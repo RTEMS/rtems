@@ -93,7 +93,8 @@ static inline void _Processor_mask_Fill( Processor_mask *mask )
  * @param src The mask to copy to @a dst.
  */
 static inline void _Processor_mask_Assign(
-  Processor_mask *dst, const Processor_mask *src
+  Processor_mask       *dst,
+  const Processor_mask *src
 )
 {
   __BIT_COPY( CPU_MAXIMUM_PROCESSORS, src, dst );
@@ -105,10 +106,7 @@ static inline void _Processor_mask_Assign(
  * @param[out] mask The mask to set the bit of.
  * @param index The index of the bit that shall be set.
  */
-static inline void _Processor_mask_Set(
-  Processor_mask *mask,
-  uint32_t        index
-)
+static inline void _Processor_mask_Set( Processor_mask *mask, uint32_t index )
 {
   __BIT_SET( CPU_MAXIMUM_PROCESSORS, index, mask );
 }
@@ -319,7 +317,10 @@ static inline void _Processor_mask_From_uint32_t(
 )
 {
   _Processor_mask_Zero( mask );
-  mask->__bits[ __bitset_words( index ) ] = ((long) bits) << (32 * (index % _BITSET_BITS) / 32);
+  mask->__bits[ __bitset_words( index ) ] = ( (long) bits )
+                                            << ( 32 *
+                                                 ( index % _BITSET_BITS ) /
+                                                 32 );
 }
 
 /**

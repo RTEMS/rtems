@@ -61,13 +61,13 @@
  * @{
  */
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 
 #include <rtems/score/smplockstats.h>
 #include <rtems/score/smplockticket.h>
 #include <rtems/score/isrlevel.h>
 
-#if defined(RTEMS_DEBUG)
+#if defined( RTEMS_DEBUG )
 #include <rtems/score/assert.h>
 #include <rtems/score/smp.h>
 #endif
@@ -76,7 +76,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#if defined(RTEMS_DEBUG) || defined(RTEMS_PROFILING)
+#if defined( RTEMS_DEBUG ) || defined( RTEMS_PROFILING )
 #define RTEMS_SMP_LOCK_DO_NOT_INLINE
 #endif
 
@@ -85,7 +85,7 @@ extern "C" {
  */
 typedef struct {
   SMP_ticket_lock_Control Ticket_lock;
-#if defined(RTEMS_DEBUG)
+#if defined( RTEMS_DEBUG )
   /**
    * @brief The index of the owning processor of this lock.
    *
@@ -100,7 +100,7 @@ typedef struct {
    */
   uint32_t owner;
 #endif
-#if defined(RTEMS_PROFILING)
+#if defined( RTEMS_PROFILING )
   SMP_lock_Stats Stats;
 #endif
 } SMP_lock_Control;
@@ -110,34 +110,32 @@ typedef struct {
  */
 typedef struct {
   ISR_Level isr_level;
-#if defined(RTEMS_DEBUG)
+#if defined( RTEMS_DEBUG )
   SMP_lock_Control *lock_used_for_acquire;
 #endif
-#if defined(RTEMS_PROFILING)
+#if defined( RTEMS_PROFILING )
   SMP_lock_Stats_context Stats_context;
 #endif
 } SMP_lock_Context;
 
-#if defined(RTEMS_DEBUG)
+#if defined( RTEMS_DEBUG )
 #define SMP_LOCK_NO_OWNER 0
 #endif
 
 /**
  * @brief SMP lock control initializer for static initialization.
  */
-#if defined(RTEMS_DEBUG) && defined(RTEMS_PROFILING)
+#if defined( RTEMS_DEBUG ) && defined( RTEMS_PROFILING )
   #define SMP_LOCK_INITIALIZER( name ) \
-    { \
-      SMP_TICKET_LOCK_INITIALIZER, \
-      SMP_LOCK_NO_OWNER, \
-      SMP_LOCK_STATS_INITIALIZER( name ) \
-    }
-#elif defined(RTEMS_DEBUG)
+  { SMP_TICKET_LOCK_INITIALIZER,       \
+    SMP_LOCK_NO_OWNER,                 \
+    SMP_LOCK_STATS_INITIALIZER( name ) }
+#elif defined( RTEMS_DEBUG )
   #define SMP_LOCK_INITIALIZER( name ) \
-    { SMP_TICKET_LOCK_INITIALIZER, SMP_LOCK_NO_OWNER }
-#elif defined(RTEMS_PROFILING)
+  { SMP_TICKET_LOCK_INITIALIZER, SMP_LOCK_NO_OWNER }
+#elif defined( RTEMS_PROFILING )
   #define SMP_LOCK_INITIALIZER( name ) \
-    { SMP_TICKET_LOCK_INITIALIZER, SMP_LOCK_STATS_INITIALIZER( name ) }
+  { SMP_TICKET_LOCK_INITIALIZER, SMP_LOCK_STATS_INITIALIZER( name ) }
 #else
   #define SMP_LOCK_INITIALIZER( name ) { SMP_TICKET_LOCK_INITIALIZER }
 #endif
@@ -153,10 +151,10 @@ static inline void _SMP_lock_Initialize_inline(
 )
 {
   _SMP_ticket_lock_Initialize( &lock->Ticket_lock );
-#if defined(RTEMS_DEBUG)
+#if defined( RTEMS_DEBUG )
   lock->owner = SMP_LOCK_NO_OWNER;
 #endif
-#if defined(RTEMS_PROFILING)
+#if defined( RTEMS_PROFILING )
   _SMP_lock_Stats_initialize( &lock->Stats, name );
 #else
   (void) name;
@@ -172,11 +170,8 @@ static inline void _SMP_lock_Initialize_inline(
  * @param name The name for the SMP lock statistics.  This name must be
  * persistent throughout the life time of this statistics block.
  */
-#if defined(RTEMS_SMP_LOCK_DO_NOT_INLINE)
-void _SMP_lock_Initialize(
-  SMP_lock_Control *lock,
-  const char       *name
-);
+#if defined( RTEMS_SMP_LOCK_DO_NOT_INLINE )
+void _SMP_lock_Initialize( SMP_lock_Control *lock, const char *name );
 #else
 #define _SMP_lock_Initialize( lock, name ) \
   _SMP_lock_Initialize_inline( lock, name )
@@ -200,11 +195,10 @@ static inline void _SMP_lock_Destroy_inline( SMP_lock_Control *lock )
  *
  * @param[in, out] lock The SMP lock control.
  */
-#if defined(RTEMS_SMP_LOCK_DO_NOT_INLINE)
+#if defined( RTEMS_SMP_LOCK_DO_NOT_INLINE )
 void _SMP_lock_Destroy( SMP_lock_Control *lock );
 #else
-#define _SMP_lock_Destroy( lock ) \
-  _SMP_lock_Destroy_inline( lock )
+#define _SMP_lock_Destroy( lock ) _SMP_lock_Destroy_inline( lock )
 #endif
 
 /**
@@ -219,7 +213,7 @@ static inline void _SMP_lock_Set_name(
   const char       *name
 )
 {
-#if defined(RTEMS_PROFILING)
+#if defined( RTEMS_PROFILING )
   lock->Stats.name = name;
 #else
   (void) lock;
@@ -232,7 +226,7 @@ static inline void _SMP_lock_Set_name(
  *
  * @return The current processor index + 1.
  */
-#if defined(RTEMS_DEBUG)
+#if defined( RTEMS_DEBUG )
 static inline uint32_t _SMP_lock_Who_am_I( void )
 {
   /*
@@ -254,7 +248,7 @@ static inline void _SMP_lock_Acquire_inline(
   SMP_lock_Context *context
 )
 {
-#if defined(RTEMS_DEBUG)
+#if defined( RTEMS_DEBUG )
   context->lock_used_for_acquire = lock;
 #else
   (void) context;
@@ -264,7 +258,7 @@ static inline void _SMP_lock_Acquire_inline(
     &lock->Stats,
     &context->Stats_context
   );
-#if defined(RTEMS_DEBUG)
+#if defined( RTEMS_DEBUG )
   lock->owner = _SMP_lock_Who_am_I();
 #endif
 }
@@ -280,10 +274,7 @@ static inline void _SMP_lock_Acquire_inline(
  * @param[in, out] context The local SMP lock context for an acquire and release
  * pair.
  */
-void _SMP_lock_Acquire(
-  SMP_lock_Control *lock,
-  SMP_lock_Context *context
-);
+void _SMP_lock_Acquire( SMP_lock_Control *lock, SMP_lock_Context *context );
 
 /**
  * @brief Releases an SMP lock.
@@ -296,7 +287,7 @@ static inline void _SMP_lock_Release_inline(
   SMP_lock_Context *context
 )
 {
-#if defined(RTEMS_DEBUG)
+#if defined( RTEMS_DEBUG )
   _Assert( context->lock_used_for_acquire == lock );
   context->lock_used_for_acquire = NULL;
   _Assert( lock->owner == _SMP_lock_Who_am_I() );
@@ -304,10 +295,7 @@ static inline void _SMP_lock_Release_inline(
 #else
   (void) context;
 #endif
-  _SMP_ticket_lock_Release(
-    &lock->Ticket_lock,
-    &context->Stats_context
-  );
+  _SMP_ticket_lock_Release( &lock->Ticket_lock, &context->Stats_context );
 }
 
 /**
@@ -317,11 +305,8 @@ static inline void _SMP_lock_Release_inline(
  * @param[in, out] context The local SMP lock context for an acquire and release
  * pair.
  */
-#if defined(RTEMS_SMP_LOCK_DO_NOT_INLINE)
-void _SMP_lock_Release(
-  SMP_lock_Control *lock,
-  SMP_lock_Context *context
-);
+#if defined( RTEMS_SMP_LOCK_DO_NOT_INLINE )
+void _SMP_lock_Release( SMP_lock_Control *lock, SMP_lock_Context *context );
 #else
 #define _SMP_lock_Release( lock, context ) \
   _SMP_lock_Release_inline( lock, context )
@@ -376,7 +361,7 @@ static inline void _SMP_lock_Release_and_ISR_enable_inline(
  * @param[in, out] context The local SMP lock context for an acquire and release
  * pair.
  */
-#if defined(RTEMS_SMP_LOCK_DO_NOT_INLINE)
+#if defined( RTEMS_SMP_LOCK_DO_NOT_INLINE )
 void _SMP_lock_Release_and_ISR_enable(
   SMP_lock_Control *lock,
   SMP_lock_Context *context
@@ -386,7 +371,7 @@ void _SMP_lock_Release_and_ISR_enable(
   _SMP_lock_Release_and_ISR_enable_inline( lock, context )
 #endif
 
-#if defined(RTEMS_DEBUG)
+#if defined( RTEMS_DEBUG )
 /**
  * @brief Checks if the SMP lock is owned by the current processor.
  *

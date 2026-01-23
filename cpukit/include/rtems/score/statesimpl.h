@@ -59,103 +59,97 @@ extern "C" {
  */
 
 /** This macro corresponds to a task being ready. */
-#define STATES_READY                           0x00000000
+#define STATES_READY 0x00000000
 
 /** This macro corresponds to a task waiting for a mutex. */
-#define STATES_WAITING_FOR_MUTEX               0x00000001
+#define STATES_WAITING_FOR_MUTEX 0x00000001
 
 /** This macro corresponds to a task waiting for a semaphore. */
-#define STATES_WAITING_FOR_SEMAPHORE           0x00000002
+#define STATES_WAITING_FOR_SEMAPHORE 0x00000002
 
 /** This macro corresponds to a task waiting for an event. */
-#define STATES_WAITING_FOR_EVENT               0x00000004
+#define STATES_WAITING_FOR_EVENT 0x00000004
 
 /** This macro corresponds to a task waiting for a system event. */
-#define STATES_WAITING_FOR_SYSTEM_EVENT        0x00000008
+#define STATES_WAITING_FOR_SYSTEM_EVENT 0x00000008
 
 /** This macro corresponds to a task waiting for a message. */
-#define STATES_WAITING_FOR_MESSAGE             0x00000010
+#define STATES_WAITING_FOR_MESSAGE 0x00000010
 
 /** This macro corresponds to a task waiting for a condition variable. */
-#define STATES_WAITING_FOR_CONDITION_VARIABLE  0x00000020
+#define STATES_WAITING_FOR_CONDITION_VARIABLE 0x00000020
 
 /** This macro corresponds to a task waiting for a futex. */
-#define STATES_WAITING_FOR_FUTEX               0x00000040
+#define STATES_WAITING_FOR_FUTEX 0x00000040
 
 /** This macro corresponds to a task waiting for BSD wakeup. */
-#define STATES_WAITING_FOR_BSD_WAKEUP          0x00000080
+#define STATES_WAITING_FOR_BSD_WAKEUP 0x00000080
 
 /**
  * @brief This macro corresponds to a task which is waiting for a relative or
  * absolute timeout.
  */
-#define STATES_WAITING_FOR_TIME                0x00000100
+#define STATES_WAITING_FOR_TIME 0x00000100
 
 /** This macro corresponds to a task waiting for a period. */
-#define STATES_WAITING_FOR_PERIOD              0x00000200
+#define STATES_WAITING_FOR_PERIOD 0x00000200
 
 /** This macro corresponds to a task waiting for a signal. */
-#define STATES_WAITING_FOR_SIGNAL              0x00000400
+#define STATES_WAITING_FOR_SIGNAL 0x00000400
 
 /** This macro corresponds to a task waiting for a barrier. */
-#define STATES_WAITING_FOR_BARRIER             0x00000800
+#define STATES_WAITING_FOR_BARRIER 0x00000800
 
 /** This macro corresponds to a task waiting for a RWLock. */
-#define STATES_WAITING_FOR_RWLOCK              0x00001000
+#define STATES_WAITING_FOR_RWLOCK 0x00001000
 
 /** This macro corresponds to a task waiting for a join while exiting. */
-#define STATES_WAITING_FOR_JOIN_AT_EXIT        0x00002000
+#define STATES_WAITING_FOR_JOIN_AT_EXIT 0x00002000
 
 /** This macro corresponds to a task waiting for a join. */
-#define STATES_WAITING_FOR_JOIN                0x00004000
+#define STATES_WAITING_FOR_JOIN 0x00004000
 
 /** This macro corresponds to a task being suspended. */
-#define STATES_SUSPENDED                       0x00008000
+#define STATES_SUSPENDED 0x00008000
 
 /** This macro corresponds to a task waiting for a fixed size segment. */
-#define STATES_WAITING_FOR_SEGMENT             0x00010000
+#define STATES_WAITING_FOR_SEGMENT 0x00010000
 
 /** This macro corresponds to a task those life is changing. */
-#define STATES_LIFE_IS_CHANGING                0x00020000
+#define STATES_LIFE_IS_CHANGING 0x00020000
 
 /** This macro corresponds to a task being held by the debugger. */
-#define STATES_DEBUGGER                        0x08000000
+#define STATES_DEBUGGER 0x08000000
 
 /** This macro corresponds to a task which is in an interruptible
  *  blocking state.
  */
-#define STATES_INTERRUPTIBLE_BY_SIGNAL         0x10000000
+#define STATES_INTERRUPTIBLE_BY_SIGNAL 0x10000000
 
 /** This macro corresponds to a task waiting for a reply to an MPCI request. */
-#define STATES_WAITING_FOR_RPC_REPLY           0x20000000
+#define STATES_WAITING_FOR_RPC_REPLY 0x20000000
 
 /** This macro corresponds to a task being a zombie. */
-#define STATES_ZOMBIE                          0x40000000
+#define STATES_ZOMBIE 0x40000000
 
 /** This macro corresponds to a task being created but not yet started. */
-#define STATES_DORMANT                         0x80000000
+#define STATES_DORMANT 0x80000000
 
 /** This macro corresponds to a task waiting for a local object operation. */
-#define STATES_LOCALLY_BLOCKED ( STATES_WAITING_FOR_SEGMENT            | \
-                                 STATES_WAITING_FOR_MESSAGE            | \
-                                 STATES_WAITING_FOR_SEMAPHORE          | \
-                                 STATES_WAITING_FOR_MUTEX              | \
-                                 STATES_WAITING_FOR_CONDITION_VARIABLE | \
-                                 STATES_WAITING_FOR_JOIN               | \
-                                 STATES_WAITING_FOR_SIGNAL             | \
-                                 STATES_WAITING_FOR_BARRIER            | \
-                                 STATES_WAITING_FOR_BSD_WAKEUP         | \
-                                 STATES_WAITING_FOR_FUTEX              | \
-                                 STATES_WAITING_FOR_RWLOCK             )
+#define STATES_LOCALLY_BLOCKED                                        \
+  ( STATES_WAITING_FOR_SEGMENT | STATES_WAITING_FOR_MESSAGE |         \
+    STATES_WAITING_FOR_SEMAPHORE | STATES_WAITING_FOR_MUTEX |         \
+    STATES_WAITING_FOR_CONDITION_VARIABLE | STATES_WAITING_FOR_JOIN | \
+    STATES_WAITING_FOR_SIGNAL | STATES_WAITING_FOR_BARRIER |          \
+    STATES_WAITING_FOR_BSD_WAKEUP | STATES_WAITING_FOR_FUTEX |        \
+    STATES_WAITING_FOR_RWLOCK )
 
 /** This macro corresponds to a task waiting which is blocked. */
-#define STATES_BLOCKED         ( STATES_LOCALLY_BLOCKED         | \
-                                 STATES_WAITING_FOR_TIME        | \
-                                 STATES_WAITING_FOR_PERIOD      | \
-                                 STATES_WAITING_FOR_EVENT       | \
-                                 STATES_WAITING_FOR_RPC_REPLY   | \
-                                 STATES_WAITING_FOR_SYSTEM_EVENT | \
-                                 STATES_INTERRUPTIBLE_BY_SIGNAL )
+#define STATES_BLOCKED                                               \
+  ( STATES_LOCALLY_BLOCKED | STATES_WAITING_FOR_TIME |               \
+    STATES_WAITING_FOR_PERIOD | STATES_WAITING_FOR_EVENT |           \
+    STATES_WAITING_FOR_RPC_REPLY | STATES_WAITING_FOR_SYSTEM_EVENT | \
+    STATES_INTERRUPTIBLE_BY_SIGNAL )
 
 /** All state bits set to one (provided for _Thread_Start()) */
 #define STATES_ALL_SET 0xffffffff
@@ -171,12 +165,12 @@ extern "C" {
  *
  * @return This method returns the updated states value.
  */
-static inline States_Control _States_Set (
+static inline States_Control _States_Set(
   States_Control states_to_set,
   States_Control current_state
 )
 {
-   return (current_state | states_to_set);
+  return ( current_state | states_to_set );
 }
 
 /**
@@ -190,12 +184,12 @@ static inline States_Control _States_Set (
  *
  * @return This method returns the updated states value.
  */
-static inline States_Control _States_Clear (
+static inline States_Control _States_Clear(
   States_Control states_to_clear,
   States_Control current_state
 )
 {
-   return (current_state & ~states_to_clear);
+  return ( current_state & ~states_to_clear );
 }
 
 /**
@@ -209,11 +203,9 @@ static inline States_Control _States_Clear (
  * @retval true The state is ready.
  * @retval false The state is not ready.
  */
-static inline bool _States_Is_ready (
-  States_Control the_states
-)
+static inline bool _States_Is_ready( States_Control the_states )
 {
-   return (the_states == STATES_READY);
+  return ( the_states == STATES_READY );
 }
 
 /**
@@ -227,11 +219,9 @@ static inline bool _States_Is_ready (
  * @retval true DORMANT state is set in @a the_states.
  * @retval false DORMANT state is not set in @a the_states.
  */
-static inline bool _States_Is_dormant (
-  States_Control the_states
-)
+static inline bool _States_Is_dormant( States_Control the_states )
 {
-   return (the_states & STATES_DORMANT);
+  return ( the_states & STATES_DORMANT );
 }
 
 /**
@@ -245,11 +235,9 @@ static inline bool _States_Is_dormant (
  * @retval true SUSPENDED state is set in @a the_states.
  * @retval false SUSPENDED state is not set in @a the_states.
  */
-static inline bool _States_Is_suspended (
-  States_Control the_states
-)
+static inline bool _States_Is_suspended( States_Control the_states )
 {
-   return (the_states & STATES_SUSPENDED);
+  return ( the_states & STATES_SUSPENDED );
 }
 
 /**
@@ -263,11 +251,11 @@ static inline bool _States_Is_suspended (
  * @retval true WAITING_FOR_TIME state is set in @a the_states.
  * @retval false WAITING_FOR_TIME state is not set in @a the_states.
  */
-static inline bool _States_Is_waiting_for_rpc_reply (
+static inline bool _States_Is_waiting_for_rpc_reply(
   States_Control the_states
 )
 {
-   return (the_states & STATES_WAITING_FOR_RPC_REPLY);
+  return ( the_states & STATES_WAITING_FOR_RPC_REPLY );
 }
 
 /**
@@ -285,7 +273,7 @@ static inline bool _States_Is_waiting_for_join_at_exit(
   States_Control the_states
 )
 {
-   return ( the_states & STATES_WAITING_FOR_JOIN_AT_EXIT ) != 0;
+  return ( the_states & STATES_WAITING_FOR_JOIN_AT_EXIT ) != 0;
 }
 
 /**
@@ -299,11 +287,11 @@ static inline bool _States_Is_waiting_for_join_at_exit(
  * @retval true @a the_states is interruptible.
  * @retval false @a the_states is not interruptible.
  */
-static inline bool _States_Is_interruptible_by_signal (
+static inline bool _States_Is_interruptible_by_signal(
   States_Control the_states
 )
 {
-   return (the_states & STATES_INTERRUPTIBLE_BY_SIGNAL);
+  return ( the_states & STATES_INTERRUPTIBLE_BY_SIGNAL );
 }
 
 /**
@@ -320,11 +308,9 @@ static inline bool _States_Is_interruptible_by_signal (
  * @retval false The state indicates that the task is not blocked waiting on a
  *      local resource.
  */
-static inline bool _States_Is_locally_blocked (
-  States_Control the_states
-)
+static inline bool _States_Is_locally_blocked( States_Control the_states )
 {
-   return (the_states & STATES_LOCALLY_BLOCKED);
+  return ( the_states & STATES_LOCALLY_BLOCKED );
 }
 
 /** @} */

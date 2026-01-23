@@ -63,7 +63,7 @@ static inline void _Scheduler_uniprocessor_Update_heir(
 )
 {
   _Assert( heir != new_heir );
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /*
    * We need this state only for _Thread_Get_CPU_time_used_locked().  Cannot
    * use _Scheduler_Thread_change_state() since THREAD_SCHEDULER_BLOCKED to
@@ -127,12 +127,12 @@ static inline void _Scheduler_uniprocessor_Block(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node,
-  void                  ( *extract )(
-                             const Scheduler_Control *,
-                             Thread_Control *,
-                             Scheduler_Node *
-                        ),
-  Thread_Control       *( *get_highest_ready )( const Scheduler_Control * )
+  void ( *extract )(
+    const Scheduler_Control *,
+    Thread_Control *,
+    Scheduler_Node *
+  ),
+  Thread_Control *( *get_highest_ready )(const Scheduler_Control *)
 )
 {
   ( *extract )( scheduler, the_thread, node );
@@ -185,7 +185,7 @@ static inline void _Scheduler_uniprocessor_Unblock(
  */
 static inline void _Scheduler_uniprocessor_Schedule(
   const Scheduler_Control *scheduler,
-  Thread_Control       *( *get_highest_ready )( const Scheduler_Control * )
+  Thread_Control *( *get_highest_ready )(const Scheduler_Control *)
 )
 {
   Thread_Control *highest_ready;
@@ -205,7 +205,7 @@ static inline void _Scheduler_uniprocessor_Schedule(
  */
 static inline void _Scheduler_uniprocessor_Yield(
   const Scheduler_Control *scheduler,
-  Thread_Control       *( *get_highest_ready )( const Scheduler_Control * )
+  Thread_Control *( *get_highest_ready )(const Scheduler_Control *)
 )
 {
   Thread_Control *highest_ready;

@@ -67,8 +67,9 @@ extern "C" {
  *
  * @return The scheduler context of @a scheduler.
  */
-static inline Scheduler_EDF_Context *
-  _Scheduler_EDF_Get_context( const Scheduler_Control *scheduler )
+static inline Scheduler_EDF_Context *_Scheduler_EDF_Get_context(
+  const Scheduler_Control *scheduler
+)
 {
   return (Scheduler_EDF_Context *) _Scheduler_Get_context( scheduler );
 }
@@ -94,7 +95,7 @@ static inline Scheduler_EDF_Node *_Scheduler_EDF_Thread_get_node(
  *
  * @return The corresponding scheduler EDF node.
  */
-static inline Scheduler_EDF_Node * _Scheduler_EDF_Node_downcast(
+static inline Scheduler_EDF_Node *_Scheduler_EDF_Node_downcast(
   Scheduler_Node *node
 )
 {

@@ -98,30 +98,30 @@ typedef union {
  *     Bits 24 .. 26    = API    (up to 7 API classes)
  *     Bits 27 .. 31    = class  (up to 31 object types per API)
  */
-typedef uint32_t   Objects_Id;
+typedef uint32_t Objects_Id;
 
 /**
  * This type is used to store the maximum number of allowed objects
  * of each type.
  */
-typedef uint16_t   Objects_Maximum;
+typedef uint16_t Objects_Maximum;
 
 /**
  *  This is the bit position of the starting bit of the index portion of
  *  the object Id.
  */
-#define OBJECTS_INDEX_START_BIT  0U
+#define OBJECTS_INDEX_START_BIT 0U
 /**
  *  This is the bit position of the starting bit of the node portion of
  *  the object Id.
  */
-#define OBJECTS_NODE_START_BIT  16U
+#define OBJECTS_NODE_START_BIT 16U
 
 /**
  *  This is the bit position of the starting bit of the API portion of
  *  the object Id.
  */
-#define OBJECTS_API_START_BIT   24U
+#define OBJECTS_API_START_BIT 24U
 
 /**
  *  This is the bit position of the starting bit of the class portion of
@@ -132,46 +132,46 @@ typedef uint16_t   Objects_Maximum;
 /**
  *  This mask is used to extract the index portion of an object Id.
  */
-#define OBJECTS_INDEX_MASK      (Objects_Id)0x0000ffffU
+#define OBJECTS_INDEX_MASK (Objects_Id) 0x0000ffffU
 
 /**
  *  This mask is used to extract the node portion of an object Id.
  */
-#define OBJECTS_NODE_MASK       (Objects_Id)0x00ff0000U
+#define OBJECTS_NODE_MASK (Objects_Id) 0x00ff0000U
 
 /**
  *  This mask is used to extract the API portion of an object Id.
  */
-#define OBJECTS_API_MASK        (Objects_Id)0x07000000U
+#define OBJECTS_API_MASK (Objects_Id) 0x07000000U
 
 /**
  *  This mask is used to extract the class portion of an object Id.
  */
-#define OBJECTS_CLASS_MASK      (Objects_Id)0xf8000000U
+#define OBJECTS_CLASS_MASK (Objects_Id) 0xf8000000U
 
 /**
  *  This mask represents the bits that is used to ensure no extra bits
  *  are set after shifting to extract the index portion of an object Id.
  */
-#define OBJECTS_INDEX_VALID_BITS  (Objects_Id)0x0000ffffU
+#define OBJECTS_INDEX_VALID_BITS (Objects_Id) 0x0000ffffU
 
 /**
  *  This mask represents the bits that is used to ensure no extra bits
  *  are set after shifting to extract the node portion of an object Id.
  */
-#define OBJECTS_NODE_VALID_BITS   (Objects_Id)0x000000ffU
+#define OBJECTS_NODE_VALID_BITS (Objects_Id) 0x000000ffU
 
 /**
  *  This mask represents the bits that is used to ensure no extra bits
  *  are set after shifting to extract the API portion of an object Id.
  */
-#define OBJECTS_API_VALID_BITS    (Objects_Id)0x00000007U
+#define OBJECTS_API_VALID_BITS (Objects_Id) 0x00000007U
 
 /**
  *  This mask represents the bits that is used to ensure no extra bits
  *  are set after shifting to extract the class portion of an object Id.
  */
-#define OBJECTS_CLASS_VALID_BITS  (Objects_Id)0x0000001fU
+#define OBJECTS_CLASS_VALID_BITS (Objects_Id) 0x0000001fU
 
 /**
  *  Mask to enable unlimited objects.  This is used in the configuration
@@ -182,21 +182,21 @@ typedef uint16_t   Objects_Maximum;
 /**
  *  This is the lowest value for the index portion of an object Id.
  */
-#define OBJECTS_ID_INITIAL_INDEX  (0)
+#define OBJECTS_ID_INITIAL_INDEX ( 0 )
 
 /**
  *  This is the highest value for the index portion of an object Id.
  */
-#define OBJECTS_ID_FINAL_INDEX    (0xffffU)
+#define OBJECTS_ID_FINAL_INDEX ( 0xffffU )
 
 /**
  *  This enumerated type is used in the class field of the object ID.
  */
 typedef enum {
-  OBJECTS_NO_API       = 0,
+  OBJECTS_NO_API = 0,
   OBJECTS_INTERNAL_API = 1,
-  OBJECTS_CLASSIC_API  = 2,
-  OBJECTS_POSIX_API    = 3,
+  OBJECTS_CLASSIC_API = 2,
+  OBJECTS_POSIX_API = 3,
   OBJECTS_FAKE_OBJECTS_API = 7
 } Objects_APIs;
 
@@ -212,13 +212,13 @@ typedef enum {
  *  The following defines the constant which may be used
  *  to manipulate the calling task.
  */
-#define OBJECTS_ID_OF_SELF ((Objects_Id) 0)
+#define OBJECTS_ID_OF_SELF ( (Objects_Id) 0 )
 
 /**
  *  The following constant is used to specify that a name to ID search
  *  should search through all nodes.
  */
-#define OBJECTS_SEARCH_ALL_NODES   0
+#define OBJECTS_SEARCH_ALL_NODES 0
 
 /**
  *  The following constant is used to specify that a name to ID search
@@ -230,25 +230,30 @@ typedef enum {
  *  The following constant is used to specify that a name to ID search
  *  should search only on this node.
  */
-#define OBJECTS_SEARCH_LOCAL_NODE  0x7FFFFFFF
+#define OBJECTS_SEARCH_LOCAL_NODE 0x7FFFFFFF
 
 /**
  *  The following constant is used to specify that a name to ID search
  *  is being asked for the ID of the currently executing task.
  */
-#define OBJECTS_WHO_AM_I           0
+#define OBJECTS_WHO_AM_I 0
 
 /**
  *  This macros calculates the lowest ID for the specified api, class,
  *  and node.
  */
-#define OBJECTS_ID_INITIAL(_api, _class, _node) \
-  _Objects_Build_id( (_api), (_class), (_node), OBJECTS_ID_INITIAL_INDEX )
+#define OBJECTS_ID_INITIAL( _api, _class, _node ) \
+  _Objects_Build_id(                              \
+    ( _api ),                                     \
+    ( _class ),                                   \
+    ( _node ),                                    \
+    OBJECTS_ID_INITIAL_INDEX                      \
+  )
 
 /**
  *  This macro specifies the highest object ID value
  */
-#define OBJECTS_ID_FINAL           ((Objects_Id)~0)
+#define OBJECTS_ID_FINAL ( (Objects_Id) ~0 )
 
 /**
  *  This macro is used to build a thirty-two bit style name from
@@ -260,11 +265,9 @@ typedef enum {
  *  @param[in] _C3 is the third character of the name
  *  @param[in] _C4 is the fourth character of the name
  */
-#define  _Objects_Build_name( _C1, _C2, _C3, _C4 ) \
-  ( (uint32_t) (uint8_t) (_C1) << 24 | \
-    (uint32_t) (uint8_t) (_C2) << 16 | \
-    (uint32_t) (uint8_t) (_C3) << 8 | \
-    (uint8_t) (_C4) )
+#define _Objects_Build_name( _C1, _C2, _C3, _C4 )                             \
+  ( (uint32_t) (uint8_t) ( _C1 ) << 24 | (uint32_t) (uint8_t) ( _C2 ) << 16 | \
+    (uint32_t) (uint8_t) ( _C3 ) << 8 | (uint8_t) ( _C4 ) )
 
 /**
  * @brief Returns the API portion of the ID.
@@ -273,11 +276,10 @@ typedef enum {
  *
  * @return An object Id constructed from the arguments.
  */
-static inline Objects_APIs _Objects_Get_API(
-  Objects_Id id
-)
+static inline Objects_APIs _Objects_Get_API( Objects_Id id )
 {
-  return (Objects_APIs) ((id >> OBJECTS_API_START_BIT) & OBJECTS_API_VALID_BITS);
+  return (Objects_APIs) ( ( id >> OBJECTS_API_START_BIT ) &
+                          OBJECTS_API_VALID_BITS );
 }
 
 /**
@@ -287,12 +289,10 @@ static inline Objects_APIs _Objects_Get_API(
  *
  * @return The class portion of the ID.
  */
-static inline uint32_t _Objects_Get_class(
-  Objects_Id id
-)
+static inline uint32_t _Objects_Get_class( Objects_Id id )
 {
-  return (uint32_t)
-    ((id >> OBJECTS_CLASS_START_BIT) & OBJECTS_CLASS_VALID_BITS);
+  return (uint32_t) ( ( id >> OBJECTS_CLASS_START_BIT ) &
+                      OBJECTS_CLASS_VALID_BITS );
 }
 
 /**
@@ -302,11 +302,9 @@ static inline uint32_t _Objects_Get_class(
  *
  * @return Returns the node portion of an object ID.
  */
-static inline uint32_t _Objects_Get_node(
-  Objects_Id id
-)
+static inline uint32_t _Objects_Get_node( Objects_Id id )
 {
-  return (id >> OBJECTS_NODE_START_BIT) & OBJECTS_NODE_VALID_BITS;
+  return ( id >> OBJECTS_NODE_START_BIT ) & OBJECTS_NODE_VALID_BITS;
 }
 
 /**
@@ -316,13 +314,10 @@ static inline uint32_t _Objects_Get_node(
  *
  * @return Returns the index portion of the specified object ID.
  */
-static inline Objects_Maximum _Objects_Get_index(
-  Objects_Id id
-)
+static inline Objects_Maximum _Objects_Get_index( Objects_Id id )
 {
-  return
-    (Objects_Maximum)((id >> OBJECTS_INDEX_START_BIT) &
-                                          OBJECTS_INDEX_VALID_BITS);
+  return (Objects_Maximum) ( ( id >> OBJECTS_INDEX_START_BIT ) &
+                             OBJECTS_INDEX_VALID_BITS );
 }
 
 /**
@@ -335,11 +330,11 @@ static inline Objects_Maximum _Objects_Get_index(
  *
  * @return Returns the object ID constructed from the arguments.
  */
-#define _Objects_Build_id( the_api, the_class, node, index ) \
-  ( (Objects_Id) ( (Objects_Id) the_api   << OBJECTS_API_START_BIT )   | \
-                 ( (Objects_Id) the_class << OBJECTS_CLASS_START_BIT ) | \
-                 ( (Objects_Id) node      << OBJECTS_NODE_START_BIT )  | \
-                 ( (Objects_Id) index     << OBJECTS_INDEX_START_BIT ) )
+#define _Objects_Build_id( the_api, the_class, node, index )         \
+  ( (Objects_Id) ( (Objects_Id) the_api << OBJECTS_API_START_BIT ) | \
+    ( (Objects_Id) the_class << OBJECTS_CLASS_START_BIT ) |          \
+    ( (Objects_Id) node << OBJECTS_NODE_START_BIT ) |                \
+    ( (Objects_Id) index << OBJECTS_INDEX_START_BIT ) )
 
 /**
  * Returns if the object maximum specifies unlimited objects.
@@ -357,15 +352,15 @@ static inline Objects_Maximum _Objects_Get_index(
  * compile time.
  */
 #define _Objects_Maximum_per_allocation( maximum ) \
-  ((Objects_Maximum) ((maximum) & ~OBJECTS_UNLIMITED_OBJECTS))
+  ( (Objects_Maximum) ( ( maximum ) & ~OBJECTS_UNLIMITED_OBJECTS ) )
 
 /**
  * @brief The local MPCI node number.
  */
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
 extern uint16_t _Objects_Local_node;
 #else
-#define _Objects_Local_node ((uint16_t) 1)
+#define _Objects_Local_node ( (uint16_t) 1 )
 #endif
 
 /** @} */

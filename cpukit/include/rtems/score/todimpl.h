@@ -68,55 +68,55 @@ extern "C" {
 /**
  *  This constant represents the number of seconds in a minute.
  */
-#define TOD_SECONDS_PER_MINUTE (uint32_t)60
+#define TOD_SECONDS_PER_MINUTE (uint32_t) 60
 
 /**
  *  This constant represents the number of minutes per hour.
  */
-#define TOD_MINUTES_PER_HOUR   (uint32_t)60
+#define TOD_MINUTES_PER_HOUR (uint32_t) 60
 
 /**
  *  This constant represents the number of months in a year.
  */
-#define TOD_MONTHS_PER_YEAR    (uint32_t)12
+#define TOD_MONTHS_PER_YEAR (uint32_t) 12
 
 /**
  *  This constant represents the number of days in a non-leap year.
  */
-#define TOD_DAYS_PER_YEAR      (uint32_t)365
+#define TOD_DAYS_PER_YEAR (uint32_t) 365
 
 /**
  *  This constant represents the number of hours per day.
  */
-#define TOD_HOURS_PER_DAY      (uint32_t)24
+#define TOD_HOURS_PER_DAY (uint32_t) 24
 
 /**
  *  This constant represents the number of seconds in a day which does
  *  not include a leap second.
  */
-#define TOD_SECONDS_PER_DAY    (uint32_t) (TOD_SECONDS_PER_MINUTE * \
-                                TOD_MINUTES_PER_HOUR   * \
-                                TOD_HOURS_PER_DAY)
+#define TOD_SECONDS_PER_DAY                                    \
+  (uint32_t) ( TOD_SECONDS_PER_MINUTE * TOD_MINUTES_PER_HOUR * \
+               TOD_HOURS_PER_DAY )
 
 /**
  *  This constant represents the number of seconds in a non-leap year.
  */
-#define TOD_SECONDS_PER_NON_LEAP_YEAR (365 * TOD_SECONDS_PER_DAY)
+#define TOD_SECONDS_PER_NON_LEAP_YEAR ( 365 * TOD_SECONDS_PER_DAY )
 
 /**
  *  This constant represents the number of millisecond in a second.
  */
-#define TOD_MILLISECONDS_PER_SECOND     1000
+#define TOD_MILLISECONDS_PER_SECOND 1000
 
 /**
  *  This constant represents the number of microseconds in a second.
  */
-#define TOD_MICROSECONDS_PER_SECOND     1000000L
+#define TOD_MICROSECONDS_PER_SECOND 1000000L
 
 /**
  *  This constant represents the number of nanoseconds in a second.
  */
-#define TOD_NANOSECONDS_PER_SECOND      1000000000L
+#define TOD_NANOSECONDS_PER_SECOND 1000000000L
 
 /**
  *  This constant represents the number of nanoseconds in a mircosecond.
@@ -130,9 +130,9 @@ extern "C" {
  *  differences between POSIX API and RTEMS core. The timespec format time
  *  is kept in POSIX compliant form.
  */
-#define TOD_SECONDS_1970_THROUGH_1988 \
-  (((1987 - 1970 + 1)  * TOD_SECONDS_PER_NON_LEAP_YEAR) + \
-  (4 * TOD_SECONDS_PER_DAY))
+#define TOD_SECONDS_1970_THROUGH_1988                         \
+  ( ( ( 1987 - 1970 + 1 ) * TOD_SECONDS_PER_NON_LEAP_YEAR ) + \
+    ( 4 * TOD_SECONDS_PER_DAY ) )
 
 /**
  * @brief Seconds from 1970-01-01T00:00:00Z to 2400-01-01T00:00:00Z.
@@ -222,7 +222,7 @@ void _TOD_Unlock( void );
  * @retval true It is owner of the time of day mutex.
  * @retval false It is not owner of the time of day mutex.
  */
-#if defined(RTEMS_DEBUG)
+#if defined( RTEMS_DEBUG )
 bool _TOD_Is_owner( void );
 #endif
 
@@ -297,9 +297,7 @@ Status_Control _TOD_Set(
  *
  * @param[out] time The value gathered by the request.
  */
-static inline void _TOD_Get(
-  struct timespec *tod
-)
+static inline void _TOD_Get( struct timespec *tod )
 {
   _Timecounter_Nanotime( tod );
 }
@@ -314,9 +312,7 @@ static inline void _TOD_Get(
  *
  * @param[out] time Is a pointer to the uptime after the method call.
  */
-static inline void _TOD_Get_uptime(
-  Timestamp_Control *time
-)
+static inline void _TOD_Get_uptime( Timestamp_Control *time )
 {
   *time = _Timecounter_Sbinuptime();
 }
@@ -328,9 +324,7 @@ static inline void _TOD_Get_uptime(
  *
  * @param[out] time Is a pointer to the uptime after the method call.
  */
-static inline void _TOD_Get_zero_based_uptime(
-  Timestamp_Control *time
-)
+static inline void _TOD_Get_zero_based_uptime( Timestamp_Control *time )
 {
   *time = _Timecounter_Sbinuptime() - SBT_1S;
 }
@@ -374,9 +368,7 @@ static inline uint32_t _TOD_Seconds_since_epoch( void )
  *
  * @param[out] time The timeval to be filled in by the method.
  */
-static inline void _TOD_Get_timeval(
-  struct timeval *time
-)
+static inline void _TOD_Get_timeval( struct timeval *time )
 {
   _Timecounter_Microtime( time );
 }
@@ -444,9 +436,7 @@ extern Chain_Control _TOD_Hooks;
  *
  * @brief hook is the action hook to register.
  */
-void _TOD_Hook_Register(
-  TOD_Hook *hook
-);
+void _TOD_Hook_Register( TOD_Hook *hook );
 
 /**
  * @brief Remove a TOD Action Hook
@@ -455,9 +445,7 @@ void _TOD_Hook_Register(
  *
  * @brief hook is the action hook to unregister.
  */
-void _TOD_Hook_Unregister(
-  TOD_Hook *hook
-);
+void _TOD_Hook_Unregister( TOD_Hook *hook );
 
 /**
  * @brief Run the TOD Action Hooks
@@ -470,11 +458,7 @@ void _TOD_Hook_Unregister(
  * @retval STATUS_SUCCESSFUL Successful operation.
  * @retval other Some error occurred.
  */
-Status_Control _TOD_Hook_Run(
-  TOD_Action             action,
-  const struct timespec *tod
-);
-
+Status_Control _TOD_Hook_Run( TOD_Action action, const struct timespec *tod );
 
 /** @} */
 

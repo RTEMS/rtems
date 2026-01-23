@@ -60,7 +60,7 @@ extern "C" {
 
 typedef struct {
   Thread_queue_Syslock_queue Queue;
-  unsigned int count;
+  unsigned int               count;
 } Sem_Control;
 
 #define SEMAPHORE_TQ_OPERATIONS &_Thread_queue_Operations_priority

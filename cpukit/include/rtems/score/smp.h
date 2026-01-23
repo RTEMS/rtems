@@ -62,30 +62,30 @@ extern "C" {
  * configuration via <rtems/confdefs.h>, otherwise it is a compile-time
  * constant with the value one.
  */
-#if defined(RTEMS_SMP)
-  extern const uint32_t _SMP_Processor_configured_maximum;
+#if defined( RTEMS_SMP )
+extern const uint32_t _SMP_Processor_configured_maximum;
 #else
   #define _SMP_Processor_configured_maximum 1
 #endif
 
 #if defined( RTEMS_SMP )
-  extern uint32_t _SMP_Processor_maximum;
+extern uint32_t _SMP_Processor_maximum;
 
-  static inline uint32_t _SMP_Get_processor_maximum( void )
-  {
-    return _SMP_Processor_maximum;
-  }
+static inline uint32_t _SMP_Get_processor_maximum( void )
+{
+  return _SMP_Processor_maximum;
+}
 #else
-  #define _SMP_Get_processor_maximum() UINT32_C(1)
+  #define _SMP_Get_processor_maximum() UINT32_C( 1 )
 #endif
 
 #if defined( RTEMS_SMP )
-  static inline uint32_t _SMP_Get_current_processor( void )
-  {
-    return _CPU_SMP_Get_current_processor();
-  }
+static inline uint32_t _SMP_Get_current_processor( void )
+{
+  return _CPU_SMP_Get_current_processor();
+}
 #else
-  #define _SMP_Get_current_processor() UINT32_C(0)
+  #define _SMP_Get_current_processor() UINT32_C( 0 )
 #endif
 
 /** @} */

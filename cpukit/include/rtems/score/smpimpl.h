@@ -112,10 +112,11 @@ static inline void _SMP_Fatal( SMP_Fatal_code code )
  * This method initialize the SMP Handler.
  */
 #if defined( RTEMS_SMP )
-  void _SMP_Handler_initialize( void );
+void _SMP_Handler_initialize( void );
 #else
   #define _SMP_Handler_initialize() \
-    do { } while ( 0 )
+  do {                              \
+  } while ( 0 )
 #endif
 
 #if defined( RTEMS_SMP )
@@ -273,10 +274,7 @@ void _SMP_Multicast_action(
  * @param handler The multicast action handler.
  * @param arg The multicast action argument.
  */
-void _SMP_Broadcast_action(
-  SMP_Action_handler  handler,
-  void               *arg
-);
+void _SMP_Broadcast_action( SMP_Action_handler handler, void *arg );
 
 /**
  * @brief Initiates an SMP multicast action to the set of all online
@@ -288,10 +286,7 @@ void _SMP_Broadcast_action(
  * @param handler The multicast action handler.
  * @param arg The multicast action argument.
  */
-void _SMP_Othercast_action(
-  SMP_Action_handler  handler,
-  void               *arg
-);
+void _SMP_Othercast_action( SMP_Action_handler handler, void *arg );
 
 /**
  * @brief Initiates an SMP action on the specified target processor.
@@ -303,9 +298,9 @@ void _SMP_Othercast_action(
  * @param arg The action argument.
  */
 void _SMP_Unicast_action(
-  uint32_t            cpu_index,
-  SMP_Action_handler  handler,
-  void               *arg
+  uint32_t           cpu_index,
+  SMP_Action_handler handler,
+  void              *arg
 );
 
 /**
@@ -336,10 +331,11 @@ void _SMP_Wait_for_ready_to_start_multitasking( void );
  * processors.
  */
 #if defined( RTEMS_SMP )
-  void _SMP_Request_start_multitasking( void );
+void _SMP_Request_start_multitasking( void );
 #else
   #define _SMP_Request_start_multitasking() \
-    do { } while ( 0 )
+  do {                                      \
+  } while ( 0 )
 #endif
 
 /**
@@ -350,10 +346,11 @@ void _SMP_Wait_for_ready_to_start_multitasking( void );
  * @see _Terminate().
  */
 #if defined( RTEMS_SMP )
-  void _SMP_Request_shutdown( void );
+void _SMP_Request_shutdown( void );
 #else
   #define _SMP_Request_shutdown() \
-    do { } while ( 0 )
+  do {                            \
+  } while ( 0 )
 #endif
 
 /**
@@ -363,7 +360,7 @@ void _SMP_Wait_for_ready_to_start_multitasking( void );
  */
 static inline const Processor_mask *_SMP_Get_online_processors( void )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   return &_SMP_Online_processors;
 #else
   return &_Processor_mask_The_one_and_only;

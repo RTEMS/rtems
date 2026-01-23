@@ -306,8 +306,8 @@ typedef CPU_Uint32ptr Internal_errors_t;
  * @see rtems_fatal() and _Internal_error().
  */
 RTEMS_NO_RETURN void _Terminate(
-  Internal_errors_Source  the_source,
-  Internal_errors_t       the_error
+  Internal_errors_Source the_source,
+  Internal_errors_t      the_error
 );
 
 /**

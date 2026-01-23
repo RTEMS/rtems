@@ -135,32 +135,30 @@ typedef struct {
   Scheduler_EDF_SMP_Ready_queue Ready[ RTEMS_ZERO_LENGTH_ARRAY ];
 } Scheduler_EDF_SMP_Context;
 
-#define SCHEDULER_EDF_SMP_ENTRY_POINTS \
-  { \
-    _Scheduler_EDF_SMP_Initialize, \
-    NULL, \
-    _Scheduler_EDF_SMP_Yield, \
-    _Scheduler_EDF_SMP_Block, \
-    _Scheduler_EDF_SMP_Unblock, \
-    _Scheduler_EDF_SMP_Update_priority, \
-    _Scheduler_EDF_Map_priority, \
-    _Scheduler_EDF_Unmap_priority, \
-    _Scheduler_EDF_SMP_Ask_for_help, \
+#define SCHEDULER_EDF_SMP_ENTRY_POINTS          \
+  { _Scheduler_EDF_SMP_Initialize,              \
+    NULL,                                       \
+    _Scheduler_EDF_SMP_Yield,                   \
+    _Scheduler_EDF_SMP_Block,                   \
+    _Scheduler_EDF_SMP_Unblock,                 \
+    _Scheduler_EDF_SMP_Update_priority,         \
+    _Scheduler_EDF_Map_priority,                \
+    _Scheduler_EDF_Unmap_priority,              \
+    _Scheduler_EDF_SMP_Ask_for_help,            \
     _Scheduler_EDF_SMP_Reconsider_help_request, \
-    _Scheduler_EDF_SMP_Withdraw_node, \
-    _Scheduler_EDF_SMP_Make_sticky, \
-    _Scheduler_EDF_SMP_Clean_sticky, \
-    _Scheduler_EDF_SMP_Pin, \
-    _Scheduler_EDF_SMP_Unpin, \
-    _Scheduler_EDF_SMP_Add_processor, \
-    _Scheduler_EDF_SMP_Remove_processor, \
-    _Scheduler_EDF_SMP_Node_initialize, \
-    _Scheduler_default_Node_destroy, \
-    _Scheduler_EDF_Release_job, \
-    _Scheduler_EDF_Cancel_job, \
-    _Scheduler_EDF_SMP_Start_idle, \
-    _Scheduler_EDF_SMP_Set_affinity \
-  }
+    _Scheduler_EDF_SMP_Withdraw_node,           \
+    _Scheduler_EDF_SMP_Make_sticky,             \
+    _Scheduler_EDF_SMP_Clean_sticky,            \
+    _Scheduler_EDF_SMP_Pin,                     \
+    _Scheduler_EDF_SMP_Unpin,                   \
+    _Scheduler_EDF_SMP_Add_processor,           \
+    _Scheduler_EDF_SMP_Remove_processor,        \
+    _Scheduler_EDF_SMP_Node_initialize,         \
+    _Scheduler_default_Node_destroy,            \
+    _Scheduler_EDF_Release_job,                 \
+    _Scheduler_EDF_Cancel_job,                  \
+    _Scheduler_EDF_SMP_Start_idle,              \
+    _Scheduler_EDF_SMP_Set_affinity }
 
 /**
  * @brief Initializes the context of the scheduler control.

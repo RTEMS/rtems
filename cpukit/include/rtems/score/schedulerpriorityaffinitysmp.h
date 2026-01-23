@@ -71,32 +71,30 @@ extern "C" {
 /**
  * @brief Entry points for the Deterministic Priority Affinity SMP Scheduler.
  */
-#define SCHEDULER_PRIORITY_AFFINITY_SMP_ENTRY_POINTS \
-  { \
-    _Scheduler_priority_SMP_Initialize, \
-    _Scheduler_default_Schedule, \
-    _Scheduler_priority_affinity_SMP_Yield, \
-    _Scheduler_priority_affinity_SMP_Block, \
-    _Scheduler_priority_affinity_SMP_Unblock, \
-    _Scheduler_priority_affinity_SMP_Update_priority, \
-    _Scheduler_default_Map_priority, \
-    _Scheduler_default_Unmap_priority, \
-    _Scheduler_priority_affinity_SMP_Ask_for_help, \
+#define SCHEDULER_PRIORITY_AFFINITY_SMP_ENTRY_POINTS          \
+  { _Scheduler_priority_SMP_Initialize,                       \
+    _Scheduler_default_Schedule,                              \
+    _Scheduler_priority_affinity_SMP_Yield,                   \
+    _Scheduler_priority_affinity_SMP_Block,                   \
+    _Scheduler_priority_affinity_SMP_Unblock,                 \
+    _Scheduler_priority_affinity_SMP_Update_priority,         \
+    _Scheduler_default_Map_priority,                          \
+    _Scheduler_default_Unmap_priority,                        \
+    _Scheduler_priority_affinity_SMP_Ask_for_help,            \
     _Scheduler_priority_affinity_SMP_Reconsider_help_request, \
-    _Scheduler_priority_affinity_SMP_Withdraw_node, \
-    _Scheduler_priority_affinity_SMP_Make_sticky, \
-    _Scheduler_priority_affinity_SMP_Clean_sticky, \
-    _Scheduler_default_Pin_or_unpin_not_supported, \
-    _Scheduler_default_Pin_or_unpin_not_supported, \
-    _Scheduler_priority_affinity_SMP_Add_processor, \
-    _Scheduler_priority_affinity_SMP_Remove_processor, \
-    _Scheduler_priority_affinity_SMP_Node_initialize, \
-    _Scheduler_default_Node_destroy, \
-    _Scheduler_default_Release_job, \
-    _Scheduler_default_Cancel_job, \
-    _Scheduler_SMP_Start_idle, \
-    _Scheduler_priority_affinity_SMP_Set_affinity \
-  }
+    _Scheduler_priority_affinity_SMP_Withdraw_node,           \
+    _Scheduler_priority_affinity_SMP_Make_sticky,             \
+    _Scheduler_priority_affinity_SMP_Clean_sticky,            \
+    _Scheduler_default_Pin_or_unpin_not_supported,            \
+    _Scheduler_default_Pin_or_unpin_not_supported,            \
+    _Scheduler_priority_affinity_SMP_Add_processor,           \
+    _Scheduler_priority_affinity_SMP_Remove_processor,        \
+    _Scheduler_priority_affinity_SMP_Node_initialize,         \
+    _Scheduler_default_Node_destroy,                          \
+    _Scheduler_default_Release_job,                           \
+    _Scheduler_default_Cancel_job,                            \
+    _Scheduler_SMP_Start_idle,                                \
+    _Scheduler_priority_affinity_SMP_Set_affinity }
 
 /**
  * @brief Initializes per thread scheduler information.

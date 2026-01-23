@@ -61,24 +61,22 @@ extern "C" {
 /**
  *  Entry points for the Deterministic Priority Based Scheduler.
  */
-#define SCHEDULER_PRIORITY_ENTRY_POINTS \
-  { \
-    _Scheduler_priority_Initialize,       /* initialize entry point */ \
-    _Scheduler_priority_Schedule,         /* schedule entry point */ \
-    _Scheduler_priority_Yield,            /* yield entry point */ \
-    _Scheduler_priority_Block,            /* block entry point */ \
-    _Scheduler_priority_Unblock,          /* unblock entry point */ \
-    _Scheduler_priority_Update_priority,  /* update priority entry point */ \
-    _Scheduler_default_Map_priority,      /* map priority entry point */ \
-    _Scheduler_default_Unmap_priority,    /* unmap priority entry point */ \
-    SCHEDULER_DEFAULT_SMP_OPERATIONS \
-    _Scheduler_priority_Node_initialize,  /* node initialize entry point */ \
-    _Scheduler_default_Node_destroy,      /* node destroy entry point */ \
-    _Scheduler_default_Release_job,       /* new period of task */ \
-    _Scheduler_default_Cancel_job,        /* cancel period of task */ \
-    _Scheduler_default_Start_idle         /* start idle entry point */ \
-    SCHEDULER_DEFAULT_SET_AFFINITY_OPERATION \
-  }
+#define SCHEDULER_PRIORITY_ENTRY_POINTS                                      \
+  { _Scheduler_priority_Initialize,      /* initialize entry point */        \
+    _Scheduler_priority_Schedule,        /* schedule entry point */          \
+    _Scheduler_priority_Yield,           /* yield entry point */             \
+    _Scheduler_priority_Block,           /* block entry point */             \
+    _Scheduler_priority_Unblock,         /* unblock entry point */           \
+    _Scheduler_priority_Update_priority, /* update priority entry point */   \
+    _Scheduler_default_Map_priority,     /* map priority entry point */      \
+    _Scheduler_default_Unmap_priority,   /* unmap priority entry point */    \
+    SCHEDULER_DEFAULT_SMP_OPERATIONS                                         \
+      _Scheduler_priority_Node_initialize, /* node initialize entry point */ \
+    _Scheduler_default_Node_destroy,       /* node destroy entry point */    \
+    _Scheduler_default_Release_job,        /* new period of task */          \
+    _Scheduler_default_Cancel_job,         /* cancel period of task */       \
+    _Scheduler_default_Start_idle          /* start idle entry point */      \
+      SCHEDULER_DEFAULT_SET_AFFINITY_OPERATION }
 
 typedef struct {
   /**
@@ -107,10 +105,10 @@ typedef struct {
   unsigned int current_priority;
 
   /** This field points to the Ready FIFO for this thread's priority. */
-  Chain_Control                        *ready_chain;
+  Chain_Control *ready_chain;
 
   /** This field contains precalculated priority map indices. */
-  Priority_bit_map_Information          Priority_map;
+  Priority_bit_map_Information Priority_map;
 } Scheduler_priority_Ready_queue;
 
 /**

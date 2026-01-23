@@ -89,9 +89,7 @@ void _CORE_barrier_Initialize(
  *
  * @param[out] the_barrier The barrier to destroy.
  */
-static inline void _CORE_barrier_Destroy(
-  CORE_barrier_Control *the_barrier
-)
+static inline void _CORE_barrier_Destroy( CORE_barrier_Control *the_barrier )
 {
   _Thread_queue_Destroy( &the_barrier->Wait_queue );
 }

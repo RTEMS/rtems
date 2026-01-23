@@ -69,27 +69,25 @@ extern "C" {
  *  @note: The CBS scheduler is an enhancement of EDF scheduler,
  *         therefor some routines are similar.
  */
-#define SCHEDULER_CBS_ENTRY_POINTS \
-  { \
-    _Scheduler_EDF_Initialize,       /* initialize entry point */ \
-    _Scheduler_EDF_Schedule,         /* schedule entry point */ \
-    _Scheduler_EDF_Yield,            /* yield entry point */ \
-    _Scheduler_EDF_Block,            /* block entry point */ \
-    _Scheduler_CBS_Unblock,          /* unblock entry point */ \
-    _Scheduler_EDF_Update_priority,  /* update priority entry point */ \
-    _Scheduler_EDF_Map_priority,     /* map priority entry point */ \
-    _Scheduler_EDF_Unmap_priority,   /* unmap priority entry point */ \
-    SCHEDULER_DEFAULT_SMP_OPERATIONS \
-    _Scheduler_CBS_Node_initialize,  /* node initialize entry point */ \
-    _Scheduler_default_Node_destroy, /* node destroy entry point */ \
-    _Scheduler_CBS_Release_job,      /* new period of task */ \
-    _Scheduler_CBS_Cancel_job,       /* cancel period of task */ \
-    _Scheduler_default_Start_idle    /* start idle entry point */ \
-    SCHEDULER_DEFAULT_SET_AFFINITY_OPERATION \
-  }
+#define SCHEDULER_CBS_ENTRY_POINTS                                      \
+  { _Scheduler_EDF_Initialize,      /* initialize entry point */        \
+    _Scheduler_EDF_Schedule,        /* schedule entry point */          \
+    _Scheduler_EDF_Yield,           /* yield entry point */             \
+    _Scheduler_EDF_Block,           /* block entry point */             \
+    _Scheduler_CBS_Unblock,         /* unblock entry point */           \
+    _Scheduler_EDF_Update_priority, /* update priority entry point */   \
+    _Scheduler_EDF_Map_priority,    /* map priority entry point */      \
+    _Scheduler_EDF_Unmap_priority,  /* unmap priority entry point */    \
+    SCHEDULER_DEFAULT_SMP_OPERATIONS                                    \
+      _Scheduler_CBS_Node_initialize, /* node initialize entry point */ \
+    _Scheduler_default_Node_destroy,  /* node destroy entry point */    \
+    _Scheduler_CBS_Release_job,       /* new period of task */          \
+    _Scheduler_CBS_Cancel_job,        /* cancel period of task */       \
+    _Scheduler_default_Start_idle     /* start idle entry point */      \
+      SCHEDULER_DEFAULT_SET_AFFINITY_OPERATION }
 
 /* Return values for CBS server. */
-#define SCHEDULER_CBS_OK                        0
+#define SCHEDULER_CBS_OK                       0
 #define SCHEDULER_CBS_ERROR_GENERIC            -16
 #define SCHEDULER_CBS_ERROR_NO_MEMORY          -17
 #define SCHEDULER_CBS_ERROR_INVALID_PARAMETER  -18
@@ -111,8 +109,8 @@ extern const uint32_t _Scheduler_CBS_Maximum_servers;
 typedef uint32_t Scheduler_CBS_Server_id;
 
 /** Callback function invoked when a budget overrun of a task occurs. */
-typedef void (*Scheduler_CBS_Budget_overrun)(
-    Scheduler_CBS_Server_id server_id
+typedef void ( *Scheduler_CBS_Budget_overrun )(
+  Scheduler_CBS_Server_id server_id
 );
 
 /**
@@ -134,11 +132,11 @@ typedef struct {
    *
    * @note: The current implementation of CBS handles only one task per server.
    */
-  rtems_id                 task_id;
+  rtems_id                     task_id;
   /** Server paramenters. */
-  Scheduler_CBS_Parameters parameters;
+  Scheduler_CBS_Parameters     parameters;
   /** Callback function invoked when a budget overrun occurs. */
-  Scheduler_CBS_Budget_overrun  cbs_budget_overrun;
+  Scheduler_CBS_Budget_overrun cbs_budget_overrun;
 
   /**
    * @brief Indicates if this CBS server is initialized.
@@ -153,13 +151,12 @@ typedef struct {
  */
 typedef struct {
   /** EDF scheduler specific data of a task. */
-  Scheduler_EDF_Node            Base;
+  Scheduler_EDF_Node    Base;
   /** CBS server specific data of a task. */
-  Scheduler_CBS_Server         *cbs_server;
+  Scheduler_CBS_Server *cbs_server;
 
-  Priority_Node                *deadline_node;
+  Priority_Node *deadline_node;
 } Scheduler_CBS_Node;
-
 
 /**
  * List of servers. The @a Scheduler_CBS_Server is the index to the array
@@ -219,7 +216,7 @@ void _Scheduler_CBS_Cancel_job(
  *
  * @return SCHEDULER_CBS_OK This method always returns this status.
  */
-int _Scheduler_CBS_Initialize(void);
+int _Scheduler_CBS_Initialize( void );
 
 /**
  * @brief Attaches a task to an already existing server.
@@ -235,7 +232,7 @@ int _Scheduler_CBS_Initialize(void);
  * @retval SCHEDULER_CBS_ERROR_NOSERVER The server is not yet initialized.
  * @retval SCHEDULER_CBS_ERROR_FULL The server already has a task.
  */
-int _Scheduler_CBS_Attach_thread (
+int _Scheduler_CBS_Attach_thread(
   Scheduler_CBS_Server_id server_id,
   rtems_id                task_id
 );
@@ -254,7 +251,7 @@ int _Scheduler_CBS_Attach_thread (
  *      no thread with this task.
  * @retval SCHEDULER_CBS_ERROR_NOSERVER The server is not yet initialized.
  */
-int _Scheduler_CBS_Detach_thread (
+int _Scheduler_CBS_Detach_thread(
   Scheduler_CBS_Server_id server_id,
   rtems_id                task_id
 );
@@ -266,7 +263,7 @@ int _Scheduler_CBS_Detach_thread (
  *
  * @return This method always returns SCHEDULER_CBS_OK.
  */
-int _Scheduler_CBS_Cleanup (void);
+int _Scheduler_CBS_Cleanup( void );
 
 /**
  * @brief Creates a new server with specified parameters.
@@ -283,10 +280,10 @@ int _Scheduler_CBS_Cleanup (void);
  * @retval SCHEDULER_CBS_ERROR_FULL The maximum number of servers was already
  *      created, a new server cannot be created.
  */
-int _Scheduler_CBS_Create_server (
-  Scheduler_CBS_Parameters     *params,
-  Scheduler_CBS_Budget_overrun  budget_overrun_callback,
-  rtems_id                     *server_id
+int _Scheduler_CBS_Create_server(
+  Scheduler_CBS_Parameters    *params,
+  Scheduler_CBS_Budget_overrun budget_overrun_callback,
+  rtems_id                    *server_id
 );
 
 /**
@@ -300,9 +297,7 @@ int _Scheduler_CBS_Create_server (
  * @retval SCHEDULER_CBS_ERROR_INVALID_PARAMETER The server id is too big.
  * @retval SCHEDULER_CBS_ERROR_NOSERVER There is no initialized server with this id.
  */
-int _Scheduler_CBS_Destroy_server (
-  Scheduler_CBS_Server_id server_id
-);
+int _Scheduler_CBS_Destroy_server( Scheduler_CBS_Server_id server_id );
 
 /**
  * @brief Retrieves the approved budget.
@@ -317,9 +312,9 @@ int _Scheduler_CBS_Destroy_server (
  * @retval SCHEDULER_CBS_ERROR_INVALID_PARAMETER The server id is too big.
  * @retval SCHEDULER_CBS_ERROR_NOSERVER There is no initialized server with this id.
  */
-int _Scheduler_CBS_Get_approved_budget (
-  Scheduler_CBS_Server_id  server_id,
-  time_t                  *approved_budget
+int _Scheduler_CBS_Get_approved_budget(
+  Scheduler_CBS_Server_id server_id,
+  time_t                 *approved_budget
 );
 
 /**
@@ -334,9 +329,9 @@ int _Scheduler_CBS_Get_approved_budget (
  * @retval SCHEDULER_CBS_ERROR_INVALID_PARAMETER The server id is too big.
  * @retval SCHEDULER_CBS_ERROR_NOSERVER There is no initialized server with this id.
  */
-int _Scheduler_CBS_Get_remaining_budget (
-  Scheduler_CBS_Server_id  server_id,
-  time_t                  *remaining_budget
+int _Scheduler_CBS_Get_remaining_budget(
+  Scheduler_CBS_Server_id server_id,
+  time_t                 *remaining_budget
 );
 
 /**
@@ -352,10 +347,10 @@ int _Scheduler_CBS_Get_remaining_budget (
  * @retval SCHEDULER_CBS_ERROR_INVALID_PARAMETER The server id is too big.
  * @retval SCHEDULER_CBS_ERROR_NOSERVER There is no initialized server with this id.
  */
-int _Scheduler_CBS_Get_execution_time (
-  Scheduler_CBS_Server_id   server_id,
-  time_t                   *exec_time,
-  time_t                   *abs_time
+int _Scheduler_CBS_Get_execution_time(
+  Scheduler_CBS_Server_id server_id,
+  time_t                 *exec_time,
+  time_t                 *abs_time
 );
 
 /**
@@ -370,7 +365,7 @@ int _Scheduler_CBS_Get_execution_time (
  * @retval SCHEDULER_CBS_ERROR_INVALID_PARAMETER The server id is too big.
  * @retval SCHEDULER_CBS_ERROR_NOSERVER There is no initialized server with this id.
  */
-int _Scheduler_CBS_Get_parameters (
+int _Scheduler_CBS_Get_parameters(
   Scheduler_CBS_Server_id   server_id,
   Scheduler_CBS_Parameters *params
 );
@@ -386,7 +381,7 @@ int _Scheduler_CBS_Get_parameters (
  * @retval SCHEDULER_CBS_OK The operation was successful
  * @retval SCHEDULER_CBS_ERROR_NOSERVER There is no server with this task attached.
  */
-int _Scheduler_CBS_Get_server_id (
+int _Scheduler_CBS_Get_server_id(
   rtems_id                 task_id,
   Scheduler_CBS_Server_id *server_id
 );
@@ -404,7 +399,7 @@ int _Scheduler_CBS_Get_server_id (
  *      given parameters are invalid.
  * @retval SCHEDULER_CBS_ERROR_NOSERVER There is no server with this id.
  */
-int _Scheduler_CBS_Set_parameters (
+int _Scheduler_CBS_Set_parameters(
   Scheduler_CBS_Server_id   server_id,
   Scheduler_CBS_Parameters *parameters
 );

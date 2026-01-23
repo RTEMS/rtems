@@ -39,7 +39,7 @@
 
 #include <rtems/score/cpuopts.h>
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 
 #include <rtems/score/atomic.h>
 #include <rtems/score/smplockstats.h>
@@ -85,7 +85,7 @@ typedef struct SMP_MCS_lock_Context {
    */
   Atomic_Uint locked;
 
-#if defined(RTEMS_PROFILING)
+#if defined( RTEMS_PROFILING )
   SMP_lock_Stats_context Stats_context;
 
   unsigned int queue_length;
@@ -121,7 +121,12 @@ typedef struct {
 /**
  * @brief SMP MCS lock control initializer for static initialization.
  */
-#define SMP_MCS_LOCK_INITIALIZER { { ATOMIC_INITIALIZER_UINTPTR( 0 ) } }
+#define SMP_MCS_LOCK_INITIALIZER      \
+  {                                   \
+    {                                 \
+      ATOMIC_INITIALIZER_UINTPTR( 0 ) \
+    }                                 \
+  }
 
 /**
  * @brief Initializes the SMP MCS lock.
@@ -155,17 +160,17 @@ static inline void _SMP_MCS_lock_Destroy( SMP_MCS_lock_Control *lock )
  * @param stats the SMP lock statistics.
  */
 static inline void _SMP_MCS_lock_Do_acquire(
-  SMP_MCS_lock_Control   *lock,
-  SMP_MCS_lock_Context   *context
-#if defined(RTEMS_PROFILING)
+  SMP_MCS_lock_Control *lock,
+  SMP_MCS_lock_Context *context
+#if defined( RTEMS_PROFILING )
   ,
-  SMP_lock_Stats         *stats
+  SMP_lock_Stats *stats
 #endif
 )
 {
-  SMP_MCS_lock_Context           *previous;
-#if defined(RTEMS_PROFILING)
-  SMP_lock_Stats_acquire_context  acquire_context;
+  SMP_MCS_lock_Context *previous;
+#if defined( RTEMS_PROFILING )
+  SMP_lock_Stats_acquire_context acquire_context;
 
   _SMP_lock_Stats_acquire_begin( &acquire_context );
   context->queue_length = 0;
@@ -194,7 +199,7 @@ static inline void _SMP_MCS_lock_Do_acquire(
     } while ( locked != 0 );
   }
 
-#if defined(RTEMS_PROFILING)
+#if defined( RTEMS_PROFILING )
   _SMP_lock_Stats_acquire_end(
     &acquire_context,
     stats,
@@ -215,12 +220,12 @@ static inline void _SMP_MCS_lock_Do_acquire(
  * @param context The SMP MCS lock context.
  * @param stats The SMP lock statistics.
  */
-#if defined(RTEMS_PROFILING)
+#if defined( RTEMS_PROFILING )
   #define _SMP_MCS_lock_Acquire( lock, context, stats ) \
-    _SMP_MCS_lock_Do_acquire( lock, context, stats )
+  _SMP_MCS_lock_Do_acquire( lock, context, stats )
 #else
   #define _SMP_MCS_lock_Acquire( lock, context, stats ) \
-    _SMP_MCS_lock_Do_acquire( lock, context )
+  _SMP_MCS_lock_Do_acquire( lock, context )
 #endif
 
 /**
@@ -236,10 +241,8 @@ static inline void _SMP_MCS_lock_Release(
 {
   SMP_MCS_lock_Context *next;
 
-  next = (SMP_MCS_lock_Context *) _Atomic_Load_uintptr(
-    &context->next.atomic,
-    ATOMIC_ORDER_RELAXED
-  );
+  next = (SMP_MCS_lock_Context *)
+    _Atomic_Load_uintptr( &context->next.atomic, ATOMIC_ORDER_RELAXED );
 
   if ( next == NULL ) {
     uintptr_t expected;
@@ -255,7 +258,7 @@ static inline void _SMP_MCS_lock_Release(
     );
 
     if ( success ) {
-#if defined(RTEMS_PROFILING)
+#if defined( RTEMS_PROFILING )
       _SMP_lock_Stats_release_update( &context->Stats_context );
 #endif
       /* Nobody waits. So, we are done */
@@ -263,14 +266,12 @@ static inline void _SMP_MCS_lock_Release(
     }
 
     do {
-      next = (SMP_MCS_lock_Context *) _Atomic_Load_uintptr(
-        &context->next.atomic,
-        ATOMIC_ORDER_RELAXED
-      );
+      next = (SMP_MCS_lock_Context *)
+        _Atomic_Load_uintptr( &context->next.atomic, ATOMIC_ORDER_RELAXED );
     } while ( next == NULL );
   }
 
-#if defined(RTEMS_PROFILING)
+#if defined( RTEMS_PROFILING )
   next->queue_length = context->queue_length + 1;
   _SMP_lock_Stats_release_update( &context->Stats_context );
 #endif

@@ -56,8 +56,8 @@
  */
 
 #ifdef RTEMS_SMP
-  #if defined(__cplusplus) \
-    && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 9))
+  #if defined( __cplusplus ) && \
+    ( __GNUC__ > 4 || ( __GNUC__ == 4 && __GNUC_MINOR__ >= 9 ) )
     /*
      * The GCC 4.9 ships its own <stdatomic.h> which is not C++ compatible.  The
      * suggested solution was to include <atomic> in case C++ is used.  This works
@@ -76,7 +76,7 @@
   #include <rtems/score/isrlevel.h>
 #endif
 
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
 
 typedef unsigned int Atomic_Uint;
 
@@ -106,7 +106,7 @@ typedef std::memory_order Atomic_Order;
 
 #define ATOMIC_INITIALIZER_FLAG ATOMIC_FLAG_INIT
 
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
 
 typedef atomic_uint Atomic_Uint;
 
@@ -175,9 +175,9 @@ typedef int Atomic_Order;
  */
 static inline void _Atomic_Fence( Atomic_Order order )
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
   std::atomic_thread_fence( order );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   atomic_thread_fence( order );
 #else
   (void) order;
@@ -193,9 +193,9 @@ static inline void _Atomic_Fence( Atomic_Order order )
  */
 static inline void _Atomic_Init_uint( Atomic_Uint *obj, unsigned int desired )
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  reinterpret_cast<std::atomic_uint *>( obj )->store( desired );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  reinterpret_cast< std::atomic_uint * >( obj )->store( desired );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   atomic_init( obj, desired );
 #else
   *obj = desired;
@@ -208,11 +208,14 @@ static inline void _Atomic_Init_uint( Atomic_Uint *obj, unsigned int desired )
  * @param[out] obj The CPU atomic Ulong to initialize.
  * @param desired The desired value for @a obj.
  */
-static inline void _Atomic_Init_ulong( Atomic_Ulong *obj, unsigned long desired )
+static inline void _Atomic_Init_ulong(
+  Atomic_Ulong *obj,
+  unsigned long desired
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  reinterpret_cast<std::atomic_ulong *>( obj )->store( desired );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  reinterpret_cast< std::atomic_ulong * >( obj )->store( desired );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   atomic_init( obj, desired );
 #else
   *obj = desired;
@@ -225,11 +228,14 @@ static inline void _Atomic_Init_ulong( Atomic_Ulong *obj, unsigned long desired 
  * @param[out] obj The CPU atomic Uintptr to initialize.
  * @param desired The desired value for @a obj.
  */
-static inline void _Atomic_Init_uintptr( Atomic_Uintptr *obj, uintptr_t desired )
+static inline void _Atomic_Init_uintptr(
+  Atomic_Uintptr *obj,
+  uintptr_t       desired
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  reinterpret_cast<std::atomic_uintptr_t *>( obj )->store( desired );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  reinterpret_cast< std::atomic_uintptr_t * >( obj )->store( desired );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   atomic_init( obj, desired );
 #else
   *obj = desired;
@@ -244,11 +250,14 @@ static inline void _Atomic_Init_uintptr( Atomic_Uintptr *obj, uintptr_t desired 
  *
  * @return The value of @a obj considering the @a order.
  */
-static inline unsigned int _Atomic_Load_uint( const Atomic_Uint *obj, Atomic_Order order )
+static inline unsigned int _Atomic_Load_uint(
+  const Atomic_Uint *obj,
+  Atomic_Order       order
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  return reinterpret_cast<const std::atomic_uint *>( obj )->load( order );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  return reinterpret_cast< const std::atomic_uint * >( obj )->load( order );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   return atomic_load_explicit( obj, order );
 #else
   unsigned int val;
@@ -269,11 +278,14 @@ static inline unsigned int _Atomic_Load_uint( const Atomic_Uint *obj, Atomic_Ord
  *
  * @return The value of @a obj considering the @a order.
  */
-static inline unsigned long _Atomic_Load_ulong( const Atomic_Ulong *obj, Atomic_Order order )
+static inline unsigned long _Atomic_Load_ulong(
+  const Atomic_Ulong *obj,
+  Atomic_Order        order
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  return reinterpret_cast<const std::atomic_ulong *>( obj )->load( order );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  return reinterpret_cast< const std::atomic_ulong * >( obj )->load( order );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   return atomic_load_explicit( obj, order );
 #else
   unsigned long val;
@@ -294,11 +306,16 @@ static inline unsigned long _Atomic_Load_ulong( const Atomic_Ulong *obj, Atomic_
  *
  * @return The value of @a obj considering the @a order.
  */
-static inline uintptr_t _Atomic_Load_uintptr( const Atomic_Uintptr *obj, Atomic_Order order )
+static inline uintptr_t _Atomic_Load_uintptr(
+  const Atomic_Uintptr *obj,
+  Atomic_Order          order
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  return reinterpret_cast<const std::atomic_uintptr_t *>( obj )->load( order );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  return reinterpret_cast< const std::atomic_uintptr_t * >( obj )->load(
+    order
+  );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   return atomic_load_explicit( obj, order );
 #else
   uintptr_t val;
@@ -318,11 +335,15 @@ static inline uintptr_t _Atomic_Load_uintptr( const Atomic_Uintptr *obj, Atomic_
  * @param desired The desired value for @a obj.
  * @param order The atomic order for storing the value.
  */
-static inline void _Atomic_Store_uint( Atomic_Uint *obj, unsigned int desired, Atomic_Order order )
+static inline void _Atomic_Store_uint(
+  Atomic_Uint *obj,
+  unsigned int desired,
+  Atomic_Order order
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  reinterpret_cast<std::atomic_uint *>( obj )->store( desired, order );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  reinterpret_cast< std::atomic_uint * >( obj )->store( desired, order );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   atomic_store_explicit( obj, desired, order );
 #else
   (void) order;
@@ -338,11 +359,15 @@ static inline void _Atomic_Store_uint( Atomic_Uint *obj, unsigned int desired, A
  * @param desired The desired value for @a obj.
  * @param order The atomic order for storing the value.
  */
-static inline void _Atomic_Store_ulong( Atomic_Ulong *obj, unsigned long desired, Atomic_Order order )
+static inline void _Atomic_Store_ulong(
+  Atomic_Ulong *obj,
+  unsigned long desired,
+  Atomic_Order  order
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  reinterpret_cast<std::atomic_ulong *>( obj )->store( desired, order );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  reinterpret_cast< std::atomic_ulong * >( obj )->store( desired, order );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   atomic_store_explicit( obj, desired, order );
 #else
   (void) order;
@@ -358,11 +383,15 @@ static inline void _Atomic_Store_ulong( Atomic_Ulong *obj, unsigned long desired
  * @param desired The desired value for @a obj.
  * @param order The atomic order for storing the value.
  */
-static inline void _Atomic_Store_uintptr( Atomic_Uintptr *obj, uintptr_t desired, Atomic_Order order )
+static inline void _Atomic_Store_uintptr(
+  Atomic_Uintptr *obj,
+  uintptr_t       desired,
+  Atomic_Order    order
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  reinterpret_cast<std::atomic_uintptr_t *>( obj )->store( desired, order );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  reinterpret_cast< std::atomic_uintptr_t * >( obj )->store( desired, order );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   atomic_store_explicit( obj, desired, order );
 #else
   (void) order;
@@ -380,15 +409,22 @@ static inline void _Atomic_Store_uintptr( Atomic_Uintptr *obj, uintptr_t desired
  *
  * @return The value of @a obj prior to the addition of @a arg.
  */
-static inline unsigned int _Atomic_Fetch_add_uint( Atomic_Uint *obj, unsigned int arg, Atomic_Order order )
+static inline unsigned int _Atomic_Fetch_add_uint(
+  Atomic_Uint *obj,
+  unsigned int arg,
+  Atomic_Order order
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  return reinterpret_cast<std::atomic_uint *>( obj )->fetch_add( arg, order );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  return reinterpret_cast< std::atomic_uint * >( obj )->fetch_add(
+    arg,
+    order
+  );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   return atomic_fetch_add_explicit( obj, arg, order );
 #else
   unsigned int val;
-  ISR_Level level;
+  ISR_Level    level;
 
   (void) order;
   _ISR_Local_disable( level );
@@ -409,15 +445,22 @@ static inline unsigned int _Atomic_Fetch_add_uint( Atomic_Uint *obj, unsigned in
  *
  * @return The value of @a obj prior to the addition of @a arg.
  */
-static inline unsigned long _Atomic_Fetch_add_ulong( Atomic_Ulong *obj, unsigned long arg, Atomic_Order order )
+static inline unsigned long _Atomic_Fetch_add_ulong(
+  Atomic_Ulong *obj,
+  unsigned long arg,
+  Atomic_Order  order
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  return reinterpret_cast<std::atomic_ulong *>( obj )->fetch_add( arg, order );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  return reinterpret_cast< std::atomic_ulong * >( obj )->fetch_add(
+    arg,
+    order
+  );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   return atomic_fetch_add_explicit( obj, arg, order );
 #else
   unsigned long val;
-  ISR_Level level;
+  ISR_Level     level;
 
   (void) order;
   _ISR_Local_disable( level );
@@ -438,11 +481,18 @@ static inline unsigned long _Atomic_Fetch_add_ulong( Atomic_Ulong *obj, unsigned
  *
  * @return The value of @a obj prior to the addition of @a arg.
  */
-static inline uintptr_t _Atomic_Fetch_add_uintptr( Atomic_Uintptr *obj, uintptr_t arg, Atomic_Order order )
+static inline uintptr_t _Atomic_Fetch_add_uintptr(
+  Atomic_Uintptr *obj,
+  uintptr_t       arg,
+  Atomic_Order    order
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  return reinterpret_cast<std::atomic_uintptr_t *>( obj )->fetch_add( arg, order );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  return reinterpret_cast< std::atomic_uintptr_t * >( obj )->fetch_add(
+    arg,
+    order
+  );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   return atomic_fetch_add_explicit( obj, arg, order );
 #else
   uintptr_t val;
@@ -467,15 +517,22 @@ static inline uintptr_t _Atomic_Fetch_add_uintptr( Atomic_Uintptr *obj, uintptr_
  *
  * @return The value of @a obj prior to the subtraction of @a arg.
  */
-static inline unsigned int _Atomic_Fetch_sub_uint( Atomic_Uint *obj, unsigned int arg, Atomic_Order order )
+static inline unsigned int _Atomic_Fetch_sub_uint(
+  Atomic_Uint *obj,
+  unsigned int arg,
+  Atomic_Order order
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  return reinterpret_cast<std::atomic_uint *>( obj )->fetch_sub( arg, order );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  return reinterpret_cast< std::atomic_uint * >( obj )->fetch_sub(
+    arg,
+    order
+  );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   return atomic_fetch_sub_explicit( obj, arg, order );
 #else
   unsigned int val;
-  ISR_Level level;
+  ISR_Level    level;
 
   (void) order;
   _ISR_Local_disable( level );
@@ -496,15 +553,22 @@ static inline unsigned int _Atomic_Fetch_sub_uint( Atomic_Uint *obj, unsigned in
  *
  * @return The value of @a obj prior to the subtraction of @a arg.
  */
-static inline unsigned long _Atomic_Fetch_sub_ulong( Atomic_Ulong *obj, unsigned long arg, Atomic_Order order )
+static inline unsigned long _Atomic_Fetch_sub_ulong(
+  Atomic_Ulong *obj,
+  unsigned long arg,
+  Atomic_Order  order
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  return reinterpret_cast<std::atomic_ulong *>( obj )->fetch_sub( arg, order );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  return reinterpret_cast< std::atomic_ulong * >( obj )->fetch_sub(
+    arg,
+    order
+  );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   return atomic_fetch_sub_explicit( obj, arg, order );
 #else
   unsigned long val;
-  ISR_Level level;
+  ISR_Level     level;
 
   (void) order;
   _ISR_Local_disable( level );
@@ -525,11 +589,18 @@ static inline unsigned long _Atomic_Fetch_sub_ulong( Atomic_Ulong *obj, unsigned
  *
  * @return The value of @a obj prior to the subtraction of @a arg.
  */
-static inline uintptr_t _Atomic_Fetch_sub_uintptr( Atomic_Uintptr *obj, uintptr_t arg, Atomic_Order order )
+static inline uintptr_t _Atomic_Fetch_sub_uintptr(
+  Atomic_Uintptr *obj,
+  uintptr_t       arg,
+  Atomic_Order    order
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  return reinterpret_cast<std::atomic_uintptr_t *>( obj )->fetch_sub( arg, order );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  return reinterpret_cast< std::atomic_uintptr_t * >( obj )->fetch_sub(
+    arg,
+    order
+  );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   return atomic_fetch_sub_explicit( obj, arg, order );
 #else
   uintptr_t val;
@@ -554,15 +625,19 @@ static inline uintptr_t _Atomic_Fetch_sub_uintptr( Atomic_Uintptr *obj, uintptr_
  *
  * @return The value of @a obj prior to the OR operation with @a arg.
  */
-static inline unsigned int _Atomic_Fetch_or_uint( Atomic_Uint *obj, unsigned int arg, Atomic_Order order )
+static inline unsigned int _Atomic_Fetch_or_uint(
+  Atomic_Uint *obj,
+  unsigned int arg,
+  Atomic_Order order
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  return reinterpret_cast<std::atomic_uint *>( obj )->fetch_or( arg, order );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  return reinterpret_cast< std::atomic_uint * >( obj )->fetch_or( arg, order );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   return atomic_fetch_or_explicit( obj, arg, order );
 #else
   unsigned int val;
-  ISR_Level level;
+  ISR_Level    level;
 
   (void) order;
   _ISR_Local_disable( level );
@@ -583,15 +658,22 @@ static inline unsigned int _Atomic_Fetch_or_uint( Atomic_Uint *obj, unsigned int
  *
  * @return The value of @a obj prior to the OR operation with @a arg.
  */
-static inline unsigned long _Atomic_Fetch_or_ulong( Atomic_Ulong *obj, unsigned long arg, Atomic_Order order )
+static inline unsigned long _Atomic_Fetch_or_ulong(
+  Atomic_Ulong *obj,
+  unsigned long arg,
+  Atomic_Order  order
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  return reinterpret_cast<std::atomic_ulong *>( obj )->fetch_or( arg, order );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  return reinterpret_cast< std::atomic_ulong * >( obj )->fetch_or(
+    arg,
+    order
+  );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   return atomic_fetch_or_explicit( obj, arg, order );
 #else
   unsigned long val;
-  ISR_Level level;
+  ISR_Level     level;
 
   (void) order;
   _ISR_Local_disable( level );
@@ -612,11 +694,18 @@ static inline unsigned long _Atomic_Fetch_or_ulong( Atomic_Ulong *obj, unsigned 
  *
  * @return The value of @a obj prior to the OR operation with @a arg.
  */
-static inline uintptr_t _Atomic_Fetch_or_uintptr( Atomic_Uintptr *obj, uintptr_t arg, Atomic_Order order )
+static inline uintptr_t _Atomic_Fetch_or_uintptr(
+  Atomic_Uintptr *obj,
+  uintptr_t       arg,
+  Atomic_Order    order
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  return reinterpret_cast<std::atomic_uintptr_t *>( obj )->fetch_or( arg, order );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  return reinterpret_cast< std::atomic_uintptr_t * >( obj )->fetch_or(
+    arg,
+    order
+  );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   return atomic_fetch_or_explicit( obj, arg, order );
 #else
   uintptr_t val;
@@ -641,15 +730,22 @@ static inline uintptr_t _Atomic_Fetch_or_uintptr( Atomic_Uintptr *obj, uintptr_t
  *
  * @return The value of @a obj prior to the AND operation with @a arg.
  */
-static inline unsigned int _Atomic_Fetch_and_uint( Atomic_Uint *obj, unsigned int arg, Atomic_Order order )
+static inline unsigned int _Atomic_Fetch_and_uint(
+  Atomic_Uint *obj,
+  unsigned int arg,
+  Atomic_Order order
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  return reinterpret_cast<std::atomic_uint *>( obj )->fetch_and( arg, order );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  return reinterpret_cast< std::atomic_uint * >( obj )->fetch_and(
+    arg,
+    order
+  );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   return atomic_fetch_and_explicit( obj, arg, order );
 #else
   unsigned int val;
-  ISR_Level level;
+  ISR_Level    level;
 
   (void) order;
   _ISR_Local_disable( level );
@@ -670,15 +766,22 @@ static inline unsigned int _Atomic_Fetch_and_uint( Atomic_Uint *obj, unsigned in
  *
  * @return The value of @a obj prior to the AND operation with @a arg.
  */
-static inline unsigned long _Atomic_Fetch_and_ulong( Atomic_Ulong *obj, unsigned long arg, Atomic_Order order )
+static inline unsigned long _Atomic_Fetch_and_ulong(
+  Atomic_Ulong *obj,
+  unsigned long arg,
+  Atomic_Order  order
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  return reinterpret_cast<std::atomic_ulong *>( obj )->fetch_and( arg, order );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  return reinterpret_cast< std::atomic_ulong * >( obj )->fetch_and(
+    arg,
+    order
+  );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   return atomic_fetch_and_explicit( obj, arg, order );
 #else
   unsigned long val;
-  ISR_Level level;
+  ISR_Level     level;
 
   (void) order;
   _ISR_Local_disable( level );
@@ -699,11 +802,18 @@ static inline unsigned long _Atomic_Fetch_and_ulong( Atomic_Ulong *obj, unsigned
  *
  * @return The value of @a obj prior to the AND operation with @a arg.
  */
-static inline uintptr_t _Atomic_Fetch_and_uintptr( Atomic_Uintptr *obj, uintptr_t arg, Atomic_Order order )
+static inline uintptr_t _Atomic_Fetch_and_uintptr(
+  Atomic_Uintptr *obj,
+  uintptr_t       arg,
+  Atomic_Order    order
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  return reinterpret_cast<std::atomic_uintptr_t *>( obj )->fetch_and( arg, order );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  return reinterpret_cast< std::atomic_uintptr_t * >( obj )->fetch_and(
+    arg,
+    order
+  );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   return atomic_fetch_and_explicit( obj, arg, order );
 #else
   uintptr_t val;
@@ -728,15 +838,22 @@ static inline uintptr_t _Atomic_Fetch_and_uintptr( Atomic_Uintptr *obj, uintptr_
  *
  * @return The value of @a obj prior to the exchange with @a desired.
  */
-static inline unsigned int _Atomic_Exchange_uint( Atomic_Uint *obj, unsigned int desired, Atomic_Order order )
+static inline unsigned int _Atomic_Exchange_uint(
+  Atomic_Uint *obj,
+  unsigned int desired,
+  Atomic_Order order
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  return reinterpret_cast<std::atomic_uint *>( obj )->exchange( desired, order );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  return reinterpret_cast< std::atomic_uint * >( obj )->exchange(
+    desired,
+    order
+  );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   return atomic_exchange_explicit( obj, desired, order );
 #else
   unsigned int val;
-  ISR_Level level;
+  ISR_Level    level;
 
   (void) order;
   _ISR_Local_disable( level );
@@ -757,15 +874,22 @@ static inline unsigned int _Atomic_Exchange_uint( Atomic_Uint *obj, unsigned int
  *
  * @return The value of @a obj prior to the exchange with @a desired.
  */
-static inline unsigned long _Atomic_Exchange_ulong( Atomic_Ulong *obj, unsigned long desired, Atomic_Order order )
+static inline unsigned long _Atomic_Exchange_ulong(
+  Atomic_Ulong *obj,
+  unsigned long desired,
+  Atomic_Order  order
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  return reinterpret_cast<std::atomic_ulong *>( obj )->exchange( desired, order );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  return reinterpret_cast< std::atomic_ulong * >( obj )->exchange(
+    desired,
+    order
+  );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   return atomic_exchange_explicit( obj, desired, order );
 #else
   unsigned long val;
-  ISR_Level level;
+  ISR_Level     level;
 
   (void) order;
   _ISR_Local_disable( level );
@@ -786,11 +910,18 @@ static inline unsigned long _Atomic_Exchange_ulong( Atomic_Ulong *obj, unsigned 
  *
  * @return The value of @a obj prior to the exchange with @a desired.
  */
-static inline uintptr_t _Atomic_Exchange_uintptr( Atomic_Uintptr *obj, uintptr_t desired, Atomic_Order order )
+static inline uintptr_t _Atomic_Exchange_uintptr(
+  Atomic_Uintptr *obj,
+  uintptr_t       desired,
+  Atomic_Order    order
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  return reinterpret_cast<std::atomic_uintptr_t *>( obj )->exchange( desired, order );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  return reinterpret_cast< std::atomic_uintptr_t * >( obj )->exchange(
+    desired,
+    order
+  );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   return atomic_exchange_explicit( obj, desired, order );
 #else
   uintptr_t val;
@@ -823,15 +954,28 @@ static inline uintptr_t _Atomic_Exchange_uintptr( Atomic_Uintptr *obj, uintptr_t
  * @retval true The old value of @a obj was as expected.
  * @retval false The old value of @a obj was not as expected.
  */
-static inline bool _Atomic_Compare_exchange_uint( Atomic_Uint *obj, unsigned int *expected, unsigned int desired, Atomic_Order succ, Atomic_Order fail )
+static inline bool _Atomic_Compare_exchange_uint(
+  Atomic_Uint  *obj,
+  unsigned int *expected,
+  unsigned int  desired,
+  Atomic_Order  succ,
+  Atomic_Order  fail
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  return reinterpret_cast<std::atomic_uint *>( obj )->compare_exchange_strong( *expected, desired, succ, fail );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
-  return atomic_compare_exchange_strong_explicit( obj, expected, desired, succ, fail );
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  return reinterpret_cast< std::atomic_uint * >( obj )
+    ->compare_exchange_strong( *expected, desired, succ, fail );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
+  return atomic_compare_exchange_strong_explicit(
+    obj,
+    expected,
+    desired,
+    succ,
+    fail
+  );
 #else
-  bool success;
-  ISR_Level level;
+  bool         success;
+  ISR_Level    level;
   unsigned int actual;
 
   (void) succ;
@@ -867,15 +1011,28 @@ static inline bool _Atomic_Compare_exchange_uint( Atomic_Uint *obj, unsigned int
  * @retval true The old value of @a obj was as expected.
  * @retval false The old value of @a obj was not as expected.
  */
-static inline bool _Atomic_Compare_exchange_ulong( Atomic_Ulong *obj, unsigned long *expected, unsigned long desired, Atomic_Order succ, Atomic_Order fail )
+static inline bool _Atomic_Compare_exchange_ulong(
+  Atomic_Ulong  *obj,
+  unsigned long *expected,
+  unsigned long  desired,
+  Atomic_Order   succ,
+  Atomic_Order   fail
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  return reinterpret_cast<std::atomic_ulong *>( obj )->compare_exchange_strong( *expected, desired, succ, fail );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
-  return atomic_compare_exchange_strong_explicit( obj, expected, desired, succ, fail );
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  return reinterpret_cast< std::atomic_ulong * >( obj )
+    ->compare_exchange_strong( *expected, desired, succ, fail );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
+  return atomic_compare_exchange_strong_explicit(
+    obj,
+    expected,
+    desired,
+    succ,
+    fail
+  );
 #else
-  bool success;
-  ISR_Level level;
+  bool          success;
+  ISR_Level     level;
   unsigned long actual;
 
   (void) succ;
@@ -911,14 +1068,27 @@ static inline bool _Atomic_Compare_exchange_ulong( Atomic_Ulong *obj, unsigned l
  * @retval true The old value of @a obj was as expected.
  * @retval false The old value of @a obj was not as expected.
  */
-static inline bool _Atomic_Compare_exchange_uintptr( Atomic_Uintptr *obj, uintptr_t *expected, uintptr_t desired, Atomic_Order succ, Atomic_Order fail )
+static inline bool _Atomic_Compare_exchange_uintptr(
+  Atomic_Uintptr *obj,
+  uintptr_t      *expected,
+  uintptr_t       desired,
+  Atomic_Order    succ,
+  Atomic_Order    fail
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
-  return reinterpret_cast<std::atomic_uintptr_t *>( obj )->compare_exchange_strong( *expected, desired, succ, fail );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
-  return atomic_compare_exchange_strong_explicit( obj, expected, desired, succ, fail );
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
+  return reinterpret_cast< std::atomic_uintptr_t * >( obj )
+    ->compare_exchange_strong( *expected, desired, succ, fail );
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
+  return atomic_compare_exchange_strong_explicit(
+    obj,
+    expected,
+    desired,
+    succ,
+    fail
+  );
 #else
-  bool success;
+  bool      success;
   ISR_Level level;
   uintptr_t actual;
 
@@ -946,9 +1116,9 @@ static inline bool _Atomic_Compare_exchange_uintptr( Atomic_Uintptr *obj, uintpt
  */
 static inline void _Atomic_Flag_clear( Atomic_Flag *obj, Atomic_Order order )
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
   obj->clear( order );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   atomic_flag_clear_explicit( obj, order );
 #else
   (void) order;
@@ -965,14 +1135,17 @@ static inline void _Atomic_Flag_clear( Atomic_Flag *obj, Atomic_Order order )
  * @retval true @a obj was set prior to this operation.
  * @retval false @a obj was not set prior to this operation.
  */
-static inline bool _Atomic_Flag_test_and_set( Atomic_Flag *obj, Atomic_Order order )
+static inline bool _Atomic_Flag_test_and_set(
+  Atomic_Flag *obj,
+  Atomic_Order order
+)
 {
-#if defined(_RTEMS_SCORE_ATOMIC_USE_ATOMIC)
+#if defined( _RTEMS_SCORE_ATOMIC_USE_ATOMIC )
   return obj->test_and_set( order );
-#elif defined(_RTEMS_SCORE_ATOMIC_USE_STDATOMIC)
+#elif defined( _RTEMS_SCORE_ATOMIC_USE_STDATOMIC )
   return atomic_flag_test_and_set_explicit( obj, order );
 #else
-  bool flag;
+  bool      flag;
   ISR_Level level;
 
   (void) order;

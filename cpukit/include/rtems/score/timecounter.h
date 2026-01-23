@@ -224,8 +224,8 @@ extern ISR_lock_Control _Timecounter_Lock;
  *
  * See _Timecounter_Tick_simple().
  */
-#define _Timecounter_Release(lock_context) \
-   _ISR_lock_Release_and_ISR_enable(&_Timecounter_Lock, lock_context)
+#define _Timecounter_Release( lock_context ) \
+  _ISR_lock_Release_and_ISR_enable( &_Timecounter_Lock, lock_context )
 
 /**
  * @brief Performs a simple timecounter tick.
@@ -240,8 +240,8 @@ extern ISR_lock_Control _Timecounter_Lock;
  * _Timecounter_Acquire().
  */
 void _Timecounter_Tick_simple(
-  uint32_t delta,
-  uint32_t offset,
+  uint32_t          delta,
+  uint32_t          offset,
   ISR_lock_Context *lock_context
 );
 
@@ -270,7 +270,7 @@ extern struct timecounter *_Timecounter;
  *
  * @param[in, out] newsec is the number of seconds since Unix epoch.
  */
-typedef	void ( *Timecounter_NTP_update_second )(
+typedef void ( *Timecounter_NTP_update_second )(
   int64_t *adjustment,
   time_t  *newsec
 );
@@ -292,7 +292,7 @@ void _Timecounter_Set_NTP_update_second(
  *
  * @param[in, out] newsec is the number of seconds since Unix epoch.
  */
-void _Timecounter_NTP_update_second(int64_t *adjustment, time_t *newsec);
+void _Timecounter_NTP_update_second( int64_t *adjustment, time_t *newsec );
 
 /**
  * @brief Gets the frequency in Hz of the current timecounter at some time
@@ -300,7 +300,7 @@ void _Timecounter_NTP_update_second(int64_t *adjustment, time_t *newsec);
  *
  * @return Returns the frequency in Hz.
  */
-uint64_t _Timecounter_Get_frequency(void);
+uint64_t _Timecounter_Get_frequency( void );
 
 /**
  * @brief Updates the timecounter frequency adjustment used by
@@ -317,7 +317,7 @@ uint64_t _Timecounter_Get_frequency(void);
  *
  * @param[i] nsec is the time in nanoseconds from the last PPS event
  */
-void _Timecounter_Discipline(struct timespec *tsp, long nsec);
+void _Timecounter_Discipline( struct timespec *tsp, long nsec );
 
 /** @} */
 

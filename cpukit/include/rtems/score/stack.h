@@ -63,17 +63,17 @@ extern "C" {
  *  The following constant defines the minimum stack size which every
  *  thread must exceed.
  */
-#define STACK_MINIMUM_SIZE  CPU_STACK_MINIMUM_SIZE
+#define STACK_MINIMUM_SIZE CPU_STACK_MINIMUM_SIZE
 
 /**
  *  The following defines the control block used to manage each stack.
  */
 typedef struct {
   /** This is the stack size. */
-  size_t      size;
+  size_t size;
   /** This is the low memory address of stack. */
-  void       *area;
-}   Stack_Control;
+  void  *area;
+} Stack_Control;
 
 /**
  * @brief The stack allocator initialization handler.
@@ -118,10 +118,8 @@ typedef void ( *Stack_Allocator_free )( void *addr );
  *
  * @return Returns the pointer to begin of the allocated stack area.
  */
-typedef void *( *Stack_Allocator_allocate_for_idle )(
-  uint32_t  cpu,
-  size_t   *stack_size
-);
+typedef void
+  *( *Stack_Allocator_allocate_for_idle )( uint32_t cpu, size_t *stack_size );
 
 /**
  * @brief The minimum stack size.
@@ -186,8 +184,8 @@ void _Stack_Allocator_do_initialize( void );
  * @return Returns a pointer to the begin of the allocated task storage area.
  */
 void *_Stack_Allocator_allocate_for_idle_workspace(
-  uint32_t  unused,
-  size_t   *storage_size
+  uint32_t unused,
+  size_t  *storage_size
 );
 
 /**
@@ -219,8 +217,8 @@ extern char _Stack_Allocator_allocate_for_idle_storage_areas[];
  * @return Returns a pointer to the begin of the allocated task storage area.
  */
 void *_Stack_Allocator_allocate_for_idle_static(
-  uint32_t  cpu_index,
-  size_t   *storage_size
+  uint32_t cpu_index,
+  size_t  *storage_size
 );
 
 /**

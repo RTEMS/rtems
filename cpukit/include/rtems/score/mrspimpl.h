@@ -39,7 +39,7 @@
 
 #include <rtems/score/mrsp.h>
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 
 #include <rtems/score/assert.h>
 #include <rtems/score/status.h>
@@ -93,9 +93,7 @@ static inline void _MRSP_Release(
  *
  * @return The owner of the Mrsp control.
  */
-static inline Thread_Control *_MRSP_Get_owner(
-  const MRSP_Control *mrsp
-)
+static inline Thread_Control *_MRSP_Get_owner( const MRSP_Control *mrsp )
 {
   return mrsp->Wait_queue.Queue.owner;
 }
@@ -106,10 +104,7 @@ static inline Thread_Control *_MRSP_Get_owner(
  * @param[out] mrsp The MrsP control to set the owner of.
  * @param owner The desired new owner for @a mrsp.
  */
-static inline void _MRSP_Set_owner(
-  MRSP_Control   *mrsp,
-  Thread_Control *owner
-)
+static inline void _MRSP_Set_owner( MRSP_Control *mrsp, Thread_Control *owner )
 {
   mrsp->Wait_queue.Queue.owner = owner;
 }
@@ -188,8 +183,8 @@ static inline Status_Control _MRSP_Raise_priority(
   ceiling_priority = _MRSP_Get_priority( mrsp, scheduler );
 
   if (
-    ceiling_priority
-      <= _Priority_Get_priority( &scheduler_node->Wait.Priority )
+    ceiling_priority <=
+    _Priority_Get_priority( &scheduler_node->Wait.Priority )
   ) {
     _Priority_Node_initialize( priority_node, ceiling_priority );
     _Thread_Priority_add( thread, priority_node, queue_context );
@@ -240,7 +235,7 @@ static inline void _MRSP_Replace_priority(
   ISR_lock_Context lock_context;
 
   _Thread_Wait_acquire_default( thread, &lock_context );
-  _Thread_Priority_replace( 
+  _Thread_Priority_replace(
     thread,
     ceiling_priority,
     &mrsp->Ceiling_priority
@@ -318,14 +313,16 @@ static inline Status_Control _MRSP_Initialize(
 
   scheduler_count = _Scheduler_Count;
 
-  for ( i = 0 ; i < scheduler_count ; ++i ) {
+  for ( i = 0; i < scheduler_count; ++i ) {
     const Scheduler_Control *scheduler_of_index;
 
     scheduler_of_index = &_Scheduler_Table[ i ];
 
     if ( scheduler != scheduler_of_index ) {
-      mrsp->ceiling_priorities[ i ] =
-        _Scheduler_Map_priority( scheduler_of_index, 0 );
+      mrsp->ceiling_priorities[ i ] = _Scheduler_Map_priority(
+        scheduler_of_index,
+        0
+      );
     } else {
       mrsp->ceiling_priorities[ i ] = ceiling_priority;
     }

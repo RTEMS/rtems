@@ -57,7 +57,7 @@ extern "C" {
  *  The following type defines the control block used to manage
  *  the interrupt level portion of the status register.
  */
-typedef uint32_t   ISR_Level;
+typedef uint32_t ISR_Level;
 
 /**
  *  @brief Disables interrupts on this processor.
@@ -74,10 +74,10 @@ typedef uint32_t   ISR_Level;
  *  interrupt mask level.
  */
 #define _ISR_Local_disable( _level ) \
-  do { \
-    _CPU_ISR_Disable( _level ); \
+  do {                               \
+    _CPU_ISR_Disable( _level );      \
     RTEMS_COMPILER_MEMORY_BARRIER(); \
-  } while (0)
+  } while ( 0 )
 
 /**
  *  @brief Enables interrupts on this processor.
@@ -90,11 +90,11 @@ typedef uint32_t   ISR_Level;
  *  @param[in] _level The interrupt level previously obtained by
  *  _ISR_Local_disable().
  */
-#define _ISR_Local_enable( _level ) \
-  do { \
+#define _ISR_Local_enable( _level )  \
+  do {                               \
     RTEMS_COMPILER_MEMORY_BARRIER(); \
-    _CPU_ISR_Enable( _level ); \
-  } while (0)
+    _CPU_ISR_Enable( _level );       \
+  } while ( 0 )
 
 /**
  *  @brief Temporarily enables interrupts on this processor.
@@ -115,12 +115,12 @@ typedef uint32_t   ISR_Level;
  *  @param[in] _level The interrupt level previously obtained by
  *  _ISR_Local_disable().
  */
-#define _ISR_Local_flash( _level ) \
-  do { \
+#define _ISR_Local_flash( _level )   \
+  do {                               \
     RTEMS_COMPILER_MEMORY_BARRIER(); \
-    _CPU_ISR_Flash( _level ); \
+    _CPU_ISR_Flash( _level );        \
     RTEMS_COMPILER_MEMORY_BARRIER(); \
-  } while (0)
+  } while ( 0 )
 
 /**
  * @brief Returns true if interrupts are enabled in the specified interrupt
@@ -131,8 +131,7 @@ typedef uint32_t   ISR_Level;
  * @retval true Interrupts are enabled in the interrupt level.
  * @retval false Otherwise.
  */
-#define _ISR_Is_enabled( _level ) \
-  _CPU_ISR_Is_enabled( _level )
+#define _ISR_Is_enabled( _level ) _CPU_ISR_Is_enabled( _level )
 
 /**
  *  @brief Return current interrupt level.
@@ -144,8 +143,7 @@ typedef uint32_t   ISR_Level;
  *
  *  @retval This method returns the current level.
  */
-#define _ISR_Get_level() \
-        _CPU_ISR_Get_level()
+#define _ISR_Get_level() _CPU_ISR_Get_level()
 
 /**
  *  @brief Set current interrupt level.
@@ -156,12 +154,12 @@ typedef uint32_t   ISR_Level;
  *
  *  @param[in] _new_level contains the desired interrupt level.
  */
-#define _ISR_Set_level( _new_level ) \
-  do { \
+#define _ISR_Set_level( _new_level )  \
+  do {                                \
     RTEMS_COMPILER_MEMORY_BARRIER();  \
     _CPU_ISR_Set_level( _new_level ); \
     RTEMS_COMPILER_MEMORY_BARRIER();  \
-  } while (0)
+  } while ( 0 )
 
 /**
  * @brief Checks if an ISR in progress.

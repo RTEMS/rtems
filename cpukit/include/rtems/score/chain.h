@@ -95,13 +95,13 @@ typedef struct Chain_Node {
  */
 typedef union {
   struct {
-    Chain_Node Node;
+    Chain_Node  Node;
     Chain_Node *fill;
   } Head;
 
   struct {
     Chain_Node *fill;
-    Chain_Node Node;
+    Chain_Node  Node;
   } Tail;
 } Chain_Control;
 

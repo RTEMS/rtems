@@ -55,7 +55,7 @@ struct _Thread_Control;
 extern "C" {
 #endif /* __cplusplus */
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 /**
  * @brief The scheduler node requests.
  */
@@ -92,7 +92,7 @@ typedef struct Scheduler_Node Scheduler_Node;
  * @brief Scheduler node for per-thread data.
  */
 struct Scheduler_Node {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /**
    * @brief Chain node for usage in various scheduler data structures.
    *
@@ -103,7 +103,7 @@ struct Scheduler_Node {
    * object node in the thread control block.
    */
   union {
-    Chain_Node Chain;
+    Chain_Node  Chain;
     RBTree_Node RBTree;
   } Node;
 
@@ -137,7 +137,7 @@ struct Scheduler_Node {
    */
   struct _Thread_Control *owner;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /**
    * @brief Block to register and manage this scheduler node in the thread
    * control block of the owner of this scheduler node.
@@ -213,13 +213,13 @@ struct Scheduler_Node {
      *
      * @see _Scheduler_Node_get_priority() and _Scheduler_Node_set_priority().
      */
-#if defined(RTEMS_SMP) && CPU_SIZEOF_POINTER == 8
+#if defined( RTEMS_SMP ) && CPU_SIZEOF_POINTER == 8
     Atomic_Ulong value;
 #else
     Priority_Control value;
 #endif
 
-#if defined(RTEMS_SMP) && CPU_SIZEOF_POINTER != 8
+#if defined( RTEMS_SMP ) && CPU_SIZEOF_POINTER != 8
     /**
      * @brief The lock protects the priority value.
      */
@@ -228,7 +228,7 @@ struct Scheduler_Node {
   } Priority;
 };
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 /**
  * @brief The size of a scheduler node.
  *
@@ -237,7 +237,7 @@ struct Scheduler_Node {
 extern const size_t _Scheduler_Node_size;
 #endif
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 #define SCHEDULER_NODE_OF_THREAD_WAIT_NODE( node ) \
   RTEMS_CONTAINER_OF( node, Scheduler_Node, Thread.Wait_node )
 

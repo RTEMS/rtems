@@ -89,8 +89,8 @@ static inline void _Workspace_Initialize_for_multiple_areas( void )
         size = free_size;
       } else {
         if ( remaining > 0 ) {
-          size = remaining < free_size - overhead ?
-            remaining + overhead : free_size;
+          size = remaining < free_size - overhead ? remaining + overhead
+                                                  : free_size;
         } else {
           size = 0;
         }

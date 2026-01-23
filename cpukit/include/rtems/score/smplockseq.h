@@ -39,7 +39,7 @@
 
 #include <rtems/score/cpuopts.h>
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 
 #include <rtems/score/assert.h>
 #include <rtems/score/atomic.h>
@@ -88,7 +88,9 @@ typedef struct {
  *
  * @param[out] lock The SMP sequence lock control.
  */
-static inline void _SMP_sequence_lock_Initialize( SMP_sequence_lock_Control *lock )
+static inline void _SMP_sequence_lock_Initialize(
+  SMP_sequence_lock_Control *lock
+)
 {
   _Atomic_Init_uint( &lock->sequence, 0 );
 }
@@ -100,7 +102,9 @@ static inline void _SMP_sequence_lock_Initialize( SMP_sequence_lock_Control *loc
  *
  * @param lock The SMP sequence lock control.
  */
-static inline void _SMP_sequence_lock_Destroy( SMP_sequence_lock_Control *lock )
+static inline void _SMP_sequence_lock_Destroy(
+  SMP_sequence_lock_Control *lock
+)
 {
   (void) lock;
 }

@@ -102,11 +102,9 @@ typedef void ( *Thread_queue_Enqueue_callout )(
  *
  * @see _Thread_queue_Context_set_deadlock_callout().
  */
-typedef void ( *Thread_queue_Deadlock_callout )(
-  Thread_Control *the_thread
-);
+typedef void ( *Thread_queue_Deadlock_callout )( Thread_Control *the_thread );
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
 /**
  * @brief Multiprocessing (MP) support callout for thread queue operations.
  *
@@ -123,7 +121,7 @@ typedef void ( *Thread_queue_MP_callout )(
 );
 #endif
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 /**
  * @brief The thread queue gate is an SMP synchronization means.
  *
@@ -148,7 +146,7 @@ typedef struct {
    */
   ISR_lock_Context Lock_context;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /**
    * @brief Data to support thread queue enqueue operations.
    */
@@ -168,7 +166,7 @@ typedef struct {
 #endif
 } Thread_queue_Lock_context;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 /**
  * @brief A thread queue link from one thread to another specified by the
  * thread queue owner and thread wait queue relationships.
@@ -271,7 +269,7 @@ struct Thread_queue_Context {
    */
   clockid_t clock_id;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /**
    * @brief Representation of a thread queue path from a start thread queue to
    * the terminal thread queue.
@@ -337,7 +335,7 @@ struct Thread_queue_Context {
    */
   Thread_queue_Deadlock_callout deadlock_callout;
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   /**
    * @brief Callout to unblock the thread in case it is actually a thread
    * proxy.
@@ -356,7 +354,7 @@ struct Thread_queue_Context {
  * @brief Thread priority queue.
  */
 typedef struct {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /**
    * @brief Node to enqueue this queue in the FIFO chain of the corresponding
    * heads structure.
@@ -405,7 +403,7 @@ typedef struct _Thread_queue_Heads {
      */
     Chain_Control Fifo;
 
-#if !defined(RTEMS_SMP)
+#if !defined( RTEMS_SMP )
     /**
      * @brief This is the set of threads for priority discipline waiting.
      */
@@ -425,7 +423,7 @@ typedef struct _Thread_queue_Heads {
    */
   Chain_Node Free_node;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /**
    * @brief One priority queue per scheduler instance.
    */
@@ -434,7 +432,7 @@ typedef struct _Thread_queue_Heads {
 } Thread_queue_Heads;
 
 struct Thread_queue_Queue {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /**
    * @brief Lock to protect this thread queue.
    *
@@ -480,8 +478,8 @@ struct Thread_queue_Queue {
  *   the thread queue owner or the empty set in case there is nothing to do.
  */
 typedef void ( *Thread_queue_Priority_actions_operation )(
-  Thread_queue_Queue   *queue,
-  Priority_Actions     *priority_actions
+  Thread_queue_Queue *queue,
+  Priority_Actions   *priority_actions
 );
 
 /**
@@ -616,8 +614,8 @@ struct Thread_queue_Operations {
  *  waiting to acquire a resource.
  */
 typedef struct {
-#if defined(RTEMS_SMP)
-#if defined(RTEMS_DEBUG)
+#if defined( RTEMS_SMP )
+#if defined( RTEMS_DEBUG )
   /**
    * @brief The index of the owning processor of the thread queue lock.
    *
@@ -632,7 +630,7 @@ typedef struct {
   uint32_t owner;
 #endif
 
-#if defined(RTEMS_PROFILING)
+#if defined( RTEMS_PROFILING )
   /**
    * @brief SMP lock statistics in case SMP and profiling are enabled.
    *

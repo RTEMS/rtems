@@ -67,9 +67,9 @@ extern "C" {
  */
 static inline uintptr_t _Protected_heap_Initialize(
   Heap_Control *heap,
-  void *area_begin,
-  uintptr_t area_size,
-  uintptr_t page_size
+  void         *area_begin,
+  uintptr_t     area_size,
+  uintptr_t     page_size
 )
 {
   return _Heap_Initialize( heap, area_begin, area_size, page_size );
@@ -87,8 +87,8 @@ static inline uintptr_t _Protected_heap_Initialize(
  */
 bool _Protected_heap_Extend(
   Heap_Control *heap,
-  void *area_begin,
-  uintptr_t area_size
+  void         *area_begin,
+  uintptr_t     area_size
 );
 
 /**
@@ -112,9 +112,9 @@ bool _Protected_heap_Extend(
  */
 void *_Protected_heap_Allocate_aligned_with_boundary(
   Heap_Control *heap,
-  uintptr_t size,
-  uintptr_t alignment,
-  uintptr_t boundary
+  uintptr_t     size,
+  uintptr_t     alignment,
+  uintptr_t     boundary
 );
 
 /**
@@ -133,12 +133,16 @@ void *_Protected_heap_Allocate_aligned_with_boundary(
  */
 static inline void *_Protected_heap_Allocate_aligned(
   Heap_Control *heap,
-  uintptr_t size,
-  uintptr_t alignment
+  uintptr_t     size,
+  uintptr_t     alignment
 )
 {
-  return
-    _Protected_heap_Allocate_aligned_with_boundary( heap, size, alignment, 0 );
+  return _Protected_heap_Allocate_aligned_with_boundary(
+    heap,
+    size,
+    alignment,
+    0
+  );
 }
 
 /**
@@ -156,7 +160,7 @@ static inline void *_Protected_heap_Allocate_aligned(
  */
 static inline void *_Protected_heap_Allocate(
   Heap_Control *heap,
-  uintptr_t size
+  uintptr_t     size
 )
 {
   return _Protected_heap_Allocate_aligned_with_boundary( heap, size, 0, 0 );
@@ -200,7 +204,7 @@ bool _Protected_heap_Walk( Heap_Control *heap, int source, bool dump );
  * @param[out] info Stores the information of the @a heap after the method call.
  */
 bool _Protected_heap_Get_information(
-  Heap_Control *heap,
+  Heap_Control           *heap,
   Heap_Information_block *info
 );
 
@@ -214,7 +218,7 @@ bool _Protected_heap_Get_information(
  *      method call.
  */
 bool _Protected_heap_Get_free_information(
-  Heap_Control *heap,
+  Heap_Control     *heap,
   Heap_Information *info
 );
 

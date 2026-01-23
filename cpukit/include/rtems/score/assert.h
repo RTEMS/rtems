@@ -75,25 +75,25 @@ extern "C" {
   #endif /* !__RTEMS_ASSERT_FUNCTION */
 
   #if !defined( RTEMS_SCHEDSIM )
-    /* normal build is newlib. */
+/* normal build is newlib. */
 
     #define _Assert( _e ) \
-       ( ( _e ) ? \
-         ( void ) 0 : \
-           __assert_func( __FILE__, __LINE__, __RTEMS_ASSERT_FUNCTION, #_e ) )
+  ( ( _e )                \
+      ? (void) 0          \
+      : __assert_func( __FILE__, __LINE__, __RTEMS_ASSERT_FUNCTION, #_e ) )
 
-  #elif defined(__linux__)
+  #elif defined( __linux__ )
     /* Scheduler simulator has only beed tested on glibc. */
     #define _Assert( _e ) \
-     ( ( _e ) ? \
-       ( void ) 0 : \
-         __assert_fail( #_e, __FILE__, __LINE__, __RTEMS_ASSERT_FUNCTION ) )
+  ( ( _e )                \
+      ? (void) 0          \
+      : __assert_fail( #_e, __FILE__, __LINE__, __RTEMS_ASSERT_FUNCTION ) )
   #else
     #error "Implement RTEMS assert support for this C Library"
   #endif
 
 #else
-  #define _Assert( _e ) ( ( void ) 0 )
+  #define _Assert( _e ) ( (void) 0 )
 #endif
 
 /**
@@ -105,11 +105,11 @@ extern "C" {
  * @param _var The return value to be checked.
  * @param _val Indicates what @a _var is supposed to be.
  */
-#define _Assert_Unused_variable_equals(_var,_val) \
-        do { \
-          _Assert((_var) == (_val)); \
-          (void) (_var); \
-        } while (0)
+#define _Assert_Unused_variable_equals( _var, _val ) \
+  do {                                               \
+    _Assert( ( _var ) == ( _val ) );                 \
+    (void) ( _var );                                 \
+  } while ( 0 )
 
 /**
  * @brief Assert if unused return value is not equal.
@@ -120,11 +120,11 @@ extern "C" {
  * @param _var The return value to be checked.
  * @param _val Indicates what @a _var is not supposed to be.
  */
-#define _Assert_Unused_variable_unequal(_var,_val) \
-         do { \
-          _Assert((_var) != (_val)); \
-           (void) (_var); \
-        } while (0)
+#define _Assert_Unused_variable_unequal( _var, _val ) \
+  do {                                                \
+    _Assert( ( _var ) != ( _val ) );                  \
+    (void) ( _var );                                  \
+  } while ( 0 )
 
 /**
  * @brief Returns true if thread dispatching is allowed.
@@ -133,7 +133,7 @@ extern "C" {
  * _ISR_Local_disable().
  */
 #if defined( RTEMS_DEBUG )
-  bool _Debug_Is_thread_dispatching_allowed( void );
+bool _Debug_Is_thread_dispatching_allowed( void );
 #endif
 
 #ifdef __cplusplus

@@ -68,7 +68,7 @@ extern "C" {
  */
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
   #define CONTEXT_FP_SIZE \
-    RTEMS_ALIGN_UP( CPU_CONTEXT_FP_SIZE, CPU_STACK_ALIGNMENT )
+  RTEMS_ALIGN_UP( CPU_CONTEXT_FP_SIZE, CPU_STACK_ALIGNMENT )
 #else
   #define CONTEXT_FP_SIZE 0
 #endif
@@ -90,10 +90,24 @@ extern "C" {
  *         enabled
  *  @param[in] _tls_area The thread-local storage (TLS) area begin.
  */
-#define _Context_Initialize( _the_context, _stack, _size, _isr, _entry, \
-  _is_fp, _tls_area ) \
-    _CPU_Context_Initialize( _the_context, _stack, _size, _isr, _entry, \
-      _is_fp, _tls_area )
+#define _Context_Initialize( \
+  _the_context,              \
+  _stack,                    \
+  _size,                     \
+  _isr,                      \
+  _entry,                    \
+  _is_fp,                    \
+  _tls_area                  \
+)                            \
+  _CPU_Context_Initialize(   \
+    _the_context,            \
+    _stack,                  \
+    _size,                   \
+    _isr,                    \
+    _entry,                  \
+    _is_fp,                  \
+    _tls_area                \
+  )
 
 /**
  *  This macro is invoked from _Thread_Handler to do whatever CPU
@@ -104,9 +118,9 @@ extern "C" {
  *  macro is empty.
  */
 
-#if defined(_CPU_Context_Initialization_at_thread_begin)
+#if defined( _CPU_Context_Initialization_at_thread_begin )
   #define _Context_Initialization_at_thread_begin() \
-     _CPU_Context_Initialization_at_thread_begin()
+  _CPU_Context_Initialization_at_thread_begin()
 #else
   #define _Context_Initialization_at_thread_begin()
 #endif
@@ -121,7 +135,7 @@ extern "C" {
  *  @param[in] _heir is the context of the thread to be switched to
  */
 #define _Context_Switch( _executing, _heir ) \
-   _CPU_Context_switch( _executing, _heir )
+  _CPU_Context_switch( _executing, _heir )
 
 /**
  *  @brief Restart currently executing thread.
@@ -132,7 +146,7 @@ extern "C" {
  *  @param[in] _the_context is the context of the thread to restart
  */
 #define _Context_Restart_self( _the_context ) \
-   _CPU_Context_Restart_self( _the_context )
+  _CPU_Context_Restart_self( _the_context )
 
 /**
  *  @brief Initialize floating point context area.
@@ -144,7 +158,7 @@ extern "C" {
  *         context save area to initialize.
  */
 #define _Context_Initialize_fp( _fp_area ) \
-   _CPU_Context_Initialize_fp( _fp_area )
+  _CPU_Context_Initialize_fp( _fp_area )
 
 /**
  *  @brief Restore floating point context area.
@@ -156,8 +170,7 @@ extern "C" {
  *
  *  @param[in] _fp points to the floating point context area to restore.
  */
-#define _Context_Restore_fp( _fp ) \
-   _CPU_Context_restore_fp( _fp )
+#define _Context_Restore_fp( _fp ) _CPU_Context_restore_fp( _fp )
 
 /**
  *  @brief Save floating point context area.
@@ -167,12 +180,11 @@ extern "C" {
  *
  *  @param[in] _fp points to the floating point context area to restore.
  */
-#define _Context_Save_fp( _fp ) \
-   _CPU_Context_save_fp( _fp )
+#define _Context_Save_fp( _fp ) _CPU_Context_save_fp( _fp )
 
-#if defined(_CPU_Context_Destroy)
+#if defined( _CPU_Context_Destroy )
   #define _Context_Destroy( _the_thread, _the_context ) \
-    _CPU_Context_Destroy( _the_thread, _the_context )
+  _CPU_Context_Destroy( _the_thread, _the_context )
 #else
   #define _Context_Destroy( _the_thread, _the_context )
 #endif

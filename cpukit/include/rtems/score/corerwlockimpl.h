@@ -64,7 +64,7 @@ extern "C" {
  *  This is used to denote that a thread is blocking waiting for
  *  read-only access to the RWLock.
  */
-#define CORE_RWLOCK_THREAD_WAITING_FOR_READ  0
+#define CORE_RWLOCK_THREAD_WAITING_FOR_READ 0
 
 /**
  *  This is used to denote that a thread is blocking waiting for
@@ -85,7 +85,7 @@ typedef enum {
   /** This indicates the the RWLock is currently locked for reading.
    */
   CORE_RWLOCK_LOCKED_FOR_WRITING
-}   CORE_RWLock_States;
+} CORE_RWLock_States;
 
 /**
  *  The following defines the control block used to manage each
@@ -104,7 +104,7 @@ typedef struct {
   /** This element contains the current number of thread waiting for this
    *  RWLock to be released. */
   unsigned int number_of_readers;
-}   CORE_RWLock_Control;
+} CORE_RWLock_Control;
 
 /**
  * @brief Initializes a RWlock.
@@ -113,9 +113,7 @@ typedef struct {
  *
  * @param[out] the_rwlock is the RWLock to initialize.
  */
-void _CORE_RWLock_Initialize(
-  CORE_RWLock_Control *the_rwlock
-);
+void _CORE_RWLock_Initialize( CORE_RWLock_Control *the_rwlock );
 
 /**
  * @brief Destroys a RWlock.
@@ -124,9 +122,7 @@ void _CORE_RWLock_Initialize(
  *
  * @param[out] the_rwlock is the RWLock to destroy.
  */
-static inline void _CORE_RWLock_Destroy(
-  CORE_RWLock_Control *the_rwlock
-)
+static inline void _CORE_RWLock_Destroy( CORE_RWLock_Control *the_rwlock )
 {
   (void) the_rwlock;
 }

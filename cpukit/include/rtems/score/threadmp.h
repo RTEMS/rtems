@@ -39,7 +39,8 @@
 #define _RTEMS_SCORE_THREADMP_H
 
 #ifndef _RTEMS_SCORE_THREADIMPL_H
-# error "Never use <rtems/score/threadmp.h> directly; include <rtems/score/threadimpl.h> instead."
+# error \
+  "Never use <rtems/score/threadmp.h> directly; include <rtems/score/threadimpl.h> instead."
 #endif
 
 #include <rtems/score/mpciimpl.h>
@@ -71,9 +72,7 @@ extern "C" {
  *
  * @param maximum_proxies The maximum number of proxies for the MP thread handler.
  */
-void _Thread_MP_Handler_initialization (
-  uint32_t   maximum_proxies
-);
+void _Thread_MP_Handler_initialization( uint32_t maximum_proxies );
 
 /**
  * @brief Allocates a MP proxy control block from
@@ -87,9 +86,7 @@ void _Thread_MP_Handler_initialization (
  *
  * * @param the_state The state for the allocated MP proxy control block.
  */
-Thread_Control *_Thread_MP_Allocate_proxy (
-  States_Control the_state
-);
+Thread_Control *_Thread_MP_Allocate_proxy( States_Control the_state );
 
 /**
  * @brief Removes the MP proxy control block for the specified
@@ -102,9 +99,7 @@ Thread_Control *_Thread_MP_Allocate_proxy (
  *
  * @return The removed proxy control block.
  */
-Thread_Control *_Thread_MP_Find_proxy (
-  Objects_Id the_id
-);
+Thread_Control *_Thread_MP_Find_proxy( Objects_Id the_id );
 
 /**
  * This function returns true if the thread in question is the
@@ -113,8 +108,8 @@ Thread_Control *_Thread_MP_Find_proxy (
  * @note This is a macro to avoid needing a prototype for
  *       _MPCI_Receive_server_tcb until it is used.
  */
-#define _Thread_MP_Is_receive(_the_thread) \
-  ((_the_thread) == _MPCI_Receive_server_tcb)
+#define _Thread_MP_Is_receive( _the_thread ) \
+  ( ( _the_thread ) == _MPCI_Receive_server_tcb )
 
 /**
  * @brief Extracts the proxy of the thread if necessary.

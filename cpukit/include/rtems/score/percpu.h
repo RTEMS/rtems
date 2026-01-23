@@ -77,8 +77,8 @@ extern "C" {
   #endif
 
   #define PER_CPU_CONTROL_SIZE_BASE 180
-  #define PER_CPU_CONTROL_SIZE_APPROX \
-    ( PER_CPU_CONTROL_SIZE_BASE + CPU_PER_CPU_CONTROL_SIZE + \
+  #define PER_CPU_CONTROL_SIZE_APPROX                           \
+  ( PER_CPU_CONTROL_SIZE_BASE + CPU_PER_CPU_CONTROL_SIZE +      \
     CPU_INTERRUPT_FRAME_SIZE + PER_CPU_CONTROL_SIZE_PROFILING + \
     PER_CPU_CONTROL_SIZE_DEBUG + PER_CPU_CONTROL_SIZE_BIG_POINTER )
 
@@ -383,10 +383,10 @@ typedef enum {
  */
 typedef struct Per_CPU_Control {
   #if CPU_PER_CPU_CONTROL_SIZE > 0
-    /**
+  /**
      * @brief CPU port specific control.
      */
-    CPU_Per_CPU_control cpu_per_cpu;
+  CPU_Per_CPU_control cpu_per_cpu;
   #endif
 
   /**
@@ -472,7 +472,7 @@ typedef struct Per_CPU_Control {
    */
   struct _Thread_Control *heir;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   CPU_Interrupt_frame Interrupt_frame;
 #endif
 
@@ -492,7 +492,7 @@ typedef struct Per_CPU_Control {
    * @brief Watchdog state for this processor.
    */
   struct {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
     /**
      * @brief Protects all watchdog operations on this processor.
      */
@@ -514,74 +514,74 @@ typedef struct Per_CPU_Control {
   } Watchdog;
 
   #if defined( RTEMS_SMP )
-    /**
+  /**
      * @brief This lock protects some members of this structure.
      */
-    ISR_lock_Control Lock;
+  ISR_lock_Control Lock;
 
-    /**
+  /**
      * @brief Lock context used to acquire all per-CPU locks.
      *
      * This member is protected by the Per_CPU_Control::Lock lock.
      *
      * @see _Per_CPU_Acquire_all().
      */
-    ISR_lock_Context Lock_context;
+  ISR_lock_Context Lock_context;
 
-    /**
+  /**
      * @brief Chain of threads in need for help.
      *
      * This member is protected by the Per_CPU_Control::Lock lock.
      */
-    Chain_Control Threads_in_need_for_help;
+  Chain_Control Threads_in_need_for_help;
 
-    /**
+  /**
      * @brief Bit field for SMP messages.
      *
      * This member is not protected locks.  Atomic operations are used to set
      * and get the message bits.
      */
-    Atomic_Ulong message;
+  Atomic_Ulong message;
 
-    struct {
-      /**
+  struct {
+    /**
        * @brief The scheduler control of the scheduler owning this processor.
        *
        * This pointer is NULL in case this processor is currently not used by a
        * scheduler instance.
        */
-      const struct _Scheduler_Control *control;
+    const struct _Scheduler_Control *control;
 
-      /**
+    /**
        * @brief The scheduler context of the scheduler owning this processor.
        *
        * This pointer is NULL in case this processor is currently not used by a
        * scheduler instance.
        */
-      const struct Scheduler_Context *context;
+    const struct Scheduler_Context *context;
 
-      /**
+    /**
        * @brief The idle thread for this processor in case it is online and
        * currently not used by a scheduler instance.
        */
-      struct _Thread_Control *idle_if_online_and_unused;
-    } Scheduler;
+    struct _Thread_Control *idle_if_online_and_unused;
+  } Scheduler;
 
-    /**
+  /**
      * @brief The ancestor of the executing thread.
      *
      * This member is used by _User_extensions_Thread_switch().
      */
-    struct _Thread_Control *ancestor;
+  struct _Thread_Control *ancestor;
 
-    /**
+  /**
      * @brief Begin of the per-CPU data area.
      *
      * Contains items defined via PER_CPU_DATA_ITEM().
      */
-    char *data;
+  char *data;
 
-    /**
+  /**
      * @brief Indicates the current state of the processor.
      *
      * Only the processor associated with this control is allowed to change
@@ -589,29 +589,29 @@ typedef struct Per_CPU_Control {
      *
      * @see _Per_CPU_Get_state() and _Per_CPU_Set_state().
      */
-    Atomic_Uint state;
+  Atomic_Uint state;
 
-    /**
+  /**
      * @brief FIFO list of jobs to be performed by this processor.
      *
      * @see _SMP_Multicast_action().
      */
-    struct {
-      /**
+  struct {
+    /**
        * @brief Lock to protect the FIFO list of jobs to be performed by this
        * processor.
        */
-      ISR_lock_Control Lock;
+    ISR_lock_Control Lock;
 
-      /**
+    /**
        * @brief Head of the FIFO list of jobs to be performed by this
        * processor.
        *
        * This member is protected by the Per_CPU_Control::Jobs::Lock lock.
        */
-      struct Per_CPU_Job *head;
+    struct Per_CPU_Job *head;
 
-      /**
+    /**
        * @brief Tail of the FIFO list of jobs to be performed by this
        * processor.
        *
@@ -619,20 +619,20 @@ typedef struct Per_CPU_Control {
        *
        * This member is protected by the Per_CPU_Control::Jobs::Lock lock.
        */
-      struct Per_CPU_Job **tail;
-    } Jobs;
+    struct Per_CPU_Job **tail;
+  } Jobs;
 
-    /**
+  /**
      * @brief Indicates if the processor has been successfully started via
      * _CPU_SMP_Start_processor().
      */
-    bool online;
+  bool online;
 
-    /**
+  /**
      * @brief Indicates if the processor is the one that performed the initial
      * system initialization.
      */
-    bool boot;
+  bool boot;
   #endif
 
   struct Record_Control *record;
@@ -643,7 +643,7 @@ typedef struct Per_CPU_Control {
 #if defined( RTEMS_SMP )
 typedef struct {
   Per_CPU_Control per_cpu;
-  char unused_space_for_cache_line_alignment
+  char            unused_space_for_cache_line_alignment
     [ PER_CPU_CONTROL_SIZE - sizeof( Per_CPU_Control ) ];
 } Per_CPU_Control_envelope;
 #else
@@ -676,7 +676,7 @@ extern CPU_STRUCTURE_ALIGNMENT Per_CPU_Control_envelope _Per_CPU_Information[];
   #define _Per_CPU_Get_snapshot() _CPU_Get_current_per_CPU_control()
 #else
   #define _Per_CPU_Get_snapshot() \
-    ( &_Per_CPU_Information[ _SMP_Get_current_processor() ].per_cpu )
+  ( &_Per_CPU_Information[ _SMP_Get_current_processor() ].per_cpu )
 #endif
 
 #if defined( RTEMS_SMP )
@@ -701,11 +701,11 @@ static inline Per_CPU_Control *_Per_CPU_Get_by_index( uint32_t index )
 
 static inline uint32_t _Per_CPU_Get_index( const Per_CPU_Control *cpu )
 {
-#if defined(RTEMS_SMP)
-  const Per_CPU_Control_envelope *per_cpu_envelope =
-    ( const Per_CPU_Control_envelope * ) cpu;
+#if defined( RTEMS_SMP )
+  const Per_CPU_Control_envelope
+    *per_cpu_envelope = (const Per_CPU_Control_envelope *) cpu;
 
-  return ( uint32_t ) ( per_cpu_envelope - &_Per_CPU_Information[ 0 ] );
+  return (uint32_t) ( per_cpu_envelope - &_Per_CPU_Information[ 0 ] );
 #else
   (void) cpu;
   return 0;
@@ -729,9 +729,7 @@ static inline bool _Per_CPU_Is_ISR_in_progress( const Per_CPU_Control *cpu )
 #endif
 }
 
-static inline bool _Per_CPU_Is_processor_online(
-  const Per_CPU_Control *cpu
-)
+static inline bool _Per_CPU_Is_processor_online( const Per_CPU_Control *cpu )
 {
 #if defined( RTEMS_SMP )
   return cpu->online;
@@ -742,9 +740,7 @@ static inline bool _Per_CPU_Is_processor_online(
 #endif
 }
 
-static inline bool _Per_CPU_Is_boot_processor(
-  const Per_CPU_Control *cpu
-)
+static inline bool _Per_CPU_Is_boot_processor( const Per_CPU_Control *cpu )
 {
 #if defined( RTEMS_SMP )
   return cpu->boot;
@@ -755,11 +751,9 @@ static inline bool _Per_CPU_Is_boot_processor(
 #endif
 }
 
-static inline void _Per_CPU_Acquire_all(
-  ISR_lock_Context *lock_context
-)
+static inline void _Per_CPU_Acquire_all( ISR_lock_Context *lock_context )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   uint32_t         cpu_max;
   uint32_t         cpu_index;
   Per_CPU_Control *previous_cpu;
@@ -770,23 +764,21 @@ static inline void _Per_CPU_Acquire_all(
   _ISR_lock_ISR_disable( lock_context );
   _Per_CPU_Acquire( previous_cpu, lock_context );
 
-  for ( cpu_index = 1 ; cpu_index < cpu_max ; ++cpu_index ) {
-     Per_CPU_Control *cpu;
+  for ( cpu_index = 1; cpu_index < cpu_max; ++cpu_index ) {
+    Per_CPU_Control *cpu;
 
-     cpu = _Per_CPU_Get_by_index( cpu_index );
-     _Per_CPU_Acquire( cpu, &previous_cpu->Lock_context );
-     previous_cpu = cpu;
+    cpu = _Per_CPU_Get_by_index( cpu_index );
+    _Per_CPU_Acquire( cpu, &previous_cpu->Lock_context );
+    previous_cpu = cpu;
   }
 #else
   _ISR_lock_ISR_disable( lock_context );
 #endif
 }
 
-static inline void _Per_CPU_Release_all(
-  ISR_lock_Context *lock_context
-)
+static inline void _Per_CPU_Release_all( ISR_lock_Context *lock_context )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   uint32_t         cpu_max;
   uint32_t         cpu_index;
   Per_CPU_Control *cpu;
@@ -794,12 +786,12 @@ static inline void _Per_CPU_Release_all(
   cpu_max = _SMP_Get_processor_maximum();
   cpu = _Per_CPU_Get_by_index( cpu_max - 1 );
 
-  for ( cpu_index = cpu_max - 1 ; cpu_index > 0 ; --cpu_index ) {
-     Per_CPU_Control *previous_cpu;
+  for ( cpu_index = cpu_max - 1; cpu_index > 0; --cpu_index ) {
+    Per_CPU_Control *previous_cpu;
 
-     previous_cpu = _Per_CPU_Get_by_index( cpu_index - 1 );
-     _Per_CPU_Release( cpu, &previous_cpu->Lock_context );
-     cpu = previous_cpu;
+    previous_cpu = _Per_CPU_Get_by_index( cpu_index - 1 );
+    _Per_CPU_Release( cpu, &previous_cpu->Lock_context );
+    cpu = previous_cpu;
   }
 
   _Per_CPU_Release( cpu, lock_context );
@@ -820,8 +812,9 @@ static inline void _Per_CPU_Release_all(
  */
 static inline Per_CPU_State _Per_CPU_Get_state( const Per_CPU_Control *cpu )
 {
-  return (Per_CPU_State)
-    _Atomic_Load_uint( &cpu->state, ATOMIC_ORDER_ACQUIRE );
+  return (
+    Per_CPU_State
+  ) _Atomic_Load_uint( &cpu->state, ATOMIC_ORDER_ACQUIRE );
 }
 
 /**
@@ -899,25 +892,18 @@ void _Per_CPU_Wait_for_job(
  */
 #define _Thread_Dispatch_disable_level \
   _Per_CPU_Get()->thread_dispatch_disable_level
-#define _Thread_Heir \
-  _Per_CPU_Get()->heir
+#define _Thread_Heir _Per_CPU_Get()->heir
 
-#if defined(_CPU_Get_thread_executing)
-#define _Thread_Executing \
-  _CPU_Get_thread_executing()
+#if defined( _CPU_Get_thread_executing )
+#define _Thread_Executing _CPU_Get_thread_executing()
 #else
-#define _Thread_Executing \
-  _Per_CPU_Get_executing( _Per_CPU_Get() )
+#define _Thread_Executing _Per_CPU_Get_executing( _Per_CPU_Get() )
 #endif
 
-#define _ISR_Nest_level \
-  _Per_CPU_Get()->isr_nest_level
-#define _CPU_Interrupt_stack_low \
-  _Per_CPU_Get()->interrupt_stack_low
-#define _CPU_Interrupt_stack_high \
-  _Per_CPU_Get()->interrupt_stack_high
-#define _Thread_Dispatch_necessary \
-  _Per_CPU_Get()->dispatch_necessary
+#define _ISR_Nest_level            _Per_CPU_Get()->isr_nest_level
+#define _CPU_Interrupt_stack_low   _Per_CPU_Get()->interrupt_stack_low
+#define _CPU_Interrupt_stack_high  _Per_CPU_Get()->interrupt_stack_high
+#define _Thread_Dispatch_necessary _Per_CPU_Get()->dispatch_necessary
 
 /**
  * @brief Returns the thread control block of the executing thread.
@@ -933,16 +919,16 @@ static inline struct _Thread_Control *_Thread_Get_executing( void )
 {
   struct _Thread_Control *executing;
 
-  #if defined(RTEMS_SMP) && !defined(_CPU_Get_thread_executing)
-    ISR_Level level;
+  #if defined( RTEMS_SMP ) && !defined( _CPU_Get_thread_executing )
+  ISR_Level level;
 
-    _ISR_Local_disable( level );
+  _ISR_Local_disable( level );
   #endif
 
   executing = _Thread_Executing;
 
-  #if defined(RTEMS_SMP) && !defined(_CPU_Get_thread_executing)
-    _ISR_Local_enable( level );
+  #if defined( RTEMS_SMP ) && !defined( _CPU_Get_thread_executing )
+  _ISR_Local_enable( level );
   #endif
 
   return executing;
@@ -954,42 +940,34 @@ static inline struct _Thread_Control *_Thread_Get_executing( void )
 
 #if defined( ASM ) || defined( _RTEMS_PERCPU_DEFINE_OFFSETS )
 
-#define PER_CPU_INTERRUPT_STACK_LOW \
-  CPU_PER_CPU_CONTROL_SIZE
+#define PER_CPU_INTERRUPT_STACK_LOW CPU_PER_CPU_CONTROL_SIZE
 #define PER_CPU_INTERRUPT_STACK_HIGH \
   PER_CPU_INTERRUPT_STACK_LOW + CPU_SIZEOF_POINTER
 
 #define INTERRUPT_STACK_LOW \
-  (SYM(_Per_CPU_Information) + PER_CPU_INTERRUPT_STACK_LOW)
+  ( SYM( _Per_CPU_Information ) + PER_CPU_INTERRUPT_STACK_LOW )
 #define INTERRUPT_STACK_HIGH \
-  (SYM(_Per_CPU_Information) + PER_CPU_INTERRUPT_STACK_HIGH)
+  ( SYM( _Per_CPU_Information ) + PER_CPU_INTERRUPT_STACK_HIGH )
 
 /*
  *  These are the offsets of the required elements in the per CPU table.
  */
 #define PER_CPU_ISR_NEST_LEVEL \
   PER_CPU_INTERRUPT_STACK_HIGH + CPU_SIZEOF_POINTER
-#define PER_CPU_ISR_DISPATCH_DISABLE \
-  PER_CPU_ISR_NEST_LEVEL + 4
-#define PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL \
-  PER_CPU_ISR_DISPATCH_DISABLE + 4
-#define PER_CPU_DISPATCH_NEEDED \
-  PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL + 4
-#define PER_CPU_OFFSET_EXECUTING \
-  PER_CPU_DISPATCH_NEEDED + 4
-#define PER_CPU_OFFSET_HEIR \
-  PER_CPU_OFFSET_EXECUTING + CPU_SIZEOF_POINTER
-#if defined(RTEMS_SMP)
-#define PER_CPU_INTERRUPT_FRAME_AREA \
-  PER_CPU_OFFSET_HEIR + CPU_SIZEOF_POINTER
+#define PER_CPU_ISR_DISPATCH_DISABLE          PER_CPU_ISR_NEST_LEVEL + 4
+#define PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL PER_CPU_ISR_DISPATCH_DISABLE + 4
+#define PER_CPU_DISPATCH_NEEDED  PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL + 4
+#define PER_CPU_OFFSET_EXECUTING PER_CPU_DISPATCH_NEEDED + 4
+#define PER_CPU_OFFSET_HEIR      PER_CPU_OFFSET_EXECUTING + CPU_SIZEOF_POINTER
+#if defined( RTEMS_SMP )
+#define PER_CPU_INTERRUPT_FRAME_AREA PER_CPU_OFFSET_HEIR + CPU_SIZEOF_POINTER
 #endif
 
 #define THREAD_DISPATCH_DISABLE_LEVEL \
-  (SYM(_Per_CPU_Information) + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL)
-#define ISR_NEST_LEVEL \
-  (SYM(_Per_CPU_Information) + PER_CPU_ISR_NEST_LEVEL)
+  ( SYM( _Per_CPU_Information ) + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL )
+#define ISR_NEST_LEVEL ( SYM( _Per_CPU_Information ) + PER_CPU_ISR_NEST_LEVEL )
 #define DISPATCH_NEEDED \
-  (SYM(_Per_CPU_Information) + PER_CPU_DISPATCH_NEEDED)
+  ( SYM( _Per_CPU_Information ) + PER_CPU_DISPATCH_NEEDED )
 
 #endif /* defined( ASM ) || defined( _RTEMS_PERCPU_DEFINE_OFFSETS ) */
 

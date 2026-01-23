@@ -69,10 +69,10 @@ typedef void *( *Freechain_Allocator )( size_t size );
  * @param node_size The node size.
  */
 static inline void _Freechain_Initialize(
-  Freechain_Control   *freechain,
-  void                *initial_nodes,
-  size_t               number_nodes,
-  size_t               node_size
+  Freechain_Control *freechain,
+  void              *initial_nodes,
+  size_t             number_nodes,
+  size_t             node_size
 )
 {
   _Chain_Initialize(
@@ -88,9 +88,7 @@ static inline void _Freechain_Initialize(
  *
  * @param freechain The freechain control.
  */
-static inline bool _Freechain_Is_empty(
-  const Freechain_Control *freechain
-)
+static inline bool _Freechain_Is_empty( const Freechain_Control *freechain )
 {
   return _Chain_Is_empty( &freechain->Free );
 }
@@ -113,10 +111,7 @@ static inline void *_Freechain_Pop( Freechain_Control *freechain )
  * @param freechain The freechain control.
  * @param node The node to push back.  The node shall not be @c NULL.
  */
-static inline void _Freechain_Push(
-  Freechain_Control *freechain,
-  void              *node
-)
+static inline void _Freechain_Push( Freechain_Control *freechain, void *node )
 {
   _Chain_Initialize_node( node );
   _Chain_Prepend_unprotected( &freechain->Free, node );
@@ -134,10 +129,10 @@ static inline void _Freechain_Push(
  * @retval nodes Pointer to the new nodes.
  */
 void *_Freechain_Extend(
-  Freechain_Control   *freechain,
-  Freechain_Allocator  allocator,
-  size_t               number_nodes_to_extend,
-  size_t               node_size
+  Freechain_Control  *freechain,
+  Freechain_Allocator allocator,
+  size_t              number_nodes_to_extend,
+  size_t              node_size
 );
 
 /**
@@ -154,10 +149,10 @@ void *_Freechain_Extend(
  * caller.
  */
 void *_Freechain_Get(
-  Freechain_Control   *freechain,
-  Freechain_Allocator  allocator,
-  size_t               number_nodes_to_extend,
-  size_t               node_size
+  Freechain_Control  *freechain,
+  Freechain_Allocator allocator,
+  size_t              number_nodes_to_extend,
+  size_t              node_size
 );
 
 /**
@@ -167,10 +162,7 @@ void *_Freechain_Get(
  * @param[out] node The node to put back.  The node may be @c NULL, in this case
  *   the function does nothing.
  */
-void _Freechain_Put(
-  Freechain_Control *freechain,
-  void              *node
-);
+void _Freechain_Put( Freechain_Control *freechain, void *node );
 
 /** @} */
 

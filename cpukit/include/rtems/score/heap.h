@@ -216,52 +216,53 @@ typedef struct {
 #else
   #define HEAP_PROTECTOR_COUNT 2
 
-  #define HEAP_BEGIN_PROTECTOR_0 ((uintptr_t) 0xfd75a98f)
-  #define HEAP_BEGIN_PROTECTOR_1 ((uintptr_t) 0xbfa1f177)
-  #define HEAP_END_PROTECTOR_0 ((uintptr_t) 0xd6b8855e)
-  #define HEAP_END_PROTECTOR_1 ((uintptr_t) 0x13a44a5b)
+  #define HEAP_BEGIN_PROTECTOR_0 ( (uintptr_t) 0xfd75a98f )
+  #define HEAP_BEGIN_PROTECTOR_1 ( (uintptr_t) 0xbfa1f177 )
+  #define HEAP_END_PROTECTOR_0   ( (uintptr_t) 0xd6b8855e )
+  #define HEAP_END_PROTECTOR_1   ( (uintptr_t) 0x13a44a5b )
 
-  #define HEAP_FREE_PATTERN ((uintptr_t) 0xe7093cdf)
+  #define HEAP_FREE_PATTERN ( (uintptr_t) 0xe7093cdf )
 
-  #define HEAP_PROTECTION_OBOLUS ((Heap_Block *) 1)
+  #define HEAP_PROTECTION_OBOLUS ( (Heap_Block *) 1 )
 
-  typedef void (*_Heap_Protection_handler)(
-     Heap_Control *heap,
-     Heap_Block *block
-  );
+typedef void ( *_Heap_Protection_handler )(
+  Heap_Control *heap,
+  Heap_Block   *block
+);
 
-  typedef void (*_Heap_Protection_error_handler)(
-     Heap_Control *heap,
-     Heap_Block *block,
-     Heap_Error_reason reason
-  );
+typedef void ( *_Heap_Protection_error_handler )(
+  Heap_Control     *heap,
+  Heap_Block       *block,
+  Heap_Error_reason reason
+);
 
-  typedef struct {
-    _Heap_Protection_handler block_initialize;
-    _Heap_Protection_handler block_check;
-    _Heap_Protection_error_handler block_error;
-    void *handler_data;
-    Heap_Block *first_delayed_free_block;
-    Heap_Block *last_delayed_free_block;
-    uintptr_t delayed_free_block_count;
-    uintptr_t delayed_free_fraction;
-  } Heap_Protection;
+typedef struct {
+  _Heap_Protection_handler       block_initialize;
+  _Heap_Protection_handler       block_check;
+  _Heap_Protection_error_handler block_error;
+  void                          *handler_data;
+  Heap_Block                    *first_delayed_free_block;
+  Heap_Block                    *last_delayed_free_block;
+  uintptr_t                      delayed_free_block_count;
+  uintptr_t                      delayed_free_fraction;
+} Heap_Protection;
 
-  struct _Thread_Control;
+struct _Thread_Control;
 
-  typedef struct {
-    uintptr_t protector [HEAP_PROTECTOR_COUNT];
-    Heap_Block *next_delayed_free_block;
-    struct _Thread_Control *task;
-    void *tag;
-  } Heap_Protection_block_begin;
+typedef struct {
+  uintptr_t               protector[ HEAP_PROTECTOR_COUNT ];
+  Heap_Block             *next_delayed_free_block;
+  struct _Thread_Control *task;
+  void                   *tag;
+} Heap_Protection_block_begin;
 
-  typedef struct {
-    uintptr_t protector [HEAP_PROTECTOR_COUNT];
-  } Heap_Protection_block_end;
+typedef struct {
+  uintptr_t protector[ HEAP_PROTECTOR_COUNT ];
+} Heap_Protection_block_end;
 
-  #define HEAP_PROTECTION_HEADER_SIZE \
-    (sizeof(Heap_Protection_block_begin) + sizeof(Heap_Protection_block_end))
+  #define HEAP_PROTECTION_HEADER_SIZE       \
+  ( sizeof( Heap_Protection_block_begin ) + \
+    sizeof( Heap_Protection_block_end ) )
 #endif
 
 /**
@@ -269,7 +270,7 @@ typedef struct {
  * (@ref Heap_Block.prev_size and @ref Heap_Block.size_and_flag).
  */
 #define HEAP_BLOCK_HEADER_SIZE \
-  (2 * sizeof(uintptr_t) + HEAP_PROTECTION_HEADER_SIZE)
+  ( 2 * sizeof( uintptr_t ) + HEAP_PROTECTION_HEADER_SIZE )
 
 /**
  * @brief Description for free or used blocks.
@@ -291,7 +292,7 @@ struct Heap_Block {
   uintptr_t prev_size;
 
   #ifdef HEAP_PROTECTION
-    Heap_Protection_block_begin Protection_begin;
+  Heap_Protection_block_begin Protection_begin;
   #endif
 
   /**
@@ -310,7 +311,7 @@ struct Heap_Block {
   uintptr_t size_and_flag;
 
   #ifdef HEAP_PROTECTION
-    Heap_Protection_block_end Protection_end;
+  Heap_Protection_block_end Protection_end;
   #endif
 
   /**
@@ -337,16 +338,16 @@ struct Heap_Block {
  * @brief Control block used to manage a heap.
  */
 struct Heap_Control {
-  Heap_Block free_list;
-  uintptr_t page_size;
-  uintptr_t min_block_size;
-  uintptr_t area_begin;
-  uintptr_t area_end;
-  Heap_Block *first_block;
-  Heap_Block *last_block;
+  Heap_Block      free_list;
+  uintptr_t       page_size;
+  uintptr_t       min_block_size;
+  uintptr_t       area_begin;
+  uintptr_t       area_end;
+  Heap_Block     *first_block;
+  Heap_Block     *last_block;
   Heap_Statistics stats;
   #ifdef HEAP_PROTECTION
-    Heap_Protection Protection;
+  Heap_Protection Protection;
   #endif
 };
 
@@ -357,7 +358,7 @@ struct Heap_Control {
  * @see Heap_Initialization_or_extend_handler.
  */
 typedef struct {
-  void *begin;
+  void     *begin;
   uintptr_t size;
 } Heap_Area;
 
@@ -370,11 +371,11 @@ typedef struct {
  *
  * @see Heap_Area, _Heap_Initialize(), _Heap_Extend(), or _Heap_No_extend().
  */
-typedef uintptr_t (*Heap_Initialization_or_extend_handler)(
+typedef uintptr_t ( *Heap_Initialization_or_extend_handler )(
   Heap_Control *heap,
-  void *area_begin,
-  uintptr_t area_size,
-  uintptr_t page_size_or_unused
+  void         *area_begin,
+  uintptr_t     area_size,
+  uintptr_t     page_size_or_unused
 );
 
 /**
@@ -399,9 +400,9 @@ typedef uintptr_t (*Heap_Initialization_or_extend_handler)(
  */
 uintptr_t _Heap_Extend(
   Heap_Control *heap,
-  void *area_begin,
-  uintptr_t area_size,
-  uintptr_t unused
+  void         *area_begin,
+  uintptr_t     area_size,
+  uintptr_t     unused
 );
 
 /**
@@ -418,9 +419,9 @@ uintptr_t _Heap_Extend(
  */
 uintptr_t _Heap_No_extend(
   Heap_Control *unused_0,
-  void *unused_1,
-  uintptr_t unused_2,
-  uintptr_t unused_3
+  void         *unused_1,
+  uintptr_t     unused_2,
+  uintptr_t     unused_3
 );
 
 /**
@@ -431,10 +432,7 @@ uintptr_t _Heap_No_extend(
  *
  * @return The @a value aligned to the given @a alignment, rounded up.
  */
-static inline uintptr_t _Heap_Align_up(
-  uintptr_t value,
-  uintptr_t alignment
-)
+static inline uintptr_t _Heap_Align_up( uintptr_t value, uintptr_t alignment )
 {
   uintptr_t remainder = value % alignment;
 
@@ -464,9 +462,7 @@ static inline uintptr_t _Heap_Min_block_size( uintptr_t page_size )
  *
  * @return The worst case overhead to manage a memory area.
  */
-static inline uintptr_t _Heap_Area_overhead(
-  uintptr_t page_size
-)
+static inline uintptr_t _Heap_Area_overhead( uintptr_t page_size )
 {
   if ( page_size != 0 ) {
     page_size = _Heap_Align_up( page_size, CPU_ALIGNMENT );
@@ -480,7 +476,7 @@ static inline uintptr_t _Heap_Area_overhead(
    * only of a block header.
    */
   return page_size - 1 + _Heap_Min_block_size( page_size ) +
-    HEAP_BLOCK_HEADER_SIZE;
+         HEAP_BLOCK_HEADER_SIZE;
 }
 
 /**

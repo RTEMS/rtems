@@ -43,7 +43,7 @@
 
 #include <rtems/score/atomic.h>
 #include <rtems/score/context.h>
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
 #include <rtems/score/mppkt.h>
 #endif
 #include <rtems/score/freechain.h>
@@ -57,7 +57,7 @@
 #include <rtems/score/timestamp.h>
 #include <rtems/score/watchdog.h>
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 #include <rtems/score/processormask.h>
 #endif
 
@@ -95,14 +95,14 @@ extern "C" {
  *@{
  */
 
-#if defined(RTEMS_DEBUG)
+#if defined( RTEMS_DEBUG )
 /**
  * @brief This define enables the thread resource count support.
  */
 #define RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT
 #endif
 
-#if defined(RTEMS_POSIX_API)
+#if defined( RTEMS_POSIX_API )
 /**
  * @brief This define enables support for an inactive real thread priority.
  *
@@ -112,7 +112,7 @@ extern "C" {
 #define RTEMS_SCORE_THREAD_REAL_PRIORITY_MAY_BE_INACTIVE
 #endif
 
-#if defined(RTEMS_POSIX_API) && defined(RTEMS_SMP)
+#if defined( RTEMS_POSIX_API ) && defined( RTEMS_SMP )
 /**
  * @brief This define enables support to inhibit scheduler changes.
  *
@@ -153,7 +153,7 @@ typedef struct {
  * value.
  */
 typedef struct {
-  void *( *entry )( void *argument  );
+  void *( *entry )( void *argument );
   void *argument;
 } Thread_Entry_pointer;
 
@@ -175,7 +175,7 @@ typedef struct {
    * function with the right parameters.
    */
   union {
-    Thread_Entry_idle Idle;
+    Thread_Entry_idle    Idle;
     Thread_Entry_numeric Numeric;
     Thread_Entry_pointer Pointer;
   } Kinds;
@@ -230,12 +230,12 @@ typedef struct {
  */
 typedef struct {
   /** This field contains the thread entry information. */
-  Thread_Entry_information             Entry;
+  Thread_Entry_information Entry;
   /*-------------- initial execution modes ----------------- */
   /** This field indicates whether the thread was preemptible when
     * it started.
     */
-  bool                                 is_preemptible;
+  bool                     is_preemptible;
 
   /**
    * @brief This member may provide the CPU budget operations activated when a
@@ -244,24 +244,24 @@ typedef struct {
   const Thread_CPU_budget_operations *cpu_budget_operations;
 
   /** This field is the initial ISR disable level of this thread. */
-  uint32_t                             isr_level;
+  uint32_t         isr_level;
   /** This field is the initial priority. */
-  Priority_Control                     initial_priority;
+  Priority_Control initial_priority;
   /**
    * @brief This field points to the handler which should free the stack.
    */
-  void                              ( *stack_free )( void * );
+  void ( *stack_free )( void * );
   /** This field is the stack information. */
-  Stack_Control                        Initial_stack;
+  Stack_Control Initial_stack;
   #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-    /** This field is the initial FP context area address. */
-    Context_Control_fp                  *fp_context;
+  /** This field is the initial FP context area address. */
+  Context_Control_fp *fp_context;
   #endif
   /** The thread-local storage (TLS) area */
-  void                                *tls_area;
+  void *tls_area;
 } Thread_Start_information;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 /**
  * @brief The thread state with respect to the scheduler.
  */
@@ -295,7 +295,7 @@ typedef enum {
  * @brief Thread scheduler control.
  */
 typedef struct {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /**
    * @brief Lock to protect the scheduler node change requests.
    */
@@ -457,40 +457,39 @@ typedef unsigned int Thread_Wait_flags;
  *  blocked and to return information to it.
  */
 typedef struct {
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   /*
    * @brief This field is the identifier of the remote object this thread is
    * waiting upon.
    */
-  Objects_Id            remote_id;
+  Objects_Id remote_id;
 #endif
   /** This field is used to return an integer while when blocked. */
-  uint32_t              count;
+  uint32_t                                     count;
   /** This field is for a pointer to a user return argument. */
-  void                 *return_argument;
+  void                                        *return_argument;
   /** This field is for a pointer to a second user return argument. */
-  Thread_Wait_information_Object_argument_type
-                        return_argument_second;
+  Thread_Wait_information_Object_argument_type return_argument_second;
   /** This field contains any options in effect on this blocking operation. */
-  uint32_t              option;
+  uint32_t                                     option;
   /** This field will contain the return status from a blocking operation.
    *
    *  @note The following assumes that all API return codes can be
    *        treated as an uint32_t.
    */
-  uint32_t              return_code;
+  uint32_t                                     return_code;
 
   /**
    * @brief This field contains several flags used to control the wait class
    * and state of a thread in case fine-grained locking is used.
    */
-#if defined(RTEMS_SMP)
-  Atomic_Uint           flags;
+#if defined( RTEMS_SMP )
+  Atomic_Uint flags;
 #else
-  Thread_Wait_flags     flags;
+  Thread_Wait_flags flags;
 #endif
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /**
    * @brief Thread wait lock control block.
    *
@@ -559,7 +558,7 @@ typedef struct {
   const Thread_queue_Operations *operations;
 
   Thread_queue_Heads *spare_heads;
-}   Thread_Wait_information;
+} Thread_Wait_information;
 
 /**
  * @brief Information required to manage a thread timer.
@@ -581,24 +580,24 @@ typedef struct {
  */
 typedef struct {
   /** This field is the object management structure for each proxy. */
-  Objects_Control          Object;
+  Objects_Control Object;
 
   /**
    * @see Thread_Control::Join_queue
    */
-  Thread_queue_Control     Join_queue;
+  Thread_queue_Control Join_queue;
 
   /** This field is the current execution state of this proxy. */
-  States_Control           current_state;
+  States_Control current_state;
 
   /**
    * @brief The base priority of this thread in its home scheduler instance.
    */
-  Priority_Node            Real_priority;
+  Priority_Node Real_priority;
 
-#if defined(RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT)
+#if defined( RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT )
   /** This field is the number of mutexes currently held by this proxy. */
-  uint32_t                 resource_count;
+  uint32_t resource_count;
 #endif
 
   /**
@@ -610,26 +609,26 @@ typedef struct {
   Thread_Wait_information  Wait;
   /** This field is the Watchdog used to manage proxy delays and timeouts. */
   Thread_Timer_information Timer;
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   /** This field is the received response packet in an MP system. */
-  MP_packet_Prefix        *receive_packet;
-     /****************** end of common block ********************/
+  MP_packet_Prefix *receive_packet;
+  /****************** end of common block ********************/
 
   /**
    * @brief Thread queue callout for _Thread_queue_Enqueue().
    */
-  Thread_queue_MP_callout  thread_queue_callout;
+  Thread_queue_MP_callout thread_queue_callout;
 
   /**
    * @brief This field is used to manage the set of active proxies in the system.
    */
-  RBTree_Node              Active;
+  RBTree_Node Active;
 
   /**
    * @brief The scheduler node providing the thread wait nodes used to enqueue
    * this thread proxy on a thread queue.
    */
-  Scheduler_Node           Scheduler_node;
+  Scheduler_Node Scheduler_node;
 
   /**
    * @brief Provide thread queue heads for this thread proxy.
@@ -638,9 +637,9 @@ typedef struct {
    * configuration.  Since thread proxies are never destroyed we can use the
    * same storage place for the thread queue heads.
    */
-  Thread_queue_Heads       Thread_queue_heads[ RTEMS_ZERO_LENGTH_ARRAY ];
+  Thread_queue_Heads Thread_queue_heads[ RTEMS_ZERO_LENGTH_ARRAY ];
 #endif
-}   Thread_Proxy_control;
+} Thread_Proxy_control;
 
 /**
  *  The following record defines the control block used
@@ -654,13 +653,13 @@ typedef enum {
   THREAD_API_RTEMS,
   /** This value is for the POSIX API. */
   THREAD_API_POSIX
-}  Thread_APIs;
+} Thread_APIs;
 
 /** This macro defines the first API which has threads. */
 #define THREAD_API_FIRST THREAD_API_RTEMS
 
 /** This macro defines the last API which has threads. */
-#define THREAD_API_LAST  THREAD_API_POSIX
+#define THREAD_API_LAST THREAD_API_POSIX
 
 typedef struct Thread_Action Thread_Action;
 
@@ -717,7 +716,7 @@ typedef struct {
    */
   RBTree_Control Key_value_pairs;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /**
    * @brief Lock to protect the tree operations.
    */
@@ -797,12 +796,12 @@ typedef struct {
    * @brief Thread life action used to react upon thread restart and delete
    * requests.
    */
-  Thread_Action      Action;
+  Thread_Action Action;
 
   /**
    * @brief The current thread life state.
    */
-  Thread_Life_state  state;
+  Thread_Life_state state;
 
   /**
    * @brief The count of pending life change requests.
@@ -820,10 +819,10 @@ typedef struct {
   void *exit_value;
 } Thread_Life_control;
 
-typedef struct  {
-  uint32_t      flags;
-  void *        control;
-}Thread_Capture_control;
+typedef struct {
+  uint32_t flags;
+  void    *control;
+} Thread_Capture_control;
 
 /**
  *  This structure defines the Thread Control Block (TCB).
@@ -836,7 +835,7 @@ typedef struct  {
  */
 struct _Thread_Control {
   /** This field is the object management structure for each thread. */
-  Objects_Control          Object;
+  Objects_Control Object;
 
   /**
    * @brief Thread queue for thread join operations and multi-purpose lock.
@@ -853,19 +852,19 @@ struct _Thread_Control {
    *
    * @see _Thread_State_acquire().
    */
-  Thread_queue_Control     Join_queue;
+  Thread_queue_Control Join_queue;
 
   /** This field is the current execution state of this thread. */
-  States_Control           current_state;
+  States_Control current_state;
 
   /**
    * @brief The base priority of this thread in its home scheduler instance.
    */
-  Priority_Node            Real_priority;
+  Priority_Node Real_priority;
 
-#if defined(RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT)
+#if defined( RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT )
   /** This field is the number of mutexes currently held by this thread. */
-  uint32_t                 resource_count;
+  uint32_t resource_count;
 #endif
 
   /**
@@ -877,11 +876,11 @@ struct _Thread_Control {
   Thread_Wait_information  Wait;
   /** This field is the Watchdog used to manage thread delays and timeouts. */
   Thread_Timer_information Timer;
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   /** This field is the received response packet in an MP system. */
-  MP_packet_Prefix        *receive_packet;
+  MP_packet_Prefix *receive_packet;
 #endif
-     /*================= end of common block =================*/
+  /*================= end of common block =================*/
 
   /**
    * @brief This member contains the context of this thread.
@@ -892,7 +891,7 @@ struct _Thread_Control {
    */
   Context_Control Registers;
 
-#if defined(RTEMS_SMP) && defined(RTEMS_PROFILING)
+#if defined( RTEMS_SMP ) && defined( RTEMS_PROFILING )
   /**
    * @brief Potpourri lock statistics.
    *
@@ -905,15 +904,15 @@ struct _Thread_Control {
 #endif
 
   /** This field is true if the thread is an idle thread. */
-  bool                                  is_idle;
-#if defined(RTEMS_MULTIPROCESSING)
+  bool is_idle;
+#if defined( RTEMS_MULTIPROCESSING )
   /** This field is true if the thread is offered globally */
-  bool                                  is_global;
+  bool is_global;
 #endif
   /** This field is true if the thread is preemptible. */
-  bool                                  is_preemptible;
+  bool is_preemptible;
   /** This field is true if the thread uses the floating point unit. */
-  bool                                  is_fp;
+  bool is_fp;
 
   /**
    * @brief True, if the thread was created with an inherited scheduler
@@ -921,7 +920,7 @@ struct _Thread_Control {
    */
   bool was_created_with_inherited_scheduler;
 
-#if defined(RTEMS_SCORE_THREAD_HAS_SCHEDULER_CHANGE_INHIBITORS)
+#if defined( RTEMS_SCORE_THREAD_HAS_SCHEDULER_CHANGE_INHIBITORS )
   /**
    * @brief This field is true, if scheduler changes are inhibited.
    *
@@ -953,38 +952,38 @@ struct _Thread_Control {
   /** This field contains information about the starting state of
    *  this thread.
    */
-  Thread_Start_information              Start;
+  Thread_Start_information Start;
 
-  Thread_Action_control                 Post_switch_actions;
+  Thread_Action_control Post_switch_actions;
 
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
   /** This field points to the floating point context for this thread.
    *  If NULL, the thread is integer only.
    */
-  Context_Control_fp                   *fp_context;
+  Context_Control_fp *fp_context;
 #endif
 
 #ifndef _REENT_THREAD_LOCAL
   /** This field points to the newlib reentrancy structure for this thread. */
-  struct _reent                        *libc_reent;
+  struct _reent *libc_reent;
 #endif
 
   /** This array contains the API extension area pointers. */
-  void                                 *API_Extensions[ THREAD_API_LAST + 1 ];
+  void *API_Extensions[ THREAD_API_LAST + 1 ];
 
   /**
    * @brief The POSIX Keys information.
    */
-  Thread_Keys_information               Keys;
+  Thread_Keys_information Keys;
 
   /**
    * @brief Thread life-cycle control.
    *
    * Control state changes triggered by thread restart and delete requests.
    */
-  Thread_Life_control                   Life;
+  Thread_Life_control Life;
 
-  Thread_Capture_control                Capture;
+  Thread_Capture_control Capture;
 
   /**
    * @brief Pointer to an optional thread-specific POSIX user environment.
@@ -1006,10 +1005,10 @@ struct _Thread_Control {
    *
    * The length is defined by the application via <rtems/confdefs.h>.
    */
-  void                                 *extensions[ RTEMS_ZERO_LENGTH_ARRAY ];
+  void *extensions[ RTEMS_ZERO_LENGTH_ARRAY ];
 };
 
-typedef void (*rtems_per_thread_routine)( Thread_Control * );
+typedef void ( *rtems_per_thread_routine )( Thread_Control * );
 
 /**
  * @brief Deprecated, use rtems_task_iterate() instead.
@@ -1110,7 +1109,7 @@ typedef struct Thread_Configured_control Thread_Configured_control;
  * In SMP configurations, this type is defined in <rtems/confdefs.h> and depends
  * on the application configuration.
  */
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 typedef struct Thread_queue_Configured_heads Thread_queue_Configured_heads;
 #else
 typedef Thread_queue_Heads Thread_queue_Configured_heads;
@@ -1121,10 +1120,10 @@ typedef Thread_queue_Heads Thread_queue_Configured_heads;
  *
  * In SMP configurations, this value is provided via <rtems/confdefs.h>.
  */
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 extern const size_t _Thread_queue_Heads_size;
 #else
-#define _Thread_queue_Heads_size sizeof(Thread_queue_Heads)
+#define _Thread_queue_Heads_size sizeof( Thread_queue_Heads )
 #endif
 
 /**
@@ -1161,26 +1160,24 @@ typedef struct {
  */
 extern Thread_Information _Thread_Information;
 
-#define THREAD_INFORMATION_DEFINE_ZERO( name, api, cls ) \
-Thread_Information name##_Information = { \
-  { \
-    _Objects_Build_id( api, cls, 1, 0 ), \
-    NULL, \
-    _Objects_Allocate_none, \
-    NULL, \
-    0, \
-    0, \
-    0, \
-    0, \
-    CHAIN_INITIALIZER_EMPTY( name##_Information.Objects.Inactive ), \
-    NULL, \
-    NULL, \
-    NULL \
-    OBJECTS_INFORMATION_MP( name##_Information.Objects, NULL ), \
-  }, { \
-    NULL \
-  } \
-}
+#define THREAD_INFORMATION_DEFINE_ZERO( name, api, cls )               \
+  Thread_Information name##_Information = {                            \
+    {                                                                  \
+      _Objects_Build_id( api, cls, 1, 0 ),                             \
+      NULL,                                                            \
+      _Objects_Allocate_none,                                          \
+      NULL,                                                            \
+      0,                                                               \
+      0,                                                               \
+      0,                                                               \
+      0,                                                               \
+      CHAIN_INITIALIZER_EMPTY( name##_Information.Objects.Inactive ),  \
+      NULL,                                                            \
+      NULL,                                                            \
+      NULL OBJECTS_INFORMATION_MP( name##_Information.Objects, NULL ), \
+    },                                                                 \
+    { NULL }                                                           \
+  }
 
 /**
  * @brief Return an inactive thread object or NULL.
@@ -1188,40 +1185,45 @@ Thread_Information name##_Information = { \
  * @retval NULL No inactive object is available.
  * @retval object An inactive object.
  */
-Objects_Control *_Thread_Allocate_unlimited( Objects_Information *information );
+Objects_Control *_Thread_Allocate_unlimited(
+  Objects_Information *information
+);
 
-#define THREAD_INFORMATION_DEFINE( name, api, cls, max ) \
-static Objects_Control * \
-name##_Local_table[ _Objects_Maximum_per_allocation( max ) ]; \
-static RTEMS_SECTION( ".noinit.rtems.content.objects." #name ) \
-Thread_Configured_control \
-name##_Objects[ _Objects_Maximum_per_allocation( max ) ]; \
-static RTEMS_SECTION( ".noinit.rtems.content.objects." #name ) \
-Thread_queue_Configured_heads \
-name##_Heads[ _Objects_Maximum_per_allocation( max ) ]; \
-Thread_Information name##_Information = { \
-  { \
-    _Objects_Build_id( api, cls, 1, _Objects_Maximum_per_allocation( max ) ), \
-    name##_Local_table, \
-    _Objects_Is_unlimited( max ) ? \
-      _Thread_Allocate_unlimited : _Objects_Allocate_static, \
-    _Objects_Is_unlimited( max ) ? \
-      _Objects_Free_unlimited : _Objects_Free_static, \
-    0, \
-    _Objects_Is_unlimited( max ) ? _Objects_Maximum_per_allocation( max ) : 0, \
-    sizeof( Thread_Configured_control ), \
-    OBJECTS_NO_STRING_NAME, \
-    CHAIN_INITIALIZER_EMPTY( name##_Information.Objects.Inactive ), \
-    NULL, \
-    NULL, \
-    &name##_Objects[ 0 ].Control.Object \
-    OBJECTS_INFORMATION_MP( name##_Information.Objects, NULL ) \
-  }, { \
-    &name##_Heads[ 0 ] \
-  } \
-}
+#define THREAD_INFORMATION_DEFINE( name, api, cls, max )                     \
+  static Objects_Control                                                     \
+    *name##_Local_table[ _Objects_Maximum_per_allocation( max ) ];           \
+  static RTEMS_SECTION( ".noinit.rtems.content.objects." #name )             \
+    Thread_Configured_control                                                \
+      name##_Objects[ _Objects_Maximum_per_allocation( max ) ];              \
+  static RTEMS_SECTION( ".noinit.rtems.content.objects." #name )             \
+    Thread_queue_Configured_heads                                            \
+                     name##_Heads[ _Objects_Maximum_per_allocation( max ) ]; \
+  Thread_Information name##_Information = {                                  \
+    { _Objects_Build_id(                                                     \
+        api,                                                                 \
+        cls,                                                                 \
+        1,                                                                   \
+        _Objects_Maximum_per_allocation( max )                               \
+      ),                                                                     \
+      name##_Local_table,                                                    \
+      _Objects_Is_unlimited( max ) ? _Thread_Allocate_unlimited              \
+                                   : _Objects_Allocate_static,               \
+      _Objects_Is_unlimited( max ) ? _Objects_Free_unlimited                 \
+                                   : _Objects_Free_static,                   \
+      0,                                                                     \
+      _Objects_Is_unlimited( max ) ? _Objects_Maximum_per_allocation( max )  \
+                                   : 0,                                      \
+      sizeof( Thread_Configured_control ),                                   \
+      OBJECTS_NO_STRING_NAME,                                                \
+      CHAIN_INITIALIZER_EMPTY( name##_Information.Objects.Inactive ),        \
+      NULL,                                                                  \
+      NULL,                                                                  \
+      &name##_Objects[ 0 ].Control.Object                                    \
+         OBJECTS_INFORMATION_MP( name##_Information.Objects, NULL ) },       \
+    { &name##_Heads[ 0 ] }                                                   \
+  }
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
 /**
  * @brief The configured thread control block.
  *
@@ -1235,7 +1237,7 @@ typedef struct Thread_Configured_proxy_control Thread_Configured_proxy_control;
  *
  * Provided by the application via <rtems/confdefs.h>.
  */
-extern Thread_Configured_proxy_control * const _Thread_MP_Proxies;
+extern Thread_Configured_proxy_control *const _Thread_MP_Proxies;
 #endif
 
 /** @} */

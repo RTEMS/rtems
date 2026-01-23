@@ -81,32 +81,29 @@ typedef struct {
 /**
  * @brief Entry points for the Simple SMP Scheduler.
  */
-#define SCHEDULER_SIMPLE_SMP_ENTRY_POINTS \
-  { \
-    _Scheduler_simple_SMP_Initialize, \
-    _Scheduler_default_Schedule, \
-    _Scheduler_simple_SMP_Yield, \
-    _Scheduler_simple_SMP_Block, \
-    _Scheduler_simple_SMP_Unblock, \
-    _Scheduler_simple_SMP_Update_priority, \
-    _Scheduler_default_Map_priority, \
-    _Scheduler_default_Unmap_priority, \
-    _Scheduler_simple_SMP_Ask_for_help, \
+#define SCHEDULER_SIMPLE_SMP_ENTRY_POINTS          \
+  { _Scheduler_simple_SMP_Initialize,              \
+    _Scheduler_default_Schedule,                   \
+    _Scheduler_simple_SMP_Yield,                   \
+    _Scheduler_simple_SMP_Block,                   \
+    _Scheduler_simple_SMP_Unblock,                 \
+    _Scheduler_simple_SMP_Update_priority,         \
+    _Scheduler_default_Map_priority,               \
+    _Scheduler_default_Unmap_priority,             \
+    _Scheduler_simple_SMP_Ask_for_help,            \
     _Scheduler_simple_SMP_Reconsider_help_request, \
-    _Scheduler_simple_SMP_Withdraw_node, \
-    _Scheduler_simple_SMP_Make_sticky, \
-    _Scheduler_simple_SMP_Clean_sticky, \
+    _Scheduler_simple_SMP_Withdraw_node,           \
+    _Scheduler_simple_SMP_Make_sticky,             \
+    _Scheduler_simple_SMP_Clean_sticky,            \
     _Scheduler_default_Pin_or_unpin_not_supported, \
     _Scheduler_default_Pin_or_unpin_not_supported, \
-    _Scheduler_simple_SMP_Add_processor, \
-    _Scheduler_simple_SMP_Remove_processor, \
-    _Scheduler_simple_SMP_Node_initialize, \
-    _Scheduler_default_Node_destroy, \
-    _Scheduler_default_Release_job, \
-    _Scheduler_default_Cancel_job, \
-    _Scheduler_SMP_Start_idle \
-    SCHEDULER_DEFAULT_SET_AFFINITY_OPERATION \
-  }
+    _Scheduler_simple_SMP_Add_processor,           \
+    _Scheduler_simple_SMP_Remove_processor,        \
+    _Scheduler_simple_SMP_Node_initialize,         \
+    _Scheduler_default_Node_destroy,               \
+    _Scheduler_default_Release_job,                \
+    _Scheduler_default_Cancel_job,                 \
+    _Scheduler_SMP_Start_idle SCHEDULER_DEFAULT_SET_AFFINITY_OPERATION }
 
 /**
  * @brief Initializes the scheduler's context.

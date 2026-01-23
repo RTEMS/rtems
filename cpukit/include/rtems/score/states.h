@@ -62,7 +62,7 @@ extern "C" {
  *  The following type defines the control block used to manage a
  *  thread's state.
  */
-typedef uint32_t   States_Control;
+typedef uint32_t States_Control;
 
 /** @} */
 

@@ -92,21 +92,15 @@ typedef enum {
  *
  * @see _Watchdog_Preinitialize().
  */
-#if defined(RTEMS_SMP)
-  #define WATCHDOG_INITIALIZER( routine ) \
-    { \
-      { { { NULL, NULL, NULL, WATCHDOG_INACTIVE } } }, \
-      &_Per_CPU_Information[ 0 ].per_cpu, \
-      ( routine ), \
-      0 \
-    }
+#if defined( RTEMS_SMP )
+  #define WATCHDOG_INITIALIZER( routine )            \
+  { { { { NULL, NULL, NULL, WATCHDOG_INACTIVE } } }, \
+    &_Per_CPU_Information[ 0 ].per_cpu,              \
+    ( routine ),                                     \
+    0 }
 #else
   #define WATCHDOG_INITIALIZER( routine ) \
-    { \
-      { { { NULL, NULL, NULL, WATCHDOG_INACTIVE } } }, \
-      ( routine ), \
-      0 \
-    }
+  { { { { NULL, NULL, NULL, WATCHDOG_INACTIVE } } }, ( routine ), 0 }
 #endif
 
 /**
@@ -114,9 +108,7 @@ typedef enum {
  *
  * @param[out] header The header to initialize.
  */
-static inline void _Watchdog_Header_initialize(
-  Watchdog_Header *header
-)
+static inline void _Watchdog_Header_initialize( Watchdog_Header *header )
 {
   _RBTree_Initialize_empty( &header->Watchdogs );
   header->first = NULL;
@@ -141,9 +133,7 @@ static inline Watchdog_Control *_Watchdog_Header_first(
  *
  * @param header The watchdog header to destroy.
  */
-static inline void _Watchdog_Header_destroy(
-  Watchdog_Header *header
-)
+static inline void _Watchdog_Header_destroy( Watchdog_Header *header )
 {
   /* Do nothing */
   (void) header;
@@ -195,7 +185,7 @@ static inline Per_CPU_Control *_Watchdog_Get_CPU(
   const Watchdog_Control *the_watchdog
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   return the_watchdog->cpu;
 #else
   (void) the_watchdog;
@@ -214,7 +204,7 @@ static inline void _Watchdog_Set_CPU(
   Per_CPU_Control  *cpu
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   the_watchdog->cpu = cpu;
 #else
   (void) the_watchdog;
@@ -238,7 +228,7 @@ static inline void _Watchdog_Preinitialize(
   _Watchdog_Set_CPU( the_watchdog, cpu );
   _Watchdog_Set_state( the_watchdog, WATCHDOG_INACTIVE );
 
-#if defined(RTEMS_DEBUG)
+#if defined( RTEMS_DEBUG )
   the_watchdog->routine = NULL;
   the_watchdog->expire = 0;
 #endif
@@ -253,8 +243,8 @@ static inline void _Watchdog_Preinitialize(
  * @param routing The service routine for @a the_watchdog.
  */
 static inline void _Watchdog_Initialize(
-  Watchdog_Control               *the_watchdog,
-  Watchdog_Service_routine_entry  routine
+  Watchdog_Control              *the_watchdog,
+  Watchdog_Service_routine_entry routine
 )
 {
   _Assert( _Watchdog_Get_state( the_watchdog ) == WATCHDOG_INACTIVE );
@@ -276,18 +266,18 @@ void _Watchdog_Do_tickle(
   Watchdog_Header  *header,
   Watchdog_Control *first,
   uint64_t          now,
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   ISR_lock_Control *lock,
 #endif
   ISR_lock_Context *lock_context
 );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   #define _Watchdog_Tickle( header, first, now, lock, lock_context ) \
-    _Watchdog_Do_tickle( header, first, now, lock, lock_context )
+  _Watchdog_Do_tickle( header, first, now, lock, lock_context )
 #else
   #define _Watchdog_Tickle( header, first, now, lock, lock_context ) \
-    _Watchdog_Do_tickle( header, first, now, lock_context )
+  _Watchdog_Do_tickle( header, first, now, lock_context )
 #endif
 
 /**
@@ -452,12 +442,10 @@ static inline void _Watchdog_Next_first(
  * @retval true The timespec is a valid timespec.
  * @retval false The timespec is invalid.
  */
-static inline bool _Watchdog_Is_valid_timespec(
-  const struct timespec *ts
-)
+static inline bool _Watchdog_Is_valid_timespec( const struct timespec *ts )
 {
-  return ts != NULL
-    && (unsigned long) ts->tv_nsec < WATCHDOG_NANOSECONDS_PER_SECOND;
+  return ts != NULL &&
+         (unsigned long) ts->tv_nsec < WATCHDOG_NANOSECONDS_PER_SECOND;
 }
 
 /**
@@ -485,7 +473,7 @@ static inline bool _Watchdog_Is_valid_interval_timespec(
  * @retval pointer Pointer to the now timespec.
  * @retval NULL @a delta is not a valid interval timespec.
  */
-static inline const struct timespec * _Watchdog_Future_timespec(
+static inline const struct timespec *_Watchdog_Future_timespec(
   struct timespec       *now,
   const struct timespec *delta
 )
@@ -537,9 +525,7 @@ static inline bool _Watchdog_Is_far_future_timespec(
  *
  * @return @a seconds converted to ticks.
  */
-static inline uint64_t _Watchdog_Ticks_from_seconds(
-  uint32_t seconds
-)
+static inline uint64_t _Watchdog_Ticks_from_seconds( uint32_t seconds )
 {
   uint64_t ticks = seconds;
 
@@ -617,7 +603,7 @@ static inline void _Watchdog_Per_CPU_acquire_critical(
 {
   _ISR_lock_Acquire( &cpu->Watchdog.Lock, lock_context );
 #ifndef RTEMS_SMP
-   (void) cpu;
+  (void) cpu;
 #endif
 }
 
@@ -634,7 +620,7 @@ static inline void _Watchdog_Per_CPU_release_critical(
 {
   _ISR_lock_Release( &cpu->Watchdog.Lock, lock_context );
 #ifndef RTEMS_SMP
-   (void) cpu;
+  (void) cpu;
 #endif
 }
 
@@ -649,14 +635,14 @@ static inline void _Watchdog_Per_CPU_release_critical(
  * @return The new expiration time of the watchdog.
  */
 static inline uint64_t _Watchdog_Per_CPU_insert_ticks(
-  Watchdog_Control  *the_watchdog,
-  Per_CPU_Control   *cpu,
-  Watchdog_Interval  ticks
+  Watchdog_Control *the_watchdog,
+  Per_CPU_Control  *cpu,
+  Watchdog_Interval ticks
 )
 {
-  ISR_lock_Context  lock_context;
-  Watchdog_Header  *header;
-  uint64_t          expire;
+  ISR_lock_Context lock_context;
+  Watchdog_Header *header;
+  uint64_t         expire;
 
   header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_TICKS ];
 
@@ -664,7 +650,7 @@ static inline uint64_t _Watchdog_Per_CPU_insert_ticks(
 
   _Watchdog_Per_CPU_acquire_critical( cpu, &lock_context );
   expire = ticks + cpu->Watchdog.ticks;
-  _Watchdog_Insert(header, the_watchdog, expire);
+  _Watchdog_Insert( header, the_watchdog, expire );
   _Watchdog_Per_CPU_release_critical( cpu, &lock_context );
   return expire;
 }
@@ -713,10 +699,7 @@ static inline void _Watchdog_Per_CPU_remove(
   ISR_lock_Context lock_context;
 
   _Watchdog_Per_CPU_acquire_critical( cpu, &lock_context );
-  _Watchdog_Remove(
-    header,
-    the_watchdog
-  );
+  _Watchdog_Remove( header, the_watchdog );
   _Watchdog_Per_CPU_release_critical( cpu, &lock_context );
 }
 

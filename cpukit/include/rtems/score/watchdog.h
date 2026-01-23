@@ -81,8 +81,9 @@ typedef void Watchdog_Service_routine;
  *
  *  This type define a pointer to a watchdog service routine.
  */
-typedef Watchdog_Service_routine
-  ( *Watchdog_Service_routine_entry )( Watchdog_Control * );
+typedef Watchdog_Service_routine ( *Watchdog_Service_routine_entry )(
+  Watchdog_Control *
+);
 
 /**
  * @brief The watchdog header to manage scheduled watchdogs.
@@ -124,7 +125,7 @@ struct Watchdog_Control {
     Chain_Node Chain;
   } Node;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /** @brief This field references the processor of this watchdog control. */
   struct Per_CPU_Control *cpu;
 #endif

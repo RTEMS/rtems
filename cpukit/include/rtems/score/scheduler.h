@@ -64,7 +64,7 @@ typedef struct {
   void ( *initialize )( const Scheduler_Control * );
 
   /** @see _Scheduler_Schedule() */
-  void ( *schedule )( const Scheduler_Control *, Thread_Control *);
+  void ( *schedule )( const Scheduler_Control *, Thread_Control * );
 
   /** @see _Scheduler_Yield() */
   void ( *yield )(
@@ -106,7 +106,7 @@ typedef struct {
     Priority_Control
   );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /**
    * @brief Ask for help operation.
    *
@@ -275,7 +275,7 @@ typedef struct {
   void ( *node_destroy )( const Scheduler_Control *, Scheduler_Node * );
 
   /** @see _Scheduler_Release_job() */
-  void ( *release_job ) (
+  void ( *release_job )(
     const Scheduler_Control *,
     Thread_Control *,
     Priority_Node *,
@@ -284,7 +284,7 @@ typedef struct {
   );
 
   /** @see _Scheduler_Cancel_job() */
-  void ( *cancel_job ) (
+  void ( *cancel_job )(
     const Scheduler_Control *,
     Thread_Control *,
     Priority_Node *,
@@ -298,7 +298,7 @@ typedef struct {
     struct Per_CPU_Control *
   );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /** @see _Scheduler_Set_affinity() */
   Status_Control ( *set_affinity )(
     const Scheduler_Control *,
@@ -316,7 +316,7 @@ typedef struct {
  * this structure at the begin of its context structure.
  */
 typedef struct Scheduler_Context {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /**
    * @brief Lock to protect this scheduler instance.
    */
@@ -358,7 +358,7 @@ struct _Scheduler_Control {
    */
   uint32_t name;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /**
    * @brief True if the non-preempt mode for threads is supported by the
    * scheduler, otherwise false.
@@ -389,17 +389,17 @@ extern const Scheduler_Control _Scheduler_Table[];
  *
  * @see _Scheduler_Table.
  */
-#if defined(RTEMS_SMP)
-  extern const size_t _Scheduler_Count;
+#if defined( RTEMS_SMP )
+extern const size_t _Scheduler_Count;
 #else
   #define _Scheduler_Count ( (size_t) 1 )
 #endif
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /**
    * @brief The scheduler assignment default attributes.
    */
-  #define SCHEDULER_ASSIGN_DEFAULT UINT32_C(0x0)
+  #define SCHEDULER_ASSIGN_DEFAULT UINT32_C( 0x0 )
 
   /**
    * @brief The presence of this processor is optional.
@@ -409,18 +409,18 @@ extern const Scheduler_Control _Scheduler_Table[];
   /**
    * @brief The presence of this processor is mandatory.
    */
-  #define SCHEDULER_ASSIGN_PROCESSOR_MANDATORY UINT32_C(0x1)
+  #define SCHEDULER_ASSIGN_PROCESSOR_MANDATORY UINT32_C( 0x1 )
 
-  /**
+/**
    * @brief Scheduler assignment.
    */
-  typedef struct {
-    /**
+typedef struct {
+  /**
      * @brief The scheduler for this processor.
      */
-    const Scheduler_Control *scheduler;
+  const Scheduler_Control *scheduler;
 
-    /**
+  /**
      * @brief The scheduler assignment attributes.
      *
      * Use @ref SCHEDULER_ASSIGN_DEFAULT to select default attributes.
@@ -429,10 +429,10 @@ extern const Scheduler_Control _Scheduler_Table[];
      * - @ref SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL, or
      * - @ref SCHEDULER_ASSIGN_PROCESSOR_MANDATORY.
      */
-    uint32_t attributes;
-  } Scheduler_Assignment;
+  uint32_t attributes;
+} Scheduler_Assignment;
 
-  /**
+/**
    * @brief The scheduler assignments.
    *
    * The length of this array must be equal to the maximum processors.
@@ -441,7 +441,7 @@ extern const Scheduler_Control _Scheduler_Table[];
    *
    * @see _Scheduler_Table and rtems_configuration_get_maximum_processors().
    */
-  extern const Scheduler_Assignment _Scheduler_Initial_assignments[];
+extern const Scheduler_Assignment _Scheduler_Initial_assignments[];
 #endif
 
 /**
@@ -472,8 +472,8 @@ Priority_Control _Scheduler_default_Unmap_priority(
   Priority_Control         priority
 );
 
-#if defined(RTEMS_SMP)
-  /**
+#if defined( RTEMS_SMP )
+/**
    * @brief Does nothing.
    *
    * This default implementation for the make and clean sticky operations
@@ -485,13 +485,13 @@ Priority_Control _Scheduler_default_Unmap_priority(
    *
    * @param node is an unused parameter.
    */
-  void _Scheduler_default_Sticky_do_nothing(
-    const Scheduler_Control *scheduler,
-    Thread_Control          *the_thread,
-    Scheduler_Node          *node
-  );
+void _Scheduler_default_Sticky_do_nothing(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
+);
 
-  /**
+/**
    * @brief Does nothing.
    *
    * This default implementation for the thread pin or unpin operations should
@@ -502,14 +502,14 @@ Priority_Control _Scheduler_default_Unmap_priority(
    * @param node This parameter is unused.
    * @param cpu This parameter is unused.
    */
-  void _Scheduler_default_Pin_or_unpin_do_nothing(
-    const Scheduler_Control *scheduler,
-    Thread_Control          *the_thread,
-    Scheduler_Node          *node,
-    struct Per_CPU_Control  *cpu
-  );
+void _Scheduler_default_Pin_or_unpin_do_nothing(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node,
+  struct Per_CPU_Control  *cpu
+);
 
-  /**
+/**
    * @brief Does nothing in a single processor system, otherwise a fatal error
    * is issued.
    *
@@ -521,12 +521,12 @@ Priority_Control _Scheduler_default_Unmap_priority(
    * @param node This parameter is unused.
    * @param cpu This parameter is unused.
    */
-  void _Scheduler_default_Pin_or_unpin_not_supported(
-    const Scheduler_Control *scheduler,
-    Thread_Control          *the_thread,
-    Scheduler_Node          *node,
-    struct Per_CPU_Control  *cpu
-  );
+void _Scheduler_default_Pin_or_unpin_not_supported(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node,
+  struct Per_CPU_Control  *cpu
+);
 #endif
 
 /**
@@ -548,17 +548,12 @@ Priority_Control _Scheduler_default_Unmap_priority(
  * processor to add.  The processor remove operation is NULL, since the one and
  * only processor cannot be removed.
  */
-#if defined(RTEMS_SMP)
-  #define SCHEDULER_DEFAULT_SMP_OPERATIONS \
-    NULL, \
-    NULL, \
-    NULL, \
-    _Scheduler_default_Sticky_do_nothing, \
-    _Scheduler_default_Sticky_do_nothing, \
-    _Scheduler_default_Pin_or_unpin_do_nothing, \
-    _Scheduler_default_Pin_or_unpin_do_nothing, \
-    NULL, \
-    NULL,
+#if defined( RTEMS_SMP )
+  #define SCHEDULER_DEFAULT_SMP_OPERATIONS                \
+  NULL, NULL, NULL, _Scheduler_default_Sticky_do_nothing, \
+    _Scheduler_default_Sticky_do_nothing,                 \
+    _Scheduler_default_Pin_or_unpin_do_nothing,           \
+    _Scheduler_default_Pin_or_unpin_do_nothing, NULL, NULL,
 #else
   #define SCHEDULER_DEFAULT_SMP_OPERATIONS
 #endif
@@ -649,8 +644,8 @@ void _Scheduler_default_Start_idle(
   struct Per_CPU_Control  *cpu
 );
 
-#if defined(RTEMS_SMP)
-  /** 
+#if defined( RTEMS_SMP )
+/** 
    * @brief Checks if the processor set of the scheduler is the subset of the affinity set.
    *
    * Default implementation of the set affinity scheduler operation.
@@ -666,12 +661,12 @@ void _Scheduler_default_Start_idle(
     * @retval STATUS_INVALID_NUMBER The affinity is not a subset of the online
     *   processors.
    */
-  Status_Control _Scheduler_default_Set_affinity(
-    const Scheduler_Control *scheduler,
-    Thread_Control          *thread,
-    Scheduler_Node          *node,
-    const Processor_mask    *affinity
-  );
+Status_Control _Scheduler_default_Set_affinity(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *thread,
+  Scheduler_Node          *node,
+  const Processor_mask    *affinity
+);
 #endif
 
 /**
@@ -684,9 +679,9 @@ void _Scheduler_default_Start_idle(
  *
  * If SMP support is disabled, the define evaluates to nothing.
  */
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   #define SCHEDULER_DEFAULT_SET_AFFINITY_OPERATION \
-    , _Scheduler_default_Set_affinity
+  , _Scheduler_default_Set_affinity
 #else
   #define SCHEDULER_DEFAULT_SET_AFFINITY_OPERATION
 #endif

@@ -39,7 +39,7 @@
 
 #include <rtems/score/cpu.h>
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 
 #include <rtems/score/chain.h>
 
@@ -53,7 +53,7 @@ extern "C" {
  * @{
  */
 
-#if defined(RTEMS_PROFILING)
+#if defined( RTEMS_PROFILING )
 
 /**
  * @brief Count of lock contention counters for lock statistics.
@@ -122,7 +122,7 @@ typedef struct {
    *
    * The values may overflow.
    */
-  uint64_t contention_counts[SMP_LOCK_STATS_CONTENTION_COUNTS];
+  uint64_t contention_counts[ SMP_LOCK_STATS_CONTENTION_COUNTS ];
 
   /**
    * @brief Total lock section time in CPU counter ticks.
@@ -172,7 +172,7 @@ typedef struct {
  */
 static inline void _SMP_lock_Stats_initialize(
   SMP_lock_Stats *stats,
-  const char *name
+  const char     *name
 )
 {
   SMP_lock_Stats init = SMP_LOCK_STATS_INITIALIZER( name );
@@ -195,8 +195,8 @@ void _SMP_lock_Stats_destroy( SMP_lock_Stats *stats );
  * @param max_section_time The max section time for @a stats.
  */
 void _SMP_lock_Stats_register_or_max_section_time(
-  SMP_lock_Stats    *stats,
-  CPU_Counter_ticks  max_section_time
+  SMP_lock_Stats   *stats,
+  CPU_Counter_ticks max_section_time
 );
 
 typedef struct {
@@ -262,10 +262,10 @@ static inline void _SMP_lock_Stats_release_update(
   const SMP_lock_Stats_context *stats_context
 )
 {
-  SMP_lock_Stats    *stats;
-  CPU_Counter_ticks  first;
-  CPU_Counter_ticks  second;
-  CPU_Counter_ticks  delta;
+  SMP_lock_Stats   *stats;
+  CPU_Counter_ticks first;
+  CPU_Counter_ticks second;
+  CPU_Counter_ticks delta;
 
   stats = stats_context->stats;
   first = stats_context->acquire_instant;
@@ -280,7 +280,7 @@ static inline void _SMP_lock_Stats_release_update(
 }
 
 typedef struct {
-  Chain_Node Node;
+  Chain_Node      Node;
   SMP_lock_Stats *current;
 } SMP_lock_Stats_iteration_context;
 
@@ -322,9 +322,13 @@ void _SMP_lock_Stats_iteration_stop(
 
 #else /* RTEMS_PROFILING */
 
-#define _SMP_lock_Stats_initialize( stats, name ) do { } while ( 0 )
+#define _SMP_lock_Stats_initialize( stats, name ) \
+  do {                                            \
+  } while ( 0 )
 
-#define _SMP_lock_Stats_destroy( stats ) do { } while ( 0 )
+#define _SMP_lock_Stats_destroy( stats ) \
+  do {                                   \
+  } while ( 0 )
 
 #endif /* !RTEMS_PROFILING */
 

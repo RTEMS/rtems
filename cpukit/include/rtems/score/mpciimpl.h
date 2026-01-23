@@ -60,21 +60,21 @@ extern "C" {
  *   the MPCI driver sets an upper limit on how long a remote request
  *   should take to complete.
  */
-#define MPCI_DEFAULT_TIMEOUT    0xFFFFFFFF
+#define MPCI_DEFAULT_TIMEOUT 0xFFFFFFFF
 
 /**
  *  The following defines the type for packet processing routines
  *  invoked by the MPCI Receive server.
  */
-typedef void (*MPCI_Packet_processor)( MP_packet_Prefix * );
+typedef void ( *MPCI_Packet_processor )( MP_packet_Prefix * );
 
 /**
  *  The following enumerated type defines the list of
  *  internal MP operations.
  */
 typedef enum {
-  MPCI_PACKETS_SYSTEM_VERIFY  =  0
-}   MPCI_Internal_Remote_operations;
+  MPCI_PACKETS_SYSTEM_VERIFY = 0
+} MPCI_Internal_Remote_operations;
 
 /**
  *  The following data structure defines the packet used to perform
@@ -82,18 +82,18 @@ typedef enum {
  */
 typedef struct {
   /** This field is the general header for all packets. */
-  MP_packet_Prefix                 Prefix;
+  MP_packet_Prefix                Prefix;
   /** This value specifies the operation. */
-  MPCI_Internal_Remote_operations  operation;
+  MPCI_Internal_Remote_operations operation;
   /** This is the maximum number of nodes in the system. It must agree
    *  on all nodes.
    */
-  uint32_t                         maximum_nodes;
+  uint32_t                        maximum_nodes;
   /** This field is the maximum number of concurrently existent
    *  globally offered objects.
    */
-  uint32_t                         maximum_global_objects;
-}    MPCI_Internal_packet;
+  uint32_t                        maximum_global_objects;
+} MPCI_Internal_packet;
 
 /**
  *  The following thread queue is used to maintain a list of tasks
@@ -121,7 +121,7 @@ extern Thread_Control *_MPCI_Receive_server_tcb;
  *  by each object that supports MP operations.
  */
 extern MPCI_Packet_processor
-_MPCI_Packet_processors[ MP_PACKET_CLASSES_LAST + 1 ];
+  _MPCI_Packet_processors[ MP_PACKET_CLASSES_LAST + 1 ];
 
 /**
  * @brief Registers the MPCI packet processor for the designated object class.
@@ -132,8 +132,8 @@ _MPCI_Packet_processors[ MP_PACKET_CLASSES_LAST + 1 ];
  *            invoked when packets with @a the_class are received.
  */
 void _MPCI_Register_packet_processor(
-  MP_packet_Classes      the_class,
-  MPCI_Packet_processor  the_packet_processor
+  MP_packet_Classes     the_class,
+  MPCI_Packet_processor the_packet_processor
 
 );
 
@@ -145,7 +145,7 @@ void _MPCI_Register_packet_processor(
  *          filled in by the caller and used to perform a subsequent
  *          remote operation.
  */
-MP_packet_Prefix *_MPCI_Get_packet ( void );
+MP_packet_Prefix *_MPCI_Get_packet( void );
 
 /**
  * @brief Deallocates a packet.
@@ -155,9 +155,7 @@ MP_packet_Prefix *_MPCI_Get_packet ( void );
  *
  * @param[out] the_packet The MP packet to deallocate.
  */
-void _MPCI_Return_packet (
-  MP_packet_Prefix *the_packet
-);
+void _MPCI_Return_packet( MP_packet_Prefix *the_packet );
 
 /**
  * @brief Sends a process packet.
@@ -168,7 +166,7 @@ void _MPCI_Return_packet (
  * @param destination The node which should receive this packet.
  * @param the_packet The packet to be sent.
  */
-void _MPCI_Send_process_packet (
+void _MPCI_Send_process_packet(
   uint32_t          destination,
   MP_packet_Prefix *the_packet
 );
@@ -203,7 +201,7 @@ Status_Control _MPCI_Send_request_packet(
  * @param destination The node which should receive this packet.
  * @param the_packet The packet to be sent.
  */
-void _MPCI_Send_response_packet (
+void _MPCI_Send_response_packet(
   uint32_t          destination,
   MP_packet_Prefix *the_packet
 );
@@ -216,7 +214,7 @@ void _MPCI_Send_response_packet (
  *
  * @return This method returns the packet received.
  */
-MP_packet_Prefix  *_MPCI_Receive_packet ( void );
+MP_packet_Prefix *_MPCI_Receive_packet( void );
 
 /**
  * @brief Passes a packet to the thread.
@@ -230,9 +228,7 @@ MP_packet_Prefix  *_MPCI_Receive_packet ( void );
  * @retval pointer This method returns a pointer to the thread which was unblocked
  * @retval NULL The waiting thread no longer exists.
  */
-Thread_Control *_MPCI_Process_response (
-  MP_packet_Prefix *the_packet
-);
+Thread_Control *_MPCI_Process_response( MP_packet_Prefix *the_packet );
 
 /**
  * @brief Receives and processes all packets.
@@ -241,16 +237,14 @@ Thread_Control *_MPCI_Process_response (
  *
  * @param ignored The thread argument.  It is not used.
  */
-void _MPCI_Receive_server(
-  Thread_Entry_numeric_type ignored
-);
+void _MPCI_Receive_server( Thread_Entry_numeric_type ignored );
 
 /**
  * @brief Announces the availability of a packet.
  *
  * This routine informs RTEMS of the availability of an MPCI packet.
  */
-void _MPCI_Announce ( void );
+void _MPCI_Announce( void );
 
 /**
  * @brief Performs a process on another node.
@@ -260,8 +254,8 @@ void _MPCI_Announce ( void );
  *
  * @param operation The remote operation to perform.
  */
-void _MPCI_Internal_packets_Send_process_packet (
-   MPCI_Internal_Remote_operations operation
+void _MPCI_Internal_packets_Send_process_packet(
+  MPCI_Internal_Remote_operations operation
 );
 
 /**
@@ -292,7 +286,7 @@ void _MPCI_Internal_packets_Send_process_packet (
  *
  * @param the_packet_prefix The packet prefix for this method.
  */
-void _MPCI_Internal_packets_Process_packet (
+void _MPCI_Internal_packets_Process_packet(
   MP_packet_Prefix *the_packet_prefix
 );
 
@@ -326,7 +320,7 @@ void _MPCI_Internal_packets_Process_packet (
  * @retval pointer The pointer to the obtained packet.
  * @retval NULL Something went wrong.
  */
-MPCI_Internal_packet *_MPCI_Internal_packets_Get_packet ( void );
+MPCI_Internal_packet *_MPCI_Internal_packets_Get_packet( void );
 
 /**
  * @brief Checks if the packet class is valid.
@@ -340,7 +334,7 @@ MPCI_Internal_packet *_MPCI_Internal_packets_Get_packet ( void );
  *       because this enum starts at lower bound of zero.
  */
 
-static inline bool _Mp_packet_Is_valid_packet_class (
+static inline bool _Mp_packet_Is_valid_packet_class(
   MP_packet_Classes the_packet_class
 )
 {

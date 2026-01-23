@@ -61,7 +61,7 @@ extern "C" {
 typedef struct {
   Chain_Node                              Node;
   User_extensions_thread_switch_extension thread_switch;
-}   User_extensions_Switch_control;
+} User_extensions_Switch_control;
 
 /**
  * @brief Manages each user extension set.
@@ -73,7 +73,7 @@ typedef struct {
   Chain_Node                     Node;
   User_extensions_Switch_control Switch;
   User_extensions_Table          Callouts;
-}   User_extensions_Control;
+} User_extensions_Control;
 
 /**
  * @brief The count of initial user extensions.

@@ -64,30 +64,28 @@ extern "C" {
 /**
  *  The following type defines the type used to manage the vectors.
  */
-typedef uint32_t   ISR_Vector_number;
+typedef uint32_t ISR_Vector_number;
 
 /**
  *  Return type for ISR Handler
  */
 typedef void ISR_Handler;
 
-#if (CPU_SIMPLE_VECTORED_INTERRUPTS == FALSE)
+#if ( CPU_SIMPLE_VECTORED_INTERRUPTS == FALSE )
 
-typedef void * ISR_Handler_entry;
+typedef void *ISR_Handler_entry;
 
 #else
 /**
  *  Pointer to an ISR Handler
  */
-#if (CPU_ISR_PASSES_FRAME_POINTER == TRUE)
+#if ( CPU_ISR_PASSES_FRAME_POINTER == TRUE )
 typedef ISR_Handler ( *ISR_Handler_entry )(
-                 ISR_Vector_number,
-                 CPU_Interrupt_frame *
-             );
+  ISR_Vector_number,
+  CPU_Interrupt_frame *
+);
 #else
-typedef ISR_Handler ( *ISR_Handler_entry )(
-                 ISR_Vector_number
-             );
+typedef ISR_Handler ( *ISR_Handler_entry )( ISR_Vector_number );
 #endif
 
 /**
@@ -115,7 +113,7 @@ RTEMS_DECLARE_GLOBAL_SYMBOL( _ISR_Stack_size );
  * This object is provided to avoid issues with the _ISR_Stack_size symbol
  * address and the code model used by the compiler.
  */
-extern const char * const volatile _ISR_Stack_size_object;
+extern const char *const volatile _ISR_Stack_size_object;
 
 /**
  * @brief The interrupt stack area begin.
@@ -140,7 +138,7 @@ extern const char _ISR_Stack_area_end[];
  *
  * This routine performs the initialization necessary for the ISR handler.
  */
-void _ISR_Handler_initialization ( void );
+void _ISR_Handler_initialization( void );
 
 /**
  *  @brief Install interrupt handler vector.

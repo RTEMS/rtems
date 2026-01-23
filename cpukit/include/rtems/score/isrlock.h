@@ -145,10 +145,12 @@ static inline void _ISR_lock_Context_set_level(
  */
 #if defined( RTEMS_SMP )
   #define _ISR_lock_Initialize( _lock, _name ) \
-    _SMP_lock_Initialize( &( _lock )->Lock, _name )
+  _SMP_lock_Initialize( &( _lock )->Lock, _name )
 #else
   #define _ISR_lock_Initialize( _lock, _name ) \
-    do { (void) _name; } while (0)
+  do {                                         \
+    (void) _name;                              \
+  } while ( 0 )
 #endif
 
 /**
@@ -159,8 +161,7 @@ static inline void _ISR_lock_Context_set_level(
  * @param[in] _lock The ISR lock control.
  */
 #if defined( RTEMS_SMP )
-  #define _ISR_lock_Destroy( _lock ) \
-    _SMP_lock_Destroy( &( _lock )->Lock )
+  #define _ISR_lock_Destroy( _lock ) _SMP_lock_Destroy( &( _lock )->Lock )
 #else
   #define _ISR_lock_Destroy( _lock )
 #endif
@@ -175,7 +176,7 @@ static inline void _ISR_lock_Context_set_level(
  */
 #if defined( RTEMS_SMP )
   #define _ISR_lock_Set_name( _lock, _name ) \
-    _SMP_lock_Set_name( &( _lock )->Lock, _name )
+  _SMP_lock_Set_name( &( _lock )->Lock, _name )
 #else
   #define _ISR_lock_Set_name( _lock, _name )
 #endif
@@ -196,13 +197,13 @@ static inline void _ISR_lock_Context_set_level(
  */
 #if defined( RTEMS_SMP )
   #define _ISR_lock_ISR_disable_and_acquire( _lock, _context ) \
-    _SMP_lock_ISR_disable_and_acquire( \
-      &( _lock )->Lock, \
-      &( _context )->Lock_context \
-    )
+  _SMP_lock_ISR_disable_and_acquire(                           \
+    &( _lock )->Lock,                                          \
+    &( _context )->Lock_context                                \
+  )
 #else
   #define _ISR_lock_ISR_disable_and_acquire( _lock, _context ) \
-    _ISR_Local_disable( ( _context )->isr_level )
+  _ISR_Local_disable( ( _context )->isr_level )
 #endif
 
 /**
@@ -221,13 +222,13 @@ static inline void _ISR_lock_Context_set_level(
  */
 #if defined( RTEMS_SMP )
   #define _ISR_lock_Release_and_ISR_enable( _lock, _context ) \
-    _SMP_lock_Release_and_ISR_enable( \
-      &( _lock )->Lock, \
-      &( _context )->Lock_context \
-    )
+  _SMP_lock_Release_and_ISR_enable(                           \
+    &( _lock )->Lock,                                         \
+    &( _context )->Lock_context                               \
+  )
 #else
   #define _ISR_lock_Release_and_ISR_enable( _lock, _context ) \
-    _ISR_Local_enable( ( _context )->isr_level )
+  _ISR_Local_enable( ( _context )->isr_level )
 #endif
 
 /**
@@ -247,17 +248,16 @@ static inline void _ISR_lock_Context_set_level(
  * @see _ISR_lock_Release().
  */
 #if defined( RTEMS_SMP )
-  #define _ISR_lock_Acquire( _lock, _context ) \
-    do { \
-      _Assert( _ISR_Get_level() != 0 ); \
-      _SMP_lock_Acquire( \
-        &( _lock )->Lock, \
-        &( _context )->Lock_context \
-      ); \
-    } while ( 0 )
+  #define _ISR_lock_Acquire( _lock, _context )                          \
+  do {                                                                  \
+    _Assert( _ISR_Get_level() != 0 );                                   \
+    _SMP_lock_Acquire( &( _lock )->Lock, &( _context )->Lock_context ); \
+  } while ( 0 )
 #else
   #define _ISR_lock_Acquire( _lock, _context ) \
-    do { (void) _context; } while ( 0 )
+  do {                                         \
+    (void) _context;                           \
+  } while ( 0 )
 #endif
 
 /**
@@ -274,13 +274,12 @@ static inline void _ISR_lock_Context_set_level(
  */
 #if defined( RTEMS_SMP )
   #define _ISR_lock_Release( _lock, _context ) \
-    _SMP_lock_Release( \
-      &( _lock )->Lock, \
-      &( _context )->Lock_context \
-    )
+  _SMP_lock_Release( &( _lock )->Lock, &( _context )->Lock_context )
 #else
   #define _ISR_lock_Release( _lock, _context ) \
-    do { (void) _context; } while ( 0 )
+  do {                                         \
+    (void) _context;                           \
+  } while ( 0 )
 #endif
 
 /**
@@ -290,16 +289,18 @@ static inline void _ISR_lock_Context_set_level(
  */
 #if defined( RTEMS_SMP )
   #define _ISR_lock_Acquire_inline( _lock, _context ) \
-    do { \
-      _Assert( _ISR_Get_level() != 0 ); \
-      _SMP_lock_Acquire_inline( \
-        &( _lock )->Lock, \
-        &( _context )->Lock_context \
-      ); \
-    } while ( 0 )
+  do {                                                \
+    _Assert( _ISR_Get_level() != 0 );                 \
+    _SMP_lock_Acquire_inline(                         \
+      &( _lock )->Lock,                               \
+      &( _context )->Lock_context                     \
+    );                                                \
+  } while ( 0 )
 #else
   #define _ISR_lock_Acquire_inline( _lock, _context ) \
-    do { (void) _context; } while ( 0 )
+  do {                                                \
+    (void) _context;                                  \
+  } while ( 0 )
 #endif
 
 /**
@@ -309,13 +310,12 @@ static inline void _ISR_lock_Context_set_level(
  */
 #if defined( RTEMS_SMP )
   #define _ISR_lock_Release_inline( _lock, _context ) \
-    _SMP_lock_Release_inline( \
-      &( _lock )->Lock, \
-      &( _context )->Lock_context \
-    )
+  _SMP_lock_Release_inline( &( _lock )->Lock, &( _context )->Lock_context )
 #else
   #define _ISR_lock_Release_inline( _lock, _context ) \
-    do { (void) _context; } while ( 0 )
+  do {                                                \
+    (void) _context;                                  \
+  } while ( 0 )
 #endif
 
 #if defined( RTEMS_DEBUG )
@@ -329,17 +329,15 @@ static inline void _ISR_lock_Context_set_level(
    * @param[in] _lock The ISR lock control.
    */
   #if defined( RTEMS_SMP )
-    #define _ISR_lock_Is_owner( _lock ) \
-      _SMP_lock_Is_owner( &( _lock )->Lock )
+    #define _ISR_lock_Is_owner( _lock ) _SMP_lock_Is_owner( &( _lock )->Lock )
   #else
-    #define _ISR_lock_Is_owner( _lock ) \
-      ( _ISR_Get_level() != 0 )
+    #define _ISR_lock_Is_owner( _lock ) ( _ISR_Get_level() != 0 )
   #endif
 #endif
 
 #if defined( RTEMS_PROFILING )
   #define _ISR_lock_ISR_disable_profile( _context ) \
-    ( _context )->ISR_disable_instant = _CPU_Counter_read();
+  ( _context )->ISR_disable_instant = _CPU_Counter_read();
 #else
   #define _ISR_lock_ISR_disable_profile( _context )
 #endif
@@ -355,17 +353,17 @@ static inline void _ISR_lock_Context_set_level(
  * @see _ISR_lock_ISR_enable().
  */
 #if defined( RTEMS_SMP )
-  #define _ISR_lock_ISR_disable( _context ) \
-    do { \
-      _ISR_Local_disable( ( _context )->Lock_context.isr_level ); \
-      _ISR_lock_ISR_disable_profile( _context ) \
-    } while ( 0 )
+  #define _ISR_lock_ISR_disable( _context )                     \
+  do {                                                          \
+    _ISR_Local_disable( ( _context )->Lock_context.isr_level ); \
+    _ISR_lock_ISR_disable_profile( _context )                   \
+  } while ( 0 )
 #else
-  #define _ISR_lock_ISR_disable( _context ) \
-    do { \
-      _ISR_Local_disable( ( _context )->isr_level ); \
-      _ISR_lock_ISR_disable_profile( _context ) \
-    } while ( 0 )
+  #define _ISR_lock_ISR_disable( _context )        \
+  do {                                             \
+    _ISR_Local_disable( ( _context )->isr_level ); \
+    _ISR_lock_ISR_disable_profile( _context )      \
+  } while ( 0 )
 #endif
 
 /**
@@ -380,10 +378,10 @@ static inline void _ISR_lock_Context_set_level(
  */
 #if defined( RTEMS_SMP )
   #define _ISR_lock_ISR_enable( _context ) \
-    _ISR_Local_enable( ( _context )->Lock_context.isr_level )
+  _ISR_Local_enable( ( _context )->Lock_context.isr_level )
 #else
   #define _ISR_lock_ISR_enable( _context ) \
-    _ISR_Local_enable( ( _context )->isr_level )
+  _ISR_Local_enable( ( _context )->isr_level )
 #endif
 
 /** @} */

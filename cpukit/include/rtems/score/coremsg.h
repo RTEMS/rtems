@@ -60,7 +60,7 @@ extern "C" {
  * @{
  */
 
-#if defined(RTEMS_POSIX_API)
+#if defined( RTEMS_POSIX_API )
   /**
    *  This macro is defined when an API is enabled that requires that the
    *  Message Queue Handler include support for notification of enqueuing
@@ -88,20 +88,20 @@ typedef enum {
   CORE_MESSAGE_QUEUE_DISCIPLINES_FIFO,
   /** This value indicates that blocking tasks are in priority order. */
   CORE_MESSAGE_QUEUE_DISCIPLINES_PRIORITY
-}   CORE_message_queue_Disciplines;
+} CORE_message_queue_Disciplines;
 
-#if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
-  /**
+#if defined( RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION )
+/**
    *  @brief Type for a notification handler.
    *
    *  The following defines the type for a Notification handler.  A
    *  notification handler is invoked when the message queue makes a
    *  0->1 transition on pending messages.
    */
-  typedef void (*CORE_message_queue_Notify_Handler)(
-    CORE_message_queue_Control *,
-    Thread_queue_Context *
-  );
+typedef void ( *CORE_message_queue_Notify_Handler )(
+  CORE_message_queue_Control *,
+  Thread_queue_Context *
+);
 #endif
 
 /**
@@ -114,33 +114,33 @@ struct CORE_message_queue_Control {
   /** This field is the Waiting Queue used to manage the set of tasks
    *  which are blocked waiting to receive a message from this queue.
    */
-  Thread_queue_Control               Wait_queue;
+  Thread_queue_Control Wait_queue;
 
   /**
    * @brief The thread queue operations according to the blocking discipline.
    */
-  const Thread_queue_Operations     *operations;
+  const Thread_queue_Operations *operations;
 
   /** This element is maximum number of messages which may be pending
    *  at any given time.
    */
-  uint32_t                           maximum_pending_messages;
+  uint32_t                   maximum_pending_messages;
   /** This element is the number of messages which are currently pending.
    */
-  uint32_t                           number_of_pending_messages;
+  uint32_t                   number_of_pending_messages;
   /** This is the size in bytes of the largest message which may be
    *  sent via this queue.
    */
-  size_t                             maximum_message_size;
+  size_t                     maximum_message_size;
   /** This chain is the set of pending messages.  It may be ordered by
    *  message priority or in FIFO order.
    */
-  Chain_Control                      Pending_messages;
+  Chain_Control              Pending_messages;
   /** This is the address of the memory allocated for message buffers.
    *  It is allocated are part of message queue initialization and freed
    *  as part of destroying it.
    */
-  CORE_message_queue_Buffer         *message_buffers;
+  CORE_message_queue_Buffer *message_buffers;
 
   /**
    * @brief This member contains the optional message buffer storage area free
@@ -149,18 +149,18 @@ struct CORE_message_queue_Control {
    * It may be NULL.  In this case no action is performed to free the message
    * buffer storage area.
    */
-  void                            ( *free_message_buffers )( void * );
+  void ( *free_message_buffers )( void * );
 
-  #if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
-    /** This is the routine invoked when the message queue transitions
+  #if defined( RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION )
+  /** This is the routine invoked when the message queue transitions
      *  from zero (0) messages pending to one (1) message pending.
      */
-    CORE_message_queue_Notify_Handler  notify_handler;
+  CORE_message_queue_Notify_Handler notify_handler;
   #endif
   /** This chain is the set of inactive messages.  A message is inactive
    *  when it does not contain a pending message.
    */
-  Chain_Control                      Inactive_messages;
+  Chain_Control Inactive_messages;
 };
 
 /** @} */

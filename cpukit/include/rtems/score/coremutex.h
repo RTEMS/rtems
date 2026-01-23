@@ -109,7 +109,7 @@ typedef struct {
    */
   Priority_Node Priority_ceiling;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /**
    * @brief The scheduler instance for this priority ceiling mutex.
    */

@@ -88,9 +88,7 @@ void *_Workspace_Allocate( size_t size );
  *        This allows the caller to not worry about whether or not
  *        a pointer is NULL.
  */
-void _Workspace_Free(
-  void *block
-);
+void _Workspace_Free( void *block );
 
 /**
  * @brief Duplicates string with memory from the workspace.
@@ -101,10 +99,7 @@ void _Workspace_Free(
  * @retval other Duplicated string.
  * @retval NULL Not enough memory.
  */
-char *_Workspace_String_duplicate(
-  const char *string,
-  size_t len
-);
+char *_Workspace_String_duplicate( const char *string, size_t len );
 
 /** @} */
 

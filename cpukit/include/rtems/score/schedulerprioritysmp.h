@@ -94,32 +94,29 @@ typedef struct {
 /**
  * @brief Entry points for the Priority SMP Scheduler.
  */
-#define SCHEDULER_PRIORITY_SMP_ENTRY_POINTS \
-  { \
-    _Scheduler_priority_SMP_Initialize, \
-    _Scheduler_default_Schedule, \
-    _Scheduler_priority_SMP_Yield, \
-    _Scheduler_priority_SMP_Block, \
-    _Scheduler_priority_SMP_Unblock, \
-    _Scheduler_priority_SMP_Update_priority, \
-    _Scheduler_default_Map_priority, \
-    _Scheduler_default_Unmap_priority, \
-    _Scheduler_priority_SMP_Ask_for_help, \
+#define SCHEDULER_PRIORITY_SMP_ENTRY_POINTS          \
+  { _Scheduler_priority_SMP_Initialize,              \
+    _Scheduler_default_Schedule,                     \
+    _Scheduler_priority_SMP_Yield,                   \
+    _Scheduler_priority_SMP_Block,                   \
+    _Scheduler_priority_SMP_Unblock,                 \
+    _Scheduler_priority_SMP_Update_priority,         \
+    _Scheduler_default_Map_priority,                 \
+    _Scheduler_default_Unmap_priority,               \
+    _Scheduler_priority_SMP_Ask_for_help,            \
     _Scheduler_priority_SMP_Reconsider_help_request, \
-    _Scheduler_priority_SMP_Withdraw_node, \
-    _Scheduler_priority_SMP_Make_sticky, \
-    _Scheduler_priority_SMP_Clean_sticky, \
-    _Scheduler_default_Pin_or_unpin_not_supported, \
-    _Scheduler_default_Pin_or_unpin_not_supported, \
-    _Scheduler_priority_SMP_Add_processor, \
-    _Scheduler_priority_SMP_Remove_processor, \
-    _Scheduler_priority_SMP_Node_initialize, \
-    _Scheduler_default_Node_destroy, \
-    _Scheduler_default_Release_job, \
-    _Scheduler_default_Cancel_job, \
-    _Scheduler_SMP_Start_idle \
-    SCHEDULER_DEFAULT_SET_AFFINITY_OPERATION \
-  }
+    _Scheduler_priority_SMP_Withdraw_node,           \
+    _Scheduler_priority_SMP_Make_sticky,             \
+    _Scheduler_priority_SMP_Clean_sticky,            \
+    _Scheduler_default_Pin_or_unpin_not_supported,   \
+    _Scheduler_default_Pin_or_unpin_not_supported,   \
+    _Scheduler_priority_SMP_Add_processor,           \
+    _Scheduler_priority_SMP_Remove_processor,        \
+    _Scheduler_priority_SMP_Node_initialize,         \
+    _Scheduler_default_Node_destroy,                 \
+    _Scheduler_default_Release_job,                  \
+    _Scheduler_default_Cancel_job,                   \
+    _Scheduler_SMP_Start_idle SCHEDULER_DEFAULT_SET_AFFINITY_OPERATION }
 
 /**
  * @brief Initializes the priority SMP scheduler.

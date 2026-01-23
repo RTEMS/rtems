@@ -109,7 +109,7 @@ typedef bool ( *User_extensions_thread_create_extension )(
  * @param[in] executing The executing thread.
  * @param[in] deleted The deleted thread.
  */
-typedef void( *User_extensions_thread_delete_extension )(
+typedef void ( *User_extensions_thread_delete_extension )(
   struct _Thread_Control *executing,
   struct _Thread_Control *deleted
 );
@@ -129,7 +129,7 @@ typedef void( *User_extensions_thread_delete_extension )(
  * @param[in] executing The executing thread.
  * @param[in] started The started thread.
  */
-typedef void( *User_extensions_thread_start_extension )(
+typedef void ( *User_extensions_thread_start_extension )(
   struct _Thread_Control *executing,
   struct _Thread_Control *started
 );
@@ -151,7 +151,7 @@ typedef void( *User_extensions_thread_start_extension )(
  * @param[in] executing The executing thread.
  * @param[in] restarted The executing thread.  Yes, the executing thread.
  */
-typedef void( *User_extensions_thread_restart_extension )(
+typedef void ( *User_extensions_thread_restart_extension )(
   struct _Thread_Control *executing,
   struct _Thread_Control *restarted
 );
@@ -174,7 +174,7 @@ typedef void( *User_extensions_thread_restart_extension )(
  * @param[in] executing The executing thread.
  * @param[in] heir The heir thread.
  */
-typedef void( *User_extensions_thread_switch_extension )(
+typedef void ( *User_extensions_thread_switch_extension )(
   struct _Thread_Control *executing,
   struct _Thread_Control *heir
 );
@@ -189,7 +189,7 @@ typedef void( *User_extensions_thread_switch_extension )(
  *
  * @param[in] executing The executing thread.
  */
-typedef void( *User_extensions_thread_begin_extension )(
+typedef void ( *User_extensions_thread_begin_extension )(
   struct _Thread_Control *executing
 );
 
@@ -203,7 +203,7 @@ typedef void( *User_extensions_thread_begin_extension )(
  *
  * @param[in] executing The executing thread.
  */
-typedef void( *User_extensions_thread_exitted_extension )(
+typedef void ( *User_extensions_thread_exitted_extension )(
   struct _Thread_Control *executing
 );
 
@@ -221,7 +221,7 @@ typedef void( *User_extensions_thread_exitted_extension )(
  * @param[in] code The fatal error code.  This value must be interpreted with
  * respect to the source.
  */
-typedef void( *User_extensions_fatal_extension )(
+typedef void ( *User_extensions_fatal_extension )(
   Internal_errors_Source source,
   bool                   always_set_to_false,
   Internal_errors_t      code
@@ -243,7 +243,7 @@ typedef void( *User_extensions_fatal_extension )(
  *
  * @param[in] terminated The terminated thread.
  */
-typedef void( *User_extensions_thread_terminate_extension )(
+typedef void ( *User_extensions_thread_terminate_extension )(
   struct _Thread_Control *terminated
 );
 
@@ -251,16 +251,16 @@ typedef void( *User_extensions_thread_terminate_extension )(
  * @brief User extension table.
  */
 typedef struct {
-  User_extensions_thread_create_extension  thread_create;
-  User_extensions_thread_start_extension   thread_start;
-  User_extensions_thread_restart_extension thread_restart;
-  User_extensions_thread_delete_extension  thread_delete;
-  User_extensions_thread_switch_extension  thread_switch;
-  User_extensions_thread_begin_extension   thread_begin;
-  User_extensions_thread_exitted_extension thread_exitted;
-  User_extensions_fatal_extension          fatal;
+  User_extensions_thread_create_extension    thread_create;
+  User_extensions_thread_start_extension     thread_start;
+  User_extensions_thread_restart_extension   thread_restart;
+  User_extensions_thread_delete_extension    thread_delete;
+  User_extensions_thread_switch_extension    thread_switch;
+  User_extensions_thread_begin_extension     thread_begin;
+  User_extensions_thread_exitted_extension   thread_exitted;
+  User_extensions_fatal_extension            fatal;
   User_extensions_thread_terminate_extension thread_terminate;
-}   User_extensions_Table;
+} User_extensions_Table;
 
 /** @} */
 

@@ -68,10 +68,10 @@ RTEMS_LINKER_RWSET_DECLARE( _Per_CPU_Data, char );
  *   exactly once at file scope.
  */
 #ifdef RTEMS_SMP
-#define PER_CPU_DATA_NEED_INITIALIZATION() \
-  static const char * const _Per_CPU_Data_reference \
-  RTEMS_SECTION( ".rtemsroset.reference" ) RTEMS_USED = \
-  RTEMS_LINKER_SET_BEGIN( _Per_CPU_Data )
+#define PER_CPU_DATA_NEED_INITIALIZATION()                        \
+  static const char *const _Per_CPU_Data_reference RTEMS_SECTION( \
+    ".rtemsroset.reference"                                       \
+  ) RTEMS_USED = RTEMS_LINKER_SET_BEGIN( _Per_CPU_Data )
 #else
 #define PER_CPU_DATA_NEED_INITIALIZATION() \
   RTEMS_LINKER_RWSET_DECLARE( _Per_CPU_Data, char )
@@ -103,9 +103,9 @@ RTEMS_LINKER_RWSET_DECLARE( _Per_CPU_Data, char );
  *
  * @param item The designator of the item.
  */
-#define PER_CPU_DATA_OFFSET( item ) \
-  ( (uintptr_t) &_Linker_set__Per_CPU_Data_##item \
-    - (uintptr_t) RTEMS_LINKER_SET_BEGIN( _Per_CPU_Data ) )
+#define PER_CPU_DATA_OFFSET( item )                 \
+  ( (uintptr_t) &_Linker_set__Per_CPU_Data_##item - \
+    (uintptr_t) RTEMS_LINKER_SET_BEGIN( _Per_CPU_Data ) )
 
 /**
  * @brief Returns a pointer of the specified type to the per-CPU item at the
@@ -119,7 +119,7 @@ RTEMS_LINKER_RWSET_DECLARE( _Per_CPU_Data, char );
 #define PER_CPU_DATA_GET_BY_OFFSET( cpu, type, offset ) \
   (type *) ( cpu->data + offset )
 #else
-#define PER_CPU_DATA_GET_BY_OFFSET( cpu, type, offset ) \
+#define PER_CPU_DATA_GET_BY_OFFSET( cpu, type, offset )                      \
   (type *) ( (uintptr_t) RTEMS_LINKER_SET_BEGIN( _Per_CPU_Data ) + offset ), \
     (void) cpu
 #endif

@@ -61,8 +61,9 @@ extern "C" {
  *
  * @return The context of the scheduler.
  */
-static inline Scheduler_priority_Context *
-  _Scheduler_priority_Get_context( const Scheduler_Control *scheduler )
+static inline Scheduler_priority_Context *_Scheduler_priority_Get_context(
+  const Scheduler_Control *scheduler
+)
 {
   return (Scheduler_priority_Context *) _Scheduler_Get_context( scheduler );
 }
@@ -78,7 +79,9 @@ static inline Scheduler_priority_Node *_Scheduler_priority_Thread_get_node(
   Thread_Control *the_thread
 )
 {
-  return (Scheduler_priority_Node *) _Thread_Scheduler_get_home_node( the_thread );
+  return (Scheduler_priority_Node *) _Thread_Scheduler_get_home_node(
+    the_thread
+  );
 }
 
 /**
@@ -104,13 +107,13 @@ static inline Scheduler_priority_Node *_Scheduler_priority_Node_downcast(
  * @param maximum_priority The maximum priority in the ready queue.
  */
 static inline void _Scheduler_priority_Ready_queue_initialize(
-  Chain_Control    *ready_queues,
-  Priority_Control  maximum_priority
+  Chain_Control   *ready_queues,
+  Priority_Control maximum_priority
 )
 {
   size_t index;
 
-  for ( index = 0 ; index <= (size_t) maximum_priority ; ++index ) {
+  for ( index = 0; index <= (size_t) maximum_priority; ++index ) {
     _Chain_Initialize_empty( &ready_queues[ index ] );
   }
 }
@@ -223,7 +226,7 @@ static inline Chain_Node *_Scheduler_priority_Ready_queue_first(
 )
 {
   Priority_Control index = _Priority_bit_map_Get_highest( bit_map );
-  Chain_Node *first = _Chain_First( &ready_queues[ index ] );
+  Chain_Node      *first = _Chain_First( &ready_queues[ index ] );
 
   _Assert( first != _Chain_Tail( &ready_queues[ index ] ) );
 
@@ -239,8 +242,9 @@ static inline Thread_Control *_Scheduler_priority_Get_highest_ready(
   const Scheduler_Control *scheduler
 )
 {
-  Scheduler_priority_Context *context =
-    _Scheduler_priority_Get_context( scheduler );
+  Scheduler_priority_Context *context = _Scheduler_priority_Get_context(
+    scheduler
+  );
 
   return (Thread_Control *) _Scheduler_priority_Ready_queue_first(
     &context->Bit_map,

@@ -65,11 +65,11 @@ typedef struct {
   /** This field is the Waiting Queue used to manage the set of tasks
    *  which are blocked waiting to obtain the semaphore.
    */
-  Thread_queue_Control        Wait_queue;
+  Thread_queue_Control Wait_queue;
 
   /** This element contains the current count of this semaphore. */
-  uint32_t                    count;
-}   CORE_semaphore_Control;
+  uint32_t count;
+} CORE_semaphore_Control;
 
 /** @} */
 

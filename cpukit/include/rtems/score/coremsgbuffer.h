@@ -71,7 +71,7 @@ typedef struct {
   /** @brief This member defines the size of this message. */
   size_t size;
 
-#if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
+#if defined( RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY )
   /** @brief This member defines the priority of this message. */
   int priority;
 #endif

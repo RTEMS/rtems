@@ -39,7 +39,7 @@
 
 #include <rtems/score/cpuopts.h>
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 
 #include <rtems/score/atomic.h>
 #include <rtems/score/smplockstats.h>
@@ -66,10 +66,7 @@ typedef struct {
  * @brief SMP ticket lock control initializer for static initialization.
  */
 #define SMP_TICKET_LOCK_INITIALIZER \
-  { \
-    ATOMIC_INITIALIZER_UINT( 0U ), \
-    ATOMIC_INITIALIZER_UINT( 0U ) \
-  }
+  { ATOMIC_INITIALIZER_UINT( 0U ), ATOMIC_INITIALIZER_UINT( 0U ) }
 
 /**
  * @brief Initializes the SMP ticket lock.
@@ -78,9 +75,7 @@ typedef struct {
  *
  * @param[in, out] lock The SMP ticket lock control.
  */
-static inline void _SMP_ticket_lock_Initialize(
-  SMP_ticket_lock_Control *lock
-)
+static inline void _SMP_ticket_lock_Initialize( SMP_ticket_lock_Control *lock )
 {
   _Atomic_Init_uint( &lock->next_ticket, 0U );
   _Atomic_Init_uint( &lock->now_serving, 0U );
@@ -107,39 +102,43 @@ static inline void _SMP_ticket_lock_Destroy( SMP_ticket_lock_Control *lock )
  */
 static inline void _SMP_ticket_lock_Do_acquire(
   SMP_ticket_lock_Control *lock
-#if defined(RTEMS_PROFILING)
+#if defined( RTEMS_PROFILING )
   ,
-  SMP_lock_Stats          *stats,
-  SMP_lock_Stats_context  *stats_context
+  SMP_lock_Stats         *stats,
+  SMP_lock_Stats_context *stats_context
 #endif
 )
 {
-  unsigned int                   my_ticket;
-  unsigned int                   now_serving;
-#if defined(RTEMS_PROFILING)
+  unsigned int my_ticket;
+  unsigned int now_serving;
+#if defined( RTEMS_PROFILING )
   unsigned int                   initial_queue_length;
   SMP_lock_Stats_acquire_context acquire_context;
 
   _SMP_lock_Stats_acquire_begin( &acquire_context );
 #endif
 
-  my_ticket =
-    _Atomic_Fetch_add_uint( &lock->next_ticket, 1U, ATOMIC_ORDER_RELAXED );
+  my_ticket = _Atomic_Fetch_add_uint(
+    &lock->next_ticket,
+    1U,
+    ATOMIC_ORDER_RELAXED
+  );
 
-#if defined(RTEMS_PROFILING)
-  now_serving =
-    _Atomic_Load_uint( &lock->now_serving, ATOMIC_ORDER_ACQUIRE );
+#if defined( RTEMS_PROFILING )
+  now_serving = _Atomic_Load_uint( &lock->now_serving, ATOMIC_ORDER_ACQUIRE );
   initial_queue_length = my_ticket - now_serving;
 
   if ( initial_queue_length > 0 ) {
 #endif
 
     do {
-      now_serving =
-        _Atomic_Load_uint( &lock->now_serving, ATOMIC_ORDER_ACQUIRE );
+      now_serving = _Atomic_Load_uint(
+        &lock->now_serving,
+        ATOMIC_ORDER_ACQUIRE
+      );
     } while ( now_serving != my_ticket );
 
-#if defined(RTEMS_PROFILING)
+#if defined( RTEMS_PROFILING )
   }
 
   _SMP_lock_Stats_acquire_end(
@@ -162,12 +161,12 @@ static inline void _SMP_ticket_lock_Do_acquire(
  * @param[in] stats The SMP lock statistics.
  * @param[out] stats_context The SMP lock statistics context.
  */
-#if defined(RTEMS_PROFILING)
+#if defined( RTEMS_PROFILING )
   #define _SMP_ticket_lock_Acquire( lock, stats, stats_context ) \
-    _SMP_ticket_lock_Do_acquire( lock, stats, stats_context )
+  _SMP_ticket_lock_Do_acquire( lock, stats, stats_context )
 #else
   #define _SMP_ticket_lock_Acquire( lock, stats, stats_context ) \
-    _SMP_ticket_lock_Do_acquire( lock )
+  _SMP_ticket_lock_Do_acquire( lock )
 #endif
 
 /**
@@ -178,17 +177,19 @@ static inline void _SMP_ticket_lock_Do_acquire(
  */
 static inline void _SMP_ticket_lock_Do_release(
   SMP_ticket_lock_Control *lock
-#if defined(RTEMS_PROFILING)
+#if defined( RTEMS_PROFILING )
   ,
   const SMP_lock_Stats_context *stats_context
 #endif
 )
 {
-  unsigned int current_ticket =
-    _Atomic_Load_uint( &lock->now_serving, ATOMIC_ORDER_RELAXED );
+  unsigned int current_ticket = _Atomic_Load_uint(
+    &lock->now_serving,
+    ATOMIC_ORDER_RELAXED
+  );
   unsigned int next_ticket = current_ticket + 1U;
 
-#if defined(RTEMS_PROFILING)
+#if defined( RTEMS_PROFILING )
   _SMP_lock_Stats_release_update( stats_context );
 #endif
 
@@ -201,12 +202,12 @@ static inline void _SMP_ticket_lock_Do_release(
  * @param[in] lock The SMP ticket lock control.
  * @param[in] stats_context The SMP lock statistics context.
  */
-#if defined(RTEMS_PROFILING)
+#if defined( RTEMS_PROFILING )
   #define _SMP_ticket_lock_Release( lock, stats_context ) \
-    _SMP_ticket_lock_Do_release( lock, stats_context )
+  _SMP_ticket_lock_Do_release( lock, stats_context )
 #else
   #define _SMP_ticket_lock_Release( lock, stats_context ) \
-    _SMP_ticket_lock_Do_release( lock )
+  _SMP_ticket_lock_Do_release( lock )
 #endif
 
 /** @} */

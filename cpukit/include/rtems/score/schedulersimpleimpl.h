@@ -58,8 +58,9 @@ extern "C" {
  *
  * @return The context of @a scheduler.
  */
-static inline Scheduler_simple_Context *
-  _Scheduler_simple_Get_context( const Scheduler_Control *scheduler )
+static inline Scheduler_simple_Context *_Scheduler_simple_Get_context(
+  const Scheduler_Control *scheduler
+)
 {
   return (Scheduler_simple_Context *) _Scheduler_Get_context( scheduler );
 }
@@ -141,8 +142,9 @@ static inline Thread_Control *_Scheduler_simple_Get_highest_ready(
   const Scheduler_Control *scheduler
 )
 {
-  Scheduler_simple_Context *context =
-    _Scheduler_simple_Get_context( scheduler );
+  Scheduler_simple_Context *context = _Scheduler_simple_Get_context(
+    scheduler
+  );
 
   return (Thread_Control *) _Chain_First( &context->Ready );
 }

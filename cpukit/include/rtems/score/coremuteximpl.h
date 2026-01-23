@@ -65,9 +65,7 @@ extern "C" {
  *
  * @param[out] the_mutex The mutex to initialize.
  */
-static inline void _CORE_mutex_Initialize(
-  CORE_mutex_Control *the_mutex
-)
+static inline void _CORE_mutex_Initialize( CORE_mutex_Control *the_mutex )
 {
   _Thread_queue_Object_initialize( &the_mutex->Wait_queue );
 }
@@ -135,9 +133,7 @@ static inline Thread_Control *_CORE_mutex_Get_owner(
  * @retval true The mutex is locked.
  * @retval false The mutex is not locked.
  */
-static inline bool _CORE_mutex_Is_locked(
-  const CORE_mutex_Control *the_mutex
-)
+static inline bool _CORE_mutex_Is_locked( const CORE_mutex_Control *the_mutex )
 {
   return _CORE_mutex_Get_owner( the_mutex ) != NULL;
 }
@@ -241,8 +237,8 @@ static inline Status_Control _CORE_recursive_mutex_Seize(
   const Thread_queue_Operations *operations,
   Thread_Control                *executing,
   bool                           wait,
-  Status_Control              ( *nested )( CORE_recursive_mutex_Control * ),
-  Thread_queue_Context          *queue_context
+  Status_Control ( *nested )( CORE_recursive_mutex_Control * ),
+  Thread_queue_Context *queue_context
 )
 {
   Thread_Control *owner;
@@ -347,7 +343,7 @@ static inline void _CORE_ceiling_mutex_Initialize(
 {
   _CORE_recursive_mutex_Initialize( &the_mutex->Recursive );
   _Priority_Node_initialize( &the_mutex->Priority_ceiling, priority_ceiling );
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   the_mutex->scheduler = scheduler;
 #else
   (void) scheduler;
@@ -361,12 +357,11 @@ static inline void _CORE_ceiling_mutex_Initialize(
  *
  * @return The scheduler of the mutex. If RTEMS_SMP is not defined, the first entry of the _Scheduler_Table is returned.
  */
-static inline const Scheduler_Control *
-_CORE_ceiling_mutex_Get_scheduler(
+static inline const Scheduler_Control *_CORE_ceiling_mutex_Get_scheduler(
   const CORE_ceiling_mutex_Control *the_mutex
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   return the_mutex->scheduler;
 #else
   (void) the_mutex;
@@ -439,17 +434,17 @@ static inline Status_Control _CORE_ceiling_mutex_Set_owner(
   Thread_queue_Context       *queue_context
 )
 {
-  ISR_lock_Context  lock_context;
-  Scheduler_Node   *scheduler_node;
-  Per_CPU_Control  *cpu_self;
+  ISR_lock_Context lock_context;
+  Scheduler_Node  *scheduler_node;
+  Per_CPU_Control *cpu_self;
 
   _Thread_Wait_acquire_default_critical( owner, &lock_context );
 
   scheduler_node = _Thread_Scheduler_get_home_node( owner );
 
   if (
-    _Priority_Get_priority( &scheduler_node->Wait.Priority )
-      < the_mutex->Priority_ceiling.priority
+    _Priority_Get_priority( &scheduler_node->Wait.Priority ) <
+    the_mutex->Priority_ceiling.priority
   ) {
     _Thread_Wait_release_default_critical( owner, &lock_context );
     _CORE_mutex_Release( &the_mutex->Recursive.Mutex, queue_context );
@@ -458,11 +453,7 @@ static inline Status_Control _CORE_ceiling_mutex_Set_owner(
 
   _CORE_mutex_Set_owner( &the_mutex->Recursive.Mutex, owner );
   _Thread_Resource_count_increment( owner );
-  _Thread_Priority_add(
-    owner,
-    &the_mutex->Priority_ceiling,
-    queue_context
-  );
+  _Thread_Priority_add( owner, &the_mutex->Priority_ceiling, queue_context );
   _Thread_Wait_release_default_critical( owner, &lock_context );
 
   cpu_self = _Thread_queue_Dispatch_disable( queue_context );
@@ -488,21 +479,21 @@ static inline Status_Control _CORE_ceiling_mutex_Set_owner(
  * @retval other Return value of @a nested.
  */
 static inline Status_Control _CORE_ceiling_mutex_Seize(
-  CORE_ceiling_mutex_Control    *the_mutex,
-  Thread_Control                *executing,
-  bool                           wait,
-  Status_Control              ( *nested )( CORE_recursive_mutex_Control * ),
-  Thread_queue_Context          *queue_context
+  CORE_ceiling_mutex_Control *the_mutex,
+  Thread_Control             *executing,
+  bool                        wait,
+  Status_Control ( *nested )( CORE_recursive_mutex_Control * ),
+  Thread_queue_Context *queue_context
 )
 {
   Thread_Control *owner;
 
   _CORE_mutex_Acquire_critical( &the_mutex->Recursive.Mutex, queue_context );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   if (
-    _Thread_Scheduler_get_home( executing )
-      != _CORE_ceiling_mutex_Get_scheduler( the_mutex )
+    _Thread_Scheduler_get_home( executing ) !=
+    _CORE_ceiling_mutex_Get_scheduler( the_mutex )
   ) {
     _CORE_mutex_Release( &the_mutex->Recursive.Mutex, queue_context );
     return STATUS_NOT_DEFINED;

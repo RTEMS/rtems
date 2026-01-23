@@ -169,10 +169,11 @@ static inline Status_Control _CORE_semaphore_Surrender(
       operations
     );
   } else {
-    if ( the_semaphore->count < maximum_count )
+    if ( the_semaphore->count < maximum_count ) {
       the_semaphore->count += 1;
-    else
+    } else {
       status = STATUS_MAXIMUM_COUNT_EXCEEDED;
+    }
 
     _CORE_semaphore_Release( the_semaphore, queue_context );
   }
@@ -187,7 +188,7 @@ static inline Status_Control _CORE_semaphore_Surrender(
  *
  * @return the current count of this semaphore.
  */
-static inline uint32_t  _CORE_semaphore_Get_count(
+static inline uint32_t _CORE_semaphore_Get_count(
   const CORE_semaphore_Control *the_semaphore
 )
 {

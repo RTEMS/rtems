@@ -109,9 +109,7 @@ static inline void _SMP_barrier_Control_initialize(
  *
  * @param[out] state The SMP barrier control.
  */
-static inline void _SMP_barrier_State_initialize(
-  SMP_barrier_State *state
-)
+static inline void _SMP_barrier_State_initialize( SMP_barrier_State *state )
 {
   state->sense = 0U;
 }
@@ -128,8 +126,8 @@ static inline void _SMP_barrier_State_initialize(
  */
 bool _SMP_barrier_Wait(
   SMP_barrier_Control *control,
-  SMP_barrier_State *state,
-  unsigned int count
+  SMP_barrier_State   *state,
+  unsigned int         count
 );
 
 /**
@@ -144,7 +142,7 @@ bool _SMP_barrier_Wait(
  */
 static inline void _SMP_barrier_Wait_for_other(
   const SMP_barrier_Control *control,
-  unsigned int count
+  unsigned int               count
 )
 {
   unsigned int value;

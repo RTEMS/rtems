@@ -60,24 +60,22 @@ extern "C" {
 /**
  *  Entry points for Scheduler Simple
  */
-#define SCHEDULER_SIMPLE_ENTRY_POINTS \
-  { \
-    _Scheduler_simple_Initialize,         /* initialize entry point */ \
-    _Scheduler_simple_Schedule,           /* schedule entry point */ \
-    _Scheduler_simple_Yield,              /* yield entry point */ \
-    _Scheduler_simple_Block,              /* block entry point */ \
-    _Scheduler_simple_Unblock,            /* unblock entry point */ \
-    _Scheduler_simple_Update_priority,    /* update priority entry point */ \
-    _Scheduler_default_Map_priority,      /* map priority entry point */ \
-    _Scheduler_default_Unmap_priority,    /* unmap priority entry point */ \
-    SCHEDULER_DEFAULT_SMP_OPERATIONS \
-    _Scheduler_default_Node_initialize,   /* node initialize entry point */ \
-    _Scheduler_default_Node_destroy,      /* node destroy entry point */ \
-    _Scheduler_default_Release_job,       /* new period of task */ \
-    _Scheduler_default_Cancel_job,        /* cancel period of task */ \
-    _Scheduler_default_Start_idle         /* start idle entry point */ \
-    SCHEDULER_DEFAULT_SET_AFFINITY_OPERATION \
-  }
+#define SCHEDULER_SIMPLE_ENTRY_POINTS                                       \
+  { _Scheduler_simple_Initialize,      /* initialize entry point */         \
+    _Scheduler_simple_Schedule,        /* schedule entry point */           \
+    _Scheduler_simple_Yield,           /* yield entry point */              \
+    _Scheduler_simple_Block,           /* block entry point */              \
+    _Scheduler_simple_Unblock,         /* unblock entry point */            \
+    _Scheduler_simple_Update_priority, /* update priority entry point */    \
+    _Scheduler_default_Map_priority,   /* map priority entry point */       \
+    _Scheduler_default_Unmap_priority, /* unmap priority entry point */     \
+    SCHEDULER_DEFAULT_SMP_OPERATIONS                                        \
+      _Scheduler_default_Node_initialize, /* node initialize entry point */ \
+    _Scheduler_default_Node_destroy,      /* node destroy entry point */    \
+    _Scheduler_default_Release_job,       /* new period of task */          \
+    _Scheduler_default_Cancel_job,        /* cancel period of task */       \
+    _Scheduler_default_Start_idle         /* start idle entry point */      \
+      SCHEDULER_DEFAULT_SET_AFFINITY_OPERATION }
 
 /**
  * @brief Simple scheduler context.

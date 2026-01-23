@@ -49,8 +49,8 @@
  */
 
 #include <stdbool.h> /* bool */
-#include <stdint.h> /* uint32_t */
-#include <time.h> /* struct timespec */
+#include <stdint.h>  /* uint32_t */
+#include <time.h>    /* struct timespec */
 
 #ifdef __cplusplus
 extern "C" {
@@ -67,10 +67,10 @@ extern "C" {
  *  @param[in] _nanoseconds is the nanoseconds portion of the timespec
  */
 #define _Timespec_Set( _time, _seconds, _nanoseconds ) \
-	do { \
-	   (_time)->tv_sec = (_seconds); \
-	   (_time)->tv_nsec = (_nanoseconds); \
-	} while (0)
+  do {                                                 \
+    ( _time )->tv_sec = ( _seconds );                  \
+    ( _time )->tv_nsec = ( _nanoseconds );             \
+  } while ( 0 )
 
 /**
  * @brief Sets the Timespec to Zero
@@ -81,10 +81,10 @@ extern "C" {
  *  @param[in] _time points to the timespec instance to zero.
  */
 #define _Timespec_Set_to_zero( _time ) \
-	do { \
-	   (_time)->tv_sec = 0; \
-	   (_time)->tv_nsec = 0; \
-	} while (0)
+  do {                                 \
+    ( _time )->tv_sec = 0;             \
+    ( _time )->tv_nsec = 0;            \
+  } while ( 0 )
 
 /**
  * @brief Get seconds portion of timespec.
@@ -95,8 +95,7 @@ extern "C" {
  *
  *  @retval The seconds portion of @a _time.
  */
-#define _Timespec_Get_seconds( _time ) \
-	((_time)->tv_sec)
+#define _Timespec_Get_seconds( _time ) ( ( _time )->tv_sec )
 
 /**
  * @brief Get nanoseconds portion of timespec.
@@ -107,8 +106,7 @@ extern "C" {
  *
  *  @retval The nanoseconds portion of @a _time.
  */
-#define _Timespec_Get_nanoseconds( _time ) \
-	((_time)->tv_nsec)
+#define _Timespec_Get_nanoseconds( _time ) ( ( _time )->tv_nsec )
 
 /**
  *  @brief Gets the timestamp as nanoseconds.
@@ -119,9 +117,7 @@ extern "C" {
  *
  *  @return The time in nanoseconds.
  */
-uint64_t _Timespec_Get_as_nanoseconds(
-  const struct timespec *time
-);
+uint64_t _Timespec_Get_as_nanoseconds( const struct timespec *time );
 
 /**
  * @brief Checks if the values in @a time are non-negative.
@@ -131,9 +127,7 @@ uint64_t _Timespec_Get_as_nanoseconds(
  * @retval true If @a time is filled with non-negative values.
  * @retval false If @a time is not filled with non-negative values.
  */
-bool _Timespec_Is_non_negative(
-  const struct timespec *time
-);
+bool _Timespec_Is_non_negative( const struct timespec *time );
 
 /**
  * @brief Checks if timespec is valid.
@@ -145,9 +139,7 @@ bool _Timespec_Is_non_negative(
  * @retval true The timespec is valid.
  * @retval false The timespec is invalid.
  */
-bool _Timespec_Is_valid(
-  const struct timespec *time
-);
+bool _Timespec_Is_valid( const struct timespec *time );
 
 /**
  * @brief Checks if the left hand side timespec is less than the right one.
@@ -176,8 +168,7 @@ bool _Timespec_Less_than(
  *  @retval This method returns true if @a lhs is greater than the @a rhs and
  *          false otherwise.
  */
-#define _Timespec_Greater_than( _lhs, _rhs ) \
-  _Timespec_Less_than( _rhs, _lhs )
+#define _Timespec_Greater_than( _lhs, _rhs ) _Timespec_Less_than( _rhs, _lhs )
 
 /**
  * @brief The Timespec "equal to" operator.
@@ -190,10 +181,9 @@ bool _Timespec_Less_than(
  *  @retval This method returns true if @a lhs is equal to  @a rhs and
  *          false otherwise.
  */
-#define _Timespec_Equal_to( lhs, rhs ) \
-  ( ((lhs)->tv_sec  == (rhs)->tv_sec) &&   \
-    ((lhs)->tv_nsec == (rhs)->tv_nsec)     \
-  )
+#define _Timespec_Equal_to( lhs, rhs )        \
+  ( ( ( lhs )->tv_sec == ( rhs )->tv_sec ) && \
+    ( ( lhs )->tv_nsec == ( rhs )->tv_nsec ) )
 
 /**
  * @brief Adds two timespecs.
@@ -206,10 +196,7 @@ bool _Timespec_Less_than(
  *
  * @return The number of seconds @a time increased by.
  */
-time_t _Timespec_Add_to(
-  struct timespec       *time,
-  const struct timespec *add
-);
+time_t _Timespec_Add_to( struct timespec *time, const struct timespec *add );
 
 /**
  * @brief Converts timespec to number of ticks.
@@ -221,9 +208,7 @@ time_t _Timespec_Add_to(
  *
  * @return The number of ticks computed.
  */
-uint32_t _Timespec_To_ticks(
-  const struct timespec *time
-);
+uint32_t _Timespec_To_ticks( const struct timespec *time );
 
 /**
  * @brief Converts ticks to timespec.
@@ -234,10 +219,7 @@ uint32_t _Timespec_To_ticks(
  *  @param ticks The number of ticks to convert.
  *  @param[out] time The timespec format time result.
  */
-void _Timespec_From_ticks(
-  uint32_t         ticks,
-  struct timespec *time
-);
+void _Timespec_From_ticks( uint32_t ticks, struct timespec *time );
 
 /**
  * @brief Subtracts two timespec.

@@ -86,10 +86,7 @@ void _RBTree_Prepend( RBTree_Control *the_rbtree, RBTree_Node *the_node );
  *
  * @see _RBTree_Iterate().
  */
-typedef bool (*RBTree_Visitor)(
-  const RBTree_Node *node,
-  void *visitor_arg
-);
+typedef bool ( *RBTree_Visitor )( const RBTree_Node *node, void *visitor_arg );
 
 /**
  * @brief Red-black tree iteration.
@@ -100,8 +97,8 @@ typedef bool (*RBTree_Visitor)(
  */
 void _RBTree_Iterate(
   const RBTree_Control *rbtree,
-  RBTree_Visitor visitor,
-  void *visitor_arg
+  RBTree_Visitor        visitor,
+  void                 *visitor_arg
 );
 
 /** @} */

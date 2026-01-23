@@ -64,7 +64,7 @@ extern "C" {
  *  This is the priority constant used when appending messages onto
  *  a message queue.
  */
-#define  CORE_MESSAGE_QUEUE_SEND_REQUEST   INT_MAX
+#define CORE_MESSAGE_QUEUE_SEND_REQUEST INT_MAX
 
 /**
  *  @brief Used when prepending messages onto a message queue.
@@ -72,7 +72,7 @@ extern "C" {
  *  This is the priority constant used when prepending messages onto
  *  a message queue.
  */
-#define  CORE_MESSAGE_QUEUE_URGENT_REQUEST INT_MIN
+#define CORE_MESSAGE_QUEUE_URGENT_REQUEST INT_MIN
 
 /**
  *  @brief The modes in which a message may be submitted to a message queue.
@@ -161,12 +161,12 @@ void *_CORE_message_queue_Workspace_allocate(
  *   allocation failed.
  */
 Status_Control _CORE_message_queue_Initialize(
-  CORE_message_queue_Control          *the_message_queue,
-  CORE_message_queue_Disciplines       discipline,
-  uint32_t                             maximum_pending_messages,
-  size_t                               maximum_message_size,
-  CORE_message_queue_Allocate_buffers  allocate_buffers,
-  const void                          *arg
+  CORE_message_queue_Control         *the_message_queue,
+  CORE_message_queue_Disciplines      discipline,
+  uint32_t                            maximum_pending_messages,
+  size_t                              maximum_message_size,
+  CORE_message_queue_Allocate_buffers allocate_buffers,
+  const void                         *arg
 );
 
 /**
@@ -203,12 +203,12 @@ void _CORE_message_queue_Close(
  *
  * @return This method returns the number of message pending messages flushed.
  */
-uint32_t   _CORE_message_queue_Flush(
+uint32_t _CORE_message_queue_Flush(
   CORE_message_queue_Control *the_message_queue,
   Thread_queue_Context       *queue_context
 );
 
-#if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
+#if defined( FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API )
 /**
  * @brief Flushes waiting threads.
  *
@@ -221,9 +221,9 @@ uint32_t   _CORE_message_queue_Flush(
  *
  * @return This method returns the number of messages flushed from the queue.
  */
-  void _CORE_message_queue_Flush_waiting_threads(
-    CORE_message_queue_Control *the_message_queue
-  );
+void _CORE_message_queue_Flush_waiting_threads(
+  CORE_message_queue_Control *the_message_queue
+);
 #endif
 
 /**
@@ -283,13 +283,13 @@ Status_Control _CORE_message_queue_Broadcast(
  * @retval STATUS_TIMEOUT A timeout occurred.
  */
 Status_Control _CORE_message_queue_Submit(
-  CORE_message_queue_Control       *the_message_queue,
-  Thread_Control                   *executing,
-  const void                       *buffer,
-  size_t                            size,
-  CORE_message_queue_Submit_types   submit_type,
-  bool                              wait,
-  Thread_queue_Context             *queue_context
+  CORE_message_queue_Control     *the_message_queue,
+  Thread_Control                 *executing,
+  const void                     *buffer,
+  size_t                          size,
+  CORE_message_queue_Submit_types submit_type,
+  bool                            wait,
+  Thread_queue_Context           *queue_context
 );
 
 /**
@@ -348,11 +348,11 @@ Status_Control _CORE_message_queue_Seize(
  *        appended, or enqueued in priority order.
  */
 void _CORE_message_queue_Insert_message(
-  CORE_message_queue_Control        *the_message_queue,
-  CORE_message_queue_Buffer         *the_message,
-  const void                        *content_source,
-  size_t                             content_size,
-  CORE_message_queue_Submit_types    submit_type
+  CORE_message_queue_Control     *the_message_queue,
+  CORE_message_queue_Buffer      *the_message,
+  const void                     *content_source,
+  size_t                          content_size,
+  CORE_message_queue_Submit_types submit_type
 );
 
 /**
@@ -373,11 +373,11 @@ void _CORE_message_queue_Insert_message(
  * @retval STATUS_TIMEOUT A timeout occurred.
  */
 static inline Status_Control _CORE_message_queue_Send(
-  CORE_message_queue_Control       *the_message_queue,
-  const void                       *buffer,
-  size_t                            size,
-  bool                              wait,
-  Thread_queue_Context             *queue_context
+  CORE_message_queue_Control *the_message_queue,
+  const void                 *buffer,
+  size_t                      size,
+  bool                        wait,
+  Thread_queue_Context       *queue_context
 )
 {
   return _CORE_message_queue_Submit(
@@ -409,11 +409,11 @@ static inline Status_Control _CORE_message_queue_Send(
  * @retval STATUS_TIMEOUT A timeout occurred.
  */
 static inline Status_Control _CORE_message_queue_Urgent(
-  CORE_message_queue_Control       *the_message_queue,
-  const void                       *buffer,
-  size_t                            size,
-  bool                              wait,
-  Thread_queue_Context             *queue_context
+  CORE_message_queue_Control *the_message_queue,
+  const void                 *buffer,
+  size_t                      size,
+  bool                        wait,
+  Thread_queue_Context       *queue_context
 )
 {
   return _CORE_message_queue_Submit(
@@ -452,7 +452,10 @@ static inline void _CORE_message_queue_Acquire_critical(
   Thread_queue_Context       *queue_context
 )
 {
-  _Thread_queue_Acquire_critical( &the_message_queue->Wait_queue, queue_context );
+  _Thread_queue_Acquire_critical(
+    &the_message_queue->Wait_queue,
+    queue_context
+  );
 }
 
 /**
@@ -479,13 +482,13 @@ static inline void _CORE_message_queue_Release(
  * @param[out] destination The destination messag buffer to copy the source to.
  * @param size The size of the source buffer.
  */
-static inline void _CORE_message_queue_Copy_buffer (
+static inline void _CORE_message_queue_Copy_buffer(
   const void *source,
   void       *destination,
   size_t      size
 )
 {
-  memcpy(destination, source, size);
+  memcpy( destination, source, size );
 }
 
 /**
@@ -500,12 +503,13 @@ static inline void _CORE_message_queue_Copy_buffer (
  * @retval NULL The inactive message buffer chain is empty.
  */
 static inline CORE_message_queue_Buffer *
-_CORE_message_queue_Allocate_message_buffer (
-    CORE_message_queue_Control *the_message_queue
+_CORE_message_queue_Allocate_message_buffer(
+  CORE_message_queue_Control *the_message_queue
 )
 {
-   return (CORE_message_queue_Buffer *)
-     _Chain_Get_unprotected( &the_message_queue->Inactive_messages );
+  return (CORE_message_queue_Buffer *) _Chain_Get_unprotected(
+    &the_message_queue->Inactive_messages
+  );
 }
 
 /**
@@ -517,12 +521,15 @@ _CORE_message_queue_Allocate_message_buffer (
  * @param[in, out] the_message_queue The message queue to free the message buffer to.
  * @param[out] the_message The message to be freed.
  */
-static inline void _CORE_message_queue_Free_message_buffer (
+static inline void _CORE_message_queue_Free_message_buffer(
   CORE_message_queue_Control *the_message_queue,
   CORE_message_queue_Buffer  *the_message
 )
 {
-  _Chain_Append_unprotected( &the_message_queue->Inactive_messages, &the_message->Node );
+  _Chain_Append_unprotected(
+    &the_message_queue->Inactive_messages,
+    &the_message->Node
+  );
 }
 
 /**
@@ -538,14 +545,14 @@ static inline void _CORE_message_queue_Free_message_buffer (
  * @note It encapsulates the optional behavior that message priority is
  *       disabled if no API requires it.
  */
-static inline int _CORE_message_queue_Get_message_priority (
+static inline int _CORE_message_queue_Get_message_priority(
   const CORE_message_queue_Buffer *the_message
 )
 {
-  #if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
-    return the_message->priority;
+  #if defined( RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY )
+  return the_message->priority;
   #else
-    return 0;
+  return 0;
   #endif
 }
 
@@ -560,17 +567,18 @@ static inline int _CORE_message_queue_Get_message_priority (
  * @retval pointer The first message if the message queue is not empty.
  * @retval NULL The message queue is empty.
  */
-static inline
-  CORE_message_queue_Buffer *_CORE_message_queue_Get_pending_message (
+static inline CORE_message_queue_Buffer *
+_CORE_message_queue_Get_pending_message(
   CORE_message_queue_Control *the_message_queue
 )
 {
-  return (CORE_message_queue_Buffer *)
-    _Chain_Get_unprotected( &the_message_queue->Pending_messages );
+  return (CORE_message_queue_Buffer *) _Chain_Get_unprotected(
+    &the_message_queue->Pending_messages
+  );
 }
 
-#if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
-  /**
+#if defined( RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION )
+/**
    * @brief Checks if notification is enabled.
    *
    * This function returns true if notification is enabled on this message
@@ -581,12 +589,12 @@ static inline
    * @retval true Notification is enabled on this message queue.
    * @retval false Notification is not enabled on this message queue.
    */
-  static inline bool _CORE_message_queue_Is_notify_enabled (
-    CORE_message_queue_Control *the_message_queue
-  )
-  {
-    return (the_message_queue->notify_handler != NULL);
-  }
+static inline bool _CORE_message_queue_Is_notify_enabled(
+  CORE_message_queue_Control *the_message_queue
+)
+{
+  return ( the_message_queue->notify_handler != NULL );
+}
 #endif
 
 /**
@@ -598,18 +606,19 @@ static inline
  * @param[out] the_message_queue The message queue to initialize the notification information.
  * @param[out] the_handler The notification information for the message queue.
  */
-#if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
-  static inline void _CORE_message_queue_Set_notify (
-    CORE_message_queue_Control        *the_message_queue,
-    CORE_message_queue_Notify_Handler  the_handler
-  )
-  {
-    the_message_queue->notify_handler = the_handler;
-  }
+#if defined( RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION )
+static inline void _CORE_message_queue_Set_notify(
+  CORE_message_queue_Control       *the_message_queue,
+  CORE_message_queue_Notify_Handler the_handler
+)
+{
+  the_message_queue->notify_handler = the_handler;
+}
 #else
   /* turn it into nothing if not enabled */
   #define _CORE_message_queue_Set_notify( the_message_queue, the_handler ) \
-    do { } while ( 0 )
+  do {                                                                     \
+  } while ( 0 )
 #endif
 
 /**
@@ -628,11 +637,11 @@ static inline
  * @retval NULL There are pending messages or no thread waiting to receive.
  */
 static inline Thread_Control *_CORE_message_queue_Dequeue_receiver(
-  CORE_message_queue_Control      *the_message_queue,
-  const void                      *buffer,
-  size_t                           size,
-  CORE_message_queue_Submit_types  submit_type,
-  Thread_queue_Context            *queue_context
+  CORE_message_queue_Control     *the_message_queue,
+  const void                     *buffer,
+  size_t                          size,
+  CORE_message_queue_Submit_types submit_type,
+  Thread_queue_Context           *queue_context
 )
 {
   Thread_queue_Heads *heads;
@@ -666,8 +675,8 @@ static inline Thread_Control *_CORE_message_queue_Dequeue_receiver(
     queue_context
   );
 
-   *(size_t *) the_thread->Wait.return_argument = size;
-   the_thread->Wait.count = (uint32_t) submit_type;
+  *(size_t *) the_thread->Wait.return_argument = size;
+  the_thread->Wait.count = (uint32_t) submit_type;
 
   _CORE_message_queue_Copy_buffer(
     buffer,

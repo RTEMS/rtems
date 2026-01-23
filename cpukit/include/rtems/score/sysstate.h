@@ -84,7 +84,7 @@ typedef enum {
 
 #define SYSTEM_STATE_CODES_LAST SYSTEM_STATE_TERMINATED
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
 extern bool _System_state_Is_multiprocessing;
 #endif
 
@@ -95,9 +95,7 @@ extern System_state_Codes _System_state_Current;
  *
  * @param state The state to set.
  */
-static inline void _System_state_Set (
-  System_state_Codes state
-)
+static inline void _System_state_Set( System_state_Codes state )
 {
   _System_state_Current = state;
 }
@@ -107,7 +105,7 @@ static inline void _System_state_Set (
  *
  * @return The current system state.
  */
-static inline System_state_Codes _System_state_Get ( void )
+static inline System_state_Codes _System_state_Get( void )
 {
   return _System_state_Current;
 }
@@ -120,11 +118,11 @@ static inline System_state_Codes _System_state_Get ( void )
  * @retval true @a state is before initialization.
  * @retval false @a state is not before initialization.
  */
-static inline bool _System_state_Is_before_initialization (
+static inline bool _System_state_Is_before_initialization(
   System_state_Codes state
 )
 {
-  return (state == SYSTEM_STATE_BEFORE_INITIALIZATION);
+  return ( state == SYSTEM_STATE_BEFORE_INITIALIZATION );
 }
 
 /**
@@ -135,11 +133,11 @@ static inline bool _System_state_Is_before_initialization (
  * @retval true @a state is before multitasking.
  * @retval false @a state is not before multitasking.
  */
-static inline bool _System_state_Is_before_multitasking (
+static inline bool _System_state_Is_before_multitasking(
   System_state_Codes state
 )
 {
-  return (state == SYSTEM_STATE_BEFORE_MULTITASKING);
+  return ( state == SYSTEM_STATE_BEFORE_MULTITASKING );
 }
 
 /**
@@ -150,11 +148,9 @@ static inline bool _System_state_Is_before_multitasking (
  * @retval true @a state is up.
  * @retval false @a state is not up.
  */
-static inline bool _System_state_Is_up (
-  System_state_Codes state
-)
+static inline bool _System_state_Is_up( System_state_Codes state )
 {
-  return (state == SYSTEM_STATE_UP);
+  return ( state == SYSTEM_STATE_UP );
 }
 
 /**
@@ -165,11 +161,9 @@ static inline bool _System_state_Is_up (
  * @retval true @a state is terminated.
  * @retval false @a state is not terminated.
  */
-static inline bool _System_state_Is_terminated (
-  System_state_Codes state
-)
+static inline bool _System_state_Is_terminated( System_state_Codes state )
 {
-  return (state == SYSTEM_STATE_TERMINATED);
+  return ( state == SYSTEM_STATE_TERMINATED );
 }
 
 /** @} */

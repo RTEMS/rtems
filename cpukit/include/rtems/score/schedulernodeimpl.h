@@ -72,13 +72,13 @@ extern "C" {
 /**
  * @brief Clears the priority append indicator bit.
  */
-#define SCHEDULER_PRIORITY_PURIFY( priority )  \
+#define SCHEDULER_PRIORITY_PURIFY( priority ) \
   ( ( priority ) & ~( (Priority_Control) PRIORITY_GROUP_LAST ) )
 
 /**
  * @brief Returns the priority control with the append indicator bit set.
  */
-#define SCHEDULER_PRIORITY_APPEND( priority )  \
+#define SCHEDULER_PRIORITY_APPEND( priority ) \
   ( ( priority ) | ( (Priority_Control) PRIORITY_GROUP_LAST ) )
 
 /**
@@ -111,7 +111,7 @@ static inline void _Scheduler_Node_do_initialize(
 
   node->Priority.value = priority;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   _Chain_Initialize_node( &node->Thread.Wait_node );
   node->Wait.Priority.scheduler = scheduler;
   node->user = the_thread;
@@ -139,7 +139,7 @@ static inline void _Scheduler_Node_do_destroy(
 {
   (void) scheduler;
 
-#if defined(RTEMS_SMP) && CPU_SIZEOF_POINTER != 8
+#if defined( RTEMS_SMP ) && CPU_SIZEOF_POINTER != 8
   _ISR_lock_Destroy( &node->Priority.Lock );
 #else
   (void) node;
@@ -187,7 +187,7 @@ static inline Priority_Control _Scheduler_Node_get_priority(
 {
   Priority_Control priority;
 
-#if defined(RTEMS_SMP) && CPU_SIZEOF_POINTER == 8
+#if defined( RTEMS_SMP ) && CPU_SIZEOF_POINTER == 8
   priority = _Atomic_Fetch_add_ulong(
     &node->Priority.value,
     0,
@@ -220,7 +220,7 @@ static inline void _Scheduler_Node_set_priority(
   Priority_Group_order group_order
 )
 {
-#if defined(RTEMS_SMP) && CPU_SIZEOF_POINTER == 8
+#if defined( RTEMS_SMP ) && CPU_SIZEOF_POINTER == 8
   _Atomic_Store_ulong(
     &node->Priority.value,
     new_priority | (Priority_Control) group_order,
@@ -235,7 +235,7 @@ static inline void _Scheduler_Node_set_priority(
 #endif
 }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 /**
  * @brief Gets the user of the node.
  *

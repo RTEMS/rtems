@@ -112,11 +112,11 @@ typedef struct {
   */
   uint32_t generation_number;
 
-  void *tls_blocks[1];
+  void *tls_blocks[ 1 ];
 } TLS_Dynamic_thread_vector;
 
 typedef struct TLS_Thread_control_block {
-#if defined(__i386__) || defined(__x86_64__)
+#if defined( __i386__ ) || defined( __x86_64__ )
   struct TLS_Thread_control_block *tcb;
 #else /* !(__i386__ || __x86_64__) */
   TLS_Dynamic_thread_vector *dtv;
@@ -124,7 +124,7 @@ typedef struct TLS_Thread_control_block {
  * GCC under AArch64/LP64 expects a 16 byte TCB at the beginning of the TLS
  * data segment and indexes into it accordingly for TLS variable addresses.
  */
-#if CPU_SIZEOF_POINTER == 4 || defined(AARCH64_MULTILIB_ARCH_V8)
+#if CPU_SIZEOF_POINTER == 4 || defined( AARCH64_MULTILIB_ARCH_V8 )
   uintptr_t reserved;
 #endif
 #endif /* __i386__ || __x86_64__ */
@@ -178,12 +178,15 @@ static inline void _TLS_Copy_and_clear(
   void                             *tls_data
 )
 {
-  tls_data =
-    memcpy( tls_data, config->data_begin, (uintptr_t) config->data_size );
+  tls_data = memcpy(
+    tls_data,
+    config->data_begin,
+    (uintptr_t) config->data_size
+  );
 
   memset(
-    (char *) tls_data +
-      (uintptr_t) config->bss_begin - (uintptr_t) config->data_begin,
+    (char *) tls_data + (uintptr_t) config->bss_begin -
+      (uintptr_t) config->data_begin,
     0,
     (uintptr_t) config->bss_size
   );
@@ -204,14 +207,14 @@ static inline void _TLS_Initialize_TCB_and_DTV(
   TLS_Dynamic_thread_vector *dtv
 )
 {
-#if defined(__i386__) || defined(__x86_64__)
+#if defined( __i386__ ) || defined( __x86_64__ )
   (void) tls_data;
   (void) dtv;
   tcb->tcb = tcb;
 #else
   tcb->dtv = dtv;
   dtv->generation_number = 1;
-  dtv->tls_blocks[0] = tls_data;
+  dtv->tls_blocks[ 0 ] = tls_data;
 #endif
 }
 
@@ -233,17 +236,17 @@ static inline void *_TLS_Initialize_area( void *tls_area )
   TLS_Dynamic_thread_vector        *dtv;
   void                             *return_value;
 #if CPU_THREAD_LOCAL_STORAGE_VARIANT == 11
-  uintptr_t                         tcb_size;
+  uintptr_t tcb_size;
 #endif
 #if CPU_THREAD_LOCAL_STORAGE_VARIANT == 20
-  uintptr_t                         size;
-  uintptr_t                         alignment_2;
+  uintptr_t size;
+  uintptr_t alignment_2;
 #endif
 
   config = &_TLS_Configuration;
   alignment = (uintptr_t) config->alignment;
 
-#if defined(__i386__) || defined(__x86_64__)
+#if defined( __i386__ ) || defined( __x86_64__ )
   dtv = NULL;
 #else
   dtv = (TLS_Dynamic_thread_vector *) tls_area;
@@ -253,20 +256,20 @@ static inline void *_TLS_Initialize_area( void *tls_area )
 #if CPU_THREAD_LOCAL_STORAGE_VARIANT == 10
   tls_data = (void *)
     RTEMS_ALIGN_UP( (uintptr_t) tls_area + sizeof( *tcb ), alignment );
-  tcb = (TLS_Thread_control_block *) ((char *) tls_data - sizeof( *tcb ));
+  tcb = (TLS_Thread_control_block *) ( (char *) tls_data - sizeof( *tcb ) );
   return_value = tls_data;
 #elif CPU_THREAD_LOCAL_STORAGE_VARIANT == 11
   tcb_size = RTEMS_ALIGN_UP( sizeof( *tcb ), alignment );
   tls_data = (void *)
     RTEMS_ALIGN_UP( (uintptr_t) tls_area + tcb_size, alignment );
-  tcb = (TLS_Thread_control_block *) ((char *) tls_data - tcb_size);
+  tcb = (TLS_Thread_control_block *) ( (char *) tls_data - tcb_size );
   return_value = tcb;
 #elif CPU_THREAD_LOCAL_STORAGE_VARIANT == 20
   alignment_2 = RTEMS_ALIGN_UP( alignment, CPU_SIZEOF_POINTER );
   tls_area = (void *) RTEMS_ALIGN_UP( (uintptr_t) tls_area, alignment_2 );
   size = (uintptr_t) config->size;
-  tcb = (TLS_Thread_control_block *)
-    ((char *) tls_area + RTEMS_ALIGN_UP( size, alignment_2 ));
+  tcb = (TLS_Thread_control_block *) ( (char *) tls_area +
+                                       RTEMS_ALIGN_UP( size, alignment_2 ) );
   tls_data = (char *) tcb - RTEMS_ALIGN_UP( size, alignment );
   return_value = tcb;
 #else

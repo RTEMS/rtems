@@ -56,7 +56,7 @@ extern "C" {
  *
  *  This type is used to specify the length of intervals.
  */
-typedef uint32_t   Watchdog_Interval;
+typedef uint32_t Watchdog_Interval;
 
 /**
  * @brief Special watchdog ticks value to indicate an infinite wait.

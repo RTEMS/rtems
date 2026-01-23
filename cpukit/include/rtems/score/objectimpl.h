@@ -59,10 +59,10 @@ extern "C" {
 /**
  *  Functions which compare names are prototyped like this.
  */
-typedef bool    (*Objects_Name_comparators)(
-  void       * /* name_1 */,
-  void       * /* name_2 */,
-  uint16_t     /* length */
+typedef bool ( *Objects_Name_comparators )(
+  void * /* name_1 */,
+  void * /* name_2 */,
+  uint16_t /* length */
 );
 
 /** This macro is used to generically specify the last API index. */
@@ -79,14 +79,14 @@ typedef bool    (*Objects_Name_comparators)(
  * information block.
  */
 typedef enum {
-  OBJECTS_FAKE_OBJECTS_NO_CLASS   = 0,
+  OBJECTS_FAKE_OBJECTS_NO_CLASS = 0,
   OBJECTS_FAKE_OBJECTS_SCHEDULERS = 1
 } Objects_Fake_objects_API;
 
 /**
  *  The following is referenced to the number of nodes in the system.
  */
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
 extern uint16_t _Objects_Maximum_nodes;
 #else
 #define _Objects_Maximum_nodes 1
@@ -102,8 +102,8 @@ extern uint16_t _Objects_Maximum_nodes;
  *  class.  From the ID, we can go to one of these information blocks,
  *  and obtain a pointer to the appropriate object control block.
  */
-extern Objects_Information ** const
-_Objects_Information_table[ OBJECTS_APIS_LAST + 1 ];
+extern Objects_Information
+  **const _Objects_Information_table[ OBJECTS_APIS_LAST + 1 ];
 
 /**
  * @brief Extends an object class information record.
@@ -138,9 +138,7 @@ void _Objects_Free_objects_block(
  *
  * @param information Points to an object class information block.
  */
-void _Objects_Shrink_information(
-  Objects_Information *information
-);
+void _Objects_Shrink_information( Objects_Information *information );
 
 /**
  * @brief Initializes the specified objects information.
@@ -163,9 +161,7 @@ void _Objects_Initialize_information( Objects_Information *information );
  * @retval some_value Positive integer on success.
  * @retval 0 The method failed.
  */
-unsigned int _Objects_API_maximum_class(
-  uint32_t api
-);
+unsigned int _Objects_API_maximum_class( uint32_t api );
 
 /**
  * @brief Allocates an object.
@@ -277,10 +273,7 @@ Objects_Control *_Objects_Get_by_name(
  *
  * @note This function currently does not support string names.
  */
-Status_Control _Objects_Id_to_name (
-  Objects_Id      id,
-  Objects_Name   *name
-);
+Status_Control _Objects_Id_to_name( Objects_Id id, Objects_Name *name );
 
 /**
  * @brief Maps the specified object identifier to the associated local object
@@ -368,8 +361,8 @@ Objects_Control *_Objects_Get_next(
  * @retval NULL An error occurred.
  */
 Objects_Information *_Objects_Get_information(
-  Objects_APIs   the_api,
-  uint16_t       the_class
+  Objects_APIs the_api,
+  uint16_t     the_class
 );
 
 /**
@@ -384,9 +377,7 @@ Objects_Information *_Objects_Get_information(
  *         for the class of objects which corresponds to this object ID.
  * @retval NULL An error occurred.
  */
-Objects_Information *_Objects_Get_information_id(
-  Objects_Id  id
-);
+Objects_Information *_Objects_Get_information_id( Objects_Id id );
 
 /**
  * @brief Returns if the object has a string name.
@@ -417,11 +408,7 @@ static inline bool _Objects_Has_string_name(
  * @retval @a name The operation was succeeded and the string was correctly filled in.
  * @retval NULL An error occurred.
  */
-char *_Objects_Get_name_as_string(
-  Objects_Id   id,
-  size_t       length,
-  char        *name
-);
+char *_Objects_Get_name_as_string( Objects_Id id, size_t length, char *name );
 
 /**
  * @brief Converts the specified object name to a text representation.
@@ -438,10 +425,10 @@ char *_Objects_Get_name_as_string(
  * to the buffer size if truncation occurred.
  */
 size_t _Objects_Name_to_string(
-  Objects_Name  name,
-  bool          is_string,
-  char         *buffer,
-  size_t        buffer_size
+  Objects_Name name,
+  bool         is_string,
+  char        *buffer,
+  size_t       buffer_size
 );
 
 /**
@@ -540,9 +527,7 @@ static inline Objects_Maximum _Objects_Extend_size(
  * @retval true The specified api value is valid.
  * @retval false The specified api value is not valid.
  */
-static inline bool _Objects_Is_api_valid(
-  uint32_t   the_api
-)
+static inline bool _Objects_Is_api_valid( uint32_t the_api )
 {
   return ( 1 <= the_api && the_api <= OBJECTS_APIS_LAST );
 }
@@ -556,9 +541,7 @@ static inline bool _Objects_Is_api_valid(
  * @retval true The specified node is the local node.
  * @retval false The specified node is not the local node.
  */
-static inline bool _Objects_Is_local_node(
-  uint32_t   node
-)
+static inline bool _Objects_Is_local_node( uint32_t node )
 {
   return ( node == _Objects_Local_node );
 }
@@ -574,15 +557,15 @@ static inline bool _Objects_Is_local_node(
  * @note On a single processor configuration, this always returns true.
  */
 static inline bool _Objects_Is_local_id(
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   Objects_Id id
 #else
   Objects_Id id RTEMS_UNUSED
 #endif
 )
 {
-#if defined(RTEMS_MULTIPROCESSING)
-  return _Objects_Is_local_node( _Objects_Get_node(id) );
+#if defined( RTEMS_MULTIPROCESSING )
+  return _Objects_Is_local_node( _Objects_Get_node( id ) );
 #else
   return true;
 #endif
@@ -597,10 +580,7 @@ static inline bool _Objects_Is_local_id(
  * @retval true The specified object IDs are equal.
  * @retval false The specified object IDs are not equal.
  */
-static inline bool _Objects_Are_ids_equal(
-  Objects_Id left,
-  Objects_Id right
-)
+static inline bool _Objects_Are_ids_equal( Objects_Id left, Objects_Id right )
 {
   return ( left == right );
 }
@@ -850,8 +830,8 @@ static inline Objects_Control *_Objects_Allocate_unprotected(
 )
 {
   _Assert(
-    _Objects_Allocator_is_owner()
-      || !_System_state_Is_up( _System_state_Get() )
+    _Objects_Allocator_is_owner() ||
+    !_System_state_Is_up( _System_state_Get() )
   );
 
   return ( *information->allocate )( information );
@@ -972,8 +952,8 @@ static inline void _Objects_Activate_unlimited(
  * @param extend The object information extend handler.
  */
 static inline Objects_Control *_Objects_Allocate_with_extend(
-  Objects_Information   *information,
-  void                ( *extend )( Objects_Information * )
+  Objects_Information *information,
+  void ( *extend )( Objects_Information * )
 )
 {
   Objects_Control *the_object;
@@ -1007,10 +987,9 @@ void _Objects_Free_nothing( void *ptr );
 }
 #endif
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
 #include <rtems/score/objectmp.h>
 #endif
-
 
 #endif
 /* end of include file */

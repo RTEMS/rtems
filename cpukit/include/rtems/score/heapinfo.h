@@ -165,7 +165,7 @@ typedef struct {
 typedef struct {
   Heap_Information Free;
   Heap_Information Used;
-  Heap_Statistics Stats;
+  Heap_Statistics  Stats;
 } Heap_Information_block;
 
 /** @} */

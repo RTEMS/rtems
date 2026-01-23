@@ -60,11 +60,11 @@ extern "C" {
  */
 typedef struct {
   /** This is the chain node portion of an object. */
-  Chain_Node     Node;
+  Chain_Node   Node;
   /** This is the object's ID. */
-  Objects_Id     id;
+  Objects_Id   id;
   /** This is the object's name. */
-  Objects_Name   name;
+  Objects_Name name;
 } Objects_Control;
 
 /**
@@ -303,7 +303,7 @@ struct Objects_Information {
    */
   Objects_Control *initial_objects;
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   /**
    * @brief This method is used by _Thread_MP_Extract_proxy().
    *
@@ -361,7 +361,9 @@ Objects_Control *_Objects_Allocate_static( Objects_Information *information );
  * @retval NULL No inactive object is available.
  * @retval object An inactive object.
  */
-Objects_Control *_Objects_Allocate_unlimited( Objects_Information *information );
+Objects_Control *_Objects_Allocate_unlimited(
+  Objects_Information *information
+);
 
 /**
  * @brief Free the object.
@@ -390,12 +392,10 @@ void _Objects_Free_unlimited(
   Objects_Control     *the_object
 );
 
-#if defined(RTEMS_MULTIPROCESSING)
-#define OBJECTS_INFORMATION_MP( name, extract ) \
-  , \
-  extract, \
-  RBTREE_INITIALIZER_EMPTY( name.Global_by_id ), \
-  RBTREE_INITIALIZER_EMPTY( name.Global_by_name )
+#if defined( RTEMS_MULTIPROCESSING )
+#define OBJECTS_INFORMATION_MP( name, extract )             \
+  , extract, RBTREE_INITIALIZER_EMPTY( name.Global_by_id ), \
+    RBTREE_INITIALIZER_EMPTY( name.Global_by_name )
 #else
 #define OBJECTS_INFORMATION_MP( name, extract )
 #endif
@@ -412,21 +412,20 @@ void _Objects_Free_unlimited(
  *   objects without a string name.
  */
 #define OBJECTS_INFORMATION_DEFINE_ZERO( name, api, cls, nl ) \
-Objects_Information name##_Information = { \
-  _Objects_Build_id( api, cls, 1, 0 ), \
-  NULL, \
-  _Objects_Allocate_none, \
-  NULL, \
-  0, \
-  0, \
-  0, \
-  nl, \
-  CHAIN_INITIALIZER_EMPTY( name##_Information.Inactive ), \
-  NULL, \
-  NULL, \
-  NULL \
-  OBJECTS_INFORMATION_MP( name##_Information, NULL ) \
-}
+  Objects_Information name##_Information = {                  \
+    _Objects_Build_id( api, cls, 1, 0 ),                      \
+    NULL,                                                     \
+    _Objects_Allocate_none,                                   \
+    NULL,                                                     \
+    0,                                                        \
+    0,                                                        \
+    0,                                                        \
+    nl,                                                       \
+    CHAIN_INITIALIZER_EMPTY( name##_Information.Inactive ),   \
+    NULL,                                                     \
+    NULL,                                                     \
+    NULL OBJECTS_INFORMATION_MP( name##_Information, NULL )   \
+  }
 
 /**
  * @brief Statically initializes an objects information.
@@ -446,29 +445,32 @@ Objects_Information name##_Information = { \
  * @param ex The optional object extraction method.  Used only if
  *   multiprocessing (RTEMS_MULTIPROCESSING) is enabled.
  */
-#define OBJECTS_INFORMATION_DEFINE( name, api, cls, type, max, nl, ex ) \
-static Objects_Control * \
-name##_Local_table[ _Objects_Maximum_per_allocation( max ) ]; \
-static RTEMS_SECTION( ".noinit.rtems.content.objects." #name ) \
-type \
-name##_Objects[ _Objects_Maximum_per_allocation( max ) ]; \
-Objects_Information name##_Information = { \
-  _Objects_Build_id( api, cls, 1, _Objects_Maximum_per_allocation( max ) ), \
-  name##_Local_table, \
-  _Objects_Is_unlimited( max ) ? \
-    _Objects_Allocate_unlimited : _Objects_Allocate_static, \
-  _Objects_Is_unlimited( max ) ? \
-    _Objects_Free_unlimited : _Objects_Free_static, \
-  0, \
-  _Objects_Is_unlimited( max ) ? _Objects_Maximum_per_allocation( max ) : 0, \
-  sizeof( type ), \
-  nl, \
-  CHAIN_INITIALIZER_EMPTY( name##_Information.Inactive ), \
-  NULL, \
-  NULL, \
-  &name##_Objects[ 0 ].Object \
-  OBJECTS_INFORMATION_MP( name##_Information, ex ) \
-}
+#define OBJECTS_INFORMATION_DEFINE( name, api, cls, type, max, nl, ex )       \
+  static Objects_Control                                                      \
+    *name##_Local_table[ _Objects_Maximum_per_allocation( max ) ];            \
+  static RTEMS_SECTION( ".noinit.rtems.content.objects." #name )              \
+    type name##_Objects[ _Objects_Maximum_per_allocation( max ) ];            \
+                                                                              \
+  Objects_Information name##_Information = {                                  \
+    _Objects_Build_id( api, cls, 1, _Objects_Maximum_per_allocation( max ) ), \
+    name##_Local_table,                                                       \
+    _Objects_Is_unlimited( max ) ? _Objects_Allocate_unlimited                \
+                                 : _Objects_Allocate_static,                  \
+    _Objects_Is_unlimited( max ) ? _Objects_Free_unlimited                    \
+                                 : _Objects_Free_static,                      \
+    0,                                                                        \
+    _Objects_Is_unlimited( max ) ? _Objects_Maximum_per_allocation( max )     \
+                                 : 0,                                         \
+    sizeof( type ),                                                           \
+    nl,                                                                       \
+    CHAIN_INITIALIZER_EMPTY( name##_Information.Inactive ),                   \
+    NULL,                                                                     \
+    NULL,                                                                     \
+    &name##_Objects[ 0 ].Object OBJECTS_INFORMATION_MP(                       \
+      name##_Information,                                                     \
+      ex                                                                      \
+    )                                                                         \
+  }
 
 /** @} */
 

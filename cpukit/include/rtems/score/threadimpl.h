@@ -71,7 +71,7 @@ extern "C" {
  *   #STATES_ZOMBIE state.
  */
 typedef struct {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /**
    * @brief This lock protects the zombie chain.
    */
@@ -111,7 +111,7 @@ extern Objects_Id _Thread_Global_constructor;
 extern Thread_Control *_Thread_Allocated_fp;
 #endif
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 #define THREAD_OF_SCHEDULER_HELP_NODE( node ) \
   RTEMS_CONTAINER_OF( node, Thread_Control, Scheduler.Help_node )
 #endif
@@ -126,10 +126,7 @@ typedef bool ( *Thread_Visitor )( Thread_Control *the_thread, void *arg );
  *      returns if it is done.
  * @param arg Parameter for @a visitor
  */
-void _Thread_Iterate(
-  Thread_Visitor  visitor,
-  void           *arg
-);
+void _Thread_Iterate( Thread_Visitor visitor, void *arg );
 
 /**
  * @brief Initializes the thread information
@@ -143,7 +140,7 @@ void _Thread_Initialize_information( Thread_Information *information );
  *
  * This routine performs the initialization necessary for this handler.
  */
-void _Thread_Handler_initialization(void);
+void _Thread_Handler_initialization( void );
 
 /**
  * @brief Creates idle thread.
@@ -152,7 +149,7 @@ void _Thread_Handler_initialization(void);
  *
  * @warning No thread should be created before this one.
  */
-void _Thread_Create_idle(void);
+void _Thread_Create_idle( void );
 
 /**
  * @brief Starts thread multitasking.
@@ -375,8 +372,8 @@ void _Thread_Kill_zombies( void );
  * @param life_states_to_set are the thread life states to set.
  */
 RTEMS_NO_RETURN void _Thread_Exit(
-  void              *exit_value,
-  Thread_Life_state  life_states_to_set
+  void             *exit_value,
+  Thread_Life_state life_states_to_set
 );
 
 /**
@@ -545,9 +542,7 @@ States_Control _Thread_Set_state(
  *
  * @param[in, out] the_thread The pointer to the thread control block.
  */
-void _Thread_Load_environment(
-  Thread_Control *the_thread
-);
+void _Thread_Load_environment( Thread_Control *the_thread );
 
 /**
  * @brief Calls the start kinds idle entry of the thread.
@@ -676,10 +671,8 @@ static inline void _Thread_State_release(
  * @retval true The thread is owner of the lock of the join queue.
  * @retval false The thread is not owner of the lock of the join queue.
  */
-#if defined(RTEMS_DEBUG)
-static inline bool _Thread_State_is_owner(
-  const Thread_Control *the_thread
-)
+#if defined( RTEMS_DEBUG )
+static inline bool _Thread_State_is_owner( const Thread_Control *the_thread )
 {
   return _Thread_queue_Is_lock_owner( &the_thread->Join_queue );
 }
@@ -801,7 +794,7 @@ static inline void _Thread_Priority_change(
 {
   _Priority_Node_set_priority( priority_node, new_priority );
 
-#if defined(RTEMS_SCORE_THREAD_REAL_PRIORITY_MAY_BE_INACTIVE)
+#if defined( RTEMS_SCORE_THREAD_REAL_PRIORITY_MAY_BE_INACTIVE )
   if ( !_Priority_Node_is_active( priority_node ) ) {
     /* The priority change is picked up once the node is added */
     return;
@@ -816,7 +809,7 @@ static inline void _Thread_Priority_change(
   );
 }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 /**
  * @brief Replaces the victim priority node with the replacement priority node
  * in the corresponding thread priority aggregation.
@@ -849,7 +842,7 @@ void _Thread_Priority_replace(
  */
 void _Thread_Priority_update( Thread_queue_Context *queue_context );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 /**
  * @brief Updates the priority of the thread and makes its home scheduler node
  *   sticky.
@@ -974,10 +967,7 @@ static inline Thread_Information *_Thread_Get_objects_information(
  * @param id The id of the thread.
  * @param lock_context The lock context.
  */
-Thread_Control *_Thread_Get(
-  Objects_Id         id,
-  ISR_lock_Context  *lock_context
-);
+Thread_Control *_Thread_Get( Objects_Id id, ISR_lock_Context *lock_context );
 
 /**
  * @brief Gets the identifier of the calling thread.
@@ -993,11 +983,9 @@ Objects_Id _Thread_Self_id( void );
  *
  * @return The cpu of the thread's scheduler.
  */
-static inline Per_CPU_Control *_Thread_Get_CPU(
-  const Thread_Control *thread
-)
+static inline Per_CPU_Control *_Thread_Get_CPU( const Thread_Control *thread )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   return thread->Scheduler.cpu;
 #else
   (void) thread;
@@ -1013,11 +1001,11 @@ static inline Per_CPU_Control *_Thread_Get_CPU(
  * @param cpu The cpu to set.
  */
 static inline void _Thread_Set_CPU(
-  Thread_Control *thread,
+  Thread_Control  *thread,
   Per_CPU_Control *cpu
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   thread->Scheduler.cpu = cpu;
 #else
   (void) thread;
@@ -1036,14 +1024,12 @@ static inline void _Thread_Set_CPU(
  * @retval true @a the_thread is the currently executing one.
  * @retval false @a the_thread is not the currently executing one.
  */
-static inline bool _Thread_Is_executing (
-  const Thread_Control *the_thread
-)
+static inline bool _Thread_Is_executing( const Thread_Control *the_thread )
 {
   return ( the_thread == _Thread_Executing );
 }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 /**
  * @brief Checks if the thread executes currently on some processor in the
  * system.
@@ -1075,9 +1061,7 @@ static inline bool _Thread_Is_executing_on_a_processor(
  * @retval true @a the_thread is the heir.
  * @retval false @a the_thread is not the heir.
  */
-static inline bool _Thread_Is_heir (
-  const Thread_Control *the_thread
-)
+static inline bool _Thread_Is_heir( const Thread_Control *the_thread )
 {
   return ( the_thread == _Thread_Heir );
 }
@@ -1091,9 +1075,7 @@ static inline bool _Thread_Is_heir (
  *
  * @param[in, out] the_thread The thread to unblock.
  */
-static inline void _Thread_Unblock (
-  Thread_Control *the_thread
-)
+static inline void _Thread_Unblock( Thread_Control *the_thread )
 {
   _Thread_Clear_state( the_thread, STATES_BLOCKED );
 }
@@ -1114,9 +1096,7 @@ static inline void _Thread_Unblock (
  *      loaded in the floating point unit.
  */
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-static inline bool _Thread_Is_allocated_fp (
-  const Thread_Control *the_thread
-)
+static inline bool _Thread_Is_allocated_fp( const Thread_Control *the_thread )
 {
   return ( the_thread == _Thread_Allocated_fp );
 }
@@ -1144,8 +1124,9 @@ static inline void _Thread_Save_fp( Thread_Control *executing )
 {
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
 #if ( CPU_USE_DEFERRED_FP_SWITCH != TRUE )
-  if ( executing->fp_context != NULL )
+  if ( executing->fp_context != NULL ) {
     _Context_Save_fp( &executing->fp_context );
+  }
 #else
   (void) executing;
 #endif
@@ -1163,16 +1144,19 @@ static inline void _Thread_Restore_fp( Thread_Control *executing )
 {
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
 #if ( CPU_USE_DEFERRED_FP_SWITCH == TRUE )
-  if ( (executing->fp_context != NULL) &&
-       !_Thread_Is_allocated_fp( executing ) ) {
-    if ( _Thread_Allocated_fp != NULL )
+  if (
+    ( executing->fp_context != NULL ) && !_Thread_Is_allocated_fp( executing )
+  ) {
+    if ( _Thread_Allocated_fp != NULL ) {
       _Context_Save_fp( &_Thread_Allocated_fp->fp_context );
+    }
     _Context_Restore_fp( &executing->fp_context );
     _Thread_Allocated_fp = executing;
   }
 #else
-  if ( executing->fp_context != NULL )
+  if ( executing->fp_context != NULL ) {
     _Context_Restore_fp( &executing->fp_context );
+  }
 #endif
 #else
   (void) executing;
@@ -1211,14 +1195,14 @@ static inline bool _Thread_Is_context_switch_necessary( void )
  *
  * @return The maximum number of internal threads.
  */
-static inline uint32_t _Thread_Get_maximum_internal_threads(void)
+static inline uint32_t _Thread_Get_maximum_internal_threads( void )
 {
   /* Idle threads */
-  uint32_t maximum_internal_threads =
-    rtems_configuration_get_maximum_processors();
+  uint32_t
+    maximum_internal_threads = rtems_configuration_get_maximum_processors();
 
   /* MPCI thread */
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   if ( _System_state_Is_multiprocessing ) {
     ++maximum_internal_threads;
   }
@@ -1235,8 +1219,9 @@ static inline uint32_t _Thread_Get_maximum_internal_threads(void)
  */
 static inline Thread_Control *_Thread_Internal_allocate( void )
 {
-  return (Thread_Control *)
-    _Objects_Allocate_unprotected( &_Thread_Information.Objects );
+  return (Thread_Control *) _Objects_Allocate_unprotected(
+    &_Thread_Information.Objects
+  );
 }
 
 /**
@@ -1363,9 +1348,7 @@ static inline void _Thread_Action_control_initialize(
  *
  * @param[out] action The Thread_Action to initialize.
  */
-static inline void _Thread_Action_initialize(
-  Thread_Action *action
-)
+static inline void _Thread_Action_initialize( Thread_Action *action )
 {
   _Chain_Set_off_chain( &action->Node );
 }
@@ -1383,9 +1366,9 @@ static inline void _Thread_Action_initialize(
  * @param handler is the handler for the action.
  */
 static inline void _Thread_Add_post_switch_action(
-  Thread_Control        *the_thread,
-  Thread_Action         *action,
-  Thread_Action_handler  handler
+  Thread_Control       *the_thread,
+  Thread_Action        *action,
+  Thread_Action_handler handler
 )
 {
   Per_CPU_Control *cpu_of_thread;
@@ -1437,9 +1420,7 @@ static inline void _Thread_Append_post_switch_action(
  * @retval true @a life_state is restarting.
  * @retval false @a life_state is not restarting.
  */
-static inline bool _Thread_Is_life_restarting(
-  Thread_Life_state life_state
-)
+static inline bool _Thread_Is_life_restarting( Thread_Life_state life_state )
 {
   return ( life_state & THREAD_LIFE_RESTARTING ) != 0;
 }
@@ -1452,9 +1433,7 @@ static inline bool _Thread_Is_life_restarting(
  * @retval true @a life_state is terminating.
  * @retval false @a life_state is not terminating.
  */
-static inline bool _Thread_Is_life_terminating(
-  Thread_Life_state life_state
-)
+static inline bool _Thread_Is_life_terminating( Thread_Life_state life_state )
 {
   return ( life_state & THREAD_LIFE_TERMINATING ) != 0;
 }
@@ -1471,8 +1450,8 @@ static inline bool _Thread_Is_life_change_allowed(
   Thread_Life_state life_state
 )
 {
-  return ( life_state
-    & ( THREAD_LIFE_PROTECTED | THREAD_LIFE_CHANGE_DEFERRED ) ) == 0;
+  return ( life_state &
+           ( THREAD_LIFE_PROTECTED | THREAD_LIFE_CHANGE_DEFERRED ) ) == 0;
 }
 
 /**
@@ -1483,12 +1462,10 @@ static inline bool _Thread_Is_life_change_allowed(
  * @retval true @a life_state is life changing.
  * @retval false @a life_state is not life changing.
  */
-static inline bool _Thread_Is_life_changing(
-  Thread_Life_state life_state
-)
+static inline bool _Thread_Is_life_changing( Thread_Life_state life_state )
 {
-  return ( life_state
-    & ( THREAD_LIFE_RESTARTING | THREAD_LIFE_TERMINATING ) ) != 0;
+  return ( life_state &
+           ( THREAD_LIFE_RESTARTING | THREAD_LIFE_TERMINATING ) ) != 0;
 }
 
 /**
@@ -1499,9 +1476,7 @@ static inline bool _Thread_Is_life_changing(
  * @retval true @a life_state is joinable.
  * @retval false @a life_state is not joinable.
  */
-static inline bool _Thread_Is_joinable(
-  const Thread_Control *the_thread
-)
+static inline bool _Thread_Is_joinable( const Thread_Control *the_thread )
 {
   _Assert( _Thread_State_is_owner( the_thread ) );
   return ( the_thread->Life.state & THREAD_LIFE_DETACHED ) == 0;
@@ -1516,7 +1491,7 @@ static inline void _Thread_Resource_count_increment(
   Thread_Control *the_thread
 )
 {
-#if defined(RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT)
+#if defined( RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT )
   ++the_thread->resource_count;
 #else
   (void) the_thread;
@@ -1532,14 +1507,14 @@ static inline void _Thread_Resource_count_decrement(
   Thread_Control *the_thread
 )
 {
-#if defined(RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT)
+#if defined( RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT )
   --the_thread->resource_count;
 #else
   (void) the_thread;
 #endif
 }
 
-#if defined(RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT)
+#if defined( RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT )
 /**
  * @brief Checks if the thread owns resources.
  *
@@ -1551,9 +1526,7 @@ static inline void _Thread_Resource_count_decrement(
  * @retval true The thread owns resources.
  * @retval false The thread does not own resources.
  */
-static inline bool _Thread_Owns_resources(
-  const Thread_Control *the_thread
-)
+static inline bool _Thread_Owns_resources( const Thread_Control *the_thread )
 {
   return the_thread->resource_count != 0;
 }
@@ -1570,7 +1543,7 @@ static inline const Scheduler_Control *_Thread_Scheduler_get_home(
   const Thread_Control *the_thread
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   return the_thread->Scheduler.home_scheduler;
 #else
   (void) the_thread;
@@ -1589,7 +1562,7 @@ static inline Scheduler_Node *_Thread_Scheduler_get_home_node(
   const Thread_Control *the_thread
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   _Assert( !_Chain_Is_empty( &the_thread->Scheduler.Wait_nodes ) );
   return SCHEDULER_NODE_OF_THREAD_WAIT_NODE(
     _Chain_First( &the_thread->Scheduler.Wait_nodes )
@@ -1613,17 +1586,16 @@ static inline Scheduler_Node *_Thread_Scheduler_get_node_by_index(
 )
 {
   _Assert( scheduler_index < _Scheduler_Count );
-#if defined(RTEMS_SMP)
-  return (Scheduler_Node *)
-    ( (uintptr_t) the_thread->Scheduler.nodes
-      + scheduler_index * _Scheduler_Node_size );
+#if defined( RTEMS_SMP )
+  return (Scheduler_Node *) ( (uintptr_t) the_thread->Scheduler.nodes +
+                              scheduler_index * _Scheduler_Node_size );
 #else
   (void) scheduler_index;
   return the_thread->Scheduler.nodes;
 #endif
 }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 /**
  * @brief Acquires the lock context in a critical section.
  *
@@ -1667,9 +1639,9 @@ void _Thread_Scheduler_process_requests( Thread_Control *the_thread );
  * @param request The request to add.
  */
 static inline void _Thread_Scheduler_add_request(
-  Thread_Control         *the_thread,
-  Scheduler_Node         *scheduler_node,
-  Scheduler_Node_request  request
+  Thread_Control        *the_thread,
+  Scheduler_Node        *scheduler_node,
+  Scheduler_Node_request request
 )
 {
   ISR_lock_Context       lock_context;
@@ -1681,18 +1653,18 @@ static inline void _Thread_Scheduler_add_request(
 
   if ( current_request == SCHEDULER_NODE_REQUEST_NOT_PENDING ) {
     _Assert(
-      request == SCHEDULER_NODE_REQUEST_ADD
-        || request == SCHEDULER_NODE_REQUEST_REMOVE
+      request == SCHEDULER_NODE_REQUEST_ADD ||
+      request == SCHEDULER_NODE_REQUEST_REMOVE
     );
     _Assert( scheduler_node->Thread.next_request == NULL );
     scheduler_node->Thread.next_request = the_thread->Scheduler.requests;
     the_thread->Scheduler.requests = scheduler_node;
   } else if ( current_request != SCHEDULER_NODE_REQUEST_NOTHING ) {
     _Assert(
-      ( current_request == SCHEDULER_NODE_REQUEST_ADD
-        && request == SCHEDULER_NODE_REQUEST_REMOVE )
-      || ( current_request == SCHEDULER_NODE_REQUEST_REMOVE
-        && request == SCHEDULER_NODE_REQUEST_ADD )
+      ( current_request == SCHEDULER_NODE_REQUEST_ADD &&
+        request == SCHEDULER_NODE_REQUEST_REMOVE ) ||
+      ( current_request == SCHEDULER_NODE_REQUEST_REMOVE &&
+        request == SCHEDULER_NODE_REQUEST_ADD )
     );
     request = SCHEDULER_NODE_REQUEST_NOTHING;
   }
@@ -1875,7 +1847,7 @@ static inline void _Thread_Wait_release_default_critical(
 {
   _ISR_lock_Release( &the_thread->Wait.Lock.Default, lock_context );
 #ifndef RTEMS_SMP
-   (void) the_thread;
+  (void) the_thread;
 #endif
 }
 
@@ -1896,7 +1868,7 @@ static inline void _Thread_Wait_release_default(
   _ISR_lock_ISR_enable( lock_context );
 }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 #define THREAD_QUEUE_CONTEXT_OF_REQUEST( node ) \
   RTEMS_CONTAINER_OF( node, Thread_queue_Context, Lock_context.Wait.Gate.Node )
 
@@ -1970,7 +1942,7 @@ static inline void _Thread_Wait_acquire_critical(
   Thread_queue_Context *queue_context
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   Thread_queue_Queue *queue;
 
   _Thread_Wait_acquire_default_critical(
@@ -2045,15 +2017,13 @@ static inline void _Thread_Wait_release_critical(
   Thread_queue_Context *queue_context
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   Thread_queue_Queue *queue;
 
   queue = queue_context->Lock_context.Wait.queue;
 
   if ( queue != NULL ) {
-    _Thread_Wait_release_queue_critical(
-      queue, &queue_context->Lock_context
-    );
+    _Thread_Wait_release_queue_critical( queue, &queue_context->Lock_context );
     _Thread_Wait_acquire_default_critical(
       the_thread,
       &queue_context->Lock_context.Lock_context
@@ -2116,7 +2086,7 @@ static inline void _Thread_Wait_claim(
 
   _Assert( the_thread->Wait.queue == NULL );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   _Chain_Initialize_empty( &the_thread->Wait.Lock.Pending_requests );
   _Chain_Initialize_node( &the_thread->Wait.Lock.Tranquilizer.Node );
   _Thread_queue_Gate_close( &the_thread->Wait.Lock.Tranquilizer );
@@ -2158,7 +2128,7 @@ static inline void _Thread_Wait_remove_request(
   Thread_queue_Lock_context *queue_lock_context
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   ISR_lock_Context lock_context;
 
   _Thread_Wait_acquire_default( the_thread, &lock_context );
@@ -2182,11 +2152,9 @@ static inline void _Thread_Wait_remove_request(
  *
  * @see _Thread_Wait_claim().
  */
-static inline void _Thread_Wait_restore_default(
-  Thread_Control *the_thread
-)
+static inline void _Thread_Wait_restore_default( Thread_Control *the_thread )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   ISR_lock_Context  lock_context;
   Chain_Node       *node;
   const Chain_Node *tail;
@@ -2218,7 +2186,7 @@ static inline void _Thread_Wait_restore_default(
   the_thread->Wait.queue = NULL;
   the_thread->Wait.operations = &_Thread_queue_Operations_default;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   _Thread_Wait_release_default_critical( the_thread, &lock_context );
 #endif
 }
@@ -2241,11 +2209,9 @@ static inline void _Thread_Wait_restore_default(
  *
  * @param the_thread The thread.
  */
-static inline void _Thread_Wait_tranquilize(
-  Thread_Control *the_thread
-)
+static inline void _Thread_Wait_tranquilize( Thread_Control *the_thread )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   _Thread_queue_Gate_wait( &the_thread->Wait.Lock.Tranquilizer );
 #else
   (void) the_thread;
@@ -2269,7 +2235,7 @@ static inline void _Thread_Wait_cancel(
   queue = the_thread->Wait.queue;
 
   if ( queue != NULL ) {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
     _Assert( queue_context->Lock_context.Wait.queue == queue );
 #endif
 
@@ -2280,7 +2246,7 @@ static inline void _Thread_Wait_cancel(
     );
     _Thread_Wait_restore_default( the_thread );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
     _Assert( queue_context->Lock_context.Wait.queue == NULL );
     queue_context->Lock_context.Wait.queue = queue;
 #endif
@@ -2347,11 +2313,11 @@ static inline void _Thread_Wait_cancel(
  * @param flags The flags to set.
  */
 static inline void _Thread_Wait_flags_set(
-  Thread_Control    *the_thread,
-  Thread_Wait_flags  flags
+  Thread_Control   *the_thread,
+  Thread_Wait_flags flags
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   _Atomic_Store_uint( &the_thread->Wait.flags, flags, ATOMIC_ORDER_RELAXED );
 #else
   the_thread->Wait.flags = flags;
@@ -2369,7 +2335,7 @@ static inline Thread_Wait_flags _Thread_Wait_flags_get(
   const Thread_Control *the_thread
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   return _Atomic_Load_uint( &the_thread->Wait.flags, ATOMIC_ORDER_RELAXED );
 #else
   return the_thread->Wait.flags;
@@ -2387,7 +2353,7 @@ static inline Thread_Wait_flags _Thread_Wait_flags_get_acquire(
   const Thread_Control *the_thread
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   return _Atomic_Load_uint( &the_thread->Wait.flags, ATOMIC_ORDER_ACQUIRE );
 #else
   return the_thread->Wait.flags;
@@ -2411,14 +2377,14 @@ static inline Thread_Wait_flags _Thread_Wait_flags_get_acquire(
  * @retval false The wait flags were not equal to the expected wait flags.
  */
 static inline bool _Thread_Wait_flags_try_change_release(
-  Thread_Control    *the_thread,
-  Thread_Wait_flags  expected_flags,
-  Thread_Wait_flags  desired_flags
+  Thread_Control   *the_thread,
+  Thread_Wait_flags expected_flags,
+  Thread_Wait_flags desired_flags
 )
 {
   _Assert( _ISR_Get_level() != 0 );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   return _Atomic_Compare_exchange_uint(
     &the_thread->Wait.flags,
     &expected_flags,
@@ -2451,12 +2417,12 @@ static inline bool _Thread_Wait_flags_try_change_release(
  * @retval false The wait flags were not equal to the expected wait flags.
  */
 static inline bool _Thread_Wait_flags_try_change_acquire(
-  Thread_Control    *the_thread,
-  Thread_Wait_flags  expected_flags,
-  Thread_Wait_flags  desired_flags
+  Thread_Control   *the_thread,
+  Thread_Wait_flags expected_flags,
+  Thread_Wait_flags desired_flags
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   return _Atomic_Compare_exchange_uint(
     &the_thread->Wait.flags,
     &expected_flags,
@@ -2556,17 +2522,16 @@ static inline void _Thread_Timer_initialize(
  * @param ticks The ticks to add to the timeout ticks.
  */
 static inline void _Thread_Add_timeout_ticks(
-  Thread_Control    *the_thread,
-  Per_CPU_Control   *cpu,
-  Watchdog_Interval  ticks
+  Thread_Control   *the_thread,
+  Per_CPU_Control  *cpu,
+  Watchdog_Interval ticks
 )
 {
   ISR_lock_Context lock_context;
 
   _ISR_lock_ISR_disable_and_acquire( &the_thread->Timer.Lock, &lock_context );
 
-  the_thread->Timer.header =
-    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_TICKS ];
+  the_thread->Timer.header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_TICKS ];
   the_thread->Timer.Watchdog.routine = _Thread_Timeout;
   _Watchdog_Per_CPU_insert_ticks( &the_thread->Timer.Watchdog, cpu, ticks );
 
@@ -2582,14 +2547,14 @@ static inline void _Thread_Add_timeout_ticks(
  * @param expire Expiration for the watchdog.
  */
 static inline void _Thread_Timer_insert_realtime(
-  Thread_Control                 *the_thread,
-  Per_CPU_Control                *cpu,
-  Watchdog_Service_routine_entry  routine,
-  uint64_t                        expire
+  Thread_Control                *the_thread,
+  Per_CPU_Control               *cpu,
+  Watchdog_Service_routine_entry routine,
+  uint64_t                       expire
 )
 {
-  ISR_lock_Context  lock_context;
-  Watchdog_Header  *header;
+  ISR_lock_Context lock_context;
+  Watchdog_Header *header;
 
   _ISR_lock_ISR_disable_and_acquire( &the_thread->Timer.Lock, &lock_context );
 
@@ -2614,7 +2579,7 @@ static inline void _Thread_Timer_remove( Thread_Control *the_thread )
 
   _Watchdog_Per_CPU_remove(
     &the_thread->Timer.Watchdog,
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
     the_thread->Timer.Watchdog.cpu,
 #else
     _Per_CPU_Get(),
@@ -2640,7 +2605,7 @@ static inline void _Thread_Remove_timer_and_unblock(
   _Thread_Wait_tranquilize( the_thread );
   _Thread_Timer_remove( the_thread );
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   if ( _Objects_Is_local_id( the_thread->Object.id ) ) {
     _Thread_Unblock( the_thread );
   } else {
@@ -2681,7 +2646,7 @@ size_t _Thread_Get_name(
   size_t                buffer_size
 );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 #define THREAD_PIN_STEP 2
 
 #define THREAD_PIN_PREEMPTION 1
@@ -2692,10 +2657,7 @@ size_t _Thread_Get_name(
  * @param executing The currently executing thread.
  * @param cpu_self The cpu for the operation.
  */
-void _Thread_Do_unpin(
-  Thread_Control  *executing,
-  Per_CPU_Control *cpu_self
-);
+void _Thread_Do_unpin( Thread_Control *executing, Per_CPU_Control *cpu_self );
 #endif
 
 /**
@@ -2705,7 +2667,7 @@ void _Thread_Do_unpin(
  */
 static inline void _Thread_Pin( Thread_Control *executing )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   _Assert( executing == _Thread_Get_executing() );
 
   executing->Scheduler.pin_level += THREAD_PIN_STEP;
@@ -2725,7 +2687,7 @@ static inline void _Thread_Unpin(
   Per_CPU_Control *cpu_self
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   unsigned int pin_level;
 
   _Assert( executing == _Per_CPU_Get_executing( cpu_self ) );
@@ -2754,7 +2716,7 @@ static inline void _Thread_Unpin(
 }
 #endif
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
 #include <rtems/score/threadmp.h>
 #endif
 
@@ -2778,7 +2740,7 @@ static inline void _Thread_Timer_remove_and_continue(
 )
 {
   _Thread_Timer_remove( the_thread );
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   _Thread_MP_Extract_proxy( the_thread );
 #endif
   _Thread_Continue( the_thread, status );

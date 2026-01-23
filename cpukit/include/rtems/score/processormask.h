@@ -119,7 +119,10 @@ extern "C" {
  * @brief A bit map which is large enough to provide one bit for each processor
  * in the system.
  */
-typedef __BITSET_DEFINE( Processor_mask, CPU_MAXIMUM_PROCESSORS ) Processor_mask;
+typedef __BITSET_DEFINE(
+  Processor_mask,
+  CPU_MAXIMUM_PROCESSORS
+) Processor_mask;
 
 /** @} */
 

@@ -64,7 +64,7 @@ extern "C" {
  */
 static inline void _Profiling_Thread_dispatch_disable(
   Per_CPU_Control *cpu,
-  uint32_t previous_thread_dispatch_disable_level
+  uint32_t         previous_thread_dispatch_disable_level
 )
 {
 #if defined( RTEMS_PROFILING )
@@ -101,7 +101,8 @@ static inline void _Profiling_Thread_dispatch_disable_critical(
   if ( previous_thread_dispatch_disable_level == 0 ) {
     Per_CPU_Stats *stats = &cpu->Stats;
 
-    stats->thread_dispatch_disabled_instant = lock_context->ISR_disable_instant;
+    stats->thread_dispatch_disabled_instant = lock_context
+                                                ->ISR_disable_instant;
     ++stats->thread_dispatch_disabled_count;
   }
 #else
@@ -122,12 +123,12 @@ static inline void _Profiling_Thread_dispatch_disable_critical(
  */
 static inline void _Profiling_Thread_dispatch_enable(
   Per_CPU_Control *cpu,
-  uint32_t new_thread_dispatch_disable_level
+  uint32_t         new_thread_dispatch_disable_level
 )
 {
 #if defined( RTEMS_PROFILING )
   if ( new_thread_dispatch_disable_level == 0 ) {
-    Per_CPU_Stats *stats = &cpu->Stats;
+    Per_CPU_Stats    *stats = &cpu->Stats;
     CPU_Counter_ticks now = _CPU_Counter_read();
     CPU_Counter_ticks delta = now - stats->thread_dispatch_disabled_instant;
 
@@ -150,7 +151,7 @@ static inline void _Profiling_Thread_dispatch_enable(
  * @param interrupt_delay The new interrupt delay.
  */
 static inline void _Profiling_Update_max_interrupt_delay(
-  Per_CPU_Control *cpu,
+  Per_CPU_Control  *cpu,
   CPU_Counter_ticks interrupt_delay
 )
 {
@@ -177,7 +178,7 @@ static inline void _Profiling_Update_max_interrupt_delay(
  * @param interrupt_exit_instant The instant in which the interrupt was exited.
  */
 void _Profiling_Outer_most_interrupt_entry_and_exit(
-  Per_CPU_Control *cpu,
+  Per_CPU_Control  *cpu,
   CPU_Counter_ticks interrupt_entry_instant,
   CPU_Counter_ticks interrupt_exit_instant
 );

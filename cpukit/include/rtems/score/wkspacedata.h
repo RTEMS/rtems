@@ -98,7 +98,7 @@ struct Heap_Control *_Workspace_Malloc_initialize_unified( void );
  * #CONFIGURE_UNIFIED_WORK_AREAS via <rtems/confdefs.h> or a default
  * configuration.
  */
-extern struct Heap_Control *( * const _Workspace_Malloc_initializer )( void );
+extern struct Heap_Control *( *const _Workspace_Malloc_initializer )( void );
 
 /** @} */
 

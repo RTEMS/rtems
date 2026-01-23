@@ -50,7 +50,7 @@ extern "C" {
  * @{
  */
 
- /**
+/**
   * @brief The priority group order determines if a priority node is inserted
   *   as the first or last node into its priority group.
   *
@@ -100,7 +100,7 @@ static inline void _Priority_Actions_initialize_one(
   Priority_Action_type  type
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   aggregation->Action.next = NULL;
 #endif
   aggregation->Action.node = node;
@@ -154,7 +154,7 @@ static inline void _Priority_Actions_add(
   Priority_Aggregation *aggregation
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /*
    * Priority aggregations are only added to action lists, so do not care about
    * the current next pointer value.
@@ -172,8 +172,8 @@ static inline void _Priority_Actions_add(
  * @param priority The priority to initialize @a node to.
  */
 static inline void _Priority_Node_initialize(
-  Priority_Node    *node,
-  Priority_Control  priority
+  Priority_Node   *node,
+  Priority_Control priority
 )
 {
   node->priority = priority;
@@ -187,8 +187,8 @@ static inline void _Priority_Node_initialize(
  * @param priority The new priority for @a node.
  */
 static inline void _Priority_Node_set_priority(
-  Priority_Node    *node,
-  Priority_Control  priority
+  Priority_Node   *node,
+  Priority_Control priority
 )
 {
   node->priority = priority;
@@ -199,9 +199,7 @@ static inline void _Priority_Node_set_priority(
  *
  * @param[in, out] node The priority node to set inactive.
  */
-static inline void _Priority_Node_set_inactive(
-  Priority_Node *node
-)
+static inline void _Priority_Node_set_inactive( Priority_Node *node )
 {
   _RBTree_Set_off_tree( &node->Node.RBTree );
 }
@@ -214,9 +212,7 @@ static inline void _Priority_Node_set_inactive(
  * @retval true The priority node is active.
  * @retval false The priority node is inactive.
  */
-static inline bool _Priority_Node_is_active(
-  const Priority_Node *node
-)
+static inline bool _Priority_Node_is_active( const Priority_Node *node )
 {
   return !_RBTree_Is_node_off_tree( &node->Node.RBTree );
 }
@@ -230,8 +226,8 @@ static inline void _Priority_Initialize_empty(
   Priority_Aggregation *aggregation
 )
 {
-#if defined(RTEMS_DEBUG)
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_DEBUG )
+#if defined( RTEMS_SMP )
   aggregation->Action.next = NULL;
 #endif
   aggregation->Action.node = NULL;
@@ -252,8 +248,8 @@ static inline void _Priority_Initialize_one(
   Priority_Node        *node
 )
 {
-#if defined(RTEMS_DEBUG)
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_DEBUG )
+#if defined( RTEMS_SMP )
   aggregation->Action.next = NULL;
 #endif
   aggregation->Action.node = NULL;
@@ -303,7 +299,7 @@ static inline const Scheduler_Control *_Priority_Get_scheduler(
   const Priority_Aggregation *aggregation
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   return aggregation->scheduler;
 #else
   (void) aggregation;
@@ -336,7 +332,7 @@ static inline void _Priority_Set_action_node(
   Priority_Node        *node
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   _Assert( aggregation->Action.next == NULL );
 #endif
   aggregation->Action.node = node;
@@ -353,7 +349,7 @@ static inline void _Priority_Set_action_type(
   Priority_Action_type  type
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   _Assert( aggregation->Action.next == NULL );
 #endif
   aggregation->Action.type = type;
@@ -373,14 +369,14 @@ static inline void _Priority_Set_action(
   Priority_Action_type  type
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   _Assert( aggregation->Action.next == NULL );
 #endif
   aggregation->Action.node = node;
   aggregation->Action.type = type;
 }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 /**
  * @brief Gets the next action of the priority aggregation.
  *
@@ -390,7 +386,7 @@ static inline void _Priority_Set_action(
  *   is no next action.
  */
 static inline Priority_Aggregation *_Priority_Get_next_action(
-#if defined(RTEMS_DEBUG)
+#if defined( RTEMS_DEBUG )
   Priority_Aggregation *aggregation
 #else
   const Priority_Aggregation *aggregation
@@ -400,7 +396,7 @@ static inline Priority_Aggregation *_Priority_Get_next_action(
   Priority_Aggregation *next;
 
   next = aggregation->Action.next;
-#if defined(RTEMS_DEBUG)
+#if defined( RTEMS_DEBUG )
   aggregation->Action.next = NULL;
 #endif
 
@@ -417,10 +413,7 @@ static inline Priority_Aggregation *_Priority_Get_next_action(
  * @retval true The priority on the left hand side of the comparison is smaller.
  * @retval false The priority on the left hand side of the comparison is greater of equal.
  */
-static inline bool _Priority_Less(
-  const void        *left,
-  const RBTree_Node *right
-)
+static inline bool _Priority_Less( const void *left, const RBTree_Node *right )
 {
   const Priority_Control *the_left;
   const Priority_Node    *the_right;
@@ -568,11 +561,11 @@ static inline void _Priority_Remove_nothing(
  *      minimum.
  */
 static inline void _Priority_Non_empty_insert(
-  Priority_Aggregation    *aggregation,
-  Priority_Node           *node,
-  Priority_Actions        *actions,
-  Priority_Change_handler  change,
-  void                    *arg
+  Priority_Aggregation   *aggregation,
+  Priority_Node          *node,
+  Priority_Actions       *actions,
+  Priority_Change_handler change,
+  void                   *arg
 )
 {
   bool is_new_minimum;
@@ -599,12 +592,12 @@ static inline void _Priority_Non_empty_insert(
  * @param arg The arguments for @a change.
  */
 static inline void _Priority_Insert(
-  Priority_Aggregation    *aggregation,
-  Priority_Node           *node,
-  Priority_Actions        *actions,
-  Priority_Add_handler     add,
-  Priority_Change_handler  change,
-  void                    *arg
+  Priority_Aggregation   *aggregation,
+  Priority_Node          *node,
+  Priority_Actions       *actions,
+  Priority_Add_handler    add,
+  Priority_Change_handler change,
+  void                   *arg
 )
 {
   if ( _Priority_Is_empty( aggregation ) ) {
@@ -633,12 +626,12 @@ static inline void _Priority_Insert(
  * @param arg The arguments for @a remove and @a change.
  */
 static inline void _Priority_Extract(
-  Priority_Aggregation    *aggregation,
-  Priority_Node           *node,
-  Priority_Actions        *actions,
-  Priority_Remove_handler  remove,
-  Priority_Change_handler  change,
-  void                    *arg
+  Priority_Aggregation   *aggregation,
+  Priority_Node          *node,
+  Priority_Actions       *actions,
+  Priority_Remove_handler remove,
+  Priority_Change_handler change,
+  void                   *arg
 )
 {
   _Priority_Plain_extract( aggregation, node );
@@ -673,11 +666,11 @@ static inline void _Priority_Extract(
  * @param arg The arguments for @a change.
  */
 static inline void _Priority_Extract_non_empty(
-  Priority_Aggregation    *aggregation,
-  Priority_Node           *node,
-  Priority_Actions        *actions,
-  Priority_Change_handler  change,
-  void                    *arg
+  Priority_Aggregation   *aggregation,
+  Priority_Node          *node,
+  Priority_Actions       *actions,
+  Priority_Change_handler change,
+  void                   *arg
 )
 {
   Priority_Node *min;
@@ -708,12 +701,12 @@ static inline void _Priority_Extract_non_empty(
  * @param arg The arguments for @a change.
  */
 static inline void _Priority_Changed(
-  Priority_Aggregation    *aggregation,
-  Priority_Node           *node,
-  Priority_Group_order     group_order,
-  Priority_Actions        *actions,
-  Priority_Change_handler  change,
-  void                    *arg
+  Priority_Aggregation   *aggregation,
+  Priority_Node          *node,
+  Priority_Group_order    group_order,
+  Priority_Actions       *actions,
+  Priority_Change_handler change,
+  void                   *arg
 )
 {
   Priority_Node *min;

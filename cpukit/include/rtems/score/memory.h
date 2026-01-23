@@ -115,9 +115,7 @@ typedef struct {
  *
  * @return The memory area count.
  */
-static inline size_t _Memory_Get_count(
-  const Memory_Information *information
-)
+static inline size_t _Memory_Get_count( const Memory_Information *information )
 {
   return information->count;
 }
@@ -193,10 +191,7 @@ static inline const void *_Memory_Get_begin( const Memory_Area *area )
  * @param area The memory area.
  * @param begin The memory area begin.
  */
-static inline void _Memory_Set_begin(
-  Memory_Area *area,
-  const void  *begin
-)
+static inline void _Memory_Set_begin( Memory_Area *area, const void *begin )
 {
   area->begin = begin;
 }
@@ -219,10 +214,7 @@ static inline const void *_Memory_Get_end( const Memory_Area *area )
  * @param area The memory area.
  * @param end The memory area end.
  */
-static inline void _Memory_Set_end(
-  Memory_Area *area,
-  const void  *end
-)
+static inline void _Memory_Set_end( Memory_Area *area, const void *end )
 {
   area->end = end;
 }
@@ -257,10 +249,7 @@ static inline void *_Memory_Get_free_begin( const Memory_Area *area )
  * @param area The memory area.
  * @param begin The free memory area begin the memory area.
  */
-static inline void _Memory_Set_free_begin(
-  Memory_Area *area,
-  void        *begin
-)
+static inline void _Memory_Set_free_begin( Memory_Area *area, void *begin )
 {
   area->free = begin;
 }
@@ -285,10 +274,7 @@ static inline uintptr_t _Memory_Get_free_size( const Memory_Area *area )
  * @param consume The bytes to consume from the free memory area of the memory
  *   area.
  */
-static inline void _Memory_Consume(
-  Memory_Area *area,
-  uintptr_t    consume
-)
+static inline void _Memory_Consume( Memory_Area *area, uintptr_t consume )
 {
   area->free = (char *) area->free + consume;
 }

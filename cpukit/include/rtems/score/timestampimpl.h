@@ -74,7 +74,7 @@ static inline void _Timestamp_Set(
   _ts.tv_sec = _seconds;
   _ts.tv_nsec = _nanoseconds;
 
-  *_time = tstosbt(_ts);
+  *_time = tstosbt( _ts );
 }
 
 /**
@@ -86,9 +86,7 @@ static inline void _Timestamp_Set(
  * @param[out] _time The timestamp instance to zero.
  */
 
-static inline void _Timestamp_Set_to_zero(
-  Timestamp_Control *_time
-)
+static inline void _Timestamp_Set_to_zero( Timestamp_Control *_time )
 {
   *_time = 0;
 }
@@ -163,7 +161,7 @@ static inline bool _Timestamp_Equal_to(
  * @param _add points The timestamp to add to the first argument.
  */
 static inline void _Timestamp_Add_to(
-  Timestamp_Control *_time,
+  Timestamp_Control       *_time,
   const Timestamp_Control *_add
 )
 {
@@ -231,11 +229,9 @@ static inline void _Timestamp_Divide(
  *
  * @return The seconds portion of @a _time.
  */
-static inline time_t _Timestamp_Get_seconds(
-  const Timestamp_Control *_time
-)
+static inline time_t _Timestamp_Get_seconds( const Timestamp_Control *_time )
 {
-  return (*_time >> 32);
+  return ( *_time >> 32 );
 }
 
 /**

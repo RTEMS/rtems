@@ -39,7 +39,8 @@
 #define _RTEMS_SCORE_OBJECTMP_H
 
 #ifndef _RTEMS_SCORE_OBJECTIMPL_H
-# error "Never use <rtems/rtems/objectmp.h> directly; include <rtems/rtems/objectimpl.h> instead."
+# error \
+  "Never use <rtems/rtems/objectmp.h> directly; include <rtems/rtems/objectimpl.h> instead."
 #endif
 
 #include <rtems/score/chainimpl.h>
@@ -70,7 +71,7 @@ extern "C" {
  * This routine intializes the inactive global object chain
  * based on the maximum number of global objects configured.
  */
-void _Objects_MP_Handler_initialization(void);
+void _Objects_MP_Handler_initialization( void );
 
 /**
  * @brief Intializes the global object node number
@@ -79,7 +80,7 @@ void _Objects_MP_Handler_initialization(void);
  * This routine intializes the global object node number
  * used in the ID field of all objects.
  */
-void _Objects_MP_Handler_early_initialization(void);
+void _Objects_MP_Handler_early_initialization( void );
 
 /**
  * @brief Place the specified global object in the
@@ -97,7 +98,7 @@ void _Objects_MP_Handler_early_initialization(void);
  * @todo This method only works for object types with 4 byte object names.
  *       It does not support variable length object names.
  */
-void _Objects_MP_Open (
+void _Objects_MP_Open(
   Objects_Information *information,
   Objects_MP_Control  *the_global_object,
   uint32_t             the_name,
@@ -126,7 +127,7 @@ void _Objects_MP_Open (
  * @todo This method only works for object types with 4 byte object names.
  *       It does not support variable length object names.
  */
-bool _Objects_MP_Allocate_and_open (
+bool _Objects_MP_Allocate_and_open(
   Objects_Information *information,
   uint32_t             the_name,
   Objects_Id           the_id,
@@ -143,10 +144,7 @@ bool _Objects_MP_Allocate_and_open (
  *            object class.
  * @param the_id The id of the global object to remove.
  */
-void _Objects_MP_Close (
-  Objects_Information *information,
-  Objects_Id           the_id
-);
+void _Objects_MP_Close( Objects_Information *information, Objects_Id the_id );
 
 /**
  * @brief Looks for the object with the_name in the global
@@ -167,7 +165,7 @@ void _Objects_MP_Close (
  *      objects maximum nodes value.
  * @retval STATUS_INVALID_NAME There is no global object with this name.
  */
-Status_Control _Objects_MP_Global_name_search (
+Status_Control _Objects_MP_Global_name_search(
   const Objects_Information *information,
   Objects_Name               the_name,
   uint32_t                   nodes_to_search,

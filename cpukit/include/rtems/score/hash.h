@@ -144,10 +144,7 @@ static inline void _Hash_Add_data(
  *
  * @param str is the string to add.
  */
-static inline void _Hash_Add_string(
-  Hash_Context *context,
-  const char   *str
-)
+static inline void _Hash_Add_string( Hash_Context *context, const char *str )
 {
   SHA256_Update( &context->Context, str, strlen( str ) );
 }

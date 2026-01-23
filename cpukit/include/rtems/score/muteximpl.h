@@ -61,7 +61,7 @@ typedef struct {
 
 typedef struct {
   Mutex_Control Mutex;
-  unsigned int nest_level;
+  unsigned int  nest_level;
 } Mutex_recursive_Control;
 
 /** @} */

@@ -53,13 +53,13 @@ extern "C" {
 /**
  * @brief See also @ref Heap_Block.size_and_flag.
  */
-#define HEAP_PREV_BLOCK_USED ((uintptr_t) 1)
+#define HEAP_PREV_BLOCK_USED ( (uintptr_t) 1 )
 
 /**
  * @brief Size of the part at the block begin which may be used for allocation
  * in charge of the previous block.
  */
-#define HEAP_ALLOC_BONUS sizeof(uintptr_t)
+#define HEAP_ALLOC_BONUS sizeof( uintptr_t )
 
 /**
  * @brief See _Heap_Resize_block().
@@ -86,10 +86,10 @@ typedef enum {
  * @retval false The area is not big enough.
  */
 bool _Heap_Get_first_and_last_block(
-  uintptr_t heap_area_begin,
-  uintptr_t heap_area_size,
-  uintptr_t page_size,
-  uintptr_t min_block_size,
+  uintptr_t    heap_area_begin,
+  uintptr_t    heap_area_size,
+  uintptr_t    page_size,
+  uintptr_t    min_block_size,
   Heap_Block **first_block_ptr,
   Heap_Block **last_block_ptr
 );
@@ -113,9 +113,9 @@ bool _Heap_Get_first_and_last_block(
  */
 uintptr_t _Heap_Initialize(
   Heap_Control *heap,
-  void *area_begin,
-  uintptr_t area_size,
-  uintptr_t page_size
+  void         *area_begin,
+  uintptr_t     area_size,
+  uintptr_t     page_size
 );
 
 /**
@@ -138,9 +138,9 @@ uintptr_t _Heap_Initialize(
  */
 void *_Heap_Allocate_aligned_with_boundary(
   Heap_Control *heap,
-  uintptr_t size,
-  uintptr_t alignment,
-  uintptr_t boundary
+  uintptr_t     size,
+  uintptr_t     alignment,
+  uintptr_t     boundary
 );
 
 /**
@@ -158,8 +158,8 @@ void *_Heap_Allocate_aligned_with_boundary(
  */
 static inline void *_Heap_Allocate_aligned(
   Heap_Control *heap,
-  uintptr_t size,
-  uintptr_t alignment
+  uintptr_t     size,
+  uintptr_t     alignment
 )
 {
   return _Heap_Allocate_aligned_with_boundary( heap, size, alignment, 0 );
@@ -207,11 +207,7 @@ bool _Heap_Free( Heap_Control *heap, void *addr );
  * @retval true No errors occurred, the heap's integrity is not violated.
  * @retval false The heap is corrupt.
  */
-bool _Heap_Walk(
-  Heap_Control *heap,
-  int source,
-  bool dump
-);
+bool _Heap_Walk( Heap_Control *heap, int source, bool dump );
 
 /**
  * @brief Heap block visitor.
@@ -221,11 +217,11 @@ bool _Heap_Walk(
  * @retval true Stop the iteration.
  * @retval false Continue the iteration.
  */
-typedef bool (*Heap_Block_visitor)(
+typedef bool ( *Heap_Block_visitor )(
   const Heap_Block *block,
-  uintptr_t block_size,
-  bool block_is_used,
-  void *visitor_arg
+  uintptr_t         block_size,
+  bool              block_is_used,
+  void             *visitor_arg
 );
 
 /**
@@ -237,9 +233,9 @@ typedef bool (*Heap_Block_visitor)(
  * @param[in, out] visitor_arg The argument for all calls of @a visitor.
  */
 void _Heap_Iterate(
-  Heap_Control *heap,
+  Heap_Control      *heap,
   Heap_Block_visitor visitor,
-  void *visitor_arg
+  void              *visitor_arg
 );
 
 /**
@@ -259,9 +255,9 @@ void _Heap_Iterate(
  * @see _Heap_Greedy_free().
  */
 Heap_Block *_Heap_Greedy_allocate(
-  Heap_Control *heap,
+  Heap_Control    *heap,
   const uintptr_t *block_sizes,
-  size_t block_count
+  size_t           block_count
 );
 
 /**
@@ -280,7 +276,7 @@ Heap_Block *_Heap_Greedy_allocate(
  */
 Heap_Block *_Heap_Greedy_allocate_all_except_largest(
   Heap_Control *heap,
-  uintptr_t *allocatable_size
+  uintptr_t    *allocatable_size
 );
 
 /**
@@ -289,10 +285,7 @@ Heap_Block *_Heap_Greedy_allocate_all_except_largest(
  * @param[in, out] heap The heap to operate upon.
  * @param blocks Must be the return value of _Heap_Greedy_allocate().
  */
-void _Heap_Greedy_free(
-  Heap_Control *heap,
-  Heap_Block *blocks
-);
+void _Heap_Greedy_free( Heap_Control *heap, Heap_Block *blocks );
 
 /**
  * @brief Returns information about used and free blocks for the heap.
@@ -300,10 +293,7 @@ void _Heap_Greedy_free(
  * @param heap The heap to get the information from.
  * @param[out] info Stores the information of the @a heap after the method call.
  */
-void _Heap_Get_information(
-  Heap_Control *heap,
-  Heap_Information_block *info
-);
+void _Heap_Get_information( Heap_Control *heap, Heap_Information_block *info );
 
 /**
  * @brief Returns information about free blocks for the heap.
@@ -312,10 +302,7 @@ void _Heap_Get_information(
  * @param[out] info Stores the information about free blocks of @a heap after the
  *      method call.
  */
-void _Heap_Get_free_information(
-  Heap_Control *heap,
-  Heap_Information *info
-);
+void _Heap_Get_free_information( Heap_Control *heap, Heap_Information *info );
 
 /**
  * @brief Returns the size of the allocatable memory area.
@@ -335,8 +322,8 @@ void _Heap_Get_free_information(
  */
 bool _Heap_Size_of_alloc_area(
   Heap_Control *heap,
-  void *addr,
-  uintptr_t *size
+  void         *addr,
+  uintptr_t    *size
 );
 
 /**
@@ -362,10 +349,10 @@ bool _Heap_Size_of_alloc_area(
  */
 Heap_Resize_status _Heap_Resize_block(
   Heap_Control *heap,
-  void *addr,
-  uintptr_t size,
-  uintptr_t *old_size,
-  uintptr_t *new_size
+  void         *addr,
+  uintptr_t     size,
+  uintptr_t    *old_size,
+  uintptr_t    *new_size
 );
 
 /**
@@ -391,43 +378,43 @@ Heap_Resize_status _Heap_Resize_block(
  */
 Heap_Block *_Heap_Block_allocate(
   Heap_Control *heap,
-  Heap_Block *block,
-  uintptr_t alloc_begin,
-  uintptr_t alloc_size
+  Heap_Block   *block,
+  uintptr_t     alloc_begin,
+  uintptr_t     alloc_size
 );
 
 #ifndef HEAP_PROTECTION
-  #define _Heap_Protection_block_initialize( heap, block ) ((void) 0)
-  #define _Heap_Protection_block_check( heap, block ) ((void) 0)
-  #define _Heap_Protection_block_error( heap, block, reason ) ((void) 0)
-  #define _Heap_Protection_free_all_delayed_blocks( heap ) ((void) 0)
+  #define _Heap_Protection_block_initialize( heap, block )    ( (void) 0 )
+  #define _Heap_Protection_block_check( heap, block )         ( (void) 0 )
+  #define _Heap_Protection_block_error( heap, block, reason ) ( (void) 0 )
+  #define _Heap_Protection_free_all_delayed_blocks( heap )    ( (void) 0 )
 #else
-  static inline void _Heap_Protection_block_initialize(
-    Heap_Control *heap,
-    Heap_Block *block
-  )
-  {
-    (*heap->Protection.block_initialize)( heap, block );
-  }
+static inline void _Heap_Protection_block_initialize(
+  Heap_Control *heap,
+  Heap_Block   *block
+)
+{
+  ( *heap->Protection.block_initialize )( heap, block );
+}
 
-  static inline void _Heap_Protection_block_check(
-    Heap_Control *heap,
-    Heap_Block *block
-  )
-  {
-    (*heap->Protection.block_check)( heap, block );
-  }
+static inline void _Heap_Protection_block_check(
+  Heap_Control *heap,
+  Heap_Block   *block
+)
+{
+  ( *heap->Protection.block_check )( heap, block );
+}
 
-  static inline void _Heap_Protection_block_error(
-    Heap_Control *heap,
-    Heap_Block *block,
-    Heap_Error_reason reason
-  )
-  {
-    (*heap->Protection.block_error)( heap, block, reason );
-  }
+static inline void _Heap_Protection_block_error(
+  Heap_Control     *heap,
+  Heap_Block       *block,
+  Heap_Error_reason reason
+)
+{
+  ( *heap->Protection.block_error )( heap, block, reason );
+}
 
-  void _Heap_Protection_free_all_delayed_blocks( Heap_Control *heap );
+void _Heap_Protection_free_all_delayed_blocks( Heap_Control *heap );
 #endif
 
 /**
@@ -442,7 +429,7 @@ Heap_Block *_Heap_Block_allocate(
  */
 static inline void _Heap_Protection_set_delayed_free_fraction(
   Heap_Control *heap,
-  uintptr_t fraction
+  uintptr_t     fraction
 )
 {
 #ifdef HEAP_PROTECTION
@@ -486,7 +473,7 @@ static inline Heap_Block *_Heap_Free_list_tail( Heap_Control *heap )
  */
 static inline Heap_Block *_Heap_Free_list_first( Heap_Control *heap )
 {
-  return _Heap_Free_list_head(heap)->next;
+  return _Heap_Free_list_head( heap )->next;
 }
 
 /**
@@ -498,7 +485,7 @@ static inline Heap_Block *_Heap_Free_list_first( Heap_Control *heap )
  */
 static inline Heap_Block *_Heap_Free_list_last( Heap_Control *heap )
 {
-  return _Heap_Free_list_tail(heap)->prev;
+  return _Heap_Free_list_tail( heap )->prev;
 }
 
 /**
@@ -583,12 +570,9 @@ static inline void _Heap_Free_list_insert_before(
  * @retval true The value is aligned to the given alignment.
  * @retval false The value is not aligned to the given alignment.
  */
-static inline bool _Heap_Is_aligned(
-  uintptr_t value,
-  uintptr_t alignment
-)
+static inline bool _Heap_Is_aligned( uintptr_t value, uintptr_t alignment )
 {
-  return (value % alignment) == 0;
+  return ( value % alignment ) == 0;
 }
 
 /**
@@ -604,7 +588,7 @@ static inline uintptr_t _Heap_Align_down(
   uintptr_t alignment
 )
 {
-  return value - (value % alignment);
+  return value - ( value % alignment );
 }
 
 /**
@@ -617,10 +601,10 @@ static inline uintptr_t _Heap_Align_down(
  */
 static inline Heap_Block *_Heap_Block_at(
   const Heap_Block *block,
-  uintptr_t offset
+  uintptr_t         offset
 )
 {
-  return (Heap_Block *) ((uintptr_t) block + offset);
+  return (Heap_Block *) ( (uintptr_t) block + offset );
 }
 
 /**
@@ -630,11 +614,9 @@ static inline Heap_Block *_Heap_Block_at(
  *
  * @return The address of the previous block.
  */
-static inline Heap_Block *_Heap_Prev_block(
-  const Heap_Block *block
-)
+static inline Heap_Block *_Heap_Prev_block( const Heap_Block *block )
 {
-  return (Heap_Block *) ((uintptr_t) block - block->prev_size);
+  return (Heap_Block *) ( (uintptr_t) block - block->prev_size );
 }
 
 /**
@@ -644,9 +626,7 @@ static inline Heap_Block *_Heap_Prev_block(
  *
  * @return The first address after the heap header.
  */
-static inline uintptr_t _Heap_Alloc_area_of_block(
-  const Heap_Block *block
-)
+static inline uintptr_t _Heap_Alloc_area_of_block( const Heap_Block *block )
 {
   return (uintptr_t) block + HEAP_BLOCK_HEADER_SIZE;
 }
@@ -664,8 +644,8 @@ static inline Heap_Block *_Heap_Block_of_alloc_area(
   uintptr_t page_size
 )
 {
-  return (Heap_Block *) (_Heap_Align_down( alloc_begin, page_size )
-    - HEAP_BLOCK_HEADER_SIZE);
+  return (Heap_Block *) ( _Heap_Align_down( alloc_begin, page_size ) -
+                          HEAP_BLOCK_HEADER_SIZE );
 }
 
 /**
@@ -686,10 +666,7 @@ static inline uintptr_t _Heap_Block_size( const Heap_Block *block )
  * @param[in, out] block The block of which the size shall be set.
  * @param size The new size of the block.
  */
-static inline void _Heap_Block_set_size(
-  Heap_Block *block,
-  uintptr_t size
-)
+static inline void _Heap_Block_set_size( Heap_Block *block, uintptr_t size )
 {
   uintptr_t flag = block->size_and_flag & HEAP_PREV_BLOCK_USED;
 
@@ -718,12 +695,12 @@ static inline bool _Heap_Is_prev_used( const Heap_Block *block )
  * @retval true The block is used.
  * @retval false The block is not used.
  */
-static inline bool _Heap_Is_used(
-  const Heap_Block *block
-)
+static inline bool _Heap_Is_used( const Heap_Block *block )
 {
-  const Heap_Block *const next_block =
-    _Heap_Block_at( block, _Heap_Block_size( block ) );
+  const Heap_Block *const next_block = _Heap_Block_at(
+    block,
+    _Heap_Block_size( block )
+  );
 
   return _Heap_Is_prev_used( next_block );
 }
@@ -736,9 +713,7 @@ static inline bool _Heap_Is_used(
  * @retval true The block is free.
  * @retval false The block is not free.
  */
-static inline bool _Heap_Is_free(
-  const Heap_Block *block
-)
+static inline bool _Heap_Is_free( const Heap_Block *block )
 {
   return !_Heap_Is_used( block );
 }
@@ -754,11 +729,11 @@ static inline bool _Heap_Is_free(
  */
 static inline bool _Heap_Is_block_in_heap(
   const Heap_Control *heap,
-  const Heap_Block *block
+  const Heap_Block   *block
 )
 {
-  return (uintptr_t) block >= (uintptr_t) heap->first_block
-    && (uintptr_t) block <= (uintptr_t) heap->last_block;
+  return (uintptr_t) block >= (uintptr_t) heap->first_block &&
+         (uintptr_t) block <= (uintptr_t) heap->last_block;
 }
 
 /**
@@ -830,14 +805,14 @@ static inline uintptr_t _Heap_Min( uintptr_t a, uintptr_t b )
 
 #ifdef RTEMS_HEAP_DEBUG
   #include <assert.h>
-  #define _HAssert( cond ) \
-    do { \
-      if ( !(cond) ) { \
-        __assert( __FILE__, __LINE__, #cond ); \
-      } \
-    } while (0)
+  #define _HAssert( cond )                   \
+  do {                                       \
+    if ( !( cond ) ) {                       \
+      __assert( __FILE__, __LINE__, #cond ); \
+    }                                        \
+  } while ( 0 )
 #else
-  #define _HAssert( cond ) ((void) 0)
+  #define _HAssert( cond ) ( (void) 0 )
 #endif
 
 /** @} */

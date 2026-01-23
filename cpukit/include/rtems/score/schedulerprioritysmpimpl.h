@@ -59,11 +59,12 @@ static inline Scheduler_priority_SMP_Context *_Scheduler_priority_SMP_Get_self(
   return (Scheduler_priority_SMP_Context *) context;
 }
 
-static inline Scheduler_priority_SMP_Node *_Scheduler_priority_SMP_Thread_get_node(
-  Thread_Control *thread
-)
+static inline Scheduler_priority_SMP_Node *
+_Scheduler_priority_SMP_Thread_get_node( Thread_Control *thread )
 {
-  return (Scheduler_priority_SMP_Node *) _Thread_Scheduler_get_home_node( thread );
+  return (Scheduler_priority_SMP_Node *) _Thread_Scheduler_get_home_node(
+    thread
+  );
 }
 
 static inline Scheduler_priority_SMP_Node *
@@ -72,10 +73,13 @@ _Scheduler_priority_SMP_Node_downcast( Scheduler_Node *node )
   return (Scheduler_priority_SMP_Node *) node;
 }
 
-static inline bool _Scheduler_priority_SMP_Has_ready( Scheduler_Context *context )
+static inline bool _Scheduler_priority_SMP_Has_ready(
+  Scheduler_Context *context
+)
 {
-  Scheduler_priority_SMP_Context *self =
-    _Scheduler_priority_SMP_Get_self( context );
+  Scheduler_priority_SMP_Context *self = _Scheduler_priority_SMP_Get_self(
+    context
+  );
 
   return !_Priority_bit_map_Is_empty( &self->Bit_map );
 }
@@ -85,10 +89,12 @@ static inline void _Scheduler_priority_SMP_Move_from_scheduled_to_ready(
   Scheduler_Node    *scheduled_to_ready
 )
 {
-  Scheduler_priority_SMP_Context *self =
-    _Scheduler_priority_SMP_Get_self( context );
-  Scheduler_priority_SMP_Node *node =
-    _Scheduler_priority_SMP_Node_downcast( scheduled_to_ready );
+  Scheduler_priority_SMP_Context *self = _Scheduler_priority_SMP_Get_self(
+    context
+  );
+  Scheduler_priority_SMP_Node *node = _Scheduler_priority_SMP_Node_downcast(
+    scheduled_to_ready
+  );
 
   _Chain_Extract_unprotected( &node->Base.Base.Node.Chain );
   _Scheduler_priority_Ready_queue_enqueue_first(
@@ -157,10 +163,12 @@ static inline void _Scheduler_priority_SMP_Extract_from_ready(
   Scheduler_Node    *thread
 )
 {
-  Scheduler_priority_SMP_Context *self =
-    _Scheduler_priority_SMP_Get_self( context );
-  Scheduler_priority_SMP_Node *node =
-    _Scheduler_priority_SMP_Node_downcast( thread );
+  Scheduler_priority_SMP_Context *self = _Scheduler_priority_SMP_Get_self(
+    context
+  );
+  Scheduler_priority_SMP_Node *node = _Scheduler_priority_SMP_Node_downcast(
+    thread
+  );
 
   _Scheduler_priority_Ready_queue_extract(
     &node->Base.Base.Node.Chain,
@@ -175,8 +183,9 @@ static inline Scheduler_Node *_Scheduler_priority_SMP_Get_idle( void *arg )
   Scheduler_priority_SMP_Node    *lowest_ready;
 
   self = _Scheduler_priority_SMP_Get_self( arg );
-  lowest_ready = (Scheduler_priority_SMP_Node *)
-    _Chain_Last( self->idle_ready_queue );
+  lowest_ready = (Scheduler_priority_SMP_Node *) _Chain_Last(
+    self->idle_ready_queue
+  );
   _Scheduler_priority_Ready_queue_extract(
     &lowest_ready->Base.Base.Node.Chain,
     &lowest_ready->Ready_queue,

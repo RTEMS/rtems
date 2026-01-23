@@ -69,12 +69,9 @@ extern "C" {
  *
  * @return This method returns the resulting address.
  */
-static inline void *_Addresses_Add_offset (
-  const void *base,
-  uintptr_t   offset
-)
+static inline void *_Addresses_Add_offset( const void *base, uintptr_t offset )
 {
-  return (void *)((uintptr_t)base + offset);
+  return (void *) ( (uintptr_t) base + offset );
 }
 
 /**
@@ -90,12 +87,12 @@ static inline void *_Addresses_Add_offset (
  * @return This method returns the resulting address.
  */
 
-static inline void *_Addresses_Subtract_offset (
+static inline void *_Addresses_Subtract_offset(
   const void *base,
   uintptr_t   offset
 )
 {
-  return (void *)((uintptr_t)base - offset);
+  return (void *) ( (uintptr_t) base - offset );
 }
 
 /**
@@ -129,9 +126,7 @@ static inline intptr_t _Addresses_Subtract(
  * @retval true The @a address is aligned.
  * @retval false The @a address is not aligned.
  */
-static inline bool _Addresses_Is_aligned(
-  const void *address
-)
+static inline bool _Addresses_Is_aligned( const void *address )
 {
   return ( (uintptr_t) address % CPU_ALIGNMENT ) == 0;
 }
@@ -152,13 +147,13 @@ static inline bool _Addresses_Is_aligned(
  * @retval true The @a address is within the memory range specified
  * @retval false The @a address is not within the memory range specified.
  */
-static inline bool _Addresses_Is_in_range (
+static inline bool _Addresses_Is_in_range(
   const void *address,
   const void *base,
   const void *limit
 )
 {
-  return (address >= base && address <= limit);
+  return ( address >= base && address <= limit );
 }
 
 /**
@@ -174,13 +169,10 @@ static inline bool _Addresses_Is_in_range (
  *
  * @return Returns the aligned address.
  */
-static inline void *_Addresses_Align_up(
-  void *address,
-  size_t alignment
-)
+static inline void *_Addresses_Align_up( void *address, size_t alignment )
 {
-  uintptr_t mask = alignment - (uintptr_t)1;
-  return (void*)(((uintptr_t)address + mask) & ~mask);
+  uintptr_t mask = alignment - (uintptr_t) 1;
+  return (void *) ( ( (uintptr_t) address + mask ) & ~mask );
 }
 
 /**
@@ -196,13 +188,10 @@ static inline void *_Addresses_Align_up(
  *
  * @return Returns the aligned address.
  */
-static inline void *_Addresses_Align_down(
-  void *address,
-  size_t alignment
-)
+static inline void *_Addresses_Align_down( void *address, size_t alignment )
 {
-  uintptr_t mask = alignment - (uintptr_t)1;
-  return (void*)((uintptr_t)address & ~mask);
+  uintptr_t mask = alignment - (uintptr_t) 1;
+  return (void *) ( (uintptr_t) address & ~mask );
 }
 
 /** @} */

@@ -82,9 +82,7 @@ typedef MPCI_Entry ( *MPCI_initialization_entry )( void );
  *  in an Multiprocessor Communications Interface.  The single
  *  parameter will point to the packet allocated.
  */
-typedef MPCI_Entry ( *MPCI_get_packet_entry )(
-                     MP_packet_Prefix **
-                   );
+typedef MPCI_Entry ( *MPCI_get_packet_entry )( MP_packet_Prefix ** );
 
 /**
  *  This type defines the prototype for the return packet entry point
@@ -92,9 +90,7 @@ typedef MPCI_Entry ( *MPCI_get_packet_entry )(
  *  parameter will point to a packet previously allocated by the
  *  get packet MPCI entry.
  */
-typedef MPCI_Entry ( *MPCI_return_packet_entry )(
-                     MP_packet_Prefix *
-                   );
+typedef MPCI_Entry ( *MPCI_return_packet_entry )( MP_packet_Prefix * );
 
 /**
  *  This type defines the prototype for send get packet entry point
@@ -102,10 +98,7 @@ typedef MPCI_Entry ( *MPCI_return_packet_entry )(
  *  parameter will point to a packet previously allocated by the
  *  get packet entry point that has been filled in by the caller.
  */
-typedef MPCI_Entry ( *MPCI_send_entry )(
-                     uint32_t,
-                     MP_packet_Prefix *
-                   );
+typedef MPCI_Entry ( *MPCI_send_entry )( uint32_t, MP_packet_Prefix * );
 
 /**
  *  This type defines the prototype for the receive packet entry point
@@ -114,9 +107,7 @@ typedef MPCI_Entry ( *MPCI_send_entry )(
  *  receive packet handler.  The caller will block until a packet is
  *  received.
  */
-typedef MPCI_Entry ( *MPCI_receive_entry )(
-                     MP_packet_Prefix **
-                   );
+typedef MPCI_Entry ( *MPCI_receive_entry )( MP_packet_Prefix ** );
 
 /**
  *  This type defines the Multiprocessor Communications
@@ -128,22 +119,22 @@ typedef MPCI_Entry ( *MPCI_receive_entry )(
  */
 typedef struct {
   /** This fields contains the timeout for MPCI operations in ticks. */
-  uint32_t                   default_timeout;
+  uint32_t                  default_timeout;
   /** This field contains the maximum size of a packet supported by this
    *  MPCI layer.  This size places a limit on the size of a message
    *  which can be transmitted over this interface.
    **/
-  size_t                     maximum_packet_size;
+  size_t                    maximum_packet_size;
   /** This field points to the MPCI initialization entry point. */
-  MPCI_initialization_entry  initialization;
+  MPCI_initialization_entry initialization;
   /** This field points to the MPCI get packet entry point. */
-  MPCI_get_packet_entry      get_packet;
+  MPCI_get_packet_entry     get_packet;
   /** This field points to the MPCI return packet entry point. */
-  MPCI_return_packet_entry   return_packet;
+  MPCI_return_packet_entry  return_packet;
   /** This field points to the MPCI send packet entry point. */
-  MPCI_send_entry            send_packet;
+  MPCI_send_entry           send_packet;
   /** This field points to the MPCI receive packet entry point. */
-  MPCI_receive_entry         receive_packet;
+  MPCI_receive_entry        receive_packet;
 } MPCI_Control;
 
 /*
@@ -154,23 +145,23 @@ typedef struct {
  */
 typedef struct {
   /** This is the local node number. */
-  uint32_t            node;
+  uint32_t node;
   /** This is the maximum number of nodes in system. */
-  uint32_t            maximum_nodes;
+  uint32_t maximum_nodes;
   /** This is the maximum number of global objects. */
-  uint32_t            maximum_global_objects;
+  uint32_t maximum_global_objects;
   /** This is the maximum number of proxies. */
-  uint32_t            maximum_proxies;
+  uint32_t maximum_proxies;
 
   /**
    * The MPCI Receive server is assumed to have a stack of at least
    * minimum stack size.  This field specifies the amount of extra
    * stack this task will be given in bytes.
    */
-  uint32_t            extra_mpci_receive_server_stack;
+  uint32_t extra_mpci_receive_server_stack;
 
   /** This is a pointer to User/BSP provided MPCI Table. */
-  MPCI_Control       *User_mpci_table;
+  MPCI_Control *User_mpci_table;
 } MPCI_Configuration;
 
 /**

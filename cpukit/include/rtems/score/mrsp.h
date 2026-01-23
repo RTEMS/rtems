@@ -69,7 +69,7 @@ extern "C" {
  * @{
  */
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 
 /**
  * @brief MrsP control block.

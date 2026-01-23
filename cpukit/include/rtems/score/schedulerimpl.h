@@ -119,7 +119,7 @@ static inline const Scheduler_Control *_Scheduler_Get_by_CPU(
   const Per_CPU_Control *cpu
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   return cpu->Scheduler.control;
 #else
   (void) cpu;
@@ -140,7 +140,7 @@ static inline void _Scheduler_Acquire_critical(
   ISR_lock_Context        *lock_context
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   Scheduler_Context *context;
 
   context = _Scheduler_Get_context( scheduler );
@@ -164,7 +164,7 @@ static inline void _Scheduler_Release_critical(
   ISR_lock_Context        *lock_context
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   Scheduler_Context *context;
 
   context = _Scheduler_Get_context( scheduler );
@@ -175,7 +175,7 @@ static inline void _Scheduler_Release_critical(
 #endif
 }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 /**
  * @brief Indicate if the thread non-preempt mode is supported by the
  * scheduler.
@@ -264,7 +264,7 @@ static inline void _Scheduler_Yield( Thread_Control *the_thread )
  */
 static inline void _Scheduler_Block( Thread_Control *the_thread )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   Chain_Node              *node;
   const Chain_Node        *tail;
   Scheduler_Node          *scheduler_node;
@@ -278,11 +278,7 @@ static inline void _Scheduler_Block( Thread_Control *the_thread )
   scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
 
   _Scheduler_Acquire_critical( scheduler, &lock_context );
-  ( *scheduler->Operations.block )(
-    scheduler,
-    the_thread,
-    scheduler_node
-  );
+  ( *scheduler->Operations.block )( scheduler, the_thread, scheduler_node );
   _Scheduler_Release_critical( scheduler, &lock_context );
 
   node = _Chain_Next( node );
@@ -330,7 +326,7 @@ static inline void _Scheduler_Unblock( Thread_Control *the_thread )
   const Scheduler_Control *scheduler;
   ISR_lock_Context         lock_context;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   scheduler_node = SCHEDULER_NODE_OF_THREAD_SCHEDULER_NODE(
     _Chain_First( &the_thread->Scheduler.Scheduler_nodes )
   );
@@ -361,7 +357,7 @@ static inline void _Scheduler_Unblock( Thread_Control *the_thread )
  */
 static inline void _Scheduler_Update_priority( Thread_Control *the_thread )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   Chain_Node       *node;
   const Chain_Node *tail;
 
@@ -498,7 +494,9 @@ static inline void _Scheduler_Release_job(
   Thread_queue_Context *queue_context
 )
 {
-  const Scheduler_Control *scheduler = _Thread_Scheduler_get_home( the_thread );
+  const Scheduler_Control *scheduler = _Thread_Scheduler_get_home(
+    the_thread
+  );
 
   _Thread_queue_Context_clear_priority_updates( queue_context );
   ( *scheduler->Operations.release_job )(
@@ -524,7 +522,9 @@ static inline void _Scheduler_Cancel_job(
   Thread_queue_Context *queue_context
 )
 {
-  const Scheduler_Control *scheduler = _Thread_Scheduler_get_home( the_thread );
+  const Scheduler_Control *scheduler = _Thread_Scheduler_get_home(
+    the_thread
+  );
 
   _Thread_queue_Context_clear_priority_updates( queue_context );
   ( *scheduler->Operations.cancel_job )(
@@ -568,7 +568,7 @@ static inline bool _Scheduler_Has_processor_ownership(
   uint32_t                 cpu_index
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   const Per_CPU_Control   *cpu;
   const Scheduler_Control *scheduler_of_cpu;
 
@@ -595,7 +595,7 @@ static inline const Processor_mask *_Scheduler_Get_processors(
   const Scheduler_Control *scheduler
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   return &_Scheduler_Get_context( scheduler )->Processors;
 #else
   (void) scheduler;
@@ -680,7 +680,7 @@ static inline uint32_t _Scheduler_Get_processor_count(
   const Scheduler_Control *scheduler
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   const Scheduler_Context *context = _Scheduler_Get_context( scheduler );
 
   return _Processor_mask_Count( &context->Processors );
@@ -729,9 +729,7 @@ static inline uint32_t _Scheduler_Get_index_by_id( Objects_Id id )
  *
  * @return The scheduler to the object id.
  */
-static inline const Scheduler_Control *_Scheduler_Get_by_id(
-  Objects_Id id
-)
+static inline const Scheduler_Control *_Scheduler_Get_by_id( Objects_Id id )
 {
   uint32_t index;
 
@@ -755,10 +753,10 @@ static inline uint32_t _Scheduler_Get_index(
   const Scheduler_Control *scheduler
 )
 {
-  return (uint32_t) (scheduler - &_Scheduler_Table[ 0 ]);
+  return (uint32_t) ( scheduler - &_Scheduler_Table[ 0 ] );
 }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 /**
  * @brief Gets a scheduler node which is owned by an unused idle thread.
  *
@@ -789,14 +787,14 @@ typedef void ( *Scheduler_Release_idle_node )(
  * @param new_state The new state for @a the_thread.
  */
 static inline void _Scheduler_Thread_change_state(
-  Thread_Control         *the_thread,
-  Thread_Scheduler_state  new_state
+  Thread_Control        *the_thread,
+  Thread_Scheduler_state new_state
 )
 {
   _Assert(
-    _ISR_lock_Is_owner( &the_thread->Scheduler.Lock )
-      || the_thread->Scheduler.state == THREAD_SCHEDULER_BLOCKED
-      || !_System_state_Is_up( _System_state_Get() )
+    _ISR_lock_Is_owner( &the_thread->Scheduler.Lock ) ||
+    the_thread->Scheduler.state == THREAD_SCHEDULER_BLOCKED ||
+    !_System_state_Is_up( _System_state_Get() )
   );
 
   the_thread->Scheduler.state = new_state;
@@ -812,9 +810,9 @@ static inline void _Scheduler_Thread_change_state(
  * @param arg is the handler argument.
  */
 static inline Thread_Control *_Scheduler_Use_idle_thread(
-  Scheduler_Node          *node,
-  Scheduler_Get_idle_node  get_idle_node,
-  void                    *arg
+  Scheduler_Node         *node,
+  Scheduler_Get_idle_node get_idle_node,
+  void                   *arg
 )
 {
   Scheduler_Node *idle_node;
@@ -874,7 +872,7 @@ static inline void _Scheduler_Release_idle_thread(
 static inline Thread_Control *_Scheduler_Release_idle_thread_if_necessary(
   Scheduler_Node             *node,
   Scheduler_Release_idle_node release_idle_node,
-  void                        *arg
+  void                       *arg
 )
 {
   Thread_Control *idle;
@@ -936,16 +934,16 @@ static inline Status_Control _Scheduler_Set(
 )
 {
 #ifndef RTEMS_SMP
-   (void) new_scheduler;
+  (void) new_scheduler;
 #endif
-  Scheduler_Node          *new_scheduler_node;
-  Scheduler_Node          *old_scheduler_node;
-#if defined(RTEMS_SMP)
+  Scheduler_Node *new_scheduler_node;
+  Scheduler_Node *old_scheduler_node;
+#if defined( RTEMS_SMP )
   ISR_lock_Context         lock_context;
   const Scheduler_Control *old_scheduler;
 #endif
 
-#if defined(RTEMS_SCORE_THREAD_HAS_SCHEDULER_CHANGE_INHIBITORS)
+#if defined( RTEMS_SCORE_THREAD_HAS_SCHEDULER_CHANGE_INHIBITORS )
   if ( the_thread->is_scheduler_change_inhibited ) {
     return STATUS_RESOURCE_IN_USE;
   }
@@ -963,9 +961,9 @@ static inline Status_Control _Scheduler_Set(
 
   if (
     !_Priority_Is_empty( &old_scheduler_node->Wait.Priority )
-#if defined(RTEMS_SMP)
-      || !_Chain_Has_only_one_node( &the_thread->Scheduler.Wait_nodes )
-      || the_thread->Scheduler.pin_level != 0
+#if defined( RTEMS_SMP )
+    || !_Chain_Has_only_one_node( &the_thread->Scheduler.Wait_nodes ) ||
+    the_thread->Scheduler.pin_level != 0
 #endif
   ) {
     _Priority_Plain_insert(
@@ -976,7 +974,7 @@ static inline Status_Control _Scheduler_Set(
     return STATUS_RESOURCE_IN_USE;
   }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   old_scheduler = _Thread_Scheduler_get_home( the_thread );
   new_scheduler_node = _Thread_Scheduler_get_node_by_index(
     the_thread,
@@ -986,13 +984,13 @@ static inline Status_Control _Scheduler_Set(
   _Scheduler_Acquire_critical( new_scheduler, &lock_context );
 
   if (
-    _Scheduler_Get_processor_count( new_scheduler ) == 0
-      || ( *new_scheduler->Operations.set_affinity )(
-        new_scheduler,
-        the_thread,
-        new_scheduler_node,
-        &the_thread->Scheduler.Affinity
-      ) != STATUS_SUCCESSFUL
+    _Scheduler_Get_processor_count( new_scheduler ) == 0 ||
+    ( *new_scheduler->Operations.set_affinity )(
+      new_scheduler,
+      the_thread,
+      new_scheduler_node,
+      &the_thread->Scheduler.Affinity
+    ) != STATUS_SUCCESSFUL
   ) {
     _Scheduler_Release_critical( new_scheduler, &lock_context );
     _Priority_Plain_insert(
@@ -1020,7 +1018,7 @@ static inline Status_Control _Scheduler_Set(
     &the_thread->Real_priority
   );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   if ( old_scheduler != new_scheduler ) {
     States_Control current_state;
 

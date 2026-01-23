@@ -52,7 +52,7 @@ extern "C" {
  * @{
  */
 
-#if defined(RTEMS_SMP) || ( CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE )
+#if defined( RTEMS_SMP ) || ( CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE )
 /**
  * @brief Enables a robust thread dispatch.
  *
@@ -72,11 +72,11 @@ extern "C" {
  * @retval false The executing thread is inside a thread dispatch critical
  * section and dispatching is not allowed.
  */
-static inline bool _Thread_Dispatch_is_enabled(void)
+static inline bool _Thread_Dispatch_is_enabled( void )
 {
   bool enabled;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   ISR_Level level;
 
   _ISR_Local_disable( level );
@@ -84,7 +84,7 @@ static inline bool _Thread_Dispatch_is_enabled(void)
 
   enabled = _Thread_Dispatch_disable_level == 0;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   _ISR_Local_enable( level );
 #endif
 
@@ -96,7 +96,7 @@ static inline bool _Thread_Dispatch_is_enabled(void)
  *
  * @return The value of the thread dispatch level.
  */
-static inline uint32_t _Thread_Dispatch_get_disable_level(void)
+static inline uint32_t _Thread_Dispatch_get_disable_level( void )
 {
   return _Thread_Dispatch_disable_level;
 }
@@ -221,10 +221,10 @@ static inline Per_CPU_Control *_Thread_Dispatch_disable_critical(
  */
 static inline Per_CPU_Control *_Thread_Dispatch_disable( void )
 {
-  Per_CPU_Control  *cpu_self;
+  Per_CPU_Control *cpu_self;
 
 #if defined( RTEMS_SMP ) || defined( RTEMS_PROFILING )
-  ISR_lock_Context  lock_context;
+  ISR_lock_Context lock_context;
 
   _ISR_lock_ISR_disable( &lock_context );
 
@@ -277,8 +277,8 @@ static inline void _Thread_Dispatch_request(
     _CPU_SMP_Send_interrupt( _Per_CPU_Get_index( cpu_target ) );
   }
 #else
- cpu_self->dispatch_necessary = true;
- (void) cpu_target;
+  cpu_self->dispatch_necessary = true;
+  (void) cpu_target;
 #endif
 }
 

@@ -95,7 +95,6 @@ typedef struct {
   Processor_mask Affinity;
 } Scheduler_strong_APA_Node;
 
-
 /**
  * @brief CPU related variables and a CPU_Control to implement BFS.
  */
@@ -148,32 +147,30 @@ typedef struct {
 /**
  * @brief Entry points for the Strong APA Scheduler.
  */
-#define SCHEDULER_STRONG_APA_ENTRY_POINTS \
-  { \
-    _Scheduler_strong_APA_Initialize, \
-    _Scheduler_default_Schedule, \
-    _Scheduler_strong_APA_Yield, \
-    _Scheduler_strong_APA_Block, \
-    _Scheduler_strong_APA_Unblock, \
-    _Scheduler_strong_APA_Update_priority, \
-    _Scheduler_default_Map_priority, \
-    _Scheduler_default_Unmap_priority, \
-    _Scheduler_strong_APA_Ask_for_help, \
+#define SCHEDULER_STRONG_APA_ENTRY_POINTS          \
+  { _Scheduler_strong_APA_Initialize,              \
+    _Scheduler_default_Schedule,                   \
+    _Scheduler_strong_APA_Yield,                   \
+    _Scheduler_strong_APA_Block,                   \
+    _Scheduler_strong_APA_Unblock,                 \
+    _Scheduler_strong_APA_Update_priority,         \
+    _Scheduler_default_Map_priority,               \
+    _Scheduler_default_Unmap_priority,             \
+    _Scheduler_strong_APA_Ask_for_help,            \
     _Scheduler_strong_APA_Reconsider_help_request, \
-    _Scheduler_strong_APA_Withdraw_node, \
-    _Scheduler_strong_APA_Make_sticky, \
-    _Scheduler_strong_APA_Clean_sticky, \
+    _Scheduler_strong_APA_Withdraw_node,           \
+    _Scheduler_strong_APA_Make_sticky,             \
+    _Scheduler_strong_APA_Clean_sticky,            \
     _Scheduler_default_Pin_or_unpin_not_supported, \
     _Scheduler_default_Pin_or_unpin_not_supported, \
-    _Scheduler_strong_APA_Add_processor, \
-    _Scheduler_strong_APA_Remove_processor, \
-    _Scheduler_strong_APA_Node_initialize, \
-    _Scheduler_default_Node_destroy, \
-    _Scheduler_default_Release_job, \
-    _Scheduler_default_Cancel_job, \
-    _Scheduler_strong_APA_Start_idle, \
-    _Scheduler_strong_APA_Set_affinity \
-  }
+    _Scheduler_strong_APA_Add_processor,           \
+    _Scheduler_strong_APA_Remove_processor,        \
+    _Scheduler_strong_APA_Node_initialize,         \
+    _Scheduler_default_Node_destroy,               \
+    _Scheduler_default_Release_job,                \
+    _Scheduler_default_Cancel_job,                 \
+    _Scheduler_strong_APA_Start_idle,              \
+    _Scheduler_strong_APA_Set_affinity }
 
 /**
  * @brief Initializes the scheduler.

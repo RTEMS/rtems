@@ -63,24 +63,22 @@ extern "C" {
 /**
  *  Entry points for the Earliest Deadline First Scheduler.
  */
-#define SCHEDULER_EDF_ENTRY_POINTS \
-  { \
-    _Scheduler_EDF_Initialize,       /* initialize entry point */ \
-    _Scheduler_EDF_Schedule,         /* schedule entry point */ \
-    _Scheduler_EDF_Yield,            /* yield entry point */ \
-    _Scheduler_EDF_Block,            /* block entry point */ \
-    _Scheduler_EDF_Unblock,          /* unblock entry point */ \
-    _Scheduler_EDF_Update_priority,  /* update priority entry point */ \
-    _Scheduler_EDF_Map_priority,     /* map priority entry point */ \
-    _Scheduler_EDF_Unmap_priority,   /* unmap priority entry point */ \
-    SCHEDULER_DEFAULT_SMP_OPERATIONS \
-    _Scheduler_EDF_Node_initialize,  /* node initialize entry point */ \
-    _Scheduler_default_Node_destroy, /* node destroy entry point */ \
-    _Scheduler_EDF_Release_job,      /* new period of task */ \
-    _Scheduler_EDF_Cancel_job,       /* cancel period of task */ \
-    _Scheduler_default_Start_idle    /* start idle entry point */ \
-    SCHEDULER_DEFAULT_SET_AFFINITY_OPERATION \
-  }
+#define SCHEDULER_EDF_ENTRY_POINTS                                      \
+  { _Scheduler_EDF_Initialize,      /* initialize entry point */        \
+    _Scheduler_EDF_Schedule,        /* schedule entry point */          \
+    _Scheduler_EDF_Yield,           /* yield entry point */             \
+    _Scheduler_EDF_Block,           /* block entry point */             \
+    _Scheduler_EDF_Unblock,         /* unblock entry point */           \
+    _Scheduler_EDF_Update_priority, /* update priority entry point */   \
+    _Scheduler_EDF_Map_priority,    /* map priority entry point */      \
+    _Scheduler_EDF_Unmap_priority,  /* unmap priority entry point */    \
+    SCHEDULER_DEFAULT_SMP_OPERATIONS                                    \
+      _Scheduler_EDF_Node_initialize, /* node initialize entry point */ \
+    _Scheduler_default_Node_destroy,  /* node destroy entry point */    \
+    _Scheduler_EDF_Release_job,       /* new period of task */          \
+    _Scheduler_EDF_Cancel_job,        /* cancel period of task */       \
+    _Scheduler_default_Start_idle     /* start idle entry point */      \
+      SCHEDULER_DEFAULT_SET_AFFINITY_OPERATION }
 
 typedef struct {
   /**

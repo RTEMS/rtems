@@ -60,7 +60,7 @@
 
 #include <rtems/score/cpuopts.h>
 
-#if !defined(ASM)
+#if !defined( ASM )
   #include <stdbool.h>
   #include <stddef.h>
   #include <stdint.h>
@@ -99,7 +99,7 @@ extern "C" {
  *
  * @param _target is the target function name.
  */
-#if defined(__GNUC__)
+#if defined( __GNUC__ )
   #define RTEMS_ALIAS( _target ) __attribute__(( __alias__( #_target ) ))
 #else
   #define RTEMS_ALIAS( _target )
@@ -151,8 +151,9 @@ extern "C" {
  *
  * @param _alignment is the desired alignment in bytes.
  */
-#if defined(__GNUC__)
-  #define RTEMS_ALIGNED( _alignment ) __attribute__(( __aligned__( _alignment ) ))
+#if defined( __GNUC__ )
+  #define RTEMS_ALIGNED( _alignment ) \
+  __attribute__(( __aligned__( _alignment ) ))
 #else
   #define RTEMS_ALIGNED( _alignment )
 #endif
@@ -187,8 +188,9 @@ extern "C" {
  * @param _index is the allocation alignment parameter index (starting with
  *   one).
  */
-#if defined(__GNUC__)
-  #define RTEMS_ALLOC_ALIGN( _index ) __attribute__(( __alloc_align__( _index ) ))
+#if defined( __GNUC__ )
+  #define RTEMS_ALLOC_ALIGN( _index ) \
+  __attribute__(( __alloc_align__( _index ) ))
 #else
   #define RTEMS_ALLOC_ALIGN( _index )
 #endif
@@ -203,8 +205,9 @@ extern "C" {
  *
  * @param _index is the allocation size parameter index (starting with one).
  */
-#if defined(__GNUC__)
-  #define RTEMS_ALLOC_SIZE( _index ) __attribute__(( __alloc_size__( _index ) ))
+#if defined( __GNUC__ )
+  #define RTEMS_ALLOC_SIZE( _index ) \
+  __attribute__(( __alloc_size__( _index ) ))
 #else
   #define RTEMS_ALLOC_SIZE( _index )
 #endif
@@ -223,9 +226,9 @@ extern "C" {
  * @param _size_index is the allocation item size parameter index (starting
  *   with one).
  */
-#if defined(__GNUC__)
+#if defined( __GNUC__ )
   #define RTEMS_ALLOC_SIZE_2( _count_index, _size_index ) \
-    __attribute__(( __alloc_size__( _count_index, _size_index ) ))
+  __attribute__(( __alloc_size__( _count_index, _size_index ) ))
 #else
   #define RTEMS_ALLOC_SIZE_2( _count_index, _size_index )
 #endif
@@ -252,10 +255,14 @@ extern "C" {
  * @brief This macro forbids the compiler to reorder read and write commands
  *   around it.
  */
-#if defined(__GNUC__)
-  #define RTEMS_COMPILER_MEMORY_BARRIER() __asm__ volatile( "" ::: "memory" )
+#if defined( __GNUC__ )
+  #define RTEMS_COMPILER_MEMORY_BARRIER() \
+  __asm__ volatile( "" ::                 \
+                      : "memory" )
 #else
-  #define RTEMS_COMPILER_MEMORY_BARRIER() do { } while ( 0 )
+  #define RTEMS_COMPILER_MEMORY_BARRIER() \
+  do {                                    \
+  } while ( 0 )
 #endif
 
 /* Generated from spec:/rtems/basedefs/if/concat */
@@ -282,7 +289,7 @@ extern "C" {
  *   no effect except the return value and that the return value depends only
  *   on the value of parameters.
  */
-#if defined(__GNUC__)
+#if defined( __GNUC__ )
   #define RTEMS_CONST __attribute__(( __const__ ))
 #else
   #define RTEMS_CONST
@@ -328,7 +335,7 @@ extern "C" {
  * @brief Instructs the compiler in a declaration to issue a warning whenever a
  *   variable, function, or type using this declaration will be used.
  */
-#if defined(__GNUC__)
+#if defined( __GNUC__ )
   #define RTEMS_DEPRECATED __attribute__(( __deprecated__ ))
 #else
   #define RTEMS_DEPRECATED
@@ -362,7 +369,7 @@ extern "C" {
  * @brief Expands to the name of the function containing the use of this
  *   define.
  */
-#if defined(__cplusplus) && defined(__GNUC__)
+#if defined( __cplusplus ) && defined( __GNUC__ )
   #define RTEMS_FUNCTION_NAME __PRETTY_FUNCTION__
 #else
   #define RTEMS_FUNCTION_NAME __func__
@@ -380,7 +387,7 @@ extern "C" {
   #define RTEMS_NO_RETURN [[noreturn]]
 #elif defined( __STDC_VERSION__ ) && __STDC_VERSION__ >= 201112L
   #define RTEMS_NO_RETURN _Noreturn
-#elif defined(__GNUC__)
+#elif defined( __GNUC__ )
   #define RTEMS_NO_RETURN __attribute__(( __noreturn__ ))
 #else
   #define RTEMS_NO_RETURN
@@ -405,7 +412,7 @@ extern "C" {
  *
  * @param _section is the section name as a string.
  */
-#if defined(__GNUC__)
+#if defined( __GNUC__ )
   #define RTEMS_SECTION( _section ) __attribute__(( __section__( _section ) ))
 #else
   #define RTEMS_SECTION( _section )
@@ -441,9 +448,13 @@ extern "C" {
  * @return Returns the type of a pointer reference of the specified level to
  *   the specified type.
  */
-#if defined(__GNUC__)
+#if defined( __GNUC__ )
   #define RTEMS_TYPEOF_REFX( _level, _target ) \
-    __typeof__( _level( union { int _z; __typeof__( _target ) _x; } ){ 0 }._x )
+  __typeof__( _level( union {                  \
+            int                   _z;          \
+            __typeof__( _target ) _x;          \
+              } ){ 0 }                         \
+                ._x )
 #else
   #define RTEMS_TYPEOF_REFX( _level, _target )
 #endif
@@ -465,10 +476,10 @@ extern "C" {
  */
 #define RTEMS_XCONCAT( _x, _y ) RTEMS_CONCAT( _x, _y )
 
-#if !defined(ASM) && defined(RTEMS_DEBUG)
-  /* Generated from spec:/score/basedefs/if/debug-unreachable */
+#if !defined( ASM ) && defined( RTEMS_DEBUG )
+/* Generated from spec:/score/basedefs/if/debug-unreachable */
 
-  /**
+/**
    * @ingroup RTEMSScore
    *
    * @brief Terminates the program with a failed assertion.
@@ -479,14 +490,14 @@ extern "C" {
    *
    * @param func is the function name.
    */
-  RTEMS_NO_RETURN void _Debug_Unreachable(
-    const char *file,
-    int         line,
-    const char *func
-  );
+RTEMS_NO_RETURN void _Debug_Unreachable(
+  const char *file,
+  int         line,
+  const char *func
+);
 #endif
 
-#if !defined(ASM)
+#if !defined( ASM )
   /* Generated from spec:/score/basedefs/if/dequalify-types-not-compatible */
 
   /**
@@ -495,11 +506,12 @@ extern "C" {
    * @brief A not implemented function to trigger compile time errors with an
    *   error message.
    */
-  #if defined(__GNUC__)
-    __attribute__((__error__("RTEMS_DEQUALIFY() types differ not only by volatile and const"))) void *
-    RTEMS_DEQUALIFY_types_not_compatible( void );
+  #if defined( __GNUC__ )
+__attribute__((
+  __error__( "RTEMS_DEQUALIFY() types differ not only by volatile and const" )
+)) void *RTEMS_DEQUALIFY_types_not_compatible( void );
   #else
-    void *RTEMS_DEQUALIFY_types_not_compatible( void );
+void *RTEMS_DEQUALIFY_types_not_compatible( void );
   #endif
 #endif
 
@@ -517,26 +529,23 @@ extern "C" {
  *
  * @param _var is the variable.
  */
-#if defined(__cplusplus)
+#if defined( __cplusplus )
   #define RTEMS_DEQUALIFY_DEPTHX( _ptr_level, _type, _var ) \
-    ( const_cast<_type>( _var ) )
-#elif defined(__GNUC__)
+  ( const_cast< _type >( _var ) )
+#elif defined( __GNUC__ )
   #define RTEMS_DEQUALIFY_DEPTHX( _ptr_level, _type, _var ) \
-    __builtin_choose_expr( \
-      __builtin_types_compatible_p( \
-        RTEMS_TYPEOF_REFX( _ptr_level, _var ), \
-        RTEMS_TYPEOF_REFX( _ptr_level, _type ) \
-      ) || \
-      __builtin_types_compatible_p( \
-        _type, \
-        void * \
-      ), \
-      (_type) ( _var ), \
-      RTEMS_DEQUALIFY_types_not_compatible() \
-    )
+  __builtin_choose_expr(                                    \
+    __builtin_types_compatible_p(                           \
+      RTEMS_TYPEOF_REFX( _ptr_level, _var ),                \
+      RTEMS_TYPEOF_REFX( _ptr_level, _type )                \
+    ) ||                                                    \
+      __builtin_types_compatible_p( _type, void * ),        \
+    (_type) ( _var ),                                       \
+    RTEMS_DEQUALIFY_types_not_compatible()                  \
+  )
 #else
   #define RTEMS_DEQUALIFY_DEPTHX( _ptr_level, _type, _var ) \
-    ( (_type) (uintptr_t) (const volatile void *)( _var ) )
+  ( (_type) (uintptr_t) (const volatile void *) ( _var ) )
 #endif
 
 /* Generated from spec:/rtems/basedefs/if/deconst */
@@ -579,7 +588,8 @@ extern "C" {
  *
  * @param _var is the pointer variable.
  */
-#define RTEMS_DEVOLATILE( _type, _var ) RTEMS_DEQUALIFY_DEPTHX( *, _type, _var )
+#define RTEMS_DEVOLATILE( _type, _var ) \
+  RTEMS_DEQUALIFY_DEPTHX( *, _type, _var )
 
 /* Generated from spec:/rtems/basedefs/if/fallthrough */
 
@@ -600,13 +610,15 @@ extern "C" {
  */
 #if defined( __STDC_VERSION__ ) && __STDC_VERSION__ >= 202311L
   #define RTEMS_FALL_THROUGH() [[fallthrough]]
-#elif defined(__GNUC__)
+#elif defined( __GNUC__ )
   #define RTEMS_FALL_THROUGH() __attribute__(( __fallthrough__ ))
 #else
-  #define RTEMS_FALL_THROUGH() do {} while ( 0 ) /* Fall through */
+  #define RTEMS_FALL_THROUGH() \
+  do {                         \
+  } while ( 0 ) /* Fall through */
 #endif
 
-#if !defined(FALSE)
+#if !defined( FALSE )
   /* Generated from spec:/rtems/basedefs/if/false */
 
   /**
@@ -635,12 +647,12 @@ extern "C" {
  * @return Returns to true, if the members of two types have compatible types,
  *   otherwise false.
  */
-#if defined(__GNUC__)
+#if defined( __GNUC__ )
   #define RTEMS_HAVE_MEMBER_SAME_TYPE( _t_lhs, _m_lhs, _t_rhs, _m_rhs ) \
-    __builtin_types_compatible_p( \
-      __typeof__( ( (_t_lhs *) 0 )->_m_lhs ), \
-      __typeof__( ( (_t_rhs *) 0 )->_m_rhs ) \
-    )
+  __builtin_types_compatible_p(                                         \
+    __typeof__( ( (_t_lhs *) 0 )->_m_lhs ),                             \
+    __typeof__( ( (_t_rhs *) 0 )->_m_rhs )                              \
+  )
 #else
   #define RTEMS_HAVE_MEMBER_SAME_TYPE( _t_lhs, _m_lhs, _t_rhs, _m_rhs ) true
 #endif
@@ -653,7 +665,7 @@ extern "C" {
  * @brief Gives a hint to the compiler in a function declaration to inline this
  *   function.
  */
-#if defined(__GNUC__)
+#if defined( __GNUC__ )
   #define RTEMS_INLINE_ROUTINE static __inline__
 #else
   #define RTEMS_INLINE_ROUTINE static inline
@@ -667,7 +679,7 @@ extern "C" {
  * @brief Tells the compiler in a declaration that this function is a memory
  *   allocation function similar to malloc().
  */
-#if defined(__GNUC__)
+#if defined( __GNUC__ )
   #define RTEMS_MALLOCLIKE __attribute__(( __malloc__ ))
 #else
   #define RTEMS_MALLOCLIKE
@@ -681,7 +693,7 @@ extern "C" {
  * @brief Instructs the compiler in a function declaration to not inline this
  *   function.
  */
-#if defined(__GNUC__)
+#if defined( __GNUC__ )
   #define RTEMS_NO_INLINE __attribute__(( __noinline__ ))
 #else
   #define RTEMS_NO_INLINE
@@ -709,8 +721,10 @@ extern "C" {
  *
  * The variable must be simple enough to fit into a register.
  */
-#if defined(__GNUC__)
-  #define RTEMS_OBFUSCATE_VARIABLE( _var ) __asm__( "" : "+r" ( _var ) )
+#if defined( __GNUC__ )
+  #define RTEMS_OBFUSCATE_VARIABLE( _var ) \
+  __asm__( ""                              \
+           : "+r"( _var ) )
 #else
   #define RTEMS_OBFUSCATE_VARIABLE( _var ) (void) ( _var )
 #endif
@@ -723,7 +737,7 @@ extern "C" {
  * @brief Instructs the compiler in a type definition to place members of a
  *   structure or union so that the memory required is minimized.
  */
-#if defined(__GNUC__)
+#if defined( __GNUC__ )
   #define RTEMS_PACKED __attribute__(( __packed__ ))
 #else
   #define RTEMS_PACKED
@@ -751,7 +765,7 @@ extern "C" {
  * @return Returns the value of the integral expression and tells the compiler
  *   that the predicted value is false (0).
  */
-#if defined(__GNUC__)
+#if defined( __GNUC__ )
   #define RTEMS_PREDICT_FALSE( _exp ) __builtin_expect( ( _exp ), 0 )
 #else
   #define RTEMS_PREDICT_FALSE( _exp ) ( _exp )
@@ -770,7 +784,7 @@ extern "C" {
  * @return Returns the value of the integral expression and tells the compiler
  *   that the predicted value is true (1).
  */
-#if defined(__GNUC__)
+#if defined( __GNUC__ )
   #define RTEMS_PREDICT_TRUE( _exp ) __builtin_expect( ( _exp ), 1 )
 #else
   #define RTEMS_PREDICT_TRUE( _exp ) ( _exp )
@@ -790,9 +804,9 @@ extern "C" {
  * @param _ap_pos is the position of the argument pointer parameter index
  *   (starting with one).
  */
-#if defined(__GNUC__)
+#if defined( __GNUC__ )
   #define RTEMS_PRINTFLIKE( _format_pos, _ap_pos ) \
-    __attribute__(( __format__( __printf__, _format_pos, _ap_pos ) ))
+  __attribute__(( __format__( __printf__, _format_pos, _ap_pos ) ))
 #else
   #define RTEMS_PRINTFLIKE( _format_pos, _ap_pos )
 #endif
@@ -806,7 +820,7 @@ extern "C" {
  *   no effect except the return value and that the return value depends only
  *   on the value of parameters and/or global variables.
  */
-#if defined(__GNUC__)
+#if defined( __GNUC__ )
   #define RTEMS_PURE __attribute__(( __pure__ ))
 #else
   #define RTEMS_PURE
@@ -830,7 +844,7 @@ extern "C" {
  *
  * @return Returns the return address of the current function.
  */
-#if defined(__GNUC__)
+#if defined( __GNUC__ )
   #define RTEMS_RETURN_ADDRESS() __builtin_return_address( 0 )
 #else
   #define RTEMS_RETURN_ADDRESS() NULL
@@ -843,7 +857,7 @@ extern "C" {
  *
  * @brief It is defined if a static analysis run is performed.
  */
-#if defined(__COVERITY__)
+#if defined( __COVERITY__ )
   #define RTEMS_STATIC_ANALYSIS
 #endif
 
@@ -859,13 +873,14 @@ extern "C" {
  * @param _msg is the error message in case the static assertion fails.
  */
 #if defined( __cplusplus ) && __cplusplus >= 201103L
-  #define RTEMS_STATIC_ASSERT( _cond, _msg ) static_assert( _cond, # _msg )
+  #define RTEMS_STATIC_ASSERT( _cond, _msg ) static_assert( _cond, #_msg )
 #elif defined( __STDC_VERSION__ ) && __STDC_VERSION__ >= 201112L
-  #define RTEMS_STATIC_ASSERT( _cond, _msg ) _Static_assert( _cond, # _msg )
+  #define RTEMS_STATIC_ASSERT( _cond, _msg ) _Static_assert( _cond, #_msg )
 #else
-  #define RTEMS_STATIC_ASSERT( _cond, _msg ) \
-    struct rtems_static_assert_ ## _msg \
-      { int rtems_static_assert_ ## _msg : ( _cond ) ? 1 : -1; }
+  #define RTEMS_STATIC_ASSERT( _cond, _msg )             \
+  struct rtems_static_assert_##_msg {                    \
+    int rtems_static_assert_##_msg : ( _cond ) ? 1 : -1; \
+  }
 #endif
 
 /* Generated from spec:/rtems/basedefs/if/symbol-name */
@@ -880,13 +895,14 @@ extern "C" {
  *
  * @return Returns the symbol name associated with the name.
  */
-#if defined(__USER_LABEL_PREFIX__)
-  #define RTEMS_SYMBOL_NAME( _name ) RTEMS_XCONCAT( __USER_LABEL_PREFIX__, _name )
+#if defined( __USER_LABEL_PREFIX__ )
+  #define RTEMS_SYMBOL_NAME( _name ) \
+  RTEMS_XCONCAT( __USER_LABEL_PREFIX__, _name )
 #else
   #define RTEMS_SYMBOL_NAME( _name ) RTEMS_EXPAND( _name )
 #endif
 
-#if !defined(TRUE)
+#if !defined( TRUE )
   /* Generated from spec:/rtems/basedefs/if/true */
 
   /**
@@ -904,13 +920,15 @@ extern "C" {
  *
  * @brief Tells the compiler that this program point is unreachable.
  */
-#if defined(RTEMS_DEBUG)
+#if defined( RTEMS_DEBUG )
   #define RTEMS_UNREACHABLE() \
-    _Debug_Unreachable( __FILE__, __LINE__, RTEMS_FUNCTION_NAME )
-#elif defined(__GNUC__)
+  _Debug_Unreachable( __FILE__, __LINE__, RTEMS_FUNCTION_NAME )
+#elif defined( __GNUC__ )
   #define RTEMS_UNREACHABLE() __builtin_unreachable()
 #else
-  #define RTEMS_UNREACHABLE() do { } while ( 0 )
+  #define RTEMS_UNREACHABLE() \
+  do {                        \
+  } while ( 0 )
 #endif
 
 /* Generated from spec:/rtems/basedefs/if/unused */
@@ -921,7 +939,7 @@ extern "C" {
  * @brief Tells the compiler that the variable or function is deliberately
  *   unused.
  */
-#if defined(__GNUC__)
+#if defined( __GNUC__ )
   #define RTEMS_UNUSED __attribute__(( __unused__ ))
 #else
   #define RTEMS_UNUSED
@@ -943,7 +961,7 @@ extern "C" {
  *
  * @brief Tells the compiler that the variable or function is used.
  */
-#if defined(__GNUC__)
+#if defined( __GNUC__ )
   #define RTEMS_USED __attribute__(( __used__ ))
 #else
   #define RTEMS_USED
@@ -957,7 +975,7 @@ extern "C" {
  * @brief Tells the compiler in a declaration that the result of this function
  *   should be used.
  */
-#if defined(__GNUC__)
+#if defined( __GNUC__ )
   #define RTEMS_WARN_UNUSED_RESULT __attribute__(( __warn_unused_result__ ))
 #else
   #define RTEMS_WARN_UNUSED_RESULT
@@ -974,7 +992,7 @@ extern "C" {
  * Use this attribute for function definitions.  Do not use it for function
  * declarations.
  */
-#if defined(__GNUC__)
+#if defined( __GNUC__ )
   #define RTEMS_WEAK __attribute__(( __weak__ ))
 #else
   #define RTEMS_WEAK
@@ -990,9 +1008,9 @@ extern "C" {
  *
  * @param _target is the target function name.
  */
-#if defined(__GNUC__)
+#if defined( __GNUC__ )
   #define RTEMS_WEAK_ALIAS( _target ) \
-    __attribute__(( __weak__, __alias__( #_target ) ))
+  __attribute__(( __weak__, __alias__( #_target ) ))
 #else
   #define RTEMS_WEAK_ALIAS( _target )
 #endif
@@ -1029,13 +1047,13 @@ extern "C" {
  *
  * This macro shall be placed at file scope.
  */
-#if defined(__GNUC__)
-  #define RTEMS_DEFINE_GLOBAL_SYMBOL( _name, _value ) \
-    __asm__( \
-      "\t.globl " RTEMS_XSTRING( RTEMS_SYMBOL_NAME( _name ) ) \
-      "\n\t.set " RTEMS_XSTRING( RTEMS_SYMBOL_NAME( _name ) ) \
-      ", " RTEMS_STRING( _value ) "\n" \
-    )
+#if defined( __GNUC__ )
+  #define RTEMS_DEFINE_GLOBAL_SYMBOL( _name, _value )                                  \
+  __asm__(                                                                             \
+    "\t.globl " RTEMS_XSTRING( RTEMS_SYMBOL_NAME( _name ) ) "\n\t.set " RTEMS_XSTRING( \
+      RTEMS_SYMBOL_NAME( _name )                                                       \
+    ) ", " RTEMS_STRING( _value ) "\n"                                                 \
+  )
 #else
   #define RTEMS_DEFINE_GLOBAL_SYMBOL( _name, _value )
 #endif

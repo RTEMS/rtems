@@ -79,7 +79,7 @@ typedef struct {
    */
   Chain_Iterator_registry Iterators;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /**
    * @brief Lock to protect User_extensions_List::Active and
    * User_extensions_List::Iterators.
@@ -114,9 +114,7 @@ void _User_extensions_Handler_initialization( void );
  *
  * @param extension The user extension to add.
  */
-void _User_extensions_Add_set(
-  User_extensions_Control *extension
-);
+void _User_extensions_Add_set( User_extensions_Control *extension );
 
 /**
  * @brief Adds a user extension.
@@ -151,9 +149,7 @@ static inline void _User_extensions_Add_set_with_table(
  *
  * @param extension The user extension to remove.
  */
-void _User_extensions_Remove_set(
-  User_extensions_Control *extension
-);
+void _User_extensions_Remove_set( User_extensions_Control *extension );
 
 /**
  * @brief User extension visitor.
@@ -162,7 +158,7 @@ void _User_extensions_Remove_set(
  * @param[in, out] arg The argument passed to _User_extensions_Iterate().
  * @param[in] callouts The current callouts.
  */
-typedef void (*User_extensions_Visitor)(
+typedef void ( *User_extensions_Visitor )(
   Thread_Control              *executing,
   void                        *arg,
   const User_extensions_Table *callouts
@@ -290,9 +286,9 @@ void _User_extensions_Thread_terminate_visitor(
  * @param direction The iteration direction for dynamic extensions.
  */
 void _User_extensions_Iterate(
-  void                     *arg,
-  User_extensions_Visitor   visitor,
-  Chain_Iterator_direction  direction
+  void                    *arg,
+  User_extensions_Visitor  visitor,
+  Chain_Iterator_direction direction
 );
 
 /** @} */
@@ -399,9 +395,9 @@ static inline void _User_extensions_Thread_switch(
   node = _Chain_Immutable_first( chain );
 
   if ( node != tail ) {
-#if defined(RTEMS_SMP)
-    ISR_lock_Context  lock_context;
-    Per_CPU_Control  *cpu_self;
+#if defined( RTEMS_SMP )
+    ISR_lock_Context lock_context;
+    Per_CPU_Control *cpu_self;
 
     cpu_self = _Per_CPU_Get();
 
@@ -420,15 +416,15 @@ static inline void _User_extensions_Thread_switch(
     if ( executing != heir ) {
 #endif
 
-    while ( node != tail ) {
-      const User_extensions_Switch_control *extension;
+      while ( node != tail ) {
+        const User_extensions_Switch_control *extension;
 
-      extension = (const User_extensions_Switch_control *) node;
-      node = _Chain_Immutable_next( node );
-      (*extension->thread_switch)( executing, heir );
-    }
+        extension = (const User_extensions_Switch_control *) node;
+        node = _Chain_Immutable_next( node );
+        ( *extension->thread_switch )( executing, heir );
+      }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
     }
 
     _Per_CPU_Release( cpu_self, &lock_context );

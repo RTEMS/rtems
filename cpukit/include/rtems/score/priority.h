@@ -93,17 +93,17 @@ typedef uint64_t Priority_Control;
 /**
  * @brief The highest (most important) thread priority value.
  */
-#define PRIORITY_MINIMUM      0
+#define PRIORITY_MINIMUM 0
 
 /**
  * @brief The default lowest (least important) thread priority value.
  *
  * This value is CPU port dependent.
  */
-#if defined (CPU_PRIORITY_MAXIMUM)
-  #define PRIORITY_DEFAULT_MAXIMUM      CPU_PRIORITY_MAXIMUM
+#if defined( CPU_PRIORITY_MAXIMUM )
+  #define PRIORITY_DEFAULT_MAXIMUM CPU_PRIORITY_MAXIMUM
 #else
-  #define PRIORITY_DEFAULT_MAXIMUM      255
+  #define PRIORITY_DEFAULT_MAXIMUM 255
 #endif
 
 /**
@@ -114,7 +114,7 @@ typedef struct {
    * @brief Node component for a chain or red-black tree.
    */
   union {
-    Chain_Node Chain;
+    Chain_Node  Chain;
     RBTree_Node RBTree;
   } Node;
 
@@ -166,7 +166,7 @@ struct Priority_Aggregation {
    */
   RBTree_Control Contributors;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /**
    * @brief The scheduler instance of this priority aggregation.
    */
@@ -178,7 +178,7 @@ struct Priority_Aggregation {
    * and removals.
    */
   struct {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
     /**
      * @brief The next priority aggregation in the action list.
      */
