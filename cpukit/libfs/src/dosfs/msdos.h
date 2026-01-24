@@ -3,9 +3,9 @@
 /**
  * @file
  *
- * @ingroup DOSFS
+ * @ingroup libfs_msdos
  *
- * @brief The MSDOS Filesystem Constants/Data Structures/Prototypes
+ * @brief MS-DOS Filesystem Support
  */
 
 /*
