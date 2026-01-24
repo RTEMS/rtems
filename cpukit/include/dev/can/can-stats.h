@@ -89,19 +89,19 @@ enum can_state {
  */
 struct rtems_can_stats {
   /**
-   * @brief This member holds number of succesful TX frames.
+   * @brief This member holds number of successful TX frames.
    */
   unsigned long tx_done;
   /**
-   * @brief This member holds number of succesful RX frames.
+   * @brief This member holds number of successful RX frames.
    */
   unsigned long rx_done;
   /**
-   * @brief This member holds number of bytes succesfully send.
+   * @brief This member holds number of bytes successfully send.
    */
   unsigned long tx_bytes;
   /**
-   * @brief This member holds number of bytes succesfully received.
+   * @brief This member holds number of bytes successfully received.
    */
   unsigned long rx_bytes;
   /**

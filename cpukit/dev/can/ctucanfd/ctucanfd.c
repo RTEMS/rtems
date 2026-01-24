@@ -1120,7 +1120,7 @@ static void ctucanfd_handle_txtb_done(
  * @brief  This function handles TX interrupts
  *
  * TX done, TX abort and TX error interrupts are handled in this function.
- * It takes care of freeing HW buffers on succesfull transfer or of
+ * It takes care of freeing HW buffers on successful transfer or of
  * rescheduling messages in case of abort/error.
  *
  * @param  chip Pointer to CAN chip structure
@@ -1363,7 +1363,7 @@ static rtems_task ctucanfd_worker( rtems_task_argument arg )
         /* Insert frame to HW buffer */
         bool ok = ctucanfd_insert_frame( internal, &slot->frame, txtb_id );
         if ( ok == true ) {
-          /* Frame inserted succesfully, update TX buffer representation,
+          /* Frame inserted successfully, update TX buffer representation,
            * buffer priorities and set buffer as ready.
            */
           txb_info = &internal->txb_info[txtb_id];

@@ -56,7 +56,7 @@ struct ctucanfd_txb_info {
    * @brief This holds the pointer to the slot the buffer acquired.
    *
    * The stack does not free the slot immediately after it is assigned to
-   * the buffer, but waits for succesful transmission (or error/abort). Hence
+   * the buffer, but waits for successful transmission (or error/abort). Hence
    * the buffer has to keep the information about the slot it acquired to
    * provide correct error reporting or to schedule it for later processing.
    */
