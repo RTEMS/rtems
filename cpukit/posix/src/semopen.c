@@ -128,7 +128,7 @@ sem_t *sem_open(
   va_list                   arg;
   unsigned int              value = 0;
   POSIX_Semaphore_Control  *the_semaphore;
-  size_t                    name_len;
+  size_t                    name_len = 0;
   Objects_Get_by_name_error error;
   sem_t                    *sem;
 
