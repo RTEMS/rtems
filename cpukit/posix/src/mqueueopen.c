@@ -152,7 +152,7 @@ mqd_t mq_open(
 )
 {
   POSIX_Message_queue_Control *the_mq;
-  size_t                       name_len;
+  size_t                       name_len = 0;
   Objects_Get_by_name_error    error;
   mqd_t                        status;
 
