@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: aarch64
+bsp: rk3399_rockpro64
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2026 Ning Yang <yangn0@qq.com>
+cppflags: []
+enabled-by: true
+family: rk3399
+includes: []
+install: []
+links:
+- role: build-dependency
+  uid: grp
+- role: build-dependency
+  uid: linkcmds
+source: []
+type: build

@@ -1,0 +1,38 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2026 Ning Yang <yangn0@qq.com>
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/aarch64/rk3399/include/bsp.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/aarch64/rk3399/include/bsp/irq.h
+links:
+- role: build-dependency
+  uid: ../optmmupages
+source:
+- bsps/aarch64/rk3399/console/console.c
+- bsps/aarch64/rk3399/start/bspstart.c
+- bsps/aarch64/rk3399/start/bspstarthooks.c
+- bsps/aarch64/rk3399/start/bspstartmmu.c
+- bsps/aarch64/rk3399/start/mmu-config.c
+- bsps/aarch64/shared/cache/cache.c
+- bsps/aarch64/shared/mmu/mmu-setup.c
+- bsps/aarch64/shared/mmu/vmsav8-64.c
+- bsps/aarch64/shared/start/start-cpu-mpidr.S
+- bsps/shared/dev/btimer/btimer-cpucounter.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/serial/console-termios-init.c
+- bsps/shared/dev/serial/console-termios.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspreset-arm-psci.S
+- bsps/shared/start/gettargethash-default.c
+- bsps/shared/start/sbrk.c
+type: build

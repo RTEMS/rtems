@@ -12,6 +12,7 @@ default:
   - aarch64/a72_ilp32_qemu
   - aarch64/a72_lp64_qemu
   - aarch64/raspberrypi4b
+  - aarch64/rk3399_rockpro64
   - aarch64/versal_aiedge
   - aarch64/versal_qemu
   - aarch64/versal_vck190
