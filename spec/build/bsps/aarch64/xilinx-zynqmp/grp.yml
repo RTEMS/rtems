@@ -23,8 +23,6 @@ links:
 - role: build-dependency
   uid: obj
 - role: build-dependency
-  uid: objjffs2qspinor
-- role: build-dependency
   uid: objsmp
 - role: build-dependency
   uid: optloadoff
