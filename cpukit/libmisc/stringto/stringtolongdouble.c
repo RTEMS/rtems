@@ -20,6 +20,7 @@
 /*
  *  Instantiate an error checking wrapper for strtod (double)
  */
+#include <rtems/stringto.h>
 #define STRING_TO_FLOAT
 #define STRING_TO_TYPE long double
 #define STRING_TO_NAME rtems_string_to_long_double

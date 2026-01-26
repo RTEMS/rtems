@@ -20,6 +20,7 @@
 /*
  *  Instantiate an error checking wrapper for strtoull (unsigned long long)
  */
+#include <rtems/stringto.h>
 #define STRING_TO_INTEGER
 #define STRING_TO_TYPE unsigned long long
 #define STRING_TO_NAME rtems_string_to_unsigned_long_long

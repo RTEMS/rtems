@@ -20,9 +20,11 @@
 /*
  *  Instantiate an error checking wrapper for strtol (int)
  */
+#include <rtems/stringto.h>
 #define STRING_TO_INTEGER
 #define STRING_TO_TYPE int
 #define STRING_TO_NAME rtems_string_to_int
 #define STRING_TO_METHOD strtol
-#define STRING_TO_MAX LONG_MAX
+#define STRING_TO_MAX INT_MAX
+#define STRING_TO_MIN INT_MIN
 #include "stringto_template.h"

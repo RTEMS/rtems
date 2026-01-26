@@ -20,6 +20,7 @@
 /*
  *  Instantiate an error checking wrapper for strtol (long)
  */
+#include <rtems/stringto.h>
 #define STRING_TO_INTEGER
 #define STRING_TO_TYPE long int
 #define STRING_TO_NAME rtems_string_to_long
