@@ -11,5 +11,5 @@ includes: []
 install: []
 links: []
 source:
-- cpukit/libfs/src/jffs2/src/summary.c
+- contrib/cpukit/jffs2/summary.c
 type: build

@@ -9,7 +9,6 @@ generate the relevant patches:
 ```shell
   git format-patch v6.1..v9.99 -- \
     include/uapi/linux/jffs2.h \
-    fs/jffs2/LICENCE \
     fs/jffs2/acl.h \
     fs/jffs2/build.c \
     fs/jffs2/compr.c \
@@ -40,6 +39,6 @@ generate the relevant patches:
 The patches need a transformation of file paths from Linux to RTEMS:
 
 ```shell
-  sed -i 's%/include/uapi%/cpukit/libfs/src/jffs2/include%g' 00*
-  sed -i 's%/fs/jffs2%/cpukit/libfs/src/jffs2/src%g' 00*
+  sed -i 's%/include/uapi%/contrib/cpukit/jffs2/include%g' 00*
+  sed -i 's%/fs/jffs2%/contrib/cpukit/jffs2%g' 00*
 ```

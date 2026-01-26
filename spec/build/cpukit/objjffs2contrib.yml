@@ -1,0 +1,33 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags:
+- ${COVERAGE_COMPILER_FLAGS}
+- -Wno-pointer-sign
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+cppflags: []
+cxxflags:
+- ${COVERAGE_COMPILER_FLAGS}
+enabled-by: true
+includes:
+- contrib/cpukit/jffs2/include
+- contrib/cpukit/zlib
+install: []
+links: []
+source:
+- contrib/cpukit/jffs2/build.c
+- contrib/cpukit/jffs2/compr.c
+- contrib/cpukit/jffs2/compr_rtime.c
+- contrib/cpukit/jffs2/compr_zlib.c
+- contrib/cpukit/jffs2/debug.c
+- contrib/cpukit/jffs2/erase.c
+- contrib/cpukit/jffs2/gc.c
+- contrib/cpukit/jffs2/nodelist.c
+- contrib/cpukit/jffs2/nodemgmt.c
+- contrib/cpukit/jffs2/read.c
+- contrib/cpukit/jffs2/readinode.c
+- contrib/cpukit/jffs2/scan.c
+- contrib/cpukit/jffs2/wbuf.c
+- contrib/cpukit/jffs2/write.c
+- contrib/cpukit/jffs2/writev.c
+type: build

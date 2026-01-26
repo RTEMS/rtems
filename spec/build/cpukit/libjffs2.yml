@@ -2,7 +2,6 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 build-type: library
 cflags:
 - ${COVERAGE_COMPILER_FLAGS}
-- -Wno-pointer-sign
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 cppflags: []
@@ -11,6 +10,9 @@ cxxflags:
 enabled-by: true
 includes:
 - cpukit/libfs/src/jffs2/include
+- cpukit/libfs/src/jffs2/src
+- contrib/cpukit/jffs2/include
+- contrib/cpukit/jffs2
 - contrib/cpukit/zlib
 install:
 - destination: ${BSP_INCLUDEDIR}/rtems
@@ -19,26 +21,13 @@ install:
 install-path: ${BSP_LIBDIR}
 links:
 - role: build-dependency
+  uid: objjffs2contrib
+- role: build-dependency
   uid: objjffs2summary
 source:
-- cpukit/libfs/src/jffs2/src/build.c
-- cpukit/libfs/src/jffs2/src/compr.c
-- cpukit/libfs/src/jffs2/src/compr_rtime.c
-- cpukit/libfs/src/jffs2/src/compr_zlib.c
-- cpukit/libfs/src/jffs2/src/debug.c
 - cpukit/libfs/src/jffs2/src/dir-rtems.c
-- cpukit/libfs/src/jffs2/src/erase.c
 - cpukit/libfs/src/jffs2/src/flashio.c
 - cpukit/libfs/src/jffs2/src/fs-rtems.c
-- cpukit/libfs/src/jffs2/src/gc.c
 - cpukit/libfs/src/jffs2/src/malloc-rtems.c
-- cpukit/libfs/src/jffs2/src/nodelist.c
-- cpukit/libfs/src/jffs2/src/nodemgmt.c
-- cpukit/libfs/src/jffs2/src/read.c
-- cpukit/libfs/src/jffs2/src/readinode.c
-- cpukit/libfs/src/jffs2/src/scan.c
-- cpukit/libfs/src/jffs2/src/wbuf.c
-- cpukit/libfs/src/jffs2/src/write.c
-- cpukit/libfs/src/jffs2/src/writev.c
 target: jffs2
 type: build
