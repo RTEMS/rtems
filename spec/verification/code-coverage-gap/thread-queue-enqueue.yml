@@ -1,0 +1,62 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+areas:
+  RTEMS:
+    cpukit/score/src/threadqenqueue.c:
+      branches:
+      - branches:
+        - 0
+        line: 249
+        md5: 5c5f9a094e51196cfab27da47a9efeed
+      - branches:
+        - 0
+        line: 254
+        md5: 89378036135a7ed3e348404cfc4e3931
+      - branches:
+        - 0
+        line: 343
+        md5: b3bd97e376e4af302b3611cff9a25d83
+      lines:
+      - line: 250
+        md5: 3c19daa985dda9e83d2974df84fb7c21
+      - line: 251
+        md5: 03ad3914872361940e753bdc8bde69b8
+      - line: 257
+        md5: 8f7469672f2b25ada0f689edeef9d270
+      - line: 258
+        md5: 5f59b80020aa8b68a928a4bfac47208f
+      - line: 259
+        md5: 45bdd2935633bbc9386d6339f38e0399
+      - line: 263
+        md5: 716ec2819d328f46ec5f5a5da34f1aa7
+      - line: 264
+        md5: 0fa287b6d862f142a8404fafe90103b6
+      - line: 265
+        md5: 433e34001cc0067985d4c2033c3333e6
+      - line: 344
+        md5: b5f6f19e4864f7b904d57f7ac19fe34e
+      - line: 345
+        md5: 75587eaa1442d1208c3999c20346d2cd
+      - line: 346
+        md5: 6ae67843539a0b4b0500ce99edaf3f99
+      - line: 350
+        md5: ca32f86356a360338a90c14e0d371800
+      - line: 352
+        md5: 815bb68ad1ba91043d06d4fcaf04beca
+      functions: []
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+enabled-by: RTEMS_SMP
+links: []
+text: |
+  The uncovered code blocks are related to
+  ${/score/tq/req/deadlock-concurrent:/spec} and validation test case
+  ${/score/tq/val/smp:/spec}. The specified scenario can happen on systems with
+  two processors, however, the validation test case requires at least three
+  processors (one processor is necessary to guide the test scenario).
+
+  While the validation tests of pre-qualified ${/glossary/rtems:/term} do not
+  reach this code, the randomized test in
+  :file:`testsuites/smptests/smpmutex02/init.c` of the RTEMS test suites
+  sporadically executes these lines and branches.
+type: verification
+verification-type: code-coverage-gap
