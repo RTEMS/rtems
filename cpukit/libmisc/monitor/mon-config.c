@@ -120,11 +120,12 @@ INITIAL (startup) Configuration Info\n");
 
 int
 rtems_monitor_config_dump(
-    rtems_monitor_config_t *monitor_config,
+    void                *arg,
     bool                 verbose RTEMS_UNUSED
 )
 {
     int     length = 0;
+    rtems_monitor_config_t *monitor_config = (rtems_monitor_config_t *) arg;
 
     length = 0;
     length += fprintf(stdout,"WORKSPACE");

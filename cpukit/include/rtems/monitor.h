@@ -453,7 +453,7 @@ const void *rtems_monitor_manager_next(void *, void *, rtems_id *);
 void       rtems_monitor_config_canonical(rtems_monitor_config_t *, const void *);
 const void *rtems_monitor_config_next(void *, rtems_monitor_config_t *, rtems_id *);
 void       rtems_monitor_config_dump_header(bool);
-int        rtems_monitor_config_dump(rtems_monitor_config_t *, bool verbose);
+int        rtems_monitor_config_dump(void *, bool verbose);
 
 /* mpci.c */
 #if defined(RTEMS_MULTIPROCESSING)

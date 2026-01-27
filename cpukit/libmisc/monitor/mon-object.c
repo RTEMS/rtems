@@ -67,6 +67,11 @@
  *     next
  */
 
+static void config_dump_wrapper(void *arg, bool verbose)
+{
+  (void) rtems_monitor_config_dump(arg, verbose);
+}
+
 static const rtems_monitor_object_info_t rtems_monitor_object_info[] =
 {
     { RTEMS_MONITOR_OBJECT_CONFIG,
@@ -75,7 +80,7 @@ static const rtems_monitor_object_info_t rtems_monitor_object_info[] =
       (rtems_monitor_object_next_fn)        rtems_monitor_config_next,
       (rtems_monitor_object_canonical_fn)   rtems_monitor_config_canonical,
       (rtems_monitor_object_dump_header_fn) rtems_monitor_config_dump_header,
-      (rtems_monitor_object_dump_fn)        rtems_monitor_config_dump,
+      (rtems_monitor_object_dump_fn)        config_dump_wrapper,
     },
     { RTEMS_MONITOR_OBJECT_MPCI,
       (void *) 0,
