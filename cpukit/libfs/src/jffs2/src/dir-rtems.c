@@ -247,7 +247,8 @@ int jffs2_mknod(
 
 	if (S_ISLNK(mode)) {
 		/* We use f->target field to store the target path. */
-		f->target = kmemdup(data, datalen + 1, GFP_KERNEL);
+		f->target = (unsigned char *) kmemdup((const char *) data,
+			     datalen + 1, GFP_KERNEL);
 		if (!f->target) {
 			pr_warn("Can't allocate %d bytes of memory\n", datalen + 1);
 			mutex_unlock(&f->sem);

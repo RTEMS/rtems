@@ -487,7 +487,9 @@ static ssize_t rtems_jffs2_dir_read(rtems_libio_t *iop, void *buf, size_t len)
 	while (eno == 0 && off < end && fd != NULL) {
 		if (fd->ino != 0) {
 			if (off == fd_off) {
-				eno = rtems_jffs2_fill_dirent(de, off, fd->ino, fd->name, fd->type);
+				eno = rtems_jffs2_fill_dirent(de, off, fd->ino,
+							      (char *) fd->name,
+							      fd->type);
 				++off;
 				++de;
 			}
@@ -840,7 +842,8 @@ static rtems_filesystem_eval_path_generic_status rtems_jffs2_eval_token(
 			entry_i = dir_i->i_parent;
 			++entry_i->i_count;
 		} else {
-			entry_i = jffs2_lookup(dir_i, token, (int) tokenlen);
+			entry_i = jffs2_lookup(dir_i, (const unsigned char *) token,
+					       (int) tokenlen);
 		}
 
 		if (IS_ERR(entry_i)) {
@@ -854,7 +857,7 @@ static rtems_filesystem_eval_path_generic_status rtems_jffs2_eval_token(
 
 			if (S_ISLNK(entry_i->i_mode) && (follow_sym_link || !terminal)) {
 				struct jffs2_inode_info *f = JFFS2_INODE_INFO(entry_i);
-				const char *target = f->target;
+				const char *target = (char *) f->target;
 
 				rtems_filesystem_eval_path_recursive(ctx, target, strlen(target));
 
@@ -917,7 +920,7 @@ static int rtems_jffs2_link(
 	struct _inode *dir_i = rtems_jffs2_get_inode_by_location(parentloc);
 	int eno;
 
-	eno = -jffs2_link(old_d_inode, dir_i, name, namelen);
+	eno = -jffs2_link(old_d_inode, dir_i, (const unsigned char *) name, namelen);
 
 	return rtems_jffs2_eno_to_rv_and_errno(eno);
 }
@@ -948,7 +951,8 @@ static int rtems_jffs2_mknod(
 
 	switch (mode & S_IFMT) {
 		case S_IFDIR:
-			eno = -jffs2_mknod(dir_i, name, namelen, mode, NULL, 0);
+			eno = -jffs2_mknod(dir_i, (const unsigned char *) name,
+					   namelen, mode, NULL, 0);
 			break;
 		case S_IFREG:
 			eno = -jffs2_create(dir_i, name, namelen, mode);
@@ -961,10 +965,14 @@ static int rtems_jffs2_mknod(
 	return rtems_jffs2_eno_to_rv_and_errno(eno);
 }
 
-static int rtems_jffs2_cache_fd_name(struct _inode *inode, char **name, size_t *namelen)
+static int rtems_jffs2_cache_fd_name(
+	struct _inode *inode,
+	unsigned char **name,
+	size_t *namelen
+)
 {
 	struct super_block *sb = inode->i_sb;
-	char *fd_name = inode->i_fd->name;
+	char *fd_name = (char *) inode->i_fd->name;
 	size_t fd_namelen = strlen(fd_name);
 	int eno = 0;
 
@@ -985,7 +993,7 @@ static int rtems_jffs2_rmnod(
 {
 	struct _inode *dir_i = rtems_jffs2_get_inode_by_location(parentloc);
 	struct _inode *entry_i = rtems_jffs2_get_inode_by_location(loc);
-	char *name;
+	unsigned char *name;
 	size_t namelen;
 	int eno = rtems_jffs2_cache_fd_name(entry_i, &name, &namelen);
 
@@ -1109,12 +1117,12 @@ static int rtems_jffs2_rename(
 	struct _inode *old_dir_i = rtems_jffs2_get_inode_by_location(oldparentloc);
 	struct _inode *new_dir_i = rtems_jffs2_get_inode_by_location(newparentloc);
 	struct _inode *d_inode = rtems_jffs2_get_inode_by_location(oldloc);
-	char *oldname;
+	unsigned char *oldname;
 	size_t oldnamelen;
 	int eno = rtems_jffs2_cache_fd_name(d_inode, &oldname, &oldnamelen);
 
 	if (eno == 0) {
-		eno = -jffs2_rename(old_dir_i, d_inode, oldname, oldnamelen, new_dir_i, name, namelen);
+		eno = -jffs2_rename(old_dir_i, d_inode, oldname, oldnamelen, new_dir_i, (const unsigned char *) name, namelen);
 	}
 
 	return rtems_jffs2_eno_to_rv_and_errno(eno);
@@ -1180,7 +1188,9 @@ static int rtems_jffs2_symlink(
 	struct _inode *dir_i = rtems_jffs2_get_inode_by_location(parentloc);
 	int eno;
 
-	eno = -jffs2_mknod(dir_i, name, namelen, S_IFLNK | S_IRWXUGO, target, strlen(target));
+	eno = -jffs2_mknod(dir_i, (const unsigned char *) name, namelen,
+			   S_IFLNK | S_IRWXUGO, (const unsigned char *) target,
+			   strlen(target));
 
 	return rtems_jffs2_eno_to_rv_and_errno(eno);
 }
@@ -1193,7 +1203,7 @@ static ssize_t rtems_jffs2_readlink(
 {
 	struct _inode *inode = rtems_jffs2_get_inode_by_location(loc);
 	struct jffs2_inode_info *f = JFFS2_INODE_INFO(inode);
-	const char *target = f->target;
+	const char *target = (char *) f->target;
 	ssize_t i;
 
 	for (i = 0; i < (ssize_t) bufsize && target[i] != '\0'; ++i) {
