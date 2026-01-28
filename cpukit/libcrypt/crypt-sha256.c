@@ -165,7 +165,11 @@ crypt_sha256_r(const char *key, const char *salt, struct crypt_data *data)
 	SHA256_Init(&alt_ctx);
 
 	/* For every character in the password add the entire password. */
+#ifdef __rtems__
+	for (cnt = 0; cnt < (size_t) (16 + alt_result[0]); ++cnt)
+#else
 	for (cnt = 0; cnt < 16 + alt_result[0]; ++cnt)
+#endif
 		SHA256_Update(&alt_ctx, salt, salt_len);
 
 	/* Finish the digest. */
