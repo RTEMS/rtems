@@ -160,7 +160,7 @@ static int flash_sim_erase_wrapper(
   uintptr_t aligned_end = RTEMS_ALIGN_UP( offset + count, sector_size );
   uint64_t sector_count = ( aligned_end - aligned_start ) / sector_size;
 
-  for ( int i = 0; i < sector_count; i++ ) {
+  for ( uint64_t i = 0; i < sector_count; i++ ) {
     erase_sector( flash_driver, aligned_start + i * sector_size );
   }
 

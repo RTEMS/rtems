@@ -31,8 +31,8 @@
 static int read_config_byte(
   uint8_t *config_raw,
   size_t config_raw_len,
-  int datalen,
-  int desired_byte,
+  size_t datalen,
+  size_t desired_byte,
   uint8_t *read_byte
 )
 {
