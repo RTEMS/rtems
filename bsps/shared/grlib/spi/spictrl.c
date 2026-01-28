@@ -705,7 +705,7 @@ STATIC rtems_status_code spictrl_libi2c_send_addr(rtems_libi2c_bus_t *bushdl,
 		/* Let user set spi select using for example GPIO */
 		return priv->slvSelFunc(priv->regs, addr, 1);
 	} else if ( priv->regs->capability & SPICTRL_CAP_SSEN ) {
-		int slaves;
+		uint32_t slaves;
 
 		/* Maximum number of slaves the core support */
 		slaves = (priv->regs->capability & SPICTRL_CAP_SSSZ) >> SPICTRL_CAP_SSSZ_BIT;
