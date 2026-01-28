@@ -53,8 +53,8 @@ int _Scheduler_CBS_Create_server (
 
   if ( params->budget <= 0 ||
        params->deadline <= 0 ||
-       params->budget >= SCHEDULER_EDF_PRIO_MSB ||
-       params->deadline >= SCHEDULER_EDF_PRIO_MSB )
+       params->budget >= (time_t)SCHEDULER_EDF_PRIO_MSB ||
+       params->deadline >= (time_t)SCHEDULER_EDF_PRIO_MSB )
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
 
   for ( i = 0; i<_Scheduler_CBS_Maximum_servers; i++ ) {

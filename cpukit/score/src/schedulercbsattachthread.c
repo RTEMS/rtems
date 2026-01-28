@@ -62,7 +62,7 @@ int _Scheduler_CBS_Attach_thread (
     return SCHEDULER_CBS_ERROR_NOSERVER;
   }
 
-  if ( server->task_id != -1 ) {
+  if ( server->task_id != (rtems_id)-1 ) {
     return SCHEDULER_CBS_ERROR_FULL;
   }
 

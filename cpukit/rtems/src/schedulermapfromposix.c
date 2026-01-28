@@ -62,7 +62,7 @@ rtems_status_code rtems_scheduler_map_priority_from_posix(
     return RTEMS_INVALID_PRIORITY;
   }
 
-  if ( posix_priority >= scheduler->maximum_priority ) {
+  if ( (uint32_t) posix_priority >= scheduler->maximum_priority ) {
     return RTEMS_INVALID_PRIORITY;
   }
 

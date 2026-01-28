@@ -64,7 +64,7 @@ int _Scheduler_CBS_Get_execution_time (
     return SCHEDULER_CBS_ERROR_NOSERVER;
   }
 
-  if ( server->task_id == -1 ) {
+  if ( server->task_id == (rtems_id)-1 ) {
     *exec_time = 0;
     return SCHEDULER_CBS_OK;
   }
