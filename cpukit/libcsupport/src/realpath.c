@@ -114,7 +114,11 @@ realpath(const char * __restrict path, char * __restrict resolved)
 		 */
 		p = strchr(left, '/');
 		s = p ? p : left + left_len;
+#ifdef __rtems__
+		if ((size_t)(s - left) >= sizeof(next_token)) {
+#else
 		if (s - left >= sizeof(next_token)) {
+#endif
 			if (m)
 				free(resolved);
 			errno = ENAMETOOLONG;
@@ -221,7 +225,11 @@ realpath(const char * __restrict path, char * __restrict resolved)
 			 */
 			if (p != NULL) {
 				if (symlink[slen - 1] != '/') {
+#ifdef __rtems__
+					if ((size_t)(slen + 1) >= sizeof(symlink)) {
+#else
 					if (slen + 1 >= sizeof(symlink)) {
+#endif
 						if (m)
 							free(resolved);
 						errno = ENAMETOOLONG;

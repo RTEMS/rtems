@@ -131,8 +131,8 @@ static int
 scanInt(FILE *fp, int *val)
 {
   int c;
-  unsigned int i = 0;
-  unsigned int limit = INT_MAX;
+  int i = 0;
+  int limit = INT_MAX;
   int sign = 0;
   int d;
 

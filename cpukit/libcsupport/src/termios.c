@@ -778,8 +778,8 @@ rtems_termios_ioctl (void *arg)
   struct rtems_termios_tty *tty = args->iop->data1;
   struct ttywakeup         *wakeup = (struct ttywakeup *)args->buffer;
   bool                      rawInBufSemaphoreWait;
-  int                       rawInBufSemaphoreTimeout;
-  int                       rawInBufSemaphoreFirstTimeout;
+  rtems_interval            rawInBufSemaphoreTimeout;
+  rtems_interval            rawInBufSemaphoreFirstTimeout;
   rtems_status_code sc;
   int flags;
 
@@ -1255,7 +1255,7 @@ erase (struct rtems_termios_tty *tty, int lineFlag)
         echo (tty->termios.c_cc[VERASE], tty);
       } else if (c == '\t') {
         int col = tty->read_start_column;
-        int i = 0;
+        size_t i = 0;
 
         /*
          * Find the character before the tab
