@@ -258,7 +258,7 @@ struct tftpStream {
      * (blocknum_last_filled + 1).
      */
     int     nleft;
-    int     nused;
+    size_t  nused;
 
     /*
      * Flags
@@ -518,7 +518,7 @@ static void send_error (
     msg.opcode = htons (TFTP_OPCODE_ERROR);
     msg.errorCode = htons (error_code);
     len = snprintf (msg.errorMessage, sizeof (msg.errorMessage), error_message);
-    if (len >= sizeof (msg.errorMessage)) {
+    if ((size_t) len >= sizeof (msg.errorMessage)) {
       len = sizeof (msg.errorMessage) - 1;
     }
     len += sizeof (msg.opcode) + sizeof (msg.errorCode) + 1;
@@ -688,7 +688,7 @@ static int process_data_packet (struct tftpStream *tp, ssize_t len)
     int32_t pkt_blocknum;
     union tftpPacket *send_buf;
 
-    if (len < sizeof (tp->receive_buf->tftpACK)) {
+    if ((size_t) len < sizeof (tp->receive_buf->tftpACK)) {
         return process_malformed_packet (tp, len);
     }
     pkt_blocknum = (int32_t) ntohs (tp->receive_buf->tftpACK.blocknum);
@@ -757,7 +757,7 @@ static int process_data_packet (struct tftpStream *tp, ssize_t len)
 static int process_ack_packet (struct tftpStream *tp, ssize_t len)
 {
     uint16_t blocknum_ack;
-    if (len < sizeof (tp->receive_buf->tftpACK)) {
+    if ((size_t) len < sizeof (tp->receive_buf->tftpACK)) {
         return process_malformed_packet (tp, len);
     }
     blocknum_ack = ntohs (tp->receive_buf->tftpACK.blocknum);
