@@ -32,11 +32,11 @@
  * @brief RTEMS Run-Time Linker Object File Symbol Table.
  */
 
-#if !defined (_RTEMS_RTL_SYM_H_)
+#if !defined(_RTEMS_RTL_SYM_H_)
 #define _RTEMS_RTL_SYM_H_
 
-#include <rtems.h>
 #include "rtl-obj-fwd.h"
+#include <rtems.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -45,21 +45,19 @@ extern "C" {
 /**
  * An object file symbol.
  */
-typedef struct rtems_rtl_obj_sym
-{
-  rtems_chain_node node;    /**< The node's link in the chain. */
-  const char*      name;    /**< The symbol's name. */
-  void*            value;   /**< The value of the symbol. */
-  uint32_t         data;    /**< Format specific data. */
+typedef struct rtems_rtl_obj_sym {
+  rtems_chain_node node; /**< The node's link in the chain. */
+  const char* name;      /**< The symbol's name. */
+  void* value;           /**< The value of the symbol. */
+  uint32_t data;         /**< Format specific data. */
 } rtems_rtl_obj_sym;
 
 /**
  * Table of symbols stored in a hash table.
  */
-typedef struct rtems_rtl_symbols
-{
+typedef struct rtems_rtl_symbols {
   rtems_chain_control* buckets;
-  size_t               nbuckets;
+  size_t nbuckets;
 } rtems_rtl_symbols;
 
 /**
@@ -72,9 +70,8 @@ typedef size_t (*rtems_rtl_tls_offset_func)(void);
  * A TLS symbol offset entry. It is used with an exported symbol table
  * to find a TSL table offset for a variable at runtime.
  */
-typedef struct rtems_rtl_tls_offset
-{
-  size_t                    index;  /** exported symbol table index */
+typedef struct rtems_rtl_tls_offset {
+  size_t index;                     /** exported symbol table index */
   rtems_rtl_tls_offset_func offset; /** TLS offset function */
 } rtems_rtl_tls_offset;
 
@@ -87,15 +84,14 @@ typedef struct rtems_rtl_tls_offset
  * @retval false The symbol table could not created. The RTL
  *               error has the error.
  */
-bool rtems_rtl_symbol_table_open (rtems_rtl_symbols* symbols,
-                                  size_t             buckets);
+bool rtems_rtl_symbol_table_open(rtems_rtl_symbols* symbols, size_t buckets);
 
 /**
  * Close the table and erase the hash table.
  *
  * @param symbols Close the symbol table.
  */
-void rtems_rtl_symbol_table_close (rtems_rtl_symbols* symbols);
+void rtems_rtl_symbol_table_close(rtems_rtl_symbols* symbols);
 
 /**
  * Insert a symbol into a symbol table.
@@ -103,8 +99,8 @@ void rtems_rtl_symbol_table_close (rtems_rtl_symbols* symbols);
  * @param symbols Symbol table
  * @param symbols Symbol to add
  */
-void rtems_rtl_symbol_global_insert (rtems_rtl_symbols* symbols,
-                                     rtems_rtl_obj_sym* symbol);
+void rtems_rtl_symbol_global_insert(rtems_rtl_symbols* symbols,
+                                    rtems_rtl_obj_sym* symbol);
 
 /**
  * Add a table of exported symbols to the symbol table.
@@ -129,11 +125,10 @@ void rtems_rtl_symbol_global_insert (rtems_rtl_symbols* symbols,
  * @param tls_offsets The TLS offsets table. If NULL none provided.
  * @param tls_size The number TLS offset entries in the table.
  */
-bool rtems_rtl_symbol_global_add (rtems_rtl_obj*              obj,
-                                  const unsigned char*        esyms,
-                                  unsigned int                size,
-                                  const rtems_rtl_tls_offset* tls_offsets,
-                                  unsigned int                tls_size);
+bool rtems_rtl_symbol_global_add(rtems_rtl_obj* obj, const unsigned char* esyms,
+                                 unsigned int size,
+                                 const rtems_rtl_tls_offset* tls_offsets,
+                                 unsigned int tls_size);
 
 /**
  * Find a symbol given the symbol label in the global symbol table.
@@ -142,7 +137,7 @@ bool rtems_rtl_symbol_global_add (rtems_rtl_obj*              obj,
  * @retval NULL No symbol found.
  * @return rtems_rtl_obj_sym* Reference to the symbol.
  */
-rtems_rtl_obj_sym* rtems_rtl_symbol_global_find (const char* name);
+rtems_rtl_obj_sym* rtems_rtl_symbol_global_find(const char* name);
 
 /**
  * Sort an object file's local and global symbol table. This needs to
@@ -151,7 +146,7 @@ rtems_rtl_obj_sym* rtems_rtl_symbol_global_find (const char* name);
  *
  * @param obj The object file to sort.
  */
-void rtems_rtl_symbol_obj_sort (rtems_rtl_obj* obj);
+void rtems_rtl_symbol_obj_sort(rtems_rtl_obj* obj);
 
 /**
  * Find a symbol given the symbol label in the local object file.
@@ -161,29 +156,29 @@ void rtems_rtl_symbol_obj_sort (rtems_rtl_obj* obj);
  * @retval NULL No symbol found.
  * @return rtems_rtl_obj_sym* Reference to the symbol.
  */
-rtems_rtl_obj_sym* rtems_rtl_symbol_obj_find (rtems_rtl_obj* obj,
-                                              const char*    name);
+rtems_rtl_obj_sym* rtems_rtl_symbol_obj_find(rtems_rtl_obj* obj,
+                                             const char* name);
 
 /**
  * Add the object file's symbols to the global table.
  *
  * @param obj The object file the symbols are to be added.
  */
-void rtems_rtl_symbol_obj_add (rtems_rtl_obj* obj);
+void rtems_rtl_symbol_obj_add(rtems_rtl_obj* obj);
 
 /**
  * Erase the object file's local symbols.
  *
  * @param obj The object file the local symbols are to be erased from.
  */
-void rtems_rtl_symbol_obj_erase_local (rtems_rtl_obj* obj);
+void rtems_rtl_symbol_obj_erase_local(rtems_rtl_obj* obj);
 
 /**
  * Erase the object file's symbols.
  *
  * @param obj The object file the symbols are to be erased from.
  */
-void rtems_rtl_symbol_obj_erase (rtems_rtl_obj* obj);
+void rtems_rtl_symbol_obj_erase(rtems_rtl_obj* obj);
 
 #ifdef __cplusplus
 }

@@ -32,7 +32,7 @@
  * @brief RTEMS Run-Time Linker ELF Trace Support.
  */
 
-#if !defined (_RTEMS_RTL_TRACE_H_)
+#if !defined(_RTEMS_RTL_TRACE_H_)
 #define _RTEMS_RTL_TRACE_H_
 
 #ifdef __cplusplus
@@ -57,27 +57,27 @@ typedef uint32_t rtems_rtl_trace_mask;
 /**
  * List of tracing bits for the various parts of the link editor.
  */
-#define RTEMS_RTL_TRACE_DETAIL                 (1UL << 0)
-#define RTEMS_RTL_TRACE_WARNING                (1UL << 1)
-#define RTEMS_RTL_TRACE_LOAD                   (1UL << 2)
-#define RTEMS_RTL_TRACE_UNLOAD                 (1UL << 3)
-#define RTEMS_RTL_TRACE_SECTION                (1UL << 4)
-#define RTEMS_RTL_TRACE_SYMBOL                 (1UL << 5)
-#define RTEMS_RTL_TRACE_RELOC                  (1UL << 6)
-#define RTEMS_RTL_TRACE_GLOBAL_SYM             (1UL << 7)
-#define RTEMS_RTL_TRACE_LOAD_SECT              (1UL << 8)
-#define RTEMS_RTL_TRACE_ALLOCATOR              (1UL << 9)
-#define RTEMS_RTL_TRACE_UNRESOLVED             (1UL << 10)
-#define RTEMS_RTL_TRACE_CACHE                  (1UL << 11)
-#define RTEMS_RTL_TRACE_ARCHIVES               (1UL << 12)
-#define RTEMS_RTL_TRACE_ARCHIVE_SYMS           (1UL << 13)
-#define RTEMS_RTL_TRACE_DEPENDENCY             (1UL << 14)
-#define RTEMS_RTL_TRACE_BIT_ALLOC              (1UL << 15)
-#define RTEMS_RTL_TRACE_COMP                   (1UL << 16)
-#define RTEMS_RTL_TRACE_ALL                    (0xffffffffUL & ~(RTEMS_RTL_TRACE_CACHE | \
-                                                                 RTEMS_RTL_TRACE_COMP | \
-                                                                 RTEMS_RTL_TRACE_GLOBAL_SYM | \
-                                                                 RTEMS_RTL_TRACE_ARCHIVE_SYMS))
+#define RTEMS_RTL_TRACE_DETAIL (1UL << 0)
+#define RTEMS_RTL_TRACE_WARNING (1UL << 1)
+#define RTEMS_RTL_TRACE_LOAD (1UL << 2)
+#define RTEMS_RTL_TRACE_UNLOAD (1UL << 3)
+#define RTEMS_RTL_TRACE_SECTION (1UL << 4)
+#define RTEMS_RTL_TRACE_SYMBOL (1UL << 5)
+#define RTEMS_RTL_TRACE_RELOC (1UL << 6)
+#define RTEMS_RTL_TRACE_GLOBAL_SYM (1UL << 7)
+#define RTEMS_RTL_TRACE_LOAD_SECT (1UL << 8)
+#define RTEMS_RTL_TRACE_ALLOCATOR (1UL << 9)
+#define RTEMS_RTL_TRACE_UNRESOLVED (1UL << 10)
+#define RTEMS_RTL_TRACE_CACHE (1UL << 11)
+#define RTEMS_RTL_TRACE_ARCHIVES (1UL << 12)
+#define RTEMS_RTL_TRACE_ARCHIVE_SYMS (1UL << 13)
+#define RTEMS_RTL_TRACE_DEPENDENCY (1UL << 14)
+#define RTEMS_RTL_TRACE_BIT_ALLOC (1UL << 15)
+#define RTEMS_RTL_TRACE_COMP (1UL << 16)
+#define RTEMS_RTL_TRACE_ALL                                                    \
+  (0xffffffffUL &                                                              \
+   ~(RTEMS_RTL_TRACE_CACHE | RTEMS_RTL_TRACE_COMP |                            \
+     RTEMS_RTL_TRACE_GLOBAL_SYM | RTEMS_RTL_TRACE_ARCHIVE_SYMS))
 
 /**
  * Call to check if this part is bring traced. If RTEMS_RTL_TRACE is defined to
@@ -88,7 +88,7 @@ typedef uint32_t rtems_rtl_trace_mask;
  * @retval false Do not trace.
  */
 #if RTEMS_RTL_TRACE
-bool rtems_rtl_trace (rtems_rtl_trace_mask mask);
+bool rtems_rtl_trace(rtems_rtl_trace_mask mask);
 #else
 #define rtems_rtl_trace(_m) (0)
 #endif
@@ -100,7 +100,7 @@ bool rtems_rtl_trace (rtems_rtl_trace_mask mask);
  * @return The previous mask.
  */
 #if RTEMS_RTL_TRACE
-rtems_rtl_trace_mask rtems_rtl_trace_set_mask (rtems_rtl_trace_mask mask);
+rtems_rtl_trace_mask rtems_rtl_trace_set_mask(rtems_rtl_trace_mask mask);
 #else
 #define rtems_rtl_trace_set_mask(_m)
 #endif
@@ -112,7 +112,7 @@ rtems_rtl_trace_mask rtems_rtl_trace_set_mask (rtems_rtl_trace_mask mask);
  * @return The previous mask.
  */
 #if RTEMS_RTL_TRACE
-rtems_rtl_trace_mask rtems_rtl_trace_clear_mask (rtems_rtl_trace_mask mask);
+rtems_rtl_trace_mask rtems_rtl_trace_clear_mask(rtems_rtl_trace_mask mask);
 #else
 #define rtems_rtl_trace_clear_mask(_m)
 #endif
@@ -121,9 +121,8 @@ rtems_rtl_trace_mask rtems_rtl_trace_clear_mask (rtems_rtl_trace_mask mask);
  * Add shell trace shell command.
  */
 #if RTEMS_RTL_TRACE
-int rtems_rtl_trace_shell_command (const rtems_printer* printer,
-				   int                  argc,
-				   char*                argv[]);
+int rtems_rtl_trace_shell_command(const rtems_printer* printer, int argc,
+                                  char* argv[]);
 #endif
 
 #ifdef __cplusplus

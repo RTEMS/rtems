@@ -38,35 +38,30 @@
 #endif
 
 #include <errno.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
-#include <stdarg.h>
 
-#include <rtems/rtl/rtl.h>
 #include "rtl-error.h"
+#include <rtems/rtl/rtl.h>
 
-void
-rtems_rtl_set_error (int error, const char* format, ...)
-{
-  rtems_rtl_data* rtl = rtems_rtl_lock ();
-  va_list         ap;
-  va_start (ap, format);
+void rtems_rtl_set_error(int error, const char* format, ...) {
+  rtems_rtl_data* rtl = rtems_rtl_lock();
+  va_list ap;
+  va_start(ap, format);
   rtl->last_errno = error;
-  vsnprintf (rtl->last_error, sizeof (rtl->last_error), format, ap);
-  rtems_rtl_unlock ();
-  va_end (ap);
+  vsnprintf(rtl->last_error, sizeof(rtl->last_error), format, ap);
+  rtems_rtl_unlock();
+  va_end(ap);
 }
 
-int
-rtems_rtl_get_error (char* message, size_t max_message)
-{
-  rtems_rtl_data* rtl = rtems_rtl_lock ();
-  if (rtl != NULL)
-  {
+int rtems_rtl_get_error(char* message, size_t max_message) {
+  rtems_rtl_data* rtl = rtems_rtl_lock();
+  if (rtl != NULL) {
     int last_errno = rtl->last_errno;
     rtl->last_errno = 0;
-    strlcpy (message, rtl->last_error, max_message);
-    rtems_rtl_unlock ();
+    strlcpy(message, rtl->last_error, max_message);
+    rtems_rtl_unlock();
     return last_errno;
   }
 

@@ -39,7 +39,7 @@
  * allocated.
  */
 
-#if !defined (_RTEMS_RTL_OBJ_COMP_H_)
+#if !defined(_RTEMS_RTL_OBJ_COMP_H_)
 #define _RTEMS_RTL_OBJ_COMP_H_
 
 #include <rtems/rtl/rtl-obj-cache.h>
@@ -62,24 +62,22 @@ extern "C" {
 /**
  * The compressed file.
  */
-typedef struct rtems_rtl_obj_cpmp
-{
-  rtems_rtl_obj_cache* cache;       /**< The cache provides the input
-                                       *   buffer. */
-  int                  fd;          /**< The file descriptor. */
-  int                  compression; /**< The type of compression. */
-  off_t                offset;      /**< The base offset of the buffer. */
-  size_t               size;        /**< The size of the output buffer. */
-  size_t               level;       /**< The amount of data in the buffer. */
-  uint8_t*             buffer;      /**< The buffer */
-  uint32_t             read;        /**< The amount of data read. */
+typedef struct rtems_rtl_obj_cpmp {
+  rtems_rtl_obj_cache* cache; /**< The cache provides the input
+                               *   buffer. */
+  int fd;                     /**< The file descriptor. */
+  int compression;            /**< The type of compression. */
+  off_t offset;               /**< The base offset of the buffer. */
+  size_t size;                /**< The size of the output buffer. */
+  size_t level;               /**< The amount of data in the buffer. */
+  uint8_t* buffer;            /**< The buffer */
+  uint32_t read;              /**< The amount of data read. */
 } rtems_rtl_obj_comp;
 
 /**
  * Return the input level.
  */
-static inline uint32_t rtems_rtl_obj_comp_input (rtems_rtl_obj_comp* comp)
-{
+static inline uint32_t rtems_rtl_obj_comp_input(rtems_rtl_obj_comp* comp) {
   return comp->read;
 }
 
@@ -91,15 +89,14 @@ static inline uint32_t rtems_rtl_obj_comp_input (rtems_rtl_obj_comp* comp)
  * @retval true The compressor is open.
  * @retval false The compressor is not open. The RTL error is set.
  */
-bool rtems_rtl_obj_comp_open (rtems_rtl_obj_comp*  comp,
-                              size_t               size);
+bool rtems_rtl_obj_comp_open(rtems_rtl_obj_comp* comp, size_t size);
 
 /**
  * Close a compressor.
  *
  * @param comp The compressor to close.
  */
-void rtems_rtl_obj_comp_close (rtems_rtl_obj_comp* comp);
+void rtems_rtl_obj_comp_close(rtems_rtl_obj_comp* comp);
 
 /**
  * Set the cache and offset in the file the compressed stream starts.
@@ -110,11 +107,9 @@ void rtems_rtl_obj_comp_close (rtems_rtl_obj_comp* comp);
  * @param compression The type of compression being streamed.
  * @param offset The offset in the file the compressed stream starts.
  */
-void rtems_rtl_obj_comp_set (rtems_rtl_obj_comp*  comp,
-                             rtems_rtl_obj_cache* cache,
-                             int                  fd,
-                             int                  compression,
-                             off_t                offset);
+void rtems_rtl_obj_comp_set(rtems_rtl_obj_comp* comp,
+                            rtems_rtl_obj_cache* cache, int fd, int compression,
+                            off_t offset);
 
 /**
  * Read decompressed data. The length contains the amount of data that should
@@ -130,9 +125,8 @@ void rtems_rtl_obj_comp_set (rtems_rtl_obj_comp*  comp,
  * @retval true The data referenced is in the cache.
  * @retval false The read failed and the RTL error has been set.
  */
-bool rtems_rtl_obj_comp_read (rtems_rtl_obj_comp* comp,
-                              void*               buffer,
-                              size_t              length);
+bool rtems_rtl_obj_comp_read(rtems_rtl_obj_comp* comp, void* buffer,
+                             size_t length);
 
 #ifdef __cplusplus
 }

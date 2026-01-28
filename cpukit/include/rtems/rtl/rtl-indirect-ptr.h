@@ -33,7 +33,7 @@
  *        compaction in the allocator.
  */
 
-#if !defined (_RTEMS_RTL_INDIRECT_PTR_H_)
+#if !defined(_RTEMS_RTL_INDIRECT_PTR_H_)
 #define _RTEMS_RTL_INDIRECT_PTR_H_
 
 #ifdef __cplusplus
@@ -46,8 +46,8 @@ extern "C" {
  * The RTL Indirect pointer.
  */
 struct rtems_rtl_ptr {
-  rtems_chain_node node;     /**< Indirect pointers are held on lists. */
-  void*            pointer;  /**< The actual pointer. */
+  rtems_chain_node node; /**< Indirect pointers are held on lists. */
+  void* pointer;         /**< The actual pointer. */
 };
 
 typedef struct rtems_rtl_ptr rtems_rtl_ptr;
@@ -56,8 +56,8 @@ typedef struct rtems_rtl_ptr rtems_rtl_ptr;
  * The RTL Indirect size and pointer.
  */
 struct rtems_rtl_sptr {
-  rtems_rtl_ptr  ptr;      /**< The indirect pointer. */
-  size_t         size;     /**< The size of the memory block. */
+  rtems_rtl_ptr ptr; /**< The indirect pointer. */
+  size_t size;       /**< The size of the memory block. */
 };
 
 typedef struct rtems_rtl_sptr rtems_rtl_sptr;
@@ -69,8 +69,8 @@ typedef struct rtems_rtl_sptr rtems_rtl_sptr;
  *       used by applications.
  */
 struct rtems_rtl_ptr_chain {
-  rtems_chain_node node;  /**< Chain of indirect pointers. */
-  rtems_rtl_ptr    ptr;   /**< The indirect pointer. */
+  rtems_chain_node node; /**< Chain of indirect pointers. */
+  rtems_rtl_ptr ptr;     /**< The indirect pointer. */
 };
 
 typedef struct rtems_rtl_ptr_chain rtems_rtl_ptr_chain;
@@ -83,7 +83,7 @@ typedef struct rtems_rtl_ptr_chain rtems_rtl_ptr_chain;
  */
 struct rtems_rtl_sptr_chain {
   rtems_chain_node node; /**< Chain of indirect pointers. */
-  rtems_rtl_sptr   ptr;  /**< The indirect pointer. */
+  rtems_rtl_sptr ptr;    /**< The indirect pointer. */
 };
 
 typedef struct rtems_rtl_sptr_chain rtems_rtl_sptr_chain;
@@ -94,8 +94,7 @@ typedef struct rtems_rtl_sptr_chain rtems_rtl_sptr_chain;
  * @param handle The handle the pointer is returned from.
  * @return void* The pointer held in the handle.
  */
-static inline void* rtems_rtl_ptr_get (rtems_rtl_ptr* handle)
-{
+static inline void* rtems_rtl_ptr_get(rtems_rtl_ptr* handle) {
   return handle->pointer;
 }
 
@@ -105,8 +104,7 @@ static inline void* rtems_rtl_ptr_get (rtems_rtl_ptr* handle)
  * @param handle The handle the pointer is returned from.
  * @param pointer The pointer to set in the handle.
  */
-static inline void rtems_rtl_ptr_set (rtems_rtl_ptr* handle, void* pointer)
-{
+static inline void rtems_rtl_ptr_set(rtems_rtl_ptr* handle, void* pointer) {
   handle->pointer = pointer;
 }
 
@@ -115,9 +113,8 @@ static inline void rtems_rtl_ptr_set (rtems_rtl_ptr* handle, void* pointer)
  *
  * @param handle The handle to initialise.
  */
-static inline void rtems_rtl_ptr_init (rtems_rtl_ptr* handle)
-{
-  rtems_chain_set_off_chain (&handle->node);
+static inline void rtems_rtl_ptr_init(rtems_rtl_ptr* handle) {
+  rtems_chain_set_off_chain(&handle->node);
   handle->pointer = NULL;
 }
 
@@ -127,8 +124,7 @@ static inline void rtems_rtl_ptr_init (rtems_rtl_ptr* handle)
  * @param handle The handle to test.
  * @return bool True if the pointer is NULL.
  */
-static inline bool rtems_rtl_ptr_null (rtems_rtl_ptr* handle)
-{
+static inline bool rtems_rtl_ptr_null(rtems_rtl_ptr* handle) {
   return handle->pointer == NULL;
 }
 
@@ -139,16 +135,15 @@ static inline bool rtems_rtl_ptr_null (rtems_rtl_ptr* handle)
  * @param src The source handle to move the pointer from.
  * @param dst The destination handle to receive the pointer.
  */
-static inline void rtems_rtl_ptr_move (rtems_rtl_ptr* dst, rtems_rtl_ptr* src)
-{
+static inline void rtems_rtl_ptr_move(rtems_rtl_ptr* dst, rtems_rtl_ptr* src) {
   /*
    * We do not know which chain the src handle resides on so insert the dst
    * handle after the src handle then extract the src handle.
    */
-  rtems_chain_insert_unprotected (&src->node, &dst->node);
-  rtems_chain_extract_unprotected (&src->node);
+  rtems_chain_insert_unprotected(&src->node, &dst->node);
+  rtems_chain_extract_unprotected(&src->node);
   dst->pointer = src->pointer;
-  rtems_rtl_ptr_init (src);
+  rtems_rtl_ptr_init(src);
 }
 
 /**
@@ -157,7 +152,7 @@ static inline void rtems_rtl_ptr_move (rtems_rtl_ptr* dst, rtems_rtl_ptr* src)
  * @param _h The handle.
  * @param _t The type.
  */
-#define rtems_rtl_ptr_type_get(_h, _t) ((_t*) rtems_rtl_ptr_get (_h))
+#define rtems_rtl_ptr_type_get(_h, _t) ((_t*)rtems_rtl_ptr_get(_h))
 
 /**
  * Get the pointer given an indirect handle.
@@ -165,9 +160,8 @@ static inline void rtems_rtl_ptr_move (rtems_rtl_ptr* dst, rtems_rtl_ptr* src)
  * @param handle The handle the pointer is returned from.
  * @return void* The pointer held in the handle.
  */
-static inline void* rtems_rtl_sptr_get (rtems_rtl_sptr* handle)
-{
-  return rtems_rtl_ptr_get (&handle->ptr);
+static inline void* rtems_rtl_sptr_get(rtems_rtl_sptr* handle) {
+  return rtems_rtl_ptr_get(&handle->ptr);
 }
 
 /**
@@ -176,9 +170,8 @@ static inline void* rtems_rtl_sptr_get (rtems_rtl_sptr* handle)
  * @param handle The handle the pointer is returned from.
  * @param pointer The pointer to set in the handle.
  */
-static inline void rtems_rtl_sptr_set (rtems_rtl_sptr* handle, void* pointer)
-{
-  rtems_rtl_ptr_set (&handle->ptr, pointer);
+static inline void rtems_rtl_sptr_set(rtems_rtl_sptr* handle, void* pointer) {
+  rtems_rtl_ptr_set(&handle->ptr, pointer);
 }
 
 /**
@@ -186,9 +179,8 @@ static inline void rtems_rtl_sptr_set (rtems_rtl_sptr* handle, void* pointer)
  *
  * @param handle The handle to initialise.
  */
-static inline void rtems_rtl_sptr_init (rtems_rtl_sptr* handle)
-{
-  rtems_rtl_ptr_init (&handle->ptr);
+static inline void rtems_rtl_sptr_init(rtems_rtl_sptr* handle) {
+  rtems_rtl_ptr_init(&handle->ptr);
   handle->size = 0;
 }
 
@@ -198,9 +190,8 @@ static inline void rtems_rtl_sptr_init (rtems_rtl_sptr* handle)
  * @param handle The handle to test.
  * @return bool True if the pointer is NULL.
  */
-static inline bool rtems_rtl_sptr_null (rtems_rtl_sptr* handle)
-{
-  return rtems_rtl_ptr_null (&handle->ptr);
+static inline bool rtems_rtl_sptr_null(rtems_rtl_sptr* handle) {
+  return rtems_rtl_ptr_null(&handle->ptr);
 }
 
 /**
@@ -210,9 +201,9 @@ static inline bool rtems_rtl_sptr_null (rtems_rtl_sptr* handle)
  * @param src The source handle to move the pointer from.
  * @param dst The destination handle to receive the pointer.
  */
-static inline void rtems_rtl_sptr_move (rtems_rtl_sptr* dst, rtems_rtl_sptr* src)
-{
-  rtems_rtl_ptr_move (&dst->ptr, &src->ptr);
+static inline void rtems_rtl_sptr_move(rtems_rtl_sptr* dst,
+                                       rtems_rtl_sptr* src) {
+  rtems_rtl_ptr_move(&dst->ptr, &src->ptr);
   dst->size = src->size;
   src->size = 0;
 }
@@ -223,8 +214,7 @@ static inline void rtems_rtl_sptr_move (rtems_rtl_sptr* dst, rtems_rtl_sptr* src
  * @param handle The handle to get the size from.
  * @return size_t The size_t.
  */
-static inline size_t rtems_rtl_sptr_get_size (rtems_rtl_sptr* handle)
-{
+static inline size_t rtems_rtl_sptr_get_size(rtems_rtl_sptr* handle) {
   return handle->size;
 }
 
@@ -234,8 +224,8 @@ static inline size_t rtems_rtl_sptr_get_size (rtems_rtl_sptr* handle)
  * @param handle The handle to set the size.
  * @param size The size to set..
  */
-static inline void rtems_rtl_sptr_set_size (rtems_rtl_sptr* handle, size_t size)
-{
+static inline void rtems_rtl_sptr_set_size(rtems_rtl_sptr* handle,
+                                           size_t size) {
   handle->size = size;
 }
 
@@ -245,7 +235,7 @@ static inline void rtems_rtl_sptr_set_size (rtems_rtl_sptr* handle, size_t size)
  * @param _h The handle.
  * @param _t The type.
  */
-#define rtems_rtl_sptr_type_get(_h, _t) ((_t*) rtems_rtl_sptr_get (_h))
+#define rtems_rtl_sptr_type_get(_h, _t) ((_t*)rtems_rtl_sptr_get(_h))
 
 #ifdef __cplusplus
 }

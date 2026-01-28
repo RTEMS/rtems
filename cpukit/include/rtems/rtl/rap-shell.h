@@ -28,6 +28,6 @@
 #if !defined(_RAP_SHELL_H_)
 #define _RAP_SHELL_H_
 
-int shell_rap (int argc, char* argv[]);
+int shell_rap(int argc, char* argv[]);
 
 #endif

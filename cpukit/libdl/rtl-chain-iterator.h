@@ -33,7 +33,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined (_RTEMS_RTL_CHAIN_ITERATOR_H_)
+#if !defined(_RTEMS_RTL_CHAIN_ITERATOR_H_)
 #define _RTEMS_RTL_CHAIN_ITERATOR_H_
 
 #ifdef __cplusplus
@@ -45,7 +45,7 @@ extern "C" {
 /**
  * Chain iterator handler.
  */
-typedef bool (*rtems_chain_iterator) (rtems_chain_node* node, void* data);
+typedef bool (*rtems_chain_iterator)(rtems_chain_node* node, void* data);
 
 /**
  * Iterate a chain of nodes invoking the iterator handler. Supply a data
@@ -59,10 +59,8 @@ typedef bool (*rtems_chain_iterator) (rtems_chain_node* node, void* data);
  * @retval true The whole chain was iterated over.
  * @retval false The iterator returned false.
  */
-bool
-rtems_rtl_chain_iterate (rtems_chain_control* chain,
-                         rtems_chain_iterator iterator,
-                         void*                data);
+bool rtems_rtl_chain_iterate(rtems_chain_control* chain,
+                             rtems_chain_iterator iterator, void* data);
 
 /**
  * Count the number of nodes on the chain.
@@ -70,7 +68,7 @@ rtems_rtl_chain_iterate (rtems_chain_control* chain,
  * @param chain The chain to count the nodes of.
  * @return int The number of nodes.
  */
-int rtems_rtl_chain_count (rtems_chain_control* chain);
+int rtems_rtl_chain_count(rtems_chain_control* chain);
 
 #ifdef __cplusplus
 }

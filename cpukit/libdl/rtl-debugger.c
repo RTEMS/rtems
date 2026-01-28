@@ -46,48 +46,41 @@
 #include "config.h"
 #endif
 
-#include <stdio.h>
 #include <link.h>
-#include <rtems/rtl/rtl.h>
-#include <rtems/rtl/rtl-trace.h>
 #include <rtems/rtl/rtl-obj-fwd.h>
+#include <rtems/rtl/rtl-trace.h>
+#include <rtems/rtl/rtl.h>
+#include <stdio.h>
 
-struct r_debug  _rtld_debug;
+struct r_debug _rtld_debug;
 
-void
-_rtld_debug_state (void)
-{
+void _rtld_debug_state(void) {
   /*
    * Empty. GDB only needs to hit this location.
    */
 }
 
-int
-_rtld_linkmap_add (rtems_rtl_obj* obj)
-{
+int _rtld_linkmap_add(rtems_rtl_obj* obj) {
   struct link_map* l = obj->linkmap;
   struct link_map* prev;
-  uint32_t         obj_num = obj->obj_num;
-  size_t           i;
+  uint32_t obj_num = obj->obj_num;
+  size_t i;
 
-  if (rtems_rtl_trace (RTEMS_RTL_TRACE_DETAIL))
-    printf ("rtl: linkmap_add\n");
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_DETAIL))
+    printf("rtl: linkmap_add\n");
 
-  for (i = 0; i < obj_num; ++i)
-  {
+  for (i = 0; i < obj_num; ++i) {
     l[i].sec_addr[rap_text] = obj->text_base;
     l[i].sec_addr[rap_const] = obj->const_base;
     l[i].sec_addr[rap_data] = obj->data_base;
     l[i].sec_addr[rap_bss] = obj->bss_base;
   }
 
-  if (_rtld_debug.r_map == NULL)
-  {
+  if (_rtld_debug.r_map == NULL) {
     _rtld_debug.r_map = l;
-  }
-  else
-  {
-    for (prev = _rtld_debug.r_map; prev->l_next != NULL; prev = prev->l_next);
+  } else {
+    for (prev = _rtld_debug.r_map; prev->l_next != NULL; prev = prev->l_next)
+      ;
     l->l_prev = prev;
     prev->l_next = l;
   }
@@ -95,9 +88,7 @@ _rtld_linkmap_add (rtems_rtl_obj* obj)
   return true;
 }
 
-void
-_rtld_linkmap_delete (rtems_rtl_obj* obj)
-{
+void _rtld_linkmap_delete(rtems_rtl_obj* obj) {
   struct link_map* l = obj->linkmap;
 
   /*
@@ -105,13 +96,10 @@ _rtld_linkmap_delete (rtems_rtl_obj* obj)
    */
   struct link_map* e = l + obj->obj_num - 1;
 
-  if (l->l_prev == NULL)
-  {
+  if (l->l_prev == NULL) {
     if ((_rtld_debug.r_map = e->l_next) != NULL)
-     _rtld_debug.r_map->l_prev = NULL;
-  }
-  else
-  {
+      _rtld_debug.r_map->l_prev = NULL;
+  } else {
     if ((l->l_prev->l_next = e->l_next) != NULL)
       e->l_next->l_prev = l->l_prev;
   }

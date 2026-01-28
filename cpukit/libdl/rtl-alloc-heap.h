@@ -33,7 +33,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined (_RTEMS_RTL_ALLOC_HEAP_H_)
+#if !defined(_RTEMS_RTL_ALLOC_HEAP_H_)
 #define _RTEMS_RTL_ALLOC_HEAP_H_
 
 #include <rtems/rtl/rtl-allocator.h>
@@ -55,10 +55,8 @@ extern "C" {
  * @param size The size of the allocation if an allocation request and
  *             not used if deleting or freeing a previous allocation.
  */
-void rtems_rtl_alloc_heap(rtems_rtl_alloc_cmd cmd,
-                          rtems_rtl_alloc_tag tag,
-                          void**              address,
-                          size_t              size);
+void rtems_rtl_alloc_heap(rtems_rtl_alloc_cmd cmd, rtems_rtl_alloc_tag tag,
+                          void** address, size_t size);
 
 #ifdef __cplusplus
 }

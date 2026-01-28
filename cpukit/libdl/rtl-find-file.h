@@ -33,7 +33,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined (_RTEMS_RTL_FIND_FILE_H_)
+#if !defined(_RTEMS_RTL_FIND_FILE_H_)
 #define _RTEMS_RTL_FIND_FILE_H_
 
 #include <rtems.h>
@@ -53,10 +53,8 @@ extern "C" {
  * @retval true The file was found.
  * @retval false The file was not found.
  */
-bool rtems_rtl_find_file (const char*  name,
-                          const char*  paths,
-                          const char** file_name,
-                          size_t*      size);
+bool rtems_rtl_find_file(const char* name, const char* paths,
+                         const char** file_name, size_t* size);
 
 #ifdef __cplusplus
 }

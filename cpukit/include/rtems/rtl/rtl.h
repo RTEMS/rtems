@@ -35,7 +35,7 @@
  * This is the POSIX interface to run-time loading of code into RTEMS.
  */
 
-#if !defined (_RTEMS_RTL_H_)
+#if !defined(_RTEMS_RTL_H_)
 #define _RTEMS_RTL_H_
 
 #include <link.h>
@@ -45,9 +45,9 @@
 #include <rtems/rtl/rtl-allocator.h>
 #include <rtems/rtl/rtl-archive.h>
 #include <rtems/rtl/rtl-fwd.h>
-#include <rtems/rtl/rtl-obj.h>
 #include <rtems/rtl/rtl-obj-cache.h>
 #include <rtems/rtl/rtl-obj-comp.h>
+#include <rtems/rtl/rtl-obj.h>
 #include <rtems/rtl/rtl-sym.h>
 #include <rtems/rtl/rtl-unresolved.h>
 
@@ -76,12 +76,12 @@ extern "C" {
  * Macros to glue two tokens.
  */
 #ifdef __STDC__
-#define RTL_XGLUE(a,b) a##b
+#define RTL_XGLUE(a, b) a##b
 #else
-#define RTL_XGLUE(a,b) a/**/b
+#define RTL_XGLUE(a, b) a /**/ b
 #endif
 
-#define RTL_GLUE(a,b) RTL_XGLUE(a,b)
+#define RTL_GLUE(a, b) RTL_XGLUE(a, b)
 
 /**
  * The number of buckets in the global symbol table.
@@ -107,7 +107,7 @@ extern struct r_debug _rtld_debug;
  * Debugger break function. Call when debugging to have it read the _rtld_debug
  * variable.
  */
-void _rtld_debug_state (void);
+void _rtld_debug_state(void);
 
 /**
  * The type of constructor/destructor function.
@@ -122,23 +122,22 @@ typedef void (*rtems_rtl_cdtor)(void);
  * actual symbols are part of the object's structure. If this is a problem we
  * could look at a hash table per object file.
  */
-struct rtems_rtl_data
-{
-  rtems_recursive_mutex lock;           /**< The RTL lock */
-  rtems_rtl_alloc_data  allocator;      /**< The allocator data. */
-  rtems_chain_control   objects;        /**< List if loaded object files. */
-  rtems_chain_control   pending;        /**< Listof object files needing work. */
-  const char*           paths;          /**< Search paths for archives. */
-  rtems_rtl_symbols     globals;        /**< Global symbol table. */
-  rtems_rtl_archives    archives;       /**< Archive search and loader. */
-  rtems_rtl_unresolved  unresolved;     /**< Unresolved symbols. */
-  rtems_rtl_obj*        base;           /**< Base object file. */
-  rtems_rtl_obj_cache   symbols;        /**< Symbols object file cache. */
-  rtems_rtl_obj_cache   strings;        /**< Strings object file cache. */
-  rtems_rtl_obj_cache   relocs;         /**< Relocations object file cache. */
-  rtems_rtl_obj_comp    decomp;         /**< The decompression compressor. */
-  int                   last_errno;     /**< Last error number. */
-  char                  last_error[64]; /**< Last error string. */
+struct rtems_rtl_data {
+  rtems_recursive_mutex lock;      /**< The RTL lock */
+  rtems_rtl_alloc_data allocator;  /**< The allocator data. */
+  rtems_chain_control objects;     /**< List if loaded object files. */
+  rtems_chain_control pending;     /**< Listof object files needing work. */
+  const char* paths;               /**< Search paths for archives. */
+  rtems_rtl_symbols globals;       /**< Global symbol table. */
+  rtems_rtl_archives archives;     /**< Archive search and loader. */
+  rtems_rtl_unresolved unresolved; /**< Unresolved symbols. */
+  rtems_rtl_obj* base;             /**< Base object file. */
+  rtems_rtl_obj_cache symbols;     /**< Symbols object file cache. */
+  rtems_rtl_obj_cache strings;     /**< Strings object file cache. */
+  rtems_rtl_obj_cache relocs;      /**< Relocations object file cache. */
+  rtems_rtl_obj_comp decomp;       /**< The decompression compressor. */
+  int last_errno;                  /**< Last error number. */
+  char last_error[64];             /**< Last error string. */
 };
 
 /**
@@ -147,7 +146,7 @@ struct rtems_rtl_data
  * @return rtems_rtl_data* The RTL data after being locked.
  * @retval NULL The RTL data is not initialised.
  */
-rtems_rtl_data* rtems_rtl_data_unprotected (void);
+rtems_rtl_data* rtems_rtl_data_unprotected(void);
 
 /**
  * Get the RTL global symbol table with out locking. This call assumes
@@ -156,7 +155,7 @@ rtems_rtl_data* rtems_rtl_data_unprotected (void);
  * @return rtems_rtl_symbols* The RTL global symbols after being locked.
  * @retval NULL The RTL data is not initialised.
  */
-rtems_rtl_symbols* rtems_rtl_global_symbols (void);
+rtems_rtl_symbols* rtems_rtl_global_symbols(void);
 
 /**
  * Get the RTL last error string with out locking. This call assumes the RTL is
@@ -165,7 +164,7 @@ rtems_rtl_symbols* rtems_rtl_global_symbols (void);
  * @return const char* The RTL's laste error.
  * @retval NULL The RTL data is not initialised.
  */
-const char* rtems_rtl_last_error_unprotected (void);
+const char* rtems_rtl_last_error_unprotected(void);
 
 /**
  * Get the RTL objects table with out locking. This call assumes the RTL
@@ -174,7 +173,7 @@ const char* rtems_rtl_last_error_unprotected (void);
  * @return rtems_chain_control* The RTL objects chain.
  * @retval NULL The RTL data is not initialised.
  */
-rtems_chain_control* rtems_rtl_objects_unprotected (void);
+rtems_chain_control* rtems_rtl_objects_unprotected(void);
 
 /**
  * Get the RTL pending with out locking. This call assumes the RTL is locked.
@@ -182,7 +181,7 @@ rtems_chain_control* rtems_rtl_objects_unprotected (void);
  * @return rtems_chain_control* The RTL pending list control.
  * @retval NULL The RTL data is not initialised.
  */
-rtems_chain_control* rtems_rtl_pending_unprotected (void);
+rtems_chain_control* rtems_rtl_pending_unprotected(void);
 
 /**
  * Get the RTL unresolved table with out locking. This call assumes the RTL
@@ -191,7 +190,7 @@ rtems_chain_control* rtems_rtl_pending_unprotected (void);
  * @return rtems_rtl_unresolv* The RTL unresolved symbols and reloc records.
  * @retval NULL The RTL data is not initialised.
  */
-rtems_rtl_unresolved* rtems_rtl_unresolved_unprotected (void);
+rtems_rtl_unresolved* rtems_rtl_unresolved_unprotected(void);
 
 /**
  * Get the RTL archives with out locking. This call assumes the RTL is locked.
@@ -199,7 +198,7 @@ rtems_rtl_unresolved* rtems_rtl_unresolved_unprotected (void);
  * @return rtems_rtl_archives* The RTL acrhives.
  * @retval NULL The RTL data is not initialised.
  */
-rtems_rtl_archives* rtems_rtl_archives_unprotected (void);
+rtems_rtl_archives* rtems_rtl_archives_unprotected(void);
 
 /**
  * Get the RTL symbols, strings, or relocations object file caches. This call
@@ -212,14 +211,14 @@ rtems_rtl_archives* rtems_rtl_archives_unprotected (void);
  * @param relocs Pointer to the location to set the cache into. Returns NULL
  *               is rtl is not initialised. If NULL is passed in no value set.
  */
-void rtems_rtl_obj_caches (rtems_rtl_obj_cache** symbols,
-                           rtems_rtl_obj_cache** strings,
-                           rtems_rtl_obj_cache** relocs);
+void rtems_rtl_obj_caches(rtems_rtl_obj_cache** symbols,
+                          rtems_rtl_obj_cache** strings,
+                          rtems_rtl_obj_cache** relocs);
 
 /**
  * Flush all the object file caches.
  */
-void rtems_rtl_obj_caches_flush (void);
+void rtems_rtl_obj_caches_flush(void);
 
 /**
  * Get the RTL decompressor setting for the cache and the offset in the file
@@ -230,11 +229,9 @@ void rtems_rtl_obj_caches_flush (void);
  * @param cache The cache to read the file with. Saves needing an extrs buffer.
  * @param offset The offset in the file the compressed stream starts.
  */
-void rtems_rtl_obj_decompress (rtems_rtl_obj_comp** decomp,
-                               rtems_rtl_obj_cache* cache,
-                               int                  fd,
-                               int                  compression,
-                               off_t                offset);
+void rtems_rtl_obj_decompress(rtems_rtl_obj_comp** decomp,
+                              rtems_rtl_obj_cache* cache, int fd,
+                              int compression, off_t offset);
 
 /**
  * Update the mask in the object files. You can clear flags and then set
@@ -244,7 +241,7 @@ void rtems_rtl_obj_decompress (rtems_rtl_obj_comp** decomp,
  * @param clear The flag's clear mask, a 0 does not clear any flags.
  * @param set The flag's set mask, a 0 does not set any flags.
  */
-void rtems_rtl_obj_update_flags (uint32_t clear, uint32_t set);
+void rtems_rtl_obj_update_flags(uint32_t clear, uint32_t set);
 
 /**
  * Lock the Run-time Linker.
@@ -253,12 +250,12 @@ void rtems_rtl_obj_update_flags (uint32_t clear, uint32_t set);
  * @retval NULL The RTL data could not be initialised or locked. Typically this
  *              means the lock could not be created.
  */
-rtems_rtl_data* rtems_rtl_lock (void);
+rtems_rtl_data* rtems_rtl_lock(void);
 
 /**
  * Unlock the Run-time Linker.
  */
-void rtems_rtl_unlock (void);
+void rtems_rtl_unlock(void);
 
 /**
  * Check a pointer is a valid object file descriptor returning the pointer as
@@ -269,7 +266,7 @@ void rtems_rtl_unlock (void);
  * @param handle Pointer to the object file to be validated.
  * @return rtl_obj* The object file descriptor. NULL is returned if invalid.
  */
-rtems_rtl_obj* rtems_rtl_check_handle (void* handle);
+rtems_rtl_obj* rtems_rtl_check_handle(void* handle);
 
 /**
  * Find the object given a file name.
@@ -278,7 +275,7 @@ rtems_rtl_obj* rtems_rtl_check_handle (void* handle);
  * @retval NULL No object file with that name found.
  * @return rtems_rtl_obj* The object file descriptor.
  */
-rtems_rtl_obj* rtems_rtl_find_obj (const char* name);
+rtems_rtl_obj* rtems_rtl_find_obj(const char* name);
 
 /**
  * Find the object file a symbol is exported from.
@@ -287,7 +284,7 @@ rtems_rtl_obj* rtems_rtl_find_obj (const char* name);
  * @retval NULL No object file found.
  * @return rtems_rtl_obj* Reference to the symbol.
  */
-rtems_rtl_obj* rtems_rtl_find_obj_with_symbol (const rtems_rtl_obj_sym* sym);
+rtems_rtl_obj* rtems_rtl_find_obj_with_symbol(const rtems_rtl_obj_sym* sym);
 
 /**
  * Load an object file into memory relocating it. It will not be resolved
@@ -318,9 +315,10 @@ rtems_rtl_obj* rtems_rtl_find_obj_with_symbol (const rtems_rtl_obj_sym* sym);
  *
  * @param name The name of the object file.
  * @param mode The mode of the load as defined by the dlopen call.
- * @return rtl_obj* The object file descriptor. NULL is returned if the load fails.
+ * @return rtl_obj* The object file descriptor. NULL is returned if the load
+ * fails.
  */
-rtems_rtl_obj* rtems_rtl_load_object (const char* name, int mode);
+rtems_rtl_obj* rtems_rtl_load_object(const char* name, int mode);
 
 /**
  * Unload an object file. This only happens when the user count is 0.
@@ -331,7 +329,7 @@ rtems_rtl_obj* rtems_rtl_load_object (const char* name, int mode);
  * @retval true The object file has been unloaded.
  * @retval false The object file could not be unloaded.
  */
-bool rtems_rtl_unload_object (rtems_rtl_obj* obj);
+bool rtems_rtl_unload_object(rtems_rtl_obj* obj);
 
 /**
  * Load an object file.  This is the user accessable interface to unloading an
@@ -339,9 +337,10 @@ bool rtems_rtl_unload_object (rtems_rtl_obj* obj);
  *
  * @param name The name of the object file.
  * @param mode The mode of the load as defined by the dlopen call.
- * @return rtl_obj* The object file descriptor. NULL is returned if the load fails.
+ * @return rtl_obj* The object file descriptor. NULL is returned if the load
+ * fails.
  */
-rtems_rtl_obj* rtems_rtl_load (const char* name, int mode);
+rtems_rtl_obj* rtems_rtl_load(const char* name, int mode);
 
 /**
  * Unload an object file. This is the user accessable interface to unloading an
@@ -353,7 +352,7 @@ rtems_rtl_obj* rtems_rtl_load (const char* name, int mode);
  * @retval true The object file has been unloaded.
  * @retval false The object file could not be unloaded.
  */
-bool rtems_rtl_unload (rtems_rtl_obj* obj);
+bool rtems_rtl_unload(rtems_rtl_obj* obj);
 
 /**
  * Get the last error message clearing it. This operation locks the run time
@@ -365,7 +364,7 @@ bool rtems_rtl_unload (rtems_rtl_obj* obj);
  * @param max_message The maximum message that can be copied.
  * @return int The last error number.
  */
-int rtems_rtl_get_error (char* message, size_t max_message);
+int rtems_rtl_get_error(char* message, size_t max_message);
 
 /**
  * Append the path to the search path.
@@ -374,7 +373,7 @@ int rtems_rtl_get_error (char* message, size_t max_message);
  * @retval false The path could not be appended.
  * @retval true The path was appended.
  */
-bool rtems_rtl_path_append (const char* path);
+bool rtems_rtl_path_append(const char* path);
 
 /**
  * Prepend the path to the search path.
@@ -384,7 +383,7 @@ bool rtems_rtl_path_append (const char* path);
  * @retval true The path was prepended.
  */
 
-bool rtems_rtl_path_prepend (const char* path);
+bool rtems_rtl_path_prepend(const char* path);
 
 /**
  * Add an exported symbol table to the global symbol table. This call is
@@ -396,10 +395,10 @@ bool rtems_rtl_path_prepend (const char* path);
  * @param tls_offsets The TLS offsets table. If NULL none provided.
  * @param tls_size The number TLS offset entries in the table.
  */
-void rtems_rtl_base_sym_global_add (const unsigned char*        esyms,
-                                    unsigned int                count,
-                                    const rtems_rtl_tls_offset* tls_offsets,
-                                    unsigned int                tls_size);
+void rtems_rtl_base_sym_global_add(const unsigned char* esyms,
+                                   unsigned int count,
+                                   const rtems_rtl_tls_offset* tls_offsets,
+                                   unsigned int tls_size);
 
 /**
  * Return the object file descriptor for the base image. The object file
@@ -410,7 +409,7 @@ void rtems_rtl_base_sym_global_add (const unsigned char*        esyms,
  * @return rtl_obj* The object file descriptor for the base image. NULL is
  *                  returned if the load fails.
  */
-rtems_rtl_obj* rtems_rtl_baseimage (void);
+rtems_rtl_obj* rtems_rtl_baseimage(void);
 
 #ifdef __cplusplus
 }

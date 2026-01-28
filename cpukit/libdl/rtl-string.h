@@ -33,7 +33,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined (_RTEMS_RTL_STRING_H_)
+#if !defined(_RTEMS_RTL_STRING_H_)
 #define _RTEMS_RTL_STRING_H_
 
 #ifdef __cplusplus
@@ -46,7 +46,7 @@ extern "C" {
  * @param s1 The string to duplicate.
  * @return char* The copy of the string. NULL if there is no memory.
  */
-char* rtems_rtl_strdup (const char *s1);
+char* rtems_rtl_strdup(const char* s1);
 
 #ifdef __cplusplus
 }

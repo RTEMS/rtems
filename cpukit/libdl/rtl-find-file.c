@@ -40,53 +40,45 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <inttypes.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
 #include <rtems/libio_.h>
 
-#include <rtems/rtl/rtl.h>
-#include "rtl-find-file.h"
 #include "rtl-error.h"
+#include "rtl-find-file.h"
 #include "rtl-string.h"
 #include <rtems/rtl/rtl-trace.h>
+#include <rtems/rtl/rtl.h>
 
 #if WAF_BUILD
 #define rtems_filesystem_is_delimiter rtems_filesystem_is_separator
 #endif
 
-bool
-rtems_rtl_find_file (const char*  name,
-                     const char*  paths,
-                     const char** file_name,
-                     size_t*      size)
-{
+bool rtems_rtl_find_file(const char* name, const char* paths,
+                         const char** file_name, size_t* size) {
   struct stat sb;
 
   *file_name = NULL;
   *size = 0;
 
-  if (rtems_filesystem_is_delimiter (name[0]) || (name[0] == '.'))
-  {
-    if (stat (name, &sb) == 0)
-      *file_name = rtems_rtl_strdup (name);
-  }
-  else if (paths)
-  {
+  if (rtems_filesystem_is_delimiter(name[0]) || (name[0] == '.')) {
+    if (stat(name, &sb) == 0)
+      *file_name = rtems_rtl_strdup(name);
+  } else if (paths) {
     const char* start;
     const char* end;
-    int         len;
-    char*       fname;
+    int len;
+    char* fname;
 
     start = paths;
-    end = start + strlen (paths);
-    len = strlen (name);
+    end = start + strlen(paths);
+    len = strlen(name);
 
-    while (!*file_name && (start != end))
-    {
-      const char* delimiter = strchr (start, ':');
+    while (!*file_name && (start != end)) {
+      const char* delimiter = strchr(start, ':');
 
       if (delimiter == NULL)
         delimiter = end;
@@ -96,23 +88,22 @@ rtems_rtl_find_file (const char*  name,
        * path then see if the stat call works.
        */
 
-      fname = rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_OBJECT,
-                                   (delimiter - start) + 1 + len + 1, true);
-      if (!fname)
-      {
-        rtems_rtl_set_error (ENOMEM, "no memory searching for file");
+      fname = rtems_rtl_alloc_new(RTEMS_RTL_ALLOC_OBJECT,
+                                  (delimiter - start) + 1 + len + 1, true);
+      if (!fname) {
+        rtems_rtl_set_error(ENOMEM, "no memory searching for file");
         return false;
       }
 
-      memcpy (fname, start, delimiter - start);
+      memcpy(fname, start, delimiter - start);
       fname[delimiter - start] = '/';
-      memcpy (fname + (delimiter - start) + 1, name, len);
+      memcpy(fname + (delimiter - start) + 1, name, len);
 
-      if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD))
-        printf ("rtl: find-file: path: %s\n", fname);
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_LOAD))
+        printf("rtl: find-file: path: %s\n", fname);
 
-      if (stat (fname, &sb) < 0)
-        rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_OBJECT, fname);
+      if (stat(fname, &sb) < 0)
+        rtems_rtl_alloc_del(RTEMS_RTL_ALLOC_OBJECT, fname);
       else
         *file_name = fname;
 

@@ -32,7 +32,7 @@
  * @brief RTEMS Run-Time Linker ELF Headers
  */
 
-#if !defined (_RTEMS_RTL_FWD_H_)
+#if !defined(_RTEMS_RTL_FWD_H_)
 #define _RTEMS_RTL_FWD_H_
 
 #ifdef __cplusplus

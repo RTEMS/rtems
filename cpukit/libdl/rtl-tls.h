@@ -35,14 +35,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined (_RTEMS_RTL_TLS_H_)
+#if !defined(_RTEMS_RTL_TLS_H_)
 #define _RTEMS_RTL_TLS_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-void* rtems_rtl_tls_get_base (void);
+void* rtems_rtl_tls_get_base(void);
 
 #ifdef __cplusplus
 }

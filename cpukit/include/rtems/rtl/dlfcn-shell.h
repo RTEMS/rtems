@@ -28,9 +28,9 @@
 #if !defined(_DLFCN_SHELL_H_)
 #define _DLFCN_SHELL_H_
 
-int shell_dlopen (int argc, char* argv[]);
-int shell_dlclose (int argc, char* argv[]);
-int shell_dlsym (int argc, char* argv[]);
-int shell_dlcall (int argc, char* argv[]);
+int shell_dlopen(int argc, char* argv[]);
+int shell_dlclose(int argc, char* argv[]);
+int shell_dlsym(int argc, char* argv[]);
+int shell_dlcall(int argc, char* argv[]);
 
 #endif

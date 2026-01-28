@@ -33,7 +33,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined (_RTEMS_RTL_ERROR_H_)
+#if !defined(_RTEMS_RTL_ERROR_H_)
 #define _RTEMS_RTL_ERROR_H_
 
 #ifdef __cplusplus
@@ -41,7 +41,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 #if __GNUC__
-#define RTEMS_RTL_PRINTF_ATTR   __attribute__((__format__(__printf__,2,3)))
+#define RTEMS_RTL_PRINTF_ATTR __attribute__((__format__(__printf__, 2, 3)))
 #else
 #define RTEMS_RTL_PRINTF_ATTR
 #endif
@@ -55,7 +55,8 @@ extern "C" {
  * @param format The error format string.
  * @param ... The variable arguments that depend on the format string.
  */
-void rtems_rtl_set_error (int error, const char* format, ...) RTEMS_RTL_PRINTF_ATTR;
+void rtems_rtl_set_error(int error, const char* format,
+                         ...) RTEMS_RTL_PRINTF_ATTR;
 
 #ifdef __cplusplus
 }

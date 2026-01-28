@@ -33,7 +33,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined (_RTEMS_RTL_RAP_H_)
+#if !defined(_RTEMS_RTL_RAP_H_)
 #define _RTEMS_RTL_RAP_H_
 
 #include <rtems/rtl/rtl-fwd.h>
@@ -50,7 +50,7 @@ extern "C" {
  * @param obj The object being checked.
  * @param fd The file descriptor.
  */
-bool rtems_rtl_rap_file_check (rtems_rtl_obj* obj, int fd);
+bool rtems_rtl_rap_file_check(rtems_rtl_obj* obj, int fd);
 
 /**
  * The RAP format load handler.
@@ -58,21 +58,21 @@ bool rtems_rtl_rap_file_check (rtems_rtl_obj* obj, int fd);
  * @param obj The object to load.
  * @param fd The file descriptor.
  */
-bool rtems_rtl_rap_file_load (rtems_rtl_obj* obj, int fd);
+bool rtems_rtl_rap_file_load(rtems_rtl_obj* obj, int fd);
 
 /**
  * The RAP format unload handler.
  *
  * @param obj The object to unload.
  */
-bool rtems_rtl_rap_file_unload (rtems_rtl_obj* obj);
+bool rtems_rtl_rap_file_unload(rtems_rtl_obj* obj);
 
 /**
  * The RAP format signature handler.
  *
  * @return rtems_rtl_loader_format* The format's signature.
  */
-rtems_rtl_loader_format* rtems_rtl_rap_file_sig (void);
+rtems_rtl_loader_format* rtems_rtl_rap_file_sig(void);
 
 #ifdef __cplusplus
 }

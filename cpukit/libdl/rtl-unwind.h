@@ -33,7 +33,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined (_RTEMS_RTL_UNWIND_H_)
+#if !defined(_RTEMS_RTL_UNWIND_H_)
 #define _RTEMS_RTL_UNWIND_H_
 
 #include "rtl-elf.h"
@@ -52,9 +52,8 @@ extern "C" {
  * @retval true The section contains unwind information.
  * @retval false The section does not contain unwind information.
  */
-bool rtems_rtl_elf_unwind_parse (const rtems_rtl_obj* obj,
-                                 const char*          name,
-                                 uint32_t             flags);
+bool rtems_rtl_elf_unwind_parse(const rtems_rtl_obj* obj, const char* name,
+                                uint32_t flags);
 
 /**
  * Architecture specific handler to add an object file's unwind information to
@@ -64,7 +63,7 @@ bool rtems_rtl_elf_unwind_parse (const rtems_rtl_obj* obj,
  * @retval true The unwind information has been registered.
  * @retval false The unwind information could not be registered.
  */
-bool rtems_rtl_elf_unwind_register (rtems_rtl_obj* obj);
+bool rtems_rtl_elf_unwind_register(rtems_rtl_obj* obj);
 
 /**
  * Architecture specific handler to remove an object file's unwind information
@@ -74,7 +73,7 @@ bool rtems_rtl_elf_unwind_register (rtems_rtl_obj* obj);
  * @retval true The unwind information has been deregistered.
  * @retval false The unwind information could not be deregistered.
  */
-bool rtems_rtl_elf_unwind_deregister (rtems_rtl_obj* obj);
+bool rtems_rtl_elf_unwind_deregister(rtems_rtl_obj* obj);
 
 #ifdef __cplusplus
 }

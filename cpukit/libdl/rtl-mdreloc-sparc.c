@@ -38,12 +38,12 @@
 #include <inttypes.h>
 #include <stdio.h>
 
-#include <rtems/rtl/rtl.h>
 #include "rtl-elf.h"
 #include "rtl-error.h"
-#include <rtems/rtl/rtl-trace.h>
-#include "rtl-unwind.h"
 #include "rtl-unwind-dw2.h"
+#include "rtl-unwind.h"
+#include <rtems/rtl/rtl-trace.h>
+#include <rtems/rtl/rtl.h>
 
 /*
  * The following table holds for each relocation type:
@@ -59,206 +59,245 @@
  *    * the relocation is relative to the load address
  *
  */
-#define _RF_S     0x80000000           /* Resolve symbol */
-#define _RF_A     0x40000000           /* Use addend */
-#define _RF_P     0x20000000           /* Location relative */
-#define _RF_G     0x10000000           /* GOT offset */
-#define _RF_B     0x08000000           /* Load address relative */
-#define _RF_U     0x04000000           /* Unaligned */
-#define _RF_SZ(s) (((s) & 0xff) << 8)  /* memory target size */
-#define _RF_RS(s) ( (s) & 0xff)        /* right shift */
+#define _RF_S 0x80000000              /* Resolve symbol */
+#define _RF_A 0x40000000              /* Use addend */
+#define _RF_P 0x20000000              /* Location relative */
+#define _RF_G 0x10000000              /* GOT offset */
+#define _RF_B 0x08000000              /* Load address relative */
+#define _RF_U 0x04000000              /* Unaligned */
+#define _RF_SZ(s) (((s) & 0xff) << 8) /* memory target size */
+#define _RF_RS(s) ((s) & 0xff)        /* right shift */
 
 static const uint32_t reloc_target_flags[] = {
-  0,                                             /* NONE */
-  _RF_S|_RF_A|        _RF_SZ(8)  | _RF_RS(0),    /* RELOC_8 */
-  _RF_S|_RF_A|        _RF_SZ(16) | _RF_RS(0),    /* RELOC_16 */
-  _RF_S|_RF_A|        _RF_SZ(32) | _RF_RS(0),    /* RELOC_32 */
-  _RF_S|_RF_A|_RF_P|  _RF_SZ(8)  | _RF_RS(0),    /* DISP_8 */
-  _RF_S|_RF_A|_RF_P|  _RF_SZ(16) | _RF_RS(0),    /* DISP_16 */
-  _RF_S|_RF_A|_RF_P|  _RF_SZ(32) | _RF_RS(0),    /* DISP_32 */
-  _RF_S|_RF_A|_RF_P|  _RF_SZ(32) | _RF_RS(2),    /* WDISP_30 */
-  _RF_S|_RF_A|_RF_P|  _RF_SZ(32) | _RF_RS(2),    /* WDISP_22 */
-  _RF_S|_RF_A|        _RF_SZ(32) | _RF_RS(10),   /* HI22 */
-  _RF_S|_RF_A|        _RF_SZ(32) | _RF_RS(0),    /* 22 */
-  _RF_S|_RF_A|        _RF_SZ(32) | _RF_RS(0),    /* 13 */
-  _RF_S|_RF_A|        _RF_SZ(32) | _RF_RS(0),    /* LO10 */
-  _RF_G|              _RF_SZ(32) | _RF_RS(0),    /* GOT10 */
-  _RF_G|              _RF_SZ(32) | _RF_RS(0),    /* GOT13 */
-  _RF_G|              _RF_SZ(32) | _RF_RS(10),   /* GOT22 */
-  _RF_S|_RF_A|_RF_P|  _RF_SZ(32) | _RF_RS(0),    /* PC10 */
-  _RF_S|_RF_A|_RF_P|  _RF_SZ(32) | _RF_RS(10),   /* PC22 */
-  _RF_A|_RF_P|        _RF_SZ(32) | _RF_RS(2),    /* WPLT30 */
-  _RF_SZ(32) |                     _RF_RS(0),    /* COPY */
-  _RF_S|_RF_A|        _RF_SZ(32) | _RF_RS(0),    /* GLOB_DAT */
-  _RF_SZ(32) |                     _RF_RS(0),    /* JMP_SLOT */
-  _RF_A|  _RF_B|      _RF_SZ(32) | _RF_RS(0),    /* RELATIVE */
-  _RF_S|_RF_A|_RF_U|  _RF_SZ(32) | _RF_RS(0),    /* UA_32 */
+    0,                                               /* NONE */
+    _RF_S | _RF_A | _RF_SZ(8) | _RF_RS(0),           /* RELOC_8 */
+    _RF_S | _RF_A | _RF_SZ(16) | _RF_RS(0),          /* RELOC_16 */
+    _RF_S | _RF_A | _RF_SZ(32) | _RF_RS(0),          /* RELOC_32 */
+    _RF_S | _RF_A | _RF_P | _RF_SZ(8) | _RF_RS(0),   /* DISP_8 */
+    _RF_S | _RF_A | _RF_P | _RF_SZ(16) | _RF_RS(0),  /* DISP_16 */
+    _RF_S | _RF_A | _RF_P | _RF_SZ(32) | _RF_RS(0),  /* DISP_32 */
+    _RF_S | _RF_A | _RF_P | _RF_SZ(32) | _RF_RS(2),  /* WDISP_30 */
+    _RF_S | _RF_A | _RF_P | _RF_SZ(32) | _RF_RS(2),  /* WDISP_22 */
+    _RF_S | _RF_A | _RF_SZ(32) | _RF_RS(10),         /* HI22 */
+    _RF_S | _RF_A | _RF_SZ(32) | _RF_RS(0),          /* 22 */
+    _RF_S | _RF_A | _RF_SZ(32) | _RF_RS(0),          /* 13 */
+    _RF_S | _RF_A | _RF_SZ(32) | _RF_RS(0),          /* LO10 */
+    _RF_G | _RF_SZ(32) | _RF_RS(0),                  /* GOT10 */
+    _RF_G | _RF_SZ(32) | _RF_RS(0),                  /* GOT13 */
+    _RF_G | _RF_SZ(32) | _RF_RS(10),                 /* GOT22 */
+    _RF_S | _RF_A | _RF_P | _RF_SZ(32) | _RF_RS(0),  /* PC10 */
+    _RF_S | _RF_A | _RF_P | _RF_SZ(32) | _RF_RS(10), /* PC22 */
+    _RF_A | _RF_P | _RF_SZ(32) | _RF_RS(2),          /* WPLT30 */
+    _RF_SZ(32) | _RF_RS(0),                          /* COPY */
+    _RF_S | _RF_A | _RF_SZ(32) | _RF_RS(0),          /* GLOB_DAT */
+    _RF_SZ(32) | _RF_RS(0),                          /* JMP_SLOT */
+    _RF_A | _RF_B | _RF_SZ(32) | _RF_RS(0),          /* RELATIVE */
+    _RF_S | _RF_A | _RF_U | _RF_SZ(32) | _RF_RS(0),  /* UA_32 */
 
-  /* TLS and 64 bit relocs not listed here... */
+    /* TLS and 64 bit relocs not listed here... */
 };
-#define RELOC_TARGET_FLAGS_SIZE \
+#define RELOC_TARGET_FLAGS_SIZE                                                \
   (sizeof(reloc_target_flags) / sizeof(reloc_target_flags[0]))
 
 #define RTLD_DEBUG_RELOC
 #ifdef RTLD_DEBUG_RELOC
-static const char *reloc_names[] = {
-  "NONE", "RELOC_8", "RELOC_16", "RELOC_32", "DISP_8",
-  "DISP_16", "DISP_32", "WDISP_30", "WDISP_22", "HI22",
-  "22", "13", "LO10", "GOT10", "GOT13",
-  "GOT22", "PC10", "PC22", "WPLT30", "COPY",
-  "GLOB_DAT", "JMP_SLOT", "RELATIVE", "UA_32",
+static const char* reloc_names[] = {
+    "NONE",
+    "RELOC_8",
+    "RELOC_16",
+    "RELOC_32",
+    "DISP_8",
+    "DISP_16",
+    "DISP_32",
+    "WDISP_30",
+    "WDISP_22",
+    "HI22",
+    "22",
+    "13",
+    "LO10",
+    "GOT10",
+    "GOT13",
+    "GOT22",
+    "PC10",
+    "PC22",
+    "WPLT30",
+    "COPY",
+    "GLOB_DAT",
+    "JMP_SLOT",
+    "RELATIVE",
+    "UA_32",
 
-  /* not used with 32bit userland, besides a few of the TLS ones */
-  "PLT32",
-  "HIPLT22", "LOPLT10", "LOPLT10", "PCPLT22", "PCPLT32",
-  "10", "11", "64", "OLO10", "HH22",
-  "HM10", "LM22", "PC_HH22", "PC_HM10", "PC_LM22",
-  "WDISP16", "WDISP19", "GLOB_JMP", "7", "5", "6",
-  "DISP64", "PLT64", "HIX22", "LOX10", "H44", "M44",
-  "L44", "REGISTER", "UA64", "UA16",
-  "TLS_GD_HI22", "TLS_GD_LO10", "TLS_GD_ADD", "TLS_GD_CALL",
-  "TLS_LDM_HI22", "TLS_LDM_LO10", "TLS_LDM_ADD", "TLS_LDM_CALL",
-  "TLS_LDO_HIX22", "TLS_LDO_LOX10", "TLS_LDO_ADD", "TLS_IE_HI22",
-  "TLS_IE_LO10", "TLS_IE_LD", "TLS_IE_LDX", "TLS_IE_ADD", "TLS_LE_HIX22",
-  "TLS_LE_LOX10", "TLS_DTPMOD32", "TLS_DTPMOD64", "TLS_DTPOFF32",
-  "TLS_DTPOFF64", "TLS_TPOFF32", "TLS_TPOFF64",
+    /* not used with 32bit userland, besides a few of the TLS ones */
+    "PLT32",
+    "HIPLT22",
+    "LOPLT10",
+    "LOPLT10",
+    "PCPLT22",
+    "PCPLT32",
+    "10",
+    "11",
+    "64",
+    "OLO10",
+    "HH22",
+    "HM10",
+    "LM22",
+    "PC_HH22",
+    "PC_HM10",
+    "PC_LM22",
+    "WDISP16",
+    "WDISP19",
+    "GLOB_JMP",
+    "7",
+    "5",
+    "6",
+    "DISP64",
+    "PLT64",
+    "HIX22",
+    "LOX10",
+    "H44",
+    "M44",
+    "L44",
+    "REGISTER",
+    "UA64",
+    "UA16",
+    "TLS_GD_HI22",
+    "TLS_GD_LO10",
+    "TLS_GD_ADD",
+    "TLS_GD_CALL",
+    "TLS_LDM_HI22",
+    "TLS_LDM_LO10",
+    "TLS_LDM_ADD",
+    "TLS_LDM_CALL",
+    "TLS_LDO_HIX22",
+    "TLS_LDO_LOX10",
+    "TLS_LDO_ADD",
+    "TLS_IE_HI22",
+    "TLS_IE_LO10",
+    "TLS_IE_LD",
+    "TLS_IE_LDX",
+    "TLS_IE_ADD",
+    "TLS_LE_HIX22",
+    "TLS_LE_LOX10",
+    "TLS_DTPMOD32",
+    "TLS_DTPMOD64",
+    "TLS_DTPOFF32",
+    "TLS_DTPOFF64",
+    "TLS_TPOFF32",
+    "TLS_TPOFF64",
 };
 #endif
 
-#define RELOC_RESOLVE_SYMBOL(t)         ((reloc_target_flags[t] & _RF_S) != 0)
-#define RELOC_PC_RELATIVE(t)            ((reloc_target_flags[t] & _RF_P) != 0)
-#define RELOC_BASE_RELATIVE(t)          ((reloc_target_flags[t] & _RF_B) != 0)
-#define RELOC_UNALIGNED(t)              ((reloc_target_flags[t] & _RF_U) != 0)
-#define RELOC_USE_ADDEND(t)             ((reloc_target_flags[t] & _RF_A) != 0)
-#define RELOC_TARGET_SIZE(t)            ((reloc_target_flags[t] >> 8) & 0xff)
-#define RELOC_VALUE_RIGHTSHIFT(t)       (reloc_target_flags[t] & 0xff)
-#define RELOC_TLS(t)                    (t >= R_TYPE(TLS_GD_HI22))
+#define RELOC_RESOLVE_SYMBOL(t) ((reloc_target_flags[t] & _RF_S) != 0)
+#define RELOC_PC_RELATIVE(t) ((reloc_target_flags[t] & _RF_P) != 0)
+#define RELOC_BASE_RELATIVE(t) ((reloc_target_flags[t] & _RF_B) != 0)
+#define RELOC_UNALIGNED(t) ((reloc_target_flags[t] & _RF_U) != 0)
+#define RELOC_USE_ADDEND(t) ((reloc_target_flags[t] & _RF_A) != 0)
+#define RELOC_TARGET_SIZE(t) ((reloc_target_flags[t] >> 8) & 0xff)
+#define RELOC_VALUE_RIGHTSHIFT(t) (reloc_target_flags[t] & 0xff)
+#define RELOC_TLS(t) (t >= R_TYPE(TLS_GD_HI22))
 
 static const int reloc_target_bitmask[] = {
-#define _BM(x)  (~(-(1ULL << (x))))
-  0,                            /* NONE */
-  _BM(8), _BM(16), _BM(32),     /* RELOC_8, _16, _32 */
-  _BM(8), _BM(16), _BM(32),     /* DISP8, DISP16, DISP32 */
-  _BM(30), _BM(22),             /* WDISP30, WDISP22 */
-  _BM(22), _BM(22),             /* HI22, _22 */
-  _BM(13), _BM(10),             /* RELOC_13, _LO10 */
-  _BM(10), _BM(13), _BM(22),    /* GOT10, GOT13, GOT22 */
-  _BM(10), _BM(22),             /* _PC10, _PC22 */
-  _BM(30), 0,                   /* _WPLT30, _COPY */
-  -1, -1, -1,                   /* _GLOB_DAT, JMP_SLOT, _RELATIVE */
-  _BM(32)                       /* _UA32 */
+#define _BM(x) (~(-(1ULL << (x))))
+    0,                         /* NONE */
+    _BM(8),  _BM(16), _BM(32), /* RELOC_8, _16, _32 */
+    _BM(8),  _BM(16), _BM(32), /* DISP8, DISP16, DISP32 */
+    _BM(30), _BM(22),          /* WDISP30, WDISP22 */
+    _BM(22), _BM(22),          /* HI22, _22 */
+    _BM(13), _BM(10),          /* RELOC_13, _LO10 */
+    _BM(10), _BM(13), _BM(22), /* GOT10, GOT13, GOT22 */
+    _BM(10), _BM(22),          /* _PC10, _PC22 */
+    _BM(30), 0,                /* _WPLT30, _COPY */
+    -1,      -1,      -1,      /* _GLOB_DAT, JMP_SLOT, _RELATIVE */
+    _BM(32)                    /* _UA32 */
 #undef _BM
 };
-#define RELOC_VALUE_BITMASK(t)  (reloc_target_bitmask[t])
+#define RELOC_VALUE_BITMASK(t) (reloc_target_bitmask[t])
 
-uint32_t
-rtems_rtl_elf_section_flags (const rtems_rtl_obj* obj,
-                             const Elf_Shdr*      shdr)
-{
-  (void) obj;
-  (void) shdr;
+uint32_t rtems_rtl_elf_section_flags(const rtems_rtl_obj* obj,
+                                     const Elf_Shdr* shdr) {
+  (void)obj;
+  (void)shdr;
 
   return 0;
 }
 
-uint32_t
-rtems_rtl_elf_arch_parse_section (const rtems_rtl_obj* obj,
-                                  int                  section,
-                                  const char*          name,
-                                  const Elf_Shdr*      shdr,
-                                  const uint32_t       flags)
-{
-  (void) obj;
-  (void) section;
-  (void) name;
-  (void) shdr;
+uint32_t rtems_rtl_elf_arch_parse_section(const rtems_rtl_obj* obj, int section,
+                                          const char* name,
+                                          const Elf_Shdr* shdr,
+                                          const uint32_t flags) {
+  (void)obj;
+  (void)section;
+  (void)name;
+  (void)shdr;
   return flags;
 }
 
-bool
-rtems_rtl_elf_arch_section_alloc (const rtems_rtl_obj* obj,
-                                  rtems_rtl_obj_sect*  sect)
-{
-  (void) obj;
-  (void) sect;
+bool rtems_rtl_elf_arch_section_alloc(const rtems_rtl_obj* obj,
+                                      rtems_rtl_obj_sect* sect) {
+  (void)obj;
+  (void)sect;
   return false;
 }
 
-bool
-rtems_rtl_elf_arch_section_free (const rtems_rtl_obj* obj,
-                                  rtems_rtl_obj_sect*  sect)
-{
-  (void) obj;
-  (void) sect;
+bool rtems_rtl_elf_arch_section_free(const rtems_rtl_obj* obj,
+                                     rtems_rtl_obj_sect* sect) {
+  (void)obj;
+  (void)sect;
   return false;
 }
 
-bool
-rtems_rtl_elf_rel_resolve_sym (Elf_Word type)
-{
+bool rtems_rtl_elf_rel_resolve_sym(Elf_Word type) {
   bool r = false;
   if (type < RELOC_TARGET_FLAGS_SIZE) {
-    r = RELOC_RESOLVE_SYMBOL (type) ? true : false;
+    r = RELOC_RESOLVE_SYMBOL(type) ? true : false;
   }
   switch (type) {
-    case R_TYPE(TLS_DTPOFF32):
-    case R_TYPE(TLS_LE_HIX22):
-    case R_TYPE(TLS_LE_LOX10):
-      r = true;
-      break;
+  case R_TYPE(TLS_DTPOFF32):
+  case R_TYPE(TLS_LE_HIX22):
+  case R_TYPE(TLS_LE_LOX10):
+    r = true;
+    break;
   default:
     break;
   }
   return r;
 }
 
-uint32_t rtems_rtl_obj_tramp_alignment (const rtems_rtl_obj* obj)
-{
-  (void) obj;
+uint32_t rtems_rtl_obj_tramp_alignment(const rtems_rtl_obj* obj) {
+  (void)obj;
   return sizeof(uint32_t);
 }
 
-size_t
-rtems_rtl_elf_relocate_tramp_max_size (void)
-{
+size_t rtems_rtl_elf_relocate_tramp_max_size(void) {
   /*
    * Disable by returning 0.
    */
   return 0;
 }
 
-rtems_rtl_elf_rel_status
-rtems_rtl_elf_relocate_rela_tramp (rtems_rtl_obj*            obj,
-                                   const Elf_Rela*           rela,
-                                   const rtems_rtl_obj_sect* sect,
-                                   const char*               symname,
-                                   const Elf_Byte            syminfo,
-                                   const Elf_Word            symvalue)
-{
-  (void) obj;
-  (void) rela;
-  (void) sect;
-  (void) symname;
-  (void) syminfo;
-  (void) symvalue;
+rtems_rtl_elf_rel_status rtems_rtl_elf_relocate_rela_tramp(
+    rtems_rtl_obj* obj, const Elf_Rela* rela, const rtems_rtl_obj_sect* sect,
+    const char* symname, const Elf_Byte syminfo, const Elf_Word symvalue) {
+  (void)obj;
+  (void)rela;
+  (void)sect;
+  (void)symname;
+  (void)syminfo;
+  (void)symvalue;
   return rtems_rtl_elf_rel_no_error;
 }
 
 rtems_rtl_elf_rel_status
-rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
-                             const Elf_Rela*           rela,
-                             const rtems_rtl_obj_sect* sect,
-                             const char*               symname,
-                             const Elf_Byte            syminfo,
-                             const Elf_Word            symvalue)
-{
-  (void) syminfo;
+rtems_rtl_elf_relocate_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
+                            const rtems_rtl_obj_sect* sect, const char* symname,
+                            const Elf_Byte syminfo, const Elf_Word symvalue) {
+  (void)syminfo;
 
-  Elf_Addr *where;
+  Elf_Addr* where;
   Elf_Word type, value, mask;
   Elf_Addr tmp = 0;
 
-  where = (Elf_Addr *) (sect->base + rela->r_offset);
+  where = (Elf_Addr*)(sect->base + rela->r_offset);
 
   type = ELF_R_TYPE(rela->r_info);
   if (type == R_TYPE(NONE))
@@ -277,8 +316,8 @@ rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
    * Note: R_SPARC_6 is currently numerically largest.
    */
   if (type > R_TYPE(TLS_TPOFF64)) {
-    if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-      printf("rtl: invalid reloc type: %d\n", (int) type);
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      printf("rtl: invalid reloc type: %d\n", (int)type);
     return rtems_rtl_elf_rel_failure;
   }
 
@@ -290,55 +329,53 @@ rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
   if (RELOC_TLS(type)) {
     switch (type) {
     case R_TYPE(TLS_DTPMOD32):
-      #if NETBSD_CODE__NOT_USED
+#if NETBSD_CODE__NOT_USED
       *where = (Elf_Addr)defobj->tlsindex;
-      #endif
+#endif
 
-      if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-        printf("rtl: reloc: TLS_DTPMOD32 %s in %s --> %p\n",
-               symname, rtems_rtl_obj_oname (obj), (void *)*where);
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+        printf("rtl: reloc: TLS_DTPMOD32 %s in %s --> %p\n", symname,
+               rtems_rtl_obj_oname(obj), (void*)*where);
       break;
 
     case R_TYPE(TLS_DTPOFF32):
       *where = (Elf_Addr)(symvalue + rela->r_addend);
 
-      if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-        printf("rtl: reloc: TLS_DTPOFF32 %s in %s --> %p\n",
-               symname, rtems_rtl_obj_oname (obj), (void *)*where);
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+        printf("rtl: reloc: TLS_DTPOFF32 %s in %s --> %p\n", symname,
+               rtems_rtl_obj_oname(obj), (void*)*where);
       break;
 
     case R_TYPE(TLS_TPOFF32):
-      #if NETBSD_CODE__NOT_USED
-      if (!defobj->tls_static &&
-          _rtld_tls_offset_allocate(__UNCONST(defobj)))
-        return ;
+#if NETBSD_CODE__NOT_USED
+      if (!defobj->tls_static && _rtld_tls_offset_allocate(__UNCONST(defobj)))
+        return;
 
-      *where = (Elf_Addr)(def->st_value -
-                          defobj->tlsoffset + rela->r_addend);
-     #endif
-      if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-        printf("rtl: reloc: TLS_TPOFF32 %s in %s --> %p\n",
-               symname, rtems_rtl_obj_oname (obj), (void *)*where);
+      *where = (Elf_Addr)(def->st_value - defobj->tlsoffset + rela->r_addend);
+#endif
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+        printf("rtl: reloc: TLS_TPOFF32 %s in %s --> %p\n", symname,
+               rtems_rtl_obj_oname(obj), (void*)*where);
       return rtems_rtl_elf_rel_failure;
 
     case R_TYPE(TLS_LE_HIX22):
       *where |= ((symvalue + rela->r_addend) ^ 0xffffffff) >> 10;
-      if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-        printf("rtl: reloc: R_SPARC_TLS_LE_HIX22 %s in %s --> %p\n",
-               symname, rtems_rtl_obj_oname (obj), (void *)*where);
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+        printf("rtl: reloc: R_SPARC_TLS_LE_HIX22 %s in %s --> %p\n", symname,
+               rtems_rtl_obj_oname(obj), (void*)*where);
       break;
 
     case R_TYPE(TLS_LE_LOX10):
       *where |= ((symvalue + rela->r_addend) & 0x3ff) | 0x1c00;
-      if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-        printf("rtl: reloc: R_SPARC_TLS_LE_LOX10 %s in %s --> %p\n",
-               symname, rtems_rtl_obj_oname (obj), (void *)*where);
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+        printf("rtl: reloc: R_SPARC_TLS_LE_LOX10 %s in %s --> %p\n", symname,
+               rtems_rtl_obj_oname(obj), (void*)*where);
       break;
 
     default:
-      if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-        printf("rtl: reloc: unknown TLS relo: %d for %s in %s --> %p\n",
-               type, symname, rtems_rtl_obj_oname (obj), (void *)*where);
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+        printf("rtl: reloc: unknown TLS relo: %d for %s in %s --> %p\n", type,
+               symname, rtems_rtl_obj_oname(obj), (void*)*where);
       return rtems_rtl_elf_rel_failure;
     }
     return rtems_rtl_elf_rel_no_error;
@@ -354,24 +391,24 @@ rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
   /*
    * Handle relative relocs here, as an optimization.
    */
-  if (type == R_TYPE (RELATIVE)) {
+  if (type == R_TYPE(RELATIVE)) {
     *where += (Elf_Addr)(sect->base + value);
-    if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-      printf ("rtl: reloc relative in %s --> %p",
-              rtems_rtl_obj_oname (obj), (void *)*where);
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      printf("rtl: reloc relative in %s --> %p", rtems_rtl_obj_oname(obj),
+             (void*)*where);
     return rtems_rtl_elf_rel_no_error;
   }
 
-  if (RELOC_RESOLVE_SYMBOL (type)) {
+  if (RELOC_RESOLVE_SYMBOL(type)) {
     /* Add in the symbol's absolute address */
     value += symvalue;
   }
 
-  if (RELOC_PC_RELATIVE (type)) {
+  if (RELOC_PC_RELATIVE(type)) {
     value -= (Elf_Word)where;
   }
 
-  if (RELOC_BASE_RELATIVE (type)) {
+  if (RELOC_BASE_RELATIVE(type)) {
     /*
      * Note that even though sparcs use `Elf_rela'
      * exclusively we still need the implicit memory addend
@@ -387,26 +424,26 @@ rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
 #define DIAGNOSTIC
 #ifdef DIAGNOSTIC
     if (value != 0 && *where != 0) {
-      if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
         printf("rtl: reloc base_rel(%s): where=%p, *where 0x%" PRIu32 ", "
                "addend=0x%" PRIu32 ", base %p\n",
-               rtems_rtl_obj_oname (obj),
-               where, *where, rela->r_addend, sect->base);
+               rtems_rtl_obj_oname(obj), where, *where, rela->r_addend,
+               sect->base);
     }
 #endif
     value += (Elf_Word)(sect->base + *where);
   }
 
-  mask = RELOC_VALUE_BITMASK (type);
-  value >>= RELOC_VALUE_RIGHTSHIFT (type);
+  mask = RELOC_VALUE_BITMASK(type);
+  value >>= RELOC_VALUE_RIGHTSHIFT(type);
   value &= mask;
 
   if (RELOC_UNALIGNED(type)) {
     /*
      * Handle unaligned relocations.
      */
-    char *ptr = (char*) where;
-    int i, size = RELOC_TARGET_SIZE (type) / 8;
+    char* ptr = (char*)where;
+    int i, size = RELOC_TARGET_SIZE(type) / 8;
 
     /* Read it in one byte at a time. */
     for (i = size - 1; i >= 0; i--)
@@ -424,66 +461,49 @@ rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
     tmp = *where;
   }
 
-  if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-    printf ("rtl: %s %p @ %p in %s\n",
-            reloc_names[ELF_R_TYPE(rela->r_info)],
-            (void *)tmp, where, rtems_rtl_obj_oname (obj));
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+    printf("rtl: %s %p @ %p in %s\n", reloc_names[ELF_R_TYPE(rela->r_info)],
+           (void*)tmp, where, rtems_rtl_obj_oname(obj));
 
   return rtems_rtl_elf_rel_no_error;
 }
 
-rtems_rtl_elf_rel_status
-rtems_rtl_elf_relocate_rel_tramp (rtems_rtl_obj*            obj,
-                                  const Elf_Rel*            rel,
-                                  const rtems_rtl_obj_sect* sect,
-                                  const char*               symname,
-                                  const Elf_Byte            syminfo,
-                                  const Elf_Word            symvalue)
-{
-  (void) obj;
-  (void) rel;
-  (void) sect;
-  (void) symname;
-  (void) syminfo;
-  (void) symvalue;
-  rtems_rtl_set_error (EINVAL, "rel type record not supported");
+rtems_rtl_elf_rel_status rtems_rtl_elf_relocate_rel_tramp(
+    rtems_rtl_obj* obj, const Elf_Rel* rel, const rtems_rtl_obj_sect* sect,
+    const char* symname, const Elf_Byte syminfo, const Elf_Word symvalue) {
+  (void)obj;
+  (void)rel;
+  (void)sect;
+  (void)symname;
+  (void)syminfo;
+  (void)symvalue;
+  rtems_rtl_set_error(EINVAL, "rel type record not supported");
   return rtems_rtl_elf_rel_failure;
 }
 
 rtems_rtl_elf_rel_status
-rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
-                            const Elf_Rel*            rel,
-                            const rtems_rtl_obj_sect* sect,
-                            const char*               symname,
-                            const Elf_Byte            syminfo,
-                            const Elf_Word            symvalue)
-{
-  (void) obj;
-  (void) rel;
-  (void) sect;
-  (void) symname;
-  (void) syminfo;
-  (void) symvalue;
-  printf ("rtl: rel type record not supported; please report\n");
+rtems_rtl_elf_relocate_rel(rtems_rtl_obj* obj, const Elf_Rel* rel,
+                           const rtems_rtl_obj_sect* sect, const char* symname,
+                           const Elf_Byte syminfo, const Elf_Word symvalue) {
+  (void)obj;
+  (void)rel;
+  (void)sect;
+  (void)symname;
+  (void)syminfo;
+  (void)symvalue;
+  printf("rtl: rel type record not supported; please report\n");
   return rtems_rtl_elf_rel_failure;
 }
 
-bool
-rtems_rtl_elf_unwind_parse (const rtems_rtl_obj* obj,
-                            const char*          name,
-                            uint32_t             flags)
-{
-  return rtems_rtl_elf_unwind_dw2_parse (obj, name, flags);
+bool rtems_rtl_elf_unwind_parse(const rtems_rtl_obj* obj, const char* name,
+                                uint32_t flags) {
+  return rtems_rtl_elf_unwind_dw2_parse(obj, name, flags);
 }
 
-bool
-rtems_rtl_elf_unwind_register (rtems_rtl_obj* obj)
-{
-  return rtems_rtl_elf_unwind_dw2_register (obj);
+bool rtems_rtl_elf_unwind_register(rtems_rtl_obj* obj) {
+  return rtems_rtl_elf_unwind_dw2_register(obj);
 }
 
-bool
-rtems_rtl_elf_unwind_deregister (rtems_rtl_obj* obj)
-{
-  return rtems_rtl_elf_unwind_dw2_deregister (obj);
+bool rtems_rtl_elf_unwind_deregister(rtems_rtl_obj* obj) {
+  return rtems_rtl_elf_unwind_dw2_deregister(obj);
 }

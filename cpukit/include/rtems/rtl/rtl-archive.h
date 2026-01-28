@@ -45,7 +45,7 @@
  *       reported to a user. The user error is undefined symbols.
  */
 
-#if !defined (_RTEMS_RTL_ARCHIVE_H_)
+#if !defined(_RTEMS_RTL_ARCHIVE_H_)
 #define _RTEMS_RTL_ARCHIVE_H_
 
 #include <rtems.h>
@@ -60,14 +60,13 @@ extern "C" {
  * Flags for archives.
  */
 #define RTEMS_RTL_ARCHIVE_USER_LOAD (1 << 0) /**< User forced load. */
-#define RTEMS_RTL_ARCHIVE_REMOVE    (1 << 1) /**< The achive is not found. */
-#define RTEMS_RTL_ARCHIVE_LOAD      (1 << 2) /**< Load the achive. */
+#define RTEMS_RTL_ARCHIVE_REMOVE (1 << 1)    /**< The achive is not found. */
+#define RTEMS_RTL_ARCHIVE_LOAD (1 << 2)      /**< Load the achive. */
 
 /**
  * Symbol search and loading results.
  */
-typedef enum rtems_rtl_archive_search
-{
+typedef enum rtems_rtl_archive_search {
   rtems_rtl_archive_search_not_found = 0, /**< The search failed to find the
                                                symbol. */
   rtems_rtl_archive_search_found = 1,     /**< The symbols was found. */
@@ -75,56 +74,52 @@ typedef enum rtems_rtl_archive_search
                                                object file has been loaded */
   rtems_rtl_archive_search_error = 3,     /**< There was an error searching or
                                                loading. */
-  rtems_rtl_archive_search_no_config = 4 /**< There is no config or it is
-                                          *   invalid. */
+  rtems_rtl_archive_search_no_config = 4  /**< There is no config or it is
+                                           *   invalid. */
 } rtems_rtl_archive_search;
 
 /**
  * RTL Archive symbols.
  */
-typedef struct rtems_rtl_archive_symbol
-{
-  size_t      entry;  /**< Index in the symbol offset table. */
-  const char* label;  /**< The symbol's label. */
+typedef struct rtems_rtl_archive_symbol {
+  size_t entry;      /**< Index in the symbol offset table. */
+  const char* label; /**< The symbol's label. */
 } rtems_rtl_archive_symbol;
 
 /**
  * RTL Archive symbols.
  */
-typedef struct rtems_rtl_archive_symbols
-{
-  void*                     base;     /**< Base of the symbol table. */
-  size_t                    size;     /**< Size of the symbol table. */
-  size_t                    entries;  /**< Entries in the symbol table. */
-  const char*               names;    /**< Start of the symbol names. */
-  rtems_rtl_archive_symbol* symbols;  /**< Sorted symbol table. */
+typedef struct rtems_rtl_archive_symbols {
+  void* base;                        /**< Base of the symbol table. */
+  size_t size;                       /**< Size of the symbol table. */
+  size_t entries;                    /**< Entries in the symbol table. */
+  const char* names;                 /**< Start of the symbol names. */
+  rtems_rtl_archive_symbol* symbols; /**< Sorted symbol table. */
 } rtems_rtl_archive_symbols;
 
 /**
  * RTL Archive data.
  */
-typedef struct rtems_rtl_archive
-{
-  rtems_chain_node          node;     /**< Chain link. */
-  const char*               name;     /**< Archive absolute path. */
-  size_t                    size;     /**< Size of the archive. */
-  time_t                    mtime;    /**< Archive's last modified time. */
-  off_t                     enames;   /**< Extended file name offset, lazy load. */
-  rtems_rtl_archive_symbols symbols;  /**< Ranlib symbol table. */
-  size_t                    refs;     /**< Loaded object modules. */
-  uint32_t                  flags;    /**< Some flags. */
+typedef struct rtems_rtl_archive {
+  rtems_chain_node node; /**< Chain link. */
+  const char* name;      /**< Archive absolute path. */
+  size_t size;           /**< Size of the archive. */
+  time_t mtime;          /**< Archive's last modified time. */
+  off_t enames;          /**< Extended file name offset, lazy load. */
+  rtems_rtl_archive_symbols symbols; /**< Ranlib symbol table. */
+  size_t refs;                       /**< Loaded object modules. */
+  uint32_t flags;                    /**< Some flags. */
 } rtems_rtl_archive;
 
 /**
  * RTL Archive data.
  */
-typedef struct rtems_rtl_archives
-{
-  const char*         config_name;    /**< Config file name. */
-  time_t              config_mtime;   /**< Config last modified time. */
-  ssize_t             config_length;  /**< Length the config data. */
-  char*               config;         /**< Config file contents. */
-  rtems_chain_control archives;       /**< The located archives. */
+typedef struct rtems_rtl_archives {
+  const char* config_name;      /**< Config file name. */
+  time_t config_mtime;          /**< Config last modified time. */
+  ssize_t config_length;        /**< Length the config data. */
+  char* config;                 /**< Config file contents. */
+  rtems_chain_control archives; /**< The located archives. */
 } rtems_rtl_archives;
 
 /**
@@ -139,14 +134,14 @@ typedef void (*rtems_rtl_archive_error)(int num, const char* text);
  * @param config The path to the configuration file.
  * @return bool Returns @true is the archives are open.
  */
-void rtems_rtl_archives_open (rtems_rtl_archives* archives, const char* config);
+void rtems_rtl_archives_open(rtems_rtl_archives* archives, const char* config);
 
 /**
  * Close the RTL archives support.
  *
  * @param archives The archives data to close.
  */
-void rtems_rtl_archives_close (rtems_rtl_archives* archives);
+void rtems_rtl_archives_close(rtems_rtl_archives* archives);
 
 /**
  * Refresh the archives data. Check if the configuration has changes and if it
@@ -159,7 +154,7 @@ void rtems_rtl_archives_close (rtems_rtl_archives* archives);
  * @param archives The archives data to refresh.
  * @retval false The refresh failed, an error will have been set.
  */
-bool rtems_rtl_archives_refresh (rtems_rtl_archives* archives);
+bool rtems_rtl_archives_refresh(rtems_rtl_archives* archives);
 
 /**
  * Load an archive.
@@ -168,7 +163,7 @@ bool rtems_rtl_archives_refresh (rtems_rtl_archives* archives);
  * @param name     The archive to load.
  * @retval true    The archive is loaded.
  */
-bool rtems_rtl_archive_load (rtems_rtl_archives* archives, const char* name);
+bool rtems_rtl_archive_load(rtems_rtl_archives* archives, const char* name);
 
 /**
  * Search for a symbol and load the first object file that has the symbol.
@@ -178,9 +173,9 @@ bool rtems_rtl_archive_load (rtems_rtl_archives* archives, const char* name);
  * @param load     If @true load the object file the symbol is found in
  *                 else return the found not found status.
  */
-rtems_rtl_archive_search rtems_rtl_archive_obj_load (rtems_rtl_archives* archives,
-                                                     const char*         symbol,
-                                                     bool                load);
+rtems_rtl_archive_search
+rtems_rtl_archive_obj_load(rtems_rtl_archives* archives, const char* symbol,
+                           bool load);
 
 /**
  * Find a module in an archive returning the offset in the archive and
@@ -201,13 +196,10 @@ rtems_rtl_archive_search rtems_rtl_archive_obj_load (rtems_rtl_archives* archive
  * @retval true The file was found in the archive.
  * @retval false The file was not found.
  */
-bool rtems_rtl_obj_archive_find_obj (int                     fd,
-                                     size_t                  fsize,
-                                     const char**            name,
-                                     off_t*                  offset,
-                                     size_t*                 size,
-                                     off_t*                  extended_names,
-                                     rtems_rtl_archive_error error);
+bool rtems_rtl_obj_archive_find_obj(int fd, size_t fsize, const char** name,
+                                    off_t* offset, size_t* size,
+                                    off_t* extended_names,
+                                    rtems_rtl_archive_error error);
 
 #ifdef __cplusplus
 }

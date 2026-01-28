@@ -54,7 +54,7 @@
  * parts of the file.
  */
 
-#if !defined (_RTEMS_RTL_OBJ_CACHE_H_)
+#if !defined(_RTEMS_RTL_OBJ_CACHE_H_)
 #define _RTEMS_RTL_OBJ_CACHE_H_
 
 #include <fcntl.h>
@@ -69,15 +69,14 @@ extern "C" {
 /**
  * The buffer cache.
  */
-typedef struct rtems_rtl_obj_cache
-{
-  int      fd;        /**< The file descriptor of the data in the cache. */
-  size_t   file_size; /**< The size of the file. */
-  off_t    offset;    /**< The base offset of the buffer. */
-  size_t   size;      /**< The size of the cache. */
-  size_t   level;     /**< The amount of data in the cache. A file can be
-                       * smaller than the cache file. */
-  uint8_t* buffer;    /**< The buffer */
+typedef struct rtems_rtl_obj_cache {
+  int fd;           /**< The file descriptor of the data in the cache. */
+  size_t file_size; /**< The size of the file. */
+  off_t offset;     /**< The base offset of the buffer. */
+  size_t size;      /**< The size of the cache. */
+  size_t level;     /**< The amount of data in the cache. A file can be
+                     * smaller than the cache file. */
+  uint8_t* buffer;  /**< The buffer */
 } rtems_rtl_obj_cache;
 
 /**
@@ -89,21 +88,21 @@ typedef struct rtems_rtl_obj_cache
  * @retval true The cache is open.
  * @retval false The cache is not open. The RTL error is set.
  */
-bool rtems_rtl_obj_cache_open (rtems_rtl_obj_cache* cache, size_t size);
+bool rtems_rtl_obj_cache_open(rtems_rtl_obj_cache* cache, size_t size);
 
 /**
  * Close a cache.
  *
  * @param cache The cache to close.
  */
-void rtems_rtl_obj_cache_close (rtems_rtl_obj_cache* cache);
+void rtems_rtl_obj_cache_close(rtems_rtl_obj_cache* cache);
 
 /**
  * Flush the cache. Any further read will read the data from the file.
  *
  * @param cache The cache to flush.
  */
-void rtems_rtl_obj_cache_flush (rtems_rtl_obj_cache* cache);
+void rtems_rtl_obj_cache_flush(rtems_rtl_obj_cache* cache);
 
 /**
  * Read data by reference. The length contains the amount of data that should
@@ -121,11 +120,8 @@ void rtems_rtl_obj_cache_flush (rtems_rtl_obj_cache* cache);
  * @retval true The data referenced is in the cache.
  * @retval false The read failed and the RTL error has been set.
  */
-bool rtems_rtl_obj_cache_read (rtems_rtl_obj_cache* cache,
-                               int                  fd,
-                               off_t                offset,
-                               void**               buffer,
-                               size_t*              length);
+bool rtems_rtl_obj_cache_read(rtems_rtl_obj_cache* cache, int fd, off_t offset,
+                              void** buffer, size_t* length);
 
 /**
  * Read data by value. The data is copied to the user supplied buffer.
@@ -138,11 +134,8 @@ bool rtems_rtl_obj_cache_read (rtems_rtl_obj_cache* cache,
  * @retval true The data has been read from the cache.
  * @retval false The read failed and the RTL error has been set.
  */
-bool rtems_rtl_obj_cache_read_byval (rtems_rtl_obj_cache* cache,
-                                     int                  fd,
-                                     off_t                offset,
-                                     void*                buffer,
-                                     size_t               length);
+bool rtems_rtl_obj_cache_read_byval(rtems_rtl_obj_cache* cache, int fd,
+                                    off_t offset, void* buffer, size_t length);
 
 #ifdef __cplusplus
 }

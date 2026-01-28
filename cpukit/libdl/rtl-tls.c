@@ -47,7 +47,6 @@
 #include <rtems/score/percpu.h>
 #include <rtems/score/thread.h>
 
-void* rtems_rtl_tls_get_base (void)
-{
-  return _CPU_Get_TLS_thread_pointer (&_Thread_Get_executing()->Registers);
+void* rtems_rtl_tls_get_base(void) {
+  return _CPU_Get_TLS_thread_pointer(&_Thread_Get_executing()->Registers);
 }

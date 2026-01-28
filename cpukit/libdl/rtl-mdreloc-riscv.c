@@ -39,88 +39,76 @@
 
 #include <errno.h>
 #include <stdio.h>
-#include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 
-#include <rtems/rtl/rtl.h>
 #include "rtl-elf.h"
 #include "rtl-error.h"
-#include <rtems/rtl/rtl-trace.h>
-#include "rtl-unwind.h"
 #include "rtl-unwind-dw2.h"
+#include "rtl-unwind.h"
+#include <rtems/rtl/rtl-trace.h>
+#include <rtems/rtl/rtl.h>
 
-uint32_t
-rtems_rtl_elf_section_flags (const rtems_rtl_obj* obj,
-                             const Elf_Shdr*      shdr) {
-  (void) obj;
-  (void) shdr;
+uint32_t rtems_rtl_elf_section_flags(const rtems_rtl_obj* obj,
+                                     const Elf_Shdr* shdr) {
+  (void)obj;
+  (void)shdr;
 
   return 0;
 }
 
-uint32_t
-rtems_rtl_elf_arch_parse_section (const rtems_rtl_obj* obj,
-                                  int                  section,
-                                  const char*          name,
-                                  const Elf_Shdr*      shdr,
-                                  const uint32_t       flags) {
-  (void) obj;
-  (void) section;
-  (void) name;
-  (void) shdr;
+uint32_t rtems_rtl_elf_arch_parse_section(const rtems_rtl_obj* obj, int section,
+                                          const char* name,
+                                          const Elf_Shdr* shdr,
+                                          const uint32_t flags) {
+  (void)obj;
+  (void)section;
+  (void)name;
+  (void)shdr;
   return flags;
 }
 
-bool
-rtems_rtl_elf_arch_section_alloc (const rtems_rtl_obj* obj,
-                                  rtems_rtl_obj_sect*  sect) {
-  (void) obj;
-  (void) sect;
+bool rtems_rtl_elf_arch_section_alloc(const rtems_rtl_obj* obj,
+                                      rtems_rtl_obj_sect* sect) {
+  (void)obj;
+  (void)sect;
   return false;
 }
 
-bool
-rtems_rtl_elf_arch_section_free (const rtems_rtl_obj* obj,
-                                 rtems_rtl_obj_sect*  sect) {
-  (void) obj;
-  (void) sect;
+bool rtems_rtl_elf_arch_section_free(const rtems_rtl_obj* obj,
+                                     rtems_rtl_obj_sect* sect) {
+  (void)obj;
+  (void)sect;
   return false;
 }
 
-bool
-rtems_rtl_elf_rel_resolve_sym (Elf_Word type) {
-  (void) type;
+bool rtems_rtl_elf_rel_resolve_sym(Elf_Word type) {
+  (void)type;
 
   return true;
 }
 
-uint32_t rtems_rtl_obj_tramp_alignment (const rtems_rtl_obj* obj)
-{
-  (void) obj;
+uint32_t rtems_rtl_obj_tramp_alignment(const rtems_rtl_obj* obj) {
+  (void)obj;
   return sizeof(uint32_t);
 }
 
-size_t
-rtems_rtl_elf_relocate_tramp_max_size (void) {
+size_t rtems_rtl_elf_relocate_tramp_max_size(void) {
   /*
    * Disable by returning 0.
    */
   return 0;
 }
 
-rtems_rtl_elf_rel_status
-rtems_rtl_elf_relocate_rel_tramp (rtems_rtl_obj*            obj,
-                                  const Elf_Rel*            rel,
-                                  const rtems_rtl_obj_sect* sect,
-                                  const char*               symname,
-                                  const Elf_Byte            syminfo,
-                                  const Elf_Word            symvalue) {
-  (void) obj;
-  (void) rel;
-  (void) sect;
-  (void) symname;
-  (void) syminfo;
-  (void) symvalue;
+rtems_rtl_elf_rel_status rtems_rtl_elf_relocate_rel_tramp(
+    rtems_rtl_obj* obj, const Elf_Rel* rel, const rtems_rtl_obj_sect* sect,
+    const char* symname, const Elf_Byte syminfo, const Elf_Word symvalue) {
+  (void)obj;
+  (void)rel;
+  (void)sect;
+  (void)symname;
+  (void)syminfo;
+  (void)symvalue;
   return rtems_rtl_elf_rel_no_error;
 }
 
@@ -130,50 +118,47 @@ static uint32_t extractBits(uint64_t v, uint32_t begin, uint32_t end) {
 }
 
 static int64_t SignExtend64(uint64_t val, unsigned bits) {
-  return (int64_t )(((int64_t) (val << (64 - bits))) >> (64 - bits));
+  return (int64_t)(((int64_t)(val << (64 - bits))) >> (64 - bits));
 }
 
-static void write16le(void *loc, uint16_t val) {
-  *((uint16_t *) loc) = val;
+static void write16le(void* loc, uint16_t val) {
+  *((uint16_t*)loc) = val;
 }
 
-static void write32le(void *loc, uint32_t val) {
-  *((uint32_t *) loc) = val;
+static void write32le(void* loc, uint32_t val) {
+  *((uint32_t*)loc) = val;
 }
 
-static void write64le(void *loc, uint64_t val) {
-  *((uint64_t *) loc) = val;
+static void write64le(void* loc, uint64_t val) {
+  *((uint64_t*)loc) = val;
 }
 
-static uint16_t read16le(void *loc) {
-  return *((uint16_t *) loc);
+static uint16_t read16le(void* loc) {
+  return *((uint16_t*)loc);
 }
 
-static uint32_t read32le(void *loc) {
-  return *((uint32_t *) loc);
+static uint32_t read32le(void* loc) {
+  return *((uint32_t*)loc);
 }
 
-static uint64_t read64le(void *loc) {
-  return *((uint64_t *) loc);
+static uint64_t read64le(void* loc) {
+  return *((uint64_t*)loc);
 }
 
 static rtems_rtl_elf_rel_status
-rtems_rtl_elf_reloc_rela (rtems_rtl_obj*      obj,
-                          const Elf_Rela*           rela,
-                          const rtems_rtl_obj_sect* sect,
-                          const char*               symname,
-                          const Elf_Byte            syminfo,
-                          const Elf_Word            symvalue,
-                          const bool parsing) {
-  (void) symname;
+rtems_rtl_elf_reloc_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
+                         const rtems_rtl_obj_sect* sect, const char* symname,
+                         const Elf_Byte syminfo, const Elf_Word symvalue,
+                         const bool parsing) {
+  (void)symname;
 
-  Elf_Addr *where;
+  Elf_Addr* where;
 
   char bits = (sizeof(Elf_Word) * 8);
-  where = (Elf_Addr *)(sect->base + rela->r_offset);
+  where = (Elf_Addr*)(sect->base + rela->r_offset);
 
   // Final PCREL value
-  Elf_Word pcrel_val = symvalue - ((Elf_Word)(uintptr_t) where);
+  Elf_Word pcrel_val = symvalue - ((Elf_Word)(uintptr_t)where);
 
   if (syminfo == STT_SECTION) {
     return rtems_rtl_elf_rel_no_error;
@@ -197,8 +182,7 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*      obj,
     insn |= imm8 | imm4_3 | imm7_6 | imm2_1 | imm5;
 
     write16le(where, insn);
-  }
-  break;
+  } break;
 
   case R_TYPE(RVC_JUMP): {
     uint16_t insn = ((*where) & 0xFFFF) & 0xE003;
@@ -213,8 +197,7 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*      obj,
     insn |= imm11 | imm4 | imm9_8 | imm10 | imm6 | imm7 | imm3_1 | imm5;
 
     write16le(where, insn);
-  }
-  break;
+  } break;
 
   case R_TYPE(RVC_LUI): {
     int64_t imm = SignExtend64(symvalue + 0x800, bits) >> 12;
@@ -225,8 +208,7 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*      obj,
       uint16_t imm16_12 = extractBits(symvalue + 0x800, 16, 12) << 2;
       write16le(where, (read16le(where) & 0xEF83) | imm17 | imm16_12);
     }
-  }
-  break;
+  } break;
 
   case R_TYPE(JAL): {
     uint32_t insn = read32le(where) & 0xFFF;
@@ -237,8 +219,7 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*      obj,
     insn |= imm20 | imm10_1 | imm11 | imm19_12;
 
     write32le(where, insn);
-  }
-  break;
+  } break;
 
   case R_TYPE(BRANCH): {
 
@@ -250,8 +231,7 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*      obj,
     insn |= imm12 | imm10_5 | imm4_1 | imm11;
 
     write32le(where, insn);
-  }
-  break;
+  } break;
 
   case R_TYPE(64):
     write64le(where, symvalue);
@@ -261,10 +241,10 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*      obj,
     break;
 
   case R_TYPE(SET6):
-    *((uint8_t *) where) = (*where & 0xc0) | (symvalue & 0x3f);
+    *((uint8_t*)where) = (*where & 0xc0) | (symvalue & 0x3f);
     break;
   case R_TYPE(SET8):
-    *((uint8_t *) where) = symvalue;
+    *((uint8_t*)where) = symvalue;
     break;
   case R_TYPE(SET16):
     write16le(where, symvalue);
@@ -274,7 +254,7 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*      obj,
     break;
 
   case R_TYPE(ADD8):
-    *((uint8_t *) where) = *((uint8_t *) where) + symvalue;
+    *((uint8_t*)where) = *((uint8_t*)where) + symvalue;
     break;
   case R_TYPE(ADD16):
     write16le(where, read16le(where) + symvalue);
@@ -287,10 +267,11 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*      obj,
     break;
 
   case R_TYPE(SUB6):
-    *((uint8_t *) where) = (*where & 0xc0) | (((*where & 0x3f) - symvalue) & 0x3f);
+    *((uint8_t*)where) =
+        (*where & 0xc0) | (((*where & 0x3f) - symvalue) & 0x3f);
     break;
   case R_TYPE(SUB8):
-    *((uint8_t *) where) = *((uint8_t *) where) - symvalue;
+    *((uint8_t*)where) = *((uint8_t*)where) - symvalue;
     break;
   case R_TYPE(SUB16):
     write16le(where, read16le(where) - symvalue);
@@ -305,34 +286,30 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*      obj,
   case R_TYPE(32_PCREL): {
     write32le(where, pcrel_val);
 
-    if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-      printf ("rtl: R_RISCV_32_PCREL %p @ %p in %s\n",
-              (void *) * (where), where, rtems_rtl_obj_oname (obj));
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      printf("rtl: R_RISCV_32_PCREL %p @ %p in %s\n", (void*)*(where), where,
+             rtems_rtl_obj_oname(obj));
 
-  }
-  break;
+  } break;
 
   case R_TYPE(PCREL_HI20): {
-    int64_t hi = SignExtend64(pcrel_val + 0x800, bits); //pcrel_val + 0x800;
+    int64_t hi = SignExtend64(pcrel_val + 0x800, bits); // pcrel_val + 0x800;
     write32le(where, (read32le(where) & 0xFFF) | (hi & 0xFFFFF000));
 
-  }
-  break;
+  } break;
 
   case R_TYPE(GOT_HI20):
   case R_TYPE(HI20): {
 
     uint64_t hi = symvalue + 0x800;
     write32le(where, (read32le(where) & 0xFFF) | (hi & 0xFFFFF000));
-  }
-  break;
+  } break;
 
   case R_TYPE(PCREL_LO12_I): {
     uint64_t hi = (pcrel_val + 0x800) >> 12;
     uint64_t lo = pcrel_val - (hi << 12);
     write32le(where, (read32le(where) & 0xFFFFF) | ((lo & 0xFFF) << 20));
-  }
-  break;
+  } break;
 
   case R_TYPE(LO12_I): {
 
@@ -340,8 +317,7 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*      obj,
     uint64_t lo = symvalue - (hi << 12);
     write32le(where, (read32le(where) & 0xFFFFF) | ((lo & 0xFFF) << 20));
 
-  }
-  break;
+  } break;
 
   case R_TYPE(PCREL_LO12_S): {
     uint64_t hi = (pcrel_val + 0x800) >> 12;
@@ -350,8 +326,7 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*      obj,
     uint32_t imm4_0 = extractBits(lo, 4, 0) << 7;
     write32le(where, (read32le(where) & 0x1FFF07F) | imm11_5 | imm4_0);
 
-  }
-  break;
+  } break;
 
   case R_TYPE(LO12_S): {
     uint64_t hi = (symvalue + 0x800) >> 12;
@@ -359,8 +334,7 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*      obj,
     uint32_t imm11_5 = extractBits(lo, 11, 5) << 25;
     uint32_t imm4_0 = extractBits(lo, 4, 0) << 7;
     write32le(where, (read32le(where) & 0x1FFF07F) | imm11_5 | imm4_0);
-  }
-  break;
+  } break;
 
   case R_TYPE(CALL_PLT):
   case R_TYPE(CALL): {
@@ -368,15 +342,15 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*      obj,
     write32le(where, (read32le(where) & 0xFFF) | (hi & 0xFFFFF000));
     int64_t hi20 = SignExtend64(pcrel_val + 0x800, bits);
     int64_t lo = pcrel_val - (hi20 << 12);
-    write32le(((char *) where) + 4, (read32le(((char *) where) + 4) & 0xFFFFF) | ((lo & 0xFFF) << 20));
-  }
-  break;
+    write32le(((char*)where) + 4,
+              (read32le(((char*)where) + 4) & 0xFFFFF) | ((lo & 0xFFF) << 20));
+  } break;
 
   default:
-    rtems_rtl_set_error (EINVAL,
-                         "%s: Unsupported relocation type %u "
-                         "in non-PLT relocations",
-                         sect->name, (uint32_t) ELF_R_TYPE(rela->r_info));
+    rtems_rtl_set_error(EINVAL,
+                        "%s: Unsupported relocation type %u "
+                        "in non-PLT relocations",
+                        sect->name, (uint32_t)ELF_R_TYPE(rela->r_info));
     return rtems_rtl_elf_rel_failure;
   }
 
@@ -384,68 +358,44 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*      obj,
 }
 
 rtems_rtl_elf_rel_status
-rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
-                             const Elf_Rela*           rela,
-                             const rtems_rtl_obj_sect* sect,
-                             const char*               symname,
-                             const Elf_Byte            syminfo,
-                             const Elf_Word            symvalue) {
-  return rtems_rtl_elf_reloc_rela (obj,
-                                   rela,
-                                   sect,
-                                   symname,
-                                   syminfo,
-                                   symvalue,
-                                   false);
+rtems_rtl_elf_relocate_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
+                            const rtems_rtl_obj_sect* sect, const char* symname,
+                            const Elf_Byte syminfo, const Elf_Word symvalue) {
+  return rtems_rtl_elf_reloc_rela(obj, rela, sect, symname, syminfo, symvalue,
+                                  false);
+}
+
+rtems_rtl_elf_rel_status rtems_rtl_elf_relocate_rela_tramp(
+    rtems_rtl_obj* obj, const Elf_Rela* rela, const rtems_rtl_obj_sect* sect,
+    const char* symname, const Elf_Byte syminfo, const Elf_Word symvalue) {
+  return rtems_rtl_elf_reloc_rela(obj, rela, sect, symname, syminfo, symvalue,
+                                  true);
 }
 
 rtems_rtl_elf_rel_status
-rtems_rtl_elf_relocate_rela_tramp (rtems_rtl_obj*            obj,
-                                   const Elf_Rela*           rela,
-                                   const rtems_rtl_obj_sect* sect,
-                                   const char*               symname,
-                                   const Elf_Byte            syminfo,
-                                   const Elf_Word            symvalue) {
-  return rtems_rtl_elf_reloc_rela (obj,
-                                   rela,
-                                   sect,
-                                   symname,
-                                   syminfo,
-                                   symvalue,
-                                   true);
-}
+rtems_rtl_elf_relocate_rel(rtems_rtl_obj* obj, const Elf_Rel* rel,
+                           const rtems_rtl_obj_sect* sect, const char* symname,
+                           const Elf_Byte syminfo, const Elf_Word symvalue) {
+  (void)obj;
+  (void)rel;
+  (void)sect;
+  (void)symname;
+  (void)syminfo;
+  (void)symvalue;
 
-rtems_rtl_elf_rel_status
-rtems_rtl_elf_relocate_rel (rtems_rtl_obj*      obj,
-                            const Elf_Rel*            rel,
-                            const rtems_rtl_obj_sect* sect,
-                            const char*               symname,
-                            const Elf_Byte            syminfo,
-                            const Elf_Word            symvalue) {
-  (void) obj;
-  (void) rel;
-  (void) sect;
-  (void) symname;
-  (void) syminfo;
-  (void) symvalue;
-
-  rtems_rtl_set_error (EINVAL, "rel type record not supported");
+  rtems_rtl_set_error(EINVAL, "rel type record not supported");
   return rtems_rtl_elf_rel_failure;
 }
 
-bool
-rtems_rtl_elf_unwind_parse (const rtems_rtl_obj* obj,
-                            const char*          name,
-                            uint32_t             flags) {
-  return rtems_rtl_elf_unwind_dw2_parse (obj, name, flags);
+bool rtems_rtl_elf_unwind_parse(const rtems_rtl_obj* obj, const char* name,
+                                uint32_t flags) {
+  return rtems_rtl_elf_unwind_dw2_parse(obj, name, flags);
 }
 
-bool
-rtems_rtl_elf_unwind_register (rtems_rtl_obj* obj) {
-  return rtems_rtl_elf_unwind_dw2_register (obj);
+bool rtems_rtl_elf_unwind_register(rtems_rtl_obj* obj) {
+  return rtems_rtl_elf_unwind_dw2_register(obj);
 }
 
-bool
-rtems_rtl_elf_unwind_deregister (rtems_rtl_obj* obj) {
-  return rtems_rtl_elf_unwind_dw2_deregister (obj);
+bool rtems_rtl_elf_unwind_deregister(rtems_rtl_obj* obj) {
+  return rtems_rtl_elf_unwind_dw2_deregister(obj);
 }

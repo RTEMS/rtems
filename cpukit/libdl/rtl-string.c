@@ -35,17 +35,14 @@
 
 #include <string.h>
 
-#include <rtems/rtl/rtl-allocator.h>
 #include "rtl-string.h"
+#include <rtems/rtl/rtl-allocator.h>
 
-char*
-rtems_rtl_strdup (const char *s1)
-{
-  size_t len = strlen (s1);
-  char*  s2 = rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_OBJECT, len + 1, false);
-  if (s2)
-  {
-    memcpy (s2, s1, len);
+char* rtems_rtl_strdup(const char* s1) {
+  size_t len = strlen(s1);
+  char* s2 = rtems_rtl_alloc_new(RTEMS_RTL_ALLOC_OBJECT, len + 1, false);
+  if (s2) {
+    memcpy(s2, s1, len);
     s2[len] = '\0';
   }
   return s2;

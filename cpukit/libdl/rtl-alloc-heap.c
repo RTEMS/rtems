@@ -39,33 +39,28 @@
 
 #include <rtems/score/apimutex.h>
 
-void
-rtems_rtl_alloc_heap (rtems_rtl_alloc_cmd cmd,
-                      rtems_rtl_alloc_tag tag,
-                      void**              address,
-                      size_t              size)
-{
-  (void) tag;
+void rtems_rtl_alloc_heap(rtems_rtl_alloc_cmd cmd, rtems_rtl_alloc_tag tag,
+                          void** address, size_t size) {
+  (void)tag;
 
-  switch (cmd)
-  {
-    case RTEMS_RTL_ALLOC_NEW:
-      *address = malloc (size);
-      break;
-    case RTEMS_RTL_ALLOC_DEL:
-      free (*address);
-      *address = NULL;
-      break;
-    case RTEMS_RTL_ALLOC_RESIZE:
-      *address = realloc (*address, size);
-      break;
-    case RTEMS_RTL_ALLOC_LOCK:
-      _RTEMS_Lock_allocator();
-      break;
-    case RTEMS_RTL_ALLOC_UNLOCK:
-      _RTEMS_Unlock_allocator();
-      break;
-    default:
-      break;
+  switch (cmd) {
+  case RTEMS_RTL_ALLOC_NEW:
+    *address = malloc(size);
+    break;
+  case RTEMS_RTL_ALLOC_DEL:
+    free(*address);
+    *address = NULL;
+    break;
+  case RTEMS_RTL_ALLOC_RESIZE:
+    *address = realloc(*address, size);
+    break;
+  case RTEMS_RTL_ALLOC_LOCK:
+    _RTEMS_Lock_allocator();
+    break;
+  case RTEMS_RTL_ALLOC_UNLOCK:
+    _RTEMS_Unlock_allocator();
+    break;
+  default:
+    break;
   }
 }

@@ -32,7 +32,7 @@
  * @brief RTEMS Run-Time Linker Allocator
  */
 
-#if !defined (_RTEMS_RTL_ALLOCATOR_H_)
+#if !defined(_RTEMS_RTL_ALLOCATOR_H_)
 #define _RTEMS_RTL_ALLOCATOR_H_
 
 #include <stdbool.h>
@@ -84,7 +84,7 @@ typedef enum rtems_rtl_alloc_cmd rtems_rtl_alloc_cmd;
 /**
  * The number of tags.
  */
-#define RTEMS_RTL_ALLOC_TAGS ((size_t) (RTEMS_RTL_ALLOC_READ_EXEC + 1))
+#define RTEMS_RTL_ALLOC_TAGS ((size_t)(RTEMS_RTL_ALLOC_READ_EXEC + 1))
 
 /**
  * Allocator handler handles all RTL allocations. It can be hooked and
@@ -101,9 +101,8 @@ typedef enum rtems_rtl_alloc_cmd rtems_rtl_alloc_cmd;
  *             not used if deleting or freeing a previous allocation.
  */
 typedef void (*rtems_rtl_allocator)(rtems_rtl_alloc_cmd cmd,
-                                    rtems_rtl_alloc_tag tag,
-                                    void**              address,
-                                    size_t              size);
+                                    rtems_rtl_alloc_tag tag, void** address,
+                                    size_t size);
 
 /**
  * The allocator data.
@@ -122,7 +121,7 @@ typedef struct rtems_rtl_alloc_data rtems_rtl_alloc_data;
  *
  * @param data The data to initialise.
  */
-void rtems_rtl_alloc_initialise (rtems_rtl_alloc_data* data);
+void rtems_rtl_alloc_initialise(rtems_rtl_alloc_data* data);
 
 /**
  * The Runtime Loader allocator new allocates new memory and optionally clear
@@ -133,7 +132,7 @@ void rtems_rtl_alloc_initialise (rtems_rtl_alloc_data* data);
  * @param zero If true the memory is cleared.
  * @return void* The memory address or NULL is not memory available.
  */
-void* rtems_rtl_alloc_new (rtems_rtl_alloc_tag tag, size_t size, bool zero);
+void* rtems_rtl_alloc_new(rtems_rtl_alloc_tag tag, size_t size, bool zero);
 
 /**
  * The Runtime Loader allocator delete deletes allocated memory.
@@ -141,7 +140,7 @@ void* rtems_rtl_alloc_new (rtems_rtl_alloc_tag tag, size_t size, bool zero);
  * @param tag The type of allocation request.
  * @param address The memory address to delete. A NULL is ignored.
  */
-void rtems_rtl_alloc_del (rtems_rtl_alloc_tag tag, void* address);
+void rtems_rtl_alloc_del(rtems_rtl_alloc_tag tag, void* address);
 
 /**
  * The Runtime Loader allocator resize resizes allocated memory.
@@ -157,10 +156,8 @@ void rtems_rtl_alloc_del (rtems_rtl_alloc_tag tag, void* address);
  * @param zero If true the memory is cleared.
  * @return void* The memory address or NULL is not memory available.
  */
-void* rtems_rtl_alloc_resize (rtems_rtl_alloc_tag tag,
-                              void*               address,
-                              size_t              size,
-                              bool                zero);
+void* rtems_rtl_alloc_resize(rtems_rtl_alloc_tag tag, void* address,
+                             size_t size, bool zero);
 
 /**
  * The Runtime Loader allocator lock. An allocator that depends on a
@@ -169,7 +166,7 @@ void* rtems_rtl_alloc_resize (rtems_rtl_alloc_tag tag,
  * of the memory. This call be used to lock such an allocator.
  *  Allocator calls in this interface are protected by the RTL lock.
  */
-void rtems_rtl_alloc_lock (void);
+void rtems_rtl_alloc_lock(void);
 
 /**
  * The Runtime Loader allocator unlock. An allocator that depends on a
@@ -178,7 +175,7 @@ void rtems_rtl_alloc_lock (void);
  * of the memory. This call can be used to unlock such an allocator.
  * Allocator calls in this interface are protected by the RTL lock.
  */
-void rtems_rtl_alloc_unlock (void);
+void rtems_rtl_alloc_unlock(void);
 
 /**
  * The Runtime Loader allocator enable write on a bloc of allocated memory.
@@ -186,7 +183,7 @@ void rtems_rtl_alloc_unlock (void);
  * @param tag The type of allocation request. Must match the address.
  * @param address The memory address to write enable. A NULL is ignored.
  */
-void rtems_rtl_alloc_wr_enable (rtems_rtl_alloc_tag tag, void* address);
+void rtems_rtl_alloc_wr_enable(rtems_rtl_alloc_tag tag, void* address);
 
 /**
  * The Runtime Loader allocator disable write on a bloc of allocated memory.
@@ -194,7 +191,7 @@ void rtems_rtl_alloc_wr_enable (rtems_rtl_alloc_tag tag, void* address);
  * @param tag The type of allocation request. Must match the address.
  * @param address The memory address to write disable. A NULL is ignored.
  */
-void rtems_rtl_alloc_wr_disable (rtems_rtl_alloc_tag tag, void* address);
+void rtems_rtl_alloc_wr_disable(rtems_rtl_alloc_tag tag, void* address);
 
 /**
  * Hook the Runtime Loader allocatior. A handler can call the previous handler
@@ -205,7 +202,7 @@ void rtems_rtl_alloc_wr_disable (rtems_rtl_alloc_tag tag, void* address);
  * @param handler The handler to use as the allocator.
  * @return rtems_rtl_alloc_handler The previous handler.
  */
-rtems_rtl_allocator rtems_rtl_alloc_hook (rtems_rtl_allocator handler);
+rtems_rtl_allocator rtems_rtl_alloc_hook(rtems_rtl_allocator handler);
 
 /**
  * Allocate memory to an indirect handle.
@@ -214,9 +211,8 @@ rtems_rtl_allocator rtems_rtl_alloc_hook (rtems_rtl_allocator handler);
  * @param handle The handle to allocate the memory to.
  * @param size The size of the allocation.
  */
-void rtems_rtl_alloc_indirect_new (rtems_rtl_alloc_tag tag,
-                                   rtems_rtl_ptr*      handle,
-                                   size_t              size);
+void rtems_rtl_alloc_indirect_new(rtems_rtl_alloc_tag tag,
+                                  rtems_rtl_ptr* handle, size_t size);
 
 /**
  * Free memory from an indirect handle.
@@ -224,43 +220,43 @@ void rtems_rtl_alloc_indirect_new (rtems_rtl_alloc_tag tag,
  * @param tag The type of allocation request.
  * @param handle The handle to free the memory from.
  */
-void rtems_rtl_alloc_indirect_del (rtems_rtl_alloc_tag tag,
-                                   rtems_rtl_ptr*      handle);
+void rtems_rtl_alloc_indirect_del(rtems_rtl_alloc_tag tag,
+                                  rtems_rtl_ptr* handle);
 
 /**
  * Return the default tag for text sections.
  *
  * @return The text tag.
  */
-rtems_rtl_alloc_tag rtems_rtl_alloc_text_tag (void);
+rtems_rtl_alloc_tag rtems_rtl_alloc_text_tag(void);
 
 /**
  * Return the default tag for const sections.
  *
  * @return The const tag.
  */
-rtems_rtl_alloc_tag rtems_rtl_alloc_const_tag (void);
+rtems_rtl_alloc_tag rtems_rtl_alloc_const_tag(void);
 
 /**
  * Return the default tag for exception sections.
  *
  * @return The eh tag.
  */
-rtems_rtl_alloc_tag rtems_rtl_alloc_eh_tag (void);
+rtems_rtl_alloc_tag rtems_rtl_alloc_eh_tag(void);
 
 /**
  * Return the default tag for data sections.
  *
  * @return The data tag.
  */
-rtems_rtl_alloc_tag rtems_rtl_alloc_data_tag (void);
+rtems_rtl_alloc_tag rtems_rtl_alloc_data_tag(void);
 
 /**
  * Return the default tag for bss sections.
  *
  * @return The bss tag.
  */
-rtems_rtl_alloc_tag rtems_rtl_alloc_bss_tag (void);
+rtems_rtl_alloc_tag rtems_rtl_alloc_bss_tag(void);
 
 /**
  * Allocate the memory for a module given the size of the text, const, data and
@@ -280,11 +276,11 @@ rtems_rtl_alloc_tag rtems_rtl_alloc_bss_tag (void);
  * @retval true The memory has been allocated.
  * @retval false The allocation of memory has failed.
  */
-bool rtems_rtl_alloc_module_new (void** text_base, size_t text_size,
-                                 void** const_base, size_t const_size,
-                                 void** eh_base, size_t eh_size,
-                                 void** data_base, size_t data_size,
-                                 void** bss_base, size_t bss_size);
+bool rtems_rtl_alloc_module_new(void** text_base, size_t text_size,
+                                void** const_base, size_t const_size,
+                                void** eh_base, size_t eh_size,
+                                void** data_base, size_t data_size,
+                                void** bss_base, size_t bss_size);
 
 /**
  * Resize the allocated memory for a module given the new size of the text,
@@ -304,11 +300,11 @@ bool rtems_rtl_alloc_module_new (void** text_base, size_t text_size,
  * @retval true The memory has been allocated.
  * @retval false The allocation of memory has failed.
  */
-bool rtems_rtl_alloc_module_resize (void** text_base, size_t text_size,
-                                    void** const_base, size_t const_size,
-                                    void** eh_base, size_t eh_size,
-                                    void** data_base, size_t data_size,
-                                    void** bss_base, size_t bss_size);
+bool rtems_rtl_alloc_module_resize(void** text_base, size_t text_size,
+                                   void** const_base, size_t const_size,
+                                   void** eh_base, size_t eh_size,
+                                   void** data_base, size_t data_size,
+                                   void** bss_base, size_t bss_size);
 
 /**
  * Free the memory allocated to a module.
@@ -319,9 +315,9 @@ bool rtems_rtl_alloc_module_resize (void** text_base, size_t text_size,
  * @param data_base Pointer to the data base pointer.
  * @param bss_base Pointer to the bss base pointer.
  */
-void rtems_rtl_alloc_module_del (void** text_base, void** const_base,
-                                 void** eh_base, void** data_base,
-                                 void** bss_base);
+void rtems_rtl_alloc_module_del(void** text_base, void** const_base,
+                                void** eh_base, void** data_base,
+                                void** bss_base);
 
 #ifdef __cplusplus
 }

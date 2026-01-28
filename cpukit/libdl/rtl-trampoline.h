@@ -74,7 +74,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined (_RTEMS_RTL_TRAMPOLINE_H_)
+#if !defined(_RTEMS_RTL_TRAMPOLINE_H_)
 #define _RTEMS_RTL_TRAMPOLINE_H_
 
 #include <rtems/rtl/rtl-unresolved.h>
@@ -94,18 +94,17 @@ extern "C" {
  * @retval true The relocation has been added.
  * @retval false The relocation could not be added.
  */
-bool rtems_rtl_trampoline_add (rtems_rtl_obj*        obj,
-                               const uint16_t        flags,
-                               const uint16_t        sect,
-                               const rtems_rtl_word  symvalue,
-                               const rtems_rtl_word* rel);
+bool rtems_rtl_trampoline_add(rtems_rtl_obj* obj, const uint16_t flags,
+                              const uint16_t sect,
+                              const rtems_rtl_word symvalue,
+                              const rtems_rtl_word* rel);
 
 /**
  * Remove the relocation records for an object file.
  *
  * @param obj The object table the symbols are for.
  */
-void rtems_rtl_trampoline_remove (rtems_rtl_obj* obj);
+void rtems_rtl_trampoline_remove(rtems_rtl_obj* obj);
 
 #ifdef __cplusplus
 }
