@@ -710,7 +710,12 @@ static int get_selection(struct editor *ed, size_t *start, size_t *end) {
 }
 
 static int get_selected_text(struct editor *ed, char *buffer, int size) {
+#ifdef __rtems__
+  int len;
+  size_t selstart, selend;
+#else
   size_t selstart, selend, len;
+#endif
 
   if (!get_selection(ed, &selstart, &selend)) return 0;
   len = selend - selstart;
@@ -1112,10 +1117,18 @@ static void display_line(struct editor *ed, int pos, int fullline) {
   (void) get_selection(ed, &selstart, &selend);
   while (col < maxcol) {
     if (margin == 0) {
+#ifdef __rtems__
+      if (!hilite && (size_t)pos >= selstart && (size_t)pos < selend) {
+#else
       if (!hilite && pos >= selstart && pos < selend) {
+#endif
         for (s = SELECT_COLOR; *s; s++) *bufptr++ = *s;
         hilite = 1;
+#ifdef __rtems__
+      } else if (hilite && (size_t)pos >= selend) {
+#else
       } else if (hilite && pos >= selend) {
+#endif
         for (s = TEXT_COLOR; *s; s++) *bufptr++ = *s;
         hilite = 0;
       }
@@ -1580,7 +1593,11 @@ static void indent(struct editor *ed, unsigned char *indentation) {
   toplines = 0;
   newline = 1;
   for (i = start; i < end; i++) {
+#ifdef __rtems__
+    if (i == (size_t)ed->toppos) toplines = lines;
+#else
     if (i == ed->toppos) toplines = lines;
+#endif
     if (newline) {
       lines++;
       newline = 0;
@@ -1643,7 +1660,11 @@ static void unindent(struct editor *ed, unsigned char *indentation) {
       if (compare(ed, indentation, i, width)) {
         i += width;
         shrinkage += width;
+#ifdef __rtems__
+        if ((int)i < ed->toppos) topofs -= width;
+#else
         if (i < ed->toppos) topofs -= width;
+#endif
         continue;
       }
     }
