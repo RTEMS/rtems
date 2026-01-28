@@ -1264,7 +1264,7 @@ msdos_compare_entry_against_filename (
                  entry,
                  filename );
 #endif
-        if (bytes_in_entry_normalized <= size_remaining) {
+        if (bytes_in_entry_normalized <= (size_t) size_remaining) {
             size_remaining = size_remaining - bytes_in_entry_normalized;
             if (0 == memcmp ( &entry_normalized[0],
                               &filename[size_remaining],
@@ -1356,7 +1356,7 @@ msdos_find_file_in_directory (
         if (bytes_read < MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE)
             rtems_set_errno_and_return_minus_one(EIO);
 
-        assert(bytes_read == bts2rd);
+        assert(bytes_read == (ssize_t)bts2rd);
 
         /* have to look at the DIR_NAME as "raw" 8-bit data */
         for (dir_entry = 0;
@@ -1691,7 +1691,7 @@ msdos_add_file (
     int              ret;
     ssize_t          bytes_written;
     uint8_t          lfn_checksum;
-    int              lfn_entry;
+    unsigned int     lfn_entry;
     uint8_t         *entry;
     uint32_t         short_file_offset;
     uint32_t         length;
@@ -2033,7 +2033,7 @@ int msdos_find_node_by_cluster_num_in_fat_file(
         if ( ret < MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE )
             rtems_set_errno_and_return_minus_one( EIO );
 
-        assert(ret == bts2rd);
+        assert(ret == (ssize_t)bts2rd);
 
         for (i = 0; i < bts2rd; i += MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE)
         {

@@ -364,7 +364,7 @@ fat_cluster_set(
         ofs_blk,
         c,
         pattern);
-    if (c != ret)
+    if ((ssize_t)c != ret)
       rc = -1;
     else
     {
@@ -444,7 +444,7 @@ fat_cluster_write(
           ofs_blk,
           c,
           &buffer[bytes_written]);
-      if (c != ret)
+      if ((ssize_t)c != ret)
         rc = -1;
       else
       {
@@ -921,7 +921,7 @@ fat_init_clusters_chain(
     while ((cur_cln & fs_info->vol.mask) < fs_info->vol.eoc_val)
     {
         ret = fat_cluster_set(fs_info, cur_cln, 0, fs_info->vol.bpc, 0);
-        if ( ret != fs_info->vol.bpc )
+        if ( ret != (ssize_t)fs_info->vol.bpc )
         {
             return -1;
         }

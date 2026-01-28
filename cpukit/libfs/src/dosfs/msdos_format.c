@@ -783,7 +783,7 @@ static int msdos_format_determine_fmt_params
   if (ret_val == 0) {
       const char *from;
       char        *to = fmt_params->OEMName;
-      int          cnt;
+      size_t       cnt;
       from = "RTEMS"; /* default: make "from" point to OS Name */
     if ((rqdata != NULL) && (rqdata->OEMName != NULL)) {
       from = rqdata->OEMName;
@@ -810,7 +810,7 @@ static int msdos_format_determine_fmt_params
   if (ret_val == 0) {
       const char *from;
       char        *to = fmt_params->VolLabel;
-      int          cnt;
+      size_t       cnt;
       from = ""; /* default: make "from" point to empty string */
     if ((rqdata != NULL) &&
         (rqdata->VolLabel != NULL)) {

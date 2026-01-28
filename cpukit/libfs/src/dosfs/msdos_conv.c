@@ -414,7 +414,7 @@ msdos_filename_utf8_to_long_name_for_save (
     uint16_t                        *long_name,
     const size_t                     long_name_size)
 {
-    ssize_t      returned_size = 0;
+    size_t       returned_size = 0;
     int          eno           = 0;
     size_t       name_size;
     size_t       name_size_tmp;

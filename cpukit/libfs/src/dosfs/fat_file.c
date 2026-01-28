@@ -713,7 +713,7 @@ fat_file_extend(
             return rc;
 
         bytes_written = fat_cluster_set (fs_info, cur_cln, ofs, bytes_remain, 0);
-        if (bytes_remain != bytes_written)
+        if ((ssize_t)bytes_remain != bytes_written)
             return -1;
     }
 
