@@ -119,8 +119,8 @@ typedef struct rtems_termios_tty {
    * The canonical (cooked) character buffer
    */
   char    *cbuf;
-  int    ccount;
-  int    cindex;
+  size_t ccount;
+  size_t cindex;
 
   /*
    * Keep track of cursor (printhead) position
