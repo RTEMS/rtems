@@ -49,8 +49,8 @@ rtems_status_code rtems_object_get_class_information(
 )
 {
   Objects_Information *obj_info;
-  int                  unallocated;
-  int                  i;
+  uint32_t             unallocated;
+  uint32_t             i;
 
   /*
    * Validate parameters and look up information structure.
