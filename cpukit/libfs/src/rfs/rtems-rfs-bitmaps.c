@@ -443,7 +443,7 @@ rtems_rfs_search_map_for_clear_bit (rtems_rfs_bitmap_control* control,
     if (!rtems_rfs_bitmap_match (*search_bits, RTEMS_RFS_BITMAP_ELEMENT_SET))
     {
       while ((search_offset >= 0)
-             && (search_offset < rtems_rfs_bitmap_element_bits ()))
+             && ((size_t) search_offset < rtems_rfs_bitmap_element_bits ()))
       {
         if (!rtems_rfs_bitmap_test (*search_bits, search_offset))
         {
@@ -452,7 +452,7 @@ rtems_rfs_search_map_for_clear_bit (rtems_rfs_bitmap_control* control,
            * found. We may find none are spare if searching up from the seed.
            */
           while ((map_offset >= 0)
-                 && (map_offset < rtems_rfs_bitmap_element_bits ()))
+                 && ((size_t) map_offset < rtems_rfs_bitmap_element_bits ()))
           {
             if (!rtems_rfs_bitmap_test (*map_bits, map_offset))
             {
