@@ -81,7 +81,7 @@ static void symlink_test01(void )
   status=lstat(symlink_file01,&statbuf);
   rtems_test_assert(status==0);
   rtems_test_assert(S_ISLNK(statbuf.st_mode));
-  rtems_test_assert(len==statbuf.st_size);
+  rtems_test_assert((off_t)len==statbuf.st_size);
 
 
   puts("call readlink ");
@@ -99,7 +99,7 @@ static void symlink_test01(void )
   status=lstat(symlink_file01,&statbuf);
   rtems_test_assert(status==0);
   rtems_test_assert(S_ISLNK(statbuf.st_mode));
-  rtems_test_assert(len==statbuf.st_size);
+  rtems_test_assert((off_t)len==statbuf.st_size);
 
   puts("call readlink ");
   name_len=readlink(symlink_file01,name,sizeof(name)-1);
@@ -119,7 +119,7 @@ static void symlink_test01(void )
   status=lstat(symlink_file01,&statbuf);
   rtems_test_assert(status==0);
   rtems_test_assert(S_ISLNK(statbuf.st_mode));
-  rtems_test_assert(len==statbuf.st_size);
+  rtems_test_assert((off_t)len==statbuf.st_size);
 
 
   puts("call readlink ");

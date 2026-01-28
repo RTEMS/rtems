@@ -612,7 +612,7 @@ block_rw_lseek (int fd, size_t pos)
   off_t actual;
 
   actual = lseek (fd, pos, SEEK_SET);
-  rtems_test_assert (actual == pos);
+  rtems_test_assert (actual == (off_t) pos);
 }
 
 static void
@@ -648,7 +648,7 @@ block_rw_check (int fd, const char *out, char *in, size_t size)
   off_t file_size;
 
   file_size = lseek (fd, 0, SEEK_END);
-  rtems_test_assert (file_size == size);
+  rtems_test_assert (file_size == (off_t) size);
 
   block_rw_lseek (fd, 0);
 

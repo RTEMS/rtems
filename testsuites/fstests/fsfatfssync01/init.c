@@ -107,7 +107,7 @@ static void write_to_file( const char *file, bool sync )
   rtems_test_assert( n == (ssize_t) sizeof( buf ) );
 
   pos_after = lseek( fd, 0, SEEK_END );
-  rtems_test_assert( pos_after == pos_before + sizeof( buf ) );
+  rtems_test_assert( pos_after == pos_before + (ssize_t) sizeof( buf ) );
 
   if ( sync ) {
     rv = fsync( fd );
