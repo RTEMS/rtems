@@ -401,7 +401,7 @@ struct router_priv {
 
 };
 
-int router_count = 0;
+unsigned int router_count = 0;
 static struct router_priv *priv_tab[ROUTER_MAX];
 
 /* Driver prototypes */

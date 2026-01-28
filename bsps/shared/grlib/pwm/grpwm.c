@@ -177,7 +177,7 @@ struct grpwm_priv {
 	char				nscalers;	/* Number of scalers */
 	char				wave;		/* If Wave form is available */
 	int				wlength;	/* Wave Form RAM Length */
-	int				channel_cnt;
+	unsigned int			channel_cnt;
 	struct grpwm_chan_priv		*channels[8];
 	rtems_id			dev_sem;
 };
@@ -383,7 +383,7 @@ static void grpwm_write_wram(
 
 static void grpwm_hw_reset(struct grpwm_priv *priv)
 {
-	int i;
+	unsigned int i;
 	struct grpwm_chan_priv *pwm;
 	struct grpwm_regs *regs = priv->regs;
 
@@ -410,8 +410,8 @@ static void grpwm_hw_reset(struct grpwm_priv *priv)
 	}
 
 	/* Set max scaler */
-	for (i=0; i<priv->nscalers; i++) {
-		grpwm_scaler_set(regs, i, 0xffffffff);
+	for (char ic=0; ic<priv->nscalers; ic++) {
+		grpwm_scaler_set(regs, ic, 0xffffffff);
 	}
 }
 
@@ -471,7 +471,7 @@ static unsigned int grpwm_update_prepare_channel(
 static void grpwm_update_active(struct grpwm_priv *priv, int enable)
 {
 	unsigned int ctrl;
-	int i;
+	unsigned int i;
 
 	ctrl = priv->regs->ctrl;
 
@@ -491,7 +491,7 @@ static void grpwm_update_active(struct grpwm_priv *priv, int enable)
 /* Configure the hardware of a channel according to this */
 static rtems_status_code grpwm_config_channel(
 	struct grpwm_priv *priv,
-	int channel,
+	unsigned int channel,
 	struct grpwm_ioctl_config *cfg
 	)
 {
@@ -554,7 +554,7 @@ static void grpwm_isr(void *arg)
 	unsigned int ipend;
 	struct grpwm_chan_priv *pwm = arg;
 	struct grpwm_priv *priv = pwm->common;
-	int i;
+	unsigned int i;
 
 	/* Get current pending interrupts */
 	ipend = priv->regs->ipend;
@@ -726,7 +726,7 @@ static rtems_device_driver grpwm_ioctl(rtems_device_major_number major, rtems_de
 		{
 			struct grpwm_ioctl_update *up = ioarg->buffer;
 			unsigned int invalid_mask, pctrl = 0;
-			int i;
+			unsigned int i;
 
 			if ( up == NULL )
 				return RTEMS_INVALID_NAME;
@@ -804,7 +804,8 @@ int grpwm_device_init(struct grpwm_priv *priv)
 {
 	struct amba_dev_info *ambadev;
 	struct ambapp_core *pnpinfo;
-	int mask, i, sepirq;
+	int mask, sepirq;
+	unsigned int i;
 	unsigned int wabits;
 	struct grpwm_chan_priv *pwm;
 	struct grpwm_regs *regs;

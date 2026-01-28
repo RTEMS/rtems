@@ -64,7 +64,7 @@ int grlib_canbtrs_calc_timing(
 		tmp = ((br->divfactor + tseg) * baud);
 		/* Core frequency is always divided by 2 before scaler */
 		sc = core_hz / (2 * tmp);
-		if (sc <= 0 || sc > br->max_scaler)
+		if (sc <= 0 || (unsigned int)sc > br->max_scaler)
 			continue;
 		if (br->has_bpr &&
 		    (((sc > 256 * 1) && (sc <= 256 * 2) && (sc & 0x1)) ||

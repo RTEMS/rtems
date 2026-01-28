@@ -94,7 +94,7 @@ struct gptimer_priv {
 	char isr_installed;
 
 	/* Structure per Timer unit, the core supports up to 8 timers */
-	int timer_cnt;
+	unsigned int timer_cnt;
 	struct gptimer_timer_priv timers[0];
 };
 
@@ -172,8 +172,8 @@ int gptimer_init1(struct drvmgr_dev *dev)
 	gptimer *regs;
 	struct amba_dev_info *ambadev;
 	struct ambapp_core *pnpinfo;
-	int timer_hw_cnt, timer_cnt, timer_start;
-	int i, size;
+	unsigned int timer_hw_cnt, timer_cnt, timer_start;
+	unsigned int i, size;
 	struct gptimer_timer_priv *timer;
 	union drvmgr_key_value *value;
 	uint32_t irq_ack_mask;
@@ -359,7 +359,7 @@ static int gptimer_tlib_int_pend(struct tlib_dev *hand, int ack)
 void gptimer_isr(void *data)
 {
 	struct gptimer_priv *priv = data;
-	int i;
+	unsigned int i;
 
 	/* Check all timers for IRQ */
 	for (i=0;i<priv->timer_cnt; i++) {

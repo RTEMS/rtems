@@ -511,7 +511,8 @@ static void grcan_hw_sync(struct grcan_regs *regs, struct grcan_filter *sfilter)
 int grcan_wait_rxdata(struct grcan_priv *pDev, int min)
 {
 	unsigned int wp, rp, size, irq;
-	unsigned int irq_trunk, dataavail;
+	unsigned int irq_trunk;
+	int dataavail;
 	int wait, state;
 	SPIN_IRQFLAGS(oldLevel);
 
@@ -594,7 +595,8 @@ int grcan_wait_rxdata(struct grcan_priv *pDev, int min)
 int grcan_wait_txspace(struct grcan_priv *pDev, int min)
 {
 	int wait, state;
-	unsigned int irq, rp, wp, size, space_left;
+	unsigned int irq, rp, wp, size;
+	int space_left;
 	unsigned int irq_trunk;
 	SPIN_IRQFLAGS(oldLevel);
 

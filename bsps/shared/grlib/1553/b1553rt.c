@@ -565,7 +565,7 @@ static int get_messages(rt_priv *rt, void *buf, unsigned int msg_count)
 {
 
     struct rt_msg *dest = (struct rt_msg *) buf;
-    int count = 0;
+    unsigned int count = 0;
 
     if (rt->head == rt->tail) {
         return 0;

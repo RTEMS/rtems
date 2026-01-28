@@ -873,7 +873,7 @@ static rtems_device_driver brm_close(rtems_device_major_number major, rtems_devi
 static int get_rt_messages(brm_priv *brm, void *buf, unsigned int msg_count)
 {
 	struct rt_msg *dest = (struct rt_msg *) buf;
-	int count = 0;
+	unsigned int count = 0;
 
 	if (brm->head == brm->tail) {
 		return 0;
@@ -891,7 +891,7 @@ static int get_rt_messages(brm_priv *brm, void *buf, unsigned int msg_count)
 static int get_bm_messages(brm_priv *brm, void *buf, unsigned int msg_count)
 {
 	struct bm_msg *dest = (struct bm_msg *) buf;
-	int count = 0;
+	unsigned int count = 0;
 
 	if (brm->head == brm->tail) {
 		return 0;

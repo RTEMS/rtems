@@ -223,7 +223,7 @@ int grcanfd_read(void *d, CANFDMsg *msg, size_t ucount)
 	CANFDMsg *dest;
 	unsigned int count, left;
 	int nread;
-	int req_cnt;
+	unsigned int req_cnt;
 
 	FUNCDBG();
 
@@ -394,7 +394,7 @@ int grcanfd_write(
 	CANFDMsg *source, *curr;
 	unsigned int count, left;
 	int nwritten;
-	int req_cnt;
+	unsigned int req_cnt;
 
 	DBGC(DBG_TX,"\n");
 

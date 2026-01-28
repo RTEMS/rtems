@@ -74,7 +74,7 @@ struct l4stat_priv {
 	char devname[9];
 
 	int ncpu;
-	int ncnt;
+	unsigned int ncnt;
 
 	/* L4stat capabilities */
 	int max_count_support;

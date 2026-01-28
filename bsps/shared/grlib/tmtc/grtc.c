@@ -269,7 +269,7 @@ struct grtc_priv {
 
 /* FRAME MODE ONLY */
 	/* Frame management when user provides buffers. */
-	int			pool_cnt;	/* Number of Pools */
+	unsigned int		pool_cnt;	/* Number of Pools */
 	struct grtc_frame_pool	*pools;		/* Array of pools */
 
 	struct grtc_list	ready;		/* Ready queue (received frames) */
@@ -539,7 +539,7 @@ static __inline__ int grtc_hw_data_avail(unsigned int rrp, unsigned rwp, unsigne
 /* Reads as much as possible but not more than 'max' bytes from the TC receive buffer.
  * Number of bytes put into 'buf' is returned.
  */
-static int grtc_hw_read_try(struct grtc_priv *pDev, char *buf, int max)
+static int grtc_hw_read_try(struct grtc_priv *pDev, char *buf, unsigned int max)
 {
 	struct grtc_regs *regs = pDev->regs;
 	unsigned int rp, wp, asr, bufmax, rrp, rwp;
@@ -574,7 +574,7 @@ static int grtc_hw_read_try(struct grtc_priv *pDev, char *buf, int max)
 	/* Count bytes will be read */
 	count = (upper+lower) > max ? max : (upper+lower);
 	left = count;
-	
+
 	/* Read from upper part of data buffer */
 	if ( upper > 0 ){
 		if ( left < upper ){
@@ -893,7 +893,7 @@ static rtems_device_driver grtc_read(rtems_device_major_number major, rtems_devi
 
 	struct grtc_priv *pDev;
 	struct drvmgr_dev *dev;
-	int count;
+	unsigned int count;
 	int left;
 	int timedout;
 	int err;
@@ -1005,11 +1005,11 @@ static int grtc_pool_add_frms(struct grtc_frame *frms)
 	return 0;
 }
 
-static struct grtc_frame *grtc_pool_get_frm(struct grtc_priv *pDev, int frame_len, int *error)
+static struct grtc_frame *grtc_pool_get_frm(struct grtc_priv *pDev, unsigned int frame_len, int *error)
 {
 	struct grtc_frame *frm;
 	struct grtc_frame_pool *pool;
-	int i;
+	unsigned int i;
 	
 	/* Loop through all pools until a pool is found
 	 * with a matching (or larger) frame length
@@ -1223,7 +1223,7 @@ static int grtc_hw_check_ending(struct grtc_priv *pDev, int max)
 	DBG("grtc_hw_check_ending: rp: 0x%x, rrp: 0x%x, wp: 0x%x, rwp: 0x%x, bufmax: %d\n, start: 0x%x\n",
 		rp,rrp,wp,rwp,bufmax,pDev->buf_remote);
 	
-	if ( (upper+lower) < max )
+	if ( (upper+lower) < (unsigned int)max )
 		return 0;
 	
 	/* Count bytes will be read */
@@ -1268,12 +1268,13 @@ static int grtc_hw_check_ending(struct grtc_priv *pDev, int max)
 /* Copies Data from DMA area to buf, the control bytes are stripped. For
  * every data byte, in the DMA area, one control byte is stripped.
  */
-static int grtc_hw_copy(struct grtc_priv *pDev, unsigned char *buf, int max, int partial)
+static int grtc_hw_copy(struct grtc_priv *pDev, unsigned char *buf, unsigned int max, int partial)
 {
 	struct grtc_regs *regs = pDev->regs;
 	unsigned int rp, wp, asr, bufmax, rrp, rwp;
 	unsigned int upper, lower;
-	unsigned int count, cnt, left;
+	unsigned int count, left;
+	int cnt;
 	int ret, tot, tmp;
 
 	FUNCDBG();
@@ -1572,7 +1573,9 @@ static rtems_device_driver grtc_ioctl(rtems_device_major_number major, rtems_dev
 	struct drvmgr_dev *dev;
 	rtems_libio_ioctl_args_t *ioarg = (rtems_libio_ioctl_args_t *)arg;
 	unsigned int *data;
-	int status,frm_len,i,ret;
+	int status,ret;
+	unsigned int frm_len;
+	unsigned int i;
 	struct grtc_ioc_buf_params *buf_arg;
 	struct grtc_ioc_config *cfg;
 	struct grtc_ioc_hw_status *hwregs;

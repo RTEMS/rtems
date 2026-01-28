@@ -241,7 +241,7 @@ int grcan_read(void *d, CANMsg *msg, size_t ucount)
 	CANMsg *dest;
 	unsigned int count, left;
 	int nread;
-	int req_cnt;
+	unsigned int req_cnt;
 
 	FUNCDBG();
 
@@ -323,7 +323,7 @@ int grcan_write(void *d, CANMsg *msg, size_t ucount)
 	CANMsg *source;
 	unsigned int count, left;
 	int nwritten;
-	int req_cnt;
+	unsigned int req_cnt;
 
 	DBGC(DBG_TX,"\n");
 

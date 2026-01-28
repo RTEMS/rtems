@@ -940,7 +940,7 @@ void grspw_ic_ctrl(void *d, unsigned int *options)
 	if (options == NULL)
 		return;
 
-	if (*options != -1) {
+	if (*options != (unsigned int)-1) {
 		SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 
 		ctrl = REG_READ(&regs->ctrl);
@@ -3161,7 +3161,7 @@ static int grspw2_init3(struct drvmgr_dev *dev)
 	 * space. Only the first nDMA channels will be available.
 	 */
 	value = drvmgr_dev_key_get(priv->dev, "nDMA", DRVMGR_KT_INT);
-	if (value && (value->i < priv->hwsup.ndma_chans))
+	if (value && (value->i < (unsigned int) priv->hwsup.ndma_chans))
 		priv->hwsup.ndma_chans = value->i;
 
 	/* Allocate and init Memory for all DMA channels */

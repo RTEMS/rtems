@@ -1150,7 +1150,7 @@ static rtems_device_driver occan_read(rtems_device_major_number major, rtems_dev
 	rtems_libio_rw_args_t *rw_args=(rtems_libio_rw_args_t *) arg;
 	CANMsg *dstmsg, *srcmsg;
 	SPIN_IRQFLAGS(oldLevel);
-	int left;
+	size_t left;
 
 	if ( drvmgr_get_dev(&occan_drv_info.general, minor, &dev) ) {
 		return RTEMS_INVALID_NAME;
@@ -1255,7 +1255,7 @@ static rtems_device_driver occan_write(rtems_device_major_number major, rtems_de
 	rtems_libio_rw_args_t *rw_args=(rtems_libio_rw_args_t *) arg;
 	CANMsg *msg,*fifo_msg;
 	SPIN_IRQFLAGS(oldLevel);
-	int left;
+	size_t left;
 
 	DBG("OCCAN: Writing %d bytes from 0x%lx (%d)\n\r",rw_args->count,rw_args->buffer,sizeof(CANMsg));
 

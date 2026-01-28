@@ -1727,7 +1727,7 @@ static void grspw_hw_read_config(GRSPW_DEV *pDev)
 /* timeout is given in ticks */
 static int grspw_hw_startup (GRSPW_DEV *pDev, int timeout)
 {
-	int i;
+	unsigned int i;
 	unsigned int dmactrl;
 
 	SPW_WRITE(&pDev->regs->status, (SPW_STATUS_TO|SPW_STATUS_CE|SPW_STATUS_ER|SPW_STATUS_DE|SPW_STATUS_PE|SPW_STATUS_WE|SPW_STATUS_IA|SPW_STATUS_EE)); /*clear status*/
@@ -1896,9 +1896,10 @@ int grspw_hw_send(GRSPW_DEV *pDev, unsigned int hlen, char *hdr, unsigned int dl
 }
 
 static int grspw_hw_receive(GRSPW_DEV *pDev, char *b, int c) {
-	unsigned int len, rxlen, ctrl;
+	unsigned int len, ctrl;
+	int rxlen;
 	unsigned int cur; 
-	unsigned int tmp;
+	int tmp;
 	unsigned int dump_start_len;
 	int i;
 	char *rxb;  
@@ -1925,7 +1926,7 @@ static int grspw_hw_receive(GRSPW_DEV *pDev, char *b, int c) {
 
 	len = SPW_RXBD_LENGTH & ctrl;
 	if (!((ctrl & SPW_RXBD_ERROR) || (pDev->config.check_rmap_err && (ctrl & SPW_RXBD_RMAPERROR)))) {
-		if (pDev->rxbufcur == -1) {
+		if (pDev->rxbufcur == (unsigned int)-1) {
 			SPACEWIRE_DBGC(DBGSPW_RX, "incoming packet len %i\n", len);
 			pDev->stat.packets_received++;
 			pDev->rxbufcur = dump_start_len;
