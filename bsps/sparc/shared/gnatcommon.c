@@ -87,7 +87,7 @@ void __gnat_install_handler_common (
   int t1, int t2
 )
 {
-  uint32_t         trap;
+  int             trap;
   rtems_isr_entry previous_isr_a;
   rtems_isr_entry previous_isr_b;
 
