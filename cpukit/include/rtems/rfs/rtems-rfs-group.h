@@ -37,8 +37,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
-#if !defined (_RTEMS_RFS_GROUP_H_)
+#if !defined(_RTEMS_RFS_GROUP_H_)
 #define _RTEMS_RFS_GROUP_H_
 
 /**
@@ -48,16 +47,16 @@
  */
 /**@{*/
 
-#include <rtems/rfs/rtems-rfs-trace.h>
 #include <rtems/rfs/rtems-rfs-bitmaps.h>
 #include <rtems/rfs/rtems-rfs-buffer.h>
+#include <rtems/rfs/rtems-rfs-trace.h>
 
 /**
  * Block allocations for a group on disk.
  */
 #define RTEMS_RFS_GROUP_BLOCK_BITMAP_BLOCK (0)
 #define RTEMS_RFS_GROUP_INODE_BITMAP_BLOCK (1)
-#define RTEMS_RFS_GROUP_INODE_BLOCK        (2)
+#define RTEMS_RFS_GROUP_INODE_BLOCK (2)
 
 /**
  * @brief Creates bit allocator for blocks in the group simpler.
@@ -67,8 +66,7 @@
  * bit allocator for blocks in the group simpler plus is allows a simple way to
  * localise access to files and directories.
  */
-typedef struct _rtems_rfs_group
-{
+typedef struct _rtems_rfs_group {
   /**
    * Base block number.
    */
@@ -109,7 +107,7 @@ typedef struct _rtems_rfs_group
 /**
  * Return the file system inode for a inode in a group.
  */
-#define rtems_rfs_group_inode(_f, _g, _i) \
+#define rtems_rfs_group_inode(_f, _g, _i)                                      \
   (((_f)->group_inodes * (_g)) + (_i) + RTEMS_RFS_ROOT_INO)
 
 /**
@@ -123,11 +121,8 @@ typedef struct _rtems_rfs_group
  * @param group Reference to the group to open.
  * @retval int The error number (errno). No error if 0.
  */
-int rtems_rfs_group_open (rtems_rfs_file_system* fs,
-                          rtems_rfs_buffer_block base,
-                          size_t                 size,
-                          size_t                 inodes,
-                          rtems_rfs_group*       group);
+int rtems_rfs_group_open(rtems_rfs_file_system* fs, rtems_rfs_buffer_block base,
+                         size_t size, size_t inodes, rtems_rfs_group* group);
 
 /**
  * @brief Close a group.
@@ -138,8 +133,7 @@ int rtems_rfs_group_open (rtems_rfs_file_system* fs,
  * @param group The group to close.
  * @retval int The error number (errno). No error if 0.
  */
-int rtems_rfs_group_close (rtems_rfs_file_system* fs,
-                           rtems_rfs_group*       group);
+int rtems_rfs_group_close(rtems_rfs_file_system* fs, rtems_rfs_group* group);
 
 /**
  * @brief Allocate an inode or block.
@@ -153,10 +147,9 @@ int rtems_rfs_group_close (rtems_rfs_file_system* fs,
  * @param result The allocated bit in the bitmap.
  * @retval int The error number (errno). No error if 0.
  */
-int rtems_rfs_group_bitmap_alloc (rtems_rfs_file_system* fs,
-                                  rtems_rfs_bitmap_bit   goal,
-                                  bool                   inode,
-                                  rtems_rfs_bitmap_bit*  result);
+int rtems_rfs_group_bitmap_alloc(rtems_rfs_file_system* fs,
+                                 rtems_rfs_bitmap_bit goal, bool inode,
+                                 rtems_rfs_bitmap_bit* result);
 
 /**
  * @brief Free the group allocated bit.
@@ -166,9 +159,8 @@ int rtems_rfs_group_bitmap_alloc (rtems_rfs_file_system* fs,
  * @param block The inode or block number to free.
  * @retval int The error number (errno). No error if 0.
  */
-int rtems_rfs_group_bitmap_free (rtems_rfs_file_system* fs,
-                                 bool                   inode,
-                                 rtems_rfs_bitmap_bit   no);
+int rtems_rfs_group_bitmap_free(rtems_rfs_file_system* fs, bool inode,
+                                rtems_rfs_bitmap_bit no);
 
 /**
  * @brief Test the group allocated bit.
@@ -179,10 +171,8 @@ int rtems_rfs_group_bitmap_free (rtems_rfs_file_system* fs,
  * @param state Return the state of the bit.
  * @retval int The error number (errno). No error if 0.
  */
-int rtems_rfs_group_bitmap_test (rtems_rfs_file_system* fs,
-                                 bool                   inode,
-                                 rtems_rfs_bitmap_bit   no,
-                                 bool*                  state);
+int rtems_rfs_group_bitmap_test(rtems_rfs_file_system* fs, bool inode,
+                                rtems_rfs_bitmap_bit no, bool* state);
 
 /**
  * @brief Determine the number of blocks and inodes used.
@@ -192,9 +182,8 @@ int rtems_rfs_group_bitmap_test (rtems_rfs_file_system* fs,
  * @param inodes The number of inodes used.
  * @retval int The error number (errno). No error if 0.
  */
-int rtems_rfs_group_usage (rtems_rfs_file_system* fs,
-                           size_t*                blocks,
-                           size_t*                inodes);
+int rtems_rfs_group_usage(rtems_rfs_file_system* fs, size_t* blocks,
+                          size_t* inodes);
 
 /** @} */
 #endif

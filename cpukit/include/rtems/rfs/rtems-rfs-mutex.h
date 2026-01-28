@@ -38,7 +38,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined (_RTEMS_RFS_MUTEX_H_)
+#if !defined(_RTEMS_RFS_MUTEX_H_)
 #define _RTEMS_RFS_MUTEX_H_
 
 #include <errno.h>
@@ -69,7 +69,7 @@ typedef uint32_t rtems_rfs_mutex; /* place holder */
  * @retval EIO An error occurred.
  *
  */
-int rtems_rfs_mutex_create (rtems_rfs_mutex* mutex);
+int rtems_rfs_mutex_create(rtems_rfs_mutex* mutex);
 
 /**
  * @brief Destroy the mutex.
@@ -79,7 +79,7 @@ int rtems_rfs_mutex_create (rtems_rfs_mutex* mutex);
  * @retval 0 Successful operation.
  * @retval EIO An error occurred.
  */
-int rtems_rfs_mutex_destroy (rtems_rfs_mutex* mutex);
+int rtems_rfs_mutex_destroy(rtems_rfs_mutex* mutex);
 
 /**
  * @brief Lock the mutex.
@@ -89,9 +89,7 @@ int rtems_rfs_mutex_destroy (rtems_rfs_mutex* mutex);
  * @retval 0 Successful operation.
  * @retval EIO An error occurred.
  */
-static inline int
-rtems_rfs_mutex_lock (rtems_rfs_mutex* mutex)
-{
+static inline int rtems_rfs_mutex_lock(rtems_rfs_mutex* mutex) {
 #if __rtems__
   rtems_recursive_mutex_lock(mutex);
 #endif
@@ -106,9 +104,7 @@ rtems_rfs_mutex_lock (rtems_rfs_mutex* mutex)
  * @retval 0 Successful operation.
  * @retval EIO An error occurred.
  */
-static inline int
-rtems_rfs_mutex_unlock (rtems_rfs_mutex* mutex)
-{
+static inline int rtems_rfs_mutex_unlock(rtems_rfs_mutex* mutex) {
 #if __rtems__
   rtems_recursive_mutex_unlock(mutex);
 #endif

@@ -49,30 +49,18 @@
  */
 #define RTEMS_RFS_BUFFER_ERRORS 1
 
-int
-rtems_rfs_buffer_deviceio_request (rtems_rfs_buffer_handle* handle,
-                                   dev_t                    device,
-                                   rtems_rfs_buffer_block   block,
-                                   bool                     read)
-{
+int rtems_rfs_buffer_deviceio_request(rtems_rfs_buffer_handle* handle,
+                                      dev_t device,
+                                      rtems_rfs_buffer_block block, bool read) {
 }
 
-int
-rtems_rfs_buffer_deviceio_release (rtems_rfs_buffer_handle* handle,
-                                   dev_t                    device)
-{
-}
+int rtems_rfs_buffer_deviceio_release(rtems_rfs_buffer_handle* handle,
+                                      dev_t device) {}
 
-int
-rtems_rfs_buffer_deviceio_handle_open (rtems_rfs_buffer_handle* handle,
-                                       dev_t                    device)
-{
-}
+int rtems_rfs_buffer_deviceio_handle_open(rtems_rfs_buffer_handle* handle,
+                                          dev_t device) {}
 
-int
-rtems_rfs_buffer_device_handle_close (rtems_rfs_buffer_handle* handle,
-                                      dev_t                    device)
-{
-}
+int rtems_rfs_buffer_device_handle_close(rtems_rfs_buffer_handle* handle,
+                                         dev_t device) {}
 
 #endif

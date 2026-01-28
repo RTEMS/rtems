@@ -45,7 +45,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined (_RTEMS_RFS_BLOCK_POS_H_)
+#if !defined(_RTEMS_RFS_BLOCK_POS_H_)
 #define _RTEMS_RFS_BLOCK_POS_H_
 
 #include <rtems/rfs/rtems-rfs-file-system.h>
@@ -67,8 +67,7 @@ typedef uint32_t rtems_rfs_block_off;
  * block field can be used hold a block number for the position as a look up
  * cache.
  */
-typedef struct rtems_rfs_block_pos_s
-{
+typedef struct rtems_rfs_block_pos_s {
   /**
    * The block index in the map. Range is from 0 to the maps block count minus
    * 1.
@@ -94,19 +93,19 @@ typedef struct rtems_rfs_block_pos_s
  * @param[in] _lhs is the left hand side.
  * @param[in] _rhs is the right hand side.
  */
-#define rtems_rfs_block_copy_bpos(_lhs, _rhs) \
-  do { (_lhs)->bno = (_rhs)->bno; \
-       (_lhs)->boff = (_rhs)->boff; \
-       (_lhs)->block = (_rhs)->block; } while (0)
+#define rtems_rfs_block_copy_bpos(_lhs, _rhs)                                  \
+  do {                                                                         \
+    (_lhs)->bno = (_rhs)->bno;                                                 \
+    (_lhs)->boff = (_rhs)->boff;                                               \
+    (_lhs)->block = (_rhs)->block;                                             \
+  } while (0)
 
 /**
  * Zero a block position.
  *
  * @param[in] bpos is a pointer to the block position.
  */
-static inline void
-rtems_rfs_block_set_bpos_zero (rtems_rfs_block_pos* bpos)
-{
+static inline void rtems_rfs_block_set_bpos_zero(rtems_rfs_block_pos* bpos) {
   bpos->bno = 0;
   bpos->boff = 0;
   bpos->block = 0;
@@ -119,9 +118,8 @@ rtems_rfs_block_set_bpos_zero (rtems_rfs_block_pos* bpos)
  * @param[in] pos is the position as an absolute offset from the start.
  * @param[out] bpos is a pointer to the block position to fill in.
  */
-void rtems_rfs_block_get_bpos (rtems_rfs_file_system*  fs,
-                               rtems_rfs_pos           pos,
-                               rtems_rfs_block_pos*    bpos);
+void rtems_rfs_block_get_bpos(rtems_rfs_file_system* fs, rtems_rfs_pos pos,
+                              rtems_rfs_block_pos* bpos);
 
 /**
  * Given a block position compute the absolute offset.
@@ -131,8 +129,8 @@ void rtems_rfs_block_get_bpos (rtems_rfs_file_system*  fs,
  *
  * @retval offset The absolute offset.
  */
-rtems_rfs_pos rtems_rfs_block_get_pos (rtems_rfs_file_system* fs,
-                                       rtems_rfs_block_pos*   bpos);
+rtems_rfs_pos rtems_rfs_block_get_pos(rtems_rfs_file_system* fs,
+                                      rtems_rfs_block_pos* bpos);
 
 /**
  * Add the relative position to the block position. The relative position is
@@ -142,14 +140,11 @@ rtems_rfs_pos rtems_rfs_block_get_pos (rtems_rfs_file_system* fs,
  * @param[in] offset is the relative offset add to the block position.
  * @param[out] bpos is a pointer to the block position to fill in.
  */
-static inline void
-rtems_rfs_block_add_pos (rtems_rfs_file_system*  fs,
-                         rtems_rfs_pos_rel       offset,
-                         rtems_rfs_block_pos*    bpos)
-{
-  rtems_rfs_block_get_bpos (fs,
-                            rtems_rfs_block_get_pos (fs, bpos) + offset,
-                            bpos);
+static inline void rtems_rfs_block_add_pos(rtems_rfs_file_system* fs,
+                                           rtems_rfs_pos_rel offset,
+                                           rtems_rfs_block_pos* bpos) {
+  rtems_rfs_block_get_bpos(fs, rtems_rfs_block_get_pos(fs, bpos) + offset,
+                           bpos);
   bpos->block = 0;
 }
 
@@ -157,8 +152,7 @@ rtems_rfs_block_add_pos (rtems_rfs_file_system*  fs,
  * A block size is the number of blocks less one plus the offset where the
  * offset must be less than the block size.
  */
-typedef struct rtems_rfs_block_size_s
-{
+typedef struct rtems_rfs_block_size_s {
   /**
    * The count of blocks in a map. A 0 means no blocks and a zero length and
    * the offset should also be 0.
@@ -179,44 +173,48 @@ typedef struct rtems_rfs_block_size_s
  * @param[in] _lhs is the left hand side.
  * @param[in] _rhs is the right hand side.
  */
-#define rtems_rfs_block_copy_size(_lhs, _rhs) \
-  do { (_lhs)->count = (_rhs)->count; \
-       (_lhs)->offset = (_rhs)->offset; } while (0)
+#define rtems_rfs_block_copy_size(_lhs, _rhs)                                  \
+  do {                                                                         \
+    (_lhs)->count = (_rhs)->count;                                             \
+    (_lhs)->offset = (_rhs)->offset;                                           \
+  } while (0)
 
 /**
  * Last block ?
  */
-#define rtems_rfs_block_pos_last_block(_p, _s) \
+#define rtems_rfs_block_pos_last_block(_p, _s)                                 \
   ((((_p)->bno == 0) && ((_s)->count == 0)) || ((_p)->bno == ((_s)->count - 1)))
 
 /**
  * Last block ?
  */
-#define rtems_rfs_block_pos_past_end(_p, _s) \
-  (((_p)->bno && ((_s)->count == 0)) || \
-   ((_p)->bno >= (_s)->count) || \
+#define rtems_rfs_block_pos_past_end(_p, _s)                                   \
+  (((_p)->bno && ((_s)->count == 0)) || ((_p)->bno >= (_s)->count) ||          \
    (((_p)->bno == ((_s)->count - 1)) && ((_p)->boff > (_s)->offset)))
 
 /**
  * Is the block position past the end.
  */
-#define rtems_rfs_block_pos_block_past_end(_p, _s) \
+#define rtems_rfs_block_pos_block_past_end(_p, _s)                             \
   (((_p)->bno && ((_s)->count == 0)) || ((_p)->bno >= (_s)->count))
 
 /**
  * Copy the size to the block position. Note the block position and the size
  * have different block counts.
  */
-#define rtems_rfs_block_size_get_bpos(_s, _b) \
-  do { (_b)->bno = (_s)->count; \
-       (_b)->boff = (_s)->offset; \
-       (_b)->block = 0; \
-       if ((_b)->boff) --(_b)->bno; } while (0)
+#define rtems_rfs_block_size_get_bpos(_s, _b)                                  \
+  do {                                                                         \
+    (_b)->bno = (_s)->count;                                                   \
+    (_b)->boff = (_s)->offset;                                                 \
+    (_b)->block = 0;                                                           \
+    if ((_b)->boff)                                                            \
+      --(_b)->bno;                                                             \
+  } while (0)
 
 /**
  * Do the sizes match ?
  */
-#define rtems_rfs_block_size_equal(_lhs, _rhs) \
+#define rtems_rfs_block_size_equal(_lhs, _rhs)                                 \
   (((_lhs)->count == (_rhs)->count) && ((_lhs)->offset == (_rhs)->offset))
 
 /**
@@ -224,9 +222,7 @@ typedef struct rtems_rfs_block_size_s
  *
  * @param[in] size is a pointer to the block size.
  */
-static inline void
-rtems_rfs_block_set_size_zero (rtems_rfs_block_size* size)
-{
+static inline void rtems_rfs_block_set_size_zero(rtems_rfs_block_size* size) {
   size->count = 0;
   size->offset = 0;
 }
@@ -238,9 +234,9 @@ rtems_rfs_block_set_size_zero (rtems_rfs_block_size* size)
  * @param[in] pos is the position as an absolute offset from the start.
  * @param[out] size is a pointer to the block size to fill in.
  */
-void rtems_rfs_block_get_block_size (rtems_rfs_file_system*  fs,
-                                     rtems_rfs_pos           pos,
-                                     rtems_rfs_block_size*   size);
+void rtems_rfs_block_get_block_size(rtems_rfs_file_system* fs,
+                                    rtems_rfs_pos pos,
+                                    rtems_rfs_block_size* size);
 
 /**
  * Calculate the position given the number of blocks and the offset. If the
@@ -255,7 +251,7 @@ void rtems_rfs_block_get_block_size (rtems_rfs_file_system*  fs,
  *
  * @retval size The size in bytes.
  */
-rtems_rfs_pos rtems_rfs_block_get_size (rtems_rfs_file_system* fs,
-                                        rtems_rfs_block_size*  size);
+rtems_rfs_pos rtems_rfs_block_get_size(rtems_rfs_file_system* fs,
+                                       rtems_rfs_block_size* size);
 
 #endif

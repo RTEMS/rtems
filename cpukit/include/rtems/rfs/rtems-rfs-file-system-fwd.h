@@ -35,8 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
-#if !defined (_RTEMS_RFS_FILE_SYSTEM_FWD_H_)
+#if !defined(_RTEMS_RFS_FILE_SYSTEM_FWD_H_)
 #define _RTEMS_RFS_FILE_SYSTEM_FWD_H_
 
 /**

@@ -6,7 +6,7 @@
  * @ingroup rtems_rfs
  *
  * @brief RTEMS RFS Device Interface
- * 
+ *
  * This file contains the set of handlers used to map operations on RFS device
  * nodes onto calls to the RTEMS Classic API IO Manager.
  */
@@ -45,12 +45,11 @@
 #include <rtems/deviceio.h>
 
 static void
-rtems_rfs_rtems_device_get_major_and_minor ( const rtems_libio_t       *iop,
-                                             rtems_device_major_number *major,
-                                             rtems_device_minor_number *minor)
-{
+rtems_rfs_rtems_device_get_major_and_minor(const rtems_libio_t* iop,
+                                           rtems_device_major_number* major,
+                                           rtems_device_minor_number* minor) {
   *major = iop->data0;
-  *minor = (rtems_device_minor_number) (uintptr_t) iop->data1;
+  *minor = (rtems_device_minor_number)(uintptr_t)iop->data1;
 }
 
 /**
@@ -62,44 +61,38 @@ rtems_rfs_rtems_device_get_major_and_minor ( const rtems_libio_t       *iop,
  * @param mode
  * @return int
  */
-static int
-rtems_rfs_rtems_device_open ( rtems_libio_t *iop,
-                              const char    *pathname,
-                              int            oflag,
-                              mode_t         mode)
-{
-  rtems_rfs_file_system*        fs = rtems_rfs_rtems_pathloc_dev (&iop->pathinfo);
-  rtems_rfs_ino                 ino = rtems_rfs_rtems_get_iop_ino (iop);
-  rtems_rfs_inode_handle        inode;
-  rtems_device_major_number     major;
-  rtems_device_minor_number     minor;
-  int                           rc;
+static int rtems_rfs_rtems_device_open(rtems_libio_t* iop, const char* pathname,
+                                       int oflag, mode_t mode) {
+  rtems_rfs_file_system* fs = rtems_rfs_rtems_pathloc_dev(&iop->pathinfo);
+  rtems_rfs_ino ino = rtems_rfs_rtems_get_iop_ino(iop);
+  rtems_rfs_inode_handle inode;
+  rtems_device_major_number major;
+  rtems_device_minor_number minor;
+  int rc;
 
-  rtems_rfs_rtems_lock (fs);
+  rtems_rfs_rtems_lock(fs);
 
-  rc = rtems_rfs_inode_open (fs, ino, &inode, true);
-  if (rc > 0)
-  {
-    rtems_rfs_rtems_unlock (fs);
-    return rtems_rfs_rtems_error ("device_open: opening inode", rc);
+  rc = rtems_rfs_inode_open(fs, ino, &inode, true);
+  if (rc > 0) {
+    rtems_rfs_rtems_unlock(fs);
+    return rtems_rfs_rtems_error("device_open: opening inode", rc);
   }
 
-  major = rtems_rfs_inode_get_block (&inode, 0);
-  minor = rtems_rfs_inode_get_block (&inode, 1);
+  major = rtems_rfs_inode_get_block(&inode, 0);
+  minor = rtems_rfs_inode_get_block(&inode, 1);
 
-  rc = rtems_rfs_inode_close (fs, &inode);
-  if (rc > 0)
-  {
-    rtems_rfs_rtems_unlock (fs);
-    return rtems_rfs_rtems_error ("device_open: closing inode", rc);
+  rc = rtems_rfs_inode_close(fs, &inode);
+  if (rc > 0) {
+    rtems_rfs_rtems_unlock(fs);
+    return rtems_rfs_rtems_error("device_open: closing inode", rc);
   }
 
-  rtems_rfs_rtems_unlock (fs);
+  rtems_rfs_rtems_unlock(fs);
 
   iop->data0 = major;
-  iop->data1 = (void *) (uintptr_t) minor;
+  iop->data1 = (void*)(uintptr_t)minor;
 
-  return rtems_deviceio_open (iop, pathname, oflag, mode, minor, major);
+  return rtems_deviceio_open(iop, pathname, oflag, mode, minor, major);
 }
 
 /**
@@ -109,15 +102,13 @@ rtems_rfs_rtems_device_open ( rtems_libio_t *iop,
  * @return int
  */
 
-static int
-rtems_rfs_rtems_device_close (rtems_libio_t* iop)
-{
-  rtems_device_major_number     major;
-  rtems_device_minor_number     minor;
+static int rtems_rfs_rtems_device_close(rtems_libio_t* iop) {
+  rtems_device_major_number major;
+  rtems_device_minor_number minor;
 
-  rtems_rfs_rtems_device_get_major_and_minor (iop, &major, &minor);
+  rtems_rfs_rtems_device_get_major_and_minor(iop, &major, &minor);
 
-  return rtems_deviceio_close (iop, major, minor);
+  return rtems_deviceio_close(iop, major, minor);
 }
 
 /**
@@ -129,15 +120,14 @@ rtems_rfs_rtems_device_close (rtems_libio_t* iop)
  * @return ssize_t
  */
 
-static ssize_t
-rtems_rfs_rtems_device_read (rtems_libio_t* iop, void* buffer, size_t count)
-{
+static ssize_t rtems_rfs_rtems_device_read(rtems_libio_t* iop, void* buffer,
+                                           size_t count) {
   rtems_device_major_number major;
   rtems_device_minor_number minor;
 
-  rtems_rfs_rtems_device_get_major_and_minor (iop, &major, &minor);
+  rtems_rfs_rtems_device_get_major_and_minor(iop, &major, &minor);
 
-  return rtems_deviceio_read (iop, buffer, count, major, minor);
+  return rtems_deviceio_read(iop, buffer, count, major, minor);
 }
 
 /*
@@ -149,17 +139,14 @@ rtems_rfs_rtems_device_read (rtems_libio_t* iop, void* buffer, size_t count)
  * @return ssize_t
  */
 
-static ssize_t
-rtems_rfs_rtems_device_write (rtems_libio_t* iop,
-                              const void*    buffer,
-                              size_t         count)
-{
+static ssize_t rtems_rfs_rtems_device_write(rtems_libio_t* iop,
+                                            const void* buffer, size_t count) {
   rtems_device_major_number major;
   rtems_device_minor_number minor;
 
-  rtems_rfs_rtems_device_get_major_and_minor (iop, &major, &minor);
+  rtems_rfs_rtems_device_get_major_and_minor(iop, &major, &minor);
 
-  return rtems_deviceio_write (iop, buffer, count, major, minor);
+  return rtems_deviceio_write(iop, buffer, count, major, minor);
 }
 
 /**
@@ -171,17 +158,14 @@ rtems_rfs_rtems_device_write (rtems_libio_t* iop,
  * @return int
  */
 
-static int
-rtems_rfs_rtems_device_ioctl (rtems_libio_t*  iop,
-                              ioctl_command_t command,
-                              void*           buffer)
-{
+static int rtems_rfs_rtems_device_ioctl(rtems_libio_t* iop,
+                                        ioctl_command_t command, void* buffer) {
   rtems_device_major_number major;
   rtems_device_minor_number minor;
 
-  rtems_rfs_rtems_device_get_major_and_minor (iop, &major, &minor);
+  rtems_rfs_rtems_device_get_major_and_minor(iop, &major, &minor);
 
-  return rtems_deviceio_control (iop, command, buffer, major, minor);
+  return rtems_deviceio_control(iop, command, buffer, major, minor);
 }
 
 /**
@@ -192,11 +176,9 @@ rtems_rfs_rtems_device_ioctl (rtems_libio_t*  iop,
  * @return int
  */
 
-static int
-rtems_rfs_rtems_device_ftruncate (rtems_libio_t* iop, off_t length)
-{
-  (void) iop;
-  (void) length;
+static int rtems_rfs_rtems_device_ftruncate(rtems_libio_t* iop, off_t length) {
+  (void)iop;
+  (void)length;
 
   return 0;
 }
@@ -206,20 +188,19 @@ rtems_rfs_rtems_device_ftruncate (rtems_libio_t* iop, off_t length)
  */
 
 const rtems_filesystem_file_handlers_r rtems_rfs_rtems_device_handlers = {
-  .open_h      = rtems_rfs_rtems_device_open,
-  .close_h     = rtems_rfs_rtems_device_close,
-  .read_h      = rtems_rfs_rtems_device_read,
-  .write_h     = rtems_rfs_rtems_device_write,
-  .ioctl_h     = rtems_rfs_rtems_device_ioctl,
-  .lseek_h     = rtems_filesystem_default_lseek_file,
-  .fstat_h     = rtems_rfs_rtems_fstat,
-  .ftruncate_h = rtems_rfs_rtems_device_ftruncate,
-  .fsync_h     = rtems_filesystem_default_fsync_or_fdatasync,
-  .fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync,
-  .fcntl_h     = rtems_filesystem_default_fcntl,
-  .kqfilter_h  = rtems_filesystem_default_kqfilter,
-  .mmap_h      = rtems_filesystem_default_mmap,
-  .poll_h      = rtems_filesystem_default_poll,
-  .readv_h     = rtems_filesystem_default_readv,
-  .writev_h    = rtems_filesystem_default_writev
-};
+    .open_h = rtems_rfs_rtems_device_open,
+    .close_h = rtems_rfs_rtems_device_close,
+    .read_h = rtems_rfs_rtems_device_read,
+    .write_h = rtems_rfs_rtems_device_write,
+    .ioctl_h = rtems_rfs_rtems_device_ioctl,
+    .lseek_h = rtems_filesystem_default_lseek_file,
+    .fstat_h = rtems_rfs_rtems_fstat,
+    .ftruncate_h = rtems_rfs_rtems_device_ftruncate,
+    .fsync_h = rtems_filesystem_default_fsync_or_fdatasync,
+    .fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync,
+    .fcntl_h = rtems_filesystem_default_fcntl,
+    .kqfilter_h = rtems_filesystem_default_kqfilter,
+    .mmap_h = rtems_filesystem_default_mmap,
+    .poll_h = rtems_filesystem_default_poll,
+    .readv_h = rtems_filesystem_default_readv,
+    .writev_h = rtems_filesystem_default_writev};

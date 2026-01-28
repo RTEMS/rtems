@@ -35,8 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
-#if !defined (_RTEMS_RFS_BUFFER_H_)
+#if !defined(_RTEMS_RFS_BUFFER_H_)
 #define _RTEMS_RFS_BUFFER_H_
 
 #include <errno.h>
@@ -49,7 +48,7 @@
  * device I/O. The libblock interface is to the RTEMS cache and block devices
  * and device I/O accesses the media via a device file handle.
  */
-#if defined (__rtems__)
+#if defined(__rtems__)
 #define RTEMS_RFS_USE_LIBBLOCK 1
 #endif
 
@@ -60,7 +59,7 @@
 #include <rtems/bdbuf.h>
 #include <rtems/error.h>
 
-typedef rtems_blkdev_bnum  rtems_rfs_buffer_block;
+typedef rtems_blkdev_bnum rtems_rfs_buffer_block;
 typedef rtems_bdbuf_buffer rtems_rfs_buffer;
 #define rtems_rfs_buffer_io_request rtems_rfs_buffer_bdbuf_request
 #define rtems_rfs_buffer_io_release rtems_rfs_buffer_bdbuf_release
@@ -68,24 +67,21 @@ typedef rtems_bdbuf_buffer rtems_rfs_buffer;
 /**
  * Request a buffer from the RTEMS libblock BD buffer cache.
  */
-int rtems_rfs_buffer_bdbuf_request (rtems_rfs_file_system* fs,
-                                    rtems_rfs_buffer_block block,
-                                    bool                   read,
-                                    rtems_rfs_buffer**     buffer);
+int rtems_rfs_buffer_bdbuf_request(rtems_rfs_file_system* fs,
+                                   rtems_rfs_buffer_block block, bool read,
+                                   rtems_rfs_buffer** buffer);
 /**
  * Release a buffer to the RTEMS libblock BD buffer cache.
  */
-int rtems_rfs_buffer_bdbuf_release (rtems_rfs_buffer* handle,
-                                    bool              modified);
+int rtems_rfs_buffer_bdbuf_release(rtems_rfs_buffer* handle, bool modified);
 #else /* Device I/O */
 typedef uint32_t rtems_rfs_buffer_block;
-typedef struct _rtems_rfs_buffer
-{
-  rtems_chain_node       link;
+typedef struct _rtems_rfs_buffer {
+  rtems_chain_node link;
   rtems_rfs_buffer_block user;
-  void*                  buffer;
-  size_t                 size;
-  uint32_t               references;
+  void* buffer;
+  size_t size;
+  uint32_t references;
 } rtems_rfs_buffer;
 #define rtems_rfs_buffer_io_request rtems_rfs_buffer_deviceio_request
 #define rtems_rfs_buffer_io_release rtems_rfs_buffer_deviceio_release
@@ -93,22 +89,19 @@ typedef struct _rtems_rfs_buffer
 /**
  * Request a buffer from the device I/O.
  */
-int rtems_rfs_buffer_deviceio_request (rtems_rfs_file_system* fs,
-                                       rtems_rfs_buffer_block block,
-                                       bool                   read,
-                                       rtems_rfs_buffer*      buffer);
+int rtems_rfs_buffer_deviceio_request(rtems_rfs_file_system* fs,
+                                      rtems_rfs_buffer_block block, bool read,
+                                      rtems_rfs_buffer* buffer);
 /**
  * Release a buffer to the RTEMS libblock BD buffer cache.
  */
-int rtems_rfs_buffer_deviceio_release (rtems_rfs_buffer* handle,
-                                       bool              modified);
+int rtems_rfs_buffer_deviceio_release(rtems_rfs_buffer* handle, bool modified);
 #endif
 
 /**
  * RFS Buffer handle.
  */
-typedef struct rtems_rfs_buffer_handle_t
-{
+typedef struct rtems_rfs_buffer_handle_t {
   /**
    * Has the buffer been modifed?
    */
@@ -189,10 +182,9 @@ typedef struct rtems_rfs_buffer_handle_t
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_buffer_handle_request (rtems_rfs_file_system*   fs,
-                                     rtems_rfs_buffer_handle* handle,
-                                     rtems_rfs_buffer_block   block,
-                                     bool                     read);
+int rtems_rfs_buffer_handle_request(rtems_rfs_file_system* fs,
+                                    rtems_rfs_buffer_handle* handle,
+                                    rtems_rfs_buffer_block block, bool read);
 
 /**
  * Release a buffer. If the buffer is dirty the buffer is written to disk. The
@@ -205,8 +197,8 @@ int rtems_rfs_buffer_handle_request (rtems_rfs_file_system*   fs,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_buffer_handle_release (rtems_rfs_file_system*   fs,
-                                     rtems_rfs_buffer_handle* handle);
+int rtems_rfs_buffer_handle_release(rtems_rfs_file_system* fs,
+                                    rtems_rfs_buffer_handle* handle);
 
 /**
  * Open a handle.
@@ -218,13 +210,12 @@ int rtems_rfs_buffer_handle_release (rtems_rfs_file_system*   fs,
  * @retval error_code An error occurred.
  */
 static inline int
-rtems_rfs_buffer_handle_open (rtems_rfs_file_system*   fs,
-                              rtems_rfs_buffer_handle* handle)
-{
-  (void) fs;
+rtems_rfs_buffer_handle_open(rtems_rfs_file_system* fs,
+                             rtems_rfs_buffer_handle* handle) {
+  (void)fs;
 
   handle->dirty = false;
-  handle->bnum  = 0;
+  handle->bnum = 0;
   handle->buffer = NULL;
   return 0;
 }
@@ -239,12 +230,11 @@ rtems_rfs_buffer_handle_open (rtems_rfs_file_system*   fs,
  * @retval error_code An error occurred.
  */
 static inline int
-rtems_rfs_buffer_handle_close (rtems_rfs_file_system*   fs,
-                               rtems_rfs_buffer_handle* handle)
-{
-  rtems_rfs_buffer_handle_release (fs, handle);
+rtems_rfs_buffer_handle_close(rtems_rfs_file_system* fs,
+                              rtems_rfs_buffer_handle* handle) {
+  rtems_rfs_buffer_handle_release(fs, handle);
   handle->dirty = false;
-  handle->bnum  = 0;
+  handle->bnum = 0;
   handle->buffer = NULL;
   return 0;
 }
@@ -258,7 +248,7 @@ rtems_rfs_buffer_handle_close (rtems_rfs_file_system*   fs,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_buffer_open (const char* name, rtems_rfs_file_system* fs);
+int rtems_rfs_buffer_open(const char* name, rtems_rfs_file_system* fs);
 
 /**
  * Close the buffer interface.
@@ -268,7 +258,7 @@ int rtems_rfs_buffer_open (const char* name, rtems_rfs_file_system* fs);
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_buffer_close (rtems_rfs_file_system* fs);
+int rtems_rfs_buffer_close(rtems_rfs_file_system* fs);
 
 /**
  * Sync all buffers to the media.
@@ -278,7 +268,7 @@ int rtems_rfs_buffer_close (rtems_rfs_file_system* fs);
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_buffer_sync (rtems_rfs_file_system* fs);
+int rtems_rfs_buffer_sync(rtems_rfs_file_system* fs);
 
 /**
  * Set the block size of the device.
@@ -289,7 +279,7 @@ int rtems_rfs_buffer_sync (rtems_rfs_file_system* fs);
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_buffer_setblksize (rtems_rfs_file_system* fs, uint32_t size);
+int rtems_rfs_buffer_setblksize(rtems_rfs_file_system* fs, uint32_t size);
 
 /**
  * Release any chained buffers.
@@ -299,6 +289,6 @@ int rtems_rfs_buffer_setblksize (rtems_rfs_file_system* fs, uint32_t size);
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_buffers_release (rtems_rfs_file_system* fs);
+int rtems_rfs_buffers_release(rtems_rfs_file_system* fs);
 
 #endif

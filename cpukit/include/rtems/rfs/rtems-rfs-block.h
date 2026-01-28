@@ -37,8 +37,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
-#if !defined (_RTEMS_RFS_BLOCK_H_)
+#if !defined(_RTEMS_RFS_BLOCK_H_)
 #define _RTEMS_RFS_BLOCK_H_
 
 #include <rtems/rfs/rtems-rfs-block-pos.h>
@@ -54,24 +53,24 @@
  *
  * @retval block The block number.
  */
-#define rtems_rfs_block_get_number(_h, _b) \
-  ((rtems_rfs_block_no) \
-   (rtems_rfs_read_u32 (rtems_rfs_buffer_data (_h) + \
-                        ((_b) * sizeof (rtems_rfs_block_no)))))
+#define rtems_rfs_block_get_number(_h, _b)                                     \
+  ((rtems_rfs_block_no)(rtems_rfs_read_u32(                                    \
+      rtems_rfs_buffer_data(_h) + ((_b) * sizeof(rtems_rfs_block_no)))))
 
 /**
  * Set a block number in the media format given a number in the host format.
  *
  * @param[in] _h is the buffer handle of the block.
- * @param[in] _b is the block number index, ie the number of block number not the
- *           buffer offset.
+ * @param[in] _b is the block number index, ie the number of block number not
+ * the buffer offset.
  * @param[in] _n is the block number.
  */
-#define rtems_rfs_block_set_number(_h, _b, _n) \
-  do { \
-    rtems_rfs_write_u32 (rtems_rfs_buffer_data (_h) + \
-                         ((_b) * sizeof (rtems_rfs_block_no)), (_n)); \
-    rtems_rfs_buffer_mark_dirty (_h); \
+#define rtems_rfs_block_set_number(_h, _b, _n)                                 \
+  do {                                                                         \
+    rtems_rfs_write_u32(rtems_rfs_buffer_data(_h) +                            \
+                            ((_b) * sizeof(rtems_rfs_block_no)),               \
+                        (_n));                                                 \
+    rtems_rfs_buffer_mark_dirty(_h);                                           \
   } while (0)
 
 /**
@@ -108,8 +107,7 @@
  *  @li 2,684,354,560 bytes for a 2048 byte block size, and
  *  @li 21,474,836,480 bytes for a 4096 byte block size.
  */
-typedef struct rtems_rfs_block_map_s
-{
+typedef struct rtems_rfs_block_map_s {
   /**
    * Is the map dirty ?
    */
@@ -187,20 +185,19 @@ typedef struct rtems_rfs_block_map_s
 /**
  * Are we at the last block in the map ?
  */
-#define rtems_rfs_block_map_last(_m) \
-  rtems_rfs_block_pos_last_block (&(_m)->bpos, &(_m)->size)
+#define rtems_rfs_block_map_last(_m)                                           \
+  rtems_rfs_block_pos_last_block(&(_m)->bpos, &(_m)->size)
 
 /**
  * Is the position past the end of the block ?
  */
-#define rtems_rfs_block_map_past_end(_m, _p) \
-  rtems_rfs_block_pos_past_end (_p, &(_m)->size)
+#define rtems_rfs_block_map_past_end(_m, _p)                                   \
+  rtems_rfs_block_pos_past_end(_p, &(_m)->size)
 
 /**
  * Return the current position in the map.
  */
-#define rtems_rfs_block_map_pos(_f, _m) \
-  rtems_rfs_block_get_pos (_f, &(_m)->bpos)
+#define rtems_rfs_block_map_pos(_f, _m) rtems_rfs_block_get_pos(_f, &(_m)->bpos)
 
 /**
  * Return the map's current block number.
@@ -219,9 +216,8 @@ typedef struct rtems_rfs_block_map_s
  * @param[in] offset is the offset to set in the map's size.
  */
 static inline void
-rtems_rfs_block_map_set_size_offset (rtems_rfs_block_map* map,
-                                     rtems_rfs_block_off  offset)
-{
+rtems_rfs_block_map_set_size_offset(rtems_rfs_block_map* map,
+                                    rtems_rfs_block_off offset) {
   map->size.offset = offset;
   map->dirty = true;
 }
@@ -232,11 +228,9 @@ rtems_rfs_block_map_set_size_offset (rtems_rfs_block_map* map,
  * @param[in] map is a pointer to the open map to set the offset in.
  * @param[in] size is the size to set in the map's size.
  */
-static inline void
-rtems_rfs_block_map_set_size (rtems_rfs_block_map*  map,
-                              rtems_rfs_block_size* size)
-{
-  rtems_rfs_block_copy_size (&map->size, size);
+static inline void rtems_rfs_block_map_set_size(rtems_rfs_block_map* map,
+                                                rtems_rfs_block_size* size) {
+  rtems_rfs_block_copy_size(&map->size, size);
   map->dirty = true;
 }
 /**
@@ -251,9 +245,9 @@ rtems_rfs_block_map_set_size (rtems_rfs_block_map*  map,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_block_map_open (rtems_rfs_file_system*  fs,
-                              rtems_rfs_inode_handle* inode,
-                              rtems_rfs_block_map*    map);
+int rtems_rfs_block_map_open(rtems_rfs_file_system* fs,
+                             rtems_rfs_inode_handle* inode,
+                             rtems_rfs_block_map* map);
 
 /**
  * Close the map. The buffer handles are closed and any help buffers are
@@ -265,8 +259,8 @@ int rtems_rfs_block_map_open (rtems_rfs_file_system*  fs,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_block_map_close (rtems_rfs_file_system* fs,
-                               rtems_rfs_block_map*   map);
+int rtems_rfs_block_map_close(rtems_rfs_file_system* fs,
+                              rtems_rfs_block_map* map);
 
 /**
  * Find a block number in the map from the position provided.
@@ -279,10 +273,10 @@ int rtems_rfs_block_map_close (rtems_rfs_file_system* fs,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_block_map_find (rtems_rfs_file_system*  fs,
-                              rtems_rfs_block_map*    map,
-                              rtems_rfs_block_pos*    bpos,
-                              rtems_rfs_buffer_block* block);
+int rtems_rfs_block_map_find(rtems_rfs_file_system* fs,
+                             rtems_rfs_block_map* map,
+                             rtems_rfs_block_pos* bpos,
+                             rtems_rfs_buffer_block* block);
 
 /**
  * Seek around the map.
@@ -296,10 +290,9 @@ int rtems_rfs_block_map_find (rtems_rfs_file_system*  fs,
  * @retval ENXIO Failed to seek because it is outside the block map.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_block_map_seek (rtems_rfs_file_system*  fs,
-                              rtems_rfs_block_map*    map,
-                              rtems_rfs_pos_rel       offset,
-                              rtems_rfs_buffer_block* block);
+int rtems_rfs_block_map_seek(rtems_rfs_file_system* fs,
+                             rtems_rfs_block_map* map, rtems_rfs_pos_rel offset,
+                             rtems_rfs_buffer_block* block);
 
 /**
  * Seek to the next block.
@@ -312,9 +305,9 @@ int rtems_rfs_block_map_seek (rtems_rfs_file_system*  fs,
  * @retval ENXIO Failed to seek because it is outside the block map.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_block_map_next_block (rtems_rfs_file_system*  fs,
-                                    rtems_rfs_block_map*    map,
-                                    rtems_rfs_buffer_block* block);
+int rtems_rfs_block_map_next_block(rtems_rfs_file_system* fs,
+                                   rtems_rfs_block_map* map,
+                                   rtems_rfs_buffer_block* block);
 
 /**
  * Grow the block map by the specified number of blocks.
@@ -328,10 +321,9 @@ int rtems_rfs_block_map_next_block (rtems_rfs_file_system*  fs,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_block_map_grow (rtems_rfs_file_system* fs,
-                              rtems_rfs_block_map*   map,
-                              size_t                 blocks,
-                              rtems_rfs_block_no*    new_block);
+int rtems_rfs_block_map_grow(rtems_rfs_file_system* fs,
+                             rtems_rfs_block_map* map, size_t blocks,
+                             rtems_rfs_block_no* new_block);
 
 /**
  * Grow the block map by the specified number of blocks.
@@ -344,9 +336,8 @@ int rtems_rfs_block_map_grow (rtems_rfs_file_system* fs,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_block_map_shrink (rtems_rfs_file_system* fs,
-                                rtems_rfs_block_map*   map,
-                                size_t                 blocks);
+int rtems_rfs_block_map_shrink(rtems_rfs_file_system* fs,
+                               rtems_rfs_block_map* map, size_t blocks);
 
 /**
  * Free all blocks in the map.
@@ -357,7 +348,7 @@ int rtems_rfs_block_map_shrink (rtems_rfs_file_system* fs,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_block_map_free_all (rtems_rfs_file_system* fs,
-                                  rtems_rfs_block_map*   map);
+int rtems_rfs_block_map_free_all(rtems_rfs_file_system* fs,
+                                 rtems_rfs_block_map* map);
 
 #endif

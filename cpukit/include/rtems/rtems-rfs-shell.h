@@ -2,7 +2,7 @@
 
 /**
  * @file
- * 
+ *
  * @ingroup rtems_rfs
  * @brief RTEMS File Systems Shell Commands
  *
@@ -35,11 +35,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined (_RTEMS_RFS_SHELL_H_)
+#if !defined(_RTEMS_RFS_SHELL_H_)
 #define _RTEMS_RFS_SHELL_H_
 
-#include <stddef.h>
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 
 /**
@@ -51,7 +51,7 @@
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_shell_debugrfs (int argc, char *argv[]);
+int rtems_shell_debugrfs(int argc, char* argv[]);
 
 /**
  * The shell command for formatting an RFS file system.
@@ -62,6 +62,6 @@ int rtems_shell_debugrfs (int argc, char *argv[]);
  * @retval 0 Successful operation.
  * @retval 1 An error occurred.
  */
-int rtems_shell_rfs_format (int argc, char* argv[]);
+int rtems_shell_rfs_format(int argc, char* argv[]);
 
 #endif

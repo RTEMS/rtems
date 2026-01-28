@@ -35,11 +35,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined (_RTEMS_RFS_FORMAT_H_)
+#if !defined(_RTEMS_RFS_FORMAT_H_)
 #define _RTEMS_RFS_FORMAT_H_
 
-#include <stddef.h>
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 
 #ifdef __cplusplus
@@ -52,8 +52,7 @@ extern "C" {
  * RFS File System Configuration data used to format the file system. For
  * default values leave the field set to 0.
  */
-typedef struct _rtems_rfs_format_config
-{
+typedef struct _rtems_rfs_format_config {
   /**
    * The size of a block.
    */
@@ -100,7 +99,7 @@ typedef struct _rtems_rfs_format_config
  * @retval -1 Error. See errno.
  * @retval 0 No error. Format successful.
  */
-int rtems_rfs_format (const char* name, const rtems_rfs_format_config* config);
+int rtems_rfs_format(const char* name, const rtems_rfs_format_config* config);
 
 #ifdef __cplusplus
 }

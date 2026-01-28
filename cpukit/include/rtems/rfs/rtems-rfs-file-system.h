@@ -37,7 +37,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined (_RTEMS_RFS_FILE_SYSTEM_H_)
+#if !defined(_RTEMS_RFS_FILE_SYSTEM_H_)
 #define _RTEMS_RFS_FILE_SYSTEM_H_
 
 #include <rtems/rfs/rtems-rfs-group.h>
@@ -45,17 +45,17 @@
 /**
  * Superblock offsets and values.
  */
-#define RTEMS_RFS_SB_OFFSET_MAGIC           (0)
-#define RTEMS_RFS_SB_MAGIC                  (0x28092001)
-#define RTEMS_RFS_SB_OFFSET_VERSION         (RTEMS_RFS_SB_OFFSET_MAGIC           + 4)
-#define RTEMS_RFS_SB_OFFSET_BLOCK_SIZE      (RTEMS_RFS_SB_OFFSET_VERSION         + 4)
-#define RTEMS_RFS_SB_OFFSET_BLOCKS          (RTEMS_RFS_SB_OFFSET_BLOCK_SIZE      + 4)
-#define RTEMS_RFS_SB_OFFSET_BAD_BLOCKS      (RTEMS_RFS_SB_OFFSET_BLOCKS          + 4)
-#define RTEMS_RFS_SB_OFFSET_MAX_NAME_LENGTH (RTEMS_RFS_SB_OFFSET_BAD_BLOCKS      + 4)
-#define RTEMS_RFS_SB_OFFSET_GROUPS          (RTEMS_RFS_SB_OFFSET_MAX_NAME_LENGTH + 4)
-#define RTEMS_RFS_SB_OFFSET_GROUP_BLOCKS    (RTEMS_RFS_SB_OFFSET_GROUPS          + 4)
-#define RTEMS_RFS_SB_OFFSET_GROUP_INODES    (RTEMS_RFS_SB_OFFSET_GROUP_BLOCKS    + 4)
-#define RTEMS_RFS_SB_OFFSET_INODE_SIZE      (RTEMS_RFS_SB_OFFSET_GROUP_INODES    + 4)
+#define RTEMS_RFS_SB_OFFSET_MAGIC (0)
+#define RTEMS_RFS_SB_MAGIC (0x28092001)
+#define RTEMS_RFS_SB_OFFSET_VERSION (RTEMS_RFS_SB_OFFSET_MAGIC + 4)
+#define RTEMS_RFS_SB_OFFSET_BLOCK_SIZE (RTEMS_RFS_SB_OFFSET_VERSION + 4)
+#define RTEMS_RFS_SB_OFFSET_BLOCKS (RTEMS_RFS_SB_OFFSET_BLOCK_SIZE + 4)
+#define RTEMS_RFS_SB_OFFSET_BAD_BLOCKS (RTEMS_RFS_SB_OFFSET_BLOCKS + 4)
+#define RTEMS_RFS_SB_OFFSET_MAX_NAME_LENGTH (RTEMS_RFS_SB_OFFSET_BAD_BLOCKS + 4)
+#define RTEMS_RFS_SB_OFFSET_GROUPS (RTEMS_RFS_SB_OFFSET_MAX_NAME_LENGTH + 4)
+#define RTEMS_RFS_SB_OFFSET_GROUP_BLOCKS (RTEMS_RFS_SB_OFFSET_GROUPS + 4)
+#define RTEMS_RFS_SB_OFFSET_GROUP_INODES (RTEMS_RFS_SB_OFFSET_GROUP_BLOCKS + 4)
+#define RTEMS_RFS_SB_OFFSET_INODE_SIZE (RTEMS_RFS_SB_OFFSET_GROUP_INODES + 4)
 
 /**
  * RFS Version Number.
@@ -116,23 +116,26 @@ typedef int64_t rtems_rfs_pos_rel;
 /**
  * Flags to control the file system.
  */
-#define RTEMS_RFS_FS_BITMAPS_HOLD      (1 << 0) /**< Do not release bitmaps
-                                                 * when finished. Default is
-                                                 * off so they are released. */
-#define RTEMS_RFS_FS_NO_LOCAL_CACHE    (1 << 1) /**< Do not cache the buffers
-                                                 * and release directly to the
-                                                 * buffer support layer. The
-                                                 * default is to hold buffers. */
-#define RTEMS_RFS_FS_FORCE_OPEN        (1 << 2) /**< Force open and ignore any
-                                                 * errors. */
-#define RTEMS_RFS_FS_READ_ONLY         (1 << 3) /**< Make the mount
-                                                 * read-only. Currently not
-                                                 * supported. */
+#define RTEMS_RFS_FS_BITMAPS_HOLD                                              \
+  (1 << 0) /**< Do not release bitmaps                                         \
+            * when finished. Default is                                        \
+            * off so they are released. */
+#define RTEMS_RFS_FS_NO_LOCAL_CACHE                                            \
+  (1 << 1) /**< Do not cache the buffers                                       \
+            * and release directly to the                                      \
+            * buffer support layer. The                                        \
+            * default is to hold buffers. */
+#define RTEMS_RFS_FS_FORCE_OPEN                                                \
+  (1 << 2) /**< Force open and ignore any                                      \
+            * errors. */
+#define RTEMS_RFS_FS_READ_ONLY                                                 \
+  (1 << 3) /**< Make the mount                                                 \
+            * read-only. Currently not                                         \
+            * supported. */
 /**
  * RFS File System data.
  */
-struct _rtems_rfs_file_system
-{
+struct _rtems_rfs_file_system {
   /**
    * Flags to control the file system. Some can be controlled via the ioctl.
    */
@@ -289,14 +292,16 @@ struct _rtems_rfs_file_system
  *
  * @param[in] _fs is a pointer to the file system.
  */
-#define rtems_rfs_fs_release_bitmaps(_f) (!((_f)->flags & RTEMS_RFS_FS_BITMAPS_HOLD))
+#define rtems_rfs_fs_release_bitmaps(_f)                                       \
+  (!((_f)->flags & RTEMS_RFS_FS_BITMAPS_HOLD))
 
 /**
  * Are the buffers locally cache or released back to the buffering layer ?
  *
  * @param[in] _fs is a pointer to the file system.
  */
-#define rtems_rfs_fs_no_local_cache(_f) ((_f)->flags & RTEMS_RFS_FS_NO_LOCAL_CACHE)
+#define rtems_rfs_fs_no_local_cache(_f)                                        \
+  ((_f)->flags & RTEMS_RFS_FS_NO_LOCAL_CACHE)
 
 /**
  * The disk device number.
@@ -339,7 +344,7 @@ struct _rtems_rfs_file_system
  * @param[in] _blk is the block within the group.
  * @return The absolute block number.
  */
-#define rtems_rfs_fs_block(_fs, _grp, _blk) \
+#define rtems_rfs_fs_block(_fs, _grp, _blk)                                    \
   ((((_fs)->group_blocks) * (_grp)) + (_blk) + 1)
 
 /**
@@ -396,7 +401,7 @@ uint64_t rtems_rfs_fs_size(rtems_rfs_file_system* fs);
  * @param[in] fs is a pointer to the file system.
  * @return uint64_t The size of the disk in bytes.
  */
-uint64_t rtems_rfs_fs_media_size (rtems_rfs_file_system* fs);
+uint64_t rtems_rfs_fs_media_size(rtems_rfs_file_system* fs);
 
 /**
  * Open the file system given a file path.
@@ -410,11 +415,8 @@ uint64_t rtems_rfs_fs_media_size (rtems_rfs_file_system* fs);
  * @retval 0 Successful operation.
  * @retval -1 Error. See errno
  */
-int rtems_rfs_fs_open (const char*             name,
-                       void*                   user,
-                       uint32_t                flags,
-                       uint32_t                max_held_buffers,
-                       rtems_rfs_file_system** fs);
+int rtems_rfs_fs_open(const char* name, void* user, uint32_t flags,
+                      uint32_t max_held_buffers, rtems_rfs_file_system** fs);
 
 /**
  * Close the file system.
@@ -424,6 +426,6 @@ int rtems_rfs_fs_open (const char*             name,
  * @retval 0 Successful operation.
  * @retval -1 Error. See errno
  */
-int rtems_rfs_fs_close (rtems_rfs_file_system* fs);
+int rtems_rfs_fs_close(rtems_rfs_file_system* fs);
 
 #endif

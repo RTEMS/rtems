@@ -40,8 +40,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
-#if !defined (_RTEMS_RFS_BITMAPS_H_)
+#if !defined(_RTEMS_RFS_BITMAPS_H_)
 #define _RTEMS_RFS_BITMAPS_H_
 
 #include <rtems/rfs/rtems-rfs-buffer.h>
@@ -59,24 +58,26 @@
 /*
  * Bit set is a 1 and clear is 0.
  */
-#define RTEMS_RFS_BITMAP_BIT_CLEAR          0
-#define RTEMS_RFS_BITMAP_BIT_SET            1
-#define RTEMS_RFS_BITMAP_ELEMENT_SET        (RTEMS_RFS_BITMAP_ELEMENT_FULL_MASK)
-#define RTEMS_RFS_BITMAP_ELEMENT_CLEAR      (0)
-#define RTEMS_RFS_BITMAP_SET_BITS(_t, _b)   ((_t) | (_b))
+#define RTEMS_RFS_BITMAP_BIT_CLEAR 0
+#define RTEMS_RFS_BITMAP_BIT_SET 1
+#define RTEMS_RFS_BITMAP_ELEMENT_SET (RTEMS_RFS_BITMAP_ELEMENT_FULL_MASK)
+#define RTEMS_RFS_BITMAP_ELEMENT_CLEAR (0)
+#define RTEMS_RFS_BITMAP_SET_BITS(_t, _b) ((_t) | (_b))
 #define RTEMS_RFS_BITMAP_CLEAR_BITS(_t, _b) ((_t) & ~(_b))
-#define RTEMS_RFS_BITMAP_TEST_BIT(_t, _b)   (((_t) & (1 << (_b))) != 0 ? true : false)
+#define RTEMS_RFS_BITMAP_TEST_BIT(_t, _b)                                      \
+  (((_t) & (1 << (_b))) != 0 ? true : false)
 #else
 /*
  * Bit set is a 0 and clear is 1.
  */
-#define RTEMS_RFS_BITMAP_BIT_CLEAR          1
-#define RTEMS_RFS_BITMAP_BIT_SET            0
-#define RTEMS_RFS_BITMAP_ELEMENT_SET        (0)
-#define RTEMS_RFS_BITMAP_ELEMENT_CLEAR      (RTEMS_RFS_BITMAP_ELEMENT_FULL_MASK)
-#define RTEMS_RFS_BITMAP_SET_BITS(_t, _b)   ((_t) & ~(_b))
+#define RTEMS_RFS_BITMAP_BIT_CLEAR 1
+#define RTEMS_RFS_BITMAP_BIT_SET 0
+#define RTEMS_RFS_BITMAP_ELEMENT_SET (0)
+#define RTEMS_RFS_BITMAP_ELEMENT_CLEAR (RTEMS_RFS_BITMAP_ELEMENT_FULL_MASK)
+#define RTEMS_RFS_BITMAP_SET_BITS(_t, _b) ((_t) & ~(_b))
 #define RTEMS_RFS_BITMAP_CLEAR_BITS(_t, _b) ((_t) | (_b))
-#define RTEMS_RFS_BITMAP_TEST_BIT(_t, _b)   (((_t) & (1 << (_b))) == 0 ? true : false)
+#define RTEMS_RFS_BITMAP_TEST_BIT(_t, _b)                                      \
+  (((_t) & (1 << (_b))) == 0 ? true : false)
 #endif
 
 /**
@@ -95,7 +96,7 @@
  * The bitmap search window. Searches occur around a seed in either direction
  * for half the window.
  */
-#define RTEMS_RFS_BITMAP_SEARCH_WINDOW (rtems_rfs_bitmap_element_bits () * 64)
+#define RTEMS_RFS_BITMAP_SEARCH_WINDOW (rtems_rfs_bitmap_element_bits() * 64)
 
 /**
  * A bit in a map.
@@ -120,17 +121,16 @@ typedef rtems_rfs_bitmap_element* rtems_rfs_bitmap_map;
 /**
  * The bitmap control is a simple way to manage the various parts of a bitmap.
  */
-typedef struct rtems_rfs_bitmap_control_s
-{
-  rtems_rfs_buffer_handle* buffer;      //< Handle the to buffer with the bit
-                                        //map.
-  rtems_rfs_file_system*   fs;          //< The map's file system.
-  rtems_rfs_buffer_block   block;       //< The map's block number on disk.
-  size_t                   size;        //< Number of bits in the map. Passed
-                                        //to create.
-  size_t                   free;        //< Number of bits in the map that are
-                                        //free (clear).
-  rtems_rfs_bitmap_map     search_bits; //< The search bit map memory.
+typedef struct rtems_rfs_bitmap_control_s {
+  rtems_rfs_buffer_handle* buffer;  //< Handle the to buffer with the bit
+                                    // map.
+  rtems_rfs_file_system* fs;        //< The map's file system.
+  rtems_rfs_buffer_block block;     //< The map's block number on disk.
+  size_t size;                      //< Number of bits in the map. Passed
+                                    // to create.
+  size_t free;                      //< Number of bits in the map that are
+                                    // free (clear).
+  rtems_rfs_bitmap_map search_bits; //< The search bit map memory.
 } rtems_rfs_bitmap_control;
 
 /**
@@ -142,26 +142,26 @@ typedef struct rtems_rfs_bitmap_control_s
  * Return the number of bits for the number of bytes provided.  The search
  * element and the element must have the same number of bits.
  */
-#define rtems_rfs_bitmap_element_bits() \
-  rtems_rfs_bitmap_numof_bits (sizeof (rtems_rfs_bitmap_element))
+#define rtems_rfs_bitmap_element_bits()                                        \
+  rtems_rfs_bitmap_numof_bits(sizeof(rtems_rfs_bitmap_element))
 
 /**
  * Return the number of bits a search element covers.
  */
-#define rtems_rfs_bitmap_search_element_bits() \
+#define rtems_rfs_bitmap_search_element_bits()                                 \
   (rtems_rfs_bitmap_element_bits() * rtems_rfs_bitmap_element_bits())
 
 /**
  * Return the number of elements for a given number of bits.
  */
-#define rtems_rfs_bitmap_elements(_bits) \
+#define rtems_rfs_bitmap_elements(_bits)                                       \
   ((((_bits) - 1) / rtems_rfs_bitmap_element_bits()) + 1)
 
 /**
  * Release the bitmap buffer back to the buffer pool or cache.
  */
-#define rtems_rfs_bitmap_release_buffer(_fs, _bm)    \
-  rtems_rfs_buffer_handle_release (_fs, (_bm)->buffer)
+#define rtems_rfs_bitmap_release_buffer(_fs, _bm)                              \
+  rtems_rfs_buffer_handle_release(_fs, (_bm)->buffer)
 
 /**
  * Return the element index for a given bit. We use a macro to hide any
@@ -171,14 +171,13 @@ typedef struct rtems_rfs_bitmap_control_s
  * compiler should figure this out but I would rather enforce this than rely on
  * the specific backend of a compiler to do the right thing.
  */
-#define rtems_rfs_bitmap_map_index(_b) \
-  ((_b) >> RTEMS_RFS_ELEMENT_BITS_POWER_2)
+#define rtems_rfs_bitmap_map_index(_b) ((_b) >> RTEMS_RFS_ELEMENT_BITS_POWER_2)
 
 /**
  * Return the bit offset for a given bit in an element in a map. See @ref
  * rtems_rfs_bitmap_map_index for a detailed reason why.
  */
-#define rtems_rfs_bitmap_map_offset(_b) \
+#define rtems_rfs_bitmap_map_offset(_b)                                        \
   ((_b) & ((1 << RTEMS_RFS_ELEMENT_BITS_POWER_2) - 1))
 
 /**
@@ -209,7 +208,7 @@ typedef struct rtems_rfs_bitmap_control_s
  *
  * @return The mask of the argument size number of bits.
  */
-rtems_rfs_bitmap_element rtems_rfs_bitmap_mask (unsigned int size);
+rtems_rfs_bitmap_element rtems_rfs_bitmap_mask(unsigned int size);
 
 /**
  * Create a bit mask section. A mask section is a mask that is not aligned to
@@ -220,8 +219,8 @@ rtems_rfs_bitmap_element rtems_rfs_bitmap_mask (unsigned int size);
  *
  * @return Mask section as defined by the start and end arguments.
  */
-rtems_rfs_bitmap_element rtems_rfs_bitmap_mask_section (unsigned int start,
-                                                        unsigned int end);
+rtems_rfs_bitmap_element rtems_rfs_bitmap_mask_section(unsigned int start,
+                                                       unsigned int end);
 
 /**
  * Set a bit in a map and if all the bits are set, set the search map bit as
@@ -233,8 +232,8 @@ rtems_rfs_bitmap_element rtems_rfs_bitmap_mask_section (unsigned int start,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_bitmap_map_set (rtems_rfs_bitmap_control* control,
-                              rtems_rfs_bitmap_bit      bit);
+int rtems_rfs_bitmap_map_set(rtems_rfs_bitmap_control* control,
+                             rtems_rfs_bitmap_bit bit);
 
 /**
  * Clear a bit in a map and make sure the search map bit is clear so a search
@@ -246,8 +245,8 @@ int rtems_rfs_bitmap_map_set (rtems_rfs_bitmap_control* control,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_bitmap_map_clear (rtems_rfs_bitmap_control* control,
-                                rtems_rfs_bitmap_bit      bit);
+int rtems_rfs_bitmap_map_clear(rtems_rfs_bitmap_control* control,
+                               rtems_rfs_bitmap_bit bit);
 
 /**
  * Test a bit in the map.
@@ -259,10 +258,8 @@ int rtems_rfs_bitmap_map_clear (rtems_rfs_bitmap_control* control,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int
-rtems_rfs_bitmap_map_test (rtems_rfs_bitmap_control* control,
-                           rtems_rfs_bitmap_bit      bit,
-                           bool*                     state);
+int rtems_rfs_bitmap_map_test(rtems_rfs_bitmap_control* control,
+                              rtems_rfs_bitmap_bit bit, bool* state);
 
 /**
  * Set all bits in the bitmap and set the dirty bit.
@@ -272,7 +269,7 @@ rtems_rfs_bitmap_map_test (rtems_rfs_bitmap_control* control,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_bitmap_map_set_all (rtems_rfs_bitmap_control* control);
+int rtems_rfs_bitmap_map_set_all(rtems_rfs_bitmap_control* control);
 
 /**
  * Clear all bits in the bitmap and set the dirty bit.
@@ -282,7 +279,7 @@ int rtems_rfs_bitmap_map_set_all (rtems_rfs_bitmap_control* control);
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_bitmap_map_clear_all (rtems_rfs_bitmap_control* control);
+int rtems_rfs_bitmap_map_clear_all(rtems_rfs_bitmap_control* control);
 
 /**
  * Find a free bit searching from the seed up and down until found. The search
@@ -299,10 +296,9 @@ int rtems_rfs_bitmap_map_clear_all (rtems_rfs_bitmap_control* control);
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_bitmap_map_alloc (rtems_rfs_bitmap_control* control,
-                                rtems_rfs_bitmap_bit      seed,
-                                bool*                     allocate,
-                                rtems_rfs_bitmap_bit*     bit);
+int rtems_rfs_bitmap_map_alloc(rtems_rfs_bitmap_control* control,
+                               rtems_rfs_bitmap_bit seed, bool* allocate,
+                               rtems_rfs_bitmap_bit* bit);
 
 /**
  * Create a search bit map from the actual bit map.
@@ -312,7 +308,7 @@ int rtems_rfs_bitmap_map_alloc (rtems_rfs_bitmap_control* control,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_bitmap_create_search (rtems_rfs_bitmap_control* control);
+int rtems_rfs_bitmap_create_search(rtems_rfs_bitmap_control* control);
 
 /**
  * Open a bitmap control with a map and search map.
@@ -326,11 +322,10 @@ int rtems_rfs_bitmap_create_search (rtems_rfs_bitmap_control* control);
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_bitmap_open (rtems_rfs_bitmap_control* control,
-                           rtems_rfs_file_system*    fs,
-                           rtems_rfs_buffer_handle*  buffer,
-                           size_t                    size,
-                           rtems_rfs_buffer_block    block);
+int rtems_rfs_bitmap_open(rtems_rfs_bitmap_control* control,
+                          rtems_rfs_file_system* fs,
+                          rtems_rfs_buffer_handle* buffer, size_t size,
+                          rtems_rfs_buffer_block block);
 
 /**
  * Close a bitmap.
@@ -340,6 +335,6 @@ int rtems_rfs_bitmap_open (rtems_rfs_bitmap_control* control,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_bitmap_close (rtems_rfs_bitmap_control* control);
+int rtems_rfs_bitmap_close(rtems_rfs_bitmap_control* control);
 
 #endif

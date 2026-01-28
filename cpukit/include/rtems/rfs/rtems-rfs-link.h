@@ -37,8 +37,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
-#if !defined (_RTEMS_RFS_LINK_H_)
+#if !defined(_RTEMS_RFS_LINK_H_)
 #define _RTEMS_RFS_LINK_H_
 
 #include <dirent.h>
@@ -49,8 +48,7 @@
 /**
  * Directory unlink modes.
  */
-typedef enum rtems_rfs_unlink_dir_e
-{
+typedef enum rtems_rfs_unlink_dir_e {
   rtems_rfs_unlink_dir_denied,   /**< Not allowed to unlink a directory. */
   rtems_rfs_unlink_dir_if_empty, /**< Unlink if the directory is empty. */
   rtems_rfs_unlink_dir_allowed   /**< Unlinking of directories is allowed. */
@@ -71,12 +69,8 @@ typedef enum rtems_rfs_unlink_dir_e
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_link (rtems_rfs_file_system* fs,
-                    const char*            name,
-                    int                    length,
-                    rtems_rfs_ino          parent,
-                    rtems_rfs_ino          target,
-                    bool                   link_dir);
+int rtems_rfs_link(rtems_rfs_file_system* fs, const char* name, int length,
+                   rtems_rfs_ino parent, rtems_rfs_ino target, bool link_dir);
 
 /**
  * Unlink the node from the parent directory. A directory offset for the
@@ -92,11 +86,9 @@ int rtems_rfs_link (rtems_rfs_file_system* fs,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_unlink (rtems_rfs_file_system* fs,
-                      rtems_rfs_ino          parent,
-                      rtems_rfs_ino          target,
-                      uint32_t               doff,
-                      rtems_rfs_unlink_dir   dir_mode);
+int rtems_rfs_unlink(rtems_rfs_file_system* fs, rtems_rfs_ino parent,
+                     rtems_rfs_ino target, uint32_t doff,
+                     rtems_rfs_unlink_dir dir_mode);
 
 /**
  * Symbolic link is an inode that has a path attached.
@@ -112,14 +104,9 @@ int rtems_rfs_unlink (rtems_rfs_file_system* fs,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_symlink (rtems_rfs_file_system* fs,
-                       const char*            name,
-                       int                    length,
-                       const char*            link,
-                       int                    link_length,
-                       uid_t                  uid,
-                       gid_t                  gid,
-                       rtems_rfs_ino          parent);
+int rtems_rfs_symlink(rtems_rfs_file_system* fs, const char* name, int length,
+                      const char* link, int link_length, uid_t uid, gid_t gid,
+                      rtems_rfs_ino parent);
 
 /**
  * Read a symbolic link into the provided buffer returning the link of link
@@ -134,10 +121,7 @@ int rtems_rfs_symlink (rtems_rfs_file_system* fs,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_symlink_read (rtems_rfs_file_system* fs,
-                            rtems_rfs_ino          link,
-                            char*                  path,
-                            size_t                 size,
-                            size_t*                length);
+int rtems_rfs_symlink_read(rtems_rfs_file_system* fs, rtems_rfs_ino link,
+                           char* path, size_t size, size_t* length);
 
 #endif

@@ -37,8 +37,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
-#if !defined (_RTEMS_RFS_INODE_H_)
+#if !defined(_RTEMS_RFS_INODE_H_)
 #define _RTEMS_RFS_INODE_H_
 
 #include <sys/stat.h>
@@ -49,46 +48,46 @@
 /**
  * The RFS mode definitions. Currently map to the C library ones.
  */
-#define RTEMS_RFS_S_ISUID  S_ISUID  /**< Set user id on execution */
-#define RTEMS_RFS_S_ISGID  S_ISGID  /**< Set group id on execution */
-#define RTEMS_RFS_S_ISVTX  S_ISVTX  /**< Save swapped text even after use */
-#define RTEMS_RFS_S_IREAD  S_IREAD  /**< Read permission, owner */
+#define RTEMS_RFS_S_ISUID S_ISUID   /**< Set user id on execution */
+#define RTEMS_RFS_S_ISGID S_ISGID   /**< Set group id on execution */
+#define RTEMS_RFS_S_ISVTX S_ISVTX   /**< Save swapped text even after use */
+#define RTEMS_RFS_S_IREAD S_IREAD   /**< Read permission, owner */
 #define RTEMS_RFS_S_IWRITE S_IWRITE /**< Write permission, owner */
-#define RTEMS_RFS_S_IEXEC  S_IEXEC  /**< Execute/search permission, owner */
-#define RTEMS_RFS_S_ENFMT  S_ENFMT  /**< Enforcement-mode locking */
-#define RTEMS_RFS_S_IFMT   S_IFMT   /**< Type of file */
-#define RTEMS_RFS_S_IFDIR  S_IFDIR  /**< Directory */
-#define RTEMS_RFS_S_IFCHR  S_IFCHR  /**< Character special */
-#define RTEMS_RFS_S_IFBLK  S_IFBLK  /**< Block special */
-#define RTEMS_RFS_S_IFREG  S_IFREG  /**< Regular */
-#define RTEMS_RFS_S_IFLNK  S_IFLNK  /**< Symbolic link */
+#define RTEMS_RFS_S_IEXEC S_IEXEC   /**< Execute/search permission, owner */
+#define RTEMS_RFS_S_ENFMT S_ENFMT   /**< Enforcement-mode locking */
+#define RTEMS_RFS_S_IFMT S_IFMT     /**< Type of file */
+#define RTEMS_RFS_S_IFDIR S_IFDIR   /**< Directory */
+#define RTEMS_RFS_S_IFCHR S_IFCHR   /**< Character special */
+#define RTEMS_RFS_S_IFBLK S_IFBLK   /**< Block special */
+#define RTEMS_RFS_S_IFREG S_IFREG   /**< Regular */
+#define RTEMS_RFS_S_IFLNK S_IFLNK   /**< Symbolic link */
 #define RTEMS_RFS_S_IFSOCK S_IFSOCK /**< Socket */
-#define RTEMS_RFS_S_IFIFO  S_IFIFO  /**< Fifo */
-#define RTEMS_RFS_S_IRWXU  S_IRWXU
-#define RTEMS_RFS_S_IRUSR  S_IRUSR  /**< Read permission, owner */
-#define RTEMS_RFS_S_IWUSR  S_IWUSR  /**< Write permission, owner */
-#define RTEMS_RFS_S_IXUSR  S_IXUSR  /**< Execute/search permission, owner */
-#define RTEMS_RFS_S_IRWXG  S_IRWXG
-#define RTEMS_RFS_S_IRGRP  S_IRGRP  /**< Read permission, group */
-#define RTEMS_RFS_S_IWGRP  S_IWGRP  /**< Write permission, grougroup */
-#define RTEMS_RFS_S_IXGRP  S_IXGRP  /**< Execute/search permission, group */
-#define RTEMS_RFS_S_IRWXO  S_IRWXO
-#define RTEMS_RFS_S_IROTH  S_IROTH  /**< Read permission, other */
-#define RTEMS_RFS_S_IWOTH  S_IWOTH  /**< Write permission, other */
-#define RTEMS_RFS_S_IXOTH  S_IXOTH  /**< Execute/search permission, other */
+#define RTEMS_RFS_S_IFIFO S_IFIFO   /**< Fifo */
+#define RTEMS_RFS_S_IRWXU S_IRWXU
+#define RTEMS_RFS_S_IRUSR S_IRUSR /**< Read permission, owner */
+#define RTEMS_RFS_S_IWUSR S_IWUSR /**< Write permission, owner */
+#define RTEMS_RFS_S_IXUSR S_IXUSR /**< Execute/search permission, owner */
+#define RTEMS_RFS_S_IRWXG S_IRWXG
+#define RTEMS_RFS_S_IRGRP S_IRGRP /**< Read permission, group */
+#define RTEMS_RFS_S_IWGRP S_IWGRP /**< Write permission, grougroup */
+#define RTEMS_RFS_S_IXGRP S_IXGRP /**< Execute/search permission, group */
+#define RTEMS_RFS_S_IRWXO S_IRWXO
+#define RTEMS_RFS_S_IROTH S_IROTH /**< Read permission, other */
+#define RTEMS_RFS_S_IWOTH S_IWOTH /**< Write permission, other */
+#define RTEMS_RFS_S_IXOTH S_IXOTH /**< Execute/search permission, other */
 
-#define	RTEMS_RFS_S_ISBLK(m)  S_ISBLK(m)
-#define	RTEMS_RFS_S_ISCHR(m)  S_ISCHR(m)
-#define	RTEMS_RFS_S_ISDIR(m)  S_ISDIR(m)
-#define	RTEMS_RFS_S_ISFIFO(m) S_ISFIFO(m)
-#define	RTEMS_RFS_S_ISREG(m)  S_ISREG(m)
-#define	RTEMS_RFS_S_ISLNK(m)  S_ISLNK(m)
-#define	RTEMS_RFS_S_ISSOCK(m) S_ISSOCK(m)
+#define RTEMS_RFS_S_ISBLK(m) S_ISBLK(m)
+#define RTEMS_RFS_S_ISCHR(m) S_ISCHR(m)
+#define RTEMS_RFS_S_ISDIR(m) S_ISDIR(m)
+#define RTEMS_RFS_S_ISFIFO(m) S_ISFIFO(m)
+#define RTEMS_RFS_S_ISREG(m) S_ISREG(m)
+#define RTEMS_RFS_S_ISLNK(m) S_ISLNK(m)
+#define RTEMS_RFS_S_ISSOCK(m) S_ISSOCK(m)
 
 /**
  * Permissions of a symlink.
  */
-#define RTEMS_RFS_S_SYMLINK \
+#define RTEMS_RFS_S_SYMLINK                                                    \
   RTEMS_RFS_S_IFLNK | RTEMS_RFS_S_IRWXU | RTEMS_RFS_S_IRWXG | RTEMS_RFS_S_IRWXO
 
 /**
@@ -110,14 +109,13 @@ typedef uint32_t rtems_rfs_inode_block;
 /**
  * The size of the data name field in the inode.
  */
-#define RTEMS_RFS_INODE_DATA_NAME_SIZE \
-  (RTEMS_RFS_INODE_BLOCKS * sizeof (rtems_rfs_inode_block))
+#define RTEMS_RFS_INODE_DATA_NAME_SIZE                                         \
+  (RTEMS_RFS_INODE_BLOCKS * sizeof(rtems_rfs_inode_block))
 
 /**
  * The inode.
  */
-typedef struct _rtems_rfs_inode
-{
+typedef struct _rtems_rfs_inode {
   /**
    * The number of links to the inode.
    */
@@ -170,10 +168,9 @@ typedef struct _rtems_rfs_inode
    * mode the blocks point to blocks that hold the block numbers. The data can
    * also be a name if it fits. For example a symbolic link.
    */
-  union
-  {
+  union {
     rtems_rfs_inode_block blocks[RTEMS_RFS_INODE_BLOCKS];
-    uint8_t               name[RTEMS_RFS_INODE_DATA_NAME_SIZE];
+    uint8_t name[RTEMS_RFS_INODE_DATA_NAME_SIZE];
   } data;
 
   /**
@@ -192,13 +189,12 @@ typedef struct _rtems_rfs_inode
 /**
  * The size of an inode.
  */
-#define RTEMS_RFS_INODE_SIZE (sizeof (rtems_rfs_inode))
+#define RTEMS_RFS_INODE_SIZE (sizeof(rtems_rfs_inode))
 
 /**
  * RFS Inode Handle.
  */
-typedef struct _rtems_rfs_inode_handle
-{
+typedef struct _rtems_rfs_inode_handle {
   /**
    * Handles can be linked as a list for easy processing.
    */
@@ -254,10 +250,9 @@ typedef struct _rtems_rfs_inode_handle
  * @retval links The link count.
  */
 static inline uint16_t
-rtems_rfs_inode_get_links (rtems_rfs_inode_handle* handle)
-{
+rtems_rfs_inode_get_links(rtems_rfs_inode_handle* handle) {
   uint16_t links;
-  links = rtems_rfs_read_u16 (&handle->node->links);
+  links = rtems_rfs_read_u16(&handle->node->links);
   if (links == 0xffff)
     links = 0;
   return links;
@@ -269,11 +264,10 @@ rtems_rfs_inode_get_links (rtems_rfs_inode_handle* handle)
  * @param[in] handle is the inode handle.
  * @param[in] links are the links.
  */
-static inline void
-rtems_rfs_inode_set_links (rtems_rfs_inode_handle* handle, uint16_t links)
-{
-  rtems_rfs_write_u16 (&handle->node->links, links);
-  rtems_rfs_buffer_mark_dirty (&handle->buffer);
+static inline void rtems_rfs_inode_set_links(rtems_rfs_inode_handle* handle,
+                                             uint16_t links) {
+  rtems_rfs_write_u16(&handle->node->links, links);
+  rtems_rfs_buffer_mark_dirty(&handle->buffer);
 }
 
 /**
@@ -284,9 +278,8 @@ rtems_rfs_inode_set_links (rtems_rfs_inode_handle* handle, uint16_t links)
  * @retval flags The flags.
  */
 static inline uint16_t
-rtems_rfs_inode_get_flags (rtems_rfs_inode_handle* handle)
-{
-  return rtems_rfs_read_u16 (&handle->node->flags);
+rtems_rfs_inode_get_flags(rtems_rfs_inode_handle* handle) {
+  return rtems_rfs_read_u16(&handle->node->flags);
 }
 
 /**
@@ -295,11 +288,10 @@ rtems_rfs_inode_get_flags (rtems_rfs_inode_handle* handle)
  * @param[in] handle is the inode handle.
  * @param[in] flags are the flags.
  */
-static inline void
-rtems_rfs_inode_set_flags (rtems_rfs_inode_handle* handle, uint16_t flags)
-{
-  rtems_rfs_write_u16 (&handle->node->flags, flags);
-  rtems_rfs_buffer_mark_dirty (&handle->buffer);
+static inline void rtems_rfs_inode_set_flags(rtems_rfs_inode_handle* handle,
+                                             uint16_t flags) {
+  rtems_rfs_write_u16(&handle->node->flags, flags);
+  rtems_rfs_buffer_mark_dirty(&handle->buffer);
 }
 
 /**
@@ -310,9 +302,8 @@ rtems_rfs_inode_set_flags (rtems_rfs_inode_handle* handle, uint16_t flags)
  * @retval mode The mode.
  */
 static inline uint16_t
-rtems_rfs_inode_get_mode (rtems_rfs_inode_handle* handle)
-{
-  return rtems_rfs_read_u16 (&handle->node->mode);
+rtems_rfs_inode_get_mode(rtems_rfs_inode_handle* handle) {
+  return rtems_rfs_read_u16(&handle->node->mode);
 }
 
 /**
@@ -321,11 +312,10 @@ rtems_rfs_inode_get_mode (rtems_rfs_inode_handle* handle)
  * @param[in] handle is the inode handle.
  * @param[in] mode is the mode.
  */
-static inline void
-rtems_rfs_inode_set_mode (rtems_rfs_inode_handle* handle, uint16_t mode)
-{
-  rtems_rfs_write_u16 (&handle->node->mode, mode);
-  rtems_rfs_buffer_mark_dirty (&handle->buffer);
+static inline void rtems_rfs_inode_set_mode(rtems_rfs_inode_handle* handle,
+                                            uint16_t mode) {
+  rtems_rfs_write_u16(&handle->node->mode, mode);
+  rtems_rfs_buffer_mark_dirty(&handle->buffer);
 }
 
 /**
@@ -335,10 +325,8 @@ rtems_rfs_inode_set_mode (rtems_rfs_inode_handle* handle, uint16_t mode)
  *
  * @retval uid The used id.
  */
-static inline uint16_t
-rtems_rfs_inode_get_uid (rtems_rfs_inode_handle* handle)
-{
-  return rtems_rfs_read_u32 (&handle->node->owner) & 0xffff;
+static inline uint16_t rtems_rfs_inode_get_uid(rtems_rfs_inode_handle* handle) {
+  return rtems_rfs_read_u32(&handle->node->owner) & 0xffff;
 }
 
 /**
@@ -348,10 +336,8 @@ rtems_rfs_inode_get_uid (rtems_rfs_inode_handle* handle)
  *
  * @retval gid The grpup id.
  */
-static inline uint16_t
-rtems_rfs_inode_get_gid (rtems_rfs_inode_handle* handle)
-{
-  return (rtems_rfs_read_u32 (&handle->node->owner) >> 16) & 0xffff;
+static inline uint16_t rtems_rfs_inode_get_gid(rtems_rfs_inode_handle* handle) {
+  return (rtems_rfs_read_u32(&handle->node->owner) >> 16) & 0xffff;
 }
 
 /**
@@ -361,12 +347,10 @@ rtems_rfs_inode_get_gid (rtems_rfs_inode_handle* handle)
  * @param[in] uid is the user id (uid).
  * @param[in] gid is the group id (gid).
  */
-static inline void
-rtems_rfs_inode_set_uid_gid (rtems_rfs_inode_handle* handle,
-                             uint16_t uid, uint16_t gid)
-{
-  rtems_rfs_write_u32 (&handle->node->owner, (((uint32_t) gid) << 16) | uid);
-  rtems_rfs_buffer_mark_dirty (&handle->buffer);
+static inline void rtems_rfs_inode_set_uid_gid(rtems_rfs_inode_handle* handle,
+                                               uint16_t uid, uint16_t gid) {
+  rtems_rfs_write_u32(&handle->node->owner, (((uint32_t)gid) << 16) | uid);
+  rtems_rfs_buffer_mark_dirty(&handle->buffer);
 }
 
 /**
@@ -377,9 +361,8 @@ rtems_rfs_inode_set_uid_gid (rtems_rfs_inode_handle* handle,
  * @retval offset The block offset.
  */
 static inline uint16_t
-rtems_rfs_inode_get_block_offset (rtems_rfs_inode_handle* handle)
-{
-  return rtems_rfs_read_u16 (&handle->node->block_offset);
+rtems_rfs_inode_get_block_offset(rtems_rfs_inode_handle* handle) {
+  return rtems_rfs_read_u16(&handle->node->block_offset);
 }
 
 /**
@@ -389,11 +372,10 @@ rtems_rfs_inode_get_block_offset (rtems_rfs_inode_handle* handle)
  * @param[in] block_count is the block offset.
  */
 static inline void
-rtems_rfs_inode_set_block_offset (rtems_rfs_inode_handle* handle,
-                                  uint16_t                block_offset)
-{
-  rtems_rfs_write_u16 (&handle->node->block_offset, block_offset);
-  rtems_rfs_buffer_mark_dirty (&handle->buffer);
+rtems_rfs_inode_set_block_offset(rtems_rfs_inode_handle* handle,
+                                 uint16_t block_offset) {
+  rtems_rfs_write_u16(&handle->node->block_offset, block_offset);
+  rtems_rfs_buffer_mark_dirty(&handle->buffer);
 }
 
 /**
@@ -404,9 +386,8 @@ rtems_rfs_inode_set_block_offset (rtems_rfs_inode_handle* handle,
  * @retval count The block count.
  */
 static inline uint32_t
-rtems_rfs_inode_get_block_count (rtems_rfs_inode_handle* handle)
-{
-  return rtems_rfs_read_u32 (&handle->node->block_count);
+rtems_rfs_inode_get_block_count(rtems_rfs_inode_handle* handle) {
+  return rtems_rfs_read_u32(&handle->node->block_count);
 }
 
 /**
@@ -416,10 +397,10 @@ rtems_rfs_inode_get_block_count (rtems_rfs_inode_handle* handle)
  * @param[in] block_count is the block count.
  */
 static inline void
-rtems_rfs_inode_set_block_count (rtems_rfs_inode_handle* handle, uint32_t block_count)
-{
-  rtems_rfs_write_u32 (&handle->node->block_count, block_count);
-  rtems_rfs_buffer_mark_dirty (&handle->buffer);
+rtems_rfs_inode_set_block_count(rtems_rfs_inode_handle* handle,
+                                uint32_t block_count) {
+  rtems_rfs_write_u32(&handle->node->block_count, block_count);
+  rtems_rfs_buffer_mark_dirty(&handle->buffer);
 }
 
 /**
@@ -430,9 +411,8 @@ rtems_rfs_inode_set_block_count (rtems_rfs_inode_handle* handle, uint32_t block_
  * @retval atime The atime.
  */
 static inline rtems_rfs_time
-rtems_rfs_inode_get_atime (rtems_rfs_inode_handle* handle)
-{
-  return rtems_rfs_read_u32 (&handle->node->atime);
+rtems_rfs_inode_get_atime(rtems_rfs_inode_handle* handle) {
+  return rtems_rfs_read_u32(&handle->node->atime);
 }
 
 /**
@@ -441,12 +421,10 @@ rtems_rfs_inode_get_atime (rtems_rfs_inode_handle* handle)
  * @param[in] handle is the inode handle.
  * @param[in] atime The atime.
  */
-static inline void
-rtems_rfs_inode_set_atime (rtems_rfs_inode_handle* handle,
-                           rtems_rfs_time          atime)
-{
-  rtems_rfs_write_u32 (&handle->node->atime, atime);
-  rtems_rfs_buffer_mark_dirty (&handle->buffer);
+static inline void rtems_rfs_inode_set_atime(rtems_rfs_inode_handle* handle,
+                                             rtems_rfs_time atime) {
+  rtems_rfs_write_u32(&handle->node->atime, atime);
+  rtems_rfs_buffer_mark_dirty(&handle->buffer);
 }
 
 /**
@@ -457,9 +435,8 @@ rtems_rfs_inode_set_atime (rtems_rfs_inode_handle* handle,
  * @retval mtime The mtime.
  */
 static inline rtems_rfs_time
-rtems_rfs_inode_get_mtime (rtems_rfs_inode_handle* handle)
-{
-  return rtems_rfs_read_u32 (&handle->node->mtime);
+rtems_rfs_inode_get_mtime(rtems_rfs_inode_handle* handle) {
+  return rtems_rfs_read_u32(&handle->node->mtime);
 }
 
 /**
@@ -468,12 +445,10 @@ rtems_rfs_inode_get_mtime (rtems_rfs_inode_handle* handle)
  * @param[in] handle is the inode handle.
  * @param[in] mtime The mtime.
  */
-static inline void
-rtems_rfs_inode_set_mtime (rtems_rfs_inode_handle* handle,
-                           rtems_rfs_time          mtime)
-{
-  rtems_rfs_write_u32 (&handle->node->mtime, mtime);
-  rtems_rfs_buffer_mark_dirty (&handle->buffer);
+static inline void rtems_rfs_inode_set_mtime(rtems_rfs_inode_handle* handle,
+                                             rtems_rfs_time mtime) {
+  rtems_rfs_write_u32(&handle->node->mtime, mtime);
+  rtems_rfs_buffer_mark_dirty(&handle->buffer);
 }
 
 /**
@@ -484,9 +459,8 @@ rtems_rfs_inode_set_mtime (rtems_rfs_inode_handle* handle,
  * @retval ctime The ctime.
  */
 static inline rtems_rfs_time
-rtems_rfs_inode_get_ctime (rtems_rfs_inode_handle* handle)
-{
-  return rtems_rfs_read_u32 (&handle->node->ctime);
+rtems_rfs_inode_get_ctime(rtems_rfs_inode_handle* handle) {
+  return rtems_rfs_read_u32(&handle->node->ctime);
 }
 
 /**
@@ -495,12 +469,10 @@ rtems_rfs_inode_get_ctime (rtems_rfs_inode_handle* handle)
  * @param[in] handle is the inode handle.
  * @param[in] ctime The ctime.
  */
-static inline void
-rtems_rfs_inode_set_ctime (rtems_rfs_inode_handle* handle,
-                           rtems_rfs_time          ctime)
-{
-  rtems_rfs_write_u32 (&handle->node->ctime, ctime);
-  rtems_rfs_buffer_mark_dirty (&handle->buffer);
+static inline void rtems_rfs_inode_set_ctime(rtems_rfs_inode_handle* handle,
+                                             rtems_rfs_time ctime) {
+  rtems_rfs_write_u32(&handle->node->ctime, ctime);
+  rtems_rfs_buffer_mark_dirty(&handle->buffer);
 }
 
 /**
@@ -511,10 +483,9 @@ rtems_rfs_inode_set_ctime (rtems_rfs_inode_handle* handle,
  *
  * @retval block The block number.
  */
-static inline uint32_t
-rtems_rfs_inode_get_block (rtems_rfs_inode_handle* handle, int block)
-{
-  return rtems_rfs_read_u32 (&handle->node->data.blocks[block]);
+static inline uint32_t rtems_rfs_inode_get_block(rtems_rfs_inode_handle* handle,
+                                                 int block) {
+  return rtems_rfs_read_u32(&handle->node->data.blocks[block]);
 }
 
 /**
@@ -524,11 +495,10 @@ rtems_rfs_inode_get_block (rtems_rfs_inode_handle* handle, int block)
  * @param[in] block is the block index.
  * @param[in] bno is the block number.
  */
-static inline void
-rtems_rfs_inode_set_block (rtems_rfs_inode_handle* handle, int block, uint32_t bno)
-{
-  rtems_rfs_write_u32 (&handle->node->data.blocks[block], bno);
-  rtems_rfs_buffer_mark_dirty (&handle->buffer);
+static inline void rtems_rfs_inode_set_block(rtems_rfs_inode_handle* handle,
+                                             int block, uint32_t bno) {
+  rtems_rfs_write_u32(&handle->node->data.blocks[block], bno);
+  rtems_rfs_buffer_mark_dirty(&handle->buffer);
 }
 
 /**
@@ -539,9 +509,8 @@ rtems_rfs_inode_set_block (rtems_rfs_inode_handle* handle, int block, uint32_t b
  * @retval block The last map block number.
  */
 static inline uint32_t
-rtems_rfs_inode_get_last_map_block (rtems_rfs_inode_handle* handle)
-{
-  return rtems_rfs_read_u32 (&handle->node->last_map_block);
+rtems_rfs_inode_get_last_map_block(rtems_rfs_inode_handle* handle) {
+  return rtems_rfs_read_u32(&handle->node->last_map_block);
 }
 
 /**
@@ -551,10 +520,10 @@ rtems_rfs_inode_get_last_map_block (rtems_rfs_inode_handle* handle)
  * @param[in] block_count is last map block number.
  */
 static inline void
-rtems_rfs_inode_set_last_map_block (rtems_rfs_inode_handle* handle, uint32_t last_map_block)
-{
-  rtems_rfs_write_u32 (&handle->node->last_map_block, last_map_block);
-  rtems_rfs_buffer_mark_dirty (&handle->buffer);
+rtems_rfs_inode_set_last_map_block(rtems_rfs_inode_handle* handle,
+                                   uint32_t last_map_block) {
+  rtems_rfs_write_u32(&handle->node->last_map_block, last_map_block);
+  rtems_rfs_buffer_mark_dirty(&handle->buffer);
 }
 
 /**
@@ -566,9 +535,8 @@ rtems_rfs_inode_set_last_map_block (rtems_rfs_inode_handle* handle, uint32_t las
  *
  */
 static inline uint32_t
-rtems_rfs_inode_get_last_data_block (rtems_rfs_inode_handle* handle)
-{
-  return rtems_rfs_read_u32 (&handle->node->last_data_block);
+rtems_rfs_inode_get_last_data_block(rtems_rfs_inode_handle* handle) {
+  return rtems_rfs_read_u32(&handle->node->last_data_block);
 }
 
 /**
@@ -578,10 +546,10 @@ rtems_rfs_inode_get_last_data_block (rtems_rfs_inode_handle* handle)
  * @param[in] block_count is the last data block number.
  */
 static inline void
-rtems_rfs_inode_set_last_data_block (rtems_rfs_inode_handle* handle, uint32_t last_data_block)
-{
-  rtems_rfs_write_u32 (&handle->node->last_data_block, last_data_block);
-  rtems_rfs_buffer_mark_dirty (&handle->buffer);
+rtems_rfs_inode_set_last_data_block(rtems_rfs_inode_handle* handle,
+                                    uint32_t last_data_block) {
+  rtems_rfs_write_u32(&handle->node->last_data_block, last_data_block);
+  rtems_rfs_buffer_mark_dirty(&handle->buffer);
 }
 
 /**
@@ -593,9 +561,8 @@ rtems_rfs_inode_set_last_data_block (rtems_rfs_inode_handle* handle, uint32_t la
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_inode_alloc (rtems_rfs_file_system* fs,
-                           rtems_rfs_bitmap_bit   goal,
-                           rtems_rfs_ino*         ino);
+int rtems_rfs_inode_alloc(rtems_rfs_file_system* fs, rtems_rfs_bitmap_bit goal,
+                          rtems_rfs_ino* ino);
 
 /**
  * Free an inode.
@@ -606,8 +573,7 @@ int rtems_rfs_inode_alloc (rtems_rfs_file_system* fs,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_inode_free (rtems_rfs_file_system* fs,
-                          rtems_rfs_ino          ino);
+int rtems_rfs_inode_free(rtems_rfs_file_system* fs, rtems_rfs_ino ino);
 
 /**
  * Open the inode handle. This reads the inode into the buffer and sets the
@@ -622,10 +588,8 @@ int rtems_rfs_inode_free (rtems_rfs_file_system* fs,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_inode_open (rtems_rfs_file_system*  fs,
-                          rtems_rfs_ino           ino,
-                          rtems_rfs_inode_handle* handle,
-                          bool                    load);
+int rtems_rfs_inode_open(rtems_rfs_file_system* fs, rtems_rfs_ino ino,
+                         rtems_rfs_inode_handle* handle, bool load);
 
 /**
  * The close inode handle. All opened inodes need to be closed.
@@ -636,8 +600,8 @@ int rtems_rfs_inode_open (rtems_rfs_file_system*  fs,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_inode_close (rtems_rfs_file_system*  fs,
-                           rtems_rfs_inode_handle* handle);
+int rtems_rfs_inode_close(rtems_rfs_file_system* fs,
+                          rtems_rfs_inode_handle* handle);
 
 /**
  * Load the inode into memory.
@@ -648,8 +612,8 @@ int rtems_rfs_inode_close (rtems_rfs_file_system*  fs,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_inode_load (rtems_rfs_file_system*  fs,
-                          rtems_rfs_inode_handle* handle);
+int rtems_rfs_inode_load(rtems_rfs_file_system* fs,
+                         rtems_rfs_inode_handle* handle);
 
 /**
  * Unload the inode from memory.
@@ -661,9 +625,8 @@ int rtems_rfs_inode_load (rtems_rfs_file_system*  fs,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_inode_unload (rtems_rfs_file_system*  fs,
-                            rtems_rfs_inode_handle* handle,
-                            bool                    update_ctime);
+int rtems_rfs_inode_unload(rtems_rfs_file_system* fs,
+                           rtems_rfs_inode_handle* handle, bool update_ctime);
 
 /**
  * Create an inode allocating, initialising and adding an entry to the parent
@@ -675,15 +638,10 @@ int rtems_rfs_inode_unload (rtems_rfs_file_system*  fs,
  *             to create.
  *
  */
-int rtems_rfs_inode_create (rtems_rfs_file_system*  fs,
-                            rtems_rfs_ino           parent,
-                            const char*             name,
-                            size_t                  length,
-                            uint16_t                mode,
-                            uint16_t                links,
-                            uid_t                   uid,
-                            gid_t                   gid,
-                            rtems_rfs_ino*          ino);
+int rtems_rfs_inode_create(rtems_rfs_file_system* fs, rtems_rfs_ino parent,
+                           const char* name, size_t length, uint16_t mode,
+                           uint16_t links, uid_t uid, gid_t gid,
+                           rtems_rfs_ino* ino);
 
 /**
  * Delete the inode eraseing it and release the buffer to commit the write. You
@@ -695,8 +653,8 @@ int rtems_rfs_inode_create (rtems_rfs_file_system*  fs,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_inode_delete (rtems_rfs_file_system*  fs,
-                            rtems_rfs_inode_handle* handle);
+int rtems_rfs_inode_delete(rtems_rfs_file_system* fs,
+                           rtems_rfs_inode_handle* handle);
 
 /**
  * Initialise a new inode.
@@ -710,11 +668,8 @@ int rtems_rfs_inode_delete (rtems_rfs_file_system*  fs,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_inode_initialise (rtems_rfs_inode_handle* handle,
-                                uint16_t                links,
-                                uint16_t                mode,
-                                uid_t                   uid,
-                                gid_t                   gid);
+int rtems_rfs_inode_initialise(rtems_rfs_inode_handle* handle, uint16_t links,
+                               uint16_t mode, uid_t uid, gid_t gid);
 
 /**
  * Time stamp the inode with the current time. The ctime field is hanlded
@@ -728,9 +683,8 @@ int rtems_rfs_inode_initialise (rtems_rfs_inode_handle* handle,
  * @retval ENXIO No inode is loaded.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_inode_time_stamp_now (rtems_rfs_inode_handle* handle,
-                                    bool                    atime,
-                                    bool                    mtime);
+int rtems_rfs_inode_time_stamp_now(rtems_rfs_inode_handle* handle, bool atime,
+                                   bool mtime);
 
 /**
  * Calculate the size of data attached to the inode.
@@ -740,8 +694,7 @@ int rtems_rfs_inode_time_stamp_now (rtems_rfs_inode_handle* handle,
  *
  * @retval size The data size in bytes in the block map attched to the inode.
  */
-rtems_rfs_pos rtems_rfs_inode_get_size (rtems_rfs_file_system*  fs,
-                                        rtems_rfs_inode_handle* handle);
+rtems_rfs_pos rtems_rfs_inode_get_size(rtems_rfs_file_system* fs,
+                                       rtems_rfs_inode_handle* handle);
 
 #endif
-

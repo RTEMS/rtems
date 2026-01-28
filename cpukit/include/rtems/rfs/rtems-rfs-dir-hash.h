@@ -36,7 +36,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined (_RTEMS_RFS_DIR_HASH_H_)
+#if !defined(_RTEMS_RFS_DIR_HASH_H_)
 #define _RTEMS_RFS_DIR_HASH_H_
 
 #include <stddef.h>
@@ -50,6 +50,6 @@
  *
  * @retval hash The computed uint32_t hash.
  */
-uint32_t rtems_rfs_dir_hash (const void *key, size_t length);
+uint32_t rtems_rfs_dir_hash(const void* key, size_t length);
 
 #endif

@@ -37,7 +37,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined (_RTEMS_RFS_FILE_H_)
+#if !defined(_RTEMS_RFS_FILE_H_)
 #define _RTEMS_RFS_FILE_H_
 
 #include <rtems/libio_.h>
@@ -53,8 +53,7 @@
  * the inode is not thrashed yet we meet the requirements of the POSIX
  * standard. The stat call needs to check the shared file data.
  */
-typedef struct _rtems_rfs_file_shared
-{
+typedef struct _rtems_rfs_file_shared {
   /**
    * The shared parts are maintained as a list.
    */
@@ -113,8 +112,7 @@ typedef struct _rtems_rfs_file_shared
  * @retval atime The atime.
  */
 static inline rtems_rfs_time
-rtems_rfs_file_shared_get_atime (rtems_rfs_file_shared* shared)
-{
+rtems_rfs_file_shared_get_atime(rtems_rfs_file_shared* shared) {
   return shared->atime;
 }
 
@@ -126,8 +124,7 @@ rtems_rfs_file_shared_get_atime (rtems_rfs_file_shared* shared)
  * @retval mtime The mtime.
  */
 static inline rtems_rfs_time
-rtems_rfs_file_shared_get_mtime (rtems_rfs_file_shared* shared)
-{
+rtems_rfs_file_shared_get_mtime(rtems_rfs_file_shared* shared) {
   return shared->mtime;
 }
 
@@ -139,8 +136,7 @@ rtems_rfs_file_shared_get_mtime (rtems_rfs_file_shared* shared)
  * @retval ctime The ctime.
  */
 static inline rtems_rfs_time
-rtems_rfs_file_shared_get_ctime (rtems_rfs_file_shared* shared)
-{
+rtems_rfs_file_shared_get_ctime(rtems_rfs_file_shared* shared) {
   return shared->ctime;
 }
 
@@ -152,8 +148,7 @@ rtems_rfs_file_shared_get_ctime (rtems_rfs_file_shared* shared)
  * @retval count The block count.
  */
 static inline uint32_t
-rtems_rfs_file_shared_get_block_count (rtems_rfs_file_shared* shared)
-{
+rtems_rfs_file_shared_get_block_count(rtems_rfs_file_shared* shared) {
   return shared->size.count;
 }
 
@@ -165,8 +160,7 @@ rtems_rfs_file_shared_get_block_count (rtems_rfs_file_shared* shared)
  * @retval offset The block offset.
  */
 static inline uint16_t
-rtems_rfs_file_shared_get_block_offset (rtems_rfs_file_shared* shared)
-{
+rtems_rfs_file_shared_get_block_offset(rtems_rfs_file_shared* shared) {
   return shared->size.offset;
 }
 
@@ -179,30 +173,31 @@ rtems_rfs_file_shared_get_block_offset (rtems_rfs_file_shared* shared)
  * @retval data The data size in bytes.
  */
 static inline rtems_rfs_pos
-rtems_rfs_file_shared_get_size (rtems_rfs_file_system* fs,
-                                rtems_rfs_file_shared* shared)
-{
-  return rtems_rfs_block_get_size (fs, &shared->size);
+rtems_rfs_file_shared_get_size(rtems_rfs_file_system* fs,
+                               rtems_rfs_file_shared* shared) {
+  return rtems_rfs_block_get_size(fs, &shared->size);
 }
 
 /**
  * File flags.
  */
-#define RTEMS_RFS_FILE_NO_ATIME_UPDATE  (1 << 0) /**< Do not update the atime
-                                                  * field in the inode if
-                                                  * set. */
-#define RTEMS_RFS_FILE_NO_MTIME_UPDATE  (1 << 1) /**< Do not update the mtime
-                                                  * field in the inode if
-                                                  * set. */
-#define RTEMS_RFS_FILE_NO_LENGTH_UPDATE (1 << 2) /**< Do not update the position
-                                                  * field in the inode if
-                                                  * set. */
+#define RTEMS_RFS_FILE_NO_ATIME_UPDATE                                         \
+  (1 << 0) /**< Do not update the atime                                        \
+            * field in the inode if                                            \
+            * set. */
+#define RTEMS_RFS_FILE_NO_MTIME_UPDATE                                         \
+  (1 << 1) /**< Do not update the mtime                                        \
+            * field in the inode if                                            \
+            * set. */
+#define RTEMS_RFS_FILE_NO_LENGTH_UPDATE                                        \
+  (1 << 2) /**< Do not update the position                                     \
+            * field in the inode if                                            \
+            * set. */
 
 /**
  * File data used to managed an open file.
  */
-typedef struct _rtems_rfs_file_handle
-{
+typedef struct _rtems_rfs_file_handle {
   /**
    * Special flags that can be controlled by the fctrl call.
    */
@@ -228,8 +223,8 @@ typedef struct _rtems_rfs_file_handle
 /**
  * Access the data in the buffer.
  */
-#define rtems_rfs_file_data(_f) \
-  (rtems_rfs_buffer_data (&(_f)->buffer) + (_f)->bpos.boff)
+#define rtems_rfs_file_data(_f)                                                \
+  (rtems_rfs_buffer_data(&(_f)->buffer) + (_f)->bpos.boff)
 
 /**
  * Return the file system data pointer given a file handle.
@@ -264,8 +259,8 @@ typedef struct _rtems_rfs_file_handle
 /**
  * Set the file's block position given a file position (absolute).
  */
-#define rtems_rfs_file_set_bpos(_f, _p) \
-  rtems_rfs_block_get_bpos (rtems_rfs_file_fs (_f), _p, (&(_f)->bpos))
+#define rtems_rfs_file_set_bpos(_f, _p)                                        \
+  rtems_rfs_block_get_bpos(rtems_rfs_file_fs(_f), _p, (&(_f)->bpos))
 
 /**
  * Return the file's buffer handle pointer given a file handle.
@@ -275,44 +270,43 @@ typedef struct _rtems_rfs_file_handle
 /**
  * Update the access time field of the inode when reading if flagged to do so.
  */
-#define rtems_rfs_file_update_atime(_f) \
+#define rtems_rfs_file_update_atime(_f)                                        \
   (((_f)->flags & RTEMS_RFS_FILE_NO_ATIME_UPDATE) == 0)
 
 /**
  * Update the modified time field of the inode when writing if flagged to do so.
  */
-#define rtems_rfs_file_update_mtime(_f) \
+#define rtems_rfs_file_update_mtime(_f)                                        \
   (((_f)->flags & RTEMS_RFS_FILE_NO_MTIME_UPDATE) == 0)
 
 /**
  * Update the length field of the inode.
  */
-#define rtems_rfs_file_update_length(_f) \
+#define rtems_rfs_file_update_length(_f)                                       \
   (((_f)->flags & RTEMS_RFS_FILE_NO_LENGTH_UPDATE) == 0)
 
 /**
  * Return the shared size varable.
  */
-#define rtems_rfs_file_get_size(_f) \
-   (&(_f)->shared->size)
+#define rtems_rfs_file_get_size(_f) (&(_f)->shared->size)
 
 /**
  * Return the size of file.
  */
-#define rtems_rfs_file_size(_f) \
-  rtems_rfs_file_shared_get_size (rtems_rfs_file_fs (_f), (_f)->shared)
+#define rtems_rfs_file_size(_f)                                                \
+  rtems_rfs_file_shared_get_size(rtems_rfs_file_fs(_f), (_f)->shared)
 
 /**
  * Return the file block count.
  */
-#define rtems_rfs_file_size_count(_f) \
-  rtems_rfs_file_shared_get_block_count ((_f)->shared)
+#define rtems_rfs_file_size_count(_f)                                          \
+  rtems_rfs_file_shared_get_block_count((_f)->shared)
 
 /**
  * Return the file block offset.
  */
-#define rtems_rfs_file_size_offset(_f) \
-  rtems_rfs_file_shared_get_block_offset ((_f)->shared)
+#define rtems_rfs_file_size_offset(_f)                                         \
+  rtems_rfs_file_shared_get_block_offset((_f)->shared)
 
 /**
  * Open a file handle.
@@ -324,10 +318,8 @@ typedef struct _rtems_rfs_file_handle
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_file_open (rtems_rfs_file_system*  fs,
-                         rtems_rfs_ino           ino,
-                         int                     oflag,
-                         rtems_rfs_file_handle** handle);
+int rtems_rfs_file_open(rtems_rfs_file_system* fs, rtems_rfs_ino ino, int oflag,
+                        rtems_rfs_file_handle** handle);
 
 /**
  * Close an open file handle.
@@ -338,8 +330,8 @@ int rtems_rfs_file_open (rtems_rfs_file_system*  fs,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_file_close (rtems_rfs_file_system* fs,
-                          rtems_rfs_file_handle* handle);
+int rtems_rfs_file_close(rtems_rfs_file_system* fs,
+                         rtems_rfs_file_handle* handle);
 
 /**
  * Start I/O on a block of a file. This call only requests the block from the
@@ -352,14 +344,14 @@ int rtems_rfs_file_close (rtems_rfs_file_system* fs,
  *
  * @param[in] handle is the file handle.
  * @param[in] available is the amount of data available for I/O.
- * @param[in] read is the I/O operation is a read so the block is read from the media.
+ * @param[in] read is the I/O operation is a read so the block is read from the
+ * media.
  *
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_file_io_start (rtems_rfs_file_handle* handle,
-                             size_t*                available,
-                             bool                   read);
+int rtems_rfs_file_io_start(rtems_rfs_file_handle* handle, size_t* available,
+                            bool read);
 
 /**
  * End the I/O. Any buffers held in the file handle and returned to the
@@ -375,9 +367,8 @@ int rtems_rfs_file_io_start (rtems_rfs_file_handle* handle,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_file_io_end (rtems_rfs_file_handle* handle,
-                           size_t                 size,
-                           bool                   read);
+int rtems_rfs_file_io_end(rtems_rfs_file_handle* handle, size_t size,
+                          bool read);
 
 /**
  * Release the I/O resources without any changes. If data has changed in the
@@ -389,7 +380,7 @@ int rtems_rfs_file_io_end (rtems_rfs_file_handle* handle,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_file_io_release (rtems_rfs_file_handle* handle);
+int rtems_rfs_file_io_release(rtems_rfs_file_handle* handle);
 
 /**
  * The file to the position returning the old position. The position is
@@ -402,9 +393,8 @@ int rtems_rfs_file_io_release (rtems_rfs_file_handle* handle);
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_file_seek (rtems_rfs_file_handle* handle,
-                         rtems_rfs_pos          pos,
-                         rtems_rfs_pos*         new_pos);
+int rtems_rfs_file_seek(rtems_rfs_file_handle* handle, rtems_rfs_pos pos,
+                        rtems_rfs_pos* new_pos);
 
 /**
  * Set the size of the file to the new size. This can extend the file to a new
@@ -415,8 +405,7 @@ int rtems_rfs_file_seek (rtems_rfs_file_handle* handle,
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_file_set_size (rtems_rfs_file_handle* handle,
-                             rtems_rfs_pos          size);
+int rtems_rfs_file_set_size(rtems_rfs_file_handle* handle, rtems_rfs_pos size);
 
 /**
  * Return the shared file data for an ino.
@@ -428,8 +417,7 @@ int rtems_rfs_file_set_size (rtems_rfs_file_handle* handle,
  * @retval shared The shared data.
  * @retval NULL No shared file data is located.
  */
-rtems_rfs_file_shared* rtems_rfs_file_get_shared (rtems_rfs_file_system* fs,
-                                                  rtems_rfs_ino          ino);
-
+rtems_rfs_file_shared* rtems_rfs_file_get_shared(rtems_rfs_file_system* fs,
+                                                 rtems_rfs_ino ino);
 
 #endif
