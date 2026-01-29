@@ -90,10 +90,6 @@
   #endif
 #endif
 
-#if !defined(CONFIGURE_STACK_CHECKER_ENABLED) && defined(CONFIGURE_STACK_CHECKER_REPORTER)
-  #error "Stack checker is disabled but a custom reporter is configured"
-#endif
-
 #ifdef CONFIGURE_STACK_CHECKER_ENABLED
   #include <rtems/stackchk.h>
 #endif
