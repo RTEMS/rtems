@@ -98,6 +98,25 @@ struct jffs2_raw_node_ref
 /* Use blocks of about 256 bytes */
 #define REFS_PER_BLOCK ((255/sizeof(struct jffs2_raw_node_ref))-1)
 
+#ifdef __rtems__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsign-compare"
+/*
+ * The REF_LINK_NODE and REF_EMPTY_NODE macros should really be uint32_t bit
+ * patterns instead of signed integer literals to avoid signed comparison
+ * warnings. This contains all comparisons using them to this section where
+ * signed comparison warnings are disabled.
+ */
+static inline bool rtems_jffs2_is_ref_link(struct jffs2_raw_node_ref *ref)
+{
+  return ref->flash_offset == REF_LINK_NODE;
+}
+
+static inline bool rtems_jffs2_is_ref_empty(struct jffs2_raw_node_ref *ref)
+{
+  return ref->flash_offset == REF_EMPTY_NODE;
+}
+#endif
 static inline struct jffs2_raw_node_ref *ref_next(struct jffs2_raw_node_ref *ref)
 {
 	ref++;
@@ -115,6 +134,9 @@ static inline struct jffs2_raw_node_ref *ref_next(struct jffs2_raw_node_ref *ref
 
 	return ref;
 }
+#ifdef __rtems__
+#pragma GCC diagnostic pop
+#endif
 
 static inline struct jffs2_inode_cache *jffs2_raw_ref_to_ic(struct jffs2_raw_node_ref *raw)
 {

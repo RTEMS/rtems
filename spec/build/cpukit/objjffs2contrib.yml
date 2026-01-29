@@ -3,6 +3,7 @@ build-type: objects
 cflags:
 - ${COVERAGE_COMPILER_FLAGS}
 - -Wno-pointer-sign
+- -Wno-sign-compare
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 cppflags: []

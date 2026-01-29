@@ -72,7 +72,7 @@ static struct jffs2_raw_node_ref *jffs2_alloc_refblock(void)
 
 	ret = malloc((REFS_PER_BLOCK + 1) * sizeof(*ret));
 	if (ret) {
-		int i = 0;
+		uint32_t i = 0;
 		for (i=0; i < REFS_PER_BLOCK; i++) {
 			ret[i].flash_offset = REF_EMPTY_NODE;
 			ret[i].next_in_ino = NULL;
@@ -95,7 +95,7 @@ int jffs2_prealloc_raw_node_refs(struct jffs2_sb_info *c,
 	ref = *p;
 
 	/* If jeb->last_node is really a valid node then skip over it */
-	if (ref && ref->flash_offset != REF_EMPTY_NODE)
+	if (ref && !rtems_jffs2_is_ref_empty(ref))
 		ref++;
 
 	while (i) {
@@ -104,7 +104,7 @@ int jffs2_prealloc_raw_node_refs(struct jffs2_sb_info *c,
 			if (!ref)
 				return -ENOMEM;
 		}
-		if (ref->flash_offset == REF_LINK_NODE) {
+		if (rtems_jffs2_is_ref_link(ref)) {
 			p = &ref->next_in_ino;
 			ref = *p;
 			continue;
