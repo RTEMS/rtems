@@ -566,6 +566,7 @@ source:
 - cpukit/dev/can/can-queue.c
 - cpukit/dev/can/can-virtual.c
 - cpukit/dev/can/ctucanfd/ctucanfd.c
+- cpukit/dev/contrib/iovprintf.c
 - cpukit/dev/flash/flashdev.c
 - cpukit/dev/i2c/eeprom.c
 - cpukit/dev/i2c/fpga-i2c-slave.c
@@ -580,7 +581,6 @@ source:
 - cpukit/dev/i2c/xilinx-axi-i2c.c
 - cpukit/dev/ioprintf.c
 - cpukit/dev/iorelax.c
-- cpukit/dev/iovprintf.c
 - cpukit/dev/serial/sc16is752-spi.c
 - cpukit/dev/serial/sc16is752.c
 - cpukit/dev/spi/spi-bus.c
