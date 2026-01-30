@@ -994,7 +994,7 @@ source:
 - cpukit/libmisc/monitor/mon-server.c
 - cpukit/libmisc/monitor/mon-symbols.c
 - cpukit/libmisc/monitor/mon-task.c
-- cpukit/libmisc/mouse/mouse_parser.c
+- cpukit/libmisc/mouse/contrib/mouse_parser.c
 - cpukit/libmisc/mouse/serial_mouse.c
 - cpukit/libmisc/redirector/stdio-redirect.c
 - cpukit/libmisc/regulator/regulator.c
