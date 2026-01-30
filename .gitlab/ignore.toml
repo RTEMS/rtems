@@ -249,21 +249,6 @@ files = [
     "cpukit/libmisc/shell/write_file.c",
 ]
 
-[[ignore."cpukit/xz"]]
-files = [
-    "cpukit/compression/xz/*.h",
-    "cpukit/compression/xz/*.c"
-]
-
-[[ignore."cpukit/zlib"]]
-files = [
-    "cpukit/compression/zlib/*.c",
-    "cpukit/compression/zlib/*.h",
-    "cpukit/compression/zlib/doc/*",
-    "cpukit/compression/zlib/ChangeLog.zlib",
-    "cpukit/compression/zlib/FAQ"
-]
-
 # These files have test characters that fail the char test
 [[ignore."testsuites/fstests/fsdosfsname01"]]
 exclude = ["char"]
