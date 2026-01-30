@@ -115,7 +115,7 @@ rtems_rtl_obj_cache_read (rtems_rtl_obj_cache* cache,
 
   if (cache->fd == fd)
   {
-    if (offset >= cache->file_size)
+    if (offset >= (int64_t)cache->file_size)
     {
       rtems_rtl_set_error (EINVAL, "offset past end of file: offset=%i size=%i",
                            (int) offset, (int) cache->file_size);
@@ -154,7 +154,7 @@ rtems_rtl_obj_cache_read (rtems_rtl_obj_cache* cache,
        * Is any part of the data in the cache ?
        */
       if ((offset >= cache->offset) &&
-          (offset < (cache->offset + cache->level)))
+          (offset < (int64_t)(cache->offset + cache->level)))
       {
         size_t size;
 

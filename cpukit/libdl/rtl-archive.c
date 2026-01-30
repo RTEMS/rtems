@@ -1134,7 +1134,7 @@ rtems_rtl_obj_archive_find_obj (int                     fd,
     *osize = 0;
   }
 
-  while (*ooffset < fsize)
+  while (*ooffset < (int64_t)fsize)
   {
     /*
      * Clean up any existing data.
