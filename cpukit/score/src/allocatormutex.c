@@ -41,8 +41,9 @@
 
 #include <rtems/score/apimutex.h>
 
-static API_Mutex_Control _RTEMS_Allocator_Mutex =
-  API_MUTEX_INITIALIZER( "_Allocator" );
+static API_Mutex_Control _RTEMS_Allocator_Mutex = API_MUTEX_INITIALIZER(
+  "_Allocator"
+);
 
 void _RTEMS_Lock_allocator( void )
 {

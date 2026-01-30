@@ -46,7 +46,9 @@ static void _Objects_Do_extend_information( Objects_Information *information )
   _Objects_Extend_information( information );
 }
 
-Objects_Control *_Objects_Allocate_unlimited( Objects_Information *information )
+Objects_Control *_Objects_Allocate_unlimited(
+  Objects_Information *information
+)
 {
   return _Objects_Allocate_with_extend(
     information,

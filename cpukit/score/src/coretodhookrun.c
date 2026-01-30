@@ -43,10 +43,7 @@
 #include <rtems/score/assert.h>
 #include <rtems/score/chainimpl.h>
 
-Status_Control _TOD_Hook_Run(
-  TOD_Action             action,
-  const struct timespec *tod
-)
+Status_Control _TOD_Hook_Run( TOD_Action action, const struct timespec *tod )
 {
   const Chain_Node *the_node;
   Status_Control    status;

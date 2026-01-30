@@ -65,8 +65,8 @@ typedef struct {
 } Futex_Control;
 
 RTEMS_STATIC_ASSERT(
-  offsetof( Futex_Control, Queue )
-    == offsetof( struct _Futex_Control, _Queue ),
+  offsetof( Futex_Control, Queue ) ==
+    offsetof( struct _Futex_Control, _Queue ),
   FUTEX_CONTROL_QUEUE
 );
 
@@ -128,11 +128,11 @@ static void _Futex_Queue_release(
  */
 int _Futex_Wait( struct _Futex_Control *_futex, int *uaddr, int val )
 {
-  Futex_Control        *futex;
-  ISR_Level             level;
-  Thread_queue_Context  queue_context;
-  Thread_Control       *executing;
-  int                   eno;
+  Futex_Control       *futex;
+  ISR_Level            level;
+  Thread_queue_Context queue_context;
+  Thread_Control      *executing;
+  int                  eno;
 
   futex = _Futex_Get( _futex );
   _Thread_queue_Context_initialize( &queue_context );

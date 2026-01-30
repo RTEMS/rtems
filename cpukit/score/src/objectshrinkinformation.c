@@ -96,9 +96,7 @@ void _Objects_Free_objects_block(
   information->inactive -= objects_per_block;
 }
 
-void _Objects_Shrink_information(
-  Objects_Information *information
-)
+void _Objects_Shrink_information( Objects_Information *information )
 {
   Objects_Maximum objects_per_block;
   Objects_Maximum block_count;

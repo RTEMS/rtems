@@ -42,10 +42,10 @@
 #include <rtems/score/assert.h>
 
 void *_Freechain_Extend(
-  Freechain_Control   *freechain,
-  Freechain_Allocator  allocator,
-  size_t               number_nodes_to_extend,
-  size_t               node_size
+  Freechain_Control  *freechain,
+  Freechain_Allocator allocator,
+  size_t              number_nodes_to_extend,
+  size_t              node_size
 )
 {
   void *starting_address;
@@ -64,10 +64,10 @@ void *_Freechain_Extend(
 }
 
 void *_Freechain_Get(
-  Freechain_Control   *freechain,
-  Freechain_Allocator  allocator,
-  size_t               number_nodes_to_extend,
-  size_t               node_size
+  Freechain_Control  *freechain,
+  Freechain_Allocator allocator,
+  size_t              number_nodes_to_extend,
+  size_t              node_size
 )
 {
   _Assert( node_size >= sizeof( Chain_Node ) );

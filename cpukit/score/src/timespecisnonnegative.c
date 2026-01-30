@@ -40,15 +40,15 @@
 
 #include <rtems/score/timespec.h>
 
-bool _Timespec_Is_non_negative(
-  const struct timespec *time
-)
+bool _Timespec_Is_non_negative( const struct timespec *time )
 {
-  if ( time->tv_sec < 0 )
+  if ( time->tv_sec < 0 ) {
     return false;
+  }
 
-  if ( time->tv_nsec < 0 )
+  if ( time->tv_nsec < 0 ) {
     return false;
+  }
 
   return true;
 }

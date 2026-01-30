@@ -51,11 +51,11 @@ RTEMS_STATIC_ASSERT(
   CPU_Uint32ptr_greater_equal_uint32_t
 );
 
-#if !defined(RTEMS_SMP)
-  /*
+#if !defined( RTEMS_SMP )
+/*
    * On single core systems, we can efficiently directly access a single
    * statically allocated per cpu structure.  And the fields are initialized
    * as individual elements just like it has always been done.
    */
-  Per_CPU_Control_envelope _Per_CPU_Information[1];
+Per_CPU_Control_envelope _Per_CPU_Information[ 1 ];
 #endif

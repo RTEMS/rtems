@@ -42,9 +42,7 @@
 #include <rtems/score/todimpl.h>
 #include <rtems/score/chainimpl.h>
 
-void _TOD_Hook_Register(
-  TOD_Hook *hook
-)
+void _TOD_Hook_Register( TOD_Hook *hook )
 {
   /*
    * At this time, this method does NOT have a Classic or POSIX API
@@ -59,4 +57,3 @@ void _TOD_Hook_Register(
   _Chain_Append_unprotected( &_TOD_Hooks, &hook->Node );
   _TOD_Unlock();
 }
-

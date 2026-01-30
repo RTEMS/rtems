@@ -40,10 +40,7 @@
 
 #include <rtems/score/smpimpl.h>
 
-void _SMP_Othercast_action(
-  SMP_Action_handler  handler,
-  void               *arg
-)
+void _SMP_Othercast_action( SMP_Action_handler handler, void *arg )
 {
   Processor_mask targets;
 

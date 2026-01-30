@@ -47,11 +47,11 @@ Status_Control _TOD_Set(
   ISR_lock_Context      *lock_context
 )
 {
-  struct bintime  tod_as_bintime;
-  uint64_t        tod_as_ticks;
-  uint32_t        cpu_max;
-  uint32_t        cpu_index;
-  Status_Control  status;
+  struct bintime tod_as_bintime;
+  uint64_t       tod_as_ticks;
+  uint32_t       cpu_max;
+  uint32_t       cpu_index;
+  Status_Control status;
 
   _Assert( _TOD_Is_owner() );
   _Assert( _TOD_Is_valid_new_time_of_day( tod ) == STATUS_SUCCESSFUL );
@@ -68,7 +68,7 @@ Status_Control _TOD_Set(
   tod_as_ticks = _Watchdog_Ticks_from_timespec( tod );
   cpu_max = _SMP_Get_processor_maximum();
 
-  for ( cpu_index = 0 ; cpu_index < cpu_max ; ++cpu_index ) {
+  for ( cpu_index = 0; cpu_index < cpu_max; ++cpu_index ) {
     Per_CPU_Control  *cpu;
     Watchdog_Header  *header;
     ISR_lock_Context  lock_context_2;

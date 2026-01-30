@@ -50,8 +50,8 @@
 
 void _Per_CPU_Perform_jobs( Per_CPU_Control *cpu )
 {
-  ISR_lock_Context  lock_context;
-  Per_CPU_Job      *job;
+  ISR_lock_Context lock_context;
+  Per_CPU_Job     *job;
 
   _Per_CPU_Jobs_ISR_disable_and_acquire( cpu, &lock_context );
   job = cpu->Jobs.head;
@@ -105,8 +105,7 @@ void _Per_CPU_Wait_for_job(
 )
 {
   while (
-    _Atomic_Load_ulong( &job->done, ATOMIC_ORDER_ACQUIRE )
-      != PER_CPU_JOB_DONE
+    _Atomic_Load_ulong( &job->done, ATOMIC_ORDER_ACQUIRE ) != PER_CPU_JOB_DONE
   ) {
     Per_CPU_Control *cpu_self;
 

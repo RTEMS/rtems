@@ -47,10 +47,7 @@ RTEMS_RB_GENERATE_INSERT_COLOR(
   static inline
 )
 
-void _RBTree_Insert_color(
-  RBTree_Control *the_rbtree,
-  RBTree_Node    *the_node
-)
+void _RBTree_Insert_color( RBTree_Control *the_rbtree, RBTree_Node *the_node )
 {
   RBTree_Control_RTEMS_RB_INSERT_COLOR( the_rbtree, the_node );
 }

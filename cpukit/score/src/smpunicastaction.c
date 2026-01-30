@@ -41,14 +41,14 @@
 #include <rtems/score/smpimpl.h>
 
 void _SMP_Unicast_action(
-  uint32_t            cpu_index,
-  SMP_Action_handler  handler,
-  void               *arg
+  uint32_t           cpu_index,
+  SMP_Action_handler handler,
+  void              *arg
 )
 {
-  Per_CPU_Control     *cpu;
-  Per_CPU_Job_context  context;
-  Per_CPU_Job          job;
+  Per_CPU_Control    *cpu;
+  Per_CPU_Job_context context;
+  Per_CPU_Job         job;
 
   context.handler = handler;
   context.arg = arg;

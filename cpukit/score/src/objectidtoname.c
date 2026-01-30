@@ -41,10 +41,7 @@
 
 #include <rtems/score/threadimpl.h>
 
-Status_Control _Objects_Id_to_name (
-  Objects_Id      id,
-  Objects_Name   *name
-)
+Status_Control _Objects_Id_to_name( Objects_Id id, Objects_Name *name )
 {
   Objects_Id           tmpId;
   Objects_Information *information;
@@ -55,22 +52,22 @@ Status_Control _Objects_Id_to_name (
    *  Caller is trusted for name != NULL.
    */
 
-  tmpId = (id == OBJECTS_ID_OF_SELF) ? _Thread_Get_executing()->Object.id : id;
+  tmpId = ( id == OBJECTS_ID_OF_SELF ) ? _Thread_Get_executing()->Object.id
+                                       : id;
 
   information = _Objects_Get_information_id( tmpId );
-  if ( !information )
+  if ( !information ) {
     return STATUS_INVALID_ID;
+  }
 
-  if ( _Objects_Has_string_name( information ) )
+  if ( _Objects_Has_string_name( information ) ) {
     return STATUS_INVALID_ID;
+  }
 
-  the_object = _Objects_Get(
-    tmpId,
-    &lock_context,
-    information
-  );
-  if ( !the_object )
+  the_object = _Objects_Get( tmpId, &lock_context, information );
+  if ( !the_object ) {
     return STATUS_INVALID_ID;
+  }
 
   *name = the_object->name;
   _ISR_lock_ISR_enable( &lock_context );

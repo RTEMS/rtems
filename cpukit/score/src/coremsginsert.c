@@ -41,31 +41,31 @@
 
 #include <rtems/score/coremsgimpl.h>
 
-#if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
+#if defined( RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY )
 static bool _CORE_message_queue_Order(
   const void       *key,
   const Chain_Node *left,
   const Chain_Node *right
 )
 {
-   const int                       *left_priority;
-   const CORE_message_queue_Buffer *right_message;
+  const int                       *left_priority;
+  const CORE_message_queue_Buffer *right_message;
 
-   (void) left;
-   left_priority = (const int *) key;
-   right_message = (const CORE_message_queue_Buffer *) right;
+  (void) left;
+  left_priority = (const int *) key;
+  right_message = (const CORE_message_queue_Buffer *) right;
 
-   return *left_priority <
-     _CORE_message_queue_Get_message_priority( right_message );
+  return *left_priority <
+         _CORE_message_queue_Get_message_priority( right_message );
 }
 #endif
 
 void _CORE_message_queue_Insert_message(
-  CORE_message_queue_Control      *the_message_queue,
-  CORE_message_queue_Buffer       *the_message,
-  const void                      *content_source,
-  size_t                           content_size,
-  CORE_message_queue_Submit_types  submit_type
+  CORE_message_queue_Control     *the_message_queue,
+  CORE_message_queue_Buffer      *the_message,
+  const void                     *content_source,
+  size_t                          content_size,
+  CORE_message_queue_Submit_types submit_type
 )
 {
   Chain_Control *pending_messages;
@@ -78,7 +78,7 @@ void _CORE_message_queue_Insert_message(
     content_size
   );
 
-#if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
+#if defined( RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY )
   the_message->priority = submit_type;
 #endif
 
@@ -87,8 +87,8 @@ void _CORE_message_queue_Insert_message(
 
   if ( submit_type == CORE_MESSAGE_QUEUE_SEND_REQUEST ) {
     _Chain_Append_unprotected( pending_messages, &the_message->Node );
-#if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
-  } else  if ( submit_type != CORE_MESSAGE_QUEUE_URGENT_REQUEST ) {
+#if defined( RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY )
+  } else if ( submit_type != CORE_MESSAGE_QUEUE_URGENT_REQUEST ) {
     int priority;
 
     priority = _CORE_message_queue_Get_message_priority( the_message );

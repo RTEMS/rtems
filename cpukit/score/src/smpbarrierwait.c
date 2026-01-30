@@ -42,13 +42,13 @@
 
 bool _SMP_barrier_Wait(
   SMP_barrier_Control *control,
-  SMP_barrier_State *state,
-  unsigned int count
+  SMP_barrier_State   *state,
+  unsigned int         count
 )
 {
   unsigned int sense = ~state->sense;
   unsigned int previous_value;
-  bool performed_release;
+  bool         performed_release;
 
   state->sense = sense;
 

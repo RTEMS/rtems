@@ -40,5 +40,5 @@
 
 #include <rtems/score/watchdogticks.h>
 
-const uint32_t _Watchdog_Ticks_per_timeslice =
-  WATCHDOG_TICKS_PER_TIMESLICE_DEFAULT;
+const uint32_t
+  _Watchdog_Ticks_per_timeslice = WATCHDOG_TICKS_PER_TIMESLICE_DEFAULT;

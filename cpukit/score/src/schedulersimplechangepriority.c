@@ -56,7 +56,7 @@ void _Scheduler_simple_Update_priority(
   }
 
   context = _Scheduler_simple_Get_context( scheduler );
-  new_priority = (unsigned int ) _Scheduler_Node_get_priority( node );
+  new_priority = (unsigned int) _Scheduler_Node_get_priority( node );
 
   _Scheduler_simple_Extract( scheduler, the_thread, node );
   _Scheduler_simple_Insert( &context->Ready, the_thread, new_priority );

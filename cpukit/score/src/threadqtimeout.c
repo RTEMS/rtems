@@ -174,8 +174,10 @@ void _Thread_queue_Add_timeout_by_clock_id_timespec(
   Thread_queue_Context *queue_context
 )
 {
-  _Assert( queue_context->clock_id == CLOCK_REALTIME
-  || queue_context->clock_id == CLOCK_MONOTONIC);
+  _Assert(
+    queue_context->clock_id == CLOCK_REALTIME ||
+    queue_context->clock_id == CLOCK_MONOTONIC
+  );
 
   if ( queue_context->clock_id == CLOCK_MONOTONIC ) {
     _Thread_queue_Add_timeout_monotonic_timespec(

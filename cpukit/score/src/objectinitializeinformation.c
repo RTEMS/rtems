@@ -44,9 +44,7 @@
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/sysstate.h>
 
-void _Objects_Initialize_information(
-  Objects_Information *information
-)
+void _Objects_Initialize_information( Objects_Information *information )
 {
   Objects_Id       maximum_id;
   Objects_Id       api_class_and_node;
@@ -59,7 +57,7 @@ void _Objects_Initialize_information(
 
   maximum_id = information->maximum_id;
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   maximum_id &= ~OBJECTS_NODE_MASK;
   maximum_id |= _Objects_Local_node << OBJECTS_NODE_START_BIT;
   information->maximum_id = maximum_id;
@@ -73,7 +71,7 @@ void _Objects_Initialize_information(
    */
   _Assert( _Objects_Get_API( maximum_id ) <= OBJECTS_APIS_LAST );
   _Objects_Information_table[ _Objects_Get_API( maximum_id ) ]
-    [ _Objects_Get_class( maximum_id ) ] = information;
+                            [ _Objects_Get_class( maximum_id ) ] = information;
 
   head = _Chain_Head( &information->Inactive );
   tail = _Chain_Tail( &information->Inactive );
@@ -82,7 +80,7 @@ void _Objects_Initialize_information(
 
   head->previous = NULL;
 
-  for ( index = OBJECTS_INDEX_MINIMUM; index <= maximum ; ++index ) {
+  for ( index = OBJECTS_INDEX_MINIMUM; index <= maximum; ++index ) {
     current->next = &next->Node;
     next->Node.previous = current;
     current = &next->Node;

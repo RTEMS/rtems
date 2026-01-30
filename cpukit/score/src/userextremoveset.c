@@ -42,9 +42,7 @@
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/percpu.h>
 
-void _User_extensions_Remove_set (
-  User_extensions_Control  *the_extension
-)
+void _User_extensions_Remove_set( User_extensions_Control *the_extension )
 {
   ISR_lock_Context lock_context;
 

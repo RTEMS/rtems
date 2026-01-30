@@ -41,9 +41,7 @@
 
 #include <rtems/score/objectimpl.h>
 
-Objects_Information *_Objects_Get_information_id(
-  Objects_Id  id
-)
+Objects_Information *_Objects_Get_information_id( Objects_Id id )
 {
   return _Objects_Get_information(
     _Objects_Get_API( id ),

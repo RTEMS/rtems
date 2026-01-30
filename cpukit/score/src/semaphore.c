@@ -46,14 +46,14 @@
 #include <errno.h>
 
 RTEMS_STATIC_ASSERT(
-  offsetof( Sem_Control, Queue )
-    == offsetof( struct _Semaphore_Control, _Queue ),
+  offsetof( Sem_Control, Queue ) ==
+    offsetof( struct _Semaphore_Control, _Queue ),
   SEMAPHORE_CONTROL_QUEUE
 );
 
 RTEMS_STATIC_ASSERT(
-  offsetof( Sem_Control, count )
-    == offsetof( struct _Semaphore_Control, _count ),
+  offsetof( Sem_Control, count ) ==
+    offsetof( struct _Semaphore_Control, _count ),
   SEMAPHORE_CONTROL_COUNT
 );
 
@@ -64,11 +64,11 @@ RTEMS_STATIC_ASSERT(
 
 void _Semaphore_Wait( struct _Semaphore_Control *_sem )
 {
-  Sem_Control          *sem;
-  ISR_Level             level;
-  Thread_queue_Context  queue_context;
-  Thread_Control       *executing;
-  unsigned int          count;
+  Sem_Control         *sem;
+  ISR_Level            level;
+  Thread_queue_Context queue_context;
+  Thread_Control      *executing;
+  unsigned int         count;
 
   sem = _Sem_Get( _sem );
   _Thread_queue_Context_initialize( &queue_context );
@@ -95,13 +95,16 @@ void _Semaphore_Wait( struct _Semaphore_Control *_sem )
   }
 }
 
-int _Semaphore_Wait_timed_ticks( struct _Semaphore_Control *_sem, uint32_t ticks )
+int _Semaphore_Wait_timed_ticks(
+  struct _Semaphore_Control *_sem,
+  uint32_t                   ticks
+)
 {
-  Sem_Control          *sem;
-  ISR_Level             level;
-  Thread_queue_Context  queue_context;
-  Thread_Control       *executing;
-  unsigned int          count;
+  Sem_Control         *sem;
+  ISR_Level            level;
+  Thread_queue_Context queue_context;
+  Thread_Control      *executing;
+  unsigned int         count;
 
   sem = _Sem_Get( _sem );
   _Thread_queue_Context_initialize( &queue_context );
@@ -132,11 +135,11 @@ int _Semaphore_Wait_timed_ticks( struct _Semaphore_Control *_sem, uint32_t ticks
 
 int _Semaphore_Try_wait( struct _Semaphore_Control *_sem )
 {
-  Sem_Control          *sem;
-  ISR_Level             level;
-  Thread_queue_Context  queue_context;
-  unsigned int          count;
-  int                   eno;
+  Sem_Control         *sem;
+  ISR_Level            level;
+  Thread_queue_Context queue_context;
+  unsigned int         count;
+  int                  eno;
 
   sem = _Sem_Get( _sem );
   _Thread_queue_Context_initialize( &queue_context );
@@ -157,10 +160,10 @@ int _Semaphore_Try_wait( struct _Semaphore_Control *_sem )
 
 void _Semaphore_Post( struct _Semaphore_Control *_sem )
 {
-  Sem_Control          *sem;
-  ISR_Level             level;
-  Thread_queue_Context  queue_context;
-  Thread_queue_Heads   *heads;
+  Sem_Control         *sem;
+  ISR_Level            level;
+  Thread_queue_Context queue_context;
+  Thread_queue_Heads  *heads;
 
   sem = _Sem_Get( _sem );
   _Thread_queue_Context_initialize( &queue_context );
@@ -184,10 +187,10 @@ void _Semaphore_Post( struct _Semaphore_Control *_sem )
 
 void _Semaphore_Post_binary( struct _Semaphore_Control *_sem )
 {
-  Sem_Control          *sem;
-  ISR_Level             level;
-  Thread_queue_Context  queue_context;
-  Thread_queue_Heads   *heads;
+  Sem_Control         *sem;
+  ISR_Level            level;
+  Thread_queue_Context queue_context;
+  Thread_queue_Heads  *heads;
 
   sem = _Sem_Get( _sem );
   _Thread_queue_Context_initialize( &queue_context );

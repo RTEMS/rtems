@@ -44,20 +44,20 @@
 #include <rtems/score/percpu.h>
 #include <rtems/config.h>
 
-const char * const volatile _ISR_Stack_size_object = _ISR_Stack_size;
+const char *const volatile _ISR_Stack_size_object = _ISR_Stack_size;
 
 void _ISR_Handler_initialization( void )
 {
-  uint32_t  cpu_max;
-  uint32_t  cpu_index;
-  size_t    stack_size;
-  char     *stack_low;
+  uint32_t cpu_max;
+  uint32_t cpu_index;
+  size_t   stack_size;
+  char    *stack_low;
 
   stack_size = rtems_configuration_get_interrupt_stack_size();
   cpu_max = rtems_configuration_get_maximum_processors();
   stack_low = _ISR_Stack_area_begin;
 
-  for ( cpu_index = 0 ; cpu_index < cpu_max; ++cpu_index ) {
+  for ( cpu_index = 0; cpu_index < cpu_max; ++cpu_index ) {
     Per_CPU_Control *cpu;
     char            *stack_high;
 
@@ -73,7 +73,7 @@ void _ISR_Handler_initialization( void )
      * _CPU_Interrupt_stack_setup() is a nasty macro that might want to play
      * with the real memory locations.
      */
-#if defined(_CPU_Interrupt_stack_setup)
+#if defined( _CPU_Interrupt_stack_setup )
     _CPU_Interrupt_stack_setup(
       cpu->interrupt_stack_low,
       cpu->interrupt_stack_high

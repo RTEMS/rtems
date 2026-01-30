@@ -43,16 +43,13 @@
 #include <rtems/score/todimpl.h>
 #include <rtems/config.h>
 
-void _Timespec_From_ticks(
-  uint32_t         ticks,
-  struct timespec *time
-)
+void _Timespec_From_ticks( uint32_t ticks, struct timespec *time )
 {
-  uint32_t    usecs;
+  uint32_t usecs;
 
   usecs = ticks * rtems_configuration_get_microseconds_per_tick();
 
-  time->tv_sec  = usecs / TOD_MICROSECONDS_PER_SECOND;
-  time->tv_nsec = (usecs % TOD_MICROSECONDS_PER_SECOND) *
-                    TOD_NANOSECONDS_PER_MICROSECOND;
+  time->tv_sec = usecs / TOD_MICROSECONDS_PER_SECOND;
+  time->tv_nsec = ( usecs % TOD_MICROSECONDS_PER_SECOND ) *
+                  TOD_NANOSECONDS_PER_MICROSECOND;
 }

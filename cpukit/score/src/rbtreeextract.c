@@ -44,7 +44,7 @@ RTEMS_RB_GENERATE_REMOVE_COLOR( RBTree_Control, RBTree_Node, Node, static )
 
 RTEMS_RB_GENERATE_REMOVE( RBTree_Control, RBTree_Node, Node, static )
 
-#if defined(RTEMS_DEBUG)
+#if defined( RTEMS_DEBUG )
 static const RBTree_Node *_RBTree_Find_root( const RBTree_Node *the_node )
 {
   while ( true ) {
@@ -60,10 +60,7 @@ static const RBTree_Node *_RBTree_Find_root( const RBTree_Node *the_node )
 }
 #endif
 
-void _RBTree_Extract(
-  RBTree_Control *the_rbtree,
-  RBTree_Node    *the_node
-)
+void _RBTree_Extract( RBTree_Control *the_rbtree, RBTree_Node *the_node )
 {
   _Assert( _RBTree_Find_root( the_node ) == _RBTree_Root( the_rbtree ) );
   RTEMS_RB_REMOVE( RBTree_Control, the_rbtree, the_node );

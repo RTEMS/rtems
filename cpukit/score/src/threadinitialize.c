@@ -52,7 +52,7 @@ void _Thread_Free(
   Thread_Control     *the_thread
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   Scheduler_Node *scheduler_node;
   size_t          scheduler_index;
 #endif
@@ -61,7 +61,7 @@ void _Thread_Free(
   _User_extensions_Destroy_iterators( the_thread );
   _ISR_lock_Destroy( &the_thread->Keys.Lock );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   scheduler_node = the_thread->Scheduler.nodes;
   scheduler_index = 0;
 
@@ -70,8 +70,8 @@ void _Thread_Free(
       &_Scheduler_Table[ scheduler_index ],
       scheduler_node
     );
-    scheduler_node = (Scheduler_Node *)
-      ( (uintptr_t) scheduler_node + _Scheduler_Node_size );
+    scheduler_node = (Scheduler_Node *) ( (uintptr_t) scheduler_node +
+                                          _Scheduler_Node_size );
     ++scheduler_index;
   }
 #else
@@ -88,8 +88,9 @@ void _Thread_Free(
    */
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
 #if ( CPU_USE_DEFERRED_FP_SWITCH == TRUE )
-  if ( _Thread_Is_allocated_fp( the_thread ) )
+  if ( _Thread_Is_allocated_fp( the_thread ) ) {
     _Thread_Deallocate_fp();
+  }
 #endif
 #endif
 
@@ -104,7 +105,7 @@ void _Thread_Free(
    */
   ( *the_thread->Start.stack_free )( the_thread->Start.Initial_stack.area );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   _ISR_lock_Destroy( &the_thread->Scheduler.Lock );
   _ISR_lock_Destroy( &the_thread->Wait.Lock.Default );
   _SMP_lock_Stats_destroy( &the_thread->Potpourri_stats );
@@ -120,14 +121,14 @@ static void _Thread_Initialize_scheduler_and_wait_nodes(
   const Thread_Configuration *config
 )
 {
-  Scheduler_Node          *home_scheduler_node;
-#if defined(RTEMS_SMP)
+  Scheduler_Node *home_scheduler_node;
+#if defined( RTEMS_SMP )
   Scheduler_Node          *scheduler_node;
   const Scheduler_Control *scheduler;
   size_t                   scheduler_index;
 #endif
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   home_scheduler_node = NULL;
   scheduler_node = the_thread->Scheduler.nodes;
   scheduler = &_Scheduler_Table[ 0 ];
@@ -140,7 +141,7 @@ static void _Thread_Initialize_scheduler_and_wait_nodes(
    * configured.
    */
 
-  _Assert ( _Scheduler_Count >= 1 );
+  _Assert( _Scheduler_Count >= 1 );
 
   do {
     Priority_Control priority;
@@ -171,8 +172,8 @@ static void _Thread_Initialize_scheduler_and_wait_nodes(
      * configuration, the _Scheduler_Node_size constant is used to get the next
      * scheduler node.  Using sizeof( Scheduler_Node ) would be wrong.
      */
-    scheduler_node = (Scheduler_Node *)
-      ( (uintptr_t) scheduler_node + _Scheduler_Node_size );
+    scheduler_node = (Scheduler_Node *) ( (uintptr_t) scheduler_node +
+                                          _Scheduler_Node_size );
     ++scheduler;
     ++scheduler_index;
   } while ( scheduler_index < _Scheduler_Count );
@@ -215,11 +216,14 @@ static void _Thread_Initialize_scheduler_and_wait_nodes(
     &the_thread->Real_priority
   );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   RTEMS_STATIC_ASSERT( THREAD_SCHEDULER_BLOCKED == 0, Scheduler_state );
   the_thread->Scheduler.home_scheduler = config->scheduler;
   _ISR_lock_Initialize( &the_thread->Scheduler.Lock, "Thread Scheduler" );
-  _ISR_lock_Initialize( &the_thread->Wait.Lock.Default, "Thread Wait Default" );
+  _ISR_lock_Initialize(
+    &the_thread->Wait.Lock.Default,
+    "Thread Wait Default"
+  );
   _Thread_queue_Gate_open( &the_thread->Wait.Lock.Tranquilizer );
   _RBTree_Initialize_node( &the_thread->Wait.Link.Registry_node );
 #endif
@@ -231,12 +235,12 @@ static bool _Thread_Try_initialize(
   const Thread_Configuration *config
 )
 {
-  uintptr_t                tls_size;
-  size_t                   i;
-  char                    *stack_begin;
-  char                    *stack_end;
-  uintptr_t                stack_align;
-  Per_CPU_Control         *cpu = _Per_CPU_Get_by_index( 0 );
+  uintptr_t        tls_size;
+  size_t           i;
+  char            *stack_begin;
+  char            *stack_end;
+  uintptr_t        stack_align;
+  Per_CPU_Control *cpu = _Per_CPU_Get_by_index( 0 );
 
   memset(
     &the_thread->Join_queue,
@@ -244,11 +248,12 @@ static bool _Thread_Try_initialize(
     information->Objects.object_size - offsetof( Thread_Control, Join_queue )
   );
 
-  for ( i = 0 ; i < _Thread_Control_add_on_count ; ++i ) {
+  for ( i = 0; i < _Thread_Control_add_on_count; ++i ) {
     const Thread_Control_add_on *add_on = &_Thread_Control_add_ons[ i ];
 
-    *(void **) ( (char *) the_thread + add_on->destination_offset ) =
-      (char *) the_thread + add_on->source_offset;
+    *(void **) ( (char *) the_thread +
+                 add_on->destination_offset ) = (char *) the_thread +
+                                                add_on->source_offset;
   }
 
   /* Set up the properly aligned stack area begin and end */
@@ -292,31 +297,37 @@ static bool _Thread_Try_initialize(
    *  General initialization
    */
 
-  the_thread->is_fp                       = config->is_fp;
-  the_thread->Start.isr_level             = config->isr_level;
-  the_thread->Start.is_preemptible        = config->is_preemptible;
+  the_thread->is_fp = config->is_fp;
+  the_thread->Start.isr_level = config->isr_level;
+  the_thread->Start.is_preemptible = config->is_preemptible;
   the_thread->Start.cpu_budget_operations = config->cpu_budget_operations;
-  the_thread->Start.stack_free            = config->stack_free;
-  the_thread->Join_queue.Queue.owner      = the_thread;
+  the_thread->Start.stack_free = config->stack_free;
+  the_thread->Join_queue.Queue.owner = the_thread;
 
   _Thread_Timer_initialize( &the_thread->Timer, cpu );
   _Thread_Initialize_scheduler_and_wait_nodes( the_thread, config );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   _Processor_mask_Assign(
     &the_thread->Scheduler.Affinity,
     _SMP_Get_online_processors()
-   );
-  _SMP_lock_Stats_initialize( &the_thread->Potpourri_stats, "Thread Potpourri" );
-  _SMP_lock_Stats_initialize( &the_thread->Join_queue.Lock_stats, "Thread State" );
+  );
+  _SMP_lock_Stats_initialize(
+    &the_thread->Potpourri_stats,
+    "Thread Potpourri"
+  );
+  _SMP_lock_Stats_initialize(
+    &the_thread->Join_queue.Lock_stats,
+    "Thread State"
+  );
 #endif
 
   /* Initialize the CPU for the non-SMP schedulers */
   _Thread_Set_CPU( the_thread, cpu );
 
-  the_thread->current_state           = STATES_DORMANT;
-  the_thread->Wait.operations         = &_Thread_queue_Operations_default;
-  the_thread->Start.initial_priority  = config->priority;
+  the_thread->current_state = STATES_DORMANT;
+  the_thread->Wait.operations = &_Thread_queue_Operations_default;
+  the_thread->Start.initial_priority = config->priority;
 
   RTEMS_STATIC_ASSERT( THREAD_WAIT_STATE_READY == 0, Wait_flags );
 
@@ -326,7 +337,11 @@ static bool _Thread_Try_initialize(
 
   _Thread_Action_control_initialize( &the_thread->Post_switch_actions );
 
-  _Objects_Open_u32( &information->Objects, &the_thread->Object, config->name );
+  _Objects_Open_u32(
+    &information->Objects,
+    &the_thread->Object,
+    config->name
+  );
 
   /*
    * We do following checks of simple error conditions after the thread is
@@ -335,20 +350,20 @@ static bool _Thread_Try_initialize(
    * to bother with partially initialized threads.
    */
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   if (
-    !config->is_preemptible
-      && !_Scheduler_Is_non_preempt_mode_supported( config->scheduler )
+    !config->is_preemptible &&
+    !_Scheduler_Is_non_preempt_mode_supported( config->scheduler )
   ) {
     return false;
   }
 #endif
 
-#if defined(RTEMS_SMP) || CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
+#if defined( RTEMS_SMP ) || CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
   if (
     config->isr_level != 0
 #if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
-      && _SMP_Need_inter_processor_interrupts()
+    && _SMP_Need_inter_processor_interrupts()
 #endif
   ) {
     return false;

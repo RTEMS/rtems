@@ -51,8 +51,8 @@ Status_Control _Objects_Set_name(
 )
 {
   if ( _Objects_Has_string_name( information ) ) {
-    size_t  length;
-    char   *dup;
+    size_t length;
+    char  *dup;
 
     length = strnlen( name, information->name_length );
     dup = _Workspace_String_duplicate( name, length );
@@ -63,21 +63,25 @@ Status_Control _Objects_Set_name(
     _Workspace_Free( RTEMS_DECONST( char *, the_object->name.name_p ) );
     the_object->name.name_p = dup;
   } else {
-    char c[ 4 ];
+    char   c[ 4 ];
     size_t i;
 
     memset( c, ' ', sizeof( c ) );
 
     for ( i = 0; i < 4; ++i ) {
-      if ( name[ i ] == '\0') {
+      if ( name[ i ] == '\0' ) {
         break;
       }
 
       c[ i ] = name[ i ];
     }
 
-    the_object->name.name_u32 =
-      _Objects_Build_name( c[ 0 ], c[ 1 ], c[ 2 ], c[ 3 ] );
+    the_object->name.name_u32 = _Objects_Build_name(
+      c[ 0 ],
+      c[ 1 ],
+      c[ 2 ],
+      c[ 3 ]
+    );
   }
 
   return STATUS_SUCCESSFUL;

@@ -50,8 +50,8 @@
 User_extensions_List _User_extensions_List = {
   CHAIN_INITIALIZER_EMPTY( _User_extensions_List.Active ),
   CHAIN_ITERATOR_REGISTRY_INITIALIZER( _User_extensions_List.Iterators )
-#if defined(RTEMS_SMP)
-  ,
+#if defined( RTEMS_SMP )
+    ,
   ISR_LOCK_INITIALIZER( "User Extensions List" )
 #endif
 };
@@ -67,7 +67,7 @@ void _User_extensions_Thread_create_visitor(
   if ( callout != NULL ) {
     User_extensions_Thread_create_context *ctx = arg;
 
-    ctx->ok = ctx->ok && (*callout)( executing, ctx->created );
+    ctx->ok = ctx->ok && ( *callout )( executing, ctx->created );
   }
 }
 
@@ -80,7 +80,7 @@ void _User_extensions_Thread_delete_visitor(
   User_extensions_thread_delete_extension callout = callouts->thread_delete;
 
   if ( callout != NULL ) {
-    (*callout)( executing, arg );
+    ( *callout )( executing, arg );
   }
 }
 
@@ -93,7 +93,7 @@ void _User_extensions_Thread_start_visitor(
   User_extensions_thread_start_extension callout = callouts->thread_start;
 
   if ( callout != NULL ) {
-    (*callout)( executing, arg );
+    ( *callout )( executing, arg );
   }
 }
 
@@ -106,7 +106,7 @@ void _User_extensions_Thread_restart_visitor(
   User_extensions_thread_restart_extension callout = callouts->thread_restart;
 
   if ( callout != NULL ) {
-    (*callout)( executing, arg );
+    ( *callout )( executing, arg );
   }
 }
 
@@ -121,7 +121,7 @@ void _User_extensions_Thread_begin_visitor(
   (void) arg;
 
   if ( callout != NULL ) {
-    (*callout)( executing );
+    ( *callout )( executing );
   }
 }
 
@@ -136,7 +136,7 @@ void _User_extensions_Thread_exitted_visitor(
   User_extensions_thread_exitted_extension callout = callouts->thread_exitted;
 
   if ( callout != NULL ) {
-    (*callout)( executing );
+    ( *callout )( executing );
   }
 }
 
@@ -153,7 +153,7 @@ void _User_extensions_Fatal_visitor(
   if ( callout != NULL ) {
     const User_extensions_Fatal_context *ctx = arg;
 
-    (*callout)( ctx->source, false, ctx->error );
+    ( *callout )( ctx->source, false, ctx->error );
   }
 }
 
@@ -165,18 +165,18 @@ void _User_extensions_Thread_terminate_visitor(
 {
   (void) arg;
 
-  User_extensions_thread_terminate_extension callout =
-    callouts->thread_terminate;
+  User_extensions_thread_terminate_extension
+    callout = callouts->thread_terminate;
 
   if ( callout != NULL ) {
-    (*callout)( executing );
+    ( *callout )( executing );
   }
 }
 
 void _User_extensions_Iterate(
-  void                     *arg,
-  User_extensions_Visitor   visitor,
-  Chain_Iterator_direction  direction
+  void                    *arg,
+  User_extensions_Visitor  visitor,
+  Chain_Iterator_direction direction
 )
 {
   Thread_Control              *executing;
@@ -197,7 +197,7 @@ void _User_extensions_Iterate(
     initial_current = initial_begin;
 
     while ( initial_current != initial_end ) {
-      (*visitor)( executing, arg, initial_current );
+      ( *visitor )( executing, arg, initial_current );
       ++initial_current;
     }
 
@@ -258,7 +258,7 @@ void _User_extensions_Iterate(
 
     while ( initial_current != initial_begin ) {
       --initial_current;
-      (*visitor)( executing, arg, initial_current );
+      ( *visitor )( executing, arg, initial_current );
     }
   }
 }

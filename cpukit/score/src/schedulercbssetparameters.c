@@ -42,23 +42,27 @@
 #include <rtems/score/schedulercbs.h>
 #include <rtems/score/scheduleredfimpl.h>
 
-int _Scheduler_CBS_Set_parameters (
+int _Scheduler_CBS_Set_parameters(
   Scheduler_CBS_Server_id   server_id,
   Scheduler_CBS_Parameters *params
 )
 {
-  if ( server_id >= _Scheduler_CBS_Maximum_servers )
+  if ( server_id >= _Scheduler_CBS_Maximum_servers ) {
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
+  }
 
-  if ( params->budget <= 0 ||
-       params->deadline <= 0 ||
-       params->budget >= (time_t)SCHEDULER_EDF_PRIO_MSB ||
-       params->deadline >= (time_t)SCHEDULER_EDF_PRIO_MSB )
+  if (
+    params->budget <= 0 || params->deadline <= 0 ||
+    params->budget >= (time_t) SCHEDULER_EDF_PRIO_MSB ||
+    params->deadline >= (time_t) SCHEDULER_EDF_PRIO_MSB
+  ) {
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
+  }
 
-  if ( !_Scheduler_CBS_Server_list[server_id].initialized )
+  if ( !_Scheduler_CBS_Server_list[ server_id ].initialized ) {
     return SCHEDULER_CBS_ERROR_NOSERVER;
+  }
 
-  _Scheduler_CBS_Server_list[server_id].parameters = *params;
+  _Scheduler_CBS_Server_list[ server_id ].parameters = *params;
   return SCHEDULER_CBS_OK;
 }

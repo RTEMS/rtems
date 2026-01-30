@@ -39,10 +39,12 @@
 
 #include <rtems/score/isr.h>
 
-#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
-  ISR_Handler_entry _ISR_Vector_table[ CPU_INTERRUPT_NUMBER_OF_VECTORS ];
-#elif defined(CPU_INTERRUPT_NUMBER_OF_VECTORS)
-  #error "CPU_INTERRUPT_NUMBER_OF_VECTORS is defined for non-simple vectored interrupts"
-#elif defined(CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER)
-  #error "CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER is defined for non-simple vectored interrupts"
+#if ( CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE )
+ISR_Handler_entry _ISR_Vector_table[ CPU_INTERRUPT_NUMBER_OF_VECTORS ];
+#elif defined( CPU_INTERRUPT_NUMBER_OF_VECTORS )
+  #error \
+    "CPU_INTERRUPT_NUMBER_OF_VECTORS is defined for non-simple vectored interrupts"
+#elif defined( CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER )
+  #error \
+    "CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER is defined for non-simple vectored interrupts"
 #endif

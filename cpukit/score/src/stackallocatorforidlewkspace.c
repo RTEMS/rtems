@@ -43,8 +43,8 @@
 #include <rtems/score/wkspace.h>
 
 void *_Stack_Allocator_allocate_for_idle_workspace(
-  uint32_t  unused,
-  size_t   *storage_size
+  uint32_t unused,
+  size_t  *storage_size
 )
 {
   void *area;

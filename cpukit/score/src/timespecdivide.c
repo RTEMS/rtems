@@ -55,9 +55,9 @@ void _Timespec_Divide(
    *  For math simplicity just convert the timespec to nanoseconds
    *  in a 64-bit integer.
    */
-  left   = lhs->tv_sec * (uint64_t)TOD_NANOSECONDS_PER_SECOND;
-  left  += lhs->tv_nsec;
-  right  = rhs->tv_sec * (uint64_t)TOD_NANOSECONDS_PER_SECOND;
+  left = lhs->tv_sec * (uint64_t) TOD_NANOSECONDS_PER_SECOND;
+  left += lhs->tv_nsec;
+  right = rhs->tv_sec * (uint64_t) TOD_NANOSECONDS_PER_SECOND;
   right += rhs->tv_nsec;
 
   if ( right == 0 ) {
@@ -72,7 +72,7 @@ void _Timespec_Divide(
    *  TODO: Rounding on the last digit of the fval.
    */
 
-  answer = (left * 100000) / right;
+  answer = ( left * 100000 ) / right;
 
   *ival_percentage = answer / 1000;
   *fval_percentage = answer % 1000;

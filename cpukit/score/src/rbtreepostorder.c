@@ -56,10 +56,7 @@ static void *_RBTree_Postorder_dive_left(
   }
 }
 
-void *_RBTree_Postorder_next(
-  const RBTree_Node *the_node,
-  size_t             offset
-)
+void *_RBTree_Postorder_next( const RBTree_Node *the_node, size_t offset )
 {
   const RBTree_Node *parent;
 
@@ -69,8 +66,7 @@ void *_RBTree_Postorder_next(
   }
 
   if (
-    the_node == _RBTree_Left( parent )
-      && _RBTree_Right( parent ) != NULL
+    the_node == _RBTree_Left( parent ) && _RBTree_Right( parent ) != NULL
   ) {
     return _RBTree_Postorder_dive_left( _RBTree_Right( parent ), offset );
   }

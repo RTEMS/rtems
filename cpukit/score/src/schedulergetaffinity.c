@@ -46,15 +46,15 @@ Status_Control _Scheduler_Get_affinity(
   cpu_set_t      *cpuset
 )
 {
-  const Scheduler_Control    *scheduler;
-  ISR_lock_Context            lock_context;
-  const Processor_mask       *affinity;
-  Processor_mask_Copy_status  status;
+  const Scheduler_Control   *scheduler;
+  ISR_lock_Context           lock_context;
+  const Processor_mask      *affinity;
+  Processor_mask_Copy_status status;
 
   scheduler = _Thread_Scheduler_get_home( the_thread );
   _Scheduler_Acquire_critical( scheduler, &lock_context );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   affinity = &the_thread->Scheduler.Affinity;
 #else
   affinity = &_Processor_mask_The_one_and_only;

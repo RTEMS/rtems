@@ -52,9 +52,9 @@
  */
 static void _Scheduler_CBS_Budget_callout( Thread_Control *the_thread )
 {
-  Scheduler_CBS_Node      *node;
-  Scheduler_CBS_Server_id  server_id;
-  Thread_queue_Context     queue_context;
+  Scheduler_CBS_Node     *node;
+  Scheduler_CBS_Server_id server_id;
+  Thread_queue_Context    queue_context;
 
   node = _Scheduler_CBS_Thread_get_node( the_thread );
 
@@ -70,10 +70,7 @@ static void _Scheduler_CBS_Budget_callout( Thread_Control *the_thread )
 
   /* Invoke callback function if any. */
   if ( node->cbs_server->cbs_budget_overrun ) {
-    _Scheduler_CBS_Get_server_id(
-        node->cbs_server->task_id,
-        &server_id
-    );
+    _Scheduler_CBS_Get_server_id( node->cbs_server->task_id, &server_id );
     node->cbs_server->cbs_budget_overrun( server_id );
   }
 }
@@ -94,7 +91,7 @@ static void _Scheduler_CBS_Budget_at_tick( Thread_Control *the_thread )
 
   if ( budget_available == 1 ) {
     the_thread->CPU_budget.available = 0;
-    _Scheduler_CBS_Budget_callout ( the_thread );
+    _Scheduler_CBS_Budget_callout( the_thread );
   } else {
     the_thread->CPU_budget.available = budget_available - 1;
   }
@@ -106,7 +103,7 @@ const Thread_CPU_budget_operations _Scheduler_CBS_Budget = {
   .initialize = _Thread_CPU_budget_do_nothing
 };
 
-int _Scheduler_CBS_Initialize(void)
+int _Scheduler_CBS_Initialize( void )
 {
   return SCHEDULER_CBS_OK;
 }

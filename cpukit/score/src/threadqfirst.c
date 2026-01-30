@@ -46,9 +46,9 @@ Thread_Control *_Thread_queue_First(
   const Thread_queue_Operations *operations
 )
 {
-  Thread_queue_Heads   *heads;
-  Thread_Control       *the_thread;
-  Thread_queue_Context  queue_context;
+  Thread_queue_Heads  *heads;
+  Thread_Control      *the_thread;
+  Thread_queue_Context queue_context;
 
   _Thread_queue_Acquire( the_thread_queue, &queue_context );
   heads = the_thread_queue->Queue.heads;

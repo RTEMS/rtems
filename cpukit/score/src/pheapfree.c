@@ -41,15 +41,12 @@
 
 #include <rtems/score/protectedheap.h>
 
-bool _Protected_heap_Free(
-  Heap_Control *the_heap,
-  void         *start_address
-)
+bool _Protected_heap_Free( Heap_Control *the_heap, void *start_address )
 {
-  bool    status;
+  bool status;
 
   _RTEMS_Lock_allocator();
-    status = _Heap_Free( the_heap, start_address );
+  status = _Heap_Free( the_heap, start_address );
   _RTEMS_Unlock_allocator();
   return status;
 }

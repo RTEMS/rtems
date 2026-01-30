@@ -45,24 +45,24 @@
 
 static Heap_Resize_status _Heap_Resize_block_checked(
   Heap_Control *heap,
-  Heap_Block *block,
-  uintptr_t alloc_begin,
-  uintptr_t new_alloc_size,
-  uintptr_t *old_size,
-  uintptr_t *new_size
+  Heap_Block   *block,
+  uintptr_t     alloc_begin,
+  uintptr_t     new_alloc_size,
+  uintptr_t    *old_size,
+  uintptr_t    *new_size
 )
 {
   Heap_Statistics *const stats = &heap->stats;
 
   uintptr_t const block_begin = (uintptr_t) block;
-  uintptr_t block_size = _Heap_Block_size( block );
-  uintptr_t block_end = block_begin + block_size;
+  uintptr_t       block_size = _Heap_Block_size( block );
+  uintptr_t       block_end = block_begin + block_size;
 
   uintptr_t alloc_size = block_end - alloc_begin + HEAP_ALLOC_BONUS;
 
   Heap_Block *next_block = _Heap_Block_at( block, block_size );
-  uintptr_t next_block_size = _Heap_Block_size( next_block );
-  bool next_block_is_free = _Heap_Is_free( next_block );
+  uintptr_t   next_block_size = _Heap_Block_size( next_block );
+  bool        next_block_is_free = _Heap_Is_free( next_block );
 
   _HAssert( _Heap_Is_block_in_heap( heap, next_block ) );
   _HAssert( _Heap_Is_prev_used( next_block ) );
@@ -105,17 +105,20 @@ static Heap_Resize_status _Heap_Resize_block_checked(
 
 Heap_Resize_status _Heap_Resize_block(
   Heap_Control *heap,
-  void *alloc_begin_ptr,
-  uintptr_t new_alloc_size,
-  uintptr_t *old_size,
-  uintptr_t *new_size
+  void         *alloc_begin_ptr,
+  uintptr_t     new_alloc_size,
+  uintptr_t    *old_size,
+  uintptr_t    *new_size
 )
 {
   uintptr_t const page_size = heap->page_size;
 
   uintptr_t const alloc_begin = (uintptr_t) alloc_begin_ptr;
 
-  Heap_Block *const block = _Heap_Block_of_alloc_area( alloc_begin, page_size );
+  Heap_Block *const block = _Heap_Block_of_alloc_area(
+    alloc_begin,
+    page_size
+  );
 
   *old_size = 0;
   *new_size = 0;

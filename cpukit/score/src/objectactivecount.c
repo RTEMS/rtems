@@ -42,9 +42,7 @@
 #include <rtems/score/assert.h>
 #include <rtems/score/chainimpl.h>
 
-Objects_Maximum _Objects_Active_count(
-  const Objects_Information *information
-)
+Objects_Maximum _Objects_Active_count( const Objects_Information *information )
 {
   Objects_Maximum   active;
   Objects_Maximum   index;
@@ -54,7 +52,7 @@ Objects_Maximum _Objects_Active_count(
   _Assert( _Objects_Allocator_is_owner() );
 
   active = 0;
-  maximum  = _Objects_Get_maximum_index( information );
+  maximum = _Objects_Get_maximum_index( information );
   local_table = information->local_table;
 
   for ( index = 0; index < maximum; ++index ) {

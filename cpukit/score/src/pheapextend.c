@@ -50,7 +50,7 @@ bool _Protected_heap_Extend(
   uintptr_t amount_extended;
 
   _RTEMS_Lock_allocator();
-    amount_extended = _Heap_Extend( the_heap, starting_address, size, 0 );
+  amount_extended = _Heap_Extend( the_heap, starting_address, size, 0 );
   _RTEMS_Unlock_allocator();
 
   return amount_extended != 0;

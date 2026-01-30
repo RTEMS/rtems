@@ -48,15 +48,15 @@ bool _ISR_Is_in_progress( void )
   uint32_t isr_nest_level;
 
   #if defined( RTEMS_SMP )
-    ISR_Level level;
+  ISR_Level level;
 
-    _ISR_Local_disable( level );
+  _ISR_Local_disable( level );
   #endif
 
   isr_nest_level = _ISR_Nest_level;
 
   #if defined( RTEMS_SMP )
-    _ISR_Local_enable( level );
+  _ISR_Local_enable( level );
   #endif
 
   return isr_nest_level != 0;

@@ -42,8 +42,8 @@
 #include <rtems/score/protectedheap.h>
 
 bool _Protected_heap_Get_free_information(
-  Heap_Control        *the_heap,
-  Heap_Information    *info
+  Heap_Control     *the_heap,
+  Heap_Information *info
 )
 {
   /*
@@ -51,9 +51,8 @@ bool _Protected_heap_Get_free_information(
    */
 
   _RTEMS_Lock_allocator();
-    _Heap_Get_free_information( the_heap, info );
+  _Heap_Get_free_information( the_heap, info );
   _RTEMS_Unlock_allocator();
 
   return true;
 }
-

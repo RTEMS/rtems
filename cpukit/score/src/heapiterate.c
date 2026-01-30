@@ -41,21 +41,21 @@
 #include <rtems/score/heapimpl.h>
 
 void _Heap_Iterate(
-  Heap_Control *heap,
+  Heap_Control      *heap,
   Heap_Block_visitor visitor,
-  void *visitor_arg
+  void              *visitor_arg
 )
 {
   Heap_Block *current = heap->first_block;
   Heap_Block *end = heap->last_block;
-  bool stop = false;
+  bool        stop = false;
 
   while ( !stop && current != end ) {
-    uintptr_t size = _Heap_Block_size( current );
+    uintptr_t   size = _Heap_Block_size( current );
     Heap_Block *next = _Heap_Block_at( current, size );
-    bool used = _Heap_Is_prev_used( next );
+    bool        used = _Heap_Is_prev_used( next );
 
-    stop = (*visitor)( current, size, used, visitor_arg );
+    stop = ( *visitor )( current, size, used, visitor_arg );
 
     current = next;
   }

@@ -41,23 +41,24 @@
 
 #include <rtems/score/schedulercbs.h>
 
-int _Scheduler_CBS_Destroy_server (
-  Scheduler_CBS_Server_id server_id
-)
+int _Scheduler_CBS_Destroy_server( Scheduler_CBS_Server_id server_id )
 {
-  int ret = SCHEDULER_CBS_OK;
+  int      ret = SCHEDULER_CBS_OK;
   rtems_id tid;
 
-  if ( server_id >= _Scheduler_CBS_Maximum_servers )
+  if ( server_id >= _Scheduler_CBS_Maximum_servers ) {
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
+  }
 
-  if ( !_Scheduler_CBS_Server_list[server_id].initialized )
+  if ( !_Scheduler_CBS_Server_list[ server_id ].initialized ) {
     return SCHEDULER_CBS_ERROR_NOSERVER;
+  }
 
-  tid = _Scheduler_CBS_Server_list[server_id].task_id;
-  if ( tid != (rtems_id)-1 )
-    ret = _Scheduler_CBS_Detach_thread ( server_id, tid );
+  tid = _Scheduler_CBS_Server_list[ server_id ].task_id;
+  if ( tid != (rtems_id) -1 ) {
+    ret = _Scheduler_CBS_Detach_thread( server_id, tid );
+  }
 
-  _Scheduler_CBS_Server_list[server_id].initialized = false;
+  _Scheduler_CBS_Server_list[ server_id ].initialized = false;
   return ret;
 }

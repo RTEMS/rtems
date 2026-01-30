@@ -48,15 +48,18 @@ bool _Timespec_Less_than(
   const struct timespec *rhs
 )
 {
-  if ( lhs->tv_sec < rhs->tv_sec )
+  if ( lhs->tv_sec < rhs->tv_sec ) {
     return true;
+  }
 
-  if ( lhs->tv_sec > rhs->tv_sec )
+  if ( lhs->tv_sec > rhs->tv_sec ) {
     return false;
+  }
 
   /* ASSERT: lhs->tv_sec == rhs->tv_sec */
-  if ( lhs->tv_nsec < rhs->tv_nsec )
+  if ( lhs->tv_nsec < rhs->tv_nsec ) {
     return true;
+  }
 
   return false;
 }

@@ -41,17 +41,17 @@
 #include <rtems/score/threaddispatch.h>
 
 #if defined( RTEMS_DEBUG )
-  bool _Debug_Is_thread_dispatching_allowed( void )
-  {
-    bool dispatch_allowed;
-    ISR_Level level;
-    Per_CPU_Control *cpu_self;
+bool _Debug_Is_thread_dispatching_allowed( void )
+{
+  bool             dispatch_allowed;
+  ISR_Level        level;
+  Per_CPU_Control *cpu_self;
 
-    _ISR_Local_disable( level );
-    cpu_self = _Per_CPU_Get_snapshot();
-    dispatch_allowed = cpu_self->thread_dispatch_disable_level == 0;
-    _ISR_Local_enable( level );
+  _ISR_Local_disable( level );
+  cpu_self = _Per_CPU_Get_snapshot();
+  dispatch_allowed = cpu_self->thread_dispatch_disable_level == 0;
+  _ISR_Local_enable( level );
 
-    return dispatch_allowed;
-  }
+  return dispatch_allowed;
+}
 #endif

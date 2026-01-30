@@ -48,19 +48,19 @@
 #include <rtems/score/schedulerimpl.h>
 
 #define THREAD_QUEUE_CONTEXT_OF_PRIORITY_ACTIONS( priority_actions ) \
-  RTEMS_CONTAINER_OF( \
-    priority_actions, \
-    Thread_queue_Context, \
-    Priority.Actions \
+  RTEMS_CONTAINER_OF(                                                \
+    priority_actions,                                                \
+    Thread_queue_Context,                                            \
+    Priority.Actions                                                 \
   )
 
 #define THREAD_QUEUE_PRIORITY_QUEUE_OF_PRIORITY_AGGREGATION( \
-  priority_aggregation \
-) \
-  RTEMS_CONTAINER_OF( \
-    priority_aggregation, \
-    Thread_queue_Priority_queue, \
-    Queue \
+  priority_aggregation                                       \
+)                                                            \
+  RTEMS_CONTAINER_OF(                                        \
+    priority_aggregation,                                    \
+    Thread_queue_Priority_queue,                             \
+    Queue                                                    \
   )
 
 void _Thread_queue_Do_nothing_priority_actions(
@@ -68,7 +68,7 @@ void _Thread_queue_Do_nothing_priority_actions(
   Priority_Actions   *priority_actions
 )
 {
-#if defined(RTEMS_DEBUG) && defined(RTEMS_SMP)
+#if defined( RTEMS_DEBUG ) && defined( RTEMS_SMP )
   Priority_Aggregation *priority_aggregation;
 
   priority_aggregation = _Priority_Actions_move( priority_actions );
@@ -86,13 +86,13 @@ static void _Thread_queue_Queue_enqueue(
   Thread_queue_Queue   *queue,
   Thread_Control       *the_thread,
   Thread_queue_Context *queue_context,
-  void               ( *initialize )(
+  void ( *initialize )(
     Thread_queue_Queue *,
     Thread_Control *,
     Thread_queue_Context *,
     Thread_queue_Heads *
   ),
-  void               ( *enqueue )(
+  void ( *enqueue )(
     Thread_queue_Queue *,
     Thread_Control *,
     Thread_queue_Context *,
@@ -127,7 +127,7 @@ static void _Thread_queue_Queue_extract(
   Thread_Control       *current_or_previous_owner,
   Thread_queue_Context *queue_context,
   Thread_Control       *the_thread,
-  void               ( *extract )(
+  void ( *extract )(
     Thread_queue_Queue *,
     Thread_queue_Heads *,
     Thread_Control *,
@@ -291,7 +291,7 @@ static size_t _Thread_queue_Scheduler_index(
   const Scheduler_Node *scheduler_node
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   const Scheduler_Control *scheduler;
 
   scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
@@ -307,7 +307,7 @@ static Thread_queue_Priority_queue *_Thread_queue_Priority_queue_by_index(
   size_t              scheduler_index
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   _Assert( scheduler_index < _Scheduler_Count );
   return &heads->Priority[ scheduler_index ];
 #else
@@ -333,7 +333,7 @@ static Chain_Node *_Thread_queue_Priority_queue_rotation(
 {
   Chain_Node *fifo_node;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /* Ensure FIFO order with respect to the priority queues */
   fifo_node = _Chain_First( &heads->Heads.Fifo );
   _Chain_Extract_unprotected( fifo_node );
@@ -346,7 +346,7 @@ static Chain_Node *_Thread_queue_Priority_queue_rotation(
   return fifo_node;
 }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 static void _Thread_queue_Priority_queue_extract(
   Priority_Aggregation *priority_aggregation,
   Priority_Actions     *priority_actions,
@@ -381,14 +381,14 @@ static void _Thread_queue_Priority_priority_actions(
   priority_aggregation = _Priority_Actions_move( priority_actions );
 
   do {
-#if defined(RTEMS_SMP)
-    Priority_Aggregation        *next_aggregation;
+#if defined( RTEMS_SMP )
+    Priority_Aggregation *next_aggregation;
 #endif
     Scheduler_Node              *scheduler_node;
     Thread_queue_Priority_queue *priority_queue;
     Priority_Action_type         priority_action_type;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
     next_aggregation = _Priority_Get_next_action( priority_aggregation );
 #endif
 
@@ -397,10 +397,13 @@ static void _Thread_queue_Priority_priority_actions(
     priority_action_type = priority_aggregation->Action.type;
 
     switch ( priority_action_type ) {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
       case PRIORITY_ACTION_ADD:
         if ( _Priority_Is_empty( &priority_queue->Queue ) ) {
-          _Chain_Append_unprotected( &heads->Heads.Fifo, &priority_queue->Node );
+          _Chain_Append_unprotected(
+            &heads->Heads.Fifo,
+            &priority_queue->Node
+          );
         }
 
         _Priority_Plain_insert(
@@ -429,7 +432,7 @@ static void _Thread_queue_Priority_priority_actions(
         break;
     }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
     priority_aggregation = next_aggregation;
   } while ( priority_aggregation != NULL );
 #else
@@ -449,9 +452,9 @@ static void _Thread_queue_Priority_do_initialize(
 
   Scheduler_Node              *scheduler_node;
   Thread_queue_Priority_queue *priority_queue;
-#if defined(RTEMS_SMP)
-  Chain_Node                  *wait_node;
-  const Chain_Node            *wait_tail;
+#if defined( RTEMS_SMP )
+  Chain_Node       *wait_node;
+  const Chain_Node *wait_tail;
 #endif
 
   scheduler_node = _Thread_Scheduler_get_home_node( the_thread );
@@ -462,7 +465,7 @@ static void _Thread_queue_Priority_do_initialize(
     &scheduler_node->Wait.Priority.Node
   );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   _Chain_Initialize_one( &heads->Heads.Fifo, &priority_queue->Node );
 
   wait_node = _Chain_Next( &scheduler_node->Thread.Wait_node );
@@ -493,7 +496,7 @@ static void _Thread_queue_Priority_do_enqueue(
   (void) queue;
   (void) queue_context;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   Chain_Node       *wait_node;
   const Chain_Node *wait_tail;
 
@@ -548,7 +551,7 @@ static void _Thread_queue_Priority_do_extract(
 {
   (void) queue;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   Chain_Node       *wait_node;
   const Chain_Node *wait_tail;
 
@@ -647,10 +650,11 @@ static Thread_Control *_Thread_queue_Priority_first(
   Priority_Node                     *first;
   Scheduler_Node                    *scheduler_node;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   _Assert( !_Chain_Is_empty( &heads->Heads.Fifo ) );
-  priority_queue = (Thread_queue_Priority_queue *)
-    _Chain_First( &heads->Heads.Fifo );
+  priority_queue = (Thread_queue_Priority_queue *) _Chain_First(
+    &heads->Heads.Fifo
+  );
 #else
   priority_queue = &heads->Heads.Priority;
 #endif
@@ -669,7 +673,7 @@ static Thread_Control *_Thread_queue_Priority_surrender(
   Thread_queue_Context *queue_context
 )
 {
-  (void)  previous_owner;
+  (void) previous_owner;
 
   Thread_Control *first;
 
@@ -704,7 +708,7 @@ static void _Thread_queue_Priority_inherit_do_priority_actions_action(
   );
 }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 static void _Thread_queue_Priority_inherit_do_priority_actions_add(
   Priority_Aggregation *priority_aggregation,
   Priority_Actions     *priority_actions,
@@ -746,7 +750,7 @@ static void _Thread_queue_Priority_inherit_do_priority_actions_change(
   void                 *arg
 )
 {
-  (void)  priority_group_order;
+  (void) priority_group_order;
 
   _Thread_queue_Priority_inherit_do_priority_actions_action(
     priority_aggregation,
@@ -775,8 +779,8 @@ static void _Thread_queue_Priority_inherit_priority_actions(
   priority_aggregation = _Priority_Actions_move( priority_actions );
 
   do {
-#if defined(RTEMS_SMP)
-    Priority_Aggregation        *next_aggregation;
+#if defined( RTEMS_SMP )
+    Priority_Aggregation *next_aggregation;
 #endif
     Scheduler_Node              *scheduler_node;
     size_t                       scheduler_index;
@@ -784,7 +788,7 @@ static void _Thread_queue_Priority_inherit_priority_actions(
     Scheduler_Node              *scheduler_node_of_owner;
     Priority_Action_type         priority_action_type;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
     next_aggregation = _Priority_Get_next_action( priority_aggregation );
 #endif
 
@@ -801,10 +805,13 @@ static void _Thread_queue_Priority_inherit_priority_actions(
     priority_action_type = priority_aggregation->Action.type;
 
     switch ( priority_action_type ) {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
       case PRIORITY_ACTION_ADD:
         if ( _Priority_Is_empty( &priority_queue->Queue ) ) {
-          _Chain_Append_unprotected( &heads->Heads.Fifo, &priority_queue->Node );
+          _Chain_Append_unprotected(
+            &heads->Heads.Fifo,
+            &priority_queue->Node
+          );
           priority_queue->scheduler_node = scheduler_node_of_owner;
         }
 
@@ -842,7 +849,7 @@ static void _Thread_queue_Priority_inherit_priority_actions(
         break;
     }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
     priority_aggregation = next_aggregation;
   } while ( priority_aggregation != NULL );
 #else
@@ -862,9 +869,9 @@ static void _Thread_queue_Priority_inherit_do_initialize(
   Thread_queue_Priority_queue *priority_queue;
   Thread_Control              *owner;
   Scheduler_Node              *scheduler_node_of_owner;
-#if defined(RTEMS_SMP)
-  Chain_Node                  *wait_node;
-  const Chain_Node            *wait_tail;
+#if defined( RTEMS_SMP )
+  Chain_Node       *wait_node;
+  const Chain_Node *wait_tail;
 #endif
 
   owner = queue->owner;
@@ -892,7 +899,7 @@ static void _Thread_queue_Priority_inherit_do_initialize(
     PRIORITY_ACTION_ADD
   );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   _Chain_Initialize_one( &heads->Heads.Fifo, &priority_queue->Node );
 
   wait_node = _Chain_Next( &scheduler_node->Thread.Wait_node );
@@ -940,10 +947,10 @@ static void _Thread_queue_Priority_inherit_do_enqueue_change(
   void                 *arg
 )
 {
-  (void)  priority_group_order;
+  (void) priority_group_order;
 
-#if defined(RTEMS_SMP)
-  (void)  priority_actions;
+#if defined( RTEMS_SMP )
+  (void) priority_actions;
 
   Scheduler_Node *scheduler_node_of_owner;
 
@@ -986,7 +993,7 @@ static void _Thread_queue_Priority_inherit_do_enqueue(
   Thread_queue_Heads   *heads
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   Thread_Control   *owner;
   Chain_Node       *wait_node;
   const Chain_Node *wait_tail;
@@ -1085,7 +1092,7 @@ static void _Thread_queue_Priority_inherit_do_extract_action(
   Priority_Action_type  priority_action_type
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   Scheduler_Node *scheduler_node_of_owner;
 
   scheduler_node_of_owner = arg;
@@ -1159,14 +1166,14 @@ static void _Thread_queue_Priority_inherit_do_extract(
 {
   (void) queue;
 
-#if defined(RTEMS_SMP)
-  Chain_Node                  *wait_node;
-  const Chain_Node            *wait_tail;
+#if defined( RTEMS_SMP )
+  Chain_Node       *wait_node;
+  const Chain_Node *wait_tail;
 #endif
   Scheduler_Node              *scheduler_node;
   Thread_queue_Priority_queue *priority_queue;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   wait_node = _Chain_First( &the_thread->Scheduler.Wait_nodes );
   wait_tail = _Chain_Immutable_tail( &the_thread->Scheduler.Wait_nodes );
 
@@ -1227,7 +1234,7 @@ static void _Thread_queue_Priority_inherit_extract(
   Thread_queue_Context *queue_context
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /*
    * We must lock the thread wait path for the complete extract operation
    * including the thread queue head management.  Consider the following
@@ -1268,12 +1275,12 @@ static void _Thread_queue_Priority_inherit_extract(
     _Thread_queue_Priority_inherit_do_extract
   );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   _Thread_queue_Path_release( queue_context );
 #endif
 }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 static void _Thread_queue_Priority_inherit_do_surrender_add(
   Priority_Aggregation *priority_aggregation,
   Priority_Actions     *priority_actions,
@@ -1320,7 +1327,7 @@ static void _Thread_queue_Priority_inherit_do_surrender_change(
   void                 *arg
 )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   (void) arg;
 
   _Priority_Actions_add( priority_actions, priority_aggregation );
@@ -1337,7 +1344,7 @@ static void _Thread_queue_Priority_inherit_do_surrender_change(
   );
 }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 static void _Thread_queue_Priority_inherit_do_surrender_change_2(
   Priority_Aggregation *priority_aggregation,
   Priority_Group_order  priority_group_order,
@@ -1366,19 +1373,19 @@ static void _Thread_queue_Priority_inherit_do_surrender(
 {
   (void) queue;
 
-#if defined(RTEMS_SMP)
-  Chain_Node                  *fifo_node;
-  const Chain_Node            *fifo_head;
-  const Chain_Node            *fifo_tail;
-  Chain_Node                  *wait_node;
-  const Chain_Node            *wait_tail;
-  ISR_lock_Context             lock_context;
+#if defined( RTEMS_SMP )
+  Chain_Node       *fifo_node;
+  const Chain_Node *fifo_head;
+  const Chain_Node *fifo_tail;
+  Chain_Node       *wait_node;
+  const Chain_Node *wait_tail;
+  ISR_lock_Context  lock_context;
 #endif
   Scheduler_Node              *scheduler_node;
   Thread_queue_Priority_queue *priority_queue;
   Scheduler_Node              *scheduler_node_of_owner;
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   /*
    * Remove the priority node of each priority queue from the previous owner.
    * If a priority changes due to this, then register it for a priority update.
@@ -1417,8 +1424,11 @@ static void _Thread_queue_Priority_inherit_do_surrender(
      * _Thread_Priority_perform_actions().
      */
     _Thread_queue_Context_add_priority_update( queue_context, previous_owner );
-#if defined(RTEMS_DEBUG)
-    _Thread_queue_Do_nothing_priority_actions( queue, &queue_context->Priority.Actions );
+#if defined( RTEMS_DEBUG )
+    _Thread_queue_Do_nothing_priority_actions(
+      queue,
+      &queue_context->Priority.Actions
+    );
 #endif
   }
 

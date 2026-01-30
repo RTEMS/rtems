@@ -67,12 +67,12 @@ void _Scheduler_CBS_Unblock(
    * miss of another task.
    */
   if ( serv_info != NULL && ( priority & SCHEDULER_EDF_PRIO_MSB ) == 0 ) {
-    time_t deadline = serv_info->parameters.deadline;
-    time_t budget = serv_info->parameters.budget;
-    uint32_t deadline_left = the_thread->CPU_budget.available;
+    time_t           deadline = serv_info->parameters.deadline;
+    time_t           budget = serv_info->parameters.budget;
+    uint32_t         deadline_left = the_thread->CPU_budget.available;
     Priority_Control budget_left = priority - _Watchdog_Ticks_since_boot;
 
-    if ( (time_t) (deadline * budget_left) > budget * deadline_left ) {
+    if ( (time_t) ( deadline * budget_left ) > budget * deadline_left ) {
       Thread_queue_Context queue_context;
 
       /* Put late unblocked task to background until the end of period. */

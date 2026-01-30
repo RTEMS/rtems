@@ -51,12 +51,7 @@ void *_Protected_heap_Allocate_aligned_with_boundary(
   void *p;
 
   _RTEMS_Lock_allocator();
-    p = _Heap_Allocate_aligned_with_boundary(
-      heap,
-      size,
-      alignment,
-      boundary
-    );
+  p = _Heap_Allocate_aligned_with_boundary( heap, size, alignment, boundary );
   _RTEMS_Unlock_allocator();
 
   return p;

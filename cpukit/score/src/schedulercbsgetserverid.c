@@ -43,15 +43,17 @@
 #include <rtems/score/scheduler.h>
 #include <rtems/score/schedulercbs.h>
 
-int _Scheduler_CBS_Get_server_id (
+int _Scheduler_CBS_Get_server_id(
   rtems_id                 task_id,
   Scheduler_CBS_Server_id *server_id
 )
 {
   unsigned int i;
-  for ( i = 0; i<_Scheduler_CBS_Maximum_servers; i++ ) {
-    if ( _Scheduler_CBS_Server_list[i].initialized &&
-         _Scheduler_CBS_Server_list[i].task_id == task_id ) {
+  for ( i = 0; i < _Scheduler_CBS_Maximum_servers; i++ ) {
+    if (
+      _Scheduler_CBS_Server_list[ i ].initialized &&
+      _Scheduler_CBS_Server_list[ i ].task_id == task_id
+    ) {
       *server_id = i;
       return SCHEDULER_CBS_OK;
     }

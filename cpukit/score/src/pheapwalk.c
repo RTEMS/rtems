@@ -42,13 +42,9 @@
 #include <rtems/score/protectedheap.h>
 #include <rtems/score/threaddispatch.h>
 
-bool _Protected_heap_Walk(
-  Heap_Control *the_heap,
-  int           source,
-  bool          do_dump
-)
+bool _Protected_heap_Walk( Heap_Control *the_heap, int source, bool do_dump )
 {
-  bool    status;
+  bool status;
 
   /*
    * If we are called from within a dispatching critical section,
@@ -59,7 +55,7 @@ bool _Protected_heap_Walk(
    */
   if ( _Thread_Dispatch_is_enabled() ) {
     _RTEMS_Lock_allocator();
-      status = _Heap_Walk( the_heap, source, do_dump );
+    status = _Heap_Walk( the_heap, source, do_dump );
     _RTEMS_Unlock_allocator();
   } else {
     status = _Heap_Walk( the_heap, source, do_dump );

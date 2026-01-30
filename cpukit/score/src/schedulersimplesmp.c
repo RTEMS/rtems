@@ -50,22 +50,25 @@
 #include <rtems/score/schedulersimplesmp.h>
 #include <rtems/score/schedulersmpimpl.h>
 
-static Scheduler_simple_SMP_Context *
-_Scheduler_simple_SMP_Get_context( const Scheduler_Control *scheduler )
+static Scheduler_simple_SMP_Context *_Scheduler_simple_SMP_Get_context(
+  const Scheduler_Control *scheduler
+)
 {
   return (Scheduler_simple_SMP_Context *) _Scheduler_Get_context( scheduler );
 }
 
-static Scheduler_simple_SMP_Context *
-_Scheduler_simple_SMP_Get_self( Scheduler_Context *context )
+static Scheduler_simple_SMP_Context *_Scheduler_simple_SMP_Get_self(
+  Scheduler_Context *context
+)
 {
   return (Scheduler_simple_SMP_Context *) context;
 }
 
 void _Scheduler_simple_SMP_Initialize( const Scheduler_Control *scheduler )
 {
-  Scheduler_simple_SMP_Context *self =
-    _Scheduler_simple_SMP_Get_context( scheduler );
+  Scheduler_simple_SMP_Context *self = _Scheduler_simple_SMP_Get_context(
+    scheduler
+  );
 
   _Scheduler_SMP_Initialize( &self->Base );
   _Chain_Initialize_empty( &self->Ready );
@@ -100,8 +103,9 @@ static void _Scheduler_simple_SMP_Do_update(
 
 static bool _Scheduler_simple_SMP_Has_ready( Scheduler_Context *context )
 {
-  Scheduler_simple_SMP_Context *self =
-    _Scheduler_simple_SMP_Get_self( context );
+  Scheduler_simple_SMP_Context *self = _Scheduler_simple_SMP_Get_self(
+    context
+  );
 
   return !_Chain_Is_empty( &self->Ready );
 }
@@ -111,8 +115,9 @@ static Scheduler_Node *_Scheduler_simple_SMP_Get_highest_ready(
   Scheduler_Node    *node
 )
 {
-  Scheduler_simple_SMP_Context *self =
-    _Scheduler_simple_SMP_Get_self( context );
+  Scheduler_simple_SMP_Context *self = _Scheduler_simple_SMP_Get_self(
+    context
+  );
   Scheduler_Node *first = (Scheduler_Node *) _Chain_First( &self->Ready );
 
   (void) node;
@@ -193,9 +198,10 @@ static void _Scheduler_simple_SMP_Extract_from_ready(
 
 static inline Scheduler_Node *_Scheduler_simple_SMP_Get_idle( void *arg )
 {
-  Scheduler_simple_SMP_Context *self =
-    _Scheduler_simple_SMP_Get_self( arg );
-  Scheduler_Node *lowest_ready = (Scheduler_Node *) _Chain_Last( &self->Ready );
+  Scheduler_simple_SMP_Context *self = _Scheduler_simple_SMP_Get_self( arg );
+  Scheduler_Node               *lowest_ready = (Scheduler_Node *) _Chain_Last(
+    &self->Ready
+  );
 
   _Assert( &lowest_ready->Node.Chain != _Chain_Head( &self->Ready ) );
   _Chain_Extract_unprotected( &lowest_ready->Node.Chain );

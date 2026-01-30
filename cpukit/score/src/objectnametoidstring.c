@@ -81,11 +81,13 @@ Objects_Control *_Objects_Get_by_name(
 
     the_object = information->local_table[ index ];
 
-    if ( the_object == NULL )
+    if ( the_object == NULL ) {
       continue;
+    }
 
-    if ( the_object->name.name_p == NULL )
+    if ( the_object->name.name_p == NULL ) {
       continue;
+    }
 
     if ( strncmp( name, the_object->name.name_p, max_name_length ) == 0 ) {
       return the_object;

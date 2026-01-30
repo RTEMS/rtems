@@ -49,20 +49,18 @@
 
 Objects_MP_Control _Objects_MP_Controls[ 0 ];
 
-Thread_Configured_proxy_control * const _Thread_MP_Proxies;
+Thread_Configured_proxy_control *const _Thread_MP_Proxies;
 
 const MPCI_Configuration _MPCI_Configuration = {
-  1,                        /* local node number */
-  1,                        /* maximum number nodes in system */
-  0,                        /* maximum number global objects */
-  0,                        /* maximum number proxies */
-  STACK_MINIMUM_SIZE,       /* MPCI receive server stack size */
-  NULL                      /* pointer to MPCI address table */
+  1,                  /* local node number */
+  1,                  /* maximum number nodes in system */
+  0,                  /* maximum number global objects */
+  0,                  /* maximum number proxies */
+  STACK_MINIMUM_SIZE, /* MPCI receive server stack size */
+  NULL                /* pointer to MPCI address table */
 };
 
-char _MPCI_Receive_server_stack[
-  STACK_MINIMUM_SIZE
-    + CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK
-    + CPU_ALL_TASKS_ARE_FP * CONTEXT_FP_SIZE
-] RTEMS_ALIGNED( CPU_INTERRUPT_STACK_ALIGNMENT )
-RTEMS_SECTION( ".rtemsstack.mpci" );
+char _MPCI_Receive_server_stack
+  [ STACK_MINIMUM_SIZE + CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK +
+    CPU_ALL_TASKS_ARE_FP *
+      CONTEXT_FP_SIZE ] RTEMS_ALIGNED( CPU_INTERRUPT_STACK_ALIGNMENT ) RTEMS_SECTION( ".rtemsstack.mpci" );

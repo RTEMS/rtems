@@ -41,9 +41,7 @@
 
 #include <rtems/score/protectedheap.h>
 
-uintptr_t _Protected_heap_Get_size(
-  Heap_Control *the_heap
-)
+uintptr_t _Protected_heap_Get_size( Heap_Control *the_heap )
 {
   return _Heap_Get_size( the_heap );
 }

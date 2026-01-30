@@ -73,8 +73,8 @@ void _Thread_Continue( Thread_Control *the_thread, Status_Control status )
       unblock = false;
     } else {
       _Assert(
-        _Thread_Wait_flags_get( the_thread )
-          == ( wait_class | THREAD_WAIT_STATE_BLOCKED )
+        _Thread_Wait_flags_get( the_thread ) ==
+        ( wait_class | THREAD_WAIT_STATE_BLOCKED )
       );
       _Thread_Wait_flags_set( the_thread, THREAD_WAIT_STATE_READY );
       unblock = true;
@@ -90,7 +90,7 @@ void _Thread_Continue( Thread_Control *the_thread, Status_Control status )
     _Thread_Wait_tranquilize( the_thread );
     _Thread_Unblock( the_thread );
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
     if ( !_Objects_Is_local_id( the_thread->Object.id ) ) {
       _Thread_MP_Free_proxy( the_thread );
     }

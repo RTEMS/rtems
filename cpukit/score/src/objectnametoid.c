@@ -53,7 +53,7 @@ Status_Control _Objects_Name_to_id_u32(
   const Objects_Information *information
 )
 {
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   Objects_Name name_for_mp;
 #endif
 
@@ -64,8 +64,7 @@ Status_Control _Objects_Name_to_id_u32(
   }
 
   if (
-    node == OBJECTS_SEARCH_ALL_NODES ||
-    _Objects_Is_local_node_search( node )
+    node == OBJECTS_SEARCH_ALL_NODES || _Objects_Is_local_node_search( node )
   ) {
     Objects_Maximum maximum;
     Objects_Maximum index;
@@ -85,7 +84,7 @@ Status_Control _Objects_Name_to_id_u32(
     }
   }
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   if ( _Objects_Is_local_node_search( node ) ) {
     return STATUS_INVALID_NAME;
   }

@@ -46,13 +46,13 @@
 #include <rtems/score/statesimpl.h>
 
 Status_Control _CORE_message_queue_Submit(
-  CORE_message_queue_Control       *the_message_queue,
-  Thread_Control                   *executing,
-  const void                       *buffer,
-  size_t                            size,
-  CORE_message_queue_Submit_types   submit_type,
-  bool                              wait,
-  Thread_queue_Context             *queue_context
+  CORE_message_queue_Control     *the_message_queue,
+  Thread_Control                 *executing,
+  const void                     *buffer,
+  size_t                          size,
+  CORE_message_queue_Submit_types submit_type,
+  bool                            wait,
+  Thread_queue_Context           *queue_context
 )
 {
   CORE_message_queue_Buffer *the_message;
@@ -82,8 +82,9 @@ Status_Control _CORE_message_queue_Submit(
    *  No one waiting on the message queue at this time, so attempt to
    *  queue the message up for a future receive.
    */
-  the_message =
-      _CORE_message_queue_Allocate_message_buffer( the_message_queue );
+  the_message = _CORE_message_queue_Allocate_message_buffer(
+    the_message_queue
+  );
   if ( the_message ) {
     _CORE_message_queue_Insert_message(
       the_message_queue,
@@ -93,15 +94,15 @@ Status_Control _CORE_message_queue_Submit(
       submit_type
     );
 
-#if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
+#if defined( RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION )
     /*
      *  According to POSIX, does this happen before or after the message
      *  is actually enqueued.  It is logical to think afterwards, because
      *  the message is actually in the queue at this point.
      */
     if (
-      the_message_queue->number_of_pending_messages == 1
-        && the_message_queue->notify_handler != NULL
+      the_message_queue->number_of_pending_messages == 1 &&
+      the_message_queue->notify_handler != NULL
     ) {
       ( *the_message_queue->notify_handler )(
         the_message_queue,
@@ -117,7 +118,7 @@ Status_Control _CORE_message_queue_Submit(
     return STATUS_SUCCESSFUL;
   }
 
-#if !defined(RTEMS_SCORE_COREMSG_ENABLE_BLOCKING_SEND)
+#if !defined( RTEMS_SCORE_COREMSG_ENABLE_BLOCKING_SEND )
   _CORE_message_queue_Release( the_message_queue, queue_context );
   return STATUS_TOO_MANY;
 #else

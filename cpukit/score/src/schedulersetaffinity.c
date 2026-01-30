@@ -41,9 +41,9 @@
 #include <rtems/score/schedulerimpl.h>
 
 Status_Control _Scheduler_Set_affinity(
-  Thread_Control       *the_thread,
-  size_t                cpusetsize,
-  const cpu_set_t      *cpuset
+  Thread_Control  *the_thread,
+  size_t           cpusetsize,
+  const cpu_set_t *cpuset
 )
 {
   Processor_mask             affinity;
@@ -53,7 +53,11 @@ Status_Control _Scheduler_Set_affinity(
   ISR_lock_Context           lock_context;
   Status_Control             status;
 
-  copy_status = _Processor_mask_From_cpu_set_t( &affinity, cpusetsize, cpuset );
+  copy_status = _Processor_mask_From_cpu_set_t(
+    &affinity,
+    cpusetsize,
+    cpuset
+  );
   if ( !_Processor_mask_Is_at_most_partial_loss( copy_status ) ) {
     return STATUS_INVALID_NUMBER;
   }
@@ -69,7 +73,7 @@ Status_Control _Scheduler_Set_affinity(
   _Scheduler_Acquire_critical( scheduler, &lock_context );
 
   node = _Thread_Scheduler_get_home_node( the_thread );
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   status = ( *scheduler->Operations.set_affinity )(
     scheduler,
     the_thread,

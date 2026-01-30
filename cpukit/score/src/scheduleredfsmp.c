@@ -49,20 +49,23 @@
 #include <rtems/score/scheduleredfsmp.h>
 #include <rtems/score/schedulersmpimpl.h>
 
-static inline Scheduler_EDF_SMP_Context *
-_Scheduler_EDF_SMP_Get_context( const Scheduler_Control *scheduler )
+static inline Scheduler_EDF_SMP_Context *_Scheduler_EDF_SMP_Get_context(
+  const Scheduler_Control *scheduler
+)
 {
   return (Scheduler_EDF_SMP_Context *) _Scheduler_Get_context( scheduler );
 }
 
-static inline Scheduler_EDF_SMP_Context *
-_Scheduler_EDF_SMP_Get_self( Scheduler_Context *context )
+static inline Scheduler_EDF_SMP_Context *_Scheduler_EDF_SMP_Get_self(
+  Scheduler_Context *context
+)
 {
   return (Scheduler_EDF_SMP_Context *) context;
 }
 
-static inline Scheduler_EDF_SMP_Node *
-_Scheduler_EDF_SMP_Node_downcast( Scheduler_Node *node )
+static inline Scheduler_EDF_SMP_Node *_Scheduler_EDF_SMP_Node_downcast(
+  Scheduler_Node *node
+)
 {
   return (Scheduler_EDF_SMP_Node *) node;
 }
@@ -78,7 +81,11 @@ static inline bool _Scheduler_EDF_SMP_Priority_less_equal(
   Priority_Control          prio_right;
 
   the_left = left;
-  the_right = RTEMS_CONTAINER_OF( right, Scheduler_SMP_Node, Base.Node.RBTree );
+  the_right = RTEMS_CONTAINER_OF(
+    right,
+    Scheduler_SMP_Node,
+    Base.Node.RBTree
+  );
 
   prio_left = *the_left;
   prio_right = the_right->priority;
@@ -104,14 +111,15 @@ static inline bool _Scheduler_EDF_SMP_Overall_less_equal(
   next_priority = node_next->Base.priority;
 
   return insert_priority < next_priority ||
-    ( insert_priority == next_priority &&
-      node_to_insert->generation <= node_next->generation );
+         ( insert_priority == next_priority &&
+           node_to_insert->generation <= node_next->generation );
 }
 
 void _Scheduler_EDF_SMP_Initialize( const Scheduler_Control *scheduler )
 {
-  Scheduler_EDF_SMP_Context *self =
-    _Scheduler_EDF_SMP_Get_context( scheduler );
+  Scheduler_EDF_SMP_Context *self = _Scheduler_EDF_SMP_Get_context(
+    scheduler
+  );
 
   _Scheduler_SMP_Initialize( &self->Base );
   _Chain_Initialize_empty( &self->Affine_queues );
@@ -163,7 +171,7 @@ static inline bool _Scheduler_EDF_SMP_Overall_less(
   lp = left->Base.priority;
   rp = right->Base.priority;
 
-  return lp < rp || (lp == rp && left->generation < right->generation );
+  return lp < rp || ( lp == rp && left->generation < right->generation );
 }
 
 static inline Scheduler_EDF_SMP_Node *
@@ -200,8 +208,9 @@ static inline Scheduler_Node *_Scheduler_EDF_SMP_Get_highest_ready(
   Chain_Node                *next;
 
   self = _Scheduler_EDF_SMP_Get_self( context );
-  highest_ready = (Scheduler_EDF_SMP_Node *)
-    _RBTree_Minimum( &self->Ready[ 0 ].Queue );
+  highest_ready = (Scheduler_EDF_SMP_Node *) _RBTree_Minimum(
+    &self->Ready[ 0 ].Queue
+  );
   _Assert( highest_ready != NULL );
 
   /*
@@ -345,8 +354,7 @@ static inline void _Scheduler_EDF_SMP_Activate_ready_queue_if_necessary(
 )
 {
   if (
-    rqi != 0 &&
-    _RBTree_Is_empty( &ready_queue->Queue ) &&
+    rqi != 0 && _RBTree_Is_empty( &ready_queue->Queue ) &&
     ready_queue->affine_scheduled == NULL
   ) {
     _Chain_Append_unprotected( &self->Affine_queues, &ready_queue->Node );
@@ -369,7 +377,11 @@ static inline void _Scheduler_EDF_SMP_Insert_ready(
   rqi = node->ready_queue_index;
   ready_queue = &self->Ready[ rqi ];
 
-  _Scheduler_EDF_SMP_Activate_ready_queue_if_necessary( self, rqi, ready_queue );
+  _Scheduler_EDF_SMP_Activate_ready_queue_if_necessary(
+    self,
+    rqi,
+    ready_queue
+  );
   _RBTree_Initialize_node( &node->Base.Base.Node.RBTree );
   _RBTree_Insert_inline(
     &ready_queue->Queue,
@@ -423,9 +435,8 @@ static inline void _Scheduler_EDF_SMP_Extract_from_ready(
   _Chain_Initialize_node( &node->Base.Base.Node.Chain );
 
   if (
-    rqi != 0
-      && _RBTree_Is_empty( &ready_queue->Queue )
-      && ready_queue->affine_scheduled == NULL
+    rqi != 0 && _RBTree_Is_empty( &ready_queue->Queue ) &&
+    ready_queue->affine_scheduled == NULL
   ) {
     _Chain_Extract_unprotected( &ready_queue->Node );
   }
@@ -448,7 +459,11 @@ static inline void _Scheduler_EDF_SMP_Move_from_scheduled_to_ready(
   rqi = node->ready_queue_index;
   ready_queue = &self->Ready[ rqi ];
 
-  _Scheduler_EDF_SMP_Activate_ready_queue_if_necessary( self, rqi, ready_queue );
+  _Scheduler_EDF_SMP_Activate_ready_queue_if_necessary(
+    self,
+    rqi,
+    ready_queue
+  );
   _RBTree_Initialize_node( &node->Base.Base.Node.RBTree );
   _RBTree_Prepend( &ready_queue->Queue, &node->Base.Base.Node.RBTree );
 }
@@ -502,9 +517,9 @@ static inline void _Scheduler_EDF_SMP_Allocate_processor(
   Per_CPU_Control   *cpu
 )
 {
-  Scheduler_EDF_SMP_Context     *self;
-  Scheduler_EDF_SMP_Node        *scheduled;
-  uint8_t                        rqi;
+  Scheduler_EDF_SMP_Context *self;
+  Scheduler_EDF_SMP_Node    *scheduled;
+  uint8_t                    rqi;
 
   self = _Scheduler_EDF_SMP_Get_self( context );
   scheduled = _Scheduler_EDF_SMP_Node_downcast( scheduled_base );

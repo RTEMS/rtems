@@ -66,8 +66,8 @@
 #define MUTEX_TQ_OPERATIONS &_Thread_queue_Operations_priority_inherit
 
 RTEMS_STATIC_ASSERT(
-  offsetof( Mutex_Control, Queue )
-    == offsetof( struct _Mutex_Control, _Queue ),
+  offsetof( Mutex_Control, Queue ) ==
+    offsetof( struct _Mutex_Control, _Queue ),
   MUTEX_CONTROL_QUEUE
 );
 
@@ -77,20 +77,20 @@ RTEMS_STATIC_ASSERT(
 );
 
 RTEMS_STATIC_ASSERT(
-  offsetof( Mutex_recursive_Control, Mutex )
-    == offsetof( struct _Mutex_recursive_Control, _Mutex ),
+  offsetof( Mutex_recursive_Control, Mutex ) ==
+    offsetof( struct _Mutex_recursive_Control, _Mutex ),
   MUTEX_RECURSIVE_CONTROL_MUTEX
 );
 
 RTEMS_STATIC_ASSERT(
-  offsetof( Mutex_recursive_Control, nest_level )
-    == offsetof( struct _Mutex_recursive_Control, _nest_level ),
+  offsetof( Mutex_recursive_Control, nest_level ) ==
+    offsetof( struct _Mutex_recursive_Control, _nest_level ),
   MUTEX_RECURSIVE_CONTROL_NEST_LEVEL
 );
 
 RTEMS_STATIC_ASSERT(
-  sizeof( Mutex_recursive_Control )
-    == sizeof( struct _Mutex_recursive_Control ),
+  sizeof( Mutex_recursive_Control ) ==
+    sizeof( struct _Mutex_recursive_Control ),
   MUTEX_RECURSIVE_CONTROL_SIZE
 );
 
@@ -185,11 +185,11 @@ static void _Mutex_Release_critical(
 
 void _Mutex_Acquire( struct _Mutex_Control *_mutex )
 {
-  Mutex_Control        *mutex;
-  Thread_queue_Context  queue_context;
-  ISR_Level             level;
-  Thread_Control       *executing;
-  Thread_Control       *owner;
+  Mutex_Control       *mutex;
+  Thread_queue_Context queue_context;
+  ISR_Level            level;
+  Thread_Control      *executing;
+  Thread_Control      *owner;
 
   mutex = _Mutex_Get( _mutex );
   _Thread_queue_Context_initialize( &queue_context );
@@ -213,11 +213,11 @@ int _Mutex_Acquire_timed(
   const struct timespec *abstime
 )
 {
-  Mutex_Control        *mutex;
-  Thread_queue_Context  queue_context;
-  ISR_Level             level;
-  Thread_Control       *executing;
-  Thread_Control       *owner;
+  Mutex_Control       *mutex;
+  Thread_queue_Context queue_context;
+  ISR_Level            level;
+  Thread_Control      *executing;
+  Thread_Control      *owner;
 
   mutex = _Mutex_Get( _mutex );
   _Thread_queue_Context_initialize( &queue_context );
@@ -246,12 +246,12 @@ int _Mutex_Acquire_timed(
 
 int _Mutex_Try_acquire( struct _Mutex_Control *_mutex )
 {
-  Mutex_Control        *mutex;
-  Thread_queue_Context  queue_context;
-  ISR_Level             level;
-  Thread_Control       *executing;
-  Thread_Control       *owner;
-  int                   eno;
+  Mutex_Control       *mutex;
+  Thread_queue_Context queue_context;
+  ISR_Level            level;
+  Thread_Control      *executing;
+  Thread_Control      *owner;
+  int                  eno;
 
   mutex = _Mutex_Get( _mutex );
   _Thread_queue_Context_initialize( &queue_context );
@@ -275,10 +275,10 @@ int _Mutex_Try_acquire( struct _Mutex_Control *_mutex )
 
 void _Mutex_Release( struct _Mutex_Control *_mutex )
 {
-  Mutex_Control        *mutex;
-  Thread_queue_Context  queue_context;
-  ISR_Level             level;
-  Thread_Control       *executing;
+  Mutex_Control       *mutex;
+  Thread_queue_Context queue_context;
+  ISR_Level            level;
+  Thread_Control      *executing;
 
   mutex = _Mutex_Get( _mutex );
   _Thread_queue_Context_initialize( &queue_context );
@@ -301,7 +301,7 @@ void _Mutex_recursive_Acquire( struct _Mutex_recursive_Control *_mutex )
 {
   Mutex_recursive_Control *mutex;
   Thread_queue_Context     queue_context;
-  ISR_Level             level;
+  ISR_Level                level;
   Thread_Control          *executing;
   Thread_Control          *owner;
 
@@ -321,7 +321,13 @@ void _Mutex_recursive_Acquire( struct _Mutex_recursive_Control *_mutex )
     _Mutex_Queue_release( &mutex->Mutex, level, &queue_context );
   } else {
     _Thread_queue_Context_set_enqueue_do_nothing_extra( &queue_context );
-    _Mutex_Acquire_slow( &mutex->Mutex, owner, executing, level, &queue_context );
+    _Mutex_Acquire_slow(
+      &mutex->Mutex,
+      owner,
+      executing,
+      level,
+      &queue_context
+    );
   }
 }
 
@@ -360,7 +366,13 @@ int _Mutex_recursive_Acquire_timed(
       abstime,
       true
     );
-    _Mutex_Acquire_slow( &mutex->Mutex, owner, executing, level, &queue_context );
+    _Mutex_Acquire_slow(
+      &mutex->Mutex,
+      owner,
+      executing,
+      level,
+      &queue_context
+    );
 
     return STATUS_GET_POSIX( _Thread_Wait_get_status( executing ) );
   }

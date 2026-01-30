@@ -44,8 +44,9 @@
 
 void _Scheduler_simple_Initialize( const Scheduler_Control *scheduler )
 {
-  Scheduler_simple_Context *context =
-    _Scheduler_simple_Get_context( scheduler );
+  Scheduler_simple_Context *context = _Scheduler_simple_Get_context(
+    scheduler
+  );
 
   _Chain_Initialize_empty( &context->Ready );
 }

@@ -42,11 +42,8 @@
 
 #include <rtems/score/smplock.h>
 
-#if defined(RTEMS_SMP_LOCK_DO_NOT_INLINE)
-void _SMP_lock_Initialize(
-  SMP_lock_Control *lock,
-  const char *name
-)
+#if defined( RTEMS_SMP_LOCK_DO_NOT_INLINE )
+void _SMP_lock_Initialize( SMP_lock_Control *lock, const char *name )
 {
   _SMP_lock_Initialize_inline( lock, name );
 }
@@ -57,19 +54,13 @@ void _SMP_lock_Destroy( SMP_lock_Control *lock )
 }
 #endif
 
-void _SMP_lock_Acquire(
-  SMP_lock_Control *lock,
-  SMP_lock_Context *context
-)
+void _SMP_lock_Acquire( SMP_lock_Control *lock, SMP_lock_Context *context )
 {
   _SMP_lock_Acquire_inline( lock, context );
 }
 
-#if defined(RTEMS_SMP_LOCK_DO_NOT_INLINE)
-void _SMP_lock_Release(
-  SMP_lock_Control *lock,
-  SMP_lock_Context *context
-)
+#if defined( RTEMS_SMP_LOCK_DO_NOT_INLINE )
+void _SMP_lock_Release( SMP_lock_Control *lock, SMP_lock_Context *context )
 {
   _SMP_lock_Release_inline( lock, context );
 }
@@ -83,7 +74,7 @@ void _SMP_lock_ISR_disable_and_acquire(
   _SMP_lock_ISR_disable_and_acquire_inline( lock, context );
 }
 
-#if defined(RTEMS_SMP_LOCK_DO_NOT_INLINE)
+#if defined( RTEMS_SMP_LOCK_DO_NOT_INLINE )
 void _SMP_lock_Release_and_ISR_enable(
   SMP_lock_Control *lock,
   SMP_lock_Context *context
@@ -93,7 +84,7 @@ void _SMP_lock_Release_and_ISR_enable(
 }
 #endif
 
-#if defined(RTEMS_DEBUG)
+#if defined( RTEMS_DEBUG )
 bool _SMP_lock_Is_owner( const SMP_lock_Control *lock )
 {
   return lock->owner == _SMP_lock_Who_am_I();

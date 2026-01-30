@@ -42,7 +42,7 @@
 #include <rtems/score/schedulercbsimpl.h>
 #include <rtems/score/threadimpl.h>
 
-int _Scheduler_CBS_Attach_thread (
+int _Scheduler_CBS_Attach_thread(
   Scheduler_CBS_Server_id server_id,
   rtems_id                task_id
 )
@@ -62,7 +62,7 @@ int _Scheduler_CBS_Attach_thread (
     return SCHEDULER_CBS_ERROR_NOSERVER;
   }
 
-  if ( server->task_id != (rtems_id)-1 ) {
+  if ( server->task_id != (rtems_id) -1 ) {
     return SCHEDULER_CBS_ERROR_FULL;
   }
 
