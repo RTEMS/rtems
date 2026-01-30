@@ -82,7 +82,7 @@ rtems_debugger_cpu_run_body(rtems_task_argument arg)
     rtems_task_exit();
   }
 
-  for (int cpu_index = 0;
+  for (uint32_t cpu_index = 0;
        cpu_index < rtems_scheduler_get_processor_maximum();
        cpu_index++) {
     if (!CPU_ISSET(cpu_index, &scheduler_set)) {
