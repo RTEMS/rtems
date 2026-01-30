@@ -55,7 +55,7 @@ fpga_i2c_slave_read(i2c_dev* base, void* buf, size_t n, off_t offset)
     return 0;
   }
 
-  if (n > avail) {
+  if ((int64_t)n > avail) {
     n = (size_t) avail;
   }
 
@@ -97,7 +97,7 @@ fpga_i2c_slave_write(i2c_dev* base, const void* buf, size_t n, off_t offset)
     return 0;
   }
 
-  if (n > avail) {
+  if ((int64_t)n > avail) {
     n = (size_t) avail;
   }
 

@@ -328,7 +328,7 @@ static int rtems_flashdev_check_offset_region(
 )
 {
   if ( ( rtems_flashdev_is_region_defined( iop ) ) &&
-       ( offset > rtems_flashdev_get_region_size( flash, iop ) ) ) {
+       ( offset > (int64_t) rtems_flashdev_get_region_size( flash, iop ) ) ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
   return 0;
@@ -506,7 +506,7 @@ static off_t rtems_flashdev_lseek(
   }
 
   if ( ( rtems_flashdev_is_region_defined(iop) ) &&
-       ( tmp_offset > rtems_flashdev_get_region_size( flash, iop ) ) ) {
+       ( tmp_offset > (int64_t) rtems_flashdev_get_region_size( flash, iop ) ) ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 

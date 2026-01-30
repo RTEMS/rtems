@@ -92,7 +92,7 @@ static ssize_t eeprom_read(
     return 0;
   }
 
-  if (n > avail) {
+  if (n > (size_t) avail) {
     n = (size_t) avail;
   }
 
@@ -154,7 +154,7 @@ static ssize_t eeprom_write(
     return 0;
   }
 
-  if (n > avail) {
+  if (n > (size_t) avail) {
     n = (size_t) avail;
   }
 
