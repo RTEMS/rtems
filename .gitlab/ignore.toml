@@ -247,18 +247,6 @@ files = [
     "cpukit/libmisc/shell/warn.c",
     "cpukit/libmisc/shell/warnx.c",
     "cpukit/libmisc/shell/write_file.c",
-    "cpukit/libmisc/uuid/clear.c",
-    "cpukit/libmisc/uuid/compare.c",
-    "cpukit/libmisc/uuid/copy.c",
-    "cpukit/libmisc/uuid/gen_uuid.c",
-    "cpukit/libmisc/uuid/isnull.c",
-    "cpukit/libmisc/uuid/pack.c",
-    "cpukit/libmisc/uuid/parse.c",
-    "cpukit/libmisc/uuid/unpack.c",
-    "cpukit/libmisc/uuid/unparse.c",
-    "cpukit/libmisc/uuid/uuid_time.c",
-    "cpukit/libmisc/uuid/uuidd.h",
-    "cpukit/libmisc/uuid/uuidP.h"
 ]
 
 [[ignore."cpukit/xz"]]
