@@ -119,7 +119,7 @@ read_write_test (void)
   rtems_test_assert (fd >= 0);
 
   n = write (fd, databuf, len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
   status = close (fd);
   rtems_test_assert (status == 0);
 
@@ -137,7 +137,7 @@ read_write_test (void)
   fd = open (name01, O_RDONLY);
   rtems_test_assert (fd >= 0);
   n = read (fd, readbuf, len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
   rtems_test_assert (!strncmp (databuf, readbuf, len));
   status = close (fd);
   rtems_test_assert (status == 0);
@@ -148,13 +148,13 @@ read_write_test (void)
   memset (readbuf, 0, len + 1);
   fd = open (name01, O_WRONLY | O_APPEND);
   n = write (fd, databuf, len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
   pos = lseek (fd, 0, SEEK_CUR);
   rtems_test_assert (pos == 2 * len);
   pos = lseek (fd, 0, SEEK_SET);
   rtems_test_assert (pos == 0);
   n = write (fd, databuf, len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
   pos = lseek (fd, 0, SEEK_CUR);
   rtems_test_assert (pos == 3 * len);
   status = close (fd);
@@ -166,13 +166,13 @@ read_write_test (void)
   fd = open (name01, O_RDONLY);
   rtems_test_assert (fd >= 0);
   n = read (fd, readbuf, len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
   rtems_test_assert (!strncmp (databuf, readbuf, len));
   n = read (fd, readbuf, len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
   rtems_test_assert (!strncmp (databuf, readbuf, len));
   n = read (fd, readbuf, len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
   rtems_test_assert (!strncmp (databuf, readbuf, len));
   status = close (fd);
   rtems_test_assert (status == 0);
@@ -184,11 +184,11 @@ read_write_test (void)
 
   fd = open (name01, O_RDWR);
   n = write (fd, databuf, len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
   pos = lseek (fd, 0, SEEK_CUR);
   rtems_test_assert (pos == len);
   n = read (fd, readbuf, len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
   rtems_test_assert (!strncmp (databuf, readbuf, len));
   pos = lseek (fd, 0, SEEK_CUR);
   rtems_test_assert (pos == 2 * len);
@@ -279,7 +279,7 @@ truncate_test03 (void)
   fd = open (name01, O_WRONLY);
   rtems_test_assert (fd >= 0);
   n = write (fd, databuf, len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
   status = close (fd);
   rtems_test_assert (status == 0);
 
@@ -300,10 +300,10 @@ truncate_test03 (void)
   fd = open (name01, O_RDONLY);
   rtems_test_assert (fd >= 0);
   n = read (fd, readbuf, len / 2);
-  rtems_test_assert (n == len / 2);
+  rtems_test_assert (n == (ssize_t)len / 2);
   rtems_test_assert (!strncmp (databuf, readbuf, len / 2));
   n = read (fd, readbuf, len / 2);
-  rtems_test_assert (n == len / 2);
+  rtems_test_assert (n == (ssize_t)len / 2);
   for (i = 0; i < len / 2; i++) {
     rtems_test_assert (readbuf[i] == 0);
   }
@@ -412,35 +412,35 @@ lseek_test (void)
   pos = lseek (fd, len, SEEK_CUR);
   rtems_test_assert (pos == len);
   n = read (fd, readbuf, len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
   rtems_test_assert (!strncmp (databuf, readbuf, len));
 
   pos = lseek (fd, len, SEEK_CUR);
   rtems_test_assert (pos == 3 * len);
   n = read (fd, readbuf, len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
   rtems_test_assert (!strncmp (databuf, readbuf, len));
 
   pos = lseek (fd, -(off_t) len, SEEK_CUR);
   rtems_test_assert (pos == 3 * len);
   n = read (fd, readbuf, len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
   rtems_test_assert (!strncmp (databuf, readbuf, len));
 
   pos = lseek (fd, 4 * len, SEEK_SET);
   n = read (fd, readbuf, len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
   rtems_test_assert (!strncmp (databuf, readbuf, len));
 
 
   pos = lseek (fd, 10, SEEK_SET);
   n = read (fd, readbuf, len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
   rtems_test_assert (strncmp (databuf, readbuf, len) != 0);
 
   pos = lseek (fd, -(off_t) len, SEEK_END);
   n = read (fd, readbuf, 2 * len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
   rtems_test_assert (!strncmp (databuf, readbuf, len));
 
   status = close (fd);
@@ -455,24 +455,24 @@ lseek_test (void)
   pos = lseek (fd, len, SEEK_CUR);
   rtems_test_assert (pos == len);
   n = read (fd, readbuf, len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
   rtems_test_assert (!strncmp (databuf, readbuf, len));
 
   pos = lseek (fd, len, SEEK_CUR);
   rtems_test_assert (pos == 3 * len);
   n = read (fd, readbuf, len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
   rtems_test_assert (!strncmp (databuf, readbuf, len));
 
   pos = lseek (fd, -(off_t) len, SEEK_CUR);
   rtems_test_assert (pos == 3 * len);
   n = read (fd, readbuf, len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
   rtems_test_assert (!strncmp (databuf, readbuf, len));
 
   pos = lseek (fd, 4 * len, SEEK_SET);
   n = read (fd, readbuf, len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
   rtems_test_assert (!strncmp (databuf, readbuf, len));
 
   /*
@@ -480,7 +480,7 @@ lseek_test (void)
    */
   pos = lseek (fd, 10, SEEK_SET);
   n = read (fd, readbuf, len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
   rtems_test_assert (strncmp (databuf, readbuf, len) != 0);
 
   /*
@@ -488,7 +488,7 @@ lseek_test (void)
    */
   pos = lseek (fd, -(off_t) len, SEEK_END);
   n = read (fd, readbuf, 2 * len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
   rtems_test_assert (!strncmp (databuf, readbuf, len));
 
   memset (readbuf, 0, len);
@@ -499,13 +499,13 @@ lseek_test (void)
   pos = lseek (fd, -(off_t) len, SEEK_END);
   rtems_test_assert (pos == (off_t) total_written - (off_t) len);
   n = write (fd, readbuf, len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
   /*
    * Verify it
    */
   pos = lseek (fd, (off_t) total_written - (off_t) len, SEEK_SET);
   n = read (fd, readbuf, len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
   for (i = 0; i < n; i++) {
     rtems_test_assert (readbuf[i] == 0);
   }
@@ -516,7 +516,7 @@ lseek_test (void)
   pos = lseek (fd, -(off_t) total_written, SEEK_END);
   rtems_test_assert (pos == 0);
   n = write (fd, readbuf, len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
 
   /*
    * Verify it
@@ -524,13 +524,13 @@ lseek_test (void)
 
   pos = lseek (fd, 0, SEEK_SET);
   n = read (fd, readbuf, len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
   for (i = 0; i < n; i++) {
     rtems_test_assert (readbuf[i] == 0);
   }
 
   n = read (fd, readbuf, len);
-  rtems_test_assert (n == len);
+  rtems_test_assert (n == (ssize_t)len);
   rtems_test_assert (strncmp (databuf, readbuf, len) == 0);
   /*
    * Call ftruncate to decrease the file and the position not change
