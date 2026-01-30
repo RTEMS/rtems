@@ -6,10 +6,12 @@
  * @ingroup RTEMSScoreThread
  *
  * @brief This source file contains the implementation of
- *   _Thread_Priority_add(), _Thread_Priority_and_sticky_update(),
- *   _Thread_Priority_changed(), _Thread_Priority_perform_actions(),
- *   _Thread_Priority_remove(), _Thread_Priority_replace(), and
- *   _Thread_Priority_update().
+ *   _Thread_Priority_add(), _Thread_Priority_remove(),
+ *   _Thread_Priority_changed(), _Thread_Priority_replace(),
+ *   _Thread_Priority_perform_actions(), _Thread_Priority_update(),
+ *   _Thread_Priority_update_and_make_sticky(),
+ *   _Thread_Priority_update_and_clean_sticky(), and
+ *   _Thread_Priority_update_ignore_sticky().
  */
 
 /*

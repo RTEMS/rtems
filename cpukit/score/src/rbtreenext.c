@@ -6,8 +6,7 @@
  * @ingroup RTEMSScoreRBTree
  *
  * @brief This source file contains the implementation of
- *   _RBTree_Minimum(), _RBTree_Maximum(), _RBTree_Successor(), and
- *   _RBTree_Predecessor().
+ *   _RBTree_Successor().
  */
 
 /*
