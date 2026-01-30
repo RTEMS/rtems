@@ -1488,8 +1488,8 @@ source:
 - cpukit/score/src/isrisinprogress.c
 - cpukit/score/src/isrvectortable.c
 - cpukit/score/src/iterateoverthreads.c
-- cpukit/score/src/kern_ntptime.c
-- cpukit/score/src/kern_tc.c
+- cpukit/score/src/contrib/kern_ntptime.c
+- cpukit/score/src/contrib/kern_tc.c
 - cpukit/score/src/libatomic.c
 - cpukit/score/src/log2table.c
 - cpukit/score/src/memoryallocate.c
