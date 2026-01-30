@@ -661,8 +661,6 @@ source:
 - cpukit/libcsupport/src/calloc.c
 - cpukit/libcsupport/src/cfgetispeed.c
 - cpukit/libcsupport/src/cfgetospeed.c
-- cpukit/libcsupport/src/cfmakeraw.c
-- cpukit/libcsupport/src/cfmakesane.c
 - cpukit/libcsupport/src/cfsetispeed.c
 - cpukit/libcsupport/src/cfsetospeed.c
 - cpukit/libcsupport/src/cfsetspeed.c
@@ -676,6 +674,9 @@ source:
 - cpukit/libcsupport/src/consolesimple.c
 - cpukit/libcsupport/src/consolesimpleread.c
 - cpukit/libcsupport/src/consolesimpletask.c
+- cpukit/libcsupport/src/contrib/cfmakeraw.c
+- cpukit/libcsupport/src/contrib/cfmakesane.c
+- cpukit/libcsupport/src/contrib/realpath.c
 - cpukit/libcsupport/src/ctermid.c
 - cpukit/libcsupport/src/dup.c
 - cpukit/libcsupport/src/dup2.c
@@ -762,7 +763,6 @@ source:
 - cpukit/libcsupport/src/readlink.c
 - cpukit/libcsupport/src/readv.c
 - cpukit/libcsupport/src/realloc.c
-- cpukit/libcsupport/src/realpath.c
 - cpukit/libcsupport/src/resource_snapshot.c
 - cpukit/libcsupport/src/rmdir.c
 - cpukit/libcsupport/src/rtemscalloc.c
