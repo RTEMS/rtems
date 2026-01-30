@@ -15,11 +15,6 @@ default:
   - -Wextra
 # We currently have not addressed all of the cases for -Wextra warnings.
 # We are using -Wno- for the ones remaining.
-#     (4 cases) -Wclobbered is issue #5364
-#     (23 cases) -Wcast-function-type usually requires changing a function
-#       signature or adding a wrapper function
-#     (699 cases) -Wsign-compare is case by case
-  - -Wno-clobbered
   - -Wno-cast-function-type
   - -Wno-sign-compare
   - -Werror
