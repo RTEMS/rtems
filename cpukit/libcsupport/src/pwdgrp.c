@@ -134,7 +134,7 @@ scanInt(FILE *fp, int *val)
   int i = 0;
   int limit = INT_MAX;
   int sign = 0;
-  int d;
+  unsigned int d;
 
   for (;;) {
     c = getc(fp);
