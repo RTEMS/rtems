@@ -60,12 +60,6 @@ files = [
 [[ignore."cpukit/libmd"]]
 files = ["cpukit/libmd/*.c"]
 
-[[ignore."cpukit/libdl"]]
-files = [
-    "cpukit/libdl/fastlz.c",
-    "cpukit/libdl/fastlz.h"
-]
-
 [[ignore."cpukit/dtc"]]
 files = [
     "cpukit/dtc/libfdt/*.c",
