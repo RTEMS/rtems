@@ -47,39 +47,6 @@ files = [
 [[ignore."cpukit/include/machine"]]
 files = ["cpukit/include/machine/*.h"]
 
-[[ignore."cpukit/jffs2"]]
-files = [
-    "cpukit/libfs/src/jffs2/include/linux/jffs2.h",
-    "cpukit/libfs/src/jffs2/src/acl.h",
-    "cpukit/libfs/src/jffs2/src/build.c",
-    "cpukit/libfs/src/jffs2/src/compat-crc32.c",
-    "cpukit/libfs/src/jffs2/src/compr_rtime.c",
-    "cpukit/libfs/src/jffs2/src/compr_zlib.c",
-    "cpukit/libfs/src/jffs2/src/compr_rubin.c",
-    "cpukit/libfs/src/jffs2/src/compr.c",
-    "cpukit/libfs/src/jffs2/src/compr.h",
-    "cpukit/libfs/src/jffs2/src/debug.c",
-    "cpukit/libfs/src/jffs2/src/debug.h",
-    "cpukit/libfs/src/jffs2/src/dir-rtems.c",
-    "cpukit/libfs/src/jffs2/src/erase.c",
-    "cpukit/libfs/src/jffs2/src/flashio.c",
-    "cpukit/libfs/src/jffs2/src/fs-rtems.c",
-    "cpukit/libfs/src/jffs2/src/gc.c",
-    "cpukit/libfs/src/jffs2/src/jffs2_fs_i.h",
-    "cpukit/libfs/src/jffs2/src/jffs2_fs_sb.h",
-    "cpukit/libfs/src/jffs2/src/malloc-rtems.c",
-    "cpukit/libfs/src/jffs2/src/nodelist.c",
-    "cpukit/libfs/src/jffs2/src/nodelist.h",
-    "cpukit/libfs/src/jffs2/src/nodemgmt.c",
-    "cpukit/libfs/src/jffs2/src/read.c",
-    "cpukit/libfs/src/jffs2/src/readinode.c",
-    "cpukit/libfs/src/jffs2/src/scan.c",
-    "cpukit/libfs/src/jffs2/src/summary.h",
-    "cpukit/libfs/src/jffs2/src/wbuf.c",
-    "cpukit/libfs/src/jffs2/src/write.c",
-    "cpukit/libfs/src/jffs2/src/xattr.h"
-]
-
 [[ignore."cpukit/libcrypt"]]
 files = ["cpukit/libcrypt/*.c"]
 
