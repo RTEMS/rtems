@@ -553,6 +553,16 @@ links:
 - role: build-dependency
   uid: vckey
 source:
+- contrib/cpukit/uuid/clear.c
+- contrib/cpukit/uuid/compare.c
+- contrib/cpukit/uuid/copy.c
+- contrib/cpukit/uuid/gen_uuid.c
+- contrib/cpukit/uuid/isnull.c
+- contrib/cpukit/uuid/pack.c
+- contrib/cpukit/uuid/parse.c
+- contrib/cpukit/uuid/unpack.c
+- contrib/cpukit/uuid/unparse.c
+- contrib/cpukit/uuid/uuid_time.c
 - contrib/cpukit/xz-embedded/linux/lib/xz/xz_crc32.c
 - contrib/cpukit/xz-embedded/linux/lib/xz/xz_dec_lzma2.c
 - contrib/cpukit/xz-embedded/linux/lib/xz/xz_dec_stream.c
@@ -1015,16 +1025,6 @@ source:
 - cpukit/libmisc/untar/untar.c
 - cpukit/libmisc/untar/untar_tgz.c
 - cpukit/libmisc/untar/untar_txz.c
-- contrib/cpukit/uuid/clear.c
-- contrib/cpukit/uuid/compare.c
-- contrib/cpukit/uuid/copy.c
-- contrib/cpukit/uuid/gen_uuid.c
-- contrib/cpukit/uuid/isnull.c
-- contrib/cpukit/uuid/pack.c
-- contrib/cpukit/uuid/parse.c
-- contrib/cpukit/uuid/unpack.c
-- contrib/cpukit/uuid/unparse.c
-- contrib/cpukit/uuid/uuid_time.c
 - cpukit/libstdthreads/call_once.c
 - cpukit/libstdthreads/cnd.c
 - cpukit/libstdthreads/mtx.c
