@@ -138,7 +138,7 @@ static int memfile_ftruncate(
    *  as an extend operation.
    */
 
-  if ( length > memfile->File.size )
+  if ( length > (int64_t)memfile->File.size )
     return IMFS_memfile_extend( memfile, true, length );
 
   /*
@@ -179,13 +179,13 @@ static int IMFS_memfile_extend(
   /*
    *  Verify new file size is supported
    */
-  if ( new_length >= IMFS_MEMFILE_MAXIMUM_SIZE )
+  if ( new_length >= (int64_t)IMFS_MEMFILE_MAXIMUM_SIZE )
     rtems_set_errno_and_return_minus_one( EFBIG );
 
   /*
    *  Verify new file size is actually larger than current size
    */
-  if ( new_length <= memfile->File.size )
+  if ( new_length <= (int64_t)memfile->File.size )
     return 0;
 
   /*
@@ -560,7 +560,7 @@ ssize_t IMFS_memfile_write(
 
   last_byte = start + my_length;
   if ( last_byte > memfile->File.size ) {
-    bool zero_fill = start > memfile->File.size;
+    bool zero_fill = start > (int64_t)memfile->File.size;
 
     status = IMFS_memfile_extend( memfile, zero_fill, last_byte );
     if ( status )
