@@ -36,29 +36,29 @@ includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}
   source:
+  - cpukit/contrib/include/crypt.h
+  - cpukit/contrib/include/dlfcn.h
+  - cpukit/contrib/include/fdt.h
+  - cpukit/contrib/include/libfdt.h
+  - cpukit/contrib/include/libfdt_env.h
+  - cpukit/contrib/include/link.h
+  - cpukit/contrib/include/link_elf.h
+  - cpukit/contrib/include/md4.h
+  - cpukit/contrib/include/md5.h
+  - cpukit/contrib/include/sha224.h
+  - cpukit/contrib/include/sha256.h
+  - cpukit/contrib/include/sha384.h
+  - cpukit/contrib/include/sha512.h
+  - cpukit/contrib/include/sha512t.h
+  - cpukit/contrib/include/xz.h
   - cpukit/include/aio.h
-  - cpukit/include/crypt.h
-  - cpukit/include/dlfcn.h
   - cpukit/include/endian.h
-  - cpukit/include/fdt.h
-  - cpukit/include/libfdt.h
-  - cpukit/include/libfdt_env.h
-  - cpukit/include/link.h
-  - cpukit/include/link_elf.h
-  - cpukit/include/md4.h
-  - cpukit/include/md5.h
   - cpukit/include/memory.h
   - cpukit/include/mqueue.h
   - cpukit/include/rtems.h
-  - cpukit/include/sha224.h
-  - cpukit/include/sha256.h
-  - cpukit/include/sha384.h
-  - cpukit/include/sha512.h
-  - cpukit/include/sha512t.h
-  - cpukit/include/xz.h
 - destination: ${BSP_INCLUDEDIR}/arpa
   source:
-  - cpukit/include/arpa/ftp.h
+  - cpukit/contrib/include/arpa/ftp.h
 - destination: ${BSP_INCLUDEDIR}/dev/can
   source:
   - cpukit/include/dev/can/can-bittiming.h
@@ -104,17 +104,18 @@ install:
   - cpukit/include/linux/spi/spidev.h
 - destination: ${BSP_INCLUDEDIR}/machine
   source:
-  - cpukit/include/machine/_kernel_cpuset.h
-  - cpukit/include/machine/_kernel_in.h
-  - cpukit/include/machine/_kernel_in6.h
-  - cpukit/include/machine/_kernel_mman.h
-  - cpukit/include/machine/_kernel_param.h
-  - cpukit/include/machine/_kernel_time.h
-  - cpukit/include/machine/_kernel_types.h
-  - cpukit/include/machine/_kernel_uio.h
-  - cpukit/include/machine/_timecounter.h
+  - cpukit/contrib/include/machine/_kernel_cpuset.h
+  - cpukit/contrib/include/machine/_kernel_in.h
+  - cpukit/contrib/include/machine/_kernel_in6.h
+  - cpukit/contrib/include/machine/_kernel_mman.h
+  - cpukit/contrib/include/machine/_kernel_param.h
+  - cpukit/contrib/include/machine/_kernel_time.h
+  - cpukit/contrib/include/machine/_kernel_types.h
+  - cpukit/contrib/include/machine/_kernel_uio.h
+  - cpukit/contrib/include/machine/_timecounter.h
 - destination: ${BSP_INCLUDEDIR}/rtems
   source:
+  - cpukit/contrib/include/rtems/mouse_parser.h
   - cpukit/include/rtems/assoc.h
   - cpukit/include/rtems/base64.h
   - cpukit/include/rtems/bdbuf.h
@@ -173,7 +174,6 @@ install:
   - cpukit/include/rtems/malloc.h
   - cpukit/include/rtems/media.h
   - cpukit/include/rtems/monitor.h
-  - cpukit/include/rtems/mouse_parser.h
   - cpukit/include/rtems/mptables.h
   - cpukit/include/rtems/mw_uid.h
   - cpukit/include/rtems/nvdisk-sram.h
@@ -487,18 +487,18 @@ install:
   - cpukit/include/rtems/trace/rtems-trace-buffer-vars.h
 - destination: ${BSP_INCLUDEDIR}/sys
   source:
-  - cpukit/include/sys/_ffcounter.h
-  - cpukit/include/sys/cdefs_elf.h
-  - cpukit/include/sys/endian.h
-  - cpukit/include/sys/event.h
-  - cpukit/include/sys/exec_elf.h
-  - cpukit/include/sys/priority.h
-  - cpukit/include/sys/statvfs.h
-  - cpukit/include/sys/timeffc.h
-  - cpukit/include/sys/timepps.h
-  - cpukit/include/sys/timetc.h
-  - cpukit/include/sys/timex.h
-  - cpukit/include/sys/utsname.h
+  - cpukit/contrib/include/sys/_ffcounter.h
+  - cpukit/contrib/include/sys/cdefs_elf.h
+  - cpukit/contrib/include/sys/endian.h
+  - cpukit/contrib/include/sys/event.h
+  - cpukit/contrib/include/sys/exec_elf.h
+  - cpukit/contrib/include/sys/priority.h
+  - cpukit/contrib/include/sys/statvfs.h
+  - cpukit/contrib/include/sys/timeffc.h
+  - cpukit/contrib/include/sys/timepps.h
+  - cpukit/contrib/include/sys/timetc.h
+  - cpukit/contrib/include/sys/timex.h
+  - cpukit/contrib/include/sys/utsname.h
 - destination: ${BSP_INCLUDEDIR}/uuid
   source:
   - contrib/cpukit/uuid/uuid/uuid.h
