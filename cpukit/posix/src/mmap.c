@@ -180,13 +180,13 @@ void *mmap(
     if ( S_ISREG( sb.st_mode )
     /* FIXME: Should this be using strict inequality (>) comparisons? It would
      * be valid to map a region exactly equal to the st_size, e.g. see below. */
-         && (( off >= sb.st_size ) || (( off + len ) >= sb.st_size ))) {
+         && (( off >= sb.st_size ) || (( off + (off_t)len ) >= sb.st_size ))) {
       errno = EOVERFLOW;
       return MAP_FAILED;
     }
 
     /* Check to see if the mapping is valid for other file/object types. */
-    if ( !S_ISCHR( sb.st_mode ) && sb.st_size < off + len ) {
+    if ( !S_ISCHR( sb.st_mode ) && sb.st_size < off + (off_t)len ) {
       errno = ENXIO;
       return MAP_FAILED;
     }
