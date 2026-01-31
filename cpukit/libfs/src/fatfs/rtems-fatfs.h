@@ -181,7 +181,7 @@ static inline void rtems_fatfs_filinfo_to_stat(
     inode_hash = ( inode_hash * 33 ) + (unsigned char) *name;
     name++;
   }
-  inode_hash ^= fno->fsize ^ ( fno->fdate << 16 ) ^ fno->ftime;
+  inode_hash ^= fno->fsize ^ ( (uint32_t) fno->fdate << 16 ) ^ fno->ftime;
 
   st->st_ino     = ( inode_hash != 0 ) ? inode_hash : 1;
   st->st_dev     = 1;
