@@ -43,8 +43,8 @@
 extern "C" {
 #endif
 
-#define NO_BLOCK_SIZE_OPTION 0
-#define NO_WINDOW_SIZE_OPTION 0
+#define NO_BLOCK_SIZE_OPTION        0
+#define NO_WINDOW_SIZE_OPTION       0
 #define DO_NOT_WAIT_FOR_ANY_TIMEOUT UINT32_MAX
 
 /**
@@ -86,50 +86,50 @@ void _Tftp_Add_interaction_close( int fd, int result );
 void _Tftp_Add_interaction_bind( int fd, int family, int result );
 
 void _Tftp_Add_interaction_send_rrq(
-  int fd,
+  int         fd,
   const char *filename,
-  uint16_t dest_port,
+  uint16_t    dest_port,
   const char *dest_addr_str,
-  uint16_t block_size,
-  uint16_t window_size,
-  bool result
+  uint16_t    block_size,
+  uint16_t    window_size,
+  bool        result
 );
 
 void _Tftp_Add_interaction_send_wrq(
-  int fd,
+  int         fd,
   const char *filename,
-  uint16_t dest_port,
+  uint16_t    dest_port,
   const char *dest_addr_str,
-  uint16_t block_size,
-  uint16_t window_size,
-  bool result
+  uint16_t    block_size,
+  uint16_t    window_size,
+  bool        result
 );
 
 void _Tftp_Add_interaction_send_ack(
-  int fd,
-  uint16_t block_num,
-  uint16_t dest_port,
+  int         fd,
+  uint16_t    block_num,
+  uint16_t    dest_port,
   const char *dest_addr_str,
-  bool result
+  bool        result
 );
 
 void _Tftp_Add_interaction_send_data(
-  int fd,
+  int      fd,
   uint16_t block_num,
-  size_t start,
-  size_t len,
-  uint8_t (*get_data)( size_t pos ),
-  uint16_t dest_port,
+  size_t   start,
+  size_t   len,
+  uint8_t ( *get_data )( size_t pos ),
+  uint16_t    dest_port,
   const char *dest_addr_str,
-  bool result
+  bool        result
 );
 
 void _Tftp_Add_interaction_send_error(
-  int fd,
-  uint16_t error_code,
-  uint16_t dest_port,
+  int         fd,
+  uint16_t    error_code,
+  uint16_t    dest_port,
   const char *dest_addr_str,
-  bool result
+  bool        result
 );
 
 /*
@@ -140,44 +140,44 @@ void _Tftp_Add_interaction_send_error(
  * and no special value to distinct timeouts from other errors.
  */
 void _Tftp_Add_interaction_recv_data(
-  int fd,
-  uint32_t timeout_ms,
-  uint16_t src_port,
+  int         fd,
+  uint32_t    timeout_ms,
+  uint16_t    src_port,
   const char *src_addr_str,
-  uint16_t block_num,
-  size_t start,
-  size_t len,
-  uint8_t (*get_data)( size_t pos ),
+  uint16_t    block_num,
+  size_t      start,
+  size_t      len,
+  uint8_t ( *get_data )( size_t pos ),
   bool result
 );
 
 void _Tftp_Add_interaction_recv_ack(
-  int fd,
-  uint32_t timeout_ms,
-  uint16_t src_port,
+  int         fd,
+  uint32_t    timeout_ms,
+  uint16_t    src_port,
   const char *src_addr_str,
-  uint16_t block_num,
-  bool result
+  uint16_t    block_num,
+  bool        result
 );
 
 void _Tftp_Add_interaction_recv_oack(
-  int fd,
-  uint32_t timeout_ms,
-  uint16_t src_port,
+  int         fd,
+  uint32_t    timeout_ms,
+  uint16_t    src_port,
   const char *src_addr_str,
   const char *options,
-  size_t options_size,
-  bool result
+  size_t      options_size,
+  bool        result
 );
 
 void _Tftp_Add_interaction_recv_error(
-  int fd,
-  uint32_t timeout_ms,
-  uint16_t src_port,
+  int         fd,
+  uint32_t    timeout_ms,
+  uint16_t    src_port,
   const char *src_addr_str,
-  uint16_t error_code,
+  uint16_t    error_code,
   const char *err_msg,
-  bool result
+  bool        result
 );
 
 /*
@@ -190,19 +190,16 @@ void _Tftp_Add_interaction_recv_error(
  *   * Wrong op-codes
  */
 void _Tftp_Add_interaction_recv_raw(
-  int fd,
-  uint32_t timeout_ms,
-  uint16_t src_port,
-  const char *src_addr_str,
-  size_t len,
+  int            fd,
+  uint32_t       timeout_ms,
+  uint16_t       src_port,
+  const char    *src_addr_str,
+  size_t         len,
   const uint8_t *bytes,
-  bool result
+  bool           result
 );
 
-void _Tftp_Add_interaction_recv_nothing(
-  int fd,
-  uint32_t timeout_ms
-);
+void _Tftp_Add_interaction_recv_nothing( int fd, uint32_t timeout_ms );
 
 /** @} */
 

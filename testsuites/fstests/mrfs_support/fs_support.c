@@ -42,38 +42,37 @@
 #include "fstest.h"
 #include "fstest_support.h"
 
-#define BLOCK_SIZE (512)
+#define BLOCK_SIZE ( 512 )
 
-rtems_rfs_format_config rfs_config = {
-block_size:BLOCK_SIZE
-};
+rtems_rfs_format_config rfs_config = { block_size : BLOCK_SIZE };
 
-
-void
-test_initialize_filesystem (void)
+void test_initialize_filesystem( void )
 {
   int rc = 0;
-  rc = mkdir (BASE_FOR_TEST,S_IRWXU|S_IRWXG|S_IRWXO);
-  rtems_test_assert (rc == 0);
+  rc = mkdir( BASE_FOR_TEST, S_IRWXU | S_IRWXG | S_IRWXO );
+  rtems_test_assert( rc == 0 );
 
-  init_ramdisk ();
+  init_ramdisk();
 
-  rc = rtems_rfs_format (RAMDISK_PATH, &rfs_config);
-  rtems_test_assert (rc == 0);
+  rc = rtems_rfs_format( RAMDISK_PATH, &rfs_config );
+  rtems_test_assert( rc == 0 );
 
-  rc = mount (RAMDISK_PATH,
-              BASE_FOR_TEST, "rfs", RTEMS_FILESYSTEM_READ_WRITE, NULL);
-  rtems_test_assert (rc == 0);
+  rc = mount(
+    RAMDISK_PATH,
+    BASE_FOR_TEST,
+    "rfs",
+    RTEMS_FILESYSTEM_READ_WRITE,
+    NULL
+  );
+  rtems_test_assert( rc == 0 );
 }
 
-
-void
-test_shutdown_filesystem (void)
+void test_shutdown_filesystem( void )
 {
   int rc = 0;
-  rc = unmount (BASE_FOR_TEST);
-  rtems_test_assert (rc == 0);
-  del_ramdisk ();
+  rc = unmount( BASE_FOR_TEST );
+  rtems_test_assert( rc == 0 );
+  del_ramdisk();
 }
 
 /* configuration information */
@@ -84,10 +83,10 @@ test_shutdown_filesystem (void)
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_MAXIMUM_TASKS                     10
-#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS    40
-#define CONFIGURE_INIT_TASK_STACK_SIZE (32 * 1024)
-#define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
+#define CONFIGURE_MAXIMUM_TASKS            10
+#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 40
+#define CONFIGURE_INIT_TASK_STACK_SIZE     ( 32 * 1024 )
+#define CONFIGURE_INIT_TASK_ATTRIBUTES     RTEMS_FLOATING_POINT
 
 #define CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
 

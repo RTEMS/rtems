@@ -40,7 +40,7 @@
 
 #include <rtems/jffs2.h>
 
-const char rtems_test_name[] = "FSJFFS2GC 1";
+const char             rtems_test_name[] = "FSJFFS2GC 1";
 const RTEMS_TEST_STATE rtems_test_state = TEST_STATE;
 
 static const rtems_jffs2_info info_initial = {
@@ -157,27 +157,20 @@ static const rtems_jffs2_info info_after_excessive_gc = {
 
 static char big[] = "big";
 
-static const char * const more[] = {
-  "1",
-  "2",
-  "3",
-  "4",
-  "5",
-  "6",
-  "7"
-};
+static const char *const more[] = { "1", "2", "3", "4", "5", "6", "7" };
 
-#define ASSERT_INFO(a, b) do { \
-  rv = ioctl(fd, RTEMS_JFFS2_GET_INFO, &info); \
-  rtems_test_assert(rv == 0); \
-  rtems_test_assert(memcmp(a, b, sizeof(*a)) == 0); \
-} while (0)
+#define ASSERT_INFO( a, b )                                 \
+  do {                                                      \
+    rv = ioctl( fd, RTEMS_JFFS2_GET_INFO, &info );          \
+    rtems_test_assert( rv == 0 );                           \
+    rtems_test_assert( memcmp( a, b, sizeof( *a ) ) == 0 ); \
+  } while ( 0 )
 
 static const mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
 
-static char keg[523];
+static char keg[ 523 ];
 
-static uint32_t simple_random(uint32_t v)
+static uint32_t simple_random( uint32_t v )
 {
   v *= 1664525;
   v += 1013904223;
@@ -185,93 +178,93 @@ static uint32_t simple_random(uint32_t v)
   return v;
 }
 
-static void init_keg(void)
+static void init_keg( void )
 {
-  size_t i;
+  size_t   i;
   uint32_t v;
 
   v = 123;
-  for (i = 0; i < sizeof(keg); ++i) {
-    v = simple_random(v);
-    keg[i] = (uint8_t) (v >> 23);
+  for ( i = 0; i < sizeof( keg ); ++i ) {
+    v = simple_random( v );
+    keg[ i ] = (uint8_t) ( v >> 23 );
   }
 }
 
-static void write_kegs(int fd, int kegs)
+static void write_kegs( int fd, int kegs )
 {
   int i;
 
-  for (i = 0; i < kegs; ++i) {
+  for ( i = 0; i < kegs; ++i ) {
     ssize_t n;
 
-    n = write(fd, &keg[0], sizeof(keg));
-    rtems_test_assert(n == (ssize_t) sizeof(keg));
+    n = write( fd, &keg[ 0 ], sizeof( keg ) );
+    rtems_test_assert( n == (ssize_t) sizeof( keg ) );
   }
 }
 
-static void create_big_file(void)
+static void create_big_file( void )
 {
   int fd;
   int rv;
 
-  fd = open(&big[0], O_WRONLY | O_TRUNC | O_CREAT, mode);
-  rtems_test_assert(fd >= 0);
+  fd = open( &big[ 0 ], O_WRONLY | O_TRUNC | O_CREAT, mode );
+  rtems_test_assert( fd >= 0 );
 
-  write_kegs(fd, 37);
+  write_kegs( fd, 37 );
 
-  rv = close(fd);
-  rtems_test_assert(rv == 0);
+  rv = close( fd );
+  rtems_test_assert( rv == 0 );
 }
 
-static void remove_big_file(void)
+static void remove_big_file( void )
 {
   int rv;
 
-  rv = unlink(&big[0]);
-  rtems_test_assert(rv == 0);
+  rv = unlink( &big[ 0 ] );
+  rtems_test_assert( rv == 0 );
 }
 
-static void create_more_files(void)
+static void create_more_files( void )
 {
-  int fds[RTEMS_ARRAY_SIZE(more)];
-  int rv;
+  int    fds[ RTEMS_ARRAY_SIZE( more ) ];
+  int    rv;
   size_t i;
-  int j;
+  int    j;
 
-  for (i = 0; i < RTEMS_ARRAY_SIZE(fds); ++i) {
-    fds[i] = open(more[i], O_WRONLY | O_TRUNC | O_CREAT, mode);
-    rtems_test_assert(fds[i] >= 0);
+  for ( i = 0; i < RTEMS_ARRAY_SIZE( fds ); ++i ) {
+    fds[ i ] = open( more[ i ], O_WRONLY | O_TRUNC | O_CREAT, mode );
+    rtems_test_assert( fds[ i ] >= 0 );
   }
 
-  for (j = 0; j < 13; ++j) {
-    for (i = 0; i < RTEMS_ARRAY_SIZE(fds); ++i) {
-      write_kegs(fds[i], 1);
+  for ( j = 0; j < 13; ++j ) {
+    for ( i = 0; i < RTEMS_ARRAY_SIZE( fds ); ++i ) {
+      write_kegs( fds[ i ], 1 );
     }
   }
 
-  for (i = 0; i < RTEMS_ARRAY_SIZE(fds); ++i) {
-    rv = close(fds[i]);
-    rtems_test_assert(rv == 0);
+  for ( i = 0; i < RTEMS_ARRAY_SIZE( fds ); ++i ) {
+    rv = close( fds[ i ] );
+    rtems_test_assert( rv == 0 );
   }
 }
 
-static void remove_some_files(void)
+static void remove_some_files( void )
 {
   size_t i;
 
-  for (i = 0; i < RTEMS_ARRAY_SIZE(more); i += 2) {
+  for ( i = 0; i < RTEMS_ARRAY_SIZE( more ); i += 2 ) {
     int rv;
 
-    rv = unlink(more[i]);
-    rtems_test_assert(rv == 0);
+    rv = unlink( more[ i ] );
+    rtems_test_assert( rv == 0 );
   }
 }
 
-void test(void)
+void test( void )
 {
-  int fd;
-  int rv;
-  int counter;
+  int              fd;
+  int              rv;
+  int              counter;
   rtems_jffs2_info info;
 
   init_keg();
@@ -280,55 +273,55 @@ void test(void)
    * Ensure that jiffies != 0, to use most likely path in
    * jffs2_mark_node_obsolete().
    */
-  while (rtems_clock_get_ticks_since_boot() == 0) {
+  while ( rtems_clock_get_ticks_since_boot() == 0 ) {
     /* Wait */
   }
 
-  fd = open("/", O_RDONLY);
-  rtems_test_assert(fd >= 0);
+  fd = open( "/", O_RDONLY );
+  rtems_test_assert( fd >= 0 );
 
-  ASSERT_INFO(&info, &info_initial);
+  ASSERT_INFO( &info, &info_initial );
 
   create_big_file();
-  ASSERT_INFO(&info, &info_big_created);
+  ASSERT_INFO( &info, &info_big_created );
 
   remove_big_file();
-  ASSERT_INFO(&info, &info_big_removed);
+  ASSERT_INFO( &info, &info_big_removed );
 
   create_more_files();
-  ASSERT_INFO(&info, &info_more_files_created);
+  ASSERT_INFO( &info, &info_more_files_created );
 
   remove_some_files();
-  ASSERT_INFO(&info, &info_some_files_removed);
+  ASSERT_INFO( &info, &info_some_files_removed );
 
-  rv = ioctl(fd, RTEMS_JFFS2_ON_DEMAND_GARBAGE_COLLECTION);
-  rtems_test_assert(rv == 0);
-  ASSERT_INFO(&info, &info_after_first_gc);
+  rv = ioctl( fd, RTEMS_JFFS2_ON_DEMAND_GARBAGE_COLLECTION );
+  rtems_test_assert( rv == 0 );
+  ASSERT_INFO( &info, &info_after_first_gc );
 
-  rv = ioctl(fd, RTEMS_JFFS2_ON_DEMAND_GARBAGE_COLLECTION);
-  rtems_test_assert(rv == 0);
-  ASSERT_INFO(&info, &info_after_first_gc);
+  rv = ioctl( fd, RTEMS_JFFS2_ON_DEMAND_GARBAGE_COLLECTION );
+  rtems_test_assert( rv == 0 );
+  ASSERT_INFO( &info, &info_after_first_gc );
 
   counter = 0;
 
-  while (true) {
+  while ( true ) {
     errno = ENXIO;
-    rv = ioctl(fd, RTEMS_JFFS2_FORCE_GARBAGE_COLLECTION);
-    if (rv == -1) {
-      rtems_test_assert(errno == EIO);
+    rv = ioctl( fd, RTEMS_JFFS2_FORCE_GARBAGE_COLLECTION );
+    if ( rv == -1 ) {
+      rtems_test_assert( errno == EIO );
       break;
     }
 
     ++counter;
-    rtems_test_assert(rv == 0);
+    rtems_test_assert( rv == 0 );
   }
 
-  rtems_test_assert(counter == 19);
+  rtems_test_assert( counter == 19 );
 
-  rv = ioctl(fd, RTEMS_JFFS2_GET_INFO, &info);
-  rtems_test_assert(rv == 0);
-  ASSERT_INFO(&info, &info_after_excessive_gc);
+  rv = ioctl( fd, RTEMS_JFFS2_GET_INFO, &info );
+  rtems_test_assert( rv == 0 );
+  ASSERT_INFO( &info, &info_after_excessive_gc );
 
-  rv = close(fd);
-  rtems_test_assert(rv == 0);
+  rv = close( fd );
+  rtems_test_assert( rv == 0 );
 }

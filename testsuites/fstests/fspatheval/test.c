@@ -45,66 +45,66 @@
 
 #define BUF_SIZE 100
 
-const char rtems_test_name[] = "FSPATHEVAL " FILESYSTEM;
+const char             rtems_test_name[] = "FSPATHEVAL " FILESYSTEM;
 const RTEMS_TEST_STATE rtems_test_state = TEST_STATE;
 
-static void make_multiple_files (char **files,int is_directory)
+static void make_multiple_files( char **files, int is_directory )
 {
   int i;
   int status;
   int fd;
 
   i = 0;
-  if (is_directory) {
-    while (files[i]) {
-      printf ("Making directory %s\n", files[i]);
-      status = mkdir (files[i], S_IRWXU);
-      rtems_test_assert (!status);
+  if ( is_directory ) {
+    while ( files[ i ] ) {
+      printf( "Making directory %s\n", files[ i ] );
+      status = mkdir( files[ i ], S_IRWXU );
+      rtems_test_assert( !status );
       i++;
     }
   } else {
-    while (files[i]) {
-      printf ("Create file %s\n", files[i]);
-      fd=creat(files[i],S_IRWXU);
-      status=close(fd);
-      rtems_test_assert (!status);
+    while ( files[ i ] ) {
+      printf( "Create file %s\n", files[ i ] );
+      fd = creat( files[ i ], S_IRWXU );
+      status = close( fd );
+      rtems_test_assert( !status );
       i++;
     }
   }
 
-  puts ("");
+  puts( "" );
 }
 
-static void remove_multiple_files (char **files,int is_directory)
+static void remove_multiple_files( char **files, int is_directory )
 {
   int i;
   int status;
 
   i = 0;
-  while (files[i]) {
+  while ( files[ i ] ) {
     i++;
   }
 
-  if (is_directory) {
-    while (i) {
+  if ( is_directory ) {
+    while ( i ) {
       i--;
-      printf ("Removing directory %s\n", files[i]);
-      status = rmdir (files[i]);
-      rtems_test_assert (!status);
+      printf( "Removing directory %s\n", files[ i ] );
+      status = rmdir( files[ i ] );
+      rtems_test_assert( !status );
     }
   } else {
-    while (i) {
+    while ( i ) {
       i--;
-      printf ("Removing file %s\n", files[i]);
-      status = unlink (files[i]);
-      rtems_test_assert (!status);
+      printf( "Removing file %s\n", files[ i ] );
+      status = unlink( files[ i ] );
+      rtems_test_assert( !status );
     }
   }
 
-  puts ("");
+  puts( "" );
 }
 
-static void path_eval_test01 (void)
+static void path_eval_test01( void )
 {
   char *valid_path[] = {
     "/test1/",
@@ -119,7 +119,7 @@ static void path_eval_test01 (void)
     "///test9/../test10",
     0
   };
-  char *valid_file[]={
+  char *valid_file[] = {
     "/test1",
     "tets2",
     "///test3",
@@ -133,7 +133,7 @@ static void path_eval_test01 (void)
     0
   };
 
-  char *valid_relative_path[]={
+  char *valid_relative_path[] = {
     "test1",
     "tets2",
     "test3",
@@ -148,64 +148,54 @@ static void path_eval_test01 (void)
 
   };
 
-  char *valid_name[] = {
-    "!#$%&()-@^_`{}~'",
-    "0_1_A",
-    "aaa bbb",
-    "ccc....ddd",
-    " fff",
-    0
-  };
+  char *valid_name[] =
+    { "!#$%&()-@^_`{}~'", "0_1_A", "aaa bbb", "ccc....ddd", " fff", 0 };
 
+  make_multiple_files( valid_path, 1 );
+  make_multiple_files( valid_name, 1 );
 
-  make_multiple_files(valid_path,1);
-  make_multiple_files (valid_name,1);
+  remove_multiple_files( valid_relative_path, 1 );
+  remove_multiple_files( valid_name, 1 );
 
-  remove_multiple_files(valid_relative_path,1);
-  remove_multiple_files(valid_name,1);
+  make_multiple_files( valid_file, 0 );
+  make_multiple_files( valid_name, 0 );
 
-  make_multiple_files(valid_file,0);
-  make_multiple_files (valid_name,0);
-
-  remove_multiple_files(valid_relative_path,0);
-  remove_multiple_files(valid_name,0);
-
+  remove_multiple_files( valid_relative_path, 0 );
+  remove_multiple_files( valid_name, 0 );
 }
-static void path_eval_test02(void )
+static void path_eval_test02( void )
 {
+  int   status;
+  char  buf[ BUF_SIZE ];
+  char *cwd;
 
-  int status;
-  char buf[BUF_SIZE];
-  char* cwd;
+  mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
+  puts( "mkdir /tmp/a/b" );
+  status = mkdir( "/tmp", mode );
+  rtems_test_assert( status == 0 );
+  status = mkdir( "/tmp/a", mode );
+  rtems_test_assert( status == 0 );
+  status = mkdir( "/tmp/a/b", mode );
+  rtems_test_assert( status == 0 );
 
-  mode_t mode = S_IRWXU|S_IRWXG|S_IRWXO;
-  puts("mkdir /tmp/a/b");
-  status=mkdir("/tmp",mode);
-  rtems_test_assert(status==0);
-  status=mkdir("/tmp/a",mode);
-  rtems_test_assert(status==0);
-  status=mkdir("/tmp/a/b",mode);
-  rtems_test_assert(status==0);
+  cwd = getcwd( buf, BUF_SIZE );
+  rtems_test_assert( cwd != NULL );
 
-  cwd=getcwd(buf,BUF_SIZE);
-  rtems_test_assert(cwd!=NULL);
+  puts( "cd /tmp" );
+  status = chdir( "/tmp" );
+  rtems_test_assert( status == 0 );
 
-  puts("cd /tmp");
-  status=chdir("/tmp");
-  rtems_test_assert(status==0);
+  status = chdir( "a/b" );
+  rtems_test_assert( status == 0 );
 
-  status=chdir("a/b");
-  rtems_test_assert(status==0);
+  status = chdir( "../b" );
+  rtems_test_assert( status == 0 );
 
-  status=chdir("../b");
-  rtems_test_assert(status==0);
-
-  status=chdir("../b/.");
-  rtems_test_assert(status==0);
-
+  status = chdir( "../b/." );
+  rtems_test_assert( status == 0 );
 }
 
-void test (void )
+void test( void )
 {
   path_eval_test01();
   path_eval_test02();

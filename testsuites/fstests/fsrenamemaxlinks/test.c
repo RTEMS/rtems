@@ -42,10 +42,10 @@
 #include "fs_config.h"
 #include <tmacros.h>
 
-const char rtems_test_name[] = "FSRENAMEMAXLINKS " FILESYSTEM;
+const char             rtems_test_name[] = "FSRENAMEMAXLINKS " FILESYSTEM;
 const RTEMS_TEST_STATE rtems_test_state = TEST_STATE;
 
-void test (void)
+void test( void )
 {
   int status;
   int rv;
@@ -54,11 +54,11 @@ void test (void)
   const char *dir01 = "dir01";
   const char *dir02 = "dir02";
 
-  char path01[30];
+  char path01[ 30 ];
 
-  char link_name[10];
+  char link_name[ 10 ];
 
-  mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
+  mode_t      mode = S_IRWXU | S_IRWXG | S_IRWXO;
   const char *wd = __func__;
 
   struct stat statbuf;
@@ -69,69 +69,67 @@ void test (void)
    * Create a new directory and change the current directory to this
    */
 
-  status = mkdir (wd, mode);
-  rtems_test_assert (status == 0);
-  status = chdir (wd);
-  rtems_test_assert (status == 0);
+  status = mkdir( wd, mode );
+  rtems_test_assert( status == 0 );
+  status = chdir( wd );
+  rtems_test_assert( status == 0 );
 
   /*
    * The new argument points to a non existant directory and
    * the old argument points to an existant directory at LINK_MAX.
    */
 
-  status = mkdir (dir01, mode);
-  rtems_test_assert (status == 0);
+  status = mkdir( dir01, mode );
+  rtems_test_assert( status == 0 );
 
-  LINK_MAX_val = pathconf (dir01, _PC_LINK_MAX);
-  rtems_test_assert (LINK_MAX_val >= 0);
+  LINK_MAX_val = pathconf( dir01, _PC_LINK_MAX );
+  rtems_test_assert( LINK_MAX_val >= 0 );
 
-  status = stat (dir01, &statbuf);
-  rtems_test_assert (status == 0);
+  status = stat( dir01, &statbuf );
+  rtems_test_assert( status == 0 );
 
-  for(i = statbuf.st_nlink; i < LINK_MAX_val; i++)
-  {
-    rv = snprintf (link_name, sizeof(link_name), "%s/%d", dir01, i);
-    rtems_test_assert (rv < (int) sizeof(link_name));
+  for ( i = statbuf.st_nlink; i < LINK_MAX_val; i++ ) {
+    rv = snprintf( link_name, sizeof( link_name ), "%s/%d", dir01, i );
+    rtems_test_assert( rv < (int) sizeof( link_name ) );
 
-    status = mkdir (link_name, mode);
-    rtems_test_assert (status == 0);
+    status = mkdir( link_name, mode );
+    rtems_test_assert( status == 0 );
   }
 
-  status = mkdir (dir02, mode);
-  rtems_test_assert (status == 0);
+  status = mkdir( dir02, mode );
+  rtems_test_assert( status == 0 );
 
-  rv = snprintf (path01, sizeof(path01), "%s/%s", dir01, dir01);
-  rtems_test_assert (rv < (int) sizeof(path01));
-  EXPECT_ERROR (EMLINK, rename, dir02, path01);
+  rv = snprintf( path01, sizeof( path01 ), "%s/%s", dir01, dir01 );
+  rtems_test_assert( rv < (int) sizeof( path01 ) );
+  EXPECT_ERROR( EMLINK, rename, dir02, path01 );
 
   /*
    * Clear directory
    */
 
-  for(i = statbuf.st_nlink; i < LINK_MAX_val; i++)
-  {
-    rv = snprintf (link_name, sizeof(link_name), "%s/%d", dir01, i);
-    rtems_test_assert (rv < (int) sizeof(link_name));
+  for ( i = statbuf.st_nlink; i < LINK_MAX_val; i++ ) {
+    rv = snprintf( link_name, sizeof( link_name ), "%s/%d", dir01, i );
+    rtems_test_assert( rv < (int) sizeof( link_name ) );
 
-    status = rmdir (link_name);
-    rtems_test_assert (status == 0);
+    status = rmdir( link_name );
+    rtems_test_assert( status == 0 );
   }
 
-  EXPECT_EQUAL (-1, rmdir, path01);
-  EXPECT_EQUAL (0, rmdir, dir02);
-  EXPECT_EQUAL (0, rmdir, dir01);
+  EXPECT_EQUAL( -1, rmdir, path01 );
+  EXPECT_EQUAL( 0, rmdir, dir02 );
+  EXPECT_EQUAL( 0, rmdir, dir01 );
 
   /*
    * Go back to parent directory
    */
 
-  status = chdir ("..");
-  rtems_test_assert (status == 0);
+  status = chdir( ".." );
+  rtems_test_assert( status == 0 );
 
   /*
    * Remove test directory
    */
 
-  status = rmdir (wd);
-  rtems_test_assert (status == 0);
+  status = rmdir( wd );
+  rtems_test_assert( status == 0 );
 }

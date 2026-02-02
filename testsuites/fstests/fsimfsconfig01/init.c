@@ -50,21 +50,21 @@ static const IMFS_node_control node_control = IMFS_GENERIC_INITIALIZER(
   IMFS_node_destroy_default
 );
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
-  const struct utimbuf times = {0};
-  const char *generic = "generic";
-  const char *mnt = "mnt";
-  const char *dev = "device";
-  const char *file = "file";
-  const char *fifo = "fifo";
-  int rv;
-  int fd;
-  DIR *dirp;
-  struct dirent *dire;
-  struct stat st;
+  const struct utimbuf times = { 0 };
+  const char          *generic = "generic";
+  const char          *mnt = "mnt";
+  const char          *dev = "device";
+  const char          *file = "file";
+  const char          *fifo = "fifo";
+  int                  rv;
+  int                  fd;
+  DIR                 *dirp;
+  struct dirent       *dire;
+  struct stat          st;
 
   TEST_BEGIN();
 
@@ -74,53 +74,53 @@ static void Init(rtems_task_argument arg)
     &node_control,
     NULL
   );
-  rtems_test_assert(rv == 0);
+  rtems_test_assert( rv == 0 );
 
   errno = 0;
-  rv = chown(generic, 0, 0);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENOTSUP);
+  rv = chown( generic, 0, 0 );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENOTSUP );
 
   errno = 0;
-  rv = chmod(generic, 0);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENOTSUP);
+  rv = chmod( generic, 0 );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENOTSUP );
 
   errno = 0;
-  rv = link(generic, "link");
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENOTSUP);
+  rv = link( generic, "link" );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENOTSUP );
 
-  rv = mkdir(mnt, S_IRWXU);
-  rtems_test_assert(rv == 0);
+  rv = mkdir( mnt, S_IRWXU );
+  rtems_test_assert( rv == 0 );
 
-  rv = mknod(dev, S_IFCHR | S_IRWXU, 0);
-  rtems_test_assert(rv == 0);
-
-  errno = 0;
-  fd = creat(file, S_IRWXU);
-  rtems_test_assert(fd == -1);
-  rtems_test_assert(errno == ENOSYS);
+  rv = mknod( dev, S_IFCHR | S_IRWXU, 0 );
+  rtems_test_assert( rv == 0 );
 
   errno = 0;
-  rv = mkfifo(fifo, S_IRWXU);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENOSYS);
-
-  dirp = opendir(mnt);
-  rtems_test_assert(dirp != NULL);
+  fd = creat( file, S_IRWXU );
+  rtems_test_assert( fd == -1 );
+  rtems_test_assert( errno == ENOSYS );
 
   errno = 0;
-  dire = readdir(dirp);
-  rtems_test_assert(dire == NULL);
-  rtems_test_assert(errno == ENOTSUP);
+  rv = mkfifo( fifo, S_IRWXU );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENOSYS );
 
-  rv = closedir(dirp);
-  rtems_test_assert(rv == 0);
+  dirp = opendir( mnt );
+  rtems_test_assert( dirp != NULL );
 
-  rv = stat(mnt, &st);
-  rtems_test_assert(rv == 0);
-  rtems_test_assert(st.st_size == 0);
+  errno = 0;
+  dire = readdir( dirp );
+  rtems_test_assert( dire == NULL );
+  rtems_test_assert( errno == ENOTSUP );
+
+  rv = closedir( dirp );
+  rtems_test_assert( rv == 0 );
+
+  rv = stat( mnt, &st );
+  rtems_test_assert( rv == 0 );
+  rtems_test_assert( st.st_size == 0 );
 
   errno = 0;
   rv = mount(
@@ -130,31 +130,31 @@ static void Init(rtems_task_argument arg)
     RTEMS_FILESYSTEM_READ_ONLY,
     NULL
   );
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENOTSUP);
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENOTSUP );
 
   errno = 0;
-  rv = rename(generic, "new");
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENOTSUP);
+  rv = rename( generic, "new" );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENOTSUP );
 
   errno = 0;
-  rv = symlink(generic, "link");
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENOTSUP);
+  rv = symlink( generic, "link" );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENOTSUP );
 
   errno = 0;
-  rv = utime(generic, &times);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENOTSUP);
+  rv = utime( generic, &times );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENOTSUP );
 
   errno = 0;
-  rv = unlink(generic);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENOTSUP);
+  rv = unlink( generic );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENOTSUP );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER

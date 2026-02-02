@@ -29,48 +29,61 @@
 #ifndef __FSTEST_H
 #define __FSTEST_H
 
-#define TIME_PRECISION  (2)
-#define TIME_EQUAL(x,y) (llabs((x)-(y))<TIME_PRECISION)
+#define TIME_PRECISION     ( 2 )
+#define TIME_EQUAL( x, y ) ( llabs( ( x ) - ( y ) ) < TIME_PRECISION )
 
+#define FS_PASS()   \
+  do {              \
+    puts( "PASS" ); \
+  } while ( 0 )
+#define FS_FAIL()                 \
+  do {                            \
+    printf(                       \
+      "FAIL errno=%s  %s: %d \n", \
+      strerror( errno ),          \
+      __FILE__,                   \
+      __LINE__                    \
+    );                            \
+    fs_test_notify_failure();     \
+  } while ( 0 )
 
-#define FS_PASS() do {puts("PASS");} while (0)
-#define FS_FAIL() do {\
-  printf( "FAIL errno=%s  %s: %d \n", strerror(errno), __FILE__, __LINE__ );\
-  fs_test_notify_failure(); \
- } while (0)
+#define SHOW_MESSAGE( e, func, ... )                   \
+  printf(                                              \
+    "Testing %-10s with arguments: %-20s EXPECT %s\n", \
+    #func,                                             \
+    #__VA_ARGS__,                                      \
+    #e                                                 \
+  )
 
+#define EXPECT_EQUAL( expect, function, ... )       \
+  do {                                              \
+    SHOW_MESSAGE( #expect, function, __VA_ARGS__ ); \
+    if ( expect == function( __VA_ARGS__ ) )        \
+      FS_PASS();                                    \
+    else                                            \
+      FS_FAIL();                                    \
+  } while ( 0 )
 
-#define SHOW_MESSAGE(e, func, ...) printf(\
-    "Testing %-10s with arguments: %-20s EXPECT %s\n",\
-    #func,#__VA_ARGS__,#e)
+#define EXPECT_UNEQUAL( expect, function, ... )     \
+  do {                                              \
+    SHOW_MESSAGE( #expect, function, __VA_ARGS__ ); \
+    if ( expect != function( __VA_ARGS__ ) )        \
+      FS_PASS();                                    \
+    else                                            \
+      FS_FAIL();                                    \
+  } while ( 0 )
 
-#define EXPECT_EQUAL(expect, function, ...)  do { \
-  SHOW_MESSAGE(#expect,function,__VA_ARGS__);\
- if (expect==function(__VA_ARGS__)) \
-     FS_PASS();\
- else \
-     FS_FAIL();\
-   } while (0)
+#define EXPECT_ERROR( ERROR, function, ... )                       \
+  do {                                                             \
+    SHOW_MESSAGE( #ERROR, function, #__VA_ARGS__ );                \
+    if ( ( -1 == function( __VA_ARGS__ ) ) && ( errno == ERROR ) ) \
+      FS_PASS();                                                   \
+    else                                                           \
+      FS_FAIL();                                                   \
+  } while ( 0 )
 
-#define EXPECT_UNEQUAL(expect, function, ...)  do { \
-  SHOW_MESSAGE(#expect,function,__VA_ARGS__);\
- if (expect!=function(__VA_ARGS__)) \
-     FS_PASS();\
- else\
-     FS_FAIL();\
-   } while (0)
-
-#define EXPECT_ERROR(ERROR, function, ...)  do { \
-  SHOW_MESSAGE(#ERROR,function,#__VA_ARGS__);\
- if ((-1==function(__VA_ARGS__)) && (errno==ERROR)) \
-     FS_PASS();\
- else \
-     FS_FAIL();\
-   } while (0)
-
-
-void fs_test_notify_failure(void);
-void test(void);
+void fs_test_notify_failure( void );
+void test( void );
 
 #define BASE_FOR_TEST "/mnt"
 #endif

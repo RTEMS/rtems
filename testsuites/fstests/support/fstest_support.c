@@ -50,50 +50,48 @@
 
 void *volatile prevent_compiler_optimizations;
 
-static int fs_test_failed = 0;
+static int                    fs_test_failed = 0;
 extern const RTEMS_TEST_STATE rtems_test_state;
 
-void fs_test_notify_failure(void)
+void fs_test_notify_failure( void )
 {
   fs_test_failed = 1;
 }
 
-
 /* Break out of a chroot() environment in C */
-static void break_out_of_chroot(void)
+static void break_out_of_chroot( void )
 {
-  int rv;
+  int         rv;
   struct stat st;
 
   rtems_libio_use_global_env();
 
   /* Perform deferred global location releases */
-  rv = stat(".", &st);
-  rtems_test_assert(rv == 0);
+  rv = stat( ".", &st );
+  rtems_test_assert( rv == 0 );
 
   /* Perform deferred memory frees */
-  prevent_compiler_optimizations = malloc(1);
-  free(prevent_compiler_optimizations);
+  prevent_compiler_optimizations = malloc( 1 );
+  free( prevent_compiler_optimizations );
 }
 
 /*
  *  Main entry point of every filesystem test
  */
 
-rtems_task Init(
-    rtems_task_argument ignored)
+rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
 
-  int rc=0;
+  int rc = 0;
 
-  rtems_test_begin(rtems_test_name, rtems_test_state);
+  rtems_test_begin( rtems_test_name, rtems_test_state );
 
   puts( "Initializing filesystem " FILESYSTEM );
   test_initialize_filesystem();
 
-  rc=chroot(BASE_FOR_TEST);
-  rtems_test_assert(rc==0);
+  rc = chroot( BASE_FOR_TEST );
+  rtems_test_assert( rc == 0 );
 
   test();
 
@@ -102,6 +100,8 @@ rtems_task Init(
   puts( "\n\nShutting down filesystem " FILESYSTEM );
   test_shutdown_filesystem();
 
-  if (!fs_test_failed) rtems_test_end(rtems_test_name);
-  rtems_test_exit(0);
+  if ( !fs_test_failed ) {
+    rtems_test_end( rtems_test_name );
+  }
+  rtems_test_exit( 0 );
 }

@@ -43,10 +43,10 @@
 #include <errno.h>
 #include <limits.h>
 
-const char rtems_test_name[] = "FSRENAME " FILESYSTEM;
+const char             rtems_test_name[] = "FSRENAME " FILESYSTEM;
 const RTEMS_TEST_STATE rtems_test_state = TEST_STATE;
 
-static void rename_file_twice_test (void)
+static void rename_file_twice_test( void )
 {
   const char *name01 = "name01";
   const char *name02 = "name02";
@@ -55,26 +55,26 @@ static void rename_file_twice_test (void)
   int         fd;
   int         status;
 
-  puts ("\nRename file twice\n");
+  puts( "\nRename file twice\n" );
 
   mode = S_IRWXU | S_IRWXG | S_IRWXO;
-  fd = creat (name01, mode);
-  rtems_test_assert (fd >= 0);
-  status = close (fd);
-  rtems_test_assert (status == 0);
+  fd = creat( name01, mode );
+  rtems_test_assert( fd >= 0 );
+  status = close( fd );
+  rtems_test_assert( status == 0 );
 
-  EXPECT_EQUAL (0, rename, name01, name02);
-  EXPECT_EQUAL (0, rename, name02, name03);
+  EXPECT_EQUAL( 0, rename, name01, name02 );
+  EXPECT_EQUAL( 0, rename, name02, name03 );
 
   errno = 0;
-  EXPECT_EQUAL (-1, unlink, name01);
-  rtems_test_assert (errno == ENOENT);
-  EXPECT_EQUAL (-1, unlink, name02);
-  rtems_test_assert (errno == ENOENT);
-  EXPECT_EQUAL (0, unlink, name03);
+  EXPECT_EQUAL( -1, unlink, name01 );
+  rtems_test_assert( errno == ENOENT );
+  EXPECT_EQUAL( -1, unlink, name02 );
+  rtems_test_assert( errno == ENOENT );
+  EXPECT_EQUAL( 0, unlink, name03 );
 }
 
-static void rename_opened_file_test (void)
+static void rename_opened_file_test( void )
 {
   const char *name01 = "name01.txt";
   const char *name02 = "name02.txt";
@@ -83,33 +83,33 @@ static void rename_opened_file_test (void)
   int         fd1;
   int         fd2;
   int         result;
-  char        buffer[16];
+  char        buffer[ 16 ];
 
-  puts ("\nRename opened file and open a new file\n");
+  puts( "\nRename opened file and open a new file\n" );
 
   mode = S_IRWXU | S_IRWXG | S_IRWXO;
-  fd1 = open (name01, O_RDWR | O_CREAT, mode);
-  rtems_test_assert (fd1 >= 0);
-  result = write (fd1, message, strlen (message));
-  rtems_test_assert (result == (int) strlen (message));
+  fd1 = open( name01, O_RDWR | O_CREAT, mode );
+  rtems_test_assert( fd1 >= 0 );
+  result = write( fd1, message, strlen( message ) );
+  rtems_test_assert( result == (int) strlen( message ) );
 
-  EXPECT_EQUAL (0, rename, name01, name02);
+  EXPECT_EQUAL( 0, rename, name01, name02 );
 
-  fd2 = open (name01, O_RDWR | O_CREAT, mode);
-  rtems_test_assert (fd1 >= 0);
-  EXPECT_EQUAL (0, read, fd2, buffer, sizeof (buffer));
+  fd2 = open( name01, O_RDWR | O_CREAT, mode );
+  rtems_test_assert( fd1 >= 0 );
+  EXPECT_EQUAL( 0, read, fd2, buffer, sizeof( buffer ) );
 
-  result = close (fd1);
-  rtems_test_assert (result == 0);
+  result = close( fd1 );
+  rtems_test_assert( result == 0 );
 
-  result = close (fd2);
-  rtems_test_assert (result == 0);
+  result = close( fd2 );
+  rtems_test_assert( result == 0 );
 
-  EXPECT_EQUAL (0, unlink, name01);
-  EXPECT_EQUAL (0, unlink, name02);
+  EXPECT_EQUAL( 0, unlink, name01 );
+  EXPECT_EQUAL( 0, unlink, name02 );
 }
 
-static void directory_test (void)
+static void directory_test( void )
 {
   int fd;
   int status;
@@ -120,74 +120,74 @@ static void directory_test (void)
   const char *dir01 = "dir01";
   const char *dir02 = "dir02";
 
-  char path01[30];
+  char path01[ 30 ];
 
-  mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
+  mode_t      mode = S_IRWXU | S_IRWXG | S_IRWXO;
   const char *wd = __func__;
 
   /*
    * Create a new directory and change the current directory to this
    */
 
-  status = mkdir (wd, mode);
-  rtems_test_assert (status == 0);
-  status = chdir (wd);
-  rtems_test_assert (status == 0);
+  status = mkdir( wd, mode );
+  rtems_test_assert( status == 0 );
+  status = chdir( wd );
+  rtems_test_assert( status == 0 );
 
   /*
    * The new argument points to an empty directory and
    * the old argument points to a non empty directory.
    */
 
-  puts ("\nRename directory with non empty directory\n");
+  puts( "\nRename directory with non empty directory\n" );
 
-  status = mkdir (dir01, mode);
-  rtems_test_assert (status == 0);
+  status = mkdir( dir01, mode );
+  rtems_test_assert( status == 0 );
 
-  status = mkdir (dir02, mode);
-  rtems_test_assert (status == 0);
+  status = mkdir( dir02, mode );
+  rtems_test_assert( status == 0 );
 
-  rv = snprintf (path01, sizeof(path01), "%s/%s", dir02, name02);
-  rtems_test_assert (rv < (int) sizeof(path01));
-  fd = creat (path01, mode);
-  rtems_test_assert (fd >= 0);
-  status = close (fd);
-  rtems_test_assert (status == 0);
+  rv = snprintf( path01, sizeof( path01 ), "%s/%s", dir02, name02 );
+  rtems_test_assert( rv < (int) sizeof( path01 ) );
+  fd = creat( path01, mode );
+  rtems_test_assert( fd >= 0 );
+  status = close( fd );
+  rtems_test_assert( status == 0 );
 
-  EXPECT_EQUAL (-1, rename, dir01, dir02);
+  EXPECT_EQUAL( -1, rename, dir01, dir02 );
 
-  puts("Testing errno for EEXIST or ENOTEMPTY");
+  puts( "Testing errno for EEXIST or ENOTEMPTY" );
 
-  if (errno == EEXIST || errno == ENOTEMPTY) {
-    FS_PASS ();
+  if ( errno == EEXIST || errno == ENOTEMPTY ) {
+    FS_PASS();
   } else {
-    FS_FAIL ();
+    FS_FAIL();
   }
 
   /*
    * Clear directory
    */
 
-  EXPECT_EQUAL (0, unlink, path01);
-  EXPECT_EQUAL (0, rmdir, dir01);
-  EXPECT_EQUAL (0, rmdir, dir02);
+  EXPECT_EQUAL( 0, unlink, path01 );
+  EXPECT_EQUAL( 0, rmdir, dir01 );
+  EXPECT_EQUAL( 0, rmdir, dir02 );
 
   /*
    * Go back to parent directory
    */
 
-  status = chdir ("..");
-  rtems_test_assert (status == 0);
+  status = chdir( ".." );
+  rtems_test_assert( status == 0 );
 
   /*
    * Remove test directory
    */
 
-  status = rmdir (wd);
-  rtems_test_assert (status == 0);
+  status = rmdir( wd );
+  rtems_test_assert( status == 0 );
 }
 
-static void arg_test (void)
+static void arg_test( void )
 {
   int fd;
   int status;
@@ -199,40 +199,40 @@ static void arg_test (void)
   const char *dir01 = "dir01";
   const char *dir02 = "dir02";
 
-  mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
+  mode_t      mode = S_IRWXU | S_IRWXG | S_IRWXO;
   const char *wd = __func__;
-  
-  char path01[20];
+
+  char path01[ 20 ];
 
   /*
    * Create a new directory and change the current directory to this
    */
 
-  status = mkdir (wd, mode);
-  rtems_test_assert (status == 0);
-  status = chdir (wd);
-  rtems_test_assert (status == 0);
+  status = mkdir( wd, mode );
+  rtems_test_assert( status == 0 );
+  status = chdir( wd );
+  rtems_test_assert( status == 0 );
 
   /*
    * The new argument points to a nonexistent file and
    * the old argument points to a file.
    */
 
-  puts ("\nRename file with nonexistent file\n");
+  puts( "\nRename file with nonexistent file\n" );
 
-  fd = creat (name01, mode);
-  rtems_test_assert (fd >= 0);
-  status = close (fd);
-  rtems_test_assert (status == 0);
+  fd = creat( name01, mode );
+  rtems_test_assert( fd >= 0 );
+  status = close( fd );
+  rtems_test_assert( status == 0 );
 
-  EXPECT_EQUAL (0, rename, name01, name02);
+  EXPECT_EQUAL( 0, rename, name01, name02 );
 
   /*
    * Clear directory
    */
 
-  EXPECT_EQUAL (-1, unlink, name01);
-  EXPECT_EQUAL (0, unlink, name02);
+  EXPECT_EQUAL( -1, unlink, name01 );
+  EXPECT_EQUAL( 0, unlink, name02 );
 
   /*
    * The new argument points to a nonexistent file and
@@ -240,57 +240,57 @@ static void arg_test (void)
    * filepath does not exist.
    */
 
-  puts ("\nRename file with nonexistent filepath\n");
+  puts( "\nRename file with nonexistent filepath\n" );
 
-  status = mkdir (dir01, mode);
-  rtems_test_assert (status == 0);
+  status = mkdir( dir01, mode );
+  rtems_test_assert( status == 0 );
 
-  rv = snprintf (path01, sizeof(path01), "%s/%s/%s", dir01, name01, name02);
-  rtems_test_assert (rv < (int) sizeof(path01));
-  EXPECT_ERROR (ENOENT, rename, path01, name01);
+  rv = snprintf( path01, sizeof( path01 ), "%s/%s/%s", dir01, name01, name02 );
+  rtems_test_assert( rv < (int) sizeof( path01 ) );
+  EXPECT_ERROR( ENOENT, rename, path01, name01 );
 
   /*
    * Clear directory
    */
 
-  EXPECT_EQUAL (-1, unlink, name01);
-  EXPECT_EQUAL (0, rmdir, dir01);
+  EXPECT_EQUAL( -1, unlink, name01 );
+  EXPECT_EQUAL( 0, rmdir, dir01 );
 
   /*
    * The new argument points to a nonexistent directory and
    * the old argument points to a directory.
    */
 
-  puts ("\nRename directory with nonexistent directory\n");
+  puts( "\nRename directory with nonexistent directory\n" );
 
-  status = mkdir (dir01, mode);
-  rtems_test_assert (status == 0);
+  status = mkdir( dir01, mode );
+  rtems_test_assert( status == 0 );
 
-  EXPECT_EQUAL (0, rename, dir01, dir02);
+  EXPECT_EQUAL( 0, rename, dir01, dir02 );
 
   /*
    * Clear directory
    */
 
-  EXPECT_EQUAL (-1, rmdir, dir01);
-  EXPECT_EQUAL (0, rmdir, dir02);
+  EXPECT_EQUAL( -1, rmdir, dir01 );
+  EXPECT_EQUAL( 0, rmdir, dir02 );
 
   /*
    * Go back to parent directory
    */
 
-  status = chdir ("..");
-  rtems_test_assert (status == 0);
+  status = chdir( ".." );
+  rtems_test_assert( status == 0 );
 
   /*
    * Remove test directory
    */
 
-  status = rmdir (wd);
-  rtems_test_assert (status == 0);
+  status = rmdir( wd );
+  rtems_test_assert( status == 0 );
 }
 
-static void filesystem_test (void)
+static void filesystem_test( void )
 {
   int fd;
   int status;
@@ -299,65 +299,65 @@ static void filesystem_test (void)
   const char *name01 = "name01";
   const char *name02 = "name02";
 
-  char path01[20];
+  char path01[ 20 ];
 
-  mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
+  mode_t      mode = S_IRWXU | S_IRWXG | S_IRWXO;
   const char *wd = __func__;
 
   /*
    * Create a new directory and change the current directory to this
    */
 
-  status = mkdir (wd, mode);
-  rtems_test_assert (status == 0);
-  status = chdir (wd);
-  rtems_test_assert (status == 0);
+  status = mkdir( wd, mode );
+  rtems_test_assert( status == 0 );
+  status = chdir( wd );
+  rtems_test_assert( status == 0 );
 
   /*
    * The new argument points to a file on another instance of the filesystem and
    * the old argument points to a file on the base filesystem.
    */
 
-  puts ("\nRename files across different filesystems\n");
+  puts( "\nRename files across different filesystems\n" );
 
-  rv = chroot ("/");
-  rtems_test_assert (rv == 0);
+  rv = chroot( "/" );
+  rtems_test_assert( rv == 0 );
 
-  fd = creat (name01, mode);
-  rtems_test_assert (fd >= 0);
-  status = close (fd);
-  rtems_test_assert (status == 0);
+  fd = creat( name01, mode );
+  rtems_test_assert( fd >= 0 );
+  status = close( fd );
+  rtems_test_assert( status == 0 );
 
-  rv = snprintf (path01, sizeof(path01), "%s/%s", BASE_FOR_TEST, name02);
-  rtems_test_assert (rv < (int) sizeof(path01));
-  EXPECT_ERROR (EXDEV, rename, name01, path01);
+  rv = snprintf( path01, sizeof( path01 ), "%s/%s", BASE_FOR_TEST, name02 );
+  rtems_test_assert( rv < (int) sizeof( path01 ) );
+  EXPECT_ERROR( EXDEV, rename, name01, path01 );
 
-  EXPECT_EQUAL (-1, unlink, path01);
-  EXPECT_EQUAL (0, unlink, name01);
+  EXPECT_EQUAL( -1, unlink, path01 );
+  EXPECT_EQUAL( 0, unlink, name01 );
 
-  rv = chroot (BASE_FOR_TEST);
-  rtems_test_assert (rv == 0);
+  rv = chroot( BASE_FOR_TEST );
+  rtems_test_assert( rv == 0 );
 
   /*
    * Go back to parent directory
    */
 
-  status = chdir ("..");
-  rtems_test_assert (status == 0);
+  status = chdir( ".." );
+  rtems_test_assert( status == 0 );
 
   /*
    * Remove test directory
    */
 
-  status = rmdir (wd);
-  rtems_test_assert (status == 0);
+  status = rmdir( wd );
+  rtems_test_assert( status == 0 );
 }
 
-void test (void)
+void test( void )
 {
-  rename_file_twice_test ();
-  directory_test ();
-  rename_opened_file_test ();
-  arg_test ();
-  filesystem_test ();
+  rename_file_twice_test();
+  directory_test();
+  rename_opened_file_test();
+  arg_test();
+  filesystem_test();
 }

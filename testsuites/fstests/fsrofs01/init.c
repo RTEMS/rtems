@@ -45,17 +45,17 @@ const char rtems_test_name[] = "FSROFS 1";
 
 static const rtems_rfs_format_config rfs_config;
 
-static const char rda [] = "/dev/rda";
+static const char rda[] = "/dev/rda";
 
-static const char mnt [] = "/mnt";
+static const char mnt[] = "/mnt";
 
-static const char file [] = "/mnt/file";
+static const char file[] = "/mnt/file";
 
-static const char not_exist [] = "/mnt/not_exist";
+static const char not_exist[] = "/mnt/not_exist";
 
-static void test_mount(bool writeable)
+static void test_mount( bool writeable )
 {
-  int rv;
+  int         rv;
   const void *data = NULL;
 
   rv = mount(
@@ -65,106 +65,106 @@ static void test_mount(bool writeable)
     writeable ? RTEMS_FILESYSTEM_READ_WRITE : 0,
     data
   );
-  rtems_test_assert(rv == 0);
+  rtems_test_assert( rv == 0 );
 }
 
-static void test_create_file_system(void)
+static void test_create_file_system( void )
 {
   int rv;
 
-  rv = mkdir(mnt, S_IRWXU | S_IRWXG | S_IRWXO);
-  rtems_test_assert(rv == 0);
+  rv = mkdir( mnt, S_IRWXU | S_IRWXG | S_IRWXO );
+  rtems_test_assert( rv == 0 );
 
-  rv = rtems_rfs_format(rda, &rfs_config);
-  rtems_test_assert(rv == 0);
+  rv = rtems_rfs_format( rda, &rfs_config );
+  rtems_test_assert( rv == 0 );
 
-  test_mount(true);
+  test_mount( true );
 
-  rv = mknod(file, S_IFREG | S_IRWXU | S_IRWXG | S_IRWXO, 0);
-  rtems_test_assert(rv == 0);
+  rv = mknod( file, S_IFREG | S_IRWXU | S_IRWXG | S_IRWXO, 0 );
+  rtems_test_assert( rv == 0 );
 
-  rv = unmount(mnt);
-  rtems_test_assert(rv == 0);
+  rv = unmount( mnt );
+  rtems_test_assert( rv == 0 );
 }
 
-static void test_rofs(void)
+static void test_rofs( void )
 {
-  int rv;
-  int fd;
-  char buf [1];
+  int     rv;
+  int     fd;
+  char    buf[ 1 ];
   ssize_t n;
 
-  test_mount(false);
+  test_mount( false );
 
-  fd = open(file, O_RDONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
-  rtems_test_assert(fd >= 0);
+  fd = open( file, O_RDONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO );
+  rtems_test_assert( fd >= 0 );
 
-  n = read(fd, buf, sizeof(buf));
-  rtems_test_assert(n == 0);
-
-  errno = 0;
-  n = write(fd, buf, sizeof(buf));
-  rtems_test_assert(n == -1);
-  rtems_test_assert(errno == EBADF);
+  n = read( fd, buf, sizeof( buf ) );
+  rtems_test_assert( n == 0 );
 
   errno = 0;
-  rv = ftruncate(fd, 0);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == EINVAL);
+  n = write( fd, buf, sizeof( buf ) );
+  rtems_test_assert( n == -1 );
+  rtems_test_assert( errno == EBADF );
 
   errno = 0;
-  rv = fchmod(fd, 0);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == EROFS);
+  rv = ftruncate( fd, 0 );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EINVAL );
 
   errno = 0;
-  rv = fchown(fd, 0, 0);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == EROFS);
-
-  rv = close(fd);
-  rtems_test_assert(rv == 0);
+  rv = fchmod( fd, 0 );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EROFS );
 
   errno = 0;
-  fd = open(not_exist, O_RDONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
-  rtems_test_assert(fd == -1);
-  rtems_test_assert(errno == EROFS);
+  rv = fchown( fd, 0, 0 );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EROFS );
+
+  rv = close( fd );
+  rtems_test_assert( rv == 0 );
 
   errno = 0;
-  rv = mknod(not_exist, S_IFREG | S_IRWXU | S_IRWXG | S_IRWXO, 0);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == EROFS);
+  fd = open( not_exist, O_RDONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO );
+  rtems_test_assert( fd == -1 );
+  rtems_test_assert( errno == EROFS );
 
   errno = 0;
-  rv = mkdir(not_exist, S_IRWXU | S_IRWXG | S_IRWXO);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == EROFS);
+  rv = mknod( not_exist, S_IFREG | S_IRWXU | S_IRWXG | S_IRWXO, 0 );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EROFS );
 
   errno = 0;
-  rv = rename(file, not_exist);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == EROFS);
+  rv = mkdir( not_exist, S_IRWXU | S_IRWXG | S_IRWXO );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EROFS );
 
   errno = 0;
-  rv = link(file, not_exist);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == EROFS);
+  rv = rename( file, not_exist );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EROFS );
 
   errno = 0;
-  rv = unlink(file);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == EROFS);
+  rv = link( file, not_exist );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EROFS );
 
   errno = 0;
-  rv = symlink(file, not_exist);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == EROFS);
+  rv = unlink( file );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EROFS );
 
-  rv = unmount(mnt);
-  rtems_test_assert(rv == 0);
+  errno = 0;
+  rv = symlink( file, not_exist );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EROFS );
+
+  rv = unmount( mnt );
+  rtems_test_assert( rv == 0 );
 }
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
@@ -174,10 +174,10 @@ static void Init(rtems_task_argument arg)
   test_rofs();
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
-rtems_ramdisk_config rtems_ramdisk_configuration [] = {
+rtems_ramdisk_config rtems_ramdisk_configuration[] = {
   { .block_size = 512, .block_num = 1024 }
 };
 
@@ -194,7 +194,7 @@ size_t rtems_ramdisk_configuration_size = 1;
 
 #define CONFIGURE_MAXIMUM_TASKS 2
 
-#define CONFIGURE_EXTRA_TASK_STACKS (8 * 1024)
+#define CONFIGURE_EXTRA_TASK_STACKS ( 8 * 1024 )
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

@@ -41,12 +41,12 @@
 #include "fs_config.h"
 #include <tmacros.h>
 
-const char rtems_test_name[] = "FSRMDIRPARENT " FILESYSTEM;
+const char             rtems_test_name[] = "FSRMDIRPARENT " FILESYSTEM;
 const RTEMS_TEST_STATE rtems_test_state = TEST_STATE;
 
-static void rmdir_error (void)
+static void rmdir_error( void )
 {
-  int status;
+  int    status;
   mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
 
   const char *wd = __func__;
@@ -54,45 +54,43 @@ static void rmdir_error (void)
   /*
    * Create a new directory and change the current directory to this
    */
-  status = mkdir (wd, mode);
-  rtems_test_assert (status == 0);
-  status = chdir (wd);
-  rtems_test_assert (status == 0);
+  status = mkdir( wd, mode );
+  rtems_test_assert( status == 0 );
+  status = chdir( wd );
+  rtems_test_assert( status == 0 );
 
   /*
    * Try to remove the relative parent directory
   */
-  EXPECT_EQUAL (-1, rmdir, "..");
-  puts ("Testing errno for ENOTEMPTY or EBUSY");
+  EXPECT_EQUAL( -1, rmdir, ".." );
+  puts( "Testing errno for ENOTEMPTY or EBUSY" );
   if ( errno == ENOTEMPTY || errno == EBUSY ) {
-    FS_PASS ();
+    FS_PASS();
   } else {
-    FS_FAIL ();
+    FS_FAIL();
   }
 
   /*
    * Create a new directory for test
    */
-  status = mkdir ("tmp", mode);
-  rtems_test_assert (status == 0);
+  status = mkdir( "tmp", mode );
+  rtems_test_assert( status == 0 );
 
   /*
    * The path argument names a directory that is not an empty directory,
    * or there are hard links to the directory other than
    * dot or a single entry in dot-dot.
    */
-  EXPECT_ERROR (ENOTEMPTY, rmdir, "tmp/..");
+  EXPECT_ERROR( ENOTEMPTY, rmdir, "tmp/.." );
 
   /*
    * Go back to parent directory
    */
-  status = chdir ("..");
-  rtems_test_assert (status == 0);
-
-
+  status = chdir( ".." );
+  rtems_test_assert( status == 0 );
 }
 
-void test (void)
+void test( void )
 {
-  rmdir_error ();
+  rmdir_error();
 }

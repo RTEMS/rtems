@@ -50,8 +50,8 @@ extern int fatfs_diskio_register_device(
 extern void fatfs_diskio_unregister_device( unsigned char pdrv );
 
 /* FatFS constants and structures */
-#define FR_OK 0
-#define FM_FAT 0x01
+#define FR_OK    0
+#define FM_FAT   0x01
 #define FM_FAT32 0x02
 
 typedef struct {
@@ -75,11 +75,11 @@ extern FRESULT f_mkfs(
 #define BLOCK_SIZE 512
 
 static const mkfs_parm fatfs_format_options = {
-  .fmt               = FM_FAT, /* Format as FAT12/16 (auto-detect) */
-  .num_fat           = 2,      /* Number of FAT copies */
-  .align             = 0,      /* Auto data area alignment */
-  .n_root            = 512, /* Number of root directory entries for FAT12/16 */
-  .auto_cluster_size = 0    /* Auto cluster size */
+  .fmt = FM_FAT,         /* Format as FAT12/16 (auto-detect) */
+  .num_fat = 2,          /* Number of FAT copies */
+  .align = 0,            /* Auto data area alignment */
+  .n_root = 512,         /* Number of root directory entries for FAT12/16 */
+  .auto_cluster_size = 0 /* Auto cluster size */
 };
 
 static rtems_resource_snapshot before_mount;
@@ -143,7 +143,7 @@ void test_initialize_filesystem( void )
 void test_shutdown_filesystem( void )
 {
   int rc = 0;
-  rc     = unmount( BASE_FOR_TEST );
+  rc = unmount( BASE_FOR_TEST );
 
   if ( rc != 0 ) {
     printf( "Unmount failed with errno: %d (%s)\n", errno, strerror( errno ) );
@@ -169,11 +169,11 @@ void test_shutdown_filesystem( void )
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_MAXIMUM_SEMAPHORES 10
-#define CONFIGURE_MAXIMUM_TASKS 10
+#define CONFIGURE_MAXIMUM_SEMAPHORES       10
+#define CONFIGURE_MAXIMUM_TASKS            10
 #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 40
-#define CONFIGURE_INIT_TASK_STACK_SIZE ( 16 * 1024 )
-#define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
+#define CONFIGURE_INIT_TASK_STACK_SIZE     ( 16 * 1024 )
+#define CONFIGURE_INIT_TASK_ATTRIBUTES     RTEMS_FLOATING_POINT
 
 #define CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
 

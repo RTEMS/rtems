@@ -34,18 +34,15 @@
 extern "C" {
 #endif
 
-extern rtems_task Init(
-  rtems_task_argument ignored
-);
+extern rtems_task Init( rtems_task_argument ignored );
 
-extern void test(void);
+extern void test( void );
 
-extern void test_initialize_filesystem(void);
+extern void test_initialize_filesystem( void );
 
-extern void test_shutdown_filesystem(void);
+extern void test_shutdown_filesystem( void );
 #ifdef __cplusplus
 };
 #endif
-
 
 #endif

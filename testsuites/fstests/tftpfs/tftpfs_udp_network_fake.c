@@ -49,8 +49,8 @@
 #include "config.h"
 #endif
 
-#include <stdio.h> /* snprintf() */
-#include <stdlib.h> /* malloc(), free() */
+#include <stdio.h>    /* snprintf() */
+#include <stdlib.h>   /* malloc(), free() */
 #include <inttypes.h> /* printf() macros like PRId8 */
 #include <string.h>
 #include <ctype.h> /* isprint() */
@@ -64,7 +64,7 @@
 #include "tftpfs_udp_network_fake.h"
 
 #define IPV4_ADDR_SIZE 4
-#define MAX_SOCKET_FD 4
+#define MAX_SOCKET_FD  4
 
 int __wrap_close( int fd ); /* Prevent compiler warnings */
 int __real_close( int fd ); /* Prevent compiler warnings */
@@ -101,8 +101,8 @@ typedef struct control_data {
   Tftp_Interaction *interaction_head;
   Tftp_Interaction *interaction_tail;
   Tftp_Interaction *interaction_cur;
-  int receive_timeout_socket_fd[MAX_SOCKET_FD];
-  uint32_t receive_timeout_ms[MAX_SOCKET_FD];
+  int               receive_timeout_socket_fd[ MAX_SOCKET_FD ];
+  uint32_t          receive_timeout_ms[ MAX_SOCKET_FD ];
 } control_data;
 
 static control_data *control = NULL;
@@ -110,9 +110,9 @@ static control_data *control = NULL;
 void _Tftp_Reset( void )
 {
   static control_data ctl;
-  int i;
-  Tftp_Interaction *iter;
-  Tftp_Interaction *current;
+  int                 i;
+  Tftp_Interaction   *iter;
+  Tftp_Interaction   *current;
 
   if ( control == NULL ) {
     control = &ctl;
@@ -128,15 +128,15 @@ void _Tftp_Reset( void )
   control->interaction_tail = (Tftp_Interaction *) &control->interaction_head;
   control->interaction_cur = (Tftp_Interaction *) &control->interaction_head;
   for ( i = 0; i < MAX_SOCKET_FD; ++i ) {
-    control->receive_timeout_socket_fd[i] = 0;
-    control->receive_timeout_ms[i] = 0;
+    control->receive_timeout_socket_fd[ i ] = 0;
+    control->receive_timeout_ms[ i ] = 0;
   }
 }
 
 void *_Tftp_Append_interaction(
-  Tftp_Action_kind kind,
+  Tftp_Action_kind    kind,
   Tftp_Interaction_fn fn,
-  size_t size
+  size_t              size
 )
 {
   Tftp_Interaction *ia;
@@ -215,42 +215,42 @@ const char *_Tftp_Get_error_str( uint16_t error_code )
 
 static void log_hex_dump( const void *buf, size_t len )
 {
-  const size_t per_line = 16;
-  size_t pos = 0;
+  const size_t   per_line = 16;
+  size_t         pos = 0;
   const uint8_t *pkt = buf;
-  char hex[2 * per_line + 4];
-  char chars[per_line + 1];
-  char *hexpos;
-  size_t i;
+  char           hex[ 2 * per_line + 4 ];
+  char           chars[ per_line + 1 ];
+  char          *hexpos;
+  size_t         i;
 
-  chars[per_line] = '\0';
+  chars[ per_line ] = '\0';
   do {
     for ( i = 0, hexpos = hex; i < per_line; ++i ) {
       if ( pos + i < len ) {
-        hexpos += snprintf( hexpos, 3, "%02"PRIX8, pkt[ pos + i ] );
-        chars[i] = ( isprint( pkt[ pos + i ] ) ) ? pkt[ pos + i ] : '.';
+        hexpos += snprintf( hexpos, 3, "%02" PRIX8, pkt[ pos + i ] );
+        chars[ i ] = ( isprint( pkt[ pos + i ] ) ) ? pkt[ pos + i ] : '.';
       } else {
         hexpos += snprintf( hexpos, 3, "  " );
-        chars[i] = '\0';
+        chars[ i ] = '\0';
       }
       if ( i < per_line - 1 && i % 4 == 3 ) {
-        *(hexpos++) = ' ';
+        *( hexpos++ ) = ' ';
       }
     }
 
     T_log( T_VERBOSE, "  %04zX : %s |%s|", pos, hex, chars );
     pos += per_line;
-  } while( len > pos );
+  } while ( len > pos );
 }
 
 static const char *get_next_str(
   const char **buf,
-  size_t *max_len,
-  bool *has_errors
+  size_t      *max_len,
+  bool        *has_errors
 )
 {
   const char *result;
-  size_t len = strnlen( *buf, *max_len );
+  size_t      len = strnlen( *buf, *max_len );
   if ( len < *max_len ) {
     result = *buf;
     *buf += len + 1;
@@ -265,105 +265,105 @@ static const char *get_next_str(
 
 static void log_tftp_packet( const void *buf, size_t len )
 {
-  int op_code;
+  int         op_code;
   const char *buffer = ( (char *) buf ) + sizeof( uint16_t );
-  size_t remaining_len = len - sizeof( uint16_t );
-  bool has_errors = false;
+  size_t      remaining_len = len - sizeof( uint16_t );
+  bool        has_errors = false;
 
   if ( len >= sizeof( uint16_t ) ) {
-    op_code = ntohs( *((uint16_t *) buf ) );
+    op_code = ntohs( *( (uint16_t *) buf ) );
     switch ( op_code ) {
-    case TFTP_OPCODE_RRQ:
-    case TFTP_OPCODE_WRQ:
-      T_log(
-        T_VERBOSE,
-        "  %s File: \"%s\" Mode: \"%s\" %s",
-        ( op_code == TFTP_OPCODE_RRQ ) ? "RRQ" : "WRQ",
-        get_next_str( &buffer, &remaining_len, &has_errors ),
-        get_next_str( &buffer, &remaining_len, &has_errors ),
-        ( remaining_len > 0 ) ? "Options:" : "No options"
-      );
-      while ( remaining_len > 0 ) {
+      case TFTP_OPCODE_RRQ:
+      case TFTP_OPCODE_WRQ:
         T_log(
           T_VERBOSE,
-          "    %s = \"%s\"",
+          "  %s File: \"%s\" Mode: \"%s\" %s",
+          ( op_code == TFTP_OPCODE_RRQ ) ? "RRQ" : "WRQ",
           get_next_str( &buffer, &remaining_len, &has_errors ),
-          get_next_str( &buffer, &remaining_len, &has_errors )
-        );
-      }
-      break;
-
-    case TFTP_OPCODE_DATA:
-      if ( len >= 2 * sizeof( uint16_t ) ) {
-        buffer += sizeof( uint16_t );
-        remaining_len -= sizeof( uint16_t );
-        T_log(
-          T_VERBOSE,
-          "  DATA Block: %"PRIu16" Data (%zu bytes):",
-          ntohs( *( ( (uint16_t *) buf ) + 1 ) ),
-          remaining_len
-        );
-        log_hex_dump( buffer, remaining_len );
-      } else {
-        T_log( T_VERBOSE, "  DATA packet ILLEGAL length" );
-        has_errors = true;
-      }
-      break;
-
-    case TFTP_OPCODE_ACK:
-      if ( len == 2 * sizeof( uint16_t ) ) {
-        T_log(
-          T_VERBOSE,
-          "  ACK Block: %"PRIu16,
-          ntohs( *( ( (uint16_t *) buf ) + 1 ) )
-        );
-      } else {
-        T_log( T_VERBOSE, "  ACK packet ILLEGAL length" );
-        has_errors = true;
-      }
-      break;
-
-    case TFTP_OPCODE_ERROR:
-      if ( len > 2 * sizeof( uint16_t ) ) {
-        uint16_t err_code = ntohs( *( ( (uint16_t *) buf ) + 1 ) );
-        T_log(
-          T_VERBOSE,
-          "  ERROR Code: %"PRIu16" (%s) ErrMsg:",
-          err_code,
-          _Tftp_Get_error_str( err_code )
-        );
-        buffer += sizeof( uint16_t );
-        remaining_len -= sizeof( uint16_t );
-        T_log(
-          T_VERBOSE,
-          "    \"%s\"",
-          get_next_str( &buffer, &remaining_len, &has_errors )
-        );
-      } else {
-        T_log( T_VERBOSE, "  ERROR packet ILLEGAL length" );
-        has_errors = true;
-      }
-      break;
-
-    case TFTP_OPCODE_OACK:
-      T_log(
-        T_VERBOSE,
-        "  OACK %s",
-        ( remaining_len > 0 ) ? "Options:" : "No options"
-      );
-      while ( remaining_len > 0 ) {
-        T_log(
-          T_VERBOSE,
-          "    %s = \"%s\"",
           get_next_str( &buffer, &remaining_len, &has_errors ),
-          get_next_str( &buffer, &remaining_len, &has_errors )
+          ( remaining_len > 0 ) ? "Options:" : "No options"
         );
-      }
-      break;
+        while ( remaining_len > 0 ) {
+          T_log(
+            T_VERBOSE,
+            "    %s = \"%s\"",
+            get_next_str( &buffer, &remaining_len, &has_errors ),
+            get_next_str( &buffer, &remaining_len, &has_errors )
+          );
+        }
+        break;
 
-    default:
-      T_log( T_VERBOSE, "  TFTP ILLEGAL OpCode: %d", op_code );
-      has_errors = true;
+      case TFTP_OPCODE_DATA:
+        if ( len >= 2 * sizeof( uint16_t ) ) {
+          buffer += sizeof( uint16_t );
+          remaining_len -= sizeof( uint16_t );
+          T_log(
+            T_VERBOSE,
+            "  DATA Block: %" PRIu16 " Data (%zu bytes):",
+            ntohs( *( ( (uint16_t *) buf ) + 1 ) ),
+            remaining_len
+          );
+          log_hex_dump( buffer, remaining_len );
+        } else {
+          T_log( T_VERBOSE, "  DATA packet ILLEGAL length" );
+          has_errors = true;
+        }
+        break;
+
+      case TFTP_OPCODE_ACK:
+        if ( len == 2 * sizeof( uint16_t ) ) {
+          T_log(
+            T_VERBOSE,
+            "  ACK Block: %" PRIu16,
+            ntohs( *( ( (uint16_t *) buf ) + 1 ) )
+          );
+        } else {
+          T_log( T_VERBOSE, "  ACK packet ILLEGAL length" );
+          has_errors = true;
+        }
+        break;
+
+      case TFTP_OPCODE_ERROR:
+        if ( len > 2 * sizeof( uint16_t ) ) {
+          uint16_t err_code = ntohs( *( ( (uint16_t *) buf ) + 1 ) );
+          T_log(
+            T_VERBOSE,
+            "  ERROR Code: %" PRIu16 " (%s) ErrMsg:",
+            err_code,
+            _Tftp_Get_error_str( err_code )
+          );
+          buffer += sizeof( uint16_t );
+          remaining_len -= sizeof( uint16_t );
+          T_log(
+            T_VERBOSE,
+            "    \"%s\"",
+            get_next_str( &buffer, &remaining_len, &has_errors )
+          );
+        } else {
+          T_log( T_VERBOSE, "  ERROR packet ILLEGAL length" );
+          has_errors = true;
+        }
+        break;
+
+      case TFTP_OPCODE_OACK:
+        T_log(
+          T_VERBOSE,
+          "  OACK %s",
+          ( remaining_len > 0 ) ? "Options:" : "No options"
+        );
+        while ( remaining_len > 0 ) {
+          T_log(
+            T_VERBOSE,
+            "    %s = \"%s\"",
+            get_next_str( &buffer, &remaining_len, &has_errors ),
+            get_next_str( &buffer, &remaining_len, &has_errors )
+          );
+        }
+        break;
+
+      default:
+        T_log( T_VERBOSE, "  TFTP ILLEGAL OpCode: %d", op_code );
+        has_errors = true;
     }
   } else {
     has_errors = true;
@@ -376,148 +376,152 @@ static void log_tftp_packet( const void *buf, size_t len )
 
 static void log_interaction(
   Tftp_Action *act,
-  bool has_result,
-  bool was_success
+  bool         has_result,
+  bool         was_success
 )
 {
-  char *begin = has_result ? "[" : "";
+  char       *begin = has_result ? "[" : "";
   const char *action_name;
-  int result;
-  char result_buffer[20];
-  result_buffer[0] = '\0';
+  int         result;
+  char        result_buffer[ 20 ];
+  result_buffer[ 0 ] = '\0';
 
-  if ( act == NULL ) { return; }
+  if ( act == NULL ) {
+    return;
+  }
   action_name = get_action_kind_as_string( act->kind );
 
   if ( has_result && was_success ) {
     switch ( act->kind ) {
-    case TFTP_IA_KIND_SOCKET:
-      result = act->data.socket.result;
-      break;
+      case TFTP_IA_KIND_SOCKET:
+        result = act->data.socket.result;
+        break;
 
-    case TFTP_IA_KIND_CLOSE:
-      result = act->data.close.result;
-      break;
+      case TFTP_IA_KIND_CLOSE:
+        result = act->data.close.result;
+        break;
 
-    case TFTP_IA_KIND_BIND:
-      result = act->data.bind.result;
-      break;
+      case TFTP_IA_KIND_BIND:
+        result = act->data.bind.result;
+        break;
 
-    case TFTP_IA_KIND_SENDTO:
-      result = (int) act->data.sendto.result;
-      break;
+      case TFTP_IA_KIND_SENDTO:
+        result = (int) act->data.sendto.result;
+        break;
 
-    case TFTP_IA_KIND_RECVFROM:
-      result = (int) act->data.recvfrom.result;
-      break;
+      case TFTP_IA_KIND_RECVFROM:
+        result = (int) act->data.recvfrom.result;
+        break;
 
-    default:
-      result = 0;
+      default:
+        result = 0;
     }
     snprintf( result_buffer, sizeof( result_buffer ), "] = %d", result );
-  } else if ( ! was_success ) {
+  } else if ( !was_success ) {
     snprintf( result_buffer, sizeof( result_buffer ), "] = FAILED!" );
   }
 
   switch ( act->kind ) {
-  case TFTP_IA_KIND_SOCKET:
-    T_log(
-      T_VERBOSE,
-      "%s%s(domain=%d, type=%d, protocol=%d)%s",
-      begin,
-      action_name,
-      act->data.socket.domain,
-      act->data.socket.type,
-      act->data.socket.protocol,
-      result_buffer
-    );
-    break;
+    case TFTP_IA_KIND_SOCKET:
+      T_log(
+        T_VERBOSE,
+        "%s%s(domain=%d, type=%d, protocol=%d)%s",
+        begin,
+        action_name,
+        act->data.socket.domain,
+        act->data.socket.type,
+        act->data.socket.protocol,
+        result_buffer
+      );
+      break;
 
-  case TFTP_IA_KIND_CLOSE:
-    T_log( T_VERBOSE, "%s%s(%d)%s",
-      begin,
-      action_name,
-      act->data.close.fd,
-      result_buffer
-    );
-    break;
+    case TFTP_IA_KIND_CLOSE:
+      T_log(
+        T_VERBOSE,
+        "%s%s(%d)%s",
+        begin,
+        action_name,
+        act->data.close.fd,
+        result_buffer
+      );
+      break;
 
-  case TFTP_IA_KIND_BIND:
-    T_log(
-      T_VERBOSE,
-      "%s%s(sockfd=%d, addr.family=%d, addr=%s:%"PRIu16")%s",
-      begin,
-      action_name,
-      act->data.bind.fd,
-      act->data.bind.family,
-      act->data.bind.addr_str,
-      act->data.bind.port,
-      result_buffer
-    );
-    break;
+    case TFTP_IA_KIND_BIND:
+      T_log(
+        T_VERBOSE,
+        "%s%s(sockfd=%d, addr.family=%d, addr=%s:%" PRIu16 ")%s",
+        begin,
+        action_name,
+        act->data.bind.fd,
+        act->data.bind.family,
+        act->data.bind.addr_str,
+        act->data.bind.port,
+        result_buffer
+      );
+      break;
 
-  case TFTP_IA_KIND_SENDTO:
-    T_log(
-      T_VERBOSE,
-      "%s%s(sockfd=%d, buf=%p, len=%zu, flags=%X, "
-        "addr=%s:%"PRIu16", addrlen=%d)%s",
-      begin,
-      action_name,
-      act->data.sendto.fd,
-      act->data.sendto.buf,
-      act->data.sendto.len,
-      act->data.sendto.flags,
-      act->data.sendto.dest_addr_str,
-      act->data.sendto.dest_port,
-      act->data.sendto.addrlen,
-      result_buffer
-    );
-    if ( !has_result ) {
-      log_tftp_packet( act->data.sendto.buf, act->data.sendto.len );
-    }
-    break;
-
-  case TFTP_IA_KIND_RECVFROM:
-    if ( !has_result ) {
+    case TFTP_IA_KIND_SENDTO:
       T_log(
         T_VERBOSE,
         "%s%s(sockfd=%d, buf=%p, len=%zu, flags=%X, "
-          "timeout=%"PRIu32"ms, addr=?:?, addrlen=%d)%s",
+        "addr=%s:%" PRIu16 ", addrlen=%d)%s",
         begin,
         action_name,
-        act->data.recvfrom.fd,
-        act->data.recvfrom.buf,
-        act->data.recvfrom.len,
-        act->data.recvfrom.flags,
-        act->data.recvfrom.timeout_ms,
-        act->data.recvfrom.addrlen,
+        act->data.sendto.fd,
+        act->data.sendto.buf,
+        act->data.sendto.len,
+        act->data.sendto.flags,
+        act->data.sendto.dest_addr_str,
+        act->data.sendto.dest_port,
+        act->data.sendto.addrlen,
         result_buffer
       );
-    } else {
-      T_log(
-        T_VERBOSE,
-        "%s%s(sockfd=%d, buf=%p, len=%zu, flags=%X, "
-          "timeout=%"PRIu32"ms, addr=%s:%"PRIu16", addrlen=%d)%s",
-        begin,
-        action_name,
-        act->data.recvfrom.fd,
-        act->data.recvfrom.buf,
-        act->data.recvfrom.len,
-        act->data.recvfrom.flags,
-        act->data.recvfrom.timeout_ms,
-        act->data.recvfrom.src_addr_str,
-        act->data.recvfrom.src_port,
-        act->data.recvfrom.addrlen,
-        result_buffer
-      );
-      if ( act->data.recvfrom.result > 0 && was_success ) {
-        log_tftp_packet( act->data.recvfrom.buf, act->data.recvfrom.result );
+      if ( !has_result ) {
+        log_tftp_packet( act->data.sendto.buf, act->data.sendto.len );
       }
-    }
-    break;
+      break;
 
-  default:
-    T_quiet_true( false, "Unknown interaction: %d", act->kind );
+    case TFTP_IA_KIND_RECVFROM:
+      if ( !has_result ) {
+        T_log(
+          T_VERBOSE,
+          "%s%s(sockfd=%d, buf=%p, len=%zu, flags=%X, "
+          "timeout=%" PRIu32 "ms, addr=?:?, addrlen=%d)%s",
+          begin,
+          action_name,
+          act->data.recvfrom.fd,
+          act->data.recvfrom.buf,
+          act->data.recvfrom.len,
+          act->data.recvfrom.flags,
+          act->data.recvfrom.timeout_ms,
+          act->data.recvfrom.addrlen,
+          result_buffer
+        );
+      } else {
+        T_log(
+          T_VERBOSE,
+          "%s%s(sockfd=%d, buf=%p, len=%zu, flags=%X, "
+          "timeout=%" PRIu32 "ms, addr=%s:%" PRIu16 ", addrlen=%d)%s",
+          begin,
+          action_name,
+          act->data.recvfrom.fd,
+          act->data.recvfrom.buf,
+          act->data.recvfrom.len,
+          act->data.recvfrom.flags,
+          act->data.recvfrom.timeout_ms,
+          act->data.recvfrom.src_addr_str,
+          act->data.recvfrom.src_port,
+          act->data.recvfrom.addrlen,
+          result_buffer
+        );
+        if ( act->data.recvfrom.result > 0 && was_success ) {
+          log_tftp_packet( act->data.recvfrom.buf, act->data.recvfrom.result );
+        }
+      }
+      break;
+
+    default:
+      T_quiet_true( false, "Unknown interaction: %d", act->kind );
   }
 }
 
@@ -534,7 +538,7 @@ static void log_interaction(
 static bool process_interaction( Tftp_Action *act )
 {
   Tftp_Interaction *ia = get_next_interaction( control );
-  bool result;
+  bool              result;
 
   T_quiet_not_null( act );
   if ( act == NULL ) {
@@ -545,9 +549,9 @@ static bool process_interaction( Tftp_Action *act )
   }
 
   T_quiet_not_null( ia );
-  if( ia == NULL ) {
+  if ( ia == NULL ) {
     T_log(
-    T_NORMAL,
+      T_NORMAL,
       "ERROR: You have not registered any (more) 'interaction' but the TFTP "
       "client invoked interaction '%s()'. See 'tftpfs_interactions.h' and use "
       "'T_set_verbosity( T_VERBOSE )'.",
@@ -573,9 +577,9 @@ static bool process_interaction( Tftp_Action *act )
 
 static uint16_t get_ip_addr_as_str(
   const struct sockaddr *addr,
-  socklen_t addrlen,
-  char *buf,
-  size_t buf_size
+  socklen_t              addrlen,
+  char                  *buf,
+  size_t                 buf_size
 )
 {
   (void) addrlen;
@@ -584,40 +588,38 @@ static uint16_t get_ip_addr_as_str(
   *buf = '\0';
 
   switch ( addr->sa_family ) {
-  case AF_INET:
-    {
+    case AF_INET: {
       const struct sockaddr_in *ipv4 = (const struct sockaddr_in *) addr;
       port = ntohs( ipv4->sin_port );
       const uint8_t *bytes = (const uint8_t *) &ipv4->sin_addr.s_addr;
       snprintf(
         buf,
         buf_size,
-        "%"PRIu8".%"PRIu8".%"PRIu8".%"PRIu8,
-        bytes[0],
-        bytes[1],
-        bytes[2],
-        bytes[3]
+        "%" PRIu8 ".%" PRIu8 ".%" PRIu8 ".%" PRIu8,
+        bytes[ 0 ],
+        bytes[ 1 ],
+        bytes[ 2 ],
+        bytes[ 3 ]
       );
       break;
     }
-  case AF_INET6:
-    {
+    case AF_INET6: {
       const struct sockaddr_in6 *ipv6 = (const struct sockaddr_in6 *) addr;
       port = ntohs( ipv6->sin6_port );
       const uint16_t *words = (const uint16_t *) ipv6->sin6_addr.s6_addr;
       snprintf(
         buf,
         buf_size,
-        "%"PRIx16":%"PRIx16":%"PRIx16":%"PRIx16":%"PRIx16":%"PRIx16
-          ":%"PRIx16":%"PRIx16,
-        ntohs( words[0] ),
-        ntohs( words[1] ),
-        ntohs( words[2] ),
-        ntohs( words[3] ),
-        ntohs( words[4] ),
-        ntohs( words[5] ),
-        ntohs( words[6] ),
-        ntohs( words[7] )
+        "%" PRIx16 ":%" PRIx16 ":%" PRIx16 ":%" PRIx16 ":%" PRIx16 ":%" PRIx16
+        ":%" PRIx16 ":%" PRIx16,
+        ntohs( words[ 0 ] ),
+        ntohs( words[ 1 ] ),
+        ntohs( words[ 2 ] ),
+        ntohs( words[ 3 ] ),
+        ntohs( words[ 4 ] ),
+        ntohs( words[ 5 ] ),
+        ntohs( words[ 6 ] ),
+        ntohs( words[ 7 ] )
       );
       break;
     }
@@ -627,15 +629,15 @@ static uint16_t get_ip_addr_as_str(
 }
 
 static void set_ip_addr_from_str(
-  const char *addr_str,
-  uint16_t port,
+  const char      *addr_str,
+  uint16_t         port,
   struct sockaddr *addr,
-  socklen_t *addrlen
- )
+  socklen_t       *addrlen
+)
 {
   socklen_t addr_size;
-  int res;
-  int i;
+  int       res;
+  int       i;
 
   if ( addr == NULL || addrlen == NULL ) {
     return;
@@ -645,16 +647,18 @@ static void set_ip_addr_from_str(
   if ( strchr( addr_str, ':' ) == NULL ) {
     /* IPv4 address */
     struct sockaddr_in *ipv4_addr = (struct sockaddr_in *) addr;
-    uint8_t *bytes = (uint8_t *) &ipv4_addr->sin_addr.s_addr;
+    uint8_t            *bytes = (uint8_t *) &ipv4_addr->sin_addr.s_addr;
 
     *addrlen = sizeof( struct sockaddr_in );
     T_ge_sz( addr_size, *addrlen );
-    if ( addr_size < *addrlen ) { return; }
+    if ( addr_size < *addrlen ) {
+      return;
+    }
     ipv4_addr->sin_family = AF_INET;
     ipv4_addr->sin_port = htons( port );
     res = sscanf(
       addr_str,
-      "%"SCNu8".%"SCNu8".%"SCNu8".%"SCNu8,
+      "%" SCNu8 ".%" SCNu8 ".%" SCNu8 ".%" SCNu8,
       bytes,
       bytes + 1,
       bytes + 2,
@@ -664,19 +668,21 @@ static void set_ip_addr_from_str(
   } else {
     /* IPv6 address */
     struct sockaddr_in6 *ipv6_addr = (struct sockaddr_in6 *) addr;
-    uint16_t *words = (uint16_t *) &ipv6_addr->sin6_addr.s6_addr;
+    uint16_t            *words = (uint16_t *) &ipv6_addr->sin6_addr.s6_addr;
 
     *addrlen = sizeof( struct sockaddr_in6 );
     T_gt_sz( addr_size, *addrlen );
-    if ( addr_size < *addrlen ) { return; }
+    if ( addr_size < *addrlen ) {
+      return;
+    }
     ipv6_addr->sin6_family = AF_INET6;
     ipv6_addr->sin6_port = htons( port );
     ipv6_addr->sin6_flowinfo = 0;
     ipv6_addr->sin6_scope_id = 0;
     res = sscanf(
       addr_str,
-      "%"SCNx16":%"SCNx16":%"SCNx16":%"SCNx16":%"SCNx16":%"SCNx16
-        ":%"SCNx16":%"SCNx16,
+      "%" SCNx16 ":%" SCNx16 ":%" SCNx16 ":%" SCNx16 ":%" SCNx16 ":%" SCNx16
+      ":%" SCNx16 ":%" SCNx16,
       words,
       words + 1,
       words + 2,
@@ -688,7 +694,7 @@ static void set_ip_addr_from_str(
     );
     T_quiet_true( res == 8, "Cannot parse IPv6 address: \"%s\"", addr_str );
     for ( i = 0; i < 8; ++i ) {
-      words[i] = htons( words[i] );
+      words[ i ] = htons( words[ i ] );
     }
   }
 }
@@ -699,9 +705,9 @@ static void set_ip_addr_from_str(
 
 int inet_aton( const char *cp, struct in_addr *inp )
 {
-  int result = 0;
-  uint8_t *ipv4_addr = (uint8_t *) inp;
-  static const char addr0[] = TFTP_KNOWN_IPV4_ADDR0_STR;
+  int                  result = 0;
+  uint8_t             *ipv4_addr = (uint8_t *) inp;
+  static const char    addr0[] = TFTP_KNOWN_IPV4_ADDR0_STR;
   static const uint8_t addr0_data[] = { TFTP_KNOWN_IPV4_ADDR0_ARRAY };
 
   if ( strcmp( addr0, cp ) == 0 ) {
@@ -711,12 +717,12 @@ int inet_aton( const char *cp, struct in_addr *inp )
 
   T_log(
     T_VERBOSE,
-    "inet_aton(cp=%s, addr=%"PRIu8".%"PRIu8".%"PRIu8".%"PRIu8") = %d",
+    "inet_aton(cp=%s, addr=%" PRIu8 ".%" PRIu8 ".%" PRIu8 ".%" PRIu8 ") = %d",
     cp,
-    ipv4_addr[0],
-    ipv4_addr[1],
-    ipv4_addr[2],
-    ipv4_addr[3],
+    ipv4_addr[ 0 ],
+    ipv4_addr[ 1 ],
+    ipv4_addr[ 2 ],
+    ipv4_addr[ 3 ],
     result
   );
   return result;
@@ -729,47 +735,49 @@ struct hostent *gethostbyname( const char *name )
     TFTP_KNOWN_IPV4_ADDR0_ARRAY /* IPv4: 127.0.0.1 "127.0.0.1" */
   };
   static char *ip_addrs[] = {
-    ip_addr_bytes + 0 * IPV4_ADDR_SIZE, NULL,
-    ip_addr_bytes + 1 * IPV4_ADDR_SIZE, NULL
+    ip_addr_bytes + 0 * IPV4_ADDR_SIZE,
+    NULL,
+    ip_addr_bytes + 1 * IPV4_ADDR_SIZE,
+    NULL
   };
   static struct hostent hosts[] = {
     {
-    .h_name      = TFTP_KNOWN_SERVER0_NAME,
-    .h_aliases   = NULL,
-    .h_addrtype  = AF_INET,
-    .h_length    = IPV4_ADDR_SIZE,
-    .h_addr_list = ip_addrs + 0,
+      .h_name = TFTP_KNOWN_SERVER0_NAME,
+      .h_aliases = NULL,
+      .h_addrtype = AF_INET,
+      .h_length = IPV4_ADDR_SIZE,
+      .h_addr_list = ip_addrs + 0,
     },
     {
-    .h_name      = TFTP_KNOWN_IPV4_ADDR0_STR,
-    .h_aliases   = NULL,
-    .h_addrtype  = AF_INET,
-    .h_length    = IPV4_ADDR_SIZE,
-    .h_addr_list = ip_addrs + 2,
+      .h_name = TFTP_KNOWN_IPV4_ADDR0_STR,
+      .h_aliases = NULL,
+      .h_addrtype = AF_INET,
+      .h_length = IPV4_ADDR_SIZE,
+      .h_addr_list = ip_addrs + 2,
     }
   };
   struct hostent *result = NULL;
-  uint8_t *ipv4_addr;
-  size_t i;
+  uint8_t        *ipv4_addr;
+  size_t          i;
 
   for ( i = 0; i < RTEMS_ARRAY_SIZE( hosts ); ++i ) {
-    if ( strcmp( hosts[i].h_name, name ) == 0 ) {
+    if ( strcmp( hosts[ i ].h_name, name ) == 0 ) {
       result = hosts + i;
     }
   }
   /* Note: `h_errno` not set due to linker issues */
 
   if ( result != NULL ) {
-    ipv4_addr = (uint8_t *) result->h_addr_list[0];
+    ipv4_addr = (uint8_t *) result->h_addr_list[ 0 ];
     T_log(
       T_VERBOSE,
-      "gethostbyname(%s) = %s, %"PRIu8".%"PRIu8".%"PRIu8".%"PRIu8,
+      "gethostbyname(%s) = %s, %" PRIu8 ".%" PRIu8 ".%" PRIu8 ".%" PRIu8,
       name,
       result->h_name,
-      ipv4_addr[0],
-      ipv4_addr[1],
-      ipv4_addr[2],
-      ipv4_addr[3]
+      ipv4_addr[ 0 ],
+      ipv4_addr[ 1 ],
+      ipv4_addr[ 2 ],
+      ipv4_addr[ 3 ]
     );
   } else {
     T_log( T_NORMAL, "gethostbyname(%s) = %p", name, result );
@@ -780,19 +788,19 @@ struct hostent *gethostbyname( const char *name )
 int socket( int domain, int type, int protocol )
 {
   Tftp_Action act = {
-    .kind                 = TFTP_IA_KIND_SOCKET,
-    .data.socket.domain   = domain,
-    .data.socket.type     = type,
+    .kind = TFTP_IA_KIND_SOCKET,
+    .data.socket.domain = domain,
+    .data.socket.type = type,
     .data.socket.protocol = protocol
   };
 
-  if( !process_interaction( &act ) ) {
+  if ( !process_interaction( &act ) ) {
     return -1;
   };
 
   /* Should never happen but check prevents programming mistakes */
   T_quiet_ge_int( act.data.socket.result, TFTP_FIRST_FD );
-  if( act.data.socket.result < TFTP_FIRST_FD ) {
+  if ( act.data.socket.result < TFTP_FIRST_FD ) {
     return -1;
   };
 
@@ -810,7 +818,7 @@ int __wrap_close( int fd )
     .data.close.fd = fd,
   };
 
-  if( !process_interaction( &act ) ) {
+  if ( !process_interaction( &act ) ) {
     return -1;
   };
 
@@ -819,12 +827,12 @@ int __wrap_close( int fd )
 
 int bind( int sockfd, const struct sockaddr *addr, socklen_t addrlen )
 {
-  char addr_buf[INET6_ADDRSTRLEN];
+  char        addr_buf[ INET6_ADDRSTRLEN ];
   Tftp_Action act = {
-    .kind                   = TFTP_IA_KIND_BIND,
-    .data.bind.fd           = sockfd,
-    .data.bind.family       = addr->sa_family,
-    .data.bind.addr_str     = addr_buf
+    .kind = TFTP_IA_KIND_BIND,
+    .data.bind.fd = sockfd,
+    .data.bind.family = addr->sa_family,
+    .data.bind.addr_str = addr_buf
   };
   act.data.bind.port = get_ip_addr_as_str(
     addr,
@@ -833,7 +841,7 @@ int bind( int sockfd, const struct sockaddr *addr, socklen_t addrlen )
     sizeof( addr_buf )
   );
 
-  if( !process_interaction( &act ) ) {
+  if ( !process_interaction( &act ) ) {
     return -1;
   };
 
@@ -841,33 +849,33 @@ int bind( int sockfd, const struct sockaddr *addr, socklen_t addrlen )
 }
 
 int setsockopt(
-  int sockfd,
-  int level,
-  int optname,
+  int         sockfd,
+  int         level,
+  int         optname,
   const void *optval,
-  socklen_t optlen
+  socklen_t   optlen
 )
 {
-  int result = 0;
-  int i;
+  int                   result = 0;
+  int                   i;
   const struct timeval *tv = optval;
 
   T_log(
     T_VERBOSE,
     "setsockopt(sockfd=%d, level=%s, optname=%s, optval=%dms )",
     sockfd,
-    ( level == SOL_SOCKET    ) ? "SOL_SOCKET"  : "UNKNOWN",
+    ( level == SOL_SOCKET ) ? "SOL_SOCKET" : "UNKNOWN",
     ( optname == SO_RCVTIMEO ) ? "SO_RCVTIMEO" : "UNKNOWN",
-    ( optname == SO_RCVTIMEO ) ?
-      (int) ( tv->tv_sec * 1000 + tv->tv_usec / 1000 ) : -1
+    ( optname == SO_RCVTIMEO )
+      ? (int) ( tv->tv_sec * 1000 + tv->tv_usec / 1000 )
+      : -1
   );
 
   T_eq_int( level, SOL_SOCKET );
   T_eq_int( optname, SO_RCVTIMEO );
   T_eq_int( (int) optlen, sizeof( struct timeval ) );
   if (
-    level != SOL_SOCKET ||
-    optname != SO_RCVTIMEO ||
+    level != SOL_SOCKET || optname != SO_RCVTIMEO ||
     optlen != sizeof( struct timeval )
   ) {
     result = -1;
@@ -883,21 +891,25 @@ int setsockopt(
       result = -1;
       break;
     }
-    if ( control->receive_timeout_socket_fd[i] == sockfd ||
-      control->receive_timeout_socket_fd[i] == 0 ) {
-      control->receive_timeout_socket_fd[i] = sockfd;
-      control->receive_timeout_ms[i]   = tv->tv_sec * 1000 + tv->tv_usec / 1000;
+    if (
+      control->receive_timeout_socket_fd[ i ] == sockfd ||
+      control->receive_timeout_socket_fd[ i ] == 0
+    ) {
+      control->receive_timeout_socket_fd[ i ] = sockfd;
+      control->receive_timeout_ms[ i ] = tv->tv_sec * 1000 +
+                                         tv->tv_usec / 1000;
       break;
     }
   }
 
   T_log(
     T_VERBOSE,
-    "[setsockopt(sockfd=%d, level=%s, optname=%s, optval=%"PRIu32"ms )] = %d",
+    "[setsockopt(sockfd=%d, level=%s, optname=%s, optval=%" PRIu32
+    "ms )] = %d",
     sockfd,
-    ( level == SOL_SOCKET    ) ? "SOL_SOCKET"  : "UNKNOWN",
+    ( level == SOL_SOCKET ) ? "SOL_SOCKET" : "UNKNOWN",
     ( optname == SO_RCVTIMEO ) ? "SO_RCVTIMEO" : "UNKNOWN",
-    ( i < MAX_SOCKET_FD ) ? (int) control->receive_timeout_ms[i] : -1,
+    ( i < MAX_SOCKET_FD ) ? (int) control->receive_timeout_ms[ i ] : -1,
     result
   );
 
@@ -905,23 +917,23 @@ int setsockopt(
 }
 
 ssize_t sendto(
-  int sockfd,
-  const void *buf,
-  size_t len,
-  int flags,
+  int                    sockfd,
+  const void            *buf,
+  size_t                 len,
+  int                    flags,
   const struct sockaddr *dest_addr,
-  socklen_t addrlen
+  socklen_t              addrlen
 )
 {
-  char addr_buf[INET6_ADDRSTRLEN];
+  char        addr_buf[ INET6_ADDRSTRLEN ];
   Tftp_Action act = {
-    .kind                      = TFTP_IA_KIND_SENDTO,
-    .data.sendto.fd            = sockfd,
-    .data.sendto.buf           = buf,
-    .data.sendto.len           = len,
-    .data.sendto.flags         = flags,
+    .kind = TFTP_IA_KIND_SENDTO,
+    .data.sendto.fd = sockfd,
+    .data.sendto.buf = buf,
+    .data.sendto.len = len,
+    .data.sendto.flags = flags,
     .data.sendto.dest_addr_str = addr_buf,
-    .data.sendto.addrlen       = (int) addrlen,
+    .data.sendto.addrlen = (int) addrlen,
   };
   act.data.sendto.dest_port = get_ip_addr_as_str(
     dest_addr,
@@ -930,7 +942,7 @@ ssize_t sendto(
     sizeof( addr_buf )
   );
 
-  if( !process_interaction( &act ) ) {
+  if ( !process_interaction( &act ) ) {
     return -1;
   };
 
@@ -938,29 +950,29 @@ ssize_t sendto(
 }
 
 ssize_t recvfrom(
-  int sockfd,
-  void *buf,
-  size_t len,
-  int flags,
+  int              sockfd,
+  void            *buf,
+  size_t           len,
+  int              flags,
   struct sockaddr *src_addr,
-  socklen_t *addrlen
+  socklen_t       *addrlen
 )
 {
-  int i;
+  int          i;
   Tftp_Packet *pkt = buf;
-  Tftp_Action act = {
-    .kind                       = TFTP_IA_KIND_RECVFROM,
-    .data.recvfrom.fd           = sockfd,
-    .data.recvfrom.buf          = buf,
-    .data.recvfrom.len          = len,
-    .data.recvfrom.flags        = flags,
-    .data.recvfrom.timeout_ms   = 0,
-    .data.recvfrom.addrlen      = (int) *addrlen
+  Tftp_Action  act = {
+    .kind = TFTP_IA_KIND_RECVFROM,
+    .data.recvfrom.fd = sockfd,
+    .data.recvfrom.buf = buf,
+    .data.recvfrom.len = len,
+    .data.recvfrom.flags = flags,
+    .data.recvfrom.timeout_ms = 0,
+    .data.recvfrom.addrlen = (int) *addrlen
   };
 
   for ( i = 0; i < MAX_SOCKET_FD; ++i ) {
-    if ( control->receive_timeout_socket_fd[i] == sockfd ) {
-      act.data.recvfrom.timeout_ms = control->receive_timeout_ms[i];
+    if ( control->receive_timeout_socket_fd[ i ] == sockfd ) {
+      act.data.recvfrom.timeout_ms = control->receive_timeout_ms[ i ];
       break;
     }
   }
@@ -970,7 +982,7 @@ ssize_t recvfrom(
     pkt->opcode = ntohs( 0xFFFF );
   }
 
-  if( !process_interaction( &act ) ) {
+  if ( !process_interaction( &act ) ) {
     return -1;
   };
 

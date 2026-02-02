@@ -45,64 +45,64 @@
 
 const char rtems_test_name[] = "FSDOSFSSYNC 1";
 
-static void create_file(const char *file)
+static void create_file( const char *file )
 {
   int fd;
   int rv;
 
-  fd = creat(file, S_IRWXU | S_IRWXG | S_IRWXO);
-  rtems_test_assert(fd >= 0);
+  fd = creat( file, S_IRWXU | S_IRWXG | S_IRWXO );
+  rtems_test_assert( fd >= 0 );
 
-  rv = fsync(fd);
-  rtems_test_assert(rv == 0);
+  rv = fsync( fd );
+  rtems_test_assert( rv == 0 );
 
-  rv = close(fd);
-  rtems_test_assert(rv == 0);
+  rv = close( fd );
+  rtems_test_assert( rv == 0 );
 }
 
-static void write_to_file(const char *file, bool sync)
+static void write_to_file( const char *file, bool sync )
 {
-  int fd;
-  char buf [1];
+  int     fd;
+  char    buf[ 1 ];
   ssize_t n;
-  off_t pos;
-  int rv;
+  off_t   pos;
+  int     rv;
 
-  fd = open(file, O_RDWR);
-  rtems_test_assert(fd >= 0);
+  fd = open( file, O_RDWR );
+  rtems_test_assert( fd >= 0 );
 
-  n = write(fd, buf, sizeof(buf));
-  rtems_test_assert(n == (ssize_t) sizeof(buf));
+  n = write( fd, buf, sizeof( buf ) );
+  rtems_test_assert( n == (ssize_t) sizeof( buf ) );
 
-  pos = lseek(fd, 0, SEEK_END);
-  rtems_test_assert(pos == sizeof(buf));
+  pos = lseek( fd, 0, SEEK_END );
+  rtems_test_assert( pos == sizeof( buf ) );
 
-  if (sync) {
-    rv = fsync(fd);
-    rtems_test_assert(rv == 0);
+  if ( sync ) {
+    rv = fsync( fd );
+    rtems_test_assert( rv == 0 );
   }
 
-  rv = close(fd);
-  rtems_test_assert(rv == 0);
+  rv = close( fd );
+  rtems_test_assert( rv == 0 );
 }
 
-static void check_file_size(const char *file, off_t size)
+static void check_file_size( const char *file, off_t size )
 {
-  int fd;
+  int   fd;
   off_t pos;
-  int rv;
+  int   rv;
 
-  fd = open(file, O_RDWR);
-  rtems_test_assert(fd >= 0);
+  fd = open( file, O_RDWR );
+  rtems_test_assert( fd >= 0 );
 
-  pos = lseek(fd, 0, SEEK_END);
-  rtems_test_assert(pos == size);
+  pos = lseek( fd, 0, SEEK_END );
+  rtems_test_assert( pos == size );
 
-  rv = close(fd);
-  rtems_test_assert(rv == 0);
+  rv = close( fd );
+  rtems_test_assert( rv == 0 );
 }
 
-static void test(const char *rda, const char *mnt, const char *file)
+static void test( const char *rda, const char *mnt, const char *file )
 {
   static const msdos_format_request_param_t rqdata = {
     .quick_format = true,
@@ -112,11 +112,11 @@ static void test(const char *rda, const char *mnt, const char *file)
   int disk_fd;
   int rv;
 
-  disk_fd = open(rda, O_RDWR);
-  rtems_test_assert(disk_fd >= 0);
+  disk_fd = open( rda, O_RDWR );
+  rtems_test_assert( disk_fd >= 0 );
 
-  rv = msdos_format(rda, &rqdata);
-  rtems_test_assert(rv == 0);
+  rv = msdos_format( rda, &rqdata );
+  rtems_test_assert( rv == 0 );
 
   rv = mount_and_make_target_path(
     rda,
@@ -125,42 +125,42 @@ static void test(const char *rda, const char *mnt, const char *file)
     RTEMS_FILESYSTEM_READ_WRITE,
     NULL
   );
-  rtems_test_assert(rv == 0);
+  rtems_test_assert( rv == 0 );
 
-  create_file(file);
-  rv = rtems_disk_fd_purge(disk_fd);
-  rtems_test_assert(rv == 0);
+  create_file( file );
+  rv = rtems_disk_fd_purge( disk_fd );
+  rtems_test_assert( rv == 0 );
 
-  write_to_file(file, false);
-  rv = rtems_disk_fd_purge(disk_fd);
-  rtems_test_assert(rv == 0);
-  check_file_size(file, 0);
+  write_to_file( file, false );
+  rv = rtems_disk_fd_purge( disk_fd );
+  rtems_test_assert( rv == 0 );
+  check_file_size( file, 0 );
 
-  write_to_file(file, true);
-  rv = rtems_disk_fd_purge(disk_fd);
-  rtems_test_assert(rv == 0);
-  check_file_size(file, 1);
+  write_to_file( file, true );
+  rv = rtems_disk_fd_purge( disk_fd );
+  rtems_test_assert( rv == 0 );
+  check_file_size( file, 1 );
 
-  rv = unmount(mnt);
-  rtems_test_assert(rv == 0);
+  rv = unmount( mnt );
+  rtems_test_assert( rv == 0 );
 
-  rv = close(disk_fd);
-  rtems_test_assert(rv == 0);
+  rv = close( disk_fd );
+  rtems_test_assert( rv == 0 );
 }
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
   TEST_BEGIN();
 
-  test("/dev/rda", "/mnt", "/mnt/file");
+  test( "/dev/rda", "/mnt", "/mnt/file" );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
-rtems_ramdisk_config rtems_ramdisk_configuration [] = {
+rtems_ramdisk_config rtems_ramdisk_configuration[] = {
   { .block_size = 512, .block_num = 1024 }
 };
 
@@ -177,7 +177,7 @@ size_t rtems_ramdisk_configuration_size = 1;
 
 #define CONFIGURE_MAXIMUM_TASKS 2
 
-#define CONFIGURE_EXTRA_TASK_STACKS (8 * 1024)
+#define CONFIGURE_EXTRA_TASK_STACKS ( 8 * 1024 )
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

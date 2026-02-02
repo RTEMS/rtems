@@ -48,7 +48,6 @@
 extern "C" {
 #endif
 
-
 /**
  * @defgroup RTEMSTestSuiteTestsTFTPFS Test suite for libtftpsfs tests
  *
@@ -77,10 +76,10 @@ extern "C" {
  * @{
  */
 
-#define TFTP_STD_PORT               69
-#define TFTP_MAX_IP_ADDR_STRLEN     (16 * 2 + 7 + 1)
-#define TFTP_MAX_ERROR_STRLEN       20
-#define TFTP_MAX_OPTIONS_SIZE       40
+#define TFTP_STD_PORT           69
+#define TFTP_MAX_IP_ADDR_STRLEN ( 16 * 2 + 7 + 1 )
+#define TFTP_MAX_ERROR_STRLEN   20
+#define TFTP_MAX_OPTIONS_SIZE   40
 
 /**
  * @brief IP address strings and server names resolved by network fake
@@ -121,32 +120,32 @@ typedef struct Tftp_Action {
       int result;
     } close;
     struct {
-      int fd;
-      int family;
-      uint16_t port;
+      int         fd;
+      int         family;
+      uint16_t    port;
       const char *addr_str;
-      int result;
+      int         result;
     } bind;
     struct {
-      int fd;
+      int         fd;
       const void *buf;
-      size_t len;
-      int flags;
-      uint16_t dest_port;
+      size_t      len;
+      int         flags;
+      uint16_t    dest_port;
       const char *dest_addr_str;
-      int addrlen;
-      ssize_t result;
+      int         addrlen;
+      ssize_t     result;
     } sendto;
     struct {
-      int fd;
-      void *buf;
-      size_t len;
-      int flags;
+      int      fd;
+      void    *buf;
+      size_t   len;
+      int      flags;
       uint32_t timeout_ms;
       uint16_t src_port;
-      char src_addr_str[TFTP_MAX_IP_ADDR_STRLEN];
-      int addrlen;
-      ssize_t result;
+      char     src_addr_str[ TFTP_MAX_IP_ADDR_STRLEN ];
+      int      addrlen;
+      ssize_t  result;
     } recvfrom;
   } data;
 } Tftp_Action;
@@ -173,13 +172,13 @@ typedef struct Tftp_Action {
  * @retval true if the client behaved as expected.
  * @retval false if the test shall fail.
  */
-typedef bool (*Tftp_Interaction_fn)( Tftp_Action *act, void *data );
+typedef bool ( *Tftp_Interaction_fn )( Tftp_Action *act, void *data );
 typedef struct Tftp_Interaction Tftp_Interaction;
 typedef struct Tftp_Interaction {
-  Tftp_Interaction *next;
-  Tftp_Action_kind kind;
+  Tftp_Interaction   *next;
+  Tftp_Action_kind    kind;
   Tftp_Interaction_fn fn;
-  void *data[0];
+  void               *data[ 0 ];
 } Tftp_Interaction;
 
 /**
@@ -211,11 +210,10 @@ void _Tftp_Reset( void );
  *   will be provided to @c fn as argument @c data when invoked.
  */
 void *_Tftp_Append_interaction(
-  Tftp_Action_kind kind,
+  Tftp_Action_kind    kind,
   Tftp_Interaction_fn fn,
-  size_t size
+  size_t              size
 );
-
 
 /**
  * @brief Have all queued interactions been processed?
@@ -241,28 +239,28 @@ bool _Tftp_Has_no_more_interactions( void );
 #define TFTP_OPTION_TSIZE      "tsize"
 #define TFTP_OPTION_WINDOWSIZE "windowsize"
 
-#define TFTP_WINDOW_SIZE_MIN   1
-#define TFTP_BLOCK_SIZE_MIN    8
-#define TFTP_BLOCK_SIZE_MAX    65464
+#define TFTP_WINDOW_SIZE_MIN 1
+#define TFTP_BLOCK_SIZE_MIN  8
+#define TFTP_BLOCK_SIZE_MAX  65464
 
 typedef enum Tftp_Opcode {
-  TFTP_OPCODE_RRQ   = 1,
-  TFTP_OPCODE_WRQ   = 2,
-  TFTP_OPCODE_DATA  = 3,
-  TFTP_OPCODE_ACK   = 4,
+  TFTP_OPCODE_RRQ = 1,
+  TFTP_OPCODE_WRQ = 2,
+  TFTP_OPCODE_DATA = 3,
+  TFTP_OPCODE_ACK = 4,
   TFTP_OPCODE_ERROR = 5,
-  TFTP_OPCODE_OACK  = 6,
+  TFTP_OPCODE_OACK = 6,
 } Tftp_Opcode;
 
 typedef enum Tftp_Error_code {
   TFTP_ERROR_CODE_NOT_DEFINED = 0,
-  TFTP_ERROR_CODE_NOT_FOUND   = 1,
-  TFTP_ERROR_CODE_NO_ACCESS   = 2,
-  TFTP_ERROR_CODE_DISK_FULL   = 3,
-  TFTP_ERROR_CODE_ILLEGAL     = 4,
-  TFTP_ERROR_CODE_UNKNOWN_ID  = 5,
+  TFTP_ERROR_CODE_NOT_FOUND = 1,
+  TFTP_ERROR_CODE_NO_ACCESS = 2,
+  TFTP_ERROR_CODE_DISK_FULL = 3,
+  TFTP_ERROR_CODE_ILLEGAL = 4,
+  TFTP_ERROR_CODE_UNKNOWN_ID = 5,
   TFTP_ERROR_CODE_FILE_EXISTS = 6,
-  TFTP_ERROR_CODE_NO_USER     = 7,
+  TFTP_ERROR_CODE_NO_USER = 7,
   TFTP_ERROR_CODE_OPTION_NEGO = 8,
 } Tftp_Error_code;
 
@@ -270,24 +268,24 @@ typedef struct Tftp_Packet {
   uint16_t opcode;
   union {
     struct {
-      char opts[0];
+      char opts[ 0 ];
     } rrq;
     struct {
-      char opts[0];
+      char opts[ 0 ];
     } wrq;
     struct {
       uint16_t block_num;
-      uint8_t bytes[0];
+      uint8_t  bytes[ 0 ];
     } data;
     struct {
       uint16_t block_num;
     } ack;
     struct {
       uint16_t error_code;
-      char err_msg[0];
+      char     err_msg[ 0 ];
     } error;
     struct {
-      char opts[0];
+      char opts[ 0 ];
     } oack;
   } content;
 } Tftp_Packet;

@@ -44,13 +44,13 @@
 
 #include <stdio.h>
 #include <stdlib.h> /* malloc(), free() */
-#include <ctype.h> /* isprint() */
+#include <ctype.h>  /* isprint() */
 #include <errno.h>
-#include <sys/stat.h> /* mkdir(), open() */
-#include <sys/types.h> /* mkdir(), open() */
+#include <sys/stat.h>   /* mkdir(), open() */
+#include <sys/types.h>  /* mkdir(), open() */
 #include <sys/socket.h> /* AF_INET, SOCK_DGRAM */
-#include <fcntl.h> /* open() */
-#include <unistd.h> /* read(), close(), rmdir() */
+#include <fcntl.h>      /* open() */
+#include <unistd.h>     /* read(), close(), rmdir() */
 
 #include <rtems/tftp.h>
 #include <rtems/libio.h> /* mount(), RTEMS_FILESYSTEM_TYPE_TFTPFS */
@@ -63,16 +63,17 @@
 #include "tftpfs_interactions.h"
 #include "tftp_driver.h"
 
-#define SERV_PORT 12345
-#define FIRST_TIMEOUT_MILLISECONDS  400
-#define TIMEOUT_MILLISECONDS        1000
-#define LARGE_BLOCK_SIZE            TFTP_BLOCK_SIZE_MAX
-#define SMALL_BLOCK_SIZE            12
-#define SMALL_WINDOW_SIZE           4
-#define T_no_more_interactions() T_assert_true( \
-  _Tftp_Has_no_more_interactions(), \
-  "The TFTP client skipped some final network interactions." \
-)
+#define SERV_PORT                  12345
+#define FIRST_TIMEOUT_MILLISECONDS 400
+#define TIMEOUT_MILLISECONDS       1000
+#define LARGE_BLOCK_SIZE           TFTP_BLOCK_SIZE_MAX
+#define SMALL_BLOCK_SIZE           12
+#define SMALL_WINDOW_SIZE          4
+#define T_no_more_interactions()                               \
+  T_assert_true(                                               \
+    _Tftp_Has_no_more_interactions(),                          \
+    "The TFTP client skipped some final network interactions." \
+  )
 
 /*
  * Test fixture and text context
@@ -83,11 +84,11 @@ typedef struct tftp_test_context {
   void *tftp_handle; /* TFTP client handle for this file transfer */
 } tftp_test_context;
 
-static const char *tftpfs_mount_point   = "/tftp";
-static const char *tftpfs_ipv4_loopback = TFTP_KNOWN_IPV4_ADDR0_STR;
-static const char *tftpfs_server0_name  = TFTP_KNOWN_SERVER0_NAME;
-static const char *tftpfs_server0_ipv4  = TFTP_KNOWN_SERVER0_IPV4;
-static const char *tftpfs_file          = "file.txt";
+static const char       *tftpfs_mount_point = "/tftp";
+static const char       *tftpfs_ipv4_loopback = TFTP_KNOWN_IPV4_ADDR0_STR;
+static const char       *tftpfs_server0_name = TFTP_KNOWN_SERVER0_NAME;
+static const char       *tftpfs_server0_ipv4 = TFTP_KNOWN_SERVER0_IPV4;
+static const char       *tftpfs_file = "file.txt";
 static tftp_test_context tftp_context;
 
 static void mount_tftp_fs( const char *mount_point, const char *options )
@@ -171,7 +172,7 @@ static void setup_large_blocksize( void *context )
   ctx->tftp_handle = NULL;
   mount_tftp_fs(
     tftpfs_mount_point,
-    "verbose,blocksize=" RTEMS_XSTRING(LARGE_BLOCK_SIZE) ",windowsize=1"
+    "verbose,blocksize=" RTEMS_XSTRING( LARGE_BLOCK_SIZE ) ",windowsize=1"
   );
 }
 
@@ -191,8 +192,9 @@ static void setup_small_opt_size( void *context )
   ctx->tftp_handle = NULL;
   mount_tftp_fs(
     tftpfs_mount_point,
-    "blocksize=" RTEMS_XSTRING(SMALL_BLOCK_SIZE)
-    ",windowsize=" RTEMS_XSTRING(SMALL_WINDOW_SIZE)
+    "blocksize=" RTEMS_XSTRING(
+      SMALL_BLOCK_SIZE
+    ) ",windowsize=" RTEMS_XSTRING( SMALL_WINDOW_SIZE )
   );
 }
 
@@ -247,15 +249,15 @@ static uint8_t get_file_content( size_t pos )
   static const size_t frame_size = 100;
   static const size_t num_size = 11;
   static const size_t alpha_size = 53;
-  char buf[10];
-  size_t remainder = pos % frame_size;
+  char                buf[ 10 ];
+  size_t              remainder = pos % frame_size;
 
   switch ( remainder ) {
     case 0:
     case 1:
     case 2:
       sprintf( buf, "%9zu", pos - remainder );
-      return buf[remainder];
+      return buf[ remainder ];
     case 3:
     case 7:
       return '\'';
@@ -263,17 +265,17 @@ static uint8_t get_file_content( size_t pos )
     case 5:
     case 6:
       sprintf( buf, "%9zu", pos - remainder );
-      return buf[remainder-1];
+      return buf[ remainder - 1 ];
     case 8:
     case 9:
     case 10:
       sprintf( buf, "%9zu", pos - remainder );
-      return buf[remainder-2];
+      return buf[ remainder - 2 ];
     default:
       pos -= ( pos / frame_size + 1 ) * num_size;
       remainder = pos % alpha_size;
-      return ( remainder <= 'Z' - '@' ) ?
-        remainder + '@' : remainder - ( 'Z' - '@' + 1) + 'a';
+      return ( remainder <= 'Z' - '@' ) ? remainder + '@'
+                                        : remainder - ( 'Z' - '@' + 1 ) + 'a';
   }
 }
 
@@ -291,8 +293,8 @@ static const char *create_tftpfs_path(
   const char *file_name
 )
 {
-  static char buffer[100];
-  int len;
+  static char buffer[ 100 ];
+  int         len;
 
   len = snprintf(
     buffer,
@@ -310,18 +312,18 @@ static const char *create_tftpfs_path(
 
 static int read_tftp_file(
   const char *path,
-  size_t buffer_size,
-  size_t max_bytes,
-  int *fd
+  size_t      buffer_size,
+  size_t      max_bytes,
+  int        *fd
 )
 {
-  char *data_buffer;
-  int result = 0;
-  int res;
+  char   *data_buffer;
+  int     result = 0;
+  int     res;
   ssize_t i;
   ssize_t bytes = 1;
   ssize_t bytes_total = 0;
-  int errno_store;
+  int     errno_store;
 
   T_log( T_VERBOSE, "File system: open( %s, O_RDONLY )", path );
   errno = 0;
@@ -365,12 +367,13 @@ static int read_tftp_file(
       if ( bytes > 0 ) {
         max_bytes -= bytes;
         for ( i = 0; i < bytes; ++i ) {
-          if ( data_buffer[i] != get_file_content( bytes_total + i ) ) {
+          if ( data_buffer[ i ] != get_file_content( bytes_total + i ) ) {
             T_true(
               false,
               "File system: wrong file content '%c' (expected '%c') "
-                "at position %zd",
-              (int) ( isprint( (int) data_buffer[i] ) ? data_buffer[i] : '?' ),
+              "at position %zd",
+              (int) ( isprint( (int) data_buffer[ i ] ) ? data_buffer[ i ]
+                                                        : '?' ),
               (int) get_file_content( bytes_total + i ),
               bytes_total + i
             );
@@ -427,17 +430,18 @@ static int read_tftp_file(
 
 static int write_tftp_file(
   const char *path,
-  size_t file_size,
-  size_t buffer_size,
-  int *fd )
+  size_t      file_size,
+  size_t      buffer_size,
+  int        *fd
+)
 {
-  char *data_buffer;
-  int result = 0;
-  int res;
+  char   *data_buffer;
+  int     result = 0;
+  int     res;
   ssize_t i;
   ssize_t bytes;
   ssize_t bytes_total = 0;
-  int errno_store;
+  int     errno_store;
 
   errno = 0;
   T_log( T_VERBOSE, "File system: open( %s, O_WRONLY )", path );
@@ -461,10 +465,11 @@ static int write_tftp_file(
     data_buffer = malloc( buffer_size );
 
     do { /* Try also to write files with 0 bytes size */
-      bytes = ( file_size - bytes_total >= buffer_size ) ?
-        buffer_size : file_size - bytes_total;
+      bytes = ( file_size - bytes_total >= buffer_size )
+                ? buffer_size
+                : file_size - bytes_total;
       for ( i = 0; i < bytes; ++i ) {
-        data_buffer[i] = get_file_content( bytes_total + i );
+        data_buffer[ i ] = get_file_content( bytes_total + i );
       }
       errno = 0;
       bytes = write( *fd, data_buffer, i );
@@ -491,14 +496,14 @@ static int write_tftp_file(
         );
         break;
       }
-    } while( (size_t) bytes_total < file_size );
+    } while ( (size_t) bytes_total < file_size );
 
     free( data_buffer );
   } /* if */
 
   if ( *fd >= 0 ) {
     res = close( *fd );
-    if (res != 0) {
+    if ( res != 0 ) {
       errno_store = errno;
       result = res;
     }
@@ -519,19 +524,19 @@ static int write_tftp_file(
 static int rdwt_tftp_client_file(
   const char *hostname,
   const char *filename,
-  bool is_for_reading,
-  ssize_t file_size, /* Only used when `is_for_reading == false` */
+  bool        is_for_reading,
+  ssize_t     file_size, /* Only used when `is_for_reading == false` */
   const tftp_net_config *config,
-  void **tftp_handle
+  void                 **tftp_handle
 )
 {
   static const size_t buffer_size = 4001;
-  char *data_buffer;
-  int res = 0;
-  ssize_t i;
-  ssize_t bytes = 1;
-  ssize_t bytes_total = 0;
-  int errno_store = 0;
+  char               *data_buffer;
+  int                 res = 0;
+  ssize_t             i;
+  ssize_t             bytes = 1;
+  ssize_t             bytes_total = 0;
+  int                 errno_store = 0;
 
   if ( *tftp_handle == NULL ) {
     T_log(
@@ -541,13 +546,7 @@ static int rdwt_tftp_client_file(
       filename,
       is_for_reading ? "read" : "write"
     );
-    res = tftp_open(
-      hostname,
-      filename,
-      is_for_reading,
-      config,
-      tftp_handle
-    );
+    res = tftp_open( hostname, filename, is_for_reading, config, tftp_handle );
     T_log(
       T_VERBOSE,
       "TFTP Client: [tftp_open( \"%s\", \"%s\", %s, ... )] = %d (handle:%p)",
@@ -586,15 +585,10 @@ static int rdwt_tftp_client_file(
     data_buffer = malloc( buffer_size );
 
     if ( is_for_reading ) {
-
       /* Read file */
       while ( bytes > 0 ) {
         errno = 0;
-        bytes = tftp_read(
-          *tftp_handle,
-          data_buffer,
-          buffer_size
-        );
+        bytes = tftp_read( *tftp_handle, data_buffer, buffer_size );
         T_log(
           T_VERBOSE,
           "TFTP Client: [tftp_read( %p, size=%zu )] = %zd",
@@ -605,11 +599,12 @@ static int rdwt_tftp_client_file(
 
         if ( bytes > 0 ) {
           for ( i = 0; i < bytes; ++i ) {
-            if ( data_buffer[i] != get_file_content( bytes_total + i ) ) {
+            if ( data_buffer[ i ] != get_file_content( bytes_total + i ) ) {
               T_true(
                 false,
                 "FTP Client: wrong file content '%c' (expected '%c') at position %zd",
-                (int) ( isprint( (int) data_buffer[i] ) ? data_buffer[i] : '?' ),
+                (int) ( isprint( (int) data_buffer[ i ] ) ? data_buffer[ i ]
+                                                          : '?' ),
                 (int) get_file_content( bytes_total + i ),
                 bytes_total + i
               );
@@ -632,13 +627,13 @@ static int rdwt_tftp_client_file(
         }
       } /* while */
     } else {
-
       /* Write file */
       do { /* Try also to write files with 0 bytes size */
-        bytes = ( (size_t) (file_size - bytes_total) >= buffer_size ) ?
-          buffer_size : (size_t) (file_size - bytes_total);
+        bytes = ( (size_t) ( file_size - bytes_total ) >= buffer_size )
+                  ? buffer_size
+                  : (size_t) ( file_size - bytes_total );
         for ( i = 0; i < bytes; ++i ) {
-          data_buffer[i] = get_file_content( bytes_total + i );
+          data_buffer[ i ] = get_file_content( bytes_total + i );
         }
         errno = 0;
         bytes = tftp_write( *tftp_handle, data_buffer, i );
@@ -665,7 +660,7 @@ static int rdwt_tftp_client_file(
           );
           break;
         }
-      } while( bytes_total < file_size );
+      } while ( bytes_total < file_size );
     } /* if ( is_for_reading ) */
 
     free( data_buffer );
@@ -733,7 +728,7 @@ T_TEST_CASE( tftp_initialize_net_config_null )
 T_TEST_CASE_FIXTURE( tftp_open_null_hostname, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int res;
+  int                res;
 
   res = tftp_open(
     NULL, /* hostname */
@@ -755,7 +750,7 @@ T_TEST_CASE_FIXTURE( tftp_open_null_hostname, &fixture_rfc1350 )
 T_TEST_CASE_FIXTURE( tftp_open_null_filename, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int res;
+  int                res;
 
   res = tftp_open(
     tftpfs_ipv4_loopback,
@@ -783,7 +778,7 @@ T_TEST_CASE( tftp_open_null_tftp_handle )
     tftpfs_file,
     true, /* is_for_reading */
     NULL, /* config */
-    NULL /* tftp_handle */
+    NULL  /* tftp_handle */
   );
   T_eq_int( res, EINVAL );
 }
@@ -797,8 +792,8 @@ T_TEST_CASE( tftp_open_null_tftp_handle )
 T_TEST_CASE_FIXTURE( tftp_open_illegal_window_size, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  tftp_net_config config;
-  int res;
+  tftp_net_config    config;
+  int                res;
 
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
   _Tftp_Add_interaction_close( TFTP_FIRST_FD, 0 );
@@ -827,8 +822,8 @@ T_TEST_CASE_FIXTURE( tftp_open_illegal_window_size, &fixture_rfc1350 )
 T_TEST_CASE_FIXTURE( tftp_open_block_size_too_small, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  tftp_net_config config;
-  int res;
+  tftp_net_config    config;
+  int                res;
 
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
   _Tftp_Add_interaction_close( TFTP_FIRST_FD, 0 );
@@ -857,8 +852,8 @@ T_TEST_CASE_FIXTURE( tftp_open_block_size_too_small, &fixture_rfc1350 )
 T_TEST_CASE_FIXTURE( tftp_open_block_size_too_large, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  tftp_net_config config;
-  int res;
+  tftp_net_config    config;
+  int                res;
 
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
   _Tftp_Add_interaction_close( TFTP_FIRST_FD, 0 );
@@ -886,13 +881,13 @@ T_TEST_CASE_FIXTURE( tftp_open_block_size_too_large, &fixture_rfc1350 )
  */
 T_TEST_CASE( tftp_read_null_tftp_handle )
 {
-  char data_buffer[10];
+  char    data_buffer[ 10 ];
   ssize_t res;
 
   res = tftp_read(
     NULL, /* tftp_handle */
     data_buffer,
-    sizeof( data_buffer)
+    sizeof( data_buffer )
   );
   T_eq_int( res, -EIO );
 }
@@ -905,7 +900,7 @@ T_TEST_CASE( tftp_read_null_tftp_handle )
  */
 T_TEST_CASE( tftp_read_null_buffer )
 {
-  int tftp_handle;
+  int     tftp_handle;
   ssize_t res;
 
   res = tftp_read(
@@ -924,13 +919,13 @@ T_TEST_CASE( tftp_read_null_buffer )
  */
 T_TEST_CASE( tftp_write_null_tftp_handle )
 {
-  char data_buffer[10] = { 0 };
+  char    data_buffer[ 10 ] = { 0 };
   ssize_t res;
 
   res = tftp_write(
     NULL, /* tftp_handle */
     data_buffer,
-    sizeof( data_buffer)
+    sizeof( data_buffer )
   );
   T_eq_int( res, -EIO );
 }
@@ -943,7 +938,7 @@ T_TEST_CASE( tftp_write_null_tftp_handle )
  */
 T_TEST_CASE( tftp_write_null_buffer )
 {
-  int tftp_handle;
+  int     tftp_handle;
   ssize_t res;
 
   res = tftp_write(
@@ -971,8 +966,8 @@ T_TEST_CASE( tftp_close_null )
  */
 T_TEST_CASE( _Tftpfs_Parse_options_empty )
 {
-  size_t err_pos;
-  uint32_t flags = 0;
+  size_t          err_pos;
+  uint32_t        flags = 0;
   tftp_net_config config;
 
   tftp_initialize_net_config( &config );
@@ -990,8 +985,8 @@ T_TEST_CASE( _Tftpfs_Parse_options_empty )
  */
 T_TEST_CASE( _Tftpfs_Parse_options_null )
 {
-  size_t err_pos;
-  uint32_t flags = 0;
+  size_t          err_pos;
+  uint32_t        flags = 0;
   tftp_net_config config;
 
   tftp_initialize_net_config( &config );
@@ -1009,8 +1004,8 @@ T_TEST_CASE( _Tftpfs_Parse_options_null )
  */
 T_TEST_CASE( _Tftpfs_Parse_options_verbose )
 {
-  size_t err_pos;
-  uint32_t flags = 0;
+  size_t          err_pos;
+  uint32_t        flags = 0;
   tftp_net_config config;
 
   tftp_initialize_net_config( &config );
@@ -1028,8 +1023,8 @@ T_TEST_CASE( _Tftpfs_Parse_options_verbose )
  */
 T_TEST_CASE( _Tftpfs_Parse_options_rfc1350 )
 {
-  size_t err_pos;
-  uint32_t flags = 0;
+  size_t          err_pos;
+  uint32_t        flags = 0;
   tftp_net_config config;
 
   tftp_initialize_net_config( &config );
@@ -1047,8 +1042,8 @@ T_TEST_CASE( _Tftpfs_Parse_options_rfc1350 )
  */
 T_TEST_CASE( _Tftpfs_Parse_options_blocksize )
 {
-  size_t err_pos;
-  uint32_t flags = 0;
+  size_t          err_pos;
+  uint32_t        flags = 0;
   tftp_net_config config;
 
   tftp_initialize_net_config( &config );
@@ -1066,8 +1061,8 @@ T_TEST_CASE( _Tftpfs_Parse_options_blocksize )
  */
 T_TEST_CASE( _Tftpfs_Parse_options_windowsize )
 {
-  size_t err_pos;
-  uint32_t flags = 0;
+  size_t          err_pos;
+  uint32_t        flags = 0;
   tftp_net_config config;
 
   tftp_initialize_net_config( &config );
@@ -1085,12 +1080,16 @@ T_TEST_CASE( _Tftpfs_Parse_options_windowsize )
  */
 T_TEST_CASE( _Tftpfs_Parse_options_all )
 {
-  size_t err_pos;
-  uint32_t flags = 0;
+  size_t          err_pos;
+  uint32_t        flags = 0;
   tftp_net_config config;
 
   tftp_initialize_net_config( &config );
-  err_pos = _Tftpfs_Parse_options( "rfc1350,blocksize=1234,windowsize=4567,verbose", &config, &flags );
+  err_pos = _Tftpfs_Parse_options(
+    "rfc1350,blocksize=1234,windowsize=4567,verbose",
+    &config,
+    &flags
+  );
   T_eq_sz( err_pos, 0 );
   T_eq_u16( config.options.block_size, 1234 );
   T_eq_u16( config.options.window_size, 4567 );
@@ -1104,12 +1103,16 @@ T_TEST_CASE( _Tftpfs_Parse_options_all )
  */
 T_TEST_CASE( _Tftpfs_Parse_options_surplus_comma )
 {
-  size_t err_pos;
-  uint32_t flags = 0;
+  size_t          err_pos;
+  uint32_t        flags = 0;
   tftp_net_config config;
 
   tftp_initialize_net_config( &config );
-  err_pos = _Tftpfs_Parse_options( ",blocksize=1234,,,,windowsize=4567,,", &config, &flags );
+  err_pos = _Tftpfs_Parse_options(
+    ",blocksize=1234,,,,windowsize=4567,,",
+    &config,
+    &flags
+  );
   T_eq_sz( err_pos, 0 );
   T_eq_u16( config.options.block_size, 1234 );
   T_eq_u16( config.options.window_size, 4567 );
@@ -1123,12 +1126,16 @@ T_TEST_CASE( _Tftpfs_Parse_options_surplus_comma )
  */
 T_TEST_CASE( _Tftpfs_Parse_options_bad_value )
 {
-  size_t err_pos;
-  uint32_t flags = 0;
+  size_t          err_pos;
+  uint32_t        flags = 0;
   tftp_net_config config;
 
   tftp_initialize_net_config( &config );
-  err_pos = _Tftpfs_Parse_options( "blocksize=123.4,windowsize=4567", &config, &flags );
+  err_pos = _Tftpfs_Parse_options(
+    "blocksize=123.4,windowsize=4567",
+    &config,
+    &flags
+  );
   T_eq_sz( err_pos, 14 );
 }
 
@@ -1139,8 +1146,8 @@ T_TEST_CASE( _Tftpfs_Parse_options_bad_value )
  */
 T_TEST_CASE( _Tftpfs_Parse_options_illegal_option )
 {
-  size_t err_pos;
-  uint32_t flags = 0;
+  size_t          err_pos;
+  uint32_t        flags = 0;
   tftp_net_config config;
 
   tftp_initialize_net_config( &config );
@@ -1155,8 +1162,8 @@ T_TEST_CASE( _Tftpfs_Parse_options_illegal_option )
  */
 T_TEST_CASE( _Tftpfs_Parse_options_truncated_option )
 {
-  size_t err_pos;
-  uint32_t flags = 0;
+  size_t          err_pos;
+  uint32_t        flags = 0;
   tftp_net_config config;
 
   tftp_initialize_net_config( &config );
@@ -1206,9 +1213,9 @@ T_TEST_CASE_FIXTURE( mount_with_bad_options, &fixture_mount_point )
 T_TEST_CASE_FIXTURE( client_open_with_NULL_config, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  uint16_t block_num = 1;
-  size_t pos_in_file = 0;
+  int                bytes_read;
+  uint16_t           block_num = 1;
+  size_t             pos_in_file = 0;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -1246,7 +1253,7 @@ T_TEST_CASE_FIXTURE( client_open_with_NULL_config, &fixture_rfc1350 )
     tftpfs_ipv4_loopback,
     tftpfs_file,
     true, /* is_for_reading */
-    -1, /* file_size for writing files only */
+    -1,   /* file_size for writing files only */
     NULL, /* config */
     &ctx->tftp_handle
   );
@@ -1280,19 +1287,20 @@ T_TEST_CASE_FIXTURE( client_open_with_NULL_config, &fixture_rfc1350 )
 T_TEST_CASE_FIXTURE( client_open_with_none_default_config, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  tftp_net_config config;
-  int bytes_read;
-  uint16_t block_num = 0;
-  size_t pos_in_file = 0;
-  uint16_t retransmissions = 2;
-  uint16_t server_port = 3456;
-  uint32_t timeout = 300;
-  uint32_t first_timeout = 200;
-  uint16_t block_size = 8;
-  uint16_t window_size = 2;
-  const char options[] =
-    "WINDOWSIZE" "\0" "2\0"
-    TFTP_OPTION_BLKSIZE "\0" "8";
+  tftp_net_config    config;
+  int                bytes_read;
+  uint16_t           block_num = 0;
+  size_t             pos_in_file = 0;
+  uint16_t           retransmissions = 2;
+  uint16_t           server_port = 3456;
+  uint32_t           timeout = 300;
+  uint32_t           first_timeout = 200;
+  uint16_t           block_size = 8;
+  uint16_t           window_size = 2;
+  const char         options[] = "WINDOWSIZE"
+                                 "\0"
+                                 "2\0" TFTP_OPTION_BLKSIZE "\0"
+                                 "8";
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -1388,7 +1396,7 @@ T_TEST_CASE_FIXTURE( client_open_with_none_default_config, &fixture_rfc1350 )
     tftpfs_ipv4_loopback,
     tftpfs_file,
     true, /* is_for_reading */
-    -1, /* file_size for writing files only */
+    -1,   /* file_size for writing files only */
     &config,
     &ctx->tftp_handle
   );
@@ -1415,15 +1423,16 @@ T_TEST_CASE_FIXTURE( client_open_with_none_default_config, &fixture_rfc1350 )
  *   * The server receives an error message to indicate that the client
  *     closes the connection without having transferred data.
  */
-T_TEST_CASE_FIXTURE( client_write_to_file_opened_for_reading, &fixture_rfc1350 )
+T_TEST_CASE_FIXTURE(
+  client_write_to_file_opened_for_reading,
+  &fixture_rfc1350
+)
 {
   tftp_test_context *ctx = T_fixture_context();
-  int res = 0;
-  const char options[] =
-    TFTP_OPTION_BLKSIZE "\0"
-    RTEMS_XSTRING( TFTP_DEFAULT_BLOCK_SIZE ) "\0"
-    TFTP_OPTION_WINDOWSIZE"\0"
-    RTEMS_XSTRING( TFTP_DEFAULT_WINDOW_SIZE );
+  int                res = 0;
+  const char         options[] = TFTP_OPTION_BLKSIZE "\0" RTEMS_XSTRING(
+    TFTP_DEFAULT_BLOCK_SIZE
+  ) "\0" TFTP_OPTION_WINDOWSIZE "\0" RTEMS_XSTRING( TFTP_DEFAULT_WINDOW_SIZE );
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -1487,14 +1496,12 @@ T_TEST_CASE_FIXTURE( client_write_to_file_opened_for_reading, &fixture_rfc1350 )
 T_TEST_CASE_FIXTURE( client_read_to_file_opened_for_writing, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int res = 0;
-  uint16_t block_num = 1;
-  size_t pos_in_file = 0;
-  const char options[] =
-    TFTP_OPTION_BLKSIZE "\0"
-    RTEMS_XSTRING( TFTP_DEFAULT_BLOCK_SIZE ) "\0"
-    TFTP_OPTION_WINDOWSIZE"\0"
-    RTEMS_XSTRING( TFTP_DEFAULT_WINDOW_SIZE );
+  int                res = 0;
+  uint16_t           block_num = 1;
+  size_t             pos_in_file = 0;
+  const char         options[] = TFTP_OPTION_BLKSIZE "\0" RTEMS_XSTRING(
+    TFTP_DEFAULT_BLOCK_SIZE
+  ) "\0" TFTP_OPTION_WINDOWSIZE "\0" RTEMS_XSTRING( TFTP_DEFAULT_WINDOW_SIZE );
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -1528,20 +1535,20 @@ T_TEST_CASE_FIXTURE( client_read_to_file_opened_for_writing, &fixture_rfc1350 )
   );
   pos_in_file += 0;
   _Tftp_Add_interaction_recv_ack(
-     TFTP_FIRST_FD,
-     FIRST_TIMEOUT_MILLISECONDS,
-     SERV_PORT,
-     tftpfs_ipv4_loopback,
-     block_num++,
-     true
-   );
+    TFTP_FIRST_FD,
+    FIRST_TIMEOUT_MILLISECONDS,
+    SERV_PORT,
+    tftpfs_ipv4_loopback,
+    block_num++,
+    true
+  );
   _Tftp_Add_interaction_close( TFTP_FIRST_FD, 0 );
 
   res = tftp_open(
     tftpfs_ipv4_loopback,
     tftpfs_file,
     false, /* is_for_reading */
-    NULL, /* config */
+    NULL,  /* config */
     &ctx->tftp_handle
   );
   T_eq_int( res, 0 );
@@ -1575,15 +1582,13 @@ T_TEST_CASE_FIXTURE( client_read_to_file_opened_for_writing, &fixture_rfc1350 )
 T_TEST_CASE_FIXTURE( client_write_simple_file, &fixture_default_options )
 {
   tftp_test_context *ctx = T_fixture_context();
-  tftp_net_config config;
-  int bytes_written;
-  uint16_t block_num = 1;
-  size_t pos_in_file = 0;
-  const char options[] =
-    TFTP_OPTION_BLKSIZE "\0"
-    RTEMS_XSTRING( TFTP_DEFAULT_BLOCK_SIZE ) "\0"
-    TFTP_OPTION_WINDOWSIZE "\0"
-    RTEMS_XSTRING( TFTP_DEFAULT_WINDOW_SIZE );
+  tftp_net_config    config;
+  int                bytes_written;
+  uint16_t           block_num = 1;
+  size_t             pos_in_file = 0;
+  const char         options[] = TFTP_OPTION_BLKSIZE "\0" RTEMS_XSTRING(
+    TFTP_DEFAULT_BLOCK_SIZE
+  ) "\0" TFTP_OPTION_WINDOWSIZE "\0" RTEMS_XSTRING( TFTP_DEFAULT_WINDOW_SIZE );
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -1660,7 +1665,7 @@ T_TEST_CASE_FIXTURE( client_write_simple_file, &fixture_default_options )
   bytes_written = rdwt_tftp_client_file(
     tftpfs_server0_name,
     tftpfs_file,
-    false, /* is_for_reading */
+    false,       /* is_for_reading */
     pos_in_file, /* file_size for writing files only */
     &config,
     &ctx->tftp_handle
@@ -1690,9 +1695,9 @@ T_TEST_CASE_FIXTURE( client_write_simple_file, &fixture_default_options )
 T_TEST_CASE_FIXTURE( read_simple_file, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  uint16_t block_num = 1;
-  size_t pos_in_file = 0;
+  int                bytes_read;
+  uint16_t           block_num = 1;
+  size_t             pos_in_file = 0;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -1789,9 +1794,9 @@ T_TEST_CASE_FIXTURE( read_simple_file, &fixture_rfc1350 )
 T_TEST_CASE_FIXTURE( read_tiny_file, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  uint16_t block_num = 1;
-  size_t pos_in_file = 0;
+  int                bytes_read;
+  uint16_t           block_num = 1;
+  size_t             pos_in_file = 0;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -1853,9 +1858,9 @@ T_TEST_CASE_FIXTURE( read_tiny_file, &fixture_rfc1350 )
 T_TEST_CASE_FIXTURE( read_one_block_file, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  uint16_t block_num = 1;
-  size_t pos_in_file = 0;
+  int                bytes_read;
+  uint16_t           block_num = 1;
+  size_t             pos_in_file = 0;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -1943,9 +1948,9 @@ T_TEST_CASE_FIXTURE( read_one_block_file, &fixture_rfc1350 )
 T_TEST_CASE_FIXTURE( read_file_stray_packets, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  uint16_t block_num = 1;
-  size_t pos_in_file = 0;
+  int                bytes_read;
+  uint16_t           block_num = 1;
+  size_t             pos_in_file = 0;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -2051,9 +2056,9 @@ T_TEST_CASE_FIXTURE( read_file_stray_packets, &fixture_rfc1350 )
 T_TEST_CASE_FIXTURE( read_one_block_file_server_error, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  uint16_t block_num = 1;
-  size_t pos_in_file = 0;
+  int                bytes_read;
+  uint16_t           block_num = 1;
+  size_t             pos_in_file = 0;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -2122,16 +2127,29 @@ T_TEST_CASE_FIXTURE( read_one_block_file_server_error, &fixture_rfc1350 )
  *   * The test reads a file from the file system in chunks of three quarters
  *     of the block size.
  */
-T_TEST_CASE_FIXTURE( read_one_block_file_malformed_server_error, &fixture_rfc1350 )
+T_TEST_CASE_FIXTURE(
+  read_one_block_file_malformed_server_error,
+  &fixture_rfc1350
+)
 {
-  tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  uint16_t block_num = 1;
-  size_t pos_in_file = 0;
+  tftp_test_context   *ctx = T_fixture_context();
+  int                  bytes_read;
+  uint16_t             block_num = 1;
+  size_t               pos_in_file = 0;
   static const uint8_t packet_malformed_error[] = {
-  0x00, 0x05, /* Opcode = TFTP_OPCODE_ERROR */
-  0x00, 0x02, /* Error code = TFTP_ERROR_CODE_NO_ACCESS */
-  'n', 'o', ' ', 'a', 'c', 'c', 'e', 's', 's' /* missing '\0' at the end */
+    0x00,
+    0x05, /* Opcode = TFTP_OPCODE_ERROR */
+    0x00,
+    0x02, /* Error code = TFTP_ERROR_CODE_NO_ACCESS */
+    'n',
+    'o',
+    ' ',
+    'a',
+    'c',
+    'c',
+    'e',
+    's',
+    's' /* missing '\0' at the end */
   };
 
   /* T_set_verbosity( T_VERBOSE ); */
@@ -2205,9 +2223,9 @@ T_TEST_CASE_FIXTURE( read_one_block_file_malformed_server_error, &fixture_rfc135
 T_TEST_CASE_FIXTURE( read_one_block_close_file, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  uint16_t block_num = 1;
-  size_t pos_in_file = 0;
+  int                bytes_read;
+  uint16_t           block_num = 1;
+  size_t             pos_in_file = 0;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -2267,9 +2285,9 @@ T_TEST_CASE_FIXTURE( read_one_block_close_file, &fixture_rfc1350 )
 T_TEST_CASE_FIXTURE( read_close_file_immediately, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  uint16_t block_num = 1;
-  size_t pos_in_file = 0;
+  int                bytes_read;
+  uint16_t           block_num = 1;
+  size_t             pos_in_file = 0;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -2306,7 +2324,7 @@ T_TEST_CASE_FIXTURE( read_close_file_immediately, &fixture_rfc1350 )
   bytes_read = read_tftp_file(
     create_tftpfs_path( tftpfs_ipv4_loopback, tftpfs_file ),
     TFTP_RFC1350_BLOCK_SIZE / 4, /* Bytes read per call to read() */
-    0, /* Max bytes read from this file */
+    0,                           /* Max bytes read from this file */
     &ctx->fd0
   );
   T_eq_int( bytes_read, 0 );
@@ -2330,9 +2348,9 @@ T_TEST_CASE_FIXTURE( read_close_file_immediately, &fixture_rfc1350 )
 T_TEST_CASE_FIXTURE( read_empty_file, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  uint16_t block_num = 1;
-  size_t pos_in_file = 0;
+  int                bytes_read;
+  uint16_t           block_num = 1;
+  size_t             pos_in_file = 0;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -2395,9 +2413,9 @@ T_TEST_CASE_FIXTURE( read_empty_file, &fixture_rfc1350 )
 T_TEST_CASE_FIXTURE( read_empty_file_looing_rrq, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  uint16_t block_num = 1;
-  size_t pos_in_file = 0;
+  int                bytes_read;
+  uint16_t           block_num = 1;
+  size_t             pos_in_file = 0;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -2486,9 +2504,9 @@ T_TEST_CASE_FIXTURE( read_empty_file_looing_rrq, &fixture_rfc1350 )
 T_TEST_CASE_FIXTURE( read_small_file_lost_packets, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  uint16_t block_num = 1;
-  size_t pos_in_file = 0;
+  int                bytes_read;
+  uint16_t           block_num = 1;
+  size_t             pos_in_file = 0;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -2589,10 +2607,10 @@ T_TEST_CASE_FIXTURE( read_small_file_lost_packets, &fixture_rfc1350 )
  */
 T_TEST_CASE_FIXTURE( read_small_file_malformed_packet_1, &fixture_rfc1350 )
 {
-  tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  uint16_t block_num = 1;
-  size_t pos_in_file = 0;
+  tftp_test_context   *ctx = T_fixture_context();
+  int                  bytes_read;
+  uint16_t             block_num = 1;
+  size_t               pos_in_file = 0;
   static const uint8_t packet_illegal_opcode_1[] = { 0x00, 0xFF, 0x00, 0x00 };
 
   /* T_set_verbosity( T_VERBOSE ); */
@@ -2670,10 +2688,10 @@ T_TEST_CASE_FIXTURE( read_small_file_malformed_packet_1, &fixture_rfc1350 )
  */
 T_TEST_CASE_FIXTURE( read_small_file_malformed_packet_2, &fixture_rfc1350 )
 {
-  tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  uint16_t block_num = 1;
-  size_t pos_in_file = 0;
+  tftp_test_context   *ctx = T_fixture_context();
+  int                  bytes_read;
+  uint16_t             block_num = 1;
+  size_t               pos_in_file = 0;
   static const uint8_t packet_illegal_opcode_2[] = { 0x03, 0x00, 0x00, 0x01 };
 
   /* T_set_verbosity( T_VERBOSE ); */
@@ -2751,9 +2769,9 @@ T_TEST_CASE_FIXTURE( read_small_file_malformed_packet_2, &fixture_rfc1350 )
  */
 T_TEST_CASE_FIXTURE( read_file_malformed_ack_1, &fixture_rfc1350 )
 {
-  tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  size_t pos_in_file = 0;
+  tftp_test_context   *ctx = T_fixture_context();
+  int                  bytes_read;
+  size_t               pos_in_file = 0;
   static const uint8_t packet_too_short_1[] = { 0x03 };
 
   /* T_set_verbosity( T_VERBOSE ); */
@@ -2812,9 +2830,9 @@ T_TEST_CASE_FIXTURE( read_file_malformed_ack_1, &fixture_rfc1350 )
  */
 T_TEST_CASE_FIXTURE( read_file_malformed_ack_2, &fixture_rfc1350 )
 {
-  tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  size_t pos_in_file = 0;
+  tftp_test_context   *ctx = T_fixture_context();
+  int                  bytes_read;
+  size_t               pos_in_file = 0;
   static const uint8_t packet_too_short_2[] = { 0x00, 0x03 };
 
   /* T_set_verbosity( T_VERBOSE ); */
@@ -2873,9 +2891,9 @@ T_TEST_CASE_FIXTURE( read_file_malformed_ack_2, &fixture_rfc1350 )
  */
 T_TEST_CASE_FIXTURE( read_file_malformed_ack_3, &fixture_rfc1350 )
 {
-  tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  size_t pos_in_file = 0;
+  tftp_test_context   *ctx = T_fixture_context();
+  int                  bytes_read;
+  size_t               pos_in_file = 0;
   static const uint8_t packet_too_short_3[] = { 0x00, 0x03, 0x00 };
 
   /* T_set_verbosity( T_VERBOSE ); */
@@ -2935,8 +2953,8 @@ T_TEST_CASE_FIXTURE( read_file_malformed_ack_3, &fixture_rfc1350 )
 T_TEST_CASE_FIXTURE( read_file_block_number_0, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  size_t pos_in_file = 0;
+  int                bytes_read;
+  size_t             pos_in_file = 0;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -2996,9 +3014,9 @@ T_TEST_CASE_FIXTURE( read_file_block_number_0, &fixture_rfc1350 )
  */
 T_TEST_CASE_FIXTURE( read_file_illegal_opcode_1, &fixture_rfc1350 )
 {
-  tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  size_t pos_in_file = 0;
+  tftp_test_context   *ctx = T_fixture_context();
+  int                  bytes_read;
+  size_t               pos_in_file = 0;
   static const uint8_t packet_illegal_opcode_1[] = { 0x00, 0xFF, 0x00, 0x00 };
 
   /* T_set_verbosity( T_VERBOSE ); */
@@ -3065,12 +3083,15 @@ T_TEST_CASE_FIXTURE( read_file_illegal_opcode_1, &fixture_rfc1350 )
  *   * The test reads a file from the file system in one big chunk with is larger
  *     than the files size.
  */
-T_TEST_CASE_FIXTURE( read_two_block_file_wrong_block_numbers, &fixture_rfc1350 )
+T_TEST_CASE_FIXTURE(
+  read_two_block_file_wrong_block_numbers,
+  &fixture_rfc1350
+)
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  uint16_t block_num = 1;
-  size_t pos_in_file = 0;
+  int                bytes_read;
+  uint16_t           block_num = 1;
+  size_t             pos_in_file = 0;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -3267,9 +3288,9 @@ T_TEST_CASE_FIXTURE( read_two_block_file_wrong_block_numbers, &fixture_rfc1350 )
 T_TEST_CASE_FIXTURE( read_malformed_filename, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  char buffer[100];
-  int len;
+  int                bytes_read;
+  char               buffer[ 100 ];
+  int                len;
 
   len = snprintf(
     buffer,
@@ -3301,7 +3322,7 @@ T_TEST_CASE_FIXTURE( read_malformed_filename, &fixture_rfc1350 )
 T_TEST_CASE_FIXTURE( read_from_unknown_ip_address, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
+  int                bytes_read;
 
   bytes_read = read_tftp_file(
     create_tftpfs_path( "not-existing-server-address", tftpfs_file ),
@@ -3327,7 +3348,7 @@ T_TEST_CASE_FIXTURE( read_from_unknown_ip_address, &fixture_rfc1350 )
 T_TEST_CASE_FIXTURE( read_not_existing_file, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
+  int                bytes_read;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -3382,9 +3403,9 @@ T_TEST_CASE_FIXTURE( read_not_existing_file, &fixture_rfc1350 )
 T_TEST_CASE_FIXTURE( write_empty_file_packet_losts, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_written;
-  uint16_t block_num = 0;
-  size_t pos_in_file = 0;
+  int                bytes_written;
+  uint16_t           block_num = 0;
+  size_t             pos_in_file = 0;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -3511,9 +3532,9 @@ T_TEST_CASE_FIXTURE( write_empty_file_packet_losts, &fixture_rfc1350 )
 T_TEST_CASE_FIXTURE( write_tiny_file_packet_losts, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_written;
-  uint16_t block_num = 0;
-  size_t pos_in_file = 0;
+  int                bytes_written;
+  uint16_t           block_num = 0;
+  size_t             pos_in_file = 0;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -3623,7 +3644,7 @@ T_TEST_CASE_FIXTURE( write_tiny_file_packet_losts, &fixture_rfc1350 )
   bytes_written = write_tftp_file(
     create_tftpfs_path( tftpfs_server0_name, tftpfs_file ),
     TFTP_RFC1350_BLOCK_SIZE / 2 * 3, /* Size of file */
-    TFTP_RFC1350_BLOCK_SIZE / 4, /* Bytes written per call to write() */
+    TFTP_RFC1350_BLOCK_SIZE / 4,     /* Bytes written per call to write() */
     &ctx->fd0
   );
   T_eq_int( bytes_written, pos_in_file );
@@ -3646,9 +3667,9 @@ T_TEST_CASE_FIXTURE( write_tiny_file_packet_losts, &fixture_rfc1350 )
 T_TEST_CASE_FIXTURE( write_simple_file, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_written;
-  uint16_t block_num = 0;
-  size_t pos_in_file = 0;
+  int                bytes_written;
+  uint16_t           block_num = 0;
+  size_t             pos_in_file = 0;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -3755,9 +3776,9 @@ T_TEST_CASE_FIXTURE( write_simple_file, &fixture_rfc1350 )
 T_TEST_CASE_FIXTURE( write_simple_file_disk_full, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_written;
-  uint16_t block_num = 0;
-  size_t pos_in_file = 0;
+  int                bytes_written;
+  uint16_t           block_num = 0;
+  size_t             pos_in_file = 0;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -3803,7 +3824,7 @@ T_TEST_CASE_FIXTURE( write_simple_file_disk_full, &fixture_rfc1350 )
   bytes_written = write_tftp_file(
     create_tftpfs_path( tftpfs_ipv4_loopback, tftpfs_file ),
     pos_in_file, /* Size of file */
-    1, /* Bytes written per call to write() */
+    1,           /* Bytes written per call to write() */
     &ctx->fd0
   );
   T_eq_int( errno, ENOSPC );
@@ -3827,9 +3848,9 @@ T_TEST_CASE_FIXTURE( write_simple_file_disk_full, &fixture_rfc1350 )
  */
 T_TEST_CASE_FIXTURE( write_file_malformed_ack_1, &fixture_rfc1350 )
 {
-  tftp_test_context *ctx = T_fixture_context();
-  int bytes_written;
-  size_t pos_in_file = 0;
+  tftp_test_context   *ctx = T_fixture_context();
+  int                  bytes_written;
+  size_t               pos_in_file = 0;
   static const uint8_t packet_too_short_1[] = { 0x04 };
 
   /* T_set_verbosity( T_VERBOSE ); */
@@ -3864,7 +3885,7 @@ T_TEST_CASE_FIXTURE( write_file_malformed_ack_1, &fixture_rfc1350 )
   bytes_written = write_tftp_file(
     create_tftpfs_path( tftpfs_ipv4_loopback, tftpfs_file ),
     pos_in_file, /* Size of file */
-    17, /* Bytes written per call to write() */
+    17,          /* Bytes written per call to write() */
     &ctx->fd0
   );
   T_eq_int( bytes_written, -1 );
@@ -3888,9 +3909,9 @@ T_TEST_CASE_FIXTURE( write_file_malformed_ack_1, &fixture_rfc1350 )
  */
 T_TEST_CASE_FIXTURE( write_file_malformed_ack_2, &fixture_rfc1350 )
 {
-  tftp_test_context *ctx = T_fixture_context();
-  int bytes_written;
-  size_t pos_in_file = 0;
+  tftp_test_context   *ctx = T_fixture_context();
+  int                  bytes_written;
+  size_t               pos_in_file = 0;
   static const uint8_t packet_too_short_2[] = { 0x00, 0x04 };
 
   /* T_set_verbosity( T_VERBOSE ); */
@@ -3925,7 +3946,7 @@ T_TEST_CASE_FIXTURE( write_file_malformed_ack_2, &fixture_rfc1350 )
   bytes_written = write_tftp_file(
     create_tftpfs_path( tftpfs_ipv4_loopback, tftpfs_file ),
     pos_in_file, /* Size of file */
-    17, /* Bytes written per call to write() */
+    17,          /* Bytes written per call to write() */
     &ctx->fd0
   );
   T_eq_int( bytes_written, -1 );
@@ -3949,9 +3970,9 @@ T_TEST_CASE_FIXTURE( write_file_malformed_ack_2, &fixture_rfc1350 )
  */
 T_TEST_CASE_FIXTURE( write_file_malformed_ack_3, &fixture_rfc1350 )
 {
-  tftp_test_context *ctx = T_fixture_context();
-  int bytes_written;
-  size_t pos_in_file = 0;
+  tftp_test_context   *ctx = T_fixture_context();
+  int                  bytes_written;
+  size_t               pos_in_file = 0;
   static const uint8_t packet_too_short_3[] = { 0x00, 0x04, 0x00 };
 
   /* T_set_verbosity( T_VERBOSE ); */
@@ -3986,7 +4007,7 @@ T_TEST_CASE_FIXTURE( write_file_malformed_ack_3, &fixture_rfc1350 )
   bytes_written = write_tftp_file(
     create_tftpfs_path( tftpfs_ipv4_loopback, tftpfs_file ),
     pos_in_file, /* Size of file */
-    17, /* Bytes written per call to write() */
+    17,          /* Bytes written per call to write() */
     &ctx->fd0
   );
   T_eq_int( bytes_written, -1 );
@@ -4010,9 +4031,9 @@ T_TEST_CASE_FIXTURE( write_file_malformed_ack_3, &fixture_rfc1350 )
  */
 T_TEST_CASE_FIXTURE( write_file_illegal_opcode_1, &fixture_rfc1350 )
 {
-  tftp_test_context *ctx = T_fixture_context();
-  int bytes_written;
-  size_t pos_in_file = 0;
+  tftp_test_context   *ctx = T_fixture_context();
+  int                  bytes_written;
+  size_t               pos_in_file = 0;
   static const uint8_t packet_illegal_opcode_1[] = { 0x00, 0xFF, 0x00, 0x00 };
 
   /* T_set_verbosity( T_VERBOSE ); */
@@ -4047,7 +4068,7 @@ T_TEST_CASE_FIXTURE( write_file_illegal_opcode_1, &fixture_rfc1350 )
   bytes_written = write_tftp_file(
     create_tftpfs_path( tftpfs_ipv4_loopback, tftpfs_file ),
     pos_in_file, /* Size of file */
-    17, /* Bytes written per call to write() */
+    17,          /* Bytes written per call to write() */
     &ctx->fd0
   );
   T_eq_int( bytes_written, -1 );
@@ -4070,10 +4091,10 @@ T_TEST_CASE_FIXTURE( write_file_illegal_opcode_1, &fixture_rfc1350 )
  */
 T_TEST_CASE_FIXTURE( write_short_file_malformed_ACK_1, &fixture_rfc1350 )
 {
-  tftp_test_context *ctx = T_fixture_context();
-  int bytes_written;
-  uint16_t block_num = 0;
-  size_t pos_in_file = 0;
+  tftp_test_context   *ctx = T_fixture_context();
+  int                  bytes_written;
+  uint16_t             block_num = 0;
+  size_t               pos_in_file = 0;
   static const uint8_t packet_too_short_3[] = { 0x00, 0x04, 0x00 };
 
   /* T_set_verbosity( T_VERBOSE ); */
@@ -4126,7 +4147,7 @@ T_TEST_CASE_FIXTURE( write_short_file_malformed_ACK_1, &fixture_rfc1350 )
   bytes_written = write_tftp_file(
     create_tftpfs_path( tftpfs_ipv4_loopback, tftpfs_file ),
     2 * TFTP_RFC1350_BLOCK_SIZE, /* Size of file */
-    17, /* Bytes written per call to write() */
+    17,                          /* Bytes written per call to write() */
     &ctx->fd0
   );
   T_eq_int( errno, EPROTO );
@@ -4150,10 +4171,10 @@ T_TEST_CASE_FIXTURE( write_short_file_malformed_ACK_1, &fixture_rfc1350 )
  */
 T_TEST_CASE_FIXTURE( write_short_file_malformed_ACK_2, &fixture_rfc1350 )
 {
-  tftp_test_context *ctx = T_fixture_context();
-  int bytes_written;
-  uint16_t block_num = 0;
-  size_t pos_in_file = 0;
+  tftp_test_context   *ctx = T_fixture_context();
+  int                  bytes_written;
+  uint16_t             block_num = 0;
+  size_t               pos_in_file = 0;
   static const uint8_t packet_too_short_1[] = { 0x04 };
 
   /* T_set_verbosity( T_VERBOSE ); */
@@ -4226,7 +4247,7 @@ T_TEST_CASE_FIXTURE( write_short_file_malformed_ACK_2, &fixture_rfc1350 )
   bytes_written = write_tftp_file(
     create_tftpfs_path( tftpfs_ipv4_loopback, tftpfs_file ),
     pos_in_file, /* Size of file */
-    17, /* Bytes written per call to write() */
+    17,          /* Bytes written per call to write() */
     &ctx->fd0
   );
   T_eq_int( errno, EPROTO );
@@ -4250,10 +4271,10 @@ T_TEST_CASE_FIXTURE( write_short_file_malformed_ACK_2, &fixture_rfc1350 )
  */
 T_TEST_CASE_FIXTURE( write_short_file_malformed_opcode, &fixture_rfc1350 )
 {
-  tftp_test_context *ctx = T_fixture_context();
-  int bytes_written;
-  uint16_t block_num = 0;
-  size_t pos_in_file = 0;
+  tftp_test_context   *ctx = T_fixture_context();
+  int                  bytes_written;
+  uint16_t             block_num = 0;
+  size_t               pos_in_file = 0;
   static const uint8_t packet_illegal_opcode_2[] = { 0x04, 0x00, 0x00, 0x01 };
 
   /* T_set_verbosity( T_VERBOSE ); */
@@ -4306,7 +4327,7 @@ T_TEST_CASE_FIXTURE( write_short_file_malformed_opcode, &fixture_rfc1350 )
   bytes_written = write_tftp_file(
     create_tftpfs_path( tftpfs_ipv4_loopback, tftpfs_file ),
     2 * TFTP_RFC1350_BLOCK_SIZE, /* Size of file */
-    17, /* Bytes written per call to write() */
+    17,                          /* Bytes written per call to write() */
     &ctx->fd0
   );
   T_eq_int( errno, EPROTO );
@@ -4340,9 +4361,9 @@ T_TEST_CASE_FIXTURE( write_short_file_malformed_opcode, &fixture_rfc1350 )
 T_TEST_CASE_FIXTURE( write_short_file_bad_block_numbers, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_written;
-  uint16_t block_num = 0;
-  size_t pos_in_file = 0;
+  int                bytes_written;
+  uint16_t           block_num = 0;
+  size_t             pos_in_file = 0;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -4464,7 +4485,7 @@ T_TEST_CASE_FIXTURE( write_short_file_bad_block_numbers, &fixture_rfc1350 )
 
   bytes_written = write_tftp_file(
     create_tftpfs_path( tftpfs_ipv4_loopback, tftpfs_file ),
-    pos_in_file, /* Size of file */
+    pos_in_file,             /* Size of file */
     TFTP_RFC1350_BLOCK_SIZE, /* Bytes written per call to write() */
     &ctx->fd0
   );
@@ -4496,9 +4517,9 @@ T_TEST_CASE_FIXTURE( write_short_file_bad_block_numbers, &fixture_rfc1350 )
 T_TEST_CASE_FIXTURE( write_one_block_file_stray_packets, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_written;
-  uint16_t block_num = 0;
-  size_t pos_in_file = 0;
+  int                bytes_written;
+  uint16_t           block_num = 0;
+  size_t             pos_in_file = 0;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -4593,7 +4614,7 @@ T_TEST_CASE_FIXTURE( write_one_block_file_stray_packets, &fixture_rfc1350 )
 
   bytes_written = write_tftp_file(
     create_tftpfs_path( tftpfs_ipv4_loopback, tftpfs_file ),
-    pos_in_file, /* Size of file */
+    pos_in_file,             /* Size of file */
     TFTP_RFC1350_BLOCK_SIZE, /* Bytes written per call to write() */
     &ctx->fd0
   );
@@ -4616,12 +4637,11 @@ T_TEST_CASE_FIXTURE( write_one_block_file_stray_packets, &fixture_rfc1350 )
 T_TEST_CASE_FIXTURE( read_file_one_large_block, &fixture_large_blocksize )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  uint16_t block_num = 0;
-  size_t pos_in_file = 0;
-  const char options[] =
-    TFTP_OPTION_BLKSIZE "\0"
-    RTEMS_XSTRING( LARGE_BLOCK_SIZE );
+  int                bytes_read;
+  uint16_t           block_num = 0;
+  size_t             pos_in_file = 0;
+  const char         options[] = TFTP_OPTION_BLKSIZE
+    "\0" RTEMS_XSTRING( LARGE_BLOCK_SIZE );
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -4708,10 +4728,9 @@ T_TEST_CASE_FIXTURE( read_file_one_large_block, &fixture_large_blocksize )
 T_TEST_CASE_FIXTURE( read_too_long_file_name, &fixture_default_options )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  char buffer[TFTP_RFC1350_BLOCK_SIZE -
-              strlen( TFTP_MODE_OCTET ) - 1 - 5];
-  int len;
+  int                bytes_read;
+  char buffer[ TFTP_RFC1350_BLOCK_SIZE - strlen( TFTP_MODE_OCTET ) - 1 - 5 ];
+  int  len;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -4756,9 +4775,9 @@ T_TEST_CASE_FIXTURE( read_too_long_file_name, &fixture_default_options )
 T_TEST_CASE_FIXTURE( read_file_DATA_instead_of_OACK, &fixture_default_options )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  uint16_t block_num = 1;
-  size_t pos_in_file = 0;
+  int                bytes_read;
+  uint16_t           block_num = 1;
+  size_t             pos_in_file = 0;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -4812,8 +4831,8 @@ T_TEST_CASE_FIXTURE( read_file_DATA_instead_of_OACK, &fixture_default_options )
 T_TEST_CASE_FIXTURE( read_tiny_file_OACK_instead_of_DATA, &fixture_rfc1350 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  const char options[] = {};
+  int                bytes_read;
+  const char         options[] = {};
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -4869,15 +4888,13 @@ T_TEST_CASE_FIXTURE( read_tiny_file_OACK_instead_of_DATA, &fixture_rfc1350 )
 T_TEST_CASE_FIXTURE( read_file_with_default_options, &fixture_default_options )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int i;
-  int bytes_read;
-  uint16_t block_num = 0;
-  size_t pos_in_file = 0;
-  const char options[] =
-    TFTP_OPTION_BLKSIZE "\0"
-    RTEMS_XSTRING( TFTP_DEFAULT_BLOCK_SIZE ) "\0"
-    TFTP_OPTION_WINDOWSIZE"\0"
-    RTEMS_XSTRING( TFTP_DEFAULT_WINDOW_SIZE );
+  int                i;
+  int                bytes_read;
+  uint16_t           block_num = 0;
+  size_t             pos_in_file = 0;
+  const char         options[] = TFTP_OPTION_BLKSIZE "\0" RTEMS_XSTRING(
+    TFTP_DEFAULT_BLOCK_SIZE
+  ) "\0" TFTP_OPTION_WINDOWSIZE "\0" RTEMS_XSTRING( TFTP_DEFAULT_WINDOW_SIZE );
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -5003,15 +5020,13 @@ T_TEST_CASE_FIXTURE( read_file_with_default_options, &fixture_default_options )
 T_TEST_CASE_FIXTURE( read_file_rfc7440_scenario, &fixture_small_opt_size )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int i;
-  int bytes_read;
-  uint16_t block_num = 0;
-  size_t pos_in_file = 0;
-  const char options[] =
-    TFTP_OPTION_WINDOWSIZE"\0"
-    RTEMS_XSTRING( SMALL_WINDOW_SIZE ) "\0"
-    TFTP_OPTION_BLKSIZE "\0"
-    RTEMS_XSTRING( SMALL_BLOCK_SIZE );
+  int                i;
+  int                bytes_read;
+  uint16_t           block_num = 0;
+  size_t             pos_in_file = 0;
+  const char         options[] = TFTP_OPTION_WINDOWSIZE "\0" RTEMS_XSTRING(
+    SMALL_WINDOW_SIZE
+  ) "\0" TFTP_OPTION_BLKSIZE "\0" RTEMS_XSTRING( SMALL_BLOCK_SIZE );
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -5238,16 +5253,14 @@ T_TEST_CASE_FIXTURE( read_file_rfc7440_scenario, &fixture_small_opt_size )
 T_TEST_CASE_FIXTURE( read_file_windowsize_trouble, &fixture_small_opt_size )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int i;
-  int bytes_read;
-  uint16_t block_num = 0;
-  size_t pos_in_file = 0;
-  int timeout = FIRST_TIMEOUT_MILLISECONDS;
-  const char options[] =
-    TFTP_OPTION_WINDOWSIZE"\0"
-    RTEMS_XSTRING( SMALL_WINDOW_SIZE ) "\0"
-    TFTP_OPTION_BLKSIZE "\0"
-    RTEMS_XSTRING( SMALL_BLOCK_SIZE );
+  int                i;
+  int                bytes_read;
+  uint16_t           block_num = 0;
+  size_t             pos_in_file = 0;
+  int                timeout = FIRST_TIMEOUT_MILLISECONDS;
+  const char         options[] = TFTP_OPTION_WINDOWSIZE "\0" RTEMS_XSTRING(
+    SMALL_WINDOW_SIZE
+  ) "\0" TFTP_OPTION_BLKSIZE "\0" RTEMS_XSTRING( SMALL_BLOCK_SIZE );
   /*
    * A positive number is the number of a DATA packet received.
    * A negative number is the number of an ACK packet send.
@@ -5255,35 +5268,108 @@ T_TEST_CASE_FIXTURE( read_file_windowsize_trouble, &fixture_small_opt_size )
    * Each line corresponds to a window.
    */
   int16_t pkg_sequence[] = {
-    1, 1, 2, 3, 2, 1, 3, 4, -4, /* Duplicated DATA packets */
-    6, -4, 7, 8, /* DATA packet 5 lost */
-    6, 5, 7, -5, 4, 8, /* DATA packet 5 and 6 received in revers order;
+    1,
+    1,
+    2,
+    3,
+    2,
+    1,
+    3,
+    4,
+    -4, /* Duplicated DATA packets */
+    6,
+    -4,
+    7,
+    8, /* DATA packet 5 lost */
+    6,
+    5,
+    7,
+    -5,
+    4,
+    8, /* DATA packet 5 and 6 received in revers order;
                           reception of an very old packet: 4 */
-    7, 6, 8, -6, /* DATA packet 6 and 7 received in revers order;
+    7,
+    6,
+    8,
+    -6, /* DATA packet 6 and 7 received in revers order;
                     DATA packet 9 not send or lost */
-    6, 7, 8, 9, -9, /* ACK packet 6 was not received by server */
-    10, 11, 12, 0, -12, /* DATA packet 13 lost */
-    13, 16, -13, /* DATA packets 14, 15 lost */
-    12, 13, 14, 15, -15, 16, 17, /* Reception of duplicated old packets 12 and
+    6,
+    7,
+    8,
+    9,
+    -9, /* ACK packet 6 was not received by server */
+    10,
+    11,
+    12,
+    0,
+    -12, /* DATA packet 13 lost */
+    13,
+    16,
+    -13, /* DATA packets 14, 15 lost */
+    12,
+    13,
+    14,
+    15,
+    -15,
+    16,
+    17, /* Reception of duplicated old packets 12 and
                                     13 */
-    16, 17, 18, 19, -19, /* Normal sequence; ACK 19 not receive by server */
-    16, 17, 18, 19, -19, /* Normal sequence repeated;
+    16,
+    17,
+    18,
+    19,
+    -19, /* Normal sequence; ACK 19 not receive by server */
+    16,
+    17,
+    18,
+    19,
+    -19, /* Normal sequence repeated;
                             ACK 19 not receive by server */
-    16, 19, -19, 18, 17, /* Sequence repeated but DATA packet 17 and 18
+    16,
+    19,
+    -19,
+    18,
+    17, /* Sequence repeated but DATA packet 17 and 18
                             received after 19 and in revers order */
-    20, -20, 21, 22, 23, /* ACK 20 because the client assumes the server
+    20,
+    -20,
+    21,
+    22,
+    23, /* ACK 20 because the client assumes the server
                             did not get ACK 19 and restarted with 17 */
-    21, 22, 23, 24, -24, /* Normal sequence */
-    25, 27, -25, 26, 28, -26, /* The middle data packets 26, 27 are exchanged;
+    21,
+    22,
+    23,
+    24,
+    -24, /* Normal sequence */
+    25,
+    27,
+    -25,
+    26,
+    28,
+    -26, /* The middle data packets 26, 27 are exchanged;
                                  the client assumes DATA 26 being the start
                                  of the next window and sends an ACK 26
                                  upon reception of out-of-sequence DATA 28;
                                  assume ACK 26 not received by server */
-    26, 27, 29, -27, 28, /* The last data packets are exchanged;
+    26,
+    27,
+    29,
+    -27,
+    28, /* The last data packets are exchanged;
                             ACK 27 not received by server */
-    26, 27, 28, 29, -29, /* Normal sequence repeated from ACK 25 */
-    30, 31, 0, -31, /* The last two data packets are lost (timeout) */
-    32, 33, 34, /* Normal sequence; the last DATA packet (here missing) will
+    26,
+    27,
+    28,
+    29,
+    -29, /* Normal sequence repeated from ACK 25 */
+    30,
+    31,
+    0,
+    -31, /* The last two data packets are lost (timeout) */
+    32,
+    33,
+    34, /* Normal sequence; the last DATA packet (here missing) will
                    contain no data and ends the transfer at a window
                    boundary; a final ACK (here missing too) follows */
   };
@@ -5316,15 +5402,15 @@ T_TEST_CASE_FIXTURE( read_file_windowsize_trouble, &fixture_small_opt_size )
     true
   );
   for ( i = 0; i < (int) RTEMS_ARRAY_SIZE( pkg_sequence ); ++i ) {
-    if ( pkg_sequence[i] == 0 ) {
-      block_num = pkg_sequence[i];
+    if ( pkg_sequence[ i ] == 0 ) {
+      block_num = pkg_sequence[ i ];
       _Tftp_Add_interaction_recv_nothing(
         TFTP_FIRST_FD, /* Timeout: No packet received within timeout period */
         timeout
       );
       timeout = TIMEOUT_MILLISECONDS;
-    } else if ( pkg_sequence[i] > 0 ) {
-      block_num = pkg_sequence[i];
+    } else if ( pkg_sequence[ i ] > 0 ) {
+      block_num = pkg_sequence[ i ];
       _Tftp_Add_interaction_recv_data(
         TFTP_FIRST_FD,
         timeout,
@@ -5334,12 +5420,12 @@ T_TEST_CASE_FIXTURE( read_file_windowsize_trouble, &fixture_small_opt_size )
         ( block_num - 1 ) * SMALL_BLOCK_SIZE,
         SMALL_BLOCK_SIZE, /* Number of bytes transferred */
         get_file_content,
-        pkg_sequence[i] > 0 /* pkg_sequence[i] == 0 means timeout */
+        pkg_sequence[ i ] > 0 /* pkg_sequence[i] == 0 means timeout */
       );
       timeout = FIRST_TIMEOUT_MILLISECONDS;
       pos_in_file = block_num * SMALL_BLOCK_SIZE;
     } else {
-      block_num = -pkg_sequence[i];
+      block_num = -pkg_sequence[ i ];
       _Tftp_Add_interaction_send_ack(
         TFTP_FIRST_FD,
         block_num,
@@ -5396,11 +5482,13 @@ T_TEST_CASE_FIXTURE( read_file_windowsize_trouble, &fixture_small_opt_size )
 T_TEST_CASE_FIXTURE( write_simple_file_large_blocks, &fixture_large_blocksize )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_written;
-  size_t pos_in_file = 0;
-  uint16_t block_num = 1;
-  uint16_t block_size = 211;
-  const char options[] = "BLKsiZe" "\0" "211";
+  int                bytes_written;
+  size_t             pos_in_file = 0;
+  uint16_t           block_num = 1;
+  uint16_t           block_size = 211;
+  const char         options[] = "BLKsiZe"
+                                 "\0"
+                                 "211";
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -5484,7 +5572,7 @@ T_TEST_CASE_FIXTURE( write_simple_file_large_blocks, &fixture_large_blocksize )
   bytes_written = write_tftp_file(
     create_tftpfs_path( tftpfs_ipv4_loopback, tftpfs_file ),
     pos_in_file, /* Size of file */
-    333, /* Bytes written per call to write() */
+    333,         /* Bytes written per call to write() */
     &ctx->fd0
   );
   T_eq_int( bytes_written, pos_in_file );
@@ -5510,15 +5598,13 @@ T_TEST_CASE_FIXTURE(
 )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int i;
-  int bytes_written;
-  size_t pos_in_file = 0;
-  uint16_t block_num = 1;
-  const char options[] =
-    TFTP_OPTION_BLKSIZE "\0"
-    RTEMS_XSTRING( TFTP_DEFAULT_BLOCK_SIZE ) "\0"
-    TFTP_OPTION_WINDOWSIZE "\0"
-    RTEMS_XSTRING( TFTP_DEFAULT_WINDOW_SIZE );
+  int                i;
+  int                bytes_written;
+  size_t             pos_in_file = 0;
+  uint16_t           block_num = 1;
+  const char         options[] = TFTP_OPTION_BLKSIZE "\0" RTEMS_XSTRING(
+    TFTP_DEFAULT_BLOCK_SIZE
+  ) "\0" TFTP_OPTION_WINDOWSIZE "\0" RTEMS_XSTRING( TFTP_DEFAULT_WINDOW_SIZE );
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -5591,7 +5677,7 @@ T_TEST_CASE_FIXTURE(
   bytes_written = write_tftp_file(
     create_tftpfs_path( tftpfs_ipv4_loopback, tftpfs_file ),
     pos_in_file, /* Size of file */
-    333, /* Bytes written per call to write() */
+    333,         /* Bytes written per call to write() */
     &ctx->fd0
   );
   T_eq_int( bytes_written, pos_in_file );
@@ -5614,15 +5700,13 @@ T_TEST_CASE_FIXTURE(
 T_TEST_CASE_FIXTURE( write_file_rfc7440_scenario, &fixture_small_opt_size )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int i;
-  int bytes_written;
-  size_t pos_in_file = 0;
-  uint16_t block_num = 1;
-  const char options[] =
-    TFTP_OPTION_WINDOWSIZE"\0"
-    RTEMS_XSTRING( SMALL_WINDOW_SIZE ) "\0"
-    TFTP_OPTION_BLKSIZE "\0"
-    RTEMS_XSTRING( SMALL_BLOCK_SIZE );
+  int                i;
+  int                bytes_written;
+  size_t             pos_in_file = 0;
+  uint16_t           block_num = 1;
+  const char         options[] = TFTP_OPTION_WINDOWSIZE "\0" RTEMS_XSTRING(
+    SMALL_WINDOW_SIZE
+  ) "\0" TFTP_OPTION_BLKSIZE "\0" RTEMS_XSTRING( SMALL_BLOCK_SIZE );
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -5691,7 +5775,7 @@ T_TEST_CASE_FIXTURE( write_file_rfc7440_scenario, &fixture_small_opt_size )
     true
   );
   block_num = 6;
-  pos_in_file = (block_num - 1) * SMALL_BLOCK_SIZE;
+  pos_in_file = ( block_num - 1 ) * SMALL_BLOCK_SIZE;
   for ( i = 0; i < 7; ++i ) {
     _Tftp_Add_interaction_send_data(
       TFTP_FIRST_FD,
@@ -5735,7 +5819,7 @@ T_TEST_CASE_FIXTURE( write_file_rfc7440_scenario, &fixture_small_opt_size )
     FIRST_TIMEOUT_MILLISECONDS
   );
   block_num = 10;
-  pos_in_file = (block_num - 1) * SMALL_BLOCK_SIZE;
+  pos_in_file = ( block_num - 1 ) * SMALL_BLOCK_SIZE;
   for ( i = 0; i < 4; ++i ) {
     _Tftp_Add_interaction_send_data(
       TFTP_FIRST_FD,
@@ -5787,7 +5871,7 @@ T_TEST_CASE_FIXTURE( write_file_rfc7440_scenario, &fixture_small_opt_size )
   bytes_written = write_tftp_file(
     create_tftpfs_path( tftpfs_ipv4_loopback, tftpfs_file ),
     pos_in_file, /* Size of file */
-    10, /* Bytes written per call to write() */
+    10,          /* Bytes written per call to write() */
     &ctx->fd0
   );
   T_eq_int( bytes_written, pos_in_file );
@@ -5826,16 +5910,14 @@ T_TEST_CASE_FIXTURE( write_file_rfc7440_scenario, &fixture_small_opt_size )
 T_TEST_CASE_FIXTURE( write_file_windowsize_trouble, &fixture_small_opt_size )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int i;
-  int bytes_written;
-  size_t pos_in_file = 0;
-  uint16_t block_num = 1;
-  int timeout = FIRST_TIMEOUT_MILLISECONDS;
-  const char options[] =
-    TFTP_OPTION_BLKSIZE "\0"
-    RTEMS_XSTRING( SMALL_BLOCK_SIZE ) "\0"
-    TFTP_OPTION_WINDOWSIZE"\0"
-    RTEMS_XSTRING( SMALL_WINDOW_SIZE );
+  int                i;
+  int                bytes_written;
+  size_t             pos_in_file = 0;
+  uint16_t           block_num = 1;
+  int                timeout = FIRST_TIMEOUT_MILLISECONDS;
+  const char         options[] = TFTP_OPTION_BLKSIZE "\0" RTEMS_XSTRING(
+    SMALL_BLOCK_SIZE
+  ) "\0" TFTP_OPTION_WINDOWSIZE "\0" RTEMS_XSTRING( SMALL_WINDOW_SIZE );
   /*
    * A positive number is the number of an ACK packet received
    *   at the end of window.
@@ -5850,26 +5932,92 @@ T_TEST_CASE_FIXTURE( write_file_windowsize_trouble, &fixture_small_opt_size )
    * Each line corresponds to a window.
    */
   int16_t pkg_sequence[] = {
-    -1, 0, -2, 0, -3, 0, -4, 9999, /* First window, trigger full repeat */
-    -1, 0, -2, 0, -3, 0, -4, 2, /* ACK at end of window;
+    -1,
+    0,
+    -2,
+    0,
+    -3,
+    0,
+    -4,
+    9999, /* First window, trigger full repeat */
+    -1,
+    0,
+    -2,
+    0,
+    -3,
+    0,
+    -4,
+    2, /* ACK at end of window;
                                    first window must be partially repeated */
-    -3, 0, -4, 0, -5, 0, -6, 6, /* Normal sequence */
-    -7, 0, -8, 0, -9, 0, -10, 6, /* Duplicate ACK */
-    -7, 10006, /* Duplicate ACK; ACK before sending all packets of a window */
-    -7, 0, -8, 10008, /* ACK before sending all packets of a window;
+    -3,
+    0,
+    -4,
+    0,
+    -5,
+    0,
+    -6,
+    6, /* Normal sequence */
+    -7,
+    0,
+    -8,
+    0,
+    -9,
+    0,
+    -10,
+    6, /* Duplicate ACK */
+    -7,
+    10006, /* Duplicate ACK; ACK before sending all packets of a window */
+    -7,
+    0,
+    -8,
+    10008, /* ACK before sending all packets of a window;
                          ACK is not at the window end */
-    -9, 10007, 0, -10, 10013, 0, -11, 0, -12, 12, /* Reception of very old ACK;
+    -9,
+    10007,
+    0,
+    -10,
+    10013,
+    0,
+    -11,
+    0,
+    -12,
+    12, /* Reception of very old ACK;
                                                     Reception of future ACK (The
                                                     wrong "future" ACK must be
                                                     beyond the block size)
                                                     in the middle of a window */
-    -13, 0, -14, 0, -15, 0, -16, 11, 17, 16, /* Reception of very old ACK;
+    -13,
+    0,
+    -14,
+    0,
+    -15,
+    0,
+    -16,
+    11,
+    17,
+    16, /* Reception of very old ACK;
                                                 Reception of future ACK at the
                                                 end of a window */
-    -17, 0, -18, 0, -10019, 9999, /* Last window timeout, trigger full repeat */
-    -17, 0, -18, 0, -10019, 16, /* Last window, duplicated ACK */
-    -17, 0, -18, 10017, /* Last window, ACK before sending all packets */
-    -18, 0, -10019, 19 /* Last window partially repeated */
+    -17,
+    0,
+    -18,
+    0,
+    -10019,
+    9999, /* Last window timeout, trigger full repeat */
+    -17,
+    0,
+    -18,
+    0,
+    -10019,
+    16, /* Last window, duplicated ACK */
+    -17,
+    0,
+    -18,
+    10017, /* Last window, ACK before sending all packets */
+    -18,
+    0,
+    -10019,
+    19 /* Last window partially repeated */
   };
 
   /* T_set_verbosity( T_VERBOSE ); */
@@ -5893,20 +6041,17 @@ T_TEST_CASE_FIXTURE( write_file_windowsize_trouble, &fixture_small_opt_size )
     true
   );
   for ( i = 0; i < (int) RTEMS_ARRAY_SIZE( pkg_sequence ); ++i ) {
-    if ( pkg_sequence[i] == 0 ) {
+    if ( pkg_sequence[ i ] == 0 ) {
       _Tftp_Add_interaction_recv_nothing(
         TFTP_FIRST_FD,
         DO_NOT_WAIT_FOR_ANY_TIMEOUT
       );
       timeout = FIRST_TIMEOUT_MILLISECONDS;
-    } else if ( pkg_sequence[i] == 9999 ) {
-      _Tftp_Add_interaction_recv_nothing(
-        TFTP_FIRST_FD,
-        timeout
-      );
+    } else if ( pkg_sequence[ i ] == 9999 ) {
+      _Tftp_Add_interaction_recv_nothing( TFTP_FIRST_FD, timeout );
       timeout = FIRST_TIMEOUT_MILLISECONDS;
-    } else if ( pkg_sequence[i] >= 10000 ) {
-      block_num = pkg_sequence[i] - 10000;
+    } else if ( pkg_sequence[ i ] >= 10000 ) {
+      block_num = pkg_sequence[ i ] - 10000;
       _Tftp_Add_interaction_recv_ack(
         TFTP_FIRST_FD,
         DO_NOT_WAIT_FOR_ANY_TIMEOUT,
@@ -5916,8 +6061,8 @@ T_TEST_CASE_FIXTURE( write_file_windowsize_trouble, &fixture_small_opt_size )
         true
       );
       timeout = FIRST_TIMEOUT_MILLISECONDS;
-    } else if ( pkg_sequence[i] > 0 ) {
-      block_num = pkg_sequence[i];
+    } else if ( pkg_sequence[ i ] > 0 ) {
+      block_num = pkg_sequence[ i ];
       _Tftp_Add_interaction_recv_ack(
         TFTP_FIRST_FD,
         timeout,
@@ -5927,9 +6072,9 @@ T_TEST_CASE_FIXTURE( write_file_windowsize_trouble, &fixture_small_opt_size )
         true
       );
       timeout = FIRST_TIMEOUT_MILLISECONDS;
-    } else if ( pkg_sequence[i] <= -10000 ) {
-      block_num = -pkg_sequence[i] - 10000;
-      pos_in_file = (block_num - 1) * SMALL_BLOCK_SIZE;
+    } else if ( pkg_sequence[ i ] <= -10000 ) {
+      block_num = -pkg_sequence[ i ] - 10000;
+      pos_in_file = ( block_num - 1 ) * SMALL_BLOCK_SIZE;
       _Tftp_Add_interaction_send_data(
         TFTP_FIRST_FD,
         block_num++,
@@ -5942,8 +6087,8 @@ T_TEST_CASE_FIXTURE( write_file_windowsize_trouble, &fixture_small_opt_size )
       );
       timeout = FIRST_TIMEOUT_MILLISECONDS;
     } else {
-      block_num = -pkg_sequence[i];
-      pos_in_file = (block_num - 1) * SMALL_BLOCK_SIZE;
+      block_num = -pkg_sequence[ i ];
+      pos_in_file = ( block_num - 1 ) * SMALL_BLOCK_SIZE;
       _Tftp_Add_interaction_send_data(
         TFTP_FIRST_FD,
         block_num++,
@@ -5962,7 +6107,7 @@ T_TEST_CASE_FIXTURE( write_file_windowsize_trouble, &fixture_small_opt_size )
 
   bytes_written = write_tftp_file(
     create_tftpfs_path( tftpfs_ipv4_loopback, tftpfs_file ),
-    pos_in_file, /* Size of file */
+    pos_in_file,      /* Size of file */
     SMALL_BLOCK_SIZE, /* Bytes written per call to write() */
     &ctx->fd0
   );
@@ -5980,13 +6125,16 @@ T_TEST_CASE_FIXTURE( write_file_windowsize_trouble, &fixture_small_opt_size )
  *   * The first data packet is half full and signals the end of the transfer.
  *   * The test reads a file from the file system in chunks of double block size.
  */
-T_TEST_CASE_FIXTURE( write_tiny_file_OACK_no_options, &fixture_large_blocksize )
+T_TEST_CASE_FIXTURE(
+  write_tiny_file_OACK_no_options,
+  &fixture_large_blocksize
+)
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_written;
-  size_t pos_in_file = 0;
-  uint16_t block_num = 1;
-  const char options[] = {};
+  int                bytes_written;
+  size_t             pos_in_file = 0;
+  uint16_t           block_num = 1;
+  const char         options[] = {};
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -6031,7 +6179,7 @@ T_TEST_CASE_FIXTURE( write_tiny_file_OACK_no_options, &fixture_large_blocksize )
 
   bytes_written = write_tftp_file(
     create_tftpfs_path( tftpfs_ipv4_loopback, tftpfs_file ),
-    pos_in_file, /* Size of file */
+    pos_in_file,                 /* Size of file */
     2 * TFTP_RFC1350_BLOCK_SIZE, /* Bytes written per call to write() */
     &ctx->fd0
   );
@@ -6053,13 +6201,15 @@ T_TEST_CASE_FIXTURE( write_tiny_file_OACK_no_options, &fixture_large_blocksize )
  *   * The first data packet contains a single byte and signals the
  *     end of the transfer.
  */
-T_TEST_CASE_FIXTURE( read_file_fallback_to_no_options,
-  &fixture_default_options )
+T_TEST_CASE_FIXTURE(
+  read_file_fallback_to_no_options,
+  &fixture_default_options
+)
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  uint16_t block_num = 1;
-  size_t pos_in_file = 0;
+  int                bytes_read;
+  uint16_t           block_num = 1;
+  size_t             pos_in_file = 0;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -6137,11 +6287,13 @@ T_TEST_CASE_FIXTURE( read_file_fallback_to_no_options,
  *     receiving an ERROR packet to an RRQ without options.
  *   * The client signals the error to the user.
  */
-T_TEST_CASE_FIXTURE( read_file_useless_fallback_to_no_options,
-  &fixture_default_options )
+T_TEST_CASE_FIXTURE(
+  read_file_useless_fallback_to_no_options,
+  &fixture_default_options
+)
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
+  int                bytes_read;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -6208,9 +6360,9 @@ T_TEST_CASE_FIXTURE( read_file_useless_fallback_to_no_options,
 T_TEST_CASE_FIXTURE( write_file_ACK_instead_of_OACK, &fixture_default_options )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_written;
-  size_t pos_in_file = 0;
-  uint16_t block_num = 0;
+  int                bytes_written;
+  size_t             pos_in_file = 0;
+  uint16_t           block_num = 0;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -6254,7 +6406,7 @@ T_TEST_CASE_FIXTURE( write_file_ACK_instead_of_OACK, &fixture_default_options )
 
   bytes_written = write_tftp_file(
     create_tftpfs_path( tftpfs_ipv4_loopback, tftpfs_file ),
-    pos_in_file, /* Size of file */
+    pos_in_file,                 /* Size of file */
     2 * TFTP_RFC1350_BLOCK_SIZE, /* Bytes written per call to write() */
     &ctx->fd0
   );
@@ -6275,13 +6427,15 @@ T_TEST_CASE_FIXTURE( write_file_ACK_instead_of_OACK, &fixture_default_options )
  *   * The server accepts the WRQ without options by sending an ACK packet.
  *   * The first data packet is half filled and signals the end of the transfer.
  */
-T_TEST_CASE_FIXTURE( write_file_fallback_to_no_options,
-  &fixture_default_options )
+T_TEST_CASE_FIXTURE(
+  write_file_fallback_to_no_options,
+  &fixture_default_options
+)
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_written;
-  size_t pos_in_file = 0;
-  uint16_t block_num = 0;
+  int                bytes_written;
+  size_t             pos_in_file = 0;
+  uint16_t           block_num = 0;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -6343,7 +6497,7 @@ T_TEST_CASE_FIXTURE( write_file_fallback_to_no_options,
 
   bytes_written = write_tftp_file(
     create_tftpfs_path( tftpfs_ipv4_loopback, tftpfs_file ),
-    pos_in_file, /* Size of file */
+    pos_in_file,                 /* Size of file */
     2 * TFTP_RFC1350_BLOCK_SIZE, /* Bytes written per call to write() */
     &ctx->fd0
   );
@@ -6357,7 +6511,7 @@ T_TEST_CASE_FIXTURE( write_file_fallback_to_no_options,
 T_TEST_CASE_FIXTURE( OACK_without_null, &fixture_default_options )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
+  int                bytes_read;
   const char options[] = { 'b', 'l', 'k', 's', 'i', 'z', 'e', '\0', '1', '2' };
 
   /* T_set_verbosity( T_VERBOSE ); */
@@ -6406,8 +6560,8 @@ T_TEST_CASE_FIXTURE( OACK_without_null, &fixture_default_options )
 T_TEST_CASE_FIXTURE( OACK_without_option_value, &fixture_default_options )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  const char options[] = TFTP_OPTION_BLKSIZE;
+  int                bytes_read;
+  const char         options[] = TFTP_OPTION_BLKSIZE;
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -6455,10 +6609,9 @@ T_TEST_CASE_FIXTURE( OACK_without_option_value, &fixture_default_options )
 T_TEST_CASE_FIXTURE( OACK_with_unknown_option, &fixture_default_options )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  const char options[] =
-    "shoesize" "\0"
-    RTEMS_XSTRING( TFTP_DEFAULT_BLOCK_SIZE );
+  int                bytes_read;
+  const char         options[] = "shoesize"
+                                 "\0" RTEMS_XSTRING( TFTP_DEFAULT_BLOCK_SIZE );
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -6507,8 +6660,9 @@ T_TEST_CASE_FIXTURE( OACK_with_unknown_option, &fixture_default_options )
 T_TEST_CASE_FIXTURE( OACK_malformed_option_value, &fixture_default_options )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  const char options[] = TFTP_OPTION_BLKSIZE "\0" "abc";
+  int                bytes_read;
+  const char         options[] = TFTP_OPTION_BLKSIZE "\0"
+                                                     "abc";
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -6556,8 +6710,8 @@ T_TEST_CASE_FIXTURE( OACK_malformed_option_value, &fixture_default_options )
 T_TEST_CASE_FIXTURE( OACK_with_empty_option_value, &fixture_default_options )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  const char options[] = TFTP_OPTION_BLKSIZE "\0";
+  int                bytes_read;
+  const char         options[] = TFTP_OPTION_BLKSIZE "\0";
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -6605,8 +6759,8 @@ T_TEST_CASE_FIXTURE( OACK_with_empty_option_value, &fixture_default_options )
 T_TEST_CASE_FIXTURE( OACK_with_empty_option_name, &fixture_default_options )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  const char options[] = "\0" RTEMS_XSTRING( TFTP_DEFAULT_BLOCK_SIZE );
+  int                bytes_read;
+  const char         options[] = "\0" RTEMS_XSTRING( TFTP_DEFAULT_BLOCK_SIZE );
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -6655,8 +6809,9 @@ T_TEST_CASE_FIXTURE( OACK_with_empty_option_name, &fixture_default_options )
 T_TEST_CASE_FIXTURE( OACK_blocksize_too_small, &fixture_default_options )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  const char options[] = TFTP_OPTION_BLKSIZE "\0" "7";
+  int                bytes_read;
+  const char         options[] = TFTP_OPTION_BLKSIZE "\0"
+                                                     "7";
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -6705,8 +6860,9 @@ T_TEST_CASE_FIXTURE( OACK_blocksize_too_small, &fixture_default_options )
 T_TEST_CASE_FIXTURE( OACK_blocksize_too_large, &fixture_default_options )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  const char options[] = TFTP_OPTION_BLKSIZE "\0" "1457";
+  int                bytes_read;
+  const char         options[] = TFTP_OPTION_BLKSIZE "\0"
+                                                     "1457";
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -6755,8 +6911,9 @@ T_TEST_CASE_FIXTURE( OACK_blocksize_too_large, &fixture_default_options )
 T_TEST_CASE_FIXTURE( OACK_windowsize_too_small, &fixture_default_options )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  const char options[] = TFTP_OPTION_WINDOWSIZE "\0" "0";
+  int                bytes_read;
+  const char         options[] = TFTP_OPTION_WINDOWSIZE "\0"
+                                                        "0";
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -6804,8 +6961,9 @@ T_TEST_CASE_FIXTURE( OACK_windowsize_too_small, &fixture_default_options )
 T_TEST_CASE_FIXTURE( OACK_windowsize_too_large, &fixture_default_options )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  const char options[] = TFTP_OPTION_WINDOWSIZE "\0" "9";
+  int                bytes_read;
+  const char         options[] = TFTP_OPTION_WINDOWSIZE "\0"
+                                                        "9";
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );
@@ -6853,12 +7011,10 @@ T_TEST_CASE_FIXTURE( OACK_windowsize_too_large, &fixture_default_options )
 T_TEST_CASE_FIXTURE( OACK_with_surplus_option, &fixture_large_blocksize )
 {
   tftp_test_context *ctx = T_fixture_context();
-  int bytes_read;
-  const char options[] =
-    TFTP_OPTION_BLKSIZE "\0"
-    RTEMS_XSTRING( LARGE_BLOCK_SIZE ) "\0"
-    TFTP_OPTION_WINDOWSIZE "\0"
-    "1";
+  int                bytes_read;
+  const char         options[] = TFTP_OPTION_BLKSIZE
+    "\0" RTEMS_XSTRING( LARGE_BLOCK_SIZE ) "\0" TFTP_OPTION_WINDOWSIZE "\0"
+                                           "1";
 
   /* T_set_verbosity( T_VERBOSE ); */
   _Tftp_Add_interaction_socket( AF_INET, SOCK_DGRAM, 0, TFTP_FIRST_FD );

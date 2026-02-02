@@ -40,19 +40,19 @@
 
 const char rtems_test_name[] = "FSIMFSCONFIG 2";
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
   const char *mnt = "mnt";
   const char *link = "link";
-  char buf[1];
-  int rv;
+  char        buf[ 1 ];
+  int         rv;
 
   TEST_BEGIN();
 
-  rv = mkdir(mnt, S_IRWXU);
-  rtems_test_assert(rv == 0);
+  rv = mkdir( mnt, S_IRWXU );
+  rtems_test_assert( rv == 0 );
 
   rv = mount(
     "",
@@ -61,23 +61,23 @@ static void Init(rtems_task_argument arg)
     RTEMS_FILESYSTEM_READ_ONLY,
     NULL
   );
-  rtems_test_assert(rv == 0);
+  rtems_test_assert( rv == 0 );
 
   errno = 0;
-  rv = unmount(mnt);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENOTSUP);
+  rv = unmount( mnt );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENOTSUP );
 
-  rv = symlink(mnt, link);
-  rtems_test_assert(rv == 0);
+  rv = symlink( mnt, link );
+  rtems_test_assert( rv == 0 );
 
   errno = 0;
-  rv = readlink(link, &buf[0], sizeof(buf));
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENOTSUP);
+  rv = readlink( link, &buf[ 0 ], sizeof( buf ) );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENOTSUP );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER

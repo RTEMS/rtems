@@ -40,28 +40,25 @@
 
 static rtems_resource_snapshot before_mount;
 
-void
-test_initialize_filesystem (void)
+void test_initialize_filesystem( void )
 {
   int rc = 0;
-  rc = mkdir (BASE_FOR_TEST,S_IRWXU|S_IRWXG|S_IRWXO);
-  rtems_test_assert (rc == 0);
+  rc = mkdir( BASE_FOR_TEST, S_IRWXU | S_IRWXG | S_IRWXO );
+  rtems_test_assert( rc == 0 );
 
-  rtems_resource_snapshot_take(&before_mount);
+  rtems_resource_snapshot_take( &before_mount );
 
-  rc = mount (NULL, BASE_FOR_TEST, "imfs", RTEMS_FILESYSTEM_READ_WRITE, NULL);
-  rtems_test_assert (rc == 0);
+  rc = mount( NULL, BASE_FOR_TEST, "imfs", RTEMS_FILESYSTEM_READ_WRITE, NULL );
+  rtems_test_assert( rc == 0 );
 }
 
-
-void
-test_shutdown_filesystem (void)
+void test_shutdown_filesystem( void )
 {
   int rc = 0;
-  rc = unmount (BASE_FOR_TEST);
-  rtems_test_assert (rc == 0);
+  rc = unmount( BASE_FOR_TEST );
+  rtems_test_assert( rc == 0 );
 
-  rtems_test_assert(rtems_resource_snapshot_check(&before_mount));
+  rtems_test_assert( rtems_resource_snapshot_check( &before_mount ) );
 }
 
 /* configuration information */
@@ -79,9 +76,9 @@ test_shutdown_filesystem (void)
 #define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_MAXIMUM_TASKS                  10
+#define CONFIGURE_MAXIMUM_TASKS            10
 #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 40
-#define CONFIGURE_INIT_TASK_STACK_SIZE (32 * 1024)
+#define CONFIGURE_INIT_TASK_STACK_SIZE     ( 32 * 1024 )
 
 #define CONFIGURE_FILESYSTEM_IMFS
 

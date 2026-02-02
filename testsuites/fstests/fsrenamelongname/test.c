@@ -43,66 +43,66 @@
 #include "fs_config.h"
 #include <tmacros.h>
 
-const char rtems_test_name[] = "FSRENAMELONGNAME " FILESYSTEM;
+const char             rtems_test_name[] = "FSRENAMELONGNAME " FILESYSTEM;
 const RTEMS_TEST_STATE rtems_test_state = TEST_STATE;
 
-void test (void)
+void test( void )
 {
   int fd;
   int status;
 
   const char *name01 = "name01";
 
-  mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
+  mode_t      mode = S_IRWXU | S_IRWXG | S_IRWXO;
   const char *wd = __func__;
 
-  char filename[NAME_MAX + 2];
+  char filename[ NAME_MAX + 2 ];
 
   /*
    * Create a new directory and change the current directory to this
    */
 
-  status = mkdir (wd, mode);
-  rtems_test_assert (status == 0);
-  status = chdir (wd);
-  rtems_test_assert (status == 0);
+  status = mkdir( wd, mode );
+  rtems_test_assert( status == 0 );
+  status = chdir( wd );
+  rtems_test_assert( status == 0 );
 
   /*
    * The new argument is a name bigger than NAME_MAX and
    * the old argument points to a file.
    */
 
-  puts ("\nRename file with a name size exceeding NAME_MAX\n");
+  puts( "\nRename file with a name size exceeding NAME_MAX\n" );
 
-  fd = creat (name01, mode);
-  rtems_test_assert (fd >= 0);
-  status = close (fd);
-  rtems_test_assert (status == 0);
+  fd = creat( name01, mode );
+  rtems_test_assert( fd >= 0 );
+  status = close( fd );
+  rtems_test_assert( status == 0 );
 
   /* Generate string with NAME_MAX + 1 length */
-  memset(filename, 'a', NAME_MAX + 1);
-  filename[NAME_MAX + 1] = '\0';
+  memset( filename, 'a', NAME_MAX + 1 );
+  filename[ NAME_MAX + 1 ] = '\0';
 
-  EXPECT_ERROR (ENAMETOOLONG, rename, name01, filename);
+  EXPECT_ERROR( ENAMETOOLONG, rename, name01, filename );
 
   /*
    * Clear directory
    */
 
-  EXPECT_EQUAL (0, unlink, name01);
-  EXPECT_EQUAL (-1, unlink, filename);
+  EXPECT_EQUAL( 0, unlink, name01 );
+  EXPECT_EQUAL( -1, unlink, filename );
 
   /*
    * Go back to parent directory
    */
 
-  status = chdir ("..");
-  rtems_test_assert (status == 0);
+  status = chdir( ".." );
+  rtems_test_assert( status == 0 );
 
   /*
    * Remove test directory
    */
 
-  status = rmdir (wd);
-  rtems_test_assert (status == 0);
+  status = rmdir( wd );
+  rtems_test_assert( status == 0 );
 }

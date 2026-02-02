@@ -42,8 +42,8 @@
 #include "fstest.h"
 #include "fstest_support.h"
 
-#define FLASH_PAGE_SIZE ( 1024UL )
-#define PAGES_PER_SECTOR ( 16UL )
+#define FLASH_PAGE_SIZE    ( 1024UL )
+#define PAGES_PER_SECTOR   ( 16UL )
 #define SECTORS_PER_DEVICE ( 8UL )
 
 #define FLASHDEV_PATH "dev/flashdev0"
@@ -57,10 +57,10 @@ static rtems_flashdev *flash = NULL;
 
 void test_initialize_filesystem( void )
 {
-  int rv;
-  int status;
-  rtems_status_code sc;
-  rtems_flashdev_region region;
+  int                                  rv;
+  int                                  status;
+  rtems_status_code                    sc;
+  rtems_flashdev_region                region;
   struct flash_sim_flashdev_attributes attr;
 
   attr.read_delay_ns = 0;
@@ -114,7 +114,7 @@ void test_shutdown_filesystem( void )
 
 #define CONFIGURE_MAXIMUM_TASKS 2
 
-#define CONFIGURE_INIT_TASK_STACK_SIZE (32 * 1024)
+#define CONFIGURE_INIT_TASK_STACK_SIZE ( 32 * 1024 )
 #define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION

@@ -42,23 +42,23 @@
  * Ramdisk information
  */
 
-void
-init_ramdisk (void)
+void init_ramdisk( void )
 {
-
   int rc = 0;
 
-  rc = ramdisk_register (RAMDISK_BLOCK_SIZE, RAMDISK_BLOCK_COUNT,
-                         false, RAMDISK_PATH);
-  rtems_test_assert (rc == 0);
+  rc = ramdisk_register(
+    RAMDISK_BLOCK_SIZE,
+    RAMDISK_BLOCK_COUNT,
+    false,
+    RAMDISK_PATH
+  );
+  rtems_test_assert( rc == 0 );
 }
 
-void
-del_ramdisk (void)
+void del_ramdisk( void )
 {
-
   int rc = 0;
 
-  rc = unlink (RAMDISK_PATH);
-  rtems_test_assert (rc == 0);
+  rc = unlink( RAMDISK_PATH );
+  rtems_test_assert( rc == 0 );
 }

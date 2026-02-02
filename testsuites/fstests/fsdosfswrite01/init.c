@@ -38,30 +38,32 @@
 
 const char rtems_test_name[] = "FSDOSFSWRITE 1";
 
-#define MAX_PATH_LENGTH 100 /* Maximum number of characters per path */
-#define SECTOR_SIZE 512 /* sector size (bytes) */
-#define FAT16_MAX_CLN 65525 /* maximum + 1 number of clusters for FAT16 */
-#define FAT16_DEFAULT_SECTORS_PER_CLUSTER 32 /* Default number of sectors per cluster for FAT16 */
+#define MAX_PATH_LENGTH 100   /* Maximum number of characters per path */
+#define SECTOR_SIZE     512   /* sector size (bytes) */
+#define FAT16_MAX_CLN   65525 /* maximum + 1 number of clusters for FAT16 */
+#define FAT16_DEFAULT_SECTORS_PER_CLUSTER \
+  32 /* Default number of sectors per cluster for FAT16 */
 #define SECTORS_PER_CLUSTER 2
 
 static void format_and_mount( const char *dev_name, const char *mount_dir )
 {
   static const msdos_format_request_param_t rqdata = {
     .sectors_per_cluster = SECTORS_PER_CLUSTER,
-    .quick_format        = true
+    .quick_format = true
   };
 
-  int                                       rv;
-
+  int rv;
 
   rv = msdos_format( dev_name, &rqdata );
   rtems_test_assert( rv == 0 );
 
-  rv = mount( dev_name,
-              mount_dir,
-              RTEMS_FILESYSTEM_TYPE_DOSFS,
-              RTEMS_FILESYSTEM_READ_WRITE,
-              NULL );
+  rv = mount(
+    dev_name,
+    mount_dir,
+    RTEMS_FILESYSTEM_TYPE_DOSFS,
+    RTEMS_FILESYSTEM_READ_WRITE,
+    NULL
+  );
   rtems_test_assert( rv == 0 );
 }
 
@@ -69,7 +71,6 @@ static void do_fsync( const char *file )
 {
   int rv;
   int fd;
-
 
   fd = open( file, O_RDONLY );
   rtems_test_assert( fd >= 0 );
@@ -81,14 +82,15 @@ static void do_fsync( const char *file )
   rtems_test_assert( rv == 0 );
 }
 
-static void check_block_stats( const char *dev_name,
-  const char                              *mount_dir,
-  const rtems_blkdev_stats                *expected_stats )
+static void check_block_stats(
+  const char               *dev_name,
+  const char               *mount_dir,
+  const rtems_blkdev_stats *expected_stats
+)
 {
   int                fd;
   int                rv;
   rtems_blkdev_stats actual_stats;
-
 
   do_fsync( mount_dir );
 
@@ -97,8 +99,9 @@ static void check_block_stats( const char *dev_name,
 
   rv = ioctl( fd, RTEMS_BLKIO_GETDEVSTATS, &actual_stats );
   rtems_test_assert( rv == 0 );
-  rtems_test_assert( memcmp( &actual_stats, expected_stats,
-                             sizeof( actual_stats ) ) == 0 );
+  rtems_test_assert(
+    memcmp( &actual_stats, expected_stats, sizeof( actual_stats ) ) == 0
+  );
 
   rv = close( fd );
   rtems_test_assert( rv == 0 );
@@ -108,7 +111,6 @@ static void reset_block_stats( const char *dev_name, const char *mount_dir )
 {
   int fd;
   int rv;
-
 
   do_fsync( mount_dir );
 
@@ -129,57 +131,55 @@ static int create_file( const char *file_name )
 {
   mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
 
-
   return creat( file_name, mode );
 }
 
 static void test_normal_file_write(
   const char *dev_name,
   const char *mount_dir,
-  const char *file_name )
+  const char *file_name
+)
 {
   static const rtems_blkdev_stats complete_existing_block_stats = {
-    .read_hits            = 0,
-    .read_misses          = 0,
+    .read_hits = 0,
+    .read_misses = 0,
     .read_ahead_transfers = 0,
-    .read_ahead_peeks     = 0,
-    .read_blocks          = 0,
-    .read_errors          = 0,
-    .write_transfers      = 1,
-    .write_blocks         = 1,
-    .write_errors         = 0
+    .read_ahead_peeks = 0,
+    .read_blocks = 0,
+    .read_errors = 0,
+    .write_transfers = 1,
+    .write_blocks = 1,
+    .write_errors = 0
   };
   static const rtems_blkdev_stats complete_new_block_stats = {
-    .read_hits            = 3,
-    .read_misses          = 2,
+    .read_hits = 3,
+    .read_misses = 2,
     .read_ahead_transfers = 0,
-    .read_ahead_peeks     = 0,
-    .read_blocks          = 2,
-    .read_errors          = 0,
-    .write_transfers      = 1,
-    .write_blocks         = 3,
-    .write_errors         = 0
+    .read_ahead_peeks = 0,
+    .read_blocks = 2,
+    .read_errors = 0,
+    .write_transfers = 1,
+    .write_blocks = 3,
+    .write_errors = 0
   };
   static const rtems_blkdev_stats partial_new_block_stats = {
-    .read_hits            = 3,
-    .read_misses          = 3,
+    .read_hits = 3,
+    .read_misses = 3,
     .read_ahead_transfers = 0,
-    .read_ahead_peeks     = 0,
-    .read_blocks          = 3,
-    .read_errors          = 0,
-    .write_transfers      = 1,
-    .write_blocks         = 3,
-    .write_errors         = 0
+    .read_ahead_peeks = 0,
+    .read_blocks = 3,
+    .read_errors = 0,
+    .write_transfers = 1,
+    .write_blocks = 3,
+    .write_errors = 0
   };
 
-  int                             rv;
-  int                             fd;
-  ssize_t                         num_bytes;
-  uint8_t                         cluster_buf[SECTOR_SIZE
-                                              * SECTORS_PER_CLUSTER];
-  uint32_t                        cluster_size = sizeof( cluster_buf );
-  off_t                           off;
-
+  int      rv;
+  int      fd;
+  ssize_t  num_bytes;
+  uint8_t  cluster_buf[ SECTOR_SIZE * SECTORS_PER_CLUSTER ];
+  uint32_t cluster_size = sizeof( cluster_buf );
+  off_t    off;
 
   memset( cluster_buf, 0xFE, cluster_size );
 
@@ -223,24 +223,25 @@ static void test_normal_file_write(
   rtems_test_assert( 0 == rv );
 }
 
-static void test_fat12_root_directory_write( const char *dev_name,
-  const char                                            *mount_dir,
-  const char                                            *file_name )
+static void test_fat12_root_directory_write(
+  const char *dev_name,
+  const char *mount_dir,
+  const char *file_name
+)
 {
   static const rtems_blkdev_stats fat12_root_dir_stats = {
-    .read_hits            = 11,
-    .read_misses          = 2,
+    .read_hits = 11,
+    .read_misses = 2,
     .read_ahead_transfers = 0,
-    .read_blocks          = 2,
-    .read_errors          = 0,
-    .write_transfers      = 1,
-    .write_blocks         = 1,
-    .write_errors         = 0
+    .read_blocks = 2,
+    .read_errors = 0,
+    .write_transfers = 1,
+    .write_blocks = 1,
+    .write_errors = 0
   };
 
-  int                             fd;
-  int                             rv;
-
+  int fd;
+  int rv;
 
   format_and_mount( dev_name, mount_dir );
 
@@ -260,7 +261,7 @@ static void test_fat12_root_directory_write( const char *dev_name,
 
 static void test( void )
 {
-  static const char dev_name[]  = "/dev/sda";
+  static const char dev_name[] = "/dev/sda";
   static const char mount_dir[] = "/mnt";
   static const char file_name[] = "/mnt/file.txt";
 
@@ -277,7 +278,7 @@ static void test( void )
     64,
     2880,
     0
-    );
+  );
   rtems_test_assert( RTEMS_SUCCESSFUL == sc );
 
   test_fat12_root_directory_write( dev_name, mount_dir, file_name );

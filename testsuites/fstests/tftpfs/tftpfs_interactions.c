@@ -50,11 +50,10 @@
 #include "config.h"
 #endif
 
-#include <stdio.h> /* sprintf() */
-#include <inttypes.h> /* printf() macros like PRId8 */
+#include <stdio.h>     /* sprintf() */
+#include <inttypes.h>  /* printf() macros like PRId8 */
 #include <arpa/inet.h> /* ntohs() */
 #include <rtems/test.h>
-
 
 #include "tftpfs_interactions.h"
 #include "tftpfs_udp_network_fake.h"
@@ -73,12 +72,11 @@ typedef struct interaction_data_socket {
 static bool interact_socket( Tftp_Action *act, void *data )
 {
   interaction_data_socket *d = data;
-  T_eq_int( act->data.socket.domain,   d->domain );
-  T_eq_int( act->data.socket.type,     d->type );
+  T_eq_int( act->data.socket.domain, d->domain );
+  T_eq_int( act->data.socket.type, d->type );
   T_eq_int( act->data.socket.protocol, d->protocol );
   if (
-    act->data.socket.domain   != d->domain ||
-    act->data.socket.type     != d->type ||
+    act->data.socket.domain != d->domain || act->data.socket.type != d->type ||
     act->data.socket.protocol != d->protocol
   ) {
     return false;
@@ -103,10 +101,10 @@ void _Tftp_Add_interaction_socket(
     sizeof( interaction_data_socket )
   );
 
-  d->domain   = domain;
-  d->type     = type;
+  d->domain = domain;
+  d->type = type;
   d->protocol = protocol;
-  d->result   = result;
+  d->result = result;
 }
 
 /*
@@ -140,7 +138,7 @@ void _Tftp_Add_interaction_close( int fd, int result )
     sizeof( interaction_data_close )
   );
 
-  d->fd     = fd;
+  d->fd = fd;
   d->result = result;
 }
 
@@ -159,10 +157,7 @@ static bool interact_bind( Tftp_Action *act, void *data )
   interaction_data_bind *d = data;
   T_eq_int( act->data.bind.fd, d->fd );
   T_eq_int( act->data.bind.family, d->family );
-  if (
-    act->data.bind.fd     != d->fd     ||
-    act->data.bind.family != d->family
-  ) {
+  if ( act->data.bind.fd != d->fd || act->data.bind.family != d->family ) {
     return false;
   }
 
@@ -180,7 +175,7 @@ void _Tftp_Add_interaction_bind( int fd, int family, int result )
     sizeof( interaction_data_bind )
   );
 
-  d->fd     = fd;
+  d->fd = fd;
   d->family = family;
   d->result = result;
 }
@@ -192,14 +187,14 @@ void _Tftp_Add_interaction_bind( int fd, int family, int result )
 #define TFTP_MAX_FILENAME_STRLEN 12
 
 typedef struct interaction_data_sendto {
-  int fd;
+  int      fd;
   uint16_t dest_port;
-  char dest_addr_str[TFTP_MAX_IP_ADDR_STRLEN];
-  bool result;
+  char     dest_addr_str[ TFTP_MAX_IP_ADDR_STRLEN ];
+  bool     result;
   union {
     struct {
       uint16_t opcode;
-      char filename[TFTP_MAX_FILENAME_STRLEN];
+      char     filename[ TFTP_MAX_FILENAME_STRLEN ];
       uint16_t block_size;
       uint16_t window_size;
     } rwrq;
@@ -208,9 +203,9 @@ typedef struct interaction_data_sendto {
     } ack;
     struct {
       uint16_t block_num;
-      size_t start;
-      size_t len;
-      uint8_t (*get_data)( size_t pos );
+      size_t   start;
+      size_t   len;
+      uint8_t ( *get_data )( size_t pos );
     } data;
     struct {
       uint16_t error_code;
@@ -220,15 +215,17 @@ typedef struct interaction_data_sendto {
 
 static bool check_filename_and_mode(
   const char **buf,
-  size_t *max_len,
-  const char *filename
+  size_t      *max_len,
+  const char  *filename
 )
 {
   const char *str;
-  size_t len;
+  size_t      len;
 
   /* Make sure there is a 0 byte in the end before comparing strings */
-  if ( *max_len <= 0 ) { return false; };
+  if ( *max_len <= 0 ) {
+    return false;
+  };
   T_quiet_eq_u8( *( *buf + *max_len - 1 ), '\0' );
 
   str = *buf;
@@ -258,16 +255,18 @@ static bool check_filename_and_mode(
 
 static bool check_for_option(
   const char **buf,
-  size_t *max_len,
-  const char *option_name,
-  const char *option_value
+  size_t      *max_len,
+  const char  *option_name,
+  const char  *option_value
 )
 {
   const char *str;
-  size_t len;
+  size_t      len;
 
   /* Make sure there is a 0 byte in the end before comparing strings */
-  if ( *max_len <= 0 ) { return false; };
+  if ( *max_len <= 0 ) {
+    return false;
+  };
   T_quiet_eq_u8( *( *buf + *max_len - 1 ), '\0' );
 
   str = *buf;
@@ -304,19 +303,18 @@ static bool check_for_option(
 static bool interact_sendto_common( Tftp_Action *act, void *data )
 {
   interaction_data_sendto *d = data;
-  const Tftp_Packet *pkt = act->data.sendto.buf;
+  const Tftp_Packet       *pkt = act->data.sendto.buf;
 
-  T_eq_int( act->data.sendto.fd,            d->fd );
-  T_eq_int( act->data.sendto.flags,         0 );
-  T_eq_u16( act->data.sendto.dest_port,     d->dest_port );
+  T_eq_int( act->data.sendto.fd, d->fd );
+  T_eq_int( act->data.sendto.flags, 0 );
+  T_eq_u16( act->data.sendto.dest_port, d->dest_port );
   T_eq_str( act->data.sendto.dest_addr_str, d->dest_addr_str );
-  T_gt_sz(  act->data.sendto.len,           sizeof( pkt->opcode ) );
+  T_gt_sz( act->data.sendto.len, sizeof( pkt->opcode ) );
   if (
-    act->data.sendto.fd        != d->fd ||
-    act->data.sendto.flags     != 0 ||
+    act->data.sendto.fd != d->fd || act->data.sendto.flags != 0 ||
     act->data.sendto.dest_port != d->dest_port ||
     strcmp( act->data.sendto.dest_addr_str, d->dest_addr_str ) != 0 ||
-    act->data.sendto.len       <= sizeof( pkt->opcode )
+    act->data.sendto.len <= sizeof( pkt->opcode )
   ) {
     return false;
   }
@@ -328,19 +326,21 @@ static bool interact_sendto_common( Tftp_Action *act, void *data )
 static bool interact_sendto_rwrq( Tftp_Action *act, void *data )
 {
   interaction_data_sendto *d = data;
-  const Tftp_Packet *pkt = act->data.sendto.buf;
-  size_t len = act->data.sendto.len - sizeof( pkt->opcode );
-  const char *buf = pkt->content.rrq.opts;
-  const char *tmp;
-  char block_size_buffer[6];
-  char window_size_buffer[6];
+  const Tftp_Packet       *pkt = act->data.sendto.buf;
+  size_t                   len = act->data.sendto.len - sizeof( pkt->opcode );
+  const char              *buf = pkt->content.rrq.opts;
+  const char              *tmp;
+  char                     block_size_buffer[ 6 ];
+  char                     window_size_buffer[ 6 ];
 
   if ( !interact_sendto_common( act, data ) ) {
     return false;
   }
 
   T_eq_u16( ntohs( pkt->opcode ), d->content.rwrq.opcode );
-  if ( ntohs( pkt->opcode ) != d->content.rwrq.opcode ) { return false; }
+  if ( ntohs( pkt->opcode ) != d->content.rwrq.opcode ) {
+    return false;
+  }
   if ( !check_filename_and_mode( &buf, &len, d->content.rwrq.filename ) ) {
     return false;
   }
@@ -348,31 +348,32 @@ static bool interact_sendto_rwrq( Tftp_Action *act, void *data )
   snprintf(
     block_size_buffer,
     sizeof( block_size_buffer ),
-    "%"PRIu16,
+    "%" PRIu16,
     d->content.rwrq.block_size
   );
   snprintf(
     window_size_buffer,
     sizeof( window_size_buffer ),
-    "%"PRIu16,
+    "%" PRIu16,
     d->content.rwrq.window_size
   );
 
   for ( tmp = buf; len > 0; ) {
-    if ( d->content.rwrq.block_size != NO_BLOCK_SIZE_OPTION &&
-      check_for_option(
-        &buf,
-        &len,
-        TFTP_OPTION_BLKSIZE,
-        block_size_buffer )) {
-        d->content.rwrq.block_size = NO_BLOCK_SIZE_OPTION;
-    } else if ( d->content.rwrq.window_size != NO_WINDOW_SIZE_OPTION &&
+    if (
+      d->content.rwrq.block_size != NO_BLOCK_SIZE_OPTION &&
+      check_for_option( &buf, &len, TFTP_OPTION_BLKSIZE, block_size_buffer )
+    ) {
+      d->content.rwrq.block_size = NO_BLOCK_SIZE_OPTION;
+    } else if (
+      d->content.rwrq.window_size != NO_WINDOW_SIZE_OPTION &&
       check_for_option(
         &buf,
         &len,
         TFTP_OPTION_WINDOWSIZE,
-        window_size_buffer )) {
-        d->content.rwrq.window_size = NO_WINDOW_SIZE_OPTION;
+        window_size_buffer
+      )
+    ) {
+      d->content.rwrq.window_size = NO_WINDOW_SIZE_OPTION;
     } else {
       T_true( false, "Error at option '%s'", tmp );
       return false;
@@ -387,7 +388,7 @@ static bool interact_sendto_rwrq( Tftp_Action *act, void *data )
 static bool interact_sendto_ack( Tftp_Action *act, void *data )
 {
   interaction_data_sendto *d = data;
-  const Tftp_Packet *pkt = act->data.sendto.buf;
+  const Tftp_Packet       *pkt = act->data.sendto.buf;
   size_t pkt_size = sizeof( pkt->opcode ) + sizeof( pkt->content.ack );
 
   if ( !interact_sendto_common( act, data ) ) {
@@ -396,8 +397,8 @@ static bool interact_sendto_ack( Tftp_Action *act, void *data )
 
   T_eq_u16( ntohs( pkt->opcode ), TFTP_OPCODE_ACK );
   T_eq_sz( act->data.sendto.len, pkt_size );
-  if ( ntohs( pkt->opcode ) != TFTP_OPCODE_ACK ||
-    act->data.sendto.len != pkt_size
+  if (
+    ntohs( pkt->opcode ) != TFTP_OPCODE_ACK || act->data.sendto.len != pkt_size
   ) {
     return false;
   }
@@ -413,10 +414,11 @@ static bool interact_sendto_ack( Tftp_Action *act, void *data )
 static bool interact_sendto_data( Tftp_Action *act, void *data )
 {
   interaction_data_sendto *d = data;
-  const Tftp_Packet *pkt = act->data.sendto.buf;
-  size_t pkt_size = sizeof( pkt->opcode ) +
-    sizeof( pkt->content.data.block_num ) + d->content.data.len;
-  size_t i;
+  const Tftp_Packet       *pkt = act->data.sendto.buf;
+  size_t                   pkt_size = sizeof( pkt->opcode ) +
+                                      sizeof( pkt->content.data.block_num ) +
+                                      d->content.data.len;
+  size_t                   i;
 
   if ( !interact_sendto_common( act, data ) ) {
     return false;
@@ -424,7 +426,8 @@ static bool interact_sendto_data( Tftp_Action *act, void *data )
 
   T_eq_u16( ntohs( pkt->opcode ), TFTP_OPCODE_DATA );
   T_eq_sz( act->data.sendto.len, pkt_size );
-  if ( ntohs( pkt->opcode ) != TFTP_OPCODE_DATA ||
+  if (
+    ntohs( pkt->opcode ) != TFTP_OPCODE_DATA ||
     act->data.sendto.len != pkt_size
   ) {
     return false;
@@ -436,15 +439,17 @@ static bool interact_sendto_data( Tftp_Action *act, void *data )
   }
 
   for ( i = 0; i < d->content.data.len; ++i ) {
-    if ( pkt->content.data.bytes[i] !=
-      d->content.data.get_data( d->content.data.start + i ) ) {
-    T_true(
-      false,
-      "Expected byte %02"PRIx8" but TFTP client sent %02"PRIx8
+    if (
+      pkt->content.data.bytes[ i ] !=
+      d->content.data.get_data( d->content.data.start + i )
+    ) {
+      T_true(
+        false,
+        "Expected byte %02" PRIx8 " but TFTP client sent %02" PRIx8
         " at position %zu",
-      d->content.data.get_data( d->content.data.start + i ),
-      pkt->content.data.bytes[i],
-      d->content.data.start + i
+        d->content.data.get_data( d->content.data.start + i ),
+        pkt->content.data.bytes[ i ],
+        d->content.data.start + i
       );
       return false;
     }
@@ -456,7 +461,7 @@ static bool interact_sendto_data( Tftp_Action *act, void *data )
 static bool interact_sendto_error( Tftp_Action *act, void *data )
 {
   interaction_data_sendto *d = data;
-  const Tftp_Packet *pkt = act->data.sendto.buf;
+  const Tftp_Packet       *pkt = act->data.sendto.buf;
   size_t pkt_size = sizeof( pkt->opcode ) + sizeof( pkt->content.error );
 
   if ( !interact_sendto_common( act, data ) ) {
@@ -465,7 +470,8 @@ static bool interact_sendto_error( Tftp_Action *act, void *data )
 
   T_eq_u16( ntohs( pkt->opcode ), TFTP_OPCODE_ERROR );
   T_gt_sz( act->data.sendto.len, pkt_size );
-  if ( ntohs( pkt->opcode ) != TFTP_OPCODE_ERROR ||
+  if (
+    ntohs( pkt->opcode ) != TFTP_OPCODE_ERROR ||
     act->data.sendto.len <= pkt_size
   ) {
     return false;
@@ -475,7 +481,9 @@ static bool interact_sendto_error( Tftp_Action *act, void *data )
     ntohs( pkt->content.error.error_code ),
     d->content.error.error_code
   );
-  if ( ntohs( pkt->content.error.error_code ) != d->content.error.error_code ) {
+  if (
+    ntohs( pkt->content.error.error_code ) != d->content.error.error_code
+  ) {
     return false;
   }
 
@@ -483,14 +491,14 @@ static bool interact_sendto_error( Tftp_Action *act, void *data )
 }
 
 static void add_interaction_send_rwrq(
-  int fd,
+  int         fd,
   const char *filename,
-  uint16_t dest_port,
+  uint16_t    dest_port,
   const char *dest_addr_str,
-  uint16_t block_size,
-  uint16_t window_size,
-  bool result,
-  uint16_t opcode
+  uint16_t    block_size,
+  uint16_t    window_size,
+  bool        result,
+  uint16_t    opcode
 )
 {
   interaction_data_sendto *d;
@@ -505,22 +513,22 @@ static void add_interaction_send_rwrq(
   T_assert_lt_sz( strlen( dest_addr_str ), TFTP_MAX_IP_ADDR_STRLEN );
   strcpy( d->content.rwrq.filename, filename );
   strcpy( d->dest_addr_str, dest_addr_str );
-  d->fd                       = fd;
-  d->dest_port                = dest_port;
-  d->content.rwrq.opcode      = opcode;
-  d->content.rwrq.block_size  = block_size;
+  d->fd = fd;
+  d->dest_port = dest_port;
+  d->content.rwrq.opcode = opcode;
+  d->content.rwrq.block_size = block_size;
   d->content.rwrq.window_size = window_size;
-  d->result                   = result;
+  d->result = result;
 }
 
 void _Tftp_Add_interaction_send_rrq(
-  int fd,
+  int         fd,
   const char *filename,
-  uint16_t dest_port,
+  uint16_t    dest_port,
   const char *dest_addr_str,
-  uint16_t block_size,
-  uint16_t window_size,
-  bool result
+  uint16_t    block_size,
+  uint16_t    window_size,
+  bool        result
 )
 {
   add_interaction_send_rwrq(
@@ -536,13 +544,13 @@ void _Tftp_Add_interaction_send_rrq(
 }
 
 void _Tftp_Add_interaction_send_wrq(
-  int fd,
+  int         fd,
   const char *filename,
-  uint16_t dest_port,
+  uint16_t    dest_port,
   const char *dest_addr_str,
-  uint16_t block_size,
-  uint16_t window_size,
-  bool result
+  uint16_t    block_size,
+  uint16_t    window_size,
+  bool        result
 )
 {
   add_interaction_send_rwrq(
@@ -558,11 +566,11 @@ void _Tftp_Add_interaction_send_wrq(
 }
 
 void _Tftp_Add_interaction_send_ack(
-  int fd,
-  uint16_t block_num,
-  uint16_t dest_port,
+  int         fd,
+  uint16_t    block_num,
+  uint16_t    dest_port,
   const char *dest_addr_str,
-  bool result
+  bool        result
 )
 {
   interaction_data_sendto *d;
@@ -575,21 +583,21 @@ void _Tftp_Add_interaction_send_ack(
 
   T_assert_lt_sz( strlen( dest_addr_str ), TFTP_MAX_IP_ADDR_STRLEN );
   strcpy( d->dest_addr_str, dest_addr_str );
-  d->fd                    = fd;
-  d->dest_port             = dest_port;
-  d->result                = result;
+  d->fd = fd;
+  d->dest_port = dest_port;
+  d->result = result;
   d->content.ack.block_num = block_num;
 }
 
 void _Tftp_Add_interaction_send_data(
-  int fd,
+  int      fd,
   uint16_t block_num,
-  size_t start,
-  size_t len,
-  uint8_t (*get_data)( size_t pos ),
-  uint16_t dest_port,
+  size_t   start,
+  size_t   len,
+  uint8_t ( *get_data )( size_t pos ),
+  uint16_t    dest_port,
   const char *dest_addr_str,
-  bool result
+  bool        result
 )
 {
   interaction_data_sendto *d;
@@ -602,21 +610,21 @@ void _Tftp_Add_interaction_send_data(
 
   T_assert_lt_sz( strlen( dest_addr_str ), TFTP_MAX_IP_ADDR_STRLEN );
   strcpy( d->dest_addr_str, dest_addr_str );
-  d->fd                     = fd;
-  d->dest_port              = dest_port;
-  d->result                 = result;
+  d->fd = fd;
+  d->dest_port = dest_port;
+  d->result = result;
   d->content.data.block_num = block_num;
-  d->content.data.start     = start;
-  d->content.data.len       = len;
-  d->content.data.get_data  = get_data;
+  d->content.data.start = start;
+  d->content.data.len = len;
+  d->content.data.get_data = get_data;
 }
 
 void _Tftp_Add_interaction_send_error(
-  int fd,
-  uint16_t error_code,
-  uint16_t dest_port,
+  int         fd,
+  uint16_t    error_code,
+  uint16_t    dest_port,
   const char *dest_addr_str,
-  bool result
+  bool        result
 )
 {
   interaction_data_sendto *d;
@@ -629,9 +637,9 @@ void _Tftp_Add_interaction_send_error(
 
   T_assert_lt_sz( strlen( dest_addr_str ), TFTP_MAX_IP_ADDR_STRLEN );
   strcpy( d->dest_addr_str, dest_addr_str );
-  d->fd                       = fd;
-  d->dest_port                = dest_port;
-  d->result                   = result;
+  d->fd = fd;
+  d->dest_port = dest_port;
+  d->result = result;
   d->content.error.error_code = error_code;
 }
 
@@ -640,40 +648,40 @@ void _Tftp_Add_interaction_send_error(
  */
 
 typedef struct interaction_data_recvfrom {
-  int fd;
+  int      fd;
   uint32_t timeout_ms;
   uint16_t src_port;
-  char src_addr_str[TFTP_MAX_IP_ADDR_STRLEN];
-  bool result;
+  char     src_addr_str[ TFTP_MAX_IP_ADDR_STRLEN ];
+  bool     result;
   union {
     struct {
       uint16_t block_num;
     } ack;
     struct {
       size_t options_size;
-      char options[TFTP_MAX_OPTIONS_SIZE];
+      char   options[ TFTP_MAX_OPTIONS_SIZE ];
     } oack;
     struct {
       uint16_t block_num;
-      size_t start;
-      size_t len;
-      uint8_t (*get_data)( size_t pos );
+      size_t   start;
+      size_t   len;
+      uint8_t ( *get_data )( size_t pos );
     } data;
     struct {
       uint16_t error_code;
-      char err_msg[TFTP_MAX_ERROR_STRLEN];
+      char     err_msg[ TFTP_MAX_ERROR_STRLEN ];
     } error;
     struct {
-      size_t len;
-      uint8_t bytes[0];
+      size_t  len;
+      uint8_t bytes[ 0 ];
     } raw;
   } content;
 } interaction_data_recvfrom;
 
 static bool interact_recvfrom_common(
   Tftp_Action *act,
-  void *data,
-  size_t actual_size
+  void        *data,
+  size_t       actual_size
 )
 {
   interaction_data_recvfrom *d = data;
@@ -681,8 +689,7 @@ static bool interact_recvfrom_common(
   T_eq_int( act->data.recvfrom.fd, d->fd );
   T_quiet_ge_sz( act->data.recvfrom.len, actual_size );
   if (
-    act->data.recvfrom.fd != d->fd ||
-    act->data.recvfrom.len < actual_size
+    act->data.recvfrom.fd != d->fd || act->data.recvfrom.len < actual_size
   ) {
     return false;
   }
@@ -707,8 +714,8 @@ static bool interact_recvfrom_common(
     d->src_addr_str,
     sizeof( act->data.recvfrom.src_addr_str )
   );
-  act->data.recvfrom.src_addr_str[
-    sizeof( act->data.recvfrom.src_addr_str ) - 1] = '\0';
+  act->data.recvfrom
+    .src_addr_str[ sizeof( act->data.recvfrom.src_addr_str ) - 1 ] = '\0';
   act->data.recvfrom.src_port = d->src_port;
   act->data.recvfrom.result = d->result ? (int) actual_size : -1;
   return true;
@@ -717,12 +724,12 @@ static bool interact_recvfrom_common(
 static bool interact_recvfrom_data( Tftp_Action *act, void *data )
 {
   interaction_data_recvfrom *d = data;
-  Tftp_Packet *pkt = act->data.recvfrom.buf;
-  size_t actual_size;
-  size_t i;
+  Tftp_Packet               *pkt = act->data.recvfrom.buf;
+  size_t                     actual_size;
+  size_t                     i;
 
-  actual_size = sizeof( pkt->opcode ) +
-    sizeof( pkt->content.data.block_num ) + d->content.data.len;
+  actual_size = sizeof( pkt->opcode ) + sizeof( pkt->content.data.block_num ) +
+                d->content.data.len;
   if ( !interact_recvfrom_common( act, data, actual_size ) ) {
     return false;
   }
@@ -730,8 +737,9 @@ static bool interact_recvfrom_data( Tftp_Action *act, void *data )
   pkt->opcode = htons( TFTP_OPCODE_DATA );
   pkt->content.data.block_num = htons( d->content.data.block_num );
   for ( i = 0; i < d->content.data.len; ++i ) {
-    pkt->content.data.bytes[i] =
-      d->content.data.get_data( d->content.data.start + i );
+    pkt->content.data.bytes[ i ] = d->content.data.get_data(
+      d->content.data.start + i
+    );
   }
 
   return true;
@@ -740,8 +748,8 @@ static bool interact_recvfrom_data( Tftp_Action *act, void *data )
 static bool interact_recvfrom_ack( Tftp_Action *act, void *data )
 {
   interaction_data_recvfrom *d = data;
-  Tftp_Packet *pkt = act->data.recvfrom.buf;
-  size_t actual_size;
+  Tftp_Packet               *pkt = act->data.recvfrom.buf;
+  size_t                     actual_size;
 
   actual_size = sizeof( pkt->opcode ) + sizeof( pkt->content.ack.block_num );
   if ( !interact_recvfrom_common( act, data, actual_size ) ) {
@@ -757,8 +765,8 @@ static bool interact_recvfrom_ack( Tftp_Action *act, void *data )
 static bool interact_recvfrom_oack( Tftp_Action *act, void *data )
 {
   interaction_data_recvfrom *d = data;
-  Tftp_Packet *pkt = act->data.recvfrom.buf;
-  size_t actual_size;
+  Tftp_Packet               *pkt = act->data.recvfrom.buf;
+  size_t                     actual_size;
 
   actual_size = sizeof( pkt->opcode ) + d->content.oack.options_size;
   if ( !interact_recvfrom_common( act, data, actual_size ) ) {
@@ -778,12 +786,12 @@ static bool interact_recvfrom_oack( Tftp_Action *act, void *data )
 static bool interact_recvfrom_error( Tftp_Action *act, void *data )
 {
   interaction_data_recvfrom *d = data;
-  Tftp_Packet *pkt = act->data.recvfrom.buf;
-  size_t actual_size;
+  Tftp_Packet               *pkt = act->data.recvfrom.buf;
+  size_t                     actual_size;
 
   actual_size = sizeof( pkt->opcode ) +
-    sizeof( pkt->content.error.error_code ) +
-    strlen( d->content.error.err_msg ) + 1;
+                sizeof( pkt->content.error.error_code ) +
+                strlen( d->content.error.err_msg ) + 1;
   if ( !interact_recvfrom_common( act, data, actual_size ) ) {
     return false;
   }
@@ -803,8 +811,8 @@ static bool interact_recvfrom_error( Tftp_Action *act, void *data )
 static bool interact_recvfrom_raw( Tftp_Action *act, void *data )
 {
   interaction_data_recvfrom *d = data;
-  uint8_t *pkt = act->data.recvfrom.buf;
-  size_t actual_size = d->content.raw.len;
+  uint8_t                   *pkt = act->data.recvfrom.buf;
+  size_t                     actual_size = d->content.raw.len;
 
   if ( !interact_recvfrom_common( act, data, actual_size ) ) {
     return false;
@@ -816,14 +824,14 @@ static bool interact_recvfrom_raw( Tftp_Action *act, void *data )
 }
 
 void _Tftp_Add_interaction_recv_data(
-  int fd,
-  uint32_t timeout_ms,
-  uint16_t src_port,
+  int         fd,
+  uint32_t    timeout_ms,
+  uint16_t    src_port,
   const char *src_addr_str,
-  uint16_t block_num,
-  size_t start,
-  size_t len,
-  uint8_t (*get_data)( size_t pos ),
+  uint16_t    block_num,
+  size_t      start,
+  size_t      len,
+  uint8_t ( *get_data )( size_t pos ),
   bool result
 )
 {
@@ -837,23 +845,23 @@ void _Tftp_Add_interaction_recv_data(
 
   T_assert_lt_sz( strlen( src_addr_str ), sizeof( d->src_addr_str ) - 1 );
   strcpy( d->src_addr_str, src_addr_str );
-  d->fd                     = fd;
-  d->timeout_ms             = timeout_ms;
-  d->src_port               = src_port;
+  d->fd = fd;
+  d->timeout_ms = timeout_ms;
+  d->src_port = src_port;
   d->content.data.block_num = block_num;
-  d->content.data.start     = start;
-  d->content.data.len       = len;
-  d->content.data.get_data  = get_data;
-  d->result                 = result;
+  d->content.data.start = start;
+  d->content.data.len = len;
+  d->content.data.get_data = get_data;
+  d->result = result;
 }
 
 void _Tftp_Add_interaction_recv_ack(
-  int fd,
-  uint32_t timeout_ms,
-  uint16_t src_port,
+  int         fd,
+  uint32_t    timeout_ms,
+  uint16_t    src_port,
   const char *src_addr_str,
-  uint16_t block_num,
-  bool result
+  uint16_t    block_num,
+  bool        result
 )
 {
   interaction_data_recvfrom *d;
@@ -866,21 +874,21 @@ void _Tftp_Add_interaction_recv_ack(
 
   T_assert_lt_sz( strlen( src_addr_str ), sizeof( d->src_addr_str ) - 1 );
   strcpy( d->src_addr_str, src_addr_str );
-  d->fd                     = fd;
-  d->timeout_ms             = timeout_ms;
-  d->src_port               = src_port;
-  d->content.ack.block_num  = block_num;
-  d->result                 = result;
+  d->fd = fd;
+  d->timeout_ms = timeout_ms;
+  d->src_port = src_port;
+  d->content.ack.block_num = block_num;
+  d->result = result;
 }
 
 void _Tftp_Add_interaction_recv_oack(
-  int fd,
-  uint32_t timeout_ms,
-  uint16_t src_port,
+  int         fd,
+  uint32_t    timeout_ms,
+  uint16_t    src_port,
   const char *src_addr_str,
   const char *options,
-  size_t options_size,
-  bool result
+  size_t      options_size,
+  bool        result
 )
 {
   interaction_data_recvfrom *d;
@@ -895,21 +903,21 @@ void _Tftp_Add_interaction_recv_oack(
   strcpy( d->src_addr_str, src_addr_str );
   T_assert_lt_sz( options_size, sizeof( d->content.oack.options ) );
   memcpy( d->content.oack.options, options, options_size );
-  d->fd                        = fd;
-  d->timeout_ms                = timeout_ms;
-  d->src_port                  = src_port;
+  d->fd = fd;
+  d->timeout_ms = timeout_ms;
+  d->src_port = src_port;
   d->content.oack.options_size = options_size;
-  d->result                    = result;
+  d->result = result;
 }
 
 void _Tftp_Add_interaction_recv_error(
-  int fd,
-  uint32_t timeout_ms,
-  uint16_t src_port,
+  int         fd,
+  uint32_t    timeout_ms,
+  uint16_t    src_port,
   const char *src_addr_str,
-  uint16_t error_code,
+  uint16_t    error_code,
   const char *err_msg,
-  bool result
+  bool        result
 )
 {
   interaction_data_recvfrom *d;
@@ -924,21 +932,21 @@ void _Tftp_Add_interaction_recv_error(
   strcpy( d->src_addr_str, src_addr_str );
   T_assert_lt_sz( strlen( src_addr_str ), sizeof( d->src_addr_str ) - 1 );
   strcpy( d->content.error.err_msg, err_msg );
-  d->fd                       = fd;
-  d->timeout_ms               = timeout_ms;
-  d->src_port                 = src_port;
+  d->fd = fd;
+  d->timeout_ms = timeout_ms;
+  d->src_port = src_port;
   d->content.error.error_code = error_code;
-  d->result                   = result;
+  d->result = result;
 }
 
 void _Tftp_Add_interaction_recv_raw(
-  int fd,
-  uint32_t timeout_ms,
-  uint16_t src_port,
-  const char *src_addr_str,
-  size_t len,
+  int            fd,
+  uint32_t       timeout_ms,
+  uint16_t       src_port,
+  const char    *src_addr_str,
+  size_t         len,
   const uint8_t *bytes,
-  bool result
+  bool           result
 )
 {
   interaction_data_recvfrom *d;
@@ -952,19 +960,16 @@ void _Tftp_Add_interaction_recv_raw(
   T_assert_lt_sz( strlen( src_addr_str ), sizeof( d->src_addr_str ) - 1 );
   strcpy( d->src_addr_str, src_addr_str );
   memcpy( d->content.raw.bytes, bytes, len );
-  d->fd              = fd;
-  d->timeout_ms      = timeout_ms;
-  d->src_port        = src_port;
+  d->fd = fd;
+  d->timeout_ms = timeout_ms;
+  d->src_port = src_port;
   d->content.raw.len = len;
-  d->result          = result;
+  d->result = result;
 }
 
-void _Tftp_Add_interaction_recv_nothing(
-  int fd,
-  uint32_t timeout_ms
-)
+void _Tftp_Add_interaction_recv_nothing( int fd, uint32_t timeout_ms )
 {
-  static const char *dummy_ip = "0.0.0.0";
+  static const char         *dummy_ip = "0.0.0.0";
   interaction_data_recvfrom *d;
 
   d = _Tftp_Append_interaction(
@@ -973,12 +978,11 @@ void _Tftp_Add_interaction_recv_nothing(
     sizeof( interaction_data_recvfrom )
   );
 
-
   T_assert_lt_sz( strlen( dummy_ip ), sizeof( d->src_addr_str ) - 1 );
   strcpy( d->src_addr_str, dummy_ip );
-  d->fd                     = fd;
-  d->timeout_ms             = timeout_ms;
-  d->src_port               = 0;
-  d->content.ack.block_num  = 0;
-  d->result                 = false;
+  d->fd = fd;
+  d->timeout_ms = timeout_ms;
+  d->src_port = 0;
+  d->content.ack.block_num = 0;
+  d->result = false;
 }

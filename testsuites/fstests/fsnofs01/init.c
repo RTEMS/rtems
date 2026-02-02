@@ -43,16 +43,16 @@
 
 const char rtems_test_name[] = "FSNOFS 1";
 
-static int node_count(const rtems_chain_control *chain)
+static int node_count( const rtems_chain_control *chain )
 {
-  int count = 0;
-  const rtems_chain_node *current = rtems_chain_immutable_first(chain);
-  const rtems_chain_node *tail = rtems_chain_immutable_tail(chain);
+  int                     count = 0;
+  const rtems_chain_node *current = rtems_chain_immutable_first( chain );
+  const rtems_chain_node *tail = rtems_chain_immutable_tail( chain );
 
-  while (current != tail) {
+  while ( current != tail ) {
     ++count;
 
-    current = rtems_chain_immutable_next(current);
+    current = rtems_chain_immutable_next( current );
   }
 
   return count;
@@ -62,289 +62,297 @@ static void rtems_test_assert_equal_to_null_loc(
   const rtems_filesystem_location_info_t *local_loc
 )
 {
-  rtems_filesystem_global_location_t *null_loc =
-    &rtems_filesystem_global_location_null;
+  rtems_filesystem_global_location_t
+    *null_loc = &rtems_filesystem_global_location_null;
 
-  rtems_test_assert(null_loc->location.node_access == local_loc->node_access);
-  rtems_test_assert(null_loc->location.node_access_2 == local_loc->node_access_2);
-  rtems_test_assert(null_loc->location.handlers == local_loc->handlers);
-  rtems_test_assert(null_loc->location.mt_entry == local_loc->mt_entry);
+  rtems_test_assert(
+    null_loc->location.node_access == local_loc->node_access
+  );
+  rtems_test_assert(
+    null_loc->location.node_access_2 == local_loc->node_access_2
+  );
+  rtems_test_assert( null_loc->location.handlers == local_loc->handlers );
+  rtems_test_assert( null_loc->location.mt_entry == local_loc->mt_entry );
 }
 
-static void test_initial_values(void)
+static void test_initial_values( void )
 {
-  rtems_filesystem_global_location_t *null_loc =
-    &rtems_filesystem_global_location_null;
+  rtems_filesystem_global_location_t
+    *null_loc = &rtems_filesystem_global_location_null;
   rtems_filesystem_mount_table_entry_t *null_mt = null_loc->location.mt_entry;
-  rtems_chain_control *loc_chain = &null_mt->location_chain;
+  rtems_chain_control                  *loc_chain = &null_mt->location_chain;
   rtems_chain_node *loc_node = &null_loc->location.mt_entry_node;
 
-  rtems_test_assert(node_count(loc_chain) == 1);
-  rtems_test_assert(rtems_chain_previous(loc_node) == rtems_chain_head(loc_chain));
-  rtems_test_assert(rtems_chain_next(loc_node) == rtems_chain_tail(loc_chain));
-  rtems_test_assert(null_mt->mt_point_node == null_loc);
-  rtems_test_assert(null_mt->mt_fs_root == null_loc);
-  rtems_test_assert(!null_mt->mounted);
-  rtems_test_assert(!null_mt->writeable);
-  rtems_test_assert(null_loc->reference_count == 4);
-  rtems_test_assert(null_loc->deferred_released_next == NULL);
-  rtems_test_assert(null_loc->deferred_released_count == 0);
+  rtems_test_assert( node_count( loc_chain ) == 1 );
+  rtems_test_assert(
+    rtems_chain_previous( loc_node ) == rtems_chain_head( loc_chain )
+  );
+  rtems_test_assert(
+    rtems_chain_next( loc_node ) == rtems_chain_tail( loc_chain )
+  );
+  rtems_test_assert( null_mt->mt_point_node == null_loc );
+  rtems_test_assert( null_mt->mt_fs_root == null_loc );
+  rtems_test_assert( !null_mt->mounted );
+  rtems_test_assert( !null_mt->writeable );
+  rtems_test_assert( null_loc->reference_count == 4 );
+  rtems_test_assert( null_loc->deferred_released_next == NULL );
+  rtems_test_assert( null_loc->deferred_released_count == 0 );
 }
 
-static void test_location_obtain(void)
+static void test_location_obtain( void )
 {
   rtems_filesystem_global_location_t *global_loc = NULL;
-  rtems_filesystem_global_location_t *null_loc =
-    rtems_filesystem_global_location_obtain(&global_loc);
+  rtems_filesystem_global_location_t
+    *null_loc = rtems_filesystem_global_location_obtain( &global_loc );
   rtems_filesystem_mount_table_entry_t *null_mt = null_loc->location.mt_entry;
-  rtems_chain_control *loc_chain = &null_mt->location_chain;
+  rtems_chain_control                  *loc_chain = &null_mt->location_chain;
 
-  rtems_test_assert(node_count(loc_chain) == 1);
-  rtems_test_assert(null_loc->reference_count == 5);
+  rtems_test_assert( node_count( loc_chain ) == 1 );
+  rtems_test_assert( null_loc->reference_count == 5 );
 
-  rtems_filesystem_global_location_release(null_loc, false);
+  rtems_filesystem_global_location_release( null_loc, false );
 
-  rtems_test_assert(node_count(loc_chain) == 1);
-  rtems_test_assert(null_loc->reference_count == 4);
+  rtems_test_assert( node_count( loc_chain ) == 1 );
+  rtems_test_assert( null_loc->reference_count == 4 );
 }
 
-static void test_null_location_obtain(void)
+static void test_null_location_obtain( void )
 {
-  rtems_filesystem_global_location_t *null_loc =
-    rtems_filesystem_global_location_obtain_null();
+  rtems_filesystem_global_location_t
+    *null_loc = rtems_filesystem_global_location_obtain_null();
   rtems_filesystem_mount_table_entry_t *null_mt = null_loc->location.mt_entry;
-  rtems_chain_control *loc_chain = &null_mt->location_chain;
+  rtems_chain_control                  *loc_chain = &null_mt->location_chain;
 
-  rtems_test_assert(node_count(loc_chain) == 1);
-  rtems_test_assert(null_loc->reference_count == 5);
+  rtems_test_assert( node_count( loc_chain ) == 1 );
+  rtems_test_assert( null_loc->reference_count == 5 );
 
-  rtems_filesystem_global_location_release(null_loc, false);
+  rtems_filesystem_global_location_release( null_loc, false );
 
-  rtems_test_assert(node_count(loc_chain) == 1);
-  rtems_test_assert(null_loc->reference_count == 4);
+  rtems_test_assert( node_count( loc_chain ) == 1 );
+  rtems_test_assert( null_loc->reference_count == 4 );
 }
 
-static void test_null_location_replace(void)
+static void test_null_location_replace( void )
 {
-  rtems_filesystem_global_location_t *null_loc =
-    &rtems_filesystem_global_location_null;
+  rtems_filesystem_global_location_t
+    *null_loc = &rtems_filesystem_global_location_null;
   rtems_filesystem_mount_table_entry_t *null_mt = null_loc->location.mt_entry;
-  rtems_chain_control *loc_chain = &null_mt->location_chain;
-  rtems_filesystem_location_info_t local_loc;
+  rtems_chain_control                  *loc_chain = &null_mt->location_chain;
+  rtems_filesystem_location_info_t      local_loc;
 
-  rtems_test_assert(node_count(loc_chain) == 1);
-  rtems_test_assert(null_loc->reference_count == 4);
-  rtems_test_assert(rtems_filesystem_global_location_is_null(null_loc));
+  rtems_test_assert( node_count( loc_chain ) == 1 );
+  rtems_test_assert( null_loc->reference_count == 4 );
+  rtems_test_assert( rtems_filesystem_global_location_is_null( null_loc ) );
 
-  rtems_filesystem_location_copy(&local_loc, &null_loc->location);
+  rtems_filesystem_location_copy( &local_loc, &null_loc->location );
 
-  rtems_test_assert(node_count(loc_chain) == 2);
-  rtems_test_assert(null_loc->reference_count == 4);
+  rtems_test_assert( node_count( loc_chain ) == 2 );
+  rtems_test_assert( null_loc->reference_count == 4 );
 
-  rtems_filesystem_location_detach(&local_loc);
+  rtems_filesystem_location_detach( &local_loc );
 
-  rtems_test_assert(node_count(loc_chain) == 2);
-  rtems_test_assert(null_loc->reference_count == 4);
-  rtems_test_assert(rtems_filesystem_location_is_null(&local_loc));
-  rtems_test_assert_equal_to_null_loc(&local_loc);
+  rtems_test_assert( node_count( loc_chain ) == 2 );
+  rtems_test_assert( null_loc->reference_count == 4 );
+  rtems_test_assert( rtems_filesystem_location_is_null( &local_loc ) );
+  rtems_test_assert_equal_to_null_loc( &local_loc );
 
-  rtems_filesystem_location_free(&local_loc);
+  rtems_filesystem_location_free( &local_loc );
 
-  rtems_test_assert(node_count(loc_chain) == 1);
-  rtems_test_assert(null_loc->reference_count == 4);
+  rtems_test_assert( node_count( loc_chain ) == 1 );
+  rtems_test_assert( null_loc->reference_count == 4 );
 }
 
-static void test_null_location_get_and_replace(void)
+static void test_null_location_get_and_replace( void )
 {
-  rtems_filesystem_global_location_t *null_loc =
-    &rtems_filesystem_global_location_null;
+  rtems_filesystem_global_location_t
+    *null_loc = &rtems_filesystem_global_location_null;
   rtems_filesystem_mount_table_entry_t *null_mt = null_loc->location.mt_entry;
-  rtems_chain_control *loc_chain = &null_mt->location_chain;
-  rtems_filesystem_location_info_t local_loc_0;
-  rtems_filesystem_location_info_t local_loc_1;
+  rtems_chain_control                  *loc_chain = &null_mt->location_chain;
+  rtems_filesystem_location_info_t      local_loc_0;
+  rtems_filesystem_location_info_t      local_loc_1;
 
-  rtems_test_assert(node_count(loc_chain) == 1);
-  rtems_test_assert(null_loc->reference_count == 4);
+  rtems_test_assert( node_count( loc_chain ) == 1 );
+  rtems_test_assert( null_loc->reference_count == 4 );
 
-  rtems_filesystem_location_copy(&local_loc_0, &null_loc->location);
+  rtems_filesystem_location_copy( &local_loc_0, &null_loc->location );
 
-  rtems_test_assert(node_count(loc_chain) == 2);
-  rtems_test_assert(null_loc->reference_count == 4);
-  rtems_test_assert_equal_to_null_loc(&local_loc_0);
+  rtems_test_assert( node_count( loc_chain ) == 2 );
+  rtems_test_assert( null_loc->reference_count == 4 );
+  rtems_test_assert_equal_to_null_loc( &local_loc_0 );
 
-  rtems_filesystem_location_copy_and_detach(&local_loc_1, &local_loc_0);
+  rtems_filesystem_location_copy_and_detach( &local_loc_1, &local_loc_0 );
 
-  rtems_test_assert(node_count(loc_chain) == 3);
-  rtems_test_assert(null_loc->reference_count == 4);
-  rtems_test_assert_equal_to_null_loc(&local_loc_0);
-  rtems_test_assert_equal_to_null_loc(&local_loc_1);
+  rtems_test_assert( node_count( loc_chain ) == 3 );
+  rtems_test_assert( null_loc->reference_count == 4 );
+  rtems_test_assert_equal_to_null_loc( &local_loc_0 );
+  rtems_test_assert_equal_to_null_loc( &local_loc_1 );
 
-  rtems_filesystem_location_free(&local_loc_0);
+  rtems_filesystem_location_free( &local_loc_0 );
 
-  rtems_test_assert(node_count(loc_chain) == 2);
-  rtems_test_assert(null_loc->reference_count == 4);
-  rtems_test_assert_equal_to_null_loc(&local_loc_1);
+  rtems_test_assert( node_count( loc_chain ) == 2 );
+  rtems_test_assert( null_loc->reference_count == 4 );
+  rtems_test_assert_equal_to_null_loc( &local_loc_1 );
 
-  rtems_filesystem_location_free(&local_loc_1);
+  rtems_filesystem_location_free( &local_loc_1 );
 
-  rtems_test_assert(node_count(loc_chain) == 1);
-  rtems_test_assert(null_loc->reference_count == 4);
+  rtems_test_assert( node_count( loc_chain ) == 1 );
+  rtems_test_assert( null_loc->reference_count == 4 );
 }
 
-static void test_path_ops(void)
+static void test_path_ops( void )
 {
-  int rv = 0;
-  long lrv = 0;
-  struct stat st;
+  int            rv = 0;
+  long           lrv = 0;
+  struct stat    st;
   struct statvfs stvfs;
-  char buf [32];
-  ssize_t n = 0;
-  const char *path = "/";
+  char           buf[ 32 ];
+  ssize_t        n = 0;
+  const char    *path = "/";
 
   errno = 0;
-  rv = open(path, O_RDONLY);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENXIO);
+  rv = open( path, O_RDONLY );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENXIO );
 
   errno = 0;
-  rv = chdir(path);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENXIO);
+  rv = chdir( path );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENXIO );
 
   errno = 0;
-  rv = chroot(path);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENXIO);
+  rv = chroot( path );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENXIO );
 
   errno = 0;
-  rv = mknod(path, S_IFREG, 0);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENXIO);
+  rv = mknod( path, S_IFREG, 0 );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENXIO );
 
   errno = 0;
-  rv = mkdir(path, 0);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENXIO);
+  rv = mkdir( path, 0 );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENXIO );
 
   errno = 0;
-  rv = mkfifo(path, 0);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENXIO);
+  rv = mkfifo( path, 0 );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENXIO );
 
   errno = 0;
-  rv = stat(path, &st);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENXIO);
+  rv = stat( path, &st );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENXIO );
 
   errno = 0;
-  rv = lstat(path, &st);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENXIO);
+  rv = lstat( path, &st );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENXIO );
 
   errno = 0;
-  rv = statvfs(path, &stvfs);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENXIO);
+  rv = statvfs( path, &stvfs );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENXIO );
 
   errno = 0;
-  n = readlink(path, buf, sizeof(buf));
-  rtems_test_assert(n == -1);
-  rtems_test_assert(errno == ENXIO);
+  n = readlink( path, buf, sizeof( buf ) );
+  rtems_test_assert( n == -1 );
+  rtems_test_assert( errno == ENXIO );
 
   errno = 0;
-  rv = chmod(path, 0);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENXIO);
+  rv = chmod( path, 0 );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENXIO );
 
   errno = 0;
-  rv = chown(path, 0, 0);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENXIO);
+  rv = chown( path, 0, 0 );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENXIO );
 
   errno = 0;
-  rv = lchown(path, 0, 0);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENXIO);
+  rv = lchown( path, 0, 0 );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENXIO );
 
   errno = 0;
-  rv = rmdir(path);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENXIO);
+  rv = rmdir( path );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENXIO );
 
   errno = 0;
-  rv = unlink(path);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENXIO);
+  rv = unlink( path );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENXIO );
 
   errno = 0;
-  rv = truncate(path, 0);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENXIO);
+  rv = truncate( path, 0 );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENXIO );
 
   errno = 0;
-  rv = access(path, 0);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENXIO);
+  rv = access( path, 0 );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENXIO );
 
   errno = 0;
-  lrv = pathconf(path, _PC_LINK_MAX);
-  rtems_test_assert(lrv == -1);
-  rtems_test_assert(errno == ENXIO);
+  lrv = pathconf( path, _PC_LINK_MAX );
+  rtems_test_assert( lrv == -1 );
+  rtems_test_assert( errno == ENXIO );
 
   errno = 0;
-  rv = link(path, path);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENXIO);
+  rv = link( path, path );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENXIO );
 
   errno = 0;
-  rv = symlink(path, path);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENXIO);
+  rv = symlink( path, path );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENXIO );
 
   errno = 0;
-  rv = rename(path, path);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENXIO);
+  rv = rename( path, path );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENXIO );
 
   /*
    * Pass in NULL so the new access and modification time are interpreted
    * as being the current time. Otherwise, the value has to be validated.
    */
   errno = 0;
-  rv = utime(path, NULL);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENOENT);
+  rv = utime( path, NULL );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENOENT );
 }
 
-static void test_user_env(void)
+static void test_user_env( void )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  rtems_filesystem_global_location_t *null_loc =
-    &rtems_filesystem_global_location_null;
+  rtems_filesystem_global_location_t
+    *null_loc = &rtems_filesystem_global_location_null;
   rtems_filesystem_mount_table_entry_t *null_mt = null_loc->location.mt_entry;
-  rtems_chain_control *loc_chain = &null_mt->location_chain;
+  rtems_chain_control                  *loc_chain = &null_mt->location_chain;
 
-  rtems_test_assert(node_count(loc_chain) == 1);
-  rtems_test_assert(null_loc->reference_count == 4);
+  rtems_test_assert( node_count( loc_chain ) == 1 );
+  rtems_test_assert( null_loc->reference_count == 4 );
 
   sc = rtems_libio_set_private_env();
-  rtems_test_assert(sc == RTEMS_UNSATISFIED);
+  rtems_test_assert( sc == RTEMS_UNSATISFIED );
 
-  rtems_test_assert(node_count(loc_chain) == 1);
-  rtems_test_assert(null_loc->reference_count == 4);
+  rtems_test_assert( node_count( loc_chain ) == 1 );
+  rtems_test_assert( null_loc->reference_count == 4 );
 
   rtems_libio_use_global_env();
 
-  rtems_test_assert(node_count(loc_chain) == 1);
-  rtems_test_assert(null_loc->reference_count == 4);
+  rtems_test_assert( node_count( loc_chain ) == 1 );
+  rtems_test_assert( null_loc->reference_count == 4 );
 }
 
 typedef struct {
-  int flags;
+  int    flags;
   mode_t object_mode;
-  uid_t object_uid;
-  gid_t object_gid;
-  bool expected_ok;
+  uid_t  object_uid;
+  gid_t  object_gid;
+  bool   expected_ok;
 } check_access_case;
 
 #define FR RTEMS_FS_PERMS_READ
@@ -364,10 +372,10 @@ typedef struct {
 #define OX S_IXOTH
 
 static const check_access_case check_access_euid_0_cases[] = {
-  { 0,   0, 6, 7, true },
-  { FR,  0, 6, 7, false },
-  { FW,  0, 6, 7, false },
-  { FX,  0, 6, 7, false },
+  { 0, 0, 6, 7, true },
+  { FR, 0, 6, 7, false },
+  { FW, 0, 6, 7, false },
+  { FX, 0, 6, 7, false },
   { FR, UR, 6, 7, true },
   { FW, UW, 6, 7, true },
   { FX, UX, 6, 7, true },
@@ -380,10 +388,10 @@ static const check_access_case check_access_euid_0_cases[] = {
 };
 
 static const check_access_case check_access_egid_0_cases[] = {
-  { 0,   0, 6, 7, true },
-  { FR,  0, 6, 7, false },
-  { FW,  0, 6, 7, false },
-  { FX,  0, 6, 7, false },
+  { 0, 0, 6, 7, true },
+  { FR, 0, 6, 7, false },
+  { FW, 0, 6, 7, false },
+  { FX, 0, 6, 7, false },
   { FR, UR, 6, 7, false },
   { FW, UW, 6, 7, false },
   { FX, UX, 6, 7, false },
@@ -396,10 +404,10 @@ static const check_access_case check_access_egid_0_cases[] = {
 };
 
 static const check_access_case check_access_other_cases[] = {
-  { 0,   0, 3, 7, true },
-  { FR,  0, 3, 7, false },
-  { FW,  0, 3, 7, false },
-  { FX,  0, 3, 7, false },
+  { 0, 0, 3, 7, true },
+  { FR, 0, 3, 7, false },
+  { FW, 0, 3, 7, false },
+  { FX, 0, 3, 7, false },
   { FR, UR, 3, 7, true },
   { FW, UW, 3, 7, true },
   { FX, UX, 3, 7, true },
@@ -409,10 +417,10 @@ static const check_access_case check_access_other_cases[] = {
   { FR, OR, 3, 7, false },
   { FW, OW, 3, 7, false },
   { FX, OX, 3, 7, false },
-  { 0,   0, 6, 4, true },
-  { FR,  0, 6, 4, false },
-  { FW,  0, 6, 4, false },
-  { FX,  0, 6, 4, false },
+  { 0, 0, 6, 4, true },
+  { FR, 0, 6, 4, false },
+  { FW, 0, 6, 4, false },
+  { FX, 0, 6, 4, false },
   { FR, UR, 6, 4, false },
   { FW, UW, 6, 4, false },
   { FX, UX, 6, 4, false },
@@ -422,10 +430,10 @@ static const check_access_case check_access_other_cases[] = {
   { FR, OR, 6, 4, false },
   { FW, OW, 6, 4, false },
   { FX, OX, 6, 4, false },
-  { 0,   0, 6, 5, true },
-  { FR,  0, 6, 5, false },
-  { FW,  0, 6, 5, false },
-  { FX,  0, 6, 5, false },
+  { 0, 0, 6, 5, true },
+  { FR, 0, 6, 5, false },
+  { FW, 0, 6, 5, false },
+  { FX, 0, 6, 5, false },
   { FR, UR, 6, 5, false },
   { FW, UW, 6, 5, false },
   { FX, UX, 6, 5, false },
@@ -435,10 +443,10 @@ static const check_access_case check_access_other_cases[] = {
   { FR, OR, 6, 5, false },
   { FW, OW, 6, 5, false },
   { FX, OX, 6, 5, false },
-  { 0,   0, 6, 7, true },
-  { FR,  0, 6, 7, false },
-  { FW,  0, 6, 7, false },
-  { FX,  0, 6, 7, false },
+  { 0, 0, 6, 7, true },
+  { FR, 0, 6, 7, false },
+  { FW, 0, 6, 7, false },
+  { FX, 0, 6, 7, false },
   { FR, UR, 6, 7, false },
   { FW, UW, 6, 7, false },
   { FX, UX, 6, 7, false },
@@ -450,55 +458,55 @@ static const check_access_case check_access_other_cases[] = {
   { FX, OX, 6, 7, true }
 };
 
-static void check_access(const check_access_case *table, size_t n)
+static void check_access( const check_access_case *table, size_t n )
 {
   size_t i;
 
-  for (i = 0; i < n; ++i) {
-    const check_access_case *cac = &table[i];
-    bool ok = rtems_filesystem_check_access(
+  for ( i = 0; i < n; ++i ) {
+    const check_access_case *cac = &table[ i ];
+    bool                     ok = rtems_filesystem_check_access(
       cac->flags,
       cac->object_mode,
       cac->object_uid,
       cac->object_gid
     );
 
-    rtems_test_assert(ok == cac->expected_ok);
+    rtems_test_assert( ok == cac->expected_ok );
   }
 }
 
-static void test_check_access(void)
+static void test_check_access( void )
 {
   rtems_user_env_t *uenv = rtems_current_user_env_get();
 
-  rtems_test_assert(uenv->uid == 0);
-  rtems_test_assert(uenv->gid == 0);
-  rtems_test_assert(uenv->euid == 0);
-  rtems_test_assert(uenv->egid == 0);
-  rtems_test_assert(uenv->ngroups == 0);
+  rtems_test_assert( uenv->uid == 0 );
+  rtems_test_assert( uenv->gid == 0 );
+  rtems_test_assert( uenv->euid == 0 );
+  rtems_test_assert( uenv->egid == 0 );
+  rtems_test_assert( uenv->ngroups == 0 );
 
   uenv->uid = 1;
   uenv->gid = 2;
 
   check_access(
-    &check_access_euid_0_cases[0],
-    RTEMS_ARRAY_SIZE(check_access_euid_0_cases)
+    &check_access_euid_0_cases[ 0 ],
+    RTEMS_ARRAY_SIZE( check_access_euid_0_cases )
   );
 
   uenv->euid = 3;
 
   check_access(
-    &check_access_egid_0_cases[0],
-    RTEMS_ARRAY_SIZE(check_access_egid_0_cases)
+    &check_access_egid_0_cases[ 0 ],
+    RTEMS_ARRAY_SIZE( check_access_egid_0_cases )
   );
 
   uenv->egid = 4;
   uenv->ngroups = 1;
-  uenv->groups[0] = 5;
+  uenv->groups[ 0 ] = 5;
 
   check_access(
-    &check_access_other_cases[0],
-    RTEMS_ARRAY_SIZE(check_access_other_cases)
+    &check_access_other_cases[ 0 ],
+    RTEMS_ARRAY_SIZE( check_access_other_cases )
   );
 
   uenv->uid = 0;
@@ -508,7 +516,7 @@ static void test_check_access(void)
   uenv->ngroups = 0;
 }
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
@@ -524,7 +532,7 @@ static void Init(rtems_task_argument arg)
   test_check_access();
 
   TEST_END();
-  exit(0);
+  exit( 0 );
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER

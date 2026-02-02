@@ -46,7 +46,7 @@
 /* Out of Band/Spare area size is per-page */
 #define FLASH_PAGE_OOB_SIZE ( 32UL )
 
-#define PAGES_PER_BLOCK ( 16UL )
+#define PAGES_PER_BLOCK   ( 16UL )
 #define BLOCKS_PER_DEVICE ( 8UL )
 
 #define FLASHDEV_PATH "dev/flashdev0"
@@ -60,10 +60,10 @@ static rtems_flashdev *flash = NULL;
 
 void test_initialize_filesystem( void )
 {
-  int rv;
-  int status;
-  rtems_status_code sc;
-  rtems_flashdev_region region;
+  int                                  rv;
+  int                                  status;
+  rtems_status_code                    sc;
+  rtems_flashdev_region                region;
   struct flash_sim_flashdev_attributes attr;
 
   attr.read_delay_ns = 0;
@@ -118,7 +118,7 @@ void test_shutdown_filesystem( void )
 
 #define CONFIGURE_MAXIMUM_TASKS 2
 
-#define CONFIGURE_INIT_TASK_STACK_SIZE (32 * 1024)
+#define CONFIGURE_INIT_TASK_STACK_SIZE ( 32 * 1024 )
 #define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION

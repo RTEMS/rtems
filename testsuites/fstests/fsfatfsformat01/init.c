@@ -44,19 +44,19 @@
 
 const char rtems_test_name[] = "FSFATFSFORMAT 1";
 
-#define MAX_PATH_LENGTH 100
-#define SECTOR_SIZE 512
-#define FAT12_MAX_CLN 4085
-#define FAT16_MAX_CLN 65525
+#define MAX_PATH_LENGTH                   100
+#define SECTOR_SIZE                       512
+#define FAT12_MAX_CLN                     4085
+#define FAT16_MAX_CLN                     65525
 #define FAT12_DEFAULT_SECTORS_PER_CLUSTER 8
 #define FAT16_DEFAULT_SECTORS_PER_CLUSTER 32
 
 /* FatFS constants and structures */
-#define FR_OK 0
+#define FR_OK                0
 #define FR_INVALID_PARAMETER 19
-#define FM_FAT 0x01
-#define FM_FAT32 0x02
-#define FM_ANY 0x07
+#define FM_FAT               0x01
+#define FM_FAT32             0x02
+#define FM_ANY               0x07
 
 typedef struct {
   unsigned char fmt;
@@ -106,10 +106,10 @@ static int fatfs_format_disk(
   }
 
   /* Convert test structure to FatFS structure */
-  fatfs_opts.fmt     = format_options->fmt;
-  fatfs_opts.n_fat   = format_options->num_fat;
-  fatfs_opts.align   = format_options->align;
-  fatfs_opts.n_root  = format_options->n_root;
+  fatfs_opts.fmt = format_options->fmt;
+  fatfs_opts.n_fat = format_options->num_fat;
+  fatfs_opts.align = format_options->align;
+  fatfs_opts.n_root = format_options->n_root;
   fatfs_opts.au_size = format_options->auto_cluster_size *
                        512; /* Convert sectors to bytes */
 
@@ -143,7 +143,13 @@ static void test_disk_params(
   snprintf( file_name, MAX_PATH_LENGTH, "%s/file1.txt", mount_dir );
   memset( &stat_buff, 0, sizeof( stat_buff ) );
 
-  rv = mount( dev_name, mount_dir, "fatfs", RTEMS_FILESYSTEM_READ_WRITE, NULL );
+  rv = mount(
+    dev_name,
+    mount_dir,
+    "fatfs",
+    RTEMS_FILESYSTEM_READ_WRITE,
+    NULL
+  );
   rtems_test_assert( 0 == rv );
 
   fildes = open(
@@ -174,7 +180,13 @@ static void test_disk_params(
   rv = unmount( mount_dir );
   rtems_test_assert( 0 == rv );
 
-  rv = mount( dev_name, mount_dir, "fatfs", RTEMS_FILESYSTEM_READ_WRITE, NULL );
+  rv = mount(
+    dev_name,
+    mount_dir,
+    "fatfs",
+    RTEMS_FILESYSTEM_READ_WRITE,
+    NULL
+  );
   rtems_test_assert( 0 == rv );
 
   rv = unmount( mount_dir );
@@ -225,7 +237,13 @@ static void test_file_creation(
   uint32_t file_idx;
   char     file_name[ MAX_PATH_LENGTH + 1 ];
 
-  rv = mount( dev_name, mount_dir, "fatfs", RTEMS_FILESYSTEM_READ_WRITE, NULL );
+  rv = mount(
+    dev_name,
+    mount_dir,
+    "fatfs",
+    RTEMS_FILESYSTEM_READ_WRITE,
+    NULL
+  );
   rtems_test_assert( 0 == rv );
 
   for ( file_idx = 0; file_idx < number_of_files; ++file_idx ) {
@@ -254,7 +272,7 @@ static void test( void )
 {
   rtems_status_code sc;
   int               rv;
-  const char        dev_name[]  = "/dev/rda";
+  const char        dev_name[] = "/dev/rda";
   const char        mount_dir[] = "/mnt";
   mkfs_parm         rqdata;
   rtems_blkdev_bnum media_block_count;
@@ -276,12 +294,12 @@ static void test( void )
   rtems_test_assert( RTEMS_SUCCESSFUL == sc );
 
   /* Optimized for disk space */
-  rqdata.fmt               = FM_FAT;
-  rqdata.num_fat           = 1;
-  rqdata.align             = 0;
-  rqdata.n_root            = 32;
+  rqdata.fmt = FM_FAT;
+  rqdata.num_fat = 1;
+  rqdata.align = 0;
+  rqdata.n_root = 32;
   rqdata.auto_cluster_size = 1;
-  rv                       = fatfs_format_disk( dev_name, &rqdata );
+  rv = fatfs_format_disk( dev_name, &rqdata );
   rtems_test_assert( rv == 0 );
   test_disk_params( dev_name, mount_dir, SECTOR_SIZE, SECTOR_SIZE, 1 );
   test_file_creation( dev_name, mount_dir, rqdata.n_root );
@@ -290,12 +308,12 @@ static void test( void )
    * so we skip this test as it doesn't match FatFS behavior */
 
   /* Optimized for read/write speed */
-  rqdata.fmt               = FM_FAT;
-  rqdata.num_fat           = 2;
-  rqdata.align             = 0;
-  rqdata.n_root            = 0;
+  rqdata.fmt = FM_FAT;
+  rqdata.num_fat = 2;
+  rqdata.align = 0;
+  rqdata.n_root = 0;
   rqdata.auto_cluster_size = 8;
-  rv                       = fatfs_format_disk( dev_name, &rqdata );
+  rv = fatfs_format_disk( dev_name, &rqdata );
   rtems_test_assert( rv == 0 );
   test_disk_params( dev_name, mount_dir, SECTOR_SIZE, SECTOR_SIZE * 8, 8 );
 
@@ -313,12 +331,12 @@ static void test( void )
   rtems_test_assert( RTEMS_SUCCESSFUL == sc );
 
   /* Default parameters - let FatFS choose cluster size */
-  rqdata.fmt               = FM_FAT;
-  rqdata.num_fat           = 2;
-  rqdata.align             = 0;
-  rqdata.n_root            = 512;
+  rqdata.fmt = FM_FAT;
+  rqdata.num_fat = 2;
+  rqdata.align = 0;
+  rqdata.n_root = 512;
   rqdata.auto_cluster_size = 0;
-  rv                       = fatfs_format_disk( dev_name, &rqdata );
+  rv = fatfs_format_disk( dev_name, &rqdata );
   rtems_test_assert( rv == 0 );
   /* FatFS chooses cluster size based on volume size, so test actual result */
   test_disk_params(
@@ -343,12 +361,12 @@ static void test( void )
   rtems_test_assert( RTEMS_SUCCESSFUL == sc );
 
   /* Optimized for disk space */
-  rqdata.fmt               = FM_FAT;
-  rqdata.num_fat           = 1;
-  rqdata.align             = 0;
-  rqdata.n_root            = 32;
+  rqdata.fmt = FM_FAT;
+  rqdata.num_fat = 1;
+  rqdata.align = 0;
+  rqdata.n_root = 32;
   rqdata.auto_cluster_size = 1;
-  rv                       = fatfs_format_disk( dev_name, &rqdata );
+  rv = fatfs_format_disk( dev_name, &rqdata );
   rtems_test_assert( rv == 0 );
   test_disk_params( dev_name, mount_dir, SECTOR_SIZE, SECTOR_SIZE, 1 );
 
@@ -366,12 +384,12 @@ static void test( void )
   rtems_test_assert( RTEMS_SUCCESSFUL == sc );
 
   /* Default parameters - FAT32 chooses larger cluster sizes */
-  rqdata.fmt               = FM_FAT32;
-  rqdata.num_fat           = 2;
-  rqdata.align             = 0;
-  rqdata.n_root            = 0;
+  rqdata.fmt = FM_FAT32;
+  rqdata.num_fat = 2;
+  rqdata.align = 0;
+  rqdata.n_root = 0;
   rqdata.auto_cluster_size = 0;
-  rv                       = fatfs_format_disk( dev_name, &rqdata );
+  rv = fatfs_format_disk( dev_name, &rqdata );
   rtems_test_assert( rv == 0 );
   test_disk_params( dev_name, mount_dir, SECTOR_SIZE, SECTOR_SIZE * 16, 16 );
 
@@ -380,14 +398,16 @@ static void test( void )
 
   /* Format some disks from 1MB up to 128GB - let FatFS choose appropriate FAT
    * type */
-  rqdata.fmt               = FM_ANY;
-  rqdata.num_fat           = 2;
-  rqdata.align             = 0;
-  rqdata.n_root            = 0;
+  rqdata.fmt = FM_ANY;
+  rqdata.num_fat = 2;
+  rqdata.align = 0;
+  rqdata.n_root = 0;
   rqdata.auto_cluster_size = 64;
-  for ( media_block_count = 1 * 1024 * ( 1024 / SECTOR_SIZE );
-        media_block_count <= 128 * 1024 * 1024 * ( 1024 / SECTOR_SIZE );
-        media_block_count *= 2 ) {
+  for (
+    media_block_count = 1 * 1024 * ( 1024 / SECTOR_SIZE );
+    media_block_count <= 128 * 1024 * 1024 * ( 1024 / SECTOR_SIZE );
+    media_block_count *= 2
+  ) {
     sc = rtems_sparse_disk_create_and_register(
       dev_name,
       SECTOR_SIZE,
@@ -427,7 +447,7 @@ static void Init( rtems_task_argument arg )
 
 #define CONFIGURE_FILESYSTEM_FATFS
 
-#define CONFIGURE_MAXIMUM_TASKS 1
+#define CONFIGURE_MAXIMUM_TASKS      1
 #define CONFIGURE_MAXIMUM_SEMAPHORES 10
 
 #define CONFIGURE_INIT_TASK_STACK_SIZE ( 32 * 1024 )

@@ -37,98 +37,100 @@
 #include <rtems/jffs2.h>
 #include <rtems/libio.h>
 
-#define BLOCK_SIZE (16UL * 1024UL)
+#define BLOCK_SIZE ( 16UL * 1024UL )
 
-#define FLASH_SIZE (8UL * BLOCK_SIZE)
+#define FLASH_SIZE ( 8UL * BLOCK_SIZE )
 
 const char rtems_test_name[] = "FSJFFS2EMPTY 1";
 
 #define BASE_FOR_TEST "/mnt"
 static char big[] = BASE_FOR_TEST "/big";
 
-static char keg[523];
+static char keg[ 523 ];
 
-static void init_keg(void)
+static void init_keg( void )
 {
   uint32_t v = 123;
 
-  for (size_t i = 0; i < sizeof(keg); ++i) {
+  for ( size_t i = 0; i < sizeof( keg ); ++i ) {
     v = v * 1664525 + 1013904223;
-    keg[i] = (uint8_t) (v >> 23);
+    keg[ i ] = (uint8_t) ( v >> 23 );
   }
 }
 
-static void create_big_file(void)
+static void create_big_file( void )
 {
   int rv;
-  int fd = open(&big[0], O_WRONLY | O_TRUNC | O_CREAT,
-                S_IRWXU | S_IRWXG | S_IRWXO);
-  rtems_test_assert(fd >= 0);
+  int fd = open(
+    &big[ 0 ],
+    O_WRONLY | O_TRUNC | O_CREAT,
+    S_IRWXU | S_IRWXG | S_IRWXO
+  );
+  rtems_test_assert( fd >= 0 );
 
-  for (int i = 0; i < 100; ++i) {
-    ssize_t n = write(fd, &keg[0], sizeof(keg));
-    rtems_test_assert(n == (ssize_t) sizeof(keg));
+  for ( int i = 0; i < 100; ++i ) {
+    ssize_t n = write( fd, &keg[ 0 ], sizeof( keg ) );
+    rtems_test_assert( n == (ssize_t) sizeof( keg ) );
   }
 
-  rv = close(fd);
-  rtems_test_assert(rv == 0);
+  rv = close( fd );
+  rtems_test_assert( rv == 0 );
 }
 
-static void remove_big_file(void)
+static void remove_big_file( void )
 {
-  int rv = unlink(&big[0]);
-  rtems_test_assert(rv == 0);
+  int rv = unlink( &big[ 0 ] );
+  rtems_test_assert( rv == 0 );
 }
 
 typedef struct {
   rtems_jffs2_flash_control super;
-  unsigned char area[FLASH_SIZE];
+  unsigned char             area[ FLASH_SIZE ];
 } flash_control;
 
-static unsigned char *get_flash_chunk(rtems_jffs2_flash_control *super,
-                                      uint32_t offset)
+static unsigned char *get_flash_chunk(
+  rtems_jffs2_flash_control *super,
+  uint32_t                   offset
+)
 {
-  return &((flash_control *) super)->area[offset];
+  return &( (flash_control *) super )->area[ offset ];
 }
 
 static int flash_read(
   rtems_jffs2_flash_control *super,
-  uint32_t offset,
-  unsigned char *buffer,
-  size_t size_of_buffer
+  uint32_t                   offset,
+  unsigned char             *buffer,
+  size_t                     size_of_buffer
 )
 {
-  unsigned char *chunk = get_flash_chunk(super, offset);
+  unsigned char *chunk = get_flash_chunk( super, offset );
 
-  memcpy(buffer, chunk, size_of_buffer);
+  memcpy( buffer, chunk, size_of_buffer );
 
   return 0;
 }
 
 static int flash_write(
   rtems_jffs2_flash_control *super,
-  uint32_t offset,
-  const unsigned char *buffer,
-  size_t size_of_buffer
+  uint32_t                   offset,
+  const unsigned char       *buffer,
+  size_t                     size_of_buffer
 )
 {
-  unsigned char *chunk = get_flash_chunk(super, offset);
+  unsigned char *chunk = get_flash_chunk( super, offset );
 
-  for (size_t i = 0; i < size_of_buffer; ++i) {
-    chunk[i] &= buffer[i];
+  for ( size_t i = 0; i < size_of_buffer; ++i ) {
+    chunk[ i ] &= buffer[ i ];
   }
 
   return 0;
 }
 
-static int flash_erase(
-  rtems_jffs2_flash_control *super,
-  uint32_t offset
-)
+static int flash_erase( rtems_jffs2_flash_control *super, uint32_t offset )
 {
-  unsigned char *chunk = get_flash_chunk(super, offset);
+  unsigned char *chunk = get_flash_chunk( super, offset );
 
-  memset(chunk, 0xff, BLOCK_SIZE);
+  memset( chunk, 0xff, BLOCK_SIZE );
 
   return 0;
 }
@@ -153,12 +155,12 @@ static const rtems_jffs2_mount_data mount_data = {
   .compressor_control = &compressor_instance
 };
 
-static void erase_all(void)
+static void erase_all( void )
 {
-  memset(&flash_instance.area[0], 0xff, FLASH_SIZE);
+  memset( &flash_instance.area[ 0 ], 0xff, FLASH_SIZE );
 }
 
-static void test_initialize_filesystem(void)
+static void test_initialize_filesystem( void )
 {
   int rv = mount(
     NULL,
@@ -167,17 +169,16 @@ static void test_initialize_filesystem(void)
     RTEMS_FILESYSTEM_READ_WRITE,
     &mount_data
   );
-  rtems_test_assert(rv == 0);
+  rtems_test_assert( rv == 0 );
 }
 
-static void test_shutdown_filesystem(void)
+static void test_shutdown_filesystem( void )
 {
-  int rv = unmount(BASE_FOR_TEST);
-  rtems_test_assert(rv == 0);
+  int rv = unmount( BASE_FOR_TEST );
+  rtems_test_assert( rv == 0 );
 }
 
-static rtems_task Init(
-    rtems_task_argument ignored)
+static rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
 
@@ -187,8 +188,8 @@ static rtems_task Init(
 
   erase_all();
 
-  rv = mkdir(BASE_FOR_TEST, S_IRWXU | S_IRWXG | S_IRWXO);
-  rtems_test_assert(rv == 0);
+  rv = mkdir( BASE_FOR_TEST, S_IRWXU | S_IRWXG | S_IRWXO );
+  rtems_test_assert( rv == 0 );
 
   puts( "Initializing JFFS2 filesystem" );
   test_initialize_filesystem();
@@ -200,7 +201,7 @@ static rtems_task Init(
    * jffs2_mark_node_obsolete(). Without this the failure only happens
    * intermittently.
    */
-  while (rtems_clock_get_ticks_since_boot() == 0) {
+  while ( rtems_clock_get_ticks_since_boot() == 0 ) {
     /* Wait */
   }
 
@@ -214,7 +215,7 @@ static rtems_task Init(
   create_big_file();
   remove_big_file();
 
-  puts( "\n\nShutting down JFFS2 filesystem");
+  puts( "\n\nShutting down JFFS2 filesystem" );
   test_shutdown_filesystem();
 
   puts( "Initializing JFFS2 filesystem again" );
@@ -224,7 +225,7 @@ static rtems_task Init(
   test_shutdown_filesystem();
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
@@ -236,7 +237,7 @@ static rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_TASKS 2
 
-#define CONFIGURE_INIT_TASK_STACK_SIZE (32 * 1024)
+#define CONFIGURE_INIT_TASK_STACK_SIZE ( 32 * 1024 )
 #define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION

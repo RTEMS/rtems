@@ -45,7 +45,7 @@ const char rtems_test_name[] = "FSDOSFSNAME 2";
 
 #define MOUNT_PATH "/mnt"
 
-static const char * const dir_paths[] = {
+static const char *const dir_paths[] = {
   MOUNT_PATH "/cpukit",
   MOUNT_PATH "/cpukit/or1k-exception-frame-print.c",
   MOUNT_PATH "/cpukit/preinstall.am",
@@ -61,13 +61,13 @@ static const char * const dir_paths[] = {
   MOUNT_PATH "/cpukit/cpu.c"
 };
 
-static void test(void)
+static void test( void )
 {
-  int rv;
+  int    rv;
   size_t i;
 
-  rv = msdos_format(RAMDISK_PATH, NULL);
-  rtems_test_assert(rv == 0);
+  rv = msdos_format( RAMDISK_PATH, NULL );
+  rtems_test_assert( rv == 0 );
 
   rv = mount_and_make_target_path(
     RAMDISK_PATH,
@@ -76,20 +76,20 @@ static void test(void)
     RTEMS_FILESYSTEM_READ_WRITE,
     NULL
   );
-  rtems_test_assert(rv == 0);
+  rtems_test_assert( rv == 0 );
 
-  for (i = 0; i < RTEMS_ARRAY_SIZE(dir_paths); ++i) {
-    rv = mkdir(dir_paths[i], S_IRWXU | S_IRWXG | S_IRWXO);
-    rtems_test_assert(rv == 0);
+  for ( i = 0; i < RTEMS_ARRAY_SIZE( dir_paths ); ++i ) {
+    rv = mkdir( dir_paths[ i ], S_IRWXU | S_IRWXG | S_IRWXO );
+    rtems_test_assert( rv == 0 );
   }
 
-  for (i = RTEMS_ARRAY_SIZE(dir_paths); i > 0; --i) {
-    rv = unlink(dir_paths[i - 1]);
-    rtems_test_assert(rv == 0);
+  for ( i = RTEMS_ARRAY_SIZE( dir_paths ); i > 0; --i ) {
+    rv = unlink( dir_paths[ i - 1 ] );
+    rtems_test_assert( rv == 0 );
   }
 }
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
@@ -98,14 +98,16 @@ static void Init(rtems_task_argument arg)
   test();
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 rtems_ramdisk_config rtems_ramdisk_configuration[] = {
   { .block_size = 512, .block_num = 64 }
 };
 
-size_t rtems_ramdisk_configuration_size = RTEMS_ARRAY_SIZE(rtems_ramdisk_configuration);
+size_t rtems_ramdisk_configuration_size = RTEMS_ARRAY_SIZE(
+  rtems_ramdisk_configuration
+);
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
@@ -118,10 +120,10 @@ size_t rtems_ramdisk_configuration_size = RTEMS_ARRAY_SIZE(rtems_ramdisk_configu
 #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 32
 
 #define CONFIGURE_BDBUF_CACHE_MEMORY_SIZE 512
-#define CONFIGURE_BDBUF_BUFFER_MIN_SIZE 512
-#define CONFIGURE_BDBUF_BUFFER_MAX_SIZE 512
+#define CONFIGURE_BDBUF_BUFFER_MIN_SIZE   512
+#define CONFIGURE_BDBUF_BUFFER_MAX_SIZE   512
 
-#define CONFIGURE_MAXIMUM_TASKS 1
+#define CONFIGURE_MAXIMUM_TASKS      1
 #define CONFIGURE_MAXIMUM_SEMAPHORES 1
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
