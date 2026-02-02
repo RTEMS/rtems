@@ -34,30 +34,23 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_asr Process_asr(
-  rtems_signal_set signal_set
-);
+rtems_asr Process_asr( rtems_signal_set signal_set );
 
-rtems_task Task_1(
-  rtems_task_argument argument
-);
+rtems_task Task_1( rtems_task_argument argument );
 
-rtems_task Task_2(
-  rtems_task_argument argument
-);
+rtems_task Task_2( rtems_task_argument argument );
 
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS           3
-#define CONFIGURE_MICROSECONDS_PER_TICK   RTEMS_MILLISECONDS_TO_MICROSECONDS(25)
-#define CONFIGURE_TICKS_PER_TIMESLICE     1000
+#define CONFIGURE_MAXIMUM_TASKS 3
+#define CONFIGURE_MICROSECONDS_PER_TICK \
+  RTEMS_MILLISECONDS_TO_MICROSECONDS( 25 )
+#define CONFIGURE_TICKS_PER_TIMESLICE 1000
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
@@ -67,9 +60,9 @@ rtems_task Task_2(
 
 /* global variables */
 
-TEST_EXTERN rtems_id   Task_id[ 4 ];         /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 4 ];       /* array of task names */
+TEST_EXTERN rtems_id   Task_id[ 4 ];   /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 4 ]; /* array of task names */
 
-TEST_EXTERN uint32_t   Task_2_preempted;
+TEST_EXTERN uint32_t Task_2_preempted;
 
 /* end of include file */

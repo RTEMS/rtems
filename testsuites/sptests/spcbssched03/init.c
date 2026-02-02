@@ -36,20 +36,18 @@
 
 const char rtems_test_name[] = "SPCBSSCHED 3";
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  uint32_t    index;
+  uint32_t          index;
   rtems_status_code status;
 
   TEST_BEGIN();
 
   build_task_name();
 
-  for ( index = 1 ; index <= NUM_TASKS ; index++ ) {
+  for ( index = 1; index <= NUM_TASKS; index++ ) {
     status = rtems_task_create(
       Task_name[ index ],
       Priorities[ index ],
@@ -63,12 +61,12 @@ rtems_task Init(
 
   rtems_cbs_initialize();
 
-  for ( index = 1 ; index <= NUM_PERIODIC_TASKS ; index++ ) {
+  for ( index = 1; index <= NUM_PERIODIC_TASKS; index++ ) {
     status = rtems_task_start( Task_id[ index ], Tasks_Periodic, index );
     directive_failed( status, "rtems_task_start loop" );
   }
 
-  for ( index = NUM_PERIODIC_TASKS+1 ; index <= NUM_TASKS ; index++ ) {
+  for ( index = NUM_PERIODIC_TASKS + 1; index <= NUM_TASKS; index++ ) {
     status = rtems_task_start( Task_id[ index ], Tasks_Aperiodic, index );
     directive_failed( status, "rtems_task_start loop" );
   }

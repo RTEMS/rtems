@@ -34,51 +34,45 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Task_1(
-  rtems_task_argument argument
-);
+rtems_task Task_1( rtems_task_argument argument );
 
-rtems_task Task_2(
-  rtems_task_argument argument
-);
+rtems_task Task_2( rtems_task_argument argument );
 
 rtems_timer_service_routine TA1_send_18_to_self_5_seconds(
-  rtems_id  ignored_id,
-  void     *ignored_address
+  rtems_id ignored_id,
+  void    *ignored_address
 );
 
 rtems_timer_service_routine TA1_send_8_to_self_60_seconds(
-  rtems_id  ignored_id,
-  void     *ignored_address
+  rtems_id ignored_id,
+  void    *ignored_address
 );
 
 rtems_timer_service_routine TA1_send_9_to_self_60_seconds(
-  rtems_id  ignored_id,
-  void     *ignored_address
+  rtems_id ignored_id,
+  void    *ignored_address
 );
 
 rtems_timer_service_routine TA1_send_10_to_self(
-  rtems_id  ignored_id,
-  void     *ignored_address
+  rtems_id ignored_id,
+  void    *ignored_address
 );
 
 rtems_timer_service_routine TA1_send_1_to_self_every_second(
-  rtems_id  ignored_id,
-  void     *ignored_address
+  rtems_id ignored_id,
+  void    *ignored_address
 );
 
 rtems_timer_service_routine TA1_send_11_to_self(
-  rtems_id  ignored_id,
-  void     *ignored_address
+  rtems_id ignored_id,
+  void    *ignored_address
 );
 
 rtems_timer_service_routine TA2_send_10_to_self(
-  rtems_id  ignored_id,
-  void     *ignored_address
+  rtems_id ignored_id,
+  void    *ignored_address
 );
 
 /* configuration information */
@@ -86,24 +80,24 @@ rtems_timer_service_routine TA2_send_10_to_self(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS               3
-#define CONFIGURE_MAXIMUM_TIMERS              6
-#define CONFIGURE_TICKS_PER_TIMESLICE       100
+#define CONFIGURE_MAXIMUM_TASKS       3
+#define CONFIGURE_MAXIMUM_TIMERS      6
+#define CONFIGURE_TICKS_PER_TIMESLICE 100
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_EXTRA_TASK_STACKS         (2 * RTEMS_MINIMUM_STACK_SIZE)
+#define CONFIGURE_EXTRA_TASK_STACKS ( 2 * RTEMS_MINIMUM_STACK_SIZE )
 
 #include <rtems/confdefs.h>
 
 /* global variables */
 
-TEST_EXTERN rtems_id   Task_id[ 4 ];         /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 4 ];       /* array of task names */
+TEST_EXTERN rtems_id   Task_id[ 4 ];   /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 4 ]; /* array of task names */
 
-TEST_EXTERN rtems_id   Timer_id[ 7 ];     /* array of timer ids */
-TEST_EXTERN rtems_name Timer_name[ 7 ];   /* array of timer names */
+TEST_EXTERN rtems_id   Timer_id[ 7 ];   /* array of timer ids */
+TEST_EXTERN rtems_name Timer_name[ 7 ]; /* array of timer names */
 
 /* end of include file */

@@ -37,12 +37,12 @@
 /*
  runtime of TA6 should be shorter than TA5
  */
-#define TA6_ITERATIONS 10
+#define TA6_ITERATIONS    10
 #define TA6_PERIOD_FACTOR 10
 
-uint32_t      Periods[7]    = { 0,   2,   2,   2,   2, 100, 0 };
-uint32_t      Iterations[7] = { 0,  50,  50,  50,  50,   1, TA6_ITERATIONS };
-rtems_task_priority Priorities[7] = { 0,   1,   1,   3,   4,   5, 1 };
+uint32_t            Periods[ 7 ] = { 0, 2, 2, 2, 2, 100, 0 };
+uint32_t            Iterations[ 7 ] = { 0, 50, 50, 50, 50, 1, TA6_ITERATIONS };
+rtems_task_priority Priorities[ 7 ] = { 0, 1, 1, 3, 4, 5, 1 };
 
 static char *name( size_t i, char buf[ 4 ] )
 {
@@ -57,9 +57,7 @@ static char *name( size_t i, char buf[ 4 ] )
   return &buf[ 0 ];
 }
 
-rtems_task Task_1_through_6(
-  rtems_task_argument argument
-)
+rtems_task Task_1_through_6( rtems_task_argument argument )
 {
   rtems_id          rmid;
   rtems_id          test_rmid;
@@ -88,8 +86,8 @@ rtems_task Task_1_through_6(
   if ( rmid != test_rmid ) {
     rtems_test_printf(
       "RMID's DO NOT MATCH (0x%" PRIxrtems_id " and 0x%" PRIxrtems_id ")\n",
-       rmid,
-       test_rmid
+      rmid,
+      test_rmid
     );
     rtems_test_exit( 0 );
   }
@@ -117,7 +115,7 @@ rtems_task Task_1_through_6(
       }
       break;
     case 5:
-      pass   = 0;
+      pass = 0;
       failed = 0;
 
       status = rtems_rate_monotonic_period( rmid, Periods[ argument ] );
@@ -126,13 +124,12 @@ rtems_task Task_1_through_6(
       Get_all_counters();
 
       while ( FOREVER ) {
-
         status = rtems_rate_monotonic_period( rmid, Periods[ argument ] );
         directive_failed( status, "rtems_rate_monotonic_period 2 of TA5" );
 
         Get_all_counters();
 
-        for( index = 1 ; index <= 4 ; index++ ) {
+        for ( index = 1; index <= 4; index++ ) {
           if ( Temporary_count.count[ index ] != Iterations[ index ] ) {
             rtems_test_printf(
               "%s - FAIL - Actual=%" PRIu32 ", Expected=%" PRIu32 "\n",
@@ -144,8 +141,9 @@ rtems_task Task_1_through_6(
           }
         }
 
-        if ( failed == 5 )
+        if ( failed == 5 ) {
           rtems_test_exit( 0 );
+        }
 
         pass += 1;
 
@@ -154,43 +152,45 @@ rtems_task Task_1_through_6(
         if ( pass == 10 ) {
           end_of_test();
         }
-
       }
       break;
     case 6:
       /* test changing periods */
       {
-        uint32_t   time[TA6_ITERATIONS+1];
+        uint32_t       time[ TA6_ITERATIONS + 1 ];
         rtems_interval period;
 
-        period = 1*TA6_PERIOD_FACTOR;
-        status = rtems_rate_monotonic_period( rmid, period);
+        period = 1 * TA6_PERIOD_FACTOR;
+        status = rtems_rate_monotonic_period( rmid, period );
         directive_failed( status, "rtems_rate_monotonic_period of TA6" );
-        time[0] = _Watchdog_Ticks_since_boot; /* timestamp */
+        time[ 0 ] = _Watchdog_Ticks_since_boot; /* timestamp */
         /*rtems_test_printf("%d - %d\n", period, time[0]);*/
 
-        for (index = 1; index <= TA6_ITERATIONS; index++) {
-          period = (index+1)*TA6_PERIOD_FACTOR;
-          status = rtems_rate_monotonic_period( rmid,  period);
+        for ( index = 1; index <= TA6_ITERATIONS; index++ ) {
+          period = ( index + 1 ) * TA6_PERIOD_FACTOR;
+          status = rtems_rate_monotonic_period( rmid, period );
           directive_failed( status, "rtems_rate_monotonic_period of TA6" );
-          time[index] = _Watchdog_Ticks_since_boot; /* timestamp */
+          time[ index ] = _Watchdog_Ticks_since_boot; /* timestamp */
           /*rtems_test_printf("%d - %d\n", period, time[index]);*/
         }
 
-        for (index = 1; index <= TA6_ITERATIONS; index++) {
-          rtems_interval meas = time[index] - time[index-1];
-          period = index*TA6_PERIOD_FACTOR;
+        for ( index = 1; index <= TA6_ITERATIONS; index++ ) {
+          rtems_interval meas = time[ index ] - time[ index - 1 ];
+          period = index * TA6_PERIOD_FACTOR;
           rtems_test_printf(
             "TA6 - Actual: %" PRIdrtems_interval
-              " Expected: %" PRIdrtems_interval,
+            " Expected: %" PRIdrtems_interval,
             meas,
             period
           );
-          if (period == meas) rtems_test_printf(" - OK\n");
-          else                rtems_test_printf(" - FAILED\n");
+          if ( period == meas ) {
+            rtems_test_printf( " - OK\n" );
+          } else {
+            rtems_test_printf( " - FAILED\n" );
+          }
         }
       }
-      rtems_task_suspend(RTEMS_SELF);
+      rtems_task_suspend( RTEMS_SELF );
       break;
   }
 }

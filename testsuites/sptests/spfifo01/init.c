@@ -24,14 +24,14 @@
 const char rtems_test_name[] = "SPFIFO 1";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
+rtems_task Init( rtems_task_argument argument );
 
 #define FIFO_PATH "/fifo01"
 
-static void test_main(void)
+static void test_main( void )
 {
   mode_t rwx = S_IRWXU | S_IRWXG | S_IRWXO;
-  int status;
+  int    status;
 
   TEST_BEGIN();
 
@@ -42,24 +42,24 @@ static void test_main(void)
   );
 
   errno = 0;
-  status = mkfifo(FIFO_PATH, rwx);
-  rtems_test_assert(status == -1);
-  rtems_test_assert(errno == ENOSYS);
+  status = mkfifo( FIFO_PATH, rwx );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == ENOSYS );
 
   errno = 0;
-  status = mknod(FIFO_PATH, S_IFIFO | rwx, 0);
-  rtems_test_assert(status == -1);
-  rtems_test_assert(errno == ENOSYS);
+  status = mknod( FIFO_PATH, S_IFIFO | rwx, 0 );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == ENOSYS );
 
   TEST_END();
 }
 
-rtems_task Init(rtems_task_argument not_used)
+rtems_task Init( rtems_task_argument not_used )
 {
   (void) not_used;
 
   test_main();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER

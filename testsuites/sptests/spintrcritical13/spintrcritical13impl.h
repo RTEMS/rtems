@@ -37,15 +37,15 @@
 #include <rtems/test.h>
 #include <rtems/test-info.h>
 
-#if defined(FIRE_AFTER)
-  #define TEST_NAME          "13"
-  #define TEST_STRING        TimerFireAfterInterrupt
-  #define TEST_DIRECTIVE     rtems_timer_fire_after
+#if defined( FIRE_AFTER )
+  #define TEST_NAME      "13"
+  #define TEST_STRING    TimerFireAfterInterrupt
+  #define TEST_DIRECTIVE rtems_timer_fire_after
 
-#elif defined(SERVER_FIRE_AFTER)
-  #define TEST_NAME          "14"
-  #define TEST_STRING        TimerServerFireAfterInterrupt
-  #define TEST_DIRECTIVE     rtems_timer_server_fire_after
+#elif defined( SERVER_FIRE_AFTER )
+  #define TEST_NAME      "14"
+  #define TEST_STRING    TimerServerFireAfterInterrupt
+  #define TEST_DIRECTIVE rtems_timer_server_fire_after
 
 #else
   #error "Test Mode not defined"
@@ -54,16 +54,13 @@
 const char rtems_test_name[] = "SPINTRCRITICAL " TEST_NAME;
 
 typedef struct {
-  rtems_id timer;
-  long potential_hits;
+  rtems_id      timer;
+  long          potential_hits;
   volatile bool early;
   volatile bool late;
 } test_context;
 
-static rtems_timer_service_routine TimerMethod(
-  rtems_id  timer,
-  void     *arg
-)
+static rtems_timer_service_routine TimerMethod( rtems_id timer, void *arg )
 {
   (void) timer;
   (void) arg;
@@ -71,9 +68,9 @@ static rtems_timer_service_routine TimerMethod(
 
 static T_interrupt_test_state interrupt( void *arg )
 {
-  test_context           *ctx;
-  rtems_status_code       sc;
-  T_interrupt_test_state  state;
+  test_context          *ctx;
+  rtems_status_code      sc;
+  T_interrupt_test_state state;
 
   state = T_interrupt_test_get_state();
 
@@ -113,8 +110,8 @@ static void prepare( void *arg )
 
 static void action( void *arg )
 {
-  test_context      *ctx;
-  rtems_status_code  sc;
+  test_context     *ctx;
+  rtems_status_code sc;
 
   ctx = arg;
   ctx->early = false;
@@ -155,7 +152,7 @@ T_TEST_CASE( TEST_STRING )
 
 static rtems_task Init( rtems_task_argument argument )
 {
-#if defined(SERVER_FIRE_AFTER)
+#if defined( SERVER_FIRE_AFTER )
   (void) rtems_timer_initiate_server(
     RTEMS_MINIMUM_PRIORITY,
     RTEMS_MINIMUM_STACK_SIZE,
@@ -171,14 +168,14 @@ static rtems_task Init( rtems_task_argument argument )
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#if defined(SERVER_FIRE_AFTER)
-  #define CONFIGURE_MAXIMUM_TASKS     3
+#if defined( SERVER_FIRE_AFTER )
+  #define CONFIGURE_MAXIMUM_TASKS 3
 #else
-  #define CONFIGURE_MAXIMUM_TASKS     2
+  #define CONFIGURE_MAXIMUM_TASKS 2
 #endif
-#define CONFIGURE_MAXIMUM_TIMERS      1
-#define CONFIGURE_MICROSECONDS_PER_TICK  1000
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_MAXIMUM_TIMERS        1
+#define CONFIGURE_MICROSECONDS_PER_TICK 1000
+#define CONFIGURE_INITIAL_EXTENSIONS    RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

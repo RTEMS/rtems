@@ -46,14 +46,14 @@ typedef struct {
 
 static T_interrupt_test_state interrupt( void *arg )
 {
-  test_context *ctx;
+  test_context          *ctx;
   T_interrupt_test_state state;
-  Thread_Wait_flags flags;
-  rtems_status_code sc;
+  Thread_Wait_flags      flags;
+  rtems_status_code      sc;
 
   state = T_interrupt_test_get_state();
 
-  if (state != T_INTERRUPT_TEST_ACTION) {
+  if ( state != T_INTERRUPT_TEST_ACTION ) {
     return T_INTERRUPT_TEST_CONTINUE;
   }
 
@@ -80,7 +80,7 @@ static T_interrupt_test_state interrupt( void *arg )
 
 static void prepare( void *arg )
 {
-  test_context *ctx;
+  test_context     *ctx;
   rtems_status_code sc;
 
   ctx = arg;
@@ -92,7 +92,7 @@ static void prepare( void *arg )
 
 static void action( void *arg )
 {
-  test_context *ctx;
+  test_context     *ctx;
   rtems_status_code sc;
 
   ctx = arg;
@@ -102,7 +102,7 @@ static void action( void *arg )
 
 static void blocked( void *arg )
 {
-  test_context *ctx;
+  test_context     *ctx;
   rtems_status_code sc;
 
   T_interrupt_test_change_state(
@@ -129,8 +129,8 @@ static const T_interrupt_test_config config = {
  */
 T_TEST_CASE( SemaphoreSatisfyBeforeTimeout )
 {
-  test_context ctx;
-  rtems_status_code sc;
+  test_context           ctx;
+  rtems_status_code      sc;
   T_interrupt_test_state state;
 
   ctx.thread = _Thread_Get_executing();
@@ -161,10 +161,10 @@ static rtems_task Init( rtems_task_argument argument )
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS          1
-#define CONFIGURE_MAXIMUM_SEMAPHORES     1
-#define CONFIGURE_MICROSECONDS_PER_TICK  1000
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_MAXIMUM_TASKS         1
+#define CONFIGURE_MAXIMUM_SEMAPHORES    1
+#define CONFIGURE_MICROSECONDS_PER_TICK 1000
+#define CONFIGURE_INITIAL_EXTENSIONS    RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

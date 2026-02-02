@@ -33,17 +33,15 @@
 #include "system.h"
 #include "tmacros.h"
 
-rtems_asr Process_asr(
-  rtems_signal_set the_signal_set
-)
+rtems_asr Process_asr( rtems_signal_set the_signal_set )
 {
   rtems_status_code status;
 
   printf(
     "ASR - ENTRY - signal => %08" PRIxrtems_signal_set "\n",
-     the_signal_set
+    the_signal_set
   );
-  switch( the_signal_set ) {
+  switch ( the_signal_set ) {
     case RTEMS_SIGNAL_16:
     case RTEMS_SIGNAL_17:
     case RTEMS_SIGNAL_18 | RTEMS_SIGNAL_19:
@@ -60,6 +58,6 @@ rtems_asr Process_asr(
   }
   printf(
     "ASR - EXIT  - signal => %08" PRIxrtems_signal_set "\n",
-     the_signal_set
+    the_signal_set
   );
 }

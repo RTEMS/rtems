@@ -40,8 +40,8 @@
 const char rtems_test_name[] = "SPMOUNTMGR 1";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-int fs_mount(
+rtems_task Init( rtems_task_argument argument );
+int        fs_mount(
   rtems_filesystem_mount_table_entry_t *mt_entry,
   const void                           *data
 );
@@ -57,13 +57,11 @@ int fs_mount(
   return 0;
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  int status = 0;
+  int   status = 0;
   void *greedy;
 
   TEST_BEGIN();
@@ -84,22 +82,12 @@ rtems_task Init(
   rtems_test_assert( status == 0 );
 
   puts( "Init - attempt to make target(NULL) and mount - expect EINVAL" );
-  status = mount_and_make_target_path(
-             NULL,
-             NULL,
-             "fs",
-             0,
-             NULL );
+  status = mount_and_make_target_path( NULL, NULL, "fs", 0, NULL );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EINVAL );
 
   puts( "Init - attempt to make target and mount - expect EINVAL" );
-  status = mount_and_make_target_path(
-             NULL,
-             "/tmp",
-             "fs",
-             2,
-             NULL );
+  status = mount_and_make_target_path( NULL, "/tmp", "fs", 2, NULL );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EINVAL );
 
@@ -141,7 +129,7 @@ rtems_task Init(
   rtems_test_assert( errno == ENOENT );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -149,7 +137,7 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_MAXIMUM_TASKS      1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

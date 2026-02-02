@@ -34,7 +34,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #include <rtems.h>
 #include <rtems/score/todimpl.h>
 
@@ -48,39 +47,37 @@
 const char rtems_test_name[] = "SPCLOCK TOD HOOK 1";
 
 typedef struct test_case {
-  bool       do_settime; 
-  bool       use_posix; 
-  bool       do_hook1; 
-  bool       do_hook2; 
-  struct tm  tm;
+  bool      do_settime;
+  bool      use_posix;
+  bool      do_hook1;
+  bool      do_hook2;
+  struct tm tm;
 } testcase_t;
 
-#define TM(_sec, _min, _hour, _mday, _mon, _year ) \
-  { \
-    .tm_sec = (_sec), \
-    .tm_min = (_min), \
-    .tm_hour = (_hour), \
-    .tm_mday = (_mday), \
-    .tm_mon = (_mon), \
-    .tm_year = (_year) \
-  }
+#define TM( _sec, _min, _hour, _mday, _mon, _year ) \
+  { .tm_sec = ( _sec ),                             \
+    .tm_min = ( _min ),                             \
+    .tm_hour = ( _hour ),                           \
+    .tm_mday = ( _mday ),                           \
+    .tm_mon = ( _mon ),                             \
+    .tm_year = ( _year ) }
 testcase_t Cases[] = {
   /* should not trigger hooks when time not set */
   { false, false, false, false, TM( 0, 0, 9, 31, 11, 88 ) },
-  { false, false, true,  true,  TM( 0, 0, 9, 24, 5,  95 )  },
+  { false, false, true, true, TM( 0, 0, 9, 24, 5, 95 ) },
   /* should trigger hook when time is set with Classic API rtems_clock_set */
-  { true,  false, false, false, TM( 0, 0, 9, 24, 5,   95 ) },
-  { true,  false, false, false, TM( 0, 0, 9, 31, 11,  88 ) },
-  { true,  false, true,  false, TM( 0, 0, 9, 31, 11,  88 ) },
-  { true,  false, true,  true,  TM( 0, 0, 9, 24, 5,  105 ) },
+  { true, false, false, false, TM( 0, 0, 9, 24, 5, 95 ) },
+  { true, false, false, false, TM( 0, 0, 9, 31, 11, 88 ) },
+  { true, false, true, false, TM( 0, 0, 9, 31, 11, 88 ) },
+  { true, false, true, true, TM( 0, 0, 9, 24, 5, 105 ) },
   /* should trigger hook when time is set with POSIX API clock_settime */
-  { true,  true,  false, false, TM( 0, 0, 9, 24, 5,   95 ) },
-  { true,  true,  false, false, TM( 0, 9, 6, 14, 2,  114 ) },
-  { true,  true,  true,  false, TM( 0, 0, 9, 31, 11,  88 ) },
-  { true,  true,  true,  true,  TM( 0, 0, 9, 24, 5,  105 ) },
+  { true, true, false, false, TM( 0, 0, 9, 24, 5, 95 ) },
+  { true, true, false, false, TM( 0, 9, 6, 14, 2, 114 ) },
+  { true, true, true, false, TM( 0, 0, 9, 31, 11, 88 ) },
+  { true, true, true, true, TM( 0, 0, 9, 24, 5, 105 ) },
 };
 
-#define NUM_CASES (sizeof(Cases)/sizeof(testcase_t))
+#define NUM_CASES ( sizeof( Cases ) / sizeof( testcase_t ) )
 
 static struct timespec tod_set;
 
@@ -122,21 +119,21 @@ static Status_Control tod_hook2(
  *
  * Assume no hooks registered at begining. Unregister if needed at the end.
  */
-static void do_positive_case(int i)
+static void do_positive_case( int i )
 {
-  testcase_t  *testcase = &Cases[i];
-  TOD_Hook     hook1;
-  TOD_Hook     hook2;
+  testcase_t *testcase = &Cases[ i ];
+  TOD_Hook    hook1;
+  TOD_Hook    hook2;
 
   #ifdef TEST_DEBUG
-    printf(
-      "%d: do_settime=%d use_posix=%d do_hook1=%d do_hook2=%d\n",
-      i,
-      testcase->do_settime,
-      testcase->use_posix,
-      testcase->do_hook1,
-      testcase->do_hook2
-    );
+  printf(
+    "%d: do_settime=%d use_posix=%d do_hook1=%d do_hook2=%d\n",
+    i,
+    testcase->do_settime,
+    testcase->use_posix,
+    testcase->do_hook1,
+    testcase->do_hook2
+  );
   #endif
 
   _Chain_Initialize_node( &hook1.Node );
@@ -163,9 +160,9 @@ static void do_positive_case(int i)
    * Now set the time and if registered, let the handlers fire
    */
   if ( testcase->do_settime == true ) {
-    rtems_time_of_day   time;
-    rtems_status_code   status;
-    struct tm          *tm = &testcase->tm;
+    rtems_time_of_day time;
+    rtems_status_code status;
+    struct tm        *tm = &testcase->tm;
 
     tod_set.tv_sec = mktime( tm );
     tod_set.tv_nsec = 0;
@@ -187,7 +184,7 @@ static void do_positive_case(int i)
       int rc;
 
       rc = clock_settime( CLOCK_REALTIME, &tod_set );
-      rtems_test_assert( rc == 0 ); 
+      rtems_test_assert( rc == 0 );
     }
   }
 
@@ -203,11 +200,11 @@ static void do_positive_case(int i)
   }
 
   #ifdef TEST_DEBUG
-    printf(
-      "    hook1_executed=%d hook2_executed=%d\n",
-      hook1_executed,
-      hook2_executed
-    );
+  printf(
+    "    hook1_executed=%d hook2_executed=%d\n",
+    hook1_executed,
+    hook2_executed
+  );
   #endif
 
   /*
@@ -247,13 +244,12 @@ static Status_Control tod_hook_error(
  *
  * Assume no hooks registered at begining. Unregister if needed at the end.
  */
-static void do_negative_case(bool use_posix)
+static void do_negative_case( bool use_posix )
 {
-  TOD_Hook            hook_error;
-  rtems_time_of_day   time;
-  rtems_status_code   status;
-  struct tm          *tm = &Cases[0].tm;
-
+  TOD_Hook          hook_error;
+  rtems_time_of_day time;
+  rtems_status_code status;
+  struct tm        *tm = &Cases[ 0 ].tm;
 
   _Chain_Initialize_node( &hook_error.Node );
   hook_error.handler = tod_hook_error;
@@ -288,8 +284,8 @@ static void do_negative_case(bool use_posix)
     int rc;
 
     rc = clock_settime( CLOCK_REALTIME, &tod_set );
-    rtems_test_assert( rc == -1 ); 
-    rtems_test_assert( errno == EPERM ); 
+    rtems_test_assert( rc == -1 );
+    rtems_test_assert( errno == EPERM );
   }
 
   /*
@@ -303,8 +299,7 @@ static void do_negative_case(bool use_posix)
   rtems_test_assert( hook_error_executed == true );
 }
 
-
-static rtems_task Init(rtems_task_argument ignored)
+static rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
 
@@ -314,17 +309,17 @@ static rtems_task Init(rtems_task_argument ignored)
   TEST_BEGIN();
 
   // test positive cases
-  for (i=0 ; i < NUM_CASES ; i++) {
+  for ( i = 0; i < NUM_CASES; i++ ) {
     do_positive_case( i );
   }
 
   // test error cases
-  do_negative_case(false);
-  do_negative_case(true);
+  do_negative_case( false );
+  do_negative_case( true );
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -338,4 +333,3 @@ static rtems_task Init(rtems_task_argument ignored)
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>
-

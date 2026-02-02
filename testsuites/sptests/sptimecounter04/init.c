@@ -38,7 +38,7 @@
 
 const char rtems_test_name[] = "SPTIMECOUNTER 4";
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
@@ -56,31 +56,31 @@ static void Init(rtems_task_argument arg)
 
   TEST_BEGIN();
 
-  rtems_timespec_set(&min, 1, 980000000);
-  rtems_timespec_set(&max, 2,  20000000);
+  rtems_timespec_set( &min, 1, 980000000 );
+  rtems_timespec_set( &max, 2, 20000000 );
 
-  rv = clock_gettime(CLOCK_REALTIME, &real_start);
-  rtems_test_assert(rv == 0);
-  rv = clock_gettime(CLOCK_MONOTONIC, &mono_start);
-  rtems_test_assert(rv == 0);
+  rv = clock_gettime( CLOCK_REALTIME, &real_start );
+  rtems_test_assert( rv == 0 );
+  rv = clock_gettime( CLOCK_MONOTONIC, &mono_start );
+  rtems_test_assert( rv == 0 );
 
-  rtems_task_wake_after(2 * rtems_clock_get_ticks_per_second());
+  rtems_task_wake_after( 2 * rtems_clock_get_ticks_per_second() );
 
-  rv = clock_gettime(CLOCK_REALTIME, &real_end);
-  rtems_test_assert(rv == 0);
-  rv = clock_gettime(CLOCK_MONOTONIC, &mono_end);
-  rtems_test_assert(rv == 0);
+  rv = clock_gettime( CLOCK_REALTIME, &real_end );
+  rtems_test_assert( rv == 0 );
+  rv = clock_gettime( CLOCK_MONOTONIC, &mono_end );
+  rtems_test_assert( rv == 0 );
 
-  rtems_timespec_subtract(&real_start, &real_end, &real_elapsed);
-  rtems_timespec_subtract(&mono_start, &mono_end, &mono_elapsed);
+  rtems_timespec_subtract( &real_start, &real_end, &real_elapsed );
+  rtems_timespec_subtract( &mono_start, &mono_end, &mono_elapsed );
 
-  rtems_test_assert(rtems_timespec_greater_than(&real_elapsed, &min));
-  rtems_test_assert(rtems_timespec_greater_than(&max, &real_elapsed));
-  rtems_test_assert(rtems_timespec_greater_than(&mono_elapsed, &min));
-  rtems_test_assert(rtems_timespec_greater_than(&max, &mono_elapsed));
+  rtems_test_assert( rtems_timespec_greater_than( &real_elapsed, &min ) );
+  rtems_test_assert( rtems_timespec_greater_than( &max, &real_elapsed ) );
+  rtems_test_assert( rtems_timespec_greater_than( &mono_elapsed, &min ) );
+  rtems_test_assert( rtems_timespec_greater_than( &max, &mono_elapsed ) );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 #define CONFIGURE_MICROSECONDS_PER_TICK 10000

@@ -41,16 +41,13 @@
 
 #include "system.h"
 
-void Task_start_extension(
-  rtems_tcb *unused,
-  rtems_tcb *started_task
-)
+void Task_start_extension( rtems_tcb *unused, rtems_tcb *started_task )
 {
   (void) unused;
 
   ssize_t task = task_number( started_task->Object.id );
 
-  if (task > 0) {
+  if ( task > 0 ) {
     ++Task_started[ task ];
   }
 }

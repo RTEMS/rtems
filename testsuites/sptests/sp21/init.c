@@ -38,24 +38,23 @@
 const char rtems_test_name[] = "SP 21";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-void do_test_io_manager(void);
-void do_test_zero_driver(void);
+rtems_task Init( rtems_task_argument argument );
+void       do_test_io_manager( void );
+void       do_test_zero_driver( void );
 
 #define PRIurtems_device_major_number PRIu32
 
-#define STUB_DRIVER_MAJOR     1
-#define ZERO_DRIVER_MAJOR     2
-#define NO_DRIVER_MAJOR       3
-#define INVALID_DRIVER_MAJOR  UINT32_MAX
+#define STUB_DRIVER_MAJOR    1
+#define ZERO_DRIVER_MAJOR    2
+#define NO_DRIVER_MAJOR      3
+#define INVALID_DRIVER_MAJOR UINT32_MAX
 
 /* driver entries to use with io_register */
 rtems_driver_address_table GoodDriver = DEVNULL_DRIVER_TABLE_ENTRY;
-rtems_driver_address_table BadDriver_Nothing = {
-  NULL, NULL, NULL, NULL, NULL, NULL
-};
+rtems_driver_address_table BadDriver_Nothing =
+  { NULL, NULL, NULL, NULL, NULL, NULL };
 
-void do_test_io_manager(void)
+void do_test_io_manager( void )
 {
   rtems_status_code         status;
   rtems_device_major_number registered;
@@ -127,11 +126,7 @@ void do_test_io_manager(void)
   puts( "rtems_io_initialize  - RTEMS_INVALID_NUMBER" );
 
   status = rtems_io_open( INVALID_DRIVER_MAJOR, 0, NULL );
-  fatal_directive_status(
-    status,
-    RTEMS_INVALID_NUMBER,
-    "rtems_io_open"
-  );
+  fatal_directive_status( status, RTEMS_INVALID_NUMBER, "rtems_io_open" );
   puts( "rtems_io_open        - RTEMS_INVALID_NUMBER" );
 
   /*
@@ -145,9 +140,7 @@ void do_test_io_manager(void)
     RTEMS_INVALID_ADDRESS,
     "rtems_io_register_driver"
   );
-  puts(
-   "rtems_io_register_driver - RTEMS_INVALID_ADDRESS - NULL registered"
-  );
+  puts( "rtems_io_register_driver - RTEMS_INVALID_ADDRESS - NULL registered" );
 
   status = rtems_io_register_driver( 0, NULL, &registered );
   fatal_directive_status(
@@ -155,9 +148,7 @@ void do_test_io_manager(void)
     RTEMS_INVALID_ADDRESS,
     "rtems_io_register_driver"
   );
-  puts(
-    "rtems_io_register_driver - RTEMS_INVALID_ADDRESS - NULL device"
-  );
+  puts( "rtems_io_register_driver - RTEMS_INVALID_ADDRESS - NULL device" );
 
   status = rtems_io_register_driver( 0, &BadDriver_Nothing, &registered );
   fatal_directive_status(
@@ -165,12 +156,13 @@ void do_test_io_manager(void)
     RTEMS_INVALID_ADDRESS,
     "rtems_io_register_driver"
   );
-  puts(
-    "rtems_io_register_driver - RTEMS_INVALID_ADDRESS - no callouts"
-  );
+  puts( "rtems_io_register_driver - RTEMS_INVALID_ADDRESS - no callouts" );
 
   status = rtems_io_register_driver(
-    INVALID_DRIVER_MAJOR, &GoodDriver, &registered );
+    INVALID_DRIVER_MAJOR,
+    &GoodDriver,
+    &registered
+  );
   fatal_directive_status(
     status,
     RTEMS_INVALID_NUMBER,
@@ -184,14 +176,13 @@ void do_test_io_manager(void)
   puts( "rtems_io_register_driver - RTEMS_SUCCESSFUL - overwrite NULL" );
 
   status = rtems_io_register_driver( 0, &GoodDriver, &registered );
-  if ( status == RTEMS_SUCCESSFUL )
+  if ( status == RTEMS_SUCCESSFUL ) {
     printf(
-      "registered major = %" PRIurtems_device_major_number "\n", registered );
-  fatal_directive_status(
-    status,
-    RTEMS_TOO_MANY,
-    "rtems_io_register_driver"
-  );
+      "registered major = %" PRIurtems_device_major_number "\n",
+      registered
+    );
+  }
+  fatal_directive_status( status, RTEMS_TOO_MANY, "rtems_io_register_driver" );
   puts( "rtems_io_register_driver - RTEMS_TOO_MANY - no slots" );
 
   /* there should be a driver at major 1 -- clock, console, or stub */
@@ -201,9 +192,7 @@ void do_test_io_manager(void)
     RTEMS_RESOURCE_IN_USE,
     "rtems_io_register_driver"
   );
-  puts(
-    "rtems_io_register_driver - RTEMS_RESOURCE_IN_USE - major in use"
-  );
+  puts( "rtems_io_register_driver - RTEMS_RESOURCE_IN_USE - major in use" );
 
   /* this should unregister the device driver we registered above */
   status = rtems_io_unregister_driver( registered_worked );
@@ -211,19 +200,13 @@ void do_test_io_manager(void)
   puts( "rtems_io_unregister_driver - RTEMS_SUCCESSFUL" );
 }
 
-void do_test_zero_driver(void)
+void do_test_zero_driver( void )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-  char in = 'I';
-  rtems_libio_rw_args_t rw_in = {
-    .buffer = &in,
-    .count = sizeof(in)
-  };
-  char out = 'O';
-  rtems_libio_rw_args_t rw_out = {
-    .buffer = &out,
-    .count = sizeof(out)
-  };
+  rtems_status_code     sc = RTEMS_SUCCESSFUL;
+  char                  in = 'I';
+  rtems_libio_rw_args_t rw_in = { .buffer = &in, .count = sizeof( in ) };
+  char                  out = 'O';
+  rtems_libio_rw_args_t rw_out = { .buffer = &out, .count = sizeof( out ) };
 
   puts( "-----  TESTING THE ZERO DRIVER CHECKS  -----" );
 
@@ -239,20 +222,18 @@ void do_test_zero_driver(void)
   sc = rtems_io_read( ZERO_DRIVER_MAJOR, 0, &rw_in );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
   rtems_test_assert( in == 0 );
-  rtems_test_assert( rw_in.bytes_moved == sizeof(in) );
+  rtems_test_assert( rw_in.bytes_moved == sizeof( in ) );
 
   sc = rtems_io_write( ZERO_DRIVER_MAJOR, 0, &rw_out );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
   rtems_test_assert( out == 'O' );
-  rtems_test_assert( rw_out.bytes_moved == sizeof(out) );
+  rtems_test_assert( rw_out.bytes_moved == sizeof( out ) );
 
   sc = rtems_io_control( ZERO_DRIVER_MAJOR, 0, NULL );
   rtems_test_assert( sc == RTEMS_IO_ERROR );
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -274,7 +255,7 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_ZERO_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_NULL_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_MAXIMUM_TASKS      1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

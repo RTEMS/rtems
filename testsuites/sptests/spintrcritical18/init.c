@@ -43,13 +43,13 @@ const char rtems_test_name[] = "SPINTRCRITICAL 18";
 #define PRIORITY_HIGH 1
 
 typedef struct {
-  rtems_id middle_priority_task;
-  rtems_id high_priority_task;
-  bool high_priority_task_activated;
+  rtems_id      middle_priority_task;
+  rtems_id      high_priority_task;
+  bool          high_priority_task_activated;
   volatile bool early;
   volatile bool switching;
   volatile bool late;
-  long potential_hits;
+  long          potential_hits;
 } test_context;
 
 static void wake_up( rtems_id task )
@@ -63,7 +63,7 @@ static void wake_up( rtems_id task )
 static void wait_for_wake_up( void )
 {
   rtems_status_code sc;
-  rtems_event_set events;
+  rtems_event_set   events;
 
   sc = rtems_event_receive(
     WAKE_UP,
@@ -77,7 +77,7 @@ static void wait_for_wake_up( void )
 
 static T_interrupt_test_state active_high_priority_task( void *arg )
 {
-  test_context *ctx = arg;
+  test_context          *ctx = arg;
   T_interrupt_test_state state;
 
   state = T_interrupt_test_get_state();
@@ -150,7 +150,7 @@ static void action( void *arg )
 
 static void blocked( void *arg )
 {
-  test_context *ctx = arg;
+  test_context          *ctx = arg;
   T_interrupt_test_state state;
 
   state = T_interrupt_test_change_state(
@@ -173,11 +173,11 @@ static const T_interrupt_test_config config = {
   .max_iteration_count = 10000
 };
 
-T_TEST_CASE(InterruptDuringThreadDispatch)
+T_TEST_CASE( InterruptDuringThreadDispatch )
 {
   T_interrupt_test_state state;
-  test_context ctx;
-  rtems_status_code sc;
+  test_context           ctx;
+  rtems_status_code      sc;
 
   memset( &ctx, 0, sizeof( ctx ) );
 
@@ -237,8 +237,8 @@ static rtems_task Init( rtems_task_argument argument )
 
 #define CONFIGURE_MAXIMUM_TASKS 3
 
-#define CONFIGURE_INIT_TASK_PRIORITY PRIORITY_LOW
-#define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
+#define CONFIGURE_INIT_TASK_PRIORITY      PRIORITY_LOW
+#define CONFIGURE_INIT_TASK_ATTRIBUTES    RTEMS_DEFAULT_ATTRIBUTES
 #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_DEFAULT_MODES
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION

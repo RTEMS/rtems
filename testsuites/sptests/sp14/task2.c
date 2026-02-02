@@ -41,15 +41,13 @@
 
 #include "system.h"
 
-rtems_task Task_2(
-  rtems_task_argument argument
-)
+rtems_task Task_2( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_status_code status;
 
-  status = rtems_task_wake_after(rtems_clock_get_ticks_per_second());
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
   puts( "TA2 - rtems_signal_send - RTEMS_SIGNAL_17 to TA1" );
@@ -60,15 +58,20 @@ rtems_task Task_2(
   status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
   directive_failed( status, "rtems_task_wake_after" );
 
-  puts("TA2 - rtems_signal_send - RTEMS_SIGNAL_18 and RTEMS_SIGNAL_19 to TA1");
-  status = rtems_signal_send( Task_id[ 1 ], RTEMS_SIGNAL_18 | RTEMS_SIGNAL_19 );
+  puts(
+    "TA2 - rtems_signal_send - RTEMS_SIGNAL_18 and RTEMS_SIGNAL_19 to TA1"
+  );
+  status = rtems_signal_send(
+    Task_id[ 1 ],
+    RTEMS_SIGNAL_18 | RTEMS_SIGNAL_19
+  );
   directive_failed( status, "rtems_signal_send" );
 
   puts( "TA2 - rtems_task_wake_after - yield processor" );
   status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
   directive_failed( status, "rtems_task_wake_after" );
 
-  status = rtems_task_wake_after(2 * rtems_clock_get_ticks_per_second());
+  status = rtems_task_wake_after( 2 * rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
   TEST_END();

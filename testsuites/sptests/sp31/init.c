@@ -47,14 +47,12 @@
 
 const char rtems_test_name[] = "SP 31";
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  rtems_time_of_day  time;
-  rtems_status_code  status;
+  rtems_time_of_day time;
+  rtems_status_code status;
 
   TEST_BEGIN();
 
@@ -70,7 +68,7 @@ rtems_task Init(
   );
   directive_failed( status, "rtems_timer_initiate_server" );
 
-  Task_name[ 1 ]  = rtems_build_name( 'T', 'A', '1', ' ' );
+  Task_name[ 1 ] = rtems_build_name( 'T', 'A', '1', ' ' );
   Timer_name[ 1 ] = rtems_build_name( 'T', 'M', '1', ' ' );
   Timer_name[ 2 ] = rtems_build_name( 'T', 'M', '2', ' ' );
 

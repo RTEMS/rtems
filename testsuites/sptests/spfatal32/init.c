@@ -44,10 +44,10 @@
  */
 #pragma GCC diagnostic ignored "-Wfree-nonheap-object"
 
-static void force_error(void)
+static void force_error( void )
 {
   uintptr_t invalid = 1;
-  free((void *) invalid);
+  free( (void *) invalid );
 }
 
 #include "../spfatal_support/spfatalimpl.h"

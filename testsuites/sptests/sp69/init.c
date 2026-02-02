@@ -37,30 +37,25 @@
 const char rtems_test_name[] = "SP 69";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  rtems_id                                period_id;
-  rtems_name                              period_name;
-  rtems_rate_monotonic_period_status      period_status;
-  rtems_status_code                       status;
-  rtems_rate_monotonic_period_statistics  statistics;
-  uint32_t                                i;
+  rtems_id                               period_id;
+  rtems_name                             period_name;
+  rtems_rate_monotonic_period_status     period_status;
+  rtems_status_code                      status;
+  rtems_rate_monotonic_period_statistics statistics;
+  uint32_t                               i;
 
-  period_name = rtems_build_name('P','E','R','1');
+  period_name = rtems_build_name( 'P', 'E', 'R', '1' );
 
   TEST_BEGIN();
 
   /* create period */
-  status = rtems_rate_monotonic_create(
-      period_name,
-      &period_id
-  );
+  status = rtems_rate_monotonic_create( period_name, &period_id );
   directive_failed( status, "rate_monotonic_create" );
 
   /*
@@ -88,7 +83,9 @@ rtems_task Init(
   /*
    * Check normal get_status results.
    */
-  puts( "rtems_rate_monotonic_get_status - verify values of an active period" );
+  puts(
+    "rtems_rate_monotonic_get_status - verify values of an active period"
+  );
   rtems_test_spin_until_next_tick();
   status = rtems_rate_monotonic_period( period_id, 100 );
   directive_failed( status, "rate_monotonic_period" );
@@ -134,7 +131,7 @@ rtems_task Init(
   status = rtems_rate_monotonic_period( period_id, 50 );
   directive_failed( status, "rate_monotonic_period above loop" );
 
-  for ( i=1 ; i <= 3 ; i++ ) {
+  for ( i = 1; i <= 3; i++ ) {
     status = rtems_task_wake_after( 100 );
     directive_failed( status, "rtems_task_wake_after(100)" );
 
@@ -169,7 +166,7 @@ rtems_task Init(
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -177,13 +174,12 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS             1
-#define CONFIGURE_MAXIMUM_PERIODS           1
+#define CONFIGURE_MAXIMUM_TASKS   1
+#define CONFIGURE_MAXIMUM_PERIODS 1
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-
 
 #define CONFIGURE_INIT
 

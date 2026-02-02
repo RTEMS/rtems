@@ -35,9 +35,7 @@
 
 const char rtems_test_name[] = "SP 3";
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 

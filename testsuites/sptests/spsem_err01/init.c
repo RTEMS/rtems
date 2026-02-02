@@ -33,23 +33,21 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
-#define MESSAGE_SIZE (sizeof(long) * 4)
+#define MESSAGE_SIZE ( sizeof( long ) * 4 )
 
 const char rtems_test_name[] = "SP SEMAPHORE ERROR 01";
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_status_code status;
 
   TEST_BEGIN();
-  
-  Semaphore_name[ 1 ]  =  rtems_build_name( 'S', 'M', '1', ' ' );
-  Semaphore_name[ 2 ]  =  rtems_build_name( 'S', 'M', '2', ' ' );
-  Semaphore_name[ 3 ]  =  rtems_build_name( 'S', 'M', '3', ' ' );
+
+  Semaphore_name[ 1 ] = rtems_build_name( 'S', 'M', '1', ' ' );
+  Semaphore_name[ 2 ] = rtems_build_name( 'S', 'M', '2', ' ' );
+  Semaphore_name[ 3 ] = rtems_build_name( 'S', 'M', '3', ' ' );
 
   /* release overflow */
   status = rtems_semaphore_create(
@@ -59,11 +57,7 @@ rtems_task Init(
     0,
     &Semaphore_id[ 1 ]
   );
-  fatal_directive_status(
-    status,
-    RTEMS_SUCCESSFUL,
-    "rtems_semaphore_create"
-  );
+  fatal_directive_status( status, RTEMS_SUCCESSFUL, "rtems_semaphore_create" );
   puts( "TA1 - rtems_semaphore_create - RTEMS_SUCCESSFUL" );
   status = rtems_semaphore_release( Semaphore_id[ 1 ] );
   fatal_directive_status(
@@ -73,11 +67,7 @@ rtems_task Init(
   );
   puts( "TA1 - rtems_semaphore_release - RTEMS_UNSATISFIED" );
   status = rtems_semaphore_delete( Semaphore_id[ 1 ] );
-  fatal_directive_status(
-    status,
-    RTEMS_SUCCESSFUL,
-    "rtems_semaphore_delete"
-  );
+  fatal_directive_status( status, RTEMS_SUCCESSFUL, "rtems_semaphore_delete" );
   puts( "TA1 - rtems_semaphore_delete - RTEMS_SUCCESSFUL" );
 
   /* invalid name */
@@ -132,14 +122,14 @@ rtems_task Init(
   puts( "TA1 - rtems_semaphore_create - 2 - RTEMS_SUCCESSFUL" );
 
   do {
-      status = rtems_semaphore_create(
-          Semaphore_name[ 3 ],
-          1,
-          RTEMS_DEFAULT_ATTRIBUTES,
-          RTEMS_NO_PRIORITY,
-          &Junk_id
-      );
-  } while (status == RTEMS_SUCCESSFUL);
+    status = rtems_semaphore_create(
+      Semaphore_name[ 3 ],
+      1,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      RTEMS_NO_PRIORITY,
+      &Junk_id
+    );
+  } while ( status == RTEMS_SUCCESSFUL );
 
   fatal_directive_status(
     status,
@@ -160,7 +150,9 @@ rtems_task Init(
     RTEMS_NOT_DEFINED,
     "rtems_semaphore_create of RTEMS_FIFO RTEMS_INHERIT_PRIORITY"
   );
-  puts( "TA1 - rtems_semaphore_create - FIFO and inherit - RTEMS_NOT_DEFINED" );
+  puts(
+    "TA1 - rtems_semaphore_create - FIFO and inherit - RTEMS_NOT_DEFINED"
+  );
 
   status = rtems_semaphore_create(
     Semaphore_name[ 1 ],
@@ -174,13 +166,15 @@ rtems_task Init(
     RTEMS_NOT_DEFINED,
     "rtems_semaphore_create of RTEMS_FIFO RTEMS_CEILING_PRIORITY"
   );
-  puts( "TA1 - rtems_semaphore_create - FIFO and ceiling - RTEMS_NOT_DEFINED" );
+  puts(
+    "TA1 - rtems_semaphore_create - FIFO and ceiling - RTEMS_NOT_DEFINED"
+  );
 
   status = rtems_semaphore_create(
     Semaphore_name[ 1 ],
     1,
-    RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY_CEILING |
-      RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY,
+    RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY_CEILING | RTEMS_BINARY_SEMAPHORE |
+      RTEMS_PRIORITY,
     10,
     &Junk_id
   );
@@ -190,7 +184,8 @@ rtems_task Init(
     "rtems_semaphore_create of binary with ceiling and inherit"
   );
   puts(
-    "TA1 - rtems_semaphore_create - ceiling and inherit - RTEMS_NOT_DEFINED" );
+    "TA1 - rtems_semaphore_create - ceiling and inherit - RTEMS_NOT_DEFINED"
+  );
 
   status = rtems_semaphore_create(
     Semaphore_name[ 1 ],

@@ -59,9 +59,7 @@ rtems_extensions_table Extensions = {
   .thread_terminate = NULL
 };
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -74,7 +72,7 @@ rtems_task Init(
   status = rtems_clock_set( &time );
   directive_failed( status, "rtems_clock_set" );
 
-  Extension_name[ 1 ] =  rtems_build_name( 'E', 'X', 'T', ' ' );
+  Extension_name[ 1 ] = rtems_build_name( 'E', 'X', 'T', ' ' );
 
   status = rtems_extension_create(
     Extension_name[ 1 ],
@@ -83,41 +81,41 @@ rtems_task Init(
   );
   directive_failed( status, "rtems_extension_create" );
 
-  Task_name[ 1 ] =  rtems_build_name( 'T', 'A', '1', ' ' );
-  Task_name[ 2 ] =  rtems_build_name( 'T', 'A', '2', ' ' );
-  Task_name[ 3 ] =  rtems_build_name( 'T', 'A', '3', ' ' );
+  Task_name[ 1 ] = rtems_build_name( 'T', 'A', '1', ' ' );
+  Task_name[ 2 ] = rtems_build_name( 'T', 'A', '2', ' ' );
+  Task_name[ 3 ] = rtems_build_name( 'T', 'A', '3', ' ' );
 
   Run_count[ 1 ] = 0;
   Run_count[ 2 ] = 0;
   Run_count[ 3 ] = 0;
 
   status = rtems_task_create(
-     Task_name[ 1 ],
-     1,
-     RTEMS_MINIMUM_STACK_SIZE * 2,
-     RTEMS_PREEMPT|RTEMS_TIMESLICE,
-     RTEMS_DEFAULT_ATTRIBUTES,
-     &Task_id[ 1 ]
+    Task_name[ 1 ],
+    1,
+    RTEMS_MINIMUM_STACK_SIZE * 2,
+    RTEMS_PREEMPT | RTEMS_TIMESLICE,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &Task_id[ 1 ]
   );
   directive_failed( status, "rtems_task_create of TA1" );
 
   status = rtems_task_create(
-     Task_name[ 2 ],
-     1,
-     RTEMS_MINIMUM_STACK_SIZE * 2,
-     RTEMS_PREEMPT|RTEMS_TIMESLICE,
-     RTEMS_GLOBAL,
-     &Task_id[ 2 ]
+    Task_name[ 2 ],
+    1,
+    RTEMS_MINIMUM_STACK_SIZE * 2,
+    RTEMS_PREEMPT | RTEMS_TIMESLICE,
+    RTEMS_GLOBAL,
+    &Task_id[ 2 ]
   );
   directive_failed( status, "rtems_task_create of TA2" );
 
   status = rtems_task_create(
-     Task_name[ 3 ],
-     1,
-     RTEMS_MINIMUM_STACK_SIZE * 2,
-     RTEMS_PREEMPT|RTEMS_TIMESLICE,
-     RTEMS_DEFAULT_ATTRIBUTES,
-     &Task_id[ 3 ]
+    Task_name[ 3 ],
+    1,
+    RTEMS_MINIMUM_STACK_SIZE * 2,
+    RTEMS_PREEMPT | RTEMS_TIMESLICE,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &Task_id[ 3 ]
   );
   directive_failed( status, "rtems_task_create of TA3" );
 

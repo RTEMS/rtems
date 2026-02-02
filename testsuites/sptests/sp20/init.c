@@ -50,30 +50,28 @@ const char rtems_test_name[] = "SP 20";
 void end_of_test( void )
 {
   TEST_END();
-  fsync(STDOUT_FILENO);
+  fsync( STDOUT_FILENO );
   rtems_test_exit( 0 );
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
   uint32_t          index;
   rtems_status_code status;
 
-  rtems_print_printer_fprintf(&rtems_test_printer, stdout);
+  rtems_print_printer_fprintf( &rtems_test_printer, stdout );
   TEST_BEGIN();
 
-  Task_name[ 1 ] =  rtems_build_name( 'T', 'A', '1', ' ' );
-  Task_name[ 2 ] =  rtems_build_name( 'T', 'A', '2', ' ' );
-  Task_name[ 3 ] =  rtems_build_name( 'T', 'A', '3', ' ' );
-  Task_name[ 4 ] =  rtems_build_name( 'T', 'A', '4', ' ' );
-  Task_name[ 5 ] =  rtems_build_name( 'T', 'A', '5', ' ' );
-  Task_name[ 6 ] =  rtems_build_name( 'T', 'A', '6', ' ' );
+  Task_name[ 1 ] = rtems_build_name( 'T', 'A', '1', ' ' );
+  Task_name[ 2 ] = rtems_build_name( 'T', 'A', '2', ' ' );
+  Task_name[ 3 ] = rtems_build_name( 'T', 'A', '3', ' ' );
+  Task_name[ 4 ] = rtems_build_name( 'T', 'A', '4', ' ' );
+  Task_name[ 5 ] = rtems_build_name( 'T', 'A', '5', ' ' );
+  Task_name[ 6 ] = rtems_build_name( 'T', 'A', '6', ' ' );
 
-  for ( index = 1 ; index <= 6 ; index++ ) {
+  for ( index = 1; index <= 6; index++ ) {
     status = rtems_task_create(
       Task_name[ index ],
       Priorities[ index ],
@@ -85,7 +83,7 @@ rtems_task Init(
     directive_failed( status, "rtems_task_create loop" );
   }
 
-  for ( index = 1 ; index <= 6 ; index++ ) {
+  for ( index = 1; index <= 6; index++ ) {
     status = rtems_task_start( Task_id[ index ], Task_1_through_6, index );
     directive_failed( status, "rtems_task_start loop" );
   }

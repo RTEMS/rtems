@@ -41,16 +41,14 @@
 
 #include "system.h"
 
-rtems_task Task_2(
-  rtems_task_argument argument
-)
+rtems_task Task_2( rtems_task_argument argument )
 {
   (void) argument;
 
-  rtems_status_code    status;
-  rtems_task_priority  previous_priority;
-  void                *segment_address_1;
-  void                *segment_address_2;
+  rtems_status_code   status;
+  rtems_task_priority previous_priority;
+  void               *segment_address_1;
+  void               *segment_address_2;
 
   puts( "TA2 - rtems_region_get_segment - wait on 2K segment from region 1" );
   status = rtems_region_get_segment(
@@ -76,12 +74,12 @@ rtems_task Task_2(
   puts( "TA2 - rtems_task_set_priority - make self highest priority task" );
   status = rtems_task_set_priority(
     RTEMS_SELF,
-    BASE_PRIORITY-1,
+    BASE_PRIORITY - 1,
     &previous_priority
   );
   directive_failed( status, "rtems_task_set_priority" );
 
-  puts("TA2 - rtems_region_get_segment - wait on 3750 byte segment");
+  puts( "TA2 - rtems_region_get_segment - wait on 3750 byte segment" );
   status = rtems_region_get_segment(
     Region_id[ 2 ],
     3750,
@@ -90,7 +88,7 @@ rtems_task Task_2(
     &segment_address_2
   );
   directive_failed( status, "rtems_region_get_segment" );
-  puts_nocr( "TA2 - got segment from region 2 - ");
+  puts_nocr( "TA2 - got segment from region 2 - " );
   Put_address_from_area_2( segment_address_2 );
   new_line;
 

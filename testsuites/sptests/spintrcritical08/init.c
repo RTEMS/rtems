@@ -47,7 +47,7 @@ typedef struct {
   Thread_Control *thread;
 } test_context;
 
-static rtems_rate_monotonic_period_states getState(test_context *ctx)
+static rtems_rate_monotonic_period_states getState( test_context *ctx )
 {
   Rate_monotonic_Control *the_period;
   ISR_lock_Context        lock_context;
@@ -61,14 +61,14 @@ static rtems_rate_monotonic_period_states getState(test_context *ctx)
 
 static T_interrupt_test_state interrupt( void *arg )
 {
-  test_context                       *ctx;
-  Per_CPU_Control                    *cpu_self;
-  Watchdog_Header                    *header;
-  Watchdog_Control                   *watchdog;
-  T_interrupt_test_state              state;
-  Thread_Wait_flags                   flags;
-  ISR_Level                           level;
-  rtems_rate_monotonic_period_states  previous_period_state;
+  test_context                      *ctx;
+  Per_CPU_Control                   *cpu_self;
+  Watchdog_Header                   *header;
+  Watchdog_Control                  *watchdog;
+  T_interrupt_test_state             state;
+  Thread_Wait_flags                  flags;
+  ISR_Level                          level;
+  rtems_rate_monotonic_period_states previous_period_state;
 
   state = T_interrupt_test_get_state();
 
@@ -99,15 +99,15 @@ static T_interrupt_test_state interrupt( void *arg )
     state = T_INTERRUPT_TEST_DONE;
   } else if ( flags == THREAD_WAIT_STATE_READY ) {
     T_quiet_true(
-      previous_period_state == RATE_MONOTONIC_ACTIVE
-        || previous_period_state == RATE_MONOTONIC_EXPIRED
+      previous_period_state == RATE_MONOTONIC_ACTIVE ||
+      previous_period_state == RATE_MONOTONIC_EXPIRED
     );
     state = T_INTERRUPT_TEST_EARLY;
   } else {
     T_quiet_eq_int( flags, RATE_MONOTONIC_BLOCKED );
     T_quiet_true(
-      previous_period_state == RATE_MONOTONIC_ACTIVE
-        || previous_period_state == RATE_MONOTONIC_EXPIRED
+      previous_period_state == RATE_MONOTONIC_ACTIVE ||
+      previous_period_state == RATE_MONOTONIC_EXPIRED
     );
     state = T_INTERRUPT_TEST_LATE;
   }
@@ -117,8 +117,8 @@ static T_interrupt_test_state interrupt( void *arg )
 
 static void prepare( void *arg )
 {
-  test_context      *ctx;
-  rtems_status_code  sc;
+  test_context     *ctx;
+  rtems_status_code sc;
 
   ctx = arg;
 
@@ -140,8 +140,8 @@ static void prepare( void *arg )
 
 static void action( void *arg )
 {
-  test_context      *ctx;
-  rtems_status_code  sc;
+  test_context     *ctx;
+  rtems_status_code sc;
 
   ctx = arg;
 
@@ -160,11 +160,11 @@ static const T_interrupt_test_config config = {
 
 T_TEST_CASE( RateMonotonicPeriodInterrupt )
 {
-  test_context ctx;
-  rtems_status_code sc;
+  test_context           ctx;
+  rtems_status_code      sc;
   T_interrupt_test_state state;
 
-  memset( &ctx, 0 , sizeof( ctx ) );
+  memset( &ctx, 0, sizeof( ctx ) );
   ctx.thread = _Thread_Get_executing();
 
   sc = rtems_rate_monotonic_create(
@@ -190,11 +190,11 @@ static rtems_task Init( rtems_task_argument argument )
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS       1
-#define CONFIGURE_MAXIMUM_PERIODS     1
+#define CONFIGURE_MAXIMUM_TASKS   1
+#define CONFIGURE_MAXIMUM_PERIODS 1
 
-#define CONFIGURE_MICROSECONDS_PER_TICK  10000
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_MICROSECONDS_PER_TICK 10000
+#define CONFIGURE_INITIAL_EXTENSIONS    RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

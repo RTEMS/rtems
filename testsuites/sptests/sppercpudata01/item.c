@@ -31,4 +31,4 @@
 
 #include "sppercpudata01.h"
 
-PER_CPU_DATA_ITEM(unsigned int, g) = 11;
+PER_CPU_DATA_ITEM( unsigned int, g ) = 11;

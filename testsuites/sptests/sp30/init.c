@@ -47,14 +47,12 @@
 
 const char rtems_test_name[] = "SP 30";
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_time_of_day time;
-  uint32_t    index;
+  uint32_t          index;
   rtems_status_code status;
 
   TEST_BEGIN();
@@ -67,7 +65,7 @@ rtems_task Init(
   /* initiate with bad priority */
   puts( "timer_initiate_server -- INVALID_PRIORITY" );
   status = rtems_timer_initiate_server(
-    UINT32_C(0x80000000),
+    UINT32_C( 0x80000000 ),
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_ATTRIBUTES
   );
@@ -101,15 +99,15 @@ rtems_task Init(
    *  Create test tasks
    */
 
-  Task_name[ 1 ] =  rtems_build_name( 'T', 'A', '1', ' ' );
-  Task_name[ 2 ] =  rtems_build_name( 'T', 'A', '2', ' ' );
-  Task_name[ 3 ] =  rtems_build_name( 'T', 'A', '3', ' ' );
+  Task_name[ 1 ] = rtems_build_name( 'T', 'A', '1', ' ' );
+  Task_name[ 2 ] = rtems_build_name( 'T', 'A', '2', ' ' );
+  Task_name[ 3 ] = rtems_build_name( 'T', 'A', '3', ' ' );
 
-  Timer_name[ 1 ] =  rtems_build_name( 'T', 'M', '1', ' ' );
-  Timer_name[ 2 ] =  rtems_build_name( 'T', 'M', '2', ' ' );
-  Timer_name[ 3 ] =  rtems_build_name( 'T', 'M', '3', ' ' );
+  Timer_name[ 1 ] = rtems_build_name( 'T', 'M', '1', ' ' );
+  Timer_name[ 2 ] = rtems_build_name( 'T', 'M', '2', ' ' );
+  Timer_name[ 3 ] = rtems_build_name( 'T', 'M', '3', ' ' );
 
-  for ( index = 1 ; index <= 3 ; index++ ) {
+  for ( index = 1; index <= 3; index++ ) {
     status = rtems_task_create(
       Task_name[ index ],
       1,
@@ -120,14 +118,11 @@ rtems_task Init(
     );
     directive_failed( status, "rtems_task_create loop" );
 
-    status = rtems_timer_create(
-      Timer_name[ index ],
-      &Timer_id[ index ]
-    );
+    status = rtems_timer_create( Timer_name[ index ], &Timer_id[ index ] );
     directive_failed( status, "rtems_timer_create loop" );
   }
 
-  for ( index = 1 ; index <= 3 ; index++ ) {
+  for ( index = 1; index <= 3; index++ ) {
     status = rtems_task_start( Task_id[ index ], Task_1_through_3, index );
     directive_failed( status, "rtems_task_start loop" );
   }

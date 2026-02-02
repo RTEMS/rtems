@@ -34,74 +34,50 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Task_1(
-  rtems_task_argument argument
-);
+rtems_task Task_1( rtems_task_argument argument );
 
-rtems_task Task_2(
-  rtems_task_argument argument
-);
+rtems_task Task_2( rtems_task_argument argument );
 
-rtems_task Task_3(
-  rtems_task_argument argument
-);
+rtems_task Task_3( rtems_task_argument argument );
 
-rtems_task Task_4(
-  rtems_task_argument argument
-);
+rtems_task Task_4( rtems_task_argument argument );
 
-bool Task_create_extension(
-  rtems_tcb *unused,
-  rtems_tcb *created_task
-);
+bool Task_create_extension( rtems_tcb *unused, rtems_tcb *created_task );
 
-void Task_delete_extension(
-  rtems_tcb *running_task,
-  rtems_tcb *deleted_task
-);
+void Task_delete_extension( rtems_tcb *running_task, rtems_tcb *deleted_task );
 
-void Task_restart_extension(
-  rtems_tcb *unused,
-  rtems_tcb *restarted_task
-);
+void Task_restart_extension( rtems_tcb *unused, rtems_tcb *restarted_task );
 
-void Task_start_extension(
-  rtems_tcb *unused,
-  rtems_tcb *started_task
-);
+void Task_start_extension( rtems_tcb *unused, rtems_tcb *started_task );
 
-void Task_exit_extension(
-  rtems_tcb *running_task
-);
+void Task_exit_extension( rtems_tcb *running_task );
 
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_USER_EXTENSIONS     2
-#define CONFIGURE_TICKS_PER_TIMESLICE       100
+#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 2
+#define CONFIGURE_TICKS_PER_TIMESLICE     100
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_EXTRA_TASK_STACKS         (4 * RTEMS_MINIMUM_STACK_SIZE)
-#define CONFIGURE_MAXIMUM_TASKS             5
+#define CONFIGURE_EXTRA_TASK_STACKS ( 4 * RTEMS_MINIMUM_STACK_SIZE )
+#define CONFIGURE_MAXIMUM_TASKS     5
 
 #include <rtems/confdefs.h>
 
 /* global variables */
 
-TEST_EXTERN rtems_id   Task_id[ 5 ];         /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 5 ];       /* array of task names */
+TEST_EXTERN rtems_id   Task_id[ 5 ];   /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 5 ]; /* array of task names */
 
 TEST_EXTERN rtems_id   Extension_id[ 4 ];
-TEST_EXTERN rtems_name Extension_name[ 4 ];  /* array of task names */
+TEST_EXTERN rtems_name Extension_name[ 4 ]; /* array of task names */
 
 TEST_EXTERN int Task_created[ RTEMS_ARRAY_SIZE( Task_id ) ];
 

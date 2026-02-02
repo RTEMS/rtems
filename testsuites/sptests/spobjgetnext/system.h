@@ -30,9 +30,7 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
 /* configuration information */
 
@@ -43,9 +41,9 @@ rtems_task Init(
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_MAXIMUM_TASKS             2
-#define CONFIGURE_MAXIMUM_TIMERS            1
-#define CONFIGURE_MAXIMUM_SEMAPHORES        1
+#define CONFIGURE_MAXIMUM_TASKS      2
+#define CONFIGURE_MAXIMUM_TIMERS     1
+#define CONFIGURE_MAXIMUM_SEMAPHORES 1
 
 #include <rtems/confdefs.h>
 

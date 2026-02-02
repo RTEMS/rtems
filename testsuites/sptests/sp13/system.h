@@ -34,51 +34,39 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-void Fill_buffer(
-  char  source[],
-  long *buffer
-);
+void Fill_buffer( char source[], long *buffer );
 
-void Put_buffer(
-  void *buffer
-);
+void Put_buffer( void *buffer );
 
-rtems_task Task_1(
-  rtems_task_argument argument
-);
+rtems_task Task_1( rtems_task_argument argument );
 
-rtems_task Task_2(
-  rtems_task_argument argument
-);
+rtems_task Task_2( rtems_task_argument argument );
 
-rtems_task Task_3(
-  rtems_task_argument argument
-);
+rtems_task Task_3( rtems_task_argument argument );
 
 /* global variables */
 
-TEST_EXTERN rtems_id   Task_id[ 4 ];         /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 4 ];       /* array of task names */
+TEST_EXTERN rtems_id   Task_id[ 4 ];   /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 4 ]; /* array of task names */
 
-TEST_EXTERN rtems_id   Queue_id[ 4 ];        /* array of queue ids */
-TEST_EXTERN rtems_name Queue_name[ 4 ];      /* array of queue names */
+TEST_EXTERN rtems_id   Queue_id[ 4 ];   /* array of queue ids */
+TEST_EXTERN rtems_name Queue_name[ 4 ]; /* array of queue names */
 
 /* test configuration */
 
-#define MESSAGE_SIZE (sizeof(long) * 4)  /* must be multiple of sizeof(long) */
+#define MESSAGE_SIZE \
+  ( sizeof( long ) * 4 ) /* must be multiple of sizeof(long) */
 
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS               4
-#define CONFIGURE_MAXIMUM_MESSAGE_QUEUES     10
-#define CONFIGURE_TICKS_PER_TIMESLICE       100
+#define CONFIGURE_MAXIMUM_TASKS          4
+#define CONFIGURE_MAXIMUM_MESSAGE_QUEUES 10
+#define CONFIGURE_TICKS_PER_TIMESLICE    100
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
@@ -107,14 +95,17 @@ TEST_EXTERN rtems_name Queue_name[ 4 ];      /* array of queue names */
  *  ignore Q2 and the last instance of Q1 since enough memory is
  *  free when the third instance of Q1 is created.
  */
-#define CONFIGURE_MESSAGE_BUFFER_MEMORY \
-   /* Q1 */ CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 100, MESSAGE_SIZE ) + \
-   /* Q2 */ CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 10, MESSAGE_SIZE ) + \
-   /* Q3 is statically allocated */ \
-   /* Q1 */ CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 100, 20 ) + \
-   /* Q1 */ CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 2,  1030 )
+#define CONFIGURE_MESSAGE_BUFFER_MEMORY                               \
+  /* Q1 */ CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 100, MESSAGE_SIZE ) + \
+    /* Q2 */                                                          \
+    CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE(                              \
+      10,                                                             \
+      MESSAGE_SIZE                                                    \
+    ) + /* Q3 is statically allocated */ /* Q1 */                     \
+    CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 100, 20 ) +                  \
+    /* Q1 */ CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 2, 1030 )
 
-#define CONFIGURE_EXTRA_TASK_STACKS         (3 * RTEMS_MINIMUM_STACK_SIZE)
+#define CONFIGURE_EXTRA_TASK_STACKS ( 3 * RTEMS_MINIMUM_STACK_SIZE )
 
 #include <rtems/confdefs.h>
 

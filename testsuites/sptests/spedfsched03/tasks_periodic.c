@@ -38,9 +38,7 @@
 
 #include "system.h"
 
-rtems_task Tasks_Periodic(
-  rtems_task_argument argument
-)
+rtems_task Tasks_Periodic( rtems_task_argument argument )
 {
   rtems_id          rmid;
   rtems_id          test_rmid;
@@ -56,23 +54,27 @@ rtems_task Tasks_Periodic(
   status = rtems_rate_monotonic_create( argument, &rmid );
   directive_failed( status, "rtems_rate_monotonic_create" );
   put_name( Task_name[ argument ], FALSE );
-  printf( "- rtems_rate_monotonic_create id = 0x%08" PRIxrtems_id "\n",
-          rmid );
+  printf( "- rtems_rate_monotonic_create id = 0x%08" PRIxrtems_id "\n", rmid );
 
   status = rtems_rate_monotonic_ident( argument, &test_rmid );
   directive_failed( status, "rtems_rate_monotonic_ident" );
   put_name( Task_name[ argument ], FALSE );
-  printf( "- rtems_rate_monotonic_ident id = 0x%08" PRIxrtems_id "\n",
-          test_rmid );
+  printf(
+    "- rtems_rate_monotonic_ident id = 0x%08" PRIxrtems_id "\n",
+    test_rmid
+  );
 
   if ( rmid != test_rmid ) {
-     printf( "RMID's DO NOT MATCH (0x%" PRIxrtems_id " and 0x%"
-             PRIxrtems_id ")\n", rmid, test_rmid );
-     rtems_test_exit( 0 );
+    printf(
+      "RMID's DO NOT MATCH (0x%" PRIxrtems_id " and 0x%" PRIxrtems_id ")\n",
+      rmid,
+      test_rmid
+    );
+    rtems_test_exit( 0 );
   }
 
   task_id = Task_id[ argument ];
-  status = rtems_task_get_scheduler( task_id, &sched_id);
+  status = rtems_task_get_scheduler( task_id, &sched_id );
   rtems_test_assert( status == RTEMS_SUCCESSFUL );
 
   status = rtems_scheduler_get_maximum_priority( sched_id, &prio_max );
@@ -80,41 +82,54 @@ rtems_task Tasks_Periodic(
   rtems_test_assert( prio_max == CONFIGURE_MAXIMUM_PRIORITY );
 
   put_name( Task_name[ argument ], FALSE );
-  printf( "- (0x%08" PRIxrtems_id ") period %" PRIu32 "\n",
-          rmid, Periods[ argument ] );
+  printf(
+    "- (0x%08" PRIxrtems_id ") period %" PRIu32 "\n",
+    rmid,
+    Periods[ argument ]
+  );
 
-  status = rtems_task_wake_after( 2 + Phases[argument] );
+  status = rtems_task_wake_after( 2 + Phases[ argument ] );
   directive_failed( status, "rtems_task_wake_after" );
 
-  while (FOREVER) {
-    if (rtems_rate_monotonic_period(rmid, Periods[argument])==RTEMS_TIMEOUT)
-      printf("P%" PRIdPTR " - Deadline miss\n", argument);
+  while ( FOREVER ) {
+    if (
+      rtems_rate_monotonic_period( rmid, Periods[ argument ] ) == RTEMS_TIMEOUT
+    ) {
+      printf( "P%" PRIdPTR " - Deadline miss\n", argument );
+    }
 
     status = rtems_task_get_priority( task_id, sched_id, &prio_cur );
     rtems_test_assert( status == RTEMS_SUCCESSFUL );
     rtems_test_assert( prio_cur == 0 );
 
     start = rtems_clock_get_ticks_since_boot();
-    printf("P%" PRIdPTR "-S ticks:%d\n", argument, start);
-    if ( start >= 2*HP_LENGTH ) break; /* stop */
+    printf( "P%" PRIdPTR "-S ticks:%d\n", argument, start );
+    if ( start >= 2 * HP_LENGTH ) {
+      break; /* stop */
+    }
     /* active computing */
 
     /* using periodic statistics */
-    while(FOREVER) {
+    while ( FOREVER ) {
       now = rtems_clock_get_ticks_since_boot();
-      if (now >= start + Execution[argument]) break;
+      if ( now >= start + Execution[ argument ] ) {
+        break;
+      }
     }
     stop = rtems_clock_get_ticks_since_boot();
-    printf("P%" PRIdPTR "-F ticks:%d\n", argument, stop);
+    printf( "P%" PRIdPTR "-F ticks:%d\n", argument, stop );
   }
 
   /* delete period and SELF */
   status = rtems_rate_monotonic_delete( rmid );
   if ( status != RTEMS_SUCCESSFUL ) {
-    printf("rtems_rate_monotonic_delete failed with status of %d.\n",status);
+    printf(
+      "rtems_rate_monotonic_delete failed with status of %d.\n",
+      status
+    );
     rtems_test_exit( 0 );
   }
-  fflush(stdout);
+  fflush( stdout );
   TEST_END();
   rtems_test_exit( 0 );
 }

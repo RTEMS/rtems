@@ -34,49 +34,40 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task First_FP_task(
-  rtems_task_argument argument
-);
+rtems_task First_FP_task( rtems_task_argument argument );
 
-rtems_task FP_task(
-  rtems_task_argument argument
-);
+rtems_task FP_task( rtems_task_argument argument );
 
-rtems_task Task_1(
-  rtems_task_argument argument
-);
+rtems_task Task_1( rtems_task_argument argument );
 
 /* configuration information */
 
-#define CONFIGURE_INIT_TASK_ATTRIBUTES    RTEMS_FLOATING_POINT
+#define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
 
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS             7
+#define CONFIGURE_MAXIMUM_TASKS 7
 
 void thread_switch_extension( Thread_Control *, Thread_Control * );
 
 #define CONFIGURE_INITIAL_EXTENSIONS \
-  { .thread_switch = thread_switch_extension }, \
-  RTEMS_TEST_INITIAL_EXTENSION
+  { .thread_switch = thread_switch_extension }, RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_EXTRA_TASK_STACKS         (24 * RTEMS_MINIMUM_STACK_SIZE)
+#define CONFIGURE_EXTRA_TASK_STACKS ( 24 * RTEMS_MINIMUM_STACK_SIZE )
 
 #include <rtems/confdefs.h>
 
 /* global variables */
 
-TEST_EXTERN rtems_id   Task_id[ 7 ];     /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 7 ];   /* array of task names */
+TEST_EXTERN rtems_id   Task_id[ 7 ];   /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 7 ]; /* array of task names */
 
-TEST_EXTERN double FP_factors[ 10 ];  /* FP "uniqueness" factors */
+TEST_EXTERN double FP_factors[ 10 ]; /* FP "uniqueness" factors */
 
-TEST_EXTERN uint32_t   INTEGER_factors[ 10 ];  /* INT "uniqueness" factors */
+TEST_EXTERN uint32_t INTEGER_factors[ 10 ]; /* INT "uniqueness" factors */
 /* end of include file */

@@ -51,23 +51,21 @@ const char rtems_test_name[] = "SPSIZE";
 
 void size_rtems( int mode );
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-#if defined(HAVE_MENU)
+#if defined( HAVE_MENU )
   int choice = 0;
 #endif
 
-  setvbuf(stdout, 0, _IONBF, 0);
+  setvbuf( stdout, 0, _IONBF, 0 );
 
   TEST_BEGIN();
   size_rtems( 1 );
   TEST_END();
   rtems_test_exit( 0 );
-#if defined(HAVE_MENU)
+#if defined( HAVE_MENU )
   do {
     printf( "\n\nPlease select program mode:\n" );
     printf( "  1) Print Formulas\n" );
@@ -76,11 +74,17 @@ rtems_task Init(
     printf( "Enter number of choice (1,2,3) : " );
 
     choice = getint();
-    switch( choice ) {
-      case 1: size_rtems( 1 );  break;
-      case 2: size_rtems( 0 );  break;
-      case 3: rtems_test_exit( 0 );
-      default:  continue;
+    switch ( choice ) {
+      case 1:
+        size_rtems( 1 );
+        break;
+      case 2:
+        size_rtems( 0 );
+        break;
+      case 3:
+        rtems_test_exit( 0 );
+      default:
+        continue;
     }
   } while ( FOREVER );
 #endif

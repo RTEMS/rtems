@@ -48,25 +48,53 @@ const char rtems_test_name[] = "SP 42";
  * Somewhat randomly sorted to ensure than if discipline is FIFO, run-time
  * behavior won't be the same when released.
  */
-static const rtems_task_priority Priorities_High[MAX_TASKS] = {
-  37, 37, 37, 37,       /* backward - more 2-n */
-  2, 2, 2, 2,           /* forward - multiple are on 2-n chain */
-  4, 3,                 /* forward - search forward arbitrary */
-  3, 3, 3, 3,           /* forward - more 2-n */
-  38, 37,               /* backward - search backward arbitrary */
-  34, 34, 34, 34,       /* backward - multple on 2-n chain */
+static const rtems_task_priority Priorities_High[ MAX_TASKS ] = {
+  37,
+  37,
+  37,
+  37, /* backward - more 2-n */
+  2,
+  2,
+  2,
+  2, /* forward - multiple are on 2-n chain */
+  4,
+  3, /* forward - search forward arbitrary */
+  3,
+  3,
+  3,
+  3, /* forward - more 2-n */
+  38,
+  37, /* backward - search backward arbitrary */
+  34,
+  34,
+  34,
+  34, /* backward - multple on 2-n chain */
 };
 
-static const rtems_task_priority Priorities_Low[MAX_TASKS] = {
-  13, 13, 13, 13,       /* backward - more 2-n */
-  2, 2, 2, 2,           /* forward - multiple are on 2-n chain */
-  4, 3,                 /* forward - search forward arbitrary */
-  3, 3, 3, 3,           /* forward - more 2-n */
-  14, 13,               /* backward - search backward arbitrary */
-  12, 12, 12, 12,       /* backward - multple on 2-n chain */
+static const rtems_task_priority Priorities_Low[ MAX_TASKS ] = {
+  13,
+  13,
+  13,
+  13, /* backward - more 2-n */
+  2,
+  2,
+  2,
+  2, /* forward - multiple are on 2-n chain */
+  4,
+  3, /* forward - search forward arbitrary */
+  3,
+  3,
+  3,
+  3, /* forward - more 2-n */
+  14,
+  13, /* backward - search backward arbitrary */
+  12,
+  12,
+  12,
+  12, /* backward - multple on 2-n chain */
 };
 
-static const rtems_task_argument Obtain_order[2][MAX_TASKS] = {
+static const rtems_task_argument Obtain_order[ 2 ][ MAX_TASKS ] = {
   { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 },
   { 4, 5, 6, 7, 9, 10, 11, 12, 13, 8, 16, 17, 18, 19, 0, 1, 2, 3, 15, 14 }
 };
@@ -80,14 +108,9 @@ static rtems_name Task_name[ MAX_TASKS ];
 
 static rtems_task_argument Obtain_counter;
 
-static enum {
- FIFO,
- PRIORITY
-} Variant;
+static enum { FIFO, PRIORITY } Variant;
 
-static rtems_task Locker_task(
-  rtems_task_argument task_index
-)
+static rtems_task Locker_task( rtems_task_argument task_index )
 {
   rtems_id            tid;
   rtems_status_code   status;
@@ -124,7 +147,7 @@ static rtems_task Locker_task(
 
 static void do_test(
   rtems_attribute attr,
-  bool            extract  /* TRUE if extract, not release */
+  bool            extract /* TRUE if extract, not release */
 )
 {
   rtems_status_code   status;
@@ -134,20 +157,20 @@ static void do_test(
   Obtain_counter = 0;
 
   status = rtems_semaphore_create(
-    rtems_build_name( 'S', 'E', 'M', '0' ),  /* name = SEM0 */
-    0,                                       /* locked */
-    RTEMS_BINARY_SEMAPHORE | attr,           /* mutex w/desired discipline */
-    0,                                       /* IGNORED */
+    rtems_build_name( 'S', 'E', 'M', '0' ), /* name = SEM0 */
+    0,                                      /* locked */
+    RTEMS_BINARY_SEMAPHORE | attr,          /* mutex w/desired discipline */
+    0,                                      /* IGNORED */
     &Semaphore
   );
   directive_failed( status, "rtems_semaphore_create" );
 
-  for (i = 0 ; i < MAX_TASKS ; i++ ) {
+  for ( i = 0; i < MAX_TASKS; i++ ) {
     Task_name[ i ] = rtems_build_name(
-       'T',
-       'A',
-       '0' + (char)(i/10),
-       '0' + (char)(i%10)
+      'T',
+      'A',
+      '0' + (char) ( i / 10 ),
+      '0' + (char) ( i % 10 )
     );
 
     status = rtems_task_create(
@@ -165,8 +188,8 @@ static void do_test(
   }
 
   if ( extract ) {
-    for (i = 0 ; i< MAX_TASKS ; i++ ) {
-      status = rtems_task_delete( Task_id[ i ]  );
+    for ( i = 0; i < MAX_TASKS; i++ ) {
+      status = rtems_task_delete( Task_id[ i ] );
       directive_failed( status, "rtems_task_delete" );
     }
   }
@@ -185,38 +208,40 @@ static void do_test(
   directive_failed( status, "rtems_semaphore_delete" );
 }
 
-static rtems_task Init(
-  rtems_task_argument argument
-)
+static rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_task_priority prio;
-  rtems_status_code status;
+  rtems_status_code   status;
 
   TEST_BEGIN();
 
   Master = rtems_task_self();
 
-  if (RTEMS_MAXIMUM_PRIORITY >= 255)
+  if ( RTEMS_MAXIMUM_PRIORITY >= 255 ) {
     Priorities = Priorities_High;
-  else if (RTEMS_MAXIMUM_PRIORITY >= 15)
+  } else if ( RTEMS_MAXIMUM_PRIORITY >= 15 ) {
     Priorities = Priorities_Low;
-  else {
+  } else {
     puts( "Test needs at least 16 configured priority levels" );
     rtems_test_exit( 0 );
   }
 
   prio = RTEMS_MAXIMUM_PRIORITY - 1;
-  status = rtems_task_set_priority(RTEMS_SELF, prio, &prio);
+  status = rtems_task_set_priority( RTEMS_SELF, prio, &prio );
   directive_failed( status, "rtems_task_set_priority" );
 
-  if ( sizeof(Priorities_Low) / sizeof(rtems_task_priority) != MAX_TASKS ) {
+  if (
+    sizeof( Priorities_Low ) / sizeof( rtems_task_priority ) != MAX_TASKS
+  ) {
     puts( "Priorities_Low table does not have right number of entries" );
     rtems_test_exit( 0 );
   }
 
-  if ( sizeof(Priorities_High) / sizeof(rtems_task_priority) != MAX_TASKS ) {
+  if (
+    sizeof( Priorities_High ) / sizeof( rtems_task_priority ) != MAX_TASKS
+  ) {
     puts( "Priorities_High table does not have right number of entries" );
     rtems_test_exit( 0 );
   }
@@ -234,7 +259,7 @@ static rtems_task Init(
   do_test( RTEMS_PRIORITY, FALSE );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /**************** START OF CONFIGURATION INFORMATION ****************/
@@ -244,8 +269,8 @@ static rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS             MAX_TASKS+1
-#define CONFIGURE_MAXIMUM_SEMAPHORES        1
+#define CONFIGURE_MAXIMUM_TASKS      MAX_TASKS + 1
+#define CONFIGURE_MAXIMUM_SEMAPHORES 1
 
 #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_DEFAULT_MODES
 
@@ -256,4 +281,3 @@ static rtems_task Init(
 #include <rtems/confdefs.h>
 
 /****************  END OF CONFIGURATION INFORMATION  ****************/
-

@@ -41,16 +41,13 @@
 
 #include "system.h"
 
-bool Task_create_extension(
-  rtems_tcb *unused,
-  rtems_tcb *created_task
-)
+bool Task_create_extension( rtems_tcb *unused, rtems_tcb *created_task )
 {
   (void) unused;
 
   ssize_t task = task_number( created_task->Object.id );
 
-  if (task > 0) {
+  if ( task > 0 ) {
     ++Task_created[ task ];
   }
 

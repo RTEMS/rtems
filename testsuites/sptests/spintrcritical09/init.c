@@ -56,11 +56,11 @@ static bool is_interrupt_timeout( test_context *ctx )
 
 static T_interrupt_test_state interrupt( void *arg )
 {
-  test_context           *ctx;
-  Per_CPU_Control        *cpu_self;
-  Watchdog_Header        *header;
-  Watchdog_Control       *watchdog;
-  T_interrupt_test_state  state;
+  test_context          *ctx;
+  Per_CPU_Control       *cpu_self;
+  Watchdog_Header       *header;
+  Watchdog_Control      *watchdog;
+  T_interrupt_test_state state;
 
   ctx = arg;
   cpu_self = _Per_CPU_Get();
@@ -68,9 +68,8 @@ static T_interrupt_test_state interrupt( void *arg )
   watchdog = (Watchdog_Control *) header->first;
 
   if (
-    watchdog != NULL
-      && watchdog->expire == cpu_self->Watchdog.ticks
-      && watchdog->routine == _Thread_Timeout
+    watchdog != NULL && watchdog->expire == cpu_self->Watchdog.ticks &&
+    watchdog->routine == _Thread_Timeout
   ) {
     ISR_Level level;
 
@@ -98,8 +97,8 @@ static T_interrupt_test_state interrupt( void *arg )
 
 static void prepare( void *arg )
 {
-  test_context      *ctx;
-  rtems_status_code  sc;
+  test_context     *ctx;
+  rtems_status_code sc;
 
   ctx = arg;
   ctx->early = true;
@@ -109,8 +108,8 @@ static void prepare( void *arg )
 
 static void action( void *arg )
 {
-  test_context      *ctx;
-  rtems_status_code  sc;
+  test_context     *ctx;
+  rtems_status_code sc;
 
   ctx = arg;
   ctx->early = false;
@@ -159,12 +158,12 @@ static rtems_task Init( rtems_task_argument argument )
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS       1
-#define CONFIGURE_MAXIMUM_SEMAPHORES  1
+#define CONFIGURE_MAXIMUM_TASKS      1
+#define CONFIGURE_MAXIMUM_SEMAPHORES 1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-#define CONFIGURE_MICROSECONDS_PER_TICK  1000
+#define CONFIGURE_MICROSECONDS_PER_TICK 1000
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>

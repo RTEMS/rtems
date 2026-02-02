@@ -41,11 +41,9 @@
 
 #include "system.h"
 
-rtems_task Task_1(
-  rtems_task_argument   argument
-)
+rtems_task Task_1( rtems_task_argument argument )
 {
-  uint32_t    pass;
+  uint32_t          pass;
   rtems_status_code status;
 
   puts( "TA1 - is beginning to run" );

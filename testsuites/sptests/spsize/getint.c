@@ -47,8 +47,8 @@ int getint( void );
 
 int getint( void )
 {
-  char buff[16];
+  char buff[ 16 ];
 
-  gets(buff);
-  return atoi(buff);
+  gets( buff );
+  return atoi( buff );
 }

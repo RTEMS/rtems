@@ -37,81 +37,81 @@ const char rtems_test_name[] = "SPEVENTSYSTEM 1";
 
 #define EVENT RTEMS_EVENT_0
 
-static void test_with_normal_and_system_event(void)
+static void test_with_normal_and_system_event( void )
 {
   rtems_status_code sc;
-  rtems_event_set out;
+  rtems_event_set   out;
 
   /* Assert no events pending */
 
-  sc = rtems_event_receive(EVENT, RTEMS_NO_WAIT, 0, &out);
-  rtems_test_assert(sc == RTEMS_UNSATISFIED);
+  sc = rtems_event_receive( EVENT, RTEMS_NO_WAIT, 0, &out );
+  rtems_test_assert( sc == RTEMS_UNSATISFIED );
 
-  sc = rtems_event_system_receive(EVENT, RTEMS_NO_WAIT, 0, &out);
-  rtems_test_assert(sc == RTEMS_UNSATISFIED);
+  sc = rtems_event_system_receive( EVENT, RTEMS_NO_WAIT, 0, &out );
+  rtems_test_assert( sc == RTEMS_UNSATISFIED );
 
   /* Send system event */
 
-  sc = rtems_event_system_send(rtems_task_self(), EVENT);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_event_system_send( rtems_task_self(), EVENT );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_event_receive(EVENT, RTEMS_NO_WAIT, 0, &out);
-  rtems_test_assert(sc == RTEMS_UNSATISFIED);
+  sc = rtems_event_receive( EVENT, RTEMS_NO_WAIT, 0, &out );
+  rtems_test_assert( sc == RTEMS_UNSATISFIED );
 
   out = 0;
-  sc = rtems_event_system_receive(EVENT, RTEMS_NO_WAIT, 0, &out);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-  rtems_test_assert(out == EVENT);
+  sc = rtems_event_system_receive( EVENT, RTEMS_NO_WAIT, 0, &out );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  rtems_test_assert( out == EVENT );
 
   /* Send normal event */
 
-  sc = rtems_event_send(rtems_task_self(), EVENT);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_event_send( rtems_task_self(), EVENT );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   out = 0;
-  sc = rtems_event_receive(EVENT, RTEMS_NO_WAIT, 0, &out);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-  rtems_test_assert(out == EVENT);
+  sc = rtems_event_receive( EVENT, RTEMS_NO_WAIT, 0, &out );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  rtems_test_assert( out == EVENT );
 
-  sc = rtems_event_system_receive(EVENT, RTEMS_NO_WAIT, 0, &out);
-  rtems_test_assert(sc == RTEMS_UNSATISFIED);
+  sc = rtems_event_system_receive( EVENT, RTEMS_NO_WAIT, 0, &out );
+  rtems_test_assert( sc == RTEMS_UNSATISFIED );
 }
 
-static void test_with_timeout(void)
+static void test_with_timeout( void )
 {
   rtems_status_code sc;
-  rtems_event_set out;
+  rtems_event_set   out;
 
-  sc = rtems_event_system_receive(EVENT, RTEMS_NO_WAIT, 0, &out);
-  rtems_test_assert(sc == RTEMS_UNSATISFIED);
+  sc = rtems_event_system_receive( EVENT, RTEMS_NO_WAIT, 0, &out );
+  rtems_test_assert( sc == RTEMS_UNSATISFIED );
 
-  sc = rtems_event_system_receive(EVENT, RTEMS_WAIT, 1, &out);
-  rtems_test_assert(sc == RTEMS_TIMEOUT);
+  sc = rtems_event_system_receive( EVENT, RTEMS_WAIT, 1, &out );
+  rtems_test_assert( sc == RTEMS_TIMEOUT );
 
-  sc = rtems_event_system_receive(EVENT, RTEMS_NO_WAIT, 0, &out);
-  rtems_test_assert(sc == RTEMS_UNSATISFIED);
+  sc = rtems_event_system_receive( EVENT, RTEMS_NO_WAIT, 0, &out );
+  rtems_test_assert( sc == RTEMS_UNSATISFIED );
 }
 
-static void test_with_invalid_receiver(void)
-{
-  rtems_status_code sc;
-
-  sc = rtems_event_system_send(0xffff, EVENT);
-  rtems_test_assert(sc == RTEMS_INVALID_ID);
-}
-
-static void test_with_invalid_address(void)
+static void test_with_invalid_receiver( void )
 {
   rtems_status_code sc;
 
-  sc = rtems_event_system_receive(EVENT, RTEMS_NO_WAIT, 0, NULL);
-  rtems_test_assert(sc == RTEMS_INVALID_ADDRESS);
+  sc = rtems_event_system_send( 0xffff, EVENT );
+  rtems_test_assert( sc == RTEMS_INVALID_ID );
 }
 
-static void test_get_pending_events(void)
+static void test_with_invalid_address( void )
 {
   rtems_status_code sc;
-  rtems_event_set out;
+
+  sc = rtems_event_system_receive( EVENT, RTEMS_NO_WAIT, 0, NULL );
+  rtems_test_assert( sc == RTEMS_INVALID_ADDRESS );
+}
+
+static void test_get_pending_events( void )
+{
+  rtems_status_code sc;
+  rtems_event_set   out;
 
   sc = rtems_event_system_receive(
     RTEMS_PENDING_EVENTS,
@@ -119,11 +119,11 @@ static void test_get_pending_events(void)
     0,
     &out
   );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-  rtems_test_assert(out == 0);
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  rtems_test_assert( out == 0 );
 }
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
@@ -137,7 +137,7 @@ static void Init(rtems_task_argument arg)
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER

@@ -35,9 +35,7 @@
 
 const char rtems_test_name[] = "SP EVENT ERROR 3";
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -46,9 +44,9 @@ rtems_task Init(
   struct timeval    tv;
   time_t            seconds;
   rtems_status_code status;
-  
+
   TEST_BEGIN();
-  
+
   status = rtems_event_receive(
     RTEMS_EVENT_16,
     RTEMS_NO_WAIT,
@@ -95,11 +93,7 @@ rtems_task Init(
     3 * rtems_clock_get_ticks_per_second(),
     &event_out
   );
-  fatal_directive_status(
-    status,
-    RTEMS_TIMEOUT,
-    "rtems_event_receive"
-  );
+  fatal_directive_status( status, RTEMS_TIMEOUT, "rtems_event_receive" );
   puts( "TA1 - rtems_event_receive - woke up with RTEMS_TIMEOUT" );
 
   status = rtems_event_send( 100, RTEMS_EVENT_16 );
@@ -124,7 +118,7 @@ rtems_task Init(
   directive_failed( status, "clock_get_tod_timeval OK" );
 
   seconds = tv.tv_sec;
-  printf( "TA1 - current time - %s\n", ctime(&seconds) );
+  printf( "TA1 - current time - %s\n", ctime( &seconds ) );
 
   TEST_END();
 }

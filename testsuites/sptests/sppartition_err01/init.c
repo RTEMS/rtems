@@ -39,23 +39,24 @@ static uint32_t Other_Memory;
 
 static rtems_name Partition_name[ 2 ]; /* array of partition names */
 
-static rtems_id   Partition_id[ 2 ];   /* array of partition ids */
+static rtems_id Partition_id[ 2 ]; /* array of partition ids */
 
-static RTEMS_ALIGNED( RTEMS_PARTITION_ALIGNMENT ) uint8_t
-  Partition_good_area[ 256 ];
+static RTEMS_ALIGNED(
+  RTEMS_PARTITION_ALIGNMENT
+) uint8_t Partition_good_area[ 256 ];
 
 #define Partition_bad_area (void *) 0x00000005
 
-static void test_partition_errors(void)
+static void test_partition_errors( void )
 {
-  void              *buffer_address_1;
-  void              *buffer_address_2;
-  void              *buffer_address_3;
-  rtems_status_code  status;
-  size_t             size;
-  rtems_id           junk_id;
+  void             *buffer_address_1;
+  void             *buffer_address_2;
+  void             *buffer_address_3;
+  rtems_status_code status;
+  size_t            size;
+  rtems_id          junk_id;
 
-  Partition_name[ 1 ]  =  rtems_build_name( 'P', 'T', '1', ' ' );
+  Partition_name[ 1 ] = rtems_build_name( 'P', 'T', '1', ' ' );
 
   status = rtems_partition_create(
     0,
@@ -126,8 +127,8 @@ static void test_partition_errors(void)
   puts(
     "TA1 - rtems_partition_create - buffer size < overhead - RTEMS_INVALID_SIZE"
   );
-#define SIZEOF_CHAIN_NODE 2 * sizeof(void *)
-  for ( size=0 ; size < SIZEOF_CHAIN_NODE ; size++) {
+#define SIZEOF_CHAIN_NODE 2 * sizeof( void * )
+  for ( size = 0; size < SIZEOF_CHAIN_NODE; size++ ) {
     status = rtems_partition_create(
       Partition_name[ 1 ],
       Partition_good_area,
@@ -136,8 +137,9 @@ static void test_partition_errors(void)
       RTEMS_DEFAULT_ATTRIBUTES,
       &junk_id
     );
-    if ( status != RTEMS_INVALID_SIZE )
+    if ( status != RTEMS_INVALID_SIZE ) {
       printf( "ERROR when size == %zu\n", size );
+    }
 
     fatal_directive_status(
       status,
@@ -146,7 +148,7 @@ static void test_partition_errors(void)
     );
   }
 
-#if defined(_C3x) || defined(_C4x)
+#if defined( _C3x ) || defined( _C4x )
   puts( "TA1 - rtems_partition_create - RTEMS_INVALID_ADDRESS - SKIPPED" );
 #else
   status = rtems_partition_create(
@@ -165,7 +167,7 @@ static void test_partition_errors(void)
   puts( "TA1 - rtems_partition_create - RTEMS_INVALID_ADDRESS" );
 #endif
 
-#if defined(_C3x) || defined(_C4x)
+#if defined( _C3x ) || defined( _C4x )
   puts( "TA1 - rtems_partition_create - RTEMS_INVALID_SIZE - SKIPPED" );
 #else
   status = rtems_partition_create(
@@ -278,7 +280,7 @@ static void test_partition_errors(void)
   puts( "TA1 - rtems_partition_create - RTEMS_TOO_MANY" );
 
   status = rtems_partition_get_buffer( Partition_id[ 1 ], &buffer_address_1 );
-  directive_failed( status, "rtems_partition_get_buffer");
+  directive_failed( status, "rtems_partition_get_buffer" );
   puts( "TA1 - rtems_partition_get_buffer - RTEMS_SUCCESSFUL" );
 
   status = rtems_partition_get_buffer( Partition_id[ 1 ], &buffer_address_2 );
@@ -301,10 +303,7 @@ static void test_partition_errors(void)
   );
   puts( "TA1 - rtems_partition_delete - RTEMS_RESOURCE_IN_USE" );
 
-  status = rtems_partition_return_buffer(
-    Partition_id[ 1 ],
-    &Other_Memory
-  );
+  status = rtems_partition_return_buffer( Partition_id[ 1 ], &Other_Memory );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ADDRESS,
@@ -324,12 +323,10 @@ static void test_partition_errors(void)
     "rtems_partition_return_buffer with buffer address not on boundary"
   );
   puts_nocr( "TA1 - rtems_partition_return_buffer - " );
-  puts     ( "RTEMS_INVALID_ADDRESS - not on boundary");
+  puts( "RTEMS_INVALID_ADDRESS - not on boundary" );
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 

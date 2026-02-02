@@ -41,9 +41,7 @@
 
 #include "system.h"
 
-rtems_task Task_1(
-  rtems_task_argument argument
-)
+rtems_task Task_1( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -51,14 +49,14 @@ rtems_task Task_1(
   rtems_time_of_day time;
   rtems_status_code status;
 
-/* Get id */
+  /* Get id */
 
   puts( "TA1 - rtems_timer_ident - identing timer 1" );
   status = rtems_timer_ident( Timer_name[ 1 ], &tmid );
   directive_failed( status, "rtems_timer_ident" );
   printf( "TA1 - timer 1 has id (0x%" PRIxrtems_id ")\n", tmid );
 
-/* after which is allowed to fire */
+  /* after which is allowed to fire */
 
   Print_time();
 
@@ -77,7 +75,7 @@ rtems_task Task_1(
 
   Print_time();
 
-/* after which is reset and allowed to fire */
+  /* after which is reset and allowed to fire */
 
   puts( "TA1 - rtems_timer_fire_after - timer 1 in 3 seconds" );
   status = rtems_timer_fire_after(
@@ -115,7 +113,7 @@ rtems_task Task_1(
   status = rtems_clock_set( &time );
   directive_failed( status, "rtems_clock_set" );
 
-/* after which is canceled */
+  /* after which is canceled */
 
   puts( "TA1 - rtems_timer_fire_after - timer 1 in 3 seconds" );
   status = rtems_timer_fire_after(
@@ -130,7 +128,7 @@ rtems_task Task_1(
   status = rtems_timer_cancel( tmid );
   directive_failed( status, "rtems_timer_cancel" );
 
-/* when which is allowed to fire */
+  /* when which is allowed to fire */
 
   Print_time();
 
@@ -149,7 +147,7 @@ rtems_task Task_1(
 
   Print_time();
 
-/* when which is canceled */
+  /* when which is canceled */
 
   status = rtems_clock_get_tod( &time );
   directive_failed( status, "rtems_clock_get_tod" );
@@ -170,7 +168,7 @@ rtems_task Task_1(
   status = rtems_timer_cancel( tmid );
   directive_failed( status, "rtems_timer_cancel" );
 
-/* delete */
+  /* delete */
   puts( "TA1 - rtems_task_wake_after - YIELD (only task at priority)" );
   status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
   directive_failed( status, "rtems_task_wake_after" );

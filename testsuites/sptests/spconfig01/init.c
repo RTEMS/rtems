@@ -24,19 +24,19 @@ const char rtems_test_name[] = "SPCONFIG 1";
 
 static int counter;
 
-static void checkpoint(int expected_counter)
+static void checkpoint( int expected_counter )
 {
   int current_counter;
 
   current_counter = counter;
-  rtems_test_assert(current_counter == expected_counter);
+  rtems_test_assert( current_counter == expected_counter );
   counter = current_counter + 1;
 }
 
 static rtems_status_code bsp_prerequisite_drivers_init(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
-  void *arg
+  void                     *arg
 )
 {
   (void) major;
@@ -44,14 +44,14 @@ static rtems_status_code bsp_prerequisite_drivers_init(
   (void) arg;
 
   TEST_BEGIN();
-  checkpoint(0);
+  checkpoint( 0 );
   return RTEMS_SUCCESSFUL;
 }
 
 static rtems_status_code app_prerequisite_drivers_init(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
-  void *arg
+  void                     *arg
 )
 {
   (void) major;
@@ -59,14 +59,14 @@ static rtems_status_code app_prerequisite_drivers_init(
   (void) arg;
 
   struct stat st;
-  int rv;
+  int         rv;
 
-  checkpoint(1);
+  checkpoint( 1 );
 
   errno = 0;
-  rv = stat("/dev/null", &st);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENOENT);
+  rv = stat( "/dev/null", &st );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENOENT );
 
   return RTEMS_SUCCESSFUL;
 }
@@ -74,7 +74,7 @@ static rtems_status_code app_prerequisite_drivers_init(
 static rtems_status_code app_extra_drivers_init(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
-  void *arg
+  void                     *arg
 )
 {
   (void) major;
@@ -82,49 +82,49 @@ static rtems_status_code app_extra_drivers_init(
   (void) arg;
 
   struct stat st;
-  int rv;
+  int         rv;
 
-  checkpoint(2);
+  checkpoint( 2 );
 
-  rv = stat("/dev/null", &st);
-  rtems_test_assert(rv == 0);
+  rv = stat( "/dev/null", &st );
+  rtems_test_assert( rv == 0 );
 
   return RTEMS_SUCCESSFUL;
 }
 
-static void test_stack_config(void)
+static void test_stack_config( void )
 {
   pthread_attr_t attr;
-  size_t stack_size;
-  int eno;
+  size_t         stack_size;
+  int            eno;
 
   rtems_test_assert(
     rtems_configuration_get_interrupt_stack_size() == CPU_STACK_MINIMUM_SIZE
   );
 
-  eno = pthread_getattr_np(pthread_self(), &attr);
-  rtems_test_assert(eno == 0);
+  eno = pthread_getattr_np( pthread_self(), &attr );
+  rtems_test_assert( eno == 0 );
 
-  eno = pthread_attr_getstacksize(&attr, &stack_size);
-  rtems_test_assert(eno == 0);
-  rtems_test_assert(stack_size >= 2 * CPU_STACK_MINIMUM_SIZE);
+  eno = pthread_attr_getstacksize( &attr, &stack_size );
+  rtems_test_assert( eno == 0 );
+  rtems_test_assert( stack_size >= 2 * CPU_STACK_MINIMUM_SIZE );
   rtems_test_assert(
-    stack_size <= 2 * CPU_STACK_MINIMUM_SIZE + CPU_STACK_ALIGNMENT -
-      CPU_HEAP_ALIGNMENT
+    stack_size <=
+    2 * CPU_STACK_MINIMUM_SIZE + CPU_STACK_ALIGNMENT - CPU_HEAP_ALIGNMENT
   );
 
-  eno = pthread_attr_destroy(&attr);
-  rtems_test_assert(eno == 0);
+  eno = pthread_attr_destroy( &attr );
+  rtems_test_assert( eno == 0 );
 }
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
-  checkpoint(3);
+  checkpoint( 3 );
   test_stack_config();
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /*
@@ -156,7 +156,7 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_MAXIMUM_TASKS 1
 
-#define CONFIGURE_MINIMUM_TASK_STACK_SIZE (2 * CPU_STACK_MINIMUM_SIZE)
+#define CONFIGURE_MINIMUM_TASK_STACK_SIZE ( 2 * CPU_STACK_MINIMUM_SIZE )
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

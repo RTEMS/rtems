@@ -35,43 +35,36 @@
 
 const char rtems_test_name[] = "SP 46";
 
-rtems_task Periodic_Task(
-  rtems_task_argument argument
-);
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Periodic_Task( rtems_task_argument argument );
+rtems_task Init( rtems_task_argument argument );
 
 volatile int partial_loop = 0;
 
-rtems_task Periodic_Task(
-  rtems_task_argument argument
-)
+rtems_task Periodic_Task( rtems_task_argument argument )
 {
   (void) argument;
 
-  rtems_status_code  status;
-  rtems_name         period_name = rtems_build_name('P','E','R','a');
-  rtems_id           period_id;
-  rtems_interval     start;
-  rtems_interval     end;
+  rtems_status_code status;
+  rtems_name        period_name = rtems_build_name( 'P', 'E', 'R', 'a' );
+  rtems_id          period_id;
+  rtems_interval    start;
+  rtems_interval    end;
 
   puts( "Periodic - Create Period" );
   /* create period */
   status = rtems_rate_monotonic_create( period_name, &period_id );
-  directive_failed(status, "rate_monotonic_create");
+  directive_failed( status, "rate_monotonic_create" );
 
   partial_loop = 0;
-  while (1) {
+  while ( 1 ) {
     /* start period with initial value */
     status = rtems_rate_monotonic_period( period_id, 25 );
-    directive_failed(status, "rate_monotonic_period");
+    directive_failed( status, "rate_monotonic_period" );
     partial_loop = 0;
 
     start = rtems_clock_get_ticks_since_boot();
-    end   = start + 5;
-    while ( end <= rtems_clock_get_ticks_since_boot() )
-      ;
+    end = start + 5;
+    while ( end <= rtems_clock_get_ticks_since_boot() );
 
     partial_loop = 1;
 
@@ -82,21 +75,18 @@ rtems_task Periodic_Task(
   rtems_task_exit();
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  rtems_status_code  status;
-  rtems_id           task_id;
+  rtems_status_code status;
+  rtems_id          task_id;
 
   TEST_BEGIN();
 
   /*
    * Initialize Tasks
    */
-
 
   puts( "INIT - rtems_task_create - creating task 1" );
   status = rtems_task_create(
@@ -139,7 +129,7 @@ rtems_task Init(
 /* Two Tasks: Init and Timer Server */
 #define CONFIGURE_MAXIMUM_TASKS           2
 #define CONFIGURE_MAXIMUM_PERIODS         1
-#define CONFIGURE_INIT_TASK_STACK_SIZE    (RTEMS_MINIMUM_STACK_SIZE * 2)
+#define CONFIGURE_INIT_TASK_STACK_SIZE    ( RTEMS_MINIMUM_STACK_SIZE * 2 )
 #define CONFIGURE_INIT_TASK_PRIORITY      10
 #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_DEFAULT_MODES
 
@@ -147,7 +137,6 @@ rtems_task Init(
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_EXTRA_TASK_STACKS       (1 * RTEMS_MINIMUM_STACK_SIZE)
+#define CONFIGURE_EXTRA_TASK_STACKS ( 1 * RTEMS_MINIMUM_STACK_SIZE )
 
 #include <rtems/confdefs.h>
-

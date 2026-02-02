@@ -32,11 +32,11 @@
 extern "C" {
 #endif
 
-int weak_or_strong(void);
+int weak_or_strong( void );
 
-void pull_in_strong(void);
+void pull_in_strong( void );
 
-int weak_2(void);
+int weak_2( void );
 
 #ifdef __cplusplus
 }

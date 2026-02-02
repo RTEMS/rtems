@@ -34,14 +34,12 @@
 #include "fptest.h"
 #include "inttest.h"
 
-rtems_task First_FP_task(
-  rtems_task_argument argument
-)
+rtems_task First_FP_task( rtems_task_argument argument )
 {
   rtems_status_code status;
   rtems_id          tid;
   rtems_time_of_day time;
-  uint32_t    task_index;
+  uint32_t          task_index;
   INTEGER_DECLARE;
   FP_DECLARE;
 
@@ -60,9 +58,9 @@ rtems_task First_FP_task(
   );
   put_name( Task_name[ task_index ], FALSE );
   #if ( RTEMS_HAS_HARDWARE_FP == 1 )
-    printf( " - float base = (%g)\n", FP_factors[ task_index ] );
+  printf( " - float base = (%g)\n", FP_factors[ task_index ] );
   #else
-    printf( " - float base = (NA)\n" );
+  printf( " - float base = (NA)\n" );
   #endif
 
   if ( argument == 0 ) {

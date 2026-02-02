@@ -41,15 +41,14 @@
 
 #include "system.h"
 
-static void
-showTaskSwitches (void)
+static void showTaskSwitches( void )
 {
   unsigned int i;
   unsigned int switches = taskSwitchLogIndex;
 
-  for (i = 0 ; i < switches ; i++) {
-      put_name( Task_name[taskSwitchLog[i].taskIndex], FALSE );
-      print_time( "- ", &taskSwitchLog[i].when, "\n" );
+  for ( i = 0; i < switches; i++ ) {
+    put_name( Task_name[ taskSwitchLog[ i ].taskIndex ], FALSE );
+    print_time( "- ", &taskSwitchLog[ i ].when, "\n" );
   }
 }
 
@@ -71,8 +70,8 @@ static void high_task( rtems_task_argument arg )
   sc = rtems_event_transient_send( Task_id[ 1 ] );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  rtems_task_suspend(RTEMS_SELF);
-  rtems_test_assert(0);
+  rtems_task_suspend( RTEMS_SELF );
+  rtems_test_assert( 0 );
 }
 
 static void low_task( rtems_task_argument arg )
@@ -82,8 +81,8 @@ static void low_task( rtems_task_argument arg )
   rtems_test_assert( test_no_preempt_step == 1 );
   test_no_preempt_step = 2;
 
-  rtems_task_suspend(RTEMS_SELF);
-  rtems_test_assert(0);
+  rtems_task_suspend( RTEMS_SELF );
+  rtems_test_assert( 0 );
 }
 
 static void no_preempt_timer( rtems_id id, void *arg )
@@ -106,7 +105,7 @@ static void no_preempt_timer( rtems_id id, void *arg )
 static void test_no_preempt( void )
 {
   rtems_status_code sc;
-  rtems_id id;
+  rtems_id          id;
 
   rtems_test_assert( test_no_preempt_step == 0 );
 
@@ -157,19 +156,17 @@ static void test_no_preempt( void )
   rtems_test_assert( test_no_preempt_step == 3 );
 }
 
-rtems_task Task_1(
-  rtems_task_argument argument
-)
+rtems_task Task_1( rtems_task_argument argument )
 {
   (void) argument;
 
-  uint32_t    seconds;
-  uint32_t    old_seconds;
+  uint32_t          seconds;
+  uint32_t          old_seconds;
   rtems_mode        previous_mode;
   rtems_time_of_day time;
   rtems_status_code status;
-  uint32_t    start_time;
-  uint32_t    end_time;
+  uint32_t          start_time;
+  uint32_t          end_time;
 
   puts( "TA1 - rtems_task_suspend - on Task 2" );
   status = rtems_task_suspend( Task_id[ 2 ] );
@@ -184,12 +181,13 @@ rtems_task Task_1(
 
   puts( "TA1 - killing time" );
 
-  for ( ; ; ) {
+  for ( ;; ) {
     status = rtems_clock_get_seconds_since_epoch( &end_time );
     directive_failed( status, "rtems_clock_get_seconds_since_epoch" );
 
-    if ( end_time > (start_time + 2) )
+    if ( end_time > ( start_time + 2 ) ) {
       break;
+    }
   }
 
   puts( "TA1 - rtems_task_resume - on Task 2" );
@@ -216,7 +214,7 @@ rtems_task Task_1(
 
       old_seconds = time.second;
 
-      for ( seconds = 0 ; seconds < 6 ; ) {
+      for ( seconds = 0; seconds < 6; ) {
         status = rtems_clock_get_tod( &time );
         directive_failed( status, "rtems_clock_get_tod" );
 
@@ -236,16 +234,16 @@ rtems_task Task_1(
       directive_failed( status, "rtems_task_mode" );
 
       while ( !testsFinished );
-      showTaskSwitches ();
+      showTaskSwitches();
 
       puts( "TA1 - rtems_extension_delete - successful" );
-      status = rtems_extension_delete( Extension_id[1] );
+      status = rtems_extension_delete( Extension_id[ 1 ] );
       directive_failed( status, "rtems_extension_delete" );
 
       test_no_preempt();
 
       TEST_END();
-      rtems_test_exit (0);
+      rtems_test_exit( 0 );
     }
   }
 }

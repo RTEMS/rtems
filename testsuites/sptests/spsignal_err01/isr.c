@@ -40,9 +40,7 @@
 
 #include "system.h"
 
-rtems_isr Service_routine(
-  rtems_vector_number ignored
-)
+rtems_isr Service_routine( rtems_vector_number ignored )
 {
   (void) ignored;
 }

@@ -47,77 +47,77 @@
 
 const char rtems_test_name[] = "SPMKDIR";
 
-static void test_mkdir(const char *path, mode_t omode, int expected_rv)
+static void test_mkdir( const char *path, mode_t omode, int expected_rv )
 {
   struct stat st;
-  int rv = 0;
-  mode_t current_umask = umask(0);
-  mode_t dirmode = S_IFDIR | (omode & ~current_umask);
+  int         rv = 0;
+  mode_t      current_umask = umask( 0 );
+  mode_t      dirmode = S_IFDIR | ( omode & ~current_umask );
 
-  umask(current_umask);
+  umask( current_umask );
 
-  rv = rtems_mkdir(path, omode);
-  rtems_test_assert(rv == expected_rv);
+  rv = rtems_mkdir( path, omode );
+  rtems_test_assert( rv == expected_rv );
 
-  if (rv == 0) {
-    rv = stat(path, &st);
-    rtems_test_assert(rv == 0 && st.st_mode == dirmode);
+  if ( rv == 0 ) {
+    rv = stat( path, &st );
+    rtems_test_assert( rv == 0 && st.st_mode == dirmode );
   }
 }
 
-static rtems_task Init(rtems_task_argument argument)
+static rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
   mode_t omode = S_IRWXU | S_IRWXG | S_IRWXO;
-  int rv = 0;
+  int    rv = 0;
 
   TEST_BEGIN();
 
   puts( "rtems_mkdir a - OK" );
-  test_mkdir("a", omode, 0);
+  test_mkdir( "a", omode, 0 );
   puts( "rtems_mkdir a/b - OK" );
-  test_mkdir("a/b", omode, 0);
+  test_mkdir( "a/b", omode, 0 );
   puts( "rtems_mkdir a/b/c/d/e/f/g/h/i - OK" );
-  test_mkdir("a/b/c/d/e/f/g/h/i", omode, 0);
+  test_mkdir( "a/b/c/d/e/f/g/h/i", omode, 0 );
   puts( "rtems_mkdir a/b/c - OK" );
-  test_mkdir("a/b/c", omode, 0);
+  test_mkdir( "a/b/c", omode, 0 );
   puts( "rtems_mkdir a/b/c/1 - OK" );
-  test_mkdir("a/b/c/1", 0, 0);
+  test_mkdir( "a/b/c/1", 0, 0 );
   puts( "rtems_mkdir a/b/c/2 - OK" );
-  test_mkdir("a/b/c/2", S_IRWXU, 0);
+  test_mkdir( "a/b/c/2", S_IRWXU, 0 );
   puts( "rtems_mkdir a/b/c/3 - OK" );
-  test_mkdir("a/b/c/3", S_IRWXG, 0);
+  test_mkdir( "a/b/c/3", S_IRWXG, 0 );
   puts( "rtems_mkdir a/b/c/4 - OK" );
-  test_mkdir("a/b/c/4", S_IRWXO, 0);
+  test_mkdir( "a/b/c/4", S_IRWXO, 0 );
   puts( "rtems_mkdir a/b - OK" );
-  test_mkdir("a/b", omode, 0);
+  test_mkdir( "a/b", omode, 0 );
   puts( "rtems_mkdir a - OK" );
-  test_mkdir("a", omode, 0);
+  test_mkdir( "a", omode, 0 );
   puts( "rtems_mkdir a/b/x - OK" );
-  test_mkdir("a/b/x", S_IRUSR, 0);
+  test_mkdir( "a/b/x", S_IRUSR, 0 );
   puts( "rtems_mkdir a/b/x/y - expect failure" );
-  test_mkdir("a/b/x/y", S_IRUSR, -1);
-  puts( "mknod regular file a/n - OK" );  
-  rv = mknod("a/n", S_IRWXU | S_IFREG, 0LL);
+  test_mkdir( "a/b/x/y", S_IRUSR, -1 );
+  puts( "mknod regular file a/n - OK" );
+  rv = mknod( "a/n", S_IRWXU | S_IFREG, 0LL );
   puts( "rtems_mkdir a/n/b - expect failure" );
-  test_mkdir("a/n/b", S_IRUSR, -1);
+  test_mkdir( "a/n/b", S_IRUSR, -1 );
 
   puts( "Create node b and open in RDONLY mode - OK" );
-  rv = open ("b", O_CREAT | O_RDONLY, omode);
-  rtems_test_assert(rv >= 0);
+  rv = open( "b", O_CREAT | O_RDONLY, omode );
+  rtems_test_assert( rv >= 0 );
 
   puts( "Closing b - OK" );
-  rv = close(rv);
-  rtems_test_assert(rv == 0);
+  rv = close( rv );
+  rtems_test_assert( rv == 0 );
 
   puts( "rtems_mkdir b - expect failure" );
-  test_mkdir("b", omode, -1);
-  rtems_test_assert(errno == EEXIST);
+  test_mkdir( "b", omode, -1 );
+  rtems_test_assert( errno == EEXIST );
 
   TEST_END();
 
-  exit(0);
+  exit( 0 );
 }
 
 #define CONFIGURE_INIT

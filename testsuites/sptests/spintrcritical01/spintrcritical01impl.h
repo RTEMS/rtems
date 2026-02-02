@@ -37,31 +37,31 @@
 
 #include <rtems/score/threadimpl.h>
 
-#if defined(FIFO_NO_TIMEOUT)
+#if defined( FIFO_NO_TIMEOUT )
   #define TEST_NAME                "1"
   #define TEST_STRING              FIFOWithoutTimeout
   #define SEMAPHORE_OBTAIN_TIMEOUT 0
   #define SEMAPHORE_ATTRIBUTES     RTEMS_DEFAULT_ATTRIBUTES
 
-#elif defined(FIFO_WITH_TIMEOUT)
+#elif defined( FIFO_WITH_TIMEOUT )
   #define TEST_NAME                "2"
   #define TEST_STRING              FIFOWithTimeout
   #define SEMAPHORE_OBTAIN_TIMEOUT 10
   #define SEMAPHORE_ATTRIBUTES     RTEMS_DEFAULT_ATTRIBUTES
 
-#elif defined(PRIORITY_NO_TIMEOUT)
+#elif defined( PRIORITY_NO_TIMEOUT )
   #define TEST_NAME                "3"
   #define TEST_STRING              PriorityWithoutTimeout
   #define SEMAPHORE_OBTAIN_TIMEOUT 0
   #define SEMAPHORE_ATTRIBUTES     RTEMS_PRIORITY
 
-#elif defined(PRIORITY_WITH_TIMEOUT)
+#elif defined( PRIORITY_WITH_TIMEOUT )
   #define TEST_NAME                "4"
   #define TEST_STRING              PriorityWithTimeout
   #define SEMAPHORE_OBTAIN_TIMEOUT 10
   #define SEMAPHORE_ATTRIBUTES     RTEMS_PRIORITY
 
-#elif defined(PRIORITY_NO_TIMEOUT_REVERSE)
+#elif defined( PRIORITY_NO_TIMEOUT_REVERSE )
   #define TEST_NAME                "5"
   #define TEST_STRING              PriorityWithoutTimeoutReverse
   #define SEMAPHORE_OBTAIN_TIMEOUT 0
@@ -86,16 +86,16 @@ static bool is_blocked( Thread_Wait_flags flags )
 
 static bool interrupts_blocking_op( Thread_Wait_flags flags )
 {
-  return flags
-    == ( THREAD_WAIT_CLASS_OBJECT | THREAD_WAIT_STATE_INTEND_TO_BLOCK );
+  return flags ==
+         ( THREAD_WAIT_CLASS_OBJECT | THREAD_WAIT_STATE_INTEND_TO_BLOCK );
 }
 
 static T_interrupt_test_state interrupt( void *arg )
 {
-  test_context           *ctx;
-  T_interrupt_test_state  state;
-  Thread_Wait_flags       flags;
-  rtems_status_code       status;
+  test_context          *ctx;
+  T_interrupt_test_state state;
+  Thread_Wait_flags      flags;
+  rtems_status_code      status;
 
   ctx = arg;
   flags = _Thread_Wait_flags_get( ctx->thread );
@@ -116,8 +116,8 @@ static T_interrupt_test_state interrupt( void *arg )
 
 static void action( void *arg )
 {
-  test_context      *ctx;
-  rtems_status_code  status;
+  test_context     *ctx;
+  rtems_status_code status;
 
   ctx = arg;
   status = rtems_semaphore_obtain(
@@ -128,11 +128,8 @@ static void action( void *arg )
   T_quiet_rsc_success( status );
 }
 
-static const T_interrupt_test_config config = {
-  .action = action,
-  .interrupt = interrupt,
-  .max_iteration_count = 10000
-};
+static const T_interrupt_test_config config =
+  { .action = action, .interrupt = interrupt, .max_iteration_count = 10000 };
 
 T_TEST_CASE( RTEMS_XCONCAT( SemaphoreRelease, TEST_STRING ) )
 {
@@ -168,14 +165,14 @@ static rtems_task Init( rtems_task_argument argument )
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS       1
-#define CONFIGURE_MAXIMUM_SEMAPHORES  1
-#define CONFIGURE_MICROSECONDS_PER_TICK  1000
-#if defined(PRIORITY_NO_TIMEOUT_REVERSE)
-  #define CONFIGURE_INIT_TASK_PRIORITY   250
+#define CONFIGURE_MAXIMUM_TASKS         1
+#define CONFIGURE_MAXIMUM_SEMAPHORES    1
+#define CONFIGURE_MICROSECONDS_PER_TICK 1000
+#if defined( PRIORITY_NO_TIMEOUT_REVERSE )
+  #define CONFIGURE_INIT_TASK_PRIORITY 250
 #endif
-#define CONFIGURE_MICROSECONDS_PER_TICK  1000
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_MICROSECONDS_PER_TICK 1000
+#define CONFIGURE_INITIAL_EXTENSIONS    RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

@@ -50,6 +50,7 @@ static void force_error( void )
   rtems_test_assert( 0 );
 }
 
-#define CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE RTEMS_TASK_STORAGE_ALIGNMENT
+#define CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE \
+  RTEMS_TASK_STORAGE_ALIGNMENT
 
 #include "../spfatal_support/spfatalimpl.h"

@@ -38,24 +38,21 @@
  */
 #define MAX_TASK_SWITCH_LOGS 25
 
-struct taskSwitchLog taskSwitchLog[MAX_TASK_SWITCH_LOGS];
-unsigned int taskSwitchLogIndex;
-volatile int testsFinished;
+struct taskSwitchLog taskSwitchLog[ MAX_TASK_SWITCH_LOGS ];
+unsigned int         taskSwitchLogIndex;
+volatile int         testsFinished;
 
-void Task_switch(
-  rtems_tcb *unused,
-  rtems_tcb *heir
-)
+void Task_switch( rtems_tcb *unused, rtems_tcb *heir )
 {
   (void) unused;
 
-  uint32_t    index;
+  uint32_t          index;
   rtems_time_of_day time;
   rtems_status_code status;
 
-  index = task_number( heir->Object.id ) - task_number( Task_id[1] ) + 1;
+  index = task_number( heir->Object.id ) - task_number( Task_id[ 1 ] ) + 1;
 
-  switch( index ) {
+  switch ( index ) {
     case 1:
     case 2:
     case 3:
@@ -64,13 +61,14 @@ void Task_switch(
       status = rtems_clock_get_tod( &time );
       directive_failed_with_level( status, "rtems_clock_get_tod", 1 );
 
-      if (taskSwitchLogIndex < MAX_TASK_SWITCH_LOGS ) {
-        taskSwitchLog[taskSwitchLogIndex].taskIndex = index;
-        taskSwitchLog[taskSwitchLogIndex].when = time;
+      if ( taskSwitchLogIndex < MAX_TASK_SWITCH_LOGS ) {
+        taskSwitchLog[ taskSwitchLogIndex ].taskIndex = index;
+        taskSwitchLog[ taskSwitchLogIndex ].when = time;
         taskSwitchLogIndex++;
       }
-      if ( time.second >= 16 )
-	testsFinished = 1;
+      if ( time.second >= 16 ) {
+        testsFinished = 1;
+      }
       break;
 
     case 0:

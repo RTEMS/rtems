@@ -47,9 +47,7 @@
 
 const char rtems_test_name[] = "SP 12";
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -57,11 +55,11 @@ rtems_task Init(
 
   TEST_BEGIN();
 
-  Task_name[ 1 ]          = rtems_build_name( 'T', 'A', '1', ' ' );
-  Task_name[ 2 ]          = rtems_build_name( 'T', 'A', '2', ' ' );
-  Task_name[ 3 ]          = rtems_build_name( 'T', 'A', '3', ' ' );
-  Task_name[ 4 ]          = rtems_build_name( 'T', 'A', '4', ' ' );
-  Task_name[ 5 ]          = rtems_build_name( 'T', 'A', '5', ' ' );
+  Task_name[ 1 ] = rtems_build_name( 'T', 'A', '1', ' ' );
+  Task_name[ 2 ] = rtems_build_name( 'T', 'A', '2', ' ' );
+  Task_name[ 3 ] = rtems_build_name( 'T', 'A', '3', ' ' );
+  Task_name[ 4 ] = rtems_build_name( 'T', 'A', '4', ' ' );
+  Task_name[ 5 ] = rtems_build_name( 'T', 'A', '5', ' ' );
 
   Priority_task_name[ 1 ] = rtems_build_name( 'P', 'R', 'I', '1' );
   Priority_task_name[ 2 ] = rtems_build_name( 'P', 'R', 'I', '2' );
@@ -69,9 +67,9 @@ rtems_task Init(
   Priority_task_name[ 4 ] = rtems_build_name( 'P', 'R', 'I', '4' );
   Priority_task_name[ 5 ] = rtems_build_name( 'P', 'R', 'I', '5' );
 
-  Semaphore_name[ 1 ]     = rtems_build_name( 'S', 'M', '1', ' ' );
-  Semaphore_name[ 2 ]     = rtems_build_name( 'S', 'M', '2', ' ' );
-  Semaphore_name[ 3 ]     = rtems_build_name( 'S', 'M', '3', ' ' );
+  Semaphore_name[ 1 ] = rtems_build_name( 'S', 'M', '1', ' ' );
+  Semaphore_name[ 2 ] = rtems_build_name( 'S', 'M', '2', ' ' );
+  Semaphore_name[ 3 ] = rtems_build_name( 'S', 'M', '3', ' ' );
 
   status = rtems_semaphore_create(
     Semaphore_name[ 1 ],
@@ -104,7 +102,7 @@ rtems_task Init(
   Priority_test_driver( 0 );
 
   puts( "INIT - Backward priority queue test" );
-  Priority_test_driver( (RTEMS_MAXIMUM_PRIORITY / 2u) + 1u );
+  Priority_test_driver( ( RTEMS_MAXIMUM_PRIORITY / 2u ) + 1u );
 
   puts( "INIT - Binary Semaphore and Priority Inheritance Test" );
 

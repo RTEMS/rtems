@@ -35,10 +35,11 @@
 
 const char rtems_test_name[] = "SP 1";
 
-static RTEMS_NOINIT RTEMS_ALIGNED( RTEMS_TASK_STORAGE_ALIGNMENT ) char
-Task_1_storage[
-  RTEMS_TASK_STORAGE_SIZE( 2 * RTEMS_MINIMUM_STACK_SIZE, RTEMS_FLOATING_POINT )
-];
+static RTEMS_NOINIT RTEMS_ALIGNED( RTEMS_TASK_STORAGE_ALIGNMENT )
+char                Task_1_storage[ RTEMS_TASK_STORAGE_SIZE(
+  2 * RTEMS_MINIMUM_STACK_SIZE,
+  RTEMS_FLOATING_POINT
+) ];
 
 static const rtems_task_config Task_1_config = {
   .name = rtems_build_name( 'T', 'A', '1', ' ' ),
@@ -51,9 +52,7 @@ static const rtems_task_config Task_1_config = {
   .attributes = RTEMS_FLOATING_POINT
 };
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 

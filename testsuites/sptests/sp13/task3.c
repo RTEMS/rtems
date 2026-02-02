@@ -41,9 +41,7 @@
 
 #include "system.h"
 
-rtems_task Task_3(
-  rtems_task_argument argument
-)
+rtems_task Task_3( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -54,11 +52,11 @@ rtems_task Task_3(
 
   puts(
     "TA3 - rtems_message_queue_receive - receive from queue 2 - "
-      "RTEMS_WAIT FOREVER"
+    "RTEMS_WAIT FOREVER"
   );
   status = rtems_message_queue_receive(
     Queue_id[ 2 ],
-    (long (*)[4])buffer,
+    (long ( * )[ 4 ]) buffer,
     &size,
     RTEMS_DEFAULT_OPTIONS,
     RTEMS_NO_TIMEOUT
@@ -68,23 +66,23 @@ rtems_task Task_3(
   Put_buffer( buffer );
   new_line;
 
-  Fill_buffer( "BUFFER 3 TO Q 1", (long *)buffer );
+  Fill_buffer( "BUFFER 3 TO Q 1", (long *) buffer );
   puts( "TA3 - rtems_message_queue_broadcast - BUFFER 3 TO Q 1" );
   status = rtems_message_queue_broadcast(
     Queue_id[ 1 ],
-    (long (*)[4])buffer,
+    (long ( * )[ 4 ]) buffer,
     16,
     &count
   );
   printf( "TA3 - number of tasks awakened = %02" PRIu32 "\n", count );
   puts(
     "TA3 - rtems_message_queue_receive - receive from queue 3 - "
-      "RTEMS_WAIT FOREVER"
+    "RTEMS_WAIT FOREVER"
   );
 
   status = rtems_message_queue_receive(
     Queue_id[ 3 ],
-    (long (*)[4])buffer,
+    (long ( * )[ 4 ]) buffer,
     &size,
     RTEMS_DEFAULT_OPTIONS,
     RTEMS_NO_TIMEOUT

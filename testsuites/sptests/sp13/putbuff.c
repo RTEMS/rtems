@@ -41,18 +41,17 @@
 
 #include "system.h"
 
-void Put_buffer(
-  void *buffer
-)
+void Put_buffer( void *buffer )
 {
-  int i, j;
-  char c;
+  int   i, j;
+  char  c;
   long *b = buffer;
 
-  for ( i = 0; i < (int) (MESSAGE_SIZE / sizeof(long)); i++ ) {
-    for ( j = sizeof(long) - 1; j >= 0; j-- ) {
-      if ( (c = (char)(b[i] >> (8 * j)) & 0xFF) == 0 )
+  for ( i = 0; i < (int) ( MESSAGE_SIZE / sizeof( long ) ); i++ ) {
+    for ( j = sizeof( long ) - 1; j >= 0; j-- ) {
+      if ( ( c = (char) ( b[ i ] >> ( 8 * j ) ) & 0xFF ) == 0 ) {
         return;
+      }
       printf( "%c", c );
     }
   }

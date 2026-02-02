@@ -35,25 +35,25 @@
 
 const char rtems_test_name[] = "SPREGION_ERR 1";
 
-static rtems_name Region_name[ 2 ];    /* array of region names */
-static rtems_id   Region_id[ 2 ];      /* array of region ids */
+static rtems_name Region_name[ 2 ]; /* array of region names */
+static rtems_id   Region_id[ 2 ];   /* array of region ids */
 
-static uint8_t Region_good_area[4096] CPU_STRUCTURE_ALIGNMENT;
-#define Region_bad_area    (void *) 0x00000005
+static uint8_t Region_good_area[ 4096 ] CPU_STRUCTURE_ALIGNMENT;
+#define Region_bad_area     (void *) 0x00000005
 #define REGION_START_OFFSET 1024
 #define REGION_LENGTH       512
 
-static void region_error_tests(void)
+static void region_error_tests( void )
 {
-  void                   *segment_address_1;
-  void                   *segment_address_2;
-  void                   *segment_address_3;
-  uintptr_t               segment_size;
-  rtems_status_code       status;
-  Heap_Information_block  the_info;
-  rtems_id                junk_id;
+  void                  *segment_address_1;
+  void                  *segment_address_2;
+  void                  *segment_address_3;
+  uintptr_t              segment_size;
+  rtems_status_code      status;
+  Heap_Information_block the_info;
+  rtems_id               junk_id;
 
-  Region_name[ 1 ]     =  rtems_build_name( 'R', 'N', '1', ' ' );
+  Region_name[ 1 ] = rtems_build_name( 'R', 'N', '1', ' ' );
 
   /* Check invalid name error case */
   status = rtems_region_create(
@@ -131,11 +131,7 @@ static void region_error_tests(void)
   puts( "TA1 - rtems_region_create - RTEMS_SUCCESSFUL" );
 
   /* extend NULL address */
-  status = rtems_region_extend(
-    Region_id[ 1 ],
-    NULL,
-    REGION_LENGTH - 1
-  );
+  status = rtems_region_extend( Region_id[ 1 ], NULL, REGION_LENGTH - 1 );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ADDRESS,
@@ -246,11 +242,11 @@ static void region_error_tests(void)
 
   /* get_segment with NULL param */
   status = rtems_region_get_segment(
-     Region_id[ 1 ],
-     2,
-     RTEMS_DEFAULT_OPTIONS,
-     RTEMS_NO_TIMEOUT,
-     NULL
+    Region_id[ 1 ],
+    2,
+    RTEMS_DEFAULT_OPTIONS,
+    RTEMS_NO_TIMEOUT,
+    NULL
   );
   fatal_directive_status(
     status,
@@ -261,11 +257,11 @@ static void region_error_tests(void)
 
   /* get_segment with illegal 0 size */
   status = rtems_region_get_segment(
-     Region_id[ 1 ],
-     0,
-     RTEMS_DEFAULT_OPTIONS,
-     RTEMS_NO_TIMEOUT,
-     &segment_address_1
+    Region_id[ 1 ],
+    0,
+    RTEMS_DEFAULT_OPTIONS,
+    RTEMS_NO_TIMEOUT,
+    &segment_address_1
   );
   fatal_directive_status(
     status,
@@ -276,11 +272,11 @@ static void region_error_tests(void)
 
   /* get_segment with illegal big size */
   status = rtems_region_get_segment(
-     Region_id[ 1 ],
-     sizeof( Region_good_area ) * 2,
-     RTEMS_DEFAULT_OPTIONS,
-     RTEMS_NO_TIMEOUT,
-     &segment_address_1
+    Region_id[ 1 ],
+    sizeof( Region_good_area ) * 2,
+    RTEMS_DEFAULT_OPTIONS,
+    RTEMS_NO_TIMEOUT,
+    &segment_address_1
   );
   fatal_directive_status(
     status,
@@ -290,21 +286,21 @@ static void region_error_tests(void)
   puts( "TA1 - rtems_region_get_segment - too big - RTEMS_INVALID_SIZE" );
 
   status = rtems_region_get_segment(
-     Region_id[ 1 ],
-     REGION_LENGTH / 2,
-     RTEMS_DEFAULT_OPTIONS,
-     RTEMS_NO_TIMEOUT,
-     &segment_address_1
+    Region_id[ 1 ],
+    REGION_LENGTH / 2,
+    RTEMS_DEFAULT_OPTIONS,
+    RTEMS_NO_TIMEOUT,
+    &segment_address_1
   );
   directive_failed( status, "rtems_region_get_segment" );
   puts( "TA1 - rtems_region_get_segment - RTEMS_SUCCESSFUL" );
 
   status = rtems_region_get_segment(
-     Region_id[ 1 ],
-     REGION_LENGTH / 2,
-     RTEMS_NO_WAIT,
-     RTEMS_NO_TIMEOUT,
-     &segment_address_2
+    Region_id[ 1 ],
+    REGION_LENGTH / 2,
+    RTEMS_NO_WAIT,
+    RTEMS_NO_TIMEOUT,
+    &segment_address_2
   );
   fatal_directive_status(
     status,
@@ -329,7 +325,11 @@ static void region_error_tests(void)
   puts( "TA1 - rtems_region_get_segment - woke up with RTEMS_TIMEOUT" );
 
   /* Check get_segment_size errors */
-  status = rtems_region_get_segment_size( Region_id[ 1 ], NULL, &segment_size );
+  status = rtems_region_get_segment_size(
+    Region_id[ 1 ],
+    NULL,
+    &segment_size
+  );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ADDRESS,
@@ -338,7 +338,9 @@ static void region_error_tests(void)
   puts( "TA1 - rtems_region_get_segment_size - RTEMS_INVALID_ADDRESS" );
 
   status = rtems_region_get_segment_size(
-    Region_id[ 1 ], segment_address_1, NULL
+    Region_id[ 1 ],
+    segment_address_1,
+    NULL
   );
   fatal_directive_status(
     status,
@@ -348,7 +350,9 @@ static void region_error_tests(void)
   puts( "TA1 - rtems_region_get_segment_size - RTEMS_INVALID_ADDRESS" );
 
   status = rtems_region_get_segment_size(
-    100, segment_address_1, &segment_size
+    100,
+    segment_address_1,
+    &segment_size
   );
   fatal_directive_status(
     status,
@@ -367,7 +371,10 @@ static void region_error_tests(void)
 
   /* Check resize_segment errors */
   status = rtems_region_resize_segment(
-    Region_id[ 1 ], segment_address_3, 256, NULL
+    Region_id[ 1 ],
+    segment_address_3,
+    256,
+    NULL
   );
   fatal_directive_status(
     status,
@@ -377,7 +384,10 @@ static void region_error_tests(void)
   puts( "TA1 - rtems_region_resize_segment - RTEMS_INVALID_ADDRESS" );
 
   status = rtems_region_resize_segment(
-    Region_id[ 1 ], NULL, 256, &segment_size
+    Region_id[ 1 ],
+    NULL,
+    256,
+    &segment_size
   );
   fatal_directive_status(
     status,
@@ -387,7 +397,10 @@ static void region_error_tests(void)
   puts( "TA1 - rtems_region_resize_segment - RTEMS_INVALID_ADDRESS" );
 
   status = rtems_region_resize_segment(
-    100, segment_address_3, 256, &segment_size
+    100,
+    segment_address_3,
+    256,
+    &segment_size
   );
   fatal_directive_status(
     status,
@@ -413,16 +426,12 @@ static void region_error_tests(void)
   );
   puts( "TA1 - rtems_region_return_segment - RTEMS_INVALID_ADDRESS" );
 
-/*
+  /*
  *  The following generate internal heap errors.  Thus this code
  *  is subject to change if the heap code changes.
  */
 
-  status = rtems_region_extend(
-    100,
-    Region_good_area,
-    128
-  );
+  status = rtems_region_extend( 100, Region_good_area, 128 );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ID,
@@ -443,9 +452,7 @@ static void region_error_tests(void)
   puts( "TA1 - rtems_region_extend - within heap - RTEMS_INVALID_ADDRESS" );
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 

@@ -32,9 +32,7 @@
 
 #include "system.h"
 
-rtems_task Preempt_task(
-  rtems_task_argument argument
-)
+rtems_task Preempt_task( rtems_task_argument argument )
 {
   (void) argument;
 

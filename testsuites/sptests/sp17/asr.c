@@ -41,9 +41,7 @@
 
 #include "system.h"
 
-rtems_asr Process_asr(
-  rtems_signal_set signal_set
-)
+rtems_asr Process_asr( rtems_signal_set signal_set )
 {
   (void) signal_set;
 

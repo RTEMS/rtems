@@ -32,9 +32,7 @@
 
 #include "system.h"
 
-rtems_task Task_1(
-  rtems_task_argument argument
-)
+rtems_task Task_1( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -50,17 +48,19 @@ rtems_task Task_1(
   directive_failed( status, "rtems_task_set_priority" );
   printf(
     "TA1 - rtems_task_set_priority - get initial "
-       "priority of self: %02" PRIdrtems_task_priority "\n",
+    "priority of self: %02" PRIdrtems_task_priority "\n",
     the_priority
   );
 
-  while( FOREVER ) {
+  while ( FOREVER ) {
     if ( --the_priority == 0 ) {
       puts( "TA1 - rtems_task_suspend - suspend TA2" );
       status = rtems_task_suspend( Task_id[ 2 ] );
       directive_failed( status, "rtems_task_suspend" );
 
-      puts( "TA1 - rtems_task_set_priority - set priority of TA2 ( blocked )" );
+      puts(
+        "TA1 - rtems_task_set_priority - set priority of TA2 ( blocked )"
+      );
       status = rtems_task_set_priority( Task_id[ 2 ], 5, &previous_priority );
       directive_failed( status, "rtems_task_set_priority" );
 
@@ -72,13 +72,13 @@ rtems_task Task_1(
 
     printf(
       "TA1 - rtems_task_set_priority - set TA2's priority: "
-          "%02" PRIdrtems_task_priority "\n",
+      "%02" PRIdrtems_task_priority "\n",
       the_priority
     );
     status = rtems_task_set_priority(
-               Task_id[ 2 ],
-               the_priority,
-               &previous_priority
+      Task_id[ 2 ],
+      the_priority,
+      &previous_priority
     );
     directive_failed( status, "rtems_task_set_priority" );
   }

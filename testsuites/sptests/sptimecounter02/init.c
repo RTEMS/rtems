@@ -61,49 +61,49 @@ const char rtems_test_name[] = "SPTIMECOUNTER 2";
 
 typedef struct {
   rtems_test_parallel_context base;
-  const char *test_sep;
-  const char *counter_sep;
-  struct timecounter tc_null;
-  uint32_t binuptime_per_job[CPU_COUNT];
-  sbintime_t duration_per_job[CPU_COUNT];
-  uint32_t rtemsuptime_per_job[CPU_COUNT];
+  const char                 *test_sep;
+  const char                 *counter_sep;
+  struct timecounter          tc_null;
+  uint32_t                    binuptime_per_job[ CPU_COUNT ];
+  sbintime_t                  duration_per_job[ CPU_COUNT ];
+  uint32_t                    rtemsuptime_per_job[ CPU_COUNT ];
 } timecounter_context;
 
 static timecounter_context test_instance;
 
-static rtems_interval test_duration(void)
+static rtems_interval test_duration( void )
 {
   return DURATION_IN_SECONDS * rtems_clock_get_ticks_per_second();
 }
 
-static uint32_t test_get_timecount_null(struct timecounter *tc)
+static uint32_t test_get_timecount_null( struct timecounter *tc )
 {
   (void) tc;
 
   return 0;
 }
 
-static void install_tc_null(timecounter_context *ctx)
+static void install_tc_null( timecounter_context *ctx )
 {
   struct timecounter *tc_cpu = &ctx->tc_null;
 
   tc_cpu->tc_get_timecount = test_get_timecount_null;
   tc_cpu->tc_counter_mask = 0xffffffff;
-  tc_cpu->tc_frequency = rtems_counter_nanoseconds_to_ticks(1000000000);
+  tc_cpu->tc_frequency = rtems_counter_nanoseconds_to_ticks( 1000000000 );
   tc_cpu->tc_quality = 2000;
-  rtems_timecounter_install(tc_cpu);
+  rtems_timecounter_install( tc_cpu );
 }
 
 static void test_print_results(
-  const char *driver,
+  const char          *driver,
   timecounter_context *ctx,
-  size_t active_workers
+  size_t               active_workers
 )
 {
   const char *value_sep;
-  size_t i;
+  size_t      i;
 
-  if (active_workers == 1) {
+  if ( active_workers == 1 ) {
     printf(
       "%s{\n"
       "    \"timecounter\": \"%s\",\n"
@@ -115,28 +115,24 @@ static void test_print_results(
     ctx->counter_sep = "\n      ";
   }
 
-  printf("%s[", ctx->counter_sep);
+  printf( "%s[", ctx->counter_sep );
   ctx->counter_sep = "],\n      ";
   value_sep = "";
 
-  for (i = 0; i < active_workers; ++i) {
-    printf(
-      "%s%" PRIu32,
-      value_sep,
-      ctx->binuptime_per_job[i]
-    );
+  for ( i = 0; i < active_workers; ++i ) {
+    printf( "%s%" PRIu32, value_sep, ctx->binuptime_per_job[ i ] );
     value_sep = ", ";
   }
 
-  if (active_workers == rtems_scheduler_get_processor_maximum()) {
-    printf("]\n    ]\n  }");
+  if ( active_workers == rtems_scheduler_get_processor_maximum() ) {
+    printf( "]\n    ]\n  }" );
   }
 }
 
 static rtems_interval test_bintime_init(
   rtems_test_parallel_context *base,
-  void *arg,
-  size_t active_workers
+  void                        *arg,
+  size_t                       active_workers
 )
 {
   (void) base;
@@ -150,55 +146,55 @@ static rtems_interval test_bintime_init(
 
 static void test_bintime_body(
   rtems_test_parallel_context *base,
-  void *arg,
-  size_t active_workers,
-  size_t worker_index
+  void                        *arg,
+  size_t                       active_workers,
+  size_t                       worker_index
 )
 {
   (void) arg;
   (void) active_workers;
 
   timecounter_context *ctx = (timecounter_context *) base;
-  uint32_t counter = 1;
-  struct bintime start;
-  struct bintime end;
+  uint32_t             counter = 1;
+  struct bintime       start;
+  struct bintime       end;
 
-  rtems_bsd_binuptime(&start);
+  rtems_bsd_binuptime( &start );
 
   do {
     ++counter;
-    rtems_bsd_binuptime(&end);
-  } while (!rtems_test_parallel_stop_job(&ctx->base));
+    rtems_bsd_binuptime( &end );
+  } while ( !rtems_test_parallel_stop_job( &ctx->base ) );
 
-  ctx->binuptime_per_job[worker_index] = counter;
-  ctx->duration_per_job[worker_index] = bttosbt(end) - bttosbt(start);
+  ctx->binuptime_per_job[ worker_index ] = counter;
+  ctx->duration_per_job[ worker_index ] = bttosbt( end ) - bttosbt( start );
 }
 
 static void test_bintime_fini(
   rtems_test_parallel_context *base,
-  void *arg,
-  size_t active_workers
+  void                        *arg,
+  size_t                       active_workers
 )
 {
   (void) arg;
 
   timecounter_context *ctx = (timecounter_context *) base;
-  size_t i;
+  size_t               i;
 
-  for (i = 0; i < active_workers; ++i) {
+  for ( i = 0; i < active_workers; ++i ) {
     sbintime_t error;
 
-    error = DURATION_IN_SECONDS * SBT_1S - ctx->duration_per_job[i];
-    rtems_test_assert(error * error < SBT_1MS * SBT_1MS);
+    error = DURATION_IN_SECONDS * SBT_1S - ctx->duration_per_job[ i ];
+    rtems_test_assert( error * error < SBT_1MS * SBT_1MS );
   }
 
-  test_print_results("Clock Driver", ctx, active_workers);
+  test_print_results( "Clock Driver", ctx, active_workers );
 }
 
 static rtems_interval test_bintime_null_init(
   rtems_test_parallel_context *base,
-  void *arg,
-  size_t active_workers
+  void                        *arg,
+  size_t                       active_workers
 )
 {
   (void) arg;
@@ -207,98 +203,95 @@ static rtems_interval test_bintime_null_init(
 
   timecounter_context *ctx = &test_instance;
 
-  install_tc_null(ctx);
+  install_tc_null( ctx );
 
   return test_duration();
 }
 
 static void test_bintime_null_body(
   rtems_test_parallel_context *base,
-  void *arg,
-  size_t active_workers,
-  size_t worker_index
+  void                        *arg,
+  size_t                       active_workers,
+  size_t                       worker_index
 )
 {
   (void) arg;
   (void) active_workers;
 
   timecounter_context *ctx = (timecounter_context *) base;
-  struct bintime bt;
-  uint32_t counter = 0;
+  struct bintime       bt;
+  uint32_t             counter = 0;
 
-  while (!rtems_test_parallel_stop_job(&ctx->base)) {
+  while ( !rtems_test_parallel_stop_job( &ctx->base ) ) {
     ++counter;
-    rtems_bsd_binuptime(&bt);
+    rtems_bsd_binuptime( &bt );
   }
 
-  ctx->binuptime_per_job[worker_index] = counter;
+  ctx->binuptime_per_job[ worker_index ] = counter;
 }
 
 static void test_bintime_null_fini(
   rtems_test_parallel_context *base,
-  void *arg,
-  size_t active_workers
+  void                        *arg,
+  size_t                       active_workers
 )
 {
   (void) arg;
 
-  test_print_results("Null", (timecounter_context *) base, active_workers);
+  test_print_results( "Null", (timecounter_context *) base, active_workers );
 }
 
 static const rtems_test_parallel_job timecounter_jobs[] = {
-  {
-    .init = test_bintime_init,
+  { .init = test_bintime_init,
     .body = test_bintime_body,
     .fini = test_bintime_fini,
-    .cascade = true
-  },{
-    .init = test_bintime_null_init,
+    .cascade = true },
+  { .init = test_bintime_null_init,
     .body = test_bintime_null_body,
     .fini = test_bintime_null_fini,
-    .cascade = true
-  }
+    .cascade = true }
 };
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
   timecounter_context *ctx = &test_instance;
-  struct bintime bt;
-  struct timespec ts;
-  struct timeval tv;
+  struct bintime       bt;
+  struct timespec      ts;
+  struct timeval       tv;
 
   TEST_BEGIN();
 
-  printf("*** BEGIN OF JSON DATA ***\n[\n  ");
+  printf( "*** BEGIN OF JSON DATA ***\n[\n  " );
 
   ctx->test_sep = "";
   rtems_test_parallel(
     &ctx->base,
     NULL,
-    &timecounter_jobs[0],
-    RTEMS_ARRAY_SIZE(timecounter_jobs)
+    &timecounter_jobs[ 0 ],
+    RTEMS_ARRAY_SIZE( timecounter_jobs )
   );
 
-  printf("\n]\n*** END OF JSON DATA ***\n");
+  printf( "\n]\n*** END OF JSON DATA ***\n" );
 
   /* Check for all functions available in the bsd.h user space */
 
-  rtems_bsd_bintime(&bt);
-  rtems_bsd_microtime(&tv);
-  rtems_bsd_nanotime(&ts);
-  rtems_bsd_binuptime(&bt);
-  rtems_bsd_microuptime(&tv);
-  rtems_bsd_nanouptime(&ts);
-  rtems_bsd_getbintime(&bt);
-  rtems_bsd_getmicrotime(&tv);
-  rtems_bsd_getnanotime(&ts);
-  rtems_bsd_getbinuptime(&bt);
-  rtems_bsd_getmicrouptime(&tv);
-  rtems_bsd_getnanouptime(&ts);
+  rtems_bsd_bintime( &bt );
+  rtems_bsd_microtime( &tv );
+  rtems_bsd_nanotime( &ts );
+  rtems_bsd_binuptime( &bt );
+  rtems_bsd_microuptime( &tv );
+  rtems_bsd_nanouptime( &ts );
+  rtems_bsd_getbintime( &bt );
+  rtems_bsd_getmicrotime( &tv );
+  rtems_bsd_getnanotime( &ts );
+  rtems_bsd_getbinuptime( &bt );
+  rtems_bsd_getmicrouptime( &tv );
+  rtems_bsd_getnanouptime( &ts );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 #define CONFIGURE_MICROSECONDS_PER_TICK 1000
@@ -306,8 +299,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS (2 + CPU_COUNT - 1)
-#define CONFIGURE_MAXIMUM_TIMERS 2
+#define CONFIGURE_MAXIMUM_TASKS   ( 2 + CPU_COUNT - 1 )
+#define CONFIGURE_MAXIMUM_TIMERS  2
 #define CONFIGURE_MAXIMUM_PERIODS 1
 
 #define CONFIGURE_MAXIMUM_PROCESSORS CPU_COUNT

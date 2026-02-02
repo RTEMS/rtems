@@ -32,9 +32,7 @@
 
 #include "system.h"
 
-rtems_task Task_2(
-  rtems_task_argument argument
-)
+rtems_task Task_2( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -55,7 +53,7 @@ rtems_task Task_2(
   directive_failed( status, "rtems_event_receive" );
   printf(
     "TA2 - RTEMS_EVENT_16 received - eventout => %08" PRIxrtems_event_set "\n",
-     eventout
+    eventout
   );
 
   puts(
@@ -66,7 +64,7 @@ rtems_task Task_2(
 
   puts(
     "TA2 - rtems_event_receive - RTEMS_EVENT_17 or "
-      "RTEMS_EVENT_18 - forever and ANY"
+    "RTEMS_EVENT_18 - forever and ANY"
   );
   status = rtems_event_receive(
     RTEMS_EVENT_17 | RTEMS_EVENT_18,
@@ -77,7 +75,7 @@ rtems_task Task_2(
   directive_failed( status, "rtems_event_receive" );
   printf(
     "TA2 - RTEMS_EVENT_17 or RTEMS_EVENT_18 received - "
-      "eventout => %08" PRIxrtems_event_set "\n",
+    "eventout => %08" PRIxrtems_event_set "\n",
     eventout
   );
 
@@ -116,7 +114,7 @@ rtems_task Task_2(
 
   printf(
     "TA2 - RTEMS_EVENT_10 received - eventout => %08" PRIxrtems_event_set "\n",
-     eventout
+    eventout
   );
   print_time( "TA2 - rtems_clock_get_tod - ", &time, "\n" );
 
@@ -140,7 +138,7 @@ rtems_task Task_2(
   directive_failed( status, "rtems_event_receive" );
   printf(
     "TA2 - RTEMS_EVENT_19 received - eventout => %08" PRIxrtems_event_set "\n",
-     eventout
+    eventout
   );
 
   puts( "TA2 - rtems_task_delete - deletes self" );

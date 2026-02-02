@@ -40,11 +40,11 @@
 const char rtems_test_name[] = "SP 2038";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
+rtems_task Init( rtems_task_argument argument );
 
-#define ASSERT_SC(sc) rtems_test_assert((sc) == RTEMS_SUCCESSFUL)
+#define ASSERT_SC( sc ) rtems_test_assert( ( sc ) == RTEMS_SUCCESSFUL )
 
-static const uint32_t sample_seconds [] = {
+static const uint32_t sample_seconds[] = {
   571213695UL,
   602836095UL,
   634372095UL,
@@ -177,134 +177,117 @@ static const rtems_time_of_day problem_2038 = {
   .second = 8
 };
 
-static const rtems_time_of_day tod_to_seconds_base = {
-  .year = 0,
-  .month = 2,
-  .day = 7,
-  .hour = 6,
-  .minute = 28,
-  .second = 15
-};
+static const rtems_time_of_day tod_to_seconds_base =
+  { .year = 0, .month = 2, .day = 7, .hour = 6, .minute = 28, .second = 15 };
 
-static const rtems_time_of_day problem_2100 = {
-  .year = 2100,
-  .month = 2,
-  .day = 28,
-  .hour = 0,
-  .minute = 0,
-  .second = 0
-};
+static const rtems_time_of_day problem_2100 =
+  { .year = 2100, .month = 2, .day = 28, .hour = 0, .minute = 0, .second = 0 };
 
-static const rtems_time_of_day problem_2100_2 = {
-  .year = 2100,
-  .month = 2,
-  .day = 29,
-  .hour = 0,
-  .minute = 0,
-  .second = 0
-};
+static const rtems_time_of_day problem_2100_2 =
+  { .year = 2100, .month = 2, .day = 29, .hour = 0, .minute = 0, .second = 0 };
 
-static void test_tod_to_seconds(void)
+static void test_tod_to_seconds( void )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  size_t i = 0;
-  size_t n = sizeof(sample_seconds) / sizeof(sample_seconds [0]);
+  size_t            i = 0;
+  size_t n = sizeof( sample_seconds ) / sizeof( sample_seconds[ 0 ] );
 
-  for (i = 0; i < n; ++i) {
+  for ( i = 0; i < n; ++i ) {
     rtems_time_of_day tod = tod_to_seconds_base;
-    uint32_t seconds = 0;
-    rtems_interval seconds_as_interval = 0;
+    uint32_t          seconds = 0;
+    rtems_interval    seconds_as_interval = 0;
 
     tod.year = 1988 + i;
-    seconds = _TOD_To_seconds(&tod);
-    rtems_test_assert(seconds == sample_seconds [i]);
+    seconds = _TOD_To_seconds( &tod );
+    rtems_test_assert( seconds == sample_seconds[ i ] );
 
-    sc = rtems_clock_set(&tod);
-    ASSERT_SC(sc);
+    sc = rtems_clock_set( &tod );
+    ASSERT_SC( sc );
 
-    sc = rtems_clock_get_seconds_since_epoch(&seconds_as_interval);
-    ASSERT_SC(sc);
-    rtems_test_assert(seconds_as_interval == sample_seconds [i]);
+    sc = rtems_clock_get_seconds_since_epoch( &seconds_as_interval );
+    ASSERT_SC( sc );
+    rtems_test_assert( seconds_as_interval == sample_seconds[ i ] );
   }
 }
 
-static void test_problem_year(void)
+static void test_problem_year( void )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  bool time_t_is_32_bit = sizeof(time_t) == 4;
+  bool              time_t_is_32_bit = sizeof( time_t ) == 4;
 
-  if (time_t_is_32_bit) {
+  if ( time_t_is_32_bit ) {
     const rtems_time_of_day *nearly_problem = NULL;
     const rtems_time_of_day *problem = NULL;
-    rtems_time_of_day now;
+    rtems_time_of_day        now;
 
     nearly_problem = &nearly_problem_2038;
     problem = &problem_2038;
 
-    sc = rtems_clock_set(nearly_problem);
-    ASSERT_SC(sc);
-    sc = rtems_clock_get_tod(&now);
-    ASSERT_SC(sc);
-    rtems_test_assert(memcmp(&now, nearly_problem, sizeof(now)) == 0);
+    sc = rtems_clock_set( nearly_problem );
+    ASSERT_SC( sc );
+    sc = rtems_clock_get_tod( &now );
+    ASSERT_SC( sc );
+    rtems_test_assert( memcmp( &now, nearly_problem, sizeof( now ) ) == 0 );
 
-    sc = rtems_clock_set(problem);
-    ASSERT_SC(sc);
-    sc = rtems_clock_get_tod(&now);
-    ASSERT_SC(sc);
-    rtems_test_assert(memcmp(&now, problem, sizeof(now)) == 0);
+    sc = rtems_clock_set( problem );
+    ASSERT_SC( sc );
+    sc = rtems_clock_get_tod( &now );
+    ASSERT_SC( sc );
+    rtems_test_assert( memcmp( &now, problem, sizeof( now ) ) == 0 );
   }
 }
 
-static void test_leap_year(void)
+static void test_leap_year( void )
 {
-    rtems_status_code test_status;
-    const rtems_time_of_day *problem = &problem_2100;
-    const rtems_time_of_day *problem2 = &problem_2100_2;
-    // 2100 is not a leap year, so it should have 28 days
-    test_status = _TOD_Validate(problem, TOD_ENABLE_TICKS_VALIDATION);
-    rtems_test_assert(test_status == RTEMS_INVALID_CLOCK);
-    test_status = _TOD_Validate(problem2, TOD_ENABLE_TICKS_VALIDATION);
-    rtems_test_assert(test_status == RTEMS_INVALID_CLOCK);
+  rtems_status_code        test_status;
+  const rtems_time_of_day *problem = &problem_2100;
+  const rtems_time_of_day *problem2 = &problem_2100_2;
+  // 2100 is not a leap year, so it should have 28 days
+  test_status = _TOD_Validate( problem, TOD_ENABLE_TICKS_VALIDATION );
+  rtems_test_assert( test_status == RTEMS_INVALID_CLOCK );
+  test_status = _TOD_Validate( problem2, TOD_ENABLE_TICKS_VALIDATION );
+  rtems_test_assert( test_status == RTEMS_INVALID_CLOCK );
 }
 
-static bool test_year_is_leap_year(uint32_t year)
+static bool test_year_is_leap_year( uint32_t year )
 {
-    return (((year % 4) == 0) && ((year % 100) != 0)) || ((year % 400) == 0);
+  return ( ( ( year % 4 ) == 0 ) && ( ( year % 100 ) != 0 ) ) ||
+         ( ( year % 400 ) == 0 );
 }
 
-static void test_every_day(void)
+static void test_every_day( void )
 {
-    rtems_time_of_day every_day = {
-        .year = 1970,
-        .month = 1,
-        .day = 1,
-        .hour = 0,
-        .minute = 1,
-        .second = 2
-    };
-    const int days_per_month[2][12] = {
-        { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
-        { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
-    };
-    rtems_status_code sc = RTEMS_SUCCESSFUL;
-    rtems_time_of_day now;
+  rtems_time_of_day every_day = {
+    .year = 1970,
+    .month = 1,
+    .day = 1,
+    .hour = 0,
+    .minute = 1,
+    .second = 2
+  };
+  const int days_per_month[ 2 ][ 12 ] = {
+    { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
+    { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
+  };
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  rtems_time_of_day now;
 
-    for (every_day.year = 1988; every_day.year <= 2099; ++every_day.year) {
-        int leap_year = test_year_is_leap_year(every_day.year) ? 1 : 0;
-        for (every_day.month = 1; every_day.month <= 12; ++every_day.month) {
-            uint32_t days = days_per_month[leap_year][every_day.month - 1];
-            for (every_day.day = 1; every_day.day <= days; ++every_day.day) {
-                sc = rtems_clock_set(&every_day);
-                ASSERT_SC(sc);
-                sc = rtems_clock_get_tod(&now);
-                ASSERT_SC(sc);
-                rtems_test_assert(memcmp(&now, &every_day, sizeof(now)) == 0);
-            }
-        }
+  for ( every_day.year = 1988; every_day.year <= 2099; ++every_day.year ) {
+    int leap_year = test_year_is_leap_year( every_day.year ) ? 1 : 0;
+    for ( every_day.month = 1; every_day.month <= 12; ++every_day.month ) {
+      uint32_t days = days_per_month[ leap_year ][ every_day.month - 1 ];
+      for ( every_day.day = 1; every_day.day <= days; ++every_day.day ) {
+        sc = rtems_clock_set( &every_day );
+        ASSERT_SC( sc );
+        sc = rtems_clock_get_tod( &now );
+        ASSERT_SC( sc );
+        rtems_test_assert( memcmp( &now, &every_day, sizeof( now ) ) == 0 );
+      }
     }
+  }
 }
 
-rtems_task Init(rtems_task_argument argument)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -317,7 +300,7 @@ rtems_task Init(rtems_task_argument argument)
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER

@@ -28,7 +28,7 @@
 
 #include <assert.h>
 
-#define rtems_test_assert(x) assert(x)
+#define rtems_test_assert( x ) assert( x )
 
 #endif /* __rtems__ */
 
@@ -36,30 +36,30 @@ static _Thread_local int i;
 
 static _Thread_local int j;
 
-static __attribute__((__constructor__)) void con(void)
+static __attribute__(( __constructor__ )) void con( void )
 {
   i = 1;
 }
 
-static void test(void)
+static void test( void )
 {
-  rtems_test_assert(i == 1);
-  rtems_test_assert(j == 0);
-  rtems_test_assert(k == 2);
+  rtems_test_assert( i == 1 );
+  rtems_test_assert( j == 0 );
+  rtems_test_assert( k == 2 );
 }
 
 #ifdef __rtems__
 
 const char rtems_test_name[] = "SPTLS 4";
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
   TEST_BEGIN();
   test();
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
@@ -75,7 +75,7 @@ static void Init(rtems_task_argument arg)
 
 #else /* __rtems__ */
 
-int main(void)
+int main( void )
 {
   test();
   return 0;

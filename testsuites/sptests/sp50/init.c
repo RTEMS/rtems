@@ -36,13 +36,13 @@
 const char rtems_test_name[] = "SP 50";
 
 /* forward declarations to avoid warnings */
-rtems_timer_service_routine Timer_Routine(rtems_id id, void *ignored);
-rtems_task Init(rtems_task_argument argument);
+rtems_timer_service_routine Timer_Routine( rtems_id id, void *ignored );
+rtems_task                  Init( rtems_task_argument argument );
 
-volatile int   Fired;
-volatile bool  timerRan;
+volatile int  Fired;
+volatile bool timerRan;
 
-rtems_timer_service_routine Timer_Routine(rtems_id id, void *ignored)
+rtems_timer_service_routine Timer_Routine( rtems_id id, void *ignored )
 {
   (void) ignored;
 
@@ -58,12 +58,9 @@ rtems_timer_service_routine Timer_Routine(rtems_id id, void *ignored)
     NULL
   );
   directive_failed( status, "fire after" );
-
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -80,15 +77,15 @@ rtems_task Init(
   );
   directive_failed( sc, "rtems_timer_initiate_server" );
 
-  sc = rtems_timer_create(rtems_build_name( 'T', 'M', 'R', '1' ), &timer1);
+  sc = rtems_timer_create( rtems_build_name( 'T', 'M', 'R', '1' ), &timer1 );
   directive_failed( sc, "rtems_timer_create" );
 
   Fired = 0;
   timerRan = false;
 
-  Timer_Routine(timer1, NULL);
+  Timer_Routine( timer1, NULL );
 
-  while (1) {
+  while ( 1 ) {
     sc = rtems_task_wake_after( 10 );
     directive_failed( sc, "rtems_task_wake_after" );
 
@@ -109,15 +106,14 @@ rtems_task Init(
   }
 }
 
-
 /**************** START OF CONFIGURATION INFORMATION ****************/
 
 #define CONFIGURE_INIT
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS         2
-#define CONFIGURE_MAXIMUM_TIMERS        1
+#define CONFIGURE_MAXIMUM_TASKS  2
+#define CONFIGURE_MAXIMUM_TIMERS 1
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

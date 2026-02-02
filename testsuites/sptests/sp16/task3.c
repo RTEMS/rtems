@@ -41,15 +41,13 @@
 
 #include "system.h"
 
-rtems_task Task_3(
-  rtems_task_argument argument
-)
+rtems_task Task_3( rtems_task_argument argument )
 {
   (void) argument;
 
-  rtems_status_code  status;
-  void              *segment_address_1;
-  void              *segment_address_2;
+  rtems_status_code status;
+  void             *segment_address_1;
+  void             *segment_address_2;
 
   puts(
     "TA3 - rtems_region_get_segment - wait on 3750 byte segment from region 2"

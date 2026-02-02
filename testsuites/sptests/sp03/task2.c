@@ -32,9 +32,7 @@
 
 #include "system.h"
 
-rtems_task Task_2(
-  rtems_task_argument argument
-)
+rtems_task Task_2( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -45,7 +43,7 @@ rtems_task Task_2(
   status = rtems_object_get_classic_name( rtems_task_self(), &name );
   directive_failed( status, "rtems_object_get_classic_name" );
 
-  while( FOREVER ) {
+  while ( FOREVER ) {
     status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
     directive_failed( status, "rtems_task_wake_after" );
 

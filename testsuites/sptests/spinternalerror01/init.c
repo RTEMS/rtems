@@ -49,22 +49,20 @@ void boot_card( const char *cmdline )
 
 static void fatal_extension(
   Internal_errors_Source source,
-  bool always_set_to_false,
-  Internal_errors_t error
+  bool                   always_set_to_false,
+  Internal_errors_t      error
 )
 {
   TEST_BEGIN();
 
   if (
-    source == FATAL_SOURCE
-      && !always_set_to_false
-      && error == FATAL_ERROR
+    source == FATAL_SOURCE && !always_set_to_false && error == FATAL_ERROR
   ) {
     TEST_END();
   }
 }
 
-static void *idle_body(uintptr_t ignored)
+static void *idle_body( uintptr_t ignored )
 {
   (void) ignored;
 
@@ -75,20 +73,19 @@ static void *idle_body(uintptr_t ignored)
   return NULL;
 }
 
-static void *stack_allocate(size_t size)
+static void *stack_allocate( size_t size )
 {
   (void) size;
   return NULL;
 }
 
-static void stack_free(void *ptr)
+static void stack_free( void *ptr )
 {
   (void) ptr;
 }
 
 #define CONFIGURE_INITIAL_EXTENSIONS \
-  { .fatal = fatal_extension }, \
-  RTEMS_TEST_INITIAL_EXTENSION
+  { .fatal = fatal_extension }, RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
@@ -100,7 +97,9 @@ static void stack_free(void *ptr)
 
 #define CONFIGURE_SCHEDULER
 
-#define CONFIGURE_SCHEDULER_TABLE_ENTRIES { }
+#define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
+  {                                       \
+  }
 
 #define CONFIGURE_TASK_STACK_ALLOCATOR stack_allocate
 

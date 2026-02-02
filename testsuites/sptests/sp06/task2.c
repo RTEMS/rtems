@@ -51,7 +51,7 @@ rtems_task Task_2( rtems_task_argument argument )
     directive_failed( status, "rtems_task_wake_after" );
   }
 
-  while( FOREVER ) {
+  while ( FOREVER ) {
     puts( "TA2 - rtems_task_wake_after - sleep 1/2 second" );
     status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() / 2 );
     directive_failed( status, "rtems_task_wake_after" );

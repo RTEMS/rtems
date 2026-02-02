@@ -38,22 +38,20 @@
 const char rtems_test_name[] = "SPPAGESIZE";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
-    (void) argument;
+  (void) argument;
 
-    TEST_BEGIN();
+  TEST_BEGIN();
 
-    rtems_test_assert(PAGESIZE == PAGE_SIZE);
-    rtems_test_assert(getpagesize() == PAGE_SIZE);
+  rtems_test_assert( PAGESIZE == PAGE_SIZE );
+  rtems_test_assert( getpagesize() == PAGE_SIZE );
 
-    TEST_END();
+  TEST_END();
 
-    rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER

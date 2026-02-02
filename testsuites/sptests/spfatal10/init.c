@@ -48,16 +48,16 @@
 
 static inline bool spfatal10_is_expected_error( rtems_fatal_code error )
 {
-  const rtems_assert_context *assert_context =
-    (const rtems_assert_context *) error;
+  const rtems_assert_context *assert_context = (const rtems_assert_context *)
+    error;
 
-  return strcmp( assert_context->file, ASSERT_FILE ) == 0
-    && assert_context->line == ASSERT_LINE
-    && strcmp( assert_context->function, ASSERT_FUNC ) == 0
-    && strcmp( assert_context->failed_expression, ASSERT_FEXP ) == 0;
+  return strcmp( assert_context->file, ASSERT_FILE ) == 0 &&
+         assert_context->line == ASSERT_LINE &&
+         strcmp( assert_context->function, ASSERT_FUNC ) == 0 &&
+         strcmp( assert_context->failed_expression, ASSERT_FEXP ) == 0;
 }
 
-static void force_error(void)
+static void force_error( void )
 {
   __assert_func( ASSERT_FILE, ASSERT_LINE, ASSERT_FUNC, ASSERT_FEXP );
 

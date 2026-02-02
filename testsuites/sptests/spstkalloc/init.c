@@ -35,35 +35,34 @@
 const char rtems_test_name[] = "SPSTKALLOC";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
+rtems_task Init( rtems_task_argument argument );
 
 #define MAXIMUM_STACKS 2
 
 typedef struct {
-  uint8_t Space[CPU_STACK_MINIMUM_SIZE];
+  uint8_t Space[ CPU_STACK_MINIMUM_SIZE ];
 } StackMemory_t;
 
-int            stackToAlloc = 0;
-StackMemory_t  Stacks[MAXIMUM_STACKS];
-void          *StackDeallocated = NULL;
+int           stackToAlloc = 0;
+StackMemory_t Stacks[ MAXIMUM_STACKS ];
+void         *StackDeallocated = NULL;
 
-static void *StackAllocator(size_t size)
+static void *StackAllocator( size_t size )
 {
   (void) size;
 
-  if (stackToAlloc < MAXIMUM_STACKS)
-    return &Stacks[stackToAlloc++];
+  if ( stackToAlloc < MAXIMUM_STACKS ) {
+    return &Stacks[ stackToAlloc++ ];
+  }
   return NULL;
 }
 
-static void StackDeallocator(void *stack)
+static void StackDeallocator( void *stack )
 {
   StackDeallocated = stack;
 }
 
-rtems_task Init(
-  rtems_task_argument ignored
-)
+rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
 
@@ -75,23 +74,23 @@ rtems_task Init(
 
   puts( "Init - create task TA1 to use custom stack allocator - OK" );
   rc = rtems_task_create(
-     rtems_build_name( 'T', 'A', '1', ' ' ),
-     1,
-     RTEMS_MINIMUM_STACK_SIZE,
-     RTEMS_DEFAULT_MODES,
-     RTEMS_DEFAULT_ATTRIBUTES,
-     &taskId
+    rtems_build_name( 'T', 'A', '1', ' ' ),
+    1,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &taskId
   );
   directive_failed( rc, "rtems_task_create of TA1" );
 
   puts( "Init - create task TA1 to have custom stack allocator fail" );
   rc = rtems_task_create(
-     rtems_build_name( 'F', 'A', 'I', 'L' ),
-     1,
-     RTEMS_MINIMUM_STACK_SIZE,
-     RTEMS_DEFAULT_MODES,
-     RTEMS_DEFAULT_ATTRIBUTES,
-     &taskId1
+    rtems_build_name( 'F', 'A', 'I', 'L' ),
+    1,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &taskId1
   );
   fatal_directive_status( rc, RTEMS_UNSATISFIED, "rtems_task_create of FAIL" );
 
@@ -100,7 +99,7 @@ rtems_task Init(
   directive_failed( rc, "rtems_task_delete of TA1" );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -108,8 +107,8 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
-#define CONFIGURE_TASK_STACK_ALLOCATOR    StackAllocator
-#define CONFIGURE_TASK_STACK_DEALLOCATOR  StackDeallocator
+#define CONFIGURE_TASK_STACK_ALLOCATOR   StackAllocator
+#define CONFIGURE_TASK_STACK_DEALLOCATOR StackDeallocator
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

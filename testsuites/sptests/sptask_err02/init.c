@@ -35,17 +35,15 @@
 
 const char rtems_test_name[] = "SP TASK ERROR 02";
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_time_of_day time;
   rtems_status_code status;
-  
+
   TEST_BEGIN();
-  
+
   /* wake when NULL param */
   status = rtems_task_wake_when( NULL );
   fatal_directive_status(
@@ -59,8 +57,8 @@ rtems_task Init(
   status = rtems_task_wake_when( &time );
   if ( status == RTEMS_SUCCESSFUL ) {
     puts(
-     "TA1 - rtems_task_wake_when - RTEMS_NOT_DEFINED -- "
-         "DID BSP SET THE TIME OF DAY?"
+      "TA1 - rtems_task_wake_when - RTEMS_NOT_DEFINED -- "
+      "DID BSP SET THE TIME OF DAY?"
     );
   } else {
     fatal_directive_status(
@@ -69,9 +67,9 @@ rtems_task Init(
       "rtems_task_wake_when before clock is set"
     );
     puts( "TA1 - rtems_task_wake_when - RTEMS_NOT_DEFINED" );
-   }
+  }
   /* rtems_task_wake_when */
- 
+
   build_time( &time, 2, 5, 1988, 8, 30, 45, 0 );
   print_time( "TA1 - rtems_clock_set - ", &time, "" );
   status = rtems_clock_set( &time );
@@ -80,7 +78,12 @@ rtems_task Init(
 
   build_time(
     &time,
-    2, 5, 1988, 8, 30, 48,
+    2,
+    5,
+    1988,
+    8,
+    30,
+    48,
     rtems_clock_get_ticks_per_second() + 1
   );
   time.second += 3;
@@ -101,7 +104,9 @@ rtems_task Init(
     status,
     "rtems_task_wake_when with invalid ticks per second"
   );
-  puts( "TA1 - rtems_task_wake_when - TICKINVALID - woke up RTEMS_SUCCESSFUL" );
+  puts(
+    "TA1 - rtems_task_wake_when - TICKINVALID - woke up RTEMS_SUCCESSFUL"
+  );
 
   build_time( &time, 2, 5, 1961, 8, 30, 48, 0 );
   print_time( "TA1 - rtems_task_wake_when - ", &time, "" );

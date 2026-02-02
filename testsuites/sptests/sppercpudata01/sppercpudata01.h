@@ -34,7 +34,7 @@ extern "C" {
 
 #include <rtems/score/percpudata.h>
 
-PER_CPU_DATA_ITEM_DECLARE(unsigned int, g);
+PER_CPU_DATA_ITEM_DECLARE( unsigned int, g );
 
 #ifdef __cplusplus
 }

@@ -37,11 +37,11 @@
 #include <rtems/score/memory.h>
 #include <rtems/sysinit.h>
 
-#define FATAL_ERROR_TEST_NAME            "12"
-#define FATAL_ERROR_DESCRIPTION  \
-        "_Heap_Initialize fails during RTEMS initialization"
-#define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE
-#define FATAL_ERROR_EXPECTED_ERROR       INTERNAL_ERROR_TOO_LITTLE_WORKSPACE
+#define FATAL_ERROR_TEST_NAME "12"
+#define FATAL_ERROR_DESCRIPTION \
+  "_Heap_Initialize fails during RTEMS initialization"
+#define FATAL_ERROR_EXPECTED_SOURCE INTERNAL_ERROR_CORE
+#define FATAL_ERROR_EXPECTED_ERROR  INTERNAL_ERROR_TOO_LITTLE_WORKSPACE
 
 static void force_error( void )
 {

@@ -48,37 +48,37 @@ static volatile uint32_t read_write_small = 0xdeadbeefUL;
 
 static const volatile uint32_t read_only_small = 0x601dc0feUL;
 
-static void check_tls_item(char expected)
+static void check_tls_item( char expected )
 {
-  printk("TLS item = %i\n", tls_item);
-  rtems_test_assert(tls_item == expected);
+  printk( "TLS item = %i\n", tls_item );
+  rtems_test_assert( tls_item == expected );
 }
 
-static void task(rtems_task_argument arg)
+static void task( rtems_task_argument arg )
 {
   (void) arg;
 
   rtems_status_code sc;
 
-  check_tls_item(123);
+  check_tls_item( 123 );
   tls_item = 42;
 
-  sc = rtems_event_transient_send(master_task);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_event_transient_send( master_task );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_task_suspend(RTEMS_SELF);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_task_suspend( RTEMS_SELF );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 }
 
-static void check_tls_size(void)
+static void check_tls_size( void )
 {
   const volatile TLS_Configuration *config;
-  uintptr_t tls_size;
+  uintptr_t                         tls_size;
 
   config = &_TLS_Configuration;
   tls_size = (uintptr_t) config->size;
 
-  if (tls_size != 1) {
+  if ( tls_size != 1 ) {
     printk(
       "WARNING: The thread-local storage size is %" PRIuPTR ".  It should be\n"
       "exactly one for this test.  Check the BSP implementation.  The BSP\n"
@@ -86,94 +86,94 @@ static void check_tls_size(void)
       "this test.\n",
       tls_size
     );
-    rtems_test_assert(tls_size == 1);
+    rtems_test_assert( tls_size == 1 );
   }
 }
 
-static Thread_Control *get_thread(rtems_id id)
+static Thread_Control *get_thread( rtems_id id )
 {
-  Thread_Control *the_thread;
+  Thread_Control  *the_thread;
   ISR_lock_Context lock_context;
 
-  the_thread = _Thread_Get(id, &lock_context);
-  _ISR_lock_ISR_enable(&lock_context);
+  the_thread = _Thread_Get( id, &lock_context );
+  _ISR_lock_ISR_enable( &lock_context );
   return the_thread;
 }
 
-static void test(void)
+static void test( void )
 {
-  rtems_id id;
+  rtems_id          id;
   rtems_status_code sc;
-  Thread_Control *self;
-  Thread_Control *other;
-  char *self_tp;
-  char *other_tp;
-  uintptr_t tls_item_offset;
-  char *self_tls_item;
-  char *other_tls_item;
+  Thread_Control   *self;
+  Thread_Control   *other;
+  char             *self_tp;
+  char             *other_tp;
+  uintptr_t         tls_item_offset;
+  char             *self_tls_item;
+  char             *other_tls_item;
 
   master_task = rtems_task_self();
 
-  rtems_test_assert(read_write_small == 0xdeadbeefUL);
-  rtems_test_assert(read_only_small == 0x601dc0feUL);
+  rtems_test_assert( read_write_small == 0xdeadbeefUL );
+  rtems_test_assert( read_only_small == 0x601dc0feUL );
 
-  check_tls_item(123);
+  check_tls_item( 123 );
   tls_item = 5;
 
   sc = rtems_task_create(
-    rtems_build_name('T', 'A', 'S', 'K'),
+    rtems_build_name( 'T', 'A', 'S', 'K' ),
     RTEMS_MINIMUM_PRIORITY,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &id
   );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_task_start(id, task, 0);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_task_start( id, task, 0 );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  self = get_thread(master_task);
-  other = get_thread(id);
-  self_tp = _CPU_Get_TLS_thread_pointer(&self->Registers);
-  other_tp = _CPU_Get_TLS_thread_pointer(&other->Registers);
-  tls_item_offset = (uintptr_t) (&tls_item - self_tp);
+  self = get_thread( master_task );
+  other = get_thread( id );
+  self_tp = _CPU_Get_TLS_thread_pointer( &self->Registers );
+  other_tp = _CPU_Get_TLS_thread_pointer( &other->Registers );
+  tls_item_offset = (uintptr_t) ( &tls_item - self_tp );
   self_tls_item = self_tp + tls_item_offset;
   other_tls_item = other_tp + tls_item_offset;
-  rtems_test_assert(*self_tls_item == 5);
-  rtems_test_assert(*other_tls_item == 123);
+  rtems_test_assert( *self_tls_item == 5 );
+  rtems_test_assert( *other_tls_item == 123 );
 
-  sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_event_transient_receive( RTEMS_WAIT, RTEMS_NO_TIMEOUT );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  rtems_test_assert(*self_tls_item == 5);
-  rtems_test_assert(*other_tls_item == 42);
+  rtems_test_assert( *self_tls_item == 5 );
+  rtems_test_assert( *other_tls_item == 42 );
 
-  sc = rtems_task_delete(id);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_task_delete( id );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  check_tls_item(5);
+  check_tls_item( 5 );
 }
 
-static void test_idle_during_system_init(void)
+static void test_idle_during_system_init( void )
 {
-  rtems_print_printer_printk(&rtems_test_printer);
+  rtems_print_printer_printk( &rtems_test_printer );
   TEST_BEGIN();
 
-  check_tls_item(123);
+  check_tls_item( 123 );
 }
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
   test();
 
-  rtems_test_assert(!rtems_stack_checker_is_blown());
+  rtems_test_assert( !rtems_stack_checker_is_blown() );
   check_tls_size();
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 RTEMS_SYSINIT_ITEM(

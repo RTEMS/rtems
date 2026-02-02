@@ -35,17 +35,15 @@
 
 const char rtems_test_name[] = "SP TASK ERROR 01";
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_status_code status;
-  
+
   TEST_BEGIN();
-   
-  Task_name[ 2 ]       =  rtems_build_name( 'T', 'A', '2', ' ' );
+
+  Task_name[ 2 ] = rtems_build_name( 'T', 'A', '2', ' ' );
 
   status = rtems_task_create(
     Task_name[ 2 ],
@@ -57,11 +55,11 @@ rtems_task Init(
   );
   directive_failed( status, "rtems_task_create of TA2" );
   puts( "TA1 - rtems_task_create - TA2 created - RTEMS_SUCCESSFUL" );
-  
+
   puts( "TA1 - rtems_task_start - start TA2 - RTEMS_SUCCESSFUL" );
   status = rtems_task_start( Task_id[ 2 ], Task_2, 0 );
-  directive_failed( status, "rtems_task_start of TA2" ); 
-  
+  directive_failed( status, "rtems_task_start of TA2" );
+
   puts( "TA1 - rtems_task_wake_after - yield processor - RTEMS_SUCCESSFUL" );
   status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
   directive_failed( status, "rtems_task_wake_after (yield)" );

@@ -41,8 +41,8 @@
 #include "system.h"
 
 rtems_timer_service_routine Delayed_routine(
-  rtems_id  ignored_id,
-  void     *ignored_address
+  rtems_id ignored_id,
+  void    *ignored_address
 )
 {
   (void) ignored_id;

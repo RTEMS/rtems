@@ -34,13 +34,9 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Task_Periodic(
-  rtems_task_argument argument
-);
+rtems_task Task_Periodic( rtems_task_argument argument );
 
 /* configuration information */
 
@@ -49,16 +45,16 @@ rtems_task Task_Periodic(
 
 #define CONFIGURE_MICROSECONDS_PER_TICK 20000
 
-#define CONFIGURE_MAXIMUM_TASKS               3
-#define CONFIGURE_MAXIMUM_PERIODS             10
+#define CONFIGURE_MAXIMUM_TASKS   3
+#define CONFIGURE_MAXIMUM_PERIODS 10
 
-#define CONFIGURE_INIT_TASK_PRIORITY          100
-#define CONFIGURE_INIT_TASK_INITIAL_MODES     RTEMS_DEFAULT_MODES
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_INIT_TASK_PRIORITY      100
+#define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_DEFAULT_MODES
+#define CONFIGURE_INITIAL_EXTENSIONS      RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_EXTRA_TASK_STACKS         (6 * 4 * RTEMS_MINIMUM_STACK_SIZE)
+#define CONFIGURE_EXTRA_TASK_STACKS ( 6 * 4 * RTEMS_MINIMUM_STACK_SIZE )
 
 #define CONFIGURE_SCHEDULER_CBS
 
@@ -71,13 +67,13 @@ rtems_task Task_Periodic(
 
 /* global variables */
 
-TEST_EXTERN rtems_id   Task_id;
-TEST_EXTERN rtems_name Task_name;
-TEST_EXTERN rtems_id   Task_id2;
-TEST_EXTERN rtems_name Task_name2;
+TEST_EXTERN rtems_id            Task_id;
+TEST_EXTERN rtems_name          Task_name;
+TEST_EXTERN rtems_id            Task_id2;
+TEST_EXTERN rtems_name          Task_name2;
 TEST_EXTERN rtems_task_priority Priority;
-TEST_EXTERN time_t  Period;
-TEST_EXTERN time_t  Execution;
-TEST_EXTERN time_t  Phase;
+TEST_EXTERN time_t              Period;
+TEST_EXTERN time_t              Execution;
+TEST_EXTERN time_t              Phase;
 
 /* end of include file */

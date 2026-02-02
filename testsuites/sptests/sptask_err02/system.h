@@ -35,17 +35,15 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS               1
-#define CONFIGURE_TICKS_PER_TIMESLICE       100
+#define CONFIGURE_MAXIMUM_TASKS       1
+#define CONFIGURE_TICKS_PER_TIMESLICE 100
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

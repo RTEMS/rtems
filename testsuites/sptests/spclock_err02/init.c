@@ -36,11 +36,9 @@
 const char rtems_test_name[] = "SPCLOCK_ERR 2";
 
 /* forward declaration to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -49,42 +47,42 @@ rtems_task Init(
   rtems_time_of_day time;
   rtems_status_code status;
 
-  status = rtems_io_close( 0xffff, 0x0000, NULL);
+  status = rtems_io_close( 0xffff, 0x0000, NULL );
   fatal_directive_status(
     status,
     RTEMS_INVALID_NUMBER,
     "rtems_io_close with bad major number"
   );
   puts( "TA1 - rtems_io_close - RTEMS_INVALID_NUMBER" );
-  status = rtems_io_control( 0xffff, 0x00000, NULL);
+  status = rtems_io_control( 0xffff, 0x00000, NULL );
   fatal_directive_status(
     status,
     RTEMS_INVALID_NUMBER,
     "rtems_io_close with bad major number"
   );
   puts( "TA1 - rtems_io_control - RTEMS_INVALID_NUMBER" );
-  status = rtems_io_initialize( 0xffff, 0x00000, NULL);
+  status = rtems_io_initialize( 0xffff, 0x00000, NULL );
   fatal_directive_status(
     status,
     RTEMS_INVALID_NUMBER,
     "rtems_io_initialize with bad major number"
   );
   puts( "TA1 - rtems_io_initialize - RTEMS_INVALID_NUMBER" );
-  status = rtems_io_open( 0xffff, 0x00000, NULL);
+  status = rtems_io_open( 0xffff, 0x00000, NULL );
   fatal_directive_status(
     status,
     RTEMS_INVALID_NUMBER,
     "rtems_io_open with bad major number"
   );
   puts( "TA1 - rtems_io_open - RTEMS_INVALID_NUMBER" );
-  status = rtems_io_read( 0xffff, 0x00000, NULL);
+  status = rtems_io_read( 0xffff, 0x00000, NULL );
   fatal_directive_status(
     status,
     RTEMS_INVALID_NUMBER,
     "rtems_io_read with bad major number"
   );
   puts( "TA1 - rtems_io_read - RTEMS_INVALID_NUMBER" );
-  status = rtems_io_write( 0xffff, 0x0ffff, NULL);
+  status = rtems_io_write( 0xffff, 0x0ffff, NULL );
   fatal_directive_status(
     status,
     RTEMS_INVALID_NUMBER,
@@ -144,7 +142,7 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_MAXIMUM_TASKS      1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

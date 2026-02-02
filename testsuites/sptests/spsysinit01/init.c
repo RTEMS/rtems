@@ -160,75 +160,63 @@ typedef enum {
   DONE
 } init_step;
 
-#define FIRST(x) \
-  static void x##_first(void); \
-  RTEMS_SYSINIT_ITEM( \
-    x##_first, \
-    x, \
-    RTEMS_SYSINIT_ORDER_FIRST \
-  ); \
-  static void x##_first(void)
+#define FIRST( x )                                               \
+  static void x##_first( void );                                 \
+  RTEMS_SYSINIT_ITEM( x##_first, x, RTEMS_SYSINIT_ORDER_FIRST ); \
+  static void x##_first( void )
 
-#define LAST(x) \
-  static void x##_last(void); \
-  RTEMS_SYSINIT_ITEM( \
-    x##_last, \
-    x, \
-    RTEMS_SYSINIT_ORDER_LAST_BUT_1 \
-  ); \
-  static void x##_last(void)
+#define LAST( x )                                                    \
+  static void x##_last( void );                                      \
+  RTEMS_SYSINIT_ITEM( x##_last, x, RTEMS_SYSINIT_ORDER_LAST_BUT_1 ); \
+  static void x##_last( void )
 
-#define LAST_STEP(x) \
-  static void last_##x(void) \
-  { \
-    next_step(LAST_##x); \
-  } \
-  RTEMS_SYSINIT_ITEM( \
-    last_##x, \
-    RTEMS_SYSINIT_LAST, \
-    RTEMS_SYSINIT_ORDER_##x \
-  )
+#define LAST_STEP( x )         \
+  static void last_##x( void ) \
+  {                            \
+    next_step( LAST_##x );     \
+  }                            \
+  RTEMS_SYSINIT_ITEM( last_##x, RTEMS_SYSINIT_LAST, RTEMS_SYSINIT_ORDER_##x )
 
 static init_step step;
 
-static void next_step(init_step expected)
+static void next_step( init_step expected )
 {
-  assert(step == expected);
+  assert( step == expected );
   step = expected + 1;
 }
 
-static bool info_not_init(const Objects_Information *info)
+static bool info_not_init( const Objects_Information *info )
 {
-  return _Chain_Is_empty(&info->Inactive);
+  return _Chain_Is_empty( &info->Inactive );
 }
 
-static bool info_is_init(const Objects_Information *info, size_t count)
+static bool info_is_init( const Objects_Information *info, size_t count )
 {
-  return _Chain_Node_count_unprotected(&info->Inactive) == count;
+  return _Chain_Node_count_unprotected( &info->Inactive ) == count;
 }
 
-FIRST(RTEMS_SYSINIT_WORKSPACE)
+FIRST( RTEMS_SYSINIT_WORKSPACE )
 {
-  assert(_Workspace_Area.area_begin == 0);
-  next_step(WORKSPACE_PRE);
+  assert( _Workspace_Area.area_begin == 0 );
+  next_step( WORKSPACE_PRE );
 }
 
-LAST(RTEMS_SYSINIT_WORKSPACE)
+LAST( RTEMS_SYSINIT_WORKSPACE )
 {
-  assert(_Workspace_Area.area_begin != 0);
-  next_step(WORKSPACE_POST);
+  assert( _Workspace_Area.area_begin != 0 );
+  next_step( WORKSPACE_POST );
 }
 
-FIRST(RTEMS_SYSINIT_BSP_START)
+FIRST( RTEMS_SYSINIT_BSP_START )
 {
   /*
    * Since the work performed here is BSP-specific, there is no way to test pre
    * and post conditions.
    */
-  next_step(BSP_START_PRE);
+  next_step( BSP_START_PRE );
 }
 
-LAST(RTEMS_SYSINIT_BSP_START)
+LAST( RTEMS_SYSINIT_BSP_START )
 {
   /*
    * Some BSPs initialize the printk() support in bsp_start().  So, print begin
@@ -236,747 +224,749 @@ LAST(RTEMS_SYSINIT_BSP_START)
    */
   TEST_BEGIN();
 
-  next_step(BSP_START_POST);
+  next_step( BSP_START_POST );
 }
 
-FIRST(RTEMS_SYSINIT_CPU_COUNTER)
+FIRST( RTEMS_SYSINIT_CPU_COUNTER )
 {
   /*
    * Since the work performed here is BSP-specific, there is no way to test pre
    * and post conditions.
    */
-  next_step(CPU_COUNTER_PRE);
+  next_step( CPU_COUNTER_PRE );
 }
 
-LAST(RTEMS_SYSINIT_CPU_COUNTER)
+LAST( RTEMS_SYSINIT_CPU_COUNTER )
 {
-  next_step(CPU_COUNTER_POST);
+  next_step( CPU_COUNTER_POST );
 }
 
-FIRST(RTEMS_SYSINIT_TARGET_HASH)
+FIRST( RTEMS_SYSINIT_TARGET_HASH )
 {
   /*
    * Since the work performed here is BSP-specific, there is no way to test pre
    * and post conditions.
    */
-  next_step(TARGET_HASH_PRE);
+  next_step( TARGET_HASH_PRE );
 }
 
-LAST(RTEMS_SYSINIT_TARGET_HASH)
+LAST( RTEMS_SYSINIT_TARGET_HASH )
 {
-  next_step(TARGET_HASH_POST);
+  next_step( TARGET_HASH_POST );
 }
 
-FIRST(RTEMS_SYSINIT_INITIAL_EXTENSIONS)
+FIRST( RTEMS_SYSINIT_INITIAL_EXTENSIONS )
 {
-  assert(_Chain_Is_empty(&_User_extensions_Switches_list));
-  next_step(INITIAL_EXTENSIONS_PRE);
+  assert( _Chain_Is_empty( &_User_extensions_Switches_list ) );
+  next_step( INITIAL_EXTENSIONS_PRE );
 }
 
-LAST(RTEMS_SYSINIT_INITIAL_EXTENSIONS)
+LAST( RTEMS_SYSINIT_INITIAL_EXTENSIONS )
 {
-  assert(!_Chain_Is_empty(&_User_extensions_Switches_list));
-  next_step(INITIAL_EXTENSIONS_POST);
+  assert( !_Chain_Is_empty( &_User_extensions_Switches_list ) );
+  next_step( INITIAL_EXTENSIONS_POST );
 }
 
-FIRST(RTEMS_SYSINIT_DATA_STRUCTURES)
+FIRST( RTEMS_SYSINIT_DATA_STRUCTURES )
 {
-  assert(info_not_init(&_Thread_Information.Objects));
-  next_step(DATA_STRUCTURES_PRE);
+  assert( info_not_init( &_Thread_Information.Objects ) );
+  next_step( DATA_STRUCTURES_PRE );
 }
 
-LAST(RTEMS_SYSINIT_DATA_STRUCTURES)
+LAST( RTEMS_SYSINIT_DATA_STRUCTURES )
 {
-  assert(info_is_init(&_Thread_Information.Objects, 1));
-  next_step(DATA_STRUCTURES_POST);
+  assert( info_is_init( &_Thread_Information.Objects, 1 ) );
+  next_step( DATA_STRUCTURES_POST );
 }
 
-FIRST(RTEMS_SYSINIT_USER_EXTENSIONS)
+FIRST( RTEMS_SYSINIT_USER_EXTENSIONS )
 {
-  assert(info_not_init(&_Extension_Information));
-  next_step(USER_EXTENSIONS_PRE);
+  assert( info_not_init( &_Extension_Information ) );
+  next_step( USER_EXTENSIONS_PRE );
 }
 
-LAST(RTEMS_SYSINIT_USER_EXTENSIONS)
+LAST( RTEMS_SYSINIT_USER_EXTENSIONS )
 {
-  assert(info_is_init(&_Extension_Information, 1));
-  next_step(USER_EXTENSIONS_POST);
+  assert( info_is_init( &_Extension_Information, 1 ) );
+  next_step( USER_EXTENSIONS_POST );
 }
 
-FIRST(RTEMS_SYSINIT_CLASSIC_TASKS)
+FIRST( RTEMS_SYSINIT_CLASSIC_TASKS )
 {
-  assert(info_not_init(&_RTEMS_tasks_Information.Objects));
-  next_step(CLASSIC_TASKS_PRE);
+  assert( info_not_init( &_RTEMS_tasks_Information.Objects ) );
+  next_step( CLASSIC_TASKS_PRE );
 }
 
-LAST(RTEMS_SYSINIT_CLASSIC_TASKS)
+LAST( RTEMS_SYSINIT_CLASSIC_TASKS )
 {
-  assert(info_is_init(&_RTEMS_tasks_Information.Objects, 2));
-  next_step(CLASSIC_TASKS_POST);
+  assert( info_is_init( &_RTEMS_tasks_Information.Objects, 2 ) );
+  next_step( CLASSIC_TASKS_POST );
 }
 
-FIRST(RTEMS_SYSINIT_CLASSIC_TIMER)
+FIRST( RTEMS_SYSINIT_CLASSIC_TIMER )
 {
-  assert(info_not_init(&_Timer_Information));
-  next_step(CLASSIC_TIMER_PRE);
+  assert( info_not_init( &_Timer_Information ) );
+  next_step( CLASSIC_TIMER_PRE );
 }
 
-LAST(RTEMS_SYSINIT_CLASSIC_TIMER)
+LAST( RTEMS_SYSINIT_CLASSIC_TIMER )
 {
-  assert(info_is_init(&_Timer_Information, 1));
-  next_step(CLASSIC_TIMER_POST);
+  assert( info_is_init( &_Timer_Information, 1 ) );
+  next_step( CLASSIC_TIMER_POST );
 }
 
-FIRST(RTEMS_SYSINIT_CLASSIC_MESSAGE_QUEUE)
+FIRST( RTEMS_SYSINIT_CLASSIC_MESSAGE_QUEUE )
 {
-  assert(info_not_init(&_Message_queue_Information));
-  next_step(CLASSIC_MESSAGE_QUEUE_PRE);
+  assert( info_not_init( &_Message_queue_Information ) );
+  next_step( CLASSIC_MESSAGE_QUEUE_PRE );
 }
 
-LAST(RTEMS_SYSINIT_CLASSIC_MESSAGE_QUEUE)
+LAST( RTEMS_SYSINIT_CLASSIC_MESSAGE_QUEUE )
 {
-  assert(info_is_init(&_Message_queue_Information, 1));
-  next_step(CLASSIC_MESSAGE_QUEUE_POST);
+  assert( info_is_init( &_Message_queue_Information, 1 ) );
+  next_step( CLASSIC_MESSAGE_QUEUE_POST );
 }
 
-FIRST(RTEMS_SYSINIT_CLASSIC_SEMAPHORE)
+FIRST( RTEMS_SYSINIT_CLASSIC_SEMAPHORE )
 {
-  assert(info_not_init(&_Semaphore_Information));
-  next_step(CLASSIC_SEMAPHORE_PRE);
+  assert( info_not_init( &_Semaphore_Information ) );
+  next_step( CLASSIC_SEMAPHORE_PRE );
 }
 
-LAST(RTEMS_SYSINIT_CLASSIC_SEMAPHORE)
+LAST( RTEMS_SYSINIT_CLASSIC_SEMAPHORE )
 {
-  assert(info_is_init(&_Semaphore_Information, 1));
-  next_step(CLASSIC_SEMAPHORE_POST);
+  assert( info_is_init( &_Semaphore_Information, 1 ) );
+  next_step( CLASSIC_SEMAPHORE_POST );
 }
 
-FIRST(RTEMS_SYSINIT_CLASSIC_PARTITION)
+FIRST( RTEMS_SYSINIT_CLASSIC_PARTITION )
 {
-  assert(info_not_init(&_Partition_Information));
-  next_step(CLASSIC_PARTITION_PRE);
+  assert( info_not_init( &_Partition_Information ) );
+  next_step( CLASSIC_PARTITION_PRE );
 }
 
-LAST(RTEMS_SYSINIT_CLASSIC_PARTITION)
+LAST( RTEMS_SYSINIT_CLASSIC_PARTITION )
 {
-  assert(info_is_init(&_Partition_Information, 1));
-  next_step(CLASSIC_PARTITION_POST);
+  assert( info_is_init( &_Partition_Information, 1 ) );
+  next_step( CLASSIC_PARTITION_POST );
 }
 
-FIRST(RTEMS_SYSINIT_CLASSIC_REGION)
+FIRST( RTEMS_SYSINIT_CLASSIC_REGION )
 {
-  assert(info_not_init(&_Region_Information));
-  next_step(CLASSIC_REGION_PRE);
+  assert( info_not_init( &_Region_Information ) );
+  next_step( CLASSIC_REGION_PRE );
 }
 
-LAST(RTEMS_SYSINIT_CLASSIC_REGION)
+LAST( RTEMS_SYSINIT_CLASSIC_REGION )
 {
-  assert(info_is_init(&_Region_Information, 1));
-  next_step(CLASSIC_REGION_POST);
+  assert( info_is_init( &_Region_Information, 1 ) );
+  next_step( CLASSIC_REGION_POST );
 }
 
-FIRST(RTEMS_SYSINIT_CLASSIC_DUAL_PORTED_MEMORY)
+FIRST( RTEMS_SYSINIT_CLASSIC_DUAL_PORTED_MEMORY )
 {
-  assert(info_not_init(&_Dual_ported_memory_Information));
-  next_step(CLASSIC_DUAL_PORTED_MEMORY_PRE);
+  assert( info_not_init( &_Dual_ported_memory_Information ) );
+  next_step( CLASSIC_DUAL_PORTED_MEMORY_PRE );
 }
 
-LAST(RTEMS_SYSINIT_CLASSIC_DUAL_PORTED_MEMORY)
+LAST( RTEMS_SYSINIT_CLASSIC_DUAL_PORTED_MEMORY )
 {
-  assert(info_is_init(&_Dual_ported_memory_Information, 1));
-  next_step(CLASSIC_DUAL_PORTED_MEMORY_POST);
+  assert( info_is_init( &_Dual_ported_memory_Information, 1 ) );
+  next_step( CLASSIC_DUAL_PORTED_MEMORY_POST );
 }
 
-FIRST(RTEMS_SYSINIT_CLASSIC_RATE_MONOTONIC)
+FIRST( RTEMS_SYSINIT_CLASSIC_RATE_MONOTONIC )
 {
-  assert(info_not_init(&_Rate_monotonic_Information));
-  next_step(CLASSIC_RATE_MONOTONIC_PRE);
+  assert( info_not_init( &_Rate_monotonic_Information ) );
+  next_step( CLASSIC_RATE_MONOTONIC_PRE );
 }
 
-LAST(RTEMS_SYSINIT_CLASSIC_RATE_MONOTONIC)
+LAST( RTEMS_SYSINIT_CLASSIC_RATE_MONOTONIC )
 {
-  assert(info_is_init(&_Rate_monotonic_Information, 1));
-  next_step(CLASSIC_RATE_MONOTONIC_POST);
+  assert( info_is_init( &_Rate_monotonic_Information, 1 ) );
+  next_step( CLASSIC_RATE_MONOTONIC_POST );
 }
 
-FIRST(RTEMS_SYSINIT_CLASSIC_BARRIER)
+FIRST( RTEMS_SYSINIT_CLASSIC_BARRIER )
 {
-  assert(info_not_init(&_Barrier_Information));
-  next_step(CLASSIC_BARRIER_PRE);
+  assert( info_not_init( &_Barrier_Information ) );
+  next_step( CLASSIC_BARRIER_PRE );
 }
 
-LAST(RTEMS_SYSINIT_CLASSIC_BARRIER)
+LAST( RTEMS_SYSINIT_CLASSIC_BARRIER )
 {
-  assert(info_is_init(&_Barrier_Information, 1));
-  next_step(CLASSIC_BARRIER_POST);
+  assert( info_is_init( &_Barrier_Information, 1 ) );
+  next_step( CLASSIC_BARRIER_POST );
 }
 
 #ifdef RTEMS_POSIX_API
-FIRST(RTEMS_SYSINIT_POSIX_SIGNALS)
+FIRST( RTEMS_SYSINIT_POSIX_SIGNALS )
 {
   assert(
     memcmp(
       &_POSIX_signals_Vectors,
       _POSIX_signals_Default_vectors,
-      sizeof(_POSIX_signals_Vectors)
+      sizeof( _POSIX_signals_Vectors )
     ) != 0
   );
-  next_step(POSIX_SIGNALS_PRE);
+  next_step( POSIX_SIGNALS_PRE );
 }
 
-LAST(RTEMS_SYSINIT_POSIX_SIGNALS)
+LAST( RTEMS_SYSINIT_POSIX_SIGNALS )
 {
   assert(
     memcmp(
       &_POSIX_signals_Vectors,
       _POSIX_signals_Default_vectors,
-      sizeof(_POSIX_signals_Vectors)
+      sizeof( _POSIX_signals_Vectors )
     ) == 0
   );
-  next_step(POSIX_SIGNALS_POST);
+  next_step( POSIX_SIGNALS_POST );
 }
 #endif /* RTEMS_POSIX_API */
 
-FIRST(RTEMS_SYSINIT_POSIX_THREADS)
+FIRST( RTEMS_SYSINIT_POSIX_THREADS )
 {
-  assert(info_not_init(&_POSIX_Threads_Information.Objects));
-  next_step(POSIX_THREADS_PRE);
+  assert( info_not_init( &_POSIX_Threads_Information.Objects ) );
+  next_step( POSIX_THREADS_PRE );
 }
 
-LAST(RTEMS_SYSINIT_POSIX_THREADS)
+LAST( RTEMS_SYSINIT_POSIX_THREADS )
 {
-  assert(info_is_init(&_POSIX_Threads_Information.Objects, 1));
-  next_step(POSIX_THREADS_POST);
+  assert( info_is_init( &_POSIX_Threads_Information.Objects, 1 ) );
+  next_step( POSIX_THREADS_POST );
 }
 
-FIRST(RTEMS_SYSINIT_POSIX_MESSAGE_QUEUE)
+FIRST( RTEMS_SYSINIT_POSIX_MESSAGE_QUEUE )
 {
-  assert(info_not_init(&_POSIX_Message_queue_Information));
-  next_step(POSIX_MESSAGE_QUEUE_PRE);
+  assert( info_not_init( &_POSIX_Message_queue_Information ) );
+  next_step( POSIX_MESSAGE_QUEUE_PRE );
 }
 
-LAST(RTEMS_SYSINIT_POSIX_MESSAGE_QUEUE)
+LAST( RTEMS_SYSINIT_POSIX_MESSAGE_QUEUE )
 {
-  assert(info_is_init(&_POSIX_Message_queue_Information, 1));
-  next_step(POSIX_MESSAGE_QUEUE_POST);
+  assert( info_is_init( &_POSIX_Message_queue_Information, 1 ) );
+  next_step( POSIX_MESSAGE_QUEUE_POST );
 }
 
-FIRST(RTEMS_SYSINIT_POSIX_SEMAPHORE)
+FIRST( RTEMS_SYSINIT_POSIX_SEMAPHORE )
 {
-  assert(info_not_init(&_POSIX_Semaphore_Information));
-  next_step(POSIX_SEMAPHORE_PRE);
+  assert( info_not_init( &_POSIX_Semaphore_Information ) );
+  next_step( POSIX_SEMAPHORE_PRE );
 }
 
-LAST(RTEMS_SYSINIT_POSIX_SEMAPHORE)
+LAST( RTEMS_SYSINIT_POSIX_SEMAPHORE )
 {
-  assert(info_is_init(&_POSIX_Semaphore_Information, 1));
-  next_step(POSIX_SEMAPHORE_POST);
+  assert( info_is_init( &_POSIX_Semaphore_Information, 1 ) );
+  next_step( POSIX_SEMAPHORE_POST );
 }
 
 #ifdef RTEMS_POSIX_API
-FIRST(RTEMS_SYSINIT_POSIX_TIMER)
+FIRST( RTEMS_SYSINIT_POSIX_TIMER )
 {
-  assert(info_not_init(&_POSIX_Timer_Information));
-  next_step(POSIX_TIMER_PRE);
+  assert( info_not_init( &_POSIX_Timer_Information ) );
+  next_step( POSIX_TIMER_PRE );
 }
 
-LAST(RTEMS_SYSINIT_POSIX_TIMER)
+LAST( RTEMS_SYSINIT_POSIX_TIMER )
 {
-  assert(info_is_init(&_POSIX_Timer_Information, 1));
-  next_step(POSIX_TIMER_POST);
+  assert( info_is_init( &_POSIX_Timer_Information, 1 ) );
+  next_step( POSIX_TIMER_POST );
 }
 #endif /* RTEMS_POSIX_API */
 
-FIRST(RTEMS_SYSINIT_POSIX_SHM)
+FIRST( RTEMS_SYSINIT_POSIX_SHM )
 {
-  assert(info_not_init(&_POSIX_Shm_Information));
-  next_step(POSIX_SHM_PRE);
+  assert( info_not_init( &_POSIX_Shm_Information ) );
+  next_step( POSIX_SHM_PRE );
 }
 
-LAST(RTEMS_SYSINIT_POSIX_SHM)
+LAST( RTEMS_SYSINIT_POSIX_SHM )
 {
-  assert(info_is_init(&_POSIX_Shm_Information, 1));
-  next_step(POSIX_SHM_POST);
+  assert( info_is_init( &_POSIX_Shm_Information, 1 ) );
+  next_step( POSIX_SHM_POST );
 }
 
 static size_t user_extensions_pre_posix_cleanup;
 
-FIRST(RTEMS_SYSINIT_POSIX_CLEANUP)
+FIRST( RTEMS_SYSINIT_POSIX_CLEANUP )
 {
-  user_extensions_pre_posix_cleanup =
-    _Chain_Node_count_unprotected(&_User_extensions_List.Active);
-  next_step(POSIX_CLEANUP_PRE);
+  user_extensions_pre_posix_cleanup = _Chain_Node_count_unprotected(
+    &_User_extensions_List.Active
+  );
+  next_step( POSIX_CLEANUP_PRE );
 }
 
-LAST(RTEMS_SYSINIT_POSIX_CLEANUP)
+LAST( RTEMS_SYSINIT_POSIX_CLEANUP )
 {
   assert(
     user_extensions_pre_posix_cleanup + 1 ==
-      _Chain_Node_count_unprotected(&_User_extensions_List.Active)
+    _Chain_Node_count_unprotected( &_User_extensions_List.Active )
   );
-  next_step(POSIX_CLEANUP_POST);
+  next_step( POSIX_CLEANUP_POST );
 }
 
-FIRST(RTEMS_SYSINIT_POSIX_KEYS)
+FIRST( RTEMS_SYSINIT_POSIX_KEYS )
 {
-  assert(info_not_init(&_POSIX_Keys_Information));
-  next_step(POSIX_KEYS_PRE);
+  assert( info_not_init( &_POSIX_Keys_Information ) );
+  next_step( POSIX_KEYS_PRE );
 }
 
-LAST(RTEMS_SYSINIT_POSIX_KEYS)
+LAST( RTEMS_SYSINIT_POSIX_KEYS )
 {
-  assert(info_is_init(&_POSIX_Keys_Information, 1));
-  next_step(POSIX_KEYS_POST);
+  assert( info_is_init( &_POSIX_Keys_Information, 1 ) );
+  next_step( POSIX_KEYS_POST );
 }
 
-FIRST(RTEMS_SYSINIT_IDLE_THREADS)
+FIRST( RTEMS_SYSINIT_IDLE_THREADS )
 {
-  assert(_System_state_Is_before_initialization(_System_state_Get()));
-  next_step(IDLE_THREADS_PRE);
+  assert( _System_state_Is_before_initialization( _System_state_Get() ) );
+  next_step( IDLE_THREADS_PRE );
 }
 
-LAST(RTEMS_SYSINIT_IDLE_THREADS)
+LAST( RTEMS_SYSINIT_IDLE_THREADS )
 {
-  assert(_System_state_Is_before_multitasking(_System_state_Get()));
-  next_step(IDLE_THREADS_POST);
+  assert( _System_state_Is_before_multitasking( _System_state_Get() ) );
+  next_step( IDLE_THREADS_POST );
 }
 
-FIRST(RTEMS_SYSINIT_LIBIO)
+FIRST( RTEMS_SYSINIT_LIBIO )
 {
-  assert(rtems_libio_iop_free_head == NULL);
-  next_step(LIBIO_PRE);
+  assert( rtems_libio_iop_free_head == NULL );
+  next_step( LIBIO_PRE );
 }
 
-LAST(RTEMS_SYSINIT_LIBIO)
+LAST( RTEMS_SYSINIT_LIBIO )
 {
-  assert(rtems_libio_iop_free_head == &rtems_libio_iops[0]);
-  next_step(LIBIO_POST);
+  assert( rtems_libio_iop_free_head == &rtems_libio_iops[ 0 ] );
+  next_step( LIBIO_POST );
 }
 
 static size_t user_extensions_pre_user_env;
 
-FIRST(RTEMS_SYSINIT_USER_ENVIRONMENT)
+FIRST( RTEMS_SYSINIT_USER_ENVIRONMENT )
 {
-  user_extensions_pre_user_env =
-    _Chain_Node_count_unprotected(&_User_extensions_List.Active);
-  next_step(USER_ENVIRONMENT_PRE);
+  user_extensions_pre_user_env = _Chain_Node_count_unprotected(
+    &_User_extensions_List.Active
+  );
+  next_step( USER_ENVIRONMENT_PRE );
 }
 
-LAST(RTEMS_SYSINIT_USER_ENVIRONMENT)
+LAST( RTEMS_SYSINIT_USER_ENVIRONMENT )
 {
   assert(
     user_extensions_pre_user_env + 1 ==
-      _Chain_Node_count_unprotected(&_User_extensions_List.Active)
+    _Chain_Node_count_unprotected( &_User_extensions_List.Active )
   );
-  next_step(USER_ENVIRONMENT_POST);
+  next_step( USER_ENVIRONMENT_POST );
 }
 
-FIRST(RTEMS_SYSINIT_ROOT_FILESYSTEM)
+FIRST( RTEMS_SYSINIT_ROOT_FILESYSTEM )
 {
   struct stat st;
-  int rv;
+  int         rv;
 
-  rv = stat("/", &st);
-  assert(rv == -1);
-  next_step(ROOT_FILESYSTEM_PRE);
+  rv = stat( "/", &st );
+  assert( rv == -1 );
+  next_step( ROOT_FILESYSTEM_PRE );
 }
 
-LAST(RTEMS_SYSINIT_ROOT_FILESYSTEM)
+LAST( RTEMS_SYSINIT_ROOT_FILESYSTEM )
 {
   struct stat st;
-  int rv;
+  int         rv;
 
-  rv = stat("/", &st);
-  assert(rv == 0);
-  next_step(ROOT_FILESYSTEM_POST);
+  rv = stat( "/", &st );
+  assert( rv == 0 );
+  next_step( ROOT_FILESYSTEM_POST );
 }
 
-FIRST(RTEMS_SYSINIT_BSP_PRE_DRIVERS)
+FIRST( RTEMS_SYSINIT_BSP_PRE_DRIVERS )
 {
   /*
    * Since the work performed here is BSP-specific, there is no way to test pre
    * and post conditions.
    */
-  next_step(BSP_PRE_DRIVERS_PRE);
+  next_step( BSP_PRE_DRIVERS_PRE );
 }
 
-LAST(RTEMS_SYSINIT_BSP_PRE_DRIVERS)
+LAST( RTEMS_SYSINIT_BSP_PRE_DRIVERS )
 {
-  next_step(BSP_PRE_DRIVERS_POST);
+  next_step( BSP_PRE_DRIVERS_POST );
 }
 
-FIRST(RTEMS_SYSINIT_DEVICE_DRIVERS)
+FIRST( RTEMS_SYSINIT_DEVICE_DRIVERS )
 {
-  assert(!_IO_All_drivers_initialized);
-  next_step(DEVICE_DRIVERS_PRE);
+  assert( !_IO_All_drivers_initialized );
+  next_step( DEVICE_DRIVERS_PRE );
 }
 
-LAST(RTEMS_SYSINIT_DEVICE_DRIVERS)
+LAST( RTEMS_SYSINIT_DEVICE_DRIVERS )
 {
-  assert(_IO_All_drivers_initialized);
-  next_step(DEVICE_DRIVERS_POST);
+  assert( _IO_All_drivers_initialized );
+  next_step( DEVICE_DRIVERS_POST );
 }
 
-FIRST(RTEMS_SYSINIT_CLASSIC_USER_TASKS)
-{
-  _Objects_Allocator_lock();
-  assert(_Objects_Active_count(&_RTEMS_tasks_Information.Objects) == 0);
-  _Objects_Allocator_unlock();
-  next_step(CLASSIC_USER_TASKS_PRE);
-}
-
-LAST(RTEMS_SYSINIT_CLASSIC_USER_TASKS)
+FIRST( RTEMS_SYSINIT_CLASSIC_USER_TASKS )
 {
   _Objects_Allocator_lock();
-  assert(_Objects_Active_count(&_RTEMS_tasks_Information.Objects) == 1);
+  assert( _Objects_Active_count( &_RTEMS_tasks_Information.Objects ) == 0 );
   _Objects_Allocator_unlock();
-  next_step(CLASSIC_USER_TASKS_POST);
+  next_step( CLASSIC_USER_TASKS_PRE );
 }
 
-FIRST(RTEMS_SYSINIT_POSIX_USER_THREADS)
+LAST( RTEMS_SYSINIT_CLASSIC_USER_TASKS )
 {
   _Objects_Allocator_lock();
-  assert(_Objects_Active_count(&_POSIX_Threads_Information.Objects) == 0);
+  assert( _Objects_Active_count( &_RTEMS_tasks_Information.Objects ) == 1 );
   _Objects_Allocator_unlock();
-  next_step(POSIX_USER_THREADS_PRE);
+  next_step( CLASSIC_USER_TASKS_POST );
 }
 
-LAST(RTEMS_SYSINIT_POSIX_USER_THREADS)
+FIRST( RTEMS_SYSINIT_POSIX_USER_THREADS )
 {
   _Objects_Allocator_lock();
-  assert(_Objects_Active_count(&_POSIX_Threads_Information.Objects) == 1);
+  assert( _Objects_Active_count( &_POSIX_Threads_Information.Objects ) == 0 );
   _Objects_Allocator_unlock();
-  next_step(POSIX_USER_THREADS_POST);
+  next_step( POSIX_USER_THREADS_PRE );
 }
 
-FIRST(RTEMS_SYSINIT_STD_FILE_DESCRIPTORS)
+LAST( RTEMS_SYSINIT_POSIX_USER_THREADS )
+{
+  _Objects_Allocator_lock();
+  assert( _Objects_Active_count( &_POSIX_Threads_Information.Objects ) == 1 );
+  _Objects_Allocator_unlock();
+  next_step( POSIX_USER_THREADS_POST );
+}
+
+FIRST( RTEMS_SYSINIT_STD_FILE_DESCRIPTORS )
 {
   struct stat st;
-  int rv;
+  int         rv;
 
-  rv = fstat(0, &st);
-  assert(rv == -1);
-  next_step(STD_FILE_DESCRIPTORS_PRE);
+  rv = fstat( 0, &st );
+  assert( rv == -1 );
+  next_step( STD_FILE_DESCRIPTORS_PRE );
 }
 
-LAST(RTEMS_SYSINIT_STD_FILE_DESCRIPTORS)
+LAST( RTEMS_SYSINIT_STD_FILE_DESCRIPTORS )
 {
   struct stat st;
-  int rv;
+  int         rv;
 
-  rv = fstat(0, &st);
-  assert(rv == 0);
-  next_step(STD_FILE_DESCRIPTORS_POST);
+  rv = fstat( 0, &st );
+  assert( rv == 0 );
+  next_step( STD_FILE_DESCRIPTORS_POST );
 }
 
-LAST_STEP(FIRST);
-LAST_STEP(SECOND);
-LAST_STEP(THIRD);
-LAST_STEP(FOURTH);
-LAST_STEP(FIFTH);
-LAST_STEP(SIXTH);
-LAST_STEP(SEVENTH);
-LAST_STEP(EIGHTH);
-LAST_STEP(NINETH);
-LAST_STEP(TENTH);
-LAST_STEP(MIDDLE);
-LAST_STEP(LAST_BUT_9);
-LAST_STEP(LAST_BUT_8);
-LAST_STEP(LAST_BUT_7);
-LAST_STEP(LAST_BUT_6);
-LAST_STEP(LAST_BUT_5);
-LAST_STEP(LAST_BUT_4);
-LAST_STEP(LAST_BUT_3);
-LAST_STEP(LAST_BUT_2);
-LAST_STEP(LAST_BUT_1);
-LAST_STEP(LAST);
+LAST_STEP( FIRST );
+LAST_STEP( SECOND );
+LAST_STEP( THIRD );
+LAST_STEP( FOURTH );
+LAST_STEP( FIFTH );
+LAST_STEP( SIXTH );
+LAST_STEP( SEVENTH );
+LAST_STEP( EIGHTH );
+LAST_STEP( NINETH );
+LAST_STEP( TENTH );
+LAST_STEP( MIDDLE );
+LAST_STEP( LAST_BUT_9 );
+LAST_STEP( LAST_BUT_8 );
+LAST_STEP( LAST_BUT_7 );
+LAST_STEP( LAST_BUT_6 );
+LAST_STEP( LAST_BUT_5 );
+LAST_STEP( LAST_BUT_4 );
+LAST_STEP( LAST_BUT_3 );
+LAST_STEP( LAST_BUT_2 );
+LAST_STEP( LAST_BUT_1 );
+LAST_STEP( LAST );
 
-static void do_barrier_create(void)
+static void do_barrier_create( void )
 {
   rtems_status_code sc;
-  rtems_id id;
+  rtems_id          id;
 
   sc = rtems_barrier_create(
-    rtems_build_name('T', 'E', 'S', 'T'),
+    rtems_build_name( 'T', 'E', 'S', 'T' ),
     RTEMS_DEFAULT_ATTRIBUTES,
     1,
     &id
   );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_barrier_delete(id);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_barrier_delete( id );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 }
 
-static void do_extensions_create(void)
+static void do_extensions_create( void )
 {
-  rtems_status_code sc;
-  rtems_id id;
+  rtems_status_code      sc;
+  rtems_id               id;
   rtems_extensions_table table;
 
-  memset(&table, 0, sizeof(table));
+  memset( &table, 0, sizeof( table ) );
   sc = rtems_extension_create(
-    rtems_build_name('T', 'E', 'S', 'T'),
+    rtems_build_name( 'T', 'E', 'S', 'T' ),
     &table,
     &id
   );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_extension_delete(id);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_extension_delete( id );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 }
 
-static void do_message_queue_create(void)
+static void do_message_queue_create( void )
 {
   rtems_status_code sc;
-  rtems_id id;
+  rtems_id          id;
 
   sc = rtems_message_queue_create(
-    rtems_build_name('T', 'E', 'S', 'T'),
+    rtems_build_name( 'T', 'E', 'S', 'T' ),
     1,
     1,
     RTEMS_DEFAULT_ATTRIBUTES,
     &id
   );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_message_queue_delete(id);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_message_queue_delete( id );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 }
 
-static void do_partition_create(void)
+static void do_partition_create( void )
 {
   rtems_status_code sc;
-  rtems_id id;
-  long buf[32];
+  rtems_id          id;
+  long              buf[ 32 ];
 
   sc = rtems_partition_create(
-    rtems_build_name('T', 'E', 'S', 'T'),
+    rtems_build_name( 'T', 'E', 'S', 'T' ),
     buf,
-    sizeof(buf),
-    sizeof(buf),
+    sizeof( buf ),
+    sizeof( buf ),
     RTEMS_DEFAULT_ATTRIBUTES,
     &id
   );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_partition_delete(id);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_partition_delete( id );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 }
 
-static void do_period_create(void)
+static void do_period_create( void )
 {
   rtems_status_code sc;
-  rtems_id id;
+  rtems_id          id;
 
   sc = rtems_rate_monotonic_create(
-    rtems_build_name('T', 'E', 'S', 'T'),
+    rtems_build_name( 'T', 'E', 'S', 'T' ),
     &id
   );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_rate_monotonic_delete(id);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_rate_monotonic_delete( id );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 }
 
-static void do_port_create(void)
+static void do_port_create( void )
 {
   rtems_status_code sc;
-  rtems_id id;
+  rtems_id          id;
 
   sc = rtems_port_create(
-    rtems_build_name('T', 'E', 'S', 'T'),
+    rtems_build_name( 'T', 'E', 'S', 'T' ),
     NULL,
     NULL,
     1,
     &id
   );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_port_delete(id);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_port_delete( id );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 }
 
-static void do_region_create(void)
+static void do_region_create( void )
 {
   rtems_status_code sc;
-  rtems_id id;
-  long buf[32];
+  rtems_id          id;
+  long              buf[ 32 ];
 
   sc = rtems_region_create(
-    rtems_build_name('T', 'E', 'S', 'T'),
+    rtems_build_name( 'T', 'E', 'S', 'T' ),
     buf,
-    sizeof(buf),
+    sizeof( buf ),
     1,
     RTEMS_DEFAULT_ATTRIBUTES,
     &id
   );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_region_delete(id);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_region_delete( id );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 }
 
-static void do_semaphore_create(void)
+static void do_semaphore_create( void )
 {
   rtems_status_code sc;
-  rtems_id id;
+  rtems_id          id;
 
   sc = rtems_semaphore_create(
-    rtems_build_name('T', 'E', 'S', 'T'),
+    rtems_build_name( 'T', 'E', 'S', 'T' ),
     0,
     RTEMS_DEFAULT_ATTRIBUTES,
     0,
     &id
   );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_semaphore_delete(id);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_semaphore_delete( id );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 }
 
-static void do_task_create(void)
+static void do_task_create( void )
 {
   rtems_status_code sc;
-  rtems_id id;
+  rtems_id          id;
 
   sc = rtems_task_create(
-    rtems_build_name('T', 'E', 'S', 'T'),
+    rtems_build_name( 'T', 'E', 'S', 'T' ),
     1,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &id
   );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_task_delete(id);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_task_delete( id );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 }
 
-static void do_timer_create(void)
+static void do_timer_create( void )
 {
   rtems_status_code sc;
-  rtems_id id;
+  rtems_id          id;
 
-  sc = rtems_timer_create(rtems_build_name('T', 'E', 'S', 'T'), &id);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_timer_create( rtems_build_name( 'T', 'E', 'S', 'T' ), &id );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_timer_delete(id);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_timer_delete( id );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 }
 
-static void do_cleanup_push_pop(void)
+static void do_cleanup_push_pop( void )
 {
-  pthread_cleanup_push(NULL, NULL);
-  pthread_cleanup_pop(0);
+  pthread_cleanup_push( NULL, NULL );
+  pthread_cleanup_pop( 0 );
 }
 
-static void do_posix_key_create(void)
+static void do_posix_key_create( void )
 {
   pthread_key_t key;
-  int eno;
+  int           eno;
 
-  eno = pthread_key_create(&key, NULL);
-  rtems_test_assert(eno == 0);
+  eno = pthread_key_create( &key, NULL );
+  rtems_test_assert( eno == 0 );
 
-  eno = pthread_key_delete(key);
-  rtems_test_assert(eno == 0);
+  eno = pthread_key_delete( key );
+  rtems_test_assert( eno == 0 );
 }
 
-static void do_posix_mq_open(void)
+static void do_posix_mq_open( void )
 {
   struct mq_attr attr;
-  mqd_t mq;
-  int rv;
+  mqd_t          mq;
+  int            rv;
 
-  memset(&attr, 0, sizeof(attr));
+  memset( &attr, 0, sizeof( attr ) );
   attr.mq_maxmsg = 1;
   attr.mq_msgsize = 1;
-  mq = mq_open("mq", O_CREAT | O_RDWR, S_IRWXU | S_IRWXG | S_IRWXO, &attr);
-  rtems_test_assert(mq != (mqd_t) -1);
+  mq = mq_open( "mq", O_CREAT | O_RDWR, S_IRWXU | S_IRWXG | S_IRWXO, &attr );
+  rtems_test_assert( mq != (mqd_t) -1 );
 
-  rv = mq_close(mq);
-  rtems_test_assert(rv == 0);
+  rv = mq_close( mq );
+  rtems_test_assert( rv == 0 );
 
-  rv = mq_unlink("mq");
-  rtems_test_assert(rv == 0);
+  rv = mq_unlink( "mq" );
+  rtems_test_assert( rv == 0 );
 }
 
-static void do_posix_sem_open(void)
+static void do_posix_sem_open( void )
 {
   sem_t *sem;
-  int rv;
+  int    rv;
 
-  sem = sem_open("sem", O_CREAT | O_RDWR, S_IRWXU | S_IRWXG | S_IRWXO, 0);
-  rtems_test_assert(sem != SEM_FAILED);
+  sem = sem_open( "sem", O_CREAT | O_RDWR, S_IRWXU | S_IRWXG | S_IRWXO, 0 );
+  rtems_test_assert( sem != SEM_FAILED );
 
-  rv = sem_close(sem);
-  rtems_test_assert(rv == 0);
+  rv = sem_close( sem );
+  rtems_test_assert( rv == 0 );
 
-  rv = sem_unlink("sem");
-  rtems_test_assert(rv == 0);
+  rv = sem_unlink( "sem" );
+  rtems_test_assert( rv == 0 );
 }
 
-static void do_posix_shm_open(void)
+static void do_posix_shm_open( void )
 {
   int fd;
   int rv;
 
-  fd = shm_open("/shm", O_CREAT | O_RDWR, S_IRWXU | S_IRWXG | S_IRWXO);
-  rtems_test_assert(fd >= 0);
+  fd = shm_open( "/shm", O_CREAT | O_RDWR, S_IRWXU | S_IRWXG | S_IRWXO );
+  rtems_test_assert( fd >= 0 );
 
-  rv = close(fd);
-  rtems_test_assert(rv == 0);
+  rv = close( fd );
+  rtems_test_assert( rv == 0 );
 
-  rv = shm_unlink("/shm");
-  rtems_test_assert(rv == 0);
+  rv = shm_unlink( "/shm" );
+  rtems_test_assert( rv == 0 );
 }
 
-static void do_posix_timer_create(void)
+static void do_posix_timer_create( void )
 {
 #ifdef RTEMS_POSIX_API
-  int rv;
+  int     rv;
   timer_t timer;
 
-  rv = timer_create(CLOCK_REALTIME, NULL, &timer);
-  rtems_test_assert(rv == 0);
+  rv = timer_create( CLOCK_REALTIME, NULL, &timer );
+  rtems_test_assert( rv == 0 );
 
-  rv = timer_delete(timer);
-  rtems_test_assert(rv == 0);
+  rv = timer_delete( timer );
+  rtems_test_assert( rv == 0 );
 #endif /* RTEMS_POSIX_API */
 }
 
-static void check_config(void)
+static void check_config( void )
 {
   const rtems_api_configuration_table *config;
 
   config = rtems_configuration_get_rtems_api_configuration();
 
-  rtems_test_assert(!config->notepads_enabled);
-  rtems_test_assert(config->maximum_tasks == 2);
-  rtems_test_assert(config->maximum_timers == 1);
-  rtems_test_assert(config->maximum_semaphores == 1);
-  rtems_test_assert(config->maximum_message_queues == 1);
-  rtems_test_assert(config->maximum_partitions == 1);
-  rtems_test_assert(config->maximum_regions == 1);
-  rtems_test_assert(config->maximum_ports == 1);
-  rtems_test_assert(config->maximum_periods == 1);
-  rtems_test_assert(config->maximum_barriers == 1);
-  rtems_test_assert(config->number_of_initialization_tasks == 1);
-  rtems_test_assert(config->User_initialization_tasks_table != NULL);
+  rtems_test_assert( !config->notepads_enabled );
+  rtems_test_assert( config->maximum_tasks == 2 );
+  rtems_test_assert( config->maximum_timers == 1 );
+  rtems_test_assert( config->maximum_semaphores == 1 );
+  rtems_test_assert( config->maximum_message_queues == 1 );
+  rtems_test_assert( config->maximum_partitions == 1 );
+  rtems_test_assert( config->maximum_regions == 1 );
+  rtems_test_assert( config->maximum_ports == 1 );
+  rtems_test_assert( config->maximum_periods == 1 );
+  rtems_test_assert( config->maximum_barriers == 1 );
+  rtems_test_assert( config->number_of_initialization_tasks == 1 );
+  rtems_test_assert( config->User_initialization_tasks_table != NULL );
 }
 
-static void do_use_global_user_env(void)
+static void do_use_global_user_env( void )
 {
   rtems_libio_use_global_env();
 }
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
-  next_step(INIT_TASK);
+  next_step( INIT_TASK );
   do_barrier_create();
   do_extensions_create();
   do_message_queue_create();
@@ -996,10 +986,10 @@ static void Init(rtems_task_argument arg)
   do_use_global_user_env();
   check_config();
   TEST_END();
-  exit(0);
+  exit( 0 );
 }
 
-static void *POSIX_Init(void *arg)
+static void *POSIX_Init( void *arg )
 {
   (void) arg;
 
@@ -1049,7 +1039,7 @@ static void *POSIX_Init(void *arg)
 #define CONFIGURE_MAXIMUM_POSIX_KEYS 1
 
 #define CONFIGURE_MESSAGE_BUFFER_MEMORY \
-  CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE(1, 1)
+  CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 1, 1 )
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

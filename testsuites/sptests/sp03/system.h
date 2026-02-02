@@ -30,17 +30,11 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Task_1(
-  rtems_task_argument argument
-);
+rtems_task Task_1( rtems_task_argument argument );
 
-rtems_task Task_2(
-  rtems_task_argument argument
-);
+rtems_task Task_2( rtems_task_argument argument );
 
 /* configuration information */
 
@@ -51,8 +45,8 @@ rtems_task Task_2(
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_EXTRA_TASK_STACKS         (1 * RTEMS_MINIMUM_STACK_SIZE)
-#define CONFIGURE_MAXIMUM_TASKS             3
+#define CONFIGURE_EXTRA_TASK_STACKS ( 1 * RTEMS_MINIMUM_STACK_SIZE )
+#define CONFIGURE_MAXIMUM_TASKS     3
 
 #include <rtems/confdefs.h>
 

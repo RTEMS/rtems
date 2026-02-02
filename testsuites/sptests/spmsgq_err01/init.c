@@ -34,9 +34,7 @@
 #include "system.h"
 const char rtems_test_name[] = "SP MESSAGE QUEUE ERROR 1";
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -46,11 +44,11 @@ rtems_task Init(
   rtems_status_code status;
 
   rtems_test_assert( MAX_MESSAGES == 2 );
-  
+
   TEST_BEGIN();
-  Queue_name[ 1 ]      =  rtems_build_name( 'M', 'Q', '1', ' ' );
-  Queue_name[ 2 ]      =  rtems_build_name( 'M', 'Q', '2', ' ' );
-  
+  Queue_name[ 1 ] = rtems_build_name( 'M', 'Q', '1', ' ' );
+  Queue_name[ 2 ] = rtems_build_name( 'M', 'Q', '2', ' ' );
+
   status = rtems_message_queue_broadcast( 100, buffer, MESSAGE_SIZE, &count );
   fatal_directive_status(
     status,
@@ -87,7 +85,9 @@ rtems_task Init(
     RTEMS_INVALID_NUMBER,
     "rtems_message_queue_create with 0 count"
   );
-  puts( "TA1 - rtems_message_queue_create - count = 0 - RTEMS_INVALID_NUMBER" );
+  puts(
+    "TA1 - rtems_message_queue_create - count = 0 - RTEMS_INVALID_NUMBER"
+  );
 
   /* max size == 0 */
   status = rtems_message_queue_create(
@@ -204,7 +204,9 @@ rtems_task Init(
     RTEMS_INVALID_ADDRESS,
     "rtems_message_queue_get_number_pending with NULL param"
   );
-  puts("TA1 - rtems_message_queue_get_number_pending - RTEMS_INVALID_ADDRESS");
+  puts(
+    "TA1 - rtems_message_queue_get_number_pending - RTEMS_INVALID_ADDRESS"
+  );
 
   /* number pending - bad Id */
   status = rtems_message_queue_get_number_pending( 100, &count );
@@ -235,7 +237,7 @@ rtems_task Init(
 
   status = rtems_message_queue_receive(
     100,
-    (long (*)[4]) buffer,
+    (long ( * )[ 4 ]) buffer,
     &size,
     RTEMS_DEFAULT_OPTIONS,
     0
@@ -261,12 +263,12 @@ rtems_task Init(
   );
   puts(
     "TA1 - rtems_message_queue_receive - Q 1 - "
-      "RTEMS_INVALID_ADDRESS NULL buffer"
+    "RTEMS_INVALID_ADDRESS NULL buffer"
   );
 
   status = rtems_message_queue_receive(
     Queue_id[ 1 ],
-    (long (*)[4]) buffer,
+    (long ( * )[ 4 ]) buffer,
     NULL,
     RTEMS_NO_WAIT,
     RTEMS_NO_TIMEOUT
@@ -278,12 +280,12 @@ rtems_task Init(
   );
   puts(
     "TA1 - rtems_message_queue_receive - Q 1 - "
-      "RTEMS_INVALID_ADDRESS NULL size"
+    "RTEMS_INVALID_ADDRESS NULL size"
   );
 
   status = rtems_message_queue_receive(
     Queue_id[ 1 ],
-    (long (*)[4]) buffer,
+    (long ( * )[ 4 ]) buffer,
     &size,
     RTEMS_NO_WAIT,
     RTEMS_NO_TIMEOUT
@@ -298,7 +300,7 @@ rtems_task Init(
   puts( "TA1 - rtems_message_queue_receive - Q 1 - timeout in 3 seconds" );
   status = rtems_message_queue_receive(
     Queue_id[ 1 ],
-    (long (*)[4]) buffer,
+    (long ( * )[ 4 ]) buffer,
     &size,
     RTEMS_DEFAULT_OPTIONS,
     3 * rtems_clock_get_ticks_per_second()
@@ -335,11 +337,15 @@ rtems_task Init(
 
   status = rtems_message_queue_send( Queue_id[ 1 ], buffer, MESSAGE_SIZE );
   directive_failed( status, "rtems_message_queue_send" );
-  puts( "TA1 - rtems_message_queue_send - BUFFER 1 TO Q 1 - RTEMS_SUCCESSFUL" );
+  puts(
+    "TA1 - rtems_message_queue_send - BUFFER 1 TO Q 1 - RTEMS_SUCCESSFUL"
+  );
 
   status = rtems_message_queue_send( Queue_id[ 1 ], buffer, MESSAGE_SIZE );
   directive_failed( status, "rtems_message_queue_send" );
-  puts( "TA1 - rtems_message_queue_send - BUFFER 2 TO Q 1 - RTEMS_SUCCESSFUL" );
+  puts(
+    "TA1 - rtems_message_queue_send - BUFFER 2 TO Q 1 - RTEMS_SUCCESSFUL"
+  );
 
   status = rtems_message_queue_send( Queue_id[ 1 ], buffer, MESSAGE_SIZE );
   fatal_directive_status(
@@ -370,7 +376,11 @@ rtems_task Init(
   puts( "TA1 - rtems_message_queue_urgent - RTEMS_INVALID_ID" );
 
   status = rtems_message_queue_broadcast(
-     Queue_id[ 1 ], NULL, MESSAGE_SIZE, &count );
+    Queue_id[ 1 ],
+    NULL,
+    MESSAGE_SIZE,
+    &count
+  );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ADDRESS,
@@ -381,7 +391,11 @@ rtems_task Init(
   );
 
   status = rtems_message_queue_broadcast(
-     Queue_id[ 1 ], buffer, MESSAGE_SIZE + 1, &count );
+    Queue_id[ 1 ],
+    buffer,
+    MESSAGE_SIZE + 1,
+    &count
+  );
   fatal_directive_status(
     status,
     RTEMS_INVALID_SIZE,
@@ -392,7 +406,11 @@ rtems_task Init(
   );
 
   status = rtems_message_queue_broadcast(
-      Queue_id[ 1 ], buffer, MESSAGE_SIZE, NULL );
+    Queue_id[ 1 ],
+    buffer,
+    MESSAGE_SIZE,
+    NULL
+  );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ADDRESS,

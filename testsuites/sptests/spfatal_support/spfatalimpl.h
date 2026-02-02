@@ -34,26 +34,24 @@ rtems_task Init( rtems_task_argument argument );
 
 const char rtems_test_name[] = "SPFATAL " FATAL_ERROR_TEST_NAME;
 
-static void print_test_begin_message(void)
+static void print_test_begin_message( void )
 {
   static bool done = false;
 
-  if (!done) {
+  if ( !done ) {
     done = true;
     TEST_BEGIN();
   }
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
   print_test_begin_message();
   force_error();
   printk( "Fatal error (%s) NOT hit\n", FATAL_ERROR_DESCRIPTION );
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 #ifdef FATAL_ERROR_EXPECTED_ERROR
@@ -61,12 +59,12 @@ static void Put_Error( uint32_t source, uint32_t error )
 {
   if ( source == INTERNAL_ERROR_CORE ) {
     printk( rtems_internal_error_text( error ) );
-  }
-  else if (source == INTERNAL_ERROR_RTEMS_API ){
-    if (error >  RTEMS_NOT_IMPLEMENTED )
-      printk("Unknown Internal RTEMS Error (0x%08" PRIx32 ")", error);
-    else
+  } else if ( source == INTERNAL_ERROR_RTEMS_API ) {
+    if ( error > RTEMS_NOT_IMPLEMENTED ) {
+      printk( "Unknown Internal RTEMS Error (0x%08" PRIx32 ")", error );
+    } else {
       printk( "%s", rtems_status_text( error ) );
+    }
   }
 }
 #endif
@@ -80,7 +78,7 @@ static bool is_expected_error( rtems_fatal_code error )
 {
 #ifdef FATAL_ERROR_EXPECTED_ERROR
   return error == FATAL_ERROR_EXPECTED_ERROR;
-#else /* FATAL_ERROR_EXPECTED_ERROR */
+#else  /* FATAL_ERROR_EXPECTED_ERROR */
   return FATAL_ERROR_EXPECTED_ERROR_CHECK( error );
 #endif /* FATAL_ERROR_EXPECTED_ERROR */
 }
@@ -94,33 +92,33 @@ static void Fatal_extension(
   print_test_begin_message();
   printk( "Fatal error (%s) hit\n", FATAL_ERROR_DESCRIPTION );
 
-  if ( source != FATAL_ERROR_EXPECTED_SOURCE ){
-    printk( "ERROR==> Fatal Extension source Expected (");
+  if ( source != FATAL_ERROR_EXPECTED_SOURCE ) {
+    printk( "ERROR==> Fatal Extension source Expected (" );
     Put_Source( FATAL_ERROR_EXPECTED_SOURCE );
-    printk( ") received (");
+    printk( ") received (" );
     Put_Source( source );
     printk( ")\n" );
   }
 
-  if ( always_set_to_false )
+  if ( always_set_to_false ) {
     printk(
       "ERROR==> Fatal Extension is internal set to true expected false\n"
     );
+  }
 
 #ifdef FATAL_ERROR_EXPECTED_ERROR
-  if ( error !=  FATAL_ERROR_EXPECTED_ERROR ) {
-    printk( "ERROR==> Fatal Error Expected (");
+  if ( error != FATAL_ERROR_EXPECTED_ERROR ) {
+    printk( "ERROR==> Fatal Error Expected (" );
     Put_Error( source, FATAL_ERROR_EXPECTED_ERROR );
-    printk( ") received (");
+    printk( ") received (" );
     Put_Error( source, error );
     printk( ")\n" );
   }
 #endif /* FATAL_ERROR_EXPECTED_ERROR */
 
   if (
-    source == FATAL_ERROR_EXPECTED_SOURCE
-      && !always_set_to_false
-      && is_expected_error( error )
+    source == FATAL_ERROR_EXPECTED_SOURCE && !always_set_to_false &&
+    is_expected_error( error )
   ) {
     TEST_END();
   }
@@ -129,18 +127,16 @@ static void Fatal_extension(
 #define CONFIGURE_INIT
 
 #define CONFIGURE_INITIAL_EXTENSIONS \
-  { \
-    .thread_create = NULL, \
-    .thread_start = NULL, \
-    .thread_restart = NULL, \
-    .thread_delete = NULL, \
-    .thread_switch = NULL, \
-    .thread_begin = NULL, \
-    .thread_exitted = NULL, \
-    .fatal = Fatal_extension, \
-    .thread_terminate = NULL \
-  }, \
-  RTEMS_TEST_INITIAL_EXTENSION
+  { .thread_create = NULL,           \
+    .thread_start = NULL,            \
+    .thread_restart = NULL,          \
+    .thread_delete = NULL,           \
+    .thread_switch = NULL,           \
+    .thread_begin = NULL,            \
+    .thread_exitted = NULL,          \
+    .fatal = Fatal_extension,        \
+    .thread_terminate = NULL },      \
+    RTEMS_TEST_INITIAL_EXTENSION
 
 /* extra parameters may be in testcase.h */
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
@@ -150,8 +146,7 @@ static void Fatal_extension(
 #ifndef SPFATAL_TEST_CASE_EXTRA_TASKS
 #define SPFATAL_TEST_CASE_EXTRA_TASKS 0
 #endif
-#define CONFIGURE_MAXIMUM_TASKS \
-  (SPFATAL_TEST_CASE_EXTRA_TASKS + 1)
+#define CONFIGURE_MAXIMUM_TASKS ( SPFATAL_TEST_CASE_EXTRA_TASKS + 1 )
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

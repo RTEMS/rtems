@@ -47,9 +47,7 @@
 
 const char rtems_test_name[] = "SP 23";
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -57,7 +55,7 @@ rtems_task Init(
 
   TEST_BEGIN();
 
-  Task_name[ 1 ] =  rtems_build_name( 'T', 'A', '1', ' ' );
+  Task_name[ 1 ] = rtems_build_name( 'T', 'A', '1', ' ' );
 
   status = rtems_task_create(
     Task_name[ 1 ],
@@ -83,9 +81,10 @@ rtems_task Init(
   );
   directive_failed( status, "rtems_port_create of DP1" );
 
-  printf( "INIT - rtems_port_create - DP1 - int = %p   ext = %p\n",
-          Internal_port_area,
-          External_port_area
+  printf(
+    "INIT - rtems_port_create - DP1 - int = %p   ext = %p\n",
+    Internal_port_area,
+    External_port_area
   );
 
   rtems_task_exit();

@@ -32,15 +32,13 @@
 
 #include "system.h"
 
-rtems_task Task_2(
-  rtems_task_argument argument
-)
+rtems_task Task_2( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_status_code status;
 
   puts( "TA2 - rtems_task_wake_after - sleep 1 minute" );
-  status = rtems_task_wake_after( 60*rtems_clock_get_ticks_per_second() );
+  status = rtems_task_wake_after( 60 * rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after in TA2" );
 }

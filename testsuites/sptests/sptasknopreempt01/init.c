@@ -35,30 +35,30 @@ const char rtems_test_name[] = "SPTASKNOPREEMPT 1";
 
 static bool did_run;
 
-static void do_not_run(rtems_task_argument arg)
+static void do_not_run( rtems_task_argument arg )
 {
   (void) arg;
 
-  rtems_test_assert(0);
+  rtems_test_assert( 0 );
 }
 
-static void test(void)
+static void test( void )
 {
   rtems_status_code sc;
-  rtems_id task;
+  rtems_id          task;
 
   sc = rtems_task_create(
-    rtems_build_name('T', 'E', 'S', 'T'),
+    rtems_build_name( 'T', 'E', 'S', 'T' ),
     1,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &task
   );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_task_start(task, do_not_run, 0);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_task_start( task, do_not_run, 0 );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   /*
    * This will start a task with a priority of PRIORITY_MINIMUM.  Check that
@@ -70,15 +70,15 @@ static void test(void)
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_ATTRIBUTES
   );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  rtems_test_assert(!did_run);
+  rtems_test_assert( !did_run );
 
-  sc = rtems_task_delete(task);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_task_delete( task );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 }
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
@@ -87,7 +87,7 @@ static void Init(rtems_task_argument arg)
   test();
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER

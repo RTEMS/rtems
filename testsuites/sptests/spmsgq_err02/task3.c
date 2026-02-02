@@ -42,9 +42,7 @@
 
 #include "system.h"
 
-rtems_task Task_3(
-  rtems_task_argument argument
-)
+rtems_task Task_3( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -55,7 +53,7 @@ rtems_task Task_3(
   puts( "TA3 - rtems_message_queue_receive - Q 1 - RTEMS_WAIT FOREVER" );
   status = rtems_message_queue_receive(
     Queue_id[ 1 ],
-    (long (*)[4])buffer,
+    (long ( * )[ 4 ]) buffer,
     &size,
     RTEMS_DEFAULT_OPTIONS,
     RTEMS_NO_TIMEOUT

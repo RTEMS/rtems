@@ -44,9 +44,7 @@
 
 #include "system.h"
 
-rtems_task Task_1(
-  rtems_task_argument argument
-)
+rtems_task Task_1( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -60,10 +58,11 @@ rtems_task Task_1(
   status = rtems_signal_send( Task_id[ 1 ], RTEMS_SIGNAL_16 );
   directive_failed( status, "rtems_signal_send" );
 
-  if ( Task_2_preempted == TRUE )
+  if ( Task_2_preempted == TRUE ) {
     puts( "TA1 - TA2 correctly preempted me" );
+  }
 
-  puts("TA1 - Got Back!!!");
+  puts( "TA1 - Got Back!!!" );
 
   TEST_END();
   rtems_test_exit( 0 );

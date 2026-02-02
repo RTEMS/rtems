@@ -38,9 +38,7 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
 /* configuration information */
 
@@ -52,11 +50,11 @@ rtems_task Init(
 #define CONFIGURE_MICROSECONDS_PER_TICK US_PER_TICK
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-#define CONFIGURE_INIT_TASK_PRIORITY        2
-#define CONFIGURE_INIT_TASK_INITIAL_MODES   RTEMS_PREEMPT
+#define CONFIGURE_INIT_TASK_PRIORITY      2
+#define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_PREEMPT
 
-#define CONFIGURE_MAXIMUM_TASKS             2
-#define CONFIGURE_MAXIMUM_TIMERS            1
+#define CONFIGURE_MAXIMUM_TASKS  2
+#define CONFIGURE_MAXIMUM_TIMERS 1
 
 #include <rtems/confdefs.h>
 

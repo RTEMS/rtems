@@ -47,12 +47,12 @@
 
 const char rtems_test_name[] = "SPEDFSCHED 2";
 
-rtems_task_priority Prio[7] = { 0,   2,   2,   2,   2,  100, 1 };
+rtems_task_priority Prio[ 7 ] = { 0, 2, 2, 2, 2, 100, 1 };
 
 static void test_period_create_delete( void )
 {
   rtems_status_code sc;
-  rtems_id id;
+  rtems_id          id;
 
   sc = rtems_rate_monotonic_create(
     rtems_build_name( 'R', 'T', 'M', 'N' ),
@@ -64,13 +64,11 @@ static void test_period_create_delete( void )
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  uint32_t    index;
+  uint32_t          index;
   rtems_status_code status;
 
   Priorities = Prio;
@@ -79,14 +77,14 @@ rtems_task Init(
 
   test_period_create_delete();
 
-  Task_name[ 1 ] =  rtems_build_name( 'T', 'A', '1', ' ' );
-  Task_name[ 2 ] =  rtems_build_name( 'T', 'A', '2', ' ' );
-  Task_name[ 3 ] =  rtems_build_name( 'T', 'A', '3', ' ' );
-  Task_name[ 4 ] =  rtems_build_name( 'T', 'A', '4', ' ' );
-  Task_name[ 5 ] =  rtems_build_name( 'T', 'A', '5', ' ' );
-  Task_name[ 6 ] =  rtems_build_name( 'T', 'A', '6', ' ' );
+  Task_name[ 1 ] = rtems_build_name( 'T', 'A', '1', ' ' );
+  Task_name[ 2 ] = rtems_build_name( 'T', 'A', '2', ' ' );
+  Task_name[ 3 ] = rtems_build_name( 'T', 'A', '3', ' ' );
+  Task_name[ 4 ] = rtems_build_name( 'T', 'A', '4', ' ' );
+  Task_name[ 5 ] = rtems_build_name( 'T', 'A', '5', ' ' );
+  Task_name[ 6 ] = rtems_build_name( 'T', 'A', '6', ' ' );
 
-  for ( index = 1 ; index <= 6 ; index++ ) {
+  for ( index = 1; index <= 6; index++ ) {
     status = rtems_task_create(
       Task_name[ index ],
       Priorities[ index ],
@@ -98,7 +96,7 @@ rtems_task Init(
     directive_failed( status, "rtems_task_create loop" );
   }
 
-  for ( index = 1 ; index <= 6 ; index++ ) {
+  for ( index = 1; index <= 6; index++ ) {
     status = rtems_task_start( Task_id[ index ], Task_1_through_6, index );
     directive_failed( status, "rtems_task_start loop" );
   }

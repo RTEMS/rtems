@@ -37,17 +37,17 @@
 #include <rtems/test.h>
 #include <rtems/test-info.h>
 
-#if defined(EVENT_ANY)
-  #define TEST_NAME          "11"
-  #define TEST_STRING        Any
-  #define EVENTS_TO_SEND     0x1
-  #define EVENTS_TO_RECEIVE  0x3
+#if defined( EVENT_ANY )
+  #define TEST_NAME         "11"
+  #define TEST_STRING       Any
+  #define EVENTS_TO_SEND    0x1
+  #define EVENTS_TO_RECEIVE 0x3
 
-#elif defined(EVENT_ALL)
-  #define TEST_NAME          "12"
-  #define TEST_STRING        All
-  #define EVENTS_TO_SEND     0x3
-  #define EVENTS_TO_RECEIVE  0x3
+#elif defined( EVENT_ALL )
+  #define TEST_NAME         "12"
+  #define TEST_STRING       All
+  #define EVENTS_TO_SEND    0x3
+  #define EVENTS_TO_RECEIVE 0x3
 
 #else
   #error "Test Mode not defined"
@@ -65,9 +65,9 @@ typedef struct {
 
 static T_interrupt_test_state interrupt( void *arg )
 {
-  test_context           *ctx;
-  T_interrupt_test_state  state;
-  rtems_status_code       sc;
+  test_context          *ctx;
+  T_interrupt_test_state state;
+  rtems_status_code      sc;
 
   state = T_interrupt_test_get_state();
 
@@ -93,23 +93,23 @@ static T_interrupt_test_state interrupt( void *arg )
 
 static void prepare( void *arg )
 {
-  test_context    *ctx;
-  rtems_event_set  out;
+  test_context   *ctx;
+  rtems_event_set out;
 
   ctx = arg;
   ctx->early = true;
   ctx->late = false;
-  (void ) rtems_event_receive( RTEMS_PENDING_EVENTS, RTEMS_NO_WAIT, 0, &out );
+  (void) rtems_event_receive( RTEMS_PENDING_EVENTS, RTEMS_NO_WAIT, 0, &out );
 }
 
 static void action( void *arg )
 {
-  test_context    *ctx;
-  rtems_event_set  out;
+  test_context   *ctx;
+  rtems_event_set out;
 
   ctx = arg;
   ctx->early = false;
-  (void ) rtems_event_receive( EVENTS_TO_RECEIVE, RTEMS_EVENT_ANY, 1, &out );
+  (void) rtems_event_receive( EVENTS_TO_RECEIVE, RTEMS_EVENT_ANY, 1, &out );
   ctx->late = true;
 }
 
@@ -145,11 +145,11 @@ static rtems_task Init( rtems_task_argument argument )
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS       1
+#define CONFIGURE_MAXIMUM_TASKS      1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-#define CONFIGURE_MICROSECONDS_PER_TICK  1000
+#define CONFIGURE_MICROSECONDS_PER_TICK 1000
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>

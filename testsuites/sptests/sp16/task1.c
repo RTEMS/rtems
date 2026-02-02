@@ -40,18 +40,16 @@
 
 #include "system.h"
 
-rtems_task Task_1(
-  rtems_task_argument argument
-)
+rtems_task Task_1( rtems_task_argument argument )
 {
   (void) argument;
 
-  rtems_id           rnid;
-  void              *segment_address_1;
-  void              *segment_address_2;
-  void              *segment_address_3;
-  void              *segment_address_4;
-  rtems_status_code  status;
+  rtems_id          rnid;
+  void             *segment_address_1;
+  void             *segment_address_2;
+  void             *segment_address_3;
+  void             *segment_address_4;
+  rtems_status_code status;
 
   status = rtems_region_ident( Region_name[ 1 ], &rnid );
   printf( "TA1 - rtems_region_ident - rnid => %08" PRIxrtems_id "\n", rnid );
@@ -86,7 +84,7 @@ rtems_task Task_1(
   new_line;
 
   puts_nocr( "TA1 - rtems_region_get_segment - get 3080 byte segment " );
-  puts     ( "from region 1 - NO_WAIT" );
+  puts( "from region 1 - NO_WAIT" );
   status = rtems_region_get_segment(
     Region_id[ 1 ],
     3080,
@@ -113,7 +111,7 @@ rtems_task Task_1(
 
   puts(
     "TA1 - rtems_region_get_segment - wait 10 seconds for 3K "
-      "segment from region 1"
+    "segment from region 1"
   );
   status = rtems_region_get_segment(
     Region_id[ 1 ],
@@ -186,7 +184,7 @@ rtems_task Task_1(
   directive_failed( status, "rtems_task_wake_after" );
 
   puts_nocr( "TA1 - rtems_region_get_segment - wait 10 seconds for 3K " );
-  puts     ( "segment from region 1");
+  puts( "segment from region 1" );
   status = rtems_region_get_segment(
     Region_id[ 1 ],
     3072,
@@ -236,9 +234,9 @@ rtems_task Task_1(
   new_line;
 
   puts(
-   "TA1 - rtems_region_get_segment - attempt to get 3K segment from region 4"
+    "TA1 - rtems_region_get_segment - attempt to get 3K segment from region 4"
   );
-  status =  rtems_region_get_segment(
+  status = rtems_region_get_segment(
     Region_id[ 4 ],
     3072,
     RTEMS_NO_WAIT,
@@ -253,11 +251,7 @@ rtems_task Task_1(
   puts( "TA1 - rtems_region_get_segment - RTEMS_UNSATISFIED" );
 
   puts( "TA1 - rtems_region_extend - extend region 4 by 1" );
-  status = rtems_region_extend(
-    Region_id[ 4 ],
-    &Area_4[4096],
-    1
-  );
+  status = rtems_region_extend( Region_id[ 4 ], &Area_4[ 4096 ], 1 );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ADDRESS,
@@ -268,13 +262,13 @@ rtems_task Task_1(
   puts( "TA1 - rtems_region_extend - extend region 4 by 4K - 1" );
   status = rtems_region_extend(
     Region_id[ 4 ],
-    (char *) &Area_4[4096] + 1,
+    (char *) &Area_4[ 4096 ] + 1,
     4096 - 1
   );
   directive_failed( status, "rtems_region_extend" );
 
   puts(
-   "TA1 - rtems_region_get_segment - attempt to get 3K segment from region 4"
+    "TA1 - rtems_region_get_segment - attempt to get 3K segment from region 4"
   );
   status = rtems_region_get_segment(
     Region_id[ 4 ],

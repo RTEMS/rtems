@@ -37,19 +37,19 @@
 const char rtems_test_name[] = "SP 63";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-void test_case_one(void);
-void test_case_two(void);
-void test_case_three(void);
+rtems_task Init( rtems_task_argument argument );
+void       test_case_one( void );
+void       test_case_two( void );
+void       test_case_three( void );
 
-uint32_t      Memory[256];
-Heap_Control  Heap;
+uint32_t     Memory[ 256 ];
+Heap_Control Heap;
 
 /*
  *  Exercise case in heapresize.c around line 125 when new_block_size
  *  < min_block_size
  */
-void test_case_one(void)
+void test_case_one( void )
 {
   uint32_t           heap_size;
   void              *ptr1;
@@ -58,19 +58,19 @@ void test_case_one(void)
   Heap_Resize_status hc;
 
   puts( "Init - _Heap_Initialize (for test one) - OK" );
-  heap_size = _Heap_Initialize( &Heap, Memory, sizeof(Memory), 8 );
+  heap_size = _Heap_Initialize( &Heap, Memory, sizeof( Memory ), 8 );
   printf( "Init - Heap size=%" PRIu32 "\n", heap_size );
   rtems_test_assert( heap_size );
 
-  puts( "Init - _Heap_Allocate - too large size (overflow)- not OK");
+  puts( "Init - _Heap_Allocate - too large size (overflow)- not OK" );
   ptr1 = _Heap_Allocate( &Heap, UINTPTR_MAX );
   rtems_test_assert( !ptr1 );
 
-  puts( "Init - _Heap_Allocate_aligned - OK");
+  puts( "Init - _Heap_Allocate_aligned - OK" );
   ptr1 = _Heap_Allocate_aligned( &Heap, 64, 32 );
   rtems_test_assert( ptr1 );
 
-  puts( "Init - _Heap_Resize_block - OK");
+  puts( "Init - _Heap_Resize_block - OK" );
   hc = _Heap_Resize_block( &Heap, ptr1, 4, &old, &avail );
   rtems_test_assert( !hc );
 }
@@ -79,7 +79,7 @@ void test_case_one(void)
  *  Exercise case in heapresize.c around line 140 when next_is_used AND
  *  free_block_size < min_block_size.
  */
-void test_case_two(void)
+void test_case_two( void )
 {
   uint32_t           heap_size;
   void              *ptr1;
@@ -88,15 +88,15 @@ void test_case_two(void)
   Heap_Resize_status hc;
 
   puts( "\nInit - _Heap_Initialize (for test two) - OK" );
-  heap_size = _Heap_Initialize( &Heap, Memory, sizeof(Memory), 8 );
+  heap_size = _Heap_Initialize( &Heap, Memory, sizeof( Memory ), 8 );
   printf( "Init - Heap size=%" PRIu32 "\n", heap_size );
   rtems_test_assert( heap_size );
 
-  puts( "Init - _Heap_Allocate_aligned - OK");
+  puts( "Init - _Heap_Allocate_aligned - OK" );
   ptr1 = _Heap_Allocate_aligned( &Heap, 64, 4 );
   rtems_test_assert( ptr1 );
 
-  puts( "Init - _Heap_Resize_block - OK");
+  puts( "Init - _Heap_Resize_block - OK" );
   hc = _Heap_Resize_block( &Heap, ptr1, 56, &old, &avail );
   rtems_test_assert( !hc );
 }
@@ -104,17 +104,17 @@ void test_case_two(void)
 /*
  *  Exercise case in heapallocatealigned.c around line 223 when ...
  */
-void test_case_three(void)
+void test_case_three( void )
 {
-  uint32_t           heap_size;
-  void              *ptr1;
+  uint32_t heap_size;
+  void    *ptr1;
 #if 0
   Heap_Resize_status hc;
 #endif
   size_t alloc;
-  int pg, al, sz;
+  int    pg, al, sz;
 
-  puts( "Init - _Heap_Allocate_aligned - request impossible - not OK");
+  puts( "Init - _Heap_Allocate_aligned - request impossible - not OK" );
 
 #if 0
   heap_size =
@@ -123,28 +123,29 @@ void test_case_three(void)
   ptr1 = _Heap_Allocate_aligned( &Heap, 256, 1 << 16 );
 #endif
 #if 1
-  for ( sz=32 ; sz <= 80 ; sz+=4 ) {
-    for ( pg=2 ; pg < 12 ; pg++ ) {
-
-      for ( al=16 ; al >=4 ; al-- ) {
-        for ( alloc=4 ; alloc < sizeof(Memory)/2  ; alloc+=4 ) {
-          heap_size =
-            _Heap_Initialize( &Heap, &Memory[sz], sizeof(Memory)/2, 1 << pg );
+  for ( sz = 32; sz <= 80; sz += 4 ) {
+    for ( pg = 2; pg < 12; pg++ ) {
+      for ( al = 16; al >= 4; al-- ) {
+        for ( alloc = 4; alloc < sizeof( Memory ) / 2; alloc += 4 ) {
+          heap_size = _Heap_Initialize(
+            &Heap,
+            &Memory[ sz ],
+            sizeof( Memory ) / 2,
+            1 << pg
+          );
           if ( heap_size != 0 ) {
             do {
-              ptr1 = _Heap_Allocate_aligned( &Heap, alloc, 1 <<al );
+              ptr1 = _Heap_Allocate_aligned( &Heap, alloc, 1 << al );
             } while ( ptr1 );
           }
         }
       }
-   }
- }
+    }
+  }
 #endif
 }
 
-rtems_task Init(
-  rtems_task_argument ignored
-)
+rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
 
@@ -158,7 +159,7 @@ rtems_task Init(
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -166,8 +167,8 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS         1
-#define CONFIGURE_MAXIMUM_REGIONS       1
+#define CONFIGURE_MAXIMUM_TASKS      1
+#define CONFIGURE_MAXIMUM_REGIONS    1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

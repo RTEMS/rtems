@@ -32,9 +32,7 @@
 
 #include "system.h"
 
-rtems_task Priority_task(
-  rtems_task_argument its_index_arg
-)
+rtems_task Priority_task( rtems_task_argument its_index_arg )
 {
   rtems_interval      timeout;
   rtems_task_priority its_priority;
@@ -46,10 +44,11 @@ rtems_task Priority_task(
   its_index = (int) its_index_arg;
   its_priority = Task_priority[ its_index ];
 
-  if ( its_priority < 3 )
+  if ( its_priority < 3 ) {
     timeout = 5 * rtems_clock_get_ticks_per_second();
-  else
+  } else {
     timeout = RTEMS_NO_TIMEOUT;
+  }
 
   put_name( Priority_task_name[ its_index ], FALSE );
   puts( " - rtems_semaphore_obtain - wait forever on SM2" );
@@ -64,8 +63,8 @@ rtems_task Priority_task(
   if ( its_priority < PRIORITY_INHERIT_BASE_PRIORITY ) {
     printf(
       "PRI%d - WHY AM I HERE? (pri=%" PRIdrtems_task_priority ")",
-     its_index,
-     its_priority
+      its_index,
+      its_priority
     );
     rtems_test_exit( 0 );
   }
@@ -76,29 +75,33 @@ rtems_task Priority_task(
     rtems_task_priority old_priority;
 
     puts( "Set priority of self while holding resource" );
-    status =
-      rtems_task_set_priority( RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &priority );
+    status = rtems_task_set_priority(
+      RTEMS_SELF,
+      RTEMS_CURRENT_PRIORITY,
+      &priority
+    );
     directive_failed( status, "rtems_task_set_priority get current" );
     status = rtems_task_set_priority( RTEMS_SELF, priority, &old_priority );
     directive_failed( status, "rtems_task_set_priority with resource" );
     if ( priority != old_priority ) {
       printf(
         "priority != old_priority (%" PRIdrtems_task_priority
-            " != %" PRIdrtems_task_priority ")\n",
-         priority,
-         old_priority
+        " != %" PRIdrtems_task_priority ")\n",
+        priority,
+        old_priority
       );
-      rtems_test_exit(0);
+      rtems_test_exit( 0 );
     }
   }
 
-  if ( its_index == 5 )
+  if ( its_index == 5 ) {
     puts( "PRI5 - rtems_task_suspend - until all priority tasks blocked" );
+  }
   status = rtems_task_suspend( RTEMS_SELF );
   directive_failed( status, "rtems_task_suspend" );
 
   puts( "PRI5 - rtems_task_delete - all tasks waiting on SM2" );
-  for ( index = 1 ; index < 5 ; index++ ) {
+  for ( index = 1; index < 5; index++ ) {
     status = rtems_task_delete( Priority_task_id[ index ] );
     directive_failed( status, "rtems_task_delete loop" );
   }
@@ -127,7 +130,7 @@ rtems_task Priority_task(
   directive_failed( status, "PRI5 rtems_task_set_priority CURRENT" );
   printf(
     "PRI5 - priority of PRI5 is %" PRIdrtems_task_priority "\n",
-     current_priority
+    current_priority
   );
 
   (void) rtems_task_suspend( RTEMS_SELF );

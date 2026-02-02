@@ -40,22 +40,22 @@
  * contained in the file is suppose to be wrong.
  */
 #undef RTEMS_PRINTFLIKE
-#define RTEMS_PRINTFLIKE(_a, _b)
+#define RTEMS_PRINTFLIKE( _a, _b )
 
 #include <rtems/bspIo.h>
 #include <tmacros.h>
 
 const char rtems_test_name[] = "SPPRINTK";
 
-static int test_getchar(void)
+static int test_getchar( void )
 {
   return 0x35;
 }
 
-static void do_getchark(void)
+static void do_getchark( void )
 {
-  int                                sc;
-  BSP_polling_getchar_function_type  poll_char;
+  int                               sc;
+  BSP_polling_getchar_function_type poll_char;
 
   poll_char = BSP_poll_char;
 
@@ -73,17 +73,17 @@ static void do_getchark(void)
   BSP_poll_char = poll_char;
 }
 
-static void do_putk(void)
+static void do_putk( void )
 {
   putk( "This is a test of putk" );
 }
 
-static void do_printk(void)
+static void do_printk( void )
 {
-  long lm = 2147483647L;
+  long          lm = 2147483647L;
   unsigned long ulm = 4294967295UL;
-  long long llm = 9223372036854775807LL;
-  long long ullm = 18446744073709551615ULL;
+  long long     llm = 9223372036854775807LL;
+  long long     ullm = 18446744073709551615ULL;
 
   printk( "bad format                   -- %%q in parentheses (%q)\n" );
 
@@ -97,7 +97,7 @@ static void do_printk(void)
   printk( "%%u of 16                     -- %u\n", 16 );
   printk( "%%X of 16                     -- %X\n", 16 );
   printk( "%%x of 16                     -- %x\n", 16 );
-  printk( "%%p of 0x1234                 -- %p\n", (void *)0x1234 );
+  printk( "%%p of 0x1234                 -- %p\n", (void *) 0x1234 );
 
   /* long */
   printk( "%%lo of 2147483647            -- %lo\n", lm );
@@ -129,8 +129,10 @@ static void do_printk(void)
   printk( "%%u of -16                    -- %u\n", -16 );
 
   /* string formats */
-  printk( "%%s of Mary Had a Little Lamb -- '%s'\n",
-          "Mary Had a Little Lamb" );
+  printk(
+    "%%s of Mary Had a Little Lamb -- '%s'\n",
+    "Mary Had a Little Lamb"
+  );
   printk( "%%s of NULL                   -- '%s'\n", NULL );
   printk( "%%12s of joel                 -- '%20s'\n", "joel" );
   printk( "%%4s of joel                  -- '%4s'\n", "joel" );
@@ -141,7 +143,7 @@ static void do_printk(void)
 }
 
 typedef struct {
-  char buf[128];
+  char   buf[ 128 ];
   size_t i;
 } test_context;
 
@@ -169,11 +171,11 @@ static test_context test_instance;
 
 static void test_io_printf( test_context *ctx )
 {
-  int i;
-  intmax_t j;
+  int       i;
+  intmax_t  j;
   long long ll;
-  long l;
-  size_t z;
+  long      l;
+  size_t    z;
   ptrdiff_t t;
 
   clear( ctx );
@@ -210,7 +212,7 @@ static void test_io_printf( test_context *ctx )
 static void test_io_base64( test_context *ctx )
 {
   unsigned char buf[] = "abcdefghi";
-  int n;
+  int           n;
 
   clear( ctx );
   n = _Base64_Encode( put_char, ctx, buf, 9, "\n", 0 );
@@ -265,7 +267,7 @@ static void test_io_base64( test_context *ctx )
 static void test_io_base64url( test_context *ctx )
 {
   unsigned char buf[] = { 0, 0, 62, 0, 0, 63 };
-  int n;
+  int           n;
 
   clear( ctx );
   n = _Base64url_Encode( put_char, ctx, buf, sizeof( buf ), "\n", 0 );
@@ -273,24 +275,22 @@ static void test_io_base64url( test_context *ctx )
   rtems_test_assert( strcmp( ctx->buf, "AAA-\nAAA_" ) == 0 );
 }
 
-static rtems_task Init(
-  rtems_task_argument argument
-)
+static rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
   TEST_BEGIN();
 
   do_putk();
-  putk("");
+  putk( "" );
 
   do_printk();
-  putk("");
+  putk( "" );
 
   do_getchark();
-  test_io_printf(&test_instance);
-  test_io_base64(&test_instance);
-  test_io_base64url(&test_instance);
+  test_io_printf( &test_instance );
+  test_io_base64( &test_instance );
+  test_io_base64url( &test_instance );
 
   TEST_END();
   rtems_test_exit( 0 );
@@ -300,7 +300,7 @@ static rtems_task Init(
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS           1
+#define CONFIGURE_MAXIMUM_TASKS 1
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

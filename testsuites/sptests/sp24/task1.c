@@ -41,9 +41,7 @@
 
 #include "system.h"
 
-rtems_task Task_1_through_3(
-  rtems_task_argument argument
-)
+rtems_task Task_1_through_3( rtems_task_argument argument )
 {
   rtems_id          tid;
   rtems_time_of_day time;
@@ -52,7 +50,7 @@ rtems_task Task_1_through_3(
   status = rtems_task_ident( RTEMS_WHO_AM_I, RTEMS_SEARCH_ALL_NODES, &tid );
   directive_failed( status, "rtems_task_ident of self" );
 
-  while ( FOREVER )  {
+  while ( FOREVER ) {
     status = rtems_timer_fire_after(
       Timer_id[ argument ],
       task_number( tid ) * 5 * rtems_clock_get_ticks_per_second(),

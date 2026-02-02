@@ -37,15 +37,15 @@
 #include <rtems/rtems/timerimpl.h>
 
 rtems_timer_service_routine Should_not_fire_TSR(
-  rtems_id  ignored_id,
-  void     *ignored_address
+  rtems_id ignored_id,
+  void    *ignored_address
 );
 
 volatile int TSR_fired;
 
 rtems_timer_service_routine Should_not_fire_TSR(
-  rtems_id  ignored_id,
-  void     *ignored_address
+  rtems_id ignored_id,
+  void    *ignored_address
 )
 {
   (void) ignored_id;
@@ -55,8 +55,8 @@ rtems_timer_service_routine Should_not_fire_TSR(
 }
 
 static rtems_timer_service_routine Do_nothing(
-  rtems_id  ignored_id,
-  void     *ignored_address
+  rtems_id ignored_id,
+  void    *ignored_address
 )
 {
   (void) ignored_id;
@@ -65,19 +65,17 @@ static rtems_timer_service_routine Do_nothing(
   /* Do nothing */
 }
 
-rtems_task Task_1(
-  rtems_task_argument argument
-)
+rtems_task Task_1( rtems_task_argument argument )
 {
   (void) argument;
 
-  rtems_id                 tmid;
-  rtems_id                 tmid2;
-  rtems_time_of_day        time;
-  rtems_status_code        status;
-  rtems_timer_information  info;
+  rtems_id                tmid;
+  rtems_id                tmid2;
+  rtems_time_of_day       time;
+  rtems_status_code       status;
+  rtems_timer_information info;
 
-/* Get id */
+  /* Get id */
 
   puts( "TA1 - rtems_timer_ident - identing timer 1" );
   status = rtems_timer_ident( Timer_name[ 1 ], &tmid );
@@ -89,13 +87,17 @@ rtems_task Task_1(
   directive_failed( status, "rtems_timer_ident" );
   printf( "TA1 - timer 2 has id (0x%" PRIxrtems_id ")\n", tmid2 );
 
-/* make sure insertion does not unintentionally fire a timer per PR147 */
+  /* make sure insertion does not unintentionally fire a timer per PR147 */
 
   TSR_fired = 0;
 
   puts( "TA1 - rtems_timer_server_fire_after - 1 second" );
   status = rtems_timer_server_fire_after(
-    tmid, rtems_clock_get_ticks_per_second(), Should_not_fire_TSR, NULL );
+    tmid,
+    rtems_clock_get_ticks_per_second(),
+    Should_not_fire_TSR,
+    NULL
+  );
   directive_failed( status, "rtems_timer_server_fire_after" );
 
   puts( "TA1 - rtems_task_wake_after - 1/2 second" );
@@ -105,12 +107,16 @@ rtems_task Task_1(
   directive_failed( status, "rtems_timer_server_fire_after" );
   puts( "TA1 - rtems_timer_server_fire_after - timer 2 in 1/2 second" );
   status = rtems_timer_server_fire_after(
-    tmid2, rtems_clock_get_ticks_per_second() / 2, Should_not_fire_TSR, NULL );
+    tmid2,
+    rtems_clock_get_ticks_per_second() / 2,
+    Should_not_fire_TSR,
+    NULL
+  );
   directive_failed( status, "rtems_timer_server_fire_after" );
 
   if ( TSR_fired ) {
     puts( "TA1 - TSR fired and should not have!" );
-    rtems_test_exit(1);
+    rtems_test_exit( 1 );
   }
 
   puts( "TA1 - rtems_timer_cancel - timer 1" );
@@ -121,16 +127,23 @@ rtems_task Task_1(
   status = rtems_timer_cancel( tmid2 );
   directive_failed( status, "rtems_timer_cancel" );
 
-
-/* now check that rescheduling an active timer works OK. */
+  /* now check that rescheduling an active timer works OK. */
   puts( "TA1 - rtems_timer_server_fire_after - timer 1 in 30 seconds" );
   status = rtems_timer_server_fire_after(
-    tmid, 30 * rtems_clock_get_ticks_per_second(), Delayed_resume, NULL );
+    tmid,
+    30 * rtems_clock_get_ticks_per_second(),
+    Delayed_resume,
+    NULL
+  );
   directive_failed( status, "rtems_timer_server_fire_after" );
 
   puts( "TA1 - rtems_timer_server_fire_after - timer 2 in 60 seconds" );
   status = rtems_timer_server_fire_after(
-    tmid2, 60 * rtems_clock_get_ticks_per_second(), Delayed_resume, NULL );
+    tmid2,
+    60 * rtems_clock_get_ticks_per_second(),
+    Delayed_resume,
+    NULL
+  );
   directive_failed( status, "rtems_timer_server_fire_after" );
 
   status = rtems_timer_get_information( tmid, &info );
@@ -145,7 +158,11 @@ rtems_task Task_1(
 
   puts( "TA1 - rtems_timer_server_fire_after - timer 2 in 60 seconds" );
   status = rtems_timer_server_fire_after(
-    tmid2, 60 * rtems_clock_get_ticks_per_second(), Delayed_resume, NULL );
+    tmid2,
+    60 * rtems_clock_get_ticks_per_second(),
+    Delayed_resume,
+    NULL
+  );
   directive_failed( status, "rtems_timer_server_fire_after" );
 
   status = rtems_timer_get_information( tmid, &info );
@@ -161,14 +178,18 @@ rtems_task Task_1(
 
   puts( "TA1 - rtems_timer_server_fire_after - timer 2 in 60 seconds" );
   status = rtems_timer_server_fire_after(
-    tmid2, 60 * rtems_clock_get_ticks_per_second(), Delayed_resume, NULL );
+    tmid2,
+    60 * rtems_clock_get_ticks_per_second(),
+    Delayed_resume,
+    NULL
+  );
   directive_failed( status, "rtems_timer_server_fire_after" );
 
   status = rtems_timer_get_information( tmid, &info );
   directive_failed( status, "rtems_timer_get_information" );
   printf(
     "Timer 1 scheduled for %" PRIdWatchdog_Interval " ticks since boot\n",
-     info.start_time + info.initial
+    info.start_time + info.initial
   );
 
   puts( "TA1 - rtems_timer_cancel - timer 1" );
@@ -179,7 +200,7 @@ rtems_task Task_1(
   status = rtems_timer_cancel( tmid2 );
   directive_failed( status, "rtems_timer_cancel" );
 
-/* after which is allowed to fire */
+  /* after which is allowed to fire */
 
   Print_time();
 
@@ -198,7 +219,7 @@ rtems_task Task_1(
 
   Print_time();
 
-/* after which is reset and allowed to fire */
+  /* after which is reset and allowed to fire */
 
   puts( "TA1 - rtems_timer_server_fire_after - timer 1 in 3 seconds" );
   status = rtems_timer_server_fire_after(
@@ -236,7 +257,7 @@ rtems_task Task_1(
   status = rtems_clock_set( &time );
   directive_failed( status, "rtems_clock_set" );
 
-/* after which is canceled */
+  /* after which is canceled */
 
   puts( "TA1 - rtems_timer_server_fire_after - timer 1 in 3 seconds" );
   status = rtems_timer_server_fire_after(
@@ -251,7 +272,7 @@ rtems_task Task_1(
   status = rtems_timer_cancel( tmid );
   directive_failed( status, "rtems_timer_cancel" );
 
-/* when which is allowed to fire */
+  /* when which is allowed to fire */
 
   Print_time();
 
@@ -270,7 +291,7 @@ rtems_task Task_1(
 
   Print_time();
 
-/* when which is canceled */
+  /* when which is canceled */
 
   status = rtems_clock_get_tod( &time );
   directive_failed( status, "rtems_clock_get_tod" );
@@ -291,7 +312,7 @@ rtems_task Task_1(
   status = rtems_timer_cancel( tmid );
   directive_failed( status, "rtems_timer_cancel" );
 
-/* TOD timer insert with non empty TOD timer chain */
+  /* TOD timer insert with non empty TOD timer chain */
 
   status = rtems_clock_get_tod( &time );
   directive_failed( status, "rtems_clock_get_tod" );
@@ -322,7 +343,7 @@ rtems_task Task_1(
   status = rtems_timer_cancel( tmid2 );
   directive_failed( status, "rtems_timer_cancel" );
 
-/* TOD chain processing with time wrap */
+  /* TOD chain processing with time wrap */
 
   time.second = 30;
 
@@ -352,7 +373,7 @@ rtems_task Task_1(
   status = rtems_timer_cancel( tmid );
   directive_failed( status, "rtems_timer_cancel" );
 
-/* delete */
+  /* delete */
   puts( "TA1 - rtems_task_wake_after - YIELD (only task at priority)" );
   status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
   directive_failed( status, "rtems_task_wake_after" );

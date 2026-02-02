@@ -37,16 +37,14 @@
 const char rtems_test_name[] = "SP 8";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
+rtems_task Init( rtems_task_argument argument );
 
-#define PRIxrtems_mode 	PRIx32
+#define PRIxrtems_mode PRIx32
 
 #define put_mode( _comment, _output_mode ) \
-   printf( "%s %08" PRIxrtems_mode "\n", _comment, _output_mode );
+  printf( "%s %08" PRIxrtems_mode "\n", _comment, _output_mode );
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -55,7 +53,7 @@ rtems_task Init(
 
   TEST_BEGIN();
 
-/* BEGINNING OF RTEMS_ASR */
+  /* BEGINNING OF RTEMS_ASR */
 
   status = rtems_task_mode( RTEMS_ASR, RTEMS_ASR_MASK, &previous_mode );
   directive_failed( status, "rtems_task_mode" );
@@ -64,42 +62,30 @@ rtems_task Init(
     previous_mode
   );
 
-  status = rtems_task_mode(
-    RTEMS_NO_ASR,
-    RTEMS_ASR_MASK,
-    &previous_mode
-  );
+  status = rtems_task_mode( RTEMS_NO_ASR, RTEMS_ASR_MASK, &previous_mode );
   directive_failed( status, "rtems_task_mode" );
   put_mode(
     "TA1 - rtems_task_mode - RTEMS_NO_ASR               - previous mode: ",
     previous_mode
   );
 
-  status = rtems_task_mode(
-    RTEMS_NO_ASR,
-    RTEMS_ASR_MASK,
-    &previous_mode
-  );
+  status = rtems_task_mode( RTEMS_NO_ASR, RTEMS_ASR_MASK, &previous_mode );
   directive_failed( status, "rtems_task_mode" );
   put_mode(
     "TA1 - rtems_task_mode - RTEMS_NO_ASR               - previous mode: ",
     previous_mode
   );
 
-  status = rtems_task_mode(
-    RTEMS_ASR,
-    RTEMS_ASR_MASK,
-    &previous_mode
-  );
+  status = rtems_task_mode( RTEMS_ASR, RTEMS_ASR_MASK, &previous_mode );
   directive_failed( status, "rtems_task_mode" );
   put_mode(
     "TA1 - rtems_task_mode - RTEMS_ASR                  - previous mode: ",
     previous_mode
   );
 
-/* END OF RTEMS_ASR */
+  /* END OF RTEMS_ASR */
 
-/* BEGINNING OF RTEMS_TIMESLICE */
+  /* BEGINNING OF RTEMS_TIMESLICE */
 
   status = rtems_task_mode(
     RTEMS_NO_TIMESLICE,
@@ -145,9 +131,9 @@ rtems_task Init(
     previous_mode
   );
 
-/* END OF RTEMS_TIMESLICE */
+  /* END OF RTEMS_TIMESLICE */
 
-/* BEGINNING OF RTEMS_PREEMPT */
+  /* BEGINNING OF RTEMS_PREEMPT */
 
   status = rtems_task_mode(
     RTEMS_PREEMPT,
@@ -198,7 +184,7 @@ rtems_task Init(
 /* BEGINNING OF RTEMS_INTERRUPT_LEVEL */
 #if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
   status = rtems_task_mode(
-    RTEMS_INTERRUPT_LEVEL(3),
+    RTEMS_INTERRUPT_LEVEL( 3 ),
     RTEMS_INTERRUPT_MASK,
     &previous_mode
   );
@@ -209,7 +195,7 @@ rtems_task Init(
   );
 
   status = rtems_task_mode(
-    RTEMS_INTERRUPT_LEVEL(5),
+    RTEMS_INTERRUPT_LEVEL( 5 ),
     RTEMS_INTERRUPT_MASK,
     &previous_mode
   );
@@ -226,20 +212,19 @@ rtems_task Init(
   );
   fatal_directive_status( status, RTEMS_NOT_IMPLEMENTED, "rtems_task_mode" );
 #endif
-/* END OF RTEMS_INTERRUPT_LEVEL */
+  /* END OF RTEMS_INTERRUPT_LEVEL */
 
-/* BEGINNING OF COMBINATIONS */
+  /* BEGINNING OF COMBINATIONS */
 
   status = rtems_task_mode(
 #if CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
-    RTEMS_INTERRUPT_LEVEL(0) |
+    RTEMS_INTERRUPT_LEVEL( 0 ) |
 #else
-    RTEMS_INTERRUPT_LEVEL(3) |
+    RTEMS_INTERRUPT_LEVEL( 3 ) |
 #endif
-      RTEMS_NO_ASR |
-      RTEMS_TIMESLICE | RTEMS_NO_PREEMPT,
-    RTEMS_INTERRUPT_MASK | RTEMS_ASR_MASK |
-      RTEMS_TIMESLICE_MASK | RTEMS_PREEMPT_MASK,
+      RTEMS_NO_ASR | RTEMS_TIMESLICE | RTEMS_NO_PREEMPT,
+    RTEMS_INTERRUPT_MASK | RTEMS_ASR_MASK | RTEMS_TIMESLICE_MASK |
+      RTEMS_PREEMPT_MASK,
     &previous_mode
   );
   directive_failed( status, "rtems_task_mode" );
@@ -250,14 +235,13 @@ rtems_task Init(
 
   status = rtems_task_mode(
 #if CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
-    RTEMS_INTERRUPT_LEVEL(0) |
+    RTEMS_INTERRUPT_LEVEL( 0 ) |
 #else
-    RTEMS_INTERRUPT_LEVEL(3) |
+    RTEMS_INTERRUPT_LEVEL( 3 ) |
 #endif
-      RTEMS_NO_ASR |
-      RTEMS_TIMESLICE | RTEMS_NO_PREEMPT,
-    RTEMS_INTERRUPT_MASK | RTEMS_ASR_MASK |
-      RTEMS_TIMESLICE_MASK | RTEMS_PREEMPT_MASK,
+      RTEMS_NO_ASR | RTEMS_TIMESLICE | RTEMS_NO_PREEMPT,
+    RTEMS_INTERRUPT_MASK | RTEMS_ASR_MASK | RTEMS_TIMESLICE_MASK |
+      RTEMS_PREEMPT_MASK,
     &previous_mode
   );
   directive_failed( status, "rtems_task_mode" );
@@ -267,9 +251,10 @@ rtems_task Init(
   );
 
   status = rtems_task_mode(
-    RTEMS_INTERRUPT_LEVEL(0) | RTEMS_ASR | RTEMS_NO_TIMESLICE | RTEMS_PREEMPT,
-    RTEMS_INTERRUPT_MASK | RTEMS_ASR_MASK |
-    RTEMS_TIMESLICE_MASK | RTEMS_PREEMPT_MASK,
+    RTEMS_INTERRUPT_LEVEL( 0 ) | RTEMS_ASR | RTEMS_NO_TIMESLICE |
+      RTEMS_PREEMPT,
+    RTEMS_INTERRUPT_MASK | RTEMS_ASR_MASK | RTEMS_TIMESLICE_MASK |
+      RTEMS_PREEMPT_MASK,
     &previous_mode
   );
   directive_failed( status, "rtems_task_mode" );
@@ -278,9 +263,9 @@ rtems_task Init(
     previous_mode
   );
 
-/* END OF COMBINATIONS */
+  /* END OF COMBINATIONS */
 
-/* BEGINNING OF CURRENT MODE */
+  /* BEGINNING OF CURRENT MODE */
 
   status = rtems_task_mode(
     RTEMS_CURRENT_MODE,
@@ -293,9 +278,9 @@ rtems_task Init(
     previous_mode
   );
 
-/* END OF CURRENT MODE */
+  /* END OF CURRENT MODE */
 
-/* TEST BEING IN A SYSTEM STATE OTHER THAN UP */
+  /* TEST BEING IN A SYSTEM STATE OTHER THAN UP */
   puts( "TA1 - FORCE system state to before multitasking" );
   _System_state_Set( SYSTEM_STATE_BEFORE_MULTITASKING );
 
@@ -322,7 +307,7 @@ rtems_task Init(
   puts( "TA1 - Restore system state" );
   _System_state_Set( SYSTEM_STATE_UP );
 
-/* END OF TEST BEING IN A SYSTEM STATE OTHER THAN UP */
+  /* END OF TEST BEING IN A SYSTEM STATE OTHER THAN UP */
 
   TEST_END();
   rtems_test_exit( 0 );
@@ -332,7 +317,7 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_MAXIMUM_TASKS      1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

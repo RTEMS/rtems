@@ -47,9 +47,7 @@
 
 const char rtems_test_name[] = "SP 15";
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -57,10 +55,10 @@ rtems_task Init(
 
   TEST_BEGIN();
 
-  Task_name[ 1 ] =  rtems_build_name( 'T', 'A', '1', ' ' );
+  Task_name[ 1 ] = rtems_build_name( 'T', 'A', '1', ' ' );
 
-  Partition_name[ 1 ] =  rtems_build_name( 'P', 'T', '1', ' ' );
-  Partition_name[ 2 ] =  rtems_build_name( 'P', 'T', '2', ' ' );
+  Partition_name[ 1 ] = rtems_build_name( 'P', 'T', '1', ' ' );
+  Partition_name[ 2 ] = rtems_build_name( 'P', 'T', '2', ' ' );
 
   status = rtems_task_create(
     Task_name[ 1 ],
@@ -75,7 +73,7 @@ rtems_task Init(
   status = rtems_task_start( Task_id[ 1 ], Task_1, 0 );
   directive_failed( status, "rtems_task_start of TA1" );
 
-  puts("INIT - rtems_partition_create - partition 1");
+  puts( "INIT - rtems_partition_create - partition 1" );
   status = rtems_partition_create(
     Partition_name[ 1 ],
     Area_1,
@@ -86,7 +84,7 @@ rtems_task Init(
   );
   directive_failed( status, "rtems_partition_create of PT1" );
 
-  puts("INIT - rtems_partition_create - partition 2");
+  puts( "INIT - rtems_partition_create - partition 2" );
   status = rtems_partition_create(
     Partition_name[ 2 ],
     Area_2,

@@ -33,14 +33,14 @@
  */
 
 /* generate fatal errors in open_dev_console.c */
-#define FATAL_ERROR_TEST_NAME            "15"
-#define FATAL_ERROR_DESCRIPTION          "fail to open stderr"
-#define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE
-#define FATAL_ERROR_EXPECTED_ERROR       INTERNAL_ERROR_LIBIO_STDERR_FD_OPEN_FAILED
+#define FATAL_ERROR_TEST_NAME       "15"
+#define FATAL_ERROR_DESCRIPTION     "fail to open stderr"
+#define FATAL_ERROR_EXPECTED_SOURCE INTERNAL_ERROR_CORE
+#define FATAL_ERROR_EXPECTED_ERROR  INTERNAL_ERROR_LIBIO_STDERR_FD_OPEN_FAILED
 
 #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 2
 
-static void force_error(void)
+static void force_error( void )
 {
   /* we will not run this far */
 }

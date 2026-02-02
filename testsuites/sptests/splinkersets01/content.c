@@ -12,10 +12,10 @@
 
 #include "splinkersets01.h"
 
-int content_rw_1;
+int  content_rw_1;
 char content_rw_2;
 char content_rw_3;
 
-const int content_ro_1;
+const int  content_ro_1;
 const char content_ro_2;
 const char content_ro_3;

@@ -37,7 +37,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if defined(USE_TIMER_SERVER)
+#if defined( USE_TIMER_SERVER )
    #define TEST_NUMBER      "53"
    #define TSR_MODE         "Server"
    #define FIRE_WHEN        rtems_timer_server_fire_when
@@ -66,8 +66,8 @@ static rtems_time_of_day time_to_fire;
 
 /*timer Routine*/
 static rtems_timer_service_routine TIMER_service_routine(
-  rtems_id  ignored_id,
-  void     *user_data
+  rtems_id ignored_id,
+  void    *user_data
 )
 {
   (void) ignored_id;
@@ -85,9 +85,7 @@ static rtems_timer_service_routine TIMER_service_routine(
   rtems_test_assert( memcmp( &now, &time_to_fire, sizeof( now ) ) == 0 );
 }
 
-static rtems_task Init(
-  rtems_task_argument argument
-)
+static rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -100,25 +98,25 @@ static rtems_task Init(
   TEST_BEGIN();
 
   /* build timer name*/
-  timer_name = rtems_build_name('T', 'M', '1', ' ');
+  timer_name = rtems_build_name( 'T', 'M', '1', ' ' );
 
   /* create Timer */
-  status = rtems_timer_create(timer_name, &timer_id);
+  status = rtems_timer_create( timer_name, &timer_id );
   directive_failed( status, "rtems_timer_create" );
 
-  #if defined(USE_TIMER_SERVER)
-    /* initiate timer server */
-    status = rtems_timer_initiate_server(
-      RTEMS_MINIMUM_PRIORITY,
-      RTEMS_MINIMUM_STACK_SIZE,
-      RTEMS_DEFAULT_ATTRIBUTES
-    );
-    directive_failed( status, "rtems_timer_initiate_server" );
+  #if defined( USE_TIMER_SERVER )
+  /* initiate timer server */
+  status = rtems_timer_initiate_server(
+    RTEMS_MINIMUM_PRIORITY,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_ATTRIBUTES
+  );
+  directive_failed( status, "rtems_timer_initiate_server" );
   #endif
 
   /* Set system clock  */
-  build_time(&global_time, 6, 8, INITIAL_YEAR, 16, 5, 13, 0);
-  status = rtems_clock_set(&global_time);
+  build_time( &global_time, 6, 8, INITIAL_YEAR, 16, 5, 13, 0 );
+  status = rtems_clock_set( &global_time );
   directive_failed( status, "rtems_clock_set" );
 
   /* Set Timer to Fire */
@@ -132,23 +130,23 @@ static rtems_task Init(
     timer_id,
     &time_to_fire,
     TIMER_service_routine,
-    (void*) NULL
+    (void *) NULL
   );
   directive_failed( status, FIRE_WHEN_STRING );
 
   /* Set system clock FORWARD */
   global_time.year = time_to_fire.year;
-  status = rtems_clock_set(&global_time);
+  status = rtems_clock_set( &global_time );
 
-  if (!_timer_passage) {
-    puts( TSR_MODE " Timer FAILED to fire after setting time forward");
-    rtems_test_exit(0);
+  if ( !_timer_passage ) {
+    puts( TSR_MODE " Timer FAILED to fire after setting time forward" );
+    rtems_test_exit( 0 );
   }
 
-  puts( TSR_MODE " Timer fired after setting time forward -- OK");
+  puts( TSR_MODE " Timer fired after setting time forward -- OK" );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration stuff */
@@ -158,14 +156,14 @@ static rtems_task Init(
 
 #define CONFIGURE_MICROSECONDS_PER_TICK 50000
 
-#define CONFIGURE_MAXIMUM_TASKS              2
-#define CONFIGURE_MAXIMUM_TIMERS             1
+#define CONFIGURE_MAXIMUM_TASKS  2
+#define CONFIGURE_MAXIMUM_TIMERS 1
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_INIT_TASK_PRIORITY (RTEMS_MINIMUM_PRIORITY + 1)
+#define CONFIGURE_INIT_TASK_PRIORITY      ( RTEMS_MINIMUM_PRIORITY + 1 )
 #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_DEFAULT_MODES
 
 #define CONFIGURE_INIT

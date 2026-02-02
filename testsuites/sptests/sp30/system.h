@@ -34,41 +34,37 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
 rtems_timer_service_routine Resume_task(
-  rtems_id  timer_id,
-  void     *ignored_address
+  rtems_id timer_id,
+  void    *ignored_address
 );
 
-rtems_task Task_1_through_3(
-  rtems_task_argument argument
-);
+rtems_task Task_1_through_3( rtems_task_argument argument );
 
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS               5
-#define CONFIGURE_MAXIMUM_TIMERS              3
+#define CONFIGURE_MAXIMUM_TASKS  5
+#define CONFIGURE_MAXIMUM_TIMERS 3
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_EXTRA_TASK_STACKS           (3 * RTEMS_MINIMUM_STACK_SIZE)
+#define CONFIGURE_EXTRA_TASK_STACKS ( 3 * RTEMS_MINIMUM_STACK_SIZE )
 
 #include <rtems/confdefs.h>
 
 /* global variables */
 
-TEST_EXTERN rtems_id   Task_id[ 4 ];         /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 4 ];       /* array of task names */
+TEST_EXTERN rtems_id   Task_id[ 4 ];   /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 4 ]; /* array of task names */
 
-TEST_EXTERN rtems_id   Timer_id[ 4 ];     /* array of timer ids */
-TEST_EXTERN rtems_name Timer_name[ 4 ];   /* array of timer names */
+TEST_EXTERN rtems_id   Timer_id[ 4 ];   /* array of timer ids */
+TEST_EXTERN rtems_name Timer_name[ 4 ]; /* array of timer names */
 
 /* end of include file */

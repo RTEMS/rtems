@@ -50,64 +50,60 @@ const char rtems_test_name[] = "SP 43";
 #undef rtems_object_id_get_node
 
 void print_class_info(
-  int                                 api,
-  int                                 class,
+  int api,
+  int class,
   rtems_object_api_class_information *info
 );
 
-void change_name(
-  rtems_id    id,
-  const char *newName,
-  bool        printable
-);
+void change_name( rtems_id id, const char *newName, bool printable );
 
-rtems_id         main_task;
-rtems_name       main_name;
+rtems_id   main_task;
+rtems_name main_name;
 
 void print_class_info(
-  int                                 api,
-  int                                 class,
+  int api,
+  int class,
   rtems_object_api_class_information *info
 )
 {
   printf(
     "%s API %s Information\n"
-    "    minimum id  : 0x%08" PRIxrtems_id
-      " maximum id: 0x%08" PRIxrtems_id "\n"
+    "    minimum id  : 0x%08" PRIxrtems_id " maximum id: 0x%08" PRIxrtems_id
+    "\n"
     "    maximum     :    %7" PRIu32 " available : %" PRIu32 "\n"
     "    auto_extend : %s\n",
-    rtems_object_get_api_name(api),
-    rtems_object_get_api_class_name(api, class),
+    rtems_object_get_api_name( api ),
+    rtems_object_get_api_class_name( api, class ),
     info->minimum_id,
     info->maximum_id,
     info->maximum,
     info->unallocated,
-    ((info->auto_extend) ? "yes" : "no")
+    ( ( info->auto_extend ) ? "yes" : "no" )
   );
 }
 
-void change_name(
-  rtems_id    id,
-  const char *newName,
-  bool        printable
-)
+void change_name( rtems_id id, const char *newName, bool printable )
 {
-  rtems_status_code    sc;
-  char                 name[ 5 ];
-  char                *ptr;
-  const char          *c;
+  rtems_status_code sc;
+  char              name[ 5 ];
+  char             *ptr;
+  const char       *c;
 
   printf( "rtems_object_set_name - change name of init task to " );
-  if ( printable )
+  if ( printable ) {
     printf( "(%s)\n", newName );
-  else {
+  } else {
     printf( "(" );
-    for (c=newName ; *c ; ) {
-       if (isprint((unsigned char)*c)) printf( "%c", *c );
-       else                            printf( "0x%02x", *c );
-       c++;
-       if ( *c )
-         printf( "-" );
+    for ( c = newName; *c; ) {
+      if ( isprint( (unsigned char) *c ) ) {
+        printf( "%c", *c );
+      } else {
+        printf( "0x%02x", *c );
+      }
+      c++;
+      if ( *c ) {
+        printf( "-" );
+      }
     }
     printf( ")\n" );
   }
@@ -121,25 +117,23 @@ void change_name(
   puts( " - name returned by rtems_object_get_classic_name" );
 
   ptr = rtems_object_get_name( id, 5, name );
-  rtems_test_assert(ptr != NULL);
+  rtems_test_assert( ptr != NULL );
   printf( "rtems_object_get_name returned (%s) for init task\n", ptr );
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  rtems_status_code                   sc;
-  rtems_id                            tmpId;
-  rtems_name                          tmpName;
-  char                                name[5];
-  char                               *ptr;
-  const char                          newName[5] = "New1";
-  char                                tmpNameString[5];
-  int                                 part;
-  rtems_object_api_class_information  info;
+  rtems_status_code                  sc;
+  rtems_id                           tmpId;
+  rtems_name                         tmpName;
+  char                               name[ 5 ];
+  char                              *ptr;
+  const char                         newName[ 5 ] = "New1";
+  char                               tmpNameString[ 5 ];
+  int                                part;
+  rtems_object_api_class_information info;
 
   TEST_BEGIN();
 
@@ -195,13 +189,12 @@ rtems_task Init(
   put_name( tmpName, FALSE );
   puts( " - rtems_build_name for TEMP" );
 
-
   /*
    * rtems_object_get_name - cases
    */
   puts( "rtems_object_get_name - bad id for class with instances" );
   ptr = rtems_object_get_name( main_task + 5, 5, name );
-  rtems_test_assert(ptr == NULL);
+  rtems_test_assert( ptr == NULL );
 
   puts( "rtems_object_get_name - bad id for class without instances" );
   ptr = rtems_object_get_name(
@@ -209,22 +202,22 @@ rtems_task Init(
     5,
     name
   );
-  rtems_test_assert(ptr == NULL);
+  rtems_test_assert( ptr == NULL );
 
   puts( "rtems_object_get_name - bad length" );
   ptr = rtems_object_get_name( main_task, 0, name );
-  rtems_test_assert(ptr == NULL);
+  rtems_test_assert( ptr == NULL );
 
   puts( "rtems_object_get_name - bad pointer" );
   ptr = rtems_object_get_name( main_task, 5, NULL );
-  rtems_test_assert(ptr == NULL);
+  rtems_test_assert( ptr == NULL );
 
   ptr = rtems_object_get_name( main_task, 5, name );
-  rtems_test_assert(ptr != NULL);
+  rtems_test_assert( ptr != NULL );
   printf( "rtems_object_get_name returned (%s) for init task id\n", ptr );
 
   ptr = rtems_object_get_name( RTEMS_SELF, 5, name );
-  rtems_test_assert(ptr != NULL);
+  rtems_test_assert( ptr != NULL );
   printf( "rtems_object_get_name returned (%s) for RTEMS_SELF\n", ptr );
 
   /*
@@ -242,19 +235,11 @@ rtems_task Init(
   puts( "rtems_object_set_name - INVALID_ID (bad API)" );
   tmpId = rtems_build_id( 0xff, OBJECTS_RTEMS_TASKS, 1, 1 ),
   sc = rtems_object_set_name( tmpId, newName );
-  fatal_directive_status(
-    sc,
-    RTEMS_INVALID_ID,
-    "rtems_object_set_name #1"
-  );
+  fatal_directive_status( sc, RTEMS_INVALID_ID, "rtems_object_set_name #1" );
 
   puts( "rtems_object_set_name - INVALID_ID (bad index)" );
   sc = rtems_object_set_name( main_task + 10, newName );
-  fatal_directive_status(
-    sc,
-    RTEMS_INVALID_ID,
-    "rtems_object_set_name #2"
-  );
+  fatal_directive_status( sc, RTEMS_INVALID_ID, "rtems_object_set_name #2" );
 
   /*
    * rtems_object_set_name - change name of init task in various ways.
@@ -262,28 +247,27 @@ rtems_task Init(
    * This is strange but pushes the SuperCore code to do different things.
    */
 
-  change_name( main_task,  "New1", TRUE );
+  change_name( main_task, "New1", TRUE );
   change_name( main_task, "Ne1", TRUE );
   change_name( main_task, "N1", TRUE );
   change_name( main_task, "N", TRUE );
   change_name( main_task, "", TRUE );
-  tmpNameString[0] = 'N';
-  tmpNameString[1] = 0x07;
-  tmpNameString[2] = 0x09;
-  tmpNameString[3] = '1';
-  tmpNameString[4] = '\0';
+  tmpNameString[ 0 ] = 'N';
+  tmpNameString[ 1 ] = 0x07;
+  tmpNameString[ 2 ] = 0x09;
+  tmpNameString[ 3 ] = '1';
+  tmpNameString[ 4 ] = '\0';
   change_name( main_task, tmpNameString, FALSE );
 
   /*
    * Change object name using SELF ID
    */
 
-  change_name( RTEMS_SELF,  "SELF", TRUE );
+  change_name( RTEMS_SELF, "SELF", TRUE );
 
   ptr = rtems_object_get_name( main_task, 5, name );
-  rtems_test_assert(ptr != NULL);
+  rtems_test_assert( ptr != NULL );
   printf( "rtems_object_get_name returned (%s) for init task id\n", ptr );
-
 
   /*
    * Exercise id build and extraction routines
@@ -313,58 +297,103 @@ rtems_task Init(
    * API/Class min/max routines
    */
 
-  printf( "rtems_object_id_api_minimum returned %d\n",
-          rtems_object_id_api_minimum() );
-  printf( "rtems_object_id_api_maximum returned %d\n",
-          rtems_object_id_api_maximum() );
+  printf(
+    "rtems_object_id_api_minimum returned %d\n",
+    rtems_object_id_api_minimum()
+  );
+  printf(
+    "rtems_object_id_api_maximum returned %d\n",
+    rtems_object_id_api_maximum()
+  );
 
-  printf( "rtems_object_api_minimum_class(0) returned %d\n",
-          rtems_object_api_minimum_class(0) );
-  printf( "rtems_object_api_maximum_class(0) returned %d\n",
-          rtems_object_api_maximum_class(0) );
+  printf(
+    "rtems_object_api_minimum_class(0) returned %d\n",
+    rtems_object_api_minimum_class( 0 )
+  );
+  printf(
+    "rtems_object_api_maximum_class(0) returned %d\n",
+    rtems_object_api_maximum_class( 0 )
+  );
 
-  printf( "rtems_object_api_minimum_class(0) returned %d\n",
-          rtems_object_api_minimum_class(0) );
-  printf( "rtems_object_api_maximum_class(0) returned %d\n",
-          rtems_object_api_maximum_class(0) );
-  printf( "rtems_object_api_minimum_class(255) returned %d\n",
-          rtems_object_api_minimum_class(255) );
-  printf( "rtems_object_api_maximum_class(255) returned %d\n",
-          rtems_object_api_maximum_class(255) );
+  printf(
+    "rtems_object_api_minimum_class(0) returned %d\n",
+    rtems_object_api_minimum_class( 0 )
+  );
+  printf(
+    "rtems_object_api_maximum_class(0) returned %d\n",
+    rtems_object_api_maximum_class( 0 )
+  );
+  printf(
+    "rtems_object_api_minimum_class(255) returned %d\n",
+    rtems_object_api_minimum_class( 255 )
+  );
+  printf(
+    "rtems_object_api_maximum_class(255) returned %d\n",
+    rtems_object_api_maximum_class( 255 )
+  );
 
-  printf( "rtems_object_api_minimum_class(OBJECTS_INTERNAL_API) returned %d\n",
-          rtems_object_api_minimum_class(OBJECTS_INTERNAL_API) );
-  printf( "rtems_object_api_maximum_class(OBJECTS_INTERNAL_API) returned %d\n",
-          rtems_object_api_maximum_class(OBJECTS_INTERNAL_API) );
+  printf(
+    "rtems_object_api_minimum_class(OBJECTS_INTERNAL_API) returned %d\n",
+    rtems_object_api_minimum_class( OBJECTS_INTERNAL_API )
+  );
+  printf(
+    "rtems_object_api_maximum_class(OBJECTS_INTERNAL_API) returned %d\n",
+    rtems_object_api_maximum_class( OBJECTS_INTERNAL_API )
+  );
 
-  printf( "rtems_object_api_minimum_class(OBJECTS_CLASSIC_API) returned %d\n",
-          rtems_object_api_minimum_class(OBJECTS_CLASSIC_API) );
-  printf( "rtems_object_api_maximum_class(OBJECTS_CLASSIC_API) returned %d\n",
-          rtems_object_api_maximum_class(OBJECTS_CLASSIC_API) );
+  printf(
+    "rtems_object_api_minimum_class(OBJECTS_CLASSIC_API) returned %d\n",
+    rtems_object_api_minimum_class( OBJECTS_CLASSIC_API )
+  );
+  printf(
+    "rtems_object_api_maximum_class(OBJECTS_CLASSIC_API) returned %d\n",
+    rtems_object_api_maximum_class( OBJECTS_CLASSIC_API )
+  );
 
   /*
    *  API and class name tests
    */
 
-  printf( "rtems_object_get_api_name(0) = %s\n", rtems_object_get_api_name(0) );
-  printf( "rtems_object_get_api_name(255) = %s\n",
-    rtems_object_get_api_name(255));
+  printf(
+    "rtems_object_get_api_name(0) = %s\n",
+    rtems_object_get_api_name( 0 )
+  );
+  printf(
+    "rtems_object_get_api_name(255) = %s\n",
+    rtems_object_get_api_name( 255 )
+  );
 
-  printf( "rtems_object_get_api_name(INTERNAL_API) = %s\n",
-     rtems_object_get_api_name(OBJECTS_INTERNAL_API) );
-  printf( "rtems_object_get_api_name(CLASSIC_API) = %s\n",
-     rtems_object_get_api_name(OBJECTS_CLASSIC_API) );
+  printf(
+    "rtems_object_get_api_name(INTERNAL_API) = %s\n",
+    rtems_object_get_api_name( OBJECTS_INTERNAL_API )
+  );
+  printf(
+    "rtems_object_get_api_name(CLASSIC_API) = %s\n",
+    rtems_object_get_api_name( OBJECTS_CLASSIC_API )
+  );
 
-  printf( "rtems_object_get_api_class_name(0, RTEMS_TASKS) = %s\n",
-    rtems_object_get_api_class_name( 0, OBJECTS_RTEMS_TASKS ) );
-  printf( "rtems_object_get_api_class_name(CLASSIC_API, 0) = %s\n",
-    rtems_object_get_api_class_name( OBJECTS_CLASSIC_API, 0 ) );
-  printf("rtems_object_get_api_class_name(INTERNAL_API, THREADS) = %s\n",
+  printf(
+    "rtems_object_get_api_class_name(0, RTEMS_TASKS) = %s\n",
+    rtems_object_get_api_class_name( 0, OBJECTS_RTEMS_TASKS )
+  );
+  printf(
+    "rtems_object_get_api_class_name(CLASSIC_API, 0) = %s\n",
+    rtems_object_get_api_class_name( OBJECTS_CLASSIC_API, 0 )
+  );
+  printf(
+    "rtems_object_get_api_class_name(INTERNAL_API, THREADS) = %s\n",
     rtems_object_get_api_class_name(
-       OBJECTS_INTERNAL_API, OBJECTS_INTERNAL_THREADS));
-  printf("rtems_object_get_api_class_name(CLASSIC_API, RTEMS_BARRIERS) = %s\n",
+      OBJECTS_INTERNAL_API,
+      OBJECTS_INTERNAL_THREADS
+    )
+  );
+  printf(
+    "rtems_object_get_api_class_name(CLASSIC_API, RTEMS_BARRIERS) = %s\n",
     rtems_object_get_api_class_name(
-       OBJECTS_CLASSIC_API, OBJECTS_RTEMS_BARRIERS));
+      OBJECTS_CLASSIC_API,
+      OBJECTS_RTEMS_BARRIERS
+    )
+  );
 
   /*
    *  Class information
@@ -372,7 +401,10 @@ rtems_task Init(
 
   puts( "rtems_object_get_class_information - INVALID_ADDRESS" );
   sc = rtems_object_get_class_information(
-             OBJECTS_INTERNAL_API, OBJECTS_INTERNAL_THREADS, NULL );
+    OBJECTS_INTERNAL_API,
+    OBJECTS_INTERNAL_THREADS,
+    NULL
+  );
   fatal_directive_status(
     sc,
     RTEMS_INVALID_ADDRESS,
@@ -380,8 +412,11 @@ rtems_task Init(
   );
 
   puts( "rtems_object_get_class_information - INVALID_NUMBER (bad API)" );
-  sc =
-    rtems_object_get_class_information(0, OBJECTS_INTERNAL_THREADS, &info);
+  sc = rtems_object_get_class_information(
+    0,
+    OBJECTS_INTERNAL_THREADS,
+    &info
+  );
   fatal_directive_status(
     sc,
     RTEMS_INVALID_NUMBER,
@@ -397,8 +432,7 @@ rtems_task Init(
   );
 
   puts( "rtems_object_get_class_information - INVALID_NUMBER (class=0)" );
-  sc = rtems_object_get_class_information(
-    OBJECTS_INTERNAL_API, 0, &info );
+  sc = rtems_object_get_class_information( OBJECTS_INTERNAL_API, 0, &info );
   fatal_directive_status(
     sc,
     RTEMS_INVALID_NUMBER,
@@ -406,9 +440,9 @@ rtems_task Init(
   );
 
   puts(
-    "rtems_object_get_class_information - INVALID_NUMBER (class too high)" );
-  sc = rtems_object_get_class_information(
-    OBJECTS_INTERNAL_API, 0xff, &info);
+    "rtems_object_get_class_information - INVALID_NUMBER (class too high)"
+  );
+  sc = rtems_object_get_class_information( OBJECTS_INTERNAL_API, 0xff, &info );
   fatal_directive_status(
     sc,
     RTEMS_INVALID_NUMBER,
@@ -417,19 +451,21 @@ rtems_task Init(
 
   puts( "rtems_object_get_class_information - Classic Tasks - OK" );
   sc = rtems_object_get_class_information(
-             OBJECTS_CLASSIC_API, OBJECTS_RTEMS_TASKS, &info );
+    OBJECTS_CLASSIC_API,
+    OBJECTS_RTEMS_TASKS,
+    &info
+  );
   directive_failed( sc, "rtems_object_get_class_information" );
   print_class_info( OBJECTS_CLASSIC_API, OBJECTS_RTEMS_TASKS, &info );
 
   puts( "rtems_object_get_class_information - Classic Timers - OK" );
-  sc = rtems_timer_create(0, NULL);
-  fatal_directive_status(
-    sc,
-    RTEMS_INVALID_NAME,
-    "rtems_timer_create"
-  );
+  sc = rtems_timer_create( 0, NULL );
+  fatal_directive_status( sc, RTEMS_INVALID_NAME, "rtems_timer_create" );
   sc = rtems_object_get_class_information(
-             OBJECTS_CLASSIC_API, OBJECTS_RTEMS_TIMERS, &info );
+    OBJECTS_CLASSIC_API,
+    OBJECTS_RTEMS_TIMERS,
+    &info
+  );
   directive_failed( sc, "rtems_object_get_class_information" );
   print_class_info( OBJECTS_CLASSIC_API, OBJECTS_RTEMS_TIMERS, &info );
 
@@ -442,13 +478,13 @@ rtems_task Init(
    *  configurable.
    */
   {
-    rtems_task_priority              old_priority;
-    void                            *tmp;
-    int                              class;
-    int                              api;
+    rtems_task_priority old_priority;
+    void               *tmp;
+    int class;
+    int api;
 
     class = OBJECTS_INTERNAL_API;
-    api   = OBJECTS_INTERNAL_THREADS;
+    api = OBJECTS_INTERNAL_THREADS;
 
     puts( "rtems_task_set_priority - use valid Idle thread id" );
     sc = rtems_task_set_priority(

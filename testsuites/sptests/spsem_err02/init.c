@@ -35,19 +35,17 @@
 
 const char rtems_test_name[] = "SP SEMAPHORE ERROR 02";
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_status_code status;
-  
+
   TEST_BEGIN();
-   
-  Semaphore_name[ 1 ]  =  rtems_build_name( 'S', 'M', '1', ' ' );
-  Semaphore_name[ 2 ]  =  rtems_build_name( 'S', 'M', '2', ' ' );
-  Task_name[ 2 ]       =  rtems_build_name( 'T', 'A', '2', ' ' );
+
+  Semaphore_name[ 1 ] = rtems_build_name( 'S', 'M', '1', ' ' );
+  Semaphore_name[ 2 ] = rtems_build_name( 'S', 'M', '2', ' ' );
+  Task_name[ 2 ] = rtems_build_name( 'T', 'A', '2', ' ' );
 
   status = rtems_task_create(
     Task_name[ 2 ],
@@ -59,10 +57,10 @@ rtems_task Init(
   );
   directive_failed( status, "rtems_task_create of TA2" );
   puts( "TA1 - rtems_task_create - TA2 created - RTEMS_SUCCESSFUL" );
-  
+
   puts( "TA1 - rtems_task_start - start TA2 - RTEMS_SUCCESSFUL" );
   status = rtems_task_start( Task_id[ 2 ], Task_2, 0 );
-  directive_failed( status, "rtems_task_start of TA2" ); 
+  directive_failed( status, "rtems_task_start of TA2" );
 
   /* OK */
   status = rtems_semaphore_create(
@@ -160,20 +158,22 @@ rtems_task Init(
     RTEMS_DEFAULT_OPTIONS,
     RTEMS_NO_TIMEOUT
   );
-  directive_failed( status, "rtems_semaphore_obtain");
+  directive_failed( status, "rtems_semaphore_obtain" );
 
-  puts( "TA1 - rtems_semaphore_delete - delete sem 2 - RTEMS_RESOURCE_IN_USE" );
+  puts(
+    "TA1 - rtems_semaphore_delete - delete sem 2 - RTEMS_RESOURCE_IN_USE"
+  );
 
   status = rtems_semaphore_delete( Semaphore_id[ 2 ] );
   fatal_directive_status(
-     status,
-     RTEMS_RESOURCE_IN_USE,
-     "rtems_semaphore_delete of SM2"
+    status,
+    RTEMS_RESOURCE_IN_USE,
+    "rtems_semaphore_delete of SM2"
   );
 
   puts( "TA1 - rtems_task_wake_after - yield processor - RTEMS_SUCCESSFUL" );
   status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
   directive_failed( status, "rtems_task_wake_after (yield)" );
-  
+
   TEST_END();
 }

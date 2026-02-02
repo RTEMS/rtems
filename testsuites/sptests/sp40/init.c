@@ -41,12 +41,12 @@
 const char rtems_test_name[] = "SP 40";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
+rtems_task Init( rtems_task_argument argument );
 
 static rtems_device_driver test_open(
-     rtems_device_major_number  minor,
-     rtems_device_minor_number  major,
-     void                      *ignored
+  rtems_device_major_number minor,
+  rtems_device_minor_number major,
+  void                     *ignored
 )
 {
   (void) minor;
@@ -66,20 +66,18 @@ static rtems_driver_address_table test_driver = {
 };
 
 #define test_interrupt_context_enter( level ) \
-  do { \
-    rtems_interrupt_local_disable( level ); \
-    ++_ISR_Nest_level; \
-  } while (0)
+  do {                                        \
+    rtems_interrupt_local_disable( level );   \
+    ++_ISR_Nest_level;                        \
+  } while ( 0 )
 
 #define test_interrupt_context_leave( level ) \
-  do { \
-    --_ISR_Nest_level; \
-    rtems_interrupt_local_enable( level ); \
-  } while (0)
+  do {                                        \
+    --_ISR_Nest_level;                        \
+    rtems_interrupt_local_enable( level );    \
+  } while ( 0 )
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -87,8 +85,8 @@ rtems_task Init(
   rtems_device_major_number registered;
   rtems_device_major_number registered_not;
   rtems_device_major_number invalid_major = _IO_Number_of_drivers + 1;
-  rtems_interrupt_level level;
-  bool do_interrupt_context_test = true;
+  rtems_interrupt_level     level;
+  bool                      do_interrupt_context_test = true;
 
   TEST_BEGIN();
 
@@ -210,7 +208,7 @@ rtems_task Init(
 /* more one more driver slot than are statically configured */
 #define CONFIGURE_MAXIMUM_DRIVERS 2
 
-#define CONFIGURE_MAXIMUM_TASKS  1
+#define CONFIGURE_MAXIMUM_TASKS      1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

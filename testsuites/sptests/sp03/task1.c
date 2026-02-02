@@ -32,9 +32,7 @@
 
 #include "system.h"
 
-rtems_task Task_1(
-  rtems_task_argument argument
-)
+rtems_task Task_1( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -53,7 +51,7 @@ rtems_task Task_1(
   put_name( name, FALSE );
   print_time( " sets clock: ", &time, "\n" );
 
-  while( FOREVER ) {
+  while ( FOREVER ) {
     status = rtems_clock_get_tod( &time );
     directive_failed( status, "rtems_clock_get_tod" );
 

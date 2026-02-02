@@ -41,10 +41,7 @@
 #include "system.h"
 #include <rtems/rtems/tasksimpl.h>
 
-
-rtems_task Task_1(
-  rtems_task_argument argument
-)
+rtems_task Task_1( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -80,7 +77,11 @@ rtems_task Task_1(
   puts( "TA1 - rtems_task_ident - RTEMS_INVALID_ADDRESS" );
 
   /* OK */
-  status = rtems_task_ident( RTEMS_WHO_AM_I, RTEMS_SEARCH_ALL_NODES, &self_id );
+  status = rtems_task_ident(
+    RTEMS_WHO_AM_I,
+    RTEMS_SEARCH_ALL_NODES,
+    &self_id
+  );
   directive_failed( status, "rtems_task_ident of self" );
   if ( self_id != Task_id[ 1 ] ) {
     puts( "ERROR - rtems_task_ident - incorrect ID returned!" );
@@ -108,7 +109,7 @@ rtems_task Task_1(
    */
 
   status = rtems_task_ident( 100, 2, &Junk_id );
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   fatal_directive_status(
     status,
     RTEMS_INVALID_NODE,
@@ -159,7 +160,7 @@ rtems_task Task_1(
   /* bad priority */
   status = rtems_task_set_priority(
     RTEMS_SELF,
-    UINT32_C(0x80000000),
+    UINT32_C( 0x80000000 ),
     &previous_priority
   );
   fatal_directive_status(
@@ -221,7 +222,7 @@ rtems_task Task_1(
     "rtems_task_mode with NULL param"
   );
   puts( "TA1 - rtems_task_mode - RTEMS_INVALID_ADDRESS" );
- 
+
   TEST_END();
 
   rtems_test_exit( 0 );

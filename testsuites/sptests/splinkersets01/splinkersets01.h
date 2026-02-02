@@ -15,29 +15,29 @@ extern "C" {
 
 #include <rtems/linkersets.h>
 
-extern const int a[4];
+extern const int a[ 4 ];
 
-extern const int ca[5];
+extern const int ca[ 5 ];
 
-RTEMS_LINKER_RWSET_DECLARE(test_rw, const int *);
+RTEMS_LINKER_RWSET_DECLARE( test_rw, const int * );
 
-RTEMS_LINKER_ROSET_DECLARE(test_ro, const int *);
+RTEMS_LINKER_ROSET_DECLARE( test_ro, const int * );
 
-RTEMS_LINKER_RWSET_DECLARE(test_content_rw, char);
+RTEMS_LINKER_RWSET_DECLARE( test_content_rw, char );
 
-RTEMS_LINKER_ROSET_DECLARE(test_content_ro, char);
+RTEMS_LINKER_ROSET_DECLARE( test_content_ro, char );
 
-RTEMS_LINKER_RWSET_ITEM_ORDERED_DECLARE(test_rw, const int *, a1, 1);
+RTEMS_LINKER_RWSET_ITEM_ORDERED_DECLARE( test_rw, const int *, a1, 1 );
 
-RTEMS_LINKER_ROSET_ITEM_ORDERED_DECLARE(test_ro, const int *, ca2, OC);
+RTEMS_LINKER_ROSET_ITEM_ORDERED_DECLARE( test_ro, const int *, ca2, OC );
 
-RTEMS_LINKER_RWSET_CONTENT(test_content_rw, extern int content_rw_1);
-RTEMS_LINKER_RWSET_CONTENT(test_content_rw, extern char content_rw_2);
-RTEMS_LINKER_RWSET_CONTENT(test_content_rw, extern char content_rw_3);
+RTEMS_LINKER_RWSET_CONTENT( test_content_rw, extern int content_rw_1 );
+RTEMS_LINKER_RWSET_CONTENT( test_content_rw, extern char content_rw_2 );
+RTEMS_LINKER_RWSET_CONTENT( test_content_rw, extern char content_rw_3 );
 
-RTEMS_LINKER_ROSET_CONTENT(test_content_ro, extern const int content_ro_1);
-RTEMS_LINKER_ROSET_CONTENT(test_content_ro, extern const char content_ro_2);
-RTEMS_LINKER_ROSET_CONTENT(test_content_ro, extern const char content_ro_3);
+RTEMS_LINKER_ROSET_CONTENT( test_content_ro, extern const int content_ro_1 );
+RTEMS_LINKER_ROSET_CONTENT( test_content_ro, extern const char content_ro_2 );
+RTEMS_LINKER_ROSET_CONTENT( test_content_ro, extern const char content_ro_3 );
 
 #ifdef __cplusplus
 }

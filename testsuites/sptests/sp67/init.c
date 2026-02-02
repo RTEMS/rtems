@@ -48,10 +48,10 @@
 const char rtems_test_name[] = "SP 67";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
+rtems_task                  Init( rtems_task_argument argument );
 rtems_timer_service_routine TIMER_service_routine(
-  rtems_id  ignored_id,
-  void     *user_data
+  rtems_id ignored_id,
+  void    *user_data
 );
 
 volatile bool _timer_passage_1 = FALSE;
@@ -59,19 +59,17 @@ volatile bool _timer_passage_2 = FALSE;
 
 /*timer Routine*/
 rtems_timer_service_routine TIMER_service_routine(
-  rtems_id  ignored_id,
-  void     *user_data
+  rtems_id ignored_id,
+  void    *user_data
 )
 {
   (void) ignored_id;
 
-  bool *passed = (bool *)user_data;
+  bool *passed = (bool *) user_data;
   *passed = TRUE;
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -85,11 +83,17 @@ rtems_task Init(
 
   /* create Timer */
   puts( "Init - create timer 1" );
-  status = rtems_timer_create( rtems_build_name('T', 'M', '1', ' '), &timer1 );
+  status = rtems_timer_create(
+    rtems_build_name( 'T', 'M', '1', ' ' ),
+    &timer1
+  );
   directive_failed( status, "rtems_timer_create #1" );
 
   puts( "Init - create timer 2" );
-  status = rtems_timer_create( rtems_build_name('T', 'M', '2', ' '), &timer2 );
+  status = rtems_timer_create(
+    rtems_build_name( 'T', 'M', '2', ' ' ),
+    &timer2
+  );
   directive_failed( status, "rtems_timer_create #1" );
 
   /* Manipulate the time */
@@ -112,7 +116,7 @@ rtems_task Init(
     timer1,
     10,
     TIMER_service_routine,
-    (void*) &_timer_passage_1
+    (void *) &_timer_passage_1
   );
   directive_failed( status, "rtems_timer_server_fire_after" );
 
@@ -120,26 +124,26 @@ rtems_task Init(
     timer2,
     20,
     TIMER_service_routine,
-    (void*) &_timer_passage_2
+    (void *) &_timer_passage_2
   );
   directive_failed( status, "rtems_timer_server_fire_after" );
 
   status = rtems_task_wake_after( 15 );
   directive_failed( status, "task wake_after" );
 
-  if (!_timer_passage_1) {
-    puts( "Timer 1 FAILED to fire after wrapping time");
-    rtems_test_exit(0);
+  if ( !_timer_passage_1 ) {
+    puts( "Timer 1 FAILED to fire after wrapping time" );
+    rtems_test_exit( 0 );
   }
-  puts( "Server Timer 1 fired after wrapping ticks since boot-- OK");
+  puts( "Server Timer 1 fired after wrapping ticks since boot-- OK" );
 
-  if (_timer_passage_2) {
-    puts( "Timer 2 fired and should not have after wrapping time");
-    rtems_test_exit(0);
+  if ( _timer_passage_2 ) {
+    puts( "Timer 2 fired and should not have after wrapping time" );
+    rtems_test_exit( 0 );
   }
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration stuff */
@@ -147,8 +151,8 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS              2
-#define CONFIGURE_MAXIMUM_TIMERS             2
+#define CONFIGURE_MAXIMUM_TASKS  2
+#define CONFIGURE_MAXIMUM_TIMERS 2
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

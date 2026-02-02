@@ -41,13 +41,10 @@
 const char rtems_test_name[] = "SP 56";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-bool task_create(Thread_Control *executing, Thread_Control *created);
+rtems_task Init( rtems_task_argument argument );
+bool       task_create( Thread_Control *executing, Thread_Control *created );
 
-bool task_create(
-  Thread_Control *executing,
-  Thread_Control *created
-)
+bool task_create( Thread_Control *executing, Thread_Control *created )
 {
   (void) executing;
   (void) created;
@@ -67,15 +64,13 @@ rtems_extensions_table Extensions = {
   .thread_terminate = NULL
 };
 
-rtems_task Init(
-  rtems_task_argument ignored
-)
+rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
 
-  rtems_status_code    status;
-  rtems_id             extension;
-  rtems_id             task_id;
+  rtems_status_code status;
+  rtems_id          extension;
+  rtems_id          task_id;
 
   TEST_BEGIN();
 
@@ -89,12 +84,12 @@ rtems_task Init(
 
   puts( "Init - rtems_task_create - create extension fails - UNSATISFIED" );
   status = rtems_task_create(
-     rtems_build_name( 'T', 'A', '1', ' ' ),
-     1,
-     RTEMS_MINIMUM_STACK_SIZE,
-     RTEMS_TIMESLICE,
-     RTEMS_FLOATING_POINT,
-     &task_id
+    rtems_build_name( 'T', 'A', '1', ' ' ),
+    1,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_TIMESLICE,
+    RTEMS_FLOATING_POINT,
+    &task_id
   );
   fatal_directive_status( status, RTEMS_UNSATISFIED, "rtems_task_create" );
 
@@ -102,7 +97,7 @@ rtems_task Init(
   status = rtems_extension_delete( extension );
   directive_failed( status, "rtems_extension_delete" );
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -110,9 +105,9 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS             2
-#define CONFIGURE_MAXIMUM_USER_EXTENSIONS   1
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_MAXIMUM_TASKS           2
+#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
+#define CONFIGURE_INITIAL_EXTENSIONS      RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

@@ -39,41 +39,38 @@
 const char rtems_test_name[] = "SPASSOC 1";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
+rtems_task Init( rtems_task_argument argument );
 
-const rtems_assoc_t assoc_table_null[] = 
-  {
-    { NULL       , 0 , 0  },
-    { "zero"     , 1 , 8  },
-    { "one"      , 2 , 4  },
-    { "two"      , 4 , 2  },
-    { "three"    , 8 , 1  },
-    { NULL       , -1, -1 }
-  };
+const rtems_assoc_t assoc_table_null[] = {
+  { NULL, 0, 0 },
+  { "zero", 1, 8 },
+  { "one", 2, 4 },
+  { "two", 4, 2 },
+  { "three", 8, 1 },
+  { NULL, -1, -1 }
+};
 
-const rtems_assoc_t assoc_table_default[] = 
-  {
-    { "(default)", 0 , 0  },
-    { "zero"     , 1 , 8  },
-    { "one"      , 2 , 4  },
-    { "two"      , 4 , 2  },
-    { "three"    , 8 , 1  },
-    { NULL       , -1, -1 }
-  };
+const rtems_assoc_t assoc_table_default[] = {
+  { "(default)", 0, 0 },
+  { "zero", 1, 8 },
+  { "one", 2, 4 },
+  { "two", 4, 2 },
+  { "three", 8, 1 },
+  { NULL, -1, -1 }
+};
 
-const rtems_assoc_t assoc_table[] = 
-  {
-    { "zero" , 1 , 8  },
-    { "one"  , 2 , 4  },
-    { "two"  , 4 , 2  },
-    { "three", 8 , 1  },
-    { NULL   , -1, -1 }
-  };
+const rtems_assoc_t assoc_table[] = {
+  { "zero", 1, 8 },
+  { "one", 2, 4 },
+  { "two", 4, 2 },
+  { "three", 8, 1 },
+  { NULL, -1, -1 }
+};
 
-uint32_t local;
-uint32_t remote;
+uint32_t             local;
+uint32_t             remote;
 const rtems_assoc_t *assoc_item;
-char *name;
+char                *name;
 
 static void reset_name( void )
 {
@@ -82,12 +79,9 @@ static void reset_name( void )
 
 static void test_assoc_32_to_string( void )
 {
-  static const rtems_assoc_32_pair pairs[] = {
-    { 1, "A" },
-    { 2, "LOOOOONG" },
-    { 4, "C" }
-  };
-  char buf[4];
+  static const rtems_assoc_32_pair pairs[] =
+    { { 1, "A" }, { 2, "LOOOOONG" }, { 4, "C" } };
+  char   buf[ 4 ];
   size_t len;
 
   len = rtems_assoc_32_to_string(
@@ -139,13 +133,11 @@ static void test_assoc_32_to_string( void )
   rtems_test_assert( strcmp( buf, "A:L" ) == 0 );
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  name = malloc(40);
+  name = malloc( 40 );
   TEST_BEGIN();
 
   puts( "Init - get local by name -- OK" );
@@ -175,50 +167,49 @@ rtems_task Init(
   reset_name();
   puts( "Init - get name by local bitfield -- OK" );
   name = rtems_assoc_name_by_local_bitfield( assoc_table, 1, name );
-  rtems_test_assert ( !strcmp( name, "zero" ) );
+  rtems_test_assert( !strcmp( name, "zero" ) );
 
   reset_name();
   puts( "Init - get name by local bitfield -- OK" );
   name = rtems_assoc_name_by_local_bitfield( assoc_table, 3, name );
-  rtems_test_assert ( !strcmp( name, "zero one" ) );
+  rtems_test_assert( !strcmp( name, "zero one" ) );
 
   reset_name();
   puts( "Init - get name by local bitfield -- expect\"\"" );
   name = rtems_assoc_name_by_local_bitfield( assoc_table, 0, name );
-  rtems_test_assert ( !strcmp( name, "" ) );
-  
+  rtems_test_assert( !strcmp( name, "" ) );
+
   reset_name();
   puts( "Init - get name by local -- OK" );
-  rtems_test_assert( !strcmp( rtems_assoc_name_by_local( assoc_table, 1 ), 
-			      "zero" ) );
-  
+  rtems_test_assert(
+    !strcmp( rtems_assoc_name_by_local( assoc_table, 1 ), "zero" )
+  );
+
   reset_name();
   puts( "Init - get name by local -- using bad value" );
   puts( rtems_assoc_name_by_local( assoc_table, 0 ) );
 
   reset_name();
   puts( "Init - get name by remote bitfield -- OK" );
-  name = 
-    rtems_assoc_name_by_remote_bitfield( assoc_table, 1, name );
-  rtems_test_assert ( !strcmp( name, "three" ) );
+  name = rtems_assoc_name_by_remote_bitfield( assoc_table, 1, name );
+  rtems_test_assert( !strcmp( name, "three" ) );
 
   reset_name();
   puts( "Init - get name by remote bitfield -- OK" );
-  name = 
-    rtems_assoc_name_by_remote_bitfield( assoc_table, 3, name );
-  rtems_test_assert ( !strcmp( name, "three two" ) );
+  name = rtems_assoc_name_by_remote_bitfield( assoc_table, 3, name );
+  rtems_test_assert( !strcmp( name, "three two" ) );
 
   reset_name();
   puts( "Init - get name by remote bitfield -- expect\"\"" );
-  name = 
-    rtems_assoc_name_by_remote_bitfield( assoc_table, 0, name );
-  rtems_test_assert ( !strcmp( name, "" ) );
-  
+  name = rtems_assoc_name_by_remote_bitfield( assoc_table, 0, name );
+  rtems_test_assert( !strcmp( name, "" ) );
+
   reset_name();
   puts( "Init - get name by remote -- OK" );
-  rtems_test_assert( !strcmp( rtems_assoc_name_by_remote( assoc_table, 1 ),
-			      "three" ) );
-  
+  rtems_test_assert(
+    !strcmp( rtems_assoc_name_by_remote( assoc_table, 1 ), "three" )
+  );
+
   reset_name();
   puts( "Init - get name by remote -- using bad value" );
   puts( rtems_assoc_name_by_remote( assoc_table, 0 ) );
@@ -301,7 +292,7 @@ rtems_task Init(
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -309,7 +300,7 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_MAXIMUM_TASKS      1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT

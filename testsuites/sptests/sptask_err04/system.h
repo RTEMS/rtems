@@ -35,13 +35,9 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Task_1(
-  rtems_task_argument argument
-);
+rtems_task Task_1( rtems_task_argument argument );
 
 /* configuration information */
 
@@ -56,9 +52,9 @@ rtems_task Task_1(
 
 /* global variables */
 
-TEST_EXTERN rtems_id   Task_id[ 2 ];       /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 2 ];     /* array of task names */
+TEST_EXTERN rtems_id   Task_id[ 2 ];   /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 2 ]; /* array of task names */
 
-TEST_EXTERN rtems_id   Junk_id;             /* id used to return errors */
+TEST_EXTERN rtems_id Junk_id; /* id used to return errors */
 
 /* end of include file */

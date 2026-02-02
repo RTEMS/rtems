@@ -36,14 +36,12 @@
 const char rtems_test_name[] = "SP 72";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-rtems_task Test_task(rtems_task_argument argument);
+rtems_task Init( rtems_task_argument argument );
+rtems_task Test_task( rtems_task_argument argument );
 
 rtems_id Semaphore_id;
 
-rtems_task Test_task(
-  rtems_task_argument argument
-)
+rtems_task Test_task( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -56,12 +54,9 @@ rtems_task Test_task(
     rtems_clock_get_ticks_per_second() * 10
   );
   directive_failed( status, "obtain" );
-
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -88,7 +83,7 @@ rtems_task Init(
     &task_id
   );
   directive_failed( status, "rtems_task_create" );
-  
+
   status = rtems_task_start( task_id, Test_task, 0 );
   directive_failed( status, "rtems_task_start" );
 
@@ -102,7 +97,7 @@ rtems_task Init(
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -110,8 +105,8 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS             2
-#define CONFIGURE_MAXIMUM_SEMAPHORES        1
+#define CONFIGURE_MAXIMUM_TASKS      2
+#define CONFIGURE_MAXIMUM_SEMAPHORES 1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

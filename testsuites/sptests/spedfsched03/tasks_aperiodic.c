@@ -37,38 +37,38 @@
 
 #include "system.h"
 
-rtems_task Tasks_Aperiodic(
-  rtems_task_argument argument
-)
+rtems_task Tasks_Aperiodic( rtems_task_argument argument )
 {
-  rtems_status_code   status;
-  rtems_interval      start;
-  rtems_interval      stop;
-  rtems_interval      now;
+  rtems_status_code status;
+  rtems_interval    start;
+  rtems_interval    stop;
+  rtems_interval    now;
 
   put_name( Task_name[ argument ], FALSE );
 
-  status = rtems_task_wake_after( 2 + Phases[argument] );
+  status = rtems_task_wake_after( 2 + Phases[ argument ] );
   directive_failed( status, "rtems_task_wake_after" );
 
   if ( argument == 6 ) {
-    rtems_task_suspend( Task_id[5] );
-    rtems_task_resume( Task_id[5] );
+    rtems_task_suspend( Task_id[ 5 ] );
+    rtems_task_resume( Task_id[ 5 ] );
   }
 
   start = rtems_clock_get_ticks_since_boot();
-  printf("AT%" PRIdPTR "-S ticks:%d\n", argument, start);
+  printf( "AT%" PRIdPTR "-S ticks:%d\n", argument, start );
   /* active computing */
 
-  while(FOREVER) {
+  while ( FOREVER ) {
     now = rtems_clock_get_ticks_since_boot();
-    if (now >= start + Execution[argument]) break;
+    if ( now >= start + Execution[ argument ] ) {
+      break;
+    }
   }
   stop = rtems_clock_get_ticks_since_boot();
-  printf("P%" PRIdPTR "-F ticks:%d\n", argument, stop);
+  printf( "P%" PRIdPTR "-F ticks:%d\n", argument, stop );
 
   /* delete SELF */
-  fflush(stdout);
-  printf( "Killing task %" PRIdPTR "\n", argument);
+  fflush( stdout );
+  printf( "Killing task %" PRIdPTR "\n", argument );
   rtems_task_exit();
 }

@@ -39,26 +39,22 @@
 const char rtems_test_name[] = "SPERROR 2";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
+rtems_task Init( rtems_task_argument argument );
 
 static void fatal_extension(
   rtems_fatal_source source,
-  bool always_set_to_false,
-  rtems_fatal_code error
+  bool               always_set_to_false,
+  rtems_fatal_code   error
 )
 {
   if (
-    source == RTEMS_FATAL_SOURCE_EXIT
-      && !always_set_to_false
-      && error == 1
+    source == RTEMS_FATAL_SOURCE_EXIT && !always_set_to_false && error == 1
   ) {
     TEST_END();
   }
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -70,7 +66,7 @@ rtems_task Init(
     "Dummy: Resources unavailable\n"
   );
 
-  rtems_test_assert(0);
+  rtems_test_assert( 0 );
 }
 
 /* configuration information */
@@ -78,7 +74,7 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_MAXIMUM_TASKS 1
 #define CONFIGURE_INITIAL_EXTENSIONS \
   { .fatal = fatal_extension }, RTEMS_TEST_INITIAL_EXTENSION
 

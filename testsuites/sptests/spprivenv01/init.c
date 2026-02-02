@@ -39,10 +39,10 @@
 const char rtems_test_name[] = "SPPRIVENV 1";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-rtems_task task_routine(rtems_task_argument not_used);
+rtems_task Init( rtems_task_argument argument );
+rtems_task task_routine( rtems_task_argument not_used );
 
-rtems_task task_routine(rtems_task_argument not_used)
+rtems_task task_routine( rtems_task_argument not_used )
 {
   (void) not_used;
 
@@ -60,17 +60,15 @@ rtems_task task_routine(rtems_task_argument not_used)
   rtems_task_exit();
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  rtems_status_code       sc;
-  void                   *opaque;
-  rtems_id                task_id;
-  rtems_name              another_task_name;
-  rtems_user_env_t       *current_env;
+  rtems_status_code sc;
+  void             *opaque;
+  rtems_id          task_id;
+  rtems_name        another_task_name;
+  rtems_user_env_t *current_env;
 
   TEST_BEGIN();
 
@@ -107,24 +105,26 @@ rtems_task Init(
 
   puts( "Init - creating a task name and a task -- OK" );
 
-  another_task_name = 
-    rtems_build_name( 'T','S','K','D' );
+  another_task_name = rtems_build_name( 'T', 'S', 'K', 'D' );
 
-  sc = rtems_task_create( another_task_name,
-			  1,
-			  RTEMS_MINIMUM_STACK_SIZE * 2,
-			  RTEMS_DEFAULT_MODES,
-			  RTEMS_DEFAULT_ATTRIBUTES,
-			  &task_id
-			  );
+  sc = rtems_task_create(
+    another_task_name,
+    1,
+    RTEMS_MINIMUM_STACK_SIZE * 2,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &task_id
+  );
 
   puts( "Init - starting the task_routine, to set its private environment" );
-  sc = rtems_task_start( task_id, task_routine, 0);
+  sc = rtems_task_start( task_id, task_routine, 0 );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   sleep( 1 );
 
-  puts( "Init - Check current private environment. Should be same as before." );
+  puts(
+    "Init - Check current private environment. Should be same as before."
+  );
   rtems_test_assert( rtems_current_user_env == current_env );
 
   puts( "Init - Reset to global environment" );
@@ -133,7 +133,7 @@ rtems_task Init(
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -141,7 +141,7 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS             3
+#define CONFIGURE_MAXIMUM_TASKS      3
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

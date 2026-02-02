@@ -41,21 +41,21 @@
 const char rtems_test_name[] = "SPWKSPACE";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
+rtems_task Init( rtems_task_argument argument );
 
-static void test_workspace_string_duplicate(void)
+static void test_workspace_string_duplicate( void )
 {
-  char a [] = "abcd";
-  char b [] = "abc";
-  char c [] = "ab";
-  char d [] = "a";
-  char e [] = "";
+  char   a[] = "abcd";
+  char   b[] = "abc";
+  char   c[] = "ab";
+  char   d[] = "a";
+  char   e[] = "";
   size_t maxlen = 3;
-  char *dup_a = _Workspace_String_duplicate( a, maxlen );
-  char *dup_b = _Workspace_String_duplicate( b, maxlen );
-  char *dup_c = _Workspace_String_duplicate( c, maxlen );
-  char *dup_d = _Workspace_String_duplicate( d, maxlen );
-  char *dup_e = _Workspace_String_duplicate( e, maxlen );
+  char  *dup_a = _Workspace_String_duplicate( a, maxlen );
+  char  *dup_b = _Workspace_String_duplicate( b, maxlen );
+  char  *dup_c = _Workspace_String_duplicate( c, maxlen );
+  char  *dup_d = _Workspace_String_duplicate( d, maxlen );
+  char  *dup_e = _Workspace_String_duplicate( e, maxlen );
 
   rtems_test_assert( dup_a != NULL );
   rtems_test_assert( dup_b != NULL );
@@ -75,15 +75,13 @@ static void test_workspace_string_duplicate(void)
   _Workspace_Free( dup_e );
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  void                   *p1;
-  bool                    retbool;
-  Heap_Information_block  info;
+  void                  *p1;
+  bool                   retbool;
+  Heap_Information_block info;
 
   TEST_BEGIN();
 
@@ -136,7 +134,7 @@ rtems_task Init(
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_MAXIMUM_TASKS 1
 
 #define CONFIGURE_MEMORY_OVERHEAD 1
 

@@ -44,9 +44,9 @@ void __wrap__Workspace_Free( void * );
 
 void __wrap__Workspace_Free( void *ptr )
 {
-  uintptr_t alloc_begin;
-  uintptr_t block_size;
-  uintptr_t block_end;
+  uintptr_t   alloc_begin;
+  uintptr_t   block_size;
+  uintptr_t   block_end;
   Heap_Block *block;
 
   if ( ptr == NULL ) {
@@ -72,8 +72,8 @@ static void delete_mutex( rtems_id id )
 
 T_TEST_CASE( UnlimitedShrink )
 {
-  rtems_id ids[ 6 ];
-  size_t i;
+  rtems_id          ids[ 6 ];
+  size_t            i;
   rtems_status_code sc;
 
   for ( i = 0; i < RTEMS_ARRAY_SIZE( ids ); ++i ) {

@@ -42,20 +42,17 @@
 
 #include "system.h"
 
-void Fill_buffer(
-  char *source,
-  long *buffer
-)
+void Fill_buffer( char *source, long *buffer )
 {
-  char *p;
+  char  *p;
   size_t i;
-  int j;
+  int    j;
 
   p = source;
-  for ( i = 0 ; i < MESSAGE_SIZE / sizeof(long) ; i++ ) {
-    buffer[i] = 0;
-    for ( j = sizeof(long) - 1; j >= 0; j-- ) {
-      buffer[i] |= *p++ << (8 * j);
+  for ( i = 0; i < MESSAGE_SIZE / sizeof( long ); i++ ) {
+    buffer[ i ] = 0;
+    for ( j = sizeof( long ) - 1; j >= 0; j-- ) {
+      buffer[ i ] |= *p++ << ( 8 * j );
     }
   }
 }

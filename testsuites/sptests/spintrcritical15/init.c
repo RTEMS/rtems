@@ -39,33 +39,33 @@
 
 const char rtems_test_name[] = "SPINTRCRITICAL 15";
 
-#define INIT_PRIORITY      2
-#define BLOCKER_PRIORITY   1
+#define INIT_PRIORITY    2
+#define BLOCKER_PRIORITY 1
 
 typedef struct {
-  rtems_id secondary_task_id;
-  rtems_id semaphore;
+  rtems_id        secondary_task_id;
+  rtems_id        semaphore;
   Thread_Control *main_thread;
 } test_context;
 
 static rtems_task Secondary_task( rtems_task_argument arg )
 {
-  test_context      *ctx;
-  rtems_status_code  sc;
+  test_context     *ctx;
+  rtems_status_code sc;
 
   ctx = (test_context *) arg;
 
-  while (1) {
+  while ( 1 ) {
     sc = rtems_semaphore_obtain( ctx->semaphore, RTEMS_DEFAULT_OPTIONS, 1 );
     T_quiet_rsc( sc, RTEMS_TIMEOUT );
   }
 }
 
-static T_interrupt_test_state interrupt(void *arg)
+static T_interrupt_test_state interrupt( void *arg )
 {
-  test_context           *ctx;
-  Thread_Wait_flags       flags;
-  T_interrupt_test_state  state;
+  test_context          *ctx;
+  Thread_Wait_flags      flags;
+  T_interrupt_test_state state;
 
   ctx = arg;
   flags = _Thread_Wait_flags_get( ctx->main_thread );
@@ -87,8 +87,8 @@ static T_interrupt_test_state interrupt(void *arg)
 
 static void prepare( void *arg )
 {
-  test_context      *ctx;
-  rtems_status_code  sc;
+  test_context     *ctx;
+  rtems_status_code sc;
 
   ctx = arg;
   sc = rtems_task_restart( ctx->secondary_task_id, (rtems_task_argument) ctx );
@@ -97,8 +97,8 @@ static void prepare( void *arg )
 
 static void action( void *arg )
 {
-  test_context      *ctx;
-  rtems_status_code  sc;
+  test_context     *ctx;
+  rtems_status_code sc;
 
   ctx = arg;
   sc = rtems_semaphore_obtain( ctx->semaphore, RTEMS_DEFAULT_OPTIONS, 1 );
@@ -166,12 +166,12 @@ static rtems_task Init( rtems_task_argument argument )
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS          2
-#define CONFIGURE_MAXIMUM_SEMAPHORES     1
-#define CONFIGURE_MICROSECONDS_PER_TICK  1000
-#define CONFIGURE_INIT_TASK_PRIORITY  INIT_PRIORITY
+#define CONFIGURE_MAXIMUM_TASKS           2
+#define CONFIGURE_MAXIMUM_SEMAPHORES      1
+#define CONFIGURE_MICROSECONDS_PER_TICK   1000
+#define CONFIGURE_INIT_TASK_PRIORITY      INIT_PRIORITY
 #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_PREEMPT
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_INITIAL_EXTENSIONS      RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

@@ -32,9 +32,7 @@
 
 #include "system.h"
 
-rtems_task Task_1_through_3(
-  rtems_task_argument index
-)
+rtems_task Task_1_through_3( rtems_task_argument index )
 {
   rtems_time_of_day time;
   rtems_status_code status;
@@ -46,7 +44,7 @@ rtems_task Task_1_through_3(
 
   ticks = RTEMS_MILLISECONDS_TO_TICKS( index * 5 * 1000 );
 
-  while( FOREVER ) {
+  while ( FOREVER ) {
     status = rtems_clock_get_tod( &time );
     directive_failed( status, "rtems_clock_get_tod" );
 

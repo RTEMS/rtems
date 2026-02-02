@@ -37,58 +37,54 @@
  * Message buffer information
  */
 #define MAX_MESSAGES 2
-#define MESSAGE_SIZE (sizeof(long) * 4)
+#define MESSAGE_SIZE ( sizeof( long ) * 4 )
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Task_3(
-  rtems_task_argument argument
-);
+rtems_task Task_3( rtems_task_argument argument );
 
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS              10
-#define CONFIGURE_MAXIMUM_TIMERS              1
-#define CONFIGURE_MAXIMUM_SEMAPHORES          2
-#define CONFIGURE_MAXIMUM_MESSAGE_QUEUES      1
-#define CONFIGURE_MAXIMUM_PERIODS             1
-#define CONFIGURE_MAXIMUM_USER_EXTENSIONS     0
-#define CONFIGURE_TICKS_PER_TIMESLICE       100
+#define CONFIGURE_MAXIMUM_TASKS           10
+#define CONFIGURE_MAXIMUM_TIMERS          1
+#define CONFIGURE_MAXIMUM_SEMAPHORES      2
+#define CONFIGURE_MAXIMUM_MESSAGE_QUEUES  1
+#define CONFIGURE_MAXIMUM_PERIODS         1
+#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 0
+#define CONFIGURE_TICKS_PER_TIMESLICE     100
 
 #define CONFIGURE_MESSAGE_BUFFER_MEMORY \
-  CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE(MAX_MESSAGES, MESSAGE_SIZE)
+  CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( MAX_MESSAGES, MESSAGE_SIZE )
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_EXTRA_TASK_STACKS         (20 * RTEMS_MINIMUM_STACK_SIZE)
+#define CONFIGURE_EXTRA_TASK_STACKS ( 20 * RTEMS_MINIMUM_STACK_SIZE )
 
 #include <rtems/confdefs.h>
 
 /* global variables */
 
-TEST_EXTERN rtems_id   Task_id[ 11 ];       /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 11 ];     /* array of task names */
+TEST_EXTERN rtems_id   Task_id[ 11 ];   /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 11 ]; /* array of task names */
 
 TEST_EXTERN rtems_name Semaphore_name[ 4 ]; /* array of semaphore names */
 TEST_EXTERN rtems_id   Semaphore_id[ 4 ];   /* array of semaphore ids */
 
-TEST_EXTERN rtems_name Queue_name[ 3 ];     /* array of queue names */
-TEST_EXTERN rtems_id   Queue_id[ 3 ];       /* array of queue ids */
+TEST_EXTERN rtems_name Queue_name[ 3 ]; /* array of queue names */
+TEST_EXTERN rtems_id   Queue_id[ 3 ];   /* array of queue ids */
 
-TEST_EXTERN rtems_name Port_name[ 2 ];      /* array of port names */
-TEST_EXTERN rtems_id   Port_id[ 2 ];        /* array of port ids */
+TEST_EXTERN rtems_name Port_name[ 2 ]; /* array of port names */
+TEST_EXTERN rtems_id   Port_id[ 2 ];   /* array of port ids */
 
-TEST_EXTERN rtems_name Period_name[ 2 ];    /* array of period names */
-TEST_EXTERN rtems_id   Period_id[ 2 ];      /* array of period ids */
+TEST_EXTERN rtems_name Period_name[ 2 ]; /* array of period names */
+TEST_EXTERN rtems_id   Period_id[ 2 ];   /* array of period ids */
 
-TEST_EXTERN rtems_id   Junk_id;             /* id used to return errors */
+TEST_EXTERN rtems_id Junk_id; /* id used to return errors */
 
 #define Internal_port_area (void *) 0x00001000
 #define External_port_area (void *) 0x00002000

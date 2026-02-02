@@ -33,17 +33,17 @@
 
 #include <rtems.h>
 
-int weak_or_strong(void)
+int weak_or_strong( void )
 {
   return 77;
 }
 
-void pull_in_strong(void)
+void pull_in_strong( void )
 {
   /* Do nothing */
 }
 
-RTEMS_WEAK int weak_2(void)
+RTEMS_WEAK int weak_2( void )
 {
   return 222;
 }

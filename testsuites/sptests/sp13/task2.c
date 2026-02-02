@@ -41,9 +41,7 @@
 
 #include "system.h"
 
-rtems_task Task_2(
-  rtems_task_argument argument
-)
+rtems_task Task_2( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -69,7 +67,7 @@ rtems_task Task_2(
 
   puts(
     "TA2 - rtems_message_queue_receive - receive from queue 1 - "
-      "RTEMS_WAIT FOREVER"
+    "RTEMS_WAIT FOREVER"
   );
   status = rtems_message_queue_receive(
     Queue_id[ 1 ],
@@ -85,8 +83,8 @@ rtems_task Task_2(
 
   puts(
     "TA2 - rtems_message_queue_receive - receive from queue 1 - "
-      "RTEMS_WAIT FOREVER"
- );
+    "RTEMS_WAIT FOREVER"
+  );
   status = rtems_message_queue_receive(
     Queue_id[ 1 ],
     buffer,
@@ -105,7 +103,7 @@ rtems_task Task_2(
 
   puts(
     "TA2 - rtems_message_queue_receive - receive from queue 2 - "
-      "RTEMS_WAIT FOREVER"
+    "RTEMS_WAIT FOREVER"
   );
   status = rtems_message_queue_receive(
     Queue_id[ 2 ],
@@ -119,14 +117,14 @@ rtems_task Task_2(
   Put_buffer( buffer );
   new_line;
 
-  Fill_buffer( "BUFFER 2 TO Q 2", (long *)buffer );
+  Fill_buffer( "BUFFER 2 TO Q 2", (long *) buffer );
   puts( "TA2 - rtems_message_queue_send - BUFFER 2 TO Q 2" );
   status = rtems_message_queue_send( Queue_id[ 2 ], buffer, MESSAGE_SIZE );
   directive_failed( status, "rtems_message_queue_send" );
 
   puts(
     "TA2 - rtems_message_queue_receive - receive from queue 1 - "
-      "10 second timeout"
+    "10 second timeout"
   );
   status = rtems_message_queue_receive(
     Queue_id[ 1 ],
@@ -142,7 +140,7 @@ rtems_task Task_2(
 
   puts(
     "TA2 - rtems_message_queue_receive - receive from queue 3 - "
-      "RTEMS_WAIT FOREVER"
+    "RTEMS_WAIT FOREVER"
   );
   status = rtems_message_queue_receive(
     Queue_id[ 3 ],
@@ -155,5 +153,4 @@ rtems_task Task_2(
   puts_nocr( "TA2 - buffer received: " );
   Put_buffer( buffer );
   new_line;
-
 }

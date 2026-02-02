@@ -33,9 +33,7 @@
 #include "system.h"
 #include "inttest.h"
 
-rtems_task Task_1(
-  rtems_task_argument argument
-)
+rtems_task Task_1( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -58,7 +56,7 @@ rtems_task Task_1(
     INTEGER_factors[ task_index ]
   );
 
-  while( FOREVER ) {
+  while ( FOREVER ) {
     status = rtems_clock_get_tod( &time );
     directive_failed( status, "rtems_clock_get_tod" );
 

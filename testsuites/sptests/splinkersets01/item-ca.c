@@ -12,4 +12,4 @@
 
 #include "splinkersets01.h"
 
-RTEMS_LINKER_ROSET_ITEM_ORDERED(test_ro, const int *, ca2, OC) = &ca[2];
+RTEMS_LINKER_ROSET_ITEM_ORDERED( test_ro, const int *, ca2, OC ) = &ca[ 2 ];

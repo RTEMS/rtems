@@ -36,13 +36,13 @@
 const char rtems_test_name[] = "SP 70";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-void create_helper(int task);
-void delete_helper(int task);
- 
-rtems_id          TaskID[10];
+rtems_task Init( rtems_task_argument argument );
+void       create_helper( int task );
+void       delete_helper( int task );
 
-void create_helper(int task)
+rtems_id TaskID[ 10 ];
+
+void create_helper( int task )
 {
   rtems_status_code status;
 
@@ -53,23 +53,21 @@ void create_helper(int task)
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
-    &TaskID[task]
+    &TaskID[ task ]
   );
   directive_failed( status, "rtems_task_create" );
 }
 
-void delete_helper(int task)
+void delete_helper( int task )
 {
   rtems_status_code status;
 
   printf( "Deleting task %d\n", task );
-  status = rtems_task_delete( TaskID[task] );
+  status = rtems_task_delete( TaskID[ task ] );
   directive_failed( status, "rtems_task_delete" );
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -94,7 +92,7 @@ rtems_task Init(
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -103,7 +101,7 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_UNIFIED_WORK_AREAS
-#define CONFIGURE_MAXIMUM_TASKS rtems_resource_unlimited(1)
+#define CONFIGURE_MAXIMUM_TASKS      rtems_resource_unlimited( 1 )
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

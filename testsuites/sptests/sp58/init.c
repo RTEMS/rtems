@@ -38,21 +38,21 @@
 const char rtems_test_name[] = "SP 58";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-void timespec_divide_by_zero(void);
-void timespec_greater_than_lhs_sec_less(void);
+rtems_task Init( rtems_task_argument argument );
+void       timespec_divide_by_zero( void );
+void       timespec_greater_than_lhs_sec_less( void );
 
-void timespec_divide_by_zero(void)
+void timespec_divide_by_zero( void )
 {
-  struct timespec      t1;
-  struct timespec      zero;
-  uint32_t             ival_percentage;
-  uint32_t             fval_percentage;
+  struct timespec t1;
+  struct timespec zero;
+  uint32_t        ival_percentage;
+  uint32_t        fval_percentage;
 
-  t1.tv_sec  = 1;
+  t1.tv_sec = 1;
   t1.tv_nsec = 0;
 
-  zero.tv_sec  = 0;
+  zero.tv_sec = 0;
   zero.tv_nsec = 0;
 
   ival_percentage = 1234;
@@ -64,16 +64,16 @@ void timespec_divide_by_zero(void)
   rtems_test_assert( fval_percentage == 0 );
 }
 
-void timespec_greater_than_lhs_sec_less(void)
+void timespec_greater_than_lhs_sec_less( void )
 {
-  struct timespec   lhs;
-  struct timespec   rhs;
-  bool              rc;
+  struct timespec lhs;
+  struct timespec rhs;
+  bool            rc;
 
-  lhs.tv_sec  = 100;
+  lhs.tv_sec = 100;
   lhs.tv_nsec = 0;
 
-  rhs.tv_sec  = 101;
+  rhs.tv_sec = 101;
   rhs.tv_nsec = 0;
 
   puts( "Init - _Timespec_Greater_than - lhs seconds less" );
@@ -81,9 +81,7 @@ void timespec_greater_than_lhs_sec_less(void)
   rtems_test_assert( rc == false );
 }
 
-rtems_task Init(
-  rtems_task_argument ignored
-)
+rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
 
@@ -93,7 +91,7 @@ rtems_task Init(
   timespec_greater_than_lhs_sec_less();
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -101,7 +99,7 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS  1
+#define CONFIGURE_MAXIMUM_TASKS      1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

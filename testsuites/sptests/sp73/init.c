@@ -37,22 +37,20 @@
 const char rtems_test_name[] = "SP 73";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-rtems_task Test_task(rtems_task_argument argument);
+rtems_task Init( rtems_task_argument argument );
+rtems_task Test_task( rtems_task_argument argument );
 
-rtems_id   Task_id[ 4 ];         /* array of task ids */
-rtems_name Task_name[ 4 ];       /* array of task names */
+rtems_id   Task_id[ 4 ];   /* array of task ids */
+rtems_name Task_name[ 4 ]; /* array of task names */
 
-rtems_task Test_task(
-  rtems_task_argument arg
-)
+rtems_task Test_task( rtems_task_argument arg )
 {
   rtems_time_of_day time;
   uint32_t          task_index;
   rtems_status_code status;
 
   task_index = arg;
-  for ( ; ; ) {
+  for ( ;; ) {
     status = rtems_clock_get_tod( &time );
     directive_failed( status, "get tod" );
 
@@ -69,9 +67,7 @@ rtems_task Test_task(
   }
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -81,13 +77,13 @@ rtems_task Init(
 
   TEST_BEGIN();
 
-  time.year   = 1988;
-  time.month  = 12;
-  time.day    = 31;
-  time.hour   = 9;
+  time.year = 1988;
+  time.month = 12;
+  time.day = 31;
+  time.hour = 9;
   time.minute = 0;
   time.second = 0;
-  time.ticks  = 0;
+  time.ticks = 0;
 
   status = rtems_clock_set( &time );
 
@@ -96,20 +92,32 @@ rtems_task Init(
   Task_name[ 3 ] = rtems_build_name( 'T', 'A', '3', ' ' );
 
   status = rtems_task_create(
-    Task_name[ 1 ], 1, RTEMS_MINIMUM_STACK_SIZE, RTEMS_DEFAULT_MODES,
-    RTEMS_DEFAULT_ATTRIBUTES, &Task_id[ 1 ]
+    Task_name[ 1 ],
+    1,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &Task_id[ 1 ]
   );
   directive_failed( status, "create 1" );
 
   status = rtems_task_create(
-    Task_name[ 2 ], 1, RTEMS_MINIMUM_STACK_SIZE, RTEMS_DEFAULT_MODES,
-    RTEMS_DEFAULT_ATTRIBUTES, &Task_id[ 2 ]
+    Task_name[ 2 ],
+    1,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &Task_id[ 2 ]
   );
   directive_failed( status, "create 2" );
 
   status = rtems_task_create(
-    Task_name[ 3 ], 1, RTEMS_MINIMUM_STACK_SIZE, RTEMS_DEFAULT_MODES,
-    RTEMS_DEFAULT_ATTRIBUTES, &Task_id[ 3 ]
+    Task_name[ 3 ],
+    1,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &Task_id[ 3 ]
   );
   directive_failed( status, "create 3" );
 
@@ -124,7 +132,7 @@ rtems_task Init(
   status = rtems_task_start( Task_id[ 3 ], Test_task, 3 );
   directive_failed( status, "start 3" );
 
-  status = rtems_task_set_priority(Task_id[1], 1, &old);
+  status = rtems_task_set_priority( Task_id[ 1 ], 1, &old );
   directive_failed( status, "set priority" );
 
   status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
@@ -138,9 +146,9 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS           4
+#define CONFIGURE_MAXIMUM_TASKS 4
 
-#define CONFIGURE_INIT_TASK_PRIORITY      2
+#define CONFIGURE_INIT_TASK_PRIORITY 2
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

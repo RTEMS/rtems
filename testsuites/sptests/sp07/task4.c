@@ -42,14 +42,12 @@
 
 #include "system.h"
 
-rtems_task Task_4(
-  rtems_task_argument argument
-)
+rtems_task Task_4( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_status_code status;
-  rtems_id id;
+  rtems_id          id;
 
   assert_extension_counts( &Task_created[ 0 ], 0x2 | 0x4 | 0x8 | 0x10 );
   assert_extension_counts( &Task_started[ 0 ], 0x2 | 0x4 | 0x8 | 0x10 );

@@ -30,25 +30,15 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Preempt_task(
-  rtems_task_argument argument
-);
+rtems_task Preempt_task( rtems_task_argument argument );
 
-rtems_task Task_1(
-  rtems_task_argument argument
-);
+rtems_task Task_1( rtems_task_argument argument );
 
-rtems_task Task_2(
-  rtems_task_argument argument
-);
+rtems_task Task_2( rtems_task_argument argument );
 
-rtems_task Task_3(
-  rtems_task_argument argument
-);
+rtems_task Task_3( rtems_task_argument argument );
 
 /* configuration information */
 
@@ -58,19 +48,19 @@ rtems_task Task_3(
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-#define CONFIGURE_MAXIMUM_TASKS             4
+#define CONFIGURE_MAXIMUM_TASKS 4
 
 /*
  *  Deliberately configure the IDLE Task's stack as greater than minimum
  *  so it will have to be increased.
  */
-#define CONFIGURE_IDLE_TASK_STACK_SIZE (2 * RTEMS_MINIMUM_STACK_SIZE)
+#define CONFIGURE_IDLE_TASK_STACK_SIZE ( 2 * RTEMS_MINIMUM_STACK_SIZE )
 
 #include <rtems/confdefs.h>
 
 /* global variables */
 
-TEST_EXTERN rtems_id   Task_id[ 4 ];         /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 4 ];       /* array of task names */
+TEST_EXTERN rtems_id   Task_id[ 4 ];   /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 4 ]; /* array of task names */
 
 /* end of include file */

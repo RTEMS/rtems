@@ -37,11 +37,9 @@
 const char rtems_test_name[] = "SP 18";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Init(
-  rtems_task_argument ignored
-)
+rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
 
@@ -61,8 +59,7 @@ rtems_task Init(
   ++stack_size;
 
   puts( "Init - rtems_task_create - Unsatisfied on Extensions" );
-  while (1) {
-
+  while ( 1 ) {
     sc = rtems_task_create(
       rtems_build_name( 'T', 'E', 'S', 'T' ),
       1,
@@ -72,8 +69,9 @@ rtems_task Init(
       &task_id
     );
 
-    if ( sc == RTEMS_SUCCESSFUL )
+    if ( sc == RTEMS_SUCCESSFUL ) {
       break;
+    }
 
     fatal_directive_status( sc, RTEMS_UNSATISFIED, "rtems_task_create" );
 
@@ -84,12 +82,14 @@ rtems_task Init(
     rtems_test_assert( ok );
 
     stack_size -= 8;
-    if ( stack_size <= RTEMS_MINIMUM_STACK_SIZE )
-     break;
+    if ( stack_size <= RTEMS_MINIMUM_STACK_SIZE ) {
+      break;
+    }
   }
 
-  if ( sc != RTEMS_SUCCESSFUL )
-    rtems_test_exit(0);
+  if ( sc != RTEMS_SUCCESSFUL ) {
+    rtems_test_exit( 0 );
+  }
 
   /*
    * Verify heap is still in same shape after we free the task
@@ -105,7 +105,7 @@ rtems_task Init(
   rtems_workspace_greedy_free( greedy );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -113,9 +113,9 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS            2
-#define CONFIGURE_MAXIMUM_USER_EXTENSIONS  20
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_MAXIMUM_TASKS           2
+#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 20
+#define CONFIGURE_INITIAL_EXTENSIONS      RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

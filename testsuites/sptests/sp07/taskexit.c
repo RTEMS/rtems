@@ -39,9 +39,7 @@
 
 #include "system.h"
 
-void Task_exit_extension(
-  rtems_tcb *running_task
-)
+void Task_exit_extension( rtems_tcb *running_task )
 {
   if ( task_number( running_task->Object.id ) > 0 ) {
     puts_nocr( "RTEMS_TASK_EXITTED - extension invoked for " );

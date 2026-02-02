@@ -43,108 +43,107 @@
 const char rtems_test_name[] = "SPHEAPPROT";
 
 #ifdef HEAP_PROTECTION
-  static void test_heap_block_error(
-     Heap_Control *heap,
-     Heap_Block *block,
-     Heap_Error_reason reason
-  )
-  {
-    (void) block;
-    (void) reason;
+static void test_heap_block_error(
+  Heap_Control     *heap,
+  Heap_Block       *block,
+  Heap_Error_reason reason
+)
+{
+  (void) block;
+  (void) reason;
 
-    bool *error = heap->Protection.handler_data;
+  bool *error = heap->Protection.handler_data;
 
-    *error = true;
-  }
+  *error = true;
+}
 
-  static void test_heap_initialize(
-    Heap_Control *heap,
-    void *begin,
-    uintptr_t size,
-    bool *error
-  )
-  {
-    size = _Heap_Initialize(heap, begin, size, 0);
-    assert(size > 0);
+static void test_heap_initialize(
+  Heap_Control *heap,
+  void         *begin,
+  uintptr_t     size,
+  bool         *error
+)
+{
+  size = _Heap_Initialize( heap, begin, size, 0 );
+  assert( size > 0 );
 
-    heap->Protection.handler_data = error;
-    heap->Protection.block_error = test_heap_block_error;
+  heap->Protection.handler_data = error;
+  heap->Protection.block_error = test_heap_block_error;
 
-    *error = false;
-  }
+  *error = false;
+}
 
-  static void test_heap_protection(void)
-  {
-    Heap_Control heap;
-    Heap_Block *block = NULL;
-    char area [512];
-    uintptr_t *p = NULL;
-    uintptr_t max_size = 0;
-    bool ok = false;
-    bool error = false;
+static void test_heap_protection( void )
+{
+  Heap_Control heap;
+  Heap_Block  *block = NULL;
+  char         area[ 512 ];
+  uintptr_t   *p = NULL;
+  uintptr_t    max_size = 0;
+  bool         ok = false;
+  bool         error = false;
 
-    /* Test double free */
+  /* Test double free */
 
-    test_heap_initialize(&heap, area, sizeof(area), &error);
+  test_heap_initialize( &heap, area, sizeof( area ), &error );
 
-    max_size = heap.stats.free_size
-      - HEAP_BLOCK_HEADER_SIZE + HEAP_ALLOC_BONUS;
+  max_size = heap.stats.free_size - HEAP_BLOCK_HEADER_SIZE + HEAP_ALLOC_BONUS;
 
-    p = _Heap_Allocate(&heap, max_size);
-    assert(p != NULL);
+  p = _Heap_Allocate( &heap, max_size );
+  assert( p != NULL );
 
-    ok = _Heap_Free(&heap, p);
-    assert(ok && !error);
+  ok = _Heap_Free( &heap, p );
+  assert( ok && !error );
 
-    ok = _Heap_Free(&heap, p);
-    assert(ok && error);
+  ok = _Heap_Free( &heap, p );
+  assert( ok && error );
 
-    /* Test begin overwrite */
+  /* Test begin overwrite */
 
-    test_heap_initialize(&heap, area, sizeof(area), &error);
+  test_heap_initialize( &heap, area, sizeof( area ), &error );
 
-    p = _Heap_Allocate(&heap, max_size);
-    assert(p != NULL);
+  p = _Heap_Allocate( &heap, max_size );
+  assert( p != NULL );
 
-    *(p - 1) = 0;
+  *( p - 1 ) = 0;
 
-    ok = _Heap_Free(&heap, p);
-    assert(ok && error);
+  ok = _Heap_Free( &heap, p );
+  assert( ok && error );
 
-    /* Test end overwrite */
+  /* Test end overwrite */
 
-    test_heap_initialize(&heap, area, sizeof(area), &error);
+  test_heap_initialize( &heap, area, sizeof( area ), &error );
 
-    p = _Heap_Allocate(&heap, max_size);
-    assert(p != NULL);
+  p = _Heap_Allocate( &heap, max_size );
+  assert( p != NULL );
 
-    *(uintptr_t *)((char *) p + max_size) = 0;
+  *(uintptr_t *) ( (char *) p + max_size ) = 0;
 
-    ok = _Heap_Free(&heap, p);
-    assert(ok && error);
+  ok = _Heap_Free( &heap, p );
+  assert( ok && error );
 
-    /* Test use after free */
+  /* Test use after free */
 
-    test_heap_initialize(&heap, area, sizeof(area), &error);
+  test_heap_initialize( &heap, area, sizeof( area ), &error );
 
-    p = _Heap_Allocate(&heap, max_size);
-    assert(p != NULL);
+  p = _Heap_Allocate( &heap, max_size );
+  assert( p != NULL );
 
-    ok = _Heap_Free(&heap, p);
-    assert(ok && !error);
+  ok = _Heap_Free( &heap, p );
+  assert( ok && !error );
 
-    *p = 0;
+  *p = 0;
 
-    block = _Heap_Block_of_alloc_area((uintptr_t) p, heap.page_size);
-    block->Protection_begin.next_delayed_free_block = HEAP_PROTECTION_OBOLUS;
-    ok = _Heap_Free(&heap, p);
-    assert(ok && error);
-  }
+  block = _Heap_Block_of_alloc_area( (uintptr_t) p, heap.page_size );
+  block->Protection_begin.next_delayed_free_block = HEAP_PROTECTION_OBOLUS;
+  ok = _Heap_Free( &heap, p );
+  assert( ok && error );
+}
 #else
-  #define test_heap_protection() ((void) 0)
+  #define test_heap_protection() ( (void) 0 )
 #endif
 
-static rtems_task Init(rtems_task_argument argument)
+static rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -154,7 +153,7 @@ static rtems_task Init(rtems_task_argument argument)
 
   TEST_END();
 
-  exit(0);
+  exit( 0 );
 }
 
 #define CONFIGURE_INIT

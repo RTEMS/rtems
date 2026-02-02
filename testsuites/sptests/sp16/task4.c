@@ -41,17 +41,17 @@
 
 #include "system.h"
 
-rtems_task Task_4(
-  rtems_task_argument argument
-)
+rtems_task Task_4( rtems_task_argument argument )
 {
   (void) argument;
 
-  rtems_status_code  status;
-  void              *segment_address_1;
-  void              *segment_address_2;
+  rtems_status_code status;
+  void             *segment_address_1;
+  void             *segment_address_2;
 
-  puts( "TA4 - rtems_region_get_segment - wait on 1.5K segment from region 1" );
+  puts(
+    "TA4 - rtems_region_get_segment - wait on 1.5K segment from region 1"
+  );
   status = rtems_region_get_segment(
     Region_id[ 1 ],
     1536,

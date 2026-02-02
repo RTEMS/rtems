@@ -46,7 +46,7 @@ static rtems_task Init( rtems_task_argument ignored )
   TEST_BEGIN();
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */

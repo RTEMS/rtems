@@ -45,8 +45,8 @@ static rtems_test_parallel_context ctx;
 
 static rtems_interval test_binuptime_init(
   rtems_test_parallel_context *ctx,
-  void *arg,
-  size_t active_workers
+  void                        *arg,
+  size_t                       active_workers
 )
 {
   (void) ctx;
@@ -58,9 +58,9 @@ static rtems_interval test_binuptime_init(
 
 static void test_binuptime_body(
   rtems_test_parallel_context *ctx,
-  void *arg,
-  size_t active_workers,
-  size_t worker_index
+  void                        *arg,
+  size_t                       active_workers,
+  size_t                       worker_index
 )
 {
   (void) ctx;
@@ -71,22 +71,21 @@ static void test_binuptime_body(
   struct bintime start;
   struct bintime end;
 
-  rtems_bsd_binuptime(&start);
+  rtems_bsd_binuptime( &start );
 
   do {
-    rtems_bsd_binuptime(&end);
+    rtems_bsd_binuptime( &end );
     rtems_test_assert(
-      end.sec > start.sec
-        || (end.sec == start.sec && end.frac >= start.frac)
+      end.sec > start.sec || ( end.sec == start.sec && end.frac >= start.frac )
     );
     start = end;
-  } while (!rtems_test_parallel_stop_job(ctx));
+  } while ( !rtems_test_parallel_stop_job( ctx ) );
 }
 
 static void test_binuptime_fini(
   rtems_test_parallel_context *ctx,
-  void *arg,
-  size_t active_workers
+  void                        *arg,
+  size_t                       active_workers
 )
 {
   (void) ctx;
@@ -97,24 +96,22 @@ static void test_binuptime_fini(
 }
 
 static const rtems_test_parallel_job jobs[] = {
-  {
-    .init = test_binuptime_init,
+  { .init = test_binuptime_init,
     .body = test_binuptime_body,
     .fini = test_binuptime_fini,
-    .cascade = false
-  }
+    .cascade = false }
 };
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
   TEST_BEGIN();
 
-  rtems_test_parallel(&ctx, NULL, &jobs[0], RTEMS_ARRAY_SIZE(jobs));
+  rtems_test_parallel( &ctx, NULL, &jobs[ 0 ], RTEMS_ARRAY_SIZE( jobs ) );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 #define CONFIGURE_MICROSECONDS_PER_TICK 1000
@@ -122,7 +119,7 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS CPU_COUNT
+#define CONFIGURE_MAXIMUM_TASKS  CPU_COUNT
 #define CONFIGURE_MAXIMUM_TIMERS 1
 
 #define CONFIGURE_MAXIMUM_PROCESSORS CPU_COUNT

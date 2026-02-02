@@ -42,8 +42,8 @@ const char rtems_test_name[] = "SPNTP 1";
 T_TEST_CASE( NTP )
 {
   struct ntptimeval ntv;
-  struct timex tx;
-  int status;
+  struct timex      tx;
+  int               status;
 
   errno = 0;
   status = ntp_gettime( NULL );
@@ -88,7 +88,7 @@ T_TEST_CASE( NTP )
   T_eq_long( tx.errcnt, 0 );
   T_eq_long( tx.stbcnt, 0 );
 
-  status = adjtime( NULL,  NULL );
+  status = adjtime( NULL, NULL );
   T_eq_int( status, 0 );
 }
 

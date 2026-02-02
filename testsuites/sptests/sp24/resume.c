@@ -41,8 +41,8 @@
 #include "system.h"
 
 rtems_timer_service_routine Resume_task(
-  rtems_id  timer_id,
-  void     *ignored_address
+  rtems_id timer_id,
+  void    *ignored_address
 )
 {
   (void) ignored_address;

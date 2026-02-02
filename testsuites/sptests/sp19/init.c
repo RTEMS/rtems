@@ -58,9 +58,7 @@ void thread_switch_extension( Thread_Control *executing, Thread_Control *heir )
   }
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -68,12 +66,12 @@ rtems_task Init(
 
   TEST_BEGIN();
 
-  Task_name[ 1 ] =  rtems_build_name( 'T', 'A', '1', ' ' );
-  Task_name[ 2 ] =  rtems_build_name( 'T', 'A', '2', ' ' );
-  Task_name[ 3 ] =  rtems_build_name( 'T', 'A', '3', ' ' );
-  Task_name[ 4 ] =  rtems_build_name( 'T', 'A', '4', ' ' );
-  Task_name[ 5 ] =  rtems_build_name( 'T', 'A', '5', ' ' );
-  Task_name[ 6 ] =  rtems_build_name( 'F', 'P', '1', ' ' );
+  Task_name[ 1 ] = rtems_build_name( 'T', 'A', '1', ' ' );
+  Task_name[ 2 ] = rtems_build_name( 'T', 'A', '2', ' ' );
+  Task_name[ 3 ] = rtems_build_name( 'T', 'A', '3', ' ' );
+  Task_name[ 4 ] = rtems_build_name( 'T', 'A', '4', ' ' );
+  Task_name[ 5 ] = rtems_build_name( 'T', 'A', '5', ' ' );
+  Task_name[ 6 ] = rtems_build_name( 'F', 'P', '1', ' ' );
 
   status = rtems_task_create(
     Task_name[ 1 ],
@@ -157,28 +155,27 @@ rtems_task Init(
    *  Load "task dependent factors" in the context areas
    */
 
+  FP_factors[ 0 ] = 0.0;
+  FP_factors[ 1 ] = 1000.1;
+  FP_factors[ 2 ] = 2000.2;
+  FP_factors[ 3 ] = 3000.3;
+  FP_factors[ 4 ] = 4000.4;
+  FP_factors[ 5 ] = 5000.5;
+  FP_factors[ 6 ] = 6000.6;
+  FP_factors[ 7 ] = 7000.7;
+  FP_factors[ 8 ] = 8000.8;
+  FP_factors[ 9 ] = 9000.9;
 
-  FP_factors[0] =    0.0;
-  FP_factors[1] = 1000.1;
-  FP_factors[2] = 2000.2;
-  FP_factors[3] = 3000.3;
-  FP_factors[4] = 4000.4;
-  FP_factors[5] = 5000.5;
-  FP_factors[6] = 6000.6;
-  FP_factors[7] = 7000.7;
-  FP_factors[8] = 8000.8;
-  FP_factors[9] = 9000.9;
-
-  INTEGER_factors[0] = 0x0000;
-  INTEGER_factors[1] = 0x1000;
-  INTEGER_factors[2] = 0x2000;
-  INTEGER_factors[3] = 0x3000;
-  INTEGER_factors[4] = 0x4000;
-  INTEGER_factors[5] = 0x5000;
-  INTEGER_factors[6] = 0x6000;
-  INTEGER_factors[7] = 0x7000;
-  INTEGER_factors[8] = 0x8000;
-  INTEGER_factors[9] = 0x9000;
+  INTEGER_factors[ 0 ] = 0x0000;
+  INTEGER_factors[ 1 ] = 0x1000;
+  INTEGER_factors[ 2 ] = 0x2000;
+  INTEGER_factors[ 3 ] = 0x3000;
+  INTEGER_factors[ 4 ] = 0x4000;
+  INTEGER_factors[ 5 ] = 0x5000;
+  INTEGER_factors[ 6 ] = 0x6000;
+  INTEGER_factors[ 7 ] = 0x7000;
+  INTEGER_factors[ 8 ] = 0x8000;
+  INTEGER_factors[ 9 ] = 0x9000;
 
   rtems_task_exit();
 }

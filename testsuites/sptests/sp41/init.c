@@ -52,9 +52,7 @@ static void iterator( Thread_Control *thread )
   (void) thread;
 }
 
-static rtems_task Init(
-  rtems_task_argument ignored
-)
+static rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
 
@@ -85,7 +83,7 @@ static rtems_task Init(
   rtems_iterate_over_all_threads( iterator );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -93,7 +91,7 @@ static rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS         1
+#define CONFIGURE_MAXIMUM_TASKS      1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

@@ -35,28 +35,26 @@
 
 const char rtems_test_name[] = "SP TASK ERROR 03";
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_name        task_name;
   rtems_status_code status;
-  bool              skipUnsatisfied; 
-  
+  bool              skipUnsatisfied;
+
   TEST_BEGIN();
-  
-  Task_name[ 1 ]       =  rtems_build_name( 'T', 'A', '1', ' ' );
-  Task_name[ 2 ]       =  rtems_build_name( 'T', 'A', '2', ' ' );
-  Task_name[ 3 ]       =  rtems_build_name( 'T', 'A', '3', ' ' );
-  Task_name[ 4 ]       =  rtems_build_name( 'T', 'A', '4', ' ' );
-  Task_name[ 5 ]       =  rtems_build_name( 'T', 'A', '5', ' ' );
-  Task_name[ 6 ]       =  rtems_build_name( 'T', 'A', '6', ' ' );
-  Task_name[ 7 ]       =  rtems_build_name( 'T', 'A', '7', ' ' );
-  Task_name[ 8 ]       =  rtems_build_name( 'T', 'A', '8', ' ' );
-  Task_name[ 9 ]       =  rtems_build_name( 'T', 'A', '9', ' ' );
-  Task_name[ 10 ]      =  rtems_build_name( 'T', 'A', 'A', ' ' );
+
+  Task_name[ 1 ] = rtems_build_name( 'T', 'A', '1', ' ' );
+  Task_name[ 2 ] = rtems_build_name( 'T', 'A', '2', ' ' );
+  Task_name[ 3 ] = rtems_build_name( 'T', 'A', '3', ' ' );
+  Task_name[ 4 ] = rtems_build_name( 'T', 'A', '4', ' ' );
+  Task_name[ 5 ] = rtems_build_name( 'T', 'A', '5', ' ' );
+  Task_name[ 6 ] = rtems_build_name( 'T', 'A', '6', ' ' );
+  Task_name[ 7 ] = rtems_build_name( 'T', 'A', '7', ' ' );
+  Task_name[ 8 ] = rtems_build_name( 'T', 'A', '8', ' ' );
+  Task_name[ 9 ] = rtems_build_name( 'T', 'A', '9', ' ' );
+  Task_name[ 10 ] = rtems_build_name( 'T', 'A', 'A', ' ' );
 
   /* task create bad name */
   task_name = 1;
@@ -97,30 +95,31 @@ rtems_task Init(
    */
 
   skipUnsatisfied = false;
-  if (rtems_configuration_get_stack_allocate_hook())
+  if ( rtems_configuration_get_stack_allocate_hook() ) {
     skipUnsatisfied = true;
+  }
 
   if ( skipUnsatisfied ) {
     puts(
       "TA1 - rtems_task_create - stack size - RTEMS_UNSATISFIED  -- SKIPPED"
     );
   } else {
-      status = rtems_task_create(
-        task_name,
-        1,
-        rtems_configuration_get_work_space_size(),
-        RTEMS_DEFAULT_MODES,
-        RTEMS_DEFAULT_ATTRIBUTES,
-        &Junk_id
-      );
-      fatal_directive_status(
-        status,
-        RTEMS_UNSATISFIED,
-        "rtems_task_create with a stack size larger than the workspace"
-      );
-      puts( "TA1 - rtems_task_create - stack size - RTEMS_UNSATISFIED" );
+    status = rtems_task_create(
+      task_name,
+      1,
+      rtems_configuration_get_work_space_size(),
+      RTEMS_DEFAULT_MODES,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      &Junk_id
+    );
+    fatal_directive_status(
+      status,
+      RTEMS_UNSATISFIED,
+      "rtems_task_create with a stack size larger than the workspace"
+    );
+    puts( "TA1 - rtems_task_create - stack size - RTEMS_UNSATISFIED" );
   }
-   status = rtems_task_create(
+  status = rtems_task_create(
     Task_name[ 1 ],
     4,
     RTEMS_MINIMUM_STACK_SIZE * 3,

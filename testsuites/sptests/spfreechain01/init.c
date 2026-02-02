@@ -20,53 +20,55 @@ const char rtems_test_name[] = "SPFREECHAIN 1";
 
 typedef struct {
   Chain_Node Node;
-  int x;
+  int        x;
 } test_node;
 
-static rtems_task Init(rtems_task_argument ignored)
+static rtems_task Init( rtems_task_argument ignored )
 {
-    (void) ignored;
+  (void) ignored;
 
-    Freechain_Control fc;
-    test_node *node;
-    test_node node2;
+  Freechain_Control fc;
+  test_node        *node;
+  test_node         node2;
 
-    TEST_BEGIN();
+  TEST_BEGIN();
 
-    _Freechain_Initialize(&fc, &node2, 1, sizeof(node2));
-    rtems_test_assert(!_Freechain_Is_empty(&fc));
-    rtems_test_assert(_Chain_Node_count_unprotected(&fc.Free) == 1);
-    rtems_test_assert(_Chain_First(&fc.Free) == &node2.Node);
-    rtems_test_assert(_Chain_Last(&fc.Free) == &node2.Node);
+  _Freechain_Initialize( &fc, &node2, 1, sizeof( node2 ) );
+  rtems_test_assert( !_Freechain_Is_empty( &fc ) );
+  rtems_test_assert( _Chain_Node_count_unprotected( &fc.Free ) == 1 );
+  rtems_test_assert( _Chain_First( &fc.Free ) == &node2.Node );
+  rtems_test_assert( _Chain_Last( &fc.Free ) == &node2.Node );
 
-    node = _Freechain_Pop(&fc);
-    rtems_test_assert(_Freechain_Is_empty(&fc));
-    rtems_test_assert(node == &node2);
+  node = _Freechain_Pop( &fc );
+  rtems_test_assert( _Freechain_Is_empty( &fc ) );
+  rtems_test_assert( node == &node2 );
 
-    _Freechain_Initialize(&fc, NULL, 0, sizeof(test_node));
-    rtems_test_assert(_Freechain_Is_empty(&fc));
+  _Freechain_Initialize( &fc, NULL, 0, sizeof( test_node ) );
+  rtems_test_assert( _Freechain_Is_empty( &fc ) );
 
-    rtems_test_assert(_Freechain_Get(&fc, NULL, 0, sizeof(test_node)) == NULL);
+  rtems_test_assert(
+    _Freechain_Get( &fc, NULL, 0, sizeof( test_node ) ) == NULL
+  );
 
-    rtems_test_assert(_Freechain_Get(&fc, malloc, 1, SIZE_MAX) == NULL);
+  rtems_test_assert( _Freechain_Get( &fc, malloc, 1, SIZE_MAX ) == NULL );
 
-    /* check whether freechain put and get works correctly*/
+  /* check whether freechain put and get works correctly*/
 
-    _Freechain_Put(&fc, NULL);
+  _Freechain_Put( &fc, NULL );
 
-    puts( "INIT - Get node from freechain - OK" );
-    node = _Freechain_Get(&fc, malloc, 1, sizeof(test_node));
-    node->x = 1;
+  puts( "INIT - Get node from freechain - OK" );
+  node = _Freechain_Get( &fc, malloc, 1, sizeof( test_node ) );
+  node->x = 1;
 
-    puts( "INIT - Put node back to freechain - OK" );
-    _Freechain_Put(&fc, node);
+  puts( "INIT - Put node back to freechain - OK" );
+  _Freechain_Put( &fc, node );
 
-    puts( "INIT - Verify freechain node put and get - OK" );
-    node = _Freechain_Get(&fc, NULL, 0, sizeof(test_node));
-    rtems_test_assert(node->x == 1);
+  puts( "INIT - Verify freechain node put and get - OK" );
+  node = _Freechain_Get( &fc, NULL, 0, sizeof( test_node ) );
+  rtems_test_assert( node->x == 1 );
 
-    TEST_END();
-    rtems_test_exit(0);
+  TEST_END();
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */

@@ -127,17 +127,21 @@ void Screen10()
   );
 
   while ( FOREVER ) {
+    status = rtems_rate_monotonic_period(
+      Period_id[ 1 ],
+      RTEMS_PERIOD_STATUS
+    );
 
-     status = rtems_rate_monotonic_period(Period_id[ 1 ], RTEMS_PERIOD_STATUS);
+    if ( status == RTEMS_TIMEOUT ) {
+      break;
+    }
 
-     if ( status == RTEMS_TIMEOUT ) break;
+    directive_failed(
+      status,
+      "rtems_rate_monotonic_period waiting for timeout"
+    );
 
-     directive_failed(
-       status,
-       "rtems_rate_monotonic_period waiting for timeout"
-     );
-
-     rtems_task_wake_after( 1 );
+    rtems_task_wake_after( 1 );
   }
   puts(
     "TA1 - rtems_rate_monotonic_period(RTEMS_PERIOD_STATUS) - RTEMS_TIMEOUT"

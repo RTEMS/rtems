@@ -41,16 +41,13 @@
 
 #include "system.h"
 
-void Task_restart_extension(
-  rtems_tcb *unused,
-  rtems_tcb *restarted_task
-)
+void Task_restart_extension( rtems_tcb *unused, rtems_tcb *restarted_task )
 {
   (void) unused;
 
   ssize_t task = task_number( restarted_task->Object.id );
 
-  if (task > 0) {
+  if ( task > 0 ) {
     ++Task_restarted[ task ];
   }
 }

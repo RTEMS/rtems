@@ -34,14 +34,12 @@
 
 const char rtems_test_name[] = "SP 76";
 
-static rtems_task High_task(
-  rtems_task_argument index
-)
+static rtems_task High_task( rtems_task_argument index )
 {
   (void) index;
 
-  rtems_status_code  status;
-  rtems_name         name;
+  rtems_status_code status;
+  rtems_name        name;
 
   status = rtems_object_get_classic_name( rtems_task_self(), &name );
   directive_failed( status, "rtems_object_get_classic_name" );
@@ -53,24 +51,20 @@ static rtems_task High_task(
   rtems_test_exit( 0 );
 }
 
-static rtems_task Equal_task(
-  rtems_task_argument index
-)
+static rtems_task Equal_task( rtems_task_argument index )
 {
   (void) index;
 
   rtems_test_assert( 0 );
 }
 
-static rtems_task Init(
-  rtems_task_argument argument
-)
+static rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  rtems_status_code     status;
-  rtems_id              id;
-  rtems_task_priority 	old;
+  rtems_status_code   status;
+  rtems_id            id;
+  rtems_task_priority old;
 
   TEST_BEGIN();
 
@@ -123,8 +117,8 @@ static rtems_task Init(
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS           3
-#define CONFIGURE_INIT_TASK_PRIORITY      2
+#define CONFIGURE_MAXIMUM_TASKS      3
+#define CONFIGURE_INIT_TASK_PRIORITY 2
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

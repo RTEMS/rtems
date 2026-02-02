@@ -40,19 +40,17 @@
 
 #include "system.h"
 
-rtems_task Task_1(
-  rtems_task_argument argument
-)
+rtems_task Task_1( rtems_task_argument argument )
 {
   (void) argument;
 
-  rtems_id           ptid_1;
-  rtems_id           ptid_2;
-  void              *buffer_address_1;
-  void              *buffer_address_2;
-  void              *buffer_address_3;
-  void              *buffer_address_4;
-  rtems_status_code  status;
+  rtems_id          ptid_1;
+  rtems_id          ptid_2;
+  void             *buffer_address_1;
+  void             *buffer_address_2;
+  void             *buffer_address_3;
+  void             *buffer_address_4;
+  rtems_status_code status;
 
   puts_nocr( "TA1 - rtems_partition_ident - partition 1 id = " );
   status = rtems_partition_ident(
@@ -136,13 +134,11 @@ rtems_task Task_1(
   status = rtems_partition_return_buffer( ptid_2, buffer_address_4 );
   directive_failed( status, "rtems_partition_return_buffer" );
 
-  puts( "TA1 - rtems_partition_delete - delete partition 1"
-  );
+  puts( "TA1 - rtems_partition_delete - delete partition 1" );
   status = rtems_partition_delete( ptid_1 );
   directive_failed( status, "rtems_partition_delete" );
 
-  puts( "TA1 - rtems_partition_delete - delete partition 2"
-  );
+  puts( "TA1 - rtems_partition_delete - delete partition 2" );
   status = rtems_partition_delete( ptid_2 );
   directive_failed( status, "rtems_partition_delete" );
 

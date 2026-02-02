@@ -35,9 +35,7 @@
 
 const char rtems_test_name[] = "SP MESSAGE QUEUE ERROR 2";
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -45,11 +43,11 @@ rtems_task Init(
   rtems_status_code status;
 
   rtems_test_assert( MAX_MESSAGES == 2 );
-  
+
   TEST_BEGIN();
-  Queue_name[ 1 ]      =  rtems_build_name( 'M', 'Q', '1', ' ' );
-  Task_name[ 3 ]       =  rtems_build_name( 'T', 'A', '3', ' ' );
- 
+  Queue_name[ 1 ] = rtems_build_name( 'M', 'Q', '1', ' ' );
+  Task_name[ 3 ] = rtems_build_name( 'T', 'A', '3', ' ' );
+
   status = rtems_task_create(
     Task_name[ 3 ],
     1,
@@ -60,7 +58,7 @@ rtems_task Init(
   );
   directive_failed( status, "rtems_task_create of TA3" );
   puts( "TA1 - rtems_task_create - TA3 created - RTEMS_SUCCESSFUL" );
-  
+
   status = rtems_message_queue_create(
     Queue_name[ 1 ],
     MAX_MESSAGES,
@@ -70,8 +68,8 @@ rtems_task Init(
   );
   directive_failed( status, "rtems_message_queue_create successful" );
   puts( "TA1 - rtems_message_queue_create - Q 1 - 2 DEEP - RTEMS_SUCCESSFUL" );
-   
-    status = rtems_message_queue_delete( Queue_id[ 1 ] );
+
+  status = rtems_message_queue_delete( Queue_id[ 1 ] );
   directive_failed( status, "rtems_message_queue_delete successful" );
   puts( "TA1 - rtems_message_queue_delete - Q 1 - RTEMS_SUCCESSFUL" );
 
@@ -83,17 +81,19 @@ rtems_task Init(
     &Queue_id[ 1 ]
   );
   directive_failed( status, "rtems_message_queue_create successful" );
+  puts( "TA1 - rtems_message_queue_create - Q 1 - 2 DEEP - RTEMS_SUCCESSFUL" );
+
+  status = rtems_message_queue_send( Queue_id[ 1 ], buffer, MESSAGE_SIZE );
+  directive_failed( status, "rtems_message_queue_send successful" );
   puts(
-    "TA1 - rtems_message_queue_create - Q 1 - 2 DEEP - RTEMS_SUCCESSFUL"
+    "TA1 - rtems_message_queue_send - BUFFER 1 TO Q 1 - RTEMS_SUCCESSFUL"
   );
 
   status = rtems_message_queue_send( Queue_id[ 1 ], buffer, MESSAGE_SIZE );
   directive_failed( status, "rtems_message_queue_send successful" );
-  puts( "TA1 - rtems_message_queue_send - BUFFER 1 TO Q 1 - RTEMS_SUCCESSFUL" );
-
-  status = rtems_message_queue_send( Queue_id[ 1 ], buffer, MESSAGE_SIZE );
-  directive_failed( status, "rtems_message_queue_send successful" );
-  puts( "TA1 - rtems_message_queue_send - BUFFER 2 TO Q 1 - RTEMS_SUCCESSFUL" );
+  puts(
+    "TA1 - rtems_message_queue_send - BUFFER 2 TO Q 1 - RTEMS_SUCCESSFUL"
+  );
 
   status = rtems_message_queue_send( Queue_id[ 1 ], buffer, MESSAGE_SIZE );
   fatal_directive_status(
@@ -115,21 +115,25 @@ rtems_task Init(
     &Queue_id[ 1 ]
   );
   directive_failed( status, "rtems_message_queue_create successful" );
+  puts( "TA1 - rtems_message_queue_create - Q 1 - 3 DEEP - RTEMS_SUCCESSFUL" );
+
+  status = rtems_message_queue_send( Queue_id[ 1 ], buffer, MESSAGE_SIZE );
+  directive_failed( status, "rtems_message_queue_send successful" );
   puts(
-    "TA1 - rtems_message_queue_create - Q 1 - 3 DEEP - RTEMS_SUCCESSFUL"
+    "TA1 - rtems_message_queue_send - BUFFER 1 TO Q 1 - RTEMS_SUCCESSFUL"
   );
 
   status = rtems_message_queue_send( Queue_id[ 1 ], buffer, MESSAGE_SIZE );
   directive_failed( status, "rtems_message_queue_send successful" );
-  puts( "TA1 - rtems_message_queue_send - BUFFER 1 TO Q 1 - RTEMS_SUCCESSFUL" );
+  puts(
+    "TA1 - rtems_message_queue_send - BUFFER 2 TO Q 1 - RTEMS_SUCCESSFUL"
+  );
 
   status = rtems_message_queue_send( Queue_id[ 1 ], buffer, MESSAGE_SIZE );
   directive_failed( status, "rtems_message_queue_send successful" );
-  puts( "TA1 - rtems_message_queue_send - BUFFER 2 TO Q 1 - RTEMS_SUCCESSFUL" );
-
-  status = rtems_message_queue_send( Queue_id[ 1 ], buffer, MESSAGE_SIZE );
-  directive_failed( status, "rtems_message_queue_send successful" );
-  puts( "TA1 - rtems_message_queue_send - BUFFER 3 TO Q 1 - RTEMS_SUCCESSFUL" );
+  puts(
+    "TA1 - rtems_message_queue_send - BUFFER 3 TO Q 1 - RTEMS_SUCCESSFUL"
+  );
 
   status = rtems_message_queue_send( Queue_id[ 1 ], buffer, MESSAGE_SIZE );
   fatal_directive_status(
@@ -137,9 +141,7 @@ rtems_task Init(
     RTEMS_TOO_MANY,
     "rtems_message_queue_send too many to limited queue"
   );
-  puts(
-    "TA1 - rtems_message_queue_send - BUFFER 4 TO Q 1 - RTEMS_TOO_MANY"
-  );
+  puts( "TA1 - rtems_message_queue_send - BUFFER 4 TO Q 1 - RTEMS_TOO_MANY" );
 
   status = rtems_message_queue_delete( Queue_id[ 1 ] );
   directive_failed( status, "rtems_message_queue_delete successful" );
@@ -153,9 +155,7 @@ rtems_task Init(
     &Queue_id[ 1 ]
   );
   directive_failed( status, "rtems_message_queue_create successful" );
-  puts(
-    "TA1 - rtems_message_queue_create - Q 1 - 3 DEEP - RTEMS_SUCCESSFUL"
-  );
+  puts( "TA1 - rtems_message_queue_create - Q 1 - 3 DEEP - RTEMS_SUCCESSFUL" );
 
   puts( "TA1 - rtems_task_start - start TA3 - RTEMS_SUCCESSFUL" );
   status = rtems_task_start( Task_id[ 3 ], Task_3, 0 );

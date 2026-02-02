@@ -35,9 +35,7 @@
 
 const char rtems_test_name[] = "SP 7";
 
-static void Task_harmless_extension_one(
-  rtems_tcb *unused_one
-)
+static void Task_harmless_extension_one( rtems_tcb *unused_one )
 {
   (void) unused_one;
 
@@ -90,9 +88,7 @@ rtems_extensions_table Extensions = {
   .thread_terminate = NULL
 };
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -101,23 +97,32 @@ rtems_task Init(
 
   TEST_BEGIN();
 
-  Extension_name[ 1 ] =  rtems_build_name( 'E', 'X', 'T', '1' );
-  Extension_name[ 2 ] =  rtems_build_name( 'E', 'X', 'T', '2' );
+  Extension_name[ 1 ] = rtems_build_name( 'E', 'X', 'T', '1' );
+  Extension_name[ 2 ] = rtems_build_name( 'E', 'X', 'T', '2' );
 
-  puts  ( "rtems_extension_create - bad table -- RTEMS_INVALID_ADDRESS" );
+  puts( "rtems_extension_create - bad table -- RTEMS_INVALID_ADDRESS" );
   status = rtems_extension_create( 0xa5a5a5a5, NULL, &id );
   fatal_directive_status(
-    status, RTEMS_INVALID_ADDRESS, "rtems_extension_create" );
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_extension_create"
+  );
 
-  puts  ( "rtems_extension_create - bad id pointer -- RTEMS_INVALID_ADDRESS" );
+  puts( "rtems_extension_create - bad id pointer -- RTEMS_INVALID_ADDRESS" );
   status = rtems_extension_create( 0xa5a5a5a5, &Extensions, NULL );
   fatal_directive_status(
-    status, RTEMS_INVALID_ADDRESS, "rtems_extension_create" );
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_extension_create"
+  );
 
-  puts  ( "rtems_extension_create - bad name -- RTEMS_INVALID_NAME" );
+  puts( "rtems_extension_create - bad name -- RTEMS_INVALID_NAME" );
   status = rtems_extension_create( 0, &Extensions, &id );
   fatal_directive_status(
-    status, RTEMS_INVALID_NAME, "rtems_extension_create #1" );
+    status,
+    RTEMS_INVALID_NAME,
+    "rtems_extension_create #1"
+  );
 
   puts( "rtems_extension_create - first one -- OK" );
   status = rtems_extension_create(
@@ -135,7 +140,7 @@ rtems_task Init(
   );
   directive_failed( status, "rtems_extension_create #2" );
 
-  puts  ( "rtems_extension_create -- RTEMS_TOO_MANY" );
+  puts( "rtems_extension_create -- RTEMS_TOO_MANY" );
   status = rtems_extension_create( 0xa5a5a5a5, &Extensions, &id );
   fatal_directive_status( status, RTEMS_TOO_MANY, "rtems_extension_create" );
 
@@ -151,16 +156,20 @@ rtems_task Init(
     "rtems_extension_delete #2 bad"
   );
 
-  puts  ( "rtems_extension_ident -- OK" );
-  status = rtems_extension_ident( Extension_name[1], &id );
+  puts( "rtems_extension_ident -- OK" );
+  status = rtems_extension_ident( Extension_name[ 1 ], &id );
   directive_failed( status, "rtems_extension_ident" );
 
-  puts  ( "rtems_extension_ident - bad name -- RTEMS_INVALID_NAME" );
-  status = rtems_extension_ident( Extension_name[2], &id );
-  fatal_directive_status( status, RTEMS_INVALID_NAME, "rtems_extension_ident" );
+  puts( "rtems_extension_ident - bad name -- RTEMS_INVALID_NAME" );
+  status = rtems_extension_ident( Extension_name[ 2 ], &id );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_NAME,
+    "rtems_extension_ident"
+  );
 
-  puts  ( "rtems_extension_ident - bad name -- RTEMS_INVALID_ADDRESS" );
-  status = rtems_extension_ident( Extension_name[2], NULL );
+  puts( "rtems_extension_ident - bad name -- RTEMS_INVALID_ADDRESS" );
+  status = rtems_extension_ident( Extension_name[ 2 ], NULL );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ADDRESS,
@@ -202,7 +211,7 @@ rtems_task Init(
   directive_failed( status, "rtems_task_create of TA2" );
   assert_extension_counts( &Task_created[ 0 ], 0x2 | 0x4 );
 
-#define TA3_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 4u)
+#define TA3_PRIORITY ( RTEMS_MAXIMUM_PRIORITY - 4u )
   status = rtems_task_create(
     Task_name[ 3 ],
     TA3_PRIORITY,
@@ -214,7 +223,7 @@ rtems_task Init(
   directive_failed( status, "rtems_task_create of TA3" );
   assert_extension_counts( &Task_created[ 0 ], 0x2 | 0x4 | 0x8 );
 
-#define TA4_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 1u)
+#define TA4_PRIORITY ( RTEMS_MAXIMUM_PRIORITY - 1u )
   status = rtems_task_create(
     Task_name[ 4 ],
     TA4_PRIORITY,

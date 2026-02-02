@@ -56,15 +56,19 @@ static void *Init( uintptr_t ignored )
 
   puts( "Init - use valid id of API class with no objects" );
   status = rtems_task_set_priority(
-    rtems_build_id(0x2,0x1,0x01,0x0001) /* 0xa010001 */,
+    rtems_build_id( 0x2, 0x1, 0x01, 0x0001 ) /* 0xa010001 */,
     RTEMS_CURRENT_PRIORITY,
     &pri
   );
-  fatal_directive_status( status, RTEMS_INVALID_ID, "rtems_task_set_priority" );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ID,
+    "rtems_task_set_priority"
+  );
 
   puts( "Init - lookup name within API class with no objects" );
   status = rtems_task_ident(
-    rtems_build_id( 0, 0, 0x12, 0x3456) /* 0x123456 */,
+    rtems_build_id( 0, 0, 0x12, 0x3456 ) /* 0x123456 */,
     RTEMS_SEARCH_ALL_NODES,
     &id
   );
@@ -77,7 +81,7 @@ static void *Init( uintptr_t ignored )
   rtems_test_assert( config->User_initialization_tasks_table == NULL );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 static void check_dirty_memory( void )

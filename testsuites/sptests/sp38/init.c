@@ -40,31 +40,23 @@ const char rtems_test_name[] = "SP 38";
 volatile bool signal_sent;
 volatile bool signal_processed;
 
-rtems_id main_task;
-void signal_handler(rtems_signal_set signals);
-rtems_timer_service_routine test_signal_from_isr(
-  rtems_id  timer,
-  void     *arg
-);
+rtems_id                    main_task;
+void                        signal_handler( rtems_signal_set signals );
+rtems_timer_service_routine test_signal_from_isr( rtems_id timer, void *arg );
 
-void signal_handler(
-  rtems_signal_set signals
-)
+void signal_handler( rtems_signal_set signals )
 {
   (void) signals;
 
   signal_processed = TRUE;
 }
 
-rtems_timer_service_routine test_signal_from_isr(
-  rtems_id  timer,
-  void     *arg
-)
+rtems_timer_service_routine test_signal_from_isr( rtems_id timer, void *arg )
 {
   (void) timer;
   (void) arg;
 
-  rtems_status_code     status;
+  rtems_status_code status;
 
   status = rtems_signal_send( main_task, 0x0a0b0c0d );
   directive_failed_with_level( status, "rtems_signal_send", 1 );
@@ -72,16 +64,14 @@ rtems_timer_service_routine test_signal_from_isr(
   signal_sent = TRUE;
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  rtems_status_code     status;
-  rtems_id              timer;
-  rtems_interval        start;
-  rtems_interval        now;
+  rtems_status_code status;
+  rtems_id          timer;
+  rtems_interval    start;
+  rtems_interval    now;
 
   TEST_BEGIN();
 
@@ -110,14 +100,15 @@ rtems_task Init(
   status = rtems_timer_fire_after( timer, 10, test_signal_from_isr, NULL );
   directive_failed( status, "timer_fire_after failed" );
 
-  while (1) {
+  while ( 1 ) {
     now = rtems_clock_get_ticks_since_boot();
-    if ( (now-start) > 100 ) {
+    if ( ( now - start ) > 100 ) {
       puts( "Signal from ISR did not get processed\n" );
       rtems_test_exit( 0 );
     }
-    if ( signal_processed )
+    if ( signal_processed ) {
       break;
+    }
   }
 
   puts( "Signal sent from ISR has been processed" );

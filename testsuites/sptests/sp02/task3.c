@@ -32,16 +32,14 @@
 
 #include "system.h"
 
-rtems_task Task_3(
-  rtems_task_argument argument
-)
+rtems_task Task_3( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_status_code status;
 
   puts( "TA3 - rtems_task_wake_after - sleep 5 seconds" );
-  status = rtems_task_wake_after( 5*rtems_clock_get_ticks_per_second() );
+  status = rtems_task_wake_after( 5 * rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after in TA3" );
 
   puts( "TA3 - rtems_task_delete - delete self" );

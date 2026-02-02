@@ -36,27 +36,25 @@
 
 #define SPFATAL_TEST_CASE_EXTRA_TASKS 1
 
-#define FATAL_ERROR_TEST_NAME            "5"
-#define FATAL_ERROR_DESCRIPTION          "Core fall out of a task"
-#define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE
-#define FATAL_ERROR_EXPECTED_ERROR       INTERNAL_ERROR_THREAD_EXITTED
+#define FATAL_ERROR_TEST_NAME       "5"
+#define FATAL_ERROR_DESCRIPTION     "Core fall out of a task"
+#define FATAL_ERROR_EXPECTED_SOURCE INTERNAL_ERROR_CORE
+#define FATAL_ERROR_EXPECTED_ERROR  INTERNAL_ERROR_THREAD_EXITTED
 
 rtems_task EmptyTask( rtems_task_argument unused );
 
-rtems_task EmptyTask(
-  rtems_task_argument unused
-)
+rtems_task EmptyTask( rtems_task_argument unused )
 {
   (void) unused;
 }
 
-static void force_error(void)
+static void force_error( void )
 {
   rtems_id          id;
   rtems_status_code status;
 
   status = rtems_task_create(
-    rtems_build_name('T','A','0','1' ),
+    rtems_build_name( 'T', 'A', '0', '1' ),
     4,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,

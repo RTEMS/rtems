@@ -34,21 +34,17 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Task_1(
-  rtems_task_argument argument
-);
+rtems_task Task_1( rtems_task_argument argument );
 
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS               2
-#define CONFIGURE_MAXIMUM_REGIONS             1
+#define CONFIGURE_MAXIMUM_TASKS   2
+#define CONFIGURE_MAXIMUM_REGIONS 1
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
@@ -58,18 +54,20 @@ rtems_task Task_1(
 
 /* global variables */
 
-TEST_EXTERN rtems_id   Task_id[ 6 ];      /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 6 ];    /* array of task names */
-TEST_EXTERN rtems_id   Region_id[ 2 ];    /* array of region ids */
-TEST_EXTERN rtems_name Region_name[ 2 ];  /* array of region names */
+TEST_EXTERN rtems_id   Task_id[ 6 ];     /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 6 ];   /* array of task names */
+TEST_EXTERN rtems_id   Region_id[ 2 ];   /* array of region ids */
+TEST_EXTERN rtems_name Region_name[ 2 ]; /* array of region names */
 
 /* test will fail... segment sizes need to be reworked for <=32K buffer */
-TEST_EXTERN uint8_t   Area_1[20*1024]  CPU_STRUCTURE_ALIGNMENT;
+TEST_EXTERN uint8_t Area_1[ 20 * 1024 ] CPU_STRUCTURE_ALIGNMENT;
 
-#define BASE_PRIORITY ((RTEMS_MAXIMUM_PRIORITY / 2u) + 1u)
+#define BASE_PRIORITY ( ( RTEMS_MAXIMUM_PRIORITY / 2u ) + 1u )
 
-#define Put_address_from_area_1( _to_be_printed ) \
-   printf( "0x%08lx", \
-     (unsigned long) ((uint8_t   *)(_to_be_printed) - Area_1 ) )
+#define Put_address_from_area_1( _to_be_printed )               \
+  printf(                                                       \
+    "0x%08lx",                                                  \
+    (unsigned long) ( (uint8_t *) ( _to_be_printed ) - Area_1 ) \
+  )
 
 /* end of include file */

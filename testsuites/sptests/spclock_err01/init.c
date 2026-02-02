@@ -35,9 +35,7 @@
 
 const char rtems_test_name[] = "SP CLOCK ERROR 2";
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -45,9 +43,9 @@ rtems_task Init(
   rtems_interval    interval;
   struct timeval    tv;
   rtems_status_code status;
-  
+
   TEST_BEGIN();
- 
+
   puts( "TA1 - rtems_clock_get_tod - RTEMS_INVALID_ADDRESS" );
   status = rtems_clock_get_tod( NULL );
   fatal_directive_status(
@@ -56,13 +54,13 @@ rtems_task Init(
     "rtems_clock_get_tod NULL param"
   );
 
-/* errors before clock is set */
+  /* errors before clock is set */
 
   status = rtems_clock_get_tod( &time );
   if ( status == RTEMS_SUCCESSFUL ) {
     puts(
-     "TA1 - rtems_clock_get_tod - RTEMS_NOT_DEFINED -- "
-         "DID BSP SET THE TIME OF DAY?"
+      "TA1 - rtems_clock_get_tod - RTEMS_NOT_DEFINED -- "
+      "DID BSP SET THE TIME OF DAY?"
     );
   } else {
     fatal_directive_status(
@@ -84,8 +82,8 @@ rtems_task Init(
   status = rtems_clock_get_seconds_since_epoch( &interval );
   if ( status == RTEMS_SUCCESSFUL ) {
     puts(
-     "TA1 - rtems_clock_get_seconds_since_epoch - RTEMS_NOT_DEFINED -- "
-         "DID BSP SET THE TIME OF DAY?"
+      "TA1 - rtems_clock_get_seconds_since_epoch - RTEMS_NOT_DEFINED -- "
+      "DID BSP SET THE TIME OF DAY?"
     );
   } else {
     fatal_directive_status(
@@ -124,8 +122,8 @@ rtems_task Init(
   status = rtems_clock_get_tod_timeval( &tv );
   if ( status == RTEMS_SUCCESSFUL ) {
     puts(
-     "TA1 - rtems_clock_get_tod_timeval - RTEMS_NOT_DEFINED -- "
-         "DID BSP SET THE TIME OF DAY?"
+      "TA1 - rtems_clock_get_tod_timeval - RTEMS_NOT_DEFINED -- "
+      "DID BSP SET THE TIME OF DAY?"
     );
   } else {
     fatal_directive_status(
@@ -206,7 +204,13 @@ rtems_task Init(
   puts( " - RTEMS_INVALID_CLOCK" );
 
   build_time(
-    &time, 2, 5, 1988, 8, 30, 45,
+    &time,
+    2,
+    5,
+    1988,
+    8,
+    30,
+    45,
     rtems_clock_get_ticks_per_second() + 1
   );
   print_time( "TA1 - rtems_clock_set - ", &time, "" );

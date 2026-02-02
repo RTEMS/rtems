@@ -12,4 +12,4 @@
 
 #include "splinkersets01.h"
 
-RTEMS_LINKER_RWSET_ITEM_ORDERED(test_rw, const int *, a1, 1) = &a[1];
+RTEMS_LINKER_RWSET_ITEM_ORDERED( test_rw, const int *, a1, 1 ) = &a[ 1 ];

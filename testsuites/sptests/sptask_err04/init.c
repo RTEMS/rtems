@@ -37,28 +37,26 @@
 
 const char rtems_test_name[] = "TASK ERROR 04";
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  rtems_status_code   status;
-  
+  rtems_status_code status;
+
   TEST_BEGIN();
 
   Task_id[ 0 ] = rtems_task_self();
 
-  Task_name[ 1 ]       =  rtems_build_name( 'T', 'A', '1', ' ' );
+  Task_name[ 1 ] = rtems_build_name( 'T', 'A', '1', ' ' );
 
   /* priority of 0 error */
   status = rtems_task_create(
-     Task_name[1],
-     0,
-     RTEMS_MINIMUM_STACK_SIZE,
-     RTEMS_DEFAULT_MODES,
-     RTEMS_DEFAULT_ATTRIBUTES,
-     &Task_id[ 1 ]
+    Task_name[ 1 ],
+    0,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &Task_id[ 1 ]
   );
   fatal_directive_status(
     status,
@@ -69,12 +67,12 @@ rtems_task Init(
 
   /* priority > 255 error */
   status = rtems_task_create(
-     Task_name[1],
-     UINT32_C(0x80000000),
-     RTEMS_MINIMUM_STACK_SIZE,
-     RTEMS_DEFAULT_MODES,
-     RTEMS_DEFAULT_ATTRIBUTES,
-     &Task_id[ 1 ]
+    Task_name[ 1 ],
+    UINT32_C( 0x80000000 ),
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &Task_id[ 1 ]
   );
   fatal_directive_status(
     status,

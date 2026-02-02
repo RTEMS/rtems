@@ -34,13 +34,9 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Task_1_through_3(
-  rtems_task_argument argument
-);
+rtems_task Task_1_through_3( rtems_task_argument argument );
 
 /* configuration information */
 
@@ -53,14 +49,14 @@ rtems_task Task_1_through_3(
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_EXTRA_TASK_STACKS         (4 * RTEMS_MINIMUM_STACK_SIZE)
-#define CONFIGURE_MAXIMUM_TASKS             4
+#define CONFIGURE_EXTRA_TASK_STACKS ( 4 * RTEMS_MINIMUM_STACK_SIZE )
+#define CONFIGURE_MAXIMUM_TASKS     4
 
 #include <rtems/confdefs.h>
 
 /* global variables */
 
-TEST_EXTERN rtems_id   Task_id[ 4 ];         /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 4 ];       /* array of task names */
+TEST_EXTERN rtems_id   Task_id[ 4 ];   /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 4 ]; /* array of task names */
 
 /* end of include file */

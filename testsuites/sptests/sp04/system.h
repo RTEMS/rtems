@@ -34,55 +34,44 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Task_1(
-  rtems_task_argument argument
-);
+rtems_task Task_1( rtems_task_argument argument );
 
-rtems_task Task_2(
-  rtems_task_argument argument
-);
+rtems_task Task_2( rtems_task_argument argument );
 
-rtems_task Task_3(
-  rtems_task_argument argument
-);
+rtems_task Task_3( rtems_task_argument argument );
 
-void Task_switch(
-  rtems_tcb *unused,
-  rtems_tcb *heir
-);
+void Task_switch( rtems_tcb *unused, rtems_tcb *heir );
 
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_USER_EXTENSIONS     1
-#define CONFIGURE_TICKS_PER_TIMESLICE       100
+#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
+#define CONFIGURE_TICKS_PER_TIMESLICE     100
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_EXTRA_TASK_STACKS         (3 * RTEMS_MINIMUM_STACK_SIZE)
-#define CONFIGURE_MAXIMUM_TASKS             4
-#define CONFIGURE_MAXIMUM_TIMERS            1
+#define CONFIGURE_EXTRA_TASK_STACKS ( 3 * RTEMS_MINIMUM_STACK_SIZE )
+#define CONFIGURE_MAXIMUM_TASKS     4
+#define CONFIGURE_MAXIMUM_TIMERS    1
 
 #include <rtems/confdefs.h>
 
 /* global variables */
 
-TEST_EXTERN rtems_id   Task_id[ 4 ];         /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 4 ];       /* array of task names */
+TEST_EXTERN rtems_id   Task_id[ 4 ];   /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 4 ]; /* array of task names */
 
 TEST_EXTERN rtems_id   Extension_id[ 4 ];
-TEST_EXTERN rtems_name Extension_name[ 4 ];  /* array of task names */
+TEST_EXTERN rtems_name Extension_name[ 4 ]; /* array of task names */
 
 /* array of task run counts */
-TEST_EXTERN volatile uint32_t   Run_count[ 4 ];
+TEST_EXTERN volatile uint32_t Run_count[ 4 ];
 
 /*
  * Keep track of task switches
@@ -94,8 +83,7 @@ struct taskSwitchLog {
 };
 
 extern struct taskSwitchLog taskSwitchLog[];
-extern unsigned int taskSwitchLogIndex;
-extern volatile int testsFinished;
-
+extern unsigned int         taskSwitchLogIndex;
+extern volatile int         testsFinished;
 
 /* end of include file */

@@ -34,29 +34,27 @@
 
 const char rtems_test_name[] = "SP 45";
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task                  Init( rtems_task_argument argument );
 rtems_timer_service_routine Malloc_From_TSR(
-  rtems_id  ignored_id,
-  void     *ignored_address
+  rtems_id ignored_id,
+  void    *ignored_address
 );
 
-rtems_id   Timer_id[ 3 ];    /* array of timer ids */
-rtems_name Timer_name[ 3 ];  /* array of timer names */
+rtems_id   Timer_id[ 3 ];   /* array of timer ids */
+rtems_name Timer_name[ 3 ]; /* array of timer names */
 
-volatile int TSR_fired;
+volatile int   TSR_fired;
 volatile void *TSR_malloc_ptr;
 
 rtems_timer_service_routine Malloc_From_TSR(
-  rtems_id  ignored_id,
-  void     *ignored_address
+  rtems_id ignored_id,
+  void    *ignored_address
 )
 {
   (void) ignored_id;
   (void) ignored_address;
 
-  rtems_status_code  status;
+  rtems_status_code status;
 
   TSR_fired = 2;
   puts( "TSR: calling malloc" );
@@ -70,13 +68,11 @@ rtems_timer_service_routine Malloc_From_TSR(
   directive_failed( status, "rtems_task_wake_after" );
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  rtems_status_code  status;
+  rtems_status_code status;
 
   TEST_BEGIN();
 
@@ -123,10 +119,11 @@ rtems_task Init(
   status = rtems_task_wake_after( 2 * rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
-  if ( TSR_fired == 2 &&
-       (TSR_malloc_ptr && TSR_malloc_ptr != (void *)0xa5a5a5) )
+  if (
+    TSR_fired == 2 && ( TSR_malloc_ptr && TSR_malloc_ptr != (void *) 0xa5a5a5 )
+  ) {
     puts( "TSR appears to have executed OK" );
-  else {
+  } else {
     printf( "FAILURE ptr=%p TSR_fired=%d\n", TSR_malloc_ptr, TSR_fired );
     rtems_test_exit( 0 );
   }
@@ -137,7 +134,6 @@ rtems_task Init(
   puts( "TA1 - timer_deleting - timer 1" );
   status = rtems_timer_delete( Timer_id[ 1 ] );
   directive_failed( status, "rtems_timer_delete" );
-
 
   TEST_END();
   rtems_test_exit( 0 );
@@ -150,15 +146,14 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 /* Two Tasks: Init and Timer Server */
-#define CONFIGURE_MAXIMUM_TASKS           2
-#define CONFIGURE_MAXIMUM_TIMERS          2
-#define CONFIGURE_INIT_TASK_STACK_SIZE    (RTEMS_MINIMUM_STACK_SIZE * 2)
+#define CONFIGURE_MAXIMUM_TASKS        2
+#define CONFIGURE_MAXIMUM_TIMERS       2
+#define CONFIGURE_INIT_TASK_STACK_SIZE ( RTEMS_MINIMUM_STACK_SIZE * 2 )
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_EXTRA_TASK_STACKS       (1 * RTEMS_MINIMUM_STACK_SIZE)
+#define CONFIGURE_EXTRA_TASK_STACKS ( 1 * RTEMS_MINIMUM_STACK_SIZE )
 
 #include <rtems/confdefs.h>
-

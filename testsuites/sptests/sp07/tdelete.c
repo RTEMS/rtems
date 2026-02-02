@@ -41,14 +41,11 @@
 
 #include "system.h"
 
-void Task_delete_extension(
-  rtems_tcb *running_task,
-  rtems_tcb *deleted_task
-)
+void Task_delete_extension( rtems_tcb *running_task, rtems_tcb *deleted_task )
 {
   ssize_t task = task_number( deleted_task->Object.id );
 
-  if (task > 0) {
+  if ( task > 0 ) {
     ++Task_deleted[ task ];
   }
 

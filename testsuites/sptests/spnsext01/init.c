@@ -33,60 +33,60 @@
 
 const char rtems_test_name[] = "SPNSEXT 1";
 
-static rtems_task Init(rtems_task_argument argument)
+static rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  RTEMS_INTERRUPT_LOCK_DECLARE(, lock)
+  RTEMS_INTERRUPT_LOCK_DECLARE(, lock )
   rtems_interrupt_lock_context lock_context;
-  rtems_interval t0 = 0;
-  rtems_interval t1 = 0;
-  int i = 0;
-  int n = 0;
-  struct timespec uptime;
-  struct timespec new_uptime;
+  rtems_interval               t0 = 0;
+  rtems_interval               t1 = 0;
+  int                          i = 0;
+  int                          n = 0;
+  struct timespec              uptime;
+  struct timespec              new_uptime;
 
   TEST_BEGIN();
 
   /* Align with clock tick */
   t0 = rtems_clock_get_ticks_since_boot();
-  while ((t1 = rtems_clock_get_ticks_since_boot()) == t0) {
+  while ( ( t1 = rtems_clock_get_ticks_since_boot() ) == t0 ) {
     /* Do nothing */
   }
 
   t0 = t1;
-  sc = rtems_clock_get_uptime(&uptime);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-  while ((t1 = rtems_clock_get_ticks_since_boot()) == t0) {
+  sc = rtems_clock_get_uptime( &uptime );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  while ( ( t1 = rtems_clock_get_ticks_since_boot() ) == t0 ) {
     ++n;
-    sc = rtems_clock_get_uptime(&new_uptime);
-    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-    rtems_test_assert(!_Timespec_Less_than(&new_uptime, &uptime));
+    sc = rtems_clock_get_uptime( &new_uptime );
+    rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+    rtems_test_assert( !_Timespec_Less_than( &new_uptime, &uptime ) );
     uptime = new_uptime;
   }
 
-  n = (3 * n) / 2;
+  n = ( 3 * n ) / 2;
 
-  rtems_interrupt_lock_initialize(&lock, "test");
-  rtems_interrupt_lock_acquire(&lock, &lock_context);
-  sc = rtems_clock_get_uptime(&uptime);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-  for (i = 0; i < n; ++i) {
+  rtems_interrupt_lock_initialize( &lock, "test" );
+  rtems_interrupt_lock_acquire( &lock, &lock_context );
+  sc = rtems_clock_get_uptime( &uptime );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  for ( i = 0; i < n; ++i ) {
     /* Preserve execution time of previous loop */
     rtems_clock_get_ticks_since_boot();
 
-    sc = rtems_clock_get_uptime(&new_uptime);
-    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-    rtems_test_assert(!_Timespec_Less_than(&new_uptime, &uptime));
+    sc = rtems_clock_get_uptime( &new_uptime );
+    rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+    rtems_test_assert( !_Timespec_Less_than( &new_uptime, &uptime ) );
     uptime = new_uptime;
   }
-  rtems_interrupt_lock_release(&lock, &lock_context);
-  rtems_interrupt_lock_destroy(&lock);
+  rtems_interrupt_lock_release( &lock, &lock_context );
+  rtems_interrupt_lock_destroy( &lock );
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 #define CONFIGURE_INIT

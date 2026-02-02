@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(PER_ALLOCATION)
+#if !defined( PER_ALLOCATION )
 #define PER_ALLOCATION 8000
 #endif
 
@@ -40,11 +40,9 @@
 const char rtems_test_name[] = "SP 71";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -63,11 +61,12 @@ rtems_task Init(
       1024,
       &id
     );
-    if ( status == RTEMS_TOO_MANY )
+    if ( status == RTEMS_TOO_MANY ) {
       break;
+    }
     directive_failed( status, "rtems_task_create" );
     created++;
-  } while (1);
+  } while ( 1 );
 
   printf(
     "%zu ports created using %d per allocation -- need %ld\n",
@@ -76,13 +75,13 @@ rtems_task Init(
     (long) OBJECTS_ID_FINAL_INDEX
   );
 
-  if ( (created + PER_ALLOCATION) > OBJECTS_ID_FINAL_INDEX ) {
+  if ( ( created + PER_ALLOCATION ) > OBJECTS_ID_FINAL_INDEX ) {
     puts( "Test case hit" );
     TEST_END();
   } else {
     puts( "Test case NOT hit" );
   }
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -90,8 +89,8 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS             1
-#define CONFIGURE_MAXIMUM_PORTS rtems_resource_unlimited(PER_ALLOCATION)
+#define CONFIGURE_MAXIMUM_TASKS 1
+#define CONFIGURE_MAXIMUM_PORTS rtems_resource_unlimited( PER_ALLOCATION )
 #define CONFIGURE_UNIFIED_WORK_AREAS
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

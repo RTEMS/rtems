@@ -36,34 +36,32 @@
 const char rtems_test_name[] = "SPTIMER_ERR 1";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
+rtems_task                  Init( rtems_task_argument argument );
 rtems_timer_service_routine Delayed_routine(
-  rtems_id  ignored_id,
-  void     *ignored_address
+  rtems_id ignored_id,
+  void    *ignored_address
 );
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
   TEST_BEGIN();
 
-  rtems_status_code        status;
-  rtems_time_of_day        time;
-  rtems_timer_information  timer_info;
-  rtems_name               timer_name;
-  rtems_id                 timer_id;
-  rtems_id                 junk_id;
+  rtems_status_code       status;
+  rtems_time_of_day       time;
+  rtems_timer_information timer_info;
+  rtems_name              timer_name;
+  rtems_id                timer_id;
+  rtems_id                junk_id;
 
-  timer_name =  rtems_build_name( 'T', 'M', '1', ' ' );
+  timer_name = rtems_build_name( 'T', 'M', '1', ' ' );
 
   /* before time set */
   status = rtems_timer_fire_when( 0, &time, Delayed_routine, NULL );
   if ( status == RTEMS_SUCCESSFUL ) {
     puts(
-    "TA1 - timer_wake_when - RTEMS_NOT_DEFINED -- DID BSP SET THE TIME OF DAY?"
+      "TA1 - timer_wake_when - RTEMS_NOT_DEFINED -- DID BSP SET THE TIME OF DAY?"
     );
   } else {
     fatal_directive_status(
@@ -263,15 +261,14 @@ rtems_task Init(
   );
   puts( "TA1 - rtems_timer_get_information - RTEMS_INVALID_ID" );
 
-
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 rtems_timer_service_routine Delayed_routine(
-  rtems_id  ignored_id,
-  void     *ignored_address
+  rtems_id ignored_id,
+  void    *ignored_address
 )
 {
   (void) ignored_id;
@@ -285,11 +282,11 @@ rtems_timer_service_routine Delayed_routine(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_MAXIMUM_TASKS      1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-#define CONFIGURE_MAXIMUM_TIMERS              1
+#define CONFIGURE_MAXIMUM_TIMERS 1
 
 #define CONFIGURE_INIT
 

@@ -52,7 +52,7 @@
 #include <rtems/rtems/intr.h>
 #include <rtems/io.h>
 #include <rtems/rtems/messageimpl.h>
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
 #include <rtems/rtems/mp.h>
 #include <rtems/score/mpciimpl.h>
 #endif
@@ -70,7 +70,7 @@
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   #include <rtems/score/smp.h>
 #endif
 
@@ -82,19 +82,18 @@
 #include "system.h"
 
 /* external function prototypes */
-int getint( void );
-void size_rtems(int mode);
-void help_size(void);
-void print_formula(void);
-
+int  getint( void );
+void size_rtems( int mode );
+void help_size( void );
+void print_formula( void );
 
 /* These are always defined by the executive.
  *
  * #include <rtems/copyrt.h>
  * #include <rtems/tables.h>
  */
-#define  HEAP_OVHD        16    /* wasted heap space per task stack */
-#define  NAME_PTR_SIZE     8    /* size of name and pointer table entries */
+#define HEAP_OVHD     16 /* wasted heap space per task stack */
+#define NAME_PTR_SIZE 8  /* size of name and pointer table entries */
 
 /*
  *  This assumes the default Priority Scheduler
@@ -105,72 +104,63 @@ void print_formula(void);
 /* Priority scheduling per-thread consumption. Gets 
  * included in the PER_TASK consumption.
  */
-#define SCHEDULER_TASK_WKSP     (sizeof(Scheduler_priority_Node))
+#define SCHEDULER_TASK_WKSP ( sizeof( Scheduler_priority_Node ) )
 
 /* Priority scheduling workspace consumption 
  *
  * Include allocation of ready queue.
  */
-#define SCHEDULER_WKSP_SIZE  \
-    (sizeof(Scheduler_priority_Context) + \
-     RTEMS_MAXIMUM_PRIORITY * sizeof(Chain_Control ))
+#define SCHEDULER_WKSP_SIZE                \
+  ( sizeof( Scheduler_priority_Context ) + \
+    RTEMS_MAXIMUM_PRIORITY * sizeof( Chain_Control ) )
 /****** END OF MEMORY USAGE OF DEFAULT PRIORITY SCHEDULER ******/
 
-#define PER_TASK      \
-     (long) (sizeof (Thread_Control) + \
-      NAME_PTR_SIZE + HEAP_OVHD + sizeof( RTEMS_API_Control ) + \
-      SCHEDULER_TASK_WKSP )
-#define PER_SEMAPHORE \
-     (long) (sizeof (Semaphore_Control) + NAME_PTR_SIZE)
-#define PER_TIMER     \
-     (long) (sizeof (Timer_Control) + NAME_PTR_SIZE)
-#define PER_MSGQ      \
-     (long) (sizeof (Message_queue_Control) + NAME_PTR_SIZE)
-#define PER_REGN      \
-     (long) (sizeof (Region_Control) + NAME_PTR_SIZE)
-#define PER_PART      \
-     (long) (sizeof (Partition_Control) + NAME_PTR_SIZE)
-#define PER_PERIOD      \
-     (long) (sizeof (Rate_monotonic_Control) + NAME_PTR_SIZE)
-#define PER_PORT      \
-     (long) (sizeof (Dual_ported_memory_Control) + NAME_PTR_SIZE)
-#define PER_EXTENSION     \
-     (long) (sizeof (Extension_Control) + NAME_PTR_SIZE)
+#define PER_TASK                                                  \
+  (long) ( sizeof( Thread_Control ) + NAME_PTR_SIZE + HEAP_OVHD + \
+           sizeof( RTEMS_API_Control ) + SCHEDULER_TASK_WKSP )
+#define PER_SEMAPHORE (long) ( sizeof( Semaphore_Control ) + NAME_PTR_SIZE )
+#define PER_TIMER     (long) ( sizeof( Timer_Control ) + NAME_PTR_SIZE )
+#define PER_MSGQ   (long) ( sizeof( Message_queue_Control ) + NAME_PTR_SIZE )
+#define PER_REGN   (long) ( sizeof( Region_Control ) + NAME_PTR_SIZE )
+#define PER_PART   (long) ( sizeof( Partition_Control ) + NAME_PTR_SIZE )
+#define PER_PERIOD (long) ( sizeof( Rate_monotonic_Control ) + NAME_PTR_SIZE )
+#define PER_PORT \
+  (long) ( sizeof( Dual_ported_memory_Control ) + NAME_PTR_SIZE )
+#define PER_EXTENSION (long) ( sizeof( Extension_Control ) + NAME_PTR_SIZE )
 
-#define PER_DRV       (long) (0)
-#define PER_FPTASK    (long) (CONTEXT_FP_SIZE)
-#define PER_GOBTBL    (long) (sizeof (Chain_Control)*4)
-#define PER_NODE      (long) PER_GOBTBL
-#if defined(RTEMS_MULTIPROCESSING)
-#define PER_GOBJECT   (long) (sizeof (Objects_MP_Control))
+#define PER_DRV    (long) ( 0 )
+#define PER_FPTASK (long) ( CONTEXT_FP_SIZE )
+#define PER_GOBTBL (long) ( sizeof( Chain_Control ) * 4 )
+#define PER_NODE   (long) PER_GOBTBL
+#if defined( RTEMS_MULTIPROCESSING )
+#define PER_GOBJECT (long) ( sizeof( Objects_MP_Control ) )
 #else
-#define PER_GOBJECT   (long) 0
+#define PER_GOBJECT (long) 0
 #endif
-#define PER_PROXY     (long) (sizeof (Thread_Proxy_control))
+#define PER_PROXY (long) ( sizeof( Thread_Proxy_control ) )
 
-#if !defined(RTEMS_MULTIPROCESSING) || (CPU_ALL_TASKS_ARE_FP != TRUE)
+#if !defined( RTEMS_MULTIPROCESSING ) || ( CPU_ALL_TASKS_ARE_FP != TRUE )
 #define MPCI_RECEIVE_SERVER_FP (long) 0
 #else
-#define MPCI_RECEIVE_SERVER_FP (long) (sizeof( Context_Control_fp ))
+#define MPCI_RECEIVE_SERVER_FP (long) ( sizeof( Context_Control_fp ) )
 #endif
 
-#if (CPU_IDLE_TASK_IS_FP == TRUE)
-#define SYSTEM_IDLE_FP (long) (sizeof( Context_Control_fp ))
+#if ( CPU_IDLE_TASK_IS_FP == TRUE )
+#define SYSTEM_IDLE_FP (long) ( sizeof( Context_Control_fp ) )
 #else
 #define SYSTEM_IDLE_FP (long) 0
 #endif
 
-#if !defined(RTEMS_MULTIPROCESSING)
+#if !defined( RTEMS_MULTIPROCESSING )
 #define MPCI_RECEIVE_SERVER_STACK_SIZE 0
 #endif
 
-#if defined(RTEMS_MULTIPROCESSING)
-#define MPCI_RECEIVE_SERVER_STACK_SIZE \
+#if defined( RTEMS_MULTIPROCESSING )
+#define MPCI_RECEIVE_SERVER_STACK_SIZE
 
-#define MP_SYSTEM_TASKS \
-   (STACK_MINIMUM_SIZE + CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK + \
-    sizeof(Thread_Control) + \
-    MPCI_RECEIVE_SERVER_FP)
+#define MP_SYSTEM_TASKS                                        \
+  ( STACK_MINIMUM_SIZE + CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK + \
+    sizeof( Thread_Control ) + MPCI_RECEIVE_SERVER_FP )
 
 extern CORE_semaphore_Control _MPCI_Semaphore;
 #else
@@ -181,21 +171,19 @@ extern CORE_semaphore_Control _MPCI_Semaphore;
  *  Idle and the MPCI Receive Server Threads
  */
 
-#define SYSTEM_TASKS  \
-    (STACK_MINIMUM_SIZE + sizeof(Thread_Control) + SYSTEM_IDLE_FP + \
-     MP_SYSTEM_TASKS)
+#define SYSTEM_TASKS                                                 \
+  ( STACK_MINIMUM_SIZE + sizeof( Thread_Control ) + SYSTEM_IDLE_FP + \
+    MP_SYSTEM_TASKS )
 
 /* FIXME: uint32_t doesn't seem right */
-uint32_t   sys_req;
+uint32_t sys_req;
 
-void size_rtems(
-  int mode
-)
+void size_rtems( int mode )
 {
-int uninitialized = 0;
-int initialized = 0;
+  int uninitialized = 0;
+  int initialized = 0;
 
-/*
+  /*
  *  The following data is allocated for each Manager:
  *
  *    + Per Manager Object Information
@@ -245,421 +233,495 @@ int initialized = 0;
  *  The following calculates the overhead needed by RTEMS from the
  *  Workspace Area.
  */
-sys_req = SYSTEM_TASKS        +     /* MPCI Receive Server and IDLE */
-          NAME_PTR_SIZE       +     /* Task Overhead */
-          SCHEDULER_WKSP_SIZE +     /* Scheduler Overhead */
-          NAME_PTR_SIZE       +     /* Timer Overhead */
-          NAME_PTR_SIZE       +     /* Semaphore Overhead */
-          NAME_PTR_SIZE       +     /* Message Queue Overhead */
-          NAME_PTR_SIZE       +     /* Region Overhead */
-          NAME_PTR_SIZE       +     /* Partition Overhead */
-          NAME_PTR_SIZE       +     /* Dual-Ported Memory Overhead */
-          NAME_PTR_SIZE       +     /* Rate Monotonic Overhead */
-          NAME_PTR_SIZE       +     /* Extension Overhead */
-          PER_NODE;                 /* Extra Gobject Table */
+  sys_req = SYSTEM_TASKS +        /* MPCI Receive Server and IDLE */
+            NAME_PTR_SIZE +       /* Task Overhead */
+            SCHEDULER_WKSP_SIZE + /* Scheduler Overhead */
+            NAME_PTR_SIZE +       /* Timer Overhead */
+            NAME_PTR_SIZE +       /* Semaphore Overhead */
+            NAME_PTR_SIZE +       /* Message Queue Overhead */
+            NAME_PTR_SIZE +       /* Region Overhead */
+            NAME_PTR_SIZE +       /* Partition Overhead */
+            NAME_PTR_SIZE +       /* Dual-Ported Memory Overhead */
+            NAME_PTR_SIZE +       /* Rate Monotonic Overhead */
+            NAME_PTR_SIZE +       /* Extension Overhead */
+            PER_NODE;             /* Extra Gobject Table */
 
-uninitialized =
-/*address.h*/   0                                         +
+  uninitialized =
+    /*address.h*/ 0 +
 
-/*asr.h*/       0                                         +
+    /*asr.h*/ 0 +
 
-/*attr.h*/      0                                         +
+    /*attr.h*/ 0 +
 
-/*bitfield.h*/  0                                         +
+    /*bitfield.h*/ 0 +
 
-/*chain.h*/     0                                         +
+    /*chain.h*/ 0 +
 
-/*clock.h*/     0                                         +
+    /*clock.h*/ 0 +
 
-/*config.h*/    0                                         +
+    /*config.h*/ 0 +
 
-/*context.h*/   (sizeof _Thread_Dispatch_necessary)        +
+    /*context.h*/ ( sizeof _Thread_Dispatch_necessary ) +
 
-/*copyrt.h*/    0                                         +
+    /*copyrt.h*/ 0 +
 
-/*dpmemimpl.h*/ (sizeof _Dual_ported_memory_Information)  +
+    /*dpmemimpl.h*/ ( sizeof _Dual_ported_memory_Information ) +
 
-#if defined(RTEMS_MULTIPROCESSING)
-/*eventmp.h*/   0                                         +
+#if defined( RTEMS_MULTIPROCESSING )
+    /*eventmp.h*/ 0 +
 #endif
 
-/*extensionimpl.h*/ (sizeof _Extension_Information)       +
+    /*extensionimpl.h*/ ( sizeof _Extension_Information ) +
 
-/*fatal.h*/     0                                         +
+    /*fatal.h*/ 0 +
 
-/*heap.h*/      0                                         +
+    /*heap.h*/ 0 +
 
-/*init.h*/      0                                         +
+    /*init.h*/ 0 +
 
-/*intr.h*/      0                                         +
+    /*intr.h*/ 0 +
 
-/*isr.h*/       (sizeof _ISR_Nest_level)                  +
-#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
-                (sizeof _ISR_Vector_table)                +
+    /*isr.h*/ ( sizeof _ISR_Nest_level ) +
+#if ( CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE )
+    ( sizeof _ISR_Vector_table ) +
 #endif
 
-/*messageimpl.h*/ (sizeof _Message_queue_Information)     +
+    /*messageimpl.h*/ ( sizeof _Message_queue_Information ) +
 
-/*modes.h*/     0                                         +
+    /*modes.h*/ 0 +
 
-#if defined(RTEMS_MULTIPROCESSING)
-/*mp.h*/        0                                         +
+#if defined( RTEMS_MULTIPROCESSING )
+    /*mp.h*/ 0 +
 #endif
 
-#if defined(RTEMS_MULTIPROCESSING)
-/*mpciimpl.h*/  (sizeof _MPCI_Remote_blocked_threads)     +
-                (sizeof _MPCI_Semaphore)                  +
-                (sizeof _MPCI_table)                      +
-                (sizeof _MPCI_Receive_server_tcb)         +
-                (sizeof _MPCI_Packet_processors)          +
+#if defined( RTEMS_MULTIPROCESSING )
+    /*mpciimpl.h*/ ( sizeof _MPCI_Remote_blocked_threads ) +
+    ( sizeof _MPCI_Semaphore ) + ( sizeof _MPCI_table ) +
+    ( sizeof _MPCI_Receive_server_tcb ) + ( sizeof _MPCI_Packet_processors ) +
 #endif
 
-#if defined(RTEMS_MULTIPROCESSING)
-/*mppkt.h*/     0                                         +
+#if defined( RTEMS_MULTIPROCESSING )
+    /*mppkt.h*/ 0 +
 #endif
 
-#if defined(RTEMS_MULTIPROCESSING)
-/*mptables.h*/  0                                         +
+#if defined( RTEMS_MULTIPROCESSING )
+    /*mptables.h*/ 0 +
 #endif
 
-#if defined(RTEMS_MULTIPROCESSING)
-/*msgmp.h*/     0                                         +
+#if defined( RTEMS_MULTIPROCESSING )
+    /*msgmp.h*/ 0 +
 #endif
 
-/*object.h*/    (sizeof _Objects_Local_node)              +
-                (sizeof _Objects_Maximum_nodes)           +
-                (sizeof _Objects_Information_table)       +
+    /*object.h*/ ( sizeof _Objects_Local_node ) +
+    ( sizeof _Objects_Maximum_nodes ) + ( sizeof _Objects_Information_table ) +
 
-/*options.h*/   0                                         +
+    /*options.h*/ 0 +
 
-/*partimpl.h*/  (sizeof _Partition_Information)           +
+    /*partimpl.h*/ ( sizeof _Partition_Information ) +
 
-#if defined(RTEMS_MULTIPROCESSING)
-/*partmp.h*/    0                                         +
+#if defined( RTEMS_MULTIPROCESSING )
+    /*partmp.h*/ 0 +
 #endif
 
-/*percpu.h*/    (_SMP_Get_processor_maximum() * sizeof(Per_CPU_Control))  +
+    /*percpu.h*/ ( _SMP_Get_processor_maximum() * sizeof( Per_CPU_Control ) ) +
 
-/*ratemonimpl.h*/ (sizeof _Rate_monotonic_Information)    +
+    /*ratemonimpl.h*/ ( sizeof _Rate_monotonic_Information ) +
 
-/*regionimpl.h*/ (sizeof _Region_Information)             +
+    /*regionimpl.h*/ ( sizeof _Region_Information ) +
 
-#if defined(RTEMS_MULTIPROCESSING)
-/*regionmp.h*/  0                                         +
+#if defined( RTEMS_MULTIPROCESSING )
+    /*regionmp.h*/ 0 +
 #endif
 
-/*rtems.h*/     /* Not applicable */
+    /*rtems.h*/ /* Not applicable */
 
-/*semimpl.h*/   (sizeof _Semaphore_Information)           +
+    /*semimpl.h*/ ( sizeof _Semaphore_Information ) +
 
-#if defined(RTEMS_MULTIPROCESSING)
-/*semmp.h*/     0                                         +
+#if defined( RTEMS_MULTIPROCESSING )
+    /*semmp.h*/ 0 +
 #endif
 
-/*signal.h*/    0                                         +
+    /*signal.h*/ 0 +
 
-/*signalmp.h*/  0                                         +
+    /*signalmp.h*/ 0 +
 
-/*stack.h*/     0                                         +
+    /*stack.h*/ 0 +
 
-/*states.h*/    0                                         +
+    /*states.h*/ 0 +
 
-/*status.h*/    0                                         +
+    /*status.h*/ 0 +
 
-/*sysstate.h*/  (sizeof _System_state_Current)            +
-#if defined(RTEMS_MULTIPROCESSING)
-                (sizeof _System_state_Is_multiprocessing) +
+    /*sysstate.h*/ ( sizeof _System_state_Current ) +
+#if defined( RTEMS_MULTIPROCESSING )
+    ( sizeof _System_state_Is_multiprocessing ) +
 #endif
 
-#if defined(RTEMS_MULTIPROCESSING)
-/*taskmp.h*/    0                                         +
+#if defined( RTEMS_MULTIPROCESSING )
+    /*taskmp.h*/ 0 +
 #endif
 
-/*tasksimpl.h*/ (sizeof _RTEMS_tasks_Information)         +
+    /*tasksimpl.h*/ ( sizeof _RTEMS_tasks_Information ) +
 
-/*thread.h*/    (sizeof _Thread_Dispatch_disable_level)   +
-                (sizeof _Thread_Executing)                +
-                (sizeof _Thread_Heir)                     +
-#if (CPU_HARDWARE_FP == 1) || (CPU_SOFTWARE_FP == 1)
-                (sizeof _Thread_Allocated_fp)             +
+    /*thread.h*/ ( sizeof _Thread_Dispatch_disable_level ) +
+    ( sizeof _Thread_Executing ) + ( sizeof _Thread_Heir ) +
+#if ( CPU_HARDWARE_FP == 1 ) || ( CPU_SOFTWARE_FP == 1 )
+    ( sizeof _Thread_Allocated_fp ) +
 #endif
-                (sizeof _Thread_Information)     +
+    ( sizeof _Thread_Information ) +
 
-/*threadq.h*/
+    /*threadq.h*/
 
-/*timerimpl.h*/ (sizeof _Timer_Information)               +
+    /*timerimpl.h*/ ( sizeof _Timer_Information ) +
 
-/*tqdata.h*/    0                                         +
+    /*tqdata.h*/ 0 +
 
-/*types.h*/     0                                         +
+    /*types.h*/ 0 +
 
-/*userext.h*/   (sizeof _User_extensions_List)            +
+    /*userext.h*/ ( sizeof _User_extensions_List ) +
 
-/*watchdog.h*/  (sizeof _Watchdog_Ticks_since_boot)       +
+    /*watchdog.h*/ ( sizeof _Watchdog_Ticks_since_boot ) +
 
-/*wkspace.h*/   (sizeof _Workspace_Area);
+    /*wkspace.h*/ ( sizeof _Workspace_Area );
 
-#ifndef unix  /* make sure this is not a native compile */
+#ifndef unix /* make sure this is not a native compile */
 
 #ifdef __i386__
 
-/* cpu.h */
-uninitialized += (sizeof _CPU_Null_fp_context);
+  /* cpu.h */
+  uninitialized += ( sizeof _CPU_Null_fp_context );
 
-uninitialized += (sizeof _CPU_Interrupt_stack_low) +
-                 (sizeof _CPU_Interrupt_stack_high);
+  uninitialized += ( sizeof _CPU_Interrupt_stack_low ) +
+                   ( sizeof _CPU_Interrupt_stack_high );
 
 #endif
 
 #ifdef __mc68000__
 
-/* cpu.h */
-uninitialized += (sizeof _CPU_Interrupt_stack_low) +
-                 (sizeof _CPU_Interrupt_stack_high);
+  /* cpu.h */
+  uninitialized += ( sizeof _CPU_Interrupt_stack_low ) +
+                   ( sizeof _CPU_Interrupt_stack_high );
 
 #endif
 
 #ifdef __sparc__
 
-/* cpu.h */
-uninitialized += (sizeof _CPU_Interrupt_stack_low) +
-                 (sizeof _CPU_Interrupt_stack_high);
+  /* cpu.h */
+  uninitialized += ( sizeof _CPU_Interrupt_stack_low ) +
+                   ( sizeof _CPU_Interrupt_stack_high );
 
 #endif
 
-
 #ifdef no_cpu
 
-/* cpu.h */
-uninitialized += (sizeof _CPU_Null_fp_context) +
-                 (sizeof _CPU_Interrupt_stack_low) +
-                 (sizeof _CPU_Interrupt_stack_high) +
-                 (sizeof _CPU_Thread_dispatch_pointer);
+  /* cpu.h */
+  uninitialized += ( sizeof _CPU_Null_fp_context ) +
+                   ( sizeof _CPU_Interrupt_stack_low ) +
+                   ( sizeof _CPU_Interrupt_stack_high ) +
+                   ( sizeof _CPU_Thread_dispatch_pointer );
 
 #endif
 
 #ifdef __PPC__
 
-/* cpu.h */
-uninitialized += (sizeof _CPU_Interrupt_stack_low) +
-                 (sizeof _CPU_Interrupt_stack_high);
+  /* cpu.h */
+  uninitialized += ( sizeof _CPU_Interrupt_stack_low ) +
+                   ( sizeof _CPU_Interrupt_stack_high );
 
 #endif
 #endif /* !unix */
 
-initialized +=
-/*copyrt.h*/    (strlen(_Copyright_Notice)+1)             +
-                (strlen(_RTEMS_version)+1);
-
-
+  initialized +=
+    /*copyrt.h*/ ( strlen( _Copyright_Notice ) + 1 ) +
+    ( strlen( _RTEMS_version ) + 1 );
 
 #ifndef unix /* make sure this is not native */
 #ifdef __sparc__
 
-initialized +=  (sizeof _CPU_Trap_slot_template);
+  initialized += ( sizeof _CPU_Trap_slot_template );
 
 #endif
 #endif /* !unix */
 
-puts( "" );
+  puts( "" );
 
-  if ( mode == 0 ) help_size();
-  else             print_formula();
+  if ( mode == 0 ) {
+    help_size();
+  } else {
+    print_formula();
+  }
 
-printf( "\n" );
-printf( "RTEMS uninitialized data consumes %d bytes\n", uninitialized );
-printf( "RTEMS initialized data consumes %d bytes\n", initialized );
-
+  printf( "\n" );
+  printf( "RTEMS uninitialized data consumes %d bytes\n", uninitialized );
+  printf( "RTEMS initialized data consumes %d bytes\n", initialized );
 }
 
 void help_size()
 {
-int c = '\0';
-int break_loop;
-int total_size;
-int task_stacks;
-int interrupt_stack;
-int maximum_tasks, size_tasks;
-int maximum_sems, size_sems;
-int maximum_timers, size_timers;
-int maximum_msgqs, size_msgqs;
-int maximum_msgs, size_msgs_overhead;
-int maximum_regns, size_regns;
-int maximum_parts, size_parts;
-int maximum_ports, size_ports;
-int maximum_periods, size_periods;
-int maximum_extensions, size_extensions;
-int maximum_drvs, size_drvs;
-int maximum_fps, size_fps;
-int maximum_nodes, size_nodes;
-int maximum_gobjs, size_gobjs;
-int maximum_proxies, size_proxies;
+  int c = '\0';
+  int break_loop;
+  int total_size;
+  int task_stacks;
+  int interrupt_stack;
+  int maximum_tasks, size_tasks;
+  int maximum_sems, size_sems;
+  int maximum_timers, size_timers;
+  int maximum_msgqs, size_msgqs;
+  int maximum_msgs, size_msgs_overhead;
+  int maximum_regns, size_regns;
+  int maximum_parts, size_parts;
+  int maximum_ports, size_ports;
+  int maximum_periods, size_periods;
+  int maximum_extensions, size_extensions;
+  int maximum_drvs, size_drvs;
+  int maximum_fps, size_fps;
+  int maximum_nodes, size_nodes;
+  int maximum_gobjs, size_gobjs;
+  int maximum_proxies, size_proxies;
 
-total_size = sys_req;    /* Fixed Overhead */
-printf( "What is maximum_tasks? " );
-maximum_tasks = getint();
-size_tasks = PER_TASK * maximum_tasks;
-total_size += size_tasks;
+  total_size = sys_req; /* Fixed Overhead */
+  printf( "What is maximum_tasks? " );
+  maximum_tasks = getint();
+  size_tasks = PER_TASK * maximum_tasks;
+  total_size += size_tasks;
 
-printf( "What is maximum_semaphores? " );
-maximum_sems = getint();
-size_sems = PER_SEMAPHORE * maximum_sems;
-total_size += size_sems;
+  printf( "What is maximum_semaphores? " );
+  maximum_sems = getint();
+  size_sems = PER_SEMAPHORE * maximum_sems;
+  total_size += size_sems;
 
-printf( "What is maximum_timers? " );
-maximum_timers = getint();
-size_timers = PER_TIMER * maximum_timers;
-total_size += size_timers;
+  printf( "What is maximum_timers? " );
+  maximum_timers = getint();
+  size_timers = PER_TIMER * maximum_timers;
+  total_size += size_timers;
 
-printf( "What is maximum_message_queues? " );
-maximum_msgqs = getint();
-size_msgqs = PER_MSGQ * maximum_msgqs;
-total_size += size_msgqs;
+  printf( "What is maximum_message_queues? " );
+  maximum_msgqs = getint();
+  size_msgqs = PER_MSGQ * maximum_msgqs;
+  total_size += size_msgqs;
 
-printf( "What is maximum_messages?  XXXX " );
-maximum_msgs = getint();
-size_msgs_overhead = 0;
-total_size += size_msgs_overhead;
+  printf( "What is maximum_messages?  XXXX " );
+  maximum_msgs = getint();
+  size_msgs_overhead = 0;
+  total_size += size_msgs_overhead;
 
-printf( "What is maximum_regions? " );
-maximum_regns = getint();
-size_regns = PER_REGN * maximum_regns;
-total_size += size_regns;
+  printf( "What is maximum_regions? " );
+  maximum_regns = getint();
+  size_regns = PER_REGN * maximum_regns;
+  total_size += size_regns;
 
-printf( "What is maximum_partitions? " );
-maximum_parts = getint();
-size_parts = PER_PART * maximum_parts;
-total_size += size_parts;
+  printf( "What is maximum_partitions? " );
+  maximum_parts = getint();
+  size_parts = PER_PART * maximum_parts;
+  total_size += size_parts;
 
-printf( "What is maximum_ports? " );
-maximum_ports = getint();
-size_ports = PER_PORT * maximum_ports;
-total_size += size_ports;
+  printf( "What is maximum_ports? " );
+  maximum_ports = getint();
+  size_ports = PER_PORT * maximum_ports;
+  total_size += size_ports;
 
-printf( "What is maximum_periods? " );
-maximum_periods = getint();
-size_periods = PER_PERIOD * maximum_periods;
-total_size += size_periods;
+  printf( "What is maximum_periods? " );
+  maximum_periods = getint();
+  size_periods = PER_PERIOD * maximum_periods;
+  total_size += size_periods;
 
-printf( "What is maximum_extensions? " );
-maximum_extensions = getint();
-size_extensions = PER_EXTENSION * maximum_extensions;
-total_size += size_extensions;
+  printf( "What is maximum_extensions? " );
+  maximum_extensions = getint();
+  size_extensions = PER_EXTENSION * maximum_extensions;
+  total_size += size_extensions;
 
-printf( "What is number_of_device_drivers? " );
-maximum_drvs = getint();
-size_drvs = PER_DRV  * maximum_drvs;
-total_size += size_drvs;
+  printf( "What is number_of_device_drivers? " );
+  maximum_drvs = getint();
+  size_drvs = PER_DRV * maximum_drvs;
+  total_size += size_drvs;
 
-printf( "What will be total stack requirement for all tasks? " );
-task_stacks = getint();
-total_size += task_stacks;
+  printf( "What will be total stack requirement for all tasks? " );
+  task_stacks = getint();
+  total_size += task_stacks;
 
-printf( "What is the size of the interrupt stack? " );
-interrupt_stack = getint();
-total_size += interrupt_stack;
+  printf( "What is the size of the interrupt stack? " );
+  interrupt_stack = getint();
+  total_size += interrupt_stack;
 
-printf( "How many tasks will be created with the FP flag? " );
-maximum_fps = getint();
-size_fps = PER_FPTASK  * maximum_fps;
-total_size += size_fps;
+  printf( "How many tasks will be created with the FP flag? " );
+  maximum_fps = getint();
+  size_fps = PER_FPTASK * maximum_fps;
+  total_size += size_fps;
 
-printf( "Is this a single processor system? " );
-for ( break_loop=0 ; !break_loop; c = getchar() ) {
-  switch ( c ) {
-    case 'Y':  case 'y':
-    case 'N':  case 'n':
-      break_loop = 1;
-      break;
+  printf( "Is this a single processor system? " );
+  for ( break_loop = 0; !break_loop; c = getchar() ) {
+    switch ( c ) {
+      case 'Y':
+      case 'y':
+      case 'N':
+      case 'n':
+        break_loop = 1;
+        break;
+    }
   }
-}
-printf( "%c\n", c );
-if ( c == 'n' || c == 'N' ) {
-  printf( "What is maximum_nodes? " );
-  maximum_nodes = getint();
-  size_nodes = PER_NODE * maximum_nodes;
-  total_size += size_nodes;
-  printf( "What is maximum_global_objects? " );
-  maximum_gobjs = getint();
-  size_gobjs = PER_GOBJECT * maximum_gobjs;
-  total_size += size_gobjs;
-  printf( "What is maximum_proxies? " );
-  maximum_proxies = getint();
-  size_proxies = PER_PROXY * maximum_proxies;
-  total_size += size_proxies;
-} else {
-  maximum_nodes = 0;
-  size_nodes = PER_NODE * 0;
-  maximum_gobjs = 0;
-  size_gobjs = PER_GOBJECT * 0;
-  maximum_proxies = 0;
-  size_proxies = PER_PROXY * 0;
-}
+  printf( "%c\n", c );
+  if ( c == 'n' || c == 'N' ) {
+    printf( "What is maximum_nodes? " );
+    maximum_nodes = getint();
+    size_nodes = PER_NODE * maximum_nodes;
+    total_size += size_nodes;
+    printf( "What is maximum_global_objects? " );
+    maximum_gobjs = getint();
+    size_gobjs = PER_GOBJECT * maximum_gobjs;
+    total_size += size_gobjs;
+    printf( "What is maximum_proxies? " );
+    maximum_proxies = getint();
+    size_proxies = PER_PROXY * maximum_proxies;
+    total_size += size_proxies;
+  } else {
+    maximum_nodes = 0;
+    size_nodes = PER_NODE * 0;
+    maximum_gobjs = 0;
+    size_gobjs = PER_GOBJECT * 0;
+    maximum_proxies = 0;
+    size_proxies = PER_PROXY * 0;
+  }
 
-printf( "\n\n" );
-printf( " ************** EXECUTIVE WORK SPACE REQUIRED **************\n" );
-printf( " Tasks                - %03d * %03ld            =  %ld\n",
-          maximum_tasks, PER_TASK, (long) size_tasks );
-printf( " Semaphores           - %03d * %03ld            =  %ld\n",
-          maximum_sems, PER_SEMAPHORE, (long) size_sems );
-printf( " Timers               - %03d * %03ld            =  %ld\n",
-          maximum_timers, PER_TIMER, (long) size_timers );
-printf( " Msg Queues           - %03d * %03ld            =  %ld\n",
-          maximum_msgqs, PER_MSGQ, (long) size_msgqs );
-printf( " Messages Overhead    - %03d * %03d            =  %ld\n",
-          maximum_msgs, 0 /* PER_MSG_OVERHEAD */, (long) size_msgs_overhead );
-printf( " Regions              - %03d * %03ld            =  %ld\n",
-          maximum_regns, PER_REGN, (long) size_regns);
-printf( " Partitions           - %03d * %03ld            =  %ld\n",
-          maximum_parts, PER_PART, (long) size_parts );
-printf( " Periods              - %03d * %03ld            =  %ld\n",
-          maximum_periods, PER_PERIOD, (long) size_periods );
-printf( " Extensions           - %03d * %03ld            =  %ld\n",
-          maximum_extensions, PER_EXTENSION, (long) size_extensions );
-printf( " Device Drivers       - %03d * %03ld            =  %ld\n",
-          maximum_drvs, PER_DRV, (long) size_drvs );
+  printf( "\n\n" );
+  printf( " ************** EXECUTIVE WORK SPACE REQUIRED **************\n" );
+  printf(
+    " Tasks                - %03d * %03ld            =  %ld\n",
+    maximum_tasks,
+    PER_TASK,
+    (long) size_tasks
+  );
+  printf(
+    " Semaphores           - %03d * %03ld            =  %ld\n",
+    maximum_sems,
+    PER_SEMAPHORE,
+    (long) size_sems
+  );
+  printf(
+    " Timers               - %03d * %03ld            =  %ld\n",
+    maximum_timers,
+    PER_TIMER,
+    (long) size_timers
+  );
+  printf(
+    " Msg Queues           - %03d * %03ld            =  %ld\n",
+    maximum_msgqs,
+    PER_MSGQ,
+    (long) size_msgqs
+  );
+  printf(
+    " Messages Overhead    - %03d * %03d            =  %ld\n",
+    maximum_msgs,
+    0 /* PER_MSG_OVERHEAD */,
+    (long) size_msgs_overhead
+  );
+  printf(
+    " Regions              - %03d * %03ld            =  %ld\n",
+    maximum_regns,
+    PER_REGN,
+    (long) size_regns
+  );
+  printf(
+    " Partitions           - %03d * %03ld            =  %ld\n",
+    maximum_parts,
+    PER_PART,
+    (long) size_parts
+  );
+  printf(
+    " Periods              - %03d * %03ld            =  %ld\n",
+    maximum_periods,
+    PER_PERIOD,
+    (long) size_periods
+  );
+  printf(
+    " Extensions           - %03d * %03ld            =  %ld\n",
+    maximum_extensions,
+    PER_EXTENSION,
+    (long) size_extensions
+  );
+  printf(
+    " Device Drivers       - %03d * %03ld            =  %ld\n",
+    maximum_drvs,
+    PER_DRV,
+    (long) size_drvs
+  );
 
-printf( " System Requirements  - %04" PRIu32 "                 =  %"PRIu32 "\n",
-          sys_req, sys_req );
+  printf(
+    " System Requirements  - %04" PRIu32 "                 =  %" PRIu32 "\n",
+    sys_req,
+    sys_req
+  );
 
-printf( " Floating Point Tasks - %03d * %03ld            =  %ld\n",
-          maximum_fps, PER_FPTASK, (long) size_fps );
-printf( " Application Task Stacks -                     =  %d\n",
-          task_stacks );
-printf( " Interrupt Stacks -                            =  %d\n",
-          task_stacks );
-printf( " \n" );
-printf( " Global object tables - %03d * %03ld            =  %ld\n",
-          maximum_nodes, PER_NODE, (long) size_nodes );
-printf( " Global objects       - %03d * %03ld            =  %ld\n",
-          maximum_gobjs, PER_GOBJECT, (long) size_gobjs );
-printf( " Proxies              - %03d * %03ld            =  %ld\n",
-          maximum_proxies, PER_PROXY, (long) size_proxies );
-printf( "\n\n" );
-printf( " TOTAL                                       = %d bytes\n",
-      total_size );
+  printf(
+    " Floating Point Tasks - %03d * %03ld            =  %ld\n",
+    maximum_fps,
+    PER_FPTASK,
+    (long) size_fps
+  );
+  printf(
+    " Application Task Stacks -                     =  %d\n",
+    task_stacks
+  );
+  printf(
+    " Interrupt Stacks -                            =  %d\n",
+    task_stacks
+  );
+  printf( " \n" );
+  printf(
+    " Global object tables - %03d * %03ld            =  %ld\n",
+    maximum_nodes,
+    PER_NODE,
+    (long) size_nodes
+  );
+  printf(
+    " Global objects       - %03d * %03ld            =  %ld\n",
+    maximum_gobjs,
+    PER_GOBJECT,
+    (long) size_gobjs
+  );
+  printf(
+    " Proxies              - %03d * %03ld            =  %ld\n",
+    maximum_proxies,
+    PER_PROXY,
+    (long) size_proxies
+  );
+  printf( "\n\n" );
+  printf(
+    " TOTAL                                       = %d bytes\n",
+    total_size
+  );
 }
 
 void print_formula()
 {
-printf( " ************** EXECUTIVE WORK SPACE FORMULA **************\n" );
-printf( " Tasks                - maximum_tasks * %ld\n",      PER_TASK );
-printf( " Timers               - maximum_timers * %ld\n",     PER_TIMER );
-printf( " Semaphores           - maximum_semaphores * %ld\n", PER_SEMAPHORE);
-printf( " Message Queues       - maximum_message_queues * %ld\n", PER_MSGQ );
-printf( " Messages             -\n");
-printf( " Regions              - maximum_regions * %ld\n",    PER_REGN );
-printf( " Partitions           - maximum_partitions * %ld\n", PER_PART );
-printf( " Ports                - maximum_ports * %ld\n",      PER_PORT );
-printf( " Periods              - maximum_periods * %ld\n",    PER_PORT );
-printf( " Extensions           - maximum_extensions * %ld\n", PER_EXTENSION );
-printf( " Device Drivers       - number_of_device_drivers * %ld\n", PER_DRV);
-printf( " System Requirements  - %" PRIu32 "\n",              sys_req );
-printf( " Floating Point Tasks - FPMASK Tasks * %ld\n",       PER_FPTASK );
-printf( " User's Tasks' Stacks -\n" );
-printf( " Interrupt Stack      -\n" );
-printf( " \n" );
-printf( " Global object tables - maximum_nodes * %ld\n",          PER_NODE );
-printf( " Global objects       - maximum_global_objects * %ld\n", PER_GOBJECT );
-printf( " Proxies              - maximum_proxies * %ld\n",        PER_PROXY );
+  printf( " ************** EXECUTIVE WORK SPACE FORMULA **************\n" );
+  printf( " Tasks                - maximum_tasks * %ld\n", PER_TASK );
+  printf( " Timers               - maximum_timers * %ld\n", PER_TIMER );
+  printf(
+    " Semaphores           - maximum_semaphores * %ld\n",
+    PER_SEMAPHORE
+  );
+  printf( " Message Queues       - maximum_message_queues * %ld\n", PER_MSGQ );
+  printf( " Messages             -\n" );
+  printf( " Regions              - maximum_regions * %ld\n", PER_REGN );
+  printf( " Partitions           - maximum_partitions * %ld\n", PER_PART );
+  printf( " Ports                - maximum_ports * %ld\n", PER_PORT );
+  printf( " Periods              - maximum_periods * %ld\n", PER_PORT );
+  printf(
+    " Extensions           - maximum_extensions * %ld\n",
+    PER_EXTENSION
+  );
+  printf(
+    " Device Drivers       - number_of_device_drivers * %ld\n",
+    PER_DRV
+  );
+  printf( " System Requirements  - %" PRIu32 "\n", sys_req );
+  printf( " Floating Point Tasks - FPMASK Tasks * %ld\n", PER_FPTASK );
+  printf( " User's Tasks' Stacks -\n" );
+  printf( " Interrupt Stack      -\n" );
+  printf( " \n" );
+  printf( " Global object tables - maximum_nodes * %ld\n", PER_NODE );
+  printf(
+    " Global objects       - maximum_global_objects * %ld\n",
+    PER_GOBJECT
+  );
+  printf( " Proxies              - maximum_proxies * %ld\n", PER_PROXY );
 }

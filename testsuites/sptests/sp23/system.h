@@ -34,43 +34,39 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Task_1(
-  rtems_task_argument argument
-);
+rtems_task Task_1( rtems_task_argument argument );
 
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS           2
-#define CONFIGURE_MAXIMUM_PORTS           1
-#define CONFIGURE_INIT_TASK_STACK_SIZE    (RTEMS_MINIMUM_STACK_SIZE * 2)
+#define CONFIGURE_MAXIMUM_TASKS        2
+#define CONFIGURE_MAXIMUM_PORTS        1
+#define CONFIGURE_INIT_TASK_STACK_SIZE ( RTEMS_MINIMUM_STACK_SIZE * 2 )
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_EXTRA_TASK_STACKS       (1 * RTEMS_MINIMUM_STACK_SIZE)
+#define CONFIGURE_EXTRA_TASK_STACKS ( 1 * RTEMS_MINIMUM_STACK_SIZE )
 
 #include <rtems/confdefs.h>
 
 /* global variables */
 
-TEST_EXTERN rtems_id   Task_id[ 2 ];     /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 2 ];   /* array of task names */
+TEST_EXTERN rtems_id   Task_id[ 2 ];   /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 2 ]; /* array of task names */
 
-TEST_EXTERN rtems_id   Port_id[ 2 ];     /* array of port ids */
-TEST_EXTERN rtems_name Port_name[ 2 ];   /* array of port names */
+TEST_EXTERN rtems_id   Port_id[ 2 ];   /* array of port ids */
+TEST_EXTERN rtems_name Port_name[ 2 ]; /* array of port names */
 
-#define Internal_port_area ((uint8_t   *) 0x00001000)
-#define External_port_area ((uint8_t   *) 0x00002000)
+#define Internal_port_area ( (uint8_t *) 0x00001000 )
+#define External_port_area ( (uint8_t *) 0x00002000 )
 
-#define Below_port_area    ((uint8_t   *) 0x00000500)
-#define Above_port_area    ((uint8_t   *) 0x00003000)
+#define Below_port_area ( (uint8_t *) 0x00000500 )
+#define Above_port_area ( (uint8_t *) 0x00003000 )
 
 /* end of include file */

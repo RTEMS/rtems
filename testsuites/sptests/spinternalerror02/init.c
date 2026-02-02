@@ -35,11 +35,11 @@
 
 const char rtems_test_name[] = "SPINTERNALERROR 2";
 
-static void test_internal_error_text(void)
+static void test_internal_error_text( void )
 {
   rtems_fatal_code error = 0;
-  const char *text = NULL;
-  const char *text_last;
+  const char      *text = NULL;
+  const char      *text_last;
 
   do {
     text_last = text;
@@ -48,16 +48,14 @@ static void test_internal_error_text(void)
     puts( text );
   } while ( text != text_last );
 
-  rtems_test_assert(
-    error - 3 == INTERNAL_ERROR_LIBIO_STDIN_FD_OPEN_FAILED
-  );
+  rtems_test_assert( error - 3 == INTERNAL_ERROR_LIBIO_STDIN_FD_OPEN_FAILED );
 }
 
-static void test_fatal_source_text(void)
+static void test_fatal_source_text( void )
 {
   rtems_fatal_source source = 0;
-  const char *text = NULL;
-  const char *text_last;
+  const char        *text = NULL;
+  const char        *text_last;
 
   do {
     text_last = text;
@@ -69,11 +67,11 @@ static void test_fatal_source_text(void)
   rtems_test_assert( source - 3 == RTEMS_FATAL_SOURCE_SPURIOUS_INTERRUPT );
 }
 
-static void test_status_text(void)
+static void test_status_text( void )
 {
   rtems_status_code code = 0;
-  const char *text = NULL;
-  const char *text_last;
+  const char       *text = NULL;
+  const char       *text_last;
 
   do {
     text_last = text;
@@ -85,7 +83,7 @@ static void test_status_text(void)
   rtems_test_assert( code - 3 == RTEMS_PROXY_BLOCKING );
 }
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
@@ -97,7 +95,7 @@ static void Init(rtems_task_argument arg)
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER

@@ -41,29 +41,29 @@
 const char rtems_test_name[] = "SPINTRCRITICAL 23";
 
 typedef struct {
-  RTEMS_INTERRUPT_LOCK_MEMBER(lock)
-  rtems_id task_id;
+  RTEMS_INTERRUPT_LOCK_MEMBER( lock )
+  rtems_id                 task_id;
   Scheduler_priority_Node *scheduler_node;
-  rtems_task_priority priority_task;
-  rtems_task_priority priority_interrupt;
-  volatile bool early;
-  volatile bool late;
+  rtems_task_priority      priority_task;
+  rtems_task_priority      priority_interrupt;
+  volatile bool            early;
+  volatile bool            late;
 } test_context;
 
-static T_interrupt_test_state interrupt(void *arg)
+static T_interrupt_test_state interrupt( void *arg )
 {
-  test_context *ctx = arg;
-  T_interrupt_test_state state;
+  test_context                *ctx = arg;
+  T_interrupt_test_state       state;
   rtems_interrupt_lock_context lock_context;
-  unsigned int next_priority;
+  unsigned int                 next_priority;
 
   state = T_interrupt_test_get_state();
 
-  if (state != T_INTERRUPT_TEST_ACTION) {
+  if ( state != T_INTERRUPT_TEST_ACTION ) {
     return T_INTERRUPT_TEST_CONTINUE;
   }
 
-  rtems_interrupt_lock_acquire(&ctx->lock, &lock_context);
+  rtems_interrupt_lock_acquire( &ctx->lock, &lock_context );
 
   next_priority = SCHEDULER_PRIORITY_UNMAP(
     (unsigned int) ctx->scheduler_node->Base.Priority.value
@@ -73,24 +73,24 @@ static T_interrupt_test_state interrupt(void *arg)
     rtems_task_priority priority_interrupt;
     rtems_task_priority priority_task;
     rtems_task_priority previous;
-    rtems_status_code sc;
+    rtems_status_code   sc;
 
     priority_interrupt = ctx->priority_interrupt;
     priority_task = ctx->priority_task;
 
-    rtems_interrupt_lock_release(&ctx->lock, &lock_context);
+    rtems_interrupt_lock_release( &ctx->lock, &lock_context );
 
     sc = rtems_task_set_priority(
       ctx->task_id,
       priority_interrupt,
       &previous
     );
-    T_quiet_rsc_success(sc);
-    T_quiet_eq_u32(previous, priority_task);
+    T_quiet_rsc_success( sc );
+    T_quiet_eq_u32( previous, priority_task );
 
     state = T_INTERRUPT_TEST_DONE;
   } else {
-    rtems_interrupt_lock_release(&ctx->lock, &lock_context);
+    rtems_interrupt_lock_release( &ctx->lock, &lock_context );
 
     if ( ctx->early ) {
       state = T_INTERRUPT_TEST_EARLY;
@@ -104,7 +104,7 @@ static T_interrupt_test_state interrupt(void *arg)
   return state;
 }
 
-static void prepare(void *arg)
+static void prepare( void *arg )
 {
   test_context *ctx = arg;
 
@@ -112,44 +112,40 @@ static void prepare(void *arg)
   ctx->late = false;
 }
 
-static void action(void *arg)
+static void action( void *arg )
 {
-  test_context *ctx = arg;
-  rtems_status_code sc;
+  test_context                *ctx = arg;
+  rtems_status_code            sc;
   rtems_interrupt_lock_context lock_context;
-  rtems_task_priority priority_last;
-  rtems_task_priority priority_task;
-  rtems_task_priority priority_interrupt;
-  rtems_task_priority previous;
+  rtems_task_priority          priority_last;
+  rtems_task_priority          priority_task;
+  rtems_task_priority          priority_interrupt;
+  rtems_task_priority          previous;
 
-  rtems_interrupt_lock_acquire(&ctx->lock, &lock_context);
+  rtems_interrupt_lock_acquire( &ctx->lock, &lock_context );
 
   priority_last = ctx->priority_task;
-  priority_task = 1 + (priority_last + 1) % 3;
-  priority_interrupt = 1 + (priority_task + 1) % 3;
+  priority_task = 1 + ( priority_last + 1 ) % 3;
+  priority_interrupt = 1 + ( priority_task + 1 ) % 3;
   ctx->priority_task = priority_task;
   ctx->priority_interrupt = priority_interrupt;
 
-  rtems_interrupt_lock_release(&ctx->lock, &lock_context);
+  rtems_interrupt_lock_release( &ctx->lock, &lock_context );
 
   ctx->early = false;
-  sc = rtems_task_set_priority(
-    ctx->task_id,
-    priority_task,
-    &previous
-  );
-  T_quiet_rsc_success(RTEMS_SUCCESSFUL);
-  T_quiet_eq_u32(previous, priority_last);
+  sc = rtems_task_set_priority( ctx->task_id, priority_task, &previous );
+  T_quiet_rsc_success( RTEMS_SUCCESSFUL );
+  T_quiet_eq_u32( previous, priority_last );
   ctx->late = true;
 
-  if (T_interrupt_test_get_state() == T_INTERRUPT_TEST_DONE) {
+  if ( T_interrupt_test_get_state() == T_INTERRUPT_TEST_DONE ) {
     sc = rtems_task_set_priority(
       ctx->task_id,
       RTEMS_CURRENT_PRIORITY,
       &previous
     );
-    T_quiet_rsc_success(sc);
-    T_quiet_eq_u32(previous, priority_interrupt);
+    T_quiet_rsc_success( sc );
+    T_quiet_eq_u32( previous, priority_interrupt );
   }
 }
 
@@ -160,35 +156,36 @@ static const T_interrupt_test_config config = {
   .max_iteration_count = 10000
 };
 
-T_TEST_CASE(TaskSetPriorityInterrupt)
+T_TEST_CASE( TaskSetPriorityInterrupt )
 {
-  test_context ctx;
+  test_context           ctx;
   T_interrupt_test_state state;
-  rtems_status_code sc;
-  rtems_task_priority prio;
+  rtems_status_code      sc;
+  rtems_task_priority    prio;
 
-  sc = rtems_task_set_priority(RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &prio);
-  T_rsc_success(sc);
+  sc = rtems_task_set_priority( RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &prio );
+  T_rsc_success( sc );
 
-  memset(&ctx, 0, sizeof(ctx));
-  rtems_interrupt_lock_initialize(&ctx.lock, "Test");
+  memset( &ctx, 0, sizeof( ctx ) );
+  rtems_interrupt_lock_initialize( &ctx.lock, "Test" );
   ctx.priority_task = 1;
   ctx.task_id = rtems_task_self();
-  ctx.scheduler_node =
-    _Scheduler_priority_Thread_get_node(_Thread_Get_executing());
+  ctx.scheduler_node = _Scheduler_priority_Thread_get_node(
+    _Thread_Get_executing()
+  );
 
-  state = T_interrupt_test(&config, &ctx);
-  T_eq_int(state, T_INTERRUPT_TEST_DONE);
+  state = T_interrupt_test( &config, &ctx );
+  T_eq_int( state, T_INTERRUPT_TEST_DONE );
 
-  rtems_interrupt_lock_destroy(&ctx.lock);
+  rtems_interrupt_lock_destroy( &ctx.lock );
 
-  sc = rtems_task_set_priority(RTEMS_SELF, prio, &prio);
-  T_rsc_success(sc);
+  sc = rtems_task_set_priority( RTEMS_SELF, prio, &prio );
+  T_rsc_success( sc );
 }
 
-static rtems_task Init(rtems_task_argument argument)
+static rtems_task Init( rtems_task_argument argument )
 {
-  rtems_test_run(argument, TEST_STATE);
+  rtems_test_run( argument, TEST_STATE );
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER

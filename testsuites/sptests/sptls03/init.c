@@ -40,17 +40,17 @@ static volatile uint32_t read_write_small = 0xdeadbeefUL;
 
 static const volatile uint32_t read_only_small = 0x601dc0feUL;
 
-static void test(void)
+static void test( void )
 {
   Thread_Control *executing = _Thread_Get_executing();
 
-  rtems_test_assert(read_write_small == 0xdeadbeefUL);
-  rtems_test_assert(read_only_small == 0x601dc0feUL);
+  rtems_test_assert( read_write_small == 0xdeadbeefUL );
+  rtems_test_assert( read_only_small == 0x601dc0feUL );
 
-  rtems_test_assert(executing->Start.tls_area == NULL);
+  rtems_test_assert( executing->Start.tls_area == NULL );
 }
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   (void) arg;
 
@@ -58,10 +58,10 @@ static void Init(rtems_task_argument arg)
 
   test();
 
-  rtems_test_assert(!rtems_stack_checker_is_blown());
+  rtems_test_assert( !rtems_stack_checker_is_blown() );
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER

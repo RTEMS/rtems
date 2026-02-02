@@ -37,14 +37,12 @@
 const char rtems_test_name[] = "SP 64";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
+rtems_task Init( rtems_task_argument argument );
 
-uint32_t Area1[50] CPU_STRUCTURE_ALIGNMENT;
-uint32_t Area2[50] CPU_STRUCTURE_ALIGNMENT;
+uint32_t Area1[ 50 ] CPU_STRUCTURE_ALIGNMENT;
+uint32_t Area2[ 50 ] CPU_STRUCTURE_ALIGNMENT;
 
-rtems_task Init(
-  rtems_task_argument ignored
-)
+rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
 
@@ -63,7 +61,7 @@ rtems_task Init(
   sc = rtems_region_create(
     rtems_build_name( 'R', 'N', '1', ' ' ),
     Area1,
-    sizeof(Area1),
+    sizeof( Area1 ),
     8,
     RTEMS_DEFAULT_ATTRIBUTES,
     &region1
@@ -81,7 +79,7 @@ rtems_task Init(
     sc = rtems_region_create(
       rtems_build_name( 'R', 'N', '2', ' ' ),
       Area2,
-      sizeof(Area2),
+      sizeof( Area2 ),
       8,
       RTEMS_DEFAULT_ATTRIBUTES,
       &region2
@@ -89,8 +87,9 @@ rtems_task Init(
 
     rtems_workspace_free( alloced );
 
-    if ( sc == RTEMS_SUCCESSFUL )
+    if ( sc == RTEMS_SUCCESSFUL ) {
       break;
+    }
 
     rtems_test_assert( sc == RTEMS_TOO_MANY );
 
@@ -118,7 +117,7 @@ rtems_task Init(
   rtems_workspace_greedy_free( greedy );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -126,8 +125,8 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS         1
-#define CONFIGURE_MAXIMUM_REGIONS       rtems_resource_unlimited( 2 )
+#define CONFIGURE_MAXIMUM_TASKS      1
+#define CONFIGURE_MAXIMUM_REGIONS    rtems_resource_unlimited( 2 )
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

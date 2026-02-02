@@ -40,9 +40,7 @@
 
 #include "system.h"
 
-rtems_task Task_1(
-  rtems_task_argument argument
-)
+rtems_task Task_1( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -54,7 +52,10 @@ rtems_task Task_1(
     RTEMS_SEARCH_ALL_NODES,
     &smid
   );
-  printf( "TA1 - rtems_semaphore_ident - smid => %08" PRIxrtems_id "\n", smid );
+  printf(
+    "TA1 - rtems_semaphore_ident - smid => %08" PRIxrtems_id "\n",
+    smid
+  );
   directive_failed( status, "rtems_semaphore_ident of SM1" );
 
   puts( "TA1 - rtems_semaphore_obtain - wait forever on SM2" );
@@ -132,7 +133,7 @@ rtems_task Task_1(
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Task_id[ 5 ]
-   );
+  );
   directive_failed( status, "rtems_task_create of TA5" );
 
   status = rtems_task_start( Task_id[ 4 ], Task_4, 0 );

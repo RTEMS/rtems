@@ -35,23 +35,21 @@
 
 const char rtems_test_name[] = "SP PORT ERROR 01";
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  void              *converted;
+  void             *converted;
   rtems_status_code status;
-  
+
   TEST_BEGIN();
-  Port_name[ 1 ]       =  rtems_build_name( 'D', 'P', '1', ' ' );
+  Port_name[ 1 ] = rtems_build_name( 'D', 'P', '1', ' ' );
   status = rtems_port_create(
-     0,
-     Internal_port_area,
-     External_port_area,
-     sizeof( Internal_port_area ),
-     &Junk_id
+    0,
+    Internal_port_area,
+    External_port_area,
+    sizeof( Internal_port_area ),
+    &Junk_id
   );
   fatal_directive_status(
     status,
@@ -60,15 +58,15 @@ rtems_task Init(
   );
   puts( "TA1 - rtems_port_create - RTEMS_INVALID_NAME" );
 
-#if defined(_C3x) || defined(_C4x)
+#if defined( _C3x ) || defined( _C4x )
   puts( "TA1 - rtems_port_create - RTEMS_INVALID_ADDRESS - SKIPPED" );
 #else
   status = rtems_port_create(
-     Port_name[ 1 ],
-     &((char *)Internal_port_area)[ 1 ],
-     External_port_area,
-     sizeof( Internal_port_area ),
-     &Junk_id
+    Port_name[ 1 ],
+    &( (char *) Internal_port_area )[ 1 ],
+    External_port_area,
+    sizeof( Internal_port_area ),
+    &Junk_id
   );
   fatal_directive_status(
     status,
@@ -79,11 +77,11 @@ rtems_task Init(
 #endif
 
   status = rtems_port_create(
-     Port_name[ 1 ],
-     Internal_port_area,
-     External_port_area,
-     sizeof( Internal_port_area ),
-     NULL
+    Port_name[ 1 ],
+    Internal_port_area,
+    External_port_area,
+    sizeof( Internal_port_area ),
+    NULL
   );
   fatal_directive_status(
     status,
@@ -93,11 +91,11 @@ rtems_task Init(
   puts( "TA1 - rtems_port_create - null id - RTEMS_INVALID_ADDRESS" );
 
   status = rtems_port_create(
-     Port_name[ 1 ],
-     Internal_port_area,
-     External_port_area,
-     sizeof( Internal_port_area ),
-     &Junk_id
+    Port_name[ 1 ],
+    Internal_port_area,
+    External_port_area,
+    sizeof( Internal_port_area ),
+    &Junk_id
   );
   fatal_directive_status(
     status,
@@ -133,11 +131,7 @@ rtems_task Init(
     "rtems_port_external_to_internal with illegal id"
   );
 
-  status = rtems_port_external_to_internal(
-    100,
-    Internal_port_area,
-    NULL
-  );
+  status = rtems_port_external_to_internal( 100, Internal_port_area, NULL );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ADDRESS,
@@ -157,17 +151,13 @@ rtems_task Init(
   );
   puts( "TA1 - rtems_port_internal_to_external - RTEMS_INVALID_ID" );
 
-  status = rtems_port_internal_to_external(
-    100,
-    Internal_port_area,
-    NULL
-  );
+  status = rtems_port_internal_to_external( 100, Internal_port_area, NULL );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ADDRESS,
     "rtems_port_internal_to_external with NULL param"
   );
   puts( "TA1 - rtems_port_external_to_internal - RTEMS_INVALID_ADDRESS" );
- 
- TEST_END();
+
+  TEST_END();
 }

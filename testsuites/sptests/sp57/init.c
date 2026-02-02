@@ -41,44 +41,40 @@
 const char rtems_test_name[] = "SP 57";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-rtems_task Delay_task(rtems_task_argument ignored);
+rtems_task Init( rtems_task_argument argument );
+rtems_task Delay_task( rtems_task_argument ignored );
 
-rtems_task Delay_task(
-  rtems_task_argument ignored
-)
+rtems_task Delay_task( rtems_task_argument ignored )
 {
   (void) ignored;
 
-  rtems_status_code    status;
+  rtems_status_code status;
 
   puts( "Delay - rtems_task_wake_after - OK" );
-  status = rtems_task_wake_after( RTEMS_MILLISECONDS_TO_TICKS(2000) );
+  status = rtems_task_wake_after( RTEMS_MILLISECONDS_TO_TICKS( 2000 ) );
   directive_failed( status, "wake after" );
 
   puts( "ERROR - delay task woke up!!" );
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
-rtems_task Init(
-  rtems_task_argument ignored
-)
+rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
 
-  rtems_status_code    status;
-  rtems_id             task_id;
+  rtems_status_code status;
+  rtems_id          task_id;
 
   TEST_BEGIN();
 
   puts( "Init - rtems_task_create - delay task - OK" );
   status = rtems_task_create(
-     rtems_build_name( 'T', 'A', '1', ' ' ),
-     1,
-     RTEMS_MINIMUM_STACK_SIZE,
-     RTEMS_DEFAULT_OPTIONS,
-     RTEMS_DEFAULT_ATTRIBUTES,
-     &task_id
+    rtems_build_name( 'T', 'A', '1', ' ' ),
+    1,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_OPTIONS,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &task_id
   );
   directive_failed( status, "rtems_task_create" );
 
@@ -87,7 +83,7 @@ rtems_task Init(
   directive_failed( status, "rtems_task_start" );
 
   puts( "Init - rtems_task_wake_after - let delay task block - OK" );
-  status = rtems_task_wake_after( RTEMS_MILLISECONDS_TO_TICKS(1000) );
+  status = rtems_task_wake_after( RTEMS_MILLISECONDS_TO_TICKS( 1000 ) );
   directive_failed( status, "rtems_task_wake_after" );
 
   puts( "Init - rtems_task_restart - delay task - OK" );
@@ -95,7 +91,7 @@ rtems_task Init(
   directive_failed( status, "rtems_task_restart" );
 
   TEST_END();
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */
@@ -103,7 +99,7 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS             2
+#define CONFIGURE_MAXIMUM_TASKS      2
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

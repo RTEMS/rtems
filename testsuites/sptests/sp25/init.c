@@ -47,9 +47,7 @@
 
 const char rtems_test_name[] = "SP 25";
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -57,7 +55,7 @@ rtems_task Init(
 
   TEST_BEGIN();
 
-  Task_name[ 1 ] =  rtems_build_name( 'T', 'A', '1', ' ' );
+  Task_name[ 1 ] = rtems_build_name( 'T', 'A', '1', ' ' );
 
   status = rtems_task_create(
     Task_name[ 1 ],
@@ -72,7 +70,7 @@ rtems_task Init(
   status = rtems_task_start( Task_id[ 1 ], Task_1, 0 );
   directive_failed( status, "rtems_task_start of TA1" );
 
-  Region_name[ 1 ] = rtems_build_name('R', 'N', '0', '1');
+  Region_name[ 1 ] = rtems_build_name( 'R', 'N', '0', '1' );
 
   status = rtems_region_create(
     Region_name[ 1 ],

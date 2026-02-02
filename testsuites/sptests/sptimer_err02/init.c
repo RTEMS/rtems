@@ -36,31 +36,29 @@
 const char rtems_test_name[] = "SPTIMER_ERR 2";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
+rtems_task                  Init( rtems_task_argument argument );
 rtems_timer_service_routine Delayed_routine(
-  rtems_id  ignored_id,
-  void     *ignored_address
+  rtems_id ignored_id,
+  void    *ignored_address
 );
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
   TEST_BEGIN();
 
-  rtems_status_code        status;
-  rtems_time_of_day        time;
-  rtems_id                 timer_id;
-  rtems_name               timer_name;
+  rtems_status_code status;
+  rtems_time_of_day time;
+  rtems_id          timer_id;
+  rtems_name        timer_name;
 
   /* Set System time */
   build_time( &time, 12, 31, 1992, 9, 0, 0, 0 );
   status = rtems_clock_set( &time );
   directive_failed( status, "rtems_clock_set" );
 
-  timer_name =  rtems_build_name( 'T', 'M', '1', ' ' );
+  timer_name = rtems_build_name( 'T', 'M', '1', ' ' );
 
   /* OK */
   status = rtems_timer_create( timer_name, &timer_id );
@@ -106,8 +104,11 @@ rtems_task Init(
   );
   puts( "TA1 - rtems_timer_initiate_server - RTEMS_UNSATISFIED" );
 
-  status =
-    rtems_timer_initiate_server( RTEMS_TIMER_SERVER_DEFAULT_PRIORITY, 0, 0 );
+  status = rtems_timer_initiate_server(
+    RTEMS_TIMER_SERVER_DEFAULT_PRIORITY,
+    0,
+    0
+  );
   directive_failed( status, "rtems_timer_initiate_server" );
   puts( "TA1 - rtems_timer_initiate_server - SUCCESSFUL" );
 
@@ -159,8 +160,7 @@ rtems_task Init(
   puts( "TA1 - rtems_timer_server_fire_after - RTEMS_INVALID_ADDRESS" );
 
   /* 0 ticks */
-  status = rtems_timer_server_fire_after(
-    timer_id, 0, Delayed_routine, NULL );
+  status = rtems_timer_server_fire_after( timer_id, 0, Delayed_routine, NULL );
   fatal_directive_status(
     status,
     RTEMS_INVALID_NUMBER,
@@ -171,7 +171,11 @@ rtems_task Init(
   /* illegal time */
   build_time( &time, 2, 5, 1987, 8, 30, 45, 0 );
   status = rtems_timer_server_fire_when(
-    timer_id, &time, Delayed_routine, NULL );
+    timer_id,
+    &time,
+    Delayed_routine,
+    NULL
+  );
   fatal_directive_status(
     status,
     RTEMS_INVALID_CLOCK,
@@ -199,7 +203,11 @@ rtems_task Init(
   /* before current time */
   build_time( &time, 2, 5, 1990, 8, 30, 45, 0 );
   status = rtems_timer_server_fire_when(
-    timer_id, &time, Delayed_routine, NULL );
+    timer_id,
+    &time,
+    Delayed_routine,
+    NULL
+  );
   fatal_directive_status(
     status,
     RTEMS_INVALID_CLOCK,
@@ -213,12 +221,12 @@ rtems_task Init(
 
   TEST_END();
 
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
 
 rtems_timer_service_routine Delayed_routine(
-  rtems_id  ignored_id,
-  void     *ignored_address
+  rtems_id ignored_id,
+  void    *ignored_address
 )
 {
   (void) ignored_id;
@@ -234,14 +242,14 @@ rtems_timer_service_routine Delayed_routine(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 /* Two Tasks: Init and Timer Server */
-#define CONFIGURE_MAXIMUM_TASKS           2
-#define CONFIGURE_MAXIMUM_TIMERS          1
-#define CONFIGURE_INIT_TASK_STACK_SIZE    (RTEMS_MINIMUM_STACK_SIZE * 2)
+#define CONFIGURE_MAXIMUM_TASKS        2
+#define CONFIGURE_MAXIMUM_TIMERS       1
+#define CONFIGURE_INIT_TASK_STACK_SIZE ( RTEMS_MINIMUM_STACK_SIZE * 2 )
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_EXTRA_TASK_STACKS       (1 * RTEMS_MINIMUM_STACK_SIZE)
+#define CONFIGURE_EXTRA_TASK_STACKS ( 1 * RTEMS_MINIMUM_STACK_SIZE )
 
 #include <rtems/confdefs.h>

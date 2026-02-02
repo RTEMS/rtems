@@ -69,15 +69,13 @@ static bool is_blocked( Thread_Wait_flags flags )
 
 static bool interrupts_blocking_op( Thread_Wait_flags flags )
 {
-  return flags
-    == ( THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_INTEND_TO_BLOCK );
+  return flags ==
+         ( THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_INTEND_TO_BLOCK );
 }
 
-static T_interrupt_test_state event_from_isr_interrupt(
-  void *arg
-)
+static T_interrupt_test_state event_from_isr_interrupt( void *arg )
 {
-  test_context           *ctx;
+  test_context          *ctx;
   T_interrupt_test_state state;
   Thread_Wait_flags      flags;
   rtems_status_code      status;
@@ -130,7 +128,7 @@ static const T_interrupt_test_config event_from_isr_config = {
   .max_iteration_count = MAX_ITERATION_COUNT
 };
 
-T_TEST_CASE(EventFromISR)
+T_TEST_CASE( EventFromISR )
 {
   test_context           ctx;
   T_interrupt_test_state state;
@@ -162,10 +160,10 @@ static T_interrupt_test_state event_with_timeout_from_isr_interrupt(
   void *arg
 )
 {
-  test_context           *ctx;
-  T_interrupt_test_state  state;
-  Thread_Wait_flags       flags;
-  rtems_status_code       status;
+  test_context          *ctx;
+  T_interrupt_test_state state;
+  Thread_Wait_flags      flags;
+  rtems_status_code      status;
 
   ctx = arg;
   flags = _Thread_Wait_flags_get( ctx->main_thread );
@@ -234,8 +232,8 @@ static rtems_task Init( rtems_task_argument argument )
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_MICROSECONDS_PER_TICK   1000
+#define CONFIGURE_MICROSECONDS_PER_TICK 1000
 
-#define CONFIGURE_MAXIMUM_TASKS             2
+#define CONFIGURE_MAXIMUM_TASKS 2
 
 #include <rtems/confdefs.h>

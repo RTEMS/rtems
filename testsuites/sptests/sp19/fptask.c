@@ -34,9 +34,7 @@
 #include "fptest.h"
 #include "inttest.h"
 
-rtems_task FP_task(
-  rtems_task_argument argument
-)
+rtems_task FP_task( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -64,10 +62,9 @@ rtems_task FP_task(
   put_name( Task_name[ task_index ], FALSE );
   printf( " - float base = (%g)\n", FP_factors[ task_index ] );
 
-  previous_seconds = (uint32_t)-1;
+  previous_seconds = (uint32_t) -1;
 
-  while( FOREVER ) {
-
+  while ( FOREVER ) {
     status = rtems_clock_get_tod( &time );
     directive_failed( status, "rtems_clock_get_tod" );
 
@@ -84,7 +81,7 @@ rtems_task FP_task(
       rtems_test_exit( 0 );
     }
 
-    if (previous_seconds != time.second) {
+    if ( previous_seconds != time.second ) {
       put_name( Task_name[ task_index ], FALSE );
       print_time( " - rtems_clock_get_tod - ", &time, "\n" );
       previous_seconds = time.second;
@@ -97,7 +94,7 @@ rtems_task FP_task(
      * so that we likely are interrupted
      * After that, we go to sleep for a second at a time
      */
-    if (time.second >= 4) {
+    if ( time.second >= 4 ) {
       status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
       directive_failed( status, "rtems_task_wake_after" );
     }

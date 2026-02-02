@@ -32,9 +32,7 @@
 
 #include "system.h"
 
-rtems_task Task_1(
-  rtems_task_argument argument
-)
+rtems_task Task_1( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -42,7 +40,7 @@ rtems_task Task_1(
   rtems_id          tid3;
   rtems_status_code status;
   rtems_name        tid2_name;
-  uint32_t    previous_priority;
+  uint32_t          previous_priority;
 
   puts( "TA1 - rtems_task_wake_after - sleep 1 second" );
   status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
@@ -52,19 +50,23 @@ rtems_task Task_1(
   directive_failed( status, "rtems_task_ident of TA2" );
 
   printf(
-    "TA1 - rtems_task_ident - tid of TA2 (0x%.8" PRIxrtems_id ")\n", tid2
+    "TA1 - rtems_task_ident - tid of TA2 (0x%.8" PRIxrtems_id ")\n",
+    tid2
   );
   status = rtems_object_get_classic_name( tid2, &tid2_name );
   directive_failed( status, "rtems_object_get_classic_name of TA2" );
 
-  printf( "TA1 - rtems_get_classic_name - id -> name of TA2 %sOK\n",
-    (tid2_name != Task_name[2]) ? "NOT " : "" );
+  printf(
+    "TA1 - rtems_get_classic_name - id -> name of TA2 %sOK\n",
+    ( tid2_name != Task_name[ 2 ] ) ? "NOT " : ""
+  );
 
   status = rtems_task_ident( Task_name[ 3 ], RTEMS_SEARCH_ALL_NODES, &tid3 );
   directive_failed( status, "rtems_task_ident of TA3" );
 
   printf(
-    "TA1 - rtems_task_ident - tid of TA3 (0x%.8" PRIxrtems_id ")\n", tid3
+    "TA1 - rtems_task_ident - tid of TA3 (0x%.8" PRIxrtems_id ")\n",
+    tid3
   );
 
   status = rtems_task_set_priority( tid3, 2, &previous_priority );

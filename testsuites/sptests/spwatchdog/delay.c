@@ -41,15 +41,14 @@
 #include "system.h"
 
 rtems_timer_service_routine Delayed_resume(
-  rtems_id  ignored_id,
-  void     *ignored_address
+  rtems_id ignored_id,
+  void    *ignored_address
 )
 {
   (void) ignored_id;
   (void) ignored_address;
 
   rtems_status_code status;
-
 
   status = rtems_task_resume( Task_id[ 1 ] );
   directive_failed_with_level( status, "rtems_task_resume of self", 1 );

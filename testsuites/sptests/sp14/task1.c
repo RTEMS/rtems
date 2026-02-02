@@ -32,37 +32,32 @@
 
 #include "system.h"
 
-rtems_timer_service_routine Signal_3_to_task_1(
-  rtems_id  id,
-  void     *pointer
-)
+rtems_timer_service_routine Signal_3_to_task_1( rtems_id id, void *pointer )
 {
   rtems_status_code status;
 
   status = rtems_signal_send( Task_id[ 1 ], RTEMS_SIGNAL_3 );
   directive_failed_with_level( status, "rtems_signal_send of 3", 1 );
 
-  Timer_got_this_id  = id;
+  Timer_got_this_id = id;
   Timer_got_this_pointer = pointer;
 
   Signals_sent = TRUE;
 }
 
-rtems_task Task_1(
-  rtems_task_argument argument
-)
+rtems_task Task_1( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_mode        previous_mode;
   rtems_status_code status;
 
-#if defined(RTEMS_SMP) || CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
+#if defined( RTEMS_SMP ) || CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
   puts( "TA1 - rtems_signal_catch - RTEMS_INTERRUPT_LEVEL( 0 )" );
-  status = rtems_signal_catch( Process_asr, RTEMS_INTERRUPT_LEVEL(0) );
+  status = rtems_signal_catch( Process_asr, RTEMS_INTERRUPT_LEVEL( 0 ) );
 #else
   puts( "TA1 - rtems_signal_catch - RTEMS_INTERRUPT_LEVEL( 3 )" );
-  status = rtems_signal_catch( Process_asr, RTEMS_INTERRUPT_LEVEL(3) );
+  status = rtems_signal_catch( Process_asr, RTEMS_INTERRUPT_LEVEL( 3 ) );
 #endif
   directive_failed( status, "rtems_signal_catch" );
 
@@ -101,29 +96,30 @@ rtems_task Task_1(
   puts( "TA1 - waiting for signal to arrive" );
 
   Signals_sent = FALSE;
-  Asr_fired    = FALSE;
+  Asr_fired = FALSE;
 
-  while ( Signals_sent == FALSE )
-    ;
+  while ( Signals_sent == FALSE );
 
-  if ( Timer_got_this_id == Timer_id[ 1 ] &&
-       Timer_got_this_pointer == Task_1 )
+  if (
+    Timer_got_this_id == Timer_id[ 1 ] && Timer_got_this_pointer == Task_1
+  ) {
     puts( "TA1 - timer routine got the correct arguments" );
-  else
+  } else {
     printf(
-      "TA1 - timer got (0x%" PRIxrtems_id ", %p) instead of (0x%"
-        PRIxrtems_id ", %p)!!!!\n",
+      "TA1 - timer got (0x%" PRIxrtems_id ", %p) instead of (0x%" PRIxrtems_id
+      ", %p)!!!!\n",
       Timer_got_this_id,
       Timer_got_this_pointer,
       Timer_id[ 1 ],
       Task_1
     );
+  }
 
   puts( "TA1 - rtems_task_mode - enable ASRs" );
   status = rtems_task_mode( RTEMS_ASR, RTEMS_ASR_MASK, &previous_mode );
   directive_failed( status, "rtems_task_mode" );
 
-  status = rtems_task_wake_after(2 * rtems_clock_get_ticks_per_second());
+  status = rtems_task_wake_after( 2 * rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
 
   puts( "TA1 - rtems_signal_catch - asraddr of NULL" );

@@ -41,15 +41,13 @@
 
 #include "system.h"
 
-rtems_task Task_3(
-  rtems_task_argument argument
-)
+rtems_task Task_3( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_status_code status;
 
-  while( FOREVER ) {
+  while ( FOREVER ) {
     status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
     directive_failed( status, "rtems_task_wake_after" );
   }

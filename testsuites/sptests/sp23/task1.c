@@ -42,16 +42,14 @@
 
 #include "system.h"
 
-rtems_task Task_1(
-  rtems_task_argument argument
-)
+rtems_task Task_1( rtems_task_argument argument )
 {
   (void) argument;
 
-  rtems_id           dpid;
-  void              *to_be_converted;
-  void              *converted;
-  rtems_status_code  status;
+  rtems_id          dpid;
+  void             *to_be_converted;
+  void             *converted;
+  rtems_status_code status;
 
   status = rtems_port_ident( Port_name[ 1 ], &dpid );
   directive_failed( status, "rtems_port_ident" );

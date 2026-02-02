@@ -35,18 +35,16 @@
 
 const char rtems_test_name[] = "SP RATE MONOTONIC ERROR 01";
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_status_code status;
 
   TEST_BEGIN();
-  Task_name[ 4 ]       =  rtems_build_name( 'T', 'A', '4', ' ' );
-  Period_name[ 1 ]     =  rtems_build_name( 'T', 'M', '1', ' ' );
-  
+  Task_name[ 4 ] = rtems_build_name( 'T', 'A', '4', ' ' );
+  Period_name[ 1 ] = rtems_build_name( 'T', 'M', '1', ' ' );
+
   status = rtems_task_create(
     Task_name[ 4 ],
     1,
@@ -58,6 +56,6 @@ rtems_task Init(
   directive_failed( status, "rtems_task_create of TA4" );
   puts( "TA1 - rtems_task_create - 4 created - RTEMS_SUCCESSFUL" );
 
-  Screen10(); 
+  Screen10();
   TEST_END();
 }

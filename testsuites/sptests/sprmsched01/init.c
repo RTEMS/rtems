@@ -37,32 +37,30 @@
 
 const char rtems_test_name[] = "SPRMSCHED 1";
 
-static const uint32_t Periods[] = { 1000, 200 };
-static const uint32_t Iterations[] = { 600, 100 };
+static const uint32_t   Periods[] = { 1000, 200 };
+static const uint32_t   Iterations[] = { 600, 100 };
 static const rtems_name Task_name[] = {
   rtems_build_name( 'T', 'A', '1', ' ' ),
   rtems_build_name( 'T', 'A', '2', ' ' )
 };
-static const rtems_task_priority Prio[3] = { 2, 5 };
-static const uint32_t testnumber = 9; /* stop condition */
+static const rtems_task_priority Prio[ 3 ] = { 2, 5 };
+static const uint32_t            testnumber = 9; /* stop condition */
 
 static uint32_t tsk_counter[] = { 0, 0 };
-static rtems_id   Task_id[ 2 ];
+static rtems_id Task_id[ 2 ];
 
 /**
  * @brief Task body
  */
-static rtems_task Task(
-  rtems_task_argument argument
-)
+static rtems_task Task( rtems_task_argument argument )
 {
   (void) argument;
 
-  rtems_status_code                          status;
-  rtems_id                                   RM_period;
-  rtems_id                                   selfid=rtems_task_self();
-  rtems_rate_monotonic_period_status         period_status;
-  uint32_t                                   flag=0;
+  rtems_status_code                  status;
+  rtems_id                           RM_period;
+  rtems_id                           selfid = rtems_task_self();
+  rtems_rate_monotonic_period_status period_status;
+  uint32_t                           flag = 0;
 
   /*create period*/
   status = rtems_rate_monotonic_create( Task_name[ argument ], &RM_period );
@@ -74,9 +72,9 @@ static rtems_task Task(
     /* Do some work */
     rtems_test_spin_for_ticks( Iterations[ argument ] );
 
-    if( argument == 1 ){
-      if( status == RTEMS_TIMEOUT ){
-        if( flag == 0 ){
+    if ( argument == 1 ) {
+      if ( status == RTEMS_TIMEOUT ) {
+        if ( flag == 0 ) {
           puts( "First time RTEMS_TIMEOUT" );
           puts( "Task 2 should have 3 postponed jobs due to preemption." );
           rtems_test_assert( period_status.postponed_jobs_count == 3 );
@@ -93,7 +91,7 @@ static rtems_task Task(
       status = rtems_rate_monotonic_get_status( RM_period, &period_status );
       directive_failed( status, "rate_monotonic_get_status" );
 
-      if( tsk_counter[ argument ] == testnumber ){
+      if ( tsk_counter[ argument ] == testnumber ) {
         TEST_END();
         status = rtems_rate_monotonic_delete( RM_period );
         directive_failed( status, "rtems_rate_monotonic_delete" );
@@ -101,9 +99,9 @@ static rtems_task Task(
       }
     }
 
-    tsk_counter[ argument ]+=1;
-    if ( argument == 0 ){
-      if( tsk_counter[ argument ] == 2 ){
+    tsk_counter[ argument ] += 1;
+    if ( argument == 0 ) {
+      if ( tsk_counter[ argument ] == 2 ) {
         puts( "Task 1 has released two jobs" );
         status = rtems_rate_monotonic_delete( RM_period );
         directive_failed( status, "rtems_rate_monotonic_delete" );
@@ -114,45 +112,45 @@ static rtems_task Task(
   }
 }
 
-static rtems_task Init(
-	rtems_task_argument argument
-)
+static rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  uint32_t     index;
+  uint32_t          index;
   rtems_status_code status;
 
   TEST_BEGIN();
 
   /* Create two tasks */
-  for ( index = 0; index < RTEMS_ARRAY_SIZE(Task_name); ++index ){
+  for ( index = 0; index < RTEMS_ARRAY_SIZE( Task_name ); ++index ) {
     status = rtems_task_create(
-      Task_name[ index ], Prio[index], RTEMS_MINIMUM_STACK_SIZE, RTEMS_DEFAULT_MODES,
-      RTEMS_DEFAULT_ATTRIBUTES, &Task_id[ index ]
+      Task_name[ index ],
+      Prio[ index ],
+      RTEMS_MINIMUM_STACK_SIZE,
+      RTEMS_DEFAULT_MODES,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      &Task_id[ index ]
     );
     directive_failed( status, "rtems_task_create loop" );
   }
 
-
   /* After creating the periods for tasks, start to run them sequencially. */
-  for ( index = 0; index < RTEMS_ARRAY_SIZE(Task_name); ++index ){
-    status = rtems_task_start( Task_id[ index ], Task, index);
-    directive_failed( status, "rtems_task_start loop");
+  for ( index = 0; index < RTEMS_ARRAY_SIZE( Task_name ); ++index ) {
+    status = rtems_task_start( Task_id[ index ], Task, index );
+    directive_failed( status, "rtems_task_start loop" );
   }
   rtems_task_exit();
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
-#define CONFIGURE_MICROSECONDS_PER_TICK     1000
-#define CONFIGURE_MAXIMUM_TASKS             3
-#define CONFIGURE_MAXIMUM_PERIODS           2
+#define CONFIGURE_MICROSECONDS_PER_TICK 1000
+#define CONFIGURE_MAXIMUM_TASKS         3
+#define CONFIGURE_MAXIMUM_PERIODS       2
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_INITIAL_EXTENSIONS \
-  RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_INIT
 

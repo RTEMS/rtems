@@ -32,9 +32,7 @@
 
 #include "system.h"
 
-rtems_task Task_1(
-  rtems_task_argument argument
-)
+rtems_task Task_1( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -49,7 +47,7 @@ rtems_task Task_1(
 
   puts(
     "TA1 - rtems_event_receive - waiting forever on "
-      "RTEMS_EVENT_14 and RTEMS_EVENT_15"
+    "RTEMS_EVENT_14 and RTEMS_EVENT_15"
   );
   status = rtems_event_receive(
     RTEMS_EVENT_14 | RTEMS_EVENT_15,
@@ -60,7 +58,7 @@ rtems_task Task_1(
   directive_failed( status, "rtems_event_receive" );
   printf(
     "TA1 - RTEMS_EVENT_14 and RTEMS_EVENT_15 received - "
-      "eventout => %08" PRIxrtems_event_set "\n",
+    "eventout => %08" PRIxrtems_event_set "\n",
     eventout
   );
 
@@ -70,7 +68,7 @@ rtems_task Task_1(
 
   puts(
     "TA1 - rtems_event_receive - waiting with 10 second timeout "
-      "on RTEMS_EVENT_14"
+    "on RTEMS_EVENT_14"
   );
   status = rtems_event_receive(
     RTEMS_EVENT_14,
@@ -81,7 +79,7 @@ rtems_task Task_1(
   directive_failed( status, "rtems_event_receive" );
   printf(
     "TA1 - RTEMS_EVENT_14 received - eventout => "
-      "%08" PRIxrtems_event_set "\n",
+    "%08" PRIxrtems_event_set "\n",
     eventout
   );
 
@@ -93,7 +91,9 @@ rtems_task Task_1(
   directive_failed( status, "rtems_clock_get_tod" );
   print_time( "TA1 - rtems_clock_get_tod - ", &time, "\n" );
 
-  puts( "TA1 - rtems_event_send - send RTEMS_EVENT_18 to self after 5 seconds");
+  puts(
+    "TA1 - rtems_event_send - send RTEMS_EVENT_18 to self after 5 seconds"
+  );
   status = rtems_timer_fire_after(
     Timer_id[ 1 ],
     5 * rtems_clock_get_ticks_per_second(),
@@ -102,7 +102,7 @@ rtems_task Task_1(
   );
   directive_failed( status, "rtems_timer_fire_after 5 seconds" );
 
-  puts( "TA1 - rtems_event_receive - waiting forever on RTEMS_EVENT_18"  );
+  puts( "TA1 - rtems_event_receive - waiting forever on RTEMS_EVENT_18" );
   status = rtems_event_receive(
     RTEMS_EVENT_18,
     RTEMS_DEFAULT_OPTIONS,
@@ -125,7 +125,7 @@ rtems_task Task_1(
 
   puts(
     "TA1 - rtems_event_receive - RTEMS_EVENT_3 or "
-      "RTEMS_EVENT_22 - NO_WAIT and ANY"
+    "RTEMS_EVENT_22 - NO_WAIT and ANY"
   );
   status = rtems_event_receive(
     RTEMS_EVENT_3 | RTEMS_EVENT_22,
@@ -143,9 +143,9 @@ rtems_task Task_1(
   status = rtems_event_send( RTEMS_SELF, RTEMS_EVENT_4 );
   directive_failed( status, "rtems_event_send" );
 
-  puts (
-  "TA1 - rtems_event_receive - RTEMS_EVENT_4 or "
-      "RTEMS_EVENT_5 - forever and ANY"
+  puts(
+    "TA1 - rtems_event_receive - RTEMS_EVENT_4 or "
+    "RTEMS_EVENT_5 - forever and ANY"
   );
   status = rtems_event_receive(
     RTEMS_EVENT_4 | RTEMS_EVENT_5,
@@ -156,10 +156,12 @@ rtems_task Task_1(
   directive_failed( status, "rtems_event_receive" );
   printf(
     "TA1 - RTEMS_EVENT_4 received - eventout => %08" PRIxrtems_event_set "\n",
-    eventout 
+    eventout
   );
 
-  puts( "TA1 - rtems_event_send - send RTEMS_EVENT_18 to self after 5 seconds");
+  puts(
+    "TA1 - rtems_event_send - send RTEMS_EVENT_18 to self after 5 seconds"
+  );
   status = rtems_timer_fire_after(
     Timer_id[ 1 ],
     5 * rtems_clock_get_ticks_per_second(),
@@ -168,11 +170,15 @@ rtems_task Task_1(
   );
   directive_failed( status, "rtems_timer_fire_after 5 seconds" );
 
-  puts( "TA1 - rtems_timer_cancel - cancelling timer for event RTEMS_EVENT_18");
+  puts(
+    "TA1 - rtems_timer_cancel - cancelling timer for event RTEMS_EVENT_18"
+  );
   status = rtems_timer_cancel( Timer_id[ 1 ] );
   directive_failed( status, "rtems_timer_cancel" );
 
-  puts( "TA1 - rtems_event_send - send RTEMS_EVENT_8 to self after 60 seconds");
+  puts(
+    "TA1 - rtems_event_send - send RTEMS_EVENT_8 to self after 60 seconds"
+  );
   status = rtems_timer_fire_after(
     Timer_id[ 1 ],
     60 * rtems_clock_get_ticks_per_second(),
@@ -181,7 +187,9 @@ rtems_task Task_1(
   );
   directive_failed( status, "rtems_timer_fire_after 60 seconds" );
 
-  puts( "TA1 - rtems_event_send - send RTEMS_EVENT_9 to self after 60 seconds");
+  puts(
+    "TA1 - rtems_event_send - send RTEMS_EVENT_9 to self after 60 seconds"
+  );
   status = rtems_timer_fire_after(
     Timer_id[ 2 ],
     60 * rtems_clock_get_ticks_per_second(),
@@ -201,7 +209,9 @@ rtems_task Task_1(
   );
   directive_failed( status, "rtems_timer_fire_after 60 seconds" );
 
-  puts( "TA1 - rtems_timer_cancel - cancelling timer for event RTEMS_EVENT_8" );
+  puts(
+    "TA1 - rtems_timer_cancel - cancelling timer for event RTEMS_EVENT_8"
+  );
   status = rtems_timer_cancel( Timer_id[ 1 ] );
   directive_failed( status, "rtems_timer_cancel" );
 
@@ -221,7 +231,6 @@ rtems_task Task_1(
   directive_failed( status, "rtems_timer_fire_after 1 second" );
 
   for ( index = 0; index < 3; index++ ) {
-
     status = rtems_event_receive(
       RTEMS_EVENT_1,
       RTEMS_EVENT_ANY,
@@ -234,9 +243,9 @@ rtems_task Task_1(
     directive_failed( status, "rtems_clock_get_tod" );
 
     printf(
-      "TA1 - RTEMS_EVENT_1 received - eventout => %08"
-        PRIxrtems_event_set " - ",
-       eventout
+      "TA1 - RTEMS_EVENT_1 received - eventout => %08" PRIxrtems_event_set
+      " - ",
+      eventout
     );
     print_time( "at ", &time, "\n" );
 
@@ -244,10 +253,11 @@ rtems_task Task_1(
       status = rtems_timer_reset( Timer_id[ 1 ] );
       directive_failed( status, "rtems_timer_reset" );
     };
-
   }
 
-  puts( "TA1 - rtems_timer_cancel - cancelling timer for event RTEMS_EVENT_1" );
+  puts(
+    "TA1 - rtems_timer_cancel - cancelling timer for event RTEMS_EVENT_1"
+  );
   status = rtems_timer_cancel( Timer_id[ 1 ] );
   directive_failed( status, "rtems_timer_cancel" );
 
@@ -271,7 +281,7 @@ rtems_task Task_1(
   );
   directive_failed( status, "rtems_timer_fire_when 1 day" );
 
-  time.hour = 8;   /* so code below has correct time/date */
+  time.hour = 8; /* so code below has correct time/date */
   time.day = 14;
   puts( "TA1 - rtems_event_send - sending RTEMS_EVENT_11 to self in 2 days" );
   status = rtems_timer_fire_when(
@@ -282,7 +292,9 @@ rtems_task Task_1(
   );
   directive_failed( status, "rtems_timer_fire_when 2 days" );
 
-  puts("TA1 - rtems_timer_cancel - cancelling RTEMS_EVENT_11 to self in 1 day");
+  puts(
+    "TA1 - rtems_timer_cancel - cancelling RTEMS_EVENT_11 to self in 1 day"
+  );
   status = rtems_timer_cancel( Timer_id[ 1 ] );
   directive_failed( status, "rtems_timer_cancel" );
 
@@ -318,7 +330,7 @@ rtems_task Task_1(
   directive_failed( status, "rtems_event_receive" );
   printf(
     "TA1 - RTEMS_EVENT_11 received - eventout => %08" PRIxrtems_event_set "\n",
-     eventout
+    eventout
   );
 
   puts( "TA1 - rtems_event_send/rtems_event_receive combination" );
@@ -346,7 +358,7 @@ rtems_task Task_1(
 
   time.day = 13;
   puts( "TA1 - rtems_event_receive all outstanding events" );
-  status  = rtems_event_receive(
+  status = rtems_event_receive(
     RTEMS_ALL_EVENTS,
     RTEMS_NO_WAIT | RTEMS_EVENT_ANY,
     0,
@@ -384,16 +396,20 @@ rtems_task Task_1(
   status = rtems_clock_set( &time );
   directive_failed( status, "rtems_clock_set" );
 
-  status  = rtems_event_receive(
+  status = rtems_event_receive(
     RTEMS_ALL_EVENTS,
     RTEMS_NO_WAIT | RTEMS_EVENT_ANY,
     RTEMS_NO_TIMEOUT,
     &eventout
   );
-  if ( eventout )
-    printf( "ERROR -0x%08" PRIxrtems_event_set " events received\n", eventout );
-  else
+  if ( eventout ) {
+    printf(
+      "ERROR -0x%08" PRIxrtems_event_set " events received\n",
+      eventout
+    );
+  } else {
     puts( "TA1 - no events received" );
+  }
   fatal_directive_status(
     status,
     RTEMS_UNSATISFIED,
@@ -407,19 +423,25 @@ rtems_task Task_1(
   status = rtems_clock_set( &time );
   directive_failed( status, "rtems_clock_set" );
 
-  status  = rtems_event_receive(
+  status = rtems_event_receive(
     RTEMS_ALL_EVENTS,
     RTEMS_NO_WAIT | RTEMS_EVENT_ANY,
     RTEMS_NO_TIMEOUT,
     &eventout
   );
-  if ( eventout == RTEMS_EVENT_10 )
+  if ( eventout == RTEMS_EVENT_10 ) {
     puts( "TA1 - RTEMS_EVENT_10 received" );
-  else
-    printf( "ERROR -0x%08" PRIxrtems_event_set " events received\n", eventout );
+  } else {
+    printf(
+      "ERROR -0x%08" PRIxrtems_event_set " events received\n",
+      eventout
+    );
+  }
   directive_failed( status, "rtems_event_receive all events" );
 
-  puts( "TA1 - rtems_event_send - sending RTEMS_EVENT_11 to self in 100 ticks");
+  puts(
+    "TA1 - rtems_event_send - sending RTEMS_EVENT_11 to self in 100 ticks"
+  );
   status = rtems_timer_fire_after(
     Timer_id[ 1 ],
     100,
@@ -428,7 +450,9 @@ rtems_task Task_1(
   );
   directive_failed( status, "rtems_timer_fire_after 100 ticks" );
 
-  puts( "TA1 - rtems_event_send - sending RTEMS_EVENT_11 to self in 200 ticks");
+  puts(
+    "TA1 - rtems_event_send - sending RTEMS_EVENT_11 to self in 200 ticks"
+  );
   status = rtems_timer_fire_after(
     Timer_id[ 1 ],
     200,
@@ -446,7 +470,7 @@ rtems_task Task_1(
   puts(
     "TA1 - rtems_event_receive - RTEMS_EVENT_4 AND RTEMS_EVENT_5 - UNSATISFIED"
   );
-  status  = rtems_event_receive(
+  status = rtems_event_receive(
     RTEMS_EVENT_4 | RTEMS_EVENT_5,
     RTEMS_NO_WAIT | RTEMS_EVENT_ALL,
     RTEMS_NO_TIMEOUT,
