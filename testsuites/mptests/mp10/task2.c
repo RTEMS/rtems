@@ -41,9 +41,7 @@
 
 #include "system.h"
 
-rtems_task Test_task2(
-  rtems_task_argument argument
-)
+rtems_task Test_task2( rtems_task_argument argument )
 {
   (void) argument;
 

@@ -45,9 +45,7 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 

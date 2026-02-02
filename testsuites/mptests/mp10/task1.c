@@ -41,13 +41,11 @@
 
 #include "system.h"
 
-rtems_task Test_task1(
-  rtems_task_argument argument
-)
+rtems_task Test_task1( rtems_task_argument argument )
 {
   (void) argument;
 
-  char              receive_buffer[16];
+  char              receive_buffer[ 16 ];
   size_t            size;
   rtems_status_code status;
 
@@ -70,5 +68,4 @@ rtems_task Test_task1(
     RTEMS_NO_TIMEOUT
   );
   directive_failed( status, "rtems_message_queue_receive" );
-
 }

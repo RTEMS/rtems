@@ -32,13 +32,11 @@
 
 #include <tmacros.h>
 
-#define PT_NAME       rtems_build_name( 'P', 'A', 'R', '\0' )
+#define PT_NAME rtems_build_name( 'P', 'A', 'R', '\0' )
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
 /* configuration information */
 
@@ -47,14 +45,14 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS     1
-#define CONFIGURE_MP_MAXIMUM_PROXIES            0
+#define CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS 1
+#define CONFIGURE_MP_MAXIMUM_PROXIES        0
 
-#define CONFIGURE_MAXIMUM_TASKS               1
+#define CONFIGURE_MAXIMUM_TASKS 1
 #if ( CONFIGURE_MP_NODE_NUMBER == 1 )
-#define CONFIGURE_MAXIMUM_PARTITIONS          1
+#define CONFIGURE_MAXIMUM_PARTITIONS 1
 #elif ( CONFIGURE_MP_NODE_NUMBER == 2 )
-#define CONFIGURE_MAXIMUM_PARTITIONS          2
+#define CONFIGURE_MAXIMUM_PARTITIONS 2
 #endif
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
@@ -63,8 +61,8 @@ rtems_task Init(
 
 /* variables */
 
-TEST_EXTERN rtems_id   Task_id[ 4 ];     /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 4 ];   /* array of task names */
+TEST_EXTERN rtems_id   Task_id[ 4 ];   /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 4 ]; /* array of task names */
 
 TEST_EXTERN rtems_id   Partition_id[ 2 ];   /* array of partition ids */
 TEST_EXTERN rtems_name Partition_name[ 2 ]; /* array of partition names */

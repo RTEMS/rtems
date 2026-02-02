@@ -41,15 +41,13 @@
 #include "system.h"
 #include "tmacros.h"
 
-rtems_task Test_task(
-  rtems_task_argument argument
-)
+rtems_task Test_task( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_id            tid;
   rtems_status_code   status;
-  uint32_t      remote_node;
+  uint32_t            remote_node;
   rtems_id            remote_tid;
   rtems_task_priority previous_priority;
   rtems_task_priority previous_priority_1;
@@ -58,16 +56,16 @@ rtems_task Test_task(
   directive_failed( status, "rtems_task_ident" );
 
   puts( "Getting TID of remote task" );
-  remote_node = (rtems_object_get_local_node() == 1) ? 2 : 1;
+  remote_node = ( rtems_object_get_local_node() == 1 ) ? 2 : 1;
   puts_nocr( "Remote task's name is : " );
   put_name( Task_name[ remote_node ], TRUE );
 
   do {
-      status = rtems_task_ident(
-          Task_name[ remote_node ],
-          RTEMS_SEARCH_ALL_NODES,
-          &remote_tid
-          );
+    status = rtems_task_ident(
+      Task_name[ remote_node ],
+      RTEMS_SEARCH_ALL_NODES,
+      &remote_tid
+    );
   } while ( status != RTEMS_SUCCESSFUL );
 
   directive_failed( status, "rtems_task_ident" );
@@ -81,7 +79,8 @@ rtems_task Test_task(
 
   if ( previous_priority != remote_node ) {
     printf(
-      "Remote priority (0x%" PRIxrtems_task_priority ") does not match remote node (0x%" PRIx32 ")!!!\n",
+      "Remote priority (0x%" PRIxrtems_task_priority
+      ") does not match remote node (0x%" PRIx32 ")!!!\n",
       previous_priority,
       remote_node
     );

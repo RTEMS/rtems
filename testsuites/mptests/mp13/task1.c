@@ -42,13 +42,11 @@
 
 #include "system.h"
 
-rtems_task Test_task1(
-  rtems_task_argument argument
-)
+rtems_task Test_task1( rtems_task_argument argument )
 {
   (void) argument;
 
-  char              receive_buffer[16];
+  char              receive_buffer[ 16 ];
   size_t            size;
   rtems_status_code status;
 
@@ -81,12 +79,16 @@ rtems_task Test_task1(
   puts( "Receiving message ..." );
   status = rtems_message_queue_receive(
     Queue_id[ 1 ],
-    (long (*)[4])receive_buffer,
+    (long ( * )[ 4 ]) receive_buffer,
     &size,
     RTEMS_DEFAULT_OPTIONS,
     2 * rtems_clock_get_ticks_per_second()
   );
-  fatal_directive_status(status, RTEMS_TIMEOUT, "rtems_message_queue_receive");
+  fatal_directive_status(
+    status,
+    RTEMS_TIMEOUT,
+    "rtems_message_queue_receive"
+  );
   puts( "rtems_message_queue_receive correctly returned RTEMS_TIMEOUT" );
 
   puts( "Deleting self" );

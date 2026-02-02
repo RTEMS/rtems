@@ -43,12 +43,16 @@
 void Send_messages()
 {
   rtems_status_code status;
-  uint32_t    broadcast_count;
+  uint32_t          broadcast_count;
 
   puts_nocr( "rtems_message_queue_send: " );
   puts( buffer1 );
 
-  status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4])buffer1, 16 );
+  status = rtems_message_queue_send(
+    Queue_id[ 1 ],
+    (long ( * )[ 4 ]) buffer1,
+    16
+  );
   directive_failed( status, "rtems_message_queue_send" );
 
   puts( "Delaying for a second" );
@@ -57,7 +61,11 @@ void Send_messages()
 
   puts_nocr( "rtems_message_queue_urgent: " );
   puts( buffer2 );
-  status = rtems_message_queue_urgent( Queue_id[ 1 ], (long (*)[4])buffer2, 16 );
+  status = rtems_message_queue_urgent(
+    Queue_id[ 1 ],
+    (long ( * )[ 4 ]) buffer2,
+    16
+  );
   directive_failed( status, "rtems_message_queue_urgent" );
 
   puts( "Delaying for a second" );
@@ -68,7 +76,7 @@ void Send_messages()
   puts( buffer3 );
   status = rtems_message_queue_broadcast(
     Queue_id[ 1 ],
-    (long (*)[4])buffer3,
+    (long ( * )[ 4 ]) buffer3,
     16,
     &broadcast_count
   );

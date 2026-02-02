@@ -42,19 +42,17 @@
 
 #include "system.h"
 
-rtems_task Test_task(
-  rtems_task_argument argument
-)
+rtems_task Test_task( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_status_code status;
-  uint32_t    count;
-  uint32_t    remote_node;
+  uint32_t          count;
+  uint32_t          remote_node;
   rtems_id          remote_tid;
   rtems_event_set   event_out;
 
-  remote_node = ((rtems_object_get_local_node() == 1) ? 2 : 1);
+  remote_node = ( ( rtems_object_get_local_node() == 1 ) ? 2 : 1 );
 
   puts( "About to go to sleep!" );
   status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
@@ -72,26 +70,31 @@ rtems_task Test_task(
       &remote_tid
     );
 
-    if ( status == RTEMS_SUCCESSFUL )
+    if ( status == RTEMS_SUCCESSFUL ) {
       break;
+    }
     puts( "rtems_task_ident FAILED!!" );
-    rtems_task_wake_after(2);
+    rtems_task_wake_after( 2 );
   }
 
   if ( rtems_object_get_local_node() == 1 ) {
     puts( "Sending events to remote task" );
     while ( Stop_Test == false ) {
-      for ( count=EVENT_TASK_DOT_COUNT; Stop_Test == false && count; count-- ) {
+      for (
+        count = EVENT_TASK_DOT_COUNT; Stop_Test == false && count; count--
+      ) {
         status = rtems_event_send( remote_tid, RTEMS_EVENT_16 );
         directive_failed( status, "rtems_event_send" );
-     }
-     put_dot( 'e' );
+      }
+      put_dot( 'e' );
     }
   }
 
   puts( "Receiving events from remote task" );
   while ( Stop_Test == false ) {
-    for ( count=EVENT_TASK_DOT_COUNT ; Stop_Test == false && count ; count-- ) {
+    for (
+      count = EVENT_TASK_DOT_COUNT; Stop_Test == false && count; count--
+    ) {
       status = rtems_event_receive(
         RTEMS_EVENT_16,
         RTEMS_DEFAULT_OPTIONS,

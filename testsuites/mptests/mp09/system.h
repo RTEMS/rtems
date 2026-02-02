@@ -34,13 +34,9 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Test_task(
-  rtems_task_argument argument
-);
+rtems_task Test_task( rtems_task_argument argument );
 
 void Receive_messages( void );
 
@@ -59,7 +55,7 @@ void Send_messages( void );
 #if CONFIGURE_MP_NODE_NUMBER == 1
   #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES 2
   #define CONFIGURE_MESSAGE_BUFFER_MEMORY \
-    CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 3, 16 )
+  CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 3, 16 )
 #endif
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
@@ -68,15 +64,15 @@ void Send_messages( void );
 
 /* variables */
 
-TEST_EXTERN rtems_id   Task_id[ 4 ];     /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 4 ];   /* array of task names */
+TEST_EXTERN rtems_id   Task_id[ 4 ];   /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 4 ]; /* array of task names */
 
-TEST_EXTERN rtems_id   Queue_id[ 3 ];    /* array of message queue ids */
-TEST_EXTERN rtems_name Queue_name[ 3 ];  /* array of message queue names */
+TEST_EXTERN rtems_id   Queue_id[ 3 ];   /* array of message queue ids */
+TEST_EXTERN rtems_name Queue_name[ 3 ]; /* array of message queue names */
 
-extern char buffer1[16];
-extern char buffer2[16];
-extern char buffer3[16];
-extern char buffer4[16];
+extern char buffer1[ 16 ];
+extern char buffer2[ 16 ];
+extern char buffer3[ 16 ];
+extern char buffer4[ 16 ];
 
 /* end of include file */

@@ -51,11 +51,11 @@
  */
 #define MAX_LONG_TEST_DURATION 100
 
-uint8_t   my_partition[0x30000] CPU_STRUCTURE_ALIGNMENT;
+uint8_t my_partition[ 0x30000 ] CPU_STRUCTURE_ALIGNMENT;
 
 static rtems_timer_service_routine Stop_Test_TSR(
-  rtems_id  ignored_id,
-  void     *ignored_address
+  rtems_id ignored_id,
+  void    *ignored_address
 )
 {
   (void) ignored_id;
@@ -64,9 +64,7 @@ static rtems_timer_service_routine Stop_Test_TSR(
   Stop_Test = true;
 }
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -81,7 +79,7 @@ rtems_task Init(
   Stop_Test = false;
 
   status = rtems_timer_create(
-    rtems_build_name('S', 'T', 'O', 'P'),
+    rtems_build_name( 'S', 'T', 'O', 'P' ),
     &timer_id
   );
   directive_failed( status, "rtems_timer_create" );
@@ -106,7 +104,7 @@ rtems_task Init(
   Semaphore_task_name[ 1 ] = rtems_build_name( 'S', 'M', '1', ' ' );
   Semaphore_task_name[ 2 ] = rtems_build_name( 'S', 'M', '2', ' ' );
 
-  Semaphore_name[ 1 ] =  rtems_build_name( 'S', 'E', 'M', ' ' );
+  Semaphore_name[ 1 ] = rtems_build_name( 'S', 'E', 'M', ' ' );
 
   Queue_name[ 1 ] = rtems_build_name( 'M', 'S', 'G', ' ' );
 
@@ -138,7 +136,7 @@ rtems_task Init(
     puts( "Creating Partition (Global)" );
     status = rtems_partition_create(
       Partition_name[ 1 ],
-      (void *)my_partition,
+      (void *) my_partition,
       0x8000,
       0x3800,
       RTEMS_GLOBAL,

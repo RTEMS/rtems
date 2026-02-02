@@ -34,13 +34,9 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Test_task(
-  rtems_task_argument argument
-);
+rtems_task Test_task( rtems_task_argument argument );
 
 /* configuration information */
 
@@ -49,8 +45,8 @@ rtems_task Test_task(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS               2
-#define CONFIGURE_MAXIMUM_TIMERS              1
+#define CONFIGURE_MAXIMUM_TASKS  2
+#define CONFIGURE_MAXIMUM_TIMERS 1
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
@@ -58,11 +54,11 @@ rtems_task Test_task(
 
 /* variables */
 
-TEST_EXTERN rtems_id   Task_id[ 4 ];     /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 4 ];   /* array of task names */
+TEST_EXTERN rtems_id   Task_id[ 4 ];   /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 4 ]; /* array of task names */
 
-TEST_EXTERN rtems_id   Timer_id[ 4 ];     /* array of timer ids */
-TEST_EXTERN rtems_name Timer_name[ 4 ];   /* array of timer names */
+TEST_EXTERN rtems_id   Timer_id[ 4 ];   /* array of timer ids */
+TEST_EXTERN rtems_name Timer_name[ 4 ]; /* array of timer names */
 
 TEST_EXTERN volatile bool Stop_Test;
 

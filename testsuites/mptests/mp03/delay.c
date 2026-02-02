@@ -42,8 +42,8 @@
 #include <rtems/bspIo.h>
 
 rtems_timer_service_routine Delayed_send_event(
-  rtems_id  ignored_id,
-  void     *ignored_address
+  rtems_id ignored_id,
+  void    *ignored_address
 )
 {
   (void) ignored_id;
@@ -52,6 +52,8 @@ rtems_timer_service_routine Delayed_send_event(
   rtems_status_code status;
 
   status = rtems_event_send( Task_id[ 1 ], RTEMS_EVENT_16 );
-  if ( status ) printk( "Delayed_send_event failed %d\n", status );
+  if ( status ) {
+    printk( "Delayed_send_event failed %d\n", status );
+  }
   // directive_failed_with_level( status, "rtems_event_send", 1 );
 }

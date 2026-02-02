@@ -62,9 +62,7 @@ static const rtems_message_queue_config config = {
 
 #endif
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -101,7 +99,7 @@ rtems_task Init(
 
   puts( "Creating Test_task (local)" );
   status = rtems_task_create(
-    Task_name[rtems_object_get_local_node()],
+    Task_name[ rtems_object_get_local_node() ],
     1,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_TIMESLICE,

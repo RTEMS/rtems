@@ -38,8 +38,8 @@
  *  Stop_Test_TSR
  */
 static rtems_timer_service_routine Stop_Test_TSR(
-  rtems_id  ignored_id,
-  void     *ignored_address
+  rtems_id ignored_id,
+  void    *ignored_address
 )
 {
   (void) ignored_id;
@@ -89,39 +89,38 @@ rtems_event_set Event_set_table[] = {
 /*
  *  Test_task
  */
-rtems_task Test_task(
-  rtems_task_argument argument
-)
+rtems_task Test_task( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_status_code status;
-  uint32_t    count;
-  uint32_t    remote_node;
+  uint32_t          count;
+  uint32_t          remote_node;
   rtems_id          remote_tid;
   rtems_event_set   event_out;
   rtems_event_set   event_for_this_iteration;
 
   Stop_Test = false;
 
-  remote_node = (rtems_object_get_local_node() == 1) ? 2 : 1;
+  remote_node = ( rtems_object_get_local_node() == 1 ) ? 2 : 1;
   puts_nocr( "Remote task's name is : " );
   put_name( Task_name[ remote_node ], TRUE );
 
   puts( "Getting TID of remote task" );
   do {
-      status = rtems_task_ident(
-          Task_name[ remote_node ],
-          RTEMS_SEARCH_ALL_NODES,
-          &remote_tid
-          );
+    status = rtems_task_ident(
+      Task_name[ remote_node ],
+      RTEMS_SEARCH_ALL_NODES,
+      &remote_tid
+    );
   } while ( status != RTEMS_SUCCESSFUL );
   directive_failed( status, "rtems_task_ident FAILED!!" );
 
-  if ( rtems_object_get_local_node() == 1 )
+  if ( rtems_object_get_local_node() == 1 ) {
     puts( "Sending events to remote task" );
-  else
+  } else {
     puts( "Receiving events from remote task" );
+  }
 
   status = rtems_timer_fire_after(
     Timer_id[ 1 ],
@@ -133,9 +132,10 @@ rtems_task Test_task(
 
   count = 0;
 
-  for ( ; ; ) {
-    if ( Stop_Test == true )
+  for ( ;; ) {
+    if ( Stop_Test == true ) {
       break;
+    }
 
     event_for_this_iteration = Event_set_table[ count % 32 ];
 
@@ -153,17 +153,20 @@ rtems_task Test_task(
         &event_out
       );
       if ( rtems_are_statuses_equal( status, RTEMS_TIMEOUT ) ) {
-        if ( rtems_object_get_local_node() == 2 )
+        if ( rtems_object_get_local_node() == 2 ) {
           puts( "\nCorrect behavior if the other node exitted." );
-        else
+        } else {
           puts( "\nERROR... node 1 died" );
+        }
         break;
-      } else
+      } else {
         directive_failed( status, "rtems_event_receive" );
+      }
     }
 
-    if ( (count % DOT_COUNT) == 0 )
-      put_dot('.');
+    if ( ( count % DOT_COUNT ) == 0 ) {
+      put_dot( '.' );
+    }
 
     count++;
   }
@@ -173,7 +176,7 @@ rtems_task Test_task(
   if ( rtems_object_get_local_node() == 2 ) {
     /* Flush events */
     puts( "Flushing RTEMS_EVENT_16" );
-    (void) rtems_event_receive(RTEMS_EVENT_16, RTEMS_NO_WAIT, 0, &event_out);
+    (void) rtems_event_receive( RTEMS_EVENT_16, RTEMS_NO_WAIT, 0, &event_out );
 
     puts( "Waiting for RTEMS_EVENT_16" );
     status = rtems_event_receive(

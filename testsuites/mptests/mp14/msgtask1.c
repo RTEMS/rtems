@@ -43,21 +43,19 @@
 
 #include "system.h"
 
-rtems_task Message_queue_task(
-  rtems_task_argument index
-)
+rtems_task Message_queue_task( rtems_task_argument index )
 {
-  rtems_status_code  status;
-  uint32_t     count;
-  uint32_t     yield_count;
-  uint32_t    *buffer_count;
-  uint32_t    *overflow_count;
-  size_t       size;
+  rtems_status_code status;
+  uint32_t          count;
+  uint32_t          yield_count;
+  uint32_t         *buffer_count;
+  uint32_t         *overflow_count;
+  size_t            size;
 
-  Msg_buffer[ index ][0] = 0;
-  Msg_buffer[ index ][1] = 0;
-  Msg_buffer[ index ][2] = 0;
-  Msg_buffer[ index ][3] = 0;
+  Msg_buffer[ index ][ 0 ] = 0;
+  Msg_buffer[ index ][ 1 ] = 0;
+  Msg_buffer[ index ][ 2 ] = 0;
+  Msg_buffer[ index ][ 3 ] = 0;
 
   puts( "Getting ID of msg queue" );
   while ( FOREVER ) {
@@ -66,30 +64,31 @@ rtems_task Message_queue_task(
       RTEMS_SEARCH_ALL_NODES,
       &Queue_id[ 1 ]
     );
-    if ( status == RTEMS_SUCCESSFUL )
+    if ( status == RTEMS_SUCCESSFUL ) {
       break;
+    }
     puts( "rtems_message_queue_ident FAILED!!" );
-    rtems_task_wake_after(2);
+    rtems_task_wake_after( 2 );
   }
 
   if ( rtems_object_get_local_node() == 1 ) {
-      status = rtems_message_queue_send(
-        Queue_id[ 1 ],
-        (long (*)[4])Msg_buffer[ index ],
-        16
-      );
-      directive_failed( status, "rtems_message_queue_send" );
-      overflow_count = &Msg_buffer[ index ][0];
-      buffer_count   = &Msg_buffer[ index ][1];
+    status = rtems_message_queue_send(
+      Queue_id[ 1 ],
+      (long ( * )[ 4 ]) Msg_buffer[ index ],
+      16
+    );
+    directive_failed( status, "rtems_message_queue_send" );
+    overflow_count = &Msg_buffer[ index ][ 0 ];
+    buffer_count = &Msg_buffer[ index ][ 1 ];
   } else {
-      overflow_count = &Msg_buffer[ index ][2];
-      buffer_count   = &Msg_buffer[ index ][3];
+    overflow_count = &Msg_buffer[ index ][ 2 ];
+    buffer_count = &Msg_buffer[ index ][ 3 ];
   }
 
   while ( Stop_Test == false ) {
     yield_count = 100;
 
-    for ( count=MESSAGE_DOT_COUNT ; Stop_Test == false && count ; count-- ) {
+    for ( count = MESSAGE_DOT_COUNT; Stop_Test == false && count; count-- ) {
       status = rtems_message_queue_receive(
         Queue_id[ 1 ],
         Msg_buffer[ index ],
@@ -99,11 +98,12 @@ rtems_task Message_queue_task(
       );
       directive_failed( status, "rtems_message_queue_receive" );
 
-      if ( *buffer_count == (uint32_t)0xffffffff ) {
-        *buffer_count    = 0;
+      if ( *buffer_count == (uint32_t) 0xffffffff ) {
+        *buffer_count = 0;
         *overflow_count += 1;
-      } else
+      } else {
         *buffer_count += 1;
+      }
 
       status = rtems_message_queue_send(
         Queue_id[ 1 ],
@@ -112,13 +112,14 @@ rtems_task Message_queue_task(
       );
       directive_failed( status, "rtems_message_queue_send" );
 
-      if (Stop_Test == false)
+      if ( Stop_Test == false ) {
         if ( rtems_object_get_local_node() == 1 && --yield_count == 0 ) {
           status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
           directive_failed( status, "rtems_task_wake_after" );
 
           yield_count = 100;
         }
+      }
     }
     put_dot( 'm' );
   }

@@ -40,7 +40,7 @@
 
 #include "system.h"
 
-rtems_task Test_task3(rtems_task_argument restart)
+rtems_task Test_task3( rtems_task_argument restart )
 {
   rtems_status_code status;
 

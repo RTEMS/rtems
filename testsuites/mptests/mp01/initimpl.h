@@ -45,9 +45,7 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -60,8 +58,11 @@ rtems_task Init(
     rtems_object_get_local_node()
   );
 
-  if ( rtems_object_get_local_node() != 1 ) c = 'S';
-  else                                           c = 'M';
+  if ( rtems_object_get_local_node() != 1 ) {
+    c = 'S';
+  } else {
+    c = 'M';
+  }
 
   Task_name[ 1 ] = rtems_build_name( c, 'A', '1', ' ' );
   Task_name[ 2 ] = rtems_build_name( c, 'A', '2', ' ' );

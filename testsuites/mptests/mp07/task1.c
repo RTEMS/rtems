@@ -45,8 +45,8 @@
 #define DOT_COUNT 100
 
 static rtems_timer_service_routine Stop_Test_TSR(
-  rtems_id  ignored_id,
-  void     *ignored_address
+  rtems_id ignored_id,
+  void    *ignored_address
 )
 {
   (void) ignored_id;
@@ -55,21 +55,19 @@ static rtems_timer_service_routine Stop_Test_TSR(
   Stop_Test = true;
 }
 
-rtems_task Test_task(
-  rtems_task_argument argument
-)
+rtems_task Test_task( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_status_code status;
-  uint32_t    count;
-  uint32_t    remote_node;
+  uint32_t          count;
+  uint32_t          remote_node;
   rtems_id          remote_tid;
   rtems_event_set   event_out;
 
   Stop_Test = false;
 
-  remote_node = (rtems_object_get_local_node() == 1) ? 2 : 1;
+  remote_node = ( rtems_object_get_local_node() == 1 ) ? 2 : 1;
   puts_nocr( "Remote task's name is : " );
   put_name( Task_name[ remote_node ], TRUE );
 
@@ -97,7 +95,7 @@ rtems_task Test_task(
   directive_failed( status, "rtems_timer_fire_after" );
 
   while ( true ) {
-    for ( count=DOT_COUNT ; count && (Stop_Test == false) ; count-- ) {
+    for ( count = DOT_COUNT; count && ( Stop_Test == false ); count-- ) {
       status = rtems_event_receive(
         RTEMS_EVENT_16,
         RTEMS_DEFAULT_OPTIONS,
@@ -105,18 +103,22 @@ rtems_task Test_task(
         &event_out
       );
       if ( status == RTEMS_TIMEOUT ) {
-        printf("\nTA1 - RTEMS_TIMEOUT .. probably OK if the other node exits");
+        printf(
+          "\nTA1 - RTEMS_TIMEOUT .. probably OK if the other node exits"
+        );
         Stop_Test = true;
         break;
-      } else
+      } else {
         directive_failed( status, "rtems_event_receive" );
+      }
 
       status = rtems_event_send( remote_tid, RTEMS_EVENT_16 );
       directive_failed( status, "rtems_event_send" );
     }
-    if ( Stop_Test )
-       break;
-    put_dot('.');
+    if ( Stop_Test ) {
+      break;
+    }
+    put_dot( '.' );
   }
 
   /*
@@ -124,7 +126,7 @@ rtems_task Test_task(
    * when our MPCI shuts down
    */
 
-  rtems_task_wake_after(10);
+  rtems_task_wake_after( 10 );
 
   puts( "\n*** END OF TEST 7 ***" );
   rtems_test_exit( 0 );

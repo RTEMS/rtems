@@ -41,9 +41,7 @@
 
 #include "system.h"
 
-rtems_task Delayed_events_task(
-  rtems_task_argument argument
-)
+rtems_task Delayed_events_task( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -66,7 +64,9 @@ rtems_task Delayed_events_task(
   self = rtems_task_self();
 
   while ( Stop_Test == false ) {
-    for ( count=DELAYED_EVENT_DOT_COUNT; Stop_Test == false && count; count-- ){
+    for (
+      count = DELAYED_EVENT_DOT_COUNT; Stop_Test == false && count; count--
+    ) {
       status = rtems_timer_fire_after(
         Timer_id[ 1 ],
         1,
@@ -83,7 +83,7 @@ rtems_task Delayed_events_task(
       );
       directive_failed( status, "rtems_event_receive" );
     }
-    put_dot('.');
+    put_dot( '.' );
   }
 
   Exit_test();

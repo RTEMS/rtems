@@ -41,21 +41,19 @@
 
 #include "system.h"
 
-char buffer1[16] = "123456789012345";
-char buffer2[16] = "abcdefghijklmno";
-char buffer3[16] = "ABCDEFGHIJKLMNO";
-char buffer4[16] = "PQRSTUVWXYZ(){}";
+char buffer1[ 16 ] = "123456789012345";
+char buffer2[ 16 ] = "abcdefghijklmno";
+char buffer3[ 16 ] = "ABCDEFGHIJKLMNO";
+char buffer4[ 16 ] = "PQRSTUVWXYZ(){}";
 
-rtems_task Test_task(
-  rtems_task_argument argument
-)
+rtems_task Test_task( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_status_code status;
   uint32_t          count;
   size_t            size;
-  char              receive_buffer[16];
+  char              receive_buffer[ 16 ];
 
   status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   directive_failed( status, "rtems_task_wake_after" );
@@ -91,7 +89,7 @@ rtems_task Test_task(
       "rtems_message_queue_delete"
     );
     puts(
-  "rtems_message_queue_delete correctly returned RTEMS_ILLEGAL_ON_REMOTE_OBJECT"
+      "rtems_message_queue_delete correctly returned RTEMS_ILLEGAL_ON_REMOTE_OBJECT"
     );
 
     Send_messages();
@@ -125,13 +123,12 @@ rtems_task Test_task(
       "rtems_message_queue_receive"
     );
     puts( "\nGlobal message queue deleted" );
-  }
-  else {                   /* node == 1 */
+  } else { /* node == 1 */
     Receive_messages();
     Send_messages();
 
     puts( "Delaying for 5 seconds" );
-    status = rtems_task_wake_after( 5*rtems_clock_get_ticks_per_second() );
+    status = rtems_task_wake_after( 5 * rtems_clock_get_ticks_per_second() );
     directive_failed( status, "rtems_task_wake_after" );
 
     puts( "Deleting Message queue" );

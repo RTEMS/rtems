@@ -50,21 +50,19 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
-uint8_t   Partition_area[ 1024 ] CPU_STRUCTURE_ALIGNMENT;
+uint8_t Partition_area[ 1024 ] CPU_STRUCTURE_ALIGNMENT;
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
-  rtems_status_code  status;
-  void              *bufaddr;
+  rtems_status_code status;
+  void             *bufaddr;
 
   printf(
     "\n\n*** TEST 12 -- NODE %" PRId32 " ***\n",
     rtems_object_get_local_node()
-   );
+  );
 
   Task_name[ 1 ] = rtems_build_name( '1', '1', '1', ' ' );
   Task_name[ 2 ] = rtems_build_name( '2', '2', '2', ' ' );
@@ -73,7 +71,7 @@ rtems_task Init(
 
   puts( "Got to initialization task" );
 
-  if ( rtems_object_get_local_node() == 2 )  {
+  if ( rtems_object_get_local_node() == 2 ) {
     status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
     directive_failed( status, "rtems_task_wake_after" );
 
@@ -95,7 +93,7 @@ rtems_task Init(
       "rtems_partition_delete"
     );
     puts(
-     "rtems_partition_delete correctly returned RTEMS_ILLEGAL_ON_REMOTE_OBJECT"
+      "rtems_partition_delete correctly returned RTEMS_ILLEGAL_ON_REMOTE_OBJECT"
     );
 
     puts( "Obtaining a buffer from the global partition" );
@@ -109,8 +107,7 @@ rtems_task Init(
 
     status = rtems_task_wake_after( 2 * rtems_clock_get_ticks_per_second() );
     directive_failed( status, "rtems_task_wake_after" );
-  }
-  else {
+  } else {
     puts( "Creating Partition (Global)" );
     status = rtems_partition_create(
       Partition_name[ 1 ],
@@ -129,7 +126,7 @@ rtems_task Init(
     puts( "Deleting Partition (Global)" );
     status = rtems_partition_delete( Partition_id[ 1 ] );
     directive_failed( status, "rtems_partition_delete" );
- }
- puts( "*** END OF TEST 12 ***" );
- rtems_test_exit( 0 );
+  }
+  puts( "*** END OF TEST 12 ***" );
+  rtems_test_exit( 0 );
 }

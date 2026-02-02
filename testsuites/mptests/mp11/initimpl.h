@@ -48,11 +48,9 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
-uint8_t   my_partition[0x30000] CPU_STRUCTURE_ALIGNMENT;
+uint8_t my_partition[ 0x30000 ] CPU_STRUCTURE_ALIGNMENT;
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -113,7 +111,7 @@ rtems_task Init(
     puts( "Attempting to create Partition (Global)" );
     status = rtems_partition_create(
       1,
-      (uint8_t   *) my_partition,
+      (uint8_t *) my_partition,
       128,
       64,
       RTEMS_GLOBAL,

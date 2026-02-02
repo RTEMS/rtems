@@ -47,8 +47,8 @@
 #define SIGNALS_PER_DOT 15
 
 static rtems_timer_service_routine Stop_Test_TSR(
-  rtems_id  ignored_id,
-  void     *ignored_address
+  rtems_id ignored_id,
+  void    *ignored_address
 )
 {
   (void) ignored_id;
@@ -57,9 +57,7 @@ static rtems_timer_service_routine Stop_Test_TSR(
   Stop_Test = true;
 }
 
-rtems_task Test_task(
-  rtems_task_argument argument
-)
+rtems_task Test_task( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -68,32 +66,31 @@ rtems_task Test_task(
   Stop_Test = false;
 
   signal_caught = 0;
-  signal_count  = 0;
+  signal_count = 0;
 
   puts( "rtems_signal_catch: initializing signal catcher" );
-  status = rtems_signal_catch( Process_asr, RTEMS_NO_ASR|RTEMS_NO_PREEMPT );
+  status = rtems_signal_catch( Process_asr, RTEMS_NO_ASR | RTEMS_NO_PREEMPT );
   directive_failed( status, "rtems_signal_catch" );
 
-  if (rtems_object_get_local_node() == 1) {
-     remote_node = 2;
-     remote_signal  = RTEMS_SIGNAL_18;
-     expected_signal = RTEMS_SIGNAL_17;
-  }
-  else {
-     remote_node = 1;
-     remote_signal  = RTEMS_SIGNAL_17;
-     expected_signal = RTEMS_SIGNAL_18;
+  if ( rtems_object_get_local_node() == 1 ) {
+    remote_node = 2;
+    remote_signal = RTEMS_SIGNAL_18;
+    expected_signal = RTEMS_SIGNAL_17;
+  } else {
+    remote_node = 1;
+    remote_signal = RTEMS_SIGNAL_17;
+    expected_signal = RTEMS_SIGNAL_18;
   }
   puts_nocr( "Remote task's name is : " );
   put_name( Task_name[ remote_node ], TRUE );
 
   puts( "Getting TID of remote task" );
   do {
-      status = rtems_task_ident(
-          Task_name[ remote_node ],
-          RTEMS_SEARCH_ALL_NODES,
-          &remote_tid
-          );
+    status = rtems_task_ident(
+      Task_name[ remote_node ],
+      RTEMS_SEARCH_ALL_NODES,
+      &remote_tid
+    );
   } while ( status != RTEMS_SUCCESSFUL );
   directive_failed( status, "rtems_task_ident" );
 
@@ -109,8 +106,9 @@ rtems_task Test_task(
     puts( "Sending signal to remote task" );
     do {
       status = rtems_signal_send( remote_tid, remote_signal );
-      if ( status == RTEMS_NOT_DEFINED )
+      if ( status == RTEMS_NOT_DEFINED ) {
         continue;
+      }
     } while ( status != RTEMS_SUCCESSFUL );
     directive_failed( status, "rtems_signal_send" );
   }

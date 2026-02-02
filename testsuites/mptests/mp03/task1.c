@@ -32,17 +32,13 @@
 
 #include "system.h"
 
-static void Test_Task_Support(
-  uint32_t    node
-)
+static void Test_Task_Support( uint32_t node )
 {
   rtems_event_set   events;
   rtems_status_code status;
 
   if ( rtems_object_get_local_node() == node ) {
-
-    for ( ; ; ) {
-
+    for ( ;; ) {
       status = rtems_event_receive(
         RTEMS_EVENT_16,
         RTEMS_NO_WAIT,
@@ -50,10 +46,15 @@ static void Test_Task_Support(
         &events
       );
 
-      if ( status == RTEMS_SUCCESSFUL )
+      if ( status == RTEMS_SUCCESSFUL ) {
         break;
+      }
 
-      fatal_directive_status(status, RTEMS_UNSATISFIED, "rtems_event_receive");
+      fatal_directive_status(
+        status,
+        RTEMS_UNSATISFIED,
+        "rtems_event_receive"
+      );
 
       status = rtems_task_wake_after( 2 * rtems_clock_get_ticks_per_second() );
       directive_failed( status, "rtems_task_wake_after" );
@@ -70,14 +71,12 @@ static void Test_Task_Support(
       put_name( Task_name[ node ], FALSE );
       puts( " - Resuming remote task" );
 
-      status = rtems_task_resume( remote_tid ) ;
+      status = rtems_task_resume( remote_tid );
       directive_failed( status, "rtems_task_resume" );
-
     }
 
-  }  else {
-
-    for ( ; ; ) {
+  } else {
+    for ( ;; ) {
       status = rtems_event_receive(
         RTEMS_EVENT_16,
         RTEMS_NO_WAIT,
@@ -85,10 +84,15 @@ static void Test_Task_Support(
         &events
       );
 
-      if ( status == RTEMS_SUCCESSFUL )
+      if ( status == RTEMS_SUCCESSFUL ) {
         break;
+      }
 
-      fatal_directive_status(status, RTEMS_UNSATISFIED, "rtems_event_receive");
+      fatal_directive_status(
+        status,
+        RTEMS_UNSATISFIED,
+        "rtems_event_receive"
+      );
 
       put_name( Task_name[ remote_node ], FALSE );
       puts( " - have I been suspended???" );
@@ -96,9 +100,7 @@ static void Test_Task_Support(
       status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() / 2 );
       directive_failed( status, "rtems_task_wake_after" );
     }
-
   }
-
 }
 
 /*PAGE
@@ -106,9 +108,7 @@ static void Test_Task_Support(
  *  Test_task
  */
 
-rtems_task Test_task(
-  rtems_task_argument argument
-)
+rtems_task Test_task( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -119,16 +119,16 @@ rtems_task Test_task(
   directive_failed( status, "rtems_task_ident" );
 
   puts( "Getting TID of remote task" );
-  remote_node = (rtems_object_get_local_node() == 1) ? 2 : 1;
+  remote_node = ( rtems_object_get_local_node() == 1 ) ? 2 : 1;
   printf( "Remote task's name is : " );
   put_name( Task_name[ remote_node ], TRUE );
 
   do {
-      status = rtems_task_ident(
-          Task_name[ remote_node ],
-          RTEMS_SEARCH_ALL_NODES,
-          &remote_tid
-          );
+    status = rtems_task_ident(
+      Task_name[ remote_node ],
+      RTEMS_SEARCH_ALL_NODES,
+      &remote_tid
+    );
   } while ( status != RTEMS_SUCCESSFUL );
 
   directive_failed( status, "rtems_task_ident" );

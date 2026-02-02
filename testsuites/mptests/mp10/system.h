@@ -34,21 +34,13 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Test_task1(
-  rtems_task_argument argument
-);
+rtems_task Test_task1( rtems_task_argument argument );
 
-rtems_task Test_task2(
-  rtems_task_argument argument
-);
+rtems_task Test_task2( rtems_task_argument argument );
 
-rtems_task Test_task3(
-  rtems_task_argument restart
-);
+rtems_task Test_task3( rtems_task_argument restart );
 
 /* configuration information */
 
@@ -58,13 +50,13 @@ rtems_task Test_task3(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #if ( CONFIGURE_MP_NODE_NUMBER == 1 )
-#define CONFIGURE_MAXIMUM_TASKS               1
-#define CONFIGURE_MAXIMUM_SEMAPHORES          1
-#define CONFIGURE_MAXIMUM_MESSAGE_QUEUES      1
+#define CONFIGURE_MAXIMUM_TASKS          1
+#define CONFIGURE_MAXIMUM_SEMAPHORES     1
+#define CONFIGURE_MAXIMUM_MESSAGE_QUEUES 1
 #define CONFIGURE_MESSAGE_BUFFER_MEMORY \
   CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 3, 16 )
 #else
-#define CONFIGURE_MAXIMUM_TASKS               4
+#define CONFIGURE_MAXIMUM_TASKS 4
 #endif
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
@@ -73,11 +65,11 @@ rtems_task Test_task3(
 
 /* variables */
 
-TEST_EXTERN rtems_id   Task_id[ 4 ];     /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 4 ];   /* array of task names */
+TEST_EXTERN rtems_id   Task_id[ 4 ];   /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 4 ]; /* array of task names */
 
-TEST_EXTERN rtems_id   Queue_id[ 2 ];       /* array of message queue ids */
-TEST_EXTERN rtems_name Queue_name[ 2 ];     /* array of message queue names */
+TEST_EXTERN rtems_id   Queue_id[ 2 ];   /* array of message queue ids */
+TEST_EXTERN rtems_name Queue_name[ 2 ]; /* array of message queue names */
 
 TEST_EXTERN rtems_id   Semaphore_id[ 2 ];   /* array of semaphore ids */
 TEST_EXTERN rtems_name Semaphore_name[ 2 ]; /* array of semaphore names */

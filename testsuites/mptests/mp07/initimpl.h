@@ -45,17 +45,15 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_status_code status;
 
   printf(
-   "\n\n*** TEST 7 -- NODE %" PRId32 " ***\n",
-   rtems_object_get_local_node()
+    "\n\n*** TEST 7 -- NODE %" PRId32 " ***\n",
+    rtems_object_get_local_node()
   );
 
   Task_name[ 1 ] = rtems_build_name( '1', '1', '1', ' ' );
@@ -63,7 +61,7 @@ rtems_task Init(
 
   puts( "Creating Test_task (Global)" );
   status = rtems_task_create(
-    Task_name[rtems_object_get_local_node()],
+    Task_name[ rtems_object_get_local_node() ],
     1,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_TIMESLICE,

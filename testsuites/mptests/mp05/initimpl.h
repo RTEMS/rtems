@@ -45,9 +45,7 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -63,7 +61,7 @@ rtems_task Init(
 
   puts( "Creating Test_task (Global)" );
   status = rtems_task_create(
-    Task_name[rtems_object_get_local_node()],
+    Task_name[ rtems_object_get_local_node() ],
     1,
     RTEMS_MINIMUM_STACK_SIZE * 2,
     RTEMS_TIMESLICE,

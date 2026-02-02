@@ -41,16 +41,14 @@
 
 #include "system.h"
 
-rtems_task Partition_task(
-  rtems_task_argument argument
-)
+rtems_task Partition_task( rtems_task_argument argument )
 {
   (void) argument;
 
-  uint32_t     count;
-  rtems_status_code  status;
-  uint32_t     yield_count;
-  void              *buffer;
+  uint32_t          count;
+  rtems_status_code status;
+  uint32_t          yield_count;
+  void             *buffer;
 
   puts( "Getting ID of partition" );
   while ( FOREVER ) {
@@ -60,29 +58,31 @@ rtems_task Partition_task(
       &Partition_id[ 1 ]
     );
 
-    if ( status == RTEMS_SUCCESSFUL )
+    if ( status == RTEMS_SUCCESSFUL ) {
       break;
+    }
 
     puts( "rtems_partition_ident FAILED!!" );
-    rtems_task_wake_after(2);
+    rtems_task_wake_after( 2 );
   }
 
   yield_count = 100;
 
   while ( Stop_Test == false ) {
-    for ( count=PARTITION_DOT_COUNT ; Stop_Test == false && count ; count-- ) {
+    for ( count = PARTITION_DOT_COUNT; Stop_Test == false && count; count-- ) {
       status = rtems_partition_get_buffer( Partition_id[ 1 ], &buffer );
       directive_failed( status, "rtems_partition_get_buffer" );
 
       status = rtems_partition_return_buffer( Partition_id[ 1 ], buffer );
       directive_failed( status, "rtems_partition_return_buffer" );
 
-      if (Stop_Test == false)
+      if ( Stop_Test == false ) {
         if ( rtems_object_get_local_node() == 1 && --yield_count == 0 ) {
           status = rtems_task_wake_after( 1 );
           directive_failed( status, "rtems_task_wake_after" );
           yield_count = 100;
         }
+      }
     }
     put_dot( 'p' );
   }

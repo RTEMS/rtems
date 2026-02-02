@@ -51,22 +51,20 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
-rtems_task Init(
-  rtems_task_argument argument
-)
+rtems_task Init( rtems_task_argument argument )
 {
   (void) argument;
 
   rtems_status_code status;
 
   printf(
-   "\n\n*** TEST 10 -- NODE %" PRIu32 " ***\n",
-   rtems_object_get_local_node()
+    "\n\n*** TEST 10 -- NODE %" PRIu32 " ***\n",
+    rtems_object_get_local_node()
   );
 
-  Task_name[ 1 ] =  rtems_build_name( 'T', 'A', '1', ' ' );
-  Task_name[ 2 ] =  rtems_build_name( 'T', 'A', '2', ' ' );
-  Task_name[ 3 ] =  rtems_build_name( 'S', 'A', '3', ' ' );
+  Task_name[ 1 ] = rtems_build_name( 'T', 'A', '1', ' ' );
+  Task_name[ 2 ] = rtems_build_name( 'T', 'A', '2', ' ' );
+  Task_name[ 3 ] = rtems_build_name( 'S', 'A', '3', ' ' );
 
   Queue_name[ 1 ] = rtems_build_name( 'M', 'S', 'G', ' ' );
 
@@ -97,7 +95,6 @@ rtems_task Init(
     directive_failed( status, "rtems_task_wake_after" );
 
   } else {
-
     puts( "Creating Test_task 1 (local)" );
     status = rtems_task_create(
       Task_name[ 1 ],
@@ -158,7 +155,6 @@ rtems_task Init(
     puts( "Restarting Test_task3" );
     status = rtems_task_restart( Task_id[ 3 ], 1 );
     directive_failed( status, "rtems_task_restart of Task 3" );
-
   }
   puts( "*** END OF TEST 10 ***" );
   rtems_test_exit( 0 );

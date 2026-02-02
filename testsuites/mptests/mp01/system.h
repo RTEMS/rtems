@@ -34,13 +34,9 @@
 
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
-);
+rtems_task Init( rtems_task_argument argument );
 
-rtems_task Test_task(
-  rtems_task_argument argument
-);
+rtems_task Test_task( rtems_task_argument argument );
 
 /* configuration information */
 
@@ -49,16 +45,16 @@ rtems_task Test_task(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS           4
+#define CONFIGURE_MAXIMUM_TASKS 4
 
-#define CONFIGURE_INIT_TASK_ATTRIBUTES    RTEMS_GLOBAL
+#define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_GLOBAL
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #include <rtems/confdefs.h>
 
 /* variables */
 
-TEST_EXTERN rtems_id   Task_id[ 4 ];     /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 4 ];   /* array of task names */
+TEST_EXTERN rtems_id   Task_id[ 4 ];   /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 4 ]; /* array of task names */
 
 /* end of include file */

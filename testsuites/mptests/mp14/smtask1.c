@@ -40,15 +40,13 @@
 
 #include "system.h"
 
-rtems_task Semaphore_task(
-  rtems_task_argument argument
-)
+rtems_task Semaphore_task( rtems_task_argument argument )
 {
   (void) argument;
 
-  uint32_t    count;
+  uint32_t          count;
   rtems_status_code status;
-  uint32_t    yield_count;
+  uint32_t          yield_count;
 
   puts( "Getting SMID of semaphore" );
   while ( FOREVER ) {
@@ -57,17 +55,17 @@ rtems_task Semaphore_task(
       RTEMS_SEARCH_ALL_NODES,
       &Semaphore_id[ 1 ]
     );
-    if ( status == RTEMS_SUCCESSFUL )
+    if ( status == RTEMS_SUCCESSFUL ) {
       break;
+    }
     puts( "rtems_semaphore_ident FAILED!!" );
-    rtems_task_wake_after(2);
+    rtems_task_wake_after( 2 );
   }
 
   yield_count = 100;
 
   while ( Stop_Test == false ) {
-
-    for ( count=SEMAPHORE_DOT_COUNT ; Stop_Test == false && count ; count-- ) {
+    for ( count = SEMAPHORE_DOT_COUNT; Stop_Test == false && count; count-- ) {
       status = rtems_semaphore_obtain(
         Semaphore_id[ 1 ],
         RTEMS_DEFAULT_OPTIONS,
@@ -78,13 +76,14 @@ rtems_task Semaphore_task(
       status = rtems_semaphore_release( Semaphore_id[ 1 ] );
       directive_failed( status, "rtems_semaphore_release" );
 
-      if ( Stop_Test == false )
+      if ( Stop_Test == false ) {
         if ( rtems_object_get_local_node() == 1 && --yield_count == 0 ) {
           status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
           directive_failed( status, "rtems_task_wake_after" );
 
           yield_count = 100;
         }
+      }
     }
     put_dot( 's' );
   }

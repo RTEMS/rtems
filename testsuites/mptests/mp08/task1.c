@@ -41,13 +41,11 @@
 
 #include "system.h"
 
-rtems_task Test_task(
-  rtems_task_argument argument
-)
+rtems_task Test_task( rtems_task_argument argument )
 {
   (void) argument;
 
-  uint32_t    count;
+  uint32_t          count;
   rtems_status_code status;
 
   puts( "Getting SMID of semaphore" );
@@ -72,7 +70,7 @@ rtems_task Test_task(
     );
   }
 
-  count = 0;            /* number of times node 1 releases semaphore */
+  count = 0; /* number of times node 1 releases semaphore */
   while ( FOREVER ) {
     put_dot( 'p' );
     status = rtems_semaphore_obtain(
@@ -101,8 +99,7 @@ rtems_task Test_task(
 
       puts( "*** END OF TEST 8 ***" );
       rtems_test_exit( 0 );
-    }
-    else {
+    } else {
       put_dot( 'v' );
       status = rtems_semaphore_release( Semaphore_id[ 1 ] );
       directive_failed( status, "rtems_semaphore_release FAILED!!" );

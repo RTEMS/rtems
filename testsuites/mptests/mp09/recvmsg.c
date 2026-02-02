@@ -42,24 +42,24 @@
 
 void Receive_messages()
 {
- rtems_status_code status;
- uint32_t          index;
- size_t            size;
- char              receive_buffer[16];
+  rtems_status_code status;
+  uint32_t          index;
+  size_t            size;
+  char              receive_buffer[ 16 ];
 
- for ( index=1 ; index <=3 ; index++ ) {
-   puts( "Receiving message ..." );
-   status = rtems_message_queue_receive(
-     Queue_id[ 1 ],
-     receive_buffer,
-     &size,
-     RTEMS_DEFAULT_OPTIONS,
-     RTEMS_NO_TIMEOUT
-   );
-   directive_failed( status, "rtems_message_queue_receive" );
-   puts_nocr( "Received : ");
-   puts( receive_buffer );
- }
+  for ( index = 1; index <= 3; index++ ) {
+    puts( "Receiving message ..." );
+    status = rtems_message_queue_receive(
+      Queue_id[ 1 ],
+      receive_buffer,
+      &size,
+      RTEMS_DEFAULT_OPTIONS,
+      RTEMS_NO_TIMEOUT
+    );
+    directive_failed( status, "rtems_message_queue_receive" );
+    puts_nocr( "Received : " );
+    puts( receive_buffer );
+  }
 
   puts( "Receiver delaying for a second" );
   status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );

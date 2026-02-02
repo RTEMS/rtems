@@ -46,9 +46,7 @@
 
 #include "system.h"
 
-rtems_task Test_task(
-  rtems_task_argument argument
-)
+rtems_task Test_task( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -65,7 +63,9 @@ rtems_task Test_task(
   put_name( Task_name[ task_number( tid ) ], FALSE );
   print_time( " - rtems_clock_get_tod - ", &time, "\n" );
 
-  status = rtems_task_wake_after( task_number( tid ) * 1 * rtems_clock_get_ticks_per_second() );
+  status = rtems_task_wake_after(
+    task_number( tid ) * 1 * rtems_clock_get_ticks_per_second()
+  );
   directive_failed( status, "rtems_task_wake_after" );
 
   status = rtems_clock_get_tod( &time );
@@ -73,23 +73,25 @@ rtems_task Test_task(
   put_name( Task_name[ task_number( tid ) ], FALSE );
   print_time( " - rtems_clock_get_tod - ", &time, "\n" );
 
-  if ( task_number(tid) == 1 ) {          /* TASK 1 */
+  if ( task_number( tid ) == 1 ) { /* TASK 1 */
     put_name( Task_name[ 1 ], FALSE );
     printf( " - deleting self\n" );
     rtems_task_exit();
-  }
-  else if ( task_number(tid) == 2 ) {     /* TASK 2 */
+  } else if ( task_number( tid ) == 2 ) { /* TASK 2 */
     put_name( Task_name[ 2 ], FALSE );
     printf( " - waiting to be deleted by " );
     put_name( Task_name[ 3 ], TRUE );
     while ( FOREVER );
-  }
-  else {                                  /* TASK 3 */
+  } else { /* TASK 3 */
     put_name( Task_name[ 3 ], FALSE );
     printf( " - getting TID of " );
     put_name( Task_name[ 2 ], TRUE );
     do {
-      status = rtems_task_ident( Task_name[ 2 ], RTEMS_SEARCH_ALL_NODES, &tid );
+      status = rtems_task_ident(
+        Task_name[ 2 ],
+        RTEMS_SEARCH_ALL_NODES,
+        &tid
+      );
     } while ( status != RTEMS_SUCCESSFUL );
     directive_failed( status, "rtems_task_ident" );
 
@@ -100,6 +102,6 @@ rtems_task Test_task(
     directive_failed( status, "rtems_task_delete of Task 2" );
 
     puts( "*** END OF TEST 1 ***" );
-    rtems_test_exit(0);
+    rtems_test_exit( 0 );
   }
 }

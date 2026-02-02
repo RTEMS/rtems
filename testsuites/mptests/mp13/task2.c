@@ -42,9 +42,7 @@
 
 #include "system.h"
 
-rtems_task Test_task2(
-  rtems_task_argument argument
-)
+rtems_task Test_task2( rtems_task_argument argument )
 {
   (void) argument;
 
@@ -90,7 +88,7 @@ rtems_task Test_task2(
     directive_failed( status, "rtems_semaphore_obtain" );
   }
 
-/*
+  /*
   status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() / 2 );
   directive_failed( status, "rtems_task_wake_after" );
 */
@@ -116,11 +114,7 @@ rtems_task Test_task2(
     RTEMS_DEFAULT_OPTIONS,
     2 * rtems_clock_get_ticks_per_second()
   );
-  fatal_directive_status(
-    status,
-    RTEMS_TIMEOUT,
-    "rtems_semaphore_obtain"
-  );
+  fatal_directive_status( status, RTEMS_TIMEOUT, "rtems_semaphore_obtain" );
   puts( "rtems_semaphore_obtain correctly returned RTEMS_TIMEOUT" );
 
   puts( "*** END OF TEST 13 ***" );
