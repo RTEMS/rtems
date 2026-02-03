@@ -65,14 +65,14 @@ typedef struct spi_bus spi_bus;
  *
  * This command has no argument.
  */
-#define SPI_BUS_OBTAIN _IO(SPI_IOC_MAGIC, 13)
+#define SPI_BUS_OBTAIN _IO( SPI_IOC_MAGIC, 13 )
 
 /**
  * @brief Releases the bus.
  *
  * This command has no argument.
  */
-#define SPI_BUS_RELEASE _IO(SPI_IOC_MAGIC, 23)
+#define SPI_BUS_RELEASE _IO( SPI_IOC_MAGIC, 23 )
 
 /**
  * @brief SPI bus control.
@@ -89,7 +89,11 @@ struct spi_bus {
    * @retval 0 Successful operation.
    * @retval negative Negative error number in case of an error.
    */
-  int (*transfer)(spi_bus *bus, const spi_ioc_transfer *msgs, uint32_t msg_count);
+  int ( *transfer )(
+    spi_bus                *bus,
+    const spi_ioc_transfer *msgs,
+    uint32_t                msg_count
+  );
 
   /**
    * @brief Checks if maximum speed and bits per word are in a valid range
@@ -100,14 +104,14 @@ struct spi_bus {
    * @retval 0 Successful operation.
    * @retval negative Negative error number in case of an error.
    */
-  int (*setup)(spi_bus *bus);
+  int ( *setup )( spi_bus *bus );
 
   /**
    * @brief Destroys the bus.
    *
    * @param[in] bus The bus control.
    */
-  void (*destroy)(spi_bus *bus);
+  void ( *destroy )( spi_bus *bus );
 
   /**
    * @brief Mutex to protect the bus access.
@@ -160,7 +164,7 @@ struct spi_bus {
    *
    * @param[in] bus The bus control.
    */
-  int (*ioctl)(spi_bus *bus, ioctl_command_t command, void *arg);
+  int ( *ioctl )( spi_bus *bus, ioctl_command_t command, void *arg );
 };
 
 /**
@@ -178,7 +182,7 @@ struct spi_bus {
  *
  * @see spi_bus_register()
  */
-int spi_bus_init(spi_bus *bus);
+int spi_bus_init( spi_bus *bus );
 
 /**
  * @brief Allocates a bus control from the heap and initializes it.
@@ -197,21 +201,21 @@ int spi_bus_init(spi_bus *bus);
  *
  * @see spi_bus_register()
  */
-spi_bus *spi_bus_alloc_and_init(size_t size);
+spi_bus *spi_bus_alloc_and_init( size_t size );
 
 /**
  * @brief Destroys a bus control.
  *
  * @param[in] bus The bus control.
  */
-void spi_bus_destroy(spi_bus *bus);
+void spi_bus_destroy( spi_bus *bus );
 
 /**
  * @brief Destroys a bus control and frees its memory.
  *
  * @param[in] bus The bus control.
  */
-void spi_bus_destroy_and_free(spi_bus *bus);
+void spi_bus_destroy_and_free( spi_bus *bus );
 
 /**
  * @brief Registers a bus control.
@@ -225,10 +229,7 @@ void spi_bus_destroy_and_free(spi_bus *bus);
  * @retval 0 Successful operation.
  * @retval -1 An error occurred.  The errno is set to indicate the error.
  */
-int spi_bus_register(
-  spi_bus *bus,
-  const char *bus_path
-);
+int spi_bus_register( spi_bus *bus, const char *bus_path );
 
 /** @} */
 

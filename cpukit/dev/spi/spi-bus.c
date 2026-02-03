@@ -42,17 +42,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-static void spi_bus_obtain(spi_bus *bus)
+static void spi_bus_obtain( spi_bus *bus )
 {
-  rtems_recursive_mutex_lock(&bus->mutex);
+  rtems_recursive_mutex_lock( &bus->mutex );
 }
 
-static void spi_bus_release(spi_bus *bus)
+static void spi_bus_release( spi_bus *bus )
 {
-  rtems_recursive_mutex_unlock(&bus->mutex);
+  rtems_recursive_mutex_unlock( &bus->mutex );
 }
 
-static void spi_bus_set_defaults(spi_bus *bus, spi_ioc_transfer *msg)
+static void spi_bus_set_defaults( spi_bus *bus, spi_ioc_transfer *msg )
 {
   msg->cs_change = bus->cs_change;
   msg->cs = bus->cs;
@@ -62,75 +62,65 @@ static void spi_bus_set_defaults(spi_bus *bus, spi_ioc_transfer *msg)
   msg->delay_usecs = bus->delay_usecs;
 }
 
-static ssize_t spi_bus_read(
-  rtems_libio_t *iop,
-  void *buffer,
-  size_t count
-)
+static ssize_t spi_bus_read( rtems_libio_t *iop, void *buffer, size_t count )
 {
-  spi_bus *bus = IMFS_generic_get_context_by_iop(iop);
-  spi_ioc_transfer msg = {
-    .len = count,
-    .rx_buf = buffer
-  };
-  int err;
+  spi_bus         *bus = IMFS_generic_get_context_by_iop( iop );
+  spi_ioc_transfer msg = { .len = count, .rx_buf = buffer };
+  int              err;
 
-  spi_bus_obtain(bus);
-  spi_bus_set_defaults(bus, &msg);
-  err = (*bus->transfer)(bus, &msg, 1);
-  spi_bus_release(bus);
+  spi_bus_obtain( bus );
+  spi_bus_set_defaults( bus, &msg );
+  err = ( *bus->transfer )( bus, &msg, 1 );
+  spi_bus_release( bus );
 
-  if (err == 0) {
+  if ( err == 0 ) {
     return msg.len;
   } else {
-    rtems_set_errno_and_return_minus_one(-err);
+    rtems_set_errno_and_return_minus_one( -err );
   }
 }
 
 static ssize_t spi_bus_write(
   rtems_libio_t *iop,
-  const void *buffer,
-  size_t count
+  const void    *buffer,
+  size_t         count
 )
 {
-  spi_bus *bus = IMFS_generic_get_context_by_iop(iop);
-  spi_ioc_transfer msg = {
-    .len = (uint16_t) count,
-    .tx_buf = buffer
-  };
-  int err;
+  spi_bus         *bus = IMFS_generic_get_context_by_iop( iop );
+  spi_ioc_transfer msg = { .len = (uint16_t) count, .tx_buf = buffer };
+  int              err;
 
-  spi_bus_obtain(bus);
-  spi_bus_set_defaults(bus, &msg);
-  err = (*bus->transfer)(bus, &msg, 1);
-  spi_bus_release(bus);
+  spi_bus_obtain( bus );
+  spi_bus_set_defaults( bus, &msg );
+  err = ( *bus->transfer )( bus, &msg, 1 );
+  spi_bus_release( bus );
 
-  if (err == 0) {
+  if ( err == 0 ) {
     return msg.len;
   } else {
-    rtems_set_errno_and_return_minus_one(-err);
+    rtems_set_errno_and_return_minus_one( -err );
   }
 }
 
 static int spi_bus_ioctl(
-  rtems_libio_t *iop,
+  rtems_libio_t  *iop,
   ioctl_command_t command,
-  void *arg
+  void           *arg
 )
 {
-  spi_bus *bus = IMFS_generic_get_context_by_iop(iop);
-  int err;
+  spi_bus *bus = IMFS_generic_get_context_by_iop( iop );
+  int      err;
   uint32_t previous;
 
-  spi_bus_obtain(bus);
+  spi_bus_obtain( bus );
 
-  switch (command) {
+  switch ( command ) {
     case SPI_BUS_OBTAIN:
-      spi_bus_obtain(bus);
+      spi_bus_obtain( bus );
       err = 0;
       break;
     case SPI_BUS_RELEASE:
-      spi_bus_release(bus);
+      spi_bus_release( bus );
       err = 0;
       break;
     case SPI_IOC_RD_MODE:
@@ -156,9 +146,9 @@ static int spi_bus_ioctl(
     case SPI_IOC_WR_MODE:
       previous = bus->mode;
       bus->mode = *(uint8_t *) arg;
-      err = (*bus->setup)(bus);
+      err = ( *bus->setup )( bus );
 
-      if (err != 0) {
+      if ( err != 0 ) {
         bus->mode = previous;
       }
 
@@ -166,19 +156,19 @@ static int spi_bus_ioctl(
     case SPI_IOC_WR_MODE32:
       previous = bus->mode;
       bus->mode = *(uint32_t *) arg;
-      err = (*bus->setup)(bus);
+      err = ( *bus->setup )( bus );
 
-      if (err != 0) {
+      if ( err != 0 ) {
         bus->mode = previous;
       }
 
       break;
     case SPI_IOC_WR_LSB_FIRST:
       previous = bus->lsb_first;
-      bus->lsb_first = (*(uint8_t *) arg) != 0;
-      err = (*bus->setup)(bus);
+      bus->lsb_first = ( *(uint8_t *) arg ) != 0;
+      err = ( *bus->setup )( bus );
 
-      if (err != 0) {
+      if ( err != 0 ) {
         bus->lsb_first = (bool) previous;
       }
 
@@ -186,9 +176,9 @@ static int spi_bus_ioctl(
     case SPI_IOC_WR_BITS_PER_WORD:
       previous = bus->bits_per_word;
       bus->bits_per_word = *(uint8_t *) arg;
-      err = (*bus->setup)(bus);
+      err = ( *bus->setup )( bus );
 
-      if (err != 0) {
+      if ( err != 0 ) {
         bus->bits_per_word = (uint8_t) previous;
       }
 
@@ -196,34 +186,36 @@ static int spi_bus_ioctl(
     case SPI_IOC_WR_MAX_SPEED_HZ:
       previous = bus->speed_hz;
       bus->speed_hz = *(uint32_t *) arg;
-      err = (*bus->setup)(bus);
+      err = ( *bus->setup )( bus );
 
-      if (err != 0) {
+      if ( err != 0 ) {
         bus->speed_hz = previous;
       }
 
       break;
     default:
-      if (IOCBASECMD(command) == IOCBASECMD(_IOW(SPI_IOC_MAGIC, 0, 0))) {
-        err = (*bus->transfer)(
+      if (
+        IOCBASECMD( command ) == IOCBASECMD( _IOW( SPI_IOC_MAGIC, 0, 0 ) )
+      ) {
+        err = ( *bus->transfer )(
           bus,
           arg,
-          IOCPARM_LEN(command) / sizeof(struct spi_ioc_transfer)
+          IOCPARM_LEN( command ) / sizeof( struct spi_ioc_transfer )
         );
-      } else if (bus->ioctl != NULL) {
-        err = (*bus->ioctl)(bus, command, arg);
+      } else if ( bus->ioctl != NULL ) {
+        err = ( *bus->ioctl )( bus, command, arg );
       } else {
         err = -EINVAL;
       }
       break;
   }
 
-  spi_bus_release(bus);
+  spi_bus_release( bus );
 
-  if (err == 0) {
+  if ( err == 0 ) {
     return 0;
   } else {
-    rtems_set_errno_and_return_minus_one(-err);
+    rtems_set_errno_and_return_minus_one( -err );
   }
 }
 
@@ -246,14 +238,14 @@ static const rtems_filesystem_file_handlers_r spi_bus_handler = {
   .writev_h = rtems_filesystem_default_writev
 };
 
-static void spi_bus_node_destroy(IMFS_jnode_t *node)
+static void spi_bus_node_destroy( IMFS_jnode_t *node )
 {
   spi_bus *bus;
 
-  bus = IMFS_generic_get_context_by_node(node);
-  (*bus->destroy)(bus);
+  bus = IMFS_generic_get_context_by_node( node );
+  ( *bus->destroy )( bus );
 
-  IMFS_node_destroy_default(node);
+  IMFS_node_destroy_default( node );
 }
 
 static const IMFS_node_control spi_bus_node_control = IMFS_GENERIC_INITIALIZER(
@@ -262,10 +254,7 @@ static const IMFS_node_control spi_bus_node_control = IMFS_GENERIC_INITIALIZER(
   spi_bus_node_destroy
 );
 
-int spi_bus_register(
-  spi_bus *bus,
-  const char *bus_path
-)
+int spi_bus_register( spi_bus *bus, const char *bus_path )
 {
   int rv;
 
@@ -275,17 +264,17 @@ int spi_bus_register(
     &spi_bus_node_control,
     bus
   );
-  if (rv != 0) {
-    (*bus->destroy)(bus);
+  if ( rv != 0 ) {
+    ( *bus->destroy )( bus );
   }
 
   return rv;
 }
 
 static int spi_bus_transfer_default(
-  spi_bus *bus,
+  spi_bus                *bus,
   const spi_ioc_transfer *msgs,
-  uint32_t msg_count
+  uint32_t                msg_count
 )
 {
   (void) bus;
@@ -295,21 +284,16 @@ static int spi_bus_transfer_default(
   return -EIO;
 }
 
-static int spi_bus_setup_default(
-  spi_bus *bus
-)
+static int spi_bus_setup_default( spi_bus *bus )
 {
   (void) bus;
 
   return -EIO;
 }
 
-static int spi_bus_do_init(
-  spi_bus *bus,
-  void (*destroy)(spi_bus *bus)
-)
+static int spi_bus_do_init( spi_bus *bus, void ( *destroy )( spi_bus *bus ) )
 {
-  rtems_recursive_mutex_init(&bus->mutex, "SPI Bus");
+  rtems_recursive_mutex_init( &bus->mutex, "SPI Bus" );
   bus->transfer = spi_bus_transfer_default;
   bus->setup = spi_bus_setup_default;
   bus->destroy = destroy;
@@ -319,35 +303,35 @@ static int spi_bus_do_init(
   return 0;
 }
 
-void spi_bus_destroy(spi_bus *bus)
+void spi_bus_destroy( spi_bus *bus )
 {
-  rtems_recursive_mutex_destroy(&bus->mutex);
+  rtems_recursive_mutex_destroy( &bus->mutex );
 }
 
-void spi_bus_destroy_and_free(spi_bus *bus)
+void spi_bus_destroy_and_free( spi_bus *bus )
 {
-  spi_bus_destroy(bus);
-  free(bus);
+  spi_bus_destroy( bus );
+  free( bus );
 }
 
-int spi_bus_init(spi_bus *bus)
+int spi_bus_init( spi_bus *bus )
 {
-  memset(bus, 0, sizeof(*bus));
+  memset( bus, 0, sizeof( *bus ) );
 
-  return spi_bus_do_init(bus, spi_bus_destroy);
+  return spi_bus_do_init( bus, spi_bus_destroy );
 }
 
-spi_bus *spi_bus_alloc_and_init(size_t size)
+spi_bus *spi_bus_alloc_and_init( size_t size )
 {
   spi_bus *bus = NULL;
 
-  if (size >= sizeof(*bus)) {
-    bus = calloc(1, size);
-    if (bus != NULL) {
+  if ( size >= sizeof( *bus ) ) {
+    bus = calloc( 1, size );
+    if ( bus != NULL ) {
       int rv;
 
-      rv = spi_bus_do_init(bus, spi_bus_destroy_and_free);
-      if (rv != 0) {
+      rv = spi_bus_do_init( bus, spi_bus_destroy_and_free );
+      if ( rv != 0 ) {
         return NULL;
       }
     }
