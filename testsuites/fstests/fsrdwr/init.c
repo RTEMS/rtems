@@ -56,7 +56,7 @@ static const char databuf[] =
   "4Happy days are here again.5Happy days are here again.6Happy days are here "
   "again.7Happy days are here again.";
 
-static const size_t len = sizeof( databuf ) - 1;
+static const ssize_t len = sizeof( databuf ) - 1;
 
 static void test_case_enter( const char *wd )
 {
@@ -229,10 +229,9 @@ static void truncate_test03( void )
   int         status;
   char       *name01 = "name01";
   struct stat statbuf;
-
-  char   data;
-  int    n;
-  size_t i;
+  char data;
+  int n;
+  ssize_t i;
 
   char *readbuf;
   off_t good_size = 100;
