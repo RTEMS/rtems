@@ -40,7 +40,7 @@
 
 #include <rtems/dev/io.h>
 
-int _IO_Printf( IO_Put_char put_char, void *arg, char const  *fmt, ... )
+int _IO_Printf( IO_Put_char put_char, void *arg, char const *fmt, ... )
 {
   va_list ap;
   int     len;

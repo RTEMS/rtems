@@ -79,9 +79,9 @@ typedef void ( *IO_Put_char )( int c, void *arg );
  * @return Returns the count of put characters.
  */
 int _IO_Printf(
-  IO_Put_char  put_char,
-  void        *arg,
-  char const  *fmt,
+  IO_Put_char put_char,
+  void       *arg,
+  char const *fmt,
   ...
 ) RTEMS_PRINTFLIKE( 3, 4 );
 
@@ -100,10 +100,10 @@ int _IO_Printf(
  * @return Returns the count of put characters.
  */
 int _IO_Vprintf(
-  IO_Put_char  put_char,
-  void        *arg,
-  char const  *fmt,
-  va_list      ap
+  IO_Put_char put_char,
+  void       *arg,
+  char const *fmt,
+  va_list     ap
 );
 
 /**
