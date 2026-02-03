@@ -188,7 +188,7 @@ static void foo_function()
     catch( const char *e )
     {
      printf( "foo_function() catch block called:\n   < %s  >\n", e );
-     throw "foo_function() re-throwing execption...";
+     throw "foo_function() re-throwing exception...";
     }
 }
 

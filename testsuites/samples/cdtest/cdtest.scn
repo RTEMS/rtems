@@ -26,7 +26,7 @@ Derived class - Instantiation order 5
 foo_function() catch block called:
    < foo_function() throw this exception  >
 Success catching a char * exception
-foo_function() re-throwing execption...
+foo_function() re-throwing exception...
 throw std::runtime: caught: thrown std::runtime object
 throw an instance based exception
 RtemsException raised=File:../../../../../../../rtems/c/src/../../testsuites/samples/cdtest/main.cc, Line:229, Error=55
