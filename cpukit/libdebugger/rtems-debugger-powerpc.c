@@ -519,7 +519,7 @@ static int ppc_probe_cpu_type(void)
     (sizeof(ppc_cpu_id_version_nibble) / sizeof(ppc_cpu_id_version_nibble[0]))
 
   uint32_t pvr;
-  int i;
+  size_t i;
 
   ppc_read_spr(PPC_PVR, pvr);
   pvr >>= 16;
