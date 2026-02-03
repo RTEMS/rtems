@@ -48,16 +48,16 @@
  */
 static rtems_sparse_disk *sparse_disk_allocate(
   const uint32_t          media_block_size,
-  const rtems_blkdev_bnum blocks_with_buffer )
+  const rtems_blkdev_bnum blocks_with_buffer
+)
 {
-  size_t const key_table_size = blocks_with_buffer
-                                * sizeof( rtems_sparse_disk_key );
-  size_t const data_size      = blocks_with_buffer * media_block_size;
-  size_t const alloc_size     = sizeof( rtems_sparse_disk )
-                                + key_table_size + data_size;
+  size_t const key_table_size = blocks_with_buffer *
+                                sizeof( rtems_sparse_disk_key );
+  size_t const data_size = blocks_with_buffer * media_block_size;
+  size_t const alloc_size = sizeof( rtems_sparse_disk ) + key_table_size +
+                            data_size;
 
-  rtems_sparse_disk *const sd = (rtems_sparse_disk *) malloc(
-    alloc_size );
+  rtems_sparse_disk *const sd = (rtems_sparse_disk *) malloc( alloc_size );
 
   return sd;
 }
@@ -65,42 +65,47 @@ static rtems_sparse_disk *sparse_disk_allocate(
 /*
  * Initialize sparse disk data
  */
-static rtems_status_code sparse_disk_initialize( rtems_sparse_disk *sd,
-  const uint32_t                                                    media_block_size,
-  const rtems_blkdev_bnum                                           blocks_with_buffer,
-  const rtems_sparse_disk_delete_handler                            sparse_disk_delete,
-  const uint8_t                                                     fill_pattern )
+static rtems_status_code sparse_disk_initialize(
+  rtems_sparse_disk                     *sd,
+  const uint32_t                         media_block_size,
+  const rtems_blkdev_bnum                blocks_with_buffer,
+  const rtems_sparse_disk_delete_handler sparse_disk_delete,
+  const uint8_t                          fill_pattern
+)
 {
   rtems_blkdev_bnum i;
 
-  if ( NULL == sd )
+  if ( NULL == sd ) {
     return RTEMS_INVALID_ADDRESS;
+  }
 
-  uint8_t     *data           = (uint8_t *) sd;
-  size_t const key_table_size = blocks_with_buffer
-                                * sizeof( rtems_sparse_disk_key );
-  size_t const data_size      = blocks_with_buffer * media_block_size;
+  uint8_t     *data = (uint8_t *) sd;
+  size_t const key_table_size = blocks_with_buffer *
+                                sizeof( rtems_sparse_disk_key );
+  size_t const data_size = blocks_with_buffer * media_block_size;
 
   memset( data, 0, sizeof( rtems_sparse_disk ) + key_table_size );
 
   sd->fill_pattern = fill_pattern;
-  memset( (uint8_t *) ( data + sizeof( rtems_sparse_disk ) + key_table_size ),
-          sd->fill_pattern,
-          data_size );
+  memset(
+    (uint8_t *) ( data + sizeof( rtems_sparse_disk ) + key_table_size ),
+    sd->fill_pattern,
+    data_size
+  );
 
   sd->delete_handler = sparse_disk_delete;
 
   rtems_mutex_init( &sd->mutex, "Sparse Disk" );
 
-  data                  += sizeof( rtems_sparse_disk );
+  data += sizeof( rtems_sparse_disk );
 
   sd->blocks_with_buffer = blocks_with_buffer;
-  sd->key_table          = (rtems_sparse_disk_key *) data;
+  sd->key_table = (rtems_sparse_disk_key *) data;
 
-  data                  += key_table_size;
+  data += key_table_size;
 
   for ( i = 0; i < blocks_with_buffer; ++i, data += media_block_size ) {
-    sd->key_table[i].data = data;
+    sd->key_table[ i ].data = data;
   }
 
   sd->media_block_size = media_block_size;
@@ -167,20 +172,23 @@ static int sparse_disk_read_block(
   const rtems_sparse_disk *sparse_disk,
   const rtems_blkdev_bnum  block,
   uint8_t                 *buffer,
-  const size_t             buffer_size )
+  const size_t             buffer_size
+)
 {
   size_t                 bytes_to_copy = sparse_disk->media_block_size;
   rtems_sparse_disk_key *key;
 
-  if ( buffer_size < bytes_to_copy )
+  if ( buffer_size < bytes_to_copy ) {
     bytes_to_copy = buffer_size;
+  }
 
   key = sparse_disk_find_block( sparse_disk, block );
 
-  if ( NULL != key )
+  if ( NULL != key ) {
     memcpy( buffer, key->data, bytes_to_copy );
-  else
+  } else {
     memset( buffer, sparse_disk->fill_pattern, buffer_size );
+  }
 
   return bytes_to_copy;
 }
@@ -189,15 +197,17 @@ static int sparse_disk_write_block(
   rtems_sparse_disk      *sparse_disk,
   const rtems_blkdev_bnum block,
   const uint8_t          *buffer,
-  const size_t            buffer_size )
+  const size_t            buffer_size
+)
 {
   size_t                 bytes_to_copy = sparse_disk->media_block_size;
   bool                   block_needs_writing = false;
   rtems_sparse_disk_key *key;
   size_t                 i;
 
-  if ( buffer_size < bytes_to_copy )
+  if ( buffer_size < bytes_to_copy ) {
     bytes_to_copy = buffer_size;
+  }
 
   /* we only need to write the block if it is different from the fill pattern.
    * If the read method does not find a block it will deliver the fill pattern anyway.
@@ -207,8 +217,9 @@ static int sparse_disk_write_block(
 
   if ( NULL == key ) {
     for ( i = 0; ( !block_needs_writing ) && ( i < bytes_to_copy ); ++i ) {
-      if ( buffer[i] != sparse_disk->fill_pattern )
+      if ( buffer[ i ] != sparse_disk->fill_pattern ) {
         block_needs_writing = true;
+      }
     }
 
     if ( block_needs_writing ) {
@@ -216,10 +227,11 @@ static int sparse_disk_write_block(
     }
   }
 
-  if ( NULL != key )
+  if ( NULL != key ) {
     memcpy( key->data, buffer, bytes_to_copy );
-  else if ( block_needs_writing )
+  } else if ( block_needs_writing ) {
     return -1;
+  }
 
   return bytes_to_copy;
 }
@@ -230,7 +242,8 @@ static int sparse_disk_write_block(
 static int sparse_disk_read_write(
   rtems_sparse_disk    *sparse_disk,
   rtems_blkdev_request *req,
-  const bool            read )
+  const bool            read
+)
 {
   int                     rv = 0;
   uint32_t                req_buffer;
@@ -242,40 +255,46 @@ static int sparse_disk_read_write(
 
   rtems_mutex_lock( &sparse_disk->mutex );
 
-  for ( req_buffer = 0;
-        ( 0 <= rv ) && ( req_buffer < req->bufnum );
-        ++req_buffer ) {
-    scatter_gather = &req->bufs[req_buffer];
+  for (
+    req_buffer = 0; ( 0 <= rv ) && ( req_buffer < req->bufnum ); ++req_buffer
+  ) {
+    scatter_gather = &req->bufs[ req_buffer ];
 
-    bytes_handled  = 0;
-    buff           = (uint8_t *) scatter_gather->buffer;
-    block          = scatter_gather->block;
-    buff_size      = scatter_gather->length;
+    bytes_handled = 0;
+    buff = (uint8_t *) scatter_gather->buffer;
+    block = scatter_gather->block;
+    buff_size = scatter_gather->length;
 
     while ( ( 0 <= rv ) && ( 0 < buff_size ) ) {
-      if ( read )
-        rv = sparse_disk_read_block( sparse_disk,
-                                     block,
-                                     &buff[bytes_handled],
-                                     buff_size );
-      else
-        rv = sparse_disk_write_block( sparse_disk,
-                                      block,
-                                      &buff[bytes_handled],
-                                      buff_size );
+      if ( read ) {
+        rv = sparse_disk_read_block(
+          sparse_disk,
+          block,
+          &buff[ bytes_handled ],
+          buff_size
+        );
+      } else {
+        rv = sparse_disk_write_block(
+          sparse_disk,
+          block,
+          &buff[ bytes_handled ],
+          buff_size
+        );
+      }
 
       ++block;
       bytes_handled += rv;
-      buff_size     -= rv;
+      buff_size -= rv;
     }
   }
 
   rtems_mutex_unlock( &sparse_disk->mutex );
 
-  if ( 0 > rv )
+  if ( 0 > rv ) {
     rtems_blkdev_request_done( req, RTEMS_IO_ERROR );
-  else
+  } else {
     rtems_blkdev_request_done( req, RTEMS_SUCCESSFUL );
+  }
 
   return 0;
 }
@@ -293,15 +312,20 @@ static int sparse_disk_ioctl( rtems_disk_device *dd, uint32_t req, void *argp )
     switch ( r->req ) {
       case RTEMS_BLKDEV_REQ_READ:
       case RTEMS_BLKDEV_REQ_WRITE:
-        return sparse_disk_read_write( sd, r, r->req == RTEMS_BLKDEV_REQ_READ );
+        return sparse_disk_read_write(
+          sd,
+          r,
+          r->req == RTEMS_BLKDEV_REQ_READ
+        );
       default:
         break;
     }
   } else if ( RTEMS_BLKIO_DELETED == req ) {
     rtems_mutex_destroy( &sd->mutex );
 
-    if ( NULL != sd->delete_handler )
+    if ( NULL != sd->delete_handler ) {
       ( *sd->delete_handler )( sd );
+    }
 
     return 0;
   } else {
@@ -322,9 +346,10 @@ rtems_status_code rtems_sparse_disk_create_and_register(
   uint32_t          media_block_size,
   rtems_blkdev_bnum blocks_with_buffer,
   rtems_blkdev_bnum media_block_count,
-  uint8_t           fill_pattern )
+  uint8_t           fill_pattern
+)
 {
-  rtems_status_code  sc          = RTEMS_SUCCESSFUL;
+  rtems_status_code  sc = RTEMS_SUCCESSFUL;
   rtems_sparse_disk *sparse_disk = sparse_disk_allocate(
     media_block_size,
     blocks_with_buffer
@@ -354,7 +379,8 @@ rtems_status_code rtems_sparse_disk_register(
   rtems_blkdev_bnum                blocks_with_buffer,
   rtems_blkdev_bnum                media_block_count,
   uint8_t                          fill_pattern,
-  rtems_sparse_disk_delete_handler sparse_disk_delete )
+  rtems_sparse_disk_delete_handler sparse_disk_delete
+)
 {
   rtems_status_code sc;
 

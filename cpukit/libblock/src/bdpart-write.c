@@ -48,35 +48,35 @@ static void rtems_bdpart_write_mbr_partition(
   uint8_t *data,
   uint32_t begin,
   uint32_t size,
-  uint8_t type,
-  uint8_t flags
+  uint8_t  type,
+  uint8_t  flags
 )
 {
-  rtems_uint32_to_little_endian( begin, data + RTEMS_BDPART_MBR_OFFSET_BEGIN);
-  rtems_uint32_to_little_endian( size, data + RTEMS_BDPART_MBR_OFFSET_SIZE);
-  data [RTEMS_BDPART_MBR_OFFSET_TYPE] = type;
-  data [RTEMS_BDPART_MBR_OFFSET_FLAGS] = flags;
+  rtems_uint32_to_little_endian( begin, data + RTEMS_BDPART_MBR_OFFSET_BEGIN );
+  rtems_uint32_to_little_endian( size, data + RTEMS_BDPART_MBR_OFFSET_SIZE );
+  data[ RTEMS_BDPART_MBR_OFFSET_TYPE ] = type;
+  data[ RTEMS_BDPART_MBR_OFFSET_FLAGS ] = flags;
 }
 
 static rtems_status_code rtems_bdpart_new_record(
-  rtems_disk_device *dd,
-  rtems_blkdev_bnum index,
+  rtems_disk_device   *dd,
+  rtems_blkdev_bnum    index,
   rtems_bdbuf_buffer **block
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
   /* Synchronize previous block if necessary */
-  if (*block != NULL) {
-    sc = rtems_bdbuf_sync( *block);
-    if (sc != RTEMS_SUCCESSFUL) {
+  if ( *block != NULL ) {
+    sc = rtems_bdbuf_sync( *block );
+    if ( sc != RTEMS_SUCCESSFUL ) {
       return sc;
     }
   }
 
   /* Read the new record block (this accounts for disk block sizes > 512) */
-  sc = rtems_bdbuf_read( dd, index, block);
-  if (sc != RTEMS_SUCCESSFUL) {
+  sc = rtems_bdbuf_read( dd, index, block );
+  if ( sc != RTEMS_SUCCESSFUL ) {
     return sc;
   }
 
@@ -86,86 +86,87 @@ static rtems_status_code rtems_bdpart_new_record(
   }
 
   /* Clear record */
-  memset( (*block)->buffer, 0, RTEMS_BDPART_BLOCK_SIZE);
+  memset( ( *block )->buffer, 0, RTEMS_BDPART_BLOCK_SIZE );
 
   /* Write signature */
-  (*block)->buffer [RTEMS_BDPART_MBR_OFFSET_SIGNATURE_0] =
+  ( *block )->buffer[ RTEMS_BDPART_MBR_OFFSET_SIGNATURE_0 ] =
     RTEMS_BDPART_MBR_SIGNATURE_0;
-  (*block)->buffer [RTEMS_BDPART_MBR_OFFSET_SIGNATURE_1] =
+  ( *block )->buffer[ RTEMS_BDPART_MBR_OFFSET_SIGNATURE_1 ] =
     RTEMS_BDPART_MBR_SIGNATURE_1;
 
   return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code rtems_bdpart_write(
-  const char *disk_name,
-  const rtems_bdpart_format *format,
+  const char                   *disk_name,
+  const rtems_bdpart_format    *format,
   const rtems_bdpart_partition *pt,
-  size_t count
+  size_t                        count
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_status_code esc = RTEMS_SUCCESSFUL;
-  bool dos_compatibility = format != NULL
-    && format->type == RTEMS_BDPART_FORMAT_MBR
-    && format->mbr.dos_compatibility;
+  bool dos_compatibility = format != NULL &&
+                           format->type == RTEMS_BDPART_FORMAT_MBR &&
+                           format->mbr.dos_compatibility;
   rtems_bdbuf_buffer *block = NULL;
-  rtems_blkdev_bnum disk_end = 0;
-  rtems_blkdev_bnum record_space =
-    dos_compatibility ? RTEMS_BDPART_MBR_CYLINDER_SIZE : 1;
-  size_t ppc = 0; /* Primary partition count */
-  size_t i = 0;
-  uint8_t *data = NULL;
-  int fd = -1;
-  rtems_disk_device *dd = NULL;
+  rtems_blkdev_bnum   disk_end = 0;
+  rtems_blkdev_bnum   record_space = dos_compatibility
+                                       ? RTEMS_BDPART_MBR_CYLINDER_SIZE
+                                       : 1;
+  size_t              ppc = 0; /* Primary partition count */
+  size_t              i = 0;
+  uint8_t            *data = NULL;
+  int                 fd = -1;
+  rtems_disk_device  *dd = NULL;
 
   /* Check if we have something to do */
-  if (count == 0) {
+  if ( count == 0 ) {
     /* Nothing to do */
     return RTEMS_SUCCESSFUL;
   }
 
   /* Check parameter */
-  if (format == NULL || pt == NULL) {
+  if ( format == NULL || pt == NULL ) {
     return RTEMS_INVALID_ADDRESS;
   }
 
   /* Get disk data */
-  sc = rtems_bdpart_get_disk_data( disk_name, &fd, &dd, &disk_end);
-  if (sc != RTEMS_SUCCESSFUL) {
+  sc = rtems_bdpart_get_disk_data( disk_name, &fd, &dd, &disk_end );
+  if ( sc != RTEMS_SUCCESSFUL ) {
     return sc;
   }
 
   /* Align end of disk on cylinder boundary if necessary */
-  if (dos_compatibility) {
-    disk_end -= (disk_end % record_space);
+  if ( dos_compatibility ) {
+    disk_end -= ( disk_end % record_space );
   }
 
   /* Check that we have a consistent partition table */
-  for (i = 0; i < count; ++i) {
+  for ( i = 0; i < count; ++i ) {
     const rtems_bdpart_partition *p = pt + i;
 
     /* Check that begin and end are proper within the disk */
-    if (p->begin >= disk_end || p->end > disk_end) {
+    if ( p->begin >= disk_end || p->end > disk_end ) {
       esc = RTEMS_INVALID_NUMBER;
       goto cleanup;
     }
 
     /* Check that begin and end are valid */
-    if (p->begin >= p->end) {
+    if ( p->begin >= p->end ) {
       esc = RTEMS_INVALID_NUMBER;
       goto cleanup;
     }
 
     /* Check that partitions do not overlap */
-    if (i > 0 && pt [i - 1].end > p->begin) {
+    if ( i > 0 && pt[ i - 1 ].end > p->begin ) {
       esc = RTEMS_INVALID_NUMBER;
       goto cleanup;
     }
   }
 
   /* Check format */
-  if (format->type != RTEMS_BDPART_FORMAT_MBR) {
+  if ( format->type != RTEMS_BDPART_FORMAT_MBR ) {
     esc = RTEMS_NOT_IMPLEMENTED;
     goto cleanup;
   }
@@ -182,7 +183,7 @@ rtems_status_code rtems_bdpart_write(
    * Check that the first primary partition starts at head one and sector one
    * under the virtual one head and 63 sectors geometry if necessary.
    */
-  if (dos_compatibility && pt [0].begin != RTEMS_BDPART_MBR_CYLINDER_SIZE) {
+  if ( dos_compatibility && pt[ 0 ].begin != RTEMS_BDPART_MBR_CYLINDER_SIZE ) {
     esc = RTEMS_INVALID_NUMBER;
     goto cleanup;
   }
@@ -196,27 +197,27 @@ rtems_status_code rtems_bdpart_write(
    * compatibility resides between the partitions.  So there have to be gaps of
    * the appropriate size between the partitions.
    */
-  for (i = ppc; i < count; ++i) {
-    if ((pt [i].begin - pt [i - 1].end) < record_space) {
+  for ( i = ppc; i < count; ++i ) {
+    if ( ( pt[ i ].begin - pt[ i - 1 ].end ) < record_space ) {
       esc = RTEMS_INVALID_NUMBER;
       goto cleanup;
     }
   }
 
   /* Check that we can convert the parition descriptions to the MBR format */
-  for (i = 0; i < count; ++i) {
+  for ( i = 0; i < count; ++i ) {
     uint8_t type = 0;
 
     const rtems_bdpart_partition *p = pt + i;
 
     /* Check type */
-    if (!rtems_bdpart_to_mbr_partition_type( p->type, &type)) {
-      esc =  RTEMS_INVALID_ID;
+    if ( !rtems_bdpart_to_mbr_partition_type( p->type, &type ) ) {
+      esc = RTEMS_INVALID_ID;
       goto cleanup;
     }
 
     /* Check flags */
-    if (p->flags > 0xffU) {
+    if ( p->flags > 0xffU ) {
       esc = RTEMS_INVALID_ID;
       goto cleanup;
     }
@@ -226,8 +227,8 @@ rtems_status_code rtems_bdpart_write(
   }
 
   /* New MBR */
-  sc = rtems_bdpart_new_record( dd, 0, &block);
-  if (sc != RTEMS_SUCCESSFUL) {
+  sc = rtems_bdpart_new_record( dd, 0, &block );
+  if ( sc != RTEMS_SUCCESSFUL ) {
     esc = sc;
     goto cleanup;
   }
@@ -240,7 +241,7 @@ rtems_status_code rtems_bdpart_write(
 
   /* Write primary partition table */
   data = block->buffer + RTEMS_BDPART_MBR_OFFSET_TABLE_0;
-  for (i = 0; i < ppc; ++i) {
+  for ( i = 0; i < ppc; ++i ) {
     const rtems_bdpart_partition *p = pt + i;
 
     /* Write partition entry */
@@ -248,7 +249,7 @@ rtems_status_code rtems_bdpart_write(
       data,
       p->begin,
       p->end - p->begin,
-      rtems_bdpart_mbr_partition_type( p->type),
+      rtems_bdpart_mbr_partition_type( p->type ),
       (uint8_t) p->flags
     );
 
@@ -256,11 +257,11 @@ rtems_status_code rtems_bdpart_write(
   }
 
   /* Write extended partition with logical partitions if necessary */
-  if (ppc != count) {
+  if ( ppc != count ) {
     rtems_blkdev_bnum ebr = 0; /* Extended boot record block index */
 
     /* Begin of extended partition */
-    rtems_blkdev_bnum ep_begin = pt [ppc].begin - record_space;
+    rtems_blkdev_bnum ep_begin = pt[ ppc ].begin - record_space;
 
     /* Write extended partition */
     rtems_bdpart_write_mbr_partition(
@@ -272,11 +273,11 @@ rtems_status_code rtems_bdpart_write(
     );
 
     /* Write logical partitions */
-    for (i = ppc; i < count; ++i) {
+    for ( i = ppc; i < count; ++i ) {
       const rtems_bdpart_partition *p = pt + i;
 
       /* Write second partition entry */
-      if (i > ppc) {
+      if ( i > ppc ) {
         rtems_blkdev_bnum begin = p->begin - record_space;
 
         rtems_bdpart_write_mbr_partition(
@@ -290,8 +291,8 @@ rtems_status_code rtems_bdpart_write(
 
       /* New EBR */
       ebr = p->begin - record_space;
-      sc = rtems_bdpart_new_record( dd, ebr, &block);
-      if (sc != RTEMS_SUCCESSFUL) {
+      sc = rtems_bdpart_new_record( dd, ebr, &block );
+      if ( sc != RTEMS_SUCCESSFUL ) {
         esc = sc;
         goto cleanup;
       }
@@ -301,7 +302,7 @@ rtems_status_code rtems_bdpart_write(
         block->buffer + RTEMS_BDPART_MBR_OFFSET_TABLE_0,
         record_space,
         p->end - p->begin,
-        rtems_bdpart_mbr_partition_type( p->type),
+        rtems_bdpart_mbr_partition_type( p->type ),
         (uint8_t) p->flags
       );
     }
@@ -309,12 +310,12 @@ rtems_status_code rtems_bdpart_write(
 
 cleanup:
 
-  if (fd >= 0) {
-    close( fd);
+  if ( fd >= 0 ) {
+    close( fd );
   }
 
-  if (block != NULL) {
-    rtems_bdbuf_sync( block);
+  if ( block != NULL ) {
+    rtems_bdbuf_sync( block );
   }
 
   return esc;

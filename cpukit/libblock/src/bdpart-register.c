@@ -45,14 +45,16 @@
 #include <rtems.h>
 #include <rtems/bdpart.h>
 
-static char *create_logical_disk_name( const char *disk_name, char **marker)
+static char *create_logical_disk_name( const char *disk_name, char **marker )
 {
-  size_t disk_name_size = strlen( disk_name);
-  char *logical_disk_name = malloc( disk_name_size + RTEMS_BDPART_NUMBER_SIZE);
+  size_t disk_name_size = strlen( disk_name );
+  char  *logical_disk_name = malloc(
+    disk_name_size + RTEMS_BDPART_NUMBER_SIZE
+  );
 
-  if (logical_disk_name != NULL) {
+  if ( logical_disk_name != NULL ) {
     /* The string is NUL terminated by (A) ... */
-    memcpy( logical_disk_name, disk_name, disk_name_size);
+    memcpy( logical_disk_name, disk_name, disk_name_size );
     *marker = logical_disk_name + disk_name_size;
   }
 
@@ -60,16 +62,16 @@ static char *create_logical_disk_name( const char *disk_name, char **marker)
 }
 
 static rtems_status_code update_logical_disk_name(
-  char *logical_disk_marker,
+  char  *logical_disk_marker,
   size_t i
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  int rv = 0;
+  int               rv = 0;
 
   /* ... (A) */
-  rv = snprintf( logical_disk_marker, RTEMS_BDPART_NUMBER_SIZE, "%zu", i + 1);
-  if (rv >= RTEMS_BDPART_NUMBER_SIZE) {
+  rv = snprintf( logical_disk_marker, RTEMS_BDPART_NUMBER_SIZE, "%zu", i + 1 );
+  if ( rv >= RTEMS_BDPART_NUMBER_SIZE ) {
     sc = RTEMS_INVALID_NAME;
   }
 
@@ -77,23 +79,23 @@ static rtems_status_code update_logical_disk_name(
 }
 
 rtems_status_code rtems_bdpart_register(
-  const char *disk_name,
+  const char                   *disk_name,
   const rtems_bdpart_partition *pt,
-  size_t count
+  size_t                        count
 )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-  rtems_status_code esc = RTEMS_SUCCESSFUL;
-  rtems_blkdev_bnum disk_end = 0;
-  char *logical_disk_name = NULL;
-  char *logical_disk_marker = NULL;
-  size_t i = 0;
-  int fd = -1;
+  rtems_status_code  sc = RTEMS_SUCCESSFUL;
+  rtems_status_code  esc = RTEMS_SUCCESSFUL;
+  rtems_blkdev_bnum  disk_end = 0;
+  char              *logical_disk_name = NULL;
+  char              *logical_disk_marker = NULL;
+  size_t             i = 0;
+  int                fd = -1;
   rtems_disk_device *dd = NULL;
 
   /* Get disk data */
-  sc = rtems_bdpart_get_disk_data( disk_name, &fd, &dd, &disk_end);
-  if (sc != RTEMS_SUCCESSFUL) {
+  sc = rtems_bdpart_get_disk_data( disk_name, &fd, &dd, &disk_end );
+  if ( sc != RTEMS_SUCCESSFUL ) {
     return sc;
   }
 
@@ -102,18 +104,18 @@ rtems_status_code rtems_bdpart_register(
     disk_name,
     &logical_disk_marker
   );
-  if (logical_disk_name == NULL) {
+  if ( logical_disk_name == NULL ) {
     esc = sc;
     goto cleanup;
   }
 
   /* Create a logical disk for each partition */
-  for (i = 0; i < count; ++i) {
+  for ( i = 0; i < count; ++i ) {
     const rtems_bdpart_partition *p = pt + i;
 
     /* Set partition number for logical disk name */
-    sc = update_logical_disk_name( logical_disk_marker, i);
-    if (sc != RTEMS_SUCCESSFUL) {
+    sc = update_logical_disk_name( logical_disk_marker, i );
+    if ( sc != RTEMS_SUCCESSFUL ) {
       esc = sc;
       goto cleanup;
     }
@@ -125,7 +127,7 @@ rtems_status_code rtems_bdpart_register(
       p->begin,
       p->end - p->begin
     );
-    if (sc != RTEMS_SUCCESSFUL) {
+    if ( sc != RTEMS_SUCCESSFUL ) {
       esc = sc;
       goto cleanup;
     }
@@ -133,47 +135,47 @@ rtems_status_code rtems_bdpart_register(
 
 cleanup:
 
-  free( logical_disk_name);
-  close( fd);
+  free( logical_disk_name );
+  close( fd );
 
   return esc;
 }
 
-rtems_status_code rtems_bdpart_register_from_disk( const char *disk_name)
+rtems_status_code rtems_bdpart_register_from_disk( const char *disk_name )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-  rtems_bdpart_format format;
-  rtems_bdpart_partition pt [RTEMS_BDPART_PARTITION_NUMBER_HINT];
-  size_t count = RTEMS_BDPART_PARTITION_NUMBER_HINT;
+  rtems_status_code      sc = RTEMS_SUCCESSFUL;
+  rtems_bdpart_format    format;
+  rtems_bdpart_partition pt[ RTEMS_BDPART_PARTITION_NUMBER_HINT ];
+  size_t                 count = RTEMS_BDPART_PARTITION_NUMBER_HINT;
 
   /* Read partitions */
-  sc = rtems_bdpart_read( disk_name, &format, pt, &count);
-  if (sc != RTEMS_SUCCESSFUL) {
+  sc = rtems_bdpart_read( disk_name, &format, pt, &count );
+  if ( sc != RTEMS_SUCCESSFUL ) {
     return sc;
   }
 
   /* Register partitions */
-  return rtems_bdpart_register( disk_name, pt, count);
+  return rtems_bdpart_register( disk_name, pt, count );
 }
 
 rtems_status_code rtems_bdpart_unregister(
-  const char *disk_name,
+  const char                      *disk_name,
   const rtems_bdpart_partition *pt RTEMS_UNUSED,
-  size_t count
+  size_t                           count
 )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-  rtems_status_code esc = RTEMS_SUCCESSFUL;
-  rtems_blkdev_bnum disk_end = 0;
-  char *logical_disk_name = NULL;
-  char *logical_disk_marker = NULL;
-  size_t i = 0;
-  int fd = -1;
+  rtems_status_code  sc = RTEMS_SUCCESSFUL;
+  rtems_status_code  esc = RTEMS_SUCCESSFUL;
+  rtems_blkdev_bnum  disk_end = 0;
+  char              *logical_disk_name = NULL;
+  char              *logical_disk_marker = NULL;
+  size_t             i = 0;
+  int                fd = -1;
   rtems_disk_device *dd = NULL;
 
   /* Get disk data */
-  sc = rtems_bdpart_get_disk_data( disk_name, &fd, &dd, &disk_end);
-  if (sc != RTEMS_SUCCESSFUL) {
+  sc = rtems_bdpart_get_disk_data( disk_name, &fd, &dd, &disk_end );
+  if ( sc != RTEMS_SUCCESSFUL ) {
     return sc;
   }
 
@@ -182,25 +184,25 @@ rtems_status_code rtems_bdpart_unregister(
     disk_name,
     &logical_disk_marker
   );
-  if (logical_disk_name == NULL) {
+  if ( logical_disk_name == NULL ) {
     esc = sc;
     goto cleanup;
   }
 
   /* Delete the logical disk for each partition */
-  for (i = 0; i < count; ++i) {
+  for ( i = 0; i < count; ++i ) {
     int rv = 0;
 
     /* Set partition number for logical disk name */
-    sc = update_logical_disk_name( logical_disk_marker, i);
-    if (sc != RTEMS_SUCCESSFUL) {
+    sc = update_logical_disk_name( logical_disk_marker, i );
+    if ( sc != RTEMS_SUCCESSFUL ) {
       esc = sc;
       goto cleanup;
     }
 
     /* Delete logical disk */
-    rv = unlink( logical_disk_name);
-    if (rv != 0) {
+    rv = unlink( logical_disk_name );
+    if ( rv != 0 ) {
       esc = sc;
       goto cleanup;
     }
@@ -212,9 +214,9 @@ cleanup:
    * When we get here, logical_disk_name is guaranteed to be non-NULL
    * but fd may be -1. Coverity flagged passing a bad value to close().
    */
-  free( logical_disk_name);
-  if (fd >= 0) {
-    close( fd);
+  free( logical_disk_name );
+  if ( fd >= 0 ) {
+    close( fd );
   }
 
   return esc;

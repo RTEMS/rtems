@@ -47,21 +47,21 @@ typedef uint32_t rtems_blkdev_bnum;
 /**
  * @brief Block device IO control handler type.
  */
-typedef int (*rtems_block_device_ioctl)(
+typedef int ( *rtems_block_device_ioctl )(
   rtems_disk_device *dd,
-  uint32_t req,
-  void *argp
+  uint32_t           req,
+  void              *argp
 );
 
 /**
  * @brief Trigger value to disable further read-ahead requests.
  */
-#define RTEMS_DISK_READ_AHEAD_NO_TRIGGER ((rtems_blkdev_bnum) -1)
+#define RTEMS_DISK_READ_AHEAD_NO_TRIGGER ( ( rtems_blkdev_bnum ) - 1 )
 
 /**
  * @brief Size value to set number of blocks based on config and disk size.
  */
-#define RTEMS_DISK_READ_AHEAD_SIZE_AUTO (0)
+#define RTEMS_DISK_READ_AHEAD_SIZE_AUTO ( 0 )
 
 /**
  * @brief Block device read-ahead control.
@@ -306,24 +306,20 @@ RTEMS_DEPRECATED static inline dev_t rtems_disk_get_device_identifier(
 }
 
 /* Use fstat() instead */
-RTEMS_DEPRECATED static inline rtems_device_major_number rtems_disk_get_major_number(
-  const rtems_disk_device *dd
-)
+RTEMS_DEPRECATED static inline rtems_device_major_number
+rtems_disk_get_major_number( const rtems_disk_device *dd )
 {
-  return rtems_filesystem_dev_major_t(dd->dev);
+  return rtems_filesystem_dev_major_t( dd->dev );
 }
 
 /* Use fstat() instead */
-RTEMS_DEPRECATED static inline rtems_device_minor_number rtems_disk_get_minor_number(
-  const rtems_disk_device *dd
-)
+RTEMS_DEPRECATED static inline rtems_device_minor_number
+rtems_disk_get_minor_number( const rtems_disk_device *dd )
 {
-  return rtems_filesystem_dev_minor_t(dd->dev);
+  return rtems_filesystem_dev_minor_t( dd->dev );
 }
 
-static inline void *rtems_disk_get_driver_data(
-  const rtems_disk_device *dd
-)
+static inline void *rtems_disk_get_driver_data( const rtems_disk_device *dd )
 {
   return dd->driver_data;
 }
@@ -335,9 +331,7 @@ static inline uint32_t rtems_disk_get_media_block_size(
   return dd->media_block_size;
 }
 
-static inline uint32_t rtems_disk_get_block_size(
-  const rtems_disk_device *dd
-)
+static inline uint32_t rtems_disk_get_block_size( const rtems_disk_device *dd )
 {
   return dd->block_size;
 }
@@ -365,40 +359,40 @@ static inline rtems_blkdev_bnum rtems_disk_get_block_count(
 
 /* Use rtems_blkdev_create() instead */
 RTEMS_DEPRECATED rtems_status_code rtems_disk_create_phys(
-  dev_t dev,
-  uint32_t block_size,
-  rtems_blkdev_bnum block_count,
+  dev_t                    dev,
+  uint32_t                 block_size,
+  rtems_blkdev_bnum        block_count,
   rtems_block_device_ioctl handler,
-  void *driver_data,
-  const char *name
+  void                    *driver_data,
+  const char              *name
 );
 
 /* Use rtems_blkdev_create_partition() instead */
 RTEMS_DEPRECATED rtems_status_code rtems_disk_create_log(
-  dev_t dev,
-  dev_t phys,
+  dev_t             dev,
+  dev_t             phys,
   rtems_blkdev_bnum block_begin,
   rtems_blkdev_bnum block_count,
-  const char *name
+  const char       *name
 );
 
 /*
  * Use rtems_blkdev_create() or rtems_blkdev_create_partition and unlink()
  * instead.
  */
-RTEMS_DEPRECATED rtems_status_code rtems_disk_delete(dev_t dev);
+RTEMS_DEPRECATED rtems_status_code rtems_disk_delete( dev_t dev );
 
 /*
  * Use rtems_blkdev_create() or rtems_blkdev_create_partition and open()
  * instead.
  */
-RTEMS_DEPRECATED rtems_disk_device *rtems_disk_obtain(dev_t dev);
+RTEMS_DEPRECATED rtems_disk_device *rtems_disk_obtain( dev_t dev );
 
 /*
  * Use rtems_blkdev_create() or rtems_blkdev_create_partition and close()
  * instead.
  */
-RTEMS_DEPRECATED rtems_status_code rtems_disk_release(rtems_disk_device *dd);
+RTEMS_DEPRECATED rtems_status_code rtems_disk_release( rtems_disk_device *dd );
 
 /** @} */
 
@@ -408,10 +402,10 @@ RTEMS_DEPRECATED rtems_status_code rtems_disk_release(rtems_disk_device *dd);
 /**@{**/
 
 /* Just remove calls to this function */
-RTEMS_DEPRECATED rtems_status_code rtems_disk_io_initialize(void);
+RTEMS_DEPRECATED rtems_status_code rtems_disk_io_initialize( void );
 
 /* Just remove calls to this function */
-RTEMS_DEPRECATED rtems_status_code rtems_disk_io_done(void);
+RTEMS_DEPRECATED rtems_status_code rtems_disk_io_done( void );
 
 /** @} */
 
@@ -421,23 +415,23 @@ RTEMS_DEPRECATED rtems_status_code rtems_disk_io_done(void);
  * This functionality no longer available.  There is no global registration for
  * disk devices.
  */
-RTEMS_DEPRECATED rtems_disk_device *rtems_disk_next(dev_t dev);
+RTEMS_DEPRECATED rtems_disk_device *rtems_disk_next( dev_t dev );
 
 /* Internal function, do not use */
 rtems_status_code rtems_disk_init_phys(
-  rtems_disk_device *dd,
-  uint32_t block_size,
-  rtems_blkdev_bnum block_count,
+  rtems_disk_device       *dd,
+  uint32_t                 block_size,
+  rtems_blkdev_bnum        block_count,
   rtems_block_device_ioctl handler,
-  void *driver_data
+  void                    *driver_data
 );
 
 /* Internal function, do not use */
 rtems_status_code rtems_disk_init_log(
   rtems_disk_device *dd,
   rtems_disk_device *phys_dd,
-  rtems_blkdev_bnum block_begin,
-  rtems_blkdev_bnum block_count
+  rtems_blkdev_bnum  block_begin,
+  rtems_blkdev_bnum  block_count
 );
 
 #ifdef __cplusplus

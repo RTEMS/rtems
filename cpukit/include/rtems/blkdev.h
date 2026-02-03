@@ -47,9 +47,9 @@ extern "C" {
  *          to avoid requests looping for ever.
  */
 typedef enum rtems_blkdev_request_op {
-  RTEMS_BLKDEV_REQ_READ,       /**< Read the requested blocks of data. */
-  RTEMS_BLKDEV_REQ_WRITE,      /**< Write the requested blocks of data. */
-  RTEMS_BLKDEV_REQ_SYNC        /**< Sync any data with the media. */
+  RTEMS_BLKDEV_REQ_READ,  /**< Read the requested blocks of data. */
+  RTEMS_BLKDEV_REQ_WRITE, /**< Write the requested blocks of data. */
+  RTEMS_BLKDEV_REQ_SYNC   /**< Sync any data with the media. */
 } rtems_blkdev_request_op;
 
 struct rtems_blkdev_request;
@@ -57,9 +57,9 @@ struct rtems_blkdev_request;
 /**
  * @brief Block device request done callback function type.
  */
-typedef void (*rtems_blkdev_request_cb)(
+typedef void ( *rtems_blkdev_request_cb )(
   struct rtems_blkdev_request *req,
-  rtems_status_code status
+  rtems_status_code            status
 );
 
 /**
@@ -142,7 +142,7 @@ typedef struct rtems_blkdev_request {
   /**
    * List of scatter or gather buffers.
    */
-  rtems_blkdev_sg_buffer bufs[RTEMS_ZERO_LENGTH_ARRAY];
+  rtems_blkdev_sg_buffer bufs[ RTEMS_ZERO_LENGTH_ARRAY ];
 } rtems_blkdev_request;
 
 /**
@@ -158,10 +158,10 @@ typedef struct rtems_blkdev_request {
  */
 static inline void rtems_blkdev_request_done(
   rtems_blkdev_request *req,
-  rtems_status_code status
+  rtems_status_code     status
 )
 {
-  (*req->done)(req, status);
+  ( *req->done )( req, status );
 }
 
 /**
@@ -170,83 +170,83 @@ static inline void rtems_blkdev_request_done(
  * Only valid if the driver has returned the
  * @ref RTEMS_BLKDEV_CAP_MULTISECTOR_CONT capability.
  */
-#define RTEMS_BLKDEV_START_BLOCK(req) (req->bufs[0].block)
+#define RTEMS_BLKDEV_START_BLOCK( req ) ( req->bufs[ 0 ].block )
 
 /**
  * @name IO Control Request Codes
  */
 /**@{**/
 
-#define RTEMS_BLKIO_REQUEST         _IOWR('B', 1, rtems_blkdev_request)
-#define RTEMS_BLKIO_GETMEDIABLKSIZE _IOR('B', 2, uint32_t)
-#define RTEMS_BLKIO_GETBLKSIZE      _IOR('B', 3, uint32_t)
-#define RTEMS_BLKIO_SETBLKSIZE      _IOW('B', 4, uint32_t)
-#define RTEMS_BLKIO_GETSIZE         _IOR('B', 5, rtems_blkdev_bnum)
-#define RTEMS_BLKIO_SYNCDEV         _IO('B', 6)
-#define RTEMS_BLKIO_DELETED         _IO('B', 7)
-#define RTEMS_BLKIO_CAPABILITIES    _IO('B', 8)
-#define RTEMS_BLKIO_GETDISKDEV      _IOR('B', 9, rtems_disk_device *)
-#define RTEMS_BLKIO_PURGEDEV        _IO('B', 10)
-#define RTEMS_BLKIO_GETDEVSTATS     _IOR('B', 11, rtems_blkdev_stats *)
-#define RTEMS_BLKIO_RESETDEVSTATS   _IO('B', 12)
+#define RTEMS_BLKIO_REQUEST         _IOWR( 'B', 1, rtems_blkdev_request )
+#define RTEMS_BLKIO_GETMEDIABLKSIZE _IOR( 'B', 2, uint32_t )
+#define RTEMS_BLKIO_GETBLKSIZE      _IOR( 'B', 3, uint32_t )
+#define RTEMS_BLKIO_SETBLKSIZE      _IOW( 'B', 4, uint32_t )
+#define RTEMS_BLKIO_GETSIZE         _IOR( 'B', 5, rtems_blkdev_bnum )
+#define RTEMS_BLKIO_SYNCDEV         _IO( 'B', 6 )
+#define RTEMS_BLKIO_DELETED         _IO( 'B', 7 )
+#define RTEMS_BLKIO_CAPABILITIES    _IO( 'B', 8 )
+#define RTEMS_BLKIO_GETDISKDEV      _IOR( 'B', 9, rtems_disk_device * )
+#define RTEMS_BLKIO_PURGEDEV        _IO( 'B', 10 )
+#define RTEMS_BLKIO_GETDEVSTATS     _IOR( 'B', 11, rtems_blkdev_stats * )
+#define RTEMS_BLKIO_RESETDEVSTATS   _IO( 'B', 12 )
 
 /** @} */
 
 static inline int rtems_disk_fd_get_media_block_size(
-  int fd,
+  int       fd,
   uint32_t *media_block_size
 )
 {
-  return ioctl(fd, RTEMS_BLKIO_GETMEDIABLKSIZE, media_block_size);
+  return ioctl( fd, RTEMS_BLKIO_GETMEDIABLKSIZE, media_block_size );
 }
 
-static inline int rtems_disk_fd_get_block_size(int fd, uint32_t *block_size)
+static inline int rtems_disk_fd_get_block_size( int fd, uint32_t *block_size )
 {
-  return ioctl(fd, RTEMS_BLKIO_GETBLKSIZE, block_size);
+  return ioctl( fd, RTEMS_BLKIO_GETBLKSIZE, block_size );
 }
 
-static inline int rtems_disk_fd_set_block_size(int fd, uint32_t block_size)
+static inline int rtems_disk_fd_set_block_size( int fd, uint32_t block_size )
 {
-  return ioctl(fd, RTEMS_BLKIO_SETBLKSIZE, &block_size);
+  return ioctl( fd, RTEMS_BLKIO_SETBLKSIZE, &block_size );
 }
 
 static inline int rtems_disk_fd_get_block_count(
-  int fd,
+  int                fd,
   rtems_blkdev_bnum *block_count
 )
 {
-  return ioctl(fd, RTEMS_BLKIO_GETSIZE, block_count);
+  return ioctl( fd, RTEMS_BLKIO_GETSIZE, block_count );
 }
 
 static inline int rtems_disk_fd_get_disk_device(
-  int fd,
+  int                 fd,
   rtems_disk_device **dd_ptr
 )
 {
-  return ioctl(fd, RTEMS_BLKIO_GETDISKDEV, dd_ptr);
+  return ioctl( fd, RTEMS_BLKIO_GETDISKDEV, dd_ptr );
 }
 
-static inline int rtems_disk_fd_sync(int fd)
+static inline int rtems_disk_fd_sync( int fd )
 {
-  return ioctl(fd, RTEMS_BLKIO_SYNCDEV);
+  return ioctl( fd, RTEMS_BLKIO_SYNCDEV );
 }
 
-static inline int rtems_disk_fd_purge(int fd)
+static inline int rtems_disk_fd_purge( int fd )
 {
-  return ioctl(fd, RTEMS_BLKIO_PURGEDEV);
+  return ioctl( fd, RTEMS_BLKIO_PURGEDEV );
 }
 
 static inline int rtems_disk_fd_get_device_stats(
-  int fd,
+  int                 fd,
   rtems_blkdev_stats *stats
 )
 {
-  return ioctl(fd, RTEMS_BLKIO_GETDEVSTATS, stats);
+  return ioctl( fd, RTEMS_BLKIO_GETDEVSTATS, stats );
 }
 
-static inline int rtems_disk_fd_reset_device_stats(int fd)
+static inline int rtems_disk_fd_reset_device_stats( int fd )
 {
-  return ioctl(fd, RTEMS_BLKIO_RESETDEVSTATS);
+  return ioctl( fd, RTEMS_BLKIO_RESETDEVSTATS );
 }
 
 /**
@@ -261,14 +261,14 @@ static inline int rtems_disk_fd_reset_device_stats(int fd)
  * inorder so the ATA multi-sector command for example can be used. This is a
  * hack to work around the current ATA driver.
  */
-#define RTEMS_BLKDEV_CAP_MULTISECTOR_CONT (1 << 0)
+#define RTEMS_BLKDEV_CAP_MULTISECTOR_CONT ( 1 << 0 )
 
 /**
  * @brief The driver will accept a sync call.
  *
  * A sync call is made to a driver after a bdbuf cache sync has finished.
  */
-#define RTEMS_BLKDEV_CAP_SYNC (1 << 1)
+#define RTEMS_BLKDEV_CAP_SYNC ( 1 << 1 )
 
 /** @} */
 
@@ -278,8 +278,7 @@ static inline int rtems_disk_fd_reset_device_stats(int fd)
  * Use this in all block devices to handle the common set of IO control
  * requests.
  */
-int
-rtems_blkdev_ioctl(rtems_disk_device *dd, uint32_t req, void *argp);
+int rtems_blkdev_ioctl( rtems_disk_device *dd, uint32_t req, void *argp );
 
 /**
  * @brief Creates a block device.
@@ -302,11 +301,11 @@ rtems_blkdev_ioctl(rtems_disk_device *dd, uint32_t req, void *argp);
  * rtems_blkdev_request.
  */
 rtems_status_code rtems_blkdev_create(
-  const char *device,
-  uint32_t media_block_size,
-  rtems_blkdev_bnum media_block_count,
+  const char              *device,
+  uint32_t                 media_block_size,
+  rtems_blkdev_bnum        media_block_count,
   rtems_block_device_ioctl handler,
-  void *driver_data
+  void                    *driver_data
 );
 
 /**
@@ -335,8 +334,8 @@ rtems_status_code rtems_blkdev_create(
  * @see rtems_blkdev_create() and rtems_bdbuf_set_block_size().
  */
 rtems_status_code rtems_blkdev_create_partition(
-  const char *partition,
-  const char *parent_block_device,
+  const char       *partition,
+  const char       *parent_block_device,
   rtems_blkdev_bnum media_block_begin,
   rtems_blkdev_bnum media_block_count
 );
@@ -346,10 +345,10 @@ rtems_status_code rtems_blkdev_create_partition(
  */
 void rtems_blkdev_print_stats(
   const rtems_blkdev_stats *stats,
-  uint32_t media_block_size,
-  uint32_t media_block_count,
-  uint32_t block_size,
-  const rtems_printer* printer
+  uint32_t                  media_block_size,
+  uint32_t                  media_block_count,
+  uint32_t                  block_size,
+  const rtems_printer      *printer
 );
 
 /**
@@ -357,8 +356,8 @@ void rtems_blkdev_print_stats(
  */
 void rtems_blkstats(
   const rtems_printer *printer,
-  const char *device,
-  bool reset
+  const char          *device,
+  bool                 reset
 );
 
 /** @} */
@@ -380,55 +379,49 @@ void rtems_blkstats(
  * driver should provide an initialize entry point, which registers the
  * appropriate IO control handler.
  */
-#define RTEMS_GENERIC_BLOCK_DEVICE_DRIVER_ENTRIES \
-  rtems_blkdev_generic_open, \
-  rtems_blkdev_generic_close, \
-  rtems_blkdev_generic_read, \
-  rtems_blkdev_generic_write, \
-  rtems_blkdev_generic_ioctl
+#define RTEMS_GENERIC_BLOCK_DEVICE_DRIVER_ENTRIES          \
+  rtems_blkdev_generic_open, rtems_blkdev_generic_close,   \
+    rtems_blkdev_generic_read, rtems_blkdev_generic_write, \
+    rtems_blkdev_generic_ioctl
 
 /* Use rtems_blkdev_create() instead */
-RTEMS_DEPRECATED rtems_device_driver
-rtems_blkdev_generic_read(
-    rtems_device_major_number major,
-    rtems_device_minor_number minor,
-    void                    * arg
+RTEMS_DEPRECATED rtems_device_driver rtems_blkdev_generic_read(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
 );
 
 /* Use rtems_blkdev_create() instead */
-RTEMS_DEPRECATED rtems_device_driver
-rtems_blkdev_generic_write(
-    rtems_device_major_number major,
-    rtems_device_minor_number minor,
-    void                    * arg
+RTEMS_DEPRECATED rtems_device_driver rtems_blkdev_generic_write(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
 );
 
 /* Use rtems_blkdev_create() instead */
-RTEMS_DEPRECATED rtems_device_driver
-rtems_blkdev_generic_open(
-    rtems_device_major_number major,
-    rtems_device_minor_number minor,
-    void                    * arg
+RTEMS_DEPRECATED rtems_device_driver rtems_blkdev_generic_open(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
 );
 
 /* Use rtems_blkdev_create() instead */
-RTEMS_DEPRECATED rtems_device_driver
-rtems_blkdev_generic_close(
-    rtems_device_major_number major,
-    rtems_device_minor_number minor,
-    void                    * arg
+RTEMS_DEPRECATED rtems_device_driver rtems_blkdev_generic_close(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
 );
 
 /* Use rtems_blkdev_create() instead */
-RTEMS_DEPRECATED rtems_device_driver
-rtems_blkdev_generic_ioctl(
-    rtems_device_major_number major,
-    rtems_device_minor_number minor,
-    void                    * arg
+RTEMS_DEPRECATED rtems_device_driver rtems_blkdev_generic_ioctl(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
 );
 
 /* Use rtems_blkdev_create() instead */
-RTEMS_DEPRECATED extern const rtems_driver_address_table rtems_blkdev_generic_ops;
+RTEMS_DEPRECATED extern const rtems_driver_address_table
+  rtems_blkdev_generic_ops;
 
 /** @} */
 

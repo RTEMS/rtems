@@ -226,17 +226,17 @@ typedef union {
  * format recognized on the disk will be stored in @a format.
  */
 rtems_status_code rtems_bdpart_read(
-  const char *disk_name,
-  rtems_bdpart_format *format,
+  const char             *disk_name,
+  rtems_bdpart_format    *format,
   rtems_bdpart_partition *partitions,
-  size_t *count
+  size_t                 *count
 );
 
 /**
  * @brief Sorts the partition table @a partitions with @a count partitions to
  * have ascending begin blocks
  */
-void rtems_bdpart_sort( rtems_bdpart_partition *partitions, size_t count);
+void rtems_bdpart_sort( rtems_bdpart_partition *partitions, size_t count );
 
 /**
  * @brief Writes the partition table to the physical disk device with name
@@ -252,10 +252,10 @@ void rtems_bdpart_sort( rtems_bdpart_partition *partitions, size_t count);
  * disk.  Depending on the output format there are additional constrains.
  */
 rtems_status_code rtems_bdpart_write(
-  const char *disk_name,
-  const rtems_bdpart_format *format,
+  const char                   *disk_name,
+  const rtems_bdpart_format    *format,
   const rtems_bdpart_partition *partitions,
-  size_t count
+  size_t                        count
 );
 
 /**
@@ -269,11 +269,11 @@ rtems_status_code rtems_bdpart_write(
  * with respect to the output format in @a format.
  */
 rtems_status_code rtems_bdpart_create(
-  const char *disk_name,
+  const char                *disk_name,
   const rtems_bdpart_format *format,
-  rtems_bdpart_partition *partitions,
-  const unsigned *distribution,
-  size_t count
+  rtems_bdpart_partition    *partitions,
+  const unsigned            *distribution,
+  size_t                     count
 );
 
 /**
@@ -288,9 +288,9 @@ rtems_status_code rtems_bdpart_create(
  * @see rtems_blkdev_create_partition().
  */
 rtems_status_code rtems_bdpart_register(
-  const char *disk_name,
+  const char                   *disk_name,
   const rtems_bdpart_partition *partitions,
-  size_t count
+  size_t                        count
 );
 
 /**
@@ -299,7 +299,7 @@ rtems_status_code rtems_bdpart_register(
  *
  * @see rtems_bdpart_register() and rtems_fsmount().
  */
-rtems_status_code rtems_bdpart_register_from_disk( const char *disk_name);
+rtems_status_code rtems_bdpart_register_from_disk( const char *disk_name );
 
 /**
  * @brief Deletes the logical disks associated with the partitions of the disk
@@ -310,22 +310,25 @@ rtems_status_code rtems_bdpart_register_from_disk( const char *disk_name);
  * rtems_bdpart_read().
  */
 rtems_status_code rtems_bdpart_unregister(
-  const char *disk_name,
+  const char                   *disk_name,
   const rtems_bdpart_partition *partitions,
-  size_t count
+  size_t                        count
 );
 
 /**
  * @brief Prints the partition table @a partitions with @a count partitions to
  * standard output.
  */
-void rtems_bdpart_dump( const rtems_bdpart_partition *partitions, size_t count);
+void rtems_bdpart_dump(
+  const rtems_bdpart_partition *partitions,
+  size_t                        count
+);
 
 /**
  * @brief Returns the partition type for the MBR partition type value
  * @a mbr_type in @a type.
  */
-void rtems_bdpart_to_partition_type( uint8_t mbr_type, uuid_t type);
+void rtems_bdpart_to_partition_type( uint8_t mbr_type, uuid_t type );
 
 /**
  * @brief Converts the partition type in @a type to the MBR partition type.
@@ -336,7 +339,7 @@ void rtems_bdpart_to_partition_type( uint8_t mbr_type, uuid_t type);
  */
 bool rtems_bdpart_to_mbr_partition_type(
   const uuid_t type,
-  uint8_t *mbr_type
+  uint8_t     *mbr_type
 );
 
 /** @} */
@@ -352,7 +355,7 @@ bool rtems_bdpart_to_mbr_partition_type(
 #define RTEMS_BDPART_MBR_OFFSET_TABLE_0 446
 
 #define RTEMS_BDPART_MBR_OFFSET_TABLE_1 \
-  (RTEMS_BDPART_MBR_OFFSET_TABLE_0 + RTEMS_BDPART_MBR_TABLE_ENTRY_SIZE)
+  ( RTEMS_BDPART_MBR_OFFSET_TABLE_0 + RTEMS_BDPART_MBR_TABLE_ENTRY_SIZE )
 
 #define RTEMS_BDPART_MBR_OFFSET_DISK_ID 440
 
@@ -372,18 +375,16 @@ bool rtems_bdpart_to_mbr_partition_type(
 
 #define RTEMS_BDPART_MBR_OFFSET_FLAGS 0
 
-static inline uint8_t rtems_bdpart_mbr_partition_type(
-  const uuid_t type
-)
+static inline uint8_t rtems_bdpart_mbr_partition_type( const uuid_t type )
 {
-  return type [0];
+  return type[ 0 ];
 }
 
 rtems_status_code rtems_bdpart_get_disk_data(
-  const char *disk_name,
-  int *fd_ptr,
+  const char         *disk_name,
+  int                *fd_ptr,
   rtems_disk_device **dd_ptr,
-  rtems_blkdev_bnum *disk_end
+  rtems_blkdev_bnum  *disk_end
 );
 
 #ifdef __cplusplus

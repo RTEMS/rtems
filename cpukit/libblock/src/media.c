@@ -50,59 +50,59 @@
 
 typedef struct {
   rtems_bdpart_partition *partitions;
-  size_t *count;
+  size_t                 *count;
 } partition_table;
 
 typedef struct {
-  size_t index;
+  size_t            index;
   rtems_blkdev_bnum begin;
   rtems_blkdev_bnum count;
 } partition;
 
 typedef struct media_item {
-  rtems_chain_node node;
+  rtems_chain_node   node;
   struct media_item *parent;
-  char *disk_path;
-  char *mount_path;
+  char              *disk_path;
+  char              *mount_path;
 } media_item;
 
 typedef struct listener_item {
-  rtems_chain_node node;
+  rtems_chain_node     node;
   rtems_media_listener listener;
-  void *listener_arg;
+  void                *listener_arg;
 } listener_item;
 
-static RTEMS_CHAIN_DEFINE_EMPTY(listener_item_chain);
+static RTEMS_CHAIN_DEFINE_EMPTY( listener_item_chain );
 
-static RTEMS_CHAIN_DEFINE_EMPTY(media_item_chain);
+static RTEMS_CHAIN_DEFINE_EMPTY( media_item_chain );
 
-static rtems_mutex media_mutex = RTEMS_MUTEX_INITIALIZER("Media");
+static rtems_mutex media_mutex = RTEMS_MUTEX_INITIALIZER( "Media" );
 
-static void lock(void)
+static void lock( void )
 {
-  rtems_mutex_lock(&media_mutex);
+  rtems_mutex_lock( &media_mutex );
 }
 
-static void unlock(void)
+static void unlock( void )
 {
-  rtems_mutex_unlock(&media_mutex);
+  rtems_mutex_unlock( &media_mutex );
 }
 
 static listener_item *find_listener(
   rtems_media_listener listener,
-  void *listener_arg
+  void                *listener_arg
 )
 {
-  rtems_chain_node *node = rtems_chain_first(&listener_item_chain);
+  rtems_chain_node *node = rtems_chain_first( &listener_item_chain );
 
-  while (!rtems_chain_is_tail(&listener_item_chain, node)) {
+  while ( !rtems_chain_is_tail( &listener_item_chain, node ) ) {
     listener_item *item = (listener_item *) node;
 
-    if (item->listener == listener && item->listener_arg == listener_arg) {
+    if ( item->listener == listener && item->listener_arg == listener_arg ) {
       return item;
     }
 
-    node = rtems_chain_next(node);
+    node = rtems_chain_next( node );
   }
 
   return NULL;
@@ -110,23 +110,23 @@ static listener_item *find_listener(
 
 rtems_status_code rtems_media_listener_add(
   rtems_media_listener listener,
-  void *listener_arg
+  void                *listener_arg
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  listener_item *item;
+  listener_item    *item;
 
   lock();
 
-  item = find_listener(listener, listener_arg);
+  item = find_listener( listener, listener_arg );
 
-  if (item == NULL) {
-    item = malloc(sizeof(*item));
-    if (item != NULL) {
+  if ( item == NULL ) {
+    item = malloc( sizeof( *item ) );
+    if ( item != NULL ) {
       item->listener = listener;
       item->listener_arg = listener_arg;
-      rtems_chain_initialize_node(&item->node);
-      rtems_chain_append_unprotected(&listener_item_chain, &item->node);
+      rtems_chain_initialize_node( &item->node );
+      rtems_chain_append_unprotected( &listener_item_chain, &item->node );
     } else {
       sc = RTEMS_NO_MEMORY;
     }
@@ -141,19 +141,19 @@ rtems_status_code rtems_media_listener_add(
 
 rtems_status_code rtems_media_listener_remove(
   rtems_media_listener listener,
-  void *listener_arg
+  void                *listener_arg
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  listener_item *item;
+  listener_item    *item;
 
   lock();
 
-  item = find_listener(listener, listener_arg);
+  item = find_listener( listener, listener_arg );
 
-  if (item != NULL) {
-    rtems_chain_extract_unprotected(&item->node);
-    free(item);
+  if ( item != NULL ) {
+    rtems_chain_extract_unprotected( &item->node );
+    free( item );
   } else {
     sc = RTEMS_INVALID_ID;
   }
@@ -166,35 +166,31 @@ rtems_status_code rtems_media_listener_remove(
 static rtems_status_code notify(
   rtems_media_event event,
   rtems_media_state state,
-  const char *src,
-  const char *dest
+  const char       *src,
+  const char       *dest
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_status_code rsc = RTEMS_SUCCESSFUL;
-  rtems_chain_node *node = rtems_chain_first(&listener_item_chain);
+  rtems_chain_node *node = rtems_chain_first( &listener_item_chain );
 
-  while (!rtems_chain_is_tail(&listener_item_chain, node)) {
+  while ( !rtems_chain_is_tail( &listener_item_chain, node ) ) {
     listener_item *item = (listener_item *) node;
 
-    sc = (*item->listener)(event, state, src, dest, item->listener_arg);
-    if (sc != RTEMS_SUCCESSFUL) {
+    sc = ( *item->listener )( event, state, src, dest, item->listener_arg );
+    if ( sc != RTEMS_SUCCESSFUL ) {
       rsc = sc;
     }
 
-    node = rtems_chain_next(node);
+    node = rtems_chain_next( node );
   }
 
   return rsc;
 }
 
-static void error(
-  rtems_media_state state,
-  const char *src,
-  const char *dest
-)
+static void error( rtems_media_state state, const char *src, const char *dest )
 {
-  (void) notify(RTEMS_MEDIA_EVENT_ERROR, state, src, dest);
+  (void) notify( RTEMS_MEDIA_EVENT_ERROR, state, src, dest );
 }
 
 static media_item *get_media_item(
@@ -202,31 +198,30 @@ static media_item *get_media_item(
   const char *mount_path
 )
 {
-  rtems_chain_node *node = rtems_chain_first(&media_item_chain);
+  rtems_chain_node *node = rtems_chain_first( &media_item_chain );
 
-  while (!rtems_chain_is_tail(&media_item_chain, node)) {
+  while ( !rtems_chain_is_tail( &media_item_chain, node ) ) {
     media_item *item = (media_item *) node;
 
     if (
-      (disk_path == NULL || strcmp(disk_path, item->disk_path) == 0)
-        && (mount_path == NULL
-          || (item->mount_path != NULL
-            && strcmp(mount_path, item->mount_path) == 0))
+      ( disk_path == NULL || strcmp( disk_path, item->disk_path ) == 0 ) &&
+      ( mount_path == NULL || ( item->mount_path != NULL &&
+                                strcmp( mount_path, item->mount_path ) == 0 ) )
     ) {
       return item;
     }
 
-    node = rtems_chain_next(node);
+    node = rtems_chain_next( node );
   }
 
   return NULL;
 }
 
-static void free_item(media_item *item)
+static void free_item( media_item *item )
 {
-  rtems_chain_extract_unprotected(&item->node);
-  free(item->mount_path);
-  free(item);
+  rtems_chain_extract_unprotected( &item->node );
+  free( item->mount_path );
+  free( item );
 }
 
 static void create_item(
@@ -235,15 +230,15 @@ static void create_item(
   const char *mount_path
 )
 {
-  size_t disk_path_size = strlen(disk_path) + 1;
-  media_item *item = malloc(sizeof(*item) + disk_path_size);
+  size_t      disk_path_size = strlen( disk_path ) + 1;
+  media_item *item = malloc( sizeof( *item ) + disk_path_size );
 
-  if (item != NULL) {
-    if (mount_path != NULL) {
-      item->mount_path = strdup(mount_path);
+  if ( item != NULL ) {
+    if ( mount_path != NULL ) {
+      item->mount_path = strdup( mount_path );
 
-      if (item->mount_path == NULL) {
-        free(item);
+      if ( item->mount_path == NULL ) {
+        free( item );
 
         return;
       }
@@ -252,98 +247,102 @@ static void create_item(
     }
 
     item->parent = parent;
-    item->disk_path = (char *) item + sizeof(*item);
-    memcpy(item->disk_path, disk_path, disk_path_size);
-    rtems_chain_initialize_node(&item->node);
-    rtems_chain_append(&media_item_chain, &item->node);
+    item->disk_path = (char *) item + sizeof( *item );
+    memcpy( item->disk_path, disk_path, disk_path_size );
+    rtems_chain_initialize_node( &item->node );
+    rtems_chain_append( &media_item_chain, &item->node );
   }
 }
 
-static void remove_mount_point(const char *mount_path)
+static void remove_mount_point( const char *mount_path )
 {
-  media_item *item = get_media_item(NULL, mount_path);
+  media_item *item = get_media_item( NULL, mount_path );
 
-  if (item != NULL) {
-    free(item->mount_path);
+  if ( item != NULL ) {
+    free( item->mount_path );
     item->mount_path = NULL;
   } else {
-    error(RTEMS_MEDIA_ERROR_MOUNT_POINT_UNKNOWN, mount_path, NULL);
+    error( RTEMS_MEDIA_ERROR_MOUNT_POINT_UNKNOWN, mount_path, NULL );
   }
 }
 
-static void remove_partition(const char *partition_path)
+static void remove_partition( const char *partition_path )
 {
-  media_item *item = get_media_item(partition_path, NULL);
+  media_item *item = get_media_item( partition_path, NULL );
 
-  if (item != NULL) {
-    if (item->mount_path != NULL) {
+  if ( item != NULL ) {
+    if ( item->mount_path != NULL ) {
       error(
         RTEMS_MEDIA_ERROR_PARTITION_DETACH_WITH_MOUNT,
         partition_path,
         item->mount_path
       );
     }
-    free_item(item);
+    free_item( item );
   } else {
-    error(RTEMS_MEDIA_ERROR_PARTITION_UNKNOWN, partition_path, NULL);
+    error( RTEMS_MEDIA_ERROR_PARTITION_UNKNOWN, partition_path, NULL );
   }
 }
 
-static void remove_disk(const char *disk_path)
+static void remove_disk( const char *disk_path )
 {
-  media_item *item = get_media_item(disk_path, NULL);
+  media_item *item = get_media_item( disk_path, NULL );
 
-  if (item != NULL) {
-    rtems_chain_node *node = rtems_chain_first(&media_item_chain);
+  if ( item != NULL ) {
+    rtems_chain_node *node = rtems_chain_first( &media_item_chain );
 
-    while (!rtems_chain_is_tail(&media_item_chain, node)) {
+    while ( !rtems_chain_is_tail( &media_item_chain, node ) ) {
       media_item *child = (media_item *) node;
 
-      node = rtems_chain_next(node);
+      node = rtems_chain_next( node );
 
-      if (child->parent == item) {
-        if (child->mount_path != NULL) {
+      if ( child->parent == item ) {
+        if ( child->mount_path != NULL ) {
           error(
             RTEMS_MEDIA_ERROR_MOUNT_POINT_ORPHAN,
             child->mount_path,
             disk_path
           );
         }
-        error(RTEMS_MEDIA_ERROR_PARTITION_ORPHAN, child->disk_path, disk_path);
-        free_item(child);
+        error(
+          RTEMS_MEDIA_ERROR_PARTITION_ORPHAN,
+          child->disk_path,
+          disk_path
+        );
+        free_item( child );
       }
     }
 
-    free_item(item);
+    free_item( item );
   } else {
-    error(RTEMS_MEDIA_ERROR_DISK_UNKNOWN, disk_path, NULL);
+    error( RTEMS_MEDIA_ERROR_DISK_UNKNOWN, disk_path, NULL );
   }
 }
 
-static void add_disk(const char *disk_path)
+static void add_disk( const char *disk_path )
 {
-  media_item *item = get_media_item(disk_path, NULL);
+  media_item *item = get_media_item( disk_path, NULL );
 
-  if (item != NULL) {
-    error(RTEMS_MEDIA_ERROR_DISK_EXISTS, disk_path, NULL);
-    remove_disk(disk_path);
+  if ( item != NULL ) {
+    error( RTEMS_MEDIA_ERROR_DISK_EXISTS, disk_path, NULL );
+    remove_disk( disk_path );
   }
 
-  create_item(NULL, disk_path, NULL);
+  create_item( NULL, disk_path, NULL );
 }
 
-static void add_partition(const char *disk_path, const char *partition_path)
+static void add_partition( const char *disk_path, const char *partition_path )
 {
-  media_item *item = get_media_item(partition_path, NULL);
-  media_item *parent = get_media_item(disk_path, NULL);
+  media_item *item = get_media_item( partition_path, NULL );
+  media_item *parent = get_media_item( disk_path, NULL );
 
-  if (item != NULL) {
-    error(RTEMS_MEDIA_ERROR_DISK_OR_PARTITION_EXISTS, partition_path, NULL);
-    remove_disk(partition_path);
+  if ( item != NULL ) {
+    error( RTEMS_MEDIA_ERROR_DISK_OR_PARTITION_EXISTS, partition_path, NULL );
+    remove_disk( partition_path );
   }
 
-  if (parent != NULL) {
-    create_item(parent, partition_path, NULL);
+  if ( parent != NULL ) {
+    create_item( parent, partition_path, NULL );
   } else {
     error(
       RTEMS_MEDIA_ERROR_PARTITION_WITH_UNKNOWN_DISK,
@@ -353,68 +352,68 @@ static void add_partition(const char *disk_path, const char *partition_path)
   }
 }
 
-static void add_mount_point(const char *disk_path, const char *mount_path)
+static void add_mount_point( const char *disk_path, const char *mount_path )
 {
-  media_item *item = get_media_item(disk_path, NULL);
+  media_item *item = get_media_item( disk_path, NULL );
 
-  if (item != NULL) {
-    if (item->mount_path != NULL) {
-      error(RTEMS_MEDIA_ERROR_MOUNT_POINT_EXISTS, item->mount_path, NULL);
-      free(item->mount_path);
+  if ( item != NULL ) {
+    if ( item->mount_path != NULL ) {
+      error( RTEMS_MEDIA_ERROR_MOUNT_POINT_EXISTS, item->mount_path, NULL );
+      free( item->mount_path );
     }
-    item->mount_path = strdup(mount_path);
+    item->mount_path = strdup( mount_path );
   } else {
-    error(RTEMS_MEDIA_ERROR_DISK_OR_PARTITION_UNKNOWN, disk_path, NULL);
+    error( RTEMS_MEDIA_ERROR_DISK_OR_PARTITION_UNKNOWN, disk_path, NULL );
   }
 }
 
-static bool is_add_state(rtems_media_state state)
+static bool is_add_state( rtems_media_state state )
 {
   return state == RTEMS_MEDIA_STATE_SUCCESS;
 }
 
-static bool is_remove_state(rtems_media_state state)
+static bool is_remove_state( rtems_media_state state )
 {
-  return state == RTEMS_MEDIA_STATE_SUCCESS
-    || state == RTEMS_MEDIA_STATE_FAILED;
+  return state == RTEMS_MEDIA_STATE_SUCCESS ||
+         state == RTEMS_MEDIA_STATE_FAILED;
 }
 
 static rtems_status_code remember_event(
   rtems_media_event event,
   rtems_media_state state,
-  const char *src,
-  const char *dest
+  const char       *src,
+  const char       *dest
 )
 {
-  switch (event) {
+  switch ( event ) {
     case RTEMS_MEDIA_EVENT_DISK_ATTACH:
-      if (is_add_state(state)) {
-        add_disk(dest);
+      if ( is_add_state( state ) ) {
+        add_disk( dest );
       }
       break;
     case RTEMS_MEDIA_EVENT_PARTITION_ATTACH:
-      if (is_add_state(state)) {
-        add_partition(src, dest);
+      if ( is_add_state( state ) ) {
+        add_partition( src, dest );
       }
       break;
     case RTEMS_MEDIA_EVENT_MOUNT:
-      if (is_add_state(state)) {
-        add_mount_point(src, dest);
+      if ( is_add_state( state ) ) {
+        add_mount_point( src, dest );
       }
       break;
     case RTEMS_MEDIA_EVENT_UNMOUNT:
-      if (is_remove_state(state)) {
-        remove_mount_point(src);
+      if ( is_remove_state( state ) ) {
+        remove_mount_point( src );
       }
       break;
     case RTEMS_MEDIA_EVENT_PARTITION_DETACH:
-      if (is_remove_state(state)) {
-        remove_partition(src);
+      if ( is_remove_state( state ) ) {
+        remove_partition( src );
       }
       break;
     case RTEMS_MEDIA_EVENT_DISK_DETACH:
-      if (is_remove_state(state)) {
-        remove_disk(src);
+      if ( is_remove_state( state ) ) {
+        remove_disk( src );
       }
       break;
     default:
@@ -425,52 +424,53 @@ static rtems_status_code remember_event(
 }
 
 static rtems_status_code process_event(
-  rtems_media_event event,
-  const char *src,
-  char **dest_ptr,
+  rtems_media_event  event,
+  const char        *src,
+  char             **dest_ptr,
   rtems_media_worker worker,
-  void *worker_arg
+  void              *worker_arg
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_status_code sc_retry = RTEMS_SUCCESSFUL;
   rtems_media_state state;
-  char *dest = NULL;
+  char             *dest = NULL;
 
   do {
-    sc = notify(event, RTEMS_MEDIA_STATE_INQUIRY, src, NULL);
-    if (sc == RTEMS_SUCCESSFUL) {
+    sc = notify( event, RTEMS_MEDIA_STATE_INQUIRY, src, NULL );
+    if ( sc == RTEMS_SUCCESSFUL ) {
       state = RTEMS_MEDIA_STATE_READY;
     } else {
       state = RTEMS_MEDIA_STATE_ABORTED;
     }
 
-    sc = (*worker)(state, src, &dest, worker_arg);
-    if (state == RTEMS_MEDIA_STATE_READY) {
-      if (sc == RTEMS_SUCCESSFUL) {
+    sc = ( *worker )( state, src, &dest, worker_arg );
+    if ( state == RTEMS_MEDIA_STATE_READY ) {
+      if ( sc == RTEMS_SUCCESSFUL ) {
         state = RTEMS_MEDIA_STATE_SUCCESS;
       } else {
         state = RTEMS_MEDIA_STATE_FAILED;
       }
     }
 
-    sc_retry = notify(event, state, src, dest);
-  } while (state == RTEMS_MEDIA_STATE_FAILED
-    && sc_retry == RTEMS_INCORRECT_STATE);
-  remember_event(event, state, src, dest);
+    sc_retry = notify( event, state, src, dest );
+  } while (
+    state == RTEMS_MEDIA_STATE_FAILED && sc_retry == RTEMS_INCORRECT_STATE
+  );
+  remember_event( event, state, src, dest );
 
-  if (state == RTEMS_MEDIA_STATE_SUCCESS) {
+  if ( state == RTEMS_MEDIA_STATE_SUCCESS ) {
     sc = RTEMS_SUCCESSFUL;
-  } else if (state == RTEMS_MEDIA_STATE_ABORTED) {
+  } else if ( state == RTEMS_MEDIA_STATE_ABORTED ) {
     sc = RTEMS_UNSATISFIED;
   } else {
     sc = RTEMS_IO_ERROR;
   }
 
-  if (dest_ptr != NULL && sc == RTEMS_SUCCESSFUL) {
+  if ( dest_ptr != NULL && sc == RTEMS_SUCCESSFUL ) {
     *dest_ptr = dest;
   } else {
-    free(dest);
+    free( dest );
   }
 
   return sc;
@@ -478,38 +478,38 @@ static rtems_status_code process_event(
 
 static rtems_status_code mount_worker(
   rtems_media_state state,
-  const char *src,
-  char **dest,
-  void *worker_arg
+  const char       *src,
+  char            **dest,
+  void             *worker_arg
 )
 {
   int rv = 0;
 
-  if (state == RTEMS_MEDIA_STATE_READY) {
+  if ( state == RTEMS_MEDIA_STATE_READY ) {
     rtems_dosfs_mount_options mount_options;
-    char *mount_path = NULL;
+    char                     *mount_path = NULL;
 
-    if (worker_arg == NULL) {
-      mount_path = rtems_media_replace_prefix(RTEMS_MEDIA_MOUNT_BASE, src);
+    if ( worker_arg == NULL ) {
+      mount_path = rtems_media_replace_prefix( RTEMS_MEDIA_MOUNT_BASE, src );
     } else {
-      mount_path = strdup(worker_arg);
+      mount_path = strdup( worker_arg );
     }
 
-    if (mount_path == NULL) {
+    if ( mount_path == NULL ) {
       return RTEMS_IO_ERROR;
     }
 
-    rv = rtems_mkdir(mount_path, S_IRWXU | S_IRWXG | S_IRWXO);
-    if (rv != 0) {
-      free(mount_path);
+    rv = rtems_mkdir( mount_path, S_IRWXU | S_IRWXG | S_IRWXO );
+    if ( rv != 0 ) {
+      free( mount_path );
 
       return RTEMS_IO_ERROR;
     }
 
-    memset(&mount_options, 0, sizeof(mount_options));
+    memset( &mount_options, 0, sizeof( mount_options ) );
 
     /* In case this fails, we fall back to use the default converter */
-    mount_options.converter = rtems_dosfs_create_utf8_converter("CP850");
+    mount_options.converter = rtems_dosfs_create_utf8_converter( "CP850" );
 
     rv = mount(
       src,
@@ -518,10 +518,12 @@ static rtems_status_code mount_worker(
       RTEMS_FILESYSTEM_READ_WRITE,
       &mount_options
     );
-    if (rv != 0) {
-      (void) rmdir(mount_path);
-      free(mount_path);
-      (*mount_options.converter->handler->destroy)(mount_options.converter);
+    if ( rv != 0 ) {
+      (void) rmdir( mount_path );
+      free( mount_path );
+      ( *mount_options.converter->handler->destroy )(
+        mount_options.converter
+      );
 
       return RTEMS_IO_ERROR;
     }
@@ -533,13 +535,13 @@ static rtems_status_code mount_worker(
 }
 
 static rtems_status_code do_mount(
-  const char *src,
-  char **dest_ptr,
+  const char        *src,
+  char             **dest_ptr,
   rtems_media_worker worker,
-  void *worker_arg
+  void              *worker_arg
 )
 {
-  if (worker == NULL) {
+  if ( worker == NULL ) {
     worker = mount_worker;
   }
 
@@ -553,16 +555,16 @@ static rtems_status_code do_mount(
 }
 
 static rtems_status_code do_partition_attach(
-  const char *src,
-  char **dest_ptr,
+  const char        *src,
+  char             **dest_ptr,
   rtems_media_worker worker,
-  void *worker_arg
+  void              *worker_arg
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  char *part_path = NULL;
+  char             *part_path = NULL;
 
-  if (worker != NULL) {
+  if ( worker != NULL ) {
     sc = process_event(
       RTEMS_MEDIA_EVENT_PARTITION_ATTACH,
       src,
@@ -571,17 +573,17 @@ static rtems_status_code do_partition_attach(
       worker_arg
     );
 
-    if (sc == RTEMS_SUCCESSFUL) {
-      sc = do_mount(part_path, NULL, NULL, NULL);
+    if ( sc == RTEMS_SUCCESSFUL ) {
+      sc = do_mount( part_path, NULL, NULL, NULL );
     }
   } else {
     sc = RTEMS_INVALID_ADDRESS;
   }
 
-  if (dest_ptr != NULL && sc == RTEMS_SUCCESSFUL) {
+  if ( dest_ptr != NULL && sc == RTEMS_SUCCESSFUL ) {
     *dest_ptr = part_path;
   } else {
-    free(part_path);
+    free( part_path );
   }
 
   return sc;
@@ -589,18 +591,18 @@ static rtems_status_code do_partition_attach(
 
 static rtems_status_code partition_attach_worker(
   rtems_media_state state,
-  const char *src,
-  char **dest,
-  void *worker_arg
+  const char       *src,
+  char            **dest,
+  void             *worker_arg
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
-  if (state == RTEMS_MEDIA_STATE_READY) {
+  if ( state == RTEMS_MEDIA_STATE_READY ) {
     partition *part = worker_arg;
-    char *part_path = rtems_media_append_minor(src, part->index);
+    char      *part_path = rtems_media_append_minor( src, part->index );
 
-    if (part_path == NULL) {
+    if ( part_path == NULL ) {
       return RTEMS_IO_ERROR;
     }
 
@@ -610,8 +612,8 @@ static rtems_status_code partition_attach_worker(
       part->begin,
       part->count
     );
-    if (sc != RTEMS_SUCCESSFUL) {
-      free(part_path);
+    if ( sc != RTEMS_SUCCESSFUL ) {
+      free( part_path );
 
       return RTEMS_IO_ERROR;
     }
@@ -623,19 +625,19 @@ static rtems_status_code partition_attach_worker(
 }
 
 static rtems_status_code attach_and_mount_partitions(
-  const char *disk_path,
+  const char                   *disk_path,
   const rtems_bdpart_partition *partitions,
-  size_t count
+  size_t                        count
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  size_t i = 0;
+  size_t            i = 0;
 
-  for (i = 0; i < count; ++i) {
+  for ( i = 0; i < count; ++i ) {
     partition part_desc = {
       .index = i,
-      .begin = partitions [i].begin,
-      .count = partitions [i].end - partitions [i].begin
+      .begin = partitions[ i ].begin,
+      .count = partitions[ i ].end - partitions[ i ].begin
     };
     char *part_path = NULL;
 
@@ -647,11 +649,11 @@ static rtems_status_code attach_and_mount_partitions(
       &part_desc
     );
 
-    if (sc == RTEMS_SUCCESSFUL) {
-      sc = do_mount(part_path, NULL, NULL, NULL);
+    if ( sc == RTEMS_SUCCESSFUL ) {
+      sc = do_mount( part_path, NULL, NULL, NULL );
     }
 
-    free(part_path);
+    free( part_path );
   }
 
   return sc;
@@ -659,19 +661,19 @@ static rtems_status_code attach_and_mount_partitions(
 
 static rtems_status_code partition_inquiry_worker(
   rtems_media_state state,
-  const char *src,
-  char **dest RTEMS_UNUSED,
-  void *worker_arg
+  const char       *src,
+  char **dest       RTEMS_UNUSED,
+  void             *worker_arg
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
-  if (state == RTEMS_MEDIA_STATE_READY) {
-    partition_table *pt = worker_arg;
+  if ( state == RTEMS_MEDIA_STATE_READY ) {
+    partition_table    *pt = worker_arg;
     rtems_bdpart_format format;
 
-    sc = rtems_bdpart_read(src, &format, pt->partitions, pt->count);
-    if (sc != RTEMS_SUCCESSFUL || *pt->count == 0) {
+    sc = rtems_bdpart_read( src, &format, pt->partitions, pt->count );
+    if ( sc != RTEMS_SUCCESSFUL || *pt->count == 0 ) {
       return RTEMS_IO_ERROR;
     }
   }
@@ -680,21 +682,18 @@ static rtems_status_code partition_inquiry_worker(
 }
 
 static rtems_status_code do_partition_inquiry(
-  const char *src,
-  char **dest_ptr,
+  const char        *src,
+  char             **dest_ptr,
   rtems_media_worker worker,
-  void *worker_arg
+  void              *worker_arg
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
-  if (worker == NULL) {
-    rtems_bdpart_partition partitions [RTEMS_BDPART_PARTITION_NUMBER_HINT];
-    size_t count = RTEMS_BDPART_PARTITION_NUMBER_HINT;
-    partition_table pt = {
-     .partitions = partitions,
-     .count = &count
-    };
+  if ( worker == NULL ) {
+    rtems_bdpart_partition partitions[ RTEMS_BDPART_PARTITION_NUMBER_HINT ];
+    size_t                 count = RTEMS_BDPART_PARTITION_NUMBER_HINT;
+    partition_table        pt = { .partitions = partitions, .count = &count };
 
     sc = process_event(
       RTEMS_MEDIA_EVENT_PARTITION_INQUIRY,
@@ -704,8 +703,8 @@ static rtems_status_code do_partition_inquiry(
       &pt
     );
 
-    if (sc == RTEMS_SUCCESSFUL) {
-      sc = attach_and_mount_partitions(src, partitions, count);
+    if ( sc == RTEMS_SUCCESSFUL ) {
+      sc = attach_and_mount_partitions( src, partitions, count );
     }
   } else {
     sc = process_event(
@@ -721,17 +720,17 @@ static rtems_status_code do_partition_inquiry(
 }
 
 static rtems_status_code do_disk_attach(
-  const char *src,
-  char **dest_ptr,
+  const char        *src,
+  char             **dest_ptr,
   rtems_media_worker worker,
-  void *worker_arg
+  void              *worker_arg
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_status_code rsc = RTEMS_SUCCESSFUL;
-  char *disk_path = NULL;
+  char             *disk_path = NULL;
 
-  if (worker != NULL) {
+  if ( worker != NULL ) {
     rsc = process_event(
       RTEMS_MEDIA_EVENT_DISK_ATTACH,
       src,
@@ -739,22 +738,22 @@ static rtems_status_code do_disk_attach(
       worker,
       worker_arg
     );
-    
-    if (rsc == RTEMS_SUCCESSFUL) {
-      sc = do_mount(disk_path, NULL, NULL, NULL);
 
-      if (sc != RTEMS_SUCCESSFUL) {
-        do_partition_inquiry(disk_path, NULL, NULL, NULL);
+    if ( rsc == RTEMS_SUCCESSFUL ) {
+      sc = do_mount( disk_path, NULL, NULL, NULL );
+
+      if ( sc != RTEMS_SUCCESSFUL ) {
+        do_partition_inquiry( disk_path, NULL, NULL, NULL );
       }
     }
   } else {
     rsc = RTEMS_INVALID_ADDRESS;
   }
 
-  if (dest_ptr != NULL && rsc == RTEMS_SUCCESSFUL) {
+  if ( dest_ptr != NULL && rsc == RTEMS_SUCCESSFUL ) {
     *dest_ptr = disk_path;
   } else {
-    free(disk_path);
+    free( disk_path );
   }
 
   return rsc;
@@ -762,19 +761,19 @@ static rtems_status_code do_disk_attach(
 
 static rtems_status_code unmount_worker(
   rtems_media_state state,
-  const char *src,
-  char **dest RTEMS_UNUSED,
-  void *worker_arg RTEMS_UNUSED
+  const char       *src,
+  char **dest       RTEMS_UNUSED,
+  void *worker_arg  RTEMS_UNUSED
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
-  if (state == RTEMS_MEDIA_STATE_READY) {
-    int rv = unmount(src);
+  if ( state == RTEMS_MEDIA_STATE_READY ) {
+    int rv = unmount( src );
 
-    if (rv == 0) {
-      rv = rmdir(src);
-      if (rv != 0) {
+    if ( rv == 0 ) {
+      rv = rmdir( src );
+      if ( rv != 0 ) {
         sc = RTEMS_IO_ERROR;
       }
     } else {
@@ -786,13 +785,13 @@ static rtems_status_code unmount_worker(
 }
 
 static rtems_status_code do_unmount(
-  const char *src,
-  char **dest_ptr,
+  const char        *src,
+  char             **dest_ptr,
   rtems_media_worker worker,
-  void *worker_arg
+  void              *worker_arg
 )
 {
-  if (worker == NULL) {
+  if ( worker == NULL ) {
     worker = unmount_worker;
     worker_arg = NULL;
   }
@@ -808,17 +807,17 @@ static rtems_status_code do_unmount(
 
 static rtems_status_code disk_detach_worker(
   rtems_media_state state,
-  const char *src,
-  char **dest RTEMS_UNUSED,
-  void *worker_arg RTEMS_UNUSED
+  const char       *src,
+  char **dest       RTEMS_UNUSED,
+  void *worker_arg  RTEMS_UNUSED
 )
 {
   rtems_status_code rsc = RTEMS_SUCCESSFUL;
 
-  if (state == RTEMS_MEDIA_STATE_READY) {
-    int rv = unlink(src);
+  if ( state == RTEMS_MEDIA_STATE_READY ) {
+    int rv = unlink( src );
 
-    if (rv != 0) {
+    if ( rv != 0 ) {
       rsc = RTEMS_IO_ERROR;
     }
   }
@@ -826,48 +825,51 @@ static rtems_status_code disk_detach_worker(
   return rsc;
 }
 
-static rtems_status_code detach_item(rtems_media_event event, media_item *item)
+static rtems_status_code detach_item(
+  rtems_media_event event,
+  media_item       *item
+)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_status_code rsc = RTEMS_SUCCESSFUL;
 
-  if (item->mount_path != NULL) {
-    sc = do_unmount(item->mount_path, NULL, NULL, NULL);
-    if (sc != RTEMS_SUCCESSFUL) {
+  if ( item->mount_path != NULL ) {
+    sc = do_unmount( item->mount_path, NULL, NULL, NULL );
+    if ( sc != RTEMS_SUCCESSFUL ) {
       rsc = RTEMS_IO_ERROR;
     }
   }
 
-  sc = process_event(event, item->disk_path, NULL, disk_detach_worker, NULL);
-  if (sc != RTEMS_SUCCESSFUL) {
+  sc = process_event( event, item->disk_path, NULL, disk_detach_worker, NULL );
+  if ( sc != RTEMS_SUCCESSFUL ) {
     rsc = RTEMS_IO_ERROR;
   }
 
   return rsc;
 }
 
-static rtems_status_code detach_parent_item(media_item *parent)
+static rtems_status_code detach_parent_item( media_item *parent )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_status_code rsc = RTEMS_SUCCESSFUL;
 
-  rtems_chain_node *node = rtems_chain_first(&media_item_chain);
+  rtems_chain_node *node = rtems_chain_first( &media_item_chain );
 
-  while (!rtems_chain_is_tail(&media_item_chain, node)) {
+  while ( !rtems_chain_is_tail( &media_item_chain, node ) ) {
     media_item *child = (media_item *) node;
 
-    node = rtems_chain_next(node);
+    node = rtems_chain_next( node );
 
-    if (child->parent == parent) {
-      sc = detach_item(RTEMS_MEDIA_EVENT_PARTITION_DETACH, child);
-      if (sc != RTEMS_SUCCESSFUL) {
+    if ( child->parent == parent ) {
+      sc = detach_item( RTEMS_MEDIA_EVENT_PARTITION_DETACH, child );
+      if ( sc != RTEMS_SUCCESSFUL ) {
         rsc = RTEMS_IO_ERROR;
       }
     }
   }
 
-  sc = detach_item(RTEMS_MEDIA_EVENT_DISK_DETACH, parent);
-  if (sc != RTEMS_SUCCESSFUL) {
+  sc = detach_item( RTEMS_MEDIA_EVENT_DISK_DETACH, parent );
+  if ( sc != RTEMS_SUCCESSFUL ) {
     rsc = RTEMS_IO_ERROR;
   }
 
@@ -875,17 +877,17 @@ static rtems_status_code detach_parent_item(media_item *parent)
 }
 
 static rtems_status_code do_disk_detach(
-  const char *src,
-  char **dest_ptr,
+  const char        *src,
+  char             **dest_ptr,
   rtems_media_worker worker,
-  void *worker_arg
+  void              *worker_arg
 )
 {
-  if (worker == NULL) {
-    media_item *parent = get_media_item(src, NULL);
+  if ( worker == NULL ) {
+    media_item *parent = get_media_item( src, NULL );
 
-    if (parent != NULL) {
-      return detach_parent_item(parent);
+    if ( parent != NULL ) {
+      return detach_parent_item( parent );
     }
 
     worker = disk_detach_worker;
@@ -902,17 +904,17 @@ static rtems_status_code do_disk_detach(
 }
 
 static rtems_status_code do_partition_detach(
-  const char *src,
-  char **dest_ptr,
+  const char        *src,
+  char             **dest_ptr,
   rtems_media_worker worker,
-  void *worker_arg
+  void              *worker_arg
 )
 {
-  if (worker == NULL) {
-    media_item *item = get_media_item(src, NULL);
+  if ( worker == NULL ) {
+    media_item *item = get_media_item( src, NULL );
 
-    if (item != NULL) {
-      return detach_item(RTEMS_MEDIA_EVENT_PARTITION_DETACH, item);
+    if ( item != NULL ) {
+      return detach_item( RTEMS_MEDIA_EVENT_PARTITION_DETACH, item );
     }
 
     worker = disk_detach_worker;
@@ -929,38 +931,38 @@ static rtems_status_code do_partition_detach(
 }
 
 rtems_status_code rtems_media_post_event(
-  rtems_media_event event,
-  const char *src,
-  char **dest_ptr,
+  rtems_media_event  event,
+  const char        *src,
+  char             **dest_ptr,
   rtems_media_worker worker,
-  void *worker_arg
+  void              *worker_arg
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
   lock();
 
-  switch (event) {
+  switch ( event ) {
     case RTEMS_MEDIA_EVENT_DISK_ATTACH:
-      sc = do_disk_attach(src, dest_ptr, worker, worker_arg);
+      sc = do_disk_attach( src, dest_ptr, worker, worker_arg );
       break;
     case RTEMS_MEDIA_EVENT_DISK_DETACH:
-      sc = do_disk_detach(src, dest_ptr, worker, worker_arg);
+      sc = do_disk_detach( src, dest_ptr, worker, worker_arg );
       break;
     case RTEMS_MEDIA_EVENT_MOUNT:
-      sc = do_mount(src, dest_ptr, worker, worker_arg);
+      sc = do_mount( src, dest_ptr, worker, worker_arg );
       break;
     case RTEMS_MEDIA_EVENT_UNMOUNT:
-      sc = do_unmount(src, dest_ptr, worker, worker_arg);
+      sc = do_unmount( src, dest_ptr, worker, worker_arg );
       break;
     case RTEMS_MEDIA_EVENT_PARTITION_INQUIRY:
-      sc = do_partition_inquiry(src, dest_ptr, worker, worker_arg);
+      sc = do_partition_inquiry( src, dest_ptr, worker, worker_arg );
       break;
     case RTEMS_MEDIA_EVENT_PARTITION_ATTACH:
-      sc = do_partition_attach(src, dest_ptr, worker, worker_arg);
+      sc = do_partition_attach( src, dest_ptr, worker, worker_arg );
       break;
     case RTEMS_MEDIA_EVENT_PARTITION_DETACH:
-      sc = do_partition_detach(src, dest_ptr, worker, worker_arg);
+      sc = do_partition_detach( src, dest_ptr, worker, worker_arg );
       break;
     default:
       sc = RTEMS_INVALID_ID;

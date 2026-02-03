@@ -43,15 +43,12 @@
 #include <rtems.h>
 #include <rtems/bdpart.h>
 
-static void rtems_bdpart_type_to_string(
-  const uuid_t type,
-  char str [37]
-)
+static void rtems_bdpart_type_to_string( const uuid_t type, char str[ 37 ] )
 {
-  uuid_unparse_lower( type, str);
+  uuid_unparse_lower( type, str );
 }
 
-void rtems_bdpart_dump( const rtems_bdpart_partition *pt, size_t count)
+void rtems_bdpart_dump( const rtems_bdpart_partition *pt, size_t count )
 {
   size_t i = 0;
 
@@ -63,14 +60,14 @@ void rtems_bdpart_dump( const rtems_bdpart_partition *pt, size_t count)
     "------------+------------+-----------------------------------------------------\n"
   );
 
-  for (i = 0; i < count; ++i) {
+  for ( i = 0; i < count; ++i ) {
     const rtems_bdpart_partition *p = pt + i;
-    const char *type = NULL;
-    char type_buffer [52];
-    uint8_t type_mbr = 0;
+    const char                   *type = NULL;
+    char                          type_buffer[ 52 ];
+    uint8_t                       type_mbr = 0;
 
-    if (rtems_bdpart_to_mbr_partition_type( p->type, &type_mbr)) {
-      switch (type_mbr) {
+    if ( rtems_bdpart_to_mbr_partition_type( p->type, &type_mbr ) ) {
+      switch ( type_mbr ) {
         case RTEMS_BDPART_MBR_FAT_12:
           type = "FAT 12";
           break;
@@ -90,12 +87,17 @@ void rtems_bdpart_dump( const rtems_bdpart_partition *pt, size_t count)
           type = "DATA";
           break;
         default:
-          snprintf( type_buffer, sizeof( type_buffer), "0x%02" PRIx8, type_mbr);
+          snprintf(
+            type_buffer,
+            sizeof( type_buffer ),
+            "0x%02" PRIx8,
+            type_mbr
+          );
           type = type_buffer;
           break;
       }
     } else {
-      rtems_bdpart_type_to_string( p->type, type_buffer);
+      rtems_bdpart_type_to_string( p->type, type_buffer );
       type = type_buffer;
     }
 
@@ -107,5 +109,7 @@ void rtems_bdpart_dump( const rtems_bdpart_partition *pt, size_t count)
     );
   }
 
-  puts( "------------+------------+-----------------------------------------------------");
+  puts(
+    "------------+------------+-----------------------------------------------------"
+  );
 }

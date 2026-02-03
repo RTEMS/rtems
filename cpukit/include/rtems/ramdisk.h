@@ -12,7 +12,6 @@
 #ifndef _RTEMS_RAMDISK_H
 #define _RTEMS_RAMDISK_H
 
-
 #include <rtems.h>
 #include <rtems/blkdev.h>
 
@@ -60,7 +59,7 @@ typedef struct rtems_ramdisk_config {
  *
  * The configuration table is provided by the application.
  */
-extern rtems_ramdisk_config rtems_ramdisk_configuration [];
+extern rtems_ramdisk_config rtems_ramdisk_configuration[];
 
 /**
  * @brief External reference the size of the RAM disk configuration table
@@ -74,19 +73,16 @@ extern size_t rtems_ramdisk_configuration_size;
  * @brief RAM disk driver initialization entry point.
  */
 rtems_device_driver ramdisk_initialize(
- rtems_device_major_number major,
- rtems_device_minor_number minor,
- void *arg
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
 );
 
 /**
  * RAM disk driver table entry.
  */
 #define RAMDISK_DRIVER_TABLE_ENTRY \
-  { \
-    ramdisk_initialize, \
-    NULL, NULL, NULL, NULL, NULL \
-  }
+  { ramdisk_initialize, NULL, NULL, NULL, NULL, NULL }
 
 #define RAMDISK_DEVICE_BASE_NAME "/dev/rd"
 
@@ -137,7 +133,7 @@ typedef struct ramdisk {
   bool free_at_delete_request;
 } ramdisk;
 
-int ramdisk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp);
+int ramdisk_ioctl( rtems_disk_device *dd, uint32_t req, void *argp );
 
 /**
  * @brief Allocates and initializes a RAM disk descriptor.
@@ -182,15 +178,15 @@ int ramdisk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp);
  * @endcode
  */
 ramdisk *ramdisk_allocate(
-  void *area_begin,
-  uint32_t media_block_size,
+  void             *area_begin,
+  uint32_t          media_block_size,
   rtems_blkdev_bnum media_block_count,
-  bool trace
+  bool              trace
 );
 
-void ramdisk_free(ramdisk *rd);
+void ramdisk_free( ramdisk *rd );
 
-static inline void ramdisk_enable_free_at_delete_request(ramdisk *rd)
+static inline void ramdisk_enable_free_at_delete_request( ramdisk *rd )
 {
   rd->free_at_delete_request = true;
 }
@@ -207,10 +203,10 @@ static inline void ramdisk_enable_free_at_delete_request(ramdisk *rd)
  * @retval RTEMS_UNSATISFIED Something is wrong.
  */
 rtems_status_code ramdisk_register(
-  uint32_t media_block_size,
+  uint32_t          media_block_size,
   rtems_blkdev_bnum media_block_count,
-  bool trace,
-  const char *disk
+  bool              trace,
+  const char       *disk
 );
 
 /** @} */

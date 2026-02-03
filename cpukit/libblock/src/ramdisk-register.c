@@ -40,17 +40,17 @@
 #include <rtems/ramdisk.h>
 
 rtems_status_code ramdisk_register(
-  uint32_t media_block_size,
+  uint32_t          media_block_size,
   rtems_blkdev_bnum media_block_count,
-  bool trace,
-  const char *disk
+  bool              trace,
+  const char       *disk
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  ramdisk *rd = NULL;
+  ramdisk          *rd = NULL;
 
-  rd = ramdisk_allocate(NULL, media_block_size, media_block_count, trace);
-  if (rd == NULL) {
+  rd = ramdisk_allocate( NULL, media_block_size, media_block_count, trace );
+  if ( rd == NULL ) {
     return RTEMS_UNSATISFIED;
   }
 
@@ -61,8 +61,8 @@ rtems_status_code ramdisk_register(
     ramdisk_ioctl,
     rd
   );
-  if (sc != RTEMS_SUCCESSFUL) {
-    ramdisk_free(rd);
+  if ( sc != RTEMS_SUCCESSFUL ) {
+    ramdisk_free( rd );
 
     return RTEMS_UNSATISFIED;
   }

@@ -38,10 +38,10 @@
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
 const rtems_driver_address_table rtems_blkdev_generic_ops = {
-	.initialization_entry = NULL,
-	.open_entry = rtems_blkdev_generic_open,
-	.close_entry = rtems_blkdev_generic_close,
-	.read_entry = rtems_blkdev_generic_read,
-	.write_entry = rtems_blkdev_generic_write,
-	.control_entry = rtems_blkdev_generic_ioctl
+  .initialization_entry = NULL,
+  .open_entry = rtems_blkdev_generic_open,
+  .close_entry = rtems_blkdev_generic_close,
+  .read_entry = rtems_blkdev_generic_read,
+  .write_entry = rtems_blkdev_generic_write,
+  .control_entry = rtems_blkdev_generic_ioctl
 };

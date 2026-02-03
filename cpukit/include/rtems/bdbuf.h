@@ -235,8 +235,7 @@ extern "C" {
  *   </tr>
  * </table>
  */
-typedef enum
-{
+typedef enum {
   /**
    * @brief Free.
    */
@@ -305,35 +304,33 @@ typedef struct rtems_bdbuf_group rtems_bdbuf_group;
  * speed-up buffer lookup descriptors are organized in AVL-Tree. The fields
  * 'dd' and 'block' are search keys.
  */
-typedef struct rtems_bdbuf_buffer
-{
-  rtems_chain_node link;       /**< Link the BD onto a number of lists. */
+typedef struct rtems_bdbuf_buffer {
+  rtems_chain_node link; /**< Link the BD onto a number of lists. */
 
-  struct rtems_bdbuf_avl_node
-  {
-    struct rtems_bdbuf_buffer* left;   /**< Left Child */
-    struct rtems_bdbuf_buffer* right;  /**< Right Child */
-    signed char                cache;  /**< Cache */
-    signed char                bal;    /**< The balance of the sub-tree */
+  struct rtems_bdbuf_avl_node {
+    struct rtems_bdbuf_buffer *left;  /**< Left Child */
+    struct rtems_bdbuf_buffer *right; /**< Right Child */
+    signed char                cache; /**< Cache */
+    signed char                bal;   /**< The balance of the sub-tree */
   } avl;
 
-  rtems_disk_device *dd;        /**< disk device */
+  rtems_disk_device *dd; /**< disk device */
 
-  rtems_blkdev_bnum block;      /**< block number on the device */
+  rtems_blkdev_bnum block; /**< block number on the device */
 
-  unsigned char*    buffer;     /**< Pointer to the buffer memory area */
+  unsigned char *buffer; /**< Pointer to the buffer memory area */
 
-  rtems_bdbuf_buf_state state;           /**< State of the buffer. */
+  rtems_bdbuf_buf_state state; /**< State of the buffer. */
 
-  uint32_t waiters;              /**< The number of threads waiting on this
+  uint32_t           waiters;    /**< The number of threads waiting on this
                                   * buffer. */
-  rtems_bdbuf_group* group;      /**< Pointer to the group of BDs this BD is
+  rtems_bdbuf_group *group;      /**< Pointer to the group of BDs this BD is
                                   * part of. */
-  uint32_t hold_timer;           /**< Timer to indicate how long a buffer
+  uint32_t           hold_timer; /**< Timer to indicate how long a buffer
                                   * has been held in the cache modified. */
 
-  int   references;              /**< Allow reference counting by owner. */
-  void* user;                    /**< User data. */
+  int   references; /**< Allow reference counting by owner. */
+  void *user;       /**< User data. */
 } rtems_bdbuf_buffer;
 
 /**
@@ -343,15 +340,14 @@ typedef struct rtems_bdbuf_buffer
  * buffers in the group, if there are more than 1 will also be that size. The
  * number of buffers in a group is a multiple of 2, ie 1, 2, 4, 8, etc.
  */
-struct rtems_bdbuf_group
-{
+struct rtems_bdbuf_group {
   rtems_chain_node    link;          /**< Link the groups on a LRU list if they
                                       * have no buffers in use. */
   size_t              bds_per_group; /**< The number of BD allocated to this
                                       * group. This value must be a multiple of
                                       * 2. */
   uint32_t            users;         /**< How many users the block has. */
-  rtems_bdbuf_buffer* bdbuf;         /**< First BD this block covers. */
+  rtems_bdbuf_buffer *bdbuf;         /**< First BD this block covers. */
 };
 
 /**
@@ -373,15 +369,15 @@ typedef struct rtems_bdbuf_config {
                                                 * task. */
   rtems_task_priority swapout_worker_priority; /**< Priority of the swap out
                                                 * task. */
-  size_t              task_stack_size;         /**< Task stack size for swap-out
+  size_t              task_stack_size;     /**< Task stack size for swap-out
                                                 * task and worker threads. */
-  size_t              size;                    /**< Size of memory in the
+  size_t              size;                /**< Size of memory in the
                                                 * cache */
-  uint32_t            buffer_min;              /**< Minimum buffer size. */
-  uint32_t            buffer_max;              /**< Maximum buffer size
+  uint32_t            buffer_min;          /**< Minimum buffer size. */
+  uint32_t            buffer_max;          /**< Maximum buffer size
                                                 * supported. It is also the
                                                 * allocation size. */
-  rtems_task_priority read_ahead_priority;     /**< Priority of the read-ahead
+  rtems_task_priority read_ahead_priority; /**< Priority of the read-ahead
                                                 * task. */
 } rtems_bdbuf_config;
 
@@ -396,17 +392,17 @@ extern const rtems_bdbuf_config rtems_bdbuf_configuration;
  * The default value for the maximum read-ahead blocks disables the read-ahead
  * feature.
  */
-#define RTEMS_BDBUF_MAX_READ_AHEAD_BLOCKS_DEFAULT    0
+#define RTEMS_BDBUF_MAX_READ_AHEAD_BLOCKS_DEFAULT 0
 
 /**
  * Default maximum number of blocks to write at once.
  */
-#define RTEMS_BDBUF_MAX_WRITE_BLOCKS_DEFAULT         16
+#define RTEMS_BDBUF_MAX_WRITE_BLOCKS_DEFAULT 16
 
 /**
  * Default swap-out task priority.
  */
-#define RTEMS_BDBUF_SWAPOUT_TASK_PRIORITY_DEFAULT    15
+#define RTEMS_BDBUF_SWAPOUT_TASK_PRIORITY_DEFAULT 15
 
 /**
  * Default swap-out task swap period in milli seconds.
@@ -416,18 +412,18 @@ extern const rtems_bdbuf_config rtems_bdbuf_configuration;
 /**
  * Default swap-out task block hold time in milli seconds.
  */
-#define RTEMS_BDBUF_SWAPOUT_TASK_BLOCK_HOLD_DEFAULT  1000
+#define RTEMS_BDBUF_SWAPOUT_TASK_BLOCK_HOLD_DEFAULT 1000
 
 /**
  * Default swap-out worker tasks. Currently disabled.
  */
-#define RTEMS_BDBUF_SWAPOUT_WORKER_TASKS_DEFAULT     0
+#define RTEMS_BDBUF_SWAPOUT_WORKER_TASKS_DEFAULT 0
 
 /**
  * Default swap-out worker task priority. The same as the swap-out task.
  */
 #define RTEMS_BDBUF_SWAPOUT_WORKER_TASK_PRIORITY_DEFAULT \
-                             RTEMS_BDBUF_SWAPOUT_TASK_PRIORITY_DEFAULT
+  RTEMS_BDBUF_SWAPOUT_TASK_PRIORITY_DEFAULT
 
 /**
  * Default read-ahead task priority.  The same as the swap-out task.
@@ -443,17 +439,17 @@ extern const rtems_bdbuf_config rtems_bdbuf_configuration;
 /**
  * Default size of memory allocated to the cache.
  */
-#define RTEMS_BDBUF_CACHE_MEMORY_SIZE_DEFAULT (64 * 512)
+#define RTEMS_BDBUF_CACHE_MEMORY_SIZE_DEFAULT ( 64 * 512 )
 
 /**
  * Default minimum size of buffers.
  */
-#define RTEMS_BDBUF_BUFFER_MIN_SIZE_DEFAULT (512)
+#define RTEMS_BDBUF_BUFFER_MIN_SIZE_DEFAULT ( 512 )
 
 /**
  * Default maximum size of buffers.
  */
-#define RTEMS_BDBUF_BUFFER_MAX_SIZE_DEFAULT (4096)
+#define RTEMS_BDBUF_BUFFER_MAX_SIZE_DEFAULT ( 4096 )
 
 /**
  * Prepare buffering layer to work - initialize buffer descritors and (if it is
@@ -467,8 +463,7 @@ extern const rtems_bdbuf_config rtems_bdbuf_configuration;
  * @retval RTEMS_RESOURCE_IN_USE Already initialized.
  * @retval RTEMS_UNSATISFIED Not enough resources.
  */
-rtems_status_code
-rtems_bdbuf_init (void);
+rtems_status_code rtems_bdbuf_init( void );
 
 /**
  * Get block buffer for data to be written into. The buffers is set to the
@@ -498,11 +493,10 @@ rtems_bdbuf_init (void);
  * @retval RTEMS_SUCCESSFUL Successful operation. 
  * @retval RTEMS_INVALID_ID Invalid block number.
  */
-rtems_status_code
-rtems_bdbuf_get (
-  rtems_disk_device *dd,
-  rtems_blkdev_bnum block,
-  rtems_bdbuf_buffer** bd
+rtems_status_code rtems_bdbuf_get(
+  rtems_disk_device   *dd,
+  rtems_blkdev_bnum    block,
+  rtems_bdbuf_buffer **bd
 );
 
 /**
@@ -532,11 +526,10 @@ rtems_bdbuf_get (
  * @retval RTEMS_INVALID_ID Invalid block number.
  * @retval RTEMS_IO_ERROR IO error.
  */
-rtems_status_code
-rtems_bdbuf_read (
-  rtems_disk_device *dd,
-  rtems_blkdev_bnum block,
-  rtems_bdbuf_buffer** bd
+rtems_status_code rtems_bdbuf_read(
+  rtems_disk_device   *dd,
+  rtems_blkdev_bnum    block,
+  rtems_bdbuf_buffer **bd
 );
 
 /**
@@ -555,11 +548,10 @@ rtems_bdbuf_read (
  * @param block [in] Linear media block number.
  * @param nr_blocks [in] Number of consecutive blocks that can be pre-fetched.
  */
-void
-rtems_bdbuf_peek (
+void rtems_bdbuf_peek(
   rtems_disk_device *dd,
-  rtems_blkdev_bnum block,
-  uint32_t nr_blocks
+  rtems_blkdev_bnum  block,
+  uint32_t           nr_blocks
 );
 
 /**
@@ -581,8 +573,7 @@ rtems_bdbuf_peek (
  * @retval RTEMS_SUCCESSFUL Successful operation. 
  * @retval RTEMS_INVALID_ADDRESS The reference is NULL.
  */
-rtems_status_code
-rtems_bdbuf_release (rtems_bdbuf_buffer* bd);
+rtems_status_code rtems_bdbuf_release( rtems_bdbuf_buffer *bd );
 
 /**
  * Release the buffer allocated with a get or read call placing it on the
@@ -605,8 +596,7 @@ rtems_bdbuf_release (rtems_bdbuf_buffer* bd);
  * @retval RTEMS_SUCCESSFUL Successful operation. 
  * @retval RTEMS_INVALID_ADDRESS The reference is NULL.
  */
-rtems_status_code
-rtems_bdbuf_release_modified (rtems_bdbuf_buffer* bd);
+rtems_status_code rtems_bdbuf_release_modified( rtems_bdbuf_buffer *bd );
 
 /**
  * Release the buffer as modified and wait until it has been synchronized with
@@ -628,8 +618,7 @@ rtems_bdbuf_release_modified (rtems_bdbuf_buffer* bd);
  * @retval RTEMS_SUCCESSFUL Successful operation. 
  * @retval RTEMS_INVALID_ADDRESS The reference is NULL.
  */
-rtems_status_code
-rtems_bdbuf_sync (rtems_bdbuf_buffer* bd);
+rtems_status_code rtems_bdbuf_sync( rtems_bdbuf_buffer *bd );
 
 /**
  * Synchronize all modified buffers for this device with the disk and wait
@@ -648,8 +637,7 @@ rtems_bdbuf_sync (rtems_bdbuf_buffer* bd);
  *
  * @retval RTEMS_SUCCESSFUL Successful operation. 
  */
-rtems_status_code
-rtems_bdbuf_syncdev (rtems_disk_device *dd);
+rtems_status_code rtems_bdbuf_syncdev( rtems_disk_device *dd );
 
 /**
  * @brief Purges all buffers corresponding to the disk device @a dd.
@@ -662,8 +650,7 @@ rtems_bdbuf_syncdev (rtems_disk_device *dd);
  *
  * @param dd [in] The disk device.
  */
-void
-rtems_bdbuf_purge_dev (rtems_disk_device *dd);
+void rtems_bdbuf_purge_dev( rtems_disk_device *dd );
 
 /**
  * @brief Sets the block size of a disk device.
@@ -689,23 +676,24 @@ rtems_bdbuf_purge_dev (rtems_disk_device *dd);
  * @retval RTEMS_SUCCESSFUL Successful operation. 
  * @retval RTEMS_INVALID_NUMBER Invalid block size.
  */
-rtems_status_code
-rtems_bdbuf_set_block_size (rtems_disk_device *dd,
-                            uint32_t           block_size,
-                            bool               sync);
+rtems_status_code rtems_bdbuf_set_block_size(
+  rtems_disk_device *dd,
+  uint32_t           block_size,
+  bool               sync
+);
 
 /**
  * @brief Returns the block device statistics.
  */
-void
-rtems_bdbuf_get_device_stats (const rtems_disk_device *dd,
-                              rtems_blkdev_stats      *stats);
+void rtems_bdbuf_get_device_stats(
+  const rtems_disk_device *dd,
+  rtems_blkdev_stats      *stats
+);
 
 /**
  * @brief Resets the block device statistics.
  */
-void
-rtems_bdbuf_reset_device_stats (rtems_disk_device *dd);
+void rtems_bdbuf_reset_device_stats( rtems_disk_device *dd );
 
 /** @} */
 

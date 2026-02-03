@@ -49,40 +49,40 @@
 
 typedef struct {
   rtems_disk_device dd;
-  int fd;
+  int               fd;
 } rtems_blkdev_imfs_context;
 
 static ssize_t rtems_blkdev_imfs_read(
   rtems_libio_t *iop,
-  void *buffer,
-  size_t count
+  void          *buffer,
+  size_t         count
 )
 {
-  int rv;
-  rtems_blkdev_imfs_context *ctx = IMFS_generic_get_context_by_iop(iop);
-  rtems_disk_device *dd = &ctx->dd;
-  ssize_t remaining = (ssize_t) count;
-  off_t offset = iop->offset;
-  ssize_t block_size = (ssize_t) rtems_disk_get_block_size(dd);
-  rtems_blkdev_bnum block = (rtems_blkdev_bnum) (offset / block_size);
-  ssize_t block_offset = (ssize_t) (offset % block_size);
-  char *dst = buffer;
+  int                        rv;
+  rtems_blkdev_imfs_context *ctx = IMFS_generic_get_context_by_iop( iop );
+  rtems_disk_device         *dd = &ctx->dd;
+  ssize_t                    remaining = (ssize_t) count;
+  off_t                      offset = iop->offset;
+  ssize_t           block_size = (ssize_t) rtems_disk_get_block_size( dd );
+  rtems_blkdev_bnum block = (rtems_blkdev_bnum) ( offset / block_size );
+  ssize_t           block_offset = (ssize_t) ( offset % block_size );
+  char             *dst = buffer;
 
-  while (remaining > 0) {
+  while ( remaining > 0 ) {
     rtems_bdbuf_buffer *bd;
-    rtems_status_code sc = rtems_bdbuf_read(dd, block, &bd);
+    rtems_status_code   sc = rtems_bdbuf_read( dd, block, &bd );
 
-    if (sc == RTEMS_SUCCESSFUL) {
+    if ( sc == RTEMS_SUCCESSFUL ) {
       ssize_t copy = block_size - block_offset;
 
-      if (copy > remaining) {
+      if ( copy > remaining ) {
         copy = remaining;
       }
 
-      memcpy(dst, (char *) bd->buffer + block_offset, (size_t) copy);
+      memcpy( dst, (char *) bd->buffer + block_offset, (size_t) copy );
 
-      sc = rtems_bdbuf_release(bd);
-      if (sc == RTEMS_SUCCESSFUL) {
+      sc = rtems_bdbuf_release( bd );
+      if ( sc == RTEMS_SUCCESSFUL ) {
         block_offset = 0;
         remaining -= copy;
         dst += copy;
@@ -95,7 +95,7 @@ static ssize_t rtems_blkdev_imfs_read(
     }
   }
 
-  if (remaining >= 0) {
+  if ( remaining >= 0 ) {
     iop->offset += count;
     rv = (ssize_t) count;
   } else {
@@ -108,41 +108,41 @@ static ssize_t rtems_blkdev_imfs_read(
 
 static ssize_t rtems_blkdev_imfs_write(
   rtems_libio_t *iop,
-  const void *buffer,
-  size_t count
+  const void    *buffer,
+  size_t         count
 )
 {
-  int rv;
-  rtems_blkdev_imfs_context *ctx = IMFS_generic_get_context_by_iop(iop);
-  rtems_disk_device *dd = &ctx->dd;
-  ssize_t remaining = (ssize_t) count;
-  off_t offset = iop->offset;
-  ssize_t block_size = (ssize_t) rtems_disk_get_block_size(dd);
-  rtems_blkdev_bnum block = (rtems_blkdev_bnum) (offset / block_size);
-  ssize_t block_offset = (ssize_t) (offset % block_size);
-  const char *src = buffer;
+  int                        rv;
+  rtems_blkdev_imfs_context *ctx = IMFS_generic_get_context_by_iop( iop );
+  rtems_disk_device         *dd = &ctx->dd;
+  ssize_t                    remaining = (ssize_t) count;
+  off_t                      offset = iop->offset;
+  ssize_t           block_size = (ssize_t) rtems_disk_get_block_size( dd );
+  rtems_blkdev_bnum block = (rtems_blkdev_bnum) ( offset / block_size );
+  ssize_t           block_offset = (ssize_t) ( offset % block_size );
+  const char       *src = buffer;
 
-  while (remaining > 0) {
-    rtems_status_code sc;
+  while ( remaining > 0 ) {
+    rtems_status_code   sc;
     rtems_bdbuf_buffer *bd;
 
-    if (block_offset == 0 && remaining >= block_size) {
-       sc = rtems_bdbuf_get(dd, block, &bd);
+    if ( block_offset == 0 && remaining >= block_size ) {
+      sc = rtems_bdbuf_get( dd, block, &bd );
     } else {
-       sc = rtems_bdbuf_read(dd, block, &bd);
+      sc = rtems_bdbuf_read( dd, block, &bd );
     }
 
-    if (sc == RTEMS_SUCCESSFUL) {
+    if ( sc == RTEMS_SUCCESSFUL ) {
       ssize_t copy = block_size - block_offset;
 
-      if (copy > remaining) {
+      if ( copy > remaining ) {
         copy = remaining;
       }
 
-      memcpy((char *) bd->buffer + block_offset, src, (size_t) copy);
+      memcpy( (char *) bd->buffer + block_offset, src, (size_t) copy );
 
-      sc = rtems_bdbuf_release_modified(bd);
-      if (sc == RTEMS_SUCCESSFUL) {
+      sc = rtems_bdbuf_release_modified( bd );
+      if ( sc == RTEMS_SUCCESSFUL ) {
         block_offset = 0;
         remaining -= copy;
         src += copy;
@@ -155,7 +155,7 @@ static ssize_t rtems_blkdev_imfs_write(
     }
   }
 
-  if (remaining >= 0) {
+  if ( remaining >= 0 ) {
     iop->offset += count;
     rv = (ssize_t) count;
   } else {
@@ -167,18 +167,18 @@ static ssize_t rtems_blkdev_imfs_write(
 }
 
 static int rtems_blkdev_imfs_ioctl(
-  rtems_libio_t *iop,
+  rtems_libio_t  *iop,
   ioctl_command_t request,
-  void *buffer
+  void           *buffer
 )
 {
   int rv = 0;
 
-  if (request != RTEMS_BLKIO_REQUEST) {
-    rtems_blkdev_imfs_context *ctx = IMFS_generic_get_context_by_iop(iop);
-    rtems_disk_device *dd = &ctx->dd;
+  if ( request != RTEMS_BLKIO_REQUEST ) {
+    rtems_blkdev_imfs_context *ctx = IMFS_generic_get_context_by_iop( iop );
+    rtems_disk_device         *dd = &ctx->dd;
 
-    rv = (*dd->ioctl)(dd, request, buffer);
+    rv = ( *dd->ioctl )( dd, request, buffer );
   } else {
     /*
      * It is not allowed to directly access the driver circumventing the cache.
@@ -192,35 +192,33 @@ static int rtems_blkdev_imfs_ioctl(
 
 static int rtems_blkdev_imfs_fstat(
   const rtems_filesystem_location_info_t *loc,
-  struct stat *buf
+  struct stat                            *buf
 )
 {
   rtems_blkdev_imfs_context *ctx;
-  rtems_disk_device *dd;
-  IMFS_jnode_t *node;
+  rtems_disk_device         *dd;
+  IMFS_jnode_t              *node;
 
-  ctx = IMFS_generic_get_context_by_location(loc);
+  ctx = IMFS_generic_get_context_by_location( loc );
   dd = &ctx->dd;
 
-  buf->st_blksize = rtems_disk_get_block_size(dd);
-  buf->st_blocks = rtems_disk_get_block_count(dd);
+  buf->st_blksize = rtems_disk_get_block_size( dd );
+  buf->st_blocks = rtems_disk_get_block_count( dd );
 
   node = loc->node_access;
-  buf->st_rdev = IMFS_generic_get_device_identifier_by_node(node);
+  buf->st_rdev = IMFS_generic_get_device_identifier_by_node( node );
 
-  return IMFS_stat(loc, buf);
+  return IMFS_stat( loc, buf );
 }
 
-static int rtems_blkdev_imfs_fsync_or_fdatasync(
-  rtems_libio_t *iop
-)
+static int rtems_blkdev_imfs_fsync_or_fdatasync( rtems_libio_t *iop )
 {
-  int rv = 0;
-  rtems_blkdev_imfs_context *ctx = IMFS_generic_get_context_by_iop(iop);
-  rtems_disk_device *dd = &ctx->dd;
-  rtems_status_code sc = rtems_bdbuf_syncdev(dd);
+  int                        rv = 0;
+  rtems_blkdev_imfs_context *ctx = IMFS_generic_get_context_by_iop( iop );
+  rtems_disk_device         *dd = &ctx->dd;
+  rtems_status_code          sc = rtems_bdbuf_syncdev( dd );
 
-  if (sc != RTEMS_SUCCESSFUL) {
+  if ( sc != RTEMS_SUCCESSFUL ) {
     errno = EIO;
     rv = -1;
   }
@@ -249,65 +247,65 @@ static const rtems_filesystem_file_handlers_r rtems_blkdev_imfs_node = {
 
 static IMFS_jnode_t *rtems_blkdev_imfs_initialize(
   IMFS_jnode_t *node,
-  void *arg
+  void         *arg
 )
 {
   rtems_blkdev_imfs_context *ctx;
-  rtems_disk_device *dd;
+  rtems_disk_device         *dd;
 
-  node = IMFS_node_initialize_generic(node, arg);
+  node = IMFS_node_initialize_generic( node, arg );
 
-  ctx = IMFS_generic_get_context_by_node(node);
+  ctx = IMFS_generic_get_context_by_node( node );
   dd = &ctx->dd;
-  dd->dev = IMFS_generic_get_device_identifier_by_node(node);
+  dd->dev = IMFS_generic_get_device_identifier_by_node( node );
 
   return node;
 }
 
-static void rtems_blkdev_imfs_destroy(IMFS_jnode_t *node)
+static void rtems_blkdev_imfs_destroy( IMFS_jnode_t *node )
 {
-  rtems_blkdev_imfs_context *ctx = IMFS_generic_get_context_by_node(node);
-  rtems_disk_device *dd = &ctx->dd;
+  rtems_blkdev_imfs_context *ctx = IMFS_generic_get_context_by_node( node );
+  rtems_disk_device         *dd = &ctx->dd;
 
-  (void) rtems_bdbuf_syncdev(dd);
-  rtems_bdbuf_purge_dev(dd);
+  (void) rtems_bdbuf_syncdev( dd );
+  rtems_bdbuf_purge_dev( dd );
 
-  if (ctx->fd >= 0) {
-    close(ctx->fd);
+  if ( ctx->fd >= 0 ) {
+    close( ctx->fd );
   } else {
-    (*dd->ioctl)(dd, RTEMS_BLKIO_DELETED, NULL);
+    ( *dd->ioctl )( dd, RTEMS_BLKIO_DELETED, NULL );
   }
 
-  free(ctx);
+  free( ctx );
 
-  IMFS_node_destroy_default(node);
+  IMFS_node_destroy_default( node );
 }
 
-static const IMFS_node_control rtems_blkdev_imfs_control =
-  IMFS_GENERIC_INITIALIZER(
+static const IMFS_node_control
+  rtems_blkdev_imfs_control = IMFS_GENERIC_INITIALIZER(
     &rtems_blkdev_imfs_node,
     rtems_blkdev_imfs_initialize,
     rtems_blkdev_imfs_destroy
   );
 
 rtems_status_code rtems_blkdev_create(
-  const char *device,
-  uint32_t media_block_size,
-  rtems_blkdev_bnum media_block_count,
+  const char              *device,
+  uint32_t                 media_block_size,
+  rtems_blkdev_bnum        media_block_count,
   rtems_block_device_ioctl handler,
-  void *driver_data
+  void                    *driver_data
 )
 {
-  rtems_status_code sc;
+  rtems_status_code          sc;
   rtems_blkdev_imfs_context *ctx;
 
   sc = rtems_bdbuf_init();
-  if (sc != RTEMS_SUCCESSFUL) {
+  if ( sc != RTEMS_SUCCESSFUL ) {
     return RTEMS_INCORRECT_STATE;
   }
 
-  ctx = malloc(sizeof(*ctx));
-  if (ctx != NULL) {
+  ctx = malloc( sizeof( *ctx ) );
+  if ( ctx != NULL ) {
     sc = rtems_disk_init_phys(
       &ctx->dd,
       media_block_size,
@@ -318,7 +316,7 @@ rtems_status_code rtems_blkdev_create(
 
     ctx->fd = -1;
 
-    if (sc == RTEMS_SUCCESSFUL) {
+    if ( sc == RTEMS_SUCCESSFUL ) {
       int rv = IMFS_make_generic_node(
         device,
         S_IFBLK | S_IRWXU | S_IRWXG | S_IRWXO,
@@ -326,12 +324,12 @@ rtems_status_code rtems_blkdev_create(
         ctx
       );
 
-      if (rv != 0) {
-        free(ctx);
+      if ( rv != 0 ) {
+        free( ctx );
         sc = RTEMS_UNSATISFIED;
       }
     } else {
-      free(ctx);
+      free( ctx );
     }
   } else {
     sc = RTEMS_NO_MEMORY;
@@ -341,28 +339,28 @@ rtems_status_code rtems_blkdev_create(
 }
 
 rtems_status_code rtems_blkdev_create_partition(
-  const char *partition,
-  const char *parent_block_device,
+  const char       *partition,
+  const char       *parent_block_device,
   rtems_blkdev_bnum media_block_begin,
   rtems_blkdev_bnum media_block_count
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  int fd = open(parent_block_device, O_RDWR);
+  int               fd = open( parent_block_device, O_RDWR );
 
-  if (fd >= 0) {
-    int rv;
+  if ( fd >= 0 ) {
+    int         rv;
     struct stat st;
 
-    rv = fstat(fd, &st);
-    if (rv == 0 && S_ISBLK(st.st_mode)) {
+    rv = fstat( fd, &st );
+    if ( rv == 0 && S_ISBLK( st.st_mode ) ) {
       rtems_disk_device *phys_dd;
 
-      rv = rtems_disk_fd_get_disk_device(fd, &phys_dd);
-      if (rv == 0) {
-        rtems_blkdev_imfs_context *ctx = malloc(sizeof(*ctx));
+      rv = rtems_disk_fd_get_disk_device( fd, &phys_dd );
+      if ( rv == 0 ) {
+        rtems_blkdev_imfs_context *ctx = malloc( sizeof( *ctx ) );
 
-        if (ctx != NULL) {
+        if ( ctx != NULL ) {
           sc = rtems_disk_init_log(
             &ctx->dd,
             phys_dd,
@@ -370,7 +368,7 @@ rtems_status_code rtems_blkdev_create_partition(
             media_block_count
           );
 
-          if (sc == RTEMS_SUCCESSFUL) {
+          if ( sc == RTEMS_SUCCESSFUL ) {
             ctx->fd = fd;
 
             rv = IMFS_make_generic_node(
@@ -380,12 +378,12 @@ rtems_status_code rtems_blkdev_create_partition(
               ctx
             );
 
-            if (rv != 0) {
-              free(ctx);
+            if ( rv != 0 ) {
+              free( ctx );
               sc = RTEMS_UNSATISFIED;
             }
           } else {
-            free(ctx);
+            free( ctx );
           }
         } else {
           sc = RTEMS_NO_MEMORY;
@@ -397,8 +395,8 @@ rtems_status_code rtems_blkdev_create_partition(
       sc = RTEMS_INVALID_NODE;
     }
 
-    if (sc != RTEMS_SUCCESSFUL) {
-      close(fd);
+    if ( sc != RTEMS_SUCCESSFUL ) {
+      close( fd );
     }
   } else {
     sc = RTEMS_INVALID_ID;

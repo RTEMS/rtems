@@ -43,22 +43,22 @@
 #include <rtems/ramdisk.h>
 
 ramdisk *ramdisk_allocate(
-  void *area_begin,
-  uint32_t media_block_size,
+  void             *area_begin,
+  uint32_t          media_block_size,
   rtems_blkdev_bnum media_block_count,
-  bool trace
+  bool              trace
 )
 {
-  struct ramdisk *rd = calloc(1, sizeof(*rd));
+  struct ramdisk *rd = calloc( 1, sizeof( *rd ) );
 
-  if (rd == NULL) {
+  if ( rd == NULL ) {
     return NULL;
   }
 
-  if (area_begin == NULL) {
-    area_begin = calloc(media_block_count, media_block_size);
-    if (area_begin == NULL) {
-      free(rd);
+  if ( area_begin == NULL ) {
+    area_begin = calloc( media_block_count, media_block_size );
+    if ( area_begin == NULL ) {
+      free( rd );
 
       return NULL;
     }
@@ -75,12 +75,12 @@ ramdisk *ramdisk_allocate(
   return rd;
 }
 
-void ramdisk_free(ramdisk *rd)
+void ramdisk_free( ramdisk *rd )
 {
-  if (rd != NULL) {
-    if (rd->malloced) {
-      free(rd->area);
+  if ( rd != NULL ) {
+    if ( rd->malloced ) {
+      free( rd->area );
     }
-    free(rd);
+    free( rd );
   }
 }

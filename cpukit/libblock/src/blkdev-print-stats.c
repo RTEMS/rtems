@@ -43,41 +43,41 @@
 
 void rtems_blkdev_print_stats(
   const rtems_blkdev_stats *stats,
-  uint32_t media_block_size,
-  uint32_t media_block_count,
-  uint32_t block_size,
-  const rtems_printer* printer
+  uint32_t                  media_block_size,
+  uint32_t                  media_block_count,
+  uint32_t                  block_size,
+  const rtems_printer      *printer
 )
 {
   rtems_printf(
-     printer,
-     "-------------------------------------------------------------------------------\n"
-     "                               DEVICE STATISTICS\n"
-     "----------------------+--------------------------------------------------------\n"
-     " MEDIA BLOCK SIZE     | %" PRIu32 "\n"
-     " MEDIA BLOCK COUNT    | %" PRIu32 "\n"
-     " BLOCK SIZE           | %" PRIu32 "\n"
-     " READ HITS            | %" PRIu32 "\n"
-     " READ MISSES          | %" PRIu32 "\n"
-     " READ AHEAD TRANSFERS | %" PRIu32 "\n"
-     " READ AHEAD PEEKS     | %" PRIu32 "\n"
-     " READ BLOCKS          | %" PRIu32 "\n"
-     " READ ERRORS          | %" PRIu32 "\n"
-     " WRITE TRANSFERS      | %" PRIu32 "\n"
-     " WRITE BLOCKS         | %" PRIu32 "\n"
-     " WRITE ERRORS         | %" PRIu32 "\n"
-     "----------------------+--------------------------------------------------------\n",
-     media_block_size,
-     media_block_count,
-     block_size,
-     stats->read_hits,
-     stats->read_misses,
-     stats->read_ahead_transfers,
-     stats->read_ahead_peeks,
-     stats->read_blocks,
-     stats->read_errors,
-     stats->write_transfers,
-     stats->write_blocks,
-     stats->write_errors
+    printer,
+    "-------------------------------------------------------------------------------\n"
+    "                               DEVICE STATISTICS\n"
+    "----------------------+--------------------------------------------------------\n"
+    " MEDIA BLOCK SIZE     | %" PRIu32 "\n"
+    " MEDIA BLOCK COUNT    | %" PRIu32 "\n"
+    " BLOCK SIZE           | %" PRIu32 "\n"
+    " READ HITS            | %" PRIu32 "\n"
+    " READ MISSES          | %" PRIu32 "\n"
+    " READ AHEAD TRANSFERS | %" PRIu32 "\n"
+    " READ AHEAD PEEKS     | %" PRIu32 "\n"
+    " READ BLOCKS          | %" PRIu32 "\n"
+    " READ ERRORS          | %" PRIu32 "\n"
+    " WRITE TRANSFERS      | %" PRIu32 "\n"
+    " WRITE BLOCKS         | %" PRIu32 "\n"
+    " WRITE ERRORS         | %" PRIu32 "\n"
+    "----------------------+--------------------------------------------------------\n",
+    media_block_size,
+    media_block_count,
+    block_size,
+    stats->read_hits,
+    stats->read_misses,
+    stats->read_ahead_transfers,
+    stats->read_ahead_peeks,
+    stats->read_blocks,
+    stats->read_errors,
+    stats->write_transfers,
+    stats->write_blocks,
+    stats->write_errors
   );
 }

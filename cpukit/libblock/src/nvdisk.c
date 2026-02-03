@@ -73,15 +73,14 @@
  * Control tracing. It can be compiled out of the code for small
  * footprint targets. Leave in by default.
  */
-#if !defined (RTEMS_NVDISK_TRACE)
+#if !defined( RTEMS_NVDISK_TRACE )
 #define RTEMS_NVDISK_TRACE 0
 #endif
 
 /**
  * NV Device Control holds the segment controls
  */
-typedef struct rtems_nvdisk_device_ctl
-{
+typedef struct rtems_nvdisk_device_ctl {
   /**
    * The device this segment resides on.
    */
@@ -105,29 +104,28 @@ typedef struct rtems_nvdisk_device_ctl
   /**
    * Device descriptor.
    */
-  const rtems_nvdisk_device_desc* descriptor;
+  const rtems_nvdisk_device_desc *descriptor;
 } rtems_nvdisk_device_ctl;
 
 /**
  * The NV disk control structure for a single disk. There is one
  * for each minor disk in the system.
  */
-typedef struct
-{
-  uint32_t                  flags;        /**< configuration flags. */
-  uint32_t                  block_size;   /**< The block size for this disk. */
-  uint32_t                  block_count;  /**< The number of available blocks. */
-  rtems_nvdisk_device_ctl*  devices;      /**< The NV devices for this disk. */
-  uint32_t                  device_count; /**< The number of NV devices. */
-  uint32_t                  cs_pages;     /**< The num of pages of checksums. */
-  rtems_mutex               lock;         /**< Mutex for threading protection.*/
-  uint32_t info_level;                    /**< The info trace level. */
+typedef struct {
+  uint32_t                 flags;       /**< configuration flags. */
+  uint32_t                 block_size;  /**< The block size for this disk. */
+  uint32_t                 block_count; /**< The number of available blocks. */
+  rtems_nvdisk_device_ctl *devices;     /**< The NV devices for this disk. */
+  uint32_t                 device_count; /**< The number of NV devices. */
+  uint32_t                 cs_pages;     /**< The num of pages of checksums. */
+  rtems_mutex              lock;         /**< Mutex for threading protection.*/
+  uint32_t                 info_level;   /**< The info trace level. */
 } rtems_nvdisk;
 
 /**
  * The CRC16 factor table. Created during initialisation.
  */
-static uint16_t* rtems_nvdisk_crc16_factor;
+static uint16_t *rtems_nvdisk_crc16_factor;
 
 /**
  * Calculate the CRC16 checksum.
@@ -135,8 +133,9 @@ static uint16_t* rtems_nvdisk_crc16_factor;
  * @param _b The byte to checksum.
  * @param _c The current checksum.
  */
-#define rtems_nvdisk_calc_crc16(_b, _c) \
-  rtems_nvdisk_crc16_factor[((_b) ^ ((_c) & 0xff)) & 0xff] ^ (((_c) >> 8) & 0xff)
+#define rtems_nvdisk_calc_crc16( _b, _c )                              \
+  rtems_nvdisk_crc16_factor[ ( ( _b ) ^ ( ( _c ) & 0xff ) ) & 0xff ] ^ \
+    ( ( ( _c ) >> 8 ) & 0xff )
 
 /**
  * Generate the CRC table.
@@ -145,22 +144,22 @@ static uint16_t* rtems_nvdisk_crc16_factor;
  * @relval RTEMS_SUCCESSFUL The table was generated.
  * @retval RTEMS_NO_MEMORY The table could not be allocated from the heap.
  */
-static rtems_status_code
-rtems_nvdisk_crc16_gen_factors (uint16_t pattern)
+static rtems_status_code rtems_nvdisk_crc16_gen_factors( uint16_t pattern )
 {
   uint32_t b;
 
-  rtems_nvdisk_crc16_factor = malloc (sizeof (uint16_t) * 256);
-  if (!rtems_nvdisk_crc16_factor)
+  rtems_nvdisk_crc16_factor = malloc( sizeof( uint16_t ) * 256 );
+  if ( !rtems_nvdisk_crc16_factor ) {
     return RTEMS_NO_MEMORY;
+  }
 
-  for (b = 0; b < 256; b++)
-  {
+  for ( b = 0; b < 256; b++ ) {
     uint32_t i;
     uint16_t v = b;
-    for (i = 8; i--;)
-      v = v & 1 ? (v >> 1) ^ pattern : v >> 1;
-    rtems_nvdisk_crc16_factor[b] = v & 0xffff;
+    for ( i = 8; i--; ) {
+      v = v & 1 ? ( v >> 1 ) ^ pattern : v >> 1;
+    }
+    rtems_nvdisk_crc16_factor[ b ] = v & 0xffff;
   }
   return RTEMS_SUCCESSFUL;
 }
@@ -174,19 +173,21 @@ rtems_nvdisk_crc16_gen_factors (uint16_t pattern)
  * @param ... The arguments for the format text.
  * @return int The number of bytes written to the output.
  */
-static int
-rtems_nvdisk_printf (const rtems_nvdisk* nvd, const char *format, ...)
+static int rtems_nvdisk_printf(
+  const rtems_nvdisk *nvd,
+  const char         *format,
+  ...
+)
 {
   int ret = 0;
-  if (nvd->info_level >= 3)
-  {
+  if ( nvd->info_level >= 3 ) {
     va_list args;
-    va_start (args, format);
-    fprintf (stdout, "nvdisk:");
-    ret =  vfprintf (stdout, format, args);
-    fprintf (stdout, "\n");
-    fflush (stdout);
-    va_end (args);
+    va_start( args, format );
+    fprintf( stdout, "nvdisk:" );
+    ret = vfprintf( stdout, format, args );
+    fprintf( stdout, "\n" );
+    fflush( stdout );
+    va_end( args );
   }
   return ret;
 }
@@ -199,19 +200,21 @@ rtems_nvdisk_printf (const rtems_nvdisk* nvd, const char *format, ...)
  * @param ... The arguments for the format text.
  * @return int The number of bytes written to the output.
  */
-static int
-rtems_nvdisk_info (const rtems_nvdisk* nvd, const char *format, ...)
+static int rtems_nvdisk_info(
+  const rtems_nvdisk *nvd,
+  const char         *format,
+  ...
+)
 {
   int ret = 0;
-  if (nvd->info_level >= 2)
-  {
+  if ( nvd->info_level >= 2 ) {
     va_list args;
-    va_start (args, format);
-    fprintf (stdout, "nvdisk:");
-    ret =  vfprintf (stdout, format, args);
-    fprintf (stdout, "\n");
-    fflush (stdout);
-    va_end (args);
+    va_start( args, format );
+    fprintf( stdout, "nvdisk:" );
+    ret = vfprintf( stdout, format, args );
+    fprintf( stdout, "\n" );
+    fflush( stdout );
+    va_end( args );
   }
   return ret;
 }
@@ -224,19 +227,21 @@ rtems_nvdisk_info (const rtems_nvdisk* nvd, const char *format, ...)
  * @param ... The arguments for the format text.
  * @return int The number of bytes written to the output.
  */
-static int
-rtems_nvdisk_warning (const rtems_nvdisk* nvd, const char *format, ...)
+static int rtems_nvdisk_warning(
+  const rtems_nvdisk *nvd,
+  const char         *format,
+  ...
+)
 {
   int ret = 0;
-  if (nvd->info_level >= 1)
-  {
+  if ( nvd->info_level >= 1 ) {
     va_list args;
-    va_start (args, format);
-    fprintf (stdout, "nvdisk:warning:");
-    ret =  vfprintf (stdout, format, args);
-    fprintf (stdout, "\n");
-    fflush (stdout);
-    va_end (args);
+    va_start( args, format );
+    fprintf( stdout, "nvdisk:warning:" );
+    ret = vfprintf( stdout, format, args );
+    fprintf( stdout, "\n" );
+    fflush( stdout );
+    va_end( args );
   }
   return ret;
 }
@@ -249,148 +254,187 @@ rtems_nvdisk_warning (const rtems_nvdisk* nvd, const char *format, ...)
  * @param ... The arguments for the format text.
  * @return int The number of bytes written to the output.
  */
-static int
-rtems_nvdisk_error (const char *format, ...)
+static int rtems_nvdisk_error( const char *format, ... )
 {
-  int ret;
+  int     ret;
   va_list args;
-  va_start (args, format);
-  fprintf (stderr, "nvdisk:error:");
-  ret =  vfprintf (stderr, format, args);
-  fprintf (stderr, "\n");
-  fflush (stderr);
-  va_end (args);
+  va_start( args, format );
+  fprintf( stderr, "nvdisk:error:" );
+  ret = vfprintf( stderr, format, args );
+  fprintf( stderr, "\n" );
+  fflush( stderr );
+  va_end( args );
   return ret;
 }
 
 /**
  * Get the descriptor for a device.
  */
-static const rtems_nvdisk_device_desc*
-rtems_nvdisk_device_descriptor (const rtems_nvdisk* nvd, uint32_t device)
+static const rtems_nvdisk_device_desc *rtems_nvdisk_device_descriptor(
+  const rtems_nvdisk *nvd,
+  uint32_t            device
+)
 {
-  return nvd->devices[device].descriptor;
+  return nvd->devices[ device ].descriptor;
 }
 
 /**
  * Read a block of data from a device.
  */
-static int
-rtems_nvdisk_device_read (const rtems_nvdisk* nvd,
-                          uint32_t            device,
-                          uint32_t            offset,
-                          void*               buffer,
-                          uint32_t            size)
+static int rtems_nvdisk_device_read(
+  const rtems_nvdisk *nvd,
+  uint32_t            device,
+  uint32_t            offset,
+  void               *buffer,
+  uint32_t            size
+)
 {
-  const rtems_nvdisk_device_desc*     dd;
-  const rtems_nvdisk_driver_handlers* ops;
-  dd  = rtems_nvdisk_device_descriptor (nvd, device);
-  ops = nvd->devices[device].descriptor->nv_ops;
+  const rtems_nvdisk_device_desc     *dd;
+  const rtems_nvdisk_driver_handlers *ops;
+  dd = rtems_nvdisk_device_descriptor( nvd, device );
+  ops = nvd->devices[ device ].descriptor->nv_ops;
 #if RTEMS_NVDISK_TRACE
-  rtems_nvdisk_printf (nvd, "  dev-read: %02d-%08x: s=%d",
-                      device, offset, size);
+  rtems_nvdisk_printf(
+    nvd,
+    "  dev-read: %02d-%08x: s=%d",
+    device,
+    offset,
+    size
+  );
 #endif
-  return ops->read (device, dd->flags, dd->base, offset, buffer, size);
+  return ops->read( device, dd->flags, dd->base, offset, buffer, size );
 }
 
 /**
  * Write a block of data to a device.
  */
-static int
-rtems_nvdisk_device_write (const rtems_nvdisk* nvd,
-                           uint32_t            device,
-                           uint32_t            offset,
-                           const void*         buffer,
-                           uint32_t            size)
+static int rtems_nvdisk_device_write(
+  const rtems_nvdisk *nvd,
+  uint32_t            device,
+  uint32_t            offset,
+  const void         *buffer,
+  uint32_t            size
+)
 {
-  const rtems_nvdisk_device_desc*     dd;
-  const rtems_nvdisk_driver_handlers* ops;
-  dd  = rtems_nvdisk_device_descriptor (nvd, device);
-  ops = nvd->devices[device].descriptor->nv_ops;
+  const rtems_nvdisk_device_desc     *dd;
+  const rtems_nvdisk_driver_handlers *ops;
+  dd = rtems_nvdisk_device_descriptor( nvd, device );
+  ops = nvd->devices[ device ].descriptor->nv_ops;
 #if RTEMS_NVDISK_TRACE
-  rtems_nvdisk_printf (nvd, "  dev-write: %02d-%08x: s=%d",
-                      device, offset, size);
+  rtems_nvdisk_printf(
+    nvd,
+    "  dev-write: %02d-%08x: s=%d",
+    device,
+    offset,
+    size
+  );
 #endif
-  return ops->write (device, dd->flags, dd->base, offset, buffer, size);
+  return ops->write( device, dd->flags, dd->base, offset, buffer, size );
 }
 
 #if NOT_USED
 /**
  * Verify the data with the data in a segment.
  */
-static int
-rtems_nvdisk_device_verify (const rtems_nvdisk* nvd,
-                            uint32_t            device,
-                            uint32_t            offset,
-                            const void*         buffer,
-                            uint32_t            size)
+static int rtems_nvdisk_device_verify(
+  const rtems_nvdisk *nvd,
+  uint32_t            device,
+  uint32_t            offset,
+  const void         *buffer,
+  uint32_t            size
+)
 {
-  const rtems_nvdisk_device_desc*     dd;
-  const rtems_nvdisk_driver_handlers* ops;
-  dd  = rtems_nvdisk_device_descriptor (nvd, device);
-  ops = nvd->devices[device].descriptor->nv_ops;
+  const rtems_nvdisk_device_desc     *dd;
+  const rtems_nvdisk_driver_handlers *ops;
+  dd = rtems_nvdisk_device_descriptor( nvd, device );
+  ops = nvd->devices[ device ].descriptor->nv_ops;
 #if RTEMS_NVDISK_TRACE
-  rtems_nvdisk_printf (nvd, "  seg-verify: %02d-%08x: s=%d",
-                      device, offset, size);
+  rtems_nvdisk_printf(
+    nvd,
+    "  seg-verify: %02d-%08x: s=%d",
+    device,
+    offset,
+    size
+  );
 #endif
-  return ops->verify (device, dd->flags, dd->base, offset, buffer, size);
+  return ops->verify( device, dd->flags, dd->base, offset, buffer, size );
 }
 #endif
 
 /**
  * Read a page of data from the device.
  */
-static int
-rtems_nvdisk_read_page (const rtems_nvdisk* nvd,
-                        uint32_t            device,
-                        uint32_t            page,
-                        void*               buffer)
+static int rtems_nvdisk_read_page(
+  const rtems_nvdisk *nvd,
+  uint32_t            device,
+  uint32_t            page,
+  void               *buffer
+)
 {
-  return rtems_nvdisk_device_read (nvd, device,
-                                   page * nvd->block_size, buffer,
-                                   nvd->block_size);
+  return rtems_nvdisk_device_read(
+    nvd,
+    device,
+    page * nvd->block_size,
+    buffer,
+    nvd->block_size
+  );
 }
 
 /**
  * Write a page of data to a device.
  */
-static int
-rtems_nvdisk_write_page (const rtems_nvdisk* nvd,
-                         uint32_t            device,
-                         uint32_t            page,
-                         const void*         buffer)
+static int rtems_nvdisk_write_page(
+  const rtems_nvdisk *nvd,
+  uint32_t            device,
+  uint32_t            page,
+  const void         *buffer
+)
 {
-  return rtems_nvdisk_device_write (nvd, device,
-                                    page * nvd->block_size,
-                                    buffer, nvd->block_size);
+  return rtems_nvdisk_device_write(
+    nvd,
+    device,
+    page * nvd->block_size,
+    buffer,
+    nvd->block_size
+  );
 }
 
 /**
  * Read the checksum from the device.
  */
-static int
-rtems_nvdisk_read_checksum (const rtems_nvdisk* nvd,
-                            uint32_t            device,
-                            uint32_t            page,
-                            uint16_t*           cs)
+static int rtems_nvdisk_read_checksum(
+  const rtems_nvdisk *nvd,
+  uint32_t            device,
+  uint32_t            page,
+  uint16_t           *cs
+)
 {
-  return rtems_nvdisk_device_read (nvd, device,
-                                   page * sizeof (uint16_t),
-                                   cs, sizeof (uint16_t));
+  return rtems_nvdisk_device_read(
+    nvd,
+    device,
+    page * sizeof( uint16_t ),
+    cs,
+    sizeof( uint16_t )
+  );
 }
 
 /**
  * Write the checksum to the device.
  */
-static int
-rtems_nvdisk_write_checksum (const rtems_nvdisk* nvd,
-                             uint32_t            device,
-                             uint32_t            page,
-                             const uint16_t      cs)
+static int rtems_nvdisk_write_checksum(
+  const rtems_nvdisk *nvd,
+  uint32_t            device,
+  uint32_t            page,
+  const uint16_t      cs
+)
 {
-  return rtems_nvdisk_device_write (nvd, device,
-                                    page * sizeof (uint16_t),
-                                    &cs, sizeof (uint16_t));
+  return rtems_nvdisk_device_write(
+    nvd,
+    device,
+    page * sizeof( uint16_t ),
+    &cs,
+    sizeof( uint16_t )
+  );
 }
 
 /**
@@ -400,9 +444,10 @@ rtems_nvdisk_write_checksum (const rtems_nvdisk* nvd,
  * @param dd The device descriptor.
  * @param page_size The page size in bytes.
  */
-static uint32_t
-rtems_nvdisk_pages_in_device (const rtems_nvdisk*             nvd,
-                              const rtems_nvdisk_device_desc* dd)
+static uint32_t rtems_nvdisk_pages_in_device(
+  const rtems_nvdisk             *nvd,
+  const rtems_nvdisk_device_desc *dd
+)
 {
   return dd->size / nvd->block_size;
 }
@@ -411,26 +456,30 @@ rtems_nvdisk_pages_in_device (const rtems_nvdisk*             nvd,
  * Calculate the number of pages needed to hold the page descriptors.
  * The calculation need to round up.
  */
-static uint32_t
-rtems_nvdisk_page_desc_pages (const rtems_nvdisk*             nvd,
-                              const rtems_nvdisk_device_desc* dd)
+static uint32_t rtems_nvdisk_page_desc_pages(
+  const rtems_nvdisk             *nvd,
+  const rtems_nvdisk_device_desc *dd
+)
 {
-  uint32_t pages = rtems_nvdisk_pages_in_device (nvd, dd);
-  uint32_t bytes = pages * sizeof (uint16_t);
-  return ((bytes - 1) / nvd->block_size) + 1;
+  uint32_t pages = rtems_nvdisk_pages_in_device( nvd, dd );
+  uint32_t bytes = pages * sizeof( uint16_t );
+  return ( ( bytes - 1 ) / nvd->block_size ) + 1;
 }
 
 /**
  * Calculate the checksum of a page.
  */
-static uint16_t
-rtems_nvdisk_page_checksum (const uint8_t* buffer, uint32_t page_size)
+static uint16_t rtems_nvdisk_page_checksum(
+  const uint8_t *buffer,
+  uint32_t       page_size
+)
 {
   uint16_t cs = 0xffff;
   uint32_t i;
 
-  for (i = 0; i < page_size; i++, buffer++)
-    cs = rtems_nvdisk_calc_crc16 (*buffer, cs);
+  for ( i = 0; i < page_size; i++, buffer++ ) {
+    cs = rtems_nvdisk_calc_crc16( *buffer, cs );
+  }
 
   return cs;
 }
@@ -438,26 +487,29 @@ rtems_nvdisk_page_checksum (const uint8_t* buffer, uint32_t page_size)
 /**
  * Map a block to a device.
  */
-static rtems_nvdisk_device_ctl*
-rtems_nvdisk_get_device (rtems_nvdisk* nvd, uint32_t block)
+static rtems_nvdisk_device_ctl *rtems_nvdisk_get_device(
+  rtems_nvdisk *nvd,
+  uint32_t      block
+)
 {
   uint32_t device;
 
-  if (block >= nvd->block_count)
-  {
-    rtems_nvdisk_error ("read-block: bad block: %d", block);
+  if ( block >= nvd->block_count ) {
+    rtems_nvdisk_error( "read-block: bad block: %d", block );
     return NULL;
   }
 
-  for (device = 0; device < nvd->device_count; device++)
-  {
-    rtems_nvdisk_device_ctl* dc = &nvd->devices[device];
-    if ((block >= dc->block_base) &&
-        (block < (dc->block_base + dc->pages - dc->pages_desc)))
+  for ( device = 0; device < nvd->device_count; device++ ) {
+    rtems_nvdisk_device_ctl *dc = &nvd->devices[ device ];
+    if (
+      ( block >= dc->block_base ) &&
+      ( block < ( dc->block_base + dc->pages - dc->pages_desc ) )
+    ) {
       return dc;
+    }
   }
 
-  rtems_nvdisk_error ("map-block:%d: no device/page map found", block);
+  rtems_nvdisk_error( "map-block:%d: no device/page map found", block );
 
   return NULL;
 }
@@ -465,9 +517,10 @@ rtems_nvdisk_get_device (rtems_nvdisk* nvd, uint32_t block)
 /**
  * Get the page for a block in a device.
  */
-static uint32_t
-rtems_nvdisk_get_page (rtems_nvdisk_device_ctl* dc,
-                       uint32_t                 block)
+static uint32_t rtems_nvdisk_get_page(
+  rtems_nvdisk_device_ctl *dc,
+  uint32_t                 block
+)
 {
   return block - dc->block_base;
 }
@@ -482,52 +535,71 @@ rtems_nvdisk_get_page (rtems_nvdisk_device_ctl* dc,
  * @return 0 No error.
  * @return EIO Invalid block number or crc.
  */
-static int
-rtems_nvdisk_read_block (rtems_nvdisk* nvd, uint32_t block, uint8_t* buffer)
+static int rtems_nvdisk_read_block(
+  rtems_nvdisk *nvd,
+  uint32_t      block,
+  uint8_t      *buffer
+)
 {
-  rtems_nvdisk_device_ctl* dc;
+  rtems_nvdisk_device_ctl *dc;
   uint32_t                 page;
   uint16_t                 crc;
   uint16_t                 cs;
   int                      ret;
 
-  dc = rtems_nvdisk_get_device (nvd, block);
+  dc = rtems_nvdisk_get_device( nvd, block );
 
-  if (!dc)
+  if ( !dc ) {
     return EIO;
+  }
 
-  page = rtems_nvdisk_get_page (dc, block);
+  page = rtems_nvdisk_get_page( dc, block );
 
 #if RTEMS_NVDISK_TRACE
-  rtems_nvdisk_info (nvd, " read-block:%d=>%02d-%03d, cs:%04x",
-                     block, dc->device, page, crc);
+  rtems_nvdisk_info(
+    nvd,
+    " read-block:%d=>%02d-%03d, cs:%04x",
+    block,
+    dc->device,
+    page,
+    crc
+  );
 #endif
 
-  ret = rtems_nvdisk_read_checksum (nvd, dc->device, page, &crc);
+  ret = rtems_nvdisk_read_checksum( nvd, dc->device, page, &crc );
 
-  if (ret)
+  if ( ret ) {
     return ret;
+  }
 
-  if (crc == 0xffff)
-  {
+  if ( crc == 0xffff ) {
 #if RTEMS_NVDISK_TRACE
-    rtems_nvdisk_warning (nvd, "read-block: crc not set: %d", block);
+    rtems_nvdisk_warning( nvd, "read-block: crc not set: %d", block );
 #endif
-    memset (buffer, 0, nvd->block_size);
+    memset( buffer, 0, nvd->block_size );
     return 0;
   }
 
-  ret = rtems_nvdisk_read_page (nvd, dc->device, page + dc->pages_desc, buffer);
+  ret = rtems_nvdisk_read_page(
+    nvd,
+    dc->device,
+    page + dc->pages_desc,
+    buffer
+  );
 
-  if (ret)
+  if ( ret ) {
     return ret;
+  }
 
-  cs = rtems_nvdisk_page_checksum (buffer, nvd->block_size);
+  cs = rtems_nvdisk_page_checksum( buffer, nvd->block_size );
 
-  if (cs != crc)
-  {
-    rtems_nvdisk_error ("read-block: crc failure: %d: buffer:%04x page:%04x",
-                        block, cs, crc);
+  if ( cs != crc ) {
+    rtems_nvdisk_error(
+      "read-block: crc failure: %d: buffer:%04x page:%04x",
+      block,
+      cs,
+      crc
+    );
     return EIO;
   }
 
@@ -545,35 +617,49 @@ rtems_nvdisk_read_block (rtems_nvdisk* nvd, uint32_t block, uint8_t* buffer)
  * @return EIO Invalid block size, block number, segment pointer, crc,
  *             page flags.
  */
-static int
-rtems_nvdisk_write_block (rtems_nvdisk*        nvd,
-                          uint32_t             block,
-                          const unsigned char* buffer)
+static int rtems_nvdisk_write_block(
+  rtems_nvdisk        *nvd,
+  uint32_t             block,
+  const unsigned char *buffer
+)
 {
-  rtems_nvdisk_device_ctl* dc;
+  rtems_nvdisk_device_ctl *dc;
   uint32_t                 page;
   uint16_t                 cs;
   int                      ret;
 
-  dc = rtems_nvdisk_get_device (nvd, block);
+  dc = rtems_nvdisk_get_device( nvd, block );
 
-  if (!dc)
+  if ( !dc ) {
     return EIO;
+  }
 
-  page = rtems_nvdisk_get_page (dc, block);
+  page = rtems_nvdisk_get_page( dc, block );
 
-  cs = rtems_nvdisk_page_checksum (buffer, nvd->block_size);
+  cs = rtems_nvdisk_page_checksum( buffer, nvd->block_size );
 
 #if RTEMS_NVDISK_TRACE
-  rtems_nvdisk_info (nvd, " write-block:%d=>%02d-%03d", block, dc->device, page);
+  rtems_nvdisk_info(
+    nvd,
+    " write-block:%d=>%02d-%03d",
+    block,
+    dc->device,
+    page
+  );
 #endif
 
-  ret = rtems_nvdisk_write_page (nvd, dc->device, page + dc->pages_desc, buffer);
+  ret = rtems_nvdisk_write_page(
+    nvd,
+    dc->device,
+    page + dc->pages_desc,
+    buffer
+  );
 
-  if (ret)
+  if ( ret ) {
     return ret;
+  }
 
-  return rtems_nvdisk_write_checksum (nvd, dc->device, page, cs);
+  return rtems_nvdisk_write_checksum( nvd, dc->device, page, cs );
 }
 
 /**
@@ -584,33 +670,31 @@ rtems_nvdisk_write_block (rtems_nvdisk*        nvd,
  * @param req Pointer to the READ block device request info.
  * @retval int The ioctl return value.
  */
-static int
-rtems_nvdisk_read (rtems_nvdisk* nvd, rtems_blkdev_request* req)
+static int rtems_nvdisk_read( rtems_nvdisk *nvd, rtems_blkdev_request *req )
 {
-  rtems_blkdev_sg_buffer* sg = req->bufs;
+  rtems_blkdev_sg_buffer *sg = req->bufs;
   uint32_t                bufs;
   int                     ret = 0;
 
 #if RTEMS_NVDISK_TRACE
-  rtems_nvdisk_info (nvd, "read: blocks=%d", req->bufnum);
+  rtems_nvdisk_info( nvd, "read: blocks=%d", req->bufnum );
 #endif
 
-  for (bufs = 0; (ret == 0) && (bufs < req->bufnum); bufs++, sg++)
-  {
-    uint8_t* data;
+  for ( bufs = 0; ( ret == 0 ) && ( bufs < req->bufnum ); bufs++, sg++ ) {
+    uint8_t *data;
     uint32_t nvb;
     uint32_t b;
     nvb = sg->length / nvd->block_size;
     data = sg->buffer;
-    for (b = 0; b < nvb; b++, data += nvd->block_size)
-    {
-      ret = rtems_nvdisk_read_block (nvd, sg->block + b, data);
-      if (ret)
+    for ( b = 0; b < nvb; b++, data += nvd->block_size ) {
+      ret = rtems_nvdisk_read_block( nvd, sg->block + b, data );
+      if ( ret ) {
         break;
+      }
     }
   }
 
-  rtems_blkdev_request_done (req, ret ? RTEMS_IO_ERROR : RTEMS_SUCCESSFUL);
+  rtems_blkdev_request_done( req, ret ? RTEMS_IO_ERROR : RTEMS_SUCCESSFUL );
 
   return 0;
 }
@@ -623,33 +707,31 @@ rtems_nvdisk_read (rtems_nvdisk* nvd, rtems_blkdev_request* req)
  * @param req Pointers to the WRITE block device request info.
  * @retval int The ioctl return value.
  */
-static int
-rtems_nvdisk_write (rtems_nvdisk* nvd, rtems_blkdev_request* req)
+static int rtems_nvdisk_write( rtems_nvdisk *nvd, rtems_blkdev_request *req )
 {
-  rtems_blkdev_sg_buffer* sg = req->bufs;
+  rtems_blkdev_sg_buffer *sg = req->bufs;
   uint32_t                bufs;
   int                     ret = 0;
 
 #if RTEMS_NVDISK_TRACE
-  rtems_nvdisk_info (nvd, "write: blocks=%d", req->bufnum);
+  rtems_nvdisk_info( nvd, "write: blocks=%d", req->bufnum );
 #endif
 
-  for (bufs = 0; (ret == 0) && (bufs < req->bufnum); bufs++, sg++)
-  {
-    uint8_t* data;
+  for ( bufs = 0; ( ret == 0 ) && ( bufs < req->bufnum ); bufs++, sg++ ) {
+    uint8_t *data;
     uint32_t nvb;
     uint32_t b;
     nvb = sg->length / nvd->block_size;
     data = sg->buffer;
-    for (b = 0; b < nvb; b++, data += nvd->block_size)
-    {
-      ret = rtems_nvdisk_write_block (nvd, sg->block + b, data);
-      if (ret)
+    for ( b = 0; b < nvb; b++, data += nvd->block_size ) {
+      ret = rtems_nvdisk_write_block( nvd, sg->block + b, data );
+      if ( ret ) {
         break;
+      }
     }
   }
 
-  rtems_blkdev_request_done (req, ret ? RTEMS_IO_ERROR : RTEMS_SUCCESSFUL);
+  rtems_blkdev_request_done( req, ret ? RTEMS_IO_ERROR : RTEMS_SUCCESSFUL );
 
   return 0;
 }
@@ -660,24 +742,22 @@ rtems_nvdisk_write (rtems_nvdisk* nvd, rtems_blkdev_request* req)
  * @param nvd The nvdisk data.
  * @retval int The ioctl return value.
  */
-static int
-rtems_nvdisk_erase_disk (rtems_nvdisk* nvd)
+static int rtems_nvdisk_erase_disk( rtems_nvdisk *nvd )
 {
   uint32_t device;
 
 #if RTEMS_NVDISK_TRACE
-  rtems_nvdisk_info (nvd, "erase-disk");
+  rtems_nvdisk_info( nvd, "erase-disk" );
 #endif
 
-  for (device = 0; device < nvd->device_count; device++)
-  {
-    rtems_nvdisk_device_ctl* dc = &nvd->devices[device];
+  for ( device = 0; device < nvd->device_count; device++ ) {
+    rtems_nvdisk_device_ctl *dc = &nvd->devices[ device ];
     uint32_t                 page;
-    for (page = 0; page < (dc->pages - dc->pages_desc); page++)
-    {
-      int ret = rtems_nvdisk_write_checksum (nvd, dc->device, page, 0xffff);
-      if (ret)
+    for ( page = 0; page < ( dc->pages - dc->pages_desc ); page++ ) {
+      int ret = rtems_nvdisk_write_checksum( nvd, dc->device, page, 0xffff );
+      if ( ret ) {
         return ret;
+      }
     }
   }
 
@@ -692,33 +772,33 @@ rtems_nvdisk_erase_disk (rtems_nvdisk* nvd)
  * @param argp IOCTL argument.
  * @retval The IOCTL return value
  */
-static int
-rtems_nvdisk_ioctl (rtems_disk_device *dd, uint32_t req, void* argp)
+static int rtems_nvdisk_ioctl(
+  rtems_disk_device *dd,
+  uint32_t           req,
+  void              *argp
+)
 {
-  rtems_nvdisk*         nvd = rtems_disk_get_driver_data (dd);
-  rtems_blkdev_request* r = argp;
+  rtems_nvdisk         *nvd = rtems_disk_get_driver_data( dd );
+  rtems_blkdev_request *r = argp;
 
-  if (nvd->device_count == 0)
-  {
+  if ( nvd->device_count == 0 ) {
     errno = ENODEV;
     return -1;
   }
 
   errno = 0;
 
-  rtems_mutex_lock (&nvd->lock);
+  rtems_mutex_lock( &nvd->lock );
 
-  switch (req)
-  {
+  switch ( req ) {
     case RTEMS_BLKIO_REQUEST:
-      switch (r->req)
-      {
+      switch ( r->req ) {
         case RTEMS_BLKDEV_REQ_READ:
-          errno = rtems_nvdisk_read (nvd, r);
+          errno = rtems_nvdisk_read( nvd, r );
           break;
 
         case RTEMS_BLKDEV_REQ_WRITE:
-          errno = rtems_nvdisk_write (nvd, r);
+          errno = rtems_nvdisk_write( nvd, r );
           break;
 
         default:
@@ -728,7 +808,7 @@ rtems_nvdisk_ioctl (rtems_disk_device *dd, uint32_t req, void* argp)
       break;
 
     case RTEMS_NVDISK_IOCTL_ERASE_DISK:
-      errno = rtems_nvdisk_erase_disk (nvd);
+      errno = rtems_nvdisk_erase_disk( nvd );
       break;
 
     case RTEMS_NVDISK_IOCTL_INFO_LEVEL:
@@ -736,11 +816,11 @@ rtems_nvdisk_ioctl (rtems_disk_device *dd, uint32_t req, void* argp)
       break;
 
     default:
-      rtems_blkdev_ioctl (dd, req, argp);
+      rtems_blkdev_ioctl( dd, req, argp );
       break;
   }
 
-  rtems_mutex_unlock (&nvd->lock);
+  rtems_mutex_unlock( &nvd->lock );
 
   return errno == 0 ? 0 : -1;
 }
@@ -754,66 +834,78 @@ rtems_nvdisk_ioctl (rtems_disk_device *dd, uint32_t req, void* argp)
  * @param minor Minor device number, not applicable.
  * @param arg Initialization argument, not applicable.
  */
-rtems_device_driver
-rtems_nvdisk_initialize (rtems_device_major_number major RTEMS_UNUSED,
-                        rtems_device_minor_number minor RTEMS_UNUSED,
-                        void*                     arg RTEMS_UNUSED)
+rtems_device_driver rtems_nvdisk_initialize(
+  rtems_device_major_number major RTEMS_UNUSED,
+  rtems_device_minor_number minor RTEMS_UNUSED,
+  void *arg                       RTEMS_UNUSED
+)
 {
-  const rtems_nvdisk_config* c = rtems_nvdisk_configuration;
-  rtems_nvdisk*              nvd;
+  const rtems_nvdisk_config *c = rtems_nvdisk_configuration;
+  rtems_nvdisk              *nvd;
   rtems_status_code          sc;
   uint32_t                   i;
 
-  sc = rtems_nvdisk_crc16_gen_factors (0x8408);
-  if (sc != RTEMS_SUCCESSFUL)
-      return sc;
+  sc = rtems_nvdisk_crc16_gen_factors( 0x8408 );
+  if ( sc != RTEMS_SUCCESSFUL ) {
+    return sc;
+  }
 
-  nvd = calloc (rtems_nvdisk_configuration_size, sizeof (*nvd));
-  if (!nvd)
+  nvd = calloc( rtems_nvdisk_configuration_size, sizeof( *nvd ) );
+  if ( !nvd ) {
     return RTEMS_NO_MEMORY;
+  }
 
-  for (i = 0; i < rtems_nvdisk_configuration_size; i++, c++, nvd++)
-  {
+  for ( i = 0; i < rtems_nvdisk_configuration_size; i++, c++, nvd++ ) {
     char     name[] = RTEMS_NVDISK_DEVICE_BASE_NAME "a";
     uint32_t device;
     uint32_t blocks = 0;
 
-    name [sizeof(RTEMS_NVDISK_DEVICE_BASE_NAME)] += i;
+    name[ sizeof( RTEMS_NVDISK_DEVICE_BASE_NAME ) ] += i;
 
-    nvd->flags        = c->flags;
-    nvd->block_size   = c->block_size;
-    nvd->info_level   = c->info_level;
+    nvd->flags = c->flags;
+    nvd->block_size = c->block_size;
+    nvd->info_level = c->info_level;
 
-    nvd->devices = calloc (c->device_count, sizeof (rtems_nvdisk_device_ctl));
-    if (!nvd->devices)
+    nvd->devices = calloc(
+      c->device_count,
+      sizeof( rtems_nvdisk_device_ctl )
+    );
+    if ( !nvd->devices ) {
       return RTEMS_NO_MEMORY;
+    }
 
-    for (device = 0; device < c->device_count; device++)
-    {
-      rtems_nvdisk_device_ctl* dc = &nvd->devices[device];
+    for ( device = 0; device < c->device_count; device++ ) {
+      rtems_nvdisk_device_ctl *dc = &nvd->devices[ device ];
 
-      dc->device     = device;
-      dc->pages      = rtems_nvdisk_pages_in_device (nvd, &c->devices[device]);
-      dc->pages_desc = rtems_nvdisk_page_desc_pages (nvd, &c->devices[device]);
+      dc->device = device;
+      dc->pages = rtems_nvdisk_pages_in_device( nvd, &c->devices[ device ] );
+      dc->pages_desc = rtems_nvdisk_page_desc_pages(
+        nvd,
+        &c->devices[ device ]
+      );
       dc->block_base = blocks;
 
       blocks += dc->pages - dc->pages_desc;
 
-      dc->descriptor = &c->devices[device];
+      dc->descriptor = &c->devices[ device ];
     }
 
-    nvd->block_count  = blocks;
+    nvd->block_count = blocks;
     nvd->device_count = c->device_count;
 
-    sc = rtems_blkdev_create(name, c->block_size, blocks,
-                             rtems_nvdisk_ioctl, nvd);
-    if (sc != RTEMS_SUCCESSFUL)
-    {
-      rtems_nvdisk_error ("disk create phy failed");
+    sc = rtems_blkdev_create(
+      name,
+      c->block_size,
+      blocks,
+      rtems_nvdisk_ioctl,
+      nvd
+    );
+    if ( sc != RTEMS_SUCCESSFUL ) {
+      rtems_nvdisk_error( "disk create phy failed" );
       return sc;
     }
 
-    rtems_mutex_init (&nvd->lock, "NV Disk");
+    rtems_mutex_init( &nvd->lock, "NV Disk" );
   }
 
   return RTEMS_SUCCESSFUL;

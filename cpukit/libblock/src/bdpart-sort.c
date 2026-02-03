@@ -42,21 +42,21 @@
 #include <rtems.h>
 #include <rtems/bdpart.h>
 
-static int rtems_bdpart_partition_compare( const void *aa, const void *bb)
+static int rtems_bdpart_partition_compare( const void *aa, const void *bb )
 {
   const rtems_bdpart_partition *a = aa;
   const rtems_bdpart_partition *b = bb;
 
-  if (a->begin < b->begin) {
+  if ( a->begin < b->begin ) {
     return -1;
-  } else if (a->begin == b->begin) {
+  } else if ( a->begin == b->begin ) {
     return 0;
   } else {
     return 1;
   }
 }
 
-void rtems_bdpart_sort( rtems_bdpart_partition *pt, size_t count)
+void rtems_bdpart_sort( rtems_bdpart_partition *pt, size_t count )
 {
-  qsort( pt, count, sizeof( *pt), rtems_bdpart_partition_compare);
+  qsort( pt, count, sizeof( *pt ), rtems_bdpart_partition_compare );
 }

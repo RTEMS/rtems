@@ -43,14 +43,14 @@
 
 rtems_status_code rtems_media_get_device_identifier(
   const char *device_path,
-  dev_t *device_identifier
+  dev_t      *device_identifier
 )
 {
-  int rv = 0;
+  int         rv = 0;
   struct stat st;
 
-  rv = stat(device_path, &st);
-  if (rv != 0) {
+  rv = stat( device_path, &st );
+  if ( rv != 0 ) {
     return RTEMS_INVALID_ID;
   }
 
