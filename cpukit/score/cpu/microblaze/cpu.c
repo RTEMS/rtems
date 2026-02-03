@@ -138,7 +138,7 @@ void _CPU_Exception_frame_print( const CPU_Exception_frame *ctx )
           ( ctx->msr & MICROBLAZE_MSR_IE ) ? "IE " : "" );
 
   const char *esr_ec_txt = "?";
-  int         exception_ind = 0;
+  size_t      exception_ind = 0;
   int         esr_ec = ctx->esr & 0x1f;
   for ( ; exception_ind < sizeof( esr_ec_codes ) / sizeof( esr_ec_codes[ 0 ] );
         exception_ind++ ) {
