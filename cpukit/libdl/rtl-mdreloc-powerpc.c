@@ -336,7 +336,7 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
       }
 
       tmp = (symvalue + rela->r_addend) >> 2;
-      if (tmp > ((1<<bits) - 1 )) {
+      if (tmp > ((1u<<bits) - 1 )) {
         Elf_Word tramp_addr;
         size_t   tramp_size = get_veneer_size(ELF_R_TYPE(rela->r_info));
         if (parsing) {
