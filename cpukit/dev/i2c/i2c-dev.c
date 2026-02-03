@@ -44,73 +44,69 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-static ssize_t i2c_dev_read(
-  rtems_libio_t *iop,
-  void *buffer,
-  size_t count
-)
+static ssize_t i2c_dev_read( rtems_libio_t *iop, void *buffer, size_t count )
 {
-  i2c_dev *dev = IMFS_generic_get_context_by_iop(iop);
-  ssize_t n;
+  i2c_dev *dev = IMFS_generic_get_context_by_iop( iop );
+  ssize_t  n;
 
-  n = (*dev->read)(dev, buffer, count, iop->offset);
-  if (n >= 0) {
+  n = ( *dev->read )( dev, buffer, count, iop->offset );
+  if ( n >= 0 ) {
     iop->offset += n;
 
     return n;
   } else {
-    rtems_set_errno_and_return_minus_one(-n);
+    rtems_set_errno_and_return_minus_one( -n );
   }
 }
 
 static ssize_t i2c_dev_write(
   rtems_libio_t *iop,
-  const void *buffer,
-  size_t count
+  const void    *buffer,
+  size_t         count
 )
 {
-  i2c_dev *dev = IMFS_generic_get_context_by_iop(iop);
-  ssize_t n;
+  i2c_dev *dev = IMFS_generic_get_context_by_iop( iop );
+  ssize_t  n;
 
-  n = (*dev->write)(dev, buffer, count, iop->offset);
-  if (n >= 0) {
+  n = ( *dev->write )( dev, buffer, count, iop->offset );
+  if ( n >= 0 ) {
     iop->offset += n;
 
     return n;
   } else {
-    rtems_set_errno_and_return_minus_one(-n);
+    rtems_set_errno_and_return_minus_one( -n );
   }
 }
 
 static int i2c_dev_ioctl(
-  rtems_libio_t *iop,
+  rtems_libio_t  *iop,
   ioctl_command_t command,
-  void *arg
+  void           *arg
 )
 {
-  i2c_dev *dev = IMFS_generic_get_context_by_iop(iop);
-  int err;
+  i2c_dev *dev = IMFS_generic_get_context_by_iop( iop );
+  int      err;
 
-  err = (*dev->ioctl)(dev, command, arg);
+  err = ( *dev->ioctl )( dev, command, arg );
 
-  if (err == 0) {
+  if ( err == 0 ) {
     return 0;
   } else {
-    rtems_set_errno_and_return_minus_one(-err);
+    rtems_set_errno_and_return_minus_one( -err );
   }
 }
 
 static int i2c_dev_fstat(
   const rtems_filesystem_location_info_t *loc,
-  struct stat *buf
+  struct stat                            *buf
 )
 {
-  i2c_dev *dev = IMFS_generic_get_context_by_location(loc);
+  i2c_dev *dev = IMFS_generic_get_context_by_location( loc );
 
-  buf->st_size = (*dev->get_size)(dev);
-  buf->st_blksize = (*dev->get_block_size)(dev);
+  buf->st_size = ( *dev->get_size )( dev );
+  buf->st_blksize = ( *dev->get_block_size )( dev );
 
-  return IMFS_stat(loc, buf);
+  return IMFS_stat( loc, buf );
 }
 
 static const rtems_filesystem_file_handlers_r i2c_dev_handler = {
@@ -132,14 +128,14 @@ static const rtems_filesystem_file_handlers_r i2c_dev_handler = {
   .writev_h = rtems_filesystem_default_writev
 };
 
-static void i2c_dev_node_destroy(IMFS_jnode_t *node)
+static void i2c_dev_node_destroy( IMFS_jnode_t *node )
 {
   i2c_dev *dev;
 
-  dev = IMFS_generic_get_context_by_node(node);
-  (*dev->destroy)(dev);
+  dev = IMFS_generic_get_context_by_node( node );
+  ( *dev->destroy )( dev );
 
-  IMFS_node_destroy_default(node);
+  IMFS_node_destroy_default( node );
 }
 
 static const IMFS_node_control i2c_dev_node_control = IMFS_GENERIC_INITIALIZER(
@@ -148,10 +144,7 @@ static const IMFS_node_control i2c_dev_node_control = IMFS_GENERIC_INITIALIZER(
   i2c_dev_node_destroy
 );
 
-int i2c_dev_register(
-  i2c_dev *dev,
-  const char *dev_path
-)
+int i2c_dev_register( i2c_dev *dev, const char *dev_path )
 {
   int rv;
 
@@ -161,8 +154,8 @@ int i2c_dev_register(
     &i2c_dev_node_control,
     dev
   );
-  if (rv != 0) {
-    (*dev->destroy)(dev);
+  if ( rv != 0 ) {
+    ( *dev->destroy )( dev );
   }
 
   return rv;
@@ -170,9 +163,9 @@ int i2c_dev_register(
 
 static ssize_t i2c_dev_read_default(
   i2c_dev *dev,
-  void *buf,
-  size_t n,
-  off_t offset
+  void    *buf,
+  size_t   n,
+  off_t    offset
 )
 {
   (void) dev;
@@ -184,10 +177,10 @@ static ssize_t i2c_dev_read_default(
 }
 
 static ssize_t i2c_dev_write_default(
-  i2c_dev *dev,
+  i2c_dev    *dev,
   const void *buf,
-  size_t n,
-  off_t offset
+  size_t      n,
+  off_t       offset
 )
 {
   (void) dev;
@@ -199,9 +192,9 @@ static ssize_t i2c_dev_write_default(
 }
 
 static int i2c_dev_ioctl_default(
-  i2c_dev *dev,
+  i2c_dev        *dev,
   ioctl_command_t command,
-  void *arg
+  void           *arg
 )
 {
   (void) dev;
@@ -211,14 +204,14 @@ static int i2c_dev_ioctl_default(
   return -ENOTTY;
 }
 
-static off_t i2c_dev_get_size_default(i2c_dev *dev)
+static off_t i2c_dev_get_size_default( i2c_dev *dev )
 {
   (void) dev;
 
   return 0;
 }
 
-static blksize_t i2c_dev_get_block_size_default(i2c_dev *dev)
+static blksize_t i2c_dev_get_block_size_default( i2c_dev *dev )
 {
   (void) dev;
 
@@ -226,24 +219,24 @@ static blksize_t i2c_dev_get_block_size_default(i2c_dev *dev)
 }
 
 static int i2c_dev_do_init(
-  i2c_dev *dev,
+  i2c_dev    *dev,
   const char *bus_path,
-  uint16_t address,
-  void (*destroy)(i2c_dev *dev)
+  uint16_t    address,
+  void ( *destroy )( i2c_dev *dev )
 )
 {
   int rv;
 
-  dev->bus_fd = open(bus_path, O_RDWR);
-  if (dev->bus_fd < 0) {
-    (*destroy)(dev);
+  dev->bus_fd = open( bus_path, O_RDWR );
+  if ( dev->bus_fd < 0 ) {
+    ( *destroy )( dev );
 
     return -1;
   }
 
-  rv = ioctl(dev->bus_fd, I2C_BUS_GET_CONTROL, &dev->bus);
-  if (rv != 0) {
-    (*destroy)(dev);
+  rv = ioctl( dev->bus_fd, I2C_BUS_GET_CONTROL, &dev->bus );
+  if ( rv != 0 ) {
+    ( *destroy )( dev );
 
     return -1;
   }
@@ -259,41 +252,41 @@ static int i2c_dev_do_init(
   return 0;
 }
 
-void i2c_dev_destroy(i2c_dev *dev)
+void i2c_dev_destroy( i2c_dev *dev )
 {
   int rv;
 
-  rv = close(dev->bus_fd);
-  _Assert(dev->bus_fd < 0 || rv == 0);
+  rv = close( dev->bus_fd );
+  _Assert( dev->bus_fd < 0 || rv == 0 );
   (void) rv;
 }
 
-void i2c_dev_destroy_and_free(i2c_dev *dev)
+void i2c_dev_destroy_and_free( i2c_dev *dev )
 {
-  i2c_dev_destroy(dev);
-  free(dev);
+  i2c_dev_destroy( dev );
+  free( dev );
 }
 
-int i2c_dev_init(i2c_dev *dev, const char *bus_path, uint16_t address)
+int i2c_dev_init( i2c_dev *dev, const char *bus_path, uint16_t address )
 {
-  return i2c_dev_do_init(dev, bus_path, address, i2c_dev_destroy);
+  return i2c_dev_do_init( dev, bus_path, address, i2c_dev_destroy );
 }
 
 i2c_dev *i2c_dev_alloc_and_init(
-  size_t size,
+  size_t      size,
   const char *bus_path,
-  uint16_t address
+  uint16_t    address
 )
 {
   i2c_dev *dev = NULL;
 
-  if (size >= sizeof(*dev)) {
-    dev = calloc(1, size);
-    if (dev != NULL) {
+  if ( size >= sizeof( *dev ) ) {
+    dev = calloc( 1, size );
+    if ( dev != NULL ) {
       int rv;
 
-      rv = i2c_dev_do_init(dev, bus_path, address, i2c_dev_destroy_and_free);
-      if (rv != 0) {
+      rv = i2c_dev_do_init( dev, bus_path, address, i2c_dev_destroy_and_free );
+      if ( rv != 0 ) {
         return NULL;
       }
     }

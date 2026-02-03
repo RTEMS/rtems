@@ -43,39 +43,39 @@ typedef struct {
   size_t   size;
 } fpga_i2c_slave;
 
-static ssize_t
-fpga_i2c_slave_read(i2c_dev* base, void* buf, size_t n, off_t offset)
+static ssize_t fpga_i2c_slave_read(
+  i2c_dev *base,
+  void    *buf,
+  size_t   n,
+  off_t    offset
+)
 {
-  fpga_i2c_slave* dev = (fpga_i2c_slave*) base;
+  fpga_i2c_slave *dev = (fpga_i2c_slave *) base;
   off_t           avail = dev->size - offset;
-  uint8_t*        in = buf;
+  uint8_t        *in = buf;
   size_t          todo;
 
-  if (avail <= 0) {
+  if ( avail <= 0 ) {
     return 0;
   }
 
-  if ((int64_t)n > avail) {
+  if ( (int64_t) n > avail ) {
     n = (size_t) avail;
   }
 
   todo = n;
 
-  while (todo > 0) {
+  while ( todo > 0 ) {
     /*
      * Limit the transfer size so that it can be stored in 8-bits.  This may
      * help some bus controllers.
      */
-    uint16_t cur = (uint16_t) (todo < 255 ?  todo : 255);
-    i2c_msg msgs = {
-      .addr = dev->base.address,
-      .flags = I2C_M_RD,
-      .buf = in,
-      .len = cur
-    };
+    uint16_t cur = (uint16_t) ( todo < 255 ? todo : 255 );
+    i2c_msg  msgs =
+      { .addr = dev->base.address, .flags = I2C_M_RD, .buf = in, .len = cur };
     int err;
-    err = i2c_bus_transfer(dev->base.bus, &msgs, 1);
-    if (err != 0) {
+    err = i2c_bus_transfer( dev->base.bus, &msgs, 1 );
+    if ( err != 0 ) {
       return err;
     }
     todo -= cur;
@@ -85,39 +85,43 @@ fpga_i2c_slave_read(i2c_dev* base, void* buf, size_t n, off_t offset)
   return (ssize_t) n;
 }
 
-static ssize_t
-fpga_i2c_slave_write(i2c_dev* base, const void* buf, size_t n, off_t offset)
+static ssize_t fpga_i2c_slave_write(
+  i2c_dev    *base,
+  const void *buf,
+  size_t      n,
+  off_t       offset
+)
 {
-  fpga_i2c_slave* dev = (fpga_i2c_slave*) base;
+  fpga_i2c_slave *dev = (fpga_i2c_slave *) base;
   off_t           avail = dev->size - offset;
-  const uint8_t*  out = buf;
+  const uint8_t  *out = buf;
   size_t          todo;
 
-  if (avail <= 0) {
+  if ( avail <= 0 ) {
     return 0;
   }
 
-  if ((int64_t)n > avail) {
+  if ( (int64_t) n > avail ) {
     n = (size_t) avail;
   }
 
   todo = n;
 
-  while (todo > 0) {
+  while ( todo > 0 ) {
     /*
      * Limit the transfer size so that it can be stored in 8-bits.  This may
      * help some bus controllers.
      */
-    uint16_t cur = (uint16_t) (todo < 255 ?  todo : 255);
-    i2c_msg msgs = {
+    uint16_t cur = (uint16_t) ( todo < 255 ? todo : 255 );
+    i2c_msg  msgs = {
       .addr = dev->base.address,
       .flags = 0,
-      .buf = RTEMS_DECONST(uint8_t*, out),
+      .buf = RTEMS_DECONST( uint8_t *, out ),
       .len = cur
     };
     int err;
-    err = i2c_bus_transfer(dev->base.bus, &msgs, 1);
-    if (err != 0) {
+    err = i2c_bus_transfer( dev->base.bus, &msgs, 1 );
+    if ( err != 0 ) {
       return err;
     }
     todo -= cur;
@@ -127,18 +131,19 @@ fpga_i2c_slave_write(i2c_dev* base, const void* buf, size_t n, off_t offset)
   return (ssize_t) n;
 }
 
-int
-i2c_dev_register_fpga_i2c_slave(const char* bus_path,
-                                const char* dev_path,
-                                uint16_t    address,
-                                size_t      size)
+int i2c_dev_register_fpga_i2c_slave(
+  const char *bus_path,
+  const char *dev_path,
+  uint16_t    address,
+  size_t      size
+)
 
 {
-  fpga_i2c_slave* dev;
+  fpga_i2c_slave *dev;
 
-  dev = (fpga_i2c_slave*)
-    i2c_dev_alloc_and_init(sizeof(*dev), bus_path, address);
-  if (dev == NULL) {
+  dev = (fpga_i2c_slave *)
+    i2c_dev_alloc_and_init( sizeof( *dev ), bus_path, address );
+  if ( dev == NULL ) {
     return -1;
   }
 
@@ -146,5 +151,5 @@ i2c_dev_register_fpga_i2c_slave(const char* bus_path,
   dev->base.write = fpga_i2c_slave_write;
   dev->size = size;
 
-  return i2c_dev_register(&dev->base, dev_path);
+  return i2c_dev_register( &dev->base, dev_path );
 }

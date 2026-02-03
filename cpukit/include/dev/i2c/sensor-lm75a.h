@@ -55,7 +55,7 @@ extern "C" {
 int i2c_dev_register_sensor_lm75a(
   const char *bus_path,
   const char *dev_path,
-  uint16_t address
+  uint16_t    address
 );
 
 typedef enum {
@@ -69,64 +69,64 @@ typedef enum {
   SENSOR_LM75A_SET_THYST
 } sensor_lm75a_command;
 
-static inline int sensor_lm75a_get_conf(int fd, uint8_t *val)
+static inline int sensor_lm75a_get_conf( int fd, uint8_t *val )
 {
-  return ioctl(fd, SENSOR_LM75A_GET_CONF, val);
+  return ioctl( fd, SENSOR_LM75A_GET_CONF, val );
 }
 
-static inline int sensor_lm75a_set_conf(int fd, uint8_t val)
+static inline int sensor_lm75a_set_conf( int fd, uint8_t val )
 {
-  return ioctl(fd, SENSOR_LM75A_SET_CONF, (void *)(uintptr_t) val);
+  return ioctl( fd, SENSOR_LM75A_SET_CONF, (void *) (uintptr_t) val );
 }
 
 static inline int sensor_lm75a_clear_and_set_conf(
-  int fd,
+  int     fd,
   uint8_t clear,
   uint8_t set
 )
 {
-  uint16_t clear_and_set = (uint16_t) (((uint16_t) set << 8) | clear);
+  uint16_t clear_and_set = (uint16_t) ( ( (uint16_t) set << 8 ) | clear );
 
   return ioctl(
     fd,
     SENSOR_LM75A_CLEAR_AND_SET_CONF,
-    (void *)(uintptr_t) clear_and_set
+    (void *) (uintptr_t) clear_and_set
   );
 }
 
-static inline int sensor_lm75a_get_temp(int fd, int16_t *val)
+static inline int sensor_lm75a_get_temp( int fd, int16_t *val )
 {
-  return ioctl(fd, SENSOR_LM75A_GET_TEMP, val);
+  return ioctl( fd, SENSOR_LM75A_GET_TEMP, val );
 }
 
-static inline int sensor_lm75a_get_temp_celsius(int fd, double *celsius)
+static inline int sensor_lm75a_get_temp_celsius( int fd, double *celsius )
 {
-  int rv;
+  int     rv;
   int16_t val;
 
-  rv = ioctl(fd, SENSOR_LM75A_GET_TEMP, &val);
-  *celsius = (((int) val) >> 5) * 0.125;
+  rv = ioctl( fd, SENSOR_LM75A_GET_TEMP, &val );
+  *celsius = ( ( (int) val ) >> 5 ) * 0.125;
   return rv;
 }
 
-static inline int sensor_lm75a_get_tos(int fd, uint16_t *val)
+static inline int sensor_lm75a_get_tos( int fd, uint16_t *val )
 {
-  return ioctl(fd, SENSOR_LM75A_GET_TOS, val);
+  return ioctl( fd, SENSOR_LM75A_GET_TOS, val );
 }
 
-static inline int sensor_lm75a_set_tos(int fd, uint16_t val)
+static inline int sensor_lm75a_set_tos( int fd, uint16_t val )
 {
-  return ioctl(fd, SENSOR_LM75A_SET_TOS, (void *)(uintptr_t) val);
+  return ioctl( fd, SENSOR_LM75A_SET_TOS, (void *) (uintptr_t) val );
 }
 
-static inline int sensor_lm75a_get_thyst(int fd, uint16_t *val)
+static inline int sensor_lm75a_get_thyst( int fd, uint16_t *val )
 {
-  return ioctl(fd, SENSOR_LM75A_GET_THYST, val);
+  return ioctl( fd, SENSOR_LM75A_GET_THYST, val );
 }
 
-static inline int sensor_lm75a_set_thyst(int fd, uint16_t val)
+static inline int sensor_lm75a_set_thyst( int fd, uint16_t val )
 {
-  return ioctl(fd, SENSOR_LM75A_SET_THYST, (void *)(uintptr_t) val);
+  return ioctl( fd, SENSOR_LM75A_SET_THYST, (void *) (uintptr_t) val );
 }
 
 /** @} */

@@ -55,11 +55,11 @@ extern "C" {
 int i2c_dev_register_eeprom(
   const char *bus_path,
   const char *dev_path,
-  uint16_t i2c_address,
-  uint16_t address_bytes,
-  uint16_t page_size_in_bytes,
-  uint32_t size_in_bytes,
-  uint32_t program_timeout_in_ms
+  uint16_t    i2c_address,
+  uint16_t    address_bytes,
+  uint16_t    page_size_in_bytes,
+  uint32_t    size_in_bytes,
+  uint32_t    program_timeout_in_ms
 );
 
 /** @} */

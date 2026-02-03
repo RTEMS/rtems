@@ -132,7 +132,7 @@ struct i2c_bus {
    * @retval 0 Successful operation.
    * @retval negative Negative error number in case of an error.
    */
-  int (*transfer)(i2c_bus *bus, i2c_msg *msgs, uint32_t msg_count);
+  int ( *transfer )( i2c_bus *bus, i2c_msg *msgs, uint32_t msg_count );
 
   /**
    * @brief Sets the bus clock.
@@ -143,14 +143,14 @@ struct i2c_bus {
    * @retval 0 Successful operation.
    * @retval negative Negative error number in case of an error.
    */
-  int (*set_clock)(i2c_bus *bus, unsigned long clock);
+  int ( *set_clock )( i2c_bus *bus, unsigned long clock );
 
   /**
    * @brief Destroys the bus.
    *
    * @param[in] bus The bus control.
    */
-  void (*destroy)(i2c_bus *bus);
+  void ( *destroy )( i2c_bus *bus );
 
   /**
    * @brief Mutex to protect the bus access.
@@ -203,7 +203,7 @@ struct i2c_bus {
  *
  * @see i2c_bus_register()
  */
-int i2c_bus_init(i2c_bus *bus);
+int i2c_bus_init( i2c_bus *bus );
 
 /**
  * @brief Allocates a bus control from the heap and initializes it.
@@ -222,21 +222,21 @@ int i2c_bus_init(i2c_bus *bus);
  *
  * @see i2c_bus_register()
  */
-i2c_bus *i2c_bus_alloc_and_init(size_t size);
+i2c_bus *i2c_bus_alloc_and_init( size_t size );
 
 /**
  * @brief Destroys a bus control.
  *
  * @param[in] bus The bus control.
  */
-void i2c_bus_destroy(i2c_bus *bus);
+void i2c_bus_destroy( i2c_bus *bus );
 
 /**
  * @brief Destroys a bus control and frees its memory.
  *
  * @param[in] bus The bus control.
  */
-void i2c_bus_destroy_and_free(i2c_bus *bus);
+void i2c_bus_destroy_and_free( i2c_bus *bus );
 
 /**
  * @brief Registers a bus control.
@@ -250,10 +250,7 @@ void i2c_bus_destroy_and_free(i2c_bus *bus);
  * @retval 0 Successful operation.
  * @retval -1 An error occurred.  The errno is set to indicate the error.
  */
-int i2c_bus_register(
-  i2c_bus *bus,
-  const char *bus_path
-);
+int i2c_bus_register( i2c_bus *bus, const char *bus_path );
 
 /**
  * @brief Try to obtain the bus.
@@ -263,21 +260,21 @@ int i2c_bus_register(
  * @retval 0 Successful operation.
  * @retval EBUSY if mutex is already locked.
  */
-int i2c_bus_try_obtain(i2c_bus *bus);
+int i2c_bus_try_obtain( i2c_bus *bus );
 
 /**
  * @brief Obtains the bus.
  *
  * @param[in] bus The bus control.
  */
-void i2c_bus_obtain(i2c_bus *bus);
+void i2c_bus_obtain( i2c_bus *bus );
 
 /**
  * @brief Releases the bus.
  *
  * @param[in] bus The bus control.
  */
-void i2c_bus_release(i2c_bus *bus);
+void i2c_bus_release( i2c_bus *bus );
 
 /**
  * @brief Transfers I2C messages.
@@ -293,7 +290,7 @@ void i2c_bus_release(i2c_bus *bus);
  * @retval 0 Successful operation.
  * @retval negative Negative error number in case of an error.
  */
-int i2c_bus_transfer(i2c_bus *bus, i2c_msg *msgs, uint32_t msg_count);
+int i2c_bus_transfer( i2c_bus *bus, i2c_msg *msgs, uint32_t msg_count );
 
 /**
  * @brief Transfers I2C messages with optional flags.
@@ -324,7 +321,7 @@ int i2c_bus_do_transfer(
  * @brief I2C bus transfer flag to indicate that the task should not block if
  * the bus is busy on a new transfer.
  */
-#define I2C_BUS_NOBLOCK (1u << 0)
+#define I2C_BUS_NOBLOCK ( 1u << 0 )
 
 /** @} */
 
@@ -351,7 +348,7 @@ struct i2c_dev {
    * @retval non-negative Bytes transferred from device.
    * @retval negative Negative error number in case of an error.
    */
-  ssize_t (*read)(i2c_dev *dev, void *buf, size_t n, off_t offset);
+  ssize_t ( *read )( i2c_dev *dev, void *buf, size_t n, off_t offset );
 
   /**
    * @brief Writes to the device.
@@ -359,7 +356,7 @@ struct i2c_dev {
    * @retval non-negative Bytes transferred to device.
    * @retval negative Negative error number in case of an error.
    */
-  ssize_t (*write)(i2c_dev *dev, const void *buf, size_t n, off_t offset);
+  ssize_t ( *write )( i2c_dev *dev, const void *buf, size_t n, off_t offset );
 
   /**
    * @brief Device IO control.
@@ -367,22 +364,22 @@ struct i2c_dev {
    * @retval 0 Successful operation.
    * @retval negative Negative error number in case of an error.
    */
-  int (*ioctl)(i2c_dev *dev, ioctl_command_t command, void *arg);
+  int ( *ioctl )( i2c_dev *dev, ioctl_command_t command, void *arg );
 
   /**
    * @brief Gets the file size.
    */
-  off_t (*get_size)(i2c_dev *dev);
+  off_t ( *get_size )( i2c_dev *dev );
 
   /**
    * @brief Gets the file block size.
    */
-  blksize_t (*get_block_size)(i2c_dev *dev);
+  blksize_t ( *get_block_size )( i2c_dev *dev );
 
   /**
    * @brief Destroys the device.
    */
-  void (*destroy)(i2c_dev *dev);
+  void ( *destroy )( i2c_dev *dev );
 
   /**
    * @brief The bus control.
@@ -403,7 +400,6 @@ struct i2c_dev {
   int bus_fd;
 };
 
-
 /**
  * @brief Initializes a device control.
  *
@@ -421,7 +417,7 @@ struct i2c_dev {
  *
  * @see i2c_dev_register()
  */
-int i2c_dev_init(i2c_dev *dev, const char *bus_path, uint16_t address);
+int i2c_dev_init( i2c_dev *dev, const char *bus_path, uint16_t address );
 
 /**
  * @brief Allocates a device control from the heap and initializes it.
@@ -443,9 +439,9 @@ int i2c_dev_init(i2c_dev *dev, const char *bus_path, uint16_t address);
  * @see i2c_dev_register()
  */
 i2c_dev *i2c_dev_alloc_and_init(
-  size_t size,
+  size_t      size,
   const char *bus_path,
-  uint16_t address
+  uint16_t    address
 );
 
 /**
@@ -453,14 +449,14 @@ i2c_dev *i2c_dev_alloc_and_init(
  *
  * @param[in] dev The device control.
  */
-void i2c_dev_destroy(i2c_dev *dev);
+void i2c_dev_destroy( i2c_dev *dev );
 
 /**
  * @brief Destroys a device control and frees its memory.
  *
  * @param[in] dev The device control.
  */
-void i2c_dev_destroy_and_free(i2c_dev *dev);
+void i2c_dev_destroy_and_free( i2c_dev *dev );
 
 /**
  * @brief Registers a device control.
@@ -474,12 +470,9 @@ void i2c_dev_destroy_and_free(i2c_dev *dev);
  * @retval 0 Successful operation.
  * @retval -1 An error occurred.  The errno is set to indicate the error.
  */
-int i2c_dev_register(
-  i2c_dev *dev,
-  const char *dev_path
-);
+int i2c_dev_register( i2c_dev *dev, const char *dev_path );
 
-/** @} */  /* end of i2c device driver */
+/** @} */ /* end of i2c device driver */
 
 /** @} */
 

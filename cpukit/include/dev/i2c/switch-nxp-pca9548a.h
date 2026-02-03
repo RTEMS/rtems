@@ -55,21 +55,25 @@ extern "C" {
 int i2c_dev_register_switch_nxp_pca9548a(
   const char *bus_path,
   const char *dev_path,
-  uint16_t address
+  uint16_t    address
 );
 
-#define SWITCH_NXP_PCA9548A_GET_CONTROL (I2C_DEV_IO_CONTROL + 0)
+#define SWITCH_NXP_PCA9548A_GET_CONTROL ( I2C_DEV_IO_CONTROL + 0 )
 
-#define SWITCH_NXP_PCA9548A_SET_CONTROL (I2C_DEV_IO_CONTROL + 1)
+#define SWITCH_NXP_PCA9548A_SET_CONTROL ( I2C_DEV_IO_CONTROL + 1 )
 
-static inline int switch_nxp_pca9548a_get_control(int fd, uint8_t *val)
+static inline int switch_nxp_pca9548a_get_control( int fd, uint8_t *val )
 {
-  return ioctl(fd, SWITCH_NXP_PCA9548A_GET_CONTROL, val);
+  return ioctl( fd, SWITCH_NXP_PCA9548A_GET_CONTROL, val );
 }
 
-static inline int switch_nxp_pca9548a_set_control(int fd, uint8_t val)
+static inline int switch_nxp_pca9548a_set_control( int fd, uint8_t val )
 {
-  return ioctl(fd, SWITCH_NXP_PCA9548A_SET_CONTROL, (void *)(uintptr_t) val);
+  return ioctl(
+    fd,
+    SWITCH_NXP_PCA9548A_SET_CONTROL,
+    (void *) (uintptr_t) val
+  );
 }
 
 /** @} */

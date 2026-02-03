@@ -36,9 +36,11 @@
 
 #include <dev/i2c/i2c.h>
 
-int i2c_dev_register_fpga_i2c_slave(const char* bus_path,
-                                    const char* dev_path,
-                                    uint16_t   address,
-                                    size_t     size);
+int i2c_dev_register_fpga_i2c_slave(
+  const char *bus_path,
+  const char *dev_path,
+  uint16_t    address,
+  size_t      size
+);
 
 #endif

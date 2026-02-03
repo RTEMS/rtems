@@ -34,7 +34,6 @@
  * factors handling this in software.
  */
 
-
 #ifndef XILINX_AXI_I2C_H
 #define XILINX_AXI_I2C_H
 
@@ -50,25 +49,20 @@
  *
  * Set the valid mask to the values that are to be set.
  */
-#define XILINX_AIX_I2C_AXI_CLOCK (1 << 0)
-#define XILINX_AIX_I2C_TSUSTA    (1 << 1)
-#define XILINX_AIX_I2C_TSUSTO    (1 << 2)
-#define XILINX_AIX_I2C_THDSTA    (1 << 3)
-#define XILINX_AIX_I2C_TSUDAT    (1 << 4)
-#define XILINX_AIX_I2C_TBUF      (1 << 5)
-#define XILINX_AIX_I2C_THIGH     (1 << 6)
-#define XILINX_AIX_I2C_TLOW      (1 << 7)
-#define XILINX_AIX_I2C_THDDAT    (1 << 8)
-#define XILINX_AIX_I2C_ALL_REGS  (XILINX_AIX_I2C_TSUSTA | \
-                                  XILINX_AIX_I2C_TSUSTO | \
-                                  XILINX_AIX_I2C_THDSTA | \
-                                  XILINX_AIX_I2C_TSUDAT | \
-                                  XILINX_AIX_I2C_TBUF   | \
-                                  XILINX_AIX_I2C_THIGH  | \
-                                  XILINX_AIX_I2C_TLOW   | \
-                                  XILINX_AIX_I2C_THDDAT)
-typedef struct
-{
+#define XILINX_AIX_I2C_AXI_CLOCK ( 1 << 0 )
+#define XILINX_AIX_I2C_TSUSTA    ( 1 << 1 )
+#define XILINX_AIX_I2C_TSUSTO    ( 1 << 2 )
+#define XILINX_AIX_I2C_THDSTA    ( 1 << 3 )
+#define XILINX_AIX_I2C_TSUDAT    ( 1 << 4 )
+#define XILINX_AIX_I2C_TBUF      ( 1 << 5 )
+#define XILINX_AIX_I2C_THIGH     ( 1 << 6 )
+#define XILINX_AIX_I2C_TLOW      ( 1 << 7 )
+#define XILINX_AIX_I2C_THDDAT    ( 1 << 8 )
+#define XILINX_AIX_I2C_ALL_REGS                                             \
+  ( XILINX_AIX_I2C_TSUSTA | XILINX_AIX_I2C_TSUSTO | XILINX_AIX_I2C_THDSTA | \
+    XILINX_AIX_I2C_TSUDAT | XILINX_AIX_I2C_TBUF | XILINX_AIX_I2C_THIGH |    \
+    XILINX_AIX_I2C_TLOW | XILINX_AIX_I2C_THDDAT )
+typedef struct {
   uint32_t valid_mask;
   uint32_t AXI_CLOCK;
   uint32_t SCL_INERTIAL_DELAY;
@@ -96,10 +90,12 @@ typedef struct
  * @param gpio_address Bits 12:15 of a slave address it written to the GPO.
  * @param timing Override the default timing. NULL means no changes.
  */
-int i2c_bus_register_xilinx_aix_i2c(const char*                  bus_path,
-                                    uintptr_t                    register_base,
-                                    rtems_vector_number          irq,
-                                    bool                         ten_gpio,
-                                    const xilinx_aix_i2c_timing* timing);
+int i2c_bus_register_xilinx_aix_i2c(
+  const char                  *bus_path,
+  uintptr_t                    register_base,
+  rtems_vector_number          irq,
+  bool                         ten_gpio,
+  const xilinx_aix_i2c_timing *timing
+);
 
 #endif
