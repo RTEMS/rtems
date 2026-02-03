@@ -53,27 +53,24 @@
 #define RTEMS_CAN_USER_MAGIC 0x05402033
 
 #ifndef BIT
-#define BIT(nr)			(1UL << (nr))
+#define BIT( nr ) ( 1UL << ( nr ) )
 #endif
 
-#define GENMASK(h, l) (((~0UL) << (l)) & (~0UL >> (sizeof(long) * 8 - 1 - (h))))
+#define GENMASK( h, l ) \
+  ( ( ( ~0UL ) << ( l ) ) & ( ~0UL >> ( sizeof( long ) * 8 - 1 - ( h ) ) ) )
 
 #ifndef __bf_shf
-#define __bf_shf(x) (__builtin_ffsll(x) - 1)
+#define __bf_shf( x ) ( __builtin_ffsll( x ) - 1 )
 #endif
 
 #ifndef FIELD_PREP
-#define FIELD_PREP(_mask, _val)						\
-	({								\
-		((typeof(_mask))(_val) << __bf_shf(_mask)) & (_mask);	\
-	})
+#define FIELD_PREP( _mask, _val ) \
+  ( { ( (typeof( _mask )) ( _val ) << __bf_shf( _mask ) ) & ( _mask ); } )
 #endif
 
 #ifndef FIELD_GET
-#define FIELD_GET(_mask, _reg)						\
-	({								\
-		(typeof(_mask))(((_reg) & (_mask)) >> __bf_shf(_mask));	\
-	})
+#define FIELD_GET( _mask, _reg ) \
+  ( { (typeof( _mask )) ( ( ( _reg ) & ( _mask ) ) >> __bf_shf( _mask ) ); } )
 #endif
 
 // clang-formatting off
@@ -104,7 +101,7 @@ static inline uint8_t rtems_canfd_len2dlc( uint8_t len )
     return 0xF;
   }
 
-  return rtems_can_len2dlc[len];
+  return rtems_can_len2dlc[ len ];
 }
 
 /**

@@ -50,30 +50,30 @@ enum can_state {
    * @brief This member indicates the controller is in error active state (
    *  RX/TX error count < 96)
    */
-	CAN_STATE_ERROR_ACTIVE = 0,
+  CAN_STATE_ERROR_ACTIVE = 0,
   /**
    * @brief This member indicates the controller is in error warning state (
    *  RX/TX error count < 128)
    */
-	CAN_STATE_ERROR_WARNING,
+  CAN_STATE_ERROR_WARNING,
   /**
    * @brief This member indicates the controller is in error passive state (
    *  RX/TX error count < 256)
    */
-	CAN_STATE_ERROR_PASSIVE,
+  CAN_STATE_ERROR_PASSIVE,
   /**
    * @brief This member indicates the controller is in bus off state (
    *  RX/TX error count >= 256)
    */
-	CAN_STATE_BUS_OFF,
+  CAN_STATE_BUS_OFF,
   /**
    * @brief This member indicates the the controller is stopped.
    */
-	CAN_STATE_STOPPED,
+  CAN_STATE_STOPPED,
   /**
    * @brief This member indicates the the controller is in sleep.
    */
-	CAN_STATE_SLEEPING,
+  CAN_STATE_SLEEPING,
   /**
    * @brief This member indicates the the controller is in stopping process.
    */
@@ -81,7 +81,7 @@ enum can_state {
   /**
    * @brief This member holds the maximum number of controller's states.
    */
-	CAN_STATE_MAX
+  CAN_STATE_MAX
 };
 
 /**
@@ -120,26 +120,22 @@ struct rtems_can_stats {
    * @brief This member holds controller's state (error active, passive,
    * bus off)
    */
-  int chip_state;
+  int           chip_state;
 };
 
-static inline void rtems_can_stats_add_tx_done(
-  struct rtems_can_stats *stats
-)
+static inline void rtems_can_stats_add_tx_done( struct rtems_can_stats *stats )
 {
   stats->tx_done += 1;
 }
 
-static inline void rtems_can_stats_add_rx_done(
-  struct rtems_can_stats *stats
-)
+static inline void rtems_can_stats_add_rx_done( struct rtems_can_stats *stats )
 {
   stats->rx_done += 1;
 }
 
 static inline void rtems_can_stats_add_tx_bytes(
   struct rtems_can_stats *stats,
-  uint16_t nbytes
+  uint16_t                nbytes
 )
 {
   stats->tx_bytes += nbytes;
@@ -147,7 +143,7 @@ static inline void rtems_can_stats_add_tx_bytes(
 
 static inline void rtems_can_stats_add_rx_bytes(
   struct rtems_can_stats *stats,
-  uint16_t nbytes
+  uint16_t                nbytes
 )
 {
   stats->rx_bytes += nbytes;
@@ -176,7 +172,7 @@ static inline void rtems_can_stats_add_rx_overflows(
 
 static inline void rtems_can_stats_set_state(
   struct rtems_can_stats *stats,
-  enum can_state state
+  enum can_state          state
 )
 {
   stats->chip_state = state;

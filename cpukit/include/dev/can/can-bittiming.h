@@ -56,7 +56,7 @@
 /**
  * @brief This define is used to select data bit timing.
  */
-#define RTEMS_CAN_BITTIME_DATA    ( 1 )
+#define RTEMS_CAN_BITTIME_DATA ( 1 )
 
 /** @} */
 
@@ -69,11 +69,11 @@
 /**
  * @brief This define is used to use bit timing calculation from bitrate.
  */
-#define RTEMS_CAN_BITTIME_FROM_BITRATE      ( 0 )
+#define RTEMS_CAN_BITTIME_FROM_BITRATE ( 0 )
 /**
  * @brief This define is used to use bit timing from precomputed values.
  */
-#define RTEMS_CAN_BITTIME_FROM_PRECOMPUTED  ( 1 )
+#define RTEMS_CAN_BITTIME_FROM_PRECOMPUTED ( 1 )
 
 /** @} */
 
@@ -91,35 +91,35 @@ struct rtems_can_bittiming_const {
   /**
    * @brief This member holds mimimal possible TSEG1 value.
    */
-  uint32_t tseg1_min;
+  uint32_t    tseg1_min;
   /**
    * @brief This member holds maximal possible TSEG1 value.
    */
-  uint32_t tseg1_max;
+  uint32_t    tseg1_max;
   /**
    * @brief This member holds mimimal possible TSEG2 value.
    */
-  uint32_t tseg2_min;
+  uint32_t    tseg2_min;
   /**
    * @brief This member holds maximal possible TSEG2 value.
    */
-  uint32_t tseg2_max;
+  uint32_t    tseg2_max;
   /**
    * @brief This member holds maximal possible Sync Jump Width value.
    */
-  uint32_t sjw_max;
+  uint32_t    sjw_max;
   /**
    * @brief This member holds mimimal possible Bit Rate Prescaler value.
    */
-  uint32_t brp_min;
+  uint32_t    brp_min;
   /**
    * @brief This member holds maximal possible Bit Rate Prescaler value.
    */
-  uint32_t brp_max;
+  uint32_t    brp_max;
   /**
    * @brief This member holds Bit Rate Prescaler initial value.
    */
-  uint32_t brp_inc;
+  uint32_t    brp_inc;
 };
 
 /**
@@ -172,13 +172,13 @@ struct rtems_can_set_bittiming {
    *  @ref RTEMS_CAN_BITTIME_NOMINAL - nominal bit timing
    *  @ref RTEMS_CAN_BITTIME_DATA    - data bit timing (for CAN FD chips)
    */
-  uint16_t type;
+  uint16_t                   type;
   /**
    * @brief This member specifies the source of bit timing constants
    *  @ref RTEMS_CAN_BITTIME_FROM_BITRATE      - calculate from bitrate
    *  @ref RTEMS_CAN_BITTIME_FROM_PRECOMPUTED  - used precomputed values
    */
-  uint16_t from;
+  uint16_t                   from;
   /**
    * @brief This member holds the @ref rtems_can_bittiming structure. This
    *  is used to specify bitrate or precomputed values.
@@ -196,12 +196,12 @@ struct rtems_can_get_bittiming {
    *  @ref RTEMS_CAN_BITTIME_NOMINAL - nominal bit timing
    *  @ref RTEMS_CAN_BITTIME_DATA    - data bit timing (for CAN FD chips)
    */
-  uint16_t type;
+  uint16_t                         type;
   /**
    * @brief This member holds the rtems_can_bittiming structure. This
    *  represents currently set values.
    */
-  struct rtems_can_bittiming bittiming;
+  struct rtems_can_bittiming       bittiming;
   /**
    * @brief This member holds the @ref rtems_can_bittiming_const structure.
    *  This represents maximum and minimal possible bit timing values.

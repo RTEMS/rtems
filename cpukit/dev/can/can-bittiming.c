@@ -46,16 +46,16 @@
 #include <dev/can/can.h>
 #include <dev/can/can-devcommon.h>
 
-#define CAN_CALC_MAX_ERROR 50  /* in one-tenth of a percent */
-#define CAN_CALC_SYNC_SEG 1
+#define CAN_CALC_MAX_ERROR 50 /* in one-tenth of a percent */
+#define CAN_CALC_SYNC_SEG  1
 
 static int can_update_sample_point(
   const struct rtems_can_bittiming_const *btc,
-  unsigned int sample_point_nominal,
-  unsigned int tseg,
-  unsigned int *tseg1_ptr,
-  unsigned int *tseg2_ptr,
-  unsigned int *sample_point_error_ptr
+  unsigned int                            sample_point_nominal,
+  unsigned int                            tseg,
+  unsigned int                           *tseg1_ptr,
+  unsigned int                           *tseg2_ptr,
+  unsigned int                           *sample_point_error_ptr
 )
 {
   unsigned int sample_point_error;
@@ -64,15 +64,15 @@ static int can_update_sample_point(
   unsigned int best_sample_point;
   unsigned int tseg1;
   unsigned int tseg2;
-  int i;
+  int          i;
 
   best_sample_point_error = UINT_MAX;
   sample_point = 0;
   best_sample_point = 0;
 
   for ( i = 0; i <= 1; i++ ) {
-    tseg2 = tseg + CAN_CALC_SYNC_SEG - (sample_point_nominal *
-                ( tseg + CAN_CALC_SYNC_SEG ) ) /  1000 - i;
+    tseg2 = tseg + CAN_CALC_SYNC_SEG -
+            ( sample_point_nominal * ( tseg + CAN_CALC_SYNC_SEG ) ) / 1000 - i;
 
     if ( tseg2 < btc->tseg2_min ) {
       tseg2 = btc->tseg2_min;
@@ -87,15 +87,16 @@ static int can_update_sample_point(
     }
 
     sample_point = 1000 * ( tseg + CAN_CALC_SYNC_SEG - tseg2 ) /
-        ( tseg + CAN_CALC_SYNC_SEG );
+                   ( tseg + CAN_CALC_SYNC_SEG );
 
-    sample_point_error = sample_point_nominal > sample_point ?
-                         sample_point_nominal - sample_point :
-                         sample_point - sample_point_nominal;
+    sample_point_error = sample_point_nominal > sample_point
+                           ? sample_point_nominal - sample_point
+                           : sample_point - sample_point_nominal;
 
-    if ( ( sample_point <= sample_point_nominal ) &&
-        ( sample_point_error < best_sample_point_error ) ) {
-
+    if (
+      ( sample_point <= sample_point_nominal ) &&
+      ( sample_point_error < best_sample_point_error )
+    ) {
       best_sample_point = sample_point;
       best_sample_point_error = sample_point_error;
       *tseg1_ptr = tseg1;
@@ -103,15 +104,16 @@ static int can_update_sample_point(
     }
   }
 
-  if ( sample_point_error_ptr )
+  if ( sample_point_error_ptr ) {
     *sample_point_error_ptr = best_sample_point_error;
+  }
 
   return best_sample_point;
 }
 
 int rtems_can_bitrate2bittiming(
-  struct rtems_can_chip *chip,
-  struct rtems_can_bittiming *bt,
+  struct rtems_can_chip                  *chip,
+  struct rtems_can_bittiming             *bt,
   const struct rtems_can_bittiming_const *btc
 )
 {
@@ -128,7 +130,7 @@ int rtems_can_bitrate2bittiming(
   unsigned int tseg;
   unsigned int tseg1;
   unsigned int tseg2;
-  uint64_t v64;
+  uint64_t     v64;
 
   best_bitrate_error = UINT_MAX;
   best_sample_point_error = UINT_MAX;
@@ -160,18 +162,17 @@ int rtems_can_bitrate2bittiming(
     tsegall = CAN_CALC_SYNC_SEG + tseg / 2;
 
     /* Compute all possible tseg choices (tseg = tseg1 + tseg2) */
-    brp = chip->freq / (tsegall * bt->bitrate) + tseg % 2;
+    brp = chip->freq / ( tsegall * bt->bitrate ) + tseg % 2;
 
     /* choose brp step which is possible in system */
-    brp = (brp / btc->brp_inc) * btc->brp_inc;
+    brp = ( brp / btc->brp_inc ) * btc->brp_inc;
     if ( ( brp < btc->brp_min ) || ( brp > btc->brp_max ) ) {
       continue;
     }
 
     bitrate = chip->freq / ( brp * tsegall );
-    bitrate_error = bt->bitrate > bitrate ?
-                    bt->bitrate - bitrate :
-                    bitrate - bt->bitrate;
+    bitrate_error = bt->bitrate > bitrate ? bt->bitrate - bitrate
+                                          : bitrate - bt->bitrate;
 
     /* tseg brp biterror */
     if ( bitrate_error > best_bitrate_error ) {
@@ -179,8 +180,9 @@ int rtems_can_bitrate2bittiming(
     }
 
     /* reset sample point error if we have a better bitrate */
-    if ( bitrate_error < best_bitrate_error )
+    if ( bitrate_error < best_bitrate_error ) {
       best_sample_point_error = UINT_MAX;
+    }
 
     can_update_sample_point(
       btc,
@@ -248,8 +250,8 @@ int rtems_can_bitrate2bittiming(
   bt->brp = best_brp;
 
   /* Calculate real bitrate */
-  bt->bitrate = chip->freq / ( bt->brp *
-            ( CAN_CALC_SYNC_SEG + tseg1 + tseg2 ) );
+  bt->bitrate = chip->freq /
+                ( bt->brp * ( CAN_CALC_SYNC_SEG + tseg1 + tseg2 ) );
 
   return 0;
 }

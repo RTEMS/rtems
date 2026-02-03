@@ -65,11 +65,11 @@
 /**
  * @brief Represents CAN FD frame data length.
  */
-#define CAN_FRAME_FD_DLEN       ( 64u )
+#define CAN_FRAME_FD_DLEN ( 64u )
 /**
  * @brief Represents maximum allowed CAN frame data length.
  */
-#define CAN_FRAME_MAX_DLEN      ( CAN_FRAME_FD_DLEN )
+#define CAN_FRAME_MAX_DLEN ( CAN_FRAME_FD_DLEN )
 
 /**
  * @defgroup CANFrameFlags
@@ -90,15 +90,15 @@
 /**
  * @brief Represents extended frame format.
  */
-#define CAN_FRAME_IDE   ( 1 << 0 )
+#define CAN_FRAME_IDE ( 1 << 0 )
 /**
  * @brief Represents remote transfer request.
  */
-#define CAN_FRAME_RTR   ( 1 << 1 )
+#define CAN_FRAME_RTR ( 1 << 1 )
 /**
  * @brief Represents echo flag.
  */
-#define CAN_FRAME_ECHO  ( 1 << 2 )
+#define CAN_FRAME_ECHO ( 1 << 2 )
 /**
  * @brief Represents local flag.
  */
@@ -110,7 +110,7 @@
 /**
  * @brief Represents generic error flag.
  */
-#define CAN_FRAME_ERR   ( 1 << 5 )
+#define CAN_FRAME_ERR ( 1 << 5 )
 /**
  * @brief Represents local FIFO overflow.
  */
@@ -118,15 +118,15 @@
 /**
  * @brief Represents CAN FD frame format.
  */
-#define CAN_FRAME_FDF   ( 1 << 7 )
+#define CAN_FRAME_FDF ( 1 << 7 )
 /**
  * @brief Represents bit rate shift for CAN FD frames.
  */
-#define CAN_FRAME_BRS   ( 1 << 8 )
+#define CAN_FRAME_BRS ( 1 << 8 )
 /**
  * @brief Represents error state inicator of transmitting node.
  */
-#define CAN_FRAME_ESI   ( 1 << 9 )
+#define CAN_FRAME_ESI ( 1 << 9 )
 
 /** @} */
 /** @} */
@@ -150,59 +150,59 @@
 /**
  * @brief Represents CAN frame TX timeout error.
  */
-#define CAN_ERR_ID_TXTIMEOUT    ( 1 << 0 )
+#define CAN_ERR_ID_TXTIMEOUT ( 1 << 0 )
 /**
  * @brief Represents lost arbitration error. Additional information
  *  are stored in @ref CAN_ERR_DATA_BYTE_TRX_CTRL of data.
  */
-#define CAN_ERR_ID_LOSTARB      ( 1 << 1 )
+#define CAN_ERR_ID_LOSTARB ( 1 << 1 )
 /**
  * @brief Represents CAN controller error. Additional information
  *  are stored in @ref CAN_ERR_DATA_BYTE_TRX_PROT of data.
  */
-#define CAN_ERR_ID_CRTL         ( 1 << 2 )
+#define CAN_ERR_ID_CRTL ( 1 << 2 )
 /**
  * @brief Represents CAN frame protocol violations. Additional information
  *  are stored in @ref CAN_ERR_DATA_BYTE_TRX_PROT and
  *  @ref CAN_ERR_DATA_BYTE_TRX_PROT_LOC of data.
  */
-#define CAN_ERR_ID_PROT         ( 1 << 3 )
+#define CAN_ERR_ID_PROT ( 1 << 3 )
 /**
  * @brief Represents transceiver status error. Additional information
  *  are stored in @ref CAN_ERR_TRX_DATA_BYTE of data.
  */
-#define CAN_ERR_ID_TRX          ( 1 << 4 )
+#define CAN_ERR_ID_TRX ( 1 << 4 )
 /**
  * @brief Represents no acknowledgment on transmission error.
  */
-#define CAN_ERR_ID_ACK          ( 1 << 5 )
+#define CAN_ERR_ID_ACK ( 1 << 5 )
 /**
  * @brief Represents bus off state.
  */
-#define CAN_ERR_ID_BUSOFF       ( 1 << 6 )
+#define CAN_ERR_ID_BUSOFF ( 1 << 6 )
 /**
  * @brief Represents bus error.
  */
-#define CAN_ERR_ID_BUSERROR     ( 1 << 7 )
+#define CAN_ERR_ID_BUSERROR ( 1 << 7 )
 /**
  * @brief Represents controller restarted information.
  */
-#define CAN_ERR_ID_RESTARTED    ( 1 << 8 )
+#define CAN_ERR_ID_RESTARTED ( 1 << 8 )
 /**
  * @brief Represents TX/RX error counter. Values are stored in
  *  @ref CAN_ERR_DATA_BYTE_CNT_TX and @ref CAN_ERR_DATA_BYTE_CNT_RX of data.
  */
-#define CAN_ERR_ID_CNT          ( 1 << 9 )
+#define CAN_ERR_ID_CNT ( 1 << 9 )
 /**
  * @brief Represents stack internal error.
  */
-#define CAN_ERR_ID_INTERNAL     ( 1 << 10 )
+#define CAN_ERR_ID_INTERNAL ( 1 << 10 )
 /**
  * @brief Represents CAN error tag. This sets 31st bit of identifier to
  *  logical one to make the frame invalid. It should be used to further
  *  distinquish error frames from standard ones.
  */
-#define CAN_ERR_ID_TAG          ( 1 << 31 )
+#define CAN_ERR_ID_TAG ( 1 << 31 )
 
 /** @} */
 
@@ -218,16 +218,16 @@
 /**
  * @brief Represents data offset in bytes to lost arbitration information.
  */
-#define CAN_ERR_DATA_BYTE_TRX_LOSTARB  ( 0 )
+#define CAN_ERR_DATA_BYTE_TRX_LOSTARB ( 0 )
 /**
  * @brief Represents data offset in bytes to controller error information.
  */
-#define CAN_ERR_DATA_BYTE_TRX_CTRL     ( 1 )
+#define CAN_ERR_DATA_BYTE_TRX_CTRL ( 1 )
 /**
  * @brief Represents data offset in bytes to information about protocol
  *  violation.
  */
-#define CAN_ERR_DATA_BYTE_TRX_PROT     ( 2 )
+#define CAN_ERR_DATA_BYTE_TRX_PROT ( 2 )
 /**
  * @brief Represents data offset in bytes to information about protocol
  *  violation location.
@@ -237,15 +237,15 @@
  * @brief Represents data offset in bytes to additional transceiver status
  *  error information.
  */
-#define CAN_ERR_TRX_DATA_BYTE      ( 4 )
+#define CAN_ERR_TRX_DATA_BYTE ( 4 )
 /**
  * @brief Represents data offset in bytes to TX counter.
  */
-#define CAN_ERR_DATA_BYTE_CNT_TX   ( 6 )
+#define CAN_ERR_DATA_BYTE_CNT_TX ( 6 )
 /**
  * @brief Represents data offset in bytes to RX counter.
  */
-#define CAN_ERR_DATA_BYTE_CNT_RX   ( 7 )
+#define CAN_ERR_DATA_BYTE_CNT_RX ( 7 )
 
 /** @} */
 
@@ -258,7 +258,7 @@
 /**
  * @brief Represents unspecified lost arbitration error.
  */
-#define CAN_ERR_LOSTARB_UNSPEC   ( 0 )
+#define CAN_ERR_LOSTARB_UNSPEC ( 0 )
 /**
  * @brief Represents bit in which arbitration was lost.
  */
@@ -275,7 +275,7 @@
 /**
  * @brief Represents unspecified controller error.
  */
-#define CAN_ERR_CRTL_UNSPEC      ( 0 )
+#define CAN_ERR_CRTL_UNSPEC ( 0 )
 /**
  * @brief Represents RX buffer overflow controller error.
  */
@@ -287,23 +287,23 @@
 /**
  * @brief Identifies controller reached warning level for RX errors.
  */
-#define CAN_ERR_CRTL_RX_WARNING  ( 1 << 2 )
+#define CAN_ERR_CRTL_RX_WARNING ( 1 << 2 )
 /**
  * @brief Identifies controller reached warning level for TX errors.
  */
-#define CAN_ERR_CRTL_TX_WARNING  ( 1 << 3 )
+#define CAN_ERR_CRTL_TX_WARNING ( 1 << 3 )
 /**
  * @brief Identifies controller reached error passive status for RX.
  */
-#define CAN_ERR_CRTL_RX_PASSIVE  ( 1 << 4 )
+#define CAN_ERR_CRTL_RX_PASSIVE ( 1 << 4 )
 /**
  * @brief Identifies controller reached error passive status for TX.
  */
-#define CAN_ERR_CRTL_TX_PASSIVE  ( 1 << 5 )
+#define CAN_ERR_CRTL_TX_PASSIVE ( 1 << 5 )
 /**
  * @brief Identifies controller recovered to error active state.
  */
-#define CAN_ERR_CRTL_ACTIVE      ( 1 << 6 )
+#define CAN_ERR_CRTL_ACTIVE ( 1 << 6 )
 
 /** @} */
 
@@ -316,39 +316,39 @@
 /**
  * @brief Represents unspecified protocol violation.
  */
-#define CAN_ERR_PROT_UNSPEC      ( 0 )
+#define CAN_ERR_PROT_UNSPEC ( 0 )
 /**
  * @brief Represents single bit error.
  */
-#define CAN_ERR_PROT_BIT         (1 << 0)
+#define CAN_ERR_PROT_BIT ( 1 << 0 )
 /**
  * @brief Represents frame format error.
  */
-#define CAN_ERR_PROT_FOR         (1 << 1)
+#define CAN_ERR_PROT_FOR ( 1 << 1 )
 /**
  * @brief Represents bit stuffing error.
  */
-#define CAN_ERR_PROT_STUFF       (1 << 2)
+#define CAN_ERR_PROT_STUFF ( 1 << 2 )
 /**
  * @brief Identifies the controller is unable to send dominant bit.
  */
-#define CAN_ERR_PROT_BIT0        (1 << 3)
+#define CAN_ERR_PROT_BIT0 ( 1 << 3 )
 /**
  * @brief Identifies the controller is unable to send recessive bit.
  */
-#define CAN_ERR_PROT_BIT1        (1 << 4)
+#define CAN_ERR_PROT_BIT1 ( 1 << 4 )
 /**
  * @brief Represents bus overload.
  */
-#define CAN_ERR_PROT_OVERLOAD    (1 << 5)
+#define CAN_ERR_PROT_OVERLOAD ( 1 << 5 )
 /**
  * @brief Represents active error announcement.
  */
-#define CAN_ERR_PROT_ACTIVE      (1 << 6)
+#define CAN_ERR_PROT_ACTIVE ( 1 << 6 )
 /**
  * @brief Identifies that rrror occurred on transmission.
  */
-#define CAN_ERR_PROT_TX          (1 << 7)
+#define CAN_ERR_PROT_TX ( 1 << 7 )
 
 /** @} */
 
@@ -361,83 +361,83 @@
 /**
  * @brief Represents unspecified protocol violation location.
  */
-#define CAN_ERR_PROT_LOC_UNSPEC  ( 0x00 )
+#define CAN_ERR_PROT_LOC_UNSPEC ( 0x00 )
 /**
  * @brief Represents protocol violation location at start of frame.
  */
-#define CAN_ERR_PROT_LOC_SOF     ( 0x01 )
+#define CAN_ERR_PROT_LOC_SOF ( 0x01 )
 /**
  * @brief Represents protocol violation location at ID bits 0-4.
  */
-#define CAN_ERR_PROT_LOC_ID0     ( 0x02 )
+#define CAN_ERR_PROT_LOC_ID0 ( 0x02 )
 /**
  * @brief Represents protocol violation location at ID bits 5-12.
  */
-#define CAN_ERR_PROT_LOC_ID1     ( 0x03 )
+#define CAN_ERR_PROT_LOC_ID1 ( 0x03 )
 /**
  * @brief Represents protocol violation location at ID bits 13-17.
  */
-#define CAN_ERR_PROT_LOC_ID2     ( 0x04 )
+#define CAN_ERR_PROT_LOC_ID2 ( 0x04 )
 /**
  * @brief Represents protocol violation location at ID bits 21-28.
  */
-#define CAN_ERR_PROT_LOC_ID3     ( 0x05 )
+#define CAN_ERR_PROT_LOC_ID3 ( 0x05 )
 /**
  * @brief Represents protocol violation location at ID bits 18-20.
  */
-#define CAN_ERR_PROT_LOC_ID4     ( 0x06 )
+#define CAN_ERR_PROT_LOC_ID4 ( 0x06 )
 /**
  * @brief Represents protocol violation location at IDE bit.
  */
-#define CAN_ERR_PROT_LOC_IDE     ( 0x07 )
+#define CAN_ERR_PROT_LOC_IDE ( 0x07 )
 /**
  * @brief Represents protocol violation location at RTR bit.
  */
-#define CAN_ERR_PROT_LOC_RTR     ( 0x08 )
+#define CAN_ERR_PROT_LOC_RTR ( 0x08 )
 /**
  * @brief Represents protocol violation location at SRTR bit.
  */
-#define CAN_ERR_PROT_LOC_SRTR    ( 0x09 )
+#define CAN_ERR_PROT_LOC_SRTR ( 0x09 )
 /**
  * @brief Represents protocol violation location at reserved bit 0.
  */
-#define CAN_ERR_PROT_LOC_RES0    ( 0x0a )
+#define CAN_ERR_PROT_LOC_RES0 ( 0x0a )
 /**
  * @brief Represents protocol violation location at reserved bit 1.
  */
-#define CAN_ERR_PROT_LOC_RES1    ( 0x0b )
+#define CAN_ERR_PROT_LOC_RES1 ( 0x0b )
 /**
  * @brief Represents protocol violation location at DLC.
  */
-#define CAN_ERR_PROT_LOC_DLC     ( 0x0c )
+#define CAN_ERR_PROT_LOC_DLC ( 0x0c )
 /**
  * @brief Represents protocol violation location at data section.
  */
-#define CAN_ERR_PROT_LOC_DATA    ( 0x0d )
+#define CAN_ERR_PROT_LOC_DATA ( 0x0d )
 /**
  * @brief Represents protocol violation location at CRC sequence.
  */
-#define CAN_ERR_PROT_LOC_CRCSEQ  ( 0x0e )
+#define CAN_ERR_PROT_LOC_CRCSEQ ( 0x0e )
 /**
  * @brief Represents protocol violation location at CRC delimiter.
  */
-#define CAN_ERR_PROT_LOC_CRCDEL  ( 0x0f )
+#define CAN_ERR_PROT_LOC_CRCDEL ( 0x0f )
 /**
  * @brief Represents protocol violation location at ACK slot.
  */
-#define CAN_ERR_PROT_LOC_ACK     ( 0x10 )
+#define CAN_ERR_PROT_LOC_ACK ( 0x10 )
 /**
  * @brief Represents protocol violation location at ACK delimiter.
  */
-#define CAN_ERR_PROT_LOC_ACKDEL  ( 0x11 )
+#define CAN_ERR_PROT_LOC_ACKDEL ( 0x11 )
 /**
  * @brief Represents protocol violation location at end of frame.
  */
-#define CAN_ERR_PROT_LOC_EOF     ( 0x12 )
+#define CAN_ERR_PROT_LOC_EOF ( 0x12 )
 /**
  * @brief Represents protocol violation location at intermission.
  */
-#define CAN_ERR_PROT_LOC_INTERM  ( 0x13 )
+#define CAN_ERR_PROT_LOC_INTERM ( 0x13 )
 
 /** @} */
 
@@ -450,51 +450,51 @@
 /**
  * @brief Represents unspecified transmission error.
  */
-#define CAN_ERR_TRX_UNSPEC        ( 0x00 )
+#define CAN_ERR_TRX_UNSPEC ( 0x00 )
 /**
  * @brief Represents mask for CANH transmission error.
  */
-#define CAN_ERR_TRX_H_MASK        ( 0x0f )
+#define CAN_ERR_TRX_H_MASK ( 0x0f )
 /**
  * @brief Represents no CAN high wire detected.
  */
-#define CAN_ERR_TRX_H_NOWIRE      ( 0x01 )
+#define CAN_ERR_TRX_H_NOWIRE ( 0x01 )
 /**
  * @brief Identifies CAN H shortage to bat.
  */
-#define CAN_ERR_TRX_H_SHORT2BAT   ( 0x02 )
+#define CAN_ERR_TRX_H_SHORT2BAT ( 0x02 )
 /**
  * @brief Identifies CAN H shortage to VCC.
  */
-#define CAN_ERR_TRX_H_SHORT2VCC   ( 0x03 )
+#define CAN_ERR_TRX_H_SHORT2VCC ( 0x03 )
 /**
  * @brief Identifies CAN H shortage to ground.
  */
-#define CAN_ERR_TRX_H_SHORT2GND   ( 0x04 )
+#define CAN_ERR_TRX_H_SHORT2GND ( 0x04 )
 /**
  * @brief Represents mask for CANL transmission error.
  */
-#define CAN_ERR_TRX_L_MASK        ( 0xf0 )
+#define CAN_ERR_TRX_L_MASK ( 0xf0 )
 /**
  * @brief Represents no CAN low wire detected.
  */
-#define CAN_ERR_TRX_L_NOWIRE      ( 0x10 )
+#define CAN_ERR_TRX_L_NOWIRE ( 0x10 )
 /**
  * @brief Identifies CAN L shortage to bat.
  */
-#define CAN_ERR_TRX_L_SHORT2BAT   ( 0x20 )
+#define CAN_ERR_TRX_L_SHORT2BAT ( 0x20 )
 /**
  * @brief Identifies CAN L shortage to VCC.
  */
-#define CAN_ERR_TRX_L_SHORT2VCC   ( 0x30 )
+#define CAN_ERR_TRX_L_SHORT2VCC ( 0x30 )
 /**
  * @brief Identifies CAN L shortage to ground.
  */
-#define CAN_ERR_TRX_L_SHORT2GND   ( 0x40 )
+#define CAN_ERR_TRX_L_SHORT2GND ( 0x40 )
 /**
  * @brief Identifies CAN L shortage to CAN H.
  */
-#define CAN_ERR_TRX_L_SHORT2CANH  ( 0x50 )
+#define CAN_ERR_TRX_L_SHORT2CANH ( 0x50 )
 
 /** @} */
 /** @} */
@@ -540,7 +540,7 @@ struct can_frame {
   /**
    * @brief This member stores CAN data.
    */
-  uint8_t data[CAN_FRAME_MAX_DLEN];
+  uint8_t                 data[ CAN_FRAME_MAX_DLEN ];
 };
 
 /**

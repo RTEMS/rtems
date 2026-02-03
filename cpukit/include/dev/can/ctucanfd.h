@@ -75,12 +75,12 @@ struct rtems_can_chip;
  * @return Pointer to CAN chip structure on success, NULL otherwise.
  */
 struct rtems_can_chip *rtems_ctucanfd_initialize(
-  uintptr_t addr,
+  uintptr_t           addr,
   rtems_vector_number irq,
   rtems_task_priority worker_priority,
-  unsigned int ntxbufs,
-  rtems_option irq_option,
-  unsigned long can_clk_rate
+  unsigned int        ntxbufs,
+  rtems_option        irq_option,
+  unsigned long       can_clk_rate
 );
 
 #endif /* _DEV_CAN_CTUCANFD_H */

@@ -48,29 +48,26 @@
 #undef TXB_ALL
 #undef TXB_SH
 
-#define TXT_DONE     0x4
-#define TXT_BF       4
-#define TXT_MASK     0xf
-#define TXT_ANY_DONE ( ( TXT_DONE << ( 0 * TXT_BF ) ) | \
-                       ( TXT_DONE << ( 1 * TXT_BF ) ) | \
-                       ( TXT_DONE << ( 2 * TXT_BF ) ) | \
-                       ( TXT_DONE << ( 3 * TXT_BF ) ) | \
-                       ( TXT_DONE << ( 4 * TXT_BF ) ) | \
-                       ( TXT_DONE << ( 5 * TXT_BF ) ) | \
-                       ( TXT_DONE << ( 6 * TXT_BF ) ) | \
-                       ( TXT_DONE << ( 7 * TXT_BF ) ) )
-#define TXTB_GET_STATUS( status, id ) ( ( status >> ( id * TXT_BF ) ) & \
-                                        TXT_MASK)
+#define TXT_DONE 0x4
+#define TXT_BF   4
+#define TXT_MASK 0xf
+#define TXT_ANY_DONE                                                  \
+  ( ( TXT_DONE << ( 0 * TXT_BF ) ) | ( TXT_DONE << ( 1 * TXT_BF ) ) | \
+    ( TXT_DONE << ( 2 * TXT_BF ) ) | ( TXT_DONE << ( 3 * TXT_BF ) ) | \
+    ( TXT_DONE << ( 4 * TXT_BF ) ) | ( TXT_DONE << ( 5 * TXT_BF ) ) | \
+    ( TXT_DONE << ( 6 * TXT_BF ) ) | ( TXT_DONE << ( 7 * TXT_BF ) ) )
+#define TXTB_GET_STATUS( status, id ) \
+  ( ( status >> ( id * TXT_BF ) ) & TXT_MASK )
 
-#define TXB_BF 4
-#define TXB_MASK 0xf
-#define TXB_ALL 0xffffffff
-#define TXB_SH(idx) (idx * TXB_BF)
+#define TXB_BF        4
+#define TXB_MASK      0xf
+#define TXB_ALL       0xffffffff
+#define TXB_SH( idx ) ( idx * TXB_BF )
 
 static inline uint32_t ctucanfd_txb_slot_demote(
   uint32_t txb_order,
-  int from,
-  int to
+  int      from,
+  int      to
 )
 {
   uint32_t txb_order_new;
@@ -79,14 +76,14 @@ static inline uint32_t ctucanfd_txb_slot_demote(
   uint32_t mask_to = TXB_ALL << TXB_SH( to );
   txb_order_new = txb_move << TXB_SH( to );
   txb_order_new |= txb_order & ( ~mask_from | ( mask_to << TXB_BF ) );
-  txb_order_new |= ( ( txb_order >> TXB_BF) & ~mask_to ) & mask_from;
+  txb_order_new |= ( ( txb_order >> TXB_BF ) & ~mask_to ) & mask_from;
   return txb_order_new;
 }
 
 static inline uint32_t ctucanfd_txb_slot_promote(
   uint32_t txb_order,
-  int from,
-  int to
+  int      from,
+  int      to
 )
 {
   uint32_t txb_order_new;
@@ -95,14 +92,14 @@ static inline uint32_t ctucanfd_txb_slot_promote(
   uint32_t mask_to = TXB_ALL << TXB_SH( to );
   txb_order_new = txb_move << TXB_SH( to );
   txb_order_new |= ( txb_order ) & ( ~mask_to | ( mask_from << TXB_BF ) );
-  txb_order_new |= ( ( (txb_order & mask_to ) & ~mask_from ) << TXB_BF );
+  txb_order_new |= ( ( ( txb_order & mask_to ) & ~mask_from ) << TXB_BF );
   return txb_order_new;
 }
 
 static inline uint32_t ctucanfd_txb_order2prio( uint32_t txb_order )
 {
   uint32_t prio = 0;
-  int i = RTEMS_CTUCANFD_NTXBUFS_MAX - 1;
+  int      i = RTEMS_CTUCANFD_NTXBUFS_MAX - 1;
   do {
     prio |= i << ( 4 * ( txb_order & TXB_MASK ) );
     txb_order >>= TXB_BF;
@@ -112,11 +109,11 @@ static inline uint32_t ctucanfd_txb_order2prio( uint32_t txb_order )
 }
 
 static inline unsigned int ctucanfd_txb_from_order(
-  uint32_t txb_order,
+  uint32_t     txb_order,
   unsigned int at
-) 
+)
 {
-  return ( txb_order >> TXB_SH ( at ) ) & TXB_MASK;
+  return ( txb_order >> TXB_SH( at ) ) & TXB_MASK;
 }
 
 #endif /* _DEV_CTUCANFD_CTUCANFD_TXB_H */

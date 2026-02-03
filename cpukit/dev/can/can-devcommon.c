@@ -50,7 +50,7 @@
 static void can_queue_notify_chip(
   struct rtems_can_queue_ends *qends,
   struct rtems_can_queue_edge *qedge,
-  int what
+  int                          what
 )
 {
   struct rtems_can_queue_ends_dev *qends_dev = RTEMS_CONTAINER_OF(
@@ -65,10 +65,12 @@ static void can_queue_notify_chip(
       break;
     case RTEMS_CAN_QUEUE_NOTIFY_DEAD_WANTED:
     case RTEMS_CAN_QUEUE_NOTIFY_DEAD:
-      if ( rtems_can_queue_fifo_test_and_clear_fl(
+      if (
+        rtems_can_queue_fifo_test_and_clear_fl(
           &qedge->fifo,
           RTEMS_CAN_FIFOF_READY
-        ) ) {
+        )
+      ) {
         rtems_can_queue_edge_decref( qedge );
       }
       break;
@@ -84,7 +86,7 @@ void rtems_can_stats_reset( struct rtems_can_stats *stats )
 
 int rtems_can_queue_ends_init_chip(
   struct rtems_can_chip *chip,
-  const char *name
+  const char            *name
 )
 {
   int ret;

@@ -54,14 +54,16 @@
 
 static rtems_task virtual_worker( rtems_task_argument arg )
 {
-  struct rtems_can_chip *chip = (struct rtems_can_chip *)arg;
+  struct rtems_can_chip           *chip = (struct rtems_can_chip *) arg;
   struct rtems_can_queue_ends_dev *qends_dev = chip->qends_dev;
-  struct rtems_can_queue_ends *qends = &qends_dev->base;
-  struct rtems_can_queue_edge *qedge;
-  struct rtems_can_queue_slot *slot;
-  int cmd;
+  struct rtems_can_queue_ends     *qends = &qends_dev->base;
+  struct rtems_can_queue_edge     *qedge;
+  struct rtems_can_queue_slot     *slot;
+  int                              cmd;
   while ( 1 ) {
-    while ( ( cmd = rtems_can_queue_test_outslot( qends, &qedge, &slot ) ) >= 0 ) {
+    while (
+      ( cmd = rtems_can_queue_test_outslot( qends, &qedge, &slot ) ) >= 0
+    ) {
       if ( rtems_can_test_bit( RTEMS_CAN_CHIP_RUNNING, &chip->flags ) == 0 ) {
         if ( cmd >= 0 ) {
           rtems_can_queue_filter_frame_to_edges(
@@ -74,7 +76,7 @@ static rtems_task virtual_worker( rtems_task_argument arg )
         } else {
           rtems_binary_semaphore_post( &chip->stop_sem );
         }
-      } else  if ( cmd >= 0 ) {
+      } else if ( cmd >= 0 ) {
         /* fill CAN message timestamp */
         slot->frame.header.timestamp = rtems_can_fill_timestamp();
 
@@ -98,7 +100,7 @@ static int virtual_get_chip_info( struct rtems_can_chip *chip, int what )
 {
   int ret;
 
-  switch( what ) {
+  switch ( what ) {
     case RTEMS_CAN_CHIP_BITRATE:
     case RTEMS_CAN_CHIP_DBITRATE:
       ret = -EINVAL;
@@ -128,8 +130,8 @@ static int virtual_get_chip_info( struct rtems_can_chip *chip, int what )
  */
 static int virtual_chip_ioctl(
   struct rtems_can_chip *chip,
-  ioctl_command_t command,
-  void *arg
+  ioctl_command_t        command,
+  void                  *arg
 )
 {
   (void) chip;
@@ -137,7 +139,7 @@ static int virtual_chip_ioctl(
 
   int ret;
 
-  switch( command ) {
+  switch ( command ) {
     default:
       ret = -EINVAL;
       break;
@@ -146,13 +148,16 @@ static int virtual_chip_ioctl(
   return ret;
 }
 
-static int virtual_stop_chip ( struct rtems_can_chip *chip, struct timespec *ts )
+static int virtual_stop_chip(
+  struct rtems_can_chip *chip,
+  struct timespec       *ts
+)
 {
-  rtems_interval timeout;
+  rtems_interval  timeout;
   struct timespec curr;
   struct timespec final;
   struct timespec towait;
-  int ret;
+  int             ret;
 
   rtems_mutex_lock( &chip->lock );
   if ( rtems_can_test_bit( RTEMS_CAN_CHIP_RUNNING, &chip->flags ) == 0 ) {
@@ -184,7 +189,7 @@ static int virtual_stop_chip ( struct rtems_can_chip *chip, struct timespec *ts 
     ret = rtems_binary_semaphore_try_wait( &chip->stop_sem );
   }
 
-  if (ret < 0) {
+  if ( ret < 0 ) {
     rtems_can_queue_ends_flush_outlist( &chip->qends_dev->base );
   }
 
@@ -195,7 +200,7 @@ static int virtual_stop_chip ( struct rtems_can_chip *chip, struct timespec *ts 
   return 0;
 }
 
-static int virtual_start_chip ( struct rtems_can_chip *chip )
+static int virtual_start_chip( struct rtems_can_chip *chip )
 {
   rtems_mutex_lock( &chip->lock );
   if ( rtems_can_test_bit( RTEMS_CAN_CHIP_RUNNING, &chip->flags ) ) {
@@ -222,8 +227,8 @@ static void virtual_register( struct rtems_can_chip_ops *chip_ops )
 
 struct rtems_can_chip *rtems_can_virtual_initialize( void )
 {
-  rtems_id worker_task_id;
-  rtems_status_code sc;
+  rtems_id               worker_task_id;
+  rtems_status_code      sc;
   struct rtems_can_chip *chip;
 
   chip = calloc( 1, sizeof( struct rtems_can_chip ) );
@@ -243,20 +248,14 @@ struct rtems_can_chip *rtems_can_virtual_initialize( void )
 
   rtems_mutex_init( &chip->lock, "virtual_lock" );
 
-  rtems_binary_semaphore_init(
-    &chip->stop_sem,
-    "can_virtual_stop_sem"
-  );
+  rtems_binary_semaphore_init( &chip->stop_sem, "can_virtual_stop_sem" );
 
-  rtems_can_queue_ends_init_chip(
-    chip,
-    "can_virtual_worker"
-  );
+  rtems_can_queue_ends_init_chip( chip, "can_virtual_worker" );
 
   sc = rtems_task_create(
     rtems_build_name( 'C', 'A', 'N', 'V' ),
     CAN_VIRTUAL_PRIORITY,
-    RTEMS_MINIMUM_STACK_SIZE+0x1000,
+    RTEMS_MINIMUM_STACK_SIZE + 0x1000,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &worker_task_id
@@ -267,13 +266,16 @@ struct rtems_can_chip *rtems_can_virtual_initialize( void )
     return NULL;
   }
 
-  rtems_task_start( worker_task_id, virtual_worker,
-                    (rtems_task_argument)chip );
+  rtems_task_start(
+    worker_task_id,
+    virtual_worker,
+    (rtems_task_argument) chip
+  );
 
   virtual_register( &chip->chip_ops );
 
   rtems_can_set_bit( RTEMS_CAN_CHIP_CONFIGURED, &chip->flags );
-  rtems_can_stats_set_state(&chip->chip_stats, CAN_STATE_STOPPED );
+  rtems_can_stats_set_state( &chip->chip_stats, CAN_STATE_STOPPED );
 
   return chip;
 }

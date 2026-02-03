@@ -48,7 +48,7 @@
 int rtems_can_queue_fifo_flush_slots( struct rtems_can_queue_fifo *fifo )
 {
   struct rtems_can_queue_slot *slot;
-  int ret = 0;
+  int                          ret = 0;
 
   rtems_mutex_lock( &fifo->fifo_lock );
   slot = fifo->head;
@@ -62,7 +62,9 @@ int rtems_can_queue_fifo_flush_slots( struct rtems_can_queue_fifo *fifo )
   rtems_can_queue_fifo_clear_flag( fifo, RTEMS_CAN_FIFOF_FULL );
   rtems_can_queue_fifo_set_flag( fifo, RTEMS_CAN_FIFOF_INACTIVE );
   if ( fifo->out_taken == 0 ) {
-    if ( rtems_can_queue_fifo_test_and_set_flag( fifo, RTEMS_CAN_FIFOF_EMPTY ) ) {
+    if (
+      rtems_can_queue_fifo_test_and_set_flag( fifo, RTEMS_CAN_FIFOF_EMPTY )
+    ) {
       ret |= RTEMS_CAN_FIFOF_EMPTY;
     }
   }
@@ -83,9 +85,9 @@ int rtems_can_queue_fifo_init_slots( struct rtems_can_queue_fifo *fifo )
   slot = fifo->entry;
   fifo->free_list = slot;
   while ( --allocated_slot_count ) {
-    slot = slot->next = (void *)slot + rtems_can_queue_fifo_slot_size(
-      fifo->max_data_length
-    );
+    slot = slot->next = (void *) slot + rtems_can_queue_fifo_slot_size(
+                                          fifo->max_data_length
+                                        );
   }
   slot->next = NULL;
   fifo->head = NULL;
@@ -102,18 +104,20 @@ void rtems_can_queue_do_edge_decref( struct rtems_can_queue_edge *qedge )
 }
 
 int rtems_can_queue_get_inslot(
-  struct rtems_can_queue_ends *qends,
+  struct rtems_can_queue_ends  *qends,
   struct rtems_can_queue_edge **qedgep,
   struct rtems_can_queue_slot **slotp,
-  int cmd
+  int                           cmd
 )
 {
   struct rtems_can_queue_edge *edge;
-  int ret = -2;
+  int                          ret = -2;
 
   edge = rtems_can_queue_first_inedge( qends );
   if ( edge ) {
-    if ( rtems_can_queue_fifo_test_flag( &edge->fifo, RTEMS_CAN_FIFOF_BLOCK ) == 0 ) {
+    if (
+      rtems_can_queue_fifo_test_flag( &edge->fifo, RTEMS_CAN_FIFOF_BLOCK ) == 0
+    ) {
       ret = rtems_can_queue_fifo_get_inslot( &edge->fifo, slotp, cmd );
       if ( ret == 0 ) {
         *qedgep = edge;
@@ -130,25 +134,32 @@ int rtems_can_queue_get_inslot(
 }
 
 int rtems_can_queue_get_inslot_for_prio(
-  struct rtems_can_queue_ends *qends,
-  struct rtems_can_queue_edge **qedgep,
-  struct rtems_can_queue_slot **slotp,
+  struct rtems_can_queue_ends   *qends,
+  struct rtems_can_queue_edge  **qedgep,
+  struct rtems_can_queue_slot  **slotp,
   const struct can_frame_header *header,
-  int cmd,
-  int prio
+  int                            cmd,
+  int                            prio
 )
 {
   struct rtems_can_queue_edge *edge = NULL;
   struct rtems_can_queue_edge *bestedge = NULL;
-  int ret = -2;
+  int                          ret = -2;
 
-  rtems_can_queue_for_each_inedge( qends, edge ) {
-    if ( rtems_can_queue_fifo_test_flag( &edge->fifo, RTEMS_CAN_FIFOF_BLOCK ) ) {
+  rtems_can_queue_for_each_inedge( qends, edge )
+  {
+    if (
+      rtems_can_queue_fifo_test_flag( &edge->fifo, RTEMS_CAN_FIFOF_BLOCK )
+    ) {
       continue;
     }
 
     if ( header != NULL ) {
-      if ( !rtems_can_queue_filter_match( &edge->filter, header->can_id, header->flags ) ) {
+      if ( !rtems_can_queue_filter_match(
+             &edge->filter,
+             header->can_id,
+             header->flags
+           ) ) {
         continue;
       }
     }
@@ -173,8 +184,12 @@ int rtems_can_queue_get_inslot_for_prio(
     ret = rtems_can_queue_fifo_get_inslot( &edge->fifo, slotp, cmd );
     if ( ret == 0 ) {
       *qedgep = edge;
-      RTEMS_DEBUG_PRINT( "cmd = %d prio = %d found edge %d\n", cmd, prio,
-                         edge->edge_num );
+      RTEMS_DEBUG_PRINT(
+        "cmd = %d prio = %d found edge %d\n",
+        cmd,
+        prio,
+        edge->edge_num
+      );
       return ret;
     }
     rtems_can_queue_edge_decref( bestedge );
@@ -188,12 +203,17 @@ int rtems_can_queue_get_inslot_for_prio(
 int rtems_can_queue_test_inslot( struct rtems_can_queue_ends *qends )
 {
   struct rtems_can_queue_edge *edge;
-  int ret = -1;
+  int                          ret = -1;
 
   edge = rtems_can_queue_first_inedge( qends );
   if ( edge ) {
-    if ( rtems_can_queue_fifo_test_flag( &edge->fifo, RTEMS_CAN_FIFOF_BLOCK ) == 0 ) {
-      if ( rtems_can_queue_fifo_test_flag( &edge->fifo, RTEMS_CAN_FIFOF_FULL ) == 0 ) {
+    if (
+      rtems_can_queue_fifo_test_flag( &edge->fifo, RTEMS_CAN_FIFOF_BLOCK ) == 0
+    ) {
+      if (
+        rtems_can_queue_fifo_test_flag( &edge->fifo, RTEMS_CAN_FIFOF_FULL ) ==
+        0
+      ) {
         /* There is empty space */
         rtems_can_queue_edge_decref( edge );
         return 0;
@@ -248,29 +268,34 @@ int rtems_can_queue_abort_inslot(
 int rtems_can_queue_filter_frame_to_edges(
   struct rtems_can_queue_ends *qends,
   struct rtems_can_queue_edge *src_edge,
-  struct can_frame *frame,
-  unsigned int flags2add
+  struct can_frame            *frame,
+  unsigned int                 flags2add
 )
 {
   struct rtems_can_queue_edge *edge;
   struct rtems_can_queue_slot *slot;
-  int destnr = 0;
-  int is_txerr = 0;
-  int ret;
+  int                          destnr = 0;
+  int                          is_txerr = 0;
+  int                          ret;
 
-  RTEMS_DEBUG_PRINT( "For frame ID 0x%08lx and flags 0x%02x\n",
-                     frame->header.can_id, frame->header.flags );
+  RTEMS_DEBUG_PRINT(
+    "For frame ID 0x%08lx and flags 0x%02x\n",
+    frame->header.can_id,
+    frame->header.flags
+  );
 
   is_txerr = ( ( flags2add & CAN_FRAME_TXERR ) == 0 ) ? 0 : 1;
 
-  rtems_can_queue_for_each_inedge( qends, edge ) {
-    if ( rtems_can_queue_fifo_test_flag( &edge->fifo, RTEMS_CAN_FIFOF_BLOCK ) ) {
+  rtems_can_queue_for_each_inedge( qends, edge )
+  {
+    if (
+      rtems_can_queue_fifo_test_flag( &edge->fifo, RTEMS_CAN_FIFOF_BLOCK )
+    ) {
       continue;
     }
 
     if (
-      src_edge != NULL &&
-      is_txerr == 0 &&
+      src_edge != NULL && is_txerr == 0 &&
       edge->output_ends == src_edge->input_ends
     ) {
       flags2add |= CAN_FRAME_ECHO;
@@ -278,8 +303,11 @@ int rtems_can_queue_filter_frame_to_edges(
       flags2add &= ~CAN_FRAME_ECHO;
     }
 
-    if ( !rtems_can_queue_filter_match( &edge->filter, frame->header.can_id,
-                               frame->header.flags | flags2add ) ) {
+    if ( !rtems_can_queue_filter_match(
+           &edge->filter,
+           frame->header.can_id,
+           frame->header.flags | flags2add
+         ) ) {
       continue;
     }
 
@@ -317,27 +345,33 @@ int rtems_can_queue_filter_frame_to_edges(
       }
     }
   }
-  RTEMS_DEBUG_PRINT( "Sent frame ID %d to %d edges\n", frame->header.can_id,
-                     destnr );
+  RTEMS_DEBUG_PRINT(
+    "Sent frame ID %d to %d edges\n",
+    frame->header.can_id,
+    destnr
+  );
 
   return destnr;
 }
 
 int rtems_can_queue_test_outslot(
-  struct rtems_can_queue_ends *qends,
+  struct rtems_can_queue_ends  *qends,
   struct rtems_can_queue_edge **qedgep,
   struct rtems_can_queue_slot **slotp
 )
 {
   struct rtems_can_queue_edge *edge;
-  int prio = RTEMS_CAN_QUEUE_PRIO_NR - 1;
-  int ret;
+  int                          prio = RTEMS_CAN_QUEUE_PRIO_NR - 1;
+  int                          ret;
 
   do {
     rtems_mutex_lock( &qends->ends_lock );
-    while ( !TAILQ_EMPTY( &qends->active[prio] ) ) {
-      edge = TAILQ_FIRST( &qends->active[prio] );
-      if ( !rtems_can_queue_fifo_test_flag( &edge->fifo, RTEMS_CAN_FIFOF_DEAD ) ) {
+    while ( !TAILQ_EMPTY( &qends->active[ prio ] ) ) {
+      edge = TAILQ_FIRST( &qends->active[ prio ] );
+      if ( !rtems_can_queue_fifo_test_flag(
+             &edge->fifo,
+             RTEMS_CAN_FIFOF_DEAD
+           ) ) {
         int out_ready;
         rtems_can_queue_edge_incref( edge );
         rtems_mutex_unlock( &qends->ends_lock );
@@ -358,11 +392,11 @@ int rtems_can_queue_test_outslot(
           }
           if ( out_ready ) {
             TAILQ_INSERT_HEAD(
-              &qends->active[edge->edge_prio],
+              &qends->active[ edge->edge_prio ],
               edge,
               activepeers
             );
-            edge->peershead = &qends->active[edge->edge_prio];
+            edge->peershead = &qends->active[ edge->edge_prio ];
           } else {
             rtems_can_queue_fifo_set_flag(
               &edge->fifo,
@@ -395,16 +429,20 @@ int rtems_can_queue_test_outslot(
 
 int rtems_can_queue_pending_outslot_prio(
   struct rtems_can_queue_ends *qends,
-  int prio_min
-) {
+  int                          prio_min
+)
+{
   struct rtems_can_queue_edge *edge;
-  int prio;
+  int                          prio;
 
   for ( prio = RTEMS_CAN_QUEUE_PRIO_NR; --prio >= prio_min; ) {
     rtems_mutex_lock( &qends->ends_lock );
-    while ( !TAILQ_EMPTY( &qends->active[prio] ) ) {
-      edge = TAILQ_FIRST( &qends->active[prio] );
-      if ( !rtems_can_queue_fifo_test_flag( &edge->fifo, RTEMS_CAN_FIFOF_DEAD ) ) {
+    while ( !TAILQ_EMPTY( &qends->active[ prio ] ) ) {
+      edge = TAILQ_FIRST( &qends->active[ prio ] );
+      if ( !rtems_can_queue_fifo_test_flag(
+             &edge->fifo,
+             RTEMS_CAN_FIFOF_DEAD
+           ) ) {
         rtems_can_queue_edge_incref( edge );
         rtems_mutex_unlock( &qends->ends_lock );
         if ( rtems_can_queue_fifo_out_is_ready_unprotected( &edge->fifo ) ) {
@@ -483,8 +521,12 @@ int rtems_can_queue_push_back_outslot(
     if ( qedge->peershead != NULL ) {
       TAILQ_REMOVE( qedge->peershead, qedge, activepeers );
     }
-    TAILQ_INSERT_TAIL( &qends->active[qedge->edge_prio], qedge, activepeers );
-    qedge->peershead = &qends->active[qedge->edge_prio];
+    TAILQ_INSERT_TAIL(
+      &qends->active[ qedge->edge_prio ],
+      qedge,
+      activepeers
+    );
+    qedge->peershead = &qends->active[ qedge->edge_prio ];
     rtems_can_queue_fifo_clear_flag( &qedge->fifo, RTEMS_CAN_FIFOF_INACTIVE );
   }
   rtems_mutex_unlock( &qedge->fifo.fifo_lock );
@@ -505,10 +547,12 @@ int rtems_can_queue_flush( struct rtems_can_queue_edge *qedge )
     rtems_can_queue_notify_input_ends( qedge, RTEMS_CAN_QUEUE_NOTIFY_SPACE );
     rtems_mutex_lock( &qedge->output_ends->ends_lock );
     rtems_mutex_lock( &qedge->fifo.fifo_lock );
-    if ( !rtems_can_queue_fifo_out_is_ready_unprotected( &qedge->fifo ) &&
-         ( qedge->output_ends != NULL ) ) {
+    if (
+      !rtems_can_queue_fifo_out_is_ready_unprotected( &qedge->fifo ) &&
+      ( qedge->output_ends != NULL )
+    ) {
       rtems_can_queue_fifo_set_flag( &qedge->fifo, RTEMS_CAN_FIFOF_INACTIVE );
-      rtems_can_queue_edge_to_idle_unprotected(qedge->output_ends, qedge);
+      rtems_can_queue_edge_to_idle_unprotected( qedge->output_ends, qedge );
     }
     rtems_mutex_unlock( &qedge->fifo.fifo_lock );
     rtems_mutex_unlock( &qedge->output_ends->ends_lock );
@@ -522,7 +566,7 @@ int rtems_can_queue_ends_init( struct rtems_can_queue_ends *qends )
   int i;
 
   for ( i = RTEMS_CAN_QUEUE_PRIO_NR; --i >= 0; ) {
-    TAILQ_INIT( &qends->active[i] );
+    TAILQ_INIT( &qends->active[ i ] );
   }
   TAILQ_INIT( &qends->idle );
   TAILQ_INIT( &qends->inlist );
@@ -554,9 +598,9 @@ int rtems_can_queue_connect_edge(
   }
 
   rtems_mutex_lock( &qedge->fifo.fifo_lock );
-  qedge->input_ends=input_ends;
+  qedge->input_ends = input_ends;
   TAILQ_INSERT_TAIL( &input_ends->inlist, qedge, input_peers );
-  qedge->output_ends=output_ends;
+  qedge->output_ends = output_ends;
   TAILQ_INSERT_TAIL( &output_ends->outlist, qedge, output_peers );
   TAILQ_INSERT_TAIL( &output_ends->idle, qedge, activepeers );
   qedge->peershead = &output_ends->idle;
@@ -574,9 +618,12 @@ int rtems_can_queue_connect_edge(
 
   rtems_can_queue_notify_both_ends( qedge, RTEMS_CAN_QUEUE_NOTIFY_ATTACH );
 
-  if ( rtems_can_queue_fifo_test_and_set_flag(
-      &qedge->fifo, RTEMS_CAN_FIFOF_READY
-    ) ) {
+  if (
+    rtems_can_queue_fifo_test_and_set_flag(
+      &qedge->fifo,
+      RTEMS_CAN_FIFOF_READY
+    )
+  ) {
     rtems_can_queue_edge_decref( qedge );
   }
   return 0;
@@ -584,11 +631,11 @@ int rtems_can_queue_connect_edge(
 
 int rtems_can_queue_disconnect_edge( struct rtems_can_queue_edge *qedge )
 {
-  int ret;
+  int                          ret;
   struct rtems_can_queue_ends *input_ends, *output_ends;
 
-  input_ends=qedge->input_ends;
-  output_ends=qedge->output_ends;
+  input_ends = qedge->input_ends;
+  output_ends = qedge->output_ends;
 
   if ( input_ends && output_ends ) {
     if ( input_ends < output_ends ) {
@@ -617,11 +664,11 @@ int rtems_can_queue_disconnect_edge( struct rtems_can_queue_edge *qedge )
         qedge->peershead = NULL;
       }
       TAILQ_REMOVE( &qedge->output_ends->outlist, qedge, output_peers );
-      qedge->output_ends=NULL;
+      qedge->output_ends = NULL;
     }
     if ( qedge->input_ends ) {
       TAILQ_REMOVE( &qedge->input_ends->inlist, qedge, input_peers );
-      qedge->input_ends=NULL;
+      qedge->input_ends = NULL;
     }
     ret = 1;
   } else {
@@ -656,7 +703,8 @@ void rtems_can_queue_block_inlist( struct rtems_can_queue_ends *qends )
 {
   struct rtems_can_queue_edge *edge;
 
-  rtems_can_queue_for_each_inedge( qends, edge ) {
+  rtems_can_queue_for_each_inedge( qends, edge )
+  {
     rtems_can_queue_fifo_set_flag( &edge->fifo, RTEMS_CAN_FIFOF_BLOCK );
   }
 }
@@ -665,19 +713,21 @@ void rtems_can_queue_block_outlist( struct rtems_can_queue_ends *qends )
 {
   struct rtems_can_queue_edge *edge;
 
-  rtems_can_queue_for_each_outedge( qends, edge ) {
+  rtems_can_queue_for_each_outedge( qends, edge )
+  {
     rtems_can_queue_fifo_set_flag( &edge->fifo, RTEMS_CAN_FIFOF_BLOCK );
   }
 }
 
 int rtems_can_queue_ends_kill_inlist(
   struct rtems_can_queue_ends *qends,
-  int send_rest
+  int                          send_rest
 )
 {
   struct rtems_can_queue_edge *edge;
 
-  rtems_can_queue_for_each_inedge( qends, edge ) {
+  rtems_can_queue_for_each_inedge( qends, edge )
+  {
     rtems_can_queue_notify_both_ends(
       edge,
       RTEMS_CAN_QUEUE_NOTIFY_DEAD_WANTED
@@ -685,16 +735,19 @@ int rtems_can_queue_ends_kill_inlist(
     if ( send_rest ) {
       rtems_can_queue_edge_incref( edge );
       if ( !rtems_can_queue_fifo_test_and_set_flag(
-          &edge->fifo,
-          RTEMS_CAN_FIFOF_FREEONEMPTY
-        ) ) {
-        if ( !rtems_can_queue_fifo_test_flag( &edge->fifo, RTEMS_CAN_FIFOF_EMPTY ) ) {
+             &edge->fifo,
+             RTEMS_CAN_FIFOF_FREEONEMPTY
+           ) ) {
+        if ( !rtems_can_queue_fifo_test_flag(
+               &edge->fifo,
+               RTEMS_CAN_FIFOF_EMPTY
+             ) ) {
           continue;
         }
         if ( !rtems_can_queue_fifo_test_and_clear_fl(
-            &edge->fifo,
-            RTEMS_CAN_FIFOF_FREEONEMPTY
-          ) ) {
+               &edge->fifo,
+               RTEMS_CAN_FIFOF_FREEONEMPTY
+             ) ) {
           continue;
         }
       }
@@ -709,7 +762,8 @@ int rtems_can_queue_ends_kill_outlist( struct rtems_can_queue_ends *qends )
 {
   struct rtems_can_queue_edge *edge;
 
-  rtems_can_queue_for_each_outedge( qends, edge ) {
+  rtems_can_queue_for_each_outedge( qends, edge )
+  {
     rtems_can_queue_notify_both_ends(
       edge,
       RTEMS_CAN_QUEUE_NOTIFY_DEAD_WANTED
@@ -723,7 +777,8 @@ int rtems_can_queue_ends_flush_inlist( struct rtems_can_queue_ends *qends )
 {
   struct rtems_can_queue_edge *edge;
 
-  rtems_can_queue_for_each_inedge( qends, edge ) {
+  rtems_can_queue_for_each_inedge( qends, edge )
+  {
     rtems_can_queue_flush( edge );
   }
   return 0;
@@ -733,7 +788,8 @@ int rtems_can_queue_ends_flush_outlist( struct rtems_can_queue_ends *qends )
 {
   struct rtems_can_queue_edge *edge;
 
-  rtems_can_queue_for_each_outedge( qends, edge ) {
+  rtems_can_queue_for_each_outedge( qends, edge )
+  {
     rtems_can_queue_flush( edge );
   }
   return 0;

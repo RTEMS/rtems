@@ -60,32 +60,32 @@ static rtems_mutex canuser_manipulation_lock = RTEMS_MUTEX_INITIALIZER(
 
 static int can_bus_open(
   rtems_libio_t *iop,
-  const char *path,
-  int oflag,
-  mode_t mode
+  const char    *path,
+  int            oflag,
+  mode_t         mode
 );
-static int can_bus_close( rtems_libio_t *iop );
+static int     can_bus_close( rtems_libio_t *iop );
 static ssize_t can_bus_read( rtems_libio_t *iop, void *buffer, size_t count );
 static ssize_t can_bus_write(
   rtems_libio_t *iop,
-  const void *buffer,
-  size_t count
+  const void    *buffer,
+  size_t         count
 );
 static int can_bus_ioctl(
-  rtems_libio_t *iop,
+  rtems_libio_t  *iop,
   ioctl_command_t request,
-  void *buffer
+  void           *buffer
 );
 
 static struct rtems_can_user *can_bus_get_user( rtems_libio_t *iop )
 {
   struct rtems_can_user *canuser = iop->data1;
   if ( !canuser || ( canuser->magic != RTEMS_CAN_USER_MAGIC ) ) {
-     rtems_set_errno_and_return_value( ENODEV, NULL );
+    rtems_set_errno_and_return_value( ENODEV, NULL );
   }
 
   if ( canuser->bus->chip == NULL ) {
-     rtems_set_errno_and_return_value( EIO, NULL );
+    rtems_set_errno_and_return_value( EIO, NULL );
   }
 
   return canuser;
@@ -93,16 +93,16 @@ static struct rtems_can_user *can_bus_get_user( rtems_libio_t *iop )
 
 static int can_bus_ioctl_poll_tx_ready(
   struct rtems_can_queue_ends_user_t *qends_user,
-  struct timespec *ts
+  struct timespec                    *ts
 )
 {
   struct rtems_can_queue_ends *qends = &qends_user->base;
-  rtems_interval timeout;
-  bool nowait;
-  struct timespec curr;
-  struct timespec final;
-  struct timespec towait;
-  int ret;
+  rtems_interval               timeout;
+  bool                         nowait;
+  struct timespec              curr;
+  struct timespec              final;
+  struct timespec              towait;
+  int                          ret;
 
   ret = rtems_can_queue_test_inslot( qends );
   if ( ret < 0 ) {
@@ -152,16 +152,16 @@ static int can_bus_ioctl_poll_tx_ready(
 
 static int can_bus_ioctl_poll_rx_avail(
   struct rtems_can_queue_ends_user_t *qends_user,
-  struct timespec *ts
+  struct timespec                    *ts
 )
 {
   struct rtems_can_queue_ends *qends = &qends_user->base;
-  rtems_interval timeout;
-  bool nowait;
-  struct timespec curr;
-  struct timespec final;
-  struct timespec towait;
-  int ret;
+  rtems_interval               timeout;
+  bool                         nowait;
+  struct timespec              curr;
+  struct timespec              final;
+  struct timespec              towait;
+  int                          ret;
 
   ret = rtems_can_queue_pending_outslot_prio( qends, 0 );
   if ( ret < 0 ) {
@@ -211,7 +211,7 @@ static int can_bus_ioctl_poll_rx_avail(
 
 static int can_bus_ioctl_create_queue(
   struct rtems_can_queue_param queue,
-  struct rtems_can_chip *chip,
+  struct rtems_can_chip       *chip,
   struct rtems_can_queue_ends *qends
 )
 {
@@ -240,8 +240,9 @@ static int can_bus_ioctl_create_queue(
   }
 
   if ( queue.dlen_max == 0 ) {
-    queue.dlen_max = chip->capabilities & RTEMS_CAN_CHIP_CAPABILITIES_FD ?
-      CAN_FRAME_FD_DLEN : CAN_FRAME_STANDARD_DLEN;
+    queue.dlen_max = chip->capabilities & RTEMS_CAN_CHIP_CAPABILITIES_FD
+                       ? CAN_FRAME_FD_DLEN
+                       : CAN_FRAME_STANDARD_DLEN;
   }
 
   if ( queue.buffer_size == 0 ) {
@@ -257,7 +258,10 @@ static int can_bus_ioctl_create_queue(
   }
 
   /* Create new edge */
-  new_edge = rtems_can_queue_new_edge_kern( queue.buffer_size, queue.dlen_max );
+  new_edge = rtems_can_queue_new_edge_kern(
+    queue.buffer_size,
+    queue.dlen_max
+  );
   if ( new_edge == NULL ) {
     return -ENOMEM;
   }
@@ -269,14 +273,14 @@ static int can_bus_ioctl_create_queue(
   /* And connect edge. This should not fail. */
   rtems_can_queue_connect_edge( new_edge, input_ends, output_ends );
   rtems_can_queue_edge_decref( new_edge );
-  return 0;  
+  return 0;
 }
 
 static int can_bus_open(
   rtems_libio_t *iop,
-  const char *path,
-  int oflag,
-  mode_t mode
+  const char    *path,
+  int            oflag,
+  mode_t         mode
 )
 {
   (void) path;
@@ -284,13 +288,13 @@ static int can_bus_open(
   (void) mode;
 
   struct rtems_can_queue_ends_user_t *qends_user;
-  struct rtems_can_queue_ends *qends;
-  struct rtems_can_queue_edge *edge4read = NULL;
-  struct rtems_can_queue_edge *edge4write = NULL;
-  struct rtems_can_chip *chip;
-  struct rtems_can_user *canuser;
-  int can_frame_dlen;
-  int sc;
+  struct rtems_can_queue_ends        *qends;
+  struct rtems_can_queue_edge        *edge4read = NULL;
+  struct rtems_can_queue_edge        *edge4write = NULL;
+  struct rtems_can_chip              *chip;
+  struct rtems_can_user              *canuser;
+  int                                 can_frame_dlen;
+  int                                 sc;
 
   struct rtems_can_bus *bus = IMFS_generic_get_context_by_iop( iop );
   if ( bus == NULL ) {
@@ -301,13 +305,17 @@ static int can_bus_open(
 
   atomic_fetch_add( &chip->used, 1 );
 
-  canuser = ( struct rtems_can_user * )malloc( sizeof( struct rtems_can_user ) );
+  canuser = (struct rtems_can_user *) malloc(
+    sizeof( struct rtems_can_user )
+  );
   if ( canuser == NULL ) {
     atomic_fetch_sub( &chip->used, 1 );
     rtems_set_errno_and_return_minus_one( ENOMEM );
   }
 
-  qends_user = ( struct rtems_can_queue_ends_user_t * )malloc( sizeof( struct rtems_can_queue_ends_user_t ) );
+  qends_user = (struct rtems_can_queue_ends_user_t *) malloc(
+    sizeof( struct rtems_can_queue_ends_user_t )
+  );
   if ( qends_user == NULL ) {
     free( canuser );
     atomic_fetch_sub( &chip->used, 1 );
@@ -324,22 +332,39 @@ static int can_bus_open(
   rtems_can_queue_ends_init_user( qends_user );
   canuser->qends_user = qends_user;
 
-  can_frame_dlen = chip->capabilities & RTEMS_CAN_CHIP_CAPABILITIES_FD ?
-    CAN_FRAME_FD_DLEN : CAN_FRAME_STANDARD_DLEN;
+  can_frame_dlen = chip->capabilities & RTEMS_CAN_CHIP_CAPABILITIES_FD
+                     ? CAN_FRAME_FD_DLEN
+                     : CAN_FRAME_STANDARD_DLEN;
 
   rtems_mutex_lock( &canuser_manipulation_lock );
   TAILQ_INSERT_TAIL( &chip->can_users, canuser, peers );
   rtems_mutex_unlock( &canuser_manipulation_lock );
 
-  edge4write = rtems_can_queue_new_edge_kern( RTEMS_CAN_FIFO_SIZE, can_frame_dlen );
-  sc = rtems_can_queue_connect_edge( edge4write, qends, &chip->qends_dev->base );
-  if ( sc < 0 )
+  edge4write = rtems_can_queue_new_edge_kern(
+    RTEMS_CAN_FIFO_SIZE,
+    can_frame_dlen
+  );
+  sc = rtems_can_queue_connect_edge(
+    edge4write,
+    qends,
+    &chip->qends_dev->base
+  );
+  if ( sc < 0 ) {
     goto no_qedge;
+  }
 
-  edge4read = rtems_can_queue_new_edge_kern( RTEMS_CAN_FIFO_SIZE, can_frame_dlen );
-  sc = rtems_can_queue_connect_edge( edge4read, &chip->qends_dev->base, qends );
-  if ( sc < 0 )
+  edge4read = rtems_can_queue_new_edge_kern(
+    RTEMS_CAN_FIFO_SIZE,
+    can_frame_dlen
+  );
+  sc = rtems_can_queue_connect_edge(
+    edge4read,
+    &chip->qends_dev->base,
+    qends
+  );
+  if ( sc < 0 ) {
     goto no_qedge;
+  }
 
   rtems_can_queue_edge_decref( edge4write );
   rtems_can_queue_edge_decref( edge4read );
@@ -367,10 +392,10 @@ no_qedge:
 
 static int can_bus_close( rtems_libio_t *iop )
 {
-  struct rtems_can_user *canuser;
+  struct rtems_can_user              *canuser;
   struct rtems_can_queue_ends_user_t *qends_user;
-  struct rtems_can_queue_ends *qends;
-  struct rtems_can_chip *chip;
+  struct rtems_can_queue_ends        *qends;
+  struct rtems_can_chip              *chip;
 
   canuser = iop->data1;
 
@@ -401,14 +426,14 @@ static int can_bus_close( rtems_libio_t *iop )
 static ssize_t can_bus_read( rtems_libio_t *iop, void *buffer, size_t count )
 {
   struct rtems_can_queue_ends_user_t *qends_user;
-  struct rtems_can_queue_ends *qends;
-  struct rtems_can_queue_edge *qedge;
-  struct rtems_can_queue_slot *slot;
-  struct rtems_can_user *canuser;
-  struct rtems_can_chip *chip;
-  size_t frame_len;
+  struct rtems_can_queue_ends        *qends;
+  struct rtems_can_queue_edge        *qedge;
+  struct rtems_can_queue_slot        *slot;
+  struct rtems_can_user              *canuser;
+  struct rtems_can_chip              *chip;
+  size_t                              frame_len;
   const size_t frame_header_len = sizeof( struct can_frame_header );
-  int ret;
+  int          ret;
 
   canuser = can_bus_get_user( iop );
   if ( canuser == NULL ) {
@@ -431,7 +456,7 @@ static ssize_t can_bus_read( rtems_libio_t *iop, void *buffer, size_t count )
       rtems_set_errno_and_return_minus_one( EAGAIN );
     }
 
-    if ( rtems_can_test_bit( RTEMS_CAN_CHIP_RUNNING, &chip->flags ) == 0) {
+    if ( rtems_can_test_bit( RTEMS_CAN_CHIP_RUNNING, &chip->flags ) == 0 ) {
       /* Chip is not running */
       rtems_set_errno_and_return_minus_one( EPERM );
     }
@@ -444,7 +469,7 @@ static ssize_t can_bus_read( rtems_libio_t *iop, void *buffer, size_t count )
     rtems_binary_semaphore_post( &qends_user->sem_read );
   }
 
-  frame_len = can_framesize( ( struct can_frame *)&slot->frame );
+  frame_len = can_framesize( (struct can_frame *) &slot->frame );
   if ( count > frame_len ) {
     count = frame_len;
   }
@@ -463,20 +488,20 @@ static ssize_t can_bus_read( rtems_libio_t *iop, void *buffer, size_t count )
 
 static ssize_t can_bus_write(
   rtems_libio_t *iop,
-  const void *buffer,
-  size_t count
+  const void    *buffer,
+  size_t         count
 )
 {
   struct rtems_can_queue_ends_user_t *qends_user;
-  struct rtems_can_queue_ends *qends;
-  struct rtems_can_queue_edge *qedge;
-  struct rtems_can_queue_slot *slot;
-  struct rtems_can_user *canuser;
-  struct rtems_can_chip *chip;
-  struct can_frame_header frame_header;
+  struct rtems_can_queue_ends        *qends;
+  struct rtems_can_queue_edge        *qedge;
+  struct rtems_can_queue_slot        *slot;
+  struct rtems_can_user              *canuser;
+  struct rtems_can_chip              *chip;
+  struct can_frame_header             frame_header;
   const size_t frame_header_len = sizeof( struct can_frame_header );
-  size_t frame_bytes;
-  int ret;
+  size_t       frame_bytes;
+  int          ret;
 
   canuser = can_bus_get_user( iop );
   if ( canuser == NULL ) {
@@ -507,7 +532,16 @@ static ssize_t can_bus_write(
   qends_user = canuser->qends_user;
   qends = &qends_user->base;
 
-  if ( ( ret = rtems_can_queue_get_inslot_for_prio( qends, &qedge, &slot, &frame_header, 0, 2 ) ) < 0 ) {
+  if (
+    ( ret = rtems_can_queue_get_inslot_for_prio(
+        qends,
+        &qedge,
+        &slot,
+        &frame_header,
+        0,
+        2
+      ) ) < 0
+  ) {
     if ( ret < -1 ) {
       rtems_set_errno_and_return_minus_one( EIO );
     }
@@ -522,7 +556,14 @@ static ssize_t can_bus_write(
         rtems_binary_semaphore_post( &qends_user->sem_write );
         rtems_set_errno_and_return_minus_one( EPERM );
       }
-      ret = rtems_can_queue_get_inslot_for_prio( qends, &qedge, &slot, &frame_header, 0, 2 );
+      ret = rtems_can_queue_get_inslot_for_prio(
+        qends,
+        &qedge,
+        &slot,
+        &frame_header,
+        0,
+        2
+      );
       if ( ret < -1 ) {
         rtems_binary_semaphore_post( &qends_user->sem_write );
         rtems_set_errno_and_return_minus_one( EIO );
@@ -540,7 +581,9 @@ static ssize_t can_bus_write(
   memcpy( &slot->frame, buffer, frame_bytes );
 
   /* Force extended frame format if id exceeds 11 bits */
-  if ( slot->frame.header.can_id & ~CAN_FRAME_BFF_ID_MASK & CAN_FRAME_EFF_ID_MASK ) {
+  if (
+    slot->frame.header.can_id & ~CAN_FRAME_BFF_ID_MASK & CAN_FRAME_EFF_ID_MASK
+  ) {
     slot->frame.header.flags |= CAN_FRAME_IDE;
   }
 
@@ -550,18 +593,18 @@ static ssize_t can_bus_write(
 }
 
 static int can_bus_ioctl(
-  rtems_libio_t *iop,
+  rtems_libio_t  *iop,
   ioctl_command_t command,
-  void *arg
+  void           *arg
 )
 {
   struct rtems_can_queue_ends_user_t *qends_user;
-  struct rtems_can_queue_ends *qends;
-  struct rtems_can_user *canuser;
-  struct rtems_can_chip *chip;
-  struct timespec ts;
-  int direction;
-  int ret = -EINVAL;
+  struct rtems_can_queue_ends        *qends;
+  struct rtems_can_user              *canuser;
+  struct rtems_can_chip              *chip;
+  struct timespec                     ts;
+  int                                 direction;
+  int                                 ret = -EINVAL;
 
   canuser = iop->data1;
   if ( !canuser || ( canuser->magic != RTEMS_CAN_USER_MAGIC ) ) {
@@ -586,7 +629,7 @@ static int can_bus_ioctl(
     case RTEMS_CAN_CHIP_STOP:
       if ( chip->chip_ops.stop_chip != NULL ) {
         if ( arg != 0 ) {
-          ts = *( struct timespec * )arg;
+          ts = *(struct timespec *) arg;
           ret = chip->chip_ops.stop_chip( chip, &ts );
         } else {
           ret = chip->chip_ops.stop_chip( chip, NULL );
@@ -595,13 +638,13 @@ static int can_bus_ioctl(
       break;
 
     case RTEMS_CAN_CLOSE_NONBLOCK:
-      chip->close_nonblock = ( bool )arg;
+      chip->close_nonblock = (bool) arg;
       ret = 0;
       break;
 
     case RTEMS_CAN_WAIT_TX_DONE:
       if ( arg != 0 ) {
-        ts = *( struct timespec * )arg;
+        ts = *(struct timespec *) arg;
         ret = rtems_can_queue_ends_sync_all_kern( qends, &ts );
       } else {
         ret = rtems_can_queue_ends_sync_all_kern( qends, NULL );
@@ -609,8 +652,8 @@ static int can_bus_ioctl(
       break;
 
     case RTEMS_CAN_POLL_TX_READY:
-      if ( arg != 0) {
-        ts = *( struct timespec * )arg;
+      if ( arg != 0 ) {
+        ts = *(struct timespec *) arg;
         ret = can_bus_ioctl_poll_tx_ready( qends_user, &ts );
       } else {
         ret = can_bus_ioctl_poll_tx_ready( qends_user, NULL );
@@ -618,8 +661,8 @@ static int can_bus_ioctl(
       break;
 
     case RTEMS_CAN_POLL_RX_AVAIL:
-      if ( arg != 0) {
-        ts = *( struct timespec * )arg;
+      if ( arg != 0 ) {
+        ts = *(struct timespec *) arg;
         ret = can_bus_ioctl_poll_rx_avail( qends_user, &ts );
       } else {
         ret = can_bus_ioctl_poll_rx_avail( qends_user, NULL );
@@ -627,7 +670,7 @@ static int can_bus_ioctl(
       break;
 
     case RTEMS_CAN_DISCARD_QUEUES:
-      direction = ( intptr_t )arg;
+      direction = (intptr_t) arg;
       ret = 0;
       if ( ( direction & ( RTEMS_CAN_QUEUE_RX | RTEMS_CAN_QUEUE_TX ) ) == 0 ) {
         ret = -EINVAL;
@@ -643,7 +686,7 @@ static int can_bus_ioctl(
       break;
 
     case RTEMS_CAN_FLUSH_QUEUES:
-      direction = ( intptr_t )arg;
+      direction = (intptr_t) arg;
       ret = 0;
 
       if ( ( direction & ( RTEMS_CAN_QUEUE_RX | RTEMS_CAN_QUEUE_TX ) ) == 0 ) {
@@ -661,15 +704,16 @@ static int can_bus_ioctl(
 
     case RTEMS_CAN_CREATE_QUEUE:
       ret = can_bus_ioctl_create_queue(
-        *( struct rtems_can_queue_param *)arg,
+        *(struct rtems_can_queue_param *) arg,
         chip,
         qends
       );
       break;
 
     case RTEMS_CAN_SET_BITRATE:
-      struct rtems_can_set_bittiming bittime =
-        *( struct rtems_can_set_bittiming *)arg;
+      struct rtems_can_set_bittiming bittime = *(
+        struct rtems_can_set_bittiming *
+      ) arg;
       if ( bittime.from == RTEMS_CAN_BITTIME_FROM_BITRATE ) {
         ret = chip->chip_ops.calc_bittiming(
           chip,
@@ -686,7 +730,7 @@ static int can_bus_ioctl(
       break;
 
     case RTEMS_CAN_CHIP_SET_MODE:
-      uint32_t ctrlmode = ( uintptr_t )arg;
+      uint32_t ctrlmode = (uintptr_t) arg;
       if ( rtems_can_test_bit( RTEMS_CAN_CHIP_RUNNING, &chip->flags ) == 1 ) {
         /* Cannot change the mode if chip has already started */
         ret = -EPERM;
@@ -703,8 +747,8 @@ static int can_bus_ioctl(
       break;
 
     case RTEMS_CAN_GET_BITTIMING:
-      struct rtems_can_get_bittiming *bittiming =
-        ( struct rtems_can_get_bittiming *)arg;
+      struct rtems_can_get_bittiming
+        *bittiming = (struct rtems_can_get_bittiming *) arg;
       ret = RTEMS_SUCCESSFUL;
       if ( bittiming->type == RTEMS_CAN_BITTIME_NOMINAL ) {
         memcpy(
@@ -738,18 +782,18 @@ static int can_bus_ioctl(
       uint64_t timestamp;
       if ( chip->chip_ops.get_chip_timestamp != NULL ) {
         ret = chip->chip_ops.get_chip_timestamp( chip, &timestamp );
-        *( uint64_t * )arg = timestamp;
+        *(uint64_t *) arg = timestamp;
       }
       break;
 
     case RTEMS_CAN_CHIP_STATISTICS:
-      *( struct rtems_can_stats* )arg = chip->chip_stats;
+      *(struct rtems_can_stats *) arg = chip->chip_stats;
       ret = RTEMS_SUCCESSFUL;
       break;
 
     case RTEMS_CAN_CHIP_GET_INFO:
       if ( chip->chip_ops.get_chip_info != NULL ) {
-        ret = chip->chip_ops.get_chip_info( chip, ( intptr_t )arg );
+        ret = chip->chip_ops.get_chip_info( chip, (intptr_t) arg );
       }
       break;
 

@@ -82,67 +82,65 @@ struct ctucanfd_internal {
   /**
    * @brief Base memory address.
    */
-  uintptr_t base;
+  uintptr_t                base;
   /**
    * @brief This member holds the enabled interrupts.
    */
-  uint32_t int_ena;
+  uint32_t                 int_ena;
   /**
    * @brief This member holds the masked out interrupts.
    */
-  uint32_t int_mask;
+  uint32_t                 int_mask;
   /**
    * @brief This member holds the array of @ref ctucanfd_txb_info structures.
    */
-  struct ctucanfd_txb_info txb_info[RTEMS_CTUCANFD_NTXBUFS_MAX];
+  struct ctucanfd_txb_info txb_info[ RTEMS_CTUCANFD_NTXBUFS_MAX ];
   /**
    * @brief This member holds tails for mapping of priority classes to bufders.
    *
    * These are the positions where buffers with frames from given priority
    * class should be inserted.
    */
-  uint8_t txb_prio_tail[RTEMS_CAN_QUEUE_PRIO_NR];
+  uint8_t                  txb_prio_tail[ RTEMS_CAN_QUEUE_PRIO_NR ];
   /**
    * @brief This member holds the order in which the buffers should be
    *  scheduled for transmisison.
    */
-  uint32_t txb_order;
+  uint32_t                 txb_order;
   /**
    * @brief This member holds the number of TX buffers for given core.
    */
-  unsigned int ntxbufs;
+  unsigned int             ntxbufs;
 };
 
 static inline void ctucanfd_write32(
-  struct ctucanfd_internal *internal,
+  struct ctucanfd_internal     *internal,
   enum ctu_can_fd_can_registers reg,
-  uint32_t val
+  uint32_t                      val
 )
 {
-  *( volatile uint32_t * )( internal->base + reg ) = val;
+  *(volatile uint32_t *) ( internal->base + reg ) = val;
 }
 
 static inline uint32_t ctucanfd_read32(
-  struct ctucanfd_internal *internal,
+  struct ctucanfd_internal     *internal,
   enum ctu_can_fd_can_registers reg
 )
 {
-  return *( volatile uint32_t * )( internal->base + reg );
+  return *(volatile uint32_t *) ( internal->base + reg );
 }
 
 static inline void ctucanfd_write_txt_buf(
-  struct ctucanfd_internal *internal,
+  struct ctucanfd_internal     *internal,
   enum ctu_can_fd_can_registers buf_base,
-  uint32_t offset,
-  uint32_t val
+  uint32_t                      offset,
+  uint32_t                      val
 )
 {
-  *( volatile uint32_t * )( internal->base + buf_base + offset ) = val;
+  *(volatile uint32_t *) ( internal->base + buf_base + offset ) = val;
 }
 
-#define CTU_CAN_FD_ENABLED( internal ) (!!FIELD_GET( \
-  REG_MODE_ENA, \
-  ctucanfd_read32( internal, CTUCANFD_MODE ) \
-) )
+#define CTU_CAN_FD_ENABLED( internal ) \
+  ( !!FIELD_GET( REG_MODE_ENA, ctucanfd_read32( internal, CTUCANFD_MODE ) ) )
 
 #endif /* __CTUCANFD_PRIV_H */

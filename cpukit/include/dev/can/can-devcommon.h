@@ -65,12 +65,12 @@ struct rtems_can_queue_ends_dev {
   /**
    * @brief This member holds the chip's structure.
    */
-  struct rtems_can_chip *chip;
+  struct rtems_can_chip      *chip;
   /**
    * @brief This member holds the worker semaphore used to trigger controller
    *  when there is a new message to be transmitted.
    */
-  rtems_binary_semaphore worker_sem;
+  rtems_binary_semaphore      worker_sem;
 };
 
 struct rtems_can_user;
@@ -127,8 +127,8 @@ struct rtems_can_chip_ops {
    */
   int ( *chip_ioctl )(
     struct rtems_can_chip *chip,
-    ioctl_command_t command,
-    void *arg
+    ioctl_command_t        command,
+    void                  *arg
   );
   /**
    * @brief Obtains timestamp from the controller. Called with
@@ -141,7 +141,7 @@ struct rtems_can_chip_ops {
    */
   int ( *get_chip_timestamp )(
     struct rtems_can_chip *chip,
-    uint64_t *timestamp
+    uint64_t              *timestamp
   );
   /**
    * @brief Obtains controller's information specified by input integer
@@ -167,8 +167,8 @@ struct rtems_can_chip_ops {
    * @retval -EINVAL Incorrect bit time type.
    */
   int ( *calc_bittiming )(
-    struct rtems_can_chip *chip,
-    int type,
+    struct rtems_can_chip      *chip,
+    int                         type,
     struct rtems_can_bittiming *bt
   );
   /**
@@ -185,8 +185,8 @@ struct rtems_can_chip_ops {
    * @retval -EINVAL Incorrect bit time type.
    */
   int ( *check_and_set_bittiming )(
-    struct rtems_can_chip *chip,
-    int type,
+    struct rtems_can_chip      *chip,
+    int                         type,
     struct rtems_can_bittiming *bt
   );
   /**
@@ -207,52 +207,52 @@ struct rtems_can_chip {
   /**
    * @brief This member holds controller's type/name.
    */
-  const char *type;
+  const char                             *type;
   /**
    * @brief This member holds controller's interrupt number.
    */
-  rtems_vector_number irq;
+  rtems_vector_number                     irq;
   /**
    * @brief This member holds controller's base clock frequency.
    */
-  uint32_t freq;
+  uint32_t                                freq;
   /**
    * @brief This member informs whether close operation is blocking or
    *  nonblocking. This can be set with @ref RTEMS_CAN_CLOSE_NONBLOCK ioctl.
    */
-  bool close_nonblock;
+  bool                                    close_nonblock;
   /**
    * @brief This member holds controller's flags.
    */
-  atomic_uint flags;
+  atomic_uint                             flags;
   /**
    * @brief This member holds the number of users using the controller.
    */
-  atomic_uint used;
+  atomic_uint                             used;
   /**
    * @brief This member holds the currently set mode. Controller's device
    *  driver may set initial modes if needed.
    */
-  uint32_t ctrlmode;
+  uint32_t                                ctrlmode;
   /**
    * @brief This member holds modes supported by the controller. Controller's
    *  device driver should set this field. Writing
    *  unsuported mode via @ref RTEMS_CAN_CHIP_SET_MODE ioctl results in error.
    */
-  uint32_t ctrlmode_supported;
+  uint32_t                                ctrlmode_supported;
   /**
    * @brief This member holds controller's capabilities.
    */
-  uint32_t capabilities;
+  uint32_t                                capabilities;
   /**
    * @brief This member holds the lock to ensure atomicity of chip operations.
    */
-  rtems_mutex lock;
+  rtems_mutex                             lock;
   /**
    * @brief This member is used by the worker to notify the closed operation
    *  is finished.
    */
-  rtems_binary_semaphore stop_sem;
+  rtems_binary_semaphore                  stop_sem;
   /**
    * @brief This member holds nominal bit timing constants (max/min values)
    */
@@ -264,32 +264,32 @@ struct rtems_can_chip {
   /**
    * @brief This member holds currently set nominal btt timing values.
    */
-  struct rtems_can_bittiming bittiming;
+  struct rtems_can_bittiming              bittiming;
   /**
    * @brief This member holds currently set data btt timing values.
    */
-  struct rtems_can_bittiming data_bittiming;
+  struct rtems_can_bittiming              data_bittiming;
   /**
    * @brief This member holds chip operations.
    */
-  struct rtems_can_chip_ops chip_ops;
+  struct rtems_can_chip_ops               chip_ops;
   /**
    * @brief This member holds chip's side of queue ends.
    */
-  struct rtems_can_queue_ends_dev *qends_dev;
+  struct rtems_can_queue_ends_dev        *qends_dev;
   /**
    * @brief This member holds the list of chip's users.
    */
-  struct rtems_can_user_list_t can_users;
+  struct rtems_can_user_list_t            can_users;
   /**
    * @brief This member holds the chip's statistics.
    */
-  struct rtems_can_stats chip_stats;
+  struct rtems_can_stats                  chip_stats;
   /**
    * @brief This member holds chip's specific private structure. This
    *  structure defines non generic fields and setting.
    */
-  void *internal;
+  void                                   *internal;
 };
 
 /**
@@ -304,17 +304,17 @@ struct rtems_can_queue_ends_user_t {
    * @brief This member holds semaphore informing the user's side there
    *  is a new message to be read.
    */
-  rtems_binary_semaphore sem_read;
+  rtems_binary_semaphore      sem_read;
   /**
    * @brief This member holds semaphore informing the user's side there
    *  is a free space to write message.
    */
-  rtems_binary_semaphore sem_write;
+  rtems_binary_semaphore      sem_write;
   /**
    * @brief This member holds semaphore synchronizing queues during close
    *  operation. It informs all messages were sent from the queue.
    */
-  rtems_binary_semaphore sem_sync;
+  rtems_binary_semaphore      sem_sync;
 };
 
 /**
@@ -336,12 +336,12 @@ struct rtems_can_user {
   /**
    * @brief This member holds pointer to @ref rtems_can_bus structure.
    */
-  struct rtems_can_bus *bus;
+  struct rtems_can_bus               *bus;
   /**
    * @brief This member holds user magic value. It should be set
    *  to @ref RTEMS_CAN_USER_MAGIC value.
    */
-  int magic;
+  int                                 magic;
 };
 
 /**
@@ -375,8 +375,8 @@ int rtems_can_chip_start( struct rtems_can_chip *chip );
  *
  */
 int rtems_can_bitrate2bittiming(
-  struct rtems_can_chip *chip,
-  struct rtems_can_bittiming *bt,
+  struct rtems_can_chip                  *chip,
+  struct rtems_can_bittiming             *bt,
   const struct rtems_can_bittiming_const *btc
 );
 
@@ -413,7 +413,7 @@ int rtems_can_queue_ends_init_user(
  */
 int rtems_can_queue_ends_init_chip(
   struct rtems_can_chip *chip,
-  const char *name
+  const char            *name
 );
 
 #endif /* _DEV_CAN_CAN_DEVCOMMON_H */

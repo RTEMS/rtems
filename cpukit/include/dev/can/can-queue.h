@@ -66,18 +66,18 @@ struct rtems_can_queue_slot {
    * @brief Space for flags and optional command describing action
    *  associated with slot data
    */
-  atomic_uint slot_flags;
+  atomic_uint                  slot_flags;
   /**
    * @brief This member holds @ref can_frame structure representing one
    *  CAN frame/message.
    */
-  struct can_frame frame;
+  struct can_frame             frame;
 };
 
 /**
  * @brief Macro for command associated with allocated slot.
  */
-#define RTEMS_CAN_SLOTF_CMD  ( 0x00ff )
+#define RTEMS_CAN_SLOTF_CMD ( 0x00ff )
 
 /**
  * @brief This structure represents CAN FIFO queue. It is implemented as
@@ -89,7 +89,7 @@ struct rtems_can_queue_fifo {
   /**
    * @brief This field holds global flags describing state of the FIFO.
    */
-  atomic_uint fifo_flags;
+  atomic_uint                   fifo_flags;
   /**
    * @brief This member holds the number of elements in the fifo.
    *
@@ -100,15 +100,15 @@ struct rtems_can_queue_fifo {
    * all slots taken by out side are processed then it can be signaled
    * as empty.
    */
-  unsigned int out_taken;
+  unsigned int                  out_taken;
   /**
    * @brief This member holds futher description of error condition.
    */
-  unsigned long error_code;
+  unsigned long                 error_code;
   /**
    * @brief This member holds the pointer to the FIFO head, oldest slot.
    */
-  struct rtems_can_queue_slot *head;
+  struct rtems_can_queue_slot  *head;
   /**
    * @brief This member holds the pointer to the location, where pointer to
    *   newly inserted slot should be added.
@@ -118,75 +118,75 @@ struct rtems_can_queue_fifo {
    * @brief This member holds the pointer to list of the free slots
    *   associated with queue.
    */
-  struct rtems_can_queue_slot *free_list;
+  struct rtems_can_queue_slot  *free_list;
   /**
    * @brief This member holds the pointer to the memory allocated for
    *   the list slots.
    */
-  struct rtems_can_queue_slot *entry;
+  struct rtems_can_queue_slot  *entry;
   /**
    * @brief This member holds maximum data length of one CAN frame.
    */
-  int max_data_length;
+  int                           max_data_length;
   /**
    * @brief This member holds the number of allocated slots.
    */
-  int allocated_slot_count;
+  int                           allocated_slot_count;
   /**
    * @brief This member holds the lock to ensure atomicity of slot
    * manipulation operations.
    */
-  rtems_mutex fifo_lock;
+  rtems_mutex                   fifo_lock;
 };
 
 /**
  * @brief This is set when FIFO is scheduled for destruction.
  */
-#define RTEMS_CAN_FIFOF_DESTROY      ( 1 << 15 )
+#define RTEMS_CAN_FIFOF_DESTROY ( 1 << 15 )
 /**
  * @brief This is set when some error condition occurs.
  */
-#define RTEMS_CAN_FIFOF_ERROR        ( 1 << 14 )
+#define RTEMS_CAN_FIFOF_ERROR ( 1 << 14 )
 /**
  * @brief This defines that error should lead to the FIFO block state.
  */
-#define RTEMS_CAN_FIFOF_ERR2BLOCK    ( 1 << 13 )
+#define RTEMS_CAN_FIFOF_ERR2BLOCK ( 1 << 13 )
 /**
  * @brief This state blocks insertion of the next messages.
  */
-#define RTEMS_CAN_FIFOF_BLOCK        ( 1 << 12 )
+#define RTEMS_CAN_FIFOF_BLOCK ( 1 << 12 )
 /**
  * @brief This indicates attempt to acquire new slot, when FIFO is full.
  */
-#define RTEMS_CAN_FIFOF_OVERRUN      ( 1 << 11 )
+#define RTEMS_CAN_FIFOF_OVERRUN ( 1 << 11 )
 /**
  * @brief This indicates FIFO full state.
  */
-#define RTEMS_CAN_FIFOF_FULL         ( 1 << 10 )
+#define RTEMS_CAN_FIFOF_FULL ( 1 << 10 )
 /**
  * @brief This indicates no allocated slot in the FIFO.
  */
-#define RTEMS_CAN_FIFOF_EMPTY        ( 1 << 9 )
+#define RTEMS_CAN_FIFOF_EMPTY ( 1 << 9 )
 /**
  * @brief This is used when FIFO is beeing destroyed.
  */
-#define RTEMS_CAN_FIFOF_DEAD         ( 1 << 8 )
+#define RTEMS_CAN_FIFOF_DEAD ( 1 << 8 )
 /**
  * @brief This indicates FIFO is inactive.
  */
-#define RTEMS_CAN_FIFOF_INACTIVE     ( 1 << 7 )
+#define RTEMS_CAN_FIFOF_INACTIVE ( 1 << 7 )
 /**
  * @brief This indicates FIFO was freed when being empty.
  */
-#define RTEMS_CAN_FIFOF_FREEONEMPTY  ( 1 << 6 )
+#define RTEMS_CAN_FIFOF_FREEONEMPTY ( 1 << 6 )
 /**
  * @brief This indicates FIFO is ready.
  */
-#define RTEMS_CAN_FIFOF_READY        ( 1 << 5 )
+#define RTEMS_CAN_FIFOF_READY ( 1 << 5 )
 /**
  * @brief This indicates pending notification.
  */
-#define RTEMS_CAN_FIFOF_NOTIFYPEND   ( 1 << 4 )
+#define RTEMS_CAN_FIFOF_NOTIFYPEND ( 1 << 4 )
 
 /**
  * @brief This function frees all ready slots from the FIFO.
@@ -238,7 +238,7 @@ struct rtems_can_queue_edge {
    * @brief This member holds place where primitive @ref rtems_can_filter is
    * located.
    */
-  struct rtems_can_filter filter;
+  struct rtems_can_filter     filter;
   /**
    * @brief This member holds the lists of all peers FIFOs connected by
    * their input side ( @ref input_ends ) to the same terminal
@@ -265,27 +265,27 @@ struct rtems_can_queue_edge {
    * @brief This member holds the pointer to the FIFO input side terminal
    * (  @ref rtems_can_queue_ends ).
    */
-  struct rtems_can_queue_ends *input_ends;
+  struct rtems_can_queue_ends       *input_ends;
   /**
    * @brief This member holds the pointer to the FIFO output side terminal
    * (  @ref rtems_can_queue_ends ).
    */
-  struct rtems_can_queue_ends *output_ends;
+  struct rtems_can_queue_ends       *output_ends;
   /**
    * @brief This member holds the atomic usage counter, mainly used for
    * safe destruction of the edge.
    */
-  atomic_uint edge_used;
+  atomic_uint                        edge_used;
   /**
    * @brief This member holds the the assigned queue priority from the
    * range 0 to @ref RTEMS_CAN_QUEUE_PRIO_NR - 1
    */
-  int edge_prio;
+  int                                edge_prio;
   /**
    * @brief This member holds the edge sequential number intended for
    * debugging purposes only.
    */
-  int edge_num;
+  int                                edge_num;
 };
 
 struct rtems_can_queue_ends;
@@ -301,7 +301,7 @@ struct rtems_can_queue_ends {
    * @brief This member holds the array of the lists of active edges
    * directed to the ends structure.
    */
-  struct rtems_can_queue_edges_list active[RTEMS_CAN_QUEUE_PRIO_NR];
+  struct rtems_can_queue_edges_list active[ RTEMS_CAN_QUEUE_PRIO_NR ];
   /**
    * @brief This member holds the list of the edges directed to the ends
    * structure with empty FIFOs.
@@ -320,7 +320,7 @@ struct rtems_can_queue_ends {
    * @brief This member holds the lock synchronizing operations between
    * threads accessing the ends.
    */
-  rtems_mutex ends_lock;
+  rtems_mutex                       ends_lock;
   /**
    * @brief pointer to notify procedure. The next state changes are notified.
    *
@@ -347,10 +347,10 @@ struct rtems_can_queue_ends {
    * @param qedge The pointer to @ref rtems_can_queue_edge structure.
    * @param what  Integer specifying notification changes.
    */
-  void (*notify)(
+  void ( *notify )(
     struct rtems_can_queue_ends *qends,
     struct rtems_can_queue_edge *qedge,
-    int what
+    int                          what
   );
   /**
    * @brief This member is used to chain ends wanting for postponed
@@ -362,24 +362,24 @@ struct rtems_can_queue_ends {
 /**
  * @brief out-> in all slots are processed by FIFO out side.
  */
-#define RTEMS_CAN_QUEUE_NOTIFY_EMPTY  ( 1 )
+#define RTEMS_CAN_QUEUE_NOTIFY_EMPTY ( 1 )
 /**
  * @brief out -> in - full state negated => there is space for new message.
  */
-#define RTEMS_CAN_QUEUE_NOTIFY_SPACE  ( 2 )
+#define RTEMS_CAN_QUEUE_NOTIFY_SPACE ( 2 )
 /**
  * @brief out -> in - full state negated => there is space for new message.
  */
-#define RTEMS_CAN_QUEUE_NOTIFY_PROC   ( 3 )
+#define RTEMS_CAN_QUEUE_NOTIFY_PROC ( 3 )
 /**
  * @brief Notify, that the last user has released the edge usage called
  *  with some lock to prevent edge disappear.
  */
-#define RTEMS_CAN_QUEUE_NOTIFY_NOUSR  ( 4 )
+#define RTEMS_CAN_QUEUE_NOTIFY_NOUSR ( 4 )
 /**
  * @brief Edge is in progress of deletion.
  */
-#define RTEMS_CAN_QUEUE_NOTIFY_DEAD   ( 5 )
+#define RTEMS_CAN_QUEUE_NOTIFY_DEAD ( 5 )
 /**
  * @brief Edge should be deleted.
  */
@@ -405,10 +405,10 @@ struct rtems_can_queue_ends {
  *
  */
 int rtems_can_queue_get_inslot(
-  struct rtems_can_queue_ends *qends,
+  struct rtems_can_queue_ends  *qends,
   struct rtems_can_queue_edge **qedgep,
   struct rtems_can_queue_slot **slotp,
-  int cmd
+  int                           cmd
 );
 
 /**
@@ -433,12 +433,12 @@ int rtems_can_queue_get_inslot(
  *
  */
 int rtems_can_queue_get_inslot_for_prio(
-  struct rtems_can_queue_ends *qends,
-  struct rtems_can_queue_edge **qedgep,
-  struct rtems_can_queue_slot **slotp,
+  struct rtems_can_queue_ends   *qends,
+  struct rtems_can_queue_edge  **qedgep,
+  struct rtems_can_queue_slot  **slotp,
   const struct can_frame_header *header,
-  int cmd,
-  int prio
+  int                            cmd,
+  int                            prio
 );
 
 /**
@@ -514,8 +514,8 @@ int rtems_can_queue_abort_inslot(
 int rtems_can_queue_filter_frame_to_edges(
   struct rtems_can_queue_ends *qends,
   struct rtems_can_queue_edge *src_edge,
-  struct can_frame *frame,
-  unsigned int flags2add
+  struct can_frame            *frame,
+  unsigned int                 flags2add
 );
 
 /**
@@ -534,7 +534,7 @@ int rtems_can_queue_filter_frame_to_edges(
  *
  */
 int rtems_can_queue_test_outslot(
-  struct rtems_can_queue_ends *qends,
+  struct rtems_can_queue_ends  *qends,
   struct rtems_can_queue_edge **qedgep,
   struct rtems_can_queue_slot **slotp
 );
@@ -558,7 +558,7 @@ int rtems_can_queue_test_outslot(
  */
 int rtems_can_queue_pending_outslot_prio(
   struct rtems_can_queue_ends *qends,
-  int prio_min
+  int                          prio_min
 );
 
 /**
@@ -690,7 +690,7 @@ void rtems_can_queue_block_outlist( struct rtems_can_queue_ends *qends );
  */
 int rtems_can_queue_ends_kill_inlist(
   struct rtems_can_queue_ends *qends,
-  int send_rest
+  int                          send_rest
 );
 
 /**
@@ -756,8 +756,8 @@ void rtems_can_queue_edge_do_dead( struct rtems_can_queue_edge *qedge );
  */
 int rtems_can_queue_fifo_init_kern(
   struct rtems_can_queue_fifo *fifo,
-  int allocated_slot_count,
-  int max_data_length
+  int                          allocated_slot_count,
+  int                          max_data_length
 );
 
 /**
@@ -797,7 +797,7 @@ struct rtems_can_queue_edge *rtems_can_queue_new_edge_kern(
  */
 int rtems_can_queue_ends_sync_all_kern(
   struct rtems_can_queue_ends *qends,
-  struct timespec *ts
+  struct timespec             *ts
 );
 
 /**
@@ -816,8 +816,8 @@ int rtems_can_queue_ends_sync_all_kern(
 int rtems_can_queue_sync_wait_kern(
   struct rtems_can_queue_ends *qends,
   struct rtems_can_queue_edge *qedge,
-  bool nowait,
-  rtems_interval timeout
+  bool                         nowait,
+  rtems_interval               timeout
 );
 
 /**
@@ -832,7 +832,7 @@ int rtems_can_queue_sync_wait_kern(
  */
 int rtems_can_queue_ends_dispose_kern(
   struct rtems_can_queue_ends *qends,
-  bool nonblock
+  bool                         nonblock
 );
 
 /**

@@ -72,7 +72,7 @@
  * @brief The magic number synthesized to the core. See 3.1.1 DEVICE_ID
  *  register description in CTU CAN FD Core Datasheet Documentation.
  */
-#define CTUCANFD_ID 0xCAFD
+#define CTUCANFD_ID      0xCAFD
 #define CTUCANFD_ID_MASK 0xFFFF
 
 /**
@@ -80,47 +80,48 @@
  *  to one buffer number. The buffer located on the least significant 4 bits
  *  has the highest priority.
  */
-#define CTUCANFD_INIT_TXB_ORDER  0x76543210
-#define CAN_CTUCANFD_TYPE "ctucanfd"
+#define CTUCANFD_INIT_TXB_ORDER 0x76543210
+#define CAN_CTUCANFD_TYPE       "ctucanfd"
 
 enum ctucanfd_txtb_status {
   /* Buffer does not exists in the core */
-  TXT_NOT_EXIST       = 0x0,
+  TXT_NOT_EXIST = 0x0,
   /* Buffer is in ready state */
-  TXT_RDY             = 0x1,
+  TXT_RDY = 0x1,
   /* Buffer is in TX in progress state */
-  TXT_TRAN            = 0x2,
+  TXT_TRAN = 0x2,
   /* Buffer is in abort in progress state */
-  TXT_ABTP            = 0x3,
+  TXT_ABTP = 0x3,
   /* Buffer is in TX OK state */
-  TXT_TOK             = 0x4,
+  TXT_TOK = 0x4,
   /* Buffer is in failed state */
-  TXT_ERR             = 0x6,
+  TXT_ERR = 0x6,
   /* Buffer is in aborted state */
-  TXT_ABT             = 0x7,
+  TXT_ABT = 0x7,
   /* Buffer is in empty state */
-  TXT_ETY             = 0x8,
+  TXT_ETY = 0x8,
 };
 
 enum ctucanfd_txtb_command {
   /* Requests TXT buffer to move to "Empty" state */
-  TXT_CMD_SET_EMPTY   = 0x01,
+  TXT_CMD_SET_EMPTY = 0x01,
   /* Requests TXT buffer to move to "Aborted" or "Abort in progress" state */
-  TXT_CMD_SET_READY   = 0x02,
+  TXT_CMD_SET_READY = 0x02,
   /* Requests TXT buffer to move to "Ready" state*/
-  TXT_CMD_SET_ABORT   = 0x04
+  TXT_CMD_SET_ABORT = 0x04
 };
 
-static const struct rtems_can_bittiming_const ctucanfd_nominal_bittiming_const = {
-  .name = "ctucanfd_nominal",
-  .tseg1_min = 2,
-  .tseg1_max = 190,
-  .tseg2_min = 1,
-  .tseg2_max = 63,
-  .sjw_max = 31,
-  .brp_min = 1,
-  .brp_max = 8,
-  .brp_inc = 1,
+static const struct rtems_can_bittiming_const
+  ctucanfd_nominal_bittiming_const = {
+    .name = "ctucanfd_nominal",
+    .tseg1_min = 2,
+    .tseg1_max = 190,
+    .tseg2_min = 1,
+    .tseg2_max = 63,
+    .sjw_max = 31,
+    .brp_min = 1,
+    .brp_max = 8,
+    .brp_inc = 1,
 };
 
 static const struct rtems_can_bittiming_const ctucanfd_data_bittiming_const = {
@@ -139,36 +140,45 @@ static const struct rtems_can_bittiming_const ctucanfd_data_bittiming_const = {
 
 static int ctucanfd_check_state(
   struct ctucanfd_internal *internal,
-  const char *where
+  const char               *where
 )
 {
   unsigned int i;
-  int ret = 0;
-  int prio = 0;
+  int          ret = 0;
+  int          prio = 0;
   unsigned int idx_limit = 0;
-  uint32_t txb_alloc = 0;
-  uint32_t txb_found = 0;
-  uint32_t tx_status = ctucanfd_read32( internal, CTUCANFD_TX_STATUS );
+  uint32_t     txb_alloc = 0;
+  uint32_t     txb_found = 0;
+  uint32_t     tx_status = ctucanfd_read32( internal, CTUCANFD_TX_STATUS );
 
   for (
-    prio = 0,
-    idx_limit = internal->ntxbufs;
-    prio < RTEMS_CAN_QUEUE_PRIO_NR; prio++
+    prio = 0, idx_limit = internal->ntxbufs; prio < RTEMS_CAN_QUEUE_PRIO_NR;
+    prio++
   ) {
-    if ( internal->txb_prio_tail[prio] > internal->ntxbufs) {
-      printk( "CTUCANFD CHECK at %s: prio_tail[%d] %d > ntxbufs %d\n",
-              where, prio, internal->txb_prio_tail[prio], internal->ntxbufs );
+    if ( internal->txb_prio_tail[ prio ] > internal->ntxbufs ) {
+      printk(
+        "CTUCANFD CHECK at %s: prio_tail[%d] %d > ntxbufs %d\n",
+        where,
+        prio,
+        internal->txb_prio_tail[ prio ],
+        internal->ntxbufs
+      );
       ret = -1;
-    } else if ( internal->txb_prio_tail[prio] > idx_limit ) {
-      printk( "CTUCANFD CHECK at %s: prio_tail[%d] %d > lower prio tail %d\n",
-              where, prio, internal->txb_prio_tail[prio], idx_limit );
+    } else if ( internal->txb_prio_tail[ prio ] > idx_limit ) {
+      printk(
+        "CTUCANFD CHECK at %s: prio_tail[%d] %d > lower prio tail %d\n",
+        where,
+        prio,
+        internal->txb_prio_tail[ prio ],
+        idx_limit
+      );
       ret = -1;
     }
-    idx_limit = internal->txb_prio_tail[prio];
+    idx_limit = internal->txb_prio_tail[ prio ];
   }
 
   for ( i = 0; i < internal->ntxbufs; i++ ) {
-    uint32_t mask;
+    uint32_t     mask;
     unsigned int txtb_st;
     unsigned int txtb_id;
 
@@ -200,7 +210,7 @@ static int ctucanfd_check_state(
     }
     txb_found |= mask;
     txtb_st = TXTB_GET_STATUS( tx_status, txtb_id );
-    if ( i < internal->txb_prio_tail[0]) {
+    if ( i < internal->txb_prio_tail[ 0 ] ) {
       txb_alloc |= mask;
       if ( txtb_st == TXT_ETY ) {
         printk(
@@ -209,7 +219,7 @@ static int ctucanfd_check_state(
           where,
           txtb_id,
           i,
-          internal->txb_prio_tail[0],
+          internal->txb_prio_tail[ 0 ],
           internal->txb_order
         );
         ret = -1;
@@ -222,7 +232,7 @@ static int ctucanfd_check_state(
           where,
           txtb_id,
           i,
-          internal->txb_prio_tail[0],
+          internal->txb_prio_tail[ 0 ],
           internal->txb_order
         );
         ret = -1;
@@ -231,22 +241,22 @@ static int ctucanfd_check_state(
   }
 
   if ( txb_found != ( 1 << internal->ntxbufs ) - 1 ) {
-     printk(
+    printk(
       "CTUCANFD CHECK at %s: missing buffers in txb_order = 0x%08x, "
       "txb_found = 0x%02x ntxbufs %d, tail %d\n",
       where,
       internal->txb_order,
       txb_found,
       internal->ntxbufs,
-      internal->txb_prio_tail[0]
+      internal->txb_prio_tail[ 0 ]
     );
-     ret = -1;
+    ret = -1;
   }
   for ( i = 0; i < internal->ntxbufs; i++ ) {
     if ( txb_alloc & ( 1 << i ) ) {
       if (
-        ( internal->txb_info[i].slot == NULL ) ||
-        ( internal->txb_info[i].edge == NULL )
+        ( internal->txb_info[ i ].slot == NULL ) ||
+        ( internal->txb_info[ i ].edge == NULL )
       ) {
         printk(
           "CTUCANFD CHECK at %s: txb_info[%d] not filled, but active in "
@@ -255,24 +265,24 @@ static int ctucanfd_check_state(
           i,
           internal->txb_order,
           internal->ntxbufs,
-          internal->txb_prio_tail[0]
+          internal->txb_prio_tail[ 0 ]
         );
         ret = -1;
       }
     } else {
       if (
-        ( internal->txb_info[i].slot != NULL ) ||
-        ( internal->txb_info[i].edge != NULL )
+        ( internal->txb_info[ i ].slot != NULL ) ||
+        ( internal->txb_info[ i ].edge != NULL )
       ) {
         printk(
           "CTUCANFD CHECK at %s: txb_info[%d] filled, but shoul be inactive "
           "active in txb_order = 0x%08x, ntxbufs %d, tail %d\n",
-           where,
-           i,
-           internal->txb_order,
-           internal->ntxbufs,
-           internal->txb_prio_tail[0]
-          );
+          where,
+          i,
+          internal->txb_order,
+          internal->ntxbufs,
+          internal->txb_prio_tail[ 0 ]
+        );
         ret = -1;
       }
     }
@@ -284,8 +294,9 @@ static int ctucanfd_check_state(
 
 static int ctucanfd_check_state(
   struct ctucanfd_internal *internal,
-  const char *where
-) {
+  const char               *where
+)
+{
   (void) internal;
   (void) where;
 
@@ -294,12 +305,15 @@ static int ctucanfd_check_state(
 
 #endif /*CTUCANFD_DEBUG*/
 
-static int ctucanfd_get_timestamp( struct rtems_can_chip *chip, uint64_t *timestamp )
+static int ctucanfd_get_timestamp(
+  struct rtems_can_chip *chip,
+  uint64_t              *timestamp
+)
 {
   struct ctucanfd_internal *internal = chip->internal;
-  uint32_t lower;
-  uint32_t upper;
-  uint32_t upper_check;
+  uint32_t                  lower;
+  uint32_t                  upper;
+  uint32_t                  upper_check;
 
   upper = ctucanfd_read32( internal, CTUCANFD_TIMESTAMP_HIGH );
   lower = ctucanfd_read32( internal, CTUCANFD_TIMESTAMP_LOW );
@@ -309,7 +323,7 @@ static int ctucanfd_get_timestamp( struct rtems_can_chip *chip, uint64_t *timest
     lower = ctucanfd_read32( internal, CTUCANFD_TIMESTAMP_LOW );
   }
 
-  *timestamp = ( ( uint64_t )upper << 32) | lower;
+  *timestamp = ( (uint64_t) upper << 32 ) | lower;
 
   return 0;
 }
@@ -318,7 +332,7 @@ static int ctucanfd_get_chip_info( struct rtems_can_chip *chip, int what )
 {
   int ret;
 
-  switch( what ) {
+  switch ( what ) {
     case RTEMS_CAN_CHIP_BITRATE:
       ret = chip->bittiming.bitrate;
       break;
@@ -355,7 +369,7 @@ static int ctucanfd_get_chip_info( struct rtems_can_chip *chip, int what )
 static int ctucanfd_reset( struct ctucanfd_internal *internal )
 {
   uint16_t dev_id;
-  int i = 100;
+  int      i = 100;
 
   ctucanfd_write32( internal, CTUCANFD_MODE, REG_MODE_RST );
 
@@ -368,8 +382,10 @@ static int ctucanfd_reset( struct ctucanfd_internal *internal )
      * This while loop check is to avoid stuck when there is problem with
      * FPGA synthesis or some clocks blocked, not configured.
      */
-    dev_id = FIELD_GET( REG_DEVICE_ID_DEVICE_ID,
-                        ctucanfd_read32( internal, CTUCANFD_DEVICE_ID ) );
+    dev_id = FIELD_GET(
+      REG_DEVICE_ID_DEVICE_ID,
+      ctucanfd_read32( internal, CTUCANFD_DEVICE_ID )
+    );
 
     if ( dev_id == CTUCANFD_ID ) {
       return 0;
@@ -391,16 +407,16 @@ static int ctucanfd_reset( struct ctucanfd_internal *internal )
  * @return 0 for success, -EPERM if CAN controller is enabled
  */
 static int ctucanfd_set_btr(
-  struct rtems_can_chip *chip,
+  struct rtems_can_chip      *chip,
   struct rtems_can_bittiming *bt,
-  bool nominal
+  bool                        nominal
 )
 {
   struct ctucanfd_internal *internal = chip->internal;
-  unsigned int max_ph1_len = 31;
-  uint32_t btr = 0;
-  uint32_t prop_seg = bt->prop_seg;
-  uint32_t phase_seg1 = bt->phase_seg1;
+  unsigned int              max_ph1_len = 31;
+  uint32_t                  btr = 0;
+  uint32_t                  prop_seg = bt->prop_seg;
+  uint32_t                  phase_seg1 = bt->phase_seg1;
 
   if ( CTU_CAN_FD_ENABLED( internal ) ) {
     return -EPERM;
@@ -482,10 +498,10 @@ static int ctucanfd_set_data_bittiming( struct rtems_can_chip *chip )
  */
 static int ctucanfd_set_secondary_sample_point( struct rtems_can_chip *chip )
 {
-  struct ctucanfd_internal *internal = chip->internal;
+  struct ctucanfd_internal   *internal = chip->internal;
   struct rtems_can_bittiming *dbt = &chip->data_bittiming;
-  int ssp_offset = 0;
-  uint32_t ssp_cfg = 0; /* No SSP by default */
+  int                         ssp_offset = 0;
+  uint32_t                    ssp_cfg = 0; /* No SSP by default */
 
   if ( CTU_CAN_FD_ENABLED( internal ) ) {
     return -EPERM;
@@ -519,36 +535,35 @@ static int ctucanfd_set_secondary_sample_point( struct rtems_can_chip *chip )
  */
 static void ctucanfd_set_mode(
   struct ctucanfd_internal *internal,
-  uint32_t ctrlmode
+  uint32_t                  ctrlmode
 )
 {
   uint32_t mode_reg = ctucanfd_read32( internal, CTUCANFD_MODE );
 
-  mode_reg = ( ctrlmode & CAN_CTRLMODE_LOOPBACK ) ?
-             ( mode_reg | REG_MODE_ILBP ) :
-             ( mode_reg & ~REG_MODE_ILBP );
+  mode_reg = ( ctrlmode & CAN_CTRLMODE_LOOPBACK )
+               ? ( mode_reg | REG_MODE_ILBP )
+               : ( mode_reg & ~REG_MODE_ILBP );
 
-  mode_reg = ( ctrlmode & CAN_CTRLMODE_LISTENONLY ) ?
-             ( mode_reg | REG_MODE_BMM ) :
-             ( mode_reg & ~REG_MODE_BMM );
+  mode_reg = ( ctrlmode & CAN_CTRLMODE_LISTENONLY )
+               ? ( mode_reg | REG_MODE_BMM )
+               : ( mode_reg & ~REG_MODE_BMM );
 
-  mode_reg = ( ctrlmode & CAN_CTRLMODE_FD ) ?
-             ( mode_reg | REG_MODE_FDE ) :
-             ( mode_reg & ~REG_MODE_FDE );
+  mode_reg = ( ctrlmode & CAN_CTRLMODE_FD ) ? ( mode_reg | REG_MODE_FDE )
+                                            : ( mode_reg & ~REG_MODE_FDE );
 
-  mode_reg = ( ctrlmode & CAN_CTRLMODE_PRESUME_ACK ) ?
-             ( mode_reg | REG_MODE_STM ) :
-             ( mode_reg & ~REG_MODE_STM );
+  mode_reg = ( ctrlmode & CAN_CTRLMODE_PRESUME_ACK )
+               ? ( mode_reg | REG_MODE_STM )
+               : ( mode_reg & ~REG_MODE_STM );
 
-  mode_reg = ( ctrlmode & CAN_CTRLMODE_FD_NON_ISO ) ?
-             ( mode_reg | REG_MODE_NISOFD ) :
-             ( mode_reg & ~REG_MODE_NISOFD );
+  mode_reg = ( ctrlmode & CAN_CTRLMODE_FD_NON_ISO )
+               ? ( mode_reg | REG_MODE_NISOFD )
+               : ( mode_reg & ~REG_MODE_NISOFD );
 
   /* One shot mode supported indirectly via Retransmit limit */
   mode_reg &= ~FIELD_PREP( REG_MODE_RTRTH, 0xF );
-  mode_reg = ( ctrlmode & CAN_CTRLMODE_ONE_SHOT ) ?
-             ( mode_reg | REG_MODE_RTRLE ) :
-             ( mode_reg & ~REG_MODE_RTRLE );
+  mode_reg = ( ctrlmode & CAN_CTRLMODE_ONE_SHOT )
+               ? ( mode_reg | REG_MODE_RTRLE )
+               : ( mode_reg & ~REG_MODE_RTRLE );
 
   /* Some bits fixed:
    *   TSTM  - Off, User shall not be able to change REC/TEC by hand during
@@ -569,7 +584,7 @@ static void ctucanfd_set_mode(
  */
 static enum ctucanfd_txtb_status ctucanfd_get_tx_status(
   struct ctucanfd_internal *internal,
-  uint8_t buf
+  uint8_t                   buf
 )
 {
   uint32_t tx_status = ctucanfd_read32( internal, CTUCANFD_TX_STATUS );
@@ -589,16 +604,14 @@ static enum ctucanfd_txtb_status ctucanfd_get_tx_status(
  */
 static bool ctucanfd_is_txt_buf_writable(
   struct ctucanfd_internal *internal,
-  uint8_t buf
+  uint8_t                   buf
 )
 {
   enum ctucanfd_txtb_status buf_status;
 
   buf_status = ctucanfd_get_tx_status( internal, buf );
   if (
-    buf_status == TXT_RDY ||
-    buf_status == TXT_TRAN ||
-    buf_status == TXT_ABTP
+    buf_status == TXT_RDY || buf_status == TXT_TRAN || buf_status == TXT_ABTP
   ) {
     return false;
   }
@@ -620,14 +633,14 @@ static bool ctucanfd_is_txt_buf_writable(
  *      3. Invalid frame length
  */
 static bool ctucanfd_insert_frame(
-	struct ctucanfd_internal *internal,
-	const struct can_frame *cf,
-	uint8_t buf
+  struct ctucanfd_internal *internal,
+  const struct can_frame   *cf,
+  uint8_t                   buf
 )
 {
-  uint32_t buf_base;
-  uint32_t ffw = 0;
-  uint32_t idw = 0;
+  uint32_t     buf_base;
+  uint32_t     ffw = 0;
+  uint32_t     idw = 0;
   unsigned int i;
 
   if ( buf >= internal->ntxbufs ) {
@@ -683,7 +696,7 @@ static bool ctucanfd_insert_frame(
   /* Write Data payload */
   if ( !( cf->header.flags & CAN_FRAME_RTR ) ) {
     for ( i = 0; i < cf->header.dlen; i += 4 ) {
-      uint32_t data = *( uint32_t * )( cf->data + i );
+      uint32_t data = *(uint32_t *) ( cf->data + i );
 
       ctucanfd_write_txt_buf(
         internal,
@@ -707,9 +720,9 @@ static bool ctucanfd_insert_frame(
  * @return None
  */
 static void ctucanfd_give_txtb_cmd(
-	struct ctucanfd_internal *internal,
-	enum ctucanfd_txtb_command cmd,
-	uint8_t buf
+  struct ctucanfd_internal  *internal,
+  enum ctucanfd_txtb_command cmd,
+  uint8_t                    buf
 )
 {
   uint32_t tx_cmd = cmd;
@@ -729,17 +742,17 @@ static void ctucanfd_give_txtb_cmd(
  */
 static void ctucanfd_read_rx_frame(
   struct rtems_can_chip *chip,
-  struct can_frame *frame,
-  uint32_t ffw
+  struct can_frame      *frame,
+  uint32_t               ffw
 )
 {
-  struct ctucanfd_internal *internal = chip->internal;
+  struct ctucanfd_internal        *internal = chip->internal;
   struct rtems_can_queue_ends_dev *qends_dev = chip->qends_dev;
-  struct rtems_can_queue_ends *qends = &qends_dev->base;
-  uint32_t idw;
-  unsigned int i;
-  unsigned int wc;
-  unsigned int len;
+  struct rtems_can_queue_ends     *qends = &qends_dev->base;
+  uint32_t                         idw;
+  unsigned int                     i;
+  unsigned int                     wc;
+  unsigned int                     len;
 
   frame->header.flags = 0;
 
@@ -783,15 +796,14 @@ static void ctucanfd_read_rx_frame(
 
   /* Timestamp */
   frame->header.timestamp = ctucanfd_read32( internal, CTUCANFD_RX_DATA );
-  frame->header.timestamp |= ( uint64_t )ctucanfd_read32(
-                                           internal,
-                                           CTUCANFD_RX_DATA
-                                         ) << 32;
+  frame->header.timestamp |= (uint64_t)
+                               ctucanfd_read32( internal, CTUCANFD_RX_DATA )
+                             << 32;
 
   /* Data */
   for ( i = 0; i < len; i += 4 ) {
     uint32_t data = ctucanfd_read32( internal, CTUCANFD_RX_DATA );
-    *(uint32_t *)( frame->data + i ) = data;
+    *(uint32_t *) ( frame->data + i ) = data;
   }
   while ( i < wc * 4 ) {
     ctucanfd_read32( internal, CTUCANFD_RX_DATA );
@@ -813,8 +825,8 @@ static void ctucanfd_read_rx_frame(
 static int ctucanfd_receive( struct rtems_can_chip *chip )
 {
   struct ctucanfd_internal *internal = chip->internal;
-  struct can_frame frame;
-  uint32_t ffw;
+  struct can_frame          frame;
+  uint32_t                  ffw;
 
   ffw = ctucanfd_read32( internal, CTUCANFD_RX_DATA );
 
@@ -850,8 +862,10 @@ static enum can_state ctucanfd_read_fault_state(
   ewl = FIELD_GET( REG_EWL_EW_LIMIT, fs );
 
   if ( FIELD_GET( REG_EWL_ERA, fs ) ) {
-    if ( ewl > FIELD_GET( REG_REC_REC_VAL, rec_tec ) &&
-         ewl > FIELD_GET( REG_REC_TEC_VAL, rec_tec ) ) {
+    if (
+      ewl > FIELD_GET( REG_REC_REC_VAL, rec_tec ) &&
+      ewl > FIELD_GET( REG_REC_TEC_VAL, rec_tec )
+    ) {
       return CAN_STATE_ERROR_ACTIVE;
     } else {
       return CAN_STATE_ERROR_WARNING;
@@ -876,11 +890,11 @@ static enum can_state ctucanfd_read_fault_state(
 static void ctucanfd_err_interrupt( struct rtems_can_chip *chip, uint32_t isr )
 {
   struct ctucanfd_internal *internal = chip->internal;
-  struct can_frame err_frame = {};
-  enum can_state state;
-  uint32_t regval;
-  uint16_t rxerr;
-  uint16_t txerr;
+  struct can_frame          err_frame = {};
+  enum can_state            state;
+  uint32_t                  regval;
+  uint16_t                  rxerr;
+  uint16_t                  txerr;
 
   regval = ctucanfd_read32( internal, CTUCANFD_REC );
 
@@ -888,11 +902,10 @@ static void ctucanfd_err_interrupt( struct rtems_can_chip *chip, uint32_t isr )
   txerr = FIELD_GET( REG_REC_TEC_VAL, regval );
 
   state = ctucanfd_read_fault_state( internal );
-  rtems_can_stats_set_state(&chip->chip_stats, state);
+  rtems_can_stats_set_state( &chip->chip_stats, state );
 
   if (
-    FIELD_GET( REG_INT_STAT_FCSI, isr ) ||
-    FIELD_GET( REG_INT_STAT_EWLI, isr )
+    FIELD_GET( REG_INT_STAT_FCSI, isr ) || FIELD_GET( REG_INT_STAT_EWLI, isr )
   ) {
     switch ( state ) {
       case CAN_STATE_BUS_OFF:
@@ -902,27 +915,26 @@ static void ctucanfd_err_interrupt( struct rtems_can_chip *chip, uint32_t isr )
       case CAN_STATE_ERROR_PASSIVE:
         err_frame.header.can_id = CAN_ERR_ID_CRTL | CAN_ERR_ID_CNT;
         err_frame.header.flags = CAN_FRAME_ERR;
-        err_frame.data[CAN_ERR_DATA_BYTE_TRX_CTRL] = ( rxerr > 127 ) ?
-                             CAN_ERR_CRTL_RX_PASSIVE :
-                             CAN_ERR_CRTL_TX_PASSIVE;
-        err_frame.data[CAN_ERR_DATA_BYTE_CNT_TX] = txerr;
-        err_frame.data[CAN_ERR_DATA_BYTE_CNT_RX] = rxerr;
+        err_frame.data[ CAN_ERR_DATA_BYTE_TRX_CTRL ] =
+          ( rxerr > 127 ) ? CAN_ERR_CRTL_RX_PASSIVE : CAN_ERR_CRTL_TX_PASSIVE;
+        err_frame.data[ CAN_ERR_DATA_BYTE_CNT_TX ] = txerr;
+        err_frame.data[ CAN_ERR_DATA_BYTE_CNT_RX ] = rxerr;
         break;
       case CAN_STATE_ERROR_WARNING:
         err_frame.header.can_id = CAN_ERR_ID_CRTL | CAN_ERR_ID_CNT;
         err_frame.header.flags = CAN_FRAME_ERR;
-        err_frame.data[CAN_ERR_DATA_BYTE_TRX_CTRL] = ( txerr > rxerr ) ?
-                             CAN_ERR_CRTL_TX_WARNING :
-                             CAN_ERR_CRTL_RX_WARNING;
-        err_frame.data[CAN_ERR_DATA_BYTE_CNT_TX] = txerr;
-        err_frame.data[CAN_ERR_DATA_BYTE_CNT_RX] = rxerr;
+        err_frame.data[ CAN_ERR_DATA_BYTE_TRX_CTRL ] =
+          ( txerr > rxerr ) ? CAN_ERR_CRTL_TX_WARNING
+                            : CAN_ERR_CRTL_RX_WARNING;
+        err_frame.data[ CAN_ERR_DATA_BYTE_CNT_TX ] = txerr;
+        err_frame.data[ CAN_ERR_DATA_BYTE_CNT_RX ] = rxerr;
         break;
       case CAN_STATE_ERROR_ACTIVE:
         err_frame.header.can_id = CAN_ERR_ID_CRTL;
         err_frame.header.flags = CAN_FRAME_ERR;
-        err_frame.data[CAN_ERR_DATA_BYTE_TRX_CTRL] = CAN_ERR_CRTL_ACTIVE;
-        err_frame.data[CAN_ERR_DATA_BYTE_CNT_TX] = txerr;
-        err_frame.data[CAN_ERR_DATA_BYTE_CNT_RX] = rxerr;
+        err_frame.data[ CAN_ERR_DATA_BYTE_TRX_CTRL ] = CAN_ERR_CRTL_ACTIVE;
+        err_frame.data[ CAN_ERR_DATA_BYTE_CNT_TX ] = txerr;
+        err_frame.data[ CAN_ERR_DATA_BYTE_CNT_RX ] = rxerr;
         break;
       default:
         break;
@@ -933,17 +945,17 @@ static void ctucanfd_err_interrupt( struct rtems_can_chip *chip, uint32_t isr )
   if ( FIELD_GET( REG_INT_STAT_ALI, isr ) ) {
     err_frame.header.can_id |= CAN_ERR_ID_CRTL | CAN_ERR_ID_LOSTARB;
     err_frame.header.flags |= CAN_FRAME_ERR;
-    err_frame.data[CAN_ERR_DATA_BYTE_TRX_LOSTARB] = CAN_ERR_LOSTARB_UNSPEC;
+    err_frame.data[ CAN_ERR_DATA_BYTE_TRX_LOSTARB ] = CAN_ERR_LOSTARB_UNSPEC;
   }
 
   /* Check for Bus Error interrupt */
   if ( FIELD_GET( REG_INT_STAT_BEI, isr ) ) {
     rtems_can_stats_add_rx_error( &chip->chip_stats );
-    err_frame.header.can_id |= CAN_ERR_ID_CRTL | CAN_ERR_ID_PROT | \
+    err_frame.header.can_id |= CAN_ERR_ID_CRTL | CAN_ERR_ID_PROT |
                                CAN_ERR_ID_BUSERROR;
     err_frame.header.flags |= CAN_FRAME_ERR;
-    err_frame.data[CAN_ERR_DATA_BYTE_TRX_PROT] = CAN_ERR_PROT_UNSPEC;
-    err_frame.data[CAN_ERR_DATA_BYTE_TRX_PROT_LOC] = CAN_ERR_PROT_LOC_UNSPEC;
+    err_frame.data[ CAN_ERR_DATA_BYTE_TRX_PROT ] = CAN_ERR_PROT_UNSPEC;
+    err_frame.data[ CAN_ERR_DATA_BYTE_TRX_PROT_LOC ] = CAN_ERR_PROT_LOC_UNSPEC;
   }
 
   /* Check for RX overflow interrupt */
@@ -952,7 +964,7 @@ static void ctucanfd_err_interrupt( struct rtems_can_chip *chip, uint32_t isr )
     ctucanfd_write32( internal, CTUCANFD_TX_COMMAND, REG_COMMAND_CDO );
     err_frame.header.can_id |= CAN_ERR_ID_CRTL;
     err_frame.header.flags |= CAN_FRAME_ERR;
-    err_frame.data[CAN_ERR_ID_LOSTARB] |= CAN_ERR_CRTL_RX_OVERFLOW;
+    err_frame.data[ CAN_ERR_ID_LOSTARB ] |= CAN_ERR_CRTL_RX_OVERFLOW;
   }
 
   if ( err_frame.header.flags != 0 ) {
@@ -976,17 +988,18 @@ static void ctucanfd_err_interrupt( struct rtems_can_chip *chip, uint32_t isr )
  */
 static void ctucanfd_txb_add(
   struct ctucanfd_internal *internal,
-  unsigned int txb_order_idx,
-  unsigned int prio
-) {
+  unsigned int              txb_order_idx,
+  unsigned int              prio
+)
+{
   unsigned int i;
   internal->txb_order = ctucanfd_txb_slot_promote(
     internal->txb_order,
     txb_order_idx,
-    internal->txb_prio_tail[prio]
+    internal->txb_prio_tail[ prio ]
   );
   for ( i = 0; i <= prio; i++ ) {
-    internal->txb_prio_tail[i]++;
+    internal->txb_prio_tail[ i ]++;
   }
 }
 
@@ -1000,8 +1013,9 @@ static void ctucanfd_txb_add(
  */
 static void ctucanfd_txb_free(
   struct ctucanfd_internal *internal,
-  unsigned int txb_order_idx
-) {
+  unsigned int              txb_order_idx
+)
+{
   int i = RTEMS_CAN_QUEUE_PRIO_NR - 1;
   internal->txb_order = ctucanfd_txb_slot_demote(
     internal->txb_order,
@@ -1009,10 +1023,10 @@ static void ctucanfd_txb_free(
     internal->ntxbufs - 1
   );
   do {
-    if ( internal->txb_prio_tail[i] > txb_order_idx ) {
-      internal->txb_prio_tail[i]--;
+    if ( internal->txb_prio_tail[ i ] > txb_order_idx ) {
+      internal->txb_prio_tail[ i ]--;
     }
-  } while( i-- );
+  } while ( i-- );
 }
 
 /**
@@ -1027,16 +1041,16 @@ static void ctucanfd_txb_free(
  */
 static void ctucanfd_handle_txtb_done(
   struct rtems_can_chip *chip,
-  unsigned int txtb_id,
-  unsigned int txb_order_idx,
-  unsigned int txtb_st
+  unsigned int           txtb_id,
+  unsigned int           txb_order_idx,
+  unsigned int           txtb_st
 )
 {
   struct ctucanfd_internal *internal;
   struct ctucanfd_txb_info *txb_info;
 
   internal = (struct ctucanfd_internal *) chip->internal;
-  txb_info = &internal->txb_info[txtb_id];
+  txb_info = &internal->txb_info[ txtb_id ];
   ctucanfd_give_txtb_cmd( internal, TXT_CMD_SET_EMPTY, txtb_id );
   switch ( txtb_st ) {
     case TXT_TOK:
@@ -1082,7 +1096,7 @@ static void ctucanfd_handle_txtb_done(
       RTEMS_FALL_THROUGH();
     case TXT_ERR:
   #ifdef CTUCANFD_DEBUG
-        printk("CTUCANFD TXT_ERR\n");
+      printk( "CTUCANFD TXT_ERR\n" );
   #endif /*CTUCANFD_DEBUG*/
       rtems_can_queue_filter_frame_to_edges(
         &chip->qends_dev->base,
@@ -1102,7 +1116,7 @@ static void ctucanfd_handle_txtb_done(
       break;
     default:
   #ifdef CTUCANFD_DEBUG
-        printk("CTUCANFD TXT state unknown\n");
+      printk( "CTUCANFD TXT state unknown\n" );
   #endif /*CTUCANFD_DEBUG*/
       rtems_can_queue_free_outslot(
         &chip->qends_dev->base,
@@ -1129,25 +1143,25 @@ static void ctucanfd_handle_txtb_done(
  */
 static void ctucanfd_tx_interrupt( struct rtems_can_chip *chip )
 {
-  struct ctucanfd_internal *internal =
-    ( struct ctucanfd_internal * )chip->internal;
+  struct ctucanfd_internal *internal = (struct ctucanfd_internal *)
+                                         chip->internal;
 
   while ( 1 ) {
-    uint32_t tx_status;
+    uint32_t     tx_status;
     unsigned int txb_order_idx = 0;
     unsigned int txtb_id;
     unsigned int txtb_st;
     ctucanfd_write32( internal, CTUCANFD_INT_STAT, REG_INT_STAT_TXBHCI );
     tx_status = ctucanfd_read32( internal, CTUCANFD_TX_STATUS );
-    if ( ( tx_status & TXT_ANY_DONE ) == 0 )
+    if ( ( tx_status & TXT_ANY_DONE ) == 0 ) {
       break;
+    }
 
     txtb_id = ctucanfd_txb_from_order( internal->txb_order, txb_order_idx );
     txtb_st = TXTB_GET_STATUS( tx_status, txtb_id );
     if ( ( txtb_st & TXT_DONE ) == 0 ) {
       for (
-        txb_order_idx = 1;
-        txb_order_idx < RTEMS_CTUCANFD_NTXBUFS_MAX;
+        txb_order_idx = 1; txb_order_idx < RTEMS_CTUCANFD_NTXBUFS_MAX;
         txb_order_idx++
       ) {
         txtb_id = ctucanfd_txb_from_order(
@@ -1155,8 +1169,9 @@ static void ctucanfd_tx_interrupt( struct rtems_can_chip *chip )
           txb_order_idx
         );
         txtb_st = TXTB_GET_STATUS( tx_status, txtb_id );
-        if ( ( txtb_st & TXT_DONE ) != 0 )
+        if ( ( txtb_st & TXT_DONE ) != 0 ) {
           break;
+        }
       }
 
       if ( txb_order_idx >= internal->ntxbufs ) {
@@ -1180,7 +1195,7 @@ static void ctucanfd_tx_interrupt( struct rtems_can_chip *chip )
  */
 static void ctucanfd_interrupt( void *arg )
 {
-  struct rtems_can_chip *chip = (struct rtems_can_chip *)arg;
+  struct rtems_can_chip    *chip = (struct rtems_can_chip *) arg;
   struct ctucanfd_internal *internal = chip->internal;
 
   /* Just disable interrupts and start worker thread. */
@@ -1205,11 +1220,11 @@ static void ctucanfd_interrupt( void *arg )
  */
 static inline void ctucanfd_process_interrupts(
   struct rtems_can_chip *chip,
-  int *abort_recheck
+  int                   *abort_recheck
 )
 {
-  struct ctucanfd_internal *internal =
-    (struct ctucanfd_internal *)chip->internal;
+  struct ctucanfd_internal *internal = (struct ctucanfd_internal *)
+                                         chip->internal;
 #ifdef CTUCANFD_DEBUG
   int loop_counter = 0;
 #endif /* CTUCANFD_DEBUG*/
@@ -1220,7 +1235,7 @@ static inline void ctucanfd_process_interrupts(
     ctucanfd_check_state( internal, "in worker loop start" );
 #ifdef CTUCANFD_DEBUG
     if ( ++loop_counter > 100 ) {
-      printk("CTUCANFD CHECK detected too much active loops\n");
+      printk( "CTUCANFD CHECK detected too much active loops\n" );
     }
 #endif /*CTUCANFD_DEBUG*/
 
@@ -1249,17 +1264,11 @@ static inline void ctucanfd_process_interrupts(
       FIELD_GET( REG_INT_STAT_BEI, isr ) ||
       FIELD_GET( REG_INT_STAT_EWLI, isr ) ||
       FIELD_GET( REG_INT_STAT_FCSI, isr ) ||
-      FIELD_GET( REG_INT_STAT_ALI, isr ) ||
-      FIELD_GET( REG_INT_STAT_DOI, isr )
+      FIELD_GET( REG_INT_STAT_ALI, isr ) || FIELD_GET( REG_INT_STAT_DOI, isr )
     ) {
       /* Error interrupts */
-      icr = isr & (
-        REG_INT_STAT_EWLI |
-        REG_INT_STAT_FCSI |
-        REG_INT_STAT_ALI |
-        REG_INT_STAT_BEI |
-        REG_INT_STAT_DOI
-      );
+      icr = isr & ( REG_INT_STAT_EWLI | REG_INT_STAT_FCSI | REG_INT_STAT_ALI |
+                    REG_INT_STAT_BEI | REG_INT_STAT_DOI );
 
       ctucanfd_write32( internal, CTUCANFD_INT_STAT, icr );
       ctucanfd_err_interrupt( chip, isr );
@@ -1280,17 +1289,17 @@ static inline void ctucanfd_process_interrupts(
  */
 static rtems_task ctucanfd_worker( rtems_task_argument arg )
 {
-  struct rtems_can_chip *chip = (struct rtems_can_chip *)arg;
-  struct ctucanfd_internal *internal =
-    (struct ctucanfd_internal *)chip->internal;
-  struct ctucanfd_txb_info *txb_info;
+  struct rtems_can_chip           *chip = (struct rtems_can_chip *) arg;
+  struct ctucanfd_internal        *internal = (struct ctucanfd_internal *)
+                                                chip->internal;
+  struct ctucanfd_txb_info        *txb_info;
   struct rtems_can_queue_ends_dev *qends_dev = chip->qends_dev;
-  struct rtems_can_queue_ends *qends = &qends_dev->base;
-  struct rtems_can_queue_edge *qedge;
-  struct rtems_can_queue_slot *slot;
-  unsigned int txtb_id;
-  int abort_recheck = 0;
-  int ret;
+  struct rtems_can_queue_ends     *qends = &qends_dev->base;
+  struct rtems_can_queue_edge     *qedge;
+  struct rtems_can_queue_slot     *slot;
+  unsigned int                     txtb_id;
+  int                              abort_recheck = 0;
+  int                              ret;
 
   while ( 1 ) {
     /* First process all received interrupts. This is implemented as a
@@ -1300,11 +1309,11 @@ static rtems_task ctucanfd_worker( rtems_task_argument arg )
 
     if ( rtems_can_test_bit( RTEMS_CAN_CHIP_RUNNING, &chip->flags ) == 0 ) {
       /* Abort all filled HW buffers. */
-      for ( int i = 0; i < internal->txb_prio_tail[0]; i++ ) {
+      for ( int i = 0; i < internal->txb_prio_tail[ 0 ]; i++ ) {
         txtb_id = ctucanfd_txb_from_order( internal->txb_order, i );
 
         if ( ctucanfd_get_tx_status( internal, txtb_id ) == TXT_ETY ) {
-          txb_info = &internal->txb_info[txtb_id];
+          txb_info = &internal->txb_info[ txtb_id ];
           if ( txb_info != NULL ) {
             rtems_can_queue_filter_frame_to_edges(
               &chip->qends_dev->base,
@@ -1336,26 +1345,22 @@ static rtems_task ctucanfd_worker( rtems_task_argument arg )
           &slot->frame,
           CAN_FRAME_TXERR
         );
-        rtems_can_queue_free_outslot(
-          &chip->qends_dev->base,
-          qedge,
-          slot
-        );
+        rtems_can_queue_free_outslot( &chip->qends_dev->base, qedge, slot );
         rtems_can_stats_add_tx_error( &chip->chip_stats );
       }
 
-      if ( internal->txb_prio_tail[0] == 0 ) {
+      if ( internal->txb_prio_tail[ 0 ] == 0 ) {
         /* Notify the stop function all frames were aborted/sent back */
         rtems_binary_semaphore_post( &chip->stop_sem );
       }
-    } else if ( internal->txb_prio_tail[0] < internal->ntxbufs ) {
+    } else if ( internal->txb_prio_tail[ 0 ] < internal->ntxbufs ) {
       /* We have some space in HW buffers for outgoing messages,
        * chek whether there is something to send.
        */
       ret = rtems_can_queue_test_outslot( qends, &qedge, &slot );
       if ( ret >= 0 ) {
-        unsigned int txb_order_idx = internal->txb_prio_tail[0];
-        unsigned int txtb_id = ctucanfd_txb_from_order (
+        unsigned int txb_order_idx = internal->txb_prio_tail[ 0 ];
+        unsigned int txtb_id = ctucanfd_txb_from_order(
           internal->txb_order,
           txb_order_idx
         );
@@ -1366,7 +1371,7 @@ static rtems_task ctucanfd_worker( rtems_task_argument arg )
           /* Frame inserted successfully, update TX buffer representation,
            * buffer priorities and set buffer as ready.
            */
-          txb_info = &internal->txb_info[txtb_id];
+          txb_info = &internal->txb_info[ txtb_id ];
           txb_info->edge = qedge;
           txb_info->slot = slot;
           ctucanfd_txb_add( internal, txb_order_idx, qedge->edge_prio );
@@ -1392,11 +1397,9 @@ static rtems_task ctucanfd_worker( rtems_task_argument arg )
       int pending_prio = -1;
       int avail_prio;
       for (
-        avail_prio = 1;
-        avail_prio < RTEMS_CAN_QUEUE_PRIO_NR;
-        avail_prio++
+        avail_prio = 1; avail_prio < RTEMS_CAN_QUEUE_PRIO_NR; avail_prio++
       ) {
-        if ( internal->txb_prio_tail[avail_prio] < internal->ntxbufs ) {
+        if ( internal->txb_prio_tail[ avail_prio ] < internal->ntxbufs ) {
           pending_prio = rtems_can_queue_pending_outslot_prio(
             qends,
             avail_prio
@@ -1441,8 +1444,8 @@ static rtems_task ctucanfd_worker( rtems_task_argument arg )
  */
 static int ctucanfd_chip_ioctl(
   struct rtems_can_chip *chip,
-  ioctl_command_t command,
-  void *arg
+  ioctl_command_t        command,
+  void                  *arg
 )
 {
   (void) chip;
@@ -1450,7 +1453,7 @@ static int ctucanfd_chip_ioctl(
 
   int ret;
 
-  switch( command ) {
+  switch ( command ) {
     default:
       ret = -EINVAL;
       break;
@@ -1471,14 +1474,14 @@ static int ctucanfd_chip_ioctl(
  * @retval -EINVAL Incorrect bit time type.
  */
 static int ctucanfd_calc_and_set_bittiming(
-  struct rtems_can_chip *chip,
-  int type,
+  struct rtems_can_chip      *chip,
+  int                         type,
   struct rtems_can_bittiming *bt
 )
 {
   const struct rtems_can_bittiming_const *btc;
-  struct rtems_can_bittiming *chip_bt;
-  int ret;
+  struct rtems_can_bittiming             *chip_bt;
+  int                                     ret;
 
   if ( rtems_can_test_bit( RTEMS_CAN_CHIP_RUNNING, &chip->flags ) ) {
     /* Chip was already started, cannot change bitrate */
@@ -1517,8 +1520,8 @@ static int ctucanfd_calc_and_set_bittiming(
  * @retval -EINVAL Incorrect bit time type.
  */
 static int ctucanfd_check_and_set_bittiming(
-  struct rtems_can_chip *chip,
-  int type,
+  struct rtems_can_chip      *chip,
+  int                         type,
   struct rtems_can_bittiming *bt
 )
 {
@@ -1552,17 +1555,17 @@ static int ctucanfd_check_and_set_bittiming(
  */
 static int ctucanfd_stop_chip(
   struct rtems_can_chip *chip,
-  struct timespec *ts
+  struct timespec       *ts
 )
 {
   struct ctucanfd_internal *internal = chip->internal;
-  rtems_interval timeout;
-  struct timespec curr;
-  struct timespec final;
-  struct timespec towait;
-  uint32_t mode;
-  uint32_t mask = 0xffff;
-  int ret = -1;
+  rtems_interval            timeout;
+  struct timespec           curr;
+  struct timespec           final;
+  struct timespec           towait;
+  uint32_t                  mode;
+  uint32_t                  mask = 0xffff;
+  int                       ret = -1;
 
   rtems_mutex_lock( &chip->lock );
   if ( rtems_can_test_bit( RTEMS_CAN_CHIP_RUNNING, &chip->flags ) == 0 ) {
@@ -1595,7 +1598,7 @@ static int ctucanfd_stop_chip(
     ret = rtems_binary_semaphore_try_wait( &chip->stop_sem );
   }
 
-  if (ret < 0) {
+  if ( ret < 0 ) {
     /* The controller didn't managed to clear all frames before timeout,
      * flush the buffers.
      */
@@ -1630,8 +1633,8 @@ static int ctucanfd_stop_chip(
 static int ctucanfd_start_chip( struct rtems_can_chip *chip )
 {
   struct ctucanfd_internal *internal = chip->internal;
-  uint32_t regval;
-  int ret = 0;
+  uint32_t                  regval;
+  int                       ret = 0;
 
   rtems_mutex_lock( &chip->lock );
   if ( rtems_can_test_bit( RTEMS_CAN_CHIP_RUNNING, &chip->flags ) ) {
@@ -1640,40 +1643,41 @@ static int ctucanfd_start_chip( struct rtems_can_chip *chip )
     return 0;
   }
 
-  internal->int_ena  = 0;
+  internal->int_ena = 0;
   internal->int_mask = 0;
 
   ctucanfd_write32( internal, CTUCANFD_TX_PRIORITY, 0x01234567 );
 
   /* Set timestamp at the Start of Frame bit */
-  ctucanfd_write32( internal, CTUCANFD_RX_STATUS, REG_RX_STATUS_RTSOP);
+  ctucanfd_write32( internal, CTUCANFD_RX_STATUS, REG_RX_STATUS_RTSOP );
 
   /* Configure bit-rates and ssp */
   ret = ctucanfd_set_bittiming( chip );
-  if ( ret < 0 )
+  if ( ret < 0 ) {
     goto start_chip_unlock;
+  }
 
   ret = ctucanfd_set_data_bittiming( chip );
-  if ( ret < 0 )
+  if ( ret < 0 ) {
     goto start_chip_unlock;
+  }
 
   ret = ctucanfd_set_secondary_sample_point( chip );
-  if ( ret < 0 )
+  if ( ret < 0 ) {
     goto start_chip_unlock;
+  }
 
   /* Configure modes */
   ctucanfd_set_mode( internal, chip->ctrlmode );
 
   /* Configure interrupts */
-  internal->int_ena = REG_INT_STAT_RBNEI |
-                  REG_INT_STAT_TXBHCI |
-                  REG_INT_STAT_EWLI |
-                  REG_INT_STAT_FCSI |
-                  REG_INT_STAT_DOI;
+  internal->int_ena = REG_INT_STAT_RBNEI | REG_INT_STAT_TXBHCI |
+                      REG_INT_STAT_EWLI | REG_INT_STAT_FCSI | REG_INT_STAT_DOI;
 
   /* Bus error reporting -> Allow Error/Arb.lost interrupts */
-  if ( chip->ctrlmode & CAN_CTRLMODE_BERR_REPORTING )
+  if ( chip->ctrlmode & CAN_CTRLMODE_BERR_REPORTING ) {
     internal->int_ena |= REG_INT_STAT_ALI | REG_INT_STAT_BEI;
+  }
 
   internal->int_mask = ~internal->int_ena;
 
@@ -1716,20 +1720,20 @@ static void ctucanfd_register( struct rtems_can_chip_ops *chip_ops )
 }
 
 struct rtems_can_chip *rtems_ctucanfd_initialize(
-  uintptr_t addr,
+  uintptr_t           addr,
   rtems_vector_number irq,
   rtems_task_priority worker_priority,
-  unsigned int ntxbufs,
-  rtems_option irq_option,
-  unsigned long can_clk_rate
+  unsigned int        ntxbufs,
+  rtems_option        irq_option,
+  unsigned long       can_clk_rate
 )
 {
-  rtems_id worker_task_id;
-  rtems_status_code sc;
-  struct rtems_can_chip *chip;
+  rtems_id                  worker_task_id;
+  rtems_status_code         sc;
+  struct rtems_can_chip    *chip;
   struct ctucanfd_internal *internal;
-  uint32_t txb_count;
-  int ret;
+  uint32_t                  txb_count;
+  int                       ret;
 
   internal = calloc( 1, sizeof( struct ctucanfd_internal ) );
   if ( internal == NULL ) {
@@ -1753,13 +1757,10 @@ struct rtems_can_chip *rtems_ctucanfd_initialize(
   chip->irq = irq;
   chip->freq = can_clk_rate;
   chip->ctrlmode = CAN_CTRLMODE_FD;
-  chip->ctrlmode_supported = CAN_CTRLMODE_LOOPBACK |
-                             CAN_CTRLMODE_LISTENONLY |
-                             CAN_CTRLMODE_FD |
-                             CAN_CTRLMODE_PRESUME_ACK |
+  chip->ctrlmode_supported = CAN_CTRLMODE_LOOPBACK | CAN_CTRLMODE_LISTENONLY |
+                             CAN_CTRLMODE_FD | CAN_CTRLMODE_PRESUME_ACK |
                              CAN_CTRLMODE_BERR_REPORTING |
-                             CAN_CTRLMODE_FD_NON_ISO |
-                             CAN_CTRLMODE_ONE_SHOT;
+                             CAN_CTRLMODE_FD_NON_ISO | CAN_CTRLMODE_ONE_SHOT;
   chip->bittiming_const = &ctucanfd_nominal_bittiming_const;
   chip->data_bittiming_const = &ctucanfd_data_bittiming_const;
   chip->capabilities = RTEMS_CAN_CHIP_CAPABILITIES_FD;
@@ -1813,15 +1814,9 @@ struct rtems_can_chip *rtems_ctucanfd_initialize(
     return NULL;
   }
 
-  rtems_binary_semaphore_init(
-    &chip->stop_sem,
-    "can_ctucanfd_stop_sem"
-  );
+  rtems_binary_semaphore_init( &chip->stop_sem, "can_ctucanfd_stop_sem" );
 
-  rtems_can_queue_ends_init_chip(
-    chip,
-    "can_ctucanfd_worker"
-  );
+  rtems_can_queue_ends_init_chip( chip, "can_ctucanfd_worker" );
 
   sc = rtems_interrupt_handler_install(
     chip->irq,
@@ -1847,18 +1842,17 @@ struct rtems_can_chip *rtems_ctucanfd_initialize(
   );
   if ( sc != RTEMS_SUCCESSFUL ) {
     free( internal );
-    rtems_interrupt_handler_remove(
-      chip->irq,
-      ctucanfd_interrupt,
-      chip
-    );
+    rtems_interrupt_handler_remove( chip->irq, ctucanfd_interrupt, chip );
     free( chip->qends_dev );
     free( chip );
     return NULL;
   }
 
-  rtems_task_start( worker_task_id, ctucanfd_worker,
-                    (rtems_task_argument)chip );
+  rtems_task_start(
+    worker_task_id,
+    ctucanfd_worker,
+    (rtems_task_argument) chip
+  );
 
   rtems_can_set_bit( RTEMS_CAN_CHIP_CONFIGURED, &chip->flags );
   rtems_can_stats_set_state( &chip->chip_stats, CAN_STATE_STOPPED );

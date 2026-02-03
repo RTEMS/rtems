@@ -60,16 +60,17 @@ static atomic_uint edge_num_cnt;
 static rtems_mutex can_queue_dead_func_lock = RTEMS_MUTEX_INITIALIZER(
   "can_queue_dead_func_lock"
 );
-static rtems_binary_semaphore dead_func_sem = RTEMS_BINARY_SEMAPHORE_INITIALIZER(
-  "can_queue_dead_func_sem"
-);
+static rtems_binary_semaphore dead_func_sem =
+  RTEMS_BINARY_SEMAPHORE_INITIALIZER( "can_queue_dead_func_sem" );
 
-static struct rtems_can_queue_ends_list can_queue_dead_ends;
+static struct rtems_can_queue_ends_list  can_queue_dead_ends;
 static struct rtems_can_queue_edges_list can_queue_dead_edges;
 
 static atomic_uint kern_flags;
 
-static inline struct rtems_can_queue_edge *can_queue_dead_edges_cut_first( void )
+static inline struct rtems_can_queue_edge *can_queue_dead_edges_cut_first(
+  void
+)
 {
   struct rtems_can_queue_edge *edge;
   rtems_mutex_lock( &can_queue_dead_func_lock );
@@ -163,11 +164,15 @@ void rtems_can_queue_edge_do_dead( struct rtems_can_queue_edge *qedge )
 static void can_queue_notify_user(
   struct rtems_can_queue_ends *qends,
   struct rtems_can_queue_edge *qedge,
-  int what
+  int                          what
 )
 {
-  RTEMS_DEBUG_PRINT( "For edge %d, use %d and event %d\n",
-                     qedge->edge_num, (int)atomic_load( &qedge->edge_used ), what );
+  RTEMS_DEBUG_PRINT(
+    "For edge %d, use %d and event %d\n",
+    qedge->edge_num,
+    (int) atomic_load( &qedge->edge_used ),
+    what
+  );
 
   struct rtems_can_queue_ends_user_t *qends_user = RTEMS_CONTAINER_OF(
     qends,
@@ -176,39 +181,45 @@ static void can_queue_notify_user(
   );
 
   switch ( what ) {
-  case RTEMS_CAN_QUEUE_NOTIFY_EMPTY:
-    rtems_binary_semaphore_post( &qends_user->sem_sync );
-    if ( rtems_can_queue_fifo_test_and_clear_fl(
-        &qedge->fifo,
-        RTEMS_CAN_FIFOF_FREEONEMPTY
-      ) ) {
-      rtems_can_queue_edge_decref( qedge );
-    }
-    break;
-  case RTEMS_CAN_QUEUE_NOTIFY_SPACE:
-    rtems_binary_semaphore_post( &qends_user->sem_write );
-    break;
-  case RTEMS_CAN_QUEUE_NOTIFY_PROC:
-    rtems_binary_semaphore_post( &qends_user->sem_read );
-    break;
-  case RTEMS_CAN_QUEUE_NOTIFY_NOUSR:
-    rtems_binary_semaphore_post( &qends_user->sem_sync );
-    break;
-  case RTEMS_CAN_QUEUE_NOTIFY_DEAD_WANTED:
-  case RTEMS_CAN_QUEUE_NOTIFY_DEAD:
-    if ( rtems_can_queue_fifo_test_and_clear_fl(
-        &qedge->fifo,
-        RTEMS_CAN_FIFOF_READY
-       ) ) {
-      rtems_can_queue_edge_decref( qedge );
-    }
-    break;
-  case RTEMS_CAN_QUEUE_NOTIFY_ATTACH:
-    break;
+    case RTEMS_CAN_QUEUE_NOTIFY_EMPTY:
+      rtems_binary_semaphore_post( &qends_user->sem_sync );
+      if (
+        rtems_can_queue_fifo_test_and_clear_fl(
+          &qedge->fifo,
+          RTEMS_CAN_FIFOF_FREEONEMPTY
+        )
+      ) {
+        rtems_can_queue_edge_decref( qedge );
+      }
+      break;
+    case RTEMS_CAN_QUEUE_NOTIFY_SPACE:
+      rtems_binary_semaphore_post( &qends_user->sem_write );
+      break;
+    case RTEMS_CAN_QUEUE_NOTIFY_PROC:
+      rtems_binary_semaphore_post( &qends_user->sem_read );
+      break;
+    case RTEMS_CAN_QUEUE_NOTIFY_NOUSR:
+      rtems_binary_semaphore_post( &qends_user->sem_sync );
+      break;
+    case RTEMS_CAN_QUEUE_NOTIFY_DEAD_WANTED:
+    case RTEMS_CAN_QUEUE_NOTIFY_DEAD:
+      if (
+        rtems_can_queue_fifo_test_and_clear_fl(
+          &qedge->fifo,
+          RTEMS_CAN_FIFOF_READY
+        )
+      ) {
+        rtems_can_queue_edge_decref( qedge );
+      }
+      break;
+    case RTEMS_CAN_QUEUE_NOTIFY_ATTACH:
+      break;
   }
 }
 
-int rtems_can_queue_ends_init_user( struct rtems_can_queue_ends_user_t *qends_user )
+int rtems_can_queue_ends_init_user(
+  struct rtems_can_queue_ends_user_t *qends_user
+)
 {
   struct rtems_can_queue_ends *qends = &qends_user->base;
 
@@ -236,11 +247,11 @@ int rtems_can_queue_ends_init_user( struct rtems_can_queue_ends_user_t *qends_us
 int rtems_can_queue_sync_wait_kern(
   struct rtems_can_queue_ends *qends,
   struct rtems_can_queue_edge *qedge,
-  bool nowait,
-  rtems_interval timeout
+  bool                         nowait,
+  rtems_interval               timeout
 )
 {
-  int ret;
+  int                                 ret;
   struct rtems_can_queue_ends_user_t *qends_user = RTEMS_CONTAINER_OF(
     qends,
     struct rtems_can_queue_ends_user_t,
@@ -252,7 +263,10 @@ int rtems_can_queue_sync_wait_kern(
    * In that case the semaphore would never be released.
    */
 
-  if ( !rtems_can_queue_fifo_test_flag( &qedge->fifo, RTEMS_CAN_FIFOF_EMPTY ) ) {
+  if ( !rtems_can_queue_fifo_test_flag(
+         &qedge->fifo,
+         RTEMS_CAN_FIFOF_EMPTY
+       ) ) {
     do {
       if ( nowait ) {
         ret = rtems_binary_semaphore_try_wait( &qends_user->sem_sync );
@@ -266,8 +280,8 @@ int rtems_can_queue_sync_wait_kern(
         return -1;
       }
     } while (
-        !rtems_can_queue_fifo_test_flag( &qedge->fifo, RTEMS_CAN_FIFOF_EMPTY )
-      );
+      !rtems_can_queue_fifo_test_flag( &qedge->fifo, RTEMS_CAN_FIFOF_EMPTY )
+    );
 
     rtems_binary_semaphore_post( &qends_user->sem_sync );
   }
@@ -277,8 +291,8 @@ int rtems_can_queue_sync_wait_kern(
 
 int rtems_can_queue_fifo_init_kern(
   struct rtems_can_queue_fifo *fifo,
-  int allocated_slot_count,
-  int max_data_length
+  int                          allocated_slot_count,
+  int                          max_data_length
 )
 {
   int size;
@@ -290,7 +304,8 @@ int rtems_can_queue_fifo_init_kern(
     max_data_length = CAN_FRAME_MAX_DLEN;
   }
 
-  size = rtems_can_queue_fifo_slot_size( max_data_length ) * allocated_slot_count;
+  size = rtems_can_queue_fifo_slot_size( max_data_length ) *
+         allocated_slot_count;
   fifo->entry = malloc( size );
   if ( fifo->entry == NULL ) {
     return -1;
@@ -317,17 +332,20 @@ struct rtems_can_queue_edge *rtems_can_queue_new_edge_kern(
 )
 {
   struct rtems_can_queue_edge *qedge;
-  qedge = (struct rtems_can_queue_edge *)calloc( 1, sizeof( struct rtems_can_queue_edge ) );
+  qedge = (struct rtems_can_queue_edge *)
+    calloc( 1, sizeof( struct rtems_can_queue_edge ) );
   if ( qedge == NULL ) {
     return NULL;
   }
 
   rtems_mutex_init( &qedge->fifo.fifo_lock, "fifo_lock" );
-  if ( rtems_can_queue_fifo_init_kern(
-    &qedge->fifo,
-    allocated_slot_count,
-    max_data_length
-  ) < 0 ) {
+  if (
+    rtems_can_queue_fifo_init_kern(
+      &qedge->fifo,
+      allocated_slot_count,
+      max_data_length
+    ) < 0
+  ) {
     free( qedge );
     RTEMS_DEBUG_PRINT( "Failed\n" );
     return NULL;
@@ -348,16 +366,16 @@ struct rtems_can_queue_edge *rtems_can_queue_new_edge_kern(
 
 int rtems_can_queue_ends_sync_all_kern(
   struct rtems_can_queue_ends *qends,
-  struct timespec *ts
+  struct timespec             *ts
 )
 {
   struct rtems_can_queue_edge *qedge;
-  struct timespec curr;
-  struct timespec final;
-  struct timespec towait;
-  rtems_interval timeout;
-  bool nowait;
-  int ret;
+  struct timespec              curr;
+  struct timespec              final;
+  struct timespec              towait;
+  rtems_interval               timeout;
+  bool                         nowait;
+  int                          ret;
 
   timeout = RTEMS_NO_TIMEOUT;
   nowait = false;
@@ -366,7 +384,8 @@ int rtems_can_queue_ends_sync_all_kern(
     rtems_timespec_add_to( &final, ts );
   }
 
-  rtems_can_queue_for_each_inedge( qends, qedge ) {
+  rtems_can_queue_for_each_inedge( qends, qedge )
+  {
     RTEMS_DEBUG_PRINT( "Called for edge %d\n", qedge->edge_num );
     if ( ts != NULL ) {
       clock_gettime( CLOCK_MONOTONIC, &curr );
@@ -400,7 +419,7 @@ static void can_queue_ends_dispose_postpone(
 
 int rtems_can_queue_ends_dispose_kern(
   struct rtems_can_queue_ends *qends,
-  bool nonblock
+  bool                         nonblock
 )
 {
   int delayed;
@@ -432,7 +451,7 @@ int rtems_can_queue_ends_dispose_kern(
 
 int rtems_can_queue_kern_initialize( void )
 {
-  rtems_id dead_func_id;
+  rtems_id          dead_func_id;
   rtems_status_code sc;
 
   if ( rtems_can_test_and_set_bit( CAN_KERN_INITIALIZED, &kern_flags ) == 1 ) {
@@ -446,13 +465,14 @@ int rtems_can_queue_kern_initialize( void )
   sc = rtems_task_create(
     rtems_build_name( 'C', 'A', 'N', 'D' ),
     CAN_DEAD_FUNC_PRIORITY,
-    RTEMS_MINIMUM_STACK_SIZE+0x1000,
+    RTEMS_MINIMUM_STACK_SIZE + 0x1000,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &dead_func_id
   );
-  if ( sc != RTEMS_SUCCESSFUL )
+  if ( sc != RTEMS_SUCCESSFUL ) {
     return -1;
+  }
 
   rtems_task_start( dead_func_id, can_queue_dead_func, 0 );
 
