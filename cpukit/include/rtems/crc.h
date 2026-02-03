@@ -55,7 +55,6 @@ extern "C" {
  * @{
  */
 
-
 /**
  * @brief This constant represents the default CRC-24Q seed state.
  */

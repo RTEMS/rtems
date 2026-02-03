@@ -129,21 +129,26 @@ static const uint32_t _CRC24Q_Table[256] = {
     UINT32_C(0xDD8538)};
 // clang-format on
 
-static inline uint32_t _CRC24Q_do_update(uint32_t crc, uint8_t byte) {
-  return (crc << 8) ^ _CRC24Q_Table[byte ^ (uint8_t)(crc >> 16)];
+static inline uint32_t _CRC24Q_do_update( uint32_t crc, uint8_t byte )
+{
+  return ( crc << 8 ) ^ _CRC24Q_Table[ byte ^ (uint8_t) ( crc >> 16 ) ];
 }
 
-uint32_t _CRC24Q_Update(uint32_t crc, uint8_t byte) {
-  return _CRC24Q_do_update(crc, byte);
+uint32_t _CRC24Q_Update( uint32_t crc, uint8_t byte )
+{
+  return _CRC24Q_do_update( crc, byte );
 }
 
-uint32_t _CRC24Q_Sequence_update(uint32_t crc,
-                                 const void* bytes,
-                                 size_t size_in_bytes) {
-  const uint8_t* the_bytes = bytes;
+uint32_t _CRC24Q_Sequence_update(
+  uint32_t    crc,
+  const void *bytes,
+  size_t      size_in_bytes
+)
+{
+  const uint8_t *the_bytes = bytes;
 
-  for (size_t i = 0; i < size_in_bytes; ++i) {
-    crc = _CRC24Q_do_update(crc, the_bytes[i]);
+  for ( size_t i = 0; i < size_in_bytes; ++i ) {
+    crc = _CRC24Q_do_update( crc, the_bytes[ i ] );
   }
 
   return crc;
