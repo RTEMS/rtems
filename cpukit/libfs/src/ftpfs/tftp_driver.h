@@ -75,15 +75,13 @@ extern "C" {
  * @param tftp_handle is the reference returned by a call to tftp_open().
  *   If this parameter is @c NULL, the directive call is a no-op.
  */
-void _Tftp_Destroy(
-  void *tftp_handle
-);
+void _Tftp_Destroy( void *tftp_handle );
 
 /* Only non-private to ease unit testing */
 ssize_t _Tftpfs_Parse_options(
-  const char *option_str,
+  const char      *option_str,
   tftp_net_config *tftp_config,
-  uint32_t *flags
+  uint32_t        *flags
 );
 
 /** @} */

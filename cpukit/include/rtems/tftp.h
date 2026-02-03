@@ -57,7 +57,7 @@ extern "C" {
  */
 int rtems_tftpfs_initialize(
   rtems_filesystem_mount_table_entry_t *mt_entry,
-  const void *data
+  const void                           *data
 );
 
 /**
@@ -288,9 +288,7 @@ typedef struct tftp_net_config {
  *   The values are set to the defaults defined in
  *   @ref tftp_net_config "`type tftp_net_config`".
  */
-void tftp_initialize_net_config(
-  tftp_net_config *config
-);
+void tftp_initialize_net_config( tftp_net_config *config );
 
 /**
  * @brief Opens and starts a TFTP client session to read or write a
@@ -343,11 +341,11 @@ void tftp_initialize_net_config(
  * @return Returns a POSIX @c errno value in case an error occurred.
  */
 int tftp_open(
-  const char  *hostname,
-  const char  *path,
-  bool   is_for_reading,
+  const char            *hostname,
+  const char            *path,
+  bool                   is_for_reading,
   const tftp_net_config *config,
-  void **tftp_handle
+  void                 **tftp_handle
 );
 
 /**
@@ -373,11 +371,7 @@ int tftp_open(
  *   into the buffer.  If the return value is negative, an error occurred.
  *   In this case the negated value is a POSIX @c errno value.
  */
-ssize_t tftp_read(
-  void   *tftp_handle,
-  void   *buffer,
-  size_t  count
-);
+ssize_t tftp_read( void *tftp_handle, void *buffer, size_t count );
 
 /**
  * @brief Write data to a TFTP server.
@@ -403,11 +397,7 @@ ssize_t tftp_read(
  *   If the return value is negative, an error occurred.  In this case
  *   the negated value is a POSIX @c errno value.
  */
-ssize_t tftp_write(
-  void       *tftp_handle,
-  const void *buffer,
-  size_t      count
-);
+ssize_t tftp_write( void *tftp_handle, const void *buffer, size_t count );
 
 /**
  * @brief Close a TFTP client connection.
@@ -431,9 +421,7 @@ ssize_t tftp_write(
  * @retval 0 When the client session was closed successfully.
  * @return Returns a POSIX @c errno value in case an error occurred.
  */
-int tftp_close(
-  void *tftp_handle
-);
+int tftp_close( void *tftp_handle );
 
 /** @} */
 

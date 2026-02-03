@@ -98,10 +98,10 @@ extern "C" {
  * @brief FTP file system IO control requests.
  */
 typedef enum {
-  RTEMS_FTPFS_IOCTL_GET_VERBOSE = _IOR( 'd', 1, bool *),
-  RTEMS_FTPFS_IOCTL_SET_VERBOSE = _IOW( 'd', 1, bool *),
-  RTEMS_FTPFS_IOCTL_GET_TIMEOUT = _IOR( 'd', 2, struct timeval *),
-  RTEMS_FTPFS_IOCTL_SET_TIMEOUT = _IOW( 'd', 2, struct timeval *)
+  RTEMS_FTPFS_IOCTL_GET_VERBOSE = _IOR( 'd', 1, bool * ),
+  RTEMS_FTPFS_IOCTL_SET_VERBOSE = _IOW( 'd', 1, bool * ),
+  RTEMS_FTPFS_IOCTL_GET_TIMEOUT = _IOR( 'd', 2, struct timeval * ),
+  RTEMS_FTPFS_IOCTL_SET_TIMEOUT = _IOW( 'd', 2, struct timeval * )
 } rtems_ftpfs_ioctl_numbers;
 
 /**
@@ -111,7 +111,10 @@ typedef enum {
  * If @a mount_point is @c NULL the default mount point
  * @ref RTEMS_FTPFS_MOUNT_POINT_DEFAULT will be used.
  */
-rtems_status_code rtems_ftpfs_get_verbose( const char *mount_point, bool *verbose);
+rtems_status_code rtems_ftpfs_get_verbose(
+  const char *mount_point,
+  bool       *verbose
+);
 
 /**
  * @brief Enables or disables the verbose mode if @a verbose is @c true or
@@ -123,7 +126,10 @@ rtems_status_code rtems_ftpfs_get_verbose( const char *mount_point, bool *verbos
  * If @a mount_point is @c NULL the default mount point
  * @ref RTEMS_FTPFS_MOUNT_POINT_DEFAULT will be used.
  */
-rtems_status_code rtems_ftpfs_set_verbose( const char *mount_point, bool verbose);
+rtems_status_code rtems_ftpfs_set_verbose(
+  const char *mount_point,
+  bool        verbose
+);
 
 /**
  * @brief Returns the current timeout value in @a timeout for the file system
@@ -133,7 +139,7 @@ rtems_status_code rtems_ftpfs_set_verbose( const char *mount_point, bool verbose
  * @ref RTEMS_FTPFS_MOUNT_POINT_DEFAULT will be used.
  */
 rtems_status_code rtems_ftpfs_get_timeout(
-  const char *mount_point,
+  const char     *mount_point,
   struct timeval *timeout
 );
 
@@ -149,7 +155,7 @@ rtems_status_code rtems_ftpfs_get_timeout(
  * @ref RTEMS_FTPFS_MOUNT_POINT_DEFAULT will be used.
  */
 rtems_status_code rtems_ftpfs_set_timeout(
-  const char *mount_point,
+  const char           *mount_point,
   const struct timeval *timeout
 );
 
@@ -160,7 +166,7 @@ rtems_status_code rtems_ftpfs_set_timeout(
  */
 int rtems_ftpfs_initialize(
   rtems_filesystem_mount_table_entry_t *mt_entry,
-  const void *data
+  const void                           *data
 );
 
 #ifdef __cplusplus
