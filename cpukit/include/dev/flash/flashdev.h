@@ -43,7 +43,6 @@
 extern "C" {
 #endif
 
-
 typedef struct rtems_flashdev rtems_flashdev;
 
 /**
@@ -254,7 +253,7 @@ typedef struct rtems_flashdev_region {
   /**
    * @brief Base of region.
    */
-  off_t offset;
+  off_t  offset;
   /**
    * @brief Length of region.
    */
@@ -274,7 +273,7 @@ typedef struct rtems_flashdev_region_table {
    * @brief Pointer to array of rtems_flashdev_region of length
    * max_regions
    */
-  rtems_flashdev_region* regions;
+  rtems_flashdev_region *regions;
 
   /**
    * @brief Array of uint32_t acting as bit allocator
@@ -369,9 +368,9 @@ struct rtems_flashdev {
    */
   int ( *read )(
     rtems_flashdev *flash,
-    uintptr_t offset,
-    size_t count,
-    void *buffer
+    uintptr_t       offset,
+    size_t          count,
+    void           *buffer
   );
 
   /**
@@ -387,9 +386,9 @@ struct rtems_flashdev {
    */
   int ( *write )(
     rtems_flashdev *flash,
-    uintptr_t offset,
-    size_t count,
-    const void *buffer
+    uintptr_t       offset,
+    size_t          count,
+    const void     *buffer
   );
 
   /**
@@ -402,11 +401,7 @@ struct rtems_flashdev {
    * @retval 0 Successful operation.
    * @retval 1 Failed operation.
    */
-  int ( *erase )(
-    rtems_flashdev *flash,
-    uintptr_t offset,
-    size_t count
-  );
+  int ( *erase )( rtems_flashdev *flash, uintptr_t offset, size_t count );
 
   /**
    * @brief Call to the device driver to return the JEDEC ID.
@@ -415,9 +410,7 @@ struct rtems_flashdev {
    *
    * @retval JEDEC ID.
    */
-  uint32_t ( *jedec_id )(
-    rtems_flashdev *flash
-  );
+  uint32_t ( *jedec_id )( rtems_flashdev *flash );
 
   /**
    * @brief Call to the device driver to return the flash type.
@@ -429,7 +422,7 @@ struct rtems_flashdev {
    * @retbal Other Failure
    */
   int ( *flash_type )(
-    rtems_flashdev *flash,
+    rtems_flashdev            *flash,
     rtems_flashdev_flash_type *type
   );
 
@@ -448,9 +441,9 @@ struct rtems_flashdev {
    */
   int ( *page_info_by_offset )(
     rtems_flashdev *flash,
-    off_t search_offset,
-    off_t *page_offset,
-    size_t *page_size
+    off_t           search_offset,
+    off_t          *page_offset,
+    size_t         *page_size
   );
 
   /**
@@ -467,9 +460,9 @@ struct rtems_flashdev {
    */
   int ( *page_info_by_index )(
     rtems_flashdev *flashdev,
-    off_t search_index,
-    off_t *page_offset,
-    size_t *page_size
+    off_t           search_index,
+    off_t          *page_offset,
+    size_t         *page_size
   );
 
   /**
@@ -481,10 +474,7 @@ struct rtems_flashdev {
    * @retval 0 Success.
    * @retval non-zero Failed.
    */
-  int ( *page_count )(
-    rtems_flashdev *flashdev,
-    int *page_count
-  );
+  int ( *page_count )( rtems_flashdev *flashdev, int *page_count );
 
   /**
    * @brief Call to device driver to return the minimum write size of the
@@ -497,7 +487,7 @@ struct rtems_flashdev {
    */
   int ( *write_block_size )(
     rtems_flashdev *flashdev,
-    size_t *write_block_size
+    size_t         *write_block_size
   );
 
   /**
@@ -515,9 +505,9 @@ struct rtems_flashdev {
    */
   int ( *sector_info_by_offset )(
     rtems_flashdev *flash,
-    off_t search_offset,
-    off_t *sector_offset,
-    size_t *sector_size
+    off_t           search_offset,
+    off_t          *sector_offset,
+    size_t         *sector_size
   );
 
   /**
@@ -531,10 +521,7 @@ struct rtems_flashdev {
    * @retval 0 Success.
    * @retval non-zero Failed.
    */
-  int ( *sector_count )(
-    rtems_flashdev *flashdev,
-    int *sector_count
-  );
+  int ( *sector_count )( rtems_flashdev *flashdev, int *sector_count );
 
   /**
    * @brief Call to device driver to return the size of the out of band space.
@@ -547,7 +534,7 @@ struct rtems_flashdev {
    */
   int ( *oob_bytes_per_page )(
     rtems_flashdev *flashdev,
-    size_t *oob_bytes_per_page
+    size_t         *oob_bytes_per_page
   );
 
   /**
@@ -564,9 +551,9 @@ struct rtems_flashdev {
    */
   int ( *oob_read )(
     rtems_flashdev *flash,
-    uintptr_t offset,
-    size_t count,
-    void *buffer
+    uintptr_t       offset,
+    size_t          count,
+    void           *buffer
   );
 
   /**
@@ -583,9 +570,9 @@ struct rtems_flashdev {
    */
   int ( *oob_write )(
     rtems_flashdev *flash,
-    uintptr_t offset,
-    size_t count,
-    const void *buffer
+    uintptr_t       offset,
+    size_t          count,
+    const void     *buffer
   );
 
   /**
@@ -600,10 +587,7 @@ struct rtems_flashdev {
    * @retval 0 Successful operation.
    * @retval 1 Failed operation.
    */
-  int ( *sector_mark_bad )(
-    rtems_flashdev *flash,
-    off_t offset
-  );
+  int ( *sector_mark_bad )( rtems_flashdev *flash, off_t offset );
 
   /**
    * @brief Call to device driver to get health of sector at given offset.
@@ -618,8 +602,8 @@ struct rtems_flashdev {
    */
   int ( *sector_health )(
     rtems_flashdev *flash,
-    off_t search_offset,
-    uint8_t *sector_bad
+    off_t           search_offset,
+    uint8_t        *sector_bad
   );
 
   /**
@@ -627,9 +611,7 @@ struct rtems_flashdev {
    *
    * @param[in] flash Pointer to flash device.
    */
-  void ( *destroy )(
-    rtems_flashdev *flashdev
-  );
+  void ( *destroy )( rtems_flashdev *flashdev );
 
   /**
    * @brief Callback to destroy private data not owned directly by the flashdev
@@ -637,9 +619,7 @@ struct rtems_flashdev {
    *
    * @param[in] flash Pointer to flash device.
    */
-  void ( *priv_destroy )(
-    rtems_flashdev *flashdev
-  );
+  void ( *priv_destroy )( rtems_flashdev *flashdev );
 
   /**
    * @brief Pointer to device driver.
@@ -668,9 +648,7 @@ struct rtems_flashdev {
  * @retval NULL Failed to set up flash device.
  * @retval non-NULL The new flash device.
  */
-rtems_flashdev *rtems_flashdev_alloc_and_init(
-  size_t size
-);
+rtems_flashdev *rtems_flashdev_alloc_and_init( size_t size );
 
 /**
  * @brief Initialize the flash device.
@@ -686,9 +664,7 @@ rtems_flashdev *rtems_flashdev_alloc_and_init(
  * @retval 1 Failed to set up flash device.
  * @retval 0 Successful set up of flash device.
  */
-int rtems_flashdev_init(
-  rtems_flashdev *flash
-);
+int rtems_flashdev_init( rtems_flashdev *flash );
 
 /**
  * @brief Register the flash device.
@@ -705,10 +681,7 @@ int rtems_flashdev_init(
  * @retval 0 Successful operation.
  * @retval non-zero Failed operation.
  */
-int rtems_flashdev_register(
-  rtems_flashdev *flash,
-  const char *flash_path
-);
+int rtems_flashdev_register( rtems_flashdev *flash, const char *flash_path );
 
 /**
  * @brief Unregister the flash device.
@@ -718,9 +691,7 @@ int rtems_flashdev_register(
  * @retval 0 Successful operation.
  * @retval non-zero Failed operation.
  */
-int rtems_flashdev_unregister(
-  const char *flash_path
-);
+int rtems_flashdev_unregister( const char *flash_path );
 
 /**
  * @brief Destroys the flash device.
@@ -730,9 +701,7 @@ int rtems_flashdev_unregister(
  *
  * @param[in] flash The flash device.
  */
-void rtems_flashdev_destroy(
-  rtems_flashdev *flash
-);
+void rtems_flashdev_destroy( rtems_flashdev *flash );
 
 /**
  * @brief Destroys the flash device and frees its memory.
@@ -742,9 +711,7 @@ void rtems_flashdev_destroy(
  *
  * @param[in] flash The flash device.
  */
-void rtems_flashdev_destroy_and_free(
-  rtems_flashdev *flash
-);
+void rtems_flashdev_destroy_and_free( rtems_flashdev *flash );
 
 #ifdef __cplusplus
 }
