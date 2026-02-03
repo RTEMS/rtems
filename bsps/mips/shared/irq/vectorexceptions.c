@@ -64,7 +64,8 @@ static const struct regdef dumpregs[]= {
 void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
 {
   uint32_t *frame_u32;
-  int   i, j;
+  int       i;
+  size_t    j;
 
   frame_u32 = (uint32_t *)frame;
   for(i=0; dumpregs[i].offset > -1; i++)
