@@ -39,6 +39,7 @@
 
 #include <rtems/crc.h>
 
+// clang-format off
 static const uint32_t _CRC24Q_Table[256] = {
     UINT32_C(0x000000), UINT32_C(0x864CFB), UINT32_C(0x8AD50D),
     UINT32_C(0x0C99F6), UINT32_C(0x93E6E1), UINT32_C(0x15AA1A),
@@ -126,6 +127,7 @@ static const uint32_t _CRC24Q_Table[256] = {
     UINT32_C(0xC4B6D4), UINT32_C(0xC82F22), UINT32_C(0x4E63D9),
     UINT32_C(0xD11CCE), UINT32_C(0x575035), UINT32_C(0x5BC9C3),
     UINT32_C(0xDD8538)};
+// clang-format on
 
 static inline uint32_t _CRC24Q_do_update(uint32_t crc, uint8_t byte) {
   return (crc << 8) ^ _CRC24Q_Table[byte ^ (uint8_t)(crc >> 16)];
