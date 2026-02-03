@@ -163,7 +163,7 @@ static int scanInt( FILE *fp, int *val )
     d = c - '0';
     if (
       ( i > ( limit / 10 ) ) ||
-      ( ( i == ( limit / 10 ) ) && ( d > ( limit % 10 ) ) )
+      ( ( i == ( limit / 10 ) ) && ( d > (unsigned int)( limit % 10 ) ) )
     ) {
       return 0;
     }
