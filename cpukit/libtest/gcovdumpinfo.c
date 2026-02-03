@@ -78,13 +78,13 @@ static void *_Gcov_Allocate( unsigned length, void *arg )
 
 void _Gcov_Dump_info( IO_Put_char put_char, void *arg )
 {
-  Gcov_Context                    ctx;
-  const struct gcov_info * const *item;
+  Gcov_Context                   ctx;
+  const struct gcov_info *const *item;
 
   ctx.put_char = put_char;
   ctx.arg = arg;
 
-  RTEMS_LINKER_SET_FOREACH( gcov_info, item ) {
+  RTEMS_LINKER_SET_FOREACH ( gcov_info, item ) {
     __gcov_info_to_gcda(
       *item,
       _Gcov_Filename,

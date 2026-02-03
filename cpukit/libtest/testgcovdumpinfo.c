@@ -73,7 +73,11 @@ void rtems_test_gcov_dump_info( void )
 
     gcov_dump_done = true;
 
-    _IO_Printf( rtems_put_char, NULL, "\n*** BEGIN OF GCOV INFO BASE64 ***\n" );
+    _IO_Printf(
+      rtems_put_char,
+      NULL,
+      "\n*** BEGIN OF GCOV INFO BASE64 ***\n"
+    );
     _Hash_Initialize( &gcov_hash );
     _Gcov_Dump_info_base64( gcov_put_char, NULL );
     _Hash_Finalize( &gcov_hash, &result );

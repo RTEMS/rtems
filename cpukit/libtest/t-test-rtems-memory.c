@@ -39,57 +39,57 @@
 #include <rtems/score/memory.h>
 #include <rtems/sysinit.h>
 
-static Memory_Area T_memory_areas[1];
+static Memory_Area T_memory_areas[ 1 ];
 
-static Memory_Information T_memory_information =
-    MEMORY_INFORMATION_INITIALIZER(T_memory_areas);
+static Memory_Information
+  T_memory_information = MEMORY_INFORMATION_INITIALIZER( T_memory_areas );
 
-static void
-T_memory_initialize(void)
+static void T_memory_initialize( void )
 {
-	const Memory_Information *mem;
-	Memory_Area *area;
-	void *begin;
-	uintptr_t size;
+  const Memory_Information *mem;
+  Memory_Area              *area;
+  void                     *begin;
+  uintptr_t                 size;
 
-	mem = _Memory_Get();
-	area = _Memory_Get_area(mem, 0);
-	begin = _Memory_Get_free_begin(area);
-	size = _Memory_Get_free_size(area) / 2;
-	_Memory_Consume(area, size);
-	_Memory_Initialize_by_size(&T_memory_areas[0], begin, size);
+  mem = _Memory_Get();
+  area = _Memory_Get_area( mem, 0 );
+  begin = _Memory_Get_free_begin( area );
+  size = _Memory_Get_free_size( area ) / 2;
+  _Memory_Consume( area, size );
+  _Memory_Initialize_by_size( &T_memory_areas[ 0 ], begin, size );
 }
 
-RTEMS_SYSINIT_ITEM(T_memory_initialize, RTEMS_SYSINIT_WORKSPACE,
-    RTEMS_SYSINIT_ORDER_FIRST);
+RTEMS_SYSINIT_ITEM(
+  T_memory_initialize,
+  RTEMS_SYSINIT_WORKSPACE,
+  RTEMS_SYSINIT_ORDER_FIRST
+);
 
-void *
-T_memory_allocate(size_t size)
+void *T_memory_allocate( size_t size )
 {
-	return _Memory_Allocate(&T_memory_information, size,
-	    CPU_HEAP_ALIGNMENT);
+  return _Memory_Allocate( &T_memory_information, size, CPU_HEAP_ALIGNMENT );
 }
 
-void
-T_memory_deallocate(void *ptr)
+void T_memory_deallocate( void *ptr )
 {
-	(void)ptr;
+  (void) ptr;
 }
 
-void
-T_memory_action(T_event event, const char *name)
+void T_memory_action( T_event event, const char *name )
 {
-	Memory_Area *area;
+  Memory_Area *area;
 
-	(void)name;
+  (void) name;
 
-	switch (event) {
-	case T_EVENT_CASE_BEGIN:
-		area = &T_memory_areas[0];
-		_Memory_Set_free_begin(area,
-		    RTEMS_DECONST(void *, _Memory_Get_begin(area)));
-		break;
-	default:
-		break;
-	};
+  switch ( event ) {
+    case T_EVENT_CASE_BEGIN:
+      area = &T_memory_areas[ 0 ];
+      _Memory_Set_free_begin(
+        area,
+        RTEMS_DECONST( void *, _Memory_Get_begin( area ) )
+      );
+      break;
+    default:
+      break;
+  };
 }

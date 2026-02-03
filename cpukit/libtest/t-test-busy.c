@@ -45,15 +45,14 @@
  * various places.  So, the compiler must not inline this function.  Take care
  * of link time optimization.
  */
-__attribute__((__noinline__)) void
-T_busy(uint_fast32_t count)
+__attribute__(( __noinline__ )) void T_busy( uint_fast32_t count )
 {
-	uint_fast32_t i;
+  uint_fast32_t i;
 
-	i = 0;
+  i = 0;
 
-	do {
-		__asm__ volatile ("");
-		++i;
-	} while (i < count);
+  do {
+    __asm__ volatile( "" );
+    ++i;
+  } while ( i < count );
 }

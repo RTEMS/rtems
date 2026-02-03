@@ -40,54 +40,50 @@
 
 static int T_open_fds;
 
-static int
-T_count_open_fds(void)
+static int T_count_open_fds( void )
 {
-	int free_count;
-	rtems_libio_t *iop;
+  int            free_count;
+  rtems_libio_t *iop;
 
-	free_count = 0;
-	rtems_libio_lock();
+  free_count = 0;
+  rtems_libio_lock();
 
-	iop = rtems_libio_iop_free_head;
-	while (iop != NULL) {
-		++free_count;
-		iop = iop->data1;
-	}
+  iop = rtems_libio_iop_free_head;
+  while ( iop != NULL ) {
+    ++free_count;
+    iop = iop->data1;
+  }
 
-	rtems_libio_unlock();
-	return (int)rtems_libio_number_iops - free_count;
+  rtems_libio_unlock();
+  return (int) rtems_libio_number_iops - free_count;
 }
 
-static void
-T_check_open_fds(void)
+static void T_check_open_fds( void )
 {
-	int open_fds;
-	int delta;
+  int open_fds;
+  int delta;
 
-	open_fds = T_count_open_fds();
-	delta = open_fds - T_open_fds;
+  open_fds = T_count_open_fds();
+  delta = open_fds - T_open_fds;
 
-	if (delta != 0) {
-		T_open_fds = open_fds;
-		T_check(&T_special, false, "file descriptor leak (%i)",
-		    delta);
-	}
+  if ( delta != 0 ) {
+    T_open_fds = open_fds;
+    T_check( &T_special, false, "file descriptor leak (%i)", delta );
+  }
 }
 
-void
-T_check_file_descriptors(T_event event, const char *name)
+void T_check_file_descriptors( T_event event, const char *name )
 {
-	(void)name;
+  (void) name;
 
-	switch (event) {
-	case T_EVENT_RUN_INITIALIZE_EARLY:
-		T_open_fds = T_count_open_fds();
-		break;
-	case T_EVENT_CASE_END:
-		T_check_open_fds();
-		break;
-	default:
-		break;
-	};
+  switch ( event ) {
+    case T_EVENT_RUN_INITIALIZE_EARLY:
+      T_open_fds = T_count_open_fds();
+      break;
+    case T_EVENT_CASE_END:
+      T_check_open_fds();
+      break;
+    default:
+      break;
+  };
 }

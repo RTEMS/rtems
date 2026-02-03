@@ -50,207 +50,209 @@
 #endif
 
 #ifdef __rtems__
-static T_time
-round_sbt(T_time time)
+static T_time round_sbt( T_time time )
 {
-	/*
+  /*
 	 * One 1ns consists of 4.30 fractions of 1/2**32.  Round up close to
 	 * the middle.  This turns the conversion mapping of struct timespec to
 	 * sbintime_t and back into the identity function.
 	 */
-	return time + 2;
+  return time + 2;
 }
 #endif
 
-const char *
-T_time_to_string_ns(T_time time, T_time_string string)
+const char *T_time_to_string_ns( T_time time, T_time_string string )
 {
-	uint32_t s;
-	uint32_t f;
+  uint32_t s;
+  uint32_t f;
 
 #ifdef __rtems__
-	time = round_sbt(time);
-	s = (uint32_t)(time >> 32);
-	f = (uint32_t)(((uint64_t)1000000000 * (uint32_t)time) >> 32);
+  time = round_sbt( time );
+  s = (uint32_t) ( time >> 32 );
+  f = (uint32_t) ( ( (uint64_t) 1000000000 * (uint32_t) time ) >> 32 );
 #else
-	s = (uint32_t)(time / 1000000000);
-	f = (uint32_t)(time % 1000000000);
+  s = (uint32_t) ( time / 1000000000 );
+  f = (uint32_t) ( time % 1000000000 );
 #endif
 
-	(void)T_snprintf(string, sizeof(T_time_string),
-	    "%" PRIu32 ".%09" PRIu32, s, f);
-	return string;
+  (void) T_snprintf(
+    string,
+    sizeof( T_time_string ),
+    "%" PRIu32 ".%09" PRIu32,
+    s,
+    f
+  );
+  return string;
 }
 
-const char *
-T_time_to_string_us(T_time time, T_time_string string)
+const char *T_time_to_string_us( T_time time, T_time_string string )
 {
-	uint32_t s;
-	uint32_t f;
+  uint32_t s;
+  uint32_t f;
 
 #ifdef __rtems__
-	time = round_sbt(time);
-	s = (uint32_t)(time >> 32);
-	f = (uint32_t)(((uint64_t)1000000 * (uint32_t)time) >> 32);
+  time = round_sbt( time );
+  s = (uint32_t) ( time >> 32 );
+  f = (uint32_t) ( ( (uint64_t) 1000000 * (uint32_t) time ) >> 32 );
 #else
-	time /= 1000;
-	s = (uint32_t)(time / 1000000);
-	f = (uint32_t)(time % 1000000);
+  time /= 1000;
+  s = (uint32_t) ( time / 1000000 );
+  f = (uint32_t) ( time % 1000000 );
 #endif
 
-	(void)T_snprintf(string, sizeof(T_time_string),
-	    "%" PRIu32 ".%06" PRIu32, s, f);
-	return string;
+  (void) T_snprintf(
+    string,
+    sizeof( T_time_string ),
+    "%" PRIu32 ".%06" PRIu32,
+    s,
+    f
+  );
+  return string;
 }
 
-const char *
-T_time_to_string_ms(T_time time, T_time_string string)
+const char *T_time_to_string_ms( T_time time, T_time_string string )
 {
-	uint32_t s;
-	uint32_t f;
+  uint32_t s;
+  uint32_t f;
 
 #ifdef __rtems__
-	time = round_sbt(time);
-	s = (uint32_t)(time >> 32);
-	f = (uint32_t)(((uint64_t)1000 * (uint32_t)time) >> 32);
+  time = round_sbt( time );
+  s = (uint32_t) ( time >> 32 );
+  f = (uint32_t) ( ( (uint64_t) 1000 * (uint32_t) time ) >> 32 );
 #else
-	time /= 1000000;
-	s = (uint32_t)(time / 1000);
-	f = (uint32_t)(time % 1000);
+  time /= 1000000;
+  s = (uint32_t) ( time / 1000 );
+  f = (uint32_t) ( time % 1000 );
 #endif
 
-	(void)T_snprintf(string, sizeof(T_time_string),
-	    "%" PRIu32 ".%03" PRIu32, s, f);
-	return string;
+  (void) T_snprintf(
+    string,
+    sizeof( T_time_string ),
+    "%" PRIu32 ".%03" PRIu32,
+    s,
+    f
+  );
+  return string;
 }
 
-const char *
-T_time_to_string_s(T_time time, T_time_string string)
+const char *T_time_to_string_s( T_time time, T_time_string string )
 {
-	uint32_t s;
+  uint32_t s;
 
 #ifdef __rtems__
-	time = round_sbt(time);
-	s = (uint32_t)(time >> 32);
+  time = round_sbt( time );
+  s = (uint32_t) ( time >> 32 );
 #else
-	s = (uint32_t)(time / 1000000000);
+  s = (uint32_t) ( time / 1000000000 );
 #endif
 
-	(void)T_snprintf(string, sizeof(T_time_string), "%" PRIu32, s);
-	return string;
+  (void) T_snprintf( string, sizeof( T_time_string ), "%" PRIu32, s );
+  return string;
 }
 
-const char *
-T_ticks_to_string_ns(T_ticks ticks, T_time_string string)
+const char *T_ticks_to_string_ns( T_ticks ticks, T_time_string string )
 {
-	return T_time_to_string_ns(T_ticks_to_time(ticks), string);
+  return T_time_to_string_ns( T_ticks_to_time( ticks ), string );
 }
 
-const char *
-T_ticks_to_string_us(T_ticks ticks, T_time_string string)
+const char *T_ticks_to_string_us( T_ticks ticks, T_time_string string )
 {
-	return T_time_to_string_us(T_ticks_to_time(ticks), string);
+  return T_time_to_string_us( T_ticks_to_time( ticks ), string );
 }
 
-const char *
-T_ticks_to_string_ms(T_ticks ticks, T_time_string string)
+const char *T_ticks_to_string_ms( T_ticks ticks, T_time_string string )
 {
-	return T_time_to_string_ms(T_ticks_to_time(ticks), string);
+  return T_time_to_string_ms( T_ticks_to_time( ticks ), string );
 }
 
-const char *
-T_ticks_to_string_s(T_ticks ticks, T_time_string string)
+const char *T_ticks_to_string_s( T_ticks ticks, T_time_string string )
 {
-	return T_time_to_string_s(T_ticks_to_time(ticks), string);
+  return T_time_to_string_s( T_ticks_to_time( ticks ), string );
 }
 
-uint64_t
-T_ticks_to_time(T_ticks ticks)
+uint64_t T_ticks_to_time( T_ticks ticks )
 {
 #ifdef __rtems__
-	return (uint64_t)rtems_counter_ticks_to_sbintime(ticks);
+  return (uint64_t) rtems_counter_ticks_to_sbintime( ticks );
 #else
-	return ticks;
+  return ticks;
 #endif
 }
 
-T_ticks
-T_time_to_ticks(T_time time)
+T_ticks T_time_to_ticks( T_time time )
 {
 #ifdef __rtems__
-	return rtems_counter_sbintime_to_ticks((sbintime_t)time);
+  return rtems_counter_sbintime_to_ticks( (sbintime_t) time );
 #else
-	return time;
+  return time;
 #endif
 }
 
-T_time
-T_seconds_and_nanoseconds_to_time(uint32_t s, uint32_t ns)
+T_time T_seconds_and_nanoseconds_to_time( uint32_t s, uint32_t ns )
 {
 #ifdef __rtems__
-	struct timespec ts;
+  struct timespec ts;
 
-	ts.tv_sec = s;
-	ts.tv_nsec = (long)ns;
-	return (T_time)tstosbt(ts);
+  ts.tv_sec = s;
+  ts.tv_nsec = (long) ns;
+  return (T_time) tstosbt( ts );
 #else
-	return (T_time)s * (T_time)1000000000 + (T_time)ns;
+  return (T_time) s * (T_time) 1000000000 + (T_time) ns;
 #endif
 }
 
-void
-T_time_to_seconds_and_nanoseconds(T_time time, uint32_t *s, uint32_t *ns)
+void T_time_to_seconds_and_nanoseconds(
+  T_time    time,
+  uint32_t *s,
+  uint32_t *ns
+)
 {
 #ifdef __rtems__
-	time = round_sbt(time);
-	*s = (uint32_t)(time >> 32);
-	*ns = (uint32_t)(((uint64_t)1000000000 * (uint32_t)time) >> 32);
+  time = round_sbt( time );
+  *s = (uint32_t) ( time >> 32 );
+  *ns = (uint32_t) ( ( (uint64_t) 1000000000 * (uint32_t) time ) >> 32 );
 #else
-	*s = (uint32_t)(time / 1000000000);
-	*ns = (uint32_t)(time % 1000000000);
+  *s = (uint32_t) ( time / 1000000000 );
+  *ns = (uint32_t) ( time % 1000000000 );
 #endif
 }
 
-T_time
-T_now_clock(void)
+T_time T_now_clock( void )
 {
 #ifndef __rtems__
-	struct timespec tp;
+  struct timespec tp;
 
-	(void)clock_gettime(CLOCK_MONOTONIC, &tp);
-	return (T_time)tp.tv_sec * (T_time)1000000000 + (T_time)tp.tv_nsec;
-#else /* __rtems__ */
-	return (T_time)_Timecounter_Sbinuptime();
+  (void) clock_gettime( CLOCK_MONOTONIC, &tp );
+  return (T_time) tp.tv_sec * (T_time) 1000000000 + (T_time) tp.tv_nsec;
+#else  /* __rtems__ */
+  return (T_time) _Timecounter_Sbinuptime();
 #endif /* __rtems__ */
 }
 
 #ifndef __rtems__
-T_ticks
-T_tick(void)
+T_ticks T_tick( void )
 {
-	return T_now();
+  return T_now();
 }
 #endif
 
 static atomic_uint T_dummy_time;
 
-T_time
-T_now_dummy(void)
+T_time T_now_dummy( void )
 {
-	return atomic_fetch_add_explicit(&T_dummy_time, 1,
-	    memory_order_relaxed);
+  return atomic_fetch_add_explicit( &T_dummy_time, 1, memory_order_relaxed );
 }
 
 #ifndef __rtems__
-T_time
-T_now_tick(void)
+T_time T_now_tick( void )
 {
-	return T_ticks_to_time(T_tick());
+  return T_ticks_to_time( T_tick() );
 }
 #else /* __rtems__ */
-#if defined(RTEMS_SMP)
-static rtems_interrupt_lock T_time_lock =
-  RTEMS_INTERRUPT_LOCK_INITIALIZER("Test Time Lock");
+#if defined( RTEMS_SMP )
+static rtems_interrupt_lock T_time_lock = RTEMS_INTERRUPT_LOCK_INITIALIZER(
+  "Test Time Lock"
+);
 #endif
 
 static T_ticks T_tick_last;
@@ -259,34 +261,33 @@ static T_time T_tick_time;
 
 static bool T_tick_initialized;
 
-T_time
-T_now_tick(void)
+T_time T_now_tick( void )
 {
-	rtems_interrupt_lock_context lock_context;
-	T_ticks ticks;
-	T_time now;
+  rtems_interrupt_lock_context lock_context;
+  T_ticks                      ticks;
+  T_time                       now;
 
-	ticks = T_tick();
+  ticks = T_tick();
 
-	rtems_interrupt_lock_acquire(&T_time_lock, &lock_context);
+  rtems_interrupt_lock_acquire( &T_time_lock, &lock_context );
 
-	if (T_tick_initialized) {
-		T_ticks last;
+  if ( T_tick_initialized ) {
+    T_ticks last;
 
-		last = T_tick_last;
-		T_tick_last = ticks;
+    last = T_tick_last;
+    T_tick_last = ticks;
 
-		now = T_tick_time;
-		now += T_ticks_to_time(ticks - last);
-		T_tick_time = now;
-	} else {
-		T_tick_initialized = true;
-		T_tick_last = ticks;
-		now = 0;
-	}
+    now = T_tick_time;
+    now += T_ticks_to_time( ticks - last );
+    T_tick_time = now;
+  } else {
+    T_tick_initialized = true;
+    T_tick_last = ticks;
+    now = 0;
+  }
 
-	rtems_interrupt_lock_release(&T_time_lock, &lock_context);
+  rtems_interrupt_lock_release( &T_time_lock, &lock_context );
 
-	return now;
+  return now;
 }
 #endif /* __rtems__ */

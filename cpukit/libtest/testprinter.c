@@ -41,23 +41,14 @@
 #include <rtems/test-printer.h>
 #include <rtems/bspIo.h>
 
-rtems_printer rtems_test_printer = {
-  .printer = rtems_printk_printer
-};
+rtems_printer rtems_test_printer = { .printer = rtems_printk_printer };
 
-int rtems_test_printf(
-  const char* format,
-  ...
-)
+int rtems_test_printf( const char *format, ... )
 {
   va_list ap;
-  int len;
-  va_start(ap, format);
-  len = rtems_vprintf(
-    &rtems_test_printer,
-    format,
-    ap
-  );
-  va_end(ap);
+  int     len;
+  va_start( ap, format );
+  len = rtems_vprintf( &rtems_test_printer, format, ap );
+  va_end( ap );
   return len;
 }

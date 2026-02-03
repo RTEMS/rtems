@@ -42,80 +42,77 @@
 
 #include <rtems.h>
 
-static uint_fast32_t
-T_estimate_busy_loop_maximum(void)
+static uint_fast32_t T_estimate_busy_loop_maximum( void )
 {
-	uint_fast32_t initial;
-	uint_fast32_t units;
+  uint_fast32_t initial;
+  uint_fast32_t units;
 
-	initial = rtems_clock_get_ticks_since_boot();
-	units = 0;
+  initial = rtems_clock_get_ticks_since_boot();
+  units = 0;
 
-	while (initial == rtems_clock_get_ticks_since_boot()) {
-		++units;
-	}
+  while ( initial == rtems_clock_get_ticks_since_boot() ) {
+    ++units;
+  }
 
-	return units;
+  return units;
 }
 
-static uint_fast32_t
-T_wait_for_tick_change(void)
+static uint_fast32_t T_wait_for_tick_change( void )
 {
-	uint_fast32_t initial;
-	uint_fast32_t now;
+  uint_fast32_t initial;
+  uint_fast32_t now;
 
-	initial = rtems_clock_get_ticks_since_boot();
+  initial = rtems_clock_get_ticks_since_boot();
 
-	do {
-		now = rtems_clock_get_ticks_since_boot();
-	} while (now == initial);
+  do {
+    now = rtems_clock_get_ticks_since_boot();
+  } while ( now == initial );
 
-	return now;
+  return now;
 }
 
-uint_fast32_t
-T_get_one_clock_tick_busy(void)
+uint_fast32_t T_get_one_clock_tick_busy( void )
 {
-	uint_fast32_t last;
-	uint_fast32_t now;
-	uint_fast32_t a;
-	uint_fast32_t b;
-	uint_fast32_t m;
+  uint_fast32_t last;
+  uint_fast32_t now;
+  uint_fast32_t a;
+  uint_fast32_t b;
+  uint_fast32_t m;
 
-	/* Choose a lower bound */
-	a = 1;
+  /* Choose a lower bound */
+  a = 1;
 
-	/* Estimate an upper bound */
+  /* Estimate an upper bound */
 
-	T_wait_for_tick_change();
-	b = 2 * T_estimate_busy_loop_maximum();
+  T_wait_for_tick_change();
+  b = 2 * T_estimate_busy_loop_maximum();
 
-	while (true) {
-		last = T_wait_for_tick_change();
-		T_busy(b);
-		now = rtems_clock_get_ticks_since_boot();
+  while ( true ) {
+    last = T_wait_for_tick_change();
+    T_busy( b );
+    now = rtems_clock_get_ticks_since_boot();
 
-		if (now != last) {
-			break;
-		}
+    if ( now != last ) {
+      break;
+    }
 
-		b *= 2;
-	}
+    b *= 2;
+  }
 
-	/* Find a good value */
-	do {
-		m = (a + b) / 2;
+  /* Find a good value */
+  do {
+    m = ( a + b ) / 2;
 
-		last = T_wait_for_tick_change();
-		T_busy(m);
-		now = rtems_clock_get_ticks_since_boot();
+    last = T_wait_for_tick_change();
+    T_busy( m );
+    now = rtems_clock_get_ticks_since_boot();
 
-		if (now != last) {
-			b = m;
-		} else {
-			a = m;
-		}
-	} while (b - a > 1);
+    if ( now != last ) {
+      b = m;
+    } else {
+      a = m;
+    }
+  } while ( b - a > 1 );
 
-	return m;
+  return m;
 }

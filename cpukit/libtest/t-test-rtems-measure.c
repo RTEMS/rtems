@@ -47,651 +47,664 @@
 #define WAKEUP_EVENT RTEMS_EVENT_0
 
 typedef struct {
-	struct T_measure_runtime_context *master;
-	rtems_id id;
-	volatile unsigned int *chunk;
+  struct T_measure_runtime_context *master;
+  rtems_id                          id;
+  volatile unsigned int            *chunk;
 } load_context;
 
 struct T_measure_runtime_context {
-	size_t sample_count;
-	T_ticks *samples;
-	size_t cache_line_size;
-	size_t chunk_size;
-	volatile unsigned int *chunk;
-	rtems_id runner;
-	uint32_t load_count;
-	load_context *load_contexts;
+  size_t                 sample_count;
+  T_ticks               *samples;
+  size_t                 cache_line_size;
+  size_t                 chunk_size;
+  volatile unsigned int *chunk;
+  rtems_id               runner;
+  uint32_t               load_count;
+  load_context          *load_contexts;
 #ifdef RTEMS_SMP
-	cpu_set_t cpus;
+  cpu_set_t cpus;
 #endif
 };
 
-static unsigned int
-dirty_data_cache(volatile unsigned int *chunk, size_t chunk_size,
-    size_t cache_line_size, unsigned int token)
+static unsigned int dirty_data_cache(
+  volatile unsigned int *chunk,
+  size_t                 chunk_size,
+  size_t                 cache_line_size,
+  unsigned int           token
+)
 {
-	size_t m;
-	size_t k;
-	size_t i;
+  size_t m;
+  size_t k;
+  size_t i;
 
-	m = chunk_size / sizeof(chunk[0]);
-	k = cache_line_size / sizeof(chunk[0]);
+  m = chunk_size / sizeof( chunk[ 0 ] );
+  k = cache_line_size / sizeof( chunk[ 0 ] );
 
-	for (i = 0; i < m; i += k) {
-		chunk[i] = i + token;
-	}
+  for ( i = 0; i < m; i += k ) {
+    chunk[ i ] = i + token;
+  }
 
-	return i + token;
+  return i + token;
 }
 
-static void
-wait_for_worker(void)
+static void wait_for_worker( void )
 {
-	rtems_event_set events;
-	rtems_status_code sc;
+  rtems_event_set   events;
+  rtems_status_code sc;
 
-	sc = rtems_event_receive(WAKEUP_EVENT, RTEMS_EVENT_ALL | RTEMS_WAIT,
-	    RTEMS_NO_TIMEOUT, &events);
-	_Assert(sc == RTEMS_SUCCESSFUL);
-	(void)sc;
+  sc = rtems_event_receive(
+    WAKEUP_EVENT,
+    RTEMS_EVENT_ALL | RTEMS_WAIT,
+    RTEMS_NO_TIMEOUT,
+    &events
+  );
+  _Assert( sc == RTEMS_SUCCESSFUL );
+  (void) sc;
 }
 
-static void
-wakeup_master(const T_measure_runtime_context *ctx)
+static void wakeup_master( const T_measure_runtime_context *ctx )
 {
-	rtems_status_code sc;
+  rtems_status_code sc;
 
-	sc = rtems_event_send(ctx->runner, WAKEUP_EVENT);
-	_Assert(sc == RTEMS_SUCCESSFUL);
-	(void)sc;
+  sc = rtems_event_send( ctx->runner, WAKEUP_EVENT );
+  _Assert( sc == RTEMS_SUCCESSFUL );
+  (void) sc;
 }
 
-static void
-suspend_worker(const load_context *lctx)
+static void suspend_worker( const load_context *lctx )
 {
-	rtems_status_code sc;
+  rtems_status_code sc;
 
-	sc = rtems_task_suspend(lctx->id);
-	_Assert(sc == RTEMS_SUCCESSFUL);
-	(void)sc;
+  sc = rtems_task_suspend( lctx->id );
+  _Assert( sc == RTEMS_SUCCESSFUL );
+  (void) sc;
 }
 
-static void
-restart_worker(const load_context *lctx)
+static void restart_worker( const load_context *lctx )
 {
-	rtems_status_code sc;
+  rtems_status_code sc;
 
-	sc = rtems_task_restart(lctx->id, (rtems_task_argument)lctx);
-	_Assert(sc == RTEMS_SUCCESSFUL);
-	(void)sc;
-	wait_for_worker();
+  sc = rtems_task_restart( lctx->id, (rtems_task_argument) lctx );
+  _Assert( sc == RTEMS_SUCCESSFUL );
+  (void) sc;
+  wait_for_worker();
 }
 
-static void
-load_worker(rtems_task_argument arg)
+static void load_worker( rtems_task_argument arg )
 {
-	const load_context *lctx;
-	T_measure_runtime_context *ctx;
-	unsigned int token;
-	volatile unsigned int *chunk;
-	size_t chunk_size;
-	size_t cache_line_size;
+  const load_context        *lctx;
+  T_measure_runtime_context *ctx;
+  unsigned int               token;
+  volatile unsigned int     *chunk;
+  size_t                     chunk_size;
+  size_t                     cache_line_size;
 
-	lctx = (const load_context *)arg;
-	ctx = lctx->master;
-	chunk = lctx->chunk;
-	chunk_size = ctx->chunk_size;
-	cache_line_size = ctx->cache_line_size;
-	token = (unsigned int)rtems_scheduler_get_processor();
+  lctx = (const load_context *) arg;
+  ctx = lctx->master;
+  chunk = lctx->chunk;
+  chunk_size = ctx->chunk_size;
+  cache_line_size = ctx->cache_line_size;
+  token = (unsigned int) rtems_scheduler_get_processor();
 
-	token = dirty_data_cache(chunk, chunk_size, cache_line_size, token);
-	wakeup_master(ctx);
+  token = dirty_data_cache( chunk, chunk_size, cache_line_size, token );
+  wakeup_master( ctx );
 
-	while (true) {
-		token = dirty_data_cache(chunk, chunk_size, cache_line_size,
-		    token);
-	}
+  while ( true ) {
+    token = dirty_data_cache( chunk, chunk_size, cache_line_size, token );
+  }
 }
 
-static void
-destroy(void *ptr)
+static void destroy( void *ptr )
 {
-	const T_measure_runtime_context *ctx;
-	uint32_t load;
-	rtems_status_code sc;
+  const T_measure_runtime_context *ctx;
+  uint32_t                         load;
+  rtems_status_code                sc;
 
-	ctx = ptr;
+  ctx = ptr;
 
-	for (load = 0; load < ctx->load_count; ++load) {
-		const load_context *lctx;
+  for ( load = 0; load < ctx->load_count; ++load ) {
+    const load_context *lctx;
 
-		lctx = &ctx->load_contexts[load];
+    lctx = &ctx->load_contexts[ load ];
 
-		if (lctx->id != 0) {
-			sc = rtems_task_delete(lctx->id);
-			_Assert(sc == RTEMS_SUCCESSFUL);
-			(void)sc;
-		}
-	}
+    if ( lctx->id != 0 ) {
+      sc = rtems_task_delete( lctx->id );
+      _Assert( sc == RTEMS_SUCCESSFUL );
+      (void) sc;
+    }
+  }
 
 #ifdef RTEMS_SMP
-	sc = rtems_task_set_affinity(RTEMS_SELF, sizeof(ctx->cpus),
-	    &ctx->cpus);
-	_Assert(sc == RTEMS_SUCCESSFUL);
-	(void)sc;
+  sc = rtems_task_set_affinity( RTEMS_SELF, sizeof( ctx->cpus ), &ctx->cpus );
+  _Assert( sc == RTEMS_SUCCESSFUL );
+  (void) sc;
 #endif
 }
 
-static void *
-add_offset(const volatile void *p, uintptr_t o)
+static void *add_offset( const volatile void *p, uintptr_t o )
 {
-	return (void *)((uintptr_t)p + o);
+  return (void *) ( (uintptr_t) p + o );
 }
 
-static void *
-align_up(const volatile void *p, uintptr_t a)
+static void *align_up( const volatile void *p, uintptr_t a )
 {
-	return (void *)RTEMS_ALIGN_UP((uintptr_t)p, a);
+  return (void *) RTEMS_ALIGN_UP( (uintptr_t) p, a );
 }
 
-T_measure_runtime_context *
-T_measure_runtime_create(const T_measure_runtime_config *config)
+T_measure_runtime_context *T_measure_runtime_create(
+  const T_measure_runtime_config *config
+)
 {
-	T_measure_runtime_context *ctx;
-	size_t sample_size;
-	size_t cache_line_size;
-	size_t chunk_size;
-	size_t load_size;
-	uint32_t load_count;
-	uint32_t i;
-	rtems_status_code sc;
+  T_measure_runtime_context *ctx;
+  size_t                     sample_size;
+  size_t                     cache_line_size;
+  size_t                     chunk_size;
+  size_t                     load_size;
+  uint32_t                   load_count;
+  uint32_t                   i;
+  rtems_status_code          sc;
 #ifdef RTEMS_SMP
-	cpu_set_t cpu;
+  cpu_set_t cpu;
 #endif
 
-	sample_size = config->sample_count * sizeof(ctx->samples[0]);
+  sample_size = config->sample_count * sizeof( ctx->samples[ 0 ] );
 
-	cache_line_size = rtems_cache_get_data_line_size();
+  cache_line_size = rtems_cache_get_data_line_size();
 
-	if (cache_line_size == 0) {
-		cache_line_size = 8;
-	}
+  if ( cache_line_size == 0 ) {
+    cache_line_size = 8;
+  }
 
-	chunk_size = rtems_cache_get_data_cache_size(0);
+  chunk_size = rtems_cache_get_data_cache_size( 0 );
 
-	if (chunk_size == 0) {
-		chunk_size = cache_line_size;
-	}
+  if ( chunk_size == 0 ) {
+    chunk_size = cache_line_size;
+  }
 
-	chunk_size *= 2;
+  chunk_size *= 2;
 
-	load_count = rtems_scheduler_get_processor_maximum();
-	load_size = load_count * sizeof(ctx->load_contexts[0]);
+  load_count = rtems_scheduler_get_processor_maximum();
+  load_size = load_count * sizeof( ctx->load_contexts[ 0 ] );
 
-	ctx = T_zalloc(sizeof(*ctx) + sample_size + load_size + chunk_size +
-	    2 * cache_line_size, destroy);
+  ctx = T_zalloc(
+    sizeof( *ctx ) + sample_size + load_size + chunk_size +
+      2 * cache_line_size,
+    destroy
+  );
 
-	if (ctx == NULL) {
-		return NULL;
-	}
-
-#ifdef RTEMS_SMP
-	sc = rtems_task_get_affinity(RTEMS_SELF, sizeof(ctx->cpus),
-	    &ctx->cpus);
-	_Assert(sc == RTEMS_SUCCESSFUL);
-	(void)sc;
-	CPU_ZERO(&cpu);
-	CPU_SET(0, &cpu);
-	sc = rtems_task_set_affinity(RTEMS_SELF, sizeof(cpu), &cpu);
-	_Assert(sc == RTEMS_SUCCESSFUL || sc == RTEMS_INVALID_NUMBER);
-	(void)sc;
-#endif
-
-	ctx->sample_count = config->sample_count;
-	ctx->samples = add_offset(ctx, sizeof(*ctx));
-	ctx->samples = align_up(ctx->samples, cache_line_size);
-	ctx->cache_line_size = cache_line_size;
-	ctx->chunk_size = chunk_size;
-	ctx->chunk = add_offset(ctx->samples, sample_size);
-	ctx->chunk = align_up(ctx->chunk, cache_line_size);
-	ctx->runner = rtems_task_self();
-	ctx->load_count = load_count;
-	ctx->load_contexts = add_offset(ctx->chunk, chunk_size);
-
-	for (i = 0; i < load_count; ++i) {
-		rtems_id id;
-		load_context *lctx;
-		rtems_task_priority max_prio;
-		rtems_id scheduler;
-
-		sc = rtems_scheduler_ident_by_processor(i, &scheduler);
-		if (sc != RTEMS_SUCCESSFUL) {
-			continue;
-		}
-
-		sc = rtems_task_create(rtems_build_name('L', 'O', 'A', 'D'),
-		    1, RTEMS_MINIMUM_STACK_SIZE, RTEMS_DEFAULT_MODES,
-		    RTEMS_DEFAULT_ATTRIBUTES, &id);
-		if (sc != RTEMS_SUCCESSFUL) {
-			return NULL;
-		}
-
-		lctx = &ctx->load_contexts[i];
-		lctx->master = ctx;
-		lctx->id = id;
-
-		lctx->chunk = T_malloc(chunk_size);
-		if (lctx->chunk == NULL) {
-			lctx->chunk = ctx->chunk;
-		}
-
-		sc = rtems_scheduler_get_maximum_priority(scheduler, &max_prio);
-		_Assert(sc == RTEMS_SUCCESSFUL);
-		(void)sc;
-		sc = rtems_task_set_scheduler(id, scheduler, max_prio - 1);
-		_Assert(sc == RTEMS_SUCCESSFUL);
-		(void)sc;
+  if ( ctx == NULL ) {
+    return NULL;
+  }
 
 #ifdef RTEMS_SMP
-		CPU_ZERO(&cpu);
-		CPU_SET((int)i, &cpu);
-		sc = rtems_task_set_affinity(id, sizeof(cpu), &cpu);
-		_Assert(sc == RTEMS_SUCCESSFUL || sc == RTEMS_INVALID_NUMBER);
-		(void)sc;
+  sc = rtems_task_get_affinity( RTEMS_SELF, sizeof( ctx->cpus ), &ctx->cpus );
+  _Assert( sc == RTEMS_SUCCESSFUL );
+  (void) sc;
+  CPU_ZERO( &cpu );
+  CPU_SET( 0, &cpu );
+  sc = rtems_task_set_affinity( RTEMS_SELF, sizeof( cpu ), &cpu );
+  _Assert( sc == RTEMS_SUCCESSFUL || sc == RTEMS_INVALID_NUMBER );
+  (void) sc;
 #endif
 
-		sc = rtems_task_start(id, load_worker,
-		    (rtems_task_argument)lctx);
-		_Assert(sc == RTEMS_SUCCESSFUL);
-		(void)sc;
+  ctx->sample_count = config->sample_count;
+  ctx->samples = add_offset( ctx, sizeof( *ctx ) );
+  ctx->samples = align_up( ctx->samples, cache_line_size );
+  ctx->cache_line_size = cache_line_size;
+  ctx->chunk_size = chunk_size;
+  ctx->chunk = add_offset( ctx->samples, sample_size );
+  ctx->chunk = align_up( ctx->chunk, cache_line_size );
+  ctx->runner = rtems_task_self();
+  ctx->load_count = load_count;
+  ctx->load_contexts = add_offset( ctx->chunk, chunk_size );
 
-		wait_for_worker();
-		suspend_worker(lctx);
-	}
+  for ( i = 0; i < load_count; ++i ) {
+    rtems_id            id;
+    load_context       *lctx;
+    rtems_task_priority max_prio;
+    rtems_id            scheduler;
 
-	return ctx;
+    sc = rtems_scheduler_ident_by_processor( i, &scheduler );
+    if ( sc != RTEMS_SUCCESSFUL ) {
+      continue;
+    }
+
+    sc = rtems_task_create(
+      rtems_build_name( 'L', 'O', 'A', 'D' ),
+      1,
+      RTEMS_MINIMUM_STACK_SIZE,
+      RTEMS_DEFAULT_MODES,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      &id
+    );
+    if ( sc != RTEMS_SUCCESSFUL ) {
+      return NULL;
+    }
+
+    lctx = &ctx->load_contexts[ i ];
+    lctx->master = ctx;
+    lctx->id = id;
+
+    lctx->chunk = T_malloc( chunk_size );
+    if ( lctx->chunk == NULL ) {
+      lctx->chunk = ctx->chunk;
+    }
+
+    sc = rtems_scheduler_get_maximum_priority( scheduler, &max_prio );
+    _Assert( sc == RTEMS_SUCCESSFUL );
+    (void) sc;
+    sc = rtems_task_set_scheduler( id, scheduler, max_prio - 1 );
+    _Assert( sc == RTEMS_SUCCESSFUL );
+    (void) sc;
+
+#ifdef RTEMS_SMP
+    CPU_ZERO( &cpu );
+    CPU_SET( (int) i, &cpu );
+    sc = rtems_task_set_affinity( id, sizeof( cpu ), &cpu );
+    _Assert( sc == RTEMS_SUCCESSFUL || sc == RTEMS_INVALID_NUMBER );
+    (void) sc;
+#endif
+
+    sc = rtems_task_start( id, load_worker, (rtems_task_argument) lctx );
+    _Assert( sc == RTEMS_SUCCESSFUL );
+    (void) sc;
+
+    wait_for_worker();
+    suspend_worker( lctx );
+  }
+
+  return ctx;
 }
 
-static int
-cmp(const void *ap, const void *bp)
+static int cmp( const void *ap, const void *bp )
 {
-	T_ticks a;
-	T_ticks b;
+  T_ticks a;
+  T_ticks b;
 
-	a = *(const T_ticks *)ap;
-	b = *(const T_ticks *)bp;
+  a = *(const T_ticks *) ap;
+  b = *(const T_ticks *) bp;
 
-	if (a < b) {
-		return -1;
-	} else if (a > b) {
-		return 1;
-	} else {
-		return 0;
-	}
+  if ( a < b ) {
+    return -1;
+  } else if ( a > b ) {
+    return 1;
+  } else {
+    return 0;
+  }
 }
 
-static void
-measure_variant_begin(const char *name, const char *variant)
+static void measure_variant_begin( const char *name, const char *variant )
 {
-	T_printf("M:B:%s\n", name);
-	T_printf("M:V:%s\n", variant);
+  T_printf( "M:B:%s\n", name );
+  T_printf( "M:V:%s\n", variant );
 }
 
-static T_time
-accumulate(const T_ticks *samples, size_t sample_count)
+static T_time accumulate( const T_ticks *samples, size_t sample_count )
 {
-	T_time a;
-	size_t i;
+  T_time a;
+  size_t i;
 
-	a = 0;
+  a = 0;
 
-	for (i = 0; i < sample_count; ++i) {
-		a += T_ticks_to_time(samples[i]);
-	}
+  for ( i = 0; i < sample_count; ++i ) {
+    a += T_ticks_to_time( samples[ i ] );
+  }
 
-	return a;
+  return a;
 }
 
-static T_ticks
-median_absolute_deviation(T_ticks *samples, size_t sample_count)
+static T_ticks median_absolute_deviation(
+  T_ticks *samples,
+  size_t   sample_count
+)
 {
-	T_ticks median;
-	size_t i;
+  T_ticks median;
+  size_t  i;
 
-	median = samples[sample_count / 2];
+  median = samples[ sample_count / 2 ];
 
-	for (i = 0; i < sample_count / 2; ++i) {
-		samples[i] = median - samples[i];
-	}
+  for ( i = 0; i < sample_count / 2; ++i ) {
+    samples[ i ] = median - samples[ i ];
+  }
 
-	for (; i < sample_count; ++i) {
-		samples[i] = samples[i] - median;
-	}
+  for ( ; i < sample_count; ++i ) {
+    samples[ i ] = samples[ i ] - median;
+  }
 
-	qsort(samples, sample_count, sizeof(samples[0]), cmp);
-	return samples[sample_count / 2];
+  qsort( samples, sample_count, sizeof( samples[ 0 ] ), cmp );
+  return samples[ sample_count / 2 ];
 }
 
-static void
-report_sorted_samples(const T_measure_runtime_context *ctx)
+static void report_sorted_samples( const T_measure_runtime_context *ctx )
 {
-	size_t sample_count;
-	const T_ticks *samples;
-	T_time_string ts;
-	T_ticks last;
-	T_ticks v;
-	size_t count;
-	size_t i;
+  size_t         sample_count;
+  const T_ticks *samples;
+  T_time_string  ts;
+  T_ticks        last;
+  T_ticks        v;
+  size_t         count;
+  size_t         i;
 
-	sample_count = ctx->sample_count;
-	samples = ctx->samples;
-	last = samples[0];
-	v = samples[0];
-	count = 1;
+  sample_count = ctx->sample_count;
+  samples = ctx->samples;
+  last = samples[ 0 ];
+  v = samples[ 0 ];
+  count = 1;
 
-	for (i = 1; i < sample_count; ++i) {
-		v = samples[i];
+  for ( i = 1; i < sample_count; ++i ) {
+    v = samples[ i ];
 
-		if (v != last) {
-			uint32_t sa;
-			uint32_t sb;
-			uint32_t nsa;
-			uint32_t nsb;
-			T_time t;
+    if ( v != last ) {
+      uint32_t sa;
+      uint32_t sb;
+      uint32_t nsa;
+      uint32_t nsb;
+      T_time   t;
 
-			t = T_ticks_to_time(last);
-			T_time_to_seconds_and_nanoseconds(t, &sa, &nsa);
-			T_time_to_seconds_and_nanoseconds(T_ticks_to_time(v),
-			    &sb, &nsb);
+      t = T_ticks_to_time( last );
+      T_time_to_seconds_and_nanoseconds( t, &sa, &nsa );
+      T_time_to_seconds_and_nanoseconds( T_ticks_to_time( v ), &sb, &nsb );
 
-			if (sa != sb || nsa != nsb) {
-				T_printf("M:S:%zu:%s\n", count,
-				    T_time_to_string_ns(t, ts));
-				count = 1;
-			} else {
-				++count;
-			}
+      if ( sa != sb || nsa != nsb ) {
+        T_printf( "M:S:%zu:%s\n", count, T_time_to_string_ns( t, ts ) );
+        count = 1;
+      } else {
+        ++count;
+      }
 
-			last = v;
-		} else {
-			++count;
-		}
-	}
+      last = v;
+    } else {
+      ++count;
+    }
+  }
 
-	if (count > 0) {
-		T_printf("M:S:%zu:%s\n", count,
-		    T_ticks_to_string_ns(v, ts));
-	}
+  if ( count > 0 ) {
+    T_printf( "M:S:%zu:%s\n", count, T_ticks_to_string_ns( v, ts ) );
+  }
 }
 
-static void
-measure_variant_end(const T_measure_runtime_context *ctx,
-    const T_measure_runtime_request *req, T_time begin)
+static void measure_variant_end(
+  const T_measure_runtime_context *ctx,
+  const T_measure_runtime_request *req,
+  T_time                           begin
+)
 {
-	size_t sample_count;
-	T_ticks *samples;
-	T_time_string ts;
-	T_time d;
-	T_ticks v;
-	T_time a;
+  size_t        sample_count;
+  T_ticks      *samples;
+  T_time_string ts;
+  T_time        d;
+  T_ticks       v;
+  T_time        a;
 
-	sample_count = ctx->sample_count;
-	samples = ctx->samples;
-	d = T_now() - begin;
-	a = accumulate(samples, sample_count);
-	qsort(samples, sample_count, sizeof(samples[0]), cmp);
-	T_printf("M:N:%zu\n", sample_count);
+  sample_count = ctx->sample_count;
+  samples = ctx->samples;
+  d = T_now() - begin;
+  a = accumulate( samples, sample_count );
+  qsort( samples, sample_count, sizeof( samples[ 0 ] ), cmp );
+  T_printf( "M:N:%zu\n", sample_count );
 
-	if ((req->flags & T_MEASURE_RUNTIME_REPORT_SAMPLES) != 0) {
-		report_sorted_samples(ctx);
-	}
+  if ( ( req->flags & T_MEASURE_RUNTIME_REPORT_SAMPLES ) != 0 ) {
+    report_sorted_samples( ctx );
+  }
 
-	v = samples[0];
-	T_printf("M:MI:%s\n", T_ticks_to_string_ns(v, ts));
-	v = samples[(1 * sample_count) / 100];
-	T_printf("M:P1:%s\n", T_ticks_to_string_ns(v, ts));
-	v = samples[(1 * sample_count) / 4];
-	T_printf("M:Q1:%s\n", T_ticks_to_string_ns(v, ts));
-	v = samples[sample_count / 2];
-	T_printf("M:Q2:%s\n", T_ticks_to_string_ns(v, ts));
-	v = samples[(3 * sample_count) / 4];
-	T_printf("M:Q3:%s\n", T_ticks_to_string_ns(v, ts));
-	v = samples[(99 * sample_count) / 100];
-	T_printf("M:P99:%s\n", T_ticks_to_string_ns(v, ts));
-	v = samples[sample_count - 1];
-	T_printf("M:MX:%s\n", T_ticks_to_string_ns(v, ts));
-	v = median_absolute_deviation(samples, sample_count);
-	T_printf("M:MAD:%s\n", T_ticks_to_string_ns(v, ts));
-	T_printf("M:D:%s\n", T_time_to_string_ns(a, ts));
-	T_printf("M:E:%s:D:%s\n", req->name, T_time_to_string_ns(d, ts));
+  v = samples[ 0 ];
+  T_printf( "M:MI:%s\n", T_ticks_to_string_ns( v, ts ) );
+  v = samples[ ( 1 * sample_count ) / 100 ];
+  T_printf( "M:P1:%s\n", T_ticks_to_string_ns( v, ts ) );
+  v = samples[ ( 1 * sample_count ) / 4 ];
+  T_printf( "M:Q1:%s\n", T_ticks_to_string_ns( v, ts ) );
+  v = samples[ sample_count / 2 ];
+  T_printf( "M:Q2:%s\n", T_ticks_to_string_ns( v, ts ) );
+  v = samples[ ( 3 * sample_count ) / 4 ];
+  T_printf( "M:Q3:%s\n", T_ticks_to_string_ns( v, ts ) );
+  v = samples[ ( 99 * sample_count ) / 100 ];
+  T_printf( "M:P99:%s\n", T_ticks_to_string_ns( v, ts ) );
+  v = samples[ sample_count - 1 ];
+  T_printf( "M:MX:%s\n", T_ticks_to_string_ns( v, ts ) );
+  v = median_absolute_deviation( samples, sample_count );
+  T_printf( "M:MAD:%s\n", T_ticks_to_string_ns( v, ts ) );
+  T_printf( "M:D:%s\n", T_time_to_string_ns( a, ts ) );
+  T_printf( "M:E:%s:D:%s\n", req->name, T_time_to_string_ns( d, ts ) );
 }
 
-static void
-fill_data_cache(volatile unsigned int *chunk, size_t chunk_size,
-    size_t cache_line_size)
+static void fill_data_cache(
+  volatile unsigned int *chunk,
+  size_t                 chunk_size,
+  size_t                 cache_line_size
+)
 {
-	size_t m;
-	size_t k;
-	size_t i;
+  size_t m;
+  size_t k;
+  size_t i;
 
-	m = chunk_size / sizeof(chunk[0]);
-	k = cache_line_size / sizeof(chunk[0]);
+  m = chunk_size / sizeof( chunk[ 0 ] );
+  k = cache_line_size / sizeof( chunk[ 0 ] );
 
-	for (i = 0; i < m; i += k) {
-		chunk[i];
-	}
+  for ( i = 0; i < m; i += k ) {
+    chunk[ i ];
+  }
 }
 
-static void
-dirty_call(void (*body)(void *), void *arg)
+static void dirty_call( void ( *body )( void * ), void *arg )
 {
-	void *space;
+  void *space;
 
-	/* Ensure that we use an untouched stack area */
-	space = alloca(1024);
-	RTEMS_OBFUSCATE_VARIABLE(space);
+  /* Ensure that we use an untouched stack area */
+  space = alloca( 1024 );
+  RTEMS_OBFUSCATE_VARIABLE( space );
 
-	(*body)(arg);
+  ( *body )( arg );
 }
 
-static void
-setup(const T_measure_runtime_request *req, void *arg)
+static void setup( const T_measure_runtime_request *req, void *arg )
 {
-	if (req->setup != NULL) {
-		(*req->setup)(arg);
-	}
+  if ( req->setup != NULL ) {
+    ( *req->setup )( arg );
+  }
 }
 
-static bool
-teardown(const T_measure_runtime_request *req, void *arg, T_ticks *delta,
-    uint32_t tic, uint32_t toc, unsigned int retry,
-    unsigned int maximum_retries)
+static bool teardown(
+  const T_measure_runtime_request *req,
+  void                            *arg,
+  T_ticks                         *delta,
+  uint32_t                         tic,
+  uint32_t                         toc,
+  unsigned int                     retry,
+  unsigned int                     maximum_retries
+)
 {
-	if (req->teardown == NULL) {
-		return tic == toc || retry >= maximum_retries;
-	}
+  if ( req->teardown == NULL ) {
+    return tic == toc || retry >= maximum_retries;
+  }
 
-	return (*req->teardown)(arg, delta, tic, toc, retry);
+  return ( *req->teardown )( arg, delta, tic, toc, retry );
 }
 
-static unsigned int
-get_maximum_retries(const T_measure_runtime_request *req)
+static unsigned int get_maximum_retries( const T_measure_runtime_request *req )
 {
-	return (req->flags & T_MEASURE_RUNTIME_ALLOW_CLOCK_ISR) != 0 ? 1 : 0;
+  return ( req->flags & T_MEASURE_RUNTIME_ALLOW_CLOCK_ISR ) != 0 ? 1 : 0;
 }
 
-static void
-measure_full_cache(T_measure_runtime_context *ctx,
-    const T_measure_runtime_request *req)
+static void measure_full_cache(
+  T_measure_runtime_context       *ctx,
+  const T_measure_runtime_request *req
+)
 {
-	size_t sample_count;
-	T_ticks *samples;
-	void (*body)(void *);
-	void *arg;
-	size_t i;
-	T_time begin;
+  size_t   sample_count;
+  T_ticks *samples;
+  void ( *body )( void * );
+  void  *arg;
+  size_t i;
+  T_time begin;
 
-	measure_variant_begin(req->name, "FullCache");
-	begin = T_now();
-	sample_count = ctx->sample_count;
-	samples = ctx->samples;
-	body = req->body;
-	arg = req->arg;
+  measure_variant_begin( req->name, "FullCache" );
+  begin = T_now();
+  sample_count = ctx->sample_count;
+  samples = ctx->samples;
+  body = req->body;
+  arg = req->arg;
 
-	for (i = 0; i < sample_count; ++i) {
-		unsigned int maximum_retries;
-		unsigned int retry;
+  for ( i = 0; i < sample_count; ++i ) {
+    unsigned int maximum_retries;
+    unsigned int retry;
 
-		maximum_retries = get_maximum_retries(req);
-		retry = 0;
+    maximum_retries = get_maximum_retries( req );
+    retry = 0;
 
-		while (true) {
-			rtems_interval tic;
-			rtems_interval toc;
-			T_ticks t0;
-			T_ticks t1;
+    while ( true ) {
+      rtems_interval tic;
+      rtems_interval toc;
+      T_ticks        t0;
+      T_ticks        t1;
 
-			setup(req, arg);
-			fill_data_cache(ctx->chunk, ctx->chunk_size,
-			    ctx->cache_line_size);
+      setup( req, arg );
+      fill_data_cache( ctx->chunk, ctx->chunk_size, ctx->cache_line_size );
 
-			tic = rtems_clock_get_ticks_since_boot();
-			t0 = T_tick();
-			(*body)(arg);
-			t1 = T_tick();
-			toc = rtems_clock_get_ticks_since_boot();
-			samples[i] = t1 - t0;
+      tic = rtems_clock_get_ticks_since_boot();
+      t0 = T_tick();
+      ( *body )( arg );
+      t1 = T_tick();
+      toc = rtems_clock_get_ticks_since_boot();
+      samples[ i ] = t1 - t0;
 
-			if (teardown(req, arg, &samples[i], tic, toc, retry,
-			    maximum_retries)) {
-				break;
-			}
+      if (
+        teardown( req, arg, &samples[ i ], tic, toc, retry, maximum_retries )
+      ) {
+        break;
+      }
 
-			++retry;
-		}
-	}
+      ++retry;
+    }
+  }
 
-	measure_variant_end(ctx, req, begin);
+  measure_variant_end( ctx, req, begin );
 }
 
-static void
-measure_hot_cache(T_measure_runtime_context *ctx,
-    const T_measure_runtime_request *req)
+static void measure_hot_cache(
+  T_measure_runtime_context       *ctx,
+  const T_measure_runtime_request *req
+)
 {
-	size_t sample_count;
-	T_ticks *samples;
-	void (*body)(void *);
-	void *arg;
-	size_t i;
-	T_time begin;
+  size_t   sample_count;
+  T_ticks *samples;
+  void ( *body )( void * );
+  void  *arg;
+  size_t i;
+  T_time begin;
 
-	measure_variant_begin(req->name, "HotCache");
-	begin = T_now();
-	sample_count = ctx->sample_count;
-	samples = ctx->samples;
-	body = req->body;
-	arg = req->arg;
+  measure_variant_begin( req->name, "HotCache" );
+  begin = T_now();
+  sample_count = ctx->sample_count;
+  samples = ctx->samples;
+  body = req->body;
+  arg = req->arg;
 
-	for (i = 0; i < sample_count; ++i) {
-		unsigned int maximum_retries;
-		unsigned int retry;
+  for ( i = 0; i < sample_count; ++i ) {
+    unsigned int maximum_retries;
+    unsigned int retry;
 
-		maximum_retries = get_maximum_retries(req);
-		retry = 0;
+    maximum_retries = get_maximum_retries( req );
+    retry = 0;
 
-		while (true) {
-			rtems_interval tic;
-			rtems_interval toc;
-			T_ticks t0;
-			T_ticks t1;
+    while ( true ) {
+      rtems_interval tic;
+      rtems_interval toc;
+      T_ticks        t0;
+      T_ticks        t1;
 
-			setup(req, arg);
+      setup( req, arg );
 
-			tic = rtems_clock_get_ticks_since_boot();
-			t0 = T_tick();
-			(*body)(arg);
-			t1 = T_tick();
-			toc = rtems_clock_get_ticks_since_boot();
-			samples[i] = t1 - t0;
+      tic = rtems_clock_get_ticks_since_boot();
+      t0 = T_tick();
+      ( *body )( arg );
+      t1 = T_tick();
+      toc = rtems_clock_get_ticks_since_boot();
+      samples[ i ] = t1 - t0;
 
-			(void)teardown(req, arg, &samples[i], tic, toc, retry,
-			    0);
-			setup(req, arg);
+      (void) teardown( req, arg, &samples[ i ], tic, toc, retry, 0 );
+      setup( req, arg );
 
-			tic = rtems_clock_get_ticks_since_boot();
-			t0 = T_tick();
-			(*body)(arg);
-			t1 = T_tick();
-			toc = rtems_clock_get_ticks_since_boot();
-			samples[i] = t1 - t0;
+      tic = rtems_clock_get_ticks_since_boot();
+      t0 = T_tick();
+      ( *body )( arg );
+      t1 = T_tick();
+      toc = rtems_clock_get_ticks_since_boot();
+      samples[ i ] = t1 - t0;
 
-			if (teardown(req, arg, &samples[i], tic, toc, retry,
-			    maximum_retries)) {
-				break;
-			}
+      if (
+        teardown( req, arg, &samples[ i ], tic, toc, retry, maximum_retries )
+      ) {
+        break;
+      }
 
-			++retry;
-		}
-	}
+      ++retry;
+    }
+  }
 
-	measure_variant_end(ctx, req, begin);
+  measure_variant_end( ctx, req, begin );
 }
 
-static void
-measure_dirty_cache(T_measure_runtime_context *ctx,
-    const T_measure_runtime_request *req)
+static void measure_dirty_cache(
+  T_measure_runtime_context       *ctx,
+  const T_measure_runtime_request *req
+)
 {
-	size_t sample_count;
-	T_ticks *samples;
-	void (*body)(void *);
-	void *arg;
-	size_t i;
-	T_time begin;
-	size_t token;
+  size_t   sample_count;
+  T_ticks *samples;
+  void ( *body )( void * );
+  void  *arg;
+  size_t i;
+  T_time begin;
+  size_t token;
 
-	measure_variant_begin(req->name, "DirtyCache");
-	begin = T_now();
-	sample_count = ctx->sample_count;
-	samples = ctx->samples;
-	body = req->body;
-	arg = req->arg;
-	token = 0;
+  measure_variant_begin( req->name, "DirtyCache" );
+  begin = T_now();
+  sample_count = ctx->sample_count;
+  samples = ctx->samples;
+  body = req->body;
+  arg = req->arg;
+  token = 0;
 
-	for (i = 0; i < sample_count; ++i) {
-		unsigned int maximum_retries;
-		unsigned int retry;
+  for ( i = 0; i < sample_count; ++i ) {
+    unsigned int maximum_retries;
+    unsigned int retry;
 
-		maximum_retries = get_maximum_retries(req);
-		retry = 0;
+    maximum_retries = get_maximum_retries( req );
+    retry = 0;
 
-		while (true) {
-			rtems_interval tic;
-			rtems_interval toc;
-			T_ticks t0;
-			T_ticks t1;
+    while ( true ) {
+      rtems_interval tic;
+      rtems_interval toc;
+      T_ticks        t0;
+      T_ticks        t1;
 
-			setup(req, arg);
-			token = dirty_data_cache(ctx->chunk, ctx->chunk_size,
-			    ctx->cache_line_size, token);
-			rtems_cache_invalidate_entire_instruction();
+      setup( req, arg );
+      token = dirty_data_cache(
+        ctx->chunk,
+        ctx->chunk_size,
+        ctx->cache_line_size,
+        token
+      );
+      rtems_cache_invalidate_entire_instruction();
 
-			tic = rtems_clock_get_ticks_since_boot();
-			t0 = T_tick();
-			dirty_call(body, arg);
-			t1 = T_tick();
-			toc = rtems_clock_get_ticks_since_boot();
-			samples[i] = t1 - t0;
+      tic = rtems_clock_get_ticks_since_boot();
+      t0 = T_tick();
+      dirty_call( body, arg );
+      t1 = T_tick();
+      toc = rtems_clock_get_ticks_since_boot();
+      samples[ i ] = t1 - t0;
 
-			if (teardown(req, arg, &samples[i], tic, toc, retry,
-			    maximum_retries)) {
-				break;
-			}
+      if (
+        teardown( req, arg, &samples[ i ], tic, toc, retry, maximum_retries )
+      ) {
+        break;
+      }
 
-			++retry;
-		}
-	}
+      ++retry;
+    }
+  }
 
-	measure_variant_end(ctx, req, begin);
+  measure_variant_end( ctx, req, begin );
 }
 
 #ifdef __sparc__
@@ -700,166 +713,179 @@ measure_dirty_cache(T_measure_runtime_context *ctx,
  * traps in the body.  Try to make it hard for the compiler to optimize the
  * recursive function away.
  */
-static T_ticks
-recursive_load_call(void (*body)(void *), void *arg, int n)
+static T_ticks recursive_load_call(
+  void ( *body )( void * ),
+  void *arg,
+  int   n
+)
 {
-	T_ticks delta;
+  T_ticks delta;
 
-	RTEMS_OBFUSCATE_VARIABLE(n);
+  RTEMS_OBFUSCATE_VARIABLE( n );
 
-	if (n > 0) {
-		delta = recursive_load_call(body, arg, n - 1);
-	} else {
-		T_ticks t0;
-		T_ticks t1;
+  if ( n > 0 ) {
+    delta = recursive_load_call( body, arg, n - 1 );
+  } else {
+    T_ticks t0;
+    T_ticks t1;
 
-		t0 = T_tick();
-		dirty_call(body, arg);
-		t1 = T_tick();
+    t0 = T_tick();
+    dirty_call( body, arg );
+    t1 = T_tick();
 
-		delta = t1 - t0;
-	}
+    delta = t1 - t0;
+  }
 
-	RTEMS_OBFUSCATE_VARIABLE(delta);
-	return delta;
+  RTEMS_OBFUSCATE_VARIABLE( delta );
+  return delta;
 }
 #else
-static T_ticks
-load_call(void (*body)(void *), void *arg)
+static T_ticks load_call( void ( *body )( void * ), void *arg )
 {
-	T_ticks t0;
-	T_ticks t1;
+  T_ticks t0;
+  T_ticks t1;
 
-	t0 = T_tick();
-	dirty_call(body, arg);
-	t1 = T_tick();
+  t0 = T_tick();
+  dirty_call( body, arg );
+  t1 = T_tick();
 
-	return t1 - t0;
+  return t1 - t0;
 }
 #endif
 
-static void
-measure_load_variant(T_measure_runtime_context *ctx,
-    const T_measure_runtime_request *req,
-    const load_context *lctx, uint32_t load)
+static void measure_load_variant(
+  T_measure_runtime_context       *ctx,
+  const T_measure_runtime_request *req,
+  const load_context              *lctx,
+  uint32_t                         load
+)
 {
-	size_t sample_count;
-	T_ticks *samples;
-	void (*body)(void *);
-	void *arg;
-	size_t i;
-	T_time begin;
-	size_t token;
+  size_t   sample_count;
+  T_ticks *samples;
+  void ( *body )( void * );
+  void  *arg;
+  size_t i;
+  T_time begin;
+  size_t token;
 
-	T_printf("M:B:%s\n", req->name);
-	T_printf("M:V:Load/%" PRIu32 "\n", load + 1);
-	begin = T_now();
-	sample_count = ctx->sample_count;
-	samples = ctx->samples;
-	body = req->body;
-	arg = req->arg;
-	token = 0;
+  T_printf( "M:B:%s\n", req->name );
+  T_printf( "M:V:Load/%" PRIu32 "\n", load + 1 );
+  begin = T_now();
+  sample_count = ctx->sample_count;
+  samples = ctx->samples;
+  body = req->body;
+  arg = req->arg;
+  token = 0;
 
-	restart_worker(lctx);
+  restart_worker( lctx );
 
-	for (i = 0; i < sample_count; ++i) {
-		unsigned int maximum_retries;
-		unsigned int retry;
+  for ( i = 0; i < sample_count; ++i ) {
+    unsigned int maximum_retries;
+    unsigned int retry;
 
-		maximum_retries = get_maximum_retries(req);
-		retry = 0;
+    maximum_retries = get_maximum_retries( req );
+    retry = 0;
 
-		while (true) {
-			rtems_interval tic;
-			rtems_interval toc;
-			T_ticks delta;
+    while ( true ) {
+      rtems_interval tic;
+      rtems_interval toc;
+      T_ticks        delta;
 
-			setup(req, arg);
-			token = dirty_data_cache(ctx->chunk, ctx->chunk_size,
-			    ctx->cache_line_size, token);
-			rtems_cache_invalidate_entire_instruction();
+      setup( req, arg );
+      token = dirty_data_cache(
+        ctx->chunk,
+        ctx->chunk_size,
+        ctx->cache_line_size,
+        token
+      );
+      rtems_cache_invalidate_entire_instruction();
 
-			tic = rtems_clock_get_ticks_since_boot();
+      tic = rtems_clock_get_ticks_since_boot();
 #ifdef __sparc__
-			delta = recursive_load_call(body, arg,
-			    SPARC_NUMBER_OF_REGISTER_WINDOWS - 3);
+      delta = recursive_load_call(
+        body,
+        arg,
+        SPARC_NUMBER_OF_REGISTER_WINDOWS - 3
+      );
 #else
-			delta = load_call(body, arg);
+      delta = load_call( body, arg );
 #endif
-			toc = rtems_clock_get_ticks_since_boot();
-			samples[i] = delta;
+      toc = rtems_clock_get_ticks_since_boot();
+      samples[ i ] = delta;
 
-			if (teardown(req, arg, &samples[i], tic, toc, retry,
-			    maximum_retries)) {
-				break;
-			}
+      if (
+        teardown( req, arg, &samples[ i ], tic, toc, retry, maximum_retries )
+      ) {
+        break;
+      }
 
-			++retry;
-		}
-	}
+      ++retry;
+    }
+  }
 
-	measure_variant_end(ctx, req, begin);
+  measure_variant_end( ctx, req, begin );
 }
 
-static void
-measure_load(T_measure_runtime_context *ctx,
-    const T_measure_runtime_request *req)
+static void measure_load(
+  T_measure_runtime_context       *ctx,
+  const T_measure_runtime_request *req
+)
 {
-	const load_context *lctx;
-	uint32_t load;
+  const load_context *lctx;
+  uint32_t            load;
 
 #ifdef RTEMS_SMP
-	for (load = 0; load < ctx->load_count - 1; ++load) {
-		lctx = &ctx->load_contexts[load];
+  for ( load = 0; load < ctx->load_count - 1; ++load ) {
+    lctx = &ctx->load_contexts[ load ];
 
-		if (lctx->id != 0) {
-			if ((req->flags &
-			    T_MEASURE_RUNTIME_DISABLE_MINOR_LOAD) == 0) {
-				measure_load_variant(ctx, req, lctx, load);
-			} else {
-				restart_worker(lctx);
-			}
-		}
-	}
+    if ( lctx->id != 0 ) {
+      if ( ( req->flags & T_MEASURE_RUNTIME_DISABLE_MINOR_LOAD ) == 0 ) {
+        measure_load_variant( ctx, req, lctx, load );
+      } else {
+        restart_worker( lctx );
+      }
+    }
+  }
 #endif
 
-	if ((req->flags & T_MEASURE_RUNTIME_DISABLE_MAX_LOAD) == 0) {
-		load = ctx->load_count - 1;
-		lctx = &ctx->load_contexts[load];
+  if ( ( req->flags & T_MEASURE_RUNTIME_DISABLE_MAX_LOAD ) == 0 ) {
+    load = ctx->load_count - 1;
+    lctx = &ctx->load_contexts[ load ];
 
-		if (lctx->id != 0) {
-			measure_load_variant(ctx, req, lctx, load);
-		}
-	}
+    if ( lctx->id != 0 ) {
+      measure_load_variant( ctx, req, lctx, load );
+    }
+  }
 
-	for (load = 0; load < ctx->load_count; ++load) {
-		lctx = &ctx->load_contexts[load];
+  for ( load = 0; load < ctx->load_count; ++load ) {
+    lctx = &ctx->load_contexts[ load ];
 
-		if (lctx->id != 0) {
-			suspend_worker(lctx);
-		}
-	}
+    if ( lctx->id != 0 ) {
+      suspend_worker( lctx );
+    }
+  }
 }
 
-void
-T_measure_runtime(T_measure_runtime_context *ctx,
-    const T_measure_runtime_request *req)
+void T_measure_runtime(
+  T_measure_runtime_context       *ctx,
+  const T_measure_runtime_request *req
+)
 {
-	/*
+  /*
 	 * Do FullCache variant before HotCache to get a good overall cache
 	 * state for the HotCache variant.
 	 */
-	if ((req->flags & T_MEASURE_RUNTIME_DISABLE_FULL_CACHE) == 0) {
-		measure_full_cache(ctx, req);
-	}
+  if ( ( req->flags & T_MEASURE_RUNTIME_DISABLE_FULL_CACHE ) == 0 ) {
+    measure_full_cache( ctx, req );
+  }
 
-	if ((req->flags & T_MEASURE_RUNTIME_DISABLE_HOT_CACHE) == 0) {
-		measure_hot_cache(ctx, req);
-	}
+  if ( ( req->flags & T_MEASURE_RUNTIME_DISABLE_HOT_CACHE ) == 0 ) {
+    measure_hot_cache( ctx, req );
+  }
 
-	if ((req->flags & T_MEASURE_RUNTIME_DISABLE_DIRTY_CACHE) == 0) {
-		measure_dirty_cache(ctx, req);
-	}
+  if ( ( req->flags & T_MEASURE_RUNTIME_DISABLE_DIRTY_CACHE ) == 0 ) {
+    measure_dirty_cache( ctx, req );
+  }
 
-	measure_load(ctx, req);
+  measure_load( ctx, req );
 }

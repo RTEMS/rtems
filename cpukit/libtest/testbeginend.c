@@ -44,8 +44,7 @@
 #include <rtems/test-printer.h>
 #include <rtems/version.h>
 
-static const char* const test_state_strings[] =
-{
+static const char *const test_state_strings[] = {
   "EXPECTED_PASS",
   "EXPECTED_FAIL",
   "USER_INPUT",
@@ -53,7 +52,7 @@ static const char* const test_state_strings[] =
   "BENCHMARK"
 };
 
-int rtems_test_begin(const char* name, const RTEMS_TEST_STATE state)
+int rtems_test_begin( const char *name, const RTEMS_TEST_STATE state )
 {
   return rtems_printf(
     &rtems_test_printer,
@@ -86,14 +85,15 @@ int rtems_test_begin(const char* name, const RTEMS_TEST_STATE state)
     "*** TEST TOOLS: " __VERSION__ "\n",
     name,
     rtems_version(),
-    test_state_strings[state]
+    test_state_strings[ state ]
   );
 }
 
-int rtems_test_end(const char* name)
+int rtems_test_end( const char *name )
 {
   return rtems_printf(
     &rtems_test_printer,
-    "\n*** END OF TEST %s ***\n\n", name
+    "\n*** END OF TEST %s ***\n\n",
+    name
   );
 }

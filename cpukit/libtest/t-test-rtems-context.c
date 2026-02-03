@@ -51,83 +51,100 @@ static rtems_id T_runner_scheduler;
 
 static rtems_task_priority T_runner_priority;
 
-static void
-T_initialize_runner_properties(void)
+static void T_initialize_runner_properties( void )
 {
-	rtems_status_code sc;
+  rtems_status_code sc;
 
 #ifdef RTEMS_SMP
-	sc = rtems_task_get_scheduler(RTEMS_SELF, &T_runner_scheduler);
-	T_quiet_rsc_success(sc);
+  sc = rtems_task_get_scheduler( RTEMS_SELF, &T_runner_scheduler );
+  T_quiet_rsc_success( sc );
 #endif
 
-	sc = rtems_task_set_priority(RTEMS_SELF, RTEMS_CURRENT_PRIORITY,
-	    &T_runner_priority);
-	T_quiet_rsc_success(sc);
+  sc = rtems_task_set_priority(
+    RTEMS_SELF,
+    RTEMS_CURRENT_PRIORITY,
+    &T_runner_priority
+  );
+  T_quiet_rsc_success( sc );
 }
 
-static void
-T_do_check_task_context(void)
+static void T_do_check_task_context( void )
 {
-	rtems_task_priority prio;
-	rtems_status_code sc;
-	uint32_t v;
-	rtems_event_set events;
+  rtems_task_priority prio;
+  rtems_status_code   sc;
+  uint32_t            v;
+  rtems_event_set     events;
 #ifdef RTEMS_SMP
-	rtems_id id;
+  rtems_id id;
 #endif
 
-	v = _Per_CPU_Get_snapshot()->thread_dispatch_disable_level;
-	T_check(&T_special, v == 0,
-	    "Wrong thread dispatch disabled level (%" PRIu32 ")", v);
+  v = _Per_CPU_Get_snapshot()->thread_dispatch_disable_level;
+  T_check(
+    &T_special,
+    v == 0,
+    "Wrong thread dispatch disabled level (%" PRIu32 ")",
+    v
+  );
 
-	v = _Per_CPU_Get_snapshot()->isr_nest_level;
-	T_check(&T_special, v == 0,
-	    "Wrong ISR nest level (%" PRIu32 ")", v);
+  v = _Per_CPU_Get_snapshot()->isr_nest_level;
+  T_check( &T_special, v == 0, "Wrong ISR nest level (%" PRIu32 ")", v );
 
-	v = _ISR_Get_level();
-	T_check(&T_special, v == 0,
-	    "Wrong ISR level (%" PRIu32 ")", v);
+  v = _ISR_Get_level();
+  T_check( &T_special, v == 0, "Wrong ISR level (%" PRIu32 ")", v );
 
 #ifdef RTEMS_SMP
-	id = 0;
-	sc = rtems_task_get_scheduler(RTEMS_SELF, &id);
-	T_quiet_rsc_success(sc);
-	T_check(&T_special, id == T_runner_scheduler,
-	    "Wrong runner scheduler, expected ID %08" PRIx32 ", actual ID %08"
-	    PRIx32, T_runner_scheduler, id);
+  id = 0;
+  sc = rtems_task_get_scheduler( RTEMS_SELF, &id );
+  T_quiet_rsc_success( sc );
+  T_check(
+    &T_special,
+    id == T_runner_scheduler,
+    "Wrong runner scheduler, expected ID %08" PRIx32 ", actual ID %08" PRIx32,
+    T_runner_scheduler,
+    id
+  );
 #endif
 
-	prio = 0;
-	sc = rtems_task_set_priority(RTEMS_SELF, RTEMS_CURRENT_PRIORITY,
-	    &prio);
-	T_quiet_rsc_success(sc);
-	T_check(&T_special, prio == T_runner_priority,
-	    "Wrong runner priority, expected %" PRIu32 ", actual %"
-	    PRIu32, T_runner_priority, prio);
+  prio = 0;
+  sc = rtems_task_set_priority( RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &prio );
+  T_quiet_rsc_success( sc );
+  T_check(
+    &T_special,
+    prio == T_runner_priority,
+    "Wrong runner priority, expected %" PRIu32 ", actual %" PRIu32,
+    T_runner_priority,
+    prio
+  );
 
-	sc = rtems_event_receive(RTEMS_ALL_EVENTS,
-	    RTEMS_NO_WAIT | RTEMS_EVENT_ANY, 0, &events);
-	T_quiet_rsc( sc, RTEMS_UNSATISFIED );
+  sc = rtems_event_receive(
+    RTEMS_ALL_EVENTS,
+    RTEMS_NO_WAIT | RTEMS_EVENT_ANY,
+    0,
+    &events
+  );
+  T_quiet_rsc( sc, RTEMS_UNSATISFIED );
 
-	sc = rtems_event_system_receive(RTEMS_ALL_EVENTS,
-	    RTEMS_NO_WAIT | RTEMS_EVENT_ANY, 0, &events);
-	T_quiet_rsc( sc, RTEMS_UNSATISFIED );
+  sc = rtems_event_system_receive(
+    RTEMS_ALL_EVENTS,
+    RTEMS_NO_WAIT | RTEMS_EVENT_ANY,
+    0,
+    &events
+  );
+  T_quiet_rsc( sc, RTEMS_UNSATISFIED );
 }
 
-void
-T_check_task_context(T_event event, const char *name)
+void T_check_task_context( T_event event, const char *name )
 {
-	(void)name;
+  (void) name;
 
-	switch (event) {
-	case T_EVENT_RUN_INITIALIZE_LATE:
-		T_initialize_runner_properties();
-		/* Fall through */
-	case T_EVENT_CASE_END:
-		T_do_check_task_context();
-		break;
-	default:
-		break;
-	};
+  switch ( event ) {
+    case T_EVENT_RUN_INITIALIZE_LATE:
+      T_initialize_runner_properties();
+      /* Fall through */
+    case T_EVENT_CASE_END:
+      T_do_check_task_context();
+      break;
+    default:
+      break;
+  };
 }

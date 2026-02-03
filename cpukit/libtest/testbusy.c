@@ -25,7 +25,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -35,10 +34,10 @@
 
 void rtems_test_busy_cpu_usage( time_t seconds, long nanoseconds )
 {
-  Thread_Control    *executing;
-  Timestamp_Control  busy;
-  Timestamp_Control  start;
-  Timestamp_Control  now;
+  Thread_Control   *executing;
+  Timestamp_Control busy;
+  Timestamp_Control start;
+  Timestamp_Control now;
 
   executing = _Thread_Get_executing();
   start = _Thread_Get_CPU_time_used( executing );

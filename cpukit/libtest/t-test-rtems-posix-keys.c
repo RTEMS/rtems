@@ -46,72 +46,71 @@ static Objects_Maximum T_posix_key_count;
 
 static ssize_t T_posix_key_value_count;
 
-static POSIX_Keys_Control *
-T_get_next_posix_key(Objects_Id *id)
+static POSIX_Keys_Control *T_get_next_posix_key( Objects_Id *id )
 {
-	return (POSIX_Keys_Control *)
-	    _Objects_Get_next(*id, &_POSIX_Keys_Information, id);
+  return (
+    POSIX_Keys_Control *
+  ) _Objects_Get_next( *id, &_POSIX_Keys_Information, id );
 }
 
-static ssize_t
-T_get_active_posix_key_value_pairs(void)
+static ssize_t T_get_active_posix_key_value_pairs( void )
 {
-	ssize_t count;
-	Objects_Id id;
-	POSIX_Keys_Control *the_key;
+  ssize_t             count;
+  Objects_Id          id;
+  POSIX_Keys_Control *the_key;
 
-	count = 0;
-	id = OBJECTS_ID_INITIAL_INDEX;
+  count = 0;
+  id = OBJECTS_ID_INITIAL_INDEX;
 
-	while ((the_key = T_get_next_posix_key(&id)) != NULL ) {
-		count += (ssize_t)
-		    _Chain_Node_count_unprotected(&the_key->Key_value_pairs);
-		_Objects_Allocator_unlock();
-	}
+  while ( ( the_key = T_get_next_posix_key( &id ) ) != NULL ) {
+    count += (ssize_t) _Chain_Node_count_unprotected(
+      &the_key->Key_value_pairs
+    );
+    _Objects_Allocator_unlock();
+  }
 
-	return count;
+  return count;
 }
 
-static void
-T_posix_keys_run_initialize(void)
+static void T_posix_keys_run_initialize( void )
 {
-	T_posix_key_count = T_objects_count(OBJECTS_POSIX_API,
-	    OBJECTS_POSIX_KEYS);
-	T_posix_key_value_count = T_get_active_posix_key_value_pairs();
+  T_posix_key_count = T_objects_count( OBJECTS_POSIX_API, OBJECTS_POSIX_KEYS );
+  T_posix_key_value_count = T_get_active_posix_key_value_pairs();
 }
 
-static void
-T_posix_keys_case_end(void)
+static void T_posix_keys_case_end( void )
 {
-	ssize_t count;
-	ssize_t delta;
+  ssize_t count;
+  ssize_t delta;
 
-	T_objects_check(OBJECTS_POSIX_API, OBJECTS_POSIX_KEYS,
-	    &T_posix_key_count, "POSIX key");
+  T_objects_check(
+    OBJECTS_POSIX_API,
+    OBJECTS_POSIX_KEYS,
+    &T_posix_key_count,
+    "POSIX key"
+  );
 
-	count = T_get_active_posix_key_value_pairs();
-	delta = count - T_posix_key_value_count;
+  count = T_get_active_posix_key_value_pairs();
+  delta = count - T_posix_key_value_count;
 
-	if (delta != 0) {
-		T_posix_key_value_count = count;
-		T_check(&T_special, false, "POSIX key value pair leak (%zi)",
-		    delta);
-	}
+  if ( delta != 0 ) {
+    T_posix_key_value_count = count;
+    T_check( &T_special, false, "POSIX key value pair leak (%zi)", delta );
+  }
 }
 
-void
-T_check_posix_keys(T_event event, const char *name)
+void T_check_posix_keys( T_event event, const char *name )
 {
-	(void)name;
+  (void) name;
 
-	switch (event) {
-	case T_EVENT_RUN_INITIALIZE_EARLY:
-		T_posix_keys_run_initialize();
-		break;
-	case T_EVENT_CASE_END:
-		T_posix_keys_case_end();
-		break;
-	default:
-		break;
-	};
+  switch ( event ) {
+    case T_EVENT_RUN_INITIALIZE_EARLY:
+      T_posix_keys_run_initialize();
+      break;
+    case T_EVENT_CASE_END:
+      T_posix_keys_case_end();
+      break;
+    default:
+      break;
+  };
 }

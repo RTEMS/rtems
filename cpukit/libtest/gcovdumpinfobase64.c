@@ -71,7 +71,7 @@ static void _Gcov_Base64_put_char( int c, void *arg )
 static void _Gcov_Base64_encode( int c, void *arg )
 {
   Gcov_Base64_context *ctx;
-  size_t                  index;
+  size_t               index;
 
   ctx = arg;
   index = ctx->index;

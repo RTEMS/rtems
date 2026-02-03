@@ -38,7 +38,7 @@
 
 #include <limits.h>
 
-#if defined(__rtems__)
+#if defined( __rtems__ )
 #include <sha256.h>
 #else
 #include <openssl/sha.h>
@@ -47,72 +47,77 @@
 #include <rtems/base64.h>
 
 typedef struct {
-	SHA256_CTX sha256;
-	T_putchar putchar;
-	void *putchar_arg;
+  SHA256_CTX sha256;
+  T_putchar  putchar;
+  void      *putchar_arg;
 } T_report_hash_sha256_context;
 
 static T_report_hash_sha256_context T_report_hash_sha256_instance;
 
-void
-T_report_hash_sha256_update(char c)
+void T_report_hash_sha256_update( char c )
 {
-	T_report_hash_sha256_context *ctx;
+  T_report_hash_sha256_context *ctx;
 
-	ctx = &T_report_hash_sha256_instance;
-	SHA256_Update(&ctx->sha256, &c, sizeof(c));
+  ctx = &T_report_hash_sha256_instance;
+  SHA256_Update( &ctx->sha256, &c, sizeof( c ) );
 }
 
-static void
-T_report_hash_sha256_putchar(int c, void *arg)
+static void T_report_hash_sha256_putchar( int c, void *arg )
 {
-	T_report_hash_sha256_context *ctx;
-	char cc;
+  T_report_hash_sha256_context *ctx;
+  char                          cc;
 
-	ctx = arg;
-	cc = (char)c;
-	SHA256_Update(&ctx->sha256, &cc, sizeof(cc));
-	(*ctx->putchar)(c, ctx->putchar_arg);
+  ctx = arg;
+  cc = (char) c;
+  SHA256_Update( &ctx->sha256, &cc, sizeof( cc ) );
+  ( *ctx->putchar )( c, ctx->putchar_arg );
 }
 
-static void
-T_report_hash_sha256_initialize(void)
+static void T_report_hash_sha256_initialize( void )
 {
-	T_report_hash_sha256_context *ctx;
+  T_report_hash_sha256_context *ctx;
 
-	ctx = &T_report_hash_sha256_instance;
-	SHA256_Init(&ctx->sha256);
-	T_set_putchar(T_report_hash_sha256_putchar, ctx, &ctx->putchar,
-	    &ctx->putchar_arg);
+  ctx = &T_report_hash_sha256_instance;
+  SHA256_Init( &ctx->sha256 );
+  T_set_putchar(
+    T_report_hash_sha256_putchar,
+    ctx,
+    &ctx->putchar,
+    &ctx->putchar_arg
+  );
 }
 
-static void
-T_report_hash_sha256_finalize(void)
+static void T_report_hash_sha256_finalize( void )
 {
-	T_report_hash_sha256_context *ctx;
-	unsigned char hash[32];
+  T_report_hash_sha256_context *ctx;
+  unsigned char                 hash[ 32 ];
 
-	ctx = &T_report_hash_sha256_instance;
-	SHA256_Final(hash, &ctx->sha256);
-	T_printf("Y:ReportHash:SHA256:");
-	(void)_Base64url_Encode(ctx->putchar, ctx->putchar_arg, hash,
-	    sizeof(hash), NULL, INT_MAX);
-	T_printf("\n");
+  ctx = &T_report_hash_sha256_instance;
+  SHA256_Final( hash, &ctx->sha256 );
+  T_printf( "Y:ReportHash:SHA256:" );
+  (void) _Base64url_Encode(
+    ctx->putchar,
+    ctx->putchar_arg,
+    hash,
+    sizeof( hash ),
+    NULL,
+    INT_MAX
+  );
+  T_printf( "\n" );
 }
 
-void
-T_report_hash_sha256(T_event event, const char *name)
+void T_report_hash_sha256( T_event event, const char *name )
 {
-	(void)name;
+  (void) name;
 
-	switch (event) {
-	case T_EVENT_RUN_INITIALIZE_EARLY:
-		T_report_hash_sha256_initialize();
-		break;
-	case T_EVENT_RUN_FINALIZE_LATE:
-		T_report_hash_sha256_finalize();
-		break;
-	default:
-		break;
-	};
+  switch ( event ) {
+    case T_EVENT_RUN_INITIALIZE_EARLY:
+      T_report_hash_sha256_initialize();
+      break;
+    case T_EVENT_RUN_FINALIZE_LATE:
+      T_report_hash_sha256_finalize();
+      break;
+    default:
+      break;
+  };
 }

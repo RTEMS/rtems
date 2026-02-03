@@ -49,10 +49,14 @@ extern "C" {
  * @{
  */
 
-Objects_Maximum T_objects_count(Objects_APIs api, uint16_t cls);
+Objects_Maximum T_objects_count( Objects_APIs api, uint16_t cls );
 
-void T_objects_check(Objects_APIs api, uint16_t cls,
-    Objects_Maximum *expected, const char *name);
+void T_objects_check(
+  Objects_APIs     api,
+  uint16_t         cls,
+  Objects_Maximum *expected,
+  const char      *name
+);
 
 /** @} */
 

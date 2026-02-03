@@ -74,19 +74,16 @@ static const T_config config = {
   .actions = actions
 };
 
-static int printer(void *context, const char *fmt, va_list ap)
+static int printer( void *context, const char *fmt, va_list ap )
 {
   (void) context;
-  return T_vprintf(fmt, ap);
+  return T_vprintf( fmt, ap );
 }
 
-void rtems_test_run(
-  rtems_task_argument    arg,
-  const RTEMS_TEST_STATE state
-)
+void rtems_test_run( rtems_task_argument arg, const RTEMS_TEST_STATE state )
 {
   rtems_print_printer previous_printer;
-  int exit_code;
+  int                 exit_code;
 
   (void) arg;
 

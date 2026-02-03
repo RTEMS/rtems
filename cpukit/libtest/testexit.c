@@ -40,8 +40,8 @@
 
 #include <rtems/test-info.h>
 
-void rtems_test_exit(int status)
+void rtems_test_exit( int status )
 {
   (void) status;
-  rtems_shutdown_executive(0);
+  rtems_shutdown_executive( 0 );
 }

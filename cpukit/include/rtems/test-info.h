@@ -64,21 +64,28 @@ extern const char rtems_test_name[];
  */
 void rtems_test_fatal_extension(
   rtems_fatal_source source,
-  bool always_set_to_false,
-  rtems_fatal_code code
+  bool               always_set_to_false,
+  rtems_fatal_code   code
 );
 
 /**
  * @brief Initial extension for tests.
  */
 #define RTEMS_TEST_INITIAL_EXTENSION \
-  { NULL, NULL, NULL, NULL, NULL, NULL, NULL, rtems_test_fatal_extension, NULL }
+  { NULL,                            \
+    NULL,                            \
+    NULL,                            \
+    NULL,                            \
+    NULL,                            \
+    NULL,                            \
+    NULL,                            \
+    rtems_test_fatal_extension,      \
+    NULL }
 
 /**
  * @brief Test states.
  */
-typedef enum
-{
+typedef enum {
   RTEMS_TEST_STATE_PASS,
   RTEMS_TEST_STATE_FAIL,
   RTEMS_TEST_STATE_USER_INPUT,
@@ -86,12 +93,12 @@ typedef enum
   RTEMS_TEST_STATE_BENCHMARK
 } RTEMS_TEST_STATE;
 
-#if (TEST_STATE_EXPECTED_FAIL && TEST_STATE_USER_INPUT) || \
-    (TEST_STATE_EXPECTED_FAIL && TEST_STATE_INDETERMINATE) || \
-    (TEST_STATE_EXPECTED_FAIL && TEST_STATE_BENCHMARK) || \
-    (TEST_STATE_USER_INPUT    && TEST_STATE_INDETERMINATE) || \
-    (TEST_STATE_USER_INPUT    && TEST_STATE_BENCHMARK) || \
-    (TEST_STATE_INDETERMINATE && TEST_STATE_BENCHMARK)
+#if ( TEST_STATE_EXPECTED_FAIL && TEST_STATE_USER_INPUT ) ||  \
+  ( TEST_STATE_EXPECTED_FAIL && TEST_STATE_INDETERMINATE ) || \
+  ( TEST_STATE_EXPECTED_FAIL && TEST_STATE_BENCHMARK ) ||     \
+  ( TEST_STATE_USER_INPUT && TEST_STATE_INDETERMINATE ) ||    \
+  ( TEST_STATE_USER_INPUT && TEST_STATE_BENCHMARK ) ||        \
+  ( TEST_STATE_INDETERMINATE && TEST_STATE_BENCHMARK )
   #error Test states must be unique
 #endif
 
@@ -112,20 +119,20 @@ typedef enum
  *
  * @return As specified by printf().
  */
-int rtems_test_begin(const char* name, const RTEMS_TEST_STATE state);
+int rtems_test_begin( const char *name, const RTEMS_TEST_STATE state );
 
 /**
  * @brief Prints an end of test message using printf().
  *
  * @return As specified by printf().
  */
-int rtems_test_end(const char* name);
+int rtems_test_end( const char *name );
 
 /**
  * @brief Exit the test without calling exit() since it closes stdin, etc and
  * pulls in stdio code
  */
-RTEMS_NO_RETURN void rtems_test_exit(int status);
+RTEMS_NO_RETURN void rtems_test_exit( int status );
 
 #define RTEMS_TEST_PARALLEL_PROCESSOR_MAX 32
 
@@ -135,13 +142,13 @@ typedef struct rtems_test_parallel_job rtems_test_parallel_job;
  * @brief Internal context for parallel job execution.
  */
 typedef struct {
-  Atomic_Ulong stop;
+  Atomic_Ulong        stop;
   SMP_barrier_Control barrier;
-  size_t worker_count;
-  rtems_id worker_ids[RTEMS_TEST_PARALLEL_PROCESSOR_MAX];
-  rtems_id stop_worker_timer_id;
+  size_t              worker_count;
+  rtems_id            worker_ids[ RTEMS_TEST_PARALLEL_PROCESSOR_MAX ];
+  rtems_id            stop_worker_timer_id;
   const struct rtems_test_parallel_job *jobs;
-  size_t job_count;
+  size_t                                job_count;
 } rtems_test_parallel_context;
 
 /**
@@ -154,10 +161,10 @@ typedef struct {
  * @param[in] worker_index The worker index.
  * @param[in] worker_id The worker task identifier.
  */
-typedef void (*rtems_test_parallel_worker_setup)(
+typedef void ( *rtems_test_parallel_worker_setup )(
   rtems_test_parallel_context *ctx,
-  size_t worker_index,
-  rtems_id worker_id
+  size_t                       worker_index,
+  rtems_id                     worker_id
 );
 
 /**
@@ -178,10 +185,10 @@ struct rtems_test_parallel_job {
    * @return The desired job body execution time in clock ticks.  See
    *   rtems_test_parallel_stop_job().
    */
-  rtems_interval (*init)(
+  rtems_interval ( *init )(
     rtems_test_parallel_context *ctx,
-    void *arg,
-    size_t active_workers
+    void                        *arg,
+    size_t                       active_workers
   );
 
   /**
@@ -194,11 +201,11 @@ struct rtems_test_parallel_job {
    * @param[in] worker_index The worker index.  It ranges from 0 to the
    *   processor count minus one.
    */
-  void (*body)(
+  void ( *body )(
     rtems_test_parallel_context *ctx,
-    void *arg,
-    size_t active_workers,
-    size_t worker_index
+    void                        *arg,
+    size_t                       active_workers,
+    size_t                       worker_index
   );
 
   /**
@@ -212,10 +219,10 @@ struct rtems_test_parallel_job {
    * @param[in] active_workers Count of active workers.  Depends on the cascade
    *   option.
    */
-  void (*fini)(
+  void ( *fini )(
     rtems_test_parallel_context *ctx,
-    void *arg,
-    size_t active_workers
+    void                        *arg,
+    size_t                       active_workers
   );
 
   /**
@@ -245,7 +252,7 @@ static inline bool rtems_test_parallel_stop_job(
   const rtems_test_parallel_context *ctx
 )
 {
-  return _Atomic_Load_ulong(&ctx->stop, ATOMIC_ORDER_RELAXED) != 0;
+  return _Atomic_Load_ulong( &ctx->stop, ATOMIC_ORDER_RELAXED ) != 0;
 }
 
 /**
@@ -258,7 +265,7 @@ static inline bool rtems_test_parallel_stop_job(
  * @retval true This is the master worker.
  * @retval false Otherwise.
  */
-static inline bool rtems_test_parallel_is_master_worker(size_t worker_index)
+static inline bool rtems_test_parallel_is_master_worker( size_t worker_index )
 {
   return worker_index == 0;
 }
@@ -273,10 +280,10 @@ static inline bool rtems_test_parallel_is_master_worker(size_t worker_index)
  */
 static inline rtems_id rtems_test_parallel_get_task_id(
   const rtems_test_parallel_context *ctx,
-  size_t worker_index
+  size_t                             worker_index
 )
 {
-  return ctx->worker_ids[worker_index];
+  return ctx->worker_ids[ worker_index ];
 }
 
 /**
@@ -293,10 +300,10 @@ static inline rtems_id rtems_test_parallel_get_task_id(
  * @param[in] job_count The count of jobs in the job table.
  */
 void rtems_test_parallel(
-  rtems_test_parallel_context *ctx,
+  rtems_test_parallel_context     *ctx,
   rtems_test_parallel_worker_setup worker_setup,
-  const rtems_test_parallel_job *jobs,
-  size_t job_count
+  const rtems_test_parallel_job   *jobs,
+  size_t                           job_count
 );
 
 /**
@@ -310,7 +317,7 @@ void rtems_test_parallel(
  * @param[in] seconds The busy seconds.
  * @param[in] nanoseconds The busy nanoseconds.
  */
-void rtems_test_busy_cpu_usage(time_t seconds, long nanoseconds);
+void rtems_test_busy_cpu_usage( time_t seconds, long nanoseconds );
 
 /**
  * @brief Runs the test cases of the RTEMS Test Framework using a default

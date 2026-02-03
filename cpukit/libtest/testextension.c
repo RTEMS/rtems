@@ -34,7 +34,7 @@
 #include <rtems/profiling.h>
 #include <rtems/bspIo.h>
 
-#if defined(RTEMS_PROFILING)
+#if defined( RTEMS_PROFILING )
 static bool report_done;
 
 RTEMS_INTERRUPT_LOCK_DEFINE( static, report_lock, "test report" )
@@ -42,13 +42,13 @@ RTEMS_INTERRUPT_LOCK_DEFINE( static, report_lock, "test report" )
 
 void rtems_test_fatal_extension(
   rtems_fatal_source source,
-  bool always_set_to_false,
-  rtems_fatal_code code
+  bool               always_set_to_false,
+  rtems_fatal_code   code
 )
 {
-#if defined(RTEMS_PROFILING)
+#if defined( RTEMS_PROFILING )
   rtems_interrupt_lock_context lock_context;
-  rtems_printer printer;
+  rtems_printer                printer;
 
   rtems_print_printer_printk( &printer );
 
@@ -61,22 +61,11 @@ void rtems_test_fatal_extension(
   if ( !report_done ) {
     report_done = true;
 
-    printk(
-      "\n*** PROFILING REPORT BEGIN %s ***\n",
-      rtems_test_name
-    );
+    printk( "\n*** PROFILING REPORT BEGIN %s ***\n", rtems_test_name );
 
-    rtems_profiling_report_xml(
-      rtems_test_name,
-      &printer,
-      1,
-      "  "
-    );
+    rtems_profiling_report_xml( rtems_test_name, &printer, 1, "  " );
 
-    printk(
-      "*** PROFILING REPORT END %s ***\n",
-      rtems_test_name
-    );
+    printk( "*** PROFILING REPORT END %s ***\n", rtems_test_name );
   }
 
   rtems_interrupt_lock_release( &report_lock, &lock_context );
