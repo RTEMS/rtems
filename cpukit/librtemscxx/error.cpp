@@ -27,53 +27,35 @@
 
 #include <rtems/error.hpp>
 
-namespace rtems
-{
-  runtime_error::runtime_error(const rtems_status_code sc)
-    : std::runtime_error(::rtems_status_text(sc)),
-      sc(sc)
-  {
-  }
+namespace rtems {
+runtime_error::runtime_error(const rtems_status_code sc)
+    : std::runtime_error(::rtems_status_text(sc)), sc(sc) {}
 
-  runtime_error::runtime_error(const rtems_status_code sc,
-                               const std::string&      what)
-    : std::runtime_error(what + ": " + ::rtems_status_text(sc)),
-      sc(sc)
-  {
-  }
+runtime_error::runtime_error(const rtems_status_code sc,
+                             const std::string& what)
+    : std::runtime_error(what + ": " + ::rtems_status_text(sc)), sc(sc) {}
 
-  runtime_error::runtime_error(const rtems_status_code sc,
-                               const char*             what)
+runtime_error::runtime_error(const rtems_status_code sc, const char* what)
     : std::runtime_error(std::string(what) + ": " + ::rtems_status_text(sc)),
-      sc(sc)
-  {
-  }
+      sc(sc) {}
 
-  runtime_error::~runtime_error()
-  {
-  }
+runtime_error::~runtime_error() {}
 
-  void
-  runtime_error_check(const rtems_status_code sc)
-  {
-    if (sc != RTEMS_SUCCESSFUL) {
-      throw runtime_error(sc);
-    }
+void runtime_error_check(const rtems_status_code sc) {
+  if (sc != RTEMS_SUCCESSFUL) {
+    throw runtime_error(sc);
   }
+}
 
-  void
-  runtime_error_check(const rtems_status_code sc, const std::string& what)
-  {
-    if (sc != RTEMS_SUCCESSFUL) {
-      throw runtime_error(sc, what);
-    }
+void runtime_error_check(const rtems_status_code sc, const std::string& what) {
+  if (sc != RTEMS_SUCCESSFUL) {
+    throw runtime_error(sc, what);
   }
+}
 
-  void
-  runtime_error_check(const rtems_status_code sc, const char* what)
-  {
-    if (sc != RTEMS_SUCCESSFUL) {
-      throw runtime_error(sc, what);
-    }
+void runtime_error_check(const rtems_status_code sc, const char* what) {
+  if (sc != RTEMS_SUCCESSFUL) {
+    throw runtime_error(sc, what);
   }
-};
+}
+}; // namespace rtems

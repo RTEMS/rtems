@@ -48,8 +48,7 @@ extern "C" bool get_scheduler_name(rtems_id sid, char* name);
 #endif
 
 #if HAVE_GET_SCHEDULER_NAME
-bool get_scheduler_name(rtems_id sid, char* name)
-{
+bool get_scheduler_name(rtems_id sid, char* name) {
   name[0] = 'N';
   name[1] = 'O';
   name[2] = 'P';
@@ -60,7 +59,7 @@ bool get_scheduler_name(rtems_id sid, char* name)
 
 #ifdef __FreeBSD__
 #include <pthread_np.h>
-static inline int pthread_getattr_np(pthread_t p, pthread_attr_t *a) {
+static inline int pthread_getattr_np(pthread_t p, pthread_attr_t* a) {
   return ::pthread_attr_get_np(p, a);
 }
 #endif /* __FreeBSD__ */
@@ -69,404 +68,322 @@ static inline int pthread_getattr_np(pthread_t p, pthread_attr_t *a) {
 #define HAVE_SCHED_SPORADIC 1
 #endif /* SCHED_SPORADIC */
 
-namespace rtems
-{
-  namespace thread
-  {
-    void
-    system_error_check(int ec, const char* what)
-    {
-      if (ec != 0) {
-        throw std::system_error(ec, std::system_category(), what);
-      }
-    }
+namespace rtems {
+namespace thread {
+void system_error_check(int ec, const char* what) {
+  if (ec != 0) {
+    throw std::system_error(ec, std::system_category(), what);
+  }
+}
 
-    attributes::attributes()
-      : priority(-1),
-        stack_size(MINIMUM_STACK_SIZE),
-        attr(sched_inherit),
-        policy(sched_fifo)
-    {
-      update();
-    }
+attributes::attributes()
+    : priority(-1), stack_size(MINIMUM_STACK_SIZE), attr(sched_inherit),
+      policy(sched_fifo) {
+  update();
+}
 
-    attributes::attributes(const attributes& attr)
-      : name(attr.name),
-        priority(attr.priority),
-        stack_size(attr.stack_size),
-        scheduler(attr.scheduler),
-        attr(attr.attr),
-        policy(attr.policy)
-    {
-    }
+attributes::attributes(const attributes& attr)
+    : name(attr.name), priority(attr.priority), stack_size(attr.stack_size),
+      scheduler(attr.scheduler), attr(attr.attr), policy(attr.policy) {}
 
-    void
-    attributes::set_name(const std::string& name_)
-    {
-      name = name_;
-    }
+void attributes::set_name(const std::string& name_) {
+  name = name_;
+}
 
-    void
-    attributes::set_name(const char* name_)
-    {
-      name = name_;
-    }
+void attributes::set_name(const char* name_) {
+  name = name_;
+}
 
-    const std::string&
-    attributes::get_name() const
-    {
-      return name;
-    }
+const std::string& attributes::get_name() const {
+  return name;
+}
 
-    void
-    attributes::set_priority(int priority_)
-    {
-      priority = priority_;
-    }
+void attributes::set_priority(int priority_) {
+  priority = priority_;
+}
 
-    int
-    attributes::get_priority() const
-    {
-      return priority;
-    }
+int attributes::get_priority() const {
+  return priority;
+}
 
-    void
-    attributes::set_stack_size(size_t size)
-    {
-      stack_size = size;
-    }
+void attributes::set_stack_size(size_t size) {
+  stack_size = size;
+}
 
-    size_t
-    attributes::get_stack_size() const
-    {
-      return stack_size;
-    }
+size_t attributes::get_stack_size() const {
+  return stack_size;
+}
 
-    void
-    attributes::set_scheduler(const std::string& scheduler_)
-    {
-      scheduler = scheduler_;
-    }
+void attributes::set_scheduler(const std::string& scheduler_) {
+  scheduler = scheduler_;
+}
 
-    void
-    attributes::set_scheduler(const char* scheduler_)
-    {
-      scheduler = scheduler_;
-    }
+void attributes::set_scheduler(const char* scheduler_) {
+  scheduler = scheduler_;
+}
 
-    const std::string&
-    attributes::get_scheduler()
-    {
-      return scheduler;
-    }
+const std::string& attributes::get_scheduler() {
+  return scheduler;
+}
 
-    attributes::sched_attr
-    attributes::get_scheduler_attr() const
-    {
-      return attr;
-    }
+attributes::sched_attr attributes::get_scheduler_attr() const {
+  return attr;
+}
 
-    void
-    attributes::set_scheduler_policy(sched_policy policy_)
-    {
-      attr = sched_explicit;
-      policy = policy_;
-    }
+void attributes::set_scheduler_policy(sched_policy policy_) {
+  attr = sched_explicit;
+  policy = policy_;
+}
 
-    attributes::sched_policy
-    attributes::get_scheduler_policy() const
-    {
-      return policy;
-    }
+attributes::sched_policy attributes::get_scheduler_policy() const {
+  return policy;
+}
 
-    void
-    attributes::commit()
-    {
-      pthread_t pid = ::pthread_self();
+void attributes::commit() {
+  pthread_t pid = ::pthread_self();
 
-      system_error_check(
-        ::pthread_setname_np(pid, name.c_str()),
-        "getting name");
+  system_error_check(::pthread_setname_np(pid, name.c_str()), "getting name");
 
-      int spolicy;
-      struct sched_param sched_param;
+  int spolicy;
+  struct sched_param sched_param;
 
-      system_error_check(
-        ::pthread_getschedparam(pid, &spolicy, &sched_param),
-        "getting scheduler parameters");
+  system_error_check(::pthread_getschedparam(pid, &spolicy, &sched_param),
+                     "getting scheduler parameters");
 
-      switch (policy) {
-      case sched_other:
-        spolicy = SCHED_OTHER;
-        break;
-      case sched_fifo:
-        spolicy = SCHED_FIFO;
-        break;
-      case sched_roundrobin:
-        spolicy = SCHED_RR;
-        break;
-      case sched_sporadic:
+  switch (policy) {
+  case sched_other:
+    spolicy = SCHED_OTHER;
+    break;
+  case sched_fifo:
+    spolicy = SCHED_FIFO;
+    break;
+  case sched_roundrobin:
+    spolicy = SCHED_RR;
+    break;
+  case sched_sporadic:
 #ifdef HAVE_SCHED_SPORADIC
-        spolicy = SCHED_SPORADIC;
-        break;
+    spolicy = SCHED_SPORADIC;
+    break;
 #endif /* HAVE_SCHED_SPORADIC */
-      default:
-        system_error_check(EINVAL, "get scheduler policy");
+  default:
+    system_error_check(EINVAL, "get scheduler policy");
+    break;
+  }
+
+  sched_param.sched_priority = priority;
+
+  system_error_check(::pthread_setschedparam(pid, spolicy, &sched_param),
+                     "getting scheduler parameters");
+
+  if (!scheduler.empty()) {
+    char sname[4] = {' ', ' ', ' ', ' '};
+    for (size_t c = 0; c < sizeof(sname); ++c) {
+      if (c >= scheduler.length()) {
         break;
       }
-
-      sched_param.sched_priority = priority;
-
-      system_error_check(
-        ::pthread_setschedparam(pid, spolicy, &sched_param),
-        "getting scheduler parameters");
-
-      if (!scheduler.empty()) {
-        char sname[4] = { ' ', ' ', ' ', ' ' };
-        for (size_t c = 0; c < sizeof(sname); ++c) {
-          if (c >= scheduler.length()) {
-            break;
-          }
-          sname[c] = scheduler[c];
-        }
+      sname[c] = scheduler[c];
+    }
 #ifdef __rtems__
-        rtems_name scheduler_name = rtems_build_name(
-          sname[0], sname[1], sname[2], sname[3]);
-        rtems_id scheduler_id;
-        runtime_error_check(
-          ::rtems_scheduler_ident(scheduler_name, &scheduler_id),
-          "get scheduler id");
-        // runtime_error_check (::rtems_task_set_scheduler (RTEMS_SELF,
-        //                                                  scheduler_id,
-        //                                                  1),
-        //                      "set scheduler id");
+    rtems_name scheduler_name =
+        rtems_build_name(sname[0], sname[1], sname[2], sname[3]);
+    rtems_id scheduler_id;
+    runtime_error_check(::rtems_scheduler_ident(scheduler_name, &scheduler_id),
+                        "get scheduler id");
+    // runtime_error_check (::rtems_task_set_scheduler (RTEMS_SELF,
+    //                                                  scheduler_id,
+    //                                                  1),
+    //                      "set scheduler id");
 #endif /* __rtems__ */
-      }
-    }
+  }
+}
 
-    void
-    attributes::update()
-    {
-      pthread_t pid = ::pthread_self();
+void attributes::update() {
+  pthread_t pid = ::pthread_self();
 
-      char buf[64];
-      system_error_check(
-        ::pthread_getname_np(pid, buf, sizeof (buf)),
-        "getting name");
-      name = buf;
+  char buf[64];
+  system_error_check(::pthread_getname_np(pid, buf, sizeof(buf)),
+                     "getting name");
+  name = buf;
 
-      int spolicy;
-      struct sched_param sched_param;
-      system_error_check(
-        ::pthread_getschedparam(pid, &spolicy, &sched_param),
-        "getting scheduler parameters");
+  int spolicy;
+  struct sched_param sched_param;
+  system_error_check(::pthread_getschedparam(pid, &spolicy, &sched_param),
+                     "getting scheduler parameters");
 
-      switch (spolicy) {
-      case SCHED_OTHER:
-        policy = sched_other;
-        break;
-      case SCHED_FIFO:
-        policy = sched_fifo;
-        break;
-      case SCHED_RR:
-        policy = sched_roundrobin;
-        break;
+  switch (spolicy) {
+  case SCHED_OTHER:
+    policy = sched_other;
+    break;
+  case SCHED_FIFO:
+    policy = sched_fifo;
+    break;
+  case SCHED_RR:
+    policy = sched_roundrobin;
+    break;
 #ifdef HAVE_SCHED_SPORADIC
-      case SCHED_SPORADIC:
-        policy = sched_sporadic;
-        break;
+  case SCHED_SPORADIC:
+    policy = sched_sporadic;
+    break;
 #endif /* HAVE_SCHED_SPORADIC */
-      default:
-        system_error_check(EINVAL, "get scheduler policy");
-        break;
-      }
-      priority = sched_param.sched_priority;
+  default:
+    system_error_check(EINVAL, "get scheduler policy");
+    break;
+  }
+  priority = sched_param.sched_priority;
 
-      pthread_attr_t pattr;
-      system_error_check(
-        ::pthread_attr_init(&pattr), "attribute init");
+  pthread_attr_t pattr;
+  system_error_check(::pthread_attr_init(&pattr), "attribute init");
 
-      system_error_check(
-        ::pthread_getattr_np(pid, &pattr),
-        "getting thread attributes");
-      system_error_check(
-        ::pthread_attr_getstacksize(&pattr, &stack_size),
-        "getting stack size");
-      int inheritsched = 0;
-      system_error_check(
-        ::pthread_attr_getinheritsched(&pattr, &inheritsched),
-        "getting inherited scheduler attribute");
+  system_error_check(::pthread_getattr_np(pid, &pattr),
+                     "getting thread attributes");
+  system_error_check(::pthread_attr_getstacksize(&pattr, &stack_size),
+                     "getting stack size");
+  int inheritsched = 0;
+  system_error_check(::pthread_attr_getinheritsched(&pattr, &inheritsched),
+                     "getting inherited scheduler attribute");
 
-      ::pthread_attr_destroy(&pattr);
+  ::pthread_attr_destroy(&pattr);
 
-      switch (inheritsched) {
-      case PTHREAD_INHERIT_SCHED:
-        attr = sched_inherit;
-        break;
-      case PTHREAD_EXPLICIT_SCHED:
-        attr = sched_explicit;
-        break;
-      default:
-        system_error_check(EINVAL, "get scheduler attribute");
-        break;
-      }
+  switch (inheritsched) {
+  case PTHREAD_INHERIT_SCHED:
+    attr = sched_inherit;
+    break;
+  case PTHREAD_EXPLICIT_SCHED:
+    attr = sched_explicit;
+    break;
+  default:
+    system_error_check(EINVAL, "get scheduler attribute");
+    break;
+  }
 
 #ifdef __rtems__
-      rtems_id scheduler_id;
-      runtime_error_check(
-        ::rtems_task_get_scheduler(RTEMS_SELF, &scheduler_id));
+  rtems_id scheduler_id;
+  runtime_error_check(::rtems_task_get_scheduler(RTEMS_SELF, &scheduler_id));
 #endif /* __rtems__ */
 #if HAVE_GET_SCHEDULER_NAME
-      char name[5];
-      if (!get_scheduler_name(scheduler_id, &name[0])) {
-        system_error_check(ENOENT, "get scheduler name");
-      }
-      scheduler = name;
+  char name[5];
+  if (!get_scheduler_name(scheduler_id, &name[0])) {
+    system_error_check(ENOENT, "get scheduler name");
+  }
+  scheduler = name;
 #endif
-    }
+}
 
-    attributes&
-    attributes::operator=(const attributes& other)
-    {
-      name = other.name;
-      priority = other.priority;
-      stack_size = other.stack_size;
-      attr = other.attr;
-      policy = other.policy;
-      return *this;
-    }
+attributes& attributes::operator=(const attributes& other) {
+  name = other.name;
+  priority = other.priority;
+  stack_size = other.stack_size;
+  attr = other.attr;
+  policy = other.policy;
+  return *this;
+}
 
-    bool
-    attributes::operator==(const attributes& other) const
-    {
-      return
-        name == other.name &&
-        priority == other.priority &&
-        stack_size == other.stack_size &&
-        attr == other.attr &&
-        policy == other.policy;
-    }
+bool attributes::operator==(const attributes& other) const {
+  return name == other.name && priority == other.priority &&
+         stack_size == other.stack_size && attr == other.attr &&
+         policy == other.policy;
+}
 
-    void*
-    thread_generic_entry(void* arg)
-    {
-      thread::state_ptr s{ static_cast<thread::state_base*>(arg) };
-      try {
-        s->run();
-      } catch (...) {
-        std::terminate();
-      }
-      return nullptr;
-    }
+void* thread_generic_entry(void* arg) {
+  thread::state_ptr s{static_cast<thread::state_base*>(arg)};
+  try {
+    s->run();
+  } catch (...) {
+    std::terminate();
+  }
+  return nullptr;
+}
 
-    thread&
-    thread::operator=(thread&& thread_)
-    {
-      if (joinable()) {
-        std::terminate();
-      }
-      swap(thread_);
-      return *this;
-    }
+thread& thread::operator=(thread&& thread_) {
+  if (joinable()) {
+    std::terminate();
+  }
+  swap(thread_);
+  return *this;
+}
 
-    void
-    thread::swap(thread& thread_) noexcept
-    {
-      std::swap(id_, thread_.id_);
-    }
+void thread::swap(thread& thread_) noexcept {
+  std::swap(id_, thread_.id_);
+}
 
-    bool
-    thread::joinable() const noexcept
-    {
-      return !(id_ == id());
-    }
+bool thread::joinable() const noexcept {
+  return !(id_ == id());
+}
 
-    void
-    thread::join()
-    {
-      if (!joinable()) {
-        system_error_check(EINVAL, "join");
-      }
-      system_error_check(::pthread_join(id_.id_, nullptr), "join");
-      id_ = id();
-    }
+void thread::join() {
+  if (!joinable()) {
+    system_error_check(EINVAL, "join");
+  }
+  system_error_check(::pthread_join(id_.id_, nullptr), "join");
+  id_ = id();
+}
 
-    void
-    thread::detach()
-    {
-      if (!joinable()) {
-        system_error_check(EINVAL, "detach");
-      }
-      system_error_check(::pthread_detach(id_.id_), "detach");
-      id_ = id();
-    }
+void thread::detach() {
+  if (!joinable()) {
+    system_error_check(EINVAL, "detach");
+  }
+  system_error_check(::pthread_detach(id_.id_), "detach");
+  id_ = id();
+}
 
-    thread::state_base::~state_base() = default;
+thread::state_base::~state_base() = default;
 
-    void
-    thread::start_thread(thread::state_ptr s)
-    {
-      const attributes attr = s->get_attributes();
+void thread::start_thread(thread::state_ptr s) {
+  const attributes attr = s->get_attributes();
 
-      pthread_attr_t pattr;
-      system_error_check(
-        ::pthread_attr_init(&pattr), "attribute init");
+  pthread_attr_t pattr;
+  system_error_check(::pthread_attr_init(&pattr), "attribute init");
 
-      int spolicy;
-      switch (attr.get_scheduler_policy()) {
-      case attributes::sched_other:
-        spolicy = SCHED_OTHER;
-        break;
-      case attributes::sched_roundrobin:
-        spolicy = SCHED_RR;
-        break;
-      case attributes::sched_sporadic:
+  int spolicy;
+  switch (attr.get_scheduler_policy()) {
+  case attributes::sched_other:
+    spolicy = SCHED_OTHER;
+    break;
+  case attributes::sched_roundrobin:
+    spolicy = SCHED_RR;
+    break;
+  case attributes::sched_sporadic:
 #ifdef HAVE_SCHED_SPORADIC
-        spolicy = SCHED_SPORADIC;
-        break;
+    spolicy = SCHED_SPORADIC;
+    break;
 #endif /* HAVE_SCHED_SPORADIC */
-      default:
-        spolicy = SCHED_FIFO;
-        break;
-      }
-      system_error_check(
-        ::pthread_attr_setschedpolicy(&pattr, spolicy),
-        "set scheduler policy");
+  default:
+    spolicy = SCHED_FIFO;
+    break;
+  }
+  system_error_check(::pthread_attr_setschedpolicy(&pattr, spolicy),
+                     "set scheduler policy");
 
-      if (attr.get_scheduler_attr() == attributes::sched_inherit) {
-        ::pthread_attr_setinheritsched(&pattr, PTHREAD_INHERIT_SCHED);
-      }
-      else {
-        ::pthread_attr_setinheritsched(&pattr, PTHREAD_EXPLICIT_SCHED);
-      }
+  if (attr.get_scheduler_attr() == attributes::sched_inherit) {
+    ::pthread_attr_setinheritsched(&pattr, PTHREAD_INHERIT_SCHED);
+  } else {
+    ::pthread_attr_setinheritsched(&pattr, PTHREAD_EXPLICIT_SCHED);
+  }
 
 #ifndef __linux__
-      struct sched_param param;
-      param.sched_priority = attr.get_priority();
-      system_error_check(
-        ::pthread_attr_setschedparam(&pattr, &param),
-        "set sched param");
+  struct sched_param param;
+  param.sched_priority = attr.get_priority();
+  system_error_check(::pthread_attr_setschedparam(&pattr, &param),
+                     "set sched param");
 
-      system_error_check(
-        ::pthread_attr_setstacksize(&pattr, attr.get_stack_size()),
-        "set stack size");
+  system_error_check(::pthread_attr_setstacksize(&pattr, attr.get_stack_size()),
+                     "set stack size");
 #endif /* __linux__ */
 
-      /*
-       * Hold the new thread in the state's run handler until the rest
-       * of the thread is set up after the create call.
-       */
-      system_error_check(
-        ::pthread_create(&id_.id_, &pattr, thread_generic_entry, s.get()),
-        "create thread");
+  /*
+   * Hold the new thread in the state's run handler until the rest
+   * of the thread is set up after the create call.
+   */
+  system_error_check(
+      ::pthread_create(&id_.id_, &pattr, thread_generic_entry, s.get()),
+      "create thread");
 
-      system_error_check(
-        ::pthread_setname_np(id_.id_, attr.get_name().c_str()),
-        "setting thread name");
+  system_error_check(::pthread_setname_np(id_.id_, attr.get_name().c_str()),
+                     "setting thread name");
 
-      ::pthread_attr_destroy(&pattr);
+  ::pthread_attr_destroy(&pattr);
 
-      s.release();
-    };
-  };
+  s.release();
 };
+}; // namespace thread
+}; // namespace rtems
