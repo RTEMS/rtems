@@ -1061,7 +1061,7 @@ handle_exception (int exceptionVector)
 			  else if (!insert)
 			    {
 			      uint32_t dra = getDR(i);
-			      if (dra == addr)
+			      if (dra == (uint32_t)addr)
 				{
 				  dr7 &= ~(2 << (i * 2));
 				  setDR7(dr7);

@@ -500,7 +500,7 @@ BSP_uart_termios_read_com1(int uart)
 {
   (void) uart;
 
-  int     off = (int)0;
+  size_t  off = 0;
   char    buf[40];
 
   /* read bytes */
@@ -525,7 +525,7 @@ BSP_uart_termios_read_com2(int uart)
 {
   (void) uart;
 
-  int     off = (int)0;
+  size_t  off = 0;
   char    buf[40];
 
   /* read current byte */
@@ -624,7 +624,8 @@ BSP_uart_termios_isr_com1(void *ignored)
 
   unsigned char buf[40];
   unsigned char val;
-  int      off, ret, vect;
+  size_t        off;
+  int           ret, vect;
 
   off = 0;
 
@@ -722,7 +723,8 @@ BSP_uart_termios_isr_com2(void *ignored)
 
   unsigned char buf[40];
   unsigned char val;
-  int      off, ret, vect;
+  size_t        off;
+  int           ret, vect;
 
   off = 0;
 

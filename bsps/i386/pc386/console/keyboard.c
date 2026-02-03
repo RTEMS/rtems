@@ -549,7 +549,7 @@ static void do_dead2(unsigned char value, char up_flag)
 unsigned char handle_diacr(unsigned char ch)
 {
   int d = diacr;
-  int i;
+  size_t i;
 
   diacr = 0;
 
@@ -694,7 +694,8 @@ static void do_shift(unsigned char value, char up_flag)
 /* maybe called when keymap is undefined, so that shiftkey release is seen */
 void compute_shiftstate(void)
 {
-  int i, j, k, sym, val;
+  size_t i, j, k;
+  int sym, val;
 
   shift_state = 0;
   for(i=0; i < SIZE(k_down); i++)

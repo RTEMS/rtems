@@ -161,7 +161,7 @@ static struct cpu_model_info amd_models[] = {
 static const char * AMDmodel(void)
 {
   const char *p=NULL;
-  int i;
+  size_t i;
 
   if (x86_model < 16)
     for (i=0; i<sizeof(amd_models)/sizeof(struct cpu_model_info); i++)

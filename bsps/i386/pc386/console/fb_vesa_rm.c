@@ -632,7 +632,7 @@ void vesa_realmode_bootup_init(void)
     VBE_vbe_info_block *vib = (VBE_vbe_info_block *)
         i386_get_default_rm_buffer(&size);
     vbe_ret_val = VBE_controller_information(vib, 0x300);
-    if (vbe_ret_val == -1)
+    if (vbe_ret_val == (uint32_t)-1)
     {
         printk(FB_VESA_NAME " error calling real mode interrupt.\n");
         return;

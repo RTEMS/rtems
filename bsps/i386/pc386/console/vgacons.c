@@ -128,7 +128,7 @@ VGACONS_STATIC ssize_t vgacons_write_support_polled(
   size_t      len
 )
 {
-  int nwrite = 0;
+  size_t nwrite = 0;
 
   /*
    * poll each byte in the string out of the port.

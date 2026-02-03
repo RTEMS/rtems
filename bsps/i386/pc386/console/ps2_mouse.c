@@ -157,7 +157,7 @@ static inline void handle_mouse_event(unsigned char scancode)
   }
 
   if (aux_count) {
-    int head = queue->head;
+    unsigned long head = queue->head;
     queue->buf[head] = scancode;
     head = (head + 1) & (AUX_BUF_SIZE-1);
     if (head != queue->tail) {

@@ -100,7 +100,7 @@ static void bsp_size_memory(void)
   } else if ( (uintptr_t) RamSize == (uintptr_t) 0xFFFFFFFF ) {
     uintptr_t lowest;
     uint32_t  val;
-    int       i;
+    uintptr_t i;
 
     /*
      * We have to dynamically size memory. Memory size can be anything

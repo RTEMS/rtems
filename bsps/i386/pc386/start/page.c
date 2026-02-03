@@ -127,7 +127,7 @@ int init_paging(void)
     physPage ++;
     tableEntry ++;
 
-    if (tableEntry >= MAX_ENTRY){
+    if (tableEntry >= (int)MAX_ENTRY){
       tableEntry = 0;
       directoryEntry ++;
       pageTable ++;
@@ -258,7 +258,7 @@ int _CPU_map_phys_address(
 
     countAddress += PG_SIZE;
     tableEntry++;
-    if (tableEntry >= MAX_ENTRY){
+    if (tableEntry >= (int)MAX_ENTRY){
       tableEntry = 0;
       directoryEntry++;
     }
@@ -453,7 +453,8 @@ int _CPU_change_memory_mapping_attribute(
 
 int  _CPU_display_memory_attribute(void)
 {
-  unsigned int dirCount, pageCount;
+  int dirCount;
+  unsigned int pageCount;
   unsigned int regCr0;
   page_table *localPageTable;
   unsigned int prevCache;
