@@ -78,49 +78,53 @@ const uint8_t _Base64_Decoding[128] = {
     [124] = INVALID, [125] = INVALID, [126] = INVALID, [127] = INVALID};
 // clang-format on
 
-void _Base64_Decode_initialize(Base64_Decode_control* self,
-                               uint8_t* target,
-                               size_t target_size) {
+void _Base64_Decode_initialize(
+  Base64_Decode_control *self,
+  uint8_t               *target,
+  size_t                 target_size
+)
+{
   self->state = BASE64_DECODE_STATE_0;
   self->target = target;
   self->target_end = target + target_size;
 }
 
-Base64_Decode_status _Base64_Decode(Base64_Decode_control* self, char ch) {
-  uint8_t decoded_ch;
-  uint8_t next_ch;
-  uint8_t* target;
-  const uint8_t* target_end;
+Base64_Decode_status _Base64_Decode( Base64_Decode_control *self, char ch )
+{
+  uint8_t             decoded_ch;
+  uint8_t             next_ch;
+  uint8_t            *target;
+  const uint8_t      *target_end;
   Base64_Decode_state next_state;
 
-  if ((unsigned char)ch >= 128) {
+  if ( (unsigned char) ch >= 128 ) {
     return BASE64_DECODE_INVALID_INPUT;
   }
 
-  decoded_ch = _Base64_Decoding[(unsigned char)ch];
+  decoded_ch = _Base64_Decoding[ (unsigned char) ch ];
 
-  if (decoded_ch == SPACE) {
+  if ( decoded_ch == SPACE ) {
     return BASE64_DECODE_SUCCESS;
   }
 
   target = self->target;
 
-  if (decoded_ch == PAD) {
+  if ( decoded_ch == PAD ) {
     self->target_end = target;
     return BASE64_DECODE_SUCCESS;
   }
 
-  if (decoded_ch == INVALID) {
+  if ( decoded_ch == INVALID ) {
     return BASE64_DECODE_INVALID_INPUT;
   }
 
   target_end = self->target_end;
 
-  if (target == target_end) {
+  if ( target == target_end ) {
     return BASE64_DECODE_OVERFLOW;
   }
 
-  switch (self->state) {
+  switch ( self->state ) {
     case BASE64_DECODE_STATE_0:
       *target = decoded_ch << 2;
       next_state = BASE64_DECODE_STATE_1;
@@ -128,12 +132,12 @@ Base64_Decode_status _Base64_Decode(Base64_Decode_control* self, char ch) {
 
     case BASE64_DECODE_STATE_1:
       *target |= decoded_ch >> 4;
-      next_ch = (decoded_ch & 0x0fU) << 4;
+      next_ch = ( decoded_ch & 0x0fU ) << 4;
       ++target;
 
-      if (target != target_end) {
+      if ( target != target_end ) {
         *target = next_ch;
-      } else if (next_ch != 0) {
+      } else if ( next_ch != 0 ) {
         return BASE64_DECODE_OVERFLOW;
       }
 
@@ -142,12 +146,12 @@ Base64_Decode_status _Base64_Decode(Base64_Decode_control* self, char ch) {
 
     case BASE64_DECODE_STATE_2:
       *target |= decoded_ch >> 2;
-      next_ch = (decoded_ch & 0x03U) << 6;
+      next_ch = ( decoded_ch & 0x03U ) << 6;
       ++target;
 
-      if (target != target_end) {
+      if ( target != target_end ) {
         *target = next_ch;
-      } else if (next_ch != 0) {
+      } else if ( next_ch != 0 ) {
         return BASE64_DECODE_OVERFLOW;
       }
 

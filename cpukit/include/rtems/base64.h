@@ -87,12 +87,12 @@ extern const uint8_t _Base64url_Encoding[ 64 ];
  * @return Returns the count of output characters.
  */
 int _Base64_Encode(
-  IO_Put_char  put_char,
-  void        *arg,
-  const void  *src,
-  size_t       len,
-  const char  *wordbreak,
-  int          wordlen
+  IO_Put_char put_char,
+  void       *arg,
+  const void *src,
+  size_t      len,
+  const char *wordbreak,
+  int         wordlen
 );
 
 /**
@@ -118,12 +118,12 @@ int _Base64_Encode(
  * @return Returns the count of output characters.
  */
 int _Base64url_Encode(
-  IO_Put_char  put_char,
-  void        *arg,
-  const void  *src,
-  size_t       len,
-  const char  *wordbreak,
-  int          wordlen
+  IO_Put_char put_char,
+  void       *arg,
+  const void *src,
+  size_t      len,
+  const char *wordbreak,
+  int         wordlen
 );
 
 /**
@@ -184,10 +184,7 @@ typedef enum {
  *
  * @param ch is the character to decode.
  */
-Base64_Decode_status _Base64_Decode(
-  Base64_Decode_control *self,
-  char                   ch
-);
+Base64_Decode_status _Base64_Decode( Base64_Decode_control *self, char ch );
 
 /** @} */
 

@@ -29,63 +29,75 @@
 
 #include <rtems/base64.h>
 
-static void
-_Base64_Put(int c, void *arg, IO_Put_char put_char)
+static void _Base64_Put( int c, void *arg, IO_Put_char put_char )
 {
-	(*put_char)(c, arg);
+  ( *put_char )( c, arg );
 }
 
-static int
-_Base64_Do_encode(IO_Put_char put_char, void *arg, const void *src,
-    size_t srclen, const char *wordbreak, int wordlen, const uint8_t *encoding)
+static int _Base64_Do_encode(
+  IO_Put_char    put_char,
+  void          *arg,
+  const void    *src,
+  size_t         srclen,
+  const char    *wordbreak,
+  int            wordlen,
+  const uint8_t *encoding
+)
 {
-	unsigned int loops = 0;
-	const unsigned char *in = src;
-	int out = 0;
+  unsigned int         loops = 0;
+  const unsigned char *in = src;
+  int                  out = 0;
 
-	if (wordlen < 4) {
-		wordlen = 4;
-	}
+  if ( wordlen < 4 ) {
+    wordlen = 4;
+  }
 
-	while (srclen > 2) {
-		_Base64_Put(encoding[(in[0]>>2)&0x3f], arg, put_char);
-		_Base64_Put(encoding[((in[0]<<4)&0x30)|
-				((in[1]>>4)&0x0f)], arg, put_char);
-		_Base64_Put(encoding[((in[1]<<2)&0x3c)|
-				((in[2]>>6)&0x03)], arg, put_char);
-		_Base64_Put(encoding[in[2]&0x3f], arg, put_char);
-		in += 3;
-		srclen -= 3;
-		out += 4;
+  while ( srclen > 2 ) {
+    _Base64_Put( encoding[ ( in[ 0 ] >> 2 ) & 0x3f ], arg, put_char );
+    _Base64_Put(
+      encoding[ ( ( in[ 0 ] << 4 ) & 0x30 ) | ( ( in[ 1 ] >> 4 ) & 0x0f ) ],
+      arg,
+      put_char
+    );
+    _Base64_Put(
+      encoding[ ( ( in[ 1 ] << 2 ) & 0x3c ) | ( ( in[ 2 ] >> 6 ) & 0x03 ) ],
+      arg,
+      put_char
+    );
+    _Base64_Put( encoding[ in[ 2 ] & 0x3f ], arg, put_char );
+    in += 3;
+    srclen -= 3;
+    out += 4;
 
-		loops++;
-		if (srclen != 0 &&
-		    (int)((loops + 1) * 4) >= wordlen)
-		{
-			const char *w = wordbreak;
-			loops = 0;
-			while (*w != '\0') {
-				_Base64_Put(*w, arg, put_char);
-				++w;
-				++out;
-			}
-		}
-	}
-	if (srclen == 2) {
-		_Base64_Put(encoding[(in[0]>>2)&0x3f], arg, put_char);
-		_Base64_Put(encoding[((in[0]<<4)&0x30)|
-				((in[1]>>4)&0x0f)], arg, put_char);
-		_Base64_Put(encoding[((in[1]<<2)&0x3c)], arg, put_char);
-		_Base64_Put('=', arg, put_char);
-		out += 4;
-	} else if (srclen == 1) {
-		_Base64_Put(encoding[(in[0]>>2)&0x3f], arg, put_char);
-		_Base64_Put(encoding[((in[0]<<4)&0x30)], arg, put_char);
-		_Base64_Put('=', arg, put_char);
-		_Base64_Put('=', arg, put_char);
-		out += 4;
-	}
-	return out;
+    loops++;
+    if ( srclen != 0 && (int) ( ( loops + 1 ) * 4 ) >= wordlen ) {
+      const char *w = wordbreak;
+      loops = 0;
+      while ( *w != '\0' ) {
+        _Base64_Put( *w, arg, put_char );
+        ++w;
+        ++out;
+      }
+    }
+  }
+  if ( srclen == 2 ) {
+    _Base64_Put( encoding[ ( in[ 0 ] >> 2 ) & 0x3f ], arg, put_char );
+    _Base64_Put(
+      encoding[ ( ( in[ 0 ] << 4 ) & 0x30 ) | ( ( in[ 1 ] >> 4 ) & 0x0f ) ],
+      arg,
+      put_char
+    );
+    _Base64_Put( encoding[ ( ( in[ 1 ] << 2 ) & 0x3c ) ], arg, put_char );
+    _Base64_Put( '=', arg, put_char );
+    out += 4;
+  } else if ( srclen == 1 ) {
+    _Base64_Put( encoding[ ( in[ 0 ] >> 2 ) & 0x3f ], arg, put_char );
+    _Base64_Put( encoding[ ( ( in[ 0 ] << 4 ) & 0x30 ) ], arg, put_char );
+    _Base64_Put( '=', arg, put_char );
+    _Base64_Put( '=', arg, put_char );
+    out += 4;
+  }
+  return out;
 }
 
 // clang-format off
@@ -98,12 +110,24 @@ const uint8_t _Base64_Encoding[64] = {
 };
 // clang-format on
 
-int
-_Base64_Encode(IO_Put_char put_char, void *arg, const void *src, size_t srclen,
-    const char *wordbreak, int wordlen)
+int _Base64_Encode(
+  IO_Put_char put_char,
+  void       *arg,
+  const void *src,
+  size_t      srclen,
+  const char *wordbreak,
+  int         wordlen
+)
 {
-	return _Base64_Do_encode(put_char, arg, src, srclen, wordbreak,
-	    wordlen, _Base64_Encoding);
+  return _Base64_Do_encode(
+    put_char,
+    arg,
+    src,
+    srclen,
+    wordbreak,
+    wordlen,
+    _Base64_Encoding
+  );
 }
 
 // clang-format off
@@ -116,10 +140,22 @@ const uint8_t _Base64url_Encoding[64] = {
 };
 // clang-format on
 
-int
-_Base64url_Encode(IO_Put_char put_char, void *arg, const void *src,
-    size_t srclen, const char *wordbreak, int wordlen)
+int _Base64url_Encode(
+  IO_Put_char put_char,
+  void       *arg,
+  const void *src,
+  size_t      srclen,
+  const char *wordbreak,
+  int         wordlen
+)
 {
-	return _Base64_Do_encode(put_char, arg, src, srclen, wordbreak,
-	    wordlen, _Base64url_Encoding);
+  return _Base64_Do_encode(
+    put_char,
+    arg,
+    src,
+    srclen,
+    wordbreak,
+    wordlen,
+    _Base64url_Encoding
+  );
 }
