@@ -33,7 +33,7 @@
 #include <rtems.h>
 #include <rtems/bspIo.h>
 
-rtems_id __gnat_binary_semaphore_create(void)
+rtems_id __gnat_binary_semaphore_create( void )
 {
   rtems_status_code status;
   rtems_id          semaphore;
@@ -45,77 +45,74 @@ rtems_id __gnat_binary_semaphore_create(void)
     0,
     &semaphore
   );
-  if ( status != RTEMS_SUCCESSFUL )
+  if ( status != RTEMS_SUCCESSFUL ) {
     printk( "__gnat_binary_semaphore_create failed %d\n", status );
+  }
 
-  #if defined(GNAT_DEBUG)
-    printk( "__gnat_binary_semaphore_create\n" );
+  #if defined( GNAT_DEBUG )
+  printk( "__gnat_binary_semaphore_create\n" );
   #endif
   return semaphore;
 }
 
-int __gnat_binary_semaphore_delete(
-  rtems_id semaphore
-)
+int __gnat_binary_semaphore_delete( rtems_id semaphore )
 {
   rtems_status_code status;
 
-  #if defined(GNAT_DEBUG)
-    printk( "__gnat_binary_semaphore_delete\n" );
+  #if defined( GNAT_DEBUG )
+  printk( "__gnat_binary_semaphore_delete\n" );
   #endif
 
   status = rtems_semaphore_delete( semaphore );
-  if ( status != RTEMS_SUCCESSFUL )
+  if ( status != RTEMS_SUCCESSFUL ) {
     printk( "__gnat_binary_semaphore_delete failed %d\n", status );
+  }
 
   return 0;
 }
 
-int __gnat_binary_semaphore_obtain(
-  rtems_id semaphore
-)
+int __gnat_binary_semaphore_obtain( rtems_id semaphore )
 {
   rtems_status_code status;
 
-  #if defined(GNAT_DEBUG)
-    printk( "__gnat_binary_semaphore_obtain\n" );
+  #if defined( GNAT_DEBUG )
+  printk( "__gnat_binary_semaphore_obtain\n" );
   #endif
 
   status = rtems_semaphore_obtain( semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
-  if ( status != RTEMS_SUCCESSFUL )
+  if ( status != RTEMS_SUCCESSFUL ) {
     printk( "__gnat_binary_semaphore_obtain failed %d\n", status );
+  }
 
   return 0;
 }
 
-int __gnat_binary_semaphore_release(
-  rtems_id semaphore
-)
+int __gnat_binary_semaphore_release( rtems_id semaphore )
 {
   rtems_status_code status;
 
-  #if defined(GNAT_DEBUG)
-    printk( "__gnat_binary_semaphore_release\n" );
+  #if defined( GNAT_DEBUG )
+  printk( "__gnat_binary_semaphore_release\n" );
   #endif
 
   status = rtems_semaphore_release( semaphore );
-  if ( status != RTEMS_SUCCESSFUL )
+  if ( status != RTEMS_SUCCESSFUL ) {
     printk( "__gnat_binary_semaphore_release failed %d\n", status );
+  }
 
   return 0;
 }
 
-int __gnat_binary_semaphore_flush(
-  rtems_id semaphore
-)
+int __gnat_binary_semaphore_flush( rtems_id semaphore )
 {
   rtems_status_code status;
 
   printk( "__gnat_binary_semaphore_flush\n" );
 
   status = rtems_semaphore_flush( semaphore );
-  if ( status != RTEMS_SUCCESSFUL )
+  if ( status != RTEMS_SUCCESSFUL ) {
     printk( "__gnat_binary_semaphore_flush failed %d\n", status );
+  }
 
   return 0;
 }

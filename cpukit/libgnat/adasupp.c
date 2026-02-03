@@ -59,7 +59,7 @@ size_t _ada_pthread_minimum_stack_size( void )
   return PTHREAD_MINIMUM_STACK_SIZE * 2;
 }
 
-uint32_t _ada_microseconds_per_tick(void)
+uint32_t _ada_microseconds_per_tick( void )
 {
   return rtems_configuration_get_microseconds_per_tick();
 }
