@@ -247,69 +247,64 @@
 #include <arpa/ftp.h>
 #include <netinet/in.h>
 
-
 #ifdef __GNUC__
 /* change to #if 1 to disable syslog entirely */
 #if 0
-#undef  syslog
-#define syslog(a, b, ...) while(0){}
+#undef syslog
+#define syslog( a, b, ... ) \
+  while ( 0 ) {             \
+  }
 #endif
 #endif
 
-#define FTPD_SERVER_MESSAGE  "RTEMS FTP server (Version 1.1-JWJ) ready."
+#define FTPD_SERVER_MESSAGE "RTEMS FTP server (Version 1.1-JWJ) ready."
 
 #define FTPD_SYSTYPE "UNIX Type: L8"
 
 /* Seems to be unused */
 #if 0
-#define FTPD_WELCOME_MESSAGE \
-   "Welcome to the RTEMS FTP server.\n" \
-   "\n" \
-   "Login accepted.\n"
+#define FTPD_WELCOME_MESSAGE           \
+  "Welcome to the RTEMS FTP server.\n" \
+  "\n"                                 \
+  "Login accepted.\n"
 #endif
 
 /* Event to be used by session tasks for waiting */
-enum
-{
-  FTPD_RTEMS_EVENT = RTEMS_EVENT_1
-};
+enum { FTPD_RTEMS_EVENT = RTEMS_EVENT_1 };
 
 /* Configuration table */
 static struct rtems_ftpd_configuration *ftpd_config;
 
 /* this is not prototyped in strict ansi mode */
-FILE *fdopen (int fildes, const char *mode);
+FILE *fdopen( int fildes, const char *mode );
 
 /*SessionInfo structure.
  *
  * The following structure is allocated for each session.
  */
-typedef struct
-{
-  struct sockaddr_in  ctrl_addr;   /* Control connection self address */
-  struct sockaddr_in  data_addr;   /* Data address set by PORT command */
-  struct sockaddr_in  def_addr;    /* Default address for data */
-  int                 use_default; /* 1 - use default address for data */
-  FILE                *ctrl_fp;    /* File pointer for control connection */
-  int                 ctrl_socket; /* Socket for ctrl connection */
-  int                 pasv_socket; /* Socket for PASV connection */
-  int                 data_socket; /* Socket for data connection */
-  int                 idle;        /* Timeout in seconds */
-  int                 xfer_mode;   /* Transfer mode (ASCII/binary) */
-  rtems_id            tid;         /* Task id */
-  char                *user;       /* user name (0 if not supplied) */
-  char                user_buf[256]; /* user name buffer */
-  bool                auth;        /* true if user/pass was valid, false if not or not supplied */
+typedef struct {
+  struct sockaddr_in ctrl_addr;       /* Control connection self address */
+  struct sockaddr_in data_addr;       /* Data address set by PORT command */
+  struct sockaddr_in def_addr;        /* Default address for data */
+  int                use_default;     /* 1 - use default address for data */
+  FILE              *ctrl_fp;         /* File pointer for control connection */
+  int                ctrl_socket;     /* Socket for ctrl connection */
+  int                pasv_socket;     /* Socket for PASV connection */
+  int                data_socket;     /* Socket for data connection */
+  int                idle;            /* Timeout in seconds */
+  int                xfer_mode;       /* Transfer mode (ASCII/binary) */
+  rtems_id           tid;             /* Task id */
+  char              *user;            /* user name (0 if not supplied) */
+  char               user_buf[ 256 ]; /* user name buffer */
+  bool auth; /* true if user/pass was valid, false if not or not supplied */
 } FTPD_SessionInfo_t;
-
 
 /*
  * TaskPool structure.
  */
-typedef struct
-{
-  FTPD_SessionInfo_t       *info;
-  FTPD_SessionInfo_t       **queue;
+typedef struct {
+  FTPD_SessionInfo_t      *info;
+  FTPD_SessionInfo_t     **queue;
   int                      count;
   int                      head;
   int                      tail;
@@ -326,7 +321,7 @@ static FTPD_TaskPool_t task_pool;
  * Root directory
  */
 
-static char const* ftpd_root = "/";
+static char const *ftpd_root = "/";
 
 /*
  * Default idle timeout for sockets in seconds.
@@ -338,8 +333,7 @@ static int ftpd_timeout = 0;
  */
 static int ftpd_access = 0;
 
-static void
-yield(void)
+static void yield( void )
 {
 /*
  * If we do not build for the legacy network stack, then we use the libbsd.  In
@@ -357,12 +351,11 @@ yield(void)
  * Return error string corresponding to current 'errno'.
  *
  */
-static char const*
-serr(void)
+static char const *serr( void )
 {
   int err = errno;
   errno = 0;
-  return strerror(err);
+  return strerror( err );
 }
 
 /*
@@ -370,23 +363,20 @@ serr(void)
  *
  */
 
-static int
-can_read(void)
+static int can_read( void )
 {
-  return (ftpd_access & FTPD_NO_READ) == 0;
+  return ( ftpd_access & FTPD_NO_READ ) == 0;
 }
 
-static int
-can_write(void)
+static int can_write( void )
 {
-  return (ftpd_access & FTPD_NO_WRITE) == 0;
+  return ( ftpd_access & FTPD_NO_WRITE ) == 0;
 }
 
 /*
  * Task pool management routines
  *
  */
-
 
 /*
  * task_pool_done
@@ -400,16 +390,16 @@ can_write(void)
  *   NONE
  *
  */
-static void
-task_pool_done(int count)
+static void task_pool_done( int count )
 {
   int i;
-  for(i = 0; i < count; ++i)
-    rtems_task_delete(task_pool.info[i].tid);
-  free(task_pool.info);
-  free(task_pool.queue);
-  rtems_mutex_destroy(&task_pool.mutex);
-  rtems_counting_semaphore_destroy(&task_pool.sem);
+  for ( i = 0; i < count; ++i ) {
+    rtems_task_delete( task_pool.info[ i ].tid );
+  }
+  free( task_pool.info );
+  free( task_pool.queue );
+  rtems_mutex_destroy( &task_pool.mutex );
+  rtems_counting_semaphore_destroy( &task_pool.sem );
   task_pool.info = 0;
   task_pool.queue = 0;
   task_pool.count = 0;
@@ -428,59 +418,67 @@ task_pool_done(int count)
  *   returns 1 on success, 0 on failure.
  *
  */
-static void session(rtems_task_argument arg); /* Forward declare */
+static void session( rtems_task_argument arg ); /* Forward declare */
 
-static int
-task_pool_init(int count, rtems_task_priority priority)
+static int task_pool_init( int count, rtems_task_priority priority )
 {
-  int i;
+  int               i;
   rtems_status_code sc;
-  char id = 'a';
+  char              id = 'a';
 
   task_pool.count = 0;
   task_pool.head = task_pool.tail = 0;
 
-  rtems_mutex_init(&task_pool.mutex, "FTPD");
-  rtems_counting_semaphore_init(&task_pool.sem, "FTPD", (unsigned int) count);
+  rtems_mutex_init( &task_pool.mutex, "FTPD" );
+  rtems_counting_semaphore_init(
+    &task_pool.sem,
+    "FTPD",
+    (unsigned int) count
+  );
 
-  task_pool.info = (FTPD_SessionInfo_t*)
-    malloc(sizeof(FTPD_SessionInfo_t) * count);
-  task_pool.queue = (FTPD_SessionInfo_t**)
-    malloc(sizeof(FTPD_SessionInfo_t*) * count);
-  if (NULL == task_pool.info || NULL == task_pool.queue)
-  {
-    task_pool_done(0);
-    syslog(LOG_ERR, "ftpd: Not enough memory");
+  task_pool.info = (FTPD_SessionInfo_t *) malloc(
+    sizeof( FTPD_SessionInfo_t ) * count
+  );
+  task_pool.queue = (FTPD_SessionInfo_t **) malloc(
+    sizeof( FTPD_SessionInfo_t * ) * count
+  );
+  if ( NULL == task_pool.info || NULL == task_pool.queue ) {
+    task_pool_done( 0 );
+    syslog( LOG_ERR, "ftpd: Not enough memory" );
     return 0;
   }
 
-  for(i = 0; i < count; ++i)
-  {
-    FTPD_SessionInfo_t *info = &task_pool.info[i];
-    sc = rtems_task_create(rtems_build_name('F', 'T', 'P', id),
-      priority, FTPD_STACKSIZE,
-      RTEMS_PREEMPT | RTEMS_NO_TIMESLICE |
-      RTEMS_NO_ASR | RTEMS_INTERRUPT_LEVEL(0),
+  for ( i = 0; i < count; ++i ) {
+    FTPD_SessionInfo_t *info = &task_pool.info[ i ];
+    sc = rtems_task_create(
+      rtems_build_name( 'F', 'T', 'P', id ),
+      priority,
+      FTPD_STACKSIZE,
+      RTEMS_PREEMPT | RTEMS_NO_TIMESLICE | RTEMS_NO_ASR |
+        RTEMS_INTERRUPT_LEVEL( 0 ),
       RTEMS_FLOATING_POINT | RTEMS_LOCAL,
-      &info->tid);
-    if (sc == RTEMS_SUCCESSFUL)
-    {
-      sc = rtems_task_start(
-        info->tid, session, (rtems_task_argument)info);
-      if (sc != RTEMS_SUCCESSFUL)
-        task_pool_done(i);
+      &info->tid
+    );
+    if ( sc == RTEMS_SUCCESSFUL ) {
+      sc = rtems_task_start( info->tid, session, (rtems_task_argument) info );
+      if ( sc != RTEMS_SUCCESSFUL ) {
+        task_pool_done( i );
+      }
+    } else {
+      task_pool_done( i + 1 );
     }
-    else
-      task_pool_done(i + 1);
-    if (sc != RTEMS_SUCCESSFUL)
-    {
-      syslog(LOG_ERR, "ftpd: Could not create/start FTPD session: %s",
-        rtems_status_text(sc));
+    if ( sc != RTEMS_SUCCESSFUL ) {
+      syslog(
+        LOG_ERR,
+        "ftpd: Could not create/start FTPD session: %s",
+        rtems_status_text( sc )
+      );
       return 0;
     }
-    task_pool.queue[i] = task_pool.info + i;
-    if (++id > 'z')
+    task_pool.queue[ i ] = task_pool.info + i;
+    if ( ++id > 'z' ) {
       id = 'a';
+    }
   }
   task_pool.count = count;
   return 1;
@@ -499,16 +497,16 @@ task_pool_init(int count, rtems_task_priority priority)
  *           NULL if there are no free tasks in the pool.
  *
  */
-static FTPD_SessionInfo_t*
-task_pool_obtain(void)
+static FTPD_SessionInfo_t *task_pool_obtain( void )
 {
-  FTPD_SessionInfo_t* info = 0;
-  rtems_counting_semaphore_wait(&task_pool.sem);
-  rtems_mutex_lock(&task_pool.mutex);
-  info = task_pool.queue[task_pool.head];
-  if(++task_pool.head >= task_pool.count)
+  FTPD_SessionInfo_t *info = 0;
+  rtems_counting_semaphore_wait( &task_pool.sem );
+  rtems_mutex_lock( &task_pool.mutex );
+  info = task_pool.queue[ task_pool.head ];
+  if ( ++task_pool.head >= task_pool.count ) {
     task_pool.head = 0;
-  rtems_mutex_unlock(&task_pool.mutex);
+  }
+  rtems_mutex_unlock( &task_pool.mutex );
   return info;
 }
 
@@ -524,15 +522,15 @@ task_pool_obtain(void)
  *   NONE
  *
  */
-static void
-task_pool_release(FTPD_SessionInfo_t* info)
+static void task_pool_release( FTPD_SessionInfo_t *info )
 {
-  rtems_mutex_lock(&task_pool.mutex);
-  task_pool.queue[task_pool.tail] = info;
-  if(++task_pool.tail >= task_pool.count)
+  rtems_mutex_lock( &task_pool.mutex );
+  task_pool.queue[ task_pool.tail ] = info;
+  if ( ++task_pool.tail >= task_pool.count ) {
     task_pool.tail = 0;
-  rtems_mutex_unlock(&task_pool.mutex);
-  rtems_counting_semaphore_post(&task_pool.sem);
+  }
+  rtems_mutex_unlock( &task_pool.mutex );
+  rtems_counting_semaphore_post( &task_pool.sem );
 }
 
 /*
@@ -554,14 +552,12 @@ task_pool_release(FTPD_SessionInfo_t* info)
  * Output parameters:
  *   NONE
  */
-static void
-send_reply(FTPD_SessionInfo_t  *info, int code, const char *text)
+static void send_reply( FTPD_SessionInfo_t *info, int code, const char *text )
 {
   text = text != NULL ? text : "";
-  fprintf(info->ctrl_fp, "%d %.70s\r\n", code, text);
-  fflush(info->ctrl_fp);
+  fprintf( info->ctrl_fp, "%d %.70s\r\n", code, text );
+  fflush( info->ctrl_fp );
 }
-
 
 /*
  * close_socket
@@ -576,20 +572,25 @@ send_reply(FTPD_SessionInfo_t  *info, int code, const char *text)
  * Output parameters:
  *   returns 1 on success, 0 on failure.
  */
-static void
-set_socket_timeout(int s, int seconds)
+static void set_socket_timeout( int s, int seconds )
 {
   struct timeval tv;
-  int len = sizeof(tv);
+  int            len = sizeof( tv );
 
-  if(seconds < 0)
+  if ( seconds < 0 ) {
     seconds = 0;
+  }
   tv.tv_usec = 0;
-  tv.tv_sec  = seconds;
-  if(0 != setsockopt(s, SOL_SOCKET, SO_SNDTIMEO, &tv, len))
-    syslog(LOG_ERR, "ftpd: Can't set send timeout on socket: %s.", serr());
-  else if(0 != setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, &tv, len))
-    syslog(LOG_ERR, "ftpd: Can't set receive timeout on socket: %s.", serr());
+  tv.tv_sec = seconds;
+  if ( 0 != setsockopt( s, SOL_SOCKET, SO_SNDTIMEO, &tv, len ) ) {
+    syslog( LOG_ERR, "ftpd: Can't set send timeout on socket: %s.", serr() );
+  } else if ( 0 != setsockopt( s, SOL_SOCKET, SO_RCVTIMEO, &tv, len ) ) {
+    syslog(
+      LOG_ERR,
+      "ftpd: Can't set receive timeout on socket: %s.",
+      serr()
+    );
+  }
 }
 
 /*
@@ -603,16 +604,14 @@ set_socket_timeout(int s, int seconds)
  * Output parameters:
  *   returns 1 on success, 0 on failure
  */
-static int
-close_socket(int s)
+static int close_socket( int s )
 {
-  if (0 <= s)
-  {
-    if (0 != close(s))
-    {
-      shutdown(s, 2);
-      if (0 != close(s))
+  if ( 0 <= s ) {
+    if ( 0 != close( s ) ) {
+      shutdown( s, 2 );
+      if ( 0 != close( s ) ) {
         return 0;
+      }
     }
   }
   return 1;
@@ -630,53 +629,53 @@ close_socket(int s)
  *   returns socket descriptor, or -1 if failure
  *
  */
-static int
-data_socket(FTPD_SessionInfo_t *info)
+static int data_socket( FTPD_SessionInfo_t *info )
 {
   int s = info->pasv_socket;
-  if(0 > s)
-  {
+  if ( 0 > s ) {
     int on = 1;
-    s = socket(PF_INET, SOCK_STREAM, 0);
-    if(0 > s)
-      send_reply(info, 425, "Can't create data socket.");
-    else if(0 > setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on)))
-    {
-      close_socket(s);
+    s = socket( PF_INET, SOCK_STREAM, 0 );
+    if ( 0 > s ) {
+      send_reply( info, 425, "Can't create data socket." );
+    } else if (
+      0 > setsockopt( s, SOL_SOCKET, SO_REUSEADDR, &on, sizeof( on ) )
+    ) {
+      close_socket( s );
       s = -1;
-    }
-    else
-    {
+    } else {
       struct sockaddr_in data_source;
-      int tries;
+      int                tries;
 
       /* anchor socket to avoid multi-homing problems */
       data_source = info->ctrl_addr;
-      data_source.sin_port = htons(20); /* ftp-data port */
-      for(tries = 1; tries < 10; ++tries)
-      {
+      data_source.sin_port = htons( 20 ); /* ftp-data port */
+      for ( tries = 1; tries < 10; ++tries ) {
         errno = 0;
-        if(bind(s, (struct sockaddr *)&data_source, sizeof(data_source)) >= 0)
+        if (
+          bind( s, (struct sockaddr *) &data_source, sizeof( data_source ) ) >=
+          0
+        ) {
           break;
-        if (errno != EADDRINUSE)
+        }
+        if ( errno != EADDRINUSE ) {
           tries = 10;
-        else
-          rtems_task_wake_after(tries * 10);
+        } else {
+          rtems_task_wake_after( tries * 10 );
+        }
       }
-      if(tries >= 10)
-      {
-        send_reply(info, 425, "Can't bind data socket.");
-        close_socket(s);
+      if ( tries >= 10 ) {
+        send_reply( info, 425, "Can't bind data socket." );
+        close_socket( s );
         s = -1;
-      }
-      else
-      {
-        struct sockaddr_in *data_dest =
-          (info->use_default) ? &info->def_addr : &info->data_addr;
-        if(0 > connect(s, (struct sockaddr *)data_dest, sizeof(*data_dest)))
-        {
-          send_reply(info, 425, "Can't connect data socket.");
-          close_socket(s);
+      } else {
+        struct sockaddr_in *data_dest = ( info->use_default )
+                                          ? &info->def_addr
+                                          : &info->data_addr;
+        if (
+          0 > connect( s, (struct sockaddr *) data_dest, sizeof( *data_dest ) )
+        ) {
+          send_reply( info, 425, "Can't connect data socket." );
+          close_socket( s );
           s = -1;
         }
       }
@@ -684,7 +683,7 @@ data_socket(FTPD_SessionInfo_t *info)
   }
   info->data_socket = s;
   info->use_default = 1;
-  set_socket_timeout(s, info->idle);
+  set_socket_timeout( s, info->idle );
   return s;
 }
 
@@ -700,16 +699,17 @@ data_socket(FTPD_SessionInfo_t *info)
  *   NONE
  *
  */
-static void
-close_data_socket(FTPD_SessionInfo_t *info)
+static void close_data_socket( FTPD_SessionInfo_t *info )
 {
   /* As at most one data socket could be open simultaneously and in some cases
      data_socket == pasv_socket, we select socket to close, then close it. */
   int s = info->data_socket;
-  if(0 > s)
+  if ( 0 > s ) {
     s = info->pasv_socket;
-  if(!close_socket(s))
-    syslog(LOG_ERR, "ftpd: Error closing data socket.");
+  }
+  if ( !close_socket( s ) ) {
+    syslog( LOG_ERR, "ftpd: Error closing data socket." );
+  }
   info->data_socket = -1;
   info->pasv_socket = -1;
   info->use_default = 1;
@@ -727,26 +727,23 @@ close_data_socket(FTPD_SessionInfo_t *info)
  *   NONE
  *
  */
-static void
-close_stream(FTPD_SessionInfo_t* info)
+static void close_stream( FTPD_SessionInfo_t *info )
 {
-  if (NULL != info->ctrl_fp)
-  {
-    if (0 != fclose(info->ctrl_fp))
-    {
-      syslog(LOG_ERR, "ftpd: Could not close control stream: %s", serr());
-    }
-    else
+  if ( NULL != info->ctrl_fp ) {
+    if ( 0 != fclose( info->ctrl_fp ) ) {
+      syslog( LOG_ERR, "ftpd: Could not close control stream: %s", serr() );
+    } else {
       info->ctrl_socket = -1;
+    }
   }
 
-  if (!close_socket(info->ctrl_socket))
-    syslog(LOG_ERR, "ftpd: Could not close control socket: %s", serr());
+  if ( !close_socket( info->ctrl_socket ) ) {
+    syslog( LOG_ERR, "ftpd: Could not close control socket: %s", serr() );
+  }
 
   info->ctrl_fp = NULL;
   info->ctrl_socket = -1;
 }
-
 
 /*
  * send_mode_reply
@@ -760,13 +757,13 @@ close_stream(FTPD_SessionInfo_t* info)
  *   NONE
  *
  */
-static void
-send_mode_reply(FTPD_SessionInfo_t *info)
+static void send_mode_reply( FTPD_SessionInfo_t *info )
 {
-  if(info->xfer_mode == TYPE_I)
-    send_reply(info, 150, "Opening BINARY mode data connection.");
-  else
-    send_reply(info, 150, "Opening ASCII mode data connection.");
+  if ( info->xfer_mode == TYPE_I ) {
+    send_reply( info, 150, "Opening BINARY mode data connection." );
+  } else {
+    send_reply( info, 150, "Opening ASCII mode data connection." );
+  }
 }
 
 /*
@@ -782,112 +779,100 @@ send_mode_reply(FTPD_SessionInfo_t *info)
  *   NONE
  *
  */
-static void
-command_retrieve(FTPD_SessionInfo_t  *info, char const *filename)
+static void command_retrieve( FTPD_SessionInfo_t *info, char const *filename )
 {
-  int                 s = -1;
-  int                 fd = -1;
-  char                buf[FTPD_DATASIZE];
-  struct stat         stat_buf;
-  int                 res = 0;
+  int         s = -1;
+  int         fd = -1;
+  char        buf[ FTPD_DATASIZE ];
+  struct stat stat_buf;
+  int         res = 0;
 
-  if(!can_read() || !info->auth)
-  {
-    send_reply(info, 550, "Access denied.");
+  if ( !can_read() || !info->auth ) {
+    send_reply( info, 550, "Access denied." );
     return;
   }
 
-  if (0 > (fd = open(filename, O_RDONLY)))
-  {
-    send_reply(info, 550, "Error opening file.");
+  if ( 0 > ( fd = open( filename, O_RDONLY ) ) ) {
+    send_reply( info, 550, "Error opening file." );
     return;
   }
 
-  if (fstat(fd, &stat_buf) == 0 && S_ISDIR(stat_buf.st_mode))
-  {
-    if (-1 != fd)
-      close(fd);
-    send_reply(info, 550, "Is a directory.");
+  if ( fstat( fd, &stat_buf ) == 0 && S_ISDIR( stat_buf.st_mode ) ) {
+    if ( -1 != fd ) {
+      close( fd );
+    }
+    send_reply( info, 550, "Is a directory." );
     return;
   }
 
-  send_mode_reply(info);
+  send_mode_reply( info );
 
-  s = data_socket(info);
+  s = data_socket( info );
 
-  if (0 <= s)
-  {
+  if ( 0 <= s ) {
     int n = -1;
 
-    if(info->xfer_mode == TYPE_I)
-    {
-      while ((n = read(fd, buf, FTPD_DATASIZE)) > 0)
-      {
-        if(send(s, buf, n, 0) != n)
+    if ( info->xfer_mode == TYPE_I ) {
+      while ( ( n = read( fd, buf, FTPD_DATASIZE ) ) > 0 ) {
+        if ( send( s, buf, n, 0 ) != n ) {
           break;
+        }
         yield();
       }
-    }
-    else if (info->xfer_mode == TYPE_A)
-    {
+    } else if ( info->xfer_mode == TYPE_A ) {
       int rest = 0;
-      while (rest == 0 && (n = read(fd, buf, FTPD_DATASIZE)) > 0)
-      {
-        char const* e = buf;
-        char const* b;
-        int i;
+      while ( rest == 0 && ( n = read( fd, buf, FTPD_DATASIZE ) ) > 0 ) {
+        char const *e = buf;
+        char const *b;
+        int         i;
         rest = n;
-        do
-        {
+        do {
           char lf = '\0';
 
           b = e;
-          for(i = 0; i < rest; ++i, ++e)
-          {
-            if(*e == '\n')
-            {
+          for ( i = 0; i < rest; ++i, ++e ) {
+            if ( *e == '\n' ) {
               lf = '\n';
               break;
             }
           }
-          if(send(s, b, i, 0) != i)
+          if ( send( s, b, i, 0 ) != i ) {
             break;
-          if(lf == '\n')
-          {
-            if(send(s, "\r\n", 2, 0) != 2)
+          }
+          if ( lf == '\n' ) {
+            if ( send( s, "\r\n", 2, 0 ) != 2 ) {
               break;
+            }
             ++e;
             ++i;
           }
-        }
-        while((rest -= i) > 0);
+        } while ( ( rest -= i ) > 0 );
         yield();
       }
     }
 
-    if (0 == n)
-    {
-      if (0 == close(fd))
-      {
+    if ( 0 == n ) {
+      if ( 0 == close( fd ) ) {
         fd = -1;
         res = 1;
       }
     }
   }
 
-  if (-1 != fd)
-    close(fd);
+  if ( -1 != fd ) {
+    close( fd );
+  }
 
-  if (0 == res)
-    send_reply(info, 451, "File read error.");
-  else
-    send_reply(info, 226, "Transfer complete.");
+  if ( 0 == res ) {
+    send_reply( info, 451, "File read error." );
+  } else {
+    send_reply( info, 226, "Transfer complete." );
+  }
 
-  close_data_socket(info);
+  close_data_socket( info );
 
   return;
 }
-
 
 /*
  * discard
@@ -903,11 +888,10 @@ command_retrieve(FTPD_SessionInfo_t  *info, char const *filename)
  *   returns `count'
  *
  */
-static ssize_t
-discard(int fd, void const* buf, size_t count)
+static ssize_t discard( int fd, void const *buf, size_t count )
 {
-  (void)fd;
-  (void)buf;
+  (void) fd;
+  (void) buf;
   return count;
 }
 
@@ -923,35 +907,33 @@ discard(int fd, void const* buf, size_t count)
  * Output parameters:
  *   NONE
  */
-static void
-command_store(FTPD_SessionInfo_t *info, char const *filename)
+static void command_store( FTPD_SessionInfo_t *info, char const *filename )
 {
-  int                    s;
-  int                    n;
-  unsigned long          size = 0;
+  int                     s;
+  int                     n;
+  unsigned long           size = 0;
   struct rtems_ftpd_hook *usehook = NULL;
-  char                   buf[FTPD_DATASIZE];
-  int                    res = 1;
-  int                    bare_lfs = 0;
-  int                    null = 0;
-  typedef ssize_t (*WriteProc)(int, void const*, size_t);
-  WriteProc              wrt = &write;
+  char                    buf[ FTPD_DATASIZE ];
+  int                     res = 1;
+  int                     bare_lfs = 0;
+  int                     null = 0;
+  typedef ssize_t ( *WriteProc )( int, void const *, size_t );
+  WriteProc wrt = &write;
 
-  if(!can_write() || !info->auth)
-  {
-    send_reply(info, 550, "Access denied.");
+  if ( !can_write() || !info->auth ) {
+    send_reply( info, 550, "Access denied." );
     return;
   }
 
-  send_mode_reply(info);
+  send_mode_reply( info );
 
-  s = data_socket(info);
-  if(0 > s)
+  s = data_socket( info );
+  if ( 0 > s ) {
     return;
+  }
 
-  null = !strcmp("/dev/null", filename);
-  if (null)
-  {
+  null = !strcmp( "/dev/null", filename );
+  if ( null ) {
     /* File "/dev/null" just throws data away.
      *  FIXME: this is hack.  Using `/dev/null' filesystem entry would be
      *  better.
@@ -959,28 +941,23 @@ command_store(FTPD_SessionInfo_t *info, char const *filename)
     wrt = &discard;
   }
 
-  if (!null && ftpd_config->hooks != NULL)
-  {
-
+  if ( !null && ftpd_config->hooks != NULL ) {
     /* Search our list of hooks to see if we need to do something special. */
     struct rtems_ftpd_hook *hook;
-    int i;
+    int                     i;
 
     i = 0;
-    hook = &ftpd_config->hooks[i++];
-    while (hook->filename != NULL)
-    {
-      if (!strcmp(hook->filename, filename))
-      {
+    hook = &ftpd_config->hooks[ i++ ];
+    while ( hook->filename != NULL ) {
+      if ( !strcmp( hook->filename, filename ) ) {
         usehook = hook;
         break;
       }
-      hook = &ftpd_config->hooks[i++];
+      hook = &ftpd_config->hooks[ i++ ];
     }
   }
 
-  if (usehook != NULL)
-  {
+  if ( usehook != NULL ) {
     /*
      * OSV: FIXME: Small buffer could be used and hook routine
      * called multiple times instead.  Alternatively, the support could be
@@ -988,17 +965,16 @@ command_store(FTPD_SessionInfo_t *info, char const *filename)
      * given name.
      */
 
-    char   *bigBufr;
-    size_t  filesize = ftpd_config->max_hook_filesize + 1;
+    char  *bigBufr;
+    size_t filesize = ftpd_config->max_hook_filesize + 1;
 
     /*
      * Allocate space for our "file".
      */
-    bigBufr = (char *)malloc(filesize);
-    if (bigBufr == NULL)
-    {
-      send_reply(info, 451, "Local resource failure: malloc.");
-      close_data_socket(info);
+    bigBufr = (char *) malloc( filesize );
+    if ( bigBufr == NULL ) {
+      send_reply( info, 451, "Local resource failure: malloc." );
+      close_data_socket( info );
       return;
     }
 
@@ -1006,97 +982,82 @@ command_store(FTPD_SessionInfo_t *info, char const *filename)
      * Retrieve the file into our buffer space.
      */
     size = 0;
-    while ((n = recv(s, bigBufr + size, filesize - size, 0)) > 0)
-    {
+    while ( ( n = recv( s, bigBufr + size, filesize - size, 0 ) ) > 0 ) {
       size += n;
     }
-    if (size >= filesize)
-    {
-      send_reply(info, 451, "File too long: buffer size exceeded.");
-      free(bigBufr);
-      close_data_socket(info);
+    if ( size >= filesize ) {
+      send_reply( info, 451, "File too long: buffer size exceeded." );
+      free( bigBufr );
+      close_data_socket( info );
       return;
     }
 
     /*
      * Call our hook.
      */
-    res = (usehook->hook_function)(bigBufr, size) == 0;
-    free(bigBufr);
-    if(!res)
-    {
-      send_reply(info, 451, "File processing failed.");
-      close_data_socket(info);
+    res = ( usehook->hook_function )( bigBufr, size ) == 0;
+    free( bigBufr );
+    if ( !res ) {
+      send_reply( info, 451, "File processing failed." );
+      close_data_socket( info );
       return;
     }
-  }
-  else
-  {
+  } else {
     /* Data transfer to regular file or /dev/null. */
     int fd = 0;
 
-    if(!null)
-      fd = creat(filename,
-        S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+    if ( !null ) {
+      fd = creat(
+        filename,
+        S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH
+      );
+    }
 
-    if (0 > fd)
-    {
-      send_reply(info, 550, "Error creating file.");
-      close_data_socket(info);
+    if ( 0 > fd ) {
+      send_reply( info, 550, "Error creating file." );
+      close_data_socket( info );
       return;
     }
 
-    if(info->xfer_mode == TYPE_I)
-    {
-      while ((n = recv(s, buf, FTPD_DATASIZE, 0)) > 0)
-      {
-        if (wrt(fd, buf, n) != n)
-        {
+    if ( info->xfer_mode == TYPE_I ) {
+      while ( ( n = recv( s, buf, FTPD_DATASIZE, 0 ) ) > 0 ) {
+        if ( wrt( fd, buf, n ) != n ) {
           res = 0;
           break;
         }
         yield();
       }
-    }
-    else if(info->xfer_mode == TYPE_A)
-    {
+    } else if ( info->xfer_mode == TYPE_A ) {
       int rest = 0;
       int pended_cr = 0;
-      while (res && rest == 0 && (n = recv(s, buf, FTPD_DATASIZE, 0)) > 0)
-      {
-        char const* e = buf;
-        char const* b;
-        int i;
+      while (
+        res && rest == 0 && ( n = recv( s, buf, FTPD_DATASIZE, 0 ) ) > 0
+      ) {
+        char const *e = buf;
+        char const *b;
+        int         i;
 
         rest = n;
-        if(pended_cr && *e != '\n')
-        {
+        if ( pended_cr && *e != '\n' ) {
           char const lf = '\r';
           pended_cr = 0;
-          if(wrt(fd, &lf, 1) != 1)
-          {
+          if ( wrt( fd, &lf, 1 ) != 1 ) {
             res = 0;
             break;
           }
         }
-        do
-        {
+        do {
           int count;
           int sub = 0;
 
           b = e;
-          for(i = 0; i < rest; ++i, ++e)
-          {
+          for ( i = 0; i < rest; ++i, ++e ) {
             int pcr = pended_cr;
             pended_cr = 0;
-            if(*e == '\r')
-            {
+            if ( *e == '\r' ) {
               pended_cr = 1;
-            }
-            else if(*e == '\n')
-            {
-              if(pcr)
-              {
+            } else if ( *e == '\n' ) {
+              if ( pcr ) {
                 sub = 2;
                 ++i;
                 ++e;
@@ -1105,43 +1066,42 @@ command_store(FTPD_SessionInfo_t *info, char const *filename)
               ++bare_lfs;
             }
           }
-          if(res == 0)
+          if ( res == 0 ) {
             break;
+          }
           count = i - sub - pended_cr;
-          if(count > 0 && wrt(fd, b, count) != count)
-          {
+          if ( count > 0 && wrt( fd, b, count ) != count ) {
             res = 0;
             break;
           }
-          if(sub == 2 && wrt(fd, e - 1, 1) != 1)
+          if ( sub == 2 && wrt( fd, e - 1, 1 ) != 1 ) {
             res = 0;
-        }
-        while((rest -= i) > 0);
+          }
+        } while ( ( rest -= i ) > 0 );
         yield();
       }
     }
 
-    if (0 > close(fd) || res == 0)
-    {
-      send_reply(info, 452, "Error writing file.");
-      close_data_socket(info);
+    if ( 0 > close( fd ) || res == 0 ) {
+      send_reply( info, 452, "Error writing file." );
+      close_data_socket( info );
       return;
     }
   }
 
-  if (bare_lfs > 0)
-  {
-    snprintf(buf, FTPD_BUFSIZE,
+  if ( bare_lfs > 0 ) {
+    snprintf(
+      buf,
+      FTPD_BUFSIZE,
       "Transfer complete. WARNING! %d bare linefeeds received in ASCII mode.",
-      bare_lfs);
-    send_reply(info, 226, buf);
+      bare_lfs
+    );
+    send_reply( info, 226, buf );
+  } else {
+    send_reply( info, 226, "Transfer complete." );
   }
-  else
-    send_reply(info, 226, "Transfer complete.");
-  close_data_socket(info);
-
+  close_data_socket( info );
 }
-
 
 /*
  * send_dirline
@@ -1163,82 +1123,89 @@ command_store(FTPD_SessionInfo_t *info, char const *filename)
  *   returns false on failure, true on success
  *
  */
-static bool
-send_dirline(int s, bool wide, time_t curTime, char const* path,
-  char const* add, char const* fname, char* buf)
+static bool send_dirline(
+  int         s,
+  bool        wide,
+  time_t      curTime,
+  char const *path,
+  char const *add,
+  char const *fname,
+  char       *buf
+)
 {
   struct stat stat_buf;
-  size_t plen = strlen(path);
-  size_t alen = strlen(add);
-  int slen = 0;
+  size_t      plen = strlen( path );
+  size_t      alen = strlen( add );
+  int         slen = 0;
 
-  if(plen == 0)
-  {
-    buf[plen++] = '/';
-    buf[plen] = '\0';
-  }
-  else
-  {
-    buf = memcpy(buf, path, plen + 1);
-    if(alen > 0 && buf[plen - 1] != '/')
-    {
-      buf[plen++] = '/';
-      if(plen >= FTPD_BUFSIZE)
+  if ( plen == 0 ) {
+    buf[ plen++ ] = '/';
+    buf[ plen ] = '\0';
+  } else {
+    buf = memcpy( buf, path, plen + 1 );
+    if ( alen > 0 && buf[ plen - 1 ] != '/' ) {
+      buf[ plen++ ] = '/';
+      if ( plen >= FTPD_BUFSIZE ) {
         return 0;
-      buf[plen] = '\0';
+      }
+      buf[ plen ] = '\0';
     }
   }
-  if(plen + alen >= FTPD_BUFSIZE)
+  if ( plen + alen >= FTPD_BUFSIZE ) {
     return 0;
-  memcpy(buf + plen, add, alen + 1);
+  }
+  memcpy( buf + plen, add, alen + 1 );
 
-  if (stat(buf, &stat_buf) == 0)
-  {
-    if (wide)
-    {
+  if ( stat( buf, &stat_buf ) == 0 ) {
+    if ( wide ) {
       struct tm bt;
-      time_t tf = stat_buf.st_mtime;
+      time_t    tf = stat_buf.st_mtime;
       enum { SIZE = 80 };
-      time_t SIX_MONTHS = (365L*24L*60L*60L)/2L;
-      char timeBuf[SIZE];
-      gmtime_r(&tf, &bt);
-      if(curTime > tf + SIX_MONTHS || tf > curTime + SIX_MONTHS)
-        strftime (timeBuf, SIZE, "%b %d  %Y", &bt);
-      else
-        strftime (timeBuf, SIZE, "%b %d %H:%M", &bt);
+      time_t SIX_MONTHS = ( 365L * 24L * 60L * 60L ) / 2L;
+      char   timeBuf[ SIZE ];
+      gmtime_r( &tf, &bt );
+      if ( curTime > tf + SIX_MONTHS || tf > curTime + SIX_MONTHS ) {
+        strftime( timeBuf, SIZE, "%b %d  %Y", &bt );
+      } else {
+        strftime( timeBuf, SIZE, "%b %d %H:%M", &bt );
+      }
 
-      slen = snprintf(buf, FTPD_BUFSIZE,
+      slen = snprintf(
+        buf,
+        FTPD_BUFSIZE,
         "%c%c%c%c%c%c%c%c%c%c  1 %5d %5d %11u %s %s\r\n",
-        (S_ISLNK(stat_buf.st_mode)?('l'):
-          (S_ISDIR(stat_buf.st_mode)?('d'):('-'))),
-        (stat_buf.st_mode & S_IRUSR)?('r'):('-'),
-        (stat_buf.st_mode & S_IWUSR)?('w'):('-'),
-        (stat_buf.st_mode & S_IXUSR)?('x'):('-'),
-        (stat_buf.st_mode & S_IRGRP)?('r'):('-'),
-        (stat_buf.st_mode & S_IWGRP)?('w'):('-'),
-        (stat_buf.st_mode & S_IXGRP)?('x'):('-'),
-        (stat_buf.st_mode & S_IROTH)?('r'):('-'),
-        (stat_buf.st_mode & S_IWOTH)?('w'):('-'),
-        (stat_buf.st_mode & S_IXOTH)?('x'):('-'),
-        (int)stat_buf.st_uid,
-        (int)stat_buf.st_gid,
-        (int)stat_buf.st_size,
+        ( S_ISLNK( stat_buf.st_mode )
+            ? ( 'l' )
+            : ( S_ISDIR( stat_buf.st_mode ) ? ( 'd' ) : ( '-' ) ) ),
+        ( stat_buf.st_mode & S_IRUSR ) ? ( 'r' ) : ( '-' ),
+        ( stat_buf.st_mode & S_IWUSR ) ? ( 'w' ) : ( '-' ),
+        ( stat_buf.st_mode & S_IXUSR ) ? ( 'x' ) : ( '-' ),
+        ( stat_buf.st_mode & S_IRGRP ) ? ( 'r' ) : ( '-' ),
+        ( stat_buf.st_mode & S_IWGRP ) ? ( 'w' ) : ( '-' ),
+        ( stat_buf.st_mode & S_IXGRP ) ? ( 'x' ) : ( '-' ),
+        ( stat_buf.st_mode & S_IROTH ) ? ( 'r' ) : ( '-' ),
+        ( stat_buf.st_mode & S_IWOTH ) ? ( 'w' ) : ( '-' ),
+        ( stat_buf.st_mode & S_IXOTH ) ? ( 'x' ) : ( '-' ),
+        (int) stat_buf.st_uid,
+        (int) stat_buf.st_gid,
+        (int) stat_buf.st_size,
         timeBuf,
         fname
       );
+    } else {
+      slen = snprintf( buf, FTPD_BUFSIZE, "%s\r\n", fname );
     }
-    else
-    {
-      slen = snprintf(buf, FTPD_BUFSIZE, "%s\r\n", fname);
-    }
-  }
-  else
-  {
-    slen = snprintf(buf, FTPD_BUFSIZE, "%s: %s.\r\n", fname, strerror(errno));
+  } else {
+    slen = snprintf(
+      buf,
+      FTPD_BUFSIZE,
+      "%s: %s.\r\n",
+      fname,
+      strerror( errno )
+    );
   }
 
-  if (slen >= FTPD_BUFSIZE)
-  {
+  if ( slen >= FTPD_BUFSIZE ) {
     static const char dots[] = { '.', '.', '.', '\r', '\n' };
 
     /*
@@ -1246,11 +1213,12 @@ send_dirline(int s, bool wide, time_t curTime, char const* path,
      * end of the line.
      */
     slen = FTPD_BUFSIZE - 1;
-    memcpy(&buf[slen - sizeof(dots)], dots, sizeof(dots));
+    memcpy( &buf[ slen - sizeof( dots ) ], dots, sizeof( dots ) );
   }
 
-  if (slen > 0 && send(s, buf, (size_t) slen, 0) != slen)
+  if ( slen > 0 && send( s, buf, (size_t) slen, 0 ) != slen ) {
     return false;
+  }
 
   return true;
 }
@@ -1267,62 +1235,70 @@ send_dirline(int s, bool wide, time_t curTime, char const* path,
  * Output parameters:
  *   NONE
  */
-static void
-command_list(FTPD_SessionInfo_t *info, char const *fname, bool wide)
+static void command_list(
+  FTPD_SessionInfo_t *info,
+  char const         *fname,
+  bool                wide
+)
 {
-  int                 s;
-  DIR                 *dirp = 0;
-  struct dirent       *dp = 0;
-  char                buf[FTPD_BUFSIZE];
-  time_t curTime;
-  bool ok = true;
+  int            s;
+  DIR           *dirp = 0;
+  struct dirent *dp = 0;
+  char           buf[ FTPD_BUFSIZE ];
+  time_t         curTime;
+  bool           ok = true;
 
-  if(!info->auth)
-  {
-    send_reply(info, 550, "Access denied.");
+  if ( !info->auth ) {
+    send_reply( info, 550, "Access denied." );
     return;
   }
 
-  send_reply(info, 150, "Opening ASCII mode data connection for LIST.");
+  send_reply( info, 150, "Opening ASCII mode data connection for LIST." );
 
-  s = data_socket(info);
-  if(0 > s)
-  {
-    syslog(LOG_ERR, "ftpd: Error connecting to data socket.");
+  s = data_socket( info );
+  if ( 0 > s ) {
+    syslog( LOG_ERR, "ftpd: Error connecting to data socket." );
     return;
   }
 
-  if (fname[0] == '\0')
+  if ( fname[ 0 ] == '\0' ) {
     fname = ".";
+  }
 
-  time(&curTime);
-  dirp = opendir(fname);
-  if (dirp != NULL)
-  {
+  time( &curTime );
+  dirp = opendir( fname );
+  if ( dirp != NULL ) {
     /* FIXME: need "." and ".." only when '-a' option is given */
-    ok = ok && send_dirline(s, wide, curTime, fname, "", ".", buf);
-    ok = ok && send_dirline(s, wide, curTime, fname,
-      (strcmp(fname, ftpd_root) ? ".." : ""), "..", buf);
+    ok = ok && send_dirline( s, wide, curTime, fname, "", ".", buf );
+    ok = ok && send_dirline(
+                 s,
+                 wide,
+                 curTime,
+                 fname,
+                 ( strcmp( fname, ftpd_root ) ? ".." : "" ),
+                 "..",
+                 buf
+               );
 
-    while (ok && (dp = readdir(dirp)) != NULL)
-      ok = ok &&
-        send_dirline(s, wide, curTime, fname, dp->d_name, dp->d_name, buf);
+    while ( ok && ( dp = readdir( dirp ) ) != NULL ) {
+      ok =
+        ok &&
+        send_dirline( s, wide, curTime, fname, dp->d_name, dp->d_name, buf );
+    }
 
-    closedir(dirp);
+    closedir( dirp );
+  } else {
+    send_dirline( s, wide, curTime, fname, "", fname, buf );
   }
-  else
-  {
-    send_dirline(s, wide, curTime, fname, "", fname, buf);
+
+  close_data_socket( info );
+
+  if ( ok ) {
+    send_reply( info, 226, "Transfer complete." );
+  } else {
+    send_reply( info, 426, "Connection aborted." );
   }
-
-  close_data_socket(info);
-
-  if (ok)
-    send_reply(info, 226, "Transfer complete.");
-  else
-    send_reply(info, 426, "Connection aborted.");
 }
-
 
 /*
  * command_cwd
@@ -1337,21 +1313,19 @@ command_list(FTPD_SessionInfo_t *info, char const *fname, bool wide)
  *   NONE
  *
  */
-static void
-command_cwd(FTPD_SessionInfo_t  *info, const char *dir)
+static void command_cwd( FTPD_SessionInfo_t *info, const char *dir )
 {
-  if(!info->auth)
-  {
-    send_reply(info, 550, "Access denied.");
+  if ( !info->auth ) {
+    send_reply( info, 550, "Access denied." );
     return;
   }
 
-  if(chdir(dir) == 0)
-    send_reply(info, 250, "CWD command successful.");
-  else
-    send_reply(info, 550, "CWD command failed.");
+  if ( chdir( dir ) == 0 ) {
+    send_reply( info, 250, "CWD command successful." );
+  } else {
+    send_reply( info, 550, "CWD command failed." );
+  }
 }
-
 
 /*
  * command_pwd
@@ -1364,35 +1338,32 @@ command_cwd(FTPD_SessionInfo_t  *info, const char *dir)
  * Output parameters:
  *   NONE
  */
-static void
-command_pwd(FTPD_SessionInfo_t  *info)
+static void command_pwd( FTPD_SessionInfo_t *info )
 {
-  char buf[FTPD_BUFSIZE];
-  char const* cwd;
+  char        buf[ FTPD_BUFSIZE ];
+  char const *cwd;
   errno = 0;
-  buf[0] = '"';
+  buf[ 0 ] = '"';
 
-  if(!info->auth)
-  {
-    send_reply(info, 550, "Access denied.");
+  if ( !info->auth ) {
+    send_reply( info, 550, "Access denied." );
     return;
   }
 
-  cwd = getcwd(buf + 1, FTPD_BUFSIZE - 4);
-  if(cwd)
-  {
-    int len = strlen(cwd);
+  cwd = getcwd( buf + 1, FTPD_BUFSIZE - 4 );
+  if ( cwd ) {
+    int               len = strlen( cwd );
     static char const txt[] = "\" is the current directory.";
-    int size = sizeof(txt);
-    if(len + size + 1 >= FTPD_BUFSIZE)
+    int               size = sizeof( txt );
+    if ( len + size + 1 >= FTPD_BUFSIZE ) {
       size = FTPD_BUFSIZE - len - 2;
-    memcpy(buf + len + 1, txt, size);
-    buf[len + size] = '\0';
-    send_reply(info, 250, buf);
-  }
-  else {
-    snprintf(buf, FTPD_BUFSIZE, "Error: %s.", serr());
-    send_reply(info, 452, buf);
+    }
+    memcpy( buf + len + 1, txt, size );
+    buf[ len + size ] = '\0';
+    send_reply( info, 250, buf );
+  } else {
+    snprintf( buf, FTPD_BUFSIZE, "Error: %s.", serr() );
+    send_reply( info, 452, buf );
   }
 }
 
@@ -1408,54 +1379,53 @@ command_pwd(FTPD_SessionInfo_t  *info)
  * Output parameters:
  *   info->cwd is set to new CWD value.
  */
-static void
-command_mdtm(FTPD_SessionInfo_t  *info, char const* fname)
+static void command_mdtm( FTPD_SessionInfo_t *info, char const *fname )
 {
   struct stat stbuf;
-  char buf[FTPD_BUFSIZE];
+  char        buf[ FTPD_BUFSIZE ];
 
-  if(!info->auth)
-  {
-    send_reply(info, 550, "Access denied.");
+  if ( !info->auth ) {
+    send_reply( info, 550, "Access denied." );
     return;
   }
 
-  if (0 > stat(fname, &stbuf))
-  {
-    snprintf(buf, FTPD_BUFSIZE, "%s: %s.", fname, serr());
-    send_reply(info, 550, buf);
-  }
-  else
-  {
-    struct tm *t = gmtime(&stbuf.st_mtime);
-    snprintf(buf, FTPD_BUFSIZE, "%04d%02d%02d%02d%02d%02d",
+  if ( 0 > stat( fname, &stbuf ) ) {
+    snprintf( buf, FTPD_BUFSIZE, "%s: %s.", fname, serr() );
+    send_reply( info, 550, buf );
+  } else {
+    struct tm *t = gmtime( &stbuf.st_mtime );
+    snprintf(
+      buf,
+      FTPD_BUFSIZE,
+      "%04d%02d%02d%02d%02d%02d",
       1900 + t->tm_year,
-      t->tm_mon+1, t->tm_mday,
-      t->tm_hour, t->tm_min, t->tm_sec);
-    send_reply(info, 213, buf);
+      t->tm_mon + 1,
+      t->tm_mday,
+      t->tm_hour,
+      t->tm_min,
+      t->tm_sec
+    );
+    send_reply( info, 213, buf );
   }
 }
 
-static void
-command_size(FTPD_SessionInfo_t *info, char const* fname)
+static void command_size( FTPD_SessionInfo_t *info, char const *fname )
 {
   struct stat stbuf;
-  char buf[FTPD_BUFSIZE];
+  char        buf[ FTPD_BUFSIZE ];
 
-  if(!info->auth)
-  {
-    send_reply(info, 550, "Access denied.");
+  if ( !info->auth ) {
+    send_reply( info, 550, "Access denied." );
     return;
   }
 
-  if (info->xfer_mode != TYPE_I || 0 > stat(fname, &stbuf) || stbuf.st_size < 0)
-  {
-    send_reply(info, 550, "Could not get file size.");
-  }
-  else
-  {
-    snprintf(buf, FTPD_BUFSIZE, "%" PRIuMAX, (uintmax_t) stbuf.st_size);
-    send_reply(info, 213, buf);
+  if (
+    info->xfer_mode != TYPE_I || 0 > stat( fname, &stbuf ) || stbuf.st_size < 0
+  ) {
+    send_reply( info, 550, "Could not get file size." );
+  } else {
+    snprintf( buf, FTPD_BUFSIZE, "%" PRIuMAX, (uintmax_t) stbuf.st_size );
+    send_reply( info, 213, buf );
   }
 }
 
@@ -1473,60 +1443,66 @@ command_size(FTPD_SessionInfo_t *info, char const* fname)
  *   info->data_addr is set according to arguments of the PORT command.
  *   info->use_default is set to 0 on success, 1 on failure.
  */
-static void
-command_port(FTPD_SessionInfo_t *info, char const *args)
+static void command_port( FTPD_SessionInfo_t *info, char const *args )
 {
   enum { NUM_FIELDS = 6 };
-  unsigned int a[NUM_FIELDS];
-  int n;
+  unsigned int a[ NUM_FIELDS ];
+  int          n;
 
-  close_data_socket(info);
+  close_data_socket( info );
 
-  n = sscanf(args, "%u,%u,%u,%u,%u,%u", a+0, a+1, a+2, a+3, a+4, a+5);
-  if(NUM_FIELDS == n)
-  {
+  n = sscanf(
+    args,
+    "%u,%u,%u,%u,%u,%u",
+    a + 0,
+    a + 1,
+    a + 2,
+    a + 3,
+    a + 4,
+    a + 5
+  );
+  if ( NUM_FIELDS == n ) {
     int i;
     union {
-      uint8_t b[NUM_FIELDS];
+      uint8_t b[ NUM_FIELDS ];
       struct {
         uint32_t ip;
         uint16_t port;
-      } u ;
+      } u;
     } ip_info;
 
-    for(i = 0; i < NUM_FIELDS; ++i)
-    {
-      if(a[i] > 255)
+    for ( i = 0; i < NUM_FIELDS; ++i ) {
+      if ( a[ i ] > 255 ) {
         break;
-      ip_info.b[i] = (uint8_t)a[i];
+      }
+      ip_info.b[ i ] = (uint8_t) a[ i ];
     }
 
-    if(i == NUM_FIELDS)
-    {
+    if ( i == NUM_FIELDS ) {
       /* Note: while it contradicts RFC959, we don't allow PORT command
        * to specify IP address different from that of the originating client
        * for the sake of safety. */
-      if (ip_info.u.ip == info->def_addr.sin_addr.s_addr)
-      {
+      if ( ip_info.u.ip == info->def_addr.sin_addr.s_addr ) {
         info->data_addr.sin_addr.s_addr = ip_info.u.ip;
-        info->data_addr.sin_port        = ip_info.u.port;
-        info->data_addr.sin_family      = AF_INET;
-        memset(info->data_addr.sin_zero, 0, sizeof(info->data_addr.sin_zero));
+        info->data_addr.sin_port = ip_info.u.port;
+        info->data_addr.sin_family = AF_INET;
+        memset(
+          info->data_addr.sin_zero,
+          0,
+          sizeof( info->data_addr.sin_zero )
+        );
 
         info->use_default = 0;
-        send_reply(info, 200, "PORT command successful.");
+        send_reply( info, 200, "PORT command successful." );
         return; /* success */
-      }
-      else
-      {
-        send_reply(info, 425, "Address doesn't match peer's IP.");
+      } else {
+        send_reply( info, 425, "Address doesn't match peer's IP." );
         return;
       }
     }
   }
-  send_reply(info, 501, "Syntax error.");
+  send_reply( info, 501, "Syntax error." );
 }
-
 
 /*
  * command_pasv
@@ -1540,68 +1516,76 @@ command_port(FTPD_SessionInfo_t *info, char const *args)
  * Output parameters:
  *   info->pasv_socket is set to the descriptor of the data socket
  */
-static void
-command_pasv(FTPD_SessionInfo_t *info)
+static void command_pasv( FTPD_SessionInfo_t *info )
 {
   int s = -1;
   int err = 1;
 
-  close_data_socket(info);
+  close_data_socket( info );
 
-  s = socket(PF_INET, SOCK_STREAM, 0);
-  if (s < 0)
-    syslog(LOG_ERR, "ftpd: Error creating PASV socket: %s", serr());
-  else
-  {
+  s = socket( PF_INET, SOCK_STREAM, 0 );
+  if ( s < 0 ) {
+    syslog( LOG_ERR, "ftpd: Error creating PASV socket: %s", serr() );
+  } else {
     struct sockaddr_in addr;
-    socklen_t addrLen = sizeof(addr);
+    socklen_t          addrLen = sizeof( addr );
 
     addr = info->ctrl_addr;
-    addr.sin_port = htons(0);
+    addr.sin_port = htons( 0 );
 
-    if (0 > bind(s, (struct sockaddr *)&addr, addrLen))
-      syslog(LOG_ERR, "ftpd: Error binding PASV socket: %s", serr());
-    else if (0 > listen(s, 1))
-      syslog(LOG_ERR, "ftpd: Error listening on PASV socket: %s", serr());
+    if ( 0 > bind( s, (struct sockaddr *) &addr, addrLen ) ) {
+      syslog( LOG_ERR, "ftpd: Error binding PASV socket: %s", serr() );
+    } else if ( 0 > listen( s, 1 ) ) {
+      syslog( LOG_ERR, "ftpd: Error listening on PASV socket: %s", serr() );
+    }
     {
-      set_socket_timeout(s, info->idle);
-      if (0 == getsockname(s, (struct sockaddr *)&addr, &addrLen))
-      {
-        char buf[FTPD_BUFSIZE];
+      set_socket_timeout( s, info->idle );
+      if ( 0 == getsockname( s, (struct sockaddr *) &addr, &addrLen ) ) {
+        char                 buf[ FTPD_BUFSIZE ];
         unsigned char const *ip, *p;
 
-        ip = (unsigned char const*)&(addr.sin_addr);
-        p  = (unsigned char const*)&(addr.sin_port);
-        snprintf(buf, FTPD_BUFSIZE, "Entering passive mode (%u,%u,%u,%u,%u,%u).",
-          ip[0], ip[1], ip[2], ip[3], p[0], p[1]);
-        send_reply(info, 227, buf);
+        ip = (unsigned char const *) &( addr.sin_addr );
+        p = (unsigned char const *) &( addr.sin_port );
+        snprintf(
+          buf,
+          FTPD_BUFSIZE,
+          "Entering passive mode (%u,%u,%u,%u,%u,%u).",
+          ip[ 0 ],
+          ip[ 1 ],
+          ip[ 2 ],
+          ip[ 3 ],
+          p[ 0 ],
+          p[ 1 ]
+        );
+        send_reply( info, 227, buf );
 
-        info->pasv_socket = accept(s, (struct sockaddr *)&addr, &addrLen);
-        if (0 > info->pasv_socket)
-          syslog(LOG_ERR, "ftpd: Error accepting PASV connection: %s", serr());
-        else
-        {
-          close_socket(s);
+        info->pasv_socket = accept( s, (struct sockaddr *) &addr, &addrLen );
+        if ( 0 > info->pasv_socket ) {
+          syslog(
+            LOG_ERR,
+            "ftpd: Error accepting PASV connection: %s",
+            serr()
+          );
+        } else {
+          close_socket( s );
           s = -1;
           err = 0;
         }
+      } else {
+        syslog( LOG_ERR, "ftpd: Cannot get socket name: %s", serr() );
       }
-      else
-        syslog(LOG_ERR, "ftpd: Cannot get socket name: %s", serr());
     }
   }
-  if(err)
-  {
+  if ( err ) {
     /* (OSV) The note is from FreeBSD FTPD.
      * Note: a response of 425 is not mentioned as a possible response to
      * the PASV command in RFC959.  However, it has been blessed as a
      * legitimate response by Jon Postel in a telephone conversation
      * with Rick Adams on 25 Jan 89. */
-    send_reply(info, 425, "Can't open passive connection.");
-    close_socket(s);
+    send_reply( info, 425, "Can't open passive connection." );
+    close_socket( s );
   }
 }
-
 
 /*
  * skip_options
@@ -1614,32 +1598,35 @@ command_pasv(FTPD_SessionInfo_t *info)
  * Output parameters:
  *   p  - is changed to point to first non-option argument
  */
-static void
-skip_options(char **p)
+static void skip_options( char **p )
 {
-  char* buf = *p;
-  char* last = NULL;
-  while(1) {
-    while(isspace((unsigned char)*buf))
+  char *buf = *p;
+  char *last = NULL;
+  while ( 1 ) {
+    while ( isspace( (unsigned char) *buf ) ) {
       ++buf;
-    if(*buf == '-') {
-      if(*++buf == '-') { /* `--' should terminate options */
-        if(isspace((unsigned char)*++buf)) {
+    }
+    if ( *buf == '-' ) {
+      if ( *++buf == '-' ) { /* `--' should terminate options */
+        if ( isspace( (unsigned char) *++buf ) ) {
           last = buf;
-          do ++buf;
-          while(isspace((unsigned char)*buf));
+          do {
+            ++buf;
+          } while ( isspace( (unsigned char) *buf ) );
           break;
         }
       }
-      while(*buf && !isspace((unsigned char)*buf))
+      while ( *buf && !isspace( (unsigned char) *buf ) ) {
         ++buf;
+      }
       last = buf;
-    }
-    else
+    } else {
       break;
+    }
   }
-  if(last)
+  if ( last ) {
     *last = '\0';
+  }
   *p = buf;
 }
 
@@ -1658,33 +1645,37 @@ skip_options(char **p)
  *   opts - string containing all the options
  *   args - string containing all the arguments
  */
-static void
-split_command(char *buf, char **cmd, char **opts, char **args)
+static void split_command( char *buf, char **cmd, char **opts, char **args )
 {
-  char* eoc;
-  char* p = buf;
-  while(isspace((unsigned char)*p))
+  char *eoc;
+  char *p = buf;
+  while ( isspace( (unsigned char) *p ) ) {
     ++p;
+  }
   *cmd = p;
-  while(*p && !isspace((unsigned char)*p))
-  {
-    *p = toupper((unsigned char)*p);
+  while ( *p && !isspace( (unsigned char) *p ) ) {
+    *p = toupper( (unsigned char) *p );
     ++p;
   }
   eoc = p;
-  if(*p)
+  if ( *p ) {
     *p++ = '\0';
-  while(isspace((unsigned char)*p))
+  }
+  while ( isspace( (unsigned char) *p ) ) {
     ++p;
+  }
   *opts = p;
-  skip_options(&p);
+  skip_options( &p );
   *args = p;
-  if(*opts == p)
+  if ( *opts == p ) {
     *opts = eoc;
-  while(*p && *p != '\r' && *p != '\n')
+  }
+  while ( *p && *p != '\r' && *p != '\n' ) {
     ++p;
-  if(*p)
+  }
+  if ( *p ) {
     *p++ = '\0';
+  }
 }
 
 /*
@@ -1703,182 +1694,122 @@ split_command(char *buf, char **cmd, char **opts, char **args)
  * Output parameters:
  *    NONE
  */
-static void
-exec_command(FTPD_SessionInfo_t *info, char *cmd, char *args)
+static void exec_command( FTPD_SessionInfo_t *info, char *cmd, char *args )
 {
   int wrong_command = 0;
 
-  if (!strcmp("PORT", cmd))
-  {
-    command_port(info, args);
-  }
-  else if (!strcmp("PASV", cmd))
-  {
-    command_pasv(info);
-  }
-  else if (!strcmp("RETR", cmd))
-  {
-    command_retrieve(info, args);
-  }
-  else if (!strcmp("STOR", cmd))
-  {
-    command_store(info, args);
-  }
-  else if (!strcmp("LIST", cmd))
-  {
-    command_list(info, args, true);
-  }
-  else if (!strcmp("NLST", cmd))
-  {
-    command_list(info, args, false);
-  }
-  else if (!strcmp("MDTM", cmd))
-  {
-    command_mdtm(info, args);
-  }
-  else if (!strcmp("SIZE", cmd))
-  {
-    command_size(info, args);
-  }
-  else if (!strcmp("SYST", cmd))
-  {
-    send_reply(info, 215, FTPD_SYSTYPE);
-  }
-  else if (!strcmp("TYPE", cmd))
-  {
-    if (args[0] == 'I')
-    {
+  if ( !strcmp( "PORT", cmd ) ) {
+    command_port( info, args );
+  } else if ( !strcmp( "PASV", cmd ) ) {
+    command_pasv( info );
+  } else if ( !strcmp( "RETR", cmd ) ) {
+    command_retrieve( info, args );
+  } else if ( !strcmp( "STOR", cmd ) ) {
+    command_store( info, args );
+  } else if ( !strcmp( "LIST", cmd ) ) {
+    command_list( info, args, true );
+  } else if ( !strcmp( "NLST", cmd ) ) {
+    command_list( info, args, false );
+  } else if ( !strcmp( "MDTM", cmd ) ) {
+    command_mdtm( info, args );
+  } else if ( !strcmp( "SIZE", cmd ) ) {
+    command_size( info, args );
+  } else if ( !strcmp( "SYST", cmd ) ) {
+    send_reply( info, 215, FTPD_SYSTYPE );
+  } else if ( !strcmp( "TYPE", cmd ) ) {
+    if ( args[ 0 ] == 'I' ) {
       info->xfer_mode = TYPE_I;
-      send_reply(info, 200, "Type set to I.");
-    }
-    else if (args[0] == 'A')
-    {
+      send_reply( info, 200, "Type set to I." );
+    } else if ( args[ 0 ] == 'A' ) {
       info->xfer_mode = TYPE_A;
-      send_reply(info, 200, "Type set to A.");
-    }
-    else
-    {
+      send_reply( info, 200, "Type set to A." );
+    } else {
       info->xfer_mode = TYPE_I;
-      send_reply(info, 504, "Type not implemented.  Set to I.");
+      send_reply( info, 504, "Type not implemented.  Set to I." );
     }
-  }
-  else if (!strcmp("USER", cmd))
-  {
-    strlcpy(info->user_buf, args, sizeof(info->user_buf));
+  } else if ( !strcmp( "USER", cmd ) ) {
+    strlcpy( info->user_buf, args, sizeof( info->user_buf ) );
     info->user = info->user_buf;
-    if (ftpd_config->login &&
-      !ftpd_config->login(info->user, NULL)) {
+    if ( ftpd_config->login && !ftpd_config->login( info->user, NULL ) ) {
       info->auth = false;
-      send_reply(info, 331, "User name okay, need password.");
+      send_reply( info, 331, "User name okay, need password." );
     } else {
       info->auth = true;
-      send_reply(info, 230, "User logged in.");
+      send_reply( info, 230, "User logged in." );
     }
-  }
-  else if (!strcmp("PASS", cmd))
-  {
-    if (!info->user) {
-      send_reply(info, 332, "Need account to log in");
+  } else if ( !strcmp( "PASS", cmd ) ) {
+    if ( !info->user ) {
+      send_reply( info, 332, "Need account to log in" );
     } else {
-      if (ftpd_config->login &&
-        !ftpd_config->login(info->user, args)) {
+      if ( ftpd_config->login && !ftpd_config->login( info->user, args ) ) {
         info->auth = false;
-        send_reply(info, 530, "Not logged in.");
+        send_reply( info, 530, "Not logged in." );
       } else {
         info->auth = true;
-        send_reply(info, 230, "User logged in.");
+        send_reply( info, 230, "User logged in." );
       }
     }
-  }
-  else if (!strcmp("DELE", cmd))
-  {
-    if(!can_write() || !info->auth)
-    {
-      send_reply(info, 550, "Access denied.");
+  } else if ( !strcmp( "DELE", cmd ) ) {
+    if ( !can_write() || !info->auth ) {
+      send_reply( info, 550, "Access denied." );
+    } else if ( unlink( args ) == 0 ) {
+      send_reply( info, 257, "DELE successful." );
+    } else {
+      send_reply( info, 550, "DELE failed." );
     }
-    else if (unlink(args) == 0)
-    {
-      send_reply(info, 257, "DELE successful.");
-    }
-    else
-    {
-      send_reply(info, 550, "DELE failed.");
-    }
-  }
-  else if (!strcmp("SITE", cmd))
-  {
-    char* opts;
-    split_command(args, &cmd, &opts, &args);
-    if(!strcmp("CHMOD", cmd))
-    {
+  } else if ( !strcmp( "SITE", cmd ) ) {
+    char *opts;
+    split_command( args, &cmd, &opts, &args );
+    if ( !strcmp( "CHMOD", cmd ) ) {
       int mask;
 
-      if(!can_write() || !info->auth)
-      {
-        send_reply(info, 550, "Access denied.");
-      }
-      else {
+      if ( !can_write() || !info->auth ) {
+        send_reply( info, 550, "Access denied." );
+      } else {
         char *c;
-        c = strchr(args, ' ');
-        if((c != NULL) && (sscanf(args, "%o", &mask) == 1)
-          && (chmod(c + 1, (mode_t)mask) == 0))
-          send_reply(info, 257, "CHMOD successful.");
-        else
-          send_reply(info, 550, "CHMOD failed.");
+        c = strchr( args, ' ' );
+        if (
+          ( c != NULL ) && ( sscanf( args, "%o", &mask ) == 1 ) &&
+          ( chmod( c + 1, (mode_t) mask ) == 0 )
+        ) {
+          send_reply( info, 257, "CHMOD successful." );
+        } else {
+          send_reply( info, 550, "CHMOD failed." );
+        }
       }
-    }
-    else
+    } else {
       wrong_command = 1;
-  }
-  else if (!strcmp("RMD", cmd))
-  {
-    if(!can_write() || !info->auth)
-    {
-      send_reply(info, 550, "Access denied.");
     }
-    else if (rmdir(args) == 0)
-    {
-      send_reply(info, 257, "RMD successful.");
+  } else if ( !strcmp( "RMD", cmd ) ) {
+    if ( !can_write() || !info->auth ) {
+      send_reply( info, 550, "Access denied." );
+    } else if ( rmdir( args ) == 0 ) {
+      send_reply( info, 257, "RMD successful." );
+    } else {
+      send_reply( info, 550, "RMD failed." );
     }
-    else
-    {
-      send_reply(info, 550, "RMD failed.");
+  } else if ( !strcmp( "MKD", cmd ) ) {
+    if ( !can_write() || !info->auth ) {
+      send_reply( info, 550, "Access denied." );
+    } else if ( mkdir( args, S_IRWXU | S_IRWXG | S_IRWXO ) == 0 ) {
+      send_reply( info, 257, "MKD successful." );
+    } else {
+      send_reply( info, 550, "MKD failed." );
     }
-  }
-  else if (!strcmp("MKD", cmd))
-  {
-    if(!can_write() || !info->auth)
-    {
-      send_reply(info, 550, "Access denied.");
-    }
-    else if (mkdir(args, S_IRWXU | S_IRWXG | S_IRWXO) == 0)
-    {
-      send_reply(info, 257, "MKD successful.");
-    }
-    else
-    {
-      send_reply(info, 550, "MKD failed.");
-    }
-  }
-  else if (!strcmp("CWD", cmd))
-  {
-    command_cwd(info, args);
-  }
-  else if (!strcmp("CDUP", cmd))
-  {
-    command_cwd(info, "..");
-  }
-  else if (!strcmp("PWD", cmd))
-  {
-    command_pwd(info);
-  }
-  else
+  } else if ( !strcmp( "CWD", cmd ) ) {
+    command_cwd( info, args );
+  } else if ( !strcmp( "CDUP", cmd ) ) {
+    command_cwd( info, ".." );
+  } else if ( !strcmp( "PWD", cmd ) ) {
+    command_pwd( info );
+  } else {
     wrong_command = 1;
+  }
 
-  if(wrong_command)
-    send_reply(info, 500, "Command not understood.");
+  if ( wrong_command ) {
+    send_reply( info, 500, "Command not understood." );
+  }
 }
-
 
 /*
  * session
@@ -1895,52 +1826,51 @@ exec_command(FTPD_SessionInfo_t *info, char *cmd, char *args)
  * Output parameters:
  *   NONE
  */
-static void
-session(rtems_task_argument arg)
+static void session( rtems_task_argument arg )
 {
-  FTPD_SessionInfo_t  *const info = (FTPD_SessionInfo_t  *)arg;
-  bool chroot_made = false;
+  FTPD_SessionInfo_t *const info = (FTPD_SessionInfo_t *) arg;
+  bool                      chroot_made = false;
 
-  while (1)
-  {
+  while ( 1 ) {
     rtems_event_set set;
 
-    rtems_event_receive(FTPD_RTEMS_EVENT, RTEMS_EVENT_ANY, RTEMS_NO_TIMEOUT,
-      &set);
+    rtems_event_receive(
+      FTPD_RTEMS_EVENT,
+      RTEMS_EVENT_ANY,
+      RTEMS_NO_TIMEOUT,
+      &set
+    );
 
-    chroot_made = chroot_made
-      || (rtems_libio_set_private_env() == RTEMS_SUCCESSFUL
-        && chroot(ftpd_root) == 0);
+    chroot_made = chroot_made ||
+                  ( rtems_libio_set_private_env() == RTEMS_SUCCESSFUL &&
+                    chroot( ftpd_root ) == 0 );
 
     /*
      * The chdir() must immediately follow the chroot(), otherwise static
      * analysis tools may complain about a security issue.
      */
 
-    if (chroot_made && chdir("/") == 0)
-    {
-      send_reply(info, 220, FTPD_SERVER_MESSAGE);
+    if ( chroot_made && chdir( "/" ) == 0 ) {
+      send_reply( info, 220, FTPD_SERVER_MESSAGE );
 
-      while (1)
-      {
-        char buf[FTPD_BUFSIZE];
-        char *cmd, *opts, *args;
+      while ( 1 ) {
+        char   buf[ FTPD_BUFSIZE ];
+        char  *cmd, *opts, *args;
         size_t len;
 
-        if (fgets(buf, FTPD_BUFSIZE, info->ctrl_fp) == NULL)
-        {
-          syslog(LOG_INFO, "ftpd: Connection aborted.");
+        if ( fgets( buf, FTPD_BUFSIZE, info->ctrl_fp ) == NULL ) {
+          syslog( LOG_INFO, "ftpd: Connection aborted." );
           break;
         }
 
-        len = strlen(buf);
+        len = strlen( buf );
 
-        if (len == 0)
+        if ( len == 0 ) {
           continue;
+        }
 
-        if (buf[len - 1] != '\n')
-        {
-          send_reply(info, 501, "Command line too long.");
+        if ( buf[ len - 1 ] != '\n' ) {
+          send_reply( info, 501, "Command line too long." );
 
           /*
            * We could also try to continue here; however, discarding the rest
@@ -1952,22 +1882,21 @@ session(rtems_task_argument arg)
           break;
         }
 
-        split_command(buf, &cmd, &opts, &args);
+        split_command( buf, &cmd, &opts, &args );
 
-        if (!strcmp("QUIT", cmd))
-        {
-          send_reply(info, 221, "Goodbye.");
+        if ( !strcmp( "QUIT", cmd ) ) {
+          send_reply( info, 221, "Goodbye." );
           break;
-        }
-        else
-        {
-          exec_command(info, cmd, args);
+        } else {
+          exec_command( info, cmd, args );
         }
       }
-    }
-    else
-    {
-      send_reply(info, 421, "Service not available, closing control connection.");
+    } else {
+      send_reply(
+        info,
+        421,
+        "Service not available, closing control connection."
+      );
     }
 
     /*
@@ -1976,15 +1905,14 @@ session(rtems_task_argument arg)
      * The return value can be ignored since the next session will try do the
      * operation again and an error check is performed in this case.
      */
-    chdir("/");
+    chdir( "/" );
 
     /* Close connection and put ourselves back into the task pool. */
-    close_data_socket(info);
-    close_stream(info);
-    task_pool_release(info);
+    close_data_socket( info );
+    close_stream( info );
+    task_pool_release( info );
   }
 }
-
 
 /*
  * ftpd_daemon
@@ -1999,89 +1927,86 @@ session(rtems_task_argument arg)
  * Output parameters:
  *   NONE
  */
-static void
-ftpd_daemon(rtems_task_argument args RTEMS_UNUSED)
+static void ftpd_daemon( rtems_task_argument args RTEMS_UNUSED )
 {
-  int                 s;
-  socklen_t	      addrLen;
-  struct sockaddr_in  addr;
+  int                s;
+  socklen_t          addrLen;
+  struct sockaddr_in addr;
 
-  memset(&addr, 0, sizeof(addr));
-  addr.sin_family      = AF_INET;
-  addr.sin_port        = htons(ftpd_config->port);
-  addr.sin_addr.s_addr = htonl(INADDR_ANY);
+  memset( &addr, 0, sizeof( addr ) );
+  addr.sin_family = AF_INET;
+  addr.sin_port = htons( ftpd_config->port );
+  addr.sin_addr.s_addr = htonl( INADDR_ANY );
 
-  s = socket(PF_INET, SOCK_STREAM, 0);
-  if (s < 0)
-    syslog(LOG_ERR, "ftpd: Error creating control socket: %s", serr());
-  else if (0 > bind(s, (struct sockaddr *)&addr, sizeof(addr)))
-    syslog(LOG_ERR, "ftpd: Error binding control socket: %s", serr());
-  else if (0 > listen(s, 1))
-    syslog(LOG_ERR, "ftpd: Error listening on control socket: %s", serr());
-  else while (1)
-  {
-    int ss;
-    addrLen = sizeof(addr);
-    ss = accept(s, (struct sockaddr *)&addr, &addrLen);
-    if (0 > ss)
-      syslog(LOG_ERR, "ftpd: Error accepting control connection: %s", serr());
-    else
-    {
-      FTPD_SessionInfo_t *info;
+  s = socket( PF_INET, SOCK_STREAM, 0 );
+  if ( s < 0 ) {
+    syslog( LOG_ERR, "ftpd: Error creating control socket: %s", serr() );
+  } else if ( 0 > bind( s, (struct sockaddr *) &addr, sizeof( addr ) ) ) {
+    syslog( LOG_ERR, "ftpd: Error binding control socket: %s", serr() );
+  } else if ( 0 > listen( s, 1 ) ) {
+    syslog( LOG_ERR, "ftpd: Error listening on control socket: %s", serr() );
+  } else {
+    while ( 1 ) {
+      int ss;
+      addrLen = sizeof( addr );
+      ss = accept( s, (struct sockaddr *) &addr, &addrLen );
+      if ( 0 > ss ) {
+        syslog(
+          LOG_ERR,
+          "ftpd: Error accepting control connection: %s",
+          serr()
+        );
+      } else {
+        FTPD_SessionInfo_t *info;
 
-      set_socket_timeout(ss, ftpd_timeout);
-      info = task_pool_obtain();
-      if (NULL == info)
-      {
-        close_socket(ss);
-      }
-      else
-      {
-        info->ctrl_socket = ss;
-        if ((info->ctrl_fp = fdopen(info->ctrl_socket, "r+")) == NULL)
-        {
-          syslog(LOG_ERR, "ftpd: fdopen() on socket failed: %s", serr());
-          close_stream(info);
-          task_pool_release(info);
-        }
-        else
-        {
-          /* Initialize corresponding SessionInfo structure */
-          info->def_addr = addr;
-          if(0 > getsockname(ss, (struct sockaddr *)&addr, &addrLen))
-          {
-            syslog(LOG_ERR, "ftpd: getsockname(): %s", serr());
-            close_stream(info);
-            task_pool_release(info);
-          }
-          else
-          {
-            info->use_default = 1;
-            info->ctrl_addr  = addr;
-            info->pasv_socket = -1;
-            info->data_socket = -1;
-            info->xfer_mode   = TYPE_A;
-            info->data_addr.sin_port =
-              htons(ntohs(info->ctrl_addr.sin_port) - 1);
-            info->idle = ftpd_timeout;
-            info->user = NULL;
-            if (ftpd_config->login)
-              info->auth = false;
-            else
-              info->auth = true;
-            /* Wakeup the session task.  The task will call task_pool_release
+        set_socket_timeout( ss, ftpd_timeout );
+        info = task_pool_obtain();
+        if ( NULL == info ) {
+          close_socket( ss );
+        } else {
+          info->ctrl_socket = ss;
+          if (
+            ( info->ctrl_fp = fdopen( info->ctrl_socket, "r+" ) ) == NULL
+          ) {
+            syslog( LOG_ERR, "ftpd: fdopen() on socket failed: %s", serr() );
+            close_stream( info );
+            task_pool_release( info );
+          } else {
+            /* Initialize corresponding SessionInfo structure */
+            info->def_addr = addr;
+            if ( 0 > getsockname( ss, (struct sockaddr *) &addr, &addrLen ) ) {
+              syslog( LOG_ERR, "ftpd: getsockname(): %s", serr() );
+              close_stream( info );
+              task_pool_release( info );
+            } else {
+              info->use_default = 1;
+              info->ctrl_addr = addr;
+              info->pasv_socket = -1;
+              info->data_socket = -1;
+              info->xfer_mode = TYPE_A;
+              info->data_addr.sin_port = htons(
+                ntohs( info->ctrl_addr.sin_port ) - 1
+              );
+              info->idle = ftpd_timeout;
+              info->user = NULL;
+              if ( ftpd_config->login ) {
+                info->auth = false;
+              } else {
+                info->auth = true;
+              }
+              /* Wakeup the session task.  The task will call task_pool_release
                after it closes connection. */
-            rtems_event_send(info->tid, FTPD_RTEMS_EVENT);
+              rtems_event_send( info->tid, FTPD_RTEMS_EVENT );
+            }
           }
         }
       }
     }
   }
 
-  close(s);
+  close( s );
   rtems_task_exit();
 }
-
 
 /*
  * rtems_ftpd_start
@@ -2095,82 +2020,95 @@ ftpd_daemon(rtems_task_argument args RTEMS_UNUSED)
  * Output parameters:
  *    returns RTEMS_SUCCESSFUL on successful start of the daemon.
  */
-rtems_status_code
-rtems_ftpd_start(const struct rtems_ftpd_configuration* config)
+rtems_status_code rtems_ftpd_start(
+  const struct rtems_ftpd_configuration *config
+)
 {
   rtems_status_code   sc;
   rtems_id            tid;
   rtems_task_priority priority;
-  int count;
+  int                 count;
 
-  if (ftpd_config != NULL)
+  if ( ftpd_config != NULL ) {
     return RTEMS_RESOURCE_IN_USE;
+  }
 
-  ftpd_config = malloc(sizeof(*ftpd_config));
-  if (ftpd_config == NULL)
+  ftpd_config = malloc( sizeof( *ftpd_config ) );
+  if ( ftpd_config == NULL ) {
     return RTEMS_NO_MEMORY;
+  }
 
   *ftpd_config = *config;
 
-  if (ftpd_config->port == 0)
-  {
+  if ( ftpd_config->port == 0 ) {
     ftpd_config->port = FTPD_CONTROL_PORT;
   }
 
-  if (ftpd_config->priority == 0)
-  {
+  if ( ftpd_config->priority == 0 ) {
     ftpd_config->priority = 40;
   }
   priority = ftpd_config->priority;
 
   ftpd_timeout = ftpd_config->idle;
-  if (ftpd_timeout < 0)
+  if ( ftpd_timeout < 0 ) {
     ftpd_timeout = 0;
+  }
   ftpd_config->idle = ftpd_timeout;
 
   ftpd_access = ftpd_config->access;
 
   ftpd_root = "/";
-  if (ftpd_config->root && ftpd_config->root[0] == '/' )
+  if ( ftpd_config->root && ftpd_config->root[ 0 ] == '/' ) {
     ftpd_root = ftpd_config->root;
+  }
 
   ftpd_config->root = ftpd_root;
 
-  if (ftpd_config->tasks_count <= 0)
+  if ( ftpd_config->tasks_count <= 0 ) {
     ftpd_config->tasks_count = 1;
+  }
   count = ftpd_config->tasks_count;
 
-  if (!task_pool_init(count, priority))
-  {
-    syslog(LOG_ERR, "ftpd: Could not initialize task pool.");
+  if ( !task_pool_init( count, priority ) ) {
+    syslog( LOG_ERR, "ftpd: Could not initialize task pool." );
     return RTEMS_UNSATISFIED;
   }
 
-  sc = rtems_task_create(rtems_build_name('F', 'T', 'P', 'D'),
-    priority, RTEMS_MINIMUM_STACK_SIZE,
+  sc = rtems_task_create(
+    rtems_build_name( 'F', 'T', 'P', 'D' ),
+    priority,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_PREEMPT | RTEMS_NO_TIMESLICE | RTEMS_NO_ASR |
-    RTEMS_INTERRUPT_LEVEL(0),
+      RTEMS_INTERRUPT_LEVEL( 0 ),
     RTEMS_FLOATING_POINT | RTEMS_LOCAL,
-    &tid);
+    &tid
+  );
 
-  if (sc == RTEMS_SUCCESSFUL)
-  {
-    sc = rtems_task_start(tid, ftpd_daemon, 0);
-    if (sc != RTEMS_SUCCESSFUL)
-      rtems_task_delete(tid);
+  if ( sc == RTEMS_SUCCESSFUL ) {
+    sc = rtems_task_start( tid, ftpd_daemon, 0 );
+    if ( sc != RTEMS_SUCCESSFUL ) {
+      rtems_task_delete( tid );
+    }
   }
 
-  if (sc != RTEMS_SUCCESSFUL)
-  {
-    task_pool_done(count);
-    syslog(LOG_ERR, "ftpd: Could not create/start FTP daemon: %s",
-      rtems_status_text(sc));
+  if ( sc != RTEMS_SUCCESSFUL ) {
+    task_pool_done( count );
+    syslog(
+      LOG_ERR,
+      "ftpd: Could not create/start FTP daemon: %s",
+      rtems_status_text( sc )
+    );
     return RTEMS_UNSATISFIED;
   }
 
-  if (ftpd_config->verbose)
-    syslog(LOG_INFO, "ftpd: FTP daemon started (%d session%s max)",
-           count, ((count > 1) ? "s" : ""));
+  if ( ftpd_config->verbose ) {
+    syslog(
+      LOG_INFO,
+      "ftpd: FTP daemon started (%d session%s max)",
+      count,
+      ( ( count > 1 ) ? "s" : "" )
+    );
+  }
 
   return RTEMS_SUCCESSFUL;
 }
