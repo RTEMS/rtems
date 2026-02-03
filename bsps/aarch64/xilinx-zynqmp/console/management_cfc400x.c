@@ -78,7 +78,7 @@ __attribute__ ((weak)) void zynqmp_configure_management_console(rtems_termios_de
     "\xc0\xda\x00\x00\xff\xff\xff\xff\xff\x00\xff\xff\xff\xffM#\xc0";
 
   /* Send the system watchdog configuration command */
-  for (int i = 0; i < sizeof(mgmt_watchdog_cmd); i++) {
+  for (size_t i = 0; i < sizeof(mgmt_watchdog_cmd); i++) {
     ns16550_polled_putchar(base, mgmt_watchdog_cmd[i]);
   }
 }
