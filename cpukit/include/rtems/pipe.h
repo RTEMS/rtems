@@ -55,7 +55,7 @@ extern "C" {
 
 /* Control block to manage each pipe */
 typedef struct pipe_control {
-  char *Buffer;
+  char        *Buffer;
   unsigned int Size;
   unsigned int Start;
   unsigned int Length;
@@ -63,10 +63,10 @@ typedef struct pipe_control {
   unsigned int Writers;
   unsigned int waitingReaders;
   unsigned int waitingWriters;
-  unsigned int readerCounter;     /* incremental counters */
-  unsigned int writerCounter;     /* for differentiation of successive opens */
-  rtems_mutex Mutex;
-  rtems_condition_variable readBarrier;   /* wait queues */
+  unsigned int readerCounter; /* incremental counters */
+  unsigned int writerCounter; /* for differentiation of successive opens */
+  rtems_mutex  Mutex;
+  rtems_condition_variable readBarrier; /* wait queues */
   rtems_condition_variable writeBarrier;
 #if 0
   boolean Anonymous;      /* anonymous pipe or FIFO */
@@ -81,10 +81,7 @@ typedef struct pipe_control {
  * *pipep points to pipe control structure. When the last user releases pipe,
  * it will be set to NULL.
  */
-extern void pipe_release(
-  pipe_control_t **pipep,
-  rtems_libio_t *iop
-);
+extern void pipe_release( pipe_control_t **pipep, rtems_libio_t *iop );
 
 /**
  * @brief File system open.
@@ -94,10 +91,7 @@ extern void pipe_release(
  * fifo_open will try allocating and initializing a control structure. If the
  * call succeeds, *pipep will be set to address of new control structure.
  */
-extern int fifo_open(
-  pipe_control_t **pipep,
-  rtems_libio_t *iop
-);
+extern int fifo_open( pipe_control_t **pipep, rtems_libio_t *iop );
 
 /**
  * @brief File system read.
@@ -129,10 +123,10 @@ extern ssize_t pipe_write(
  * Interface to file system ioctl.
  */
 extern int pipe_ioctl(
-  pipe_control_t  *pipe,
-  ioctl_command_t  cmd,
-  void            *buffer,
-  rtems_libio_t   *iop
+  pipe_control_t *pipe,
+  ioctl_command_t cmd,
+  void           *buffer,
+  rtems_libio_t  *iop
 );
 
 /** @} */

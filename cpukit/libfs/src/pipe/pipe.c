@@ -48,27 +48,27 @@
 /* FIXME: This approach is questionable */
 static uint16_t rtems_pipe_no = 0;
 
-int pipe(
-  int filsdes[2]
-)
+int pipe( int filsdes[ 2 ] )
 {
   rtems_libio_t *iop;
-  int err = 0;
+  int            err = 0;
 
-  if (filsdes == NULL)
+  if ( filsdes == NULL ) {
     rtems_set_errno_and_return_minus_one( EFAULT );
+  }
 
-  if (rtems_mkdir("/tmp", S_IRWXU | S_IRWXG | S_IRWXO) != 0)
+  if ( rtems_mkdir( "/tmp", S_IRWXU | S_IRWXG | S_IRWXO ) != 0 ) {
     return -1;
+  }
 
   /* /tmp/.fifoXXXX */
-  char fifopath[15];
-  memcpy(fifopath, "/tmp/.fifo", 10);
-  sprintf(fifopath + 10, "%04x", rtems_pipe_no ++);
+  char fifopath[ 15 ];
+  memcpy( fifopath, "/tmp/.fifo", 10 );
+  sprintf( fifopath + 10, "%04x", rtems_pipe_no++ );
 
   /* Try creating FIFO file until find an available file name */
-  while (mkfifo(fifopath, S_IRUSR|S_IWUSR) != 0) {
-    if (errno != EEXIST){
+  while ( mkfifo( fifopath, S_IRUSR | S_IWUSR ) != 0 ) {
+    if ( errno != EEXIST ) {
       return -1;
     }
     /* Just try once... */
@@ -77,28 +77,27 @@ int pipe(
   }
 
   /* Non-blocking open to avoid waiting for writers */
-  filsdes[0] = open(fifopath, O_RDONLY | O_NONBLOCK);
-  if (filsdes[0] < 0) {
+  filsdes[ 0 ] = open( fifopath, O_RDONLY | O_NONBLOCK );
+  if ( filsdes[ 0 ] < 0 ) {
     err = errno;
     /* Delete file at errors, or else if pipe is successfully created
      the file node will be deleted after it is closed by all. */
-    unlink(fifopath);
-  }
-  else {
-  /* Reset open file to blocking mode */
-    iop = rtems_libio_iop(filsdes[0]);
+    unlink( fifopath );
+  } else {
+    /* Reset open file to blocking mode */
+    iop = rtems_libio_iop( filsdes[ 0 ] );
     rtems_libio_iop_flags_clear( iop, LIBIO_FLAGS_NO_DELAY );
 
-    filsdes[1] = open(fifopath, O_WRONLY);
+    filsdes[ 1 ] = open( fifopath, O_WRONLY );
 
-    if (filsdes[1] < 0) {
-    err = errno;
-    close(filsdes[0]);
+    if ( filsdes[ 1 ] < 0 ) {
+      err = errno;
+      close( filsdes[ 0 ] );
     }
-  unlink(fifopath);
+    unlink( fifopath );
   }
-  if(err != 0)
-    rtems_set_errno_and_return_minus_one(err);
+  if ( err != 0 ) {
+    rtems_set_errno_and_return_minus_one( err );
+  }
   return 0;
 }
-
