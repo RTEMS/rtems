@@ -42,6 +42,7 @@
 
 #define INVALID 255
 
+// clang-format off
 const uint8_t _Base64_Decoding[128] = {
     ['A'] = 0,       ['B'] = 1,       ['C'] = 2,       ['D'] = 3,
     ['E'] = 4,       ['F'] = 5,       ['G'] = 6,       ['H'] = 7,
@@ -75,6 +76,7 @@ const uint8_t _Base64_Decoding[128] = {
     [63] = INVALID,  [64] = INVALID,  [91] = INVALID,  [92] = INVALID,
     [93] = INVALID,  [94] = INVALID,  [96] = INVALID,  [123] = INVALID,
     [124] = INVALID, [125] = INVALID, [126] = INVALID, [127] = INVALID};
+// clang-format on
 
 void _Base64_Decode_initialize(Base64_Decode_control* self,
                                uint8_t* target,

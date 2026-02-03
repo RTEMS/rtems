@@ -88,6 +88,7 @@ _Base64_Do_encode(IO_Put_char put_char, void *arg, const void *src,
 	return out;
 }
 
+// clang-format off
 const uint8_t _Base64_Encoding[64] = {
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
     'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd',
@@ -95,6 +96,7 @@ const uint8_t _Base64_Encoding[64] = {
     't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7',
     '8', '9', '+', '/'
 };
+// clang-format on
 
 int
 _Base64_Encode(IO_Put_char put_char, void *arg, const void *src, size_t srclen,
@@ -104,6 +106,7 @@ _Base64_Encode(IO_Put_char put_char, void *arg, const void *src, size_t srclen,
 	    wordlen, _Base64_Encoding);
 }
 
+// clang-format off
 const uint8_t _Base64url_Encoding[64] = {
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
     'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd',
@@ -111,6 +114,7 @@ const uint8_t _Base64url_Encoding[64] = {
     't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7',
     '8', '9', '-', '_'
 };
+// clang-format on
 
 int
 _Base64url_Encode(IO_Put_char put_char, void *arg, const void *src,
