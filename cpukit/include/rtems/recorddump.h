@@ -63,10 +63,7 @@ typedef void ( *rtems_record_dump_chunk )(
  * @param flush Handler to flush the data.
  * @param arg The argument for the handlers.
  */
-void rtems_record_dump(
-  rtems_record_dump_chunk  chunk,
-  void                    *arg
-);
+void rtems_record_dump( rtems_record_dump_chunk chunk, void *arg );
 
 /**
  * @brief Dumps the event records in base64 encoding.
@@ -83,14 +80,14 @@ void rtems_record_dump_base64( void ( *put_char )( int, void * ), void *arg );
  * encoding.
  */
 typedef struct {
-  void        ( *put_char )( int, void * );
-  void          *arg;
-  int            out;
-  unsigned char  buf[ 57 ];
-  z_stream       stream;
-  char          *mem_begin;
-  size_t         mem_available;
-  char           mem[ 0x80000 ];
+  void ( *put_char )( int, void * );
+  void         *arg;
+  int           out;
+  unsigned char buf[ 57 ];
+  z_stream      stream;
+  char         *mem_begin;
+  size_t        mem_available;
+  char          mem[ 0x80000 ];
 } rtems_record_dump_base64_zlib_context;
 
 /**
@@ -105,8 +102,8 @@ typedef struct {
  */
 void rtems_record_dump_zlib_base64(
   rtems_record_dump_base64_zlib_context *ctx,
-  void                                ( *put_char )( int, void * ),
-  void                                  *arg
+  void ( *put_char )( int, void * ),
+  void *arg
 );
 
 /** @} */

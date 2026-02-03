@@ -143,7 +143,7 @@ static uint64_t time_bt(
 
   time_accumulated = per_cpu->uptime.time_accumulated;
 
-  if ( has_time( event) ) {
+  if ( has_time( event ) ) {
     time_accumulated += ( time - per_cpu->uptime.time_last ) & TIME_MASK;
     per_cpu->uptime.time_last = time;
     per_cpu->uptime.time_accumulated = time_accumulated;
@@ -192,10 +192,10 @@ static rtems_record_client_status resolve_hold_back(
   rtems_record_client_per_cpu *per_cpu
 )
 {
-  rtems_record_item_64 *items;
-  uint32_t last;
-  uint64_t accumulated;
-  size_t index;
+  rtems_record_item_64      *items;
+  uint32_t                   last;
+  uint64_t                   accumulated;
+  size_t                     index;
   rtems_record_client_uptime uptime;
 
   items = per_cpu->items;
@@ -222,7 +222,7 @@ static rtems_record_client_status resolve_hold_back(
   per_cpu->uptime.time_accumulated = 0;
 
   for ( index = 0; index < per_cpu->item_index; ++index ) {
-    uint32_t time_event;
+    uint32_t                   time_event;
     rtems_record_client_status status;
 
     time_event = items[ index ].event;
@@ -317,7 +317,7 @@ static rtems_record_client_status visit(
         per_cpu->uptime.time_last = time;
         per_cpu->uptime.time_accumulated = 0;
 
-        if (do_hold_back) {
+        if ( do_hold_back ) {
           status = resolve_hold_back( ctx, per_cpu );
 
           if ( status != RTEMS_RECORD_CLIENT_SUCCESS ) {
@@ -382,7 +382,7 @@ static rtems_record_client_status consume_32(
 {
   while ( n > 0 ) {
     size_t m;
-    char *pos;
+    char  *pos;
 
     m = ctx->todo < n ? ctx->todo : n;
     pos = ctx->pos;
@@ -422,7 +422,7 @@ static rtems_record_client_status consume_64(
 {
   while ( n > 0 ) {
     size_t m;
-    char *pos;
+    char  *pos;
 
     m = ctx->todo < n ? ctx->todo : n;
     pos = ctx->pos;
@@ -462,7 +462,7 @@ static rtems_record_client_status consume_swap_32(
 {
   while ( n > 0 ) {
     size_t m;
-    char *pos;
+    char  *pos;
 
     m = ctx->todo < n ? ctx->todo : n;
     pos = ctx->pos;
@@ -502,7 +502,7 @@ static rtems_record_client_status consume_swap_64(
 {
   while ( n > 0 ) {
     size_t m;
-    char *pos;
+    char  *pos;
 
     m = ctx->todo < n ? ctx->todo : n;
     pos = ctx->pos;
@@ -542,7 +542,7 @@ static rtems_record_client_status consume_init(
 {
   while ( n > 0 ) {
     size_t m;
-    char *pos;
+    char  *pos;
 
     m = ctx->todo < n ? ctx->todo : n;
     pos = ctx->pos;
@@ -631,7 +631,7 @@ static rtems_record_client_status consume_init(
   return RTEMS_RECORD_CLIENT_SUCCESS;
 }
 
-rtems_record_client_status  rtems_record_client_init(
+rtems_record_client_status rtems_record_client_init(
   rtems_record_client_context *ctx,
   rtems_record_client_handler  handler,
   void                        *arg
@@ -669,9 +669,9 @@ static void calculate_best_effort_uptime(
 )
 {
   rtems_record_item_64 *items;
-  uint32_t last;
-  uint64_t accumulated;
-  size_t index;
+  uint32_t              last;
+  uint64_t              accumulated;
+  size_t                index;
 
   items = per_cpu->items;
   accumulated = 0;
@@ -701,9 +701,7 @@ static void calculate_best_effort_uptime(
   per_cpu->uptime.time_accumulated = 0;
 }
 
-void rtems_record_client_destroy(
-  rtems_record_client_context *ctx
-)
+void rtems_record_client_destroy( rtems_record_client_context *ctx )
 {
   uint32_t cpu;
 
@@ -714,13 +712,7 @@ void rtems_record_client_destroy(
     per_cpu = &ctx->per_cpu[ cpu ];
 
     if ( per_cpu->hold_back && per_cpu->item_index > 0 ) {
-      (void) call_handler(
-        ctx,
-        per_cpu,
-        0,
-        RTEMS_RECORD_UNRELIABLE_TIME,
-        0
-      );
+      (void) call_handler( ctx, per_cpu, 0, RTEMS_RECORD_UNRELIABLE_TIME, 0 );
       calculate_best_effort_uptime( ctx, per_cpu );
       (void) resolve_hold_back( ctx, per_cpu );
     }

@@ -39,10 +39,7 @@ void rtems_record_line( void )
   );
 }
 
-void rtems_record_line_2(
-  rtems_record_event event,
-  rtems_record_data  data
-)
+void rtems_record_line_2( rtems_record_event event, rtems_record_data data )
 {
   rtems_record_produce_2(
     RTEMS_RECORD_LINE,
@@ -343,9 +340,9 @@ void _Record_Caller( void *return_address )
 }
 
 void _Record_Caller_3(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data
 )
 {
   rtems_record_item items[ 3 ];
@@ -360,11 +357,11 @@ void _Record_Caller_3(
 }
 
 void _Record_Caller_4(
-  void               *return_address,
-  rtems_record_event  event_0,
-  rtems_record_data   data_0,
-  rtems_record_event  event_1,
-  rtems_record_data   data_1
+  void              *return_address,
+  rtems_record_event event_0,
+  rtems_record_data  data_0,
+  rtems_record_event event_1,
+  rtems_record_data  data_1
 )
 {
   rtems_record_item items[ 4 ];
@@ -394,9 +391,9 @@ void _Record_Caller_arg( void *return_address, rtems_record_data data )
 }
 
 void _Record_Caller_arg_2(
-  void              *return_address,
-  rtems_record_data  data_0,
-  rtems_record_data  data_1
+  void             *return_address,
+  rtems_record_data data_0,
+  rtems_record_data data_1
 )
 {
   rtems_record_item items[ 4 ];
@@ -413,10 +410,10 @@ void _Record_Caller_arg_2(
 }
 
 void _Record_Caller_arg_3(
-  void              *return_address,
-  rtems_record_data  data_0,
-  rtems_record_data  data_1,
-  rtems_record_data  data_2
+  void             *return_address,
+  rtems_record_data data_0,
+  rtems_record_data data_1,
+  rtems_record_data data_2
 )
 {
   rtems_record_item items[ 5 ];
@@ -435,11 +432,11 @@ void _Record_Caller_arg_3(
 }
 
 void _Record_Caller_arg_4(
-  void              *return_address,
-  rtems_record_data  data_0,
-  rtems_record_data  data_1,
-  rtems_record_data  data_2,
-  rtems_record_data  data_3
+  void             *return_address,
+  rtems_record_data data_0,
+  rtems_record_data data_1,
+  rtems_record_data data_2,
+  rtems_record_data data_3
 )
 {
   rtems_record_item items[ 6 ];
@@ -460,12 +457,12 @@ void _Record_Caller_arg_4(
 }
 
 void _Record_Caller_arg_5(
-  void              *return_address,
-  rtems_record_data  data_0,
-  rtems_record_data  data_1,
-  rtems_record_data  data_2,
-  rtems_record_data  data_3,
-  rtems_record_data  data_4
+  void             *return_address,
+  rtems_record_data data_0,
+  rtems_record_data data_1,
+  rtems_record_data data_2,
+  rtems_record_data data_3,
+  rtems_record_data data_4
 )
 {
   rtems_record_item items[ 7 ];
@@ -488,13 +485,13 @@ void _Record_Caller_arg_5(
 }
 
 void _Record_Caller_arg_6(
-  void              *return_address,
-  rtems_record_data  data_0,
-  rtems_record_data  data_1,
-  rtems_record_data  data_2,
-  rtems_record_data  data_3,
-  rtems_record_data  data_4,
-  rtems_record_data  data_5
+  void             *return_address,
+  rtems_record_data data_0,
+  rtems_record_data data_1,
+  rtems_record_data data_2,
+  rtems_record_data data_3,
+  rtems_record_data data_4,
+  rtems_record_data data_5
 )
 {
   rtems_record_item items[ 8 ];
@@ -519,14 +516,14 @@ void _Record_Caller_arg_6(
 }
 
 void _Record_Caller_arg_7(
-  void              *return_address,
-  rtems_record_data  data_0,
-  rtems_record_data  data_1,
-  rtems_record_data  data_2,
-  rtems_record_data  data_3,
-  rtems_record_data  data_4,
-  rtems_record_data  data_5,
-  rtems_record_data  data_6
+  void             *return_address,
+  rtems_record_data data_0,
+  rtems_record_data data_1,
+  rtems_record_data data_2,
+  rtems_record_data data_3,
+  rtems_record_data data_4,
+  rtems_record_data data_5,
+  rtems_record_data data_6
 )
 {
   rtems_record_item items[ 9 ];
@@ -553,15 +550,15 @@ void _Record_Caller_arg_7(
 }
 
 void _Record_Caller_arg_8(
-  void              *return_address,
-  rtems_record_data  data_0,
-  rtems_record_data  data_1,
-  rtems_record_data  data_2,
-  rtems_record_data  data_3,
-  rtems_record_data  data_4,
-  rtems_record_data  data_5,
-  rtems_record_data  data_6,
-  rtems_record_data  data_7
+  void             *return_address,
+  rtems_record_data data_0,
+  rtems_record_data data_1,
+  rtems_record_data data_2,
+  rtems_record_data data_3,
+  rtems_record_data data_4,
+  rtems_record_data data_5,
+  rtems_record_data data_6,
+  rtems_record_data data_7
 )
 {
   rtems_record_item items[ 10 ];
@@ -590,16 +587,16 @@ void _Record_Caller_arg_8(
 }
 
 void _Record_Caller_arg_9(
-  void              *return_address,
-  rtems_record_data  data_0,
-  rtems_record_data  data_1,
-  rtems_record_data  data_2,
-  rtems_record_data  data_3,
-  rtems_record_data  data_4,
-  rtems_record_data  data_5,
-  rtems_record_data  data_6,
-  rtems_record_data  data_7,
-  rtems_record_data  data_8
+  void             *return_address,
+  rtems_record_data data_0,
+  rtems_record_data data_1,
+  rtems_record_data data_2,
+  rtems_record_data data_3,
+  rtems_record_data data_4,
+  rtems_record_data data_5,
+  rtems_record_data data_6,
+  rtems_record_data data_7,
+  rtems_record_data data_8
 )
 {
   rtems_record_item items[ 11 ];
@@ -630,17 +627,17 @@ void _Record_Caller_arg_9(
 }
 
 void _Record_Caller_arg_10(
-  void              *return_address,
-  rtems_record_data  data_0,
-  rtems_record_data  data_1,
-  rtems_record_data  data_2,
-  rtems_record_data  data_3,
-  rtems_record_data  data_4,
-  rtems_record_data  data_5,
-  rtems_record_data  data_6,
-  rtems_record_data  data_7,
-  rtems_record_data  data_8,
-  rtems_record_data  data_9
+  void             *return_address,
+  rtems_record_data data_0,
+  rtems_record_data data_1,
+  rtems_record_data data_2,
+  rtems_record_data data_3,
+  rtems_record_data data_4,
+  rtems_record_data data_5,
+  rtems_record_data data_6,
+  rtems_record_data data_7,
+  rtems_record_data data_8,
+  rtems_record_data data_9
 )
 {
   rtems_record_item items[ 12 ];
@@ -673,10 +670,10 @@ void _Record_Caller_arg_10(
 }
 
 void _Record_Entry_2(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1
 )
 {
   rtems_record_item items[ 3 ];
@@ -691,11 +688,11 @@ void _Record_Entry_2(
 }
 
 void _Record_Entry_3(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1,
+  rtems_record_data  data_2
 )
 {
   rtems_record_item items[ 4 ];
@@ -712,12 +709,12 @@ void _Record_Entry_3(
 }
 
 void _Record_Entry_4(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1,
+  rtems_record_data  data_2,
+  rtems_record_data  data_3
 )
 {
   rtems_record_item items[ 5 ];
@@ -736,13 +733,13 @@ void _Record_Entry_4(
 }
 
 void _Record_Entry_5(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3,
-  rtems_record_data   data_4
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1,
+  rtems_record_data  data_2,
+  rtems_record_data  data_3,
+  rtems_record_data  data_4
 )
 {
   rtems_record_item items[ 6 ];
@@ -763,14 +760,14 @@ void _Record_Entry_5(
 }
 
 void _Record_Entry_6(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3,
-  rtems_record_data   data_4,
-  rtems_record_data   data_5
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1,
+  rtems_record_data  data_2,
+  rtems_record_data  data_3,
+  rtems_record_data  data_4,
+  rtems_record_data  data_5
 )
 {
   rtems_record_item items[ 7 ];
@@ -793,15 +790,15 @@ void _Record_Entry_6(
 }
 
 void _Record_Entry_7(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3,
-  rtems_record_data   data_4,
-  rtems_record_data   data_5,
-  rtems_record_data   data_6
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1,
+  rtems_record_data  data_2,
+  rtems_record_data  data_3,
+  rtems_record_data  data_4,
+  rtems_record_data  data_5,
+  rtems_record_data  data_6
 )
 {
   rtems_record_item items[ 8 ];
@@ -826,16 +823,16 @@ void _Record_Entry_7(
 }
 
 void _Record_Entry_8(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3,
-  rtems_record_data   data_4,
-  rtems_record_data   data_5,
-  rtems_record_data   data_6,
-  rtems_record_data   data_7
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1,
+  rtems_record_data  data_2,
+  rtems_record_data  data_3,
+  rtems_record_data  data_4,
+  rtems_record_data  data_5,
+  rtems_record_data  data_6,
+  rtems_record_data  data_7
 )
 {
   rtems_record_item items[ 9 ];
@@ -862,17 +859,17 @@ void _Record_Entry_8(
 }
 
 void _Record_Entry_9(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3,
-  rtems_record_data   data_4,
-  rtems_record_data   data_5,
-  rtems_record_data   data_6,
-  rtems_record_data   data_7,
-  rtems_record_data   data_8
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1,
+  rtems_record_data  data_2,
+  rtems_record_data  data_3,
+  rtems_record_data  data_4,
+  rtems_record_data  data_5,
+  rtems_record_data  data_6,
+  rtems_record_data  data_7,
+  rtems_record_data  data_8
 )
 {
   rtems_record_item items[ 10 ];
@@ -901,18 +898,18 @@ void _Record_Entry_9(
 }
 
 void _Record_Entry_10(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3,
-  rtems_record_data   data_4,
-  rtems_record_data   data_5,
-  rtems_record_data   data_6,
-  rtems_record_data   data_7,
-  rtems_record_data   data_8,
-  rtems_record_data   data_9
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1,
+  rtems_record_data  data_2,
+  rtems_record_data  data_3,
+  rtems_record_data  data_4,
+  rtems_record_data  data_5,
+  rtems_record_data  data_6,
+  rtems_record_data  data_7,
+  rtems_record_data  data_8,
+  rtems_record_data  data_9
 )
 {
   rtems_record_item items[ 11 ];
@@ -943,10 +940,10 @@ void _Record_Entry_10(
 }
 
 void _Record_Exit_2(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1
 )
 {
   rtems_record_item items[ 3 ];
@@ -961,11 +958,11 @@ void _Record_Exit_2(
 }
 
 void _Record_Exit_3(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1,
+  rtems_record_data  data_2
 )
 {
   rtems_record_item items[ 4 ];
@@ -982,12 +979,12 @@ void _Record_Exit_3(
 }
 
 void _Record_Exit_4(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1,
+  rtems_record_data  data_2,
+  rtems_record_data  data_3
 )
 {
   rtems_record_item items[ 5 ];
@@ -1006,13 +1003,13 @@ void _Record_Exit_4(
 }
 
 void _Record_Exit_5(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3,
-  rtems_record_data   data_4
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1,
+  rtems_record_data  data_2,
+  rtems_record_data  data_3,
+  rtems_record_data  data_4
 )
 {
   rtems_record_item items[ 6 ];
@@ -1033,14 +1030,14 @@ void _Record_Exit_5(
 }
 
 void _Record_Exit_6(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3,
-  rtems_record_data   data_4,
-  rtems_record_data   data_5
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1,
+  rtems_record_data  data_2,
+  rtems_record_data  data_3,
+  rtems_record_data  data_4,
+  rtems_record_data  data_5
 )
 {
   rtems_record_item items[ 7 ];
@@ -1063,15 +1060,15 @@ void _Record_Exit_6(
 }
 
 void _Record_Exit_7(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3,
-  rtems_record_data   data_4,
-  rtems_record_data   data_5,
-  rtems_record_data   data_6
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1,
+  rtems_record_data  data_2,
+  rtems_record_data  data_3,
+  rtems_record_data  data_4,
+  rtems_record_data  data_5,
+  rtems_record_data  data_6
 )
 {
   rtems_record_item items[ 8 ];
@@ -1096,16 +1093,16 @@ void _Record_Exit_7(
 }
 
 void _Record_Exit_8(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3,
-  rtems_record_data   data_4,
-  rtems_record_data   data_5,
-  rtems_record_data   data_6,
-  rtems_record_data   data_7
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1,
+  rtems_record_data  data_2,
+  rtems_record_data  data_3,
+  rtems_record_data  data_4,
+  rtems_record_data  data_5,
+  rtems_record_data  data_6,
+  rtems_record_data  data_7
 )
 {
   rtems_record_item items[ 9 ];
@@ -1132,17 +1129,17 @@ void _Record_Exit_8(
 }
 
 void _Record_Exit_9(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3,
-  rtems_record_data   data_4,
-  rtems_record_data   data_5,
-  rtems_record_data   data_6,
-  rtems_record_data   data_7,
-  rtems_record_data   data_8
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1,
+  rtems_record_data  data_2,
+  rtems_record_data  data_3,
+  rtems_record_data  data_4,
+  rtems_record_data  data_5,
+  rtems_record_data  data_6,
+  rtems_record_data  data_7,
+  rtems_record_data  data_8
 )
 {
   rtems_record_item items[ 10 ];
@@ -1171,18 +1168,18 @@ void _Record_Exit_9(
 }
 
 void _Record_Exit_10(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3,
-  rtems_record_data   data_4,
-  rtems_record_data   data_5,
-  rtems_record_data   data_6,
-  rtems_record_data   data_7,
-  rtems_record_data   data_8,
-  rtems_record_data   data_9
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1,
+  rtems_record_data  data_2,
+  rtems_record_data  data_3,
+  rtems_record_data  data_4,
+  rtems_record_data  data_5,
+  rtems_record_data  data_6,
+  rtems_record_data  data_7,
+  rtems_record_data  data_8,
+  rtems_record_data  data_9
 )
 {
   rtems_record_item items[ 11 ];

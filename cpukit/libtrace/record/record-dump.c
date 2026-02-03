@@ -33,8 +33,8 @@
 #include <rtems/score/threadimpl.h>
 
 typedef struct {
-  rtems_record_dump_chunk  chunk;
-  void                    *arg;
+  rtems_record_dump_chunk chunk;
+  void                   *arg;
 } dump_context;
 
 static void dump_chunk( dump_context *ctx, const void *data, size_t length )
@@ -44,12 +44,12 @@ static void dump_chunk( dump_context *ctx, const void *data, size_t length )
 
 static bool thread_names_visitor( rtems_tcb *tcb, void *arg )
 {
-  dump_context      *ctx;
-  char               name[ 2 * THREAD_DEFAULT_MAXIMUM_NAME_SIZE ];
-  size_t             n;
-  size_t             i;
-  rtems_record_item  item;
-  rtems_record_data  data;
+  dump_context     *ctx;
+  char              name[ 2 * THREAD_DEFAULT_MAXIMUM_NAME_SIZE ];
+  size_t            n;
+  size_t            i;
+  rtems_record_item item;
+  rtems_record_data data;
 
   ctx = arg;
   item.event = RTEMS_RECORD_THREAD_ID;
@@ -80,10 +80,7 @@ static bool thread_names_visitor( rtems_tcb *tcb, void *arg )
   return false;
 }
 
-void rtems_record_dump(
-  rtems_record_dump_chunk  chunk,
-  void                    *arg
-)
+void rtems_record_dump( rtems_record_dump_chunk chunk, void *arg )
 {
   Record_Stream_header       header;
   size_t                     size;

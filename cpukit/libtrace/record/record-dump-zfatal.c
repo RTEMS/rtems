@@ -37,8 +37,9 @@
 #include <rtems/score/timecounter.h>
 
 #if ISR_LOCK_NEEDS_OBJECT
-static ISR_lock_Control _Record_Dump_base64_zlib_lock =
-  ISR_LOCK_INITIALIZER( "Record Dump base64 zlib" );
+static ISR_lock_Control _Record_Dump_base64_zlib_lock = ISR_LOCK_INITIALIZER(
+  "Record Dump base64 zlib"
+);
 #endif
 
 static bool _Record_Dump_base64_zlib_done;
@@ -75,22 +76,13 @@ void _Record_Fatal_dump_base64_zlib(
   rtems_record_commit_critical( &record_context );
 
   rtems_record_prepare_critical( &record_context, cpu_self );
-  rtems_record_add(
-    &record_context,
-    RTEMS_RECORD_FATAL_SOURCE,
-    source
-  );
-  rtems_record_add(
-    &record_context,
-    RTEMS_RECORD_FATAL_CODE,
-    code
-  );
+  rtems_record_add( &record_context, RTEMS_RECORD_FATAL_SOURCE, source );
+  rtems_record_add( &record_context, RTEMS_RECORD_FATAL_CODE, code );
   rtems_record_commit_critical( &record_context );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   if (
-    source == RTEMS_FATAL_SOURCE_SMP &&
-    code == SMP_FATAL_SHUTDOWN_RESPONSE
+    source == RTEMS_FATAL_SOURCE_SMP && code == SMP_FATAL_SHUTDOWN_RESPONSE
   ) {
     return;
   }

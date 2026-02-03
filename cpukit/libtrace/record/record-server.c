@@ -80,8 +80,8 @@ static void send_header( int fd )
 }
 
 typedef struct {
-  int fd;
-  size_t index;
+  int               fd;
+  size_t            index;
   rtems_record_item items[ 128 ];
 } thread_names_context;
 
@@ -97,7 +97,7 @@ static void thread_names_produce(
   ctx->items[ i ].event = RTEMS_RECORD_TIME_EVENT( 0, event );
   ctx->items[ i ].data = data;
 
-  if (i == RTEMS_ARRAY_SIZE(ctx->items) - 1) {
+  if ( i == RTEMS_ARRAY_SIZE( ctx->items ) - 1 ) {
     ctx->index = 0;
     (void) write( ctx->fd, ctx->items, sizeof( ctx->items ) );
   } else {
@@ -150,11 +150,7 @@ static void send_thread_names( int fd )
   }
 }
 
-static void fetch_and_write(
-  int fd,
-  rtems_record_item *items,
-  size_t count
-)
+static void fetch_and_write( int fd, rtems_record_item *items, size_t count )
 {
   rtems_record_fetch_control control;
 
@@ -184,13 +180,13 @@ static void fetch_and_write(
 
 void rtems_record_server( uint16_t port, rtems_interval period )
 {
-  rtems_status_code sc;
-  rtems_id self;
-  rtems_id timer;
+  rtems_status_code  sc;
+  rtems_id           self;
+  rtems_id           timer;
   struct sockaddr_in addr;
-  int sd;
-  int rv;
-  size_t count;
+  int                sd;
+  int                rv;
+  size_t             count;
   rtems_record_item *items;
 
   self = rtems_task_self();
@@ -207,7 +203,7 @@ void rtems_record_server( uint16_t port, rtems_interval period )
   }
 
   sd = socket( PF_INET, SOCK_STREAM, 0 );
-  if (sd < 0) {
+  if ( sd < 0 ) {
     goto socket_error;
   }
 
@@ -217,12 +213,12 @@ void rtems_record_server( uint16_t port, rtems_interval period )
   addr.sin_addr.s_addr = htonl( INADDR_ANY );
 
   rv = bind( sd, (const struct sockaddr *) &addr, sizeof( addr ) );
-  if (rv != 0) {
+  if ( rv != 0 ) {
     goto error;
   }
 
   rv = listen( sd, 0 );
-  if (rv != 0) {
+  if ( rv != 0 ) {
     goto error;
   }
 
@@ -265,14 +261,14 @@ typedef struct {
 
 static void server( rtems_task_argument arg )
 {
-  server_arg     *sarg;
-  uint16_t        port;
-  rtems_interval  period;
+  server_arg    *sarg;
+  uint16_t       port;
+  rtems_interval period;
 
   sarg = (server_arg *) arg;
   port = sarg->port;
   period = sarg->period;
-  wakeup(sarg->task);
+  wakeup( sarg->task );
   rtems_record_server( port, period );
   rtems_task_exit();
 }

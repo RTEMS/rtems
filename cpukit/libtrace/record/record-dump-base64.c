@@ -37,11 +37,11 @@
 #include <rtems/base64.h>
 
 typedef struct {
-  IO_Put_char  put_char;
-  void        *arg;
-  int          out;
-  size_t       index;
-  char         buf[ 57 ];
+  IO_Put_char put_char;
+  void       *arg;
+  int         out;
+  size_t      index;
+  char        buf[ 57 ];
 } dump_context;
 
 static void put_char( int c, void *arg )

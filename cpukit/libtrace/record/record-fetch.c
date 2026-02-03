@@ -50,12 +50,13 @@
 
 size_t rtems_record_get_item_count_for_fetch( void )
 {
-  return _Record_Configuration.item_count + RECORD_FETCH_HEADER_ITEMS
+  return _Record_Configuration.item_count +
+         RECORD_FETCH_HEADER_ITEMS
 #ifdef RTEMS_SMP
-   /* See red zone comment below */
-   - 1
+         /* See red zone comment below */
+         - 1
 #endif
-   ;
+    ;
 }
 
 void rtems_record_fetch_initialize(
@@ -68,7 +69,6 @@ void rtems_record_fetch_initialize(
   control->internal.storage_items = items;
   control->internal.storage_item_count = count;
 }
-
 
 rtems_record_fetch_status rtems_record_fetch(
   rtems_record_fetch_control *control

@@ -97,7 +97,14 @@ static void chunk( void *arg, const void *data, size_t length )
       ctx->stream.next_out = &ctx->buf[ 0 ];
       ctx->stream.avail_out = sizeof( ctx->buf );
 
-      _Base64_Encode( put_char, ctx, ctx->buf, sizeof( ctx->buf ), NULL, INT_MAX );
+      _Base64_Encode(
+        put_char,
+        ctx,
+        ctx->buf,
+        sizeof( ctx->buf ),
+        NULL,
+        INT_MAX
+      );
     }
   }
 }
@@ -116,7 +123,14 @@ static void flush( rtems_record_dump_base64_zlib_context *ctx )
       ctx->stream.next_out = &ctx->buf[ 0 ];
       ctx->stream.avail_out = sizeof( ctx->buf );
 
-      _Base64_Encode( put_char, ctx, ctx->buf, sizeof( ctx->buf ), NULL, INT_MAX );
+      _Base64_Encode(
+        put_char,
+        ctx,
+        ctx->buf,
+        sizeof( ctx->buf ),
+        NULL,
+        INT_MAX
+      );
     }
   }
 
@@ -132,8 +146,8 @@ static void flush( rtems_record_dump_base64_zlib_context *ctx )
 
 void rtems_record_dump_zlib_base64(
   rtems_record_dump_base64_zlib_context *ctx,
-  void                                ( *put_char )( int, void * ),
-  void                                  *arg
+  void ( *put_char )( int, void * ),
+  void *arg
 )
 {
   int err;
@@ -148,7 +162,7 @@ void rtems_record_dump_zlib_base64(
   ctx->mem_available = sizeof( ctx->mem );
 
   err = deflateInit( &ctx->stream, Z_BEST_COMPRESSION );
-  if (err != Z_OK) {
+  if ( err != Z_OK ) {
     return;
   }
 

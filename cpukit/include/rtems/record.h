@@ -43,12 +43,12 @@ extern "C" {
 #endif /* __cplusplus */
 
 typedef struct Record_Control {
-  Atomic_Uint       head;
-  unsigned int      tail;
-  unsigned int      mask;
-  Watchdog_Control  Watchdog;
+  Atomic_Uint      head;
+  unsigned int     tail;
+  unsigned int     mask;
+  Watchdog_Control Watchdog;
   RTEMS_ALIGNED( CPU_CACHE_LINE_BYTES )
-    rtems_record_item Items[ RTEMS_ZERO_LENGTH_ARRAY ];
+  rtems_record_item Items[ RTEMS_ZERO_LENGTH_ARRAY ];
 } Record_Control;
 
 typedef struct {
@@ -112,9 +112,7 @@ void _Record_Fatal_dump_base64_zlib(
   Internal_errors_t      code
 );
 
-void _Record_Thread_terminate(
-  struct _Thread_Control *executing
-);
+void _Record_Thread_terminate( struct _Thread_Control *executing );
 
 static inline unsigned int _Record_Index(
   const Record_Control *control,
@@ -166,66 +164,160 @@ static inline rtems_counter_ticks _Record_Now( void )
 }
 
 typedef struct RTEMS_PACKED {
-  uint32_t format;
-  uint32_t magic;
+  uint32_t          format;
+  uint32_t          magic;
   rtems_record_item Version;
   rtems_record_item Processor_maximum;
   rtems_record_item Count;
   rtems_record_item Frequency;
-  rtems_record_item Info[64];
+  rtems_record_item Info[ 64 ];
 } Record_Stream_header;
 
 size_t _Record_Stream_header_initialize( Record_Stream_header *header );
 
 size_t _Record_String_to_items(
-  rtems_record_event  event,
-  const char         *str,
-  size_t              len,
-  rtems_record_item  *items,
-  size_t              item_count
+  rtems_record_event event,
+  const char        *str,
+  size_t             len,
+  rtems_record_item *items,
+  size_t             item_count
 );
 
 void _Record_Caller( void *return_address );
 
 void _Record_Caller_3(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data
 );
 
 void _Record_Caller_4(
-  void               *return_address,
-  rtems_record_event  event_0,
-  rtems_record_data   data_0,
-  rtems_record_event  event_1,
-  rtems_record_data   data_1
+  void              *return_address,
+  rtems_record_event event_0,
+  rtems_record_data  data_0,
+  rtems_record_event event_1,
+  rtems_record_data  data_1
 );
 
 void _Record_Caller_arg( void *return_address, rtems_record_data data );
 
 void _Record_Caller_arg_2(
+  void             *return_address,
+  rtems_record_data data_0,
+  rtems_record_data data_1
+);
+
+void _Record_Caller_arg_3(
+  void             *return_address,
+  rtems_record_data data_0,
+  rtems_record_data data_1,
+  rtems_record_data data_2
+);
+
+void _Record_Caller_arg_4(
+  void             *return_address,
+  rtems_record_data data_0,
+  rtems_record_data data_1,
+  rtems_record_data data_2,
+  rtems_record_data data_3
+);
+
+void _Record_Caller_arg_5(
+  void             *return_address,
+  rtems_record_data data_0,
+  rtems_record_data data_1,
+  rtems_record_data data_2,
+  rtems_record_data data_3,
+  rtems_record_data data_4
+);
+
+void _Record_Caller_arg_6(
+  void             *return_address,
+  rtems_record_data data_0,
+  rtems_record_data data_1,
+  rtems_record_data data_2,
+  rtems_record_data data_3,
+  rtems_record_data data_4,
+  rtems_record_data data_5
+);
+
+void _Record_Caller_arg_7(
+  void             *return_address,
+  rtems_record_data data_0,
+  rtems_record_data data_1,
+  rtems_record_data data_2,
+  rtems_record_data data_3,
+  rtems_record_data data_4,
+  rtems_record_data data_5,
+  rtems_record_data data_6
+);
+
+void _Record_Caller_arg_8(
+  void             *return_address,
+  rtems_record_data data_0,
+  rtems_record_data data_1,
+  rtems_record_data data_2,
+  rtems_record_data data_3,
+  rtems_record_data data_4,
+  rtems_record_data data_5,
+  rtems_record_data data_6,
+  rtems_record_data data_7
+);
+
+void _Record_Caller_arg_9(
+  void             *return_address,
+  rtems_record_data data_0,
+  rtems_record_data data_1,
+  rtems_record_data data_2,
+  rtems_record_data data_3,
+  rtems_record_data data_4,
+  rtems_record_data data_5,
+  rtems_record_data data_6,
+  rtems_record_data data_7,
+  rtems_record_data data_8
+);
+
+void _Record_Caller_arg_10(
+  void             *return_address,
+  rtems_record_data data_0,
+  rtems_record_data data_1,
+  rtems_record_data data_2,
+  rtems_record_data data_3,
+  rtems_record_data data_4,
+  rtems_record_data data_5,
+  rtems_record_data data_6,
+  rtems_record_data data_7,
+  rtems_record_data data_8,
+  rtems_record_data data_9
+);
+
+void _Record_Entry_2(
   void              *return_address,
+  rtems_record_event event,
   rtems_record_data  data_0,
   rtems_record_data  data_1
 );
 
-void _Record_Caller_arg_3(
+void _Record_Entry_3(
   void              *return_address,
+  rtems_record_event event,
   rtems_record_data  data_0,
   rtems_record_data  data_1,
   rtems_record_data  data_2
 );
 
-void _Record_Caller_arg_4(
+void _Record_Entry_4(
   void              *return_address,
+  rtems_record_event event,
   rtems_record_data  data_0,
   rtems_record_data  data_1,
   rtems_record_data  data_2,
   rtems_record_data  data_3
 );
 
-void _Record_Caller_arg_5(
+void _Record_Entry_5(
   void              *return_address,
+  rtems_record_event event,
   rtems_record_data  data_0,
   rtems_record_data  data_1,
   rtems_record_data  data_2,
@@ -233,8 +325,9 @@ void _Record_Caller_arg_5(
   rtems_record_data  data_4
 );
 
-void _Record_Caller_arg_6(
+void _Record_Entry_6(
   void              *return_address,
+  rtems_record_event event,
   rtems_record_data  data_0,
   rtems_record_data  data_1,
   rtems_record_data  data_2,
@@ -243,8 +336,9 @@ void _Record_Caller_arg_6(
   rtems_record_data  data_5
 );
 
-void _Record_Caller_arg_7(
+void _Record_Entry_7(
   void              *return_address,
+  rtems_record_event event,
   rtems_record_data  data_0,
   rtems_record_data  data_1,
   rtems_record_data  data_2,
@@ -254,8 +348,9 @@ void _Record_Caller_arg_7(
   rtems_record_data  data_6
 );
 
-void _Record_Caller_arg_8(
+void _Record_Entry_8(
   void              *return_address,
+  rtems_record_event event,
   rtems_record_data  data_0,
   rtems_record_data  data_1,
   rtems_record_data  data_2,
@@ -266,8 +361,9 @@ void _Record_Caller_arg_8(
   rtems_record_data  data_7
 );
 
-void _Record_Caller_arg_9(
+void _Record_Entry_9(
   void              *return_address,
+  rtems_record_event event,
   rtems_record_data  data_0,
   rtems_record_data  data_1,
   rtems_record_data  data_2,
@@ -279,8 +375,9 @@ void _Record_Caller_arg_9(
   rtems_record_data  data_8
 );
 
-void _Record_Caller_arg_10(
+void _Record_Entry_10(
   void              *return_address,
+  rtems_record_event event,
   rtems_record_data  data_0,
   rtems_record_data  data_1,
   rtems_record_data  data_2,
@@ -293,202 +390,103 @@ void _Record_Caller_arg_10(
   rtems_record_data  data_9
 );
 
-void _Record_Entry_2(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1
-);
-
-void _Record_Entry_3(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2
-);
-
-void _Record_Entry_4(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3
-);
-
-void _Record_Entry_5(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3,
-  rtems_record_data   data_4
-);
-
-void _Record_Entry_6(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3,
-  rtems_record_data   data_4,
-  rtems_record_data   data_5
-);
-
-void _Record_Entry_7(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3,
-  rtems_record_data   data_4,
-  rtems_record_data   data_5,
-  rtems_record_data   data_6
-);
-
-void _Record_Entry_8(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3,
-  rtems_record_data   data_4,
-  rtems_record_data   data_5,
-  rtems_record_data   data_6,
-  rtems_record_data   data_7
-);
-
-void _Record_Entry_9(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3,
-  rtems_record_data   data_4,
-  rtems_record_data   data_5,
-  rtems_record_data   data_6,
-  rtems_record_data   data_7,
-  rtems_record_data   data_8
-);
-
-void _Record_Entry_10(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3,
-  rtems_record_data   data_4,
-  rtems_record_data   data_5,
-  rtems_record_data   data_6,
-  rtems_record_data   data_7,
-  rtems_record_data   data_8,
-  rtems_record_data   data_9
-);
-
 void _Record_Exit_2(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1
 );
 
 void _Record_Exit_3(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1,
+  rtems_record_data  data_2
 );
 
 void _Record_Exit_4(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1,
+  rtems_record_data  data_2,
+  rtems_record_data  data_3
 );
 
 void _Record_Exit_5(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3,
-  rtems_record_data   data_4
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1,
+  rtems_record_data  data_2,
+  rtems_record_data  data_3,
+  rtems_record_data  data_4
 );
 
 void _Record_Exit_6(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3,
-  rtems_record_data   data_4,
-  rtems_record_data   data_5
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1,
+  rtems_record_data  data_2,
+  rtems_record_data  data_3,
+  rtems_record_data  data_4,
+  rtems_record_data  data_5
 );
 
 void _Record_Exit_7(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3,
-  rtems_record_data   data_4,
-  rtems_record_data   data_5,
-  rtems_record_data   data_6
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1,
+  rtems_record_data  data_2,
+  rtems_record_data  data_3,
+  rtems_record_data  data_4,
+  rtems_record_data  data_5,
+  rtems_record_data  data_6
 );
 
 void _Record_Exit_8(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3,
-  rtems_record_data   data_4,
-  rtems_record_data   data_5,
-  rtems_record_data   data_6,
-  rtems_record_data   data_7
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1,
+  rtems_record_data  data_2,
+  rtems_record_data  data_3,
+  rtems_record_data  data_4,
+  rtems_record_data  data_5,
+  rtems_record_data  data_6,
+  rtems_record_data  data_7
 );
 
 void _Record_Exit_9(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3,
-  rtems_record_data   data_4,
-  rtems_record_data   data_5,
-  rtems_record_data   data_6,
-  rtems_record_data   data_7,
-  rtems_record_data   data_8
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1,
+  rtems_record_data  data_2,
+  rtems_record_data  data_3,
+  rtems_record_data  data_4,
+  rtems_record_data  data_5,
+  rtems_record_data  data_6,
+  rtems_record_data  data_7,
+  rtems_record_data  data_8
 );
 
 void _Record_Exit_10(
-  void               *return_address,
-  rtems_record_event  event,
-  rtems_record_data   data_0,
-  rtems_record_data   data_1,
-  rtems_record_data   data_2,
-  rtems_record_data   data_3,
-  rtems_record_data   data_4,
-  rtems_record_data   data_5,
-  rtems_record_data   data_6,
-  rtems_record_data   data_7,
-  rtems_record_data   data_8,
-  rtems_record_data   data_9
+  void              *return_address,
+  rtems_record_event event,
+  rtems_record_data  data_0,
+  rtems_record_data  data_1,
+  rtems_record_data  data_2,
+  rtems_record_data  data_3,
+  rtems_record_data  data_4,
+  rtems_record_data  data_5,
+  rtems_record_data  data_6,
+  rtems_record_data  data_7,
+  rtems_record_data  data_8,
+  rtems_record_data  data_9
 );
 
 /**
@@ -587,7 +585,9 @@ static inline void rtems_record_add(
  * @param context The record context initialized via
  *   rtems_record_prepare_critical().
  */
-static inline void rtems_record_commit_critical( rtems_record_context *context )
+static inline void rtems_record_commit_critical(
+  rtems_record_context *context
+)
 {
   _Atomic_Store_uint(
     &context->control->head,
@@ -637,10 +637,7 @@ void rtems_record_produce_2(
  * @param item The record items without a time stamps.
  * @param n The count of record items.
  */
-void rtems_record_produce_n(
-  const rtems_record_item *items,
-  size_t                   n
-);
+void rtems_record_produce_n( const rtems_record_item *items, size_t n );
 
 /**
  * @brief Generates an RTEMS_RECORD_LINE event.
@@ -657,10 +654,7 @@ void rtems_record_line( void );
  * @param event The record event without a time stamp for the second item.
  * @param data The record data for the second item.
  */
-void rtems_record_line_2(
-  rtems_record_event event,
-  rtems_record_data  data
-);
+void rtems_record_line_2( rtems_record_event event, rtems_record_data data );
 
 /**
  * @brief Generates an RTEMS_RECORD_LINE event and two extra events.
@@ -930,13 +924,7 @@ void rtems_record_line_arg_10(
  * @param data_1 The record data for the fourth item.
  */
 #define rtems_record_caller_4( event_0, data_0, event_1, data_1 ) \
-  _Record_Caller_4( \
-    RTEMS_RETURN_ADDRESS(), \
-    event_0, \
-    data_0, \
-    event_1, \
-    data_1 \
-  )
+  _Record_Caller_4( RTEMS_RETURN_ADDRESS(), event_0, data_0, event_1, data_1 )
 
 /**
  * @brief Generates an RTEMS_RECORD_CALLER event, an RTEMS_RECORD_LINE event,
@@ -967,11 +955,7 @@ void rtems_record_line_arg_10(
  * @param data_1 The RTEMS_RECORD_ARG_1 event data.
  */
 #define rtems_record_caller_arg_2( data_0, data_1 ) \
-  _Record_Caller_arg_2( \
-    RTEMS_RETURN_ADDRESS(), \
-    data_0, \
-    data_1 \
-  )
+  _Record_Caller_arg_2( RTEMS_RETURN_ADDRESS(), data_0, data_1 )
 
 /**
  * @brief Generates an RTEMS_RECORD_CALLER event, an RTEMS_RECORD_LINE event,
@@ -988,12 +972,7 @@ void rtems_record_line_arg_10(
  * @param data_2 The RTEMS_RECORD_ARG_2 event data.
  */
 #define rtems_record_caller_arg_3( data_0, data_1, data_2 ) \
-  _Record_Caller_arg_3( \
-    RTEMS_RETURN_ADDRESS(), \
-    data_0, \
-    data_1, \
-    data_2 \
-  )
+  _Record_Caller_arg_3( RTEMS_RETURN_ADDRESS(), data_0, data_1, data_2 )
 
 /**
  * @brief Generates an RTEMS_RECORD_CALLER event, an RTEMS_RECORD_LINE event,
@@ -1011,12 +990,12 @@ void rtems_record_line_arg_10(
  * @param data_3 The RTEMS_RECORD_ARG_3 event data.
  */
 #define rtems_record_caller_arg_4( data_0, data_1, data_2, data_3 ) \
-  _Record_Caller_arg_4( \
-    RTEMS_RETURN_ADDRESS(), \
-    data_0, \
-    data_1, \
-    data_2, \
-    data_3 \
+  _Record_Caller_arg_4(                                             \
+    RTEMS_RETURN_ADDRESS(),                                         \
+    data_0,                                                         \
+    data_1,                                                         \
+    data_2,                                                         \
+    data_3                                                          \
   )
 
 /**
@@ -1036,13 +1015,13 @@ void rtems_record_line_arg_10(
  * @param data_4 The RTEMS_RECORD_ARG_4 event data.
  */
 #define rtems_record_caller_arg_5( data_0, data_1, data_2, data_3, data_4 ) \
-  _Record_Caller_arg_5( \
-    RTEMS_RETURN_ADDRESS(), \
-    data_0, \
-    data_1, \
-    data_2, \
-    data_3, \
-    data_4 \
+  _Record_Caller_arg_5(                                                     \
+    RTEMS_RETURN_ADDRESS(),                                                 \
+    data_0,                                                                 \
+    data_1,                                                                 \
+    data_2,                                                                 \
+    data_3,                                                                 \
+    data_4                                                                  \
   )
 
 /**
@@ -1063,21 +1042,21 @@ void rtems_record_line_arg_10(
  * @param data_5 The RTEMS_RECORD_ARG_5 event data.
  */
 #define rtems_record_caller_arg_6( \
-  data_0, \
-  data_1, \
-  data_2, \
-  data_3, \
-  data_4, \
-  data_5 \
-) \
-  _Record_Caller_arg_6( \
-    RTEMS_RETURN_ADDRESS(), \
-    data_0, \
-    data_1, \
-    data_2, \
-    data_3, \
-    data_4, \
-    data_5 \
+  data_0,                          \
+  data_1,                          \
+  data_2,                          \
+  data_3,                          \
+  data_4,                          \
+  data_5                           \
+)                                  \
+  _Record_Caller_arg_6(            \
+    RTEMS_RETURN_ADDRESS(),        \
+    data_0,                        \
+    data_1,                        \
+    data_2,                        \
+    data_3,                        \
+    data_4,                        \
+    data_5                         \
   )
 
 /**
@@ -1099,23 +1078,23 @@ void rtems_record_line_arg_10(
  * @param data_6 The RTEMS_RECORD_ARG_6 event data.
  */
 #define rtems_record_caller_arg_7( \
-  data_0, \
-  data_1, \
-  data_2, \
-  data_3, \
-  data_4, \
-  data_5, \
-  data_6 \
-) \
-  _Record_Caller_arg_7( \
-    RTEMS_RETURN_ADDRESS(), \
-    data_0, \
-    data_1, \
-    data_2, \
-    data_3, \
-    data_4, \
-    data_5, \
-    data_6 \
+  data_0,                          \
+  data_1,                          \
+  data_2,                          \
+  data_3,                          \
+  data_4,                          \
+  data_5,                          \
+  data_6                           \
+)                                  \
+  _Record_Caller_arg_7(            \
+    RTEMS_RETURN_ADDRESS(),        \
+    data_0,                        \
+    data_1,                        \
+    data_2,                        \
+    data_3,                        \
+    data_4,                        \
+    data_5,                        \
+    data_6                         \
   )
 
 /**
@@ -1138,25 +1117,25 @@ void rtems_record_line_arg_10(
  * @param data_7 The RTEMS_RECORD_ARG_7 event data.
  */
 #define rtems_record_caller_arg_8( \
-  data_0, \
-  data_1, \
-  data_2, \
-  data_3, \
-  data_4, \
-  data_5, \
-  data_6, \
-  data_7 \
-) \
-  _Record_Caller_arg_8( \
-    RTEMS_RETURN_ADDRESS(), \
-    data_0, \
-    data_1, \
-    data_2, \
-    data_3, \
-    data_4, \
-    data_5, \
-    data_6, \
-    data_7 \
+  data_0,                          \
+  data_1,                          \
+  data_2,                          \
+  data_3,                          \
+  data_4,                          \
+  data_5,                          \
+  data_6,                          \
+  data_7                           \
+)                                  \
+  _Record_Caller_arg_8(            \
+    RTEMS_RETURN_ADDRESS(),        \
+    data_0,                        \
+    data_1,                        \
+    data_2,                        \
+    data_3,                        \
+    data_4,                        \
+    data_5,                        \
+    data_6,                        \
+    data_7                         \
   )
 
 /**
@@ -1180,27 +1159,27 @@ void rtems_record_line_arg_10(
  * @param data_8 The RTEMS_RECORD_ARG_8 event data.
  */
 #define rtems_record_caller_arg_9( \
-  data_0, \
-  data_1, \
-  data_2, \
-  data_3, \
-  data_4, \
-  data_5, \
-  data_6, \
-  data_7, \
-  data_8 \
-) \
-  _Record_Caller_arg_9( \
-    RTEMS_RETURN_ADDRESS(), \
-    data_0, \
-    data_1, \
-    data_2, \
-    data_3, \
-    data_4, \
-    data_5, \
-    data_6, \
-    data_7, \
-    data_8 \
+  data_0,                          \
+  data_1,                          \
+  data_2,                          \
+  data_3,                          \
+  data_4,                          \
+  data_5,                          \
+  data_6,                          \
+  data_7,                          \
+  data_8                           \
+)                                  \
+  _Record_Caller_arg_9(            \
+    RTEMS_RETURN_ADDRESS(),        \
+    data_0,                        \
+    data_1,                        \
+    data_2,                        \
+    data_3,                        \
+    data_4,                        \
+    data_5,                        \
+    data_6,                        \
+    data_7,                        \
+    data_8                         \
   )
 
 /**
@@ -1225,29 +1204,29 @@ void rtems_record_line_arg_10(
  * @param data_10 The RTEMS_RECORD_ARG_10 event data.
  */
 #define rtems_record_caller_arg_10( \
-  data_0, \
-  data_1, \
-  data_2, \
-  data_3, \
-  data_4, \
-  data_5, \
-  data_6, \
-  data_7, \
-  data_8, \
-  data_9 \
-) \
-  _Record_Caller_arg_10( \
-    RTEMS_RETURN_ADDRESS(), \
-    data_0, \
-    data_1, \
-    data_2, \
-    data_3, \
-    data_4, \
-    data_5, \
-    data_6, \
-    data_7, \
-    data_8, \
-    data_9 \
+  data_0,                           \
+  data_1,                           \
+  data_2,                           \
+  data_3,                           \
+  data_4,                           \
+  data_5,                           \
+  data_6,                           \
+  data_7,                           \
+  data_8,                           \
+  data_9                            \
+)                                   \
+  _Record_Caller_arg_10(            \
+    RTEMS_RETURN_ADDRESS(),         \
+    data_0,                         \
+    data_1,                         \
+    data_2,                         \
+    data_3,                         \
+    data_4,                         \
+    data_5,                         \
+    data_6,                         \
+    data_7,                         \
+    data_8,                         \
+    data_9                          \
   )
 
 /**
@@ -1270,12 +1249,12 @@ void rtems_record_line_arg_10(
  * @param event The entry event.
  * @param data The RTEMS_RECORD_ARG_0 event data.
  */
-#define rtems_record_entry_1( event, data ) \
-  rtems_record_produce_2( \
-    event, \
+#define rtems_record_entry_1( event, data )     \
+  rtems_record_produce_2(                       \
+    event,                                      \
     (rtems_record_data) RTEMS_RETURN_ADDRESS(), \
-    RTEMS_RECORD_ARG_0, \
-    data \
+    RTEMS_RECORD_ARG_0,                         \
+    data                                        \
   )
 
 /**
@@ -1303,13 +1282,7 @@ void rtems_record_line_arg_10(
  * @param data_2 The RTEMS_RECORD_ARG_2 event data.
  */
 #define rtems_record_entry_3( event, data_0, data_1, data_2 ) \
-  _Record_Entry_3( \
-    RTEMS_RETURN_ADDRESS(), \
-    event, \
-    data_0, \
-    data_1, \
-    data_2 \
-  )
+  _Record_Entry_3( RTEMS_RETURN_ADDRESS(), event, data_0, data_1, data_2 )
 
 /**
  * @brief Generates the specified entry event and four argument events.
@@ -1324,13 +1297,13 @@ void rtems_record_line_arg_10(
  * @param data_3 The RTEMS_RECORD_ARG_3 event data.
  */
 #define rtems_record_entry_4( event, data_0, data_1, data_2, data_3 ) \
-  _Record_Entry_4( \
-    RTEMS_RETURN_ADDRESS(), \
-    event, \
-    data_0, \
-    data_1, \
-    data_2, \
-    data_3 \
+  _Record_Entry_4(                                                    \
+    RTEMS_RETURN_ADDRESS(),                                           \
+    event,                                                            \
+    data_0,                                                           \
+    data_1,                                                           \
+    data_2,                                                           \
+    data_3                                                            \
   )
 
 /**
@@ -1346,22 +1319,15 @@ void rtems_record_line_arg_10(
  * @param data_3 The RTEMS_RECORD_ARG_3 event data.
  * @param data_4 The RTEMS_RECORD_ARG_4 event data.
  */
-#define rtems_record_entry_5( \
-  event, \
-  data_0, \
-  data_1, \
-  data_2, \
-  data_3, \
-  data_4 \
-) \
-  _Record_Entry_5( \
-    RTEMS_RETURN_ADDRESS(), \
-    event, \
-    data_0, \
-    data_1, \
-    data_2, \
-    data_3, \
-    data_4 \
+#define rtems_record_entry_5( event, data_0, data_1, data_2, data_3, data_4 ) \
+  _Record_Entry_5(                                                            \
+    RTEMS_RETURN_ADDRESS(),                                                   \
+    event,                                                                    \
+    data_0,                                                                   \
+    data_1,                                                                   \
+    data_2,                                                                   \
+    data_3,                                                                   \
+    data_4                                                                    \
   )
 
 /**
@@ -1379,23 +1345,23 @@ void rtems_record_line_arg_10(
  * @param data_5 The RTEMS_RECORD_ARG_5 event data.
  */
 #define rtems_record_entry_6( \
-  event, \
-  data_0, \
-  data_1, \
-  data_2, \
-  data_3, \
-  data_4, \
-  data_5 \
-) \
-  _Record_Entry_6( \
-    RTEMS_RETURN_ADDRESS(), \
-    event, \
-    data_0, \
-    data_1, \
-    data_2, \
-    data_3, \
-    data_4, \
-    data_5 \
+  event,                      \
+  data_0,                     \
+  data_1,                     \
+  data_2,                     \
+  data_3,                     \
+  data_4,                     \
+  data_5                      \
+)                             \
+  _Record_Entry_6(            \
+    RTEMS_RETURN_ADDRESS(),   \
+    event,                    \
+    data_0,                   \
+    data_1,                   \
+    data_2,                   \
+    data_3,                   \
+    data_4,                   \
+    data_5                    \
   )
 
 /**
@@ -1414,25 +1380,25 @@ void rtems_record_line_arg_10(
  * @param data_6 The RTEMS_RECORD_ARG_6 event data.
  */
 #define rtems_record_entry_7( \
-  event, \
-  data_0, \
-  data_1, \
-  data_2, \
-  data_3, \
-  data_4, \
-  data_5, \
-  data_6 \
-) \
-  _Record_Entry_7( \
-    RTEMS_RETURN_ADDRESS(), \
-    event, \
-    data_0, \
-    data_1, \
-    data_2, \
-    data_3, \
-    data_4, \
-    data_5, \
-    data_6 \
+  event,                      \
+  data_0,                     \
+  data_1,                     \
+  data_2,                     \
+  data_3,                     \
+  data_4,                     \
+  data_5,                     \
+  data_6                      \
+)                             \
+  _Record_Entry_7(            \
+    RTEMS_RETURN_ADDRESS(),   \
+    event,                    \
+    data_0,                   \
+    data_1,                   \
+    data_2,                   \
+    data_3,                   \
+    data_4,                   \
+    data_5,                   \
+    data_6                    \
   )
 
 /**
@@ -1452,27 +1418,27 @@ void rtems_record_line_arg_10(
  * @param data_7 The RTEMS_RECORD_ARG_7 event data.
  */
 #define rtems_record_entry_8( \
-  event, \
-  data_0, \
-  data_1, \
-  data_2, \
-  data_3, \
-  data_4, \
-  data_5, \
-  data_6, \
-  data_7 \
-) \
-  _Record_Entry_8( \
-    RTEMS_RETURN_ADDRESS(), \
-    event, \
-    data_0, \
-    data_1, \
-    data_2, \
-    data_3, \
-    data_4, \
-    data_5, \
-    data_6, \
-    data_7 \
+  event,                      \
+  data_0,                     \
+  data_1,                     \
+  data_2,                     \
+  data_3,                     \
+  data_4,                     \
+  data_5,                     \
+  data_6,                     \
+  data_7                      \
+)                             \
+  _Record_Entry_8(            \
+    RTEMS_RETURN_ADDRESS(),   \
+    event,                    \
+    data_0,                   \
+    data_1,                   \
+    data_2,                   \
+    data_3,                   \
+    data_4,                   \
+    data_5,                   \
+    data_6,                   \
+    data_7                    \
   )
 
 /**
@@ -1493,29 +1459,29 @@ void rtems_record_line_arg_10(
  * @param data_8 The RTEMS_RECORD_ARG_8 event data.
  */
 #define rtems_record_entry_9( \
-  event, \
-  data_0, \
-  data_1, \
-  data_2, \
-  data_3, \
-  data_4, \
-  data_5, \
-  data_6, \
-  data_7, \
-  data_8 \
-) \
-  _Record_Entry_9( \
-    RTEMS_RETURN_ADDRESS(), \
-    event, \
-    data_0, \
-    data_1, \
-    data_2, \
-    data_3, \
-    data_4, \
-    data_5, \
-    data_6, \
-    data_7, \
-    data_8 \
+  event,                      \
+  data_0,                     \
+  data_1,                     \
+  data_2,                     \
+  data_3,                     \
+  data_4,                     \
+  data_5,                     \
+  data_6,                     \
+  data_7,                     \
+  data_8                      \
+)                             \
+  _Record_Entry_9(            \
+    RTEMS_RETURN_ADDRESS(),   \
+    event,                    \
+    data_0,                   \
+    data_1,                   \
+    data_2,                   \
+    data_3,                   \
+    data_4,                   \
+    data_5,                   \
+    data_6,                   \
+    data_7,                   \
+    data_8                    \
   )
 
 /**
@@ -1537,31 +1503,31 @@ void rtems_record_line_arg_10(
  * @param data_10 The RTEMS_RECORD_ARG_10 event data.
  */
 #define rtems_record_entry_10( \
-  event, \
-  data_0, \
-  data_1, \
-  data_2, \
-  data_3, \
-  data_4, \
-  data_5, \
-  data_6, \
-  data_7, \
-  data_8, \
-  data_9 \
-) \
-  _Record_Entry_10( \
-    RTEMS_RETURN_ADDRESS(), \
-    event, \
-    data_0, \
-    data_1, \
-    data_2, \
-    data_3, \
-    data_4, \
-    data_5, \
-    data_6, \
-    data_7, \
-    data_8, \
-    data_9 \
+  event,                       \
+  data_0,                      \
+  data_1,                      \
+  data_2,                      \
+  data_3,                      \
+  data_4,                      \
+  data_5,                      \
+  data_6,                      \
+  data_7,                      \
+  data_8,                      \
+  data_9                       \
+)                              \
+  _Record_Entry_10(            \
+    RTEMS_RETURN_ADDRESS(),    \
+    event,                     \
+    data_0,                    \
+    data_1,                    \
+    data_2,                    \
+    data_3,                    \
+    data_4,                    \
+    data_5,                    \
+    data_6,                    \
+    data_7,                    \
+    data_8,                    \
+    data_9                     \
   )
 
 /**
@@ -1584,12 +1550,12 @@ void rtems_record_line_arg_10(
  * @param event The exit event.
  * @param data The RTEMS_RECORD_RETURN_0 event data.
  */
-#define rtems_record_exit_1( event, data ) \
-  rtems_record_produce_2( \
-    event, \
+#define rtems_record_exit_1( event, data )      \
+  rtems_record_produce_2(                       \
+    event,                                      \
     (rtems_record_data) RTEMS_RETURN_ADDRESS(), \
-    RTEMS_RECORD_RETURN_0, \
-    data \
+    RTEMS_RECORD_RETURN_0,                      \
+    data                                        \
   )
 
 /**
@@ -1617,13 +1583,7 @@ void rtems_record_line_arg_10(
  * @param data_2 The RTEMS_RECORD_RETURN_2 event data.
  */
 #define rtems_record_exit_3( event, data_0, data_1, data_2 ) \
-  _Record_Exit_3( \
-    RTEMS_RETURN_ADDRESS(), \
-    event, \
-    data_0, \
-    data_1, \
-    data_2 \
-  )
+  _Record_Exit_3( RTEMS_RETURN_ADDRESS(), event, data_0, data_1, data_2 )
 
 /**
  * @brief Generates the specified exit event and four argument events.
@@ -1638,13 +1598,13 @@ void rtems_record_line_arg_10(
  * @param data_3 The RTEMS_RECORD_RETURN_3 event data.
  */
 #define rtems_record_exit_4( event, data_0, data_1, data_2, data_3 ) \
-  _Record_Exit_4( \
-    RTEMS_RETURN_ADDRESS(), \
-    event, \
-    data_0, \
-    data_1, \
-    data_2, \
-    data_3 \
+  _Record_Exit_4(                                                    \
+    RTEMS_RETURN_ADDRESS(),                                          \
+    event,                                                           \
+    data_0,                                                          \
+    data_1,                                                          \
+    data_2,                                                          \
+    data_3                                                           \
   )
 
 /**
@@ -1660,22 +1620,15 @@ void rtems_record_line_arg_10(
  * @param data_3 The RTEMS_RECORD_RETURN_3 event data.
  * @param data_4 The RTEMS_RECORD_RETURN_4 event data.
  */
-#define rtems_record_exit_5( \
-  event, \
-  data_0, \
-  data_1, \
-  data_2, \
-  data_3, \
-  data_4 \
-) \
-  _Record_Exit_5( \
-    RTEMS_RETURN_ADDRESS(), \
-    event, \
-    data_0, \
-    data_1, \
-    data_2, \
-    data_3, \
-    data_4 \
+#define rtems_record_exit_5( event, data_0, data_1, data_2, data_3, data_4 ) \
+  _Record_Exit_5(                                                            \
+    RTEMS_RETURN_ADDRESS(),                                                  \
+    event,                                                                   \
+    data_0,                                                                  \
+    data_1,                                                                  \
+    data_2,                                                                  \
+    data_3,                                                                  \
+    data_4                                                                   \
   )
 
 /**
@@ -1693,23 +1646,23 @@ void rtems_record_line_arg_10(
  * @param data_5 The RTEMS_RECORD_RETURN_5 event data.
  */
 #define rtems_record_exit_6( \
-  event, \
-  data_0, \
-  data_1, \
-  data_2, \
-  data_3, \
-  data_4, \
-  data_5 \
-) \
-  _Record_Exit_6( \
-    RTEMS_RETURN_ADDRESS(), \
-    event, \
-    data_0, \
-    data_1, \
-    data_2, \
-    data_3, \
-    data_4, \
-    data_5 \
+  event,                     \
+  data_0,                    \
+  data_1,                    \
+  data_2,                    \
+  data_3,                    \
+  data_4,                    \
+  data_5                     \
+)                            \
+  _Record_Exit_6(            \
+    RTEMS_RETURN_ADDRESS(),  \
+    event,                   \
+    data_0,                  \
+    data_1,                  \
+    data_2,                  \
+    data_3,                  \
+    data_4,                  \
+    data_5                   \
   )
 
 /**
@@ -1728,25 +1681,25 @@ void rtems_record_line_arg_10(
  * @param data_6 The RTEMS_RECORD_RETURN_6 event data.
  */
 #define rtems_record_exit_7( \
-  event, \
-  data_0, \
-  data_1, \
-  data_2, \
-  data_3, \
-  data_4, \
-  data_5, \
-  data_6 \
-) \
-  _Record_Exit_7( \
-    RTEMS_RETURN_ADDRESS(), \
-    event, \
-    data_0, \
-    data_1, \
-    data_2, \
-    data_3, \
-    data_4, \
-    data_5, \
-    data_6 \
+  event,                     \
+  data_0,                    \
+  data_1,                    \
+  data_2,                    \
+  data_3,                    \
+  data_4,                    \
+  data_5,                    \
+  data_6                     \
+)                            \
+  _Record_Exit_7(            \
+    RTEMS_RETURN_ADDRESS(),  \
+    event,                   \
+    data_0,                  \
+    data_1,                  \
+    data_2,                  \
+    data_3,                  \
+    data_4,                  \
+    data_5,                  \
+    data_6                   \
   )
 
 /**
@@ -1766,27 +1719,27 @@ void rtems_record_line_arg_10(
  * @param data_7 The RTEMS_RECORD_RETURN_7 event data.
  */
 #define rtems_record_exit_8( \
-  event, \
-  data_0, \
-  data_1, \
-  data_2, \
-  data_3, \
-  data_4, \
-  data_5, \
-  data_6, \
-  data_7 \
-) \
-  _Record_Exit_8( \
-    RTEMS_RETURN_ADDRESS(), \
-    event, \
-    data_0, \
-    data_1, \
-    data_2, \
-    data_3, \
-    data_4, \
-    data_5, \
-    data_6, \
-    data_7 \
+  event,                     \
+  data_0,                    \
+  data_1,                    \
+  data_2,                    \
+  data_3,                    \
+  data_4,                    \
+  data_5,                    \
+  data_6,                    \
+  data_7                     \
+)                            \
+  _Record_Exit_8(            \
+    RTEMS_RETURN_ADDRESS(),  \
+    event,                   \
+    data_0,                  \
+    data_1,                  \
+    data_2,                  \
+    data_3,                  \
+    data_4,                  \
+    data_5,                  \
+    data_6,                  \
+    data_7                   \
   )
 
 /**
@@ -1807,29 +1760,29 @@ void rtems_record_line_arg_10(
  * @param data_8 The RTEMS_RECORD_RETURN_8 event data.
  */
 #define rtems_record_exit_9( \
-  event, \
-  data_0, \
-  data_1, \
-  data_2, \
-  data_3, \
-  data_4, \
-  data_5, \
-  data_6, \
-  data_7, \
-  data_8 \
-) \
-  _Record_Exit_9( \
-    RTEMS_RETURN_ADDRESS(), \
-    event, \
-    data_0, \
-    data_1, \
-    data_2, \
-    data_3, \
-    data_4, \
-    data_5, \
-    data_6, \
-    data_7, \
-    data_8 \
+  event,                     \
+  data_0,                    \
+  data_1,                    \
+  data_2,                    \
+  data_3,                    \
+  data_4,                    \
+  data_5,                    \
+  data_6,                    \
+  data_7,                    \
+  data_8                     \
+)                            \
+  _Record_Exit_9(            \
+    RTEMS_RETURN_ADDRESS(),  \
+    event,                   \
+    data_0,                  \
+    data_1,                  \
+    data_2,                  \
+    data_3,                  \
+    data_4,                  \
+    data_5,                  \
+    data_6,                  \
+    data_7,                  \
+    data_8                   \
   )
 
 /**
@@ -1851,31 +1804,31 @@ void rtems_record_line_arg_10(
  * @param data_10 The RTEMS_RECORD_RETURN_10 event data.
  */
 #define rtems_record_exit_10( \
-  event, \
-  data_0, \
-  data_1, \
-  data_2, \
-  data_3, \
-  data_4, \
-  data_5, \
-  data_6, \
-  data_7, \
-  data_8, \
-  data_9 \
-) \
-  _Record_Exit_10( \
-    RTEMS_RETURN_ADDRESS(), \
-    event, \
-    data_0, \
-    data_1, \
-    data_2, \
-    data_3, \
-    data_4, \
-    data_5, \
-    data_6, \
-    data_7, \
-    data_8, \
-    data_9 \
+  event,                      \
+  data_0,                     \
+  data_1,                     \
+  data_2,                     \
+  data_3,                     \
+  data_4,                     \
+  data_5,                     \
+  data_6,                     \
+  data_7,                     \
+  data_8,                     \
+  data_9                      \
+)                             \
+  _Record_Exit_10(            \
+    RTEMS_RETURN_ADDRESS(),   \
+    event,                    \
+    data_0,                   \
+    data_1,                   \
+    data_2,                   \
+    data_3,                   \
+    data_4,                   \
+    data_5,                   \
+    data_6,                   \
+    data_7,                   \
+    data_8,                   \
+    data_9                    \
   )
 
 /**

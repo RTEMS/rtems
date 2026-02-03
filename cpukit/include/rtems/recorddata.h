@@ -1189,7 +1189,7 @@ typedef unsigned long rtems_record_data;
 /**
  * @brief The native record item.
  */
-typedef struct __attribute__((__packed__)) {
+typedef struct __attribute__(( __packed__ )) {
   uint32_t          event;
   rtems_record_data data;
 } rtems_record_item;
@@ -1205,7 +1205,7 @@ typedef struct {
 /**
  * @brief The 64-bit format record item.
  */
-typedef struct __attribute__((__packed__)) {
+typedef struct __attribute__(( __packed__ )) {
   uint32_t event;
   uint64_t data;
 } rtems_record_item_64;

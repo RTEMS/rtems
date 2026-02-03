@@ -68,10 +68,7 @@ void _Record_Thread_start(
 {
   (void) executing;
 
-  rtems_record_produce(
-    RTEMS_RECORD_THREAD_START,
-    started->Object.id
-  );
+  rtems_record_produce( RTEMS_RECORD_THREAD_START, started->Object.id );
 }
 
 void _Record_Thread_restart(
@@ -81,10 +78,7 @@ void _Record_Thread_restart(
 {
   (void) executing;
 
-  rtems_record_produce(
-    RTEMS_RECORD_THREAD_RESTART,
-    restarted->Object.id
-  );
+  rtems_record_produce( RTEMS_RECORD_THREAD_RESTART, restarted->Object.id );
 }
 
 void _Record_Thread_delete(
@@ -94,10 +88,7 @@ void _Record_Thread_delete(
 {
   (void) executing;
 
-  rtems_record_produce(
-    RTEMS_RECORD_THREAD_DELETE,
-    deleted->Object.id
-  );
+  rtems_record_produce( RTEMS_RECORD_THREAD_DELETE, deleted->Object.id );
 }
 
 void _Record_Thread_switch(
@@ -111,9 +102,9 @@ void _Record_Thread_switch(
   items[ 0 ].data = executing->Object.id;
   items[ 1 ].event = RTEMS_RECORD_THREAD_STACK_CURRENT;
   items[ 1 ].data =
-#if defined(__GNUC__)
-    (uintptr_t) __builtin_frame_address( 0 )
-      - (uintptr_t) executing->Start.Initial_stack.area;
+#if defined( __GNUC__ )
+    (uintptr_t) __builtin_frame_address( 0 ) -
+    (uintptr_t) executing->Start.Initial_stack.area;
 #else
     0;
 #endif
@@ -124,24 +115,15 @@ void _Record_Thread_switch(
 
 void _Record_Thread_begin( struct _Thread_Control *executing )
 {
-  rtems_record_produce(
-    RTEMS_RECORD_THREAD_BEGIN,
-    executing->Object.id
-  );
+  rtems_record_produce( RTEMS_RECORD_THREAD_BEGIN, executing->Object.id );
 }
 
 void _Record_Thread_exitted( struct _Thread_Control *executing )
 {
-  rtems_record_produce(
-    RTEMS_RECORD_THREAD_EXITTED,
-    executing->Object.id
-  );
+  rtems_record_produce( RTEMS_RECORD_THREAD_EXITTED, executing->Object.id );
 }
 
 void _Record_Thread_terminate( struct _Thread_Control *executing )
 {
-  rtems_record_produce(
-    RTEMS_RECORD_THREAD_TERMINATE,
-    executing->Object.id
-  );
+  rtems_record_produce( RTEMS_RECORD_THREAD_TERMINATE, executing->Object.id );
 }

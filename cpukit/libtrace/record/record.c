@@ -68,10 +68,7 @@ void rtems_record_produce_2(
   rtems_record_commit( &context );
 }
 
-void rtems_record_produce_n(
-  const rtems_record_item *items,
-  size_t                   n
-)
+void rtems_record_produce_n( const rtems_record_item *items, size_t n )
 {
   rtems_record_context context;
 
@@ -89,11 +86,11 @@ void rtems_record_produce_n(
 }
 
 size_t _Record_String_to_items(
-  rtems_record_event  event,
-  const char         *str,
-  size_t              len,
-  rtems_record_item  *items,
-  size_t              item_count
+  rtems_record_event event,
+  const char        *str,
+  size_t             len,
+  rtems_record_item *items,
+  size_t             item_count
 )
 {
   size_t s;

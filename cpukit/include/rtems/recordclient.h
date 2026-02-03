@@ -65,11 +65,11 @@ typedef enum {
 } rtems_record_client_status;
 
 typedef rtems_record_client_status ( *rtems_record_client_handler )(
-  uint64_t            bt,
-  uint32_t            cpu,
-  rtems_record_event  event,
-  uint64_t            data,
-  void               *arg
+  uint64_t           bt,
+  uint32_t           cpu,
+  rtems_record_event event,
+  uint64_t           data,
+  void              *arg
 );
 
 typedef struct {
@@ -130,27 +130,27 @@ typedef struct {
 } rtems_record_client_per_cpu;
 
 typedef struct rtems_record_client_context {
-  uint64_t to_bt_scaler;
+  uint64_t                    to_bt_scaler;
   rtems_record_client_per_cpu per_cpu[ RTEMS_RECORD_CLIENT_MAXIMUM_CPU_COUNT ];
-  uint32_t cpu;
-  uint32_t cpu_count;
-  uint32_t per_cpu_items;
+  uint32_t                    cpu;
+  uint32_t                    cpu_count;
+  uint32_t                    per_cpu_items;
   union {
     rtems_record_item_32 format_32;
     rtems_record_item_64 format_64;
   } item;
   size_t todo;
-  void *pos;
+  void  *pos;
   rtems_record_client_status ( *consume )(
     struct rtems_record_client_context *,
     const void *,
     size_t
   );
   rtems_record_client_handler handler;
-  void *handler_arg;
-  size_t data_size;
-  uint32_t header[ 2 ];
-  rtems_record_client_status status;
+  void                       *handler_arg;
+  size_t                      data_size;
+  uint32_t                    header[ 2 ];
+  rtems_record_client_status  status;
 } rtems_record_client_context;
 
 /**
@@ -190,9 +190,7 @@ rtems_record_client_status rtems_record_client_run(
  *
  * @param ctx The record client context.
  */
-void rtems_record_client_destroy(
-  rtems_record_client_context *ctx
-);
+void rtems_record_client_destroy( rtems_record_client_context *ctx );
 
 static inline void rtems_record_client_set_handler(
   rtems_record_client_context *ctx,

@@ -68,15 +68,22 @@ size_t _Record_Stream_header_initialize( Record_Stream_header *header )
   header->Version.event = RTEMS_RECORD_TIME_EVENT( 0, RTEMS_RECORD_VERSION );
   header->Version.data = RTEMS_RECORD_THE_VERSION;
 
-  header->Processor_maximum.event =
-    RTEMS_RECORD_TIME_EVENT( 0, RTEMS_RECORD_PROCESSOR_MAXIMUM );
+  header->Processor_maximum.event = RTEMS_RECORD_TIME_EVENT(
+    0,
+    RTEMS_RECORD_PROCESSOR_MAXIMUM
+  );
   header->Processor_maximum.data = rtems_scheduler_get_processor_maximum() - 1;
 
-  header->Count.event = RTEMS_RECORD_TIME_EVENT( 0, RTEMS_RECORD_PER_CPU_COUNT );
+  header->Count.event = RTEMS_RECORD_TIME_EVENT(
+    0,
+    RTEMS_RECORD_PER_CPU_COUNT
+  );
   header->Count.data = _Record_Configuration.item_count;
 
-  header->Frequency.event =
-    RTEMS_RECORD_TIME_EVENT( 0, RTEMS_RECORD_FREQUENCY );
+  header->Frequency.event = RTEMS_RECORD_TIME_EVENT(
+    0,
+    RTEMS_RECORD_FREQUENCY
+  );
   header->Frequency.data = rtems_counter_frequency();
 
   items = header->Info;
