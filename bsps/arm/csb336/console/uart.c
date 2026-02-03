@@ -315,7 +315,7 @@ static int imx_uart_poll_read(int minor)
 
 static ssize_t imx_uart_poll_write(int minor, const char *buf, size_t len)
 {
-    int i;
+    size_t i;
     for (i = 0; i < len; i++) {
         /* Wait for there to be room in the fifo */
         while (!(imx_uart_data[minor].regs->sr2 & MC9328MXL_UART_SR2_TXDC)) {

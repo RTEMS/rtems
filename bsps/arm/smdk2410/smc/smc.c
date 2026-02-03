@@ -336,7 +336,7 @@ smc_read(rtems_blkdev_request *req)
     sg = req->bufs;
     for (i = 0; (remains > 0) && (i < req->bufnum); i++, sg++)
     {
-        int count = sg->length;
+        uint32_t count = sg->length;
         if (count > remains)
             count = remains;
         smc_read_page(sg->block,sg->buffer);

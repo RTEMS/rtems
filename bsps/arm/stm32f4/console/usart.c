@@ -249,7 +249,7 @@ static ssize_t usart_write_support_polled(
   size_t n
 )
 {
-  ssize_t i = 0;
+  size_t i = 0;
 
   for (i = 0; i < n; ++i) {
     usart_write_polled(minor, s [i]);

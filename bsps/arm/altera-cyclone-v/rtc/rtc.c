@@ -269,7 +269,7 @@ static rtems_status_code  ds1339_read(uint8_t addr, void* buf, size_t size)
   if (sc == RTEMS_SUCCESSFUL)
   {
     rv = read(fd, buf, size);
-    if (rv != size)
+    if (rv != (ssize_t)size)
       sc = RTEMS_IO_ERROR;
   }
 
@@ -294,7 +294,7 @@ static rtems_status_code  ds1339_write(uint8_t addr, void* buf, size_t size)
   uint8_t            local_buf[DS1339_MAX_WRITE_SIZE];
   int                write_size = size + 1;
 
-  assert(write_size <= DS1339_MAX_WRITE_SIZE);
+  assert(write_size <= (ssize_t)DS1339_MAX_WRITE_SIZE);
 
   local_buf[0] = addr;
   memcpy(&local_buf[1], buf, size);
@@ -649,14 +649,14 @@ static rtems_status_code  m41st87_read(uint8_t addr, void* buf, size_t size)
   if (sc == RTEMS_SUCCESSFUL)
   {
     rv = write(fd, &addr, sizeof(addr));
-    if (rv != sizeof(addr))
+    if (rv != (ssize_t)sizeof(addr))
       sc = RTEMS_IO_ERROR;
   }
 
   if (sc == RTEMS_SUCCESSFUL)
   {
     rv = read(fd, buf, size);
-    if (rv != size)
+    if (rv != (ssize_t)size)
       sc = RTEMS_IO_ERROR;
   }
 
@@ -681,7 +681,7 @@ static rtems_status_code  m41st87_write(uint8_t addr, void* buf, size_t size)
   uint8_t            local_buf[M41ST87_MAX_WRITE_SIZE];
   int                write_size = size + 1;
 
-  assert(write_size <= M41ST87_MAX_WRITE_SIZE);
+  assert(write_size <= (ssize_t)M41ST87_MAX_WRITE_SIZE);
 
   local_buf[0] = addr;
   memcpy(&local_buf[1], buf, size);

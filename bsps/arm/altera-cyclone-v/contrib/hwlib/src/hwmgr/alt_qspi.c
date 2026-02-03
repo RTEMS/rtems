@@ -2044,7 +2044,11 @@ ALT_STATUS_CODE alt_qspi_erase_chip(void)
 
         uint32_t die_count = qspi_device_size / ALT_QSPI_N25Q_DIE_SIZE;
 
+#ifdef __rtems__
+        for (uint32_t i = 0; i < die_count; ++i)
+#else
         for (int i = 0; i < die_count; ++i)
+#endif
         {
             if (status != ALT_E_SUCCESS)
             {
@@ -2161,7 +2165,11 @@ static bool is_pow_2(uint32_t n)
 static uint32_t log2u(uint32_t value)
 {
     uint32_t exp = 0;
+#ifdef __rtems__
+    while ((exp < 32) && (value != (1U << exp)))
+#else
     while ((exp < 32) && (value != (1 << exp)))
+#endif
     {
         ++exp;
     }

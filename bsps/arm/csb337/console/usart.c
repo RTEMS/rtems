@@ -163,7 +163,7 @@ static void usart_write_polled(int minor, char c)
 static ssize_t usart_write_polled_support(int minor, const char *buf, size_t len)
 {
   at91rm9200_usart_regs_t *usart;
-  int nwrite=0;
+  size_t nwrite=0;
 
   /*
    *  Verify the minor number

@@ -142,7 +142,8 @@ static int dbgu_read(int minor)
  */
 static ssize_t dbgu_write(int minor, const char *buf, size_t len)
 {
-    int i, x;
+    int x;
+    size_t i;
     char c;
     console_tbl *console_entry;
     at91rm9200_dbgu_regs_t *dbgu;

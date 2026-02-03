@@ -944,7 +944,11 @@ void SMARTCARD_EMVSIM_IRQHandler(EMVSIM_Type *base, smartcard_context_t *context
             /* To fifo will be written 2 or more bytes */
             size_t getu_tail = (size_t)(base->TX_GETU > 0u);
             while (((context->txFifoEntryCount - (uint8_t)((base->TX_STATUS & EMVSIM_TX_STATUS_TX_CNT_MASK) >>
+#ifdef __rtems__
+                                                           EMVSIM_TX_STATUS_TX_CNT_SHIFT)) > 0) &&
+#else
                                                            EMVSIM_TX_STATUS_TX_CNT_SHIFT)) > 0u) &&
+#endif
                    (context->xSize > getu_tail))
             {
                 /* Write data to fifo */

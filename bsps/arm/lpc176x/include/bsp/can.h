@@ -169,7 +169,7 @@ rtems_status_code can_register_isr(
  */
 rtems_status_code create_can_message(
   can_message *const msg,
-  const int          _id,
+  const unsigned int _id,
   const char *const  _data,
   const char         _len
 );

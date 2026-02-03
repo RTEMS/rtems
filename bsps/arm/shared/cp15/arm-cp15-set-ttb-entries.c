@@ -125,8 +125,8 @@ static uint32_t set_translation_table_entries(
      * Multiprocessing Extensions register format and the U (bit 30)
      * is 0.
      */
-    #define MPIDR_MX_FMT (1 << 31)
-    #define MPIDR_UP     (1 << 30)
+    #define MPIDR_MX_FMT (uint32_t)(1 << 31)
+    #define MPIDR_UP     (uint32_t)(1 << 30)
     const uint32_t mpidr = arm_cp15_get_multiprocessor_affinity();
     if ((mpidr & (MPIDR_MX_FMT | MPIDR_UP)) == MPIDR_MX_FMT) {
       arm_cp15_tlb_invalidate_entry_all_asids_inner_shareable(mva);

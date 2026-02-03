@@ -211,7 +211,7 @@ int bcm2835_mailbox_get_pitch( bcm2835_get_pitch_entries *_entries )
 
 int bcm2835_mailbox_get_cmdline( bcm2835_get_cmdline_entries *_entries )
 {
-  int i;
+  uint32_t i;
 
   struct BCM2835_MBOX_BUF_ALIGN_ATTRIBUTE {
     bcm2835_mbox_buf_hdr hdr;

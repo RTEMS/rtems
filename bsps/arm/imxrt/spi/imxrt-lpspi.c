@@ -99,9 +99,15 @@ static void imxrt_lpspi_find_clockdivs(
   int best_sckdif;
   int best_prescale;
 
+#ifdef __rtems__
+  unsigned check_baud_hz;
+  unsigned check_sckdif;
+  unsigned check_prescale;
+#else
   int check_baud_hz;
   int check_sckdif;
   int check_prescale;
+#endif
 
   /* Start with slowest possible */
   best_sckdif = max_sckdif;
@@ -425,7 +431,7 @@ static int imxrt_lpspi_check_howmany(
   uint32_t max
 )
 {
-  int i;
+  uint32_t i;
 
   if (max == 0) {
     return max;

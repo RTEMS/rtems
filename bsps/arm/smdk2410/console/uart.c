@@ -179,7 +179,7 @@ static int uart_read(int minor)
  */
 static ssize_t uart_write(int minor, const char *buf, size_t len)
 {
-    int i;
+    size_t i;
 
     if (minor == 0) {
         for (i = 0; i < len; i++) {

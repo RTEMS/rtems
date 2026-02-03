@@ -555,7 +555,7 @@ static int stm32h7_spi_transfer(
 {
   stm32h7_spi_context *ctx = RTEMS_CONTAINER_OF(base, stm32h7_spi_context, bus);
 
-  for (int i = 0; i < msg_count; i++) {
+  for (uint32_t i = 0; i < msg_count; i++) {
     const spi_ioc_transfer *msg = &msgs[i];
 
     if (stm32h7_spi_apply_premessage_settings(ctx, msg)) {
@@ -718,7 +718,7 @@ static int stm32h7_register_spi_device(
 
 void stm32h7_register_spi_devices(void)
 {
-  int i;
+  size_t i;
 
   for (i = 0; i < (RTEMS_ARRAY_SIZE(stm32h7_spi_instances)); i++) {
     if (stm32h7_spi_instances[i] == NULL) {

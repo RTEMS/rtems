@@ -508,7 +508,7 @@ void beagle_i2c_init(phandle_t node)
   if (err < 0) {
     /* No path was provided in the device tree therefore use the default one */
     snprintf(bus_path, PATH_LEN, "/dev/i2c-%d", unit);
-  } else if (err >= PATH_LEN) {
+  } else if ((size_t)err >= PATH_LEN) {
     /* Null terminate the string */
     bus_path[PATH_LEN - 1] = 0;
     printk("i2c: bus path too long, trucated %s\n", bus_path);
