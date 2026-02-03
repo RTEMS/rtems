@@ -71,11 +71,11 @@ struct sc16is752_context {
    *
    * Internal handler.
    */
-  int (*write_reg)(
+  int ( *write_reg )(
     sc16is752_context *ctx,
-    uint8_t addr,
-    const uint8_t *data,
-    size_t len
+    uint8_t            addr,
+    const uint8_t     *data,
+    size_t             len
   );
 
   /**
@@ -83,11 +83,11 @@ struct sc16is752_context {
    *
    * Internal handler.
    */
-  int (*read_reg)(
+  int ( *read_reg )(
     sc16is752_context *ctx,
-    uint8_t addr,
-    uint8_t *data,
-    size_t len
+    uint8_t            addr,
+    uint8_t           *data,
+    size_t             len
   );
 
   /**
@@ -95,11 +95,11 @@ struct sc16is752_context {
    *
    * Internal handler.
    */
-  int (*read_2_reg)(
+  int ( *read_2_reg )(
     sc16is752_context *ctx,
-    uint8_t addr_0,
-    uint8_t addr_1,
-    uint8_t data[2]
+    uint8_t            addr_0,
+    uint8_t            addr_1,
+    uint8_t            data[ 2 ]
   );
 
   /**
@@ -107,28 +107,28 @@ struct sc16is752_context {
    *
    * Internal handler.
    */
-  bool (*first_open)(sc16is752_context *ctx);
+  bool ( *first_open )( sc16is752_context *ctx );
 
   /**
    * @brief Last close.
    *
    * Internal handler.
    */
-  void (*last_close)(sc16is752_context *ctx);
+  void ( *last_close )( sc16is752_context *ctx );
 
   /**
    * @brief Shall install the interrupt handler.
    *
    * Must be initialized by the user before the device creation.
    */
-  bool (*install_irq)(sc16is752_context *ctx);
+  bool ( *install_irq )( sc16is752_context *ctx );
 
   /**
    * @brief Shall remove the interrupt handler.
    *
    * Must be initialized by the user before the device creation.
    */
-  void (*remove_irq)(sc16is752_context *ctx);
+  void ( *remove_irq )( sc16is752_context *ctx );
 
   /**
    * @brief Device mode.
@@ -251,7 +251,7 @@ extern const rtems_termios_device_handler sc16is752_termios_handler;
  *
  * @param[in] arg The device context.
  */
-void sc16is752_interrupt_handler(void *arg);
+void sc16is752_interrupt_handler( void *arg );
 
 /**
  * @brief Creates an SPI connected SC16IS752 device.
@@ -272,7 +272,7 @@ rtems_status_code sc16is752_spi_create(
  *
  * The sleep mode is disabled by default.
  */
-#define SC16IS752_SET_SLEEP_MODE _IOW('d', 0, int)
+#define SC16IS752_SET_SLEEP_MODE _IOW( 'd', 0, int )
 
 /**
  * @brief Set the I/O Control bits except for the SRESET.
@@ -280,56 +280,56 @@ rtems_status_code sc16is752_spi_create(
  * Note that it will not be possible to set the SRESET. Otherwise the driver
  * might would have an undefined state.
  */
-#define SC16IS752_SET_IOCONTROL _IOW('d', 1, uint8_t)
+#define SC16IS752_SET_IOCONTROL _IOW( 'd', 1, uint8_t )
 
 /**
  * @brief Set the I/O pins direction register.
  */
-#define SC16IS752_SET_IODIR _IOW('d', 2, uint8_t)
+#define SC16IS752_SET_IODIR _IOW( 'd', 2, uint8_t )
 
 /**
  * @brief Set the I/O pins state register.
  */
-#define SC16IS752_SET_IOSTATE _IOW('d', 3, uint8_t)
+#define SC16IS752_SET_IOSTATE _IOW( 'd', 3, uint8_t )
 
 /**
  * @brief Set the EFCR register.
  */
-#define SC16IS752_SET_EFCR _IOW('d', 4, uint8_t)
+#define SC16IS752_SET_EFCR _IOW( 'd', 4, uint8_t )
 
 /**
  * @brief Returns non-zero in case the sleep mode is enabled, otherwise zero.
  */
-#define SC16IS752_GET_SLEEP_MODE _IOR('d', 0, int)
+#define SC16IS752_GET_SLEEP_MODE _IOR( 'd', 0, int )
 
 /**
  * @brief Read the I/O Control register.
  */
-#define SC16IS752_GET_IOCONTROL _IOR('d', 1, uint8_t)
+#define SC16IS752_GET_IOCONTROL _IOR( 'd', 1, uint8_t )
 
 /**
  * @brief Read the I/O pins direction register.
  */
-#define SC16IS752_GET_IODIR _IOR('d', 2, uint8_t)
+#define SC16IS752_GET_IODIR _IOR( 'd', 2, uint8_t )
 
 /**
  * @brief Read the I/O pins state register.
  */
-#define SC16IS752_GET_IOSTATE _IOR('d', 3, uint8_t)
+#define SC16IS752_GET_IOSTATE _IOR( 'd', 3, uint8_t )
 
 /**
  * @brief Read the EFCR register.
  */
-#define SC16IS752_GET_EFCR _IOR('d', 4, uint8_t)
+#define SC16IS752_GET_EFCR _IOR( 'd', 4, uint8_t )
 
 /**
  * @brief Bits for the IOCONTROL register.
  * @{
  */
-#define SC16IS752_IOCONTROL_SRESET (1u << 3)
-#define SC16IS752_IOCONTROL_GPIO_3_0_OR_MODEM (1u << 2)
-#define SC16IS752_IOCONTROL_GPIO_7_4_OR_MODEM (1u << 1)
-#define SC16IS752_IOCONTROL_IOLATCH (1u << 0)
+#define SC16IS752_IOCONTROL_SRESET            ( 1u << 3 )
+#define SC16IS752_IOCONTROL_GPIO_3_0_OR_MODEM ( 1u << 2 )
+#define SC16IS752_IOCONTROL_GPIO_7_4_OR_MODEM ( 1u << 1 )
+#define SC16IS752_IOCONTROL_IOLATCH           ( 1u << 0 )
 /**
  * @}
  */
