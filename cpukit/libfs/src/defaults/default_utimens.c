@@ -42,7 +42,7 @@
 
 int rtems_filesystem_default_utimens(
   const rtems_filesystem_location_info_t *loc,
-  struct timespec times[2]
+  struct timespec                         times[ 2 ]
 )
 {
   (void) loc;

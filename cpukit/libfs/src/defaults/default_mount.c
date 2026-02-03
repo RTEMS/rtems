@@ -38,9 +38,9 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-int rtems_filesystem_default_mount (
-  rtems_filesystem_mount_table_entry_t *mt_entry,    /* IN */
-  const void *data
+int rtems_filesystem_default_mount(
+  rtems_filesystem_mount_table_entry_t *mt_entry, /* IN */
+  const void                           *data
 )
 {
   (void) mt_entry;

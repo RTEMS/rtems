@@ -44,5 +44,5 @@ void rtems_filesystem_default_eval_path(
 )
 {
   ctx->pathlen = 0;
-  rtems_filesystem_location_detach(&ctx->currentloc);
+  rtems_filesystem_location_detach( &ctx->currentloc );
 }

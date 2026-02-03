@@ -39,9 +39,7 @@
 
 #include <rtems/libio_.h>
 
-int rtems_filesystem_default_clonenode(
-  rtems_filesystem_location_info_t *loc
-)
+int rtems_filesystem_default_clonenode( rtems_filesystem_location_info_t *loc )
 {
   (void) loc;
 

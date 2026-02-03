@@ -38,10 +38,7 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-int rtems_filesystem_default_fcntl(
-  rtems_libio_t *iop,
-  int cmd
-)
+int rtems_filesystem_default_fcntl( rtems_libio_t *iop, int cmd )
 {
   (void) iop;
   (void) cmd;

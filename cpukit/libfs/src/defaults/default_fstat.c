@@ -42,7 +42,7 @@
 
 int rtems_filesystem_default_fstat(
   const rtems_filesystem_location_info_t *loc,
-  struct stat *buf
+  struct stat                            *buf
 )
 {
   (void) loc;

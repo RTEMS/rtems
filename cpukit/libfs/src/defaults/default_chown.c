@@ -41,8 +41,8 @@
 
 int rtems_filesystem_default_chown(
   const rtems_filesystem_location_info_t *loc,
-  uid_t owner,
-  gid_t group
+  uid_t                                   owner,
+  gid_t                                   group
 )
 {
   (void) loc;

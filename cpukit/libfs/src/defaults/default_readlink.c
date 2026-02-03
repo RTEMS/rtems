@@ -43,8 +43,8 @@
 
 ssize_t rtems_filesystem_default_readlink(
   const rtems_filesystem_location_info_t *loc,
-  char *buf,
-  size_t bufsize
+  char                                   *buf,
+  size_t                                  bufsize
 )
 {
   (void) loc;

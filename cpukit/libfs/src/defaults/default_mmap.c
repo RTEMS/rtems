@@ -40,11 +40,11 @@
 #include <rtems/libio_.h>
 
 int rtems_filesystem_default_mmap(
-  rtems_libio_t  *iop,
-  void          **addr,
-  size_t          len,
-  int             prot,
-  off_t           off
+  rtems_libio_t *iop,
+  void         **addr,
+  size_t         len,
+  int            prot,
+  off_t          off
 )
 {
   (void) iop;
@@ -57,9 +57,9 @@ int rtems_filesystem_default_mmap(
 }
 
 int rtems_termios_mmap(
-  rtems_libio_t  *iop,
-  void          **addr,
-  size_t          len,
-  int             prot,
-  off_t           off
+  rtems_libio_t *iop,
+  void         **addr,
+  size_t         len,
+  int            prot,
+  off_t          off
 ) RTEMS_WEAK_ALIAS( rtems_filesystem_default_mmap );

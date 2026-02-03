@@ -45,8 +45,8 @@ int rtems_filesystem_default_rename(
   const rtems_filesystem_location_info_t *oldparentloc,
   const rtems_filesystem_location_info_t *oldloc,
   const rtems_filesystem_location_info_t *newparentloc,
-  const char *name,
-  size_t namelen
+  const char                             *name,
+  size_t                                  namelen
 )
 {
   (void) oldparentloc;

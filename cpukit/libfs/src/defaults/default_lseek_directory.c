@@ -41,8 +41,8 @@
 
 off_t rtems_filesystem_default_lseek_directory(
   rtems_libio_t *iop,
-  off_t offset,
-  int whence
+  off_t          offset,
+  int            whence
 )
 {
   off_t rv = 0;

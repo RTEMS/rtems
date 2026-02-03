@@ -41,10 +41,7 @@
 
 #include <sys/poll.h>
 
-int rtems_filesystem_default_poll(
-  rtems_libio_t *iop,
-  int            events
-)
+int rtems_filesystem_default_poll( rtems_libio_t *iop, int events )
 {
   (void) iop;
   (void) events;
@@ -52,7 +49,6 @@ int rtems_filesystem_default_poll(
   return POLLERR;
 }
 
-int rtems_termios_poll(
-  rtems_libio_t *iop,
-  int            events
-) RTEMS_WEAK_ALIAS( rtems_filesystem_default_poll );
+int rtems_termios_poll( rtems_libio_t *iop, int events ) RTEMS_WEAK_ALIAS(
+  rtems_filesystem_default_poll
+);

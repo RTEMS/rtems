@@ -41,7 +41,7 @@
 
 int rtems_filesystem_default_fchmod(
   const rtems_filesystem_location_info_t *loc,
-  mode_t mode
+  mode_t                                  mode
 )
 {
   (void) loc;

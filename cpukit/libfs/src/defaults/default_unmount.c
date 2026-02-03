@@ -39,7 +39,7 @@
 #include <rtems/seterr.h>
 
 int rtems_filesystem_default_unmount(
-  rtems_filesystem_mount_table_entry_t *mt_entry     /* IN */
+  rtems_filesystem_mount_table_entry_t *mt_entry /* IN */
 )
 {
   (void) mt_entry;

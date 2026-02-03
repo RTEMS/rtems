@@ -53,7 +53,7 @@ ssize_t rtems_filesystem_default_readv(
 
   total = 0;
 
-  for ( v = 0 ; v < iovcnt ; ++v ) {
+  for ( v = 0; v < iovcnt; ++v ) {
     size_t len = iov[ v ].iov_len;
 
     if ( len > 0 ) {
@@ -63,13 +63,15 @@ ssize_t rtems_filesystem_default_readv(
         len
       );
 
-      if ( bytes < 0 )
+      if ( bytes < 0 ) {
         return -1;
+      }
 
       total += bytes;
 
-      if ( bytes != ( ssize_t ) len )
+      if ( bytes != (ssize_t) len ) {
         break;
+      }
     }
   }
 

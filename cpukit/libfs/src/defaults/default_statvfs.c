@@ -41,7 +41,7 @@
 
 int rtems_filesystem_default_statvfs(
   const rtems_filesystem_location_info_t *loc,
-  struct statvfs *buf
+  struct statvfs                         *buf
 )
 {
   (void) loc;

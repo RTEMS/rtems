@@ -39,10 +39,7 @@
 
 #include <rtems/libio_.h>
 
-int rtems_filesystem_default_kqfilter(
-  rtems_libio_t *iop,
-  struct knote  *kn
-)
+int rtems_filesystem_default_kqfilter( rtems_libio_t *iop, struct knote *kn )
 {
   (void) iop;
   (void) kn;

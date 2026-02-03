@@ -41,10 +41,7 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-int rtems_filesystem_default_ftruncate(
-  rtems_libio_t *iop,
-  off_t          length
-)
+int rtems_filesystem_default_ftruncate( rtems_libio_t *iop, off_t length )
 {
   (void) iop;
   (void) length;

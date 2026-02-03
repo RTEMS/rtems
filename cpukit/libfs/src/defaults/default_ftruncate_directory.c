@@ -42,7 +42,7 @@
 
 int rtems_filesystem_default_ftruncate_directory(
   rtems_libio_t *iop,
-  off_t length
+  off_t          length
 )
 {
   (void) iop;

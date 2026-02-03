@@ -34,9 +34,7 @@
 
 #include <rtems/libio.h>
 
-int rtems_filesystem_default_close(
-  rtems_libio_t *iop
-)
+int rtems_filesystem_default_close( rtems_libio_t *iop )
 {
   (void) iop;
 

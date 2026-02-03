@@ -43,10 +43,10 @@
 
 int rtems_filesystem_default_mknod(
   const rtems_filesystem_location_info_t *parentloc,
-  const char *name,
-  size_t namelen,
-  mode_t mode,
-  dev_t dev
+  const char                             *name,
+  size_t                                  namelen,
+  mode_t                                  mode,
+  dev_t                                   dev
 )
 {
   (void) parentloc;

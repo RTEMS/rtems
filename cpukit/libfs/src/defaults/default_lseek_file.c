@@ -41,12 +41,12 @@
 
 off_t rtems_filesystem_default_lseek_file(
   rtems_libio_t *iop,
-  off_t offset,
-  int whence
+  off_t          offset,
+  int            whence
 )
 {
-  off_t rv = 0;
-  off_t reference_offset;
+  off_t       rv = 0;
+  off_t       reference_offset;
   struct stat st;
 
   switch ( whence ) {
@@ -58,7 +58,7 @@ off_t rtems_filesystem_default_lseek_file(
       break;
     case SEEK_END:
       st.st_size = 0;
-      rv = (*iop->pathinfo.handlers->fstat_h)( &iop->pathinfo, &st );
+      rv = ( *iop->pathinfo.handlers->fstat_h )( &iop->pathinfo, &st );
       reference_offset = st.st_size;
       break;
     default:
@@ -71,8 +71,8 @@ off_t rtems_filesystem_default_lseek_file(
     off_t new_offset = reference_offset + offset;
 
     if (
-      (offset >= 0 && new_offset >= reference_offset)
-        || (offset < 0 && new_offset < reference_offset)
+      ( offset >= 0 && new_offset >= reference_offset ) ||
+      ( offset < 0 && new_offset < reference_offset )
     ) {
       if ( new_offset >= 0 ) {
         iop->offset = new_offset;

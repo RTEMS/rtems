@@ -42,8 +42,8 @@
 int rtems_filesystem_default_link(
   const rtems_filesystem_location_info_t *parentloc,
   const rtems_filesystem_location_info_t *targetloc,
-  const char *name,
-  size_t namelen
+  const char                             *name,
+  size_t                                  namelen
 )
 {
   (void) parentloc;

@@ -41,9 +41,9 @@
 #include <rtems/libio_.h>
 
 int rtems_filesystem_default_ioctl(
-  rtems_libio_t   *iop,
-  ioctl_command_t  request,
-  void            *buffer
+  rtems_libio_t  *iop,
+  ioctl_command_t request,
+  void           *buffer
 )
 {
   (void) iop;
