@@ -6,6 +6,8 @@
  * @ingroup RTEMSBSPsMicroblaze
  *
  * @brief MicroBlaze AXI GPIO implementation
+ *
+ * @note Reference: https://www.kernel.org/doc/Documentation/devicetree/bindings/gpio/gpio-xilinx.txt
  */
 
 /*
@@ -33,11 +35,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <assert.h>
-
 #include <bsp/fatal.h>
 #include <bsp/fdt.h>
 #include <bsp/microblaze-gpio.h>
+
+#include <rtems/score/assert.h>
 
 #include <libfdt.h>
 
@@ -101,9 +103,76 @@ rtems_status_code microblaze_gpio_init_context_from_fdt(
     }
   }
 
+  prop = fdt_getprop( fdt, node, "xlnx,gpio-width", NULL );
+  if ( prop != NULL ) {
+    context->config[0].width = fdt32_to_cpu( prop[0] );
+  } else {
+    return RTEMS_INVALID_NUMBER;
+  }
+
+  prop = fdt_getprop( fdt, node, "xlnx,all-inputs", NULL );
+  if ( prop != NULL ) {
+    context->config[0].all_inputs = fdt32_to_cpu( prop[0] ) != 0;
+  } else {
+    return RTEMS_INVALID_NUMBER;
+  }
+
+  prop = fdt_getprop( fdt, node, "xlnx,all-outputs", NULL );
+  if ( prop != NULL ) {
+    context->config[0].all_outputs = fdt32_to_cpu( prop[0] ) != 0;
+  } else {
+    return RTEMS_INVALID_NUMBER;
+  }
+
+  if ( context->is_dual ) {
+    prop = fdt_getprop( fdt, node, "xlnx,gpio2-width", NULL );
+    if ( prop != NULL ) {
+      context->config[1].width = fdt32_to_cpu( prop[0] );
+    } else {
+      return RTEMS_INVALID_NUMBER;
+    }
+
+    prop = fdt_getprop( fdt, node, "xlnx,all-inputs-2", NULL );
+    if ( prop != NULL ) {
+      context->config[1].all_inputs = fdt32_to_cpu( prop[0] ) != 0;
+    } else {
+      return RTEMS_INVALID_NUMBER;
+    }
+
+    prop = fdt_getprop( fdt, node, "xlnx,all-outputs-2", NULL );
+    if ( prop != NULL ) {
+      context->config[1].all_outputs = fdt32_to_cpu( prop[0] ) != 0;
+    } else {
+      return RTEMS_INVALID_NUMBER;
+    }
+  } else {
+    context->config[1].width = 0x0;
+    context->config[1].all_inputs = false;
+    context->config[1].all_outputs = false;
+  }
+
   return RTEMS_SUCCESSFUL;
 }
 #endif /* BSP_MICROBLAZE_FPGA_USE_FDT */
+
+void microblaze_gpio_get_configuration(
+  Microblaze_GPIO_context *ctx,
+  uint32_t                 channel,
+  Microblaze_GPIO_config  *config
+)
+{
+  _Assert( channel == 1 || (ctx->is_dual && channel == 2) );
+
+  if ( channel == 1 ) {
+    config->width = ctx->config[0].width;
+    config->all_inputs = ctx->config[0].all_inputs;
+    config->all_outputs = ctx->config[0].all_outputs;
+  } else if ( ctx->is_dual && channel == 2 ) {
+    config->width = ctx->config[1].width;
+    config->all_inputs = ctx->config[1].all_inputs;
+    config->all_outputs = ctx->config[1].all_outputs;
+  }
+}
 
 void microblaze_gpio_set_data_direction(
   Microblaze_GPIO_context *ctx,
@@ -111,7 +180,7 @@ void microblaze_gpio_set_data_direction(
   uint32_t                 mask
 )
 {
-  assert( channel == 1 || (ctx->is_dual && channel == 2) );
+  _Assert( channel == 1 || (ctx->is_dual && channel == 2) );
 
   if ( channel == 1 ) {
     ctx->regs->gpio_tri = mask;
@@ -125,7 +194,7 @@ uint32_t microblaze_gpio_get_data_direction(
   uint32_t                 channel
 )
 {
-  assert( channel == 1 || (ctx->is_dual && channel == 2) );
+  _Assert( channel == 1 || (ctx->is_dual && channel == 2) );
 
   if ( channel == 1 ) {
     return ctx->regs->gpio_tri;
@@ -141,12 +210,12 @@ uint32_t microblaze_gpio_discrete_read(
   uint32_t                 channel
 )
 {
-  assert( channel == 1 || (ctx->is_dual && channel == 2) );
+  _Assert( channel == 1 || (ctx->is_dual && channel == 2) );
 
   if ( channel == 1 ) {
     return ctx->regs->gpio_data;
   } else if ( ctx->is_dual && channel == 2 ) {
-    return ctx->regs->gpio2_tri;
+    return ctx->regs->gpio2_data;
   }
 
   return 0;
@@ -158,12 +227,12 @@ void microblaze_gpio_discrete_write(
   uint32_t                 mask
 )
 {
-  assert( channel == 1 || (ctx->is_dual && channel == 2) );
+  _Assert( channel == 1 || (ctx->is_dual && channel == 2) );
 
   if ( channel == 1 ) {
     ctx->regs->gpio_data = mask;
   } else if ( ctx->is_dual && channel == 2 ) {
-    ctx->regs->gpio2_tri = mask;
+    ctx->regs->gpio2_data = mask;
   }
 }
 
@@ -173,12 +242,12 @@ void microblaze_gpio_discrete_set(
   uint32_t                 mask
 )
 {
-  assert( channel == 1 || (ctx->is_dual && channel == 2) );
+  _Assert( channel == 1 || (ctx->is_dual && channel == 2) );
 
   if ( channel == 1 ) {
     ctx->regs->gpio_data |= mask;
   } else if ( ctx->is_dual && channel == 2 ) {
-    ctx->regs->gpio2_tri |= mask;
+    ctx->regs->gpio2_data |= mask;
   }
 }
 
@@ -188,12 +257,12 @@ void microblaze_gpio_discrete_clear(
   uint32_t                 mask
 )
 {
-  assert( channel == 1 || (ctx->is_dual && channel == 2) );
+  _Assert( channel == 1 || (ctx->is_dual && channel == 2) );
 
   if ( channel == 1 ) {
     ctx->regs->gpio_data &= ~mask;
   } else if ( ctx->is_dual && channel == 2 ) {
-    ctx->regs->gpio2_tri &= ~mask;
+    ctx->regs->gpio2_data &= ~mask;
   }
 }
 
@@ -204,7 +273,7 @@ rtems_vector_number microblaze_gpio_get_irq( Microblaze_GPIO_context *ctx )
 
 void microblaze_gpio_interrupt_global_enable( Microblaze_GPIO_context *ctx )
 {
-  assert( ctx->has_interrupts );
+  _Assert( ctx->has_interrupts );
 
   if ( ctx->has_interrupts ) {
     ctx->regs->gier = GLOBAL_INTERRUPT_REGISTER_ENABLE;
@@ -213,7 +282,7 @@ void microblaze_gpio_interrupt_global_enable( Microblaze_GPIO_context *ctx )
 
 void microblaze_gpio_interrupt_global_disable( Microblaze_GPIO_context *ctx )
 {
-  assert( ctx->has_interrupts );
+  _Assert( ctx->has_interrupts );
 
   if ( ctx->has_interrupts ) {
     ctx->regs->gier = 0x0;
@@ -225,8 +294,8 @@ void microblaze_gpio_interrupt_enable(
   uint32_t                 channel
 )
 {
-  assert( ctx->has_interrupts );
-  assert( channel == 1 || (ctx->is_dual && channel == 2) );
+  _Assert( ctx->has_interrupts );
+  _Assert( channel == 1 || (ctx->is_dual && channel == 2) );
 
   if ( ctx->has_interrupts ) {
     if ( channel == 1 ) {
@@ -242,7 +311,7 @@ void microblaze_gpio_interrupt_disable(
   uint32_t                 channel
 )
 {
-  assert( channel == 1 || (ctx->is_dual && channel == 2) );
+  _Assert( channel == 1 || (ctx->is_dual && channel == 2) );
 
   if ( channel == 1 ) {
     ctx->regs->ip_ier &= ~CHANNEL_1_INTERRUPT_REGISTER;
@@ -256,7 +325,7 @@ void microblaze_gpio_interrupt_clear(
   uint32_t                 channel
 )
 {
-  assert( channel == 1 || (ctx->is_dual && channel == 2) );
+  _Assert( channel == 1 || (ctx->is_dual && channel == 2) );
 
   if ( channel == 1 ) {
     ctx->regs->ip_isr &= CHANNEL_1_INTERRUPT_REGISTER;
@@ -267,7 +336,7 @@ void microblaze_gpio_interrupt_clear(
 
 uint32_t microblaze_gpio_interrupt_get_enabled( Microblaze_GPIO_context *ctx )
 {
-  assert( ctx->has_interrupts );
+  _Assert( ctx->has_interrupts );
 
   if ( ctx->has_interrupts ) {
     return ctx->regs->ip_ier;
@@ -278,7 +347,7 @@ uint32_t microblaze_gpio_interrupt_get_enabled( Microblaze_GPIO_context *ctx )
 
 uint32_t microblaze_gpio_interrupt_get_status( Microblaze_GPIO_context *ctx )
 {
-  assert( ctx->has_interrupts );
+  _Assert( ctx->has_interrupts );
 
   if ( ctx->has_interrupts ) {
     return ctx->regs->ip_isr;

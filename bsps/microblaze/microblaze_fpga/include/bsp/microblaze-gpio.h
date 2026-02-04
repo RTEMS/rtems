@@ -123,10 +123,17 @@ typedef struct {
 } Microblaze_GPIO_registers;
 
 typedef struct {
+  uint32_t width;
+  bool     all_inputs;
+  bool     all_outputs;
+} Microblaze_GPIO_config;
+
+typedef struct {
   Microblaze_GPIO_registers *regs;
   bool                       is_dual;
   uint32_t                   irq;
   bool                       has_interrupts;
+  Microblaze_GPIO_config     config[2];
 } Microblaze_GPIO_context;
 
 #ifdef BSP_MICROBLAZE_FPGA_USE_FDT
@@ -143,9 +150,27 @@ typedef struct {
  */
 rtems_status_code microblaze_gpio_init_context_from_fdt(
   Microblaze_GPIO_context *context,
-  int index
+  int                      index
 );
 #endif /* BSP_MICROBLAZE_FPGA_USE_FDT */
+
+/**
+ * @brief Get configuration for the specified GPIO channel.
+ *
+ * Get the configuration for a channel. Width, all_inputs, and
+ * all_outputs.
+ *
+ * @param[in]  ctx the GPIO context
+ * @param[in]  channel the GPIO channel
+ * @param[out] configuration of GPIO channel
+ *
+ * @retval None
+ */
+void microblaze_gpio_get_configuration(
+  Microblaze_GPIO_context *ctx,
+  uint32_t                 channel,
+  Microblaze_GPIO_config  *config
+);
 
 /**
  * @brief Set pin configuration for the specified GPIO channel.
