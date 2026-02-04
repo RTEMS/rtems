@@ -50,142 +50,145 @@
 #include <rtems/monitor.h>
 #include "symbols.h"
 
-
-rtems_symbol_table_t *
-rtems_symbol_table_create(void)
+rtems_symbol_table_t *rtems_symbol_table_create( void )
 {
-    rtems_symbol_table_t *table;
+  rtems_symbol_table_t *table;
 
-    table = (rtems_symbol_table_t *) malloc(sizeof(rtems_symbol_table_t));
-    memset((void *) table, 0, sizeof(*table));
+  table = (rtems_symbol_table_t *) malloc( sizeof( rtems_symbol_table_t ) );
+  memset( (void *) table, 0, sizeof( *table ) );
 
-    table->growth_factor = 30;          /* 30 percent */
+  table->growth_factor = 30; /* 30 percent */
 
-    return table;
+  return table;
 }
 
-void
-rtems_symbol_table_destroy(rtems_symbol_table_t *table)
+void rtems_symbol_table_destroy( rtems_symbol_table_t *table )
 {
-    rtems_symbol_string_block_t *p, *pnext;
+  rtems_symbol_string_block_t *p, *pnext;
 
-    if (table)
-    {
-        if (table->addresses)
-            (void) free(table->addresses);
-        table->addresses = 0;
-        p = table->string_buffer_head;
-        while (p)
-        {
-            pnext = p->next;
-            free(p);
-            p = pnext;
-        }
-        table->string_buffer_head = 0;
-        table->string_buffer_current = 0;
-
-        free(table);
+  if ( table ) {
+    if ( table->addresses ) {
+      (void) free( table->addresses );
     }
+    table->addresses = 0;
+    p = table->string_buffer_head;
+    while ( p ) {
+      pnext = p->next;
+      free( p );
+      p = pnext;
+    }
+    table->string_buffer_head = 0;
+    table->string_buffer_current = 0;
+
+    free( table );
+  }
 }
 
-rtems_symbol_t *
-rtems_symbol_create(
-    rtems_symbol_table_t *table,
-    const char           *name,
-    uint32_t              value
-    )
+rtems_symbol_t *rtems_symbol_create(
+  rtems_symbol_table_t *table,
+  const char           *name,
+  uint32_t              value
+)
 {
-    size_t symbol_length;
-    size_t newsize;
-    rtems_symbol_t *sp;
+  size_t          symbol_length;
+  size_t          newsize;
+  rtems_symbol_t *sp;
 
-    symbol_length = strlen(name) + 1;   /* include '\000' in length */
+  symbol_length = strlen( name ) + 1; /* include '\000' in length */
 
-    /* need to grow the table? */
-    if (table->next >= table->size)
-    {
-        if (table->size == 0)
-            newsize = 100;
-        else
-            newsize = table->size + (table->size / (100 / table->growth_factor));
-
-        table->addresses = (rtems_symbol_t *) realloc((void *) table->addresses, newsize * sizeof(rtems_symbol_t));
-        if (table->addresses == 0)        /* blew it; lost orig */
-            goto failed;
-        table->size = newsize;
+  /* need to grow the table? */
+  if ( table->next >= table->size ) {
+    if ( table->size == 0 ) {
+      newsize = 100;
+    } else {
+      newsize = table->size + ( table->size / ( 100 / table->growth_factor ) );
     }
 
-    sp = &table->addresses[table->next];
-    sp->value = value;
-
-    /* Have to add it to string pool */
-    /* need to grow pool? */
-
-    if ((table->string_buffer_head == 0) ||
-        (table->strings_next + symbol_length) >= SYMBOL_STRING_BLOCK_SIZE)
-    {
-        rtems_symbol_string_block_t *p;
-
-        p = (rtems_symbol_string_block_t *) malloc(sizeof(rtems_symbol_string_block_t));
-        if (p == 0)
-            goto failed;
-        p->next = 0;
-        if (table->string_buffer_head == 0)
-            table->string_buffer_head = p;
-        else
-            table->string_buffer_current->next = p;
-        table->string_buffer_current = p;
-
-        table->strings_next = 0;
+    table->addresses = (rtems_symbol_t *)
+      realloc( (void *) table->addresses, newsize * sizeof( rtems_symbol_t ) );
+    if ( table->addresses == 0 ) { /* blew it; lost orig */
+      goto failed;
     }
+    table->size = newsize;
+  }
 
-    sp->name = table->string_buffer_current->buffer + table->strings_next;
-    (void) strcpy(sp->name, name);
+  sp = &table->addresses[ table->next ];
+  sp->value = value;
 
-    table->strings_next += symbol_length;
-    table->sorted = 0;
-    table->next++;
+  /* Have to add it to string pool */
+  /* need to grow pool? */
 
-    return sp;
+  if (
+    ( table->string_buffer_head == 0 ) ||
+    ( table->strings_next + symbol_length ) >= SYMBOL_STRING_BLOCK_SIZE
+  ) {
+    rtems_symbol_string_block_t *p;
+
+    p = (rtems_symbol_string_block_t *) malloc(
+      sizeof( rtems_symbol_string_block_t )
+    );
+    if ( p == 0 ) {
+      goto failed;
+    }
+    p->next = 0;
+    if ( table->string_buffer_head == 0 ) {
+      table->string_buffer_head = p;
+    } else {
+      table->string_buffer_current->next = p;
+    }
+    table->string_buffer_current = p;
+
+    table->strings_next = 0;
+  }
+
+  sp->name = table->string_buffer_current->buffer + table->strings_next;
+  (void) strcpy( sp->name, name );
+
+  table->strings_next += symbol_length;
+  table->sorted = 0;
+  table->next++;
+
+  return sp;
 
 /* XXX Not sure what to do here.  We've possibly destroyed the initial
    symbol table due to realloc failure */
 failed:
-    return 0;
+  return 0;
 }
 
 /*
  * Qsort entry point for compare by address
  */
 
-static int
-rtems_symbol_compare(const void *e1,
-                     const void *e2)
+static int rtems_symbol_compare( const void *e1, const void *e2 )
 {
-    const rtems_symbol_t *s1, *s2;
-    s1 = (const rtems_symbol_t *) e1;
-    s2 = (const rtems_symbol_t *) e2;
+  const rtems_symbol_t *s1, *s2;
+  s1 = (const rtems_symbol_t *) e1;
+  s2 = (const rtems_symbol_t *) e2;
 
-    if (s1->value < s2->value)
-        return -1;
-    if (s1->value > s2->value)
-        return 1;
-    return 0;
+  if ( s1->value < s2->value ) {
+    return -1;
+  }
+  if ( s1->value > s2->value ) {
+    return 1;
+  }
+  return 0;
 }
-
 
 /*
  * Sort the symbol table using qsort
  */
 
-static void
-rtems_symbol_sort(rtems_symbol_table_t *table)
+static void rtems_symbol_sort( rtems_symbol_table_t *table )
 {
-    qsort((void *) table->addresses, (size_t) table->next,
-          sizeof(rtems_symbol_t), rtems_symbol_compare);
-    table->sorted = 1;
+  qsort(
+    (void *) table->addresses,
+    (size_t) table->next,
+    sizeof( rtems_symbol_t ),
+    rtems_symbol_compare
+  );
+  table->sorted = 1;
 }
-
 
 /*
  * Search the symbol table by address
@@ -193,55 +196,55 @@ rtems_symbol_sort(rtems_symbol_table_t *table)
  * to allow for finding closest symbol <= key
  */
 
-rtems_symbol_t *
-rtems_symbol_value_lookup(
-    rtems_symbol_table_t *table,
-    uint32_t              value
-  )
+rtems_symbol_t *rtems_symbol_value_lookup(
+  rtems_symbol_table_t *table,
+  uint32_t              value
+)
 {
-    rtems_symbol_t *sp;
-    rtems_symbol_t *base;
-    rtems_symbol_t *best = 0;
-    uint32_t   distance;
-    uint32_t   best_distance = ~0;
-    uint32_t   elements;
+  rtems_symbol_t *sp;
+  rtems_symbol_t *base;
+  rtems_symbol_t *best = 0;
+  uint32_t        distance;
+  uint32_t        best_distance = ~0;
+  uint32_t        elements;
 
-    if (table == 0)
-        table = rtems_monitor_symbols;
+  if ( table == 0 ) {
+    table = rtems_monitor_symbols;
+  }
 
-    if ((table == 0) || (table->size == 0))
-        return 0;
+  if ( ( table == 0 ) || ( table->size == 0 ) ) {
+    return 0;
+  }
 
-    if (table->sorted == 0)
-        rtems_symbol_sort(table);
+  if ( table->sorted == 0 ) {
+    rtems_symbol_sort( table );
+  }
 
-    base = table->addresses;
-    elements = table->next;
+  base = table->addresses;
+  elements = table->next;
 
-    while (elements)
-    {
-        sp = base + (elements / 2);
-        if (value < sp->value)
-            elements /= 2;
-        else if (value > sp->value)
-        {
-            distance = value - sp->value;
-            if (distance < best_distance)
-            {
-                best_distance = distance;
-                best = sp;
-            }
-            base = sp + 1;
-            elements = (elements / 2) - (elements % 2 ? 0 : 1);
-        }
-        else
-            return sp;
+  while ( elements ) {
+    sp = base + ( elements / 2 );
+    if ( value < sp->value ) {
+      elements /= 2;
+    } else if ( value > sp->value ) {
+      distance = value - sp->value;
+      if ( distance < best_distance ) {
+        best_distance = distance;
+        best = sp;
+      }
+      base = sp + 1;
+      elements = ( elements / 2 ) - ( elements % 2 ? 0 : 1 );
+    } else {
+      return sp;
     }
+  }
 
-    if (value == base->value)
-        return base;
+  if ( value == base->value ) {
+    return base;
+  }
 
-    return best;
+  return best;
 }
 
 /*
@@ -255,220 +258,224 @@ rtems_symbol_value_lookup(
  * an exact match is needed such that symbol table order
  * is not important.
  */
-const rtems_symbol_t *
-rtems_symbol_value_lookup_exact(
-    rtems_symbol_table_t *table,
-    uint32_t              value
-  )
+const rtems_symbol_t *rtems_symbol_value_lookup_exact(
+  rtems_symbol_table_t *table,
+  uint32_t              value
+)
 {
-    uint32_t   s;
-    rtems_symbol_t *sp;
+  uint32_t        s;
+  rtems_symbol_t *sp;
 
-    if (table == 0)
-    {
-        table = rtems_monitor_symbols;
-        if (table == 0)
-            return NULL;
+  if ( table == 0 ) {
+    table = rtems_monitor_symbols;
+    if ( table == 0 ) {
+      return NULL;
     }
+  }
 
-    if (table->sorted)
-    {
-        sp = rtems_symbol_value_lookup(table, value);
-        if ( rtems_symbol_value(sp) == value )
-            return sp;
-        else
-            return NULL;  /* not an exact match */
+  if ( table->sorted ) {
+    sp = rtems_symbol_value_lookup( table, value );
+    if ( rtems_symbol_value( sp ) == value ) {
+      return sp;
+    } else {
+      return NULL; /* not an exact match */
     }
+  }
 
-    for (s = 0, sp = table->addresses; s < table->next; s++, sp++)
-    {
-        if ( sp->value == value )
-            return sp;
+  for ( s = 0, sp = table->addresses; s < table->next; s++, sp++ ) {
+    if ( sp->value == value ) {
+      return sp;
     }
+  }
 
-    return NULL;
-
+  return NULL;
 }
-
 
 /*
  * Search the symbol table by string name (case independent)
  */
 
-rtems_symbol_t *
-rtems_symbol_name_lookup(
-    rtems_symbol_table_t *table,
-    const char           *name
-  )
-{
-    uint32_t   s;
-    rtems_symbol_t *sp;
-
-    if (table == 0)
-    {
-        table = rtems_monitor_symbols;
-        if (table == 0)
-            return NULL;
-    }
-
-    for (s = 0, sp = table->addresses; s < table->next; s++, sp++)
-    {
-        if ( strcasecmp(sp->name, name) == 0 )
-            return sp;
-    }
-
-    return NULL;
-}
-
-const void *
-rtems_monitor_symbol_next(
-    void                   *object_info,
-    rtems_monitor_symbol_t *canonical RTEMS_UNUSED,
-    rtems_id               *next_id
+rtems_symbol_t *rtems_symbol_name_lookup(
+  rtems_symbol_table_t *table,
+  const char           *name
 )
 {
-    rtems_symbol_table_t *table;
-    uint32_t   n = rtems_object_id_get_index(*next_id);
+  uint32_t        s;
+  rtems_symbol_t *sp;
 
-    table = *(rtems_symbol_table_t **) object_info;
-    if (table == 0)
-        goto failed;
+  if ( table == 0 ) {
+    table = rtems_monitor_symbols;
+    if ( table == 0 ) {
+      return NULL;
+    }
+  }
 
-    if (n >= table->next)
-        goto failed;
+  for ( s = 0, sp = table->addresses; s < table->next; s++, sp++ ) {
+    if ( strcasecmp( sp->name, name ) == 0 ) {
+      return sp;
+    }
+  }
 
-    /* NOTE: symbols do not have id and name fields */
+  return NULL;
+}
 
-    if (table->sorted == 0)
-        rtems_symbol_sort(table);
+const void *rtems_monitor_symbol_next(
+  void                             *object_info,
+  rtems_monitor_symbol_t *canonical RTEMS_UNUSED,
+  rtems_id                         *next_id
+)
+{
+  rtems_symbol_table_t *table;
+  uint32_t              n = rtems_object_id_get_index( *next_id );
 
-    _Objects_Allocator_lock();
+  table = *(rtems_symbol_table_t **) object_info;
+  if ( table == 0 ) {
+    goto failed;
+  }
 
-    *next_id += 1;
-    return (const void *) (table->addresses + n);
+  if ( n >= table->next ) {
+    goto failed;
+  }
+
+  /* NOTE: symbols do not have id and name fields */
+
+  if ( table->sorted == 0 ) {
+    rtems_symbol_sort( table );
+  }
+
+  _Objects_Allocator_lock();
+
+  *next_id += 1;
+  return (const void *) ( table->addresses + n );
 
 failed:
-    *next_id = RTEMS_OBJECT_ID_FINAL;
-    return 0;
+  *next_id = RTEMS_OBJECT_ID_FINAL;
+  return 0;
 }
 
-void
-rtems_monitor_symbol_canonical(
-    rtems_monitor_symbol_t *canonical_symbol,
-    rtems_symbol_t *sp
+void rtems_monitor_symbol_canonical(
+  rtems_monitor_symbol_t *canonical_symbol,
+  rtems_symbol_t         *sp
 )
 {
+  canonical_symbol->value = sp->value;
+  canonical_symbol->offset = 0;
+  strncpy(
+    canonical_symbol->name,
+    sp->name,
+    sizeof( canonical_symbol->name ) - 1
+  );
+}
+
+void rtems_monitor_symbol_canonical_by_name(
+  rtems_monitor_symbol_t *canonical_symbol,
+  const char             *name
+)
+{
+  rtems_symbol_t *sp;
+
+  sp = rtems_symbol_name_lookup( 0, name );
+
+  canonical_symbol->value = sp ? sp->value : 0;
+
+  strncpy(
+    canonical_symbol->name,
+    name,
+    sizeof( canonical_symbol->name ) - 1
+  );
+  canonical_symbol->offset = 0;
+}
+
+void rtems_monitor_symbol_canonical_by_value(
+  rtems_monitor_symbol_t *canonical_symbol,
+  void                   *value_void_p
+)
+{
+  uintptr_t       value = (uintptr_t) value_void_p;
+  rtems_symbol_t *sp;
+
+  sp = rtems_symbol_value_lookup( 0, value );
+  if ( sp ) {
     canonical_symbol->value = sp->value;
+    canonical_symbol->offset = value - sp->value;
+    strncpy(
+      canonical_symbol->name,
+      sp->name,
+      sizeof( canonical_symbol->name ) - 1
+    );
+  } else {
+    canonical_symbol->value = value;
     canonical_symbol->offset = 0;
-    strncpy(canonical_symbol->name, sp->name, sizeof(canonical_symbol->name)-1);
+    canonical_symbol->name[ 0 ] = '\0';
+  }
 }
 
-
-void
-rtems_monitor_symbol_canonical_by_name(
-    rtems_monitor_symbol_t *canonical_symbol,
-    const char             *name
+uint32_t rtems_monitor_symbol_dump(
+  rtems_monitor_symbol_t *canonical_symbol,
+  bool                    verbose
 )
 {
-    rtems_symbol_t *sp;
+  uint32_t length = 0;
 
-    sp = rtems_symbol_name_lookup(0, name);
-
-    canonical_symbol->value = sp ? sp->value : 0;
-
-    strncpy(canonical_symbol->name, name, sizeof(canonical_symbol->name) - 1);
-    canonical_symbol->offset = 0;
-}
-
-void
-rtems_monitor_symbol_canonical_by_value(
-    rtems_monitor_symbol_t *canonical_symbol,
-    void                   *value_void_p
-)
-{
-    uintptr_t   value = (uintptr_t) value_void_p;
-    rtems_symbol_t *sp;
-
-    sp = rtems_symbol_value_lookup(0, value);
-    if (sp)
-    {
-        canonical_symbol->value = sp->value;
-        canonical_symbol->offset = value - sp->value;
-        strncpy(canonical_symbol->name, sp->name, sizeof(canonical_symbol->name)-1);
-    }
-    else
-    {
-        canonical_symbol->value = value;
-        canonical_symbol->offset = 0;
-        canonical_symbol->name[0] = '\0';
-    }
-}
-
-
-uint32_t
-rtems_monitor_symbol_dump(
-    rtems_monitor_symbol_t *canonical_symbol,
-    bool                    verbose
-)
-{
-    uint32_t   length = 0;
-
-    /*
+  /*
      * print the name if it exists AND if value is non-zero
      * Ie: don't print some garbage symbol for address 0
      */
 
-    if (canonical_symbol->name[0] && (canonical_symbol->value != 0))
-    {
-        if (canonical_symbol->offset == 0)
-            length += fprintf(stdout,"%.*s",
-                             (int) sizeof(canonical_symbol->name),
-                             canonical_symbol->name);
-        else
-            length += fprintf(stdout,"<%.*s+0x%" PRIx32 ">",
-                             (int) sizeof(canonical_symbol->name),
-                             canonical_symbol->name,
-                             canonical_symbol->offset);
-        if (verbose)
-            length += fprintf(stdout,
-                        " [0x%" PRIx32 "]", canonical_symbol->value);
+  if ( canonical_symbol->name[ 0 ] && ( canonical_symbol->value != 0 ) ) {
+    if ( canonical_symbol->offset == 0 ) {
+      length += fprintf(
+        stdout,
+        "%.*s",
+        (int) sizeof( canonical_symbol->name ),
+        canonical_symbol->name
+      );
+    } else {
+      length += fprintf(
+        stdout,
+        "<%.*s+0x%" PRIx32 ">",
+        (int) sizeof( canonical_symbol->name ),
+        canonical_symbol->name,
+        canonical_symbol->offset
+      );
     }
-    else
-        length += fprintf(stdout,"[0x%" PRIx32 "]", canonical_symbol->value);
+    if ( verbose ) {
+      length += fprintf( stdout, " [0x%" PRIx32 "]", canonical_symbol->value );
+    }
+  } else {
+    length += fprintf( stdout, "[0x%" PRIx32 "]", canonical_symbol->value );
+  }
 
-    return length;
+  return length;
 }
 
-
-static void
-rtems_monitor_symbol_dump_all(
-    rtems_symbol_table_t *table,
-    bool                  verbose RTEMS_UNUSED
+static void rtems_monitor_symbol_dump_all(
+  rtems_symbol_table_t *table,
+  bool verbose          RTEMS_UNUSED
 )
 {
-    uint32_t   s;
-    rtems_symbol_t *sp;
+  uint32_t        s;
+  rtems_symbol_t *sp;
 
-    if (table == 0)
-    {
-        table = rtems_monitor_symbols;
-        if (table == 0)
-            return;
+  if ( table == 0 ) {
+    table = rtems_monitor_symbols;
+    if ( table == 0 ) {
+      return;
     }
+  }
 
-    if (table->sorted == 0)
-        rtems_symbol_sort(table);
+  if ( table->sorted == 0 ) {
+    rtems_symbol_sort( table );
+  }
 
-    for (s = 0, sp = table->addresses; s < table->next; s++, sp++)
-    {
-        rtems_monitor_symbol_t canonical_symbol;
+  for ( s = 0, sp = table->addresses; s < table->next; s++, sp++ ) {
+    rtems_monitor_symbol_t canonical_symbol;
 
-        rtems_monitor_symbol_canonical(&canonical_symbol, sp);
-        rtems_monitor_symbol_dump(&canonical_symbol, true);
-        fprintf(stdout,"\n");
-    }
+    rtems_monitor_symbol_canonical( &canonical_symbol, sp );
+    rtems_monitor_symbol_dump( &canonical_symbol, true );
+    fprintf( stdout, "\n" );
+  }
 }
-
 
 /*
  * 'symbol' command
@@ -481,31 +488,29 @@ void rtems_monitor_symbol_cmd(
   bool                               verbose
 )
 {
-    int arg;
-    rtems_symbol_table_t *table;
+  int                   arg;
+  rtems_symbol_table_t *table;
 
-    table = *command_arg->symbol_table;
-    if (table == 0)
-    {
-        table = rtems_monitor_symbols;
-        if (table == 0)
-            return;
+  table = *command_arg->symbol_table;
+  if ( table == 0 ) {
+    table = rtems_monitor_symbols;
+    if ( table == 0 ) {
+      return;
     }
+  }
 
-    /*
+  /*
      * Use object command to dump out whole symbol table
      */
-    if (argc == 1)
-        rtems_monitor_symbol_dump_all(table, verbose);
-    else
-    {
-        rtems_monitor_symbol_t canonical_symbol;
+  if ( argc == 1 ) {
+    rtems_monitor_symbol_dump_all( table, verbose );
+  } else {
+    rtems_monitor_symbol_t canonical_symbol;
 
-        for (arg=1; argv[arg]; arg++)
-        {
-            rtems_monitor_symbol_canonical_by_name(&canonical_symbol, argv[arg]);
-            rtems_monitor_symbol_dump(&canonical_symbol, verbose);
-            fprintf(stdout,"\n");
-        }
+    for ( arg = 1; argv[ arg ]; arg++ ) {
+      rtems_monitor_symbol_canonical_by_name( &canonical_symbol, argv[ arg ] );
+      rtems_monitor_symbol_dump( &canonical_symbol, verbose );
+      fprintf( stdout, "\n" );
     }
+  }
 }

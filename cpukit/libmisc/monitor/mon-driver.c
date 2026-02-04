@@ -55,111 +55,119 @@
 #include <rtems/monitor.h>
 
 #include <stdio.h>
-#include <stdlib.h>             /* strtoul() */
+#include <stdlib.h> /* strtoul() */
 #include <inttypes.h>
 
 #define DATACOL 15
-#define CONTCOL DATACOL		/* continued col */
+#define CONTCOL DATACOL /* continued col */
 
-
-void
-rtems_monitor_driver_canonical(
-    rtems_monitor_driver_t *canonical_driver,
-    const void             *driver_void
+void rtems_monitor_driver_canonical(
+  rtems_monitor_driver_t *canonical_driver,
+  const void             *driver_void
 )
 {
-    const rtems_driver_address_table *d = (const rtems_driver_address_table *) driver_void;
+  const rtems_driver_address_table *d = (const rtems_driver_address_table *)
+    driver_void;
 
-    rtems_monitor_symbol_canonical_by_value(&canonical_driver->initialization,
-                                            (void *) d->initialization_entry);
+  rtems_monitor_symbol_canonical_by_value(
+    &canonical_driver->initialization,
+    (void *) d->initialization_entry
+  );
 
-    rtems_monitor_symbol_canonical_by_value(&canonical_driver->open,
-                                            (void *) d->open_entry);
-    rtems_monitor_symbol_canonical_by_value(&canonical_driver->close,
-                                            (void *) d->close_entry);
-    rtems_monitor_symbol_canonical_by_value(&canonical_driver->read,
-                                            (void *) d->read_entry);
-    rtems_monitor_symbol_canonical_by_value(&canonical_driver->write,
-                                            (void *) d->write_entry);
-    rtems_monitor_symbol_canonical_by_value(&canonical_driver->control,
-                                            (void *) d->control_entry);
+  rtems_monitor_symbol_canonical_by_value(
+    &canonical_driver->open,
+    (void *) d->open_entry
+  );
+  rtems_monitor_symbol_canonical_by_value(
+    &canonical_driver->close,
+    (void *) d->close_entry
+  );
+  rtems_monitor_symbol_canonical_by_value(
+    &canonical_driver->read,
+    (void *) d->read_entry
+  );
+  rtems_monitor_symbol_canonical_by_value(
+    &canonical_driver->write,
+    (void *) d->write_entry
+  );
+  rtems_monitor_symbol_canonical_by_value(
+    &canonical_driver->control,
+    (void *) d->control_entry
+  );
 }
 
-
-const void *
-rtems_monitor_driver_next(
-    void                  *object_info RTEMS_UNUSED,
-    rtems_monitor_driver_t *canonical_driver,
-    rtems_id              *next_id
+const void *rtems_monitor_driver_next(
+  void *object_info       RTEMS_UNUSED,
+  rtems_monitor_driver_t *canonical_driver,
+  rtems_id               *next_id
 )
 {
-    uint32_t   n = rtems_object_id_get_index(*next_id);
+  uint32_t n = rtems_object_id_get_index( *next_id );
 
-    if (n >= _IO_Number_of_drivers)
-        goto failed;
+  if ( n >= _IO_Number_of_drivers ) {
+    goto failed;
+  }
 
-    _Objects_Allocator_lock();
+  _Objects_Allocator_lock();
 
-    /*
+  /*
      * dummy up a fake id and name for this item
      */
 
-    canonical_driver->id = n;
-    canonical_driver->name = rtems_build_name('-', '-', '-', '-');
+  canonical_driver->id = n;
+  canonical_driver->name = rtems_build_name( '-', '-', '-', '-' );
 
-    *next_id += 1;
-    return (const void *) (&_IO_Driver_address_table[n]);
+  *next_id += 1;
+  return (const void *) ( &_IO_Driver_address_table[ n ] );
 
 failed:
-    *next_id = RTEMS_OBJECT_ID_FINAL;
-    return 0;
+  *next_id = RTEMS_OBJECT_ID_FINAL;
+  return 0;
 }
 
-
-void
-rtems_monitor_driver_dump_header(
-    bool verbose RTEMS_UNUSED
-)
+void rtems_monitor_driver_dump_header( bool verbose RTEMS_UNUSED )
 {
-    fprintf(stdout,"\
-  Major      Entry points\n");
-/*23456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
+  fprintf( stdout, "\
+  Major      Entry points\n" );
+  /*23456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
 0         1         2         3         4         5         6         7       */
-    rtems_monitor_separator();
+  rtems_monitor_separator();
 }
 
-void
-rtems_monitor_driver_dump(
-    rtems_monitor_driver_t *monitor_driver,
-    bool                    verbose
+void rtems_monitor_driver_dump(
+  rtems_monitor_driver_t *monitor_driver,
+  bool                    verbose
 )
 {
-    uint32_t            length = 0;
+  uint32_t length = 0;
 
-    length += fprintf(stdout,"  %" PRId32 "", monitor_driver->id);
-    length += rtems_monitor_pad(13, length);
-    length += fprintf(stdout,"init: ");
-    length += rtems_monitor_symbol_dump(&monitor_driver->initialization, verbose);
-    length += fprintf(stdout,";  control: ");
-    length += rtems_monitor_symbol_dump(&monitor_driver->control, verbose);
-    length += fprintf(stdout,"\n");
-    length = 0;
+  length += fprintf( stdout, "  %" PRId32 "", monitor_driver->id );
+  length += rtems_monitor_pad( 13, length );
+  length += fprintf( stdout, "init: " );
+  length += rtems_monitor_symbol_dump(
+    &monitor_driver->initialization,
+    verbose
+  );
+  length += fprintf( stdout, ";  control: " );
+  length += rtems_monitor_symbol_dump( &monitor_driver->control, verbose );
+  length += fprintf( stdout, "\n" );
+  length = 0;
 
-    length += rtems_monitor_pad(13, length);
+  length += rtems_monitor_pad( 13, length );
 
-    length += fprintf(stdout,"open: ");
-    length += rtems_monitor_symbol_dump(&monitor_driver->open, verbose);
-    length += fprintf(stdout,";  close: ");
-    length += rtems_monitor_symbol_dump(&monitor_driver->close, verbose);
-    length += fprintf(stdout,"\n");
-    length = 0;
+  length += fprintf( stdout, "open: " );
+  length += rtems_monitor_symbol_dump( &monitor_driver->open, verbose );
+  length += fprintf( stdout, ";  close: " );
+  length += rtems_monitor_symbol_dump( &monitor_driver->close, verbose );
+  length += fprintf( stdout, "\n" );
+  length = 0;
 
-    length += rtems_monitor_pad(13, length);
+  length += rtems_monitor_pad( 13, length );
 
-    length += fprintf(stdout,"read: ");
-    length += rtems_monitor_symbol_dump(&monitor_driver->read, verbose);
-    length += fprintf(stdout,";  write: ");
-    length += rtems_monitor_symbol_dump(&monitor_driver->write, verbose);
-    length += fprintf(stdout,"\n");
-    length = 0;
+  length += fprintf( stdout, "read: " );
+  length += rtems_monitor_symbol_dump( &monitor_driver->read, verbose );
+  length += fprintf( stdout, ";  write: " );
+  length += rtems_monitor_symbol_dump( &monitor_driver->write, verbose );
+  length += fprintf( stdout, "\n" );
+  length = 0;
 }

@@ -41,46 +41,44 @@
 
 #include <stdio.h>
 
-void
-rtems_monitor_queue_canonical(
-    rtems_monitor_queue_t *canonical_queue,
-    const void            *queue_void
+void rtems_monitor_queue_canonical(
+  rtems_monitor_queue_t *canonical_queue,
+  const void            *queue_void
 )
 {
-    const Message_queue_Control *rtems_queue = (const Message_queue_Control *) queue_void;
+  const Message_queue_Control *rtems_queue = (const Message_queue_Control *)
+    queue_void;
 
-    canonical_queue->attributes = 0;
+  canonical_queue->attributes = 0;
 
-    if (
-      rtems_queue->message_queue.operations
-        == &_Thread_queue_Operations_priority
-    ) {
-      canonical_queue->attributes |= RTEMS_PRIORITY;
-    }
+  if (
+    rtems_queue->message_queue.operations == &_Thread_queue_Operations_priority
+  ) {
+    canonical_queue->attributes |= RTEMS_PRIORITY;
+  }
 
-#if defined(RTEMS_MULTIPROCESSING)
-    if ( rtems_queue->is_global ) {
-      canonical_queue->attributes |= RTEMS_GLOBAL;
-    }
+#if defined( RTEMS_MULTIPROCESSING )
+  if ( rtems_queue->is_global ) {
+    canonical_queue->attributes |= RTEMS_GLOBAL;
+  }
 #endif
 
-    canonical_queue->maximum_message_size = rtems_queue->message_queue.maximum_message_size;
-    canonical_queue->maximum_pending_messages = rtems_queue->message_queue.maximum_pending_messages;
-    canonical_queue->number_of_pending_messages = rtems_queue->message_queue.number_of_pending_messages;
+  canonical_queue->maximum_message_size = rtems_queue->message_queue
+                                            .maximum_message_size;
+  canonical_queue->maximum_pending_messages = rtems_queue->message_queue
+                                                .maximum_pending_messages;
+  canonical_queue->number_of_pending_messages = rtems_queue->message_queue
+                                                  .number_of_pending_messages;
 }
 
-void
-rtems_monitor_queue_dump_header(
-    bool verbose RTEMS_UNUSED
-)
+void rtems_monitor_queue_dump_header( bool verbose RTEMS_UNUSED )
 {
-    fprintf(stdout,"\
-  ID       NAME   ATTRIBUTES   PEND   MAXPEND  MAXSIZE\n");
-/*23456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
+  fprintf( stdout, "\
+  ID       NAME   ATTRIBUTES   PEND   MAXPEND  MAXSIZE\n" );
+  /*23456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
 0         1         2         3         4         5         6         7       */
-    rtems_monitor_separator();
+  rtems_monitor_separator();
 }
-
 
 /*
  * Dump out the "next" queue indicated by 'id'.
@@ -88,25 +86,28 @@ rtems_monitor_queue_dump_header(
  * Returns RTEMS_OBJECT_ID_FINAL when all done
  */
 
-void
-rtems_monitor_queue_dump(
-    rtems_monitor_queue_t *monitor_queue,
-    bool  verbose RTEMS_UNUSED
+void rtems_monitor_queue_dump(
+  rtems_monitor_queue_t *monitor_queue,
+  bool verbose           RTEMS_UNUSED
 )
 {
-    uint32_t              length = 0;
+  uint32_t length = 0;
 
-    length += rtems_monitor_dump_id(monitor_queue->id);
-    length += rtems_monitor_pad(11, length);
-    length += rtems_monitor_dump_name(monitor_queue->id);
-    length += rtems_monitor_pad(19, length);
-    length += rtems_monitor_dump_attributes(monitor_queue->attributes);
-    length += rtems_monitor_pad(31, length);
-    length += rtems_monitor_dump_decimal(monitor_queue->number_of_pending_messages);
-    length += rtems_monitor_pad(39, length);
-    length += rtems_monitor_dump_decimal(monitor_queue->maximum_pending_messages);
-    length += rtems_monitor_pad(48, length);
-    length += rtems_monitor_dump_decimal(monitor_queue->maximum_message_size);
+  length += rtems_monitor_dump_id( monitor_queue->id );
+  length += rtems_monitor_pad( 11, length );
+  length += rtems_monitor_dump_name( monitor_queue->id );
+  length += rtems_monitor_pad( 19, length );
+  length += rtems_monitor_dump_attributes( monitor_queue->attributes );
+  length += rtems_monitor_pad( 31, length );
+  length += rtems_monitor_dump_decimal(
+    monitor_queue->number_of_pending_messages
+  );
+  length += rtems_monitor_pad( 39, length );
+  length += rtems_monitor_dump_decimal(
+    monitor_queue->maximum_pending_messages
+  );
+  length += rtems_monitor_pad( 48, length );
+  length += rtems_monitor_dump_decimal( monitor_queue->maximum_message_size );
 
-    fprintf(stdout,"\n");
+  fprintf( stdout, "\n" );
 }
