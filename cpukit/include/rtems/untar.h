@@ -54,29 +54,33 @@
 extern "C" {
 #endif
 
-#define UNTAR_SUCCESSFUL         0
-#define UNTAR_FAIL               1
-#define UNTAR_INVALID_CHECKSUM   2
-#define UNTAR_INVALID_HEADER     3
+#define UNTAR_SUCCESSFUL       0
+#define UNTAR_FAIL             1
+#define UNTAR_INVALID_CHECKSUM 2
+#define UNTAR_INVALID_HEADER   3
 
-#define UNTAR_GZ_INFLATE_FAILED 4
+#define UNTAR_GZ_INFLATE_FAILED     4
 #define UNTAR_GZ_INFLATE_END_FAILED 5
 
-int Untar_FromMemory(void *tar_buf, size_t size);
-int Untar_FromMemory_Print(void *tar_buf, size_t size, const rtems_printer* printer);
-int Untar_FromFile(const char *tar_name);
-int Untar_FromFile_Print(const char *tar_name, const rtems_printer* printer);
+int Untar_FromMemory( void *tar_buf, size_t size );
+int Untar_FromMemory_Print(
+  void                *tar_buf,
+  size_t               size,
+  const rtems_printer *printer
+);
+int Untar_FromFile( const char *tar_name );
+int Untar_FromFile_Print( const char *tar_name, const rtems_printer *printer );
 
 #define UNTAR_FILE_NAME_SIZE 100
 
 typedef struct {
-  char *file_path;
-  char *file_name;
-  char link_name[UNTAR_FILE_NAME_SIZE];
-  unsigned long mode;
-  unsigned long file_size;
-  unsigned long nblocks;
-  unsigned char linkflag;
+  char                *file_path;
+  char                *file_name;
+  char                 link_name[ UNTAR_FILE_NAME_SIZE ];
+  unsigned long        mode;
+  unsigned long        file_size;
+  unsigned long        nblocks;
+  unsigned char        linkflag;
   const rtems_printer *printer;
 } Untar_HeaderContext;
 
@@ -86,7 +90,7 @@ typedef struct {
   /**
    * @brief File path buffer.
    */
-  char buf[UNTAR_FILE_NAME_SIZE];
+  char buf[ UNTAR_FILE_NAME_SIZE ];
 
   /**
    * @brief Current context state.
@@ -101,7 +105,7 @@ typedef struct {
   /**
    * @brief Header buffer.
    */
-  char header[512];
+  char header[ 512 ];
 
   /**
    * @brief Number of bytes of overall length are already processed.
@@ -146,7 +150,7 @@ typedef struct {
   /**
    * @brief Xz context.
    */
-  struct xz_dec* strm;
+  struct xz_dec *strm;
 
   /**
    * @brief Xz buffer.
@@ -171,7 +175,7 @@ typedef struct {
  *
  * @param Untar_ChunkContext *context [in] Pointer to a context structure.
  */
-void Untar_ChunkContext_Init(Untar_ChunkContext *context);
+void Untar_ChunkContext_Init( Untar_ChunkContext *context );
 
 /*
  * @brief Rips links, directories and files out of a part of a block of memory.
@@ -187,10 +191,10 @@ void Untar_ChunkContext_Init(Untar_ChunkContext *context);
  */
 
 int Untar_FromChunk_Print(
-  Untar_ChunkContext *context,
-  void *chunk,
-  size_t chunk_size,
-  const rtems_printer* printer
+  Untar_ChunkContext  *context,
+  void                *chunk,
+  size_t               chunk_size,
+  const rtems_printer *printer
 );
 
 /**
@@ -202,8 +206,8 @@ int Untar_FromChunk_Print(
  */
 int Untar_GzChunkContext_Init(
   Untar_GzChunkContext *ctx,
-  void *inflateBuffer,
-  size_t inflateBufferSize
+  void                 *inflateBuffer,
+  size_t                inflateBufferSize
 );
 
 /*
@@ -218,9 +222,9 @@ int Untar_GzChunkContext_Init(
  */
 int Untar_FromGzChunk_Print(
   Untar_GzChunkContext *ctx,
-  void *chunk,
-  size_t chunk_size,
-  const rtems_printer* printer
+  void                 *chunk,
+  size_t                chunk_size,
+  const rtems_printer  *printer
 );
 
 /**
@@ -234,10 +238,10 @@ int Untar_FromGzChunk_Print(
  */
 int Untar_XzChunkContext_Init(
   Untar_XzChunkContext *ctx,
-  enum xz_mode mode,
-  uint32_t dict_max,
-  void *inflateBuffer,
-  size_t inflateBufferSize
+  enum xz_mode          mode,
+  uint32_t              dict_max,
+  void                 *inflateBuffer,
+  size_t                inflateBufferSize
 );
 
 /*
@@ -252,15 +256,15 @@ int Untar_XzChunkContext_Init(
  */
 int Untar_FromXzChunk_Print(
   Untar_XzChunkContext *ctx,
-  const void *chunk,
-  size_t chunk_size,
-  const rtems_printer* printer
+  const void           *chunk,
+  size_t                chunk_size,
+  const rtems_printer  *printer
 );
 
-int Untar_ProcessHeader(Untar_HeaderContext *ctx, const char *bufr);
+int Untar_ProcessHeader( Untar_HeaderContext *ctx, const char *bufr );
 
 #ifdef __cplusplus
 }
 #endif
 /**@}*/
-#endif  /* _RTEMS_UNTAR_H */
+#endif /* _RTEMS_UNTAR_H */
