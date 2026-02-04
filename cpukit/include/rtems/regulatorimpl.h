@@ -48,7 +48,6 @@
 
 #include <rtems/chain.h>
 
-
 /**
  * @ingroup RegulatorInternalAPI
  *
@@ -63,9 +62,9 @@
  */
 typedef struct {
   /** This points to the message contents. */
-  void   *buffer;
+  void  *buffer;
   /** This is the length of the message. */
-  size_t  length;
+  size_t length;
 } _Regulator_Message_t;
 
 /**
@@ -77,15 +76,15 @@ typedef struct {
  */
 typedef struct {
   /** Number of successfully obtained buffers. */
-  atomic_size_t    obtained;
-  
+  atomic_size_t obtained;
+
   /** Number of successfully released buffers. */
-  atomic_size_t    released;
+  atomic_size_t released;
 
   /** Number of successfully delivered buffers. */
-  atomic_size_t    delivered;
+  atomic_size_t delivered;
 } _Regulator_Statistics;
- 
+
 /**
  * @ingroup RegulatorInternalAPI
  *
@@ -95,10 +94,10 @@ typedef struct {
  */
 typedef struct {
   /** Has magic value when instance is usable */
-  uint32_t   initialized;
+  uint32_t initialized;
 
   /** Attributes for this instance -- copied from user */
-  rtems_regulator_attributes  Attributes;
+  rtems_regulator_attributes Attributes;
 
   /** Pointer to allocated message memory */
   void *message_memory;
@@ -107,25 +106,25 @@ typedef struct {
   void *message_queue_storage;
 
   /** RTEMS Message Queue of pending outgoing messages */
-  rtems_id  queue_id;
+  rtems_id queue_id;
 
   /** RTEMS Partition for pool of unused messages */
-  rtems_id  messages_partition_id;
+  rtems_id messages_partition_id;
 
   /** RTEMS Task for performing output */
-  rtems_id  delivery_thread_id;
+  rtems_id delivery_thread_id;
 
   /** Id of period used by output thread */
-  rtems_id  delivery_thread_period_id;
+  rtems_id delivery_thread_period_id;
 
   /** Indicates Delivery thread is running */
-  bool  delivery_thread_is_running;
+  bool delivery_thread_is_running;
 
   /** Indicates Delivery thread has been requested to exit */
-  bool  delivery_thread_request_exit;
+  bool delivery_thread_request_exit;
 
   /** Indicates Delivery thread has exited */
-  bool  delivery_thread_has_exited;
+  bool delivery_thread_has_exited;
 
   /** Internal Statistics */
   _Regulator_Statistics Statistics;

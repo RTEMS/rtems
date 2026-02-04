@@ -225,10 +225,10 @@
  * Thread, the Delivery function, or later when the buffer contents
  * are transferred.
  */
-typedef bool (*rtems_regulator_deliverer)(
-  void     *context,
-  void     *message,
-  size_t    length
+typedef bool ( *rtems_regulator_deliverer )(
+  void  *context,
+  void  *message,
+  size_t length
 );
 
 /**
@@ -245,13 +245,13 @@ typedef struct {
   rtems_regulator_deliverer deliverer;
 
   /** Context pointer to pass to deliver function */
-  void  *deliverer_context;
+  void *deliverer_context;
 
   /** Maximum size message to process */
-  size_t  maximum_message_size;
+  size_t maximum_message_size;
 
   /** Maximum number of messages to be able to buffer */
-  size_t  maximum_messages;
+  size_t maximum_messages;
 
   /** Priority of Delivery thread */
   rtems_task_priority delivery_thread_priority;
@@ -263,7 +263,7 @@ typedef struct {
   rtems_interval delivery_thread_period;
 
   /** Maximum messages to dequeue per period */
-  size_t  maximum_to_dequeue_per_period;
+  size_t maximum_to_dequeue_per_period;
 
 } rtems_regulator_attributes;
 
@@ -277,13 +277,13 @@ typedef struct {
  */
 typedef struct {
   /** Number of successfully obtained buffers. */
-  size_t    obtained;
-  
+  size_t obtained;
+
   /** Number of successfully released buffers. */
-  size_t    released;
+  size_t released;
 
   /** Number of successfully delivered buffers. */
-  size_t    delivered;
+  size_t delivered;
 
   /** Rate Monotonic Period statistics for Delivery Thread */
   rtems_rate_monotonic_period_statistics period_statistics;
@@ -341,8 +341,8 @@ typedef struct _Regulator_Control *rtems_regulator_instance;
  *       Delivery thread will create an RTEMS rate monotonic period.
  */
 rtems_status_code rtems_regulator_create(
-  rtems_regulator_attributes  *attributes,
-  rtems_regulator_instance   **regulator
+  rtems_regulator_attributes *attributes,
+  rtems_regulator_instance  **regulator
 );
 
 /**
@@ -368,8 +368,8 @@ rtems_status_code rtems_regulator_create(
  *       @a rtems_regulator_create().
  */
 rtems_status_code rtems_regulator_delete(
-  rtems_regulator_instance    *regulator,
-  rtems_interval               ticks
+  rtems_regulator_instance *regulator,
+  rtems_interval            ticks
 );
 
 /**
@@ -398,8 +398,8 @@ rtems_status_code rtems_regulator_delete(
  * @note Any attempt to write outside the buffer area is undefined.
  */
 rtems_status_code rtems_regulator_obtain_buffer(
-  rtems_regulator_instance   *regulator,
-  void                      **buffer
+  rtems_regulator_instance *regulator,
+  void                    **buffer
 );
 
 /**
@@ -426,8 +426,8 @@ rtems_status_code rtems_regulator_obtain_buffer(
  *       buffer to the pool allocated during @a rtems_regulator_create().
  */
 rtems_status_code rtems_regulator_release_buffer(
-  rtems_regulator_instance   *regulator,
-  void                       *buffer
+  rtems_regulator_instance *regulator,
+  void                     *buffer
 );
 
 /**
@@ -471,9 +471,9 @@ rtems_status_code rtems_regulator_release_buffer(
  *
  */
 rtems_status_code rtems_regulator_send(
-  rtems_regulator_instance  *regulator,
-  void                      *message,
-  size_t                     length
+  rtems_regulator_instance *regulator,
+  void                     *message,
+  size_t                    length
 );
 
 /**

@@ -51,18 +51,16 @@
  * @note The argument passed in cannot be NULL if the
  *       rtems_regulator_create worked.
  */
-static rtems_task _Regulator_Output_task_body(
-  rtems_task_argument arg
-)
+static rtems_task _Regulator_Output_task_body( rtems_task_argument arg )
 {
-  _Regulator_Control   *the_regulator = (_Regulator_Control *)arg;
-  rtems_status_code     sc;
-  size_t                to_dequeue;
-  _Regulator_Message_t  regulator_message;
-  size_t                regulator_message_size;
-  bool                  release_it;
+  _Regulator_Control  *the_regulator = (_Regulator_Control *) arg;
+  rtems_status_code    sc;
+  size_t               to_dequeue;
+  _Regulator_Message_t regulator_message;
+  size_t               regulator_message_size;
+  bool                 release_it;
 
-  the_regulator->delivery_thread_is_running   = true;
+  the_regulator->delivery_thread_is_running = true;
 
   /**
    * This thread uses a rate monotonic period object instance. A rate
@@ -77,29 +75,29 @@ static rtems_task _Regulator_Output_task_body(
    * exit the thread.
    */
   sc = rtems_rate_monotonic_create(
-    rtems_build_name('P', 'E', 'R', 'D'),
+    rtems_build_name( 'P', 'E', 'R', 'D' ),
     &the_regulator->delivery_thread_period_id
   );
-  if (sc != RTEMS_SUCCESSFUL) {
+  if ( sc != RTEMS_SUCCESSFUL ) {
     goto exit_delivery_thread;
   }
 
   /**
    * Loop on the rate_monotonic_period() based on the specified period.
    */
-  while (1) {
+  while ( 1 ) {
     sc = rtems_rate_monotonic_period(
       the_regulator->delivery_thread_period_id,
       the_regulator->Attributes.delivery_thread_period
     );
-     _Assert_Unused_variable_equals(sc, RTEMS_SUCCESSFUL);
+    _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
 
     /**
      * If the delivery thread has been requested to exit, then
      * quit processing messages, break out of this loop, and exit
      * this thread.
      */
-    if (the_regulator->delivery_thread_request_exit) {
+    if ( the_regulator->delivery_thread_request_exit ) {
       break;
     }
 
@@ -108,10 +106,12 @@ static rtems_task _Regulator_Output_task_body(
      * If we reach the point, there are no more messages, block for the
      * rest of this period. If there are messages, deliver them.
      */
-    for (to_dequeue = 0;
-         to_dequeue < the_regulator->Attributes.maximum_to_dequeue_per_period;
-         to_dequeue++) {
-      regulator_message_size = sizeof(_Regulator_Message_t);
+    for (
+      to_dequeue = 0;
+      to_dequeue < the_regulator->Attributes.maximum_to_dequeue_per_period;
+      to_dequeue++
+    ) {
+      regulator_message_size = sizeof( _Regulator_Message_t );
       sc = rtems_message_queue_receive(
         the_regulator->queue_id,
         &regulator_message,
@@ -119,8 +119,8 @@ static rtems_task _Regulator_Output_task_body(
         RTEMS_NO_WAIT,
         0
       );
-     _Assert_Unused_variable_equals(sc, RTEMS_SUCCESSFUL);
-      if (sc != RTEMS_SUCCESSFUL) {
+      _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
+      if ( sc != RTEMS_SUCCESSFUL ) {
         break;
       }
 
@@ -142,13 +142,13 @@ static rtems_task _Regulator_Output_task_body(
        * used by @a rtems_regulator_obtain_buffer() and @a
        * rtems_regulator_release_buffer().
        */
-      if (release_it == true) {
+      if ( release_it == true ) {
         the_regulator->Statistics.released++;
         sc = rtems_partition_return_buffer(
           the_regulator->messages_partition_id,
           regulator_message.buffer
         );
-        _Assert_Unused_variable_equals(sc, RTEMS_SUCCESSFUL);
+        _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
       }
     }
   }
@@ -157,10 +157,12 @@ static rtems_task _Regulator_Output_task_body(
    * This thread was requested to exit. Do so.
    */
 exit_delivery_thread:
-  the_regulator->delivery_thread_is_running   = false;
-  the_regulator->delivery_thread_has_exited   = true;
+  the_regulator->delivery_thread_is_running = false;
+  the_regulator->delivery_thread_has_exited = true;
 
-  (void) rtems_rate_monotonic_delete(the_regulator->delivery_thread_period_id);
+  (void) rtems_rate_monotonic_delete(
+    the_regulator->delivery_thread_period_id
+  );
 
   rtems_task_exit();
 }
@@ -184,31 +186,30 @@ static bool _Regulator_Free_helper(
   rtems_interval      ticks
 )
 {
-  rtems_status_code  sc;
-
+  rtems_status_code sc;
 
   /*
    * If the output thread has not started running, then we can just delete it.
    */
 
-  if (ticks == 0 || the_regulator->delivery_thread_is_running == false) {
-    sc = rtems_task_delete(the_regulator->delivery_thread_id);
-    _Assert_Unused_variable_equals(sc, RTEMS_SUCCESSFUL);
+  if ( ticks == 0 || the_regulator->delivery_thread_is_running == false ) {
+    sc = rtems_task_delete( the_regulator->delivery_thread_id );
+    _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
   } else {
     rtems_interval remaining = ticks;
 
     the_regulator->delivery_thread_request_exit = true;
 
-    while (1) {
-      if (the_regulator->delivery_thread_has_exited) {
+    while ( 1 ) {
+      if ( the_regulator->delivery_thread_has_exited ) {
         break;
       }
-    
-      if (remaining == 0) {
+
+      if ( remaining == 0 ) {
         return false;
       }
 
-      (void) rtems_task_wake_after(1);
+      (void) rtems_task_wake_after( 1 );
       remaining--;
     }
   }
@@ -220,18 +221,18 @@ static bool _Regulator_Free_helper(
   /*
    * The regulator's message_queue_storage is implicitly freed by this call.
    */
-  sc = rtems_message_queue_delete(the_regulator->queue_id);
-  _Assert_Unused_variable_equals(sc, RTEMS_SUCCESSFUL);
+  sc = rtems_message_queue_delete( the_regulator->queue_id );
+  _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
 
-  sc = rtems_partition_delete(the_regulator->messages_partition_id);
-  _Assert_Unused_variable_equals(sc, RTEMS_SUCCESSFUL);
+  sc = rtems_partition_delete( the_regulator->messages_partition_id );
+  _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
 
-  if (the_regulator->message_memory) {
-    free(the_regulator->message_memory);
+  if ( the_regulator->message_memory ) {
+    free( the_regulator->message_memory );
   }
 
   the_regulator->initialized = 0;
-  free(the_regulator);
+  free( the_regulator );
   return true;
 }
 
@@ -239,22 +240,22 @@ static bool _Regulator_Free_helper(
  * @ingroup RegulatorInternalAPI
  */
 rtems_status_code rtems_regulator_create(
-  rtems_regulator_attributes  *attributes,
-  rtems_regulator_instance   **regulator
+  rtems_regulator_attributes *attributes,
+  rtems_regulator_instance  **regulator
 )
 {
   _Regulator_Control *the_regulator;
-  rtems_status_code  sc;
-  size_t             alloc_size;
+  rtems_status_code   sc;
+  size_t              alloc_size;
 
   /**
    * Perform basic validation of parameters
    */
-  if (attributes == NULL) {
+  if ( attributes == NULL ) {
     return RTEMS_INVALID_ADDRESS;
   }
 
-  if (regulator == NULL) {
+  if ( regulator == NULL ) {
     return RTEMS_INVALID_ADDRESS;
   }
 
@@ -265,31 +266,32 @@ rtems_status_code rtems_regulator_create(
    * - delivery_thread_priority by rtems_task_create()
    * - delivery_thread_stack_size can be any value
    */
-  if (attributes->deliverer == NULL) {
+  if ( attributes->deliverer == NULL ) {
     return RTEMS_INVALID_ADDRESS;
   }
 
-  if (attributes->maximum_messages == 0) {
+  if ( attributes->maximum_messages == 0 ) {
     return RTEMS_INVALID_NUMBER;
   }
 
-  if (attributes->maximum_message_size == 0) {
+  if ( attributes->maximum_message_size == 0 ) {
     return RTEMS_INVALID_SIZE;
   }
 
-  if (attributes->maximum_to_dequeue_per_period == 0) {
+  if ( attributes->maximum_to_dequeue_per_period == 0 ) {
     return RTEMS_INVALID_NUMBER;
   }
 
-  if (attributes->delivery_thread_period == 0) {
+  if ( attributes->delivery_thread_period == 0 ) {
     return RTEMS_INVALID_NUMBER;
   }
 
   /**
    * Allocate memory for regulator instance
    */
-  the_regulator = (_Regulator_Control *) calloc(1, sizeof(_Regulator_Control));
-  if (the_regulator == NULL) {
+  the_regulator = (_Regulator_Control *)
+    calloc( 1, sizeof( _Regulator_Control ) );
+  if ( the_regulator == NULL ) {
     return RTEMS_NO_MEMORY;
   }
 
@@ -312,9 +314,9 @@ rtems_status_code rtems_regulator_create(
    * message memory because the user should fill that in.
    */
   alloc_size = attributes->maximum_message_size * attributes->maximum_messages;
-  the_regulator->message_memory = calloc(alloc_size, 1);
-  if (the_regulator->message_memory == NULL) {
-    _Regulator_Free_helper(the_regulator, 0);
+  the_regulator->message_memory = calloc( alloc_size, 1 );
+  if ( the_regulator->message_memory == NULL ) {
+    _Regulator_Free_helper( the_regulator, 0 );
     return RTEMS_NO_MEMORY;
   }
 
@@ -322,46 +324,45 @@ rtems_status_code rtems_regulator_create(
    * Associate message memory with a partition so allocations are atomic
    */
   sc = rtems_partition_create(
-    rtems_build_name('P', 'O', 'O', 'L'),
+    rtems_build_name( 'P', 'O', 'O', 'L' ),
     the_regulator->message_memory,
     alloc_size,
     attributes->maximum_message_size,
     RTEMS_DEFAULT_ATTRIBUTES,
     &the_regulator->messages_partition_id
   );
-  if (sc != RTEMS_SUCCESSFUL) {
-    _Regulator_Free_helper(the_regulator, 0);
+  if ( sc != RTEMS_SUCCESSFUL ) {
+    _Regulator_Free_helper( the_regulator, 0 );
     return sc;
   }
 
   /**
    * Create the message queue between the sender and output thread
    */
-  RTEMS_MESSAGE_QUEUE_BUFFER(sizeof(_Regulator_Message_t)) regulator_message_t;
+  RTEMS_MESSAGE_QUEUE_BUFFER( sizeof( _Regulator_Message_t ) )
+  regulator_message_t;
 
-  size_t storage_size = sizeof(regulator_message_t) * attributes->maximum_messages;
+  size_t storage_size = sizeof( regulator_message_t ) *
+                        attributes->maximum_messages;
 
-  the_regulator->message_queue_storage = malloc(storage_size);
-  if (the_regulator->message_queue_storage == NULL) {
-    _Regulator_Free_helper(the_regulator, 0);
+  the_regulator->message_queue_storage = malloc( storage_size );
+  if ( the_regulator->message_queue_storage == NULL ) {
+    _Regulator_Free_helper( the_regulator, 0 );
     return RTEMS_NO_MEMORY;
   }
 
   rtems_message_queue_config mq_config = {
-    .name = rtems_build_name('S', 'N', 'D', 'Q'),
-    .maximum_pending_messages =  attributes->maximum_messages,
-    .maximum_message_size = sizeof(_Regulator_Message_t),
+    .name = rtems_build_name( 'S', 'N', 'D', 'Q' ),
+    .maximum_pending_messages = attributes->maximum_messages,
+    .maximum_message_size = sizeof( _Regulator_Message_t ),
     .storage_area = the_regulator->message_queue_storage,
     .storage_size = storage_size,
     .storage_free = free,
     .attributes = RTEMS_DEFAULT_ATTRIBUTES
   };
-  sc = rtems_message_queue_construct(
-    &mq_config,
-    &the_regulator->queue_id
-  );
-  if (sc != RTEMS_SUCCESSFUL) {
-    _Regulator_Free_helper(the_regulator, 0);
+  sc = rtems_message_queue_construct( &mq_config, &the_regulator->queue_id );
+  if ( sc != RTEMS_SUCCESSFUL ) {
+    _Regulator_Free_helper( the_regulator, 0 );
     return sc;
   }
 
@@ -376,15 +377,15 @@ rtems_status_code rtems_regulator_create(
    * specified by the user.
    */
   sc = rtems_task_create(
-    rtems_build_name('R', 'E', 'G', 'U'),
+    rtems_build_name( 'R', 'E', 'G', 'U' ),
     attributes->delivery_thread_priority,
     attributes->delivery_thread_stack_size,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &the_regulator->delivery_thread_id
   );
-  if (sc != RTEMS_SUCCESSFUL) {
-    _Regulator_Free_helper(the_regulator, 0);
+  if ( sc != RTEMS_SUCCESSFUL ) {
+    _Regulator_Free_helper( the_regulator, 0 );
     return sc;
   }
 
@@ -395,16 +396,16 @@ rtems_status_code rtems_regulator_create(
    *       the regulator output thread entry point is valid, and the argument
    *       is valid.
    */
-  the_regulator->delivery_thread_is_running   = true;
+  the_regulator->delivery_thread_is_running = true;
   the_regulator->delivery_thread_request_exit = false;
-  the_regulator->delivery_thread_has_exited   = false;
+  the_regulator->delivery_thread_has_exited = false;
 
   sc = rtems_task_start(
     the_regulator->delivery_thread_id,
     _Regulator_Output_task_body,
     (rtems_task_argument) the_regulator
   );
- _Assert_Unused_variable_equals(sc, RTEMS_SUCCESSFUL);
+  _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
 
   /**
    * The regulator is successfully initialized. Set the initialized field
@@ -412,7 +413,7 @@ rtems_status_code rtems_regulator_create(
    */
   the_regulator->initialized = REGULATOR_INITIALIZED;
 
-  *regulator = (void *)the_regulator;
+  *regulator = (void *) the_regulator;
 
   return RTEMS_SUCCESSFUL;
 }
@@ -436,12 +437,12 @@ static inline _Regulator_Control *_Regulator_Get(
 {
   _Regulator_Control *the_regulator = (_Regulator_Control *) regulator;
 
-  if (the_regulator == NULL) {
+  if ( the_regulator == NULL ) {
     *status = RTEMS_INVALID_ADDRESS;
     return NULL;
   }
 
-  if (the_regulator->initialized != REGULATOR_INITIALIZED) {
+  if ( the_regulator->initialized != REGULATOR_INITIALIZED ) {
     *status = RTEMS_INCORRECT_STATE;
     return NULL;
   }
@@ -454,8 +455,8 @@ static inline _Regulator_Control *_Regulator_Get(
  * @ingroup RegulatorInternalAPI
  */
 rtems_status_code rtems_regulator_delete(
-  rtems_regulator_instance    *regulator,
-  rtems_interval               ticks
+  rtems_regulator_instance *regulator,
+  rtems_interval            ticks
 )
 {
   _Regulator_Control *the_regulator;
@@ -464,8 +465,8 @@ rtems_status_code rtems_regulator_delete(
   /**
    * Convert external handle to internal instance pointer
    */
-  the_regulator = _Regulator_Get(regulator, &status);
-  if (the_regulator == NULL) {
+  the_regulator = _Regulator_Get( regulator, &status );
+  if ( the_regulator == NULL ) {
     return status;
   }
 
@@ -474,7 +475,7 @@ rtems_status_code rtems_regulator_delete(
    */
   _Regulator_Statistics *stats = &the_regulator->Statistics;
 
-  if (stats->obtained != stats->released ) {
+  if ( stats->obtained != stats->released ) {
     return RTEMS_RESOURCE_IN_USE;
   }
 
@@ -482,8 +483,8 @@ rtems_status_code rtems_regulator_delete(
    * Free the resources associated with this regulator instance.
    */
   bool bc;
-  bc = _Regulator_Free_helper(the_regulator, ticks);
-  if (bc == false) {
+  bc = _Regulator_Free_helper( the_regulator, ticks );
+  if ( bc == false ) {
     return RTEMS_TIMEOUT;
   }
 
@@ -496,8 +497,8 @@ rtems_status_code rtems_regulator_delete(
  * Allocate a buffer for the caller using the internal partition.
  */
 rtems_status_code rtems_regulator_obtain_buffer(
-  rtems_regulator_instance    *regulator,
-  void                       **buffer
+  rtems_regulator_instance *regulator,
+  void                    **buffer
 )
 {
   _Regulator_Control *the_regulator;
@@ -506,8 +507,8 @@ rtems_status_code rtems_regulator_obtain_buffer(
   /**
    * Convert external handle to internal instance pointer
    */
-  the_regulator = _Regulator_Get(regulator, &status);
-  if (the_regulator == NULL) {
+  the_regulator = _Regulator_Get( regulator, &status );
+  if ( the_regulator == NULL ) {
     return status;
   }
 
@@ -520,7 +521,7 @@ rtems_status_code rtems_regulator_obtain_buffer(
     buffer
   );
 
-  if (status == RTEMS_SUCCESSFUL) {
+  if ( status == RTEMS_SUCCESSFUL ) {
     the_regulator->Statistics.obtained++;
   }
 
@@ -533,8 +534,8 @@ rtems_status_code rtems_regulator_obtain_buffer(
  * Allocate a buffer for the caller using the internal partition.
  */
 rtems_status_code rtems_regulator_release_buffer(
-  rtems_regulator_instance  *regulator,
-  void                      *buffer
+  rtems_regulator_instance *regulator,
+  void                     *buffer
 )
 {
   _Regulator_Control *the_regulator;
@@ -543,8 +544,8 @@ rtems_status_code rtems_regulator_release_buffer(
   /**
    * Convert external handle to internal instance pointer
    */
-  the_regulator = _Regulator_Get(regulator, &status);
-  if (the_regulator == NULL) {
+  the_regulator = _Regulator_Get( regulator, &status );
+  if ( the_regulator == NULL ) {
     return status;
   }
 
@@ -557,7 +558,7 @@ rtems_status_code rtems_regulator_release_buffer(
     buffer
   );
 
-  if (status == RTEMS_SUCCESSFUL) {
+  if ( status == RTEMS_SUCCESSFUL ) {
     the_regulator->Statistics.released++;
   }
 
@@ -573,9 +574,9 @@ rtems_status_code rtems_regulator_send(
   size_t                    length
 )
 {
-  _Regulator_Control   *the_regulator;
-  rtems_status_code     status;
-  _Regulator_Message_t  regulator_message;
+  _Regulator_Control  *the_regulator;
+  rtems_status_code    status;
+  _Regulator_Message_t regulator_message;
 
   the_regulator = (_Regulator_Control *) regulator;
 
@@ -583,19 +584,19 @@ rtems_status_code rtems_regulator_send(
    * Validate the arguments and ensure the regulator was successfully
    * initialized.
    */
-  if (message == NULL) {
+  if ( message == NULL ) {
     return RTEMS_INVALID_ADDRESS;
   }
 
-  if (length == 0) {
+  if ( length == 0 ) {
     return RTEMS_INVALID_NUMBER;
   }
 
   /**
    * Convert external handle to internal instance pointer
    */
-  the_regulator = _Regulator_Get(regulator, &status);
-  if (the_regulator == NULL) {
+  the_regulator = _Regulator_Get( regulator, &status );
+  if ( the_regulator == NULL ) {
     return status;
   }
 
@@ -614,9 +615,9 @@ rtems_status_code rtems_regulator_send(
   status = rtems_message_queue_send(
     the_regulator->queue_id,
     &regulator_message,
-    sizeof(_Regulator_Message_t)
+    sizeof( _Regulator_Message_t )
   );
-  if (status != RTEMS_SUCCESSFUL) {
+  if ( status != RTEMS_SUCCESSFUL ) {
     return status;
   }
 
@@ -631,22 +632,22 @@ rtems_status_code rtems_regulator_get_statistics(
   rtems_regulator_statistics *statistics
 )
 {
-  _Regulator_Control   *the_regulator;
-  rtems_status_code     status;
+  _Regulator_Control *the_regulator;
+  rtems_status_code   status;
 
   /**
    * Validate the arguments and ensure the regulator was successfully
    * initialized.
    */
-  if (statistics == NULL) {
+  if ( statistics == NULL ) {
     return RTEMS_INVALID_ADDRESS;
   }
 
   /**
    * Convert external handle to internal instance pointer
    */
-  the_regulator = _Regulator_Get(regulator, &status);
-  if (the_regulator == NULL) {
+  the_regulator = _Regulator_Get( regulator, &status );
+  if ( the_regulator == NULL ) {
     return status;
   }
 
@@ -654,14 +655,14 @@ rtems_status_code rtems_regulator_get_statistics(
    * Zero out the statistics structure in case the get period statistics
    * fails below.
    */
-  memset(statistics, 0, sizeof(rtems_regulator_statistics)); 
+  memset( statistics, 0, sizeof( rtems_regulator_statistics ) );
 
   /**
    * Fill in the caller's statistics structure from information
    * maintained by the regulator instance about buffers processed.
    */
-  statistics->obtained  = the_regulator->Statistics.obtained;
-  statistics->released  = the_regulator->Statistics.released;
+  statistics->obtained = the_regulator->Statistics.obtained;
+  statistics->released = the_regulator->Statistics.released;
   statistics->delivered = the_regulator->Statistics.delivered;
 
   /**
