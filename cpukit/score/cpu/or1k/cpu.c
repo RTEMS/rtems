@@ -116,6 +116,15 @@ void _CPU_ISR_install_raw_handler(
    _ISR_Local_enable( level );
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcast-function-type"
+/* This cast is known to be safe based on the OR1K calling convention */
+static CPU_ISR_raw_handler handler_to_raw_handler( CPU_ISR_handler handler )
+{
+  return ( CPU_ISR_raw_handler ) handler;
+}
+#pragma GCC diagnostic pop
+
 void _CPU_ISR_install_vector(
   uint32_t         vector,
   CPU_ISR_handler  new_handler,
@@ -124,7 +133,7 @@ void _CPU_ISR_install_vector(
 {
   _CPU_ISR_install_raw_handler(
     vector,
-    (CPU_ISR_raw_handler) new_handler,
+    handler_to_raw_handler( new_handler ),
     (CPU_ISR_raw_handler *) old_handler
   );
 }
