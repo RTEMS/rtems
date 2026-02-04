@@ -38,7 +38,7 @@
  * Support for loading, managing and accessing FDT blobs in RTEMS.
  */
 
-#if !defined (_RTEMS_FDT_H_)
+#if !defined( _RTEMS_FDT_H_ )
 #define _RTEMS_FDT_H_
 
 #include <rtems.h>
@@ -59,9 +59,8 @@ typedef struct rtems_fdt_blob rtems_fdt_blob;
  * referenced via the handle to allow searches across loaded DTB's to return
  * the referenced DTB.
  */
-typedef struct
-{
-  rtems_fdt_blob* blob;  /**< The blob the handle references. */
+typedef struct {
+  rtems_fdt_blob *blob; /**< The blob the handle references. */
 } rtems_fdt_handle;
 
 /**
@@ -70,9 +69,8 @@ typedef struct
  * Only 32bit addresses and sizes on 32bit machine. Ignore the upper
  * 32bits.
  */
-typedef struct
-{
-  int node;
+typedef struct {
+  int      node;
   uint64_t address;
   uint64_t size;
   int      address_cells;
@@ -86,17 +84,17 @@ typedef struct
 /**
  * RTEMS_FDT_ERR_NOTFOUND: The requested node or property does not exist
  */
-#define RTEMS_FDT_ERR_NOTFOUND  1
+#define RTEMS_FDT_ERR_NOTFOUND 1
 /**
  * RTEMS_FDT_ERR_EXISTS: Attemped to create a node or property which already
  * exists */
-#define RTEMS_FDT_ERR_EXISTS    2
+#define RTEMS_FDT_ERR_EXISTS 2
 /**
  * RTEMS_FDT_ERR_NOSPACE: Operation needed to expand the device tree, but its
  * buffer did not have sufficient space to contain the expanded tree. Use
  * rtems_fdt_open_into() to move the device tree to a buffer with more space.
  */
-#define RTEMS_FDT_ERR_NOSPACE    3
+#define RTEMS_FDT_ERR_NOSPACE 3
 
 /* Error codes: codes for bad parameters */
 /**
@@ -104,23 +102,23 @@ typedef struct
  * is out-of-bounds, or which points to an unsuitable part of the structure for
  * the operation.
  */
-#define RTEMS_FDT_ERR_BADOFFSET  4
+#define RTEMS_FDT_ERR_BADOFFSET 4
 /**
  * RTEMS_FDT_ERR_BADPATH: Function was passed a badly formatted path
  * (e.g. missing a leading / for a function which requires an absolute path)
 */
-#define RTEMS_FDT_ERR_BADPATH    5
+#define RTEMS_FDT_ERR_BADPATH 5
 /**
  * RTEMS_FDT_ERR_BADPHANDLE: Function was passed an invalid phandle value.
  * phandle values of 0 and -1 are not permitted.
  */
-#define RTEMS_FDT_ERR_BADPHANDLE  6
+#define RTEMS_FDT_ERR_BADPHANDLE 6
 /**
  * RTEMS_FDT_ERR_BADSTATE: Function was passed an incomplete device tree
  * created by the sequential-write functions, which is not sufficiently
  * complete for the requested operation.
  */
-#define RTEMS_FDT_ERR_BADSTATE  7
+#define RTEMS_FDT_ERR_BADSTATE 7
 
 /* Error codes: codes for bad device tree blobs */
 
@@ -128,35 +126,35 @@ typedef struct
  * RTEMS_FDT_ERR_TRUNCATED: Structure block of the given device tree ends
  * without an RTEMS_FDT_END tag.
  */
-#define RTEMS_FDT_ERR_TRUNCATED  8
+#define RTEMS_FDT_ERR_TRUNCATED 8
 /**
  * RTEMS_FDT_ERR_BADMAGIC: Given "device tree" appears not to be a device tree
  * at all - it is missing the flattened device tree magic number.
  */
-#define RTEMS_FDT_ERR_BADMAGIC  9
+#define RTEMS_FDT_ERR_BADMAGIC 9
 /** RTEMS_FDT_ERR_BADVERSION: Given device tree has a version which can't be
  * handled by the requested operation.  For read-write functions, this may mean
  * that rtems_fdt_open_into() is required to convert the tree to the expected
  * version.
  */
-#define RTEMS_FDT_ERR_BADVERSION  10
+#define RTEMS_FDT_ERR_BADVERSION 10
 /**
  * RTEMS_FDT_ERR_BADSTRUCTURE: Given device tree has a corrupt structure block
  * or other serious error (e.g. misnested nodes, or subnodes preceding
  * properties).
  */
-#define RTEMS_FDT_ERR_BADSTRUCTURE  11
+#define RTEMS_FDT_ERR_BADSTRUCTURE 11
 /**
  * RTEMS_FDT_ERR_BADLAYOUT: For read-write functions, the given device tree has
  * it's sub-blocks in an order that the function can't handle (memory reserve
  * map, then structure, then strings).  Use rtems_fdt_open_into() to reorganize
  * the tree into a form suitable for the read-write operations.
  */
-#define RTEMS_FDT_ERR_BADLAYOUT  12
+#define RTEMS_FDT_ERR_BADLAYOUT 12
 /**
  * "Can't happen" error indicating a bug in libfdt
  */
-#define RTEMS_FDT_ERR_INTERNAL  13
+#define RTEMS_FDT_ERR_INTERNAL 13
 
 /* RTEMS error codes. */
 
@@ -167,33 +165,33 @@ typedef struct
 /**
  * No memory.
  */
-#define RTEMS_FDT_ERR_NO_MEMORY      101
+#define RTEMS_FDT_ERR_NO_MEMORY 101
 /**
  * File not found.
  */
-#define RTEMS_FDT_ERR_NOT_FOUND      102
+#define RTEMS_FDT_ERR_NOT_FOUND 102
 /**
  * Cannot read the DTB into memory.
  */
-#define RTEMS_FDT_ERR_READ_FAIL      103
+#define RTEMS_FDT_ERR_READ_FAIL 103
 /**
  * The blob cannot be unloaded as it is referenced.
  */
-#define RTEMS_FDT_ERR_REFERENCED     104
+#define RTEMS_FDT_ERR_REFERENCED 104
 /**
  * The property length is invalid
  */
-#define RTEMS_FDT_ERR_BADLENGTH      105
+#define RTEMS_FDT_ERR_BADLENGTH 105
 
-#define RTEMS_FDT_ERR_RTEMS_MIN      100
-#define RTEMS_FDT_ERR_MAX            105
+#define RTEMS_FDT_ERR_RTEMS_MIN 100
+#define RTEMS_FDT_ERR_MAX       105
 
 /**
  * Initialise a handle to a default state.
  *
  * @param handle The handle to initialise.
  */
-void rtems_fdt_init_handle (rtems_fdt_handle* handle);
+void rtems_fdt_init_handle( rtems_fdt_handle *handle );
 
 /**
  * Duplicate a handle. The copy must be released.
@@ -201,14 +199,14 @@ void rtems_fdt_init_handle (rtems_fdt_handle* handle);
  * @param from Duplicate from this handle.
  * @param to   Duplicate to this handle.
  */
-void rtems_fdt_dup_handle (rtems_fdt_handle* from, rtems_fdt_handle* to);
+void rtems_fdt_dup_handle( rtems_fdt_handle *from, rtems_fdt_handle *to );
 
 /**
  * Release a blob from a handle and clear it.
  *
  * @param handle The handle to check.
  */
-void rtems_fdt_release_handle (rtems_fdt_handle* handle);
+void rtems_fdt_release_handle( rtems_fdt_handle *handle );
 
 /**
  * Check if a handle had a valid blob assigned.
@@ -217,7 +215,7 @@ void rtems_fdt_release_handle (rtems_fdt_handle* handle);
  * @retval true The handle has a valid blob.
  * @retval false The handle does not have a valid blob.
  */
-bool rtems_fdt_valid_handle (const rtems_fdt_handle* handle);
+bool rtems_fdt_valid_handle( const rtems_fdt_handle *handle );
 
 /**
  * Find a tree node by its full path looking across of loaded blobs.. Each path
@@ -233,7 +231,7 @@ bool rtems_fdt_valid_handle (const rtems_fdt_handle* handle);
  * @param path Full path of the node to locate.
  * @param int If less than 0 an error code else the node offset is returned.
  */
-int rtems_fdt_find_path_offset (rtems_fdt_handle* handle, const char* path);
+int rtems_fdt_find_path_offset( rtems_fdt_handle *handle, const char *path );
 
 /**
  * Load a device tree blob or DTB file into memory and register it on the chain
@@ -243,7 +241,7 @@ int rtems_fdt_find_path_offset (rtems_fdt_handle* handle, const char* path);
  * @param handle The handle returns the reference to the blob once load.
  * @return int If less than 0 it is an error code else it is the blob descriptor.
  */
-int rtems_fdt_load (const char* const filename, rtems_fdt_handle* handle);
+int rtems_fdt_load( const char *const filename, rtems_fdt_handle *handle );
 
 /**
  * Register a device tree blob or DTB on to the chain of blobs.
@@ -252,7 +250,7 @@ int rtems_fdt_load (const char* const filename, rtems_fdt_handle* handle);
  * @param handle The handle returns the reference to the blob once load.
  * @return int If less than 0 it is an error code else it is the blob descriptor.
  */
-int rtems_fdt_register (const void* blob, rtems_fdt_handle* handle);
+int rtems_fdt_register( const void *blob, rtems_fdt_handle *handle );
 
 /**
  * Unload a device tree blob or DTB file and release any memory allocated when
@@ -261,7 +259,7 @@ int rtems_fdt_register (const void* blob, rtems_fdt_handle* handle);
  * @param blob_desc A valid blob descriptor.
  * @return int If less than 0 it is an error code else 0 is return on success.
  */
-int rtems_fdt_unload (rtems_fdt_handle* handle);
+int rtems_fdt_unload( rtems_fdt_handle *handle );
 
 /**
  * Returns the number of entries in the device tree blob's memory
@@ -271,7 +269,7 @@ int rtems_fdt_unload (rtems_fdt_handle* handle);
  * @param blob_desc A valid blob descriptor.
  * @return int The number of entries.
  */
-int rtems_fdt_num_mem_rsv (rtems_fdt_handle* handle);
+int rtems_fdt_num_mem_rsv( rtems_fdt_handle *handle );
 
 /**
  * Retrieve one memory reserve map entry. On success, *address and *size will
@@ -284,10 +282,12 @@ int rtems_fdt_num_mem_rsv (rtems_fdt_handle* handle);
  * @return int If less than 0 it is an error code else 0 is returned on
  *             success.
  */
-int rtems_fdt_get_mem_rsv (rtems_fdt_handle* handle,
-                           int               n,
-                           uint64_t*         address,
-                           uint64_t*         size);
+int rtems_fdt_get_mem_rsv(
+  rtems_fdt_handle *handle,
+  int               n,
+  uint64_t         *address,
+  uint64_t         *size
+);
 
 /**
  * Find a subnode based on substring. Identical to rtems_fdt_subnode_offset(),
@@ -302,10 +302,12 @@ int rtems_fdt_get_mem_rsv (rtems_fdt_handle* handle,
  * @return int If less than 0 it is an error code else the node offset is
  *             returned.
  */
-int rtems_fdt_subnode_offset_namelen (rtems_fdt_handle* handle,
-                                      int               parentoffset,
-                                      const char* const name,
-                                      int               namelen);
+int rtems_fdt_subnode_offset_namelen(
+  rtems_fdt_handle *handle,
+  int               parentoffset,
+  const char *const name,
+  int               namelen
+);
 
 /**
  * Find a subnode of a given node at structure block offset parentoffset with
@@ -321,9 +323,11 @@ int rtems_fdt_subnode_offset_namelen (rtems_fdt_handle* handle,
  * @return int If less than 0 it is an error code else the subnode offset is
  *             returned.
  */
-int rtems_fdt_subnode_offset (rtems_fdt_handle* handle,
-                              int               parentoffset,
-                              const char* const name);
+int rtems_fdt_subnode_offset(
+  rtems_fdt_handle *handle,
+  int               parentoffset,
+  const char *const name
+);
 
 /**
  * Find a tree node by its full path. Each path component may omit the unit
@@ -335,7 +339,7 @@ int rtems_fdt_subnode_offset (rtems_fdt_handle* handle,
  * @param path Full path of the node to locate.
  * @param int If less than 0 an error code else the node offset is returned.
  */
-int rtems_fdt_path_offset (rtems_fdt_handle* handle, const char* path);
+int rtems_fdt_path_offset( rtems_fdt_handle *handle, const char *path );
 
 /**
  * Retrieve the name of a given node (including unit address) of the device
@@ -351,9 +355,11 @@ int rtems_fdt_path_offset (rtems_fdt_handle* handle, const char* path);
  * @return const char* The node's name on success or NULL on error. The length
  *                     if non-NULL will hold the error code.
  */
-const char* rtems_fdt_get_name (rtems_fdt_handle* handle,
-                                int               nodeoffset,
-                                int*              length);
+const char *rtems_fdt_get_name(
+  rtems_fdt_handle *handle,
+  int               nodeoffset,
+  int              *length
+);
 
 /**
  * Retrieve the offset for the first property for a node.
@@ -362,7 +368,7 @@ const char* rtems_fdt_get_name (rtems_fdt_handle* handle,
  * @param nodeoffset Structure block offset of the starting node.
  * @return int The offset of a node's first property.
  */
-int rtems_fdt_first_prop_offset(rtems_fdt_handle* handle, int nodeoffset);
+int rtems_fdt_first_prop_offset( rtems_fdt_handle *handle, int nodeoffset );
 
 /**
  * Retrieve the next property of a node relative to the property
@@ -371,7 +377,7 @@ int rtems_fdt_first_prop_offset(rtems_fdt_handle* handle, int nodeoffset);
  * @param propoffset Property offset to search from
  * @return int Property offset or end if less than 0.
  */
-int rtems_fdt_next_prop_offset(rtems_fdt_handle* handle, int propoffset);
+int rtems_fdt_next_prop_offset( rtems_fdt_handle *handle, int propoffset );
 
 /**
  * Retrieve the property value, name and length of name given a
@@ -385,10 +391,12 @@ int rtems_fdt_next_prop_offset(rtems_fdt_handle* handle, int propoffset);
  *               code.
  * @return const void* The node's value data.
  */
-const void* rtems_fdt_getprop_by_offset(rtems_fdt_handle* handle,
-                                        int               propoffset,
-                                        const char**      name,
-                                        int*              length);
+const void *rtems_fdt_getprop_by_offset(
+  rtems_fdt_handle *handle,
+  int               propoffset,
+  const char      **name,
+  int              *length
+);
 
 /**
  * Get property value based on substring. Identical to rtems_fdt_getprop(), but
@@ -405,11 +413,13 @@ const void* rtems_fdt_getprop_by_offset(rtems_fdt_handle* handle,
  * @return const void* The node's property on success or NULL on error. The
  *                     length if non-NULL will hold the error code.
  */
-const void *rtems_fdt_getprop_namelen (rtems_fdt_handle* handle,
-                                       int               nodeoffset,
-                                       const char* const name,
-                                       int               namelen,
-                                       int*              length);
+const void *rtems_fdt_getprop_namelen(
+  rtems_fdt_handle *handle,
+  int               nodeoffset,
+  const char *const name,
+  int               namelen,
+  int              *length
+);
 
 /**
  * Retrieve the value of a given property. Retrieves a pointer to the value of
@@ -427,10 +437,12 @@ const void *rtems_fdt_getprop_namelen (rtems_fdt_handle* handle,
  * @return const void* The node's property on success or NULL on error. The
  *                     length if non-NULL will hold the error code.
  */
-const void *rtems_fdt_getprop (rtems_fdt_handle* handle,
-                               int               nodeoffset,
-                               const char* const name,
-                               int*              length);
+const void *rtems_fdt_getprop(
+  rtems_fdt_handle *handle,
+  int               nodeoffset,
+  const char *const name,
+  int              *length
+);
 
 /**
  * Retrieve the phandle of the device tree node at structure block
@@ -441,7 +453,7 @@ const void *rtems_fdt_getprop (rtems_fdt_handle* handle,
  * return uint32_t The phandle of the node at nodeoffset, on success (!= 0, !=
  *                  -1) 0, if the node has no phandle, or another error occurs.
  */
-uint32_t rtems_fdt_get_phandle (rtems_fdt_handle* handle, int nodeoffset);
+uint32_t rtems_fdt_get_phandle( rtems_fdt_handle *handle, int nodeoffset );
 
 /**
  * Get alias based on substring. Identical to rtems_fdt_get_alias(), but only
@@ -452,9 +464,11 @@ uint32_t rtems_fdt_get_phandle (rtems_fdt_handle* handle, int nodeoffset);
  * @param namelen The number of characters of name to consider.
  * @return const char* The alias or NULL.
  */
-const char *rtems_fdt_get_alias_namelen (rtems_fdt_handle* handle,
-                                         const char* const name,
-                                         int               namelen);
+const char *rtems_fdt_get_alias_namelen(
+  rtems_fdt_handle *handle,
+  const char *const name,
+  int               namelen
+);
 
 /**
  * Retreive the path referenced by a given alias. That is, the value of the
@@ -466,7 +480,7 @@ const char *rtems_fdt_get_alias_namelen (rtems_fdt_handle* handle,
  *                     it exists NULL, if the given alias or the /aliases node
  *                     does not exist
  */
-const char* rtems_fdt_get_alias (rtems_fdt_handle* handle, const char* name);
+const char *rtems_fdt_get_alias( rtems_fdt_handle *handle, const char *name );
 
 /**
  * Determine the full path of a node. This function is expensive, as it must
@@ -481,10 +495,12 @@ const char* rtems_fdt_get_alias (rtems_fdt_handle* handle, const char* name);
  * @param buflen The size of the character buffer at buf.
  * @return int 0 on success of an error code.
  */
-int rtems_fdt_get_path (rtems_fdt_handle* handle,
-                        int               nodeoffset,
-                        char*             buf,
-                        int               buflen);
+int rtems_fdt_get_path(
+  rtems_fdt_handle *handle,
+  int               nodeoffset,
+  char             *buf,
+  int               buflen
+);
 
 /**
  * Find a specific ancestor of a node at a specific depth from the root (where
@@ -502,10 +518,12 @@ int rtems_fdt_get_path (rtems_fdt_handle* handle,
  *                  NULL
  * @return int If less than 0 an error else the node offset.
  */
-int rtems_fdt_supernode_atdepth_offset (rtems_fdt_handle* handle,
-                                        int               nodeoffset,
-                                        int               supernodedepth,
-                                        int*              nodedepth);
+int rtems_fdt_supernode_atdepth_offset(
+  rtems_fdt_handle *handle,
+  int               nodeoffset,
+  int               supernodedepth,
+  int              *nodedepth
+);
 
 /**
  * Find the depth of a given node. The root node has depth 0, its immediate
@@ -518,7 +536,7 @@ int rtems_fdt_supernode_atdepth_offset (rtems_fdt_handle* handle,
  * @param nodeoffset The offset of the node whose parent to find.
  * @return int If less than 0 an error else the node offset.
  */
-int rtems_fdt_node_depth (rtems_fdt_handle* handle, int nodeoffset);
+int rtems_fdt_node_depth( rtems_fdt_handle *handle, int nodeoffset );
 
 /**
  * Find the parent of a given node. This funciton locates the parent node of a
@@ -532,7 +550,7 @@ int rtems_fdt_node_depth (rtems_fdt_handle* handle, int nodeoffset);
  * @param nodeoffset The offset of the node whose parent to find.
  * @return int If less than 0 an error else the node offset.
  */
-int rtems_fdt_parent_offset (rtems_fdt_handle* handle, int nodeoffset);
+int rtems_fdt_parent_offset( rtems_fdt_handle *handle, int nodeoffset );
 
 /**
  * Find nodes with a given property value. This funtion returns the offset of
@@ -563,11 +581,13 @@ int rtems_fdt_parent_offset (rtems_fdt_handle* handle, int nodeoffset);
  *             >startoffset), on success and an error code is less
  *             than 0.
  */
-int rtems_fdt_node_offset_by_prop_value (rtems_fdt_handle* handle,
-                                         int               startoffset,
-                                         const char* const propname,
-                                         const void*       propval,
-                                         int               proplen);
+int rtems_fdt_node_offset_by_prop_value(
+  rtems_fdt_handle *handle,
+  int               startoffset,
+  const char *const propname,
+  const void       *propval,
+  int               proplen
+);
 
 /**
  * Find the node with a given phandle returning the offset of the node which
@@ -578,8 +598,10 @@ int rtems_fdt_node_offset_by_prop_value (rtems_fdt_handle* handle,
  * @param phandle The phandle value.
  * @return int If less than 0 an error else the node offset.
  */
-int rtems_fdt_node_offset_by_phandle (rtems_fdt_handle* handle,
-                                      uint32_t          phandle);
+int rtems_fdt_node_offset_by_phandle(
+  rtems_fdt_handle *handle,
+  uint32_t          phandle
+);
 
 /**
  * Check a node's compatible property returning 0 if the given node contains a
@@ -593,9 +615,11 @@ int rtems_fdt_node_offset_by_phandle (rtems_fdt_handle* handle,
  * @retval 1, if the node has a 'compatible' property, but it does not list the
  *            given string
  */
-int rtems_fdt_node_check_compatible (rtems_fdt_handle* handle,
-                                     int               nodeoffset,
-                                     const char* const compatible);
+int rtems_fdt_node_check_compatible(
+  rtems_fdt_handle *handle,
+  int               nodeoffset,
+  const char *const compatible
+);
 
 /**
  * Find nodes with a given 'compatible' value returning the offset of the first
@@ -621,9 +645,11 @@ int rtems_fdt_node_check_compatible (rtems_fdt_handle* handle,
  * @param compatible The 'compatible' string to match against.
  * @return int If less than 0 an error else the node offset.
  */
-int rtems_fdt_node_offset_by_compatible(rtems_fdt_handle* handle,
-                                        int               startoffset,
-                                        const char*       compatible);
+int rtems_fdt_node_offset_by_compatible(
+  rtems_fdt_handle *handle,
+  int               startoffset,
+  const char       *compatible
+);
 
 /**
  * Traverse to the next node.
@@ -633,7 +659,7 @@ int rtems_fdt_node_offset_by_compatible(rtems_fdt_handle* handle,
  * @param depth Pointer to return the depth the node is.
  * @return int If less than 0 an error else the node offset.
  */
-int rtems_fdt_next_node (rtems_fdt_handle* handle, int offset, int* depth);
+int rtems_fdt_next_node( rtems_fdt_handle *handle, int offset, int *depth );
 
 /**
  * Return an error string given an error value.
@@ -641,100 +667,117 @@ int rtems_fdt_next_node (rtems_fdt_handle* handle, int offset, int* depth);
  * @param errval The error value.
  * @return const char* The error string.
  */
-const char* rtems_fdt_strerror (int errval);
+const char *rtems_fdt_strerror( int errval );
 
 /**
  * Return a parent property given a node offset. Travel up until found
  * or the root node is reached
  */
-bool rtems_fdt_get_parent_prop_value(rtems_fdt_handle* handle,
-                                     int               nodeoffset,
-                                     const char*       name,
-                                     uint32_t*         value);
+bool rtems_fdt_get_parent_prop_value(
+  rtems_fdt_handle *handle,
+  int               nodeoffset,
+  const char       *name,
+  uint32_t         *value
+);
 /**
  * Return a property given a path.
  */
-int rtems_fdt_prop_value(const char* const path,
-                         const char* const propname,
-                         void*             value,
-                         size_t*           size);
+int rtems_fdt_prop_value(
+  const char *const path,
+  const char *const propname,
+  void             *value,
+  size_t           *size
+);
 
 /**
  * Create a map given a path the property name and the names of the subnodes of
  * the path.
  */
-int rtems_fdt_prop_map (const char* const path,
-                        const char* const propname,
-                        const char* const names[],
-                        uintptr_t*        values,
-                        size_t            count);
+int rtems_fdt_prop_map(
+  const char *const path,
+  const char *const propname,
+  const char *const names[],
+  uintptr_t        *values,
+  size_t            count
+);
 
 /*
  * Get a value given a path and a property.
  */
-int rtems_fdt_get_value (const char* const path,
-                         const char* const property,
-                         size_t            size,
-                         uintptr_t*        value);
+int rtems_fdt_get_value(
+  const char *const path,
+  const char *const property,
+  size_t            size,
+  uintptr_t        *value
+);
 
 /**
  * Get the number of entries in an FDT handle.
  */
-int rtems_fdt_num_entries(rtems_fdt_handle* handle);
+int rtems_fdt_num_entries( rtems_fdt_handle *handle );
 
 /**
  * Get the numbered entry name. Note that the id isn't the same as
  * the offset - it's numbered 0, 1, 2 ... num_entries-1
  */
-const char *rtems_fdt_entry_name(rtems_fdt_handle* handle, int id);
+const char *rtems_fdt_entry_name( rtems_fdt_handle *handle, int id );
 
 /**
  * Get the numbered entry offset. Note that the id isn't the same as
  * the offset - it's numbered 0, 1, 2 ... num_entries-1
  */
-int rtems_fdt_entry_offset(rtems_fdt_handle* handle, int id);
+int rtems_fdt_entry_offset( rtems_fdt_handle *handle, int id );
 
 /*
  * Helper function to convert the void* property result of unknown
  * length to an unsigned int pointer value.
  */
-uintptr_t rtems_fdt_get_offset_len_uintptr(const void* prop, int offset, int len);
+uintptr_t rtems_fdt_get_offset_len_uintptr(
+  const void *prop,
+  int         offset,
+  int         len
+);
 
 /*
  * Helper function to convert the void* property result to a 32bit unsigned int.
  */
-uint32_t rtems_fdt_get_uint32(const void* prop);
-uint32_t rtems_fdt_get_offset_uint32(const void* prop, int offset);
+uint32_t rtems_fdt_get_uint32( const void *prop );
+uint32_t rtems_fdt_get_offset_uint32( const void *prop, int offset );
 
 /*
  * Helper function to convert the void* property result to a 64bit unsigned int.
  */
-uint64_t rtems_fdt_get_uint64(const void* prop);
-uint64_t rtems_fdt_get_offset_uint64(const void* prop, int offset);
+uint64_t rtems_fdt_get_uint64( const void *prop );
+uint64_t rtems_fdt_get_offset_uint64( const void *prop, int offset );
 
 /*
  * Helper function to convert the void* property result to a uintptr_t
  */
-uintptr_t rtems_fdt_get_uintptr(const void* prop);
-uintptr_t rtems_fdt_get_offset_uintptr(const void* prop, int offset);
+uintptr_t rtems_fdt_get_uintptr( const void *prop );
+uintptr_t rtems_fdt_get_offset_uintptr( const void *prop, int offset );
 
 /*
  * Find the address cells property in parent nodes.
  */
-int rtems_fdt_getprop_address_cells(rtems_fdt_handle* handle, int nodeoffset);
+int rtems_fdt_getprop_address_cells(
+  rtems_fdt_handle *handle,
+  int               nodeoffset
+);
 
 /*
  * Find the size cells property in parent nodes.
  */
-int rtems_fdt_getprop_size_cells(rtems_fdt_handle* handle, int nodeoffset);
+int rtems_fdt_getprop_size_cells( rtems_fdt_handle *handle, int nodeoffset );
 
 /*
  * Get an address space property.
  */
-int rtems_fdt_getprop_address_map(rtems_fdt_handle*      handle,
-                                  const char*            path,
-                                  const char*            name,
-                                  rtems_fdt_address_map* addr_map);
+int rtems_fdt_getprop_address_map(
+  rtems_fdt_handle      *handle,
+  const char            *path,
+  const char            *name,
+  rtems_fdt_address_map *addr_map
+);
 
 #ifdef __cplusplus
 }
