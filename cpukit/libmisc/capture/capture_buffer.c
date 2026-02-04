@@ -42,13 +42,14 @@
 #include <rtems/score/assert.h>
 #include "capture_buffer.h"
 
-void*
-rtems_capture_buffer_allocate (rtems_capture_buffer* buffer, size_t size)
+void *rtems_capture_buffer_allocate(
+  rtems_capture_buffer *buffer,
+  size_t                size
+)
 {
-  void* ptr = NULL;
+  void *ptr = NULL;
 
-  if ((buffer->count + size) <= buffer->end)
-  {
+  if ( ( buffer->count + size ) <= buffer->end ) {
     size_t end;
 
     /*
@@ -59,27 +60,23 @@ rtems_capture_buffer_allocate (rtems_capture_buffer* buffer, size_t size)
      *
      * tail|.....|head| freespace| end
      */
-    if (buffer->tail > buffer->head)
-    {
+    if ( buffer->tail > buffer->head ) {
       end = buffer->tail;
-    } else
-    {
+    } else {
       end = buffer->end;
     }
 
     /*
      * Can we allocate it easily?
      */
-    if ((buffer->head + size) <= end)
-    {
-      ptr = &buffer->buffer[buffer->head];
+    if ( ( buffer->head + size ) <= end ) {
+      ptr = &buffer->buffer[ buffer->head ];
       buffer->head += size;
       buffer->count = buffer->count + size;
-      if (buffer->max_rec < size)
+      if ( buffer->max_rec < size ) {
         buffer->max_rec = size;
-    }
-    else
-    {
+      }
+    } else {
       /*
        * We have to consider wrapping around to the front of the buffer
        *
@@ -87,8 +84,7 @@ rtems_capture_buffer_allocate (rtems_capture_buffer* buffer, size_t size)
        * wrapped then we can't allocate and if there is room at the front of
        * the buffer.
        */
-      if ((end != buffer->tail) && (buffer->tail >= size))
-      {
+      if ( ( end != buffer->tail ) && ( buffer->tail >= size ) ) {
         /*
          * Change the end pointer to the last used byte, so a read will wrap
          * when out of data
@@ -101,8 +97,9 @@ rtems_capture_buffer_allocate (rtems_capture_buffer* buffer, size_t size)
         ptr = buffer->buffer;
         buffer->head = size;
         buffer->count = buffer->count + size;
-        if (buffer->max_rec < size)
+        if ( buffer->max_rec < size ) {
           buffer->max_rec = size;
+        }
       }
     }
   }
@@ -110,34 +107,32 @@ rtems_capture_buffer_allocate (rtems_capture_buffer* buffer, size_t size)
   return ptr;
 }
 
-void*
-rtems_capture_buffer_free (rtems_capture_buffer* buffer, size_t size)
+void *rtems_capture_buffer_free( rtems_capture_buffer *buffer, size_t size )
 {
-  void*  ptr;
+  void  *ptr;
   size_t next;
   size_t buff_size;
 
-  if (size == 0)
+  if ( size == 0 ) {
     return NULL;
+  }
 
-  ptr = rtems_capture_buffer_peek (buffer, &buff_size);
+  ptr = rtems_capture_buffer_peek( buffer, &buff_size );
   next = buffer->tail + size;
 
   /*
    * Check if we are freeing space past the end of the buffer
    */
-  _Assert (! rtems_capture_buffer_is_empty( buffer));
-  _Assert (!((buffer->tail > buffer->head) && (next > buffer->end)));
-  _Assert (!((buffer->tail < buffer->head) && (next > buffer->head)));
+  _Assert( !rtems_capture_buffer_is_empty( buffer ) );
+  _Assert( !( ( buffer->tail > buffer->head ) && ( next > buffer->end ) ) );
+  _Assert( !( ( buffer->tail < buffer->head ) && ( next > buffer->head ) ) );
 
   buffer->count = buffer->count - size;
 
-  if (next == buffer->end)
-  {
+  if ( next == buffer->end ) {
     buffer->end = buffer->size;
     buffer->tail = 0;
-  } else
-  {
+  } else {
     buffer->tail = next;
   }
 

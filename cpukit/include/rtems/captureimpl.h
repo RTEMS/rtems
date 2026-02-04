@@ -54,7 +54,7 @@ extern "C" {
  * @param[in] index specifies the extension index to be
  * used for capture engine data.
  */
-void rtems_capture_set_extension_index(int index);
+void rtems_capture_set_extension_index( int index );
 
 /**
  * @brief Capture get extension index.
@@ -64,7 +64,7 @@ void rtems_capture_set_extension_index(int index);
  *
  * @retval This method returns the extension index.
  */
-int  rtems_capture_get_extension_index(void);
+int rtems_capture_get_extension_index( void );
 
 /**
  * @brief Capture get flags.
@@ -76,7 +76,7 @@ int  rtems_capture_get_extension_index(void);
  * flags.
  *
  */
-uint32_t rtems_capture_get_flags(void);
+uint32_t rtems_capture_get_flags( void );
 
 /**
  * @brief Capture set flags.
@@ -85,7 +85,7 @@ uint32_t rtems_capture_get_flags(void);
  *
  * @param[in] mask specifies the flag to set
  */
-void rtems_capture_set_flags(uint32_t mask);
+void rtems_capture_set_flags( uint32_t mask );
 
 /**
  * @brief Capture user extension open.
@@ -96,7 +96,7 @@ void rtems_capture_set_flags(uint32_t mask);
  * @retval This method returns RTEMS_SUCCESSFUL upon successful
  * creation of the user extensions.
  */
-rtems_status_code rtems_capture_user_extension_open(void);
+rtems_status_code rtems_capture_user_extension_open( void );
 
 /**
  * @brief Capture user extension close.
@@ -106,7 +106,7 @@ rtems_status_code rtems_capture_user_extension_open(void);
  * @retval This method returns RTEMS_SUCCESSFUL upon a successful
  * delete of the user extensions.
  */
-rtems_status_code rtems_capture_user_extension_close(void);
+rtems_status_code rtems_capture_user_extension_close( void );
 
 /**
  * @brief Capture check trigger.
@@ -121,9 +121,11 @@ rtems_status_code rtems_capture_user_extension_close(void);
  * @retval This method returns true if we have triggered or
  * if the event is a cause of a trigger.
  */
-bool rtems_capture_trigger_fired (rtems_tcb* ft,
-                                  rtems_tcb* tt,
-                                  uint32_t   events);
+bool rtems_capture_trigger_fired(
+  rtems_tcb *ft,
+  rtems_tcb *tt,
+  uint32_t   events
+);
 
 /**
  * @brief Capture print trace records.
@@ -135,7 +137,7 @@ bool rtems_capture_trigger_fired (rtems_tcb* ft,
  * @param[in] total specifies the number of records to print
  * @param[in] csv specifies a comma seperated value format
  */
-void rtems_capture_print_trace_records ( int total, bool csv );
+void rtems_capture_print_trace_records( int total, bool csv );
 
 /**
  * @brief Capture print timestamp.
@@ -144,7 +146,7 @@ void rtems_capture_print_trace_records ( int total, bool csv );
  *
  * @param[in] uptime specifies the timestamp to print
  */
-void rtems_capture_print_timestamp (uint64_t uptime);
+void rtems_capture_print_timestamp( uint64_t uptime );
 
 /**
  * @brief Capture print record task.
@@ -156,9 +158,11 @@ void rtems_capture_print_timestamp (uint64_t uptime);
  * @param[in] cpu specifies the cpu the cpu the record was logged on.
  * @param[in] rec specifies the task record.
  */
-void rtems_capture_print_record_task(int                              cpu,
-                                     const rtems_capture_record*      rec,
-                                     const rtems_capture_task_record* task_rec);
+void rtems_capture_print_record_task(
+  int                              cpu,
+  const rtems_capture_record      *rec,
+  const rtems_capture_task_record *task_rec
+);
 
 /**
  * @brief Capture print capture record.
@@ -172,17 +176,19 @@ void rtems_capture_print_record_task(int                              cpu,
  * @param[in] name specifies the name of the task, NULL if none.
  * @param[in] task_count number of tasks to search for.
  */
-void rtems_capture_print_record_capture(int                         cpu,
-                                        const rtems_capture_record* rec,
-                                        uint64_t                    diff,
-                                        const rtems_name*           name);
+void rtems_capture_print_record_capture(
+  int                         cpu,
+  const rtems_capture_record *rec,
+  uint64_t                    diff,
+  const rtems_name           *name
+);
 
 /**
  * @brief Capture print watch list
  *
  * This function  prints a capture watch list
  */
-void rtems_capture_print_watch_list (void);
+void rtems_capture_print_watch_list( void );
 
 #ifdef __cplusplus
 }

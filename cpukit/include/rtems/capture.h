@@ -59,24 +59,24 @@ extern "C" {
 /*
  * Global capture flags.
  */
-#define RTEMS_CAPTURE_INIT           (1u << 0)
-#define RTEMS_CAPTURE_ON             (1U << 1)
-#define RTEMS_CAPTURE_NO_MEMORY      (1U << 2)
-#define RTEMS_CAPTURE_TRIGGERED      (1U << 3)
-#define RTEMS_CAPTURE_GLOBAL_WATCH   (1U << 4)
-#define RTEMS_CAPTURE_ONLY_MONITOR   (1U << 5)
+#define RTEMS_CAPTURE_INIT         ( 1u << 0 )
+#define RTEMS_CAPTURE_ON           ( 1U << 1 )
+#define RTEMS_CAPTURE_NO_MEMORY    ( 1U << 2 )
+#define RTEMS_CAPTURE_TRIGGERED    ( 1U << 3 )
+#define RTEMS_CAPTURE_GLOBAL_WATCH ( 1U << 4 )
+#define RTEMS_CAPTURE_ONLY_MONITOR ( 1U << 5 )
 
 /*
  * Per-CPU capture flags.
  */
-#define RTEMS_CAPTURE_OVERFLOW       (1U << 0)
-#define RTEMS_CAPTURE_READER_ACTIVE  (1U << 1)
-#define RTEMS_CAPTURE_READER_WAITING (1U << 2)
+#define RTEMS_CAPTURE_OVERFLOW       ( 1U << 0 )
+#define RTEMS_CAPTURE_READER_ACTIVE  ( 1U << 1 )
+#define RTEMS_CAPTURE_READER_WAITING ( 1U << 2 )
 
 /**
  * The number of tasks in a trigger group.
  */
-#define RTEMS_CAPTURE_TRIGGER_TASKS (32)
+#define RTEMS_CAPTURE_TRIGGER_TASKS ( 32 )
 
 /**
  * @brief A capture timestamp.
@@ -94,8 +94,7 @@ typedef uint64_t rtems_capture_time;
  * will only be a from type trigger if the flags in the control
  * structure has the specific *_BY bit set.
  */
-typedef struct rtems_capture_from
-{
+typedef struct rtems_capture_from {
   rtems_name name;
   rtems_id   id;
   uint32_t   trigger;
@@ -112,8 +111,7 @@ typedef struct rtems_capture_from
  * caused BY the task listed TO this task. The by_valid flag which entries
  * in by are valid.
  */
-typedef struct rtems_capture_control
-{
+typedef struct rtems_capture_control {
   rtems_name                    name;
   rtems_id                      id;
   uint32_t                      flags;
@@ -121,53 +119,48 @@ typedef struct rtems_capture_control
   uint32_t                      from_triggers;
   uint32_t                      by_triggers;
   uint32_t                      by_valid;
-  rtems_capture_from            by[RTEMS_CAPTURE_TRIGGER_TASKS];
-  struct rtems_capture_control* next;
+  rtems_capture_from            by[ RTEMS_CAPTURE_TRIGGER_TASKS ];
+  struct rtems_capture_control *next;
 } rtems_capture_control;
 
 /**
  * The from_valid mask.
  */
-#define RTEMS_CAPTURE_CONTROL_FROM_MASK(_s) \
- (UINT32_C(1) << (RTEMS_CAPTURE_TRIGGER_TASKS - ((_s) + 1)))
+#define RTEMS_CAPTURE_CONTROL_FROM_MASK( _s ) \
+  ( UINT32_C( 1 ) << ( RTEMS_CAPTURE_TRIGGER_TASKS - ( ( _s ) + 1 ) ) )
 
 /**
  * Control flags.
  */
-#define RTEMS_CAPTURE_WATCH         (1U << 0)
+#define RTEMS_CAPTURE_WATCH ( 1U << 0 )
 
 /**
  * Control triggers.
  */
-#define RTEMS_CAPTURE_SWITCH        (1 << 0)
-#define RTEMS_CAPTURE_CREATE        (1 << 1)
-#define RTEMS_CAPTURE_START         (1 << 2)
-#define RTEMS_CAPTURE_RESTART       (1 << 3)
-#define RTEMS_CAPTURE_DELETE        (1 << 4)
-#define RTEMS_CAPTURE_BEGIN         (1 << 5)
-#define RTEMS_CAPTURE_EXITTED       (1 << 6)
-#define RTEMS_CAPTURE_TERMINATED    (1 << 7)
+#define RTEMS_CAPTURE_SWITCH     ( 1 << 0 )
+#define RTEMS_CAPTURE_CREATE     ( 1 << 1 )
+#define RTEMS_CAPTURE_START      ( 1 << 2 )
+#define RTEMS_CAPTURE_RESTART    ( 1 << 3 )
+#define RTEMS_CAPTURE_DELETE     ( 1 << 4 )
+#define RTEMS_CAPTURE_BEGIN      ( 1 << 5 )
+#define RTEMS_CAPTURE_EXITTED    ( 1 << 6 )
+#define RTEMS_CAPTURE_TERMINATED ( 1 << 7 )
 
-#define RTEMS_CAPTURE_FROM_TRIGS    (RTEMS_CAPTURE_SWITCH  | \
-                                     RTEMS_CAPTURE_CREATE | \
-                                     RTEMS_CAPTURE_START | \
-                                     RTEMS_CAPTURE_RESTART | \
-                                     RTEMS_CAPTURE_DELETE)
+#define RTEMS_CAPTURE_FROM_TRIGS                                        \
+  ( RTEMS_CAPTURE_SWITCH | RTEMS_CAPTURE_CREATE | RTEMS_CAPTURE_START | \
+    RTEMS_CAPTURE_RESTART | RTEMS_CAPTURE_DELETE )
 
-#define RTEMS_CAPTURE_TO_TRIGS      (RTEMS_CAPTURE_SWITCH | \
-                                     RTEMS_CAPTURE_CREATE | \
-                                     RTEMS_CAPTURE_START | \
-                                     RTEMS_CAPTURE_RESTART | \
-                                     RTEMS_CAPTURE_DELETE | \
-                                     RTEMS_CAPTURE_BEGIN | \
-                                     RTEMS_CAPTURE_EXITTED)
+#define RTEMS_CAPTURE_TO_TRIGS                                           \
+  ( RTEMS_CAPTURE_SWITCH | RTEMS_CAPTURE_CREATE | RTEMS_CAPTURE_START |  \
+    RTEMS_CAPTURE_RESTART | RTEMS_CAPTURE_DELETE | RTEMS_CAPTURE_BEGIN | \
+    RTEMS_CAPTURE_EXITTED )
 
 /**
  * Task flags.
  */
-#define RTEMS_CAPTURE_TRACED      (1U << 0)
-#define RTEMS_CAPTURE_INIT_TASK   (1U << 1)
-#define RTEMS_CAPTURE_RECORD_TASK (1U << 2)
+#define RTEMS_CAPTURE_TRACED      ( 1U << 0 )
+#define RTEMS_CAPTURE_INIT_TASK   ( 1U << 1 )
+#define RTEMS_CAPTURE_RECORD_TASK ( 1U << 2 )
 
 /*
  * @brief Capture record.
@@ -176,8 +169,7 @@ typedef struct rtems_capture_control
  * the buffer. The events includes the priority of the task
  * at the time of the context switch.
  */
-typedef struct rtems_capture_record
-{
+typedef struct rtems_capture_record {
   size_t             size;
   uint32_t           events;
   rtems_id           task_id;
@@ -191,8 +183,7 @@ typedef struct rtems_capture_record
  * the buffer. The events includes the priority of the task
  * at the time of the context switch.
  */
-typedef struct rtems_capture_task_record
-{
+typedef struct rtems_capture_task_record {
   rtems_name          name;
   rtems_task_priority start_priority;
   uint32_t            stack_size;
@@ -201,34 +192,33 @@ typedef struct rtems_capture_task_record
 /**
  * The capture record event flags.
  */
-#define RTEMS_CAPTURE_REAL_PRI_EVENT_MASK UINT32_C (0x000000ff)
-#define RTEMS_CAPTURE_CURR_PRI_EVENT_MASK UINT32_C (0x0000ff00)
-#define RTEMS_CAPTURE_REAL_PRIORITY_EVENT (0)
-#define RTEMS_CAPTURE_CURR_PRIORITY_EVENT (8)
-#define RTEMS_CAPTURE_EVENT_START         (16)
-#define RTEMS_CAPTURE_CREATED_BY_EVENT    UINT32_C (0x00010000)
-#define RTEMS_CAPTURE_CREATED_EVENT       UINT32_C (0x00020000)
-#define RTEMS_CAPTURE_STARTED_BY_EVENT    UINT32_C (0x00040000)
-#define RTEMS_CAPTURE_STARTED_EVENT       UINT32_C (0x00080000)
-#define RTEMS_CAPTURE_RESTARTED_BY_EVENT  UINT32_C (0x00100000)
-#define RTEMS_CAPTURE_RESTARTED_EVENT     UINT32_C (0x00200000)
-#define RTEMS_CAPTURE_DELETED_BY_EVENT    UINT32_C (0x00400000)
-#define RTEMS_CAPTURE_DELETED_EVENT       UINT32_C (0x00800000)
-#define RTEMS_CAPTURE_TERMINATED_EVENT    UINT32_C (0x01000000)
-#define RTEMS_CAPTURE_BEGIN_EVENT         UINT32_C (0x02000000)
-#define RTEMS_CAPTURE_EXITTED_EVENT       UINT32_C (0x04000000)
-#define RTEMS_CAPTURE_SWITCHED_OUT_EVENT  UINT32_C (0x08000000)
-#define RTEMS_CAPTURE_SWITCHED_IN_EVENT   UINT32_C (0x10000000)
-#define RTEMS_CAPTURE_TIMESTAMP           UINT32_C (0x20000000)
-#define RTEMS_CAPTURE_EVENT_END           (29)
+#define RTEMS_CAPTURE_REAL_PRI_EVENT_MASK UINT32_C( 0x000000ff )
+#define RTEMS_CAPTURE_CURR_PRI_EVENT_MASK UINT32_C( 0x0000ff00 )
+#define RTEMS_CAPTURE_REAL_PRIORITY_EVENT ( 0 )
+#define RTEMS_CAPTURE_CURR_PRIORITY_EVENT ( 8 )
+#define RTEMS_CAPTURE_EVENT_START         ( 16 )
+#define RTEMS_CAPTURE_CREATED_BY_EVENT    UINT32_C( 0x00010000 )
+#define RTEMS_CAPTURE_CREATED_EVENT       UINT32_C( 0x00020000 )
+#define RTEMS_CAPTURE_STARTED_BY_EVENT    UINT32_C( 0x00040000 )
+#define RTEMS_CAPTURE_STARTED_EVENT       UINT32_C( 0x00080000 )
+#define RTEMS_CAPTURE_RESTARTED_BY_EVENT  UINT32_C( 0x00100000 )
+#define RTEMS_CAPTURE_RESTARTED_EVENT     UINT32_C( 0x00200000 )
+#define RTEMS_CAPTURE_DELETED_BY_EVENT    UINT32_C( 0x00400000 )
+#define RTEMS_CAPTURE_DELETED_EVENT       UINT32_C( 0x00800000 )
+#define RTEMS_CAPTURE_TERMINATED_EVENT    UINT32_C( 0x01000000 )
+#define RTEMS_CAPTURE_BEGIN_EVENT         UINT32_C( 0x02000000 )
+#define RTEMS_CAPTURE_EXITTED_EVENT       UINT32_C( 0x04000000 )
+#define RTEMS_CAPTURE_SWITCHED_OUT_EVENT  UINT32_C( 0x08000000 )
+#define RTEMS_CAPTURE_SWITCHED_IN_EVENT   UINT32_C( 0x10000000 )
+#define RTEMS_CAPTURE_TIMESTAMP           UINT32_C( 0x20000000 )
+#define RTEMS_CAPTURE_EVENT_END           ( 29 )
 
 /**
  * @brief Capture trigger modes
  *
  * The types of trigger modes that exist.
  */
-typedef enum rtems_capture_trigger_mode
-{
+typedef enum rtems_capture_trigger_mode {
   rtems_capture_to_any,
   rtems_capture_from_any,
   rtems_capture_from_to
@@ -239,8 +229,7 @@ typedef enum rtems_capture_trigger_mode
  *
  * The types of triggers that exist.
  */
-typedef enum rtems_capture_trigger
-{
+typedef enum rtems_capture_trigger {
   rtems_capture_switch,
   rtems_capture_create,
   rtems_capture_start,
@@ -259,7 +248,7 @@ typedef enum rtems_capture_trigger
  *
  */
 
-typedef void (*rtems_capture_timestamp)(rtems_capture_time* time);
+typedef void ( *rtems_capture_timestamp )( rtems_capture_time *time );
 
 /**
  * @brief Capture record lock context.
@@ -276,7 +265,7 @@ typedef void (*rtems_capture_timestamp)(rtems_capture_time* time);
  */
 typedef struct {
   rtems_interrupt_lock_context lock_context;
-  rtems_interrupt_lock*        lock;
+  rtems_interrupt_lock        *lock;
 } rtems_capture_record_lock_context;
 
 /**
@@ -295,8 +284,10 @@ typedef struct {
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code rtems_capture_open (uint32_t                size,
-                                      rtems_capture_timestamp timestamp);
+rtems_status_code rtems_capture_open(
+  uint32_t                size,
+  rtems_capture_timestamp timestamp
+);
 
 /**
  * @brief Capture close
@@ -308,7 +299,7 @@ rtems_status_code rtems_capture_open (uint32_t                size,
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code rtems_capture_close (void);
+rtems_status_code rtems_capture_close( void );
 
 /**
  * @brief Capture control trace enable/disable.
@@ -321,7 +312,7 @@ rtems_status_code rtems_capture_close (void);
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code rtems_capture_set_control (bool enable);
+rtems_status_code rtems_capture_set_control( bool enable );
 
 /**
  * @brief Capture monitor enable/disable.
@@ -336,7 +327,7 @@ rtems_status_code rtems_capture_set_control (bool enable);
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code rtems_capture_set_monitor (bool enable);
+rtems_status_code rtems_capture_set_monitor( bool enable );
 
 /*
  * @brief Capture flush trace buffer.
@@ -350,7 +341,7 @@ rtems_status_code rtems_capture_set_monitor (bool enable);
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code rtems_capture_flush (bool prime);
+rtems_status_code rtems_capture_flush( bool prime );
 
 /**
  * @brief Capture add watch
@@ -367,7 +358,7 @@ rtems_status_code rtems_capture_flush (bool prime);
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code rtems_capture_watch_add (rtems_name name, rtems_id id);
+rtems_status_code rtems_capture_watch_add( rtems_name name, rtems_id id );
 
 /**
  * @brief Capture delete watch.
@@ -383,7 +374,7 @@ rtems_status_code rtems_capture_watch_add (rtems_name name, rtems_id id);
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code rtems_capture_watch_del (rtems_name name, rtems_id id);
+rtems_status_code rtems_capture_watch_del( rtems_name name, rtems_id id );
 
 /**
  * @brief Capture enable/disable watch.
@@ -399,9 +390,11 @@ rtems_status_code rtems_capture_watch_del (rtems_name name, rtems_id id);
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code rtems_capture_watch_ctrl (rtems_name name,
-                                            rtems_id   id,
-                                            bool       enable);
+rtems_status_code rtems_capture_watch_ctrl(
+  rtems_name name,
+  rtems_id   id,
+  bool       enable
+);
 
 /**
  * @brief Capture enable/disable global watch.
@@ -416,7 +409,7 @@ rtems_status_code rtems_capture_watch_ctrl (rtems_name name,
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code rtems_capture_watch_global (bool enable);
+rtems_status_code rtems_capture_watch_global( bool enable );
 
 /**
  * @brief Get global watch state
@@ -426,7 +419,7 @@ rtems_status_code rtems_capture_watch_global (bool enable);
  * @retval This method returns true  if the global watch
  *         is on.  Otherwise, it returns false.
  */
-bool rtems_capture_watch_global_on (void);
+bool rtems_capture_watch_global_on( void );
 
 /**
  * @brief Set watch ceiling.
@@ -443,7 +436,7 @@ bool rtems_capture_watch_global_on (void);
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code rtems_capture_watch_ceiling (rtems_task_priority ceiling);
+rtems_status_code rtems_capture_watch_ceiling( rtems_task_priority ceiling );
 
 /**
  * @brief Get watch ceiling.
@@ -453,7 +446,7 @@ rtems_status_code rtems_capture_watch_ceiling (rtems_task_priority ceiling);
  * @retval The priority level immediately above that at which events
  *         from tasks are not captured.
  */
-rtems_task_priority rtems_capture_watch_get_ceiling (void);
+rtems_task_priority rtems_capture_watch_get_ceiling( void );
 
 /**
  * @brief Capture set watch floor.
@@ -470,7 +463,7 @@ rtems_task_priority rtems_capture_watch_get_ceiling (void);
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code rtems_capture_watch_floor (rtems_task_priority floor);
+rtems_status_code rtems_capture_watch_floor( rtems_task_priority floor );
 
 /**
  * @brief Capture set watch floor
@@ -480,7 +473,7 @@ rtems_status_code rtems_capture_watch_floor (rtems_task_priority floor);
  * @retval The priority level immediately below
  *     that at which events from tasks are not captured.
  */
-rtems_task_priority rtems_capture_watch_get_floor (void);
+rtems_task_priority rtems_capture_watch_get_floor( void );
 
 /**
  * @brief Capture set trigger
@@ -510,13 +503,14 @@ rtems_task_priority rtems_capture_watch_get_floor (void);
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code
-rtems_capture_set_trigger (rtems_name                 from_name,
-                           rtems_id                   from_id,
-                           rtems_name                 to_name,
-                           rtems_id                   to_id,
-                           rtems_capture_trigger_mode mode,
-                           rtems_capture_trigger      trigger);
+rtems_status_code rtems_capture_set_trigger(
+  rtems_name                 from_name,
+  rtems_id                   from_id,
+  rtems_name                 to_name,
+  rtems_id                   to_id,
+  rtems_capture_trigger_mode mode,
+  rtems_capture_trigger      trigger
+);
 
 /**
  * @brief Capture clear trigger.
@@ -536,13 +530,14 @@ rtems_capture_set_trigger (rtems_name                 from_name,
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code
-rtems_capture_clear_trigger (rtems_name                 from_name,
-                             rtems_id                   from_id,
-                             rtems_name                 to_name,
-                             rtems_id                   to_id,
-                             rtems_capture_trigger_mode mode,
-                             rtems_capture_trigger      trigger);
+rtems_status_code rtems_capture_clear_trigger(
+  rtems_name                 from_name,
+  rtems_id                   from_id,
+  rtems_name                 to_name,
+  rtems_id                   to_id,
+  rtems_capture_trigger_mode mode,
+  rtems_capture_trigger      trigger
+);
 
 /**
  * @brief Capture read records from capture buffer
@@ -568,9 +563,11 @@ rtems_capture_clear_trigger (rtems_name                 from_name,
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code rtems_capture_read (uint32_t     cpu,
-                                      size_t*      read,
-                                      const void** recs);
+rtems_status_code rtems_capture_read(
+  uint32_t     cpu,
+  size_t      *read,
+  const void **recs
+);
 
 /**
  * @brief Capture release records.
@@ -584,7 +581,7 @@ rtems_status_code rtems_capture_read (uint32_t     cpu,
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code rtems_capture_release (uint32_t cpu, uint32_t count);
+rtems_status_code rtems_capture_release( uint32_t cpu, uint32_t count );
 
 /**
  * @brief Capture filter
@@ -598,7 +595,7 @@ rtems_status_code rtems_capture_release (uint32_t cpu, uint32_t count);
  * @retval This method returns true if this data should be filtered from the
  *         log. It returns false if this data should be logged.
  */
-bool rtems_capture_filter (rtems_tcb* task, uint32_t events);
+bool rtems_capture_filter( rtems_tcb *task, uint32_t events );
 
 /**
  * @brief Capture returns the current time.
@@ -611,7 +608,7 @@ bool rtems_capture_filter (rtems_tcb* task, uint32_t events);
  * @retval This method returns a nano-second time if no user handler
  * is provided.  Otherwise, it returns a resolution defined by the handler.
  */
-void rtems_capture_get_time (rtems_capture_time* time);
+void rtems_capture_get_time( rtems_capture_time *time );
 
 /**
  * @brief Capture get event text.
@@ -624,7 +621,7 @@ void rtems_capture_get_time (rtems_capture_time* time);
  *
  * @retval This method returns a string description of the given event.
  */
-const char* rtems_capture_event_text (int event);
+const char *rtems_capture_event_text( int event );
 
 /**
  * @brief Capture initialize task
@@ -633,7 +630,7 @@ const char* rtems_capture_event_text (int event);
  *
  * @param[in] tcb is the task control block for the task
  */
-void rtems_capture_initialize_task (rtems_tcb* tcb);
+void rtems_capture_initialize_task( rtems_tcb *tcb );
 
 /**
  * @brief Capture record task.
@@ -642,7 +639,7 @@ void rtems_capture_initialize_task (rtems_tcb* tcb);
  *
  * @param[in] tcb is the task control block for the task
  */
-void rtems_capture_record_task (rtems_tcb* tcb);
+void rtems_capture_record_task( rtems_tcb *tcb );
 
 /**
  * @brief Capture record lock.
@@ -652,7 +649,7 @@ void rtems_capture_record_task (rtems_tcb* tcb);
  *
  * @param[out] context specifies the record context
  */
-void rtems_capture_record_lock (rtems_capture_record_lock_context* context);
+void rtems_capture_record_lock( rtems_capture_record_lock_context *context );
 
 /**
  * @brief Capture record unlock.
@@ -661,7 +658,7 @@ void rtems_capture_record_lock (rtems_capture_record_lock_context* context);
  *
  * @param[in] context specifies the record context
  */
-void rtems_capture_record_unlock (rtems_capture_record_lock_context* context);
+void rtems_capture_record_unlock( rtems_capture_record_lock_context *context );
 
 /**
  * @brief Capture record open.
@@ -679,10 +676,12 @@ void rtems_capture_record_unlock (rtems_capture_record_lock_context* context);
  * @retval This method returns a pointer to the next location in
  * the capture record to store data.
  */
-void* rtems_capture_record_open (rtems_tcb*                         task,
-                                 uint32_t                           events,
-                                 size_t                             size,
-                                 rtems_capture_record_lock_context* context);
+void *rtems_capture_record_open(
+  rtems_tcb                         *task,
+  uint32_t                           events,
+  size_t                             size,
+  rtems_capture_record_lock_context *context
+);
 
 /**
  * @brief Capture record close.
@@ -692,7 +691,7 @@ void* rtems_capture_record_open (rtems_tcb*                         task,
  *
  * @param[out] context specifies the record context
  */
-void rtems_capture_record_close (rtems_capture_record_lock_context* context);
+void rtems_capture_record_close( rtems_capture_record_lock_context *context );
 
 /**
  * @brief Capture append to record to the per CPU buffer.
@@ -705,11 +704,14 @@ void rtems_capture_record_close (rtems_capture_record_lock_context* context);
  *
  * @retval This method returns the next write point in the capture record.
  */
-static inline void*
-rtems_capture_record_append (void* rec, const void* data, size_t size)
+static inline void *rtems_capture_record_append(
+  void       *rec,
+  const void *data,
+  size_t      size
+)
 {
-  memcpy (rec, data, size);
-  return ((uint8_t*) rec) + size;
+  memcpy( rec, data, size );
+  return ( (uint8_t *) rec ) + size;
 }
 
 /**
@@ -723,11 +725,14 @@ rtems_capture_record_append (void* rec, const void* data, size_t size)
  *
  * @retval This method returns the next write point in the capture record.
  */
-static inline void*
-rtems_capture_record_extract (const void* rec, void* data, size_t size)
+static inline void *rtems_capture_record_extract(
+  const void *rec,
+  void       *data,
+  size_t      size
+)
 {
-  memcpy (data, rec, size);
-  return ((uint8_t*) rec) + size;
+  memcpy( data, rec, size );
+  return ( (uint8_t *) rec ) + size;
 }
 
 /**
@@ -738,8 +743,9 @@ rtems_capture_record_extract (const void* rec, void* data, size_t size)
  *
  * @param[in] tcb is the task control block for the task
  */
-static inline bool rtems_capture_task_recorded (rtems_tcb* tcb) {
-  return ((tcb->Capture.flags & RTEMS_CAPTURE_RECORD_TASK) != 0);
+static inline bool rtems_capture_task_recorded( rtems_tcb *tcb )
+{
+  return ( ( tcb->Capture.flags & RTEMS_CAPTURE_RECORD_TASK ) != 0 );
 }
 
 /**
@@ -750,8 +756,9 @@ static inline bool rtems_capture_task_recorded (rtems_tcb* tcb) {
  *
  * @param[in] tcb is the task control block for the task
  */
-static inline bool rtems_capture_task_initialized (rtems_tcb* tcb) {
-  return ((tcb->Capture.flags & RTEMS_CAPTURE_INIT_TASK) != 0);
+static inline bool rtems_capture_task_initialized( rtems_tcb *tcb )
+{
+  return ( ( tcb->Capture.flags & RTEMS_CAPTURE_INIT_TASK ) != 0 );
 }
 
 /**
@@ -763,8 +770,7 @@ static inline bool rtems_capture_task_initialized (rtems_tcb* tcb) {
  *
  * @retval This function returns the task id.
  */
-static inline rtems_id
-rtems_capture_task_id (rtems_tcb* tcb)
+static inline rtems_id rtems_capture_task_id( rtems_tcb *tcb )
 {
   return tcb->Object.id;
 }
@@ -778,10 +784,9 @@ rtems_capture_task_id (rtems_tcb* tcb)
  *
  * @retval This function returns the task API as an int.
  */
-static inline int
-rtems_capture_task_api (rtems_id id)
+static inline int rtems_capture_task_api( rtems_id id )
 {
-  return _Objects_Get_API (id);
+  return _Objects_Get_API( id );
 }
 
 /**
@@ -793,11 +798,11 @@ rtems_capture_task_api (rtems_id id)
  *
  * @retval This function returns the task state.
  */
-static inline States_Control
-rtems_capture_task_state (rtems_tcb* tcb)
+static inline States_Control rtems_capture_task_state( rtems_tcb *tcb )
 {
-  if (tcb)
+  if ( tcb ) {
     return tcb->current_state;
+  }
   return 0;
 }
 
@@ -810,10 +815,9 @@ rtems_capture_task_state (rtems_tcb* tcb)
  *
  * @retval This function returns the task name.
  */
-static inline rtems_name
-rtems_capture_task_name (rtems_tcb* tcb)
+static inline rtems_name rtems_capture_task_name( rtems_tcb *tcb )
 {
-  rtems_name  name;
+  rtems_name name;
   rtems_object_get_classic_name( tcb->Object.id, &name );
   return name;
 }
@@ -827,8 +831,7 @@ rtems_capture_task_name (rtems_tcb* tcb)
  *
  * @retval This function returns the task flags.
  */
-static inline uint32_t
-rtems_capture_task_flags (rtems_tcb* tcb)
+static inline uint32_t rtems_capture_task_flags( rtems_tcb *tcb )
 {
   return tcb->Capture.flags;
 }
@@ -842,10 +845,11 @@ rtems_capture_task_flags (rtems_tcb* tcb)
  *
  * @retval This function returns the task control if present.
  */
-static inline rtems_capture_control*
-rtems_capture_task_control (rtems_tcb* tcb)
+static inline rtems_capture_control *rtems_capture_task_control(
+  rtems_tcb *tcb
+)
 {
-  return (rtems_capture_control*) tcb->Capture.control;
+  return (rtems_capture_control *) tcb->Capture.control;
 }
 
 /**
@@ -857,12 +861,12 @@ rtems_capture_task_control (rtems_tcb* tcb)
  *
  * @retval This function returns the task control flags if a control is present.
  */
-static inline uint32_t
-rtems_capture_task_control_flags (rtems_tcb* tcb)
+static inline uint32_t rtems_capture_task_control_flags( rtems_tcb *tcb )
 {
-  rtems_capture_control*  control = rtems_capture_task_control (tcb);
-  if (!control)
+  rtems_capture_control *control = rtems_capture_task_control( tcb );
+  if ( !control ) {
     return 0;
+  }
   return control->flags;
 }
 
@@ -877,11 +881,14 @@ rtems_capture_task_control_flags (rtems_tcb* tcb)
  * @retval This function returns the tasks start priority. The tracer needs this
  * to track where the task's priority goes.
  */
-static inline rtems_task_priority
-rtems_capture_task_start_priority (rtems_tcb* tcb)
+static inline rtems_task_priority rtems_capture_task_start_priority(
+  rtems_tcb *tcb
+)
 {
-  return _RTEMS_Priority_From_core (_Thread_Scheduler_get_home( tcb ),
-                                    tcb->Start.initial_priority);
+  return _RTEMS_Priority_From_core(
+    _Thread_Scheduler_get_home( tcb ),
+    tcb->Start.initial_priority
+  );
 }
 
 /**
@@ -893,10 +900,11 @@ rtems_capture_task_start_priority (rtems_tcb* tcb)
  *
  * @retval This function returns the tasks real priority.
  */
-static inline rtems_task_priority
-rtems_capture_task_real_priority (rtems_tcb* tcb)
+static inline rtems_task_priority rtems_capture_task_real_priority(
+  rtems_tcb *tcb
+)
 {
-  return _Thread_Get_unmapped_real_priority (tcb);
+  return _Thread_Get_unmapped_real_priority( tcb );
 }
 
 /**
@@ -908,10 +916,11 @@ rtems_capture_task_real_priority (rtems_tcb* tcb)
  *
  * @retval This function returns the tasks current priority.
  */
-static inline rtems_task_priority
-rtems_capture_task_curr_priority (rtems_tcb* tcb)
+static inline rtems_task_priority rtems_capture_task_curr_priority(
+  rtems_tcb *tcb
+)
 {
-  return _Thread_Get_unmapped_priority (tcb);
+  return _Thread_Get_unmapped_priority( tcb );
 }
 
 /**
@@ -923,8 +932,7 @@ rtems_capture_task_curr_priority (rtems_tcb* tcb)
  * @retval This function returns the head of the list of controls in the
  * capture engine.
  */
-rtems_capture_control*
-rtems_capture_get_control_list (void);
+rtems_capture_control *rtems_capture_get_control_list( void );
 
 /**
  * @brief Capture get next capture control.
@@ -937,8 +945,9 @@ rtems_capture_get_control_list (void);
  * @retval This function returns the pointer to the next control in the list. The
  * pointer NULL terminates the list.
  */
-static inline rtems_capture_control*
-rtems_capture_next_control (rtems_capture_control* control)
+static inline rtems_capture_control *rtems_capture_next_control(
+  rtems_capture_control *control
+)
 {
   return control->next;
 }
@@ -952,8 +961,9 @@ rtems_capture_next_control (rtems_capture_control* control)
  *
  * @retval This function returns the control id.
  */
-static inline rtems_id
-rtems_capture_control_id (rtems_capture_control* control)
+static inline rtems_id rtems_capture_control_id(
+  rtems_capture_control *control
+)
 {
   return control->id;
 }
@@ -967,8 +977,9 @@ rtems_capture_control_id (rtems_capture_control* control)
  *
  * @retval This function returns the control name.
  */
-static inline rtems_name
-rtems_capture_control_name (rtems_capture_control* control)
+static inline rtems_name rtems_capture_control_name(
+  rtems_capture_control *control
+)
 {
   return control->name;
 }
@@ -982,8 +993,9 @@ rtems_capture_control_name (rtems_capture_control* control)
  *
  * @retval This function returns the control flags.
  */
-static inline uint32_t
-rtems_capture_control_flags (rtems_capture_control* control)
+static inline uint32_t rtems_capture_control_flags(
+  rtems_capture_control *control
+)
 {
   return control->flags;
 }
@@ -997,8 +1009,9 @@ rtems_capture_control_flags (rtems_capture_control* control)
  *
  * @retval This function returns the task control to triggers.
  */
-static inline uint32_t
-rtems_capture_control_to_triggers (rtems_capture_control* control)
+static inline uint32_t rtems_capture_control_to_triggers(
+  rtems_capture_control *control
+)
 {
   return control->to_triggers;
 }
@@ -1012,8 +1025,9 @@ rtems_capture_control_to_triggers (rtems_capture_control* control)
  *
  * @retval This function returns the task control from triggers.
  */
-static inline uint32_t
-rtems_capture_control_from_triggers (rtems_capture_control* control)
+static inline uint32_t rtems_capture_control_from_triggers(
+  rtems_capture_control *control
+)
 {
   return control->from_triggers;
 }
@@ -1027,8 +1041,9 @@ rtems_capture_control_from_triggers (rtems_capture_control* control)
  *
  * @retval This function returns the task control by triggers.
  */
-static inline uint32_t
-rtems_capture_control_all_by_triggers (rtems_capture_control* control)
+static inline uint32_t rtems_capture_control_all_by_triggers(
+  rtems_capture_control *control
+)
 {
   return control->by_triggers;
 }
@@ -1043,10 +1058,12 @@ rtems_capture_control_all_by_triggers (rtems_capture_control* control)
  *
  * @retval This function returns the control valid BY flags.
  */
-static inline int
-rtems_capture_control_by_valid (rtems_capture_control* control, int slot)
+static inline int rtems_capture_control_by_valid(
+  rtems_capture_control *control,
+  int                    slot
+)
 {
-  return control->by_valid & RTEMS_CAPTURE_CONTROL_FROM_MASK (slot);
+  return control->by_valid & RTEMS_CAPTURE_CONTROL_FROM_MASK( slot );
 }
 
 /**
@@ -1059,12 +1076,15 @@ rtems_capture_control_by_valid (rtems_capture_control* control, int slot)
  *
  * @retval This function returns the control @a by task name.
  */
-static inline rtems_name
-rtems_capture_control_by_name (rtems_capture_control* control, int by)
+static inline rtems_name rtems_capture_control_by_name(
+  rtems_capture_control *control,
+  int                    by
+)
 {
-  if (by < RTEMS_CAPTURE_TRIGGER_TASKS)
-    return control->by[by].name;
-  return control->by[0].name;
+  if ( by < RTEMS_CAPTURE_TRIGGER_TASKS ) {
+    return control->by[ by ].name;
+  }
+  return control->by[ 0 ].name;
 }
 
 /**
@@ -1074,12 +1094,15 @@ rtems_capture_control_by_name (rtems_capture_control* control, int by)
  *
  * @retval This function returns the control @a by task id.
  */
-static inline rtems_id
-rtems_capture_control_by_id (rtems_capture_control* control, int by)
+static inline rtems_id rtems_capture_control_by_id(
+  rtems_capture_control *control,
+  int                    by
+)
 {
-  if (by < RTEMS_CAPTURE_TRIGGER_TASKS)
-    return control->by[by].id;
-  return control->by[0].id;
+  if ( by < RTEMS_CAPTURE_TRIGGER_TASKS ) {
+    return control->by[ by ].id;
+  }
+  return control->by[ 0 ].id;
 }
 
 /**
@@ -1089,13 +1112,15 @@ rtems_capture_control_by_id (rtems_capture_control* control, int by)
  *
  * @retval This function returns the control @a by task triggers.
  */
-static inline uint32_t
-rtems_capture_control_by_triggers (rtems_capture_control* control,
-                                   int                      by)
+static inline uint32_t rtems_capture_control_by_triggers(
+  rtems_capture_control *control,
+  int                    by
+)
 {
-  if (by < RTEMS_CAPTURE_TRIGGER_TASKS)
-    return control->by[by].trigger;
-  return control->by[0].trigger;
+  if ( by < RTEMS_CAPTURE_TRIGGER_TASKS ) {
+    return control->by[ by ].trigger;
+  }
+  return control->by[ 0 ].trigger;
 }
 
 /**
@@ -1107,16 +1132,14 @@ rtems_capture_control_by_triggers (rtems_capture_control* control,
  * @retval This function returns the number of controls the capture
  * engine has.
  */
-static inline uint32_t
-rtems_capture_control_count (void)
+static inline uint32_t rtems_capture_control_count( void )
 {
-  rtems_capture_control* control = rtems_capture_get_control_list ();
+  rtems_capture_control *control = rtems_capture_get_control_list();
   uint32_t               count = 0;
 
-  while (control)
-  {
+  while ( control ) {
     count++;
-    control = rtems_capture_next_control (control);
+    control = rtems_capture_next_control( control );
   }
 
   return count;
