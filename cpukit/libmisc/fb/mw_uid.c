@@ -27,8 +27,8 @@
 #include <rtems/mw_uid.h>
 #include <rtems/seterr.h>
 
-static rtems_id  queue_id = 0;
-static int       open_count = 0;
+static rtems_id queue_id = 0;
+static int      open_count = 0;
 
 /*
 #define MW_DEBUG_ON     1
@@ -37,7 +37,7 @@ static int       open_count = 0;
 /* open a message queue with the kernel */
 int uid_open_queue(
   const char *q_name,
-  int         flags RTEMS_UNUSED,
+  int flags   RTEMS_UNUSED,
   size_t      max_msgs
 )
 {
@@ -54,7 +54,7 @@ int uid_open_queue(
   }
 
   status = rtems_message_queue_create(
-    rtems_build_name( q_name[0], q_name[1], q_name[2], q_name[3] ),
+    rtems_build_name( q_name[ 0 ], q_name[ 1 ], q_name[ 2 ], q_name[ 3 ] ),
     max_msgs,
     sizeof( struct MW_UID_MESSAGE ),
     RTEMS_FIFO | RTEMS_LOCAL,
@@ -62,17 +62,16 @@ int uid_open_queue(
   );
   if ( status != RTEMS_SUCCESSFUL ) {
     #ifdef MW_DEBUG_ON
-      printk( "UID_Queue: error creating queue: %d\n", status );
+    printk( "UID_Queue: error creating queue: %d\n", status );
      #endif
     return -1;
   }
   #ifdef MW_DEBUG_ON
-    printk( "UID_Queue: id=%X\n", queue_id );
+  printk( "UID_Queue: id=%X\n", queue_id );
   #endif
   open_count++;
   return 0;
 }
-
 
 /* close message queue */
 int uid_close_queue( void )
@@ -90,12 +89,12 @@ int uid_read_message( struct MW_UID_MESSAGE *m, unsigned long timeout )
 {
   rtems_status_code status;
   size_t            size = 0;
-  int               wait = (timeout != 0);
-  int ticks = RTEMS_MICROSECONDS_TO_TICKS(timeout * 1000);
+  int               wait = ( timeout != 0 );
+  int               ticks = RTEMS_MICROSECONDS_TO_TICKS( timeout * 1000 );
 
-  if (timeout == (unsigned long) -1) {
+  if ( timeout == (unsigned long) -1 ) {
     ticks = RTEMS_NO_TIMEOUT;
-  } else if (timeout && ticks == 0) {
+  } else if ( timeout && ticks == 0 ) {
     /* if timeout greater than 0 and smaller than a tick, round up to avoid
      * unintentionally RTEMS_NO_TIMEOUT
      */
@@ -103,21 +102,23 @@ int uid_read_message( struct MW_UID_MESSAGE *m, unsigned long timeout )
   }
 
   status = rtems_message_queue_receive(
-   queue_id,
-   (void*)m,
-   &size,
-   wait ? RTEMS_WAIT : RTEMS_NO_WAIT,
-   ticks
+    queue_id,
+    (void *) m,
+    &size,
+    wait ? RTEMS_WAIT : RTEMS_NO_WAIT,
+    ticks
   );
 
-  if( status == RTEMS_SUCCESSFUL ) {
-     return size;
-  } else if( ( status == RTEMS_UNSATISFIED ) || ( status == RTEMS_TIMEOUT ) ) {
-     rtems_set_errno_and_return_minus_one( ETIMEDOUT );
+  if ( status == RTEMS_SUCCESSFUL ) {
+    return size;
+  } else if (
+    ( status == RTEMS_UNSATISFIED ) || ( status == RTEMS_TIMEOUT )
+  ) {
+    rtems_set_errno_and_return_minus_one( ETIMEDOUT );
   }
   /* Here we have one error condition */
   #ifdef MW_DEBUG_ON
-    printk( "UID_Queue: error reading queue: %d\n", status );
+  printk( "UID_Queue: error reading queue: %d\n", status );
   #endif
   return -1;
 }
@@ -131,8 +132,11 @@ int uid_send_message( struct MW_UID_MESSAGE *m )
 {
   rtems_status_code status;
   status = rtems_message_queue_send(
-    queue_id, ( void * )m, sizeof( struct MW_UID_MESSAGE ) );
-  return (status == RTEMS_SUCCESSFUL) ? 0 : -1;
+    queue_id,
+    (void *) m,
+    sizeof( struct MW_UID_MESSAGE )
+  );
+  return ( status == RTEMS_SUCCESSFUL ) ? 0 : -1;
 }
 
 /*
@@ -153,11 +157,11 @@ int uid_unregister_device( int fd )
 /* set the keyboard */
 int uid_set_kbd_mode( int fd, int mode, int *old_mode )
 {
-  if (ioctl( fd, MV_KDGKBMODE, old_mode) < 0) {
-     return -1;
+  if ( ioctl( fd, MV_KDGKBMODE, old_mode ) < 0 ) {
+    return -1;
   }
-  if (ioctl(fd, MV_KDSKBMODE, mode ) < 0 ) {
-     return -1;
+  if ( ioctl( fd, MV_KDSKBMODE, mode ) < 0 ) {
+    return -1;
   }
   return 0;
 }
