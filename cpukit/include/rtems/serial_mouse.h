@@ -65,8 +65,12 @@ extern "C" {
  *  This macro defines the serial mouse device driver entry points.
  */
 #define SERIAL_MOUSE_DRIVER_TABLE_ENTRY \
-  { serial_mouse_initialize, serial_mouse_open, serial_mouse_close, \
-    serial_mouse_read, serial_mouse_write, serial_mouse_control }
+  { serial_mouse_initialize,            \
+    serial_mouse_open,                  \
+    serial_mouse_close,                 \
+    serial_mouse_read,                  \
+    serial_mouse_write,                 \
+    serial_mouse_control }
 
 /**
  * @brief The initialization of the serial mouse driver.
@@ -78,9 +82,9 @@ extern "C" {
  * @param[in] arg points to device driver arguments
  */
 rtems_device_driver serial_mouse_initialize(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
 );
 
 /**
@@ -94,9 +98,9 @@ rtems_device_driver serial_mouse_initialize(
  * @param[in] arg points to device driver arguments
  */
 rtems_device_driver serial_mouse_open(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
 );
 
 /**
@@ -110,9 +114,9 @@ rtems_device_driver serial_mouse_open(
  * @param[in] arg points to device driver arguments
  */
 rtems_device_driver serial_mouse_close(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
 );
 
 /**
@@ -126,9 +130,9 @@ rtems_device_driver serial_mouse_close(
  * @param[in] arg points to device driver arguments
  */
 rtems_device_driver serial_mouse_read(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
 );
 
 /**
@@ -142,9 +146,9 @@ rtems_device_driver serial_mouse_read(
  * @param[in] arg points to device driver arguments
  */
 rtems_device_driver serial_mouse_write(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
 );
 
 /**
@@ -158,9 +162,9 @@ rtems_device_driver serial_mouse_write(
  * @param[in] arg points to device driver arguments
  */
 rtems_device_driver serial_mouse_control(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
 );
 
 /**
@@ -176,13 +180,10 @@ rtems_device_driver serial_mouse_control(
  *
  * @retval This method returns true on success and false on error.
  */
-bool bsp_get_serial_mouse_device(
-  const char **name,
-  const char **type
-);
+bool bsp_get_serial_mouse_device( const char **name, const char **type );
 
 #ifdef __cplusplus
 }
 #endif
 /**@}*/
-#endif  /* __tty_drv__  */
+#endif /* __tty_drv__  */

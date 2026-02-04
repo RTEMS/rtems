@@ -51,7 +51,7 @@ int         serial_mouse_fd = -1;
 const char *serial_mouse_device;
 const char *serial_mouse_type;
 
-static int serial_mouse_l_rint(int c, struct rtems_termios_tty *tp)
+static int serial_mouse_l_rint( int c, struct rtems_termios_tty *tp )
 {
   (void) tp;
 
@@ -65,31 +65,27 @@ static int serial_mouse_l_rint(int c, struct rtems_termios_tty *tp)
 static struct rtems_termios_linesw serial_mouse_linesw = {
   .l_open = NULL,
   .l_close = NULL,
-  .l_read  = NULL,
+  .l_read = NULL,
   .l_write = NULL,
-  .l_rint  = serial_mouse_l_rint,
+  .l_rint = serial_mouse_l_rint,
   .l_start = NULL,
   .l_ioctl = NULL,
   .l_modem = NULL
 };
 
-
 /*
  *  Serial Mouse - device driver INITIALIZE entry point.
  */
 rtems_device_driver serial_mouse_initialize(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
 )
 {
   (void) minor;
   (void) arg;
 
-  bsp_get_serial_mouse_device(
-    &serial_mouse_device,
-    &serial_mouse_type
-  );
+  bsp_get_serial_mouse_device( &serial_mouse_device, &serial_mouse_type );
 
   (void) rtems_io_register_name( "/dev/mouse", major, 0 );
 
@@ -102,39 +98,38 @@ rtems_device_driver serial_mouse_initialize(
  * serial_mouse - device driver OPEN entry point
  */
 rtems_device_driver serial_mouse_open(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *args
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *args
 )
 {
   (void) major;
   (void) minor;
   (void) args;
 
-  struct termios  termios_attr;
-  int             status;
-  int             disc = 6;
+  struct termios termios_attr;
+  int            status;
+  int            disc = 6;
 
   /* XXX open(2) the configured /dev/comX */
   /* XXX save the file descriptor */
   serial_mouse_fd = open( serial_mouse_device, O_RDONLY );
   if ( serial_mouse_fd == -1 ) {
-   printk(
-     "Error opening serial_mouse device on %s\n",
-     serial_mouse_device
-   );
-   return RTEMS_IO_ERROR;
+    printk( "Error opening serial_mouse device on %s\n", serial_mouse_device );
+    return RTEMS_IO_ERROR;
   }
 
   /* 1200-8-N-1, without hardware flow control */
   /* BSP_uart_init( BSP_UART_PORT, 1200, CHR_8_BITS, 0, 0, 0 ); */
-  status = tcgetattr(serial_mouse_fd, &termios_attr );
-  if (status != 0) {
-    printk("Error getting mouse attributes\n");
+  status = tcgetattr( serial_mouse_fd, &termios_attr );
+  if ( status != 0 ) {
+    printk( "Error getting mouse attributes\n" );
     return RTEMS_IO_ERROR;
   }
-  termios_attr.c_lflag &= ~(ICANON|ECHO|ECHONL|ECHOK|ECHOE|ECHOPRT|ECHOCTL);
-  termios_attr.c_iflag &= ~(IXON|IXANY|IXOFF);
+  termios_attr.c_lflag &= ~(
+    ICANON | ECHO | ECHONL | ECHOK | ECHOE | ECHOPRT | ECHOCTL
+  );
+  termios_attr.c_iflag &= ~( IXON | IXANY | IXOFF );
   /*
   termios_attr.c_cc[VMIN] = itask_VMIN;
   termios_attr.c_cc[VTIME] = itask_VTIME;
@@ -142,25 +137,25 @@ rtems_device_driver serial_mouse_open(
   termios_attr.c_cflag |= B1200;
   termios_attr.c_cflag |= CS8;
   status = tcsetattr( serial_mouse_fd, TCSANOW, &termios_attr );
-  if (status != 0) {
-    printk("Error setting mouse attributes\n");
+  if ( status != 0 ) {
+    printk( "Error setting mouse attributes\n" );
     return RTEMS_IO_ERROR;
   }
 
-  status = ioctl(serial_mouse_fd, TIOCSETD, &disc);
-  if (status != 0) {
-    printk("Error setting mouse attributes\n");
+  status = ioctl( serial_mouse_fd, TIOCSETD, &disc );
+  if ( status != 0 ) {
+    printk( "Error setting mouse attributes\n" );
     return RTEMS_IO_ERROR;
   }
 
-  sleep(5);
+  sleep( 5 );
   return RTEMS_SUCCESSFUL;
 }
 
 rtems_device_driver serial_mouse_close(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
 )
 {
   (void) major;
@@ -173,9 +168,9 @@ rtems_device_driver serial_mouse_close(
 }
 
 rtems_device_driver serial_mouse_read(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
 )
 {
   (void) major;
@@ -184,12 +179,11 @@ rtems_device_driver serial_mouse_read(
 
   return RTEMS_SUCCESSFUL;
 }
-
 
 rtems_device_driver serial_mouse_write(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
 )
 {
   (void) major;
@@ -199,22 +193,20 @@ rtems_device_driver serial_mouse_write(
   return RTEMS_SUCCESSFUL;
 }
 
-
 rtems_device_driver serial_mouse_control(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
 )
 {
   (void) major;
   (void) minor;
 
-  rtems_libio_ioctl_args_t *args = (rtems_libio_ioctl_args_t *)arg;
+  rtems_libio_ioctl_args_t *args = (rtems_libio_ioctl_args_t *) arg;
 
-  switch( args->command ) {
-
+  switch ( args->command ) {
     case MW_UID_REGISTER_DEVICE:
-      printk( "SerialMouse: reg=%s\n", (const char*) args->buffer );
+      printk( "SerialMouse: reg=%s\n", (const char *) args->buffer );
       mouse_parser_initialize( serial_mouse_type );
       break;
 
@@ -222,9 +214,14 @@ rtems_device_driver serial_mouse_control(
       break;
 
     default:
-      args->ioctl_return = ioctl(serial_mouse_fd, args->command, args->buffer );
-      if ( !args->ioctl_return )
+      args->ioctl_return = ioctl(
+        serial_mouse_fd,
+        args->command,
+        args->buffer
+      );
+      if ( !args->ioctl_return ) {
         return RTEMS_SUCCESSFUL;
+      }
       return RTEMS_IO_ERROR;
   }
   args->ioctl_return = 0;
