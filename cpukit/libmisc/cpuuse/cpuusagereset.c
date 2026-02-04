@@ -62,8 +62,9 @@ static bool CPU_usage_Per_thread_handler(
   scheduler = _Thread_Scheduler_get_home( the_thread );
   _Scheduler_Acquire_critical( scheduler, &scheduler_lock_context );
 
-  the_thread->cpu_time_used_at_last_reset =
-    _Thread_Get_CPU_time_used_locked( the_thread );
+  the_thread->cpu_time_used_at_last_reset = _Thread_Get_CPU_time_used_locked(
+    the_thread
+  );
 
   _Scheduler_Release_critical( scheduler, &scheduler_lock_context );
   _Thread_State_release( the_thread, &state_lock_context );
@@ -81,11 +82,11 @@ void rtems_cpu_usage_reset( void )
   _TOD_Get_uptime( &CPU_usage_Uptime_at_last_reset );
 
   cpu_count = rtems_scheduler_get_processor_maximum();
-  for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
+  for ( cpu_index = 0; cpu_index < cpu_count; ++cpu_index ) {
     Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
 
     cpu->cpu_usage_timestamp = CPU_usage_Uptime_at_last_reset;
   }
 
-  rtems_task_iterate(CPU_usage_Per_thread_handler, NULL);
+  rtems_task_iterate( CPU_usage_Per_thread_handler, NULL );
 }

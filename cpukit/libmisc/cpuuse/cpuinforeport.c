@@ -61,18 +61,18 @@ int rtems_cpu_info_report( const rtems_printer *printer )
 
   n = rtems_printf(
     printer,
-     "-------------------------------------------------------------------------------\n"
-     "                            PER PROCESSOR INFORMATION\n"
-     "-------+--------+--------------+-----------------------------------------------\n"
-     " INDEX | ONLINE | SCHEDULER ID | SCHEDULER NAME\n"
-     "-------+--------+--------------+-----------------------------------------------\n"
-   );
+    "-------------------------------------------------------------------------------\n"
+    "                            PER PROCESSOR INFORMATION\n"
+    "-------+--------+--------------+-----------------------------------------------\n"
+    " INDEX | ONLINE | SCHEDULER ID | SCHEDULER NAME\n"
+    "-------+--------+--------------+-----------------------------------------------\n"
+  );
 
   for ( cpu_index = 0; cpu_index < cpu_max; ++cpu_index ) {
-    const Per_CPU_Control *cpu;
+    const Per_CPU_Control   *cpu;
     const Scheduler_Control *scheduler;
-    char scheduler_str[ 5 ];
-    uint32_t scheduler_id;
+    char                     scheduler_str[ 5 ];
+    uint32_t                 scheduler_id;
 
     cpu = _Per_CPU_Get_by_index( cpu_index );
     scheduler = _Scheduler_Get_by_CPU( cpu );

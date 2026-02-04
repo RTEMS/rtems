@@ -77,16 +77,18 @@ static bool cpu_usage_visitor( Thread_Control *the_thread, void *arg )
   _Timestamp_Divide( &used, &ctx->total, &ival, &fval );
   seconds = _Timestamp_Get_seconds( &used );
   nanoseconds = _Timestamp_Get_nanoseconds( &used ) /
-    TOD_NANOSECONDS_PER_MICROSECOND;
+                TOD_NANOSECONDS_PER_MICROSECOND;
 
   rtems_printf(
     ctx->printer,
     " 0x%08" PRIx32 " | %-38s |"
-      "%7" PRIu32 ".%06" PRIu32 " |%4" PRIu32 ".%03" PRIu32 "\n",
+    "%7" PRIu32 ".%06" PRIu32 " |%4" PRIu32 ".%03" PRIu32 "\n",
     the_thread->Object.id,
     name,
-    seconds, nanoseconds,
-    ival, fval
+    seconds,
+    nanoseconds,
+    ival,
+    fval
   );
 
   return false;
@@ -95,13 +97,11 @@ static bool cpu_usage_visitor( Thread_Control *the_thread, void *arg )
 /*
  *  rtems_cpu_usage_report
  */
-void rtems_cpu_usage_report_with_plugin(
-  const rtems_printer *printer
-)
+void rtems_cpu_usage_report_with_plugin( const rtems_printer *printer )
 {
-  cpu_usage_context  ctx;
-  uint32_t           seconds;
-  uint32_t           nanoseconds;
+  cpu_usage_context ctx;
+  uint32_t          seconds;
+  uint32_t          nanoseconds;
 
   ctx.printer = printer;
 
@@ -114,25 +114,27 @@ void rtems_cpu_usage_report_with_plugin(
   ctx.uptime_at_last_reset = CPU_usage_Uptime_at_last_reset;
 
   rtems_printf(
-     printer,
-     "-------------------------------------------------------------------------------\n"
-     "                              CPU USAGE BY THREAD\n"
-     "------------+----------------------------------------+---------------+---------\n"
-     " ID         | NAME                                   | SECONDS       | PERCENT\n"
-     "------------+----------------------------------------+---------------+---------\n"
+    printer,
+    "-------------------------------------------------------------------------------\n"
+    "                              CPU USAGE BY THREAD\n"
+    "------------+----------------------------------------+---------------+---------\n"
+    " ID         | NAME                                   | SECONDS       | PERCENT\n"
+    "------------+----------------------------------------+---------------+---------\n"
   );
 
   rtems_task_iterate( cpu_usage_visitor, &ctx );
 
   seconds = _Timestamp_Get_seconds( &ctx.total );
   nanoseconds = _Timestamp_Get_nanoseconds( &ctx.total ) /
-    TOD_NANOSECONDS_PER_MICROSECOND;
+                TOD_NANOSECONDS_PER_MICROSECOND;
   rtems_printf(
-     printer,
-     "------------+----------------------------------------+---------------+---------\n"
-     " TIME SINCE LAST CPU USAGE RESET IN SECONDS:                    %7" PRIu32 ".%06" PRIu32 "\n"
-     "-------------------------------------------------------------------------------\n",
-     seconds, nanoseconds
+    printer,
+    "------------+----------------------------------------+---------------+---------\n"
+    " TIME SINCE LAST CPU USAGE RESET IN SECONDS:                    %7" PRIu32
+    ".%06" PRIu32 "\n"
+    "-------------------------------------------------------------------------------\n",
+    seconds,
+    nanoseconds
   );
 }
 
