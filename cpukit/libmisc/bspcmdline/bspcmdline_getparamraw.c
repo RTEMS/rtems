@@ -44,19 +44,19 @@
 
 extern const char *bsp_boot_cmdline;
 
-const char *rtems_bsp_cmdline_get_param_raw(
-  const char *name
-)
+const char *rtems_bsp_cmdline_get_param_raw( const char *name )
 {
   const char *p;
 
-  if ( !name )
+  if ( !name ) {
     return NULL;
+  }
 
-  if ( !bsp_boot_cmdline )
+  if ( !bsp_boot_cmdline ) {
     return NULL;
+  }
 
-  p = strstr(bsp_boot_cmdline, name);
+  p = strstr( bsp_boot_cmdline, name );
   /* printf( "raw: %p (%s)\n", p, p ); */
   return p;
 }

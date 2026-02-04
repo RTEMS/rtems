@@ -40,26 +40,22 @@
 
 #include <rtems/bspcmdline.h>
 
-static void copy_string(
-  const char *start,
-  char       *value,
-  size_t      length
-)
+static void copy_string( const char *start, char *value, size_t length )
 {
   size_t      i;
   int         quotes;
   const char *p = start;
 
-  quotes=0;
-  for (i=0 ; *p && i<length-1; ) {
+  quotes = 0;
+  for ( i = 0; *p && i < length - 1; ) {
     if ( *p == '\"' ) {
       quotes++;
-    } else if ( ((quotes % 2) == 0) && *p == ' ' )
+    } else if ( ( ( quotes % 2 ) == 0 ) && *p == ' ' ) {
       break;
-    value[i++] = *p++;
-    value[i] = '\0';
+    }
+    value[ i++ ] = *p++;
+    value[ i ] = '\0';
   }
-
 }
 
 const char *rtems_bsp_cmdline_get_param(
@@ -70,21 +66,25 @@ const char *rtems_bsp_cmdline_get_param(
 {
   const char *p;
 
-  if ( !name )
+  if ( !name ) {
     return NULL;
+  }
 
-  if ( !value )
+  if ( !value ) {
     return NULL;
+  }
 
-  if ( !length )
+  if ( !length ) {
     return NULL;
+  }
 
-  value[0] = '\0';
+  value[ 0 ] = '\0';
 
   p = rtems_bsp_cmdline_get_param_raw( name );
 
-  if ( !p )
+  if ( !p ) {
     return NULL;
+  }
 
   copy_string( p, value, length );
 

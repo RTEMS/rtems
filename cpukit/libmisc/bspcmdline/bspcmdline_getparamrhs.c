@@ -53,20 +53,25 @@ const char *rtems_bsp_cmdline_get_param_rhs(
   char       *d;
 
   p = rtems_bsp_cmdline_get_param( name, value, length );
-  if ( !p )
+  if ( !p ) {
     return NULL;
+  }
 
-  rhs = &p[strlen(name)];
-  if ( *rhs != '=' )
+  rhs = &p[ strlen( name ) ];
+  if ( *rhs != '=' ) {
     return NULL;
+  }
 
   rhs++;
-  if ( *rhs == '\"' )
+  if ( *rhs == '\"' ) {
     rhs++;
-  for ( d=value ; *rhs ; )
+  }
+  for ( d = value; *rhs; ) {
     *d++ = *rhs++;
-  if ( *(d-1) == '\"' )
+  }
+  if ( *( d - 1 ) == '\"' ) {
     d--;
+  }
   *d = '\0';
 
   return value;

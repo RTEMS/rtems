@@ -60,7 +60,6 @@
 extern "C" {
 #endif
 
-
 /**
  * @brief Obtain Pointer to BSP Boot Command String
  *
@@ -70,7 +69,7 @@ extern "C" {
  *
  * @retval This method returns the pointer to the BSP Boot Command String.
  */
-const char *rtems_bsp_cmdline_get(void);
+const char *rtems_bsp_cmdline_get( void );
 
 /**
  * @brief Obtain COPY of the Entire Matching Argument
@@ -95,7 +94,6 @@ const char *rtems_bsp_cmdline_get_param(
   char       *value,
   size_t      length
 );
-
 
 /**
  * @brief Obtain COPY of the Right Hand Side of the Matching Argument
@@ -139,9 +137,7 @@ const char *rtems_bsp_cmdline_get_param_rhs(
  * @note The pointer will be to the original BSP Command
  *       Line string. Exercise caution when using this.
  */
-const char *rtems_bsp_cmdline_get_param_raw(
-  const char *name
-);
+const char *rtems_bsp_cmdline_get_param_raw( const char *name );
 
 #ifdef __cplusplus
 }
