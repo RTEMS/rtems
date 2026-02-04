@@ -9,7 +9,7 @@
  * 
  * @note This extension set uses conditional compilation to account for 
  *       stack growth direction.
- */         
+ */
 
 /*
  *  COPYRIGHT (c) 1989-2024 On-Line Applications Research Corporation (OAR).
@@ -63,11 +63,13 @@
  *  pattern area must be a multiple of 4 words.
  */
 
-#if !defined(CPU_STACK_CHECK_PATTERN_INITIALIZER)
+#if !defined( CPU_STACK_CHECK_PATTERN_INITIALIZER )
 #define CPU_STACK_CHECK_PATTERN_INITIALIZER \
-  { \
-    0xFEEDF00D, 0x0BAD0D06, /* FEED FOOD to  BAD DOG */ \
-    0xDEADF00D, 0x600D0D06  /* DEAD FOOD but GOOD DOG */ \
+  {                                         \
+    0xFEEDF00D,                             \
+    0x0BAD0D06, /* FEED FOOD to  BAD DOG */ \
+    0xDEADF00D,                             \
+    0x600D0D06 /* DEAD FOOD but GOOD DOG */ \
   }
 #endif
 
@@ -76,7 +78,7 @@
  */
 
 #define BYTE_PATTERN 0xA5
-#define U32_PATTERN 0xA5A5A5A5
+#define U32_PATTERN  0xA5A5A5A5
 
 /*
  *  Variable to indicate when the stack checker has been initialized.
@@ -86,12 +88,13 @@ static bool Stack_check_Initialized;
 /*
  *  The "magic pattern" used to mark the end of the stack.
  */
-static const uint32_t Stack_check_Sanity_pattern[] =
-  CPU_STACK_CHECK_PATTERN_INITIALIZER;
+static const uint32_t
+  Stack_check_Sanity_pattern[] = CPU_STACK_CHECK_PATTERN_INITIALIZER;
 
-#define SANITY_PATTERN_SIZE_BYTES sizeof(Stack_check_Sanity_pattern)
+#define SANITY_PATTERN_SIZE_BYTES sizeof( Stack_check_Sanity_pattern )
 
-#define SANITY_PATTERN_SIZE_WORDS RTEMS_ARRAY_SIZE(Stack_check_Sanity_pattern)
+#define SANITY_PATTERN_SIZE_WORDS \
+  RTEMS_ARRAY_SIZE( Stack_check_Sanity_pattern )
 
 /*
  * Helper function to report if the actual stack pointer is in range.
@@ -102,16 +105,16 @@ static inline bool Stack_check_Frame_pointer_in_range(
   const Thread_Control *the_thread
 )
 {
-  #if defined(__GNUC__)
-    void *sp = __builtin_frame_address(0);
-    const Stack_Control *the_stack = &the_thread->Start.Initial_stack;
+  #if defined( __GNUC__ )
+  void                *sp = __builtin_frame_address( 0 );
+  const Stack_Control *the_stack = &the_thread->Start.Initial_stack;
 
-    if ( sp < the_stack->area ) {
-      return false;
-    }
-    if ( sp > (the_stack->area + the_stack->size) ) {
-      return false;
-    }
+  if ( sp < the_stack->area ) {
+    return false;
+  }
+  if ( sp > ( the_stack->area + the_stack->size ) ) {
+    return false;
+  }
   #else
     #error "How do I check stack bounds on a non-GNU compiler?"
   #endif
@@ -122,26 +125,25 @@ static inline bool Stack_check_Frame_pointer_in_range(
  *  Where the pattern goes in the stack area is dependent upon
  *  whether the stack grow to the high or low area of the memory.
  */
-#if (CPU_STACK_GROWS_UP == TRUE)
-  #define Stack_check_Get_pattern( _the_stack ) \
-    ((char *)(_the_stack)->area + \
-         (_the_stack)->size - SANITY_PATTERN_SIZE_BYTES )
+#if ( CPU_STACK_GROWS_UP == TRUE )
+  #define Stack_check_Get_pattern( _the_stack )            \
+  ( (char *) ( _the_stack )->area + ( _the_stack )->size - \
+    SANITY_PATTERN_SIZE_BYTES )
 
   #define Stack_check_Calculate_used( _low, _size, _high_water ) \
-      ((char *)(_high_water) - (char *)(_low))
+  ( (char *) ( _high_water ) - (char *) ( _low ) )
 
-  #define Stack_check_Usable_stack_start(_the_stack) \
-    ((_the_stack)->area)
+  #define Stack_check_Usable_stack_start( _the_stack ) ( ( _the_stack )->area )
 
 #else
   #define Stack_check_Get_pattern( _the_stack ) \
-    ((char *)(_the_stack)->area)
+  ( (char *) ( _the_stack )->area )
 
-  #define Stack_check_Calculate_used( _low, _size, _high_water) \
-      ( ((char *)(_low) + (_size)) - (char *)(_high_water) )
+  #define Stack_check_Calculate_used( _low, _size, _high_water ) \
+  ( ( (char *) ( _low ) + ( _size ) ) - (char *) ( _high_water ) )
 
-  #define Stack_check_Usable_stack_start(_the_stack) \
-      ((char *)(_the_stack)->area + SANITY_PATTERN_SIZE_BYTES)
+  #define Stack_check_Usable_stack_start( _the_stack ) \
+  ( (char *) ( _the_stack )->area + SANITY_PATTERN_SIZE_BYTES )
 
 #endif
 
@@ -149,10 +151,10 @@ static inline bool Stack_check_Frame_pointer_in_range(
  *  The assumption is that if the pattern gets overwritten, the task
  *  is too close. This defines the usable stack memory.
  */
-#define Stack_check_Usable_stack_size(_the_stack) \
-    ((_the_stack)->size - SANITY_PATTERN_SIZE_BYTES)
+#define Stack_check_Usable_stack_size( _the_stack ) \
+  ( ( _the_stack )->size - SANITY_PATTERN_SIZE_BYTES )
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 static Stack_Control Stack_check_Interrupt_stack[ CPU_MAXIMUM_PROCESSORS ];
 #else
 static Stack_Control Stack_check_Interrupt_stack[ 1 ];
@@ -183,10 +185,10 @@ static void Stack_check_Add_sanity_pattern( Stack_Control *stack )
 static bool Stack_check_Is_sanity_pattern_valid( const Stack_Control *stack )
 {
   return memcmp(
-    Stack_check_Get_pattern( stack ),
-    Stack_check_Sanity_pattern,
-    SANITY_PATTERN_SIZE_BYTES
-  ) == 0;
+           Stack_check_Get_pattern( stack ),
+           Stack_check_Sanity_pattern,
+           SANITY_PATTERN_SIZE_BYTES
+         ) == 0;
 }
 
 /*
@@ -194,7 +196,7 @@ static bool Stack_check_Is_sanity_pattern_valid( const Stack_Control *stack )
  */
 bool rtems_stack_checker_create_extension(
   Thread_Control *running RTEMS_UNUSED,
-  Thread_Control *the_thread
+  Thread_Control         *the_thread
 )
 {
   Stack_check_Initialized = true;
@@ -222,7 +224,7 @@ void rtems_stack_checker_begin_extension( Thread_Control *executing )
    * processor in thread context.
    */
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   cpu_self = _Thread_Dispatch_disable();
 #else
   cpu_self = _Per_CPU_Get();
@@ -234,7 +236,7 @@ void rtems_stack_checker_begin_extension( Thread_Control *executing )
   if ( stack->area == NULL ) {
     stack->area = cpu_self->interrupt_stack_low;
     stack->size = (size_t) ( (char *) cpu_self->interrupt_stack_high -
-      (char *) cpu_self->interrupt_stack_low );
+                             (char *) cpu_self->interrupt_stack_low );
 
     /*
      * Sanity pattern has been added by Stack_check_Prepare_interrupt_stack()
@@ -249,7 +251,7 @@ void rtems_stack_checker_begin_extension( Thread_Control *executing )
     Stack_check_Dope_stack( stack );
   }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   _Thread_Dispatch_enable( cpu_self );
 #endif
 }
@@ -265,42 +267,40 @@ void rtems_stack_checker_begin_extension( Thread_Control *executing )
  */
 void rtems_stack_checker_reporter_print_details(
   const Thread_Control *running,
-  bool pattern_ok
+  bool                  pattern_ok
 )
 {
   const Stack_Control *stack = &running->Start.Initial_stack;
-  void                *pattern_area = Stack_check_Get_pattern(stack);
-  char                 name[2 * THREAD_DEFAULT_MAXIMUM_NAME_SIZE];
+  void                *pattern_area = Stack_check_Get_pattern( stack );
+  char                 name[ 2 * THREAD_DEFAULT_MAXIMUM_NAME_SIZE ];
 
-  printk("BLOWN STACK!!!\n");
-  printk("task control block: 0x%08" PRIxPTR "\n", (intptr_t) running);
-  printk("task ID: 0x%08lx\n", (unsigned long) running->Object.id);
-  printk(
-    "task name: 0x%08" PRIx32 "\n",
-    running->Object.name.name_u32
-  );
-  _Thread_Get_name(running, name, sizeof(name));
-  printk("task name string: %s\n", name);
+  printk( "BLOWN STACK!!!\n" );
+  printk( "task control block: 0x%08" PRIxPTR "\n", (intptr_t) running );
+  printk( "task ID: 0x%08lx\n", (unsigned long) running->Object.id );
+  printk( "task name: 0x%08" PRIx32 "\n", running->Object.name.name_u32 );
+  _Thread_Get_name( running, name, sizeof( name ) );
+  printk( "task name string: %s\n", name );
   printk(
     "task stack area (%lu Bytes): 0x%08" PRIxPTR " .. 0x%08" PRIxPTR "\n",
     (unsigned long) stack->size,
     (intptr_t) stack->area,
-    (intptr_t) ((char *) stack->area + stack->size)
+    (intptr_t) ( (char *) stack->area + stack->size )
   );
-  if (!pattern_ok) {
+  if ( !pattern_ok ) {
     printk(
-      "damaged pattern area (%lu Bytes): 0x%08" PRIxPTR " .. 0x%08" PRIxPTR "\n",
+      "damaged pattern area (%lu Bytes): 0x%08" PRIxPTR " .. 0x%08" PRIxPTR
+      "\n",
       (unsigned long) SANITY_PATTERN_SIZE_BYTES,
       (intptr_t) pattern_area,
-      (intptr_t) (pattern_area + SANITY_PATTERN_SIZE_BYTES)
+      (intptr_t) ( pattern_area + SANITY_PATTERN_SIZE_BYTES )
     );
   }
 
-  #if defined(RTEMS_MULTIPROCESSING)
-    printk(
-      "node: 0x%08" PRIxPTR "\n",
-	(intptr_t) rtems_configuration_get_user_multiprocessing_table()->node
-    );
+  #if defined( RTEMS_MULTIPROCESSING )
+  printk(
+    "node: 0x%08" PRIxPTR "\n",
+    (intptr_t) rtems_configuration_get_user_multiprocessing_table()->node
+  );
   #endif
 
   rtems_fatal(
@@ -311,7 +311,7 @@ void rtems_stack_checker_reporter_print_details(
 
 void rtems_stack_checker_reporter_quiet(
   const Thread_Control *running,
-  bool pattern_ok
+  bool                  pattern_ok
 )
 {
   (void) pattern_ok;
@@ -319,7 +319,7 @@ void rtems_stack_checker_reporter_quiet(
   rtems_fatal(
     RTEMS_FATAL_SOURCE_STACK_CHECKER,
     running->Object.name.name_u32
-    );
+  );
 }
 
 /*
@@ -332,14 +332,14 @@ void rtems_stack_checker_switch_extension(
 {
   (void) heir;
 
-  bool sp_ok;
-  bool pattern_ok;
+  bool                 sp_ok;
+  bool                 pattern_ok;
   const Stack_Control *stack;
 
   /*
    *  Check for an out of bounds stack pointer or an overwrite
    */
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   sp_ok = Stack_check_Frame_pointer_in_range( heir );
 
   if ( !sp_ok ) {
@@ -349,7 +349,9 @@ void rtems_stack_checker_switch_extension(
     Stack_checker_Reporter( heir, pattern_ok );
   }
 
-  pattern_ok = Stack_check_Is_sanity_pattern_valid( &running->Start.Initial_stack );
+  pattern_ok = Stack_check_Is_sanity_pattern_valid(
+    &running->Start.Initial_stack
+  );
 
   if ( !pattern_ok ) {
     Stack_checker_Reporter( running, pattern_ok );
@@ -357,7 +359,9 @@ void rtems_stack_checker_switch_extension(
 #else
   sp_ok = Stack_check_Frame_pointer_in_range( running );
 
-  pattern_ok = Stack_check_Is_sanity_pattern_valid( &running->Start.Initial_stack );
+  pattern_ok = Stack_check_Is_sanity_pattern_valid(
+    &running->Start.Initial_stack
+  );
 
   if ( !sp_ok || !pattern_ok ) {
     Stack_checker_Reporter( running, pattern_ok );
@@ -393,36 +397,37 @@ bool rtems_stack_checker_is_blown( void )
 /*
  * Stack_check_find_high_water_mark
  */
-static inline void *Stack_check_Find_high_water_mark(
-  const void *s,
-  size_t      n
-)
+static inline void *Stack_check_Find_high_water_mark( const void *s, size_t n )
 {
-  const uint32_t   *base, *ebase;
-  uint32_t   length;
+  const uint32_t *base, *ebase;
+  uint32_t        length;
 
   base = s;
-  length = n/4;
+  length = n / 4;
 
   #if ( CPU_STACK_GROWS_UP == TRUE )
-    /*
+  /*
      * start at higher memory and find first word that does not
      * match pattern
      */
 
-    base += length - 1;
-    for (ebase = s; base > ebase; base--)
-      if (*base != U32_PATTERN)
-        return (void *) base;
+  base += length - 1;
+  for ( ebase = s; base > ebase; base-- ) {
+    if ( *base != U32_PATTERN ) {
+      return (void *) base;
+    }
+  }
   #else
-    /*
+  /*
      * start at lower memory and find first word that does not
      * match pattern
      */
 
-    for (ebase = base + length; base < ebase; base++)
-      if (*base != U32_PATTERN)
-        return (void *) base;
+  for ( ebase = base + length; base < ebase; base++ ) {
+    if ( *base != U32_PATTERN ) {
+      return (void *) base;
+    }
+  }
   #endif
 
   return NULL;
@@ -434,7 +439,7 @@ static void Stack_check_Visit_stack(
   const char                 *name,
   rtems_id                    id,
   rtems_stack_checker_visitor visit,
-  void                        *arg
+  void                       *arg
 )
 {
   rtems_stack_checker_info info;
@@ -447,18 +452,23 @@ static void Stack_check_Visit_stack(
   info.id = id;
   info.name = name;
   info.current = current;
-  info.begin  = Stack_check_Usable_stack_start( stack );
+  info.begin = Stack_check_Usable_stack_start( stack );
   info.size = Stack_check_Usable_stack_size( stack );
 
   if ( Stack_check_Initialized ) {
     void *high_water_mark;
 
-    high_water_mark =
-      Stack_check_Find_high_water_mark( info.begin, info.size );
+    high_water_mark = Stack_check_Find_high_water_mark(
+      info.begin,
+      info.size
+    );
 
     if ( high_water_mark != NULL ) {
-      info.used =
-        Stack_check_Calculate_used( info.begin, info.size, high_water_mark );
+      info.used = Stack_check_Calculate_used(
+        info.begin,
+        info.size,
+        high_water_mark
+      );
     } else {
       info.used = 0;
     }
@@ -471,13 +481,10 @@ static void Stack_check_Visit_stack(
 
 typedef struct {
   rtems_stack_checker_visitor visit;
-  void *arg;
+  void                       *arg;
 } Stack_check_Visitor;
 
-static bool Stack_check_Visit_thread(
-  Thread_Control *the_thread,
-  void           *arg
-)
+static bool Stack_check_Visit_thread( Thread_Control *the_thread, void *arg )
 {
   Stack_check_Visitor *visitor;
   char                 name[ 22 ];
@@ -503,14 +510,7 @@ static void Stack_check_Visit_interrupt_stack(
   void                       *arg
 )
 {
-  Stack_check_Visit_stack(
-    stack,
-    NULL,
-    "Interrupt Stack",
-    id,
-    visit,
-    arg
-  );
+  Stack_check_Visit_stack( stack, NULL, "Interrupt Stack", id, visit, arg );
 }
 
 static void Stack_check_Print_info(
@@ -524,7 +524,8 @@ static void Stack_check_Print_info(
 
   rtems_printf(
     printer,
-    "0x%08" PRIx32 " %-21s 0x%08" PRIxPTR " 0x%08" PRIxPTR " 0x%08" PRIxPTR " %6" PRIuPTR " ",
+    "0x%08" PRIx32 " %-21s 0x%08" PRIxPTR " 0x%08" PRIxPTR " 0x%08" PRIxPTR
+    " %6" PRIuPTR " ",
     info->id,
     info->name,
     (uintptr_t) info->begin,
@@ -541,13 +542,13 @@ static void Stack_check_Print_info(
 }
 
 void rtems_stack_checker_report_usage_with_plugin(
-  const rtems_printer* printer
+  const rtems_printer *printer
 )
 {
   rtems_printf(
-     printer,
-     "                             STACK USAGE BY THREAD\n"
-     "ID         NAME                  LOW        HIGH       CURRENT     AVAIL   USED\n"
+    printer,
+    "                             STACK USAGE BY THREAD\n"
+    "ID         NAME                  LOW        HIGH       CURRENT     AVAIL   USED\n"
   );
 
   rtems_stack_checker_iterate(
@@ -559,11 +560,14 @@ void rtems_stack_checker_report_usage_with_plugin(
 void rtems_stack_checker_report_usage( void )
 {
   rtems_printer printer;
-  rtems_print_printer_printk(&printer);
+  rtems_print_printer_printk( &printer );
   rtems_stack_checker_report_usage_with_plugin( &printer );
 }
 
-void rtems_stack_checker_iterate( rtems_stack_checker_visitor visit, void *arg )
+void rtems_stack_checker_iterate(
+  rtems_stack_checker_visitor visit,
+  void                       *arg
+)
 {
   Stack_check_Visitor visitor;
   uint32_t            cpu_max;

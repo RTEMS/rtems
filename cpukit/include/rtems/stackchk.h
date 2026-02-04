@@ -159,7 +159,10 @@ typedef void ( *rtems_stack_checker_visitor )(
  * @param[in] arg is the argument passed to each visitor routine invocation 
  *                during the iteration.
  */
-void rtems_stack_checker_iterate( rtems_stack_checker_visitor visit, void *arg );
+void rtems_stack_checker_iterate(
+  rtems_stack_checker_visitor visit,
+  void                       *arg
+);
 
 /*************************************************************
  *************************************************************
@@ -212,10 +215,10 @@ void rtems_stack_checker_switch_extension(
  * @param[in] pattern_ok bool variable to check if the pattern is
  *                       still valid or not
  */
- 
+
 void rtems_stack_checker_reporter_quiet(
   const rtems_tcb *running,
-  bool pattern_ok
+  bool             pattern_ok
 );
 
 /**
@@ -229,7 +232,7 @@ void rtems_stack_checker_reporter_quiet(
  */
 void rtems_stack_checker_reporter_print_details(
   const rtems_tcb *running,
-  bool pattern_ok
+  bool             pattern_ok
 );
 
 /**
@@ -238,18 +241,18 @@ void rtems_stack_checker_reporter_print_details(
  *  This macro defines the user extension handler set for the stack
  *  checker. This macro is normally only used by confdefs.h.
  */
-#define RTEMS_STACK_CHECKER_EXTENSION \
-{ \
-  rtems_stack_checker_create_extension,        /* rtems_task_create  */ \
-  0,                                           /* rtems_task_start   */ \
-  0,                                           /* rtems_task_restart */ \
-  0,                                           /* rtems_task_delete  */ \
-  rtems_stack_checker_switch_extension,        /* task_switch  */ \
-  rtems_stack_checker_begin_extension,         /* task_begin   */ \
-  0,                                           /* task_exitted */ \
-  0,                                           /* fatal        */ \
-  0                                            /* terminate    */ \
-}
+#define RTEMS_STACK_CHECKER_EXTENSION                              \
+  {                                                                \
+    rtems_stack_checker_create_extension, /* rtems_task_create  */ \
+    0,                                    /* rtems_task_start   */ \
+    0,                                    /* rtems_task_restart */ \
+    0,                                    /* rtems_task_delete  */ \
+    rtems_stack_checker_switch_extension, /* task_switch  */       \
+    rtems_stack_checker_begin_extension,  /* task_begin   */       \
+    0,                                    /* task_exitted */       \
+    0,                                    /* fatal        */       \
+    0                                     /* terminate    */       \
+  }
 
 /**
  * @brief The Stack Checker Reporter Initialization Handler.
@@ -260,9 +263,9 @@ void rtems_stack_checker_reporter_print_details(
  * @param[in] pattern_ok bool variable to check if the pattern is
  *                       still valid or not.
  */
-typedef void (*Stack_checker_Reporter_handler)(
+typedef void ( *Stack_checker_Reporter_handler )(
   const rtems_tcb *running,
-  bool pattern_ok
+  bool             pattern_ok
 );
 
 /**
