@@ -58,10 +58,7 @@ extern "C" {
  * @param[in] buffer is the address of the buffer
  * @param[in] length is the length of the buffer
  */
-void rtems_print_buffer(
-  const unsigned char *buffer,
-  int                  length
-);
+void rtems_print_buffer( const unsigned char *buffer, int length );
 
 #ifdef __cplusplus
 }
