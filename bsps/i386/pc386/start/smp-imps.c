@@ -53,9 +53,11 @@
 #define IMPS_DEBUG
 #endif
 
+#include <bsp.h>
 #include <bsp/apic.h>
 #include <bsp/smp-imps.h>
 #include <bsp/irq.h>
+#include <bsp/tblsizes.h>
 #include <rtems/score/smpimpl.h>
 
 /*
@@ -83,7 +85,7 @@
 #include <assert.h>
 
 extern void _pc386_delay(void);
-extern uint32_t* gdtdesc;
+extern uint8_t gdtdesc[GDT_SIZE];
 
 static int lapic_dummy = 0;
 unsigned imps_lapic_addr = ((unsigned)(&lapic_dummy)) - LAPIC_ID;
@@ -152,6 +154,8 @@ static inline unsigned long long read_msr(unsigned int msr)
 
 /*
  *  Static defines here for SMP use.
+ *
+ *  Note: {'*'} is used to initialize the reserved[] field.
  */
 
 #define DEF_ENTRIES  23
@@ -163,8 +167,8 @@ static struct {
   imps_interrupt intin[16];
   imps_interrupt lintin[2];
 } defconfig = {
-  { { IMPS_BCT_PROCESSOR, 0, 0, 0, 0, 0},
-    { IMPS_BCT_PROCESSOR, 1, 0, 0, 0, 0} },
+  { { IMPS_BCT_PROCESSOR, 0, 0, 0, 0, 0, {'*'}},
+    { IMPS_BCT_PROCESSOR, 1, 0, 0, 0, 0, {'*'}} },
   { { IMPS_BCT_BUS, 0, {'E', 'I', 'S', 'A', ' ', ' '}},
     { 255, 1, {'P', 'C', 'I', ' ', ' ', ' '}} },
   { IMPS_BCT_IOAPIC, 0, 0, IMPS_FLAG_ENABLED, IOAPIC_ADDR_DEFAULT },
@@ -194,7 +198,7 @@ static struct {
 
 volatile int imps_release_cpus = 0;
 int imps_enabled = 0;
-int imps_num_cpus = 1;
+uint32_t imps_num_cpus = 1;
 unsigned char imps_cpu_apic_map[IMPS_MAX_CPUS];
 unsigned char imps_apic_cpu_map[IMPS_MAX_CPUS];
 
@@ -283,7 +287,7 @@ boot_cpu(imps_processor *proc)
   reset[2] = (uint32_t)_Per_CPU_Get_by_index(cpuid)->interrupt_stack_high;
   memcpy(
   	(char*) &reset[3],
-  	&gdtdesc,
+  	&gdtdesc[0],
   	6);
   /*
    *  Generic CPU startup sequence starts here.
@@ -291,7 +295,10 @@ boot_cpu(imps_processor *proc)
 
   /* set BIOS reset vector */
   CMOS_WRITE_BYTE(CMOS_RESET_CODE, CMOS_RESET_JUMP);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
   *((volatile unsigned *) bios_reset_vector) = ((bootaddr & 0xFF000) << 12);
+#pragma GCC diagnostic pop
 
   /* clear the APIC error register */
   IMPS_LAPIC_WRITE(LAPIC_ESR, 0);
@@ -334,9 +341,12 @@ boot_cpu(imps_processor *proc)
   IMPS_LAPIC_WRITE(LAPIC_ESR, 0);
   IMPS_LAPIC_READ(LAPIC_ESR);
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
   /* clean up BIOS reset vector */
   CMOS_WRITE_BYTE(CMOS_RESET_CODE, 0);
   *((volatile unsigned *) bios_reset_vector) = 0;
+#pragma GCC diagnostic pop
 
   return success;
 }
@@ -708,11 +718,14 @@ imps_force(int ncpus)
 int
 imps_probe(void)
 {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
   /*
    *  Determine possible address of the EBDA
    */
   unsigned ebda_addr = *((unsigned short *)
              PHYS_TO_VIRTUAL(EBDA_SEG_ADDR)) << 4;
+#pragma GCC diagnostic pop
 
   /*
    *  Determine amount of installed lower memory (not *available*
