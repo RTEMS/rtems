@@ -100,7 +100,7 @@ console_tbl* console_find_console_entry(
  */
 void console_initialize_data(void)
 {
-  int i;
+  uint32_t i;
 
   if ( Console_Port_Tbl )
     return;
@@ -140,8 +140,8 @@ void console_register_devices(
   size_t       number_of_ports
 )
 {
-  int  old_number_of_ports;
-  int  i;
+  int old_number_of_ports;
+  size_t i;
 
   /*
    * Initialize the console data elements

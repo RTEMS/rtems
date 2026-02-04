@@ -32,7 +32,7 @@ unsigned char pci_bus_count(void)
     for (device=0; device < PCI_MAX_DEVICES; device++) {
 
        pci_read_config_dword(bus, device, 0, PCI_VENDOR_ID, &vendor);
-       if ( vendor == -1 ) {
+       if ( vendor == (uint32_t)-1 ) {
          continue;
        }
 
@@ -41,7 +41,7 @@ unsigned char pci_bus_count(void)
 
        for ( function=0; function < number_of_functions; function++ ) {
          pci_read_config_dword(bus, device, function, PCI_VENDOR_ID, &vendor);
-         if ( vendor == -1 ) {
+         if ( vendor == (uint32_t)-1 ) {
            continue;
          }
 

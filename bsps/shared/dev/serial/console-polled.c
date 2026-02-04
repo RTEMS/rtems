@@ -56,7 +56,7 @@ ssize_t console_write_support (
   size_t      len
 )
 {
-  int nwrite = 0;
+  size_t nwrite = 0;
   const char *buf = bufarg;
 
   while (nwrite < len) {

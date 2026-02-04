@@ -141,7 +141,7 @@ static int xnandpsu_erase_wrapper(
   }
 
   /* Perform erase operation. */
-  for ( int i = 0; i < erase_count; i++ ) {
+  for ( uint64_t i = 0; i < erase_count; i++ ) {
     uint8_t sector_bad = 0;
     uint64_t block_start = start_offset + i * block_size;
     rv = xnandpsu_sector_health( flash, block_start, &sector_bad );
@@ -246,7 +246,7 @@ static int xnandpsu_sector_info_by_offset(
   *sector_off = RTEMS_ALIGN_DOWN( search_off, nandpsu->Geometry.BlockSize );
   *sector_size = nandpsu->Geometry.BlockSize;
 
-  if ( *sector_off > nandpsu->Geometry.DeviceSize ) {
+  if ( (uint64_t)*sector_off > nandpsu->Geometry.DeviceSize ) {
     return -EIO;
   }
 
@@ -270,7 +270,7 @@ static int xnandpsu_sector_health(
 
   sector_off = RTEMS_ALIGN_DOWN( search_offset, nandpsu->Geometry.BlockSize );
 
-  if ( sector_off > nandpsu->Geometry.DeviceSize ) {
+  if ( (uint64_t)sector_off > nandpsu->Geometry.DeviceSize ) {
     return -EIO;
   }
 
@@ -422,7 +422,7 @@ static int xnandpsu_sector_mark_bad( rtems_flashdev *flash, off_t offset )
   rtems_status_code sc;
   uint32_t BlockIndex;
 
-  if ( offset > nandpsu->Geometry.DeviceSize ) {
+  if ( (uint64_t)offset > nandpsu->Geometry.DeviceSize ) {
     return -EIO;
   }
 

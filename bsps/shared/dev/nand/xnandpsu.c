@@ -1638,7 +1638,7 @@ s32 XNandPsu_Read(XNandPsu *InstancePtr, u64 Offset, u64 Length, u8 *DestBuf)
 					(u32)LengthVar;
 		}
 #ifdef __rtems__
-		if (Page == InstancePtr->PartialDataPageIndex) {
+		if (Page == (uint32_t)InstancePtr->PartialDataPageIndex) {
 			/*
 			 * This is a whole page read for the currently cached
 			 * page. It will not be taken care of below, so perform

@@ -41,7 +41,7 @@ static void zynq_uart_interrupt(void *arg)
 
   if ((regs->irq_sts & ZYNQ_UART_RTRIG) != 0) {
     char buf[32];
-    int c = 0;
+    size_t c = 0;
     regs->irq_sts = ZYNQ_UART_RTRIG;
     while (c < sizeof(buf) &&
            (regs->channel_sts & ZYNQ_UART_CHANNEL_STS_REMPTY) == 0) {

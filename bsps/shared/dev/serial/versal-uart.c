@@ -90,7 +90,7 @@ static void versal_uart_interrupt(void *arg)
 
   if ((uartmis & (PL011_UARTI_RTI | PL011_UARTI_RXI)) != 0) {
     char buf[32];
-    int c = 0;
+    size_t c = 0;
     while (c < sizeof(buf) &&
            versal_uart_flags_clear(regs, PL011_UARTFR_RXFE)) {
       buf[c++] = (char) PL011_UARTDR_DATA_GET(regs->base.uartdr);
@@ -254,7 +254,7 @@ static void versal_uart_write_support(
     ctx->transmitting = true;
   }
 #else
-  ssize_t i;
+  size_t i;
   for (i = 0; i < len; ++i) {
     arm_pl011_write_polled(base, buf[i]);
   }

@@ -1281,7 +1281,7 @@ int rtems_gpio_get_value(uint32_t pin_number)
 
   rv = rtems_gpio_bsp_get_value(bank, pin);
 
-  if ( rv == GPIO_INPUT_ERROR ) {
+  if ( rv == (uint32_t) GPIO_INPUT_ERROR ) {
     RELEASE_LOCK(gpio_bank_state[bank].lock);
 
     return -1;
