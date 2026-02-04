@@ -98,7 +98,7 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
   };
 
   unsigned int pvr;
-  int i;
+  size_t i;
 
   if ( PPC_UNKNOWN != current_ppc_cpu )
   	return current_ppc_cpu;

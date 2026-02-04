@@ -359,7 +359,7 @@ static void TEXT add_pcie_regions(qoriq_mmu_context *context, const void *fdt)
 			continue;
 		}
 
-		while (len >= range_length) {
+		while ((size_t)len >= range_length) {
 			uint32_t pci_addr_flags;
 			uintptr_t pci_addr;
 			uintptr_t cpu_addr;

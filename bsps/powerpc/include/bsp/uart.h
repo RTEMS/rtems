@@ -37,7 +37,7 @@ int      BSP_uart_set_break_cb(int uart, rtems_libio_ioctl_args_t *arg);
 
 extern unsigned BSP_poll_char_via_serial(void);
 extern void BSP_output_char_via_serial(const char val);
-extern int BSPConsolePort;
+extern rtems_device_minor_number BSPConsolePort;
 extern int BSPBaseBaud;
 
 /* Special IOCTLS to install a lowlevel 'BREAK' handler */

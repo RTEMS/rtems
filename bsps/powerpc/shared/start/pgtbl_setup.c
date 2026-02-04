@@ -103,7 +103,7 @@ unsigned		ldPtSize,tmp;
 						(PAGE_ALIGN((unsigned long)_etext) - 0) >> PG_SHIFT,
 						0, /* WIMG */
 						TRIV121_PP_RO_PAGE);
-	if (TRIV121_MAP_SUCCESS != tmp) {
+	if ((unsigned int)TRIV121_MAP_SUCCESS != tmp) {
 		printk("Unable to map page index %i; reverting to BAT0\n",
 				tmp);
 		pt = 0;
@@ -116,7 +116,7 @@ unsigned		ldPtSize,tmp;
 						(*pmemsize - (1<<ldPtSize) -  (unsigned long)__DATA_START__ )>> PG_SHIFT,
 						0, /* WIMG */
 						TRIV121_PP_RW_PAGE);
-		if (TRIV121_MAP_SUCCESS != tmp) {
+		if ((unsigned int)TRIV121_MAP_SUCCESS != tmp) {
 			printk("Unable to map page index %i; reverting to BAT0\n",
 					tmp);
 			pt = 0;

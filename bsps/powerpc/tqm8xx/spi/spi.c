@@ -488,7 +488,10 @@ static int m8xx_spi_read_write_bytes
 #if defined(DEBUG)
   printk("... exit OK, rc=%d\r\n",bc);
 #endif
-  return (rc == RTEMS_SUCCESSFUL) ? bc : -rc;
+  if (rc == RTEMS_SUCCESSFUL) {
+    return bc;
+  }
+  return -rc;
 }
 
 /*=========================================================================*\

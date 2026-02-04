@@ -365,7 +365,7 @@ rtems_interrupt_level lvl;
     /* Assume they literally specify a size */
     msk = sz;
     sz  = 0;
-    while ( msk != (1024<<(2*sz)) ) {
+    while ( msk != (1024u<<(2u*sz)) ) {
       if ( ++sz > 15 ) {
         return -1;
       }

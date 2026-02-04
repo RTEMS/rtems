@@ -820,7 +820,7 @@ configTsiPort(
 unsigned long long	start, limit, offst;
 unsigned long		mode, mask, tat_reg, tsau_reg;
 char				*name = (isout ? "Outbound" : "Inbound");
-int					i,s,l;
+unsigned long					i,s,l;
 
 	CHECK_BASE(base,0,-1);
 
@@ -831,7 +831,7 @@ int					i,s,l;
 		return -1;
 	}
 
-	if ( base == THEBASE && isout && vmeTsi148RegPort == port ) {
+	if ( base == THEBASE && isout && (unsigned long)vmeTsi148RegPort == port ) {
 		uprintf(stderr,"Tsi148 %s Port Cfg: invalid port; reserved by the interrupt manager for CRG\n", name);
 		return -1;
 	}
@@ -2102,7 +2102,10 @@ bail:
 	if ( q )
 		rtems_message_queue_delete(q);
 
-	return sc ? sc : err;
+  if ( sc ) {
+    return sc;
+  }
+	return err;
 }
 
 unsigned long

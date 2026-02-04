@@ -289,7 +289,7 @@ check_bat_size (unsigned long size)
   } else {
     __asm__ volatile ("	cntlzw %0, %1":"=r" (bit):"r" (size));
     bit = 31 - bit;
-    if (1 << bit != size)
+    if (1u << bit != size)
       return -1;
   }
   /* bit < 17 is not really legal but we aliased it to 0 in the past */
@@ -309,7 +309,7 @@ check_bat_size (unsigned long size)
 static int
 check_overlap (int typ, unsigned long start, unsigned long size)
 {
-  int i;
+  size_t i;
   unsigned long limit = start + size - 1;
   for (i = 0; i < sizeof (bat_addrs[typ]) / sizeof (bat_addrs[typ][0]); i++) {
     if (!((1 << i) & bat_in_use[typ]))

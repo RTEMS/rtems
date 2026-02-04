@@ -2518,7 +2518,10 @@ bail:
 	if ( q )
 		rtems_message_queue_delete(q);
 
-	return sc ? sc : err;
+	if ( sc ) {
+    return sc;
+  }
+	return err;
 }
 
 #endif

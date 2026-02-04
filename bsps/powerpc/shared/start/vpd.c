@@ -130,7 +130,8 @@ BSP_vpdRetrieveFields(VpdBuf data)
 {
 VpdBuf	      b, b1;
 VpdKey	      k;
-int		      l,fd = -1, put, got;
+size_t        l;
+int		        fd = -1, put, got;
 int           rval = -1;
 unsigned char mot[9];
 static int	  (*stop)(int fd);
@@ -188,7 +189,7 @@ static int	  (*stop)(int fd);
 					/* found 'instance' of field 'type' */
 
 					/* limit to buffer size */
-					put = b->buflen > l ? l : b->buflen;
+					put = (size_t)b->buflen > l ? l : (size_t)b->buflen;
 					if ( read_buf(fd, b->buf, put) < put )
 						goto bail;
 

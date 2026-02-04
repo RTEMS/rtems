@@ -65,7 +65,7 @@ PPC_DEVICE *residual_find_device(RESIDUAL *res,unsigned long BusMask,
 				 int Interface,
 				 int n)
 {
-	int i;
+	unsigned long i;
 	if ( !res || !res->ResidualLength ) return NULL;
 	for (i=0; i<res->ActualNumDevices; i++) {
 #define Dev res->Devices[i].DeviceId

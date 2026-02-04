@@ -38,7 +38,8 @@
  */
 void mmu_init( void )
 {
-  register uint32_t   reg1, i;
+  register uint32_t   reg1;
+  int i;
 
   /*
    * Initialize the TLBs

@@ -47,7 +47,8 @@ void TaskSetup_BDTable(volatile uint32 *BasePtr, volatile uint32 *LastPtr, volat
 					   int TaskNum, uint32 NumBD, uint16 MaxBD,
 					   uint8 NumPtr, ApiConfig_t ApiConfig, uint32 Status)
 {
-	int i, j;
+	uint16_t i;
+	int j;
 	uint32 *ptr;
 
 	/*

@@ -354,7 +354,7 @@ bsp_mmu_write(bsp_tlb_idx_t idx, uint32_t ea, uint32_t pa, int sz,
     /* Assume they literally specify a size */
     msk = sz;
     sz  = 0;
-    while ( msk != (1024<<(sz+sz)) ) {
+    while ( msk != (1024u<<(sz+sz)) ) {
       if ( ++sz > 15 ) {
         return -1;
       }

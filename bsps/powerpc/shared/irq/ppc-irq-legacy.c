@@ -87,7 +87,7 @@ static int C_dispatch_dec_handler_bookE (BSP_Exception_frame *frame, unsigned in
  * is valid.
  */
 
-static int isValidInterrupt(int irq)
+static int isValidInterrupt(unsigned int irq)
 {
   if ( (irq < internal_config->irqBase) || (irq >= internal_config->irqBase + internal_config->irqNb))
     return 0;
@@ -347,7 +347,7 @@ int BSP_rtems_int_disconnect(rtems_irq_number n, rtems_irq_hdl hdl, rtems_irq_hd
 
 int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
 {
-    int                           i;
+    size_t                        i;
     rtems_interrupt_level         level;
     rtems_irq_connect_data*       vchain;
 

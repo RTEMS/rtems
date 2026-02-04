@@ -511,7 +511,7 @@ mpc5200mbus_poll(mpc5200mbus *bus)
 rtems_status_code
 mpc5200mbus_select_clock_divider(mpc5200mbus *bus, int divider)
 {
-    int i;
+    size_t i;
     int mbc;
     struct {
         int divider;

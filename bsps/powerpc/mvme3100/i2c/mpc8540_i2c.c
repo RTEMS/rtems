@@ -394,6 +394,7 @@ uint8_t           buf[2];
 int               l = 0;
 uint8_t           read_mask = rw ? 1 : 0;
 rtems_status_code sc;
+int               xfer;
 
 	/* Make sure we are started; (i2c_start() didn't bother to wait
 	 * so we do it here - some time already has expired.
@@ -423,8 +424,8 @@ rtems_status_code sc;
 	 * the second byte]) to overcome the pipeline
 	 * delay in the hardware (I don't like this design) :-(.
 	 */
-	sc = i2c_xfer( 0, buf, l );
-	if ( rw && l == sc ) {
+	xfer = i2c_xfer( 0, buf, l );
+	if ( rw && l == xfer ) {
 		sc = i2c_xfer( 1, buf, 1 );
 	}
 	return sc >=0 ? RTEMS_SUCCESSFUL : -sc;

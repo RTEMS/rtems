@@ -82,7 +82,7 @@ static rtems_status_code mpc83xx_i2c_find_clock_divider
 |    o = ok or error code                                                   |
 \*=========================================================================*/
 {
-  int i;
+  size_t i;
   int fdr_val;
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   struct {

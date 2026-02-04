@@ -70,7 +70,7 @@ mpc5200_pcf8563_probe(int minor)
     i2c_bus_number bus;
     i2c_address addr;
 
-    if (minor >= NUM_RTCS)
+    if ((size_t)minor >= NUM_RTCS)
         return false;
 
     rtc = RTC_Table + minor;

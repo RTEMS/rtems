@@ -385,7 +385,7 @@ unsigned int accent_table_size = 68;
 
 typedef struct _console_log {
 	struct _console_log *next;
-	int offset;
+	size_t offset;
 	u_char data[PAGE_LOG_CHARS];
 } console_log;
 

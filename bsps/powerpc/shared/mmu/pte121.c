@@ -393,7 +393,7 @@ triv121PgTblLdMinSize (unsigned long size)
   size >>= LD_PG_SIZE - LD_PTE_SIZE;
   /* find the next power of 2 >= size */
   for (i = 0; i < LD_PHYS_SIZE; i++) {
-    if ((1 << i) >= size)
+    if ((1u << i) >= size)
       break;
   }
   /* pop up to the allowed minimum, if necessary */
@@ -481,7 +481,8 @@ triv121PgTblMap (Triv121PgTbl pt,
                  unsigned long numPages,
                  unsigned attributes, unsigned protection)
 {
-  int i, pass;
+  size_t i;
+  int pass;
   unsigned long pi;
   APte pte;
   long vsid;

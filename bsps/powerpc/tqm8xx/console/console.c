@@ -889,7 +889,8 @@ rtems_device_driver console_initialize(rtems_device_major_number  major,
   (void) arg;
 
   rtems_status_code status = RTEMS_SUCCESSFUL;
-  int entry,ttynum;
+  size_t entry;
+  int ttynum;
   char tty_name[] = "/dev/tty00";
 
   /*

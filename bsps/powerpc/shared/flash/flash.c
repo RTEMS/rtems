@@ -397,7 +397,7 @@ struct devdesc  *dd;
 STATIC uint32_t
 BSP_flashProbeSize(struct bankdesc *b)
 {
-int             max = b->max_size;
+uint32_t    max = b->max_size;
 uint32_t		rval;
 struct devdesc	*dd;
 unsigned		q;

@@ -146,7 +146,9 @@ void *sbrk(ptrdiff_t incr)
 {
   void *rval=(void*)-1;
 
-  if ( remaining_start != INVALID_REMAINING_START && incr <= remaining_size) {
+  if ( remaining_start != INVALID_REMAINING_START &&
+       (uintptr_t)incr <= remaining_size) {
+
     remaining_size-=incr;
     rval = (void *) remaining_start;
     remaining_start += incr;

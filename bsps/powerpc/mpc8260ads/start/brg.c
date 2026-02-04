@@ -94,7 +94,7 @@ m8xx_get_brg(unsigned brgmask, int baud)
   /* first try to find a BRG that is already at the right speed */
   for ( i = 0; i < NUM_BRGS; i++ ) {
     if ( (1 << i) & brgmask )    /* is this brg allowed? */
-      if ( brg_spd[i] == baud ) {
+      if ( brg_spd[i] == (unsigned long)baud ) {
         break;
     }
   }

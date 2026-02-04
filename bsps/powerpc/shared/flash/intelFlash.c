@@ -328,7 +328,7 @@ STATIC int
 flash_erase_block_intel(struct bankdesc *b, uint32_t addr)
 {
 uint32_t       sta;
-int            i;
+size_t         i;
 rtems_interval p;
 
 	if ( (sta = flash_check_ready_intel(b, addr)) )

@@ -162,7 +162,7 @@ struct bankdesc *b;
 			return 0;
 	}
 	/* bank is unsigned and cannot be < 0 */
-	if ( bank >= b->size ) {
+	if ( (uint32_t)bank >= b->size ) {
 		if ( !quiet )
 			fprintf(stderr,"Invalid flash bank #: %i; (too big)\n", bank);
 		return 0;

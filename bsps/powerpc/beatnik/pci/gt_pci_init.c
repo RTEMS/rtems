@@ -60,7 +60,7 @@ unsigned	BSP_pci_hose1_bus_base = (unsigned)-1;
 #define MV64x60_PCI1_CONFIG_ADDR	(BSP_MV64x60_BASE + 0xc78)
 #define MV64x60_PCI1_CONFIG_DATA	(BSP_MV64x60_BASE + 0xc7c)
 
-#define PCI_BUS2HOSE(bus) (bus<BSP_pci_hose1_bus_base?0:1)
+#define PCI_BUS2HOSE(bus) ((unsigned int)bus<BSP_pci_hose1_bus_base?0:1)
 
 void detect_host_bridge(void)
 {

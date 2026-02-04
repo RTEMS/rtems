@@ -45,7 +45,7 @@
  *    BSP_UART_COM1
  *    BSP_UART_COM2
  */
-int BSPConsolePort = BSP_CONSOLE_PORT;
+rtems_device_minor_number BSPConsolePort = BSP_CONSOLE_PORT;
 
 int BSPBaseBaud    = BSP_UART_BAUD_BASE;
 
@@ -159,7 +159,8 @@ static int console_first_open(int major, int minor, void *arg)
   rtems_status_code status;
 
   /* must not open a minor device we have no ISR for */
-  assert( minor>=0 && minor < sizeof(ttyS)/sizeof(ttyS[0]) && ttyS[minor].isr );
+  assert( minor>=0 && (size_t) minor < sizeof(ttyS)/sizeof(ttyS[0]) &&
+          ttyS[minor].isr );
 
   /* BSP_CONSOLE_BAUD-8-N-1 */
   BSP_uart_init(minor, BSP_CONSOLE_BAUD, 0);

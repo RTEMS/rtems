@@ -105,7 +105,7 @@ static int except_always_enabled(const rtems_raw_except_connect_data* ptr)
 
 void initialize_exceptions(void)
 {
-  int i;
+  size_t i;
 
   /*
    * Initialize all entries of the exception table with a description of the

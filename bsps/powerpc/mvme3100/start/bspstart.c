@@ -211,7 +211,7 @@ static void bsp_early( void )
 {
   unsigned char       *stack;
   char                *chpt;
-  int                  i;
+  size_t               i;
   ppc_cpu_id_t         myCpu;
   ppc_cpu_revision_t   myCpuRevision;
   E500_tlb_va_cache_t *tlb;
@@ -293,7 +293,7 @@ VpdBufRec          vpdData [] = {
        */
       if (    tlb->att.v
           &&  0xa != (tlb->att.wimge & 0xa)
-        &&  (tlb->va.va_epn<<12) >= BSP_mem_size ) {
+        &&  ((unsigned int)tlb->va.va_epn<<12) >= BSP_mem_size ) {
         rtems_e500_clrtlb( E500_SELTLB_1 | i );
       }
     }

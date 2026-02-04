@@ -549,7 +549,7 @@ ssize_t
 BSP_uart_termios_write_polled(int minor, const char *buf, size_t len)
 {
   int uart=minor;	/* could differ, theoretically */
-  int nwrite;
+  size_t nwrite;
   const char *b = buf;
 
   for (nwrite=0 ; nwrite < len ; nwrite++) {
@@ -616,7 +616,7 @@ BSP_uart_termios_read_com(int uart)
   rtems_interrupt_level l;
 
   /* read bytes */
-  while (( off < sizeof(buf) ) && ( uread(uart, LSR) & DR )) {
+  while (( (size_t)off < sizeof(buf) ) && ( uread(uart, LSR) & DR )) {
     buf[off++] = uread(uart, RBR);
   }
 
@@ -725,8 +725,8 @@ BSP_uart_termios_isr_com(int uart)
 	  else
 	    {
 	      /* RX data ready */
-	      assert(off < sizeof(buf));
-	      while ( off < sizeof(buf) && ( DR & uread(uart, LSR) ) )
+	      assert((size_t)off < sizeof(buf));
+	      while ( (size_t)off < sizeof(buf) && ( DR & uread(uart, LSR) ) )
 	        buf[off++] = uread(uart, RBR);
 	    }
 	  break;

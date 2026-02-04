@@ -248,7 +248,7 @@ void openpic_init(int main_pic, unsigned char *polarities, unsigned char *senses
 
 	/* Override if they desire */
 	if ( num_sources ) {
-		if ( NumSources != num_sources )
+		if ( NumSources != (unsigned int)num_sources )
 			printk("Overriding NumSources (%i) from configuration with %i\n",
 				NumSources, num_sources);
 		NumSources = num_sources;

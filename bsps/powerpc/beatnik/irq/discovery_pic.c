@@ -514,7 +514,7 @@ unsigned           i,j;
 int
 BSP_setup_the_pic(rtems_irq_global_settings* config)
 {
-int i;
+unsigned int i;
    /*
     * Store copy of configuration
     */

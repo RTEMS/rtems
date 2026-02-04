@@ -344,7 +344,7 @@ int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
      * it can re-enable the openpic while handling
      * VME interrupts (-> VME priorities in software)
 	 */
-	if (_BSP_vme_bridge_irq != irq && OpenPIC)
+	if (_BSP_vme_bridge_irq != (int)irq && OpenPIC)
 #endif
     		openpic_eoi(0);
 #else

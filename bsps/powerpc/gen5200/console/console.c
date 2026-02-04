@@ -531,7 +531,7 @@ static ssize_t mpc5200_uart_write(
    /*
     * Check tx fifo space
     */
-    if(len > (TX_FIFO_SIZE - psc->tfnum))
+    if(len > (size_t)(TX_FIFO_SIZE - psc->tfnum))
       frame_len = TX_FIFO_SIZE - psc->tfnum;
 
 #ifndef SINGLE_CHAR_MODE

@@ -276,7 +276,7 @@ static uint32_t rd_wdcnf(void)
    * status locally (and hope we get the initial
    * value right).
    */
-  if ( ~0 == cnf )
+  if ( ~0u == cnf )
     cnf = wdog_on;
   return cnf;
 }
