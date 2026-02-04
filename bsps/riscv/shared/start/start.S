@@ -50,6 +50,12 @@ SYM(_start):
 	LADDR	gp, __global_pointer$
 	.option	pop
 
+#ifndef RTEMS_SMP
+	li t3, RISCV_BOOT_HARTID
+	csrr	 t0, mhartid
+	bne	 t0, t3, .Lwfi
+#endif
+
 	/* Init FPU */
 #ifdef __riscv_flen
 	li	t0, MSTATUS_FS
