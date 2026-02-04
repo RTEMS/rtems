@@ -53,9 +53,8 @@
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-int rtems_fsmount
-(
-/*-------------------------------------------------------------------------*\
+int rtems_fsmount(
+  /*-------------------------------------------------------------------------*\
   | Purpose:                                                                  |
   |  This function will create the mount points listed and mount the file     |
   |   systems listed in the calling parameters                                |
@@ -63,37 +62,39 @@ int rtems_fsmount
   | Input Parameters:                                                         |
   \*-------------------------------------------------------------------------*/
   const rtems_fstab_entry *fstab_ptr,
-  size_t fstab_count,
-  size_t *fail_idx
- )
+  size_t                   fstab_count,
+  size_t                  *fail_idx
+)
 /*-------------------------------------------------------------------------*\
   | Return Value:                                                             |
   |    0, if success, -1 and errno if failed                                  |
   \*=========================================================================*/
 {
-  int rc = 0;
-  int tmp_rc;
+  int    rc = 0;
+  int    tmp_rc;
   size_t fstab_idx = 0;
-  bool terminate = false;
+  bool   terminate = false;
 
   /*
    * scan through all fstab entries;
    */
-  while (!terminate &&
-         (fstab_idx < fstab_count)) {
+  while ( !terminate && ( fstab_idx < fstab_count ) ) {
     tmp_rc = 0;
     /*
      * create mount point
      */
-    if (tmp_rc == 0) {
-      tmp_rc = rtems_mkdir(fstab_ptr->target, S_IRWXU | S_IRWXG | S_IRWXO);
-      if (tmp_rc != 0) {
-        if (0 != (fstab_ptr->report_reasons & FSMOUNT_MNTPNT_CRTERR)) {
-          fprintf(stdout,"fsmount: creation of mount point \"%s\" failed: %s\n",
-                  fstab_ptr->target,
-                  strerror(errno));
+    if ( tmp_rc == 0 ) {
+      tmp_rc = rtems_mkdir( fstab_ptr->target, S_IRWXU | S_IRWXG | S_IRWXO );
+      if ( tmp_rc != 0 ) {
+        if ( 0 != ( fstab_ptr->report_reasons & FSMOUNT_MNTPNT_CRTERR ) ) {
+          fprintf(
+            stdout,
+            "fsmount: creation of mount point \"%s\" failed: %s\n",
+            fstab_ptr->target,
+            strerror( errno )
+          );
         }
-        if (0 != (fstab_ptr->abort_reasons & FSMOUNT_MNTPNT_CRTERR)) {
+        if ( 0 != ( fstab_ptr->abort_reasons & FSMOUNT_MNTPNT_CRTERR ) ) {
           terminate = true;
           rc = tmp_rc;
         }
@@ -102,33 +103,40 @@ int rtems_fsmount
     /*
      * mount device to given mount point
      */
-    if (tmp_rc == 0) {
-      tmp_rc = mount(fstab_ptr->source,
-                     fstab_ptr->target,
-                     fstab_ptr->type,
-                     fstab_ptr->options,
-                     NULL);
-      if (tmp_rc != 0) {
-        if (0 != (fstab_ptr->report_reasons & FSMOUNT_MNT_FAILED)) {
-          fprintf(stdout,"fsmount: mounting of \"%s\" to"
-                  " \"%s\" failed: %s\n",
-                  fstab_ptr->source,
-                  fstab_ptr->target,
-                  strerror(errno));
+    if ( tmp_rc == 0 ) {
+      tmp_rc = mount(
+        fstab_ptr->source,
+        fstab_ptr->target,
+        fstab_ptr->type,
+        fstab_ptr->options,
+        NULL
+      );
+      if ( tmp_rc != 0 ) {
+        if ( 0 != ( fstab_ptr->report_reasons & FSMOUNT_MNT_FAILED ) ) {
+          fprintf(
+            stdout,
+            "fsmount: mounting of \"%s\" to"
+            " \"%s\" failed: %s\n",
+            fstab_ptr->source,
+            fstab_ptr->target,
+            strerror( errno )
+          );
         }
-        if (0 != (fstab_ptr->abort_reasons & FSMOUNT_MNT_FAILED)) {
+        if ( 0 != ( fstab_ptr->abort_reasons & FSMOUNT_MNT_FAILED ) ) {
           terminate = true;
           rc = tmp_rc;
         }
-      }
-      else {
-        if (0 != (fstab_ptr->report_reasons & FSMOUNT_MNT_OK)) {
-          fprintf(stdout,"fsmount: mounting of \"%s\" to"
-                  " \"%s\" succeeded\n",
-                  fstab_ptr->source,
-                  fstab_ptr->target);
+      } else {
+        if ( 0 != ( fstab_ptr->report_reasons & FSMOUNT_MNT_OK ) ) {
+          fprintf(
+            stdout,
+            "fsmount: mounting of \"%s\" to"
+            " \"%s\" succeeded\n",
+            fstab_ptr->source,
+            fstab_ptr->target
+          );
         }
-        if (0 != (fstab_ptr->abort_reasons & FSMOUNT_MNT_OK)) {
+        if ( 0 != ( fstab_ptr->abort_reasons & FSMOUNT_MNT_OK ) ) {
           terminate = true;
         }
       }
@@ -136,12 +144,12 @@ int rtems_fsmount
     /*
      * proceed to next entry
      */
-    if (!terminate) {
+    if ( !terminate ) {
       fstab_ptr++;
       fstab_idx++;
     }
   }
-  if (fail_idx != NULL) {
+  if ( fail_idx != NULL ) {
     *fail_idx = fstab_idx;
   }
   return rc;
