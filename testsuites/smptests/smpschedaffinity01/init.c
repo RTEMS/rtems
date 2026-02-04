@@ -54,10 +54,10 @@ const char rtems_test_name[] = "SMPSCHEDAFFINITY 1";
 
 struct task_data_t {
   rtems_id  id;
-  int       expected_cpu;
+  uint32_t  expected_cpu;
   cpu_set_t cpuset;
   bool      ran;
-  int       actual_cpu;
+  uint32_t  actual_cpu;
 };
 
 static struct task_data_t task_data[ NUM_CPUS ] = {
@@ -71,7 +71,7 @@ static struct task_data_t task_data[ NUM_CPUS ] = {
  * Spin loop to allow tasks to delay without yeilding the
  * processor.
  */
-static void test_delay( int ticks )
+static void test_delay( rtems_interval ticks )
 {
   rtems_interval start, stop;
   start = rtems_clock_get_ticks_since_boot();

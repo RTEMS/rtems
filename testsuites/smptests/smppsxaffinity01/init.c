@@ -120,7 +120,7 @@ void Validate_attr( void )
   uint32_t       cpus;
   cpu_set_t      cpuset1;
   cpu_set_t      cpuset2;
-  int            i;
+  uint32_t       i;
   int            priority;
 
   sc = pthread_getattr_np( Init_id, &attr );
