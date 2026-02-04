@@ -22,9 +22,9 @@
  */
 #include <rtems/stringto.h>
 #define STRING_TO_FLOAT
-#define STRING_TO_TYPE float
-#define STRING_TO_NAME rtems_string_to_float
+#define STRING_TO_TYPE   float
+#define STRING_TO_NAME   rtems_string_to_float
 #define STRING_TO_METHOD strtof
-#define STRING_TO_MAX HUGE_VALF
-#define STRING_TO_MIN ( -HUGE_VALF )
+#define STRING_TO_MAX    HUGE_VALF
+#define STRING_TO_MIN    ( -HUGE_VALF )
 #include "stringto_template.h"

@@ -22,9 +22,8 @@
  */
 #include <rtems/stringto.h>
 #define STRING_TO_FLOAT
-#define STRING_TO_TYPE long double
-#define STRING_TO_NAME rtems_string_to_long_double
+#define STRING_TO_TYPE   long double
+#define STRING_TO_NAME   rtems_string_to_long_double
 #define STRING_TO_METHOD strtod
-#define STRING_TO_MAX HUGE_VALL
+#define STRING_TO_MAX    HUGE_VALL
 #include "stringto_template.h"
-

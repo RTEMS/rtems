@@ -22,8 +22,8 @@
  */
 #include <rtems/stringto.h>
 #define STRING_TO_INTEGER
-#define STRING_TO_TYPE unsigned long long
-#define STRING_TO_NAME rtems_string_to_unsigned_long_long
+#define STRING_TO_TYPE   unsigned long long
+#define STRING_TO_NAME   rtems_string_to_unsigned_long_long
 #define STRING_TO_METHOD strtoull
-#define STRING_TO_MAX ULONG_LONG_MAX
+#define STRING_TO_MAX    ULONG_LONG_MAX
 #include "stringto_template.h"

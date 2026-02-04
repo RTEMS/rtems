@@ -74,11 +74,12 @@ rtems_status_code STRING_TO_NAME(
 #endif
   char *end;
 
-  if ( NULL == n )
+  if ( NULL == n ) {
     return RTEMS_INVALID_ADDRESS;
+  }
 
   errno = 0;
-  *n    = 0;
+  *n = 0;
 
 #ifdef STRING_TO_FLOAT
   result = STRING_TO_METHOD( s, &end );
@@ -87,27 +88,32 @@ rtems_status_code STRING_TO_NAME(
 #endif
 
   /* If the user wants the end pointer back, then return it. */
-  if ( endptr )
+  if ( endptr ) {
     *endptr = end;
+  }
 
   /* nothing was converted */
-  if ( end == s )
+  if ( end == s ) {
     return RTEMS_NOT_DEFINED;
+  }
 
   /* there was a conversion error */
-  if ( ( result == ZERO ) && errno )
+  if ( ( result == ZERO ) && errno ) {
     return RTEMS_INVALID_NUMBER;
+  }
 
 #ifdef STRING_TO_MAX
   /* there was an overflow */
-  if ( ( result == STRING_TO_MAX ) && ( errno == ERANGE ) )
+  if ( ( result == STRING_TO_MAX ) && ( errno == ERANGE ) ) {
     return RTEMS_INVALID_NUMBER;
+  }
 #endif
 
 #ifdef STRING_TO_MIN
   /* there was an underflow */
-  if ( ( result == STRING_TO_MIN ) && ( errno == ERANGE ) )
+  if ( ( result == STRING_TO_MIN ) && ( errno == ERANGE ) ) {
     return RTEMS_INVALID_NUMBER;
+  }
 #endif
 
 #ifdef STRING_TO_UCHAR_MAX

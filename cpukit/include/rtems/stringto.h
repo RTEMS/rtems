@@ -62,9 +62,9 @@
  *         source of the error.
  */
 rtems_status_code rtems_string_to_pointer(
-  const char     *s,
-  void          **n,
-  char          **endptr
+  const char *s,
+  void      **n,
+  char      **endptr
 );
 
 /**
@@ -83,10 +83,10 @@ rtems_status_code rtems_string_to_pointer(
  *         source of the error.
  */
 rtems_status_code rtems_string_to_unsigned_char(
-  const char     *s,
-  unsigned char  *n,
-  char          **endptr,
-  int             base
+  const char    *s,
+  unsigned char *n,
+  char         **endptr,
+  int            base
 );
 
 /**
@@ -104,10 +104,10 @@ rtems_status_code rtems_string_to_unsigned_char(
  *         source of the error.
  */
 rtems_status_code rtems_string_to_int(
-  const char  *s,
-  int         *n,
-  char       **endptr,
-  int          base
+  const char *s,
+  int        *n,
+  char      **endptr,
+  int         base
 );
 
 /**
@@ -125,10 +125,10 @@ rtems_status_code rtems_string_to_int(
  *         source of the error.
  */
 rtems_status_code rtems_string_to_unsigned_int(
-  const char    *s,
-  unsigned int  *n,
-  char         **endptr,
-  int            base
+  const char   *s,
+  unsigned int *n,
+  char        **endptr,
+  int           base
 );
 
 /**
@@ -147,10 +147,10 @@ rtems_status_code rtems_string_to_unsigned_int(
  *         source of the error.
  */
 rtems_status_code rtems_string_to_long(
-  const char  *s,
-  long        *n,
-  char       **endptr,
-  int          base
+  const char *s,
+  long       *n,
+  char      **endptr,
+  int         base
 );
 
 /**
@@ -169,10 +169,10 @@ rtems_status_code rtems_string_to_long(
  *         source of the error.
  */
 rtems_status_code rtems_string_to_unsigned_long(
-  const char     *s,
-  unsigned long  *n,
-  char          **endptr,
-  int             base
+  const char    *s,
+  unsigned long *n,
+  char         **endptr,
+  int            base
 );
 
 /**
@@ -191,10 +191,10 @@ rtems_status_code rtems_string_to_unsigned_long(
  *         source of the error.
  */
 rtems_status_code rtems_string_to_long_long(
-  const char  *s,
-  long long   *n,
-  char       **endptr,
-  int          base
+  const char *s,
+  long long  *n,
+  char      **endptr,
+  int         base
 );
 
 /**
@@ -213,10 +213,10 @@ rtems_status_code rtems_string_to_long_long(
  *         source of the error.
  */
 rtems_status_code rtems_string_to_unsigned_long_long(
-  const char           *s,
-  unsigned long long   *n,
-  char                **endptr,
-  int                   base
+  const char         *s,
+  unsigned long long *n,
+  char              **endptr,
+  int                 base
 );
 
 /**
@@ -233,9 +233,9 @@ rtems_status_code rtems_string_to_unsigned_long_long(
  *         source of the error.
  */
 rtems_status_code rtems_string_to_float(
-  const char   *s,
-  float        *n,
-  char        **endptr
+  const char *s,
+  float      *n,
+  char      **endptr
 );
 
 /**
@@ -252,9 +252,9 @@ rtems_status_code rtems_string_to_float(
  *         source of the error.
  */
 rtems_status_code rtems_string_to_double(
-  const char   *s,
-  double       *n,
-  char        **endptr
+  const char *s,
+  double     *n,
+  char      **endptr
 );
 
 /**
@@ -271,9 +271,9 @@ rtems_status_code rtems_string_to_double(
  *         source of the error.
  */
 rtems_status_code rtems_string_to_long_double(
-  const char   *s,
-  long double  *n,
-  char        **endptr
+  const char  *s,
+  long double *n,
+  char       **endptr
 );
 
 #endif

@@ -22,9 +22,9 @@
  */
 #include <rtems/stringto.h>
 #define STRING_TO_INTEGER
-#define STRING_TO_TYPE long long
-#define STRING_TO_NAME rtems_string_to_long_long
+#define STRING_TO_TYPE   long long
+#define STRING_TO_NAME   rtems_string_to_long_long
 #define STRING_TO_METHOD strtoll
-#define STRING_TO_MIN LONG_LONG_MIN
-#define STRING_TO_MAX LONG_LONG_MAX
+#define STRING_TO_MIN    LONG_LONG_MIN
+#define STRING_TO_MAX    LONG_LONG_MAX
 #include "stringto_template.h"
