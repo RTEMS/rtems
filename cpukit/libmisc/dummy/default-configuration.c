@@ -41,7 +41,7 @@ int main( int argc, char **argv );
 
 static void Init( rtems_task_argument arg )
 {
-  const char *boot_cmdline = *((const char **) arg);
+  const char *boot_cmdline = *( (const char **) arg );
   char       *cmdline = NULL;
   int         argc = 0;
   char      **argv = NULL;
@@ -52,9 +52,9 @@ static void Init( rtems_task_argument arg )
 
     cmdline = malloc( n );
     if ( cmdline != NULL ) {
-      char* command;
+      char *command;
 
-      memcpy( cmdline, boot_cmdline, n);
+      memcpy( cmdline, boot_cmdline, n );
 
       command = cmdline;
 
@@ -63,8 +63,9 @@ static void Init( rtems_task_argument arg )
        */
       while ( true ) {
         command = strtok( command, " \t\r\n" );
-        if ( command == NULL )
+        if ( command == NULL ) {
           break;
+        }
 
         ++argc;
         command = '\0';
@@ -110,8 +111,8 @@ static void Init( rtems_task_argument arg )
 
 /* on smaller architectures lower the number or resources */
 #define CONFIGURE_UNLIMITED_OBJECTS
-#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 8
-#define CONFIGURE_MAXIMUM_DRIVERS 16
+#define CONFIGURE_MAXIMUM_USER_EXTENSIONS  8
+#define CONFIGURE_MAXIMUM_DRIVERS          16
 #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 32
 
 /* Include basic device drivers needed to call delays */
