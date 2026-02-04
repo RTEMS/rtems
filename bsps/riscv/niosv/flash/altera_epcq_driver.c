@@ -429,7 +429,7 @@ static int alt_epcq_controller2_erase_block(
    */
   if (
     ( block_offset < 0 ) ||
-    ( block_offset >= epcq_flash_info->size_in_bytes ) ||
+    ( (uint32_t) block_offset >= epcq_flash_info->size_in_bytes ) ||
     ( block_offset & ( epcq_flash_info->sector_size - 1 )) != 0
   ) {
     return -EINVAL;
@@ -531,9 +531,10 @@ static int alt_epcq_controller2_write_block (
     data_offset < 0 ||
     NULL == flash_info ||
     NULL == data ||
-    data_offset >= epcq_flash_info->size_in_bytes ||
-    block_offset >= epcq_flash_info->size_in_bytes ||
-    length > (epcq_flash_info->sector_size - (data_offset - block_offset)) ||
+    (uint32_t) data_offset >= epcq_flash_info->size_in_bytes ||
+    (uint32_t) block_offset >= epcq_flash_info->size_in_bytes ||
+    (uint32_t) length > (epcq_flash_info->sector_size -
+      (data_offset - block_offset)) ||
     length < 0 ||
     (block_offset & (epcq_flash_info->sector_size - 1)) != 0
   ) {
@@ -817,7 +818,7 @@ static inline int alt_epcq_validate_read_write_arguments (
 {
   alt_epcq_controller2_dev *epcq_flash_info = NULL;
   uint32_t start_address = 0;
-  int32_t end_address = 0;
+  uint32_t end_address = 0;
 
   /* return -EINVAL if flash_info is NULL */
   if( NULL == flash_info ) {
