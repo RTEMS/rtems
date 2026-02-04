@@ -54,8 +54,12 @@ extern "C" {
 #endif
 
 #define DEVNULL_DRIVER_TABLE_ENTRY \
-  { null_initialize, null_open, null_close, null_read, \
-    null_write, null_control }
+  { null_initialize,               \
+    null_open,                     \
+    null_close,                    \
+    null_read,                     \
+    null_write,                    \
+    null_control }
 
 #define NULL_SUCCESSFUL RTEMS_SUCCESSFUL
 

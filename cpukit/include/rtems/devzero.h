@@ -53,49 +53,47 @@ extern "C" {
 #define DEVZERO_DEVICE_NAME "/dev/zero"
 
 #define DEVZERO_DRIVER_TABLE_ENTRY \
-  { \
-    dev_zero_initialize, \
-    dev_zero_open, \
-    dev_zero_close, \
-    dev_zero_read, \
-    dev_zero_write, \
-    dev_zero_control \
-  }
+  { dev_zero_initialize,           \
+    dev_zero_open,                 \
+    dev_zero_close,                \
+    dev_zero_read,                 \
+    dev_zero_write,                \
+    dev_zero_control }
 
 rtems_device_driver dev_zero_initialize(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
-  void *arg
+  void                     *arg
 );
 
 rtems_device_driver dev_zero_open(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
-  void *arg
+  void                     *arg
 );
 
 rtems_device_driver dev_zero_close(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
-  void *arg
+  void                     *arg
 );
 
 rtems_device_driver dev_zero_read(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
-  void *arg
+  void                     *arg
 );
 
 rtems_device_driver dev_zero_write(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
-  void *arg
+  void                     *arg
 );
 
 rtems_device_driver dev_zero_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
-  void *arg
+  void                     *arg
 );
 
 #ifdef __cplusplus

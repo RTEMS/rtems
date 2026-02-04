@@ -42,13 +42,13 @@
  *    rval       - NULL_SUCCESSFUL
  */
 
-uint32_t   NULL_major;
+uint32_t    NULL_major;
 static char initialized;
 
 rtems_device_driver null_initialize(
-  rtems_device_major_number major,
+  rtems_device_major_number       major,
   rtems_device_minor_number minor RTEMS_UNUSED,
-  void *pargp RTEMS_UNUSED
+  void *pargp                     RTEMS_UNUSED
 )
 {
   rtems_device_driver status;
@@ -62,8 +62,9 @@ rtems_device_driver null_initialize(
       (rtems_device_minor_number) 0
     );
 
-    if (status != RTEMS_SUCCESSFUL)
-      rtems_fatal_error_occurred(status);
+    if ( status != RTEMS_SUCCESSFUL ) {
+      rtems_fatal_error_occurred( status );
+    }
 
     NULL_major = major;
   }
@@ -87,12 +88,11 @@ rtems_device_driver null_initialize(
 rtems_device_driver null_open(
   rtems_device_major_number major RTEMS_UNUSED,
   rtems_device_minor_number minor RTEMS_UNUSED,
-  void *pargp RTEMS_UNUSED
+  void *pargp                     RTEMS_UNUSED
 )
 {
   return NULL_SUCCESSFUL;
 }
-
 
 /*  null_close
  *
@@ -110,12 +110,11 @@ rtems_device_driver null_open(
 rtems_device_driver null_close(
   rtems_device_major_number major RTEMS_UNUSED,
   rtems_device_minor_number minor RTEMS_UNUSED,
-  void *pargp RTEMS_UNUSED
+  void *pargp                     RTEMS_UNUSED
 )
 {
   return NULL_SUCCESSFUL;
 }
-
 
 /*  null_read
  *
@@ -133,12 +132,11 @@ rtems_device_driver null_close(
 rtems_device_driver null_read(
   rtems_device_major_number major RTEMS_UNUSED,
   rtems_device_minor_number minor RTEMS_UNUSED,
-  void *pargp RTEMS_UNUSED
+  void *pargp                     RTEMS_UNUSED
 )
 {
   return NULL_SUCCESSFUL;
 }
-
 
 /*  null_write
  *
@@ -156,17 +154,17 @@ rtems_device_driver null_read(
 rtems_device_driver null_write(
   rtems_device_major_number major RTEMS_UNUSED,
   rtems_device_minor_number minor RTEMS_UNUSED,
-  void *pargp
+  void                           *pargp
 )
 {
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *) pargp;
 
-  if ( rw_args )
+  if ( rw_args ) {
     rw_args->bytes_moved = rw_args->count;
+  }
 
   return NULL_SUCCESSFUL;
 }
-
 
 /*  null_control
  *
@@ -184,7 +182,7 @@ rtems_device_driver null_write(
 rtems_device_driver null_control(
   rtems_device_major_number major RTEMS_UNUSED,
   rtems_device_minor_number minor RTEMS_UNUSED,
-  void *pargp RTEMS_UNUSED
+  void *pargp                     RTEMS_UNUSED
 )
 {
   return NULL_SUCCESSFUL;

@@ -44,18 +44,18 @@
 #include <rtems/libio.h>
 
 rtems_device_driver dev_zero_initialize(
-  rtems_device_major_number major,
+  rtems_device_major_number       major,
   rtems_device_minor_number minor RTEMS_UNUSED,
-  void *arg RTEMS_UNUSED
+  void *arg                       RTEMS_UNUSED
 )
 {
-  return rtems_io_register_name(DEVZERO_DEVICE_NAME, major, 0);
+  return rtems_io_register_name( DEVZERO_DEVICE_NAME, major, 0 );
 }
 
 rtems_device_driver dev_zero_open(
   rtems_device_major_number major RTEMS_UNUSED,
   rtems_device_minor_number minor RTEMS_UNUSED,
-  void *arg RTEMS_UNUSED
+  void *arg                       RTEMS_UNUSED
 )
 {
   return RTEMS_SUCCESSFUL;
@@ -64,7 +64,7 @@ rtems_device_driver dev_zero_open(
 rtems_device_driver dev_zero_close(
   rtems_device_major_number major RTEMS_UNUSED,
   rtems_device_minor_number minor RTEMS_UNUSED,
-  void *arg RTEMS_UNUSED
+  void *arg                       RTEMS_UNUSED
 )
 {
   return RTEMS_SUCCESSFUL;
@@ -73,13 +73,13 @@ rtems_device_driver dev_zero_close(
 rtems_device_driver dev_zero_read(
   rtems_device_major_number major RTEMS_UNUSED,
   rtems_device_minor_number minor RTEMS_UNUSED,
-  void *arg RTEMS_UNUSED
+  void *arg                       RTEMS_UNUSED
 )
 {
   rtems_libio_rw_args_t *rw = arg;
 
   rw->bytes_moved = rw->count;
-  memset(rw->buffer, 0, rw->count);
+  memset( rw->buffer, 0, rw->count );
 
   return RTEMS_SUCCESSFUL;
 }
@@ -87,7 +87,7 @@ rtems_device_driver dev_zero_read(
 rtems_device_driver dev_zero_write(
   rtems_device_major_number major RTEMS_UNUSED,
   rtems_device_minor_number minor RTEMS_UNUSED,
-  void *arg
+  void                           *arg
 )
 {
   rtems_libio_rw_args_t *rw = arg;
@@ -100,7 +100,7 @@ rtems_device_driver dev_zero_write(
 rtems_device_driver dev_zero_control(
   rtems_device_major_number major RTEMS_UNUSED,
   rtems_device_minor_number minor RTEMS_UNUSED,
-  void *arg RTEMS_UNUSED
+  void *arg                       RTEMS_UNUSED
 )
 {
   return RTEMS_IO_ERROR;
