@@ -283,7 +283,7 @@ void console_outbyte_interrupt(
 
 static ssize_t console_write_support (int minor, const char *buf, size_t len)
 {
-  int nwrite = 0;
+  size_t nwrite = 0;
 
   while (nwrite < len) {
 #if (CONSOLE_USE_INTERRUPTS)

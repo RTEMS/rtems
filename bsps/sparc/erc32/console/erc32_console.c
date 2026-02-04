@@ -292,7 +292,7 @@ static ssize_t erc32_console_write_support_polled(
   size_t      len
 )
 {
-  int nwrite = 0;
+  size_t nwrite = 0;
 
   while (nwrite < len) {
     console_outbyte_polled( minor, *buf++ );
