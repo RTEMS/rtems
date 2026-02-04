@@ -156,7 +156,7 @@ static ssize_t uart_write(
   size_t n
 )
 {
-  ssize_t i = 0;
+  size_t i = 0;
 
   for (i = 0; i < n; ++i){
     uart_write_polled(minor, s [i]);
