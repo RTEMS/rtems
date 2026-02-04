@@ -115,6 +115,7 @@ install:
   - cpukit/contrib/include/machine/_timecounter.h
 - destination: ${BSP_INCLUDEDIR}/rtems
   source:
+  - cpukit/contrib/include/rtems/fatfs.h
   - cpukit/contrib/include/rtems/mouse_parser.h
   - cpukit/include/rtems/assoc.h
   - cpukit/include/rtems/base64.h
@@ -143,7 +144,6 @@ install:
   - cpukit/include/rtems/devzero.h
   - cpukit/include/rtems/diskdevs.h
   - cpukit/include/rtems/dosfs.h
-  - cpukit/include/rtems/fatfs.h
   - cpukit/include/rtems/dumpbuf.h
   - cpukit/include/rtems/endian.h
   - cpukit/include/rtems/error.h
