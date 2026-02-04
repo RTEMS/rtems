@@ -142,7 +142,11 @@ static const char* module_metadata_search_info(const char* mod, int info)
      * Attribute match? Return pointer to data.
      * Consumer may safely assume that size value precedes data.
      */
+#ifdef __rtems__
+    if (hdr[0] == (uint32_t)info)
+#else
     if (hdr[0] == info)
+#endif
       return(curr_addr + (sizeof(uint32_t) * 2));
 
     /* Skip to next field */

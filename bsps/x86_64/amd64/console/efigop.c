@@ -373,7 +373,7 @@ find_gop()
                                     &HandleCount,
                                     &HandleBuffer);
     if (!EFI_ERROR (status)) {
-        for (int i = 0; i < HandleCount; i++) {
+        for (UINTN i = 0; i < HandleCount; i++) {
             status = BS->HandleProtocol( HandleBuffer[i],
                                          &gop_guid,
                                          (VOID*)&gop);

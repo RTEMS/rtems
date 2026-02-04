@@ -139,7 +139,7 @@ efi_console_initialize( void )
                                                            &HandleCount,
                                                            &HandleBuffer);
             if (status == EFI_SUCCESS) {
-                for (int i = 0; i < HandleCount; i++) {
+                for (UINTN i = 0; i < HandleCount; i++) {
                     status = ST->BootServices->HandleProtocol( HandleBuffer[i],
                                                                &ConsoleControlGUID,
                                                                (VOID*)&ConsoleControl);
