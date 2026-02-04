@@ -43,7 +43,7 @@ void Shm_Get_configuration(
 {
   (void) localnode;
 
-  int i;
+  size_t i;
   unsigned int tmp;
   const rtems_multiprocessing_table *mptable;
 
