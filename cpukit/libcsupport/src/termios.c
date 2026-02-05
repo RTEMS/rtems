@@ -1315,7 +1315,7 @@ static void erase( struct rtems_termios_tty *tty, int lineFlag )
       if ( !lineFlag && !( tty->termios.c_lflag & ECHOE ) ) {
         echo( tty->termios.c_cc[ VERASE ], tty );
       } else if ( c == '\t' ) {
-        int col = tty->read_start_column;
+        int    col = tty->read_start_column;
         size_t i = 0;
 
         /*

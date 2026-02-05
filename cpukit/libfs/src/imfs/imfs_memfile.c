@@ -566,7 +566,7 @@ ssize_t IMFS_memfile_write(
 
   last_byte = start + my_length;
   if ( last_byte > memfile->File.size ) {
-    bool zero_fill = start > (int64_t)memfile->File.size;
+    bool zero_fill = start > (int64_t) memfile->File.size;
 
     status = IMFS_memfile_extend( memfile, zero_fill, last_byte );
     if ( status ) {

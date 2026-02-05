@@ -76,4 +76,3 @@
  *
  * @brief Serial Mouse
  */
-

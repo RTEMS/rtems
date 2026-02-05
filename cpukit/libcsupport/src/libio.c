@@ -181,7 +181,7 @@ void rtems_libio_free_iop( rtems_libio_t *iop )
 
 int rtems_libio_count_open_iops( void )
 {
-  int open = 0;
+  int      open = 0;
   uint32_t i;
   /*
    * No locking needed to count the open iops

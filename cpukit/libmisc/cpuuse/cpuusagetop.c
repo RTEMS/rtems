@@ -81,12 +81,12 @@ typedef struct {
   Timestamp_Control    uptime;
   Timestamp_Control    last_uptime;
   Timestamp_Control    period;
-  uint32_t             task_count;           /* Number of tasks. */
-  uint32_t             last_task_count;      /* Number in the last sample. */
-  uint32_t             task_size;            /* The size of the arrays */
-  Thread_Control     **tasks;         /* List of tasks in this sample. */
-  Thread_Control     **last_tasks;    /* List of tasks in the last sample. */
-  Timestamp_Control   *usage;         /* Usage of task's in this sample. */
+  uint32_t             task_count;      /* Number of tasks. */
+  uint32_t             last_task_count; /* Number in the last sample. */
+  uint32_t             task_size;       /* The size of the arrays */
+  Thread_Control     **tasks;           /* List of tasks in this sample. */
+  Thread_Control     **last_tasks;      /* List of tasks in the last sample. */
+  Timestamp_Control   *usage;           /* Usage of task's in this sample. */
   Timestamp_Control   *last_usage;    /* Usage of task's in the last sample. */
   Timestamp_Control   *current_usage; /* Current usage for this sample. */
   Timestamp_Control    total;         /* Total run time (equal to uptime). */
