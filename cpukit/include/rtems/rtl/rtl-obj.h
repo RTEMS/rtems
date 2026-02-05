@@ -115,7 +115,8 @@ typedef struct rtems_rtl_loader_table {
   (1 << 7)                              /**< Section holds reloc addend recs. */
 #define RTEMS_RTL_OBJ_SECT_SYM (1 << 8) /**< Section holds symbols. */
 #define RTEMS_RTL_OBJ_SECT_STR (1 << 9) /**< Section holds strings. */
-#define RTEMS_RTL_OBJ_SECT_ALLOC      (1 << 10  /**< Section allocates runtime memory. */
+#define RTEMS_RTL_OBJ_SECT_ALLOC                                               \
+  (1 << 10) /**< Section allocates runtime memory. */
 #define RTEMS_RTL_OBJ_SECT_LOAD                                                \
   (1 << 11) /**< Section is loaded from object file. */
 #define RTEMS_RTL_OBJ_SECT_WRITE                                               \
