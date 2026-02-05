@@ -79,9 +79,13 @@ RTEMS_STATIC_ASSERT(
 #undef RTEMS_RB_ROOT
 #define RTEMS_RB_ROOT ( (struct rb_root) { NULL } )
 
-#define rb_entry( p, container, field ) RTEMS_CONTAINER_OF( p, container, field )
+#define rb_entry( p, container, field ) \
+  RTEMS_CONTAINER_OF( p, container, field )
 
-static inline void rb_insert_color( struct rb_node *node, struct rb_root *root)
+static inline void rb_insert_color(
+  struct rb_node *node,
+  struct rb_root *root
+)
 {
   _RBTree_Insert_color( (RBTree_Control *) root, node );
 }
@@ -117,16 +121,12 @@ static inline void rb_replace_node(
   struct rb_root *root
 )
 {
-  _RBTree_Replace_node(
-    (RBTree_Control *) root,
-    victim,
-    replacement
-  );
+  _RBTree_Replace_node( (RBTree_Control *) root, victim, replacement );
 }
 
 static inline void rb_link_node(
-  struct rb_node *node,
-  struct rb_node *parent,
+  struct rb_node  *node,
+  struct rb_node  *parent,
   struct rb_node **link
 )
 {
@@ -140,19 +140,17 @@ static inline struct rb_node *rb_parent( struct rb_node *node )
 }
 
 #define rbtree_postorder_for_each_entry_safe( node, next, root, field ) \
-  for ( \
-    node = _RBTree_Postorder_first( \
-      (RBTree_Control *) root, \
-      offsetof( __typeof__( *node ), field ) \
-    ); \
-    node != NULL && ( \
-      next = _RBTree_Postorder_next( \
-        &node->field, \
-        offsetof( __typeof__( *node ), field ) \
-      ), \
-      node != NULL \
-    ); \
-    node = next \
+  for (                                                                 \
+    node = _RBTree_Postorder_first(                                     \
+      (RBTree_Control *) root,                                          \
+      offsetof( __typeof__( *node ), field )                            \
+    );                                                                  \
+    node != NULL && ( next = _RBTree_Postorder_next(                    \
+                        &node->field,                                   \
+                        offsetof( __typeof__( *node ), field )          \
+                      ),                                                \
+                      node != NULL );                                   \
+    node = next                                                         \
   )
 
 #ifdef __cplusplus

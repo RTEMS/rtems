@@ -92,7 +92,7 @@
  * @brief SPI transfer flag which sets SPI Mode 0 (clock starts high, sample on
  * trailing edge).
  */
-#define SPI_MODE_3 (SPI_CPOL | SPI_CPHA)
+#define SPI_MODE_3 ( SPI_CPOL | SPI_CPHA )
 
 /**
  * @brief SPI transfer flag which selects the device by setting the chip select
@@ -218,64 +218,65 @@ struct spi_ioc_transfer {
 /**
  * @brief Calculates the size of the SPI message array.
  */
-#define SPI_MSGSIZE(n) \
-  (((n) * sizeof(struct spi_ioc_transfer) < IOCPARM_MAX) ? \
-    (n) * sizeof(struct spi_ioc_transfer) : 0)
+#define SPI_MSGSIZE( n )                                        \
+  ( ( ( n ) * sizeof( struct spi_ioc_transfer ) < IOCPARM_MAX ) \
+      ? ( n ) * sizeof( struct spi_ioc_transfer )               \
+      : 0 )
 
 /**
  * @brief Transfers an array with SPI messages.
  */
-#define SPI_IOC_MESSAGE(n) _IOW(SPI_IOC_MAGIC, 0, char[SPI_MSGSIZE(n)])
+#define SPI_IOC_MESSAGE( n ) _IOW( SPI_IOC_MAGIC, 0, char[ SPI_MSGSIZE( n ) ] )
 
 /**
  * @brief Reads the least-significant 8-bits of the SPI default mode.
  */
-#define SPI_IOC_RD_MODE _IOR(SPI_IOC_MAGIC, 1, uint8_t)
+#define SPI_IOC_RD_MODE _IOR( SPI_IOC_MAGIC, 1, uint8_t )
 
 /**
  * @brief Writes the SPI default mode (the most-significant 24-bits of the mode are
  * set to zero).
  */
-#define SPI_IOC_WR_MODE _IOW(SPI_IOC_MAGIC, 1, uint8_t)
+#define SPI_IOC_WR_MODE _IOW( SPI_IOC_MAGIC, 1, uint8_t )
 
 /**
  * @brief Reads the SPI default least-significant bit first setting.
  */
-#define SPI_IOC_RD_LSB_FIRST _IOR(SPI_IOC_MAGIC, 2, uint8_t)
+#define SPI_IOC_RD_LSB_FIRST _IOR( SPI_IOC_MAGIC, 2, uint8_t )
 
 /**
  * @brief Writes the SPI default least-significant-bit first setting.
  */
-#define SPI_IOC_WR_LSB_FIRST _IOW(SPI_IOC_MAGIC, 2, uint8_t)
+#define SPI_IOC_WR_LSB_FIRST _IOW( SPI_IOC_MAGIC, 2, uint8_t )
 
 /**
  * @brief Reads the SPI default bits per word.
  */
-#define SPI_IOC_RD_BITS_PER_WORD _IOR(SPI_IOC_MAGIC, 3, uint8_t)
+#define SPI_IOC_RD_BITS_PER_WORD _IOR( SPI_IOC_MAGIC, 3, uint8_t )
 
 /**
  * @brief Writes the SPI default bits per word.
  */
-#define SPI_IOC_WR_BITS_PER_WORD _IOW(SPI_IOC_MAGIC, 3, uint8_t)
+#define SPI_IOC_WR_BITS_PER_WORD _IOW( SPI_IOC_MAGIC, 3, uint8_t )
 
 /**
  * @brief Reads the SPI default speed in Hz.
  */
-#define SPI_IOC_RD_MAX_SPEED_HZ _IOR(SPI_IOC_MAGIC, 4, uint32_t)
+#define SPI_IOC_RD_MAX_SPEED_HZ _IOR( SPI_IOC_MAGIC, 4, uint32_t )
 
 /**
  * @brief Writes the SPI default speed in Hz.
  */
-#define SPI_IOC_WR_MAX_SPEED_HZ _IOW(SPI_IOC_MAGIC, 4, uint32_t)
+#define SPI_IOC_WR_MAX_SPEED_HZ _IOW( SPI_IOC_MAGIC, 4, uint32_t )
 
 /**
  * @brief Reads the full 32-bit SPI default mode.
  */
-#define SPI_IOC_RD_MODE32 _IOR(SPI_IOC_MAGIC, 5, uint32_t)
+#define SPI_IOC_RD_MODE32 _IOR( SPI_IOC_MAGIC, 5, uint32_t )
 
 /**
  * @brief Writes the full 32-bit SPI default mode.
  */
-#define SPI_IOC_WR_MODE32 _IOW(SPI_IOC_MAGIC, 5, uint32_t)
+#define SPI_IOC_WR_MODE32 _IOW( SPI_IOC_MAGIC, 5, uint32_t )
 
 #endif /* _UAPI_LINUX_SPI_H */

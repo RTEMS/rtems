@@ -126,9 +126,9 @@
  * @brief Argument type for I2C_SMBUS IO control call.
  */
 struct i2c_smbus_ioctl_data {
-  uint8_t read_write;
-  uint8_t command;
-  uint32_t size;
+  uint8_t               read_write;
+  uint8_t               command;
+  uint32_t              size;
   union i2c_smbus_data *data;
 };
 
@@ -137,7 +137,7 @@ struct i2c_smbus_ioctl_data {
  */
 struct i2c_rdwr_ioctl_data {
   struct i2c_msg *msgs;
-  uint32_t nmsgs;
+  uint32_t        nmsgs;
 };
 
 /**
