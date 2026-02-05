@@ -82,7 +82,7 @@
 #include <rtems/rtems/timer.h>
 #include <rtems/rtems/types.h>
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   #include <rtems/rtems/mp.h>
 #endif
 

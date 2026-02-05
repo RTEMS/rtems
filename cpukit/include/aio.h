@@ -53,7 +53,7 @@ extern "C" {
  * @{
  */
 
-#if defined(_POSIX_ASYNCHRONOUS_IO)
+#if defined( _POSIX_ASYNCHRONOUS_IO )
 
 /*
  *  6.7.1 Data Definitions for Asynchronous Input and Output,
@@ -69,7 +69,7 @@ extern "C" {
  */
 
 /** All requested operations have been canceled */
-#define AIO_CANCELED    0
+#define AIO_CANCELED 0
 
 /** Some operations could not be canceled since they are in progress */
 #define AIO_NOTCANCELED 1
@@ -78,25 +78,25 @@ extern "C" {
  * None of the requested operations could be canceled since
  * they are already complete
  */
-#define AIO_ALLDONE     2
+#define AIO_ALLDONE 2
 
 /** Calling process is to be suspendes until the operation is complete */
-#define LIO_WAIT        0
+#define LIO_WAIT 0
 
 /**
  * Calling process is to continue execution while the operation is performed
  * and no notification shall be given when the operation is completed
  */
-#define LIO_NOWAIT      1
+#define LIO_NOWAIT 1
 
 /** No transfer is requested */
-#define LIO_NOP         0
+#define LIO_NOP 0
 
 /** Request a read() */
-#define LIO_READ        1
+#define LIO_READ 1
 
 /** Request a write() */
-#define LIO_WRITE       2
+#define LIO_WRITE 2
 
 /**
  * @brief Asynchronous I/O Control Block
@@ -124,11 +124,11 @@ struct aiocb {
   /** @name private */
 
   /** @brief Field used for aio_return() */
-  int             return_status;
+  int     return_status;
   /** @brief Field used for aio_error() */
-  int             error_code;
+  int     error_code;
   /** @brief Filed used for aio_return() */
-  ssize_t         return_value;
+  ssize_t return_value;
 };
 
 /**
@@ -151,9 +151,7 @@ struct aiocb {
  *         - EINVAL aiocbp is a NULL pointer.
  *         - EINVAL aiocbp->sigevent is not valid.
  */
-int aio_read(
-  struct aiocb  *aiocbp
-);
+int aio_read( struct aiocb *aiocbp );
 
 /**
  * @brief Asynchronous Write
@@ -173,9 +171,7 @@ int aio_read(
  *         - EINVAL aiocbp is a NULL pointer.
  *         - EINVAL aiocbp->sigevent is not valid.
  */
-int aio_write(
-  struct aiocb  *aiocbp
-);
+int aio_write( struct aiocb *aiocbp );
 
 /**
  * @brief List Directed I/O
@@ -204,9 +200,9 @@ int aio_write(
  *         - EIO One or more of the individual I/O operations failed.
  */
 int lio_listio(
-  int              mode,
-  struct aiocb    *__restrict const  list[__restrict],
-  int              nent,
+  int mode,
+  struct aiocb *__restrict const list[ __restrict ],
+  int nent,
   struct sigevent *__restrict sig
 );
 
@@ -224,9 +220,7 @@ int lio_listio(
  * @retval EINVAL aiocbp is a NULL pointer.
  * @return The error status as described for the various operations.
  */
-int aio_error(
-  const struct aiocb  *aiocbp
-);
+int aio_error( const struct aiocb *aiocbp );
 
 /**
  * @brief Retrieve Return Status of Asynchronous I/O Operation
@@ -243,9 +237,7 @@ int aio_error(
  * @retval EINVAL aiocbp is a NULL pointer.
  * @return The operation return status, stored in aiocbp->return_value
  */
-ssize_t aio_return(
-  struct aiocb  *aiocbp
-);
+ssize_t aio_return( struct aiocb *aiocbp );
 
 /**
  * @brief Cancel asynchronous I/O operation.
@@ -263,10 +255,7 @@ ssize_t aio_return(
  * @retval -1               An error has occured, errno indicates the error:
  *                          - EBADF fildes is not a valid file descriptor.
  */
-int aio_cancel(
-  int            filedes,
-  struct aiocb  *aiocbp
-);
+int aio_cancel( int filedes, struct aiocb *aiocbp );
 
 /**
  * @brief Wait for Asynchronous I/O Request
@@ -286,12 +275,12 @@ int aio_cancel(
  * @retval EINTR An event interrupted the aio_suspend() function.
  */
 int aio_suspend(
-  const struct aiocb  * const   list[],
-  int                     nent,
-  const struct timespec  *timeout
+  const struct aiocb *const list[],
+  int                       nent,
+  const struct timespec    *timeout
 );
 
-#if defined(_POSIX_SYNCHRONIZED_IO)
+#if defined( _POSIX_SYNCHRONIZED_IO )
 
 /**
  * @brief Asynchronous File Synchronization
@@ -313,10 +302,7 @@ int aio_suspend(
  *            - EINVAL aiocbp is a NULL pointer.
  *            - EINVAL aiocbp->sigevent is not valid.
  */
-int aio_fsync(
-  int            op,
-  struct aiocb  *aiocbp
-);
+int aio_fsync( int op, struct aiocb *aiocbp );
 
 #endif /* _POSIX_SYNCHRONIZED_IO */
 
@@ -331,4 +317,3 @@ int aio_fsync(
 #endif
 
 /* end of include file */
-
