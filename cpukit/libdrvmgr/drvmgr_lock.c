@@ -37,7 +37,7 @@ void _DRV_Manager_Lock( void )
   }
 }
 
-void _DRV_Manager_Unlock(void)
+void _DRV_Manager_Unlock( void )
 {
   if ( !_System_state_Is_before_initialization( _System_state_Get() ) ) {
     _API_Mutex_Unlock( &drvmgr.lock );

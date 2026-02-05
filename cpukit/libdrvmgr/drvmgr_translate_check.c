@@ -36,20 +36,25 @@
  * If size=0 only the starting address is not checked.
  */
 int drvmgr_translate_check(
-	struct drvmgr_dev *dev,
-	unsigned int options,
-	void *src_address,
-	void **dst_address,
-	unsigned int size)
+  struct drvmgr_dev *dev,
+  unsigned int       options,
+  void              *src_address,
+  void             **dst_address,
+  unsigned int       size
+)
 {
-	unsigned int max;
+  unsigned int max;
 
-	max = drvmgr_translate(dev, options, src_address, dst_address);
-	if (max == 0 || (max < size && (size != 0))) {
-		printk(" ### dev %p (%s) failed mapping %p\n",
-			dev, dev->name ? dev->name : "unnamed", src_address);
-		return -1;
-	}
+  max = drvmgr_translate( dev, options, src_address, dst_address );
+  if ( max == 0 || ( max < size && ( size != 0 ) ) ) {
+    printk(
+      " ### dev %p (%s) failed mapping %p\n",
+      dev,
+      dev->name ? dev->name : "unnamed",
+      src_address
+    );
+    return -1;
+  }
 
-	return 0;
+  return 0;
 }

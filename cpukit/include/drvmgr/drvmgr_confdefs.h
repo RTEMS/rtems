@@ -53,228 +53,224 @@ extern drvmgr_drv_reg_func drvmgr_drivers[];
 #ifdef CONFIGURE_INIT
 
 /*** AMBA Plug & Play Drivers ***/
-extern void gptimer_register_drv(void);
-extern void apbuart_cons_register_drv(void);
-extern void greth_register_drv(void);
-extern void grspw_register_drv(void);
-extern void grspw2_register_drv(void);
-extern void grcan_register_drv(void);
-extern void occan_register_drv(void);
-extern void gr1553_register(void);
-extern void gr1553bc_register(void);
-extern void gr1553bm_register(void);
-extern void gr1553rt_register(void);
-extern void b1553brm_register_drv(void);
-extern void b1553rt_register_drv(void);
-extern void grtm_register_drv(void);
-extern void grtc_register_drv(void);
-extern void pcif_register_drv(void);
-extern void grpci_register_drv(void);
-extern void mctrl_register_drv(void);
-extern void l2cache_register_drv(void);
-extern void griommu_register_drv(void);
-extern void grpci2_register_drv(void);
-extern void spictrl_register_drv(void);
-extern void i2cmst_register_drv(void);
-extern void grgpio_register_drv(void);
-extern void grpwm_register_drv(void);
-extern void gradcdac_register_drv(void);
-extern void spwcuc_register(void);
-extern void grctm_register(void);
-extern void router_register_drv(void);
-extern void ahbstat_register_drv(void);
-extern void memscrub_register_drv(void);
-extern void l4stat_register_drv(void);
-extern void spwtdp_register_drv(void);
-
+extern void gptimer_register_drv( void );
+extern void apbuart_cons_register_drv( void );
+extern void greth_register_drv( void );
+extern void grspw_register_drv( void );
+extern void grspw2_register_drv( void );
+extern void grcan_register_drv( void );
+extern void occan_register_drv( void );
+extern void gr1553_register( void );
+extern void gr1553bc_register( void );
+extern void gr1553bm_register( void );
+extern void gr1553rt_register( void );
+extern void b1553brm_register_drv( void );
+extern void b1553rt_register_drv( void );
+extern void grtm_register_drv( void );
+extern void grtc_register_drv( void );
+extern void pcif_register_drv( void );
+extern void grpci_register_drv( void );
+extern void mctrl_register_drv( void );
+extern void l2cache_register_drv( void );
+extern void griommu_register_drv( void );
+extern void grpci2_register_drv( void );
+extern void spictrl_register_drv( void );
+extern void i2cmst_register_drv( void );
+extern void grgpio_register_drv( void );
+extern void grpwm_register_drv( void );
+extern void gradcdac_register_drv( void );
+extern void spwcuc_register( void );
+extern void grctm_register( void );
+extern void router_register_drv( void );
+extern void ahbstat_register_drv( void );
+extern void memscrub_register_drv( void );
+extern void l4stat_register_drv( void );
+extern void spwtdp_register_drv( void );
 
 /*** LEON2 AMBA Hard coded bus Drivers ***/
-extern void at697pci_register_drv(void);
-extern void ambapp_leon2_register(void);
-
+extern void at697pci_register_drv( void );
+extern void ambapp_leon2_register( void );
 
 /*** PCI Bus Drivers (PCI Target drivers) ***/
-extern void gr_rasta_adcdac_register_drv(void);
-extern void gr_rasta_io_register_drv(void);
-extern void gr_rasta_tmtc_register_drv(void);
-extern void gr701_register_drv(void);
-extern void gr_tmtc_1553_register_drv(void);
-extern void gr_rasta_spw_router_register_drv(void);
-extern void gr_cpci_leon4_n2x_register_drv(void);
-extern void gr_cpci_gr740_register_drv(void);
-
+extern void gr_rasta_adcdac_register_drv( void );
+extern void gr_rasta_io_register_drv( void );
+extern void gr_rasta_tmtc_register_drv( void );
+extern void gr701_register_drv( void );
+extern void gr_tmtc_1553_register_drv( void );
+extern void gr_rasta_spw_router_register_drv( void );
+extern void gr_cpci_leon4_n2x_register_drv( void );
+extern void gr_cpci_gr740_register_drv( void );
 
 /* CONFIGURE DRIVER MANAGER */
 drvmgr_drv_reg_func drvmgr_drivers[] = {
-	/*** AMBA Plug & Play Drivers ***/
+/*** AMBA Plug & Play Drivers ***/
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_GPTIMER
-	gptimer_register_drv,
+  gptimer_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_APBUART
-	apbuart_cons_register_drv,
+  apbuart_cons_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_GRETH
-	greth_register_drv,
+  greth_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_GRSPW
-	grspw_register_drv,
+  grspw_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_GRSPW2
-	grspw2_register_drv,
+  grspw2_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_GRCAN
-	grcan_register_drv,
+  grcan_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_OCCAN
-	occan_register_drv,
+  occan_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_GR1553B
-	gr1553_register,
+  gr1553_register,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_GR1553BC
-	gr1553bc_register,
+  gr1553bc_register,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_GR1553BM
-	gr1553bm_register,
+  gr1553bm_register,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_GR1553RT
-	gr1553rt_register,
+  gr1553rt_register,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_B1553BRM
-	b1553brm_register_drv,
+  b1553brm_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_B1553RT
-	b1553rt_register_drv,
+  b1553rt_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_GRTM
-	grtm_register_drv,
+  grtm_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_GRTC
-	grtc_register_drv,
+  grtc_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_PCIF
-	pcif_register_drv,
+  pcif_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_GRPCI
-	grpci_register_drv,
+  grpci_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_GRPCI2
-	grpci2_register_drv,
+  grpci2_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_MCTRL
-	mctrl_register_drv,
+  mctrl_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_L2CACHE
-	l2cache_register_drv,
+  l2cache_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_GRIOMMU
-	griommu_register_drv,
+  griommu_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_SPICTRL
-	spictrl_register_drv,
+  spictrl_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_I2CMST
-	i2cmst_register_drv,
+  i2cmst_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_GRGPIO
-	grgpio_register_drv,
+  grgpio_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_GRPWM
-	grpwm_register_drv,
+  grpwm_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_GRADCDAC
-	gradcdac_register_drv,
+  gradcdac_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_SPWCUC
-	spwcuc_register,
+  spwcuc_register,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_GRCTM
-	grctm_register,
+  grctm_register,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_SPW_ROUTER
-	router_register_drv,
+  router_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_AHBSTAT
-	ahbstat_register_drv,
+  ahbstat_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_MEMSCRUB
-	memscrub_register_drv,
+  memscrub_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_L4STAT
-	l4stat_register_drv,
+  l4stat_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_SPWTDP
-	spwtdp_register_drv,
+  spwtdp_register_drv,
 #endif
 
-	/*** LEON2 AMBA Drivers ***/
+/*** LEON2 AMBA Drivers ***/
 #ifdef CONFIGURE_DRIVER_LEON2_AT697PCI
-	at697pci_register_drv,
+  at697pci_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_LEON2_AMBAPP
-	ambapp_leon2_register,
+  ambapp_leon2_register,
 #endif
 
-	/*** PCI Target Drivers ***/
+/*** PCI Target Drivers ***/
 #ifdef CONFIGURE_DRIVER_PCI_GR_RASTA_ADCDAC
-	gr_rasta_adcdac_register_drv,
+  gr_rasta_adcdac_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_PCI_GR_RASTA_IO
-	gr_rasta_io_register_drv,
+  gr_rasta_io_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_PCI_GR_RASTA_TMTC
-	gr_rasta_tmtc_register_drv,
+  gr_rasta_tmtc_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_PCI_GR_701
-	gr701_register_drv,
+  gr701_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_PCI_GR_TMTC_1553
-	gr_tmtc_1553_register_drv,
+  gr_tmtc_1553_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_PCI_GR_RASTA_SPW_ROUTER
-	gr_rasta_spw_router_register_drv,
+  gr_rasta_spw_router_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_PCI_GR_LEON4_N2X
-	gr_cpci_leon4_n2x_register_drv,
+  gr_cpci_leon4_n2x_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_PCI_GR_CPCI_GR740
-	gr_cpci_gr740_register_drv,
+  gr_cpci_gr740_register_drv,
 #endif
-
 
 /* Macros for adding custom drivers without needing to recompile
  * kernel.
  */
 #ifdef CONFIGURE_DRIVER_CUSTOM1
-	DRIVER_CUSTOM1_REG,
+  DRIVER_CUSTOM1_REG,
 #endif
 #ifdef CONFIGURE_DRIVER_CUSTOM2
-	DRIVER_CUSTOM2_REG,
+  DRIVER_CUSTOM2_REG,
 #endif
 #ifdef CONFIGURE_DRIVER_CUSTOM3
-	DRIVER_CUSTOM3_REG,
+  DRIVER_CUSTOM3_REG,
 #endif
 #ifdef CONFIGURE_DRIVER_CUSTOM4
-	DRIVER_CUSTOM4_REG,
+  DRIVER_CUSTOM4_REG,
 #endif
 #ifdef CONFIGURE_DRIVER_CUSTOM5
-	DRIVER_CUSTOM5_REG,
+  DRIVER_CUSTOM5_REG,
 #endif
 #ifdef CONFIGURE_DRIVER_CUSTOM6
-	DRIVER_CUSTOM6_REG,
+  DRIVER_CUSTOM6_REG,
 #endif
 #ifdef CONFIGURE_DRIVER_CUSTOM7
-	DRIVER_CUSTOM7_REG,
+  DRIVER_CUSTOM7_REG,
 #endif
 #ifdef CONFIGURE_DRIVER_CUSTOM8
-	DRIVER_CUSTOM8_REG,
+  DRIVER_CUSTOM8_REG,
 #endif
 #ifdef CONFIGURE_DRIVER_CUSTOM9
-	DRIVER_CUSTOM9_REG,
+  DRIVER_CUSTOM9_REG,
 #endif
 
-	/* End array with NULL */
-	NULL
+  /* End array with NULL */
+  NULL
 };
 
 #endif /* CONFIGURE_INIT */

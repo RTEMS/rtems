@@ -56,33 +56,35 @@ extern "C" {
 #define DRVMGR_USE_LOCKS 1
 #endif
 
-struct drvmgr_dev;	/* Device */
-struct drvmgr_bus;	/* Bus */
-struct drvmgr_drv;	/* Driver */
+struct drvmgr_dev; /* Device */
+struct drvmgr_bus; /* Bus */
+struct drvmgr_drv; /* Driver */
 
 /*** List Interface shortcuts ***/
-#define BUS_LIST_HEAD(list) LIST_HEAD(list, struct drvmgr_bus)
-#define BUS_LIST_TAIL(list) LIST_TAIL(list, struct drvmgr_bus)
-#define DEV_LIST_HEAD(list) LIST_HEAD(list, struct drvmgr_dev)
-#define DEV_LIST_TAIL(list) LIST_TAIL(list, struct drvmgr_dev)
-#define DRV_LIST_HEAD(list) LIST_HEAD(list, struct drvmgr_drv)
-#define DRV_LIST_TAIL(list) LIST_TAIL(list, struct drvmgr_drv)
+#define BUS_LIST_HEAD( list ) LIST_HEAD( list, struct drvmgr_bus )
+#define BUS_LIST_TAIL( list ) LIST_TAIL( list, struct drvmgr_bus )
+#define DEV_LIST_HEAD( list ) LIST_HEAD( list, struct drvmgr_dev )
+#define DEV_LIST_TAIL( list ) LIST_TAIL( list, struct drvmgr_dev )
+#define DRV_LIST_HEAD( list ) LIST_HEAD( list, struct drvmgr_drv )
+#define DRV_LIST_TAIL( list ) LIST_TAIL( list, struct drvmgr_drv )
 
 /*** Bus indentification ***/
-#define DRVMGR_BUS_TYPE_NONE 0		/* Not a valid bus */
-#define DRVMGR_BUS_TYPE_ROOT 1		/* Hard coded bus */
-#define DRVMGR_BUS_TYPE_PCI 2		/* PCI bus */
-#define DRVMGR_BUS_TYPE_AMBAPP 3	/* AMBA Plug & Play bus */
-#define DRVMGR_BUS_TYPE_LEON2_AMBA 4	/* LEON2 hardcoded bus */
-#define DRVMGR_BUS_TYPE_AMBAPP_DIST 5	/* Distibuted AMBA Plug & Play bus accessed using a communication interface */
-#define DRVMGR_BUS_TYPE_SPW_RMAP 6	/* SpaceWire Network bus */
-#define DRVMGR_BUS_TYPE_AMBAPP_RMAP 7	/* SpaceWire RMAP accessed AMBA Plug & Play bus */
+#define DRVMGR_BUS_TYPE_NONE       0 /* Not a valid bus */
+#define DRVMGR_BUS_TYPE_ROOT       1 /* Hard coded bus */
+#define DRVMGR_BUS_TYPE_PCI        2 /* PCI bus */
+#define DRVMGR_BUS_TYPE_AMBAPP     3 /* AMBA Plug & Play bus */
+#define DRVMGR_BUS_TYPE_LEON2_AMBA 4 /* LEON2 hardcoded bus */
+#define DRVMGR_BUS_TYPE_AMBAPP_DIST \
+  5 /* Distibuted AMBA Plug & Play bus accessed using a communication interface */
+#define DRVMGR_BUS_TYPE_SPW_RMAP 6 /* SpaceWire Network bus */
+#define DRVMGR_BUS_TYPE_AMBAPP_RMAP \
+  7 /* SpaceWire RMAP accessed AMBA Plug & Play bus */
 
 enum {
-	DRVMGR_OBJ_NONE = 0,
-	DRVMGR_OBJ_DRV = 1,
-	DRVMGR_OBJ_BUS = 2,
-	DRVMGR_OBJ_DEV = 3,
+  DRVMGR_OBJ_NONE = 0,
+  DRVMGR_OBJ_DRV = 1,
+  DRVMGR_OBJ_BUS = 2,
+  DRVMGR_OBJ_DEV = 3,
 };
 
 /*** Driver indentification ***
@@ -110,32 +112,36 @@ enum {
 #define DRIVER_ID_DEV_MASK 0x00FFFFFFFFFFFF00ULL
 
 /* Set Bus ID Mask. */
-#define DRIVER_ID(busid, devid) ((unsigned long long) \
-	((((unsigned long long)(devid) << 8) & DRIVER_ID_DEV_MASK) | \
-	 ((unsigned long long)(busid) & DRIVER_ID_BUS_MASK)))
+#define DRIVER_ID( busid, devid )                                      \
+  ( (unsigned long long) ( ( ( (unsigned long long) ( devid ) << 8 ) & \
+                             DRIVER_ID_DEV_MASK ) |                    \
+                           ( (unsigned long long) ( busid ) &          \
+                             DRIVER_ID_BUS_MASK ) ) )
 
 /* Get IDs */
-#define DRIVER_BUSID_GET(id)	((unsigned long long)(id) & DRIVER_ID_BUS_MASK)
-#define DRIVER_DEVID_GET(id)	(((unsigned long long)(id) & DRIVER_ID_DEV_MASK) >> 8)
+#define DRIVER_BUSID_GET( id ) \
+  ( (unsigned long long) ( id ) & DRIVER_ID_BUS_MASK )
+#define DRIVER_DEVID_GET( id ) \
+  ( ( (unsigned long long) ( id ) & DRIVER_ID_DEV_MASK ) >> 8 )
 
-#define DRIVER_ROOTBUS_ID(bus_type)	DRIVER_ID(bus_type, 0)
+#define DRIVER_ROOTBUS_ID( bus_type ) DRIVER_ID( bus_type, 0 )
 
 /*** Root Bus drivers ***/
 
 /* Generic Hard coded Root bus: Driver ID */
-#define DRIVER_ROOT_ID		DRIVER_ROOTBUS_ID(DRVMGR_BUS_TYPE_ROOT)
+#define DRIVER_ROOT_ID DRIVER_ROOTBUS_ID( DRVMGR_BUS_TYPE_ROOT )
 
 /* PCI Plug & Play bus: Driver ID */
-#define DRIVER_PCIBUS_ID	DRIVER_ROOTBUS_ID(DRVMGR_BUS_TYPE_PCI)
+#define DRIVER_PCIBUS_ID DRIVER_ROOTBUS_ID( DRVMGR_BUS_TYPE_PCI )
 
 /* AMBA Plug & Play bus: Driver ID */
-#define DRIVER_GRLIB_AMBAPP_ID	DRIVER_ROOTBUS_ID(DRVMGR_BUS_TYPE_AMBAPP)
+#define DRIVER_GRLIB_AMBAPP_ID DRIVER_ROOTBUS_ID( DRVMGR_BUS_TYPE_AMBAPP )
 
 /* AMBA Hard coded bus: Driver ID */
-#define DRIVER_LEON2_AMBA_ID	DRIVER_ROOTBUS_ID(DRVMGR_BUS_TYPE_LEON2_AMBA)
+#define DRIVER_LEON2_AMBA_ID DRIVER_ROOTBUS_ID( DRVMGR_BUS_TYPE_LEON2_AMBA )
 
 /* Distributed AMBA Plug & Play bus: Driver ID */
-#define DRIVER_AMBAPP_DIST_ID	DRIVER_ROOTBUS_ID(DRVMGR_BUS_TYPE_AMBAPP_DIST)
+#define DRIVER_AMBAPP_DIST_ID DRIVER_ROOTBUS_ID( DRVMGR_BUS_TYPE_AMBAPP_DIST )
 
 /*! Bus parameters used by driver interface functions to aquire information
  * about bus. All Bus drivers should implement the operation 'get_params' so
@@ -143,48 +149,69 @@ enum {
  * an non-dependent way.
  */
 struct drvmgr_bus_params {
-	char		*dev_prefix;		/*!< Optional name prefix */
+  char *dev_prefix; /*!< Optional name prefix */
 };
 
 /* Interrupt Service Routine (ISR) */
-typedef void (*drvmgr_isr)(void *arg);
+typedef void ( *drvmgr_isr )( void *arg );
 
 /*! Bus operations */
 struct drvmgr_bus_ops {
-	/* Functions used internally within driver manager */
-	int	(*init[DRVMGR_LEVEL_MAX])(struct drvmgr_bus *);
-	int	(*remove)(struct drvmgr_bus *);
-	int	(*unite)(struct drvmgr_drv *, struct drvmgr_dev *);	/*!< Unite Hardware Device with Driver */
+  /* Functions used internally within driver manager */
+  int ( *init[ DRVMGR_LEVEL_MAX ] )( struct drvmgr_bus * );
+  int ( *remove )( struct drvmgr_bus * );
+  int ( *unite )(
+    struct drvmgr_drv *,
+    struct drvmgr_dev *
+  ); /*!< Unite Hardware Device with Driver */
 
-	/* Functions called indirectly from drivers */
-	int	(*int_register)(struct drvmgr_dev *, int index, const char *info, drvmgr_isr isr, void *arg);
-	int	(*int_unregister)(struct drvmgr_dev *, int index, drvmgr_isr isr, void *arg);
-	int	(*int_clear)(struct drvmgr_dev *, int index);
-	int	(*int_mask)(struct drvmgr_dev *, int index);
-	int	(*int_unmask)(struct drvmgr_dev *, int index);
+  /* Functions called indirectly from drivers */
+  int ( *int_register )(
+    struct drvmgr_dev *,
+    int         index,
+    const char *info,
+    drvmgr_isr  isr,
+    void       *arg
+  );
+  int ( *int_unregister )(
+    struct drvmgr_dev *,
+    int        index,
+    drvmgr_isr isr,
+    void      *arg
+  );
+  int ( *int_clear )( struct drvmgr_dev *, int index );
+  int ( *int_mask )( struct drvmgr_dev *, int index );
+  int ( *int_unmask )( struct drvmgr_dev *, int index );
 #ifdef RTEMS_SMP
-	int	(*int_set_affinity)(struct drvmgr_dev *, int index,
-				    const Processor_mask *cpus);
+  int ( *int_set_affinity )(
+    struct drvmgr_dev *,
+    int                   index,
+    const Processor_mask *cpus
+  );
 #endif
 
-	/* Get Parameters */
-	int	(*get_params)(struct drvmgr_dev *, struct drvmgr_bus_params *);
-	/* Get Frequency of Bus */
-	int	(*get_freq)(struct drvmgr_dev*, int, unsigned int*);
-	/*! Function called to request information about a device. The bus
+  /* Get Parameters */
+  int ( *get_params )( struct drvmgr_dev *, struct drvmgr_bus_params * );
+  /* Get Frequency of Bus */
+  int ( *get_freq )( struct drvmgr_dev *, int, unsigned int * );
+  /*! Function called to request information about a device. The bus
 	 *  driver interpret the bus-specific information about the device.
 	 */
-	void	(*get_info_dev)(struct drvmgr_dev *,
-				void (*print)(void *p, char *str), void *p);
+  void ( *get_info_dev )(
+    struct drvmgr_dev *,
+    void ( *print )( void *p, char *str ),
+    void *p
+  );
 };
-#define BUS_OPS_NUM (sizeof(struct drvmgr_bus_ops)/sizeof(void (*)(void)))
+#define BUS_OPS_NUM \
+  ( sizeof( struct drvmgr_bus_ops ) / sizeof( void ( * )( void ) ) )
 
 struct drvmgr_func {
-	int funcid;
-	void *func;
+  int   funcid;
+  void *func;
 };
-#define DRVMGR_FUNC(_ID_, _FUNC_) {(int)(_ID_), (void *)(_FUNC_)}
-#define DRVMGR_FUNC_END {0, NULL}
+#define DRVMGR_FUNC( _ID_, _FUNC_ ) { (int) ( _ID_ ), (void *) ( _FUNC_ ) }
+#define DRVMGR_FUNC_END             { 0, NULL }
 
 /*** Resource definitions ***
  *
@@ -200,44 +227,45 @@ struct drvmgr_func {
 
 /* Key Data Types */
 enum drvmgr_kt {
-	DRVMGR_KT_ANY = -1,
-	DRVMGR_KT_NONE = 0,
-	DRVMGR_KT_INT = 1,
-	DRVMGR_KT_STRING = 2,
-	DRVMGR_KT_POINTER = 3,
+  DRVMGR_KT_ANY = -1,
+  DRVMGR_KT_NONE = 0,
+  DRVMGR_KT_INT = 1,
+  DRVMGR_KT_STRING = 2,
+  DRVMGR_KT_POINTER = 3,
 };
 
-#define DRVMGR_KEY_EMPTY	{NULL, DRVMGR_KT_NONE, {0}}
-#define DRVMGR_RES_EMPTY	{0, 0, NULL}
-#define MMAP_EMPTY	{0, 0, 0}
+#define DRVMGR_KEY_EMPTY { NULL, DRVMGR_KT_NONE, { 0 } }
+#define DRVMGR_RES_EMPTY { 0, 0, NULL }
+#define MMAP_EMPTY       { 0, 0, 0 }
 
 /*! Union of different values */
 union drvmgr_key_value {
-	unsigned int		i;	/*!< Key data type UNSIGNED INTEGER */
-	char			*str;	/*!< Key data type STRING */
-	void			*ptr;	/*!< Key data type ADDRESS/POINTER */
+  unsigned int i;   /*!< Key data type UNSIGNED INTEGER */
+  char        *str; /*!< Key data type STRING */
+  void        *ptr; /*!< Key data type ADDRESS/POINTER */
 };
 
 /* One key. One Value. Holding information relevant to the driver. */
 struct drvmgr_key {
-	char			*key_name;	/* Name of key */
-	enum drvmgr_kt		key_type;	/* How to interpret key_value */
-	union drvmgr_key_value	key_value;	/* The value or pointer to value */
+  char                  *key_name;  /* Name of key */
+  enum drvmgr_kt         key_type;  /* How to interpret key_value */
+  union drvmgr_key_value key_value; /* The value or pointer to value */
 };
 
 /*! Driver resource entry, Driver resources for a certain device instance,
  *  containing a number of keys where each key hold the data of interest.
  */
 struct drvmgr_drv_res {
-	uint64_t		drv_id;		/*!< Identifies the driver this resource is aiming */
-	int			minor_bus;	/*!< Indentifies a specfic device */
-	struct drvmgr_key	*keys;		/*!< First key in key array, ended with KEY_EMPTY */
+  uint64_t drv_id;    /*!< Identifies the driver this resource is aiming */
+  int      minor_bus; /*!< Indentifies a specfic device */
+  struct drvmgr_key *keys; /*!< First key in key array, ended with KEY_EMPTY */
 };
 
 /*! Bus resource list node */
 struct drvmgr_bus_res {
-	struct drvmgr_bus_res	*next;		/*!< Next resource node in list */
-	struct drvmgr_drv_res	resource[];	/*!< Array of resources, one per device instance */
+  struct drvmgr_bus_res *next; /*!< Next resource node in list */
+  struct drvmgr_drv_res
+    resource[]; /*!< Array of resources, one per device instance */
 };
 
 /*! MAP entry. Describes an linear address space translation. Untranslated
@@ -247,154 +275,171 @@ struct drvmgr_bus_res {
  * the translation driver interface.
  */
 struct drvmgr_map_entry {
-	char		*name;		/*!< Map Name */
-	unsigned int	size;		/*!< Size of map window */
-	char		*from_adr;	/*!< Start address of access window used
+  char        *name;     /*!< Map Name */
+  unsigned int size;     /*!< Size of map window */
+  char        *from_adr; /*!< Start address of access window used
 					 *   to reach into remote bus */
-	char		*to_adr;	/*!< Start address of remote system
+  char        *to_adr;   /*!< Start address of remote system
 					 *   address range */
 };
-#define DRVMGR_TRANSLATE_ONE2ONE	NULL
-#define DRVMGR_TRANSLATE_NO_BRIDGE	((void *)1)  /* No bridge, error */
+#define DRVMGR_TRANSLATE_ONE2ONE   NULL
+#define DRVMGR_TRANSLATE_NO_BRIDGE ( (void *) 1 ) /* No bridge, error */
 
 /*! Bus information. Describes a bus. */
 struct drvmgr_bus {
-	int			obj_type;	/*!< DRVMGR_OBJ_BUS */
-	unsigned char		bus_type;	/*!< Type of bus */
-	unsigned char		depth;		/*!< Bus level distance from root bus */
-	struct drvmgr_bus	*next;		/*!< Next Bus */
-	struct drvmgr_dev	*dev;		/*!< Bus device, the hardware... */
-	void			*priv;		/*!< Private data structure used by BUS driver */
-	struct drvmgr_dev	*children;	/*!< Hardware devices on this bus */
-	struct drvmgr_bus_ops	*ops;		/*!< Bus operations supported by this bus driver */
-	struct drvmgr_func	*funcs;		/*!< Extra operations */
-	int			dev_cnt;	/*!< Number of devices this bus has */
-	struct drvmgr_bus_res	*reslist;	/*!< Bus resources, head of a linked list of resources. */
-	struct drvmgr_map_entry	*maps_up;	/*!< Map Translation, array of address spaces upstreams to CPU */
-	struct drvmgr_map_entry	*maps_down;	/*!< Map Translation, array of address spaces downstreams to Hardware */
+  int                obj_type; /*!< DRVMGR_OBJ_BUS */
+  unsigned char      bus_type; /*!< Type of bus */
+  unsigned char      depth;    /*!< Bus level distance from root bus */
+  struct drvmgr_bus *next;     /*!< Next Bus */
+  struct drvmgr_dev *dev;      /*!< Bus device, the hardware... */
+  void              *priv; /*!< Private data structure used by BUS driver */
+  struct drvmgr_dev *children; /*!< Hardware devices on this bus */
+  struct drvmgr_bus_ops
+                     *ops; /*!< Bus operations supported by this bus driver */
+  struct drvmgr_func *funcs;   /*!< Extra operations */
+  int                 dev_cnt; /*!< Number of devices this bus has */
+  struct drvmgr_bus_res
+    *reslist; /*!< Bus resources, head of a linked list of resources. */
+  struct drvmgr_map_entry
+    *maps_up; /*!< Map Translation, array of address spaces upstreams to CPU */
+  struct drvmgr_map_entry *
+    maps_down; /*!< Map Translation, array of address spaces downstreams to Hardware */
 
-	/* Bus status */
-	int			level;		/*!< Initialization Level of Bus */
-	int			state;		/*!< Init State of Bus, BUS_STATE_* */
-	int			error;		/*!< Return code from bus->ops->initN() */
+  /* Bus status */
+  int level; /*!< Initialization Level of Bus */
+  int state; /*!< Init State of Bus, BUS_STATE_* */
+  int error; /*!< Return code from bus->ops->initN() */
 };
 
 /* States of a bus */
-#define BUS_STATE_INIT_FAILED	0x00000001	/* Initialization Failed */
-#define BUS_STATE_LIST_INACTIVE	0x00001000	/* In inactive bus list */
-#define BUS_STATE_DEPEND_FAILED	0x00000004	/* Device init failed */
+#define BUS_STATE_INIT_FAILED   0x00000001 /* Initialization Failed */
+#define BUS_STATE_LIST_INACTIVE 0x00001000 /* In inactive bus list */
+#define BUS_STATE_DEPEND_FAILED 0x00000004 /* Device init failed */
 
 /* States of a device */
-#define DEV_STATE_INIT_FAILED	0x00000001	/* Initialization Failed */
-#define DEV_STATE_INIT_DONE	0x00000002	/* All init levels completed */
-#define DEV_STATE_DEPEND_FAILED	0x00000004	/* Parent Bus init failed */
-#define DEV_STATE_UNITED	0x00000100	/* Device United with Device Driver */
-#define DEV_STATE_REMOVED	0x00000200	/* Device has been removed (unregistered) */
-#define DEV_STATE_IGNORED	0x00000400	/* Device was ignored according to user's request, the device
+#define DEV_STATE_INIT_FAILED   0x00000001 /* Initialization Failed */
+#define DEV_STATE_INIT_DONE     0x00000002 /* All init levels completed */
+#define DEV_STATE_DEPEND_FAILED 0x00000004 /* Parent Bus init failed */
+#define DEV_STATE_UNITED 0x00000100 /* Device United with Device Driver */
+#define DEV_STATE_REMOVED \
+  0x00000200 /* Device has been removed (unregistered) */
+#define DEV_STATE_IGNORED \
+  0x00000400 /* Device was ignored according to user's request, the device
 						 * was never reported to it's driver (as expected).
 						 */
-#define DEV_STATE_LIST_INACTIVE	0x00001000	/* In inactive device list */
+#define DEV_STATE_LIST_INACTIVE 0x00001000 /* In inactive device list */
 
 /*! Device information */
 struct drvmgr_dev {
-	int			obj_type;	/*!< DRVMGR_OBJ_DEV */
-	struct drvmgr_dev	*next;		/*!< Next device */
-	struct drvmgr_dev	*next_in_bus;	/*!< Next device on the same bus */
-	struct drvmgr_dev	*next_in_drv;	/*!< Next device using the same driver */
+  int                obj_type;    /*!< DRVMGR_OBJ_DEV */
+  struct drvmgr_dev *next;        /*!< Next device */
+  struct drvmgr_dev *next_in_bus; /*!< Next device on the same bus */
+  struct drvmgr_dev *next_in_drv; /*!< Next device using the same driver */
 
-	struct drvmgr_drv	*drv;		/*!< The driver owning this device */
-	struct drvmgr_bus	*parent;	/*!< Bus that this device resides on */
-	short			minor_drv;	/*!< Device number within driver */
-	short			minor_bus;	/*!< Device number on bus (for device separation) */
-	char			*name;		/*!< Name of Device Hardware */
-	void			*priv;		/*!< Pointer to driver private device structure */
-	void			*businfo;	/*!< Host bus specific information */
-	struct drvmgr_bus	*bus;		/*!< Pointer to bus, set only if this is a bridge */
+  struct drvmgr_drv *drv;       /*!< The driver owning this device */
+  struct drvmgr_bus *parent;    /*!< Bus that this device resides on */
+  short              minor_drv; /*!< Device number within driver */
+  short minor_bus;        /*!< Device number on bus (for device separation) */
+  char *name;             /*!< Name of Device Hardware */
+  void *priv;             /*!< Pointer to driver private device structure */
+  void *businfo;          /*!< Host bus specific information */
+  struct drvmgr_bus *bus; /*!< Pointer to bus, set only if this is a bridge */
 
-	/* Device Status */
-	unsigned int		state;		/*!< State of device, see DEV_STATE_* */
-	int			level;		/*!< Init Level */
-	int			error;		/*!< Error state returned by driver */
+  /* Device Status */
+  unsigned int state; /*!< State of device, see DEV_STATE_* */
+  int          level; /*!< Init Level */
+  int          error; /*!< Error state returned by driver */
 };
 
 /*! Driver operations, function pointers. */
 struct drvmgr_drv_ops {
-	int	(*init[DRVMGR_LEVEL_MAX])(struct drvmgr_dev *);	/*! Function doing Init Stage 1 of a hardware device */
-	int	(*remove)(struct drvmgr_dev *);	/*! Function called when device instance is to be removed */
-	int	(*info)(struct drvmgr_dev *, void (*print)(void *p, char *str), void *p, int, char *argv[]);/*! Function called to request information about a device or driver */
+  int ( *init[ DRVMGR_LEVEL_MAX ] )(
+    struct drvmgr_dev *
+  ); /*! Function doing Init Stage 1 of a hardware device */
+  int ( *remove )(
+    struct drvmgr_dev *
+  ); /*! Function called when device instance is to be removed */
+  int ( *info )(
+    struct drvmgr_dev *,
+    void ( *print )( void *p, char *str ),
+    void *p,
+    int,
+    char *argv[]
+  ); /*! Function called to request information about a device or driver */
 };
-#define DRVMGR_OPS_NUM(x) (sizeof(x)/sizeof(void (*)(void)))
+#define DRVMGR_OPS_NUM( x ) ( sizeof( x ) / sizeof( void ( * )( void ) ) )
 
 /*! Device driver description */
 struct drvmgr_drv {
-	int			obj_type;	/*!< DRVMGR_OBJ_DRV */
-	struct drvmgr_drv	*next;		/*!< Next Driver */
-	struct drvmgr_dev	*dev;		/*!< Devices using this driver */
+  int                obj_type; /*!< DRVMGR_OBJ_DRV */
+  struct drvmgr_drv *next;     /*!< Next Driver */
+  struct drvmgr_dev *dev;      /*!< Devices using this driver */
 
-	uint64_t		drv_id;		/*!< Unique Driver ID */
-	char			*name;		/*!< Name of Driver */
-	int			bus_type;	/*!< Type of Bus this driver supports */
-	struct drvmgr_drv_ops	*ops;		/*!< Driver operations */
-	struct drvmgr_func	*funcs;		/*!< Extra Operations */
-	unsigned int		dev_cnt;	/*!< Number of devices in dev */
-	unsigned int		dev_priv_size;	/*!< If non-zero DRVMGR will allocate memory for dev->priv */
+  uint64_t               drv_id;   /*!< Unique Driver ID */
+  char                  *name;     /*!< Name of Driver */
+  int                    bus_type; /*!< Type of Bus this driver supports */
+  struct drvmgr_drv_ops *ops;      /*!< Driver operations */
+  struct drvmgr_func    *funcs;    /*!< Extra Operations */
+  unsigned int           dev_cnt;  /*!< Number of devices in dev */
+  unsigned int
+    dev_priv_size; /*!< If non-zero DRVMGR will allocate memory for dev->priv */
 };
 
 /*! Structure defines a function pointer called when driver manager is ready
  *  for drivers to register themselfs. Used to select drivers available to the
  *  driver manager.
  */
-typedef void (*drvmgr_drv_reg_func)(void);
+typedef void ( *drvmgr_drv_reg_func )( void );
 
 /*** DRIVER | DEVICE | BUS FUNCTIONS ***/
 
 /* Return Codes */
 enum {
-	DRVMGR_OK = 0,		/* Sucess */
-	DRVMGR_NOMEM = 1,	/* Memory allocation error */
-	DRVMGR_EIO = 2,		/* I/O error */
-	DRVMGR_EINVAL = 3,	/* Invalid parameter */
-	DRVMGR_ENOSYS = 4,
-	DRVMGR_TIMEDOUT = 5,	/* Operation timeout error */
-	DRVMGR_EBUSY = 6,
-	DRVMGR_ENORES = 7,	/* Not enough resources */
-	DRVMGR_FAIL = -1	/* Unspecified failure */
+  DRVMGR_OK = 0,     /* Sucess */
+  DRVMGR_NOMEM = 1,  /* Memory allocation error */
+  DRVMGR_EIO = 2,    /* I/O error */
+  DRVMGR_EINVAL = 3, /* Invalid parameter */
+  DRVMGR_ENOSYS = 4,
+  DRVMGR_TIMEDOUT = 5, /* Operation timeout error */
+  DRVMGR_EBUSY = 6,
+  DRVMGR_ENORES = 7, /* Not enough resources */
+  DRVMGR_FAIL = -1   /* Unspecified failure */
 };
 
 /*! Initialize data structures of the driver management system.
  *  Calls predefined register driver functions so that drivers can
  *  register themselves.
  */
-extern void _DRV_Manager_initialization(void);
+extern void _DRV_Manager_initialization( void );
 
 /*! Take all devices into init level 'level', all devices registered later
  *  will directly be taken into this level as well, ensuring that all
  *  registerd devices has been taken into the level.
  *
  */
-extern void _DRV_Manager_init_level(int level);
+extern void _DRV_Manager_init_level( int level );
 
 /*! Init driver manager all in one go, will call _DRV_Manager_initialization(),
  *  then _DRV_Manager_init_level([1..DRVMGR_LEVEL_MAX]).
  *  Typically called from Init task when user wants to initilize driver
  *  manager after startup, otherwise not used.
  */
-extern int drvmgr_init(void);
+extern int drvmgr_init( void );
 
 /* Take registered buses and devices into the correct init level,
  * this function is called from _init_level() so normally
  * we don't need to call it directly.
  */
-extern void drvmgr_init_update(void);
+extern void drvmgr_init_update( void );
 
 /*! Register Root Bus device driver */
-extern int drvmgr_root_drv_register(struct drvmgr_drv *drv);
+extern int drvmgr_root_drv_register( struct drvmgr_drv *drv );
 
 /*! Register a driver */
-extern int drvmgr_drv_register(struct drvmgr_drv *drv);
+extern int drvmgr_drv_register( struct drvmgr_drv *drv );
 
 /*! Register a device */
-extern int drvmgr_dev_register(struct drvmgr_dev *dev);
+extern int drvmgr_dev_register( struct drvmgr_dev *dev );
 
 /*! Remove a device, and all its children devices if device is a bus device. The
  *  device driver will be requested to remove the device and once gone from bus,
@@ -406,23 +451,23 @@ extern int drvmgr_dev_register(struct drvmgr_dev *dev);
  * \param remove If non-zero the device will be deallocated, and not put into
  *               the inacitve list.
  */
-extern int drvmgr_dev_unregister(struct drvmgr_dev *dev);
+extern int drvmgr_dev_unregister( struct drvmgr_dev *dev );
 
 /*! Register a bus */
-extern int drvmgr_bus_register(struct drvmgr_bus *bus);
+extern int drvmgr_bus_register( struct drvmgr_bus *bus );
 
 /*! Unregister a bus */
-extern int drvmgr_bus_unregister(struct drvmgr_bus *bus);
+extern int drvmgr_bus_unregister( struct drvmgr_bus *bus );
 
 /*! Unregister all child devices of a bus.
  *
  * This function is called from the bus driver, from a "safe" state where
  * devices will not be added or removed on this particular bus at this time
  */
-extern int drvmgr_children_unregister(struct drvmgr_bus *bus);
+extern int drvmgr_children_unregister( struct drvmgr_bus *bus );
 
 /* Separate a device from the driver it has been united with */
-extern int drvmgr_dev_drv_separate(struct drvmgr_dev *dev);
+extern int drvmgr_dev_drv_separate( struct drvmgr_dev *dev );
 
 /*! Allocate a device structure, if no memory available
  *  rtems_error_fatal_occurred is called.
@@ -430,7 +475,7 @@ extern int drvmgr_dev_drv_separate(struct drvmgr_dev *dev);
  * the device structure, this is typically used for "businfo" structures. The extra
  * space is always aligned to a 4-byte boundary.
  */
-extern int drvmgr_alloc_dev(struct drvmgr_dev **pdev, int extra);
+extern int drvmgr_alloc_dev( struct drvmgr_dev **pdev, int extra );
 
 /*! Allocate a bus structure, if no memory available rtems_error_fatal_occurred
  * is called.
@@ -438,7 +483,7 @@ extern int drvmgr_alloc_dev(struct drvmgr_dev **pdev, int extra);
  * the device structure, this is typically used for "businfo" structures. The
  * extra space is always aligned to a 4-byte boundary.
  */
-extern int drvmgr_alloc_bus(struct drvmgr_bus **pbus, int extra);
+extern int drvmgr_alloc_bus( struct drvmgr_bus **pbus, int extra );
 
 /*** DRIVER RESOURCE FUNCTIONS ***/
 
@@ -448,8 +493,10 @@ extern int drvmgr_alloc_bus(struct drvmgr_bus **pbus, int extra);
  * \param res   An array with Driver resources, all together are called bus
  *              resources.
  */
-extern void drvmgr_bus_res_add(struct drvmgr_bus *bus,
-					struct drvmgr_bus_res *bres);
+extern void drvmgr_bus_res_add(
+  struct drvmgr_bus     *bus,
+  struct drvmgr_bus_res *bres
+);
 
 /*! Find all the resource keys for a device among all driver resources on a
  *  bus. Typically used by a device driver to get configuration options.
@@ -457,7 +504,7 @@ extern void drvmgr_bus_res_add(struct drvmgr_bus *bus,
  * \param dev   Device to find resources for
  * \param key   Location where the pointer to the driver resource array (drvmgr_drv_res->keys) is stored.
  */
-extern int drvmgr_keys_get(struct drvmgr_dev *dev, struct drvmgr_key **keys);
+extern int drvmgr_keys_get( struct drvmgr_dev *dev, struct drvmgr_key **keys );
 
 /*! Return the one key that matches key name from a driver keys array. The keys
  *  can be obtained using drvmgr_keys_get().
@@ -465,7 +512,10 @@ extern int drvmgr_keys_get(struct drvmgr_dev *dev, struct drvmgr_key **keys);
  * \param keys       An array of keys ended with DRVMGR_KEY_EMPTY to search among.
  * \param key_name   Name of key to search for among the keys.
  */
-extern struct drvmgr_key *drvmgr_key_get(struct drvmgr_key *keys, char *key_name);
+extern struct drvmgr_key *drvmgr_key_get(
+  struct drvmgr_key *keys,
+  char              *key_name
+);
 
 /*! Extract key value from the key in the keys array matching name and type.
  *
@@ -480,9 +530,10 @@ extern struct drvmgr_key *drvmgr_key_get(struct drvmgr_key *keys, char *key_name
  *                    Type.
  */
 extern union drvmgr_key_value *drvmgr_key_val_get(
-	struct drvmgr_key *keys,
-	char *key_name,
-	enum drvmgr_kt key_type);
+  struct drvmgr_key *keys,
+  char              *key_name,
+  enum drvmgr_kt     key_type
+);
 
 /*! Get key value from the bus resources matching [device, key name, key type]
  *  if no matching key is found NULL is returned.
@@ -497,29 +548,31 @@ extern union drvmgr_key_value *drvmgr_key_val_get(
  *                    Key Type was found for device.
  */
 extern union drvmgr_key_value *drvmgr_dev_key_get(
-	struct drvmgr_dev *dev,
-	char *key_name,
-	enum drvmgr_kt key_type);
+  struct drvmgr_dev *dev,
+  char              *key_name,
+  enum drvmgr_kt     key_type
+);
 
 /*** DRIVER INTERACE USED TO REQUEST INFORMATION/SERVICES FROM BUS DRIVER ***/
 
 /*! Get parent bus */
-static inline struct drvmgr_bus *drvmgr_get_parent(
-	struct drvmgr_dev *dev)
+static inline struct drvmgr_bus *drvmgr_get_parent( struct drvmgr_dev *dev )
 {
-	if (dev)
-		return dev->parent;
-	else
-		return NULL;
+  if ( dev ) {
+    return dev->parent;
+  } else {
+    return NULL;
+  }
 }
 
 /*! Get Driver of device */
-static inline struct drvmgr_drv *drvmgr_get_drv(struct drvmgr_dev *dev)
+static inline struct drvmgr_drv *drvmgr_get_drv( struct drvmgr_dev *dev )
 {
-	if (dev)
-		return dev->drv;
-	else
-		return NULL;
+  if ( dev ) {
+    return dev->drv;
+  } else {
+    return NULL;
+  }
 }
 
 /*! Calls func() for every device found in the device tree, regardless of
@@ -534,12 +587,13 @@ static inline struct drvmgr_drv *drvmgr_get_drv(struct drvmgr_dev *dev)
  * \param options    Search Options, see DRVMGR_FED_*
  *
  */
-#define DRVMGR_FED_BF 1		/* Breadth-first search */
-#define DRVMGR_FED_DF 0		/* Depth first search */
+#define DRVMGR_FED_BF 1 /* Breadth-first search */
+#define DRVMGR_FED_DF 0 /* Depth first search */
 extern intptr_t drvmgr_for_each_dev(
-	intptr_t (*func)(struct drvmgr_dev *dev, void *arg),
-	void *arg,
-	int options);
+  intptr_t ( *func )( struct drvmgr_dev *dev, void *arg ),
+  void *arg,
+  int   options
+);
 
 /*! Get Device pointer from Driver and Driver minor number
  *
@@ -550,9 +604,10 @@ extern intptr_t drvmgr_for_each_dev(
  *                    found in driver device list.
  */
 extern int drvmgr_get_dev(
-	struct drvmgr_drv *drv,
-	int minor,
-	struct drvmgr_dev **pdev);
+  struct drvmgr_drv  *drv,
+  int                 minor,
+  struct drvmgr_dev **pdev
+);
 
 /*! Get Bus frequency in Hertz. Frequency is stored into address of freq_hz.
  *
@@ -561,12 +616,13 @@ extern int drvmgr_get_dev(
  * \param freq_hz    Location where Bus Frequency will be stored.
  */
 extern int drvmgr_freq_get(
-	struct drvmgr_dev *dev,
-	int options,
-	unsigned int *freq_hz);
+  struct drvmgr_dev *dev,
+  int                options,
+  unsigned int      *freq_hz
+);
 
 /*! Return 0 if dev is not located on the root bus, 1 if on root bus */
-extern int drvmgr_on_rootbus(struct drvmgr_dev *dev);
+extern int drvmgr_on_rootbus( struct drvmgr_dev *dev );
 
 /*! Get device name prefix, this name can be used to register a unique name in
  *  the bus->error filesystem or to get an idea where the device is located.
@@ -574,7 +630,7 @@ extern int drvmgr_on_rootbus(struct drvmgr_dev *dev);
  * \param dev         The Device to get the device Prefix for.
  * \param dev_prefix  Location where the prefix will be stored.
  */
-extern int drvmgr_get_dev_prefix(struct drvmgr_dev *dev, char *dev_prefix);
+extern int drvmgr_get_dev_prefix( struct drvmgr_dev *dev, char *dev_prefix );
 
 /*! Register a shared interrupt handler. Since this service is shared among
  *  interrupt drivers/handlers the handler[arg] must be installed before the
@@ -590,11 +646,12 @@ extern int drvmgr_get_dev_prefix(struct drvmgr_dev *dev, char *dev_prefix);
  *  \param arg        Optional ISR argument.
  */
 extern int drvmgr_interrupt_register(
-	struct drvmgr_dev *dev,
-	int index,
-	const char *info,
-	drvmgr_isr isr,
-	void *arg);
+  struct drvmgr_dev *dev,
+  int                index,
+  const char        *info,
+  drvmgr_isr         isr,
+  void              *arg
+);
 
 /*! Unregister an interrupt handler. This also disables the interrupt before
  *  unregistering the interrupt handler.
@@ -607,10 +664,11 @@ extern int drvmgr_interrupt_register(
  *  \param arg        Optional ISR argument, previously registered.
  */
 extern int drvmgr_interrupt_unregister(
-	struct drvmgr_dev *dev,
-	int index,
-	drvmgr_isr isr,
-	void *arg);
+  struct drvmgr_dev *dev,
+  int                index,
+  drvmgr_isr         isr,
+  void              *arg
+);
 
 /*! Clear (ACK) pending interrupt
  *
@@ -621,9 +679,7 @@ extern int drvmgr_interrupt_unregister(
  *  \param isr        Interrupt Service Routine, previously registered.
  *  \param arg        Optional ISR argument, previously registered.
  */
-extern int drvmgr_interrupt_clear(
-	struct drvmgr_dev *dev,
-	int index);
+extern int drvmgr_interrupt_clear( struct drvmgr_dev *dev, int index );
 
 /*! Force unmasking/enableing an interrupt on the interrupt controller, this is not normally used,
  *  if used the caller has masked/disabled the interrupt just before.
@@ -635,9 +691,7 @@ extern int drvmgr_interrupt_clear(
  *  \param isr        Interrupt Service Routine, previously registered.
  *  \param arg        Optional ISR argument, previously registered.
  */
-extern int drvmgr_interrupt_unmask(
-	struct drvmgr_dev *dev,
-	int index);
+extern int drvmgr_interrupt_unmask( struct drvmgr_dev *dev, int index );
 
 /*! Force masking/disable an interrupt on the interrupt controller, this is not normally performed
  *  since this will stop all other (shared) ISRs to be disabled until _unmask() is called.
@@ -647,9 +701,7 @@ extern int drvmgr_interrupt_unmask(
  *                    Normally Index is set to 0 to indicated the first and only IRQ source.
  *                    A negative index is interpreted as a absolute bus IRQ number.
  */
-extern int drvmgr_interrupt_mask(
-	struct drvmgr_dev *dev,
-	int index);
+extern int drvmgr_interrupt_mask( struct drvmgr_dev *dev, int index );
 
 /*! Force masking/disable an interrupt on the interrupt controller, this is not normally performed
  *  since this will stop all other (shared) ISRs to be disabled until _unmask() is called.
@@ -661,23 +713,24 @@ extern int drvmgr_interrupt_mask(
  */
 #ifdef RTEMS_SMP
 extern int drvmgr_interrupt_set_affinity(
-	struct drvmgr_dev *dev,
-	int index,
-	const Processor_mask *cpus);
+  struct drvmgr_dev    *dev,
+  int                   index,
+  const Processor_mask *cpus
+);
 #endif
 
 /*! drvmgr_translate() translation options */
 enum drvmgr_tr_opts {
-	/* Translate CPU RAM Address (input) to DMA unit accessible address
+  /* Translate CPU RAM Address (input) to DMA unit accessible address
 	 * (output), this is an upstreams translation in reverse order.
 	 *
 	 * Typical Usage:
 	 * It is common to translate a CPU accessible RAM address to an
 	 * address that DMA units can access over bridges.
 	 */
-	CPUMEM_TO_DMA = 0x0,
+  CPUMEM_TO_DMA = 0x0,
 
-	/* Translate DMA Unit Accessible address mapped to CPU RAM (input) to
+  /* Translate DMA Unit Accessible address mapped to CPU RAM (input) to
 	 * CPU accessible address (output). This is an upstreams translation.
 	 *
 	 * Typical Usage (not often used):
@@ -686,9 +739,9 @@ enum drvmgr_tr_opts {
 	 * the descriptors and want to access the data but a translation back
 	 * to CPU address is required.
 	 */
-	CPUMEM_FROM_DMA = 0x1,
+  CPUMEM_FROM_DMA = 0x1,
 
-	/* Translate DMA Memory Address (input) to CPU accessible address
+  /* Translate DMA Memory Address (input) to CPU accessible address
 	 * (output), this is a downstreams translation in reverse order.
 	 *
 	 * Typical Usage:
@@ -696,17 +749,17 @@ enum drvmgr_tr_opts {
 	 * PCI, in order for the CPU to access them the PCI address must be
 	 * translated.
 	 */
-	DMAMEM_TO_CPU = 0x2,
+  DMAMEM_TO_CPU = 0x2,
 
-	/* Translate CPU accessible address (input) mapped to DMA Memory Address
+  /* Translate CPU accessible address (input) mapped to DMA Memory Address
 	 * to DMA Unit accessible address (output). This is a downstreams
 	 * translation.
 	 */
-	DMAMEM_FROM_CPU = 0x3,
+  DMAMEM_FROM_CPU = 0x3,
 };
-#define DRVMGR_TR_REVERSE 0x1	/* do reverse translation direction order */
-#define DRVMGR_TR_PATH 0x2	/* 0x0=down-stream 0x2=up-stream address path */
- 
+#define DRVMGR_TR_REVERSE 0x1 /* do reverse translation direction order */
+#define DRVMGR_TR_PATH    0x2 /* 0x0=down-stream 0x2=up-stream address path */
+
 /*! Translate an address on one bus to an address on another bus.
  *
  *  The device determines source or destination bus, the root bus is always
@@ -744,10 +797,11 @@ enum drvmgr_tr_opts {
  *  and src_address is stored in *dst_address.
  */
 extern unsigned int drvmgr_translate(
-	struct drvmgr_dev *dev,
-	unsigned int options,
-	void *src_address,
-	void **dst_address);
+  struct drvmgr_dev *dev,
+  unsigned int       options,
+  void              *src_address,
+  void             **dst_address
+);
 
 /* Translate addresses between buses, used internally to implement
  * drvmgr_translate. Function is not limited to translate from/to root bus
@@ -769,11 +823,12 @@ extern unsigned int drvmgr_translate(
  *  and src_address is stored in *dst_address.
  */
 extern unsigned int drvmgr_translate_bus(
-	struct drvmgr_bus *from,
-	struct drvmgr_bus *to,
-	int reverse,
-	void *src_address,
-	void **dst_address);
+  struct drvmgr_bus *from,
+  struct drvmgr_bus *to,
+  int                reverse,
+  void              *src_address,
+  void             **dst_address
+);
 
 /* Calls drvmgr_translate() to translate an address range and checks the result,
  * a printout is generated if the check fails. All parameters are passed on to
@@ -784,122 +839,145 @@ extern unsigned int drvmgr_translate_bus(
  * If mapping failes a non-zero result is returned.
  */
 extern int drvmgr_translate_check(
-	struct drvmgr_dev *dev,
-	unsigned int options,
-	void *src_address,
-	void **dst_address,
-	unsigned int size);
+  struct drvmgr_dev *dev,
+  unsigned int       options,
+  void              *src_address,
+  void             **dst_address,
+  unsigned int       size
+);
 
 /*! Get function pointer from Device Driver or Bus Driver.
  *
  *  Returns 0 if function is available
  */
-extern int drvmgr_func_get(void *obj, int funcid, void **func);
+extern int drvmgr_func_get( void *obj, int funcid, void **func );
 
 /*! Lookup function and call it directly with the four optional arguments */
-extern int drvmgr_func_call(void *obj, int funcid, void *a, void *b, void *c, void *d);
+extern int drvmgr_func_call(
+  void *obj,
+  int   funcid,
+  void *a,
+  void *b,
+  void *c,
+  void *d
+);
 
 /* Builds a Function ID.
  *
  * Used to request optional functions by a bus or device driver
  */
-#define DRVMGR_FUNCID(major, minor) ((((major) & 0xfff) << 20) | ((minor) & 0xfffff))
+#define DRVMGR_FUNCID( major, minor ) \
+  ( ( ( ( major ) & 0xfff ) << 20 ) | ( ( minor ) & 0xfffff ) )
 #define DRVMGR_FUNCID_NONE 0
-#define DRVMGR_FUNCID_END DRVMGR_FUNCID(DRVMGR_FUNCID_NONE, 0)
+#define DRVMGR_FUNCID_END  DRVMGR_FUNCID( DRVMGR_FUNCID_NONE, 0 )
 
 /* Major Function ID. Most significant 12-bits. */
 enum {
-	FUNCID_NONE             = 0x000,
-	FUNCID_RW               = 0x001, /* Read/Write functions */
+  FUNCID_NONE = 0x000,
+  FUNCID_RW = 0x001, /* Read/Write functions */
 };
 
 /* Select Sub-Function Read/Write function by ID */
-#define RW_SIZE_1   0x00001    /* Access Size */
-#define RW_SIZE_2   0x00002
-#define RW_SIZE_4   0x00004
-#define RW_SIZE_8   0x00008
-#define RW_SIZE_ANY 0x00000
-#define RW_SIZE(id) ((unsigned int)(id) & 0xf)
+#define RW_SIZE_1     0x00001 /* Access Size */
+#define RW_SIZE_2     0x00002
+#define RW_SIZE_4     0x00004
+#define RW_SIZE_8     0x00008
+#define RW_SIZE_ANY   0x00000
+#define RW_SIZE( id ) ( (unsigned int) ( id ) & 0xf )
 
-#define RW_DIR_ANY  0x00000   /* Access Direction */
-#define RW_READ     0x00000   /* Read */
-#define RW_WRITE    0x00010   /* Write */
-#define RW_SET      0x00020   /* Write with same value (memset) */
-#define RW_DIR(id)  (((unsigned int)(id) >> 4) & 0x3)
+#define RW_DIR_ANY   0x00000 /* Access Direction */
+#define RW_READ      0x00000 /* Read */
+#define RW_WRITE     0x00010 /* Write */
+#define RW_SET       0x00020 /* Write with same value (memset) */
+#define RW_DIR( id ) ( ( (unsigned int) ( id ) >> 4 ) & 0x3 )
 
-#define RW_RAW      0x00000  /* Raw access - no swapping (machine default) */
-#define RW_LITTLE   0x00040  /* Little Endian */
-#define RW_BIG      0x00080  /* Big Endian */
-#define RW_ENDIAN(id) (((unsigned int)(id) >> 6) & 0x3)
+#define RW_RAW    0x00000 /* Raw access - no swapping (machine default) */
+#define RW_LITTLE 0x00040 /* Little Endian */
+#define RW_BIG    0x00080 /* Big Endian */
+#define RW_ENDIAN( id ) ( ( (unsigned int) ( id ) >> 6 ) & 0x3 )
 
-#define RW_TYPE_ANY 0x00000  /* Access type */
-#define RW_REG      0x00100
-#define RW_MEM      0x00200
-#define RW_MEMREG   0x00300
-#define RW_CFG      0x00400
-#define RW_TYPE(id) (((unsigned int)(id) >> 8) & 0xf)
+#define RW_TYPE_ANY   0x00000 /* Access type */
+#define RW_REG        0x00100
+#define RW_MEM        0x00200
+#define RW_MEMREG     0x00300
+#define RW_CFG        0x00400
+#define RW_TYPE( id ) ( ( (unsigned int) ( id ) >> 8 ) & 0xf )
 
-#define RW_ARG      0x01000 /* Optional Argument */
-#define RW_ERR      0x02000 /* Optional Error Handler */
+#define RW_ARG 0x01000 /* Optional Argument */
+#define RW_ERR 0x02000 /* Optional Error Handler */
 
 /* Build a Read/Write function ID */
-#define DRVMGR_RWFUNC(minor) DRVMGR_FUNCID(FUNCID_RW, minor)
+#define DRVMGR_RWFUNC( minor ) DRVMGR_FUNCID( FUNCID_RW, minor )
 
 /* Argument to Read/Write functions, the "void *arg" pointer is returned by
  * RW_ARG. If NULL is returned no argument is needed.
  */
 struct drvmgr_rw_arg {
-	void *arg;
-	struct drvmgr_dev *dev;
+  void              *arg;
+  struct drvmgr_dev *dev;
 };
 
 /* Standard Read/Write function types */
-typedef uint8_t (*drvmgr_r8)(uint8_t *srcadr);
-typedef uint16_t (*drvmgr_r16)(uint16_t *srcadr);
-typedef uint32_t (*drvmgr_r32)(uint32_t *srcadr);
-typedef uint64_t (*drvmgr_r64)(uint64_t *srcadr);
-typedef void (*drvmgr_w8)(uint8_t *dstadr, uint8_t data);
-typedef void (*drvmgr_w16)(uint16_t *dstadr, uint16_t data);
-typedef void (*drvmgr_w32)(uint32_t *dstadr, uint32_t data);
-typedef void (*drvmgr_w64)(uint64_t *dstadr, uint64_t data);
+typedef uint8_t ( *drvmgr_r8 )( uint8_t *srcadr );
+typedef uint16_t ( *drvmgr_r16 )( uint16_t *srcadr );
+typedef uint32_t ( *drvmgr_r32 )( uint32_t *srcadr );
+typedef uint64_t ( *drvmgr_r64 )( uint64_t *srcadr );
+typedef void ( *drvmgr_w8 )( uint8_t *dstadr, uint8_t data );
+typedef void ( *drvmgr_w16 )( uint16_t *dstadr, uint16_t data );
+typedef void ( *drvmgr_w32 )( uint32_t *dstadr, uint32_t data );
+typedef void ( *drvmgr_w64 )( uint64_t *dstadr, uint64_t data );
 /* READ/COPY a memory area located on bus into CPU memory.
  * From 'src' (remote) to the destination 'dest' (local), n=number of bytes
  */
-typedef int (*drvmgr_rmem)(void *dest, const void *src, int n);
+typedef int ( *drvmgr_rmem )( void *dest, const void *src, int n );
 /* WRITE/COPY a user buffer located in CPU memory to a location on the bus.
  * From 'src' (local) to the destination 'dest' (remote), n=number of bytes
  */
-typedef int (*drvmgr_wmem)(void *dest, const void *src, int n);
+typedef int ( *drvmgr_wmem )( void *dest, const void *src, int n );
 /* Set a memory area to the byte value given in c, see LIBC memset(). Memset is
  * implemented by calling wmem() multiple times with a "large" buffer.
  */
-typedef int (*drvmgr_memset)(void *dstadr, int c, size_t n);
+typedef int ( *drvmgr_memset )( void *dstadr, int c, size_t n );
 
 /* Read/Write function types with additional argument */
-typedef uint8_t (*drvmgr_r8_arg)(uint8_t *srcadr, void *a);
-typedef uint16_t (*drvmgr_r16_arg)(uint16_t *srcadr, void *a);
-typedef uint32_t (*drvmgr_r32_arg)(uint32_t *srcadr, void *a);
-typedef uint64_t (*drvmgr_r64_arg)(uint64_t *srcadr, void *a);
-typedef void (*drvmgr_w8_arg)(uint8_t *dstadr, uint8_t data, void *a);
-typedef void (*drvmgr_w16_arg)(uint16_t *dstadr, uint16_t data, void *a);
-typedef void (*drvmgr_w32_arg)(uint32_t *dstadr, uint32_t data, void *a);
-typedef void (*drvmgr_w64_arg)(uint64_t *dstadr, uint64_t data, void *a);
-typedef int (*drvmgr_rmem_arg)(void *dest, const void *src, int n, void *a);
-typedef int (*drvmgr_wmem_arg)(void *dest, const void *src, int n, void *a);
-typedef int (*drvmgr_memset_arg)(void *dstadr, int c, size_t n, void *a);
+typedef uint8_t ( *drvmgr_r8_arg )( uint8_t *srcadr, void *a );
+typedef uint16_t ( *drvmgr_r16_arg )( uint16_t *srcadr, void *a );
+typedef uint32_t ( *drvmgr_r32_arg )( uint32_t *srcadr, void *a );
+typedef uint64_t ( *drvmgr_r64_arg )( uint64_t *srcadr, void *a );
+typedef void ( *drvmgr_w8_arg )( uint8_t *dstadr, uint8_t data, void *a );
+typedef void ( *drvmgr_w16_arg )( uint16_t *dstadr, uint16_t data, void *a );
+typedef void ( *drvmgr_w32_arg )( uint32_t *dstadr, uint32_t data, void *a );
+typedef void ( *drvmgr_w64_arg )( uint64_t *dstadr, uint64_t data, void *a );
+typedef int ( *drvmgr_rmem_arg )(
+  void       *dest,
+  const void *src,
+  int         n,
+  void       *a
+);
+typedef int ( *drvmgr_wmem_arg )(
+  void       *dest,
+  const void *src,
+  int         n,
+  void       *a
+);
+typedef int ( *drvmgr_memset_arg )( void *dstadr, int c, size_t n, void *a );
 
 /* Report an error to the parent bus of the device */
-typedef void (*drvmgr_rw_err)(struct drvmgr_rw_arg *a, struct drvmgr_bus *bus,
-				int funcid, void *adr);
+typedef void ( *drvmgr_rw_err )(
+  struct drvmgr_rw_arg *a,
+  struct drvmgr_bus    *bus,
+  int                   funcid,
+  void                 *adr
+);
 
 /* Helper function for buses that implement the memset() over wmem() */
 extern void drvmgr_rw_memset(
-	void *dstadr,
-	int c,
-	size_t n,
-	void *a,
-	drvmgr_wmem_arg wmem
-	);
+  void           *dstadr,
+  int             c,
+  size_t          n,
+  void           *a,
+  drvmgr_wmem_arg wmem
+);
 
 /*** PRINT INFORMATION ABOUT DRIVER MANAGER ***/
 
@@ -928,76 +1006,79 @@ extern void drvmgr_rw_memset(
  *
  */
 extern int drvmgr_for_each_listdev(
-	struct drvmgr_list *devlist,
-	unsigned int state_set_mask,
-	unsigned int state_clr_mask,
-	int (*func)(struct drvmgr_dev *dev, void *arg),
-	void *arg);
+  struct drvmgr_list *devlist,
+  unsigned int        state_set_mask,
+  unsigned int        state_clr_mask,
+  int ( *func )( struct drvmgr_dev *dev, void *arg ),
+  void *arg
+);
 
 /* Print all devices */
-#define PRINT_DEVS_FAILED	0x01	/* Failed during initialization */
-#define PRINT_DEVS_ASSIGNED	0x02	/* Driver assigned */
-#define PRINT_DEVS_UNASSIGNED	0x04	/* Driver not assigned */
-#define PRINT_DEVS_IGNORED	0x08	/* Device ignored on user's request */
-#define PRINT_DEVS_ALL		(PRINT_DEVS_FAILED | \
-				PRINT_DEVS_ASSIGNED | \
-				PRINT_DEVS_UNASSIGNED |\
-				PRINT_DEVS_IGNORED)
+#define PRINT_DEVS_FAILED     0x01 /* Failed during initialization */
+#define PRINT_DEVS_ASSIGNED   0x02 /* Driver assigned */
+#define PRINT_DEVS_UNASSIGNED 0x04 /* Driver not assigned */
+#define PRINT_DEVS_IGNORED    0x08 /* Device ignored on user's request */
+#define PRINT_DEVS_ALL                                                \
+  ( PRINT_DEVS_FAILED | PRINT_DEVS_ASSIGNED | PRINT_DEVS_UNASSIGNED | \
+    PRINT_DEVS_IGNORED )
 
 /*! Print number of devices, buses and drivers */
-extern void drvmgr_summary(void);
+extern void drvmgr_summary( void );
 
 /*! Print devices with certain condictions met according to 'options' */
-extern void drvmgr_print_devs(unsigned int options);
+extern void drvmgr_print_devs( unsigned int options );
 
 /*! Print device/bus topology */
-extern void drvmgr_print_topo(void);
+extern void drvmgr_print_topo( void );
 
 /*! Print the memory usage
  * Only accounts for data structures. Not for the text size.
  */
-extern void drvmgr_print_mem(void);
+extern void drvmgr_print_mem( void );
 
-#define OPTION_DEV_GENINFO   0x00000001
-#define OPTION_DEV_BUSINFO   0x00000002
-#define OPTION_DEV_DRVINFO   0x00000004
-#define OPTION_DRV_DEVS      0x00000100
-#define OPTION_BUS_DEVS      0x00010000
-#define OPTION_RECURSIVE     0x01000000
-#define OPTION_INFO_ALL      0xffffffff
+#define OPTION_DEV_GENINFO 0x00000001
+#define OPTION_DEV_BUSINFO 0x00000002
+#define OPTION_DEV_DRVINFO 0x00000004
+#define OPTION_DRV_DEVS    0x00000100
+#define OPTION_BUS_DEVS    0x00010000
+#define OPTION_RECURSIVE   0x01000000
+#define OPTION_INFO_ALL    0xffffffff
 
 /*! Print information about a driver manager object (device, driver, bus) */
-extern void drvmgr_info(void *id, unsigned int options);
+extern void drvmgr_info( void *id, unsigned int options );
 
 /*! Get information about a device */
-extern void drvmgr_info_dev(struct drvmgr_dev *dev, unsigned int options);
+extern void drvmgr_info_dev( struct drvmgr_dev *dev, unsigned int options );
 
 /*! Get information about a bus */
-extern void drvmgr_info_bus(struct drvmgr_bus *bus, unsigned int options);
+extern void drvmgr_info_bus( struct drvmgr_bus *bus, unsigned int options );
 
 /*! Get information about a driver */
-extern void drvmgr_info_drv(struct drvmgr_drv *drv, unsigned int options);
+extern void drvmgr_info_drv( struct drvmgr_drv *drv, unsigned int options );
 
 /*! Get information about all devices on a bus */
-extern void drvmgr_info_devs_on_bus(struct drvmgr_bus *bus, unsigned int options);
+extern void drvmgr_info_devs_on_bus(
+  struct drvmgr_bus *bus,
+  unsigned int       options
+);
 
 /*! Get information about all devices in the system (on all buses) */
-extern void drvmgr_info_devs(unsigned int options);
+extern void drvmgr_info_devs( unsigned int options );
 
 /*! Get information about all drivers in the system */
-extern void drvmgr_info_drvs(unsigned int options);
+extern void drvmgr_info_drvs( unsigned int options );
 
 /*! Get information about all buses in the system */
-extern void drvmgr_info_buses(unsigned int options);
+extern void drvmgr_info_buses( unsigned int options );
 
 /*! Get Driver by Driver ID */
-extern struct drvmgr_drv *drvmgr_drv_by_id(uint64_t id);
+extern struct drvmgr_drv *drvmgr_drv_by_id( uint64_t id );
 
 /*! Get Driver by Driver Name */
-extern struct drvmgr_drv *drvmgr_drv_by_name(const char *name);
+extern struct drvmgr_drv *drvmgr_drv_by_name( const char *name );
 
 /*! Get Device by Device Name */
-extern struct drvmgr_dev *drvmgr_dev_by_name(const char *name);
+extern struct drvmgr_dev *drvmgr_dev_by_name( const char *name );
 
 #ifdef __cplusplus
 }

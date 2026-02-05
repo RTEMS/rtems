@@ -49,119 +49,130 @@
 #include "drvmgr_internal.h"
 
 unsigned int drvmgr_translate_bus(
-	struct drvmgr_bus *from,
-	struct drvmgr_bus *to,
-	int reverse,
-	void *src_address,
-	void **dst_address)
+  struct drvmgr_bus *from,
+  struct drvmgr_bus *to,
+  int                reverse,
+  void              *src_address,
+  void             **dst_address
+)
 {
-	struct drvmgr_bus *path[16];
-	int dir, levels, i;
-	void *dst, *from_adr, *to_adr;
-	struct drvmgr_map_entry *map;
-	struct drvmgr_bus *bus;
-	ssize_t sz;
-	struct drvmgr_bus *bus_bot, *bus_top;
+  struct drvmgr_bus       *path[ 16 ];
+  int                      dir, levels, i;
+  void                    *dst, *from_adr, *to_adr;
+  struct drvmgr_map_entry *map;
+  struct drvmgr_bus       *bus;
+  ssize_t                  sz;
+  struct drvmgr_bus       *bus_bot, *bus_top;
 
-	dst = src_address;
-	sz = 0xffffffff;
+  dst = src_address;
+  sz = 0xffffffff;
 
-	if (from == to) /* no need translating addresses when on same bus */
-		goto out;
+  if ( from == to ) { /* no need translating addresses when on same bus */
+    goto out;
+  }
 
-	/* Always find translation path from remote bus towards root bus. All
+  /* Always find translation path from remote bus towards root bus. All
 	 * buses have root bus has parent at some level
 	 */
-	if (from->depth > to->depth) {
-		bus_bot = from;
-		bus_top = to;
-		dir = 0;
-	} else {
-		bus_bot = to;
-		bus_top = from;
-		dir = 1;
-	}
-	levels = bus_bot->depth - bus_top->depth;
-	if (levels >= 16)
-		return 0; /* Does not support such a big depth */
-	i = 0;
-	while ((bus_bot != NULL) && bus_bot != bus_top) {
-		if (dir)
-			path[(levels - 1) - i] = bus_bot;
-		else
-			path[i] = bus_bot;
-		i++;
-		bus_bot = bus_bot->dev->parent;
-	}
-	if (bus_bot == NULL)
-		return 0; /* from -> to is not linearly connected */
+  if ( from->depth > to->depth ) {
+    bus_bot = from;
+    bus_top = to;
+    dir = 0;
+  } else {
+    bus_bot = to;
+    bus_top = from;
+    dir = 1;
+  }
+  levels = bus_bot->depth - bus_top->depth;
+  if ( levels >= 16 ) {
+    return 0; /* Does not support such a big depth */
+  }
+  i = 0;
+  while ( ( bus_bot != NULL ) && bus_bot != bus_top ) {
+    if ( dir ) {
+      path[ ( levels - 1 ) - i ] = bus_bot;
+    } else {
+      path[ i ] = bus_bot;
+    }
+    i++;
+    bus_bot = bus_bot->dev->parent;
+  }
+  if ( bus_bot == NULL ) {
+    return 0; /* from -> to is not linearly connected */
+  }
 
-	for (i = 0; i < levels; i++) {
-		bus = path[i];
+  for ( i = 0; i < levels; i++ ) {
+    bus = path[ i ];
 
-		if ((dir && reverse) || (!dir && !reverse))
-			map = bus->maps_up;
-		else
-			map = bus->maps_down;
+    if ( ( dir && reverse ) || ( !dir && !reverse ) ) {
+      map = bus->maps_up;
+    } else {
+      map = bus->maps_down;
+    }
 
-		if (map == NULL)
-			continue; /* No translation needed - 1:1 mapping */
+    if ( map == NULL ) {
+      continue; /* No translation needed - 1:1 mapping */
+    }
 
-		if (map == DRVMGR_TRANSLATE_NO_BRIDGE) {
-			sz = 0;
-			break; /* No bridge interface in this direction */
-		}
+    if ( map == DRVMGR_TRANSLATE_NO_BRIDGE ) {
+      sz = 0;
+      break; /* No bridge interface in this direction */
+    }
 
-		while (map->size != 0) {
-			if (reverse) {
-				/* Opposite direction */
-				from_adr = map->to_adr;
-				to_adr = map->from_adr;
-			} else {
-				from_adr = map->from_adr;
-				to_adr = map->to_adr;
-			}
+    while ( map->size != 0 ) {
+      if ( reverse ) {
+        /* Opposite direction */
+        from_adr = map->to_adr;
+        to_adr = map->from_adr;
+      } else {
+        from_adr = map->from_adr;
+        to_adr = map->to_adr;
+      }
 
-			if ((dst >= from_adr) &&
-			    (dst <= (from_adr + (map->size - 1)))) {
-				if (((from_adr + (map->size - 1)) - dst) < sz)
-					sz = (from_adr + (map->size - 1)) - dst;
-				dst = (dst - from_adr) + to_adr;
-				break;
-			}
-			map++;
-		}
-		/* quit if no matching translation information */
-		if (map->size == 0) {
-			sz = 0;
-			break;
-		}
-	}
+      if (
+        ( dst >= from_adr ) && ( dst <= ( from_adr + ( map->size - 1 ) ) )
+      ) {
+        if ( ( ( from_adr + ( map->size - 1 ) ) - dst ) < sz ) {
+          sz = ( from_adr + ( map->size - 1 ) ) - dst;
+        }
+        dst = ( dst - from_adr ) + to_adr;
+        break;
+      }
+      map++;
+    }
+    /* quit if no matching translation information */
+    if ( map->size == 0 ) {
+      sz = 0;
+      break;
+    }
+  }
 
 out:
-	if (dst_address)
-		*dst_address = dst;
+  if ( dst_address ) {
+    *dst_address = dst;
+  }
 
-	return sz;
+  return sz;
 }
 
 unsigned int drvmgr_translate(
-	struct drvmgr_dev *dev,
-	unsigned int options,
-	void *src_address,
-	void **dst_address)
+  struct drvmgr_dev *dev,
+  unsigned int       options,
+  void              *src_address,
+  void             **dst_address
+)
 {
-	struct drvmgr_bus *to, *from;
-	int rev = 0;
+  struct drvmgr_bus *to, *from;
+  int                rev = 0;
 
-	rev = (~options) & 1;
-	if ((options == CPUMEM_TO_DMA) || (options == DMAMEM_FROM_CPU)) {
-		from = drvmgr.root_dev.bus;
-		to = dev->parent;
-	} else { /* CPUMEM_FROM_DMA || DMAMEM_TO_CPU */
-		from = dev->parent;
-		to = drvmgr.root_dev.bus;
-	}
+  rev = ( ~options ) & 1;
+  if ( ( options == CPUMEM_TO_DMA ) || ( options == DMAMEM_FROM_CPU ) ) {
+    from = drvmgr.root_dev.bus;
+    to = dev->parent;
+  } else { /* CPUMEM_FROM_DMA || DMAMEM_TO_CPU */
+    from = dev->parent;
+    to = drvmgr.root_dev.bus;
+  }
 
-	return drvmgr_translate_bus(from, to, rev, src_address, dst_address);
+  return drvmgr_translate_bus( from, to, rev, src_address, dst_address );
 }
