@@ -41,8 +41,8 @@ extern "C" {
  * kernel's on_each_cpu() call and always waits for the task to complete before
  * returning.
  */
-rtems_status_code rtems_debugger_cpu_run_all(
-  rtems_task_entry task_entry, rtems_task_argument arg);
+rtems_status_code rtems_debugger_cpu_run_all(rtems_task_entry task_entry,
+                                             rtems_task_argument arg);
 
 #ifdef __cplusplus
 }

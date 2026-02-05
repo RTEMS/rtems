@@ -53,25 +53,25 @@ extern "C" {
 /*
  * Debugger signals.
  */
-#define RTEMS_DEBUGGER_SIGNAL_HUP   1     /* Hangup */
-#define RTEMS_DEBUGGER_SIGNAL_INT   2     /* Interrupt */
-#define RTEMS_DEBUGGER_SIGNAL_QUIT  3     /* Quit */
-#define RTEMS_DEBUGGER_SIGNAL_ILL   4     /* Illegal instruction */
-#define RTEMS_DEBUGGER_SIGNAL_TRAP  5     /* Trace/breakpoint trap */
-#define RTEMS_DEBUGGER_SIGNAL_ABRT  6     /* Aborted */
-#define RTEMS_DEBUGGER_SIGNAL_EMT   7     /* Emulation trap */
-#define RTEMS_DEBUGGER_SIGNAL_FPE   8     /* Arithmetic exception */
-#define RTEMS_DEBUGGER_SIGNAL_KILL  9     /* Killed */
-#define RTEMS_DEBUGGER_SIGNAL_BUS   10    /* Bus error */
-#define RTEMS_DEBUGGER_SIGNAL_SEGV  11    /* Segmentation fault */
-#define RTEMS_DEBUGGER_SIGNAL_SYS   12    /* Bad system call */
-#define RTEMS_DEBUGGER_SIGNAL_PIPE  13    /* Broken pipe */
-#define RTEMS_DEBUGGER_SIGNAL_ALRM  14    /* Alarm clock */
-#define RTEMS_DEBUGGER_SIGNAL_TERM  15    /* Terminated */
-#define RTEMS_DEBUGGER_SIGNAL_URG   16    /* Urgent I/O condition */
-#define RTEMS_DEBUGGER_SIGNAL_STOP  17    /* Stopped (signal) */
-#define RTEMS_DEBUGGER_SIGNAL_TSTP  18    /* Stopped (user) */
-#define RTEMS_DEBUGGER_SIGNAL_CONT  19    /* Continued */
+#define RTEMS_DEBUGGER_SIGNAL_HUP 1   /* Hangup */
+#define RTEMS_DEBUGGER_SIGNAL_INT 2   /* Interrupt */
+#define RTEMS_DEBUGGER_SIGNAL_QUIT 3  /* Quit */
+#define RTEMS_DEBUGGER_SIGNAL_ILL 4   /* Illegal instruction */
+#define RTEMS_DEBUGGER_SIGNAL_TRAP 5  /* Trace/breakpoint trap */
+#define RTEMS_DEBUGGER_SIGNAL_ABRT 6  /* Aborted */
+#define RTEMS_DEBUGGER_SIGNAL_EMT 7   /* Emulation trap */
+#define RTEMS_DEBUGGER_SIGNAL_FPE 8   /* Arithmetic exception */
+#define RTEMS_DEBUGGER_SIGNAL_KILL 9  /* Killed */
+#define RTEMS_DEBUGGER_SIGNAL_BUS 10  /* Bus error */
+#define RTEMS_DEBUGGER_SIGNAL_SEGV 11 /* Segmentation fault */
+#define RTEMS_DEBUGGER_SIGNAL_SYS 12  /* Bad system call */
+#define RTEMS_DEBUGGER_SIGNAL_PIPE 13 /* Broken pipe */
+#define RTEMS_DEBUGGER_SIGNAL_ALRM 14 /* Alarm clock */
+#define RTEMS_DEBUGGER_SIGNAL_TERM 15 /* Terminated */
+#define RTEMS_DEBUGGER_SIGNAL_URG 16  /* Urgent I/O condition */
+#define RTEMS_DEBUGGER_SIGNAL_STOP 17 /* Stopped (signal) */
+#define RTEMS_DEBUGGER_SIGNAL_TSTP 18 /* Stopped (user) */
+#define RTEMS_DEBUGGER_SIGNAL_CONT 19 /* Continued */
 
 /**
  * Timeout period for the Debugger task to stop in usecs.
@@ -96,10 +96,10 @@ extern "C" {
 /**
  * Debugger flags.
  */
-#define RTEMS_DEBUGGER_FLAG_VERBOSE      (1 << 0)
-#define RTEMS_DEBUGGER_FLAG_RESET        (1 << 1)
-#define RTEMS_DEBUGGER_FLAG_NON_STOP     (1 << 2)
-#define RTEMS_DEBUGGER_FLAG_VCONT        (1 << 3)
+#define RTEMS_DEBUGGER_FLAG_VERBOSE (1 << 0)
+#define RTEMS_DEBUGGER_FLAG_RESET (1 << 1)
+#define RTEMS_DEBUGGER_FLAG_NON_STOP (1 << 2)
+#define RTEMS_DEBUGGER_FLAG_VCONT (1 << 3)
 #define RTEMS_DEBUGGER_FLAG_MULTIPROCESS (1 << 4)
 #define RTEMS_DEBUGGER_FLAG_VERBOSE_LOCK (1 << 5)
 #define RTEMS_DEBUGGER_FLAG_VERBOSE_CMDS (1 << 6)
@@ -108,45 +108,44 @@ extern "C" {
 /**
  * Forward decl for the threads and targets.
  */
-typedef struct rtems_debugger_remote  rtems_debugger_remote;
+typedef struct rtems_debugger_remote rtems_debugger_remote;
 typedef struct rtems_debugger_threads rtems_debugger_threads;
-typedef struct rtems_debugger_target  rtems_debugger_target;
+typedef struct rtems_debugger_target rtems_debugger_target;
 
 /**
  * Local types for the RTEMS-X interface.
  */
-typedef struct _Condition_Control       rtems_rx_cond;
+typedef struct _Condition_Control rtems_rx_cond;
 typedef struct _Mutex_recursive_Control rtems_rx_mutex;
 
 /**
  * Debugger data.
  */
-typedef struct
-{
-  int                     port;
-  int                     timeout;
-  rtems_task_priority     priority;
-  rtems_rx_mutex          lock;
-  rtems_debugger_remote*  remote;
-  rtems_id                server_task;
-  rtems_rx_cond           server_cond;
-  volatile bool           server_running;
-  volatile bool           server_finished;
-  rtems_id                events_task;
-  volatile bool           events_running;
-  volatile bool           events_finished;
-  rtems_printer           printer;
-  uint32_t                flags;
-  pid_t                   pid;
-  bool                    remote_debug;
-  bool                    ack_pending;
-  size_t                  output_level;
-  uint8_t                 input[RTEMS_DEBUGGER_BUFFER_SIZE];
-  uint8_t                 output[RTEMS_DEBUGGER_BUFFER_SIZE];
+typedef struct {
+  int port;
+  int timeout;
+  rtems_task_priority priority;
+  rtems_rx_mutex lock;
+  rtems_debugger_remote* remote;
+  rtems_id server_task;
+  rtems_rx_cond server_cond;
+  volatile bool server_running;
+  volatile bool server_finished;
+  rtems_id events_task;
+  volatile bool events_running;
+  volatile bool events_finished;
+  rtems_printer printer;
+  uint32_t flags;
+  pid_t pid;
+  bool remote_debug;
+  bool ack_pending;
+  size_t output_level;
+  uint8_t input[RTEMS_DEBUGGER_BUFFER_SIZE];
+  uint8_t output[RTEMS_DEBUGGER_BUFFER_SIZE];
   rtems_debugger_threads* threads;
-  rtems_chain_control     exception_threads;
-  int                     signal;
-  rtems_debugger_target*  target;
+  rtems_chain_control exception_threads;
+  int signal;
+  rtems_debugger_target* target;
 } rtems_debugger_server;
 
 /**
@@ -157,10 +156,14 @@ extern rtems_debugger_server* rtems_debugger;
 /**
  * Debug server printer.
  */
-extern int rtems_debugger_printf(const char* format, ...) RTEMS_PRINTFLIKE(1, 2);
-extern int rtems_debugger_clean_printf(const char* format, ...) RTEMS_PRINTFLIKE(1, 2);
-extern void rtems_debugger_printk_lock(rtems_interrupt_lock_context* lock_context);
-extern void rtems_debugger_printk_unlock(rtems_interrupt_lock_context* lock_context);
+extern int rtems_debugger_printf(const char* format, ...)
+    RTEMS_PRINTFLIKE(1, 2);
+extern int rtems_debugger_clean_printf(const char* format, ...)
+    RTEMS_PRINTFLIKE(1, 2);
+extern void
+rtems_debugger_printk_lock(rtems_interrupt_lock_context* lock_context);
+extern void
+rtems_debugger_printk_unlock(rtems_interrupt_lock_context* lock_context);
 
 /**
  * Lock the Debugger.
@@ -210,14 +213,12 @@ extern bool rtems_debugger_verbose(void);
 /**
  * Check a flag.
  */
-static inline bool rtems_debugger_server_flag(uint32_t mask)
-{
+static inline bool rtems_debugger_server_flag(uint32_t mask) {
   return (rtems_debugger->flags & mask) != 0;
 }
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-
 
 #endif

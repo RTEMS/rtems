@@ -56,15 +56,13 @@ typedef struct {
  * The function that runs as the body of the task which moves itself
  * among the various cores registered to a scheduler.
  */
-static rtems_task
-rtems_debugger_cpu_run_body(rtems_task_argument arg)
-{
-  uint32_t                       released = 0;
-  rtems_status_code              sc;
-  rtems_debugger_cpu_run_context *ctx = (rtems_debugger_cpu_run_context *) arg;
-  cpu_set_t                      set;
-  cpu_set_t                      scheduler_set;
-  rtems_id                       scheduler_id;
+static rtems_task rtems_debugger_cpu_run_body(rtems_task_argument arg) {
+  uint32_t released = 0;
+  rtems_status_code sc;
+  rtems_debugger_cpu_run_context* ctx = (rtems_debugger_cpu_run_context*)arg;
+  cpu_set_t set;
+  cpu_set_t scheduler_set;
+  rtems_id scheduler_id;
 
   sc = rtems_task_get_scheduler(RTEMS_SELF, &scheduler_id);
 
@@ -74,8 +72,8 @@ rtems_debugger_cpu_run_body(rtems_task_argument arg)
   }
 
   CPU_ZERO(&scheduler_set);
-  sc = rtems_scheduler_get_processor_set(
-    scheduler_id, sizeof(scheduler_set), &scheduler_set);
+  sc = rtems_scheduler_get_processor_set(scheduler_id, sizeof(scheduler_set),
+                                         &scheduler_set);
 
   if (sc != RTEMS_SUCCESSFUL) {
     ctx->sc = sc;
@@ -83,8 +81,7 @@ rtems_debugger_cpu_run_body(rtems_task_argument arg)
   }
 
   for (uint32_t cpu_index = 0;
-       cpu_index < rtems_scheduler_get_processor_maximum();
-       cpu_index++) {
+       cpu_index < rtems_scheduler_get_processor_maximum(); cpu_index++) {
     if (!CPU_ISSET(cpu_index, &scheduler_set)) {
       continue;
     }
@@ -117,11 +114,10 @@ rtems_debugger_cpu_run_body(rtems_task_argument arg)
  * kernel's on_each_cpu() call and always waits for the task to complete before
  * returning.
  */
-rtems_status_code
-rtems_debugger_cpu_run_all(rtems_task_entry task_entry, rtems_task_argument arg)
-{
-  rtems_status_code              sc;
-  rtems_id                       task_id;
+rtems_status_code rtems_debugger_cpu_run_all(rtems_task_entry task_entry,
+                                             rtems_task_argument arg) {
+  rtems_status_code sc;
+  rtems_id task_id;
   rtems_debugger_cpu_run_context ctx;
 
   memset(&ctx, 0, sizeof(ctx));
@@ -130,25 +126,26 @@ rtems_debugger_cpu_run_all(rtems_task_entry task_entry, rtems_task_argument arg)
   ctx.arg = arg;
   ctx.sc = RTEMS_SUCCESSFUL;
 
-  sc = rtems_barrier_create(
-    rtems_build_name('D', 'B', 'b', 'r'), RTEMS_BARRIER_MANUAL_RELEASE, 2,
-    &ctx.all_cpus_barrier);
+  sc = rtems_barrier_create(rtems_build_name('D', 'B', 'b', 'r'),
+                            RTEMS_BARRIER_MANUAL_RELEASE, 2,
+                            &ctx.all_cpus_barrier);
 
   if (sc != RTEMS_SUCCESSFUL) {
     return sc;
   }
 
-  sc = rtems_task_create(
-    rtems_build_name('D', 'B', 't', 'k'), 1, RTEMS_MINIMUM_STACK_SIZE * 2,
-    RTEMS_DEFAULT_MODES, RTEMS_FLOATING_POINT | RTEMS_DEFAULT_ATTRIBUTES, &task_id);
+  sc = rtems_task_create(rtems_build_name('D', 'B', 't', 'k'), 1,
+                         RTEMS_MINIMUM_STACK_SIZE * 2, RTEMS_DEFAULT_MODES,
+                         RTEMS_FLOATING_POINT | RTEMS_DEFAULT_ATTRIBUTES,
+                         &task_id);
 
   if (sc != RTEMS_SUCCESSFUL) {
     rtems_barrier_delete(ctx.all_cpus_barrier);
     return sc;
   }
 
-  sc = rtems_task_start(
-    task_id, rtems_debugger_cpu_run_body, (rtems_task_argument) &ctx);
+  sc = rtems_task_start(task_id, rtems_debugger_cpu_run_body,
+                        (rtems_task_argument)&ctx);
 
   if (sc != RTEMS_SUCCESSFUL) {
     rtems_task_delete(task_id);

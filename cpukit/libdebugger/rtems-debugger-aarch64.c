@@ -363,6 +363,7 @@ typedef struct {
   uint64_t value;
 } aarch64_debug_hwbreak;
 
+// clang-format off
 /*
  * AArch64 guarantees that 2-16 breakpoints will be available in:
  * DBGBCR<0-15>_EL1 (control)
@@ -380,6 +381,7 @@ typedef struct {
  *   DebugVer: BSP_FLD64(val, 0, 3) (0x6 - 8, 0x7 - 8 w/ VHE, 0x8 - 8.2, 0x9 - 8.4)
  */
 #define AARCH64_HW_BREAKPOINT_MAX ( 16 )
+// clang-format on
 
 /*
  * Types of break points.
@@ -823,6 +825,8 @@ static bool target_exception( CPU_Exception_frame *frame )
 #define str( a ) #a
 #define FRAME_SIZE_STR xstr( AARCH64_EXCEPTION_FRAME_SIZE )
 
+// clang-format off
+
 /*
  * This block of assembly must have a target branch function because GCC
  * requires that SP not accumulate changes across an ASM block. Instead of
@@ -869,6 +873,8 @@ static bool target_exception( CPU_Exception_frame *frame )
 
 #define THREAD_MODE "1"
 #define EXCEPTION_MODE "0"
+
+// clang-format on
 
 void target_exception_stack_stage_3(
   CPU_Exception_frame *exc_frame,

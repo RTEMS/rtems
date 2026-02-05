@@ -30,17 +30,13 @@
 
 #include <rtems/debugger/rtems-debugger-bsp.h>
 
-void* rtems_debugger_arm_debug_registers(void) __attribute__ ((weak));
-bool rtems_debugger_arm_debug_configure(void) __attribute__ ((weak));
+void* rtems_debugger_arm_debug_registers(void) __attribute__((weak));
+bool rtems_debugger_arm_debug_configure(void) __attribute__((weak));
 
-void*
-rtems_debugger_arm_debug_registers(void)
-{
+void* rtems_debugger_arm_debug_registers(void) {
   return NULL;
 }
 
-bool
-rtems_debugger_arm_debug_configure(void)
-{
+bool rtems_debugger_arm_debug_configure(void) {
   return true;
 }

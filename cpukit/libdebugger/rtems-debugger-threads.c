@@ -26,8 +26,8 @@
 
 #include <errno.h>
 #include <inttypes.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <rtems.h>
 #include <rtems/assoc.h>
@@ -38,19 +38,11 @@
 #include "rtems-debugger-target.h"
 #include "rtems-debugger-threads.h"
 
-static const char * const excludes_defaults[] =
-{
-  "TIME",
-  "_BSD",
-  "IRQS",
-  "DBSs",
-  "DBSe",
-  "IDLE",
+static const char* const excludes_defaults[] = {
+    "TIME", "_BSD", "IRQS", "DBSs", "DBSe", "IDLE",
 };
 
-static void
-rtems_debugger_thread_free(rtems_debugger_threads* threads)
-{
+static void rtems_debugger_thread_free(rtems_debugger_threads* threads) {
   rtems_debugger_block_destroy(&threads->current);
   rtems_debugger_block_destroy(&threads->registers);
   rtems_debugger_block_destroy(&threads->excludes);
@@ -59,11 +51,9 @@ rtems_debugger_thread_free(rtems_debugger_threads* threads)
   threads->next = 0;
 }
 
-int
-rtems_debugger_thread_create(void)
-{
+int rtems_debugger_thread_create(void) {
   rtems_debugger_threads* threads;
-  int                     r;
+  int r;
 
   threads = calloc(1, sizeof(rtems_debugger_threads));
   if (threads == NULL) {
@@ -95,9 +85,8 @@ rtems_debugger_thread_create(void)
     return -1;
   }
 
-  r = rtems_debugger_block_create(&threads->excludes,
-                                  RTEMS_DEBUGGER_THREAD_BLOCK_SIZE,
-                                  sizeof(rtems_id));
+  r = rtems_debugger_block_create(
+      &threads->excludes, RTEMS_DEBUGGER_THREAD_BLOCK_SIZE, sizeof(rtems_id));
   if (r < 0) {
     rtems_debugger_thread_free(threads);
     free(threads);
@@ -106,9 +95,8 @@ rtems_debugger_thread_create(void)
     return -1;
   }
 
-  r = rtems_debugger_block_create(&threads->stopped,
-                                  RTEMS_DEBUGGER_THREAD_BLOCK_SIZE,
-                                  sizeof(rtems_id));
+  r = rtems_debugger_block_create(
+      &threads->stopped, RTEMS_DEBUGGER_THREAD_BLOCK_SIZE, sizeof(rtems_id));
   if (r < 0) {
     rtems_debugger_thread_free(threads);
     free(threads);
@@ -133,9 +121,7 @@ rtems_debugger_thread_create(void)
   return rtems_debugger_thread_system_suspend();
 }
 
-int
-rtems_debugger_thread_destroy(void)
-{
+int rtems_debugger_thread_destroy(void) {
   rtems_debugger_threads* threads = rtems_debugger->threads;
   rtems_debugger_thread_system_resume(true);
   rtems_debugger_thread_free(threads);
@@ -144,11 +130,9 @@ rtems_debugger_thread_destroy(void)
   return 0;
 }
 
-int
-rtems_debugger_thread_find_index(rtems_id id)
-{
+int rtems_debugger_thread_find_index(rtems_id id) {
   rtems_debugger_threads* threads = rtems_debugger->threads;
-  int                     r = -1;
+  int r = -1;
   if (threads != NULL) {
     rtems_debugger_thread* current = rtems_debugger_thread_current(threads);
     size_t i;
@@ -162,24 +146,23 @@ rtems_debugger_thread_find_index(rtems_id id)
   return r;
 }
 
-static bool
-snapshot_thread(rtems_tcb* tcb, void* arg)
-{
-  (void) arg;
+static bool snapshot_thread(rtems_tcb* tcb, void* arg) {
+  (void)arg;
 
   rtems_debugger_threads* threads = rtems_debugger->threads;
-  rtems_id                id = tcb->Object.id;
-  char                    name[RTEMS_DEBUGGER_THREAD_NAME_SIZE];
-  bool                    exclude = false;
-  size_t                  i;
-  int                     sc;
+  rtems_id id = tcb->Object.id;
+  char name[RTEMS_DEBUGGER_THREAD_NAME_SIZE];
+  bool exclude = false;
+  size_t i;
+  int sc;
 
   /*
    * The only time the threads pointer is NULL is a realloc error so we stop
    * processing threads. There is no way to stop the iterator.
    */
-  if (rtems_debugger_thread_current(threads) == NULL)
+  if (rtems_debugger_thread_current(threads) == NULL) {
     return true;
+  }
 
   /*
    * Filter the threads.
@@ -190,7 +173,7 @@ snapshot_thread(rtems_tcb* tcb, void* arg)
     exclude = true;
     break;
   default:
-    rtems_object_get_name(id, sizeof(name), (char*) &name[0]);
+    rtems_object_get_name(id, sizeof(name), (char*)&name[0]);
     for (i = 0; i < RTEMS_DEBUGGER_NUMOF(excludes_defaults); ++i) {
       if (strcmp(excludes_defaults[i], name) == 0) {
         exclude = true;
@@ -202,7 +185,7 @@ snapshot_thread(rtems_tcb* tcb, void* arg)
 
   if (exclude) {
     rtems_id* excludes;
-    int       r;
+    int r;
     r = rtems_debugger_block_resize(&threads->excludes);
     if (r < 0) {
       rtems_debugger_thread_free(threads);
@@ -210,12 +193,11 @@ snapshot_thread(rtems_tcb* tcb, void* arg)
     }
     excludes = rtems_debugger_thread_excludes(threads);
     excludes[threads->excludes.level++] = id;
-  }
-  else {
+  } else {
     rtems_debugger_thread* current;
-    uint8_t*               registers;
+    uint8_t* registers;
     rtems_debugger_thread* thread;
-    int                    r;
+    int r;
 
     r = rtems_debugger_block_resize(&threads->current);
     if (r < 0) {
@@ -232,15 +214,15 @@ snapshot_thread(rtems_tcb* tcb, void* arg)
     registers = rtems_debugger_thread_registers(threads);
 
     thread = &current[threads->current.level++];
-    thread->registers =
-        &registers[threads->registers.level++ * rtems_debugger_target_reg_table_size()];
+    thread->registers = &registers[threads->registers.level++ *
+                                   rtems_debugger_target_reg_table_size()];
 
-    thread->tcb    = tcb;
-    thread->id     = id;
-    thread->flags  = 0;
+    thread->tcb = tcb;
+    thread->id = id;
+    thread->flags = 0;
     thread->signal = 0;
-    thread->frame  = NULL;
-    memcpy((void*) &thread->name[0], &name[0], sizeof(thread->name));
+    thread->frame = NULL;
+    memcpy((void*)&thread->name[0], &name[0], sizeof(thread->name));
 
     /*
      * See if there is a valid exception stack frame and if the thread is being
@@ -261,12 +243,12 @@ snapshot_thread(rtems_tcb* tcb, void* arg)
       }
       stopped = rtems_debugger_thread_stopped(threads);
       stopped[threads->stopped.level++] = id;
-    }
-    else {
+    } else {
       rtems_status_code sc;
       sc = rtems_task_suspend(id);
       if (sc != RTEMS_SUCCESSFUL && sc != RTEMS_ALREADY_SUSPENDED) {
-        rtems_debugger_printf("error: rtems-db: thread: suspend: %08" PRIx32 ": %s\n",
+        rtems_debugger_printf("error: rtems-db: thread: suspend: %08" PRIx32
+                              ": %s\n",
                               id, rtems_status_text(sc));
         r = -1;
       }
@@ -278,9 +260,10 @@ snapshot_thread(rtems_tcb* tcb, void* arg)
     sc = rtems_debugger_target_read_regs(thread);
     _Assert_Unused_variable_equals(sc, 0);
 
-    if (rtems_debugger_server_flag(RTEMS_DEBUGGER_FLAG_VERBOSE))
+    if (rtems_debugger_server_flag(RTEMS_DEBUGGER_FLAG_VERBOSE)) {
       rtems_debugger_printf("rtems-db: sys: thd: %08" PRIx32 ": signal: %d\n",
                             id, thread->signal);
+    }
 
     /*
      * Pick up the first non-zero signal.
@@ -293,17 +276,17 @@ snapshot_thread(rtems_tcb* tcb, void* arg)
   return false;
 }
 
-int
-rtems_debugger_thread_system_suspend(void)
-{
+int rtems_debugger_thread_system_suspend(void) {
   rtems_debugger_threads* threads = rtems_debugger->threads;
-  int                     r = -1;
+  int r = -1;
   if (threads != NULL && rtems_debugger_thread_current(threads) != NULL) {
-    if (rtems_debugger_verbose())
+    if (rtems_debugger_verbose()) {
       rtems_debugger_printf("rtems-db: sys:    : suspending\n");
+    }
     r = rtems_debugger_target_swbreak_remove();
-    if (r == 0)
+    if (r == 0) {
       r = rtems_debugger_target_hwbreak_remove();
+    }
     if (r == 0) {
       rtems_debugger_thread* current;
       threads->current.level = 0;
@@ -317,8 +300,7 @@ rtems_debugger_thread_system_suspend(void)
         rtems_debugger_printf("error: rtems-db: thread: snapshot: (%d) %s\n",
                               errno, strerror(errno));
         r = -1;
-      }
-      else {
+      } else {
         rtems_id* stopped;
         /*
          * If there are no stopped threads pick the first one in the current
@@ -331,26 +313,23 @@ rtems_debugger_thread_system_suspend(void)
           stopped[threads->stopped.level++] = current[0].id;
         }
         if (threads->stopped.level > 0) {
-          threads->selector_gen =
-            rtems_debugger_thread_find_index(stopped[0]);
-          if (threads->selector_gen < 0)
+          threads->selector_gen = rtems_debugger_thread_find_index(stopped[0]);
+          if (threads->selector_gen < 0) {
             threads->selector_gen = 0;
+          }
         }
       }
-    }
-    else {
+    } else {
       errno = EIO;
     }
   }
   return r;
 }
 
-int
-rtems_debugger_thread_system_resume(bool detaching)
-{
+int rtems_debugger_thread_system_resume(bool detaching) {
   rtems_debugger_threads* threads = rtems_debugger->threads;
-  rtems_debugger_thread*  current;
-  int                     r = 0;
+  rtems_debugger_thread* current;
+  int r = 0;
   if (threads == NULL) {
     return r;
   }
@@ -358,52 +337,57 @@ rtems_debugger_thread_system_resume(bool detaching)
   if (current != NULL) {
     size_t i;
     rtems_debugger_target* target = rtems_debugger->target;
-    if (rtems_debugger_verbose())
+    if (rtems_debugger_verbose()) {
       rtems_debugger_printf("rtems-db: sys:    : resuming\n");
-    if (!detaching
-      && (target->capabilities & RTEMS_DEBUGGER_TARGET_CAP_PURE_SWBREAK) == 0) {
+    }
+    if (!detaching &&
+        (target->capabilities & RTEMS_DEBUGGER_TARGET_CAP_PURE_SWBREAK) == 0) {
       r = rtems_debugger_target_swbreak_insert();
-      if (r == 0)
+      if (r == 0) {
         r = rtems_debugger_target_hwbreak_insert();
+      }
     }
     if (r == 0) {
       for (i = 0; i < threads->current.level; ++i) {
         rtems_debugger_thread* thread = &current[i];
-        rtems_status_code      sc;
-        int                    rr;
-        bool                   has_exception;
+        rtems_status_code sc;
+        int rr;
+        bool has_exception;
         /*
          * Check if resuming, which can be continuing, a step, or stepping a
          * range.
          */
-        if (detaching ||
-            rtems_debugger_thread_flag(thread,
-                                       RTEMS_DEBUGGER_THREAD_FLAG_RESUME)) {
+        if (detaching || rtems_debugger_thread_flag(
+                             thread, RTEMS_DEBUGGER_THREAD_FLAG_RESUME)) {
           if (!detaching) {
             rr = rtems_debugger_target_write_regs(thread);
-            if (rr < 0 && r == 0)
+            if (rr < 0 && r == 0) {
               r = rr;
-            if (rtems_debugger_thread_flag(thread,
-                                           RTEMS_DEBUGGER_THREAD_FLAG_STEP_INSTR)) {
+            }
+            if (rtems_debugger_thread_flag(
+                    thread, RTEMS_DEBUGGER_THREAD_FLAG_STEP_INSTR)) {
               rr = rtems_debugger_target_thread_stepping(thread);
-              if (rr < 0 && r == 0)
+              if (rr < 0 && r == 0) {
                 r = rr;
+              }
             }
           }
-          has_exception =
-            rtems_debugger_thread_flag(thread,
-                                       RTEMS_DEBUGGER_THREAD_FLAG_EXCEPTION);
-          if (rtems_debugger_verbose())
-            rtems_debugger_printf("rtems-db: sys:    : resume: 0x%08" PRIx32 " %c\n",
+          has_exception = rtems_debugger_thread_flag(
+              thread, RTEMS_DEBUGGER_THREAD_FLAG_EXCEPTION);
+          if (rtems_debugger_verbose()) {
+            rtems_debugger_printf("rtems-db: sys:    : resume: 0x%08" PRIx32
+                                  " %c\n",
                                   thread->id, has_exception ? 'E' : ' ');
+          }
           if (has_exception) {
-              rtems_debugger_target_exception_thread_resume(thread);
+            rtems_debugger_target_exception_thread_resume(thread);
           } else {
-              sc = rtems_task_resume(thread->id);
-              if (sc != RTEMS_SUCCESSFUL) {
-                  rtems_debugger_printf("error: rtems-db: thread: resume: %08" PRIx32 ": %s\n",
-                                        thread->id, rtems_status_text(sc));
-              }
+            sc = rtems_task_resume(thread->id);
+            if (sc != RTEMS_SUCCESSFUL) {
+              rtems_debugger_printf(
+                  "error: rtems-db: thread: resume: %08" PRIx32 ": %s\n",
+                  thread->id, rtems_status_text(sc));
+            }
           }
           thread->flags &= ~(RTEMS_DEBUGGER_THREAD_FLAG_CONTINUE |
                              RTEMS_DEBUGGER_THREAD_FLAG_STEP);
@@ -417,8 +401,7 @@ rtems_debugger_thread_system_resume(bool detaching)
       threads->current.level = 0;
       threads->registers.level = 0;
       threads->stopped.level = 0;
-    }
-    else {
+    } else {
       r = -1;
       errno = EIO;
     }
@@ -426,19 +409,15 @@ rtems_debugger_thread_system_resume(bool detaching)
   return r;
 }
 
-int
-rtems_debugger_thread_continue(rtems_debugger_thread* thread)
-{
+int rtems_debugger_thread_continue(rtems_debugger_thread* thread) {
   thread->flags |= RTEMS_DEBUGGER_THREAD_FLAG_CONTINUE;
   return 0;
 }
 
-int
-rtems_debugger_thread_continue_all(void)
-{
+int rtems_debugger_thread_continue_all(void) {
   rtems_debugger_threads* threads = rtems_debugger->threads;
-  rtems_debugger_thread*  current;
-  int                     r = 0;
+  rtems_debugger_thread* current;
+  int r = 0;
   if (threads == NULL) {
     r = -1;
     errno = EIO;
@@ -452,34 +431,29 @@ rtems_debugger_thread_continue_all(void)
       if (!rtems_debugger_thread_flag(thread,
                                       RTEMS_DEBUGGER_THREAD_FLAG_STEP_INSTR)) {
         r = rtems_debugger_thread_continue(thread);
-        if (r < 0)
+        if (r < 0) {
           break;
+        }
       }
     }
-  }
-  else {
+  } else {
     r = -1;
     errno = EIO;
   }
   return r;
 }
 
-int
-rtems_debugger_thread_step(rtems_debugger_thread* thread)
-{
+int rtems_debugger_thread_step(rtems_debugger_thread* thread) {
   thread->flags |= RTEMS_DEBUGGER_THREAD_FLAG_STEP;
   return 0;
 }
 
-int
-rtems_debugger_thread_stepping(rtems_debugger_thread* thread,
-                               uintptr_t              start,
-                               uintptr_t              end)
-{
+int rtems_debugger_thread_stepping(rtems_debugger_thread* thread,
+                                   uintptr_t start, uintptr_t end) {
   /* add lock */
-  rtems_debugger_threads*        threads = rtems_debugger->threads;
+  rtems_debugger_threads* threads = rtems_debugger->threads;
   rtems_debugger_thread_stepper* stepper;
-  int                            r;
+  int r;
   /*
    * The resize will automatically extend the block when we are full. The
    * steppers are cleared in suspend by setting the level to 0.
@@ -500,58 +474,45 @@ rtems_debugger_thread_stepping(rtems_debugger_thread* thread,
 }
 
 const rtems_debugger_thread_stepper*
-rtems_debugger_thread_is_stepping(rtems_id id, uintptr_t pc)
-{
+rtems_debugger_thread_is_stepping(rtems_id id, uintptr_t pc) {
   /* add lock */
-  rtems_debugger_threads*        threads = rtems_debugger->threads;
+  rtems_debugger_threads* threads = rtems_debugger->threads;
   rtems_debugger_thread_stepper* stepper;
-  size_t                         i;
+  size_t i;
   stepper = rtems_debugger_thread_steppers(threads);
   for (i = 0; i < threads->steppers.level; ++i, ++stepper) {
     if (stepper->thread->id == id) {
-      if (pc == stepper->start || (pc > stepper->start && pc < stepper->end))
+      if (pc == stepper->start || (pc > stepper->start && pc < stepper->end)) {
         return stepper;
+      }
       break;
     }
   }
   return NULL;
 }
 
-int
-rtems_debugger_thread_current_priority(rtems_debugger_thread* thread)
-{
+int rtems_debugger_thread_current_priority(rtems_debugger_thread* thread) {
   return _Thread_Get_unmapped_priority(thread->tcb);
 }
 
-int
-rtems_debugger_thread_real_priority(rtems_debugger_thread* thread)
-{
+int rtems_debugger_thread_real_priority(rtems_debugger_thread* thread) {
   return _Thread_Get_unmapped_real_priority(thread->tcb);
 }
 
-int
-rtems_debugger_thread_state(rtems_debugger_thread* thread)
-{
+int rtems_debugger_thread_state(rtems_debugger_thread* thread) {
   return thread->tcb->current_state;
 }
 
-int
-rtems_debugger_thread_state_str(rtems_debugger_thread* thread,
-                                char*                  buf,
-                                size_t                 size)
-{
+int rtems_debugger_thread_state_str(rtems_debugger_thread* thread, char* buf,
+                                    size_t size) {
   rtems_assoc_thread_states_to_string(thread->tcb->current_state, buf, size);
   return 0;
 }
 
-unsigned long
-rtems_debugger_thread_stack_size(rtems_debugger_thread* thread)
-{
+unsigned long rtems_debugger_thread_stack_size(rtems_debugger_thread* thread) {
   return thread->tcb->Start.Initial_stack.size;
 }
 
-void*
-rtems_debugger_thread_stack_area(rtems_debugger_thread* thread)
-{
+void* rtems_debugger_thread_stack_area(rtems_debugger_thread* thread) {
   return thread->tcb->Start.Initial_stack.area;
 }

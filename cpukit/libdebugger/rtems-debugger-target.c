@@ -45,18 +45,16 @@
  * server's events loop processor.
  */
 typedef struct {
-  rtems_chain_node     node;
-  rtems_id             id;
+  rtems_chain_node node;
+  rtems_id id;
   CPU_Exception_frame* frame;
-  rtems_rx_cond        cond;
+  rtems_rx_cond cond;
 } rtems_debugger_exception;
 
 #if TARGET_DEBUG
 #include <rtems/bspIo.h>
 static void target_printk(const char* format, ...) RTEMS_PRINTFLIKE(1, 2);
-static void
-target_printk(const char* format, ...)
-{
+static void target_printk(const char* format, ...) {
   rtems_interrupt_lock_context lock_context;
   va_list ap;
   va_start(ap, format);
@@ -69,12 +67,10 @@ target_printk(const char* format, ...)
 #define target_printk(_fmt, ...)
 #endif
 
-int
-rtems_debugger_target_create(void)
-{
+int rtems_debugger_target_create(void) {
   if (rtems_debugger->target == NULL) {
     rtems_debugger_target* target;
-    int                    r;
+    int r;
 
     target = calloc(1, sizeof(rtems_debugger_target));
     if (target == NULL) {
@@ -90,7 +86,8 @@ rtems_debugger_target_create(void)
 
     if (target->breakpoint_size > RTEMS_DEBUGGER_TARGET_SWBREAK_MAX_SIZE) {
       free(target);
-      rtems_debugger_printf("error: rtems-db: target: breakpoint size too big\n");
+      rtems_debugger_printf(
+          "error: rtems-db: target: breakpoint size too big\n");
       return -1;
     }
 
@@ -108,9 +105,7 @@ rtems_debugger_target_create(void)
   return 0;
 }
 
-int
-rtems_debugger_target_destroy(void)
-{
+int rtems_debugger_target_destroy(void) {
   if (rtems_debugger->target != NULL) {
     rtems_debugger_target* target = rtems_debugger->target;
     rtems_debugger_target_swbreak_remove();
@@ -122,70 +117,63 @@ rtems_debugger_target_destroy(void)
   return 0;
 }
 
-uint32_t
-rtems_debugger_target_capabilities(void)
-{
-  if (rtems_debugger->target != NULL)
+uint32_t rtems_debugger_target_capabilities(void) {
+  if (rtems_debugger->target != NULL) {
 
     return rtems_debugger->target->capabilities;
+  }
   return 0;
 }
 
-size_t
-rtems_debugger_target_reg_num(void)
-{
+size_t rtems_debugger_target_reg_num(void) {
   rtems_debugger_target* target = rtems_debugger->target;
-  if (target != NULL)
+  if (target != NULL) {
     return target->reg_num;
+  }
   return 0;
 }
 
-size_t
-rtems_debugger_target_reg_size(size_t reg)
-{
+size_t rtems_debugger_target_reg_size(size_t reg) {
   rtems_debugger_target* target = rtems_debugger->target;
-  if (target != NULL && reg < target->reg_num)
+  if (target != NULL && reg < target->reg_num) {
     return target->reg_offset[reg + 1] - target->reg_offset[reg];
+  }
   return 0;
 }
 
-size_t
-rtems_debugger_target_reg_offset(size_t reg)
-{
+size_t rtems_debugger_target_reg_offset(size_t reg) {
   rtems_debugger_target* target = rtems_debugger->target;
-  if (target != NULL && reg < target->reg_num)
+  if (target != NULL && reg < target->reg_num) {
     return target->reg_offset[reg];
+  }
   return 0;
 }
 
-size_t
-rtems_debugger_target_reg_table_size(void)
-{
+size_t rtems_debugger_target_reg_table_size(void) {
   rtems_debugger_target* target = rtems_debugger->target;
-  if (target != NULL)
+  if (target != NULL) {
     return target->reg_offset[target->reg_num];
+  }
   return 0;
 }
 
-bool
-rtems_debugger_target_swbreak_is_configured( uintptr_t addr )
-{
-  size_t                         i;
-  rtems_debugger_target_swbreak *swbreaks;
-  rtems_debugger_target         *target = rtems_debugger->target;
+bool rtems_debugger_target_swbreak_is_configured(uintptr_t addr) {
+  size_t i;
+  rtems_debugger_target_swbreak* swbreaks;
+  rtems_debugger_target* target = rtems_debugger->target;
 
-  if ( target == NULL ) {
+  if (target == NULL) {
     return false;
   }
 
   swbreaks = target->swbreaks.block;
 
-  if ( swbreaks == NULL ) {
+  if (swbreaks == NULL) {
     return false;
   }
 
-  for ( i = 0; i < target->swbreaks.level; ++i ) {
-    if ( (uintptr_t) swbreaks[ i ].address == addr ) {
+  for (i = 0; i < target->swbreaks.level; ++i) {
+    if ((uintptr_t)swbreaks[i].address == addr) {
       return true;
     }
   }
@@ -193,15 +181,14 @@ rtems_debugger_target_swbreak_is_configured( uintptr_t addr )
   return false;
 }
 
-int
-rtems_debugger_target_swbreak_control(bool insert, uintptr_t addr, DB_UINT kind)
-{
-  rtems_debugger_target*         target = rtems_debugger->target;
+int rtems_debugger_target_swbreak_control(bool insert, uintptr_t addr,
+                                          DB_UINT kind) {
+  rtems_debugger_target* target = rtems_debugger->target;
   rtems_debugger_target_swbreak* swbreaks;
-  size_t                         swbreak_size;
-  uint8_t*                       loc = (void*) addr;
-  size_t                         i;
-  int                            r;
+  size_t swbreak_size;
+  uint8_t* loc = (void*)addr;
+  size_t i;
+  int r;
 
   if (target == NULL || target->swbreaks.block == NULL ||
       kind != target->breakpoint_size) {
@@ -211,15 +198,14 @@ rtems_debugger_target_swbreak_control(bool insert, uintptr_t addr, DB_UINT kind)
 
   swbreaks = target->swbreaks.block;
   swbreak_size =
-    sizeof(rtems_debugger_target_swbreak) + target->breakpoint_size;
+      sizeof(rtems_debugger_target_swbreak) + target->breakpoint_size;
 
   for (i = 0; i < target->swbreaks.level; ++i) {
     if (loc == swbreaks[i].address) {
       size_t remaining;
       if (!insert) {
         if (target->code_writer != NULL) {
-          r = target->code_writer(loc,
-                                  &swbreaks[i].contents[0],
+          r = target->code_writer(loc, &swbreaks[i].contents[0],
                                   target->breakpoint_size);
           if (r < 0) {
             return r;
@@ -253,21 +239,22 @@ rtems_debugger_target_swbreak_control(bool insert, uintptr_t addr, DB_UINT kind)
     }
   }
 
-  if (!insert)
+  if (!insert) {
     return 0;
+  }
 
   r = rtems_debugger_block_resize(&target->swbreaks);
-  if (r < 0)
+  if (r < 0) {
     return -1;
+  }
 
   swbreaks = target->swbreaks.block;
 
   swbreaks[target->swbreaks.level].address = loc;
-  if (target->breakpoint_size > 4)
-    memcpy(&swbreaks[target->swbreaks.level].contents[0],
-           loc,
+  if (target->breakpoint_size > 4) {
+    memcpy(&swbreaks[target->swbreaks.level].contents[0], loc,
            target->breakpoint_size);
-  else {
+  } else {
     uint8_t* contents = &swbreaks[target->swbreaks.level].contents[0];
     switch (target->breakpoint_size) {
     case 4:
@@ -289,22 +276,20 @@ rtems_debugger_target_swbreak_control(bool insert, uintptr_t addr, DB_UINT kind)
   return 0;
 }
 
-int
-rtems_debugger_target_swbreak_insert(void)
-{
+int rtems_debugger_target_swbreak_insert(void) {
   rtems_debugger_target* target = rtems_debugger->target;
-  int                    r = -1;
+  int r = -1;
   if (target != NULL && target->swbreaks.block != NULL) {
     rtems_debugger_target_swbreak* swbreaks = target->swbreaks.block;
-    size_t                         i;
+    size_t i;
     r = 0;
     for (i = 0; i < target->swbreaks.level; ++i) {
       uint8_t* loc = swbreaks[i].address;
-      if (rtems_debugger_verbose())
+      if (rtems_debugger_verbose()) {
         rtems_debugger_printf("rtems-db:  bp:  in: %p\n", swbreaks[i].address);
+      }
       if (target->code_writer != NULL) {
-        r = target->code_writer(loc,
-                                &target->breakpoint[0],
+        r = target->code_writer(loc, &target->breakpoint[0],
                                 target->breakpoint_size);
         if (r < 0) {
           return r;
@@ -313,11 +298,12 @@ rtems_debugger_target_swbreak_insert(void)
         if (target->breakpoint_size > 4) {
           memcpy(loc, &target->breakpoint[0], target->breakpoint_size);
         } else {
-          if (rtems_debugger_verbose())
-            rtems_debugger_printf("rtems-db:  bp:  in: %p %p %d %d %d\n",
-                                  loc, &target->breakpoint[0],
-                                  (int) target->breakpoint_size,
-                                  (int) i, (int) target->swbreaks.level);
+          if (rtems_debugger_verbose()) {
+            rtems_debugger_printf("rtems-db:  bp:  in: %p %p %d %d %d\n", loc,
+                                  &target->breakpoint[0],
+                                  (int)target->breakpoint_size, (int)i,
+                                  (int)target->swbreaks.level);
+          }
           switch (target->breakpoint_size) {
           case 4:
             loc[3] = target->breakpoint[3];
@@ -340,21 +326,20 @@ rtems_debugger_target_swbreak_insert(void)
   return r;
 }
 
-int
-rtems_debugger_target_swbreak_remove(void)
-{
+int rtems_debugger_target_swbreak_remove(void) {
   rtems_debugger_target* target = rtems_debugger->target;
-  int                    r = -1;
+  int r = -1;
   if (target != NULL && target->swbreaks.block != NULL) {
-    rtems_debugger_target*         target = rtems_debugger->target;
+    rtems_debugger_target* target = rtems_debugger->target;
     rtems_debugger_target_swbreak* swbreaks = target->swbreaks.block;
-    size_t                         i;
+    size_t i;
     r = 0;
     for (i = 0; i < target->swbreaks.level; ++i) {
       uint8_t* loc = swbreaks[i].address;
       uint8_t* contents = &swbreaks[i].contents[0];
-      if (rtems_debugger_verbose())
+      if (rtems_debugger_verbose()) {
         rtems_debugger_printf("rtems-db:  bp: out: %p\n", swbreaks[i].address);
+      }
       if (target->code_writer != NULL) {
         r = target->code_writer(loc, contents, target->breakpoint_size);
         if (r < 0) {
@@ -387,13 +372,12 @@ rtems_debugger_target_swbreak_remove(void)
 }
 
 static rtems_debugger_target_exc_action
-rtems_debugger_soft_step_and_continue(CPU_Exception_frame* frame)
-{
-  uintptr_t              break_address;
-  rtems_debugger_target *target = rtems_debugger->target;
-  Thread_Control        *thread = _Thread_Get_executing();
-  const rtems_id         tid = thread->Object.id;
-  rtems_debugger_thread  fake_debugger_thread;
+rtems_debugger_soft_step_and_continue(CPU_Exception_frame* frame) {
+  uintptr_t break_address;
+  rtems_debugger_target* target = rtems_debugger->target;
+  Thread_Control* thread = _Thread_Get_executing();
+  const rtems_id tid = thread->Object.id;
+  rtems_debugger_thread fake_debugger_thread;
 
   /*
    * If this was a hwbreak, cascade. If this is a swbreak replace the contents
@@ -405,8 +389,8 @@ rtems_debugger_soft_step_and_continue(CPU_Exception_frame* frame)
     return rtems_debugger_target_exc_cascade;
   }
 
-  break_address = rtems_debugger_target_frame_pc( frame );
-  if ( rtems_debugger_target_swbreak_is_configured( break_address ) == false ) {
+  break_address = rtems_debugger_target_frame_pc(frame);
+  if (rtems_debugger_target_swbreak_is_configured(break_address) == false) {
     target_printk("rtems-db: exception in an interrupt, cascading\n");
     rtems_debugger_unlock();
     return rtems_debugger_target_exc_cascade;
@@ -415,11 +399,8 @@ rtems_debugger_soft_step_and_continue(CPU_Exception_frame* frame)
   /*
    * Remove the current breakpoint
    */
-  rtems_debugger_target_swbreak_control(
-    false,
-    break_address,
-    target->breakpoint_size
-  );
+  rtems_debugger_target_swbreak_control(false, break_address,
+                                        target->breakpoint_size);
 
   /*
    * Save the thread ID and break address to recover after stepping
@@ -442,21 +423,17 @@ rtems_debugger_soft_step_and_continue(CPU_Exception_frame* frame)
 }
 
 rtems_debugger_target_exc_action
-rtems_debugger_target_exception(CPU_Exception_frame* frame)
-{
-  rtems_debugger_target *target = rtems_debugger->target;
-  Thread_Control*        thread = _Thread_Get_executing();
-  const rtems_id         tid = thread->Object.id;
+rtems_debugger_target_exception(CPU_Exception_frame* frame) {
+  rtems_debugger_target* target = rtems_debugger->target;
+  Thread_Control* thread = _Thread_Get_executing();
+  const rtems_id tid = thread->Object.id;
 
   /*
    * Resolve outstanding step+continue
    */
   if (target->step_bp_address != 0 && target->step_tid == tid) {
     rtems_debugger_target_swbreak_control(
-      true,
-      target->step_bp_address,
-      rtems_debugger->target->breakpoint_size
-    );
+        true, target->step_bp_address, rtems_debugger->target->breakpoint_size);
     target->step_bp_address = 0;
     target->step_tid = 0;
 
@@ -471,16 +448,16 @@ rtems_debugger_target_exception(CPU_Exception_frame* frame)
   rtems_debugger_lock();
 
   if (!rtems_interrupt_is_in_progress()) {
-    rtems_debugger_threads*              threads = rtems_debugger->threads;
-    rtems_id*                            excludes;
-    uintptr_t                            pc;
+    rtems_debugger_threads* threads = rtems_debugger->threads;
+    rtems_id* excludes;
+    uintptr_t pc;
     const rtems_debugger_thread_stepper* stepper;
-    rtems_debugger_exception             target_exception;
-    size_t                               i;
+    rtems_debugger_exception target_exception;
+    size_t i;
 
     target_printk("[} tid:%08" PRIx32 ": thread:%08" PRIxPTR
                   " frame:%08" PRIxPTR "\n",
-                  tid, (intptr_t) thread, (intptr_t) frame);
+                  tid, (intptr_t)thread, (intptr_t)frame);
 
     /*
      * If the thread is in the debugger recover. If the access is from gdb
@@ -578,16 +555,15 @@ rtems_debugger_target_exception(CPU_Exception_frame* frame)
   return rtems_debugger_soft_step_and_continue(frame);
 }
 
-void
-rtems_debugger_target_exception_thread(rtems_debugger_thread* thread)
-{
+void rtems_debugger_target_exception_thread(rtems_debugger_thread* thread) {
   rtems_chain_node* node;
   thread->frame = NULL;
   thread->flags &= ~RTEMS_DEBUGGER_THREAD_FLAG_EXCEPTION;
   for (node = rtems_chain_first(&rtems_debugger->exception_threads);
        !rtems_chain_is_tail(&rtems_debugger->exception_threads, node);
        node = rtems_chain_next(node)) {
-    rtems_debugger_exception* target_exception = (rtems_debugger_exception*) node;
+    rtems_debugger_exception* target_exception =
+        (rtems_debugger_exception*)node;
     if (target_exception->id == thread->id) {
       thread->frame = target_exception->frame;
       thread->flags |= RTEMS_DEBUGGER_THREAD_FLAG_EXCEPTION;
@@ -595,14 +571,14 @@ rtems_debugger_target_exception_thread(rtems_debugger_thread* thread)
   }
 }
 
-void
-rtems_debugger_target_exception_thread_resume(rtems_debugger_thread* thread)
-{
+void rtems_debugger_target_exception_thread_resume(
+    rtems_debugger_thread* thread) {
   rtems_chain_node* node;
   for (node = rtems_chain_first(&rtems_debugger->exception_threads);
        !rtems_chain_is_tail(&rtems_debugger->exception_threads, node);
        node = rtems_chain_next(node)) {
-    rtems_debugger_exception* target_exception = (rtems_debugger_exception*) node;
+    rtems_debugger_exception* target_exception =
+        (rtems_debugger_exception*)node;
     if (target_exception->id == thread->id) {
       rtems_chain_extract(node);
       thread->frame = NULL;
@@ -613,14 +589,10 @@ rtems_debugger_target_exception_thread_resume(rtems_debugger_thread* thread)
   }
 }
 
-void
-rtems_debugger_target_end_memory_access(void)
-{
+void rtems_debugger_target_end_memory_access(void) {
   rtems_debugger->target->memory_access = false;
 }
 
-bool
-rtems_debugger_target_is_memory_access(void)
-{
+bool rtems_debugger_target_is_memory_access(void) {
   return rtems_debugger->target->memory_access;
 }

@@ -31,8 +31,8 @@
 #ifndef _RTEMS_DEBUGGER_REMOTE_h
 #define _RTEMS_DEBUGGER_REMOTE_h
 
-#include <rtems/rtems-debugger.h>
 #include <rtems/debugger/rtems-debugger-server.h>
+#include <rtems/rtems-debugger.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -41,17 +41,17 @@ extern "C" {
 /**
  * Debugger remote.
  */
-struct rtems_debugger_remote
-{
+struct rtems_debugger_remote {
   const char* name;
-  int         (*begin)(rtems_debugger_remote* remote, const char* device);
-  int         (*end)(rtems_debugger_remote* remote);
-  int         (*connect)(rtems_debugger_remote* remote);
-  int         (*disconnect)(rtems_debugger_remote* remote);
-  bool        (*isconnected)(rtems_debugger_remote* remote);
-  ssize_t     (*read)(rtems_debugger_remote* remote, void* buf, size_t nbytes);
-  ssize_t     (*write)(rtems_debugger_remote* remote, const void* buf, size_t nbytes);
-  void*       data;
+  int (*begin)(rtems_debugger_remote* remote, const char* device);
+  int (*end)(rtems_debugger_remote* remote);
+  int (*connect)(rtems_debugger_remote* remote);
+  int (*disconnect)(rtems_debugger_remote* remote);
+  bool (*isconnected)(rtems_debugger_remote* remote);
+  ssize_t (*read)(rtems_debugger_remote* remote, void* buf, size_t nbytes);
+  ssize_t (*write)(rtems_debugger_remote* remote, const void* buf,
+                   size_t nbytes);
+  void* data;
 };
 
 /**
@@ -67,6 +67,5 @@ rtems_debugger_remote* rtems_debugger_remote_find(const char* name);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-
 
 #endif

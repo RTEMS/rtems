@@ -29,25 +29,21 @@
 
 #include "rtems-debugger-block.h"
 
-int
-rtems_debugger_block_create(rtems_debugger_block* block,
-                            size_t                step,
-                            size_t                size)
-{
+int rtems_debugger_block_create(rtems_debugger_block* block, size_t step,
+                                size_t size) {
   int r = 0;
   block->level = 0;
   block->step = step;
   block->count = step;
   block->size = size;
   block->block = calloc(block->count, block->size);
-  if (block->block == NULL)
+  if (block->block == NULL) {
     errno = ENOMEM;
+  }
   return r;
 }
 
-int
-rtems_debugger_block_destroy(rtems_debugger_block* block)
-{
+int rtems_debugger_block_destroy(rtems_debugger_block* block) {
   free(block->block);
   block->block = NULL;
   block->level = 0;
@@ -56,9 +52,7 @@ rtems_debugger_block_destroy(rtems_debugger_block* block)
   return 0;
 }
 
-int
-rtems_debugger_block_resize(rtems_debugger_block* block)
-{
+int rtems_debugger_block_resize(rtems_debugger_block* block) {
   int r = 0;
   if (block->level >= block->count) {
     block->count += block->step;

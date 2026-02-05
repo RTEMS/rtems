@@ -49,10 +49,8 @@ extern "C" {
 /**
  * Start the Debugger.
  */
-extern int rtems_debugger_start(const char*          remote,
-                                const char*          device,
-                                int                  timeout,
-                                rtems_task_priority  priority,
+extern int rtems_debugger_start(const char* remote, const char* device,
+                                int timeout, rtems_task_priority priority,
                                 const rtems_printer* printer);
 
 /**
@@ -86,6 +84,5 @@ extern int rtems_debugger_remote_debug(bool state);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-
 
 #endif

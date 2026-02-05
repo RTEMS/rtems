@@ -46,23 +46,23 @@
  * Debugger command for the RTEMS shell.
  */
 
-static int rtems_shell_main_debugger(int argc, char *argv[])
-{
+static int rtems_shell_main_debugger(int argc, char* argv[]) {
   if (argc == 1) {
-    printf("RTEMS debugger is %srunning\n", rtems_debugger_running() ? "" : "not ");
+    printf("RTEMS debugger is %srunning\n",
+           rtems_debugger_running() ? "" : "not ");
     return 0;
   }
 
   if (strcasecmp(argv[1], "start") == 0) {
-    rtems_printer       printer;
-    const char*         remote = "tcp";
-    const char*         device = "1122";
-    int                 timeout = RTEMS_DEBUGGER_TIMEOUT;
+    rtems_printer printer;
+    const char* remote = "tcp";
+    const char* device = "1122";
+    int timeout = RTEMS_DEBUGGER_TIMEOUT;
     rtems_task_priority priority = 1;
-    bool                verbose = false;
-    struct getopt_data  data;
-    char*               end;
-    int                 r;
+    bool verbose = false;
+    struct getopt_data data;
+    char* end;
+    int r;
 
     if (rtems_debugger_running()) {
       printf("error: debugger already running.\n");
@@ -80,8 +80,9 @@ static int rtems_shell_main_debugger(int argc, char *argv[])
       int c;
 
       c = getopt_r(argc, argv, "vR:d:t:P:l:", &data);
-      if (c == -1)
+      if (c == -1) {
         break;
+      }
 
       switch (c) {
       case 'v':
@@ -108,23 +109,25 @@ static int rtems_shell_main_debugger(int argc, char *argv[])
         }
         break;
       case 'l':
-        if (strcasecmp(data.optarg, "stdout") == 0)
+        if (strcasecmp(data.optarg, "stdout") == 0) {
           rtems_print_printer_fprintf(&printer, stdout);
-        else if (strcasecmp(data.optarg, "stderr") == 0)
+        } else if (strcasecmp(data.optarg, "stderr") == 0) {
           rtems_print_printer_fprintf(&printer, stderr);
-        else if (strcasecmp(data.optarg, "kernel") == 0)
+        } else if (strcasecmp(data.optarg, "kernel") == 0) {
           rtems_print_printer_printk(&printer);
-        else {
-          printf("error: unknown printer (stdout, stderr, kernel): %s\n", data.optarg);
+        } else {
+          printf("error: unknown printer (stdout, stderr, kernel): %s\n",
+                 data.optarg);
           return 1;
         }
         break;
       default:
       case '?':
-        if (data.optarg != NULL)
+        if (data.optarg != NULL) {
           printf("error: unknown option: %s\n", data.optarg);
-        else
+        } else {
           printf("error: invalid start command\n");
+        }
         return 1;
       }
     }
@@ -139,8 +142,7 @@ static int rtems_shell_main_debugger(int argc, char *argv[])
     }
 
     rtems_debugger_set_verbose(verbose);
-  }
-  else if (strcasecmp(argv[1], "stop") == 0) {
+  } else if (strcasecmp(argv[1], "stop") == 0) {
     int r;
 
     if (!rtems_debugger_running()) {
@@ -153,8 +155,7 @@ static int rtems_shell_main_debugger(int argc, char *argv[])
       printf("debugger stop failed\n");
       return 1;
     }
-  }
-  else if (strcasecmp(argv[1], "remote-debug") == 0) {
+  } else if (strcasecmp(argv[1], "remote-debug") == 0) {
     int r;
 
     if (!rtems_debugger_running()) {
@@ -168,20 +169,17 @@ static int rtems_shell_main_debugger(int argc, char *argv[])
         printf("debugger remote-debug on failed\n");
         return 1;
       }
-    }
-    else if (argc == 3 && strcasecmp(argv[2], "off") == 0) {
+    } else if (argc == 3 && strcasecmp(argv[2], "off") == 0) {
       r = rtems_debugger_remote_debug(false);
       if (r < 0) {
         printf("debugger remote-debug off failed\n");
         return 1;
       }
-    }
-    else {
+    } else {
       printf("debugger remote-debug: not on or off\n");
       return 1;
     }
-  }
-  else if (strcasecmp(argv[1], "verbose") == 0) {
+  } else if (strcasecmp(argv[1], "verbose") == 0) {
     if (!rtems_debugger_running()) {
       printf("error: debugger not running.\n");
       return 1;
@@ -189,24 +187,21 @@ static int rtems_shell_main_debugger(int argc, char *argv[])
 
     if (argc == 3 && strcasecmp(argv[2], "on") == 0) {
       rtems_debugger_set_verbose(true);
-    }
-    else if (argc == 3 && strcasecmp(argv[2], "off") == 0) {
+    } else if (argc == 3 && strcasecmp(argv[2], "off") == 0) {
       rtems_debugger_set_verbose(false);
-    }
-    else {
+    } else {
       printf("debugger verbose: not on or off\n");
       return 1;
     }
-  }
-  else if (strcasecmp(argv[1], "help") == 0) {
-    printf("debugger [start/stop/help] ...\n" \
-           "  start -v -R remote -d device -t secs -P priority -l [stdout,stderr,kernel]\n" \
-           "  stop\n" \
-           "  remote-debug <on/off>\n" \
-           "  verbose <on/off>\n" \
+  } else if (strcasecmp(argv[1], "help") == 0) {
+    printf("debugger [start/stop/help] ...\n"
+           "  start -v -R remote -d device -t secs -P priority -l "
+           "[stdout,stderr,kernel]\n"
+           "  stop\n"
+           "  remote-debug <on/off>\n"
+           "  verbose <on/off>\n"
            "  help\n");
-  }
-  else {
+  } else {
     printf("error: unknown command: %s\n", argv[1]);
     return 1;
   }
@@ -215,13 +210,12 @@ static int rtems_shell_main_debugger(int argc, char *argv[])
 }
 
 rtems_shell_cmd_t rtems_shell_DEBUGGER_Command = {
-  .name = "debugger",
-  .usage = "debugger [start/stop] [options ...]",
-  .topic = "misc",
-  .command = rtems_shell_main_debugger,
-  .alias = NULL,
-  .next = NULL,
-  .mode = 0755,
-  .uid = 0,
-  .gid = 0
-};
+    .name = "debugger",
+    .usage = "debugger [start/stop] [options ...]",
+    .topic = "misc",
+    .command = rtems_shell_main_debugger,
+    .alias = NULL,
+    .next = NULL,
+    .mode = 0755,
+    .uid = 0,
+    .gid = 0};

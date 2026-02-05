@@ -42,21 +42,19 @@ extern "C" {
  * grows. As more threads enter the system the block becomes the peak and then
  * sits at that level.
  */
-typedef struct rtems_debugger_block
-{
-  void*  block;  /**< The block of memory. */
-  size_t step;   /**< The step size the block is increased by. */
-  size_t size;   /**< The size of the elements in the block. */
-  size_t count;  /**< The number of elements in the block. */
-  size_t level;  /**< The usage level in the block. */
+typedef struct rtems_debugger_block {
+  void* block;  /**< The block of memory. */
+  size_t step;  /**< The step size the block is increased by. */
+  size_t size;  /**< The size of the elements in the block. */
+  size_t count; /**< The number of elements in the block. */
+  size_t level; /**< The usage level in the block. */
 } rtems_debugger_block;
 
 /**
  * Create a block.
  */
-extern int rtems_debugger_block_create(rtems_debugger_block* block,
-				       size_t                step,
-				       size_t                size);
+extern int rtems_debugger_block_create(rtems_debugger_block* block, size_t step,
+                                       size_t size);
 
 /**
  * Destroy a block.
@@ -71,6 +69,5 @@ extern int rtems_debugger_block_resize(rtems_debugger_block* block);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-
 
 #endif

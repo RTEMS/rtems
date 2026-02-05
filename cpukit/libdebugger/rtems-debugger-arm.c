@@ -52,24 +52,23 @@
 /*
  * ARM Variant controls.
  */
-#if (__ARM_ARCH >= 7) && \
+#if (__ARM_ARCH >= 7) &&                                                       \
     (__ARM_ARCH_PROFILE == 'A' || __ARM_ARCH_PROFILE == 'R')
-  #define ARM_CP15 1
+#define ARM_CP15 1
 #endif
 
-#if (__ARM_ARCH >= 7) && \
-    (__ARM_ARCH_PROFILE == 'M')
-  #define ARM_THUMB_ONLY 1
+#if (__ARM_ARCH >= 7) && (__ARM_ARCH_PROFILE == 'M')
+#define ARM_THUMB_ONLY 1
 #else
-  #define ARM_THUMB_ONLY 0
+#define ARM_THUMB_ONLY 0
 #endif
 
 #if defined(ARM_MULTILIB_ARCH_V4)
- #define ARM_PSR_HAS_INT_MASK 1
- #define ARM_PSR_HAS_THUMB    1
+#define ARM_PSR_HAS_INT_MASK 1
+#define ARM_PSR_HAS_THUMB 1
 #else
- #define ARM_PSR_HAS_INT_MASK 0
- #define ARM_PSR_HAS_THUMB    0
+#define ARM_PSR_HAS_INT_MASK 0
+#define ARM_PSR_HAS_THUMB 0
 #endif
 
 #if ARM_CP15
@@ -82,27 +81,29 @@
  * If the variant only supports thumb insturctions disable the support.
  */
 #if !ARM_THUMB_ONLY && defined(__thumb__)
-  #define ARM_SWITCH_REG       uint32_t arm_switch_reg
-  #define ARM_SWITCH_REG_ASM   [arm_switch_reg] "=&r" (arm_switch_reg)
-  #define ARM_SWITCH_REG_ASM_L ARM_SWITCH_REG_ASM,
-  #define ASM_ARM_ASM          ".align 2\n.arm\n"
-  #define ASM_ARM_MODE         ".align 2\nbx pc\n.arm\n"
-  #define ASM_THUMB_MODE       "add %[arm_switch_reg], pc, #1\nbx %[arm_switch_reg]\n.thumb\n"
-  #define ARM_THUMB_MODE()     __asm__ volatile(ASM_THUMB_MODE : ARM_SWITCH_REG_ASM : :);
-  #define ARM_ARM_MODE()       __asm__ volatile(ASM_ARM_MODE : : :);
+#define ARM_SWITCH_REG uint32_t arm_switch_reg
+#define ARM_SWITCH_REG_ASM [arm_switch_reg] "=&r"(arm_switch_reg)
+#define ARM_SWITCH_REG_ASM_L ARM_SWITCH_REG_ASM,
+#define ASM_ARM_ASM ".align 2\n.arm\n"
+#define ASM_ARM_MODE ".align 2\nbx pc\n.arm\n"
+#define ASM_THUMB_MODE                                                         \
+  "add %[arm_switch_reg], pc, #1\nbx %[arm_switch_reg]\n.thumb\n"
+#define ARM_THUMB_MODE()                                                       \
+  __asm__ volatile(ASM_THUMB_MODE : ARM_SWITCH_REG_ASM : :);
+#define ARM_ARM_MODE() __asm__ volatile(ASM_ARM_MODE : : :);
 #else
-  #define ARM_SWITCH_REG
-  #define ARM_SWITCH_REG_ASM
-  #define ARM_SWITCH_REG_ASM_L
-  #define ASM_ARM_ASM
-  #define ASM_ARM_MODE
-  #define ASM_THUMB_MODE
-  #define ARM_THUMB_MODE()
-  #define ARM_ARM_MODE()
+#define ARM_SWITCH_REG
+#define ARM_SWITCH_REG_ASM
+#define ARM_SWITCH_REG_ASM_L
+#define ASM_ARM_ASM
+#define ASM_ARM_MODE
+#define ASM_THUMB_MODE
+#define ARM_THUMB_MODE()
+#define ARM_ARM_MODE()
 #endif
 
 #ifdef ARM_MULTILIB_HAS_BARRIER_INSTRUCTIONS
-#define ARM_SYNC_INST  "isb\n"
+#define ARM_SYNC_INST "isb\n"
 #else
 #define ARM_SYNC_INST
 #endif
@@ -113,18 +114,18 @@
  * This needs to be fixed when real support for this ARM variant is added.
  */
 #if !defined(ARM_PSR_I)
-  #define ARM_PSR_I 0
+#define ARM_PSR_I 0
 #endif
 #if !defined(ARM_PSR_T)
-  #define ARM_PSR_T 0
+#define ARM_PSR_T 0
 #endif
 
 /*
  * The ARM has 2 interrupt bits.
  */
-#define CPSR_IRQ_DISABLE 0x80    /* IIQ disabled when 1 */
-#define CPSR_FIQ_DISABLE 0x40    /* FIQ disabled when 1 */
-#define CPSR_INTS_MASK   (CPSR_IRQ_DISABLE | CPSR_FIQ_DISABLE)
+#define CPSR_IRQ_DISABLE 0x80 /* IIQ disabled when 1 */
+#define CPSR_FIQ_DISABLE 0x40 /* FIQ disabled when 1 */
+#define CPSR_INTS_MASK (CPSR_IRQ_DISABLE | CPSR_FIQ_DISABLE)
 
 /*
  * Software breakpoint block size.
@@ -139,38 +140,38 @@
 /*
  * Number of bytes per type of register.
  */
-#define RTEMS_DEBUGGER_REG_BYTES    4
+#define RTEMS_DEBUGGER_REG_BYTES 4
 #define RTEMS_DEBUGGER_FP_REG_BYTES 12
 
 /*
  * Debugger registers layout. See arm-core.xml in GDB source.
  */
-#define REG_R0    0
-#define REG_R1    1
-#define REG_R2    2
-#define REG_R3    3
-#define REG_R4    4
-#define REG_R5    5
-#define REG_R6    6
-#define REG_R7    7
-#define REG_R8    8
-#define REG_R9    9
-#define REG_R10   10
-#define REG_R11   11
-#define REG_R12   12
-#define REG_SP    13
-#define REG_LR    14
-#define REG_PC    15
-#define REG_F0    16
-#define REG_F1    17
-#define REG_F2    18
-#define REG_F3    19
-#define REG_F4    20
-#define REG_F5    21
-#define REG_F6    22
-#define REG_F7    23
-#define REG_FPS   24
-#define REG_CPSR  25
+#define REG_R0 0
+#define REG_R1 1
+#define REG_R2 2
+#define REG_R3 3
+#define REG_R4 4
+#define REG_R5 5
+#define REG_R6 6
+#define REG_R7 7
+#define REG_R8 8
+#define REG_R9 9
+#define REG_R10 10
+#define REG_R11 11
+#define REG_R12 12
+#define REG_SP 13
+#define REG_LR 14
+#define REG_PC 15
+#define REG_F0 16
+#define REG_F1 17
+#define REG_F2 18
+#define REG_F3 19
+#define REG_F4 20
+#define REG_F5 21
+#define REG_F6 22
+#define REG_F7 23
+#define REG_FPS 24
+#define REG_CPSR 25
 
 /**
  * Register offset table with the total as the last entry.
@@ -179,35 +180,34 @@
  *
  *   maint print registers
  */
-static const size_t arm_reg_offsets[RTEMS_DEBUGGER_NUMREGS + 1] =
-{
-  0,   /* REG_R0    4 uint32_t */
-  4,   /* REG_R1    4 uint32_t */
-  8,   /* REG_R2    4 uint32_t */
-  12,  /* REG_R3    4 uint32_t */
-  16,  /* REG_R4    4 uint32_t */
-  20,  /* REG_R5    4 uint32_t */
-  24,  /* REG_R6    4 uint32_t */
-  28,  /* REG_R7    4 uint32_t */
-  32,  /* REG_R8    4 uint32_t */
-  36,  /* REG_R9    4 uint32_t */
-  40,  /* REG_R10   4 uint32_t */
-  44,  /* REG_R11   4 uint32_t */
-  48,  /* REG_R12   4 uint32_t */
-  52,  /* REG_SP    4 *1 */
-  56,  /* REG_LR    4 uint32_t */
-  60,  /* REG_PC    4 *1 */
-  64,  /* REG_F0   12 _arm_ext */
-  76,  /* REG_F1   12 _arm_ext */
-  88,  /* REG_F2   12 _arm_ext */
-  100, /* REG_F3   12 _arm_ext */
-  112, /* REG_F4   12 _arm_ext */
-  124, /* REG_F5   12 _arm_ext */
-  136, /* REG_F6   12 _arm_ext */
-  148, /* REG_F7   12 _arm_ext */
-  160, /* REG_FPS   4 uint32_t */
-  164, /* REG_CPSR  4 uint32_t */
-  168  /* total size */
+static const size_t arm_reg_offsets[RTEMS_DEBUGGER_NUMREGS + 1] = {
+    0,   /* REG_R0    4 uint32_t */
+    4,   /* REG_R1    4 uint32_t */
+    8,   /* REG_R2    4 uint32_t */
+    12,  /* REG_R3    4 uint32_t */
+    16,  /* REG_R4    4 uint32_t */
+    20,  /* REG_R5    4 uint32_t */
+    24,  /* REG_R6    4 uint32_t */
+    28,  /* REG_R7    4 uint32_t */
+    32,  /* REG_R8    4 uint32_t */
+    36,  /* REG_R9    4 uint32_t */
+    40,  /* REG_R10   4 uint32_t */
+    44,  /* REG_R11   4 uint32_t */
+    48,  /* REG_R12   4 uint32_t */
+    52,  /* REG_SP    4 *1 */
+    56,  /* REG_LR    4 uint32_t */
+    60,  /* REG_PC    4 *1 */
+    64,  /* REG_F0   12 _arm_ext */
+    76,  /* REG_F1   12 _arm_ext */
+    88,  /* REG_F2   12 _arm_ext */
+    100, /* REG_F3   12 _arm_ext */
+    112, /* REG_F4   12 _arm_ext */
+    124, /* REG_F5   12 _arm_ext */
+    136, /* REG_F6   12 _arm_ext */
+    148, /* REG_F7   12 _arm_ext */
+    160, /* REG_FPS   4 uint32_t */
+    164, /* REG_CPSR  4 uint32_t */
+    168  /* total size */
 };
 
 /*
@@ -219,60 +219,60 @@ static const size_t arm_reg_offsets[RTEMS_DEBUGGER_NUMREGS + 1] =
  * The various status registers.
  */
 #if defined(ARM_MULTILIB_ARCH_V4) || defined(ARM_MULTILIB_ARCH_V6M)
- #define FRAME_SR(_frame) (_frame)->register_cpsr
+#define FRAME_SR(_frame) (_frame)->register_cpsr
 #elif defined(ARM_MULTILIB_ARCH_V7M)
- #define FRAME_SR(_frame) (_frame)->register_xpsr
+#define FRAME_SR(_frame) (_frame)->register_xpsr
 #else
- #error ARM architecture is not supported.
+#error ARM architecture is not supported.
 #endif
 
 /**
  * Print the exception frame.
  */
-#define EXC_FRAME_PRINT(_out, _prefix, _frame) \
-do { \
-  _out(_prefix "  R0 = %08" PRIx32 "  R1 = %08" PRIx32       \
-               "  R2 = %08" PRIx32 "  R3 = %08" PRIx32 "\n", \
-       _frame->register_r0, _frame->register_r1, \
-       _frame->register_r2, _frame->register_r3); \
-  _out(_prefix "  R4 = %08" PRIx32 "  R5 = %08" PRIx32       \
-               "  R6 = %08" PRIx32 "  R7 = %08" PRIx32 "\n", \
-       _frame->register_r4, _frame->register_r5, \
-       _frame->register_r6, _frame->register_r7); \
-  _out(_prefix "  R8 = %08" PRIx32 "  R9 = %08" PRIx32       \
-               " R10 = %08" PRIx32 " R11 = %08" PRIx32 "\n", \
-       _frame->register_r8, _frame->register_r9, \
-       _frame->register_r10, _frame->register_r11); \
-  _out(_prefix " R12 = %08" PRIx32 "  SP = %08" PRIx32       \
-               "  LR = %08" PRIxPTR "  PC = %08" PRIxPTR "\n", \
-       _frame->register_r12, _frame->register_sp, \
-       (intptr_t) _frame->register_lr, (intptr_t) _frame->register_pc); \
-  _out(_prefix " CPSR = %08" PRIx32 " %c%c%c%c%c%c%c%c%c%c%c"       \
-               " GE:%" PRIx32 " IT:%02" PRIx32 " M:%" PRIx32 " %s\n", \
-       FRAME_SR(_frame), \
-       (FRAME_SR(_frame) & (1 << 31)) != 0 ? 'N' : '-', \
-       (FRAME_SR(_frame) & (1 << 30)) != 0 ? 'Z' : '-', \
-       (FRAME_SR(_frame) & (1 << 29)) != 0 ? 'C' : '-', \
-       (FRAME_SR(_frame) & (1 << 28)) != 0 ? 'V' : '-', \
-       (FRAME_SR(_frame) & (1 << 27)) != 0 ? 'Q' : '-', \
-       (FRAME_SR(_frame) & (1 << 24)) != 0 ? 'J' : '-', \
-       (FRAME_SR(_frame) & (1 <<  9)) != 0 ? 'E' : '-', \
-       (FRAME_SR(_frame) & (1 <<  8)) != 0 ? 'A' : '-', \
-       (FRAME_SR(_frame) & (1 <<  7)) != 0 ? 'I' : '-', \
-       (FRAME_SR(_frame) & (1 <<  6)) != 0 ? 'F' : '-', \
-       (FRAME_SR(_frame) & (1 <<  5)) != 0 ? 'T' : '-', \
-       (FRAME_SR(_frame) >> 16) & 0xf, \
-       ((FRAME_SR(_frame) >> (25 - 5)) & (0x3 << 5)) | ((FRAME_SR(_frame) >> 10) & 0x1f), \
-       FRAME_SR(_frame) & 0x1f, arm_mode_label(FRAME_SR(_frame) & 0x1f)); \
-} while (0)
+#define EXC_FRAME_PRINT(_out, _prefix, _frame)                                 \
+  do {                                                                         \
+    _out(_prefix "  R0 = %08" PRIx32 "  R1 = %08" PRIx32 "  R2 = %08" PRIx32   \
+                 "  R3 = %08" PRIx32 "\n",                                     \
+         _frame->register_r0, _frame->register_r1, _frame->register_r2,        \
+         _frame->register_r3);                                                 \
+    _out(_prefix "  R4 = %08" PRIx32 "  R5 = %08" PRIx32 "  R6 = %08" PRIx32   \
+                 "  R7 = %08" PRIx32 "\n",                                     \
+         _frame->register_r4, _frame->register_r5, _frame->register_r6,        \
+         _frame->register_r7);                                                 \
+    _out(_prefix "  R8 = %08" PRIx32 "  R9 = %08" PRIx32 " R10 = %08" PRIx32   \
+                 " R11 = %08" PRIx32 "\n",                                     \
+         _frame->register_r8, _frame->register_r9, _frame->register_r10,       \
+         _frame->register_r11);                                                \
+    _out(_prefix " R12 = %08" PRIx32 "  SP = %08" PRIx32 "  LR = %08" PRIxPTR  \
+                 "  PC = %08" PRIxPTR "\n",                                    \
+         _frame->register_r12, _frame->register_sp,                            \
+         (intptr_t)_frame->register_lr, (intptr_t)_frame->register_pc);        \
+    _out(_prefix " CPSR = %08" PRIx32 " %c%c%c%c%c%c%c%c%c%c%c"                \
+                 " GE:%" PRIx32 " IT:%02" PRIx32 " M:%" PRIx32 " %s\n",        \
+         FRAME_SR(_frame), (FRAME_SR(_frame) & (1 << 31)) != 0 ? 'N' : '-',    \
+         (FRAME_SR(_frame) & (1 << 30)) != 0 ? 'Z' : '-',                      \
+         (FRAME_SR(_frame) & (1 << 29)) != 0 ? 'C' : '-',                      \
+         (FRAME_SR(_frame) & (1 << 28)) != 0 ? 'V' : '-',                      \
+         (FRAME_SR(_frame) & (1 << 27)) != 0 ? 'Q' : '-',                      \
+         (FRAME_SR(_frame) & (1 << 24)) != 0 ? 'J' : '-',                      \
+         (FRAME_SR(_frame) & (1 << 9)) != 0 ? 'E' : '-',                       \
+         (FRAME_SR(_frame) & (1 << 8)) != 0 ? 'A' : '-',                       \
+         (FRAME_SR(_frame) & (1 << 7)) != 0 ? 'I' : '-',                       \
+         (FRAME_SR(_frame) & (1 << 6)) != 0 ? 'F' : '-',                       \
+         (FRAME_SR(_frame) & (1 << 5)) != 0 ? 'T' : '-',                       \
+         (FRAME_SR(_frame) >> 16) & 0xf,                                       \
+         ((FRAME_SR(_frame) >> (25 - 5)) & (0x3 << 5)) |                       \
+             ((FRAME_SR(_frame) >> 10) & 0x1f),                                \
+         FRAME_SR(_frame) & 0x1f, arm_mode_label(FRAME_SR(_frame) & 0x1f));    \
+  } while (0)
 
 /**
  * The breakpoint.
  */
 #ifdef __thumb__
- static const uint8_t breakpoint[2] = { 0x55, 0xbe };
+static const uint8_t breakpoint[2] = {0x55, 0xbe};
 #else
- static const uint8_t breakpoint[4] = { 0x75, 0xe0, 0x20, 0xe1 };
+static const uint8_t breakpoint[4] = {0x75, 0xe0, 0x20, 0xe1};
 #endif
 
 /**
@@ -284,13 +284,11 @@ RTEMS_INTERRUPT_LOCK_DEFINE(static, target_lock, "target_lock")
  * An exception offset is added to the return address of the PC on an
  * exception's stack frame. The PC needs to be adjusted.
  */
-static const size_t exc_offsets[2][5] =
-{
-  /* ARM undef_ins sup call pref abt data abt */
-  {  0,  4,        0,       4,       8 },
-  /* TMB undef_ins sup call pref abt data abt */
-  {  0,  2,        0,       4,       8 }
-};
+static const size_t exc_offsets[2][5] = {
+    /* ARM undef_ins sup call pref abt data abt */
+    {0, 4, 0, 4, 8},
+    /* TMB undef_ins sup call pref abt data abt */
+    {0, 2, 0, 4, 8}};
 
 /**
  * Is a session active?
@@ -301,12 +299,12 @@ static bool debug_session_active;
  * ARM debug hardware. These variables are directly access
  * from assembler so do not change types.
  */
-static int   debug_version;
+static int debug_version;
 static void* debug_registers;
-static int   debug_revision;
-static int   debug_disable_ints;
-static int   hw_breakpoints;
-static int   hw_watchpoints;
+static int debug_revision;
+static int debug_disable_ints;
+static int hw_breakpoints;
+static int hw_watchpoints;
 
 /**
  * Hardware break and watch points.
@@ -317,16 +315,16 @@ static int   hw_watchpoints;
 /*
  * Types of break points. Only the 2 we use listed.
  */
-#define ARM_HW_BP_UNLINKED_INSTR_MATCH    (0x00)
+#define ARM_HW_BP_UNLINKED_INSTR_MATCH (0x00)
 #define ARM_HW_BP_UNLINKED_INSTR_MISMATCH (0x04)
 
 /*
  * Privilege levels.
  */
 #define ARM_HW_BP_PRIV_PL0_SUP_SYS (0x00)
-#define ARM_HW_BP_PRIV_PL1_ONLY    (0x01)
-#define ARM_HW_BP_PRIV_PL0_ONLY    (0x02)
-#define ARM_HW_BP_PRIV_ALL_MODES   (0x03)
+#define ARM_HW_BP_PRIV_PL1_ONLY (0x01)
+#define ARM_HW_BP_PRIV_PL0_ONLY (0x02)
+#define ARM_HW_BP_PRIV_ALL_MODES (0x03)
 
 /*
  * A hw breakpoint has DBGBCR and DBGBVR registers. Allocate memory
@@ -343,20 +341,22 @@ static uint32_t hw_breaks[ARM_HW_BREAKPOINT_MAX * 2];
 #define ARM_HWB_BCR(_bp) (hw_breaks[((_bp) * 2) + 1])
 #define ARM_HWB_VCR(_bp) (hw_breaks[(_bp) * 2])
 #define ARM_HWB_ENALBED(_bp) ((ARM_HWB_BCR(_bp) & 1) != 0)
-#define ARM_HWB_CLEAR(_bp) ARM_HWB_BCR(_bp) = 0; ARM_HWB_VCR(_bp) = 0
+#define ARM_HWB_CLEAR(_bp)                                                     \
+  ARM_HWB_BCR(_bp) = 0;                                                        \
+  ARM_HWB_VCR(_bp) = 0
 #define ARM_HWB_CLEAR_ALL() memset(&hw_breaks[0], 0, sizeof(hw_breaks))
 
 /*
  * Method of entry (MOE) to debug mode. Bits [5:2] of DBGDSCR.
  */
-#define ARM_HW_DSCR_MOE_HALT_REQUEST       (0x0)
-#define ARM_HW_DSCR_MOE_BREAKPOINT_EVENT   (0x1)
-#define ARM_HW_DSCR_MOE_ASYNC_WATCHPOINT   (0x2)
-#define ARM_HW_DSCR_MOE_BREAKPOINT_INSTR   (0x3)
-#define ARM_HW_DSCR_MOE_EXTERNAL           (0x4)
+#define ARM_HW_DSCR_MOE_HALT_REQUEST (0x0)
+#define ARM_HW_DSCR_MOE_BREAKPOINT_EVENT (0x1)
+#define ARM_HW_DSCR_MOE_ASYNC_WATCHPOINT (0x2)
+#define ARM_HW_DSCR_MOE_BREAKPOINT_INSTR (0x3)
+#define ARM_HW_DSCR_MOE_EXTERNAL (0x4)
 #define ARM_HW_DSCR_MOE_VECTOR_CATCH_EVENT (0x5)
-#define ARM_HW_DSCR_MOE_OS_UNLOCK_EVENT    (0x8)
-#define ARM_HW_DSCR_MOE_SYNC_WATCHPOINT    (0xa)
+#define ARM_HW_DSCR_MOE_OS_UNLOCK_EVENT (0x8)
+#define ARM_HW_DSCR_MOE_SYNC_WATCHPOINT (0xa)
 
 /*
  * Use to locally probe and catch exceptions when accessinf suspect addresses.
@@ -373,9 +373,7 @@ void rtems_debugger_printk_lock(rtems_interrupt_lock_context* lock_context);
 void rtems_debugger_printk_unlock(rtems_interrupt_lock_context* lock_context);
 
 static void target_printk(const char* format, ...) RTEMS_PRINTFLIKE(1, 2);
-static void
-target_printk(const char* format, ...)
-{
+static void target_printk(const char* format, ...) {
   rtems_interrupt_lock_context lock_context;
   va_list ap;
   va_start(ap, format);
@@ -389,9 +387,7 @@ target_printk(const char* format, ...)
 #define mode_labels(_m) NULL
 #endif
 
-static const char*
-arm_mode_label(int mode)
-{
+static const char* arm_mode_label(int mode) {
   switch (mode) {
   case 0x10:
     return "USR";
@@ -416,9 +412,7 @@ arm_mode_label(int mode)
 }
 
 #if TARGET_DEBUG
-static const char*
-arm_moe_label(uint32_t moe)
-{
+static const char* arm_moe_label(uint32_t moe) {
   switch (moe) {
   case ARM_HW_DSCR_MOE_HALT_REQUEST:
     return "HLT";
@@ -442,6 +436,8 @@ arm_moe_label(uint32_t moe)
   return "RSV";
 }
 #endif
+
+// clang-format off
 
 /*
  * CP register access.
@@ -473,6 +469,8 @@ arm_moe_label(uint32_t moe)
         [val] "=&r" (_val));                               \
   } while (0)
 
+// clang-format on
+
 /*
  * CP14 register access.
  *
@@ -487,10 +485,10 @@ arm_moe_label(uint32_t moe)
  * registers, you cannot program it. This means there is a switch table to do
  * this.
  */
-#define ARM_CP14_WRITE(_val, _CRn, _CRm, _op2) \
+#define ARM_CP14_WRITE(_val, _CRn, _CRm, _op2)                                 \
   ARM_CP_WRITE(14, 0, _val, _CRn, _CRm, _op2)
 
-#define ARM_CP14_READ(_val, _CRn, _CRm, _op2)  \
+#define ARM_CP14_READ(_val, _CRn, _CRm, _op2)                                  \
   ARM_CP_READ(14, 0, _val, _CRn, _CRm, _op2)
 
 /*
@@ -499,37 +497,34 @@ arm_moe_label(uint32_t moe)
  * The Context ID register is a process level context and used to scope
  * hardware break points.
  */
-#define ARM_CP15_WRITE(_val, _op1, _CRn, _CRm, _op2) \
+#define ARM_CP15_WRITE(_val, _op1, _CRn, _CRm, _op2)                           \
   ARM_CP_WRITE(15, _op1, _val, _CRn, _CRm, _op2)
 
-#define ARM_CP15_READ(_val, _op1, _CRn, _CRm, _op2)  \
+#define ARM_CP15_READ(_val, _op1, _CRn, _CRm, _op2)                            \
   ARM_CP_READ(15, _op1, _val, _CRn, _CRm, _op2)
 
 /*
  * Read and write a memory mapped debug register. The register number is a word
  * offset from the base address.
  */
-#define ARM_MMAP_ADDR(reg) \
-  (((volatile uint32_t*) debug_registers) + (reg))
+#define ARM_MMAP_ADDR(reg) (((volatile uint32_t*)debug_registers) + (reg))
 #define ARM_MMAP_WRITE(reg, val) *ARM_MMAP_ADDR(reg) = (val)
 #define ARM_MMAP_READ(reg) *ARM_MMAP_ADDR(reg)
-#define ARM_MMAP_WRITE_SYNC(reg, val) \
-  ARM_MMAP_WRITE(reg, val); \
-  _ARM_Data_synchronization_barrier(); \
+#define ARM_MMAP_WRITE_SYNC(reg, val)                                          \
+  ARM_MMAP_WRITE(reg, val);                                                    \
+  _ARM_Data_synchronization_barrier();                                         \
   _ARM_Instruction_synchronization_barrier()
 
 /*
  * Debug hardware breakpoint registers.
  */
 #define ARM_MMAP_DBGDSCR 34
-#define ARM_MMAP_DBGBCR  80
-#define ARM_MMAP_DBGBVR  64
+#define ARM_MMAP_DBGBCR 80
+#define ARM_MMAP_DBGBVR 64
 
-static bool
-arm_debug_authentication(uint32_t dbgauthstatus)
-{
+static bool arm_debug_authentication(uint32_t dbgauthstatus) {
   bool granted = (dbgauthstatus & (1 << 0)) != 0;
-  rtems_debugger_printf("rtems-db: arm debug: authentication: %s " \
+  rtems_debugger_printf("rtems-db: arm debug: authentication: %s "
                         "(%s %s %s %s %s %s %s %s)\n",
                         granted ? "granted" : "denied",
                         (dbgauthstatus & (1 << 0)) == 0 ? "-" : "NSE",
@@ -543,15 +538,14 @@ arm_debug_authentication(uint32_t dbgauthstatus)
   return granted;
 }
 
-static int
-arm_debug_cp14_enable(rtems_debugger_target* target)
-{
-  (void) target;
+static int arm_debug_cp14_enable(rtems_debugger_target* target) {
+  (void)target;
 
   uint32_t val;
   ARM_CP14_READ(val, 7, 14, 6);
-  if (!arm_debug_authentication(val))
+  if (!arm_debug_authentication(val)) {
     return -1;
+  }
   ARM_CP14_READ(val, 0, 1, 0);
   if ((val & (1 << 15)) == 0) {
     switch (debug_version) {
@@ -565,7 +559,8 @@ arm_debug_cp14_enable(rtems_debugger_target* target)
       ARM_CP14_WRITE(val | (1 << 15), 0, 2, 2);
       break;
     case 4:
-      rtems_debugger_printf("rtems-db: arm debug: no cp14 access with version 4\n");
+      rtems_debugger_printf(
+          "rtems-db: arm debug: no cp14 access with version 4\n");
       return -1;
     }
     ARM_CP14_READ(val, 0, 1, 0);
@@ -584,104 +579,108 @@ arm_debug_cp14_enable(rtems_debugger_target* target)
  * it.
  */
 static jmp_buf unlock_abort_jmpbuf;
-static size_t  arm_debug_retries;
+static size_t arm_debug_retries;
 
-static void
-arm_debug_dump_rom_table(uint32_t* rom, size_t depth)
-{
+static void arm_debug_dump_rom_table(uint32_t* rom, size_t depth) {
   uint32_t pidr[7];
   uint32_t cidr[4];
   uint32_t memtype;
   uint32_t pidr4_4KB_count;
-  size_t   r;
+  size_t r;
 
-  static const char *table_class[16] = {
-    "reserved",
-    "ROM table",
-    "reserved", "reserved",
-    "reserved",
-    "reserved",
-    "reserved",
-    "reserved",
-    "reserved",
-    "CoreSight component",
-    "reserved",
-    "Peripheral Test Block",
-    "reserved",
-    "OptimoDE DESS",
-    "Generic IP component",
-    "PrimeCell or System component"
-  };
+  static const char* table_class[16] = {"reserved",
+                                        "ROM table",
+                                        "reserved",
+                                        "reserved",
+                                        "reserved",
+                                        "reserved",
+                                        "reserved",
+                                        "reserved",
+                                        "reserved",
+                                        "CoreSight component",
+                                        "reserved",
+                                        "Peripheral Test Block",
+                                        "reserved",
+                                        "OptimoDE DESS",
+                                        "Generic IP component",
+                                        "PrimeCell or System component"};
 
-  #define ROM_READ(b_, o_, r_) b_[((o_) / sizeof(uint32_t)) + (r_)]
+#define ROM_READ(b_, o_, r_) b_[((o_) / sizeof(uint32_t)) + (r_)]
 
   if (depth > 16) {
     rtems_debugger_printf("]] rom: too deep\n");
     return;
   }
 
-  for (r = 0; r < 4; ++r)
+  for (r = 0; r < 4; ++r) {
     pidr[r] = ROM_READ(rom, 0xfe0, r) & 0xff;
-  for (r = 0; r < 3; ++r)
+  }
+  for (r = 0; r < 3; ++r) {
     pidr[r + 4] = ROM_READ(rom, 0xfd0, r) & 0xff;
-  for (r = 0; r < 4; ++r)
+  }
+  for (r = 0; r < 4; ++r) {
     cidr[r] = ROM_READ(rom, 0xff0, r) & 0xff;
+  }
   memtype = ROM_READ(rom, 0xfcc, 0);
 
   pidr4_4KB_count = pidr[4] & (((1 << (7 - 4)) - 1) >> 4);
 
   rtems_debugger_printf("]] rom = %p\n", rom);
   rtems_debugger_printf("   PIDR: %08x %08x %08x %08x %08x %08x %08x\n",
-                        pidr[0], pidr[1], pidr[2], pidr[3],
-                        pidr[4], pidr[5], pidr[6]);
-  rtems_debugger_printf("   CIDR: %08x %08x %08x %08x\n",
-                        cidr[0], cidr[1], cidr[2], cidr[3]);
+                        pidr[0], pidr[1], pidr[2], pidr[3], pidr[4], pidr[5],
+                        pidr[6]);
+  rtems_debugger_printf("   CIDR: %08x %08x %08x %08x\n", cidr[0], cidr[1],
+                        cidr[2], cidr[3]);
   rtems_debugger_printf("   4KB count: %u\n", pidr4_4KB_count);
 
-  if ((memtype & 0x01) != 0)
+  if ((memtype & 0x01) != 0) {
     rtems_debugger_printf("   MEMTYPE sys memory present on bus\n");
-  else
-    rtems_debugger_printf("   MEMTYPE sys memory not present: dedicated debug bus\n");
+  } else {
+    rtems_debugger_printf(
+        "   MEMTYPE sys memory not present: dedicated debug bus\n");
+  }
 
   /*
    * Read ROM table entries until we get 0
    */
   for (r = 0; rom[r] != 0; ++r) {
-    uint32_t  romentry = rom[r];
-    uint32_t  c_pidr[7];
-    uint32_t  c_cidr[4];
+    uint32_t romentry = rom[r];
+    uint32_t c_pidr[7];
+    uint32_t c_cidr[4];
     uint32_t* c_base;
-    uint32_t  table_type;
-    size_t    i;
+    uint32_t table_type;
+    size_t i;
 
-    c_base = (uint32_t*) ((intptr_t) rom + (romentry & 0xFFFFF000));
+    c_base = (uint32_t*)((intptr_t)rom + (romentry & 0xFFFFF000));
 
     /*
      * Read the IDs.
      */
-    for (i = 0; i < 4; ++i)
+    for (i = 0; i < 4; ++i) {
       c_pidr[i] = ROM_READ(c_base, 0xfe0, i) & 0xff;
-    for (i = 0; i < 3; ++i)
+    }
+    for (i = 0; i < 3; ++i) {
       c_pidr[i + 4] = ROM_READ(c_base, 0xfd0, i) & 0xff;
-    for (i = 0; i < 4; ++i)
+    }
+    for (i = 0; i < 4; ++i) {
       c_cidr[i] = ROM_READ(c_base, 0xff0, i) & 0xff;
+    }
 
     table_type = ROM_READ(c_base, 0xfcc, 0);
 
-    rtems_debugger_printf("   > Base: %p, start: 0x%" PRIx32 "\n",
-                          c_base,
-                          /* component may take multiple 4K pages */
-                          (uint32_t)((intptr_t) c_base - 0x1000 * (c_pidr[4] >> 4)));
-    rtems_debugger_printf("     Class is 0x%x, %s\n",
-                          (c_cidr[1] >> 4) & 0xf, table_class[(c_cidr[1] >> 4) & 0xf]);
+    rtems_debugger_printf(
+        "   > Base: %p, start: 0x%" PRIx32 "\n", c_base,
+        /* component may take multiple 4K pages */
+        (uint32_t)((intptr_t)c_base - 0x1000 * (c_pidr[4] >> 4)));
+    rtems_debugger_printf("     Class is 0x%x, %s\n", (c_cidr[1] >> 4) & 0xf,
+                          table_class[(c_cidr[1] >> 4) & 0xf]);
 
     if (((c_cidr[1] >> 4) & 0x0f) == 1) {
       arm_debug_dump_rom_table(c_base, depth + 1);
-    }
-    else if (((c_cidr[1] >> 4) & 0x0f) == 9) {
+    } else if (((c_cidr[1] >> 4) & 0x0f) == 9) {
       const char* major = "reserved";
       const char* subtype = "reserved";
-      unsigned    minor = (table_type >> 4) & 0x0f;
+      unsigned minor = (table_type >> 4) & 0x0f;
 
       switch (table_type & 0x0f) {
       case 0:
@@ -819,7 +818,8 @@ arm_debug_dump_rom_table(uint32_t* rom, size_t depth)
       rtems_debugger_printf("     Type: 0x%02" PRIx32 ", %s, %s\n",
                             table_type & 0xff, major, subtype);
       rtems_debugger_printf("     PID[4..0]: %02x %02x %02x %02x %02x\n",
-                            c_pidr[4], c_pidr[3], c_pidr[2], c_pidr[1], c_pidr[0]);
+                            c_pidr[4], c_pidr[3], c_pidr[2], c_pidr[1],
+                            c_pidr[0]);
 
       if (((c_cidr[1] >> 4) & 0x0f) == 1) {
         arm_debug_dump_rom_table(c_base, depth + 1);
@@ -828,24 +828,24 @@ arm_debug_dump_rom_table(uint32_t* rom, size_t depth)
   }
 }
 
-static int
-arm_debug_rom_discover(uint32_t* rom, uint32_t comp, uint32_t** addr, int* index)
-{
+static int arm_debug_rom_discover(uint32_t* rom, uint32_t comp, uint32_t** addr,
+                                  int* index) {
   size_t r = 0;
   *addr = 0;
   while ((rom[r] & 1) != 0) {
-    uint32_t* c_base = (uint32_t*) ((intptr_t) rom + (rom[r] & 0xfffff000));
-    uint32_t  c_cid1 = c_base[0xff4 / sizeof(uint32_t)];
-    uint32_t  type;
+    uint32_t* c_base = (uint32_t*)((intptr_t)rom + (rom[r] & 0xfffff000));
+    uint32_t c_cid1 = c_base[0xff4 / sizeof(uint32_t)];
+    uint32_t type;
     if (((c_cid1 >> 4) & 0x0f) == 1) {
-      if (arm_debug_rom_discover(c_base, comp, addr, index))
+      if (arm_debug_rom_discover(c_base, comp, addr, index)) {
         return true;
+      }
     }
     type = c_base[0xfcc / sizeof(uint32_t)] & 0xff;
     if (comp == type) {
-      if (*index > 0)
+      if (*index > 0) {
         --(*index);
-      else {
+      } else {
         *addr = c_base;
         return true;
       }
@@ -855,13 +855,12 @@ arm_debug_rom_discover(uint32_t* rom, uint32_t comp, uint32_t** addr, int* index
   return false;
 }
 
-static int
-arm_debug_mmap_enable(rtems_debugger_target* target, uint32_t dbgdidr)
-{
-  (void) target;
+static int arm_debug_mmap_enable(rtems_debugger_target* target,
+                                 uint32_t dbgdidr) {
+  (void)target;
 
   uint32_t val;
-  int      rc = -1;
+  int rc = -1;
 
 #if ARM_CP15
   void* abort_handler;
@@ -879,12 +878,13 @@ arm_debug_mmap_enable(rtems_debugger_target* target, uint32_t dbgdidr)
    */
   ARM_CP14_READ(val, 1, 0, 0);
   if ((val & 3) == 3) {
-    uint32_t* rom = (uint32_t*) (val & 0xfffff000);
+    uint32_t* rom = (uint32_t*)(val & 0xfffff000);
     uint32_t* comp_base = NULL;
-    int       core = (int) _SMP_Get_current_processor();
+    int core = (int)_SMP_Get_current_processor();
 
-    if (ARM_DUMP_ROM_TABLES)
+    if (ARM_DUMP_ROM_TABLES) {
       arm_debug_dump_rom_table(rom, 0);
+    }
 
     debug_registers = NULL;
 
@@ -893,8 +893,8 @@ arm_debug_mmap_enable(rtems_debugger_target* target, uint32_t dbgdidr)
       rtems_debugger_printf("rtems-db: ram debug: ROM Base: %p\n", comp_base);
     } else {
       ARM_CP14_READ(val, 2, 0, 0);
-      if ((val & 3) == 3 ) {
-        debug_registers = (void*) ((intptr_t) rom + (val & ~3));
+      if ((val & 3) == 3) {
+        debug_registers = (void*)((intptr_t)rom + (val & ~3));
       }
     }
   }
@@ -905,7 +905,8 @@ arm_debug_mmap_enable(rtems_debugger_target* target, uint32_t dbgdidr)
       rtems_debugger_printf("rtems-db: arm debug: no valid register map\n");
       return -1;
     }
-    rtems_debugger_printf("rtems-db: arm debug: BSP Base: %p\n", debug_registers);
+    rtems_debugger_printf("rtems-db: arm debug: BSP Base: %p\n",
+                          debug_registers);
   }
 
   /*
@@ -913,18 +914,19 @@ arm_debug_mmap_enable(rtems_debugger_target* target, uint32_t dbgdidr)
    */
   if (ARM_MMAP_READ(0) != dbgdidr) {
     debug_registers = NULL;
-    rtems_debugger_printf("rtems-db: arm debug: debug reg map not verified: " \
-                          "0x%08x\n", ARM_MMAP_READ(0));
+    rtems_debugger_printf("rtems-db: arm debug: debug reg map not verified: "
+                          "0x%08x\n",
+                          ARM_MMAP_READ(0));
     return -1;
   }
 
-  if (!arm_debug_authentication(ARM_MMAP_READ(1006)))
+  if (!arm_debug_authentication(ARM_MMAP_READ(1006))) {
     return -1;
+  }
 
 #if ARM_CP15
-  abort_handler =
-    arm_cp15_set_exception_handler(ARM_EXCEPTION_DATA_ABORT,
-                                   arm_debug_unlock_abort);
+  abort_handler = arm_cp15_set_exception_handler(ARM_EXCEPTION_DATA_ABORT,
+                                                 arm_debug_unlock_abort);
 #endif
 
   while (arm_debug_retries-- > 0) {
@@ -959,8 +961,7 @@ arm_debug_mmap_enable(rtems_debugger_target* target, uint32_t dbgdidr)
   if (arm_debug_retries > 0) {
     rtems_debugger_printf("rtems-db: arm debug: using debug register access\n");
     rc = 0;
-  }
-  else {
+  } else {
     rtems_debugger_printf("rtems-db: arm debug: cannot enter debug mode\n");
   }
 
@@ -969,30 +970,24 @@ arm_debug_mmap_enable(rtems_debugger_target* target, uint32_t dbgdidr)
   return rc;
 }
 
-static int
-arm_debug_probe(rtems_debugger_target* target)
-{
-  #define ID_VALUE(_i, _h, _l) ((_i >> _l) & ((1 << ((_h - _l) + 1)) -1))
-  uint32_t          val;
-  const char*       vl = "[Invalid version]";
+static int arm_debug_probe(rtems_debugger_target* target) {
+#define ID_VALUE(_i, _h, _l) ((_i >> _l) & ((1 << ((_h - _l) + 1)) - 1))
+  uint32_t val;
+  const char* vl = "[Invalid version]";
   const char* const labels[] = {
-    "ARMv6 [v6]",
-    "ARMv6 [v6.1]",
-    "ARMv7 [v7, all CP14 registers]",
-    "ARMv7 [v7, baseline CP14 registers]",
-    "ARMv7 [v7.1]"
-  };
+      "ARMv6 [v6]", "ARMv6 [v6.1]", "ARMv7 [v7, all CP14 registers]",
+      "ARMv7 [v7, baseline CP14 registers]", "ARMv7 [v7.1]"};
   int rc = -1;
 
 #if ARM_CP15
   ARM_CP15_READ(val, 0, 0, 0, 0);
-  rtems_debugger_printf("rtems-db: arm core: Architecture: %d Variant: %d " \
+  rtems_debugger_printf("rtems-db: arm core: Architecture: %d Variant: %d "
                         "Implementor: %d Part Number: %d Revision: %d\n",
                         (val >> 16) & ((1 << (19 - 16 + 1)) - 1),
                         (val >> 20) & ((1 << (23 - 20 + 1)) - 1),
                         (val >> 24) & ((1 << (31 - 24 + 1)) - 1),
-                        (val >>  4) & ((1 << (15 -  4 + 1)) - 1),
-                        (val >>  0) & ((1 << ( 3 -  0 + 1)) - 1));
+                        (val >> 4) & ((1 << (15 - 4 + 1)) - 1),
+                        (val >> 0) & ((1 << (3 - 0 + 1)) - 1));
 #endif
 
   ARM_CP14_READ(val, 0, 0, 0);
@@ -1010,228 +1005,202 @@ arm_debug_probe(rtems_debugger_target* target)
   hw_breakpoints = ID_VALUE(val, 27, 24);
   hw_watchpoints = ID_VALUE(val, 31, 28);
 
-  rtems_debugger_printf("rtems-db: arm debug: (v%d.%d) %s " \
+  rtems_debugger_printf("rtems-db: arm debug: (v%d.%d) %s "
                         "breakpoints:%d watchpoints:%d\n",
-                        debug_version, debug_revision, vl,
-                        hw_breakpoints, hw_watchpoints);
+                        debug_version, debug_revision, vl, hw_breakpoints,
+                        hw_watchpoints);
 
-  if (!rtems_debugger_arm_debug_configure())
+  if (!rtems_debugger_arm_debug_configure()) {
     return -1;
+  }
 
   switch (debug_version) {
-    case 1:
-    case 2:
-    case 3:
-    case 5:
-    default:
-      rc = arm_debug_mmap_enable(target, val);
-      if (rc != 0)
-        rc =  arm_debug_cp14_enable(target);
-      break;
-    case 4:
-      rc = arm_debug_mmap_enable(target, val);
-      break;
+  case 1:
+  case 2:
+  case 3:
+  case 5:
+  default:
+    rc = arm_debug_mmap_enable(target, val);
+    if (rc != 0) {
+      rc = arm_debug_cp14_enable(target);
+    }
+    break;
+  case 4:
+    rc = arm_debug_mmap_enable(target, val);
+    break;
   }
 
   return rc;
 }
 
-static inline void
-arm_debug_break_setup(int      bp,
-                      uint32_t address,
-                      uint32_t type,
-                      uint32_t byte_address_select,
-                      uint32_t privilege)
-{
-  ARM_HWB_BCR(bp) = (((type & 0xf) << 20) |
-                     ((byte_address_select & 0xf) << 5) |
+static inline void arm_debug_break_setup(int bp, uint32_t address,
+                                         uint32_t type,
+                                         uint32_t byte_address_select,
+                                         uint32_t privilege) {
+  ARM_HWB_BCR(bp) = (((type & 0xf) << 20) | ((byte_address_select & 0xf) << 5) |
                      ((privilege & 0x3) << 1) | 1);
-  ARM_HWB_VCR(bp) = (intptr_t) (address & (~3));
+  ARM_HWB_VCR(bp) = (intptr_t)(address & (~3));
 }
 
-static void
-arm_debug_break_c14_write_control(int bp, uint32_t control)
-{
+static void arm_debug_break_c14_write_control(int bp, uint32_t control) {
   switch (bp) {
-    case 0:
-      ARM_CP14_WRITE(control, 0, 0, 5);
-      break;
-    case 1:
-      ARM_CP14_WRITE(control, 0, 1, 5);
-      break;
-    case 2:
-      ARM_CP14_WRITE(control, 0, 2, 5);
-      break;
-    case 3:
-      ARM_CP14_WRITE(control, 0, 3, 5);
-      break;
-    case 4:
-      ARM_CP14_WRITE(control, 0, 4, 5);
-      break;
-    case 5:
-      ARM_CP14_WRITE(control, 0, 5, 5);
-      break;
-    case 6:
-      ARM_CP14_WRITE(control, 0, 6, 5);
-      break;
-    case 7:
-      ARM_CP14_WRITE(control, 0, 7, 5);
-      break;
-    case 8:
-      ARM_CP14_WRITE(control, 0, 8, 5);
-      break;
-    case 9:
-      ARM_CP14_WRITE(control, 0, 9, 5);
-      break;
-    case 10:
-      ARM_CP14_WRITE(control, 0, 10, 5);
-      break;
-    case 11:
-      ARM_CP14_WRITE(control, 0, 11, 5);
-      break;
-    case 12:
-      ARM_CP14_WRITE(control, 0, 12, 5);
-      break;
-    case 13:
-      ARM_CP14_WRITE(control, 0, 13, 5);
-      break;
-    case 14:
-      ARM_CP14_WRITE(control, 0, 14, 5);
-      break;
-    case 15:
-      ARM_CP14_WRITE(control, 0, 15, 5);
-      break;
+  case 0:
+    ARM_CP14_WRITE(control, 0, 0, 5);
+    break;
+  case 1:
+    ARM_CP14_WRITE(control, 0, 1, 5);
+    break;
+  case 2:
+    ARM_CP14_WRITE(control, 0, 2, 5);
+    break;
+  case 3:
+    ARM_CP14_WRITE(control, 0, 3, 5);
+    break;
+  case 4:
+    ARM_CP14_WRITE(control, 0, 4, 5);
+    break;
+  case 5:
+    ARM_CP14_WRITE(control, 0, 5, 5);
+    break;
+  case 6:
+    ARM_CP14_WRITE(control, 0, 6, 5);
+    break;
+  case 7:
+    ARM_CP14_WRITE(control, 0, 7, 5);
+    break;
+  case 8:
+    ARM_CP14_WRITE(control, 0, 8, 5);
+    break;
+  case 9:
+    ARM_CP14_WRITE(control, 0, 9, 5);
+    break;
+  case 10:
+    ARM_CP14_WRITE(control, 0, 10, 5);
+    break;
+  case 11:
+    ARM_CP14_WRITE(control, 0, 11, 5);
+    break;
+  case 12:
+    ARM_CP14_WRITE(control, 0, 12, 5);
+    break;
+  case 13:
+    ARM_CP14_WRITE(control, 0, 13, 5);
+    break;
+  case 14:
+    ARM_CP14_WRITE(control, 0, 14, 5);
+    break;
+  case 15:
+    ARM_CP14_WRITE(control, 0, 15, 5);
+    break;
   }
 }
 
-static void
-arm_debug_break_c14_write_value(int bp, uint32_t value)
-{
+static void arm_debug_break_c14_write_value(int bp, uint32_t value) {
   switch (bp) {
-    case 0:
-      ARM_CP14_WRITE(value, 0, 0, 4);
-      break;
-    case 1:
-      ARM_CP14_WRITE(value, 0, 1, 4);
-      break;
-    case 2:
-      ARM_CP14_WRITE(value, 0, 2, 4);
-      break;
-    case 3:
-      ARM_CP14_WRITE(value, 0, 3, 4);
-      break;
-    case 4:
-      ARM_CP14_WRITE(value, 0, 4, 4);
-      break;
-    case 5:
-      ARM_CP14_WRITE(value, 0, 5, 4);
-      break;
-    case 6:
-      ARM_CP14_WRITE(value, 0, 6, 4);
-      break;
-    case 7:
-      ARM_CP14_WRITE(value, 0, 7, 4);
-      break;
-    case 8:
-      ARM_CP14_WRITE(value, 0, 8, 4);
-      break;
-    case 9:
-      ARM_CP14_WRITE(value, 0, 9, 4);
-      break;
-    case 10:
-      ARM_CP14_WRITE(value, 0, 10, 4);
-      break;
-    case 11:
-      ARM_CP14_WRITE(value, 0, 11, 4);
-      break;
-    case 12:
-      ARM_CP14_WRITE(value, 0, 12, 4);
-      break;
-    case 13:
-      ARM_CP14_WRITE(value, 0, 13, 4);
-      break;
-    case 14:
-      ARM_CP14_WRITE(value, 0, 14, 4);
-      break;
-    case 15:
-      ARM_CP14_WRITE(value, 0, 15, 4);
-      break;
+  case 0:
+    ARM_CP14_WRITE(value, 0, 0, 4);
+    break;
+  case 1:
+    ARM_CP14_WRITE(value, 0, 1, 4);
+    break;
+  case 2:
+    ARM_CP14_WRITE(value, 0, 2, 4);
+    break;
+  case 3:
+    ARM_CP14_WRITE(value, 0, 3, 4);
+    break;
+  case 4:
+    ARM_CP14_WRITE(value, 0, 4, 4);
+    break;
+  case 5:
+    ARM_CP14_WRITE(value, 0, 5, 4);
+    break;
+  case 6:
+    ARM_CP14_WRITE(value, 0, 6, 4);
+    break;
+  case 7:
+    ARM_CP14_WRITE(value, 0, 7, 4);
+    break;
+  case 8:
+    ARM_CP14_WRITE(value, 0, 8, 4);
+    break;
+  case 9:
+    ARM_CP14_WRITE(value, 0, 9, 4);
+    break;
+  case 10:
+    ARM_CP14_WRITE(value, 0, 10, 4);
+    break;
+  case 11:
+    ARM_CP14_WRITE(value, 0, 11, 4);
+    break;
+  case 12:
+    ARM_CP14_WRITE(value, 0, 12, 4);
+    break;
+  case 13:
+    ARM_CP14_WRITE(value, 0, 13, 4);
+    break;
+  case 14:
+    ARM_CP14_WRITE(value, 0, 14, 4);
+    break;
+  case 15:
+    ARM_CP14_WRITE(value, 0, 15, 4);
+    break;
   }
 }
 
-static uint32_t
-arm_debug_dbgdscr_read(void)
-{
+static uint32_t arm_debug_dbgdscr_read(void) {
   uint32_t val;
   if (debug_registers != NULL) {
     val = ARM_MMAP_READ(ARM_MMAP_DBGDSCR);
-  }
-  else {
+  } else {
     ARM_CP14_READ(val, 0, 1, 0);
   }
   return val;
 }
 
-static void
-arm_debug_dbgdscr_write(uint32_t val)
-{
+static void arm_debug_dbgdscr_write(uint32_t val) {
   if (debug_registers != NULL) {
     ARM_MMAP_WRITE_SYNC(ARM_MMAP_DBGDSCR, val);
-  }
-  else {
+  } else {
     ARM_CP14_WRITE(val, 0, 1, 0);
   }
 }
 
-static uint32_t
-arm_debug_method_of_entry(void)
-{
+static uint32_t arm_debug_method_of_entry(void) {
   return (arm_debug_dbgdscr_read() >> 2) & 0xf;
 }
 
-static void
-arm_debug_disable_interrupts(void)
-{
+static void arm_debug_disable_interrupts(void) {
   debug_disable_ints = 1;
 }
 
-static void
-arm_debug_enable_interrupts(void)
-{
+static void arm_debug_enable_interrupts(void) {
   arm_debug_dbgdscr_write(arm_debug_dbgdscr_read() & ~(1 << 11));
 }
 
-static void
-arm_debug_break_clear(int bp)
-{
+static void arm_debug_break_clear(int bp) {
   rtems_interrupt_lock_context lock_context;
   rtems_interrupt_lock_acquire(&target_lock, &lock_context);
   ARM_HWB_CLEAR(bp);
   rtems_interrupt_lock_release(&target_lock, &lock_context);
 }
 
-static void
-arm_debug_break_clear_all(void)
-{
+static void arm_debug_break_clear_all(void) {
   rtems_interrupt_lock_context lock_context;
   rtems_interrupt_lock_acquire(&target_lock, &lock_context);
   ARM_HWB_CLEAR_ALL();
   rtems_interrupt_lock_release(&target_lock, &lock_context);
 }
 
-static inline void
-arm_debug_set_context_id(const uint32_t id)
-{
+static inline void arm_debug_set_context_id(const uint32_t id) {
 #if ARM_CP15
   ARM_CP15_WRITE(id, 0, 13, 0, 1);
 #else
-  (void) id;
+  (void)id;
 #endif
 }
 
-static void
-arm_debug_break_unload(void)
-{
+static void arm_debug_break_unload(void) {
   rtems_interrupt_lock_context lock_context;
   int i;
   rtems_interrupt_lock_acquire(&target_lock, &lock_context);
@@ -1249,8 +1218,8 @@ arm_debug_break_unload(void)
   rtems_interrupt_lock_release(&target_lock, &lock_context);
 }
 
-static void
-arm_debug_break_exec_enable(int bp, uintptr_t addr, bool thumb, bool step) {
+static void arm_debug_break_exec_enable(int bp, uintptr_t addr, bool thumb,
+                                        bool step) {
   uint32_t bas;
 
   /*
@@ -1267,15 +1236,13 @@ arm_debug_break_exec_enable(int bp, uintptr_t addr, bool thumb, bool step) {
        * Instruction address: DBGBVR[31:2]:00 BAS: 0bxx11 Mismatch: Miss
        */
       bas = 0x3; /* bxx11 */
-    }
-    else {
+    } else {
       /*
        * Instruction address: DBGBVR[31:2]:10 BAS: 0b11xx Mismatch: Miss
        */
       bas = 0xc; /* b11xx */
     }
-  }
-  else {
+  } else {
     /*
      * ARM
      *
@@ -1284,37 +1251,31 @@ arm_debug_break_exec_enable(int bp, uintptr_t addr, bool thumb, bool step) {
     bas = 0xf; /* b1111 */
   }
 
-  target_printk("[} break: addr:%08x bas:%x thumb:%s\n",
-                addr, bas, thumb ? "yes" : "no");
+  target_printk("[} break: addr:%08x bas:%x thumb:%s\n", addr, bas,
+                thumb ? "yes" : "no");
 
-  arm_debug_break_setup(
-    bp,
-    addr,
-    step ? ARM_HW_BP_UNLINKED_INSTR_MISMATCH : ARM_HW_BP_UNLINKED_INSTR_MATCH,
-    bas,
-    ARM_HW_BP_PRIV_PL0_SUP_SYS);
+  arm_debug_break_setup(bp, addr,
+                        step ? ARM_HW_BP_UNLINKED_INSTR_MISMATCH
+                             : ARM_HW_BP_UNLINKED_INSTR_MATCH,
+                        bas, ARM_HW_BP_PRIV_PL0_SUP_SYS);
 }
 
-static void
-arm_debug_break_dump(void)
-{
+static void arm_debug_break_dump(void) {
 #if TARGET_DEBUG
-  int                i;
+  int i;
   for (i = 0; i < hw_breakpoints; ++i) {
     if (ARM_HWB_ENALBED(i)) {
-      target_printk("[} bp: %d: control: %08x addr: %08x\n",
-                    i, ARM_HWB_BCR(i), ARM_HWB_VCR(i));
+      target_printk("[} bp: %d: control: %08x addr: %08x\n", i, ARM_HWB_BCR(i),
+                    ARM_HWB_VCR(i));
     }
   }
 #endif
 }
 
 #if NOT_USED_BUT_KEEPING
-static size_t
-arm_debug_break_length(void* pc)
-{
+static size_t arm_debug_break_length(void* pc) {
   arm_debug_hwbreak* bp = &hw_breaks[0];
-  int                i;
+  int i;
 
   for (i = 0; i < hw_breakpoints; ++i, ++bp) {
     if (bp->enabled && bp->address == pc) {
@@ -1325,9 +1286,7 @@ arm_debug_break_length(void* pc)
 }
 #endif
 
-int
-rtems_debugger_target_configure(rtems_debugger_target* target)
-{
+int rtems_debugger_target_configure(rtems_debugger_target* target) {
   target->capabilities = (RTEMS_DEBUGGER_TARGET_CAP_SWBREAK);
   target->reg_num = RTEMS_DEBUGGER_NUMREGS;
   target->reg_offset = arm_reg_offsets;
@@ -1336,24 +1295,18 @@ rtems_debugger_target_configure(rtems_debugger_target* target)
   return arm_debug_probe(target);
 }
 
-static void
-target_print_frame(CPU_Exception_frame* frame)
-{
-  (void) frame;
+static void target_print_frame(CPU_Exception_frame* frame) {
+  (void)frame;
 
   EXC_FRAME_PRINT(target_printk, "[} ", frame);
 }
 
-static size_t
-target_exc_offset(CPU_Exception_frame* frame)
-{
+static size_t target_exc_offset(CPU_Exception_frame* frame) {
   size_t thumb = (FRAME_SR(frame) & (1 << 5)) == 0 ? 0 : 1;
   return exc_offsets[thumb][frame->vector];
 }
 
-static void
-target_exception(CPU_Exception_frame* frame)
-{
+static void target_exception(CPU_Exception_frame* frame) {
 #if TARGET_DEBUG
 #if ARM_CP15
   const uint32_t ifsr = arm_cp15_get_instruction_fault_status();
@@ -1369,7 +1322,7 @@ target_exception(CPU_Exception_frame* frame)
   const uint32_t moe = arm_debug_method_of_entry();
   const size_t exc_offset = target_exc_offset(frame);
 
-  switch (moe){
+  switch (moe) {
   case ARM_HW_DSCR_MOE_BREAKPOINT_EVENT:
   case ARM_HW_DSCR_MOE_BREAKPOINT_INSTR:
   case ARM_HW_DSCR_MOE_ASYNC_WATCHPOINT:
@@ -1384,25 +1337,26 @@ target_exception(CPU_Exception_frame* frame)
     break;
   }
 
-  target_printk("[} > frame = %08" PRIx32 \
-                " sig=%d vector=%u (%u) dbgdscr=%08" PRIx32 " moe=%s" \
-                " far=%p ifsr=%08" PRIx32 " dfsr=%08" PRIx32
-                " exc-ret-pc=%08x\n", (uint32_t) frame,
-                rtems_debugger_target_exception_to_signal(frame),
-                frame->vector, mvector, dbgdscr, arm_moe_label(moe),
-                far, ifsr, dfsr, (intptr_t) frame->register_pc);
+  target_printk(
+      "[} > frame = %08" PRIx32 " sig=%d vector=%u (%u) dbgdscr=%08" PRIx32
+      " moe=%s"
+      " far=%p ifsr=%08" PRIx32 " dfsr=%08" PRIx32 " exc-ret-pc=%08x\n",
+      (uint32_t)frame, rtems_debugger_target_exception_to_signal(frame),
+      frame->vector, mvector, dbgdscr, arm_moe_label(moe), far, ifsr, dfsr,
+      (intptr_t)frame->register_pc);
 
   arm_debug_break_dump();
 
-  frame->register_pc = (void*) ((intptr_t) frame->register_pc - exc_offset);
+  frame->register_pc = (void*)((intptr_t)frame->register_pc - exc_offset);
 
   target_print_frame(frame);
 
   arm_debug_break_clear(0);
   arm_debug_enable_interrupts();
 
-  if (!debug_session_active)
+  if (!debug_session_active) {
     _ARM_Exception_default(frame);
+  }
 
   switch (rtems_debugger_target_exception(frame)) {
   case rtems_debugger_target_exc_consumed:
@@ -1416,11 +1370,13 @@ target_exception(CPU_Exception_frame* frame)
     break;
   }
 
-  target_printk("[} < resuming frame = %08" PRIx32 \
-                " PC = %08" PRIxPTR " CPSR = %08" PRIx32 "\n",
-                (uint32_t) frame, (intptr_t) frame->register_pc, FRAME_SR(frame));
+  target_printk("[} < resuming frame = %08" PRIx32 " PC = %08" PRIxPTR
+                " CPSR = %08" PRIx32 "\n",
+                (uint32_t)frame, (intptr_t)frame->register_pc, FRAME_SR(frame));
   target_print_frame(frame);
 }
+
+// clang-format off
 
 /**
  * Exception Handlers
@@ -1823,13 +1779,13 @@ target_exception(CPU_Exception_frame* frame)
   EXCEPTION_EXIT_DEBUGGER();                      \
   EXCEPTION_EXIT_EXC()
 
+// clang-format on
+
 /*
  * This is used to catch faulting accesses.
  */
 #if ARM_CP15
-static void __attribute__((naked))
-arm_debug_unlock_abort(void)
-{
+static void __attribute__((naked)) arm_debug_unlock_abort(void) {
   CPU_Exception_frame* frame;
   ARM_SWITCH_REGISTERS;
   EXCEPTION_ENTRY_EXC();
@@ -1839,9 +1795,8 @@ arm_debug_unlock_abort(void)
 }
 #endif
 
-static void __attribute__((naked))
-target_exception_undefined_instruction(void)
-{
+static void
+    __attribute__((naked)) target_exception_undefined_instruction(void) {
   CPU_Exception_frame* frame;
   ARM_SWITCH_REG;
   EXCEPTION_ENTRY(frame);
@@ -1850,9 +1805,7 @@ target_exception_undefined_instruction(void)
   EXCEPTION_EXIT(frame);
 }
 
-static void __attribute__((naked))
-target_exception_supervisor_call(void)
-{
+static void __attribute__((naked)) target_exception_supervisor_call(void) {
   CPU_Exception_frame* frame;
   ARM_SWITCH_REG;
   /*
@@ -1867,9 +1820,7 @@ target_exception_supervisor_call(void)
   EXCEPTION_EXIT(frame);
 }
 
-static void __attribute__((naked))
-target_exception_prefetch_abort(void)
-{
+static void __attribute__((naked)) target_exception_prefetch_abort(void) {
   CPU_Exception_frame* frame;
   ARM_SWITCH_REG;
   EXCEPTION_ENTRY(frame);
@@ -1878,9 +1829,7 @@ target_exception_prefetch_abort(void)
   EXCEPTION_EXIT(frame);
 }
 
-static void __attribute__((naked))
-target_exception_data_abort(void)
-{
+static void __attribute__((naked)) target_exception_data_abort(void) {
   CPU_Exception_frame* frame;
   ARM_SWITCH_REG;
   EXCEPTION_ENTRY(frame);
@@ -1900,30 +1849,21 @@ static uint32_t text_section_flags;
 extern char bsp_section_text_begin[];
 extern char bsp_section_text_end[];
 
-static void
-rtems_debugger_target_set_mmu(void)
-{
+static void rtems_debugger_target_set_mmu(void) {
   void* text_begin;
   void* text_end;
   text_begin = &bsp_section_text_begin[0];
   text_end = &bsp_section_text_end[0];
-  target_printk("[} MMU edit: text_begin: %p text_end: %p\n",
-                text_begin, text_end);
-  text_section_flags =
-    arm_cp15_set_translation_table_entries(text_begin,
-                                           text_end,
-                                           ARMV7_MMU_DATA_READ_WRITE_CACHED);
+  target_printk("[} MMU edit: text_begin: %p text_end: %p\n", text_begin,
+                text_end);
+  text_section_flags = arm_cp15_set_translation_table_entries(
+      text_begin, text_end, ARMV7_MMU_DATA_READ_WRITE_CACHED);
 }
 #else
-static void
-rtems_debugger_target_set_mmu(void)
-{
-}
+static void rtems_debugger_target_set_mmu(void) {}
 #endif
 
-static void
-rtems_debugger_target_set_vectors(void)
-{
+static void rtems_debugger_target_set_vectors(void) {
   arm_cp15_set_exception_handler(ARM_EXCEPTION_UNDEF,
                                  target_exception_undefined_instruction);
   arm_cp15_set_exception_handler(ARM_EXCEPTION_SWI,
@@ -1934,9 +1874,7 @@ rtems_debugger_target_set_vectors(void)
                                  target_exception_data_abort);
 }
 #else
-static void
-rtems_debugger_target_set_vectors(void)
-{
+static void rtems_debugger_target_set_vectors(void) {
   /*
    * Dummy, please add support for your ARM variant.
    */
@@ -1944,30 +1882,22 @@ rtems_debugger_target_set_vectors(void)
   void* sc = target_exception_supervisor_call;
   void* pa = target_exception_prefetch_abort;
   void* da = target_exception_data_abort;
-  (void) ui;
-  (void) sc;
-  (void) pa;
-  (void) da;
+  (void)ui;
+  (void)sc;
+  (void)pa;
+  (void)da;
 }
 
-static void
-rtems_debugger_target_set_mmu(void)
-{
-}
+static void rtems_debugger_target_set_mmu(void) {}
 #endif
 
-static bool
-rtems_debugger_is_int_reg(size_t reg)
-{
+static bool rtems_debugger_is_int_reg(size_t reg) {
   const size_t size = arm_reg_offsets[reg + 1] - arm_reg_offsets[reg];
   return size == RTEMS_DEBUGGER_REG_BYTES;
 }
 
-static void
-rtems_debugger_set_int_reg(rtems_debugger_thread* thread,
-                           size_t                 reg,
-                           const uint32_t         value)
-{
+static void rtems_debugger_set_int_reg(rtems_debugger_thread* thread,
+                                       size_t reg, const uint32_t value) {
   const size_t offset = arm_reg_offsets[reg];
   /*
    * Use memcpy to avoid alignment issues.
@@ -1975,32 +1905,27 @@ rtems_debugger_set_int_reg(rtems_debugger_thread* thread,
   memcpy(&thread->registers[offset], &value, sizeof(uint32_t));
 }
 
-static uint32_t
-rtems_debugger_get_int_reg(rtems_debugger_thread* thread, size_t reg)
-{
+static uint32_t rtems_debugger_get_int_reg(rtems_debugger_thread* thread,
+                                           size_t reg) {
   const size_t offset = arm_reg_offsets[reg];
-  uint32_t     value;
+  uint32_t value;
   memcpy(&value, &thread->registers[offset], sizeof(uint32_t));
   return value;
 }
 
-static rtems_task
-rtems_debugger_setup_on_cpu(rtems_task_argument arg)
-{
-  (void) arg;
+static rtems_task rtems_debugger_setup_on_cpu(rtems_task_argument arg) {
+  (void)arg;
   rtems_debugger_target_set_mmu();
   rtems_debugger_target_set_vectors();
 }
 
-int
-rtems_debugger_target_enable(void)
-{
+int rtems_debugger_target_enable(void) {
   rtems_status_code sc;
   rtems_status_code error = RTEMS_SUCCESSFUL;
   arm_debug_break_unload();
   arm_debug_break_clear_all();
-  sc = rtems_debugger_cpu_run_all(
-    rtems_debugger_setup_on_cpu,  (rtems_task_argument) &error);
+  sc = rtems_debugger_cpu_run_all(rtems_debugger_setup_on_cpu,
+                                  (rtems_task_argument)&error);
   if (sc != RTEMS_SUCCESSFUL) {
     return -1;
   }
@@ -2011,13 +1936,11 @@ rtems_debugger_target_enable(void)
   return 0;
 }
 
-int
-rtems_debugger_target_disable(void)
-{
+int rtems_debugger_target_disable(void) {
   rtems_interrupt_lock_context lock_context;
 #if DOES_NOT_WORK
-  void*                        text_begin;
-  void*                        text_end;
+  void* text_begin;
+  void* text_end;
 #endif
   arm_debug_break_unload();
   arm_debug_break_clear_all();
@@ -2027,27 +1950,25 @@ rtems_debugger_target_disable(void)
 #if DOES_NOT_WORK
   text_begin = &bsp_section_text_begin[0];
   text_end = &bsp_section_text_end[0];
-  arm_cp15_set_translation_table_entries(text_begin,
-                                         text_end,
+  arm_cp15_set_translation_table_entries(text_begin, text_end,
                                          text_section_flags);
 #endif
   rtems_interrupt_lock_release(&target_lock, &lock_context);
   return 0;
 }
 
-int
-rtems_debugger_target_read_regs(rtems_debugger_thread* thread)
-{
+int rtems_debugger_target_read_regs(rtems_debugger_thread* thread) {
   if (!rtems_debugger_thread_flag(thread,
                                   RTEMS_DEBUGGER_THREAD_FLAG_REG_VALID)) {
-    static const uint32_t good_address = (uint32_t) &good_address;
-    int                   i;
+    static const uint32_t good_address = (uint32_t)&good_address;
+    int i;
 
     memset(&thread->registers[0], 0, RTEMS_DEBUGGER_NUMREGBYTES);
 
     for (i = 0; i < RTEMS_DEBUGGER_NUMREGS; ++i) {
-      if (rtems_debugger_is_int_reg(i))
-        rtems_debugger_set_int_reg(thread, i, (uint32_t) &good_address);
+      if (rtems_debugger_is_int_reg(i)) {
+        rtems_debugger_set_int_reg(thread, i, (uint32_t)&good_address);
+      }
     }
 
     if (thread->frame) {
@@ -2059,60 +1980,82 @@ rtems_debugger_target_read_regs(rtems_debugger_thread* thread)
        */
       FRAME_SR(frame) &= ~CPSR_INTS_MASK;
 
-      if (rtems_debugger_thread_flag(thread,
-                                     RTEMS_DEBUGGER_THREAD_FLAG_INTS_DISABLED)) {
+      if (rtems_debugger_thread_flag(
+              thread, RTEMS_DEBUGGER_THREAD_FLAG_INTS_DISABLED)) {
         FRAME_SR(frame) |=
-          (thread->flags >> RTEMS_DEBUGGER_THREAD_FLAG_TARGET_BASE) & CPSR_INTS_MASK;
+            (thread->flags >> RTEMS_DEBUGGER_THREAD_FLAG_TARGET_BASE) &
+            CPSR_INTS_MASK;
         thread->flags &= ~RTEMS_DEBUGGER_THREAD_FLAG_INTS_DISABLED;
       }
 
-      rtems_debugger_set_int_reg(thread, REG_R0,   frame->register_r0);
-      rtems_debugger_set_int_reg(thread, REG_R1,   frame->register_r1);
-      rtems_debugger_set_int_reg(thread, REG_R2,   frame->register_r2);
-      rtems_debugger_set_int_reg(thread, REG_R3,   frame->register_r3);
-      rtems_debugger_set_int_reg(thread, REG_R4,   frame->register_r4);
-      rtems_debugger_set_int_reg(thread, REG_R5,   frame->register_r5);
-      rtems_debugger_set_int_reg(thread, REG_R6,   frame->register_r6);
-      rtems_debugger_set_int_reg(thread, REG_R7,   frame->register_r7);
-      rtems_debugger_set_int_reg(thread, REG_R8,   frame->register_r8);
-      rtems_debugger_set_int_reg(thread, REG_R9,   frame->register_r9);
-      rtems_debugger_set_int_reg(thread, REG_R10,  frame->register_r10);
-      rtems_debugger_set_int_reg(thread, REG_R11,  frame->register_r11);
-      rtems_debugger_set_int_reg(thread, REG_R12,  frame->register_r12);
-      rtems_debugger_set_int_reg(thread, REG_SP,   frame->register_sp);
-      rtems_debugger_set_int_reg(thread, REG_LR,   (uint32_t) frame->register_lr);
-      rtems_debugger_set_int_reg(thread, REG_PC,   (uint32_t) frame->register_pc);
+      rtems_debugger_set_int_reg(thread, REG_R0, frame->register_r0);
+      rtems_debugger_set_int_reg(thread, REG_R1, frame->register_r1);
+      rtems_debugger_set_int_reg(thread, REG_R2, frame->register_r2);
+      rtems_debugger_set_int_reg(thread, REG_R3, frame->register_r3);
+      rtems_debugger_set_int_reg(thread, REG_R4, frame->register_r4);
+      rtems_debugger_set_int_reg(thread, REG_R5, frame->register_r5);
+      rtems_debugger_set_int_reg(thread, REG_R6, frame->register_r6);
+      rtems_debugger_set_int_reg(thread, REG_R7, frame->register_r7);
+      rtems_debugger_set_int_reg(thread, REG_R8, frame->register_r8);
+      rtems_debugger_set_int_reg(thread, REG_R9, frame->register_r9);
+      rtems_debugger_set_int_reg(thread, REG_R10, frame->register_r10);
+      rtems_debugger_set_int_reg(thread, REG_R11, frame->register_r11);
+      rtems_debugger_set_int_reg(thread, REG_R12, frame->register_r12);
+      rtems_debugger_set_int_reg(thread, REG_SP, frame->register_sp);
+      rtems_debugger_set_int_reg(thread, REG_LR, (uint32_t)frame->register_lr);
+      rtems_debugger_set_int_reg(thread, REG_PC, (uint32_t)frame->register_pc);
       rtems_debugger_set_int_reg(thread, REG_CPSR, FRAME_SR(frame));
       /*
        * Get the signal from the frame.
        */
       thread->signal = rtems_debugger_target_exception_to_signal(frame);
-    }
-    else {
+    } else {
 #if defined(ARM_MULTILIB_ARCH_V4)
-      rtems_debugger_set_int_reg(thread, REG_R4,  thread->tcb->Registers.register_r4);
-      rtems_debugger_set_int_reg(thread, REG_R5,  thread->tcb->Registers.register_r5);
-      rtems_debugger_set_int_reg(thread, REG_R6,  thread->tcb->Registers.register_r6);
-      rtems_debugger_set_int_reg(thread, REG_R7,  thread->tcb->Registers.register_r7);
-      rtems_debugger_set_int_reg(thread, REG_R8,  thread->tcb->Registers.register_r8);
-      rtems_debugger_set_int_reg(thread, REG_R9,  thread->tcb->Registers.register_r9);
-      rtems_debugger_set_int_reg(thread, REG_R10, thread->tcb->Registers.register_r10);
-      rtems_debugger_set_int_reg(thread, REG_R11, thread->tcb->Registers.register_fp);
-      rtems_debugger_set_int_reg(thread, REG_LR,  (intptr_t) thread->tcb->Registers.register_lr);
-      rtems_debugger_set_int_reg(thread, REG_PC,  (intptr_t) thread->tcb->Registers.register_lr);
-      rtems_debugger_set_int_reg(thread, REG_SP,  (intptr_t) thread->tcb->Registers.register_sp);
+      rtems_debugger_set_int_reg(thread, REG_R4,
+                                 thread->tcb->Registers.register_r4);
+      rtems_debugger_set_int_reg(thread, REG_R5,
+                                 thread->tcb->Registers.register_r5);
+      rtems_debugger_set_int_reg(thread, REG_R6,
+                                 thread->tcb->Registers.register_r6);
+      rtems_debugger_set_int_reg(thread, REG_R7,
+                                 thread->tcb->Registers.register_r7);
+      rtems_debugger_set_int_reg(thread, REG_R8,
+                                 thread->tcb->Registers.register_r8);
+      rtems_debugger_set_int_reg(thread, REG_R9,
+                                 thread->tcb->Registers.register_r9);
+      rtems_debugger_set_int_reg(thread, REG_R10,
+                                 thread->tcb->Registers.register_r10);
+      rtems_debugger_set_int_reg(thread, REG_R11,
+                                 thread->tcb->Registers.register_fp);
+      rtems_debugger_set_int_reg(thread, REG_LR,
+                                 (intptr_t)thread->tcb->Registers.register_lr);
+      rtems_debugger_set_int_reg(thread, REG_PC,
+                                 (intptr_t)thread->tcb->Registers.register_lr);
+      rtems_debugger_set_int_reg(thread, REG_SP,
+                                 (intptr_t)thread->tcb->Registers.register_sp);
 #elif defined(ARM_MULTILIB_ARCH_V7M)
-      rtems_debugger_set_int_reg(thread, REG_R4,  thread->tcb->Registers.register_r4);
-      rtems_debugger_set_int_reg(thread, REG_R5,  thread->tcb->Registers.register_r5);
-      rtems_debugger_set_int_reg(thread, REG_R6,  thread->tcb->Registers.register_r6);
-      rtems_debugger_set_int_reg(thread, REG_R7,  thread->tcb->Registers.register_r7);
-      rtems_debugger_set_int_reg(thread, REG_R8,  thread->tcb->Registers.register_r8);
-      rtems_debugger_set_int_reg(thread, REG_R9,  thread->tcb->Registers.register_r9);
-      rtems_debugger_set_int_reg(thread, REG_R10, thread->tcb->Registers.register_r10);
-      rtems_debugger_set_int_reg(thread, REG_R11, thread->tcb->Registers.register_r11);
-      rtems_debugger_set_int_reg(thread, REG_LR,  (intptr_t) thread->tcb->Registers.register_lr);
-      rtems_debugger_set_int_reg(thread, REG_PC,  (intptr_t) thread->tcb->Registers.register_lr);
-      rtems_debugger_set_int_reg(thread, REG_SP,  (intptr_t) thread->tcb->Registers.register_sp);
+      rtems_debugger_set_int_reg(thread, REG_R4,
+                                 thread->tcb->Registers.register_r4);
+      rtems_debugger_set_int_reg(thread, REG_R5,
+                                 thread->tcb->Registers.register_r5);
+      rtems_debugger_set_int_reg(thread, REG_R6,
+                                 thread->tcb->Registers.register_r6);
+      rtems_debugger_set_int_reg(thread, REG_R7,
+                                 thread->tcb->Registers.register_r7);
+      rtems_debugger_set_int_reg(thread, REG_R8,
+                                 thread->tcb->Registers.register_r8);
+      rtems_debugger_set_int_reg(thread, REG_R9,
+                                 thread->tcb->Registers.register_r9);
+      rtems_debugger_set_int_reg(thread, REG_R10,
+                                 thread->tcb->Registers.register_r10);
+      rtems_debugger_set_int_reg(thread, REG_R11,
+                                 thread->tcb->Registers.register_r11);
+      rtems_debugger_set_int_reg(thread, REG_LR,
+                                 (intptr_t)thread->tcb->Registers.register_lr);
+      rtems_debugger_set_int_reg(thread, REG_PC,
+                                 (intptr_t)thread->tcb->Registers.register_lr);
+      rtems_debugger_set_int_reg(thread, REG_SP,
+                                 (intptr_t)thread->tcb->Registers.register_sp);
 #endif
       /*
        * Blocked threads have no signal.
@@ -2127,9 +2070,7 @@ rtems_debugger_target_read_regs(rtems_debugger_thread* thread)
   return 0;
 }
 
-int
-rtems_debugger_target_write_regs(rtems_debugger_thread* thread)
-{
+int rtems_debugger_target_write_regs(rtems_debugger_thread* thread) {
   if (rtems_debugger_thread_flag(thread,
                                  RTEMS_DEBUGGER_THREAD_FLAG_REG_DIRTY)) {
     /*
@@ -2139,23 +2080,23 @@ rtems_debugger_target_write_regs(rtems_debugger_thread* thread)
     if (rtems_debugger_thread_flag(thread,
                                    RTEMS_DEBUGGER_THREAD_FLAG_EXCEPTION)) {
       CPU_Exception_frame* frame = thread->frame;
-      frame->register_r0  = rtems_debugger_get_int_reg(thread, REG_R0);
-      frame->register_r1  = rtems_debugger_get_int_reg(thread, REG_R1);
-      frame->register_r2  = rtems_debugger_get_int_reg(thread, REG_R2);
-      frame->register_r3  = rtems_debugger_get_int_reg(thread, REG_R3);
-      frame->register_r4  = rtems_debugger_get_int_reg(thread, REG_R4);
-      frame->register_r5  = rtems_debugger_get_int_reg(thread, REG_R5);
-      frame->register_r6  = rtems_debugger_get_int_reg(thread, REG_R6);
-      frame->register_r7  = rtems_debugger_get_int_reg(thread, REG_R7);
-      frame->register_r8  = rtems_debugger_get_int_reg(thread, REG_R8);
-      frame->register_r9  = rtems_debugger_get_int_reg(thread, REG_R9);
+      frame->register_r0 = rtems_debugger_get_int_reg(thread, REG_R0);
+      frame->register_r1 = rtems_debugger_get_int_reg(thread, REG_R1);
+      frame->register_r2 = rtems_debugger_get_int_reg(thread, REG_R2);
+      frame->register_r3 = rtems_debugger_get_int_reg(thread, REG_R3);
+      frame->register_r4 = rtems_debugger_get_int_reg(thread, REG_R4);
+      frame->register_r5 = rtems_debugger_get_int_reg(thread, REG_R5);
+      frame->register_r6 = rtems_debugger_get_int_reg(thread, REG_R6);
+      frame->register_r7 = rtems_debugger_get_int_reg(thread, REG_R7);
+      frame->register_r8 = rtems_debugger_get_int_reg(thread, REG_R8);
+      frame->register_r9 = rtems_debugger_get_int_reg(thread, REG_R9);
       frame->register_r10 = rtems_debugger_get_int_reg(thread, REG_R10);
       frame->register_r11 = rtems_debugger_get_int_reg(thread, REG_R11);
       frame->register_r12 = rtems_debugger_get_int_reg(thread, REG_R12);
-      frame->register_sp  = rtems_debugger_get_int_reg(thread, REG_SP);
-      frame->register_lr  = (void*) rtems_debugger_get_int_reg(thread, REG_LR);
-      frame->register_pc  = (void*) rtems_debugger_get_int_reg(thread, REG_PC);
-      FRAME_SR(frame)     = rtems_debugger_get_int_reg(thread, REG_CPSR);
+      frame->register_sp = rtems_debugger_get_int_reg(thread, REG_SP);
+      frame->register_lr = (void*)rtems_debugger_get_int_reg(thread, REG_LR);
+      frame->register_pc = (void*)rtems_debugger_get_int_reg(thread, REG_PC);
+      FRAME_SR(frame) = rtems_debugger_get_int_reg(thread, REG_CPSR);
     }
     thread->flags &= ~RTEMS_DEBUGGER_THREAD_FLAG_REG_DIRTY;
   }
@@ -2163,8 +2104,7 @@ rtems_debugger_target_write_regs(rtems_debugger_thread* thread)
 }
 
 DB_UINT
-rtems_debugger_target_reg_pc(rtems_debugger_thread* thread)
-{
+rtems_debugger_target_reg_pc(rtems_debugger_thread* thread) {
   int r;
   r = rtems_debugger_target_read_regs(thread);
   if (r >= 0) {
@@ -2174,14 +2114,12 @@ rtems_debugger_target_reg_pc(rtems_debugger_thread* thread)
 }
 
 DB_UINT
-rtems_debugger_target_frame_pc(CPU_Exception_frame* frame)
-{
-  return (DB_UINT) frame->register_pc;
+rtems_debugger_target_frame_pc(CPU_Exception_frame* frame) {
+  return (DB_UINT)frame->register_pc;
 }
 
 DB_UINT
-rtems_debugger_target_reg_sp(rtems_debugger_thread* thread)
-{
+rtems_debugger_target_reg_sp(rtems_debugger_thread* thread) {
   int r;
   r = rtems_debugger_target_read_regs(thread);
   if (r >= 0) {
@@ -2191,26 +2129,25 @@ rtems_debugger_target_reg_sp(rtems_debugger_thread* thread)
 }
 
 DB_UINT
-rtems_debugger_target_tcb_sp(rtems_debugger_thread* thread)
-{
-  return (DB_UINT) thread->tcb->Registers.register_sp;
+rtems_debugger_target_tcb_sp(rtems_debugger_thread* thread) {
+  return (DB_UINT)thread->tcb->Registers.register_sp;
 }
 
-int
-rtems_debugger_target_thread_stepping(rtems_debugger_thread* thread)
-{
-  if (rtems_debugger_thread_flag(thread, RTEMS_DEBUGGER_THREAD_FLAG_STEP_INSTR)) {
+int rtems_debugger_target_thread_stepping(rtems_debugger_thread* thread) {
+  if (rtems_debugger_thread_flag(thread,
+                                 RTEMS_DEBUGGER_THREAD_FLAG_STEP_INSTR)) {
     /*
      * Single stepping and range stepping uses hardware debug breakpoint
      * 0. This is reserved for single stepping.
      */
     CPU_Exception_frame* frame = thread->frame;
 
-    target_printk("[} stepping: hbp[0] enabled: %s\n", ARM_HWB_ENALBED(0) ? "yes" : "no");
+    target_printk("[} stepping: hbp[0] enabled: %s\n",
+                  ARM_HWB_ENALBED(0) ? "yes" : "no");
 
     if (!ARM_HWB_ENALBED(0)) {
-      const uint32_t addr = (intptr_t) frame->register_pc;
-      const bool     thumb = (FRAME_SR(frame) & (1 << 5)) != 0 ? true : false;
+      const uint32_t addr = (intptr_t)frame->register_pc;
+      const bool thumb = (FRAME_SR(frame) & (1 << 5)) != 0 ? true : false;
       arm_debug_break_exec_enable(0, addr, thumb, true);
       arm_debug_disable_interrupts();
     }
@@ -2218,9 +2155,7 @@ rtems_debugger_target_thread_stepping(rtems_debugger_thread* thread)
   return 0;
 }
 
-int
-rtems_debugger_target_exception_to_signal(CPU_Exception_frame* frame)
-{
+int rtems_debugger_target_exception_to_signal(CPU_Exception_frame* frame) {
   int sig = RTEMS_DEBUGGER_SIGNAL_HUP;
 #if defined(ARM_MULTILIB_ARCH_V4)
   switch (frame->vector) {
@@ -2249,37 +2184,28 @@ rtems_debugger_target_exception_to_signal(CPU_Exception_frame* frame)
   return sig;
 }
 
-void
-rtems_debugger_target_exception_print(CPU_Exception_frame* frame)
-{
+void rtems_debugger_target_exception_print(CPU_Exception_frame* frame) {
   EXC_FRAME_PRINT(rtems_debugger_printf, "", frame);
 }
 
-int
-rtems_debugger_target_hwbreak_insert(void)
-{
+int rtems_debugger_target_hwbreak_insert(void) {
   /*
    * Do nothing, load on exit of the exception handler.
    */
   return 0;
 }
 
-int
-rtems_debugger_target_hwbreak_remove(void)
-{
+int rtems_debugger_target_hwbreak_remove(void) {
   target_printk("[} hbreak: remove: unload\n");
   arm_debug_break_unload();
   return 0;
 }
 
-int
-rtems_debugger_target_hwbreak_control(rtems_debugger_target_watchpoint wp,
-                                      bool                             insert,
-                                      DB_UINT                          addr,
-                                      DB_UINT                          kind)
-{
+int rtems_debugger_target_hwbreak_control(rtems_debugger_target_watchpoint wp,
+                                          bool insert, DB_UINT addr,
+                                          DB_UINT kind) {
   rtems_interrupt_lock_context lock_context;
-  int                          i;
+  int i;
   if (wp != rtems_debugger_target_hw_execute) {
     errno = EIO;
     return -1;
@@ -2302,15 +2228,12 @@ rtems_debugger_target_hwbreak_control(rtems_debugger_target_watchpoint wp,
   return 0;
 }
 
-int
-rtems_debugger_target_cache_sync(rtems_debugger_target_swbreak* swbreak)
-{
+int rtems_debugger_target_cache_sync(rtems_debugger_target_swbreak* swbreak) {
   target_printk("[} cache: sync: %p\n", swbreak->address);
   /*
    * Flush the data cache and invalidate the instruction cache.
    */
-  rtems_cache_flush_multiple_data_lines(swbreak->address,
-                                        sizeof(breakpoint));
+  rtems_cache_flush_multiple_data_lines(swbreak->address, sizeof(breakpoint));
   rtems_cache_instruction_sync_after_code_change(swbreak->address,
                                                  sizeof(breakpoint));
   return 0;

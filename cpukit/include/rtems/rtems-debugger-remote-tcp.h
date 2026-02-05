@@ -45,5 +45,4 @@ int rtems_debugger_register_tcp_remote(void);
 }
 #endif /* __cplusplus */
 
-
 #endif

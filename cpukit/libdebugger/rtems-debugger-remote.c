@@ -28,19 +28,16 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include <rtems/rtems-debugger.h>
-#include <rtems/debugger/rtems-debugger-server.h>
 #include <rtems/debugger/rtems-debugger-remote.h>
+#include <rtems/debugger/rtems-debugger-server.h>
+#include <rtems/rtems-debugger.h>
 
 static rtems_debugger_remote* remotes[4];
 
-int
-rtems_debugger_remote_register(rtems_debugger_remote* remote)
-{
+int rtems_debugger_remote_register(rtems_debugger_remote* remote) {
   size_t r;
-  if (remote->begin == NULL || remote->end == NULL ||
-      remote->connect == NULL || remote->disconnect == NULL ||
-      remote->isconnected == NULL ||
+  if (remote->begin == NULL || remote->end == NULL || remote->connect == NULL ||
+      remote->disconnect == NULL || remote->isconnected == NULL ||
       remote->read == NULL || remote->write == NULL) {
     errno = EINVAL;
     return -1;
@@ -55,14 +52,13 @@ rtems_debugger_remote_register(rtems_debugger_remote* remote)
   return -1;
 }
 
-rtems_debugger_remote*
-rtems_debugger_remote_find(const char* name)
-{
+rtems_debugger_remote* rtems_debugger_remote_find(const char* name) {
   size_t r;
   for (r = 0; r < RTEMS_DEBUGGER_NUMOF(remotes); ++r) {
     if (remotes[r] != NULL) {
-      if (strcasecmp(name, remotes[r]->name) == 0)
+      if (strcasecmp(name, remotes[r]->name) == 0) {
         return remotes[r];
+      }
     }
   }
   return NULL;
