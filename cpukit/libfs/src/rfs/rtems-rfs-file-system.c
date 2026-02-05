@@ -67,17 +67,19 @@ static int rtems_rfs_fs_read_superblock(rtems_rfs_file_system* fs) {
 
   rc = rtems_rfs_buffer_handle_open(fs, &handle);
   if (rc > 0) {
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN)) {
       printf("rtems-rfs: read-superblock: handle open failed: %d: %s\n", rc,
              strerror(rc));
+    }
     return rc;
   }
 
   rc = rtems_rfs_buffer_handle_request(fs, &handle, 0, true);
   if (rc > 0) {
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN)) {
       printf("rtems-rfs: read-superblock: request failed%d: %s\n", rc,
              strerror(rc));
+    }
     return rc;
   }
 
@@ -86,8 +88,9 @@ static int rtems_rfs_fs_read_superblock(rtems_rfs_file_system* fs) {
 #define read_sb(_o) rtems_rfs_read_u32(sb + (_o))
 
   if (read_sb(RTEMS_RFS_SB_OFFSET_MAGIC) != RTEMS_RFS_SB_MAGIC) {
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN)) {
       printf("rtems-rfs: read-superblock: invalid superblock, bad magic\n");
+    }
     rtems_rfs_buffer_handle_close(fs, &handle);
     return EIO;
   }
@@ -96,28 +99,31 @@ static int rtems_rfs_fs_read_superblock(rtems_rfs_file_system* fs) {
   fs->block_size = read_sb(RTEMS_RFS_SB_OFFSET_BLOCK_SIZE);
 
   if (rtems_rfs_fs_size(fs) > rtems_rfs_fs_media_size(fs)) {
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN)) {
       printf(
           "rtems-rfs: read-superblock: invalid superblock block/size count\n");
+    }
     rtems_rfs_buffer_handle_close(fs, &handle);
     return EIO;
   }
 
   if ((read_sb(RTEMS_RFS_SB_OFFSET_VERSION) & RTEMS_RFS_VERSION_MASK) !=
       (RTEMS_RFS_VERSION * RTEMS_RFS_VERSION_MASK)) {
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN)) {
       printf("rtems-rfs: read-superblock: incompatible version: %08" PRIx32
              " (%08" PRIx32 ")\n",
              read_sb(RTEMS_RFS_SB_OFFSET_VERSION), RTEMS_RFS_VERSION_MASK);
+    }
     rtems_rfs_buffer_handle_close(fs, &handle);
     return EIO;
   }
 
   if (read_sb(RTEMS_RFS_SB_OFFSET_INODE_SIZE) != RTEMS_RFS_INODE_SIZE) {
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN)) {
       printf("rtems-rfs: read-superblock: inode size mismatch: fs:%" PRId32
              " target:%" PRId32 "\n",
              read_sb(RTEMS_RFS_SB_OFFSET_VERSION), RTEMS_RFS_VERSION_MASK);
+    }
     rtems_rfs_buffer_handle_close(fs, &handle);
     return EIO;
   }
@@ -142,9 +148,10 @@ static int rtems_rfs_fs_read_superblock(rtems_rfs_file_system* fs) {
   if (fs->group_blocks >
       rtems_rfs_bitmap_numof_bits(rtems_rfs_fs_block_size(fs))) {
     rtems_rfs_buffer_handle_close(fs, &handle);
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN)) {
       printf(
           "rtems-rfs: read-superblock: groups blocks larger than block bits\n");
+    }
     return EIO;
   }
 
@@ -156,10 +163,11 @@ static int rtems_rfs_fs_read_superblock(rtems_rfs_file_system* fs) {
   rc = rtems_rfs_buffer_setblksize(fs, rtems_rfs_fs_block_size(fs));
   if (rc > 0) {
     rtems_rfs_buffer_handle_close(fs, &handle);
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN)) {
       printf(
           "rtems-rfs: read-superblock: invalid superblock block size%d: %s\n",
           rc, strerror(rc));
+    }
     return rc;
   }
 
@@ -167,8 +175,9 @@ static int rtems_rfs_fs_read_superblock(rtems_rfs_file_system* fs) {
 
   if (!fs->groups) {
     rtems_rfs_buffer_handle_close(fs, &handle);
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN)) {
       printf("rtems-rfs: read-superblock: no memory for group table\n");
+    }
     return ENOMEM;
   }
 
@@ -183,12 +192,14 @@ static int rtems_rfs_fs_read_superblock(rtems_rfs_file_system* fs) {
                               &fs->groups[group]);
     if (rc > 0) {
       int g;
-      for (g = 0; g < group; g++)
+      for (g = 0; g < group; g++) {
         rtems_rfs_group_close(fs, &fs->groups[g]);
+      }
       rtems_rfs_buffer_handle_close(fs, &handle);
-      if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN))
+      if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN)) {
         printf("rtems-rfs: read-superblock: no memory for group table%d: %s\n",
                rc, strerror(rc));
+      }
       return rc;
     }
   }
@@ -206,13 +217,15 @@ int rtems_rfs_fs_open(const char* name, void* user, uint32_t flags,
   uint16_t mode;
   int rc;
 
-  if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN))
+  if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN)) {
     printf("rtems-rfs: open: %s\n", name);
+  }
 
   *fs = malloc(sizeof(rtems_rfs_file_system));
   if (!*fs) {
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN)) {
       printf("rtems-rfs: open: no memory for file system data\n");
+    }
     errno = ENOMEM;
     return -1;
   }
@@ -242,8 +255,9 @@ int rtems_rfs_fs_open(const char* name, void* user, uint32_t flags,
   rc = rtems_rfs_buffer_open(name, *fs);
   if (rc > 0) {
     free(*fs);
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN)) {
       printf("rtems-rfs: open: buffer open failed: %d: %s\n", rc, strerror(rc));
+    }
     errno = rc;
     return -1;
   }
@@ -252,8 +266,9 @@ int rtems_rfs_fs_open(const char* name, void* user, uint32_t flags,
   if (rc > 0) {
     rtems_rfs_buffer_close(*fs);
     free(*fs);
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN)) {
       printf("rtems-rfs: open: reading superblock: %d: %s\n", rc, strerror(rc));
+    }
     errno = rc;
     return -1;
   }
@@ -262,8 +277,9 @@ int rtems_rfs_fs_open(const char* name, void* user, uint32_t flags,
   if (rc > 0) {
     rtems_rfs_buffer_close(*fs);
     free(*fs);
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN)) {
       printf("rtems-rfs: open: reading root inode: %d: %s\n", rc, strerror(rc));
+    }
     errno = rc;
     return -1;
   }
@@ -275,8 +291,9 @@ int rtems_rfs_fs_open(const char* name, void* user, uint32_t flags,
       rtems_rfs_inode_close(*fs, &inode);
       rtems_rfs_buffer_close(*fs);
       free(*fs);
-      if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN))
+      if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN)) {
         printf("rtems-rfs: open: invalid root inode mode\n");
+      }
       errno = EIO;
       return -1;
     }
@@ -286,8 +303,9 @@ int rtems_rfs_fs_open(const char* name, void* user, uint32_t flags,
   if (rc > 0) {
     rtems_rfs_buffer_close(*fs);
     free(*fs);
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_OPEN)) {
       printf("rtems-rfs: open: closing root inode: %d: %s\n", rc, strerror(rc));
+    }
     errno = rc;
     return -1;
   }
@@ -298,11 +316,13 @@ int rtems_rfs_fs_open(const char* name, void* user, uint32_t flags,
 int rtems_rfs_fs_close(rtems_rfs_file_system* fs) {
   int group;
 
-  if (rtems_rfs_trace(RTEMS_RFS_TRACE_CLOSE))
+  if (rtems_rfs_trace(RTEMS_RFS_TRACE_CLOSE)) {
     printf("rtems-rfs: close\n");
+  }
 
-  for (group = 0; group < fs->group_count; group++)
+  for (group = 0; group < fs->group_count; group++) {
     rtems_rfs_group_close(fs, &fs->groups[group]);
+  }
 
   rtems_rfs_buffer_close(fs);
 

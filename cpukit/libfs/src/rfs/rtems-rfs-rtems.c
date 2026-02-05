@@ -215,9 +215,10 @@ rtems_rfs_rtems_link(const rtems_filesystem_location_info_t* parentloc,
   rtems_rfs_ino parent = rtems_rfs_rtems_get_pathloc_ino(parentloc);
   int rc;
 
-  if (rtems_rfs_rtems_trace(RTEMS_RFS_RTEMS_DEBUG_LINK))
+  if (rtems_rfs_rtems_trace(RTEMS_RFS_RTEMS_DEBUG_LINK)) {
     printf("rtems-rfs-rtems: link: in: parent:%" PRId32 " target:%" PRId32 "\n",
            parent, target);
+  }
 
   rc = rtems_rfs_link(fs, name, namelen, parent, target, false);
   if (rc) {
@@ -245,9 +246,10 @@ rtems_rfs_rtems_chown(const rtems_filesystem_location_info_t* pathloc,
   rtems_rfs_inode_handle inode;
   int rc;
 
-  if (rtems_rfs_rtems_trace(RTEMS_RFS_RTEMS_DEBUG_CHOWN))
+  if (rtems_rfs_rtems_trace(RTEMS_RFS_RTEMS_DEBUG_CHOWN)) {
     printf("rtems-rfs-rtems: chown: in: ino:%" PRId32 " uid:%d gid:%d\n", ino,
            owner, group);
+  }
 
   rc = rtems_rfs_inode_open(fs, ino, &inode, true);
   if (rc > 0) {
@@ -331,8 +333,9 @@ rtems_rfs_rtems_readlink(const rtems_filesystem_location_info_t* pathloc,
   size_t length;
   int rc;
 
-  if (rtems_rfs_rtems_trace(RTEMS_RFS_RTEMS_DEBUG_READLINK))
+  if (rtems_rfs_rtems_trace(RTEMS_RFS_RTEMS_DEBUG_READLINK)) {
     printf("rtems-rfs-rtems: readlink: in: ino:%" PRId32 "\n", ino);
+  }
 
   rc = rtems_rfs_symlink_read(fs, ino, buf, bufsize, &length);
   if (rc) {
@@ -350,10 +353,11 @@ rtems_rfs_rtems_fchmod(const rtems_filesystem_location_info_t* pathloc,
   rtems_rfs_inode_handle inode;
   int rc;
 
-  if (rtems_rfs_rtems_trace(RTEMS_RFS_RTEMS_DEBUG_FCHMOD))
+  if (rtems_rfs_rtems_trace(RTEMS_RFS_RTEMS_DEBUG_FCHMOD)) {
     printf("rtems-rfs-rtems: fchmod: in: ino:%" PRId32 " mode:%06" PRIomode_t
            "\n",
            ino, mode);
+  }
 
   rc = rtems_rfs_inode_open(fs, ino, &inode, true);
   if (rc) {
@@ -379,8 +383,9 @@ int rtems_rfs_rtems_fstat(const rtems_filesystem_location_info_t* pathloc,
   uint16_t mode;
   int rc;
 
-  if (rtems_rfs_rtems_trace(RTEMS_RFS_RTEMS_DEBUG_STAT))
+  if (rtems_rfs_rtems_trace(RTEMS_RFS_RTEMS_DEBUG_STAT)) {
     printf("rtems-rfs-rtems: stat: in: ino:%" PRId32 "\n", ino);
+  }
 
   rc = rtems_rfs_inode_open(fs, ino, &inode, true);
   if (rc) {
@@ -414,20 +419,22 @@ int rtems_rfs_rtems_fstat(const rtems_filesystem_location_info_t* pathloc,
     buf->st_ctime = rtems_rfs_file_shared_get_ctime(shared);
     buf->st_blocks = rtems_rfs_file_shared_get_block_count(shared);
 
-    if (S_ISLNK(buf->st_mode))
+    if (S_ISLNK(buf->st_mode)) {
       buf->st_size = rtems_rfs_file_shared_get_block_offset(shared);
-    else
+    } else {
       buf->st_size = rtems_rfs_file_shared_get_size(fs, shared);
+    }
   } else {
     buf->st_atime = rtems_rfs_inode_get_atime(&inode);
     buf->st_mtime = rtems_rfs_inode_get_mtime(&inode);
     buf->st_ctime = rtems_rfs_inode_get_ctime(&inode);
     buf->st_blocks = rtems_rfs_inode_get_block_count(&inode);
 
-    if (S_ISLNK(buf->st_mode))
+    if (S_ISLNK(buf->st_mode)) {
       buf->st_size = rtems_rfs_inode_get_block_offset(&inode);
-    else
+    } else {
       buf->st_size = rtems_rfs_inode_get_size(fs, &inode);
+    }
   }
 
   buf->st_blksize = rtems_rfs_fs_block_size(fs);
@@ -506,10 +513,11 @@ int rtems_rfs_rtems_rmnod(
   uint32_t doff = rtems_rfs_rtems_get_pathloc_doff(pathloc);
   int rc;
 
-  if (rtems_rfs_rtems_trace(RTEMS_RFS_RTEMS_DEBUG_RMNOD))
+  if (rtems_rfs_rtems_trace(RTEMS_RFS_RTEMS_DEBUG_RMNOD)) {
     printf("rtems-rfs: rmnod: parent:%" PRId32 " doff:%" PRIu32 ", ino:%" PRId32
            "\n",
            parent, doff, ino);
+  }
 
   rc = rtems_rfs_unlink(fs, parent, ino, doff, rtems_rfs_unlink_dir_if_empty);
   if (rc) {
@@ -530,8 +538,9 @@ int rtems_rfs_rtems_fdatasync(rtems_libio_t* iop) {
   int rc;
 
   rc = rtems_rfs_buffer_sync(rtems_rfs_rtems_pathloc_dev(&iop->pathinfo));
-  if (rc)
+  if (rc) {
     return rtems_rfs_rtems_error("fdatasync: sync", rc);
+  }
 
   return 0;
 }
@@ -557,10 +566,11 @@ rtems_rfs_rtems_rename(const rtems_filesystem_location_info_t* old_parent_loc,
   ino = rtems_rfs_rtems_get_pathloc_ino(old_loc);
   doff = rtems_rfs_rtems_get_pathloc_doff(old_loc);
 
-  if (rtems_rfs_rtems_trace(RTEMS_RFS_RTEMS_DEBUG_RENAME))
+  if (rtems_rfs_rtems_trace(RTEMS_RFS_RTEMS_DEBUG_RENAME)) {
     printf("rtems-rfs: rename: ino:%" PRId32 " doff:%" PRIu32
            ", new parent:%" PRId32 "\n",
            ino, doff, new_parent);
+  }
 
   /*
    * Link to the inode before unlinking so the inode is not erased when
@@ -687,28 +697,31 @@ int rtems_rfs_rtems_initialise(rtems_filesystem_mount_table_entry_t* mt_entry,
    */
   while (options) {
     printf("options=%s\n", options);
-    if (strncmp(options, "hold-bitmaps", sizeof("hold-bitmaps") - 1) == 0)
+    if (strncmp(options, "hold-bitmaps", sizeof("hold-bitmaps") - 1) == 0) {
       flags |= RTEMS_RFS_FS_BITMAPS_HOLD;
-    else if (strncmp(options, "no-local-cache", sizeof("no-local-cache") - 1) ==
-             0)
+    } else if (strncmp(options, "no-local-cache",
+                       sizeof("no-local-cache") - 1) == 0) {
       flags |= RTEMS_RFS_FS_NO_LOCAL_CACHE;
-    else if (strncmp(options, "max-held-bufs", sizeof("max-held-bufs") - 1) ==
-             0) {
+    } else if (strncmp(options, "max-held-bufs", sizeof("max-held-bufs") - 1) ==
+               0) {
       max_held_buffers = strtoul(options + sizeof("max-held-bufs"), 0, 0);
-    } else
+    } else {
       return rtems_rfs_rtems_error("initialise: invalid option", EINVAL);
+    }
 
     options = strchr(options, ',');
     if (options) {
       ++options;
-      if (*options == '\0')
+      if (*options == '\0') {
         options = NULL;
+      }
     }
   }
 
   rtems = malloc(sizeof(rtems_rfs_rtems_private));
-  if (!rtems)
+  if (!rtems) {
     return rtems_rfs_rtems_error("initialise: local data", ENOMEM);
+  }
 
   memset(rtems, 0, sizeof(rtems_rfs_rtems_private));
 

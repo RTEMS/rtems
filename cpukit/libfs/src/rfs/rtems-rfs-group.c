@@ -51,14 +51,16 @@ int rtems_rfs_group_open(rtems_rfs_file_system* fs, rtems_rfs_buffer_block base,
   int rc;
 
   if (base >= rtems_rfs_fs_blocks(fs)) {
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_GROUP_OPEN))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_GROUP_OPEN)) {
       printf("rtems-rfs: group-open: base outside file system range: %d: %s\n",
              EIO, strerror(EIO));
+    }
     return EIO;
   }
 
-  if ((base + size) >= rtems_rfs_fs_blocks(fs))
+  if ((base + size) >= rtems_rfs_fs_blocks(fs)) {
     size = rtems_rfs_fs_blocks(fs) - base;
+  }
 
   /*
    * Limit the inodes to the same size as the blocks. This is what the
@@ -66,22 +68,25 @@ int rtems_rfs_group_open(rtems_rfs_file_system* fs, rtems_rfs_buffer_block base,
    * not work. If we are so pushed for inodes that this makes a difference
    * the format configuration needs reviewing.
    */
-  if (inodes > size)
+  if (inodes > size) {
     inodes = size;
+  }
 
-  if (rtems_rfs_trace(RTEMS_RFS_TRACE_GROUP_OPEN))
+  if (rtems_rfs_trace(RTEMS_RFS_TRACE_GROUP_OPEN)) {
     printf("rtems-rfs: group-open: base=%" PRId32 ", blocks=%zd inodes=%zd\n",
            base, size, inodes);
+  }
 
   group->base = base;
   group->size = size;
 
   rc = rtems_rfs_buffer_handle_open(fs, &group->block_bitmap_buffer);
   if (rc > 0) {
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_GROUP_OPEN))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_GROUP_OPEN)) {
       printf(
           "rtems-rfs: group-open: could not open block bitmap handle: %d: %s\n",
           rc, strerror(rc));
+    }
     return rc;
   }
 
@@ -90,9 +95,10 @@ int rtems_rfs_group_open(rtems_rfs_file_system* fs, rtems_rfs_buffer_block base,
                              group->base + RTEMS_RFS_GROUP_BLOCK_BITMAP_BLOCK);
   if (rc > 0) {
     rtems_rfs_buffer_handle_close(fs, &group->block_bitmap_buffer);
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_GROUP_OPEN))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_GROUP_OPEN)) {
       printf("rtems-rfs: group-open: could not open block bitmap: %d: %s\n", rc,
              strerror(rc));
+    }
     return rc;
   }
 
@@ -100,10 +106,11 @@ int rtems_rfs_group_open(rtems_rfs_file_system* fs, rtems_rfs_buffer_block base,
   if (rc > 0) {
     rtems_rfs_bitmap_close(&group->block_bitmap);
     rtems_rfs_buffer_handle_close(fs, &group->block_bitmap_buffer);
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_GROUP_OPEN))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_GROUP_OPEN)) {
       printf(
           "rtems-rfs: group-open: could not open inode bitmap handle: %d: %s\n",
           rc, strerror(rc));
+    }
     return rc;
   }
 
@@ -114,9 +121,10 @@ int rtems_rfs_group_open(rtems_rfs_file_system* fs, rtems_rfs_buffer_block base,
     rtems_rfs_buffer_handle_close(fs, &group->inode_bitmap_buffer);
     rtems_rfs_bitmap_close(&group->block_bitmap);
     rtems_rfs_buffer_handle_close(fs, &group->block_bitmap_buffer);
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_GROUP_OPEN))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_GROUP_OPEN)) {
       printf("rtems-rfs: group-open: could not open inode bitmap: %d: %s\n", rc,
              strerror(rc));
+    }
     return rc;
   }
 
@@ -132,8 +140,9 @@ int rtems_rfs_group_close(rtems_rfs_file_system* fs, rtems_rfs_group* group) {
   int result = 0;
   int rc;
 
-  if (rtems_rfs_trace(RTEMS_RFS_TRACE_GROUP_CLOSE))
+  if (rtems_rfs_trace(RTEMS_RFS_TRACE_GROUP_CLOSE)) {
     printf("rtems-rfs: group-close: base=%" PRId32 "\n", group->base);
+  }
 
   /*
    * We need to close as much as possible and also return any error if one
@@ -141,17 +150,21 @@ int rtems_rfs_group_close(rtems_rfs_file_system* fs, rtems_rfs_group* group) {
    * we cannot OR the errors together so this is a reasonable compromise.
    */
   rc = rtems_rfs_bitmap_close(&group->inode_bitmap);
-  if (rc > 0)
+  if (rc > 0) {
     result = rc;
+  }
   rc = rtems_rfs_buffer_handle_close(fs, &group->inode_bitmap_buffer);
-  if (rc > 0)
+  if (rc > 0) {
     result = rc;
+  }
   rc = rtems_rfs_bitmap_close(&group->block_bitmap);
-  if (rc > 0)
+  if (rc > 0) {
     result = rc;
+  }
   rc = rtems_rfs_buffer_handle_close(fs, &group->block_bitmap_buffer);
-  if (rc > 0)
+  if (rc > 0) {
     result = rc;
+  }
 
   return result;
 }
@@ -177,8 +190,9 @@ int rtems_rfs_group_bitmap_alloc(rtems_rfs_file_system* fs,
      * allocate new blocks. When that happens, we simply set 'goal' to zero and
      * continue the search from there.
      */
-    if (goal >= RTEMS_RFS_ROOT_INO)
+    if (goal >= RTEMS_RFS_ROOT_INO) {
       goal -= RTEMS_RFS_ROOT_INO;
+    }
   }
 
   group_start = goal / size;
@@ -202,8 +216,9 @@ int rtems_rfs_group_bitmap_alloc(rtems_rfs_file_system* fs,
      * direction. The offset grows until we find a free bit or we hit an end.
      */
     group = group_start + (direction * offset);
-    if (offset)
+    if (offset) {
       bit = direction > 0 ? 0 : size - 1;
+    }
 
     /*
      * If we are still looking up and down and if the group is out of range we
@@ -211,33 +226,39 @@ int rtems_rfs_group_bitmap_alloc(rtems_rfs_file_system* fs,
      * one direction one group at a time.
      */
     if ((group < 0) || (group >= fs->group_count)) {
-      if (!updown)
+      if (!updown) {
         break;
+      }
       direction = direction > 0 ? -1 : 1;
       updown = false;
       continue;
     }
 
-    if (inode)
+    if (inode) {
       bitmap = &fs->groups[group].inode_bitmap;
-    else
+    } else {
       bitmap = &fs->groups[group].block_bitmap;
+    }
 
     rc = rtems_rfs_bitmap_map_alloc(bitmap, bit, &allocated, &bit);
-    if (rc > 0)
+    if (rc > 0) {
       return rc;
+    }
 
-    if (rtems_rfs_fs_release_bitmaps(fs))
+    if (rtems_rfs_fs_release_bitmaps(fs)) {
       rtems_rfs_bitmap_release_buffer(fs, bitmap);
+    }
 
     if (allocated) {
-      if (inode)
+      if (inode) {
         *result = rtems_rfs_group_inode(fs, group, bit);
-      else
+      } else {
         *result = rtems_rfs_group_block(&fs->groups[group], bit);
-      if (rtems_rfs_trace(RTEMS_RFS_TRACE_GROUP_BITMAPS))
+      }
+      if (rtems_rfs_trace(RTEMS_RFS_TRACE_GROUP_BITMAPS)) {
         printf("rtems-rfs: group-bitmap-alloc: %s allocated: %" PRId32 "\n",
                inode ? "inode" : "block", *result);
+      }
       return 0;
     }
 
@@ -250,15 +271,17 @@ int rtems_rfs_group_bitmap_alloc(rtems_rfs_file_system* fs,
      */
     if (updown) {
       direction = direction > 0 ? -1 : 1;
-      if (direction == -1)
+      if (direction == -1) {
         offset++;
+      }
     } else {
       offset++;
     }
   }
 
-  if (rtems_rfs_trace(RTEMS_RFS_TRACE_GROUP_BITMAPS))
+  if (rtems_rfs_trace(RTEMS_RFS_TRACE_GROUP_BITMAPS)) {
     printf("rtems-rfs: group-bitmap-alloc: no blocks available\n");
+  }
 
   return ENOSPC;
 }
@@ -271,9 +294,10 @@ int rtems_rfs_group_bitmap_free(rtems_rfs_file_system* fs, bool inode,
   size_t size;
   int rc;
 
-  if (rtems_rfs_trace(RTEMS_RFS_TRACE_GROUP_BITMAPS))
+  if (rtems_rfs_trace(RTEMS_RFS_TRACE_GROUP_BITMAPS)) {
     printf("rtems-rfs: group-bitmap-free: %s free: %" PRId32 "\n",
            inode ? "inode" : "block", no);
+  }
 
   if (inode) {
     no -= RTEMS_RFS_ROOT_INO;
@@ -286,10 +310,11 @@ int rtems_rfs_group_bitmap_free(rtems_rfs_file_system* fs, bool inode,
   group = no / size;
   bit = (rtems_rfs_bitmap_bit)(no % size);
 
-  if (inode)
+  if (inode) {
     bitmap = &fs->groups[group].inode_bitmap;
-  else
+  } else {
     bitmap = &fs->groups[group].block_bitmap;
+  }
 
   rc = rtems_rfs_bitmap_map_clear(bitmap, bit);
 
@@ -306,18 +331,22 @@ int rtems_rfs_group_bitmap_test(rtems_rfs_file_system* fs, bool inode,
   size_t size;
   int rc;
 
-  if (rtems_rfs_trace(RTEMS_RFS_TRACE_GROUP_BITMAPS))
+  if (rtems_rfs_trace(RTEMS_RFS_TRACE_GROUP_BITMAPS)) {
     printf("rtems-rfs: group-bitmap-test: %s test: %" PRId32 "\n",
            inode ? "inode" : "block", no);
+  }
 
   if (inode) {
-    if ((no < RTEMS_RFS_ROOT_INO) || ((uint32_t)no > rtems_rfs_fs_inodes(fs)))
+    if ((no < RTEMS_RFS_ROOT_INO) || ((uint32_t)no > rtems_rfs_fs_inodes(fs))) {
       return EINVAL;
+    }
     no -= RTEMS_RFS_ROOT_INO;
     size = fs->group_inodes;
   } else {
-    if ((no < RTEMS_RFS_ROOT_INO) || ((uint32_t)no >= rtems_rfs_fs_blocks(fs)))
+    if ((no < RTEMS_RFS_ROOT_INO) ||
+        ((uint32_t)no >= rtems_rfs_fs_blocks(fs))) {
       return EINVAL;
+    }
     no -= RTEMS_RFS_ROOT_INO;
     size = fs->group_blocks;
   }
@@ -325,10 +354,11 @@ int rtems_rfs_group_bitmap_test(rtems_rfs_file_system* fs, bool inode,
   group = no / size;
   bit = (rtems_rfs_bitmap_bit)(no % size);
 
-  if (inode)
+  if (inode) {
     bitmap = &fs->groups[group].inode_bitmap;
-  else
+  } else {
     bitmap = &fs->groups[group].block_bitmap;
+  }
 
   rc = rtems_rfs_bitmap_map_test(bitmap, bit, state);
 
@@ -352,10 +382,12 @@ int rtems_rfs_group_usage(rtems_rfs_file_system* fs, size_t* blocks,
                rtems_rfs_bitmap_map_free(&group->inode_bitmap);
   }
 
-  if (*blocks > rtems_rfs_fs_blocks(fs))
+  if (*blocks > rtems_rfs_fs_blocks(fs)) {
     *blocks = rtems_rfs_fs_blocks(fs);
-  if (*inodes > rtems_rfs_fs_inodes(fs))
+  }
+  if (*inodes > rtems_rfs_fs_inodes(fs)) {
     *inodes = rtems_rfs_fs_inodes(fs);
+  }
 
   return 0;
 }

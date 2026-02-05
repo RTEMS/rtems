@@ -61,14 +61,16 @@ int rtems_rfs_link(rtems_rfs_file_system* fs, const char* name, int length,
   if (rtems_rfs_trace(RTEMS_RFS_TRACE_LINK)) {
     int c;
     printf("rtems-rfs: link: parent(%" PRIu32 ") -> ", parent);
-    for (c = 0; c < length; c++)
+    for (c = 0; c < length; c++) {
       printf("%c", name[c]);
+    }
     printf("(%" PRIu32 ")\n", target);
   }
 
   rc = rtems_rfs_inode_open(fs, target, &target_inode, true);
-  if (rc)
+  if (rc) {
     return rc;
+  }
 
   /*
    * If the target inode is a directory and we cannot link directories
@@ -122,13 +124,15 @@ int rtems_rfs_unlink(rtems_rfs_file_system* fs, rtems_rfs_ino parent,
   bool dir;
   int rc;
 
-  if (rtems_rfs_trace(RTEMS_RFS_TRACE_UNLINK))
+  if (rtems_rfs_trace(RTEMS_RFS_TRACE_UNLINK)) {
     printf("rtems-rfs: unlink: parent(%" PRIu32 ") -X-> (%" PRIu32 ")\n",
            parent, target);
+  }
 
   rc = rtems_rfs_inode_open(fs, target, &target_inode, true);
-  if (rc)
+  if (rc) {
     return rc;
+  }
 
   /*
    * If a directory process the unlink mode.
@@ -138,16 +142,18 @@ int rtems_rfs_unlink(rtems_rfs_file_system* fs, rtems_rfs_ino parent,
   if (dir) {
     switch (dir_mode) {
     case rtems_rfs_unlink_dir_denied:
-      if (rtems_rfs_trace(RTEMS_RFS_TRACE_UNLINK))
+      if (rtems_rfs_trace(RTEMS_RFS_TRACE_UNLINK)) {
         printf("rtems-rfs: link is a directory\n");
+      }
       rtems_rfs_inode_close(fs, &target_inode);
       return EISDIR;
 
     case rtems_rfs_unlink_dir_if_empty:
       rc = rtems_rfs_dir_empty(fs, &target_inode);
       if (rc > 0) {
-        if (rtems_rfs_trace(RTEMS_RFS_TRACE_UNLINK))
+        if (rtems_rfs_trace(RTEMS_RFS_TRACE_UNLINK)) {
           printf("rtems-rfs: dir-empty: %d: %s\n", rc, strerror(rc));
+        }
         rtems_rfs_inode_close(fs, &target_inode);
         return rc;
       }
@@ -160,16 +166,18 @@ int rtems_rfs_unlink(rtems_rfs_file_system* fs, rtems_rfs_ino parent,
 
   rc = rtems_rfs_inode_open(fs, parent, &parent_inode, true);
   if (rc) {
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_UNLINK))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_UNLINK)) {
       printf("rtems-rfs: link: inode-open failed: %d: %s\n", rc, strerror(rc));
+    }
     rtems_rfs_inode_close(fs, &target_inode);
     return rc;
   }
 
   rc = rtems_rfs_dir_del_entry(fs, &parent_inode, target, doff);
   if (rc > 0) {
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_UNLINK))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_UNLINK)) {
       printf("rtems-rfs: unlink: dir-del failed: %d: %s\n", rc, strerror(rc));
+    }
     rtems_rfs_inode_close(fs, &parent_inode);
     rtems_rfs_inode_close(fs, &target_inode);
     return rc;
@@ -177,8 +185,9 @@ int rtems_rfs_unlink(rtems_rfs_file_system* fs, rtems_rfs_ino parent,
 
   links = rtems_rfs_inode_get_links(&target_inode);
 
-  if (rtems_rfs_trace(RTEMS_RFS_TRACE_UNLINK))
+  if (rtems_rfs_trace(RTEMS_RFS_TRACE_UNLINK)) {
     printf("rtems-rfs: unlink: target:%" PRIu32 " links:%u\n", target, links);
+  }
 
   if (links > 1) {
     links--;
@@ -189,9 +198,10 @@ int rtems_rfs_unlink(rtems_rfs_file_system* fs, rtems_rfs_ino parent,
      */
     rc = rtems_rfs_inode_delete(fs, &target_inode);
     if (rc > 0) {
-      if (rtems_rfs_trace(RTEMS_RFS_TRACE_UNLINK))
+      if (rtems_rfs_trace(RTEMS_RFS_TRACE_UNLINK)) {
         printf("rtems-rfs: unlink: inode-del failed: %d: %s\n", rc,
                strerror(rc));
+      }
       rtems_rfs_inode_close(fs, &parent_inode);
       rtems_rfs_inode_close(fs, &target_inode);
       return rc;
@@ -199,17 +209,19 @@ int rtems_rfs_unlink(rtems_rfs_file_system* fs, rtems_rfs_ino parent,
 
     if (dir) {
       links = rtems_rfs_inode_get_links(&parent_inode);
-      if (links > 1)
+      if (links > 1) {
         links--;
+      }
       rtems_rfs_inode_set_links(&parent_inode, links);
     }
   }
 
   rc = rtems_rfs_inode_time_stamp_now(&parent_inode, true, true);
   if (rc > 0) {
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_UNLINK))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_UNLINK)) {
       printf("rtems-rfs: link: inode-time-stamp failed: %d: %s\n", rc,
              strerror(rc));
+    }
     rtems_rfs_inode_close(fs, &parent_inode);
     rtems_rfs_inode_close(fs, &target_inode);
     return rc;
@@ -217,18 +229,20 @@ int rtems_rfs_unlink(rtems_rfs_file_system* fs, rtems_rfs_ino parent,
 
   rc = rtems_rfs_inode_close(fs, &parent_inode);
   if (rc > 0) {
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_UNLINK))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_UNLINK)) {
       printf("rtems-rfs: link: parent inode-close failed: %d: %s\n", rc,
              strerror(rc));
+    }
     rtems_rfs_inode_close(fs, &target_inode);
     return rc;
   }
 
   rc = rtems_rfs_inode_close(fs, &target_inode);
 
-  if ((rc > 0) && rtems_rfs_trace(RTEMS_RFS_TRACE_UNLINK))
+  if ((rc > 0) && rtems_rfs_trace(RTEMS_RFS_TRACE_UNLINK)) {
     printf("rtems-rfs: link: target inode-close failed: %d: %s\n", rc,
            strerror(rc));
+  }
 
   return rc;
 }
@@ -243,24 +257,29 @@ int rtems_rfs_symlink(rtems_rfs_file_system* fs, const char* name, int length,
   if (rtems_rfs_trace(RTEMS_RFS_TRACE_SYMLINK)) {
     int c;
     printf("rtems-rfs: symlink: parent:%" PRIu32 " name:", parent);
-    for (c = 0; c < length; c++)
+    for (c = 0; c < length; c++) {
       printf("%c", name[c]);
+    }
     printf(" link:");
-    for (c = 0; c < link_length; c++)
+    for (c = 0; c < link_length; c++) {
       printf("%c", link[c]);
+    }
   }
 
-  if ((size_t)link_length >= rtems_rfs_fs_block_size(fs))
+  if ((size_t)link_length >= rtems_rfs_fs_block_size(fs)) {
     return ENAMETOOLONG;
+  }
 
   rc = rtems_rfs_inode_create(fs, parent, name, strlen(name),
                               RTEMS_RFS_S_SYMLINK, 1, uid, gid, &ino);
-  if (rc > 0)
+  if (rc > 0) {
     return rc;
+  }
 
   rc = rtems_rfs_inode_open(fs, ino, &inode, true);
-  if (rc > 0)
+  if (rc > 0) {
     return rc;
+  }
 
   /*
    * If the link length is less than the length of data union in the inode
@@ -335,12 +354,14 @@ int rtems_rfs_symlink_read(rtems_rfs_file_system* fs, rtems_rfs_ino link,
   rtems_rfs_inode_handle inode;
   int rc;
 
-  if (rtems_rfs_trace(RTEMS_RFS_TRACE_SYMLINK_READ))
+  if (rtems_rfs_trace(RTEMS_RFS_TRACE_SYMLINK_READ)) {
     printf("rtems-rfs: symlink-read: link:%" PRIu32 "\n", link);
+  }
 
   rc = rtems_rfs_inode_open(fs, link, &inode, true);
-  if (rc)
+  if (rc) {
     return rc;
+  }
 
   if (!RTEMS_RFS_S_ISLNK(rtems_rfs_inode_get_mode(&inode))) {
     rtems_rfs_inode_close(fs, &inode);

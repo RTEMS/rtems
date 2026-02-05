@@ -59,10 +59,11 @@ int rtems_rfs_buffer_bdbuf_request(rtems_rfs_file_system* fs,
   rtems_status_code sc;
   int rc = 0;
 
-  if (read)
+  if (read) {
     sc = rtems_bdbuf_read(rtems_rfs_fs_device(fs), block, buffer);
-  else
+  } else {
     sc = rtems_bdbuf_get(rtems_rfs_fs_device(fs), block, buffer);
+  }
 
   if (sc != RTEMS_SUCCESSFUL) {
 #if RTEMS_RFS_BUFFER_ERRORS
@@ -79,15 +80,17 @@ int rtems_rfs_buffer_bdbuf_release(rtems_rfs_buffer* buffer, bool modified) {
   rtems_status_code sc;
   int rc = 0;
 
-  if (rtems_rfs_trace(RTEMS_RFS_TRACE_BUFFER_RELEASE))
+  if (rtems_rfs_trace(RTEMS_RFS_TRACE_BUFFER_RELEASE)) {
     printf(
         "rtems-rfs: bdbuf-release: block=%" PRIuPTR " bdbuf=%" PRIu32 " %s\n",
         ((intptr_t)buffer->user), buffer->block, modified ? "(modified)" : "");
+  }
 
-  if (modified)
+  if (modified) {
     sc = rtems_bdbuf_release_modified(buffer);
-  else
+  } else {
     sc = rtems_bdbuf_release(buffer);
+  }
 
   if (sc != RTEMS_SUCCESSFUL) {
 #if RTEMS_RFS_BUFFER_ERRORS

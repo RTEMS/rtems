@@ -253,8 +253,9 @@ static inline uint16_t
 rtems_rfs_inode_get_links(rtems_rfs_inode_handle* handle) {
   uint16_t links;
   links = rtems_rfs_read_u16(&handle->node->links);
-  if (links == 0xffff)
+  if (links == 0xffff) {
     links = 0;
+  }
   return links;
 }
 

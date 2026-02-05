@@ -225,12 +225,14 @@ static int rtems_rfs_shell_block(rtems_rfs_file_system* fs, int argc,
        b < rtems_rfs_fs_block_size(fs); b++, data++) {
     int mod = b % 16;
     if (mod == 0) {
-      if (b)
+      if (b) {
         printf("\n");
+      }
       printf("%04zx ", b);
     }
-    if (mod == 8)
+    if (mod == 8) {
       printf(" ");
+    }
     printf("%02x ", *data);
   }
 
@@ -289,9 +291,9 @@ static int rtems_rfs_shell_inode(rtems_rfs_file_system* fs, int argc,
         break;
       }
     } else {
-      if (have_end && have_start)
+      if (have_end && have_start) {
         printf("warning: option ignored: %s\n", argv[arg]);
-      else if (!have_start) {
+      } else if (!have_start) {
         start = end = strtoul(argv[arg], 0, 0);
         have_start = true;
       } else {
@@ -339,17 +341,18 @@ static int rtems_rfs_shell_inode(rtems_rfs_file_system* fs, int argc,
       if (error_check_only) {
         if (!RTEMS_RFS_S_ISDIR(mode) && !RTEMS_RFS_S_ISCHR(mode) &&
             !RTEMS_RFS_S_ISBLK(mode) && !RTEMS_RFS_S_ISREG(mode) &&
-            !RTEMS_RFS_S_ISLNK(mode))
+            !RTEMS_RFS_S_ISLNK(mode)) {
           error = true;
-        else {
+        } else {
 #if NEED_TO_HANDLE_DIFFERENT_TYPES
           int b;
           for (b = 0; b < RTEMS_RFS_INODE_BLOCKS; b++) {
             uint32_t block;
             block = rtems_rfs_inode_get_block(&inode, b);
             if ((block <= RTEMS_RFS_SUPERBLOCK_SIZE) ||
-                (block >= rtems_rfs_fs_blocks(fs)))
+                (block >= rtems_rfs_fs_blocks(fs))) {
               error = true;
+            }
           }
 #endif
         }
@@ -360,28 +363,30 @@ static int rtems_rfs_shell_inode(rtems_rfs_file_system* fs, int argc,
                rtems_rfs_buffer_bnum(&inode.buffer),
                inode.offset * RTEMS_RFS_INODE_SIZE, allocated ? 'A' : 'F');
 
-        if (!allocated && !forced)
+        if (!allocated && !forced) {
           printf(" --\n");
-        else {
+        } else {
           const char* type;
           type = "UKN";
-          if (RTEMS_RFS_S_ISDIR(mode))
+          if (RTEMS_RFS_S_ISDIR(mode)) {
             type = "DIR";
-          else if (RTEMS_RFS_S_ISCHR(mode))
+          } else if (RTEMS_RFS_S_ISCHR(mode)) {
             type = "CHR";
-          else if (RTEMS_RFS_S_ISBLK(mode))
+          } else if (RTEMS_RFS_S_ISBLK(mode)) {
             type = "BLK";
-          else if (RTEMS_RFS_S_ISREG(mode))
+          } else if (RTEMS_RFS_S_ISREG(mode)) {
             type = "REG";
-          else if (RTEMS_RFS_S_ISLNK(mode))
+          } else if (RTEMS_RFS_S_ISLNK(mode)) {
             type = "LNK";
+          }
           printf("links=%03i mode=%04x (%s/%03o) bo=%04u bc=%04" PRIu32 " b=[",
                  rtems_rfs_inode_get_links(&inode), mode, type,
                  mode & ((1 << 10) - 1),
                  rtems_rfs_inode_get_block_offset(&inode),
                  rtems_rfs_inode_get_block_count(&inode));
-          for (b = 0; b < (RTEMS_RFS_INODE_BLOCKS - 1); b++)
+          for (b = 0; b < (RTEMS_RFS_INODE_BLOCKS - 1); b++) {
             printf("%" PRIu32 " ", rtems_rfs_inode_get_block(&inode, b));
+          }
           printf("%" PRIu32 "]\n", rtems_rfs_inode_get_block(&inode, b));
         }
       }
@@ -460,8 +465,9 @@ static int rtems_rfs_shell_dir(rtems_rfs_file_system* fs, int argc,
     eino = rtems_rfs_dir_entry_ino(data);
     elength = rtems_rfs_dir_entry_length(data);
 
-    if (elength == RTEMS_RFS_DIR_ENTRY_EMPTY)
+    if (elength == RTEMS_RFS_DIR_ENTRY_EMPTY) {
       break;
+    }
 
     if ((elength < RTEMS_RFS_DIR_ENTRY_SIZE) ||
         (elength >= rtems_rfs_fs_max_name(fs))) {
@@ -480,13 +486,16 @@ static int rtems_rfs_shell_dir(rtems_rfs_file_system* fs, int argc,
            rtems_rfs_dir_entry_ino(data), rtems_rfs_dir_entry_hash(data),
            length);
 
-    if (length > 50)
+    if (length > 50) {
       length = 50;
+    }
 
-    for (c = 0; c < length; c++)
+    for (c = 0; c < length; c++) {
       printf("%c", data[RTEMS_RFS_DIR_ENTRY_SIZE + c]);
-    if (length < elength - RTEMS_RFS_DIR_ENTRY_SIZE)
+    }
+    if (length < elength - RTEMS_RFS_DIR_ENTRY_SIZE) {
       printf("...");
+    }
     printf("\n");
 
     b += elength;
@@ -583,8 +592,9 @@ int rtems_shell_debugrfs(int argc, char* argv[]) {
   size_t t;
 
   for (arg = 1; arg < argc; arg++) {
-    if (argv[arg][0] != '-')
+    if (argv[arg][0] != '-') {
       break;
+    }
 
     switch (argv[arg][1]) {
     case 'h':
@@ -592,8 +602,10 @@ int rtems_shell_debugrfs(int argc, char* argv[]) {
       return 0;
     case 'l':
       printf("%s: commands are:\n", argv[0]);
-      for (t = 0; t < (sizeof(table) / sizeof(const rtems_rfs_shell_cmd)); t++)
+      for (t = 0; t < (sizeof(table) / sizeof(const rtems_rfs_shell_cmd));
+           t++) {
         printf("  %s\t\t%s\n", table[t].name, table[t].help);
+      }
       return 0;
     default:
       printf("error: unknown option: %s\n", argv[arg]);
@@ -601,14 +613,17 @@ int rtems_shell_debugrfs(int argc, char* argv[]) {
     }
   }
 
-  if ((argc - arg) < 2)
+  if ((argc - arg) < 2) {
     printf("error: you need at least a path and command, try %s -h\n", argv[0]);
-  else {
+  } else {
     rtems_rfs_file_system* fs;
     if (rtems_rfs_get_fs(argv[arg], &fs) == 0) {
-      for (t = 0; t < (sizeof(table) / sizeof(const rtems_rfs_shell_cmd)); t++)
-        if (strcmp(argv[arg + 1], table[t].name) == 0)
+      for (t = 0; t < (sizeof(table) / sizeof(const rtems_rfs_shell_cmd));
+           t++) {
+        if (strcmp(argv[arg + 1], table[t].name) == 0) {
           return table[t].handler(fs, argc - 2, argv + 2);
+        }
+      }
       printf("error: command not found: %s\n", argv[arg + 1]);
     }
   }
@@ -675,9 +690,9 @@ int rtems_shell_rfs_format(int argc, char* argv[]) {
         return 1;
       }
     } else {
-      if (!driver)
+      if (!driver) {
         driver = argv[arg];
-      else {
+      } else {
         printf("error: only one driver name allowed: %s\n", argv[arg]);
         return 1;
       }

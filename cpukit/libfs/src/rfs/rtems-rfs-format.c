@@ -67,8 +67,9 @@ static int rtems_rfs_bits_per_block(rtems_rfs_file_system* fs) {
  * "quotient = dividend / divisor"
  */
 static int rtems_rfs_rup_quotient(uint32_t dividend, uint32_t divisor) {
-  if (dividend == 0)
+  if (dividend == 0) {
     return 1;
+  }
   return ((dividend - 1) / divisor) + 1;
 }
 
@@ -98,8 +99,9 @@ static int rtems_rfs_inode_overhead(rtems_rfs_file_system* fs) {
   /*
    * There could be more bits than blocks, eg 512K disk with 512 blocks.
    */
-  if (bits_per_block > (rtems_rfs_fs_blocks(fs) - RTEMS_RFS_SUPERBLOCK_SIZE))
+  if (bits_per_block > (rtems_rfs_fs_blocks(fs) - RTEMS_RFS_SUPERBLOCK_SIZE)) {
     bits_per_block = rtems_rfs_fs_blocks(fs) - RTEMS_RFS_SUPERBLOCK_SIZE;
+  }
   return ((blocks + 1) * 100 * 10) / bits_per_block;
 }
 
@@ -112,17 +114,21 @@ static bool rtems_rfs_check_config(rtems_rfs_file_system* fs,
     if (total_size >= GIGS(1)) {
       uint32_t gigs = (total_size + GIGS(1)) / GIGS(1);
       int b;
-      for (b = 31; b > 0; b--)
-        if ((gigs & (1 << b)) != 0)
+      for (b = 31; b > 0; b--) {
+        if ((gigs & (1 << b)) != 0) {
           break;
+        }
+      }
       fs->block_size = 1 << b;
     }
 
-    if (fs->block_size < 512)
+    if (fs->block_size < 512) {
       fs->block_size = 512;
+    }
 
-    if (fs->block_size > (4 * 1024))
+    if (fs->block_size > (4 * 1024)) {
       fs->block_size = (4 * 1024);
+    }
   }
 
   if ((fs->block_size % rtems_rfs_fs_media_block_size(fs)) != 0) {
@@ -163,8 +169,9 @@ static bool rtems_rfs_check_config(rtems_rfs_file_system* fs,
     /*
      * The number of inodes per group is set as a percentage.
      */
-    if (config->inode_overhead)
+    if (config->inode_overhead) {
       inode_overhead = config->inode_overhead;
+    }
 
     fs->group_inodes = rtems_rfs_inodes_from_percent(fs, inode_overhead);
   }
@@ -177,8 +184,9 @@ static bool rtems_rfs_check_config(rtems_rfs_file_system* fs,
       rtems_rfs_rup_quotient(fs->group_inodes, fs->inodes_per_block) *
       fs->inodes_per_block;
 
-  if (fs->group_inodes > rtems_rfs_bitmap_numof_bits(fs->block_size))
+  if (fs->group_inodes > rtems_rfs_bitmap_numof_bits(fs->block_size)) {
     fs->group_inodes = rtems_rfs_bitmap_numof_bits(fs->block_size);
+  }
 
   fs->max_name_length = config->max_name_length;
   if (!fs->max_name_length) {
@@ -212,12 +220,14 @@ static bool rtems_rfs_write_group(rtems_rfs_file_system* fs, int group,
    * and nice numbers do not always work out. Let the last block pick up the
    * remainder of the blocks.
    */
-  if ((group_base + group_size) > rtems_rfs_fs_blocks(fs))
+  if ((group_base + group_size) > rtems_rfs_fs_blocks(fs)) {
     group_size = rtems_rfs_fs_blocks(fs) - group_base;
+  }
 
-  if (verbose)
+  if (verbose) {
     printf("\rrtems-rfs: format: group %3d: base = %" PRId32 ", size = %zd",
            group, group_base, group_size);
+  }
 
   /*
    * Open a handle and request an empty buffer.
@@ -229,8 +239,9 @@ static bool rtems_rfs_write_group(rtems_rfs_file_system* fs, int group,
     return false;
   }
 
-  if (verbose)
+  if (verbose) {
     printf(", blocks");
+  }
 
   /*
    * Open the block bitmap using the new buffer.
@@ -282,8 +293,9 @@ static bool rtems_rfs_write_group(rtems_rfs_file_system* fs, int group,
   /*
    * Forced allocation of the inode blocks which follow the block bitmap.
    */
-  for (b = 0; b < blocks; b++)
+  for (b = 0; b < blocks; b++) {
     rtems_rfs_bitmap_map_set(&bitmap, b + RTEMS_RFS_GROUP_INODE_BLOCK);
+  }
 
   /*
    * Close the block bitmap.
@@ -299,8 +311,9 @@ static bool rtems_rfs_write_group(rtems_rfs_file_system* fs, int group,
 
   rtems_rfs_buffer_mark_dirty(&handle);
 
-  if (verbose)
+  if (verbose) {
     printf(", inodes");
+  }
 
   /*
    * Open the inode bitmap using the old buffer. Should release any changes.
@@ -489,18 +502,21 @@ static int rtems_rfs_write_root_dir(const char* name) {
                                   (RTEMS_RFS_S_IFDIR | RTEMS_RFS_S_IRWXU |
                                    RTEMS_RFS_S_IXGRP | RTEMS_RFS_S_IXOTH),
                                   0, 0);
-  if (rc != 0)
+  if (rc != 0) {
     printf("rtems-rfs: format: inode initialise failed: %d: %s\n", rc,
            strerror(rc));
+  }
 
   rc = rtems_rfs_dir_add_entry(fs, &inode, ".", 1, ino);
-  if (rc != 0)
+  if (rc != 0) {
     printf("rtems-rfs: format: directory add failed: %d: %s\n", rc,
            strerror(rc));
+  }
 
   rc = rtems_rfs_inode_close(fs, &inode);
-  if (rc != 0)
+  if (rc != 0) {
     printf("rtems-rfs: format: inode close failed: %d: %s\n", rc, strerror(rc));
+  }
 
   rc = rtems_rfs_fs_close(fs);
   if (rc != 0) {
@@ -520,8 +536,9 @@ int rtems_rfs_format(const char* name, const rtems_rfs_format_config* config) {
   int group;
   int rc;
 
-  if (config->verbose)
+  if (config->verbose) {
     printf("rtems-rfs: format: %s\n", name);
+  }
 
   memset(&fs, 0, sizeof(rtems_rfs_file_system));
 
@@ -605,15 +622,17 @@ int rtems_rfs_format(const char* name, const rtems_rfs_format_config* config) {
     return -1;
   }
 
-  for (group = 0; group < fs.group_count; group++)
+  for (group = 0; group < fs.group_count; group++) {
     if (!rtems_rfs_write_group(&fs, group, config->initialise_inodes,
                                config->verbose)) {
       errno = EIO;
       return -1;
     }
+  }
 
-  if (config->verbose)
+  if (config->verbose) {
     printf("\n");
+  }
 
   rc = rtems_rfs_buffer_close(&fs);
   if (rc != 0) {

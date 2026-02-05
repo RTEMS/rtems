@@ -54,8 +54,9 @@ int rtems_rfs_file_open(rtems_rfs_file_system* fs, rtems_rfs_ino ino, int oflag,
   rtems_rfs_file_shared* shared;
   int rc;
 
-  if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_OPEN))
+  if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_OPEN)) {
     printf("rtems-rfs: file-open: ino=%" PRId32 "\n", ino);
+  }
 
   *file = NULL;
 
@@ -65,16 +66,18 @@ int rtems_rfs_file_open(rtems_rfs_file_system* fs, rtems_rfs_ino ino, int oflag,
    * counting.
    */
   handle = malloc(sizeof(rtems_rfs_file_handle));
-  if (!handle)
+  if (!handle) {
     return ENOMEM;
+  }
 
   memset(handle, 0, sizeof(rtems_rfs_file_handle));
 
   rc = rtems_rfs_buffer_handle_open(fs, &handle->buffer);
   if (rc > 0) {
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_OPEN))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_OPEN)) {
       printf("rtems-rfs: file-open: buffer handle open failed: %d: %s\n", rc,
              strerror(rc));
+    }
     free(handle);
     return rc;
   }
@@ -86,8 +89,9 @@ int rtems_rfs_file_open(rtems_rfs_file_system* fs, rtems_rfs_ino ino, int oflag,
   shared = rtems_rfs_file_get_shared(fs, ino);
   if (shared) {
     shared->references++;
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_OPEN))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_OPEN)) {
       printf("rtems-rfs: file-open: ino=%" PRId32 " shared\n", ino);
+    }
   } else {
     /*
      * None exists so create. Copy in the shared parts of the inode we hold in
@@ -104,9 +108,10 @@ int rtems_rfs_file_open(rtems_rfs_file_system* fs, rtems_rfs_ino ino, int oflag,
 
     rc = rtems_rfs_inode_open(fs, ino, &shared->inode, true);
     if (rc > 0) {
-      if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_OPEN))
+      if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_OPEN)) {
         printf("rtems-rfs: file-open: inode open failed: %d: %s\n", rc,
                strerror(rc));
+      }
       free(shared);
       rtems_rfs_buffer_handle_close(fs, &handle->buffer);
       free(handle);
@@ -115,9 +120,10 @@ int rtems_rfs_file_open(rtems_rfs_file_system* fs, rtems_rfs_ino ino, int oflag,
 
     rc = rtems_rfs_block_map_open(fs, &shared->inode, &shared->map);
     if (rc > 0) {
-      if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_OPEN))
+      if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_OPEN)) {
         printf("rtems-rfs: file-open: block map open failed: %d: %s\n", rc,
                strerror(rc));
+      }
       rtems_rfs_inode_close(fs, &shared->inode);
       free(shared);
       rtems_rfs_buffer_handle_close(fs, &handle->buffer);
@@ -137,8 +143,9 @@ int rtems_rfs_file_open(rtems_rfs_file_system* fs, rtems_rfs_ino ino, int oflag,
 
     rtems_rfs_inode_unload(fs, &shared->inode, false);
 
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_OPEN))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_OPEN)) {
       printf("rtems-rfs: file-open: ino=%" PRId32 " share created\n", ino);
+    }
   }
 
   handle->flags = oflag;
@@ -156,16 +163,19 @@ int rtems_rfs_file_close(rtems_rfs_file_system* fs,
 
   rrc = 0;
 
-  if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_CLOSE))
+  if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_CLOSE)) {
     printf("rtems-rfs: file-close: entry: ino=%" PRId32 "\n",
            handle->shared->inode.ino);
+  }
 
-  if (handle->shared->references > 0)
+  if (handle->shared->references > 0) {
     handle->shared->references--;
+  }
 
   if (handle->shared->references == 0) {
-    if (!rtems_rfs_inode_is_loaded(&handle->shared->inode))
+    if (!rtems_rfs_inode_is_loaded(&handle->shared->inode)) {
       rrc = rtems_rfs_inode_load(fs, &handle->shared->inode);
+    }
 
     if (rrc == 0) {
       /*
@@ -175,29 +185,34 @@ int rtems_rfs_file_close(rtems_rfs_file_system* fs,
       rtems_rfs_inode_set_mtime(&handle->shared->inode, handle->shared->mtime);
       rtems_rfs_inode_set_ctime(&handle->shared->inode, handle->shared->ctime);
       if (!rtems_rfs_block_size_equal(&handle->shared->size,
-                                      &handle->shared->map.size))
+                                      &handle->shared->map.size)) {
         rtems_rfs_block_map_set_size(&handle->shared->map,
                                      &handle->shared->size);
+      }
     }
 
     rc = rtems_rfs_block_map_close(fs, &handle->shared->map);
     if (rc > 0) {
-      if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_CLOSE))
+      if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_CLOSE)) {
         printf("rtems-rfs: file-close: map close error: ino=%" PRId32
                ": %d: %s\n",
                handle->shared->inode.ino, rc, strerror(rc));
-      if (rrc == 0)
+      }
+      if (rrc == 0) {
         rrc = rc;
+      }
     }
 
     rc = rtems_rfs_inode_close(fs, &handle->shared->inode);
     if (rc > 0) {
-      if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_CLOSE))
+      if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_CLOSE)) {
         printf("rtems-rfs: file-close: inode close error: ino=%" PRId32
                ": %d: %s\n",
                handle->shared->inode.ino, rc, strerror(rc));
-      if (rrc == 0)
+      }
+      if (rrc == 0) {
         rrc = rc;
+      }
     }
 
     rtems_chain_extract_unprotected(&handle->shared->link);
@@ -205,12 +220,14 @@ int rtems_rfs_file_close(rtems_rfs_file_system* fs,
   }
 
   rc = rtems_rfs_buffer_handle_close(fs, &handle->buffer);
-  if ((rrc == 0) && (rc > 0))
+  if ((rrc == 0) && (rc > 0)) {
     rrc = rc;
+  }
 
   if (rrc > 0) {
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_CLOSE))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_CLOSE)) {
       printf("rtems-rfs: file-close: result: %d: %s\n", rrc, strerror(rrc));
+    }
   }
 
   free(handle);
@@ -222,9 +239,10 @@ int rtems_rfs_file_io_start(rtems_rfs_file_handle* handle, size_t* available,
                             bool read) {
   size_t size;
 
-  if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_IO))
+  if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_IO)) {
     printf("rtems-rfs: file-io: start: %s pos=%" PRIu32 ":%" PRIu32 "\n",
            read ? "read" : "write", handle->bpos.bno, handle->bpos.boff);
+  }
 
   if (!rtems_rfs_buffer_handle_has_block(&handle->buffer)) {
     rtems_rfs_buffer_block block;
@@ -245,16 +263,19 @@ int rtems_rfs_file_io_start(rtems_rfs_file_handle* handle, size_t* available,
         return 0;
       }
 
-      if (rc != ENXIO)
+      if (rc != ENXIO) {
         return rc;
+      }
 
-      if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_IO))
+      if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_IO)) {
         printf("rtems-rfs: file-io: start: grow\n");
+      }
 
       rc = rtems_rfs_block_map_grow(rtems_rfs_file_fs(handle),
                                     rtems_rfs_file_map(handle), 1, &block);
-      if (rc > 0)
+      if (rc > 0) {
         return rc;
+      }
 
       request_read = false;
     } else {
@@ -265,32 +286,37 @@ int rtems_rfs_file_io_start(rtems_rfs_file_handle* handle, size_t* available,
        */
       if (!read &&
           (rtems_rfs_file_block_offset(handle) ||
-           (*available < rtems_rfs_fs_block_size(rtems_rfs_file_fs(handle)))))
+           (*available < rtems_rfs_fs_block_size(rtems_rfs_file_fs(handle))))) {
         request_read = true;
+      }
     }
 
-    if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_IO))
+    if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_IO)) {
       printf("rtems-rfs: file-io: start: block=%" PRIu32 " request-read=%s\n",
              block, request_read ? "yes" : "no");
+    }
 
     rc = rtems_rfs_buffer_handle_request(rtems_rfs_file_fs(handle),
                                          rtems_rfs_file_buffer(handle), block,
                                          request_read);
-    if (rc > 0)
+    if (rc > 0) {
       return rc;
+    }
   }
 
   if (read && rtems_rfs_block_map_last(rtems_rfs_file_map(handle)) &&
-      rtems_rfs_block_map_size_offset(rtems_rfs_file_map(handle)))
+      rtems_rfs_block_map_size_offset(rtems_rfs_file_map(handle))) {
     size = rtems_rfs_block_map_size_offset(rtems_rfs_file_map(handle));
-  else
+  } else {
     size = rtems_rfs_fs_block_size(rtems_rfs_file_fs(handle));
+  }
 
   *available = size - rtems_rfs_file_block_offset(handle);
 
-  if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_IO))
+  if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_IO)) {
     printf("rtems-rfs: file-io: start: available=%zu (%zu)\n", *available,
            size);
+  }
 
   return 0;
 }
@@ -302,13 +328,15 @@ int rtems_rfs_file_io_end(rtems_rfs_file_handle* handle, size_t size,
   bool length;
   int rc = 0;
 
-  if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_IO))
+  if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_IO)) {
     printf("rtems-rfs: file-io:   end: %s size=%zu\n", read ? "read" : "write",
            size);
+  }
 
   if (rtems_rfs_buffer_handle_has_block(&handle->buffer)) {
-    if (!read)
+    if (!read) {
       rtems_rfs_buffer_mark_dirty(rtems_rfs_file_buffer(handle));
+    }
     rc = rtems_rfs_buffer_handle_release(rtems_rfs_file_fs(handle),
                                          rtems_rfs_file_buffer(handle));
     if (rc > 0) {
@@ -349,17 +377,20 @@ int rtems_rfs_file_io_end(rtems_rfs_file_handle* handle, size_t size,
   mtime = rtems_rfs_file_update_mtime(handle) && mtime;
   length = rtems_rfs_file_update_length(handle) && length;
 
-  if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_IO))
+  if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_IO)) {
     printf("rtems-rfs: file-io:   end: pos=%" PRIu32 ":%" PRIu32 " %c %c %c\n",
            handle->bpos.bno, handle->bpos.boff, atime ? 'A' : '-',
            mtime ? 'M' : '-', length ? 'L' : '-');
+  }
 
   if (atime || mtime) {
     time_t now = time(NULL);
-    if (read && atime)
+    if (read && atime) {
       handle->shared->atime = now;
-    if (!read && mtime)
+    }
+    if (!read && mtime) {
       handle->shared->mtime = now;
+    }
   }
   if (length) {
     handle->shared->size.count =
@@ -373,16 +404,18 @@ int rtems_rfs_file_io_end(rtems_rfs_file_handle* handle, size_t size,
 
 int rtems_rfs_file_io_release(rtems_rfs_file_handle* handle) {
   int rc = 0;
-  if (rtems_rfs_buffer_handle_has_block(&handle->buffer))
+  if (rtems_rfs_buffer_handle_has_block(&handle->buffer)) {
     rc = rtems_rfs_buffer_handle_release(rtems_rfs_file_fs(handle),
                                          rtems_rfs_file_buffer(handle));
+  }
   return rc;
 }
 
 int rtems_rfs_file_seek(rtems_rfs_file_handle* handle, rtems_rfs_pos pos,
                         rtems_rfs_pos* new_pos) {
-  if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_IO))
+  if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_IO)) {
     printf("rtems-rfs: file-seek: new=%" PRIu64 "\n", pos);
+  }
 
   /*
    * This call only sets the position if it is in a valid part of the file. The
@@ -411,13 +444,15 @@ int rtems_rfs_file_seek(rtems_rfs_file_handle* handle, rtems_rfs_pos pos,
       rc = rtems_rfs_block_map_find(rtems_rfs_file_fs(handle),
                                     rtems_rfs_file_map(handle),
                                     rtems_rfs_file_bpos(handle), &block);
-      if (rc > 0)
+      if (rc > 0) {
         return rc;
+      }
       if (rtems_rfs_buffer_bnum(&handle->buffer) != block) {
         rc = rtems_rfs_buffer_handle_release(rtems_rfs_file_fs(handle),
                                              rtems_rfs_file_buffer(handle));
-        if (rc > 0)
+        if (rc > 0) {
           return rc;
+        }
       }
     }
   } else {
@@ -426,8 +461,9 @@ int rtems_rfs_file_seek(rtems_rfs_file_handle* handle, rtems_rfs_pos pos,
      * extend the file.
      */
     int rc = rtems_rfs_file_io_release(handle);
-    if (rc > 0)
+    if (rc > 0) {
       return rc;
+    }
   }
 
   *new_pos = pos;
@@ -440,8 +476,9 @@ int rtems_rfs_file_set_size(rtems_rfs_file_handle* handle,
   rtems_rfs_pos size;
   int rc;
 
-  if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_IO))
+  if (rtems_rfs_trace(RTEMS_RFS_TRACE_FILE_IO)) {
     printf("rtems-rfs: file-set-size: size=%" PRIu64 "\n", new_size);
+  }
 
   size = rtems_rfs_file_size(handle);
 
@@ -456,8 +493,9 @@ int rtems_rfs_file_set_size(rtems_rfs_file_handle* handle,
      */
     if (new_size == 0) {
       rc = rtems_rfs_block_map_free_all(rtems_rfs_file_fs(handle), map);
-      if (rc > 0)
+      if (rc > 0) {
         return rc;
+      }
     } else {
       if (size < new_size) {
         /*
@@ -488,13 +526,15 @@ int rtems_rfs_file_set_size(rtems_rfs_file_handle* handle,
             /*
              * Have we reached the EOF ?
              */
-            if (rc != ENXIO)
+            if (rc != ENXIO) {
               return rc;
+            }
 
             rc = rtems_rfs_block_map_grow(rtems_rfs_file_fs(handle), map, 1,
                                           &block);
-            if (rc > 0)
+            if (rc > 0) {
               return rc;
+            }
           }
 
           if (count < (length - bpos.boff)) {
@@ -511,8 +551,9 @@ int rtems_rfs_file_set_size(rtems_rfs_file_handle* handle,
           rc = rtems_rfs_buffer_handle_request(rtems_rfs_file_fs(handle),
                                                rtems_rfs_file_buffer(handle),
                                                block, read_block);
-          if (rc > 0)
+          if (rc > 0) {
             return rc;
+          }
 
           dst = rtems_rfs_buffer_data(&handle->buffer);
           memset(dst + bpos.boff, 0, length - bpos.boff);
@@ -521,8 +562,9 @@ int rtems_rfs_file_set_size(rtems_rfs_file_handle* handle,
 
           rc = rtems_rfs_buffer_handle_release(rtems_rfs_file_fs(handle),
                                                rtems_rfs_file_buffer(handle));
-          if (rc > 0)
+          if (rc > 0) {
             return rc;
+          }
 
           count -= length - bpos.boff;
         }
@@ -544,16 +586,18 @@ int rtems_rfs_file_set_size(rtems_rfs_file_handle* handle,
           int rc;
           rc = rtems_rfs_block_map_shrink(rtems_rfs_file_fs(handle),
                                           rtems_rfs_file_map(handle), blocks);
-          if (rc > 0)
+          if (rc > 0) {
             return rc;
+          }
         }
 
         rtems_rfs_block_map_set_size_offset(map, offset);
 
         if (rtems_rfs_block_pos_past_end(rtems_rfs_file_bpos(handle),
-                                         rtems_rfs_block_map_size(map)))
+                                         rtems_rfs_block_map_size(map))) {
           rtems_rfs_block_size_get_bpos(rtems_rfs_block_map_size(map),
                                         rtems_rfs_file_bpos(handle));
+        }
       }
     }
 
@@ -561,8 +605,9 @@ int rtems_rfs_file_set_size(rtems_rfs_file_handle* handle,
     handle->shared->size.offset = rtems_rfs_block_map_size_offset(map);
   }
 
-  if (rtems_rfs_file_update_mtime(handle))
+  if (rtems_rfs_file_update_mtime(handle)) {
     handle->shared->mtime = time(NULL);
+  }
 
   return 0;
 }
@@ -574,8 +619,9 @@ rtems_rfs_file_shared* rtems_rfs_file_get_shared(rtems_rfs_file_system* fs,
   while (!rtems_chain_is_tail(&fs->file_shares, node)) {
     rtems_rfs_file_shared* shared;
     shared = (rtems_rfs_file_shared*)node;
-    if (shared->inode.ino == ino)
+    if (shared->inode.ino == ino) {
       return shared;
+    }
     node = rtems_chain_next(node);
   }
   return NULL;
