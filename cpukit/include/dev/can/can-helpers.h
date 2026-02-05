@@ -73,7 +73,7 @@
   ( { (typeof( _mask )) ( ( ( _reg ) & ( _mask ) ) >> __bf_shf( _mask ) ); } )
 #endif
 
-// clang-formatting off
+// clang-format off
 static const uint8_t rtems_can_len2dlc[] = {
   0, 1, 2, 3, 4, 5, 6, 7, 8,      /* 0 - 8 */
   9, 9, 9, 9,                     /* 9 - 12 */
@@ -86,7 +86,7 @@ static const uint8_t rtems_can_len2dlc[] = {
   15, 15, 15, 15, 15, 15, 15, 15, /* 49 - 56 */
   15, 15, 15, 15, 15, 15, 15, 15  /* 57 - 64 */
 };
-// clang-formatting on
+// clang-format on
 
 /**
  * @brief This function calculates CAN DLC from given length in bytes.
