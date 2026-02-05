@@ -39,6 +39,8 @@ links:
 - role: build-dependency
   uid: optclkuart
 - role: build-dependency
+  uid: optpciemmu
+- role: build-dependency
   uid: ../objclockarmgenerictimer
 - role: build-dependency
   uid: ../../dev/irq/objarmgicv2

@@ -44,6 +44,13 @@ BSP_START_DATA_SECTION const aarch64_mmu_config_entry
 aarch64_mmu_config_table[] = {
   AARCH64_MMU_DEFAULT_SECTIONS,
   {
+#ifdef ZYNQMP_MMU_PCIE_ENABLE
+  /* PCIe low */
+    .begin = 0xe0000000,
+    .end = 0xf0000000,
+    .flags = AARCH64_MMU_DEVICE
+  }, {
+#endif /* ZYNQMP_MMU_PCIE_ENABLE */
     .begin = 0xf9000000U,
     .end = 0xf9100000U,
     .flags = AARCH64_MMU_DEVICE
@@ -69,6 +76,16 @@ aarch64_mmu_config_table[] = {
     .begin = 0xb0000000U,
     .end = 0xb0200000U,
     .flags = AARCH64_MMU_DATA_RW
+#ifdef ZYNQMP_MMU_PCIE_ENABLE
+  }, { /* PCIe high */
+    .begin = 0x600000000U,
+    .end = 0x800000000U,
+    .flags = AARCH64_MMU_DEVICE
+  }, { /* PCIe high */
+    .begin = 0x8000000000U,
+    .end = 0xc000000000U,
+    .flags = AARCH64_MMU_DEVICE
+#endif /* ZYNQMP_MMU_PCIE_ENABLE */
   }
 };
 
