@@ -286,9 +286,10 @@ rtems_rtl_elf_reloc_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
   case R_TYPE(32_PCREL): {
     write32le(where, pcrel_val);
 
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
       printf("rtl: R_RISCV_32_PCREL %p @ %p in %s\n", (void*)*(where), where,
              rtems_rtl_obj_oname(obj));
+    }
 
   } break;
 

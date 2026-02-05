@@ -362,8 +362,9 @@ static inline bool rtems_rtl_obj_text_inside(const rtems_rtl_obj* obj,
  * @return size_t Aligned offset.
  */
 static inline size_t rtems_rtl_obj_align(size_t offset, uint32_t alignment) {
-  if ((alignment > 1) && ((offset & (alignment - 1)) != 0))
+  if ((alignment > 1) && ((offset & (alignment - 1)) != 0)) {
     offset = (offset + alignment) & ~(alignment - 1);
+  }
   return offset;
 }
 

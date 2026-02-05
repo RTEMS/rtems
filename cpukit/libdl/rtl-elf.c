@@ -142,8 +142,9 @@ static const char* rtems_rtl_elf_separated_section(const char* name) {
   const size_t prefixes = sizeof(prefix) / sizeof(prefix[0]);
   size_t p;
   for (p = 0; p < prefixes; ++p) {
-    if (strncmp(name, prefix[p].label, prefix[p].len) == 0)
+    if (strncmp(name, prefix[p].label, prefix[p].len) == 0) {
       return name + prefix[p].len;
+    }
   }
   return NULL;
 }
@@ -172,8 +173,9 @@ static bool rtems_rtl_elf_find_symbol(rtems_rtl_obj* obj, const Elf_Sym* sym,
      * Search the object file then the global table for the symbol.
      */
     *symbol = rtems_rtl_symbol_obj_find(obj, symname);
-    if (!*symbol)
+    if (!*symbol) {
       return false;
+    }
 
     *value = (Elf_Addr)(uintptr_t)(*symbol)->value;
     return true;
@@ -182,8 +184,9 @@ static bool rtems_rtl_elf_find_symbol(rtems_rtl_obj* obj, const Elf_Sym* sym,
   *symbol = NULL;
 
   sect = rtems_rtl_obj_find_section_by_index(obj, sym->st_shndx);
-  if (!sect)
+  if (!sect) {
     return false;
+  }
 
   *value = sym->st_value + (Elf_Addr)(uintptr_t)sect->base;
 
@@ -228,7 +231,7 @@ static bool rtems_rtl_elf_reloc_parser(rtems_rtl_obj* obj, bool is_rela,
    */
   if (is_rela) {
     const Elf_Rela* rela = (const Elf_Rela*)relbuf;
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
       printf(
           "rtl: rela tramp: sym: %c:%s(%d)=%08jx type:%d off:%08jx addend:%d\n",
           ELF_ST_BIND(sym->st_info) == STB_GLOBAL ||
@@ -238,6 +241,7 @@ static bool rtems_rtl_elf_reloc_parser(rtems_rtl_obj* obj, bool is_rela,
           symname, (int)ELF_R_SYM(rela->r_info), (uintmax_t)symvalue,
           (int)ELF_R_TYPE(rela->r_info), (uintmax_t)rela->r_offset,
           (int)rela->r_addend);
+    }
     rs = rtems_rtl_elf_relocate_rela_tramp(obj, rela, targetsect, symname,
                                            sym->st_info, symvalue);
     rel_words[REL_R_OFFSET] = rela->r_offset;
@@ -245,7 +249,7 @@ static bool rtems_rtl_elf_reloc_parser(rtems_rtl_obj* obj, bool is_rela,
     rel_words[REL_R_ADDEND] = rela->r_addend;
   } else {
     const Elf_Rel* rel = (const Elf_Rel*)relbuf;
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
       printf("rtl: rel tramp: sym: %c:%s(%d)=%08jx type:%d off:%08jx\n",
              ELF_ST_BIND(sym->st_info) == STB_GLOBAL ||
                      ELF_ST_BIND(sym->st_info) == STB_WEAK
@@ -253,6 +257,7 @@ static bool rtems_rtl_elf_reloc_parser(rtems_rtl_obj* obj, bool is_rela,
                  : 'L',
              symname, (int)ELF_R_SYM(rel->r_info), (uintmax_t)symvalue,
              (int)ELF_R_TYPE(rel->r_info), (uintmax_t)rel->r_offset);
+    }
     rs = rtems_rtl_elf_relocate_rel_tramp(obj, rel, targetsect, symname,
                                           sym->st_info, symvalue);
     rel_words[REL_R_OFFSET] = rel->r_offset;
@@ -260,16 +265,18 @@ static bool rtems_rtl_elf_reloc_parser(rtems_rtl_obj* obj, bool is_rela,
     rel_words[REL_R_ADDEND] = 0;
   }
 
-  if (rs == rtems_rtl_elf_rel_failure)
+  if (rs == rtems_rtl_elf_rel_failure) {
     return false;
+  }
 
   if (rs == rtems_rtl_elf_rel_tramp_cache ||
       rs == rtems_rtl_elf_rel_tramp_add) {
     uint32_t flags =
         (is_rela ? 1 : 0) | (resolved ? 0 : 1 << 1) | (sym->st_info << 8);
     if (!rtems_rtl_trampoline_add(obj, flags, targetsect->section, symvalue,
-                                  rel_words))
+                                  rel_words)) {
       return false;
+    }
   }
 
   /*
@@ -322,8 +329,9 @@ static bool rtems_rtl_elf_reloc_relocator(
     }
 
     if (!rtems_rtl_unresolved_add(obj, flags, symname, targetsect->section,
-                                  rel_words))
+                                  rel_words)) {
       return false;
+    }
 
     ++obj->unresolved;
   } else {
@@ -331,35 +339,41 @@ static bool rtems_rtl_elf_reloc_relocator(
     rtems_rtl_elf_rel_status rs;
 
     if (is_rela) {
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
         printf("rtl: rela: sym:%s(%d)=%08jx type:%d off:%08jx addend:%d\n",
                symname, (int)ELF_R_SYM(rela->r_info), (uintmax_t)symvalue,
                (int)ELF_R_TYPE(rela->r_info), (uintmax_t)rela->r_offset,
                (int)rela->r_addend);
+      }
       rs = rtems_rtl_elf_relocate_rela(obj, rela, targetsect, symname,
                                        sym->st_info, symvalue);
-      if (rs != rtems_rtl_elf_rel_no_error)
+      if (rs != rtems_rtl_elf_rel_no_error) {
         return false;
+      }
     } else {
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
         printf("rtl: rel: sym:%s(%d)=%08jx type:%d off:%08jx\n", symname,
                (int)ELF_R_SYM(rel->r_info), (uintmax_t)symvalue,
                (int)ELF_R_TYPE(rel->r_info), (uintmax_t)rel->r_offset);
+      }
       rs = rtems_rtl_elf_relocate_rel(obj, rel, targetsect, symname,
                                       sym->st_info, symvalue);
-      if (rs != rtems_rtl_elf_rel_no_error)
+      if (rs != rtems_rtl_elf_rel_no_error) {
         return false;
+      }
     }
 
     sobj = rtems_rtl_find_obj_with_symbol(symbol);
 
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_DEPENDENCY))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_DEPENDENCY)) {
       printf("rtl: depend: %s -> %s:%s\n", obj->oname,
              sobj == NULL ? "not-found" : sobj->oname, symname);
+    }
 
     if (sobj != NULL) {
-      if (rtems_rtl_obj_add_dependent(obj, sobj))
+      if (rtems_rtl_obj_add_dependent(obj, sobj)) {
         rtems_rtl_obj_inc_reference(sobj);
+      }
     }
   }
 
@@ -385,20 +399,23 @@ static bool rtems_rtl_elf_relocate_worker(rtems_rtl_obj* obj, int fd,
    * exist ignore these relocations. They are most probably debug sections.
    */
   targetsect = rtems_rtl_obj_find_section_by_index(obj, sect->info);
-  if (!targetsect)
+  if (!targetsect) {
     return true;
+  }
 
   /*
    * The section muct has been loaded. It could be a separate section in an
    * archive and not loaded.
    */
-  if ((targetsect->flags & RTEMS_RTL_OBJ_SECT_LOAD) == 0)
+  if ((targetsect->flags & RTEMS_RTL_OBJ_SECT_LOAD) == 0) {
     return true;
+  }
 
   rtems_rtl_obj_caches(&symbols, &strings, &relocs);
 
-  if (!symbols || !strings || !relocs)
+  if (!symbols || !strings || !relocs) {
     return false;
+  }
 
   symsect = rtems_rtl_obj_find_section(obj, ".symtab");
   if (!symsect) {
@@ -412,8 +429,9 @@ static bool rtems_rtl_elf_relocate_worker(rtems_rtl_obj* obj, int fd,
     return false;
   }
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
     printf("rtl: relocation: %s, syms:%s\n", sect->name, symsect->name);
+  }
 
   /*
    * Handle the different relocation record types.
@@ -438,21 +456,24 @@ static bool rtems_rtl_elf_relocate_worker(rtems_rtl_obj* obj, int fd,
     off = obj->ooffset + sect->offset + (reloc * reloc_size);
 
     if (!rtems_rtl_obj_cache_read_byval(relocs, fd, off, &relbuf[0],
-                                        reloc_size))
+                                        reloc_size)) {
       return false;
+    }
 
     /*
      * Read the symbol details.
      */
-    if (is_rela)
+    if (is_rela) {
       off = (obj->ooffset + symsect->offset +
              (ELF_R_SYM(rela->r_info) * sizeof(sym)));
-    else
+    } else {
       off = (obj->ooffset + symsect->offset +
              (ELF_R_SYM(rel->r_info) * sizeof(sym)));
+    }
 
-    if (!rtems_rtl_obj_cache_read_byval(symbols, fd, off, &sym, sizeof(sym)))
+    if (!rtems_rtl_obj_cache_read_byval(symbols, fd, off, &sym, sizeof(sym))) {
       return false;
+    }
 
     /*
      * Only need the name of the symbol if global or a common symbol.
@@ -466,8 +487,9 @@ static bool rtems_rtl_elf_relocate_worker(rtems_rtl_obj* obj, int fd,
       off = obj->ooffset + strtab->offset + sym.st_name;
       len = RTEMS_RTL_ELF_STRING_MAX;
 
-      if (!rtems_rtl_obj_cache_read(strings, fd, off, (void**)&symname, &len))
+      if (!rtems_rtl_obj_cache_read(strings, fd, off, (void**)&symname, &len)) {
         return false;
+      }
     }
 
     /*
@@ -476,29 +498,34 @@ static bool rtems_rtl_elf_relocate_worker(rtems_rtl_obj* obj, int fd,
      * having unresolved externals and store the external. The load of an
      * object after this one may provide the unresolved externals.
      */
-    if (is_rela)
+    if (is_rela) {
       rel_type = ELF_R_TYPE(rela->r_info);
-    else
+    } else {
       rel_type = ELF_R_TYPE(rel->r_info);
+    }
 
     resolved = true;
 
-    if (rtems_rtl_elf_rel_resolve_sym(rel_type))
+    if (rtems_rtl_elf_rel_resolve_sym(rel_type)) {
       resolved =
           rtems_rtl_elf_find_symbol(obj, &sym, symname, &symbol, &symvalue);
-    if (symname != NULL && strlen(symname) == 0)
+    }
+    if (symname != NULL && strlen(symname) == 0) {
       resolved = true;
+    }
 
     if (!handler(obj, is_rela, relbuf, targetsect, symbol, &sym, symname,
-                 symvalue, resolved, data))
+                 symvalue, resolved, data)) {
       return false;
+    }
   }
 
   /*
    * Set the unresolved externals status if there are unresolved externals.
    */
-  if (obj->unresolved)
+  if (obj->unresolved) {
     obj->flags |= RTEMS_RTL_OBJ_UNRESOLVED;
+  }
 
   return true;
 }
@@ -538,42 +565,49 @@ bool rtems_rtl_obj_relocate_unresolved(rtems_rtl_unresolv_reloc* reloc,
     rela.r_offset = reloc->rel[REL_R_OFFSET];
     rela.r_info = reloc->rel[REL_R_INFO];
     rela.r_addend = reloc->rel[REL_R_ADDEND];
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
       printf("rtl: rela: sym:%d type:%d off:%08jx addend:%d\n",
              (int)ELF_R_SYM(rela.r_info), (int)ELF_R_TYPE(rela.r_info),
              (uintmax_t)rela.r_offset, (int)rela.r_addend);
+    }
     rs = rtems_rtl_elf_relocate_rela(reloc->obj, &rela, sect, sym->name,
                                      sym->data, symvalue);
-    if (rs != rtems_rtl_elf_rel_no_error)
+    if (rs != rtems_rtl_elf_rel_no_error) {
       return false;
+    }
   } else {
     Elf_Rel rel;
     rel.r_offset = reloc->rel[REL_R_OFFSET];
     rel.r_info = reloc->rel[REL_R_INFO];
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
       printf("rtl: rel: sym:%d type:%d off:%08jx\n", (int)ELF_R_SYM(rel.r_info),
              (int)ELF_R_TYPE(rel.r_info), (uintmax_t)rel.r_offset);
+    }
     rs = rtems_rtl_elf_relocate_rel(reloc->obj, &rel, sect, sym->name,
                                     sym->data, symvalue);
-    if (rs != rtems_rtl_elf_rel_no_error)
+    if (rs != rtems_rtl_elf_rel_no_error) {
       return false;
+    }
   }
 
   if (reloc->obj->unresolved > 0) {
     --reloc->obj->unresolved;
-    if (reloc->obj->unresolved == 0)
+    if (reloc->obj->unresolved == 0) {
       reloc->obj->flags &= ~RTEMS_RTL_OBJ_UNRESOLVED;
+    }
   }
 
   sobj = rtems_rtl_find_obj_with_symbol(sym);
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_DEPENDENCY))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_DEPENDENCY)) {
     printf("rtl: depend: %s -> %s:%s\n", reloc->obj->oname,
            sobj == NULL ? "not-found" : sobj->oname, sym->name);
+  }
 
   if (sobj != NULL) {
-    if (rtems_rtl_obj_add_dependent(reloc->obj, sobj))
+    if (rtems_rtl_obj_add_dependent(reloc->obj, sobj)) {
       rtems_rtl_obj_inc_reference(sobj);
+    }
   }
 
   return true;
@@ -595,8 +629,9 @@ static bool rtems_rtl_elf_common(rtems_rtl_obj* obj, int fd,
 
   rtems_rtl_obj_caches(&symbols, NULL, NULL);
 
-  if (!symbols)
+  if (!symbols) {
     return false;
+  }
 
   /*
    * Find the number size of the common section by finding all symbols that
@@ -609,24 +644,27 @@ static bool rtems_rtl_elf_common(rtems_rtl_obj* obj, int fd,
     off = obj->ooffset + sect->offset + (sym * sizeof(symbol));
 
     if (!rtems_rtl_obj_cache_read_byval(symbols, fd, off, &symbol,
-                                        sizeof(symbol)))
+                                        sizeof(symbol))) {
       return false;
+    }
 
     if ((symbol.st_shndx == SHN_COMMON) &&
         ((ELF_ST_TYPE(symbol.st_info) == STT_OBJECT) ||
          (ELF_ST_TYPE(symbol.st_info) == STT_COMMON))) {
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_SYMBOL))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_SYMBOL)) {
         printf(
             "rtl: com:elf:%-2zd bind:%-2d type:%-2d size:%d value:%d name:%d\n",
             sym, (int)ELF_ST_BIND(symbol.st_info),
             (int)ELF_ST_TYPE(symbol.st_info), (int)symbol.st_size,
             (int)symbol.st_value, (int)symbol.st_name);
+      }
       /*
        * If the size is zero this is the first entry, it defines the common
        * section's aligment. The symbol's value is the alignment.
        */
-      if (common->size == 0)
+      if (common->size == 0) {
         common->alignment = symbol.st_value;
+      }
       common->size +=
           rtems_rtl_obj_align(common->size, symbol.st_value) + symbol.st_size;
     }
@@ -672,7 +710,7 @@ static bool rtems_rtl_elf_tramp_resolve_reloc(rtems_rtl_unresolv_rec* rec,
         Elf_Rela rela = {.r_offset = tramp->rel[REL_R_OFFSET],
                          .r_info = tramp->rel[REL_R_INFO],
                          .r_addend = tramp->rel[REL_R_ADDEND]};
-        if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+        if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
           printf("rtl: rela tramp: check: %c(%d)=%08jx type:%d off:%08jx "
                  "addend:%d\n",
                  ELF_ST_BIND(st_info) == STB_GLOBAL ||
@@ -682,6 +720,7 @@ static bool rtems_rtl_elf_tramp_resolve_reloc(rtems_rtl_unresolv_rec* rec,
                  (int)ELF_R_SYM(rela.r_info), (uintmax_t)symvalue,
                  (int)ELF_R_TYPE(rela.r_info), (uintmax_t)rela.r_offset,
                  (int)rela.r_addend);
+        }
         rs = rtems_rtl_elf_relocate_rela_tramp(tramp->obj, &rela, targetsect,
                                                NULL, st_info, symvalue);
       } else {
@@ -689,7 +728,7 @@ static bool rtems_rtl_elf_tramp_resolve_reloc(rtems_rtl_unresolv_rec* rec,
             .r_offset = tramp->rel[REL_R_OFFSET],
             .r_info = tramp->rel[REL_R_INFO],
         };
-        if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+        if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
           printf("rtl: rel tramp: check: %c(%d)=%08jx type:%d off:%08jx\n",
                  ELF_ST_BIND(st_info) == STB_GLOBAL ||
                          ELF_ST_BIND(st_info) == STB_WEAK
@@ -697,12 +736,14 @@ static bool rtems_rtl_elf_tramp_resolve_reloc(rtems_rtl_unresolv_rec* rec,
                      : 'L',
                  (int)ELF_R_SYM(rel.r_info), (uintmax_t)symvalue,
                  (int)ELF_R_TYPE(rel.r_info), (uintmax_t)rel.r_offset);
+        }
         rs = rtems_rtl_elf_relocate_rel_tramp(tramp->obj, &rel, targetsect,
                                               NULL, st_info, symvalue);
       }
 
-      if (unresolved || rs == rtems_rtl_elf_rel_tramp_add)
+      if (unresolved || rs == rtems_rtl_elf_rel_tramp_add) {
         ++tramp->obj->tramp_slots;
+      }
       if (rs == rtems_rtl_elf_rel_failure) {
         *failure = true;
         return true;
@@ -721,22 +762,25 @@ static bool rtems_rtl_elf_find_trampolines(rtems_rtl_obj* obj,
    * See which relocs are out of range and need a trampoline.
    */
   rtems_rtl_unresolved_iterate(rtems_rtl_elf_tramp_resolve_reloc, &td);
-  if (td.failure)
+  if (td.failure) {
     return false;
+  }
   rtems_rtl_trampoline_remove(obj);
   obj->tramp_relocs = obj->tramp_slots;
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
     printf("rtl: tramp:elf: tramps: slots:%zu count:%zu total:%zu\n",
            obj->tramp_relocs, td.count, td.total);
+  }
   /*
    * Add on enough space to handle the unresolved externals that need to be
    * resolved at some point in time. They could all require fixups and
    * trampolines.
    */
   obj->tramp_slots += unresolved;
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
     printf("rtl: tramp:elf: slots:%zu (%zu)\n", obj->tramp_slots,
            obj->tramp_slots * obj->tramp_slot_size);
+  }
   return true;
 }
 
@@ -750,8 +794,9 @@ static bool rtems_rtl_elf_dependents(rtems_rtl_obj* obj,
    * entries when the entries are added.
    */
   if (reloc->dependents > 0 && reloc->unresolved == 0) {
-    if (!rtems_rtl_obj_alloc_dependents(obj, reloc->dependents))
+    if (!rtems_rtl_obj_alloc_dependents(obj, reloc->dependents)) {
       return false;
+    }
   }
   return true;
 }
@@ -782,8 +827,9 @@ static bool rtems_rtl_elf_symbols_load(rtems_rtl_obj* obj, int fd,
 
   rtems_rtl_obj_caches(&symbols, &strings, NULL);
 
-  if (!symbols || !strings)
+  if (!symbols || !strings) {
     return false;
+  }
 
   /*
    * Find the number of globals and the amount of string space
@@ -804,14 +850,16 @@ static bool rtems_rtl_elf_symbols_load(rtems_rtl_obj* obj, int fd,
     off = obj->ooffset + sect->offset + (sym * sizeof(symbol));
 
     if (!rtems_rtl_obj_cache_read_byval(symbols, fd, off, &symbol,
-                                        sizeof(symbol)))
+                                        sizeof(symbol))) {
       return false;
+    }
 
     off = obj->ooffset + strtab->offset + symbol.st_name;
     len = RTEMS_RTL_ELF_STRING_MAX;
 
-    if (!rtems_rtl_obj_cache_read(strings, fd, off, (void**)&name, &len))
+    if (!rtems_rtl_obj_cache_read(strings, fd, off, (void**)&name, &len)) {
       return false;
+    }
 
     /*
      * Only keep the functions and global or weak symbols so place them in a
@@ -819,7 +867,7 @@ static bool rtems_rtl_elf_symbols_load(rtems_rtl_obj* obj, int fd,
      * object file has been loaded. Undefined symbols are NOTYPE so for locals
      * we need to make sure there is a valid seciton.
      */
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_SYMBOL))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_SYMBOL)) {
       printf("rtl: sym:elf:%-4zd name:%-4d: %-20s: bind:%-2d:%-12s "
              "type:%-2d:%-10s sect:%-5d size:%-5d value:%d\n",
              sym, (int)symbol.st_name, name, (int)ELF_ST_BIND(symbol.st_info),
@@ -827,12 +875,14 @@ static bool rtems_rtl_elf_symbols_load(rtems_rtl_obj* obj, int fd,
              (int)ELF_ST_TYPE(symbol.st_info),
              rtems_rtl_elf_sym_type_label(symbol.st_info), symbol.st_shndx,
              (int)symbol.st_size, (int)symbol.st_value);
+    }
 
     /*
      * If a duplicate forget it.
      */
-    if (rtems_rtl_symbol_global_find(name))
+    if (rtems_rtl_symbol_global_find(name)) {
       continue;
+    }
 
     if ((symbol.st_shndx != 0) &&
         ((ELF_ST_TYPE(symbol.st_info) == STT_OBJECT) ||
@@ -867,16 +917,18 @@ static bool rtems_rtl_elf_symbols_load(rtems_rtl_obj* obj, int fd,
               return false;
             }
           } else {
-            if (rtems_rtl_trace(RTEMS_RTL_TRACE_SYMBOL))
+            if (rtems_rtl_trace(RTEMS_RTL_TRACE_SYMBOL)) {
               printf("rtl: sym:elf:%-4zd name:%-4d: %-20s: global\n", sym,
                      (int)symbol.st_name, name);
+            }
             ++globals;
             global_string_space += strlen(name) + 1;
           }
         } else if (ELF_ST_BIND(symbol.st_info) == STB_LOCAL) {
-          if (rtems_rtl_trace(RTEMS_RTL_TRACE_SYMBOL))
+          if (rtems_rtl_trace(RTEMS_RTL_TRACE_SYMBOL)) {
             printf("rtl: sym:elf:%-4zd name:%-4d: %-20s: local\n", sym,
                    (int)symbol.st_name, name);
+          }
           ++locals;
           local_string_space += strlen(name) + 1;
         }
@@ -972,21 +1024,23 @@ static bool rtems_rtl_elf_symbols_load(rtems_rtl_obj* obj, int fd,
         off = obj->ooffset + strtab->offset + symbol.st_name;
         len = RTEMS_RTL_ELF_STRING_MAX;
 
-        if (!rtems_rtl_obj_cache_read(strings, fd, off, (void**)&name, &len))
+        if (!rtems_rtl_obj_cache_read(strings, fd, off, (void**)&name, &len)) {
           return false;
+        }
 
         /*
          * If a duplicate forget it.
          */
-        if (rtems_rtl_symbol_global_find(name))
+        if (rtems_rtl_symbol_global_find(name)) {
           continue;
+        }
 
         if ((ELF_ST_BIND(symbol.st_info) == STB_GLOBAL) ||
             (ELF_ST_BIND(symbol.st_info) == STB_WEAK)) {
           size_t slen = strlen(name) + 1;
-          if ((gstring + slen) > (char*)obj->global_table + obj->global_size)
+          if ((gstring + slen) > (char*)obj->global_table + obj->global_size) {
             string = NULL;
-          else {
+          } else {
             osym = gsym;
             string = gstring;
             gstring += slen;
@@ -994,9 +1048,9 @@ static bool rtems_rtl_elf_symbols_load(rtems_rtl_obj* obj, int fd,
           }
         } else {
           size_t slen = strlen(name) + 1;
-          if ((lstring + slen) > (char*)obj->local_table + obj->local_size)
+          if ((lstring + slen) > (char*)obj->local_table + obj->local_size) {
             string = NULL;
-          else {
+          } else {
             osym = lsym;
             string = lstring;
             lstring += slen;
@@ -1043,13 +1097,14 @@ static bool rtems_rtl_elf_symbols_load(rtems_rtl_obj* obj, int fd,
         osym->value = (void*)(intptr_t)value;
         osym->data = symbol.st_shndx;
 
-        if (rtems_rtl_trace(RTEMS_RTL_TRACE_SYMBOL))
+        if (rtems_rtl_trace(RTEMS_RTL_TRACE_SYMBOL)) {
           printf("rtl: sym:add:%-4zd name:%-4d: %-20s: bind:%-2d "
                  "type:%-2d val:%-8p sect:%-3d size:%d\n",
                  sym, (int)symbol.st_name, osym->name,
                  (int)ELF_ST_BIND(symbol.st_info),
                  (int)ELF_ST_TYPE(symbol.st_info), osym->value, symbol.st_shndx,
                  (int)symbol.st_size);
+        }
       }
     }
   }
@@ -1071,11 +1126,12 @@ static bool rtems_rtl_elf_symbols_locate(rtems_rtl_obj* obj, int fd,
     symsect = rtems_rtl_obj_find_section_by_index(obj, osym->data);
     if (symsect) {
       osym->value += (intptr_t)symsect->base;
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_SYMBOL))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_SYMBOL)) {
         printf("rtl: sym:locate:local :%-4zd name: %-20s val:%-8p sect:%-3d "
                "(%s, %p)\n",
                sym, osym->name, osym->value, osym->data, symsect->name,
                symsect->base);
+      }
     }
   }
 
@@ -1085,16 +1141,18 @@ static bool rtems_rtl_elf_symbols_locate(rtems_rtl_obj* obj, int fd,
     symsect = rtems_rtl_obj_find_section_by_index(obj, osym->data);
     if (symsect) {
       osym->value += (intptr_t)symsect->base;
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_SYMBOL))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_SYMBOL)) {
         printf("rtl: sym:locate:global:%-4zd name: %-20s val:%-8p sect:%-3d "
                "(%s, %p)\n",
                sym, osym->name, osym->value, osym->data, symsect->name,
                symsect->base);
+      }
     }
   }
 
-  if (obj->global_size)
+  if (obj->global_size) {
     rtems_rtl_symbol_obj_add(obj);
+  }
 
   return true;
 }
@@ -1104,8 +1162,9 @@ static bool rtems_rtl_elf_arch_alloc(rtems_rtl_obj* obj, int fd,
   (void)fd;
   (void)data;
 
-  if (rtems_rtl_obj_sect_is_arch_alloc(sect))
+  if (rtems_rtl_obj_sect_is_arch_alloc(sect)) {
     return rtems_rtl_elf_arch_section_alloc(obj, sect);
+  }
   return true;
 }
 
@@ -1115,10 +1174,12 @@ static bool rtems_rtl_elf_arch_free(rtems_rtl_obj* obj) {
     rtems_rtl_obj_sect* sect;
     sect = rtems_rtl_obj_find_section_by_mask(obj, index,
                                               RTEMS_RTL_OBJ_SECT_ARCH_ALLOC);
-    if (sect == NULL)
+    if (sect == NULL) {
       break;
-    if (!rtems_rtl_elf_arch_section_free(obj, sect))
+    }
+    if (!rtems_rtl_elf_arch_section_free(obj, sect)) {
       return false;
+    }
     index = sect->section;
   }
   return true;
@@ -1163,16 +1224,18 @@ static bool rtems_rtl_elf_parse_sections(rtems_rtl_obj* obj, int fd,
 
   rtems_rtl_obj_caches(&sects, &strings, NULL);
 
-  if (!sects || !strings)
+  if (!sects || !strings) {
     return false;
+  }
 
   /*
    * Get the offset to the section string table.
    */
   off = obj->ooffset + ehdr->e_shoff + (ehdr->e_shstrndx * ehdr->e_shentsize);
 
-  if (!rtems_rtl_obj_cache_read_byval(sects, fd, off, &shdr, sizeof(shdr)))
+  if (!rtems_rtl_obj_cache_read_byval(sects, fd, off, &shdr, sizeof(shdr))) {
     return false;
+  }
 
   if (shdr.sh_type != SHT_STRTAB) {
     rtems_rtl_set_error(EINVAL, "bad .sectstr section type");
@@ -1192,21 +1255,25 @@ static bool rtems_rtl_elf_parse_sections(rtems_rtl_obj* obj, int fd,
     off = obj->ooffset + ehdr->e_shoff +
           (((uint32_t)section) * ehdr->e_shentsize);
 
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_DETAIL))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_DETAIL)) {
       printf("rtl: section header: %2d: offset=%d\n", section, (int)off);
+    }
 
-    if (!rtems_rtl_obj_cache_read_byval(sects, fd, off, &shdr, sizeof(shdr)))
+    if (!rtems_rtl_obj_cache_read_byval(sects, fd, off, &shdr, sizeof(shdr))) {
       return false;
+    }
 
     len = RTEMS_RTL_ELF_STRING_MAX;
     if (!rtems_rtl_obj_cache_read(strings, fd, sectstroff + shdr.sh_name,
-                                  (void**)&name, &len))
+                                  (void**)&name, &len)) {
       return false;
+    }
 
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_DETAIL))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_DETAIL)) {
       printf("rtl: section: %2d: name=%s type=%d flags=%08x link=%d info=%d\n",
              section, name, (int)shdr.sh_type, (unsigned int)shdr.sh_flags,
              (int)shdr.sh_link, (int)shdr.sh_info);
+    }
 
     flags = 0;
 
@@ -1224,12 +1291,13 @@ static bool rtems_rtl_elf_parse_sections(rtems_rtl_obj* obj, int fd,
        * alloc/executable and the program data is flagged alloc/writable.
        */
       if ((shdr.sh_flags & SHF_ALLOC) == SHF_ALLOC) {
-        if ((shdr.sh_flags & SHF_EXECINSTR) == SHF_EXECINSTR)
+        if ((shdr.sh_flags & SHF_EXECINSTR) == SHF_EXECINSTR) {
           flags = RTEMS_RTL_OBJ_SECT_TEXT | RTEMS_RTL_OBJ_SECT_LOAD;
-        else if ((shdr.sh_flags & SHF_WRITE) == SHF_WRITE)
+        } else if ((shdr.sh_flags & SHF_WRITE) == SHF_WRITE) {
           flags = RTEMS_RTL_OBJ_SECT_DATA | RTEMS_RTL_OBJ_SECT_LOAD;
-        else
+        } else {
           flags = RTEMS_RTL_OBJ_SECT_CONST | RTEMS_RTL_OBJ_SECT_LOAD;
+        }
       }
       break;
 
@@ -1238,8 +1306,10 @@ static bool rtems_rtl_elf_parse_sections(rtems_rtl_obj* obj, int fd,
        * There is 1 NOBIT section which is the .bss section. There is nothing
        * but a definition as the .bss is just a clear region of memory.
        */
-      if ((shdr.sh_flags & (SHF_ALLOC | SHF_WRITE)) == (SHF_ALLOC | SHF_WRITE))
+      if ((shdr.sh_flags & (SHF_ALLOC | SHF_WRITE)) ==
+          (SHF_ALLOC | SHF_WRITE)) {
         flags = RTEMS_RTL_OBJ_SECT_BSS | RTEMS_RTL_OBJ_SECT_ZERO;
+      }
       break;
 
     case SHT_RELA:
@@ -1284,9 +1354,10 @@ static bool rtems_rtl_elf_parse_sections(rtems_rtl_obj* obj, int fd,
        */
       flags = rtems_rtl_elf_section_flags(obj, &shdr);
       if (flags == 0) {
-        if (rtems_rtl_trace(RTEMS_RTL_TRACE_WARNING))
+        if (rtems_rtl_trace(RTEMS_RTL_TRACE_WARNING)) {
           printf("rtl: unsupported section: %2d: type=%02d flags=%02x\n",
                  section, (int)shdr.sh_type, (int)shdr.sh_flags);
+        }
       }
       break;
     }
@@ -1300,24 +1371,28 @@ static bool rtems_rtl_elf_parse_sections(rtems_rtl_obj* obj, int fd,
        */
       if (rtems_rtl_obj_aname_valid(obj)) {
         const char* symname = rtems_rtl_elf_separated_section(name);
-        if (symname != NULL && rtems_rtl_symbol_global_find(symname))
+        if (symname != NULL && rtems_rtl_symbol_global_find(symname)) {
           flags &= ~RTEMS_RTL_OBJ_SECT_LOAD;
+        }
       }
 
       /*
        * If link ordering this section must appear in the same order in memory
        * as the linked-to section relative to the sections it loads with.
        */
-      if ((shdr.sh_flags & SHF_LINK_ORDER) != 0)
+      if ((shdr.sh_flags & SHF_LINK_ORDER) != 0) {
         flags |= RTEMS_RTL_OBJ_SECT_LINK;
+      }
 
       /*
        * Some architexctures have a named PROGBIT section for INIT/FINI.
        */
-      if (strcmp(".ctors", name) == 0)
+      if (strcmp(".ctors", name) == 0) {
         flags |= RTEMS_RTL_OBJ_SECT_CTOR;
-      if (strcmp(".dtors", name) == 0)
+      }
+      if (strcmp(".dtors", name) == 0) {
         flags |= RTEMS_RTL_OBJ_SECT_DTOR;
+      }
 
       if (rtems_rtl_elf_unwind_parse(obj, name, flags)) {
         flags &= ~(RTEMS_RTL_OBJ_SECT_TEXT | RTEMS_RTL_OBJ_SECT_CONST);
@@ -1330,9 +1405,10 @@ static bool rtems_rtl_elf_parse_sections(rtems_rtl_obj* obj, int fd,
       flags =
           rtems_rtl_elf_arch_parse_section(obj, section, name, &shdr, flags);
       if (flags == 0) {
-        if (rtems_rtl_trace(RTEMS_RTL_TRACE_WARNING))
+        if (rtems_rtl_trace(RTEMS_RTL_TRACE_WARNING)) {
           printf("rtl: unsupported section: %2d: type=%02d flags=%02x\n",
                  section, (int)shdr.sh_type, (int)shdr.sh_flags);
+        }
         rtems_rtl_set_error(ENOMEM, "invalid architecture section: %s", name);
         return false;
       }
@@ -1342,8 +1418,9 @@ static bool rtems_rtl_elf_parse_sections(rtems_rtl_obj* obj, int fd,
        */
       if (!rtems_rtl_obj_add_section(obj, section, name, shdr.sh_size,
                                      shdr.sh_offset, shdr.sh_addralign,
-                                     shdr.sh_link, shdr.sh_info, flags))
+                                     shdr.sh_link, shdr.sh_info, flags)) {
         return false;
+      }
     }
   }
 
@@ -1355,8 +1432,9 @@ static bool rtems_rtl_elf_add_common(rtems_rtl_obj* obj, size_t size,
   if (size > 0) {
     if (!rtems_rtl_obj_add_section(
             obj, SHN_COMMON, ".common.rtems.rtl", size, 0, alignment, 0, 0,
-            RTEMS_RTL_OBJ_SECT_BSS | RTEMS_RTL_OBJ_SECT_ZERO))
+            RTEMS_RTL_OBJ_SECT_BSS | RTEMS_RTL_OBJ_SECT_ZERO)) {
       return false;
+    }
   }
   return true;
 }
@@ -1368,8 +1446,9 @@ bool rtems_rtl_elf_file_check(rtems_rtl_obj* obj, int fd) {
   rtems_rtl_obj_caches(&header, NULL, NULL);
 
   if (!rtems_rtl_obj_cache_read_byval(header, fd, obj->ooffset, &ehdr,
-                                      sizeof(ehdr)))
+                                      sizeof(ehdr))) {
     return false;
+  }
 
   /*
    * Check we have a valid ELF file.
@@ -1490,8 +1569,9 @@ bool rtems_rtl_elf_file_load(rtems_rtl_obj* obj, int fd) {
   rtems_rtl_obj_caches(&header, NULL, NULL);
 
   if (!rtems_rtl_obj_cache_read_byval(header, fd, obj->ooffset, &ehdr,
-                                      sizeof(ehdr)))
+                                      sizeof(ehdr))) {
     return false;
+  }
 
   /*
    * Check we have a valid ELF file.
@@ -1539,8 +1619,9 @@ bool rtems_rtl_elf_file_load(rtems_rtl_obj* obj, int fd) {
    * file and the memory allocated. Any further allocations we make to complete
    * the load will not fragment the memory.
    */
-  if (!rtems_rtl_elf_parse_sections(obj, fd, &ehdr))
+  if (!rtems_rtl_elf_parse_sections(obj, fd, &ehdr)) {
     return false;
+  }
 
   /*
    * Set the entry point if there is one.
@@ -1555,19 +1636,23 @@ bool rtems_rtl_elf_file_load(rtems_rtl_obj* obj, int fd) {
    * 2. Add up the common.
    * 3. The load the symbols.
    */
-  if (!rtems_rtl_obj_load_symbols(obj, fd, rtems_rtl_elf_common, &common))
+  if (!rtems_rtl_obj_load_symbols(obj, fd, rtems_rtl_elf_common, &common)) {
     return false;
-  if (!rtems_rtl_elf_add_common(obj, common.size, common.alignment))
+  }
+  if (!rtems_rtl_elf_add_common(obj, common.size, common.alignment)) {
     return false;
-  if (!rtems_rtl_obj_load_symbols(obj, fd, rtems_rtl_elf_symbols_load, &ehdr))
+  }
+  if (!rtems_rtl_obj_load_symbols(obj, fd, rtems_rtl_elf_symbols_load, &ehdr)) {
     return false;
+  }
 
   /*
    * Parse the relocation records. It lets us know how many dependents
    * and fixup trampolines there are.
    */
-  if (!rtems_rtl_obj_relocate(obj, fd, rtems_rtl_elf_relocs_parser, &relocs))
+  if (!rtems_rtl_obj_relocate(obj, fd, rtems_rtl_elf_relocs_parser, &relocs)) {
     return false;
+  }
 
   /*
    * Lock the allocator so the section memory and the trampoline memory are as
@@ -1578,26 +1663,32 @@ bool rtems_rtl_elf_file_load(rtems_rtl_obj* obj, int fd) {
   /*
    * Allocate the sections.
    */
-  if (!rtems_rtl_obj_alloc_sections(obj, fd, rtems_rtl_elf_arch_alloc, &ehdr))
+  if (!rtems_rtl_obj_alloc_sections(obj, fd, rtems_rtl_elf_arch_alloc, &ehdr)) {
     return false;
+  }
 
-  if (!rtems_rtl_elf_dependents(obj, &relocs))
+  if (!rtems_rtl_elf_dependents(obj, &relocs)) {
     return false;
+  }
 
-  if (!rtems_rtl_elf_find_trampolines(obj, relocs.unresolved))
+  if (!rtems_rtl_elf_find_trampolines(obj, relocs.unresolved)) {
     return false;
+  }
 
   /*
    * Resize the sections to allocate the trampoline memory as part of
    * the text section.
    */
   if (rtems_rtl_obj_has_trampolines(obj)) {
-    if (!rtems_rtl_obj_resize_sections(obj))
+    if (!rtems_rtl_obj_resize_sections(obj)) {
       return false;
+    }
   }
 
-  if (!rtems_rtl_obj_load_symbols(obj, fd, rtems_rtl_elf_symbols_locate, &ehdr))
+  if (!rtems_rtl_obj_load_symbols(obj, fd, rtems_rtl_elf_symbols_locate,
+                                  &ehdr)) {
     return false;
+  }
 
   /*
    * Unlock the allocator.
@@ -1607,14 +1698,16 @@ bool rtems_rtl_elf_file_load(rtems_rtl_obj* obj, int fd) {
   /*
    * Load the sections and symbols and then relocation to the base address.
    */
-  if (!rtems_rtl_obj_load_sections(obj, fd, rtems_rtl_elf_loader, &ehdr))
+  if (!rtems_rtl_obj_load_sections(obj, fd, rtems_rtl_elf_loader, &ehdr)) {
     return false;
+  }
 
   /*
    * Fix up the relocations.
    */
-  if (!rtems_rtl_obj_relocate(obj, fd, rtems_rtl_elf_relocs_locator, &ehdr))
+  if (!rtems_rtl_obj_relocate(obj, fd, rtems_rtl_elf_relocs_locator, &ehdr)) {
     return false;
+  }
 
   rtems_rtl_symbol_obj_erase_local(obj);
 

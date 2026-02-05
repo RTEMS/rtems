@@ -51,8 +51,9 @@
 static uint_fast32_t rtems_rtl_symbol_hash(const char* s) {
   uint_fast32_t h = 5381;
   unsigned char c;
-  for (c = *s; c != '\0'; c = *++s)
+  for (c = *s; c != '\0'; c = *++s) {
     h = h * 33 + c;
+  }
   return h & 0xffffffff;
 }
 
@@ -75,8 +76,9 @@ bool rtems_rtl_symbol_table_open(rtems_rtl_symbols* symbols, size_t buckets) {
     return false;
   }
   symbols->nbuckets = buckets;
-  for (buckets = 0; buckets < symbols->nbuckets; ++buckets)
+  for (buckets = 0; buckets < symbols->nbuckets; ++buckets) {
     rtems_chain_initialize_empty(&symbols->buckets[buckets]);
+  }
   return true;
 }
 
@@ -129,8 +131,9 @@ bool rtems_rtl_symbol_global_add(rtems_rtl_obj* obj, const unsigned char* esyms,
     return false;
   }
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_GLOBAL_SYM))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_GLOBAL_SYM)) {
     printf("rtl: global symbol add: %zi\n", count);
+  }
 
   obj->global_size = count * sizeof(rtems_rtl_obj_sym);
   obj->global_table =
@@ -164,18 +167,21 @@ bool rtems_rtl_symbol_global_add(rtems_rtl_obj* obj, const unsigned char* esyms,
 
     sym->name = (const char*)&esyms[s];
     s += strlen(sym->name) + 1;
-    for (b = 0; b < sizeof(void*); ++b, ++s)
+    for (b = 0; b < sizeof(void*); ++b, ++s) {
       copy_voidp.data[b] = esyms[s];
+    }
     tls_off = rtems_rtl_symbol_find_tls_offset(count, tls_offsets, tls_size);
     if (tls_off == NULL) {
       sym->value = copy_voidp.voidp;
     } else {
       sym->value = (void*)tls_off->offset();
     }
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_GLOBAL_SYM))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_GLOBAL_SYM)) {
       printf("rtl: esyms: %s -> %8p\n", sym->name, sym->value);
-    if (rtems_rtl_symbol_global_find(sym->name) == NULL)
+    }
+    if (rtems_rtl_symbol_global_find(sym->name) == NULL) {
       rtems_rtl_symbol_global_insert(symbols, sym);
+    }
     ++count;
     ++sym;
   }
@@ -200,8 +206,9 @@ rtems_rtl_obj_sym* rtems_rtl_symbol_global_find(const char* name) {
     /*
      * Use the hash. I could add this to the symbol but it uses more memory.
      */
-    if (strcmp(name, sym->name) == 0)
+    if (strcmp(name, sym->name) == 0) {
       return sym;
+    }
     node = rtems_chain_next(node);
   }
 
@@ -235,8 +242,9 @@ rtems_rtl_obj_sym* rtems_rtl_symbol_obj_find(rtems_rtl_obj* obj,
     key.name = name;
     match = bsearch(&key, obj->local_table, obj->local_syms,
                     sizeof(rtems_rtl_obj_sym), rtems_rtl_symbol_obj_compare);
-    if (match != NULL)
+    if (match != NULL) {
       return match;
+    }
   }
   if (obj->global_syms) {
     rtems_rtl_obj_sym* match;
@@ -244,8 +252,9 @@ rtems_rtl_obj_sym* rtems_rtl_symbol_obj_find(rtems_rtl_obj* obj,
     key.name = name;
     match = bsearch(&key, obj->global_table, obj->global_syms,
                     sizeof(rtems_rtl_obj_sym), rtems_rtl_symbol_obj_compare);
-    if (match != NULL)
+    if (match != NULL) {
       return match;
+    }
   }
   return rtems_rtl_symbol_global_find(name);
 }
@@ -257,8 +266,9 @@ void rtems_rtl_symbol_obj_add(rtems_rtl_obj* obj) {
 
   symbols = rtems_rtl_global_symbols();
 
-  for (s = 0, sym = obj->global_table; s < obj->global_syms; ++s, ++sym)
+  for (s = 0, sym = obj->global_table; s < obj->global_syms; ++s, ++sym) {
     rtems_rtl_symbol_global_insert(symbols, sym);
+  }
 }
 
 void rtems_rtl_symbol_obj_erase_local(rtems_rtl_obj* obj) {
@@ -275,9 +285,11 @@ void rtems_rtl_symbol_obj_erase(rtems_rtl_obj* obj) {
   if (obj->global_table) {
     rtems_rtl_obj_sym* sym;
     size_t s;
-    for (s = 0, sym = obj->global_table; s < obj->global_syms; ++s, ++sym)
-      if (!rtems_chain_is_node_off_chain(&sym->node))
+    for (s = 0, sym = obj->global_table; s < obj->global_syms; ++s, ++sym) {
+      if (!rtems_chain_is_node_off_chain(&sym->node)) {
         rtems_chain_extract(&sym->node);
+      }
+    }
     rtems_rtl_alloc_del(RTEMS_RTL_ALLOC_SYMBOL, obj->global_table);
     obj->global_table = NULL;
     obj->global_size = 0;

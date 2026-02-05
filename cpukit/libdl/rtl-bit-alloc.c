@@ -54,8 +54,9 @@
 #define BITS_PER_WORD (sizeof(uint32_t) * 8)
 
 static size_t bit_blocks(rtems_rtl_bit_alloc* balloc, size_t size) {
-  if (size == 0)
+  if (size == 0) {
     return 0;
+  }
   return ((size - 1) / balloc->block_size) + 1;
 }
 
@@ -73,14 +74,16 @@ static uint32_t bit_mask(size_t bit) {
 
 static void bit_set(rtems_rtl_bit_alloc* balloc, size_t start, size_t bits) {
   size_t b;
-  for (b = start; b < (start + bits); ++b)
+  for (b = start; b < (start + bits); ++b) {
     balloc->bits[bit_word(b)] |= bit_mask(b);
+  }
 }
 
 static void bit_clear(rtems_rtl_bit_alloc* balloc, size_t start, size_t bits) {
   size_t b;
-  for (b = start; b < (start + bits); ++b)
+  for (b = start; b < (start + bits); ++b) {
     balloc->bits[bit_word(b)] &= ~bit_mask(b);
+  }
 }
 
 static ssize_t bit_find_clear(rtems_rtl_bit_alloc* balloc, size_t blocks) {
@@ -94,11 +97,13 @@ static ssize_t bit_find_clear(rtems_rtl_bit_alloc* balloc, size_t blocks) {
       size_t o;
       for (o = 0; o < BITS_PER_WORD; ++o, word >>= 1) {
         if ((word & 1) == 0) {
-          if (clear == 0)
+          if (clear == 0) {
             base = (b * BITS_PER_WORD) + o;
+          }
           ++clear;
-          if (clear == blocks)
+          if (clear == blocks) {
             return base;
+          }
         } else {
           clear = 0;
           base = 0;
@@ -121,10 +126,11 @@ rtems_rtl_bit_alloc* rtems_rtl_bit_alloc_open(void* base, size_t size,
   const size_t blocks = (size / block_size) / BITS_PER_WORD;
   const size_t bit_bytes = blocks * sizeof(uint32_t);
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_BIT_ALLOC))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_BIT_ALLOC)) {
     printf("rtl: balloc: open: base=%p size=%zu"
            " block-size=%zu blocks=%zu used=%zu\n",
            base, size, block_size, blocks, used);
+  }
 
   if (size == 0) {
     rtems_rtl_set_error(ENOMEM, "bit allocator size is 0");
@@ -158,20 +164,23 @@ rtems_rtl_bit_alloc* rtems_rtl_bit_alloc_open(void* base, size_t size,
 }
 
 void rtems_rtl_bit_alloc_close(rtems_rtl_bit_alloc* balloc) {
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_BIT_ALLOC))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_BIT_ALLOC)) {
     printf("rtl: balloc: close: base=%p size=%zu\n", balloc->base,
            balloc->size);
+  }
   rtems_rtl_alloc_del(RTEMS_RTL_ALLOC_OBJECT, balloc);
 }
 
 void* rtems_rtl_bit_alloc_balloc(rtems_rtl_bit_alloc* balloc, size_t size) {
   size_t blocks = bit_blocks(balloc, size);
   ssize_t block = bit_find_clear(balloc, blocks);
-  if (block < 0)
+  if (block < 0) {
     return NULL;
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_BIT_ALLOC))
+  }
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_BIT_ALLOC)) {
     printf("rtl: balloc: balloc: size=%zu blocks=%zu block=%zi\n", size, blocks,
            block);
+  }
   bit_set(balloc, block, blocks);
   return (void*)(balloc->base + (block * balloc->block_size));
 }

@@ -300,24 +300,28 @@ rtems_rtl_elf_relocate_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
   where = (Elf_Addr*)(sect->base + rela->r_offset);
 
   type = ELF_R_TYPE(rela->r_info);
-  if (type == R_TYPE(NONE))
+  if (type == R_TYPE(NONE)) {
     return rtems_rtl_elf_rel_no_error;
+  }
 
   /* We do JMP_SLOTs in _rtld_bind() below */
-  if (type == R_TYPE(JMP_SLOT))
+  if (type == R_TYPE(JMP_SLOT)) {
     return rtems_rtl_elf_rel_no_error;
+  }
 
   /* COPY relocs are also handled elsewhere */
-  if (type == R_TYPE(COPY))
+  if (type == R_TYPE(COPY)) {
     return rtems_rtl_elf_rel_no_error;
+  }
 
   /*
    * We use the fact that relocation types are an `enum'
    * Note: R_SPARC_6 is currently numerically largest.
    */
   if (type > R_TYPE(TLS_TPOFF64)) {
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
       printf("rtl: invalid reloc type: %d\n", (int)type);
+    }
     return rtems_rtl_elf_rel_failure;
   }
 
@@ -333,49 +337,56 @@ rtems_rtl_elf_relocate_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
       *where = (Elf_Addr)defobj->tlsindex;
 #endif
 
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
         printf("rtl: reloc: TLS_DTPMOD32 %s in %s --> %p\n", symname,
                rtems_rtl_obj_oname(obj), (void*)*where);
+      }
       break;
 
     case R_TYPE(TLS_DTPOFF32):
       *where = (Elf_Addr)(symvalue + rela->r_addend);
 
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
         printf("rtl: reloc: TLS_DTPOFF32 %s in %s --> %p\n", symname,
                rtems_rtl_obj_oname(obj), (void*)*where);
+      }
       break;
 
     case R_TYPE(TLS_TPOFF32):
 #if NETBSD_CODE__NOT_USED
-      if (!defobj->tls_static && _rtld_tls_offset_allocate(__UNCONST(defobj)))
+      if (!defobj->tls_static && _rtld_tls_offset_allocate(__UNCONST(defobj))) {
         return;
+      }
 
       *where = (Elf_Addr)(def->st_value - defobj->tlsoffset + rela->r_addend);
 #endif
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
         printf("rtl: reloc: TLS_TPOFF32 %s in %s --> %p\n", symname,
                rtems_rtl_obj_oname(obj), (void*)*where);
+      }
       return rtems_rtl_elf_rel_failure;
 
     case R_TYPE(TLS_LE_HIX22):
       *where |= ((symvalue + rela->r_addend) ^ 0xffffffff) >> 10;
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
         printf("rtl: reloc: R_SPARC_TLS_LE_HIX22 %s in %s --> %p\n", symname,
                rtems_rtl_obj_oname(obj), (void*)*where);
+      }
       break;
 
     case R_TYPE(TLS_LE_LOX10):
       *where |= ((symvalue + rela->r_addend) & 0x3ff) | 0x1c00;
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
         printf("rtl: reloc: R_SPARC_TLS_LE_LOX10 %s in %s --> %p\n", symname,
                rtems_rtl_obj_oname(obj), (void*)*where);
+      }
       break;
 
     default:
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
         printf("rtl: reloc: unknown TLS relo: %d for %s in %s --> %p\n", type,
                symname, rtems_rtl_obj_oname(obj), (void*)*where);
+      }
       return rtems_rtl_elf_rel_failure;
     }
     return rtems_rtl_elf_rel_no_error;
@@ -385,17 +396,19 @@ rtems_rtl_elf_relocate_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
    * If it is no TLS relocation (handled above), we can not
    * deal with it if it is beyond R_SPARC_6.
    */
-  if (type > R_TYPE(6))
+  if (type > R_TYPE(6)) {
     return rtems_rtl_elf_rel_failure;
+  }
 
   /*
    * Handle relative relocs here, as an optimization.
    */
   if (type == R_TYPE(RELATIVE)) {
     *where += (Elf_Addr)(sect->base + value);
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
       printf("rtl: reloc relative in %s --> %p", rtems_rtl_obj_oname(obj),
              (void*)*where);
+    }
     return rtems_rtl_elf_rel_no_error;
   }
 
@@ -424,11 +437,12 @@ rtems_rtl_elf_relocate_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
 #define DIAGNOSTIC
 #ifdef DIAGNOSTIC
     if (value != 0 && *where != 0) {
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
         printf("rtl: reloc base_rel(%s): where=%p, *where 0x%" PRIu32 ", "
                "addend=0x%" PRIu32 ", base %p\n",
                rtems_rtl_obj_oname(obj), where, *where, rela->r_addend,
                sect->base);
+      }
     }
 #endif
     value += (Elf_Word)(sect->base + *where);
@@ -446,24 +460,27 @@ rtems_rtl_elf_relocate_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
     int i, size = RELOC_TARGET_SIZE(type) / 8;
 
     /* Read it in one byte at a time. */
-    for (i = size - 1; i >= 0; i--)
+    for (i = size - 1; i >= 0; i--) {
       tmp = (tmp << 8) | ptr[i];
+    }
 
     tmp &= ~mask;
     tmp |= value;
 
     /* Write it back out. */
-    for (i = size - 1; i >= 0; i--, tmp >>= 8)
+    for (i = size - 1; i >= 0; i--, tmp >>= 8) {
       ptr[i] = tmp & 0xff;
+    }
   } else {
     *where &= ~mask;
     *where |= value;
     tmp = *where;
   }
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
     printf("rtl: %s %p @ %p in %s\n", reloc_names[ELF_R_TYPE(rela->r_info)],
            (void*)tmp, where, rtems_rtl_obj_oname(obj));
+  }
 
   return rtems_rtl_elf_rel_no_error;
 }

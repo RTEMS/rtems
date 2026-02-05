@@ -82,9 +82,9 @@ static int shell_rap_load(int argc, char* argv[]) {
     printf("error: no application name\n");
     return 0;
   }
-  if (rtems_rap_load(argv[0], 0, argc - 1, (const char**)(argv + 1)))
+  if (rtems_rap_load(argv[0], 0, argc - 1, (const char**)(argv + 1))) {
     printf("%s loaded\n", argv[0]);
-  else {
+  } else {
     r = 1;
     shell_rap_get_error("loading");
   }

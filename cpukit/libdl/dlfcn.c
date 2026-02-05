@@ -50,10 +50,11 @@ static rtems_rtl_obj* dl_get_obj_from_handle(void* handle) {
    * can occur.
    */
 
-  if ((handle == RTLD_DEFAULT) || (handle == RTLD_SELF))
+  if ((handle == RTLD_DEFAULT) || (handle == RTLD_SELF)) {
     obj = rtems_rtl_baseimage();
-  else
+  } else {
     obj = rtems_rtl_check_handle(handle);
+  }
 
   return obj;
 }
@@ -61,16 +62,18 @@ static rtems_rtl_obj* dl_get_obj_from_handle(void* handle) {
 void* dlopen(const char* name, int mode) {
   rtems_rtl_obj* obj = NULL;
 
-  if (!rtems_rtl_lock())
+  if (!rtems_rtl_lock()) {
     return NULL;
+  }
 
   _rtld_debug.r_state = RT_ADD;
   _rtld_debug_state();
 
-  if (name)
+  if (name) {
     obj = rtems_rtl_load(name, mode);
-  else
+  } else {
     obj = rtems_rtl_baseimage();
+  }
 
   _rtld_debug.r_state = RT_CONSISTENT;
   _rtld_debug_state();
@@ -84,8 +87,9 @@ int dlclose(void* handle) {
   rtems_rtl_obj* obj;
   int r;
 
-  if (!rtems_rtl_lock())
+  if (!rtems_rtl_lock()) {
     return -1;
+  }
 
   obj = rtems_rtl_check_handle(handle);
   if (!obj) {
@@ -111,8 +115,9 @@ void* dlsym(void* handle, const char* symbol) {
   rtems_rtl_obj_sym* sym = NULL;
   void* symval = NULL;
 
-  if (!rtems_rtl_lock())
+  if (!rtems_rtl_lock()) {
     return NULL;
+  }
 
   /*
    * If the handle is "default" search the global symbol table.
@@ -121,12 +126,14 @@ void* dlsym(void* handle, const char* symbol) {
     sym = rtems_rtl_symbol_global_find(symbol);
   } else {
     obj = dl_get_obj_from_handle(handle);
-    if (obj)
+    if (obj) {
       sym = rtems_rtl_symbol_obj_find(obj, symbol);
+    }
   }
 
-  if (sym)
+  if (sym) {
     symval = sym->value;
+  }
 
   rtems_rtl_unlock();
 
@@ -137,8 +144,9 @@ const char* dlerror(void) {
   static char msg[64];
   int eno;
   eno = rtems_rtl_get_error(msg, sizeof(msg));
-  if (eno == 0)
+  if (eno == 0) {
     return NULL;
+  }
   return msg;
 }
 
@@ -146,8 +154,9 @@ int dlinfo(void* handle, int request, void* p) {
   rtems_rtl_obj* obj;
   int rc = -1;
 
-  if (!rtems_rtl_lock() || !p)
+  if (!rtems_rtl_lock() || !p) {
     return -1;
+  }
 
   obj = dl_get_obj_from_handle(handle);
   if (obj) {

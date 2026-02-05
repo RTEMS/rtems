@@ -98,8 +98,9 @@ void rtems_rtl_base_global_syms_init(void) __attribute__((weak));
 void rtems_rtl_base_global_syms_init(void) {
   rtems_rtl_symbols* symbols;
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_GLOBAL_SYM))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_GLOBAL_SYM)) {
     printf("rtl: adding default global symbol\n");
+  }
 
   if (!rtems_rtl_lock()) {
     rtems_rtl_set_error(EINVAL, "global add cannot lock rtl");
@@ -291,8 +292,9 @@ rtems_rtl_symbols* rtems_rtl_global_symbols(void) {
 }
 
 const char* rtems_rtl_last_error_unprotected(void) {
-  if (!rtl)
+  if (!rtl) {
     return NULL;
+  }
   return rtl->last_error;
 }
 
@@ -332,19 +334,25 @@ void rtems_rtl_obj_caches(rtems_rtl_obj_cache** symbols,
                           rtems_rtl_obj_cache** strings,
                           rtems_rtl_obj_cache** relocs) {
   if (!rtl) {
-    if (symbols)
+    if (symbols) {
       *symbols = NULL;
-    if (strings)
+    }
+    if (strings) {
       *strings = NULL;
-    if (relocs)
+    }
+    if (relocs) {
       *relocs = NULL;
+    }
   } else {
-    if (symbols)
+    if (symbols) {
       *symbols = &rtl->symbols;
-    if (strings)
+    }
+    if (strings) {
       *strings = &rtl->strings;
-    if (relocs)
+    }
+    if (relocs) {
       *relocs = &rtl->relocs;
+    }
   }
 }
 
@@ -375,10 +383,12 @@ typedef struct rtems_rtl_obj_flags_data {
 static bool rtems_rtl_obj_flags_iterator(rtems_chain_node* node, void* data) {
   rtems_rtl_obj* obj = (rtems_rtl_obj*)node;
   rtems_rtl_obj_flags_data* flags = (rtems_rtl_obj_flags_data*)data;
-  if (flags->clear != 0)
+  if (flags->clear != 0) {
     obj->flags &= ~flags->clear;
-  if (flags->set != 0)
+  }
+  if (flags->set != 0) {
     obj->flags |= flags->set;
+  }
   return true;
 }
 
@@ -388,8 +398,9 @@ void rtems_rtl_obj_update_flags(uint32_t clear, uint32_t set) {
 }
 
 rtems_rtl_data* rtems_rtl_lock(void) {
-  if (!rtems_rtl_data_init())
+  if (!rtems_rtl_data_init()) {
     return NULL;
+  }
 
   rtems_recursive_mutex_lock(&rtl->lock);
 
@@ -409,8 +420,9 @@ rtems_rtl_obj* rtems_rtl_check_handle(void* handle) {
 
   while (!rtems_chain_is_tail(&rtl->objects, node)) {
     rtems_rtl_obj* check = (rtems_rtl_obj*)node;
-    if (check == obj)
+    if (check == obj) {
       return obj;
+    }
     node = rtems_chain_next(node);
   }
 
@@ -424,8 +436,9 @@ rtems_rtl_obj* rtems_rtl_find_obj(const char* name) {
   const char* oname = NULL;
   off_t ooffset;
 
-  if (!rtems_rtl_parse_name(name, &aname, &oname, &ooffset))
+  if (!rtems_rtl_parse_name(name, &aname, &oname, &ooffset)) {
     return NULL;
+  }
 
   node = rtems_chain_first(&rtl->objects);
 
@@ -440,11 +453,13 @@ rtems_rtl_obj* rtems_rtl_find_obj(const char* name) {
     node = rtems_chain_next(node);
   }
 
-  if (aname != NULL)
+  if (aname != NULL) {
     rtems_rtl_alloc_del(RTEMS_RTL_ALLOC_OBJECT, (void*)aname);
+  }
 
-  if (oname != NULL)
+  if (oname != NULL) {
     rtems_rtl_alloc_del(RTEMS_RTL_ALLOC_OBJECT, (void*)oname);
+  }
 
   return found;
 }
@@ -454,15 +469,17 @@ rtems_rtl_obj* rtems_rtl_find_obj_with_symbol(const rtems_rtl_obj_sym* sym) {
     rtems_chain_node* node = rtems_chain_first(&rtl->objects);
     while (!rtems_chain_is_tail(&rtl->objects, node)) {
       rtems_rtl_obj* obj = (rtems_rtl_obj*)node;
-      if (rtems_rtl_obj_has_symbol(obj, sym))
+      if (rtems_rtl_obj_has_symbol(obj, sym)) {
         return obj;
+      }
       node = rtems_chain_next(node);
     }
     node = rtems_chain_first(&rtl->pending);
     while (!rtems_chain_is_tail(&rtl->pending, node)) {
       rtems_rtl_obj* obj = (rtems_rtl_obj*)node;
-      if (rtems_rtl_obj_has_symbol(obj, sym))
+      if (rtems_rtl_obj_has_symbol(obj, sym)) {
         return obj;
+      }
       node = rtems_chain_next(node);
     }
   }
@@ -474,8 +491,9 @@ rtems_rtl_obj* rtems_rtl_load_object(const char* name, int mode) {
 
   rtems_rtl_obj* obj;
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_LOAD))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_LOAD)) {
     printf("rtl: loading '%s'\n", name);
+  }
 
   /*
    * See if the object module has already been loaded.
@@ -597,8 +615,9 @@ rtems_rtl_obj* rtems_rtl_load(const char* name, int mode) {
 }
 
 bool rtems_rtl_unload_object(rtems_rtl_obj* obj) {
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_UNLOAD))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_UNLOAD)) {
     printf("rtl: unload object '%s'\n", rtems_rtl_obj_fname(obj));
+  }
 
   /*
    * If the object is locked it cannot be unloaded and the unload fails.
@@ -620,8 +639,9 @@ bool rtems_rtl_unload_object(rtems_rtl_obj* obj) {
    * Check the number of users in a safe manner. If this is the last user unload
    * the object file from memory.
    */
-  if (obj->users > 0)
+  if (obj->users > 0) {
     --obj->users;
+  }
 
   return true;
 }
@@ -652,10 +672,11 @@ bool rtems_rtl_unload(rtems_rtl_obj* obj) {
       while (!rtems_chain_is_tail(&rtl->objects, node)) {
         rtems_chain_node* next_node = rtems_chain_next(node);
         rtems_rtl_obj* uobj = (rtems_rtl_obj*)node;
-        if (rtems_rtl_trace(RTEMS_RTL_TRACE_UNLOAD))
+        if (rtems_rtl_trace(RTEMS_RTL_TRACE_UNLOAD)) {
           printf("rtl: unload object: %3i: %9s: %s\n", loop,
                  rtems_rtl_obj_orphaned(uobj) ? "orphaned" : "inuse",
                  rtems_rtl_obj_oname(uobj));
+        }
         if (rtems_rtl_obj_orphaned(uobj)) {
           orphaned_found = true;
           rtems_rtl_obj_remove_dependencies(uobj);
@@ -691,11 +712,13 @@ bool rtems_rtl_unload(rtems_rtl_obj* obj) {
     while (!rtems_chain_is_tail(&unloading, node)) {
       rtems_chain_node* next_node = rtems_chain_next(node);
       rtems_rtl_obj* uobj = (rtems_rtl_obj*)node;
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_UNLOAD))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_UNLOAD)) {
         printf("rtl: unloading '%s'\n", rtems_rtl_obj_oname(uobj));
+      }
       uobj->flags &= ~RTEMS_RTL_OBJ_LOCKED;
-      if (!rtems_rtl_obj_unload(uobj))
+      if (!rtems_rtl_obj_unload(uobj)) {
         ok = false;
+      }
       rtems_rtl_obj_free(uobj);
       rtems_rtl_obj_caches_flush();
       node = next_node;
@@ -710,15 +733,17 @@ static bool rtems_rtl_path_update(bool prepend, const char* path) {
   char* dst;
   int len;
 
-  if (!rtems_rtl_lock())
+  if (!rtems_rtl_lock()) {
     return false;
+  }
 
   len = strlen(path);
 
-  if (rtl->paths)
+  if (rtl->paths) {
     len += strlen(rtl->paths) + 1;
-  else
+  } else {
     prepend = true;
+  }
 
   paths = rtems_rtl_alloc_new(RTEMS_RTL_ALLOC_OBJECT, len + 1, false);
 
@@ -748,8 +773,9 @@ static bool rtems_rtl_path_update(bool prepend, const char* path) {
 
   if (prepend) {
     src = rtl->paths;
-    if (src)
+    if (src) {
       len = strlen(src);
+    }
   } else {
     len = strlen(path);
     src = path;
@@ -780,8 +806,9 @@ void rtems_rtl_base_sym_global_add(const unsigned char* esyms,
                                    unsigned int size,
                                    const rtems_rtl_tls_offset* tls_offsets,
                                    unsigned int tls_size) {
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_GLOBAL_SYM))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_GLOBAL_SYM)) {
     printf("rtl: adding global symbols, table size %u\n", size);
+  }
 
   if (!rtems_rtl_lock()) {
     rtems_rtl_set_error(EINVAL, "global add cannot lock rtl");

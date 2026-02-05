@@ -65,8 +65,9 @@ bool rtems_rtl_obj_cache_open(rtems_rtl_obj_cache* cache, size_t size) {
 }
 
 void rtems_rtl_obj_cache_close(rtems_rtl_obj_cache* cache) {
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_CACHE))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_CACHE)) {
     printf("rtl: cache: %2d: close\n", cache->fd);
+  }
   rtems_rtl_alloc_del(RTEMS_RTL_ALLOC_OBJECT, cache->buffer);
   cache->buffer = NULL;
   cache->fd = -1;
@@ -75,8 +76,9 @@ void rtems_rtl_obj_cache_close(rtems_rtl_obj_cache* cache) {
 }
 
 void rtems_rtl_obj_cache_flush(rtems_rtl_obj_cache* cache) {
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_CACHE))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_CACHE)) {
     printf("rtl: cache: %2d: flush\n", cache->fd);
+  }
   cache->fd = -1;
   cache->file_size = 0;
   cache->offset = 0;
@@ -87,12 +89,13 @@ bool rtems_rtl_obj_cache_read(rtems_rtl_obj_cache* cache, int fd, off_t offset,
                               void** buffer, size_t* length) {
   struct stat sb;
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_CACHE))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_CACHE)) {
     printf("rtl: cache: %2d: fd=%d offset=%" PRIdoff_t
            " length=%zu area=[%" PRIdoff_t ",%" PRIdoff_t "] cache=[%" PRIdoff_t
            ",%" PRIdoff_t "] size=%zu\n",
            fd, cache->fd, offset, *length, offset, offset + *length,
            cache->offset, cache->offset + cache->level, cache->file_size);
+  }
 
   if (*length > cache->size) {
     rtems_rtl_set_error(EINVAL, "read size larger than cache size");
@@ -111,8 +114,9 @@ bool rtems_rtl_obj_cache_read(rtems_rtl_obj_cache* cache, int fd, off_t offset,
      */
     if ((offset + *length) > cache->file_size) {
       *length = cache->file_size - offset;
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_CACHE))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_CACHE)) {
         printf("rtl: cache: %2d: truncate length=%d\n", fd, (int)*length);
+      }
     }
   }
 
@@ -127,8 +131,9 @@ bool rtems_rtl_obj_cache_read(rtems_rtl_obj_cache* cache, int fd, off_t offset,
       /*
        * Do not read past the end of the file.
        */
-      if ((offset + buffer_read) > cache->file_size)
+      if ((offset + buffer_read) > cache->file_size) {
         buffer_read = cache->file_size - offset;
+      }
 
       /*
        * Is any part of the data in the cache ?
@@ -148,13 +153,15 @@ bool rtems_rtl_obj_cache_read(rtems_rtl_obj_cache* cache, int fd, off_t offset,
         /*
          * Is all the data in the cache or just a part ?
          */
-        if (*length <= size)
+        if (*length <= size) {
           return true;
+        }
 
-        if (rtems_rtl_trace(RTEMS_RTL_TRACE_CACHE))
+        if (rtems_rtl_trace(RTEMS_RTL_TRACE_CACHE)) {
           printf(
               "rtl: cache: %2d: copy-down: buffer_offset=%d size=%d level=%d\n",
               fd, (int)buffer_offset, (int)size, (int)cache->level);
+        }
 
         /*
          * Copy down the data in the buffer and then fill the remaining space
@@ -170,17 +177,19 @@ bool rtems_rtl_obj_cache_read(rtems_rtl_obj_cache* cache, int fd, off_t offset,
         /*
          * Do not read past the end of the file.
          */
-        if ((offset + buffer_offset + buffer_read) > cache->file_size)
+        if ((offset + buffer_offset + buffer_read) > cache->file_size) {
           buffer_read = cache->file_size - (offset + buffer_offset);
+        }
       }
     }
 
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_CACHE))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_CACHE)) {
       printf("rtl: cache: %2d: seek: offset=%" PRIdoff_t " buffer_offset=%zu"
              " read=%zu cache=[%" PRIdoff_t ",%" PRIdoff_t "] "
              "dist=%" PRIdoff_t "\n",
              fd, offset + buffer_offset, buffer_offset, buffer_read, offset,
              offset + buffer_read, (cache->file_size - offset));
+    }
 
     if (lseek(fd, offset + buffer_offset, SEEK_SET) < 0) {
       rtems_rtl_set_error(errno, "file seek failed");
@@ -202,9 +211,10 @@ bool rtems_rtl_obj_cache_read(rtems_rtl_obj_cache* cache, int fd, off_t offset,
         return false;
       }
       if ((r == 0) && buffer_read) {
-        if (rtems_rtl_trace(RTEMS_RTL_TRACE_CACHE))
+        if (rtems_rtl_trace(RTEMS_RTL_TRACE_CACHE)) {
           printf("rtl: cache: %2d: read: past end by=%d\n", fd,
                  (int)buffer_read);
+        }
         cache->level = cache->level - buffer_read;
         buffer_read = 0;
       } else {
@@ -235,9 +245,11 @@ bool rtems_rtl_obj_cache_read_byval(rtems_rtl_obj_cache* cache, int fd,
   void* cbuffer = 0;
   size_t len = length;
   bool ok = rtems_rtl_obj_cache_read(cache, fd, offset, &cbuffer, &len);
-  if (ok && (len != length))
+  if (ok && (len != length)) {
     ok = false;
-  if (ok)
+  }
+  if (ok) {
     memcpy(buffer, cbuffer, length);
+  }
   return ok;
 }

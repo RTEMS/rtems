@@ -156,8 +156,9 @@ static bool rtems_rtl_rap_datatype_check(uint32_t datatype) {
   /*
    * This code is determined by the machine headers.
    */
-  if (datatype != ELFDEFNNAME(MACHDEP_ENDIANNESS))
+  if (datatype != ELFDEFNNAME(MACHDEP_ENDIANNESS)) {
     return false;
+  }
   return true;
 }
 
@@ -170,12 +171,14 @@ static bool rtems_rtl_rap_class_check(uint32_t class) {
    */
   switch (class) {
   case ELFCLASS32:
-    if (ARCH_ELFSIZE == 32)
+    if (ARCH_ELFSIZE == 32) {
       return true;
+    }
     break;
   case ELFCLASS64:
-    if (ARCH_ELFSIZE == 64)
+    if (ARCH_ELFSIZE == 64) {
       return true;
+    }
     break;
   default:
     break;
@@ -197,8 +200,9 @@ static bool rtems_rtl_rap_read_uint32(rtems_rtl_obj_comp* comp,
                                       uint32_t* value) {
   uint8_t buffer[sizeof(uint32_t)];
 
-  if (!rtems_rtl_obj_comp_read(comp, buffer, sizeof(uint32_t)))
+  if (!rtems_rtl_obj_comp_read(comp, buffer, sizeof(uint32_t))) {
     return false;
+  }
 
   *value = rtems_rtl_rap_get_uint32(buffer);
 
@@ -212,9 +216,10 @@ static bool rtems_rtl_rap_loader(rtems_rtl_obj* obj, int fd,
 
   rtems_rtl_rap* rap = (rtems_rtl_rap*)data;
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_LOAD))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_LOAD)) {
     printf("rtl: rap: input %s=%" PRIu32 "\n", sect->name,
            rtems_rtl_obj_comp_input(rap->decomp));
+  }
 
   return rtems_rtl_obj_comp_read(rap->decomp, sect->base, sect->size);
 }
@@ -224,8 +229,9 @@ static bool rtems_rtl_rap_relocate(rtems_rtl_rap* rap, rtems_rtl_obj* obj) {
   char* symname_buffer = NULL;
   int section;
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
     printf("rtl: relocation\n");
+  }
 
   symname_buffer = malloc(SYMNAME_BUFFER_SIZE);
   if (!symname_buffer) {
@@ -242,8 +248,9 @@ static bool rtems_rtl_rap_relocate(rtems_rtl_rap* rap, rtems_rtl_obj* obj) {
 
     targetsect = rtems_rtl_obj_find_section(obj, rap_sections[section].name);
 
-    if (!targetsect)
+    if (!targetsect) {
       continue;
+    }
 
     if (!rtems_rtl_rap_read_uint32(rap->decomp, &header)) {
       free(symname_buffer);
@@ -258,10 +265,11 @@ static bool rtems_rtl_rap_relocate(rtems_rtl_rap* rap, rtems_rtl_obj* obj) {
     is_rela = (header & (1 << 31)) != 0 ? true : false;
     relocs = header & ~(1 << 31);
 
-    if (relocs && rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+    if (relocs && rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
       printf("rtl: relocation: %s: header: %08" PRIx32 " relocs: %d %s\n",
              rap_sections[section].name, header, relocs,
              is_rela ? "rela" : "rel");
+    }
 
     for (r = 0; r < relocs; ++r) {
       uint32_t info = 0;
@@ -302,10 +310,11 @@ static bool rtems_rtl_rap_relocate(rtems_rtl_rap* rap, rtems_rtl_obj* obj) {
         }
       }
 
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
         printf(" %2d: info=%08" PRIx32 " offset=%" PRIu32 " addend=%" PRIu32
                "\n",
                r, info, offset, addend);
+      }
 
       type = ELF_R_TYPE(info);
 
@@ -361,16 +370,18 @@ static bool rtems_rtl_rap_relocate(rtems_rtl_rap* rap, rtems_rtl_obj* obj) {
         rela.r_offset = offset;
         rela.r_info = type;
 
-        if ((info & (1 << 31)) == 0)
+        if ((info & (1 << 31)) == 0) {
           rela.r_addend = 0;
-        else
+        } else {
           rela.r_addend = addend;
+        }
 
-        if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+        if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
           printf(" %2d: rela: type:%-2d off:%" PRIu32 " addend:%d"
                  " symname=%s symtype=%ju symvalue=0x%08jx\n",
                  r, (int)type, offset, (int)addend, symname, (uintmax_t)symtype,
                  (uintmax_t)symvalue);
+        }
 
         if (rtems_rtl_elf_relocate_rela(obj, &rela, targetsect, symname,
                                         symtype, symvalue) ==
@@ -384,11 +395,12 @@ static bool rtems_rtl_rap_relocate(rtems_rtl_rap* rap, rtems_rtl_obj* obj) {
         rel.r_offset = offset;
         rel.r_info = type;
 
-        if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+        if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
           printf(" %2d: rel: type:%-2d off:%" PRIu32
                  " symname=%s symtype=%ju symvalue=0x%08jx\n",
                  r, (int)type, offset, symname, (uintmax_t)symtype,
                  (uintmax_t)symvalue);
+        }
 
         if (rtems_rtl_elf_relocate_rel(obj, &rel, targetsect, symname, symtype,
                                        symvalue) == rtems_rtl_elf_rel_failure) {
@@ -449,8 +461,9 @@ static bool rtems_rtl_rap_load_linkmap(rtems_rtl_rap* rap, rtems_rtl_obj* obj) {
   obj->linkmap = (struct link_map*)detail;
 
   if (rtems_rtl_trace(RTEMS_RTL_TRACE_DETAIL)) {
-    if (rap->rpathlen > 0)
+    if (rap->rpathlen > 0) {
       printf("File rpath:\n");
+    }
   }
 
   while (pos < rap->rpathlen) {
@@ -460,8 +473,9 @@ static bool rtems_rtl_rap_load_linkmap(rtems_rtl_rap* rap, rtems_rtl_obj* obj) {
     pos = pos + strlen(rap->strtable + pos) + 1;
   }
 
-  if (rap->rpathlen > 0)
+  if (rap->rpathlen > 0) {
     pos = rap->rpathlen;
+  }
 
   for (i = 0; i < obj->obj_num; ++i) {
     tmp1 = obj->linkmap + i;
@@ -567,10 +581,11 @@ static bool rtems_rtl_rap_load_symbols(rtems_rtl_rap* rap, rtems_rtl_obj* obj) {
       return false;
     }
 
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_SYMBOL))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_SYMBOL)) {
       printf("rtl: sym:load: data=0x%08" PRIx32 " name=0x%08" PRIx32
              " value=0x%08" PRIx32 "\n",
              data, name, value);
+    }
 
     /*
      * If there is a globally exported symbol already present and this
@@ -606,17 +621,19 @@ static bool rtems_rtl_rap_load_symbols(rtems_rtl_rap* rap, rtems_rtl_obj* obj) {
     gsym->value = (uint8_t*)(value + symsect->base);
     gsym->data = data & 0xffff;
 
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_SYMBOL))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_SYMBOL)) {
       printf(
           "rtl: sym:add:%-2d name:%-20s bind:%-2d type:%-2d val:%8p sect:%d\n",
           sym, gsym->name, (int)ELF_ST_BIND(data & 0xffff),
           (int)ELF_ST_TYPE(data & 0xffff), gsym->value, (int)(data >> 16));
+    }
 
     ++gsym;
   }
 
-  if (obj->global_syms)
+  if (obj->global_syms) {
     rtems_rtl_symbol_obj_add(obj);
+  }
 
   return true;
 }
@@ -635,8 +652,9 @@ static bool rtems_rtl_rap_parse_header(uint8_t* rhdr, size_t* rhdr_len,
    */
 
   if ((rhdr[0] != 'R') || (rhdr[1] != 'A') || (rhdr[2] != 'P') ||
-      (rhdr[3] != ','))
+      (rhdr[3] != ',')) {
     return false;
+  }
 
   sptr = sptr + 4;
 
@@ -646,8 +664,9 @@ static bool rtems_rtl_rap_parse_header(uint8_t* rhdr, size_t* rhdr_len,
 
   *length = strtoul(sptr, &eptr, 10);
 
-  if (*eptr != ',')
+  if (*eptr != ',') {
     return false;
+  }
 
   sptr = eptr + 1;
 
@@ -657,8 +676,9 @@ static bool rtems_rtl_rap_parse_header(uint8_t* rhdr, size_t* rhdr_len,
 
   *version = strtoul(sptr, &eptr, 10);
 
-  if (*eptr != ',')
+  if (*eptr != ',') {
     return false;
+  }
 
   sptr = eptr + 1;
 
@@ -674,11 +694,13 @@ static bool rtems_rtl_rap_parse_header(uint8_t* rhdr, size_t* rhdr_len,
              (sptr[3] == '7')) {
     *compression = RTEMS_RTL_COMP_LZ77;
     eptr = sptr + 4;
-  } else
+  } else {
     return false;
+  }
 
-  if (*eptr != ',')
+  if (*eptr != ',') {
     return false;
+  }
 
   sptr = eptr + 1;
 
@@ -690,8 +712,9 @@ static bool rtems_rtl_rap_parse_header(uint8_t* rhdr, size_t* rhdr_len,
   /*
    * "\n" = 1 byte, total 33
    */
-  if (*eptr != '\n')
+  if (*eptr != '\n') {
     return false;
+  }
 
   *rhdr_len = ((uint8_t*)eptr) - rhdr + 1;
 
@@ -709,12 +732,15 @@ bool rtems_rtl_rap_file_check(rtems_rtl_obj* obj, int fd) {
 
   rtems_rtl_obj_caches(&header, NULL, NULL);
 
-  if (!rtems_rtl_obj_cache_read(header, fd, obj->ooffset, (void**)&rhdr, &rlen))
+  if (!rtems_rtl_obj_cache_read(header, fd, obj->ooffset, (void**)&rhdr,
+                                &rlen)) {
     return false;
+  }
 
   if (!rtems_rtl_rap_parse_header(rhdr, &rlen, &length, &version, &compression,
-                                  &checksum))
+                                  &checksum)) {
     return false;
+  }
 
   return true;
 }
@@ -728,8 +754,9 @@ bool rtems_rtl_rap_file_load(rtems_rtl_obj* obj, int fd) {
   rtems_rtl_obj_caches(&rap.file, NULL, NULL);
 
   if (!rtems_rtl_obj_cache_read(rap.file, fd, obj->ooffset, (void**)&rhdr,
-                                &rlen))
+                                &rlen)) {
     return false;
+  }
 
   if (!rtems_rtl_rap_parse_header(rhdr, &rlen, &rap.length, &rap.version,
                                   &rap.compression, &rap.checksum)) {
@@ -749,37 +776,44 @@ bool rtems_rtl_rap_file_load(rtems_rtl_obj* obj, int fd) {
    * uint32_t: class
    */
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_LOAD))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_LOAD)) {
     printf("rtl: rap: input machine=%" PRIu32 "\n",
            rtems_rtl_obj_comp_input(rap.decomp));
+  }
 
-  if (!rtems_rtl_rap_read_uint32(rap.decomp, &rap.machinetype))
+  if (!rtems_rtl_rap_read_uint32(rap.decomp, &rap.machinetype)) {
     return false;
+  }
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_LOAD))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_LOAD)) {
     printf("rtl: rap: machinetype=%" PRIu32 "\n", rap.machinetype);
+  }
 
   if (!rtems_rtl_rap_machine_check(rap.machinetype)) {
     rtems_rtl_set_error(EINVAL, "invalid machinetype");
     return false;
   }
 
-  if (!rtems_rtl_rap_read_uint32(rap.decomp, &rap.datatype))
+  if (!rtems_rtl_rap_read_uint32(rap.decomp, &rap.datatype)) {
     return false;
+  }
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_LOAD))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_LOAD)) {
     printf("rtl: rap: datatype=%" PRIu32 "\n", rap.datatype);
+  }
 
   if (!rtems_rtl_rap_datatype_check(rap.datatype)) {
     rtems_rtl_set_error(EINVAL, "invalid datatype");
     return false;
   }
 
-  if (!rtems_rtl_rap_read_uint32(rap.decomp, &rap.class))
+  if (!rtems_rtl_rap_read_uint32(rap.decomp, &rap.class)) {
     return false;
+  }
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_LOAD))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_LOAD)) {
     printf("rtl: rap: class=%" PRIu32 "\n", rap.class);
+  }
 
   if (!rtems_rtl_rap_class_check(rap.class)) {
     rtems_rtl_set_error(EINVAL, "invalid class");
@@ -794,58 +828,71 @@ bool rtems_rtl_rap_file_load(rtems_rtl_obj* obj, int fd) {
    * uint32_t: relocs_size
    */
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_LOAD))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_LOAD)) {
     printf("rtl: rap: input header=%" PRIu32 "\n",
            rtems_rtl_obj_comp_input(rap.decomp));
+  }
 
-  if (!rtems_rtl_rap_read_uint32(rap.decomp, &rap.init))
+  if (!rtems_rtl_rap_read_uint32(rap.decomp, &rap.init)) {
     return false;
+  }
 
-  if (!rtems_rtl_rap_read_uint32(rap.decomp, &rap.fini))
+  if (!rtems_rtl_rap_read_uint32(rap.decomp, &rap.fini)) {
     return false;
+  }
 
-  if (!rtems_rtl_rap_read_uint32(rap.decomp, &rap.symtab_size))
+  if (!rtems_rtl_rap_read_uint32(rap.decomp, &rap.symtab_size)) {
     return false;
+  }
 
-  if (!rtems_rtl_rap_read_uint32(rap.decomp, &rap.strtab_size))
+  if (!rtems_rtl_rap_read_uint32(rap.decomp, &rap.strtab_size)) {
     return false;
+  }
 
-  if (!rtems_rtl_rap_read_uint32(rap.decomp, &rap.relocs_size))
+  if (!rtems_rtl_rap_read_uint32(rap.decomp, &rap.relocs_size)) {
     return false;
+  }
 
   rap.symbols = rap.symtab_size / (3 * sizeof(uint32_t));
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_LOAD))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_LOAD)) {
     printf("rtl: rap: load: symtab=%" PRIu32 " (%" PRIu32 ") strtab=%" PRIu32
            " relocs=%" PRIu32 "\n",
            rap.symtab_size, rap.symbols, rap.strtab_size, rap.relocs_size);
+  }
 
   /*
    * Load the details
    */
-  if (!rtems_rtl_rap_read_uint32(rap.decomp, &obj->obj_num))
+  if (!rtems_rtl_rap_read_uint32(rap.decomp, &obj->obj_num)) {
     return false;
+  }
 
   if (obj->obj_num > 0) {
     obj->sec_num = (uint32_t*)malloc(sizeof(uint32_t) * obj->obj_num);
 
-    if (!rtems_rtl_rap_read_uint32(rap.decomp, &rap.rpathlen))
+    if (!rtems_rtl_rap_read_uint32(rap.decomp, &rap.rpathlen)) {
       return false;
+    }
 
     uint32_t i;
     for (i = 0; i < obj->obj_num; ++i) {
-      if (!rtems_rtl_rap_read_uint32(rap.decomp, &(obj->sec_num[i])))
+      if (!rtems_rtl_rap_read_uint32(rap.decomp, &(obj->sec_num[i]))) {
         return false;
+      }
     }
 
-    if (!rtems_rtl_rap_read_uint32(rap.decomp, &rap.strtable_size))
+    if (!rtems_rtl_rap_read_uint32(rap.decomp, &rap.strtable_size)) {
       return false;
+    }
 
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_DETAIL))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_DETAIL)) {
       printf("rtl: rap: details: obj_num=%" PRIu32 "\n", obj->obj_num);
+    }
 
-    if (!rtems_rtl_rap_load_linkmap(&rap, obj))
+    if (!rtems_rtl_rap_load_linkmap(&rap, obj)) {
       return false;
+    }
   }
 
   /*
@@ -864,21 +911,25 @@ bool rtems_rtl_rap_file_load(rtems_rtl_obj* obj, int fd) {
    */
 
   for (section = 0; section < RTEMS_RTL_RAP_SECS; ++section) {
-    if (!rtems_rtl_rap_read_uint32(rap.decomp, &rap.secs[section].size))
+    if (!rtems_rtl_rap_read_uint32(rap.decomp, &rap.secs[section].size)) {
       return false;
+    }
 
-    if (!rtems_rtl_rap_read_uint32(rap.decomp, &rap.secs[section].alignment))
+    if (!rtems_rtl_rap_read_uint32(rap.decomp, &rap.secs[section].alignment)) {
       return false;
+    }
 
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_LOAD_SECT))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_LOAD_SECT)) {
       printf("rtl: rap: %s: size=%" PRIu32 " align=%" PRIu32 "\n",
              rap_sections[section].name, rap.secs[section].size,
              rap.secs[section].alignment);
+    }
 
     if (!rtems_rtl_obj_add_section(
             obj, section, rap_sections[section].name, rap.secs[section].size, 0,
-            rap.secs[section].alignment, 0, 0, rap_sections[section].flags))
+            rap.secs[section].alignment, 0, 0, rap_sections[section].flags)) {
       return false;
+    }
   }
 
   /** obj->entry = (void*)(uintptr_t) ehdr.e_entry; */
@@ -886,25 +937,31 @@ bool rtems_rtl_rap_file_load(rtems_rtl_obj* obj, int fd) {
   /*
    * Allocate the sections.
    */
-  if (!rtems_rtl_obj_alloc_sections(obj, fd, NULL, &rap))
+  if (!rtems_rtl_obj_alloc_sections(obj, fd, NULL, &rap)) {
     return false;
+  }
 
-  if (!rtems_rtl_obj_load_sections(obj, fd, rtems_rtl_rap_loader, &rap))
+  if (!rtems_rtl_obj_load_sections(obj, fd, rtems_rtl_rap_loader, &rap)) {
     return false;
+  }
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_LOAD))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_LOAD)) {
     printf("rtl: rap: input symbols=%" PRIu32 "\n",
            rtems_rtl_obj_comp_input(rap.decomp));
+  }
 
-  if (!rtems_rtl_rap_load_symbols(&rap, obj))
+  if (!rtems_rtl_rap_load_symbols(&rap, obj)) {
     return false;
+  }
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_LOAD))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_LOAD)) {
     printf("rtl: rap: input relocs=%" PRIu32 "\n",
            rtems_rtl_obj_comp_input(rap.decomp));
+  }
 
-  if (!rtems_rtl_rap_relocate(&rap, obj))
+  if (!rtems_rtl_rap_relocate(&rap, obj)) {
     return false;
+  }
 
   rtems_rtl_obj_synchronize_cache(obj);
 

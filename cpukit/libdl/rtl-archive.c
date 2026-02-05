@@ -80,8 +80,9 @@ static unsigned int rtems_rtl_archive_read_32(void* data) {
 }
 
 static void rtems_rtl_archive_set_error(int num, const char* text) {
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
     printf("rtl: archive: error: %3d:  %s\n", num, text);
+  }
 }
 
 static uint64_t rtems_rtl_scan_decimal(const uint8_t* string, size_t len) {
@@ -99,10 +100,12 @@ static uint64_t rtems_rtl_scan_decimal(const uint8_t* string, size_t len) {
 
 static bool rtems_rtl_seek_read(int fd, off_t off, size_t len,
                                 uint8_t* buffer) {
-  if (lseek(fd, off, SEEK_SET) < 0)
+  if (lseek(fd, off, SEEK_SET) < 0) {
     return false;
-  if (read(fd, buffer, len) != (ssize_t)len)
+  }
+  if (read(fd, buffer, len) != (ssize_t)len) {
     return false;
+  }
   return true;
 }
 
@@ -146,11 +149,13 @@ static bool rtems_rtl_rchive_name_end(const char c) {
 static const char* rtems_rtl_archive_dup_name(const char* name) {
   size_t len = 0;
   char* dup;
-  while (!rtems_rtl_rchive_name_end(name[len]))
+  while (!rtems_rtl_rchive_name_end(name[len])) {
     ++len;
+  }
   dup = rtems_rtl_alloc_new(RTEMS_RTL_ALLOC_OBJECT, len + 1, true);
-  if (dup != NULL)
+  if (dup != NULL) {
     memcpy(dup, name, len);
+  }
   return dup;
 }
 
@@ -163,8 +168,9 @@ static bool rtems_rtl_archive_match_name(const char* file_name,
       ++name;
     }
     if (((*file_name == '\0') || (*file_name == '\n') || (*file_name == '/')) &&
-        ((*name == '\0') || (*name == '/')))
+        ((*name == '\0') || (*name == '/'))) {
       return true;
+    }
   }
   return false;
 }
@@ -240,9 +246,10 @@ static bool rtems_rtl_archive_obj_finder(rtems_rtl_archive* archive,
                                          void* data) {
   const rtems_rtl_archive_symbols* symbols = &archive->symbols;
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
     printf("rtl: archive: finder: %s: entries: %zu\n", archive->name,
            symbols->entries);
+  }
 
   /*
    * Make sure there is a valid symbol table.
@@ -299,19 +306,22 @@ static rtems_rtl_archive* rtems_rtl_archive_new(rtems_rtl_archives* archives,
    */
   path_size = strlen(path);
   size = sizeof(rtems_rtl_archive) + path_size + strlen(name) + 1;
-  if (path_size > 1)
+  if (path_size > 1) {
     ++size;
+  }
   archive = rtems_rtl_alloc_new(RTEMS_RTL_ALLOC_OBJECT, size, true);
   if (archive == NULL) {
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
       printf("rtl: archive: new: %s: no memory\n", name);
+    }
   } else {
     char* aname;
     archive->name = ((const char*)archive) + sizeof(rtems_rtl_archive);
     aname = (char*)archive->name;
     strcpy(aname, path);
-    if (path_size > 1)
+    if (path_size > 1) {
       strcat(aname, "/");
+    }
     strcat(aname, name);
     rtems_chain_set_off_chain(&archive->node);
     archive->flags |= RTEMS_RTL_ARCHIVE_LOAD;
@@ -320,12 +330,14 @@ static rtems_rtl_archive* rtems_rtl_archive_new(rtems_rtl_archives* archives,
 }
 
 static void rtems_rtl_archive_del(rtems_rtl_archive* archive) {
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
     printf("rtl: archive: del: %s\n", archive->name);
+  }
   rtems_rtl_alloc_del(RTEMS_RTL_ALLOC_SYMBOL, archive->symbols.base);
   rtems_rtl_alloc_del(RTEMS_RTL_ALLOC_SYMBOL, archive->symbols.symbols);
-  if (!rtems_chain_is_node_off_chain(&archive->node))
+  if (!rtems_chain_is_node_off_chain(&archive->node)) {
     rtems_chain_extract(&archive->node);
+  }
   rtems_rtl_alloc_del(RTEMS_RTL_ALLOC_OBJECT, archive);
 }
 
@@ -366,15 +378,18 @@ static rtems_rtl_archive* rtems_rtl_archive_get(rtems_rtl_archives* archives,
 static bool rtems_rtl_archives_load_config(rtems_rtl_archives* archives) {
   struct stat sb;
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
     printf("rtl: archive: config load: %s\n", archives->config_name);
+  }
 
-  if (archives->config_name == NULL)
+  if (archives->config_name == NULL) {
     return false;
+  }
 
   if (stat(archives->config_name, &sb) < 0) {
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
       printf("rtl: archive: no config: %s\n", archives->config_name);
+    }
     return false;
   }
 
@@ -393,21 +408,24 @@ static bool rtems_rtl_archives_load_config(rtems_rtl_archives* archives) {
     archives->config =
         rtems_rtl_alloc_new(RTEMS_RTL_ALLOC_OBJECT, sb.st_size + 1, true);
     if (archives->config == NULL) {
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
         printf("rtl: archive: no memory for config\n");
+      }
       return false;
     }
 
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
       printf("rtl: archive: config load: read %s\n", archives->config_name);
+    }
 
     fd = open(archives->config_name, O_RDONLY);
     if (fd < 0) {
       rtems_rtl_alloc_del(RTEMS_RTL_ALLOC_OBJECT, (void*)archives->config);
       archives->config = NULL;
       archives->config_length = 0;
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
         printf("rtl: archive: config open error: %s\n", strerror(errno));
+      }
       return false;
     }
 
@@ -417,8 +435,9 @@ static bool rtems_rtl_archives_load_config(rtems_rtl_archives* archives) {
       rtems_rtl_alloc_del(RTEMS_RTL_ALLOC_OBJECT, (void*)archives->config);
       archives->config = NULL;
       archives->config_length = 0;
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
         printf("rtl: archive: config read error: %s\n", strerror(errno));
+      }
       return false;
     }
 
@@ -431,11 +450,13 @@ static bool rtems_rtl_archives_load_config(rtems_rtl_archives* archives) {
     s = (char*)archives->config;
     in_comment = false;
     for (r = 0; r < archives->config_length; ++r, ++s) {
-      if (*s == '#')
+      if (*s == '#') {
         in_comment = true;
+      }
       if (in_comment) {
-        if (*s == '\n')
+        if (*s == '\n') {
           in_comment = false;
+        }
         *s = '\0';
       }
     }
@@ -445,8 +466,9 @@ static bool rtems_rtl_archives_load_config(rtems_rtl_archives* archives) {
      */
     s = (char*)archives->config;
     for (r = 0; r < archives->config_length; ++r, ++s) {
-      if (*s == '\r' || *s == '\n')
+      if (*s == '\r' || *s == '\n') {
         *s = '\0';
+      }
     }
 
     /*
@@ -493,8 +515,9 @@ static bool rtems_rtl_archives_load_config(rtems_rtl_archives* archives) {
 }
 
 void rtems_rtl_archives_open(rtems_rtl_archives* archives, const char* config) {
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
     printf("rtl: archive: open: %s\n", config);
+  }
   memset(archives, 0, sizeof(rtems_rtl_archives));
   archives->config_name = rtems_rtl_strdup(config);
   rtems_chain_initialize_empty(&archives->archives);
@@ -502,9 +525,10 @@ void rtems_rtl_archives_open(rtems_rtl_archives* archives, const char* config) {
 
 void rtems_rtl_archives_close(rtems_rtl_archives* archives) {
   rtems_chain_node* node;
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
     printf("rtl: archive: close: count=%zu\n",
            rtems_chain_node_count_unprotected(&archives->archives));
+  }
   node = rtems_chain_first(&archives->archives);
   while (!rtems_chain_is_tail(&archives->archives, node)) {
     rtems_rtl_archive* archive = (rtems_rtl_archive*)node;
@@ -518,16 +542,18 @@ void rtems_rtl_archives_close(rtems_rtl_archives* archives) {
 
 static void rtems_rtl_archives_remove(rtems_rtl_archives* archives) {
   rtems_chain_node* node = rtems_chain_first(&archives->archives);
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
     printf("rtl: archive: refresh: remove: checking %zu archive(s)\n",
            rtems_chain_node_count_unprotected(&archives->archives));
+  }
   while (!rtems_chain_is_tail(&archives->archives, node)) {
     rtems_rtl_archive* archive = (rtems_rtl_archive*)node;
     rtems_chain_node* next_node = rtems_chain_next(node);
     if ((archive->flags & RTEMS_RTL_ARCHIVE_REMOVE) != 0) {
       archive->flags &= ~RTEMS_RTL_ARCHIVE_REMOVE;
-      if ((archive->flags & RTEMS_RTL_ARCHIVE_USER_LOAD) == 0)
+      if ((archive->flags & RTEMS_RTL_ARCHIVE_USER_LOAD) == 0) {
         rtems_rtl_archive_del(archive);
+      }
     }
     node = next_node;
   }
@@ -542,14 +568,16 @@ static bool rtems_rtl_archive_loader(rtems_rtl_archive* archive, void* data) {
     size_t size = 0;
     const char* name = "/";
 
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
       printf("rtl: archive: loader: %s\n", archive->name);
+    }
 
     fd = open(archive->name, O_RDONLY);
     if (fd < 0) {
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
         printf("rtl: archive: loader: open error: %s: %s\n", archive->name,
                strerror(errno));
+      }
       rtems_rtl_archive_set_error(errno, "opening archive file");
       return true;
     }
@@ -557,9 +585,10 @@ static bool rtems_rtl_archive_loader(rtems_rtl_archive* archive, void* data) {
     if (rtems_rtl_obj_archive_find_obj(fd, archive->size, &name, &offset, &size,
                                        &archive->enames,
                                        rtems_rtl_archive_set_error)) {
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
         printf("rtl: archive: loader: symbols: off=0x%08jx size=%zu\n", offset,
                size);
+      }
 
       /*
        * Reallocate the symbol table memory if it has changed size.
@@ -626,13 +655,14 @@ static bool rtems_rtl_archive_loader(rtems_rtl_archive* archive, void* data) {
               rtems_rtl_archive_symbol_compare);
       }
 
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
         printf("rtl: archive: loader: symbols: "
                "base=%p entries=%zu names=%p (0x%08x) symbols=%p\n",
                archive->symbols.base, archive->symbols.entries,
                archive->symbols.names,
                (unsigned int)(archive->symbols.entries + 1) * 4,
                archive->symbols.symbols);
+      }
 
       if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVE_SYMS) &&
           archive->symbols.entries > 0) {
@@ -657,8 +687,9 @@ static bool rtems_rtl_archive_loader(rtems_rtl_archive* archive, void* data) {
 
 static bool rtems_rtl_archives_load(rtems_rtl_archives* archives) {
   int loaded = 0;
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
     printf("rtl: archive: archive: load\n");
+  }
   rtems_rtl_archive_iterate_archives(archives, rtems_rtl_archive_loader,
                                      &loaded);
   return loaded > 0;
@@ -672,8 +703,9 @@ bool rtems_rtl_archives_refresh(rtems_rtl_archives* archives) {
    * Reload the configuration file if it has not been loaded or has been
    * updated.
    */
-  if (!rtems_rtl_archives_load_config(archives))
+  if (!rtems_rtl_archives_load_config(archives)) {
     return false;
+  }
 
   /*
    * Assume all existing archives are to be removed. If an existing archive
@@ -694,8 +726,9 @@ bool rtems_rtl_archives_refresh(rtems_rtl_archives* archives) {
       continue;
     }
 
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
       printf("rtl: archive: refresh: %s\n", dirname);
+    }
 
     config_path += strlen(dirname);
 
@@ -703,8 +736,9 @@ bool rtems_rtl_archives_refresh(rtems_rtl_archives* archives) {
      * Relative paths do not work in the config. Must be absolute.
      */
     if (dirname[0] != '/') {
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
         printf("rtl: archive: refresh: relative paths ignored: %s\n", dirname);
+      }
       continue;
     }
 
@@ -712,20 +746,23 @@ bool rtems_rtl_archives_refresh(rtems_rtl_archives* archives) {
      * Scan the parent directory of the glob path matching file names.
      */
     basename = strrchr(dirname, '/');
-    if (basename == NULL)
+    if (basename == NULL) {
       continue;
+    }
 
-    if (basename == dirname)
+    if (basename == dirname) {
       dirname = &root[0];
+    }
 
     *basename = '\0';
     ++basename;
 
     dir = opendir(dirname);
 
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
       printf("rtl: archive: refresh: %s %sfound\n", dirname,
              dir == NULL ? ": not " : "");
+    }
 
     if (dir != NULL) {
       while (true) {
@@ -733,24 +770,28 @@ bool rtems_rtl_archives_refresh(rtems_rtl_archives* archives) {
         struct dirent* result = NULL;
 
         if (readdir_r(dir, &entry, &result) != 0) {
-          if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+          if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
             printf("rtl: archive: refresh: readdir error\n");
+          }
           break;
         }
 
-        if (result == NULL)
+        if (result == NULL) {
           break;
+        }
 
-        if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+        if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
           printf("rtl: archive: refresh: checking: %s (pattern: %s)\n",
                  entry.d_name, basename);
+        }
 
         if (fnmatch(basename, entry.d_name, 0) == 0) {
           rtems_rtl_archive* archive;
           archive = rtems_rtl_archive_get(archives, dirname, entry.d_name);
-          if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+          if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
             printf("rtl: archive: refresh: %s: %sfound\n", entry.d_name,
                    archive == NULL ? ": not " : "");
+          }
         }
       }
       closedir(dir);
@@ -771,8 +812,9 @@ bool rtems_rtl_archives_refresh(rtems_rtl_archives* archives) {
    * search flag avoids searching for symbols we know are not in the known
    * archives,
    */
-  if (rtems_rtl_archives_load(archives))
+  if (rtems_rtl_archives_load(archives)) {
     rtems_rtl_unresolved_set_archive_search();
+  }
 
   return true;
 }
@@ -815,40 +857,46 @@ rtems_rtl_archive_obj_load(rtems_rtl_archives* archives, const char* symbol,
   archive_count = rtems_chain_node_count_unprotected(&archives->archives);
 
   if (archive_count == 0) {
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
       printf("rtl: archive: load: no archives\n");
+    }
     return rtems_rtl_archive_search_no_config;
   }
 
   pending = rtems_rtl_pending_unprotected();
   if (pending == NULL) {
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
       printf("rtl: archive: load: no pending list\n");
+    }
     return rtems_rtl_archive_search_not_found;
   }
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
     printf("rtl: archive: load: searching %zu archives\n", archive_count);
+  }
 
   rtems_rtl_archive_iterate_archives(archives, rtems_rtl_archive_obj_finder,
                                      &search);
 
   if (search.archive == NULL) {
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
       printf("rtl: archive: load: not found: %s\n", symbol);
+    }
     return rtems_rtl_archive_search_not_found;
   }
 
   if (!load) {
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
       printf("rtl: archive: load: found (no load): %s\n", symbol);
+    }
     return rtems_rtl_archive_search_found;
   }
 
   obj = rtems_rtl_obj_alloc();
   if (obj == NULL) {
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
       printf("rtl: archive: alloc: no memory: %s\n", search.archive->name);
+    }
     return rtems_rtl_archive_search_error;
   }
 
@@ -856,9 +904,10 @@ rtems_rtl_archive_obj_load(rtems_rtl_archives* archives, const char* symbol,
 
   fd = open(obj->aname, O_RDONLY);
   if (fd < 0) {
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
       printf("rtl: archive: load: open error: %s: %s\n", obj->aname,
              strerror(errno));
+    }
     rtems_rtl_obj_free(obj);
     return rtems_rtl_archive_search_error;
   }
@@ -869,8 +918,9 @@ rtems_rtl_archive_obj_load(rtems_rtl_archives* archives, const char* symbol,
   if (!rtems_rtl_obj_archive_find_obj(
           fd, search.archive->size, &obj->oname, &obj->ooffset, &obj->fsize,
           &search.archive->enames, rtems_rtl_archive_set_error)) {
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
       printf("rtl: archive: load: load error: %s:%s\n", obj->aname, obj->oname);
+    }
     close(fd);
     rtems_rtl_obj_free(obj);
     return rtems_rtl_archive_search_error;
@@ -882,16 +932,18 @@ rtems_rtl_archive_obj_load(rtems_rtl_archives* archives, const char* symbol,
 
   close(fd);
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
     printf("rtl: archive: loading: %s:%s@0x%08jx size:%zu\n", obj->aname,
            obj->oname, obj->ooffset, obj->fsize);
+  }
 
   rtems_chain_append(pending, &obj->link);
 
   if (!rtems_rtl_obj_load(obj)) {
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
       printf("rtl: archive: loading: error: %s:%s@0x%08jx: %s\n", obj->aname,
              obj->oname, obj->ooffset, rtems_rtl_last_error_unprotected());
+    }
     rtems_chain_extract(&obj->link);
     rtems_rtl_obj_free(obj);
     rtems_rtl_obj_caches_flush();
@@ -900,9 +952,10 @@ rtems_rtl_archive_obj_load(rtems_rtl_archives* archives, const char* symbol,
 
   rtems_rtl_obj_caches_flush();
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
     printf("rtl: archive: loading: loaded: %s:%s@0x%08jx\n", obj->aname,
            obj->oname, obj->ooffset);
+  }
 
   return rtems_rtl_archive_search_loaded;
 }
@@ -921,8 +974,9 @@ bool rtems_rtl_obj_archive_find_obj(int fd, size_t fsize, const char** name,
     return false;
   }
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ARCHIVES)) {
     printf("rtl: archive: find obj: %s @ 0x%08jx\n", *name, *ooffset);
+  }
 
   if (read(fd, &header[0], RTEMS_RTL_AR_IDENT_SIZE) !=
       RTEMS_RTL_AR_IDENT_SIZE) {
@@ -960,9 +1014,9 @@ bool rtems_rtl_obj_archive_find_obj(int fd, size_t fsize, const char** name,
    * If the name had the offset encoded we go straight to that location.
    */
 
-  if (*ooffset != 0)
+  if (*ooffset != 0) {
     scanning = false;
-  else {
+  } else {
     if (*name == NULL) {
       error(errno, "invalid object name and archive offset");
       *ooffset = 0;
@@ -1107,8 +1161,9 @@ bool rtems_rtl_obj_archive_find_obj(int fd, size_t fsize, const char** name,
            * If there is no name memory the user is asking us to return the
            * name in the archive at the offset.
            */
-          if (*name == NULL)
+          if (*name == NULL) {
             *name = rtems_rtl_archive_dup_name(ename);
+          }
           if (rtems_rtl_archive_match_name(*name, ename)) {
             *ooffset += RTEMS_RTL_AR_FHDR_SIZE;
             return true;
@@ -1123,8 +1178,9 @@ bool rtems_rtl_obj_archive_find_obj(int fd, size_t fsize, const char** name,
       }
     } else {
       const char* ename = (const char*)&header[RTEMS_RTL_AR_FNAME];
-      if (*name == NULL)
+      if (*name == NULL) {
         *name = rtems_rtl_archive_dup_name(ename);
+      }
       if (rtems_rtl_archive_match_name(*name, ename)) {
         *ooffset += RTEMS_RTL_AR_FHDR_SIZE;
         return true;

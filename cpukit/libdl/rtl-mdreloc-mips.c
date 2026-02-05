@@ -171,8 +171,9 @@ rtems_rtl_elf_relocate_rel(rtems_rtl_obj* obj, const Elf_Rel* rel,
   where = (Elf_Addr*)(sect->base + rel->r_offset);
   addend = *where;
 
-  if (syminfo == STT_SECTION)
+  if (syminfo == STT_SECTION) {
     local = 1;
+  }
 
   switch (ELF_R_TYPE(rel->r_info)) {
   case R_TYPE(NONE):
@@ -180,8 +181,9 @@ rtems_rtl_elf_relocate_rel(rtems_rtl_obj* obj, const Elf_Rel* rel,
 
   case R_TYPE(16):
     tmp = addend & 0xffff;
-    if ((tmp & 0x8000) == 0x8000)
+    if ((tmp & 0x8000) == 0x8000) {
       tmp |= 0xffff0000; /* Sign extend */
+    }
     tmp = symvalue + (int)tmp;
     if ((tmp & 0xffff0000) != 0) {
       printf("R_MIPS_16 Overflow\n");
@@ -190,19 +192,22 @@ rtems_rtl_elf_relocate_rel(rtems_rtl_obj* obj, const Elf_Rel* rel,
 
     *where = (tmp & 0xffff) | (*where & 0xffff0000);
 
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
       printf("rtl: R_MIPS_16 %p @ %p in %s\n", (void*)*(where), where,
              rtems_rtl_obj_oname(obj));
+    }
     break;
 
   case R_TYPE(32):
     tmp = symvalue + addend;
-    if (addend != tmp)
+    if (addend != tmp) {
       *where = tmp;
+    }
 
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
       printf("rtl: R_MIPS_32 %p @ %p in %s\n", (void*)*(where), where,
              rtems_rtl_obj_oname(obj));
+    }
     break;
 
   case R_TYPE(26):
@@ -218,17 +223,19 @@ rtems_rtl_elf_relocate_rel(rtems_rtl_obj* obj, const Elf_Rel* rel,
 
       tmp = addend;
 
-      if ((tmp & 0x08000000) == 0x08000000)
+      if ((tmp & 0x08000000) == 0x08000000) {
         tmp |= 0xf0000000; /* Sign extened */
+      }
       tmp = ((int)tmp + symvalue) >> 2;
     }
 
     *where &= ~0x03ffffff;
     *where |= tmp & 0x03ffffff;
 
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
       printf("rtl: R_MIPS_26 local=%" PRIu32 " @ %p in %s\n", local,
              (void*)*(where), rtems_rtl_obj_oname(obj));
+    }
     break;
 
   case R_TYPE(HI16):
@@ -240,9 +247,10 @@ rtems_rtl_elf_relocate_rel(rtems_rtl_obj* obj, const Elf_Rel* rel,
     mips_hi16_list[mips_hi16_list_cnt].ahl = addend << 16;
     ++mips_hi16_list_cnt;
 
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
       printf("rtl: R_MIPS_HI16 %p @ %p in %s\n", (void*)*(where), where,
              rtems_rtl_obj_oname(obj));
+    }
     break;
 
   case R_TYPE(LO16):
@@ -258,8 +266,9 @@ rtems_rtl_elf_relocate_rel(rtems_rtl_obj* obj, const Elf_Rel* rel,
     addend |= (uint16_t)(t + tmp);
     *where = addend;
 
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
       printf("*where %x where %p\n", *where, where);
+    }
 
     /* reloc hi parts */
     while (mips_hi16_list_cnt != 0) {
@@ -270,20 +279,23 @@ rtems_rtl_elf_relocate_rel(rtems_rtl_obj* obj, const Elf_Rel* rel,
       addend &= 0xffff0000;
       addend |= ((ahl + t + tmp) - (int16_t)(ahl + t + tmp)) >> 16;
       *(where_hi16) = addend;
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
         printf("*where_hi %x where_hi %p ahl=%08x\n", *(where_hi16), where_hi16,
                ahl);
+      }
     }
 
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
       printf("rtl: R_MIPS_LO16 %p @ %p in %s\n", (void*)*(where), where,
              rtems_rtl_obj_oname(obj));
+    }
     break;
 
   case R_TYPE(PC16):
     tmp = addend & 0xffff;
-    if ((tmp & 0x8000) == 0x8000)
+    if ((tmp & 0x8000) == 0x8000) {
       tmp |= 0xffff0000; /* Sign extend */
+    }
     tmp = symvalue + ((int)tmp * 4) - (Elf_Addr)where;
     tmp = (Elf_Sword)tmp >> 2;
     if (((Elf_Sword)tmp > 0x7fff) || ((Elf_Sword)tmp < -0x8000)) {
@@ -293,9 +305,10 @@ rtems_rtl_elf_relocate_rel(rtems_rtl_obj* obj, const Elf_Rel* rel,
 
     *where = (tmp & 0xffff) | (*where & 0xffff0000);
 
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
       printf("rtl: R_MIPS_PC16 %p @ %p in %s\n", (void*)*(where), where,
              rtems_rtl_obj_oname(obj));
+    }
 
     break;
 

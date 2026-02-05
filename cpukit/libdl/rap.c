@@ -136,8 +136,9 @@ static rtems_rap_app* rtems_rap_check_handle(void* handle) {
 
   while (!rtems_chain_is_tail(&rap_.apps, node)) {
     rtems_rap_app* check = (rtems_rap_app*)node;
-    if (check == app)
+    if (check == app) {
       return app;
+    }
     node = rtems_chain_next(node);
   }
 
@@ -157,8 +158,9 @@ static void rtems_rap_app_free(rtems_rap_app* app) {
     app->handle = NULL;
   }
 
-  if (!rtems_chain_is_node_off_chain(&app->node))
+  if (!rtems_chain_is_node_off_chain(&app->node)) {
     rtems_chain_extract(&app->node);
+  }
 }
 
 static bool rtems_rap_match_name(rtems_rap_app* app, const char* name) {
@@ -169,8 +171,9 @@ static bool rtems_rap_match_name(rtems_rap_app* app, const char* name) {
    * there is at least one delimiter in the name.
    */
 
-  if (strncmp(app->name, name, strlen(name)) == 0)
+  if (strncmp(app->name, name, strlen(name)) == 0) {
     return true;
+  }
 
   a = app->name + strlen(app->name) - 1;
 
@@ -182,8 +185,9 @@ static bool rtems_rap_match_name(rtems_rap_app* app, const char* name) {
 
       while (*a && *n) {
         if (*a == '.') {
-          if (*n == '\0')
+          if (*n == '\0') {
             return true;
+          }
         }
 
         ++a;
@@ -217,11 +221,13 @@ static void rtems_rap_set_error(int error, const char* format, ...) {
 bool rtems_rap_load(const char* name, int mode, int argc, const char* argv[]) {
   rtems_rap_data* rap = rtems_rap_lock();
 
-  if (!rap)
+  if (!rap) {
     return false;
+  }
 
-  if (rap_verbose)
+  if (rap_verbose) {
     printf("rap: loading '%s'\n", name);
+  }
 
   /*
    * See if the app has already been loaded.
@@ -300,8 +306,9 @@ bool rtems_rap_unload(const char* name) {
 
   app = rtems_rap_find(name);
 
-  if (rap_verbose)
+  if (rap_verbose) {
     printf("rap: unloading '%s'\n", name);
+  }
 
   if (!app) {
     rtems_rap_set_error(ENOENT, "invalid handle");
@@ -359,8 +366,9 @@ bool rtems_rap_iterate(rtems_rap_iterator iterator) {
   while (!rtems_chain_is_tail(&rap->apps, node)) {
     rtems_rap_app* app = (rtems_rap_app*)node;
     result = iterator(app);
-    if (!result)
+    if (!result) {
       break;
+    }
     node = rtems_chain_next(node);
   }
 
@@ -371,15 +379,17 @@ bool rtems_rap_iterate(rtems_rap_iterator iterator) {
 
 const char* rtems_rap_name(void* handle) {
   rtems_rap_app* app = rtems_rap_check_handle(handle);
-  if (app)
+  if (app) {
     return app->name;
+  }
   return NULL;
 }
 
 void* rtems_rap_dl_handle(void* handle) {
   rtems_rap_app* app = rtems_rap_check_handle(handle);
-  if (app)
+  if (app) {
     return app->handle;
+  }
   return NULL;
 }
 

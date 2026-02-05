@@ -97,8 +97,9 @@ static bool rtems_rtl_obj_summary_iterator(rtems_chain_node* node, void* data) {
 static int rtems_rtl_count_symbols(rtems_rtl_data* rtl) {
   size_t count;
   size_t bucket;
-  for (count = 0, bucket = 0; bucket < rtl->globals.nbuckets; ++bucket)
+  for (count = 0, bucket = 0; bucket < rtl->globals.nbuckets; ++bucket) {
     count += rtems_rtl_chain_count(&rtl->globals.buckets[bucket]);
+  }
   return count;
 }
 
@@ -169,9 +170,11 @@ static bool rtems_rtl_parse_opt(const char opt, int argc, char* argv[]) {
     if (argv[arg][0] == '-') {
       size_t len = strlen(argv[arg]);
       size_t i;
-      for (i = 1; i < len; ++i)
-        if (argv[arg][i] == opt)
+      for (i = 1; i < len; ++i) {
+        if (argv[arg][i] == opt) {
           return true;
+        }
+      }
     }
   }
   return false;
@@ -225,14 +228,16 @@ static ssize_t rtems_rtl_parse_arg_index(const char opt, const char* skip_opts,
         }
       }
     } else {
-      if (opt == ' ')
+      if (opt == ' ') {
         return arg;
+      }
     }
     /*
      * Is this an option and does it match what we are looking for?
      */
-    if (arg < argc && argv[arg][0] == '-' && argv[arg][1] == opt)
+    if (arg < argc && argv[arg][0] == '-' && argv[arg][1] == opt) {
       return arg + 1;
+    }
   }
   return -1;
 }
@@ -240,8 +245,9 @@ static ssize_t rtems_rtl_parse_arg_index(const char opt, const char* skip_opts,
 static const char* rtems_rtl_parse_arg(const char opt, const char* skip_opts,
                                        int argc, char* argv[]) {
   ssize_t arg = rtems_rtl_parse_arg_index(opt, skip_opts, argc, argv);
-  if (arg < 0)
+  if (arg < 0) {
     return NULL;
+  }
   return argv[arg];
 }
 
@@ -280,8 +286,9 @@ static int rtems_rtl_regx_match(const rtems_printer* printer, const char* label,
 static void rtems_rtl_print_obj_name(const rtems_rtl_obj_print* print,
                                      rtems_rtl_obj* obj) {
   rtems_printf(print->printer, "%-*c", print->indent, ' ');
-  if (rtems_rtl_obj_aname(obj) != NULL)
+  if (rtems_rtl_obj_aname(obj) != NULL) {
     rtems_printf(print->printer, "%s:", rtems_rtl_obj_aname(obj));
+  }
   rtems_printf(print->printer, "%s\n", rtems_rtl_obj_oname(obj));
 }
 
@@ -307,25 +314,30 @@ static bool rtems_rtl_print_symbols(rtems_rtl_obj_print* print,
 
     if (print->re_symbol != NULL) {
       int r = rtems_rtl_regx_match(print->printer, "symbol match", &rege, sym);
-      if (r < 0)
+      if (r < 0) {
         return false;
-      if (!r)
+      }
+      if (!r) {
         continue;
+      }
     }
 
     len = strlen(obj->global_table[s].name);
-    if (len > max_len)
+    if (len > max_len) {
       max_len = len;
+    }
   }
 
   for (s = 0; s < obj->global_syms; ++s) {
     const char* sym = obj->global_table[s].name;
     if (print->re_symbol != NULL) {
       int r = rtems_rtl_regx_match(print->printer, "symbol match", &rege, sym);
-      if (r < 0)
+      if (r < 0) {
         return false;
-      if (r == 0)
+      }
+      if (r == 0) {
         continue;
+      }
     }
     if (show_name) {
       show_name = false;
@@ -380,8 +392,9 @@ static bool rtems_rtl_obj_printer(rtems_rtl_obj_print* print,
   /*
    * Skip the base module unless asked to show it.
    */
-  if (!print->base && (obj == print->rtl->base))
+  if (!print->base && (obj == print->rtl->base)) {
     return true;
+  }
 
   if (print->re_name != NULL) {
     regex_t rege;
@@ -395,21 +408,24 @@ static bool rtems_rtl_obj_printer(rtems_rtl_obj_print* print,
     if (rtems_rtl_obj_aname(obj) != NULL) {
       r = rtems_rtl_regx_match(print->printer, "aname match", &rege,
                                rtems_rtl_obj_aname(obj));
-      if (r < 0)
+      if (r < 0) {
         return false;
+      }
     }
 
     if (r == 0) {
       r = rtems_rtl_regx_match(print->printer, "oname match", &rege,
                                rtems_rtl_obj_oname(obj));
-      if (r < 0)
+      if (r < 0) {
         return false;
+      }
     }
 
     regfree(&rege);
 
-    if (r == 0)
+    if (r == 0) {
       return true;
+    }
   }
 
   if (print->names || print->memory_map || print->stats ||
@@ -425,10 +441,12 @@ static bool rtems_rtl_obj_printer(rtems_rtl_obj_print* print,
     rtems_printf(print->printer, "%-*carchive name  : %s\n", indent, ' ',
                  rtems_rtl_obj_aname(obj));
     strcpy(flags_str, "--");
-    if (obj->flags & RTEMS_RTL_OBJ_LOCKED)
+    if (obj->flags & RTEMS_RTL_OBJ_LOCKED) {
       flags_str[0] = 'L';
-    if (obj->flags & RTEMS_RTL_OBJ_UNRESOLVED)
+    }
+    if (obj->flags & RTEMS_RTL_OBJ_UNRESOLVED) {
       flags_str[1] = 'U';
+    }
     rtems_printf(print->printer, "%-*cflags         : %s\n", indent, ' ',
                  flags_str);
     rtems_printf(print->printer, "%-*cfile offset   : %" PRIdoff_t "\n", indent,
@@ -463,8 +481,9 @@ static bool rtems_rtl_obj_printer(rtems_rtl_obj_print* print,
                  obj->global_size);
   }
   if (print->symbols) {
-    if (!rtems_rtl_print_symbols(print, obj, indent, show_name))
+    if (!rtems_rtl_print_symbols(print, obj, indent, show_name)) {
       return false;
+    }
   }
   if (print->dependencies) {
     rtems_rtl_dep_data dd = {.print = print,
@@ -472,8 +491,9 @@ static bool rtems_rtl_obj_printer(rtems_rtl_obj_print* print,
                              .show_name = show_name,
                              .indent = indent};
     rtems_rtl_obj_iterate_dependents(obj, rtems_rtl_dependencies, &dd);
-    if (!dd.first)
+    if (!dd.first) {
       rtems_printf(print->printer, "\n");
+    }
   }
   if (print->trampolines) {
     if (obj->tramp_size == 0) {
@@ -508,9 +528,10 @@ static bool rtems_rtl_obj_printer(rtems_rtl_obj_print* print,
 static bool rtems_rtl_unresolved_printer(rtems_rtl_unresolv_rec* rec,
                                          void* data) {
   rtems_rtl_obj_print* print = (rtems_rtl_obj_print*)data;
-  if (rec->type == rtems_rtl_unresolved_symbol)
+  if (rec->type == rtems_rtl_unresolved_symbol) {
     rtems_printf(print->printer, "%-*c%s\n", print->indent + 2, ' ',
                  rec->rec.name.name);
+  }
   return false;
 }
 
@@ -525,8 +546,9 @@ static bool rtems_rtl_obj_print_iterator(rtems_chain_node* node, void* data) {
 
 int rtems_rtl_shell_list(const rtems_printer* printer, int argc, char* argv[]) {
   rtems_rtl_obj_print print = {0};
-  if (!rtems_rtl_check_opts(printer, "anlmsdbt", argc, argv))
+  if (!rtems_rtl_check_opts(printer, "anlmsdbt", argc, argv)) {
     return 1;
+  }
   print.printer = printer;
   print.indent = 1;
   print.oname = true;
@@ -566,8 +588,9 @@ int rtems_rtl_shell_list(const rtems_printer* printer, int argc, char* argv[]) {
 
 int rtems_rtl_shell_sym(const rtems_printer* printer, int argc, char* argv[]) {
   rtems_rtl_obj_print print = {0};
-  if (!rtems_rtl_check_opts(printer, "buo", argc, argv))
+  if (!rtems_rtl_check_opts(printer, "buo", argc, argv)) {
     return 1;
+  }
   print.printer = printer;
   print.indent = 1;
   print.oname = true;
@@ -701,8 +724,9 @@ int rtems_rtl_shell_archive(const rtems_printer* printer, int argc,
   bool duplicates;
   regex_t rege;
 
-  if (!rtems_rtl_check_opts(printer, "dsl", argc, argv))
+  if (!rtems_rtl_check_opts(printer, "dsl", argc, argv)) {
     return 1;
+  }
 
   details = rtems_rtl_parse_opt('l', argc, argv);
   symbols = rtems_rtl_parse_opt('s', argc, argv);
@@ -760,18 +784,21 @@ int rtems_rtl_shell_archive(const rtems_printer* printer, int argc,
       rtems_printf(printer, "  symbols :");
 
       for (s = 0; s < archive->symbols.entries; ++s) {
-        if (archive->symbols.symbols != NULL)
+        if (archive->symbols.symbols != NULL) {
           symbol = archive->symbols.symbols[s].label;
+        }
 
         rtems_printf(printer, "%-*c%s\n", indent, ' ', symbol);
         indent = 12;
 
-        if (archive->symbols.symbols == NULL)
+        if (archive->symbols.symbols == NULL) {
           symbol += strlen(symbol) + 1;
+        }
       }
 
-      if (indent == 0)
+      if (indent == 0) {
         rtems_printf(printer, "\n");
+      }
     }
 
     if (duplicates) {
@@ -792,12 +819,14 @@ int rtems_rtl_shell_archive(const rtems_printer* printer, int argc,
             const char* match_symbol = match_archive->symbols.names;
             size_t ms;
 
-            if (archive->symbols.symbols != NULL)
+            if (archive->symbols.symbols != NULL) {
               symbol = archive->symbols.symbols[s].label;
+            }
 
             for (ms = 0; ms < match_archive->symbols.entries; ++ms) {
-              if (match_archive->symbols.symbols != NULL)
+              if (match_archive->symbols.symbols != NULL) {
                 match_symbol = match_archive->symbols.symbols[ms].label;
+              }
 
               if (symbol != match_symbol && strcmp(symbol, match_symbol) == 0) {
                 if (show_dups) {
@@ -808,24 +837,28 @@ int rtems_rtl_shell_archive(const rtems_printer* printer, int argc,
                              archive->name);
                 indent = 12;
 
-                if (match_archive->symbols.symbols != NULL)
+                if (match_archive->symbols.symbols != NULL) {
                   match_archive->symbols.symbols[ms].entry |= SYM_DUPLICATE;
+                }
               }
 
-              if (match_archive->symbols.symbols == NULL)
+              if (match_archive->symbols.symbols == NULL) {
                 match_symbol += strlen(match_symbol) + 1;
+              }
             }
           }
 
-          if (archive->symbols.symbols == NULL)
+          if (archive->symbols.symbols == NULL) {
             symbol += strlen(symbol) + 1;
+          }
         }
 
         match_node = rtems_chain_next(match_node);
       }
 
-      if (indent == 0)
+      if (indent == 0) {
         rtems_printf(printer, "\n");
+      }
     }
 
     node = rtems_chain_next(node);
@@ -839,8 +872,9 @@ int rtems_rtl_shell_archive(const rtems_printer* printer, int argc,
     rtems_rtl_archive* archive = (rtems_rtl_archive*)node;
     if (archive->symbols.symbols != NULL) {
       size_t s;
-      for (s = 0; s < archive->symbols.entries; ++s)
+      for (s = 0; s < archive->symbols.entries; ++s) {
         archive->symbols.symbols[s].entry &= ~SYM_DUPLICATE;
+      }
     }
     node = rtems_chain_next(node);
   }
@@ -874,8 +908,9 @@ int rtems_rtl_shell_call(const rtems_printer* printer, int argc, char* argv[]) {
   rtems_rtl_obj_sym* sym;
   rtems_rtl_obj* obj;
 
-  if (!rtems_rtl_check_opts(printer, "lsui", argc, argv))
+  if (!rtems_rtl_check_opts(printer, "lsui", argc, argv)) {
     return 1;
+  }
 
   keep_locked = rtems_rtl_parse_opt('l', argc, argv);
   args_s = rtems_rtl_parse_opt('s', argc, argv);
@@ -909,8 +944,9 @@ int rtems_rtl_shell_call(const rtems_printer* printer, int argc, char* argv[]) {
           rtems_printf(printer, "error: string args too big\n");
           return 1;
         }
-        if (o > 0)
+        if (o > 0) {
           values.s[o++] = ' ';
+        }
         strcat(values.s, argv[arg]);
       }
     } else if (args_u || args_i) {
@@ -921,10 +957,11 @@ int rtems_rtl_shell_call(const rtems_printer* printer, int argc, char* argv[]) {
         return 1;
       }
       for (i = 0, arg = label + 1; arg < argc; ++arg) {
-        if (args_u)
+        if (args_u) {
           values.u[i] = strtoul(argv[arg], 0, 0);
-        else
+        } else {
           values.i[i] = strtol(argv[arg], 0, 0);
+        }
         ++i;
       }
     }
@@ -1039,8 +1076,9 @@ int rtems_rtl_shell_command(int argc, char* argv[]) {
   rtems_print_printer_printf(&printer);
 
   for (arg = 1; arg < argc; arg++) {
-    if (argv[arg][0] != '-')
+    if (argv[arg][0] != '-') {
       break;
+    }
 
     switch (argv[arg][1]) {
     case 'h':
@@ -1048,8 +1086,10 @@ int rtems_rtl_shell_command(int argc, char* argv[]) {
       return 0;
     case 'l':
       rtems_printf(&printer, "%s: commands are:\n", argv[0]);
-      for (t = 0; t < (sizeof(table) / sizeof(const rtems_rtl_shell_cmd)); ++t)
+      for (t = 0; t < (sizeof(table) / sizeof(const rtems_rtl_shell_cmd));
+           ++t) {
         rtems_printf(&printer, "  %s\t%s\n", table[t].name, table[t].help);
+      }
       return 0;
     default:
       rtems_printf(&printer, "error: unknown option: %s\n", argv[arg]);
@@ -1057,13 +1097,14 @@ int rtems_rtl_shell_command(int argc, char* argv[]) {
     }
   }
 
-  if ((argc - arg) < 1)
+  if ((argc - arg) < 1) {
     rtems_printf(&printer, "error: you need to provide a command, try %s -h\n",
                  argv[0]);
-  else {
+  } else {
     for (t = 0; t < (sizeof(table) / sizeof(const rtems_rtl_shell_cmd)); ++t) {
-      if (strncmp(argv[arg], table[t].name, strlen(argv[arg])) == 0)
+      if (strncmp(argv[arg], table[t].name, strlen(argv[arg])) == 0) {
         return table[t].handler(&printer, argc - 1, argv + 1);
+      }
     }
     rtems_printf(&printer, "error: command not found: %s (try -h)\n",
                  argv[arg]);

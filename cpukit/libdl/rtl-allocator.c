@@ -55,8 +55,9 @@ static const char* tag_labels[6] = {
 void rtems_rtl_alloc_initialise(rtems_rtl_alloc_data* data) {
   size_t c;
   data->allocator = rtems_rtl_alloc_heap;
-  for (c = 0; c < RTEMS_RTL_ALLOC_TAGS; ++c)
+  for (c = 0; c < RTEMS_RTL_ALLOC_TAGS; ++c) {
     rtems_chain_initialize_empty(&data->indirects[c]);
+  }
 }
 
 void* rtems_rtl_alloc_new(rtems_rtl_alloc_tag tag, size_t size, bool zero) {
@@ -67,20 +68,23 @@ void* rtems_rtl_alloc_new(rtems_rtl_alloc_tag tag, size_t size, bool zero) {
    * Obtain memory from the allocator. The address field is set by the
    * allocator.
    */
-  if (rtl != NULL)
+  if (rtl != NULL) {
     rtl->allocator.allocator(RTEMS_RTL_ALLOC_NEW, tag, &address, size);
+  }
 
   rtems_rtl_unlock();
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ALLOCATOR))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ALLOCATOR)) {
     printf("rtl: alloc: new: %s addr=%p size=%zu\n",
            rtems_rtl_trace_tag_label(tag), address, size);
+  }
 
   /*
    * Only zero the memory if asked to and the allocation was successful.
    */
-  if (address != NULL && zero)
+  if (address != NULL && zero) {
     memset(address, 0, size);
+  }
 
   return address;
 }
@@ -88,12 +92,14 @@ void* rtems_rtl_alloc_new(rtems_rtl_alloc_tag tag, size_t size, bool zero) {
 void rtems_rtl_alloc_del(rtems_rtl_alloc_tag tag, void* address) {
   rtems_rtl_data* rtl = rtems_rtl_lock();
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ALLOCATOR))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ALLOCATOR)) {
     printf("rtl: alloc: del: %s addr=%p\n", rtems_rtl_trace_tag_label(tag),
            address);
+  }
 
-  if (rtl != NULL && address != NULL)
+  if (rtl != NULL && address != NULL) {
     rtl->allocator.allocator(RTEMS_RTL_ALLOC_DEL, tag, &address, 0);
+  }
 
   rtems_rtl_unlock();
 }
@@ -107,24 +113,27 @@ void* rtems_rtl_alloc_resize(rtems_rtl_alloc_tag tag, void* address,
    * Resize memory of an existing allocation. The address field is set
    * by the allocator and may change.
    */
-  if (rtl != NULL)
+  if (rtl != NULL) {
     rtl->allocator.allocator(RTEMS_RTL_ALLOC_RESIZE, tag, &address, size);
+  }
 
   rtems_rtl_unlock();
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ALLOCATOR))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ALLOCATOR)) {
     printf("rtl: alloc: resize: %s%s prev-addr=%p addr=%p size=%zu\n",
            rtems_rtl_trace_tag_label(tag),
            prev_address == address ? "" : " MOVED", prev_address, address,
            size);
+  }
 
   /*
    * Only zero the memory if asked to and the resize was successful. We
    * cannot clear the resized area if bigger than the previouis allocation
    * because we do not have the original size.
    */
-  if (address != NULL && zero)
+  if (address != NULL && zero) {
     memset(address, 0, size);
+  }
 
   return address;
 }
@@ -132,11 +141,13 @@ void* rtems_rtl_alloc_resize(rtems_rtl_alloc_tag tag, void* address,
 void rtems_rtl_alloc_wr_enable(rtems_rtl_alloc_tag tag, void* address) {
   rtems_rtl_data* rtl = rtems_rtl_lock();
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ALLOCATOR))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ALLOCATOR)) {
     printf("rtl: alloc: wr-enable: addr=%p\n", address);
+  }
 
-  if (rtl != NULL && address != NULL)
+  if (rtl != NULL && address != NULL) {
     rtl->allocator.allocator(RTEMS_RTL_ALLOC_WR_ENABLE, tag, address, 0);
+  }
 
   rtems_rtl_unlock();
 }
@@ -144,13 +155,15 @@ void rtems_rtl_alloc_wr_enable(rtems_rtl_alloc_tag tag, void* address) {
 void rtems_rtl_alloc_lock(void) {
   rtems_rtl_data* rtl = rtems_rtl_lock();
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ALLOCATOR))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ALLOCATOR)) {
     printf("rtl: alloc: lock\n");
+  }
 
-  if (rtl != NULL)
+  if (rtl != NULL) {
     rtl->allocator.allocator(RTEMS_RTL_ALLOC_LOCK,
                              RTEMS_RTL_ALLOC_OBJECT, /* should be ignored */
                              NULL, 0);
+  }
 
   rtems_rtl_unlock();
 }
@@ -158,24 +171,28 @@ void rtems_rtl_alloc_lock(void) {
 void rtems_rtl_alloc_unlock(void) {
   rtems_rtl_data* rtl = rtems_rtl_lock();
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ALLOCATOR))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ALLOCATOR)) {
     printf("rtl: alloc: unlock\n");
+  }
 
-  if (rtl != NULL)
+  if (rtl != NULL) {
     rtl->allocator.allocator(RTEMS_RTL_ALLOC_UNLOCK,
                              RTEMS_RTL_ALLOC_OBJECT, /* should be ignored */
                              NULL, 0);
+  }
 
   rtems_rtl_unlock();
 }
 void rtems_rtl_alloc_wr_disable(rtems_rtl_alloc_tag tag, void* address) {
   rtems_rtl_data* rtl = rtems_rtl_lock();
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ALLOCATOR))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_ALLOCATOR)) {
     printf("rtl: alloc: wr-disable: addr=%p\n", address);
+  }
 
-  if (rtl != NULL && address != NULL)
+  if (rtl != NULL && address != NULL) {
     rtl->allocator.allocator(RTEMS_RTL_ALLOC_WR_DISABLE, tag, address, 0);
+  }
 
   rtems_rtl_unlock();
 }
@@ -193,9 +210,10 @@ void rtems_rtl_alloc_indirect_new(rtems_rtl_alloc_tag tag,
   rtems_rtl_data* rtl = rtems_rtl_lock();
 
   if (rtems_rtl_trace(RTEMS_RTL_TRACE_ALLOCATOR)) {
-    if (!rtems_rtl_ptr_null(handle))
+    if (!rtems_rtl_ptr_null(handle)) {
       printf("rtl: alloc: inew: %s handle=%p: not null\n",
              rtems_rtl_trace_tag_label(tag), handle);
+    }
     printf("rtl: alloc: inew: %s handle=%p size=%zd\n",
            rtems_rtl_trace_tag_label(tag), handle, size);
   }
@@ -203,8 +221,9 @@ void rtems_rtl_alloc_indirect_new(rtems_rtl_alloc_tag tag,
   if (rtl) {
     rtems_rtl_alloc_data* allocator = &rtl->allocator;
     handle->pointer = rtems_rtl_alloc_new(tag, size, false);
-    if (!rtems_rtl_ptr_null(handle))
+    if (!rtems_rtl_ptr_null(handle)) {
       rtems_chain_append_unprotected(&allocator->indirects[tag], &handle->node);
+    }
   }
 
   rtems_rtl_unlock();
@@ -215,9 +234,10 @@ void rtems_rtl_alloc_indirect_del(rtems_rtl_alloc_tag tag,
   rtems_rtl_data* rtl = rtems_rtl_lock();
 
   if (rtems_rtl_trace(RTEMS_RTL_TRACE_ALLOCATOR)) {
-    if (rtems_rtl_ptr_null(handle))
+    if (rtems_rtl_ptr_null(handle)) {
       printf("rtl: alloc: idel: %s handle=%p: is null\n",
              rtems_rtl_trace_tag_label(tag), handle);
+    }
     printf("rtl: alloc: idel: %s handle=%p\n", rtems_rtl_trace_tag_label(tag),
            handle);
   }

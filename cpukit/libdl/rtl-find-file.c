@@ -65,8 +65,9 @@ bool rtems_rtl_find_file(const char* name, const char* paths,
   *size = 0;
 
   if (rtems_filesystem_is_delimiter(name[0]) || (name[0] == '.')) {
-    if (stat(name, &sb) == 0)
+    if (stat(name, &sb) == 0) {
       *file_name = rtems_rtl_strdup(name);
+    }
   } else if (paths) {
     const char* start;
     const char* end;
@@ -80,8 +81,9 @@ bool rtems_rtl_find_file(const char* name, const char* paths,
     while (!*file_name && (start != end)) {
       const char* delimiter = strchr(start, ':');
 
-      if (delimiter == NULL)
+      if (delimiter == NULL) {
         delimiter = end;
+      }
 
       /*
        * Allocate the path fragment, separator, name, terminating nul. Form the
@@ -99,22 +101,26 @@ bool rtems_rtl_find_file(const char* name, const char* paths,
       fname[delimiter - start] = '/';
       memcpy(fname + (delimiter - start) + 1, name, len);
 
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_LOAD))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_LOAD)) {
         printf("rtl: find-file: path: %s\n", fname);
+      }
 
-      if (stat(fname, &sb) < 0)
+      if (stat(fname, &sb) < 0) {
         rtems_rtl_alloc_del(RTEMS_RTL_ALLOC_OBJECT, fname);
-      else
+      } else {
         *file_name = fname;
+      }
 
       start = delimiter;
-      if (start != end)
+      if (start != end) {
         ++start;
+      }
     }
   }
 
-  if (!*file_name)
+  if (!*file_name) {
     return false;
+  }
 
   *size = sb.st_size;
 

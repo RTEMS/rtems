@@ -140,8 +140,9 @@ uint32_t rtems_rtl_elf_arch_parse_section(const rtems_rtl_obj* obj, int section,
   const size_t prefixes = sizeof(prefix) / sizeof(prefix[0]);
   size_t p;
   for (p = 0; p < prefixes; ++p) {
-    if (strncmp(name, prefix[p].label, prefix[p].len) == 0)
+    if (strncmp(name, prefix[p].label, prefix[p].len) == 0) {
       return flags | RTEMS_RTL_OBJ_SECT_ARCH_ALLOC;
+    }
   }
 #endif
   return flags;
@@ -156,11 +157,12 @@ bool rtems_rtl_elf_arch_section_alloc(const rtems_rtl_obj* obj,
   rtems_rtl_set_error(ENOMEM, ".sdata no supported by ABI");
   return false;
 #else
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_DETAIL))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_DETAIL)) {
     printf("rtl: section: arch: alloc: name=%s size=%zu flags=%08" PRIx32
            " order=%i link=%d info=%d\n",
            sect->name, sect->size, sect->flags, sect->load_order, sect->link,
            sect->info);
+  }
 
   if (sdata == NULL) {
     sdata = rtems_rtl_bit_alloc_open(get_sdata_start(), get_sdata_libdl_size(),
@@ -187,11 +189,13 @@ bool rtems_rtl_elf_arch_section_free(const rtems_rtl_obj* obj,
   (void)sect;
 
 #if !_ARCH_PPC64
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_DETAIL))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_DETAIL)) {
     printf("rtl: section: arch: free: name=%s size=%zu\n", sect->name,
            sect->size);
-  if (sdata != NULL)
+  }
+  if (sdata != NULL) {
     rtems_rtl_bit_alloc_bfree(sdata, sect->base, sect->size);
+  }
 #endif
   return true;
 }
@@ -275,9 +279,10 @@ rtems_rtl_elf_reloc_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
      */
     if (!parsing) {
       *where = symvalue + rela->r_addend;
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
         printf("rtl: ADDR32 %p @ %p in %s\n", (void*)*(where), where,
                rtems_rtl_obj_oname(obj));
+      }
     }
     break;
 
@@ -298,39 +303,37 @@ rtems_rtl_elf_reloc_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
     }
 
     if (parsing && sect->base == 0) {
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
         printf("rtl: ADDR14/ADDR24 tramp cache\n");
+      }
       return rtems_rtl_elf_rel_tramp_cache;
     }
 
-    tmp = ( symvalue + rela->r_addend ) >> 2;
-    if ( tmp > ( ( 1u << bits ) - 1 ) ) {
+    tmp = (symvalue + rela->r_addend) >> 2;
+    if (tmp > ((1u << bits) - 1)) {
       Elf_Word tramp_addr;
-      size_t   tramp_size = get_veneer_size( ELF_R_TYPE( rela->r_info ) );
-      if ( parsing ) {
-        if ( rtems_rtl_trace( RTEMS_RTL_TRACE_RELOC ) )
-          printf( "rtl: ADDR14/ADDR24 tramp add\n" );
+      size_t tramp_size = get_veneer_size(ELF_R_TYPE(rela->r_info));
+      if (parsing) {
+        if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
+          printf("rtl: ADDR14/ADDR24 tramp add\n");
+        }
         return rtems_rtl_elf_rel_tramp_add;
       }
-      if ( !rtems_rtl_obj_has_tramp_space( obj, tramp_size ) ) {
-        if ( rtems_rtl_trace( RTEMS_RTL_TRACE_RELOC ) )
-          printf(
-            "rtl: ADDR14/ADDR24 no tramp slot: %s\n",
-            rtems_rtl_obj_oname( obj )
-          );
-        rtems_rtl_set_error(
-          ENOMEM,
-          "%s: tramp: no slot: ADDR14/ADDR24",
-          sect->name
-        );
+      if (!rtems_rtl_obj_has_tramp_space(obj, tramp_size)) {
+        if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
+          printf("rtl: ADDR14/ADDR24 no tramp slot: %s\n",
+                 rtems_rtl_obj_oname(obj));
+        }
+        rtems_rtl_set_error(ENOMEM, "%s: tramp: no slot: ADDR14/ADDR24",
+                            sect->name);
         return rtems_rtl_elf_rel_failure;
       }
       needs_tramp = true;
-      tramp_addr = (Elf_Addr) obj->tramp_brk;
-      obj->tramp_brk = set_veneer( obj->tramp_brk, symvalue + rela->r_addend );
+      tramp_addr = (Elf_Addr)obj->tramp_brk;
+      obj->tramp_brk = set_veneer(obj->tramp_brk, symvalue + rela->r_addend);
       tmp = *where;
       tmp &= ~mask;
-      tmp |= ( tramp_addr + rela->r_addend ) & mask;
+      tmp |= (tramp_addr + rela->r_addend) & mask;
     } else {
       tmp = *where;
       tmp &= ~mask;
@@ -339,10 +342,11 @@ rtems_rtl_elf_reloc_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
 
     if (!parsing) {
       *where = tmp;
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
         printf("rtl: ADDR14/ADDR24%s %p @ %p in %s\n",
                needs_tramp ? "(tramp)" : "", (void*)*where, where,
                rtems_rtl_obj_oname(obj));
+      }
     }
     break;
 
@@ -355,10 +359,11 @@ rtems_rtl_elf_reloc_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
     if (!parsing) {
       tmp = symvalue + rela->r_addend;
       *(uint16_t*)where = (((tmp >> 16) + ((tmp & 0x8000) ? 1 : 0)) & 0xffff);
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
         printf("rtl: %s16_HA %p @ %p in %s\n",
                ELF_R_TYPE(rela->r_info) == R_TYPE(TPREL16_HA) ? "TPREL" : "",
                (void*)*(where), where, rtems_rtl_obj_oname(obj));
+      }
     }
     break;
 
@@ -370,10 +375,11 @@ rtems_rtl_elf_reloc_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
      */
     if (!parsing) {
       *(uint16_t*)where = ((symvalue + rela->r_addend) >> 16) & 0xffff;
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
         printf("rtl: %s16_HI %p @ %p in %s\n",
                ELF_R_TYPE(rela->r_info) == R_TYPE(TPREL16_HI) ? "TPREL" : "",
                (void*)*where, where, rtems_rtl_obj_oname(obj));
+      }
     }
     break;
 
@@ -385,10 +391,11 @@ rtems_rtl_elf_reloc_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
      */
     if (!parsing) {
       *(uint16_t*)where = (symvalue + (rela->r_addend)) & 0xffff;
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
         printf("rtl: %s16_LO %p @ %p in %s\n",
                ELF_R_TYPE(rela->r_info) == R_TYPE(TPREL16_LO) ? "TPREL" : "",
                (void*)*where, where, rtems_rtl_obj_oname(obj));
+      }
     }
     break;
 
@@ -409,8 +416,9 @@ rtems_rtl_elf_reloc_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
     }
 
     if (parsing && sect->base == 0) {
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
         printf("rtl: REL24/REL14 tramp cache\n");
+      }
       return rtems_rtl_elf_rel_tramp_cache;
     }
 
@@ -420,14 +428,16 @@ rtems_rtl_elf_reloc_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
       Elf_Word tramp_addr;
       size_t tramp_size = get_veneer_size(ELF_R_TYPE(rela->r_info));
       if (parsing) {
-        if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+        if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
           printf("rtl: REL24/REL14 tramp add\n");
+        }
         return rtems_rtl_elf_rel_tramp_add;
       }
       if (!rtems_rtl_obj_has_tramp_space(obj, tramp_size)) {
-        if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+        if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
           printf("rtl: REL24/REL14 no tramp slot: %s\n",
                  rtems_rtl_obj_oname(obj));
+        }
         rtems_rtl_set_error(ENOMEM, "%s: tramp: no slot: REL24/REL14",
                             sect->name);
         return rtems_rtl_elf_rel_failure;
@@ -446,10 +456,11 @@ rtems_rtl_elf_reloc_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
 
     if (!parsing) {
       *where = tmp;
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
         printf("rtl: REL24/REL14%s %p @ %p in %s\n",
                needs_tramp ? "(tramp)" : "", (void*)*where, where,
                rtems_rtl_obj_oname(obj));
+      }
     }
     break;
 
@@ -459,9 +470,10 @@ rtems_rtl_elf_reloc_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
      */
     if (!parsing) {
       *where = symvalue + rela->r_addend - (Elf_Addr)where;
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
         printf("rtl: REL32 %p @ %p in %s\n", (void*)*where, where,
                rtems_rtl_obj_oname(obj));
+      }
     }
     break;
 
@@ -477,10 +489,11 @@ rtems_rtl_elf_reloc_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
       tmp &= ~mask;
       tmp |= (symvalue + rela->r_addend - sda_base) & mask;
       *((Elf32_Half*)where) = tmp;
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
         printf("rtl: SDAREL16 %p @ %p in %s\n",
                (void*)(uintptr_t)*((Elf32_Half*)where), where,
                rtems_rtl_obj_oname(obj));
+      }
     }
     break;
 

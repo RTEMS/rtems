@@ -240,12 +240,14 @@ rtems_rtl_elf_reloc_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
     if (!parsing) {
       target = (Elf_Addr)symvalue + rela->r_addend;
 
-      if (*where != target)
+      if (*where != target) {
         *where = target;
+      }
 
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
         printf("rtl: reloc 64/GLOB_DAT in %s --> %p in %s\n", sect->name,
                (void*)(uintptr_t)*where, rtems_rtl_obj_oname(obj));
+      }
     }
     break;
 
@@ -258,9 +260,10 @@ rtems_rtl_elf_reloc_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
   case R_TYPE(RELATIVE): /* Delta(S) + A */
     if (!parsing) {
       *where = (Elf_Addr)(uintptr_t)(sect->base + rela->r_addend);
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
         printf("rtl: reloc RELATIVE in %s --> %p in %s\n", sect->name,
                (void*)(uintptr_t)*where, rtems_rtl_obj_oname(obj));
+      }
     }
     break;
 
@@ -386,19 +389,21 @@ rtems_rtl_elf_reloc_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
      *        bl <sym>+<addend>
      */
     if (parsing && sect->base == 0) {
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
         printf("rtl: JUMP26/PC26/CALL tramp cache\n");
+      }
       return rtems_rtl_elf_rel_tramp_cache;
     }
 
     raddr = (Elf_Addr)symvalue + rela->r_addend;
     target = raddr - (uintptr_t)where;
 
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
       printf("rtl: JUMP26/PC26/CALL: insn=%p where=%p target=%p raddr=%p "
              "parsing=%d\n",
              insn, (void*)where, (void*)(uintptr_t)target,
              (void*)(uintptr_t)raddr, parsing);
+    }
 
     if (checkalign(target, 4, where, off)) {
       return rtems_rtl_elf_rel_failure;
@@ -411,8 +416,9 @@ rtems_rtl_elf_reloc_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
       size_t tramp_size = get_veneer_size(ELF_R_TYPE(rela->r_info));
 
       if (parsing) {
-        if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+        if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
           printf("rtl: JUMP26/PC26/CALL tramp add\n");
+        }
         return rtems_rtl_elf_rel_tramp_add;
       }
 

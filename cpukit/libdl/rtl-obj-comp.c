@@ -100,11 +100,12 @@ bool rtems_rtl_obj_comp_read(rtems_rtl_obj_comp* comp, void* buffer,
     return false;
   }
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_COMP))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_COMP)) {
     printf("rtl:  comp: %2d: fd=%d length=%zu level=%zu offset=%" PRIdoff_t
            " area=[%" PRIdoff_t ",%" PRIdoff_t "] read=%" PRIu32 " size=%zu\n",
            comp->fd, comp->cache->fd, length, comp->level, comp->offset,
            comp->offset, comp->offset + length, comp->read, comp->size);
+  }
 
   if (comp->fd != comp->cache->fd) {
     comp->level = 0;
@@ -116,15 +117,17 @@ bool rtems_rtl_obj_comp_read(rtems_rtl_obj_comp* comp, void* buffer,
     buffer_level = length > comp->level ? comp->level : length;
 
     if (buffer_level) {
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_COMP))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_COMP)) {
         printf("rtl:  comp: copy: length=%zu\n", buffer_level);
+      }
 
       memcpy(bin, comp->buffer, buffer_level);
 
       if ((comp->level - buffer_level) != 0) {
-        if (rtems_rtl_trace(RTEMS_RTL_TRACE_COMP))
+        if (rtems_rtl_trace(RTEMS_RTL_TRACE_COMP)) {
           printf("rtl:  comp: copy-down: level=%zu length=%zu\n", comp->level,
                  comp->level - buffer_level);
+        }
 
         memmove(comp->buffer, comp->buffer + buffer_level,
                 comp->level - buffer_level);
@@ -142,13 +145,15 @@ bool rtems_rtl_obj_comp_read(rtems_rtl_obj_comp* comp, void* buffer,
       size_t in_length = sizeof(block_size);
       int decompressed;
 
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_COMP))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_COMP)) {
         printf("rtl:  comp: read block-size: offset=%" PRIdoff_t "\n",
                comp->offset);
+      }
 
       if (!rtems_rtl_obj_cache_read(comp->cache, comp->fd, comp->offset,
-                                    (void**)&input, &in_length))
+                                    (void**)&input, &in_length)) {
         return false;
+      }
 
       block_size = (input[0] << 8) | input[1];
 
@@ -156,13 +161,15 @@ bool rtems_rtl_obj_comp_read(rtems_rtl_obj_comp* comp, void* buffer,
 
       in_length = block_size;
 
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_COMP))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_COMP)) {
         printf("rtl:  comp: read block: offset=%" PRIdoff_t " size=%u\n",
                comp->offset, block_size);
+      }
 
       if (!rtems_rtl_obj_cache_read(comp->cache, comp->fd, comp->offset,
-                                    (void**)&input, &in_length))
+                                    (void**)&input, &in_length)) {
         return false;
+      }
 
       if (in_length != block_size) {
         rtems_rtl_set_error(EIO, "compressed read failed: bs=%u in=%zu",
@@ -194,10 +201,11 @@ bool rtems_rtl_obj_comp_read(rtems_rtl_obj_comp* comp, void* buffer,
 
       comp->level = decompressed;
 
-      if (rtems_rtl_trace(RTEMS_RTL_TRACE_COMP))
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_COMP)) {
         printf("rtl:  comp: expand: offset=%" PRIdoff_t
                " level=%zu read=%" PRIu32 "\n",
                comp->offset, comp->level, comp->read);
+      }
     }
   }
 

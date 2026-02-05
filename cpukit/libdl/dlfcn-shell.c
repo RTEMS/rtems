@@ -48,8 +48,9 @@
 #include <rtems/rtl/dlfcn-shell.h>
 
 static void* convert_ascii_to_voidp(const char* arg) {
-  if (strcmp(arg, "base") == 0)
+  if (strcmp(arg, "base") == 0) {
     return RTLD_DEFAULT;
+  }
   return (void*)strtoul(arg, NULL, 16);
 }
 
@@ -60,13 +61,15 @@ int shell_dlopen(int argc, char* argv[]) {
     if (handle) {
       int unresolved;
       char* message = "loaded";
-      if (dlinfo(handle, RTLD_DI_UNRESOLVED, &unresolved) < 0)
+      if (dlinfo(handle, RTLD_DI_UNRESOLVED, &unresolved) < 0) {
         message = "dlinfo error checking unresolved status";
-      else if (unresolved)
+      } else if (unresolved) {
         message = "has unresolved externals";
+      }
       printf("handle: %p %s\n", handle, message);
-    } else
+    } else {
       printf("error: %s\n", dlerror());
+    }
   }
   return 0;
 }
@@ -83,14 +86,17 @@ static bool lookup_dlsym(void** value, int argc, char* argv[]) {
     void* handle = convert_ascii_to_voidp(argv[1]);
     if (handle) {
       *value = dlsym(handle, argv[2]);
-      if (*value)
+      if (*value) {
         return true;
-      else
+      } else {
         printf("error: invalid handle or symbol\n");
-    } else
+      }
+    } else {
       printf("error: invalid handle");
-  } else
+    }
+  } else {
     printf("error: requires handle and symbol name\n");
+  }
   return false;
 }
 

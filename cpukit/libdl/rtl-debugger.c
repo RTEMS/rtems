@@ -66,8 +66,9 @@ int _rtld_linkmap_add(rtems_rtl_obj* obj) {
   uint32_t obj_num = obj->obj_num;
   size_t i;
 
-  if (rtems_rtl_trace(RTEMS_RTL_TRACE_DETAIL))
+  if (rtems_rtl_trace(RTEMS_RTL_TRACE_DETAIL)) {
     printf("rtl: linkmap_add\n");
+  }
 
   for (i = 0; i < obj_num; ++i) {
     l[i].sec_addr[rap_text] = obj->text_base;
@@ -97,10 +98,12 @@ void _rtld_linkmap_delete(rtems_rtl_obj* obj) {
   struct link_map* e = l + obj->obj_num - 1;
 
   if (l->l_prev == NULL) {
-    if ((_rtld_debug.r_map = e->l_next) != NULL)
+    if ((_rtld_debug.r_map = e->l_next) != NULL) {
       _rtld_debug.r_map->l_prev = NULL;
+    }
   } else {
-    if ((l->l_prev->l_next = e->l_next) != NULL)
+    if ((l->l_prev->l_next = e->l_next) != NULL) {
       e->l_next->l_prev = l->l_prev;
+    }
   }
 }

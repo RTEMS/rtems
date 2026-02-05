@@ -46,8 +46,9 @@ bool rtems_rtl_chain_iterate(rtems_chain_control* chain,
   rtems_chain_node* node = rtems_chain_first(chain);
   while (!rtems_chain_is_tail(chain, node)) {
     rtems_chain_node* next_node = rtems_chain_next(node);
-    if (!iterator(node, data))
+    if (!iterator(node, data)) {
       return false;
+    }
     node = next_node;
   }
   return true;

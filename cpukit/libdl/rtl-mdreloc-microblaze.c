@@ -197,9 +197,10 @@ rtems_rtl_elf_reloc_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
   case R_TYPE(32_PCREL):
     write32le(where, pcrel_val);
 
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
       printf("rtl: R_MICROBLAZE_32_PCREL %p @ %p in %s\n", (void*)*(where),
              where, rtems_rtl_obj_oname(obj));
+    }
     break;
 
   case R_TYPE(64_PCREL):
@@ -213,9 +214,10 @@ rtems_rtl_elf_reloc_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
     write16le(where + 1,
               (read16le(where + 1) & 0xFFFF0000) | (pcrel_val & 0xFFFF));
 
-    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
       printf("rtl: R_MICROBLAZE_64_PCREL %p @ %p in %s\n", (void*)*(where),
              where, rtems_rtl_obj_oname(obj));
+    }
     break;
 
   case R_TYPE(32_PCREL_LO):
