@@ -40,6 +40,6 @@
  * using the pci_cfg_print() routine after the AUTO or READ Configuration
  * Library has setup the PCI bus
  */
-extern int pci_config_static(void);
+extern int pci_config_static( void );
 
 #endif

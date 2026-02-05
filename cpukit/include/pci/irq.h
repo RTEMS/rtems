@@ -46,10 +46,10 @@
  * rtems_interrupt_handler in order for BSPs to "direct-map" the register
  * and unregister functions rtems_interrupt_handler_install/remove
  */
-typedef void (*pci_isr)(void *arg);
+typedef void ( *pci_isr )( void *arg );
 
 /* Get assigned system IRQ to a PCI Device. If no IRQ 0 is returned */
-extern int pci_dev_irq(pci_dev_t dev);
+extern int pci_dev_irq( pci_dev_t dev );
 
 /* Register shared PCI IRQ handler, but does not enable it. The system interrupt
  * number is read from the PCI board's PCI configuration space header iline
@@ -63,12 +63,20 @@ extern int pci_dev_irq(pci_dev_t dev);
  *  isr       Function pointer to the ISR
  *  arg       Second argument to function isr
  */
-static inline int pci_interrupt_register(int irq, const char *info,
-						pci_isr isr, void *arg)
+static inline int pci_interrupt_register(
+  int         irq,
+  const char *info,
+  pci_isr     isr,
+  void       *arg
+)
 {
-	return rtems_interrupt_handler_install(irq, info,
-					       RTEMS_INTERRUPT_SHARED, isr,
-					       arg);
+  return rtems_interrupt_handler_install(
+    irq,
+    info,
+    RTEMS_INTERRUPT_SHARED,
+    isr,
+    arg
+  );
 }
 
 /* Unregister previously registered shared PCI IRQ handler
@@ -78,10 +86,9 @@ static inline int pci_interrupt_register(int irq, const char *info,
  *  isr       Function pointer to the ISR
  *  arg       Second argument to function isr
  */
-static inline int pci_interrupt_unregister(int irq, pci_isr isr,
-						  void *arg)
+static inline int pci_interrupt_unregister( int irq, pci_isr isr, void *arg )
 {
-	return rtems_interrupt_handler_remove(irq, isr, arg);
+  return rtems_interrupt_handler_remove( irq, isr, arg );
 }
 
 /* Enable shared PCI IRQ handler. This function will unmask the interrupt
@@ -95,9 +102,9 @@ static inline int pci_interrupt_unregister(int irq, pci_isr isr,
  *  isr       Function pointer to the ISR
  *  arg       Second argument to function isr
  */
-static inline void pci_interrupt_unmask(int irq)
+static inline void pci_interrupt_unmask( int irq )
 {
-	(void)rtems_interrupt_vector_enable((rtems_vector_number)irq);
+  (void) rtems_interrupt_vector_enable( (rtems_vector_number) irq );
 }
 
 /* Disable shared PCI IRQ handler. This function will mask the interrupt
@@ -111,9 +118,9 @@ static inline void pci_interrupt_unmask(int irq)
  *  isr       Function pointer to the ISR
  *  arg       Second argument to function isr
  */
-static inline void pci_interrupt_mask(int irq)
+static inline void pci_interrupt_mask( int irq )
 {
-	(void)rtems_interrupt_vector_disable((rtems_vector_number)irq);
+  (void) rtems_interrupt_vector_disable( (rtems_vector_number) irq );
 }
 
 /* Acknowledge the interrupt controller by writing to the interrupt controller.
@@ -125,9 +132,9 @@ static inline void pci_interrupt_mask(int irq)
  *  isr       Function pointer to the ISR
  *  arg       Second argument to function isr
  */
-static inline void pci_interrupt_clear(int irq)
+static inline void pci_interrupt_clear( int irq )
 {
-	(void)rtems_interrupt_clear((rtems_vector_number)irq);
+  (void) rtems_interrupt_clear( (rtems_vector_number) irq );
 }
 
 #endif /* !__PCI_IRQ_H__ */

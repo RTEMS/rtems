@@ -41,10 +41,10 @@
 #include <pci/pcireg.h>
 #include <pci/ids.h>
 
-#define PCI_INVALID_VENDORDEVICEID    0xffffffff
+#define PCI_INVALID_VENDORDEVICEID 0xffffffff
 
-#define PCID_CLASS(class, dev) ((class << 8) | dev)
-#define PCID_PCI2PCI_BRIDGE PCID_CLASS(PCIC_BRIDGE, PCIS_BRIDGE_PCI)
+#define PCID_CLASS( class, dev ) ( ( class << 8 ) | dev )
+#define PCID_PCI2PCI_BRIDGE      PCID_CLASS( PCIC_BRIDGE, PCIS_BRIDGE_PCI )
 
 #include <pci/access.h>
 
@@ -67,10 +67,10 @@ extern "C" {
 
 /* Error return values */
 enum {
-	PCISTS_ERR         = -1, /* Undefined Error */
-	PCISTS_OK          = 0,
-	PCISTS_EINVAL      = 1, /* Bad input arguments */
-	PCISTS_MSTABRT     = 2, /* CFG space access error (can be ignored) */
+  PCISTS_ERR = -1, /* Undefined Error */
+  PCISTS_OK = 0,
+  PCISTS_EINVAL = 1,  /* Bad input arguments */
+  PCISTS_MSTABRT = 2, /* CFG space access error (can be ignored) */
 };
 
 /* PCI System type can be used to determine system for drivers. Normally
@@ -80,9 +80,9 @@ enum {
  * The active configuration Library set this variable.
  */
 enum pci_system_type {
-	PCI_SYSTEM_NONE = 0,
-	PCI_SYSTEM_HOST = 1,
-	PCI_SYSTEM_PERIPHERAL = 2,
+  PCI_SYSTEM_NONE = 0,
+  PCI_SYSTEM_HOST = 1,
+  PCI_SYSTEM_PERIPHERAL = 2,
 };
 extern enum pci_system_type pci_system_type;
 
@@ -91,24 +91,24 @@ extern enum pci_system_type pci_system_type;
  * endian (non-standard) in order to avoid byte-twisting.
  */
 enum {
-	PCI_LITTLE_ENDIAN = 0,
-	PCI_BIG_ENDIAN = 1,
+  PCI_LITTLE_ENDIAN = 0,
+  PCI_BIG_ENDIAN = 1,
 };
 extern int pci_endian;
 
 /* Return the number of PCI busses in the system */
-extern int pci_bus_count(void);
+extern int pci_bus_count( void );
 
 /* Scan the PCI bus and print the PCI device/functions/bridges and their
  * current resources and size to the system console.
  */
-extern void pci_print(void);
+extern void pci_print( void );
 
 /* Print current configuration of a single PCI device by reading PCI
  * configuration space
  */
-extern void pci_print_dev(pci_dev_t dev);
-extern void pci_print_device(int bus, int slot, int function);
+extern void pci_print_dev( pci_dev_t dev );
+extern void pci_print_device( int bus, int slot, int function );
 
 /*** PCI Configuration Space direct access routines ***/
 
@@ -122,7 +122,7 @@ extern void pci_print_device(int bus, int slot, int function);
  * configuration space directly (PCI RAM data structures not used). This
  * function is valid to call after PCI buses have been enumrated.
  */
-extern int pci_for_each(int (*func)(pci_dev_t, void*), void *arg);
+extern int pci_for_each( int ( *func )( pci_dev_t, void * ), void *arg );
 
 /* Get PCI Configuration space BUS|SLOT|FUNC for a device matching PCI
  * Vendor, Device and instance number 'index'.
@@ -131,7 +131,7 @@ extern int pci_for_each(int (*func)(pci_dev_t, void*), void *arg);
  * -1  pci_find_dev did not find a device matching the criterion.
  *  0  device was found, *pdev was updated with the device's BUS|SLOT|FUNC
  */
-extern int pci_find(uint16_t ven, uint16_t dev, int index, pci_dev_t *pdev);
+extern int pci_find( uint16_t ven, uint16_t dev, int index, pci_dev_t *pdev );
 
 #ifdef __cplusplus
 }

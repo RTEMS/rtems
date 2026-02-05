@@ -30,9 +30,9 @@
 #include <pci/access.h>
 #include <pci/irq.h>
 
-int pci_dev_irq(pci_dev_t dev)
+int pci_dev_irq( pci_dev_t dev )
 {
-	uint8_t irq_line;
-	pci_cfg_r8(dev, PCIR_INTLINE, &irq_line);
-	return irq_line;
+  uint8_t irq_line;
+  pci_cfg_r8( dev, PCIR_INTLINE, &irq_line );
+  return irq_line;
 }

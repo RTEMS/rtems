@@ -43,38 +43,38 @@
  * may be different, and taken care of elsewhere.
  */
 struct pci_auto_setup {
-	int options;
+  int options;
 
-	/* PCI prefetchable Memory space (OPTIONAL) */
-	uint32_t mem_start;
-	uint32_t mem_size; /* 0 = Use MEMIO space for prefetchable mem BARs */
+  /* PCI prefetchable Memory space (OPTIONAL) */
+  uint32_t mem_start;
+  uint32_t mem_size; /* 0 = Use MEMIO space for prefetchable mem BARs */
 
-	/* PCI non-prefetchable Memory */
-	uint32_t memio_start;
-	uint32_t memio_size;
+  /* PCI non-prefetchable Memory */
+  uint32_t memio_start;
+  uint32_t memio_size;
 
-	/* PCI I/O space (OPTIONAL) */
-	uint32_t io_start;
-	uint32_t io_size; /* 0 = No I/O space */
+  /* PCI I/O space (OPTIONAL) */
+  uint32_t io_start;
+  uint32_t io_size; /* 0 = No I/O space */
 
-	/* Get System IRQ connected to a PCI line of a PCI device on bus0.
+  /* Get System IRQ connected to a PCI line of a PCI device on bus0.
 	 * The return IRQ value zero equals no IRQ (IRQ disabled).
 	 */
-	uint8_t (*irq_map)(pci_dev_t dev, int irq_pin);
+  uint8_t ( *irq_map )( pci_dev_t dev, int irq_pin );
 
-	/* IRQ Bridge routing. Returns the interrupt pin (0..3 = A..D) that
+  /* IRQ Bridge routing. Returns the interrupt pin (0..3 = A..D) that
 	 * a device is connected to on parent bus.
 	 */
-	int (*irq_route)(pci_dev_t dev, int irq_pin);
+  int ( *irq_route )( pci_dev_t dev, int irq_pin );
 };
 
 /* Do PCI initialization: Enumrate buses, scan buses for devices, assign
  * I/O MEM and MEMIO resources, assign IRQ and so on.
  */
-extern int pci_config_auto(void);
+extern int pci_config_auto( void );
 
 /* Register a configuration for the auto library (struct pci_auto_setup *) */
-extern void pci_config_auto_register(void *config);
+extern void pci_config_auto_register( void *config );
 
 /* PCI memory map */
 extern struct pci_auto_setup pci_auto_cfg;

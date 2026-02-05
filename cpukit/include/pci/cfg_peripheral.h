@@ -38,6 +38,6 @@
  * structure. Nothing else than setting pci_system_type and pci_bus_cnt is done
  * by the peripheral library.
  */
-extern int pci_config_peripheral(void);
+extern int pci_config_peripheral( void );
 
 #endif

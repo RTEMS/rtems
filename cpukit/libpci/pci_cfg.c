@@ -49,25 +49,27 @@ int pci_endian = PCI_LITTLE_ENDIAN;
 /* Configure PCI devices and bridges, and setup the RAM data structures
  * describing the PCI devices currently present in the system
  */
-int pci_config_init(void)
+int pci_config_init( void )
 {
-	if (pci_config_lib_init)
-		return pci_config_lib_init();
-	else
-		return 0;
+  if ( pci_config_lib_init ) {
+    return pci_config_lib_init();
+  } else {
+    return 0;
+  }
 }
 
-void pci_config_register(void *config)
+void pci_config_register( void *config )
 {
-	if (pci_config_lib_register)
-		pci_config_lib_register(config);
+  if ( pci_config_lib_register ) {
+    pci_config_lib_register( config );
+  }
 }
 
 /* Return the number of PCI busses available in the system, note that
  * there are always one bus (bus0) after the PCI library has been
  * initialized and a driver has been registered.
  */
-int pci_bus_count(void)
+int pci_bus_count( void )
 {
-	return pci_bus_cnt;
+  return pci_bus_cnt;
 }

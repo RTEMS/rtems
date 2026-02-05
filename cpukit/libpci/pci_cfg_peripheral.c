@@ -40,10 +40,10 @@
 #include "pci_internal.h"
 
 /* Assume that user has defined static setup array in pci_hb */
-int pci_config_peripheral(void)
+int pci_config_peripheral( void )
 {
-	pci_bus_cnt = pci_hb.sord + 1;
-	pci_system_type = PCI_SYSTEM_PERIPHERAL;
+  pci_bus_cnt = pci_hb.sord + 1;
+  pci_system_type = PCI_SYSTEM_PERIPHERAL;
 
-	return 0;
+  return 0;
 }

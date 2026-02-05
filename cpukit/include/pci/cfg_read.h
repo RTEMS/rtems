@@ -33,7 +33,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef __PCI_CFG_READ_H__
 #define __PCI_CFG_READ_H__
 
@@ -41,6 +40,6 @@
  * in hardware. Devices/buses are created by reading the resource assignments
  * that the BIOS/bootloader has already setup for us.
  */
-extern int pci_config_read(void);
+extern int pci_config_read( void );
 
 #endif

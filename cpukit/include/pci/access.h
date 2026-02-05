@@ -34,7 +34,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef __PCI_ACCESS_H__
 #define __PCI_ACCESS_H__
 
@@ -50,83 +49,85 @@ extern "C" {
 /* Identification of a PCI configuration space device (16-bit) */
 typedef uint16_t pci_dev_t;
 /* Create a PCI Configuration Space ID */
-#define PCI_DEV(bus, slot, func) (((bus)<<8) | ((slot)<<3) | (func))
+#define PCI_DEV( bus, slot, func ) \
+  ( ( ( bus ) << 8 ) | ( ( slot ) << 3 ) | ( func ) )
 /* Get Bus of a PCI Configuration Space ID */
-#define PCI_DEV_BUS(dev) (((dev) >> 8) & 0xff)
+#define PCI_DEV_BUS( dev ) ( ( ( dev ) >> 8 ) & 0xff )
 /* Get Slot/Device of a PCI Configuration Space ID */
-#define PCI_DEV_SLOT(dev) (((dev) >> 3) & 0x1f)
+#define PCI_DEV_SLOT( dev ) ( ( ( dev ) >> 3 ) & 0x1f )
 /* Get Function of a PCI Configuration Space ID */
-#define PCI_DEV_FUNC(dev) ((dev) & 0x7)
+#define PCI_DEV_FUNC( dev ) ( ( dev ) & 0x7 )
 /* Get Device and Function of a PCI Configuration Space ID */
-#define PCI_DEV_DEVFUNC(dev) ((dev) & 0xff)
+#define PCI_DEV_DEVFUNC( dev ) ( ( dev ) & 0xff )
 /* Expand Device into argument lists */
-#define PCI_DEV_EXPAND(dev) PCI_DEV_BUS((dev)), PCI_DEV_SLOT((dev)), PCI_DEV_FUNC((dev))
+#define PCI_DEV_EXPAND( dev ) \
+  PCI_DEV_BUS(( dev )), PCI_DEV_SLOT(( dev )), PCI_DEV_FUNC(( dev ))
 
 /* Configuration Space Read/Write Operations */
 struct pci_cfg_ops {
-	/* Configuration Space Access and Setup Routines */
-	int (*read8)(pci_dev_t dev, int ofs, uint8_t *data);
-	int (*read16)(pci_dev_t dev, int ofs, uint16_t *data);
-	int (*read32)(pci_dev_t dev, int ofs, uint32_t *data);
-	int (*write8)(pci_dev_t dev, int ofs, uint8_t data);
-	int (*write16)(pci_dev_t dev, int ofs, uint16_t data);
-	int (*write32)(pci_dev_t dev, int ofs, uint32_t data);
+  /* Configuration Space Access and Setup Routines */
+  int ( *read8 )( pci_dev_t dev, int ofs, uint8_t *data );
+  int ( *read16 )( pci_dev_t dev, int ofs, uint16_t *data );
+  int ( *read32 )( pci_dev_t dev, int ofs, uint32_t *data );
+  int ( *write8 )( pci_dev_t dev, int ofs, uint8_t data );
+  int ( *write16 )( pci_dev_t dev, int ofs, uint16_t data );
+  int ( *write32 )( pci_dev_t dev, int ofs, uint32_t data );
 };
 
 /* Read a register over PCI I/O Space, and swap it if necessary (due to 
  * PCI endianness)
  */
 struct pci_io_ops {
-	uint8_t (*read8)(uint8_t *adr);
-	uint16_t(*read16)(uint16_t *adr);
-	uint32_t (*read32)(uint32_t *adr);
-	void (*write8)(uint8_t *adr, uint8_t data);
-	void (*write16)(uint16_t *adr, uint16_t data);
-	void (*write32)(uint32_t *adr, uint32_t data);
+  uint8_t ( *read8 )( uint8_t *adr );
+  uint16_t ( *read16 )( uint16_t *adr );
+  uint32_t ( *read32 )( uint32_t *adr );
+  void ( *write8 )( uint8_t *adr, uint8_t data );
+  void ( *write16 )( uint16_t *adr, uint16_t data );
+  void ( *write32 )( uint32_t *adr, uint32_t data );
 };
 
 /* Read a register over PCI Memory Space (non-prefetchable memory), and 
  * swap it if necessary (due to PCI endianness)
  */
 struct pci_memreg_ops {
-	uint8_t (*ld8)(uint8_t *adr);
-	void (*st8)(uint8_t *adr, uint8_t data);
+  uint8_t ( *ld8 )( uint8_t *adr );
+  void ( *st8 )( uint8_t *adr, uint8_t data );
 
-	uint16_t(*ld_le16)(uint16_t *adr);
-	void (*st_le16)(uint16_t *adr, uint16_t data);
-	uint16_t(*ld_be16)(uint16_t *adr);
-	void (*st_be16)(uint16_t *adr, uint16_t data);
+  uint16_t ( *ld_le16 )( uint16_t *adr );
+  void ( *st_le16 )( uint16_t *adr, uint16_t data );
+  uint16_t ( *ld_be16 )( uint16_t *adr );
+  void ( *st_be16 )( uint16_t *adr, uint16_t data );
 
-	uint32_t (*ld_le32)(uint32_t *adr);
-	void (*st_le32)(uint32_t *adr, uint32_t data);
-	uint32_t (*ld_be32)(uint32_t *adr);
-	void (*st_be32)(uint32_t *adr, uint32_t data);
+  uint32_t ( *ld_le32 )( uint32_t *adr );
+  void ( *st_le32 )( uint32_t *adr, uint32_t data );
+  uint32_t ( *ld_be32 )( uint32_t *adr );
+  void ( *st_be32 )( uint32_t *adr, uint32_t data );
 };
 
-typedef uint8_t (*pci_ld8_t)(uint8_t *adr);
-typedef void (*pci_st8_t)(uint8_t *adr, uint8_t data);
-typedef uint16_t(pci_ld16_t)(uint16_t *adr);
-typedef void (*pci_st16_t)(uint16_t *adr, uint16_t data);
-typedef uint32_t (*pci_ld32_t)(uint32_t *adr);
-typedef void (*pci_st32_t)(uint32_t *adr, uint32_t data);
+typedef uint8_t ( *pci_ld8_t )( uint8_t *adr );
+typedef void ( *pci_st8_t )( uint8_t *adr, uint8_t data );
+typedef uint16_t( pci_ld16_t )( uint16_t *adr );
+typedef void ( *pci_st16_t )( uint16_t *adr, uint16_t data );
+typedef uint32_t ( *pci_ld32_t )( uint32_t *adr );
+typedef void ( *pci_st32_t )( uint32_t *adr, uint32_t data );
 
 struct pci_access_drv {
-	/* Configuration */
-	struct pci_cfg_ops cfg;
+  /* Configuration */
+  struct pci_cfg_ops cfg;
 
-	/* I/O Access operations */
-	struct pci_io_ops io;
+  /* I/O Access operations */
+  struct pci_io_ops io;
 
-	/* Registers over Memory Access operations. Note that these funcs
+  /* Registers over Memory Access operations. Note that these funcs
 	 * are only for code that need to be compatible with both Big-Endian
 	 * and Little-Endian PCI bus or for some other reason need function
 	 * pointers to access functions. Normally drivers use the inline
 	 * functions for Registers-over-Memory access to avoid extra function
 	 * call.
 	 */
-	struct pci_memreg_ops *memreg;
+  struct pci_memreg_ops *memreg;
 
-	/* Translate from PCI address to CPU address (dir=0). Translate
+  /* Translate from PCI address to CPU address (dir=0). Translate
 	 * CPU address to PCI address (dir!=0). The address will can be
 	 * used to perform I/O access or memory access by CPU or PCI DMA
 	 * peripheral.
@@ -140,91 +141,91 @@ struct pci_access_drv {
 	 *  -1  = Requested Address not mapped into other address space
 	 *        i.e. not accessible
 	 */
-	int (*translate)(uint32_t *address, int type, int dir);
+  int ( *translate )( uint32_t *address, int type, int dir );
 };
 
 /* Access Routines valid after a PCI-Access-Driver has registered */
 extern struct pci_access_drv pci_access_ops;
 
 /* Register PCI Access Driver */
-extern int pci_access_drv_register(struct pci_access_drv *drv);
+extern int pci_access_drv_register( struct pci_access_drv *drv );
 
 /* Set/unset bits in command and status register of a PCI device */
-extern void pci_modify_cmdsts(pci_dev_t dev, uint32_t mask, uint32_t val);
+extern void pci_modify_cmdsts( pci_dev_t dev, uint32_t mask, uint32_t val );
 
 /* Enable Memory in command register */
-static inline void pci_mem_enable(pci_dev_t dev)
+static inline void pci_mem_enable( pci_dev_t dev )
 {
-	pci_modify_cmdsts(dev, PCIM_CMD_MEMEN, PCIM_CMD_MEMEN);
+  pci_modify_cmdsts( dev, PCIM_CMD_MEMEN, PCIM_CMD_MEMEN );
 }
 
-static inline void pci_mem_disable(pci_dev_t dev)
+static inline void pci_mem_disable( pci_dev_t dev )
 {
-	pci_modify_cmdsts(dev, PCIM_CMD_MEMEN, 0);
+  pci_modify_cmdsts( dev, PCIM_CMD_MEMEN, 0 );
 }
 
-static inline void pci_io_enable(pci_dev_t dev)
+static inline void pci_io_enable( pci_dev_t dev )
 {
-	pci_modify_cmdsts(dev, PCIM_CMD_PORTEN, PCIM_CMD_PORTEN);
+  pci_modify_cmdsts( dev, PCIM_CMD_PORTEN, PCIM_CMD_PORTEN );
 }
 
-static inline void pci_io_disable(pci_dev_t dev)
+static inline void pci_io_disable( pci_dev_t dev )
 {
-	pci_modify_cmdsts(dev, PCIM_CMD_PORTEN, 0);
+  pci_modify_cmdsts( dev, PCIM_CMD_PORTEN, 0 );
 }
 
-static inline void pci_master_enable(pci_dev_t dev)
+static inline void pci_master_enable( pci_dev_t dev )
 {
-	pci_modify_cmdsts(dev, PCIM_CMD_BUSMASTEREN, PCIM_CMD_BUSMASTEREN);
+  pci_modify_cmdsts( dev, PCIM_CMD_BUSMASTEREN, PCIM_CMD_BUSMASTEREN );
 }
 
-static inline void pci_master_disable(pci_dev_t dev)
+static inline void pci_master_disable( pci_dev_t dev )
 {
-	pci_modify_cmdsts(dev, PCIM_CMD_BUSMASTEREN, 0);
+  pci_modify_cmdsts( dev, PCIM_CMD_BUSMASTEREN, 0 );
 }
 
 /* Configuration Space Access Read Routines */
-extern int pci_cfg_r8(pci_dev_t dev, int ofs, uint8_t *data);
-extern int pci_cfg_r16(pci_dev_t dev, int ofs, uint16_t *data);
-extern int pci_cfg_r32(pci_dev_t dev, int ofs, uint32_t *data);
+extern int pci_cfg_r8( pci_dev_t dev, int ofs, uint8_t *data );
+extern int pci_cfg_r16( pci_dev_t dev, int ofs, uint16_t *data );
+extern int pci_cfg_r32( pci_dev_t dev, int ofs, uint32_t *data );
 
 /* Configuration Space Access Write Routines */
-extern int pci_cfg_w8(pci_dev_t dev, int ofs, uint8_t data);
-extern int pci_cfg_w16(pci_dev_t dev, int ofs, uint16_t data);
-extern int pci_cfg_w32(pci_dev_t dev, int ofs, uint32_t data);
+extern int pci_cfg_w8( pci_dev_t dev, int ofs, uint8_t data );
+extern int pci_cfg_w16( pci_dev_t dev, int ofs, uint16_t data );
+extern int pci_cfg_w32( pci_dev_t dev, int ofs, uint32_t data );
 
 /* Read a register over PCI I/O Space */
-extern uint8_t pci_io_r8(uint32_t adr);
-extern uint16_t pci_io_r16(uint32_t adr);
-extern uint32_t pci_io_r32(uint32_t adr);
+extern uint8_t  pci_io_r8( uint32_t adr );
+extern uint16_t pci_io_r16( uint32_t adr );
+extern uint32_t pci_io_r32( uint32_t adr );
 
 /* Write a register over PCI I/O Space */
-extern void pci_io_w8(uint32_t adr, uint8_t data);
-extern void pci_io_w16(uint32_t adr, uint16_t data);
-extern void pci_io_w32(uint32_t adr, uint32_t data);
+extern void pci_io_w8( uint32_t adr, uint8_t data );
+extern void pci_io_w16( uint32_t adr, uint16_t data );
+extern void pci_io_w32( uint32_t adr, uint32_t data );
 
 /* Translate PCI address into CPU accessible address */
-static inline int pci_pci2cpu(uint32_t *address, int type)
+static inline int pci_pci2cpu( uint32_t *address, int type )
 {
-	return pci_access_ops.translate(address, type, 0);
+  return pci_access_ops.translate( address, type, 0 );
 }
 
 /* Translate CPU accessible address into PCI address (for DMA) */
-static inline int pci_cpu2pci(uint32_t *address, int type)
+static inline int pci_cpu2pci( uint32_t *address, int type )
 {
-	return pci_access_ops.translate(address, type, 1);
+  return pci_access_ops.translate( address, type, 1 );
 }
 
 /*** Read/Write a register over PCI Memory Space ***/
 
-static inline uint8_t pci_ld8(volatile uint8_t *addr)
+static inline uint8_t pci_ld8( volatile uint8_t *addr )
 {
-	return *addr;
+  return *addr;
 }
 
-static inline void pci_st8(volatile uint8_t *addr, uint8_t val)
+static inline void pci_st8( volatile uint8_t *addr, uint8_t val )
 {
-	*addr = val;
+  *addr = val;
 }
 
 /* Registers-over-Memory Space access routines. The routines are not inlined
@@ -234,26 +235,26 @@ static inline void pci_st8(volatile uint8_t *addr, uint8_t val)
  *
  * 8-bit accesses are the same for Little and Big endian PCI buses.
  */
-uint8_t pci_mem_ld8(uint8_t *adr);
-void pci_mem_st8(uint8_t *adr, uint8_t data);
+uint8_t  pci_mem_ld8( uint8_t *adr );
+void     pci_mem_st8( uint8_t *adr, uint8_t data );
 /* Registers-over-Memory Space - Generic Big endian PCI bus definitions */
-uint16_t pci_mem_be_ld_le16(uint16_t *adr);
-uint16_t pci_mem_be_ld_be16(uint16_t *adr);
-uint32_t pci_mem_be_ld_le32(uint32_t *adr);
-uint32_t pci_mem_be_ld_be32(uint32_t *adr);
-void pci_mem_be_st_le16(uint16_t *adr, uint16_t data);
-void pci_mem_be_st_be16(uint16_t *adr, uint16_t data);
-void pci_mem_be_st_le32(uint32_t *adr, uint32_t data);
-void pci_mem_be_st_be32(uint32_t *adr, uint32_t data);
+uint16_t pci_mem_be_ld_le16( uint16_t *adr );
+uint16_t pci_mem_be_ld_be16( uint16_t *adr );
+uint32_t pci_mem_be_ld_le32( uint32_t *adr );
+uint32_t pci_mem_be_ld_be32( uint32_t *adr );
+void     pci_mem_be_st_le16( uint16_t *adr, uint16_t data );
+void     pci_mem_be_st_be16( uint16_t *adr, uint16_t data );
+void     pci_mem_be_st_le32( uint32_t *adr, uint32_t data );
+void     pci_mem_be_st_be32( uint32_t *adr, uint32_t data );
 /* Registers-over-Memory Space - Generic Little endian PCI bus definitions */
-uint16_t pci_mem_le_ld_le16(uint16_t *adr);
-uint16_t pci_mem_le_ld_be16(uint16_t *adr);
-uint32_t pci_mem_le_ld_le32(uint32_t *adr);
-uint32_t pci_mem_le_ld_be32(uint32_t *adr);
-void pci_mem_le_st_le16(uint16_t *adr, uint16_t data);
-void pci_mem_le_st_be16(uint16_t *adr, uint16_t data);
-void pci_mem_le_st_le32(uint32_t *adr, uint32_t data);
-void pci_mem_le_st_be32(uint32_t *adr, uint32_t data);
+uint16_t pci_mem_le_ld_le16( uint16_t *adr );
+uint16_t pci_mem_le_ld_be16( uint16_t *adr );
+uint32_t pci_mem_le_ld_le32( uint32_t *adr );
+uint32_t pci_mem_le_ld_be32( uint32_t *adr );
+void     pci_mem_le_st_le16( uint16_t *adr, uint16_t data );
+void     pci_mem_le_st_be16( uint16_t *adr, uint16_t data );
+void     pci_mem_le_st_le32( uint32_t *adr, uint32_t data );
+void     pci_mem_le_st_be32( uint32_t *adr, uint32_t data );
 
 /* Get Read/Write function for accessing a register over PCI Memory Space
  * (non-inline functions).
@@ -269,7 +270,13 @@ void pci_mem_le_st_be32(uint32_t *adr, uint32_t data);
  *  0              Found function
  *  others         No such function defined by host driver or BSP
  */
-extern int pci_access_func(int wr, int size, void **func, int endian, int type);
+extern int pci_access_func(
+  int    wr,
+  int    size,
+  void **func,
+  int    endian,
+  int    type
+);
 
 /* Predefined functions for Host drivers or BSPs that define the 
  * register-over-memory space functions operations.
