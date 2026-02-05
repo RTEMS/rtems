@@ -41,10 +41,10 @@
 
 #include <inttypes.h>
 #include <rtems/inttypes.h>
+#include <sys/stat.h>
 
 #include <regex.h>
 #include <string.h>
-#include <sys/stat.h>
 
 #include <dlfcn.h>
 

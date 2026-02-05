@@ -37,6 +37,7 @@
 
 #include "rtl-obj-fwd.h"
 #include <rtems.h>
+#include <rtems/chain.h>
 
 #ifdef __cplusplus
 extern "C" {
