@@ -90,6 +90,10 @@ rtems_status_code STRING_TO_NAME(
 #endif
   char *end;
 
+  if ( NULL == s ) {
+    return RTEMS_INVALID_ADDRESS;
+  }
+
   if ( NULL == n ) {
     return RTEMS_INVALID_ADDRESS;
   }

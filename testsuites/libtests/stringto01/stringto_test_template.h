@@ -53,6 +53,22 @@ void TEST_STRING_TO_NAME( void )
 
   puts( "\nTesting " STRING_TO_NAME_METHOD_STRING );
 
+  /* Null pointer for input string */
+  puts(
+    STRING_TO_NAME_METHOD_STRING " - NULL input string - RTEMS_INVALID_ADDRESS"
+  );
+  #if defined( STRING_TO_INTEGER )
+  status = STRING_TO_NAME_METHOD(
+    NULL,
+    &value,
+    &endptr,
+    get_base_10_or_16( GOOD_VALUE_STRING )
+  );
+  #elif defined( STRING_TO_POINTER ) || defined( STRING_TO_FLOAT )
+  status = STRING_TO_NAME_METHOD( NULL, &value, &endptr );
+  #endif
+  rtems_test_assert( status == RTEMS_INVALID_ADDRESS );
+
   /* Null pointer for return value */
   puts(
     STRING_TO_NAME_METHOD_STRING " - NULL return value - RTEMS_INVALID_ADDRESS"
