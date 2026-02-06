@@ -36,6 +36,12 @@
 
 #include <bsp/irq-generic.h>
 
+static void dummy_handler( void *arg )
+{
+  (void) arg;
+  /* This handler does nothing and is never executed. */
+}
+
 rtems_status_code rtems_interrupt_handler_iterate(
   rtems_vector_number                 vector,
   rtems_interrupt_per_handler_routine routine,
@@ -46,10 +52,20 @@ rtems_status_code rtems_interrupt_handler_iterate(
   rtems_vector_number    index;
   rtems_option           options;
   rtems_interrupt_entry *entry;
+  rtems_interrupt_handler check_lock_handler = NULL;
 
+  if ( routine != NULL ) {
+    check_lock_handler = dummy_handler;
+  }
+
+  /*
+   * bsp_interrupt_check_and_lock does not call the handler, it only checks it
+   * for NULL. Casting routine to rtems_interrupt_handler is not safe so this
+   * uses a dummy handler for the check.
+   */
   sc = bsp_interrupt_check_and_lock(
     vector,
-    (rtems_interrupt_handler) routine
+    check_lock_handler
   );
 
   if ( sc != RTEMS_SUCCESSFUL ) {
