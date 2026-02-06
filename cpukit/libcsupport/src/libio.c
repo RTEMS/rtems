@@ -154,10 +154,15 @@ rtems_libio_t *rtems_libio_allocate( void )
 void rtems_libio_free_iop( rtems_libio_t *iop )
 {
   size_t zero;
+  unsigned int flags;
 
-  rtems_libio_lock();
-
-  if ( !rtems_libio_iop_is_free( iop ) ) {
+  /*
+   * Use atomic test and set so the contents of the if statement
+   * can only be run once. Therefore only added to the free list once.
+   */
+  flags = rtems_libio_iop_flags_set( iop, LIBIO_FLAGS_FREE );
+  if ( ( flags & LIBIO_FLAGS_FREE ) == 0 ) {
+    rtems_libio_lock();
     /*
      * Clear the flags. All references should have been dropped.
      */
@@ -174,9 +179,8 @@ void rtems_libio_free_iop( rtems_libio_t *iop )
      */
     *rtems_libio_iop_free_tail = iop;
     rtems_libio_iop_free_tail = &iop->data1;
+    rtems_libio_unlock();
   }
-
-  rtems_libio_unlock();
 }
 
 int rtems_libio_count_open_iops( void )
