@@ -77,7 +77,7 @@ static bool wait_for_ap(uint32_t timeout_ms)
   PIT_CHAN2_ENABLE(chan2_value);
   PIT_CHAN2_WRITE_TICKS(pit_ticks);
 
-  for (int i = 0; has_ap_started == false && i < timeout_ms; i++) {
+  for (uint32_t i = 0; has_ap_started == false && i < timeout_ms; i++) {
     PIT_CHAN2_START_DELAY(chan2_value);
     PIT_CHAN2_WAIT_DELAY(pit_ticks);
     amd64_spinwait();
