@@ -334,7 +334,7 @@ void thread::start_thread(thread::state_ptr s) {
   pthread_attr_t pattr;
   system_error_check(::pthread_attr_init(&pattr), "attribute init");
 
-  int spolicy;
+  int spolicy = SCHED_FIFO;
   switch (attr.get_scheduler_policy()) {
   case attributes::sched_other:
     spolicy = SCHED_OTHER;
