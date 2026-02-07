@@ -13,10 +13,6 @@ default:
   value:
   - -Wall
   - -Wextra
-# We currently have not addressed all of the cases for -Wextra warnings.
-# We are using -Wno- for the ones remaining.
-  - -Wno-cast-function-type
-  - -Wno-sign-compare
   - -Werror
 description: |
   Warning flags passed to the C and C++ compiler
