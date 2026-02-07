@@ -466,7 +466,7 @@ void _CPU_ISR_install_raw_handler(
   CPU_ISR_raw_handler *old_handler
 );
 
-typedef void ( *CPU_ISR_handler )( uint32_t );
+typedef void ( *CPU_ISR_handler )( void * );
 
 void _CPU_ISR_install_vector(
   uint32_t         vector,
