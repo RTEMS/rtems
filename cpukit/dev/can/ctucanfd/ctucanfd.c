@@ -240,7 +240,7 @@ static int ctucanfd_check_state(
     }
   }
 
-  if ( txb_found != ( 1 << internal->ntxbufs ) - 1 ) {
+  if ( txb_found != ( 1U << internal->ntxbufs ) - 1 ) {
     printk(
       "CTUCANFD CHECK at %s: missing buffers in txb_order = 0x%08x, "
       "txb_found = 0x%02x ntxbufs %d, tail %d\n",
