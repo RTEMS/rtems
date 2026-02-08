@@ -50,7 +50,7 @@ RTEMS Doxygen for CPUKit:
 
 RTEMS POSIX 1003.1 Compliance Guide:
 
-  * https://docs.rtems.org/branches/master/posix-compliance/
+  * https://docs.rtems.org/branches/main/posix-compliance/
 
 
 RTEMS Discourse User forum for questions, answers and examples:
