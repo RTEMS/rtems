@@ -200,7 +200,7 @@ BSP_VMEDmaStatus(int channel);
  * RETURNS: 0 on success, nonzero on failure (IRQ in use, unsupported
  *          channel).
  */
-typedef void (*BSP_VMEDmaIRQCallback)(void *usr_arg, uint32_t vector);
+typedef void (*BSP_VMEDmaIRQCallback)(void *usr_arg, uintptr_t vector);
 
 int
 BSP_VMEDmaInstallISR(int channel, BSP_VMEDmaIRQCallback cb, void *usr_arg);
