@@ -58,3 +58,4 @@ Git log in order to find out version and update details
 | cpukit/uuid                           | https://github.com/tytso/e2fsprogs/tree/master/lib/uuid        |
 | cpukit/xz-embedded                    | https://github.com/tukaani-project/xz-embedded                 |
 | cpukit/jffs2                          | https://github.com/torvalds/linux                              |
+| cpukit/posix-newlib                   | https://sourceware.org/newlib/                                 |
