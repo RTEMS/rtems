@@ -474,7 +474,11 @@ int rtems_can_queue_kern_initialize( void )
     return -1;
   }
 
-  rtems_task_start( dead_func_id, can_queue_dead_func, 0 );
+  sc = rtems_task_start( dead_func_id, can_queue_dead_func, 0 );
+  if ( sc != RTEMS_SUCCESSFUL ) {
+    rtems_task_delete( dead_func_id );
+    return -1;
+  }
 
   return 0;
 }
