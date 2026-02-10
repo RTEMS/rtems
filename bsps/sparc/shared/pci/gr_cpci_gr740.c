@@ -121,7 +121,7 @@ struct gr_cpci_gr740_priv {
 	/* Driver management */
 	struct drvmgr_dev	*dev;
 	char			prefix[16];
-	SPIN_DECLARE(devlock);
+	SPIN_DECLARE(devlock)
 
 	/* PCI */
 	pci_dev_t		pcidev;

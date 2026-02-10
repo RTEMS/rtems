@@ -199,7 +199,7 @@ struct grpci2dma_priv {
 	void (*isr_register)( void (*isr)(void*), void * arg);
 
 	/* Spin-lock ISR protection */
-	SPIN_DECLARE(devlock);
+	SPIN_DECLARE(devlock)
 };
 
 /* The GRPCI2 DMA semaphore */

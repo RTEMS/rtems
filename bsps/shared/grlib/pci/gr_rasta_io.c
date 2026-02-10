@@ -132,7 +132,7 @@ struct gr_rasta_io_priv {
 	/* Driver management */
 	struct drvmgr_dev		*dev;
 	char				prefix[16];
-	SPIN_DECLARE(devlock);
+	SPIN_DECLARE(devlock)
 
 	/* PCI */
 	pci_dev_t			pcidev;

@@ -46,7 +46,7 @@
 struct gr1553bm_priv {
 	struct drvmgr_dev **pdev;
 	struct gr1553b_regs *regs;
-	SPIN_DECLARE(devlock);
+	SPIN_DECLARE(devlock)
 
 	void *buffer;
 	unsigned int buffer_base_hw;

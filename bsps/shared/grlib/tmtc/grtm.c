@@ -372,7 +372,7 @@ struct grtm_priv {
 	int			irq;
 	int			minor;
 	int			subrev;		/* GRTM Revision */
-	SPIN_DECLARE(devlock);			/* spin-lock ISR protection */
+	SPIN_DECLARE(devlock)		/* spin-lock ISR protection */
 
 	int			open;
 	int			running;

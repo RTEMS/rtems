@@ -227,7 +227,7 @@ typedef struct {
 typedef struct {
 	struct drvmgr_dev *dev;
 	char devName[52];
-	SPIN_DECLARE(devlock);
+	SPIN_DECLARE(devlock)
 
 	/* hardware shortcuts */
 	pelican_regs *regs;

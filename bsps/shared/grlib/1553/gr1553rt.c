@@ -83,7 +83,7 @@ struct gr1553rt_priv {
 	/* Software State */
 	int started;
 	struct gr1553rt_cfg cfg;
-	SPIN_DECLARE(devlock);
+	SPIN_DECLARE(devlock)
 
 	/* Handle to GR1553B RT device layer */
 	struct drvmgr_dev **pdev;

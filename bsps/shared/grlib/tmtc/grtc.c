@@ -244,7 +244,7 @@ struct grtc_priv {
 	char			devName[52];	/* Device Name */
 	struct grtc_regs	*regs;		/* TC Hardware Register MAP */
 	int			irq;		/* IRQ number of TC core */
-	SPIN_DECLARE(devlock);			/* spin-lock of registers */
+	SPIN_DECLARE(devlock)			/* spin-lock of registers */
 
 	int			major;		/* Driver major */
 	int			minor;		/* Device Minor */

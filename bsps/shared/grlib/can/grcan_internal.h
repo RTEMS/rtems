@@ -88,7 +88,7 @@ struct grcan_priv {
 	struct grcan_stats stats;
 
 	rtems_id rx_sem, tx_sem, txempty_sem, dev_sem;
-	SPIN_DECLARE(devlock);
+	SPIN_DECLARE(devlock)
 };
 
 #ifdef GRCAN_REG_BYPASS_CACHE

@@ -94,7 +94,7 @@ struct spwtdp_priv {
 	int freq; /* Frequency configured */
 
 	/* Spin-lock ISR protection */
-	SPIN_DECLARE(devlock);
+	SPIN_DECLARE(devlock)
 
 	/* Driver semaphore */
 	rtems_id sem;

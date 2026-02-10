@@ -51,7 +51,7 @@ struct gr1553bc_priv {
 	struct gr1553bc_list *list;
 	struct gr1553bc_list *alist;
 	int started;
-	SPIN_DECLARE(devlock);
+	SPIN_DECLARE(devlock)
 
 	/* IRQ log management */
 	void *irq_log_p;

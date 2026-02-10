@@ -115,7 +115,7 @@ struct gr_rasta_spw_router_priv {
 	/* Driver management */
 	struct drvmgr_dev	*dev;
 	char			prefix[20];
-	SPIN_DECLARE(devlock);
+	SPIN_DECLARE(devlock)
 
 	/* PCI */
 	pci_dev_t		pcidev;

@@ -111,7 +111,7 @@ struct gr701_priv {
 	/* Driver management */
 	struct drvmgr_dev		*dev;
 	char				prefix[16];
-	SPIN_DECLARE(devlock);
+	SPIN_DECLARE(devlock)
 
 	struct pci_bridge_regs		*pcib;
 	struct amba_bridge_regs		*ambab;

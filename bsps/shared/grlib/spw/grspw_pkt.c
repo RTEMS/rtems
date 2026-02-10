@@ -450,7 +450,7 @@ struct grspw_priv {
 	struct grspw_dma_priv *dma;
 
 	/* Spin-lock ISR protection */
-	SPIN_DECLARE(devlock);
+	SPIN_DECLARE(devlock)
 
 	/* Descriptor Memory Area for TX & RX and all DMA channels */
 	unsigned int bd_mem;

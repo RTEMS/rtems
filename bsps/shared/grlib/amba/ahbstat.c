@@ -95,7 +95,7 @@ struct ahbstat_priv {
 	uint32_t last_status;
 	uint32_t last_address;
 	/* Spin-lock ISR protection */
-	SPIN_DECLARE(devlock);
+	SPIN_DECLARE(devlock)
 };
 
 static int ahbstat_init2(struct drvmgr_dev *dev);

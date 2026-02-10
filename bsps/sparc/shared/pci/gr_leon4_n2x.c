@@ -122,7 +122,7 @@ struct gr_cpci_leon4_n2x_priv {
 	/* Driver management */
 	struct drvmgr_dev	*dev;
 	char			prefix[20];
-	SPIN_DECLARE(devlock);
+	SPIN_DECLARE(devlock)
 
 	/* PCI */
 	pci_dev_t		pcidev;
