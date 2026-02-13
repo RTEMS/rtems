@@ -51,11 +51,7 @@ int _Scheduler_CBS_Create_server(
   unsigned int          i;
   Scheduler_CBS_Server *the_server;
 
-  if (
-    params->budget <= 0 || params->deadline <= 0 ||
-    params->budget >= (time_t) SCHEDULER_EDF_PRIO_MSB ||
-    params->deadline >= (time_t) SCHEDULER_EDF_PRIO_MSB
-  ) {
+  if ( params->budget <= 0 || params->deadline <= 0 ) {
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
   }
 
