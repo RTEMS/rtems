@@ -175,7 +175,11 @@ static void riscv_plic_cpu_0_init(
    * External M-mode interrupts on secondary processors are enabled in
    * bsp_start_on_secondary_processor().
    */
+#ifdef RISCV_USE_S_MODE
+  set_csr(sie, MIP_SEIP);
+#else
   set_csr(mie, MIP_MEIP);
+#endif
 }
 
 static void riscv_clint_init(const void *fdt)
@@ -402,12 +406,20 @@ rtems_status_code bsp_interrupt_is_pending(
   }
 
   if (vector == RISCV_INTERRUPT_VECTOR_TIMER) {
+#ifdef RISCV_USE_S_MODE
+    *pending = (read_csr(sip) & SIP_STIP) != 0;
+#else
     *pending = (read_csr(mip) & MIP_MTIP) != 0;
+#endif
     return RTEMS_SUCCESSFUL;
   }
 
   _Assert(vector == RISCV_INTERRUPT_VECTOR_SOFTWARE);
+#ifdef RISCV_USE_S_MODE
+  *pending = (read_csr(sip) & SIP_STIP) != 0;
+#else
   *pending = (read_csr(mip) & MIP_MSIP) != 0;
+#endif
   return RTEMS_SUCCESSFUL;
 }
 
@@ -499,12 +511,20 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
   }
 
   if (vector == RISCV_INTERRUPT_VECTOR_TIMER) {
+#ifdef RISCV_USE_S_MODE
+    *enabled = (read_csr(sie) & SIP_STIP) != 0;
+#else
     *enabled = (read_csr(mie) & MIP_MTIP) != 0;
+#endif
     return RTEMS_SUCCESSFUL;
   }
 
   _Assert(vector == RISCV_INTERRUPT_VECTOR_SOFTWARE);
+#ifdef RISCV_USE_S_MODE
+    *enabled = (read_csr(sie) & SIP_STIP) != 0;
+#else
   *enabled = (read_csr(mie) & MIP_MSIP) != 0;
+#endif
   return RTEMS_SUCCESSFUL;
 }
 
@@ -559,12 +579,20 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
   }
 
   if (vector == RISCV_INTERRUPT_VECTOR_TIMER) {
+#ifdef RISCV_USE_S_MODE
+    set_csr(sie, SIP_STIP);
+#else
     set_csr(mie, MIP_MTIP);
+#endif
     return RTEMS_SUCCESSFUL;
   }
 
   _Assert(vector == RISCV_INTERRUPT_VECTOR_SOFTWARE);
+#ifdef RISCV_USE_S_MODE
+  set_csr(sie, SIP_STIP);
+#else
   set_csr(mie, MIP_MSIP);
+#endif
   return RTEMS_SUCCESSFUL;
 }
 
@@ -619,12 +647,20 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
   }
 
   if (vector == RISCV_INTERRUPT_VECTOR_TIMER) {
+#ifdef RISCV_USE_S_MODE
+    clear_csr(sie, SIP_STIP);
+#else
     clear_csr(mie, MIP_MTIP);
+#endif
     return RTEMS_SUCCESSFUL;
   }
 
   _Assert(vector == RISCV_INTERRUPT_VECTOR_SOFTWARE);
+#ifdef RISCV_USE_S_MODE
+  clear_csr(sie, SIP_STIP);
+#else
   clear_csr(mie, MIP_MSIP);
+#endif
   return RTEMS_SUCCESSFUL;
 }
 
