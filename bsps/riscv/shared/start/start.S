@@ -50,14 +50,17 @@ SYM(_start):
 	LADDR	gp, __global_pointer$
 	.option	pop
 
+#ifndef RISCV_USE_S_MODE
+	csrr	a0, mhartid
+#endif
+
 #ifndef RTEMS_SMP
-	li t3, RISCV_BOOT_HARTID
-	csrr	 t0, mhartid
-	bne	 t0, t3, .Lwfi
+	li	t3, RISCV_BOOT_HARTID
+	bne	a0, t3, .Lwfi
 #endif
 
 	/* Init FPU */
-#ifdef __riscv_flen
+#if defined( __riscv_flen ) && !defined( RISCV_USE_S_MODE )
 	li	t0, MSTATUS_FS
 	csrs	mstatus, t0
 	csrw	fcsr, zero
@@ -65,15 +68,18 @@ SYM(_start):
 
 	/* Set exception handler */
 	LADDR	t0, _RISCV_Exception_handler
+#ifdef RISCV_USE_S_MODE
+	csrw	stvec, t0
+#else
 	csrw	mtvec, t0
+#endif
 
 	/* Load stack pointer and branch to secondary processor start if necessary */
 #ifdef RTEMS_SMP
 	LADDR	sp, _ISR_Stack_area_begin
 	LADDR	t2, _ISR_Stack_size
-	csrr	s0, mhartid
 	li	t3, RISCV_BOOT_HARTID
-	sub	s0, s0, t3
+	sub	s0, a0, t3
 
 	/*
 	 * Check that this is a configured processor.  If not, then there is
