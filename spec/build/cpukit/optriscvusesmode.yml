@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2026 Gedare Bloom
+default:
+- enabled-by: true
+  value: false
+description: |
+  If set to true, then use RISC-V Supervisor Mode (S-Mode) privilege level,
+  otherwise use Machine Mode (M-Mode).
+enabled-by: riscv
+format: '{}'
+links: []
+name: RISCV_USE_S_MODE
+type: build
