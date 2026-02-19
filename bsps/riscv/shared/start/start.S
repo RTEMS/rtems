@@ -92,7 +92,11 @@ SYM(_start):
 	LADDR	t0, _Per_CPU_Information
 	slli	t1, s0, PER_CPU_CONTROL_SIZE_LOG2
 	add	s1, t0, t1
+#ifdef RISCV_USE_S_MODE
+	csrw	sscratch, s1
+#else
 	csrw	mscratch, s1
+#endif
 	bnez	s0, .Lstart_on_secondary_processor
 	add	sp, sp, t2
 #else

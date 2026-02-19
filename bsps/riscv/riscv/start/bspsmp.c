@@ -37,7 +37,11 @@ void bsp_start_on_secondary_processor(Per_CPU_Control *cpu_self)
   cpu_index_self = _Per_CPU_Get_index(cpu_self);
 
   if (_SMP_Should_start_processor(cpu_index_self)) {
+#ifdef RISCV_USE_S_MODE
+    set_csr(sie, SIP_SSIP | MIP_SEIP);
+#else
     set_csr(mie, MIP_MSIP | MIP_MEIP);
+#endif
     _SMP_Start_multitasking_on_secondary_processor(cpu_self);
   } else {
     _CPU_Thread_Idle_body(0);
@@ -59,7 +63,11 @@ bool _CPU_SMP_Start_processor(uint32_t cpu_index)
 void _CPU_SMP_Finalize_initialization(uint32_t cpu_count)
 {
   (void) cpu_count;
+#ifdef RISCV_USE_S_MODE
+  set_csr(sie, SIP_SSIP);
+#else
   set_csr(mie, MIP_MSIP);
+#endif
 }
 
 void _CPU_SMP_Prepare_start_multitasking(void)
@@ -72,5 +80,10 @@ void _CPU_SMP_Send_interrupt(uint32_t target_processor_index)
   Per_CPU_Control *cpu;
 
   cpu = _Per_CPU_Get_by_index(target_processor_index);
+#ifdef RISCV_USE_S_MODE
+  /* TODO: Add IPI call. */
+  (void) cpu;
+#else
   *cpu->cpu_per_cpu.clint_msip = 0x1;
+#endif
 }
