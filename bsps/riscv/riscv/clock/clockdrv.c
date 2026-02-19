@@ -156,8 +156,12 @@ static void riscv_clock_clint_init(uint64_t cmpval)
   cpu_self = _Per_CPU_Get();
   riscv_clock_write_mtimecmp(cpu_self->cpu_per_cpu.clint_mtimecmp, cmpval);
 
-  /* Enable mtimer interrupts */
+  /* Enable timer interrupts */
+#ifdef RISCV_USE_S_MODE
+  set_csr(sie, SIP_STIP);
+#else
   set_csr(mie, MIP_MTIP);
+#endif
 }
 
 #if defined(RTEMS_SMP) && !defined(CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR)
