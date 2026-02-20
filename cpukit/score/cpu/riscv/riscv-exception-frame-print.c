@@ -40,9 +40,15 @@
 
 void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
 {
-  printk("mstatus 0x%08" PRIxPTR "\n", frame->Interrupt_frame.mstatus);
-  printk("mcause  " PRINT_REG "\n", frame->mcause);
-  printk("mepc    " PRINT_REG "\n", frame->Interrupt_frame.mepc);
+#ifdef RISCV_USE_S_MODE
+  printk( "sstatus 0x%08" PRIxPTR "\n", frame->Interrupt_frame.status );
+  printk( "scause  " PRINT_REG "\n", frame->cause );
+  printk( "sepc    " PRINT_REG "\n", frame->Interrupt_frame.epc );
+#else
+  printk( "mstatus 0x%08" PRIxPTR "\n", frame->Interrupt_frame.status );
+  printk( "mcause  " PRINT_REG "\n", frame->cause );
+  printk( "mepc    " PRINT_REG "\n", frame->Interrupt_frame.epc );
+#endif
   printk("ra      " PRINT_REG "\n", frame->Interrupt_frame.ra);
   printk("sp      " PRINT_REG "\n", frame->sp);
   printk("gp      " PRINT_REG "\n", frame->gp);

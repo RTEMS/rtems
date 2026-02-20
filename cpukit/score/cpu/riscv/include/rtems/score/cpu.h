@@ -295,8 +295,8 @@ typedef enum {
 } RISCV_Exception_code;
 
 typedef struct {
-  uintptr_t mstatus;
-  uintptr_t mepc;
+  uintptr_t status;
+  uintptr_t epc;
   uintptr_t a2;
   uintptr_t s0;
   uintptr_t s1;
@@ -342,7 +342,7 @@ typedef struct {
 
 typedef struct {
   CPU_Interrupt_frame Interrupt_frame;
-  uintptr_t mcause;
+  uintptr_t           cause;
   uintptr_t sp;
   uintptr_t gp;
   uintptr_t tp;
