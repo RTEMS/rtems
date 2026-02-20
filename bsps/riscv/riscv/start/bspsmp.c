@@ -87,3 +87,10 @@ void _CPU_SMP_Send_interrupt(uint32_t target_processor_index)
   *cpu->cpu_per_cpu.clint_msip = 0x1;
 #endif
 }
+
+#ifdef RISCV_USE_S_MODE
+uint32_t _CPU_SMP_Get_current_processor( void )
+{
+  return _Per_CPU_Get_index( _CPU_Get_current_per_CPU_control() );
+}
+#endif

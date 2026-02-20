@@ -185,7 +185,11 @@
 
 .macro GET_SELF_CPU_CONTROL REG
 #ifdef RTEMS_SMP
+#ifdef RISCV_USE_S_MODE
+	csrr	\REG, sscratch
+#else
 	csrr	\REG, mscratch
+#endif
 #else
 	LADDR	\REG, _Per_CPU_Information
 #endif

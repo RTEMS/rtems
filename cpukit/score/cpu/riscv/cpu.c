@@ -183,7 +183,13 @@ void _CPU_Initialize(void)
 
 uint32_t _CPU_ISR_Get_level( void )
 {
-  if ( _CPU_ISR_Is_enabled( read_csr( mstatus ) ) ) {
+  uint64_t status;
+#ifdef RISCV_USE_S_MODE
+  status = read_csr( sstatus );
+#else
+  status = read_csr( mstatus );
+#endif
+  if ( _CPU_ISR_Is_enabled( status ) ) {
     return 0;
   }
 

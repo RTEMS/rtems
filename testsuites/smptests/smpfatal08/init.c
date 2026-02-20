@@ -87,7 +87,7 @@ void _CPU_SMP_Prepare_start_multitasking( void )
   assert( 0 );
 }
 
-#if defined( RTEMS_PARAVIRT ) ||                                          \
+#if defined( RTEMS_PARAVIRT ) || defined( RISCV_USE_S_MODE ) ||           \
   ( !defined( __leon__ ) && !defined( __PPC__ ) && !defined( __arm__ ) && \
     !defined( __riscv ) )
 uint32_t _CPU_SMP_Get_current_processor( void )

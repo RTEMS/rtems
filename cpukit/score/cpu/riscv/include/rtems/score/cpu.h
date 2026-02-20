@@ -4,6 +4,7 @@
  */
 
 /*
+ * Copyright (c) 2026 Gedare Bloom
  * Copyright (c) 2018 embedded brains GmbH & Co. KG
  *
  * Copyright (c) 2015 University of York.
@@ -43,10 +44,7 @@ extern "C" {
 
 #include <rtems/score/basedefs.h>
 #include <rtems/score/riscv.h>
-
-#define RISCV_MSTATUS_MIE 0x8
-#define RISCV_MSTATUS_MDT 0x40000000000
-#define RISCV_MSTATUSH_MDT 0x400
+#include <rtems/score/riscv-utility.h>
 
 #define CPU_ISR_PASSES_FRAME_POINTER FALSE
 
@@ -151,17 +149,25 @@ typedef struct {
 
 static inline uint32_t riscv_interrupt_disable( void )
 {
-  unsigned long mstatus;
+  unsigned long status;
 
   __asm__ volatile (
     ".option push\n"
     ".option arch, +zicsr\n"
-    "csrrc %0, mstatus, " RTEMS_XSTRING( RISCV_MSTATUS_MIE ) "\n"
+#ifdef RISCV_USE_S_MODE
+    "csrrc %0, sstatus, " RTEMS_XSTRING( SSTATUS_SIE ) "\n"
+#else
+    "csrrc %0, mstatus, " RTEMS_XSTRING( MSTATUS_MIE ) "\n"
+#endif
     ".option pop" :
-      "=&r" ( mstatus )
+      "=&r" ( status )
   );
 
-  return mstatus & RISCV_MSTATUS_MIE;
+#ifdef RISCV_USE_S_MODE
+  return status & SSTATUS_SIE;
+#else
+  return status & MSTATUS_MIE;
+#endif
 }
 
 static inline void riscv_interrupt_enable( uint32_t level )
@@ -169,7 +175,11 @@ static inline void riscv_interrupt_enable( uint32_t level )
   __asm__ volatile (
     ".option push\n"
     ".option arch, +zicsr\n"
+#ifdef RISCV_USE_S_MODE
+    "csrrs zero, sstatus, %0\n"
+#else
     "csrrs zero, mstatus, %0\n"
+#endif
     ".option pop" :
     :
     "r" ( level )
@@ -190,7 +200,11 @@ static inline void riscv_interrupt_enable( uint32_t level )
 
 static inline bool _CPU_ISR_Is_enabled( unsigned long level )
 {
-  return ( level & RISCV_MSTATUS_MIE ) != 0;
+#ifdef RISCV_USE_S_MODE
+  return ( level & SSTATUS_SIE ) != 0;
+#else
+  return ( level & MSTATUS_MIE ) != 0;
+#endif
 }
 
 static inline void _CPU_ISR_Set_level( uint32_t level )
@@ -205,7 +219,11 @@ static inline void _CPU_ISR_Set_level( uint32_t level )
   __asm__ volatile (
     ".option push\n"
     ".option arch, +zicsr\n"
-    "csrrs zero, mstatus, " RTEMS_XSTRING( RISCV_MSTATUS_MIE ) "\n"
+#ifdef RISCV_USE_S_MODE
+    "csrrs zero, sstatus, " RTEMS_XSTRING( SSTATUS_SIE ) "\n"
+#else
+    "csrrs zero, mstatus, " RTEMS_XSTRING( MSTATUS_MIE ) "\n"
+#endif
     ".option pop"
   );
 }
@@ -469,6 +487,9 @@ void _CPU_SMP_Finalize_initialization( uint32_t cpu_count );
 
 void _CPU_SMP_Prepare_start_multitasking( void );
 
+#ifdef RISCV_USE_S_MODE
+uint32_t _CPU_SMP_Get_current_processor( void );
+#else
 static inline uint32_t _CPU_SMP_Get_current_processor( void )
 {
   unsigned long mhartid;
@@ -483,6 +504,7 @@ static inline uint32_t _CPU_SMP_Get_current_processor( void )
 
   return (uint32_t) mhartid - RISCV_BOOT_HARTID;
 }
+#endif
 
 void _CPU_SMP_Send_interrupt( uint32_t target_processor_index );
 

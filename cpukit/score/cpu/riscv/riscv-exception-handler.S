@@ -7,8 +7,8 @@
  */
 
 /*
+ * Copyright (c) 2026 Gedare Bloom
  * Copyright (c) 2018 embedded brains GmbH & Co. KG
-
  * Copyright (c) 2015 University of York.
  * Hesham Almatary <hesham@alumni.york.ac.uk>
  *
@@ -41,6 +41,8 @@
 #include <rtems/asm.h>
 #include <rtems/score/percpu.h>
 
+#include <rtems/score/riscv-utility.h>
+
 PUBLIC(_RISCV_Exception_handler)
 
 	.section	.text, "ax", @progbits
@@ -56,9 +58,15 @@ SYM(_RISCV_Exception_handler):
 	SREG	a1, RISCV_INTERRUPT_FRAME_A1(sp)
 	SREG	a2, RISCV_INTERRUPT_FRAME_A2(sp)
 	SREG	s0, RISCV_INTERRUPT_FRAME_S0(sp)
+#ifdef RISCV_USE_S_MODE
+	csrr	a0, scause
+	csrr	a1, sstatus
+	csrr	a2, sepc
+#else
 	csrr	a0, mcause
 	csrr	a1, mstatus
 	csrr	a2, mepc
+#endif
 	GET_SELF_CPU_CONTROL	s0
 	SREG	s1, RISCV_INTERRUPT_FRAME_S1(sp)
 #if __riscv_flen > 0
@@ -112,13 +120,18 @@ SYM(_RISCV_Exception_handler):
 	 * In that case not clearing the MDT bit would prevent us from setting
 	 * the MIE bit later.
 	 */
+#ifdef RISCV_USE_S_MODE
+	li	t0, SSTATUS_SDT
+	csrrc	zero, sstatus, t0
+#else
 #if __riscv_xlen == 64
-	li	t0, RISCV_MSTATUS_MDT
+	li	t0, MSTATUS_MDT
 	csrrc	zero, mstatus, t0
 #elif __riscv_xlen == 32
-	li	t0, RISCV_MSTATUSH_MDT
+	li	t0, MSTATUSH_MDT
 	csrrc	zero, mstatush, t0
 #endif
+#endif /* RISCV_USE_S_MODE */
 
 	/* Increment interrupt nest and thread dispatch disable level */
 	lw	t0, PER_CPU_ISR_NEST_LEVEL(s0)
@@ -177,11 +190,19 @@ SYM(_RISCV_Exception_handler):
 
 	/* Call _Thread_Do_dispatch(), this function will enable interrupts */
 	mv	a0, s0
-	li	a1, RISCV_MSTATUS_MIE
+#ifdef RISCV_USE_S_MODE
+	li	a1, SSTATUS_SIE
+#else
+	li	a1, MSTATUS_MIE
+#endif
 	call	_Thread_Do_dispatch
 
 	/* Disable interrupts */
-	csrrc	zero, mstatus, RISCV_MSTATUS_MIE
+#ifdef RISCV_USE_S_MODE
+	csrrc	zero, sstatus, SSTATUS_SIE
+#else
+	csrrc	zero, mstatus, MSTATUS_MIE
+#endif
 
 #ifdef RTEMS_SMP
 	GET_SELF_CPU_CONTROL	s0
@@ -215,6 +236,14 @@ SYM(_RISCV_Exception_handler):
 	LREG	t5, RISCV_INTERRUPT_FRAME_T5(sp)
 	LREG	t6, RISCV_INTERRUPT_FRAME_T6(sp)
 
+#ifdef RISCV_USE_S_MODE
+	/* Clear SDT bit before restoring sstatus register */
+	li	a2, SSTATUS_SDT
+	not	a2, a2
+	and	a0, a0, a2
+	csrw	sstatus, a0
+	csrw	sepc, a1
+#else
 	/*
 	 * Clear MDT bit before restoring mstatus register.
 	 * This is only necessary if the Smdbltrp extension is implemented.
@@ -223,13 +252,14 @@ SYM(_RISCV_Exception_handler):
 	 * On RV32, the MDT bit is in the mstatush CSR which is not restored.
 	 */
 #if __riscv_xlen == 64
-	li	a2, RISCV_MSTATUS_MDT
+	li	a2, MSTATUS_MDT
 	not	a2, a2
 	and	a0, a0, a2
 #endif
-
 	csrw	mstatus, a0
 	csrw	mepc, a1
+#endif /* RISCV_USE_S_MODE */
+
 #if __riscv_flen > 0
 	lw	a0, RISCV_INTERRUPT_FRAME_FCSR(sp)
 	FLREG	ft0, RISCV_INTERRUPT_FRAME_FT0(sp)
@@ -260,7 +290,11 @@ SYM(_RISCV_Exception_handler):
 
 	addi	sp, sp, CPU_INTERRUPT_FRAME_SIZE
 
+#ifdef RISCV_USE_S_MODE
+	sret
+#else
 	mret
+#endif
 
 .Lsynchronous_exception:
 

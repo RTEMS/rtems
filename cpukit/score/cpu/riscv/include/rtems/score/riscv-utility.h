@@ -60,8 +60,11 @@
 #define MSTATUS_TVM         0x00100000
 #define MSTATUS_TW          0x00200000
 #define MSTATUS_TSR         0x00400000
+#define MSTATUS_MDT         0x40000000000
 #define MSTATUS32_SD        0x80000000
 #define MSTATUS64_SD        0x8000000000000000
+
+#define MSTATUSH_MDT        0x400
 
 #define SSTATUS_UIE         0x00000001
 #define SSTATUS_SIE         0x00000002
@@ -72,6 +75,7 @@
 #define SSTATUS_XS          0x00018000
 #define SSTATUS_SUM         0x00040000
 #define SSTATUS_MXR         0x00080000
+#define SSTATUS_SDT         0x01000000
 #define SSTATUS32_SD        0x80000000
 #define SSTATUS64_SD        0x8000000000000000
 

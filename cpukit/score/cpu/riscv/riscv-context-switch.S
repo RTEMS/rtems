@@ -183,11 +183,15 @@ SYM(_RISCV_Start_multitasking):
 	mv	a1, a0
 	GET_SELF_CPU_CONTROL	a2
 
-	/* Switch the stack to the temporary interrupt stack of this processor */
+	/* Switch to the temporary interrupt stack of this processor */
 	addi	sp, a2, PER_CPU_INTERRUPT_FRAME_AREA + CPU_INTERRUPT_FRAME_SIZE
 
 	/* Enable interrupts */
-	csrrs	zero, mstatus, RISCV_MSTATUS_MIE
+#ifdef RISCV_USE_S_MODE
+	csrrs	zero, sstatus, SSTATUS_SIE
+#else
+	csrrs	zero, mstatus, MSTATUS_MIE
+#endif
 
 	j	.Ltry_update_is_executing
 #endif
