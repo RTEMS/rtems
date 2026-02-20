@@ -49,17 +49,22 @@
 
 typedef struct {
   struct timecounter base;
-  volatile RISCV_CLINT_regs *clint;
   uint32_t interval;
 } riscv_timecounter;
 
 static riscv_timecounter riscv_clock_tc;
 
+#ifndef RISCV_USE_S_MODE
 static void riscv_clock_write_mtimecmp(
-  volatile RISCV_CLINT_timer_reg *mtimecmp,
   uint64_t value
 )
 {
+  Per_CPU_Control *cpu_self;
+  volatile RISCV_CLINT_timer_reg *mtimecmp;
+
+  cpu_self = _Per_CPU_Get();
+  mtimecmp = cpu_self->cpu_per_cpu.clint_mtimecmp;
+
 #if __riscv_xlen == 32
   mtimecmp->val_32[0] = 0xffffffff;
   mtimecmp->val_32[1] = (uint32_t) (value >> 32);
@@ -67,6 +72,15 @@ static void riscv_clock_write_mtimecmp(
 #elif __riscv_xlen == 64
   mtimecmp->val_64 = value;
 #endif
+}
+
+static uint64_t riscv_clock_read_mtimecmp()
+{
+  Per_CPU_Control *cpu_self;
+  volatile RISCV_CLINT_timer_reg *mtimecmp;
+  cpu_self = _Per_CPU_Get();
+  mtimecmp = cpu_self->cpu_per_cpu.clint_mtimecmp;
+  return mtimecmp->val_64;
 }
 
 static uint64_t riscv_clock_read_mtime(volatile RISCV_CLINT_timer_reg *mtime)
@@ -87,19 +101,21 @@ static uint64_t riscv_clock_read_mtime(volatile RISCV_CLINT_timer_reg *mtime)
   return mtime->val_64;
 #endif
 }
+#endif /* !RISCV_USE_S_MODE */
 
 static void riscv_clock_at_tick(riscv_timecounter *tc)
 {
-  Per_CPU_Control *cpu_self;
-  volatile RISCV_CLINT_timer_reg *mtimecmp;
+#ifndef RISCV_USE_S_MODE
   uint64_t value;
+#endif
 
-  cpu_self = _Per_CPU_Get();
-  mtimecmp = cpu_self->cpu_per_cpu.clint_mtimecmp;
-  value = mtimecmp->val_64;
+#ifndef RISCV_USE_S_MODE
+  value = riscv_clock_read_mtimecmp();
   value += tc->interval;
-
-  riscv_clock_write_mtimecmp(mtimecmp, value);
+  riscv_clock_write_mtimecmp(value);
+#else
+  (void) tc;
+#endif
 }
 
 static void riscv_clock_handler_install(rtems_interrupt_handler handler)
@@ -120,12 +136,18 @@ static void riscv_clock_handler_install(rtems_interrupt_handler handler)
 
 static uint32_t riscv_clock_get_timecount(struct timecounter *base)
 {
-  riscv_timecounter *tc;
-  volatile RISCV_CLINT_regs *clint;
+  riscv_timecounter *tc = (riscv_timecounter *) base;
+  uint32_t timecount = 0;
 
-  tc = (riscv_timecounter *) base;
-  clint = tc->clint;
-  return clint->mtime.val_32[0];
+  (void) tc;
+
+#ifndef RISCV_USE_S_MODE
+  timecount = riscv_clint->mtime.val_32[0];
+#else
+
+#endif
+
+  return timecount;
 }
 
 static uint32_t riscv_clock_get_timebase_frequency(const void *fdt)
@@ -149,44 +171,66 @@ static uint32_t riscv_clock_get_timebase_frequency(const void *fdt)
   return fdt32_to_cpu(*val);
 }
 
-static void riscv_clock_clint_init(uint64_t cmpval)
+static uint64_t riscv_clock_read_timer(riscv_timecounter *tc)
 {
-  Per_CPU_Control *cpu_self;
+  uint64_t now;
 
-  cpu_self = _Per_CPU_Get();
-  riscv_clock_write_mtimecmp(cpu_self->cpu_per_cpu.clint_mtimecmp, cmpval);
+  (void) tc;
 
-  /* Enable timer interrupts */
 #ifdef RISCV_USE_S_MODE
-  set_csr(sie, SIP_STIP);
+  now = rdtime();
+#else
+  now = riscv_clock_read_mtime(&riscv_clint->mtime);
+#endif
+
+  return now;
+}
+
+static void riscv_clock_local_set_timer(uint64_t cmpval)
+{
+#ifdef RISCV_USE_S_MODE
+  (void) cmpval;
+#else
+  riscv_clock_write_mtimecmp(cmpval);
+#endif
+}
+
+static void riscv_clock_local_enable()
+{
+#ifdef RISCV_USE_S_MODE
+
 #else
   set_csr(mie, MIP_MTIP);
 #endif
 }
 
+static void riscv_clock_local_init(uint64_t cmpval)
+{
+  riscv_clock_local_set_timer(cmpval);
+  riscv_clock_local_enable();
+}
+
 #if defined(RTEMS_SMP) && !defined(CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR)
 static void riscv_clock_secondary_action(void *arg)
 {
-  riscv_clock_clint_init(*(uint64_t *) arg);
+  riscv_clock_local_init(*(uint64_t *) arg);
 }
 #endif
 
-static void riscv_clock_secondary_initialization(
-  volatile RISCV_CLINT_regs *clint,
-  uint64_t cmpval,
-  uint32_t interval
+static void riscv_clock_secondary_init(
+  riscv_timecounter *tc,
+  uint64_t cmpval
 )
 {
 #if defined(RTEMS_SMP) && !defined(CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR)
   _SMP_Othercast_action(riscv_clock_secondary_action, &cmpval);
 
-  if (cmpval - riscv_clock_read_mtime(&clint->mtime) >= interval) {
+  if (cmpval - riscv_clock_read_timer(tc) >= tc->interval) {
     bsp_fatal(RISCV_FATAL_CLOCK_SMP_INIT);
   }
 #else
-  (void) clint;
+  (void) tc;
   (void) cmpval;
-  (void) interval;
 #endif
 }
 
@@ -194,27 +238,23 @@ static void riscv_clock_initialize(void)
 {
   const char *fdt;
   riscv_timecounter *tc;
-  volatile RISCV_CLINT_regs *clint;
+  uint64_t cmpval;
   uint32_t tb_freq;
   uint64_t us_per_tick;
   uint32_t interval;
-  uint64_t cmpval;
 
   fdt = bsp_fdt_get();
   tb_freq = riscv_clock_get_timebase_frequency(fdt);
   us_per_tick = rtems_configuration_get_microseconds_per_tick();
   interval = (uint32_t) ((tb_freq * us_per_tick) / 1000000);
-  clint = riscv_clint;
   tc = &riscv_clock_tc;
-
-  tc->clint = clint;
   tc->interval = interval;
 
-  cmpval = riscv_clock_read_mtime(&clint->mtime);
+  cmpval = riscv_clock_read_timer(tc);
   cmpval += interval;
 
-  riscv_clock_clint_init(cmpval);
-  riscv_clock_secondary_initialization(clint, cmpval, interval);
+  riscv_clock_local_init(cmpval);
+  riscv_clock_secondary_init(tc, cmpval);
 
   /* Initialize timecounter */
   tc->base.tc_get_timecount = riscv_clock_get_timecount;
