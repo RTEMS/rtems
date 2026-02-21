@@ -325,10 +325,10 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
     case RtemsClockReqSet_Pre_ToD_Oldest: {
       /*
        * While the ``time_of_day`` parameter references the oldest date and
-       * time accepted (2099-12-31T23:59:59.999999999Z).
+       * time accepted (4095-12-31T23:59:59.999999999Z).
        */
       ctx->target_tod_value =
-        (rtems_time_of_day) { 2099, 12, 31, 23, 59, 59,
+        (rtems_time_of_day) { 4095, 12, 31, 23, 59, 59,
         rtems_clock_get_ticks_per_second() - 1 };
       break;
     }
@@ -347,10 +347,10 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
     case RtemsClockReqSet_Pre_ToD_TooOld: {
       /*
        * While the ``time_of_day`` parameter references a valid date and time
-       * older than 2105-12-31T23:59:59.999999999Z.
+       * older than 4095-12-31T23:59:59.999999999Z.
        */
       ctx->target_tod_value =
-        (rtems_time_of_day) { 2106, 1, 1, 0, 0, 0, 0 };
+        (rtems_time_of_day) { 4096, 1, 1, 0, 0, 0, 0 };
       break;
     }
 
