@@ -82,7 +82,7 @@ static inline uintptr_t _Semaphore_Get_flags(
   const Semaphore_Control *the_semaphore
 )
 {
-  _Assert( _Chain_Is_node_off_chain( &the_semaphore->Object.Node ) );
+  _Assert( the_semaphore->Object.Node.next == NULL );
   return (uintptr_t) the_semaphore->Object.Node.previous;
 }
 
@@ -91,7 +91,7 @@ static inline void _Semaphore_Set_flags(
   uintptr_t          flags
 )
 {
-  _Assert( _Chain_Is_node_off_chain( &the_semaphore->Object.Node ) );
+  _Assert( the_semaphore->Object.Node.next == NULL );
   the_semaphore->Object.Node.previous = (Chain_Node *) flags;
 }
 
