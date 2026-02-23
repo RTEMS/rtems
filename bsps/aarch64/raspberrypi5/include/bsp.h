@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSBSPsAArch64RaspberryPi5
  *
- * @brief BSP Core definitions
+ * @brief This header file provides core definitions for the
+ *   Raspberry Pi 5 BSP.
  */
 
 /*

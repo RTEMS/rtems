@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSBSPsAArch64RaspberryPi5
  *
- * @brief BSP tm27 header
+ * @brief This header file provides functionality for the tm27 test.
  */
 
 /*

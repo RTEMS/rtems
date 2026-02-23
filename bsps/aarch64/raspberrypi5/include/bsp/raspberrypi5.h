@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSBSPsAArch64RaspberryPi5
  *
- * @brief Peripheral and Register definitions
+ * @brief This header file provides the peripheral and register
+ *   definitions for the Raspberry Pi 5 BSP.
  */
 
 /*

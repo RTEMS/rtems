@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSBSPsAArch64RaspberryPi5
  *
- * @brief Default MMU configuration
+ * @brief This source file contains the default MMU configuration for
+ *   the Raspberry Pi 5 BSP.
  */
 
 /*

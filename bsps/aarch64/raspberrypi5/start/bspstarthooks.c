@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSBSPsAArch64RaspberryPi5
  *
- * @brief BSP Startup Hooks
+ * @brief This source file contains the implementation of startup
+ *   hooks for the Raspberry Pi 5 BSP.
  */
 
 /*

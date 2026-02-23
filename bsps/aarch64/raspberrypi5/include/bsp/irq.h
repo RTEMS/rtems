@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSBSPsAArch64RaspberryPi5
  *
- * @brief IRQ Definitions
+ * @brief This header file provides IRQ definitions for the
+ *   Raspberry Pi 5 BSP.
  */
 
 /*

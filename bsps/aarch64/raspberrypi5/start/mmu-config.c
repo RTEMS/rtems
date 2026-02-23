@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSBSPsAArch64RaspberryPi5
  *
- * @brief MMU Config Table
+ * @brief This source file contains the MMU config table for the
+ *   Raspberry Pi 5 BSP.
  */
 
 /*

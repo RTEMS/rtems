@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSBSPsAArch64RaspberryPi5
  *
- * @brief Low Level Startup Code
+ * @brief This source file contains the implementation of bsp_start()
+ *   for the Raspberry Pi 5 BSP.
  */
 
 /*

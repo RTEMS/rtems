@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSBSPsAArch64RaspberryPi5
  *
- * @brief Console driver configuration
+ * @brief This source file contains console configuration for the
+ *   Raspberry Pi 5 BSP.
  */
 
 /*
