@@ -5,12 +5,12 @@
  *
  * @ingroup RTEMSBSPsShared
  *
- * @brief PSCI-based BSP CPU start.
+ * @brief This header file provides the declaration for the
+ *   _AArch_Get_PSCI_target_cpu() function.
  */
 
 /*
- * Copyright (C) 2021 On-Line Applications Research Corporation (OAR)
- * Written by Kinsey Moore <kinsey.moore@oarcorp.com>
+ * Copyright (C) Preetam Das <riki10112001@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -34,48 +34,27 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <bsp/start.h>
-#include <bsp/bspsmp-arm-psci.h>
-#include <bsp.h>
+#ifndef LIBBSP_SHARED_PSCI_H
+#define LIBBSP_SHARED_PSCI_H
 
-#if defined( AARCH64_MULTILIB_ARCH_V8 ) || \
-  defined( AARCH64_MULTILIB_ARCH_V8_ILP32 )
-#define REGISTER_PREFIX "x"
-#else
-#define REGISTER_PREFIX "r"
-#endif
+#include <stdint.h>
 
-bool _CPU_SMP_Start_processor( uint32_t cpu_index )
-{
-  uint32_t PSCI_FN_SYSTEM_CPU_ON;
-  uintptr_t target_cpu;
-  uintptr_t ret;
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
-#if defined( AARCH64_MULTILIB_ARCH_V8 ) || \
-  defined( AARCH64_MULTILIB_ARCH_V8_ILP32 )
-  PSCI_FN_SYSTEM_CPU_ON = 0xC4000003;
-#else
-  PSCI_FN_SYSTEM_CPU_ON = 0x84000003;
-#endif
+/**
+ * @brief Returns the PSCI target_cpu parameter for a given cpu index.
+ *
+ * This function is provided by the BSP.  The default implementation assumes the
+ * core IDs to be in affinity level 0. BSPs that do not follow this convention
+ * can override this function to use the correct affinity level for the target_cpu
+ * calculation.
+ */
+uintptr_t _AArch_Get_PSCI_target_cpu( uint32_t );
 
-  target_cpu = _AArch_Get_PSCI_target_cpu( cpu_index );
-
-  __asm__ volatile (
-    "mov " REGISTER_PREFIX "0, %1\n"
-    "mov " REGISTER_PREFIX "1, %2\n"
-    "mov " REGISTER_PREFIX "2, %3\n"
-    "mov " REGISTER_PREFIX "3, #0\n"
-#ifdef BSP_CPU_ON_USES_SMC
-    "smc #0\n"
-#else
-    "hvc #0\n"
-#endif
-    "mov %0, " REGISTER_PREFIX "0\n"
-    : "=r" ( ret ) : "r" ( PSCI_FN_SYSTEM_CPU_ON ), "r" ( target_cpu ),
-    "r" ( _start )
-    : REGISTER_PREFIX "0", REGISTER_PREFIX "1", REGISTER_PREFIX "2",
-    REGISTER_PREFIX "3"
-  );
-
-  return ret == 0;
+#ifdef __cplusplus
 }
+#endif /* __cplusplus */
+
+#endif /* LIBBSP_SHARED_PSCI_H */

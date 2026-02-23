@@ -11,6 +11,7 @@ install:
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/include/bsp/bootcard.h
+  - bsps/include/bsp/bspsmp-arm-psci.h
   - bsps/include/bsp/console-polled.h
   - bsps/include/bsp/console-termios.h
   - bsps/include/bsp/default-initial-extension.h
