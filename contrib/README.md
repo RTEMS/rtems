@@ -61,3 +61,4 @@ Git log in order to find out version and update details
 | cpukit/jffs2                          | https://github.com/torvalds/linux                              |
 | cpukit/posix-newlib                   | https://sourceware.org/newlib/                                 |
 | cpukit/riscv-opcodes                  | https://github.com/riscv/riscv-opcodes                         |
+| fatfs                                 | http://elm-chan.org/fsw/ff/00index_e.html                      |
