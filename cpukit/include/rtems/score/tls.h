@@ -107,10 +107,9 @@ extern const volatile TLS_Configuration _TLS_Configuration;
 
 typedef struct {
   /*
-   * FIXME: Not sure if the generation number type is correct for all
-   * architectures.
-  */
-  uint32_t generation_number;
+   * Use a machine word type for the DTV generation number.
+   */
+  uintptr_t generation_number;
 
   void *tls_blocks[ 1 ];
 } TLS_Dynamic_thread_vector;
