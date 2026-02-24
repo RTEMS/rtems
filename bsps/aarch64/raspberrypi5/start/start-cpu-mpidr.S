@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSBSPsAArch64RaspberryPi5
  *
- * @brief This header file provides core definitions for the
+ * @brief This source file contains the implementation of
+ *   _AArch64_Get_current_processor_for_system_start() for the
  *   Raspberry Pi 5 BSP.
  */
 
@@ -34,50 +35,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <rtems/asm.h>
 
-#ifndef LIBBSP_AARCH64_RASPBERRYPI5_BSP_H
-#define LIBBSP_AARCH64_RASPBERRYPI5_BSP_H
+FUNCTION_ENTRY(_AArch64_Get_current_processor_for_system_start)
 
-/**
- * @defgroup RTEMSBSPsAArch64RaspberryPi5 Raspberry Pi 5 - BCM2712
- * 
- * @ingroup RTEMSBSPsAArch64
- *    
- * @brief This group contains the BSP for the Raspberry Pi 5
- * 
- * @{
- */
+  /* Return the affinity level 1 reported by the MPIDR_EL1. In the PI5
+   * (BCM2712), the unique core identifiers are in affinity level 1
+   * instead of 0. This function shifts the core IDs to the LSB portion
+   * to correctly return them.
+   */
+  mrs x0, mpidr_el1
+  lsr x0, x0, 8
+  and x0, x0, #0xff
+  ret
 
-#include <bspopts.h>
-
-#define BSP_CPU_ON_USES_SMC
-
-#ifndef ASM
-
-#include <bsp/default-initial-extension.h>
-#include <bsp/start.h>
-
-#include <rtems.h>
-
-#include <bsp/raspberrypi5.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
-/* Raspberry Pi 5 MMU initialization */
-BSP_START_TEXT_SECTION void raspberrypi5_setup_mmu_and_cache(void);
-BSP_START_TEXT_SECTION void raspberrypi5_setup_secondary_cpu_mmu_and_cache(void);
-
-#define BSP_ARM_GIC_CPUIF_BASE (BCM2712_GIC_CPUIF_BASE)
-#define BSP_ARM_GIC_DIST_BASE  (BCM2712_GIC_DIST_BASE)
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
-#endif /* ASM */
-
-/** @} */ /* RTEMSBSPsAArch64RaspberryPi5 */
-
-#endif /* LIBBSP_AARCH64_RASPBERRYPI5_BSP_H */
+FUNCTION_END(_AArch64_Get_current_processor_for_system_start)

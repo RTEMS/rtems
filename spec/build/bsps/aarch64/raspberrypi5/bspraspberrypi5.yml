@@ -51,6 +51,8 @@ links:
   uid: objclock
 - role: build-dependency
   uid: objconsole
+- role: build-dependency
+  uid: objsmp
 source:
 - bsps/aarch64/raspberrypi5/start/bspstart.c
 - bsps/aarch64/raspberrypi5/start/bspstarthooks.c
@@ -59,7 +61,7 @@ source:
 - bsps/aarch64/shared/cache/cache.c
 - bsps/aarch64/shared/mmu/mmu-setup.c
 - bsps/aarch64/shared/mmu/vmsav8-64.c
-- bsps/aarch64/shared/start/start-cpu-mpidr.S
+- bsps/aarch64/raspberrypi5/start/start-cpu-mpidr.S
 - bsps/shared/dev/irq/arm-gicv2-get-attributes.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/btimer/btimer-cpucounter.c

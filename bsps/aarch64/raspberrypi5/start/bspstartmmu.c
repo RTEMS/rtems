@@ -59,3 +59,18 @@ raspberrypi5_setup_mmu_and_cache( void )
 
   aarch64_mmu_enable( control );
 }
+
+/*
+ * Make weak and let the user override.
+ */
+BSP_START_TEXT_SECTION void
+raspberrypi5_setup_secondary_cpu_mmu_and_cache( void ) __attribute__ ((weak));
+
+BSP_START_TEXT_SECTION void
+raspberrypi5_setup_secondary_cpu_mmu_and_cache( void )
+{
+  aarch64_mmu_control *control = &aarch64_mmu_instance;
+
+  aarch64_mmu_setup();
+  aarch64_mmu_enable( control );
+}
