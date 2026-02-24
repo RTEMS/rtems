@@ -171,6 +171,9 @@ static inline Semaphore_Control *_Semaphore_Allocate( void )
  */
 static inline void _Semaphore_Free( Semaphore_Control *the_semaphore )
 {
+#if defined( RTEMS_DEBUG )
+  _Semaphore_Set_flags( the_semaphore, 0 ); 
+#endif
   _Objects_Free( &_Semaphore_Information, &the_semaphore->Object );
 }
 
