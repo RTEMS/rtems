@@ -118,7 +118,7 @@ rtems_status_code bsp_interrupt_get_attributes(
   attributes->maybe_enable = true;
   attributes->can_disable = is_maskable;
   attributes->maybe_disable = is_maskable;
-  attributes->can_raise = true;
+  attributes->can_raise = is_standard_interrupt;
   attributes->can_raise_on = is_standard_interrupt;
   attributes->can_clear = true;
   attributes->cleared_by_acknowledge = true;
@@ -152,34 +152,21 @@ rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
 {
   uint32_t bit;
   irqamp *regs;
+  uint32_t cpu_count;
+  uint32_t cpu_index;
 
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+
+  if ( vector > BSP_INTERRUPT_VECTOR_MAX_STD ) {
+    return RTEMS_UNSATISFIED;
+  }
+
   bit = 1U << vector;
   regs = LEON3_IrqCtrl_Regs;
+  cpu_count = rtems_scheduler_get_processor_maximum();
 
-  if ( vector <= BSP_INTERRUPT_VECTOR_MAX_STD ) {
-    uint32_t cpu_count;
-    uint32_t cpu_index;
-
-    cpu_count = rtems_scheduler_get_processor_maximum();
-
-    for (cpu_index = 0; cpu_index < cpu_count; ++cpu_index) {
-      grlib_store_32(&regs->piforce[cpu_index], bit);
-    }
-  } else {
-    rtems_interrupt_lock_context lock_context;
-    uint32_t ipend;
-
-    /*
-     * This is a very dangerous operation and should only be used for test
-     * software.  We may accidentally clear the pending state set by
-     * peripherals with this read-modify-write operation.
-     */
-    LEON3_IRQCTRL_ACQUIRE(&lock_context);
-    ipend = grlib_load_32(&regs->ipend);
-    ipend |= bit;
-    grlib_store_32(&regs->ipend, ipend);
-    LEON3_IRQCTRL_RELEASE(&lock_context);
+  for (cpu_index = 0; cpu_index < cpu_count; ++cpu_index) {
+    grlib_store_32(&regs->piforce[cpu_index], bit);
   }
 
   return RTEMS_SUCCESSFUL;

@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2026 Critical Software S.A
+cppflags: []
+cxxflags: []
+enabled-by:
+- sparc/gr712rc
+- sparc/gr740
+includes: []
+install: []
+links: []
+source:
+- testsuites/validation/bsps/tc-sparc-leon3-ext-irq-raise.c
+type: build

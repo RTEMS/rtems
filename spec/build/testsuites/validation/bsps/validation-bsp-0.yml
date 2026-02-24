@@ -18,6 +18,8 @@ links:
 - role: build-dependency
   uid: objgrlib
 - role: build-dependency
+  uid: objsparcleon3extirq
+- role: build-dependency
   uid: objsparcgr712rc
 - role: build-dependency
   uid: objsparcgr740
