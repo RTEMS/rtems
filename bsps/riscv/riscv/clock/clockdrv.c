@@ -8,8 +8,9 @@
  */
 
 /*
+ * Copyright (C) 2026 Gedare Bloom
  * Copyright (C) 2018, 2023 embedded brains GmbH & Co. KG
- * COPYRIGHT (c) 2015 Hesham Alatary <hesham@alumni.york.ac.uk>
+ * Copyright (C) 2015 Hesham Alatary <hesham@alumni.york.ac.uk>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -105,16 +106,16 @@ static uint64_t riscv_clock_read_mtime(volatile RISCV_CLINT_timer_reg *mtime)
 
 static void riscv_clock_at_tick(riscv_timecounter *tc)
 {
-#ifndef RISCV_USE_S_MODE
   uint64_t value;
-#endif
 
-#ifndef RISCV_USE_S_MODE
+#ifdef RISCV_USE_S_MODE
+  value = read_csr(stimecmp);
+  value += tc->interval;
+  write_csr(stimecmp, value);
+#else
   value = riscv_clock_read_mtimecmp();
   value += tc->interval;
   riscv_clock_write_mtimecmp(value);
-#else
-  (void) tc;
 #endif
 }
 
@@ -136,15 +137,14 @@ static void riscv_clock_handler_install(rtems_interrupt_handler handler)
 
 static uint32_t riscv_clock_get_timecount(struct timecounter *base)
 {
-  riscv_timecounter *tc = (riscv_timecounter *) base;
-  uint32_t timecount = 0;
+  uint32_t timecount;
 
-  (void) tc;
+  (void) base;
 
-#ifndef RISCV_USE_S_MODE
-  timecount = riscv_clint->mtime.val_32[0];
+#ifdef RISCV_USE_S_MODE
+  timecount = (uint32_t) rdtime();
 #else
-
+  timecount = riscv_clint->mtime.val_32[0];
 #endif
 
   return timecount;
@@ -189,16 +189,16 @@ static uint64_t riscv_clock_read_timer(riscv_timecounter *tc)
 static void riscv_clock_local_set_timer(uint64_t cmpval)
 {
 #ifdef RISCV_USE_S_MODE
-  (void) cmpval;
+  write_csr(stimecmp, cmpval);
 #else
   riscv_clock_write_mtimecmp(cmpval);
 #endif
 }
 
-static void riscv_clock_local_enable()
+static void riscv_clock_local_enable_isr()
 {
 #ifdef RISCV_USE_S_MODE
-
+  set_csr(sie, SIP_STIP);
 #else
   set_csr(mie, MIP_MTIP);
 #endif
@@ -207,7 +207,7 @@ static void riscv_clock_local_enable()
 static void riscv_clock_local_init(uint64_t cmpval)
 {
   riscv_clock_local_set_timer(cmpval);
-  riscv_clock_local_enable();
+  riscv_clock_local_enable_isr();
 }
 
 #if defined(RTEMS_SMP) && !defined(CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR)
