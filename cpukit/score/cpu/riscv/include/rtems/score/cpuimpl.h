@@ -367,6 +367,7 @@ static inline uint32_t _RISCV_Read_FCSR( void )
   return fcsr;
 }
 
+#ifndef RISCV_USE_S_MODE
 /*
  * The RISC-V ISA provides a rdtime instruction, however, it is implemented in
  * most chips via a trap-and-emulate.  Using this in machine mode makes no
@@ -404,6 +405,8 @@ extern volatile uint32_t *_RISCV_Counter_mutable;
  * provided by the BSP.
  */
 extern volatile uint32_t _RISCV_Counter_register;
+
+#endif /* !RISCV_USE_S_MODE */
 
 #ifdef RTEMS_SMP
 

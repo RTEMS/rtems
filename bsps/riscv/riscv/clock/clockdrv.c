@@ -264,11 +264,15 @@ static void riscv_clock_initialize(void)
   rtems_timecounter_install(&tc->base);
 }
 
+#ifndef RISCV_USE_S_MODE
 volatile uint32_t _RISCV_Counter_register;
+#endif
 
 static void riscv_counter_initialize(void)
 {
+#ifndef RISCV_USE_S_MODE
   _RISCV_Counter_mutable = &riscv_clint->mtime.val_32[0];
+#endif
 }
 
 uint32_t _CPU_Counter_frequency( void )
@@ -278,7 +282,12 @@ uint32_t _CPU_Counter_frequency( void )
 
 CPU_Counter_ticks _CPU_Counter_read( void )
 {
+#ifdef RISCV_USE_S_MODE
+  uint64_t now = rdtime();
+  return (uint32_t) now;
+#else
   return *_RISCV_Counter;
+#endif
 }
 
 RTEMS_SYSINIT_ITEM(
