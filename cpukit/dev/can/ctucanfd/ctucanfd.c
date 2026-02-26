@@ -1312,6 +1312,9 @@ static rtems_task ctucanfd_worker( rtems_task_argument arg )
       for ( int i = 0; i < internal->txb_prio_tail[ 0 ]; i++ ) {
         txtb_id = ctucanfd_txb_from_order( internal->txb_order, i );
 
+        if ( txtb_id >= internal->ntxbufs ) {
+          continue;
+        }
         if ( ctucanfd_get_tx_status( internal, txtb_id ) == TXT_ETY ) {
           txb_info = &internal->txb_info[ txtb_id ];
           if ( txb_info != NULL ) {
@@ -1366,7 +1369,10 @@ static rtems_task ctucanfd_worker( rtems_task_argument arg )
         );
         ctucanfd_check_state( internal, "before insert_frame" );
         /* Insert frame to HW buffer */
-        bool ok = ctucanfd_insert_frame( internal, &slot->frame, txtb_id );
+        bool ok = false;
+        if ( txtb_id < internal->ntxbufs ) {
+          ok = ctucanfd_insert_frame( internal, &slot->frame, txtb_id );
+        }
         if ( ok == true ) {
           /* Frame inserted successfully, update TX buffer representation,
            * buffer priorities and set buffer as ready.
