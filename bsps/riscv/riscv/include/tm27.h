@@ -57,6 +57,10 @@ static inline void Install_tm27_vector( rtems_interrupt_handler handler )
   rtems_vector_number irq;
   bool                enabled;
 
+#ifdef RISCV_USE_S_MODE
+  irq = RISCV_INTERRUPT_VECTOR_SOFTWARE;
+  (void) enabled;
+#else
   irq = RISCV_INTERRUPT_VECTOR_TIMER;
   enabled = false;
   rtems_interrupt_vector_is_enabled( irq, &enabled );
@@ -66,6 +70,7 @@ static inline void Install_tm27_vector( rtems_interrupt_handler handler )
   } else {
     riscv_tm27_can_use_mtime = true;
   }
+#endif
 
   rtems_interrupt_entry_initialize(
     &riscv_tm27_interrupt_entry,
