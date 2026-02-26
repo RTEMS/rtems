@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string:
+- split:
+- env-assign:
+build-type: option
+copyrights:
+- Copyright (C) 2026 Shivam Deolankar
+default:
+- enabled-by: true
+  value:
+  - -ffunction-sections
+  - -fdata-sections
+description: |
+  Section layout flags required for correct linker garbage collection.
+  These flags are separated from OPTIMIZATION_FLAGS so that users may
+  override optimization settings without removing the required section
+  flags.
+  Users may override these flags through the SECTION_FLAGS build option
+  if different section handling behaviour is required.
+enabled-by: true
+links: []
+uid: optsectionflags
+name: SECTION_FLAGS
+type: build

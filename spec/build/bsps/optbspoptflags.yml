@@ -9,11 +9,13 @@ copyrights:
 - Copyright (C) 2022 embedded brains GmbH & Co. KG
 default:
 - enabled-by: true
-  value: ${OPTIMIZATION_FLAGS}
+  value: ${SECTION_FLAGS} ${OPTIMIZATION_FLAGS}
 description: |
   Optimization flags passed to C and C++ compilers for the BSP.
 enabled-by: true
 format: '{}'
-links: []
+links:
+- role: build-dependency
+  uid: optsectionflags
 name: BSP_OPTIMIZATION_FLAGS
 type: build

@@ -11,8 +11,6 @@ default:
   value:
   - -O1
   - -g
-  - -fdata-sections
-  - -ffunction-sections
 description: |
   Default optimization flags for C and C++ compilers.
 enabled-by: true
