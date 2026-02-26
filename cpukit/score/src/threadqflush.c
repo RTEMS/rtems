@@ -132,6 +132,7 @@ size_t _Thread_queue_Flush_critical(
       Scheduler_Node *scheduler_node;
 
       scheduler_node = _Thread_Scheduler_get_home_node( first );
+      _Chain_Initialize_node( &scheduler_node->Wait.Priority.Node.Node.Chain );
       _Chain_Append_unprotected(
         &unblock,
         &scheduler_node->Wait.Priority.Node.Node.Chain
