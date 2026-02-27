@@ -26,7 +26,19 @@
  * SUCH DAMAGE.
  */
 
+#ifdef __rtems__
+#include <rtems/bspIo.h>
+#ifndef printf
+#define printf printk
+#endif /* __rtems__ */
+
+#include <rtems/score/assert.h>
+#define MPASS _Assert
+#define KASSERT(cond, ...) _Assert(cond)
+#define __diagused __unused
+#endif /* __rtems__ */
 #include <sys/param.h>
+#ifndef __rtems__
 #include <sys/systm.h>
 #include <sys/bus.h>
 #include <sys/eventhandler.h>
@@ -36,12 +48,14 @@
 #include <sys/reboot.h>
 
 #include <machine/md_var.h>
+#endif /* __rtems__ */
 #include <machine/sbi.h>
 
 /* SBI Implementation-Specific Definitions */
 #define	OPENSBI_VERSION_MAJOR_OFFSET	16
 #define	OPENSBI_VERSION_MINOR_MASK	0xFFFF
 
+#ifndef __rtems__
 struct sbi_softc {
 	device_t		dev;
 };
@@ -51,6 +65,7 @@ struct sbi_devinfo {
 };
 
 static struct sbi_softc *sbi_softc = NULL;
+#endif /* __rtems__ */
 
 static u_long sbi_spec_version;
 static u_long sbi_impl_id;
@@ -97,12 +112,14 @@ sbi_get_mimpid(void)
 	return (SBI_CALL0(SBI_EXT_ID_BASE, SBI_BASE_GET_MIMPID));
 }
 
+#ifndef __rtems__
 static void
 sbi_shutdown_final(void *dummy __unused, int howto)
 {
 	if ((howto & RB_POWEROFF) != 0)
 		sbi_system_reset(SBI_SRST_TYPE_SHUTDOWN, SBI_SRST_REASON_NONE);
 }
+#endif /* __rtems__ */
 
 void
 sbi_system_reset(u_long reset_type, u_long reset_reason)
@@ -306,10 +323,21 @@ sbi_init(void)
 	sbi_impl_id = sbi_get_impl_id().value;
 	sbi_impl_version = sbi_get_impl_version().value;
 
+#ifndef __rtems__
 	/* Set the hardware implementation info. */
 	mvendorid = sbi_get_mvendorid().value;
 	marchid = sbi_get_marchid().value;
 	mimpid = sbi_get_mimpid().value;
+#endif /* __rtems__ */
+#ifdef __rtems__
+	long int ret;
+	ret = sbi_get_mvendorid().value;
+	(void) ret;
+	ret = sbi_get_marchid().value;
+	(void) ret;
+	ret = sbi_get_mimpid().value;
+	(void) ret;
+#endif /* __rtems__ */
 
 	/* Probe for legacy replacement extensions. */
 	if (sbi_probe_extension(SBI_EXT_ID_TIME) != 0)
@@ -346,6 +374,7 @@ sbi_init(void)
 	    ("SBI doesn't implement a shutdown or reset extension"));
 }
 
+#ifndef __rtems__
 static void
 sbi_identify(driver_t *driver, device_t parent)
 {
@@ -435,3 +464,4 @@ static device_method_t sbi_methods[] = {
 DEFINE_CLASS_0(sbi, sbi_driver, sbi_methods, sizeof(struct sbi_softc));
 EARLY_DRIVER_MODULE(sbi, nexus, sbi_driver, 0, 0,
     BUS_PASS_CPU + BUS_PASS_ORDER_FIRST);
+#endif /* __rtems__ */
