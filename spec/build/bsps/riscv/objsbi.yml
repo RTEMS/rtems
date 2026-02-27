@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2026 Gedare Bloom
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/machine
+  source:
+  - contrib/bsps/sbi/sbi.h
+links: []
+source:
+- contrib/bsps/riscv/sbi/sbi.c
+type: build

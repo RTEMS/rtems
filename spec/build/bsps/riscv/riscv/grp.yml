@@ -35,6 +35,8 @@ links:
 - role: build-dependency
   uid: objsmp
 - role: build-dependency
+  uid: ../objsbi
+- role: build-dependency
   uid: ../../objmem
 - role: build-dependency
   uid: ../../optfdtcpyro
@@ -68,6 +70,8 @@ links:
   uid: ../start
 - role: build-dependency
   uid: ../../bspopts
+- role: build-dependency
+  uid: optincludes
 type: build
 use-after: []
 use-before: []
