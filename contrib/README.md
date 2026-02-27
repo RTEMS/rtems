@@ -52,6 +52,7 @@ Git log in order to find out version and update details
 | bsps/arm/stm32h7/cmsis-device-h7/     | https://github.com/STMicroelectronics/cmsis_device_h7.git      |
 | bsps/arm/stm32h7/stm32h7xx_hal_driver | https://github.com/STMicroelectronics/stm32u5xx-hal-driver     |
 | bsps/arm/stm32u5/stm32u5xx-hal-driver | https://github.com/STMicroelectronics/stm32h7xx_hal_driver.git |
+| bsps/riscv/sbi         |              | https://cgit.freebsd.org/src/ |
 | cpukit/fastlz                         | https://github.com/ariya/FastLZ                                |
 | cpukit/utf8proc                       | https://juliastrings.github.io/utf8proc/releases/              |
 | cpukit/libz                           | https://github.com/madler/zlib                                 |
