@@ -14,7 +14,7 @@ default:
 description: |
   This option defines the length in bytes of the DDR memory area which is
   statically available to the application.  The default value takes a NULL
-  pointer protection are of 64KiB sizea into account.
+  pointer protection area of 64KiB size into account.
 enabled-by: true
 format: '{:#010x}'
 links: []
