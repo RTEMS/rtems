@@ -75,6 +75,8 @@ rtems_device_driver frame_buffer_initialize(
   void                      *arg
 )
 {
+  (void) minor;
+  (void) arg;
   rtems_status_code status;
 
   printk( "FBVGA -- driver initializing..\n" );
@@ -103,6 +105,9 @@ rtems_device_driver frame_buffer_open(
   void                      *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
   if (_Atomic_Flag_test_and_set(&driver_mutex, ATOMIC_ORDER_ACQUIRE) != 0 ) {
       /* restore previous state.  for VGA this means return to text mode.
        * leave out if graphics hardware has been initialized in
@@ -125,6 +130,9 @@ rtems_device_driver frame_buffer_close(
   void                      *arg
 )
 {
+  (void) major;
+  (void) minor;
+  (void) arg;
   _Atomic_Flag_clear(&driver_mutex, ATOMIC_ORDER_RELEASE);
   /* restore previous state.  for VGA this means return to text mode.
    * leave out if graphics hardware has been initialized in
@@ -132,6 +140,7 @@ rtems_device_driver frame_buffer_close(
   ega_hwterm();
   printk( "FBVGA close called.\n" );
   return RTEMS_SUCCESSFUL;
+}
 
 /*
  * fbvga device driver READ entry point.
@@ -142,6 +151,8 @@ rtems_device_driver frame_buffer_read(
   void                      *arg
 )
 {
+  (void) major;
+  (void) minor;
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
   rw_args->bytes_moved = ((rw_args->offset + rw_args->count) > fb_fix.smem_len ) ? (fb_fix.smem_len - rw_args->offset) : rw_args->count;
   memcpy(rw_args->buffer, (const void *) (fb_fix.smem_start + rw_args->offset), rw_args->bytes_moved);
@@ -157,25 +168,27 @@ rtems_device_driver frame_buffer_write(
   void                      *arg
 )
 {
+  (void) major;
+  (void) minor;
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
   rw_args->bytes_moved = ((rw_args->offset + rw_args->count) > fb_fix.smem_len ) ? (fb_fix.smem_len - rw_args->offset) : rw_args->count;
   memcpy( (void *) (fb_fix.smem_start + rw_args->offset), rw_args->buffer, rw_args->bytes_moved);
   return RTEMS_SUCCESSFUL;
 }
 
-static int get_fix_screen_info( struct fb_fix_screeninfo *info )
+static inline int get_fix_screen_info( struct fb_fix_screeninfo *info )
 {
   *info = fb_fix;
   return 0;
 }
 
-static int get_var_screen_info( struct fb_var_screeninfo *info )
+static inline int get_var_screen_info( struct fb_var_screeninfo *info )
 {
   *info =  fb_var;
   return 0;
 }
 
-static int get_palette( struct fb_cmap *cmap )
+static inline int get_palette( struct fb_cmap *cmap )
 {
   uint32_t i;
 
@@ -190,7 +203,7 @@ static int get_palette( struct fb_cmap *cmap )
   return 0;
 }
 
-static int set_palette( struct fb_cmap *cmap )
+static inline int set_palette( struct fb_cmap *cmap )
 {
   uint32_t i;
 
@@ -215,9 +228,11 @@ rtems_device_driver frame_buffer_control(
   void                      *arg
 )
 {
+  (void) major;
+  (void) minor;
   rtems_libio_ioctl_args_t *args = arg;
 
-  printk( "FBVGA ioctl called, cmd=%x\n", args->command  );
+  printk( "FBVGA ioctl called, cmd=%x\n", (int)args->command  );
 
   switch( args->command ) {
     case FBIOGET_FSCREENINFO:
