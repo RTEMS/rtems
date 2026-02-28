@@ -37,6 +37,7 @@
 #ifndef _RTEMS_SCORE_PRIORITYIMPL_H
 #define _RTEMS_SCORE_PRIORITYIMPL_H
 
+#include <rtems/score/chainimpl.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/scheduler.h>
 
@@ -465,6 +466,7 @@ static inline void _Priority_Plain_extract(
 )
 {
   _RBTree_Extract( &aggregation->Contributors, &node->Node.RBTree );
+  _Chain_Set_off_chain( &node->Node.Chain );
 }
 
 /**
