@@ -37,7 +37,7 @@ class A {
   public:
     A()
     {
-      ++i;
+      i = i + 1;
     }
 
     static volatile int i;
