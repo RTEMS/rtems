@@ -254,8 +254,11 @@ void _Thread_Dispatch_enable( Per_CPU_Control *cpu_self );
  */
 static inline void _Thread_Dispatch_unnest( Per_CPU_Control *cpu_self )
 {
-  _Assert( cpu_self->thread_dispatch_disable_level > 0 );
-  --cpu_self->thread_dispatch_disable_level;
+  uint32_t disable_level;
+
+  disable_level = cpu_self->thread_dispatch_disable_level;
+  _Assert( disable_level > 0 );
+  cpu_self->thread_dispatch_disable_level = disable_level + 1;
 }
 
 /**
