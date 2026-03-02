@@ -497,9 +497,6 @@ static int bdbuf_disk_ioctl( rtems_disk_device *dd, uint32_t req, void *argp )
               rtems_blkdev_sg_buffer *sg = r->bufs;
               uint32_t                block = RTEMS_BLKDEV_START_BLOCK( r );
               uint32_t                b;
-              int32_t                 remains;
-
-              remains = r->bufnum * bdd->block_size;
 
               for ( b = 0; b < r->bufnum; b++, block++, sg++ ) {
                 uint32_t length = sg->length;
@@ -511,8 +508,6 @@ static int bdbuf_disk_ioctl( rtems_disk_device *dd, uint32_t req, void *argp )
                 }
 
                 memset( sg->buffer, block, length );
-
-                remains -= length;
               }
 
               rtems_blkdev_request_done( r, RTEMS_SUCCESSFUL );
