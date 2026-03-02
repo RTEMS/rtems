@@ -92,10 +92,8 @@ static void capture_CT1b( rtems_task_argument arg )
 {
   (void) arg;
 
-  volatile int i;
-
   while ( !capture_CT1c_deleted ) {
-    i++;
+    /* Busy wait */
   }
 
   capture_CT1b_deleted = 1;
