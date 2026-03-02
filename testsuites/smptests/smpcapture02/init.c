@@ -319,7 +319,6 @@ static void Init( rtems_task_argument arg )
   uint32_t                cpu_count;
   uint32_t                enter_count;
   uint32_t                exit_count;
-  uint32_t                clock_tick_count;
   uint32_t                res_should_be;
   rtems_vector_number     vec;
   size_t                  read;
@@ -386,8 +385,6 @@ static void Init( rtems_task_argument arg )
   /* Disable capturing */
   sc = rtems_capture_set_control( false );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
-
-  clock_tick_count = 0;
 
   /* Read out the trace from all processors */
   for ( cpu = 0; cpu < cpu_count; cpu++ ) {
@@ -460,7 +457,6 @@ static void Init( rtems_task_argument arg )
             rtems_test_assert( res_should_be == exit_rec.res );
             break;
           case clock_tick:
-            clock_tick_count++;
 #ifdef VERBOSE
             rtems_object_get_classic_name( rec.task_id, &name );
             printf(
