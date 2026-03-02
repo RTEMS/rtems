@@ -11,7 +11,7 @@
  */
 
 /*
- * Copyright (c) 2017 embedded brains GmbH & Co. KG
+ * Copyright (c) 2017, 2026 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -44,40 +44,40 @@
 const Processor_mask _Processor_mask_The_one_and_only = { .__bits[ 0 ] = 1 };
 
 Processor_mask_Copy_status _Processor_mask_Copy(
-  long       *dst,
-  size_t      dst_size,
-  const long *src,
-  size_t      src_size
+  unsigned long       *dst,
+  size_t               dst_size,
+  const unsigned long *src,
+  size_t               src_size
 )
 {
-  long inclusive = 0;
-  long exclusive = 0;
+  unsigned long inclusive = 0;
+  unsigned long exclusive = 0;
 
-  if ( ( dst_size | src_size ) % sizeof( long ) != 0 ) {
+  if ( ( dst_size | src_size ) % sizeof( unsigned long ) != 0 ) {
     return PROCESSOR_MASK_COPY_INVALID_SIZE;
   }
 
   while ( dst_size > 0 && src_size > 0 ) {
-    long bits = *src;
+    unsigned long bits = *src;
 
     inclusive |= bits;
     *dst = bits;
     ++dst;
     ++src;
-    dst_size -= sizeof( long );
-    src_size -= sizeof( long );
+    dst_size -= sizeof( unsigned long );
+    src_size -= sizeof( unsigned long );
   }
 
   while ( dst_size > 0 ) {
     *dst = 0;
     ++dst;
-    dst_size -= sizeof( long );
+    dst_size -= sizeof( unsigned long );
   }
 
   while ( src_size > 0 ) {
     exclusive |= *src;
     ++src;
-    src_size -= sizeof( long );
+    src_size -= sizeof( unsigned long );
   }
 
   if ( exclusive != 0 ) {

@@ -10,7 +10,7 @@
  */
 
 /*
- * Copyright (C) 2016, 2023 embedded brains GmbH & Co. KG
+ * Copyright (C) 2016, 2026 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -297,7 +297,7 @@ static inline uint32_t _Processor_mask_To_uint32_t(
   uint32_t              index
 )
 {
-  long bits = mask->__bits[ index / _BITSET_BITS ];
+  unsigned long bits = mask->__bits[ index / _BITSET_BITS ];
 
   return (uint32_t) ( bits >> ( 32 * ( ( index % _BITSET_BITS ) / 32 ) ) );
 }
@@ -317,7 +317,7 @@ static inline void _Processor_mask_From_uint32_t(
 )
 {
   _Processor_mask_Zero( mask );
-  mask->__bits[ __bitset_words( index ) ] = ( (long) bits )
+  mask->__bits[ __bitset_words( index ) ] = ( (unsigned long) bits )
                                             << ( 32 *
                                                  ( index % _BITSET_BITS ) /
                                                  32 );
@@ -377,10 +377,10 @@ static inline bool _Processor_mask_Is_at_most_partial_loss(
  *      is invalid (bigger than the size of a long).
  */
 Processor_mask_Copy_status _Processor_mask_Copy(
-  long       *dst,
-  size_t      dst_size,
-  const long *src,
-  size_t      src_size
+  unsigned long       *dst,
+  size_t               dst_size,
+  const unsigned long *src,
+  size_t               src_size
 );
 
 /**
