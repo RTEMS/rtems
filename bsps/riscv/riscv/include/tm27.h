@@ -89,6 +89,7 @@ static inline void Install_tm27_vector( rtems_interrupt_handler handler )
 static inline void Cause_tm27_intr( void )
 {
   if ( riscv_tm27_can_use_mtime ) {
+#ifndef RISCV_USE_S_MODE
     rtems_interrupt_level level;
     Per_CPU_Control      *cpu_self;
 
@@ -96,6 +97,7 @@ static inline void Cause_tm27_intr( void )
     cpu_self = _Per_CPU_Get();
     cpu_self->cpu_per_cpu.clint_mtimecmp->val_64 = 0;
     rtems_interrupt_local_enable( level );
+#endif
   } else {
     (void) rtems_interrupt_raise( RISCV_INTERRUPT_VECTOR_SOFTWARE );
   }
@@ -104,6 +106,7 @@ static inline void Cause_tm27_intr( void )
 static inline void Clear_tm27_intr( void )
 {
   if ( riscv_tm27_can_use_mtime ) {
+#ifndef RISCV_USE_S_MODE
     rtems_interrupt_level level;
     Per_CPU_Control      *cpu_self;
 
@@ -111,6 +114,7 @@ static inline void Clear_tm27_intr( void )
     cpu_self = _Per_CPU_Get();
     cpu_self->cpu_per_cpu.clint_mtimecmp->val_64 = UINT64_MAX;
     rtems_interrupt_local_enable( level );
+#endif
   } else {
     (void) rtems_interrupt_clear( RISCV_INTERRUPT_VECTOR_SOFTWARE );
   }
