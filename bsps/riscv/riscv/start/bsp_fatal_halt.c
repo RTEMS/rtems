@@ -33,6 +33,10 @@
 
 #include <libfdt.h>
 
+#ifdef RISCV_USE_S_MODE
+#include <machine/sbi.h>
+#endif
+
 void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
   const char *fdt;
@@ -53,6 +57,10 @@ void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 
 #if RISCV_ENABLE_MPFS_SUPPORT != 0
   for(;;);
+#endif
+
+#ifdef RISCV_USE_S_MODE
+  sbi_system_reset(SBI_SRST_TYPE_SHUTDOWN, SBI_SRST_REASON_NONE);
 #endif
 
   node = fdt_node_offset_by_compatible(fdt, -1, "sifive,test0");
