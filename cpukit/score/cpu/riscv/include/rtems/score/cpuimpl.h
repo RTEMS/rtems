@@ -44,6 +44,13 @@
  * @{
  */
 
+#ifdef RISCV_USE_S_MODE
+#if defined(__riscv_atomic)
+#define CPU_PER_CPU_CONTROL_SIZE 32
+#else
+#define CPU_PER_CPU_CONTROL_SIZE 24
+#endif
+#else /* RISCV_USE_S_MODE */
 #if defined(__riscv_atomic) && __riscv_xlen == 64
 #define CPU_PER_CPU_CONTROL_SIZE 48
 #elif defined(__riscv_atomic) && __riscv_xlen == 32
@@ -53,6 +60,7 @@
 #elif __riscv_xlen == 32
 #define CPU_PER_CPU_CONTROL_SIZE 16
 #endif
+#endif /* RISCV_USE_S_MODE */
 
 #define CPU_THREAD_LOCAL_STORAGE_VARIANT 10
 
@@ -345,10 +353,15 @@ typedef struct {
   uint64_t clear_reservations;
   uint32_t reserved_for_alignment_of_interrupt_frame[ 2 ];
 #endif
+#ifdef RISCV_USE_S_MODE
+  uint64_t cmpval;
+  uint32_t reserved_for_alignment_of_interrupt_frame2[ 2 ];
+#else
   volatile RISCV_PLIC_hart_regs *plic_hart_regs;
   volatile uint32_t *plic_m_ie;
   volatile RISCV_CLINT_timer_reg *clint_mtimecmp;
   volatile uint32_t *clint_msip;
+#endif
 } CPU_Per_CPU_control;
 
 struct Per_CPU_Control;
