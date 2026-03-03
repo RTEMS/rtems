@@ -30,6 +30,10 @@
 #include <rtems/score/riscv-utility.h>
 #include <rtems/score/smpimpl.h>
 
+#ifdef RISCV_USE_S_MODE
+#include <machine/sbi.h>
+#endif
+
 void bsp_start_on_secondary_processor(Per_CPU_Control *cpu_self)
 {
   uint32_t cpu_index_self;
@@ -53,9 +57,18 @@ uint32_t _CPU_SMP_Initialize(void)
   return riscv_hart_count;
 }
 
+extern void RISCV_Start_on_processor(uint32_t hartid);
+
 bool _CPU_SMP_Start_processor(uint32_t cpu_index)
 {
-  (void) cpu_index;
+  uint32_t hartid;
+  hartid = _RISCV_Map_cpu_index_to_hartid(cpu_index);
+
+#ifdef RISCV_USE_S_MODE
+  sbi_hsm_hart_start(hartid, (uintptr_t) RISCV_Start_on_processor, 1);
+#else
+  (void) hartid;
+#endif
 
   return true;
 }
@@ -75,16 +88,33 @@ void _CPU_SMP_Prepare_start_multitasking(void)
   /* Do nothing */
 }
 
-void _CPU_SMP_Send_interrupt(uint32_t target_processor_index)
+#ifdef RISCV_USE_S_MODE
+static void riscv_smp_s_mode_send_ipi(uint32_t target_processor_index)
+{
+  uint32_t hartid;
+  unsigned long hart_mask;
+
+  hartid = _RISCV_Map_cpu_index_to_hartid(target_processor_index);
+  hart_mask = 1UL << hartid;
+  sbi_send_ipi(&hart_mask);
+}
+#else
+static void riscv_smp_m_mode_send_ipi(uint32_t target_processor_index)
 {
   Per_CPU_Control *cpu;
 
   cpu = _Per_CPU_Get_by_index(target_processor_index);
-#ifdef RISCV_USE_S_MODE
-  /* TODO: Add IPI call. */
-  (void) cpu;
-#else
   *cpu->cpu_per_cpu.clint_msip = 0x1;
+}
+#endif
+
+
+void _CPU_SMP_Send_interrupt(uint32_t target_processor_index)
+{
+#ifdef RISCV_USE_S_MODE
+  riscv_smp_s_mode_send_ipi( target_processor_index );
+#else
+  riscv_smp_m_mode_send_ipi( target_processor_index );
 #endif
 }
 

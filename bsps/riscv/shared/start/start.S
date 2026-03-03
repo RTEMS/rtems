@@ -44,15 +44,89 @@ PUBLIC(_start)
 
 TYPE_FUNC(_start)
 SYM(_start):
+
+#ifndef RISCV_USE_S_MODE
+	csrr	a0, mhartid
+#endif
+
+	mv	s0, a0
+	mv	s1, a1
+
+#ifdef RISCV_USE_S_MODE
+	/* start boot hartid */
+	li	t0, RISCV_BOOT_HARTID
+	beq	t0, a0, .Lafter_boot_hartid
+
+	/* set up temporary stack */
+	LADDR	sp, _ISR_Stack_area_end
+
+#ifdef BSP_START_COPY_FDT_FROM_U_BOOT
+	mv	a0, a1
+	call	bsp_fdt_copy
+#endif
+
+.Lstart_boot_hartid:
+
+	li	a0, RISCV_BOOT_HARTID
+	LADDR	a1, _start
+	li 	a2, 1
+	call	sbi_hsm_hart_start
+
+	/* Not much to do if we could not start it, try again. */
+	bnez	a0, .Lstart_boot_hartid
+	mv	a0, s0
+#endif
+
+.Lafter_boot_hartid:
+
+	call RISCV_Start_on_processor
+
+	/* only boot hartid returns here */
+
+#ifdef BSP_START_COPY_FDT_FROM_U_BOOT
+	/*
+	 * s1 contains the address of FDT if the boot hartid was the one
+	 * actually booted first, otherwise it contains the privilege
+	 * level passed to sbi_hsm_hart_start.
+	 */
+	li	t0, 3
+	ble	s1, t0, .Lclear_bss
+	mv	a0, s1
+	call	bsp_fdt_copy
+#endif
+
+.Lclear_bss:
+
+	/* Clear .bss */
+	LADDR	a0, bsp_section_bss_begin
+	li	a1, 0
+	LADDR	a2, bsp_section_bss_size
+	call	memset
+
+#if defined(RTEMS_SMP)
+	/* Give go to secondary processors */
+	LADDR	t0, .Lsecondary_processor_go
+	fence	iorw,ow
+	amoswap.w	zero, zero, 0(t0)
+#endif
+
+	li	a0, 0
+	tail	boot_card
+
+PUBLIC(RISCV_Start_on_processor)
+	.section	.bsp_start_text, "wax", @progbits
+	.align	2
+	.option	arch, +zicsr
+	.option	norelax
+
+TYPE_FUNC(RISCV_Start_on_processor)
+RISCV_Start_on_processor:
+
 	/* Load global pointer */
 	.option	push
 	.option	norelax
 	LADDR	gp, __global_pointer$
 	.option	pop
-
-#ifndef RISCV_USE_S_MODE
-	csrr	a0, mhartid
-#endif
 
 #ifndef RTEMS_SMP
 	li	t3, RISCV_BOOT_HARTID
@@ -74,12 +148,15 @@ SYM(_start):
 	csrw	mtvec, t0
 #endif
 
-	/* Load stack pointer and branch to secondary processor start if necessary */
+	/*
+	 * Load stack pointer, setup per-cpu storage, and branch to secondary
+	 * processor start if necessary.
+	 */
 #ifdef RTEMS_SMP
 	LADDR	sp, _ISR_Stack_area_begin
 	LADDR	t2, _ISR_Stack_size
 	li	t3, RISCV_BOOT_HARTID
-	sub	s0, a0, t3
+	sub	a0, a0, t3
 
 	/*
 	 * Check that this is a configured processor.  If not, then there is
@@ -87,65 +164,44 @@ SYM(_start):
 	 * this processor.  Just loop forever in this case.
 	 */
 	lw	t3, _SMP_Processor_configured_maximum
-	bgeu	s0, t3, .Lwfi
-
-	LADDR	t0, _Per_CPU_Information
-	slli	t1, s0, PER_CPU_CONTROL_SIZE_LOG2
-	add	s1, t0, t1
-#ifdef RISCV_USE_S_MODE
-	csrw	sscratch, s1
-#else
-	csrw	mscratch, s1
-#endif
-	bnez	s0, .Lstart_on_secondary_processor
-	add	sp, sp, t2
-#else
-	LADDR	sp, _ISR_Stack_area_end
-#endif
-
-#ifdef BSP_START_COPY_FDT_FROM_U_BOOT
-	mv	a0, a1
-	call	bsp_fdt_copy
-#endif
-
-	/* Clear .bss */
-	LADDR	a0, bsp_section_bss_begin
-	li	a1, 0
-	LADDR	a2, bsp_section_bss_size
-	call	memset
-
-#ifdef RTEMS_SMP
-	/* Give go to secondary processors */
-	LADDR	t0, .Lsecondary_processor_go
-	fence	iorw,ow
-	amoswap.w	zero, zero, 0(t0)
-#endif
-
-	li	a0, 0
-	tail	boot_card
-
-#ifdef RTEMS_SMP
-.Lwfi:
-	wfi
-	j	.Lwfi
-
-.Lstart_on_secondary_processor:
+	bgeu	a0, t3, .Lwfi
 
 	/* Adjust stack pointer */
 #ifdef __riscv_mul
-	addi	t0, s0, 1
+	addi	t0, a0, 1
 	mul	t2, t2, t0
 #else
-	mv	t0, s0
-	mv	t3, t2
+	mv	t0, a0
+	mv	t1, t2
 
 .Ladd_more:
 
-	add	t2, t2, t3
+	add	t2, t2, t1
 	addi	t0, t0, -1
 	bnez	t0, .Ladd_more
 #endif
 	add	sp, sp, t2
+
+	LADDR	t0, _Per_CPU_Information
+	slli	t1, a0, PER_CPU_CONTROL_SIZE_LOG2
+	add	t3, t0, t1
+#ifdef RISCV_USE_S_MODE
+	csrw	sscratch, t3
+#else
+	csrw	mscratch, t3
+#endif
+#else /* RTEMS_SMP */
+	LADDR	sp, _ISR_Stack_area_end
+#endif
+	bnez	a0, .Lstart_on_secondary_processor
+	ret
+
+.Lwfi:
+	wfi
+	j	.Lwfi
+
+#ifdef RTEMS_SMP
+.Lstart_on_secondary_processor:
 
 	/* Wait for go issued by the boot processor (mhartid == 0) */
 	LADDR	t0, .Lsecondary_processor_go
@@ -156,7 +212,7 @@ SYM(_start):
 	fence	iorw, iorw
 	bnez	t1, .Lwait_for_go_again
 
-	mv	a0, s1
+	mv	a0, t3
 	call	bsp_start_on_secondary_processor
 
 	.section	.bsp_start_data, "aw"
