@@ -38,7 +38,7 @@
 #include <drvmgr/drvmgr_list.h>
 #include <stdint.h>
 #include <rtems/score/basedefs.h>
-#include <rtems/score/smpimpl.h>
+#include <rtems/score/processormask.h>
 
 #ifdef __cplusplus
 extern "C" {
