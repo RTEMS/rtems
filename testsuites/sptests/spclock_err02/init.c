@@ -90,51 +90,85 @@ rtems_task Init( rtems_task_argument argument )
   );
   puts( "TA1 - rtems_io_write - RTEMS_INVALID_NUMBER" );
 
-  build_time( &time, 12, 31, 2000, 23, 59, 59, 0 );
+  build_time( &time, 12, 31, 1991, 23, 59, 59, 0 );
   status = rtems_clock_set( &time );
   directive_failed( status, "rtems_clock_set" );
-  print_time( "TA1 - rtems_clock_set - ", &time, " - RTEMS_SUCCESSFUL\n" );
-  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() + 1 );
   status = rtems_clock_get_tod( &time );
   directive_failed( status, "rtems_clock_get_tod" );
-  print_time( "TA1 - rtems_clock_get_tod - ", &time, " - RTEMS_SUCCESSFUL\n" );
+  rtems_test_assert( time.year == 1992 );
+  rtems_test_assert( time.month == 1 );
+  rtems_test_assert( time.day == 1 );
 
   build_time( &time, 12, 31, 1999, 23, 59, 59, 0 );
   status = rtems_clock_set( &time );
   directive_failed( status, "rtems_clock_set" );
-  print_time( "TA1 - rtems_clock_set - ", &time, " - RTEMS_SUCCESSFUL\n" );
-  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() + 1 );
   status = rtems_clock_get_tod( &time );
   directive_failed( status, "rtems_clock_get_tod" );
-  print_time( "TA1 - rtems_clock_get_tod - ", &time, " - RTEMS_SUCCESSFUL\n" );
+  rtems_test_assert( time.year == 2000 );
+  rtems_test_assert( time.month == 1 );
+  rtems_test_assert( time.day == 1 );
 
-  build_time( &time, 12, 31, 4095, 23, 59, 59, 0 );
+  build_time( &time, 12, 31, 2000, 23, 59, 59, 0 );
   status = rtems_clock_set( &time );
   directive_failed( status, "rtems_clock_set" );
-  print_time( "TA1 - rtems_clock_set - ", &time, " - RTEMS_SUCCESSFUL\n" );
-  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() + 1 );
   status = rtems_clock_get_tod( &time );
   directive_failed( status, "rtems_clock_get_tod" );
-  print_time( "TA1 - rtems_clock_get_tod - ", &time, " - RTEMS_SUCCESSFUL\n" );
+  rtems_test_assert( time.year == 2001 );
+  rtems_test_assert( time.month == 1 );
+  rtems_test_assert( time.day == 1 );
+
+  build_time( &time, 2, 28, 2100, 23, 59, 59, 0 );
+  status = rtems_clock_set( &time );
+  directive_failed( status, "rtems_clock_set" );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() + 1 );
+  status = rtems_clock_get_tod( &time );
+  directive_failed( status, "rtems_clock_get_tod" );
+  rtems_test_assert( time.month == 3 );
+  rtems_test_assert( time.day == 1 );
+
+  build_time( &time, 2, 28, 2400, 23, 59, 59, 0 );
+  status = rtems_clock_set( &time );
+  directive_failed( status, "rtems_clock_set" );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() + 1 );
+  status = rtems_clock_get_tod( &time );
+  directive_failed( status, "rtems_clock_get_tod" );
+  rtems_test_assert( time.month == 2 );
+  rtems_test_assert( time.day == 29 );
+
+  build_time( &time, 2, 28, 2800, 23, 59, 59, 0 );
+  status = rtems_clock_set( &time );
+  directive_failed( status, "rtems_clock_set" );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() + 1 );
+  status = rtems_clock_get_tod( &time );
+  directive_failed( status, "rtems_clock_get_tod" );
+  rtems_test_assert( time.month == 2 );
+  rtems_test_assert( time.day == 29 );
+
+  build_time( &time, 2, 28, 4000, 23, 59, 59, 0 );
+  status = rtems_clock_set( &time );
+  directive_failed( status, "rtems_clock_set" );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() + 1 );
+  status = rtems_clock_get_tod( &time );
+  directive_failed( status, "rtems_clock_get_tod" );
+  rtems_test_assert( time.month == 2 );
+  rtems_test_assert( time.day == 29 );
+
+  build_time( &time, 3, 1, 4095, 0, 0, 0, 0 );
+  status = rtems_clock_set( &time );
+  directive_failed(status, "rtems_clock_set");
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() + 1 );
+  status = rtems_clock_get_tod( &time );
+  directive_failed( status, "rtems_clock_get_tod" );
+  rtems_test_assert( time.month == 3 );
+  rtems_test_assert( time.day == 1 );
 
   build_time( &time, 1, 1, 4096, 0, 0, 0, 0 );
   status = rtems_clock_set( &time );
   fatal_directive_status( status, RTEMS_INVALID_CLOCK, "rtems_clock_set" );
-  print_time( "TA1 - rtems_clock_set - ", &time, " - RTEMS_INVALID_CLOCK\n" );
-  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
-  status = rtems_clock_get_tod( &time );
-  directive_failed( status, "rtems_clock_get_tod" );
-  print_time( "TA1 - rtems_clock_get_tod - ", &time, " - RTEMS_SUCCESSFUL\n" );
-
-  build_time( &time, 12, 31, 1991, 23, 59, 59, 0 );
-  status = rtems_clock_set( &time );
-  directive_failed( status, "rtems_clock_set" );
-  print_time( "TA1 - rtems_clock_set - ", &time, " - RTEMS_SUCCESSFUL\n" );
-  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
-  status = rtems_clock_get_tod( &time );
-  directive_failed( status, "rtems_clock_get_tod" );
-  print_time( "TA1 - rtems_clock_get_tod - ", &time, " - RTEMS_SUCCESSFUL\n" );
-
+  
   TEST_END();
   rtems_test_exit( 0 );
 }
