@@ -223,7 +223,11 @@ sbi_send_ipi(const u_long *hart_mask)
 		    *hart_mask, 0);
 		MPASS(ret.error == SBI_SUCCESS);
 	} else {
+#ifdef __rtems__
+		(void)SBI_CALL1(SBI_SEND_IPI, 0, (uintptr_t)hart_mask);
+#else
 		(void)SBI_CALL1(SBI_SEND_IPI, 0, (uint64_t)hart_mask);
+#endif /* __rtems__ */
 	}
 }
 
@@ -238,7 +242,11 @@ sbi_remote_fence_i(const u_long *hart_mask)
 		    *hart_mask, 0);
 		MPASS(ret.error == SBI_SUCCESS);
 	} else {
+#ifdef __rtems__
+		(void)SBI_CALL1(SBI_REMOTE_FENCE_I, 0, (uintptr_t)hart_mask);
+#else
 		(void)SBI_CALL1(SBI_REMOTE_FENCE_I, 0, (uint64_t)hart_mask);
+#endif /* __rtems__ */
 	}
 }
 
@@ -253,8 +261,13 @@ sbi_remote_sfence_vma(const u_long *hart_mask, u_long start, u_long size)
 		    *hart_mask, 0, start, size);
 		MPASS(ret.error == SBI_SUCCESS);
 	} else {
+#ifdef __rtems__
+		(void)SBI_CALL3(SBI_REMOTE_SFENCE_VMA, 0, (uintptr_t)hart_mask,
+		    start, size);
+#else
 		(void)SBI_CALL3(SBI_REMOTE_SFENCE_VMA, 0, (uint64_t)hart_mask,
 		    start, size);
+#endif /* __rtems__ */
 	}
 }
 
@@ -271,8 +284,13 @@ sbi_remote_sfence_vma_asid(const u_long *hart_mask, u_long start, u_long size,
 		    size, asid);
 		MPASS(ret.error == SBI_SUCCESS);
 	} else {
+#ifdef __rtems__
+		(void)SBI_CALL4(SBI_REMOTE_SFENCE_VMA_ASID, 0,
+		    (uintptr_t)hart_mask, start, size, asid);
+#else
 		(void)SBI_CALL4(SBI_REMOTE_SFENCE_VMA_ASID, 0,
 		    (uint64_t)hart_mask, start, size, asid);
+#endif /* __rtems__ */
 	}
 }
 
