@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- env-enable: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2026 Kinsey Moore <wkmoore@gmail.com>
+default:
+- enabled-by: riscv/esp32c3db
+  value: true
+- enabled-by: true
+  value: false
+description: |
+  Enable direct boot for Espressif chips
+enabled-by: true
+links: []
+name: ESPRESSIF_DIRECT_BOOT
+type: build

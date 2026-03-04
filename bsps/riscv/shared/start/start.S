@@ -42,6 +42,16 @@ PUBLIC(_start)
 	.option	arch, +zicsr
 	.option	norelax
 
+#ifdef ESPRESSIF_DIRECT_BOOT
+/*
+ * These header values indicate to the ESP32 bootrom that the application in
+ * flash is to be run via direct boot and is not an application image to be
+ * unpacked.
+ */
+	.word 0xaedb041d
+	.word 0xaedb041d
+#endif
+
 TYPE_FUNC(_start)
 SYM(_start):
 
