@@ -1,0 +1,55 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+cflags: []
+copyrights:
+- Copyright (C) 2026 Kinsey Moore <wkmoore@gmail.com>
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install: []
+ldflags: []
+links:
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../optclang
+- role: build-dependency
+  uid: ../../optconsolebaud
+- role: build-dependency
+  uid: ../../optgcc
+- role: build-dependency
+  uid: optvariant
+- role: build-dependency
+  uid: ../../objirq
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: obj
+- role: build-dependency
+  uid: ../../objmem
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: optcodesize
+- role: build-dependency
+  uid: ../optespressifdirectboot
+- role: build-dependency
+  uid: optflashsize
+- role: build-dependency
+  uid: linkcmds
+- role: build-dependency
+  uid: ../linkcmdsbase
+- role: build-dependency
+  uid: ../optbspstartcopysections
+- role: build-dependency
+  uid: optuseusbconsole
+- role: build-dependency
+  uid: ../start
+- role: build-dependency
+  uid: ../../bspopts
+- role: build-dependency
+  uid: ../../tstsmallmem
+type: build
+use-after: []
+use-before: []

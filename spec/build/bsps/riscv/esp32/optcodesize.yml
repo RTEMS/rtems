@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- assert-uint32: null
+- env-assign: null
+- format-and-define: null
+build-type: option
+copyrights:
+- Copyright (C) 2026 Kinsey Moore <wkmoore@gmail.com>
+default:
+- enabled-by: true
+  value: 0x100000
+description: ''
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: ESP32C_CODE_REGION_SIZE
+type: build

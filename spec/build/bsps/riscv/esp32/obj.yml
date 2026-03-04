@@ -1,0 +1,32 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2026 Kinsey Moore <wkmoore@gmail.com>
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/riscv/esp32/include/bsp.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/riscv/esp32/include/bsp/irq.h
+links: []
+source:
+- bsps/riscv/esp32/console/console-config.c
+- bsps/riscv/esp32/clock/clockdrv_systimer.c
+- bsps/riscv/esp32/irq/irq_c3.c
+- bsps/riscv/esp32/start/bspstart.c
+- bsps/shared/atomics/__atomic_test_and_set.c
+- bsps/shared/cache/nocache.c
+- bsps/shared/dev/btimer/btimer-cpucounter.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/serial/console-polled.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspreset-loop.c
+- bsps/shared/start/gettargethash-default.c
+type: build
