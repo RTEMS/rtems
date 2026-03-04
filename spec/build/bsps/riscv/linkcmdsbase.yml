@@ -301,13 +301,13 @@ content: |
       *(.dynsbss)
       *(.sbss .sbss.* .gnu.linkonce.sb.*)
       *(.scommon)
-    } > REGION_DATA AT > REGION_DATA
+    } > REGION_BSS AT > REGION_BSS
     .bss : ${LINKCMDS_ALIGN_DIRECTIVE} {
       *(.dynbss)
       *(.bss .bss.* .gnu.linkonce.b.*)
       *(COMMON)
       bsp_section_bss_end = .;
-    } > REGION_DATA AT > REGION_DATA
+    } > REGION_BSS AT > REGION_BSS
     bsp_section_bss_size = bsp_section_bss_end - bsp_section_bss_begin;
 
     .rtemsstack (NOLOAD) : ${LINKCMDS_ALIGN_DIRECTIVE} {
