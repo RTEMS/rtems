@@ -51,7 +51,7 @@ content: |
       KEEP (*(.bsp_start_text))
       KEEP (*(.bsp_start_data))
       bsp_section_start_end = .;
-    } > REGION_START AT > REGION_START
+    } > REGION_START AT > REGION_START_LOAD
     bsp_section_start_size = bsp_section_start_end - bsp_section_start_begin;
 
     .text : ${LINKCMDS_ALIGN_DIRECTIVE} {
