@@ -263,14 +263,10 @@ static void riscv_clock_secondary_init(
   uint64_t cmpval
 )
 {
+  (void) tc;
 #if defined(RTEMS_SMP) && !defined(CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR)
   _SMP_Othercast_action(riscv_clock_secondary_action, &cmpval);
-
-  if (cmpval - riscv_clock_read_timer(tc) >= tc->interval) {
-    bsp_fatal(RISCV_FATAL_CLOCK_SMP_INIT);
-  }
 #else
-  (void) tc;
   (void) cmpval;
 #endif
 }
