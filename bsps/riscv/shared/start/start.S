@@ -121,6 +121,10 @@ SYM(_start):
 	amoswap.w	zero, zero, 0(t0)
 #endif
 
+#ifdef BSP_START_COPY_SECTIONS
+	call	bsp_start_copy_sections
+#endif
+
 	li	a0, 0
 	tail	boot_card
 
