@@ -1,15 +1,17 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
-- get-boolean: null
-- define-condition: null
+  - get-boolean:
+  - define-condition:
 build-type: option
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH & Co. KG
+  - Copyright (C) 2020 embedded brains GmbH & Co. KG
 default:
-- enabled-by: arm/stm32f4
-  value: true
-- enabled-by: true
-  value: false
+  - enabled-by:
+      - arm/stm32f4
+      - arm/stm32f446ze
+    value: true
+  - enabled-by: true
+    value: false
 description: |
   Chip belongs to the STM32F4XXXX family.
 enabled-by: true
