@@ -138,9 +138,6 @@ typedef uint32_t ISR_Level;
  *
  *  This routine returns the current interrupt level.
  *
- *  LM32 Specific Information:
- *  XXX document implementation including references if appropriate
- *
  *  @retval This method returns the current level.
  */
 #define _ISR_Get_level() _CPU_ISR_Get_level()

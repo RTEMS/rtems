@@ -147,9 +147,6 @@ void _ISR_Handler_initialization( void );
  *  for the specified vector.  The previous interrupt service routine is
  *  returned as old_handler.
  *
- *  LM32 Specific Information:
- *  XXX document implementation including references if appropriate
- *
  *  @param[in] _vector is the vector number
  *  @param[in] _new_handler is ISR handler to install
  *  @param[in] _old_handler is a pointer to a variable which will be set
