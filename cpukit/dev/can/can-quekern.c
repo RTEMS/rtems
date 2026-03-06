@@ -465,7 +465,7 @@ int rtems_can_queue_kern_initialize( void )
   sc = rtems_task_create(
     rtems_build_name( 'C', 'A', 'N', 'D' ),
     CAN_DEAD_FUNC_PRIORITY,
-    RTEMS_MINIMUM_STACK_SIZE + 0x1000,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &dead_func_id

@@ -169,6 +169,8 @@ links:
   - role: build-dependency
     uid: spcache01
   - role: build-dependency
+    uid: spcan01
+  - role: build-dependency
     uid: spcbssched01
   - role: build-dependency
     uid: spcbssched02
