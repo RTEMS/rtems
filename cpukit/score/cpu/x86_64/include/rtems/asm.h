@@ -161,10 +161,10 @@
 .macro GET_CPU_INDEX REG REG32
     .set LAPIC_ID,       0x20
     .set LAPIC_ID_SHIFT, 24
-    movq amd64_lapic_base, \REG
+    movq bsp_lapic_base, \REG
     movl LAPIC_ID(\REG), \REG32
     shrq $LAPIC_ID_SHIFT, \REG                /* LAPIC_ID in REG */
-    movzbq amd64_lapic_to_cpu_map(\REG), \REG /* CPU ID in REG */
+    movzbq bsp_lapic_to_cpu_map(\REG), \REG /* CPU ID in REG */
 .endm
 
 /* REG32 must be the lower 32 bits of REG */

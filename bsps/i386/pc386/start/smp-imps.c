@@ -54,7 +54,7 @@
 #endif
 
 #include <bsp.h>
-#include <bsp/apic.h>
+#include <bsp/i386-apic.h>
 #include <bsp/smp-imps.h>
 #include <bsp/irq.h>
 #include <bsp/tblsizes.h>
@@ -85,6 +85,10 @@
 #include <assert.h>
 
 extern uint8_t gdtdesc[GDT_SIZE];
+
+static int lapic_dummy = 0;
+unsigned imps_lapic_addr =
+  ((unsigned)(&lapic_dummy)) - (LAPIC_REGISTER_ID << 2);
 
 /* #define KERNEL_PRINT(_format)       printk(_format) */
 
@@ -213,6 +217,29 @@ get_checksum(unsigned start, int length)
 }
 
 /*
+ *  APIC ICR write and status check function.
+ */
+int
+send_ipi(unsigned int dst, unsigned int v)
+{
+  int to, send_status, apicid;
+
+  apicid = imps_cpu_apic_map[dst];
+
+  bsp_lapic_base[LAPIC_REGISTER_ICR_HIGH] = (apicid << 24);
+  bsp_lapic_base[LAPIC_REGISTER_ICR_LOW] = v;
+
+  /* Wait for send to finish */
+  to = 0;
+  do {
+    UDELAY(100);
+    send_status = bsp_lapic_base[LAPIC_REGISTER_ICR_LOW] & LAPIC_ICR_DELIV_STAT_PEND;
+  } while (send_status && (to++ < 1000));
+
+  return (to < 1000);
+}
+
+/*
  *  Primary function for booting individual CPUs.
  *
  *  This must be modified to perform whatever OS-specific initialization
@@ -266,7 +293,20 @@ boot_cpu(imps_processor *proc)
 #pragma GCC diagnostic pop
 
   /* clear the APIC error register */
-  lapic_clear_errors();
+  bsp_lapic_base[LAPIC_REGISTER_ESR] = 0;
+  (void) bsp_lapic_base[LAPIC_REGISTER_ESR];
+
+  /* assert INIT IPI */
+  send_ipi(
+    cpuid,
+    LAPIC_ICR_TM_LEVEL | LAPIC_ICR_LEVELASSERT | LAPIC_ICR_DM_INIT
+  );
+  UDELAY(10000);
+
+  /* de-assert INIT IPI */
+  send_ipi(cpuid, LAPIC_ICR_TM_LEVEL | LAPIC_ICR_DM_INIT);
+
+  UDELAY(10000);
 
   /*
    *  Send Startup IPIs if not an old pre-integrated APIC.
@@ -289,7 +329,8 @@ boot_cpu(imps_processor *proc)
    */
 
   /* clear the APIC error register */
-  lapic_clear_errors();
+  bsp_lapic_base[LAPIC_REGISTER_ESR] = 0;
+  (void) bsp_lapic_base[LAPIC_REGISTER_ESR];
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Warray-bounds"
@@ -493,12 +534,17 @@ imps_read_bios(imps_fps *fps_ptr)
   if (lapic_paddr != (READ_MSR_LO(APIC_BASE_MSR) & 0xFFFFF000)) {
     return;
   }
+  imps_lapic_addr = PHYS_TO_VIRTUAL(imps_lapic_addr);
 
-  /* Initialize the Local APIC */
-  if (!lapic_initialize(PHYS_TO_VIRTUAL(lapic_paddr))) {
-    printk("Failed to initialize Local APIC\n");
-    return;
-  }
+  /*
+   *  Setup primary CPU.
+   */
+  apicid = bsp_lapic_base[LAPIC_REGISTER_SPURIOUS];
+  bsp_lapic_base[LAPIC_REGISTER_SPURIOUS] = apicid | LAPIC_SPURIOUS_ENABLE;
+
+  apicid = bsp_lapic_base[LAPIC_REGISTER_ID] >> 24;
+  imps_cpu_apic_map[0] = apicid;
+  imps_apic_cpu_map[apicid] = 0;
 
   if (fps_ptr->cth_ptr) {
     char str1[16], str2[16];
@@ -604,11 +650,19 @@ imps_force(int ncpus)
 
   printk("Intel MultiProcessor \"Force\" Support\n");
 
-  lapic_paddr = (READ_MSR_LO(APIC_BASE_MSR) & 0xFFFFF000);
-  if (!lapic_initialize(PHYS_TO_VIRTUAL(lapic_paddr))) {
-    printk("Failed to initialize Local APIC\n");
-    return 0;
-  }
+  imps_lapic_addr = (READ_MSR_LO(0x1b) & 0xFFFFF000);
+  imps_lapic_addr = PHYS_TO_VIRTUAL(imps_lapic_addr);
+
+  /*
+   *  Setup primary CPU.
+   */
+  apicid = bsp_lapic_base[LAPIC_REGISTER_SPURIOUS];
+  bsp_lapic_base[LAPIC_REGISTER_SPURIOUS] =
+    apicid | LAPIC_SPURIOUS_ENABLE;
+
+  apicid = bsp_lapic_base[LAPIC_REGISTER_ID] >> 24;
+  imps_cpu_apic_map[0] = apicid;
+  imps_apic_cpu_map[apicid] = 0;
 
   p.type = 0;
   p.apic_ver = 0x10;
@@ -716,7 +770,8 @@ imps_probe(void)
  */
 static void smp_apic_ack(void)
 {
-  lapic_send_eoi(); 
+  (void) bsp_lapic_base[LAPIC_REGISTER_SPURIOUS];
+  bsp_lapic_base[LAPIC_REGISTER_EOI] = LAPIC_EOI_ACK;
 }
 
 static void bsp_inter_processor_interrupt(void *arg)
@@ -762,7 +817,9 @@ static void secondary_cpu_initialize(void)
 {
   asm volatile( "lidt IDT_Descriptor" );
 
-  lapic_enable(); 
+  apicid = bsp_lapic_base[LAPIC_REGISTER_SPURIOUS];
+  bsp_lapic_base[LAPIC_REGISTER_SPURIOUS] =
+    apicid | LAPIC_SPURIOUS_ENABLE;
 
 #ifdef __SSE__
   enable_sse();

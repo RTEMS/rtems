@@ -10,6 +10,7 @@ includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
+  - bsps/include/bsp/apic.h
   - bsps/include/bsp/bootcard.h
   - bsps/include/bsp/console-polled.h
   - bsps/include/bsp/console-termios.h

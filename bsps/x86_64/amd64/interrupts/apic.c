@@ -43,11 +43,11 @@
 
 extern void apic_spurious_handler(void);
 
-volatile uint32_t* amd64_lapic_base;
+volatile uint32_t* bsp_lapic_base;
 
 #ifdef RTEMS_SMP
 /* Maps the processor index to the Local APIC ID */
-uint8_t amd64_lapic_to_cpu_map[xAPIC_MAX_APIC_ID + 1];
+uint8_t bsp_lapic_to_cpu_map[xAPIC_MAX_APIC_ID + 1];
 static uint8_t cpu_to_lapic_map[xAPIC_MAX_APIC_ID + 1];
 static uint32_t lapic_count = 0;
 #endif
@@ -85,14 +85,14 @@ static void madt_subtables_handler(ACPI_SUBTABLE_HEADER* entry)
         break;
       }
 
-      amd64_lapic_to_cpu_map[lapic_entry->Id] = (uint8_t) lapic_count;
+      bsp_lapic_to_cpu_map[lapic_entry->Id] = (uint8_t) lapic_count;
       cpu_to_lapic_map[lapic_count++] = lapic_entry->Id;
       break;
 #endif
     case ACPI_MADT_TYPE_LOCAL_APIC_OVERRIDE:
       ACPI_MADT_LOCAL_APIC_OVERRIDE* lapic_override =
                                         (ACPI_MADT_LOCAL_APIC_OVERRIDE*) entry;
-      amd64_lapic_base = (uint32_t*) lapic_override->Address;
+      bsp_lapic_base = (uint32_t*) lapic_override->Address;
       break;
     default:
       break;
@@ -117,11 +117,11 @@ static bool parse_madt(void)
 #ifdef RTEMS_SMP
   /* Ensure the boot processor is cpu index 0 */
   uint8_t lapic_id = lapic_get_id();
-  amd64_lapic_to_cpu_map[lapic_id] = (uint8_t) lapic_count;
+  bsp_lapic_to_cpu_map[lapic_id] = (uint8_t) lapic_count;
   cpu_to_lapic_map[lapic_count++] = lapic_id;
 #endif
 
-  amd64_lapic_base = (uint32_t*) ((uintptr_t) madt->Address);
+  bsp_lapic_base = (uint32_t*) ((uintptr_t) madt->Address);
   acpi_walk_subtables(
     (ACPI_TABLE_HEADER*) madt,
     sizeof(ACPI_TABLE_MADT),
@@ -142,8 +142,8 @@ static bool parse_madt(void)
 static uint32_t lapic_timer_calc_ticks_per_sec(void)
 {
   /* Configure LAPIC timer in one-shot mode to prepare for calibration */
-  amd64_lapic_base[LAPIC_REGISTER_LVT_TIMER] = BSP_VECTOR_APIC_TIMER;
-  amd64_lapic_base[LAPIC_REGISTER_TIMER_DIV] = LAPIC_TIMER_SELECT_DIVIDER;
+  bsp_lapic_base[LAPIC_REGISTER_LVT_TIMER] = BSP_VECTOR_APIC_TIMER;
+  bsp_lapic_base[LAPIC_REGISTER_TIMER_DIV] = LAPIC_TIMER_SELECT_DIVIDER;
 
   uint8_t chan2_value;
   PIT_CHAN2_ENABLE(chan2_value);
@@ -166,15 +166,15 @@ static uint32_t lapic_timer_calc_ticks_per_sec(void)
   const uint32_t lapic_calibrate_init_count = 0xffffffff;
 
   PIT_CHAN2_START_DELAY(chan2_value);
-  amd64_lapic_base[LAPIC_REGISTER_TIMER_INITCNT] = lapic_calibrate_init_count;
+  bsp_lapic_base[LAPIC_REGISTER_TIMER_INITCNT] = lapic_calibrate_init_count;
 
   PIT_CHAN2_WAIT_DELAY(pit_ticks);
-  uint32_t lapic_currcnt = amd64_lapic_base[LAPIC_REGISTER_TIMER_CURRCNT];
+  uint32_t lapic_currcnt = bsp_lapic_base[LAPIC_REGISTER_TIMER_CURRCNT];
 
   DBG_PRINTF("PIT stopped at 0x%" PRIx32 "\n", pit_ticks);
 
   /* Stop APIC timer to calculate ticks to time ratio */
-  amd64_lapic_base[LAPIC_REGISTER_LVT_TIMER] = LAPIC_LVT_MASK;
+  bsp_lapic_base[LAPIC_REGISTER_LVT_TIMER] = LAPIC_LVT_MASK;
 
   /* Get counts passed since we started counting */
   uint32_t lapic_ticks_per_sec = lapic_calibrate_init_count - lapic_currcnt;
@@ -214,16 +214,16 @@ static uint32_t lapic_timer_calc_ticks_per_sec(void)
  */
 static void send_ipi(uint8_t dest_id, uint32_t icr_low)
 {
-  amd64_lapic_base[LAPIC_REGISTER_ICR_HIGH] =
-    (amd64_lapic_base[LAPIC_REGISTER_ICR_HIGH] & LAPIC_ICR_HIGH_MASK) | (dest_id << 24);
+  bsp_lapic_base[LAPIC_REGISTER_ICR_HIGH] =
+    (bsp_lapic_base[LAPIC_REGISTER_ICR_HIGH] & LAPIC_ICR_HIGH_MASK) | (dest_id << 24);
 
-  amd64_lapic_base[LAPIC_REGISTER_ICR_LOW] =
-    (amd64_lapic_base[LAPIC_REGISTER_ICR_LOW] & LAPIC_ICR_LOW_MASK) | icr_low;
+  bsp_lapic_base[LAPIC_REGISTER_ICR_LOW] =
+    (bsp_lapic_base[LAPIC_REGISTER_ICR_LOW] & LAPIC_ICR_LOW_MASK) | icr_low;
 }
 
 static void wait_ipi(void)
 {
-  while (amd64_lapic_base[LAPIC_REGISTER_ICR_LOW] & LAPIC_ICR_DELIV_STAT_PEND) {
+  while (bsp_lapic_base[LAPIC_REGISTER_ICR_LOW] & LAPIC_ICR_DELIV_STAT_PEND) {
     amd64_spinwait();
   }
 }
@@ -243,17 +243,17 @@ bool lapic_initialize(void)
     apic_base_msr >> 32
   );
 
-  DBG_PRINTF("APIC is at 0x%" PRIxPTR "\n", (uintptr_t) amd64_lapic_base);
+  DBG_PRINTF("APIC is at 0x%" PRIxPTR "\n", (uintptr_t) bsp_lapic_base);
   DBG_PRINTF(
     "APIC ID at *0x%" PRIxPTR "=0x%" PRIx32 "\n",
-    (uintptr_t) &amd64_lapic_base[LAPIC_REGISTER_ID],
-    amd64_lapic_base[LAPIC_REGISTER_ID]
+    (uintptr_t) &bsp_lapic_base[LAPIC_REGISTER_ID],
+    bsp_lapic_base[LAPIC_REGISTER_ID]
   );
 
   DBG_PRINTF(
     "APIC spurious vector register *0x%" PRIxPTR "=0x%" PRIx32 "\n",
-    (uintptr_t) &amd64_lapic_base[LAPIC_REGISTER_SPURIOUS],
-    amd64_lapic_base[LAPIC_REGISTER_SPURIOUS]
+    (uintptr_t) &bsp_lapic_base[LAPIC_REGISTER_SPURIOUS],
+    bsp_lapic_base[LAPIC_REGISTER_SPURIOUS]
   );
 
   /*
@@ -265,13 +265,13 @@ bool lapic_initialize(void)
     (uintptr_t) apic_spurious_handler,
     &old
   );
-  amd64_lapic_base[LAPIC_REGISTER_SPURIOUS] =
+  bsp_lapic_base[LAPIC_REGISTER_SPURIOUS] =
     LAPIC_SPURIOUS_ENABLE | BSP_VECTOR_SPURIOUS;
 
   DBG_PRINTF(
     "APIC spurious vector register *0x%" PRIxPTR "=0x%" PRIx32 "\n",
-    (uintptr_t) &amd64_lapic_base[LAPIC_REGISTER_SPURIOUS],
-    amd64_lapic_base[LAPIC_REGISTER_SPURIOUS]
+    (uintptr_t) &bsp_lapic_base[LAPIC_REGISTER_SPURIOUS],
+    bsp_lapic_base[LAPIC_REGISTER_SPURIOUS]
   );
 
   /*
@@ -308,14 +308,14 @@ uint32_t lapic_timer_calc_ticks(uint64_t desired_freq_hz)
 
 void lapic_timer_enable(uint32_t reload_value)
 {
-  amd64_lapic_base[LAPIC_REGISTER_LVT_TIMER] = BSP_VECTOR_APIC_TIMER | LAPIC_SELECT_TMR_PERIODIC;
-  amd64_lapic_base[LAPIC_REGISTER_TIMER_DIV] = LAPIC_TIMER_SELECT_DIVIDER;
-  amd64_lapic_base[LAPIC_REGISTER_TIMER_INITCNT] = reload_value;
+  bsp_lapic_base[LAPIC_REGISTER_LVT_TIMER] = BSP_VECTOR_APIC_TIMER | LAPIC_SELECT_TMR_PERIODIC;
+  bsp_lapic_base[LAPIC_REGISTER_TIMER_DIV] = LAPIC_TIMER_SELECT_DIVIDER;
+  bsp_lapic_base[LAPIC_REGISTER_TIMER_INITCNT] = reload_value;
 }
 
 void lapic_timer_set_masked(bool masked)
 {
-  uint32_t lvt = amd64_lapic_base[LAPIC_REGISTER_LVT_TIMER];
+  uint32_t lvt = bsp_lapic_base[LAPIC_REGISTER_LVT_TIMER];
 
   if (masked) {
     lvt |= LAPIC_LVT_MASK;
@@ -323,21 +323,21 @@ void lapic_timer_set_masked(bool masked)
     lvt &= ~LAPIC_LVT_MASK;
   }
 
-  amd64_lapic_base[LAPIC_REGISTER_LVT_TIMER] = lvt;
+  bsp_lapic_base[LAPIC_REGISTER_LVT_TIMER] = lvt;
 }
 
 bool lapic_timer_is_masked(void)
 {
-  return (amd64_lapic_base[LAPIC_REGISTER_LVT_TIMER] & LAPIC_LVT_MASK) != 0;
+  return (bsp_lapic_base[LAPIC_REGISTER_LVT_TIMER] & LAPIC_LVT_MASK) != 0;
 }
 
 void lapic_raise_self(uint32_t vector)
 {
-  amd64_lapic_base[LAPIC_REGISTER_ICR_LOW] =
-    (amd64_lapic_base[LAPIC_REGISTER_ICR_LOW] & LAPIC_ICR_LOW_MASK) |
+  bsp_lapic_base[LAPIC_REGISTER_ICR_LOW] =
+    (bsp_lapic_base[LAPIC_REGISTER_ICR_LOW] & LAPIC_ICR_LOW_MASK) |
       LAPIC_ICR_DEST_SELF | LAPIC_ICR_ASSERT | vector;
 
-  while (amd64_lapic_base[LAPIC_REGISTER_ICR_LOW] & LAPIC_ICR_DELIV_STAT_PEND) {
+  while (bsp_lapic_base[LAPIC_REGISTER_ICR_LOW] & LAPIC_ICR_DELIV_STAT_PEND) {
     amd64_spinwait();
   }
 }
@@ -347,7 +347,7 @@ bool lapic_is_pending(uint32_t vector)
   uint32_t reg = LAPIC_REGISTER_IRR_BASE +
     (vector / 32) * LAPIC_REGISTER_IRR_STRIDE;
 
-  return (amd64_lapic_base[reg] & (UINT32_C(1) << (vector % 32))) != 0;
+  return (bsp_lapic_base[reg] & (UINT32_C(1) << (vector % 32))) != 0;
 }
 
 #ifdef RTEMS_SMP

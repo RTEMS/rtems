@@ -84,26 +84,24 @@ GDB can be support using:
 
 The GDB stub details and in shared/comm/GDB.HOWTO.
 
+## SMP
 
-SMP
----
-The following files were developed by  Erich Boleyn  <erich@uruk.org>.
+The following files were developed by Erich Boleyn <erich@uruk.org>.
 The original files were copied from http://www.uruk.org/mps/ and committed
-into cvs as is.  These files will be modified for RTEMS smp support,
+into cvs as is. These files will be modified for RTEMS smp support,
 but the original files are being committed in order to track any file
-changes that occur.  We are attempting to keep these changes as minimal
-and conainted as possible.
+changes that occur. We are attempting to keep these changes as minimal
+and contained as possible.
 
- * start/smp-imps.c
- * ../include/bsp/smp-imps.h
- * ../include/bsp/apic.h
+- start/smp-imps.c
+- ../include/bsp/smp-imps.h
+- ../../include/bsp/apic.h
 
+## Status
 
-Status
-------
-There are a wide range of PC configurations.  This BSP has been tested 
-on only a handful.  There are configurations which do not yet work.  The
-failure is suspected to be video card related.  Here is a list of
+There are a wide range of PC configurations. This BSP has been tested
+on only a handful. There are configurations which do not yet work. The
+failure is suspected to be video card related. Here is a list of
 successes and failures.
 
 ```

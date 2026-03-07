@@ -33,7 +33,7 @@
  */
 
 #include <bsp.h>
-#include <bsp/apic.h>
+#include <bsp/i386-apic.h>
 #include <bsp/irq.h>
 #include <bsp/irq-generic.h>
 #include <libcpu/cpuModel.h>

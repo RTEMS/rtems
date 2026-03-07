@@ -37,36 +37,15 @@
 #ifndef _AMD64_APIC_H
 #define _AMD64_APIC_H
 
+#include <bsp/apic.h>
 #include <rtems/score/basedefs.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* The address of the MSR pointing to the APIC base physical address */
-#define APIC_BASE_MSR             0x1B
-/* Value to hardware-enable the APIC through the APIC_BASE_MSR */
-#define APIC_BASE_MSR_ENABLE      0x800
-
-#define xAPIC_MAX_APIC_ID         0xFE
-
-/*
- * Since the LAPIC registers are contained in an array of 32-bit elements
- * these byte-offsets need to be divided by 4 to index the array.
- */
-#define LAPIC_OFFSET(val) (val >> 2)
-
-#define LAPIC_REGISTER_ID            LAPIC_OFFSET(0x20)
-#define LAPIC_REGISTER_EOI           LAPIC_OFFSET(0x0B0)
-#define LAPIC_REGISTER_SPURIOUS      LAPIC_OFFSET(0x0F0)
-/*
- * The interrupt request register is a bit field of 256 bits.  It is split into
- * eight 32-bit registers which are 16 bytes apart.
- */
 #define LAPIC_REGISTER_IRR_BASE      LAPIC_OFFSET(0x200)
 #define LAPIC_REGISTER_IRR_STRIDE    LAPIC_OFFSET(0x010)
-#define LAPIC_REGISTER_ICR_LOW       LAPIC_OFFSET(0x300)
-#define LAPIC_REGISTER_ICR_HIGH      LAPIC_OFFSET(0x310)
 #define LAPIC_REGISTER_LVT_TIMER     LAPIC_OFFSET(0x320)
 #define LAPIC_REGISTER_TIMER_INITCNT LAPIC_OFFSET(0x380)
 #define LAPIC_REGISTER_TIMER_CURRCNT LAPIC_OFFSET(0x390)
@@ -83,9 +62,10 @@ extern "C" {
 #define LAPIC_ICR_TRIG_LEVEL         0x8000
 #define LAPIC_ICR_DEST_SELF          0x40000
 
-#define LAPIC_EOI_ACK                0
 #define LAPIC_SELECT_TMR_PERIODIC    0x20000
-#define LAPIC_SPURIOUS_ENABLE        0x100
+
+extern volatile uint32_t *bsp_lapic_base;
+extern uint8_t bsp_lapic_to_cpu_map[xAPIC_MAX_APIC_ID + 1];
 
 /* Number of times to calibrate the LAPIC timer to average it out */
 #define LAPIC_TIMER_NUM_CALIBRATIONS 5
@@ -175,14 +155,11 @@ RTEMS_STATIC_ASSERT(
     }                                                                    \
   } while(0);                                                            \
 
-extern volatile uint32_t* amd64_lapic_base;
-extern uint8_t amd64_lapic_to_cpu_map[xAPIC_MAX_APIC_ID + 1];
-
 /**
  * @brief Initializes the Local APIC by hardware and software enabling it.
  *
  * Initializes the Local APIC by hardware and software enabling it, and sets
- * up the amd64_lapic_base pointer that can be used as a 32-bit addressable array to
+ * up the bsp_lapic_base pointer that can be used as a 32-bit addressable array to
  * access Local APIC registers.
  *
  * @return true if successful.
@@ -271,7 +248,7 @@ void lapic_start_ap(uint32_t cpu_index, uint8_t page_vector);
 inline uint8_t lapic_get_id(void)
 {
   /* ID stored in highest 8 bits */
-  return amd64_lapic_base[LAPIC_REGISTER_ID]>>24;
+  return bsp_lapic_base[LAPIC_REGISTER_ID]>>24;
 }
 
 /**
@@ -279,7 +256,7 @@ inline uint8_t lapic_get_id(void)
  */
 inline void lapic_eoi(void)
 {
-  amd64_lapic_base[LAPIC_REGISTER_EOI] = LAPIC_EOI_ACK;
+  bsp_lapic_base[LAPIC_REGISTER_EOI] = LAPIC_EOI_ACK;
 }
 
 #ifdef __cplusplus

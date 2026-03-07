@@ -108,7 +108,7 @@ bool _CPU_SMP_Start_processor(uint32_t cpu_index)
 uint32_t _CPU_SMP_Get_current_processor(void)
 {
   uint8_t lapic_id = lapic_get_id();
-  return amd64_lapic_to_cpu_map[lapic_id];
+  return bsp_lapic_to_cpu_map[lapic_id];
 }
 
 uint32_t _CPU_SMP_Initialize(void)
@@ -143,7 +143,7 @@ void smp_init_ap(void)
   Context_Control_fp* null_fp_context_p = &_CPU_Null_fp_context;
   _CPU_Context_restore_fp(&null_fp_context_p);
 
-  amd64_lapic_base[LAPIC_REGISTER_SPURIOUS] =
+  bsp_lapic_base[LAPIC_REGISTER_SPURIOUS] =
     LAPIC_SPURIOUS_ENABLE | BSP_VECTOR_SPURIOUS;
 
   lidt(&amd64_idtr);
