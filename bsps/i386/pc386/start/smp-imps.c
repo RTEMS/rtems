@@ -202,9 +202,6 @@ uint32_t imps_num_cpus = 1;
 unsigned char imps_cpu_apic_map[IMPS_MAX_CPUS];
 unsigned char imps_apic_cpu_map[IMPS_MAX_CPUS];
 
-/* now defined in getcpuid.c */
-extern unsigned imps_lapic_addr;
-
 static void secondary_cpu_initialize(void);
 
 /*
