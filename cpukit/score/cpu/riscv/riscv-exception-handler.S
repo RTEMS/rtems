@@ -43,14 +43,27 @@
 
 #include <rtems/score/riscv-utility.h>
 
-PUBLIC(_RISCV_Exception_handler)
+PUBLIC(_RISCV_Vector_table)
 
 	.section	.text, "ax", @progbits
-	.align	2
+	/*
+	 * Vectored exception/interrupt handlers can require the vector base to
+	 * be aligned to 256 bytes
+	 */
+	.align	8
 	.option	arch, +zicsr
 
-TYPE_FUNC(_RISCV_Exception_handler)
-SYM(_RISCV_Exception_handler):
+/*
+ * This could be a nop slide, but it would introduce additional latency into
+ * interrupt handling depending on which interrupt was triggered
+ */
+TYPE_FUNC(_RISCV_Vector_table)
+SYM(_RISCV_Vector_table):
+	.rept 32
+	j .LRISCV_Exception_handler
+	.endr
+
+.LRISCV_Exception_handler:
 	addi	sp, sp, -CPU_INTERRUPT_FRAME_SIZE
 
 	/* Save */
@@ -111,7 +124,12 @@ SYM(_RISCV_Exception_handler):
 	FSREG	fa7, RISCV_INTERRUPT_FRAME_FA7(sp)
 #endif
 
-	/* Check if this is a synchronous or interrupt exception */
+	/*
+	 * Check if this is a synchronous or interrupt exception. The interrupt
+	 * flag does not need to be isolated here since the interrupt flag
+	 * (MSB) not being set will always evaluate to greater than zero and be
+	 * registered as an exception.
+	 */
 	bgez	a0, .Lsynchronous_exception
 
 	/*

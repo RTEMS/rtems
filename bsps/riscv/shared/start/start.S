@@ -161,7 +161,7 @@ RISCV_Start_on_processor:
 #endif
 
 	/* Set exception handler */
-	LADDR	t0, _RISCV_Exception_handler
+	LADDR	t0, _RISCV_Vector_table
 #ifdef RISCV_USE_S_MODE
 	csrw	stvec, t0
 #else
