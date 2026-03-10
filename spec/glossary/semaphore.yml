@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: semaphore
 text: |
   An RTEMS object which is used to synchronize tasks and provide mutually

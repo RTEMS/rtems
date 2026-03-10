@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: scenario
 text: |
   In the context of formal verification, in a setting that involves many

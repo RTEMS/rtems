@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: priority inversion
 text: |
   A form of indefinite postponement which occurs when a high priority tasks

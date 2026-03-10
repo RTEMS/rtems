@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: Message Queue Control Block
 text: |
   A data structure associated with each message queue used by RTEMS to

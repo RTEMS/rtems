@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: transient overload
 text: |
   A temporary rise in system activity which may cause deadlines to be

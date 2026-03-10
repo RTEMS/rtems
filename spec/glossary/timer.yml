@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: timer
 text: |
   An RTEMS object used to invoke subprograms at a later time.

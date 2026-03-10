@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: signal
 text: |
   An RTEMS provided mechanism to communicate asynchronously with a task.

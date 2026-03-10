@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: handler
 text: |
   The equivalent of a manager, except that it is internal to RTEMS and

@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: message
 text: |
   A sixteen byte entity used to communicate between tasks.  Messages are

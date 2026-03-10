@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: home scheduler
 text: |
   The home scheduler of a ${task:/term} is a ${scheduler:/term} which is an

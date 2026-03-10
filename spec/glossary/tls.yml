@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: TLS
 text: |
   This term is an acronym for Thread-Local Storage ${/ref/research/drepper-2013-tls:/cite}.

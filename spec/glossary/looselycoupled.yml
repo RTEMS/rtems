@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: loosely-coupled
 text: |
   A multiprocessor configuration where shared memory is not used for

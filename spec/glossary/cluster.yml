@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: cluster
 text: |
   We have clustered scheduling in case the set of processors of a system is

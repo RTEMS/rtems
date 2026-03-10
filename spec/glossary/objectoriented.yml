@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: object-oriented
 text: |
   A term used to describe systems with common mechanisms for utilizing a

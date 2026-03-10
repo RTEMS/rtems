@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: extension reverse order
 text: |
   The ${userextensions:/term} may be invoked in extension reverse order.  In

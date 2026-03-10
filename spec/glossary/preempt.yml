@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: preempt
 text: |
   The act of forcing a task to relinquish the processor and dispatching to

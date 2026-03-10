@@ -6,7 +6,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: user extensions
 text: |
   User extensions are software routines provided by the application to enhance

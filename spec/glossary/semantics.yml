@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: semantics
 text: |
   This term refers to the meaning of text or utterances in some language.  In a

@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: Unix epoch
 text: |
   The Unix epoch is a point in time.  It is 1970-01-01T00:00:00Z in

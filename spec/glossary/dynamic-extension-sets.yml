@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: dynamic extension sets
 text: |
   The dynamic extension sets are a list of ${userextensions:/term}.  The list

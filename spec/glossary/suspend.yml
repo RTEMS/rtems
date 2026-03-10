@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: suspend
 text: |
   A term used to describe a task that is not competing for the CPU because it

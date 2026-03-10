@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: atomic operations
 text: |
   Atomic operations are defined in terms of ${c11:/term}.

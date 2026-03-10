@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: no-operation function
 text: |
   A *no-operation function* is a function which has no side-effects and just

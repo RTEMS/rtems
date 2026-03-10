@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: posting
 text: |
   The act of sending an event, message, semaphore, or signal to a task.

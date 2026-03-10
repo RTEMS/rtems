@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: nested
 text: |
   A term used to describe an ASR that occurs during another ASR or an ISR

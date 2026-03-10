@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: User Initialization Tasks Table
 text: |
   A table which contains the information needed to create and start each of

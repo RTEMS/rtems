@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: GCC
 text: |
   This term is an acronym for `GNU Compiler Collection <https://gcc.gnu.org/>`_.

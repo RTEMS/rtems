@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: software product
 text: |
   The *software product* is the ${rtems:/term} real-time operating system.

@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: region
 text: |
   An RTEMS object which is used to allocate and deallocate variable size

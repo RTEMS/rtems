@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: Linear Temporal Logic
 text: |
   This is a logic that states properties about (possibly infinite) sequences of

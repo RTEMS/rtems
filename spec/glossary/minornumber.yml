@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: minor number
 text: |
   A numeric value passed to a device driver, the exact usage of which is

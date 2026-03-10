@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: Proxy Control Block
 text: |
   A data structure associated with each proxy used by RTEMS to manage that

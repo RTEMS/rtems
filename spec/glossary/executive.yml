@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: executive
 text: |
   In this document, this term is used to referred to RTEMS.  Commonly, an

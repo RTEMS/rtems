@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: sporadic task
 text: |
   A task which executes at irregular intervals and must comply with a hard

@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: Configuration Table
 text: |
   A table which contains information used to tailor RTEMS for a particular

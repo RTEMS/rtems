@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: Asynchronous Signal Routine
 text: |
   Similar to a hardware interrupt except that it is associated with a task

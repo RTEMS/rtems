@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: hard real-time system
 text: |
   A real-time system in which a missed deadline causes the worked performed

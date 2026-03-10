@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: CLOCK_REALTIME
 text: |
   The CLOCK_REALTIME is a clock provided by RTEMS which measures the real time

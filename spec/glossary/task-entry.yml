@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: task entry
 text: |
   The task entry is invoked to execute the task's job.  Before the task entry

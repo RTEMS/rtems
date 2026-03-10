@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: target architecture
 text: |
   The target architecture is the instruction set architecture (ISA) of the

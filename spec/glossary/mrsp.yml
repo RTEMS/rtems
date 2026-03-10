@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: MrsP
 text: |
   This term is an acronym for Multiprocessor Resource-Sharing Protocol.

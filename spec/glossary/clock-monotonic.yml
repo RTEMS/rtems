@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: CLOCK_MONOTONIC
 text: |
   The CLOCK_MONOTONIC is a clock provided by RTEMS which measures the time

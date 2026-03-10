@@ -5,7 +5,7 @@ enabled-by: true
 glossary-type: term
 links:
 - role: glossary-member
-  uid: ../glossary-general
+  uid: group
 term: context switch
 text: |
   Alternate term for task switch.  Taking control of the processor from one
