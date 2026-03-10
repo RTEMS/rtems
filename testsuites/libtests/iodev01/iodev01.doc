@@ -1,0 +1,15 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: iodev01
+
+directives:
+
+  - rtems_iodev_alloc_and_init
+  - rtems_iodev_init
+  - rtems_iodev_register
+  - rtems_iodev_unregister_and_destroy
+  - rtems_iodev_destroy_unregistered
+
+concepts:
+
+  - Ensure that the iodev driver API works.

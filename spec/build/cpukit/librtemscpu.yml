@@ -71,6 +71,9 @@ install:
 - destination: ${BSP_INCLUDEDIR}/dev/flash
   source:
   - cpukit/include/dev/flash/flashdev.h
+- destination: ${BSP_INCLUDEDIR}/dev/io
+  source:
+  - cpukit/include/dev/io/iodev.h
 - destination: ${BSP_INCLUDEDIR}/linux
   source:
   - cpukit/include/linux/i2c-dev.h
@@ -571,6 +574,7 @@ source:
 - cpukit/dev/i2c/xilinx-axi-i2c.c
 - cpukit/dev/ioprintf.c
 - cpukit/dev/iorelax.c
+- cpukit/dev/io/iodev.c
 - cpukit/dev/serial/sc16is752-spi.c
 - cpukit/dev/serial/sc16is752.c
 - cpukit/dev/spi/spi-bus.c
