@@ -12,6 +12,7 @@ install:
   source:
   - bsps/include/bsp/linker-symbols.h
   - bsps/riscv/include/bsp/linker-symbols-arch.h
+  - bsps/riscv/include/bsp/riscv-fdt.h
 ldflags: []
 links: []
 type: build

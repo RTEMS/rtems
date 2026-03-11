@@ -38,6 +38,7 @@
 #include <bsp/fdt.h>
 #include <bsp/irq.h>
 #include <bsp/riscv.h>
+#include <bsp/riscv-fdt.h>
 
 #include <rtems/sysinit.h>
 #include <rtems/timecounter.h>
@@ -49,7 +50,6 @@
 #include <libfdt.h>
 
 #ifdef RISCV_USE_S_MODE
-#include <string.h>
 #include <machine/sbi.h>
 
 static bool riscv_has_sstc;
@@ -111,30 +111,6 @@ static uint64_t riscv_clock_read_mtime(volatile RISCV_CLINT_timer_reg *mtime)
 }
 #endif /* !RISCV_USE_S_MODE */
 
-#ifdef RISCV_USE_S_MODE
-static bool riscv_has_isa_extension(const void *fdt, const char *ext)
-{
-  int node;
-  const char *val;
-  int len = 0;
-
-  node = fdt_path_offset(fdt, "/cpus");
-
-  val = (const char *) fdt_getprop(fdt, node, "riscv,isa", &len);
-
-  if (val == NULL || len == 0) {
-    int cpu0 = fdt_subnode_offset(fdt, node, "cpu@0");
-    val = (const char *) fdt_getprop(fdt, cpu0, "riscv,isa", &len);
-
-    if (val == NULL || len == 0) {
-      return false;
-    }
-  }
-
-  return strstr( val, ext ) != NULL;
-}
-#endif
-
 static void riscv_clock_handler_install(rtems_interrupt_handler handler)
 {
   rtems_status_code sc;
@@ -164,27 +140,6 @@ static uint32_t riscv_clock_get_timecount(struct timecounter *base)
 #endif
 
   return timecount;
-}
-
-static uint32_t riscv_clock_get_timebase_frequency(const void *fdt)
-{
-  int node;
-  const fdt32_t *val;
-  int len=0;
-
-  node = fdt_path_offset(fdt, "/cpus");
-
-  val = (fdt32_t *) fdt_getprop(fdt, node, "timebase-frequency", &len);
-
-  if (val == NULL || len < 4) {
-    int cpu0 = fdt_subnode_offset(fdt, node, "cpu@0");
-    val = (fdt32_t *) fdt_getprop(fdt, cpu0, "timebase-frequency", &len);
-
-    if (val == NULL || len < 4) {
-      bsp_fatal(RISCV_FATAL_NO_TIMEBASE_FREQUENCY_IN_DEVICE_TREE);
-    }
-  }
-  return fdt32_to_cpu(*val);
 }
 
 static uint64_t riscv_clock_read_timer(riscv_timecounter *tc)

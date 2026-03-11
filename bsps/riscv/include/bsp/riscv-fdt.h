@@ -3,15 +3,15 @@
 /**
  * @file
  *
- * @brief BSP specific initialization support routines
+ * @ingroup RTEMSBSPsRISCVShared
  *
+ * @brief This header file provides interfaces for probing the RISC-V ISA
+ * extensions.
  */
 
 /*
- * COPYRIGHT (c) 1989-2020.
- * On-Line Applications Research Corporation (OAR).
- * Cobham Gaisler AB.
- *
+ * Copyright (C) 2026 Gedare Bloom
+ * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -34,46 +34,36 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <bsp.h>
-#include <bsp/fdt.h>
-#include <bsp/riscv-fdt.h>
+#ifndef _BSP_RISCV_FDT_H
+#define _BSP_RISCV_FDT_H
 
-#include <rtems/sysinit.h>
+#include <rtems/score/cpu.h>
 
-#include <libfdt.h>
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
-/*
- *  These are provided by the linkcmds for ALL of the BSPs which use this file.
+/**
+ * @brief Finds the end of memory from the @a fdt properties.
+ *
+ * @return Returns the last valid address of memory.
  */
-extern char WorkAreaBase[];
-extern char RamEnd[];
+void *riscv_fdt_get_end_of_memory(const void *fdt);
 
-static Memory_Area _Memory_Areas[ 1 ];
+/**
+ * @brief Finds the timebase frequency from the @a fdt properties.
+ *
+ * @return Returns the timebase frequency.
+ */
+uint32_t riscv_clock_get_timebase_frequency(const void *fdt);
 
-static void bsp_memory_initialize( void )
-{
-  void *end;
-  const void *fdt = bsp_fdt_get();
+/**
+ * @brief Searches for the ISA @a extension within the @a fdt.
+ */
+bool riscv_has_isa_extension(const void *fdt, const char *extension);
 
-  /* get end of memory from the "/memory" node in the fdt */
-  end = riscv_fdt_get_end_of_memory(fdt);
-  if (end == NULL) {
-    /* fall back to linker symbol if "/memory" node not found or invalid */
-    end = RamEnd;
-  }
-  _Memory_Initialize( &_Memory_Areas[ 0 ], WorkAreaBase, end );
+#ifdef __cplusplus
 }
+#endif /* __cplusplus */
 
-RTEMS_SYSINIT_ITEM(
-  bsp_memory_initialize,
-  RTEMS_SYSINIT_MEMORY,
-  RTEMS_SYSINIT_ORDER_MIDDLE
-);
-
-static const Memory_Information _Memory_Information =
-  MEMORY_INFORMATION_INITIALIZER( _Memory_Areas );
-
-const Memory_Information *_Memory_Get( void )
-{
-  return &_Memory_Information;
-}
+#endif /* _BSP_RISCV_FDT_H */
