@@ -387,7 +387,7 @@ typedef struct irqamp_timestamp {
     IRQAMP_MPSTAT_EIRQ_MASK )
 
 #define IRQAMP_MPSTAT_STATUS_SHIFT 0
-#define IRQAMP_MPSTAT_STATUS_MASK 0xfU
+#define IRQAMP_MPSTAT_STATUS_MASK 0xffffU
 #define IRQAMP_MPSTAT_STATUS_GET( _reg ) \
   ( ( ( _reg ) & IRQAMP_MPSTAT_STATUS_MASK ) >> \
     IRQAMP_MPSTAT_STATUS_SHIFT )
