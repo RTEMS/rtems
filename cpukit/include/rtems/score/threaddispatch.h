@@ -258,7 +258,7 @@ static inline void _Thread_Dispatch_unnest( Per_CPU_Control *cpu_self )
 
   disable_level = cpu_self->thread_dispatch_disable_level;
   _Assert( disable_level > 0 );
-  cpu_self->thread_dispatch_disable_level = disable_level + 1;
+  cpu_self->thread_dispatch_disable_level = disable_level - 1;
 }
 
 /**
