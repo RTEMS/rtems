@@ -84,11 +84,7 @@
 #include <rtems/score/cpu.h>
 #include <assert.h>
 
-extern void _pc386_delay(void);
 extern uint8_t gdtdesc[GDT_SIZE];
-
-static int lapic_dummy = 0;
-unsigned imps_lapic_addr = ((unsigned)(&lapic_dummy)) - LAPIC_ID;
 
 /* #define KERNEL_PRINT(_format)       printk(_format) */
 
@@ -123,11 +119,6 @@ static unsigned char CMOS_READ_BYTE(
 
 #define PHYS_TO_VIRTUAL(_x)    _x
 #define VIRTUAL_TO_PHYS(_x)    _x
-static void UDELAY(int x)
-{ int _i = x;
-  while ( _i-- )
-    _pc386_delay();
-}
 
 #define READ_MSR_LO(_x) \
   (unsigned int)(read_msr(_x) & 0xffffffff)
@@ -222,29 +213,6 @@ get_checksum(unsigned start, int length)
 }
 
 /*
- *  APIC ICR write and status check function.
- */
-int
-send_ipi(unsigned int dst, unsigned int v)
-{
-  int to, send_status, apicid;
-
-  apicid = imps_cpu_apic_map[dst];
-
-  IMPS_LAPIC_WRITE(LAPIC_ICR+0x10, (apicid << 24));
-  IMPS_LAPIC_WRITE(LAPIC_ICR, v);
-
-  /* Wait for send to finish */
-  to = 0;
-  do {
-    UDELAY(100);
-    send_status = IMPS_LAPIC_READ(LAPIC_ICR) & LAPIC_ICR_STATUS_PEND;
-  } while (send_status && (to++ < 1000));
-
-  return (to < 1000);
-}
-
-/*
  *  Primary function for booting individual CPUs.
  *
  *  This must be modified to perform whatever OS-specific initialization
@@ -258,7 +226,7 @@ boot_cpu(imps_processor *proc)
   unsigned bootaddr;
   unsigned bios_reset_vector = PHYS_TO_VIRTUAL(BIOS_RESET_VECTOR);
 
-  cpuid = imps_apic_cpu_map[apicid];
+  cpuid = lapic_get_cpu_index(apicid);
   /*
    * Copy boot code for secondary CPUs here.  Find it in between
    * "patch_code_start" and "patch_code_end" symbols.  The other CPUs
@@ -298,31 +266,17 @@ boot_cpu(imps_processor *proc)
 #pragma GCC diagnostic pop
 
   /* clear the APIC error register */
-  IMPS_LAPIC_WRITE(LAPIC_ESR, 0);
-  IMPS_LAPIC_READ(LAPIC_ESR);
-
-  /* assert INIT IPI */
-  send_ipi(
-    cpuid,
-    LAPIC_ICR_TM_LEVEL | LAPIC_ICR_LEVELASSERT | LAPIC_ICR_DM_INIT
-  );
-  UDELAY(10000);
-
-  /* de-assert INIT IPI */
-  send_ipi(cpuid, LAPIC_ICR_TM_LEVEL | LAPIC_ICR_DM_INIT);
-
-  UDELAY(10000);
+  lapic_clear_errors();
 
   /*
    *  Send Startup IPIs if not an old pre-integrated APIC.
    */
 
   if (proc->apic_ver >= APIC_VER_NEW) {
-    int i;
-    for (i = 1; i <= 2; i++) {
-      send_ipi(cpuid, LAPIC_ICR_DM_SIPI | ((bootaddr >> 12) & 0xFF));
-      UDELAY(1000);
-    }
+    lapic_reset_and_start_ap(cpuid, (bootaddr >> 12) & 0xFF);
+  } else {
+    /* Old APICs don't support SIPIs, so just send an INIT IPI and wait for the AP to start */
+    lapic_reset_ap(cpuid);
   }
 
   /*
@@ -335,8 +289,7 @@ boot_cpu(imps_processor *proc)
    */
 
   /* clear the APIC error register */
-  IMPS_LAPIC_WRITE(LAPIC_ESR, 0);
-  IMPS_LAPIC_READ(LAPIC_ESR);
+  lapic_clear_errors();
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Warray-bounds"
@@ -369,15 +322,15 @@ add_processor(imps_processor *proc)
    * otherwise calls to _Get_current_processor can deliver
    * wrong values if the BSP gets interrupted
    */
-  imps_cpu_apic_map[imps_num_cpus] = apicid;
-  imps_apic_cpu_map[apicid] = imps_num_cpus;
+  lapic_set_lapic_id(imps_num_cpus, apicid);
+  lapic_set_cpu_index(apicid, imps_num_cpus);
   if (boot_cpu(proc)) {
 
     /*  XXXXX  add OS-specific setup for secondary CPUs here */
 
     /* AP booted successfully, increase number of available cores */
     imps_num_cpus++;
-    printk("#%d  Application Processor (AP)\n", imps_apic_cpu_map[apicid]);
+    printk("#%d  Application Processor (AP)\n", lapic_get_cpu_index(apicid));
   }
 }
 
@@ -506,11 +459,11 @@ imps_bad_bios(imps_fps *fps_ptr)
 static void
 imps_read_bios(imps_fps *fps_ptr)
 {
-  int apicid;
   unsigned cth_start, cth_count;
   imps_cth *local_cth_ptr
     = (imps_cth *)PHYS_TO_VIRTUAL(fps_ptr->cth_ptr);
   char *str_ptr;
+  uint32_t lapic_paddr;
 
   printk("Intel MultiProcessor Spec 1.%d BIOS support detected\n",
           fps_ptr->spec_rev);
@@ -530,26 +483,22 @@ imps_read_bios(imps_fps *fps_ptr)
     str_ptr = "Virtual Wire";
   }
   if (fps_ptr->cth_ptr) {
-    imps_lapic_addr = local_cth_ptr->lapic_addr;
+    lapic_paddr = local_cth_ptr->lapic_addr;
   } else {
-    imps_lapic_addr = LAPIC_ADDR_DEFAULT;
+    lapic_paddr = LAPIC_ADDR_DEFAULT;
   }
+
   printk("    APIC config: \"%s mode\"    Local APIC address: 0x%x\n",
-          str_ptr, imps_lapic_addr);
-  if (imps_lapic_addr != (READ_MSR_LO(0x1b) & 0xFFFFF000)) {
-    printk("Inconsistent Local APIC address, Disabling SMP support\n");
+          str_ptr, lapic_paddr);
+  if (lapic_paddr != (READ_MSR_LO(APIC_BASE_MSR) & 0xFFFFF000)) {
     return;
   }
-  imps_lapic_addr = PHYS_TO_VIRTUAL(imps_lapic_addr);
 
-  /*
-   *  Setup primary CPU.
-   */
-  apicid = IMPS_LAPIC_READ(LAPIC_SPIV);
-  IMPS_LAPIC_WRITE(LAPIC_SPIV, apicid|LAPIC_SPIV_ENABLE_APIC);
-  apicid = APIC_ID(IMPS_LAPIC_READ(LAPIC_ID));
-  imps_cpu_apic_map[0] = apicid;
-  imps_apic_cpu_map[apicid] = 0;
+  /* Initialize the Local APIC */
+  if (!lapic_initialize(PHYS_TO_VIRTUAL(lapic_paddr))) {
+    printk("Failed to initialize Local APIC\n");
+    return;
+  }
 
   if (fps_ptr->cth_ptr) {
     char str1[16], str2[16];
@@ -569,9 +518,9 @@ imps_read_bios(imps_fps *fps_ptr)
     defconfig.ioapic.ver
       = APIC_VERSION(*((volatile unsigned *)
            (IOAPIC_ADDR_DEFAULT+IOAPIC_RW)));
-    defconfig.proc[apicid].flags
+    defconfig.proc[lapic_get_id()].flags
       = IMPS_FLAG_ENABLED|IMPS_CPUFLAG_BOOT;
-    defconfig.proc[!apicid].flags = IMPS_FLAG_ENABLED;
+    defconfig.proc[!lapic_get_id()].flags = IMPS_FLAG_ENABLED;
     imps_num_cpus = 2;
     if (fps_ptr->feature_info[0] == 1
      || fps_ptr->feature_info[0] == 5) {
@@ -649,29 +598,24 @@ imps_scan(unsigned start, unsigned length)
 int
 imps_force(int ncpus)
 {
-  int apicid, i;
+  int i;
   imps_processor p;
+  uint32_t lapic_paddr;
 
   printk("Intel MultiProcessor \"Force\" Support\n");
 
-  imps_lapic_addr = (READ_MSR_LO(0x1b) & 0xFFFFF000);
-  imps_lapic_addr = PHYS_TO_VIRTUAL(imps_lapic_addr);
-
-  /*
-   *  Setup primary CPU.
-   */
-  apicid = IMPS_LAPIC_READ(LAPIC_SPIV);
-  IMPS_LAPIC_WRITE(LAPIC_SPIV, apicid|LAPIC_SPIV_ENABLE_APIC);
-  apicid = APIC_ID(IMPS_LAPIC_READ(LAPIC_ID));
-  imps_cpu_apic_map[0] = apicid;
-  imps_apic_cpu_map[apicid] = 0;
+  lapic_paddr = (READ_MSR_LO(APIC_BASE_MSR) & 0xFFFFF000);
+  if (!lapic_initialize(PHYS_TO_VIRTUAL(lapic_paddr))) {
+    printk("Failed to initialize Local APIC\n");
+    return 0;
+  }
 
   p.type = 0;
   p.apic_ver = 0x10;
   p.signature = p.features = 0;
 
   for (i = 0; i < ncpus; i++) {
-    if (apicid == i) {
+    if (lapic_get_id() == i) {
       p.flags = IMPS_FLAG_ENABLED | IMPS_CPUFLAG_BOOT;
     } else {
       p.flags = IMPS_FLAG_ENABLED;
@@ -772,8 +716,7 @@ imps_probe(void)
  */
 static void smp_apic_ack(void)
 {
-  (void) IMPS_LAPIC_READ(LAPIC_SPIV);  /* dummy read */
-  IMPS_LAPIC_WRITE(LAPIC_EOI, 0 );     /* ACK the interrupt */
+  lapic_send_eoi(); 
 }
 
 static void bsp_inter_processor_interrupt(void *arg)
@@ -817,12 +760,9 @@ extern void enable_sse(void);
 /* pc386 specific initialization */
 static void secondary_cpu_initialize(void)
 {
-  int apicid;
-
   asm volatile( "lidt IDT_Descriptor" );
 
-  apicid = IMPS_LAPIC_READ(LAPIC_SPIV);
-  IMPS_LAPIC_WRITE(LAPIC_SPIV, apicid|LAPIC_SPIV_ENABLE_APIC);
+  lapic_enable(); 
 
 #ifdef __SSE__
   enable_sse();

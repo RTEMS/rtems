@@ -182,6 +182,7 @@ void rtems_irq_mngt_init(void);          /* from 'irq_init.c' */
 
 void Clock_driver_install_handler(void);             /* from 'ckinit.c'  */
 void Clock_driver_support_initialize_hardware(void); /* from 'ckinit.c'  */
+void _pc386_delay(void); /* from 'ldsegs.S' */
 
 void *bsp_idle_thread( uintptr_t ignored );
 #define BSP_IDLE_TASK_BODY bsp_idle_thread
@@ -248,7 +249,6 @@ void C_dispatch_isr(int vector);
   /* CPU specific functions used by the SMP API */
   int imps_probe(void);
   void ipi_install_irq(void);
-  int send_ipi(unsigned int dst, unsigned int v);
 #endif
 
 #ifdef __cplusplus

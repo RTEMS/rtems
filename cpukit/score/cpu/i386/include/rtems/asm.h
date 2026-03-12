@@ -151,10 +151,10 @@
 .macro GET_CPU_ID REG
     .set  LAPIC_ID,         0x20
     .set  LAPIC_ID_SHIFT,   0x18L
-    movl     imps_lapic_addr,\REG
+    movl     i386_lapic_base,\REG
     movl     LAPIC_ID(\REG),\REG
     shrl     $LAPIC_ID_SHIFT,\REG                /* LAPIC_ID in REG */
-    movzbl   imps_apic_cpu_map(\REG),\REG        /* CPU ID in REG */
+    movzbl   i386_lapic_to_cpu_map(\REG),\REG        /* CPU ID in REG */
 .endm
 
 .macro GET_SELF_CPU_CONTROL REG

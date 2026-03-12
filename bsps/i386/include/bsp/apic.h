@@ -52,6 +52,8 @@
 #ifndef _APIC_H
 #define _APIC_H
 
+#include <rtems/score/basedefs.h>
+
 /*
  *  APIC Defines.
  */
@@ -98,7 +100,8 @@
 #define LAPIC_TMR                               0x180
 #define LAPIC_IRR                               0x200
 #define LAPIC_ESR                               0x280
-#define LAPIC_ICR                               0x300
+#define LAPIC_ICR_LOW                           0x300
+#define LAPIC_ICR_HIGH                          0x310
 #define   LAPIC_ICR_DS_SELF                     0x40000
 #define   LAPIC_ICR_DS_ALLINC                   0x80000
 #define   LAPIC_ICR_DS_ALLEX                    0xC0000
@@ -119,6 +122,127 @@
 #define LAPIC_TICR                              0x380
 #define LAPIC_TCCR                              0x390
 #define LAPIC_TDCR                              0x3E0
+
+/* The address of the MSR pointing to the APIC base physical address */
+#define APIC_BASE_MSR             0x1B
+/* Value to hardware-enable the APIC through the APIC_BASE_MSR */
+#define APIC_BASE_MSR_ENABLE      0x800
+
+/*
+ * Since the LAPIC registers are contained in an array of 32-bit elements
+ * these byte-offsets need to be divided by 4 to index the array.
+ */
+#define LAPIC_OFFSET(val) (val >> 2)
+
+#define LAPIC_REGISTER_ID              LAPIC_OFFSET(LAPIC_ID)
+#define LAPIC_REGISTER_EOI             LAPIC_OFFSET(LAPIC_EOI)
+#define LAPIC_REGISTER_SPURIOUS        LAPIC_OFFSET(LAPIC_SPIV)
+#define LAPIC_REGISTER_ESR             LAPIC_OFFSET(LAPIC_ESR)
+#define LAPIC_REGISTER_ICR_LOW         LAPIC_OFFSET(LAPIC_ICR_LOW)
+#define LAPIC_REGISTER_ICR_HIGH        LAPIC_OFFSET(LAPIC_ICR_HIGH)
+
+#define LAPIC_EOI_ACK                0
+#define LAPIC_SPURIOUS_ENABLE        0x100
+
+/**
+ * @brief Initializes the Local APIC by hardware and software enabling it.
+ *
+ * Sets the i386 local apic base pointer and enabled the local apic.
+ *
+ * @param lapic_addr The physical address of the Local APIC.
+ *
+ * @return true if successful. 
+ */
+bool lapic_initialize(uint32_t lapic_addr);
+
+/**
+ * @brief Enables the Local APIC via the spurious interrupt vector register.
+ */
+void lapic_enable(void);
+
+/**
+ * @brief Clears the error status register of the Local APIC.
+ *
+ * This is done by writing to the ESR and then doing a dummy read to make sure
+ * the write has taken effect.
+ */
+void lapic_clear_errors(void);
+
+#ifdef RTEMS_SMP
+/**
+ * @brief Sends an interprocessor interrupt to a specified processor.
+ *
+ * @param target_cpu_index The processor index of the target processor.
+ * @param isr_vector The vector of the interrupt being sent.
+ */
+void lapic_send_ipi(uint32_t target_cpu_index, uint8_t isr_vector);
+
+/**
+ * @brief Resets and starts the Application Processor that corresponds to cpu_index.
+ * 
+ * This function is only for integrated APICs (version >= APIC_VER_NEW).
+ * The AP is reset by sending an INIT IPI and then started by sending a SIPI 
+ * with the page vector of the trampoline code. 
+ * 
+ * @param cpu_index The processor to be started.
+ * @param page_vector The under 1MB 4KB page where the trampoline code is located.
+ */
+void lapic_reset_and_start_ap(uint32_t cpu_index, uint8_t page_vector);
+
+/**
+ * @brief Resets the Application Processor that corresponds to cpu_index.
+ * 
+ * For older APIC versions, the AP does not need SIPIs to start, so only 
+ * an INIT IPI is sent to reset the AP.
+ *
+ * @param cpu_index The processor to be reset.
+ */
+void lapic_reset_ap(uint32_t cpu_index);
+
+/** 
+ * @brief Get the CPU index for a given Local APIC ID. 
+ * 
+ * @param lapic_id The Local APIC ID to look up.
+ * @return The CPU index corresponding to the given Local APIC ID.
+ */
+uint8_t lapic_get_cpu_index(uint8_t lapic_id);
+
+/**
+ * @brief Get the Local APIC ID for a given CPU index.
+ * 
+ * @param cpu_index The CPU index to look up.
+ * @return The Local APIC ID corresponding to the given CPU index.
+ */
+uint8_t lapic_get_lapic_id(uint32_t cpu_index);
+
+/**
+ * @brief Stores a mapping from APIC id to CPU index.
+ *
+ * @param lapic_id The Local APIC ID to store.
+ * @param cpu_index The CPU index to store.
+ */
+void lapic_set_cpu_index(uint8_t lapic_id, uint32_t cpu_index);
+
+/**
+ * @brief Stores a mapping from CPU index to APIC id.
+ *
+ * @param cpu_index The CPU index to store.
+ * @param lapic_id The Local APIC ID to store.
+ */
+void lapic_set_lapic_id(uint32_t cpu_index, uint8_t lapic_id);
+
+#endif
+
+/**
+ * @brief Retrieves the Local APIC ID of the current processor.
+ * @return The Local APIC ID of the current processor.
+ */
+uint8_t lapic_get_id(void);
+
+/**
+ * @brief Sends an End of Interrupt (EOI) signal to the Local APIC.
+ */
+void lapic_send_eoi(void);
 
 #endif  /* _APIC_H */
 

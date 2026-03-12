@@ -225,25 +225,9 @@ struct imps_interrupt
  *  Exported globals here.
  */
 
-/** @brief
- *  These map from virtual cpu numbers to APIC id's and back.
- */
-extern unsigned char imps_cpu_apic_map[IMPS_MAX_CPUS];
-extern unsigned char imps_apic_cpu_map[IMPS_MAX_CPUS];
-
 /** @brief base address of application processor reset code at 0x70000 */
 extern char _binary_appstart_bin_start[];
 extern char _binary_appstart_bin_size[];
-
-/** @brief base address of the local apic. Usually 0xFEE00000 */
-extern unsigned imps_lapic_addr;
-
-/*
- *  Defines that use variables
- */
-#define IMPS_LAPIC_READ(x)  (*((volatile unsigned *) (imps_lapic_addr+(x))))
-#define IMPS_LAPIC_WRITE(x, y)   \
-   (*((volatile unsigned *) (imps_lapic_addr+(x))) = (y))
 
 #endif  /* !_SMP_IMPS_H */
 

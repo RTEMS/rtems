@@ -65,6 +65,7 @@ source:
 - bsps/i386/pc386/start/page.c
 - bsps/i386/pc386/start/realmode_int.c
 - bsps/i386/shared/cache/cache.c
+- bsps/i386/shared/irq/apic.c
 - bsps/i386/shared/irq/elcr.c
 - bsps/i386/shared/irq/idt.c
 - bsps/i386/shared/irq/irq.c

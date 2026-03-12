@@ -47,7 +47,7 @@ bool _CPU_SMP_Start_processor( uint32_t cpu_index )
 
 uint32_t _CPU_SMP_Get_current_processor( void )
 {
-  return imps_apic_cpu_map[APIC_ID(IMPS_LAPIC_READ(LAPIC_ID))];
+  return lapic_get_cpu_index( lapic_get_id() );
 }
 
 uint32_t _CPU_SMP_Initialize( void )
@@ -65,5 +65,5 @@ void _CPU_SMP_Finalize_initialization( uint32_t cpu_count )
 
 void _CPU_SMP_Send_interrupt( uint32_t target_processor_index )
 {
-  send_ipi( target_processor_index, 0x30 );
+  lapic_send_ipi( target_processor_index, 0x30 );
 }
