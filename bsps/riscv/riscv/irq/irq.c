@@ -484,7 +484,7 @@ rtems_status_code bsp_interrupt_is_pending(
 
   _Assert(vector == RISCV_INTERRUPT_VECTOR_SOFTWARE);
 #ifdef RISCV_USE_S_MODE
-  *pending = (read_csr(sip) & SIP_STIP) != 0;
+  *pending = (read_csr(sip) & SIP_SSIP) != 0;
 #else
   *pending = (read_csr(mip) & MIP_MSIP) != 0;
 #endif
@@ -599,7 +599,7 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
 
   _Assert(vector == RISCV_INTERRUPT_VECTOR_SOFTWARE);
 #ifdef RISCV_USE_S_MODE
-    *enabled = (read_csr(sie) & SIP_STIP) != 0;
+    *enabled = (read_csr(sie) & SIP_SSIP) != 0;
 #else
   *enabled = (read_csr(mie) & MIP_MSIP) != 0;
 #endif
@@ -671,7 +671,7 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
 
   _Assert(vector == RISCV_INTERRUPT_VECTOR_SOFTWARE);
 #ifdef RISCV_USE_S_MODE
-  set_csr(sie, SIP_STIP);
+  set_csr(sie, SIP_SSIP);
 #else
   set_csr(mie, MIP_MSIP);
 #endif
@@ -743,7 +743,7 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 
   _Assert(vector == RISCV_INTERRUPT_VECTOR_SOFTWARE);
 #ifdef RISCV_USE_S_MODE
-  clear_csr(sie, SIP_STIP);
+  clear_csr(sie, SIP_SSIP);
 #else
   clear_csr(mie, MIP_MSIP);
 #endif
