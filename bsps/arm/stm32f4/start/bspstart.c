@@ -73,8 +73,8 @@ static void init_main_osc( void )
  *
  * Limitations:
  * It is assumed that 1MHz resolution is enough.
- * Best fits for the clocks are achieved with multiplies of 42MHz.
- * Even though APB1, APB2 and AHB are calculated user is still required
+ * Best fits for the clocks are achieved with multiples of 42MHz.
+ * Even though APB1, APB2 and AHB are calculated, user is still required
  * to provide correct values for the bsp configuration for the:
  * STM32F4_PCLK1
  * STM32F4_PCLK2
@@ -86,7 +86,7 @@ static void init_main_osc( void )
  * @param hse_flag Flag determining which clock source to use, 1 for HSE,
  *                 0 for HSI.
  *
- * @retval RTEMS_SUCCESSFUL Configuration has been succesfully aplied for the
+ * @retval RTEMS_SUCCESSFUL Configuration has been successfully applied for the
  *                          requested clock speed.
  * @retval RTEMS_TIMEOUT HSE clock didn't start or PLL didn't lock.
  * @retval RTEMS_INVALID_NUMBER Requested clock speed is out of range.
@@ -150,12 +150,12 @@ static rtems_status_code set_system_clk(
   }
 
   /*
-   * Lets use 1MHz input for PLL so we get higher VCO output
-   * this way we get better value for the PLL_Q divader for the USB
+   * Let's use 1MHz input for PLL so we get higher VCO output
+   * this way we get a better value for the PLL_Q divider for the USB
    *
    * Though you might want to use 2MHz as per CPU specification:
    *
-   * Caution:The software has to set these bits correctly to ensure
+   * Caution: The software has to set these bits correctly to ensure
    * that the VCO input frequency ranges from 1 to 2 MHz.
    * It is recommended to select a frequency of 2 MHz to limit PLL jitter.
    */
@@ -182,10 +182,10 @@ static rtems_status_code set_system_clk(
     src_clk = hse_clk;
   }
 
-  pll_m = src_clk; /* divide by the oscilator speed in MHz */
+  pll_m = src_clk; /* divide by the oscillator speed in MHz */
 
   /* pll_q is a prescaler from VCO for the USB OTG FS, SDIO and RNG,
-   * best if results in the 48MHz for the USB
+   * best if it results in the 48MHz for the USB
    */
   pll_q = ( (long) ( src_clk * pll_n ) ) / pll_m / 48;
 
@@ -261,14 +261,14 @@ static rtems_status_code set_system_clk(
                   |
                   RCC_PLLCFGR_PLLQ( pll_q );    /* PLLQ divider */
 
-  /* set prescalers for the internal busses */
+  /* set prescalers for the internal buses */
   rcc->cfgr |= apbpre1 |
                apbpre2 |
                ahbpre;
 
   /*
    * Set flash parameters, hard coded for now for fast system clocks.
-   * TODO implement some math to use flash on as low latancy as possible
+   * TODO implement some math to use flash with as low latency as possible
    */
   flash->acr = STM32F4_FLASH_ACR_LATENCY( 5 ) | /* latency */
                STM32F4_FLASH_ACR_ICEN |       /* instruction cache */
