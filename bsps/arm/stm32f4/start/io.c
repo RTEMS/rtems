@@ -172,7 +172,7 @@ static void set_remap_config(stm32f4_gpio_remap remap)
     uint32_t mask = (1 << entry.width) - 1;
     uint32_t value = *reg;
 
-    value &= mask << entry.start;
+    value &= ~(mask << entry.start);
     value |= entry.value << entry.start;
 
     *reg = value;
