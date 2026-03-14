@@ -14,9 +14,9 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
-/* The I2C-module can not run with libi2c. The reason for this is, that libi2c
+/* The I2C-module can not run with libi2c. The reason for this is that libi2c
  * needs a possibility to generate a stop condition separately. This controller
- * wants to generate the condition automatically when sending or receiving data.
+ * generates the condition automatically when sending or receiving data.
  */
 
 #ifndef LIBBSP_ARM_STM32F4_I2C_H
@@ -40,8 +40,8 @@ extern "C" {
 
 typedef struct {
   /**
-   * @brief The address of the slave without the read write bit.
-   * A 7-Bit address should be placed in the bits [6..0]
+   * @brief The address of the slave without the read/write bit.
+   * A 7-bit address should be placed in bits [6..0]
    */
   uint16_t addr;
   /** @brief Read (true) or write (false) data */
@@ -68,13 +68,13 @@ typedef struct {
 /** @brief Initialise the i2c module. */
 rtems_status_code stm32f4_i2c_init(stm32f4_i2c_bus_entry *e);
 
-/** @brief Process a i2c message */
+/** @brief Process an i2c message */
 rtems_status_code stm32f4_i2c_process_message(
   stm32f4_i2c_bus_entry *e,
   stm32f4_i2c_message *msg
 );
 
-/** @brief Set another baud rate than the default one */
+/** @brief Set a baud rate other than the default */
 rtems_status_code stm32f4_i2c_set_bitrate(
   stm32f4_i2c_bus_entry *e,
   uint32_t br

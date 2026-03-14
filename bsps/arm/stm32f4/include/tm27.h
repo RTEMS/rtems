@@ -33,4 +33,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef LIBBSP_ARM_STM32F4_TM27_H
+#define LIBBSP_ARM_STM32F4_TM27_H
+
+
 #include <rtems/tm27-default.h>
+
+
+#endif /* LIBBSP_ARM_STM32F4_TM27_H */

@@ -125,7 +125,7 @@ typedef enum {
 #ifdef STM32F4_FAMILY_F10XXX
 
   /**
-   * @name Family F10
+   * @name Family F10XXX
    * @{
    */
 

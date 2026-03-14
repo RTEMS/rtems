@@ -42,7 +42,7 @@
 #ifdef STM32F4_FAMILY_F4XXXX
 
 /**
- * @defgroup stm32f4_reg Register Defintions
+ * @defgroup stm32f4_reg Register Definitions
  * @ingroup RTEMSBSPsARMSTM32F4
  * @brief Register Definitions
  * @{
@@ -54,7 +54,7 @@
 #define STM32F4_AHB2_BASE (STM32F4_BASE + 0x50000000)
 
 /**
- * @name STM32f4XXXX GPIO
+ * @name STM32F4XXXX GPIO
  * @{
  */
 
@@ -102,7 +102,7 @@
 /** @} */
 
 /**
- * @name STM32f4XXXX PWR
+ * @name STM32F4XXXX PWR
  * @{
  */
 
@@ -112,7 +112,7 @@
 /** @} */
 
 /**
- * @name STM32f4XXXX EXTI
+ * @name STM32F4XXXX EXTI
  * @{
  */
 
@@ -122,7 +122,7 @@
 /** @} */
 
 /**
- * @name STM32f4XXXX SYSCFG
+ * @name STM32F4XXXX SYSCFG
  * @{
  */
 
@@ -132,7 +132,7 @@
 /** @} */
 
 /**
- * @name STM32f4XXXX FLASH
+ * @name STM32F4XXXX FLASH
  * @{
  */
 
@@ -142,7 +142,7 @@
 /** @} */
 
 /**
- * @name STM32f4XXXX TIM
+ * @name STM32F4XXXX TIM
  * @{
  */
 
@@ -165,7 +165,7 @@
 /** @} */
 
 /**
- * @name STM32f4XXXX ADC
+ * @name STM32F4XXXX ADC
  * @{
  */
 
@@ -178,7 +178,7 @@
 /** @} */
 
 /**
- * @name STM32f4XXXX OTGFS
+ * @name STM32F4XXXX OTGFS
  * @{
  */
 

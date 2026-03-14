@@ -42,7 +42,7 @@ struct stm32f4_adc_chan_s {
 #define STM32F4_ADC_CR1_DISCNUM(val)	BSP_FLD32(val, 13, 15)	// Discontinuous mode channel count
 #define STM32F4_ADC_CR1_DISCNUM_GET(reg)	BSP_FLD32GET(reg, 13, 15)
 #define STM32F4_ADC_CR1_DISCNUM_SET(reg, val)	BSP_FLD32SET(reg, val, 13, 15)
-#define STM32F4_ADC_CR1_JDISCEN		BSP_BIT32(12)	// Discontinous mode on injected channels
+#define STM32F4_ADC_CR1_JDISCEN		BSP_BIT32(12)	// Discontinuous mode on injected channels
 #define STM32F4_ADC_CR1_DISCEN		BSP_BIT32(11)	// Discontinous mode on regular channels
 #define STM32F4_ADC_CR1_JAUTO		BSP_BIT32(10)	// Automated injected group conversion
 #define STM32F4_ADC_CR1_AWDSGL		BSP_BIT32(9)	// Enable watchdog on single channel in scan mode
@@ -254,10 +254,10 @@ struct stm32f4_adc_com_s {
 #define STM32F4_ADC_CSR_EOC1	BSP_BIT32(1)	// Channel end of conversion flag ADC1
 #define STM32F4_ADC_CSR_AWD1	BSP_BIT32(0)	// Analog watchdog flag ADC1
 
-	uint32_t ccr; 		// 0x00: Common control register
+	uint32_t ccr; 		// 0x04: Common control register
 #define STM32F4_ADC_CCR_TSVREFE	BSP_BIT32(23)	// Temp sensor and Vrefint enable
 #define STM32F4_ADC_CCR_VBATE	BSP_BIT32(22)	// Vbat enable
-#define STM32F4_ADC_CCR_ADCPRE(val)	BSP_FLD32(val, 16, 17)	// ADC prescalar
+#define STM32F4_ADC_CCR_ADCPRE(val)	BSP_FLD32(val, 16, 17)	// ADC prescaler
 #define STM32F4_ADC_CCR_ADCPRE_GET(reg)	BSP_FLD32GET(reg, 16, 17)
 #define STM32F4_ADC_CCR_ADCPRE_SET(reg, val)	BSP_FLD32SET(reg, val, 16, 17)
 #define ADC_ADCPRE_PCLK2_2 0
@@ -308,7 +308,7 @@ struct stm32f4_adc_com_s {
 #define ADC_MULTI_TRIPLE_INTRL		0x17
 #define ADC_MULTI_TRIPLE_ALT_TRIG	0x19
 
-	uint32_t cdr; 		// 0x00: Common regular data register
+	uint32_t cdr; 		// 0x08: Common regular data register
 #define STM32F4_ADC_CDR_DATA2(val)	BSP_FLD32(val, 16, 31)	// 2nd data item
 #define STM32F4_ADC_CDR_DATA2_GET(reg)	BSP_FLD32GET(reg, 16, 31)
 #define STM32F4_ADC_CDR_DATA2_SET(reg, val)	BSP_FLD32SET(reg, val, 16, 31)
