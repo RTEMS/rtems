@@ -56,7 +56,7 @@ struct stm32f4_flash_s {
 #define STM32F4_FLASH_CR_PSIZE(val) BSP_FLD32(val, 8, 9)  // Program size
 #define STM32F4_FLASH_CR_PSIZE_GET(reg) BSP_FLD32GET(reg, 8, 9)
 #define STM32F4_FLASH_CR_PSIZE_SET(reg, val)  BSP_FLD32SET(reg, val, 8, 9)
-#define STM32F4_FLASH_CR_SNB  BSP_FLD32(val, 3, 6)  // Sector number
+#define STM32F4_FLASH_CR_SNB(val) BSP_FLD32(val, 3, 6)  // Sector number
 #define STM32F4_FLASH_CR_SNB_GET(reg) BSP_FLD32GET(reg, 3, 6)
 #define STM32F4_FLASH_CR_SNB_SET(reg, val)  BSP_FLD32SET(reg, val, 3, 6)
 #define STM32F4_FLASH_CR_MER    BSP_BIT32(2)  // Mass erase
@@ -76,8 +76,8 @@ struct stm32f4_flash_s {
 #define STM32F4_FLASH_OPTCR_BOR_LEVEL(val)  BSP_FLD32(val, 2, 3)  // BOR reset level
 #define STM32F4_FLASH_OPTCR_BOR_LEVEL_GET(reg)  BSP_FLD32GET(reg, 2, 3)
 #define STM32F4_FLASH_OPTCR_BOR_LEVEL_SET(reg, val) BSP_FLD32SET(reg, val, 2, 3)
-#define STM32F4_FLASH_CR_OPTSTRT  BSP_BIT32(1)  // Option start
-#define STM32F4_FLASH_CR_OPTLOCK  BSP_BIT32(0)  // Option lock
+#define STM32F4_FLASH_OPTCR_OPTSTRT  BSP_BIT32(1)  // Option start
+#define STM32F4_FLASH_OPTCR_OPTLOCK  BSP_BIT32(0)  // Option lock
 
 } __attribute__ ((packed));
 typedef struct stm32f4_flash_s stm32f4_flash;
