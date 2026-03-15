@@ -25,7 +25,7 @@ struct stm32f4_pwr_s {
 #define STM32F4_PWR_CR_VOS        BSP_BIT32(14) // Regulator scaling output selection
 #define STM32F4_PWR_CR_FPDS       BSP_BIT32(9)  // Flash power-down in stop mode
 #define STM32F4_PWR_CR_DBP        BSP_BIT32(8)  // Disable backup domain write protection
-#define STM32F4_PWR_CR_PLS  BSP_FLD32(val, 5, 7)  // PVD level selection
+#define STM32F4_PWR_CR_PLS(val)  BSP_FLD32(val, 5, 7)  // PVD level selection
 #define STM32F4_PWR_CR_PLS_GET(reg) BSP_FLD32GET(reg, 5, 7)
 #define STM32F4_PWR_CR_PLS_SET(reg, val)  BSP_FLD32SET(reg, val, 5, 7)
 #define STM32F4_PWR_CR_PVDE       BSP_BIT32(4)  // Power voltage detector enable
