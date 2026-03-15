@@ -35,7 +35,7 @@ typedef struct {
 	uint32_t apbenr [2];
 	uint32_t bdcr;
 	uint32_t csr;
-	uint32_t ahbstr;
+	uint32_t ahbrstr;
 	uint32_t cfgr2;
 } stm32f4_rcc;
 

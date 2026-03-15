@@ -115,7 +115,7 @@ static uint32_t usart_get_baud(const console_tbl *ct)
  *
  * 2. div_fraction = pclk / (baud - a * div_mantissa)
  */
-static uint32_t usart_get_bbr(
+static uint32_t usart_get_brr(
   volatile stm32f4_usart *usart,
   uint32_t pclk,
   uint32_t baud
@@ -150,8 +150,8 @@ static uint32_t usart_get_bbr(
     div_fraction = div_fraction_high;
   }
 
-  return STM32F4_USART_BBR_DIV_MANTISSA(div_mantissa)
-    | STM32F4_USART_BBR_DIV_FRACTION(div_fraction);
+  return STM32F4_USART_BRR_DIV_MANTISSA(div_mantissa)
+    | STM32F4_USART_BRR_DIV_FRACTION(div_fraction);
 }
 
 static void usart_initialize(int minor)
@@ -167,7 +167,7 @@ static void usart_initialize(int minor)
   usart->cr1 = 0;
   usart->cr2 = 0;
   usart->cr3 = 0;
-  usart->bbr = usart_get_bbr(usart, pclk, baud);
+  usart->brr = usart_get_brr(usart, pclk, baud);
   usart->cr1 = STM32F4_USART_CR1_UE // UART enable
 #ifdef BSP_CONSOLE_USE_INTERRUPTS
     | STM32F4_USART_CR1_RXNEIE // RX interrupt
@@ -270,7 +270,7 @@ static int usart_set_attributes(int minor, const struct termios *term)
   uint32_t baud = term->c_ispeed;
 
   ct->ulClock = baud;
-  usart->bbr = usart_get_bbr(usart, pclk, baud);
+  usart->brr = usart_get_brr(usart, pclk, baud);
   return 0;
 }
 

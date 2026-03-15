@@ -77,9 +77,9 @@ struct stm32f4_tim_s {
   uint16_t egr; // Event generation register
 #define STM32F4_TIMER_EGR_TG                BSP_BIT16(6)  // Trigger event
 #define STM32F4_TIMER_EGR_CC4G              BSP_BIT16(4)  // Capture/compare 4 event
-#define STM32F4_TIMER_EGR_CC3G              BSP_BIT16(3)  // Capture/compare 3 generation)
-#define STM32F4_TIMER_EGR_CC2G              BSP_BIT16(2)  // Capture/compare 2 generation)
-#define STM32F4_TIMER_EGR_CC1G              BSP_BIT16(1)  // Capture/compare 1 generation)
+#define STM32F4_TIMER_EGR_CC3G              BSP_BIT16(3)  // Capture/compare 3 generation
+#define STM32F4_TIMER_EGR_CC2G              BSP_BIT16(2)  // Capture/compare 2 generation
+#define STM32F4_TIMER_EGR_CC1G              BSP_BIT16(1)  // Capture/compare 1 generation
 #define STM32F4_TIMER_EGR_UG                BSP_BIT16(0)  // Update event
   uint16_t reserved_16;
   uint16_t ccmr1; // Capture / compare mode register 1
@@ -188,11 +188,11 @@ struct stm32f4_tim_s {
 #define STM32F4_TIMER_DR(val) BSP_FLD32(val, 0, 31)
 #define STM32F4_TIMER_DR_GET(reg) BSP_FLD32GET(reg, 0, 31)
 #define STM32F4_TIMER_DR_SET(reg, val) BSP_FLD32SET(reg, val, 0, 31)
-  uint16_t psc; // Prescalar
+  uint16_t psc; // Prescaler
   uint16_t reserved_2a;
   uint32_t arr; // Auto-reload register
   uint16_t rcr; // Repetition counter register
-  uint16_t rserved_32;
+  uint16_t reserved_32;
   uint32_t ccr[4];// Capture / compare registers
   uint16_t bdtr;  // Break and dead-time register
   uint16_t reserved_46;
