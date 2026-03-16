@@ -86,6 +86,7 @@ void _Timer_server_Routine_adaptor( Watchdog_Control *the_watchdog )
   cpu = _Watchdog_Get_CPU( &the_timer->Ticker );
   the_timer->stop_time = _Timer_Get_CPU_ticks( cpu );
   wakeup = _Chain_Is_empty( &ts->Pending );
+  _Chain_Set_off_chain( &the_timer->Ticker.Node.Chain );
   _Chain_Append_unprotected( &ts->Pending, &the_timer->Ticker.Node.Chain );
 
   _Timer_server_Release( ts, &lock_context );
