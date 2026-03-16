@@ -122,7 +122,7 @@ static void stm32f4_i2c_handler(void *arg)
         regs->cr1 = cr1;
 
         /* Read sr2 to clear flag */
-        regs->sr2;
+        (void) regs->sr2;
 
         cr1 = regs->cr1;
         cr1 |= STM32F4_I2C_CR1_STOP;
@@ -135,7 +135,7 @@ static void stm32f4_i2c_handler(void *arg)
       /* special case for two bytes */
       if(sr1 & STM32F4_I2C_SR1_ADDR) {
         /* Read sr2 to clear flag */
-        regs->sr2;
+        (void) regs->sr2;
 
         cr1 = regs->cr1;
         cr1 &= ~STM32F4_I2C_CR1_ACK;
@@ -154,7 +154,7 @@ static void stm32f4_i2c_handler(void *arg)
       /* more than two bytes */
       if(sr1 & STM32F4_I2C_SR1_ADDR) {
         /* Read sr2 to clear flag */
-        regs->sr2;
+        (void) regs->sr2;
       } else if(sr1 & STM32F4_I2C_SR1_BTF && data == last - 2) {
         cr1 = regs->cr1;
         cr1 &= ~STM32F4_I2C_CR1_ACK;
@@ -182,7 +182,7 @@ static void stm32f4_i2c_handler(void *arg)
   } else /* write */ {
     if(sr1 & STM32F4_I2C_SR1_ADDR) {
       /* Address sent */
-      regs->sr2;
+      (void) regs->sr2;
     }
 
     if((sr1 & (STM32F4_I2C_SR1_ADDR | STM32F4_I2C_SR1_TxE)) && (data <= last)) {
@@ -225,7 +225,7 @@ rtems_status_code stm32f4_i2c_init(stm32f4_i2c_bus_entry *e)
   /* Create mutex */
   sc = rtems_semaphore_create (
     rtems_build_name ('I', '2', 'C', '1' + e->index),
-    0,
+    1,
     RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY | RTEMS_INHERIT_PRIORITY,
     0,
     &e->mutex
@@ -298,6 +298,7 @@ rtems_status_code stm32f4_i2c_process_message(
 
   /* Check if no stop is active. */
   if(cr1 & STM32F4_I2C_CR1_STOP) {
+    rtems_semaphore_release(e->mutex);
     return RTEMS_IO_ERROR;
   }
 
