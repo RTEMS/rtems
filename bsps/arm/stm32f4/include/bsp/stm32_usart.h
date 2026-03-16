@@ -56,9 +56,9 @@ typedef struct {
 #define STM32F4_USART_SR_FE BSP_BIT32(1)
 #define STM32F4_USART_SR_PE BSP_BIT32(0)
 	uint32_t dr;
-#define STM32F4_USART_DR(val) BSP_FLD32(val, 0, 7)
-#define STM32F4_USART_DR_GET(reg) BSP_FLD32GET(reg, 0, 7)
-#define STM32F4_USART_DR_SET(reg, val) BSP_FLD32SET(reg, val, 0, 7)
+#define STM32F4_USART_DR(val) BSP_FLD32(val, 0, 8)
+#define STM32F4_USART_DR_GET(reg) BSP_FLD32GET(reg, 0, 8)
+#define STM32F4_USART_DR_SET(reg, val) BSP_FLD32SET(reg, val, 0, 8)
 	uint32_t bbr;
 #define STM32F4_USART_BBR_DIV_MANTISSA(val) BSP_FLD32(val, 4, 15)
 #define STM32F4_USART_BBR_DIV_MANTISSA_GET(reg) BSP_FLD32GET(reg, 4, 15)

@@ -60,7 +60,8 @@ static void stm32f4_usart_interrupt(void *arg)
 
   while ((usart->sr & STM32F4_USART_SR_RXNE) == STM32F4_USART_SR_RXNE)
   {
-    char data = STM32F4_USART_DR_GET(usart->dr);
+    /* Mask to 8 bits to preserve existing behavior */
+    char data = STM32F4_USART_DR_GET(usart->dr) & 0xFF;
     rtems_termios_enqueue_raw_characters(tty, &data, sizeof(data));
   }
 }
@@ -224,7 +225,7 @@ static int usart_read_polled(int minor)
   volatile stm32f4_usart *usart = usart_get_regs(ct);
 
   if ((usart->sr & STM32F4_USART_SR_RXNE) != 0) {
-    return STM32F4_USART_DR_GET(usart->dr);
+    return STM32F4_USART_DR_GET(usart->dr) & 0xFF;
   } else {
     return -1;
   }
