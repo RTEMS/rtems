@@ -101,6 +101,7 @@ struct stm32f4_syscfg_s {
 #define STM32F4_SYSCFG_EXTI15(val)        BSP_FLD32(val, 12, 15)
 #define STM32F4_SYSCFG_EXTI15_GET(reg)    BSP_FLD32GET(reg, 12, 15)
 #define STM32F4_SYSCFG_EXTI15_SET(reg, val) BSP_FLD32SET(reg, val, 12, 15)
+  uint32_t reserved[2];
   uint32_t cmpcr;   // Compensation cell control register
 #define STM32F4_SYSCFG_CMPCR_READY        BSP_BIT32(8)
 #define STM32F4_SYSCFG_CMPCR_PD           BSP_BIT32(0)
