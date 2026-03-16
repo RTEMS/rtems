@@ -41,7 +41,11 @@ rvpbxa9_mmu_config_table[] = {
   ARMV7_CP15_START_DEFAULT_SECTIONS,
   {
     .begin = 0x10000000U,
-    .end = 0x10020000U,
+    .end = 0x1001FFFFU,
+    .flags = ARMV7_MMU_DEVICE
+  }, {
+    .begin = 0x10020000U,
+    .end = 0x100DFFFFU,
     .flags = ARMV7_MMU_DEVICE
   }, {
     .begin = 0x1f000000U,
