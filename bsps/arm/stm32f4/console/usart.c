@@ -122,7 +122,7 @@ static uint32_t usart_get_bbr(
 {
   uint32_t a = 8 * (2 - ((usart->cr1 & STM32F4_USART_CR1_OVER8) != 0));
   uint32_t div_mantissa_low = pclk / (a * baud);
-  uint32_t div_fraction_low = pclk / (baud - a * div_mantissa_low);
+  uint32_t div_fraction_low = (pclk - baud * a * div_mantissa_low) / baud;
   uint32_t div_mantissa_high;
   uint32_t div_fraction_high;
   uint32_t high_err;
@@ -131,10 +131,10 @@ static uint32_t usart_get_bbr(
   uint32_t div_fraction;
 
   if (div_fraction_low < a - 1) {
-    div_mantissa_high = div_fraction_low;
+    div_mantissa_high = div_mantissa_low;
     div_fraction_high = div_fraction_low + 1;
   } else {
-    div_mantissa_high = div_fraction_low + 1;
+    div_mantissa_high = div_mantissa_low + 1;
     div_fraction_high = 0;
   }
 
