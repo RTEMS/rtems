@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 #
 # Copyright (C) 2020 Hesham Almatary <Hesham.Almatary@cl.cam.ac.uk>
-# Copyright (C) 2019, 2020 embedded brains GmbH & Co. KG
+# Copyright (C) 2019, 2026 embedded brains GmbH & Co. KG
 # Copyright (C) 2024 Contemporary Software <chris@contemporary.software>
 #
 # Redistribution and use in source and binary forms, with or without
@@ -1315,6 +1315,14 @@ def options(ctx):
     prefix = ctx.parser.get_option("--prefix")
     prefix.default = default_prefix
     prefix.help = "installation prefix [default: '{}']".format(default_prefix)
+
+    # Adding new command line options is probably not the right approach.
+    # Please consider using a build option first.  Build options offer various
+    # customization methods.  The "script" action allows customization through
+    # Python code which has access to the full Waf feature set.
+    #
+    # See the *BSP Build System* chapter in the *RTEMS Software Engineering*
+    # manual.
     rg = ctx.add_option_group("RTEMS options")
     rg.add_option(
         "--rtems-bsps",
