@@ -20,7 +20,35 @@ actions:
 - find-program: null
 - env-assign: LD
 - script: |
+    from waflib import Context
+
     conf.load("ar g++ gas gcc gccdeps")
+
+    # Obtain the GCC build key
+    out = conf.cmd_and_log([conf.env.CC[0], "--version"],
+                           output=Context.STDOUT,
+                           quiet=Context.BOTH)
+    mobj = re.search(r"Build (\d{4}\.\d{2}.\d{2})", out)
+    if mobj:
+        key = mobj.group(1)
+        msg = "is too old"
+        conf.msg("GCC build key", key)
+    else:
+        key = "0000.00.00"
+        msg = "is not present"
+        conf.msg("GCC build key", "not present")
+
+    # Check the GCC build key
+    required_key = "2026.03.05"
+    if key < required_key:
+        policy = conf.env["GCC_BUILD_KEY_POLICY"]
+        if policy != "IGNORE":
+            msg = (f"GCC build key {msg} "
+                   "(see GCC_BUILD_KEY_POLICY option), expected at least")
+            if policy == "ERROR":
+                conf.fatal(f"{msg}: {required_key}")
+            else:
+                conf.msg(msg, required_key, color="RED")
 - set-value: -qrtems
 - env-append: LDFLAGS
 - env-append: PKGCONFIG_LDFLAGS

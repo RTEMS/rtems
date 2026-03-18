@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- assert-in-set:
+  - ERROR
+  - IGNORE
+  - WARNING
+- env-assign: null
+build-type: option
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+default:
+- enabled-by: true
+  value: WARNING
+description: |
+  There are dependencies between the RTEMS sources and external interfaces
+  provided by Newlib and GCC.  For example, POSIX API interfaces may change due
+  to POSIX standard updates.  The GCC build key is used to provide an
+  indication that the present tools meet the requirements of the RTEMS sources.
+  The GCC build key policy defines how the build key of the present compiler is
+  checked against the required build key.  While the policy is "ERROR", if the
+  GCC build key has not the expected value, then the build configuration
+  process produces a fatal error.  While the policy is "WARNING", if the GCC
+  build key has not the expected value, then the build configuration process
+  produces a warning message.  While the policy is "IGNORE", the GCC build key
+  is not checked at all.  The default policy is "WARNING".
+enabled-by: true
+format: '{}'
+links: []
+name: GCC_BUILD_KEY_POLICY
+type: build
