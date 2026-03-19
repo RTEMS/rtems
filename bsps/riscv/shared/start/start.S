@@ -134,9 +134,14 @@ RISCV_Start_on_processor:
 #endif
 
 	/* Init FPU */
-#if defined( __riscv_flen ) && !defined( RISCV_USE_S_MODE )
+#if defined( __riscv_flen )
+#if defined( RISCV_USE_S_MODE )
+	li	t0, SSTATUS_FS
+	csrs	sstatus, t0
+#else
 	li	t0, MSTATUS_FS
 	csrs	mstatus, t0
+#endif
 	csrw	fcsr, zero
 #endif
 
