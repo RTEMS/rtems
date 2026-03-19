@@ -47,9 +47,7 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <rtems/libio_.h>
-
-#include "ff.h"
-#include "rtems-fatfs.h"
+#include <rtems/fatfs/rtems-fatfs.h>
 
 ssize_t rtems_fatfs_file_read( rtems_libio_t *iop, void *buffer, size_t count )
 {

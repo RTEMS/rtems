@@ -45,10 +45,7 @@
 #include <rtems.h>
 #include <rtems/bdbuf.h>
 #include <rtems/libio_.h>
-
-#include "ff.h"
-#include "diskio.h"
-#include "rtems-fatfs.h"
+#include <rtems/fatfs/rtems-fatfs.h>
 
 static fatfs_volume_t volumes[ FF_VOLUMES ];
 

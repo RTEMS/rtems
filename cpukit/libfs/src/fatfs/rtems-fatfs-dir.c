@@ -47,9 +47,7 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <rtems/libio_.h>
-
-#include "ff.h"
-#include "rtems-fatfs.h"
+#include <rtems/fatfs/rtems-fatfs.h>
 
 #define DIR POSIX_DIR
 #include <dirent.h>

@@ -47,6 +47,7 @@
 #include <rtems/seterr.h>
 
 #include "ff.h"
+#include "diskio.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -30,16 +30,23 @@ cppflags:
 - -DFF_LBA64=0
 cxxflags: []
 enabled-by: true
-includes: []
+includes:
+- contrib/cpukit/fatfs
 install:
 - destination: ${BSP_INCLUDEDIR}/rtems
   source:
   - cpukit/contrib/include/rtems/fatfs.h
+- destination: ${BSP_INCLUDEDIR}/rtems/fatfs
+  source:
+  - cpukit/include/rtems/fatfs/rtems-fatfs.h
+  - contrib/cpukit/fatfs/ff.h
+  - contrib/cpukit/fatfs/ffconf.h
+  - contrib/cpukit/fatfs/diskio.h
 links: []
 source:
-- cpukit/libfs/src/fatfs/ff.c
-- cpukit/libfs/src/fatfs/ffunicode.c
-- cpukit/libfs/src/fatfs/ffsystem.c
+- contrib/cpukit/fatfs/ff.c
+- contrib/cpukit/fatfs/ffunicode.c
+- contrib/cpukit/fatfs/ffsystem.c
 - cpukit/libfs/src/fatfs/rtems-diskio.c
 - cpukit/libfs/src/fatfs/rtems-fatfs-init.c
 - cpukit/libfs/src/fatfs/rtems-fatfs-file.c

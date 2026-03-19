@@ -55,9 +55,7 @@
 #include <rtems/libio_.h>
 #include <rtems/score/chain.h>
 #include <rtems/seterr.h>
-
-#include "ff.h"
-#include "rtems-fatfs.h"
+#include <rtems/fatfs/rtems-fatfs.h>
 
 static uint8_t next_drive_number = 0;
 
