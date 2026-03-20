@@ -10,7 +10,7 @@ includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}/machine
   source:
-  - contrib/bsps/sbi/sbi.h
+  - contrib/bsps/riscv/include/machine/sbi.h
 links: []
 source:
 - contrib/bsps/riscv/sbi/sbi.c
