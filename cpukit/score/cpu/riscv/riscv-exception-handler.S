@@ -136,8 +136,10 @@ SYM(_RISCV_Vector_table):
 	 * Interrupt exception, clear MDT bit.
 	 * This is only necessary if the Smdbltrp extension is implemented.
 	 * In that case not clearing the MDT bit would prevent us from setting
-	 * the MIE bit later.
+	 * the MIE bit later. Smdbltrp implies zicsr, so if zicsr is not present
+	 * then Smdbltrp (which introduces mstatush/MDT) can not be present.
 	 */
+#ifdef __riscv_zicsr
 #ifdef RISCV_USE_S_MODE
 	li	t0, SSTATUS_SDT
 	csrrc	zero, sstatus, t0
@@ -150,6 +152,7 @@ SYM(_RISCV_Vector_table):
 	csrrc	zero, mstatush, t0
 #endif
 #endif /* RISCV_USE_S_MODE */
+#endif /* __riscv_zicsr */
 
 	/* Increment interrupt nest and thread dispatch disable level */
 	lw	t0, PER_CPU_ISR_NEST_LEVEL(s0)
