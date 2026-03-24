@@ -39,6 +39,14 @@
  * look at libbbsp/shared/include/gpio.h
  */
 
+/* This driver uses the standard multiplexing modes of the GPIO pins, as defined in
+   bsps/arm/include/libcpu/am335x.h. To use all GPIO pins as digital I/O,
+   you can set the MUXMODE to '7' by defining BBB_USE_ALL_GPIO_PINS.
+   Then MUXMODE 7 get set in rtems_gpio_bsp_set_resistor_mode(). 
+*/
+
+#define BBB_USE_ALL_GPIO_PINS 1 
+
 #include <bsp/beagleboneblack.h>
 #include <bsp/irq-generic.h>
 #include <bsp/gpio.h>
@@ -75,8 +83,6 @@ static const rtems_vector_number gpio_bank_vector[] =
 #define CONF_NOT_DEFINED 0x00
 
 /* Mapping of gpio pin number to the Control module mapped register offset */
-// FHI: allmost all, but mmc, used in MUXMODE7 from our applications
-// Macro?
 static const uint32_t gpio_pad_conf [GPIO_BANK_COUNT][BSP_GPIO_PINS_PER_BANK] =
 {
   /* GPIO Module 0 */
@@ -205,10 +211,6 @@ static inline uint32_t bbb_conf_reg(uint32_t bank, uint32_t pin)
 {
   /* Asserts if invalid pin is supplied */
   assert(gpio_pad_conf[bank][pin] != CONF_NOT_DEFINED);
-
-  /*
-   How to Deal with MUXMODE 7 ?
-  */
   return (AM335X_PADCONF_BASE + gpio_pad_conf[bank][pin]);
 }
 
@@ -337,7 +339,16 @@ rtems_status_code rtems_gpio_bsp_set_resistor_mode(
 ) {
   uint32_t register_content;
 
+/* Here we set the Pin to  MUXMMODE 7 (GPIO), here we want to use almost any Pin for GPIO
+   digital I/O. 
+   This is not a very elegant solution. It might be better if it were more configurable.
+   Via `pad_config`, but I couldn't think of anything better here. So this is then defined via the
+   application software by calling `rtems_gpio_bsp_set_resistor_mode()`
+*/
+
+#ifdef BBB_USE_ALL_GPIO_PINS
   register_content = BBB_MUXMODE(7);
+#endif
 
   /* Set control signal. */
   switch ( mode ) {
