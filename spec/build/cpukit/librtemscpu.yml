@@ -4,31 +4,7 @@ cflags:
 - ${COVERAGE_COMPILER_FLAGS}
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
-cppflags:
-- -Ddisk_status=rtems_fatfs_disk_status
-- -Ddisk_initialize=rtems_fatfs_disk_initialize
-- -Ddisk_read=rtems_fatfs_disk_read
-- -Ddisk_write=rtems_fatfs_disk_write
-- -Ddisk_ioctl=rtems_fatfs_disk_ioctl
-- -Dget_fattime=rtems_fatfs_get_fattime
-- -DFFCONF_DEF=80386
-- -DFF_VOLUMES=1
-- -DFF_USE_MKFS=1
-- -DFF_USE_CHMOD=1
-- -DFF_USE_LFN=1
-- -DFF_FS_RPATH=2
-- -DFF_FS_EXFAT=1
-- -DFF_MAX_SS=512
-- -DFF_MIN_SS=512
-- -DFF_LFN_BUF=255
-- -DFF_SFN_BUF=12
-- -DFF_MAX_LFN=255
-- -DFF_USE_LABEL=0
-- -DFF_PATH_DEPTH=10
-- -DFF_STR_VOLUME_ID=0
-- -DFF_MULTI_PARTITION=0
-- -DFF_FS_READONLY=0
-- -DFF_LBA64=0
+cppflags: []
 cxxflags:
 - ${COVERAGE_COMPILER_FLAGS}
 enabled-by: true
@@ -115,7 +91,6 @@ install:
   - cpukit/contrib/include/machine/_timecounter.h
 - destination: ${BSP_INCLUDEDIR}/rtems
   source:
-  - cpukit/contrib/include/rtems/fatfs.h
   - cpukit/contrib/include/rtems/mouse_parser.h
   - cpukit/include/rtems/assoc.h
   - cpukit/include/rtems/base64.h
@@ -537,6 +512,8 @@ links:
 - role: build-dependency
   uid: objexceptionmapping
 - role: build-dependency
+  uid: objfatfs
+- role: build-dependency
   uid: objgnat
 - role: build-dependency
   uid: objmpci
@@ -896,13 +873,6 @@ source:
 - cpukit/libfs/src/dosfs/msdos_rename.c
 - cpukit/libfs/src/dosfs/msdos_rmnod.c
 - cpukit/libfs/src/dosfs/msdos_statvfs.c
-- cpukit/libfs/src/fatfs/ff.c
-- cpukit/libfs/src/fatfs/ffunicode.c
-- cpukit/libfs/src/fatfs/ffsystem.c
-- cpukit/libfs/src/fatfs/rtems-diskio.c
-- cpukit/libfs/src/fatfs/rtems-fatfs-init.c
-- cpukit/libfs/src/fatfs/rtems-fatfs-file.c
-- cpukit/libfs/src/fatfs/rtems-fatfs-dir.c
 - cpukit/libfs/src/imfs/deviceio.c
 - cpukit/libfs/src/imfs/imfs_add_node.c
 - cpukit/libfs/src/imfs/imfs_chown.c
