@@ -23,8 +23,6 @@ links:
 - role: build-dependency
   uid: obj
 - role: build-dependency
-  uid: objsmp
-- role: build-dependency
   uid: optloadoff
 - role: build-dependency
   uid: optnocachelen
@@ -42,6 +40,8 @@ links:
   uid: optpciemmu
 - role: build-dependency
   uid: ../objclockarmgenerictimer
+- role: build-dependency
+  uid: ../objsmppsci
 - role: build-dependency
   uid: ../../dev/irq/objarmgicv2
 - role: build-dependency

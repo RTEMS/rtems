@@ -8,7 +8,10 @@ cxxflags: []
 enabled-by:
 - RTEMS_SMP
 includes: []
-install: []
+install:
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/include/bsp/bspsmp-arm-psci.h
 links: []
 source:
 - bsps/aarch64/shared/start/aarch64-smp.c
