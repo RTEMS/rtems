@@ -949,6 +949,8 @@ test-support: |
     }
 
     T_eq_u32( rtems_scheduler_get_processor(), 0 );
+  #else
+    (void) ctx;
   #endif
   }
 test-target: testsuites/validation/tr-tq-surrender-priority-inherit.c
