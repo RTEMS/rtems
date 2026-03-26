@@ -140,7 +140,7 @@ void RtemsEventReqSendReceive_Run(
   rtems_status_code ( *receive )( rtems_event_set, rtems_option, rtems_interval, rtems_event_set * ),
   rtems_event_set (   *get_pending_events )( Thread_Control * ),
   unsigned int         wait_class,
-  int                  waiting_for_event
+  States_Control       waiting_for_event
 );
 
 /** @} */
