@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup BspValMemClock
+ * @ingroup DevClockValMemClock
  */
 
 /*
@@ -57,7 +57,7 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup BspValMemClock spec:/bsp/val/mem-clock
+ * @defgroup DevClockValMemClock spec:/dev/clock/val/mem-clock
  *
  * @ingroup RTEMSTestSuitesMembench
  *
