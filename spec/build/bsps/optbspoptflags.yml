@@ -14,8 +14,6 @@ description: |
   Optimization flags passed to C and C++ compilers for the BSP.
 enabled-by: true
 format: '{}'
-links:
-- role: build-dependency
-  uid: optsectionflags
+links: []
 name: BSP_OPTIMIZATION_FLAGS
 type: build
