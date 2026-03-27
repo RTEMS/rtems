@@ -172,20 +172,20 @@ typedef ISR_Handler rtems_isr;
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The directive is only available where the target architecture support
+ * - The directive is only available where the target architecture support
  *   enabled simple vectored interrupts.
  * @endparblock
  */
@@ -255,15 +255,15 @@ rtems_status_code rtems_interrupt_catch(
    * @parblock
    * The following constraints apply to this directive:
    *
-   * * The directive is not included in the pre-qualified feature set of RTEMS.
+   * - The directive is not included in the pre-qualified feature set of RTEMS.
    *   Applications which are restricted to only use interfaces of the
    *   pre-qualified feature set of RTEMS shall not use the directive.
    *
-   * * The directive may be called from within any runtime context.
+   * - The directive may be called from within any runtime context.
    *
-   * * The directive will not cause the calling task to be preempted.
+   * - The directive will not cause the calling task to be preempted.
    *
-   * * Where the system was built with SMP support enabled, the directive is not
+   * - Where the system was built with SMP support enabled, the directive is not
    *   available.  Its use will result in compiler warnings and linker errors.
    *   The rtems_interrupt_local_disable() and rtems_interrupt_local_enable()
    *   directives are available in all build configurations.
@@ -301,20 +301,20 @@ rtems_status_code rtems_interrupt_catch(
    * @parblock
    * The following constraints apply to this directive:
    *
-   * * The directive is not included in the pre-qualified feature set of RTEMS.
+   * - The directive is not included in the pre-qualified feature set of RTEMS.
    *   Applications which are restricted to only use interfaces of the
    *   pre-qualified feature set of RTEMS shall not use the directive.
    *
-   * * The directive may be called from within any runtime context.
+   * - The directive may be called from within any runtime context.
    *
-   * * The directive will not cause the calling task to be preempted.
+   * - The directive will not cause the calling task to be preempted.
    *
-   * * While at least one maskable interrupt is pending, when the directive
+   * - While at least one maskable interrupt is pending, when the directive
    *   enables maskable interrupts, the pending interrupts are immediately
    *   serviced.  The interrupt service routines may unblock higher priority
    *   tasks which may preempt the calling task.
    *
-   * * Where the system was built with SMP support enabled, the directive is not
+   * - Where the system was built with SMP support enabled, the directive is not
    *   available.  Its use will result in compiler warnings and linker errors.
    *   The rtems_interrupt_local_disable() and rtems_interrupt_local_enable()
    *   directives are available in all build configurations.
@@ -353,15 +353,15 @@ rtems_status_code rtems_interrupt_catch(
    * @parblock
    * The following constraints apply to this directive:
    *
-   * * The directive is not included in the pre-qualified feature set of RTEMS.
+   * - The directive is not included in the pre-qualified feature set of RTEMS.
    *   Applications which are restricted to only use interfaces of the
    *   pre-qualified feature set of RTEMS shall not use the directive.
    *
-   * * The directive may be called from within any runtime context.
+   * - The directive may be called from within any runtime context.
    *
-   * * The directive will not cause the calling task to be preempted.
+   * - The directive will not cause the calling task to be preempted.
    *
-   * * Where the system was built with SMP support enabled, the directive is not
+   * - Where the system was built with SMP support enabled, the directive is not
    *   available.  Its use will result in compiler warnings and linker errors.
    *   The rtems_interrupt_local_disable() and rtems_interrupt_local_enable()
    *   directives are available in all build configurations.
@@ -435,9 +435,9 @@ rtems_status_code rtems_interrupt_catch(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define rtems_interrupt_local_disable( _isr_cookie ) \
@@ -471,11 +471,11 @@ rtems_status_code rtems_interrupt_catch(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * While at least one maskable interrupt is pending, when the directive
+ * - While at least one maskable interrupt is pending, when the directive
  *   enables maskable interrupts, the pending interrupts are immediately
  *   serviced.  The interrupt service routines may unblock higher priority
  *   tasks which may preempt the calling task.
@@ -503,13 +503,13 @@ rtems_status_code rtems_interrupt_catch(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define rtems_interrupt_is_in_progress() _ISR_Is_in_progress()
@@ -617,9 +617,9 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define rtems_interrupt_lock_destroy( _lock ) _ISR_lock_Destroy( _lock )
@@ -674,9 +674,9 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define rtems_interrupt_lock_acquire( _lock, _lock_context ) \
@@ -712,11 +712,11 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * While at least one maskable interrupt is pending, when the directive
+ * - While at least one maskable interrupt is pending, when the directive
  *   enables maskable interrupts, the pending interrupts are immediately
  *   serviced.  The interrupt service routines may unblock higher priority
  *   tasks which may preempt the calling task.
@@ -764,9 +764,9 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #if ISR_LOCK_NEEDS_OBJECT
@@ -810,9 +810,9 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #if ISR_LOCK_NEEDS_OBJECT
@@ -843,9 +843,9 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define rtems_interrupt_lock_interrupt_disable( _lock_context ) \
@@ -1011,7 +1011,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  * @endparblock
@@ -1033,7 +1033,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  * @endparblock
@@ -1055,7 +1055,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  * @endparblock
@@ -1107,7 +1107,7 @@ typedef void ( *rtems_interrupt_per_handler_routine )(
  * @parblock
  * The following constraints apply to this structure:
  *
- * * Members of the type shall not be accessed directly by the application.
+ * - Members of the type shall not be accessed directly by the application.
  * @endparblock
  */
 typedef struct rtems_interrupt_entry {
@@ -1175,9 +1175,9 @@ typedef struct rtems_interrupt_entry {
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 static inline void rtems_interrupt_entry_initialize(
@@ -1263,15 +1263,15 @@ static inline void rtems_interrupt_entry_initialize(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  *
- * * The interrupt entry shall have been initialized by
+ * - The interrupt entry shall have been initialized by
  *   rtems_interrupt_entry_initialize() or RTEMS_INTERRUPT_ENTRY_INITIALIZER().
  * @endparblock
  */
@@ -1315,15 +1315,15 @@ rtems_status_code rtems_interrupt_entry_install(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  *
- * * The interrupt entry shall have been installed by
+ * - The interrupt entry shall have been installed by
  *   rtems_interrupt_entry_install().
  * @endparblock
  */
@@ -1416,16 +1416,16 @@ rtems_status_code rtems_interrupt_entry_remove(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  * @endparblock
  */
@@ -1470,16 +1470,16 @@ rtems_status_code rtems_interrupt_handler_install(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  * @endparblock
  */
@@ -1524,14 +1524,14 @@ rtems_status_code rtems_interrupt_handler_remove(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_interrupt_vector_is_enabled(
@@ -1571,14 +1571,14 @@ rtems_status_code rtems_interrupt_vector_is_enabled(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_interrupt_vector_enable( rtems_vector_number vector );
@@ -1615,14 +1615,14 @@ rtems_status_code rtems_interrupt_vector_enable( rtems_vector_number vector );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_interrupt_vector_disable( rtems_vector_number vector );
@@ -1666,14 +1666,14 @@ rtems_status_code rtems_interrupt_vector_disable( rtems_vector_number vector );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_interrupt_is_pending(
@@ -1706,14 +1706,14 @@ rtems_status_code rtems_interrupt_is_pending(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_interrupt_raise( rtems_vector_number vector );
@@ -1752,14 +1752,14 @@ rtems_status_code rtems_interrupt_raise( rtems_vector_number vector );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_interrupt_raise_on(
@@ -1792,14 +1792,14 @@ rtems_status_code rtems_interrupt_raise_on(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_interrupt_clear( rtems_vector_number vector );
@@ -1837,14 +1837,14 @@ rtems_status_code rtems_interrupt_clear( rtems_vector_number vector );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_interrupt_get_affinity(
@@ -1899,14 +1899,14 @@ rtems_status_code rtems_interrupt_get_affinity(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_interrupt_set_affinity(
@@ -2107,14 +2107,14 @@ typedef struct {
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_interrupt_get_attributes(
@@ -2164,12 +2164,12 @@ rtems_status_code rtems_interrupt_get_attributes(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  * @endparblock
  */
@@ -2190,7 +2190,7 @@ rtems_status_code rtems_interrupt_handler_iterate(
  * @parblock
  * The following constraints apply to this constant:
  *
- * * The constant is not included in the pre-qualified feature set of RTEMS.
+ * - The constant is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the constant.
  * @endparblock
@@ -2214,7 +2214,7 @@ rtems_status_code rtems_interrupt_handler_iterate(
  * @parblock
  * The following constraints apply to this structure:
  *
- * * Members of the type shall not be accessed directly by the application.
+ * - Members of the type shall not be accessed directly by the application.
  * @endparblock
  */
 typedef struct rtems_interrupt_server_control {
@@ -2271,7 +2271,7 @@ typedef struct rtems_interrupt_server_control {
  * @parblock
  * The following constraints apply to this structure:
  *
- * * Members of the type shall not be accessed directly by the application.
+ * - Members of the type shall not be accessed directly by the application.
  * @endparblock
  */
 typedef struct {
@@ -2374,16 +2374,16 @@ typedef struct {
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  * @endparblock
  */
@@ -2426,16 +2426,16 @@ rtems_status_code rtems_interrupt_server_initialize(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  * @endparblock
  */
@@ -2508,16 +2508,16 @@ rtems_status_code rtems_interrupt_server_create(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  * @endparblock
  */
@@ -2563,19 +2563,19 @@ rtems_status_code rtems_interrupt_server_handler_install(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  *
- * * The directive sends a request to another task and waits for a response.
+ * - The directive sends a request to another task and waits for a response.
  *   This may cause the calling task to be blocked and unblocked.
  *
- * * The directive shall not be called from within the context of an interrupt
+ * - The directive shall not be called from within the context of an interrupt
  *   server.  Calling the directive from within the context of an interrupt
  *   server is undefined behaviour.
  * @endparblock
@@ -2631,21 +2631,21 @@ rtems_status_code rtems_interrupt_server_handler_remove(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may change the processor affinity of a task.  This may cause
+ * - The directive may change the processor affinity of a task.  This may cause
  *   the calling task to be preempted.
  *
- * * The directive may change the priority of a task.  This may cause the
+ * - The directive may change the priority of a task.  This may cause the
  *   calling task to be preempted.
  * @endparblock
  */
@@ -2683,17 +2683,17 @@ rtems_status_code rtems_interrupt_server_set_affinity(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive shall not be called from within the context of an interrupt
+ * - The directive shall not be called from within the context of an interrupt
  *   server.  Calling the directive from within the context of an interrupt
  *   server is undefined behaviour.
  *
- * * The directive sends a request to another task and waits for a response.
+ * - The directive sends a request to another task and waits for a response.
  *   This may cause the calling task to be blocked and unblocked.
  * @endparblock
  */
@@ -2722,17 +2722,17 @@ rtems_status_code rtems_interrupt_server_delete( uint32_t server_index );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive shall not be called from within the context of an interrupt
+ * - The directive shall not be called from within the context of an interrupt
  *   server.  Calling the directive from within the context of an interrupt
  *   server is undefined behaviour.
  *
- * * The directive sends a request to another task and waits for a response.
+ * - The directive sends a request to another task and waits for a response.
  *   This may cause the calling task to be blocked and unblocked.
  * @endparblock
  */
@@ -2761,17 +2761,17 @@ rtems_status_code rtems_interrupt_server_suspend( uint32_t server_index );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive shall not be called from within the context of an interrupt
+ * - The directive shall not be called from within the context of an interrupt
  *   server.  Calling the directive from within the context of an interrupt
  *   server is undefined behaviour.
  *
- * * The directive sends a request to another task and waits for a response.
+ * - The directive sends a request to another task and waits for a response.
  *   This may cause the calling task to be blocked and unblocked.
  * @endparblock
  */
@@ -2810,17 +2810,17 @@ rtems_status_code rtems_interrupt_server_resume( uint32_t server_index );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive shall not be called from within the context of an interrupt
+ * - The directive shall not be called from within the context of an interrupt
  *   server.  Calling the directive from within the context of an interrupt
  *   server is undefined behaviour.
  *
- * * The directive sends a request to another task and waits for a response.
+ * - The directive sends a request to another task and waits for a response.
  *   This may cause the calling task to be blocked and unblocked.
  * @endparblock
  */
@@ -2871,16 +2871,16 @@ rtems_status_code rtems_interrupt_server_move(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  * @endparblock
  */
@@ -2906,7 +2906,7 @@ rtems_status_code rtems_interrupt_server_handler_iterate(
  * @parblock
  * The following constraints apply to this structure:
  *
- * * Members of the type shall not be accessed directly by the application.
+ * - Members of the type shall not be accessed directly by the application.
  * @endparblock
  */
 typedef struct rtems_interrupt_server_action {
@@ -2945,7 +2945,7 @@ typedef struct rtems_interrupt_server_action {
  * @parblock
  * The following constraints apply to this structure:
  *
- * * Members of the type shall not be accessed directly by the application.
+ * - Members of the type shall not be accessed directly by the application.
  * @endparblock
  */
 typedef struct {
@@ -3001,16 +3001,16 @@ typedef struct {
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  * @endparblock
  */
@@ -3045,36 +3045,36 @@ rtems_status_code rtems_interrupt_server_entry_initialize(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The interrupt server entry shall have been initialized by
+ * - The interrupt server entry shall have been initialized by
  *   rtems_interrupt_server_entry_initialize() and further optional calls to
  *   rtems_interrupt_server_action_prepend().
  *
- * * The directive shall not be called concurrently with
+ * - The directive shall not be called concurrently with
  *   rtems_interrupt_server_action_prepend() with the same interrupt server
  *   entry. Calling the directive under this condition is undefined behaviour.
  *
- * * The directive shall not be called concurrently with
+ * - The directive shall not be called concurrently with
  *   rtems_interrupt_server_entry_move() with the same interrupt server entry.
  *   Calling the directive under this condition is undefined behaviour.
  *
- * * The directive shall not be called concurrently with
+ * - The directive shall not be called concurrently with
  *   rtems_interrupt_server_entry_submit() with the same interrupt server
  *   entry. Calling the directive under this condition is undefined behaviour.
  *
- * * The directive shall not be called while the interrupt server entry is
+ * - The directive shall not be called while the interrupt server entry is
  *   pending on or serviced by its current interrupt server.  Calling the
  *   directive under these conditions is undefined behaviour.
  * @endparblock
@@ -3102,20 +3102,20 @@ void rtems_interrupt_server_action_prepend(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive shall not be called from within the context of an interrupt
+ * - The directive shall not be called from within the context of an interrupt
  *   server.  Calling the directive from within the context of an interrupt
  *   server is undefined behaviour.
  *
- * * The directive sends a request to another task and waits for a response.
+ * - The directive sends a request to another task and waits for a response.
  *   This may cause the calling task to be blocked and unblocked.
  *
- * * The interrupt server entry shall have been initialized by
+ * - The interrupt server entry shall have been initialized by
  *   rtems_interrupt_server_entry_initialize() and further optional calls to
  *   rtems_interrupt_server_action_prepend().
  * @endparblock
@@ -3155,29 +3155,29 @@ void rtems_interrupt_server_entry_destroy(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may unblock a task.  This may cause the calling task to be
+ * - The directive may unblock a task.  This may cause the calling task to be
  *   preempted.
  *
- * * The interrupt server entry shall have been initialized by
+ * - The interrupt server entry shall have been initialized by
  *   rtems_interrupt_server_entry_initialize() and further optional calls to
  *   rtems_interrupt_server_action_prepend().
  *
- * * The directive shall not be called concurrently with
+ * - The directive shall not be called concurrently with
  *   rtems_interrupt_server_action_prepend() with the same interrupt server
  *   entry. Calling the directive under this condition is undefined behaviour.
  *
- * * The directive shall not be called concurrently with
+ * - The directive shall not be called concurrently with
  *   rtems_interrupt_server_entry_move() with the same interrupt server entry.
  *   Calling the directive under this condition is undefined behaviour.
  * @endparblock
@@ -3208,35 +3208,35 @@ void rtems_interrupt_server_entry_submit(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  *
- * * The interrupt server entry shall have been initialized by
+ * - The interrupt server entry shall have been initialized by
  *   rtems_interrupt_server_entry_initialize() and further optional calls to
  *   rtems_interrupt_server_action_prepend().
  *
- * * The directive shall not be called concurrently with
+ * - The directive shall not be called concurrently with
  *   rtems_interrupt_server_action_prepend() with the same interrupt server
  *   entry. Calling the directive under this condition is undefined behaviour.
  *
- * * The directive shall not be called concurrently with
+ * - The directive shall not be called concurrently with
  *   rtems_interrupt_server_entry_move() with the same interrupt server entry.
  *   Calling the directive under this condition is undefined behaviour.
  *
- * * The directive shall not be called concurrently with
+ * - The directive shall not be called concurrently with
  *   rtems_interrupt_server_entry_submit() with the same interrupt server
  *   entry. Calling the directive under this condition is undefined behaviour.
  *
- * * The directive shall not be called while the interrupt server entry is
+ * - The directive shall not be called while the interrupt server entry is
  *   pending on or serviced by its current interrupt server.  Calling the
  *   directive under these conditions is undefined behaviour.
  * @endparblock
@@ -3266,7 +3266,7 @@ rtems_status_code rtems_interrupt_server_entry_move(
  * @parblock
  * The following constraints apply to this structure:
  *
- * * Members of the type shall not be accessed directly by the application.
+ * - Members of the type shall not be accessed directly by the application.
  * @endparblock
  */
 typedef struct {
@@ -3315,16 +3315,16 @@ typedef struct {
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  * @endparblock
  */
@@ -3361,33 +3361,33 @@ rtems_status_code rtems_interrupt_server_request_initialize(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  *
- * * The interrupt server request shall have been initialized by
+ * - The interrupt server request shall have been initialized by
  *   rtems_interrupt_server_request_initialize().
  *
- * * The directive shall not be called concurrently with
+ * - The directive shall not be called concurrently with
  *   rtems_interrupt_server_request_set_vector() with the same interrupt server
  *   request.  Calling the directive under this condition is undefined
  *   behaviour.
  *
- * * The directive shall not be called concurrently with
+ * - The directive shall not be called concurrently with
  *   rtems_interrupt_server_request_submit() with the same interrupt server
  *   request. Calling the directive under this condition is undefined
  *   behaviour.
  *
- * * The directive shall not be called while the interrupt server entry is
+ * - The directive shall not be called while the interrupt server entry is
  *   pending on or serviced by its current interrupt server.  Calling the
  *   directive under these conditions is undefined behaviour.
  * @endparblock
@@ -3416,20 +3416,20 @@ static inline void rtems_interrupt_server_request_set_vector(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive shall not be called from within the context of an interrupt
+ * - The directive shall not be called from within the context of an interrupt
  *   server.  Calling the directive from within the context of an interrupt
  *   server is undefined behaviour.
  *
- * * The directive sends a request to another task and waits for a response.
+ * - The directive sends a request to another task and waits for a response.
  *   This may cause the calling task to be blocked and unblocked.
  *
- * * The interrupt server request shall have been initialized by
+ * - The interrupt server request shall have been initialized by
  *   rtems_interrupt_server_request_initialize().
  * @endparblock
  */
@@ -3471,24 +3471,24 @@ static inline void rtems_interrupt_server_request_destroy(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may unblock a task.  This may cause the calling task to be
+ * - The directive may unblock a task.  This may cause the calling task to be
  *   preempted.
  *
- * * The interrupt server request shall have been initialized by
+ * - The interrupt server request shall have been initialized by
  *   rtems_interrupt_server_request_initialize().
  *
- * * The directive shall not be called concurrently with
+ * - The directive shall not be called concurrently with
  *   rtems_interrupt_server_request_set_vector() with the same interrupt server
  *   request.  Calling the directive under this condition is undefined
  *   behaviour.

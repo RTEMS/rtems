@@ -303,7 +303,7 @@ typedef enum {
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  * @endparblock

@@ -90,13 +90,13 @@ struct rtems_printer;
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 int rtems_cpu_info_report( const struct rtems_printer *printer );
@@ -115,16 +115,16 @@ int rtems_cpu_info_report( const struct rtems_printer *printer );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  * @endparblock
  */
@@ -143,16 +143,16 @@ void rtems_cpu_usage_report( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  * @endparblock
  */
@@ -169,12 +169,12 @@ void rtems_cpu_usage_report_with_plugin( const struct rtems_printer *printer );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  * @endparblock
  */
@@ -194,16 +194,16 @@ void rtems_cpu_usage_reset( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  *
- * * The directive sends a request to another task and waits for a response.
+ * - The directive sends a request to another task and waits for a response.
  *   This may cause the calling task to be blocked and unblocked.
  * @endparblock
  */
@@ -226,16 +226,16 @@ void rtems_cpu_usage_top( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  *
- * * The directive sends a request to another task and waits for a response.
+ * - The directive sends a request to another task and waits for a response.
  *   This may cause the calling task to be blocked and unblocked.
  * @endparblock
  */

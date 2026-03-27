@@ -142,7 +142,7 @@ extern "C" {
  * @parblock
  * The following constraints apply to this constant:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  * @endparblock
@@ -169,9 +169,9 @@ extern "C" {
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define rtems_configuration_get_stack_allocator_avoids_work_space() \
@@ -196,13 +196,13 @@ extern "C" {
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 uintptr_t rtems_configuration_get_stack_space_size( void );
@@ -219,7 +219,7 @@ uintptr_t rtems_configuration_get_stack_space_size( void );
  * @parblock
  * The following constraints apply to this constant:
  *
- * * The constant is not included in the pre-qualified feature set of RTEMS.
+ * - The constant is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the constant.
  * @endparblock
@@ -278,13 +278,13 @@ typedef Stack_Allocator_free rtems_stack_free_hook;
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 const char *rtems_get_build_label( void );
@@ -302,13 +302,13 @@ const char *rtems_get_build_label( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 const char *rtems_get_copyright_notice( void );
@@ -340,13 +340,13 @@ const char *rtems_get_copyright_notice( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 const char *rtems_get_target_hash( void );
@@ -368,13 +368,13 @@ const char *rtems_get_target_hash( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 const char *rtems_get_version_string( void );
@@ -398,13 +398,13 @@ const char *rtems_get_version_string( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define rtems_configuration_get_do_zero_of_workspace() _Memory_Zero_before_use
@@ -426,9 +426,9 @@ const char *rtems_get_version_string( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define rtems_configuration_get_idle_task_stack_size() _Thread_Idle_stack_size
@@ -450,9 +450,9 @@ const char *rtems_get_version_string( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define rtems_configuration_get_idle_task() _Thread_Idle_body
@@ -474,9 +474,9 @@ const char *rtems_get_version_string( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define rtems_configuration_get_interrupt_stack_size() \
@@ -502,9 +502,9 @@ const char *rtems_get_version_string( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 uint32_t rtems_configuration_get_maximum_extensions( void );
@@ -534,9 +534,9 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define rtems_configuration_get_maximum_processors() \
@@ -561,9 +561,9 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define rtems_configuration_get_microseconds_per_tick() \
@@ -588,9 +588,9 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define rtems_configuration_get_milliseconds_per_tick() \
@@ -615,9 +615,9 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define rtems_configuration_get_nanoseconds_per_tick() \
@@ -643,13 +643,13 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define rtems_configuration_get_number_of_initial_extensions() \
@@ -674,9 +674,9 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define rtems_configuration_get_stack_allocate_for_idle_hook() \
@@ -701,9 +701,9 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define rtems_configuration_get_stack_allocate_hook() _Stack_Allocator_allocate
@@ -727,13 +727,13 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define rtems_configuration_get_stack_allocate_init_hook() \
@@ -758,9 +758,9 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define rtems_configuration_get_stack_free_hook() _Stack_Allocator_free
@@ -783,9 +783,9 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define rtems_configuration_get_ticks_per_timeslice() \
@@ -810,13 +810,13 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define rtems_configuration_get_unified_work_area() _Workspace_Is_unified
@@ -835,13 +835,13 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define rtems_configuration_get_user_extension_table() \
@@ -861,13 +861,13 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #if defined(RTEMS_MULTIPROCESSING)
@@ -892,13 +892,13 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define rtems_configuration_get_work_space_size() \
@@ -921,15 +921,15 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive is implemented by a macro and may be called from within
+ * - The directive is implemented by a macro and may be called from within
  *   C/C++ constant expressions.  In addition, a function implementation of the
  *   directive exists for bindings to other programming languages.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define rtems_resource_is_unlimited( _resource ) \
@@ -950,15 +950,15 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive is implemented by a macro and may be called from within
+ * - The directive is implemented by a macro and may be called from within
  *   C/C++ constant expressions.  In addition, a function implementation of the
  *   directive exists for bindings to other programming languages.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define rtems_resource_maximum_per_allocation( _resource ) \
@@ -985,15 +985,15 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive is implemented by a macro and may be called from within
+ * - The directive is implemented by a macro and may be called from within
  *   C/C++ constant expressions.  In addition, a function implementation of the
  *   directive exists for bindings to other programming languages.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define rtems_resource_unlimited( _resource ) \

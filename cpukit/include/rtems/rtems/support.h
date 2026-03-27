@@ -92,9 +92,9 @@ extern "C" {
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 static inline bool rtems_is_name_valid( rtems_name name )
@@ -122,13 +122,13 @@ static inline bool rtems_is_name_valid( rtems_name name )
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define RTEMS_MICROSECONDS_TO_TICKS( _us ) \
@@ -149,15 +149,15 @@ static inline bool rtems_is_name_valid( rtems_name name )
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive is implemented by a macro and may be called from within
+ * - The directive is implemented by a macro and may be called from within
  *   C/C++ constant expressions.  In addition, a function implementation of the
  *   directive exists for bindings to other programming languages.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define RTEMS_MILLISECONDS_TO_MICROSECONDS( _ms ) ( ( _ms ) * 1000UL )
@@ -181,13 +181,13 @@ static inline bool rtems_is_name_valid( rtems_name name )
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define RTEMS_MILLISECONDS_TO_TICKS( _ms ) \
@@ -214,9 +214,9 @@ static inline bool rtems_is_name_valid( rtems_name name )
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 static inline void rtems_name_to_characters(
@@ -255,16 +255,16 @@ static inline void rtems_name_to_characters(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  * @endparblock
  */
@@ -286,16 +286,16 @@ bool rtems_workspace_allocate( size_t bytes, void **pointer );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  * @endparblock
  */
@@ -319,16 +319,16 @@ bool rtems_workspace_free( void *pointer );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  * @endparblock
  */
@@ -356,7 +356,7 @@ bool rtems_workspace_get_information( Heap_Information_block *the_info );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  * @endparblock
@@ -390,16 +390,16 @@ void *rtems_workspace_greedy_allocate(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  * @endparblock
  */
@@ -425,16 +425,16 @@ void *rtems_workspace_greedy_allocate_all_except_largest(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  * @endparblock
  */

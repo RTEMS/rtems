@@ -122,18 +122,18 @@ extern "C" {
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within interrupt context.
+ * - The directive may be called from within interrupt context.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may unblock a task.  This may cause the calling task to be
+ * - The directive may unblock a task.  This may cause the calling task to be
  *   preempted.
  * @endparblock
  */
@@ -154,7 +154,7 @@ void rtems_multiprocessing_announce( void );
  * @parblock
  * The following constraints apply to this constant:
  *
- * * The constant is not included in the pre-qualified feature set of RTEMS.
+ * - The constant is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the constant.
  * @endparblock
@@ -173,7 +173,7 @@ void rtems_multiprocessing_announce( void );
  * @parblock
  * The following constraints apply to this constant:
  *
- * * The constant is not included in the pre-qualified feature set of RTEMS.
+ * - The constant is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the constant.
  * @endparblock

@@ -166,7 +166,7 @@ extern "C" {
  * @parblock
  * The following constraints apply to this object:
  *
- * * The constant is not included in the pre-qualified feature set of RTEMS.
+ * - The constant is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the constant.
  * @endparblock
@@ -201,7 +201,7 @@ typedef uint32_t rtems_mode;
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  * @endparblock

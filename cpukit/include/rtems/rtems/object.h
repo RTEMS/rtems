@@ -131,7 +131,7 @@ typedef struct {
  * @parblock
  * The following constraints apply to this constant:
  *
- * * The constant is not included in the pre-qualified feature set of RTEMS.
+ * - The constant is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the constant.
  * @endparblock
@@ -150,7 +150,7 @@ typedef struct {
  * @parblock
  * The following constraints apply to this constant:
  *
- * * The constant is not included in the pre-qualified feature set of RTEMS.
+ * - The constant is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the constant.
  * @endparblock
@@ -178,13 +178,13 @@ typedef struct {
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 #define RTEMS_OBJECT_ID_INITIAL( _api, _class, _node ) \
@@ -202,7 +202,7 @@ typedef struct {
  * @parblock
  * The following constraints apply to this constant:
  *
- * * The constant is not included in the pre-qualified feature set of RTEMS.
+ * - The constant is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the constant.
  * @endparblock
@@ -272,15 +272,15 @@ typedef struct {
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive is implemented by a macro and may be called from within
+ * - The directive is implemented by a macro and may be called from within
  *   C/C++ constant expressions.  In addition, a function implementation of the
  *   directive exists for bindings to other programming languages.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_id rtems_build_id(
@@ -297,7 +297,7 @@ rtems_id rtems_build_id(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  * @endparblock
@@ -330,11 +330,11 @@ rtems_id rtems_build_id(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is implemented by a macro and may be called from within
+ * - The directive is implemented by a macro and may be called from within
  *   C/C++ constant expressions.  In addition, a function implementation of the
  *   directive exists for bindings to other programming languages.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_name rtems_build_name( char c1, char c2, char c3, char c4 );
@@ -373,13 +373,13 @@ rtems_name rtems_build_name( char c1, char c2, char c3, char c4 );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_object_get_classic_name(
@@ -424,13 +424,13 @@ rtems_status_code rtems_object_get_classic_name(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 char *rtems_object_get_name( rtems_id id, size_t length, char *name );
@@ -481,16 +481,16 @@ char *rtems_object_get_name( rtems_id id, size_t length, char *name );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within device driver initialization
+ * - The directive may be called from within device driver initialization
  *   context.
  *
- * * The directive may be called from within task context.
+ * - The directive may be called from within task context.
  *
- * * The directive may obtain and release the object allocator mutex.  This may
+ * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
  * @endparblock
  */
@@ -514,15 +514,15 @@ rtems_status_code rtems_object_set_name( rtems_id id, const char *name );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive is implemented by a macro and may be called from within
+ * - The directive is implemented by a macro and may be called from within
  *   C/C++ constant expressions.  In addition, a function implementation of the
  *   directive exists for bindings to other programming languages.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 int rtems_object_id_get_api( rtems_id id );
@@ -534,7 +534,7 @@ int rtems_object_id_get_api( rtems_id id );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  * @endparblock
@@ -559,15 +559,15 @@ int rtems_object_id_get_api( rtems_id id );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive is implemented by a macro and may be called from within
+ * - The directive is implemented by a macro and may be called from within
  *   C/C++ constant expressions.  In addition, a function implementation of the
  *   directive exists for bindings to other programming languages.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 int rtems_object_id_get_class( rtems_id id );
@@ -579,7 +579,7 @@ int rtems_object_id_get_class( rtems_id id );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  * @endparblock
@@ -604,15 +604,15 @@ int rtems_object_id_get_class( rtems_id id );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive is implemented by a macro and may be called from within
+ * - The directive is implemented by a macro and may be called from within
  *   C/C++ constant expressions.  In addition, a function implementation of the
  *   directive exists for bindings to other programming languages.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 int rtems_object_id_get_node( rtems_id id );
@@ -624,7 +624,7 @@ int rtems_object_id_get_node( rtems_id id );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  * @endparblock
@@ -649,15 +649,15 @@ int rtems_object_id_get_node( rtems_id id );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive is implemented by a macro and may be called from within
+ * - The directive is implemented by a macro and may be called from within
  *   C/C++ constant expressions.  In addition, a function implementation of the
  *   directive exists for bindings to other programming languages.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 int rtems_object_id_get_index( rtems_id id );
@@ -669,7 +669,7 @@ int rtems_object_id_get_index( rtems_id id );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  * @endparblock
@@ -691,15 +691,15 @@ int rtems_object_id_get_index( rtems_id id );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive is implemented by a macro and may be called from within
+ * - The directive is implemented by a macro and may be called from within
  *   C/C++ constant expressions.  In addition, a function implementation of the
  *   directive exists for bindings to other programming languages.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 int rtems_object_id_api_minimum( void );
@@ -711,7 +711,7 @@ int rtems_object_id_api_minimum( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  * @endparblock
@@ -733,15 +733,15 @@ int rtems_object_id_api_minimum( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive is implemented by a macro and may be called from within
+ * - The directive is implemented by a macro and may be called from within
  *   C/C++ constant expressions.  In addition, a function implementation of the
  *   directive exists for bindings to other programming languages.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 int rtems_object_id_api_maximum( void );
@@ -753,7 +753,7 @@ int rtems_object_id_api_maximum( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  * @endparblock
@@ -777,13 +777,13 @@ int rtems_object_id_api_maximum( void );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 int rtems_object_api_minimum_class( int api );
@@ -805,13 +805,13 @@ int rtems_object_api_minimum_class( int api );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 int rtems_object_api_maximum_class( int api );
@@ -836,13 +836,13 @@ int rtems_object_api_maximum_class( int api );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 const char *rtems_object_get_api_name( int api );
@@ -872,13 +872,13 @@ const char *rtems_object_get_api_name( int api );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 const char *rtems_object_get_api_class_name( int the_api, int the_class );
@@ -910,13 +910,13 @@ const char *rtems_object_get_api_class_name( int the_api, int the_class );
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive is not included in the pre-qualified feature set of RTEMS.
+ * - The directive is not included in the pre-qualified feature set of RTEMS.
  *   Applications which are restricted to only use interfaces of the
  *   pre-qualified feature set of RTEMS shall not use the directive.
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_object_get_class_information(
@@ -938,9 +938,9 @@ rtems_status_code rtems_object_get_class_information(
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within any runtime context.
+ * - The directive may be called from within any runtime context.
  *
- * * The directive will not cause the calling task to be preempted.
+ * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 static inline uint16_t rtems_object_get_local_node( void )
