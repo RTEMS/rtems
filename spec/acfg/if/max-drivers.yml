@@ -40,7 +40,7 @@ default-value: |
   * ${appl-prerequisite-drivers:/name}
 
   If the ${disable-bsp-settings:/name} configuration option is not defined and
-  the ${/glossary/bsp:/term:/name} provides
+  the ${/glossary/bsp:/term} provides
   ${/bsp/if/acfg-prerequisite-drivers:/name}, then the BSP-provided
   prerequisite device drivers are also taken into account.
 description: |
