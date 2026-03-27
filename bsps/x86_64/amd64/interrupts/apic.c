@@ -377,7 +377,7 @@ void lapic_start_ap(uint32_t cpu_index, uint8_t page_vector)
 
   uint8_t chan2_value;
   PIT_CHAN2_ENABLE(chan2_value);
-  uint32_t pit_ticks = PIT_FREQUENCY/100; /* 10 miliseconds */
+  uint32_t pit_ticks = PIT_FREQUENCY/100; /* 10 milliseconds */
   PIT_CHAN2_WRITE_TICKS(pit_ticks);
 
   /* INIT IPI */

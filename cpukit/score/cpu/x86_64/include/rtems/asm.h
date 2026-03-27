@@ -132,10 +132,10 @@
 /** This macro is used to denote the end of a data section. */
 #define END_DATA
 /** This macro is used to denote the beginning of the
- *  unitialized data section.
+ *  uninitialized data section.
  */
 #define BEGIN_BSS
-/** This macro is used to denote the end of the unitialized data section.  */
+/** This macro is used to denote the end of the uninitialized data section.  */
 #define END_BSS
 /** This macro is used to denote the end of the assembly file.  */
 #define END

@@ -65,14 +65,14 @@ static void copy_trampoline(void)
 /**
  * @brief Waits for the Application Processor to set the flag.
  *
- * @param timeout_ms Timeout in miliseconds.
+ * @param timeout_ms Timeout in milliseconds.
  *
  * @return true if successful.
  */
 static bool wait_for_ap(uint32_t timeout_ms)
 {
   uint8_t chan2_value;
-  uint32_t pit_ticks = PIT_FREQUENCY/1000; /* a milisecond */
+  uint32_t pit_ticks = PIT_FREQUENCY/1000; /* a millisecond */
 
   PIT_CHAN2_ENABLE(chan2_value);
   PIT_CHAN2_WRITE_TICKS(pit_ticks);
