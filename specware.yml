@@ -1,0 +1,172 @@
+spec:
+  cache-directory: cache
+  paths:
+  - spec
+  resolve-proxies: true
+  spec-type-root-uid: /spec/root
+automatically-generated-warning: |
+  This file is part of the RTEMS quality process and was automatically
+  generated.  If you find something that needs to be fixed or
+  worded better please post a report or patch to an RTEMS mailing list
+  or raise a bug report:
+
+  https://www.rtems.org/bugs.html
+
+  For information on updating and regenerating please refer to the How-To
+  section in the Software Requirements Engineering chapter of the
+  RTEMS Software Engineering manual.  The manual is provided as a part of
+  a release.  For development sources please refer to the online
+  documentation at:
+
+  https://docs.rtems.org
+glossary:
+  project-groups:
+  - /glossary/group
+  project-header: Glossary
+  project-target: ../rtems-docs/c-user/glossary.rst
+  documents:
+  - header: Glossary
+    md-source-paths: []
+    rest-source-paths:
+    - ../rtems-docs/eng
+    target: ../rtems-docs/eng/glossary.rst
+appl-config:
+  doxygen-target: cpukit/doxygen/appl-config.h
+  enabled-source:
+  - RTEMS_QUAL
+  enabled-documentation:
+  - RTEMS_QUAL
+  groups:
+  - uid: /acfg/if/group-bdbuf
+    target: ../rtems-docs/c-user/config/bdbuf.rst
+  - uid: /acfg/if/group-classic
+    target: ../rtems-docs/c-user/config/classic-api.rst
+  - uid: /acfg/if/group-classicinit
+    target: ../rtems-docs/c-user/config/classic-init-task.rst
+  - uid: /acfg/if/group-devdrv
+    target: ../rtems-docs/c-user/config/device-driver.rst
+  - uid: /acfg/if/group-eventrecord
+    target: ../rtems-docs/c-user/config/event-record.rst
+  - uid: /acfg/if/group-face
+    target: ../rtems-docs/c-user/config/face-technical-standard.rst
+  - uid: /acfg/if/group-filesystem
+    target: ../rtems-docs/c-user/config/filesystem.rst
+  - uid: /acfg/if/group-general
+    target: ../rtems-docs/c-user/config/general.rst
+  - uid: /acfg/if/group-idle
+    target: ../rtems-docs/c-user/config/idle-task.rst
+  - uid: /acfg/if/group-mpci
+    target: ../rtems-docs/c-user/config/mpci.rst
+  - uid: /acfg/if/group-posix
+    target: ../rtems-docs/c-user/config/posix-api.rst
+  - uid: /acfg/if/group-posixinit
+    target: ../rtems-docs/c-user/config/posix-init-thread.rst
+  - uid: /acfg/if/group-schedgeneral
+    target: ../rtems-docs/c-user/config/scheduler-general.rst
+  - uid: /acfg/if/group-stackalloc
+    target: ../rtems-docs/c-user/config/task-stack-alloc.rst
+validation:
+  base-directory-map: []
+interface:
+  enabled:
+  - RTEMS_QUAL
+  item-level-interfaces:
+  - /build-options/if/group
+  - /compiler/if/group
+  - /user/if/group
+  domains:
+    /if/domain: .
+    /dev/if/domain: .
+interface-documentation:
+  enabled:
+  - RTEMS_QUAL
+  groups:
+  - directives-target: ../rtems-docs/c-user/barrier/directives.rst
+    group: /rtems/barrier/if/group
+    introduction-target: ../rtems-docs/c-user/barrier/introduction.rst
+  - directives-target: ../rtems-docs/c-user/cache/directives.rst
+    group: /rtems/cache/if/group
+    introduction-target: ../rtems-docs/c-user/cache/introduction.rst
+  - directives-target: ../rtems-docs/c-user/config/directives.rst
+    group: /rtems/config/if/group
+    introduction-target: ../rtems-docs/c-user/config/introduction.rst
+  - directives-target: ../rtems-docs/c-user/dual-ported-memory/directives.rst
+    group: /rtems/dpmem/if/group
+    introduction-target: ../rtems-docs/c-user/dual-ported-memory/introduction.rst
+  - directives-target: ../rtems-docs/c-user/fatal-error/directives.rst
+    group: /rtems/fatal/if/group
+    introduction-target: ../rtems-docs/c-user/fatal-error/introduction.rst
+  - directives-target: ../rtems-docs/c-user/timer/directives.rst
+    group: /rtems/timer/if/group
+    introduction-target: ../rtems-docs/c-user/timer/introduction.rst
+  - directives-target: ../rtems-docs/c-user/initialization/directives.rst
+    group: /rtems/init/if/group
+    introduction-target: ../rtems-docs/c-user/initialization/introduction.rst
+  - directives-target: ../rtems-docs/c-user/io/directives.rst
+    group: /rtems/io/if/group
+    introduction-target: ../rtems-docs/c-user/io/introduction.rst
+  - directives-target: ../rtems-docs/c-user/kernel-character-io/directives.rst
+    group: /rtems/io/if/group-3
+    introduction-target: ../rtems-docs/c-user/kernel-character-io/introduction.rst
+  - directives-target: ../rtems-docs/c-user/region/directives.rst
+    group: /rtems/region/if/group
+    introduction-target: ../rtems-docs/c-user/region/introduction.rst
+  - directives-target: ../rtems-docs/c-user/multiprocessing/directives.rst
+    group: /rtems/mp/if/group
+    introduction-target: ../rtems-docs/c-user/multiprocessing/introduction.rst
+  - directives-target: ../rtems-docs/c-user/semaphore/directives.rst
+    group: /rtems/sem/if/group
+    introduction-target: ../rtems-docs/c-user/semaphore/introduction.rst
+  - directives-target: ../rtems-docs/c-user/event/directives.rst
+    group: /rtems/event/if/group
+    introduction-target: ../rtems-docs/c-user/event/introduction.rst
+  - directives-target: ../rtems-docs/c-user/partition/directives.rst
+    group: /rtems/part/if/group
+    introduction-target: ../rtems-docs/c-user/partition/introduction.rst
+  - directives-target: ../rtems-docs/c-user/task/directives.rst
+    group: /rtems/task/if/group
+    introduction-target: ../rtems-docs/c-user/task/introduction.rst
+  - directives-target: ../rtems-docs/c-user/message/directives.rst
+    group: /rtems/message/if/group
+    introduction-target: ../rtems-docs/c-user/message/introduction.rst
+  - directives-target: ../rtems-docs/c-user/object-services/directives.rst
+    group: /rtems/object/if/group
+    introduction-target: ../rtems-docs/c-user/object-services/introduction.rst
+  - directives-target: ../rtems-docs/c-user/signal/directives.rst
+    group: /rtems/signal/if/group
+    introduction-target: ../rtems-docs/c-user/signal/introduction.rst
+  - directives-target: ../rtems-docs/c-user/user-extensions/directives.rst
+    group: /rtems/userext/if/group
+    introduction-target: ../rtems-docs/c-user/user-extensions/introduction.rst
+  - directives-target: ../rtems-docs/c-user/scheduling-concepts/directives.rst
+    group: /rtems/scheduler/if/group
+    introduction-target: ../rtems-docs/c-user/scheduling-concepts/introduction.rst
+  - directives-target: ../rtems-docs/c-user/clock/directives.rst
+    group: /rtems/clock/if/group
+    introduction-target: ../rtems-docs/c-user/clock/introduction.rst
+  - directives-target: ../rtems-docs/c-user/interrupt/directives.rst
+    group: /rtems/intr/if/group
+    introduction-target: ../rtems-docs/c-user/interrupt/introduction.rst
+  - directives-target: ../rtems-docs/c-user/rate-monotonic/directives.rst
+    group: /rtems/ratemon/if/group
+    introduction-target: ../rtems-docs/c-user/rate-monotonic/introduction.rst
+  types:
+    domains:
+    - /if/domain
+    groups:
+    - /rtems/type/if/group
+    target: ../rtems-docs/c-user/rtems_data_types.rst
+spec-verification:
+  root-type: /spec/root
+spec-documentation:
+  target: ../rtems-docs/eng/req/items.rst
+  hierarchy-subsection-name: Specification Item Hierarchy
+  hierarchy-text: |
+    The specification item types have the following hierarchy:
+  ignore: '^$'
+  item-types-subsection-name: Specification Item Types
+  label-prefix: SpecType
+  root-type-uid: /spec/root
+  section-label-prefix: ReqEng
+  section-name: Specification Items
+  value-types-subsection-name: Specification Attribute Sets and Value Types
