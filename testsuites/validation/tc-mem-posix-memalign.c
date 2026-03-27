@@ -225,7 +225,7 @@ static void CReqPosixMemalign_Pre_Memptr_Prepare(
   switch ( state ) {
     case CReqPosixMemalign_Pre_Memptr_Valid: {
       /*
-       * While the memptr parameter references an object of type ``void *``.
+       * While the memptr parameter references an object of type `void *`.
        */
       ctx->memptr = &ctx->memptr_obj;
       break;

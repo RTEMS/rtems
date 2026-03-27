@@ -126,12 +126,12 @@ typedef struct {
   void *ptr;
 
   /**
-   * @brief This member specifies if the ``nelem`` parameter value.
+   * @brief This member specifies if the `nelem` parameter value.
    */
   size_t nelem;
 
   /**
-   * @brief This member specifies if the ``elsize`` parameter value.
+   * @brief This member specifies if the `elsize` parameter value.
    */
   size_t elsize;
 
@@ -195,9 +195,9 @@ static void RtemsMallocReqCalloc_Pre_ElementCount_Prepare(
   switch ( state ) {
     case RtemsMallocReqCalloc_Pre_ElementCount_Huge: {
       /*
-       * While the ``nelem`` parameter is not equal to zero, while the
-       * ``nelem`` parameter is too large to allocate a memory area with the
-       * specified size.
+       * While the `nelem` parameter is not equal to zero, while the `nelem`
+       * parameter is too large to allocate a memory area with the specified
+       * size.
        */
       ctx->nelem = SIZE_MAX;
       break;
@@ -205,7 +205,7 @@ static void RtemsMallocReqCalloc_Pre_ElementCount_Prepare(
 
     case RtemsMallocReqCalloc_Pre_ElementCount_Zero: {
       /*
-       * While the ``nelem`` parameter is equal to zero.
+       * While the `nelem` parameter is equal to zero.
        */
       ctx->nelem = 0;
       break;
@@ -213,9 +213,9 @@ static void RtemsMallocReqCalloc_Pre_ElementCount_Prepare(
 
     case RtemsMallocReqCalloc_Pre_ElementCount_Valid: {
       /*
-       * While the ``nelem`` parameter is not equal to zero, while the
-       * ``nelem`` parameter is small enough to allocate a memory area with the
-       * specified size.
+       * While the `nelem` parameter is not equal to zero, while the `nelem`
+       * parameter is small enough to allocate a memory area with the specified
+       * size.
        */
       ctx->nelem = 1;
       break;
@@ -234,9 +234,9 @@ static void RtemsMallocReqCalloc_Pre_ElementSize_Prepare(
   switch ( state ) {
     case RtemsMallocReqCalloc_Pre_ElementSize_Huge: {
       /*
-       * While the ``elsize`` parameter is not equal to zero, while the
-       * ``elsize`` parameter is too large to allocate a memory area with the
-       * specified size.
+       * While the `elsize` parameter is not equal to zero, while the `elsize`
+       * parameter is too large to allocate a memory area with the specified
+       * size.
        */
       ctx->elsize = SIZE_MAX;
       break;
@@ -244,7 +244,7 @@ static void RtemsMallocReqCalloc_Pre_ElementSize_Prepare(
 
     case RtemsMallocReqCalloc_Pre_ElementSize_Zero: {
       /*
-       * While the ``elsize`` parameter is equal to zero.
+       * While the `elsize` parameter is equal to zero.
        */
       ctx->elsize = 0;
       break;
@@ -252,9 +252,9 @@ static void RtemsMallocReqCalloc_Pre_ElementSize_Prepare(
 
     case RtemsMallocReqCalloc_Pre_ElementSize_Valid: {
       /*
-       * While the ``elsize`` parameter is not equal to zero, while the
-       * ``elsize`` parameter is small enough to allocate a memory area with
-       * the specified size.
+       * While the `elsize` parameter is not equal to zero, while the `elsize`
+       * parameter is small enough to allocate a memory area with the specified
+       * size.
        */
       ctx->elsize = sizeof( uint64_t );
       break;
@@ -327,7 +327,7 @@ static void RtemsMallocReqCalloc_Post_Size_Check(
     case RtemsMallocReqCalloc_Post_Size_Valid: {
       /*
        * The size of the allocated memory area shall greater than or equal to
-       * the product of the ``nelem`` and ``elsize`` parameters.
+       * the product of the `nelem` and `elsize` parameters.
        */
       /* Assume that the next allocation is done from adjacent memory */
       ptr = ctx->ptr;

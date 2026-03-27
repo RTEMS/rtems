@@ -112,7 +112,7 @@ typedef struct {
   void *ptr;
 
   /**
-   * @brief This member specifies if the ``size`` parameter value.
+   * @brief This member specifies if the `size` parameter value.
    */
   size_t size;
 
@@ -168,7 +168,7 @@ static void RtemsMallocReqMalloc_Pre_Size_Prepare(
   switch ( state ) {
     case RtemsMallocReqMalloc_Pre_Size_Huge: {
       /*
-       * While the ``size`` parameter is not equal to zero, while the ``size``
+       * While the `size` parameter is not equal to zero, while the `size`
        * parameter is too large to allocate a memory area with the specified
        * size.
        */
@@ -178,7 +178,7 @@ static void RtemsMallocReqMalloc_Pre_Size_Prepare(
 
     case RtemsMallocReqMalloc_Pre_Size_Zero: {
       /*
-       * While the ``size`` parameter is equal to zero.
+       * While the `size` parameter is equal to zero.
        */
       ctx->size = 0;
       break;
@@ -186,7 +186,7 @@ static void RtemsMallocReqMalloc_Pre_Size_Prepare(
 
     case RtemsMallocReqMalloc_Pre_Size_Valid: {
       /*
-       * While the ``size`` parameter is not equal to zero, while the ``size``
+       * While the `size` parameter is not equal to zero, while the `size`
        * parameter is small enough to allocate a memory area with the specified
        * size.
        */
@@ -261,7 +261,7 @@ static void RtemsMallocReqMalloc_Post_Size_Check(
     case RtemsMallocReqMalloc_Post_Size_Valid: {
       /*
        * The size of the allocated memory area shall greater than or equal to
-       * the ``size`` parameter.
+       * the `size` parameter.
        */
       /* Assume that the next allocation is done from adjacent memory */
       ptr = ctx->ptr;
