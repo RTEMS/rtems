@@ -167,10 +167,11 @@ typedef struct {
  * The **attribute set** specified in ``attribute_set`` is built through a
  * *bitwise or* of the attribute constants described below.  Not all
  * combinations of attributes are allowed.  Some attributes are mutually
- * exclusive.  If mutually exclusive attributes are combined, the behaviour is
- * undefined.  Attributes not mentioned below are not evaluated by this
- * directive and have no effect.  Default attributes can be selected by using
- * the #RTEMS_DEFAULT_ATTRIBUTES constant.  The attribute set defines
+ * exclusive. Combining mutually exclusive attributes may throw an error or run
+ * silently with unintended default values. Attributes not mentioned below are
+ * not evaluated by this directive and have no effect.  Default attributes can
+ * be selected by using the #RTEMS_DEFAULT_ATTRIBUTES constant.  The attribute
+ * set defines
  *
  * * the scope of the message queue: #RTEMS_LOCAL (default) or #RTEMS_GLOBAL
  *   and
@@ -536,7 +537,8 @@ rtems_status_code rtems_message_queue_delete( rtems_id id );
  *
  * @param id is the queue identifier.
  *
- * @param buffer is the begin address of the message buffer to send.
+ * @param buffer is the begin address of the message buffer to send (which
+ *   shall be consistent with the subsequent size parameter).
  *
  * @param size is the size in bytes of the message buffer to send.
  *
@@ -742,11 +744,11 @@ rtems_status_code rtems_message_queue_broadcast(
  *
  * The **option set** specified in ``option_set`` is built through a *bitwise
  * or* of the option constants described below.  Not all combinations of
- * options are allowed.  Some options are mutually exclusive.  If mutually
- * exclusive options are combined, the behaviour is undefined.  Options not
- * mentioned below are not evaluated by this directive and have no effect.
- * Default options can be selected by using the #RTEMS_DEFAULT_OPTIONS
- * constant.
+ * options are allowed.  Some options are mutually exclusive. Combining
+ * mutually exclusive options may throw an error or run silently with
+ * unintended default values. Options not mentioned below are not evaluated by
+ * this directive and have no effect. Default options can be selected by using
+ * the #RTEMS_DEFAULT_OPTIONS constant.
  *
  * The calling task can **wait** or **try to receive** a message from the queue
  * according to the mutually exclusive #RTEMS_WAIT and #RTEMS_NO_WAIT options.

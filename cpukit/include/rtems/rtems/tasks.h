@@ -1445,10 +1445,10 @@ rtems_status_code rtems_task_get_priority(
  *
  * The **mode set** specified in ``mode_set`` is built through a *bitwise or*
  * of the mode constants described below.  Not all combinations of modes are
- * allowed.  Some modes are mutually exclusive.  If mutually exclusive modes
- * are combined, the behaviour is undefined.  Default task modes can be
- * selected by using the #RTEMS_DEFAULT_MODES constant.  The task mode set
- * defines
+ * allowed.  Some modes are mutually exclusive. Combining mutually exclusive
+ * mode may throw an error or run silently with unintended default values.
+ * Default task modes can be selected by using the #RTEMS_DEFAULT_MODES
+ * constant.  The task mode set defines
  *
  * * the preemption mode of the task: #RTEMS_PREEMPT (default) or
  *   #RTEMS_NO_PREEMPT,

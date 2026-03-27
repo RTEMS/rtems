@@ -817,11 +817,11 @@ rtems_status_code rtems_event_send( rtems_id id, rtems_event_set event_in );
  *
  * The **option set** specified in ``option_set`` is built through a *bitwise
  * or* of the option constants described below.  Not all combinations of
- * options are allowed.  Some options are mutually exclusive.  If mutually
- * exclusive options are combined, the behaviour is undefined.  Options not
- * mentioned below are not evaluated by this directive and have no effect.
- * Default options can be selected by using the #RTEMS_DEFAULT_OPTIONS
- * constant.  The option set defines
+ * options are allowed.  Some options are mutually exclusive. Combining
+ * mutually exclusive options may throw an error or run silently with
+ * unintended default values. Options not mentioned below are not evaluated by
+ * this directive and have no effect. Default options can be selected by using
+ * the #RTEMS_DEFAULT_OPTIONS constant.  The option set defines
  *
  * * if the calling task will wait or poll for the events, and
  *

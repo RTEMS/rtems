@@ -103,10 +103,10 @@ extern "C" {
  * The **attribute set** specified in ``attribute_set`` is built through a
  * *bitwise or* of the attribute constants described below.  Not all
  * combinations of attributes are allowed.  Some attributes are mutually
- * exclusive.  If mutually exclusive attributes are combined, the behaviour is
- * undefined.  Attributes not mentioned below are not evaluated by this
- * directive and have no effect.  Default attributes can be selected by using
- * the #RTEMS_DEFAULT_ATTRIBUTES constant.
+ * exclusive. Combining mutually exclusive attributes may throw an error or run
+ * silently with unintended default values. Attributes not mentioned below are
+ * not evaluated by this directive and have no effect.  Default attributes can
+ * be selected by using the #RTEMS_DEFAULT_ATTRIBUTES constant.
  *
  * The **barrier class** is selected by the mutually exclusive
  * #RTEMS_BARRIER_MANUAL_RELEASE and #RTEMS_BARRIER_AUTOMATIC_RELEASE

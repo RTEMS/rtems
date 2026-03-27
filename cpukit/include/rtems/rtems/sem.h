@@ -110,10 +110,11 @@ extern "C" {
  * The **attribute set** specified in ``attribute_set`` is built through a
  * *bitwise or* of the attribute constants described below.  Not all
  * combinations of attributes are allowed.  Some attributes are mutually
- * exclusive.  If mutually exclusive attributes are combined, the behaviour is
- * undefined.  Attributes not mentioned below are not evaluated by this
- * directive and have no effect.  Default attributes can be selected by using
- * the #RTEMS_DEFAULT_ATTRIBUTES constant.  The attribute set defines
+ * exclusive. Combining mutually exclusive attributes may throw an error or run
+ * silently with unintended default values. Attributes not mentioned below are
+ * not evaluated by this directive and have no effect. Default attributes can
+ * be selected by using the #RTEMS_DEFAULT_ATTRIBUTES constant.  The attribute
+ * set defines
  *
  * * the scope of the semaphore: #RTEMS_LOCAL (default) or #RTEMS_GLOBAL,
  *
@@ -425,11 +426,11 @@ rtems_status_code rtems_semaphore_delete( rtems_id id );
  *
  * The **option set** specified in ``option_set`` is built through a *bitwise
  * or* of the option constants described below.  Not all combinations of
- * options are allowed.  Some options are mutually exclusive.  If mutually
- * exclusive options are combined, the behaviour is undefined.  Options not
- * mentioned below are not evaluated by this directive and have no effect.
- * Default options can be selected by using the #RTEMS_DEFAULT_OPTIONS
- * constant.
+ * options are allowed.  Some options are mutually exclusive. Combining
+ * mutually exclusive options may throw an error or run silently with
+ * unintended default values. Options not mentioned below are not evaluated by
+ * this directive and have no effect. Default options can be selected by using
+ * the #RTEMS_DEFAULT_OPTIONS constant.
  *
  * The calling task can **wait** or **try to obtain** the semaphore according
  * to the mutually exclusive #RTEMS_WAIT and #RTEMS_NO_WAIT options.
@@ -651,7 +652,8 @@ rtems_status_code rtems_semaphore_release( rtems_id id );
  *   node.
  *
  * @retval ::RTEMS_NOT_DEFINED Flushing a semaphore using the MrsP locking
- *   protocol is undefined behaviour.
+ *   protocol may throw an error or run silently with unintended default
+ *   values.
  *
  * @par Notes
  * @parblock
