@@ -131,16 +131,16 @@ static int lpc32xx_rtc_set_time(int minor, const rtems_time_of_day *tod)
 {
   (void) minor;
   time_t tod_time_t;
-  uint32 tod;
+  uint32_t tod_for_device;
 
   tod_time_t = _TOD_To_seconds(tod);
   if (tod_time_t > UINT32_MAX) {
     return -1;
   }
 
-  tod = tod_time_t;
+  tod_for_device = tod_time_t;
 
-  lpc32xx_rtc_set(tod);
+  lpc32xx_rtc_set(tod_for_device);
 
   return 0;
 }
