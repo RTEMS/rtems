@@ -60,7 +60,7 @@ __attribute__((__naked__)) void bsp_start_hook_0( void )
     "ldr r1, =#" RTEMS_XSTRING( TMS570_MEMORY_SRAM_SIZE ) "\n"
     "sub r0, lr, r0\n"
     "cmp r1, r0\n"
-    "blt 1f\n"
+    "bhi 1f\n"
 
     /*
      * Initialize the SRAM if we are not running in SRAM.  While we are called,
