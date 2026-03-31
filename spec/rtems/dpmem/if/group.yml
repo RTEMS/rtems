@@ -16,8 +16,6 @@ links:
   uid: header
 - role: interface-ingroup
   uid: ../../if/group
-- role: interface-ingroup
-  uid: ../../if/group
 - role: placement-order
   uid: create
 - role: placement-order
