@@ -83,18 +83,6 @@ SYM(_start):
 
 	/* only boot hartid returns here */
 
-#ifdef BSP_START_COPY_FDT_FROM_U_BOOT
-	/*
-	 * s1 contains the address of FDT if the boot hartid was the one
-	 * actually booted first, otherwise it contains the privilege
-	 * level passed to sbi_hsm_hart_start.
-	 */
-	li	t0, 3
-	ble	s1, t0, .Lclear_bss
-	mv	a0, s1
-	call	bsp_fdt_copy
-#endif
-
 .Lclear_bss:
 
 	/* Clear .bss */
@@ -102,6 +90,19 @@ SYM(_start):
 	li	a1, 0
 	LADDR	a2, bsp_section_bss_size
 	call	memset
+
+#ifdef BSP_START_COPY_FDT_FROM_U_BOOT
+	/*
+	 * s1 contains the address of FDT if the boot hartid was the one
+	 * actually booted first, otherwise it contains the privilege
+	 * level passed to sbi_hsm_hart_start.
+	 */
+	li	t0, 3
+	ble	s1, t0, .Lafter_fdt_copy
+	mv	a0, s1
+	call	bsp_fdt_copy
+.Lafter_fdt_copy:
+#endif
 
 #if defined(RTEMS_SMP)
 	/* Give go to secondary processors */
