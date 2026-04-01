@@ -1,4 +1,4 @@
-SPDX-License-Identifier: BSD-2-Clause OR Apache-2.0 OR GPL-2.0-or-later
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause OR Apache-2.0 OR GPL-2.0-or-later
 actions:
 - get-integer: null
 - define: null
