@@ -7,7 +7,7 @@ actions:
 - env-assign: null
 build-type: option
 copyrights:
-- Copwyright (C) 2026 Allan N. Hessenflow
+- Copyright (C) 2026 Allan N. Hessenflow
 default: []
 description: ''
 enabled-by: true

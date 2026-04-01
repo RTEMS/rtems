@@ -7,7 +7,7 @@ actions:
 - env-assign: null
 build-type: option
 copyrights:
-- Copwyright (C) 2025 Amar Takhar <amar@coeval.ca>
+- Copyright (C) 2025 Amar Takhar <amar@coeval.ca>
 default: []
 description: ''
 enabled-by: true
