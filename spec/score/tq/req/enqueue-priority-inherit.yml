@@ -209,7 +209,7 @@ pre-conditions:
         ${.:skip}
       }
     text: |
-      Where the system has at least three schedulers.
+      Where the system has at least four schedulers.
   test-epilogue: null
   test-prologue: null
 - name: QueueEligible
