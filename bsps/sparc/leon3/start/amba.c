@@ -49,8 +49,9 @@
 
 #if !defined(LEON3_GPTIMER_BASE)
 unsigned int leon3_timer_prescaler __attribute__((weak)) = 0;
-int leon3_timer_core_index __attribute__((weak)) = 0;
 #endif
+
+int leon3_timer_core_index __attribute__((weak)) = 0;
 
 /* AMBA Plug&Play information description.
  *
@@ -195,22 +196,22 @@ static void amba_initialize(void)
   }
 #endif
 
-#if !defined(LEON3_GPTIMER_BASE)
   /* find GP Timer */
   adev = (void *)ambapp_for_each(plb, (OPTIONS_ALL|OPTIONS_APB_SLVS),
                                  VENDOR_GAISLER, GAISLER_GPTIMER,
                                  ambapp_find_by_idx, &leon3_timer_core_index);
   if (adev) {
-    LEON3_Timer_Regs = (gptimer *)DEV_TO_APB(adev)->start;
-    LEON3_Timer_Adev = adev;
+    gptimer *timer_regs = (gptimer *)DEV_TO_APB(adev)->start;
 
     /* Register AMBA Bus Frequency */
     ambapp_freq_init(
       plb,
-      LEON3_Timer_Adev,
-      (grlib_load_32(&LEON3_Timer_Regs->sreload) + 1)
+      adev,
+      (grlib_load_32(&timer_regs->sreload) + 1)
         * LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER
     );
+
+#if !defined(LEON3_GPTIMER_BASE)
     /* Set user prescaler configuration. Use this to increase accuracy of timer
      * and accociated services like cpucounter.
      * Note that minimum value is the number of timer instances present in
@@ -218,8 +219,11 @@ static void amba_initialize(void)
      */
     if (leon3_timer_prescaler)
       grlib_store_32(&LEON3_Timer_Regs->sreload, leon3_timer_prescaler);
-  }
+
+    LEON3_Timer_Regs = (gptimer *)DEV_TO_APB(adev)->start;
+    LEON3_Timer_Adev = adev;
 #endif
+  }
 }
 
 RTEMS_SYSINIT_ITEM(
