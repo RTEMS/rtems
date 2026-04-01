@@ -10,7 +10,6 @@ copyrights:
 default: 
 - enabled-by: true
   value: 0x00000000
-default-by-variant: []
 description: |
   start address of the .text section
 enabled-by: true
