@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright (C) 2018, 2024 embedded brains GmbH & Co. KG
+ * Copyright (C) 2018, 2026 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -38,6 +38,8 @@
 #include "tmacros.h"
 
 const char rtems_test_name[] = "RECORD 2";
+
+#define ITEM_COUNT_FOR_FETCH 256
 
 typedef struct {
   rtems_record_client_context client;
@@ -149,7 +151,7 @@ static void fetch( test_context *ctx )
 {
   rtems_record_client_status cs;
   rtems_record_fetch_control control;
-  rtems_record_item          items[ 256 ];
+  rtems_record_item          items[ ITEM_COUNT_FOR_FETCH ];
   rtems_record_fetch_status  fs;
 
   rtems_record_fetch_initialize(
@@ -237,6 +239,10 @@ static void fatal_extension(
 
 #define CONFIGURE_INITIAL_EXTENSIONS \
   INITIAL_EXTENSION, RTEMS_TEST_INITIAL_EXTENSION
+
+/* The fetch() function requires a considerable amout of stack space */
+#define CONFIGURE_INIT_TASK_STACK_SIZE \
+  ( RTEMS_MINIMUM_STACK_SIZE + 16 * ITEM_COUNT_FOR_FETCH )
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
