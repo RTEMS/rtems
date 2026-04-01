@@ -196,10 +196,11 @@ RISCV_Start_on_processor:
 #else
 	csrw	mscratch, t3
 #endif
+	/* boot hartid returns to _start, others wait to be released */
+	bnez	a0, .Lstart_on_secondary_processor
 #else /* RTEMS_SMP */
 	LADDR	sp, _ISR_Stack_area_end
 #endif
-	bnez	a0, .Lstart_on_secondary_processor
 	ret
 
 .Lwfi:
@@ -209,7 +210,7 @@ RISCV_Start_on_processor:
 #ifdef RTEMS_SMP
 .Lstart_on_secondary_processor:
 
-	/* Wait for go issued by the boot processor (mhartid == 0) */
+	/* Wait for boot processor (mhartid == RISCV_BOOT_HARTID) to go */
 	LADDR	t0, .Lsecondary_processor_go
 
 .Lwait_for_go_again:
