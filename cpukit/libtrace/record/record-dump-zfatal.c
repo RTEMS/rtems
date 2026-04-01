@@ -97,7 +97,7 @@ void _Record_Fatal_dump_base64_zlib(
   _SMP_Request_shutdown();
 #endif
 
-  _ISR_lock_Acquire( &_Record_Dump_base64_zlib_lock, &lock_context );
+  _ISR_lock_ISR_disable_and_acquire( &_Record_Dump_base64_zlib_lock, &lock_context );
 
   if ( !_Record_Dump_base64_zlib_done ) {
     _Record_Dump_base64_zlib_done = true;
@@ -111,5 +111,5 @@ void _Record_Fatal_dump_base64_zlib(
     printk( "\n*** END OF RECORDS BASE64 ZLIB ***\n" );
   }
 
-  _ISR_lock_Release( &_Record_Dump_base64_zlib_lock, &lock_context );
+  _ISR_lock_Release_and_ISR_enable( &_Record_Dump_base64_zlib_lock, &lock_context );
 }
