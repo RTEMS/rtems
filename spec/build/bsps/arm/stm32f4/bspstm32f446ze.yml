@@ -1,5 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 arch: arm
+copyrights:
+- Copyright (C) 2026 Santosh Bala <santmartian@gmail.com>
 bsp: stm32f446ze
 build-type: bsp
 cflags: []

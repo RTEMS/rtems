@@ -3,6 +3,8 @@ actions:
 - get-string: null
 - env-assign: null
 build-type: option
+copyrights:
+- Copyright (C) 2026 Santosh Bala <santmartian@gmail.com>
 default:
 - enabled-by: arm/stm32f446ze
   value: linkcmds.stm32f446ze
