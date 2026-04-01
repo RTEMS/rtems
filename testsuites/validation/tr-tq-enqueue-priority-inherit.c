@@ -439,7 +439,7 @@ static void ScoreTqReqEnqueuePriorityInherit_Pre_Scheduler_Prepare(
 
     case ScoreTqReqEnqueuePriorityInherit_Pre_Scheduler_More: {
       /*
-       * Where the system has at least three schedulers.
+       * Where the system has at least four schedulers.
        */
       if ( rtems_scheduler_get_processor_maximum() < 4 ) {
         ctx->Map.skip = true;
