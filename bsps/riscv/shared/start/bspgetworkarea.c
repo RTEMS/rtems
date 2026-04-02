@@ -53,6 +53,11 @@ static Memory_Area _Memory_Areas[ 1 ];
 static void bsp_memory_initialize( void )
 {
   void *end;
+#if defined(RISCV_RAM_REGION_BEGIN) && defined(RISCV_RAM_REGION_SIZE)
+  uintptr_t start = RISCV_RAM_REGION_BEGIN;
+  uintptr_t size = RISCV_RAM_REGION_SIZE;
+  end = (void*) start + size;
+#else
   const void *fdt = bsp_fdt_get();
 
   /* get end of memory from the "/memory" node in the fdt */
@@ -61,6 +66,7 @@ static void bsp_memory_initialize( void )
     /* fall back to linker symbol if "/memory" node not found or invalid */
     end = RamEnd;
   }
+#endif
   _Memory_Initialize( &_Memory_Areas[ 0 ], WorkAreaBase, end );
 }
 
