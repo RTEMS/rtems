@@ -189,18 +189,55 @@ static RTEMS_USED void tms570_start_hook_0( void )
     _coreDisableRamEcc_();
 
     /* Run PBIST on CPU RAM.
-     * The PBIST controller needs to be configured separately for single-port and dual-port SRAMs.
-     * The CPU RAM is a single-port memory. The actual "RAM Group" for all on-chip SRAMs is defined in the
-     * device datasheet.
+     * The PBIST controller needs to be configured separately for single-port
+     * and dual-port SRAMs.
+     * The CPU RAM is a single-port memory. The actual "RAM Group" for all
+     * on-chip SRAMs is defined in the device datasheet.
      */
-    tms570_pbist_run_and_check( 0x08300020U,   /* ESRAM Single Port PBIST */
-      (uint32_t) PBIST_March13N_SP );
+
+    /* The following ESRAM Single Port PBIST code is equivalent to
+     *
+     * tms570_pbist_run_and_check( 0x08300020U,
+     *     (uint32_t) PBIST_March13N_SP );
+     *
+     * But wrapper function is complex and causes store of the register
+     * and return address to the stack. Because the memory content
+     * is lost by checks, return fails. Calling of individual functions
+     * should be safe for standard optimization levels.
+     */
+    tms570_pbist_run(0x08300020U, (uint32_t) PBIST_March13N_SP);
+    while (!tms570_pbist_is_test_completed()) {
+    }
+    if (!tms570_pbist_is_test_passed()) {
+      tms570_pbist_fail();
+    }
+    tms570_pbist_stop();
+
+    tms570_memory_init(1);
 
     /*
      * Enable ECC checking for TCRAM accesses.
      * This function enables the CPU's ECC logic for accesses to B0TCM and B1TCM.
      */
     _coreEnableRamEcc_();
+
+#if TMS570_VARIANT == 3137
+    /* Test the CPU ECC mechanism for RAM accesses.
+     * The checkBxRAMECC functions cause deliberate single-bit and double-bit errors in TCRAM accesses
+     * by corrupting 1 or 2 bits in the ECC. Reading from the TCRAM location with a 2-bit error
+     * in the ECC causes a data abort exception. The data abort handler is written to look for
+     * deliberately caused exception and to return the code execution to the instruction
+     * following the one that caused the abort.
+     */
+#if 0
+    /* Disabled for now, requires specific support in data abort handler */
+    tms570_check_tcram_ecc();
+    /* TODO consider implementation of data abort handler with recognized
+     * exception to ignore fault in the tms570_check_tcram_ecc() code
+     * and report is as the evidence of proper ECC functionalily
+     */
+#endif
+#endif
   } /* end of the code skipped for tms570_running_from_tcram() */
 
   /* Start PBIST on all dual-port memories */
@@ -227,34 +264,20 @@ static RTEMS_USED void tms570_start_hook_0( void )
     (uint32_t) 0x00008000U,                  /* FRAY RAM */
     (uint32_t) PBIST_March13N_DP );
 
-  if ( !tms570_running_from_tcram() ) {
 
-#if TMS570_VARIANT == 3137
-    /* Test the CPU ECC mechanism for RAM accesses.
-     * The checkBxRAMECC functions cause deliberate single-bit and double-bit errors in TCRAM accesses
-     * by corrupting 1 or 2 bits in the ECC. Reading from the TCRAM location with a 2-bit error
-     * in the ECC causes a data abort exception. The data abort handler is written to look for
-     * deliberately caused exception and to return the code execution to the instruction
-     * following the one that caused the abort.
+  /* Wait for PBIST on all dual-port memories for to be completed */
+  /*SAFETYMCUSW 28 D MR:NA <APPROVED> "Hardware status bit read check" */
+  while ( tms570_pbist_is_test_completed() != TRUE ) {
+  }                                                  /* Wait */
+
+  /* Check if dual-port memories passed the self-test */
+  if ( tms570_pbist_is_test_passed() != TRUE ) {
+    /* CPU RAM failed the self-test.
+     * Need custom handler to check the memory failure
+     * and to take the appropriate next step.
      */
-    tms570_check_tcram_ecc();
-#endif
-
-    /* Wait for PBIST for CPU RAM to be completed */
-    /*SAFETYMCUSW 28 D MR:NA <APPROVED> "Hardware status bit read check" */
-    while ( tms570_pbist_is_test_completed() != TRUE ) {
-    }                                                  /* Wait */
-
-    /* Check if CPU RAM passed the self-test */
-    if ( tms570_pbist_is_test_passed() != TRUE ) {
-      /* CPU RAM failed the self-test.
-       * Need custom handler to check the memory failure
-       * and to take the appropriate next step.
-       */
-      tms570_pbist_fail();
-    }
-
-  } /* end of the code skipped for tms570_running_from_tcram() */
+    tms570_pbist_fail();
+  }
 
   /* Disable PBIST clocks and disable memory self-test mode */
   tms570_pbist_stop();
