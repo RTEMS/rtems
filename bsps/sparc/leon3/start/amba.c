@@ -217,10 +217,11 @@ static void amba_initialize(void)
      * Note that minimum value is the number of timer instances present in
      * GRTIMER/GPTIMER hardware. See HW manual.
      */
-    if (leon3_timer_prescaler)
-      grlib_store_32(&LEON3_Timer_Regs->sreload, leon3_timer_prescaler);
+    if (leon3_timer_prescaler) {
+      grlib_store_32(timer_regs->sreload, leon3_timer_prescaler);
+    }
 
-    LEON3_Timer_Regs = (gptimer *)DEV_TO_APB(adev)->start;
+    LEON3_Timer_Regs = timer_regs;
     LEON3_Timer_Adev = adev;
 #endif
   }
