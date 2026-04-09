@@ -218,7 +218,7 @@ static void amba_initialize(void)
      * GRTIMER/GPTIMER hardware. See HW manual.
      */
     if (leon3_timer_prescaler) {
-      grlib_store_32(timer_regs->sreload, leon3_timer_prescaler);
+      grlib_store_32(&timer_regs->sreload, leon3_timer_prescaler);
     }
 
     LEON3_Timer_Regs = timer_regs;
