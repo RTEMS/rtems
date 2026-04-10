@@ -616,6 +616,10 @@ AcpiNsLookup (
                 ACPI_DEBUG_PRINT ((ACPI_DB_NAMES,
                     "Search scope is [%4.4s], path has %u carat(s)\n",
                     AcpiUtGetNodeName (ThisNode), NumCarats));
+#ifdef __rtems__
+                /* Mark this as used beyond debug prints */
+                (void) NumCarats;
+#endif
             }
         }
 
