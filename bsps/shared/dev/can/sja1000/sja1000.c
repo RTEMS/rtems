@@ -180,7 +180,10 @@ static inline void sja1000_write_reg(
   } else
 #endif
   {
-    *( volatile uint8_t * )( internal->base + reg ) = val;
+    if ( internal->hw_options & RTEMS_SJA1000_HW_REG_IO_PORT_32BIT )
+      *( volatile uint32_t * )( internal->base + reg ) = val;
+    else
+      *( volatile uint8_t * )( internal->base + reg ) = val;
   }
 }
 
@@ -196,7 +199,10 @@ static inline uint8_t sja1000_read_reg(
   } else
 #endif
   {
-    return *( volatile uint8_t * )( internal->base + reg );
+    if ( internal->hw_options & RTEMS_SJA1000_HW_REG_IO_PORT_32BIT )
+      return *( volatile uint32_t * )( internal->base + reg );
+    else
+      return *( volatile uint8_t * )( internal->base + reg );
   }
 }
 

@@ -67,6 +67,11 @@ struct rtems_can_chip;
 #define RTEMS_SJA1000_HW_REG_IO_PORT   ( 0x100 )
 
 /**
+ * @brief SJA1000 chip register access forced to be 32-bit
+ */
+#define RTEMS_SJA1000_HW_REG_IO_PORT_32BIT ( 0x200 )
+
+/**
  * @brief  This function initializes the SJA1000 controller.
  *
  * This is an entry point for SJA1000 controller initialization. This
