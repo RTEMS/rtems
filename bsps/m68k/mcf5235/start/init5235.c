@@ -86,4 +86,8 @@ void Init5235 (void)
      */
     CopyDataClearBSSAndStart ();
 
+    /*
+     * temp is really not used but tell the compiler it is.
+     */
+    (void) temp;
 }
