@@ -100,4 +100,9 @@ void Init5282 (void)
      * Copy data, clear BSS and call boot_card()
      */
     CopyDataClearBSSAndStart ();
+
+    /*
+     * temp is really not used but tell the compiler it is.
+     */
+    (void) temp;
 }
