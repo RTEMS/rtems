@@ -701,6 +701,9 @@ rtems_debugger_target_configure(rtems_debugger_target* target)
 }
 
 static void powerpc_print_exception_frame(CPU_Exception_frame* frame) {
+#if (TARGET_DEBUG == 0)
+  (void) frame;
+#else
   uintptr_t* gpr;
   int r;
   target_printk("[} frame = %08" PRIx32 " sig=%d (0x%" PRIx32 ")\n",
@@ -726,6 +729,7 @@ static void powerpc_print_exception_frame(CPU_Exception_frame* frame) {
                   r, *gpr, r + 1, *(gpr + 1), r + 2,
                   *(gpr + 2), r + 3, *(gpr + 3));
   }
+#endif
 }
 
 /*
