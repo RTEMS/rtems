@@ -399,6 +399,12 @@ rtems_task Floating_point_task_1( rtems_task_argument argument )
   Thread_Control *executing;
   FP_DECLARE;
 
+  int task_index = argument; /* task_index is used by FP_CHECK */
+
+  FP_LOAD( 1.0 );
+  FP_CHECK( 1.0 );
+  (void) task_index;
+
   context_switch_restore_1st_fp_time = benchmark_timer_read();
 
   executing = _Thread_Get_executing();
@@ -427,6 +433,7 @@ rtems_task Floating_point_task_1( rtems_task_argument argument )
   context_switch_save_idle_restore_initted_time = benchmark_timer_read();
 
   FP_LOAD( 1.0 );
+  FP_CHECK( 1.0 );
 
   executing = _Thread_Get_executing();
 
@@ -456,6 +463,12 @@ rtems_task Floating_point_task_2( rtems_task_argument argument )
     );
   Thread_Control *executing;
   FP_DECLARE;
+
+  int task_index = argument; /* task_index is used by FP_CHECK */
+
+  FP_LOAD( 1.0 );
+  FP_CHECK( 1.0 );
+  (void) task_index;
 
   context_switch_save_restore_idle_time = benchmark_timer_read();
 

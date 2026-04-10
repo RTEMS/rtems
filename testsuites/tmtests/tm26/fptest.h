@@ -54,7 +54,7 @@
 
 #define FP_DECLARE
 #define FP_LOAD( _factor )
-#define FP_CHECK( _factor ) 0
+#define FP_CHECK( _factor )
 
 #else
 
