@@ -662,6 +662,11 @@ HAL_StatusTypeDef HAL_NAND_Read_Page_8b(NAND_HandleTypeDef *hnand, const NAND_Ad
     return HAL_ERROR;
   }
 
+#ifdef __rtems__
+  /*  address set but not used warnings */	
+  (void) numpagesread;
+#endif
+
   return HAL_OK;
 }
 
@@ -830,6 +835,11 @@ HAL_StatusTypeDef HAL_NAND_Read_Page_16b(NAND_HandleTypeDef *hnand, const NAND_A
     return HAL_ERROR;
   }
 
+#ifdef __rtems__
+  /*  address set but not used warnings */	
+  (void) numpagesread;
+#endif
+
   return HAL_OK;
 }
 
@@ -982,6 +992,11 @@ HAL_StatusTypeDef HAL_NAND_Write_Page_8b(NAND_HandleTypeDef *hnand, const NAND_A
   {
     return HAL_ERROR;
   }
+
+#ifdef __rtems__
+  /*  address set but not used warnings */	
+  (void) numpageswritten;
+#endif
 
   return HAL_OK;
 }
@@ -1146,6 +1161,11 @@ HAL_StatusTypeDef HAL_NAND_Write_Page_16b(NAND_HandleTypeDef *hnand, const NAND_
   {
     return HAL_ERROR;
   }
+
+#ifdef __rtems__
+  /*  address set but not used warnings */	
+  (void) numpageswritten;
+#endif
 
   return HAL_OK;
 }
@@ -1312,6 +1332,16 @@ HAL_StatusTypeDef HAL_NAND_Read_SpareArea_8b(NAND_HandleTypeDef *hnand, const NA
     return HAL_ERROR;
   }
 
+#ifdef __rtems__
+  /*  address set but not used warnings */	
+  (void) numsparearearead;
+#endif
+
+#ifdef __rtems__
+  /*  address set but not used warnings */	
+  (void) numsparearearead;
+#endif
+
   return HAL_OK;
 }
 
@@ -1477,6 +1507,11 @@ HAL_StatusTypeDef HAL_NAND_Read_SpareArea_16b(NAND_HandleTypeDef *hnand, const N
     return HAL_ERROR;
   }
 
+#ifdef __rtems__
+  /*  address set but not used warnings */	
+  (void) numsparearearead;
+#endif
+
   return HAL_OK;
 }
 
@@ -1640,6 +1675,11 @@ HAL_StatusTypeDef HAL_NAND_Write_SpareArea_8b(NAND_HandleTypeDef *hnand, const N
     return HAL_ERROR;
   }
 
+#ifdef __rtems__
+  /*  address set but not used warnings */	
+  (void) numspareareawritten;
+#endif
+
   return HAL_OK;
 }
 
@@ -1802,6 +1842,11 @@ HAL_StatusTypeDef HAL_NAND_Write_SpareArea_16b(NAND_HandleTypeDef *hnand, const 
   {
     return HAL_ERROR;
   }
+
+#ifdef __rtems__
+  /*  address set but not used warnings */	
+  (void) numspareareawritten;
+#endif
 
   return HAL_OK;
 }
