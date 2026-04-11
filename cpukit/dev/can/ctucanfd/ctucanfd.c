@@ -1725,7 +1725,7 @@ static void ctucanfd_register( struct rtems_can_chip_ops *chip_ops )
   chip_ops->check_and_set_bittiming = ctucanfd_check_and_set_bittiming;
 }
 
-struct rtems_can_chip *rtems_ctucanfd_initialize(
+struct rtems_can_chip *rtems_can_ctucanfd_initialize(
   uintptr_t           addr,
   rtems_vector_number irq,
   rtems_task_priority worker_priority,

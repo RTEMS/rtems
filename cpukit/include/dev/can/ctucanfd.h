@@ -47,7 +47,7 @@
  *
  * This is the maximum number of HW buffers that can be implemented to any
  * CTU CAN FD core. The user can use this as an argument to initialization
- * function @ref rtems_ctucanfd_initialize and the function automatically
+ * function @ref rtems_can_ctucanfd_initialize and the function automatically
  * limits the used buffers based on the used core.
  */
 #define RTEMS_CTUCANFD_NTXBUFS_MAX ( 8 )
@@ -74,7 +74,7 @@ struct rtems_can_chip;
  *
  * @return Pointer to CAN chip structure on success, NULL otherwise.
  */
-struct rtems_can_chip *rtems_ctucanfd_initialize(
+struct rtems_can_chip *rtems_can_ctucanfd_initialize(
   uintptr_t           addr,
   rtems_vector_number irq,
   rtems_task_priority worker_priority,
