@@ -391,7 +391,7 @@ int rtems_can_queue_test_outslot(
             TAILQ_REMOVE( edge->peershead, edge, activepeers );
           }
           if ( out_ready ) {
-            TAILQ_INSERT_HEAD(
+            TAILQ_INSERT_TAIL(
               &qends->active[ edge->edge_prio ],
               edge,
               activepeers

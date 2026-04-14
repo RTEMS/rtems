@@ -535,7 +535,7 @@ static inline void rtems_can_queue_activate_edge(
         TAILQ_REMOVE( qedge->peershead, qedge, activepeers );
       }
 
-      TAILQ_INSERT_HEAD(
+      TAILQ_INSERT_TAIL(
         &output_ends->active[ qedge->edge_prio ],
         qedge,
         activepeers
