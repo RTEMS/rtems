@@ -167,12 +167,17 @@ const uintptr_t _Stack_Space_size = _CONFIGURE_STACK_SPACE_SIZE;
   defined( CONFIGURE_TASK_STACK_DEALLOCATOR )
   /*
    * Ignore the following warnings from g++ and clang in the uses of
-   * _CONFIGURE_ASSERT_NOT_NULL() below:
+   * _CONFIGURE_ASSERT_NOT_NULL() because they are a by-product of the
+   * assertion and not a real defect. See examples below:
    *
    * warning: the address of 'f()' will never be NULL [-Waddress]
    *
    * warning: comparison of function 'f' not equal to a null pointer is always
    * true [-Wtautological-pointer-compare]
+   *
+   * Additionally, -Wpragmas is suppressed since some compilers may not support
+   * every warning option named below, which maintains compatibility across
+   * different compilers without causing unnecessary warnings.
    */
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Waddress"

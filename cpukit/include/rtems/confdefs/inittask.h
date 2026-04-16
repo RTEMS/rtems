@@ -46,6 +46,17 @@
 
 #ifdef CONFIGURE_INIT
 
+/**
+ * @brief Asserts at compile-time that the value is not NULL.
+ *
+ * This macro validates that the given value is not NULL. If the value is
+ * non-NULL, it is returned unchanged. Otherwise, a compile-time error is
+ * triggered by using an invalid array bound.
+ * 
+ * When _value is a function symbol, the compiler may prove that its address
+ * is never NULL and reports the comparison as tautological. This assertion may
+ * trigger warnings (for example, -Waddress and -Wtautological-pointer-compare).
+ */
 #define _CONFIGURE_ASSERT_NOT_NULL( _type, _value ) \
   ( ( _value ) != NULL                              \
       ? ( _value )                                  \
@@ -100,12 +111,17 @@ extern const char *bsp_boot_cmdline;
 
 /*
  * Ignore the following warnings from g++ and clang in the uses of
- * _CONFIGURE_ASSERT_NOT_NULL() below:
+ * _CONFIGURE_ASSERT_NOT_NULL() because they are a by-product of the
+ * assertion and not a real defect. See examples below:
  *
  * warning: the address of 'void Init()' will never be NULL [-Waddress]
  *
  * warning: comparison of function 'Init' not equal to a null pointer is always
  * true [-Wtautological-pointer-compare]
+ *
+ * Additionally, -Wpragmas is suppressed since some compilers may not support
+ * every warning option named below, which maintains compatibility across
+ * different compilers without causing unnecessary warnings.
  */
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Waddress"
