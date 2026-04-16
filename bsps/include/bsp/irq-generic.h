@@ -703,7 +703,7 @@ rtems_status_code bsp_interrupt_check_and_lock(
 rtems_interrupt_entry *bsp_interrupt_entry_find(
   rtems_vector_number      vector,
   rtems_interrupt_handler  routine,
-  void                    *arg,
+  const void              *arg,
   rtems_interrupt_entry ***previous_next
 );
 
