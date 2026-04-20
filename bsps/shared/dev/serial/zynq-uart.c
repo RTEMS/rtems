@@ -188,16 +188,13 @@ static bool zynq_uart_set_attributes(
    */
   mode |= ZYNQ_UART_MODE_CHMODE(ZYNQ_UART_MODE_CHMODE_NORMAL);
 
-  /*
-   * Parity
-   */
-  mode |= ZYNQ_UART_MODE_PAR(ZYNQ_UART_MODE_PAR_NONE);
-  if (term->c_cflag & PARENB) {
-    if (!(term->c_cflag & PARODD)) {
-      mode |= ZYNQ_UART_MODE_PAR(ZYNQ_UART_MODE_PAR_ODD);
-    } else {
-      mode |= ZYNQ_UART_MODE_PAR(ZYNQ_UART_MODE_PAR_EVEN);
-    }
+  /* Apply correct parity */
+  if (!(term->c_cflag & PARENB)) {
+    mode |= ZYNQ_UART_MODE_PAR(ZYNQ_UART_MODE_PAR_NONE);
+  } else if (term->c_cflag & PARODD) {
+    mode |= ZYNQ_UART_MODE_PAR(ZYNQ_UART_MODE_PAR_ODD);
+  } else {
+    mode |= ZYNQ_UART_MODE_PAR(ZYNQ_UART_MODE_PAR_EVEN);
   }
 
   /*
