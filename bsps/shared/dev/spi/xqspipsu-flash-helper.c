@@ -587,7 +587,7 @@ int QspiPsu_NOR_Erase(
   u8 WriteEnableCmd;
   u8 ReadStatusCmd;
   u8 FlashStatus[2];
-  int Sector;
+  u32 Sector;
   u32 RealAddr;
   u32 NumSect;
   int Status;
