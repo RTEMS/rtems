@@ -109,14 +109,14 @@ flash_write_line_s160(struct bankdesc *, uint32_t, const char *, uint32_t);
 /********* Global Variables ********************/
 
 static struct flash_bank_ops spansionOps = {
-	get_id      : flash_get_id_s160,
-	unlock_block: flash_unlock_block_s160,
-	lock_block  : flash_lock_block_s160,
-	erase_block : flash_erase_block_s160,
-	check_ready : flash_check_ready_s160,
-	print_stat  : flash_print_stat_s160,
-	array_mode  : flash_array_mode_s160,
-	write_line  : flash_write_line_s160,
+  .get_id       = flash_get_id_s160,
+  .unlock_block = flash_unlock_block_s160,
+  .lock_block   = flash_lock_block_s160,
+  .erase_block  = flash_erase_block_s160,
+  .check_ready  = flash_check_ready_s160,
+  .print_stat   = flash_print_stat_s160,
+  .array_mode   = flash_array_mode_s160,
+  .write_line   = flash_write_line_s160
 };
 
 static struct devdesc spansionDevs[] = {
