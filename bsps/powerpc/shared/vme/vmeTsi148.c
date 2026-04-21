@@ -2157,17 +2157,17 @@ static void     tsi_desc_dump  (DmaDescriptor);
 static int      tsi_desc_start (volatile void *controller_addr, int channel, DmaDescriptor p);
 
 VMEDmaListClassRec	vmeTsi148DmaListClass = {
-	desc_size:  sizeof(VmeTsi148DmaListDescriptorRec),
-	desc_align: 8,
-	freeList:   0,
-	desc_alloc: 0,
-	desc_free:  0,
-	desc_init:  tsi_desc_init,
-	desc_setnxt:tsi_desc_setnxt,
-	desc_setup: tsi_desc_setup,
-	desc_start: tsi_desc_start,
-	desc_refr:  0,
-	desc_dump:	tsi_desc_dump,
+  .desc_size = sizeof(VmeTsi148DmaListDescriptorRec),
+  .desc_align = 8,
+  .freeList = 0,
+  .desc_alloc = 0,
+  .desc_free = 0,
+  .desc_init = tsi_desc_init,
+  .desc_setnxt = tsi_desc_setnxt,
+  .desc_setup = tsi_desc_setup,
+  .desc_start = tsi_desc_start,
+  .desc_refr = 0,
+  .desc_dump = tsi_desc_dump
 };
 
 /* DMA Control */
