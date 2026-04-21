@@ -44,7 +44,7 @@
 
 #define BLOCK_SIZE ( 512 )
 
-rtems_rfs_format_config rfs_config = { block_size : BLOCK_SIZE };
+rtems_rfs_format_config rfs_config = { .block_size = BLOCK_SIZE };
 
 void test_initialize_filesystem( void )
 {
