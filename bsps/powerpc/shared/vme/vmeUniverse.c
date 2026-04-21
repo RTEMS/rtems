@@ -1582,17 +1582,17 @@ static void     uni_desc_dump  (DmaDescriptor);
 static int      uni_desc_start (volatile void *controller_addr, int channel, DmaDescriptor p);
 
 VMEDmaListClassRec	vmeUniverseDmaListClass = {
-	desc_size:  sizeof(VmeUniverseDMAPacketRec),
-	desc_align: 32,
-	freeList:   0,
-	desc_alloc: 0,
-	desc_free:  0,
-	desc_init:  uni_desc_init,
-	desc_setnxt:uni_desc_setnxt,
-	desc_setup: uni_desc_setup,
-	desc_start: uni_desc_start,
-	desc_refr:  0,
-	desc_dump:	uni_desc_dump,
+  .desc_size = sizeof(VmeUniverseDMAPacketRec),
+  .desc_align = 32,
+  .freeList = 0,
+  .desc_alloc = 0,
+  .desc_free = 0,
+  .desc_init = uni_desc_init,
+  .desc_setnxt = uni_desc_setnxt,
+  .desc_setup = uni_desc_setup,
+  .desc_start = uni_desc_start,
+  .desc_refr = 0,
+  .desc_dump = uni_desc_dump,
 };
 
 static void     uni_desc_init  (DmaDescriptor p)
