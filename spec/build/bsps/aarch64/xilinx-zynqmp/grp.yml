@@ -55,6 +55,8 @@ links:
 - role: build-dependency
   uid: ../../objdevspixil
 - role: build-dependency
+  uid: ../../objqspipsu
+- role: build-dependency
   uid: ../../objxqspiflash
 - role: build-dependency
   uid: ../../objmem
