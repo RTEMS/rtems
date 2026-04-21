@@ -115,49 +115,49 @@ typedef struct DmaOpsRec_ {
 
 #ifdef _VME_DRIVER_UNIVERSE
 static VMEOpsRec uniOpsRec = {
-	xlate_adrs: 		vmeUniverseXlateAddr,
-	install_isr: 		vmeUniverseInstallISR,
-	remove_isr: 		vmeUniverseRemoveISR,
-	get_isr:	 		vmeUniverseISRGet,
-	enable_int_lvl:		vmeUniverseIntEnable,
-	disable_int_lvl:	vmeUniverseIntDisable,
-	outbound_p_cfg:		vmeUniverseMasterPortCfg,
-	inbound_p_cfg:		vmeUniverseSlavePortCfg,
-	outbound_p_show:	vmeUniverseMasterPortsShow,
-	inbound_p_show:		vmeUniverseSlavePortsShow,
-	reset_bus:          vmeUniverseResetBus,
-	install_irq_mgr:	vmeUniverseInstallIrqMgrAlt,
-	irq_mgr_flags:      VMEUNIVERSE_IRQ_MGR_FLAG_SHARED |
+	.xlate_adrs = vmeUniverseXlateAddr,
+	.install_isr = vmeUniverseInstallISR,
+	.remove_isr = vmeUniverseRemoveISR,
+	.get_isr = vmeUniverseISRGet,
+	.enable_int_lvl = vmeUniverseIntEnable,
+	.disable_int_lvl = vmeUniverseIntDisable,
+	.outbound_p_cfg = vmeUniverseMasterPortCfg,
+	.inbound_p_cfg = vmeUniverseSlavePortCfg,
+	.outbound_p_show = vmeUniverseMasterPortsShow,
+	.inbound_p_show = vmeUniverseSlavePortsShow,
+	.reset_bus = vmeUniverseResetBus,
+	.install_irq_mgr = vmeUniverseInstallIrqMgrAlt,
+	.irq_mgr_flags = VMEUNIVERSE_IRQ_MGR_FLAG_SHARED |
 	                    VMEUNIVERSE_IRQ_MGR_FLAG_PW_WORKAROUND,
 };
 
 static int uniVecs[] = { UNIV_DMA_INT_VEC };
 
 static DmaOpsRec uniDmaOpsRec = {
-	setup:				vmeUniverseDmaSetup,
-	start:				vmeUniverseDmaStart,
-	status:				vmeUniverseDmaStatus,
-	listClass:			&vmeUniverseDmaListClass,
-	nChannels:			1,
-	vectors:			uniVecs,
+	.setup = vmeUniverseDmaSetup,
+	.start = vmeUniverseDmaStart,
+	.status = vmeUniverseDmaStatus,
+	.listClass = &vmeUniverseDmaListClass,
+	.nChannels = 1,
+	.vectors = uniVecs,
 };
 #endif
 
 #ifdef _VME_DRIVER_TSI148
 static VMEOpsRec tsiOpsRec = {
-	xlate_adrs: 		vmeTsi148XlateAddr,
-	install_isr: 		vmeTsi148InstallISR,
-	remove_isr: 		vmeTsi148RemoveISR,
-	get_isr:	 		vmeTsi148ISRGet,
-	enable_int_lvl:		vmeTsi148IntEnable,
-	disable_int_lvl:	vmeTsi148IntDisable,
-	outbound_p_cfg:		vmeTsi148OutboundPortCfg,
-	inbound_p_cfg:		vmeTsi148InboundPortCfg,
-	outbound_p_show:	vmeTsi148OutboundPortsShow,
-	inbound_p_show:		vmeTsi148InboundPortsShow,
-	reset_bus:          vmeTsi148ResetBus,
-	install_irq_mgr:	vmeTsi148InstallIrqMgrAlt,
-	irq_mgr_flags:      VMETSI148_IRQ_MGR_FLAG_SHARED,
+  .xlate_adrs = vmeTsi148XlateAddr,
+  .install_isr = vmeTsi148InstallISR,
+  .remove_isr = vmeTsi148RemoveISR,
+  .get_isr = vmeTsi148ISRGet,
+  .enable_int_lvl = vmeTsi148IntEnable,
+  .disable_int_lvl = vmeTsi148IntDisable,
+  .outbound_p_cfg = vmeTsi148OutboundPortCfg,
+  .inbound_p_cfg = vmeTsi148InboundPortCfg,
+  .outbound_p_show = vmeTsi148OutboundPortsShow,
+  .inbound_p_show = vmeTsi148InboundPortsShow,
+  .reset_bus = vmeTsi148ResetBus,
+  .install_irq_mgr = vmeTsi148InstallIrqMgrAlt,
+  .irq_mgr_flags = VMETSI148_IRQ_MGR_FLAG_SHARED,
 };
 
 static int tsiVecs[] = {
@@ -166,12 +166,12 @@ static int tsiVecs[] = {
 };
 
 static DmaOpsRec tsiDmaOpsRec = {
-	setup:				vmeTsi148DmaSetup,
-	start:				vmeTsi148DmaStart,
-	status:				vmeTsi148DmaStatus,
-	listClass:			&vmeTsi148DmaListClass,
-	nChannels:			2,
-	vectors:			tsiVecs,
+  .setup = vmeTsi148DmaSetup,
+  .start = vmeTsi148DmaStart,
+  .status = vmeTsi148DmaStatus,
+  .listClass = &vmeTsi148DmaListClass,
+  .nChannels = 2,
+  .vectors = tsiVecs,
 };
 #endif
 
