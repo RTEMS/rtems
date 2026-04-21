@@ -838,22 +838,22 @@ static rtems_status_code bsp_spi_init
 \*=========================================================================*/
 
 rtems_libi2c_bus_ops_t bsp_spi_ops = {
-  init:             m8xx_spi_init,
-  send_start:       bsp_spi_send_start,
-  send_stop:        bsp_spi_send_stop,
-  send_addr:        bsp_spi_sel_addr,
-  read_bytes:       m8xx_spi_read_bytes,
-  write_bytes:      m8xx_spi_write_bytes,
-  ioctl:            m8xx_spi_ioctl
+  .init = m8xx_spi_init,
+  .send_start = bsp_spi_send_start,
+  .send_stop = bsp_spi_send_stop,
+  .send_addr = bsp_spi_sel_addr,
+  .read_bytes = m8xx_spi_read_bytes,
+  .write_bytes = m8xx_spi_write_bytes,
+  .ioctl = m8xx_spi_ioctl
 };
 
 static m8xx_spi_desc_t bsp_spi_bus_desc = {
   {/* public fields */
-    ops:	&bsp_spi_ops,
-    size:	sizeof(bsp_spi_bus_desc)
+    .ops = &bsp_spi_ops,
+    .size = sizeof(bsp_spi_bus_desc)
   },
   { /* our private fields */
-    initialized: FALSE
+    .initialized = FALSE
   }
 };
 
