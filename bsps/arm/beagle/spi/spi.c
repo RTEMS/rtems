@@ -473,22 +473,22 @@ static rtems_status_code bsp_spi_send_stop
 \*=========================================================================*/
 
 rtems_libi2c_bus_ops_t bsp_spi_ops = {
-  init:             beagle_spi_init,
-  send_start:       bsp_spi_send_start_dummy,
-  send_stop:        bsp_spi_send_stop,
-  send_addr:        bsp_spi_sel_addr,
-  read_bytes:       beagle_spi_read_bytes,
-  write_bytes:      beagle_spi_write_bytes,
-  ioctl:            beagle_spi_ioctl
+  .init = beagle_spi_init,
+  .send_start = bsp_spi_send_start_dummy,
+  .send_stop = bsp_spi_send_stop,
+  .send_addr = bsp_spi_sel_addr,
+  .read_bytes = beagle_spi_read_bytes,
+  .write_bytes = beagle_spi_write_bytes,
+  .ioctl = beagle_spi_ioctl
 };
 
 static beagle_spi_desc_t bsp_spi_bus_desc = {
   {/* public fields */
-    ops:    &bsp_spi_ops,
-    size:   sizeof(bsp_spi_bus_desc)
+    .ops = &bsp_spi_ops,
+    .size = sizeof(bsp_spi_bus_desc)
   },
   { /* our private fields */
-    initialized: FALSE,
+    .initialized = FALSE,
   }
 };
 
