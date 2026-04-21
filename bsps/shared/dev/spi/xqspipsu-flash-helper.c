@@ -1489,6 +1489,11 @@ static u32 GetRealAddr(
   return(RealAddr);
 }
 
+static void interrupt_handler_wrapper(void *arg)
+{
+  (void) XQspiPsu_InterruptHandler(arg);
+}
+
 /*****************************************************************************/
 /**
  *
@@ -1512,7 +1517,7 @@ static int QspiPsuSetupIntrSystem(
     QspiPsuIntrId,
     NULL,
     RTEMS_INTERRUPT_UNIQUE,
-    (rtems_interrupt_handler) XQspiPsu_InterruptHandler,
+    interrupt_handler_wrapper,
     QspiPsuInstancePtr
   );
 }
