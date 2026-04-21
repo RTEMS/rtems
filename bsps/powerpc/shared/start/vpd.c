@@ -226,7 +226,11 @@ int
 BSP_vpdRetrieveKey(VpdKey k, void *buf, int len, int inst)
 {
 	VpdBufRec	d[] = {
-		{ key: k, buf: buf, buflen: len, instance: inst },
+		{ .key = k,
+		  .buf = buf,
+		  .buflen = len,
+		  .instance = inst
+		},
 		VPD_END
 	};
 	return  BSP_vpdRetrieveFields(d) ? -1 : d[0].found;
