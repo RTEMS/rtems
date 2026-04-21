@@ -146,14 +146,14 @@ flash_write_line_intel(struct bankdesc *, uint32_t, const char *, uint32_t);
 /********* Global Variables ********************/
 
 static struct flash_bank_ops intelOps = {
-	get_id      : flash_get_id_intel,
-	unlock_block: flash_unlock_block_intel,
-	lock_block  : flash_lock_block_intel,
-	erase_block : flash_erase_block_intel,
-	check_ready : flash_check_ready_intel,
-	print_stat  : flash_print_stat_intel,
-	array_mode  : flash_array_mode_intel,
-	write_line  : flash_write_line_intel,
+  .get_id       = flash_get_id_intel,
+  .unlock_block = flash_unlock_block_intel,
+  .lock_block   = flash_lock_block_intel,
+  .erase_block  = flash_erase_block_intel,
+  .check_ready  = flash_check_ready_intel,
+  .print_stat   = flash_print_stat_intel,
+  .array_mode   = flash_array_mode_intel,
+  .write_line   = flash_write_line_intel
 };
 
 static struct devdesc intelDevs[] = {
