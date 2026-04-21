@@ -66,21 +66,21 @@ const char rtems_test_name[] = "FILE I/O";
  * The NV Device descriptor. For this test it is just DRAM.
  */
 rtems_nvdisk_device_desc rtems_nv_heap_device_descriptor[] = { {
-  flags : 0,
-  base : 0,
-  size : (size_t) 1024 * 1024,
-  nv_ops : &rtems_nvdisk_sram_handlers
+  .flags = 0,
+  .base = 0,
+  .size = (size_t) 1024 * 1024,
+  .nv_ops = &rtems_nvdisk_sram_handlers
 } };
 
 /**
  * The NV Disk configuration.
  */
 const rtems_nvdisk_config rtems_nvdisk_configuration[] = { {
-  block_size : 512,
-  device_count : 1,
-  devices : &rtems_nv_heap_device_descriptor[ 0 ],
-  flags : 0,
-  info_level : 0
+  .block_size = 512,
+  .device_count = 1,
+  .devices = &rtems_nv_heap_device_descriptor[ 0 ],
+  .flags = 0,
+  .info_level = 0
 } };
 
 /**
