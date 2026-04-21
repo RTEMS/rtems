@@ -19,7 +19,7 @@ description: |
   Specifies the C Language version and additional APIs available to
   the program. gnuNN allows GCC extensions and POSIX APIs. Switching
   to stdNN requires the addition of -D_POSIX_C_SOURCE=202405L to
-  compit le for POSIX Issue 8 that RTEMS is aligned to.
+  compile for POSIX Issue 8 that RTEMS is aligned to.
 enabled-by: true
 links: []
 name: CC_STD_VERSION_FLAGS
