@@ -54,6 +54,7 @@
 #include <rtems/bspIo.h>	/* printk */
 #include <rtems/error.h>	/* printk */
 #include <rtems/irq.h>
+#include <bsp/irq-generic.h>
 #include <rtems/pci.h>
 #include <rtems/score/sysstate.h>
 #include <bsp.h>
@@ -1579,6 +1580,7 @@ int					lvl;
 }
 
 
+#ifndef BSP_POWERPC_IRQ_GENERIC_SUPPORT
 static void
 my_no_op(const rtems_irq_connect_data * arg)
 {}
@@ -1588,10 +1590,21 @@ my_isOn(const rtems_irq_connect_data *arg)
 {
 		return (int)(TSI_RD(THEBASE, TSI_INTEO_REG) & TSI_RD(THEBASE, TSI_INTEN_REG));
 }
+#endif /* BSP_POWERPC_IRQ_GENERIC_SUPPORT */
 
 static void
 connectIsr(int shared, rtems_irq_hdl isr, int pic_line, int slot)
 {
+#ifdef BSP_POWERPC_IRQ_GENERIC_SUPPORT
+  rtems_option option = RTEMS_INTERRUPT_UNIQUE;
+#if BSP_SHARED_HANDLER_SUPPORT > 0
+  if (shared)
+    option = RTEMS_INTERRUPT_SHARED;
+#endif
+	(void) rtems_interrupt_handler_install(
+    pic_line, "tsi148", option,
+    (rtems_interrupt_handler) isr, (void*) slot);
+#else /* BSP_POWERPC_IRQ_GENERIC_SUPPORT */
 rtems_irq_connect_data	xx;
 	xx.on     = my_no_op; /* at _least_ they could check for a 0 pointer */
 	xx.off    = my_no_op;
@@ -1613,6 +1626,7 @@ rtems_irq_connect_data	xx;
 		if (!BSP_install_rtems_irq_handler(&xx))
 			rtems_panic("unable to install vmeTsi148 irq handler");
 	}
+#endif /* BSP_POWERPC_IRQ_GENERIC_SUPPORT */
 }
 
 int

@@ -118,6 +118,17 @@ DiscoveryVersion BSP_getDiscoveryVersion(int assertion);
 #define PCI_MEM_BASE_ADJUSTMENT    0
 #define PCI_DRAM_OFFSET            0
 
+/*
+ * The BSP has PCI devices. Enable support in LibBSD.
+ */
+#define BSP_HAS_PC_PCI
+
+/*
+ * Remap the PCI address space for LibBSD
+ */
+#define RTEMS_BSP_PCI_IO_REGION_BASE  0
+#define RTEMS_BSP_PCI_MEM_REGION_BASE PCI_DRAM_OFFSET
+
 extern void BSP_motload_pci_fixup(void);
 
 /* PCI <-> local address mapping - no sophisticated windows

@@ -54,6 +54,8 @@
 #endif
 #endif
 
+#include <bsp/irq.h>
+#include <bsp/irq-generic.h>
 #include <bsp/vmeUniverse.h>
 #include <bsp/vmeUniverseDMA.h>
 
@@ -2010,6 +2012,7 @@ unsigned long 		linten;
 }
 
 
+#ifndef BSP_POWERPC_IRQ_GENERIC_SUPPORT
 /* STUPID API */
 static void
 my_no_op(const rtems_irq_connect_data * arg)
@@ -2024,10 +2027,21 @@ my_isOn(const rtems_irq_connect_data *arg)
 typedef struct {
 	int uni_pin, pic_pin;
 } IntRoute;
+#endif /* BSP_POWERPC_IRQ_GENERIC_SUPPORT */
 
 static void
 connectIsr(int shared, rtems_irq_hdl isr, int pic_line, int pic_pin)
 {
+#ifdef BSP_POWERPC_IRQ_GENERIC_SUPPORT
+	rtems_option option = RTEMS_INTERRUPT_UNIQUE;
+#if BSP_SHARED_HANDLER_SUPPORT > 0
+	if (shared)
+		option = RTEMS_INTERRUPT_SHARED;
+#endif
+	rtems_interrupt_handler_install(
+		pic_line, "UniverseII", option,
+		(rtems_interrupt_handler) isr, (void*) pic_pin);
+#else /* BSP_POWERPC_IRQ_GENERIC_SUPPORT */
 rtems_irq_connect_data	aarrggh;
 	aarrggh.on     = my_no_op; /* at _least_ they could check for a 0 pointer */
 	aarrggh.off    = my_no_op;
@@ -2049,6 +2063,7 @@ rtems_irq_connect_data	aarrggh;
 		if (!BSP_install_rtems_irq_handler(&aarrggh))
 			rtems_panic("unable to install vmeUniverse irq handler");
 	}
+#endif /* BSP_POWERPC_IRQ_GENERIC_SUPPORT */
 }
 
 #ifndef BSP_EARLY_PROBE_VME

@@ -180,13 +180,8 @@ gt_timer_hdl(rtems_irq_hdl_param arg)
 int
 BSP_timers_initialize(void)
 {
-  rtems_irq_connect_data xx = {0};
+  rtems_status_code sc;
   int                    i, ainc, arg;
-
-  xx.hdl    = gt_timer_hdl;
-  xx.on     = 0;
-  xx.off    = 0;
-  xx.isOn   = 0;
 
   switch (BSP_getDiscoveryVersion(0)) {
     case MV_64360:
@@ -202,9 +197,10 @@ BSP_timers_initialize(void)
   }
 
   for ( ; i>=0; i--, arg-=ainc ) {
-    xx.name   = BSP_IRQ_TIME0_1 + i;
-    xx.handle = (rtems_irq_hdl_param)arg;
-    if ( !BSP_install_rtems_irq_handler(&xx) )
+    sc = rtems_interrupt_handler_install(
+      BSP_IRQ_TIME0_1 + i, "Timer", RTEMS_INTERRUPT_UNIQUE,
+      (rtems_interrupt_handler) gt_timer_hdl, (void *) arg);
+    if (sc != RTEMS_SUCCESSFUL)
       return -1;
   }
 

@@ -57,6 +57,7 @@
 #include <rtems.h>
 #include <bsp.h>
 #include <bsp/irq.h>
+#include <bsp/irq-generic.h>
 #include <bsp/gtreg.h>
 #include <bsp/gtintrreg.h>
 #include <rtems/bspIo.h>
@@ -871,7 +872,7 @@ unsigned long	         diff;
 		}
 #endif
 
-		bsp_irq_dispatch_list( theConfig.irqHdlTbl, irq, theConfig.defaultEntry.hdl );
+		bsp_interrupt_handler_dispatch(irq);
 
 		/* restore executing priority level */
 		(void)change_executing_prio_level(pri);

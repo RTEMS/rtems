@@ -96,12 +96,7 @@ int i;
 	initial_config.irqBase	= BSP_LOWEST_OFFSET;
 	initial_config.irqPrioTbl	= rtemsPrioTbl;
 
-	if (!BSP_rtems_irq_mngt_set(&initial_config)) {
-		/*
-		 * put something here that will show the failure...
-		 */
-		rtems_panic("Unable to initialize RTEMS interrupt Management!!! System locked\n");
-	}
+	BSP_rtems_irq_generic_set(&initial_config);
 
 #ifdef TRACE_IRQ_INIT  
 	printk("RTEMS IRQ management is now operationnal\n");
