@@ -259,13 +259,6 @@ unsigned					m,n,N;
 	if ( !sc->sc_inited ) { 
 
 		if ( _System_state_Is_up(_System_state_Get()) ) {
-			rtems_irq_connect_data ii = {
-				.name	= BSP_IRQ_I2C,
-				.hdl	= gt_i2c_intr,
-				.on		= 0,
-				.off	= 0,
-				.isOn	= 0
-			};
 			rtems_status_code err;
 			/* synchronization semaphore */
 			err = rtems_semaphore_create(
@@ -278,12 +271,14 @@ unsigned					m,n,N;
 				sc->sc_sync = 0;
 				return err;
 			}
-			if ( !BSP_install_rtems_irq_handler(&ii) ) {
+			err = rtems_interrupt_handler_install(
+				BSP_IRQ_I2C, "I2C", RTEMS_INTERRUPT_SHARED,
+				(rtems_interrupt_handler) gt_i2c_intr, NULL);
+			if ( sc != RTEMS_SUCCESSFUL ) {
 				fprintf(stderr,"Unable to install interrupt handler\n");
 				rtems_semaphore_delete(sc->sc_sync);
 				return RTEMS_INTERNAL_ERROR;
 			}
-			BSP_irq_set_priority(BSP_IRQ_I2C, BSP_IRQ_MIN_PRIO);
 			sc->sc_inited = 1;
 		} else {
 		}

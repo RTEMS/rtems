@@ -33,15 +33,11 @@ links:
 - role: build-dependency
   uid: ../../obj
 - role: build-dependency
-  uid: ../../objirqdflt
-- role: build-dependency
   uid: ../../opto2
 - role: build-dependency
   uid: abi
 - role: build-dependency
   uid: ../../optconsolebaud
-- role: build-dependency
-  uid: optsbrk
 - role: build-dependency
   uid: ../crti
 - role: build-dependency
@@ -86,19 +82,35 @@ source:
 - bsps/powerpc/shared/console/uart.c
 - bsps/powerpc/shared/flash/flash.c
 - bsps/powerpc/shared/flash/intelFlash.c
-- bsps/powerpc/shared/irq/ppc-irq-legacy.c
+- bsps/powerpc/shared/irq/ppc-irq-generic.c
 - bsps/powerpc/shared/mmu/bat.c
 - bsps/powerpc/shared/mmu/mmuAsm.S
 - bsps/powerpc/shared/mmu/pte121.c
 - bsps/powerpc/shared/pci/pci.c
 - bsps/powerpc/shared/pci/pcifinddevice.c
+- bsps/powerpc/shared/start/bsp-start-zero.S
+- bsps/powerpc/shared/start/bspgetworkarea.c
 - bsps/powerpc/shared/start/pgtbl_activate.c
 - bsps/powerpc/shared/start/pgtbl_setup.c
 - bsps/powerpc/shared/start/probeMemEnd.c
-- bsps/powerpc/shared/start/sbrk.c
+- bsps/powerpc/shared/start/showbats.c
 - bsps/powerpc/shared/start/vpd.c
 - bsps/powerpc/shared/start/zerobss.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/rtc/rtc-support.c
+- bsps/shared/irq/irq-affinity.c
+- bsps/shared/irq/irq-enable-disable.c
+- bsps/shared/irq/irq-entry-remove.c
+- bsps/shared/irq/irq-generic.c
+- bsps/shared/irq/irq-handler-install.c
+- bsps/shared/irq/irq-handler-iterate.c
+- bsps/shared/irq/irq-handler-remove.c
+- bsps/shared/irq/irq-info.c
+- bsps/shared/irq/irq-lock.c
+- bsps/shared/irq/irq-priority.c
+- bsps/shared/irq/irq-raise-clear.c
+- bsps/shared/irq/irq-record.c
+- bsps/shared/irq/irq-server.c
+- bsps/shared/irq/irq-shell.c
 - bsps/shared/start/gettargethash-default.c
 type: build

@@ -33,8 +33,11 @@
 
 #include <bsp.h>
 #include <rtems/bspIo.h>
+#include <rtems/powerpc/registers.h>
+#include <libcpu/cpuIdent.h>
 #include <libcpu/spr.h>
 #include <libcpu/powerpc-utility.h>
+
 
 void printBAT( int bat, uint32_t upper, uint32_t lower )
 {
@@ -59,12 +62,32 @@ void printBAT( int bat, uint32_t upper, uint32_t lower )
   );
 }
 
-void ShowBATS(void){
-  uint32_t lower;
-  uint32_t upper;
+SPR_RO(DBAT0U);
+SPR_RO(DBAT0L);
+SPR_RO(DBAT1U);
+SPR_RO(DBAT1L);
+SPR_RO(DBAT2U);
+SPR_RO(DBAT2L);
+SPR_RO(DBAT3U);
+SPR_RO(DBAT3L);
+SPR_RO(DBAT4U);
+SPR_RO(DBAT4L);
+SPR_RO(DBAT5U);
+SPR_RO(DBAT5L);
+SPR_RO(DBAT6U);
+SPR_RO(DBAT6L);
+SPR_RO(DBAT7U);
+SPR_RO(DBAT7L);
 
-  __MFSPR(536, upper); __MFSPR(537, lower); printBAT( 0, upper, lower );
-  __MFSPR(538, upper); __MFSPR(539, lower); printBAT( 1, upper, lower );
-  __MFSPR(540, upper); __MFSPR(541, lower); printBAT( 2, upper, lower );
-  __MFSPR(542, upper); __MFSPR(543, lower); printBAT( 3, upper, lower );
+void ShowBATS(void){
+  printBAT( 0, _read_DBAT0U(), _read_DBAT0L() );
+  printBAT( 1, _read_DBAT1U(), _read_DBAT1L() );
+  printBAT( 2, _read_DBAT2U(), _read_DBAT2L() );
+  printBAT( 3, _read_DBAT3U(), _read_DBAT3L() );
+  if ( ppc_cpu_has_8_bats() ) {
+    printBAT( 4, _read_DBAT4U(), _read_DBAT4L() );
+    printBAT( 5, _read_DBAT5U(), _read_DBAT5L() );
+    printBAT( 6, _read_DBAT6U(), _read_DBAT6L() );
+    printBAT( 7, _read_DBAT7U(), _read_DBAT6L() );
+  }
 }

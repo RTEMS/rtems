@@ -448,6 +448,7 @@ BSP_poll_char_via_serial()
 	return BSP_uart_polled_read(BSPConsolePort);
 }
 
+#ifndef BSP_POWERPC_IRQ_GENERIC_SUPPORT
 static void
 uart_noop(const rtems_irq_connect_data *unused)
 {
@@ -482,6 +483,7 @@ doit(int uart, rtems_irq_hdl handler, int (*p)(const rtems_irq_connect_data*))
 	d.hdl  = handler;
 	return p(&d);
 }
+#endif /* BSP_POWERPC_IRQ_GENERIC_SUPPORT */
 
 int
 BSP_uart_install_isr(int uart, rtems_irq_hdl handler)
@@ -490,17 +492,38 @@ BSP_uart_install_isr(int uart, rtems_irq_hdl handler)
  * shared IRQ installer uses malloc() and if a BSP had called this
  * during early init it might not work...
  */
+#ifdef BSP_POWERPC_IRQ_GENERIC_SUPPORT
+  rtems_status_code sc;
+  rtems_option option;
+#ifdef BSP_UART_USE_SHARED_IRQS
+  option = RTEMS_INTERRUPT_SHARED;
+#else
+  option = RTEMS_INTERRUPT_UNIQUE;
+#endif
+  sc = rtems_interrupt_handler_install(
+    uart_data[uart].irq, "UART", option,
+    (rtems_interrupt_handler) handler, NULL);
+  return sc == RTEMS_SUCCESSFUL;
+#else /* BSP_POWERPC_IRQ_GENERIC_SUPPORT */
 #ifdef BSP_UART_USE_SHARED_IRQS
 	return doit(uart, handler, BSP_install_rtems_shared_irq_handler);
 #else
 	return doit(uart, handler, BSP_install_rtems_irq_handler);
 #endif
+#endif /* BSP_POWERPC_IRQ_GENERIC_SUPPORT */
 }
 
 int
 BSP_uart_remove_isr(int uart, rtems_irq_hdl handler)
 {
+#ifdef BSP_POWERPC_IRQ_GENERIC_SUPPORT
+  rtems_status_code sc;
+  sc = rtems_interrupt_handler_remove(
+    uart_data[uart].irq, (rtems_interrupt_handler) handler, NULL);
+  return sc == RTEMS_SUCCESSFUL;
+#else /* BSP_POWERPC_IRQ_GENERIC_SUPPORT */
 	return doit(uart, handler, BSP_remove_rtems_irq_handler);
+#endif /* BSP_POWERPC_IRQ_GENERIC_SUPPORT */
 }
 
 /* ================ Termios support  =================*/

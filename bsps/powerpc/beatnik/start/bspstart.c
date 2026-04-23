@@ -48,9 +48,11 @@
 #include <libcpu/pte121.h>
 #include <libcpu/cpuIdent.h>
 #include <bsp/vectors.h>
+#include <bsp/irq-generic.h>
 #include <bsp/VME.h>
 #include <bsp/vpd.h>
 
+#define SHOW_BATS
 #define SHOW_MORE_INIT_SETTINGS
 
 BSP_output_char_function_type     BSP_output_char = BSP_output_char_via_serial;
@@ -60,7 +62,11 @@ extern Triv121PgTbl BSP_pgtbl_setup(unsigned int *);
 extern void BSP_pgtbl_activate(Triv121PgTbl);
 extern void BSP_motload_pci_fixup(void);
 
-extern unsigned long __rtems_end[];
+#define CC_MEMORY 0
+#if CC_MEMORY
+#define PPC_MIN_BAT_SIZE (128 * 1024)
+static char cc_memory[PPC_MIN_BAT_SIZE] RTEMS_ALIGNED(PPC_MIN_BAT_SIZE);
+#endif
 
 /* We really shouldn't use these since MMUoff also sets IP;
  * nevertheless, during early init I don't care for now
@@ -237,7 +243,7 @@ static void bsp_early( void )
   /*
    * Initialize RTEMS IRQ system
    */
-   BSP_rtems_irq_mng_init(0);
+  bsp_interrupt_initialize();
 
   BSP_vpdRetrieveFields(vpdData);
 
@@ -323,7 +329,7 @@ static void bsp_early( void )
 
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk(
-    "Configuration.work_space_size = %" PRIxPTR "\n",
+    "Configuration.work_space_size = %" PRIuPTR "\n",
     rtems_configuration_get_work_space_size()
   );
 #endif
@@ -339,6 +345,14 @@ static void bsp_early( void )
     BSP_pgtbl_activate(pt);
   }
 
+#if CC_MEMORY
+  /* Used by LibBSD with its drivers */
+#ifdef SHOW_MORE_INIT_SETTINGS
+  printk("Cache coherent memory: addr=%p len=%u\n", (void*) &cc_memory[0], PPC_MIN_BAT_SIZE);
+#endif
+  setdbat(3, (intptr_t) &cc_memory[0], (intptr_t) &cc_memory[0], PPC_MIN_BAT_SIZE, IO_PAGE);
+  rtems_cache_coherent_add_area(&cc_memory[0], PPC_MIN_BAT_SIZE);
+#endif
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Going to start PCI buses scanning and initialization\n");
 #endif 
@@ -351,21 +365,36 @@ static void bsp_early( void )
   setdbat(5,BSP_PCI_HOSE0_MEM_BASE, BSP_PCI_HOSE0_MEM_BASE, BSP_PCI_HOSE0_MEM_SIZE, IO_PAGE);
   setdbat(6,BSP_PCI_HOSE1_MEM_BASE, BSP_PCI_HOSE1_MEM_BASE, 0x10000000, IO_PAGE);
 
+#ifdef SHOW_BATS
+  ShowBATS();
+#endif
+
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Number of PCI buses found is : %d\n", pci_bus_count());
 #endif
-
-  /*
-   * Initialize hardware timer facility (not used by BSP itself)
-   * Needs PCI to identify discovery version...
-   */
-  BSP_timers_initialize();
 
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("MSR 0x%lx \n", _read_MSR());
   printk("Exit from bspstart\n");
 #endif
 }
+
+void bsp_interrupt_handler_default( rtems_vector_number vector)
+{
+  if (vector != BSP_DECREMENTER) {
+    printk( "Spurious interrupt: 0x%08" PRIx32 "\n", vector);
+  }
+}
+
+static void bsp_initialize_timers(void) {
+  BSP_timers_initialize();
+}
+
+RTEMS_SYSINIT_ITEM(
+  bsp_initialize_timers,
+  RTEMS_SYSINIT_BSP_PRE_DRIVERS,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
 
 RTEMS_SYSINIT_ITEM(
   bsp_early,
