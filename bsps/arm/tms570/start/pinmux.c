@@ -49,13 +49,15 @@ RTEMS_STATIC_ASSERT(
   TMS570_PIN_CONFIG
 );
 
-static inline void
-tms570_bsp_pin_to_pinmmrx(volatile uint32_t **pinmmrx, uint32_t *pin_shift,
-                          uint32_t config)
+static inline void tms570_bsp_pin_to_pinmmrx(
+  volatile uint32_t **pinmmrx,
+  uint32_t           *pin_shift,
+  uint32_t            config
+)
 {
-  uint32_t pin_num = (config & TMS570_PIN_NUM_MASK) >> TMS570_PIN_NUM_SHIFT;
-  *pinmmrx = TMS570_PINMUX + (pin_num >> 2);
-  *pin_shift = (pin_num & 0x3)*8;
+  uint32_t pin_num = ( config & TMS570_PIN_NUM_MASK ) >> TMS570_PIN_NUM_SHIFT;
+  *pinmmrx = TMS570_PINMUX + ( pin_num >> 2 );
+  *pin_shift = ( pin_num & 0x3 ) * 8;
 }
 
 /**
@@ -76,31 +78,30 @@ tms570_bsp_pin_to_pinmmrx(volatile uint32_t **pinmmrx, uint32_t *pin_shift,
  *                     pin_num argument
  * @retval Void
  */
-void
-tms570_bsp_pin_set_function(int pin_num, int pin_fnc)
+void tms570_bsp_pin_set_function( int pin_num, int pin_fnc )
 {
   rtems_interrupt_level intlev;
 
-  rtems_interrupt_disable(intlev);
+  rtems_interrupt_disable( intlev );
   tms570_pin_config_prepare();
-  tms570_bsp_pin_set_function_unlocked(pin_num, pin_fnc);
+  tms570_bsp_pin_set_function_unlocked( pin_num, pin_fnc );
   tms570_pin_config_complete();
-  rtems_interrupt_enable(intlev);
+  rtems_interrupt_enable( intlev );
 }
 
-void
-tms570_bsp_pin_set_function_unlocked(int pin_num, int pin_fnc)
+void tms570_bsp_pin_set_function_unlocked( int pin_num, int pin_fnc )
 {
-  unsigned int pin_shift;
+  unsigned int       pin_shift;
   volatile uint32_t *pinmmrx;
 
   if ( pin_fnc == TMS570_PIN_FNC_AUTO ) {
-    pin_fnc = (pin_num & TMS570_PIN_FNC_MASK) >> TMS570_PIN_FNC_SHIFT;
+    pin_fnc = ( pin_num & TMS570_PIN_FNC_MASK ) >> TMS570_PIN_FNC_SHIFT;
   }
 
-  tms570_bsp_pin_to_pinmmrx(&pinmmrx, &pin_shift, pin_num);
+  tms570_bsp_pin_to_pinmmrx( &pinmmrx, &pin_shift, pin_num );
 
-  *pinmmrx = (*pinmmrx & ~(0xffU << pin_shift)) | (1U << (pin_fnc + pin_shift));
+  *pinmmrx = ( *pinmmrx & ~( 0xffU << pin_shift ) ) |
+             ( 1U << ( pin_fnc + pin_shift ) );
 }
 
 /**
@@ -115,31 +116,29 @@ tms570_bsp_pin_set_function_unlocked(int pin_num, int pin_fnc)
  *                     pin_num argument
  * @retval Void
  */
-void
-tms570_bsp_pin_clear_function(int pin_num, int pin_fnc)
+void tms570_bsp_pin_clear_function( int pin_num, int pin_fnc )
 {
   rtems_interrupt_level intlev;
 
-  rtems_interrupt_disable(intlev);
+  rtems_interrupt_disable( intlev );
   tms570_pin_config_prepare();
-  tms570_bsp_pin_clear_function_unlocked(pin_num, pin_fnc);
+  tms570_bsp_pin_clear_function_unlocked( pin_num, pin_fnc );
   tms570_pin_config_complete();
-  rtems_interrupt_enable(intlev);
+  rtems_interrupt_enable( intlev );
 }
 
-void
-tms570_bsp_pin_clear_function_unlocked(int pin_num, int pin_fnc)
+void tms570_bsp_pin_clear_function_unlocked( int pin_num, int pin_fnc )
 {
-  unsigned int pin_shift;
+  unsigned int       pin_shift;
   volatile uint32_t *pinmmrx;
 
   if ( pin_fnc == TMS570_PIN_FNC_AUTO ) {
-    pin_fnc = (pin_num & TMS570_PIN_FNC_MASK) >> TMS570_PIN_FNC_SHIFT;
+    pin_fnc = ( pin_num & TMS570_PIN_FNC_MASK ) >> TMS570_PIN_FNC_SHIFT;
   }
 
-  tms570_bsp_pin_to_pinmmrx(&pinmmrx, &pin_shift, pin_num);
+  tms570_bsp_pin_to_pinmmrx( &pinmmrx, &pin_shift, pin_num );
 
-  *pinmmrx = *pinmmrx & ~(1U << (pin_fnc+pin_shift));
+  *pinmmrx = *pinmmrx & ~( 1U << ( pin_fnc + pin_shift ) );
 }
 
 /**
@@ -165,16 +164,15 @@ tms570_bsp_pin_clear_function_unlocked(int pin_num, int pin_fnc)
  *
  * @retval Void
  */
-void
-tms570_bsp_pin_config_one(uint32_t pin_num_and_fnc)
+void tms570_bsp_pin_config_one( uint32_t pin_num_and_fnc )
 {
   rtems_interrupt_level intlev;
 
-  rtems_interrupt_disable(intlev);
+  rtems_interrupt_disable( intlev );
   tms570_pin_config_prepare();
-  tms570_pin_config_apply(pin_num_and_fnc);
+  tms570_pin_config_apply( pin_num_and_fnc );
   tms570_pin_config_complete();
-  rtems_interrupt_enable(intlev);
+  rtems_interrupt_enable( intlev );
 }
 
 /**
@@ -194,15 +192,19 @@ tms570_bsp_pin_config_one(uint32_t pin_num_and_fnc)
  *
  * @retval Void
  */
-void
-tms570_bsp_pinmmr_config(const uint32_t *pinmmr_values, int reg_start, int reg_count)
+void tms570_bsp_pinmmr_config(
+  const uint32_t *pinmmr_values,
+  int             reg_start,
+  int             reg_count
+)
 {
   volatile uint32_t *pinmmrx;
-  const uint32_t *pval;
-  int cnt;
+  const uint32_t    *pval;
+  int                cnt;
 
-  if ( reg_count <= 0)
+  if ( reg_count <= 0 ) {
     return;
+  }
 
   tms570_pin_config_prepare();
 
@@ -214,64 +216,63 @@ tms570_bsp_pinmmr_config(const uint32_t *pinmmr_values, int reg_start, int reg_c
     *pinmmrx = *pval;
     pinmmrx++;
     pval++;
-  } while( --cnt );
+  } while ( --cnt );
 
   tms570_pin_config_complete();
 }
 
-void tms570_pin_config_prepare(void)
+void tms570_pin_config_prepare( void )
 {
   TMS570_IOMM.KICK_REG0 = 0x83E70B13U; /* Hardcoded KICK0 unlock code (see TRM) */
   TMS570_IOMM.KICK_REG1 = 0x95A4F1E0U; /* Hardcoded KICK1 unlock code (see TRM) */
 }
 
-static void
-tms570_pin_set_function(uint32_t config)
+static void tms570_pin_set_function( uint32_t config )
 {
   volatile uint32_t *pinmmrx;
-  uint32_t pin_shift;
-  uint32_t pin_fnc;
-  uint32_t bit;
-  uint32_t val;
+  uint32_t           pin_shift;
+  uint32_t           pin_fnc;
+  uint32_t           bit;
+  uint32_t           val;
 
-  tms570_bsp_pin_to_pinmmrx(&pinmmrx, &pin_shift, config);
-  pin_fnc = (config & TMS570_PIN_FNC_MASK) >> TMS570_PIN_FNC_SHIFT;
-  bit = 1U << (pin_fnc + pin_shift);
+  tms570_bsp_pin_to_pinmmrx( &pinmmrx, &pin_shift, config );
+  pin_fnc = ( config & TMS570_PIN_FNC_MASK ) >> TMS570_PIN_FNC_SHIFT;
+  bit = 1U << ( pin_fnc + pin_shift );
   val = *pinmmrx;
-  val &= ~(0xffU << pin_shift);
+  val &= ~( 0xffU << pin_shift );
 
-  if ((config & TMS570_PIN_CLEAR_RQ_MASK) == 0) {
+  if ( ( config & TMS570_PIN_CLEAR_RQ_MASK ) == 0 ) {
     val |= bit;
   }
 
   *pinmmrx = val;
 }
 
-void tms570_pin_config_apply(uint32_t config)
+void tms570_pin_config_apply( uint32_t config )
 {
   uint32_t pin_in_alt;
   uint32_t pin_num_and_fnc;
 
   pin_in_alt = config & TMS570_PIN_IN_ALT_MASK;
-  if (pin_in_alt != 0) {
+  if ( pin_in_alt != 0 ) {
     pin_in_alt >>= TMS570_PIN_IN_ALT_SHIFT;
-    tms570_pin_set_function(pin_in_alt);
+    tms570_pin_set_function( pin_in_alt );
   }
 
   pin_num_and_fnc = config & TMS570_PIN_NUM_FNC_MASK;
-  tms570_pin_set_function(pin_num_and_fnc);
+  tms570_pin_set_function( pin_num_and_fnc );
 }
 
-void tms570_pin_config_array_apply(const uint32_t *config, size_t count)
+void tms570_pin_config_array_apply( const uint32_t *config, size_t count )
 {
   size_t i;
 
-  for (i = 0; i < count; ++i) {
-    tms570_pin_config_apply(config[i]);
+  for ( i = 0; i < count; ++i ) {
+    tms570_pin_config_apply( config[ i ] );
   }
 }
 
-void tms570_pin_config_complete(void)
+void tms570_pin_config_complete( void )
 {
   TMS570_IOMM.KICK_REG0 = 0;
   TMS570_IOMM.KICK_REG1 = 0;
