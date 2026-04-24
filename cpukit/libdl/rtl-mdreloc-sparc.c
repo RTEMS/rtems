@@ -37,6 +37,7 @@
 
 #include <inttypes.h>
 #include <stdio.h>
+#include <stdint.h>
 
 #include "rtl-elf.h"
 #include "rtl-error.h"
@@ -196,8 +197,8 @@ static const char* reloc_names[] = {
 #define RELOC_VALUE_RIGHTSHIFT(t) (reloc_target_flags[t] & 0xff)
 #define RELOC_TLS(t) (t >= R_TYPE(TLS_GD_HI22))
 
-static const int reloc_target_bitmask[] = {
-#define _BM(x) (~(-(1ULL << (x))))
+static const uint32_t reloc_target_bitmask[] = {
+#define _BM(x) ((uint32_t)((1ULL << (x)) - 1))
     0,                         /* NONE */
     _BM(8),  _BM(16), _BM(32), /* RELOC_8, _16, _32 */
     _BM(8),  _BM(16), _BM(32), /* DISP8, DISP16, DISP32 */
@@ -207,10 +208,11 @@ static const int reloc_target_bitmask[] = {
     _BM(10), _BM(13), _BM(22), /* GOT10, GOT13, GOT22 */
     _BM(10), _BM(22),          /* _PC10, _PC22 */
     _BM(30), 0,                /* _WPLT30, _COPY */
-    -1,      -1,      -1,      /* _GLOB_DAT, JMP_SLOT, _RELATIVE */
+    (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, /* _GLOB_DAT, JMP_SLOT, _RELATIVE */
     _BM(32)                    /* _UA32 */
 #undef _BM
 };
+
 #define RELOC_VALUE_BITMASK(t) (reloc_target_bitmask[t])
 
 uint32_t rtems_rtl_elf_section_flags(const rtems_rtl_obj* obj,
