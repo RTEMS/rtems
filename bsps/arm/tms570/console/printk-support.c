@@ -50,11 +50,9 @@
 #define TMS570_CONSOLE (&driver_context_table[0])
 
 /**
- * @brief Puts chars into peripheral
+ * @brief Writes a character to the debug console.
  *
- * debug functions always use serial dev 0 peripheral
- *
- * @retval Void
+ * The debug console always uses SCI device 0.
  */
 static void tms570_debug_console_out(char ch)
 {
@@ -100,12 +98,12 @@ static void tms570_debug_console_early_init(char c)
 }
 
 /**
- * @brief debug console input
+ * @brief Reads a character from the debug console.
  *
- * debug functions always use serial dev 0 peripheral
+ * The debug console always uses SCI device 0.
  *
- * @retval x Read char
- * @retval -1 No input character available
+ * @retval -1 No input character is available.
+ * @retval c  The received character.
  */
 static int tms570_debug_console_in( void )
 {
@@ -117,9 +115,9 @@ static int tms570_debug_console_in( void )
   rtems_interrupt_disable(level);
 
   if ( regs->FLR & TMS570_SCI_FLR_RXRDY ) {
-      c = (unsigned char) regs->RD;
+    c = (unsigned char) regs->RD;
   } else {
-      c = -1;
+    c = -1;
   }
 
   rtems_interrupt_enable(level);
