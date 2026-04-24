@@ -98,19 +98,26 @@ void bsp_interrupt_facility_initialize(void)
   leon3_ext_irq_init(LEON3_IrqCtrl_Regs);
 }
 
+static bool leon3_interrupt_is_maskable(rtems_vector_number vector)
+{
+  return vector != 15;
+}
+
 rtems_status_code bsp_interrupt_get_attributes(
   rtems_vector_number         vector,
   rtems_interrupt_attributes *attributes
 )
 {
   bool is_standard_interrupt;
+  bool is_maskable;
 
   is_standard_interrupt = (vector <= BSP_INTERRUPT_VECTOR_MAX_STD);
-  attributes->is_maskable = (vector != 15);
+  is_maskable = leon3_interrupt_is_maskable(vector);
+  attributes->is_maskable = is_maskable;
   attributes->can_enable = true;
   attributes->maybe_enable = true;
-  attributes->can_disable = true;
-  attributes->maybe_disable = true;
+  attributes->can_disable = is_maskable;
+  attributes->maybe_disable = is_maskable;
   attributes->can_raise = true;
   attributes->can_raise_on = is_standard_interrupt;
   attributes->can_clear = true;
@@ -326,6 +333,11 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 #endif
 
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  
+  if (!leon3_interrupt_is_maskable(vector)) {
+    return RTEMS_UNSATISFIED;
+  }
+
   bit = 1U << vector;
   regs = LEON3_IrqCtrl_Regs;
 
