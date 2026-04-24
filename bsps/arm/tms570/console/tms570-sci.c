@@ -255,8 +255,15 @@ bool tms570_sci_set_attributes(
 
   rtems_termios_device_lock_acquire( base, &lock_context );
 
-  while ( (ctx->regs->GCR1 & TMS570_SCI_GCR1_TXENA) &&
-          (ctx->regs->FLR & flr_tx_ready) != flr_tx_ready) {
+  if ( baudrate == 0 ) {
+    rtems_termios_device_lock_release( base, &lock_context );
+    return false;
+  }
+
+  while (
+    ( ctx->regs->GCR1 & TMS570_SCI_GCR1_TXENA ) &&
+    ( ctx->regs->FLR & flr_tx_ready ) != flr_tx_ready
+  ) {
     /*
      * There are pending characters in the hardware,
      * change in the middle of the character Tx leads
@@ -298,6 +305,7 @@ bool tms570_sci_set_attributes(
     case PARODD:
       /* No Parity */
       ctx->regs->GCR1 &= ~TMS570_SCI_GCR1_PARITY_ENA;
+      break;
   }
 
   /* Apply baudrate to the hardware */
@@ -594,11 +602,13 @@ static void tms570_sci_interrupt_last_close(
   tms570_sci_disable_interrupts( ctx );
   rtems_termios_device_lock_release( base, &lock_context );
 
-  tw = rtems_clock_get_ticks_per_second();
-  baudrate = rtems_termios_baud_to_number(cfgetospeed(&tty->termios));
-  tw = tw * 10 / baudrate + 1;
-  while ( ( ctx->regs->FLR & TMS570_SCI_FLR_TX_EMPTY ) == 0 ) {
-     rtems_task_wake_after(tw);
+  baudrate = rtems_termios_baud_to_number( cfgetospeed( &tty->termios ) );
+  if ( baudrate > 0 ) {
+    tw = rtems_clock_get_ticks_per_second();
+    tw = tw * 10 / baudrate + 1;
+    while ( ( ctx->regs->FLR & TMS570_SCI_FLR_TX_EMPTY ) == 0 ) {
+      rtems_task_wake_after( tw );
+    }
   }
 
   /* uninstall ISR */
