@@ -80,7 +80,7 @@ void tms570_sci_initialize( tms570_sci_context *ctx )
   uint32_t rx_pin = 1 << 1;
   uint32_t tx_pin = 1 << 2;
 
-  /* Resec SCI peripheral */
+  /* Reset SCI peripheral */
   ctx->regs->GCR0 = TMS570_SCI_GCR0_RESET * 0;
   ctx->regs->GCR0 = TMS570_SCI_GCR0_RESET * 1;
 
@@ -206,7 +206,7 @@ static void tms570_sci_disable_interrupts( tms570_sci_context *ctx )
  *
  * Check whether driver has put char in HW.
  * This information is read from the driver context not from a peripheral.
- * TMS570 does not have write data buffer asociated with SCI
+ * TMS570 does not have write data buffer associated with SCI
  * so the return can be only 0 or 1.
  *
  * @param[in] ctx context of the driver
