@@ -63,12 +63,12 @@ static inline void tms570_bsp_pin_to_pinmmrx(
 /**
  * @brief select desired function of pin/ball
  *
- * The function setups multiplexer to interconnect pin with
+ * The function sets up the multiplexer to interconnect the pin with the 
  * specified function/peripheral. Pin number is index into pinmux
  * entries array. Predefined values for pins are in a format
  * TMS570_BALL_ \c column \c row (for example \c TMS570_BALL_N19).
  * The multiplexer allows to interconnect one pin to multiple
- * signal sources/sinks in the theory but it is usually bad choice.
+ * signal sources/sinks in theory, but it is usually a bad choice.
  * The function sets only specified function and clears all other
  * connections.
  *
@@ -144,23 +144,24 @@ void tms570_bsp_pin_clear_function_unlocked( int pin_num, int pin_fnc )
 /**
  * @brief configure one pin according to its function specification
  *
- * The function setups multiplexer to interconnect pin with
+ * The function sets up the multiplexer to interconnect the pin with the 
  * specified function/peripheral. Predefined values for pins combined with
  * function are in a format TMS570_BALL_ \c column \c row \c function
  * (for example \c TMS570_BALL_W3_SCIRX).
  * If the function can be connected to more pins then specification
- * includes infomation which allows to disconnect alternative pin to peripheral
- * input connection or switch input multiplexer to right pin.
+ * includes information which allows disconnecting the alternative
+ * pin-to-peripheral input connection or switching the input multiplexer to 
+ * the right pin.
  *
- * @param[in] pin_num_and_fnc pin function descriptor is build by macro
+ * @param[in] pin_num_and_fnc pin function descriptor is built by the macro
  *               \c TMS570_PIN_AND_FNC which takes pin/pinmmr specification
- *               build by \c TMS570_BALL_WITH_MMR and function index in output
- *               multiplexer. If the peripheral can be connected to other input
- *               alternative then actual pin description and alternative to
- *               disconnected/reconnect are combined together by
- *               \c TMS570_PIN_WITH_IN_ALT macro. If clear of alternative
+ *               built by \c TMS570_BALL_WITH_MMR and function index in the
+ *               output multiplexer. If the peripheral can be connected to
+ *               another input alternative, then the actual pin description and
+ *               alternative to disconnect/reconnect are combined together by
+ *               \c TMS570_PIN_WITH_IN_ALT macro. If clearing the alternative
  *               connection is required then flag \c TMS570_PIN_CLEAR_RQ_MASK
- *               is ored to alternative description.
+ *               is OR'ed with the alternative description.
  *
  * @retval Void
  */
@@ -178,11 +179,11 @@ void tms570_bsp_pin_config_one( uint32_t pin_num_and_fnc )
 /**
  * @brief configure block or whole pin multiplexer
  *
- * Function change multiplexer content. It is intended for initial
+ * This function changes the multiplexer content. It is intended for initial
  * chip setup and does not use locking. If complete reconfiguration
- * is required at runtime then it is application responsibility
- * to protect and serialize change with peripherals drivers
- * and parallel calls
+ * is required at runtime then it is the application's responsibility
+ * to protect and serialize the change with peripheral drivers
+ * and concurrent calls.
  *
  * @param[in] pinmmr_values pointer to array with required multiplexer setup
  * @param[in] reg_start starting register, this allows to configure non-consecutive
