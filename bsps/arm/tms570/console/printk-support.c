@@ -41,10 +41,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <rtems/bspIo.h>
-#include <rtems/sysinit.h>
+#include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
+
+#include <rtems/bspIo.h>
+#include <rtems/sysinit.h>
+
 #include <bsp/tms570-sci-driver.h>
 
 #define TMS570_CONSOLE (&driver_context_table[0])
@@ -62,13 +65,13 @@ static void tms570_debug_console_out(char ch)
   while ( true ) {
     rtems_interrupt_level level;
 
-    while ( ( regs->FLR & TMS570_SCI_FLR_TXRDY ) == 0) {
+    while ( ( regs->FLR & TMS570_SCI_FLR_TXRDY ) == 0 ) {
       /* Wait */
     }
 
     rtems_interrupt_disable( level );
 
-    if ( ( regs->FLR & TMS570_SCI_FLR_TXRDY ) != 0) {
+    if ( ( regs->FLR & TMS570_SCI_FLR_TXRDY ) != 0 ) {
       regs->TD = ch;
       rtems_interrupt_enable( level );
 
@@ -105,7 +108,7 @@ static void tms570_debug_console_early_init(char c)
  * @retval -1 No input character is available.
  * @retval c  The received character.
  */
-static int tms570_debug_console_in( void )
+static int tms570_debug_console_in(void)
 {
   tms570_sci_context *ctx = TMS570_CONSOLE;
   volatile tms570_sci_t *regs = ctx->regs;
