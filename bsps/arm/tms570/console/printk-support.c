@@ -79,10 +79,6 @@ static void tms570_debug_console_out(char ch)
 
     rtems_interrupt_enable( level );
   }
-
-  while ( ( regs->FLR & TMS570_SCI_FLR_TX_EMPTY ) == 0) {
-    /* Wait */
-  }
 }
 
 static void tms570_debug_console_init(void)
