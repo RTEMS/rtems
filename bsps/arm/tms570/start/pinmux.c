@@ -86,7 +86,7 @@ tms570_bsp_pin_set_function(int pin_num, int pin_fnc)
     pin_fnc = (pin_num & TMS570_PIN_FNC_MASK) >> TMS570_PIN_FNC_SHIFT;
   }
   tms570_bsp_pin_to_pinmmrx(&pinmmrx, &pin_shift, pin_num);
-  *pinmmrx = (*pinmmrx & ~(0xff << pin_shift)) | (1 << (pin_fnc + pin_shift));
+  *pinmmrx = (*pinmmrx & ~(0xffU << pin_shift)) | (1U << (pin_fnc + pin_shift));
 }
 
 /**
@@ -111,7 +111,7 @@ tms570_bsp_pin_clear_function(int pin_num, int pin_fnc)
     pin_fnc = (pin_num & TMS570_PIN_FNC_MASK) >> TMS570_PIN_FNC_SHIFT;
   }
   tms570_bsp_pin_to_pinmmrx(&pinmmrx, &pin_shift, pin_num);
-  *pinmmrx = *pinmmrx & ~(1 << (pin_fnc+pin_shift));
+  *pinmmrx = *pinmmrx & ~(1U << (pin_fnc+pin_shift));
 }
 
 /**
