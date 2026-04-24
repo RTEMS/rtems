@@ -137,9 +137,39 @@ void tms570_pin_config_complete(void);
 
 /* Generic functions select pin to peripheral connection */
 
+/**
+ * @brief Selects the desired function of a pin.
+ *
+ * This function performs its own IOMM prepare/complete sequence and disables
+ * interrupts while the IOMM is unlocked.
+ */
 void tms570_bsp_pin_set_function(int pin_num, int pin_fnc);
 
+/**
+ * @brief Selects the desired function of a pin.
+ *
+ * This function does not manage IOMM access or disable interrupts. The
+ * caller shall unlock the IOMM and provide the necessary synchronization
+ * before calling this function.
+ */
+void tms570_bsp_pin_set_function_unlocked(int pin_num, int pin_fnc);
+
+/**
+ * @brief Clears the connection between a pin and a function.
+ *
+ * This function performs its own IOMM prepare/complete sequence and disables
+ * interrupts while the IOMM is unlocked.
+ */
 void tms570_bsp_pin_clear_function(int pin_num, int pin_fnc);
+
+/**
+ * @brief Clears the connection between a pin and a function.
+ *
+ * This function does not manage IOMM access or disable interrupts. The
+ * caller shall unlock the IOMM and provide the necessary synchronization
+ * before calling this function.
+ */
+void tms570_bsp_pin_clear_function_unlocked(int pin_num, int pin_fnc);
 
 void tms570_bsp_pin_config_one(uint32_t pin_num_and_fnc);
 
