@@ -231,7 +231,8 @@ static int tms570_sci_transmitted_chars( tms570_sci_context *ctx )
  *
  * @param[in] base context of the driver
  * @param[in] t termios driver
- * @retval true peripheral setting is changed
+ * @retval true peripheral settings were applied
+ * @retval false unsupported or invalid settings were requested
  */
 bool tms570_sci_set_attributes(
   rtems_termios_device_context *base,
@@ -249,6 +250,11 @@ bool tms570_sci_set_attributes(
    * to TX_EMPTY be asserted. But there is no interrupt
    * option for TX_EMPTY. Polling is used isntead.
    */
+
+  /* Fail early if an unsupported character size is requested */
+  if ( ( t->c_cflag & CSIZE ) != CS8 ) {
+    return false;
+  }
 
   /* Baud rate */
   baudrate = rtems_termios_baud_to_number( cfgetospeed( t ) );
@@ -284,7 +290,14 @@ bool tms570_sci_set_attributes(
     TMS570_SCI_GCR1_SWnRST | TMS570_SCI_GCR1_TXENA | TMS570_SCI_GCR1_RXENA
   );
 
-  ctx->regs->GCR1 &= ~TMS570_SCI_GCR1_STOP; /*one stop bit*/
+  /* Probe STOPB to check how many stop bits we should set */
+  if ( ( t->c_cflag & CSTOPB ) != 0 ) {
+    ctx->regs->GCR1 |= TMS570_SCI_GCR1_STOP; /* 2 stop bits */
+  } else {
+    ctx->regs->GCR1 &= ~TMS570_SCI_GCR1_STOP; /* 1 stop bit */
+  }
+
+  /* Force eight-bit characters */
   ctx->regs->FORMAT = TMS570_SCI_FORMAT_CHAR( 0x7 );
 
   switch ( t->c_cflag & ( PARENB | PARODD ) ) {
@@ -313,8 +326,13 @@ bool tms570_sci_set_attributes(
   bauddiv = ( TMS570_VCLK_HZ + baudrate / 2 ) / baudrate;
   ctx->regs->BRS = bauddiv ? bauddiv - 1 : 0;
 
-  ctx->regs->GCR1 |= TMS570_SCI_GCR1_SWnRST | TMS570_SCI_GCR1_TXENA |
-                     TMS570_SCI_GCR1_RXENA;
+  /* Bring the SCI out of reset and always enable TX */
+  ctx->regs->GCR1 |= TMS570_SCI_GCR1_SWnRST | TMS570_SCI_GCR1_TXENA;
+
+  /* Check CREAD to see if we should also enable RX */
+  if ( ( t->c_cflag & CREAD ) != 0 ) {
+    ctx->regs->GCR1 |= TMS570_SCI_GCR1_RXENA;
+  }
 
   rtems_termios_device_lock_release( base, &lock_context );
 
