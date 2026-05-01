@@ -46,11 +46,11 @@
 #include <bsp/irq.h>
 #include <rtems/score/armv4.h>
 
-#define VIM_CHANCTRL_COUNT     24
-#define VIM_CHANMAP_MASK       UINT32_C( 0x7f )
-#define VIM_CHANMAP_SHIFT( i ) ( 24 - ( 8 * ( i ) ) )
-#define VIM_REQ_REG( vector )  ( ( vector ) >> 5 )
-#define VIM_REQ_BIT( vector )  ( UINT32_C( 1 ) << ( ( vector ) & 0x1f ) )
+#define VIM_CHANCTRL_COUNT      24
+#define VIM_CHANMAP_MASK        UINT32_C( 0x7f )
+#define VIM_CHANMAP_SHIFT( _i ) ( 24 - ( 8 * ( _i ) ) )
+#define VIM_REQ_REG( _vector )  ( ( _vector ) >> 5 )
+#define VIM_REQ_BIT( _vector )  ( UINT32_C( 1 ) << ( ( _vector ) & 0x1f ) )
 
 static void vim_set_channel_request( uint32_t channel, uint32_t request )
 {
