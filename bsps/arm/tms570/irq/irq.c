@@ -198,7 +198,6 @@ static bool can_disable( rtems_vector_number vector )
  * Enables HW interrupt for specified vector
  *
  * @param[in] vector vector of the isr which needs to be enabled.
- * @retval RTEMS_INVALID_ID vector is invalid.
  * @retval RTEMS_SUCCESSFUL interrupt source enabled.
  */
 rtems_status_code bsp_interrupt_get_attributes(
@@ -282,8 +281,8 @@ rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number vector )
  * Disables HW interrupt for specified vector
  *
  * @param[in] vector vector of the isr which needs to be disabled.
- * @retval RTEMS_INVALID_ID vector is invalid.
  * @retval RTEMS_SUCCESSFUL interrupt source disabled.
+ * @retval RTEMS_UNSATISFIED interrupt source cannot be disabled.
  */
 rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number vector )
 {
@@ -327,8 +326,6 @@ rtems_status_code bsp_interrupt_get_priority(
  * Resets vectored interrupt interface to default state.
  * Disables all interrupts.
  * Set all sources as IRQ (not FIR).
- *
- * @retval RTEMS_SUCCESSFUL All is set
  */
 void bsp_interrupt_facility_initialize( void )
 {
