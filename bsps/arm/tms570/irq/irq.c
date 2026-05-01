@@ -54,14 +54,14 @@
 
 static void vim_set_channel_request( uint32_t channel, uint32_t request )
 {
-  uint32_t chanctrl;
+  uint32_t channel_control;
   int      shift;
 
-  chanctrl = TMS570_VIM.CHANCTRL[ channel / 4 ];
+  channel_control = TMS570_VIM.CHANCTRL[ channel / 4 ];
   shift = VIM_CHANMAP_SHIFT( channel % 4 );
-  chanctrl &= ~( VIM_CHANMAP_MASK << shift );
-  chanctrl |= request << shift;
-  TMS570_VIM.CHANCTRL[ channel / 4 ] = chanctrl;
+  channel_control &= ~( VIM_CHANMAP_MASK << shift );
+  channel_control |= request << shift;
+  TMS570_VIM.CHANCTRL[ channel / 4 ] = channel_control;
 }
 
 rtems_status_code tms570_irq_set_priority(
@@ -71,7 +71,7 @@ rtems_status_code tms570_irq_set_priority(
 {
   rtems_interrupt_level level;
   uint32_t              current_channel;
-  uint32_t              chanctrl;
+  uint32_t              channel_control;
   size_t                i;
   size_t                j;
 
@@ -98,12 +98,12 @@ rtems_status_code tms570_irq_set_priority(
   current_channel &= VIM_CHANMAP_MASK;
 
   for ( i = 0; i < VIM_CHANCTRL_COUNT; ++i ) {
-    chanctrl = TMS570_VIM.CHANCTRL[ i ];
+    channel_control = TMS570_VIM.CHANCTRL[ i ];
 
     for ( j = 0; j < 4; ++j ) {
       uint32_t channel_vector;
 
-      channel_vector = ( chanctrl >> VIM_CHANMAP_SHIFT( j ) ) &
+      channel_vector = ( channel_control >> VIM_CHANMAP_SHIFT( j ) ) &
                        VIM_CHANMAP_MASK;
 
       if ( channel_vector == vector ) {
@@ -140,14 +140,14 @@ rtems_status_code tms570_irq_get_priority(
   rtems_interrupt_disable( level );
 
   for ( i = 0; i < VIM_CHANCTRL_COUNT; ++i ) {
-    uint32_t chanctrl;
+    uint32_t channel_control;
 
-    chanctrl = TMS570_VIM.CHANCTRL[ i ];
+    channel_control = TMS570_VIM.CHANCTRL[ i ];
 
     for ( j = 0; j < 4; ++j ) {
       uint32_t channel_vector;
 
-      channel_vector = ( chanctrl >> VIM_CHANMAP_SHIFT( j ) ) &
+      channel_vector = ( channel_control >> VIM_CHANMAP_SHIFT( j ) ) &
                        VIM_CHANMAP_MASK;
 
       if ( channel_vector == vector ) {
@@ -174,15 +174,15 @@ rtems_status_code tms570_irq_get_priority(
 void bsp_interrupt_dispatch( void )
 {
   while ( true ) {
-    uint32_t irqindex;
+    uint32_t irq_index;
 
-    irqindex = TMS570_VIM.IRQINDEX;
+    irq_index = TMS570_VIM.IRQINDEX;
 
-    if ( irqindex == 0 ) {
+    if ( irq_index == 0 ) {
       return;
     }
 
-    bsp_interrupt_handler_dispatch( irqindex - 1 );
+    bsp_interrupt_handler_dispatch( irq_index - 1 );
   }
 }
 
@@ -228,13 +228,13 @@ rtems_status_code bsp_interrupt_is_pending(
   bool               *pending
 )
 {
-  uint32_t intreq;
+  uint32_t interrupt_request;
 
   bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
   bsp_interrupt_assert( pending != NULL );
 
-  intreq = TMS570_VIM.INTREQ[ VIM_REQ_REG( vector ) ];
-  *pending = ( intreq & VIM_REQ_BIT( vector ) ) != 0;
+  interrupt_request = TMS570_VIM.INTREQ[ VIM_REQ_REG( vector ) ];
+  *pending = ( interrupt_request & VIM_REQ_BIT( vector ) ) != 0;
   return RTEMS_SUCCESSFUL;
 }
 
@@ -259,13 +259,13 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
   bool               *enabled
 )
 {
-  uint32_t reqen;
+  uint32_t request_enable;
 
   bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
   bsp_interrupt_assert( enabled != NULL );
 
-  reqen = TMS570_VIM.REQENASET[ VIM_REQ_REG( vector ) ];
-  *enabled = ( reqen & VIM_REQ_BIT( vector ) ) != 0;
+  request_enable = TMS570_VIM.REQENASET[ VIM_REQ_REG( vector ) ];
+  *enabled = ( request_enable & VIM_REQ_BIT( vector ) ) != 0;
   return RTEMS_SUCCESSFUL;
 }
 
