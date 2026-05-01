@@ -46,22 +46,22 @@
 #include <bsp/irq.h>
 #include <rtems/score/armv4.h>
 
-#define VIM_CHANCTRL_COUNT 24
-#define VIM_CHANMAP_MASK UINT32_C(0x7f)
-#define VIM_CHANMAP_SHIFT(i) (24 - (8 * (i)))
-#define VIM_REQ_REG(vector) ((vector) >> 5)
-#define VIM_REQ_BIT(vector) (UINT32_C(1) << ((vector) & 0x1f))
+#define VIM_CHANCTRL_COUNT     24
+#define VIM_CHANMAP_MASK       UINT32_C( 0x7f )
+#define VIM_CHANMAP_SHIFT( i ) ( 24 - ( 8 * ( i ) ) )
+#define VIM_REQ_REG( vector )  ( ( vector ) >> 5 )
+#define VIM_REQ_BIT( vector )  ( UINT32_C( 1 ) << ( ( vector ) & 0x1f ) )
 
-static void vim_set_channel_request(uint32_t channel, uint32_t request)
+static void vim_set_channel_request( uint32_t channel, uint32_t request )
 {
   uint32_t chanctrl;
-  int shift;
+  int      shift;
 
-  chanctrl = TMS570_VIM.CHANCTRL[channel / 4];
-  shift = VIM_CHANMAP_SHIFT(channel % 4);
-  chanctrl &= ~(VIM_CHANMAP_MASK << shift);
+  chanctrl = TMS570_VIM.CHANCTRL[ channel / 4 ];
+  shift = VIM_CHANMAP_SHIFT( channel % 4 );
+  chanctrl &= ~( VIM_CHANMAP_MASK << shift );
   chanctrl |= request << shift;
-  TMS570_VIM.CHANCTRL[channel / 4] = chanctrl;
+  TMS570_VIM.CHANCTRL[ channel / 4 ] = chanctrl;
 }
 
 rtems_status_code tms570_irq_set_priority(
@@ -70,43 +70,44 @@ rtems_status_code tms570_irq_set_priority(
 )
 {
   rtems_interrupt_level level;
-  uint32_t current_channel;
-  uint32_t chanctrl;
-  size_t i;
-  size_t j;
+  uint32_t              current_channel;
+  uint32_t              chanctrl;
+  size_t                i;
+  size_t                j;
 
-  if (!bsp_interrupt_is_valid_vector(vector)) {
-   return RTEMS_INVALID_ID;
-  }
-
-  /* CHAN0 & CHAN1 are hard wired to INT_REQ0 & INT_REQ1 and can't be remapped. */
-  if (vector < 2) {
+  if ( !bsp_interrupt_is_valid_vector( vector ) ) {
     return RTEMS_INVALID_ID;
   }
 
-  if (priority < 2) {
+  /* CHAN0 & CHAN1 are hard wired to INT_REQ0 & INT_REQ1 and can't be remapped. */
+  if ( vector < 2 ) {
+    return RTEMS_INVALID_ID;
+  }
+
+  if ( priority < 2 ) {
     return RTEMS_INVALID_PRIORITY;
   }
 
-  if (priority >= BSP_INTERRUPT_VECTOR_COUNT) {
+  if ( priority >= BSP_INTERRUPT_VECTOR_COUNT ) {
     return RTEMS_INVALID_PRIORITY;
   }
 
-  rtems_interrupt_disable(level);
-  current_channel = TMS570_VIM.CHANCTRL[priority / 4];
-  current_channel >>= VIM_CHANMAP_SHIFT(priority % 4);
+  rtems_interrupt_disable( level );
+  current_channel = TMS570_VIM.CHANCTRL[ priority / 4 ];
+  current_channel >>= VIM_CHANMAP_SHIFT( priority % 4 );
   current_channel &= VIM_CHANMAP_MASK;
 
-  for (i = 0; i < VIM_CHANCTRL_COUNT; ++i) {
-    chanctrl = TMS570_VIM.CHANCTRL[i];
+  for ( i = 0; i < VIM_CHANCTRL_COUNT; ++i ) {
+    chanctrl = TMS570_VIM.CHANCTRL[ i ];
 
-    for (j = 0; j < 4; ++j) {
+    for ( j = 0; j < 4; ++j ) {
       uint32_t channel_vector;
 
-      channel_vector = (chanctrl >> VIM_CHANMAP_SHIFT(j)) & VIM_CHANMAP_MASK;
+      channel_vector = ( chanctrl >> VIM_CHANMAP_SHIFT( j ) ) &
+                       VIM_CHANMAP_MASK;
 
-      if (channel_vector == vector) {
-        vim_set_channel_request(i * 4 + j, current_channel);
+      if ( channel_vector == vector ) {
+        vim_set_channel_request( i * 4 + j, current_channel );
         goto set_my_request;
       }
     }
@@ -114,49 +115,50 @@ rtems_status_code tms570_irq_set_priority(
 
 set_my_request:
 
-  vim_set_channel_request(priority, vector);
-  rtems_interrupt_enable(level);
+  vim_set_channel_request( priority, vector );
+  rtems_interrupt_enable( level );
   return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code tms570_irq_get_priority(
-  rtems_vector_number  vector,
-  unsigned            *priority
+  rtems_vector_number vector,
+  unsigned           *priority
 )
 {
   rtems_interrupt_level level;
-  size_t i;
-  size_t j;
+  size_t                i;
+  size_t                j;
 
-  if (priority == NULL) {
+  if ( priority == NULL ) {
     return RTEMS_INVALID_ADDRESS;
   }
 
-  if (!bsp_interrupt_is_valid_vector(vector)) {
-   return RTEMS_INVALID_ID;
+  if ( !bsp_interrupt_is_valid_vector( vector ) ) {
+    return RTEMS_INVALID_ID;
   }
 
-  rtems_interrupt_disable(level);
+  rtems_interrupt_disable( level );
 
-  for (i = 0; i < VIM_CHANCTRL_COUNT; ++i) {
+  for ( i = 0; i < VIM_CHANCTRL_COUNT; ++i ) {
     uint32_t chanctrl;
 
-    chanctrl = TMS570_VIM.CHANCTRL[i];
+    chanctrl = TMS570_VIM.CHANCTRL[ i ];
 
-    for (j = 0; j < 4; ++j) {
+    for ( j = 0; j < 4; ++j ) {
       uint32_t channel_vector;
 
-      channel_vector = (chanctrl >> VIM_CHANMAP_SHIFT(j)) & VIM_CHANMAP_MASK;
+      channel_vector = ( chanctrl >> VIM_CHANMAP_SHIFT( j ) ) &
+                       VIM_CHANMAP_MASK;
 
-      if (channel_vector == vector) {
-        rtems_interrupt_enable(level);
+      if ( channel_vector == vector ) {
+        rtems_interrupt_enable( level );
         *priority = i * 4 + j;
         return RTEMS_SUCCESSFUL;
       }
     }
   }
 
-  rtems_interrupt_enable(level);
+  rtems_interrupt_enable( level );
   *priority = UINT32_MAX;
   return RTEMS_NOT_DEFINED;
 }
@@ -169,22 +171,22 @@ rtems_status_code tms570_irq_get_priority(
  *
  * @return Void
  */
-void bsp_interrupt_dispatch(void)
+void bsp_interrupt_dispatch( void )
 {
-  while (true) {
+  while ( true ) {
     uint32_t irqindex;
 
     irqindex = TMS570_VIM.IRQINDEX;
 
-    if (irqindex == 0) {
+    if ( irqindex == 0 ) {
       return;
     }
 
-    bsp_interrupt_handler_dispatch(irqindex - 1);
+    bsp_interrupt_handler_dispatch( irqindex - 1 );
   }
 }
 
-static bool can_disable(rtems_vector_number vector)
+static bool can_disable( rtems_vector_number vector )
 {
   /* INT_REQ0 and INT_REQ1 are always enabled as FIQ/NMI */
   return vector >= 2;
@@ -206,10 +208,10 @@ rtems_status_code bsp_interrupt_get_attributes(
 {
   bool can_disable_vector;
 
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  bsp_interrupt_assert(attributes != NULL);
+  bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
+  bsp_interrupt_assert( attributes != NULL );
 
-  can_disable_vector = can_disable(vector);
+  can_disable_vector = can_disable( vector );
   attributes->is_maskable = can_disable_vector;
   attributes->can_enable = true;
   attributes->maybe_enable = true;
@@ -228,27 +230,27 @@ rtems_status_code bsp_interrupt_is_pending(
 {
   uint32_t intreq;
 
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  bsp_interrupt_assert(pending != NULL);
+  bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
+  bsp_interrupt_assert( pending != NULL );
 
-  intreq = TMS570_VIM.INTREQ[VIM_REQ_REG(vector)];
-  *pending = (intreq & VIM_REQ_BIT(vector)) != 0;
+  intreq = TMS570_VIM.INTREQ[ VIM_REQ_REG( vector ) ];
+  *pending = ( intreq & VIM_REQ_BIT( vector ) ) != 0;
   return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
+rtems_status_code bsp_interrupt_raise( rtems_vector_number vector )
 {
   (void) vector;
 
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
   return RTEMS_UNSATISFIED;
 }
 
-rtems_status_code bsp_interrupt_clear(rtems_vector_number vector)
+rtems_status_code bsp_interrupt_clear( rtems_vector_number vector )
 {
   (void) vector;
 
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
   return RTEMS_UNSATISFIED;
 }
 
@@ -259,20 +261,18 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
 {
   uint32_t reqen;
 
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  bsp_interrupt_assert(enabled != NULL);
+  bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
+  bsp_interrupt_assert( enabled != NULL );
 
-  reqen = TMS570_VIM.REQENASET[VIM_REQ_REG(vector)];
-  *enabled = (reqen & VIM_REQ_BIT(vector)) != 0;
+  reqen = TMS570_VIM.REQENASET[ VIM_REQ_REG( vector ) ];
+  *enabled = ( reqen & VIM_REQ_BIT( vector ) ) != 0;
   return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code bsp_interrupt_vector_enable(
-  rtems_vector_number vector
-)
+rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number vector )
 {
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  TMS570_VIM.REQENASET[VIM_REQ_REG(vector)] = VIM_REQ_BIT(vector);
+  bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
+  TMS570_VIM.REQENASET[ VIM_REQ_REG( vector ) ] = VIM_REQ_BIT( vector );
   return RTEMS_SUCCESSFUL;
 }
 
@@ -285,41 +285,39 @@ rtems_status_code bsp_interrupt_vector_enable(
  * @retval RTEMS_INVALID_ID vector is invalid.
  * @retval RTEMS_SUCCESSFUL interrupt source disabled.
  */
-rtems_status_code bsp_interrupt_vector_disable(
-  rtems_vector_number vector
-)
+rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number vector )
 {
-  if (!can_disable(vector)) {
+  if ( !can_disable( vector ) ) {
     return RTEMS_UNSATISFIED;
   }
 
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  TMS570_VIM.REQENACLR[VIM_REQ_REG(vector)] = VIM_REQ_BIT(vector);
+  bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
+  TMS570_VIM.REQENACLR[ VIM_REQ_REG( vector ) ] = VIM_REQ_BIT( vector );
   return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_set_priority(
   rtems_vector_number vector,
-  uint32_t priority
+  uint32_t            priority
 )
 {
   (void) vector;
   (void) priority;
 
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
   return RTEMS_UNSATISFIED;
 }
 
 rtems_status_code bsp_interrupt_get_priority(
   rtems_vector_number vector,
-  uint32_t *priority
+  uint32_t           *priority
 )
 {
   (void) vector;
   (void) priority;
 
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  bsp_interrupt_assert(priority != NULL);
+  bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
+  bsp_interrupt_assert( priority != NULL );
   return RTEMS_UNSATISFIED;
 }
 
@@ -332,26 +330,26 @@ rtems_status_code bsp_interrupt_get_priority(
  *
  * @retval RTEMS_SUCCESSFUL All is set
  */
-void bsp_interrupt_facility_initialize(void)
+void bsp_interrupt_facility_initialize( void )
 {
   void (* volatile *vim_vec)(void) =
     (void (* volatile *)(void)) 0xFFF82000;
   unsigned int value = 0x00010203;
   unsigned int i = 0;
-  uint32_t sctlr;
+  uint32_t     sctlr;
 
   /* Disable interrupts */
   for ( i = 0; i < 3; i++ ) {
-    TMS570_VIM.REQENACLR[i] = 0xffffffff;
+    TMS570_VIM.REQENACLR[ i ] = 0xffffffff;
   }
   /* Map default events on interrupt vectors */
-  for ( i = 0; i < VIM_CHANCTRL_COUNT; i += 1, value += 0x04040404) {
-    TMS570_VIM.CHANCTRL[i] = value;
+  for ( i = 0; i < VIM_CHANCTRL_COUNT; i += 1, value += 0x04040404 ) {
+    TMS570_VIM.CHANCTRL[ i ] = value;
   }
   /* Set all vectors as IRQ (not FIR) */
-  TMS570_VIM.FIRQPR[0] = 3;
-  TMS570_VIM.FIRQPR[1] = 0;
-  TMS570_VIM.FIRQPR[2] = 0;
+  TMS570_VIM.FIRQPR[ 0 ] = 3;
+  TMS570_VIM.FIRQPR[ 1 ] = 0;
+  TMS570_VIM.FIRQPR[ 2 ] = 0;
 
   /*
     _CPU_ISR_install_vector(
@@ -406,7 +404,7 @@ void bsp_interrupt_facility_initialize(void)
    * Disable bypass of CPU level exception table for interrupt entry which
    * can be provided by VIM hardware
    */
-  sctlr &= ~(1 << 24);
+  sctlr &= ~( 1 << 24 );
   #if 0
     /*
      * Option to enable exception table bypass for interrupts
