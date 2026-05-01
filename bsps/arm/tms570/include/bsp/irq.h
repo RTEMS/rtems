@@ -152,6 +152,8 @@
  * channel associated with the priority is assigned to this channel.  The
  * specified interrupt vector is assigned to the channel associated with the
  * priority.  So, this function swaps the channels of two interrupt vectors.
+ * Interrupt vectors 0 and 1 cannot be reprioritized because the corresponding
+ * VIM channels are hardwired to INT_REQ0 and INT_REQ1 (FIQ requests).
  *
  * @param vector is the number of the interrupt vector to set the priority.
  *
@@ -160,7 +162,7 @@
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
- *   number specified by ``vector``.
+ *   number specified by ``vector``, or the vector cannot be remapped.
  *
  * @retval ::RTEMS_INVALID_PRIORITY The interrupt priority specified in
  *   ``priority`` was invalid.

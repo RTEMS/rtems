@@ -79,6 +79,11 @@ rtems_status_code tms570_irq_set_priority(
    return RTEMS_INVALID_ID;
   }
 
+  /* CHAN0 & CHAN1 are hard wired to INT_REQ0 & INT_REQ1 and can't be remapped. */
+  if (vector < 2) {
+    return RTEMS_INVALID_ID;
+  }
+
   if (priority < 2) {
     return RTEMS_INVALID_PRIORITY;
   }
