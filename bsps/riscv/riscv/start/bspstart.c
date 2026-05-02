@@ -38,6 +38,7 @@ void *riscv_fdt_get_address(const void *fdt, int node)
 {
   int parent;
   int ac;
+  int sc;
   int len;
   const uint32_t *reg;
   uint64_t addr;
@@ -52,8 +53,13 @@ void *riscv_fdt_get_address(const void *fdt, int node)
     return NULL;
   }
 
+  sc = fdt_size_cells(fdt, parent);
+  if (sc < 0) {
+    return NULL;
+  }
+
   reg = fdt_getprop(fdt, node, "reg", &len);
-  if (reg == NULL || len < ac) {
+  if (reg == NULL || len < (int)((ac + sc) * sizeof(*reg))) {
     return NULL;
   }
 
@@ -185,7 +191,7 @@ static uint32_t get_core_frequency(void)
 {
 #if RISCV_ENABLE_FRDME310ARTY_SUPPORT != 0 || RISCV_ENABLE_MPFS_SUPPORT != 0
   uint32_t node;
-  const char *fdt;
+  const void *fdt;
   const char *tlclk;
   int len;
   const fdt32_t *val;
@@ -240,7 +246,7 @@ uint32_t k210_get_frequency(void)
   uint32_t clk_freq;
   uint32_t pll0, nr, nf, od;
   uint32_t node;
-  const char *fdt;
+  const void *fdt;
   const fdt32_t *val;
   int len;
 
