@@ -20,7 +20,7 @@
 #include <rtems/chain.h>
 #include <bsp/irq-generic.h>
 #include <bsp/gpio.h>
-#include <assert.h>
+#include <rtems/score/assert.h>
 #include <stdlib.h>
 
 /**
@@ -42,12 +42,21 @@
   lock_id                                                    \
 )
 
-#define ACQUIRE_LOCK(m) assert ( rtems_semaphore_obtain(m,               \
-                                                        RTEMS_WAIT,      \
-                                                        RTEMS_NO_TIMEOUT \
-                                                        ) == RTEMS_SUCCESSFUL )
+#define ACQUIRE_LOCK(_m) \
+  do { \
+    rtems_status_code _sc; \
+    _sc = rtems_semaphore_obtain(_m, RTEMS_WAIT, RTEMS_NO_TIMEOUT); \
+    _Assert( _sc == RTEMS_SUCCESSFUL ); \
+    (void) _sc; \
+  } while (0)
 
-#define RELEASE_LOCK(m) assert ( rtems_semaphore_release(m) == RTEMS_SUCCESSFUL )
+#define RELEASE_LOCK(_m) \
+  do { \
+    rtems_status_code _sc; \
+    _sc = rtems_semaphore_release(_m); \
+    _Assert( _sc == RTEMS_SUCCESSFUL ); \
+    (void) _sc; \
+  } while (0)
 
 /**
  * @brief Object containing relevant information about a GPIO group.
@@ -303,7 +312,7 @@ static rtems_status_code get_pin_bitmask(
   rtems_gpio_function function
 ) {
   uint32_t pin_number;
-  uint32_t bank;
+  uint32_t bank = 0;
   uint8_t i;
 
   if ( pin_count < 1 ) {
