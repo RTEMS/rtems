@@ -419,7 +419,6 @@ msdos_filename_utf8_to_long_name_for_save (
     size_t       name_size;
     size_t       name_size_tmp;
     int          i;
-    uint16_t     c;
     unsigned int chars_written;
 
     name_size_tmp = long_name_size;
@@ -445,6 +444,8 @@ msdos_filename_utf8_to_long_name_for_save (
 
       if ( eno == 0 )
       {
+        uint16_t c = 0;
+
         /*
          * Validate the characters and assign them to the UTF-16 file name
          */
