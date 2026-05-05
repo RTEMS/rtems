@@ -49,8 +49,8 @@ void *riscv_fdt_get_end_of_memory( const void *fdt )
   int ac;
   int sc;
   int len;
-  uintptr_t start;
-  uintptr_t size;
+  uintptr_t start = 0;
+  uintptr_t size = 0;
 
   node = fdt_path_offset( fdt, "/memory" );
 
