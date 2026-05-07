@@ -51,9 +51,11 @@
 #include <string.h>
 #include <stdint.h>
 
+#ifndef ESPRESSIF_USE_USB_CONSOLE
 static uart_tx_one_char_t uart_tx_one_char = UART_TX_ONE_CHAR_ADDR;
 static uart_rx_one_char_t uart_rx_one_char = UART_RX_ONE_CHAR_ADDR;
 static uart_tx_flush_t    uart_tx_flush = UART_TX_FLUSH_ADDR;
+#endif
 
 #define USB_SERIAL_JTAG_EP1_REG              0x0
 #define USB_SERIAL_JTAG_RDWR_BYTE( val )     BSP_FLD32( val, 0, 7 )
