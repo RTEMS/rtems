@@ -214,7 +214,8 @@ rtems_rtl_elf_reloc_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
   Elf_Addr off = rela->r_offset;
   Elf_Addr target;
   Elf_Addr raddr;
-  uint32_t *insn, immhi, immlo, shift;
+  uint32_t *insn, immhi, immlo;
+  uint32_t shift = 0;
 
   where = (Elf_Addr*)(sect->base + rela->r_offset);
   where32 = (void*)where;
