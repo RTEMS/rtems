@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+attribute-actions: []
+attributes:
+  copyrights-by-license: {}
+  directory: $${.:/component/documentation-directory}/ddf/sdd
+  directory-state-type: explicit
+  enabled-by: false
+  files: []
+  hash: null
+  links: []
+  pkg-type: directory-state
+  type: pkg
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: add-package-template
+  uid: component
+pkg-type: template
+template-type: inline-item
+type: pkg

@@ -1,0 +1,28 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+bsp: gr740
+bsp-family: leon3
+copyrights:
+- Copyright (C) 2025 embedded brains GmbH & Co. KG
+component-type: rtems
+enabled-by: true
+enabled-set:
+- RTEMS_QUAL
+- RTEMS_SMP
+- target/simulator
+enabled-set-actions: []
+enabled-set-feedback-mapping: {}
+links:
+- role: use-package-component-template
+  uid: /pkg/template/bsp/component
+- role: glossary
+  uid: /req/glossary
+- hash: null
+  name: component
+  role: input
+  uid: ../../component
+pkg-type: workspace
+sis-cpus: '4'
+sis-extirq: '10'
+sis-target: gr740
+type: pkg
+workspace-type: component

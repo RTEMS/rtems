@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: BSD-2-Clause
+
+# Copyright (C) 2026 embedded brains GmbH & Co. KG
+
+[project]
+name = "package"
+version = "0.1.0"
+description = "This is a software repository using specmake."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "distro>=1.9.0",
+    "jsonschema>=4.26.0",
+    "metrixpp>=1.8.1",
+    "pykwalify>=1.8.0",
+    "specmake>=1.4.5",
+    "sphinx-book-theme>=1.1.4",
+    "sphinx-copybutton>=0.5.2",
+]

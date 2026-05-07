@@ -1,0 +1,44 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- action: directory-state-discard-and-clear
+  enabled-by: true
+  output-name: html
+- action: mkdir
+  enabled-by: true
+  exist-ok: true
+  parents: true
+  path: ${.:/output/html/directory}
+- action: mkdir
+  enabled-by: true
+  exist-ok: true
+  parents: true
+  path: ${.:/input/gcda/directory}/${.:/make-params/gcda-sub-directory}
+- action: subprocess
+  command:
+  - gcovr
+  - --include-internal-functions
+  - --gcov-ignore-parse-errors
+  - --json
+  - ${.:/output/json/file}
+  - --json-pretty
+  - --gcov-executable=${.:/input/tools/directory}/bin/${.:/component/arch}-rtems${.:/component/rtems-version}-gcov
+  - --html-details
+  - ${.:/output/html/directory}/index.html
+  - --html-medium-threshold
+  - '80.0'
+  - --html-high-threshold
+  - '100.0'
+  - --object-directory
+  - ${.:/input/gcda/directory}/${.:/make-params/gcda-sub-directory}
+  - ${.:/input/gcda/directory}/${.:/make-params/gcda-sub-directory}
+  enabled-by: true
+  env: []
+  expected-return-code: 0
+  working-directory: ${.:/input/source/directory}
+copyrights:
+- Copyright (C) 2022, 2026 embedded brains GmbH & Co. KG
+enabled-by: true
+links: []
+params: {}
+pkg-type: run-actions
+type: pkg

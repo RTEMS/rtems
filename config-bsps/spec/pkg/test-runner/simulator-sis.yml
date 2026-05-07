@@ -1,0 +1,33 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+command:
+- ${../deployment/sis:/directory}/bin/sis
+- -${.:/component/sis-target}
+- -extirq
+- ${.:/component/sis-extirq}
+- -dumbio
+- -r
+- -m
+- ${.:/component/sis-cpus}
+- ${.:/test-executable}
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH & Co. KG
+default-timeout-in-seconds: 180.0
+description: |
+  Run the tests on the ${/glossary/sis:/term}.
+discard-patterns: []
+do-not-run: []
+enabled-by: sparc
+links:
+- role: proxy-member
+  uid: simulator
+- role: weak-package-build-dependency
+  uid: ../deployment/sis
+max-process-count: 1
+max-retry-count-per-executable: 0
+min-timeout-in-seconds: 20.0
+name: SPARC/RISCV Instruction Simulator [-${.:/component/sis-target} -extirq ${.:/component/sis-extirq} -m ${.:/component/sis-cpus}]
+params: {}
+pkg-type: test-runner
+test-runner-type: subprocess
+timeout-scaler: 2.0
+type: pkg

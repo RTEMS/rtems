@@ -1,0 +1,38 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  SIS is a SPARC V7/V8 and RISC-V RV32IMACFD architecture simulator.
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by:
+  and:
+  - sparc/gr740
+  - target/simulator
+description:
+  The ``gr740`` configuration of ${/glossary/sis:/term} simulates a
+  configurable amount of LEON3 ${/glossary/sparc:/term} V8 cores and a subset
+  of the ${/glossary/gr740:/term} peripherals.
+key: simulator
+links:
+- role: proxy-member
+  uid: ../../simulator
+- role: requirement-refinement
+  uid: ../gr740
+- role: test-timeouts
+  uid: sis/test-timeouts
+- role: performance-runtime-limits-provider
+  uid: sis/perf-default
+- role: performance-runtime-limits-provider
+  uid: sis/perf-smp
+- role: verification-provider
+  uid: /verification/test-failures/default
+- role: verification-provider
+  uid: /verification/test-failures/ttest01
+name: SIS configured to simulate the GR740
+non-functional-type: design-target
+rationale: null
+references: []
+requirement-type: non-functional
+target-hash: _xQeTNJwSla2bVbhWPVcI0emLk2bE_GVQfvzt9CN84k=
+text: |
+  The ${.:/name} shall be a ${/glossary/target:/term}.
+type: requirement

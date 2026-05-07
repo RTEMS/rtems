@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+attribute-actions: []
+attributes:
+  build-label: $${.:/component/ident}/qual-only
+  config-key: qual-only
+  description: |
+    This build configuration has only the pre-qualified features enabled and may
+    be used by applications.
+  enabled-by: true
+  links:
+  - hash: null
+    name: component
+    role: input
+    uid: component
+  name: Pre-Qualified Features Only
+  pkg-type: build-configuration
+  test-timeout-key:
+  - enabled-by: RTEMS_SMP
+    key: smp
+  - enabled-by: true
+    key: default
+  type: pkg
+copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: add-package-template
+  uid: component
+pkg-type: template
+template-type: inline-item
+type: pkg

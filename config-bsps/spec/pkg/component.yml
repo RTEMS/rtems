@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-directory: ${.:/deployment-directory}/build
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+component-type: generic
+deployment-directory: ${.:/prefix-directory}/${.:/package-directory}
+documentation-directory: ${.:/deployment-directory}/doc
+enabled-by: true
+enabled-set: []
+enabled-set-actions: []
+enabled-set-feedback-mapping: {}
+ident: ${.:/name}
+links:
+- role: use-package-component-template
+  uid: /pkg/template/component
+- role: glossary
+  uid: /glossary/group
+name: wip
+package-directory: workspace
+package-version: '42'
+pkg-type: workspace
+prefix-directory: ${.:/repository-directory}
+rtems-version: '6'
+type: pkg
+workspace-type: component

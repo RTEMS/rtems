@@ -1,0 +1,85 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+attribute-actions: []
+attributes:
+  actions:
+  - action: create-ini-file
+    enabled-by: true
+    output-name: .
+    sections:
+    - enabled-by: true
+      key-value-pairs:
+      - enabled-by: true
+        key: INHERIT
+        value: ${.:/component/bsp}
+      - enabled-by: true
+        key: RTEMS_BUILD_LABEL
+        value: $${build-config-qual-only:/build-label}/coverage
+      - enabled-by: RTEMS_SMP
+        key: RTEMS_SMP
+        value: 'True'
+      - enabled-by: true
+        key: RTEMS_PPS_SYNC
+        value: 'False'
+      - enabled-by: true
+        key: RTEMS_QUAL
+        value: 'True'
+      - enabled-by: true
+        key: BUILD_TESTS
+        value: 'True'
+      - enabled-by: true
+        key: BSP_PRINT_EXCEPTION_CONTEXT
+        value: 'False'
+      - enabled-by: riscv
+        key: BSP_START_COPY_FDT_FROM_U_BOOT
+        value: 'False'
+      - enabled-by: true
+        key: RTEMS_GCOV_COVERAGE
+        value: 'True'
+      - enabled-by: true
+        key: OPTIMIZATION_FLAGS
+        value: -O2 -ffunction-sections -fdata-sections -frandom-seed=0
+      - enabled-by: true
+        key: BSP_OPTIMIZATION_FLAGS
+        value: -O0 -ffunction-sections -fdata-sections -frandom-seed=0
+      - enabled-by: true
+        key: CPUKIT_OPTIMIZATION_FLAGS
+        value: -O0 -ffunction-sections -fdata-sections -frandom-seed=0
+      name: ${.:/component/arch}/${.:/component/bsp}${.:/component/config:dash}-qual-only-coverage
+    target: null
+  copyrights-by-license: {}
+  directory: $${rtems-qual-only:/directory}
+  directory-state-type: explicit
+  enabled-by: RTEMS_QUAL
+  files:
+  - file: config-coverage.ini
+    hash: null
+  hash: null
+  links:
+  - hash: null
+    name: component
+    role: input
+    uid: component
+  - hash: null
+    name: source
+    role: input
+    uid: rtems-qual-only
+  - hash: null
+    name: source
+    role: input
+    uid: build-config-qual-only
+  - hash: null
+    name: member
+    role: input-to
+    uid: /pkg/deployment/archive
+  params: {}
+  pkg-type: directory-state
+  type: pkg
+copyrights:
+- Copyright (C) 2022, 2026 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: add-package-template
+  uid: component
+pkg-type: template
+template-type: inline-item
+type: pkg

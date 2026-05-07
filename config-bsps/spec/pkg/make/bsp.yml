@@ -1,0 +1,78 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- action: remove-glob
+  enabled-by: true
+  path: ${.:/params/working-directory}
+  patterns:
+  - .lock-waf*
+  - .waf*
+  remove-tree: true
+- action: subprocess
+  command:
+  - ./waf
+  - configure
+  - --out=${.:/params/build-directory}
+  - --prefix=${.:/component/deployment-directory}
+  - --rtems-tools=${.:/input/tools/directory}
+  - --rtems-config=${.:/input/config/file}
+  - --rtems-specs=${.:/input/build-spec/directory}/spec/build
+  - ${.:/make-params/configure-options}
+  enabled-by: true
+  env: []
+  expected-return-code: 0
+  working-directory: ${.:/params/working-directory}
+- action: subprocess
+  command:
+  - ./waf
+  - build
+  enabled-by: true
+  env: []
+  expected-return-code: 0
+  working-directory: ${.:/params/working-directory}
+- action: subprocess
+  command:
+  - ./waf
+  - install
+  - --destdir=${.:/params/intermediate-directory}
+  enabled-by:
+    has-output: deployment
+  env: []
+  expected-return-code: 0
+  working-directory: ${.:/params/working-directory}
+- action: directory-state-discard-and-clear
+  enabled-by:
+    has-output: deployment
+  output-name: deployment
+- action: directory-state-move-tree
+  enabled-by:
+    has-output: deployment
+  excludes: []
+  output-name: deployment
+  prefix: null
+  root: ${.:/params/intermediate-directory}/${.:/component/deployment-directory}
+- action: subprocess
+  command:
+  - ${.:/input/tools/directory}/bin/${.:/component/arch}-rtems${.:/component/rtems-version}-strip
+  - -g
+  - ${.:/output/deployment/glob:*/tests/*.exe}
+  enabled-by: true
+  env: []
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}
+- action: remove-glob
+  enabled-by: true
+  path: ${.:/params/working-directory}
+  patterns:
+  - .lock-waf*
+  - .waf*
+  remove-tree: true
+copyrights:
+- Copyright (C) 2020, 2026 embedded brains GmbH & Co. KG
+enabled-by: true
+links: []
+params:
+  build-directory: ${.:/output/build/directory}
+  intermediate-directory: ${.:/params/build-directory}/destdir
+  working-directory: ${.:/input/source/directory}
+pkg-type: run-actions
+type: pkg

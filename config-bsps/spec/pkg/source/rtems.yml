@@ -1,0 +1,47 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+attribute-actions:
+- action: set
+  enabled-by: true
+  path: /commit
+  value: '0000000000000000000000000000000000000000'
+branch: ${.:/component/ident}
+clone-depth: 1
+commit: ${.:/git-commit-head}
+copyrights:
+- Copyright (C) 2020, 2025 embedded brains GmbH & Co. KG
+copyrights-by-license:
+  description: |
+    RTEMS and all third-party software distributed with RTEMS which may be
+    linked to the application is licensed under permissive open source
+    licenses.  This means that the licenses do not propagate to the
+    application software.  Most of the original RTEMS code is now under the
+    BSD-2-Clause license.  Some code of RTEMS is under a legacy license, the
+    modified GPL-2.0 or later license with an exception for static linking.
+    It exposes no license requirements on application code.  RTEMS is a
+    collection of software from several sources.  Each file may have its own
+    copyright/license that is embedded in the source file.
+  files:
+  - LICENSE
+description: |
+  This repository contains the RTEMS sources.  It is used to provide the BSPs
+  shipped by this package.
+destination-directory: ${.:/component/deployment-directory}/src/rtems
+enabled-by: true
+links:
+- role: repository
+  uid: ../component
+- hash: null
+  name: component
+  role: input
+  uid: ../component
+origin-branch: null
+origin-commit: null
+origin-commit-url: null
+origin-fetch: []
+origin-url: null
+pkg-type: workspace
+symbolic-links: []
+post-clone-commands: []
+directory: file://${.:/component/workspace-directory}
+type: pkg
+workspace-type: repository

@@ -1,0 +1,50 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+attribute-actions: []
+attributes:
+  copyrights-by-license: {}
+  directory: $${.:/component/documentation-directory}/test-logs
+  directory-state-type: membench-collector
+  enabled-by: true
+  files:
+  - file: membench.json
+    hash: null
+  gdb: $${/pkg/deployment/gdb-multiarch:/directory}/bin/gdb
+  hash: null
+  links:
+  - hash: null
+    name: component
+    role: input
+    uid: component
+  - hash: null
+    name: spec
+    role: input
+    uid: rtems-item-cache
+  - hash: null
+    name: tools
+    role: input
+    uid: ../../tools
+  - hash: null
+    name: tools
+    role: input
+    uid: /pkg/deployment/gdb-multiarch
+  - hash: null
+    name: member
+    role: input-to
+    uid: /pkg/deployment/archive
+  - build-label: null
+    hash: null
+    name: membench-results
+    role: input-to
+    uid: /pkg/deployment/doc-package-manual
+  objdump: $${../../tools:/directory}/bin/$${.:/component/arch}-rtems$${.:/component/rtems-version}-objdump
+  pkg-type: directory-state
+  type: pkg
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: add-package-template
+  uid: component
+pkg-type: template
+template-type: inline-item
+type: pkg

@@ -1,0 +1,136 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+attribute-actions:
+- action: set-default
+  enabled-by: RTEMS_SMP
+  path: /bsp-config
+  value: smp
+- action: set-default
+  enabled-by:
+    not: RTEMS_SMP
+  path: /bsp-config
+  value: uni
+- action: set-default
+  enabled-by: RTEMS_QUAL
+  path: /bsp-extra
+  value: extra
+- action: set-default
+  enabled-by:
+    not: RTEMS_QUAL
+  path: /bsp-extra
+  value: ''
+- action: set-default
+  enabled-by: RTEMS_QUAL
+  path: /bsp-qual-only
+  value: qual-only
+- action: set-default
+  enabled-by:
+    not: RTEMS_QUAL
+  path: /bsp-qual-only
+  value: ''
+- action: set-default
+  enabled-by:
+    has-sibling:
+      sibling-role: input
+      sibling-type: pkg/workspace/component
+      parent-role: input
+      parent-type: pkg/workspace/component
+  path: /config
+  value: ${.:/bsp-config}
+- action: set-default
+  enabled-by:
+    not:
+      has-sibling:
+        sibling-role: input
+        sibling-type: pkg/workspace/component
+        parent-role: input
+        parent-type: pkg/workspace/component
+  path: /config
+  value: ''
+- action: set-default
+  enabled-by: true
+  path: /ident
+  value: ${.:/component/arch}/${.:/bsp}${.:/config:slash}
+- action: set-default
+  enabled-by: true
+  path: /documentation-directory
+  value: ${.:/component/documentation-directory}/${.:/component/arch}/${.:/bsp}${.:/config:slash}
+- action: set-default
+  enabled-by: true
+  path: /document-variant
+  value: ${.:/ident}
+- action: set-default
+  enabled-by: true
+  path: /image-runner-target
+  value: ${.:/component/arch}/${.:/bsp}
+- action: set-default
+  enabled-by: true
+  path: /benchmark-variant-priority
+  value: '0'
+- action: set-default
+  enabled-by: RTEMS_QUAL
+  path: /membench-build-label
+  value: ${.:/ident}/qual-only
+- action: set-default
+  enabled-by:
+    not: RTEMS_QUAL
+  path: /membench-build-label
+  value: ${.:/ident}/extra
+- action: append
+  enabled-by: target/board-0
+  path: /links
+  value:
+    role: design-target
+    uid: /target/board-0
+- action: append
+  enabled-by: target/simulator
+  path: /links
+  value:
+    role: design-target
+    uid: /target/simulator
+- action: append
+  enabled-by: target/board-0
+  path: /links
+  value:
+    role: test-runner
+    uid: /pkg/test-runner/board-0
+- action: append
+  enabled-by: target/simulator
+  path: /links
+  value:
+    role: test-runner
+    uid: /pkg/test-runner/simulator
+copyrights:
+- Copyright (C) 2024, 2026 embedded brains GmbH & Co. KG
+enabled-by: true
+enabled-set-actions:
+- action: add
+  enabled-by: true
+  value:
+  - ${.:/component/arch}/${.:/bsp}
+  - bsps/${.:/component/arch}/${.:/bsp-family}
+- action: add
+  enabled-by: pkg.feature.ada
+  value: __RTEMS_ADA__
+- action: add
+  enabled-by: pkg.feature.qual
+  value: RTEMS_QUAL
+- action: add
+  enabled-by: RTEMS_QUAL
+  value: compare-sources
+- action: add
+  enabled-by: RTEMS_QUAL
+  value: compare-specs
+enabled-set-feedback-mapping:
+  ${.:/component/arch}/${.:/bsp}: pkg.bsp.${.:/component/arch}.${.:/bsp}
+  RTEMS_QUAL: pkg.feature.qual
+  __RTEMS_ADA__: pkg.feature.ada
+  bsps/${.:/component/arch}/${.:/bsp-family}: pkg.bsp-family.${.:/component/arch}.${.:/bsp-family}
+  cfs: pkg.feature.cfs
+  compare-sources: pkg.feature.compare-sources
+  compare-specs: pkg.feature.compare-specs
+  libbsd: pkg.feature.libbsd
+  lwip: pkg.feature.lwip
+links: []
+pkg-type: template
+template-type: component
+type: pkg

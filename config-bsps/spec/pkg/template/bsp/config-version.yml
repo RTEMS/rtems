@@ -1,0 +1,48 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+attribute-actions: []
+attributes:
+  actions:
+  - action: create-ini-file
+    enabled-by: true
+    output-name: .
+    sections:
+    - enabled-by: true
+      key-value-pairs:
+      - enabled-by: true
+        key: RTEMS_VERSION_CONTROL_KEY
+        value: '0000000000000000000000000000000000000000'
+      name: RTEMS_VERSION
+    target: null
+  copyrights-by-license: {}
+  directory: $${/pkg/source/rtems:/directory}
+  directory-state-type: explicit
+  enabled-by: true
+  files:
+  - file: VERSION
+    hash: null
+  hash: null
+  links:
+  - hash: null
+    name: component
+    role: input
+    uid: component
+  - hash: null
+    name: source
+    role: input
+    uid: /pkg/source/rtems
+  - hash: null
+    name: member
+    role: input-to
+    uid: config-extra
+  params: {}
+  pkg-type: directory-state
+  type: pkg
+copyrights:
+- Copyright (C) 2023, 2026 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: add-package-template
+  uid: component
+pkg-type: template
+template-type: inline-item
+type: pkg

@@ -1,0 +1,11 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+file: ${.:/component/workspace-directory}/spec-pkg-bsps/pkg/template/bsp/coverage-json-simulator.yml
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: add-package-template
+  uid: component
+pkg-type: template
+template-type: redirect
+type: pkg
