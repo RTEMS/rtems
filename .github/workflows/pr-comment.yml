@@ -1,0 +1,34 @@
+# SPDX-License-Identifier: BSD-2-Clause
+
+# Copyright (C) 2026 embedded brains GmbH & Co. KG
+
+name: Manage PR comment
+on:
+  workflow_run:
+    workflows:
+    - Build and test
+    types:
+    - completed
+jobs:
+  comment:
+    if: ${{ github.event.workflow_run.event == 'pull_request' && (github.event.workflow_run.conclusion == 'success' || github.event.workflow_run.conclusion == 'failure') }}
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      pull-requests: write
+    steps:
+    - name: Find PR by commit
+      id: pr
+      uses: ./.github/actions/find-pr-by-commit
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: log-pkg-primary
+        run-id: ${{ github.event.workflow_run.id }}
+        github-token: ${{ github.token }}
+        path: .
+    - name: Post comment
+      uses: marocchino/sticky-pull-request-comment@v3
+      with:
+        number: ${{ steps.pr.outputs.pr }}
+        path: workspace/package-summary.md

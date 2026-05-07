@@ -1,0 +1,161 @@
+# SPDX-License-Identifier: BSD-2-Clause
+
+# Copyright (C) 2026 embedded brains GmbH & Co. KG
+
+name: Build and test
+on:
+  pull_request:
+    branches:
+    - esa/v6.2
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  primary:
+    runs-on: ubuntu-latest
+    env:
+      PKG_BSP: gr740
+      TOOLS_ARCH: sparc
+    steps:
+    - uses: actions/checkout@v6
+    - name: Set up Python
+      uses: actions/setup-python@v6
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v7
+      with:
+        enable-cache: true
+        version: 0.11.9
+    - name: Restore tools cache
+      id: restore-tools
+      uses: actions/cache/restore@v5
+      with:
+        path: tools
+        key: tools-${{ env.TOOLS_ARCH }}-${{ hashFiles('spec-pkg-tools/**/*.yml') }}
+    - name: Build tools
+      if: steps.restore-tools.outputs.cache-hit != 'true'
+      run: |
+        sudo apt-get update
+        sudo apt-get -y install binutils-multiarch build-essential git gnutls-dev libglib2.0-dev libpixman-1-dev libssl-dev ninja-build
+        make tools >log-tools.txt 2>&1
+    - name: Tools log tail
+      if: always() && steps.restore-tools.outputs.cache-hit != 'true'
+      run: |
+        tail -n 1000 log-tools.txt
+    - name: Tools log artifact
+      uses: actions/upload-artifact@v7
+      if: always() && steps.restore-tools.outputs.cache-hit != 'true'
+      with:
+        name: log-tools-primary
+        path: log-tools.txt
+        overwrite: true
+    - name: Save tools cache
+      id: save-tools
+      uses: actions/cache/save@v5
+      if: steps.restore-tools.outputs.cache-hit != 'true'
+      with:
+        path: tools
+        key: tools-${{ env.TOOLS_ARCH }}-${{ hashFiles('spec-pkg-tools/**/*.yml') }}
+    - name: Cache workspace
+      id: cache-workspace
+      uses: actions/cache@v5
+      with:
+        path: workspace
+        key: workspace-${{ env.TOOLS_ARCH }}-${{ hashFiles('spec-pkg-tools/**/*.yml') }}
+    - name: Make
+      run: |
+        make pkg >log-pkg.txt 2>&1
+    - name: Package log tail
+      if: always()
+      run: |
+        tail -n 1000 log-pkg.txt
+    - name: Package log artifact
+      uses: actions/upload-artifact@v7
+      if: always()
+      with:
+        name: log-pkg-primary
+        path: |
+          log-pkg.txt
+          workspace/package-summary.md
+        overwrite: true
+  build-all:
+    needs: primary
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        arch:
+        - aarch64
+        - arm
+        - i386
+        - m68k
+        - microblaze
+        - mips
+        - moxie
+        - nios2
+        - or1k
+        - powerpc
+        - riscv
+        - sparc
+        - x86_64
+    env:
+      TOOLS_ARCH: ${{ matrix.arch }}
+    steps:
+    - uses: actions/checkout@v6
+    - name: Set up Python
+      uses: actions/setup-python@v6
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v7
+      with:
+        enable-cache: true
+        version: 0.11.9
+    - name: Restore tools cache
+      id: restore-tools
+      uses: actions/cache/restore@v5
+      with:
+        path: tools
+        key: tools-${{ matrix.arch }}-${{ hashFiles('spec-pkg-tools/**/*.yml') }}
+    - name: Build tools
+      if: steps.restore-tools.outputs.cache-hit != 'true'
+      run: |
+        sudo apt-get update
+        sudo apt-get -y install binutils-multiarch build-essential git gnutls-dev libglib2.0-dev libpixman-1-dev libssl-dev ninja-build
+        make tools >log-tools.txt 2>&1
+    - name: Tools log tail
+      if: always() && steps.restore-tools.outputs.cache-hit != 'true'
+      run: |
+        tail -n 1000 log-tools.txt
+    - name: Tools log artifact
+      uses: actions/upload-artifact@v7
+      if: always() && steps.restore-tools.outputs.cache-hit != 'true'
+      with:
+        name: log-tools-${{ matrix.arch }}
+        path: log-tools.txt
+        overwrite: true
+    - name: Save tools cache
+      id: save-tools
+      uses: actions/cache/save@v5
+      if: steps.restore-tools.outputs.cache-hit != 'true'
+      with:
+        path: tools
+        key: tools-${{ matrix.arch }}-${{ hashFiles('spec-pkg-tools/**/*.yml') }}
+    - name: Cache build
+      id: cache-build
+      uses: actions/cache@v5
+      with:
+        path: build
+        key: build-${{ matrix.arch }}-${{ hashFiles('spec-pkg-tools/**/*.yml') }}
+    - name: Make
+      run: |
+        make bsps >log-bsps.txt 2>&1
+    - name: BSPs log tail
+      if: always()
+      run: |
+        tail -n 1000 log-bsps.txt
+    - name: BSPs log artifact
+      uses: actions/upload-artifact@v7
+      if: always()
+      with:
+        name: log-bsps-${{ matrix.arch }}
+        path: log-bsps.txt
+        overwrite: true
