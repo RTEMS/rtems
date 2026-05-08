@@ -133,12 +133,12 @@ char *TGZfname (const char *arcname)
   static char buffer[1024];
   int origlen,i;
 
-  strcpy(buffer,arcname);
+  snprintf(buffer,sizeof(buffer),"%s",arcname);
   origlen = strlen(buffer);
 
   for (i=0; TGZsuffix[i]; i++)
     {
-       strcpy(buffer+origlen,TGZsuffix[i]);
+       snprintf(buffer+origlen,sizeof(buffer)-origlen,"%s",TGZsuffix[i]);
        if (access(buffer,F_OK) == 0)
          return buffer;
     }
@@ -193,9 +193,9 @@ char *strtime (time_t *t)
   static char result[32];
 
   local = localtime(t);
-  sprintf(result,"%4d/%02d/%02d %02d:%02d:%02d",
-          local->tm_year+1900, local->tm_mon+1, local->tm_mday,
-          local->tm_hour, local->tm_min, local->tm_sec);
+  snprintf(result, sizeof(result), "%4d/%02d/%02d %02d:%02d:%02d",
+           local->tm_year+1900, local->tm_mon+1, local->tm_mday,
+           local->tm_hour, local->tm_min, local->tm_sec);
   return result;
 }
 
@@ -436,9 +436,7 @@ int tar (gzFile in,int action,int arg,int argc,char **argv)
 
           if (getheader == 1)
             {
-              strncpy(fname,buffer.header.name,SHORTNAMESIZE);
-              if (fname[SHORTNAMESIZE-1] != 0)
-                  fname[SHORTNAMESIZE] = 0;
+              snprintf(fname,SHORTNAMESIZE+1,"%s",buffer.header.name);
             }
           else
             {
