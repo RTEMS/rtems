@@ -1321,8 +1321,21 @@ struct rtems_can_chip *rtems_can_sja1000_initialize(
     return NULL;
   }
 
-  rtems_task_start( worker_task_id, sja1000_worker,
-                    ( rtems_task_argument )chip );
+  sc = rtems_task_start(
+    worker_task_id,
+    sja1000_worker,
+    ( rtems_task_argument )chip
+  );
+  if ( sc != RTEMS_SUCCESSFUL ) {
+    sc = rtems_interrupt_handler_remove( chip->irq, sja1000_interrupt, chip );
+    _Assert( sc == RTEMS_SUCCESSFUL );
+    free( internal );
+    free( chip->qends_dev );
+    free( chip );
+    sc = rtems_task_delete( worker_task_id );
+    _Assert( sc == RTEMS_SUCCESSFUL );
+    return NULL;
+  }
 
   rtems_can_set_bit( RTEMS_CAN_CHIP_CONFIGURED, &chip->flags );
   rtems_can_stats_set_state( &chip->chip_stats, CAN_STATE_STOPPED );
