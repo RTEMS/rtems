@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+archive-file: ${.:/component/workspace-directory}/src/mpfr-4.2.2.tar.xz
+archive-hash: 655_UbU4X7NJzE-6OkX_3w3VO-bfx0ky3AElgVihBRRmeWDFMMR92d_Fqhi-K9lIWdgEmYRMVxNxBYHmrGJZqQ==
+archive-patches: []
+symbolic-links: []
+archive-url: https://www.mpfr.org/mpfr-current/mpfr-4.2.2.tar.xz
+copyrights:
+- Copyright (C) 2020, 2025 embedded brains GmbH & Co. KG
+copyrights-by-license:
+  description: |
+    The MPFR library is used by host tools such as GDB and GCC.
+  files:
+  - COPYING
+  - COPYING.LESSER
+description: |
+  MPFR sources.
+destination-directory: ${.:/component/deployment-directory}/src
+enabled-by: true
+links:
+- hash: null
+  name: component
+  role: input
+  uid: ../component
+- hash: null
+  name: member
+  role: input-to
+  uid: ../deployment/archive
+pkg-type: workspace
+type: pkg
+workspace-type: archive

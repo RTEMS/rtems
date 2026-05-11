@@ -1,0 +1,186 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+archive-file: ${.:/component/workspace-directory}/src/qemu-10.1.0.tar.xz
+archive-hash: IFUqUktrKYGB3xr3CEtHDe0_6NFQXwUBHdo8M8vD2R9RjOAmtEuhqLfzTGSuga_dzto4MGb0dyo6KmMzomOMrw==
+archive-patches:
+- enabled-by: true
+  patch: |
+    From 9699d72988ee5022d0860b68f25a00cc9d9e3fcf Mon Sep 17 00:00:00 2001
+    From: Sebastian Huber <sebastian.huber@embedded-brains.de>
+    Date: Mon, 23 Sep 2024 05:46:22 +0200
+    Subject: [PATCH 1/6] hw/arm/boot: Use hooks if PSCI is disabled
+
+    In arm_load_kernel(), use the secondary boot hooks provided by the
+    platform if PSCI is disabled also while booting a non-Linux kernel.
+    While booting Linux with PSCI disabled, provide default hooks if needed.
+
+    In do_cpu_reset(), use the secondary CPU reset hook provided by the
+    platform for resetting a non-Linux kernel.
+
+    This change allows a more accurate simulation of the platform reset
+    behaviour.
+
+    Signed-off-by: Sebastian Huber <sebastian.huber@embedded-brains.de>
+    ---
+     hw/arm/boot.c | 30 +++++++++++++++++++-----------
+     1 file changed, 19 insertions(+), 11 deletions(-)
+
+    diff --git a/hw/arm/boot.c b/hw/arm/boot.c
+    index 68fe8654e6..b5d362047d 100644
+    --- a/hw/arm/boot.c
+    +++ b/hw/arm/boot.c
+    @@ -720,7 +720,11 @@ static void do_cpu_reset(void *opaque)
+                     g_assert_not_reached();
+                 }
+     
+    -            cpu_set_pc(cs, entry);
+    +            if (cs == first_cpu || !info->secondary_cpu_reset_hook) {
+    +                cpu_set_pc(cs, entry);
+    +            } else {
+    +                info->secondary_cpu_reset_hook(cpu, info);
+    +            }
+             } else {
+                 /*
+                  * If we are booting Linux then we might need to do so at:
+    @@ -1299,20 +1303,24 @@ void arm_load_kernel(ARMCPU *cpu, MachineState *ms, struct arm_boot_info *info)
+             }
+         }
+     
+    -    if (info->psci_conduit == QEMU_PSCI_CONDUIT_DISABLED &&
+    -        info->is_linux && nb_cpus > 1) {
+    +    if (info->psci_conduit == QEMU_PSCI_CONDUIT_DISABLED && nb_cpus > 1) {
+             /*
+    -         * We're booting Linux but not using PSCI, so for SMP we need
+    -         * to write a custom secondary CPU boot loader stub, and arrange
+    -         * for the secondary CPU reset to make the accompanying initialization.
+    +         * We're not using PSCI, so for SMP we may need to write a custom
+    +         * secondary CPU boot loader stub, and arrange for the secondary CPU
+    +         * reset to make the accompanying initialization.
+              */
+    -        if (!info->secondary_cpu_reset_hook) {
+    -            info->secondary_cpu_reset_hook = default_reset_secondary;
+    +        if (info->is_linux) {
+    +            /* For the Linux boot, use default hooks if needed */
+    +            if (!info->secondary_cpu_reset_hook) {
+    +                info->secondary_cpu_reset_hook = default_reset_secondary;
+    +            }
+    +            if (!info->write_secondary_boot) {
+    +                info->write_secondary_boot = default_write_secondary;
+    +            }
+             }
+    -        if (!info->write_secondary_boot) {
+    -            info->write_secondary_boot = default_write_secondary;
+    +        if (info->write_secondary_boot) {
+    +            info->write_secondary_boot(cpu, info);
+             }
+    -        info->write_secondary_boot(cpu, info);
+         } else {
+             /*
+              * No secondary boot stub; don't use the reset hook that would
+    -- 
+    2.43.0
+  type: inline
+- enabled-by: true
+  patch: |
+    From d945e319f5a06fa83005b39eaf4bd11d8c70b36c Mon Sep 17 00:00:00 2001
+    From: Sebastian Huber <sebastian.huber@embedded-brains.de>
+    Date: Mon, 23 Sep 2024 05:46:22 +0200
+    Subject: [PATCH] hw/arm/xilinx_zynq: Add CPU1 reset
+
+    After a system reset (SRST), the CPU1 should execute a wfe instruction
+    and then load the start address from 0xfffffff0:
+
+    https://docs.amd.com/r/en-US/ug585-zynq-7000-SoC-TRM/Starting-Code-on-CPU-1
+
+    Signed-off-by: Sebastian Huber <sebastian.huber@embedded-brains.de>
+    ---
+     hw/arm/xilinx_zynq.c | 31 +++++++++++++++++++++++++++++++
+     1 file changed, 31 insertions(+)
+
+    diff --git a/hw/arm/xilinx_zynq.c b/hw/arm/xilinx_zynq.c
+    index 0372cd0ac4..090d5bc74e 100644
+    --- a/hw/arm/xilinx_zynq.c
+    +++ b/hw/arm/xilinx_zynq.c
+    @@ -65,6 +65,8 @@ static const int dma_irqs[8] = {
+     
+     #define BOARD_SETUP_ADDR        0x100
+     
+    +#define SECONDARY_SETUP_ADDR    0xFFFFFFE8
+    +
+     #define SLCR_LOCK_OFFSET        0x004
+     #define SLCR_UNLOCK_OFFSET      0x008
+     #define SLCR_ARM_PLL_OFFSET     0x100
+    @@ -113,6 +115,33 @@ static void zynq_write_board_setup(ARMCPU *cpu,
+                            sizeof(board_setup_blob), BOARD_SETUP_ADDR);
+     }
+     
+    +static void zynq_write_secondary_boot(ARMCPU *cpu,
+    +                                      const struct arm_boot_info *info)
+    +{
+    +    /*
+    +     * After a system reset (SRST), the CPU1 should execute a wfe instruction
+    +     * and then load the start address from 0xfffffff0:
+    +     *
+    +     * https://docs.amd.com/r/en-US/ug585-zynq-7000-SoC-TRM/Starting-Code-on-CPU-1
+    +     */
+    +    uint32_t secondary_setup_blob[] = {
+    +        0xe320f002, /* wfe */
+    +        0xe51ff004, /* ldr pc, [pc, #-4] */
+    +        SECONDARY_SETUP_ADDR
+    +    };
+    +    for (int n = 0; n < ARRAY_SIZE(secondary_setup_blob); n++) {
+    +        secondary_setup_blob[n] = tswap32(secondary_setup_blob[n]);
+    +    }
+    +    rom_add_blob_fixed("secondary-setup", secondary_setup_blob,
+    +                       sizeof(secondary_setup_blob), SECONDARY_SETUP_ADDR);
+    +}
+    +
+    +static void zynq_secondary_cpu_reset(ARMCPU *cpu,
+    +                                     const struct arm_boot_info *info)
+    +{
+    +    cpu_set_pc(CPU(cpu), SECONDARY_SETUP_ADDR);
+    +}
+    +
+     static struct arm_boot_info zynq_binfo = {};
+     
+     static void gem_init(uint32_t base, qemu_irq irq)
+    @@ -449,6 +478,8 @@ static void zynq_init(MachineState *machine)
+         zynq_binfo.loader_start = 0;
+         zynq_binfo.board_setup_addr = BOARD_SETUP_ADDR;
+         zynq_binfo.write_board_setup = zynq_write_board_setup;
+    +    zynq_binfo.write_secondary_boot = zynq_write_secondary_boot;
+    +    zynq_binfo.secondary_cpu_reset_hook = zynq_secondary_cpu_reset;
+     
+         arm_load_kernel(zynq_machine->cpu[0], machine, &zynq_binfo);
+     }
+    -- 
+    2.43.0
+  type: inline
+symbolic-links: []
+archive-url: https://download.qemu.org/qemu-10.1.0.tar.xz
+copyrights:
+- Copyright (C) 2020, 2025 embedded brains GmbH & Co. KG
+copyrights-by-license:
+  description: |
+    The Qemu sources are used to provide host tools to simulate
+    ${/glossary/target:/plural}.
+  files:
+  - LICENSE
+description: |
+  Qemu sources.
+destination-directory: ${.:/component/deployment-directory}/src
+enabled-by:
+- pkg.arch.aarch64
+- pkg.arch.arm
+- pkg.arch.riscv
+links:
+- hash: null
+  name: component
+  role: input
+  uid: ../component
+- hash: null
+  name: member
+  role: input-to
+  uid: ../deployment/archive
+pkg-type: workspace
+type: pkg
+workspace-type: archive

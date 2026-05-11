@@ -1,0 +1,79 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- action: remove-glob
+  enabled-by: true
+  path: ${.:/params/working-directory}
+  patterns:
+  - build
+  - .lock-waf*
+  - .waf*
+  remove-tree: true
+- action: subprocess
+  command:
+  - ./waf
+  - configure
+  - --prefix=${.:/component/deployment-directory}
+  enabled-by: true
+  env: []
+  expected-return-code: 0
+  working-directory: ${.:/params/working-directory}
+- action: subprocess
+  command:
+  - ./waf
+  - build
+  enabled-by: true
+  env: []
+  expected-return-code: 0
+  working-directory: ${.:/params/working-directory}
+- action: subprocess
+  command:
+  - ./waf
+  - install
+  - --destdir=${.:/params/intermediate-directory}
+  enabled-by: true
+  env: []
+  expected-return-code: 0
+  working-directory: ${.:/params/working-directory}
+- action: directory-state-discard-and-clear
+  enabled-by: true
+  output-name: .
+- action: directory-state-move-tree
+  enabled-by: true
+  excludes: []
+  output-name: .
+  prefix: null
+  root: ${.:/params/intermediate-directory}/${.:/component/deployment-directory}
+- action: remove-glob
+  enabled-by: true
+  path: ${.:/params/working-directory}
+  patterns:
+  - build
+  - .lock-waf*
+  - .waf*
+  remove-tree: true
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+copyrights-by-license: {}
+directory: ${.:/component/deployment-directory}
+directory-state-type: explicit
+enabled-by: true
+files: []
+hash: null
+links:
+- hash: null
+  name: component
+  role: input
+  uid: ../component
+- hash: null
+  name: source
+  role: input
+  uid: ../source/rtems-tools
+- hash: null
+  name: member
+  role: input-to
+  uid: archive
+params:
+  intermediate-directory: ${.:/params/working-directory}/destdir
+  working-directory: ${../source/rtems-tools:/directory}
+pkg-type: directory-state
+type: pkg

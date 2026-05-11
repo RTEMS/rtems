@@ -1,0 +1,105 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- action: remove-tree
+  enabled-by: true
+  missing-ok: true
+  path: ${.:/params/build-directory}
+- action: mkdir
+  enabled-by: true
+  exist-ok: false
+  parents: true
+  path: ${.:/params/build-directory}
+- action: subprocess
+  command:
+  - ${.:/input/source/directory}/configure
+  - --prefix=${.:/output/deployment/directory}
+  - --libdir=${.:/output/deployment/directory}/lib
+  - --libexecdir=${.:/output/deployment/directory}/lib
+  - --target=${.:/component/arch}-rtems${.:/component/rtems-version}
+  - --disable-gdb
+  - --disable-libdecnumber
+  - --disable-nls
+  - --disable-readline
+  - --disable-sim
+  - --disable-warn-execstack
+  - --disable-warn-rwx-segments
+  - --disable-werror
+  - --enable-deterministic-archives
+  - --with-pkgversion=${.:/component/pkgversion}
+  - ${.:/make-params/host}
+  enabled-by: true
+  env:
+  - action: ${.:/make-params/ldflags-action}
+    name: LDFLAGS
+    value: -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,--no-whole-archive
+  - action: path-prepend
+    name: PATH
+    value: ${.:/component/deployment-directory}/bin
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}
+- action: subprocess
+  command:
+  - make
+  - -j
+  - ${.:/host-processor-count}
+  enabled-by: true
+  env:
+  - action: ${.:/make-params/ldflags-action}
+    name: LDFLAGS
+    value: -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,--no-whole-archive
+  - action: path-prepend
+    name: PATH
+    value: ${.:/component/deployment-directory}/bin
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}
+- action: subprocess
+  command:
+  - make
+  - -j
+  - ${.:/host-processor-count}
+  - install
+  - DESTDIR=${.:/params/build-directory}/destdir
+  enabled-by: true
+  env:
+  - action: set
+    name: AM_UPDATE_INFO_DIR
+    value: 'no'
+  - action: ${.:/make-params/ldflags-action}
+    name: LDFLAGS
+    value: -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,--no-whole-archive
+  - action: path-prepend
+    name: PATH
+    value: ${.:/component/deployment-directory}/bin
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}
+- action: directory-state-discard-and-clear
+  enabled-by: true
+  output-name: deployment
+- action: directory-state-move-tree
+  enabled-by: true
+  excludes:
+  - ${.:/component/binutils-install-excludes}
+  output-name: deployment
+  prefix: null
+  root: ${.:/params/build-directory}/destdir/${.:/output/deployment/directory}
+- action: subprocess
+  command:
+  - strip
+  - -s
+  - ${.:/output/deployment/glob-executables:*/bin/*}
+  enabled-by: true
+  env: []
+  expected-return-code: null
+  working-directory: ${.:/params/build-directory}
+- action: remove-tree
+  enabled-by: true
+  missing-ok: true
+  path: ${.:/params/build-directory}
+copyrights:
+- Copyright (C) 2023, 2024 embedded brains GmbH & Co. KG
+enabled-by: true
+links: []
+params:
+  build-directory: ${.:/component/build-directory}/build-binutils
+pkg-type: run-actions
+type: pkg

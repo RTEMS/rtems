@@ -1,0 +1,138 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- action: remove-tree
+  enabled-by: true
+  missing-ok: true
+  path: ${.:/params/build-directory}
+- action: mkdir
+  enabled-by: true
+  exist-ok: false
+  parents: true
+  path: ${.:/params/build-directory}
+- action: subprocess
+  command:
+  - ${.:/input/source/directory}/configure
+  - --prefix=${.:/output/deployment/directory}
+  - --libdir=${.:/output/deployment/directory}/lib
+  - --libexecdir=${.:/output/deployment/directory}/lib
+  - --target=${.:/component/arch}-rtems${.:/component/rtems-version}
+  - --disable-libcc1
+  - --disable-libstdcxx-pch
+  - --disable-nls
+  - --enable-languages=${.:/params/languages:join}
+  - enabled-by:
+    - aarch64
+    - arm
+    - riscv
+    - powerpc
+    - sparc
+    - x86_64
+    value: --enable-libgomp
+  - enabled-by:
+    - aarch64
+    - arm
+    - nios2
+    - powerpc
+    - riscv
+    - sparc
+    value: --enable-newlib-reent-thread-local
+  - --enable-newlib-iconv
+  - --enable-newlib-iconv-encodings=big5,cp775,cp850,cp852,cp855,cp866,euc_jp,euc_kr,euc_tw,iso_8859_1,iso_8859_10,iso_8859_11,iso_8859_13,iso_8859_14,iso_8859_15,iso_8859_2,iso_8859_3,iso_8859_4,iso_8859_5,iso_8859_6,iso_8859_7,iso_8859_8,iso_8859_9,iso_ir_111,koi8_r,koi8_ru,koi8_u,koi8_uni,ucs_2,ucs_2_internal,ucs_2be,ucs_2le,ucs_4,ucs_4_internal,ucs_4be,ucs_4le,us_ascii,utf_16,utf_16be,utf_16le,utf_8,win_1250,win_1251,win_1252,win_1253,win_1254,win_1255,win_1256,win_1257,win_1258
+  - --enable-newlib-io-c99-formats
+  - --enable-version-specific-runtime-libs
+  - --verbose
+  - --with-gmp=${.:/output/deployment/directory}
+  - --with-mpc=${.:/output/deployment/directory}
+  - --with-mpfr=${.:/output/deployment/directory}
+  - --with-newlib
+  - --with-pkgversion=${.:/component/pkgversion}
+  - --with-system-zlib=no
+  - ${.:/make-params/host}
+  enabled-by: true
+  env:
+  - action: ${.:/make-params/ldflags-action}
+    name: LDFLAGS
+    value: -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,--no-whole-archive
+  - action: path-prepend
+    name: PATH
+    value: ${.:/component/deployment-directory}/bin
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}
+- action: subprocess
+  command:
+  - make
+  - -j
+  - ${.:/host-processor-count}
+  enabled-by: true
+  env:
+  - action: ${.:/make-params/ldflags-action}
+    name: LDFLAGS
+    value: -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,--no-whole-archive
+  - action: path-prepend
+    name: PATH
+    value: ${.:/component/deployment-directory}/bin
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}
+- action: subprocess
+  command:
+  - make
+  - -j
+  - ${.:/host-processor-count}
+  - install
+  - DESTDIR=${.:/params/build-directory}/destdir
+  enabled-by: true
+  env:
+  - action: ${.:/make-params/ldflags-action}
+    name: LDFLAGS
+    value: -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,--no-whole-archive
+  - action: path-prepend
+    name: PATH
+    value: ${.:/component/deployment-directory}/bin
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}
+- action: directory-state-discard-and-clear
+  enabled-by: true
+  output-name: deployment
+- action: directory-state-move-tree
+  enabled-by: true
+  excludes:
+  - ${.:/component/gcc-install-excludes}
+  output-name: deployment
+  prefix: null
+  root: ${.:/params/build-directory}/destdir/${.:/output/deployment/directory}
+- action: subprocess
+  command:
+  - strip
+  - -s
+  - ${.:/output/deployment/glob-executables:*/bin/*,*/cc1*,*/collect2*,*/g++*,*/gnat*,*/lto*}
+  enabled-by: true
+  env: []
+  expected-return-code: null
+  working-directory: ${.:/params/build-directory}
+- action: subprocess
+  command:
+  - strip
+  - -g
+  - ${.:/output/deployment/glob:*/*.a}
+  - ${.:/output/deployment/glob:*/*.o}
+  enabled-by: pkg.feature.strip-target-libraries
+  env: []
+  expected-return-code: null
+  working-directory: ${.:/params/build-directory}
+- action: remove-tree
+  enabled-by: true
+  missing-ok: true
+  path: ${.:/params/build-directory}
+copyrights:
+- Copyright (C) 2023, 2026 embedded brains GmbH & Co. KG
+enabled-by: true
+links: []
+params:
+  build-directory: ${.:/component/build-directory}/build-gcc
+  languages:
+  - c
+  - c++
+  - enabled-by: pkg.feature.ada
+    value: ada
+pkg-type: run-actions
+type: pkg

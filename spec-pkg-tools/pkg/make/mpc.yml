@@ -1,0 +1,70 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- action: remove-tree
+  enabled-by: true
+  missing-ok: true
+  path: ${.:/params/build-directory}
+- action: mkdir
+  enabled-by: true
+  exist-ok: false
+  parents: true
+  path: ${.:/params/build-directory}
+- action: subprocess
+  command:
+  - ${../source/mpc:/directory}/configure
+  - --prefix=${.:/output/deployment/directory}
+  - --libdir=${.:/output/deployment/directory}/lib
+  - --libexecdir=${.:/output/deployment/directory}/lib
+  - --disable-shared
+  - --with-mpfr=${.:/output/deployment/directory}
+  - --with-gmp=${.:/output/deployment/directory}
+  - --verbose
+  - ${.:/make-params/host}
+  enabled-by: true
+  env: []
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}
+- action: subprocess
+  command:
+  - make
+  - -j
+  - ${.:/host-processor-count}
+  enabled-by: true
+  env: []
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}
+- action: subprocess
+  command:
+  - make
+  - -j
+  - ${.:/host-processor-count}
+  - install-strip
+  - DESTDIR=${.:/params/build-directory}/destdir
+  enabled-by: true
+  env:
+  - action: set
+    name: AM_UPDATE_INFO_DIR
+    value: 'no'
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}
+- action: directory-state-discard-and-clear
+  enabled-by: true
+  output-name: deployment
+- action: directory-state-move-tree
+  enabled-by: true
+  excludes: []
+  output-name: deployment
+  prefix: null
+  root: ${.:/params/build-directory}/destdir/${.:/output/deployment/directory}
+- action: remove-tree
+  enabled-by: true
+  missing-ok: true
+  path: ${.:/params/build-directory}
+copyrights:
+- Copyright (C) 2023, 2024 embedded brains GmbH & Co. KG
+enabled-by: true
+links: []
+params:
+  build-directory: ${.:/component/build-directory}/build-mpc
+pkg-type: run-actions
+type: pkg

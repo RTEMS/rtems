@@ -1,0 +1,37 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+attribute-actions: []
+attributes:
+  copyrights-by-license: {}
+  directory: ${.:/component/deployment-directory}
+  directory-state-type: explicit
+  enabled-by: true
+  files: []
+  hash: null
+  links:
+  - hash: null
+    name: component
+    role: input
+    uid: component
+  - hash: null
+    name: tools
+    role: input
+    uid: binutils
+  - hash: null
+    name: tools
+    role: input
+    uid: gcc
+  - hash: null
+    name: tools
+    role: input
+    uid: /pkg/deployment/rtems-tools
+  pkg-type: directory-state
+  type: pkg
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: add-package-template
+  uid: component
+pkg-type: template
+template-type: inline-item
+type: pkg

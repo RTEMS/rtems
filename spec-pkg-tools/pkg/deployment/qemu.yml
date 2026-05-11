@@ -1,0 +1,99 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- action: remove-tree
+  enabled-by: true
+  missing-ok: true
+  path: ${.:/params/build-directory}
+- action: mkdir
+  enabled-by: true
+  exist-ok: false
+  parents: true
+  path: ${.:/params/build-directory}
+- action: subprocess
+  command:
+  - ${../source/qemu:/directory}/configure
+  - --prefix=${.:/component/deployment-directory}
+  - --target-list=${.:/params/targets:join}
+  - --disable-docs
+  - --disable-install-blobs
+  enabled-by: true
+  env: []
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}
+- action: subprocess
+  command:
+  - make
+  - -j
+  - ${.:/host-processor-count}
+  enabled-by: true
+  env: []
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}
+- action: subprocess
+  command:
+  - make
+  - -j
+  - ${.:/host-processor-count}
+  - install
+  - DESTDIR=${.:/params/build-directory}/destdir
+  enabled-by: true
+  env: []
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}
+- action: directory-state-discard-and-clear
+  enabled-by: true
+  output-name: .
+- action: directory-state-move-tree
+  enabled-by: true
+  excludes: []
+  output-name: .
+  prefix: null
+  root: ${.:/params/build-directory}/destdir/${.:/component/deployment-directory}
+- action: subprocess
+  command:
+  - strip
+  - -s
+  - ${.:/glob-executables:*/bin/*}
+  enabled-by: true
+  env: []
+  expected-return-code: null
+  working-directory: ${.:/params/build-directory}
+- action: remove-tree
+  enabled-by: true
+  missing-ok: true
+  path: ${.:/params/build-directory}
+copyrights:
+- Copyright (C) 2023, 2026 embedded brains GmbH & Co. KG
+copyrights-by-license: {}
+directory: ${.:/component/deployment-directory}
+directory-state-type: explicit
+enabled-by:
+- pkg.arch.aarch64
+- pkg.arch.arm
+- pkg.arch.riscv
+files: []
+hash: null
+links:
+- hash: null
+  name: component
+  role: input
+  uid: ../component
+- hash: null
+  name: source
+  role: input
+  uid: ../source/qemu
+- hash: null
+  name: member
+  role: input-to
+  uid: /pkg/deployment/archive
+params:
+  build-directory: ${.:/component/build-directory}/build-qemu
+  targets:
+  - enabled-by: pkg.arch.aarch64
+    value: aarch64-softmmu
+  - enabled-by: pkg.arch.arm
+    value: arm-softmmu
+  - enabled-by: pkg.arch.riscv
+    value: riscv64-softmmu
+pkg-type: directory-state
+type: pkg

@@ -1,0 +1,28 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+archive-file: ${.:/component/workspace-directory}/src/rtems-tools-4e6e2007e8d5d73c4371b81cc7b29dcd1905aee9.tar.bz2
+archive-hash: sh9xclIcF9_s_NKlLXPI5w-7iCAeUkoCu-LapIEo89Uu5kCNH-rOlUfypT9psF-8ALixjtq5K05tBkwgSO38gg==
+archive-patches: []
+symbolic-links: []
+archive-url: https://gitlab.rtems.org/tools/rtems-tools/-/archive/4e6e2007e8d5d73c4371b81cc7b29dcd1905aee9/rtems-tools-4e6e2007e8d5d73c4371b81cc7b29dcd1905aee9.tar.bz2
+copyrights:
+- Copyright (C) 2020, 2025 embedded brains GmbH & Co. KG
+copyrights-by-license:
+  description: |
+    The RTEMS tools sources are used to provide host tools such as the RTEMS
+    Tester and tracing tools.
+description: |
+  RTEMS Tools sources.
+destination-directory: ${.:/component/deployment-directory}/src
+enabled-by: true
+links:
+- hash: null
+  name: component
+  role: input
+  uid: ../component
+- hash: null
+  name: member
+  role: input-to
+  uid: ../deployment/archive
+pkg-type: workspace
+type: pkg
+workspace-type: archive

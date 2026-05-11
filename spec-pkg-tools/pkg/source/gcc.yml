@@ -1,0 +1,40 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+archive-file: ${.:/component/workspace-directory}/src/gcc-13.4.0.tar.xz
+archive-hash: m0uD7PUe81W4aGCLjSV7L6Q1wG0nGcuGZXp8LCoIKP9M4E6brBBVu8rY7VtNpSTK-u9lR4XiOlAjPZXYkgHjXw==
+archive-patches: []
+archive-url: https://ftp.gwdg.de/pub/gnu/ftp/gnu/gcc/gcc-13.4.0/gcc-13.4.0.tar.xz
+copyrights:
+- Copyright (C) 2020, 2026 embedded brains GmbH & Co. KG
+copyrights-by-license:
+  description: |
+    The GCC sources are used to provide host tools such as the
+    ${/glossary/target-arch:/term} compiler.
+  files:
+  - COPYING
+  - COPYING.LIB
+  - COPYING.RUNTIME
+  - COPYING3
+  - COPYING3.LIB
+description: |
+  This repository contains the GCC sources.  It is used to build host tools.
+destination-directory: ${.:/component/deployment-directory}/src
+enabled-by: true
+links:
+- hash: null
+  name: component
+  role: input
+  uid: ../component
+- hash: null
+  name: source
+  role: input
+  uid: newlib
+- hash: null
+  name: member
+  role: input-to
+  uid: ../deployment/archive
+pkg-type: workspace
+symbolic-links:
+- link-name: newlib
+  target: ${newlib:/directory}/newlib
+type: pkg
+workspace-type: archive

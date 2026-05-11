@@ -1,0 +1,92 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- action: remove-tree
+  enabled-by: true
+  missing-ok: true
+  path: ${.:/params/build-directory}
+- action: mkdir
+  enabled-by: true
+  exist-ok: false
+  parents: true
+  path: ${.:/params/build-directory}
+- action: subprocess
+  command:
+  - ${../source/gdb:/directory}/configure
+  - --prefix=${.:/component/deployment-directory}
+  - --libdir=${.:/component/deployment-directory}/lib
+  - --libexecdir=${.:/component/deployment-directory}/lib
+  - --enable-targets=all
+  - --disable-binutils
+  - --disable-gas
+  - --disable-gold
+  - --disable-gprof
+  - --disable-ld
+  - --disable-nls
+  - --disable-sim
+  - --disable-werror
+  - --verbose
+  - --with-expat=${.:/component/deployment-directory}
+  - --with-gmp=${.:/component/deployment-directory}
+  - --with-guile=no
+  - --with-mpfr=${.:/component/deployment-directory}
+  - --with-pkgversion=${.:/component/pkgversion}
+  - --with-system-zlib=no
+  enabled-by: true
+  env:
+  - action: set
+    name: CPPFLAGS
+    value: ${.:/params/cppflags}
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}
+- action: subprocess
+  command:
+  - make
+  - -j
+  - ${.:/host-processor-count}
+  enabled-by: true
+  env:
+  - action: set
+    name: CPPFLAGS
+    value: ${.:/params/cppflags}
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}
+- action: subprocess
+  command:
+  - make
+  - -j
+  - ${.:/host-processor-count}
+  - install-strip
+  - DESTDIR=${.:/params/build-directory}/destdir
+  enabled-by: true
+  env:
+  - action: set
+    name: CPPFLAGS
+    value: ${.:/params/cppflags}
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}
+- action: directory-state-discard-and-clear
+  enabled-by: true
+  output-name: deployment
+- action: directory-state-move-tree
+  enabled-by: true
+  excludes:
+  - /share/info/bfd.info
+  - /share/info/ctf-spec.info
+  - /share/info/dir
+  - /share/info/sframe-spec.info
+  output-name: deployment
+  prefix: null
+  root: ${.:/params/build-directory}/destdir/${.:/component/deployment-directory}
+- action: remove-tree
+  enabled-by: true
+  missing-ok: true
+  path: ${.:/params/build-directory}
+copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
+enabled-by: true
+links: []
+params:
+  build-directory: ${.:/component/build-directory}/build-gdb-multiarch
+  cppflags: -I${.:/component/deployment-directory}/include
+pkg-type: run-actions
+type: pkg

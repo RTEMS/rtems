@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+archive-file: ${.:/component/workspace-directory}/src/binutils-2.43.1.tar.xz
+archive-hash: IJd60XcpFBosJtNYYo9EoJRLhNz-_ewroCnC0C9A38QcyRwGMQRFYNK9b5pR4fFYRrSzEb774U8SOfFP99V4JA==
+archive-patches: []
+symbolic-links: []
+archive-url: https://ftp.gwdg.de/pub/gnu/ftp/gnu/binutils/binutils-2.43.1.tar.xz
+copyrights:
+- Copyright (C) 2020, 2026 embedded brains GmbH & Co. KG
+copyrights-by-license:
+  description: |
+    The Binutils sources are used to provide host tools such as the
+    ${/glossary/target-arch:/term} assembler and linker.
+  files:
+  - COPYING
+  - COPYING3
+description: |
+  This directory contains the Binutils sources.  It is used to build host tools.
+destination-directory: ${.:/component/deployment-directory}/src
+enabled-by: false
+links:
+- hash: null
+  name: component
+  role: input
+  uid: ../component
+- hash: null
+  name: member
+  role: input-to
+  uid: ../deployment/archive
+pkg-type: workspace
+type: pkg
+workspace-type: archive

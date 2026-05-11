@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+archive-file: ${.:/component/workspace-directory}/src/newlib-fbc5496.tar.gz
+archive-hash: AFwyCjHHXfddx_lUcJbmcxSFOYtfj8cshzthqF9B2OtZxxxN_NQ8O-znhUPKDv20KjOBEMGh4VHpoiFBjZOrmA==
+archive-patches: []
+archive-url: https://codeload.github.com/RTEMS/sourceware-mirror-newlib-cygwin/tar.gz/fbc5496
+copyrights:
+- Copyright (C) 2020, 2025 embedded brains GmbH & Co. KG
+copyrights-by-license:
+  description: |
+    The Newlib sources are used to provide the ${/glossary/target-arch:/term}
+    standard C library.
+  files:
+  - COPYING.NEWLIB
+description: |
+  The Newlib sources are used to provide the ${/glossary/target-arch:/term}
+  standard C library.
+destination-directory: ${.:/component/deployment-directory}/src
+enabled-by: true
+links:
+- hash: null
+  name: component
+  role: input
+  uid: ../component
+- hash: null
+  name: member
+  role: input-to
+  uid: ../deployment/archive
+pkg-type: workspace
+symbolic-links: []
+type: pkg
+workspace-type: archive

@@ -1,0 +1,73 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- action: remove-tree
+  enabled-by: true
+  missing-ok: true
+  path: ${.:/params/build-directory}
+- action: mkdir
+  enabled-by: true
+  exist-ok: false
+  parents: true
+  path: ${.:/params/build-directory}
+- action: subprocess
+  command:
+  - ${.:/input/source/directory}/configure
+  - --prefix=${.:/component/deployment-directory}
+  - --libdir=${.:/component/deployment-directory}/lib
+  - --libexecdir=${.:/component/deployment-directory}/lib
+  - --disable-libcc1
+  - --disable-libsanitizer
+  - --disable-libstdcxx-pch
+  - --disable-multilib
+  - --disable-nls
+  - --enable-languages=c,c++,ada
+  - --verbose
+  - --with-gmp=${.:/component/deployment-directory}
+  - --with-mpc=${.:/component/deployment-directory}
+  - --with-mpfr=${.:/component/deployment-directory}
+  - --with-pkgversion=${.:/component/pkgversion}
+  enabled-by: true
+  env: []
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}
+- action: subprocess
+  command:
+  - make
+  - -j
+  - ${.:/host-processor-count}
+  enabled-by: true
+  env: []
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}
+- action: subprocess
+  command:
+  - make
+  - -j
+  - ${.:/host-processor-count}
+  - install
+  - DESTDIR=${.:/params/build-directory}/destdir
+  enabled-by: true
+  env: []
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}
+- action: directory-state-discard-and-clear
+  enabled-by: true
+  output-name: deployment
+- action: directory-state-move-tree
+  enabled-by: true
+  excludes: []
+  output-name: deployment
+  prefix: null
+  root: ${.:/params/build-directory}/destdir/${.:/component/deployment-directory}
+- action: remove-tree
+  enabled-by: true
+  missing-ok: true
+  path: ${.:/params/build-directory}
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links: []
+params:
+  build-directory: ${.:/component/build-directory}/build-gcc-host
+pkg-type: run-actions
+type: pkg

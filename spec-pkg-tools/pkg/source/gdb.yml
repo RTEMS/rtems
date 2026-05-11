@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+archive-file: ${.:/component/workspace-directory}/src/gdb-17.1.tar.xz
+archive-hash: 8aZ1HkOaISj-zz6ui1fBYIoNx8_nm0NWqTeHTlpCuy3wq6NutqlFLEGWaQi5pZB2x8rZcg9oRoirlWtlCA8dfA==
+archive-patches: []
+symbolic-links: []
+archive-url: https://ftp.gwdg.de/pub/gnu/ftp/gnu/gdb/gdb-17.1.tar.xz
+copyrights:
+- Copyright (C) 2020, 2025 embedded brains GmbH & Co. KG
+copyrights-by-license:
+  description: |
+    The GDB sources are used to provide a host tool to debug applications of
+    the ${/glossary/target-arch:/term}.
+  files:
+  - COPYING
+  - COPYING3
+description: |
+  GDB sources.
+destination-directory: ${.:/component/deployment-directory}/src
+enabled-by: true
+links:
+- hash: null
+  name: component
+  role: input
+  uid: ../component
+- hash: null
+  name: member
+  role: input-to
+  uid: ../deployment/archive
+pkg-type: workspace
+type: pkg
+workspace-type: archive
