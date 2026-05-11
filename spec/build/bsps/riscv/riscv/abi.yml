@@ -10,6 +10,12 @@ default:
 - enabled-by:
   - riscv/beaglevfire
   - riscv/mpfs64imafdc
+  value:
+  - -march=rv64imafdc
+  - -mabi=lp64d
+  - -mcmodel=medany
+  - -mstrict-align
+- enabled-by:
   - riscv/rv64imafdc
   - riscv/kendrytek210
   value:
