@@ -30,18 +30,18 @@
 #include <bsp/riscv.h>
 
 /* From bsps/arm/fvp/include/bsp/semihosting.h */
-#define TARGET_SYS_EXIT_EXTENDED 0x20
+#define TARGET_SYS_EXIT_EXTENDED    0x20
 #define ADP_Stopped_ApplicationExit 0x20026
 
 void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
   (void) source;
 
-  uint64_t args[2] = {ADP_Stopped_ApplicationExit, code};
-  __asm__ volatile ("li a0, %0" ::"i"(TARGET_SYS_EXIT_EXTENDED));
-  __asm__ volatile ("mv a1, %0" ::"r"(&args));
-  __asm__ volatile (".align 4; slli zero, zero, 0x1f");
-  __asm__ volatile ("ebreak");
-  __asm__ volatile ("srai zero, zero, 0x7");
+  uint64_t args[ 2 ] = { ADP_Stopped_ApplicationExit, code };
+  __asm__ volatile( "li a0, %0" ::"i"( TARGET_SYS_EXIT_EXTENDED ) );
+  __asm__ volatile( "mv a1, %0" ::"r"( &args ) );
+  __asm__ volatile( ".align 4; slli zero, zero, 0x1f" );
+  __asm__ volatile( "ebreak" );
+  __asm__ volatile( "srai zero, zero, 0x7" );
   RTEMS_UNREACHABLE();
 }

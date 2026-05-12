@@ -55,116 +55,116 @@
 
 #include <grlib/apbuart.h>
 #include <grlib/apbuart_termios.h>
-static struct apbuart_context apbuarts[RISCV_CONSOLE_MAX_APBUART_DEVICES];
-static size_t apbuart_devices = 0;
+static struct apbuart_context apbuarts[ RISCV_CONSOLE_MAX_APBUART_DEVICES ];
+static size_t                 apbuart_devices = 0;
 
 static struct {
   rtems_termios_device_context *context;
-  void (*putchar)(rtems_termios_device_context *base, char c);
-  int (*getchar)(rtems_termios_device_context *base);
+  void ( *putchar )( rtems_termios_device_context *base, char c );
+  int ( *getchar )( rtems_termios_device_context *base );
 } riscv_console;
 
-static void riscv_output_char(char c)
+static void riscv_output_char( char c )
 {
-  (*riscv_console.putchar)(riscv_console.context, c);
+  ( *riscv_console.putchar )( riscv_console.context, c );
 }
 
-static void apbuart_putchar(rtems_termios_device_context *base, char c)
+static void apbuart_putchar( rtems_termios_device_context *base, char c )
 {
   struct apbuart_context *ctx = (struct apbuart_context *) base;
-  apbuart_outbyte_polled(ctx->regs, c);
+  apbuart_outbyte_polled( ctx->regs, c );
 }
 
-static int apbuart_getchar(rtems_termios_device_context *base)
+static int apbuart_getchar( rtems_termios_device_context *base )
 {
   struct apbuart_context *ctx = (struct apbuart_context *) base;
-  return apbuart_inbyte_nonblocking(ctx->regs);
+  return apbuart_inbyte_nonblocking( ctx->regs );
 }
 
-#define RISCV_CONSOLE_IS_COMPATIBLE(actual, actual_len, desired) \
-  (actual_len == sizeof(desired) \
-     && memcmp(actual, desired, sizeof(desired) - 1) == 0)
+#define RISCV_CONSOLE_IS_COMPATIBLE( actual, actual_len, desired ) \
+  ( actual_len == sizeof( desired ) &&                             \
+    memcmp( actual, desired, sizeof( desired ) - 1 ) == 0 )
 
-static uint32_t get_core_frequency(void)
+static uint32_t get_core_frequency( void )
 {
-  uint32_t node;
-  const char *fdt;
-  int len;
+  uint32_t       node;
+  const char    *fdt;
+  int            len;
   const fdt32_t *val;
 
   fdt = bsp_fdt_get();
-  node = fdt_node_offset_by_compatible(fdt, -1, "fixed-clock");
+  node = fdt_node_offset_by_compatible( fdt, -1, "fixed-clock" );
 
-  val = fdt_getprop(fdt, node, "clock-frequency", &len);
-  if (val == NULL && len != 4) {
-    bsp_fatal(RISCV_FATAL_NO_APBUART_CLOCK_FREQUENCY_IN_DEVICE_TREE);
+  val = fdt_getprop( fdt, node, "clock-frequency", &len );
+  if ( val == NULL && len != 4 ) {
+    bsp_fatal( RISCV_FATAL_NO_APBUART_CLOCK_FREQUENCY_IN_DEVICE_TREE );
   }
 
-  return fdt32_to_cpu(*val);
+  return fdt32_to_cpu( *val );
 }
 
-static void riscv_console_probe(void)
+static void riscv_console_probe( void )
 {
   const void *fdt;
-  int node;
+  int         node;
 
   fdt = bsp_fdt_get();
 
-  node = fdt_next_node(fdt, -1, NULL);
+  node = fdt_next_node( fdt, -1, NULL );
 
-  while (node >= 0) {
+  while ( node >= 0 ) {
     const char *compat;
-    int compat_len;
+    int         compat_len;
 
-    compat = fdt_getprop(fdt, node, "compatible", &compat_len);
-    if (compat == NULL) {
+    compat = fdt_getprop( fdt, node, "compatible", &compat_len );
+    if ( compat == NULL ) {
       compat_len = 0;
     }
 
     if (
-      RISCV_CONSOLE_IS_COMPATIBLE(compat, compat_len, "gaisler,apbuart")
-        && (apbuart_devices < RISCV_CONSOLE_MAX_APBUART_DEVICES)
+      RISCV_CONSOLE_IS_COMPATIBLE( compat, compat_len, "gaisler,apbuart" ) &&
+      ( apbuart_devices < RISCV_CONSOLE_MAX_APBUART_DEVICES )
     ) {
       struct apbuart_context *ctx;
-      fdt32_t *val;
-      int len;
+      fdt32_t                *val;
+      int                     len;
 
-      ctx = &apbuarts[apbuart_devices];
+      ctx = &apbuarts[ apbuart_devices ];
 
-      ctx->regs = riscv_fdt_get_address(fdt, node);
-      if (ctx->regs == NULL) {
-        bsp_fatal(RISCV_FATAL_NO_APBUART_REG_IN_DEVICE_TREE);
+      ctx->regs = riscv_fdt_get_address( fdt, node );
+      if ( ctx->regs == NULL ) {
+        bsp_fatal( RISCV_FATAL_NO_APBUART_REG_IN_DEVICE_TREE );
       }
 
       ctx->freq_hz = get_core_frequency();
 
-      val = (fdt32_t *) fdt_getprop(fdt, node, "interrupts", &len);
-      if (val == NULL || len != 4) {
-        bsp_fatal(RISCV_FATAL_NO_APBUART_INTERRUPTS_IN_DEVICE_TREE);
+      val = (fdt32_t *) fdt_getprop( fdt, node, "interrupts", &len );
+      if ( val == NULL || len != 4 ) {
+        bsp_fatal( RISCV_FATAL_NO_APBUART_INTERRUPTS_IN_DEVICE_TREE );
       }
-      ctx->irq = RISCV_INTERRUPT_VECTOR_EXTERNAL(fdt32_to_cpu(val[0]));
+      ctx->irq = RISCV_INTERRUPT_VECTOR_EXTERNAL( fdt32_to_cpu( val[ 0 ] ) );
 
-      if (apbuart_devices == 0) {
+      if ( apbuart_devices == 0 ) {
         riscv_console.context = &ctx->base;
         riscv_console.putchar = apbuart_putchar;
         riscv_console.getchar = apbuart_getchar;
       }
 
-      rtems_termios_device_context_initialize(&ctx->base, "APBUART");
+      rtems_termios_device_context_initialize( &ctx->base, "APBUART" );
 
       apbuart_devices++;
     };
 
-    node = fdt_next_node(fdt, node, NULL);
+    node = fdt_next_node( fdt, node, NULL );
   }
 
   BSP_output_char = riscv_output_char;
 }
 
-static void riscv_output_char_init(char c)
+static void riscv_output_char_init( char c )
 {
   riscv_console_probe();
-  riscv_output_char(c);
+  riscv_output_char( c );
 }
 
 BSP_output_char_function_type BSP_output_char = riscv_output_char_init;
@@ -174,7 +174,7 @@ BSP_polling_getchar_function_type BSP_poll_char = NULL;
 rtems_status_code console_initialize(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
-  void *arg
+  void                     *arg
 )
 {
   (void) major;
@@ -188,20 +188,20 @@ rtems_status_code console_initialize(
   const rtems_termios_device_handler *handler;
 
 #ifdef BSP_CONSOLE_USE_INTERRUPTS
-    handler = &apbuart_handler_interrupt;
+  handler = &apbuart_handler_interrupt;
 #else
-    handler = &apbuart_handler_polled;
+  handler = &apbuart_handler_polled;
 #endif
 
-  for (size_t i = 0; i < apbuart_devices; ++i) {
+  for ( size_t i = 0; i < apbuart_devices; ++i ) {
     struct apbuart_context *ctx;
 
-    ctx = &apbuarts[i];
-    path[sizeof(path) - 2] = (char) ('0' + i);
-    rtems_termios_device_install(path, handler, NULL, &ctx->base);
+    ctx = &apbuarts[ i ];
+    path[ sizeof( path ) - 2 ] = (char) ( '0' + i );
+    rtems_termios_device_install( path, handler, NULL, &ctx->base );
 
-    if (&ctx->base == riscv_console.context) {
-      link(path, CONSOLE_DEVICE_NAME);
+    if ( &ctx->base == riscv_console.context ) {
+      link( path, CONSOLE_DEVICE_NAME );
     }
   }
 
