@@ -56,6 +56,13 @@ static inline void _RISCV_MMIO_store_release_fence( void )
   _RISCV_FENCE( o, i );
 }
 
+#if defined(RISCV_USE_S_MODE)
+static inline void _RISCV_TLB_flush_all_entries( void )
+{
+  __asm__ volatile ( "sfence.vma zero, zero" );
+}
+#endif /* RISCV_USE_S_MODE */
+
 #endif /* ASM */
 
 #endif

@@ -5,7 +5,8 @@ copyrights:
 - Copyright (C) 2026 Gedare Bloom
 cppflags: []
 cxxflags: []
-enabled-by: true
+enabled-by:
+- RISCV_USE_S_MODE
 includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}

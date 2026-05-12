@@ -119,7 +119,7 @@ riscv_mmu_enable( const riscv_mmu_control *control )
   value |= (uintptr_t) control->root >> RISCV_PGSHIFT;
   write_csr( satp, value );
 
-  __asm__ volatile ( "sfence.vma zero, zero" );
+  _RISCV_TLB_flush_all_entries( );
 }
 
 BSP_START_TEXT_SECTION static inline void
@@ -127,7 +127,7 @@ riscv_mmu_disable( void )
 {
   /* Disable MMU */
   write_csr( satp, 0 );
-  __asm__ volatile ( "sfence.vma zero, zero" );
+  _RISCV_TLB_flush_all_entries( );
 }
 
 #ifdef __cplusplus
