@@ -70,16 +70,16 @@ extern "C" {
 extern struct drvmgr_bus_res *gr_leon4_n2x_resources[];
 
 /* Options to gr_cpci_leon4_n2x_print function */
-#define GR_LEON4_N2X_OPTIONS_AMBA   0x01 /* Print AMBA bus devices */
+#define GR_LEON4_N2X_OPTIONS_AMBA 0x01 /* Print AMBA bus devices */
 
 /* Print information about all GR-CPCI-LEON4-N2X PCI boards */
-void gr_leon4_n2x_print(int options);
+void gr_leon4_n2x_print( int options );
 
 /* Print information about one GR-CPCI-LEON4-N2X PCI board */
-void gr_cpci_leon4_n2x_print_dev(struct drvmgr_dev *dev, int options);
+void gr_cpci_leon4_n2x_print_dev( struct drvmgr_dev *dev, int options );
 
 /* Register GR-CPCI-LEON4-N2X driver */
-void gr_cpci_leon4_n2x_register_drv(void);
+void gr_cpci_leon4_n2x_register_drv( void );
 
 #ifdef __cplusplus
 }

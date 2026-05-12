@@ -51,15 +51,15 @@
  * @{
  */
 
-#define LEON3_IO_AREA 0xfff00000
-#define LEON3_CONF_AREA 0xff000
-#define LEON3_AHB_SLAVE_CONF_AREA (1 << 11)
+#define LEON3_IO_AREA             0xfff00000
+#define LEON3_CONF_AREA           0xff000
+#define LEON3_AHB_SLAVE_CONF_AREA ( 1 << 11 )
 
 #define LEON3_AHB_CONF_WORDS 8
 #define LEON3_APB_CONF_WORDS 2
-#define LEON3_AHB_MASTERS 64
-#define LEON3_AHB_SLAVES 64
-#define LEON3_APB_SLAVES 16
+#define LEON3_AHB_MASTERS    64
+#define LEON3_AHB_SLAVES     64
+#define LEON3_APB_SLAVES     16
 
 #include <grlib/ambapp.h>
 #include <grlib/grlib.h>

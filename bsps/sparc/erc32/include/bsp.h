@@ -72,26 +72,26 @@ extern int rtems_erc32_sonic_driver_attach(
  *  Information placed in the linkcmds file.
  */
 
-extern int   RAM_START;
-extern int   RAM_END;
-extern int   RAM_SIZE;
+extern int RAM_START;
+extern int RAM_END;
+extern int RAM_SIZE;
 
-extern int   PROM_START;
-extern int   PROM_END;
-extern int   PROM_SIZE;
+extern int PROM_START;
+extern int PROM_END;
+extern int PROM_SIZE;
 
-extern int   CLOCK_SPEED;
+extern int CLOCK_SPEED;
 
-extern int   end;        /* last address in the program */
+extern int end; /* last address in the program */
 
 /* functions */
 
-void SPARC_Clear_and_unmask_interrupt(rtems_vector_number vector);
+void SPARC_Clear_and_unmask_interrupt( rtems_vector_number vector );
 
-void BSP_fatal_exit(uint32_t error);
+void BSP_fatal_exit( uint32_t error );
 
 /* Interrupt Service Routine (ISR) pointer */
-typedef void (*bsp_shared_isr)(void *arg);
+typedef void ( *bsp_shared_isr )( void *arg );
 
 /* Registers a shared IRQ handler, and enable it at IRQ controller. Multiple
  * interrupt handlers may use the same IRQ number, all ISRs will be called
@@ -103,16 +103,20 @@ typedef void (*bsp_shared_isr)(void *arg);
  *  isr       Function pointer to the ISR
  *  arg       Second argument to function isr
  */
-RTEMS_DEPRECATED static inline int BSP_shared_interrupt_register
-       (
-       int irq,
-       const char *info,
-       bsp_shared_isr isr,
-       void *arg
-       )
+RTEMS_DEPRECATED static inline int BSP_shared_interrupt_register(
+  int            irq,
+  const char    *info,
+  bsp_shared_isr isr,
+  void          *arg
+)
 {
-       return rtems_interrupt_handler_install(irq, info,
-                                       RTEMS_INTERRUPT_SHARED, isr, arg);
+  return rtems_interrupt_handler_install(
+    irq,
+    info,
+    RTEMS_INTERRUPT_SHARED,
+    isr,
+    arg
+  );
 }
 
 /* Unregister previously registered shared IRQ handler.
@@ -122,14 +126,13 @@ RTEMS_DEPRECATED static inline int BSP_shared_interrupt_register
  *  isr       Function pointer to the ISR
  *  arg       Second argument to function isr
  */
-RTEMS_DEPRECATED static inline int BSP_shared_interrupt_unregister
-       (
-       int irq,
-       bsp_shared_isr isr,
-       void *arg
-       )
+RTEMS_DEPRECATED static inline int BSP_shared_interrupt_unregister(
+  int            irq,
+  bsp_shared_isr isr,
+  void          *arg
+)
 {
-       return rtems_interrupt_handler_remove(irq, isr, arg);
+  return rtems_interrupt_handler_remove( irq, isr, arg );
 }
 
 /* Clear interrupt pending on IRQ controller, this is typically done on a
@@ -172,13 +175,13 @@ RTEMS_DEPRECATED static inline void BSP_shared_interrupt_mask( int irq )
 /*
  *  Delay for the specified number of microseconds.
  */
-void rtems_bsp_delay(int usecs);
+void rtems_bsp_delay( int usecs );
 
 /*
  * Prototypes for methods used across file boundaries
  */
-void console_outbyte_polled(int  port, unsigned char ch);
-int console_inbyte_nonblocking(int port);
+void console_outbyte_polled( int port, unsigned char ch );
+int  console_inbyte_nonblocking( int port );
 
 #ifdef __cplusplus
 }

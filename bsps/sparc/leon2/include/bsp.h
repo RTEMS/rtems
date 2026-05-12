@@ -74,21 +74,21 @@ extern int rtems_smc91111_driver_attach_leon2(
 );
 #define RTEMS_BSP_NETWORK_DRIVER_NAME "open_eth1"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH_OPENETH \
-          rtems_leon_open_eth_driver_attach
+  rtems_leon_open_eth_driver_attach
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH_SMC91111 \
-          rtems_smc91111_driver_attach_leon2
+  rtems_smc91111_driver_attach_leon2
 
 #define HAS_SMC91111
 
 /* Configure GRETH driver */
 #define GRETH_SUPPORTED
-#define GRETH_MEM_LOAD(addr) leon_r32_no_cache((uintptr_t) addr)
+#define GRETH_MEM_LOAD( addr ) leon_r32_no_cache( (uintptr_t) addr )
 
 /*
  *  The synchronous trap is an arbitrarily chosen software trap.
  */
 
-extern int   CPU_SPARC_HAS_SNOOPING;
+extern int CPU_SPARC_HAS_SNOOPING;
 
 /* Constants */
 
@@ -96,24 +96,24 @@ extern int   CPU_SPARC_HAS_SNOOPING;
  *  Information placed in the linkcmds file.
  */
 
-extern int   RAM_START;
-extern int   RAM_END;
-extern int   RAM_SIZE;
+extern int RAM_START;
+extern int RAM_END;
+extern int RAM_SIZE;
 
-extern int   PROM_START;
-extern int   PROM_END;
-extern int   PROM_SIZE;
+extern int PROM_START;
+extern int PROM_END;
+extern int PROM_SIZE;
 
-extern int   CLOCK_SPEED;
+extern int CLOCK_SPEED;
 
-extern int   end;        /* last address in the program */
+extern int end; /* last address in the program */
 
-void SPARC_Clear_and_unmask_interrupt(rtems_vector_number vector);
+void SPARC_Clear_and_unmask_interrupt( rtems_vector_number vector );
 
-void BSP_fatal_exit(uint32_t error);
+void BSP_fatal_exit( uint32_t error );
 
 /* Interrupt Service Routine (ISR) pointer */
-typedef void (*bsp_shared_isr)(void *arg);
+typedef void ( *bsp_shared_isr )( void *arg );
 
 /* Registers a shared IRQ handler, and enable it at IRQ controller. Multiple
  * interrupt handlers may use the same IRQ number, all ISRs will be called
@@ -125,16 +125,20 @@ typedef void (*bsp_shared_isr)(void *arg);
  *  isr       Function pointer to the ISR
  *  arg       Second argument to function isr
  */
-RTEMS_DEPRECATED static inline int BSP_shared_interrupt_register
-       (
-       int irq,
-       const char *info,
-       bsp_shared_isr isr,
-       void *arg
-       )
+RTEMS_DEPRECATED static inline int BSP_shared_interrupt_register(
+  int            irq,
+  const char    *info,
+  bsp_shared_isr isr,
+  void          *arg
+)
 {
-       return rtems_interrupt_handler_install(irq, info,
-                                       RTEMS_INTERRUPT_SHARED, isr, arg);
+  return rtems_interrupt_handler_install(
+    irq,
+    info,
+    RTEMS_INTERRUPT_SHARED,
+    isr,
+    arg
+  );
 }
 
 /* Unregister previously registered shared IRQ handler.
@@ -144,14 +148,13 @@ RTEMS_DEPRECATED static inline int BSP_shared_interrupt_register
  *  isr       Function pointer to the ISR
  *  arg       Second argument to function isr
  */
-RTEMS_DEPRECATED static inline int BSP_shared_interrupt_unregister
-       (
-       int irq,
-       bsp_shared_isr isr,
-       void *arg
-       )
+RTEMS_DEPRECATED static inline int BSP_shared_interrupt_unregister(
+  int            irq,
+  bsp_shared_isr isr,
+  void          *arg
+)
 {
-       return rtems_interrupt_handler_remove(irq, isr, arg);
+  return rtems_interrupt_handler_remove( irq, isr, arg );
 }
 
 /* Clear interrupt pending on IRQ controller, this is typically done on a
@@ -194,12 +197,12 @@ RTEMS_DEPRECATED static inline void BSP_shared_interrupt_mask( int irq )
 /*
  * Delay method
  */
-void rtems_bsp_delay(int usecs);
+void rtems_bsp_delay( int usecs );
 
 /*
  * Prototypes for BSP methods that are used across file boundaries
  */
-int cchip1_register(void);
+int cchip1_register( void );
 
 /* AT697 has PCI defined as big endian */
 #define BSP_PCI_BIG_ENDIAN
@@ -209,9 +212,9 @@ int cchip1_register(void);
  * for debugging and printing information about the system, but makes the
  * image bigger.
  */
-#define AMBAPPBUS_INFO_AVAIL          /* AMBAPP Bus driver */
-#define GPTIMER_INFO_AVAIL            /* GPTIMER Timer driver */
-#define GRETH_INFO_AVAIL              /* GRETH Ethernet driver */
+#define AMBAPPBUS_INFO_AVAIL /* AMBAPP Bus driver */
+#define GPTIMER_INFO_AVAIL   /* GPTIMER Timer driver */
+#define GRETH_INFO_AVAIL     /* GRETH Ethernet driver */
 
 void console_outbyte_polled( int port, unsigned char ch );
 

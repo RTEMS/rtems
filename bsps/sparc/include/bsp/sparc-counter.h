@@ -76,10 +76,10 @@ typedef struct {
 
 extern SPARC_Counter _SPARC_Counter;
 
-#define SPARC_COUNTER_DEFINITION \
-  SPARC_Counter _SPARC_Counter = { \
+#define SPARC_COUNTER_DEFINITION                      \
+  SPARC_Counter _SPARC_Counter = {                    \
     .read_isr_disabled = _SPARC_Counter_read_default, \
-    .read = _SPARC_Counter_read_default \
+    .read = _SPARC_Counter_read_default               \
   }
 
 #ifdef __cplusplus

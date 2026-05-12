@@ -44,7 +44,7 @@
 #include <bspopts.h>
 #include <bsp/irqimpl.h>
 
-#if !defined(LEON3_PLB_FREQUENCY_DEFINED_BY_GPTIMER)
+#if !defined( LEON3_PLB_FREQUENCY_DEFINED_BY_GPTIMER )
 #include <grlib/ambapp.h>
 #endif
 
@@ -87,11 +87,9 @@ RTEMS_NO_RETURN void leon3_power_down_loop( void );
  */
 static inline void leon3_set_system_register( uint32_t addr, uint32_t val )
 {
-  __asm__ volatile(
-    "sta %1, [%0] 2"
-    :
-    : "r" ( addr ), "r" ( val )
-  );
+  __asm__ volatile( "sta %1, [%0] 2"
+                    :
+                    : "r"( addr ), "r"( val ) );
 }
 
 /**
@@ -105,11 +103,9 @@ static inline uint32_t leon3_get_system_register( uint32_t addr )
 {
   uint32_t val;
 
-  __asm__ volatile(
-    "lda [%1] 2, %0"
-    : "=r" ( val )
-    : "r" ( addr )
-  );
+  __asm__ volatile( "lda [%1] 2, %0"
+                    : "=r"( val )
+                    : "r"( addr ) );
 
   return val;
 }
@@ -177,7 +173,7 @@ static inline uint32_t leon3_get_cpu_count( const irqamp *regs )
   return IRQAMP_MPSTAT_NCPU_GET( grlib_load_32( &regs->mpstat ) ) + 1;
 }
 
-#if !defined(LEON3_GPTIMER_BASE)
+#if !defined( LEON3_GPTIMER_BASE )
 /**
  * @brief This object lets the user override which on-chip GPTIMER core will be
  *   used for system clock timer.
@@ -216,12 +212,13 @@ extern unsigned int leon3_timer_prescaler;
  * @brief This constant defines the index of the GPTIMER timer used by the
  *   clock driver.
  */
-#if !defined(RTEMS_MULTIPROCESSING)
+#if !defined( RTEMS_MULTIPROCESSING )
 #define LEON3_CLOCK_INDEX 0
-#elif defined(LEON3_GPTIMER_BASE)
+#elif defined( LEON3_GPTIMER_BASE )
 #define LEON3_CLOCK_INDEX ( 2 * LEON3_Cpu_Index )
 #else
-#define LEON3_CLOCK_INDEX ( leon3_timer_core_index != 0 ? 0 : 2 * LEON3_Cpu_Index )
+#define LEON3_CLOCK_INDEX \
+  ( leon3_timer_core_index != 0 ? 0 : 2 * LEON3_Cpu_Index )
 #endif
 
 /**
@@ -243,8 +240,8 @@ extern unsigned int leon3_timer_prescaler;
 /**
  * @brief This pointer provides the GPTIMER register block address.
  */
-#if defined(LEON3_GPTIMER_BASE)
-#define LEON3_Timer_Regs ((gptimer *) LEON3_GPTIMER_BASE)
+#if defined( LEON3_GPTIMER_BASE )
+#define LEON3_Timer_Regs ( (gptimer *) LEON3_GPTIMER_BASE )
 #else
 extern gptimer *LEON3_Timer_Regs;
 
@@ -261,9 +258,9 @@ extern struct ambapp_dev *LEON3_Timer_Adev;
  */
 static inline uint32_t leon3_processor_local_bus_frequency( void )
 {
-#if defined(LEON3_PLB_FREQUENCY_DEFINED_BY_GPTIMER)
+#if defined( LEON3_PLB_FREQUENCY_DEFINED_BY_GPTIMER )
   return ( grlib_load_32( &LEON3_Timer_Regs->sreload ) + 1 ) *
-    LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER;
+         LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER;
 #else
   /*
    * For simplicity, assume that the interrupt controller uses the processor
@@ -282,10 +279,8 @@ static inline uint32_t leon3_up_counter_low( void )
 {
   uint32_t asr23;
 
-  __asm__ volatile (
-    "mov %%asr23, %0"
-    : "=&r" (asr23)
-  );
+  __asm__ volatile( "mov %%asr23, %0"
+                    : "=&r"( asr23 ) );
 
   return asr23;
 }
@@ -295,14 +290,12 @@ static inline uint32_t leon3_up_counter_low( void )
  *
  * @return Returns the register value.
  */
-static inline uint32_t leon3_up_counter_high(void)
+static inline uint32_t leon3_up_counter_high( void )
 {
   uint32_t asr22;
 
-  __asm__ volatile (
-    "mov %%asr22, %0"
-    : "=&r" (asr22)
-  );
+  __asm__ volatile( "mov %%asr22, %0"
+                    : "=&r"( asr22 ) );
 
   return asr22;
 }
@@ -312,12 +305,10 @@ static inline uint32_t leon3_up_counter_high(void)
  */
 static inline void leon3_up_counter_enable( void )
 {
-  __asm__ volatile (
-    "mov %g0, %asr22"
-  );
+  __asm__ volatile( "mov %g0, %asr22" );
 }
 
-#if !defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
+#if !defined( LEON3_HAS_ASR_22_23_UP_COUNTER )
 /**
  * @brief Checks if the LEON up-counter is available.
  *
@@ -344,8 +335,8 @@ static inline uint32_t leon3_up_counter_frequency( void )
 /**
  * @brief This pointer provides the debug APBUART register block address.
  */
-#if defined(LEON3_APBUART_BASE)
-#define leon3_debug_uart ((struct apbuart *) LEON3_APBUART_BASE)
+#if defined( LEON3_APBUART_BASE )
+#define leon3_debug_uart ( (struct apbuart *) LEON3_APBUART_BASE )
 #else
 extern apbuart *leon3_debug_uart;
 #endif
@@ -359,7 +350,7 @@ typedef struct {
    */
   struct timecounter base;
 
-#if !defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
+#if !defined( LEON3_HAS_ASR_22_23_UP_COUNTER )
   /**
    * @brief This member provides a software fall-back counter.
    */

@@ -24,8 +24,8 @@
 extern "C" {
 #endif
 
-void __gnat_install_handler (void);
-void __gnat_install_handler_common (int t1, int t2);
+void __gnat_install_handler( void );
+void __gnat_install_handler_common( int t1, int t2 );
 
 #ifdef __cplusplus
 }

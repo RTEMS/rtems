@@ -36,7 +36,7 @@ extern "C" {
 #endif
 
 /* Register AT697 PCI host bridge driver to Driver Manager */
-void at697pci_register_drv(void);
+void at697pci_register_drv( void );
 
 #ifdef __cplusplus
 }

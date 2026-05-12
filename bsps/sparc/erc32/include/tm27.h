@@ -47,13 +47,13 @@
  *        is included.
  */
 
-#define ERC32_BSP_USE_SYNCHRONOUS_TRAP  0
+#define ERC32_BSP_USE_SYNCHRONOUS_TRAP 0
 
 /*
  *  The synchronous trap is an arbitrarily chosen software trap.
  */
 
-#if (ERC32_BSP_USE_SYNCHRONOUS_TRAP == 1)
+#if ( ERC32_BSP_USE_SYNCHRONOUS_TRAP == 1 )
 
 #define TEST_VECTOR SPARC_SYNCHRONOUS_TRAP( 0x90 )
 
@@ -62,17 +62,16 @@
 #define TM27_USE_VECTOR_HANDLER
 
 #define Install_tm27_vector( handler ) \
-  rtems_interrupt_handler_install( \
-    TEST_VECTOR, \
-    "test tm27 interrupt", \
-    RTEMS_INTERRUPT_UNIQUE, \
-    handler, \
-    NULL \
-  ); \
-  SPARC_Clear_and_unmask_interrupt(TEST_VECTOR);
+  rtems_interrupt_handler_install(     \
+    TEST_VECTOR,                       \
+    "test tm27 interrupt",             \
+    RTEMS_INTERRUPT_UNIQUE,            \
+    handler,                           \
+    NULL                               \
+  );                                   \
+  SPARC_Clear_and_unmask_interrupt( TEST_VECTOR );
 
-#define Cause_tm27_intr() \
-  __asm__ volatile( "ta 0x10; nop " );
+#define Cause_tm27_intr() __asm__ volatile( "ta 0x10; nop " );
 
 #define Clear_tm27_intr() /* empty */
 
@@ -82,10 +81,10 @@
  *  The asynchronous trap is an arbitrarily chosen ERC32 interrupt source.
  */
 
-#else   /* use a regular asynchronous trap */
+#else /* use a regular asynchronous trap */
 
-#define TEST_INTERRUPT_SOURCE ERC32_INTERRUPT_EXTERNAL_1
-#define TEST_INTERRUPT_SOURCE2 (ERC32_INTERRUPT_EXTERNAL_1+1)
+#define TEST_INTERRUPT_SOURCE  ERC32_INTERRUPT_EXTERNAL_1
+#define TEST_INTERRUPT_SOURCE2 ( ERC32_INTERRUPT_EXTERNAL_1 + 1 )
 
 #define MUST_WAIT_FOR_INTERRUPT 1
 
@@ -107,16 +106,15 @@ static inline void Install_tm27_vector( rtems_interrupt_handler handler )
   );
 }
 
-#define Cause_tm27_intr() \
-  do { \
-    ERC32_Force_interrupt( TEST_INTERRUPT_SOURCE+(Interrupt_nest>>1) ); \
-    nop(); \
-    nop(); \
-    nop(); \
-  } while (0)
+#define Cause_tm27_intr()                                                     \
+  do {                                                                        \
+    ERC32_Force_interrupt( TEST_INTERRUPT_SOURCE + ( Interrupt_nest >> 1 ) ); \
+    nop();                                                                    \
+    nop();                                                                    \
+    nop();                                                                    \
+  } while ( 0 )
 
-#define Clear_tm27_intr() \
-  ERC32_Clear_interrupt( TEST_INTERRUPT_SOURCE )
+#define Clear_tm27_intr() ERC32_Clear_interrupt( TEST_INTERRUPT_SOURCE )
 
 #define Lower_tm27_intr() /* empty */
 

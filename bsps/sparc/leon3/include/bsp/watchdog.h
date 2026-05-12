@@ -39,7 +39,7 @@ extern "C" {
 /* Initialize BSP watchdog routines. Returns number of watchdog timers found.
  * Currently only one is supported.
  */
-int bsp_watchdog_init(void);
+int bsp_watchdog_init( void );
 
 /* Reload watchdog (last timer on the first GPTIMER core), all systems does not
  * feature a watchdog, it is expected that if this function is called the
@@ -53,13 +53,13 @@ int bsp_watchdog_init(void);
  *  reload_value   - Number of timer clocks (after prescaler) to count before 
  *                   watchdog is woken.
  */
-void bsp_watchdog_reload(int watchdog, unsigned int reload_value);
+void bsp_watchdog_reload( int watchdog, unsigned int reload_value );
 
 /* Stop watchdog timer */
-void bsp_watchdog_stop(int watchdog);
+void bsp_watchdog_stop( int watchdog );
 
 /* Use watchdog0 timer to reset the system */
-void bsp_watchdog_system_reset(void);
+void bsp_watchdog_system_reset( void );
 
 #ifdef __cplusplus
 }

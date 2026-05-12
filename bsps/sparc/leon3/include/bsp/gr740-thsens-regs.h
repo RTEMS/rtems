@@ -84,32 +84,30 @@ extern "C" {
  */
 
 #define GR740_THSENS_CTRL_DIV_SHIFT 16
-#define GR740_THSENS_CTRL_DIV_MASK 0x3ff0000U
+#define GR740_THSENS_CTRL_DIV_MASK  0x3ff0000U
 #define GR740_THSENS_CTRL_DIV_GET( _reg ) \
-  ( ( ( _reg ) & GR740_THSENS_CTRL_DIV_MASK ) >> \
-    GR740_THSENS_CTRL_DIV_SHIFT )
-#define GR740_THSENS_CTRL_DIV_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GR740_THSENS_CTRL_DIV_MASK ) | \
+  ( ( ( _reg ) & GR740_THSENS_CTRL_DIV_MASK ) >> GR740_THSENS_CTRL_DIV_SHIFT )
+#define GR740_THSENS_CTRL_DIV_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GR740_THSENS_CTRL_DIV_MASK ) |    \
     ( ( ( _val ) << GR740_THSENS_CTRL_DIV_SHIFT ) & \
       GR740_THSENS_CTRL_DIV_MASK ) )
 #define GR740_THSENS_CTRL_DIV( _val ) \
-  ( ( ( _val ) << GR740_THSENS_CTRL_DIV_SHIFT ) & \
-    GR740_THSENS_CTRL_DIV_MASK )
+  ( ( ( _val ) << GR740_THSENS_CTRL_DIV_SHIFT ) & GR740_THSENS_CTRL_DIV_MASK )
 
 #define GR740_THSENS_CTRL_ALEN 0x100U
 
 #define GR740_THSENS_CTRL_PDN 0x80U
 
 #define GR740_THSENS_CTRL_DCORRECT_SHIFT 2
-#define GR740_THSENS_CTRL_DCORRECT_MASK 0x7cU
-#define GR740_THSENS_CTRL_DCORRECT_GET( _reg ) \
+#define GR740_THSENS_CTRL_DCORRECT_MASK  0x7cU
+#define GR740_THSENS_CTRL_DCORRECT_GET( _reg )        \
   ( ( ( _reg ) & GR740_THSENS_CTRL_DCORRECT_MASK ) >> \
     GR740_THSENS_CTRL_DCORRECT_SHIFT )
-#define GR740_THSENS_CTRL_DCORRECT_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GR740_THSENS_CTRL_DCORRECT_MASK ) | \
+#define GR740_THSENS_CTRL_DCORRECT_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GR740_THSENS_CTRL_DCORRECT_MASK ) |    \
     ( ( ( _val ) << GR740_THSENS_CTRL_DCORRECT_SHIFT ) & \
       GR740_THSENS_CTRL_DCORRECT_MASK ) )
-#define GR740_THSENS_CTRL_DCORRECT( _val ) \
+#define GR740_THSENS_CTRL_DCORRECT( _val )             \
   ( ( ( _val ) << GR740_THSENS_CTRL_DCORRECT_SHIFT ) & \
     GR740_THSENS_CTRL_DCORRECT_MASK )
 
@@ -128,28 +126,28 @@ extern "C" {
  */
 
 #define GR740_THSENS_STATUS_MAX_SHIFT 24
-#define GR740_THSENS_STATUS_MAX_MASK 0x7f000000U
-#define GR740_THSENS_STATUS_MAX_GET( _reg ) \
+#define GR740_THSENS_STATUS_MAX_MASK  0x7f000000U
+#define GR740_THSENS_STATUS_MAX_GET( _reg )        \
   ( ( ( _reg ) & GR740_THSENS_STATUS_MAX_MASK ) >> \
     GR740_THSENS_STATUS_MAX_SHIFT )
-#define GR740_THSENS_STATUS_MAX_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GR740_THSENS_STATUS_MAX_MASK ) | \
+#define GR740_THSENS_STATUS_MAX_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GR740_THSENS_STATUS_MAX_MASK ) |    \
     ( ( ( _val ) << GR740_THSENS_STATUS_MAX_SHIFT ) & \
       GR740_THSENS_STATUS_MAX_MASK ) )
-#define GR740_THSENS_STATUS_MAX( _val ) \
+#define GR740_THSENS_STATUS_MAX( _val )             \
   ( ( ( _val ) << GR740_THSENS_STATUS_MAX_SHIFT ) & \
     GR740_THSENS_STATUS_MAX_MASK )
 
 #define GR740_THSENS_STATUS_MIN_SHIFT 16
-#define GR740_THSENS_STATUS_MIN_MASK 0x7f0000U
-#define GR740_THSENS_STATUS_MIN_GET( _reg ) \
+#define GR740_THSENS_STATUS_MIN_MASK  0x7f0000U
+#define GR740_THSENS_STATUS_MIN_GET( _reg )        \
   ( ( ( _reg ) & GR740_THSENS_STATUS_MIN_MASK ) >> \
     GR740_THSENS_STATUS_MIN_SHIFT )
-#define GR740_THSENS_STATUS_MIN_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GR740_THSENS_STATUS_MIN_MASK ) | \
+#define GR740_THSENS_STATUS_MIN_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GR740_THSENS_STATUS_MIN_MASK ) |    \
     ( ( ( _val ) << GR740_THSENS_STATUS_MIN_SHIFT ) & \
       GR740_THSENS_STATUS_MIN_MASK ) )
-#define GR740_THSENS_STATUS_MIN( _val ) \
+#define GR740_THSENS_STATUS_MIN( _val )             \
   ( ( ( _val ) << GR740_THSENS_STATUS_MIN_SHIFT ) & \
     GR740_THSENS_STATUS_MIN_MASK )
 
@@ -162,15 +160,15 @@ extern "C" {
 #define GR740_THSENS_STATUS_ALACT 0x100U
 
 #define GR740_THSENS_STATUS_DATA_SHIFT 0
-#define GR740_THSENS_STATUS_DATA_MASK 0x7fU
-#define GR740_THSENS_STATUS_DATA_GET( _reg ) \
+#define GR740_THSENS_STATUS_DATA_MASK  0x7fU
+#define GR740_THSENS_STATUS_DATA_GET( _reg )        \
   ( ( ( _reg ) & GR740_THSENS_STATUS_DATA_MASK ) >> \
     GR740_THSENS_STATUS_DATA_SHIFT )
-#define GR740_THSENS_STATUS_DATA_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GR740_THSENS_STATUS_DATA_MASK ) | \
+#define GR740_THSENS_STATUS_DATA_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GR740_THSENS_STATUS_DATA_MASK ) |    \
     ( ( ( _val ) << GR740_THSENS_STATUS_DATA_SHIFT ) & \
       GR740_THSENS_STATUS_DATA_MASK ) )
-#define GR740_THSENS_STATUS_DATA( _val ) \
+#define GR740_THSENS_STATUS_DATA( _val )             \
   ( ( ( _val ) << GR740_THSENS_STATUS_DATA_SHIFT ) & \
     GR740_THSENS_STATUS_DATA_MASK )
 
@@ -185,15 +183,15 @@ extern "C" {
  */
 
 #define GR740_THSENS_THRES_THRES_SHIFT 0
-#define GR740_THSENS_THRES_THRES_MASK 0x7fU
-#define GR740_THSENS_THRES_THRES_GET( _reg ) \
+#define GR740_THSENS_THRES_THRES_MASK  0x7fU
+#define GR740_THSENS_THRES_THRES_GET( _reg )        \
   ( ( ( _reg ) & GR740_THSENS_THRES_THRES_MASK ) >> \
     GR740_THSENS_THRES_THRES_SHIFT )
-#define GR740_THSENS_THRES_THRES_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GR740_THSENS_THRES_THRES_MASK ) | \
+#define GR740_THSENS_THRES_THRES_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GR740_THSENS_THRES_THRES_MASK ) |    \
     ( ( ( _val ) << GR740_THSENS_THRES_THRES_SHIFT ) & \
       GR740_THSENS_THRES_THRES_MASK ) )
-#define GR740_THSENS_THRES_THRES( _val ) \
+#define GR740_THSENS_THRES_THRES( _val )             \
   ( ( ( _val ) << GR740_THSENS_THRES_THRES_SHIFT ) & \
     GR740_THSENS_THRES_THRES_MASK )
 

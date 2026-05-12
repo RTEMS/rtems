@@ -86,8 +86,8 @@ extern rtems_interrupt_lock LEON3_IrqCtrl_Lock;
 /**
  * @brief This pointer provides the IRQ(A)MP register block address.
  */
-#if defined(LEON3_IRQAMP_BASE)
-#define LEON3_IrqCtrl_Regs ((irqamp *) LEON3_IRQAMP_BASE)
+#if defined( LEON3_IRQAMP_BASE )
+#define LEON3_IrqCtrl_Regs ( (irqamp *) LEON3_IRQAMP_BASE )
 #else
 extern irqamp *LEON3_IrqCtrl_Regs;
 
@@ -103,7 +103,7 @@ extern struct ambapp_dev *LEON3_IrqCtrl_Adev;
  *
  * This object should be read-only after initialization.
  */
-#if defined(LEON3_IRQAMP_EXTENDED_INTERRUPT)
+#if defined( LEON3_IRQAMP_EXTENDED_INTERRUPT )
 #define LEON3_IrqCtrl_EIrq LEON3_IRQAMP_EXTENDED_INTERRUPT
 #else
 extern uint32_t LEON3_IrqCtrl_EIrq;
