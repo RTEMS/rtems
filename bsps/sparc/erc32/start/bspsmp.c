@@ -62,9 +62,7 @@ void _CPU_SMP_Finalize_initialization( uint32_t cpu_count )
   (void) cpu_count;
 }
 
-void _CPU_SMP_Prepare_start_multitasking( void )
-{
-}
+void _CPU_SMP_Prepare_start_multitasking( void ) {}
 
 void _CPU_SMP_Send_interrupt( uint32_t target_processor_index )
 {
@@ -73,9 +71,7 @@ void _CPU_SMP_Send_interrupt( uint32_t target_processor_index )
   __asm__ volatile( "ta 0x11; nop " );
 }
 
-static rtems_isr bsp_inter_processor_interrupt(
-  void *vector
-)
+static rtems_isr bsp_inter_processor_interrupt( void *vector )
 {
   _SMP_Inter_processor_interrupt_handler( _Per_CPU_Get() );
 }
@@ -96,7 +92,7 @@ static void erc32_install_inter_processor_interrupt( void )
     &erc32_handle_ipi
   );
 
-  SPARC_Clear_and_unmask_interrupt(IPI_VECTOR);
+  SPARC_Clear_and_unmask_interrupt( IPI_VECTOR );
 }
 
 RTEMS_SYSINIT_ITEM(

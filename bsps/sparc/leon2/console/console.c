@@ -28,7 +28,7 @@
  *  Interrupt driven console IO
  */
 
-#if (CONSOLE_USE_INTERRUPTS)
+#if ( CONSOLE_USE_INTERRUPTS )
 
 /*
  *  Buffers between task and ISRs
@@ -36,8 +36,8 @@
 
 #include <rtems/ringbuf.h>
 
-Ring_buffer_t  TX_Buffer[ 2 ];
-bool           Is_TX_active[ 2 ];
+Ring_buffer_t TX_Buffer[ 2 ];
+bool          Is_TX_active[ 2 ];
 
 void *console_termios_data[ 2 ];
 
@@ -57,15 +57,13 @@ static rtems_interrupt_entry leon_UART_2;
  *  Return values:     NONE
  */
 
-rtems_isr console_isr_a(
-  rtems_vector_number vector
-)
+rtems_isr console_isr_a( rtems_vector_number vector )
 {
   char ch;
-  int UStat;
+  int  UStat;
 
-  if ( (UStat = LEON_REG.UART_Status_1) & LEON_REG_UART_STATUS_DR ) {
-    if (UStat & LEON_REG_UART_STATUS_ERR) {
+  if ( ( UStat = LEON_REG.UART_Status_1 ) & LEON_REG_UART_STATUS_DR ) {
+    if ( UStat & LEON_REG_UART_STATUS_ERR ) {
       LEON_REG.UART_Status_1 = LEON_REG_UART_STATUS_CLR;
     }
     ch = LEON_REG.UART_Channel_1;
@@ -77,8 +75,9 @@ rtems_isr console_isr_a(
     if ( !Ring_buffer_Is_empty( &TX_Buffer[ 0 ] ) ) {
       Ring_buffer_Remove_character( &TX_Buffer[ 0 ], ch );
       LEON_REG.UART_Channel_1 = (uint32_t) ch;
-    } else
-     Is_TX_active[ 0 ] = false;
+    } else {
+      Is_TX_active[ 0 ] = false;
+    }
   }
 
   LEON_Clear_interrupt( LEON_INTERRUPT_UART_1_RX_TX );
@@ -97,28 +96,26 @@ rtems_isr console_isr_a(
  *  Return values:     NONE
  */
 
-rtems_isr console_isr_b(
-  rtems_vector_number vector
-)
+rtems_isr console_isr_b( rtems_vector_number vector )
 {
   char ch;
-  int UStat;
+  int  UStat;
 
-  if ( (UStat = LEON_REG.UART_Status_2) & LEON_REG_UART_STATUS_DR ) {
-    if (UStat & LEON_REG_UART_STATUS_ERR) {
+  if ( ( UStat = LEON_REG.UART_Status_2 ) & LEON_REG_UART_STATUS_DR ) {
+    if ( UStat & LEON_REG_UART_STATUS_ERR ) {
       LEON_REG.UART_Status_2 = LEON_REG_UART_STATUS_CLR;
     }
     ch = LEON_REG.UART_Channel_2;
     rtems_termios_enqueue_raw_characters( console_termios_data[ 1 ], &ch, 1 );
-
   }
 
   if ( LEON_REG.UART_Status_2 & LEON_REG_UART_STATUS_THE ) {
     if ( !Ring_buffer_Is_empty( &TX_Buffer[ 1 ] ) ) {
       Ring_buffer_Remove_character( &TX_Buffer[ 1 ], ch );
       LEON_REG.UART_Channel_2 = (uint32_t) ch;
-    } else
-     Is_TX_active[ 1 ] = false;
+    } else {
+      Is_TX_active[ 1 ] = false;
+    }
   }
 
   LEON_Clear_interrupt( LEON_INTERRUPT_UART_2_RX_TX );
@@ -150,7 +147,7 @@ void console_exit()
   LEON_Mask_interrupt( LEON_INTERRUPT_UART_1_RX_TX );
   LEON_Mask_interrupt( LEON_INTERRUPT_UART_2_RX_TX );
 
-  for ( port=0 ; port <= 1 ; port++ ) {
+  for ( port = 0; port <= 1; port++ ) {
     while ( !Ring_buffer_Is_empty( &TX_Buffer[ port ] ) ) {
       Ring_buffer_Remove_character( &TX_Buffer[ port ], ch );
       console_outbyte_polled( port, ch );
@@ -162,22 +159,24 @@ void console_exit()
    *  should be empty.
    */
 
-  while ( (LEON_REG.UART_Status_1 & LEON_REG_UART_STATUS_THE) !=
-          LEON_REG_UART_STATUS_THE );
+  while (
+    ( LEON_REG.UART_Status_1 & LEON_REG_UART_STATUS_THE ) !=
+    LEON_REG_UART_STATUS_THE
+  );
 
-  while ( (LEON_REG.UART_Status_2 & LEON_REG_UART_STATUS_THE) !=
-          LEON_REG_UART_STATUS_THE );
+  while (
+    ( LEON_REG.UART_Status_2 & LEON_REG_UART_STATUS_THE ) !=
+    LEON_REG_UART_STATUS_THE
+  );
 
   LEON_REG.UART_Control_1 = 0;
   LEON_REG.UART_Control_2 = 0;
   LEON_REG.UART_Status_1 = 0;
   LEON_REG.UART_Status_2 = 0;
-
-
 }
 
-#define CONSOLE_UART_1_TRAP  LEON_TRAP_TYPE( LEON_INTERRUPT_UART_1_RX_TX )
-#define CONSOLE_UART_2_TRAP  LEON_TRAP_TYPE( LEON_INTERRUPT_UART_2_RX_TX )
+#define CONSOLE_UART_1_TRAP LEON_TRAP_TYPE( LEON_INTERRUPT_UART_1_RX_TX )
+#define CONSOLE_UART_2_TRAP LEON_TRAP_TYPE( LEON_INTERRUPT_UART_2_RX_TX )
 
 /*
  *  console_initialize_interrupts
@@ -193,7 +192,7 @@ void console_exit()
  */
 
 #ifdef RDB_BREAK_IN
-  extern uint32_t trap_table[];
+extern uint32_t trap_table[];
 #endif
 
 void console_initialize_interrupts( void )
@@ -220,7 +219,7 @@ void console_initialize_interrupts( void )
     RTEMS_INTERRUPT_UNIQUE,
     &leon_UART_1
   );
-  SPARC_Clear_and_unmask_interrupt(CONSOLE_UART_1_TRAP);
+  SPARC_Clear_and_unmask_interrupt( CONSOLE_UART_1_TRAP );
 
   rtems_interrupt_entry_initialize(
     &leon_UART_2,
@@ -229,15 +228,14 @@ void console_initialize_interrupts( void )
     "process UART 2"
   );
   #ifdef RDB_BREAK_IN
-    if (trap_table[0x150/4] == 0x91d02000)
+  if ( trap_table[ 0x150 / 4 ] == 0x91d02000 )
   #endif
-  rtems_interrupt_entry_install(
-    LEON_INTERRUPT_UART_2_RX_TX,
-    RTEMS_INTERRUPT_UNIQUE,
-    &leon_UART_2
-  );
-  SPARC_Clear_and_unmask_interrupt(CONSOLE_UART_2_TRAP);
-  
+    rtems_interrupt_entry_install(
+      LEON_INTERRUPT_UART_2_RX_TX,
+      RTEMS_INTERRUPT_UNIQUE,
+      &leon_UART_2
+    );
+  SPARC_Clear_and_unmask_interrupt( CONSOLE_UART_2_TRAP );
 }
 
 /*
@@ -254,10 +252,7 @@ void console_initialize_interrupts( void )
  *  Return values:      NONE
  */
 
-void console_outbyte_interrupt(
-  int   port,
-  char  ch
-)
+void console_outbyte_interrupt( int port, char ch )
 {
   /*
    *  If this is the first character then we need to prime the pump
@@ -281,12 +276,12 @@ void console_outbyte_interrupt(
  *
  */
 
-static ssize_t console_write_support (int minor, const char *buf, size_t len)
+static ssize_t console_write_support( int minor, const char *buf, size_t len )
 {
   size_t nwrite = 0;
 
-  while (nwrite < len) {
-#if (CONSOLE_USE_INTERRUPTS)
+  while ( nwrite < len ) {
+#if ( CONSOLE_USE_INTERRUPTS )
     console_outbyte_interrupt( minor, *buf++ );
 #else
     console_outbyte_polled( minor, *buf++ );
@@ -302,9 +297,9 @@ static ssize_t console_write_support (int minor, const char *buf, size_t len)
  */
 
 rtems_device_driver console_initialize(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
 )
 {
   (void) minor;
@@ -319,23 +314,26 @@ rtems_device_driver console_initialize(
    */
 
   status = rtems_io_register_name( "/dev/console", major, 0 );
-  if (status != RTEMS_SUCCESSFUL)
-    rtems_fatal_error_occurred(status);
+  if ( status != RTEMS_SUCCESSFUL ) {
+    rtems_fatal_error_occurred( status );
+  }
 
   status = rtems_io_register_name( "/dev/console_b", major, 1 );
-  if (status != RTEMS_SUCCESSFUL)
-    rtems_fatal_error_occurred(status);
+  if ( status != RTEMS_SUCCESSFUL ) {
+    rtems_fatal_error_occurred( status );
+  }
 
   /*
    *  Initialize Hardware
    */
 
   LEON_REG.UART_Control_1 |= LEON_REG_UART_CTRL_RE | LEON_REG_UART_CTRL_TE;
-  LEON_REG.UART_Control_2 |= LEON_REG_UART_CTRL_RE | LEON_REG_UART_CTRL_TE |
-      LEON_REG_UART_CTRL_RI;  /* rx irq default enable for remote debugger */
+  LEON_REG.UART_Control_2 |=
+    LEON_REG_UART_CTRL_RE | LEON_REG_UART_CTRL_TE |
+    LEON_REG_UART_CTRL_RI; /* rx irq default enable for remote debugger */
   LEON_REG.UART_Status_1 = 0;
   LEON_REG.UART_Status_2 = 0;
-#if (CONSOLE_USE_INTERRUPTS)
+#if ( CONSOLE_USE_INTERRUPTS )
   console_initialize_interrupts();
 #endif
 
@@ -345,45 +343,46 @@ rtems_device_driver console_initialize(
 rtems_device_driver console_open(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
-  void                    * arg
+  void                     *arg
 )
 {
   rtems_status_code sc;
-#if (CONSOLE_USE_INTERRUPTS)
-  rtems_libio_open_close_args_t *args = arg;
+#if ( CONSOLE_USE_INTERRUPTS )
+  rtems_libio_open_close_args_t       *args = arg;
   static const rtems_termios_callbacks intrCallbacks = {
-    NULL,                        /* firstOpen */
-    NULL,                        /* lastClose */
-    NULL,                        /* pollRead */
-    console_write_support,       /* write */
-    NULL,                        /* setAttributes */
-    NULL,                        /* stopRemoteTx */
-    NULL,                        /* startRemoteTx */
-    TERMIOS_POLLED               /* outputUsesInterrupts */
+    NULL,                  /* firstOpen */
+    NULL,                  /* lastClose */
+    NULL,                  /* pollRead */
+    console_write_support, /* write */
+    NULL,                  /* setAttributes */
+    NULL,                  /* stopRemoteTx */
+    NULL,                  /* startRemoteTx */
+    TERMIOS_POLLED         /* outputUsesInterrupts */
   };
 #else
   static const rtems_termios_callbacks pollCallbacks = {
-    NULL,                        /* firstOpen */
-    NULL,                        /* lastClose */
-    console_inbyte_nonblocking,  /* pollRead */
-    console_write_support,       /* write */
-    NULL,                        /* setAttributes */
-    NULL,                        /* stopRemoteTx */
-    NULL,                        /* startRemoteTx */
-    TERMIOS_POLLED               /* outputUsesInterrupts */
+    NULL,                       /* firstOpen */
+    NULL,                       /* lastClose */
+    console_inbyte_nonblocking, /* pollRead */
+    console_write_support,      /* write */
+    NULL,                       /* setAttributes */
+    NULL,                       /* stopRemoteTx */
+    NULL,                       /* startRemoteTx */
+    TERMIOS_POLLED              /* outputUsesInterrupts */
   };
 #endif
 
   assert( minor <= 1 );
-  if ( minor > 2 )
+  if ( minor > 2 ) {
     return RTEMS_INVALID_NUMBER;
+  }
 
-#if (CONSOLE_USE_INTERRUPTS)
-  sc = rtems_termios_open (major, minor, arg, &intrCallbacks);
+#if ( CONSOLE_USE_INTERRUPTS )
+  sc = rtems_termios_open( major, minor, arg, &intrCallbacks );
 
   console_termios_data[ minor ] = args->iop->data1;
 #else
-  sc = rtems_termios_open (major, minor, arg, &pollCallbacks);
+  sc = rtems_termios_open( major, minor, arg, &pollCallbacks );
 #endif
   (void) sc; /* avoid set but not used warning */
 
@@ -393,51 +392,51 @@ rtems_device_driver console_open(
 rtems_device_driver console_close(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
-  void                    * arg
+  void                     *arg
 )
 {
   (void) major;
   (void) minor;
   (void) arg;
 
-  return rtems_termios_close (arg);
+  return rtems_termios_close( arg );
 }
 
 rtems_device_driver console_read(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
-  void                    * arg
+  void                     *arg
 )
 {
   (void) major;
   (void) minor;
   (void) arg;
 
-  return rtems_termios_read (arg);
+  return rtems_termios_read( arg );
 }
 
 rtems_device_driver console_write(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
-  void                    * arg
+  void                     *arg
 )
 {
   (void) major;
   (void) minor;
   (void) arg;
 
-  return rtems_termios_write (arg);
+  return rtems_termios_write( arg );
 }
 
 rtems_device_driver console_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
-  void                    * arg
+  void                     *arg
 )
 {
   (void) major;
   (void) minor;
   (void) arg;
 
-  return rtems_termios_ioctl (arg);
+  return rtems_termios_ioctl( arg );
 }

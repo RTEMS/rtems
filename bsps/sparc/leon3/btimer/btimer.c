@@ -19,7 +19,6 @@
  *  European Space Agency.
  */
 
-
 #include <leon.h>
 #include <rtems/btimer.h>
 
@@ -27,13 +26,13 @@ bool benchmark_timer_find_average_overhead;
 
 bool benchmark_timer_is_initialized = false;
 
-void benchmark_timer_initialize(void)
+void benchmark_timer_initialize( void )
 {
   /*
    *  Timer runs long and accurate enough not to require an interrupt.
    */
-  if (LEON3_Timer_Regs) {
-    gptimer_timer *timer = &LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX];
+  if ( LEON3_Timer_Regs ) {
+    gptimer_timer *timer = &LEON3_Timer_Regs->timer[ LEON3_CLOCK_INDEX ];
     if ( benchmark_timer_is_initialized == false ) {
       /* approximately 1 us per countdown */
       grlib_store_32( &timer->trldval, 0xffffff );
@@ -45,34 +44,35 @@ void benchmark_timer_initialize(void)
   }
 }
 
-#define AVG_OVERHEAD      3  /* It typically takes 3.0 microseconds */
-                             /*     to start/stop the timer. */
-#define LEAST_VALID       2  /* Don't trust a value lower than this */
+#define AVG_OVERHEAD 3 /* It typically takes 3.0 microseconds */
+                       /*     to start/stop the timer. */
+#define LEAST_VALID 2  /* Don't trust a value lower than this */
 
-benchmark_timer_t benchmark_timer_read(void)
+benchmark_timer_t benchmark_timer_read( void )
 {
   uint32_t total;
 
-  if (LEON3_Timer_Regs) {
-    total =
-      grlib_load_32( &LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].tcntval );
+  if ( LEON3_Timer_Regs ) {
+    total = grlib_load_32(
+      &LEON3_Timer_Regs->timer[ LEON3_CLOCK_INDEX ].tcntval
+    );
 
     total = 0xffffff - total;
 
-    if ( benchmark_timer_find_average_overhead == true )
-      return total;          /* in one microsecond units */
+    if ( benchmark_timer_find_average_overhead == true ) {
+      return total; /* in one microsecond units */
+    }
 
-    if ( total < LEAST_VALID )
-      return 0;            /* below timer resolution */
+    if ( total < LEAST_VALID ) {
+      return 0; /* below timer resolution */
+    }
 
     return total - AVG_OVERHEAD;
   }
   return 0;
 }
 
-void benchmark_timer_disable_subtracting_average_overhead(
-  bool find_flag
-)
+void benchmark_timer_disable_subtracting_average_overhead( bool find_flag )
 {
   benchmark_timer_find_average_overhead = find_flag;
 }

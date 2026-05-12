@@ -19,8 +19,7 @@
 
 #include <bsp/gnatcommon.h>
 
-void
-__gnat_install_handler (void)
+void __gnat_install_handler( void )
 {
-  __gnat_install_handler_common (0x1d, 0x15);
+  __gnat_install_handler_common( 0x1d, 0x15 );
 }

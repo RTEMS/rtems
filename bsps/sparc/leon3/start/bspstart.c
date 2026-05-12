@@ -48,11 +48,11 @@
 #include <bsp/bootcard.h>
 #include <rtems/sysinit.h>
 
-#if defined(RTEMS_SMP) || defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_SMP ) || defined( RTEMS_MULTIPROCESSING )
 /* Irq used by shared memory driver and for inter-processor interrupts.
  * Can be overridden by being defined in the application.
  */
-const unsigned char LEON3_mp_irq __attribute__((weak)) = 14;
+const unsigned char LEON3_mp_irq __attribute__(( weak )) = 14;
 #endif
 
 /*
@@ -72,9 +72,9 @@ uint32_t LEON3_Cpu_Index = 0;
  *
  */
 
-static inline int set_snooping(void)
+static inline int set_snooping( void )
 {
-  return (leon3_get_cache_control_register() >> 23) & 1;
+  return ( leon3_get_cache_control_register() >> 23 ) & 1;
 }
 
 /*
@@ -91,7 +91,7 @@ void bsp_start( void )
 #endif
 }
 
-static void leon3_cpu_index_init(void)
+static void leon3_cpu_index_init( void )
 {
   /* Get the LEON3 CPU index, normally 0, but for MP systems we do
    * _not_ assume that this is CPU0. One may run another OS on CPU0

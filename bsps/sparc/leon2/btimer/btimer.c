@@ -25,7 +25,6 @@
  *  European Space Agency.
  */
 
-
 #include <bsp.h>
 #include <rtems/btimer.h>
 
@@ -33,14 +32,13 @@ bool benchmark_timer_find_average_overhead;
 
 bool benchmark_timer_is_initialized = false;
 
-void benchmark_timer_initialize(void)
+void benchmark_timer_initialize( void )
 {
   /*
    *  Timer runs long and accurate enough not to require an interrupt.
    */
 
   if ( benchmark_timer_is_initialized == false ) {
-
     /* approximately 1 us per countdown */
     LEON_REG.Timer_Counter_2 = 0xffffff;
     LEON_REG.Timer_Reload_2 = 0xffffff;
@@ -49,18 +47,16 @@ void benchmark_timer_initialize(void)
     benchmark_timer_is_initialized = true;
   }
 
-  LEON_REG.Timer_Control_2 = (
-    LEON_REG_TIMER_COUNTER_ENABLE_COUNTING |
-      LEON_REG_TIMER_COUNTER_LOAD_COUNTER
-  );
-
+  LEON_REG.Timer_Control_2 =
+    ( LEON_REG_TIMER_COUNTER_ENABLE_COUNTING |
+      LEON_REG_TIMER_COUNTER_LOAD_COUNTER );
 }
 
-#define AVG_OVERHEAD      3  /* It typically takes 3.0 microseconds */
-                             /*     to start/stop the timer. */
-#define LEAST_VALID       2  /* Don't trust a value lower than this */
+#define AVG_OVERHEAD 3 /* It typically takes 3.0 microseconds */
+                       /*     to start/stop the timer. */
+#define LEAST_VALID 2  /* Don't trust a value lower than this */
 
-benchmark_timer_t benchmark_timer_read(void)
+benchmark_timer_t benchmark_timer_read( void )
 {
   uint32_t total;
 
@@ -68,18 +64,18 @@ benchmark_timer_t benchmark_timer_read(void)
 
   total = 0xffffff - total;
 
-  if ( benchmark_timer_find_average_overhead == true )
-    return total;          /* in one microsecond units */
+  if ( benchmark_timer_find_average_overhead == true ) {
+    return total; /* in one microsecond units */
+  }
 
-  if ( total < LEAST_VALID )
-    return 0;            /* below timer resolution */
+  if ( total < LEAST_VALID ) {
+    return 0; /* below timer resolution */
+  }
 
   return total - AVG_OVERHEAD;
 }
 
-void benchmark_timer_disable_subtracting_average_overhead(
-  bool find_flag
-)
+void benchmark_timer_disable_subtracting_average_overhead( bool find_flag )
 {
   benchmark_timer_find_average_overhead = find_flag;
 }

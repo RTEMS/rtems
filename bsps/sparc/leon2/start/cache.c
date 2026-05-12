@@ -17,9 +17,9 @@
 
 #define CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS
 
-static inline void _CPU_cache_invalidate_entire_instruction ( void )
+static inline void _CPU_cache_invalidate_entire_instruction( void )
 {
-  __asm__ volatile ("flush");
+  __asm__ volatile( "flush" );
 }
 
 static inline void _CPU_cache_invalidate_instruction_range(
@@ -30,25 +30,17 @@ static inline void _CPU_cache_invalidate_instruction_range(
   (void) i_addr;
   (void) n_bytes;
 
-  __asm__ volatile ("flush");
+  __asm__ volatile( "flush" );
 }
 
 /* XXX these need to be addressed */
 
-static inline void _CPU_cache_freeze_instruction ( void )
-{
-}
+static inline void _CPU_cache_freeze_instruction( void ) {}
 
-static inline void _CPU_cache_unfreeze_instruction ( void )
-{
-}
+static inline void _CPU_cache_unfreeze_instruction( void ) {}
 
-static inline void _CPU_cache_enable_instruction ( void )
-{
-}
+static inline void _CPU_cache_enable_instruction( void ) {}
 
-static inline void _CPU_cache_disable_instruction (   void )
-{
-}
+static inline void _CPU_cache_disable_instruction( void ) {}
 
 #include "../../../shared/cache/cacheimpl.h"

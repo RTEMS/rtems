@@ -45,7 +45,7 @@ static void erc32_clock_init( void )
   tc->tc_counter_mask = 0xffffffff;
   tc->tc_frequency = ERC32_REAL_TIME_CLOCK_FREQUENCY;
   tc->tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
-  rtems_timecounter_install(tc);
+  rtems_timecounter_install( tc );
 }
 
 uint32_t _CPU_Counter_frequency( void )
@@ -57,12 +57,12 @@ static void erc32_clock_at_tick( SPARC_Counter *counter )
 {
   rtems_interrupt_level level;
 
-  rtems_interrupt_local_disable(level);
+  rtems_interrupt_local_disable( level );
 
   ERC32_Clear_interrupt( ERC32_INTERRUPT_REAL_TIME_CLOCK );
   counter->accumulated += counter->interval;
 
-  rtems_interrupt_local_enable(level);
+  rtems_interrupt_local_enable( level );
 }
 
 static void erc32_clock_initialize_early( void )
@@ -74,9 +74,8 @@ static void erc32_clock_initialize_early( void )
   ERC32_MEC.Real_Time_Clock_Counter =
     rtems_configuration_get_microseconds_per_tick();
   ERC32_MEC_Set_Real_Time_Clock_Timer_Control(
-      ERC32_MEC_TIMER_COUNTER_ENABLE_COUNTING |
-      ERC32_MEC_TIMER_COUNTER_LOAD_SCALER |
-      ERC32_MEC_TIMER_COUNTER_LOAD_COUNTER
+    ERC32_MEC_TIMER_COUNTER_ENABLE_COUNTING |
+    ERC32_MEC_TIMER_COUNTER_LOAD_SCALER | ERC32_MEC_TIMER_COUNTER_LOAD_COUNTER
   );
   ERC32_MEC_Set_Real_Time_Clock_Timer_Control(
     ERC32_MEC_TIMER_COUNTER_ENABLE_COUNTING |
@@ -88,7 +87,7 @@ static void erc32_clock_initialize_early( void )
   counter->read = _SPARC_Counter_read_clock;
   counter->counter_register = &ERC32_MEC.Real_Time_Clock_Counter,
   counter->pending_register = &ERC32_MEC.Interrupt_Pending;
-  counter->pending_mask = UINT32_C(1) << ERC32_INTERRUPT_REAL_TIME_CLOCK;
+  counter->pending_mask = UINT32_C( 1 ) << ERC32_INTERRUPT_REAL_TIME_CLOCK;
   counter->accumulated = rtems_configuration_get_microseconds_per_tick();
   counter->interval = rtems_configuration_get_microseconds_per_tick();
 }
@@ -105,20 +104,20 @@ RTEMS_SYSINIT_ITEM(
 #define CLOCK_VECTOR ERC32_TRAP_TYPE( ERC32_INTERRUPT_REAL_TIME_CLOCK )
 
 #define Clock_driver_support_install_isr( _new ) \
-  (void) rtems_interrupt_handler_install( \
-    ERC32_INTERRUPT_REAL_TIME_CLOCK, \
-    "Clock", \
-    RTEMS_INTERRUPT_SHARED, \
-    _new, \
-    &_SPARC_Counter \
+  (void) rtems_interrupt_handler_install(        \
+    ERC32_INTERRUPT_REAL_TIME_CLOCK,             \
+    "Clock",                                     \
+    RTEMS_INTERRUPT_SHARED,                      \
+    _new,                                        \
+    &_SPARC_Counter                              \
   )
 
 #define Clock_driver_support_set_interrupt_affinity( _online_processors ) \
-  do { \
-    (void) _online_processors; \
-  } while (0)
+  do {                                                                    \
+    (void) _online_processors;                                            \
+  } while ( 0 )
 
-#define Clock_driver_support_at_tick(arg) erc32_clock_at_tick(arg)
+#define Clock_driver_support_at_tick( arg ) erc32_clock_at_tick( arg )
 
 #define Clock_driver_support_initialize_hardware() erc32_clock_init()
 

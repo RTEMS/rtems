@@ -42,8 +42,8 @@ void _SPARC_Memory_initialize( void *end_of_usable_ram );
 
 static Memory_Area _Memory_Areas[ 1 ];
 
-static const Memory_Information _Memory_Information =
-  MEMORY_INFORMATION_INITIALIZER( _Memory_Areas );
+static const Memory_Information
+  _Memory_Information = MEMORY_INFORMATION_INITIALIZER( _Memory_Areas );
 
 void _SPARC_Memory_initialize( void *end_of_usable_ram )
 {

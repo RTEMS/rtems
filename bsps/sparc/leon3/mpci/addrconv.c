@@ -22,9 +22,7 @@
 #include <bsp.h>
 #include <shm_driver.h>
 
-void *Shm_Convert_address(
-  void *address
-)
+void *Shm_Convert_address( void *address )
 {
   return ( address );
 }

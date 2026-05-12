@@ -17,13 +17,12 @@
 
 #include <bsp.h>
 
-void rtems_bsp_delay(int usecs)
+void rtems_bsp_delay( int usecs )
 {
   uint32_t then;
 
-  then  = LEON_REG.Timer_Counter_1;
+  then = LEON_REG.Timer_Counter_1;
   then += usecs;
 
-  while (LEON_REG.Timer_Counter_1 >= then)
-    ;
+  while ( LEON_REG.Timer_Counter_1 >= then );
 }

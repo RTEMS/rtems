@@ -47,11 +47,11 @@
 
 #include <string.h>
 
-#if !defined(LEON3_GPTIMER_BASE)
-unsigned int leon3_timer_prescaler __attribute__((weak)) = 0;
+#if !defined( LEON3_GPTIMER_BASE )
+unsigned int leon3_timer_prescaler __attribute__(( weak )) = 0;
 #endif
 
-int leon3_timer_core_index __attribute__((weak)) = 0;
+int leon3_timer_core_index __attribute__(( weak )) = 0;
 
 /* AMBA Plug&Play information description.
  *
@@ -66,13 +66,13 @@ static void *ambapp_plb_alloc( size_t size )
 }
 
 static void *ambapp_memcpy(
-  void *dest,
-  const void *src,
-  int n,
+  void                   *dest,
+  const void             *src,
+  int                     n,
   struct ambapp_bus *abus RTEMS_UNUSED
 )
 {
-  return memcpy(dest, src, n);
+  return memcpy( dest, src, n );
 }
 
 struct ambapp_bus *ambapp_plb( void )
@@ -109,11 +109,9 @@ struct ambapp_bus *ambapp_plb( void )
  * so that the user may override it, if the defualt settings are not
  * enough.
  */
-struct drvmgr_bus_res grlib_drv_resources __attribute__((weak)) =
-{
+struct drvmgr_bus_res grlib_drv_resources __attribute__(( weak )) = {
   .next = NULL,
-  .resource =
-  {
+  .resource = {
     DRVMGR_RES_EMPTY,
   }
 };
@@ -126,7 +124,7 @@ static void ambapp_grlib_root_initialize( void )
   /* Register Root bus, Use GRLIB AMBA PnP bus as root bus for LEON3 */
   grlib_bus_config.abus = ambapp_plb();
   grlib_bus_config.resources = &grlib_drv_resources;
-  ambapp_grlib_root_register(&grlib_bus_config);
+  ambapp_grlib_root_register( &grlib_bus_config );
 }
 
 RTEMS_SYSINIT_ITEM(
@@ -136,13 +134,13 @@ RTEMS_SYSINIT_ITEM(
 );
 #endif
 
-#if !defined(LEON3_IRQAMP_BASE)
-irqamp *LEON3_IrqCtrl_Regs;
+#if !defined( LEON3_IRQAMP_BASE )
+irqamp            *LEON3_IrqCtrl_Regs;
 struct ambapp_dev *LEON3_IrqCtrl_Adev;
 #endif
 
-#if !defined(LEON3_GPTIMER_BASE)
-gptimer *LEON3_Timer_Regs;
+#if !defined( LEON3_GPTIMER_BASE )
+gptimer           *LEON3_Timer_Regs;
 struct ambapp_dev *LEON3_Timer_Adev;
 #endif
 
@@ -156,33 +154,38 @@ struct ambapp_dev *LEON3_Timer_Adev;
  *  amba_ahb_masters, amba_ahb_slaves and amba.
  */
 
-static void amba_initialize(void)
+static void amba_initialize( void )
 {
   struct ambapp_dev *adev;
   struct ambapp_bus *plb;
 
   plb = ambapp_plb();
-#if defined(LEON3_IRQAMP_BASE) && defined(LEON3_GPTIMER_BASE)
+#if defined( LEON3_IRQAMP_BASE ) && defined( LEON3_GPTIMER_BASE )
   (void) plb;
   (void) adev;
 #endif
 
-#if !defined(LEON3_IRQAMP_BASE)
+#if !defined( LEON3_IRQAMP_BASE )
   /* Find LEON3 Interrupt controller */
-  adev = (void *)ambapp_for_each(plb, (OPTIONS_ALL|OPTIONS_APB_SLVS),
-                                 VENDOR_GAISLER, GAISLER_IRQMP,
-                                 ambapp_find_by_idx, NULL);
-  if (adev == NULL) {
+  adev = (void *) ambapp_for_each(
+    plb,
+    ( OPTIONS_ALL | OPTIONS_APB_SLVS ),
+    VENDOR_GAISLER,
+    GAISLER_IRQMP,
+    ambapp_find_by_idx,
+    NULL
+  );
+  if ( adev == NULL ) {
     /* PANIC IRQ controller not found!
      *
      *  What else can we do but stop ...
      */
-    bsp_fatal(LEON3_FATAL_NO_IRQMP_CONTROLLER);
+    bsp_fatal( LEON3_FATAL_NO_IRQMP_CONTROLLER );
   }
 
-  LEON3_IrqCtrl_Regs = (irqamp *)DEV_TO_APB(adev)->start;
+  LEON3_IrqCtrl_Regs = (irqamp *) DEV_TO_APB( adev )->start;
   LEON3_IrqCtrl_Adev = adev;
-  if ((grlib_load_32(&LEON3_IrqCtrl_Regs->asmpctrl) >> 28) > 0) {
+  if ( ( grlib_load_32( &LEON3_IrqCtrl_Regs->asmpctrl ) >> 28 ) > 0 ) {
     uint32_t icsel;
 
     /* IRQ Controller has support for multiple IRQ Controllers, each
@@ -190,35 +193,42 @@ static void amba_initialize(void)
      * controller by looking at the IRQCTRL Select Register for this CPU.
      * Each Controller is located at a 4KByte offset.
      */
-    icsel = grlib_load_32(&LEON3_IrqCtrl_Regs->icselr[LEON3_Cpu_Index/8]);
-    icsel = (icsel >> ((7 - (LEON3_Cpu_Index & 0x7)) * 4)) & 0xf;
+    icsel = grlib_load_32(
+      &LEON3_IrqCtrl_Regs->icselr[ LEON3_Cpu_Index / 8 ]
+    );
+    icsel = ( icsel >> ( ( 7 - ( LEON3_Cpu_Index & 0x7 ) ) * 4 ) ) & 0xf;
     LEON3_IrqCtrl_Regs += icsel;
   }
 #endif
 
   /* find GP Timer */
-  adev = (void *)ambapp_for_each(plb, (OPTIONS_ALL|OPTIONS_APB_SLVS),
-                                 VENDOR_GAISLER, GAISLER_GPTIMER,
-                                 ambapp_find_by_idx, &leon3_timer_core_index);
-  if (adev) {
-    gptimer *timer_regs = (gptimer *)DEV_TO_APB(adev)->start;
+  adev = (void *) ambapp_for_each(
+    plb,
+    ( OPTIONS_ALL | OPTIONS_APB_SLVS ),
+    VENDOR_GAISLER,
+    GAISLER_GPTIMER,
+    ambapp_find_by_idx,
+    &leon3_timer_core_index
+  );
+  if ( adev ) {
+    gptimer *timer_regs = (gptimer *) DEV_TO_APB( adev )->start;
 
     /* Register AMBA Bus Frequency */
     ambapp_freq_init(
       plb,
       adev,
-      (grlib_load_32(&timer_regs->sreload) + 1)
-        * LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER
+      ( grlib_load_32( &timer_regs->sreload ) + 1 ) *
+        LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER
     );
 
-#if !defined(LEON3_GPTIMER_BASE)
+#if !defined( LEON3_GPTIMER_BASE )
     /* Set user prescaler configuration. Use this to increase accuracy of timer
      * and accociated services like cpucounter.
      * Note that minimum value is the number of timer instances present in
      * GRTIMER/GPTIMER hardware. See HW manual.
      */
-    if (leon3_timer_prescaler) {
-      grlib_store_32(&timer_regs->sreload, leon3_timer_prescaler);
+    if ( leon3_timer_prescaler ) {
+      grlib_store_32( &timer_regs->sreload, leon3_timer_prescaler );
     }
 
     LEON3_Timer_Regs = timer_regs;

@@ -46,55 +46,55 @@
 #include <grlib/apbuart.h>
 #include <grlib/io.h>
 
-#if !defined(LEON3_APBUART_BASE)
+#if !defined( LEON3_APBUART_BASE )
 #include <grlib/ambapp.h>
 
-int leon3_debug_uart_index __attribute__((weak)) = 0;
+int leon3_debug_uart_index __attribute__(( weak )) = 0;
 
 apbuart *leon3_debug_uart = NULL;
 #endif
 
-static void bsp_debug_uart_init(void);
+static void bsp_debug_uart_init( void );
 
-static void apbuart_enable_receive_and_transmit(apbuart *regs)
+static void apbuart_enable_receive_and_transmit( apbuart *regs )
 {
   uint32_t ctrl;
 
-  ctrl = grlib_load_32(&regs->ctrl);
+  ctrl = grlib_load_32( &regs->ctrl );
   ctrl |= APBUART_CTRL_RE | APBUART_CTRL_TE;
-  grlib_store_32(&regs->ctrl, ctrl);
-  grlib_store_32(&regs->status, 0);
+  grlib_store_32( &regs->ctrl, ctrl );
+  grlib_store_32( &regs->status, 0 );
 }
 
-static void bsp_debug_uart_output_char(char c)
+static void bsp_debug_uart_output_char( char c )
 {
-  apbuart_outbyte_polled(leon3_debug_uart, c);
-  apbuart_outbyte_wait(leon3_debug_uart);
+  apbuart_outbyte_polled( leon3_debug_uart, c );
+  apbuart_outbyte_wait( leon3_debug_uart );
 }
 
-static int bsp_debug_uart_poll_char(void)
+static int bsp_debug_uart_poll_char( void )
 {
-  return apbuart_inbyte_nonblocking(leon3_debug_uart);
+  return apbuart_inbyte_nonblocking( leon3_debug_uart );
 }
 
-static void bsp_debug_uart_pre_init_out(char c)
+static void bsp_debug_uart_pre_init_out( char c )
 {
   bsp_debug_uart_init();
-  (*BSP_output_char)(c);
+  ( *BSP_output_char )( c );
 }
 
-#if defined(LEON3_APBUART_BASE)
+#if defined( LEON3_APBUART_BASE )
 
-static void bsp_debug_uart_init(void)
+static void bsp_debug_uart_init( void )
 {
-  apbuart_enable_receive_and_transmit(leon3_debug_uart);
+  apbuart_enable_receive_and_transmit( leon3_debug_uart );
   BSP_poll_char = bsp_debug_uart_poll_char;
   BSP_output_char = bsp_debug_uart_output_char;
 }
 
 #else /* !LEON3_APBUART_BASE */
 
-static void bsp_debug_uart_discard(char c)
+static void bsp_debug_uart_discard( char c )
 {
   (void) c;
 }
@@ -102,9 +102,9 @@ static void bsp_debug_uart_discard(char c)
 /* Initialize the BSP system debug console layer. It will scan AMBA Plu&Play
  * for a debug APBUART and enable RX/TX for that UART.
  */
-static void bsp_debug_uart_init(void)
+static void bsp_debug_uart_init( void )
 {
-  int i;
+  int                i;
   struct ambapp_dev *adev;
 
   if ( BSP_output_char != bsp_debug_uart_pre_init_out ) {
@@ -119,8 +119,8 @@ static void bsp_debug_uart_init(void)
    *   non-MP: APBUART[0] is debug console
    *   MP: LEON CPU index select UART
    */
-  if (leon3_debug_uart_index == 0) {
-#if defined(RTEMS_MULTIPROCESSING)
+  if ( leon3_debug_uart_index == 0 ) {
+#if defined( RTEMS_MULTIPROCESSING )
     leon3_debug_uart_index = LEON3_Cpu_Index;
 #else
     leon3_debug_uart_index = 0;
@@ -131,19 +131,24 @@ static void bsp_debug_uart_init(void)
 
   /* Find APBUART core for System Debug Console */
   i = leon3_debug_uart_index;
-  adev = (void *)ambapp_for_each(ambapp_plb(), (OPTIONS_ALL|OPTIONS_APB_SLVS),
-                                 VENDOR_GAISLER, GAISLER_APBUART,
-                                 ambapp_find_by_idx, (void *)&i);
-  if (adev != NULL) {
+  adev = (void *) ambapp_for_each(
+    ambapp_plb(),
+    ( OPTIONS_ALL | OPTIONS_APB_SLVS ),
+    VENDOR_GAISLER,
+    GAISLER_APBUART,
+    ambapp_find_by_idx,
+    (void *) &i
+  );
+  if ( adev != NULL ) {
     struct ambapp_apb_info *apb;
 
     /*
      * Found a matching debug console, initialize debug UART if present for
      * printk().
      */
-    apb = (struct ambapp_apb_info *)adev->devinfo;
-    leon3_debug_uart = (apbuart *)apb->start;
-    apbuart_enable_receive_and_transmit(leon3_debug_uart);
+    apb = (struct ambapp_apb_info *) adev->devinfo;
+    leon3_debug_uart = (apbuart *) apb->start;
+    apbuart_enable_receive_and_transmit( leon3_debug_uart );
 
     BSP_poll_char = bsp_debug_uart_poll_char;
     BSP_output_char = bsp_debug_uart_output_char;

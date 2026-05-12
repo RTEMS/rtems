@@ -25,13 +25,10 @@
 #include <bsp.h>
 #include <shm_driver.h>
 
-
 /*
  *  Initialize the lock for the specified locked queue.
  */
-void Shm_Initialize_lock(
-  Shm_Locked_queue_Control *lq_cb
-)
+void Shm_Initialize_lock( Shm_Locked_queue_Control *lq_cb )
 {
   lq_cb->lock = LQ_UNLOCKED;
 }
@@ -41,36 +38,30 @@ void Shm_Initialize_lock(
  *  specified locked queue.  It disables interrupts to prevent
  *  a deadlock condition.
  */
-extern unsigned int LEON3_Atomic_Swap(uint32_t value, uint32_t *address);
+extern unsigned int LEON3_Atomic_Swap( uint32_t value, uint32_t *address );
 
-__asm__ (
-    ".text\n"
-    ".align 4\n"
-    "LEON3_Atomic_Swap:\n"
-    "  retl\n"
-    "  swapa [%o1] 1, %o0\n"
-);
+__asm__( ".text\n"
+         ".align 4\n"
+         "LEON3_Atomic_Swap:\n"
+         "  retl\n"
+         "  swapa [%o1] 1, %o0\n" );
 
-
-
-void Shm_Lock(
-  Shm_Locked_queue_Control *lq_cb
-)
+void Shm_Lock( Shm_Locked_queue_Control *lq_cb )
 {
-  uint32_t isr_level;
+  uint32_t  isr_level;
   uint32_t *lockptr = (uint32_t *) &lq_cb->lock;
-  uint32_t lock_value;
+  uint32_t  lock_value;
 
   lock_value = SHM_LOCK_VALUE;
   rtems_interrupt_disable( isr_level );
 
-    Shm_isrstat = isr_level;
-    while ( lock_value ) {
-      lock_value = LEON3_Atomic_Swap(lock_value, lockptr);
-      /*
+  Shm_isrstat = isr_level;
+  while ( lock_value ) {
+    lock_value = LEON3_Atomic_Swap( lock_value, lockptr );
+    /*
        *  If not available, then may want to delay to reduce load on lock.
        */
-   }
+  }
 }
 
 /*
@@ -79,9 +70,7 @@ void Shm_Lock(
  *  Unlock the lock for the specified locked queue.
  */
 
-void Shm_Unlock(
-  Shm_Locked_queue_Control *lq_cb
-)
+void Shm_Unlock( Shm_Locked_queue_Control *lq_cb )
 {
   uint32_t isr_level;
 
@@ -89,4 +78,3 @@ void Shm_Unlock(
   isr_level = Shm_isrstat;
   rtems_interrupt_enable( isr_level );
 }
-

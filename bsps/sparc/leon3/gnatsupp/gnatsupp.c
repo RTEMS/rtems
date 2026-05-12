@@ -25,8 +25,7 @@
  *  0x12 (UART B interrupt) which is used by the stub.
  */
 
-void
-__gnat_install_handler (void)
+void __gnat_install_handler( void )
 {
-  __gnat_install_handler_common (0x18, 0x12);
+  __gnat_install_handler_common( 0x18, 0x12 );
 }

@@ -31,28 +31,28 @@
 #include <bsp/irq-generic.h>
 #include <rtems/score/processormaskimpl.h>
 
-static inline int bsp_irq_cpu(int irq)
+static inline int bsp_irq_cpu( int irq )
 {
   (void) irq;
 
   return 0;
 }
 
-bool bsp_interrupt_is_valid_vector(rtems_vector_number vector)
+bool bsp_interrupt_is_valid_vector( rtems_vector_number vector )
 {
-  if (vector == 0) {
+  if ( vector == 0 ) {
     return false;
   }
 
   return vector <= BSP_INTERRUPT_VECTOR_MAX_STD;
 }
 
-void bsp_interrupt_facility_initialize(void)
+void bsp_interrupt_facility_initialize( void )
 {
   /* Nothing to do */
 }
 
-static bool is_maskable(rtems_vector_number vector)
+static bool is_maskable( rtems_vector_number vector )
 {
   return vector != 15;
 }
@@ -62,11 +62,11 @@ rtems_status_code bsp_interrupt_get_attributes(
   rtems_interrupt_attributes *attributes
 )
 {
-  attributes->is_maskable = is_maskable(vector);
+  attributes->is_maskable = is_maskable( vector );
   attributes->can_enable = true;
   attributes->maybe_enable = true;
-  attributes->can_disable = is_maskable(vector);
-  attributes->maybe_disable = is_maskable(vector);
+  attributes->can_disable = is_maskable( vector );
+  attributes->maybe_disable = is_maskable( vector );
   attributes->can_raise = true;
   attributes->can_raise_on = true;
   attributes->can_clear = true;
@@ -80,37 +80,37 @@ rtems_status_code bsp_interrupt_is_pending(
   bool               *pending
 )
 {
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  bsp_interrupt_assert(pending != NULL);
-  *pending = BSP_Is_interrupt_pending(vector) ||
-    BSP_Is_interrupt_forced(vector);
+  bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
+  bsp_interrupt_assert( pending != NULL );
+  *pending = BSP_Is_interrupt_pending( vector ) ||
+             BSP_Is_interrupt_forced( vector );
   return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
+rtems_status_code bsp_interrupt_raise( rtems_vector_number vector )
 {
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  BSP_Force_interrupt(vector);
+  bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
+  BSP_Force_interrupt( vector );
   return RTEMS_SUCCESSFUL;
 }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 rtems_status_code bsp_interrupt_raise_on(
   rtems_vector_number vector,
   uint32_t            cpu_index
 )
 {
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  BSP_Force_interrupt(vector);
+  bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
+  BSP_Force_interrupt( vector );
   return RTEMS_SUCCESSFUL;
 }
 #endif
 
-rtems_status_code bsp_interrupt_clear(rtems_vector_number vector)
+rtems_status_code bsp_interrupt_clear( rtems_vector_number vector )
 {
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  BSP_Clear_forced_interrupt(vector);
-  BSP_Clear_interrupt(vector);
+  bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
+  BSP_Clear_forced_interrupt( vector );
+  BSP_Clear_interrupt( vector );
   return RTEMS_SUCCESSFUL;
 }
 
@@ -119,60 +119,60 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
   bool               *enabled
 )
 {
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  bsp_interrupt_assert(enabled != NULL);
-  *enabled = !BSP_Cpu_Is_interrupt_masked(vector, bsp_irq_cpu(vector));
+  bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
+  bsp_interrupt_assert( enabled != NULL );
+  *enabled = !BSP_Cpu_Is_interrupt_masked( vector, bsp_irq_cpu( vector ) );
   return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
+rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number vector )
 {
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  BSP_Cpu_Unmask_interrupt(vector, 0);
+  bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
+  BSP_Cpu_Unmask_interrupt( vector, 0 );
   return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
+rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number vector )
 {
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
 
-  if (!is_maskable(vector)) {
+  if ( !is_maskable( vector ) ) {
     return RTEMS_UNSATISFIED;
   }
 
-  BSP_Cpu_Mask_interrupt(vector, 0);
+  BSP_Cpu_Mask_interrupt( vector, 0 );
   return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_set_priority(
   rtems_vector_number vector,
-  uint32_t priority
+  uint32_t            priority
 )
 {
   (void) vector;
   (void) priority;
 
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
   return RTEMS_UNSATISFIED;
 }
 
 rtems_status_code bsp_interrupt_get_priority(
   rtems_vector_number vector,
-  uint32_t *priority
+  uint32_t           *priority
 )
 {
   (void) vector;
   (void) priority;
 
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  bsp_interrupt_assert(priority != NULL);
+  bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
+  bsp_interrupt_assert( priority != NULL );
   return RTEMS_UNSATISFIED;
 }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 rtems_status_code bsp_interrupt_get_affinity(
-  rtems_vector_number  vector,
-  Processor_mask      *affinity
+  rtems_vector_number vector,
+  Processor_mask     *affinity
 )
 {
   (void) vector;

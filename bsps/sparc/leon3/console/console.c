@@ -60,58 +60,69 @@
  */
 #ifndef RTEMS_DRVMGR_STARTUP
 
-int syscon_uart_index __attribute__((weak)) = 0;
+int syscon_uart_index __attribute__(( weak )) = 0;
 
 /* body is in debugputs.c */
-static struct apbuart_context apbuarts[BSP_NUMBER_OF_TERMIOS_PORTS];
-static int uarts = 0;
+static struct apbuart_context apbuarts[ BSP_NUMBER_OF_TERMIOS_PORTS ];
+static int                    uarts = 0;
 
-static rtems_termios_device_context *leon3_console_get_context(int index)
+static rtems_termios_device_context *leon3_console_get_context( int index )
 {
-  struct apbuart_context *uart = &apbuarts[index];
+  struct apbuart_context *uart = &apbuarts[ index ];
 
-  rtems_termios_device_context_initialize(&uart->base, "APBUART");
+  rtems_termios_device_context_initialize( &uart->base, "APBUART" );
 
   return &uart->base;
 }
 
 /* AMBA PP find routine. Extract AMBA PnP information into data structure. */
-static int find_matching_apbuart(struct ambapp_dev *dev, int index, void *arg)
+static int find_matching_apbuart(
+  struct ambapp_dev *dev,
+  int                index,
+  void              *arg
+)
 {
   (void) index;
   (void) arg;
 
-  struct ambapp_apb_info *apb = (struct ambapp_apb_info *)dev->devinfo;
+  struct ambapp_apb_info *apb = (struct ambapp_apb_info *) dev->devinfo;
 
   /* Extract needed information of one APBUART */
-  apbuarts[uarts].regs = (apbuart *)apb->start;
-  apbuarts[uarts].irq = apb->common.irq;
+  apbuarts[ uarts ].regs = (apbuart *) apb->start;
+  apbuarts[ uarts ].irq = apb->common.irq;
   /* Get APBUART core frequency, it is assumed that it is the same
    * as Bus frequency where the UART is situated
    */
-  apbuarts[uarts].freq_hz = ambapp_freq_get(ambapp_plb(), dev);
+  apbuarts[ uarts ].freq_hz = ambapp_freq_get( ambapp_plb(), dev );
   uarts++;
 
-  if (uarts >= BSP_NUMBER_OF_TERMIOS_PORTS)
+  if ( uarts >= BSP_NUMBER_OF_TERMIOS_PORTS ) {
     return 1; /* Satisfied number of UARTs, stop search */
-  else
+  } else {
     return 0; /* Continue searching for more UARTs */
+  }
 }
 
 /* Find all UARTs */
-static void leon3_console_scan_uarts(void)
+static void leon3_console_scan_uarts( void )
 {
-  memset(apbuarts, 0, sizeof(apbuarts));
+  memset( apbuarts, 0, sizeof( apbuarts ) );
 
   /* Find APBUART cores */
-  ambapp_for_each(ambapp_plb(), (OPTIONS_ALL|OPTIONS_APB_SLVS), VENDOR_GAISLER,
-                  GAISLER_APBUART, find_matching_apbuart, NULL);
+  ambapp_for_each(
+    ambapp_plb(),
+    ( OPTIONS_ALL | OPTIONS_APB_SLVS ),
+    VENDOR_GAISLER,
+    GAISLER_APBUART,
+    find_matching_apbuart,
+    NULL
+  );
 }
 
 rtems_device_driver console_initialize(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
 )
 {
   (void) major;
@@ -125,8 +136,8 @@ rtems_device_driver console_initialize(
     &apbuart_handler_polled;
 #endif
   rtems_status_code status;
-  int i;
-  char console_name[16];
+  int               i;
+  char              console_name[ 16 ];
 
   rtems_termios_initialize();
 
@@ -139,8 +150,8 @@ rtems_device_driver console_initialize(
    *   non-MP: APBUART[0] is system console
    *   MP: LEON CPU index select UART
    */
-  if (syscon_uart_index == 0) {
-#if defined(RTEMS_MULTIPROCESSING)
+  if ( syscon_uart_index == 0 ) {
+#if defined( RTEMS_MULTIPROCESSING )
     syscon_uart_index = LEON3_Cpu_Index;
 #else
     syscon_uart_index = 0;
@@ -158,26 +169,28 @@ rtems_device_driver console_initialize(
    *
    * On a MP system one should not open UARTs that other OS instances use.
    */
-  if (syscon_uart_index < uarts) {
+  if ( syscon_uart_index < uarts ) {
     status = rtems_termios_device_install(
       CONSOLE_DEVICE_NAME,
       handler,
       NULL,
-      leon3_console_get_context(syscon_uart_index)
+      leon3_console_get_context( syscon_uart_index )
     );
-    if (status != RTEMS_SUCCESSFUL)
-      bsp_fatal(LEON3_FATAL_CONSOLE_REGISTER_DEV);
+    if ( status != RTEMS_SUCCESSFUL ) {
+      bsp_fatal( LEON3_FATAL_CONSOLE_REGISTER_DEV );
+    }
   }
-  strcpy(console_name,"/dev/console_a");
-  for (i = 0; i < uarts; i++) {
-    if (i == syscon_uart_index)
+  strcpy( console_name, "/dev/console_a" );
+  for ( i = 0; i < uarts; i++ ) {
+    if ( i == syscon_uart_index ) {
       continue; /* skip UART that is registered as /dev/console */
-    console_name[13] = 'a' + i;
+    }
+    console_name[ 13 ] = 'a' + i;
     rtems_termios_device_install(
       console_name,
       handler,
       NULL,
-      leon3_console_get_context(i)
+      leon3_console_get_context( i )
     );
   }
 

@@ -62,41 +62,40 @@ static void leon2_clock_init( void )
   tc->tc_counter_mask = 0xffffffff;
   tc->tc_frequency = LEON2_TIMER_1_FREQUENCY;
   tc->tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
-  rtems_timecounter_install(tc);
+  rtems_timecounter_install( tc );
 }
 
 static void leon2_clock_at_tick( void )
 {
-  SPARC_Counter *counter;
+  SPARC_Counter        *counter;
   rtems_interrupt_level level;
 
   counter = &_SPARC_Counter;
-  rtems_interrupt_local_disable(level);
+  rtems_interrupt_local_disable( level );
 
   LEON_Clear_interrupt( LEON_INTERRUPT_TIMER1 );
   counter->accumulated += counter->interval;
 
-  rtems_interrupt_local_enable(level);
+  rtems_interrupt_local_enable( level );
 }
 
 static void leon2_clock_initialize_early( void )
 {
   SPARC_Counter *counter;
 
-  LEON_REG.Timer_Reload_1 =
-    rtems_configuration_get_microseconds_per_tick() - 1;
-  LEON_REG.Timer_Control_1 = (
-    LEON_REG_TIMER_COUNTER_ENABLE_COUNTING |
+  LEON_REG.Timer_Reload_1 = rtems_configuration_get_microseconds_per_tick() -
+                            1;
+  LEON_REG.Timer_Control_1 =
+    ( LEON_REG_TIMER_COUNTER_ENABLE_COUNTING |
       LEON_REG_TIMER_COUNTER_RELOAD_AT_ZERO |
-      LEON_REG_TIMER_COUNTER_LOAD_COUNTER
-  );
+      LEON_REG_TIMER_COUNTER_LOAD_COUNTER );
 
   counter = &_SPARC_Counter;
   counter->read_isr_disabled = _SPARC_Counter_read_clock_isr_disabled;
   counter->read = _SPARC_Counter_read_clock;
   counter->counter_register = &LEON_REG.Timer_Counter_1;
   counter->pending_register = &LEON_REG.Interrupt_Pending;
-  counter->pending_mask = UINT32_C(1) << LEON_INTERRUPT_TIMER1;
+  counter->pending_mask = UINT32_C( 1 ) << LEON_INTERRUPT_TIMER1;
   counter->accumulated = rtems_configuration_get_microseconds_per_tick();
   counter->interval = rtems_configuration_get_microseconds_per_tick();
 }
@@ -113,15 +112,15 @@ uint32_t _CPU_Counter_frequency( void )
 }
 
 #define Clock_driver_support_install_isr( _new ) \
-  (void) rtems_interrupt_handler_install( \
-    LEON_INTERRUPT_TIMER1, \
-    "Clock", \
-    RTEMS_INTERRUPT_SHARED, \
-    _new, \
-    NULL \
+  (void) rtems_interrupt_handler_install(        \
+    LEON_INTERRUPT_TIMER1,                       \
+    "Clock",                                     \
+    RTEMS_INTERRUPT_SHARED,                      \
+    _new,                                        \
+    NULL                                         \
   )
 
-#define Clock_driver_support_at_tick(arg) leon2_clock_at_tick()
+#define Clock_driver_support_at_tick( arg ) leon2_clock_at_tick()
 
 #define Clock_driver_support_initialize_hardware() leon2_clock_init()
 

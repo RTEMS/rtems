@@ -61,10 +61,10 @@ int CPU_SPARC_HAS_SNOOPING;
  * bus snooping is available. This is needed for some drivers so
  * that they can select the most efficient copy routines.
  */
-static inline int set_snooping(void)
+static inline int set_snooping( void )
 {
-  unsigned int tmp = *(unsigned int *)0x80000014; /* Cache control register */
-  return ((tmp>>23) & 1); /* Data cache snooping enabled */
+  unsigned int tmp = *(unsigned int *) 0x80000014; /* Cache control register */
+  return ( ( tmp >> 23 ) & 1 ); /* Data cache snooping enabled */
 }
 
 void bsp_start( void )
@@ -87,24 +87,20 @@ void bsp_start( void )
  * the devmgr_confdefs.h. No specifc drivers needed by BSP since IRQ/TIMER/UART
  * is not drvmgr drivers.
  */
-drvmgr_drv_reg_func drvmgr_drivers[] __attribute__((weak)) =
-{
+drvmgr_drv_reg_func drvmgr_drivers[] __attribute__(( weak )) = {
   NULL /* End array with NULL */
 };
 
 /* Defines what cores are avilable on the bus in addition to the standard
  * LEON2 peripherals.
  */
-struct leon2_core leon2_amba_custom_cores[] __attribute__((weak)) =
-{
-  EMPTY_LEON2_CORE
-};
+struct leon2_core leon2_amba_custom_cores[]
+  __attribute__(( weak )) = { EMPTY_LEON2_CORE };
 
 /* Configure LEON2 Root bus driver */
-struct leon2_bus leon2_bus_config __attribute__((weak)) =
-{
-  &leon2_std_cores[0], /* The standard cores, defined by driver */
-  &leon2_amba_custom_cores[0],   /* custom cores, defined by us */
+struct leon2_bus leon2_bus_config __attribute__(( weak )) = {
+  &leon2_std_cores[ 0 ],         /* The standard cores, defined by driver */
+  &leon2_amba_custom_cores[ 0 ], /* custom cores, defined by us */
   DRVMGR_TRANSLATE_ONE2ONE,
   DRVMGR_TRANSLATE_ONE2ONE,
 };
@@ -113,12 +109,9 @@ struct leon2_bus leon2_bus_config __attribute__((weak)) =
  * LEON2 cores, it is up to the driver to look at the configuration paramters
  * once started.
  */
-struct drvmgr_bus_res leon2_amba_res __attribute__((weak)) =
-{
+struct drvmgr_bus_res leon2_amba_res __attribute__(( weak )) = {
   .next = NULL,
-  .resource = {
-    DRVMGR_RES_EMPTY
-  },
+  .resource = { DRVMGR_RES_EMPTY },
 };
 #endif /* RTEMS_DRVMGR_STARTUP */
 
@@ -134,7 +127,7 @@ static void leon2_pre_driver_hook( void )
   bsp_interrupt_initialize();
 
 #ifdef RTEMS_DRVMGR_STARTUP
-  leon2_root_register(&leon2_bus_config, &leon2_amba_res);
+  leon2_root_register( &leon2_bus_config, &leon2_amba_res );
 #endif
 }
 

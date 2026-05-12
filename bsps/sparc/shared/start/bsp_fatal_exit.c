@@ -35,7 +35,7 @@
 #include <bsp.h>
 #include <rtems/score/cpu.h>
 
-void BSP_fatal_exit(uint32_t error)
+void BSP_fatal_exit( uint32_t error )
 {
-  sparc_syscall_exit(RTEMS_FATAL_SOURCE_BSP, error);
+  sparc_syscall_exit( RTEMS_FATAL_SOURCE_BSP, error );
 }

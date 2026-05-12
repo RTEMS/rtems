@@ -34,16 +34,15 @@ bool benchmark_timer_find_average_overhead;
 
 bool benchmark_timer_is_initialized = false;
 
-void benchmark_timer_initialize(void)
+void benchmark_timer_initialize( void )
 {
   /*
    *  Timer runs long and accurate enough not to require an interrupt.
    */
 
   if ( benchmark_timer_is_initialized == false ) {
-
     /* approximately 1 us per countdown */
-    ERC32_MEC.General_Purpose_Timer_Scalar  = CLOCK_SPEED - 1;
+    ERC32_MEC.General_Purpose_Timer_Scalar = CLOCK_SPEED - 1;
     ERC32_MEC.General_Purpose_Timer_Counter = 0xffffffff;
 
   } else {
@@ -52,39 +51,38 @@ void benchmark_timer_initialize(void)
 
   ERC32_MEC_Set_General_Purpose_Timer_Control(
     ERC32_MEC_TIMER_COUNTER_ENABLE_COUNTING |
-      ERC32_MEC_TIMER_COUNTER_LOAD_COUNTER
+    ERC32_MEC_TIMER_COUNTER_LOAD_COUNTER
   );
 
   ERC32_MEC_Set_General_Purpose_Timer_Control(
     ERC32_MEC_TIMER_COUNTER_ENABLE_COUNTING
   );
-
 }
 
-#define AVG_OVERHEAD     12  /* It typically takes 3.0 microseconds */
-                             /*     to start/stop the timer. */
-#define LEAST_VALID      13  /* Don't trust a value lower than this */
+#define AVG_OVERHEAD 12 /* It typically takes 3.0 microseconds */
+                        /*     to start/stop the timer. */
+#define LEAST_VALID 13  /* Don't trust a value lower than this */
 
-benchmark_timer_t benchmark_timer_read(void)
+benchmark_timer_t benchmark_timer_read( void )
 {
-  uint32_t          total;
+  uint32_t total;
 
   total = ERC32_MEC.General_Purpose_Timer_Counter;
 
   total = 0xffffffff - total;
 
-  if ( benchmark_timer_find_average_overhead == true )
-    return total;          /* in one microsecond units */
+  if ( benchmark_timer_find_average_overhead == true ) {
+    return total; /* in one microsecond units */
+  }
 
-  if ( total < LEAST_VALID )
-    return 0;            /* below timer resolution */
+  if ( total < LEAST_VALID ) {
+    return 0; /* below timer resolution */
+  }
 
   return total - AVG_OVERHEAD;
 }
 
-void benchmark_timer_disable_subtracting_average_overhead(
-  bool find_flag
-)
+void benchmark_timer_disable_subtracting_average_overhead( bool find_flag )
 {
   benchmark_timer_find_average_overhead = find_flag;
 }

@@ -37,12 +37,11 @@
 
 #include <bsp.h>
 
-void SPARC_Clear_and_unmask_interrupt(rtems_vector_number vector)
+void SPARC_Clear_and_unmask_interrupt( rtems_vector_number vector )
 {
-  if (SPARC_IS_INTERRUPT_TRAP(vector)) {
-    uint32_t source = SPARC_INTERRUPT_TRAP_TO_SOURCE(vector);
-    BSP_Clear_interrupt(source);
-    BSP_Unmask_interrupt(source);
+  if ( SPARC_IS_INTERRUPT_TRAP( vector ) ) {
+    uint32_t source = SPARC_INTERRUPT_TRAP_TO_SOURCE( vector );
+    BSP_Clear_interrupt( source );
+    BSP_Unmask_interrupt( source );
   }
 }
-

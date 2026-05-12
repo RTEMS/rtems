@@ -51,7 +51,7 @@ RTEMS_SYSINIT_ITEM(
   RTEMS_SYSINIT_ORDER_MIDDLE
 );
 
-void bsp_start(void)
+void bsp_start( void )
 {
   /* Nothing to do */
 }

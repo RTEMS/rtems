@@ -59,44 +59,45 @@
 /* LEON3 Timer system interrupt number */
 static rtems_vector_number clkirq;
 
-#if defined(RTEMS_PROFILING) && \
-  (defined(LEON3_HAS_ASR_22_23_UP_COUNTER) || \
-     defined(LEON3_PROBE_ASR_22_23_UP_COUNTER) || \
-     defined(LEON3_IRQAMP_PROBE_TIMESTAMP))
+#if defined( RTEMS_PROFILING ) &&                  \
+  ( defined( LEON3_HAS_ASR_22_23_UP_COUNTER ) ||   \
+    defined( LEON3_PROBE_ASR_22_23_UP_COUNTER ) || \
+    defined( LEON3_IRQAMP_PROBE_TIMESTAMP ) )
 
 #define LEON3_CLOCK_PROBE_IRQAMP_TIMESTAMP
 
-#define IRQMP_TIMESTAMP_S1_S2 ((1U << 25) | (1U << 26))
+#define IRQMP_TIMESTAMP_S1_S2 ( ( 1U << 25 ) | ( 1U << 26 ) )
 
-static void leon3_tc_tick_default(void)
+static void leon3_tc_tick_default( void )
 {
   rtems_timecounter_tick();
 }
 
-static void (*leon3_tc_tick)(void) = leon3_tc_tick_default;
+static void ( *leon3_tc_tick )( void ) = leon3_tc_tick_default;
 
-static void leon3_tc_do_tick(void)
+static void leon3_tc_do_tick( void )
 {
-  (*leon3_tc_tick)();
+  ( *leon3_tc_tick )();
 }
 
-static void leon3_tc_tick_irqmp_timestamp(void)
+static void leon3_tc_tick_irqmp_timestamp( void )
 {
-  irqamp_timestamp *irqmp_ts =
-    irqamp_get_timestamp_registers(LEON3_IrqCtrl_Regs);
-  uint32_t first = grlib_load_32(&irqmp_ts->itstmpas);
-  uint32_t second = grlib_load_32(&irqmp_ts->itcnt);
-  uint32_t control = grlib_load_32(&irqmp_ts->itstmpc);
+  irqamp_timestamp *irqmp_ts = irqamp_get_timestamp_registers(
+    LEON3_IrqCtrl_Regs
+  );
+  uint32_t first = grlib_load_32( &irqmp_ts->itstmpas );
+  uint32_t second = grlib_load_32( &irqmp_ts->itcnt );
+  uint32_t control = grlib_load_32( &irqmp_ts->itstmpc );
 
   control |= IRQMP_TIMESTAMP_S1_S2;
-  grlib_store_32(&irqmp_ts->itstmpc, control);
+  grlib_store_32( &irqmp_ts->itstmpc, control );
 
-  _Profiling_Update_max_interrupt_delay(_Per_CPU_Get(), second - first);
+  _Profiling_Update_max_interrupt_delay( _Per_CPU_Get(), second - first );
 
   rtems_timecounter_tick();
 }
 
-static void leon3_tc_tick_irqmp_timestamp_init(void)
+static void leon3_tc_tick_irqmp_timestamp_init( void )
 {
   /*
    * Ignore the first clock interrupt, since it contains the sequential system
@@ -104,54 +105,57 @@ static void leon3_tc_tick_irqmp_timestamp_init(void)
    */
 
 #ifdef RTEMS_SMP
-  static Atomic_Uint counter = ATOMIC_INITIALIZER_UINT(0);
+  static Atomic_Uint counter = ATOMIC_INITIALIZER_UINT( 0 );
 
-  bool done =
-    _Atomic_Fetch_add_uint(&counter, 1, ATOMIC_ORDER_RELAXED)
-      == rtems_scheduler_get_processor_maximum() - 1;
+  bool done = _Atomic_Fetch_add_uint( &counter, 1, ATOMIC_ORDER_RELAXED ) ==
+              rtems_scheduler_get_processor_maximum() - 1;
 #else
   bool done = true;
 #endif
 
-  irqamp_timestamp *irqmp_ts =
-    irqamp_get_timestamp_registers(LEON3_IrqCtrl_Regs);
+  irqamp_timestamp *irqmp_ts = irqamp_get_timestamp_registers(
+    LEON3_IrqCtrl_Regs
+  );
   uint32_t ks = 1U << 5;
-  uint32_t control = grlib_load_32(&irqmp_ts->itstmpc);
+  uint32_t control = grlib_load_32( &irqmp_ts->itstmpc );
 
   control = ks | IRQMP_TIMESTAMP_S1_S2 | clkirq;
-  grlib_store_32(&irqmp_ts->itstmpc, control);
+  grlib_store_32( &irqmp_ts->itstmpc, control );
 
-  if (done) {
+  if ( done ) {
     leon3_tc_tick = leon3_tc_tick_irqmp_timestamp;
   }
 
   rtems_timecounter_tick();
 }
 #else
-static void leon3_tc_do_tick(void)
+static void leon3_tc_do_tick( void )
 {
   rtems_timecounter_tick();
 }
 #endif
 
-#define Adjust_clkirq_for_node() do { clkirq += LEON3_CLOCK_INDEX; } while(0)
+#define Adjust_clkirq_for_node() \
+  do {                           \
+    clkirq += LEON3_CLOCK_INDEX; \
+  } while ( 0 )
 
-#define Clock_driver_support_find_timer() \
-  do { \
-    /* Assume timer found during BSP initialization */ \
-    if (LEON3_Timer_Regs) { \
-      clkirq = (grlib_load_32(&LEON3_Timer_Regs->config) & 0xf8) >> 3; \
-      \
-      Adjust_clkirq_for_node(); \
-    } \
-  } while (0)
+#define Clock_driver_support_find_timer()                                  \
+  do {                                                                     \
+    /* Assume timer found during BSP initialization */                     \
+    if ( LEON3_Timer_Regs ) {                                              \
+      clkirq = ( grlib_load_32( &LEON3_Timer_Regs->config ) & 0xf8 ) >> 3; \
+                                                                           \
+      Adjust_clkirq_for_node();                                            \
+    }                                                                      \
+  } while ( 0 )
 
-#define Clock_driver_support_install_isr(isr) \
-  bsp_clock_handler_install(isr)
+#define Clock_driver_support_install_isr( isr ) \
+  bsp_clock_handler_install( isr )
 
 static rtems_interrupt_entry leon3_clock_interrupt_entry;
 
-static void bsp_clock_handler_install(rtems_interrupt_handler isr)
+static void bsp_clock_handler_install( rtems_interrupt_handler isr )
 {
   rtems_status_code sc;
 
@@ -166,19 +170,19 @@ static void bsp_clock_handler_install(rtems_interrupt_handler isr)
     RTEMS_INTERRUPT_UNIQUE,
     &leon3_clock_interrupt_entry
   );
-  if (sc != RTEMS_SUCCESSFUL) {
-    rtems_fatal(RTEMS_FATAL_SOURCE_BSP, LEON3_FATAL_CLOCK_INITIALIZATION);
+  if ( sc != RTEMS_SUCCESSFUL ) {
+    rtems_fatal( RTEMS_FATAL_SOURCE_BSP, LEON3_FATAL_CLOCK_INITIALIZATION );
   }
 }
 
-#define Clock_driver_support_set_interrupt_affinity(online_processors) \
-  bsp_interrupt_set_affinity(clkirq, online_processors)
+#define Clock_driver_support_set_interrupt_affinity( online_processors ) \
+  bsp_interrupt_set_affinity( clkirq, online_processors )
 
-static void leon3_clock_initialize(void)
+static void leon3_clock_initialize( void )
 {
   gptimer_timer *timer;
 
-  timer = &LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX];
+  timer = &LEON3_Timer_Regs->timer[ LEON3_CLOCK_INDEX ];
 
   grlib_store_32(
     &timer->trldval,
@@ -189,19 +193,18 @@ static void leon3_clock_initialize(void)
     GPTIMER_TCTRL_EN | GPTIMER_TCTRL_RS | GPTIMER_TCTRL_LD | GPTIMER_TCTRL_IE
   );
 
-#if defined(LEON3_CLOCK_PROBE_IRQAMP_TIMESTAMP)
-  if (irqamp_get_timestamp_registers(LEON3_IrqCtrl_Regs) != NULL) {
+#if defined( LEON3_CLOCK_PROBE_IRQAMP_TIMESTAMP )
+  if ( irqamp_get_timestamp_registers( LEON3_IrqCtrl_Regs ) != NULL ) {
     leon3_tc_tick = leon3_tc_tick_irqmp_timestamp_init;
   }
 #endif
 
-  rtems_timecounter_install(&leon3_timecounter_instance.base);
+  rtems_timecounter_install( &leon3_timecounter_instance.base );
 }
 
-#define Clock_driver_support_initialize_hardware() \
-  leon3_clock_initialize()
+#define Clock_driver_support_initialize_hardware() leon3_clock_initialize()
 
-#define Clock_driver_timecounter_tick(arg) leon3_tc_do_tick()
+#define Clock_driver_timecounter_tick( arg ) leon3_tc_do_tick()
 
 #define BSP_FEATURE_IRQ_EXTENSION
 

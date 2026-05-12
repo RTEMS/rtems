@@ -25,33 +25,35 @@
 void console_outbyte_polled( int port, unsigned char ch )
 {
   if ( port == 0 ) {
-    while ( (LEON_REG.UART_Status_1 & LEON_REG_UART_STATUS_THE) == 0 );
+    while ( ( LEON_REG.UART_Status_1 & LEON_REG_UART_STATUS_THE ) == 0 );
     LEON_REG.UART_Channel_1 = (unsigned int) ch;
     return;
   }
 
-  while ( (LEON_REG.UART_Status_2 & LEON_REG_UART_STATUS_THE) == 0 );
+  while ( ( LEON_REG.UART_Status_2 & LEON_REG_UART_STATUS_THE ) == 0 );
   LEON_REG.UART_Channel_2 = (unsigned int) ch;
 }
 
 int console_inbyte_nonblocking( int port )
 {
   if ( port == 0 ) {
-    if (LEON_REG.UART_Status_1 & LEON_REG_UART_STATUS_ERR) {
+    if ( LEON_REG.UART_Status_1 & LEON_REG_UART_STATUS_ERR ) {
       LEON_REG.UART_Status_1 = ~LEON_REG_UART_STATUS_ERR;
     }
 
-    if ((LEON_REG.UART_Status_1 & LEON_REG_UART_STATUS_DR) == 0)
-       return -1;
+    if ( ( LEON_REG.UART_Status_1 & LEON_REG_UART_STATUS_DR ) == 0 ) {
+      return -1;
+    }
     return (int) LEON_REG.UART_Channel_1;
   }
 
-  if (LEON_REG.UART_Status_2 & LEON_REG_UART_STATUS_ERR) {
+  if ( LEON_REG.UART_Status_2 & LEON_REG_UART_STATUS_ERR ) {
     LEON_REG.UART_Status_2 = ~LEON_REG_UART_STATUS_ERR;
   }
 
-  if ((LEON_REG.UART_Status_2 & LEON_REG_UART_STATUS_DR) == 0)
-     return -1;
+  if ( ( LEON_REG.UART_Status_2 & LEON_REG_UART_STATUS_DR ) == 0 ) {
+    return -1;
+  }
   return (int) LEON_REG.UART_Channel_2;
 }
 

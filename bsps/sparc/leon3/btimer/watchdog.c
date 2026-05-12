@@ -34,20 +34,21 @@
 #include <bsp/watchdog.h>
 
 struct gptimer_watchdog_priv {
-  gptimer *regs;
+  gptimer       *regs;
   gptimer_timer *timer;
-  int timerno;
+  int            timerno;
 };
 
-struct gptimer_watchdog_priv bsp_watchdogs[1];
-int bsp_watchdog_count = 0;
+struct gptimer_watchdog_priv bsp_watchdogs[ 1 ];
+int                          bsp_watchdog_count = 0;
 
-int bsp_watchdog_init(void)
+int bsp_watchdog_init( void )
 {
   int timercnt;
 
-  if (!LEON3_Timer_Regs)
+  if ( !LEON3_Timer_Regs ) {
     return 0;
+  }
 
   /* Get Watchdogs in system, this is implemented for one GPTIMER core
    * only.
@@ -58,55 +59,61 @@ int bsp_watchdog_init(void)
    * functionality is available or not, we assume that it is if we
    * reached this function.
    */
-  bsp_watchdogs[0].regs = LEON3_Timer_Regs;
+  bsp_watchdogs[ 0 ].regs = LEON3_Timer_Regs;
 
   /* Find Timer that has watchdog functionality */
-  timercnt = grlib_load_32(&bsp_watchdogs[0].regs->config) & 0x7;
-  if (timercnt < 2) /* First timer system clock timer */
+  timercnt = grlib_load_32( &bsp_watchdogs[ 0 ].regs->config ) & 0x7;
+  if ( timercnt < 2 ) { /* First timer system clock timer */
     return 0;
+  }
 
-  bsp_watchdogs[0].timerno = timercnt - 1;
-  bsp_watchdogs[0].timer = &bsp_watchdogs[0].regs->timer[bsp_watchdogs[0].timerno];
+  bsp_watchdogs[ 0 ].timerno = timercnt - 1;
+  bsp_watchdogs[ 0 ].timer = &bsp_watchdogs[ 0 ]
+                                .regs->timer[ bsp_watchdogs[ 0 ].timerno ];
 
   bsp_watchdog_count = 1;
   return bsp_watchdog_count;
 }
 
-void bsp_watchdog_reload(int watchdog, unsigned int reload_value)
+void bsp_watchdog_reload( int watchdog, unsigned int reload_value )
 {
   gptimer_timer *timer;
-  uint32_t tctrl;
+  uint32_t       tctrl;
 
-  if (bsp_watchdog_count == 0)
+  if ( bsp_watchdog_count == 0 ) {
     bsp_watchdog_init();
+  }
 
-  if (bsp_watchdog_count <= watchdog)
+  if ( bsp_watchdog_count <= watchdog ) {
     return;
+  }
 
   /* Kick watchdog, and clear interrupt pending bit */
-  timer = bsp_watchdogs[watchdog].timer;
-  grlib_store_32(&timer->trldval, reload_value);
-  tctrl = grlib_load_32(&timer->tctrl);
+  timer = bsp_watchdogs[ watchdog ].timer;
+  grlib_store_32( &timer->trldval, reload_value );
+  tctrl = grlib_load_32( &timer->tctrl );
   tctrl |= GPTIMER_TCTRL_LD | GPTIMER_TCTRL_EN;
   tctrl &= ~GPTIMER_TCTRL_IP;
-  grlib_store_32(&timer->tctrl, tctrl);
+  grlib_store_32( &timer->tctrl, tctrl );
 }
 
-void bsp_watchdog_stop(int watchdog)
+void bsp_watchdog_stop( int watchdog )
 {
-  if (bsp_watchdog_count == 0)
+  if ( bsp_watchdog_count == 0 ) {
     bsp_watchdog_init();
+  }
 
-  if (bsp_watchdog_count <= watchdog)
+  if ( bsp_watchdog_count <= watchdog ) {
     return;
+  }
 
   /* Stop watchdog timer */
-  grlib_store_32(&bsp_watchdogs[watchdog].timer->tctrl, 0);
+  grlib_store_32( &bsp_watchdogs[ watchdog ].timer->tctrl, 0 );
 }
 
 /* Use watchdog timer to reset system */
-void bsp_watchdog_system_reset(void)
+void bsp_watchdog_system_reset( void )
 {
   sparc_disable_interrupts();
-  bsp_watchdog_reload(0, 1);
+  bsp_watchdog_reload( 0, 1 );
 }

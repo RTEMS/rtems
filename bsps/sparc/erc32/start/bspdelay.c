@@ -19,13 +19,12 @@
 
 #include <bsp.h>
 
-void rtems_bsp_delay(int usecs)
+void rtems_bsp_delay( int usecs )
 {
   uint32_t then;
 
-  then  = ERC32_MEC.Real_Time_Clock_Counter;
+  then = ERC32_MEC.Real_Time_Clock_Counter;
   then += usecs;
 
-  while (ERC32_MEC.Real_Time_Clock_Counter >= then)
-    ;
+  while ( ERC32_MEC.Real_Time_Clock_Counter >= then );
 }
