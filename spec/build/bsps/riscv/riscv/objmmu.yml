@@ -11,7 +11,7 @@ includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}
   source:
-  - include/bsp/riscv-mmu.h
+  - bsps/riscv/include/bsp/riscv-mmu.h
 links: []
 source:
 - bsps/riscv/shared/mmu/mmu-setup.c
