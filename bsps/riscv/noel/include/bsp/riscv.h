@@ -38,9 +38,9 @@ extern "C" {
 
 extern volatile RISCV_CLINT_regs *riscv_clint;
 
-void *riscv_fdt_get_address(const void *fdt, int node);
+void *riscv_fdt_get_address( const void *fdt, int node );
 
-uint32_t riscv_get_core_frequency(void);
+uint32_t riscv_get_core_frequency( void );
 
 #ifdef RTEMS_SMP
 extern uint32_t riscv_hart_count;
@@ -48,7 +48,7 @@ extern uint32_t riscv_hart_count;
 #define riscv_hart_count 1
 #endif
 
-uint32_t riscv_get_hart_index_by_phandle(uint32_t phandle);
+uint32_t riscv_get_hart_index_by_phandle( uint32_t phandle );
 
 #ifdef __cplusplus
 }
