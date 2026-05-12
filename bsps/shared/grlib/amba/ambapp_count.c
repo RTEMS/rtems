@@ -31,12 +31,16 @@
 #include <grlib/ambapp.h>
 
 /* Get number of devices matching search options */
-int ambapp_dev_count(struct ambapp_bus *abus, unsigned int options,
-      int vendor, int device)
+int ambapp_dev_count(
+  struct ambapp_bus *abus,
+  unsigned int       options,
+  int                vendor,
+  int                device
+)
 {
   int count = 10000;
 
-  ambapp_for_each(abus, options, vendor, device, ambapp_find_by_idx, &count);
+  ambapp_for_each( abus, options, vendor, device, ambapp_find_by_idx, &count );
 
   return 10000 - count;
 }

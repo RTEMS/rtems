@@ -35,49 +35,51 @@
 #include <grlib/io.h>
 #include <bsp.h>
 
-static void apbuart_isr(void *arg)
+static void apbuart_isr( void *arg )
 {
-  rtems_termios_tty *tty = arg;
-  struct apbuart_context *uart = rtems_termios_get_device_context(tty);
-  unsigned int status;
-  char data;
+  rtems_termios_tty      *tty = arg;
+  struct apbuart_context *uart = rtems_termios_get_device_context( tty );
+  unsigned int            status;
+  char                    data;
 
   /* Get all received characters */
-  while ((status=grlib_load_32(&uart->regs->status)) & APBUART_STATUS_DR) {
+  while (
+    ( status = grlib_load_32( &uart->regs->status ) ) & APBUART_STATUS_DR
+  ) {
     /* Data has arrived, get new data */
-    data = (char)grlib_load_32(&uart->regs->data);
+    data = (char) grlib_load_32( &uart->regs->data );
 
     /* Tell termios layer about new character */
-    rtems_termios_enqueue_raw_characters(tty, &data, 1);
+    rtems_termios_enqueue_raw_characters( tty, &data, 1 );
   }
 
   if (
-    (status & APBUART_STATUS_TE)
-      && (grlib_load_32(&uart->regs->ctrl) & APBUART_CTRL_TI) != 0
+    ( status & APBUART_STATUS_TE ) &&
+    ( grlib_load_32( &uart->regs->ctrl ) & APBUART_CTRL_TI ) != 0
   ) {
     /* write_interrupt will get called from this function */
-    rtems_termios_dequeue_characters(tty, 1);
+    rtems_termios_dequeue_characters( tty, 1 );
   }
 }
 
 static void apbuart_write_support(
   rtems_termios_device_context *base,
-  const char *buf,
-  size_t len
+  const char                   *buf,
+  size_t                        len
 )
 {
   struct apbuart_context *uart = (struct apbuart_context *) base;
-  int sending;
-  uint32_t ctrl;
+  int                     sending;
+  uint32_t                ctrl;
 
-  ctrl = grlib_load_32(&uart->regs->ctrl);
+  ctrl = grlib_load_32( &uart->regs->ctrl );
 
-  if (len > 0) {
+  if ( len > 0 ) {
     /* Enable TX interrupt (interrupt is edge-triggered) */
     ctrl |= APBUART_CTRL_TI;
 
     /* start UART TX, this will result in an interrupt when done */
-    grlib_store_32(&uart->regs->data, (uint8_t)*buf);
+    grlib_store_32( &uart->regs->data, (uint8_t) *buf );
 
     sending = 1;
   } else {
@@ -88,44 +90,44 @@ static void apbuart_write_support(
     sending = 0;
   }
 
-  grlib_store_32(&uart->regs->ctrl, ctrl);
+  grlib_store_32( &uart->regs->ctrl, ctrl );
   uart->sending = sending;
 }
 
 static void apbuart_write_polled(
   rtems_termios_device_context *base,
-  const char *buf,
-  size_t len
+  const char                   *buf,
+  size_t                        len
 )
 {
   struct apbuart_context *uart = (struct apbuart_context *) base;
-  size_t nwrite = 0;
+  size_t                  nwrite = 0;
 
-  while (nwrite < len) {
-    apbuart_outbyte_polled(uart->regs, *buf++);
+  while ( nwrite < len ) {
+    apbuart_outbyte_polled( uart->regs, *buf++ );
     nwrite++;
   }
 }
 
-static int apbuart_poll_read(rtems_termios_device_context *base)
+static int apbuart_poll_read( rtems_termios_device_context *base )
 {
   struct apbuart_context *uart = (struct apbuart_context *) base;
 
-  return apbuart_inbyte_nonblocking(uart->regs);
+  return apbuart_inbyte_nonblocking( uart->regs );
 }
 
 static bool apbuart_set_attributes(
   rtems_termios_device_context *base,
-  const struct termios *t
+  const struct termios         *t
 )
 {
-  struct apbuart_context *uart = (struct apbuart_context *) base;
+  struct apbuart_context      *uart = (struct apbuart_context *) base;
   rtems_interrupt_lock_context lock_context;
-  unsigned int scaler;
-  unsigned int ctrl;
-  int baud;
+  unsigned int                 scaler;
+  unsigned int                 ctrl;
+  int                          baud;
 
-  switch (t->c_cflag & CSIZE) {
+  switch ( t->c_cflag & CSIZE ) {
     default:
     case CS5:
     case CS6:
@@ -136,15 +138,15 @@ static bool apbuart_set_attributes(
       break;
   }
 
-  rtems_termios_device_lock_acquire(base, &lock_context);
+  rtems_termios_device_lock_acquire( base, &lock_context );
 
   /* Read out current value */
-  ctrl = grlib_load_32(&uart->regs->ctrl);
+  ctrl = grlib_load_32( &uart->regs->ctrl );
 
-  switch (t->c_cflag & (PARENB|PARODD)) {
-    case (PARENB|PARODD):
+  switch ( t->c_cflag & ( PARENB | PARODD ) ) {
+    case ( PARENB | PARODD ):
       /* Odd parity */
-      ctrl |= APBUART_CTRL_PE|APBUART_CTRL_PS;
+      ctrl |= APBUART_CTRL_PE | APBUART_CTRL_PS;
       break;
 
     case PARENB:
@@ -157,28 +159,28 @@ static bool apbuart_set_attributes(
     case 0:
     case PARODD:
       /* No Parity */
-      ctrl &= ~(APBUART_CTRL_PS|APBUART_CTRL_PE);
+      ctrl &= ~( APBUART_CTRL_PS | APBUART_CTRL_PE );
   }
 
-  if (!(t->c_cflag & CLOCAL)) {
+  if ( !( t->c_cflag & CLOCAL ) ) {
     ctrl |= APBUART_CTRL_FL;
   } else {
     ctrl &= ~APBUART_CTRL_FL;
   }
 
   /* Update new settings */
-  grlib_store_32(&uart->regs->ctrl, ctrl);
+  grlib_store_32( &uart->regs->ctrl, ctrl );
 
-  rtems_termios_device_lock_release(base, &lock_context);
+  rtems_termios_device_lock_release( base, &lock_context );
 
   /* Baud rate */
-  baud = rtems_termios_baud_to_number(t->c_ospeed);
-  if (baud > 0) {
+  baud = rtems_termios_baud_to_number( t->c_ospeed );
+  if ( baud > 0 ) {
     /* Calculate Baud rate generator "scaler" number */
-    scaler = (((uart->freq_hz * 10) / (baud * 8)) - 5) / 10;
+    scaler = ( ( ( uart->freq_hz * 10 ) / ( baud * 8 ) ) - 5 ) / 10;
 
     /* Set new baud rate by setting scaler */
-    grlib_store_32(&uart->regs->scaler, scaler);
+    grlib_store_32( &uart->regs->scaler, scaler );
   }
 
   return true;
@@ -186,19 +188,19 @@ static bool apbuart_set_attributes(
 
 static void apbuart_set_best_baud(
   const struct apbuart_context *uart,
-  struct termios *term
+  struct termios               *term
 )
 {
-  uint32_t baud = (uart->freq_hz * 10) /
-    ((grlib_load_32(&uart->regs->scaler) * 10 + 5) * 8);
+  uint32_t baud = ( uart->freq_hz * 10 ) /
+                  ( ( grlib_load_32( &uart->regs->scaler ) * 10 + 5 ) * 8 );
 
-  rtems_termios_set_best_baud(term, baud);
+  rtems_termios_set_best_baud( term, baud );
 }
 
 static bool apbuart_first_open_polled(
-  rtems_termios_tty *tty,
-  rtems_termios_device_context *base,
-  struct termios *term,
+  rtems_termios_tty             *tty,
+  rtems_termios_device_context  *base,
+  struct termios                *term,
   rtems_libio_open_close_args_t *args
 )
 {
@@ -206,81 +208,85 @@ static bool apbuart_first_open_polled(
   (void) args;
 
   struct apbuart_context *uart = (struct apbuart_context *) base;
-  uint32_t ctrl;
+  uint32_t                ctrl;
 
-  apbuart_set_best_baud(uart, term);
+  apbuart_set_best_baud( uart, term );
 
   /* Initialize UART on opening */
-  ctrl = grlib_load_32(&uart->regs->ctrl);
+  ctrl = grlib_load_32( &uart->regs->ctrl );
   ctrl |= APBUART_CTRL_RE | APBUART_CTRL_TE;
-  grlib_store_32(&uart->regs->ctrl, ctrl);
-  grlib_store_32(&uart->regs->status, 0);
+  grlib_store_32( &uart->regs->ctrl, ctrl );
+  grlib_store_32( &uart->regs->status, 0 );
 
   return true;
 }
 
 static bool apbuart_first_open_interrupt(
-  rtems_termios_tty *tty,
-  rtems_termios_device_context *base,
-  struct termios *term,
+  rtems_termios_tty             *tty,
+  rtems_termios_device_context  *base,
+  struct termios                *term,
   rtems_libio_open_close_args_t *args
 )
 {
   (void) args;
 
   struct apbuart_context *uart = (struct apbuart_context *) base;
-  rtems_status_code sc;
-  uint32_t ctrl;
+  rtems_status_code       sc;
+  uint32_t                ctrl;
 
-  apbuart_set_best_baud(uart, term);
+  apbuart_set_best_baud( uart, term );
 
   /* Register Interrupt handler */
-  sc = rtems_interrupt_handler_install(uart->irq, "console",
-                                       RTEMS_INTERRUPT_SHARED,
-                                       apbuart_isr,
-                                       tty);
-  if (sc != RTEMS_SUCCESSFUL)
+  sc = rtems_interrupt_handler_install(
+    uart->irq,
+    "console",
+    RTEMS_INTERRUPT_SHARED,
+    apbuart_isr,
+    tty
+  );
+  if ( sc != RTEMS_SUCCESSFUL ) {
     return false;
+  }
 
   uart->sending = 0;
   /* Enable Receiver and transmitter and Turn on RX interrupts */
-  ctrl = grlib_load_32(&uart->regs->ctrl);
+  ctrl = grlib_load_32( &uart->regs->ctrl );
   ctrl |= APBUART_CTRL_RE | APBUART_CTRL_TE | APBUART_CTRL_RI;
-  grlib_store_32(&uart->regs->ctrl, ctrl);
+  grlib_store_32( &uart->regs->ctrl, ctrl );
   /* Initialize UART on opening */
   ctrl |= APBUART_CTRL_RE | APBUART_CTRL_TE;
-  grlib_store_32(&uart->regs->ctrl, ctrl);
-  grlib_store_32(&uart->regs->status, 0);
+  grlib_store_32( &uart->regs->ctrl, ctrl );
+  grlib_store_32( &uart->regs->status, 0 );
 
   return true;
 }
 
 static void apbuart_last_close_interrupt(
-  rtems_termios_tty *tty,
-  rtems_termios_device_context *base,
+  rtems_termios_tty             *tty,
+  rtems_termios_device_context  *base,
   rtems_libio_open_close_args_t *args
 )
 {
   (void) args;
 
-  struct apbuart_context *uart = (struct apbuart_context *) base;
+  struct apbuart_context      *uart = (struct apbuart_context *) base;
   rtems_interrupt_lock_context lock_context;
-  uint32_t ctrl;
+  uint32_t                     ctrl;
 
   /* Turn off RX interrupts */
-  rtems_termios_device_lock_acquire(base, &lock_context);
-  ctrl = grlib_load_32(&uart->regs->ctrl);
+  rtems_termios_device_lock_acquire( base, &lock_context );
+  ctrl = grlib_load_32( &uart->regs->ctrl );
   ctrl &= ~APBUART_CTRL_RI;
-  grlib_store_32(&uart->regs->ctrl, ctrl);
-  rtems_termios_device_lock_release(base, &lock_context);
+  grlib_store_32( &uart->regs->ctrl, ctrl );
+  rtems_termios_device_lock_release( base, &lock_context );
 
   /**** Flush device ****/
-  while (uart->sending) {
+  while ( uart->sending ) {
     /* Wait until all data has been sent */
   }
 
   /* uninstall ISR */
-  rtems_interrupt_handler_remove(uart->irq, apbuart_isr, tty);
+  rtems_interrupt_handler_remove( uart->irq, apbuart_isr, tty );
 }
 
 const rtems_termios_device_handler apbuart_handler_interrupt = {

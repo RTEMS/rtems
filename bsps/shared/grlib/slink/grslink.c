@@ -56,56 +56,55 @@
 /* #define DEBUG */
 
 #ifdef DEBUG
-#define DBG(x...) printk(x)
+#define DBG( x... ) printk( x )
 #else
-#define DBG(x...) 
+#define DBG( x... )
 #endif
 
 /* Bits and fields in SLINK transmit word */
-#define SLINK_RW (1 << 23)
+#define SLINK_RW       ( 1 << 23 )
 #define SLINK_CHAN_POS 16
 
 /* Local types */
 typedef struct {
-	volatile uint32_t clockscale;
-	volatile uint32_t ctrl;
-	volatile uint32_t nullwrd;
-	volatile uint32_t sts;
-	volatile uint32_t msk;
-	volatile uint32_t abase;
-	volatile uint32_t bbase;
-	volatile uint32_t td;
-	volatile uint32_t rd;
+  volatile uint32_t clockscale;
+  volatile uint32_t ctrl;
+  volatile uint32_t nullwrd;
+  volatile uint32_t sts;
+  volatile uint32_t msk;
+  volatile uint32_t abase;
+  volatile uint32_t bbase;
+  volatile uint32_t td;
+  volatile uint32_t rd;
 } SLINK_regs;
 
 typedef struct {
-	char readstat;         /* Status of READ operation */
-	char seqstat;          /* Status of SEQUENCE operation */
-	unsigned char scnt;    /* Number of SEQUENCE words transferred */
+  char          readstat; /* Status of READ operation */
+  char          seqstat;  /* Status of SEQUENCE operation */
+  unsigned char scnt;     /* Number of SEQUENCE words transferred */
 } SLINK_status;
 
 typedef struct {
-	int size;
-	unsigned int *buf;
-	unsigned int *first;
-	unsigned int *last;
-	unsigned int *max;
-	int full;
+  int           size;
+  unsigned int *buf;
+  unsigned int *first;
+  unsigned int *last;
+  unsigned int *max;
+  int           full;
 } SLINK_queue;
 
 typedef struct {
-	SLINK_regs    *reg;     /* Pointer to core registers */
-	SLINK_status  *status;  /* Driver status information */
-	void          (*slink_irq_handler)(int); /* Handler for INTERRUPT */
-	void          (*slink_seq_change)(int); /* Callback on SEQUENCE change */
-	int           rword;    /* Placeholder for READ response */
-	rtems_id      read_sem; /* Semaphore for blocking SLINK_read */
-	SLINK_queue   *queues;  /* Receive queues */
+  SLINK_regs   *reg;                  /* Pointer to core registers */
+  SLINK_status *status;               /* Driver status information */
+  void ( *slink_irq_handler )( int ); /* Handler for INTERRUPT */
+  void ( *slink_seq_change )( int );  /* Callback on SEQUENCE change */
+  int          rword;                 /* Placeholder for READ response */
+  rtems_id     read_sem;              /* Semaphore for blocking SLINK_read */
+  SLINK_queue *queues;                /* Receive queues */
 #ifdef SLINK_COLLECT_STATISTICS
-	SLINK_stats   *stats;   /* Core statistics, optional */
+  SLINK_stats *stats; /* Core statistics, optional */
 #endif
 } SLINK_cfg;
-
 
 static SLINK_cfg *cfg = NULL;
 
@@ -118,33 +117,36 @@ static SLINK_cfg *cfg = NULL;
  * that can send data. The pointers to the queues is saved in the driver 
  * config structure.
  */
-static int SLINK_createqueues(int size)
+static int SLINK_createqueues( int size )
 {
-	SLINK_queue *q;
-	int i, j;
+  SLINK_queue *q;
+  int          i, j;
 
-	if ((q = grlib_malloc(SLINK_NUMQUEUES*sizeof(*q))) == NULL)
-		goto slink_qiniterr1;
-		
-	for (i = 0; i < SLINK_NUMQUEUES; i++) {
-		q[i].size = size;
-		if ((q[i].buf = grlib_malloc(size*sizeof(int))) == NULL)
-			goto slink_qiniterr2;
-		q[i].first = q[i].last = q[i].buf;
-		q[i].max = q[i].buf + (size-1);
-		q[i].full = 0;
-	}
+  if ( ( q = grlib_malloc( SLINK_NUMQUEUES * sizeof( *q ) ) ) == NULL ) {
+    goto slink_qiniterr1;
+  }
 
-       	cfg->queues = q;
+  for ( i = 0; i < SLINK_NUMQUEUES; i++ ) {
+    q[ i ].size = size;
+    if ( ( q[ i ].buf = grlib_malloc( size * sizeof( int ) ) ) == NULL ) {
+      goto slink_qiniterr2;
+    }
+    q[ i ].first = q[ i ].last = q[ i ].buf;
+    q[ i ].max = q[ i ].buf + ( size - 1 );
+    q[ i ].full = 0;
+  }
 
-	return 0;
-	
- slink_qiniterr2:
-	for (j = 0; j < i; j++)
-		free(q[i].buf);
-	free(q);
- slink_qiniterr1:
-	return -1;
+  cfg->queues = q;
+
+  return 0;
+
+slink_qiniterr2:
+  for ( j = 0; j < i; j++ ) {
+    free( q[ i ].buf );
+  }
+  free( q );
+slink_qiniterr1:
+  return -1;
 }
 
 /*
@@ -171,18 +173,18 @@ static int SLINK_createqueues(int size)
  * Returns: Nothing
  * Description: 
  */
-static void SLINK_enqueue(unsigned int slink_wrd)
+static void SLINK_enqueue( unsigned int slink_wrd )
 {
-	SLINK_queue *ioq = cfg->queues + SLINK_WRD_CARDNUM(slink_wrd); 
+  SLINK_queue *ioq = cfg->queues + SLINK_WRD_CARDNUM( slink_wrd );
 
-	if (!ioq->full && SLINK_WRD_CARDNUM(slink_wrd) < SLINK_NUMQUEUES) {
-		*ioq->last = slink_wrd;
-		ioq->last = (ioq->last >= ioq->max) ? ioq->buf : ioq->last+1;
-		ioq->full = ioq->last == ioq->first;
-		return;
-	}
+  if ( !ioq->full && SLINK_WRD_CARDNUM( slink_wrd ) < SLINK_NUMQUEUES ) {
+    *ioq->last = slink_wrd;
+    ioq->last = ( ioq->last >= ioq->max ) ? ioq->buf : ioq->last + 1;
+    ioq->full = ioq->last == ioq->first;
+    return;
+  }
 #ifdef SLINK_COLLECT_STATISTICS
-	cfg->stats->lostwords++;
+  cfg->stats->lostwords++;
 #endif
 }
 
@@ -196,16 +198,18 @@ static void SLINK_enqueue(unsigned int slink_wrd)
  * Returns: Base address and IRQ via arguments, 0 if core is found, else -1
  * Description: See above.
  */
-static int SLINK_getaddr(int *base, int *irq)
-{	
-	struct ambapp_apb_info c;
+static int SLINK_getaddr( int *base, int *irq )
+{
+  struct ambapp_apb_info c;
 
-	if (ambapp_find_apbslv(ambapp_plb(),VENDOR_GAISLER,GAISLER_SLINK,&c) == 1) {
-		*base = c.start;
-		*irq = c.common.irq;
-		return 0;
-	}
-	return -1;
+  if (
+    ambapp_find_apbslv( ambapp_plb(), VENDOR_GAISLER, GAISLER_SLINK, &c ) == 1
+  ) {
+    *base = c.start;
+    *irq = c.common.irq;
+    return 0;
+  }
+  return -1;
 }
 
 /* Function: SLINK_calcscaler
@@ -215,12 +219,11 @@ static int SLINK_getaddr(int *base, int *irq)
  * a SLINK bus frequency as close to 6 MHz as possible. Please see the IP core 
  * documentation for a description of how clock scaling is implemented. 
  */
-static int SLINK_calcscaler(int sysfreq)
+static int SLINK_calcscaler( int sysfreq )
 {
-	int fact = sysfreq / SLINK_FREQ_HZ;
-	return ((fact/2-1) << 16) | (fact % 2 ? fact/2 : fact/2-1);  
+  int fact = sysfreq / SLINK_FREQ_HZ;
+  return ( ( fact / 2 - 1 ) << 16 ) | ( fact % 2 ? fact / 2 : fact / 2 - 1 );
 }
-
 
 /*
  * Function: SLINK_getsysfreq
@@ -229,18 +232,23 @@ static int SLINK_calcscaler(int sysfreq)
  * Description: Looks at the timer to determine system frequency. Makes use
  * of AMBA Plug'n'Play. 
  */
-static int SLINK_getsysfreq(void)
+static int SLINK_getsysfreq( void )
 {
-	struct ambapp_apb_info t;
-	struct gptimer_regs *tregs;
-		
-	if (ambapp_find_apbslv(ambapp_plb(),VENDOR_GAISLER,GAISLER_GPTIMER,&t)==1) {
-		tregs = (struct gptimer_regs *)(uintptr_t)t.start;
-		DBG("SLINK_getsysfreq returning %d\n", 
-		    (tregs->scaler_reload+1)*1000*1000);
-		return (tregs->scaler_reload+1)*1000*1000;
-	}
-	return 0;
+  struct ambapp_apb_info t;
+  struct gptimer_regs   *tregs;
+
+  if (
+    ambapp_find_apbslv( ambapp_plb(), VENDOR_GAISLER, GAISLER_GPTIMER, &t ) ==
+    1
+  ) {
+    tregs = (struct gptimer_regs *) (uintptr_t) t.start;
+    DBG(
+      "SLINK_getsysfreq returning %d\n",
+      ( tregs->scaler_reload + 1 ) * 1000 * 1000
+    );
+    return ( tregs->scaler_reload + 1 ) * 1000 * 1000;
+  }
+  return 0;
 }
 
 /*
@@ -255,101 +263,104 @@ static int SLINK_getsysfreq(void)
  * variable. SLAVE-WORD-SEND transfers are placed in the IO card's receive
  * queue.
  */
-static rtems_isr SLINK_interrupt_handler(void *v)
+static rtems_isr SLINK_interrupt_handler( void *v )
 {
-	(void) v;
+  (void) v;
 
-	unsigned int sts;
-	unsigned int wrd;
+  unsigned int sts;
+  unsigned int wrd;
 
-	/* Read all words from Receive queue */
-	while ((sts = cfg->reg->sts) & SLINK_S_RNE) {
+  /* Read all words from Receive queue */
+  while ( ( sts = cfg->reg->sts ) & SLINK_S_RNE ) {
+    /* Read first word in receive queue */
+    wrd = cfg->reg->rd;
 
-		/* Read first word in receive queue */
-		wrd = cfg->reg->rd;
-	
-		/* Check channel value to determine action */
-		switch (SLINK_WRD_CHAN(wrd)) {
-		case 0: /* Interrupt */
-			cfg->slink_irq_handler(wrd);
+    /* Check channel value to determine action */
+    switch ( SLINK_WRD_CHAN( wrd ) ) {
+      case 0: /* Interrupt */
+        cfg->slink_irq_handler( wrd );
 #ifdef SLINK_COLLECT_STATISTICS
-			cfg->stats->interrupts++;
+        cfg->stats->interrupts++;
 #endif
-			break;
-		case 3: /* Read response, if no active READ, fall-through */
-			if (cfg->status->readstat == SLINK_ACTIVE) {
-				rtems_semaphore_release(cfg->read_sem);
-				cfg->status->readstat = SLINK_COMPLETED;
-				cfg->rword = wrd;
-				break;
-			}
+        break;
+      case 3: /* Read response, if no active READ, fall-through */
+        if ( cfg->status->readstat == SLINK_ACTIVE ) {
+          rtems_semaphore_release( cfg->read_sem );
+          cfg->status->readstat = SLINK_COMPLETED;
+          cfg->rword = wrd;
+          break;
+        }
 #ifdef __rtems__
-			RTEMS_FALL_THROUGH();
+        RTEMS_FALL_THROUGH();
 #endif
-		default: /* Unsolicited request */
-			SLINK_enqueue(wrd);
-			break;
-		}
-	}
+      default: /* Unsolicited request */
+        SLINK_enqueue( wrd );
+        break;
+    }
+  }
 
-	/* Check sequence operation */
-	if (sts & SLINK_S_SC) {
-		/* SEQUENCE completed */
-		cfg->status->seqstat = SLINK_COMPLETED;
-		if (cfg->slink_seq_change)
-			cfg->slink_seq_change(SLINK_COMPLETED);
+  /* Check sequence operation */
+  if ( sts & SLINK_S_SC ) {
+    /* SEQUENCE completed */
+    cfg->status->seqstat = SLINK_COMPLETED;
+    if ( cfg->slink_seq_change ) {
+      cfg->slink_seq_change( SLINK_COMPLETED );
+    }
 #ifdef SLINK_COLLECT_STATISTICS
-		cfg->stats->seqcomp++;
+    cfg->stats->seqcomp++;
 #endif
-	} else if (sts & SLINK_S_SA) {
-		/* SEQUENCE aborted */
-		cfg->status->seqstat = SLINK_ABORTED;
-		cfg->status->scnt = (sts >> SLINK_S_SI_POS);
-		if (cfg->slink_seq_change)
-			cfg->slink_seq_change(SLINK_ABORTED);
-	}
+  } else if ( sts & SLINK_S_SA ) {
+    /* SEQUENCE aborted */
+    cfg->status->seqstat = SLINK_ABORTED;
+    cfg->status->scnt = ( sts >> SLINK_S_SI_POS );
+    if ( cfg->slink_seq_change ) {
+      cfg->slink_seq_change( SLINK_ABORTED );
+    }
+  }
 
-	/* Check error conditions */
-	if (sts & SLINK_S_PERR) {
-		/* 
+  /* Check error conditions */
+  if ( sts & SLINK_S_PERR ) {
+    /* 
 		   Parity error detected, set seqstat if there is an ongoing 
 		   sequence so that the calling application can decide if the
 		   sequence should be aborted 
 		*/
-		if (cfg->status->seqstat == SLINK_ACTIVE) {
-			cfg->status->seqstat = SLINK_PARERR;
-			if (cfg->slink_seq_change)
-				cfg->slink_seq_change(SLINK_PARERR);
-		}
-		/* Abort READ operation */
-		if (cfg->status->readstat == SLINK_ACTIVE) {
-			cfg->status->readstat = SLINK_PARERR;
-			rtems_semaphore_release(cfg->read_sem);
-		}
+    if ( cfg->status->seqstat == SLINK_ACTIVE ) {
+      cfg->status->seqstat = SLINK_PARERR;
+      if ( cfg->slink_seq_change ) {
+        cfg->slink_seq_change( SLINK_PARERR );
+      }
+    }
+    /* Abort READ operation */
+    if ( cfg->status->readstat == SLINK_ACTIVE ) {
+      cfg->status->readstat = SLINK_PARERR;
+      rtems_semaphore_release( cfg->read_sem );
+    }
 #ifdef SLINK_COLLECT_STATISTICS
-		cfg->stats->parerr++;
+    cfg->stats->parerr++;
 #endif
-	} 
-	if (sts & SLINK_S_AERR) {
-		/* AMBA error response, sequence aborted */
-		cfg->status->seqstat = SLINK_AMBAERR;
-		cfg->status->scnt = sts >> SLINK_S_SI_POS;
-		if (cfg->slink_seq_change)
-			cfg->slink_seq_change(SLINK_AMBAERR);
-	}
-	if (sts & SLINK_S_ROV) {
-		/* Receive overflow, abort any ongoing READ */ 
-		if (cfg->status->readstat == SLINK_ACTIVE) {
-			cfg->status->readstat = SLINK_ROV;
-			rtems_semaphore_release(cfg->read_sem);
-		}
+  }
+  if ( sts & SLINK_S_AERR ) {
+    /* AMBA error response, sequence aborted */
+    cfg->status->seqstat = SLINK_AMBAERR;
+    cfg->status->scnt = sts >> SLINK_S_SI_POS;
+    if ( cfg->slink_seq_change ) {
+      cfg->slink_seq_change( SLINK_AMBAERR );
+    }
+  }
+  if ( sts & SLINK_S_ROV ) {
+    /* Receive overflow, abort any ongoing READ */
+    if ( cfg->status->readstat == SLINK_ACTIVE ) {
+      cfg->status->readstat = SLINK_ROV;
+      rtems_semaphore_release( cfg->read_sem );
+    }
 #ifdef SLINK_COLLECT_STATISICS
-		cfg->status->recov++;
+    cfg->status->recov++;
 #endif
-	}
+  }
 
-	/* Clear processed bits */
-	cfg->reg->sts = sts;
+  /* Clear processed bits */
+  cfg->reg->sts = sts;
 }
 
 /**** SLINK driver interface starts here ****/
@@ -363,104 +374,139 @@ static rtems_isr SLINK_interrupt_handler(void *v)
  * Returns: 0 on success, -1 on failure
  * Description: Initializes the SLINK core
  */
-int SLINK_init(unsigned int nullwrd, int parity, int qsize,
-	       void (*interrupt_trans_handler)(int),
-	       void (*sequence_callback)(int))
+int SLINK_init(
+  unsigned int nullwrd,
+  int          parity,
+  int          qsize,
+  void ( *interrupt_trans_handler )( int ),
+  void ( *sequence_callback )( int )
+)
 {
-	int base;
-	int irq;
-	rtems_status_code st;
+  int               base;
+  int               irq;
+  rtems_status_code st;
 
-	/* Allocate private config structure */
-	if (cfg == NULL && (cfg = grlib_malloc(sizeof(*cfg))) == NULL) {
-		DBG("SLINK_init: Could not allocate cfg structure\n");
-		goto slink_initerr1;
-	}
-	
-	/* Create simple binary semaphore for blocking SLINK_read */
-	st = rtems_semaphore_create(rtems_build_name('S', 'L', 'R', '0'), 0, 
-				    (RTEMS_FIFO|RTEMS_SIMPLE_BINARY_SEMAPHORE|
-				     RTEMS_NO_INHERIT_PRIORITY|RTEMS_LOCAL|
-				     RTEMS_NO_PRIORITY_CEILING), 0,
-				    &cfg->read_sem);
-	if (st != RTEMS_SUCCESSFUL) {
-		DBG("SLINK_init: Could not create semaphore\n");
-		goto slink_initerr1;
-	}
-  
-	/* Initialize pointer to SLINK core registers and get IRQ line */
-	if (SLINK_getaddr(&base, &irq) == -1) {
-		DBG("SLINK_init: Could not find core\n");
-		goto slink_initerr2;
-	}
-	cfg->reg = (SLINK_regs*)(uintptr_t)base;
+  /* Allocate private config structure */
+  if ( cfg == NULL && ( cfg = grlib_malloc( sizeof( *cfg ) ) ) == NULL ) {
+    DBG( "SLINK_init: Could not allocate cfg structure\n" );
+    goto slink_initerr1;
+  }
 
-	/* Allocate status structure and initialize members */
-	if ((cfg->status = grlib_calloc(1, sizeof(*cfg->status))) == NULL) {
-		DBG("SLINK_init: Could not allocate status structure\n");
-		goto slink_initerr2;
-	}
-	cfg->status->seqstat = SLINK_COMPLETED;
-	cfg->status->readstat = SLINK_COMPLETED;
+  /* Create simple binary semaphore for blocking SLINK_read */
+  st = rtems_semaphore_create(
+    rtems_build_name( 'S', 'L', 'R', '0' ),
+    0,
+    ( RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY |
+      RTEMS_LOCAL | RTEMS_NO_PRIORITY_CEILING ),
+    0,
+    &cfg->read_sem
+  );
+  if ( st != RTEMS_SUCCESSFUL ) {
+    DBG( "SLINK_init: Could not create semaphore\n" );
+    goto slink_initerr1;
+  }
+
+  /* Initialize pointer to SLINK core registers and get IRQ line */
+  if ( SLINK_getaddr( &base, &irq ) == -1 ) {
+    DBG( "SLINK_init: Could not find core\n" );
+    goto slink_initerr2;
+  }
+  cfg->reg = (SLINK_regs *) (uintptr_t) base;
+
+  /* Create simple binary semaphore for blocking SLINK_read */
+  st = rtems_semaphore_create(
+    rtems_build_name( 'S', 'L', 'R', '0' ),
+    0,
+    ( RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY |
+      RTEMS_LOCAL | RTEMS_NO_PRIORITY_CEILING ),
+    0,
+    &cfg->read_sem
+  );
+  if ( st != RTEMS_SUCCESSFUL ) {
+    DBG( "SLINK_init: Could not create semaphore\n" );
+    goto slink_initerr1;
+  }
+
+  /* Initialize pointer to SLINK core registers and get IRQ line */
+  if ( SLINK_getaddr( &base, &irq ) == -1 ) {
+    DBG( "SLINK_init: Could not find core\n" );
+    goto slink_initerr2;
+  }
+  cfg->reg = (SLINK_regs *) base;
+
+  /* Allocate status structure and initialize members */
+  if ( ( cfg->status = grlib_calloc( 1, sizeof( *cfg->status ) ) ) == NULL ) {
+    DBG( "SLINK_init: Could not allocate status structure\n" );
+    goto slink_initerr2;
+  }
+  cfg->status->seqstat = SLINK_COMPLETED;
+  cfg->status->readstat = SLINK_COMPLETED;
 
 #ifdef SLINK_COLLECT_STATISTICS
-	/* Allocate statistics structure and initialize members */
-	if ((cfg->stats = grlib_calloc(1, sizeof(*cfg->stats))) == NULL) {
-		DBG("SLINK_init: Could not allocate statistics structure\n");
-		goto slink_initerr3;
-	}
+  /* Allocate statistics structure and initialize members */
+  if ( ( cfg->stats = grlib_calloc( 1, sizeof( *cfg->stats ) ) ) == NULL ) {
+    DBG( "SLINK_init: Could not allocate statistics structure\n" );
+    goto slink_initerr3;
+  }
 #endif
 
-	/* Allocate and initialize queues */
-	if (SLINK_createqueues(qsize) == -1) {
-		DBG("SLINK_init: Could not create queues\n");
-		goto slink_initerr3;
-	}
+  /* Allocate and initialize queues */
+  if ( SLINK_createqueues( qsize ) == -1 ) {
+    DBG( "SLINK_init: Could not create queues\n" );
+    goto slink_initerr3;
+  }
 
-	/* Configure core registers */
-	cfg->reg->clockscale = SLINK_calcscaler(SLINK_getsysfreq());
-	cfg->reg->ctrl = parity ? SLINK_C_PAR : 0;
-	cfg->reg->nullwrd = nullwrd;
-	cfg->reg->msk = (SLINK_M_PERRE | SLINK_M_AERRE | SLINK_M_ROVE |
-			 SLINK_M_RNEE | SLINK_M_SAE | SLINK_M_SCE);
+  /* Configure core registers */
+  cfg->reg->clockscale = SLINK_calcscaler( SLINK_getsysfreq() );
+  cfg->reg->ctrl = parity ? SLINK_C_PAR : 0;
+  cfg->reg->nullwrd = nullwrd;
+  cfg->reg->msk =
+    ( SLINK_M_PERRE | SLINK_M_AERRE | SLINK_M_ROVE | SLINK_M_RNEE |
+      SLINK_M_SAE | SLINK_M_SCE );
 
-	/* Set-up INTERRUPT transfer handling */
-	cfg->slink_irq_handler = interrupt_trans_handler;
+  /* Set-up INTERRUPT transfer handling */
+  cfg->slink_irq_handler = interrupt_trans_handler;
 
-	/* Save SEQUENCE callback */
-	cfg->slink_seq_change = sequence_callback;
+  /* Save SEQUENCE callback */
+  cfg->slink_seq_change = sequence_callback;
 
-	/* Set-up IRQ handling */
-	rtems_interrupt_handler_install(irq, "slink",
-			RTEMS_INTERRUPT_SHARED,
-			SLINK_interrupt_handler, NULL);
-	
-	return 0;
+  /* Set-up IRQ handling */
+  rtems_interrupt_handler_install(
+    irq,
+    "slink",
+    RTEMS_INTERRUPT_SHARED,
+    SLINK_interrupt_handler,
+    NULL
+  );
 
- slink_initerr3:
-	free(cfg->status);
- slink_initerr2:
-	free(cfg);
- slink_initerr1:
-	return -1;
+  return 0;
+
+slink_initerr3:
+  free( cfg->status );
+slink_initerr2:
+  free( cfg );
+slink_initerr1:
+  return -1;
 }
 
 /* Function: SLINK_start
  * Description: Enables the core
  */
-void SLINK_start(void)
-{   
-	if (cfg != NULL)
-		cfg->reg->ctrl |= SLINK_C_SLE;
+void SLINK_start( void )
+{
+  if ( cfg != NULL ) {
+    cfg->reg->ctrl |= SLINK_C_SLE;
+  }
 }
 
 /* Function: SLINK_stop
  * Description: Disables the core
  */
-void SLINK_stop(void)
+void SLINK_stop( void )
 {
-	if (cfg != NULL)
-		cfg->reg->ctrl &= ~SLINK_C_SLE;
+  if ( cfg != NULL ) {
+    cfg->reg->ctrl &= ~SLINK_C_SLE;
+  }
 }
 
 /*
@@ -475,32 +521,32 @@ void SLINK_stop(void)
  *              is an error. This function blocks until the READ operation is
  *              completed or aborted.
  */
-int SLINK_read(int data, int channel, int *reply)
-{	
-	DBG("SLINK_read: called..");
+int SLINK_read( int data, int channel, int *reply )
+{
+  DBG( "SLINK_read: called.." );
 
-	if (cfg->reg->sts & SLINK_S_TNF) {
-		cfg->status->readstat = SLINK_ACTIVE;
-		cfg->reg->td = SLINK_RW | channel << SLINK_CHAN_POS | data;
-	} else {
-		DBG("queue FULL\n");
-		return -SLINK_QFULL; /* Transmit queue full */
-	}
+  if ( cfg->reg->sts & SLINK_S_TNF ) {
+    cfg->status->readstat = SLINK_ACTIVE;
+    cfg->reg->td = SLINK_RW | channel << SLINK_CHAN_POS | data;
+  } else {
+    DBG( "queue FULL\n" );
+    return -SLINK_QFULL; /* Transmit queue full */
+  }
 
-	/* Block until the operation has completed or has been aborted */
-	rtems_semaphore_obtain(cfg->read_sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  /* Block until the operation has completed or has been aborted */
+  rtems_semaphore_obtain( cfg->read_sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
 
-	if (cfg->status->readstat == SLINK_COMPLETED) {
-		*reply = cfg->rword; 
+  if ( cfg->status->readstat == SLINK_COMPLETED ) {
+    *reply = cfg->rword;
 #ifdef SLINK_COLLECT_STATISTICS
-		cfg->stats->reads++;
-#endif       
-		DBG("returning 0\n");
-		return 0;
-	} else {
-		DBG("returning error code\n");
-		return -cfg->status->readstat;
-	}
+    cfg->stats->reads++;
+#endif
+    DBG( "returning 0\n" );
+    return 0;
+  } else {
+    DBG( "returning error code\n" );
+    return -cfg->status->readstat;
+  }
 }
 
 /*
@@ -512,17 +558,17 @@ int SLINK_read(int data, int channel, int *reply)
  *          -SLINK_QFULL if transmit queue was full (software should retry)
  * Description: See above.
  */
-int SLINK_write(int data, int channel)
-{ 
-	if (cfg->reg->sts & SLINK_S_TNF) {
-		cfg->reg->td = channel << SLINK_CHAN_POS | data;
+int SLINK_write( int data, int channel )
+{
+  if ( cfg->reg->sts & SLINK_S_TNF ) {
+    cfg->reg->td = channel << SLINK_CHAN_POS | data;
 #ifdef SLINK_COLLECT_STATISTICS
-		cfg->stats->writes++;
+    cfg->stats->writes++;
 #endif
-		return 0;
-	}
+    return 0;
+  }
 
-	return -SLINK_QFULL;	
+  return -SLINK_QFULL;
 }
 
 /*
@@ -535,48 +581,53 @@ int SLINK_write(int data, int channel)
  * Returns: 0 if SEQUENCE could be started (SUCCESS)
  *          -1 if SEQUNCE was not started due to ongoing SEQUENCE
  */
-int SLINK_seqstart(int *a, int *b, int n, int channel, int reconly)
-{  
-	/* Only start a new SEQUENCE of the former SEQUENCE has completed */
-	if (cfg->status->seqstat == SLINK_ACTIVE || 
-	    cfg->status->seqstat == SLINK_PARERR)
-		return -1;
+int SLINK_seqstart( int *a, int *b, int n, int channel, int reconly )
+{
+  /* Only start a new SEQUENCE of the former SEQUENCE has completed */
+  if (
+    cfg->status->seqstat == SLINK_ACTIVE ||
+    cfg->status->seqstat == SLINK_PARERR
+  ) {
+    return -1;
+  }
 
-	/* Tell core about arrays */
-	cfg->reg->abase = (int)(uintptr_t)a;
-	cfg->reg->bbase = (int)(uintptr_t)b;
-	
-	/* As far as software is concerned the sequence is now active */
-	cfg->status->seqstat = SLINK_ACTIVE;
+  /* Tell core about arrays */
+  cfg->reg->abase = (int) (uintptr_t) a;
+  cfg->reg->bbase = (int) (uintptr_t) b;
 
-	/* Enable SEQUENCE operation with SCN = channel and SLEN = n-1 */
-        if (reconly == 1) {
-           cfg->reg->ctrl = (((n-1) << SLINK_C_SLEN_POS) | SLINK_C_SRO |
-                             (channel << SLINK_C_SCN_POS) |
-                             SLINK_C_SE | (cfg->reg->ctrl & 0xC000000F));
-        } else {
-           cfg->reg->ctrl = (((n-1) << SLINK_C_SLEN_POS) |
-                             (channel << SLINK_C_SCN_POS) |
-                             SLINK_C_SE | (cfg->reg->ctrl & 0xC000000F));
-        }
+  /* As far as software is concerned the sequence is now active */
+  cfg->status->seqstat = SLINK_ACTIVE;
+
+  /* As far as software is concerned the sequence is now active */
+  cfg->status->seqstat = SLINK_ACTIVE;
+
+  /* Enable SEQUENCE operation with SCN = channel and SLEN = n-1 */
+  if ( reconly == 1 ) {
+    cfg->reg->ctrl =
+      ( ( ( n - 1 ) << SLINK_C_SLEN_POS ) | SLINK_C_SRO |
+        ( channel << SLINK_C_SCN_POS ) | SLINK_C_SE |
+        ( cfg->reg->ctrl & 0xC000000F ) );
+  } else {
+    cfg->reg->ctrl =
+      ( ( ( n - 1 ) << SLINK_C_SLEN_POS ) | ( channel << SLINK_C_SCN_POS ) |
+        SLINK_C_SE | ( cfg->reg->ctrl & 0xC000000F ) );
+  }
 
 #ifdef SLINK_COLLECT_STATISTICS
-	cfg->stats->sequences++;
+  cfg->stats->sequences++;
 #endif
 
-	return 0;
+  return 0;
 }
-
 
 /* Function: SLINK_seqabort
  * Description: This function aborts an ongoing SEQUENCE. Software can tell
  * when the SEQUENCE is aborted by polling SLINK_seqstat().
  */
-void SLINK_seqabort(void)
+void SLINK_seqabort( void )
 {
-	cfg->reg->ctrl = cfg->reg->ctrl | SLINK_C_AS;
+  cfg->reg->ctrl = cfg->reg->ctrl | SLINK_C_AS;
 }
-
 
 /*
  * Function: SLINK_seqstatus
@@ -593,9 +644,9 @@ void SLINK_seqabort(void)
  *              If the SEQUENCE was aborted SLINK_seqwrds() can be used to
  *              determine the number of completed operations.
  */
-int SLINK_seqstatus(void)
+int SLINK_seqstatus( void )
 {
-	return cfg->status->seqstat;
+  return cfg->status->seqstat;
 }
 
 /*
@@ -605,13 +656,16 @@ int SLINK_seqstatus(void)
  *          number of words if the last SEQUENCE did not complete 
  *          (SLINK_AMBAERR or SLINK_ABORTED is reported ny SLINK_seqstatus()) 
  */
-int SLINK_seqwrds(void)
+int SLINK_seqwrds( void )
 {
-	switch (cfg->status->seqstat) {
-	case SLINK_COMPLETED: return 0;
-	case SLINK_ACTIVE | SLINK_PARERR: return -1;
-	default: return cfg->status->scnt;
-	}
+  switch ( cfg->status->seqstat ) {
+    case SLINK_COMPLETED:
+      return 0;
+    case SLINK_ACTIVE | SLINK_PARERR:
+      return -1;
+    default:
+      return cfg->status->scnt;
+  }
 }
 
 /* 
@@ -619,9 +673,9 @@ int SLINK_seqwrds(void)
  * Returns: The SLINK core's status register. The register values can be 
  *          interpreted with the help of macros defined in bsp/grslink.h.
  */
-int SLINK_hwstatus(void)
+int SLINK_hwstatus( void )
 {
-	return cfg->reg->sts;
+  return cfg->reg->sts;
 }
 
 /*
@@ -631,25 +685,21 @@ int SLINK_hwstatus(void)
  * Description: SLINK_queuestatus(queue) returns the number of elements in
  *              queue 'iocard'
  */
-int SLINK_queuestatus(int iocard)
-{	
-	unsigned int first, last;
-	SLINK_queue *ioq;
-	
-	if (iocard >= SLINK_NUMQUEUES)
-		return -1;
+int SLINK_queuestatus( int iocard )
+{
+  unsigned int first, last;
+  SLINK_queue *ioq;
 
-	ioq = cfg->queues + iocard;
+  if ( iocard >= SLINK_NUMQUEUES ) {
+    return -1;
+  }
 
-	if (ioq->full)
-		return ioq->size;
-	if (ioq->first == ioq->last)
-		return 0;
+  ioq = cfg->queues + iocard;
 
-	first = ((unsigned int)(uintptr_t)ioq->first)/sizeof(unsigned int);
-	last = ((unsigned int)(uintptr_t)ioq->last)/sizeof(unsigned int);
-	
-	return first < last ? last - first : ioq->size - first + last; 
+  first = ( (unsigned int) (uintptr_t) ioq->first ) / sizeof( unsigned int );
+  last = ( (unsigned int) (uintptr_t) ioq->last ) / sizeof( unsigned int );
+
+  return first < last ? last - first : ioq->size - first + last;
 }
 
 /*
@@ -659,20 +709,21 @@ int SLINK_queuestatus(int iocard)
  * Returns: 0 on success or -1 on empty or non-existent queue
  * Description: 
  */
-int SLINK_dequeue(int iocard, int *elem)
-{	
-	if (iocard >= SLINK_NUMQUEUES)
-		return -1;
-	
-	SLINK_queue *ioq = cfg->queues + iocard;
-	
-	if (ioq->last != ioq->first || ioq->full) {
-		*elem = *ioq->first;
-		ioq->first = (ioq->first >= ioq->max) ? ioq->buf : ioq->first+1;
-		ioq->full = 0;
-		return 0;
-	}
-	return -1;
+int SLINK_dequeue( int iocard, int *elem )
+{
+  if ( iocard >= SLINK_NUMQUEUES ) {
+    return -1;
+  }
+
+  SLINK_queue *ioq = cfg->queues + iocard;
+
+  if ( ioq->last != ioq->first || ioq->full ) {
+    *elem = *ioq->first;
+    ioq->first = ( ioq->first >= ioq->max ) ? ioq->buf : ioq->first + 1;
+    ioq->full = 0;
+    return 0;
+  }
+  return -1;
 }
 
 /*
@@ -680,11 +731,11 @@ int SLINK_dequeue(int iocard, int *elem)
  * Returns: If the core has statistics colletion enabled this function returns
  * a pointer to a struct containing statistics information, otherwise NULL.
  */
-SLINK_stats *SLINK_statistics(void)
+SLINK_stats *SLINK_statistics( void )
 {
 #ifdef SLINK_COLLECT_STATISTICS
-	return cfg->stats;
+  return cfg->stats;
 #else
-	return NULL;
+  return NULL;
 #endif
 }

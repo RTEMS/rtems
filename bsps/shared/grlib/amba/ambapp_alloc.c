@@ -30,15 +30,16 @@
 
 #include <grlib/ambapp.h>
 
-int ambapp_alloc_dev(struct ambapp_dev *dev, void *owner)
+int ambapp_alloc_dev( struct ambapp_dev *dev, void *owner )
 {
-  if (dev->owner)
+  if ( dev->owner ) {
     return -1;
+  }
   dev->owner = owner;
   return 0;
 }
 
-void ambapp_free_dev(struct ambapp_dev *dev)
+void ambapp_free_dev( struct ambapp_dev *dev )
 {
   dev->owner = 0;
 }

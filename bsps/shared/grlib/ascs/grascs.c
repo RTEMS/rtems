@@ -40,9 +40,9 @@
 #endif
 
 #ifdef DEBUG
-#define DBG(x...) printk(x)
+#define DBG( x... ) printk( x )
 #else
-#define DBG(x...)
+#define DBG( x... )
 #endif
 
 typedef struct {
@@ -58,25 +58,25 @@ typedef struct {
   unsigned char usconf;
   unsigned char nslaves;
   unsigned char dbits;
-  int clkfreq;
+  int           clkfreq;
 } GRASCS_caps;
 
 typedef struct {
-  GRASCS_regs *regs; /* Pointer to core registers */
-  GRASCS_caps *caps; /* Pointer to capability struct */
-  rtems_id tcsem1, tcsem2;
-  rtems_id tmsem1, tmsem2;
+  GRASCS_regs  *regs; /* Pointer to core registers */
+  GRASCS_caps  *caps; /* Pointer to capability struct */
+  rtems_id      tcsem1, tcsem2;
+  rtems_id      tmsem1, tmsem2;
   volatile char running;
-  int tcptr;
-  int tmptr;
-  int tcwords;
-  int tmwords;
+  int           tcptr;
+  int           tmptr;
+  int           tcwords;
+  int           tmwords;
 } GRASCS_cfg;
 
 static GRASCS_cfg *cfg = NULL;
 
 /*------------------------------------*/
-/* Start of internal helper functions */ 
+/* Start of internal helper functions */
 /*------------------------------------*/
 
 /* Function: ASCS_getaddr
@@ -87,18 +87,25 @@ static GRASCS_cfg *cfg = NULL;
      irq to arguments. Uses AMBA plug and play to find the
      core.
 */
-static int ASCS_get_addr(int *base, int *irq) {
-
+static int ASCS_get_addr( int *base, int *irq )
+{
   struct ambapp_apb_info core;
-  
-  if(ambapp_find_apbslv(ambapp_plb(), VENDOR_GAISLER, GAISLER_ASCS, &core) == 1) {
+
+  if (
+    ambapp_find_apbslv( ambapp_plb(), VENDOR_GAISLER, GAISLER_ASCS, &core ) ==
+    1
+  ) {
     *base = core.start;
     *irq = core.common.irq;
-    DBG("ASCS_get_addr: Registerd ASCS core at 0x%x with irq %i\n",core.start, core.irq);
+    DBG(
+      "ASCS_get_addr: Registerd ASCS core at 0x%x with irq %i\n",
+      core.start,
+      core.irq
+    );
     return 0;
   }
-  DBG("ASCS_get_addr: Failed to detect core\n");
-  return -1;  
+  DBG( "ASCS_get_addr: Failed to detect core\n" );
+  return -1;
 }
 
 /* Function: ASCS_calc_clkreg
@@ -108,12 +115,13 @@ static int ASCS_get_addr(int *base, int *irq) {
    Description: Calculates value of core's CLK-register. See
      GRASCS IP core documentation for details.
 */
-static int ASCS_calc_clkreg(int sysfreq, int etrfreq) {
-
-  if(cfg->caps->usconf)
-    return 1000000/etrfreq;
-  else
-    return sysfreq*1000/etrfreq;
+static int ASCS_calc_clkreg( int sysfreq, int etrfreq )
+{
+  if ( cfg->caps->usconf ) {
+    return 1000000 / etrfreq;
+  } else {
+    return sysfreq * 1000 / etrfreq;
+  }
 }
 
 /* Function: ASCS_get_sysfreq
@@ -121,24 +129,31 @@ static int ASCS_calc_clkreg(int sysfreq, int etrfreq) {
    Return values: System clock frequency in kHz, -1 if failed
    Description: Uses AMBA plug and play to lookup system frequency
 */
-static int ASCS_get_sysfreq(void) {
-
+static int ASCS_get_sysfreq( void )
+{
   struct ambapp_apb_info gpt;
-  struct gptimer_regs *tregs;
-  int tmp;
+  struct gptimer_regs   *tregs;
+  int                    tmp;
 
-  if(ambapp_find_apbslv(ambapp_plb(), VENDOR_GAISLER, GAISLER_GPTIMER, &gpt) == 1) {
-    tregs = (struct gptimer_regs *)(uintptr_t)gpt.start;
-    tmp = (tregs->scaler_reload + 1)*1000;
-    DBG("ASCS_get_sysfreq: Detected system frequency %i kHz\n",tmp);
-    if((tmp < GRASCS_MIN_SFREQ) || (tmp > GRASCS_MAX_SFREQ)) {
-      DBG("ASCS_get_sysfreq: System frequency is invalid for ASCS core\n");
+  if (
+    ambapp_find_apbslv(
+      ambapp_plb(),
+      VENDOR_GAISLER,
+      GAISLER_GPTIMER,
+      &gpt
+    ) == 1
+  ) {
+    tregs = (struct gptimer_regs *) (uintptr_t) gpt.start;
+    tmp = ( tregs->scaler_reload + 1 ) * 1000;
+    DBG( "ASCS_get_sysfreq: Detected system frequency %i kHz\n", tmp );
+    if ( ( tmp < GRASCS_MIN_SFREQ ) || ( tmp > GRASCS_MAX_SFREQ ) ) {
+      DBG( "ASCS_get_sysfreq: System frequency is invalid for ASCS core\n" );
       return -1;
+    } else {
+      return ( tregs->scaler_reload + 1 ) * 1000;
     }
-    else
-      return (tregs->scaler_reload + 1)*1000;
   }
-  DBG("ASCS_get_sysfreq: Failed to detect system frequency\n");
+  DBG( "ASCS_get_sysfreq: Failed to detect system frequency\n" );
   return -1;
 }
 
@@ -149,57 +164,59 @@ static int ASCS_get_sysfreq(void) {
                 appropriate bits in the core's STS register and releases
 		the associated semaphore
 */
-static rtems_isr ASCS_irqhandler(void *v) {
+static rtems_isr ASCS_irqhandler( void *v )
+{
   (void) v;
 
-  if(cfg->regs->sts & GRASCS_STS_TCDONE) {
+  if ( cfg->regs->sts & GRASCS_STS_TCDONE ) {
     /* Clear TC done bit */
-    cfg->regs->sts |= GRASCS_STS_TCDONE;    
+    cfg->regs->sts |= GRASCS_STS_TCDONE;
 
-    if(--cfg->tcwords == 0)
+    if ( --cfg->tcwords == 0 ) {
       /* No more TCs to perform right now */
-      rtems_semaphore_release(cfg->tcsem2);
-    else {
+      rtems_semaphore_release( cfg->tcsem2 );
+    } else {
       /* Block not sent yet, start next TC */
-      if(cfg->caps->dbits == 8) {
-	cfg->tcptr++;
-	cfg->regs->tcd = *((unsigned char*)(uintptr_t)cfg->tcptr);
-      }
-      else if(cfg->caps->dbits == 16) {
-	cfg->tcptr += 2;
-	cfg->regs->tcd = *((unsigned short int*)(uintptr_t)cfg->tcptr);
-      }
-      else {
-	cfg->tcptr += 4;
-	cfg->regs->tcd = *((unsigned int*)(uintptr_t)cfg->tcptr);
+      if ( cfg->caps->dbits == 8 ) {
+        cfg->tcptr++;
+        cfg->regs->tcd = *( (unsigned char *) (uintptr_t) cfg->tcptr );
+      } else if ( cfg->caps->dbits == 16 ) {
+        cfg->tcptr += 2;
+        cfg->regs->tcd = *( (unsigned short int *) (uintptr_t) cfg->tcptr );
+      } else {
+        cfg->tcptr += 4;
+        cfg->regs->tcd = *( (unsigned int *) (uintptr_t) cfg->tcptr );
       }
     }
   }
 
-  if(cfg->regs->sts & GRASCS_STS_TMDONE) {
+  if ( cfg->regs->sts & GRASCS_STS_TMDONE ) {
     /* Clear TM done bit */
     cfg->regs->sts |= GRASCS_STS_TMDONE;
 
     /* Store received data */
-    if(cfg->caps->dbits == 8) {
-      *((unsigned char*)(uintptr_t)cfg->tmptr) = (unsigned char)(cfg->regs->tmd & 0xFF);
+    if ( cfg->caps->dbits == 8 ) {
+      *(
+        (unsigned char *) (uintptr_t) cfg->tmptr
+      ) = (unsigned char) ( cfg->regs->tmd & 0xFF );
       cfg->tmptr++;
-    }
-    else if(cfg->caps->dbits == 16) {
-      *((unsigned short int*)(uintptr_t)cfg->tmptr) = (unsigned short int)(cfg->regs->tmd & 0xFFFF);
+    } else if ( cfg->caps->dbits == 16 ) {
+      *(
+        (unsigned short int *) (uintptr_t) cfg->tmptr
+      ) = (unsigned short int) ( cfg->regs->tmd & 0xFFFF );
       cfg->tmptr += 2;
-    }
-    else {
-      *((unsigned int*)(uintptr_t)cfg->tmptr) = cfg->regs->tmd;
+    } else {
+      *( (unsigned int *) (uintptr_t) cfg->tmptr ) = cfg->regs->tmd;
       cfg->tmptr += 4;
     }
-    
-    if(--cfg->tmwords == 0)
+
+    if ( --cfg->tmwords == 0 ) {
       /* No more TMs to perform right now */
-      rtems_semaphore_release(cfg->tmsem2);
-    else
+      rtems_semaphore_release( cfg->tmsem2 );
+    } else {
       /* Block not received yet, start next TM */
-      cfg->regs->cmd |= GRASCS_CMD_SENDTM;      
+      cfg->regs->cmd |= GRASCS_CMD_SENDTM;
+    }
   }
 }
 
@@ -212,95 +229,122 @@ static rtems_isr ASCS_irqhandler(void *v) {
    Return values: 0 if successful, -1 if unsuccessful
    Description: Initializes the ASCS core
 */
-int ASCS_init(void) {
-
+int ASCS_init( void )
+{
   int base, irq, tmp;
 
-  DBG("ASCS_init: Starting initialization of ASCS core\n");
-  
+  DBG( "ASCS_init: Starting initialization of ASCS core\n" );
+
   /* Allocate memory for config, status and capability struct */
-  if((cfg = grlib_malloc(sizeof(*cfg))) == NULL) {
-    DBG("ASCS_init: Could not allocate memory for cfg struc\n");
+  if ( ( cfg = grlib_malloc( sizeof( *cfg ) ) ) == NULL ) {
+    DBG( "ASCS_init: Could not allocate memory for cfg struc\n" );
     return -1;
   }
-  
-  if((cfg->caps = grlib_calloc(1,sizeof(*cfg->caps))) == NULL) {
-    DBG("ASCS_init: Could not allocate memory for caps struc\n");
+
+  if ( ( cfg->caps = grlib_calloc( 1, sizeof( *cfg->caps ) ) ) == NULL ) {
+    DBG( "ASCS_init: Could not allocate memory for caps struc\n" );
     goto init_error1;
   }
-    
+
   /* Create semaphores for blocking ASCS_TC/TM functions */
-  if(rtems_semaphore_create(rtems_build_name('A','S','C','0'),1,
-			    (RTEMS_FIFO|RTEMS_SIMPLE_BINARY_SEMAPHORE|
-			     RTEMS_NO_INHERIT_PRIORITY|RTEMS_LOCAL|
-			     RTEMS_NO_PRIORITY_CEILING), 0,
-			    &cfg->tcsem1) != RTEMS_SUCCESSFUL) {
-    DBG("ASCS_init: Failed to create semaphore ASC0\n");
+  if (
+    rtems_semaphore_create(
+      rtems_build_name( 'A', 'S', 'C', '0' ),
+      1,
+      ( RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE |
+        RTEMS_NO_INHERIT_PRIORITY | RTEMS_LOCAL | RTEMS_NO_PRIORITY_CEILING ),
+      0,
+      &cfg->tcsem1
+    ) != RTEMS_SUCCESSFUL
+  ) {
+    DBG( "ASCS_init: Failed to create semaphore ASC0\n" );
     goto init_error2;
   }
-  if(rtems_semaphore_create(rtems_build_name('A','S','C','1'),1,
-			    (RTEMS_FIFO|RTEMS_SIMPLE_BINARY_SEMAPHORE|
-			     RTEMS_NO_INHERIT_PRIORITY|RTEMS_LOCAL|
-			     RTEMS_NO_PRIORITY_CEILING), 0,
-			    &cfg->tmsem1) != RTEMS_SUCCESSFUL) {
-    DBG("ASCS_init: Failed to create semaphore ASC1\n");
+  if (
+    rtems_semaphore_create(
+      rtems_build_name( 'A', 'S', 'C', '1' ),
+      1,
+      ( RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE |
+        RTEMS_NO_INHERIT_PRIORITY | RTEMS_LOCAL | RTEMS_NO_PRIORITY_CEILING ),
+      0,
+      &cfg->tmsem1
+    ) != RTEMS_SUCCESSFUL
+  ) {
+    DBG( "ASCS_init: Failed to create semaphore ASC1\n" );
     goto init_error2;
   }
   /* Create semaphores for waiting on ASCS_TC/TM interrupt */
-  if(rtems_semaphore_create(rtems_build_name('A','S','C','2'),0,
-			    (RTEMS_FIFO|RTEMS_SIMPLE_BINARY_SEMAPHORE|
-			     RTEMS_NO_INHERIT_PRIORITY|RTEMS_LOCAL|
-			     RTEMS_NO_PRIORITY_CEILING), 0,
-			    &cfg->tcsem2) != RTEMS_SUCCESSFUL) {
-    DBG("ASCS_init: Failed to create semaphore ASC2\n");
+  if (
+    rtems_semaphore_create(
+      rtems_build_name( 'A', 'S', 'C', '2' ),
+      0,
+      ( RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE |
+        RTEMS_NO_INHERIT_PRIORITY | RTEMS_LOCAL | RTEMS_NO_PRIORITY_CEILING ),
+      0,
+      &cfg->tcsem2
+    ) != RTEMS_SUCCESSFUL
+  ) {
+    DBG( "ASCS_init: Failed to create semaphore ASC2\n" );
     goto init_error2;
   }
-  if(rtems_semaphore_create(rtems_build_name('A','S','C','3'),0,
-			    (RTEMS_FIFO|RTEMS_SIMPLE_BINARY_SEMAPHORE|
-			     RTEMS_NO_INHERIT_PRIORITY|RTEMS_LOCAL|
-			     RTEMS_NO_PRIORITY_CEILING), 0,
-			    &cfg->tmsem2) != RTEMS_SUCCESSFUL) {
-    DBG("ASCS_init: Failed to create semaphore ASC3\n");
+  if (
+    rtems_semaphore_create(
+      rtems_build_name( 'A', 'S', 'C', '3' ),
+      0,
+      ( RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE |
+        RTEMS_NO_INHERIT_PRIORITY | RTEMS_LOCAL | RTEMS_NO_PRIORITY_CEILING ),
+      0,
+      &cfg->tmsem2
+    ) != RTEMS_SUCCESSFUL
+  ) {
+    DBG( "ASCS_init: Failed to create semaphore ASC3\n" );
     goto init_error2;
   }
 
   /* Set pointer to core registers */
-  if(ASCS_get_addr(&base, &irq) == -1)
+  if ( ASCS_get_addr( &base, &irq ) == -1 ) {
     goto init_error2;
+  }
 
-  cfg->regs = (GRASCS_regs*)(uintptr_t)base;
-  
+  cfg->regs = (GRASCS_regs *) base;
+
+  cfg->regs = (GRASCS_regs *) (uintptr_t) base;
+
   /* Read core capabilities */
   tmp = cfg->regs->sts;
-  cfg->caps->dbits = ((tmp >> GRASCS_STS_DBITS_BITS) & 0x1F) + 1;
-  cfg->caps->nslaves = ((tmp >> GRASCS_STS_NSLAVES_BITS) & 0xF) + 1;
-  cfg->caps->tmconf = (tmp >> GRASCS_STS_TMCONF_BITS) & 0x1;
-  cfg->caps->usconf = (tmp >> GRASCS_STS_USCONF_BITS) & 0x1;
+  cfg->caps->dbits = ( ( tmp >> GRASCS_STS_DBITS_BITS ) & 0x1F ) + 1;
+  cfg->caps->nslaves = ( ( tmp >> GRASCS_STS_NSLAVES_BITS ) & 0xF ) + 1;
+  cfg->caps->tmconf = ( tmp >> GRASCS_STS_TMCONF_BITS ) & 0x1;
+  cfg->caps->usconf = ( tmp >> GRASCS_STS_USCONF_BITS ) & 0x1;
 
   /* Reset and configure core */
   cfg->running = 0;
   cfg->regs->cmd |= GRASCS_CMD_RESET;
-  if((tmp = ASCS_get_sysfreq()) == -1)
+  if ( ( tmp = ASCS_get_sysfreq() ) == -1 ) {
     goto init_error2;
+  }
   cfg->caps->clkfreq = tmp;
-  while(ASCS_iface_status())
-    ;  
-  cfg->regs->clk = ASCS_calc_clkreg(tmp, GRASCS_DEFAULT_ETRFREQ);
+  while ( ASCS_iface_status() );
+  cfg->regs->clk = ASCS_calc_clkreg( tmp, GRASCS_DEFAULT_ETRFREQ );
   cfg->regs->cmd = GRASCS_CMD_US1C;
-  cfg->regs->cmd |= (tmp/1000 << GRASCS_CMD_US1_BITS) | GRASCS_CMD_US1C |
-    GRASCS_CMD_TCDONE | GRASCS_CMD_TMDONE;
+  cfg->regs->cmd |= ( tmp / 1000 << GRASCS_CMD_US1_BITS ) | GRASCS_CMD_US1C |
+                    GRASCS_CMD_TCDONE | GRASCS_CMD_TMDONE;
 
   /* Register interrupt routine */
-  rtems_interrupt_handler_install(irq, "grascs",
-		  RTEMS_INTERRUPT_SHARED,
-		  ASCS_irqhandler, NULL);
-  
+  rtems_interrupt_handler_install(
+    irq,
+    "grascs",
+    RTEMS_INTERRUPT_SHARED,
+    ASCS_irqhandler,
+    NULL
+  );
+
   return 0;
 
- init_error2:
-  free(cfg->caps);
- init_error1:
-  free(cfg);
+init_error2:
+  free( cfg->caps );
+init_error1:
+  free( cfg );
   return -1;
 }
 
@@ -315,25 +359,28 @@ int ASCS_init(void) {
 		to when performing a TM. The bits can't be set
 		during a TM, and the function will in such a case fail.
 */
-int ASCS_input_select(int slave) {
-
-  if((slave < 0) || (slave > cfg->caps->nslaves)) {
+int ASCS_input_select( int slave )
+{
+  if ( ( slave < 0 ) || ( slave > cfg->caps->nslaves ) ) {
     /* Slave number is negative or too big */
-    DBG("ASCS_input_select: Wrong slave number\n");
+    DBG( "ASCS_input_select: Wrong slave number\n" );
     return -GRASCS_ERROR_CAPFAULT;
   }
-    
-  if(rtems_semaphore_obtain(cfg->tmsem1,RTEMS_NO_WAIT,RTEMS_NO_TIMEOUT) !=
-     RTEMS_SUCCESSFUL) {
+
+  if (
+    rtems_semaphore_obtain( cfg->tmsem1, RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT ) !=
+    RTEMS_SUCCESSFUL
+  ) {
     /* Can't change active slave during a TM */
-    DBG("ASCS_input_select: Transaction active\n");
+    DBG( "ASCS_input_select: Transaction active\n" );
     return -GRASCS_ERROR_TRANSACTIVE;
   }
-  
-  cfg->regs->cmd = ((cfg->regs->cmd & ~GRASCS_CMD_SLAVESEL) |
-		    (slave << GRASCS_CMD_SLAVESEL_BITS));
 
-  rtems_semaphore_release(cfg->tmsem1);
+  cfg->regs->cmd =
+    ( ( cfg->regs->cmd & ~GRASCS_CMD_SLAVESEL ) |
+      ( slave << GRASCS_CMD_SLAVESEL_BITS ) );
+
+  rtems_semaphore_release( cfg->tmsem1 );
   return 0;
 }
 
@@ -349,24 +396,28 @@ int ASCS_input_select(int slave) {
    Description: Changes the source for the ETR signal. The frequency of source signal
                 is assumed to be the same as the frequency of the freq input
 */
-int ASCS_etr_select(int etr, int freq) {
-  
-  if((etr < 0) || (etr > GRASCS_MAX_TMS) || ((cfg->caps->tmconf == 0) && (etr > 0)) ||
-     (freq < GRASCS_MIN_ETRFREQ) || (freq > GRASCS_MAX_ETRFREQ)) {
+int ASCS_etr_select( int etr, int freq )
+{
+  if (
+    ( etr < 0 ) || ( etr > GRASCS_MAX_TMS ) ||
+    ( ( cfg->caps->tmconf == 0 ) && ( etr > 0 ) ) ||
+    ( freq < GRASCS_MIN_ETRFREQ ) || ( freq > GRASCS_MAX_ETRFREQ )
+  ) {
     /* ETR source value or frequency is invalid */
-    DBG("ASCS_etr_select: Wrong etr src number or wrong frequency\n");
+    DBG( "ASCS_etr_select: Wrong etr src number or wrong frequency\n" );
     return -GRASCS_ERROR_CAPFAULT;
   }
-  
-  if(cfg->regs->sts & GRASCS_STS_ERUNNING) {
+
+  if ( cfg->regs->sts & GRASCS_STS_ERUNNING ) {
     /* Synchronization interface is running */
-    DBG("ASCS_etr_select: Synch interface is running\n");
+    DBG( "ASCS_etr_select: Synch interface is running\n" );
     return -GRASCS_ERROR_STARTSTOP;
   }
-  
-  cfg->regs->clk = ASCS_calc_clkreg(cfg->caps->clkfreq,freq);
-  cfg->regs->cmd = ((cfg->regs->cmd & ~GRASCS_CMD_ETRCTRL) |
-		    (etr << GRASCS_CMD_ETRCTRL_BITS));
+
+  cfg->regs->clk = ASCS_calc_clkreg( cfg->caps->clkfreq, freq );
+  cfg->regs->cmd =
+    ( ( cfg->regs->cmd & ~GRASCS_CMD_ETRCTRL ) |
+      ( etr << GRASCS_CMD_ETRCTRL_BITS ) );
 
   return 0;
 }
@@ -376,8 +427,8 @@ int ASCS_etr_select(int etr, int freq) {
    Return values: -
    Description: Enables the serial interface. 
 */
-void ASCS_start(void) {
-  
+void ASCS_start( void )
+{
   /* Set register and internal status to running */
   cfg->regs->cmd |= GRASCS_CMD_STARTSTOP;
   cfg->running = 1;
@@ -391,23 +442,23 @@ void ASCS_start(void) {
 		TM_recv(_block) has returned in order to be sure
 		that started transactions will be performed.
 */
-void ASCS_stop(void) {
-
+void ASCS_stop( void )
+{
   /* Set internal status to stopped */
   cfg->running = 0;
 
   /* Obtain semaphores to avoid possible situation where a
      TC_send(_block) or TM_recv(_block) is aborted and driver is
      waiting forever for an interrupt */
-  rtems_semaphore_obtain(cfg->tcsem1,RTEMS_WAIT,RTEMS_NO_TIMEOUT);
-  rtems_semaphore_obtain(cfg->tmsem1,RTEMS_WAIT,RTEMS_NO_TIMEOUT);
+  rtems_semaphore_obtain( cfg->tcsem1, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
+  rtems_semaphore_obtain( cfg->tmsem1, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
 
   /* Change actual register value */
   cfg->regs->cmd &= ~GRASCS_CMD_STARTSTOP;
 
   /* Release the semaphores */
-  rtems_semaphore_release(cfg->tcsem1);
-  rtems_semaphore_release(cfg->tmsem1);
+  rtems_semaphore_release( cfg->tcsem1 );
+  rtems_semaphore_release( cfg->tmsem1 );
 }
 
 /* Function: ASCS_iface_status
@@ -419,9 +470,9 @@ void ASCS_stop(void) {
    Description: Reads the core's STS register and reports the status of the
                 serial and synch interfaces
 */
-int ASCS_iface_status(void) {
-
-  return ((cfg->regs->sts & 0x3) & (0x2 | cfg->running));
+int ASCS_iface_status( void )
+{
+  return ( ( cfg->regs->sts & 0x3 ) & ( 0x2 | cfg->running ) );
 }
 
 /* Function: ASCS_TC_send
@@ -431,40 +482,44 @@ int ASCS_iface_status(void) {
 		  -GRASCS_ERROR_TRANSACTIVE if another TC is in progress.
    Description: Start a TC and sends the data that word points to.
 */
-int ASCS_TC_send(int *word) {
-
+int ASCS_TC_send( int *word )
+{
   int retval;
 
-  if(rtems_semaphore_obtain(cfg->tcsem1,RTEMS_NO_WAIT,RTEMS_NO_TIMEOUT) !=
-     RTEMS_SUCCESSFUL) {
+  if (
+    rtems_semaphore_obtain( cfg->tcsem1, RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT ) !=
+    RTEMS_SUCCESSFUL
+  ) {
     /* Can't start a TC_send if another TC_send of TC_send_block is
        in progress */
-    DBG("ASCS_TC_send: Could not obtain semaphore, transcation probably in progress\n");
+    DBG(
+      "ASCS_TC_send: Could not obtain semaphore, transcation probably in progress\n"
+    );
     return -GRASCS_ERROR_TRANSACTIVE;
   }
-    
-  if(!cfg->running) {
+
+  if ( !cfg->running ) {
     /* Can't start a TC if serial interface isn't started */
-    DBG("ASCS_TC_send: Serial interface is not started\n");
+    DBG( "ASCS_TC_send: Serial interface is not started\n" );
     retval = -GRASCS_ERROR_STARTSTOP;
-  }
-  else {
+  } else {
     /* Start the transfer */
     cfg->tcwords = 1;
-    if(cfg->caps->dbits == 8)
-      cfg->regs->tcd = *((unsigned char*)word);
-    else if(cfg->caps->dbits == 16)
-      cfg->regs->tcd = *((unsigned short int*)((uintptr_t)word & ~1));
-    else
-      cfg->regs->tcd = *((unsigned int*)((uintptr_t)word & ~3));
-    
+    if ( cfg->caps->dbits == 8 ) {
+      cfg->regs->tcd = *( (unsigned char *) word );
+    } else if ( cfg->caps->dbits == 16 ) {
+      cfg->regs->tcd = *( (unsigned short int *) ( (uintptr_t) word & ~1 ) );
+    } else {
+      cfg->regs->tcd = *( (unsigned int *) ( (uintptr_t) word & ~3 ) );
+    }
+
     /* Wait until transfer is complete */
-    rtems_semaphore_obtain(cfg->tcsem2,RTEMS_WAIT,RTEMS_NO_TIMEOUT);
+    rtems_semaphore_obtain( cfg->tcsem2, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
     retval = 0;
   }
 
-  rtems_semaphore_release(cfg->tcsem1);
-  
+  rtems_semaphore_release( cfg->tcsem1 );
+
   return retval;
 }
 
@@ -482,45 +537,46 @@ int ASCS_TC_send(int *word) {
 		transaction will vary depending on whether the core is
 		configured for 8, 16, or 32 bits data transfers.
 */
-int ASCS_TC_send_block(int *block, int ntrans) {
-
+int ASCS_TC_send_block( int *block, int ntrans )
+{
   int retval;
 
-  if(rtems_semaphore_obtain(cfg->tcsem1,RTEMS_NO_WAIT,RTEMS_NO_TIMEOUT) !=
-     RTEMS_SUCCESSFUL) {
+  if (
+    rtems_semaphore_obtain( cfg->tcsem1, RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT ) !=
+    RTEMS_SUCCESSFUL
+  ) {
     /* Can't start a TC_send_block if another TC_send of TC_send_block is
        in progress */
-    DBG("ASCS_TC_send_block: Could not obtain semaphore, transcation probably in progress\n");
+    DBG(
+      "ASCS_TC_send_block: Could not obtain semaphore, transcation probably in progress\n"
+    );
     return -GRASCS_ERROR_TRANSACTIVE;
   }
 
-  if(!cfg->running) {
+  if ( !cfg->running ) {
     /* Can't start a TC if serial interface isn't started */
-    DBG("ASCS_TC_send_block: Serial interface is not started\n");
+    DBG( "ASCS_TC_send_block: Serial interface is not started\n" );
     retval = -GRASCS_ERROR_STARTSTOP;
-  }
-  else {
+  } else {
     /* Start the first transfer */
     cfg->tcwords = ntrans;
-    if(cfg->caps->dbits == 8) {
-      cfg->tcptr = (int)(uintptr_t)block;
-      cfg->regs->tcd = *((unsigned char*)(uintptr_t)cfg->tcptr);
+    if ( cfg->caps->dbits == 8 ) {
+      cfg->tcptr = (int) (uintptr_t) block;
+      cfg->regs->tcd = *( (unsigned char *) (uintptr_t) cfg->tcptr );
+    } else if ( cfg->caps->dbits == 16 ) {
+      cfg->tcptr = (int) (uintptr_t) block & ~1;
+      cfg->regs->tcd = *( (unsigned short int *) (uintptr_t) cfg->tcptr );
+    } else {
+      cfg->tcptr = (int) (uintptr_t) block & ~3;
+      cfg->regs->tcd = *( (unsigned int *) (uintptr_t) cfg->tcptr );
     }
-    else if(cfg->caps->dbits == 16) {
-      cfg->tcptr = (int)(uintptr_t)block & ~1;
-      cfg->regs->tcd = *((unsigned short int*)(uintptr_t)cfg->tcptr);
-    }
-    else {
-      cfg->tcptr = (int)(uintptr_t)block & ~3;
-      cfg->regs->tcd = *((unsigned int*)(uintptr_t)cfg->tcptr);
-    }
-        
+
     /* Wait until all transfers are complete */
-    rtems_semaphore_obtain(cfg->tcsem2,RTEMS_WAIT,RTEMS_NO_TIMEOUT);
+    rtems_semaphore_obtain( cfg->tcsem2, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
     retval = 0;
   }
-  
-  rtems_semaphore_release(cfg->tcsem1);
+
+  rtems_semaphore_release( cfg->tcsem1 );
 
   return retval;
 }
@@ -535,8 +591,8 @@ int ASCS_TC_send_block(int *block, int ntrans) {
      period depending on the source of the ETR and
      activity on the TM line.
 */
-void ASCS_TC_sync_start(void) {
-  
+void ASCS_TC_sync_start( void )
+{
   cfg->regs->cmd |= GRASCS_CMD_ESTARTSTOP;
 }
 
@@ -548,8 +604,8 @@ void ASCS_TC_sync_start(void) {
      can determine when synch interface has stopped by polling
      ASCS_iface_status().
 */
-void ASCS_TC_sync_stop(void) {
-  
+void ASCS_TC_sync_stop( void )
+{
   cfg->regs->cmd &= ~GRASCS_CMD_ESTARTSTOP;
 }
 
@@ -561,35 +617,38 @@ void ASCS_TC_sync_stop(void) {
 		  if another TM is in progress
    Description: Starts a TM and stores the incoming data in word.
 */
-int ASCS_TM_recv(int *word) {
-
+int ASCS_TM_recv( int *word )
+{
   int retval;
 
-  if(rtems_semaphore_obtain(cfg->tmsem1,RTEMS_NO_WAIT,RTEMS_NO_TIMEOUT) !=
-     RTEMS_SUCCESSFUL) {
+  if (
+    rtems_semaphore_obtain( cfg->tmsem1, RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT ) !=
+    RTEMS_SUCCESSFUL
+  ) {
     /* Can't start a TM_recv if another TM_recv of TM_recv_block is
        in progress */
-    DBG("ASCS_TM_recv: Could not obtain semaphore, transaction probably in progress\n");
+    DBG(
+      "ASCS_TM_recv: Could not obtain semaphore, transaction probably in progress\n"
+    );
     return -GRASCS_ERROR_TRANSACTIVE;
   }
 
-  if(!cfg->running) {
+  if ( !cfg->running ) {
     /* Can't start a TM if serial interface isn't started */
-    DBG("ASCS_TM_recv: Serial interface is not started\n");
+    DBG( "ASCS_TM_recv: Serial interface is not started\n" );
     retval = -GRASCS_ERROR_STARTSTOP;
-  }
-  else {
+  } else {
     /* Start transfer */
     cfg->tmwords = 1;
-    cfg->tmptr = (int)(uintptr_t)word;
+    cfg->tmptr = (int) (uintptr_t) word;
     cfg->regs->cmd |= GRASCS_CMD_SENDTM;
-    
+
     /* Wait until transfer finishes */
-    rtems_semaphore_obtain(cfg->tmsem2,RTEMS_WAIT,RTEMS_NO_TIMEOUT);
+    rtems_semaphore_obtain( cfg->tmsem2, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
     retval = 0;
   }
 
-  rtems_semaphore_release(cfg->tmsem1);
+  rtems_semaphore_release( cfg->tmsem1 );
 
   return retval;
 }
@@ -607,35 +666,38 @@ int ASCS_TM_recv(int *word) {
 		will vary depending on whether the core is
 		configured for 8, 16, or 32 bits data transfers.
 */
-int ASCS_TM_recv_block(int *block, int ntrans) {
-
+int ASCS_TM_recv_block( int *block, int ntrans )
+{
   int retval;
 
-  if(rtems_semaphore_obtain(cfg->tmsem1,RTEMS_NO_WAIT,RTEMS_NO_TIMEOUT) !=
-     RTEMS_SUCCESSFUL) {
+  if (
+    rtems_semaphore_obtain( cfg->tmsem1, RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT ) !=
+    RTEMS_SUCCESSFUL
+  ) {
     /* Can't start a TM_recv_block if another TM_recv of TM_recv_block is
        in progress */
-    DBG("ASCS_TM_recv_block: Could not obtain semaphore, transaction probably in progress\n");
+    DBG(
+      "ASCS_TM_recv_block: Could not obtain semaphore, transaction probably in progress\n"
+    );
     return -GRASCS_ERROR_TRANSACTIVE;
   }
 
-  if(!cfg->running) {
+  if ( !cfg->running ) {
     /* Can't start a TM if serial interface isn't started */
-    DBG("ASCS_TM_recv_block: Serial interface is not started\n");
+    DBG( "ASCS_TM_recv_block: Serial interface is not started\n" );
     retval = -GRASCS_ERROR_STARTSTOP;
-  }
-  else {
+  } else {
     /* Start transfer */
     cfg->tmwords = ntrans;
-    cfg->tmptr = (int)(uintptr_t)block;
+    cfg->tmptr = (int) (uintptr_t) block;
     cfg->regs->cmd |= GRASCS_CMD_SENDTM;
-    
+
     /* Wait until transfer finishes */
-    rtems_semaphore_obtain(cfg->tmsem2,RTEMS_WAIT,RTEMS_NO_TIMEOUT);
+    rtems_semaphore_obtain( cfg->tmsem2, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
     retval = 0;
   }
 
-  rtems_semaphore_release(cfg->tmsem1);
+  rtems_semaphore_release( cfg->tmsem1 );
 
   return retval;
 }

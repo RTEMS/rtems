@@ -31,14 +31,14 @@
 #include <grlib/ambapp.h>
 
 /* Get bus depth a device is located at */
-int ambapp_depth(struct ambapp_dev *dev)
+int ambapp_depth( struct ambapp_dev *dev )
 {
   int depth = 0;
 
   do {
-    dev = ambapp_find_parent(dev);
+    dev = ambapp_find_parent( dev );
     depth++;
-  } while (dev);
+  } while ( dev );
 
   return depth - 1;
 }

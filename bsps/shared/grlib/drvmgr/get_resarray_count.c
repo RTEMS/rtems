@@ -30,10 +30,11 @@
 #include <stdlib.h>
 #include <grlib/bspcommon.h>
 
-int get_resarray_count(struct drvmgr_bus_res **array)
+int get_resarray_count( struct drvmgr_bus_res **array )
 {
-	int i = 0;
-	while (array[i] != NULL)
-		i++;
-	return i;
+  int i = 0;
+  while ( array[ i ] != NULL ) {
+    i++;
+  }
+  return i;
 }

@@ -42,19 +42,23 @@
  * If zero is returned from ambapp_for_each no device matching the index was
  * found
  */
-int ambapp_find_by_idx(struct ambapp_dev *dev, int index, void *pcount)
+int ambapp_find_by_idx( struct ambapp_dev *dev, int index, void *pcount )
 {
   (void) index;
 
   int *pi = pcount;
 
-  if (pi) {
-    if ((*pi)-- == 0)
-      return (int)(uintptr_t)dev;
-    else
+  if ( pi ) {
+    if ( ( *pi )-- == 0 ) {
+      return (int) (uintptr_t) dev;
+    } else {
       return 0;
-  } else {
-    /* Satisfied with first matching device, stop search */
-    return (int)(uintptr_t)dev;
+    }
   }
+}
+else
+{
+  /* Satisfied with first matching device, stop search */
+  return (int) (uintptr_t) dev;
+}
 }

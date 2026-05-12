@@ -47,7 +47,7 @@ void apbuart_outbyte_wait( const apbuart *regs )
   }
 }
 
-void apbuart_outbyte_polled( apbuart *regs, char ch)
+void apbuart_outbyte_polled( apbuart *regs, char ch )
 {
   apbuart_outbyte_wait( regs );
   grlib_store_32( &regs->data, (uint8_t) ch );
@@ -60,8 +60,10 @@ int apbuart_inbyte_nonblocking( apbuart *regs )
   status = grlib_load_32( &regs->status );
 
   /* Clear errors, writes to non-error flags are ignored */
-  status &= ~( APBUART_STATUS_FE | APBUART_STATUS_PE | APBUART_STATUS_OV |
-    APBUART_STATUS_BR );
+  status &= ~(
+    APBUART_STATUS_FE | APBUART_STATUS_PE | APBUART_STATUS_OV |
+    APBUART_STATUS_BR
+  );
   grlib_store_32( &regs->status, status );
 
   if ( ( status & APBUART_STATUS_DR ) == 0 ) {

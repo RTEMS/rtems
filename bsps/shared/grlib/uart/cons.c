@@ -49,85 +49,88 @@ static int console_initialized = 0;
 
 #define FLAG_SYSCON 0x01
 struct console_priv {
-	int flags; /* 0x1=SystemConsole */
-	int minor;
-	struct console_dev *dev;
+  int                 flags; /* 0x1=SystemConsole */
+  int                 minor;
+  struct console_dev *dev;
 };
 
 #define CONSOLE_MAX BSP_NUMBER_OF_TERMIOS_PORTS
-struct console_priv cons[CONSOLE_MAX] = {{0,0},};
+struct console_priv cons[ CONSOLE_MAX ] = {
+  { 0, 0 },
+};
 
 /* Install Console in TERMIOS layer */
-static void console_dev_init(struct console_priv *con)
+static void console_dev_init( struct console_priv *con )
 {
-	char name[16], *fsname;
-	rtems_status_code status;
-	int minor;
+  char              name[ 16 ], *fsname;
+  rtems_status_code status;
+  int               minor;
 
-	minor = con->minor;
-	if (!con->dev->fsname) {
-		strcpy(name, "/dev/console_a");
-		/* Special console name and MINOR for SYSTEM CONSOLE */
-		if (minor == 0)
-			name[12] = '\0'; /* /dev/console */
-		name[13] += minor; /* when minor=0, this has no effect... */
-		fsname = name;
-	} else {
-		fsname = con->dev->fsname;
-	}
-	status = rtems_termios_device_install(
-		fsname,
-		con->dev->handler,
-		NULL,
-		&con->dev->base
-	);
-	if (status != RTEMS_SUCCESSFUL) {
-		rtems_fatal_error_occurred(status);
-	}
+  minor = con->minor;
+  if ( !con->dev->fsname ) {
+    strcpy( name, "/dev/console_a" );
+    /* Special console name and MINOR for SYSTEM CONSOLE */
+    if ( minor == 0 ) {
+      name[ 12 ] = '\0'; /* /dev/console */
+    }
+    name[ 13 ] += minor; /* when minor=0, this has no effect... */
+    fsname = name;
+  } else {
+    fsname = con->dev->fsname;
+  }
+  status = rtems_termios_device_install(
+    fsname,
+    con->dev->handler,
+    NULL,
+    &con->dev->base
+  );
+  if ( status != RTEMS_SUCCESSFUL ) {
+    rtems_fatal_error_occurred( status );
+  }
 
-	if ((con->flags & FLAG_SYSCON) != 0) {
-		(void) link(fsname, CONSOLE_DEVICE_NAME);
-	}
+  if ( ( con->flags & FLAG_SYSCON ) != 0 ) {
+    (void) link( fsname, CONSOLE_DEVICE_NAME );
+  }
 }
 
 /* Called by device driver to register itself to the cons interface. */
-void console_dev_register(struct console_dev *dev)
+void console_dev_register( struct console_dev *dev )
 {
-	int i, minor = 0;
-	struct console_priv *con = NULL;
+  int                  i, minor = 0;
+  struct console_priv *con = NULL;
 
-	if ((dev->flags & CONSOLE_FLAG_SYSCON) && !cons[0].dev) {
-		con = &cons[0];
-		con->flags = FLAG_SYSCON;
-	} else {
-		for (i=1; i<CONSOLE_MAX; i++) {
-			if (!cons[i].dev) {
-				con = &cons[i];
-				con->flags = 0;
-				minor = i;
-				break;
-			}
-		}
-	}
-	if (con == NULL) {
-		/* Not enough console structures */
-		return;
-	}
-	dev->flags &= ~CONSOLE_FLAG_SYSCON_GRANT;
-	if (con->flags & FLAG_SYSCON) {
-		dev->flags |= CONSOLE_FLAG_SYSCON_GRANT;
-	}
+  if ( ( dev->flags & CONSOLE_FLAG_SYSCON ) && !cons[ 0 ].dev ) {
+    con = &cons[ 0 ];
+    con->flags = FLAG_SYSCON;
+  } else {
+    for ( i = 1; i < CONSOLE_MAX; i++ ) {
+      if ( !cons[ i ].dev ) {
+        con = &cons[ i ];
+        con->flags = 0;
+        minor = i;
+        break;
+      }
+    }
+  }
+  if ( con == NULL ) {
+    /* Not enough console structures */
+    return;
+  }
+  dev->flags &= ~CONSOLE_FLAG_SYSCON_GRANT;
+  if ( con->flags & FLAG_SYSCON ) {
+    dev->flags |= CONSOLE_FLAG_SYSCON_GRANT;
+  }
 
-	/* Assign Console */
-	con->dev = dev;
-	con->minor = minor;
+  /* Assign Console */
+  con->dev = dev;
+  con->minor = minor;
 
-	if (console_initialized) {
-		/* Console layer is already initialized, that means that we can
+  if ( console_initialized ) {
+    /* Console layer is already initialized, that means that we can
 		 * register termios interface directly.
 		 */
-		console_dev_init(con);
-	}
+    console_dev_init( con );
+  }
 }
 
 #if 0
@@ -138,23 +141,25 @@ void console_dev_unregister(struct console_dev *dev)
 #endif
 
 rtems_device_driver console_initialize(
-	rtems_device_major_number	major,
-	rtems_device_minor_number	minor,
-	void				*arg)
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
+)
 {
-	int i;
+  int i;
 
-	rtems_termios_initialize();
+  rtems_termios_initialize();
 
-	/* Register all Console a file system device node */
-	for (i=0; i<CONSOLE_MAX; i++) {
-		if (cons[i].dev)
-			console_dev_init(&cons[i]);
-	}
+  /* Register all Console a file system device node */
+  for ( i = 0; i < CONSOLE_MAX; i++ ) {
+    if ( cons[ i ].dev ) {
+      console_dev_init( &cons[ i ] );
+    }
+  }
 
-	console_initialized = 1;
+  console_initialized = 1;
 
-	return RTEMS_SUCCESSFUL;
+  return RTEMS_SUCCESSFUL;
 }
 
 #endif
