@@ -31,87 +31,90 @@
 #ifndef __SPWCUC_H__
 #define __SPWCUC_H__
 
-#define PKT_INIT_IRQ       0x1
-#define PKT_ERR_IRQ        0x2
-#define PKT_RX_IRQ         0x4
-#define WRAP_ERR_IRQ       0x8
-#define WRAP_IRQ           0x10
-#define SYNC_ERR_IRQ       0x20
-#define SYNC_IRQ           0x40
-#define TOL_ERR_IRQ        0x80
-#define TICK_RX_ERR_IRQ    0x100
-#define TICK_RX_WRAP_IRQ   0x200
-#define TICK_RX_IRQ        0x400
-#define TICK_TX_WRAP_IRQ   0x800
-#define TICK_TX_IRQ        0x1000
+#define PKT_INIT_IRQ     0x1
+#define PKT_ERR_IRQ      0x2
+#define PKT_RX_IRQ       0x4
+#define WRAP_ERR_IRQ     0x8
+#define WRAP_IRQ         0x10
+#define SYNC_ERR_IRQ     0x20
+#define SYNC_IRQ         0x40
+#define TOL_ERR_IRQ      0x80
+#define TICK_RX_ERR_IRQ  0x100
+#define TICK_RX_WRAP_IRQ 0x200
+#define TICK_RX_IRQ      0x400
+#define TICK_TX_WRAP_IRQ 0x800
+#define TICK_TX_IRQ      0x1000
 
 /* SPWCUC Register layout */
 struct spwcuc_regs {
-	volatile uint32_t config;        /* 00 */
-	volatile uint32_t status;        /* 04 */
-	volatile uint32_t control;       /* 08 */
-	volatile uint32_t unused0;       /* 0c */
-	volatile uint32_t dla;           /* 10 */
-	volatile uint32_t pid;           /* 14 */
-	volatile uint32_t offset;        /* 18 */
-	volatile uint32_t unused1;       /* 1c */
-	volatile uint32_t pkt_ct;        /* 20 */
-	volatile uint32_t pkt_ft;        /* 24 */   
-	volatile uint32_t pkt_pf_crc;    /* 28 */
-	volatile uint32_t unused2;       /* 2c */
-	volatile uint32_t etct;          /* 30 */
-	volatile uint32_t etft;          /* 34 */
-	volatile uint32_t etct_next;     /* 38 */
-	volatile uint32_t etft_next;     /* 3c */
-	volatile uint32_t unused3[8];    /* 40-5c */
-	volatile uint32_t pimsr;         /* 60 */
-	volatile uint32_t pimr;          /* 64 */
-	volatile uint32_t pisr;          /* 68 */
-	volatile uint32_t pir;           /* 6c */
-	volatile uint32_t imr;           /* 70 */
-	volatile uint32_t picr;          /* 74 */
+  volatile uint32_t config;       /* 00 */
+  volatile uint32_t status;       /* 04 */
+  volatile uint32_t control;      /* 08 */
+  volatile uint32_t unused0;      /* 0c */
+  volatile uint32_t dla;          /* 10 */
+  volatile uint32_t pid;          /* 14 */
+  volatile uint32_t offset;       /* 18 */
+  volatile uint32_t unused1;      /* 1c */
+  volatile uint32_t pkt_ct;       /* 20 */
+  volatile uint32_t pkt_ft;       /* 24 */
+  volatile uint32_t pkt_pf_crc;   /* 28 */
+  volatile uint32_t unused2;      /* 2c */
+  volatile uint32_t etct;         /* 30 */
+  volatile uint32_t etft;         /* 34 */
+  volatile uint32_t etct_next;    /* 38 */
+  volatile uint32_t etft_next;    /* 3c */
+  volatile uint32_t unused3[ 8 ]; /* 40-5c */
+  volatile uint32_t pimsr;        /* 60 */
+  volatile uint32_t pimr;         /* 64 */
+  volatile uint32_t pisr;         /* 68 */
+  volatile uint32_t pir;          /* 6c */
+  volatile uint32_t imr;          /* 70 */
+  volatile uint32_t picr;         /* 74 */
 };
 
 struct spwcuc_cfg {
-	unsigned char sel_out;         /* Bits 3-0 enable time code transmission on respective output */
-	unsigned char sel_in;          /* Select SpW to receive time codes on, 0-3 */
-	unsigned char mapping;         /* Define mapping of time code time info into T-field, 0-31 */
-	unsigned char tolerance;       /* Define SpaceWire time code reception tolerance, 0-31 */
-	unsigned char tid;             /* Define CUC P-Field time code identification, 1 = Level 1, 2 = Level 2 */
-	unsigned char ctf;             /* If 1 check time code flags to be all zero */
-	unsigned char cp;              /* If 1 check P-Field time code id against tid */
+  unsigned char
+    sel_out; /* Bits 3-0 enable time code transmission on respective output */
+  unsigned char sel_in; /* Select SpW to receive time codes on, 0-3 */
+  unsigned char
+    mapping; /* Define mapping of time code time info into T-field, 0-31 */
+  unsigned char
+    tolerance; /* Define SpaceWire time code reception tolerance, 0-31 */
+  unsigned char
+    tid; /* Define CUC P-Field time code identification, 1 = Level 1, 2 = Level 2 */
+  unsigned char ctf; /* If 1 check time code flags to be all zero */
+  unsigned char cp;  /* If 1 check P-Field time code id against tid */
 
-	unsigned char txen;            /* Enable SpaceWire time code transmission */
-	unsigned char rxen;            /* Enable SpaceWire time code reception */
-	unsigned char pktsyncen;       /* Enable SpaceWire time CUC packet sync */
-	unsigned char pktiniten;       /* Enable SpaceWire time CUC packet init */
-	unsigned char pktrxen;         /* Enable SpaceWire time CUC packet reception */
+  unsigned char txen;      /* Enable SpaceWire time code transmission */
+  unsigned char rxen;      /* Enable SpaceWire time code reception */
+  unsigned char pktsyncen; /* Enable SpaceWire time CUC packet sync */
+  unsigned char pktiniten; /* Enable SpaceWire time CUC packet init */
+  unsigned char pktrxen;   /* Enable SpaceWire time CUC packet reception */
 
-	unsigned char dla;             /* SpaceWire destination logical address */ 
-	unsigned char dla_mask;        /* SpaceWire destination logical address mask */ 
-	unsigned char pid;             /* SpaceWire protocol ID */
-	
-	unsigned int offset;           /* Packet reception offset */
+  unsigned char dla;      /* SpaceWire destination logical address */
+  unsigned char dla_mask; /* SpaceWire destination logical address mask */
+  unsigned char pid;      /* SpaceWire protocol ID */
+
+  unsigned int offset; /* Packet reception offset */
 };
 
 /* SPWCUC Statistics gathered by driver */
 struct spwcuc_stats {
-
-	/* IRQ Stats */
-	unsigned int nirqs;
-	unsigned int tick_tx;
-	unsigned int tick_tx_wrap;
-	unsigned int tick_rx;
-	unsigned int tick_rx_wrap;
-	unsigned int tick_rx_error;
-	unsigned int tolerr;
-	unsigned int sync;
-	unsigned int syncerr;
-	unsigned int wrap;
-	unsigned int wraperr;
-	unsigned int pkt_rx;
-	unsigned int pkt_err;
-	unsigned int pkt_init;
+  /* IRQ Stats */
+  unsigned int nirqs;
+  unsigned int tick_tx;
+  unsigned int tick_tx_wrap;
+  unsigned int tick_rx;
+  unsigned int tick_rx_wrap;
+  unsigned int tick_rx_error;
+  unsigned int tolerr;
+  unsigned int sync;
+  unsigned int syncerr;
+  unsigned int wrap;
+  unsigned int wraperr;
+  unsigned int pkt_rx;
+  unsigned int pkt_err;
+  unsigned int pkt_init;
 };
 
 /* Function ISR callback prototype
@@ -119,33 +122,33 @@ struct spwcuc_stats {
  * pimr    - PIMR/PIR register of the SPWCUC core read by ISR
  * data    - Custom data provided by user
  */
-typedef void (*spwcuc_isr_t)(unsigned int pimr, void *data);
+typedef void ( *spwcuc_isr_t )( unsigned int pimr, void *data );
 
 /* Open a SPWCUC device by minor number. A SPWCUC device can only by opened
  * once. The handle returned must be used as the input parameter 'spwcuc' in 
  * the rest of the calls in the function interface.
  */
-extern void *spwcuc_open(int minor);
+extern void *spwcuc_open( int minor );
 
 /* Close a previously opened SPWCUC device */
-extern void spwcuc_close(void *spwcuc);
+extern void spwcuc_close( void *spwcuc );
 
 /* Reset SPWCUC Core */
-extern int spwcuc_reset(void *spwcuc);
+extern int spwcuc_reset( void *spwcuc );
 
 /* Enable Interrupts at Interrupt controller */
-extern void spwcuc_int_enable(void *spwcuc);
+extern void spwcuc_int_enable( void *spwcuc );
 
 /* Disable Interrupts at Interrupt controller */
-extern void spwcuc_int_disable(void *spwcuc);
+extern void spwcuc_int_disable( void *spwcuc );
 
 /* Clear Statistics gathered by the driver */
-extern void spwcuc_clr_stats(void *spwcuc);
+extern void spwcuc_clr_stats( void *spwcuc );
 
 /* Get Statistics gathered by the driver. The statistics are stored into
  * the location pointed to by 'stats'.
  */
-extern void spwcuc_get_stats(void *spwcuc, struct spwcuc_stats *stats);
+extern void spwcuc_get_stats( void *spwcuc, struct spwcuc_stats *stats );
 
 /* Register an Interrupt handler and custom data, the function call is
  * removed by setting func to NULL.
@@ -153,55 +156,55 @@ extern void spwcuc_get_stats(void *spwcuc, struct spwcuc_stats *stats);
  * The driver's interrupt handler is installed on open(), however the user
  * callback called from the driver's ISR is installed using this function.
  */
-extern void spwcuc_int_register(void *spwcuc, spwcuc_isr_t func, void *data);
+extern void spwcuc_int_register( void *spwcuc, spwcuc_isr_t func, void *data );
 
 /* Configure the spwcuc core. The configuration is taken from the data
  * structure pointed to by 'cfg'. See data structure spwcuc_cfg fields.
  */
-extern void spwcuc_config(void *spwcuc, struct spwcuc_cfg *cfg);
+extern void spwcuc_config( void *spwcuc, struct spwcuc_cfg *cfg );
 
 /* Return elapsed coarse time */
-extern unsigned int spwcuc_get_et_coarse(void *spwcuc);
+extern unsigned int spwcuc_get_et_coarse( void *spwcuc );
 
 /* Return elapsed fine time */
-extern unsigned int spwcuc_get_et_fine(void *spwcuc);
+extern unsigned int spwcuc_get_et_fine( void *spwcuc );
 
 /* Return elapsed time (coarse and fine) 64-bit value */
-extern unsigned long long spwcuc_get_et(void *spwcuc);
+extern unsigned long long spwcuc_get_et( void *spwcuc );
 
 /* Return next elapsed coarse time (for use when sending SpW time packet) */
-extern unsigned int spwcuc_get_next_et_coarse(void *spwcuc);
+extern unsigned int spwcuc_get_next_et_coarse( void *spwcuc );
 
 /* Return next elapsed fine time (for use when sending SpW time packet) */
-extern unsigned int spwcuc_get_next_et_fine(void *spwcuc);
+extern unsigned int spwcuc_get_next_et_fine( void *spwcuc );
 
 /* Return next elapsed time (for use when sending SpW time packet) */
-extern unsigned long long spwcuc_get_next_et(void *spwcuc);
+extern unsigned long long spwcuc_get_next_et( void *spwcuc );
 
 /* Force/Set the elapsed time (coarse 32-bit and fine 24-bit) by writing the
  * T-Field Time Packet Registers then the FORCE bit.
  */
-extern void spwcuc_force_et(void *spwcuc, unsigned long long time);
+extern void spwcuc_force_et( void *spwcuc, unsigned long long time );
 
 /* Return received (from time packet) elapsed coarse time */
-extern unsigned int spwcuc_get_tp_et_coarse(void *spwcuc);
+extern unsigned int spwcuc_get_tp_et_coarse( void *spwcuc );
 
 /* Return received (from time packet) elapsed fine time */
-extern unsigned int spwcuc_get_tp_et_fine(void *spwcuc);
+extern unsigned int spwcuc_get_tp_et_fine( void *spwcuc );
 
 /* Return received (from time packet) elapsed time (coarse and fine) */
-extern unsigned long long spwcuc_get_tp_et(void *spwcuc);
+extern unsigned long long spwcuc_get_tp_et( void *spwcuc );
 
 /* Clear interrupts */
-extern void spwcuc_clear_irqs(void *spwcuc, int irqs);
+extern void spwcuc_clear_irqs( void *spwcuc, int irqs );
 
 /* Enable interrupts */
-extern void spwcuc_enable_irqs(void *spwcuc, int irqs);
+extern void spwcuc_enable_irqs( void *spwcuc, int irqs );
 
 /* Get Register */
-extern struct spwcuc_regs *spwcuc_get_regs(void *spwcuc);
+extern struct spwcuc_regs *spwcuc_get_regs( void *spwcuc );
 
 /* Register the SPWCUC Driver to the Driver Manager */
-extern void spwcuc_register(void);
+extern void spwcuc_register( void );
 
 #endif

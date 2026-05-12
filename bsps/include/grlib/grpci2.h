@@ -34,7 +34,7 @@
 extern "C" {
 #endif
 
-extern void grpci2_register_drv(void);
+extern void grpci2_register_drv( void );
 
 /* Driver Resources:
  *
@@ -72,9 +72,9 @@ extern void grpci2_register_drv(void);
  * at and when accessing a BAR which AMBA address it will be translated to.
  */
 struct grpci2_pcibar_cfg {
-	unsigned int pciadr;	/* PCI address of BAR (BAR content) */
-	unsigned int ahbadr;	/* 'pciadr' translated to this AHB Address */
-	unsigned int barsize;	/* PCI BAR Size, must be a power of 2 */
+  unsigned int pciadr;  /* PCI address of BAR (BAR content) */
+  unsigned int ahbadr;  /* 'pciadr' translated to this AHB Address */
+  unsigned int barsize; /* PCI BAR Size, must be a power of 2 */
 };
 
 #ifdef __cplusplus

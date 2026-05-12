@@ -82,17 +82,14 @@ extern "C" {
  */
 
 #define GRGPIO_DATA_DATA_SHIFT 0
-#define GRGPIO_DATA_DATA_MASK 0xffffffffU
+#define GRGPIO_DATA_DATA_MASK  0xffffffffU
 #define GRGPIO_DATA_DATA_GET( _reg ) \
-  ( ( ( _reg ) & GRGPIO_DATA_DATA_MASK ) >> \
-    GRGPIO_DATA_DATA_SHIFT )
-#define GRGPIO_DATA_DATA_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRGPIO_DATA_DATA_MASK ) >> GRGPIO_DATA_DATA_SHIFT )
+#define GRGPIO_DATA_DATA_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRGPIO_DATA_DATA_MASK ) | \
-    ( ( ( _val ) << GRGPIO_DATA_DATA_SHIFT ) & \
-      GRGPIO_DATA_DATA_MASK ) )
+    ( ( ( _val ) << GRGPIO_DATA_DATA_SHIFT ) & GRGPIO_DATA_DATA_MASK ) )
 #define GRGPIO_DATA_DATA( _val ) \
-  ( ( ( _val ) << GRGPIO_DATA_DATA_SHIFT ) & \
-    GRGPIO_DATA_DATA_MASK )
+  ( ( ( _val ) << GRGPIO_DATA_DATA_SHIFT ) & GRGPIO_DATA_DATA_MASK )
 
 /** @} */
 
@@ -105,17 +102,14 @@ extern "C" {
  */
 
 #define GRGPIO_OUTPUT_DATA_SHIFT 0
-#define GRGPIO_OUTPUT_DATA_MASK 0xffffffffU
+#define GRGPIO_OUTPUT_DATA_MASK  0xffffffffU
 #define GRGPIO_OUTPUT_DATA_GET( _reg ) \
-  ( ( ( _reg ) & GRGPIO_OUTPUT_DATA_MASK ) >> \
-    GRGPIO_OUTPUT_DATA_SHIFT )
-#define GRGPIO_OUTPUT_DATA_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRGPIO_OUTPUT_DATA_MASK ) >> GRGPIO_OUTPUT_DATA_SHIFT )
+#define GRGPIO_OUTPUT_DATA_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRGPIO_OUTPUT_DATA_MASK ) | \
-    ( ( ( _val ) << GRGPIO_OUTPUT_DATA_SHIFT ) & \
-      GRGPIO_OUTPUT_DATA_MASK ) )
+    ( ( ( _val ) << GRGPIO_OUTPUT_DATA_SHIFT ) & GRGPIO_OUTPUT_DATA_MASK ) )
 #define GRGPIO_OUTPUT_DATA( _val ) \
-  ( ( ( _val ) << GRGPIO_OUTPUT_DATA_SHIFT ) & \
-    GRGPIO_OUTPUT_DATA_MASK )
+  ( ( ( _val ) << GRGPIO_OUTPUT_DATA_SHIFT ) & GRGPIO_OUTPUT_DATA_MASK )
 
 /** @} */
 
@@ -128,17 +122,15 @@ extern "C" {
  */
 
 #define GRGPIO_DIRECTION_DIR_SHIFT 0
-#define GRGPIO_DIRECTION_DIR_MASK 0xffffffffU
+#define GRGPIO_DIRECTION_DIR_MASK  0xffffffffU
 #define GRGPIO_DIRECTION_DIR_GET( _reg ) \
-  ( ( ( _reg ) & GRGPIO_DIRECTION_DIR_MASK ) >> \
-    GRGPIO_DIRECTION_DIR_SHIFT )
-#define GRGPIO_DIRECTION_DIR_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRGPIO_DIRECTION_DIR_MASK ) | \
+  ( ( ( _reg ) & GRGPIO_DIRECTION_DIR_MASK ) >> GRGPIO_DIRECTION_DIR_SHIFT )
+#define GRGPIO_DIRECTION_DIR_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRGPIO_DIRECTION_DIR_MASK ) |    \
     ( ( ( _val ) << GRGPIO_DIRECTION_DIR_SHIFT ) & \
       GRGPIO_DIRECTION_DIR_MASK ) )
 #define GRGPIO_DIRECTION_DIR( _val ) \
-  ( ( ( _val ) << GRGPIO_DIRECTION_DIR_SHIFT ) & \
-    GRGPIO_DIRECTION_DIR_MASK )
+  ( ( ( _val ) << GRGPIO_DIRECTION_DIR_SHIFT ) & GRGPIO_DIRECTION_DIR_MASK )
 
 /** @} */
 
@@ -151,17 +143,14 @@ extern "C" {
  */
 
 #define GRGPIO_IMASK_MASK_SHIFT 0
-#define GRGPIO_IMASK_MASK_MASK 0xffffffffU
+#define GRGPIO_IMASK_MASK_MASK  0xffffffffU
 #define GRGPIO_IMASK_MASK_GET( _reg ) \
-  ( ( ( _reg ) & GRGPIO_IMASK_MASK_MASK ) >> \
-    GRGPIO_IMASK_MASK_SHIFT )
-#define GRGPIO_IMASK_MASK_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRGPIO_IMASK_MASK_MASK ) >> GRGPIO_IMASK_MASK_SHIFT )
+#define GRGPIO_IMASK_MASK_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRGPIO_IMASK_MASK_MASK ) | \
-    ( ( ( _val ) << GRGPIO_IMASK_MASK_SHIFT ) & \
-      GRGPIO_IMASK_MASK_MASK ) )
+    ( ( ( _val ) << GRGPIO_IMASK_MASK_SHIFT ) & GRGPIO_IMASK_MASK_MASK ) )
 #define GRGPIO_IMASK_MASK( _val ) \
-  ( ( ( _val ) << GRGPIO_IMASK_MASK_SHIFT ) & \
-    GRGPIO_IMASK_MASK_MASK )
+  ( ( ( _val ) << GRGPIO_IMASK_MASK_SHIFT ) & GRGPIO_IMASK_MASK_MASK )
 
 /** @} */
 
@@ -174,17 +163,14 @@ extern "C" {
  */
 
 #define GRGPIO_IPOL_POL_SHIFT 0
-#define GRGPIO_IPOL_POL_MASK 0xffffffffU
+#define GRGPIO_IPOL_POL_MASK  0xffffffffU
 #define GRGPIO_IPOL_POL_GET( _reg ) \
-  ( ( ( _reg ) & GRGPIO_IPOL_POL_MASK ) >> \
-    GRGPIO_IPOL_POL_SHIFT )
-#define GRGPIO_IPOL_POL_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRGPIO_IPOL_POL_MASK ) >> GRGPIO_IPOL_POL_SHIFT )
+#define GRGPIO_IPOL_POL_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRGPIO_IPOL_POL_MASK ) | \
-    ( ( ( _val ) << GRGPIO_IPOL_POL_SHIFT ) & \
-      GRGPIO_IPOL_POL_MASK ) )
+    ( ( ( _val ) << GRGPIO_IPOL_POL_SHIFT ) & GRGPIO_IPOL_POL_MASK ) )
 #define GRGPIO_IPOL_POL( _val ) \
-  ( ( ( _val ) << GRGPIO_IPOL_POL_SHIFT ) & \
-    GRGPIO_IPOL_POL_MASK )
+  ( ( ( _val ) << GRGPIO_IPOL_POL_SHIFT ) & GRGPIO_IPOL_POL_MASK )
 
 /** @} */
 
@@ -197,17 +183,14 @@ extern "C" {
  */
 
 #define GRGPIO_IEDGE_EDGE_SHIFT 0
-#define GRGPIO_IEDGE_EDGE_MASK 0xffffffffU
+#define GRGPIO_IEDGE_EDGE_MASK  0xffffffffU
 #define GRGPIO_IEDGE_EDGE_GET( _reg ) \
-  ( ( ( _reg ) & GRGPIO_IEDGE_EDGE_MASK ) >> \
-    GRGPIO_IEDGE_EDGE_SHIFT )
-#define GRGPIO_IEDGE_EDGE_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRGPIO_IEDGE_EDGE_MASK ) >> GRGPIO_IEDGE_EDGE_SHIFT )
+#define GRGPIO_IEDGE_EDGE_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRGPIO_IEDGE_EDGE_MASK ) | \
-    ( ( ( _val ) << GRGPIO_IEDGE_EDGE_SHIFT ) & \
-      GRGPIO_IEDGE_EDGE_MASK ) )
+    ( ( ( _val ) << GRGPIO_IEDGE_EDGE_SHIFT ) & GRGPIO_IEDGE_EDGE_MASK ) )
 #define GRGPIO_IEDGE_EDGE( _val ) \
-  ( ( ( _val ) << GRGPIO_IEDGE_EDGE_SHIFT ) & \
-    GRGPIO_IEDGE_EDGE_MASK )
+  ( ( ( _val ) << GRGPIO_IEDGE_EDGE_SHIFT ) & GRGPIO_IEDGE_EDGE_MASK )
 
 /** @} */
 
@@ -220,17 +203,15 @@ extern "C" {
  */
 
 #define GRGPIO_BYPASS_BYPASS_SHIFT 0
-#define GRGPIO_BYPASS_BYPASS_MASK 0xffffffffU
+#define GRGPIO_BYPASS_BYPASS_MASK  0xffffffffU
 #define GRGPIO_BYPASS_BYPASS_GET( _reg ) \
-  ( ( ( _reg ) & GRGPIO_BYPASS_BYPASS_MASK ) >> \
-    GRGPIO_BYPASS_BYPASS_SHIFT )
-#define GRGPIO_BYPASS_BYPASS_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRGPIO_BYPASS_BYPASS_MASK ) | \
+  ( ( ( _reg ) & GRGPIO_BYPASS_BYPASS_MASK ) >> GRGPIO_BYPASS_BYPASS_SHIFT )
+#define GRGPIO_BYPASS_BYPASS_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRGPIO_BYPASS_BYPASS_MASK ) |    \
     ( ( ( _val ) << GRGPIO_BYPASS_BYPASS_SHIFT ) & \
       GRGPIO_BYPASS_BYPASS_MASK ) )
 #define GRGPIO_BYPASS_BYPASS( _val ) \
-  ( ( ( _val ) << GRGPIO_BYPASS_BYPASS_SHIFT ) & \
-    GRGPIO_BYPASS_BYPASS_MASK )
+  ( ( ( _val ) << GRGPIO_BYPASS_BYPASS_SHIFT ) & GRGPIO_BYPASS_BYPASS_MASK )
 
 /** @} */
 
@@ -249,30 +230,24 @@ extern "C" {
 #define GRGPIO_CAP_IFL 0x10000U
 
 #define GRGPIO_CAP_IRQGEN_SHIFT 8
-#define GRGPIO_CAP_IRQGEN_MASK 0x1f00U
+#define GRGPIO_CAP_IRQGEN_MASK  0x1f00U
 #define GRGPIO_CAP_IRQGEN_GET( _reg ) \
-  ( ( ( _reg ) & GRGPIO_CAP_IRQGEN_MASK ) >> \
-    GRGPIO_CAP_IRQGEN_SHIFT )
-#define GRGPIO_CAP_IRQGEN_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRGPIO_CAP_IRQGEN_MASK ) >> GRGPIO_CAP_IRQGEN_SHIFT )
+#define GRGPIO_CAP_IRQGEN_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRGPIO_CAP_IRQGEN_MASK ) | \
-    ( ( ( _val ) << GRGPIO_CAP_IRQGEN_SHIFT ) & \
-      GRGPIO_CAP_IRQGEN_MASK ) )
+    ( ( ( _val ) << GRGPIO_CAP_IRQGEN_SHIFT ) & GRGPIO_CAP_IRQGEN_MASK ) )
 #define GRGPIO_CAP_IRQGEN( _val ) \
-  ( ( ( _val ) << GRGPIO_CAP_IRQGEN_SHIFT ) & \
-    GRGPIO_CAP_IRQGEN_MASK )
+  ( ( ( _val ) << GRGPIO_CAP_IRQGEN_SHIFT ) & GRGPIO_CAP_IRQGEN_MASK )
 
 #define GRGPIO_CAP_NLINES_SHIFT 0
-#define GRGPIO_CAP_NLINES_MASK 0x1fU
+#define GRGPIO_CAP_NLINES_MASK  0x1fU
 #define GRGPIO_CAP_NLINES_GET( _reg ) \
-  ( ( ( _reg ) & GRGPIO_CAP_NLINES_MASK ) >> \
-    GRGPIO_CAP_NLINES_SHIFT )
-#define GRGPIO_CAP_NLINES_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRGPIO_CAP_NLINES_MASK ) >> GRGPIO_CAP_NLINES_SHIFT )
+#define GRGPIO_CAP_NLINES_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRGPIO_CAP_NLINES_MASK ) | \
-    ( ( ( _val ) << GRGPIO_CAP_NLINES_SHIFT ) & \
-      GRGPIO_CAP_NLINES_MASK ) )
+    ( ( ( _val ) << GRGPIO_CAP_NLINES_SHIFT ) & GRGPIO_CAP_NLINES_MASK ) )
 #define GRGPIO_CAP_NLINES( _val ) \
-  ( ( ( _val ) << GRGPIO_CAP_NLINES_SHIFT ) & \
-    GRGPIO_CAP_NLINES_MASK )
+  ( ( ( _val ) << GRGPIO_CAP_NLINES_SHIFT ) & GRGPIO_CAP_NLINES_MASK )
 
 /** @} */
 
@@ -286,54 +261,54 @@ extern "C" {
  */
 
 #define GRGPIO_IRQMAPR_IRQMAP_I_0_SHIFT 24
-#define GRGPIO_IRQMAPR_IRQMAP_I_0_MASK 0x1f000000U
-#define GRGPIO_IRQMAPR_IRQMAP_I_0_GET( _reg ) \
+#define GRGPIO_IRQMAPR_IRQMAP_I_0_MASK  0x1f000000U
+#define GRGPIO_IRQMAPR_IRQMAP_I_0_GET( _reg )        \
   ( ( ( _reg ) & GRGPIO_IRQMAPR_IRQMAP_I_0_MASK ) >> \
     GRGPIO_IRQMAPR_IRQMAP_I_0_SHIFT )
-#define GRGPIO_IRQMAPR_IRQMAP_I_0_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRGPIO_IRQMAPR_IRQMAP_I_0_MASK ) | \
+#define GRGPIO_IRQMAPR_IRQMAP_I_0_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRGPIO_IRQMAPR_IRQMAP_I_0_MASK ) |    \
     ( ( ( _val ) << GRGPIO_IRQMAPR_IRQMAP_I_0_SHIFT ) & \
       GRGPIO_IRQMAPR_IRQMAP_I_0_MASK ) )
-#define GRGPIO_IRQMAPR_IRQMAP_I_0( _val ) \
+#define GRGPIO_IRQMAPR_IRQMAP_I_0( _val )             \
   ( ( ( _val ) << GRGPIO_IRQMAPR_IRQMAP_I_0_SHIFT ) & \
     GRGPIO_IRQMAPR_IRQMAP_I_0_MASK )
 
 #define GRGPIO_IRQMAPR_IRQMAP_I_1_SHIFT 16
-#define GRGPIO_IRQMAPR_IRQMAP_I_1_MASK 0x1f0000U
-#define GRGPIO_IRQMAPR_IRQMAP_I_1_GET( _reg ) \
+#define GRGPIO_IRQMAPR_IRQMAP_I_1_MASK  0x1f0000U
+#define GRGPIO_IRQMAPR_IRQMAP_I_1_GET( _reg )        \
   ( ( ( _reg ) & GRGPIO_IRQMAPR_IRQMAP_I_1_MASK ) >> \
     GRGPIO_IRQMAPR_IRQMAP_I_1_SHIFT )
-#define GRGPIO_IRQMAPR_IRQMAP_I_1_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRGPIO_IRQMAPR_IRQMAP_I_1_MASK ) | \
+#define GRGPIO_IRQMAPR_IRQMAP_I_1_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRGPIO_IRQMAPR_IRQMAP_I_1_MASK ) |    \
     ( ( ( _val ) << GRGPIO_IRQMAPR_IRQMAP_I_1_SHIFT ) & \
       GRGPIO_IRQMAPR_IRQMAP_I_1_MASK ) )
-#define GRGPIO_IRQMAPR_IRQMAP_I_1( _val ) \
+#define GRGPIO_IRQMAPR_IRQMAP_I_1( _val )             \
   ( ( ( _val ) << GRGPIO_IRQMAPR_IRQMAP_I_1_SHIFT ) & \
     GRGPIO_IRQMAPR_IRQMAP_I_1_MASK )
 
 #define GRGPIO_IRQMAPR_IRQMAP_I_2_SHIFT 8
-#define GRGPIO_IRQMAPR_IRQMAP_I_2_MASK 0x1f00U
-#define GRGPIO_IRQMAPR_IRQMAP_I_2_GET( _reg ) \
+#define GRGPIO_IRQMAPR_IRQMAP_I_2_MASK  0x1f00U
+#define GRGPIO_IRQMAPR_IRQMAP_I_2_GET( _reg )        \
   ( ( ( _reg ) & GRGPIO_IRQMAPR_IRQMAP_I_2_MASK ) >> \
     GRGPIO_IRQMAPR_IRQMAP_I_2_SHIFT )
-#define GRGPIO_IRQMAPR_IRQMAP_I_2_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRGPIO_IRQMAPR_IRQMAP_I_2_MASK ) | \
+#define GRGPIO_IRQMAPR_IRQMAP_I_2_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRGPIO_IRQMAPR_IRQMAP_I_2_MASK ) |    \
     ( ( ( _val ) << GRGPIO_IRQMAPR_IRQMAP_I_2_SHIFT ) & \
       GRGPIO_IRQMAPR_IRQMAP_I_2_MASK ) )
-#define GRGPIO_IRQMAPR_IRQMAP_I_2( _val ) \
+#define GRGPIO_IRQMAPR_IRQMAP_I_2( _val )             \
   ( ( ( _val ) << GRGPIO_IRQMAPR_IRQMAP_I_2_SHIFT ) & \
     GRGPIO_IRQMAPR_IRQMAP_I_2_MASK )
 
 #define GRGPIO_IRQMAPR_IRQMAP_I_3_SHIFT 0
-#define GRGPIO_IRQMAPR_IRQMAP_I_3_MASK 0x1fU
-#define GRGPIO_IRQMAPR_IRQMAP_I_3_GET( _reg ) \
+#define GRGPIO_IRQMAPR_IRQMAP_I_3_MASK  0x1fU
+#define GRGPIO_IRQMAPR_IRQMAP_I_3_GET( _reg )        \
   ( ( ( _reg ) & GRGPIO_IRQMAPR_IRQMAP_I_3_MASK ) >> \
     GRGPIO_IRQMAPR_IRQMAP_I_3_SHIFT )
-#define GRGPIO_IRQMAPR_IRQMAP_I_3_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRGPIO_IRQMAPR_IRQMAP_I_3_MASK ) | \
+#define GRGPIO_IRQMAPR_IRQMAP_I_3_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRGPIO_IRQMAPR_IRQMAP_I_3_MASK ) |    \
     ( ( ( _val ) << GRGPIO_IRQMAPR_IRQMAP_I_3_SHIFT ) & \
       GRGPIO_IRQMAPR_IRQMAP_I_3_MASK ) )
-#define GRGPIO_IRQMAPR_IRQMAP_I_3( _val ) \
+#define GRGPIO_IRQMAPR_IRQMAP_I_3( _val )             \
   ( ( ( _val ) << GRGPIO_IRQMAPR_IRQMAP_I_3_SHIFT ) & \
     GRGPIO_IRQMAPR_IRQMAP_I_3_MASK )
 
@@ -348,17 +323,15 @@ extern "C" {
  */
 
 #define GRGPIO_IAVAIL_IMASK_SHIFT 0
-#define GRGPIO_IAVAIL_IMASK_MASK 0xffffffffU
+#define GRGPIO_IAVAIL_IMASK_MASK  0xffffffffU
 #define GRGPIO_IAVAIL_IMASK_GET( _reg ) \
-  ( ( ( _reg ) & GRGPIO_IAVAIL_IMASK_MASK ) >> \
-    GRGPIO_IAVAIL_IMASK_SHIFT )
-#define GRGPIO_IAVAIL_IMASK_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRGPIO_IAVAIL_IMASK_MASK ) | \
+  ( ( ( _reg ) & GRGPIO_IAVAIL_IMASK_MASK ) >> GRGPIO_IAVAIL_IMASK_SHIFT )
+#define GRGPIO_IAVAIL_IMASK_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRGPIO_IAVAIL_IMASK_MASK ) |    \
     ( ( ( _val ) << GRGPIO_IAVAIL_IMASK_SHIFT ) & \
       GRGPIO_IAVAIL_IMASK_MASK ) )
 #define GRGPIO_IAVAIL_IMASK( _val ) \
-  ( ( ( _val ) << GRGPIO_IAVAIL_IMASK_SHIFT ) & \
-    GRGPIO_IAVAIL_IMASK_MASK )
+  ( ( ( _val ) << GRGPIO_IAVAIL_IMASK_SHIFT ) & GRGPIO_IAVAIL_IMASK_MASK )
 
 /** @} */
 
@@ -371,17 +344,14 @@ extern "C" {
  */
 
 #define GRGPIO_IFLAG_IFLAG_SHIFT 0
-#define GRGPIO_IFLAG_IFLAG_MASK 0xffffffffU
+#define GRGPIO_IFLAG_IFLAG_MASK  0xffffffffU
 #define GRGPIO_IFLAG_IFLAG_GET( _reg ) \
-  ( ( ( _reg ) & GRGPIO_IFLAG_IFLAG_MASK ) >> \
-    GRGPIO_IFLAG_IFLAG_SHIFT )
-#define GRGPIO_IFLAG_IFLAG_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRGPIO_IFLAG_IFLAG_MASK ) >> GRGPIO_IFLAG_IFLAG_SHIFT )
+#define GRGPIO_IFLAG_IFLAG_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRGPIO_IFLAG_IFLAG_MASK ) | \
-    ( ( ( _val ) << GRGPIO_IFLAG_IFLAG_SHIFT ) & \
-      GRGPIO_IFLAG_IFLAG_MASK ) )
+    ( ( ( _val ) << GRGPIO_IFLAG_IFLAG_SHIFT ) & GRGPIO_IFLAG_IFLAG_MASK ) )
 #define GRGPIO_IFLAG_IFLAG( _val ) \
-  ( ( ( _val ) << GRGPIO_IFLAG_IFLAG_SHIFT ) & \
-    GRGPIO_IFLAG_IFLAG_MASK )
+  ( ( ( _val ) << GRGPIO_IFLAG_IFLAG_SHIFT ) & GRGPIO_IFLAG_IFLAG_MASK )
 
 /** @} */
 
@@ -394,17 +364,14 @@ extern "C" {
  */
 
 #define GRGPIO_IPEN_IPEN_SHIFT 0
-#define GRGPIO_IPEN_IPEN_MASK 0xffffffffU
+#define GRGPIO_IPEN_IPEN_MASK  0xffffffffU
 #define GRGPIO_IPEN_IPEN_GET( _reg ) \
-  ( ( ( _reg ) & GRGPIO_IPEN_IPEN_MASK ) >> \
-    GRGPIO_IPEN_IPEN_SHIFT )
-#define GRGPIO_IPEN_IPEN_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRGPIO_IPEN_IPEN_MASK ) >> GRGPIO_IPEN_IPEN_SHIFT )
+#define GRGPIO_IPEN_IPEN_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRGPIO_IPEN_IPEN_MASK ) | \
-    ( ( ( _val ) << GRGPIO_IPEN_IPEN_SHIFT ) & \
-      GRGPIO_IPEN_IPEN_MASK ) )
+    ( ( ( _val ) << GRGPIO_IPEN_IPEN_SHIFT ) & GRGPIO_IPEN_IPEN_MASK ) )
 #define GRGPIO_IPEN_IPEN( _val ) \
-  ( ( ( _val ) << GRGPIO_IPEN_IPEN_SHIFT ) & \
-    GRGPIO_IPEN_IPEN_MASK )
+  ( ( ( _val ) << GRGPIO_IPEN_IPEN_SHIFT ) & GRGPIO_IPEN_IPEN_MASK )
 
 /** @} */
 
@@ -417,17 +384,14 @@ extern "C" {
  */
 
 #define GRGPIO_PULSE_PULSE_SHIFT 0
-#define GRGPIO_PULSE_PULSE_MASK 0xffffffffU
+#define GRGPIO_PULSE_PULSE_MASK  0xffffffffU
 #define GRGPIO_PULSE_PULSE_GET( _reg ) \
-  ( ( ( _reg ) & GRGPIO_PULSE_PULSE_MASK ) >> \
-    GRGPIO_PULSE_PULSE_SHIFT )
-#define GRGPIO_PULSE_PULSE_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRGPIO_PULSE_PULSE_MASK ) >> GRGPIO_PULSE_PULSE_SHIFT )
+#define GRGPIO_PULSE_PULSE_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRGPIO_PULSE_PULSE_MASK ) | \
-    ( ( ( _val ) << GRGPIO_PULSE_PULSE_SHIFT ) & \
-      GRGPIO_PULSE_PULSE_MASK ) )
+    ( ( ( _val ) << GRGPIO_PULSE_PULSE_SHIFT ) & GRGPIO_PULSE_PULSE_MASK ) )
 #define GRGPIO_PULSE_PULSE( _val ) \
-  ( ( ( _val ) << GRGPIO_PULSE_PULSE_SHIFT ) & \
-    GRGPIO_PULSE_PULSE_MASK )
+  ( ( ( _val ) << GRGPIO_PULSE_PULSE_SHIFT ) & GRGPIO_PULSE_PULSE_MASK )
 
 /** @} */
 
@@ -440,17 +404,14 @@ extern "C" {
  */
 
 #define GRGPIO_LOR_DATA_SHIFT 0
-#define GRGPIO_LOR_DATA_MASK 0xffffffffU
+#define GRGPIO_LOR_DATA_MASK  0xffffffffU
 #define GRGPIO_LOR_DATA_GET( _reg ) \
-  ( ( ( _reg ) & GRGPIO_LOR_DATA_MASK ) >> \
-    GRGPIO_LOR_DATA_SHIFT )
-#define GRGPIO_LOR_DATA_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRGPIO_LOR_DATA_MASK ) >> GRGPIO_LOR_DATA_SHIFT )
+#define GRGPIO_LOR_DATA_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRGPIO_LOR_DATA_MASK ) | \
-    ( ( ( _val ) << GRGPIO_LOR_DATA_SHIFT ) & \
-      GRGPIO_LOR_DATA_MASK ) )
+    ( ( ( _val ) << GRGPIO_LOR_DATA_SHIFT ) & GRGPIO_LOR_DATA_MASK ) )
 #define GRGPIO_LOR_DATA( _val ) \
-  ( ( ( _val ) << GRGPIO_LOR_DATA_SHIFT ) & \
-    GRGPIO_LOR_DATA_MASK )
+  ( ( ( _val ) << GRGPIO_LOR_DATA_SHIFT ) & GRGPIO_LOR_DATA_MASK )
 
 /** @} */
 
@@ -463,17 +424,14 @@ extern "C" {
  */
 
 #define GRGPIO_LAND_DATA_SHIFT 0
-#define GRGPIO_LAND_DATA_MASK 0xffffffffU
+#define GRGPIO_LAND_DATA_MASK  0xffffffffU
 #define GRGPIO_LAND_DATA_GET( _reg ) \
-  ( ( ( _reg ) & GRGPIO_LAND_DATA_MASK ) >> \
-    GRGPIO_LAND_DATA_SHIFT )
-#define GRGPIO_LAND_DATA_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRGPIO_LAND_DATA_MASK ) >> GRGPIO_LAND_DATA_SHIFT )
+#define GRGPIO_LAND_DATA_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRGPIO_LAND_DATA_MASK ) | \
-    ( ( ( _val ) << GRGPIO_LAND_DATA_SHIFT ) & \
-      GRGPIO_LAND_DATA_MASK ) )
+    ( ( ( _val ) << GRGPIO_LAND_DATA_SHIFT ) & GRGPIO_LAND_DATA_MASK ) )
 #define GRGPIO_LAND_DATA( _val ) \
-  ( ( ( _val ) << GRGPIO_LAND_DATA_SHIFT ) & \
-    GRGPIO_LAND_DATA_MASK )
+  ( ( ( _val ) << GRGPIO_LAND_DATA_SHIFT ) & GRGPIO_LAND_DATA_MASK )
 
 /** @} */
 
@@ -486,17 +444,14 @@ extern "C" {
  */
 
 #define GRGPIO_LXOR_DATA_SHIFT 0
-#define GRGPIO_LXOR_DATA_MASK 0xffffffffU
+#define GRGPIO_LXOR_DATA_MASK  0xffffffffU
 #define GRGPIO_LXOR_DATA_GET( _reg ) \
-  ( ( ( _reg ) & GRGPIO_LXOR_DATA_MASK ) >> \
-    GRGPIO_LXOR_DATA_SHIFT )
-#define GRGPIO_LXOR_DATA_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRGPIO_LXOR_DATA_MASK ) >> GRGPIO_LXOR_DATA_SHIFT )
+#define GRGPIO_LXOR_DATA_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRGPIO_LXOR_DATA_MASK ) | \
-    ( ( ( _val ) << GRGPIO_LXOR_DATA_SHIFT ) & \
-      GRGPIO_LXOR_DATA_MASK ) )
+    ( ( ( _val ) << GRGPIO_LXOR_DATA_SHIFT ) & GRGPIO_LXOR_DATA_MASK ) )
 #define GRGPIO_LXOR_DATA( _val ) \
-  ( ( ( _val ) << GRGPIO_LXOR_DATA_SHIFT ) & \
-    GRGPIO_LXOR_DATA_MASK )
+  ( ( ( _val ) << GRGPIO_LXOR_DATA_SHIFT ) & GRGPIO_LXOR_DATA_MASK )
 
 /** @} */
 

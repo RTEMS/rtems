@@ -67,47 +67,47 @@ struct apbuart_regs {
 
 /* IRQMP and IRQAMP interrupt controller timestamps */
 struct irqmp_timestamp_regs {
-  volatile uint32_t counter;     /* 0x00 */
-  volatile uint32_t control;     /* 0x04 */
-  volatile uint32_t assertion;   /* 0x08 */
-  volatile uint32_t ack;         /* 0x0c */
+  volatile uint32_t counter;   /* 0x00 */
+  volatile uint32_t control;   /* 0x04 */
+  volatile uint32_t assertion; /* 0x08 */
+  volatile uint32_t ack;       /* 0x0c */
 };
 
 static inline bool irqmp_has_timestamp(
   volatile struct irqmp_timestamp_regs *irqmp_ts
 )
 {
-  return (irqmp_ts->control >> 27) > 0;
+  return ( irqmp_ts->control >> 27 ) > 0;
 }
 
 /* IRQMP and IRQAMP interrupt controllers */
 struct irqmp_regs {
-  volatile uint32_t ilevel;      /* 0x00 */
-  volatile uint32_t ipend;       /* 0x04 */
-  volatile uint32_t iforce;      /* 0x08 */
-  volatile uint32_t iclear;      /* 0x0c */
-  volatile uint32_t mpstat;      /* 0x10 */
-  volatile uint32_t bcast;       /* 0x14 */
-  volatile uint32_t notused02;   /* 0x18 */
-  volatile uint32_t wdgctrl;     /* 0x1c */
-  volatile uint32_t ampctrl;     /* 0x20 */
-  volatile uint32_t icsel[2];    /* 0x24,0x28 */
-  volatile uint32_t notused13;   /* 0x2c */
-  volatile uint32_t notused20;   /* 0x30 */
-  volatile uint32_t notused21;   /* 0x34 */
-  volatile uint32_t notused22;   /* 0x38 */
-  volatile uint32_t notused23;   /* 0x3c */
-  volatile uint32_t mask[16];    /* 0x40 */
-  volatile uint32_t force[16];   /* 0x80 */
+  volatile uint32_t                    ilevel;      /* 0x00 */
+  volatile uint32_t                    ipend;       /* 0x04 */
+  volatile uint32_t                    iforce;      /* 0x08 */
+  volatile uint32_t                    iclear;      /* 0x0c */
+  volatile uint32_t                    mpstat;      /* 0x10 */
+  volatile uint32_t                    bcast;       /* 0x14 */
+  volatile uint32_t                    notused02;   /* 0x18 */
+  volatile uint32_t                    wdgctrl;     /* 0x1c */
+  volatile uint32_t                    ampctrl;     /* 0x20 */
+  volatile uint32_t                    icsel[ 2 ];  /* 0x24,0x28 */
+  volatile uint32_t                    notused13;   /* 0x2c */
+  volatile uint32_t                    notused20;   /* 0x30 */
+  volatile uint32_t                    notused21;   /* 0x34 */
+  volatile uint32_t                    notused22;   /* 0x38 */
+  volatile uint32_t                    notused23;   /* 0x3c */
+  volatile uint32_t                    mask[ 16 ];  /* 0x40 */
+  volatile uint32_t                    force[ 16 ]; /* 0x80 */
   /* Extended IRQ registers */
-  volatile uint32_t intid[16];   /* 0xc0 */
-  volatile struct irqmp_timestamp_regs timestamp[16]; /* 0x100 */
-  volatile uint32_t resetaddr[4]; /* 0x200 */
-  volatile uint32_t resv0[12];    /* 0x210 - 0x23C */
-  volatile uint32_t pboot;        /* 0x240 */
-  volatile uint32_t resv1[47];    /* 0x244 - 0x2FC */
-  volatile uint32_t irqmap[8];    /* 0x300 - 0x31C */
-  volatile uint32_t resv2[824];   /* 0x320 - 0x1000 */
+  volatile uint32_t                    intid[ 16 ];     /* 0xc0 */
+  volatile struct irqmp_timestamp_regs timestamp[ 16 ]; /* 0x100 */
+  volatile uint32_t                    resetaddr[ 4 ];  /* 0x200 */
+  volatile uint32_t                    resv0[ 12 ];     /* 0x210 - 0x23C */
+  volatile uint32_t                    pboot;           /* 0x240 */
+  volatile uint32_t                    resv1[ 47 ];     /* 0x244 - 0x2FC */
+  volatile uint32_t                    irqmap[ 8 ];     /* 0x300 - 0x31C */
+  volatile uint32_t                    resv2[ 824 ];    /* 0x320 - 0x1000 */
 };
 
 /* GPTIMER Timer instance */
@@ -128,11 +128,11 @@ struct gptimer_timer_regs {
 
 /* GPTIMER common registers */
 struct gptimer_regs {
-  volatile uint32_t scaler_value;   /* common timer registers */
-  volatile uint32_t scaler_reload;
-  volatile uint32_t cfg;
-  volatile uint32_t notused;
-  struct gptimer_timer_regs timer[7];
+  volatile uint32_t         scaler_value; /* common timer registers */
+  volatile uint32_t         scaler_reload;
+  volatile uint32_t         cfg;
+  volatile uint32_t         notused;
+  struct gptimer_timer_regs timer[ 7 ];
 };
 
 /* GRGPIO GPIO */
@@ -145,7 +145,7 @@ struct grgpio_regs {
   volatile uint32_t iedge;       /* 0x14 Interrupt edge register */
   volatile uint32_t bypass;      /* 0x18 Bypass register */
   volatile uint32_t cap;         /* 0x1C Capability register */
-  volatile uint32_t irqmap[4];   /* 0x20 - 0x2C Interrupt map registers */
+  volatile uint32_t irqmap[ 4 ]; /* 0x20 - 0x2C Interrupt map registers */
   volatile uint32_t res_30;      /* 0x30 Reserved */
   volatile uint32_t res_34;      /* 0x34 Reserved */
   volatile uint32_t res_38;      /* 0x38 Reserved */
@@ -155,17 +155,21 @@ struct grgpio_regs {
   volatile uint32_t res_48;      /* 0x48 Reserved */
   volatile uint32_t pulse;       /* 0x4C Pulse register */
   volatile uint32_t res_50;      /* 0x50 Reserved */
-  volatile uint32_t output_or;   /* 0x54 I/O port output register, logical-OR */
-  volatile uint32_t dir_or;      /* 0x58 I/O port direction register, logical-OR */
-  volatile uint32_t imask_or;    /* 0x5C Interrupt mask register, logical-OR */
-  volatile uint32_t res_60;      /* 0x60 Reserved */
-  volatile uint32_t output_and;  /* 0x64 I/O port output register, logical-AND */
-  volatile uint32_t dir_and;     /* 0x68 I/O port direction register, logical-AND */
-  volatile uint32_t imask_and;   /* 0x6C Interrupt mask register, logical-AND */
-  volatile uint32_t res_70;      /* 0x70 Reserved */
-  volatile uint32_t output_xor;  /* 0x74 I/O port output register, logical-XOR */
-  volatile uint32_t dir_xor;     /* 0x78 I/O port direction register, logical-XOR */
-  volatile uint32_t imask_xor;   /* 0x7C Interrupt mask register, logical-XOR */
+  volatile uint32_t output_or; /* 0x54 I/O port output register, logical-OR */
+  volatile uint32_t dir_or; /* 0x58 I/O port direction register, logical-OR */
+  volatile uint32_t imask_or; /* 0x5C Interrupt mask register, logical-OR */
+  volatile uint32_t res_60;   /* 0x60 Reserved */
+  volatile uint32_t
+    output_and; /* 0x64 I/O port output register, logical-AND */
+  volatile uint32_t
+    dir_and; /* 0x68 I/O port direction register, logical-AND */
+  volatile uint32_t imask_and; /* 0x6C Interrupt mask register, logical-AND */
+  volatile uint32_t res_70;    /* 0x70 Reserved */
+  volatile uint32_t
+    output_xor; /* 0x74 I/O port output register, logical-XOR */
+  volatile uint32_t
+    dir_xor; /* 0x78 I/O port direction register, logical-XOR */
+  volatile uint32_t imask_xor; /* 0x7C Interrupt mask register, logical-XOR */
 };
 
 /* L2C - Level 2 Cache Controller registers */
@@ -186,12 +190,14 @@ struct l2c_regs {
   volatile uint32_t scrub_delay;            /* 0x34 Scrub Delay */
   volatile uint32_t error_injection;        /* 0x38 Error injection */
   volatile uint32_t access_control;         /* 0x3c Access control */
-  volatile uint32_t reserved_40[16];        /* 0x40 Reserved */
-  volatile uint32_t mtrr[32];               /* 0x80 - 0xFC MTRR registers */
-  volatile uint32_t reserved_100[131008];   /* 0x100 Reserved */
-  volatile uint32_t diag_iface_tag[16384];  /* 0x80000 - 0x8FFFC Diagnostic interface (Tag) */
-  volatile uint32_t reserved_90000[376832]; /* 0x90000 Reserved */
-  volatile uint32_t diag_iface_data[524288];/* 0x200000 - 0x3FFFFC Diagnostic interface (Data) */
+  volatile uint32_t reserved_40[ 16 ];      /* 0x40 Reserved */
+  volatile uint32_t mtrr[ 32 ];             /* 0x80 - 0xFC MTRR registers */
+  volatile uint32_t reserved_100[ 131008 ]; /* 0x100 Reserved */
+  volatile uint32_t
+    diag_iface_tag[ 16384 ]; /* 0x80000 - 0x8FFFC Diagnostic interface (Tag) */
+  volatile uint32_t reserved_90000[ 376832 ]; /* 0x90000 Reserved */
+  volatile uint32_t diag_iface_data
+    [ 524288 ]; /* 0x200000 - 0x3FFFFC Diagnostic interface (Data) */
 };
 
 #ifdef __cplusplus

@@ -36,25 +36,32 @@
  * Use interrupt lock primitives compatible with SMP defined in RTEMS 4.11.99
  * and higher.
  */
-#if (((__RTEMS_MAJOR__ << 16) | (__RTEMS_MINOR__ << 8) | __RTEMS_REVISION__) >= 0x040b63)
+#if (                                                      \
+  ( ( __RTEMS_MAJOR__ << 16 ) | ( __RTEMS_MINOR__ << 8 ) | \
+    __RTEMS_REVISION__ ) >= 0x040b63                       \
+)
 
 #include <rtems/score/isrlock.h>
 
 /* map via rtems_interrupt_lock_* API: */
-#define SPIN_DECLARE(lock) RTEMS_INTERRUPT_LOCK_MEMBER(lock)
-#define SPIN_INIT(lock, name) rtems_interrupt_lock_initialize(lock, name)
-#define SPIN_LOCK(lock, level) rtems_interrupt_lock_acquire_isr(lock, &level)
-#define SPIN_LOCK_IRQ(lock, level) rtems_interrupt_lock_acquire(lock, &level)
-#define SPIN_UNLOCK(lock, level) rtems_interrupt_lock_release_isr(lock, &level)
-#define SPIN_UNLOCK_IRQ(lock, level) rtems_interrupt_lock_release(lock, &level)
-#define SPIN_IRQFLAGS(k) rtems_interrupt_lock_context k
-#define SPIN_ISR_IRQFLAGS(k) SPIN_IRQFLAGS(k)
-#define SPIN_FREE(lock) rtems_interrupt_lock_destroy(lock)
+#define SPIN_DECLARE( lock )    RTEMS_INTERRUPT_LOCK_MEMBER( lock )
+#define SPIN_INIT( lock, name ) rtems_interrupt_lock_initialize( lock, name )
+#define SPIN_LOCK( lock, level ) \
+  rtems_interrupt_lock_acquire_isr( lock, &level )
+#define SPIN_LOCK_IRQ( lock, level ) \
+  rtems_interrupt_lock_acquire( lock, &level )
+#define SPIN_UNLOCK( lock, level ) \
+  rtems_interrupt_lock_release_isr( lock, &level )
+#define SPIN_UNLOCK_IRQ( lock, level ) \
+  rtems_interrupt_lock_release( lock, &level )
+#define SPIN_IRQFLAGS( k )     rtems_interrupt_lock_context k
+#define SPIN_ISR_IRQFLAGS( k ) SPIN_IRQFLAGS( k )
+#define SPIN_FREE( lock )      rtems_interrupt_lock_destroy( lock )
 
 /* turn on/off local CPU's interrupt to ensure HW timing - not SMP safe. */
-#define IRQ_LOCAL_DECLARE(_level) rtems_interrupt_level _level
-#define IRQ_LOCAL_DISABLE(_level) rtems_interrupt_local_disable(_level)
-#define IRQ_LOCAL_ENABLE(_level) rtems_interrupt_local_enable(_level)
+#define IRQ_LOCAL_DECLARE( _level ) rtems_interrupt_level _level
+#define IRQ_LOCAL_DISABLE( _level ) rtems_interrupt_local_disable( _level )
+#define IRQ_LOCAL_ENABLE( _level )  rtems_interrupt_local_enable( _level )
 
 #else
 
@@ -63,20 +70,20 @@
 #endif
 
 /* maintain single-core compatibility with older versions of RTEMS: */
-#define SPIN_DECLARE(name)
-#define SPIN_INIT(lock, name)
-#define SPIN_LOCK(lock, level)
-#define SPIN_LOCK_IRQ(lock, level) rtems_interrupt_disable(level)
-#define SPIN_UNLOCK(lock, level)
-#define SPIN_UNLOCK_IRQ(lock, level) rtems_interrupt_enable(level)
-#define SPIN_IRQFLAGS(k) rtems_interrupt_level k
-#define SPIN_ISR_IRQFLAGS(k)
-#define SPIN_FREE(lock)
+#define SPIN_DECLARE( name )
+#define SPIN_INIT( lock, name )
+#define SPIN_LOCK( lock, level )
+#define SPIN_LOCK_IRQ( lock, level ) rtems_interrupt_disable( level )
+#define SPIN_UNLOCK( lock, level )
+#define SPIN_UNLOCK_IRQ( lock, level ) rtems_interrupt_enable( level )
+#define SPIN_IRQFLAGS( k )             rtems_interrupt_level k
+#define SPIN_ISR_IRQFLAGS( k )
+#define SPIN_FREE( lock )
 
 /* turn on/off local CPU's interrupt to ensure HW timing - not SMP safe. */
-#define IRQ_LOCAL_DECLARE(_level) rtems_interrupt_level _level
-#define IRQ_LOCAL_DISABLE(_level) rtems_interrupt_disable(_level)
-#define IRQ_LOCAL_ENABLE(_level) rtems_interrupt_enable(_level)
+#define IRQ_LOCAL_DECLARE( _level ) rtems_interrupt_level _level
+#define IRQ_LOCAL_DISABLE( _level ) rtems_interrupt_disable( _level )
+#define IRQ_LOCAL_ENABLE( _level )  rtems_interrupt_enable( _level )
 
 #endif
 
@@ -84,99 +91,99 @@
 extern "C" {
 #endif
 
-#if (((__RTEMS_MAJOR__ << 16) | (__RTEMS_MINOR__ << 8) | __RTEMS_REVISION__) >= 0x050000)
+#if (                                                      \
+  ( ( __RTEMS_MAJOR__ << 16 ) | ( __RTEMS_MINOR__ << 8 ) | \
+    __RTEMS_REVISION__ ) >= 0x050000                       \
+)
 
-static inline void *grlib_malloc(size_t size)
+static inline void *grlib_malloc( size_t size )
 {
- return rtems_malloc(size);
+  return rtems_malloc( size );
 }
 
-static inline void *grlib_calloc(size_t nelem, size_t elsize)
+static inline void *grlib_calloc( size_t nelem, size_t elsize )
 {
- return rtems_calloc(nelem, elsize);
+  return rtems_calloc( nelem, elsize );
 }
 
 #else
 
-static inline void *grlib_malloc(size_t size)
+static inline void *grlib_malloc( size_t size )
 {
- return malloc(size);
+  return malloc( size );
 }
 
-static inline void *grlib_calloc(size_t nelem, size_t elsize)
+static inline void *grlib_calloc( size_t nelem, size_t elsize )
 {
- return calloc(nelem, elsize);
+  return calloc( nelem, elsize );
 }
 
 #endif
 
 #ifdef __sparc__
 
-static inline uint8_t grlib_read_uncached8(uintptr_t address)
+static inline uint8_t grlib_read_uncached8( uintptr_t address )
 {
-       uint8_t tmp;
-       __asm__ (" lduba [%1]1, %0 "
-           : "=r"(tmp)
-           : "r"(address)
-       );
-       return tmp;
+  uint8_t tmp;
+  __asm__( " lduba [%1]1, %0 "
+           : "=r"( tmp )
+           : "r"( address ) );
+  return tmp;
 }
 
-static inline uint16_t grlib_read_uncached16(uintptr_t addr) {
-       uint16_t tmp;
-       __asm__ (" lduha [%1]1, %0 "
-         : "=r"(tmp)
-         : "r"(addr)
-       );
-       return tmp;
+static inline uint16_t grlib_read_uncached16( uintptr_t addr )
+{
+  uint16_t tmp;
+  __asm__( " lduha [%1]1, %0 "
+           : "=r"( tmp )
+           : "r"( addr ) );
+  return tmp;
 }
 
-
-static inline uint32_t grlib_read_uncached32(uintptr_t address)
+static inline uint32_t grlib_read_uncached32( uintptr_t address )
 {
-	uint32_t tmp;
-	__asm__ (" lda [%1]1, %0 "
-	        : "=r"(tmp)
-	        : "r"(address)
-	);
-	return tmp;
+  uint32_t tmp;
+  __asm__( " lda [%1]1, %0 "
+           : "=r"( tmp )
+           : "r"( address ) );
+  return tmp;
 }
 
-static inline uint64_t grlib_read_uncached64(uint64_t *address)
+static inline uint64_t grlib_read_uncached64( uint64_t *address )
 {
-	uint64_t tmp;
-	__asm__ (" ldda [%1]1, %0 "
-	        : "=r"(tmp)
-	        : "r"(address)
-	);
-	return tmp;
+  uint64_t tmp;
+  __asm__( " ldda [%1]1, %0 "
+           : "=r"( tmp )
+           : "r"( address ) );
+  return tmp;
 }
 
 #define GRLIB_DMA_IS_CACHE_COHERENT CPU_SPARC_HAS_SNOOPING
 
 #else
 
-static inline uint8_t grlib_read_uncached8(uintptr_t address)
+static inline uint8_t grlib_read_uncached8( uintptr_t address )
 {
-	uint8_t tmp = (*(volatile uint8_t *)(address));
-	return tmp;
+  uint8_t tmp = ( *(volatile uint8_t *) ( address ) );
+  return tmp;
 }
 
-static inline uint16_t grlib_read_uncached16(uintptr_t address) {
-	uint16_t tmp = (*(volatile uint16_t *)(address));
-	return tmp;
+static inline uint16_t grlib_read_uncached16( uintptr_t address )
+{
+  uint16_t tmp = ( *(volatile uint16_t *) ( address ) );
+  return tmp;
 }
 
-static inline uint32_t grlib_read_uncached32(uintptr_t address)
+static inline uint32_t grlib_read_uncached32( uintptr_t address )
 {
-	uint32_t tmp = (*(volatile uint32_t *)(address));
-	return tmp;
+  uint32_t tmp = ( *(volatile uint32_t *) ( address ) );
+  return tmp;
 }
 
-static inline uint64_t grlib_read_uncached64(uintptr_t address)
+static inline uint64_t grlib_read_uncached64( uintptr_t address )
 {
-	uint64_t tmp = (*(volatile uint64_t *)(address));
-	return tmp;
+  uint64_t tmp = ( *(volatile uint64_t *) ( address ) );
+  return tmp;
 }
 
 #define GRLIB_DMA_IS_CACHE_COHERENT 1

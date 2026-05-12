@@ -42,11 +42,11 @@ extern "C" {
 
 struct apbuart_context {
   rtems_termios_device_context base;
-  apbuart *regs;
-  unsigned int freq_hz;
-  rtems_vector_number irq;
-  volatile int sending;
-  char *buf;
+  apbuart                     *regs;
+  unsigned int                 freq_hz;
+  rtems_vector_number          irq;
+  volatile int                 sending;
+  char                        *buf;
 };
 
 extern const rtems_termios_device_handler apbuart_handler_interrupt;

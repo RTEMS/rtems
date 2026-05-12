@@ -36,7 +36,7 @@ extern "C" {
 #endif
 
 /* Driver interface */
-int canmux_register(void);
+int canmux_register( void );
 
 /* ioctl calls */
 #define CANMUX_IOC_BUSA_SATCAN 1

@@ -35,7 +35,7 @@
 extern "C" {
 #endif
 
-extern void grgpio_register_drv (void);
+extern void grgpio_register_drv( void );
 
 #ifdef __cplusplus
 }

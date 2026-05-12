@@ -83,30 +83,26 @@ extern "C" {
  */
 
 #define SPWPNP_PNPVEND_VEND_SHIFT 16
-#define SPWPNP_PNPVEND_VEND_MASK 0xffff0000U
+#define SPWPNP_PNPVEND_VEND_MASK  0xffff0000U
 #define SPWPNP_PNPVEND_VEND_GET( _reg ) \
-  ( ( ( _reg ) & SPWPNP_PNPVEND_VEND_MASK ) >> \
-    SPWPNP_PNPVEND_VEND_SHIFT )
-#define SPWPNP_PNPVEND_VEND_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~SPWPNP_PNPVEND_VEND_MASK ) | \
+  ( ( ( _reg ) & SPWPNP_PNPVEND_VEND_MASK ) >> SPWPNP_PNPVEND_VEND_SHIFT )
+#define SPWPNP_PNPVEND_VEND_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~SPWPNP_PNPVEND_VEND_MASK ) |    \
     ( ( ( _val ) << SPWPNP_PNPVEND_VEND_SHIFT ) & \
       SPWPNP_PNPVEND_VEND_MASK ) )
 #define SPWPNP_PNPVEND_VEND( _val ) \
-  ( ( ( _val ) << SPWPNP_PNPVEND_VEND_SHIFT ) & \
-    SPWPNP_PNPVEND_VEND_MASK )
+  ( ( ( _val ) << SPWPNP_PNPVEND_VEND_SHIFT ) & SPWPNP_PNPVEND_VEND_MASK )
 
 #define SPWPNP_PNPVEND_PROD_SHIFT 0
-#define SPWPNP_PNPVEND_PROD_MASK 0xffffU
+#define SPWPNP_PNPVEND_PROD_MASK  0xffffU
 #define SPWPNP_PNPVEND_PROD_GET( _reg ) \
-  ( ( ( _reg ) & SPWPNP_PNPVEND_PROD_MASK ) >> \
-    SPWPNP_PNPVEND_PROD_SHIFT )
-#define SPWPNP_PNPVEND_PROD_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~SPWPNP_PNPVEND_PROD_MASK ) | \
+  ( ( ( _reg ) & SPWPNP_PNPVEND_PROD_MASK ) >> SPWPNP_PNPVEND_PROD_SHIFT )
+#define SPWPNP_PNPVEND_PROD_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~SPWPNP_PNPVEND_PROD_MASK ) |    \
     ( ( ( _val ) << SPWPNP_PNPVEND_PROD_SHIFT ) & \
       SPWPNP_PNPVEND_PROD_MASK ) )
 #define SPWPNP_PNPVEND_PROD( _val ) \
-  ( ( ( _val ) << SPWPNP_PNPVEND_PROD_SHIFT ) & \
-    SPWPNP_PNPVEND_PROD_MASK )
+  ( ( ( _val ) << SPWPNP_PNPVEND_PROD_SHIFT ) & SPWPNP_PNPVEND_PROD_MASK )
 
 /** @} */
 
@@ -120,43 +116,37 @@ extern "C" {
  */
 
 #define SPWPNP_PNPVER_MAJOR_SHIFT 24
-#define SPWPNP_PNPVER_MAJOR_MASK 0xff000000U
+#define SPWPNP_PNPVER_MAJOR_MASK  0xff000000U
 #define SPWPNP_PNPVER_MAJOR_GET( _reg ) \
-  ( ( ( _reg ) & SPWPNP_PNPVER_MAJOR_MASK ) >> \
-    SPWPNP_PNPVER_MAJOR_SHIFT )
-#define SPWPNP_PNPVER_MAJOR_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~SPWPNP_PNPVER_MAJOR_MASK ) | \
+  ( ( ( _reg ) & SPWPNP_PNPVER_MAJOR_MASK ) >> SPWPNP_PNPVER_MAJOR_SHIFT )
+#define SPWPNP_PNPVER_MAJOR_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~SPWPNP_PNPVER_MAJOR_MASK ) |    \
     ( ( ( _val ) << SPWPNP_PNPVER_MAJOR_SHIFT ) & \
       SPWPNP_PNPVER_MAJOR_MASK ) )
 #define SPWPNP_PNPVER_MAJOR( _val ) \
-  ( ( ( _val ) << SPWPNP_PNPVER_MAJOR_SHIFT ) & \
-    SPWPNP_PNPVER_MAJOR_MASK )
+  ( ( ( _val ) << SPWPNP_PNPVER_MAJOR_SHIFT ) & SPWPNP_PNPVER_MAJOR_MASK )
 
 #define SPWPNP_PNPVER_MINOR_SHIFT 16
-#define SPWPNP_PNPVER_MINOR_MASK 0xff0000U
+#define SPWPNP_PNPVER_MINOR_MASK  0xff0000U
 #define SPWPNP_PNPVER_MINOR_GET( _reg ) \
-  ( ( ( _reg ) & SPWPNP_PNPVER_MINOR_MASK ) >> \
-    SPWPNP_PNPVER_MINOR_SHIFT )
-#define SPWPNP_PNPVER_MINOR_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~SPWPNP_PNPVER_MINOR_MASK ) | \
+  ( ( ( _reg ) & SPWPNP_PNPVER_MINOR_MASK ) >> SPWPNP_PNPVER_MINOR_SHIFT )
+#define SPWPNP_PNPVER_MINOR_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~SPWPNP_PNPVER_MINOR_MASK ) |    \
     ( ( ( _val ) << SPWPNP_PNPVER_MINOR_SHIFT ) & \
       SPWPNP_PNPVER_MINOR_MASK ) )
 #define SPWPNP_PNPVER_MINOR( _val ) \
-  ( ( ( _val ) << SPWPNP_PNPVER_MINOR_SHIFT ) & \
-    SPWPNP_PNPVER_MINOR_MASK )
+  ( ( ( _val ) << SPWPNP_PNPVER_MINOR_SHIFT ) & SPWPNP_PNPVER_MINOR_MASK )
 
 #define SPWPNP_PNPVER_PATCH_SHIFT 8
-#define SPWPNP_PNPVER_PATCH_MASK 0xff00U
+#define SPWPNP_PNPVER_PATCH_MASK  0xff00U
 #define SPWPNP_PNPVER_PATCH_GET( _reg ) \
-  ( ( ( _reg ) & SPWPNP_PNPVER_PATCH_MASK ) >> \
-    SPWPNP_PNPVER_PATCH_SHIFT )
-#define SPWPNP_PNPVER_PATCH_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~SPWPNP_PNPVER_PATCH_MASK ) | \
+  ( ( ( _reg ) & SPWPNP_PNPVER_PATCH_MASK ) >> SPWPNP_PNPVER_PATCH_SHIFT )
+#define SPWPNP_PNPVER_PATCH_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~SPWPNP_PNPVER_PATCH_MASK ) |    \
     ( ( ( _val ) << SPWPNP_PNPVER_PATCH_SHIFT ) & \
       SPWPNP_PNPVER_PATCH_MASK ) )
 #define SPWPNP_PNPVER_PATCH( _val ) \
-  ( ( ( _val ) << SPWPNP_PNPVER_PATCH_SHIFT ) & \
-    SPWPNP_PNPVER_PATCH_MASK )
+  ( ( ( _val ) << SPWPNP_PNPVER_PATCH_SHIFT ) & SPWPNP_PNPVER_PATCH_MASK )
 
 /** @} */
 
@@ -170,15 +160,15 @@ extern "C" {
  */
 
 #define SPWPNP_PNPDEVSTS_STATUS_SHIFT 0
-#define SPWPNP_PNPDEVSTS_STATUS_MASK 0xffU
-#define SPWPNP_PNPDEVSTS_STATUS_GET( _reg ) \
+#define SPWPNP_PNPDEVSTS_STATUS_MASK  0xffU
+#define SPWPNP_PNPDEVSTS_STATUS_GET( _reg )        \
   ( ( ( _reg ) & SPWPNP_PNPDEVSTS_STATUS_MASK ) >> \
     SPWPNP_PNPDEVSTS_STATUS_SHIFT )
-#define SPWPNP_PNPDEVSTS_STATUS_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~SPWPNP_PNPDEVSTS_STATUS_MASK ) | \
+#define SPWPNP_PNPDEVSTS_STATUS_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~SPWPNP_PNPDEVSTS_STATUS_MASK ) |    \
     ( ( ( _val ) << SPWPNP_PNPDEVSTS_STATUS_SHIFT ) & \
       SPWPNP_PNPDEVSTS_STATUS_MASK ) )
-#define SPWPNP_PNPDEVSTS_STATUS( _val ) \
+#define SPWPNP_PNPDEVSTS_STATUS( _val )             \
   ( ( ( _val ) << SPWPNP_PNPDEVSTS_STATUS_SHIFT ) & \
     SPWPNP_PNPDEVSTS_STATUS_MASK )
 
@@ -194,15 +184,15 @@ extern "C" {
  */
 
 #define SPWPNP_PNPACTLNK_ACTIVE_SHIFT 1
-#define SPWPNP_PNPACTLNK_ACTIVE_MASK 0xfffffffeU
-#define SPWPNP_PNPACTLNK_ACTIVE_GET( _reg ) \
+#define SPWPNP_PNPACTLNK_ACTIVE_MASK  0xfffffffeU
+#define SPWPNP_PNPACTLNK_ACTIVE_GET( _reg )        \
   ( ( ( _reg ) & SPWPNP_PNPACTLNK_ACTIVE_MASK ) >> \
     SPWPNP_PNPACTLNK_ACTIVE_SHIFT )
-#define SPWPNP_PNPACTLNK_ACTIVE_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~SPWPNP_PNPACTLNK_ACTIVE_MASK ) | \
+#define SPWPNP_PNPACTLNK_ACTIVE_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~SPWPNP_PNPACTLNK_ACTIVE_MASK ) |    \
     ( ( ( _val ) << SPWPNP_PNPACTLNK_ACTIVE_SHIFT ) & \
       SPWPNP_PNPACTLNK_ACTIVE_MASK ) )
-#define SPWPNP_PNPACTLNK_ACTIVE( _val ) \
+#define SPWPNP_PNPACTLNK_ACTIVE( _val )             \
   ( ( ( _val ) << SPWPNP_PNPACTLNK_ACTIVE_SHIFT ) & \
     SPWPNP_PNPACTLNK_ACTIVE_MASK )
 
@@ -218,17 +208,14 @@ extern "C" {
  */
 
 #define SPWPNP_PNPOA0_RA_SHIFT 0
-#define SPWPNP_PNPOA0_RA_MASK 0xffffffffU
+#define SPWPNP_PNPOA0_RA_MASK  0xffffffffU
 #define SPWPNP_PNPOA0_RA_GET( _reg ) \
-  ( ( ( _reg ) & SPWPNP_PNPOA0_RA_MASK ) >> \
-    SPWPNP_PNPOA0_RA_SHIFT )
-#define SPWPNP_PNPOA0_RA_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWPNP_PNPOA0_RA_MASK ) >> SPWPNP_PNPOA0_RA_SHIFT )
+#define SPWPNP_PNPOA0_RA_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWPNP_PNPOA0_RA_MASK ) | \
-    ( ( ( _val ) << SPWPNP_PNPOA0_RA_SHIFT ) & \
-      SPWPNP_PNPOA0_RA_MASK ) )
+    ( ( ( _val ) << SPWPNP_PNPOA0_RA_SHIFT ) & SPWPNP_PNPOA0_RA_MASK ) )
 #define SPWPNP_PNPOA0_RA( _val ) \
-  ( ( ( _val ) << SPWPNP_PNPOA0_RA_SHIFT ) & \
-    SPWPNP_PNPOA0_RA_MASK )
+  ( ( ( _val ) << SPWPNP_PNPOA0_RA_SHIFT ) & SPWPNP_PNPOA0_RA_MASK )
 
 /** @} */
 
@@ -242,17 +229,14 @@ extern "C" {
  */
 
 #define SPWPNP_PNPOA1_RA_SHIFT 0
-#define SPWPNP_PNPOA1_RA_MASK 0xffffffffU
+#define SPWPNP_PNPOA1_RA_MASK  0xffffffffU
 #define SPWPNP_PNPOA1_RA_GET( _reg ) \
-  ( ( ( _reg ) & SPWPNP_PNPOA1_RA_MASK ) >> \
-    SPWPNP_PNPOA1_RA_SHIFT )
-#define SPWPNP_PNPOA1_RA_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWPNP_PNPOA1_RA_MASK ) >> SPWPNP_PNPOA1_RA_SHIFT )
+#define SPWPNP_PNPOA1_RA_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWPNP_PNPOA1_RA_MASK ) | \
-    ( ( ( _val ) << SPWPNP_PNPOA1_RA_SHIFT ) & \
-      SPWPNP_PNPOA1_RA_MASK ) )
+    ( ( ( _val ) << SPWPNP_PNPOA1_RA_SHIFT ) & SPWPNP_PNPOA1_RA_MASK ) )
 #define SPWPNP_PNPOA1_RA( _val ) \
-  ( ( ( _val ) << SPWPNP_PNPOA1_RA_SHIFT ) & \
-    SPWPNP_PNPOA1_RA_MASK )
+  ( ( ( _val ) << SPWPNP_PNPOA1_RA_SHIFT ) & SPWPNP_PNPOA1_RA_MASK )
 
 /** @} */
 
@@ -266,17 +250,14 @@ extern "C" {
  */
 
 #define SPWPNP_PNPOA2_RA_SHIFT 0
-#define SPWPNP_PNPOA2_RA_MASK 0xffffffffU
+#define SPWPNP_PNPOA2_RA_MASK  0xffffffffU
 #define SPWPNP_PNPOA2_RA_GET( _reg ) \
-  ( ( ( _reg ) & SPWPNP_PNPOA2_RA_MASK ) >> \
-    SPWPNP_PNPOA2_RA_SHIFT )
-#define SPWPNP_PNPOA2_RA_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWPNP_PNPOA2_RA_MASK ) >> SPWPNP_PNPOA2_RA_SHIFT )
+#define SPWPNP_PNPOA2_RA_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWPNP_PNPOA2_RA_MASK ) | \
-    ( ( ( _val ) << SPWPNP_PNPOA2_RA_SHIFT ) & \
-      SPWPNP_PNPOA2_RA_MASK ) )
+    ( ( ( _val ) << SPWPNP_PNPOA2_RA_SHIFT ) & SPWPNP_PNPOA2_RA_MASK ) )
 #define SPWPNP_PNPOA2_RA( _val ) \
-  ( ( ( _val ) << SPWPNP_PNPOA2_RA_SHIFT ) & \
-    SPWPNP_PNPOA2_RA_MASK )
+  ( ( ( _val ) << SPWPNP_PNPOA2_RA_SHIFT ) & SPWPNP_PNPOA2_RA_MASK )
 
 /** @} */
 
@@ -290,17 +271,15 @@ extern "C" {
  */
 
 #define SPWPNP_PNPDEVID_DID_SHIFT 0
-#define SPWPNP_PNPDEVID_DID_MASK 0xffffffffU
+#define SPWPNP_PNPDEVID_DID_MASK  0xffffffffU
 #define SPWPNP_PNPDEVID_DID_GET( _reg ) \
-  ( ( ( _reg ) & SPWPNP_PNPDEVID_DID_MASK ) >> \
-    SPWPNP_PNPDEVID_DID_SHIFT )
-#define SPWPNP_PNPDEVID_DID_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~SPWPNP_PNPDEVID_DID_MASK ) | \
+  ( ( ( _reg ) & SPWPNP_PNPDEVID_DID_MASK ) >> SPWPNP_PNPDEVID_DID_SHIFT )
+#define SPWPNP_PNPDEVID_DID_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~SPWPNP_PNPDEVID_DID_MASK ) |    \
     ( ( ( _val ) << SPWPNP_PNPDEVID_DID_SHIFT ) & \
       SPWPNP_PNPDEVID_DID_MASK ) )
 #define SPWPNP_PNPDEVID_DID( _val ) \
-  ( ( ( _val ) << SPWPNP_PNPDEVID_DID_SHIFT ) & \
-    SPWPNP_PNPDEVID_DID_MASK )
+  ( ( ( _val ) << SPWPNP_PNPDEVID_DID_SHIFT ) & SPWPNP_PNPDEVID_DID_MASK )
 
 /** @} */
 
@@ -314,30 +293,26 @@ extern "C" {
  */
 
 #define SPWPNP_PNPUVEND_VEND_SHIFT 16
-#define SPWPNP_PNPUVEND_VEND_MASK 0xffff0000U
+#define SPWPNP_PNPUVEND_VEND_MASK  0xffff0000U
 #define SPWPNP_PNPUVEND_VEND_GET( _reg ) \
-  ( ( ( _reg ) & SPWPNP_PNPUVEND_VEND_MASK ) >> \
-    SPWPNP_PNPUVEND_VEND_SHIFT )
-#define SPWPNP_PNPUVEND_VEND_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~SPWPNP_PNPUVEND_VEND_MASK ) | \
+  ( ( ( _reg ) & SPWPNP_PNPUVEND_VEND_MASK ) >> SPWPNP_PNPUVEND_VEND_SHIFT )
+#define SPWPNP_PNPUVEND_VEND_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~SPWPNP_PNPUVEND_VEND_MASK ) |    \
     ( ( ( _val ) << SPWPNP_PNPUVEND_VEND_SHIFT ) & \
       SPWPNP_PNPUVEND_VEND_MASK ) )
 #define SPWPNP_PNPUVEND_VEND( _val ) \
-  ( ( ( _val ) << SPWPNP_PNPUVEND_VEND_SHIFT ) & \
-    SPWPNP_PNPUVEND_VEND_MASK )
+  ( ( ( _val ) << SPWPNP_PNPUVEND_VEND_SHIFT ) & SPWPNP_PNPUVEND_VEND_MASK )
 
 #define SPWPNP_PNPUVEND_PROD_SHIFT 0
-#define SPWPNP_PNPUVEND_PROD_MASK 0xffffU
+#define SPWPNP_PNPUVEND_PROD_MASK  0xffffU
 #define SPWPNP_PNPUVEND_PROD_GET( _reg ) \
-  ( ( ( _reg ) & SPWPNP_PNPUVEND_PROD_MASK ) >> \
-    SPWPNP_PNPUVEND_PROD_SHIFT )
-#define SPWPNP_PNPUVEND_PROD_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~SPWPNP_PNPUVEND_PROD_MASK ) | \
+  ( ( ( _reg ) & SPWPNP_PNPUVEND_PROD_MASK ) >> SPWPNP_PNPUVEND_PROD_SHIFT )
+#define SPWPNP_PNPUVEND_PROD_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~SPWPNP_PNPUVEND_PROD_MASK ) |    \
     ( ( ( _val ) << SPWPNP_PNPUVEND_PROD_SHIFT ) & \
       SPWPNP_PNPUVEND_PROD_MASK ) )
 #define SPWPNP_PNPUVEND_PROD( _val ) \
-  ( ( ( _val ) << SPWPNP_PNPUVEND_PROD_SHIFT ) & \
-    SPWPNP_PNPUVEND_PROD_MASK )
+  ( ( ( _val ) << SPWPNP_PNPUVEND_PROD_SHIFT ) & SPWPNP_PNPUVEND_PROD_MASK )
 
 /** @} */
 
@@ -351,17 +326,14 @@ extern "C" {
  */
 
 #define SPWPNP_PNPUSN_USN_SHIFT 0
-#define SPWPNP_PNPUSN_USN_MASK 0xffffffffU
+#define SPWPNP_PNPUSN_USN_MASK  0xffffffffU
 #define SPWPNP_PNPUSN_USN_GET( _reg ) \
-  ( ( ( _reg ) & SPWPNP_PNPUSN_USN_MASK ) >> \
-    SPWPNP_PNPUSN_USN_SHIFT )
-#define SPWPNP_PNPUSN_USN_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWPNP_PNPUSN_USN_MASK ) >> SPWPNP_PNPUSN_USN_SHIFT )
+#define SPWPNP_PNPUSN_USN_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWPNP_PNPUSN_USN_MASK ) | \
-    ( ( ( _val ) << SPWPNP_PNPUSN_USN_SHIFT ) & \
-      SPWPNP_PNPUSN_USN_MASK ) )
+    ( ( ( _val ) << SPWPNP_PNPUSN_USN_SHIFT ) & SPWPNP_PNPUSN_USN_MASK ) )
 #define SPWPNP_PNPUSN_USN( _val ) \
-  ( ( ( _val ) << SPWPNP_PNPUSN_USN_SHIFT ) & \
-    SPWPNP_PNPUSN_USN_MASK )
+  ( ( ( _val ) << SPWPNP_PNPUSN_USN_SHIFT ) & SPWPNP_PNPUSN_USN_MASK )
 
 /** @} */
 
@@ -375,17 +347,15 @@ extern "C" {
  */
 
 #define SPWPNP_PNPVSTRL_LEN_SHIFT 0
-#define SPWPNP_PNPVSTRL_LEN_MASK 0x7fffU
+#define SPWPNP_PNPVSTRL_LEN_MASK  0x7fffU
 #define SPWPNP_PNPVSTRL_LEN_GET( _reg ) \
-  ( ( ( _reg ) & SPWPNP_PNPVSTRL_LEN_MASK ) >> \
-    SPWPNP_PNPVSTRL_LEN_SHIFT )
-#define SPWPNP_PNPVSTRL_LEN_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~SPWPNP_PNPVSTRL_LEN_MASK ) | \
+  ( ( ( _reg ) & SPWPNP_PNPVSTRL_LEN_MASK ) >> SPWPNP_PNPVSTRL_LEN_SHIFT )
+#define SPWPNP_PNPVSTRL_LEN_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~SPWPNP_PNPVSTRL_LEN_MASK ) |    \
     ( ( ( _val ) << SPWPNP_PNPVSTRL_LEN_SHIFT ) & \
       SPWPNP_PNPVSTRL_LEN_MASK ) )
 #define SPWPNP_PNPVSTRL_LEN( _val ) \
-  ( ( ( _val ) << SPWPNP_PNPVSTRL_LEN_SHIFT ) & \
-    SPWPNP_PNPVSTRL_LEN_MASK )
+  ( ( ( _val ) << SPWPNP_PNPVSTRL_LEN_SHIFT ) & SPWPNP_PNPVSTRL_LEN_MASK )
 
 /** @} */
 
@@ -399,17 +369,15 @@ extern "C" {
  */
 
 #define SPWPNP_PNPPSTRL_LEN_SHIFT 0
-#define SPWPNP_PNPPSTRL_LEN_MASK 0x7fffU
+#define SPWPNP_PNPPSTRL_LEN_MASK  0x7fffU
 #define SPWPNP_PNPPSTRL_LEN_GET( _reg ) \
-  ( ( ( _reg ) & SPWPNP_PNPPSTRL_LEN_MASK ) >> \
-    SPWPNP_PNPPSTRL_LEN_SHIFT )
-#define SPWPNP_PNPPSTRL_LEN_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~SPWPNP_PNPPSTRL_LEN_MASK ) | \
+  ( ( ( _reg ) & SPWPNP_PNPPSTRL_LEN_MASK ) >> SPWPNP_PNPPSTRL_LEN_SHIFT )
+#define SPWPNP_PNPPSTRL_LEN_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~SPWPNP_PNPPSTRL_LEN_MASK ) |    \
     ( ( ( _val ) << SPWPNP_PNPPSTRL_LEN_SHIFT ) & \
       SPWPNP_PNPPSTRL_LEN_MASK ) )
 #define SPWPNP_PNPPSTRL_LEN( _val ) \
-  ( ( ( _val ) << SPWPNP_PNPPSTRL_LEN_SHIFT ) & \
-    SPWPNP_PNPPSTRL_LEN_MASK )
+  ( ( ( _val ) << SPWPNP_PNPPSTRL_LEN_SHIFT ) & SPWPNP_PNPPSTRL_LEN_MASK )
 
 /** @} */
 
@@ -423,17 +391,14 @@ extern "C" {
  */
 
 #define SPWPNP_PNPPCNT_PC_SHIFT 0
-#define SPWPNP_PNPPCNT_PC_MASK 0x1fU
+#define SPWPNP_PNPPCNT_PC_MASK  0x1fU
 #define SPWPNP_PNPPCNT_PC_GET( _reg ) \
-  ( ( ( _reg ) & SPWPNP_PNPPCNT_PC_MASK ) >> \
-    SPWPNP_PNPPCNT_PC_SHIFT )
-#define SPWPNP_PNPPCNT_PC_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWPNP_PNPPCNT_PC_MASK ) >> SPWPNP_PNPPCNT_PC_SHIFT )
+#define SPWPNP_PNPPCNT_PC_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWPNP_PNPPCNT_PC_MASK ) | \
-    ( ( ( _val ) << SPWPNP_PNPPCNT_PC_SHIFT ) & \
-      SPWPNP_PNPPCNT_PC_MASK ) )
+    ( ( ( _val ) << SPWPNP_PNPPCNT_PC_SHIFT ) & SPWPNP_PNPPCNT_PC_MASK ) )
 #define SPWPNP_PNPPCNT_PC( _val ) \
-  ( ( ( _val ) << SPWPNP_PNPPCNT_PC_SHIFT ) & \
-    SPWPNP_PNPPCNT_PC_MASK )
+  ( ( ( _val ) << SPWPNP_PNPPCNT_PC_SHIFT ) & SPWPNP_PNPPCNT_PC_MASK )
 
 /** @} */
 
@@ -447,17 +412,14 @@ extern "C" {
  */
 
 #define SPWPNP_PNPACNT_AC_SHIFT 0
-#define SPWPNP_PNPACNT_AC_MASK 0xffU
+#define SPWPNP_PNPACNT_AC_MASK  0xffU
 #define SPWPNP_PNPACNT_AC_GET( _reg ) \
-  ( ( ( _reg ) & SPWPNP_PNPACNT_AC_MASK ) >> \
-    SPWPNP_PNPACNT_AC_SHIFT )
-#define SPWPNP_PNPACNT_AC_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWPNP_PNPACNT_AC_MASK ) >> SPWPNP_PNPACNT_AC_SHIFT )
+#define SPWPNP_PNPACNT_AC_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWPNP_PNPACNT_AC_MASK ) | \
-    ( ( ( _val ) << SPWPNP_PNPACNT_AC_SHIFT ) & \
-      SPWPNP_PNPACNT_AC_MASK ) )
+    ( ( ( _val ) << SPWPNP_PNPACNT_AC_SHIFT ) & SPWPNP_PNPACNT_AC_MASK ) )
 #define SPWPNP_PNPACNT_AC( _val ) \
-  ( ( ( _val ) << SPWPNP_PNPACNT_AC_SHIFT ) & \
-    SPWPNP_PNPACNT_AC_MASK )
+  ( ( ( _val ) << SPWPNP_PNPACNT_AC_SHIFT ) & SPWPNP_PNPACNT_AC_MASK )
 
 /** @} */
 

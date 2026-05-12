@@ -98,34 +98,29 @@ extern "C" {
 #define SPWTDP_CONF0_AE 0x8000U
 
 #define SPWTDP_CONF0_MAPPING_SHIFT 8
-#define SPWTDP_CONF0_MAPPING_MASK 0x1f00U
+#define SPWTDP_CONF0_MAPPING_MASK  0x1f00U
 #define SPWTDP_CONF0_MAPPING_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_CONF0_MAPPING_MASK ) >> \
-    SPWTDP_CONF0_MAPPING_SHIFT )
-#define SPWTDP_CONF0_MAPPING_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~SPWTDP_CONF0_MAPPING_MASK ) | \
+  ( ( ( _reg ) & SPWTDP_CONF0_MAPPING_MASK ) >> SPWTDP_CONF0_MAPPING_SHIFT )
+#define SPWTDP_CONF0_MAPPING_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~SPWTDP_CONF0_MAPPING_MASK ) |    \
     ( ( ( _val ) << SPWTDP_CONF0_MAPPING_SHIFT ) & \
       SPWTDP_CONF0_MAPPING_MASK ) )
 #define SPWTDP_CONF0_MAPPING( _val ) \
-  ( ( ( _val ) << SPWTDP_CONF0_MAPPING_SHIFT ) & \
-    SPWTDP_CONF0_MAPPING_MASK )
+  ( ( ( _val ) << SPWTDP_CONF0_MAPPING_SHIFT ) & SPWTDP_CONF0_MAPPING_MASK )
 
 #define SPWTDP_CONF0_TD 0x80U
 
 #define SPWTDP_CONF0_MU 0x40U
 
 #define SPWTDP_CONF0_SEL_SHIFT 4
-#define SPWTDP_CONF0_SEL_MASK 0x30U
+#define SPWTDP_CONF0_SEL_MASK  0x30U
 #define SPWTDP_CONF0_SEL_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_CONF0_SEL_MASK ) >> \
-    SPWTDP_CONF0_SEL_SHIFT )
-#define SPWTDP_CONF0_SEL_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_CONF0_SEL_MASK ) >> SPWTDP_CONF0_SEL_SHIFT )
+#define SPWTDP_CONF0_SEL_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_CONF0_SEL_MASK ) | \
-    ( ( ( _val ) << SPWTDP_CONF0_SEL_SHIFT ) & \
-      SPWTDP_CONF0_SEL_MASK ) )
+    ( ( ( _val ) << SPWTDP_CONF0_SEL_SHIFT ) & SPWTDP_CONF0_SEL_MASK ) )
 #define SPWTDP_CONF0_SEL( _val ) \
-  ( ( ( _val ) << SPWTDP_CONF0_SEL_SHIFT ) & \
-    SPWTDP_CONF0_SEL_MASK )
+  ( ( ( _val ) << SPWTDP_CONF0_SEL_SHIFT ) & SPWTDP_CONF0_SEL_MASK )
 
 #define SPWTDP_CONF0_ME 0x8U
 
@@ -146,17 +141,14 @@ extern "C" {
  */
 
 #define SPWTDP_CONF3_STM_SHIFT 16
-#define SPWTDP_CONF3_STM_MASK 0x3f0000U
+#define SPWTDP_CONF3_STM_MASK  0x3f0000U
 #define SPWTDP_CONF3_STM_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_CONF3_STM_MASK ) >> \
-    SPWTDP_CONF3_STM_SHIFT )
-#define SPWTDP_CONF3_STM_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_CONF3_STM_MASK ) >> SPWTDP_CONF3_STM_SHIFT )
+#define SPWTDP_CONF3_STM_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_CONF3_STM_MASK ) | \
-    ( ( ( _val ) << SPWTDP_CONF3_STM_SHIFT ) & \
-      SPWTDP_CONF3_STM_MASK ) )
+    ( ( ( _val ) << SPWTDP_CONF3_STM_SHIFT ) & SPWTDP_CONF3_STM_MASK ) )
 #define SPWTDP_CONF3_STM( _val ) \
-  ( ( ( _val ) << SPWTDP_CONF3_STM_SHIFT ) & \
-    SPWTDP_CONF3_STM_MASK )
+  ( ( ( _val ) << SPWTDP_CONF3_STM_SHIFT ) & SPWTDP_CONF3_STM_MASK )
 
 #define SPWTDP_CONF3_DI64R 0x2000U
 
@@ -167,30 +159,24 @@ extern "C" {
 #define SPWTDP_CONF3_DI 0x400U
 
 #define SPWTDP_CONF3_INRX_SHIFT 5
-#define SPWTDP_CONF3_INRX_MASK 0x3e0U
+#define SPWTDP_CONF3_INRX_MASK  0x3e0U
 #define SPWTDP_CONF3_INRX_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_CONF3_INRX_MASK ) >> \
-    SPWTDP_CONF3_INRX_SHIFT )
-#define SPWTDP_CONF3_INRX_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_CONF3_INRX_MASK ) >> SPWTDP_CONF3_INRX_SHIFT )
+#define SPWTDP_CONF3_INRX_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_CONF3_INRX_MASK ) | \
-    ( ( ( _val ) << SPWTDP_CONF3_INRX_SHIFT ) & \
-      SPWTDP_CONF3_INRX_MASK ) )
+    ( ( ( _val ) << SPWTDP_CONF3_INRX_SHIFT ) & SPWTDP_CONF3_INRX_MASK ) )
 #define SPWTDP_CONF3_INRX( _val ) \
-  ( ( ( _val ) << SPWTDP_CONF3_INRX_SHIFT ) & \
-    SPWTDP_CONF3_INRX_MASK )
+  ( ( ( _val ) << SPWTDP_CONF3_INRX_SHIFT ) & SPWTDP_CONF3_INRX_MASK )
 
 #define SPWTDP_CONF3_INTX_SHIFT 0
-#define SPWTDP_CONF3_INTX_MASK 0x1fU
+#define SPWTDP_CONF3_INTX_MASK  0x1fU
 #define SPWTDP_CONF3_INTX_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_CONF3_INTX_MASK ) >> \
-    SPWTDP_CONF3_INTX_SHIFT )
-#define SPWTDP_CONF3_INTX_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_CONF3_INTX_MASK ) >> SPWTDP_CONF3_INTX_SHIFT )
+#define SPWTDP_CONF3_INTX_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_CONF3_INTX_MASK ) | \
-    ( ( ( _val ) << SPWTDP_CONF3_INTX_SHIFT ) & \
-      SPWTDP_CONF3_INTX_MASK ) )
+    ( ( ( _val ) << SPWTDP_CONF3_INTX_SHIFT ) & SPWTDP_CONF3_INTX_MASK ) )
 #define SPWTDP_CONF3_INTX( _val ) \
-  ( ( ( _val ) << SPWTDP_CONF3_INTX_SHIFT ) & \
-    SPWTDP_CONF3_INTX_MASK )
+  ( ( ( _val ) << SPWTDP_CONF3_INTX_SHIFT ) & SPWTDP_CONF3_INTX_MASK )
 
 /** @} */
 
@@ -207,30 +193,24 @@ extern "C" {
 #define SPWTDP_CTRL_IS 0x40000000U
 
 #define SPWTDP_CTRL_SPWTC_SHIFT 16
-#define SPWTDP_CTRL_SPWTC_MASK 0xff0000U
+#define SPWTDP_CTRL_SPWTC_MASK  0xff0000U
 #define SPWTDP_CTRL_SPWTC_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_CTRL_SPWTC_MASK ) >> \
-    SPWTDP_CTRL_SPWTC_SHIFT )
-#define SPWTDP_CTRL_SPWTC_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_CTRL_SPWTC_MASK ) >> SPWTDP_CTRL_SPWTC_SHIFT )
+#define SPWTDP_CTRL_SPWTC_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_CTRL_SPWTC_MASK ) | \
-    ( ( ( _val ) << SPWTDP_CTRL_SPWTC_SHIFT ) & \
-      SPWTDP_CTRL_SPWTC_MASK ) )
+    ( ( ( _val ) << SPWTDP_CTRL_SPWTC_SHIFT ) & SPWTDP_CTRL_SPWTC_MASK ) )
 #define SPWTDP_CTRL_SPWTC( _val ) \
-  ( ( ( _val ) << SPWTDP_CTRL_SPWTC_SHIFT ) & \
-    SPWTDP_CTRL_SPWTC_MASK )
+  ( ( ( _val ) << SPWTDP_CTRL_SPWTC_SHIFT ) & SPWTDP_CTRL_SPWTC_MASK )
 
 #define SPWTDP_CTRL_CPF_SHIFT 0
-#define SPWTDP_CTRL_CPF_MASK 0xffffU
+#define SPWTDP_CTRL_CPF_MASK  0xffffU
 #define SPWTDP_CTRL_CPF_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_CTRL_CPF_MASK ) >> \
-    SPWTDP_CTRL_CPF_SHIFT )
-#define SPWTDP_CTRL_CPF_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_CTRL_CPF_MASK ) >> SPWTDP_CTRL_CPF_SHIFT )
+#define SPWTDP_CTRL_CPF_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_CTRL_CPF_MASK ) | \
-    ( ( ( _val ) << SPWTDP_CTRL_CPF_SHIFT ) & \
-      SPWTDP_CTRL_CPF_MASK ) )
+    ( ( ( _val ) << SPWTDP_CTRL_CPF_SHIFT ) & SPWTDP_CTRL_CPF_MASK ) )
 #define SPWTDP_CTRL_CPF( _val ) \
-  ( ( ( _val ) << SPWTDP_CTRL_CPF_SHIFT ) & \
-    SPWTDP_CTRL_CPF_MASK )
+  ( ( ( _val ) << SPWTDP_CTRL_CPF_SHIFT ) & SPWTDP_CTRL_CPF_MASK )
 
 /** @} */
 
@@ -243,17 +223,14 @@ extern "C" {
  */
 
 #define SPWTDP_CET0_CET0_SHIFT 0
-#define SPWTDP_CET0_CET0_MASK 0xffffffffU
+#define SPWTDP_CET0_CET0_MASK  0xffffffffU
 #define SPWTDP_CET0_CET0_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_CET0_CET0_MASK ) >> \
-    SPWTDP_CET0_CET0_SHIFT )
-#define SPWTDP_CET0_CET0_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_CET0_CET0_MASK ) >> SPWTDP_CET0_CET0_SHIFT )
+#define SPWTDP_CET0_CET0_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_CET0_CET0_MASK ) | \
-    ( ( ( _val ) << SPWTDP_CET0_CET0_SHIFT ) & \
-      SPWTDP_CET0_CET0_MASK ) )
+    ( ( ( _val ) << SPWTDP_CET0_CET0_SHIFT ) & SPWTDP_CET0_CET0_MASK ) )
 #define SPWTDP_CET0_CET0( _val ) \
-  ( ( ( _val ) << SPWTDP_CET0_CET0_SHIFT ) & \
-    SPWTDP_CET0_CET0_MASK )
+  ( ( ( _val ) << SPWTDP_CET0_CET0_SHIFT ) & SPWTDP_CET0_CET0_MASK )
 
 /** @} */
 
@@ -266,17 +243,14 @@ extern "C" {
  */
 
 #define SPWTDP_CET1_CET1_SHIFT 0
-#define SPWTDP_CET1_CET1_MASK 0xffffffffU
+#define SPWTDP_CET1_CET1_MASK  0xffffffffU
 #define SPWTDP_CET1_CET1_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_CET1_CET1_MASK ) >> \
-    SPWTDP_CET1_CET1_SHIFT )
-#define SPWTDP_CET1_CET1_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_CET1_CET1_MASK ) >> SPWTDP_CET1_CET1_SHIFT )
+#define SPWTDP_CET1_CET1_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_CET1_CET1_MASK ) | \
-    ( ( ( _val ) << SPWTDP_CET1_CET1_SHIFT ) & \
-      SPWTDP_CET1_CET1_MASK ) )
+    ( ( ( _val ) << SPWTDP_CET1_CET1_SHIFT ) & SPWTDP_CET1_CET1_MASK ) )
 #define SPWTDP_CET1_CET1( _val ) \
-  ( ( ( _val ) << SPWTDP_CET1_CET1_SHIFT ) & \
-    SPWTDP_CET1_CET1_MASK )
+  ( ( ( _val ) << SPWTDP_CET1_CET1_SHIFT ) & SPWTDP_CET1_CET1_MASK )
 
 /** @} */
 
@@ -289,17 +263,14 @@ extern "C" {
  */
 
 #define SPWTDP_CET2_CET2_SHIFT 0
-#define SPWTDP_CET2_CET2_MASK 0xffffffffU
+#define SPWTDP_CET2_CET2_MASK  0xffffffffU
 #define SPWTDP_CET2_CET2_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_CET2_CET2_MASK ) >> \
-    SPWTDP_CET2_CET2_SHIFT )
-#define SPWTDP_CET2_CET2_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_CET2_CET2_MASK ) >> SPWTDP_CET2_CET2_SHIFT )
+#define SPWTDP_CET2_CET2_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_CET2_CET2_MASK ) | \
-    ( ( ( _val ) << SPWTDP_CET2_CET2_SHIFT ) & \
-      SPWTDP_CET2_CET2_MASK ) )
+    ( ( ( _val ) << SPWTDP_CET2_CET2_SHIFT ) & SPWTDP_CET2_CET2_MASK ) )
 #define SPWTDP_CET2_CET2( _val ) \
-  ( ( ( _val ) << SPWTDP_CET2_CET2_SHIFT ) & \
-    SPWTDP_CET2_CET2_MASK )
+  ( ( ( _val ) << SPWTDP_CET2_CET2_SHIFT ) & SPWTDP_CET2_CET2_MASK )
 
 /** @} */
 
@@ -312,17 +283,14 @@ extern "C" {
  */
 
 #define SPWTDP_CET3_CET3_SHIFT 0
-#define SPWTDP_CET3_CET3_MASK 0xffffffffU
+#define SPWTDP_CET3_CET3_MASK  0xffffffffU
 #define SPWTDP_CET3_CET3_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_CET3_CET3_MASK ) >> \
-    SPWTDP_CET3_CET3_SHIFT )
-#define SPWTDP_CET3_CET3_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_CET3_CET3_MASK ) >> SPWTDP_CET3_CET3_SHIFT )
+#define SPWTDP_CET3_CET3_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_CET3_CET3_MASK ) | \
-    ( ( ( _val ) << SPWTDP_CET3_CET3_SHIFT ) & \
-      SPWTDP_CET3_CET3_MASK ) )
+    ( ( ( _val ) << SPWTDP_CET3_CET3_SHIFT ) & SPWTDP_CET3_CET3_MASK ) )
 #define SPWTDP_CET3_CET3( _val ) \
-  ( ( ( _val ) << SPWTDP_CET3_CET3_SHIFT ) & \
-    SPWTDP_CET3_CET3_MASK )
+  ( ( ( _val ) << SPWTDP_CET3_CET3_SHIFT ) & SPWTDP_CET3_CET3_MASK )
 
 /** @} */
 
@@ -335,17 +303,14 @@ extern "C" {
  */
 
 #define SPWTDP_CET4_CET4_SHIFT 24
-#define SPWTDP_CET4_CET4_MASK 0xff000000U
+#define SPWTDP_CET4_CET4_MASK  0xff000000U
 #define SPWTDP_CET4_CET4_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_CET4_CET4_MASK ) >> \
-    SPWTDP_CET4_CET4_SHIFT )
-#define SPWTDP_CET4_CET4_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_CET4_CET4_MASK ) >> SPWTDP_CET4_CET4_SHIFT )
+#define SPWTDP_CET4_CET4_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_CET4_CET4_MASK ) | \
-    ( ( ( _val ) << SPWTDP_CET4_CET4_SHIFT ) & \
-      SPWTDP_CET4_CET4_MASK ) )
+    ( ( ( _val ) << SPWTDP_CET4_CET4_SHIFT ) & SPWTDP_CET4_CET4_MASK ) )
 #define SPWTDP_CET4_CET4( _val ) \
-  ( ( ( _val ) << SPWTDP_CET4_CET4_SHIFT ) & \
-    SPWTDP_CET4_CET4_MASK )
+  ( ( ( _val ) << SPWTDP_CET4_CET4_SHIFT ) & SPWTDP_CET4_CET4_MASK )
 
 /** @} */
 
@@ -358,17 +323,14 @@ extern "C" {
  */
 
 #define SPWTDP_DPF_DPF_SHIFT 0
-#define SPWTDP_DPF_DPF_MASK 0xffffU
+#define SPWTDP_DPF_DPF_MASK  0xffffU
 #define SPWTDP_DPF_DPF_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_DPF_DPF_MASK ) >> \
-    SPWTDP_DPF_DPF_SHIFT )
-#define SPWTDP_DPF_DPF_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_DPF_DPF_MASK ) >> SPWTDP_DPF_DPF_SHIFT )
+#define SPWTDP_DPF_DPF_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_DPF_DPF_MASK ) | \
-    ( ( ( _val ) << SPWTDP_DPF_DPF_SHIFT ) & \
-      SPWTDP_DPF_DPF_MASK ) )
+    ( ( ( _val ) << SPWTDP_DPF_DPF_SHIFT ) & SPWTDP_DPF_DPF_MASK ) )
 #define SPWTDP_DPF_DPF( _val ) \
-  ( ( ( _val ) << SPWTDP_DPF_DPF_SHIFT ) & \
-    SPWTDP_DPF_DPF_MASK )
+  ( ( ( _val ) << SPWTDP_DPF_DPF_SHIFT ) & SPWTDP_DPF_DPF_MASK )
 
 /** @} */
 
@@ -381,17 +343,14 @@ extern "C" {
  */
 
 #define SPWTDP_DET0_DET0_SHIFT 0
-#define SPWTDP_DET0_DET0_MASK 0xffffffffU
+#define SPWTDP_DET0_DET0_MASK  0xffffffffU
 #define SPWTDP_DET0_DET0_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_DET0_DET0_MASK ) >> \
-    SPWTDP_DET0_DET0_SHIFT )
-#define SPWTDP_DET0_DET0_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_DET0_DET0_MASK ) >> SPWTDP_DET0_DET0_SHIFT )
+#define SPWTDP_DET0_DET0_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_DET0_DET0_MASK ) | \
-    ( ( ( _val ) << SPWTDP_DET0_DET0_SHIFT ) & \
-      SPWTDP_DET0_DET0_MASK ) )
+    ( ( ( _val ) << SPWTDP_DET0_DET0_SHIFT ) & SPWTDP_DET0_DET0_MASK ) )
 #define SPWTDP_DET0_DET0( _val ) \
-  ( ( ( _val ) << SPWTDP_DET0_DET0_SHIFT ) & \
-    SPWTDP_DET0_DET0_MASK )
+  ( ( ( _val ) << SPWTDP_DET0_DET0_SHIFT ) & SPWTDP_DET0_DET0_MASK )
 
 /** @} */
 
@@ -404,17 +363,14 @@ extern "C" {
  */
 
 #define SPWTDP_DET1_DET1_SHIFT 0
-#define SPWTDP_DET1_DET1_MASK 0xffffffffU
+#define SPWTDP_DET1_DET1_MASK  0xffffffffU
 #define SPWTDP_DET1_DET1_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_DET1_DET1_MASK ) >> \
-    SPWTDP_DET1_DET1_SHIFT )
-#define SPWTDP_DET1_DET1_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_DET1_DET1_MASK ) >> SPWTDP_DET1_DET1_SHIFT )
+#define SPWTDP_DET1_DET1_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_DET1_DET1_MASK ) | \
-    ( ( ( _val ) << SPWTDP_DET1_DET1_SHIFT ) & \
-      SPWTDP_DET1_DET1_MASK ) )
+    ( ( ( _val ) << SPWTDP_DET1_DET1_SHIFT ) & SPWTDP_DET1_DET1_MASK ) )
 #define SPWTDP_DET1_DET1( _val ) \
-  ( ( ( _val ) << SPWTDP_DET1_DET1_SHIFT ) & \
-    SPWTDP_DET1_DET1_MASK )
+  ( ( ( _val ) << SPWTDP_DET1_DET1_SHIFT ) & SPWTDP_DET1_DET1_MASK )
 
 /** @} */
 
@@ -427,17 +383,14 @@ extern "C" {
  */
 
 #define SPWTDP_DET2_DET2_SHIFT 0
-#define SPWTDP_DET2_DET2_MASK 0xffffffffU
+#define SPWTDP_DET2_DET2_MASK  0xffffffffU
 #define SPWTDP_DET2_DET2_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_DET2_DET2_MASK ) >> \
-    SPWTDP_DET2_DET2_SHIFT )
-#define SPWTDP_DET2_DET2_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_DET2_DET2_MASK ) >> SPWTDP_DET2_DET2_SHIFT )
+#define SPWTDP_DET2_DET2_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_DET2_DET2_MASK ) | \
-    ( ( ( _val ) << SPWTDP_DET2_DET2_SHIFT ) & \
-      SPWTDP_DET2_DET2_MASK ) )
+    ( ( ( _val ) << SPWTDP_DET2_DET2_SHIFT ) & SPWTDP_DET2_DET2_MASK ) )
 #define SPWTDP_DET2_DET2( _val ) \
-  ( ( ( _val ) << SPWTDP_DET2_DET2_SHIFT ) & \
-    SPWTDP_DET2_DET2_MASK )
+  ( ( ( _val ) << SPWTDP_DET2_DET2_SHIFT ) & SPWTDP_DET2_DET2_MASK )
 
 /** @} */
 
@@ -450,17 +403,14 @@ extern "C" {
  */
 
 #define SPWTDP_DET3_DET3_SHIFT 0
-#define SPWTDP_DET3_DET3_MASK 0xffffffffU
+#define SPWTDP_DET3_DET3_MASK  0xffffffffU
 #define SPWTDP_DET3_DET3_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_DET3_DET3_MASK ) >> \
-    SPWTDP_DET3_DET3_SHIFT )
-#define SPWTDP_DET3_DET3_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_DET3_DET3_MASK ) >> SPWTDP_DET3_DET3_SHIFT )
+#define SPWTDP_DET3_DET3_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_DET3_DET3_MASK ) | \
-    ( ( ( _val ) << SPWTDP_DET3_DET3_SHIFT ) & \
-      SPWTDP_DET3_DET3_MASK ) )
+    ( ( ( _val ) << SPWTDP_DET3_DET3_SHIFT ) & SPWTDP_DET3_DET3_MASK ) )
 #define SPWTDP_DET3_DET3( _val ) \
-  ( ( ( _val ) << SPWTDP_DET3_DET3_SHIFT ) & \
-    SPWTDP_DET3_DET3_MASK )
+  ( ( ( _val ) << SPWTDP_DET3_DET3_SHIFT ) & SPWTDP_DET3_DET3_MASK )
 
 /** @} */
 
@@ -473,17 +423,14 @@ extern "C" {
  */
 
 #define SPWTDP_DET4_DET4_SHIFT 24
-#define SPWTDP_DET4_DET4_MASK 0xff000000U
+#define SPWTDP_DET4_DET4_MASK  0xff000000U
 #define SPWTDP_DET4_DET4_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_DET4_DET4_MASK ) >> \
-    SPWTDP_DET4_DET4_SHIFT )
-#define SPWTDP_DET4_DET4_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_DET4_DET4_MASK ) >> SPWTDP_DET4_DET4_SHIFT )
+#define SPWTDP_DET4_DET4_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_DET4_DET4_MASK ) | \
-    ( ( ( _val ) << SPWTDP_DET4_DET4_SHIFT ) & \
-      SPWTDP_DET4_DET4_MASK ) )
+    ( ( ( _val ) << SPWTDP_DET4_DET4_SHIFT ) & SPWTDP_DET4_DET4_MASK ) )
 #define SPWTDP_DET4_DET4( _val ) \
-  ( ( ( _val ) << SPWTDP_DET4_DET4_SHIFT ) & \
-    SPWTDP_DET4_DET4_MASK )
+  ( ( ( _val ) << SPWTDP_DET4_DET4_SHIFT ) & SPWTDP_DET4_DET4_MASK )
 
 /** @} */
 
@@ -496,17 +443,14 @@ extern "C" {
  */
 
 #define SPWTDP_TRPFRX_TRPF_SHIFT 0
-#define SPWTDP_TRPFRX_TRPF_MASK 0xffffU
+#define SPWTDP_TRPFRX_TRPF_MASK  0xffffU
 #define SPWTDP_TRPFRX_TRPF_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_TRPFRX_TRPF_MASK ) >> \
-    SPWTDP_TRPFRX_TRPF_SHIFT )
-#define SPWTDP_TRPFRX_TRPF_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_TRPFRX_TRPF_MASK ) >> SPWTDP_TRPFRX_TRPF_SHIFT )
+#define SPWTDP_TRPFRX_TRPF_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_TRPFRX_TRPF_MASK ) | \
-    ( ( ( _val ) << SPWTDP_TRPFRX_TRPF_SHIFT ) & \
-      SPWTDP_TRPFRX_TRPF_MASK ) )
+    ( ( ( _val ) << SPWTDP_TRPFRX_TRPF_SHIFT ) & SPWTDP_TRPFRX_TRPF_MASK ) )
 #define SPWTDP_TRPFRX_TRPF( _val ) \
-  ( ( ( _val ) << SPWTDP_TRPFRX_TRPF_SHIFT ) & \
-    SPWTDP_TRPFRX_TRPF_MASK )
+  ( ( ( _val ) << SPWTDP_TRPFRX_TRPF_SHIFT ) & SPWTDP_TRPFRX_TRPF_MASK )
 
 /** @} */
 
@@ -519,17 +463,14 @@ extern "C" {
  */
 
 #define SPWTDP_TR0_TR0_SHIFT 0
-#define SPWTDP_TR0_TR0_MASK 0xffffffffU
+#define SPWTDP_TR0_TR0_MASK  0xffffffffU
 #define SPWTDP_TR0_TR0_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_TR0_TR0_MASK ) >> \
-    SPWTDP_TR0_TR0_SHIFT )
-#define SPWTDP_TR0_TR0_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_TR0_TR0_MASK ) >> SPWTDP_TR0_TR0_SHIFT )
+#define SPWTDP_TR0_TR0_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_TR0_TR0_MASK ) | \
-    ( ( ( _val ) << SPWTDP_TR0_TR0_SHIFT ) & \
-      SPWTDP_TR0_TR0_MASK ) )
+    ( ( ( _val ) << SPWTDP_TR0_TR0_SHIFT ) & SPWTDP_TR0_TR0_MASK ) )
 #define SPWTDP_TR0_TR0( _val ) \
-  ( ( ( _val ) << SPWTDP_TR0_TR0_SHIFT ) & \
-    SPWTDP_TR0_TR0_MASK )
+  ( ( ( _val ) << SPWTDP_TR0_TR0_SHIFT ) & SPWTDP_TR0_TR0_MASK )
 
 /** @} */
 
@@ -542,17 +483,14 @@ extern "C" {
  */
 
 #define SPWTDP_TR1_TR1_SHIFT 0
-#define SPWTDP_TR1_TR1_MASK 0xffffffffU
+#define SPWTDP_TR1_TR1_MASK  0xffffffffU
 #define SPWTDP_TR1_TR1_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_TR1_TR1_MASK ) >> \
-    SPWTDP_TR1_TR1_SHIFT )
-#define SPWTDP_TR1_TR1_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_TR1_TR1_MASK ) >> SPWTDP_TR1_TR1_SHIFT )
+#define SPWTDP_TR1_TR1_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_TR1_TR1_MASK ) | \
-    ( ( ( _val ) << SPWTDP_TR1_TR1_SHIFT ) & \
-      SPWTDP_TR1_TR1_MASK ) )
+    ( ( ( _val ) << SPWTDP_TR1_TR1_SHIFT ) & SPWTDP_TR1_TR1_MASK ) )
 #define SPWTDP_TR1_TR1( _val ) \
-  ( ( ( _val ) << SPWTDP_TR1_TR1_SHIFT ) & \
-    SPWTDP_TR1_TR1_MASK )
+  ( ( ( _val ) << SPWTDP_TR1_TR1_SHIFT ) & SPWTDP_TR1_TR1_MASK )
 
 /** @} */
 
@@ -565,17 +503,14 @@ extern "C" {
  */
 
 #define SPWTDP_TR2_TR2_SHIFT 0
-#define SPWTDP_TR2_TR2_MASK 0xffffffffU
+#define SPWTDP_TR2_TR2_MASK  0xffffffffU
 #define SPWTDP_TR2_TR2_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_TR2_TR2_MASK ) >> \
-    SPWTDP_TR2_TR2_SHIFT )
-#define SPWTDP_TR2_TR2_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_TR2_TR2_MASK ) >> SPWTDP_TR2_TR2_SHIFT )
+#define SPWTDP_TR2_TR2_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_TR2_TR2_MASK ) | \
-    ( ( ( _val ) << SPWTDP_TR2_TR2_SHIFT ) & \
-      SPWTDP_TR2_TR2_MASK ) )
+    ( ( ( _val ) << SPWTDP_TR2_TR2_SHIFT ) & SPWTDP_TR2_TR2_MASK ) )
 #define SPWTDP_TR2_TR2( _val ) \
-  ( ( ( _val ) << SPWTDP_TR2_TR2_SHIFT ) & \
-    SPWTDP_TR2_TR2_MASK )
+  ( ( ( _val ) << SPWTDP_TR2_TR2_SHIFT ) & SPWTDP_TR2_TR2_MASK )
 
 /** @} */
 
@@ -588,17 +523,14 @@ extern "C" {
  */
 
 #define SPWTDP_TR3_TR3_SHIFT 0
-#define SPWTDP_TR3_TR3_MASK 0xffffffffU
+#define SPWTDP_TR3_TR3_MASK  0xffffffffU
 #define SPWTDP_TR3_TR3_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_TR3_TR3_MASK ) >> \
-    SPWTDP_TR3_TR3_SHIFT )
-#define SPWTDP_TR3_TR3_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_TR3_TR3_MASK ) >> SPWTDP_TR3_TR3_SHIFT )
+#define SPWTDP_TR3_TR3_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_TR3_TR3_MASK ) | \
-    ( ( ( _val ) << SPWTDP_TR3_TR3_SHIFT ) & \
-      SPWTDP_TR3_TR3_MASK ) )
+    ( ( ( _val ) << SPWTDP_TR3_TR3_SHIFT ) & SPWTDP_TR3_TR3_MASK ) )
 #define SPWTDP_TR3_TR3( _val ) \
-  ( ( ( _val ) << SPWTDP_TR3_TR3_SHIFT ) & \
-    SPWTDP_TR3_TR3_MASK )
+  ( ( ( _val ) << SPWTDP_TR3_TR3_SHIFT ) & SPWTDP_TR3_TR3_MASK )
 
 /** @} */
 
@@ -611,17 +543,14 @@ extern "C" {
  */
 
 #define SPWTDP_TR4_TR4_SHIFT 24
-#define SPWTDP_TR4_TR4_MASK 0xff000000U
+#define SPWTDP_TR4_TR4_MASK  0xff000000U
 #define SPWTDP_TR4_TR4_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_TR4_TR4_MASK ) >> \
-    SPWTDP_TR4_TR4_SHIFT )
-#define SPWTDP_TR4_TR4_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_TR4_TR4_MASK ) >> SPWTDP_TR4_TR4_SHIFT )
+#define SPWTDP_TR4_TR4_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_TR4_TR4_MASK ) | \
-    ( ( ( _val ) << SPWTDP_TR4_TR4_SHIFT ) & \
-      SPWTDP_TR4_TR4_MASK ) )
+    ( ( ( _val ) << SPWTDP_TR4_TR4_SHIFT ) & SPWTDP_TR4_TR4_MASK ) )
 #define SPWTDP_TR4_TR4( _val ) \
-  ( ( ( _val ) << SPWTDP_TR4_TR4_SHIFT ) & \
-    SPWTDP_TR4_TR4_MASK )
+  ( ( ( _val ) << SPWTDP_TR4_TR4_SHIFT ) & SPWTDP_TR4_TR4_MASK )
 
 /** @} */
 
@@ -635,30 +564,24 @@ extern "C" {
  */
 
 #define SPWTDP_TTPFTX_TSTC_SHIFT 24
-#define SPWTDP_TTPFTX_TSTC_MASK 0xff000000U
+#define SPWTDP_TTPFTX_TSTC_MASK  0xff000000U
 #define SPWTDP_TTPFTX_TSTC_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_TTPFTX_TSTC_MASK ) >> \
-    SPWTDP_TTPFTX_TSTC_SHIFT )
-#define SPWTDP_TTPFTX_TSTC_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_TTPFTX_TSTC_MASK ) >> SPWTDP_TTPFTX_TSTC_SHIFT )
+#define SPWTDP_TTPFTX_TSTC_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_TTPFTX_TSTC_MASK ) | \
-    ( ( ( _val ) << SPWTDP_TTPFTX_TSTC_SHIFT ) & \
-      SPWTDP_TTPFTX_TSTC_MASK ) )
+    ( ( ( _val ) << SPWTDP_TTPFTX_TSTC_SHIFT ) & SPWTDP_TTPFTX_TSTC_MASK ) )
 #define SPWTDP_TTPFTX_TSTC( _val ) \
-  ( ( ( _val ) << SPWTDP_TTPFTX_TSTC_SHIFT ) & \
-    SPWTDP_TTPFTX_TSTC_MASK )
+  ( ( ( _val ) << SPWTDP_TTPFTX_TSTC_SHIFT ) & SPWTDP_TTPFTX_TSTC_MASK )
 
 #define SPWTDP_TTPFTX_TTPF_SHIFT 0
-#define SPWTDP_TTPFTX_TTPF_MASK 0xffffU
+#define SPWTDP_TTPFTX_TTPF_MASK  0xffffU
 #define SPWTDP_TTPFTX_TTPF_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_TTPFTX_TTPF_MASK ) >> \
-    SPWTDP_TTPFTX_TTPF_SHIFT )
-#define SPWTDP_TTPFTX_TTPF_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_TTPFTX_TTPF_MASK ) >> SPWTDP_TTPFTX_TTPF_SHIFT )
+#define SPWTDP_TTPFTX_TTPF_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_TTPFTX_TTPF_MASK ) | \
-    ( ( ( _val ) << SPWTDP_TTPFTX_TTPF_SHIFT ) & \
-      SPWTDP_TTPFTX_TTPF_MASK ) )
+    ( ( ( _val ) << SPWTDP_TTPFTX_TTPF_SHIFT ) & SPWTDP_TTPFTX_TTPF_MASK ) )
 #define SPWTDP_TTPFTX_TTPF( _val ) \
-  ( ( ( _val ) << SPWTDP_TTPFTX_TTPF_SHIFT ) & \
-    SPWTDP_TTPFTX_TTPF_MASK )
+  ( ( ( _val ) << SPWTDP_TTPFTX_TTPF_SHIFT ) & SPWTDP_TTPFTX_TTPF_MASK )
 
 /** @} */
 
@@ -671,17 +594,14 @@ extern "C" {
  */
 
 #define SPWTDP_TT0_TT0_SHIFT 0
-#define SPWTDP_TT0_TT0_MASK 0xffffffffU
+#define SPWTDP_TT0_TT0_MASK  0xffffffffU
 #define SPWTDP_TT0_TT0_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_TT0_TT0_MASK ) >> \
-    SPWTDP_TT0_TT0_SHIFT )
-#define SPWTDP_TT0_TT0_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_TT0_TT0_MASK ) >> SPWTDP_TT0_TT0_SHIFT )
+#define SPWTDP_TT0_TT0_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_TT0_TT0_MASK ) | \
-    ( ( ( _val ) << SPWTDP_TT0_TT0_SHIFT ) & \
-      SPWTDP_TT0_TT0_MASK ) )
+    ( ( ( _val ) << SPWTDP_TT0_TT0_SHIFT ) & SPWTDP_TT0_TT0_MASK ) )
 #define SPWTDP_TT0_TT0( _val ) \
-  ( ( ( _val ) << SPWTDP_TT0_TT0_SHIFT ) & \
-    SPWTDP_TT0_TT0_MASK )
+  ( ( ( _val ) << SPWTDP_TT0_TT0_SHIFT ) & SPWTDP_TT0_TT0_MASK )
 
 /** @} */
 
@@ -694,17 +614,14 @@ extern "C" {
  */
 
 #define SPWTDP_TT1_TT1_SHIFT 0
-#define SPWTDP_TT1_TT1_MASK 0xffffffffU
+#define SPWTDP_TT1_TT1_MASK  0xffffffffU
 #define SPWTDP_TT1_TT1_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_TT1_TT1_MASK ) >> \
-    SPWTDP_TT1_TT1_SHIFT )
-#define SPWTDP_TT1_TT1_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_TT1_TT1_MASK ) >> SPWTDP_TT1_TT1_SHIFT )
+#define SPWTDP_TT1_TT1_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_TT1_TT1_MASK ) | \
-    ( ( ( _val ) << SPWTDP_TT1_TT1_SHIFT ) & \
-      SPWTDP_TT1_TT1_MASK ) )
+    ( ( ( _val ) << SPWTDP_TT1_TT1_SHIFT ) & SPWTDP_TT1_TT1_MASK ) )
 #define SPWTDP_TT1_TT1( _val ) \
-  ( ( ( _val ) << SPWTDP_TT1_TT1_SHIFT ) & \
-    SPWTDP_TT1_TT1_MASK )
+  ( ( ( _val ) << SPWTDP_TT1_TT1_SHIFT ) & SPWTDP_TT1_TT1_MASK )
 
 /** @} */
 
@@ -717,17 +634,14 @@ extern "C" {
  */
 
 #define SPWTDP_TT2_TT2_SHIFT 0
-#define SPWTDP_TT2_TT2_MASK 0xffffffffU
+#define SPWTDP_TT2_TT2_MASK  0xffffffffU
 #define SPWTDP_TT2_TT2_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_TT2_TT2_MASK ) >> \
-    SPWTDP_TT2_TT2_SHIFT )
-#define SPWTDP_TT2_TT2_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_TT2_TT2_MASK ) >> SPWTDP_TT2_TT2_SHIFT )
+#define SPWTDP_TT2_TT2_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_TT2_TT2_MASK ) | \
-    ( ( ( _val ) << SPWTDP_TT2_TT2_SHIFT ) & \
-      SPWTDP_TT2_TT2_MASK ) )
+    ( ( ( _val ) << SPWTDP_TT2_TT2_SHIFT ) & SPWTDP_TT2_TT2_MASK ) )
 #define SPWTDP_TT2_TT2( _val ) \
-  ( ( ( _val ) << SPWTDP_TT2_TT2_SHIFT ) & \
-    SPWTDP_TT2_TT2_MASK )
+  ( ( ( _val ) << SPWTDP_TT2_TT2_SHIFT ) & SPWTDP_TT2_TT2_MASK )
 
 /** @} */
 
@@ -740,17 +654,14 @@ extern "C" {
  */
 
 #define SPWTDP_TT3_TT3_SHIFT 0
-#define SPWTDP_TT3_TT3_MASK 0xffffffffU
+#define SPWTDP_TT3_TT3_MASK  0xffffffffU
 #define SPWTDP_TT3_TT3_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_TT3_TT3_MASK ) >> \
-    SPWTDP_TT3_TT3_SHIFT )
-#define SPWTDP_TT3_TT3_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_TT3_TT3_MASK ) >> SPWTDP_TT3_TT3_SHIFT )
+#define SPWTDP_TT3_TT3_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_TT3_TT3_MASK ) | \
-    ( ( ( _val ) << SPWTDP_TT3_TT3_SHIFT ) & \
-      SPWTDP_TT3_TT3_MASK ) )
+    ( ( ( _val ) << SPWTDP_TT3_TT3_SHIFT ) & SPWTDP_TT3_TT3_MASK ) )
 #define SPWTDP_TT3_TT3( _val ) \
-  ( ( ( _val ) << SPWTDP_TT3_TT3_SHIFT ) & \
-    SPWTDP_TT3_TT3_MASK )
+  ( ( ( _val ) << SPWTDP_TT3_TT3_SHIFT ) & SPWTDP_TT3_TT3_MASK )
 
 /** @} */
 
@@ -763,17 +674,14 @@ extern "C" {
  */
 
 #define SPWTDP_TT4_TT4_SHIFT 24
-#define SPWTDP_TT4_TT4_MASK 0xff000000U
+#define SPWTDP_TT4_TT4_MASK  0xff000000U
 #define SPWTDP_TT4_TT4_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_TT4_TT4_MASK ) >> \
-    SPWTDP_TT4_TT4_SHIFT )
-#define SPWTDP_TT4_TT4_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_TT4_TT4_MASK ) >> SPWTDP_TT4_TT4_SHIFT )
+#define SPWTDP_TT4_TT4_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_TT4_TT4_MASK ) | \
-    ( ( ( _val ) << SPWTDP_TT4_TT4_SHIFT ) & \
-      SPWTDP_TT4_TT4_MASK ) )
+    ( ( ( _val ) << SPWTDP_TT4_TT4_SHIFT ) & SPWTDP_TT4_TT4_MASK ) )
 #define SPWTDP_TT4_TT4( _val ) \
-  ( ( ( _val ) << SPWTDP_TT4_TT4_SHIFT ) & \
-    SPWTDP_TT4_TT4_MASK )
+  ( ( ( _val ) << SPWTDP_TT4_TT4_SHIFT ) & SPWTDP_TT4_TT4_MASK )
 
 /** @} */
 
@@ -786,17 +694,14 @@ extern "C" {
  */
 
 #define SPWTDP_LPF_LPF_SHIFT 0
-#define SPWTDP_LPF_LPF_MASK 0xffffU
+#define SPWTDP_LPF_LPF_MASK  0xffffU
 #define SPWTDP_LPF_LPF_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_LPF_LPF_MASK ) >> \
-    SPWTDP_LPF_LPF_SHIFT )
-#define SPWTDP_LPF_LPF_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_LPF_LPF_MASK ) >> SPWTDP_LPF_LPF_SHIFT )
+#define SPWTDP_LPF_LPF_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_LPF_LPF_MASK ) | \
-    ( ( ( _val ) << SPWTDP_LPF_LPF_SHIFT ) & \
-      SPWTDP_LPF_LPF_MASK ) )
+    ( ( ( _val ) << SPWTDP_LPF_LPF_SHIFT ) & SPWTDP_LPF_LPF_MASK ) )
 #define SPWTDP_LPF_LPF( _val ) \
-  ( ( ( _val ) << SPWTDP_LPF_LPF_SHIFT ) & \
-    SPWTDP_LPF_LPF_MASK )
+  ( ( ( _val ) << SPWTDP_LPF_LPF_SHIFT ) & SPWTDP_LPF_LPF_MASK )
 
 /** @} */
 
@@ -843,17 +748,14 @@ extern "C" {
  */
 
 #define SPWTDP_DC_DC_SHIFT 0
-#define SPWTDP_DC_DC_MASK 0x7fffU
+#define SPWTDP_DC_DC_MASK  0x7fffU
 #define SPWTDP_DC_DC_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_DC_DC_MASK ) >> \
-    SPWTDP_DC_DC_SHIFT )
-#define SPWTDP_DC_DC_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_DC_DC_MASK ) >> SPWTDP_DC_DC_SHIFT )
+#define SPWTDP_DC_DC_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_DC_DC_MASK ) | \
-    ( ( ( _val ) << SPWTDP_DC_DC_SHIFT ) & \
-      SPWTDP_DC_DC_MASK ) )
+    ( ( ( _val ) << SPWTDP_DC_DC_SHIFT ) & SPWTDP_DC_DC_MASK ) )
 #define SPWTDP_DC_DC( _val ) \
-  ( ( ( _val ) << SPWTDP_DC_DC_SHIFT ) & \
-    SPWTDP_DC_DC_MASK )
+  ( ( ( _val ) << SPWTDP_DC_DC_SHIFT ) & SPWTDP_DC_DC_MASK )
 
 /** @} */
 
@@ -868,17 +770,14 @@ extern "C" {
 #define SPWTDP_DS_EN 0x80000000U
 
 #define SPWTDP_DS_CD_SHIFT 0
-#define SPWTDP_DS_CD_MASK 0xffffffU
+#define SPWTDP_DS_CD_MASK  0xffffffU
 #define SPWTDP_DS_CD_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_DS_CD_MASK ) >> \
-    SPWTDP_DS_CD_SHIFT )
-#define SPWTDP_DS_CD_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_DS_CD_MASK ) >> SPWTDP_DS_CD_SHIFT )
+#define SPWTDP_DS_CD_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_DS_CD_MASK ) | \
-    ( ( ( _val ) << SPWTDP_DS_CD_SHIFT ) & \
-      SPWTDP_DS_CD_MASK ) )
+    ( ( ( _val ) << SPWTDP_DS_CD_SHIFT ) & SPWTDP_DS_CD_MASK ) )
 #define SPWTDP_DS_CD( _val ) \
-  ( ( ( _val ) << SPWTDP_DS_CD_SHIFT ) & \
-    SPWTDP_DS_CD_MASK )
+  ( ( ( _val ) << SPWTDP_DS_CD_SHIFT ) & SPWTDP_DS_CD_MASK )
 
 /** @} */
 
@@ -891,17 +790,14 @@ extern "C" {
  */
 
 #define SPWTDP_EDM0_EDM0_SHIFT 0
-#define SPWTDP_EDM0_EDM0_MASK 0xffffffffU
+#define SPWTDP_EDM0_EDM0_MASK  0xffffffffU
 #define SPWTDP_EDM0_EDM0_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_EDM0_EDM0_MASK ) >> \
-    SPWTDP_EDM0_EDM0_SHIFT )
-#define SPWTDP_EDM0_EDM0_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_EDM0_EDM0_MASK ) >> SPWTDP_EDM0_EDM0_SHIFT )
+#define SPWTDP_EDM0_EDM0_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_EDM0_EDM0_MASK ) | \
-    ( ( ( _val ) << SPWTDP_EDM0_EDM0_SHIFT ) & \
-      SPWTDP_EDM0_EDM0_MASK ) )
+    ( ( ( _val ) << SPWTDP_EDM0_EDM0_SHIFT ) & SPWTDP_EDM0_EDM0_MASK ) )
 #define SPWTDP_EDM0_EDM0( _val ) \
-  ( ( ( _val ) << SPWTDP_EDM0_EDM0_SHIFT ) & \
-    SPWTDP_EDM0_EDM0_MASK )
+  ( ( ( _val ) << SPWTDP_EDM0_EDM0_SHIFT ) & SPWTDP_EDM0_EDM0_MASK )
 
 /** @} */
 
@@ -915,17 +811,14 @@ extern "C" {
  */
 
 #define SPWTDP_EDPF0_EDPF0_SHIFT 0
-#define SPWTDP_EDPF0_EDPF0_MASK 0xffffU
+#define SPWTDP_EDPF0_EDPF0_MASK  0xffffU
 #define SPWTDP_EDPF0_EDPF0_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_EDPF0_EDPF0_MASK ) >> \
-    SPWTDP_EDPF0_EDPF0_SHIFT )
-#define SPWTDP_EDPF0_EDPF0_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPWTDP_EDPF0_EDPF0_MASK ) >> SPWTDP_EDPF0_EDPF0_SHIFT )
+#define SPWTDP_EDPF0_EDPF0_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPWTDP_EDPF0_EDPF0_MASK ) | \
-    ( ( ( _val ) << SPWTDP_EDPF0_EDPF0_SHIFT ) & \
-      SPWTDP_EDPF0_EDPF0_MASK ) )
+    ( ( ( _val ) << SPWTDP_EDPF0_EDPF0_SHIFT ) & SPWTDP_EDPF0_EDPF0_MASK ) )
 #define SPWTDP_EDPF0_EDPF0( _val ) \
-  ( ( ( _val ) << SPWTDP_EDPF0_EDPF0_SHIFT ) & \
-    SPWTDP_EDPF0_EDPF0_MASK )
+  ( ( ( _val ) << SPWTDP_EDPF0_EDPF0_SHIFT ) & SPWTDP_EDPF0_EDPF0_MASK )
 
 /** @} */
 
@@ -939,17 +832,15 @@ extern "C" {
  */
 
 #define SPWTDP_ED0ET0_ED0ET0_SHIFT 0
-#define SPWTDP_ED0ET0_ED0ET0_MASK 0xffffffffU
+#define SPWTDP_ED0ET0_ED0ET0_MASK  0xffffffffU
 #define SPWTDP_ED0ET0_ED0ET0_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_ED0ET0_ED0ET0_MASK ) >> \
-    SPWTDP_ED0ET0_ED0ET0_SHIFT )
-#define SPWTDP_ED0ET0_ED0ET0_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~SPWTDP_ED0ET0_ED0ET0_MASK ) | \
+  ( ( ( _reg ) & SPWTDP_ED0ET0_ED0ET0_MASK ) >> SPWTDP_ED0ET0_ED0ET0_SHIFT )
+#define SPWTDP_ED0ET0_ED0ET0_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~SPWTDP_ED0ET0_ED0ET0_MASK ) |    \
     ( ( ( _val ) << SPWTDP_ED0ET0_ED0ET0_SHIFT ) & \
       SPWTDP_ED0ET0_ED0ET0_MASK ) )
 #define SPWTDP_ED0ET0_ED0ET0( _val ) \
-  ( ( ( _val ) << SPWTDP_ED0ET0_ED0ET0_SHIFT ) & \
-    SPWTDP_ED0ET0_ED0ET0_MASK )
+  ( ( ( _val ) << SPWTDP_ED0ET0_ED0ET0_SHIFT ) & SPWTDP_ED0ET0_ED0ET0_MASK )
 
 /** @} */
 
@@ -963,17 +854,15 @@ extern "C" {
  */
 
 #define SPWTDP_ED0ET1_ED0ET1_SHIFT 0
-#define SPWTDP_ED0ET1_ED0ET1_MASK 0xffffffffU
+#define SPWTDP_ED0ET1_ED0ET1_MASK  0xffffffffU
 #define SPWTDP_ED0ET1_ED0ET1_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_ED0ET1_ED0ET1_MASK ) >> \
-    SPWTDP_ED0ET1_ED0ET1_SHIFT )
-#define SPWTDP_ED0ET1_ED0ET1_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~SPWTDP_ED0ET1_ED0ET1_MASK ) | \
+  ( ( ( _reg ) & SPWTDP_ED0ET1_ED0ET1_MASK ) >> SPWTDP_ED0ET1_ED0ET1_SHIFT )
+#define SPWTDP_ED0ET1_ED0ET1_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~SPWTDP_ED0ET1_ED0ET1_MASK ) |    \
     ( ( ( _val ) << SPWTDP_ED0ET1_ED0ET1_SHIFT ) & \
       SPWTDP_ED0ET1_ED0ET1_MASK ) )
 #define SPWTDP_ED0ET1_ED0ET1( _val ) \
-  ( ( ( _val ) << SPWTDP_ED0ET1_ED0ET1_SHIFT ) & \
-    SPWTDP_ED0ET1_ED0ET1_MASK )
+  ( ( ( _val ) << SPWTDP_ED0ET1_ED0ET1_SHIFT ) & SPWTDP_ED0ET1_ED0ET1_MASK )
 
 /** @} */
 
@@ -987,17 +876,15 @@ extern "C" {
  */
 
 #define SPWTDP_ED0ET2_ED0ET2_SHIFT 0
-#define SPWTDP_ED0ET2_ED0ET2_MASK 0xffffffffU
+#define SPWTDP_ED0ET2_ED0ET2_MASK  0xffffffffU
 #define SPWTDP_ED0ET2_ED0ET2_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_ED0ET2_ED0ET2_MASK ) >> \
-    SPWTDP_ED0ET2_ED0ET2_SHIFT )
-#define SPWTDP_ED0ET2_ED0ET2_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~SPWTDP_ED0ET2_ED0ET2_MASK ) | \
+  ( ( ( _reg ) & SPWTDP_ED0ET2_ED0ET2_MASK ) >> SPWTDP_ED0ET2_ED0ET2_SHIFT )
+#define SPWTDP_ED0ET2_ED0ET2_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~SPWTDP_ED0ET2_ED0ET2_MASK ) |    \
     ( ( ( _val ) << SPWTDP_ED0ET2_ED0ET2_SHIFT ) & \
       SPWTDP_ED0ET2_ED0ET2_MASK ) )
 #define SPWTDP_ED0ET2_ED0ET2( _val ) \
-  ( ( ( _val ) << SPWTDP_ED0ET2_ED0ET2_SHIFT ) & \
-    SPWTDP_ED0ET2_ED0ET2_MASK )
+  ( ( ( _val ) << SPWTDP_ED0ET2_ED0ET2_SHIFT ) & SPWTDP_ED0ET2_ED0ET2_MASK )
 
 /** @} */
 
@@ -1011,17 +898,15 @@ extern "C" {
  */
 
 #define SPWTDP_ED0ET3_ED0ET3_SHIFT 0
-#define SPWTDP_ED0ET3_ED0ET3_MASK 0xffffffffU
+#define SPWTDP_ED0ET3_ED0ET3_MASK  0xffffffffU
 #define SPWTDP_ED0ET3_ED0ET3_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_ED0ET3_ED0ET3_MASK ) >> \
-    SPWTDP_ED0ET3_ED0ET3_SHIFT )
-#define SPWTDP_ED0ET3_ED0ET3_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~SPWTDP_ED0ET3_ED0ET3_MASK ) | \
+  ( ( ( _reg ) & SPWTDP_ED0ET3_ED0ET3_MASK ) >> SPWTDP_ED0ET3_ED0ET3_SHIFT )
+#define SPWTDP_ED0ET3_ED0ET3_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~SPWTDP_ED0ET3_ED0ET3_MASK ) |    \
     ( ( ( _val ) << SPWTDP_ED0ET3_ED0ET3_SHIFT ) & \
       SPWTDP_ED0ET3_ED0ET3_MASK ) )
 #define SPWTDP_ED0ET3_ED0ET3( _val ) \
-  ( ( ( _val ) << SPWTDP_ED0ET3_ED0ET3_SHIFT ) & \
-    SPWTDP_ED0ET3_ED0ET3_MASK )
+  ( ( ( _val ) << SPWTDP_ED0ET3_ED0ET3_SHIFT ) & SPWTDP_ED0ET3_ED0ET3_MASK )
 
 /** @} */
 
@@ -1035,17 +920,15 @@ extern "C" {
  */
 
 #define SPWTDP_ED0ET4_ED0ET4_SHIFT 24
-#define SPWTDP_ED0ET4_ED0ET4_MASK 0xff000000U
+#define SPWTDP_ED0ET4_ED0ET4_MASK  0xff000000U
 #define SPWTDP_ED0ET4_ED0ET4_GET( _reg ) \
-  ( ( ( _reg ) & SPWTDP_ED0ET4_ED0ET4_MASK ) >> \
-    SPWTDP_ED0ET4_ED0ET4_SHIFT )
-#define SPWTDP_ED0ET4_ED0ET4_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~SPWTDP_ED0ET4_ED0ET4_MASK ) | \
+  ( ( ( _reg ) & SPWTDP_ED0ET4_ED0ET4_MASK ) >> SPWTDP_ED0ET4_ED0ET4_SHIFT )
+#define SPWTDP_ED0ET4_ED0ET4_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~SPWTDP_ED0ET4_ED0ET4_MASK ) |    \
     ( ( ( _val ) << SPWTDP_ED0ET4_ED0ET4_SHIFT ) & \
       SPWTDP_ED0ET4_ED0ET4_MASK ) )
 #define SPWTDP_ED0ET4_ED0ET4( _val ) \
-  ( ( ( _val ) << SPWTDP_ED0ET4_ED0ET4_SHIFT ) & \
-    SPWTDP_ED0ET4_ED0ET4_MASK )
+  ( ( ( _val ) << SPWTDP_ED0ET4_ED0ET4_SHIFT ) & SPWTDP_ED0ET4_ED0ET4_MASK )
 
 /** @} */
 

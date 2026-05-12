@@ -44,12 +44,12 @@ extern "C" {
 #endif
 
 /* Error return codes */
-#define GRPCI2DMA_ERR_OK 0
+#define GRPCI2DMA_ERR_OK       0
 #define GRPCI2DMA_ERR_WRONGPTR -1
-#define GRPCI2DMA_ERR_NOINIT -2
-#define GRPCI2DMA_ERR_TOOMANY -3
-#define GRPCI2DMA_ERR_ERROR -4
-#define GRPCI2DMA_ERR_STOPDMA -5
+#define GRPCI2DMA_ERR_NOINIT   -2
+#define GRPCI2DMA_ERR_TOOMANY  -3
+#define GRPCI2DMA_ERR_ERROR    -4
+#define GRPCI2DMA_ERR_STOPDMA  -5
 #define GRPCI2DMA_ERR_NOTFOUND -6
 
 /* Size of a dma descriptors */
@@ -63,10 +63,10 @@ extern "C" {
 /* User-helper functions to allocate/deallocate
  * channel and data descriptors
  */
-extern void * grpci2dma_channel_new(int number);
-extern void grpci2dma_channel_delete(void * chanbd);
-extern void * grpci2dma_data_new(int number);
-extern void grpci2dma_data_delete(void * databd);
+extern void *grpci2dma_channel_new( int number );
+extern void  grpci2dma_channel_delete( void *chanbd );
+extern void *grpci2dma_data_new( int number );
+extern void  grpci2dma_data_delete( void *databd );
 
 /* Function:
  *  -grpci2dma_prepare
@@ -91,13 +91,21 @@ extern void grpci2dma_data_delete(void * databd);
  *  -value > 0: A positive return value means the number of data descriptors 
  *  prepared/used in the buffer, starting from index.
  */
-#define GRPCI2DMA_AHBTOPCI 1
-#define GRPCI2DMA_PCITOAHB 0
+#define GRPCI2DMA_AHBTOPCI     1
+#define GRPCI2DMA_PCITOAHB     0
 #define GRPCI2DMA_LITTLEENDIAN 1
-#define GRPCI2DMA_BIGENDIAN 0
+#define GRPCI2DMA_BIGENDIAN    0
 extern int grpci2dma_prepare(
-        uint32_t pci_start, uint32_t ahb_start, int dir, int endianness,
-        int size, void * databd, int bdindex, int bdmax, int block_size);
+  uint32_t pci_start,
+  uint32_t ahb_start,
+  int      dir,
+  int      endianness,
+  int      size,
+  void    *databd,
+  int      bdindex,
+  int      bdmax,
+  int      block_size
+);
 
 /* Function:
  *  -grpci2dma_status
@@ -117,16 +125,16 @@ extern int grpci2dma_prepare(
  *  which means that either the transfer finished or it was never prepared.
  */
 #define GRPCI2DMA_BD_STATUS_DISABLED 0
-#define GRPCI2DMA_BD_STATUS_ENABLED 1
-#define GRPCI2DMA_BD_STATUS_ERR 2
-extern int grpci2dma_status(void *databd, int bdindex, int bdsize);
+#define GRPCI2DMA_BD_STATUS_ENABLED  1
+#define GRPCI2DMA_BD_STATUS_ERR      2
+extern int grpci2dma_status( void *databd, int bdindex, int bdsize );
 
 /* Function Interrupt-Code ISR callback prototype.
  * arg     - Custom arg provided by user
  * cid     - Channel ID that got the interrupt
  * status  - Error status of the DMA core
  */
-typedef void (*grpci2dma_isr_t)(void *arg, int cid, unsigned int status);
+typedef void ( *grpci2dma_isr_t )( void *arg, int cid, unsigned int status );
 
 /* Function:
  *  -grpci2dma_isr_register
@@ -142,7 +150,10 @@ typedef void (*grpci2dma_isr_t)(void *arg, int cid, unsigned int status);
  *  -OK (=0): Done
  */
 extern int grpci2dma_isr_register(
-        int chan_no, grpci2dma_isr_t dmaisr, void *arg);
+  int             chan_no,
+  grpci2dma_isr_t dmaisr,
+  void           *arg
+);
 
 /* Function:
  *  -grpci2dma_isr_unregister
@@ -155,7 +166,7 @@ extern int grpci2dma_isr_register(
  *  -WRONGPTR: Wrong input parameters
  *  -OK (=0): Done
  */
-extern int grpci2dma_isr_unregister(int chan_no);
+extern int grpci2dma_isr_unregister( int chan_no );
 
 /* Function:
  *  -grpci2dma_open
@@ -171,7 +182,7 @@ extern int grpci2dma_isr_unregister(int chan_no);
  *  -ERROR: Inconsistent state found in driver
  *  -value > 0: A positive return value means the id for the channel.
  */
-extern int grpci2dma_open(void * chan);
+extern int grpci2dma_open( void *chan );
 
 /* Function:
  *  -grpci2dma_close
@@ -187,7 +198,7 @@ extern int grpci2dma_open(void * chan);
  *  -WRONGPTR: Wrong input parameters
  *  -OK (=0): Done.
  */
-extern int grpci2dma_close(int chan_no);
+extern int grpci2dma_close( int chan_no );
 
 /* Function:
  *  -grpci2dma_start
@@ -203,7 +214,7 @@ extern int grpci2dma_close(int chan_no);
  *  -ERROR: Inconsistent state found in driver
  *  -OK (=0): Done.
  */
-extern int grpci2dma_start(int chan_no, int options);
+extern int grpci2dma_start( int chan_no, int options );
 
 /* Function:
  *  -grpci2dma_stop
@@ -217,7 +228,7 @@ extern int grpci2dma_start(int chan_no, int options);
  *  -ERROR: Inconsistent state found in driver
  *  -OK (=0): Done.
  */
-extern int grpci2dma_stop(int chan_no);
+extern int grpci2dma_stop( int chan_no );
 
 /* Function:
  *  -grpci2dma_push
@@ -234,7 +245,12 @@ extern int grpci2dma_stop(int chan_no);
  *  -NOTFOUND: Channel not opened.
  *  -OK (=0): Done.
  */
-extern int grpci2dma_push(int chan_no, void *databd, int bdindex, int bdsize);
+extern int grpci2dma_push(
+  int   chan_no,
+  void *databd,
+  int   bdindex,
+  int   bdsize
+);
 
 /* Function:
  *  -grpci2dma_active
@@ -245,7 +261,7 @@ extern int grpci2dma_push(int chan_no, void *databd, int bdindex, int bdsize);
  *  -(!=0): Active.
  *  -(=0): Not active.
  */
-extern int grpci2dma_active(void);
+extern int grpci2dma_active( void );
 
 /* Function:
  *  -grpci2dma_interrupt_enable
@@ -268,12 +284,16 @@ extern int grpci2dma_active(void);
 #define GRPCI2DMA_OPTIONS_ALL 1
 #define GRPCI2DMA_OPTIONS_ONE 0
 extern int grpci2dma_interrupt_enable(
-        void *databd, int bdindex, int bdmax, int options);
+  void *databd,
+  int   bdindex,
+  int   bdmax,
+  int   options
+);
 
 /* Debug function: print dma channel and associated data descriptors.
  * Only prints if driver internal DEBUG flag is defined. */
-extern int grpci2dma_print(int chan_no);
-extern int grpci2dma_print_bd(void * data);
+extern int grpci2dma_print( int chan_no );
+extern int grpci2dma_print_bd( void *data );
 
 #ifdef __cplusplus
 }

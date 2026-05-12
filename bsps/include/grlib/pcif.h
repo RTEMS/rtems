@@ -35,7 +35,7 @@ extern "C" {
 #endif
 
 /* Register the PCIF PCI host driver to the Driver Manager */
-extern void pcif_register_drv(void);
+extern void pcif_register_drv( void );
 
 #ifdef __cplusplus
 }

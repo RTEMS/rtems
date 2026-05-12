@@ -52,17 +52,17 @@ extern "C" {
 extern struct drvmgr_bus_res *gr_rasta_adcdac_resources[];
 
 /* Options to gr_rasta_io_print function */
-#define RASTA_ADCDAC_OPTIONS_AMBA   0x01 /* Print AMBA bus devices */
-#define RASTA_ADCDAC_OPTIONS_IRQ    0x02 /* Print current IRQ setup */
+#define RASTA_ADCDAC_OPTIONS_AMBA 0x01 /* Print AMBA bus devices */
+#define RASTA_ADCDAC_OPTIONS_IRQ  0x02 /* Print current IRQ setup */
 
 /* Print information about all GR-RASTA-IO PCI boards */
-void gr_rasta_adcdac_print(int options);
+void gr_rasta_adcdac_print( int options );
 
 /* Print information about one GR-RASTA-IO PCI board */
-void gr_rasta_adcdac_print_dev(struct drvmgr_dev *dev, int options);
+void gr_rasta_adcdac_print_dev( struct drvmgr_dev *dev, int options );
 
 /* Register GR-RASTA-IO driver */
-void gr_rasta_adcdac_register_drv(void);
+void gr_rasta_adcdac_register_drv( void );
 
 #ifdef __cplusplus
 }

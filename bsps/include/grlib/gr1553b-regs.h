@@ -140,32 +140,26 @@ extern "C" {
 #define GR1553B_HC_XKEYS 0x800U
 
 #define GR1553B_HC_ENDIAN_SHIFT 9
-#define GR1553B_HC_ENDIAN_MASK 0x600U
+#define GR1553B_HC_ENDIAN_MASK  0x600U
 #define GR1553B_HC_ENDIAN_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_HC_ENDIAN_MASK ) >> \
-    GR1553B_HC_ENDIAN_SHIFT )
-#define GR1553B_HC_ENDIAN_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_HC_ENDIAN_MASK ) >> GR1553B_HC_ENDIAN_SHIFT )
+#define GR1553B_HC_ENDIAN_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_HC_ENDIAN_MASK ) | \
-    ( ( ( _val ) << GR1553B_HC_ENDIAN_SHIFT ) & \
-      GR1553B_HC_ENDIAN_MASK ) )
+    ( ( ( _val ) << GR1553B_HC_ENDIAN_SHIFT ) & GR1553B_HC_ENDIAN_MASK ) )
 #define GR1553B_HC_ENDIAN( _val ) \
-  ( ( ( _val ) << GR1553B_HC_ENDIAN_SHIFT ) & \
-    GR1553B_HC_ENDIAN_MASK )
+  ( ( ( _val ) << GR1553B_HC_ENDIAN_SHIFT ) & GR1553B_HC_ENDIAN_MASK )
 
 #define GR1553B_HC_SCLK 0x100U
 
 #define GR1553B_HC_CCFREQ_SHIFT 0
-#define GR1553B_HC_CCFREQ_MASK 0xffU
+#define GR1553B_HC_CCFREQ_MASK  0xffU
 #define GR1553B_HC_CCFREQ_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_HC_CCFREQ_MASK ) >> \
-    GR1553B_HC_CCFREQ_SHIFT )
-#define GR1553B_HC_CCFREQ_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_HC_CCFREQ_MASK ) >> GR1553B_HC_CCFREQ_SHIFT )
+#define GR1553B_HC_CCFREQ_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_HC_CCFREQ_MASK ) | \
-    ( ( ( _val ) << GR1553B_HC_CCFREQ_SHIFT ) & \
-      GR1553B_HC_CCFREQ_MASK ) )
+    ( ( ( _val ) << GR1553B_HC_CCFREQ_SHIFT ) & GR1553B_HC_CCFREQ_MASK ) )
 #define GR1553B_HC_CCFREQ( _val ) \
-  ( ( ( _val ) << GR1553B_HC_CCFREQ_SHIFT ) & \
-    GR1553B_HC_CCFREQ_MASK )
+  ( ( ( _val ) << GR1553B_HC_CCFREQ_SHIFT ) & GR1553B_HC_CCFREQ_MASK )
 
 /** @} */
 
@@ -181,71 +175,57 @@ extern "C" {
 #define GR1553B_BCSC_BCSUP 0x80000000U
 
 #define GR1553B_BCSC_BCFEAT_SHIFT 28
-#define GR1553B_BCSC_BCFEAT_MASK 0x70000000U
+#define GR1553B_BCSC_BCFEAT_MASK  0x70000000U
 #define GR1553B_BCSC_BCFEAT_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_BCSC_BCFEAT_MASK ) >> \
-    GR1553B_BCSC_BCFEAT_SHIFT )
-#define GR1553B_BCSC_BCFEAT_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GR1553B_BCSC_BCFEAT_MASK ) | \
+  ( ( ( _reg ) & GR1553B_BCSC_BCFEAT_MASK ) >> GR1553B_BCSC_BCFEAT_SHIFT )
+#define GR1553B_BCSC_BCFEAT_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GR1553B_BCSC_BCFEAT_MASK ) |    \
     ( ( ( _val ) << GR1553B_BCSC_BCFEAT_SHIFT ) & \
       GR1553B_BCSC_BCFEAT_MASK ) )
 #define GR1553B_BCSC_BCFEAT( _val ) \
-  ( ( ( _val ) << GR1553B_BCSC_BCFEAT_SHIFT ) & \
-    GR1553B_BCSC_BCFEAT_MASK )
+  ( ( ( _val ) << GR1553B_BCSC_BCFEAT_SHIFT ) & GR1553B_BCSC_BCFEAT_MASK )
 
 #define GR1553B_BCSC_BCCHK 0x10000U
 
 #define GR1553B_BCSC_ASADL_SHIFT 11
-#define GR1553B_BCSC_ASADL_MASK 0xf800U
+#define GR1553B_BCSC_ASADL_MASK  0xf800U
 #define GR1553B_BCSC_ASADL_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_BCSC_ASADL_MASK ) >> \
-    GR1553B_BCSC_ASADL_SHIFT )
-#define GR1553B_BCSC_ASADL_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_BCSC_ASADL_MASK ) >> GR1553B_BCSC_ASADL_SHIFT )
+#define GR1553B_BCSC_ASADL_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_BCSC_ASADL_MASK ) | \
-    ( ( ( _val ) << GR1553B_BCSC_ASADL_SHIFT ) & \
-      GR1553B_BCSC_ASADL_MASK ) )
+    ( ( ( _val ) << GR1553B_BCSC_ASADL_SHIFT ) & GR1553B_BCSC_ASADL_MASK ) )
 #define GR1553B_BCSC_ASADL( _val ) \
-  ( ( ( _val ) << GR1553B_BCSC_ASADL_SHIFT ) & \
-    GR1553B_BCSC_ASADL_MASK )
+  ( ( ( _val ) << GR1553B_BCSC_ASADL_SHIFT ) & GR1553B_BCSC_ASADL_MASK )
 
 #define GR1553B_BCSC_ASST_SHIFT 8
-#define GR1553B_BCSC_ASST_MASK 0x300U
+#define GR1553B_BCSC_ASST_MASK  0x300U
 #define GR1553B_BCSC_ASST_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_BCSC_ASST_MASK ) >> \
-    GR1553B_BCSC_ASST_SHIFT )
-#define GR1553B_BCSC_ASST_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_BCSC_ASST_MASK ) >> GR1553B_BCSC_ASST_SHIFT )
+#define GR1553B_BCSC_ASST_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_BCSC_ASST_MASK ) | \
-    ( ( ( _val ) << GR1553B_BCSC_ASST_SHIFT ) & \
-      GR1553B_BCSC_ASST_MASK ) )
+    ( ( ( _val ) << GR1553B_BCSC_ASST_SHIFT ) & GR1553B_BCSC_ASST_MASK ) )
 #define GR1553B_BCSC_ASST( _val ) \
-  ( ( ( _val ) << GR1553B_BCSC_ASST_SHIFT ) & \
-    GR1553B_BCSC_ASST_MASK )
+  ( ( ( _val ) << GR1553B_BCSC_ASST_SHIFT ) & GR1553B_BCSC_ASST_MASK )
 
 #define GR1553B_BCSC_SCADL_SHIFT 3
-#define GR1553B_BCSC_SCADL_MASK 0xf8U
+#define GR1553B_BCSC_SCADL_MASK  0xf8U
 #define GR1553B_BCSC_SCADL_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_BCSC_SCADL_MASK ) >> \
-    GR1553B_BCSC_SCADL_SHIFT )
-#define GR1553B_BCSC_SCADL_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_BCSC_SCADL_MASK ) >> GR1553B_BCSC_SCADL_SHIFT )
+#define GR1553B_BCSC_SCADL_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_BCSC_SCADL_MASK ) | \
-    ( ( ( _val ) << GR1553B_BCSC_SCADL_SHIFT ) & \
-      GR1553B_BCSC_SCADL_MASK ) )
+    ( ( ( _val ) << GR1553B_BCSC_SCADL_SHIFT ) & GR1553B_BCSC_SCADL_MASK ) )
 #define GR1553B_BCSC_SCADL( _val ) \
-  ( ( ( _val ) << GR1553B_BCSC_SCADL_SHIFT ) & \
-    GR1553B_BCSC_SCADL_MASK )
+  ( ( ( _val ) << GR1553B_BCSC_SCADL_SHIFT ) & GR1553B_BCSC_SCADL_MASK )
 
 #define GR1553B_BCSC_SCST_SHIFT 0
-#define GR1553B_BCSC_SCST_MASK 0x7U
+#define GR1553B_BCSC_SCST_MASK  0x7U
 #define GR1553B_BCSC_SCST_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_BCSC_SCST_MASK ) >> \
-    GR1553B_BCSC_SCST_SHIFT )
-#define GR1553B_BCSC_SCST_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_BCSC_SCST_MASK ) >> GR1553B_BCSC_SCST_SHIFT )
+#define GR1553B_BCSC_SCST_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_BCSC_SCST_MASK ) | \
-    ( ( ( _val ) << GR1553B_BCSC_SCST_SHIFT ) & \
-      GR1553B_BCSC_SCST_MASK ) )
+    ( ( ( _val ) << GR1553B_BCSC_SCST_SHIFT ) & GR1553B_BCSC_SCST_MASK ) )
 #define GR1553B_BCSC_SCST( _val ) \
-  ( ( ( _val ) << GR1553B_BCSC_SCST_SHIFT ) & \
-    GR1553B_BCSC_SCST_MASK )
+  ( ( ( _val ) << GR1553B_BCSC_SCST_SHIFT ) & GR1553B_BCSC_SCST_MASK )
 
 /** @} */
 
@@ -258,17 +238,14 @@ extern "C" {
  */
 
 #define GR1553B_BCA_BCKEY_SHIFT 16
-#define GR1553B_BCA_BCKEY_MASK 0xffff0000U
+#define GR1553B_BCA_BCKEY_MASK  0xffff0000U
 #define GR1553B_BCA_BCKEY_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_BCA_BCKEY_MASK ) >> \
-    GR1553B_BCA_BCKEY_SHIFT )
-#define GR1553B_BCA_BCKEY_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_BCA_BCKEY_MASK ) >> GR1553B_BCA_BCKEY_SHIFT )
+#define GR1553B_BCA_BCKEY_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_BCA_BCKEY_MASK ) | \
-    ( ( ( _val ) << GR1553B_BCA_BCKEY_SHIFT ) & \
-      GR1553B_BCA_BCKEY_MASK ) )
+    ( ( ( _val ) << GR1553B_BCA_BCKEY_SHIFT ) & GR1553B_BCA_BCKEY_MASK ) )
 #define GR1553B_BCA_BCKEY( _val ) \
-  ( ( ( _val ) << GR1553B_BCA_BCKEY_SHIFT ) & \
-    GR1553B_BCA_BCKEY_MASK )
+  ( ( ( _val ) << GR1553B_BCA_BCKEY_SHIFT ) & GR1553B_BCA_BCKEY_MASK )
 
 #define GR1553B_BCA_ASSTP 0x200U
 
@@ -296,17 +273,15 @@ extern "C" {
  */
 
 #define GR1553B_BCTNP_POINTER_SHIFT 0
-#define GR1553B_BCTNP_POINTER_MASK 0xffffffffU
+#define GR1553B_BCTNP_POINTER_MASK  0xffffffffU
 #define GR1553B_BCTNP_POINTER_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_BCTNP_POINTER_MASK ) >> \
-    GR1553B_BCTNP_POINTER_SHIFT )
-#define GR1553B_BCTNP_POINTER_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GR1553B_BCTNP_POINTER_MASK ) | \
+  ( ( ( _reg ) & GR1553B_BCTNP_POINTER_MASK ) >> GR1553B_BCTNP_POINTER_SHIFT )
+#define GR1553B_BCTNP_POINTER_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GR1553B_BCTNP_POINTER_MASK ) |    \
     ( ( ( _val ) << GR1553B_BCTNP_POINTER_SHIFT ) & \
       GR1553B_BCTNP_POINTER_MASK ) )
 #define GR1553B_BCTNP_POINTER( _val ) \
-  ( ( ( _val ) << GR1553B_BCTNP_POINTER_SHIFT ) & \
-    GR1553B_BCTNP_POINTER_MASK )
+  ( ( ( _val ) << GR1553B_BCTNP_POINTER_SHIFT ) & GR1553B_BCTNP_POINTER_MASK )
 
 /** @} */
 
@@ -320,17 +295,15 @@ extern "C" {
  */
 
 #define GR1553B_BCANP_POINTER_SHIFT 0
-#define GR1553B_BCANP_POINTER_MASK 0xffffffffU
+#define GR1553B_BCANP_POINTER_MASK  0xffffffffU
 #define GR1553B_BCANP_POINTER_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_BCANP_POINTER_MASK ) >> \
-    GR1553B_BCANP_POINTER_SHIFT )
-#define GR1553B_BCANP_POINTER_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GR1553B_BCANP_POINTER_MASK ) | \
+  ( ( ( _reg ) & GR1553B_BCANP_POINTER_MASK ) >> GR1553B_BCANP_POINTER_SHIFT )
+#define GR1553B_BCANP_POINTER_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GR1553B_BCANP_POINTER_MASK ) |    \
     ( ( ( _val ) << GR1553B_BCANP_POINTER_SHIFT ) & \
       GR1553B_BCANP_POINTER_MASK ) )
 #define GR1553B_BCANP_POINTER( _val ) \
-  ( ( ( _val ) << GR1553B_BCANP_POINTER_SHIFT ) & \
-    GR1553B_BCANP_POINTER_MASK )
+  ( ( ( _val ) << GR1553B_BCANP_POINTER_SHIFT ) & GR1553B_BCANP_POINTER_MASK )
 
 /** @} */
 
@@ -343,17 +316,14 @@ extern "C" {
  */
 
 #define GR1553B_BCT_SCTM_SHIFT 0
-#define GR1553B_BCT_SCTM_MASK 0xffffffU
+#define GR1553B_BCT_SCTM_MASK  0xffffffU
 #define GR1553B_BCT_SCTM_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_BCT_SCTM_MASK ) >> \
-    GR1553B_BCT_SCTM_SHIFT )
-#define GR1553B_BCT_SCTM_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_BCT_SCTM_MASK ) >> GR1553B_BCT_SCTM_SHIFT )
+#define GR1553B_BCT_SCTM_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_BCT_SCTM_MASK ) | \
-    ( ( ( _val ) << GR1553B_BCT_SCTM_SHIFT ) & \
-      GR1553B_BCT_SCTM_MASK ) )
+    ( ( ( _val ) << GR1553B_BCT_SCTM_SHIFT ) & GR1553B_BCT_SCTM_MASK ) )
 #define GR1553B_BCT_SCTM( _val ) \
-  ( ( ( _val ) << GR1553B_BCT_SCTM_SHIFT ) & \
-    GR1553B_BCT_SCTM_MASK )
+  ( ( ( _val ) << GR1553B_BCT_SCTM_SHIFT ) & GR1553B_BCT_SCTM_MASK )
 
 /** @} */
 
@@ -367,17 +337,15 @@ extern "C" {
  */
 
 #define GR1553B_BCRP_POSITION_SHIFT 0
-#define GR1553B_BCRP_POSITION_MASK 0xffffffffU
+#define GR1553B_BCRP_POSITION_MASK  0xffffffffU
 #define GR1553B_BCRP_POSITION_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_BCRP_POSITION_MASK ) >> \
-    GR1553B_BCRP_POSITION_SHIFT )
-#define GR1553B_BCRP_POSITION_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GR1553B_BCRP_POSITION_MASK ) | \
+  ( ( ( _reg ) & GR1553B_BCRP_POSITION_MASK ) >> GR1553B_BCRP_POSITION_SHIFT )
+#define GR1553B_BCRP_POSITION_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GR1553B_BCRP_POSITION_MASK ) |    \
     ( ( ( _val ) << GR1553B_BCRP_POSITION_SHIFT ) & \
       GR1553B_BCRP_POSITION_MASK ) )
 #define GR1553B_BCRP_POSITION( _val ) \
-  ( ( ( _val ) << GR1553B_BCRP_POSITION_SHIFT ) & \
-    GR1553B_BCRP_POSITION_MASK )
+  ( ( ( _val ) << GR1553B_BCRP_POSITION_SHIFT ) & GR1553B_BCRP_POSITION_MASK )
 
 /** @} */
 
@@ -390,17 +358,14 @@ extern "C" {
  */
 
 #define GR1553B_BCBS_SWAP_SHIFT 0
-#define GR1553B_BCBS_SWAP_MASK 0xffffffffU
+#define GR1553B_BCBS_SWAP_MASK  0xffffffffU
 #define GR1553B_BCBS_SWAP_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_BCBS_SWAP_MASK ) >> \
-    GR1553B_BCBS_SWAP_SHIFT )
-#define GR1553B_BCBS_SWAP_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_BCBS_SWAP_MASK ) >> GR1553B_BCBS_SWAP_SHIFT )
+#define GR1553B_BCBS_SWAP_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_BCBS_SWAP_MASK ) | \
-    ( ( ( _val ) << GR1553B_BCBS_SWAP_SHIFT ) & \
-      GR1553B_BCBS_SWAP_MASK ) )
+    ( ( ( _val ) << GR1553B_BCBS_SWAP_SHIFT ) & GR1553B_BCBS_SWAP_MASK ) )
 #define GR1553B_BCBS_SWAP( _val ) \
-  ( ( ( _val ) << GR1553B_BCBS_SWAP_SHIFT ) & \
-    GR1553B_BCBS_SWAP_MASK )
+  ( ( ( _val ) << GR1553B_BCBS_SWAP_SHIFT ) & GR1553B_BCBS_SWAP_MASK )
 
 /** @} */
 
@@ -414,17 +379,15 @@ extern "C" {
  */
 
 #define GR1553B_BCTCP_POINTER_SHIFT 0
-#define GR1553B_BCTCP_POINTER_MASK 0xffffffffU
+#define GR1553B_BCTCP_POINTER_MASK  0xffffffffU
 #define GR1553B_BCTCP_POINTER_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_BCTCP_POINTER_MASK ) >> \
-    GR1553B_BCTCP_POINTER_SHIFT )
-#define GR1553B_BCTCP_POINTER_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GR1553B_BCTCP_POINTER_MASK ) | \
+  ( ( ( _reg ) & GR1553B_BCTCP_POINTER_MASK ) >> GR1553B_BCTCP_POINTER_SHIFT )
+#define GR1553B_BCTCP_POINTER_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GR1553B_BCTCP_POINTER_MASK ) |    \
     ( ( ( _val ) << GR1553B_BCTCP_POINTER_SHIFT ) & \
       GR1553B_BCTCP_POINTER_MASK ) )
 #define GR1553B_BCTCP_POINTER( _val ) \
-  ( ( ( _val ) << GR1553B_BCTCP_POINTER_SHIFT ) & \
-    GR1553B_BCTCP_POINTER_MASK )
+  ( ( ( _val ) << GR1553B_BCTCP_POINTER_SHIFT ) & GR1553B_BCTCP_POINTER_MASK )
 
 /** @} */
 
@@ -438,17 +401,15 @@ extern "C" {
  */
 
 #define GR1553B_BCACP_POINTER_SHIFT 0
-#define GR1553B_BCACP_POINTER_MASK 0xffffffffU
+#define GR1553B_BCACP_POINTER_MASK  0xffffffffU
 #define GR1553B_BCACP_POINTER_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_BCACP_POINTER_MASK ) >> \
-    GR1553B_BCACP_POINTER_SHIFT )
-#define GR1553B_BCACP_POINTER_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GR1553B_BCACP_POINTER_MASK ) | \
+  ( ( ( _reg ) & GR1553B_BCACP_POINTER_MASK ) >> GR1553B_BCACP_POINTER_SHIFT )
+#define GR1553B_BCACP_POINTER_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GR1553B_BCACP_POINTER_MASK ) |    \
     ( ( ( _val ) << GR1553B_BCACP_POINTER_SHIFT ) & \
       GR1553B_BCACP_POINTER_MASK ) )
 #define GR1553B_BCACP_POINTER( _val ) \
-  ( ( ( _val ) << GR1553B_BCACP_POINTER_SHIFT ) & \
-    GR1553B_BCACP_POINTER_MASK )
+  ( ( ( _val ) << GR1553B_BCACP_POINTER_SHIFT ) & GR1553B_BCACP_POINTER_MASK )
 
 /** @} */
 
@@ -481,17 +442,14 @@ extern "C" {
  */
 
 #define GR1553B_RTC_RTKEY_SHIFT 16
-#define GR1553B_RTC_RTKEY_MASK 0xffff0000U
+#define GR1553B_RTC_RTKEY_MASK  0xffff0000U
 #define GR1553B_RTC_RTKEY_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_RTC_RTKEY_MASK ) >> \
-    GR1553B_RTC_RTKEY_SHIFT )
-#define GR1553B_RTC_RTKEY_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_RTC_RTKEY_MASK ) >> GR1553B_RTC_RTKEY_SHIFT )
+#define GR1553B_RTC_RTKEY_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_RTC_RTKEY_MASK ) | \
-    ( ( ( _val ) << GR1553B_RTC_RTKEY_SHIFT ) & \
-      GR1553B_RTC_RTKEY_MASK ) )
+    ( ( ( _val ) << GR1553B_RTC_RTKEY_SHIFT ) & GR1553B_RTC_RTKEY_MASK ) )
 #define GR1553B_RTC_RTKEY( _val ) \
-  ( ( ( _val ) << GR1553B_RTC_RTKEY_SHIFT ) & \
-    GR1553B_RTC_RTKEY_MASK )
+  ( ( ( _val ) << GR1553B_RTC_RTKEY_SHIFT ) & GR1553B_RTC_RTKEY_MASK )
 
 #define GR1553B_RTC_SYS 0x8000U
 
@@ -502,17 +460,14 @@ extern "C" {
 #define GR1553B_RTC_RTEIS 0x40U
 
 #define GR1553B_RTC_RTADDR_SHIFT 1
-#define GR1553B_RTC_RTADDR_MASK 0x3eU
+#define GR1553B_RTC_RTADDR_MASK  0x3eU
 #define GR1553B_RTC_RTADDR_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_RTC_RTADDR_MASK ) >> \
-    GR1553B_RTC_RTADDR_SHIFT )
-#define GR1553B_RTC_RTADDR_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_RTC_RTADDR_MASK ) >> GR1553B_RTC_RTADDR_SHIFT )
+#define GR1553B_RTC_RTADDR_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_RTC_RTADDR_MASK ) | \
-    ( ( ( _val ) << GR1553B_RTC_RTADDR_SHIFT ) & \
-      GR1553B_RTC_RTADDR_MASK ) )
+    ( ( ( _val ) << GR1553B_RTC_RTADDR_SHIFT ) & GR1553B_RTC_RTADDR_MASK ) )
 #define GR1553B_RTC_RTADDR( _val ) \
-  ( ( ( _val ) << GR1553B_RTC_RTADDR_SHIFT ) & \
-    GR1553B_RTC_RTADDR_MASK )
+  ( ( ( _val ) << GR1553B_RTC_RTADDR_SHIFT ) & GR1553B_RTC_RTADDR_MASK )
 
 #define GR1553B_RTC_RTEN 0x1U
 
@@ -549,30 +504,24 @@ extern "C" {
  */
 
 #define GR1553B_RTSW_BITW_SHIFT 16
-#define GR1553B_RTSW_BITW_MASK 0xffff0000U
+#define GR1553B_RTSW_BITW_MASK  0xffff0000U
 #define GR1553B_RTSW_BITW_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_RTSW_BITW_MASK ) >> \
-    GR1553B_RTSW_BITW_SHIFT )
-#define GR1553B_RTSW_BITW_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_RTSW_BITW_MASK ) >> GR1553B_RTSW_BITW_SHIFT )
+#define GR1553B_RTSW_BITW_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_RTSW_BITW_MASK ) | \
-    ( ( ( _val ) << GR1553B_RTSW_BITW_SHIFT ) & \
-      GR1553B_RTSW_BITW_MASK ) )
+    ( ( ( _val ) << GR1553B_RTSW_BITW_SHIFT ) & GR1553B_RTSW_BITW_MASK ) )
 #define GR1553B_RTSW_BITW( _val ) \
-  ( ( ( _val ) << GR1553B_RTSW_BITW_SHIFT ) & \
-    GR1553B_RTSW_BITW_MASK )
+  ( ( ( _val ) << GR1553B_RTSW_BITW_SHIFT ) & GR1553B_RTSW_BITW_MASK )
 
 #define GR1553B_RTSW_VECW_SHIFT 0
-#define GR1553B_RTSW_VECW_MASK 0xffffU
+#define GR1553B_RTSW_VECW_MASK  0xffffU
 #define GR1553B_RTSW_VECW_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_RTSW_VECW_MASK ) >> \
-    GR1553B_RTSW_VECW_SHIFT )
-#define GR1553B_RTSW_VECW_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_RTSW_VECW_MASK ) >> GR1553B_RTSW_VECW_SHIFT )
+#define GR1553B_RTSW_VECW_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_RTSW_VECW_MASK ) | \
-    ( ( ( _val ) << GR1553B_RTSW_VECW_SHIFT ) & \
-      GR1553B_RTSW_VECW_MASK ) )
+    ( ( ( _val ) << GR1553B_RTSW_VECW_SHIFT ) & GR1553B_RTSW_VECW_MASK ) )
 #define GR1553B_RTSW_VECW( _val ) \
-  ( ( ( _val ) << GR1553B_RTSW_VECW_SHIFT ) & \
-    GR1553B_RTSW_VECW_MASK )
+  ( ( ( _val ) << GR1553B_RTSW_VECW_SHIFT ) & GR1553B_RTSW_VECW_MASK )
 
 /** @} */
 
@@ -585,30 +534,24 @@ extern "C" {
  */
 
 #define GR1553B_RTSY_SYTM_SHIFT 16
-#define GR1553B_RTSY_SYTM_MASK 0xffff0000U
+#define GR1553B_RTSY_SYTM_MASK  0xffff0000U
 #define GR1553B_RTSY_SYTM_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_RTSY_SYTM_MASK ) >> \
-    GR1553B_RTSY_SYTM_SHIFT )
-#define GR1553B_RTSY_SYTM_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_RTSY_SYTM_MASK ) >> GR1553B_RTSY_SYTM_SHIFT )
+#define GR1553B_RTSY_SYTM_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_RTSY_SYTM_MASK ) | \
-    ( ( ( _val ) << GR1553B_RTSY_SYTM_SHIFT ) & \
-      GR1553B_RTSY_SYTM_MASK ) )
+    ( ( ( _val ) << GR1553B_RTSY_SYTM_SHIFT ) & GR1553B_RTSY_SYTM_MASK ) )
 #define GR1553B_RTSY_SYTM( _val ) \
-  ( ( ( _val ) << GR1553B_RTSY_SYTM_SHIFT ) & \
-    GR1553B_RTSY_SYTM_MASK )
+  ( ( ( _val ) << GR1553B_RTSY_SYTM_SHIFT ) & GR1553B_RTSY_SYTM_MASK )
 
 #define GR1553B_RTSY_SYD_SHIFT 0
-#define GR1553B_RTSY_SYD_MASK 0xffffU
+#define GR1553B_RTSY_SYD_MASK  0xffffU
 #define GR1553B_RTSY_SYD_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_RTSY_SYD_MASK ) >> \
-    GR1553B_RTSY_SYD_SHIFT )
-#define GR1553B_RTSY_SYD_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_RTSY_SYD_MASK ) >> GR1553B_RTSY_SYD_SHIFT )
+#define GR1553B_RTSY_SYD_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_RTSY_SYD_MASK ) | \
-    ( ( ( _val ) << GR1553B_RTSY_SYD_SHIFT ) & \
-      GR1553B_RTSY_SYD_MASK ) )
+    ( ( ( _val ) << GR1553B_RTSY_SYD_SHIFT ) & GR1553B_RTSY_SYD_MASK ) )
 #define GR1553B_RTSY_SYD( _val ) \
-  ( ( ( _val ) << GR1553B_RTSY_SYD_SHIFT ) & \
-    GR1553B_RTSY_SYD_MASK )
+  ( ( ( _val ) << GR1553B_RTSY_SYD_SHIFT ) & GR1553B_RTSY_SYD_MASK )
 
 /** @} */
 
@@ -622,17 +565,15 @@ extern "C" {
  */
 
 #define GR1553B_RTSTBA_SATB_SHIFT 9
-#define GR1553B_RTSTBA_SATB_MASK 0xfffffe00U
+#define GR1553B_RTSTBA_SATB_MASK  0xfffffe00U
 #define GR1553B_RTSTBA_SATB_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_RTSTBA_SATB_MASK ) >> \
-    GR1553B_RTSTBA_SATB_SHIFT )
-#define GR1553B_RTSTBA_SATB_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GR1553B_RTSTBA_SATB_MASK ) | \
+  ( ( ( _reg ) & GR1553B_RTSTBA_SATB_MASK ) >> GR1553B_RTSTBA_SATB_SHIFT )
+#define GR1553B_RTSTBA_SATB_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GR1553B_RTSTBA_SATB_MASK ) |    \
     ( ( ( _val ) << GR1553B_RTSTBA_SATB_SHIFT ) & \
       GR1553B_RTSTBA_SATB_MASK ) )
 #define GR1553B_RTSTBA_SATB( _val ) \
-  ( ( ( _val ) << GR1553B_RTSTBA_SATB_SHIFT ) & \
-    GR1553B_RTSTBA_SATB_MASK )
+  ( ( ( _val ) << GR1553B_RTSTBA_SATB_SHIFT ) & GR1553B_RTSTBA_SATB_MASK )
 
 /** @} */
 
@@ -646,199 +587,154 @@ extern "C" {
  */
 
 #define GR1553B_RTMCC_RRTB_SHIFT 28
-#define GR1553B_RTMCC_RRTB_MASK 0x30000000U
+#define GR1553B_RTMCC_RRTB_MASK  0x30000000U
 #define GR1553B_RTMCC_RRTB_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_RTMCC_RRTB_MASK ) >> \
-    GR1553B_RTMCC_RRTB_SHIFT )
-#define GR1553B_RTMCC_RRTB_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_RTMCC_RRTB_MASK ) >> GR1553B_RTMCC_RRTB_SHIFT )
+#define GR1553B_RTMCC_RRTB_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_RTMCC_RRTB_MASK ) | \
-    ( ( ( _val ) << GR1553B_RTMCC_RRTB_SHIFT ) & \
-      GR1553B_RTMCC_RRTB_MASK ) )
+    ( ( ( _val ) << GR1553B_RTMCC_RRTB_SHIFT ) & GR1553B_RTMCC_RRTB_MASK ) )
 #define GR1553B_RTMCC_RRTB( _val ) \
-  ( ( ( _val ) << GR1553B_RTMCC_RRTB_SHIFT ) & \
-    GR1553B_RTMCC_RRTB_MASK )
+  ( ( ( _val ) << GR1553B_RTMCC_RRTB_SHIFT ) & GR1553B_RTMCC_RRTB_MASK )
 
 #define GR1553B_RTMCC_RRT_SHIFT 26
-#define GR1553B_RTMCC_RRT_MASK 0xc000000U
+#define GR1553B_RTMCC_RRT_MASK  0xc000000U
 #define GR1553B_RTMCC_RRT_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_RTMCC_RRT_MASK ) >> \
-    GR1553B_RTMCC_RRT_SHIFT )
-#define GR1553B_RTMCC_RRT_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_RTMCC_RRT_MASK ) >> GR1553B_RTMCC_RRT_SHIFT )
+#define GR1553B_RTMCC_RRT_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_RTMCC_RRT_MASK ) | \
-    ( ( ( _val ) << GR1553B_RTMCC_RRT_SHIFT ) & \
-      GR1553B_RTMCC_RRT_MASK ) )
+    ( ( ( _val ) << GR1553B_RTMCC_RRT_SHIFT ) & GR1553B_RTMCC_RRT_MASK ) )
 #define GR1553B_RTMCC_RRT( _val ) \
-  ( ( ( _val ) << GR1553B_RTMCC_RRT_SHIFT ) & \
-    GR1553B_RTMCC_RRT_MASK )
+  ( ( ( _val ) << GR1553B_RTMCC_RRT_SHIFT ) & GR1553B_RTMCC_RRT_MASK )
 
 #define GR1553B_RTMCC_ITFB_SHIFT 24
-#define GR1553B_RTMCC_ITFB_MASK 0x3000000U
+#define GR1553B_RTMCC_ITFB_MASK  0x3000000U
 #define GR1553B_RTMCC_ITFB_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_RTMCC_ITFB_MASK ) >> \
-    GR1553B_RTMCC_ITFB_SHIFT )
-#define GR1553B_RTMCC_ITFB_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_RTMCC_ITFB_MASK ) >> GR1553B_RTMCC_ITFB_SHIFT )
+#define GR1553B_RTMCC_ITFB_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_RTMCC_ITFB_MASK ) | \
-    ( ( ( _val ) << GR1553B_RTMCC_ITFB_SHIFT ) & \
-      GR1553B_RTMCC_ITFB_MASK ) )
+    ( ( ( _val ) << GR1553B_RTMCC_ITFB_SHIFT ) & GR1553B_RTMCC_ITFB_MASK ) )
 #define GR1553B_RTMCC_ITFB( _val ) \
-  ( ( ( _val ) << GR1553B_RTMCC_ITFB_SHIFT ) & \
-    GR1553B_RTMCC_ITFB_MASK )
+  ( ( ( _val ) << GR1553B_RTMCC_ITFB_SHIFT ) & GR1553B_RTMCC_ITFB_MASK )
 
 #define GR1553B_RTMCC_ITF_SHIFT 22
-#define GR1553B_RTMCC_ITF_MASK 0xc00000U
+#define GR1553B_RTMCC_ITF_MASK  0xc00000U
 #define GR1553B_RTMCC_ITF_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_RTMCC_ITF_MASK ) >> \
-    GR1553B_RTMCC_ITF_SHIFT )
-#define GR1553B_RTMCC_ITF_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_RTMCC_ITF_MASK ) >> GR1553B_RTMCC_ITF_SHIFT )
+#define GR1553B_RTMCC_ITF_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_RTMCC_ITF_MASK ) | \
-    ( ( ( _val ) << GR1553B_RTMCC_ITF_SHIFT ) & \
-      GR1553B_RTMCC_ITF_MASK ) )
+    ( ( ( _val ) << GR1553B_RTMCC_ITF_SHIFT ) & GR1553B_RTMCC_ITF_MASK ) )
 #define GR1553B_RTMCC_ITF( _val ) \
-  ( ( ( _val ) << GR1553B_RTMCC_ITF_SHIFT ) & \
-    GR1553B_RTMCC_ITF_MASK )
+  ( ( ( _val ) << GR1553B_RTMCC_ITF_SHIFT ) & GR1553B_RTMCC_ITF_MASK )
 
 #define GR1553B_RTMCC_ISTB_SHIFT 20
-#define GR1553B_RTMCC_ISTB_MASK 0x300000U
+#define GR1553B_RTMCC_ISTB_MASK  0x300000U
 #define GR1553B_RTMCC_ISTB_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_RTMCC_ISTB_MASK ) >> \
-    GR1553B_RTMCC_ISTB_SHIFT )
-#define GR1553B_RTMCC_ISTB_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_RTMCC_ISTB_MASK ) >> GR1553B_RTMCC_ISTB_SHIFT )
+#define GR1553B_RTMCC_ISTB_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_RTMCC_ISTB_MASK ) | \
-    ( ( ( _val ) << GR1553B_RTMCC_ISTB_SHIFT ) & \
-      GR1553B_RTMCC_ISTB_MASK ) )
+    ( ( ( _val ) << GR1553B_RTMCC_ISTB_SHIFT ) & GR1553B_RTMCC_ISTB_MASK ) )
 #define GR1553B_RTMCC_ISTB( _val ) \
-  ( ( ( _val ) << GR1553B_RTMCC_ISTB_SHIFT ) & \
-    GR1553B_RTMCC_ISTB_MASK )
+  ( ( ( _val ) << GR1553B_RTMCC_ISTB_SHIFT ) & GR1553B_RTMCC_ISTB_MASK )
 
 #define GR1553B_RTMCC_IST_SHIFT 18
-#define GR1553B_RTMCC_IST_MASK 0xc0000U
+#define GR1553B_RTMCC_IST_MASK  0xc0000U
 #define GR1553B_RTMCC_IST_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_RTMCC_IST_MASK ) >> \
-    GR1553B_RTMCC_IST_SHIFT )
-#define GR1553B_RTMCC_IST_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_RTMCC_IST_MASK ) >> GR1553B_RTMCC_IST_SHIFT )
+#define GR1553B_RTMCC_IST_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_RTMCC_IST_MASK ) | \
-    ( ( ( _val ) << GR1553B_RTMCC_IST_SHIFT ) & \
-      GR1553B_RTMCC_IST_MASK ) )
+    ( ( ( _val ) << GR1553B_RTMCC_IST_SHIFT ) & GR1553B_RTMCC_IST_MASK ) )
 #define GR1553B_RTMCC_IST( _val ) \
-  ( ( ( _val ) << GR1553B_RTMCC_IST_SHIFT ) & \
-    GR1553B_RTMCC_IST_MASK )
+  ( ( ( _val ) << GR1553B_RTMCC_IST_SHIFT ) & GR1553B_RTMCC_IST_MASK )
 
 #define GR1553B_RTMCC_DBC_SHIFT 16
-#define GR1553B_RTMCC_DBC_MASK 0x30000U
+#define GR1553B_RTMCC_DBC_MASK  0x30000U
 #define GR1553B_RTMCC_DBC_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_RTMCC_DBC_MASK ) >> \
-    GR1553B_RTMCC_DBC_SHIFT )
-#define GR1553B_RTMCC_DBC_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_RTMCC_DBC_MASK ) >> GR1553B_RTMCC_DBC_SHIFT )
+#define GR1553B_RTMCC_DBC_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_RTMCC_DBC_MASK ) | \
-    ( ( ( _val ) << GR1553B_RTMCC_DBC_SHIFT ) & \
-      GR1553B_RTMCC_DBC_MASK ) )
+    ( ( ( _val ) << GR1553B_RTMCC_DBC_SHIFT ) & GR1553B_RTMCC_DBC_MASK ) )
 #define GR1553B_RTMCC_DBC( _val ) \
-  ( ( ( _val ) << GR1553B_RTMCC_DBC_SHIFT ) & \
-    GR1553B_RTMCC_DBC_MASK )
+  ( ( ( _val ) << GR1553B_RTMCC_DBC_SHIFT ) & GR1553B_RTMCC_DBC_MASK )
 
 #define GR1553B_RTMCC_TBW_SHIFT 14
-#define GR1553B_RTMCC_TBW_MASK 0xc000U
+#define GR1553B_RTMCC_TBW_MASK  0xc000U
 #define GR1553B_RTMCC_TBW_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_RTMCC_TBW_MASK ) >> \
-    GR1553B_RTMCC_TBW_SHIFT )
-#define GR1553B_RTMCC_TBW_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_RTMCC_TBW_MASK ) >> GR1553B_RTMCC_TBW_SHIFT )
+#define GR1553B_RTMCC_TBW_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_RTMCC_TBW_MASK ) | \
-    ( ( ( _val ) << GR1553B_RTMCC_TBW_SHIFT ) & \
-      GR1553B_RTMCC_TBW_MASK ) )
+    ( ( ( _val ) << GR1553B_RTMCC_TBW_SHIFT ) & GR1553B_RTMCC_TBW_MASK ) )
 #define GR1553B_RTMCC_TBW( _val ) \
-  ( ( ( _val ) << GR1553B_RTMCC_TBW_SHIFT ) & \
-    GR1553B_RTMCC_TBW_MASK )
+  ( ( ( _val ) << GR1553B_RTMCC_TBW_SHIFT ) & GR1553B_RTMCC_TBW_MASK )
 
 #define GR1553B_RTMCC_TVW_SHIFT 12
-#define GR1553B_RTMCC_TVW_MASK 0x3000U
+#define GR1553B_RTMCC_TVW_MASK  0x3000U
 #define GR1553B_RTMCC_TVW_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_RTMCC_TVW_MASK ) >> \
-    GR1553B_RTMCC_TVW_SHIFT )
-#define GR1553B_RTMCC_TVW_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_RTMCC_TVW_MASK ) >> GR1553B_RTMCC_TVW_SHIFT )
+#define GR1553B_RTMCC_TVW_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_RTMCC_TVW_MASK ) | \
-    ( ( ( _val ) << GR1553B_RTMCC_TVW_SHIFT ) & \
-      GR1553B_RTMCC_TVW_MASK ) )
+    ( ( ( _val ) << GR1553B_RTMCC_TVW_SHIFT ) & GR1553B_RTMCC_TVW_MASK ) )
 #define GR1553B_RTMCC_TVW( _val ) \
-  ( ( ( _val ) << GR1553B_RTMCC_TVW_SHIFT ) & \
-    GR1553B_RTMCC_TVW_MASK )
+  ( ( ( _val ) << GR1553B_RTMCC_TVW_SHIFT ) & GR1553B_RTMCC_TVW_MASK )
 
 #define GR1553B_RTMCC_TSB_SHIFT 10
-#define GR1553B_RTMCC_TSB_MASK 0xc00U
+#define GR1553B_RTMCC_TSB_MASK  0xc00U
 #define GR1553B_RTMCC_TSB_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_RTMCC_TSB_MASK ) >> \
-    GR1553B_RTMCC_TSB_SHIFT )
-#define GR1553B_RTMCC_TSB_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_RTMCC_TSB_MASK ) >> GR1553B_RTMCC_TSB_SHIFT )
+#define GR1553B_RTMCC_TSB_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_RTMCC_TSB_MASK ) | \
-    ( ( ( _val ) << GR1553B_RTMCC_TSB_SHIFT ) & \
-      GR1553B_RTMCC_TSB_MASK ) )
+    ( ( ( _val ) << GR1553B_RTMCC_TSB_SHIFT ) & GR1553B_RTMCC_TSB_MASK ) )
 #define GR1553B_RTMCC_TSB( _val ) \
-  ( ( ( _val ) << GR1553B_RTMCC_TSB_SHIFT ) & \
-    GR1553B_RTMCC_TSB_MASK )
+  ( ( ( _val ) << GR1553B_RTMCC_TSB_SHIFT ) & GR1553B_RTMCC_TSB_MASK )
 
 #define GR1553B_RTMCC_TS_SHIFT 8
-#define GR1553B_RTMCC_TS_MASK 0x300U
+#define GR1553B_RTMCC_TS_MASK  0x300U
 #define GR1553B_RTMCC_TS_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_RTMCC_TS_MASK ) >> \
-    GR1553B_RTMCC_TS_SHIFT )
-#define GR1553B_RTMCC_TS_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_RTMCC_TS_MASK ) >> GR1553B_RTMCC_TS_SHIFT )
+#define GR1553B_RTMCC_TS_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_RTMCC_TS_MASK ) | \
-    ( ( ( _val ) << GR1553B_RTMCC_TS_SHIFT ) & \
-      GR1553B_RTMCC_TS_MASK ) )
+    ( ( ( _val ) << GR1553B_RTMCC_TS_SHIFT ) & GR1553B_RTMCC_TS_MASK ) )
 #define GR1553B_RTMCC_TS( _val ) \
-  ( ( ( _val ) << GR1553B_RTMCC_TS_SHIFT ) & \
-    GR1553B_RTMCC_TS_MASK )
+  ( ( ( _val ) << GR1553B_RTMCC_TS_SHIFT ) & GR1553B_RTMCC_TS_MASK )
 
 #define GR1553B_RTMCC_SDB_SHIFT 6
-#define GR1553B_RTMCC_SDB_MASK 0xc0U
+#define GR1553B_RTMCC_SDB_MASK  0xc0U
 #define GR1553B_RTMCC_SDB_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_RTMCC_SDB_MASK ) >> \
-    GR1553B_RTMCC_SDB_SHIFT )
-#define GR1553B_RTMCC_SDB_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_RTMCC_SDB_MASK ) >> GR1553B_RTMCC_SDB_SHIFT )
+#define GR1553B_RTMCC_SDB_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_RTMCC_SDB_MASK ) | \
-    ( ( ( _val ) << GR1553B_RTMCC_SDB_SHIFT ) & \
-      GR1553B_RTMCC_SDB_MASK ) )
+    ( ( ( _val ) << GR1553B_RTMCC_SDB_SHIFT ) & GR1553B_RTMCC_SDB_MASK ) )
 #define GR1553B_RTMCC_SDB( _val ) \
-  ( ( ( _val ) << GR1553B_RTMCC_SDB_SHIFT ) & \
-    GR1553B_RTMCC_SDB_MASK )
+  ( ( ( _val ) << GR1553B_RTMCC_SDB_SHIFT ) & GR1553B_RTMCC_SDB_MASK )
 
 #define GR1553B_RTMCC_SD_SHIFT 4
-#define GR1553B_RTMCC_SD_MASK 0x30U
+#define GR1553B_RTMCC_SD_MASK  0x30U
 #define GR1553B_RTMCC_SD_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_RTMCC_SD_MASK ) >> \
-    GR1553B_RTMCC_SD_SHIFT )
-#define GR1553B_RTMCC_SD_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_RTMCC_SD_MASK ) >> GR1553B_RTMCC_SD_SHIFT )
+#define GR1553B_RTMCC_SD_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_RTMCC_SD_MASK ) | \
-    ( ( ( _val ) << GR1553B_RTMCC_SD_SHIFT ) & \
-      GR1553B_RTMCC_SD_MASK ) )
+    ( ( ( _val ) << GR1553B_RTMCC_SD_SHIFT ) & GR1553B_RTMCC_SD_MASK ) )
 #define GR1553B_RTMCC_SD( _val ) \
-  ( ( ( _val ) << GR1553B_RTMCC_SD_SHIFT ) & \
-    GR1553B_RTMCC_SD_MASK )
+  ( ( ( _val ) << GR1553B_RTMCC_SD_SHIFT ) & GR1553B_RTMCC_SD_MASK )
 
 #define GR1553B_RTMCC_SB_SHIFT 2
-#define GR1553B_RTMCC_SB_MASK 0xcU
+#define GR1553B_RTMCC_SB_MASK  0xcU
 #define GR1553B_RTMCC_SB_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_RTMCC_SB_MASK ) >> \
-    GR1553B_RTMCC_SB_SHIFT )
-#define GR1553B_RTMCC_SB_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_RTMCC_SB_MASK ) >> GR1553B_RTMCC_SB_SHIFT )
+#define GR1553B_RTMCC_SB_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_RTMCC_SB_MASK ) | \
-    ( ( ( _val ) << GR1553B_RTMCC_SB_SHIFT ) & \
-      GR1553B_RTMCC_SB_MASK ) )
+    ( ( ( _val ) << GR1553B_RTMCC_SB_SHIFT ) & GR1553B_RTMCC_SB_MASK ) )
 #define GR1553B_RTMCC_SB( _val ) \
-  ( ( ( _val ) << GR1553B_RTMCC_SB_SHIFT ) & \
-    GR1553B_RTMCC_SB_MASK )
+  ( ( ( _val ) << GR1553B_RTMCC_SB_SHIFT ) & GR1553B_RTMCC_SB_MASK )
 
 #define GR1553B_RTMCC_S_SHIFT 0
-#define GR1553B_RTMCC_S_MASK 0x3U
+#define GR1553B_RTMCC_S_MASK  0x3U
 #define GR1553B_RTMCC_S_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_RTMCC_S_MASK ) >> \
-    GR1553B_RTMCC_S_SHIFT )
-#define GR1553B_RTMCC_S_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_RTMCC_S_MASK ) >> GR1553B_RTMCC_S_SHIFT )
+#define GR1553B_RTMCC_S_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_RTMCC_S_MASK ) | \
-    ( ( ( _val ) << GR1553B_RTMCC_S_SHIFT ) & \
-      GR1553B_RTMCC_S_MASK ) )
+    ( ( ( _val ) << GR1553B_RTMCC_S_SHIFT ) & GR1553B_RTMCC_S_MASK ) )
 #define GR1553B_RTMCC_S( _val ) \
-  ( ( ( _val ) << GR1553B_RTMCC_S_SHIFT ) & \
-    GR1553B_RTMCC_S_MASK )
+  ( ( ( _val ) << GR1553B_RTMCC_S_SHIFT ) & GR1553B_RTMCC_S_MASK )
 
 /** @} */
 
@@ -852,30 +748,24 @@ extern "C" {
  */
 
 #define GR1553B_RTTTC_TRES_SHIFT 16
-#define GR1553B_RTTTC_TRES_MASK 0xffff0000U
+#define GR1553B_RTTTC_TRES_MASK  0xffff0000U
 #define GR1553B_RTTTC_TRES_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_RTTTC_TRES_MASK ) >> \
-    GR1553B_RTTTC_TRES_SHIFT )
-#define GR1553B_RTTTC_TRES_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_RTTTC_TRES_MASK ) >> GR1553B_RTTTC_TRES_SHIFT )
+#define GR1553B_RTTTC_TRES_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_RTTTC_TRES_MASK ) | \
-    ( ( ( _val ) << GR1553B_RTTTC_TRES_SHIFT ) & \
-      GR1553B_RTTTC_TRES_MASK ) )
+    ( ( ( _val ) << GR1553B_RTTTC_TRES_SHIFT ) & GR1553B_RTTTC_TRES_MASK ) )
 #define GR1553B_RTTTC_TRES( _val ) \
-  ( ( ( _val ) << GR1553B_RTTTC_TRES_SHIFT ) & \
-    GR1553B_RTTTC_TRES_MASK )
+  ( ( ( _val ) << GR1553B_RTTTC_TRES_SHIFT ) & GR1553B_RTTTC_TRES_MASK )
 
 #define GR1553B_RTTTC_TVAL_SHIFT 0
-#define GR1553B_RTTTC_TVAL_MASK 0xffffU
+#define GR1553B_RTTTC_TVAL_MASK  0xffffU
 #define GR1553B_RTTTC_TVAL_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_RTTTC_TVAL_MASK ) >> \
-    GR1553B_RTTTC_TVAL_SHIFT )
-#define GR1553B_RTTTC_TVAL_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_RTTTC_TVAL_MASK ) >> GR1553B_RTTTC_TVAL_SHIFT )
+#define GR1553B_RTTTC_TVAL_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_RTTTC_TVAL_MASK ) | \
-    ( ( ( _val ) << GR1553B_RTTTC_TVAL_SHIFT ) & \
-      GR1553B_RTTTC_TVAL_MASK ) )
+    ( ( ( _val ) << GR1553B_RTTTC_TVAL_SHIFT ) & GR1553B_RTTTC_TVAL_MASK ) )
 #define GR1553B_RTTTC_TVAL( _val ) \
-  ( ( ( _val ) << GR1553B_RTTTC_TVAL_SHIFT ) & \
-    GR1553B_RTTTC_TVAL_MASK )
+  ( ( ( _val ) << GR1553B_RTTTC_TVAL_SHIFT ) & GR1553B_RTTTC_TVAL_MASK )
 
 /** @} */
 
@@ -889,17 +779,14 @@ extern "C" {
  */
 
 #define GR1553B_RTELM_MASK_SHIFT 0
-#define GR1553B_RTELM_MASK_MASK 0xffffffffU
+#define GR1553B_RTELM_MASK_MASK  0xffffffffU
 #define GR1553B_RTELM_MASK_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_RTELM_MASK_MASK ) >> \
-    GR1553B_RTELM_MASK_SHIFT )
-#define GR1553B_RTELM_MASK_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_RTELM_MASK_MASK ) >> GR1553B_RTELM_MASK_SHIFT )
+#define GR1553B_RTELM_MASK_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_RTELM_MASK_MASK ) | \
-    ( ( ( _val ) << GR1553B_RTELM_MASK_SHIFT ) & \
-      GR1553B_RTELM_MASK_MASK ) )
+    ( ( ( _val ) << GR1553B_RTELM_MASK_SHIFT ) & GR1553B_RTELM_MASK_MASK ) )
 #define GR1553B_RTELM_MASK( _val ) \
-  ( ( ( _val ) << GR1553B_RTELM_MASK_SHIFT ) & \
-    GR1553B_RTELM_MASK_MASK )
+  ( ( ( _val ) << GR1553B_RTELM_MASK_SHIFT ) & GR1553B_RTELM_MASK_MASK )
 
 /** @} */
 
@@ -913,17 +800,15 @@ extern "C" {
  */
 
 #define GR1553B_RTELP_POINTER_SHIFT 0
-#define GR1553B_RTELP_POINTER_MASK 0xffffffffU
+#define GR1553B_RTELP_POINTER_MASK  0xffffffffU
 #define GR1553B_RTELP_POINTER_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_RTELP_POINTER_MASK ) >> \
-    GR1553B_RTELP_POINTER_SHIFT )
-#define GR1553B_RTELP_POINTER_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GR1553B_RTELP_POINTER_MASK ) | \
+  ( ( ( _reg ) & GR1553B_RTELP_POINTER_MASK ) >> GR1553B_RTELP_POINTER_SHIFT )
+#define GR1553B_RTELP_POINTER_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GR1553B_RTELP_POINTER_MASK ) |    \
     ( ( ( _val ) << GR1553B_RTELP_POINTER_SHIFT ) & \
       GR1553B_RTELP_POINTER_MASK ) )
 #define GR1553B_RTELP_POINTER( _val ) \
-  ( ( ( _val ) << GR1553B_RTELP_POINTER_SHIFT ) & \
-    GR1553B_RTELP_POINTER_MASK )
+  ( ( ( _val ) << GR1553B_RTELP_POINTER_SHIFT ) & GR1553B_RTELP_POINTER_MASK )
 
 /** @} */
 
@@ -937,15 +822,15 @@ extern "C" {
  */
 
 #define GR1553B_RTELIP_POINTER_SHIFT 0
-#define GR1553B_RTELIP_POINTER_MASK 0xffffffffU
-#define GR1553B_RTELIP_POINTER_GET( _reg ) \
+#define GR1553B_RTELIP_POINTER_MASK  0xffffffffU
+#define GR1553B_RTELIP_POINTER_GET( _reg )        \
   ( ( ( _reg ) & GR1553B_RTELIP_POINTER_MASK ) >> \
     GR1553B_RTELIP_POINTER_SHIFT )
-#define GR1553B_RTELIP_POINTER_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GR1553B_RTELIP_POINTER_MASK ) | \
+#define GR1553B_RTELIP_POINTER_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GR1553B_RTELIP_POINTER_MASK ) |    \
     ( ( ( _val ) << GR1553B_RTELIP_POINTER_SHIFT ) & \
       GR1553B_RTELIP_POINTER_MASK ) )
-#define GR1553B_RTELIP_POINTER( _val ) \
+#define GR1553B_RTELIP_POINTER( _val )             \
   ( ( ( _val ) << GR1553B_RTELIP_POINTER_SHIFT ) & \
     GR1553B_RTELIP_POINTER_MASK )
 
@@ -974,17 +859,14 @@ extern "C" {
  */
 
 #define GR1553B_BMC_BMKEY_SHIFT 16
-#define GR1553B_BMC_BMKEY_MASK 0xffff0000U
+#define GR1553B_BMC_BMKEY_MASK  0xffff0000U
 #define GR1553B_BMC_BMKEY_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_BMC_BMKEY_MASK ) >> \
-    GR1553B_BMC_BMKEY_SHIFT )
-#define GR1553B_BMC_BMKEY_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_BMC_BMKEY_MASK ) >> GR1553B_BMC_BMKEY_SHIFT )
+#define GR1553B_BMC_BMKEY_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_BMC_BMKEY_MASK ) | \
-    ( ( ( _val ) << GR1553B_BMC_BMKEY_SHIFT ) & \
-      GR1553B_BMC_BMKEY_MASK ) )
+    ( ( ( _val ) << GR1553B_BMC_BMKEY_SHIFT ) & GR1553B_BMC_BMKEY_MASK ) )
 #define GR1553B_BMC_BMKEY( _val ) \
-  ( ( ( _val ) << GR1553B_BMC_BMKEY_SHIFT ) & \
-    GR1553B_BMC_BMKEY_MASK )
+  ( ( ( _val ) << GR1553B_BMC_BMKEY_SHIFT ) & GR1553B_BMC_BMKEY_MASK )
 
 #define GR1553B_BMC_WRSTP 0x20U
 
@@ -1010,17 +892,15 @@ extern "C" {
  */
 
 #define GR1553B_BMRTAF_MASK_SHIFT 0
-#define GR1553B_BMRTAF_MASK_MASK 0xffffffffU
+#define GR1553B_BMRTAF_MASK_MASK  0xffffffffU
 #define GR1553B_BMRTAF_MASK_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_BMRTAF_MASK_MASK ) >> \
-    GR1553B_BMRTAF_MASK_SHIFT )
-#define GR1553B_BMRTAF_MASK_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GR1553B_BMRTAF_MASK_MASK ) | \
+  ( ( ( _reg ) & GR1553B_BMRTAF_MASK_MASK ) >> GR1553B_BMRTAF_MASK_SHIFT )
+#define GR1553B_BMRTAF_MASK_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GR1553B_BMRTAF_MASK_MASK ) |    \
     ( ( ( _val ) << GR1553B_BMRTAF_MASK_SHIFT ) & \
       GR1553B_BMRTAF_MASK_MASK ) )
 #define GR1553B_BMRTAF_MASK( _val ) \
-  ( ( ( _val ) << GR1553B_BMRTAF_MASK_SHIFT ) & \
-    GR1553B_BMRTAF_MASK_MASK )
+  ( ( ( _val ) << GR1553B_BMRTAF_MASK_SHIFT ) & GR1553B_BMRTAF_MASK_MASK )
 
 /** @} */
 
@@ -1034,17 +914,15 @@ extern "C" {
  */
 
 #define GR1553B_BMRTSF_MASK_SHIFT 0
-#define GR1553B_BMRTSF_MASK_MASK 0xffffffffU
+#define GR1553B_BMRTSF_MASK_MASK  0xffffffffU
 #define GR1553B_BMRTSF_MASK_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_BMRTSF_MASK_MASK ) >> \
-    GR1553B_BMRTSF_MASK_SHIFT )
-#define GR1553B_BMRTSF_MASK_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GR1553B_BMRTSF_MASK_MASK ) | \
+  ( ( ( _reg ) & GR1553B_BMRTSF_MASK_MASK ) >> GR1553B_BMRTSF_MASK_SHIFT )
+#define GR1553B_BMRTSF_MASK_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GR1553B_BMRTSF_MASK_MASK ) |    \
     ( ( ( _val ) << GR1553B_BMRTSF_MASK_SHIFT ) & \
       GR1553B_BMRTSF_MASK_MASK ) )
 #define GR1553B_BMRTSF_MASK( _val ) \
-  ( ( ( _val ) << GR1553B_BMRTSF_MASK_SHIFT ) & \
-    GR1553B_BMRTSF_MASK_MASK )
+  ( ( ( _val ) << GR1553B_BMRTSF_MASK_SHIFT ) & GR1553B_BMRTSF_MASK_MASK )
 
 /** @} */
 
@@ -1106,17 +984,15 @@ extern "C" {
  */
 
 #define GR1553B_BMLBS_START_SHIFT 0
-#define GR1553B_BMLBS_START_MASK 0xffffffffU
+#define GR1553B_BMLBS_START_MASK  0xffffffffU
 #define GR1553B_BMLBS_START_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_BMLBS_START_MASK ) >> \
-    GR1553B_BMLBS_START_SHIFT )
-#define GR1553B_BMLBS_START_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GR1553B_BMLBS_START_MASK ) | \
+  ( ( ( _reg ) & GR1553B_BMLBS_START_MASK ) >> GR1553B_BMLBS_START_SHIFT )
+#define GR1553B_BMLBS_START_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GR1553B_BMLBS_START_MASK ) |    \
     ( ( ( _val ) << GR1553B_BMLBS_START_SHIFT ) & \
       GR1553B_BMLBS_START_MASK ) )
 #define GR1553B_BMLBS_START( _val ) \
-  ( ( ( _val ) << GR1553B_BMLBS_START_SHIFT ) & \
-    GR1553B_BMLBS_START_MASK )
+  ( ( ( _val ) << GR1553B_BMLBS_START_SHIFT ) & GR1553B_BMLBS_START_MASK )
 
 /** @} */
 
@@ -1129,17 +1005,14 @@ extern "C" {
  */
 
 #define GR1553B_BMLBE_END_SHIFT 0
-#define GR1553B_BMLBE_END_MASK 0xffffffffU
+#define GR1553B_BMLBE_END_MASK  0xffffffffU
 #define GR1553B_BMLBE_END_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_BMLBE_END_MASK ) >> \
-    GR1553B_BMLBE_END_SHIFT )
-#define GR1553B_BMLBE_END_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_BMLBE_END_MASK ) >> GR1553B_BMLBE_END_SHIFT )
+#define GR1553B_BMLBE_END_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_BMLBE_END_MASK ) | \
-    ( ( ( _val ) << GR1553B_BMLBE_END_SHIFT ) & \
-      GR1553B_BMLBE_END_MASK ) )
+    ( ( ( _val ) << GR1553B_BMLBE_END_SHIFT ) & GR1553B_BMLBE_END_MASK ) )
 #define GR1553B_BMLBE_END( _val ) \
-  ( ( ( _val ) << GR1553B_BMLBE_END_SHIFT ) & \
-    GR1553B_BMLBE_END_MASK )
+  ( ( ( _val ) << GR1553B_BMLBE_END_SHIFT ) & GR1553B_BMLBE_END_MASK )
 
 /** @} */
 
@@ -1152,15 +1025,15 @@ extern "C" {
  */
 
 #define GR1553B_BMLBP_POSITION_SHIFT 0
-#define GR1553B_BMLBP_POSITION_MASK 0xffffffffU
-#define GR1553B_BMLBP_POSITION_GET( _reg ) \
+#define GR1553B_BMLBP_POSITION_MASK  0xffffffffU
+#define GR1553B_BMLBP_POSITION_GET( _reg )        \
   ( ( ( _reg ) & GR1553B_BMLBP_POSITION_MASK ) >> \
     GR1553B_BMLBP_POSITION_SHIFT )
-#define GR1553B_BMLBP_POSITION_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GR1553B_BMLBP_POSITION_MASK ) | \
+#define GR1553B_BMLBP_POSITION_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GR1553B_BMLBP_POSITION_MASK ) |    \
     ( ( ( _val ) << GR1553B_BMLBP_POSITION_SHIFT ) & \
       GR1553B_BMLBP_POSITION_MASK ) )
-#define GR1553B_BMLBP_POSITION( _val ) \
+#define GR1553B_BMLBP_POSITION( _val )             \
   ( ( ( _val ) << GR1553B_BMLBP_POSITION_SHIFT ) & \
     GR1553B_BMLBP_POSITION_MASK )
 
@@ -1176,30 +1049,24 @@ extern "C" {
  */
 
 #define GR1553B_BMTTC_TRES_SHIFT 24
-#define GR1553B_BMTTC_TRES_MASK 0xff000000U
+#define GR1553B_BMTTC_TRES_MASK  0xff000000U
 #define GR1553B_BMTTC_TRES_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_BMTTC_TRES_MASK ) >> \
-    GR1553B_BMTTC_TRES_SHIFT )
-#define GR1553B_BMTTC_TRES_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_BMTTC_TRES_MASK ) >> GR1553B_BMTTC_TRES_SHIFT )
+#define GR1553B_BMTTC_TRES_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_BMTTC_TRES_MASK ) | \
-    ( ( ( _val ) << GR1553B_BMTTC_TRES_SHIFT ) & \
-      GR1553B_BMTTC_TRES_MASK ) )
+    ( ( ( _val ) << GR1553B_BMTTC_TRES_SHIFT ) & GR1553B_BMTTC_TRES_MASK ) )
 #define GR1553B_BMTTC_TRES( _val ) \
-  ( ( ( _val ) << GR1553B_BMTTC_TRES_SHIFT ) & \
-    GR1553B_BMTTC_TRES_MASK )
+  ( ( ( _val ) << GR1553B_BMTTC_TRES_SHIFT ) & GR1553B_BMTTC_TRES_MASK )
 
 #define GR1553B_BMTTC_TVAL_SHIFT 0
-#define GR1553B_BMTTC_TVAL_MASK 0xffffffU
+#define GR1553B_BMTTC_TVAL_MASK  0xffffffU
 #define GR1553B_BMTTC_TVAL_GET( _reg ) \
-  ( ( ( _reg ) & GR1553B_BMTTC_TVAL_MASK ) >> \
-    GR1553B_BMTTC_TVAL_SHIFT )
-#define GR1553B_BMTTC_TVAL_SET( _reg, _val ) \
+  ( ( ( _reg ) & GR1553B_BMTTC_TVAL_MASK ) >> GR1553B_BMTTC_TVAL_SHIFT )
+#define GR1553B_BMTTC_TVAL_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GR1553B_BMTTC_TVAL_MASK ) | \
-    ( ( ( _val ) << GR1553B_BMTTC_TVAL_SHIFT ) & \
-      GR1553B_BMTTC_TVAL_MASK ) )
+    ( ( ( _val ) << GR1553B_BMTTC_TVAL_SHIFT ) & GR1553B_BMTTC_TVAL_MASK ) )
 #define GR1553B_BMTTC_TVAL( _val ) \
-  ( ( ( _val ) << GR1553B_BMTTC_TVAL_SHIFT ) & \
-    GR1553B_BMTTC_TVAL_MASK )
+  ( ( ( _val ) << GR1553B_BMTTC_TVAL_SHIFT ) & GR1553B_BMTTC_TVAL_MASK )
 
 /** @} */
 

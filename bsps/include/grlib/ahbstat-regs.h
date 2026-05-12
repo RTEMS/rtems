@@ -96,30 +96,25 @@ extern "C" {
 #define AHBSTAT_AHBS_HWRITE 0x80U
 
 #define AHBSTAT_AHBS_HMASTER_SHIFT 3
-#define AHBSTAT_AHBS_HMASTER_MASK 0x78U
+#define AHBSTAT_AHBS_HMASTER_MASK  0x78U
 #define AHBSTAT_AHBS_HMASTER_GET( _reg ) \
-  ( ( ( _reg ) & AHBSTAT_AHBS_HMASTER_MASK ) >> \
-    AHBSTAT_AHBS_HMASTER_SHIFT )
-#define AHBSTAT_AHBS_HMASTER_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~AHBSTAT_AHBS_HMASTER_MASK ) | \
+  ( ( ( _reg ) & AHBSTAT_AHBS_HMASTER_MASK ) >> AHBSTAT_AHBS_HMASTER_SHIFT )
+#define AHBSTAT_AHBS_HMASTER_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~AHBSTAT_AHBS_HMASTER_MASK ) |    \
     ( ( ( _val ) << AHBSTAT_AHBS_HMASTER_SHIFT ) & \
       AHBSTAT_AHBS_HMASTER_MASK ) )
 #define AHBSTAT_AHBS_HMASTER( _val ) \
-  ( ( ( _val ) << AHBSTAT_AHBS_HMASTER_SHIFT ) & \
-    AHBSTAT_AHBS_HMASTER_MASK )
+  ( ( ( _val ) << AHBSTAT_AHBS_HMASTER_SHIFT ) & AHBSTAT_AHBS_HMASTER_MASK )
 
 #define AHBSTAT_AHBS_HSIZE_SHIFT 0
-#define AHBSTAT_AHBS_HSIZE_MASK 0x7U
+#define AHBSTAT_AHBS_HSIZE_MASK  0x7U
 #define AHBSTAT_AHBS_HSIZE_GET( _reg ) \
-  ( ( ( _reg ) & AHBSTAT_AHBS_HSIZE_MASK ) >> \
-    AHBSTAT_AHBS_HSIZE_SHIFT )
-#define AHBSTAT_AHBS_HSIZE_SET( _reg, _val ) \
+  ( ( ( _reg ) & AHBSTAT_AHBS_HSIZE_MASK ) >> AHBSTAT_AHBS_HSIZE_SHIFT )
+#define AHBSTAT_AHBS_HSIZE_SET( _reg, _val )  \
   ( ( ( _reg ) & ~AHBSTAT_AHBS_HSIZE_MASK ) | \
-    ( ( ( _val ) << AHBSTAT_AHBS_HSIZE_SHIFT ) & \
-      AHBSTAT_AHBS_HSIZE_MASK ) )
+    ( ( ( _val ) << AHBSTAT_AHBS_HSIZE_SHIFT ) & AHBSTAT_AHBS_HSIZE_MASK ) )
 #define AHBSTAT_AHBS_HSIZE( _val ) \
-  ( ( ( _val ) << AHBSTAT_AHBS_HSIZE_SHIFT ) & \
-    AHBSTAT_AHBS_HSIZE_MASK )
+  ( ( ( _val ) << AHBSTAT_AHBS_HSIZE_SHIFT ) & AHBSTAT_AHBS_HSIZE_MASK )
 
 /** @} */
 
@@ -133,17 +128,15 @@ extern "C" {
  */
 
 #define AHBSTAT_AHBFAR_HADDR_SHIFT 0
-#define AHBSTAT_AHBFAR_HADDR_MASK 0xffffffffU
+#define AHBSTAT_AHBFAR_HADDR_MASK  0xffffffffU
 #define AHBSTAT_AHBFAR_HADDR_GET( _reg ) \
-  ( ( ( _reg ) & AHBSTAT_AHBFAR_HADDR_MASK ) >> \
-    AHBSTAT_AHBFAR_HADDR_SHIFT )
-#define AHBSTAT_AHBFAR_HADDR_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~AHBSTAT_AHBFAR_HADDR_MASK ) | \
+  ( ( ( _reg ) & AHBSTAT_AHBFAR_HADDR_MASK ) >> AHBSTAT_AHBFAR_HADDR_SHIFT )
+#define AHBSTAT_AHBFAR_HADDR_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~AHBSTAT_AHBFAR_HADDR_MASK ) |    \
     ( ( ( _val ) << AHBSTAT_AHBFAR_HADDR_SHIFT ) & \
       AHBSTAT_AHBFAR_HADDR_MASK ) )
 #define AHBSTAT_AHBFAR_HADDR( _val ) \
-  ( ( ( _val ) << AHBSTAT_AHBFAR_HADDR_SHIFT ) & \
-    AHBSTAT_AHBFAR_HADDR_MASK )
+  ( ( ( _val ) << AHBSTAT_AHBFAR_HADDR_SHIFT ) & AHBSTAT_AHBFAR_HADDR_MASK )
 
 /** @} */
 

@@ -82,69 +82,55 @@ extern "C" {
  */
 
 #define GRCAN_CANCONF_SCALER_SHIFT 24
-#define GRCAN_CANCONF_SCALER_MASK 0xff000000U
+#define GRCAN_CANCONF_SCALER_MASK  0xff000000U
 #define GRCAN_CANCONF_SCALER_GET( _reg ) \
-  ( ( ( _reg ) & GRCAN_CANCONF_SCALER_MASK ) >> \
-    GRCAN_CANCONF_SCALER_SHIFT )
-#define GRCAN_CANCONF_SCALER_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRCAN_CANCONF_SCALER_MASK ) | \
+  ( ( ( _reg ) & GRCAN_CANCONF_SCALER_MASK ) >> GRCAN_CANCONF_SCALER_SHIFT )
+#define GRCAN_CANCONF_SCALER_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRCAN_CANCONF_SCALER_MASK ) |    \
     ( ( ( _val ) << GRCAN_CANCONF_SCALER_SHIFT ) & \
       GRCAN_CANCONF_SCALER_MASK ) )
 #define GRCAN_CANCONF_SCALER( _val ) \
-  ( ( ( _val ) << GRCAN_CANCONF_SCALER_SHIFT ) & \
-    GRCAN_CANCONF_SCALER_MASK )
+  ( ( ( _val ) << GRCAN_CANCONF_SCALER_SHIFT ) & GRCAN_CANCONF_SCALER_MASK )
 
 #define GRCAN_CANCONF_PS1_SHIFT 20
-#define GRCAN_CANCONF_PS1_MASK 0xf00000U
+#define GRCAN_CANCONF_PS1_MASK  0xf00000U
 #define GRCAN_CANCONF_PS1_GET( _reg ) \
-  ( ( ( _reg ) & GRCAN_CANCONF_PS1_MASK ) >> \
-    GRCAN_CANCONF_PS1_SHIFT )
-#define GRCAN_CANCONF_PS1_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRCAN_CANCONF_PS1_MASK ) >> GRCAN_CANCONF_PS1_SHIFT )
+#define GRCAN_CANCONF_PS1_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRCAN_CANCONF_PS1_MASK ) | \
-    ( ( ( _val ) << GRCAN_CANCONF_PS1_SHIFT ) & \
-      GRCAN_CANCONF_PS1_MASK ) )
+    ( ( ( _val ) << GRCAN_CANCONF_PS1_SHIFT ) & GRCAN_CANCONF_PS1_MASK ) )
 #define GRCAN_CANCONF_PS1( _val ) \
-  ( ( ( _val ) << GRCAN_CANCONF_PS1_SHIFT ) & \
-    GRCAN_CANCONF_PS1_MASK )
+  ( ( ( _val ) << GRCAN_CANCONF_PS1_SHIFT ) & GRCAN_CANCONF_PS1_MASK )
 
 #define GRCAN_CANCONF_PS2_SHIFT 16
-#define GRCAN_CANCONF_PS2_MASK 0xf0000U
+#define GRCAN_CANCONF_PS2_MASK  0xf0000U
 #define GRCAN_CANCONF_PS2_GET( _reg ) \
-  ( ( ( _reg ) & GRCAN_CANCONF_PS2_MASK ) >> \
-    GRCAN_CANCONF_PS2_SHIFT )
-#define GRCAN_CANCONF_PS2_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRCAN_CANCONF_PS2_MASK ) >> GRCAN_CANCONF_PS2_SHIFT )
+#define GRCAN_CANCONF_PS2_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRCAN_CANCONF_PS2_MASK ) | \
-    ( ( ( _val ) << GRCAN_CANCONF_PS2_SHIFT ) & \
-      GRCAN_CANCONF_PS2_MASK ) )
+    ( ( ( _val ) << GRCAN_CANCONF_PS2_SHIFT ) & GRCAN_CANCONF_PS2_MASK ) )
 #define GRCAN_CANCONF_PS2( _val ) \
-  ( ( ( _val ) << GRCAN_CANCONF_PS2_SHIFT ) & \
-    GRCAN_CANCONF_PS2_MASK )
+  ( ( ( _val ) << GRCAN_CANCONF_PS2_SHIFT ) & GRCAN_CANCONF_PS2_MASK )
 
 #define GRCAN_CANCONF_RSJ_SHIFT 12
-#define GRCAN_CANCONF_RSJ_MASK 0x7000U
+#define GRCAN_CANCONF_RSJ_MASK  0x7000U
 #define GRCAN_CANCONF_RSJ_GET( _reg ) \
-  ( ( ( _reg ) & GRCAN_CANCONF_RSJ_MASK ) >> \
-    GRCAN_CANCONF_RSJ_SHIFT )
-#define GRCAN_CANCONF_RSJ_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRCAN_CANCONF_RSJ_MASK ) >> GRCAN_CANCONF_RSJ_SHIFT )
+#define GRCAN_CANCONF_RSJ_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRCAN_CANCONF_RSJ_MASK ) | \
-    ( ( ( _val ) << GRCAN_CANCONF_RSJ_SHIFT ) & \
-      GRCAN_CANCONF_RSJ_MASK ) )
+    ( ( ( _val ) << GRCAN_CANCONF_RSJ_SHIFT ) & GRCAN_CANCONF_RSJ_MASK ) )
 #define GRCAN_CANCONF_RSJ( _val ) \
-  ( ( ( _val ) << GRCAN_CANCONF_RSJ_SHIFT ) & \
-    GRCAN_CANCONF_RSJ_MASK )
+  ( ( ( _val ) << GRCAN_CANCONF_RSJ_SHIFT ) & GRCAN_CANCONF_RSJ_MASK )
 
 #define GRCAN_CANCONF_BPR_SHIFT 8
-#define GRCAN_CANCONF_BPR_MASK 0x300U
+#define GRCAN_CANCONF_BPR_MASK  0x300U
 #define GRCAN_CANCONF_BPR_GET( _reg ) \
-  ( ( ( _reg ) & GRCAN_CANCONF_BPR_MASK ) >> \
-    GRCAN_CANCONF_BPR_SHIFT )
-#define GRCAN_CANCONF_BPR_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRCAN_CANCONF_BPR_MASK ) >> GRCAN_CANCONF_BPR_SHIFT )
+#define GRCAN_CANCONF_BPR_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRCAN_CANCONF_BPR_MASK ) | \
-    ( ( ( _val ) << GRCAN_CANCONF_BPR_SHIFT ) & \
-      GRCAN_CANCONF_BPR_MASK ) )
+    ( ( ( _val ) << GRCAN_CANCONF_BPR_SHIFT ) & GRCAN_CANCONF_BPR_MASK ) )
 #define GRCAN_CANCONF_BPR( _val ) \
-  ( ( ( _val ) << GRCAN_CANCONF_BPR_SHIFT ) & \
-    GRCAN_CANCONF_BPR_MASK )
+  ( ( ( _val ) << GRCAN_CANCONF_BPR_SHIFT ) & GRCAN_CANCONF_BPR_MASK )
 
 #define GRCAN_CANCONF_SAM 0x20U
 
@@ -169,54 +155,54 @@ extern "C" {
  */
 
 #define GRCAN_CANSTAT_TXCHANNELS_SHIFT 28
-#define GRCAN_CANSTAT_TXCHANNELS_MASK 0xf0000000U
-#define GRCAN_CANSTAT_TXCHANNELS_GET( _reg ) \
+#define GRCAN_CANSTAT_TXCHANNELS_MASK  0xf0000000U
+#define GRCAN_CANSTAT_TXCHANNELS_GET( _reg )        \
   ( ( ( _reg ) & GRCAN_CANSTAT_TXCHANNELS_MASK ) >> \
     GRCAN_CANSTAT_TXCHANNELS_SHIFT )
-#define GRCAN_CANSTAT_TXCHANNELS_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRCAN_CANSTAT_TXCHANNELS_MASK ) | \
+#define GRCAN_CANSTAT_TXCHANNELS_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRCAN_CANSTAT_TXCHANNELS_MASK ) |    \
     ( ( ( _val ) << GRCAN_CANSTAT_TXCHANNELS_SHIFT ) & \
       GRCAN_CANSTAT_TXCHANNELS_MASK ) )
-#define GRCAN_CANSTAT_TXCHANNELS( _val ) \
+#define GRCAN_CANSTAT_TXCHANNELS( _val )             \
   ( ( ( _val ) << GRCAN_CANSTAT_TXCHANNELS_SHIFT ) & \
     GRCAN_CANSTAT_TXCHANNELS_MASK )
 
 #define GRCAN_CANSTAT_RXCHANNELS_SHIFT 24
-#define GRCAN_CANSTAT_RXCHANNELS_MASK 0xf000000U
-#define GRCAN_CANSTAT_RXCHANNELS_GET( _reg ) \
+#define GRCAN_CANSTAT_RXCHANNELS_MASK  0xf000000U
+#define GRCAN_CANSTAT_RXCHANNELS_GET( _reg )        \
   ( ( ( _reg ) & GRCAN_CANSTAT_RXCHANNELS_MASK ) >> \
     GRCAN_CANSTAT_RXCHANNELS_SHIFT )
-#define GRCAN_CANSTAT_RXCHANNELS_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRCAN_CANSTAT_RXCHANNELS_MASK ) | \
+#define GRCAN_CANSTAT_RXCHANNELS_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRCAN_CANSTAT_RXCHANNELS_MASK ) |    \
     ( ( ( _val ) << GRCAN_CANSTAT_RXCHANNELS_SHIFT ) & \
       GRCAN_CANSTAT_RXCHANNELS_MASK ) )
-#define GRCAN_CANSTAT_RXCHANNELS( _val ) \
+#define GRCAN_CANSTAT_RXCHANNELS( _val )             \
   ( ( ( _val ) << GRCAN_CANSTAT_RXCHANNELS_SHIFT ) & \
     GRCAN_CANSTAT_RXCHANNELS_MASK )
 
 #define GRCAN_CANSTAT_TXERRCNT_SHIFT 16
-#define GRCAN_CANSTAT_TXERRCNT_MASK 0xff0000U
-#define GRCAN_CANSTAT_TXERRCNT_GET( _reg ) \
+#define GRCAN_CANSTAT_TXERRCNT_MASK  0xff0000U
+#define GRCAN_CANSTAT_TXERRCNT_GET( _reg )        \
   ( ( ( _reg ) & GRCAN_CANSTAT_TXERRCNT_MASK ) >> \
     GRCAN_CANSTAT_TXERRCNT_SHIFT )
-#define GRCAN_CANSTAT_TXERRCNT_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRCAN_CANSTAT_TXERRCNT_MASK ) | \
+#define GRCAN_CANSTAT_TXERRCNT_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRCAN_CANSTAT_TXERRCNT_MASK ) |    \
     ( ( ( _val ) << GRCAN_CANSTAT_TXERRCNT_SHIFT ) & \
       GRCAN_CANSTAT_TXERRCNT_MASK ) )
-#define GRCAN_CANSTAT_TXERRCNT( _val ) \
+#define GRCAN_CANSTAT_TXERRCNT( _val )             \
   ( ( ( _val ) << GRCAN_CANSTAT_TXERRCNT_SHIFT ) & \
     GRCAN_CANSTAT_TXERRCNT_MASK )
 
 #define GRCAN_CANSTAT_RXERRCNT_SHIFT 8
-#define GRCAN_CANSTAT_RXERRCNT_MASK 0xff00U
-#define GRCAN_CANSTAT_RXERRCNT_GET( _reg ) \
+#define GRCAN_CANSTAT_RXERRCNT_MASK  0xff00U
+#define GRCAN_CANSTAT_RXERRCNT_GET( _reg )        \
   ( ( ( _reg ) & GRCAN_CANSTAT_RXERRCNT_MASK ) >> \
     GRCAN_CANSTAT_RXERRCNT_SHIFT )
-#define GRCAN_CANSTAT_RXERRCNT_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRCAN_CANSTAT_RXERRCNT_MASK ) | \
+#define GRCAN_CANSTAT_RXERRCNT_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRCAN_CANSTAT_RXERRCNT_MASK ) |    \
     ( ( ( _val ) << GRCAN_CANSTAT_RXERRCNT_SHIFT ) & \
       GRCAN_CANSTAT_RXERRCNT_MASK ) )
-#define GRCAN_CANSTAT_RXERRCNT( _val ) \
+#define GRCAN_CANSTAT_RXERRCNT( _val )             \
   ( ( ( _val ) << GRCAN_CANSTAT_RXERRCNT_SHIFT ) & \
     GRCAN_CANSTAT_RXERRCNT_MASK )
 
@@ -255,17 +241,14 @@ extern "C" {
  */
 
 #define GRCAN_CANMASK_MASK_SHIFT 0
-#define GRCAN_CANMASK_MASK_MASK 0x1fffffffU
+#define GRCAN_CANMASK_MASK_MASK  0x1fffffffU
 #define GRCAN_CANMASK_MASK_GET( _reg ) \
-  ( ( ( _reg ) & GRCAN_CANMASK_MASK_MASK ) >> \
-    GRCAN_CANMASK_MASK_SHIFT )
-#define GRCAN_CANMASK_MASK_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRCAN_CANMASK_MASK_MASK ) >> GRCAN_CANMASK_MASK_SHIFT )
+#define GRCAN_CANMASK_MASK_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRCAN_CANMASK_MASK_MASK ) | \
-    ( ( ( _val ) << GRCAN_CANMASK_MASK_SHIFT ) & \
-      GRCAN_CANMASK_MASK_MASK ) )
+    ( ( ( _val ) << GRCAN_CANMASK_MASK_SHIFT ) & GRCAN_CANMASK_MASK_MASK ) )
 #define GRCAN_CANMASK_MASK( _val ) \
-  ( ( ( _val ) << GRCAN_CANMASK_MASK_SHIFT ) & \
-    GRCAN_CANMASK_MASK_MASK )
+  ( ( ( _val ) << GRCAN_CANMASK_MASK_SHIFT ) & GRCAN_CANMASK_MASK_MASK )
 
 /** @} */
 
@@ -278,17 +261,14 @@ extern "C" {
  */
 
 #define GRCAN_CANCODE_SYNC_SHIFT 0
-#define GRCAN_CANCODE_SYNC_MASK 0x1fffffffU
+#define GRCAN_CANCODE_SYNC_MASK  0x1fffffffU
 #define GRCAN_CANCODE_SYNC_GET( _reg ) \
-  ( ( ( _reg ) & GRCAN_CANCODE_SYNC_MASK ) >> \
-    GRCAN_CANCODE_SYNC_SHIFT )
-#define GRCAN_CANCODE_SYNC_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRCAN_CANCODE_SYNC_MASK ) >> GRCAN_CANCODE_SYNC_SHIFT )
+#define GRCAN_CANCODE_SYNC_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRCAN_CANCODE_SYNC_MASK ) | \
-    ( ( ( _val ) << GRCAN_CANCODE_SYNC_SHIFT ) & \
-      GRCAN_CANCODE_SYNC_MASK ) )
+    ( ( ( _val ) << GRCAN_CANCODE_SYNC_SHIFT ) & GRCAN_CANCODE_SYNC_MASK ) )
 #define GRCAN_CANCODE_SYNC( _val ) \
-  ( ( ( _val ) << GRCAN_CANCODE_SYNC_SHIFT ) & \
-    GRCAN_CANCODE_SYNC_MASK )
+  ( ( ( _val ) << GRCAN_CANCODE_SYNC_SHIFT ) & GRCAN_CANCODE_SYNC_MASK )
 
 /** @} */
 
@@ -319,17 +299,15 @@ extern "C" {
  */
 
 #define GRCAN_CANTXADDR_ADDR_SHIFT 10
-#define GRCAN_CANTXADDR_ADDR_MASK 0xfffffc00U
+#define GRCAN_CANTXADDR_ADDR_MASK  0xfffffc00U
 #define GRCAN_CANTXADDR_ADDR_GET( _reg ) \
-  ( ( ( _reg ) & GRCAN_CANTXADDR_ADDR_MASK ) >> \
-    GRCAN_CANTXADDR_ADDR_SHIFT )
-#define GRCAN_CANTXADDR_ADDR_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRCAN_CANTXADDR_ADDR_MASK ) | \
+  ( ( ( _reg ) & GRCAN_CANTXADDR_ADDR_MASK ) >> GRCAN_CANTXADDR_ADDR_SHIFT )
+#define GRCAN_CANTXADDR_ADDR_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRCAN_CANTXADDR_ADDR_MASK ) |    \
     ( ( ( _val ) << GRCAN_CANTXADDR_ADDR_SHIFT ) & \
       GRCAN_CANTXADDR_ADDR_MASK ) )
 #define GRCAN_CANTXADDR_ADDR( _val ) \
-  ( ( ( _val ) << GRCAN_CANTXADDR_ADDR_SHIFT ) & \
-    GRCAN_CANTXADDR_ADDR_MASK )
+  ( ( ( _val ) << GRCAN_CANTXADDR_ADDR_SHIFT ) & GRCAN_CANTXADDR_ADDR_MASK )
 
 /** @} */
 
@@ -343,17 +321,15 @@ extern "C" {
  */
 
 #define GRCAN_CANTXSIZE_SIZE_SHIFT 6
-#define GRCAN_CANTXSIZE_SIZE_MASK 0x1fffc0U
+#define GRCAN_CANTXSIZE_SIZE_MASK  0x1fffc0U
 #define GRCAN_CANTXSIZE_SIZE_GET( _reg ) \
-  ( ( ( _reg ) & GRCAN_CANTXSIZE_SIZE_MASK ) >> \
-    GRCAN_CANTXSIZE_SIZE_SHIFT )
-#define GRCAN_CANTXSIZE_SIZE_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRCAN_CANTXSIZE_SIZE_MASK ) | \
+  ( ( ( _reg ) & GRCAN_CANTXSIZE_SIZE_MASK ) >> GRCAN_CANTXSIZE_SIZE_SHIFT )
+#define GRCAN_CANTXSIZE_SIZE_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRCAN_CANTXSIZE_SIZE_MASK ) |    \
     ( ( ( _val ) << GRCAN_CANTXSIZE_SIZE_SHIFT ) & \
       GRCAN_CANTXSIZE_SIZE_MASK ) )
 #define GRCAN_CANTXSIZE_SIZE( _val ) \
-  ( ( ( _val ) << GRCAN_CANTXSIZE_SIZE_SHIFT ) & \
-    GRCAN_CANTXSIZE_SIZE_MASK )
+  ( ( ( _val ) << GRCAN_CANTXSIZE_SIZE_SHIFT ) & GRCAN_CANTXSIZE_SIZE_MASK )
 
 /** @} */
 
@@ -366,17 +342,15 @@ extern "C" {
  */
 
 #define GRCAN_CANTXWR_WRITE_SHIFT 4
-#define GRCAN_CANTXWR_WRITE_MASK 0xffff0U
+#define GRCAN_CANTXWR_WRITE_MASK  0xffff0U
 #define GRCAN_CANTXWR_WRITE_GET( _reg ) \
-  ( ( ( _reg ) & GRCAN_CANTXWR_WRITE_MASK ) >> \
-    GRCAN_CANTXWR_WRITE_SHIFT )
-#define GRCAN_CANTXWR_WRITE_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRCAN_CANTXWR_WRITE_MASK ) | \
+  ( ( ( _reg ) & GRCAN_CANTXWR_WRITE_MASK ) >> GRCAN_CANTXWR_WRITE_SHIFT )
+#define GRCAN_CANTXWR_WRITE_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRCAN_CANTXWR_WRITE_MASK ) |    \
     ( ( ( _val ) << GRCAN_CANTXWR_WRITE_SHIFT ) & \
       GRCAN_CANTXWR_WRITE_MASK ) )
 #define GRCAN_CANTXWR_WRITE( _val ) \
-  ( ( ( _val ) << GRCAN_CANTXWR_WRITE_SHIFT ) & \
-    GRCAN_CANTXWR_WRITE_MASK )
+  ( ( ( _val ) << GRCAN_CANTXWR_WRITE_SHIFT ) & GRCAN_CANTXWR_WRITE_MASK )
 
 /** @} */
 
@@ -389,17 +363,14 @@ extern "C" {
  */
 
 #define GRCAN_CANTXRD_READ_SHIFT 4
-#define GRCAN_CANTXRD_READ_MASK 0xffff0U
+#define GRCAN_CANTXRD_READ_MASK  0xffff0U
 #define GRCAN_CANTXRD_READ_GET( _reg ) \
-  ( ( ( _reg ) & GRCAN_CANTXRD_READ_MASK ) >> \
-    GRCAN_CANTXRD_READ_SHIFT )
-#define GRCAN_CANTXRD_READ_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRCAN_CANTXRD_READ_MASK ) >> GRCAN_CANTXRD_READ_SHIFT )
+#define GRCAN_CANTXRD_READ_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRCAN_CANTXRD_READ_MASK ) | \
-    ( ( ( _val ) << GRCAN_CANTXRD_READ_SHIFT ) & \
-      GRCAN_CANTXRD_READ_MASK ) )
+    ( ( ( _val ) << GRCAN_CANTXRD_READ_SHIFT ) & GRCAN_CANTXRD_READ_MASK ) )
 #define GRCAN_CANTXRD_READ( _val ) \
-  ( ( ( _val ) << GRCAN_CANTXRD_READ_SHIFT ) & \
-    GRCAN_CANTXRD_READ_MASK )
+  ( ( ( _val ) << GRCAN_CANTXRD_READ_SHIFT ) & GRCAN_CANTXRD_READ_MASK )
 
 /** @} */
 
@@ -413,17 +384,14 @@ extern "C" {
  */
 
 #define GRCAN_CANTXIRQ_IRQ_SHIFT 4
-#define GRCAN_CANTXIRQ_IRQ_MASK 0xffff0U
+#define GRCAN_CANTXIRQ_IRQ_MASK  0xffff0U
 #define GRCAN_CANTXIRQ_IRQ_GET( _reg ) \
-  ( ( ( _reg ) & GRCAN_CANTXIRQ_IRQ_MASK ) >> \
-    GRCAN_CANTXIRQ_IRQ_SHIFT )
-#define GRCAN_CANTXIRQ_IRQ_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRCAN_CANTXIRQ_IRQ_MASK ) >> GRCAN_CANTXIRQ_IRQ_SHIFT )
+#define GRCAN_CANTXIRQ_IRQ_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRCAN_CANTXIRQ_IRQ_MASK ) | \
-    ( ( ( _val ) << GRCAN_CANTXIRQ_IRQ_SHIFT ) & \
-      GRCAN_CANTXIRQ_IRQ_MASK ) )
+    ( ( ( _val ) << GRCAN_CANTXIRQ_IRQ_SHIFT ) & GRCAN_CANTXIRQ_IRQ_MASK ) )
 #define GRCAN_CANTXIRQ_IRQ( _val ) \
-  ( ( ( _val ) << GRCAN_CANTXIRQ_IRQ_SHIFT ) & \
-    GRCAN_CANTXIRQ_IRQ_MASK )
+  ( ( ( _val ) << GRCAN_CANTXIRQ_IRQ_SHIFT ) & GRCAN_CANTXIRQ_IRQ_MASK )
 
 /** @} */
 
@@ -452,17 +420,15 @@ extern "C" {
  */
 
 #define GRCAN_CANRXADDR_ADDR_SHIFT 10
-#define GRCAN_CANRXADDR_ADDR_MASK 0xfffffc00U
+#define GRCAN_CANRXADDR_ADDR_MASK  0xfffffc00U
 #define GRCAN_CANRXADDR_ADDR_GET( _reg ) \
-  ( ( ( _reg ) & GRCAN_CANRXADDR_ADDR_MASK ) >> \
-    GRCAN_CANRXADDR_ADDR_SHIFT )
-#define GRCAN_CANRXADDR_ADDR_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRCAN_CANRXADDR_ADDR_MASK ) | \
+  ( ( ( _reg ) & GRCAN_CANRXADDR_ADDR_MASK ) >> GRCAN_CANRXADDR_ADDR_SHIFT )
+#define GRCAN_CANRXADDR_ADDR_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRCAN_CANRXADDR_ADDR_MASK ) |    \
     ( ( ( _val ) << GRCAN_CANRXADDR_ADDR_SHIFT ) & \
       GRCAN_CANRXADDR_ADDR_MASK ) )
 #define GRCAN_CANRXADDR_ADDR( _val ) \
-  ( ( ( _val ) << GRCAN_CANRXADDR_ADDR_SHIFT ) & \
-    GRCAN_CANRXADDR_ADDR_MASK )
+  ( ( ( _val ) << GRCAN_CANRXADDR_ADDR_SHIFT ) & GRCAN_CANRXADDR_ADDR_MASK )
 
 /** @} */
 
@@ -476,17 +442,15 @@ extern "C" {
  */
 
 #define GRCAN_CANRXSIZE_SIZE_SHIFT 6
-#define GRCAN_CANRXSIZE_SIZE_MASK 0x1fffc0U
+#define GRCAN_CANRXSIZE_SIZE_MASK  0x1fffc0U
 #define GRCAN_CANRXSIZE_SIZE_GET( _reg ) \
-  ( ( ( _reg ) & GRCAN_CANRXSIZE_SIZE_MASK ) >> \
-    GRCAN_CANRXSIZE_SIZE_SHIFT )
-#define GRCAN_CANRXSIZE_SIZE_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRCAN_CANRXSIZE_SIZE_MASK ) | \
+  ( ( ( _reg ) & GRCAN_CANRXSIZE_SIZE_MASK ) >> GRCAN_CANRXSIZE_SIZE_SHIFT )
+#define GRCAN_CANRXSIZE_SIZE_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRCAN_CANRXSIZE_SIZE_MASK ) |    \
     ( ( ( _val ) << GRCAN_CANRXSIZE_SIZE_SHIFT ) & \
       GRCAN_CANRXSIZE_SIZE_MASK ) )
 #define GRCAN_CANRXSIZE_SIZE( _val ) \
-  ( ( ( _val ) << GRCAN_CANRXSIZE_SIZE_SHIFT ) & \
-    GRCAN_CANRXSIZE_SIZE_MASK )
+  ( ( ( _val ) << GRCAN_CANRXSIZE_SIZE_SHIFT ) & GRCAN_CANRXSIZE_SIZE_MASK )
 
 /** @} */
 
@@ -499,17 +463,15 @@ extern "C" {
  */
 
 #define GRCAN_CANRXWR_WRITE_SHIFT 4
-#define GRCAN_CANRXWR_WRITE_MASK 0xffff0U
+#define GRCAN_CANRXWR_WRITE_MASK  0xffff0U
 #define GRCAN_CANRXWR_WRITE_GET( _reg ) \
-  ( ( ( _reg ) & GRCAN_CANRXWR_WRITE_MASK ) >> \
-    GRCAN_CANRXWR_WRITE_SHIFT )
-#define GRCAN_CANRXWR_WRITE_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRCAN_CANRXWR_WRITE_MASK ) | \
+  ( ( ( _reg ) & GRCAN_CANRXWR_WRITE_MASK ) >> GRCAN_CANRXWR_WRITE_SHIFT )
+#define GRCAN_CANRXWR_WRITE_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRCAN_CANRXWR_WRITE_MASK ) |    \
     ( ( ( _val ) << GRCAN_CANRXWR_WRITE_SHIFT ) & \
       GRCAN_CANRXWR_WRITE_MASK ) )
 #define GRCAN_CANRXWR_WRITE( _val ) \
-  ( ( ( _val ) << GRCAN_CANRXWR_WRITE_SHIFT ) & \
-    GRCAN_CANRXWR_WRITE_MASK )
+  ( ( ( _val ) << GRCAN_CANRXWR_WRITE_SHIFT ) & GRCAN_CANRXWR_WRITE_MASK )
 
 /** @} */
 
@@ -522,17 +484,14 @@ extern "C" {
  */
 
 #define GRCAN_CANRXRD_READ_SHIFT 4
-#define GRCAN_CANRXRD_READ_MASK 0xffff0U
+#define GRCAN_CANRXRD_READ_MASK  0xffff0U
 #define GRCAN_CANRXRD_READ_GET( _reg ) \
-  ( ( ( _reg ) & GRCAN_CANRXRD_READ_MASK ) >> \
-    GRCAN_CANRXRD_READ_SHIFT )
-#define GRCAN_CANRXRD_READ_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRCAN_CANRXRD_READ_MASK ) >> GRCAN_CANRXRD_READ_SHIFT )
+#define GRCAN_CANRXRD_READ_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRCAN_CANRXRD_READ_MASK ) | \
-    ( ( ( _val ) << GRCAN_CANRXRD_READ_SHIFT ) & \
-      GRCAN_CANRXRD_READ_MASK ) )
+    ( ( ( _val ) << GRCAN_CANRXRD_READ_SHIFT ) & GRCAN_CANRXRD_READ_MASK ) )
 #define GRCAN_CANRXRD_READ( _val ) \
-  ( ( ( _val ) << GRCAN_CANRXRD_READ_SHIFT ) & \
-    GRCAN_CANRXRD_READ_MASK )
+  ( ( ( _val ) << GRCAN_CANRXRD_READ_SHIFT ) & GRCAN_CANRXRD_READ_MASK )
 
 /** @} */
 
@@ -546,17 +505,14 @@ extern "C" {
  */
 
 #define GRCAN_CANRXIRQ_IRQ_SHIFT 4
-#define GRCAN_CANRXIRQ_IRQ_MASK 0xffff0U
+#define GRCAN_CANRXIRQ_IRQ_MASK  0xffff0U
 #define GRCAN_CANRXIRQ_IRQ_GET( _reg ) \
-  ( ( ( _reg ) & GRCAN_CANRXIRQ_IRQ_MASK ) >> \
-    GRCAN_CANRXIRQ_IRQ_SHIFT )
-#define GRCAN_CANRXIRQ_IRQ_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRCAN_CANRXIRQ_IRQ_MASK ) >> GRCAN_CANRXIRQ_IRQ_SHIFT )
+#define GRCAN_CANRXIRQ_IRQ_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRCAN_CANRXIRQ_IRQ_MASK ) | \
-    ( ( ( _val ) << GRCAN_CANRXIRQ_IRQ_SHIFT ) & \
-      GRCAN_CANRXIRQ_IRQ_MASK ) )
+    ( ( ( _val ) << GRCAN_CANRXIRQ_IRQ_SHIFT ) & GRCAN_CANRXIRQ_IRQ_MASK ) )
 #define GRCAN_CANRXIRQ_IRQ( _val ) \
-  ( ( ( _val ) << GRCAN_CANRXIRQ_IRQ_SHIFT ) & \
-    GRCAN_CANRXIRQ_IRQ_MASK )
+  ( ( ( _val ) << GRCAN_CANRXIRQ_IRQ_SHIFT ) & GRCAN_CANRXIRQ_IRQ_MASK )
 
 /** @} */
 
@@ -570,17 +526,14 @@ extern "C" {
  */
 
 #define GRCAN_CANRXMASK_AM_SHIFT 0
-#define GRCAN_CANRXMASK_AM_MASK 0x1fffffffU
+#define GRCAN_CANRXMASK_AM_MASK  0x1fffffffU
 #define GRCAN_CANRXMASK_AM_GET( _reg ) \
-  ( ( ( _reg ) & GRCAN_CANRXMASK_AM_MASK ) >> \
-    GRCAN_CANRXMASK_AM_SHIFT )
-#define GRCAN_CANRXMASK_AM_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRCAN_CANRXMASK_AM_MASK ) >> GRCAN_CANRXMASK_AM_SHIFT )
+#define GRCAN_CANRXMASK_AM_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRCAN_CANRXMASK_AM_MASK ) | \
-    ( ( ( _val ) << GRCAN_CANRXMASK_AM_SHIFT ) & \
-      GRCAN_CANRXMASK_AM_MASK ) )
+    ( ( ( _val ) << GRCAN_CANRXMASK_AM_SHIFT ) & GRCAN_CANRXMASK_AM_MASK ) )
 #define GRCAN_CANRXMASK_AM( _val ) \
-  ( ( ( _val ) << GRCAN_CANRXMASK_AM_SHIFT ) & \
-    GRCAN_CANRXMASK_AM_MASK )
+  ( ( ( _val ) << GRCAN_CANRXMASK_AM_SHIFT ) & GRCAN_CANRXMASK_AM_MASK )
 
 /** @} */
 
@@ -594,17 +547,14 @@ extern "C" {
  */
 
 #define GRCAN_CANRXCODE_AC_SHIFT 0
-#define GRCAN_CANRXCODE_AC_MASK 0x1fffffffU
+#define GRCAN_CANRXCODE_AC_MASK  0x1fffffffU
 #define GRCAN_CANRXCODE_AC_GET( _reg ) \
-  ( ( ( _reg ) & GRCAN_CANRXCODE_AC_MASK ) >> \
-    GRCAN_CANRXCODE_AC_SHIFT )
-#define GRCAN_CANRXCODE_AC_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRCAN_CANRXCODE_AC_MASK ) >> GRCAN_CANRXCODE_AC_SHIFT )
+#define GRCAN_CANRXCODE_AC_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRCAN_CANRXCODE_AC_MASK ) | \
-    ( ( ( _val ) << GRCAN_CANRXCODE_AC_SHIFT ) & \
-      GRCAN_CANRXCODE_AC_MASK ) )
+    ( ( ( _val ) << GRCAN_CANRXCODE_AC_SHIFT ) & GRCAN_CANRXCODE_AC_MASK ) )
 #define GRCAN_CANRXCODE_AC( _val ) \
-  ( ( ( _val ) << GRCAN_CANRXCODE_AC_SHIFT ) & \
-    GRCAN_CANRXCODE_AC_MASK )
+  ( ( ( _val ) << GRCAN_CANRXCODE_AC_SHIFT ) & GRCAN_CANRXCODE_AC_MASK )
 
 /** @} */
 

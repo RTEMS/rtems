@@ -87,75 +87,64 @@ extern "C" {
 #define MMCTRL_SDCFG1_TRP 0x40000000U
 
 #define MMCTRL_SDCFG1_TRFC_SHIFT 27
-#define MMCTRL_SDCFG1_TRFC_MASK 0x38000000U
+#define MMCTRL_SDCFG1_TRFC_MASK  0x38000000U
 #define MMCTRL_SDCFG1_TRFC_GET( _reg ) \
-  ( ( ( _reg ) & MMCTRL_SDCFG1_TRFC_MASK ) >> \
-    MMCTRL_SDCFG1_TRFC_SHIFT )
-#define MMCTRL_SDCFG1_TRFC_SET( _reg, _val ) \
+  ( ( ( _reg ) & MMCTRL_SDCFG1_TRFC_MASK ) >> MMCTRL_SDCFG1_TRFC_SHIFT )
+#define MMCTRL_SDCFG1_TRFC_SET( _reg, _val )  \
   ( ( ( _reg ) & ~MMCTRL_SDCFG1_TRFC_MASK ) | \
-    ( ( ( _val ) << MMCTRL_SDCFG1_TRFC_SHIFT ) & \
-      MMCTRL_SDCFG1_TRFC_MASK ) )
+    ( ( ( _val ) << MMCTRL_SDCFG1_TRFC_SHIFT ) & MMCTRL_SDCFG1_TRFC_MASK ) )
 #define MMCTRL_SDCFG1_TRFC( _val ) \
-  ( ( ( _val ) << MMCTRL_SDCFG1_TRFC_SHIFT ) & \
-    MMCTRL_SDCFG1_TRFC_MASK )
+  ( ( ( _val ) << MMCTRL_SDCFG1_TRFC_SHIFT ) & MMCTRL_SDCFG1_TRFC_MASK )
 
 #define MMCTRL_SDCFG1_TC 0x4000000U
 
 #define MMCTRL_SDCFG1_BANKSZ_SHIFT 23
-#define MMCTRL_SDCFG1_BANKSZ_MASK 0x3800000U
+#define MMCTRL_SDCFG1_BANKSZ_MASK  0x3800000U
 #define MMCTRL_SDCFG1_BANKSZ_GET( _reg ) \
-  ( ( ( _reg ) & MMCTRL_SDCFG1_BANKSZ_MASK ) >> \
-    MMCTRL_SDCFG1_BANKSZ_SHIFT )
-#define MMCTRL_SDCFG1_BANKSZ_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MMCTRL_SDCFG1_BANKSZ_MASK ) | \
+  ( ( ( _reg ) & MMCTRL_SDCFG1_BANKSZ_MASK ) >> MMCTRL_SDCFG1_BANKSZ_SHIFT )
+#define MMCTRL_SDCFG1_BANKSZ_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MMCTRL_SDCFG1_BANKSZ_MASK ) |    \
     ( ( ( _val ) << MMCTRL_SDCFG1_BANKSZ_SHIFT ) & \
       MMCTRL_SDCFG1_BANKSZ_MASK ) )
 #define MMCTRL_SDCFG1_BANKSZ( _val ) \
-  ( ( ( _val ) << MMCTRL_SDCFG1_BANKSZ_SHIFT ) & \
-    MMCTRL_SDCFG1_BANKSZ_MASK )
+  ( ( ( _val ) << MMCTRL_SDCFG1_BANKSZ_SHIFT ) & MMCTRL_SDCFG1_BANKSZ_MASK )
 
 #define MMCTRL_SDCFG1_COLSZ_SHIFT 21
-#define MMCTRL_SDCFG1_COLSZ_MASK 0x600000U
+#define MMCTRL_SDCFG1_COLSZ_MASK  0x600000U
 #define MMCTRL_SDCFG1_COLSZ_GET( _reg ) \
-  ( ( ( _reg ) & MMCTRL_SDCFG1_COLSZ_MASK ) >> \
-    MMCTRL_SDCFG1_COLSZ_SHIFT )
-#define MMCTRL_SDCFG1_COLSZ_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MMCTRL_SDCFG1_COLSZ_MASK ) | \
+  ( ( ( _reg ) & MMCTRL_SDCFG1_COLSZ_MASK ) >> MMCTRL_SDCFG1_COLSZ_SHIFT )
+#define MMCTRL_SDCFG1_COLSZ_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MMCTRL_SDCFG1_COLSZ_MASK ) |    \
     ( ( ( _val ) << MMCTRL_SDCFG1_COLSZ_SHIFT ) & \
       MMCTRL_SDCFG1_COLSZ_MASK ) )
 #define MMCTRL_SDCFG1_COLSZ( _val ) \
-  ( ( ( _val ) << MMCTRL_SDCFG1_COLSZ_SHIFT ) & \
-    MMCTRL_SDCFG1_COLSZ_MASK )
+  ( ( ( _val ) << MMCTRL_SDCFG1_COLSZ_SHIFT ) & MMCTRL_SDCFG1_COLSZ_MASK )
 
 #define MMCTRL_SDCFG1_COMMAND_SHIFT 18
-#define MMCTRL_SDCFG1_COMMAND_MASK 0x1c0000U
+#define MMCTRL_SDCFG1_COMMAND_MASK  0x1c0000U
 #define MMCTRL_SDCFG1_COMMAND_GET( _reg ) \
-  ( ( ( _reg ) & MMCTRL_SDCFG1_COMMAND_MASK ) >> \
-    MMCTRL_SDCFG1_COMMAND_SHIFT )
-#define MMCTRL_SDCFG1_COMMAND_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MMCTRL_SDCFG1_COMMAND_MASK ) | \
+  ( ( ( _reg ) & MMCTRL_SDCFG1_COMMAND_MASK ) >> MMCTRL_SDCFG1_COMMAND_SHIFT )
+#define MMCTRL_SDCFG1_COMMAND_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MMCTRL_SDCFG1_COMMAND_MASK ) |    \
     ( ( ( _val ) << MMCTRL_SDCFG1_COMMAND_SHIFT ) & \
       MMCTRL_SDCFG1_COMMAND_MASK ) )
 #define MMCTRL_SDCFG1_COMMAND( _val ) \
-  ( ( ( _val ) << MMCTRL_SDCFG1_COMMAND_SHIFT ) & \
-    MMCTRL_SDCFG1_COMMAND_MASK )
+  ( ( ( _val ) << MMCTRL_SDCFG1_COMMAND_SHIFT ) & MMCTRL_SDCFG1_COMMAND_MASK )
 
 #define MMCTRL_SDCFG1_MS 0x10000U
 
 #define MMCTRL_SDCFG1_64 0x8000U
 
 #define MMCTRL_SDCFG1_RFLOAD_SHIFT 0
-#define MMCTRL_SDCFG1_RFLOAD_MASK 0x7fffU
+#define MMCTRL_SDCFG1_RFLOAD_MASK  0x7fffU
 #define MMCTRL_SDCFG1_RFLOAD_GET( _reg ) \
-  ( ( ( _reg ) & MMCTRL_SDCFG1_RFLOAD_MASK ) >> \
-    MMCTRL_SDCFG1_RFLOAD_SHIFT )
-#define MMCTRL_SDCFG1_RFLOAD_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MMCTRL_SDCFG1_RFLOAD_MASK ) | \
+  ( ( ( _reg ) & MMCTRL_SDCFG1_RFLOAD_MASK ) >> MMCTRL_SDCFG1_RFLOAD_SHIFT )
+#define MMCTRL_SDCFG1_RFLOAD_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MMCTRL_SDCFG1_RFLOAD_MASK ) |    \
     ( ( ( _val ) << MMCTRL_SDCFG1_RFLOAD_SHIFT ) & \
       MMCTRL_SDCFG1_RFLOAD_MASK ) )
 #define MMCTRL_SDCFG1_RFLOAD( _val ) \
-  ( ( ( _val ) << MMCTRL_SDCFG1_RFLOAD_SHIFT ) & \
-    MMCTRL_SDCFG1_RFLOAD_MASK )
+  ( ( ( _val ) << MMCTRL_SDCFG1_RFLOAD_SHIFT ) & MMCTRL_SDCFG1_RFLOAD_MASK )
 
 /** @} */
 
@@ -187,58 +176,49 @@ extern "C" {
  */
 
 #define MMCTRL_MUXCFG_ERRLOC_SHIFT 20
-#define MMCTRL_MUXCFG_ERRLOC_MASK 0xfff00000U
+#define MMCTRL_MUXCFG_ERRLOC_MASK  0xfff00000U
 #define MMCTRL_MUXCFG_ERRLOC_GET( _reg ) \
-  ( ( ( _reg ) & MMCTRL_MUXCFG_ERRLOC_MASK ) >> \
-    MMCTRL_MUXCFG_ERRLOC_SHIFT )
-#define MMCTRL_MUXCFG_ERRLOC_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MMCTRL_MUXCFG_ERRLOC_MASK ) | \
+  ( ( ( _reg ) & MMCTRL_MUXCFG_ERRLOC_MASK ) >> MMCTRL_MUXCFG_ERRLOC_SHIFT )
+#define MMCTRL_MUXCFG_ERRLOC_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MMCTRL_MUXCFG_ERRLOC_MASK ) |    \
     ( ( ( _val ) << MMCTRL_MUXCFG_ERRLOC_SHIFT ) & \
       MMCTRL_MUXCFG_ERRLOC_MASK ) )
 #define MMCTRL_MUXCFG_ERRLOC( _val ) \
-  ( ( ( _val ) << MMCTRL_MUXCFG_ERRLOC_SHIFT ) & \
-    MMCTRL_MUXCFG_ERRLOC_MASK )
+  ( ( ( _val ) << MMCTRL_MUXCFG_ERRLOC_SHIFT ) & MMCTRL_MUXCFG_ERRLOC_MASK )
 
 #define MMCTRL_MUXCFG_DDERR 0x80000U
 
 #define MMCTRL_MUXCFG_DWIDTH_SHIFT 16
-#define MMCTRL_MUXCFG_DWIDTH_MASK 0x70000U
+#define MMCTRL_MUXCFG_DWIDTH_MASK  0x70000U
 #define MMCTRL_MUXCFG_DWIDTH_GET( _reg ) \
-  ( ( ( _reg ) & MMCTRL_MUXCFG_DWIDTH_MASK ) >> \
-    MMCTRL_MUXCFG_DWIDTH_SHIFT )
-#define MMCTRL_MUXCFG_DWIDTH_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MMCTRL_MUXCFG_DWIDTH_MASK ) | \
+  ( ( ( _reg ) & MMCTRL_MUXCFG_DWIDTH_MASK ) >> MMCTRL_MUXCFG_DWIDTH_SHIFT )
+#define MMCTRL_MUXCFG_DWIDTH_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MMCTRL_MUXCFG_DWIDTH_MASK ) |    \
     ( ( ( _val ) << MMCTRL_MUXCFG_DWIDTH_SHIFT ) & \
       MMCTRL_MUXCFG_DWIDTH_MASK ) )
 #define MMCTRL_MUXCFG_DWIDTH( _val ) \
-  ( ( ( _val ) << MMCTRL_MUXCFG_DWIDTH_SHIFT ) & \
-    MMCTRL_MUXCFG_DWIDTH_MASK )
+  ( ( ( _val ) << MMCTRL_MUXCFG_DWIDTH_SHIFT ) & MMCTRL_MUXCFG_DWIDTH_MASK )
 
 #define MMCTRL_MUXCFG_BEID_SHIFT 12
-#define MMCTRL_MUXCFG_BEID_MASK 0xf000U
+#define MMCTRL_MUXCFG_BEID_MASK  0xf000U
 #define MMCTRL_MUXCFG_BEID_GET( _reg ) \
-  ( ( ( _reg ) & MMCTRL_MUXCFG_BEID_MASK ) >> \
-    MMCTRL_MUXCFG_BEID_SHIFT )
-#define MMCTRL_MUXCFG_BEID_SET( _reg, _val ) \
+  ( ( ( _reg ) & MMCTRL_MUXCFG_BEID_MASK ) >> MMCTRL_MUXCFG_BEID_SHIFT )
+#define MMCTRL_MUXCFG_BEID_SET( _reg, _val )  \
   ( ( ( _reg ) & ~MMCTRL_MUXCFG_BEID_MASK ) | \
-    ( ( ( _val ) << MMCTRL_MUXCFG_BEID_SHIFT ) & \
-      MMCTRL_MUXCFG_BEID_MASK ) )
+    ( ( ( _val ) << MMCTRL_MUXCFG_BEID_SHIFT ) & MMCTRL_MUXCFG_BEID_MASK ) )
 #define MMCTRL_MUXCFG_BEID( _val ) \
-  ( ( ( _val ) << MMCTRL_MUXCFG_BEID_SHIFT ) & \
-    MMCTRL_MUXCFG_BEID_MASK )
+  ( ( ( _val ) << MMCTRL_MUXCFG_BEID_SHIFT ) & MMCTRL_MUXCFG_BEID_MASK )
 
 #define MMCTRL_MUXCFG_DATAMUX_SHIFT 5
-#define MMCTRL_MUXCFG_DATAMUX_MASK 0xe0U
+#define MMCTRL_MUXCFG_DATAMUX_MASK  0xe0U
 #define MMCTRL_MUXCFG_DATAMUX_GET( _reg ) \
-  ( ( ( _reg ) & MMCTRL_MUXCFG_DATAMUX_MASK ) >> \
-    MMCTRL_MUXCFG_DATAMUX_SHIFT )
-#define MMCTRL_MUXCFG_DATAMUX_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MMCTRL_MUXCFG_DATAMUX_MASK ) | \
+  ( ( ( _reg ) & MMCTRL_MUXCFG_DATAMUX_MASK ) >> MMCTRL_MUXCFG_DATAMUX_SHIFT )
+#define MMCTRL_MUXCFG_DATAMUX_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MMCTRL_MUXCFG_DATAMUX_MASK ) |    \
     ( ( ( _val ) << MMCTRL_MUXCFG_DATAMUX_SHIFT ) & \
       MMCTRL_MUXCFG_DATAMUX_MASK ) )
 #define MMCTRL_MUXCFG_DATAMUX( _val ) \
-  ( ( ( _val ) << MMCTRL_MUXCFG_DATAMUX_SHIFT ) & \
-    MMCTRL_MUXCFG_DATAMUX_MASK )
+  ( ( ( _val ) << MMCTRL_MUXCFG_DATAMUX_SHIFT ) & MMCTRL_MUXCFG_DATAMUX_MASK )
 
 #define MMCTRL_MUXCFG_CEN 0x10U
 
@@ -261,17 +241,14 @@ extern "C" {
  */
 
 #define MMCTRL_FTDA_FTDA_SHIFT 2
-#define MMCTRL_FTDA_FTDA_MASK 0xfffffffcU
+#define MMCTRL_FTDA_FTDA_MASK  0xfffffffcU
 #define MMCTRL_FTDA_FTDA_GET( _reg ) \
-  ( ( ( _reg ) & MMCTRL_FTDA_FTDA_MASK ) >> \
-    MMCTRL_FTDA_FTDA_SHIFT )
-#define MMCTRL_FTDA_FTDA_SET( _reg, _val ) \
+  ( ( ( _reg ) & MMCTRL_FTDA_FTDA_MASK ) >> MMCTRL_FTDA_FTDA_SHIFT )
+#define MMCTRL_FTDA_FTDA_SET( _reg, _val )  \
   ( ( ( _reg ) & ~MMCTRL_FTDA_FTDA_MASK ) | \
-    ( ( ( _val ) << MMCTRL_FTDA_FTDA_SHIFT ) & \
-      MMCTRL_FTDA_FTDA_MASK ) )
+    ( ( ( _val ) << MMCTRL_FTDA_FTDA_SHIFT ) & MMCTRL_FTDA_FTDA_MASK ) )
 #define MMCTRL_FTDA_FTDA( _val ) \
-  ( ( ( _val ) << MMCTRL_FTDA_FTDA_SHIFT ) & \
-    MMCTRL_FTDA_FTDA_MASK )
+  ( ( ( _val ) << MMCTRL_FTDA_FTDA_SHIFT ) & MMCTRL_FTDA_FTDA_MASK )
 
 /** @} */
 
@@ -284,56 +261,44 @@ extern "C" {
  */
 
 #define MMCTRL_FTDC_CBD_SHIFT 24
-#define MMCTRL_FTDC_CBD_MASK 0xff000000U
+#define MMCTRL_FTDC_CBD_MASK  0xff000000U
 #define MMCTRL_FTDC_CBD_GET( _reg ) \
-  ( ( ( _reg ) & MMCTRL_FTDC_CBD_MASK ) >> \
-    MMCTRL_FTDC_CBD_SHIFT )
-#define MMCTRL_FTDC_CBD_SET( _reg, _val ) \
+  ( ( ( _reg ) & MMCTRL_FTDC_CBD_MASK ) >> MMCTRL_FTDC_CBD_SHIFT )
+#define MMCTRL_FTDC_CBD_SET( _reg, _val )  \
   ( ( ( _reg ) & ~MMCTRL_FTDC_CBD_MASK ) | \
-    ( ( ( _val ) << MMCTRL_FTDC_CBD_SHIFT ) & \
-      MMCTRL_FTDC_CBD_MASK ) )
+    ( ( ( _val ) << MMCTRL_FTDC_CBD_SHIFT ) & MMCTRL_FTDC_CBD_MASK ) )
 #define MMCTRL_FTDC_CBD( _val ) \
-  ( ( ( _val ) << MMCTRL_FTDC_CBD_SHIFT ) & \
-    MMCTRL_FTDC_CBD_MASK )
+  ( ( ( _val ) << MMCTRL_FTDC_CBD_SHIFT ) & MMCTRL_FTDC_CBD_MASK )
 
 #define MMCTRL_FTDC_CBC_SHIFT 16
-#define MMCTRL_FTDC_CBC_MASK 0xff0000U
+#define MMCTRL_FTDC_CBC_MASK  0xff0000U
 #define MMCTRL_FTDC_CBC_GET( _reg ) \
-  ( ( ( _reg ) & MMCTRL_FTDC_CBC_MASK ) >> \
-    MMCTRL_FTDC_CBC_SHIFT )
-#define MMCTRL_FTDC_CBC_SET( _reg, _val ) \
+  ( ( ( _reg ) & MMCTRL_FTDC_CBC_MASK ) >> MMCTRL_FTDC_CBC_SHIFT )
+#define MMCTRL_FTDC_CBC_SET( _reg, _val )  \
   ( ( ( _reg ) & ~MMCTRL_FTDC_CBC_MASK ) | \
-    ( ( ( _val ) << MMCTRL_FTDC_CBC_SHIFT ) & \
-      MMCTRL_FTDC_CBC_MASK ) )
+    ( ( ( _val ) << MMCTRL_FTDC_CBC_SHIFT ) & MMCTRL_FTDC_CBC_MASK ) )
 #define MMCTRL_FTDC_CBC( _val ) \
-  ( ( ( _val ) << MMCTRL_FTDC_CBC_SHIFT ) & \
-    MMCTRL_FTDC_CBC_MASK )
+  ( ( ( _val ) << MMCTRL_FTDC_CBC_SHIFT ) & MMCTRL_FTDC_CBC_MASK )
 
 #define MMCTRL_FTDC_CBB_SHIFT 8
-#define MMCTRL_FTDC_CBB_MASK 0xff00U
+#define MMCTRL_FTDC_CBB_MASK  0xff00U
 #define MMCTRL_FTDC_CBB_GET( _reg ) \
-  ( ( ( _reg ) & MMCTRL_FTDC_CBB_MASK ) >> \
-    MMCTRL_FTDC_CBB_SHIFT )
-#define MMCTRL_FTDC_CBB_SET( _reg, _val ) \
+  ( ( ( _reg ) & MMCTRL_FTDC_CBB_MASK ) >> MMCTRL_FTDC_CBB_SHIFT )
+#define MMCTRL_FTDC_CBB_SET( _reg, _val )  \
   ( ( ( _reg ) & ~MMCTRL_FTDC_CBB_MASK ) | \
-    ( ( ( _val ) << MMCTRL_FTDC_CBB_SHIFT ) & \
-      MMCTRL_FTDC_CBB_MASK ) )
+    ( ( ( _val ) << MMCTRL_FTDC_CBB_SHIFT ) & MMCTRL_FTDC_CBB_MASK ) )
 #define MMCTRL_FTDC_CBB( _val ) \
-  ( ( ( _val ) << MMCTRL_FTDC_CBB_SHIFT ) & \
-    MMCTRL_FTDC_CBB_MASK )
+  ( ( ( _val ) << MMCTRL_FTDC_CBB_SHIFT ) & MMCTRL_FTDC_CBB_MASK )
 
 #define MMCTRL_FTDC_CBA_SHIFT 0
-#define MMCTRL_FTDC_CBA_MASK 0xffU
+#define MMCTRL_FTDC_CBA_MASK  0xffU
 #define MMCTRL_FTDC_CBA_GET( _reg ) \
-  ( ( ( _reg ) & MMCTRL_FTDC_CBA_MASK ) >> \
-    MMCTRL_FTDC_CBA_SHIFT )
-#define MMCTRL_FTDC_CBA_SET( _reg, _val ) \
+  ( ( ( _reg ) & MMCTRL_FTDC_CBA_MASK ) >> MMCTRL_FTDC_CBA_SHIFT )
+#define MMCTRL_FTDC_CBA_SET( _reg, _val )  \
   ( ( ( _reg ) & ~MMCTRL_FTDC_CBA_MASK ) | \
-    ( ( ( _val ) << MMCTRL_FTDC_CBA_SHIFT ) & \
-      MMCTRL_FTDC_CBA_MASK ) )
+    ( ( ( _val ) << MMCTRL_FTDC_CBA_SHIFT ) & MMCTRL_FTDC_CBA_MASK ) )
 #define MMCTRL_FTDC_CBA( _val ) \
-  ( ( ( _val ) << MMCTRL_FTDC_CBA_SHIFT ) & \
-    MMCTRL_FTDC_CBA_MASK )
+  ( ( ( _val ) << MMCTRL_FTDC_CBA_SHIFT ) & MMCTRL_FTDC_CBA_MASK )
 
 /** @} */
 
@@ -346,17 +311,14 @@ extern "C" {
  */
 
 #define MMCTRL_FTDD_DATA_SHIFT 0
-#define MMCTRL_FTDD_DATA_MASK 0xffffffffU
+#define MMCTRL_FTDD_DATA_MASK  0xffffffffU
 #define MMCTRL_FTDD_DATA_GET( _reg ) \
-  ( ( ( _reg ) & MMCTRL_FTDD_DATA_MASK ) >> \
-    MMCTRL_FTDD_DATA_SHIFT )
-#define MMCTRL_FTDD_DATA_SET( _reg, _val ) \
+  ( ( ( _reg ) & MMCTRL_FTDD_DATA_MASK ) >> MMCTRL_FTDD_DATA_SHIFT )
+#define MMCTRL_FTDD_DATA_SET( _reg, _val )  \
   ( ( ( _reg ) & ~MMCTRL_FTDD_DATA_MASK ) | \
-    ( ( ( _val ) << MMCTRL_FTDD_DATA_SHIFT ) & \
-      MMCTRL_FTDD_DATA_MASK ) )
+    ( ( ( _val ) << MMCTRL_FTDD_DATA_SHIFT ) & MMCTRL_FTDD_DATA_MASK ) )
 #define MMCTRL_FTDD_DATA( _val ) \
-  ( ( ( _val ) << MMCTRL_FTDD_DATA_SHIFT ) & \
-    MMCTRL_FTDD_DATA_MASK )
+  ( ( ( _val ) << MMCTRL_FTDD_DATA_SHIFT ) & MMCTRL_FTDD_DATA_MASK )
 
 /** @} */
 
@@ -369,15 +331,15 @@ extern "C" {
  */
 
 #define MMCTRL_FTBND_FTBND_31_3_SHIFT 3
-#define MMCTRL_FTBND_FTBND_31_3_MASK 0xfffffff8U
-#define MMCTRL_FTBND_FTBND_31_3_GET( _reg ) \
+#define MMCTRL_FTBND_FTBND_31_3_MASK  0xfffffff8U
+#define MMCTRL_FTBND_FTBND_31_3_GET( _reg )        \
   ( ( ( _reg ) & MMCTRL_FTBND_FTBND_31_3_MASK ) >> \
     MMCTRL_FTBND_FTBND_31_3_SHIFT )
-#define MMCTRL_FTBND_FTBND_31_3_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MMCTRL_FTBND_FTBND_31_3_MASK ) | \
+#define MMCTRL_FTBND_FTBND_31_3_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MMCTRL_FTBND_FTBND_31_3_MASK ) |    \
     ( ( ( _val ) << MMCTRL_FTBND_FTBND_31_3_SHIFT ) & \
       MMCTRL_FTBND_FTBND_31_3_MASK ) )
-#define MMCTRL_FTBND_FTBND_31_3( _val ) \
+#define MMCTRL_FTBND_FTBND_31_3( _val )             \
   ( ( ( _val ) << MMCTRL_FTBND_FTBND_31_3_SHIFT ) & \
     MMCTRL_FTBND_FTBND_31_3_MASK )
 

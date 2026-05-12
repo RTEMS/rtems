@@ -37,27 +37,26 @@ extern "C" {
 #endif
 
 struct rt_reg {
-    volatile uint32_t stat;            /* 0x00 */
-    volatile uint32_t ctrl;            /* 0x04 */
-    volatile uint32_t vword;           /* 0x08 */
-    volatile uint32_t irq;             /* 0x0C */
-    volatile uint32_t addr;            /* 0x10 */
-		volatile uint32_t ipm;             /* 0x14 */
+  volatile uint32_t stat;  /* 0x00 */
+  volatile uint32_t ctrl;  /* 0x04 */
+  volatile uint32_t vword; /* 0x08 */
+  volatile uint32_t irq;   /* 0x0C */
+  volatile uint32_t addr;  /* 0x10 */
+  volatile uint32_t ipm;   /* 0x14 */
 };
 
-
 struct rt_msg {
-    unsigned short miw;
-    unsigned short time;
-    unsigned short data[32];
-    unsigned short desc;
+  unsigned short miw;
+  unsigned short time;
+  unsigned short data[ 32 ];
+  unsigned short desc;
 };
 
 #define RT_FREQ_12MHZ 0
 #define RT_FREQ_16MHZ 1
 #define RT_FREQ_20MHZ 2
 #define RT_FREQ_24MHZ 3
-#define RT_FREQ_MASK 0x3
+#define RT_FREQ_MASK  0x3
 
 /* IOCTLs */
 #define RT_SET_ADDR    3
@@ -67,32 +66,31 @@ struct rt_msg {
 #define RT_GET_STATUS  13
 #define RT_SET_EVENTID 14
 
-#define RT_SET_VECTORW 32
+#define RT_SET_VECTORW  32
 #define RT_SET_EXTMDATA 33
 
-#define RT_ILLCMD_IRQ  128   
-#define RT_MERR_IRQ       2048
-#define RT_DMAF_IRQ       32768                /* DMA Fail irq */
+#define RT_ILLCMD_IRQ 128
+#define RT_MERR_IRQ   2048
+#define RT_DMAF_IRQ   32768 /* DMA Fail irq */
 
-#define RT_TSW_OK  (1<<14)
-#define RT_TSW_BUS (1<<13)
-#define RT_TSW_BC  (1<<12)
-#define RT_TSW_LPBKERRB  (1<<11)
-#define RT_TSW_LPBKERRA  (1<<10)
-#define RT_TSW_ILL  (1<<9)
-#define RT_TSW_MEM  (1<<8)
-#define RT_TSW_MAN  (1<<7)
-#define RT_TSW_PAR  (1<<6)
-#define RT_TSW_WC   (1<<5)
+#define RT_TSW_OK       ( 1 << 14 )
+#define RT_TSW_BUS      ( 1 << 13 )
+#define RT_TSW_BC       ( 1 << 12 )
+#define RT_TSW_LPBKERRB ( 1 << 11 )
+#define RT_TSW_LPBKERRA ( 1 << 10 )
+#define RT_TSW_ILL      ( 1 << 9 )
+#define RT_TSW_MEM      ( 1 << 8 )
+#define RT_TSW_MAN      ( 1 << 7 )
+#define RT_TSW_PAR      ( 1 << 6 )
+#define RT_TSW_WC       ( 1 << 5 )
 
-void b1553rt_print_dev(struct drvmgr_dev *dev, int options);
-void b1553rt_print(int options);
+void b1553rt_print_dev( struct drvmgr_dev *dev, int options );
+void b1553rt_print( int options );
 
-void b1553rt_register_drv(void);
+void b1553rt_register_drv( void );
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* __RT_H__ */
-

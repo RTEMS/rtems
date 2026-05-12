@@ -93,17 +93,15 @@ extern "C" {
  */
 
 #define GPTIMER_TCNTVAL_TCVAL_SHIFT 0
-#define GPTIMER_TCNTVAL_TCVAL_MASK 0xffffffffU
+#define GPTIMER_TCNTVAL_TCVAL_MASK  0xffffffffU
 #define GPTIMER_TCNTVAL_TCVAL_GET( _reg ) \
-  ( ( ( _reg ) & GPTIMER_TCNTVAL_TCVAL_MASK ) >> \
-    GPTIMER_TCNTVAL_TCVAL_SHIFT )
-#define GPTIMER_TCNTVAL_TCVAL_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GPTIMER_TCNTVAL_TCVAL_MASK ) | \
+  ( ( ( _reg ) & GPTIMER_TCNTVAL_TCVAL_MASK ) >> GPTIMER_TCNTVAL_TCVAL_SHIFT )
+#define GPTIMER_TCNTVAL_TCVAL_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GPTIMER_TCNTVAL_TCVAL_MASK ) |    \
     ( ( ( _val ) << GPTIMER_TCNTVAL_TCVAL_SHIFT ) & \
       GPTIMER_TCNTVAL_TCVAL_MASK ) )
 #define GPTIMER_TCNTVAL_TCVAL( _val ) \
-  ( ( ( _val ) << GPTIMER_TCNTVAL_TCVAL_SHIFT ) & \
-    GPTIMER_TCNTVAL_TCVAL_MASK )
+  ( ( ( _val ) << GPTIMER_TCNTVAL_TCVAL_SHIFT ) & GPTIMER_TCNTVAL_TCVAL_MASK )
 
 /** @} */
 
@@ -117,15 +115,15 @@ extern "C" {
  */
 
 #define GPTIMER_TRLDVAL_TRLDVAL_SHIFT 0
-#define GPTIMER_TRLDVAL_TRLDVAL_MASK 0xffffffffU
-#define GPTIMER_TRLDVAL_TRLDVAL_GET( _reg ) \
+#define GPTIMER_TRLDVAL_TRLDVAL_MASK  0xffffffffU
+#define GPTIMER_TRLDVAL_TRLDVAL_GET( _reg )        \
   ( ( ( _reg ) & GPTIMER_TRLDVAL_TRLDVAL_MASK ) >> \
     GPTIMER_TRLDVAL_TRLDVAL_SHIFT )
-#define GPTIMER_TRLDVAL_TRLDVAL_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GPTIMER_TRLDVAL_TRLDVAL_MASK ) | \
+#define GPTIMER_TRLDVAL_TRLDVAL_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GPTIMER_TRLDVAL_TRLDVAL_MASK ) |    \
     ( ( ( _val ) << GPTIMER_TRLDVAL_TRLDVAL_SHIFT ) & \
       GPTIMER_TRLDVAL_TRLDVAL_MASK ) )
-#define GPTIMER_TRLDVAL_TRLDVAL( _val ) \
+#define GPTIMER_TRLDVAL_TRLDVAL( _val )             \
   ( ( ( _val ) << GPTIMER_TRLDVAL_TRLDVAL_SHIFT ) & \
     GPTIMER_TRLDVAL_TRLDVAL_MASK )
 
@@ -168,17 +166,15 @@ extern "C" {
  */
 
 #define GPTIMER_TLATCH_LTCV_SHIFT 0
-#define GPTIMER_TLATCH_LTCV_MASK 0xffffffffU
+#define GPTIMER_TLATCH_LTCV_MASK  0xffffffffU
 #define GPTIMER_TLATCH_LTCV_GET( _reg ) \
-  ( ( ( _reg ) & GPTIMER_TLATCH_LTCV_MASK ) >> \
-    GPTIMER_TLATCH_LTCV_SHIFT )
-#define GPTIMER_TLATCH_LTCV_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GPTIMER_TLATCH_LTCV_MASK ) | \
+  ( ( ( _reg ) & GPTIMER_TLATCH_LTCV_MASK ) >> GPTIMER_TLATCH_LTCV_SHIFT )
+#define GPTIMER_TLATCH_LTCV_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GPTIMER_TLATCH_LTCV_MASK ) |    \
     ( ( ( _val ) << GPTIMER_TLATCH_LTCV_SHIFT ) & \
       GPTIMER_TLATCH_LTCV_MASK ) )
 #define GPTIMER_TLATCH_LTCV( _val ) \
-  ( ( ( _val ) << GPTIMER_TLATCH_LTCV_SHIFT ) & \
-    GPTIMER_TLATCH_LTCV_MASK )
+  ( ( ( _val ) << GPTIMER_TLATCH_LTCV_SHIFT ) & GPTIMER_TLATCH_LTCV_MASK )
 
 /** @} */
 
@@ -230,17 +226,15 @@ typedef struct gptimer_timer {
  */
 
 #define GPTIMER_SCALER_SCALER_SHIFT 0
-#define GPTIMER_SCALER_SCALER_MASK 0xffffU
+#define GPTIMER_SCALER_SCALER_MASK  0xffffU
 #define GPTIMER_SCALER_SCALER_GET( _reg ) \
-  ( ( ( _reg ) & GPTIMER_SCALER_SCALER_MASK ) >> \
-    GPTIMER_SCALER_SCALER_SHIFT )
-#define GPTIMER_SCALER_SCALER_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GPTIMER_SCALER_SCALER_MASK ) | \
+  ( ( ( _reg ) & GPTIMER_SCALER_SCALER_MASK ) >> GPTIMER_SCALER_SCALER_SHIFT )
+#define GPTIMER_SCALER_SCALER_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GPTIMER_SCALER_SCALER_MASK ) |    \
     ( ( ( _val ) << GPTIMER_SCALER_SCALER_SHIFT ) & \
       GPTIMER_SCALER_SCALER_MASK ) )
 #define GPTIMER_SCALER_SCALER( _val ) \
-  ( ( ( _val ) << GPTIMER_SCALER_SCALER_SHIFT ) & \
-    GPTIMER_SCALER_SCALER_MASK )
+  ( ( ( _val ) << GPTIMER_SCALER_SCALER_SHIFT ) & GPTIMER_SCALER_SCALER_MASK )
 
 /** @} */
 
@@ -254,15 +248,15 @@ typedef struct gptimer_timer {
  */
 
 #define GPTIMER_SRELOAD_SRELOAD_SHIFT 0
-#define GPTIMER_SRELOAD_SRELOAD_MASK 0xffffU
-#define GPTIMER_SRELOAD_SRELOAD_GET( _reg ) \
+#define GPTIMER_SRELOAD_SRELOAD_MASK  0xffffU
+#define GPTIMER_SRELOAD_SRELOAD_GET( _reg )        \
   ( ( ( _reg ) & GPTIMER_SRELOAD_SRELOAD_MASK ) >> \
     GPTIMER_SRELOAD_SRELOAD_SHIFT )
-#define GPTIMER_SRELOAD_SRELOAD_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GPTIMER_SRELOAD_SRELOAD_MASK ) | \
+#define GPTIMER_SRELOAD_SRELOAD_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GPTIMER_SRELOAD_SRELOAD_MASK ) |    \
     ( ( ( _val ) << GPTIMER_SRELOAD_SRELOAD_SHIFT ) & \
       GPTIMER_SRELOAD_SRELOAD_MASK ) )
-#define GPTIMER_SRELOAD_SRELOAD( _val ) \
+#define GPTIMER_SRELOAD_SRELOAD( _val )             \
   ( ( ( _val ) << GPTIMER_SRELOAD_SRELOAD_SHIFT ) & \
     GPTIMER_SRELOAD_SRELOAD_MASK )
 
@@ -289,30 +283,25 @@ typedef struct gptimer_timer {
 #define GPTIMER_CONFIG_SI 0x100U
 
 #define GPTIMER_CONFIG_IRQ_SHIFT 3
-#define GPTIMER_CONFIG_IRQ_MASK 0xf8U
+#define GPTIMER_CONFIG_IRQ_MASK  0xf8U
 #define GPTIMER_CONFIG_IRQ_GET( _reg ) \
-  ( ( ( _reg ) & GPTIMER_CONFIG_IRQ_MASK ) >> \
-    GPTIMER_CONFIG_IRQ_SHIFT )
-#define GPTIMER_CONFIG_IRQ_SET( _reg, _val ) \
+  ( ( ( _reg ) & GPTIMER_CONFIG_IRQ_MASK ) >> GPTIMER_CONFIG_IRQ_SHIFT )
+#define GPTIMER_CONFIG_IRQ_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GPTIMER_CONFIG_IRQ_MASK ) | \
-    ( ( ( _val ) << GPTIMER_CONFIG_IRQ_SHIFT ) & \
-      GPTIMER_CONFIG_IRQ_MASK ) )
+    ( ( ( _val ) << GPTIMER_CONFIG_IRQ_SHIFT ) & GPTIMER_CONFIG_IRQ_MASK ) )
 #define GPTIMER_CONFIG_IRQ( _val ) \
-  ( ( ( _val ) << GPTIMER_CONFIG_IRQ_SHIFT ) & \
-    GPTIMER_CONFIG_IRQ_MASK )
+  ( ( ( _val ) << GPTIMER_CONFIG_IRQ_SHIFT ) & GPTIMER_CONFIG_IRQ_MASK )
 
 #define GPTIMER_CONFIG_TIMERS_SHIFT 0
-#define GPTIMER_CONFIG_TIMERS_MASK 0x7U
+#define GPTIMER_CONFIG_TIMERS_MASK  0x7U
 #define GPTIMER_CONFIG_TIMERS_GET( _reg ) \
-  ( ( ( _reg ) & GPTIMER_CONFIG_TIMERS_MASK ) >> \
-    GPTIMER_CONFIG_TIMERS_SHIFT )
-#define GPTIMER_CONFIG_TIMERS_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GPTIMER_CONFIG_TIMERS_MASK ) | \
+  ( ( ( _reg ) & GPTIMER_CONFIG_TIMERS_MASK ) >> GPTIMER_CONFIG_TIMERS_SHIFT )
+#define GPTIMER_CONFIG_TIMERS_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GPTIMER_CONFIG_TIMERS_MASK ) |    \
     ( ( ( _val ) << GPTIMER_CONFIG_TIMERS_SHIFT ) & \
       GPTIMER_CONFIG_TIMERS_MASK ) )
 #define GPTIMER_CONFIG_TIMERS( _val ) \
-  ( ( ( _val ) << GPTIMER_CONFIG_TIMERS_SHIFT ) & \
-    GPTIMER_CONFIG_TIMERS_MASK )
+  ( ( ( _val ) << GPTIMER_CONFIG_TIMERS_SHIFT ) & GPTIMER_CONFIG_TIMERS_MASK )
 
 /** @} */
 
@@ -326,15 +315,15 @@ typedef struct gptimer_timer {
  */
 
 #define GPTIMER_LATCHCFG_LATCHSEL_SHIFT 0
-#define GPTIMER_LATCHCFG_LATCHSEL_MASK 0xffffffffU
-#define GPTIMER_LATCHCFG_LATCHSEL_GET( _reg ) \
+#define GPTIMER_LATCHCFG_LATCHSEL_MASK  0xffffffffU
+#define GPTIMER_LATCHCFG_LATCHSEL_GET( _reg )        \
   ( ( ( _reg ) & GPTIMER_LATCHCFG_LATCHSEL_MASK ) >> \
     GPTIMER_LATCHCFG_LATCHSEL_SHIFT )
-#define GPTIMER_LATCHCFG_LATCHSEL_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GPTIMER_LATCHCFG_LATCHSEL_MASK ) | \
+#define GPTIMER_LATCHCFG_LATCHSEL_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GPTIMER_LATCHCFG_LATCHSEL_MASK ) |    \
     ( ( ( _val ) << GPTIMER_LATCHCFG_LATCHSEL_SHIFT ) & \
       GPTIMER_LATCHCFG_LATCHSEL_MASK ) )
-#define GPTIMER_LATCHCFG_LATCHSEL( _val ) \
+#define GPTIMER_LATCHCFG_LATCHSEL( _val )             \
   ( ( ( _val ) << GPTIMER_LATCHCFG_LATCHSEL_SHIFT ) & \
     GPTIMER_LATCHCFG_LATCHSEL_MASK )
 

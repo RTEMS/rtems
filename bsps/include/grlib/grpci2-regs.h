@@ -96,15 +96,15 @@ extern "C" {
 #define GRPCI2_CTRL_EI 0x1000000U
 
 #define GRPCI2_CTRL_BUS_NUMBER_SHIFT 16
-#define GRPCI2_CTRL_BUS_NUMBER_MASK 0xff0000U
-#define GRPCI2_CTRL_BUS_NUMBER_GET( _reg ) \
+#define GRPCI2_CTRL_BUS_NUMBER_MASK  0xff0000U
+#define GRPCI2_CTRL_BUS_NUMBER_GET( _reg )        \
   ( ( ( _reg ) & GRPCI2_CTRL_BUS_NUMBER_MASK ) >> \
     GRPCI2_CTRL_BUS_NUMBER_SHIFT )
-#define GRPCI2_CTRL_BUS_NUMBER_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRPCI2_CTRL_BUS_NUMBER_MASK ) | \
+#define GRPCI2_CTRL_BUS_NUMBER_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRPCI2_CTRL_BUS_NUMBER_MASK ) |    \
     ( ( ( _val ) << GRPCI2_CTRL_BUS_NUMBER_SHIFT ) & \
       GRPCI2_CTRL_BUS_NUMBER_MASK ) )
-#define GRPCI2_CTRL_BUS_NUMBER( _val ) \
+#define GRPCI2_CTRL_BUS_NUMBER( _val )             \
   ( ( ( _val ) << GRPCI2_CTRL_BUS_NUMBER_SHIFT ) & \
     GRPCI2_CTRL_BUS_NUMBER_MASK )
 
@@ -117,28 +117,28 @@ extern "C" {
 #define GRPCI2_CTRL_DIF 0x100U
 
 #define GRPCI2_CTRL_DEVICE_INT_MASK_SHIFT 4
-#define GRPCI2_CTRL_DEVICE_INT_MASK_MASK 0xf0U
-#define GRPCI2_CTRL_DEVICE_INT_MASK_GET( _reg ) \
+#define GRPCI2_CTRL_DEVICE_INT_MASK_MASK  0xf0U
+#define GRPCI2_CTRL_DEVICE_INT_MASK_GET( _reg )        \
   ( ( ( _reg ) & GRPCI2_CTRL_DEVICE_INT_MASK_MASK ) >> \
     GRPCI2_CTRL_DEVICE_INT_MASK_SHIFT )
-#define GRPCI2_CTRL_DEVICE_INT_MASK_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRPCI2_CTRL_DEVICE_INT_MASK_MASK ) | \
+#define GRPCI2_CTRL_DEVICE_INT_MASK_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRPCI2_CTRL_DEVICE_INT_MASK_MASK ) |    \
     ( ( ( _val ) << GRPCI2_CTRL_DEVICE_INT_MASK_SHIFT ) & \
       GRPCI2_CTRL_DEVICE_INT_MASK_MASK ) )
-#define GRPCI2_CTRL_DEVICE_INT_MASK( _val ) \
+#define GRPCI2_CTRL_DEVICE_INT_MASK( _val )             \
   ( ( ( _val ) << GRPCI2_CTRL_DEVICE_INT_MASK_SHIFT ) & \
     GRPCI2_CTRL_DEVICE_INT_MASK_MASK )
 
 #define GRPCI2_CTRL_HOST_INT_MASK_SHIFT 0
-#define GRPCI2_CTRL_HOST_INT_MASK_MASK 0xfU
-#define GRPCI2_CTRL_HOST_INT_MASK_GET( _reg ) \
+#define GRPCI2_CTRL_HOST_INT_MASK_MASK  0xfU
+#define GRPCI2_CTRL_HOST_INT_MASK_GET( _reg )        \
   ( ( ( _reg ) & GRPCI2_CTRL_HOST_INT_MASK_MASK ) >> \
     GRPCI2_CTRL_HOST_INT_MASK_SHIFT )
-#define GRPCI2_CTRL_HOST_INT_MASK_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRPCI2_CTRL_HOST_INT_MASK_MASK ) | \
+#define GRPCI2_CTRL_HOST_INT_MASK_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRPCI2_CTRL_HOST_INT_MASK_MASK ) |    \
     ( ( ( _val ) << GRPCI2_CTRL_HOST_INT_MASK_SHIFT ) & \
       GRPCI2_CTRL_HOST_INT_MASK_MASK ) )
-#define GRPCI2_CTRL_HOST_INT_MASK( _val ) \
+#define GRPCI2_CTRL_HOST_INT_MASK( _val )             \
   ( ( ( _val ) << GRPCI2_CTRL_HOST_INT_MASK_SHIFT ) & \
     GRPCI2_CTRL_HOST_INT_MASK_MASK )
 
@@ -165,15 +165,15 @@ extern "C" {
 #define GRPCI2_STATCAP_HI 0x4000000U
 
 #define GRPCI2_STATCAP_IRQ_MODE_SHIFT 24
-#define GRPCI2_STATCAP_IRQ_MODE_MASK 0x3000000U
-#define GRPCI2_STATCAP_IRQ_MODE_GET( _reg ) \
+#define GRPCI2_STATCAP_IRQ_MODE_MASK  0x3000000U
+#define GRPCI2_STATCAP_IRQ_MODE_GET( _reg )        \
   ( ( ( _reg ) & GRPCI2_STATCAP_IRQ_MODE_MASK ) >> \
     GRPCI2_STATCAP_IRQ_MODE_SHIFT )
-#define GRPCI2_STATCAP_IRQ_MODE_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRPCI2_STATCAP_IRQ_MODE_MASK ) | \
+#define GRPCI2_STATCAP_IRQ_MODE_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRPCI2_STATCAP_IRQ_MODE_MASK ) |    \
     ( ( ( _val ) << GRPCI2_STATCAP_IRQ_MODE_SHIFT ) & \
       GRPCI2_STATCAP_IRQ_MODE_MASK ) )
-#define GRPCI2_STATCAP_IRQ_MODE( _val ) \
+#define GRPCI2_STATCAP_IRQ_MODE( _val )             \
   ( ( ( _val ) << GRPCI2_STATCAP_IRQ_MODE_SHIFT ) & \
     GRPCI2_STATCAP_IRQ_MODE_MASK )
 
@@ -184,56 +184,52 @@ extern "C" {
 #define GRPCI2_STATCAP_CFGER 0x80000U
 
 #define GRPCI2_STATCAP_CORE_INT_STATUS_SHIFT 12
-#define GRPCI2_STATCAP_CORE_INT_STATUS_MASK 0x7f000U
-#define GRPCI2_STATCAP_CORE_INT_STATUS_GET( _reg ) \
+#define GRPCI2_STATCAP_CORE_INT_STATUS_MASK  0x7f000U
+#define GRPCI2_STATCAP_CORE_INT_STATUS_GET( _reg )        \
   ( ( ( _reg ) & GRPCI2_STATCAP_CORE_INT_STATUS_MASK ) >> \
     GRPCI2_STATCAP_CORE_INT_STATUS_SHIFT )
-#define GRPCI2_STATCAP_CORE_INT_STATUS_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRPCI2_STATCAP_CORE_INT_STATUS_MASK ) | \
+#define GRPCI2_STATCAP_CORE_INT_STATUS_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRPCI2_STATCAP_CORE_INT_STATUS_MASK ) |    \
     ( ( ( _val ) << GRPCI2_STATCAP_CORE_INT_STATUS_SHIFT ) & \
       GRPCI2_STATCAP_CORE_INT_STATUS_MASK ) )
-#define GRPCI2_STATCAP_CORE_INT_STATUS( _val ) \
+#define GRPCI2_STATCAP_CORE_INT_STATUS( _val )             \
   ( ( ( _val ) << GRPCI2_STATCAP_CORE_INT_STATUS_SHIFT ) & \
     GRPCI2_STATCAP_CORE_INT_STATUS_MASK )
 
 #define GRPCI2_STATCAP_HOST_INT_STATUS_SHIFT 8
-#define GRPCI2_STATCAP_HOST_INT_STATUS_MASK 0xf00U
-#define GRPCI2_STATCAP_HOST_INT_STATUS_GET( _reg ) \
+#define GRPCI2_STATCAP_HOST_INT_STATUS_MASK  0xf00U
+#define GRPCI2_STATCAP_HOST_INT_STATUS_GET( _reg )        \
   ( ( ( _reg ) & GRPCI2_STATCAP_HOST_INT_STATUS_MASK ) >> \
     GRPCI2_STATCAP_HOST_INT_STATUS_SHIFT )
-#define GRPCI2_STATCAP_HOST_INT_STATUS_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRPCI2_STATCAP_HOST_INT_STATUS_MASK ) | \
+#define GRPCI2_STATCAP_HOST_INT_STATUS_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRPCI2_STATCAP_HOST_INT_STATUS_MASK ) |    \
     ( ( ( _val ) << GRPCI2_STATCAP_HOST_INT_STATUS_SHIFT ) & \
       GRPCI2_STATCAP_HOST_INT_STATUS_MASK ) )
-#define GRPCI2_STATCAP_HOST_INT_STATUS( _val ) \
+#define GRPCI2_STATCAP_HOST_INT_STATUS( _val )             \
   ( ( ( _val ) << GRPCI2_STATCAP_HOST_INT_STATUS_SHIFT ) & \
     GRPCI2_STATCAP_HOST_INT_STATUS_MASK )
 
 #define GRPCI2_STATCAP_FDEPTH_SHIFT 2
-#define GRPCI2_STATCAP_FDEPTH_MASK 0x1cU
+#define GRPCI2_STATCAP_FDEPTH_MASK  0x1cU
 #define GRPCI2_STATCAP_FDEPTH_GET( _reg ) \
-  ( ( ( _reg ) & GRPCI2_STATCAP_FDEPTH_MASK ) >> \
-    GRPCI2_STATCAP_FDEPTH_SHIFT )
-#define GRPCI2_STATCAP_FDEPTH_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRPCI2_STATCAP_FDEPTH_MASK ) | \
+  ( ( ( _reg ) & GRPCI2_STATCAP_FDEPTH_MASK ) >> GRPCI2_STATCAP_FDEPTH_SHIFT )
+#define GRPCI2_STATCAP_FDEPTH_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRPCI2_STATCAP_FDEPTH_MASK ) |    \
     ( ( ( _val ) << GRPCI2_STATCAP_FDEPTH_SHIFT ) & \
       GRPCI2_STATCAP_FDEPTH_MASK ) )
 #define GRPCI2_STATCAP_FDEPTH( _val ) \
-  ( ( ( _val ) << GRPCI2_STATCAP_FDEPTH_SHIFT ) & \
-    GRPCI2_STATCAP_FDEPTH_MASK )
+  ( ( ( _val ) << GRPCI2_STATCAP_FDEPTH_SHIFT ) & GRPCI2_STATCAP_FDEPTH_MASK )
 
 #define GRPCI2_STATCAP_FNUM_SHIFT 0
-#define GRPCI2_STATCAP_FNUM_MASK 0x3U
+#define GRPCI2_STATCAP_FNUM_MASK  0x3U
 #define GRPCI2_STATCAP_FNUM_GET( _reg ) \
-  ( ( ( _reg ) & GRPCI2_STATCAP_FNUM_MASK ) >> \
-    GRPCI2_STATCAP_FNUM_SHIFT )
-#define GRPCI2_STATCAP_FNUM_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRPCI2_STATCAP_FNUM_MASK ) | \
+  ( ( ( _reg ) & GRPCI2_STATCAP_FNUM_MASK ) >> GRPCI2_STATCAP_FNUM_SHIFT )
+#define GRPCI2_STATCAP_FNUM_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRPCI2_STATCAP_FNUM_MASK ) |    \
     ( ( ( _val ) << GRPCI2_STATCAP_FNUM_SHIFT ) & \
       GRPCI2_STATCAP_FNUM_MASK ) )
 #define GRPCI2_STATCAP_FNUM( _val ) \
-  ( ( ( _val ) << GRPCI2_STATCAP_FNUM_SHIFT ) & \
-    GRPCI2_STATCAP_FNUM_MASK )
+  ( ( ( _val ) << GRPCI2_STATCAP_FNUM_SHIFT ) & GRPCI2_STATCAP_FNUM_MASK )
 
 /** @} */
 
@@ -246,28 +242,28 @@ extern "C" {
  */
 
 #define GRPCI2_BCIM_AHB_MASTER_UNMASK_SHIFT 16
-#define GRPCI2_BCIM_AHB_MASTER_UNMASK_MASK 0xffff0000U
-#define GRPCI2_BCIM_AHB_MASTER_UNMASK_GET( _reg ) \
+#define GRPCI2_BCIM_AHB_MASTER_UNMASK_MASK  0xffff0000U
+#define GRPCI2_BCIM_AHB_MASTER_UNMASK_GET( _reg )        \
   ( ( ( _reg ) & GRPCI2_BCIM_AHB_MASTER_UNMASK_MASK ) >> \
     GRPCI2_BCIM_AHB_MASTER_UNMASK_SHIFT )
-#define GRPCI2_BCIM_AHB_MASTER_UNMASK_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRPCI2_BCIM_AHB_MASTER_UNMASK_MASK ) | \
+#define GRPCI2_BCIM_AHB_MASTER_UNMASK_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRPCI2_BCIM_AHB_MASTER_UNMASK_MASK ) |    \
     ( ( ( _val ) << GRPCI2_BCIM_AHB_MASTER_UNMASK_SHIFT ) & \
       GRPCI2_BCIM_AHB_MASTER_UNMASK_MASK ) )
-#define GRPCI2_BCIM_AHB_MASTER_UNMASK( _val ) \
+#define GRPCI2_BCIM_AHB_MASTER_UNMASK( _val )             \
   ( ( ( _val ) << GRPCI2_BCIM_AHB_MASTER_UNMASK_SHIFT ) & \
     GRPCI2_BCIM_AHB_MASTER_UNMASK_MASK )
 
 #define GRPCI2_BCIM_BURST_LENGTH_SHIFT 0
-#define GRPCI2_BCIM_BURST_LENGTH_MASK 0xffU
-#define GRPCI2_BCIM_BURST_LENGTH_GET( _reg ) \
+#define GRPCI2_BCIM_BURST_LENGTH_MASK  0xffU
+#define GRPCI2_BCIM_BURST_LENGTH_GET( _reg )        \
   ( ( ( _reg ) & GRPCI2_BCIM_BURST_LENGTH_MASK ) >> \
     GRPCI2_BCIM_BURST_LENGTH_SHIFT )
-#define GRPCI2_BCIM_BURST_LENGTH_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRPCI2_BCIM_BURST_LENGTH_MASK ) | \
+#define GRPCI2_BCIM_BURST_LENGTH_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRPCI2_BCIM_BURST_LENGTH_MASK ) |    \
     ( ( ( _val ) << GRPCI2_BCIM_BURST_LENGTH_SHIFT ) & \
       GRPCI2_BCIM_BURST_LENGTH_MASK ) )
-#define GRPCI2_BCIM_BURST_LENGTH( _val ) \
+#define GRPCI2_BCIM_BURST_LENGTH( _val )             \
   ( ( ( _val ) << GRPCI2_BCIM_BURST_LENGTH_SHIFT ) & \
     GRPCI2_BCIM_BURST_LENGTH_MASK )
 
@@ -282,15 +278,15 @@ extern "C" {
  */
 
 #define GRPCI2_AHB2PCI_AHB_TO_PCI_IO_SHIFT 16
-#define GRPCI2_AHB2PCI_AHB_TO_PCI_IO_MASK 0xffff0000U
-#define GRPCI2_AHB2PCI_AHB_TO_PCI_IO_GET( _reg ) \
+#define GRPCI2_AHB2PCI_AHB_TO_PCI_IO_MASK  0xffff0000U
+#define GRPCI2_AHB2PCI_AHB_TO_PCI_IO_GET( _reg )        \
   ( ( ( _reg ) & GRPCI2_AHB2PCI_AHB_TO_PCI_IO_MASK ) >> \
     GRPCI2_AHB2PCI_AHB_TO_PCI_IO_SHIFT )
-#define GRPCI2_AHB2PCI_AHB_TO_PCI_IO_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRPCI2_AHB2PCI_AHB_TO_PCI_IO_MASK ) | \
+#define GRPCI2_AHB2PCI_AHB_TO_PCI_IO_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRPCI2_AHB2PCI_AHB_TO_PCI_IO_MASK ) |    \
     ( ( ( _val ) << GRPCI2_AHB2PCI_AHB_TO_PCI_IO_SHIFT ) & \
       GRPCI2_AHB2PCI_AHB_TO_PCI_IO_MASK ) )
-#define GRPCI2_AHB2PCI_AHB_TO_PCI_IO( _val ) \
+#define GRPCI2_AHB2PCI_AHB_TO_PCI_IO( _val )             \
   ( ( ( _val ) << GRPCI2_AHB2PCI_AHB_TO_PCI_IO_SHIFT ) & \
     GRPCI2_AHB2PCI_AHB_TO_PCI_IO_MASK )
 
@@ -307,17 +303,15 @@ extern "C" {
 #define GRPCI2_DMACTRL_SAFE 0x80000000U
 
 #define GRPCI2_DMACTRL_CHIRQ_SHIFT 12
-#define GRPCI2_DMACTRL_CHIRQ_MASK 0xff000U
+#define GRPCI2_DMACTRL_CHIRQ_MASK  0xff000U
 #define GRPCI2_DMACTRL_CHIRQ_GET( _reg ) \
-  ( ( ( _reg ) & GRPCI2_DMACTRL_CHIRQ_MASK ) >> \
-    GRPCI2_DMACTRL_CHIRQ_SHIFT )
-#define GRPCI2_DMACTRL_CHIRQ_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRPCI2_DMACTRL_CHIRQ_MASK ) | \
+  ( ( ( _reg ) & GRPCI2_DMACTRL_CHIRQ_MASK ) >> GRPCI2_DMACTRL_CHIRQ_SHIFT )
+#define GRPCI2_DMACTRL_CHIRQ_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRPCI2_DMACTRL_CHIRQ_MASK ) |    \
     ( ( ( _val ) << GRPCI2_DMACTRL_CHIRQ_SHIFT ) & \
       GRPCI2_DMACTRL_CHIRQ_MASK ) )
 #define GRPCI2_DMACTRL_CHIRQ( _val ) \
-  ( ( ( _val ) << GRPCI2_DMACTRL_CHIRQ_SHIFT ) & \
-    GRPCI2_DMACTRL_CHIRQ_MASK )
+  ( ( ( _val ) << GRPCI2_DMACTRL_CHIRQ_SHIFT ) & GRPCI2_DMACTRL_CHIRQ_MASK )
 
 #define GRPCI2_DMACTRL_MA 0x800U
 
@@ -330,17 +324,15 @@ extern "C" {
 #define GRPCI2_DMACTRL_DE 0x80U
 
 #define GRPCI2_DMACTRL_NUMCH_SHIFT 4
-#define GRPCI2_DMACTRL_NUMCH_MASK 0x70U
+#define GRPCI2_DMACTRL_NUMCH_MASK  0x70U
 #define GRPCI2_DMACTRL_NUMCH_GET( _reg ) \
-  ( ( ( _reg ) & GRPCI2_DMACTRL_NUMCH_MASK ) >> \
-    GRPCI2_DMACTRL_NUMCH_SHIFT )
-#define GRPCI2_DMACTRL_NUMCH_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRPCI2_DMACTRL_NUMCH_MASK ) | \
+  ( ( ( _reg ) & GRPCI2_DMACTRL_NUMCH_MASK ) >> GRPCI2_DMACTRL_NUMCH_SHIFT )
+#define GRPCI2_DMACTRL_NUMCH_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRPCI2_DMACTRL_NUMCH_MASK ) |    \
     ( ( ( _val ) << GRPCI2_DMACTRL_NUMCH_SHIFT ) & \
       GRPCI2_DMACTRL_NUMCH_MASK ) )
 #define GRPCI2_DMACTRL_NUMCH( _val ) \
-  ( ( ( _val ) << GRPCI2_DMACTRL_NUMCH_SHIFT ) & \
-    GRPCI2_DMACTRL_NUMCH_MASK )
+  ( ( ( _val ) << GRPCI2_DMACTRL_NUMCH_SHIFT ) & GRPCI2_DMACTRL_NUMCH_MASK )
 
 #define GRPCI2_DMACTRL_ACTIVE 0x8U
 
@@ -362,17 +354,15 @@ extern "C" {
  */
 
 #define GRPCI2_DMABASE_BASE_SHIFT 0
-#define GRPCI2_DMABASE_BASE_MASK 0xffffffffU
+#define GRPCI2_DMABASE_BASE_MASK  0xffffffffU
 #define GRPCI2_DMABASE_BASE_GET( _reg ) \
-  ( ( ( _reg ) & GRPCI2_DMABASE_BASE_MASK ) >> \
-    GRPCI2_DMABASE_BASE_SHIFT )
-#define GRPCI2_DMABASE_BASE_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRPCI2_DMABASE_BASE_MASK ) | \
+  ( ( ( _reg ) & GRPCI2_DMABASE_BASE_MASK ) >> GRPCI2_DMABASE_BASE_SHIFT )
+#define GRPCI2_DMABASE_BASE_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRPCI2_DMABASE_BASE_MASK ) |    \
     ( ( ( _val ) << GRPCI2_DMABASE_BASE_SHIFT ) & \
       GRPCI2_DMABASE_BASE_MASK ) )
 #define GRPCI2_DMABASE_BASE( _val ) \
-  ( ( ( _val ) << GRPCI2_DMABASE_BASE_SHIFT ) & \
-    GRPCI2_DMABASE_BASE_MASK )
+  ( ( ( _val ) << GRPCI2_DMABASE_BASE_SHIFT ) & GRPCI2_DMABASE_BASE_MASK )
 
 /** @} */
 
@@ -385,17 +375,15 @@ extern "C" {
  */
 
 #define GRPCI2_DMACHAN_CHAN_SHIFT 0
-#define GRPCI2_DMACHAN_CHAN_MASK 0xffffffffU
+#define GRPCI2_DMACHAN_CHAN_MASK  0xffffffffU
 #define GRPCI2_DMACHAN_CHAN_GET( _reg ) \
-  ( ( ( _reg ) & GRPCI2_DMACHAN_CHAN_MASK ) >> \
-    GRPCI2_DMACHAN_CHAN_SHIFT )
-#define GRPCI2_DMACHAN_CHAN_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRPCI2_DMACHAN_CHAN_MASK ) | \
+  ( ( ( _reg ) & GRPCI2_DMACHAN_CHAN_MASK ) >> GRPCI2_DMACHAN_CHAN_SHIFT )
+#define GRPCI2_DMACHAN_CHAN_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRPCI2_DMACHAN_CHAN_MASK ) |    \
     ( ( ( _val ) << GRPCI2_DMACHAN_CHAN_SHIFT ) & \
       GRPCI2_DMACHAN_CHAN_MASK ) )
 #define GRPCI2_DMACHAN_CHAN( _val ) \
-  ( ( ( _val ) << GRPCI2_DMACHAN_CHAN_SHIFT ) & \
-    GRPCI2_DMACHAN_CHAN_MASK )
+  ( ( ( _val ) << GRPCI2_DMACHAN_CHAN_SHIFT ) & GRPCI2_DMACHAN_CHAN_MASK )
 
 /** @} */
 
@@ -409,17 +397,15 @@ extern "C" {
  */
 
 #define GRPCI2_PCI2AHB_ADDR_SHIFT 0
-#define GRPCI2_PCI2AHB_ADDR_MASK 0xffffffffU
+#define GRPCI2_PCI2AHB_ADDR_MASK  0xffffffffU
 #define GRPCI2_PCI2AHB_ADDR_GET( _reg ) \
-  ( ( ( _reg ) & GRPCI2_PCI2AHB_ADDR_MASK ) >> \
-    GRPCI2_PCI2AHB_ADDR_SHIFT )
-#define GRPCI2_PCI2AHB_ADDR_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRPCI2_PCI2AHB_ADDR_MASK ) | \
+  ( ( ( _reg ) & GRPCI2_PCI2AHB_ADDR_MASK ) >> GRPCI2_PCI2AHB_ADDR_SHIFT )
+#define GRPCI2_PCI2AHB_ADDR_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRPCI2_PCI2AHB_ADDR_MASK ) |    \
     ( ( ( _val ) << GRPCI2_PCI2AHB_ADDR_SHIFT ) & \
       GRPCI2_PCI2AHB_ADDR_MASK ) )
 #define GRPCI2_PCI2AHB_ADDR( _val ) \
-  ( ( ( _val ) << GRPCI2_PCI2AHB_ADDR_SHIFT ) & \
-    GRPCI2_PCI2AHB_ADDR_MASK )
+  ( ( ( _val ) << GRPCI2_PCI2AHB_ADDR_SHIFT ) & GRPCI2_PCI2AHB_ADDR_MASK )
 
 /** @} */
 
@@ -433,17 +419,15 @@ extern "C" {
  */
 
 #define GRPCI2_AHBM2PCI_ADDR_SHIFT 0
-#define GRPCI2_AHBM2PCI_ADDR_MASK 0xffffffffU
+#define GRPCI2_AHBM2PCI_ADDR_MASK  0xffffffffU
 #define GRPCI2_AHBM2PCI_ADDR_GET( _reg ) \
-  ( ( ( _reg ) & GRPCI2_AHBM2PCI_ADDR_MASK ) >> \
-    GRPCI2_AHBM2PCI_ADDR_SHIFT )
-#define GRPCI2_AHBM2PCI_ADDR_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRPCI2_AHBM2PCI_ADDR_MASK ) | \
+  ( ( ( _reg ) & GRPCI2_AHBM2PCI_ADDR_MASK ) >> GRPCI2_AHBM2PCI_ADDR_SHIFT )
+#define GRPCI2_AHBM2PCI_ADDR_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRPCI2_AHBM2PCI_ADDR_MASK ) |    \
     ( ( ( _val ) << GRPCI2_AHBM2PCI_ADDR_SHIFT ) & \
       GRPCI2_AHBM2PCI_ADDR_MASK ) )
 #define GRPCI2_AHBM2PCI_ADDR( _val ) \
-  ( ( ( _val ) << GRPCI2_AHBM2PCI_ADDR_SHIFT ) & \
-    GRPCI2_AHBM2PCI_ADDR_MASK )
+  ( ( ( _val ) << GRPCI2_AHBM2PCI_ADDR_SHIFT ) & GRPCI2_AHBM2PCI_ADDR_MASK )
 
 /** @} */
 
@@ -457,15 +441,15 @@ extern "C" {
  */
 
 #define GRPCI2_TCTRC_TRIG_INDEX_SHIFT 16
-#define GRPCI2_TCTRC_TRIG_INDEX_MASK 0xffff0000U
-#define GRPCI2_TCTRC_TRIG_INDEX_GET( _reg ) \
+#define GRPCI2_TCTRC_TRIG_INDEX_MASK  0xffff0000U
+#define GRPCI2_TCTRC_TRIG_INDEX_GET( _reg )        \
   ( ( ( _reg ) & GRPCI2_TCTRC_TRIG_INDEX_MASK ) >> \
     GRPCI2_TCTRC_TRIG_INDEX_SHIFT )
-#define GRPCI2_TCTRC_TRIG_INDEX_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRPCI2_TCTRC_TRIG_INDEX_MASK ) | \
+#define GRPCI2_TCTRC_TRIG_INDEX_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRPCI2_TCTRC_TRIG_INDEX_MASK ) |    \
     ( ( ( _val ) << GRPCI2_TCTRC_TRIG_INDEX_SHIFT ) & \
       GRPCI2_TCTRC_TRIG_INDEX_MASK ) )
-#define GRPCI2_TCTRC_TRIG_INDEX( _val ) \
+#define GRPCI2_TCTRC_TRIG_INDEX( _val )             \
   ( ( ( _val ) << GRPCI2_TCTRC_TRIG_INDEX_SHIFT ) & \
     GRPCI2_TCTRC_TRIG_INDEX_MASK )
 
@@ -474,17 +458,14 @@ extern "C" {
 #define GRPCI2_TCTRC_EN 0x4000U
 
 #define GRPCI2_TCTRC_DEPTH_SHIFT 4
-#define GRPCI2_TCTRC_DEPTH_MASK 0xff0U
+#define GRPCI2_TCTRC_DEPTH_MASK  0xff0U
 #define GRPCI2_TCTRC_DEPTH_GET( _reg ) \
-  ( ( ( _reg ) & GRPCI2_TCTRC_DEPTH_MASK ) >> \
-    GRPCI2_TCTRC_DEPTH_SHIFT )
-#define GRPCI2_TCTRC_DEPTH_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRPCI2_TCTRC_DEPTH_MASK ) >> GRPCI2_TCTRC_DEPTH_SHIFT )
+#define GRPCI2_TCTRC_DEPTH_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRPCI2_TCTRC_DEPTH_MASK ) | \
-    ( ( ( _val ) << GRPCI2_TCTRC_DEPTH_SHIFT ) & \
-      GRPCI2_TCTRC_DEPTH_MASK ) )
+    ( ( ( _val ) << GRPCI2_TCTRC_DEPTH_SHIFT ) & GRPCI2_TCTRC_DEPTH_MASK ) )
 #define GRPCI2_TCTRC_DEPTH( _val ) \
-  ( ( ( _val ) << GRPCI2_TCTRC_DEPTH_SHIFT ) & \
-    GRPCI2_TCTRC_DEPTH_MASK )
+  ( ( ( _val ) << GRPCI2_TCTRC_DEPTH_SHIFT ) & GRPCI2_TCTRC_DEPTH_MASK )
 
 #define GRPCI2_TCTRC_SO 0x2U
 
@@ -501,41 +482,41 @@ extern "C" {
  */
 
 #define GRPCI2_TMODE_TRACING_MODE_SHIFT 24
-#define GRPCI2_TMODE_TRACING_MODE_MASK 0xf000000U
-#define GRPCI2_TMODE_TRACING_MODE_GET( _reg ) \
+#define GRPCI2_TMODE_TRACING_MODE_MASK  0xf000000U
+#define GRPCI2_TMODE_TRACING_MODE_GET( _reg )        \
   ( ( ( _reg ) & GRPCI2_TMODE_TRACING_MODE_MASK ) >> \
     GRPCI2_TMODE_TRACING_MODE_SHIFT )
-#define GRPCI2_TMODE_TRACING_MODE_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRPCI2_TMODE_TRACING_MODE_MASK ) | \
+#define GRPCI2_TMODE_TRACING_MODE_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRPCI2_TMODE_TRACING_MODE_MASK ) |    \
     ( ( ( _val ) << GRPCI2_TMODE_TRACING_MODE_SHIFT ) & \
       GRPCI2_TMODE_TRACING_MODE_MASK ) )
-#define GRPCI2_TMODE_TRACING_MODE( _val ) \
+#define GRPCI2_TMODE_TRACING_MODE( _val )             \
   ( ( ( _val ) << GRPCI2_TMODE_TRACING_MODE_SHIFT ) & \
     GRPCI2_TMODE_TRACING_MODE_MASK )
 
 #define GRPCI2_TMODE_TRIG_COUNT_SHIFT 16
-#define GRPCI2_TMODE_TRIG_COUNT_MASK 0xff0000U
-#define GRPCI2_TMODE_TRIG_COUNT_GET( _reg ) \
+#define GRPCI2_TMODE_TRIG_COUNT_MASK  0xff0000U
+#define GRPCI2_TMODE_TRIG_COUNT_GET( _reg )        \
   ( ( ( _reg ) & GRPCI2_TMODE_TRIG_COUNT_MASK ) >> \
     GRPCI2_TMODE_TRIG_COUNT_SHIFT )
-#define GRPCI2_TMODE_TRIG_COUNT_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRPCI2_TMODE_TRIG_COUNT_MASK ) | \
+#define GRPCI2_TMODE_TRIG_COUNT_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRPCI2_TMODE_TRIG_COUNT_MASK ) |    \
     ( ( ( _val ) << GRPCI2_TMODE_TRIG_COUNT_SHIFT ) & \
       GRPCI2_TMODE_TRIG_COUNT_MASK ) )
-#define GRPCI2_TMODE_TRIG_COUNT( _val ) \
+#define GRPCI2_TMODE_TRIG_COUNT( _val )             \
   ( ( ( _val ) << GRPCI2_TMODE_TRIG_COUNT_SHIFT ) & \
     GRPCI2_TMODE_TRIG_COUNT_MASK )
 
 #define GRPCI2_TMODE_DELAYED_STOP_SHIFT 0
-#define GRPCI2_TMODE_DELAYED_STOP_MASK 0xffffU
-#define GRPCI2_TMODE_DELAYED_STOP_GET( _reg ) \
+#define GRPCI2_TMODE_DELAYED_STOP_MASK  0xffffU
+#define GRPCI2_TMODE_DELAYED_STOP_GET( _reg )        \
   ( ( ( _reg ) & GRPCI2_TMODE_DELAYED_STOP_MASK ) >> \
     GRPCI2_TMODE_DELAYED_STOP_SHIFT )
-#define GRPCI2_TMODE_DELAYED_STOP_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRPCI2_TMODE_DELAYED_STOP_MASK ) | \
+#define GRPCI2_TMODE_DELAYED_STOP_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRPCI2_TMODE_DELAYED_STOP_MASK ) |    \
     ( ( ( _val ) << GRPCI2_TMODE_DELAYED_STOP_SHIFT ) & \
       GRPCI2_TMODE_DELAYED_STOP_MASK ) )
-#define GRPCI2_TMODE_DELAYED_STOP( _val ) \
+#define GRPCI2_TMODE_DELAYED_STOP( _val )             \
   ( ( ( _val ) << GRPCI2_TMODE_DELAYED_STOP_SHIFT ) & \
     GRPCI2_TMODE_DELAYED_STOP_MASK )
 
@@ -550,17 +531,15 @@ extern "C" {
  */
 
 #define GRPCI2_TADP_PATTERN_SHIFT 0
-#define GRPCI2_TADP_PATTERN_MASK 0xffffffffU
+#define GRPCI2_TADP_PATTERN_MASK  0xffffffffU
 #define GRPCI2_TADP_PATTERN_GET( _reg ) \
-  ( ( ( _reg ) & GRPCI2_TADP_PATTERN_MASK ) >> \
-    GRPCI2_TADP_PATTERN_SHIFT )
-#define GRPCI2_TADP_PATTERN_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRPCI2_TADP_PATTERN_MASK ) | \
+  ( ( ( _reg ) & GRPCI2_TADP_PATTERN_MASK ) >> GRPCI2_TADP_PATTERN_SHIFT )
+#define GRPCI2_TADP_PATTERN_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRPCI2_TADP_PATTERN_MASK ) |    \
     ( ( ( _val ) << GRPCI2_TADP_PATTERN_SHIFT ) & \
       GRPCI2_TADP_PATTERN_MASK ) )
 #define GRPCI2_TADP_PATTERN( _val ) \
-  ( ( ( _val ) << GRPCI2_TADP_PATTERN_SHIFT ) & \
-    GRPCI2_TADP_PATTERN_MASK )
+  ( ( ( _val ) << GRPCI2_TADP_PATTERN_SHIFT ) & GRPCI2_TADP_PATTERN_MASK )
 
 /** @} */
 
@@ -573,17 +552,14 @@ extern "C" {
  */
 
 #define GRPCI2_TADM_MASK_SHIFT 0
-#define GRPCI2_TADM_MASK_MASK 0xffffffffU
+#define GRPCI2_TADM_MASK_MASK  0xffffffffU
 #define GRPCI2_TADM_MASK_GET( _reg ) \
-  ( ( ( _reg ) & GRPCI2_TADM_MASK_MASK ) >> \
-    GRPCI2_TADM_MASK_SHIFT )
-#define GRPCI2_TADM_MASK_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRPCI2_TADM_MASK_MASK ) >> GRPCI2_TADM_MASK_SHIFT )
+#define GRPCI2_TADM_MASK_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRPCI2_TADM_MASK_MASK ) | \
-    ( ( ( _val ) << GRPCI2_TADM_MASK_SHIFT ) & \
-      GRPCI2_TADM_MASK_MASK ) )
+    ( ( ( _val ) << GRPCI2_TADM_MASK_SHIFT ) & GRPCI2_TADM_MASK_MASK ) )
 #define GRPCI2_TADM_MASK( _val ) \
-  ( ( ( _val ) << GRPCI2_TADM_MASK_SHIFT ) & \
-    GRPCI2_TADM_MASK_MASK )
+  ( ( ( _val ) << GRPCI2_TADM_MASK_SHIFT ) & GRPCI2_TADM_MASK_MASK )
 
 /** @} */
 
@@ -596,17 +572,14 @@ extern "C" {
  */
 
 #define GRPCI2_TCP_CBE_3_0_SHIFT 16
-#define GRPCI2_TCP_CBE_3_0_MASK 0xf0000U
+#define GRPCI2_TCP_CBE_3_0_MASK  0xf0000U
 #define GRPCI2_TCP_CBE_3_0_GET( _reg ) \
-  ( ( ( _reg ) & GRPCI2_TCP_CBE_3_0_MASK ) >> \
-    GRPCI2_TCP_CBE_3_0_SHIFT )
-#define GRPCI2_TCP_CBE_3_0_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRPCI2_TCP_CBE_3_0_MASK ) >> GRPCI2_TCP_CBE_3_0_SHIFT )
+#define GRPCI2_TCP_CBE_3_0_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRPCI2_TCP_CBE_3_0_MASK ) | \
-    ( ( ( _val ) << GRPCI2_TCP_CBE_3_0_SHIFT ) & \
-      GRPCI2_TCP_CBE_3_0_MASK ) )
+    ( ( ( _val ) << GRPCI2_TCP_CBE_3_0_SHIFT ) & GRPCI2_TCP_CBE_3_0_MASK ) )
 #define GRPCI2_TCP_CBE_3_0( _val ) \
-  ( ( ( _val ) << GRPCI2_TCP_CBE_3_0_SHIFT ) & \
-    GRPCI2_TCP_CBE_3_0_MASK )
+  ( ( ( _val ) << GRPCI2_TCP_CBE_3_0_SHIFT ) & GRPCI2_TCP_CBE_3_0_MASK )
 
 #define GRPCI2_TCP_FRAME 0x8000U
 
@@ -645,17 +618,14 @@ extern "C" {
  */
 
 #define GRPCI2_TCM_CBE_3_0_SHIFT 16
-#define GRPCI2_TCM_CBE_3_0_MASK 0xf0000U
+#define GRPCI2_TCM_CBE_3_0_MASK  0xf0000U
 #define GRPCI2_TCM_CBE_3_0_GET( _reg ) \
-  ( ( ( _reg ) & GRPCI2_TCM_CBE_3_0_MASK ) >> \
-    GRPCI2_TCM_CBE_3_0_SHIFT )
-#define GRPCI2_TCM_CBE_3_0_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRPCI2_TCM_CBE_3_0_MASK ) >> GRPCI2_TCM_CBE_3_0_SHIFT )
+#define GRPCI2_TCM_CBE_3_0_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRPCI2_TCM_CBE_3_0_MASK ) | \
-    ( ( ( _val ) << GRPCI2_TCM_CBE_3_0_SHIFT ) & \
-      GRPCI2_TCM_CBE_3_0_MASK ) )
+    ( ( ( _val ) << GRPCI2_TCM_CBE_3_0_SHIFT ) & GRPCI2_TCM_CBE_3_0_MASK ) )
 #define GRPCI2_TCM_CBE_3_0( _val ) \
-  ( ( ( _val ) << GRPCI2_TCM_CBE_3_0_SHIFT ) & \
-    GRPCI2_TCM_CBE_3_0_MASK )
+  ( ( ( _val ) << GRPCI2_TCM_CBE_3_0_SHIFT ) & GRPCI2_TCM_CBE_3_0_MASK )
 
 #define GRPCI2_TCM_FRAME 0x8000U
 
@@ -694,17 +664,14 @@ extern "C" {
  */
 
 #define GRPCI2_TADS_SIGNAL_SHIFT 0
-#define GRPCI2_TADS_SIGNAL_MASK 0xffffffffU
+#define GRPCI2_TADS_SIGNAL_MASK  0xffffffffU
 #define GRPCI2_TADS_SIGNAL_GET( _reg ) \
-  ( ( ( _reg ) & GRPCI2_TADS_SIGNAL_MASK ) >> \
-    GRPCI2_TADS_SIGNAL_SHIFT )
-#define GRPCI2_TADS_SIGNAL_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRPCI2_TADS_SIGNAL_MASK ) >> GRPCI2_TADS_SIGNAL_SHIFT )
+#define GRPCI2_TADS_SIGNAL_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRPCI2_TADS_SIGNAL_MASK ) | \
-    ( ( ( _val ) << GRPCI2_TADS_SIGNAL_SHIFT ) & \
-      GRPCI2_TADS_SIGNAL_MASK ) )
+    ( ( ( _val ) << GRPCI2_TADS_SIGNAL_SHIFT ) & GRPCI2_TADS_SIGNAL_MASK ) )
 #define GRPCI2_TADS_SIGNAL( _val ) \
-  ( ( ( _val ) << GRPCI2_TADS_SIGNAL_SHIFT ) & \
-    GRPCI2_TADS_SIGNAL_MASK )
+  ( ( ( _val ) << GRPCI2_TADS_SIGNAL_SHIFT ) & GRPCI2_TADS_SIGNAL_MASK )
 
 /** @} */
 
@@ -718,17 +685,14 @@ extern "C" {
  */
 
 #define GRPCI2_TCS_CBE_3_0_SHIFT 16
-#define GRPCI2_TCS_CBE_3_0_MASK 0xf0000U
+#define GRPCI2_TCS_CBE_3_0_MASK  0xf0000U
 #define GRPCI2_TCS_CBE_3_0_GET( _reg ) \
-  ( ( ( _reg ) & GRPCI2_TCS_CBE_3_0_MASK ) >> \
-    GRPCI2_TCS_CBE_3_0_SHIFT )
-#define GRPCI2_TCS_CBE_3_0_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRPCI2_TCS_CBE_3_0_MASK ) >> GRPCI2_TCS_CBE_3_0_SHIFT )
+#define GRPCI2_TCS_CBE_3_0_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRPCI2_TCS_CBE_3_0_MASK ) | \
-    ( ( ( _val ) << GRPCI2_TCS_CBE_3_0_SHIFT ) & \
-      GRPCI2_TCS_CBE_3_0_MASK ) )
+    ( ( ( _val ) << GRPCI2_TCS_CBE_3_0_SHIFT ) & GRPCI2_TCS_CBE_3_0_MASK ) )
 #define GRPCI2_TCS_CBE_3_0( _val ) \
-  ( ( ( _val ) << GRPCI2_TCS_CBE_3_0_SHIFT ) & \
-    GRPCI2_TCS_CBE_3_0_MASK )
+  ( ( ( _val ) << GRPCI2_TCS_CBE_3_0_SHIFT ) & GRPCI2_TCS_CBE_3_0_MASK )
 
 #define GRPCI2_TCS_FRAME 0x8000U
 

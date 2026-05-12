@@ -66,38 +66,38 @@ extern "C" {
 #endif
 
 /* Register GR1553B driver needed by BC driver */
-extern void gr1553bc_register(void);
+extern void gr1553bc_register( void );
 
 /* A BC descriptor accessed as is */
 struct gr1553bc_bd_raw {
-	volatile uint32_t words[4];
+  volatile uint32_t words[ 4 ];
 };
 
 /* A BC descriptor accessed as a transfer descriptor */
 struct gr1553bc_bd_tr {
-	volatile uint32_t settings[2];
-	volatile uint32_t dptr;
-	volatile uint32_t status;
+  volatile uint32_t settings[ 2 ];
+  volatile uint32_t dptr;
+  volatile uint32_t status;
 };
 
 /* A BC descriptor accessed as a conditional descriptor */
 struct gr1553bc_bd_cond {
-	volatile uint32_t cond;
-	volatile uint32_t bdptr;
-	volatile uint32_t padding[2];
+  volatile uint32_t cond;
+  volatile uint32_t bdptr;
+  volatile uint32_t padding[ 2 ];
 };
 
 /* A BC descriptor accessed any way */
 union gr1553bc_bd {
-	struct gr1553bc_bd_raw raw;
-	struct gr1553bc_bd_tr tr;
-	struct gr1553bc_bd_cond cond;
+  struct gr1553bc_bd_raw  raw;
+  struct gr1553bc_bd_tr   tr;
+  struct gr1553bc_bd_cond cond;
 };
 
 /* Current state of the BC hardware */
 struct gr1553bc_status {
-	unsigned int status;
-	unsigned int time;
+  unsigned int status;
+  unsigned int time;
 };
 
 #define KEEP_TIMESLOT 0x10
@@ -113,13 +113,13 @@ struct gr1553bc_status {
  *  descriptor.
  */
 extern void gr1553bc_bd_init(
-	union gr1553bc_bd *bd,
-	unsigned int flags,
-	uint32_t word0,
-	uint32_t word1,
-	uint32_t word2,
-	uint32_t word3
-	);
+  union gr1553bc_bd *bd,
+  unsigned int       flags,
+  uint32_t           word0,
+  uint32_t           word1,
+  uint32_t           word2,
+  uint32_t           word3
+);
 
 /* Initialize a Transfer descriptor
  *
@@ -130,9 +130,8 @@ extern void gr1553bc_bd_init(
  *	uint32_t data
  *	uint32_t status
  */
-#define gr1553bc_bd_tr_init(bd, set0, set1, data, status) \
-		gr1553bc_bd_init((union gr1553bc_bd *)bd,\
-					0xf, set0, set1, data, status)
+#define gr1553bc_bd_tr_init( bd, set0, set1, data, status ) \
+  gr1553bc_bd_init( (union gr1553bc_bd *) bd, 0xf, set0, set1, data, status )
 /* Initializa a Condition descriptor
  *
  * Arguments:
@@ -140,12 +139,11 @@ extern void gr1553bc_bd_init(
  * 	uint32_t cond
  *	uint32_t jump_adr
  */
-#define gr1553bc_bd_cond_init(bd, cond, jump_adr) \
-		gr1553bc_bd_init((union gr1553bc_bd *)bd, \
-					0xf, cond, jump_adr, 0, 0)
+#define gr1553bc_bd_cond_init( bd, cond, jump_adr ) \
+  gr1553bc_bd_init( (union gr1553bc_bd *) bd, 0xf, cond, jump_adr, 0, 0 )
 
 /* Size of a descriptor */
-#define GR1553BC_BD_SIZE sizeof(struct gr1553bc_bd_raw)
+#define GR1553BC_BD_SIZE sizeof( struct gr1553bc_bd_raw )
 
 /* Alignment of a descriptor */
 #define GR1553BC_BD_ALIGN 16
@@ -153,29 +151,29 @@ extern void gr1553bc_bd_init(
 /* End of list marker */
 #define GR1553BC_TR_EOL 0x80ffffff
 
-#define GR1553BC_BD_TYPE	0x80000000
+#define GR1553BC_BD_TYPE 0x80000000
 
 /* Condition descriptor bits */
-#define GR1553BC_UNCOND_JMP	0x820000ff
-#define GR1553BC_UNCOND_IRQ	0x860000ff
-#define GR1553BC_UNCOND_NOJMP	0x82000000
+#define GR1553BC_UNCOND_JMP   0x820000ff
+#define GR1553BC_UNCOND_IRQ   0x860000ff
+#define GR1553BC_UNCOND_NOJMP 0x82000000
 
 /* Transfer descriptor bits */
-#define GR1553BC_TR_DUMMY_0	0x00000000
-#define GR1553BC_TR_DUMMY_1	0x80000000
+#define GR1553BC_TR_DUMMY_0 0x00000000
+#define GR1553BC_TR_DUMMY_1 0x80000000
 
-#define GR1553BC_TR_TIME	0x0000ffff
+#define GR1553BC_TR_TIME 0x0000ffff
 
-#define GR1553BC_TR_EXTTRIG	0x40000000
+#define GR1553BC_TR_EXTTRIG 0x40000000
 
 /* Take a GR1553BC hardware device identified by instance index (minor).
  * A pointer is returned that is used internally by the GR1553BC
  * driver, it is used as an input paramter 'bc' to all other
  * functions that manipulate the hardware.
  */
-extern void *gr1553bc_open(int minor);
+extern void *gr1553bc_open( int minor );
 
-extern void gr1553bc_close(void *bc);
+extern void gr1553bc_close( void *bc );
 
 /* Stores Current Major/Minor frame number and the Slot number executing
  * into the location indicated by 'mid'. There may be two lists executing
@@ -184,7 +182,7 @@ extern void gr1553bc_close(void *bc);
  * list.
  *
  */
-extern int gr1553bc_indication(void *bc, int async, int *mid);
+extern int gr1553bc_indication( void *bc, int async, int *mid );
 
 /* Trigger external time sync by writing to the BC action register.
  * This may be good for debugging or if the time management is 
@@ -193,7 +191,7 @@ extern int gr1553bc_indication(void *bc, int async, int *mid);
  * if trig=0 the external trigger memory is cleared.
  * if trig!=0 the external trigger memory is set.
  */
-extern void gr1553bc_ext_trig(void *bc, int trig);
+extern void gr1553bc_ext_trig( void *bc, int trig );
 
 /* Configure the GR1553BC driver */
 /*extern int gr1553bc_config(struct gr1553bc_config *cfg);*/
@@ -209,24 +207,23 @@ extern void gr1553bc_ext_trig(void *bc, int trig);
  * list        - Schedule Transfer List
  * list_async  - Asynchronous list
  */
-extern int gr1553bc_start
-	(
-	void *bc,
-	struct gr1553bc_list *list,
-	struct gr1553bc_list *list_async
-	);
+extern int gr1553bc_start(
+  void                 *bc,
+  struct gr1553bc_list *list,
+  struct gr1553bc_list *list_async
+);
 
 /* Pause GR1553B BC scheduled transfers.
  *
  * Does not affect asynchronous operation.
  */
-extern int gr1553bc_pause(void *bc);
+extern int gr1553bc_pause( void *bc );
 
 /* Restart GR1553B BC scheduled transfers, after being paused 
  *
  * Does not affect asynchronous operation.
  */
-extern int gr1553bc_restart(void *bc);
+extern int gr1553bc_restart( void *bc );
 
 /* Stop BC transmission.
  *
@@ -234,7 +231,7 @@ extern int gr1553bc_restart(void *bc);
  *   bit0 - 1=STOP schedule list
  *   bit1 - 1=STOP asynchronous list
  */
-extern int gr1553bc_stop(void *bc, int options);
+extern int gr1553bc_stop( void *bc, int options );
 
 /* Standard IRQ function setup. IRQ can be generated by condition descriptors
  * or by transfer descriptors or by errors.
@@ -249,18 +246,13 @@ extern int gr1553bc_stop(void *bc, int options);
  * IRQs generated by transfer descriptors or by BC errors (DMA error etc.)
  * is handled by this standard ISR handler.
  */
-extern int gr1553bc_irq_setup
-	(
-	void *bc,
-	bcirq_func_t func,
-	void *data
-	);
+extern int gr1553bc_irq_setup( void *bc, bcirq_func_t func, void *data );
 
 /* Get Current BC hardware state/status. The Status is stored into the
  * area pointed to by status. See "struct gr1553bc_status" for more
  * info.
  */
-extern void gr1553bc_status(void *bc, struct gr1553bc_status *status);
+extern void gr1553bc_status( void *bc, struct gr1553bc_status *status );
 
 #ifdef __cplusplus
 }

@@ -82,17 +82,14 @@ extern "C" {
  */
 
 #define L4STAT_CVAL_CVAL_SHIFT 0
-#define L4STAT_CVAL_CVAL_MASK 0xffffffffU
+#define L4STAT_CVAL_CVAL_MASK  0xffffffffU
 #define L4STAT_CVAL_CVAL_GET( _reg ) \
-  ( ( ( _reg ) & L4STAT_CVAL_CVAL_MASK ) >> \
-    L4STAT_CVAL_CVAL_SHIFT )
-#define L4STAT_CVAL_CVAL_SET( _reg, _val ) \
+  ( ( ( _reg ) & L4STAT_CVAL_CVAL_MASK ) >> L4STAT_CVAL_CVAL_SHIFT )
+#define L4STAT_CVAL_CVAL_SET( _reg, _val )  \
   ( ( ( _reg ) & ~L4STAT_CVAL_CVAL_MASK ) | \
-    ( ( ( _val ) << L4STAT_CVAL_CVAL_SHIFT ) & \
-      L4STAT_CVAL_CVAL_MASK ) )
+    ( ( ( _val ) << L4STAT_CVAL_CVAL_SHIFT ) & L4STAT_CVAL_CVAL_MASK ) )
 #define L4STAT_CVAL_CVAL( _val ) \
-  ( ( ( _val ) << L4STAT_CVAL_CVAL_SHIFT ) & \
-    L4STAT_CVAL_CVAL_MASK )
+  ( ( ( _val ) << L4STAT_CVAL_CVAL_SHIFT ) & L4STAT_CVAL_CVAL_MASK )
 
 /** @} */
 
@@ -105,30 +102,24 @@ extern "C" {
  */
 
 #define L4STAT_CCTRL_NCPU_SHIFT 28
-#define L4STAT_CCTRL_NCPU_MASK 0xf0000000U
+#define L4STAT_CCTRL_NCPU_MASK  0xf0000000U
 #define L4STAT_CCTRL_NCPU_GET( _reg ) \
-  ( ( ( _reg ) & L4STAT_CCTRL_NCPU_MASK ) >> \
-    L4STAT_CCTRL_NCPU_SHIFT )
-#define L4STAT_CCTRL_NCPU_SET( _reg, _val ) \
+  ( ( ( _reg ) & L4STAT_CCTRL_NCPU_MASK ) >> L4STAT_CCTRL_NCPU_SHIFT )
+#define L4STAT_CCTRL_NCPU_SET( _reg, _val )  \
   ( ( ( _reg ) & ~L4STAT_CCTRL_NCPU_MASK ) | \
-    ( ( ( _val ) << L4STAT_CCTRL_NCPU_SHIFT ) & \
-      L4STAT_CCTRL_NCPU_MASK ) )
+    ( ( ( _val ) << L4STAT_CCTRL_NCPU_SHIFT ) & L4STAT_CCTRL_NCPU_MASK ) )
 #define L4STAT_CCTRL_NCPU( _val ) \
-  ( ( ( _val ) << L4STAT_CCTRL_NCPU_SHIFT ) & \
-    L4STAT_CCTRL_NCPU_MASK )
+  ( ( ( _val ) << L4STAT_CCTRL_NCPU_SHIFT ) & L4STAT_CCTRL_NCPU_MASK )
 
 #define L4STAT_CCTRL_NCNT_SHIFT 23
-#define L4STAT_CCTRL_NCNT_MASK 0xf800000U
+#define L4STAT_CCTRL_NCNT_MASK  0xf800000U
 #define L4STAT_CCTRL_NCNT_GET( _reg ) \
-  ( ( ( _reg ) & L4STAT_CCTRL_NCNT_MASK ) >> \
-    L4STAT_CCTRL_NCNT_SHIFT )
-#define L4STAT_CCTRL_NCNT_SET( _reg, _val ) \
+  ( ( ( _reg ) & L4STAT_CCTRL_NCNT_MASK ) >> L4STAT_CCTRL_NCNT_SHIFT )
+#define L4STAT_CCTRL_NCNT_SET( _reg, _val )  \
   ( ( ( _reg ) & ~L4STAT_CCTRL_NCNT_MASK ) | \
-    ( ( ( _val ) << L4STAT_CCTRL_NCNT_SHIFT ) & \
-      L4STAT_CCTRL_NCNT_MASK ) )
+    ( ( ( _val ) << L4STAT_CCTRL_NCNT_SHIFT ) & L4STAT_CCTRL_NCNT_MASK ) )
 #define L4STAT_CCTRL_NCNT( _val ) \
-  ( ( ( _val ) << L4STAT_CCTRL_NCNT_SHIFT ) & \
-    L4STAT_CCTRL_NCNT_MASK )
+  ( ( ( _val ) << L4STAT_CCTRL_NCNT_SHIFT ) & L4STAT_CCTRL_NCNT_MASK )
 
 #define L4STAT_CCTRL_MC 0x400000U
 
@@ -145,47 +136,40 @@ extern "C" {
 #define L4STAT_CCTRL_CD 0x10000U
 
 #define L4STAT_CCTRL_SU_SHIFT 14
-#define L4STAT_CCTRL_SU_MASK 0xc000U
+#define L4STAT_CCTRL_SU_MASK  0xc000U
 #define L4STAT_CCTRL_SU_GET( _reg ) \
-  ( ( ( _reg ) & L4STAT_CCTRL_SU_MASK ) >> \
-    L4STAT_CCTRL_SU_SHIFT )
-#define L4STAT_CCTRL_SU_SET( _reg, _val ) \
+  ( ( ( _reg ) & L4STAT_CCTRL_SU_MASK ) >> L4STAT_CCTRL_SU_SHIFT )
+#define L4STAT_CCTRL_SU_SET( _reg, _val )  \
   ( ( ( _reg ) & ~L4STAT_CCTRL_SU_MASK ) | \
-    ( ( ( _val ) << L4STAT_CCTRL_SU_SHIFT ) & \
-      L4STAT_CCTRL_SU_MASK ) )
+    ( ( ( _val ) << L4STAT_CCTRL_SU_SHIFT ) & L4STAT_CCTRL_SU_MASK ) )
 #define L4STAT_CCTRL_SU( _val ) \
-  ( ( ( _val ) << L4STAT_CCTRL_SU_SHIFT ) & \
-    L4STAT_CCTRL_SU_MASK )
+  ( ( ( _val ) << L4STAT_CCTRL_SU_SHIFT ) & L4STAT_CCTRL_SU_MASK )
 
 #define L4STAT_CCTRL_CL 0x2000U
 
 #define L4STAT_CCTRL_EN 0x1000U
 
 #define L4STAT_CCTRL_EVENT_ID_SHIFT 4
-#define L4STAT_CCTRL_EVENT_ID_MASK 0xff0U
+#define L4STAT_CCTRL_EVENT_ID_MASK  0xff0U
 #define L4STAT_CCTRL_EVENT_ID_GET( _reg ) \
-  ( ( ( _reg ) & L4STAT_CCTRL_EVENT_ID_MASK ) >> \
-    L4STAT_CCTRL_EVENT_ID_SHIFT )
-#define L4STAT_CCTRL_EVENT_ID_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~L4STAT_CCTRL_EVENT_ID_MASK ) | \
+  ( ( ( _reg ) & L4STAT_CCTRL_EVENT_ID_MASK ) >> L4STAT_CCTRL_EVENT_ID_SHIFT )
+#define L4STAT_CCTRL_EVENT_ID_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~L4STAT_CCTRL_EVENT_ID_MASK ) |    \
     ( ( ( _val ) << L4STAT_CCTRL_EVENT_ID_SHIFT ) & \
       L4STAT_CCTRL_EVENT_ID_MASK ) )
 #define L4STAT_CCTRL_EVENT_ID( _val ) \
-  ( ( ( _val ) << L4STAT_CCTRL_EVENT_ID_SHIFT ) & \
-    L4STAT_CCTRL_EVENT_ID_MASK )
+  ( ( ( _val ) << L4STAT_CCTRL_EVENT_ID_SHIFT ) & L4STAT_CCTRL_EVENT_ID_MASK )
 
 #define L4STAT_CCTRL_CPU_AHBM_SHIFT 0
-#define L4STAT_CCTRL_CPU_AHBM_MASK 0xfU
+#define L4STAT_CCTRL_CPU_AHBM_MASK  0xfU
 #define L4STAT_CCTRL_CPU_AHBM_GET( _reg ) \
-  ( ( ( _reg ) & L4STAT_CCTRL_CPU_AHBM_MASK ) >> \
-    L4STAT_CCTRL_CPU_AHBM_SHIFT )
-#define L4STAT_CCTRL_CPU_AHBM_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~L4STAT_CCTRL_CPU_AHBM_MASK ) | \
+  ( ( ( _reg ) & L4STAT_CCTRL_CPU_AHBM_MASK ) >> L4STAT_CCTRL_CPU_AHBM_SHIFT )
+#define L4STAT_CCTRL_CPU_AHBM_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~L4STAT_CCTRL_CPU_AHBM_MASK ) |    \
     ( ( ( _val ) << L4STAT_CCTRL_CPU_AHBM_SHIFT ) & \
       L4STAT_CCTRL_CPU_AHBM_MASK ) )
 #define L4STAT_CCTRL_CPU_AHBM( _val ) \
-  ( ( ( _val ) << L4STAT_CCTRL_CPU_AHBM_SHIFT ) & \
-    L4STAT_CCTRL_CPU_AHBM_MASK )
+  ( ( ( _val ) << L4STAT_CCTRL_CPU_AHBM_SHIFT ) & L4STAT_CCTRL_CPU_AHBM_MASK )
 
 /** @} */
 
@@ -199,17 +183,14 @@ extern "C" {
  */
 
 #define L4STAT_CSVAL_CSVAL_SHIFT 0
-#define L4STAT_CSVAL_CSVAL_MASK 0xffffffffU
+#define L4STAT_CSVAL_CSVAL_MASK  0xffffffffU
 #define L4STAT_CSVAL_CSVAL_GET( _reg ) \
-  ( ( ( _reg ) & L4STAT_CSVAL_CSVAL_MASK ) >> \
-    L4STAT_CSVAL_CSVAL_SHIFT )
-#define L4STAT_CSVAL_CSVAL_SET( _reg, _val ) \
+  ( ( ( _reg ) & L4STAT_CSVAL_CSVAL_MASK ) >> L4STAT_CSVAL_CSVAL_SHIFT )
+#define L4STAT_CSVAL_CSVAL_SET( _reg, _val )  \
   ( ( ( _reg ) & ~L4STAT_CSVAL_CSVAL_MASK ) | \
-    ( ( ( _val ) << L4STAT_CSVAL_CSVAL_SHIFT ) & \
-      L4STAT_CSVAL_CSVAL_MASK ) )
+    ( ( ( _val ) << L4STAT_CSVAL_CSVAL_SHIFT ) & L4STAT_CSVAL_CSVAL_MASK ) )
 #define L4STAT_CSVAL_CSVAL( _val ) \
-  ( ( ( _val ) << L4STAT_CSVAL_CSVAL_SHIFT ) & \
-    L4STAT_CSVAL_CSVAL_MASK )
+  ( ( ( _val ) << L4STAT_CSVAL_CSVAL_SHIFT ) & L4STAT_CSVAL_CSVAL_MASK )
 
 /** @} */
 
@@ -222,17 +203,15 @@ extern "C" {
  */
 
 #define L4STAT_TSTAMP_TSTAMP_SHIFT 0
-#define L4STAT_TSTAMP_TSTAMP_MASK 0xffffffffU
+#define L4STAT_TSTAMP_TSTAMP_MASK  0xffffffffU
 #define L4STAT_TSTAMP_TSTAMP_GET( _reg ) \
-  ( ( ( _reg ) & L4STAT_TSTAMP_TSTAMP_MASK ) >> \
-    L4STAT_TSTAMP_TSTAMP_SHIFT )
-#define L4STAT_TSTAMP_TSTAMP_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~L4STAT_TSTAMP_TSTAMP_MASK ) | \
+  ( ( ( _reg ) & L4STAT_TSTAMP_TSTAMP_MASK ) >> L4STAT_TSTAMP_TSTAMP_SHIFT )
+#define L4STAT_TSTAMP_TSTAMP_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~L4STAT_TSTAMP_TSTAMP_MASK ) |    \
     ( ( ( _val ) << L4STAT_TSTAMP_TSTAMP_SHIFT ) & \
       L4STAT_TSTAMP_TSTAMP_MASK ) )
 #define L4STAT_TSTAMP_TSTAMP( _val ) \
-  ( ( ( _val ) << L4STAT_TSTAMP_TSTAMP_SHIFT ) & \
-    L4STAT_TSTAMP_TSTAMP_MASK )
+  ( ( ( _val ) << L4STAT_TSTAMP_TSTAMP_SHIFT ) & L4STAT_TSTAMP_TSTAMP_MASK )
 
 /** @} */
 

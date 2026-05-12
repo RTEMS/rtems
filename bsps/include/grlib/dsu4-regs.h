@@ -116,17 +116,14 @@ extern "C" {
  */
 
 #define DSU4_DTTC_TIMETAG_SHIFT 0
-#define DSU4_DTTC_TIMETAG_MASK 0xffffffffU
+#define DSU4_DTTC_TIMETAG_MASK  0xffffffffU
 #define DSU4_DTTC_TIMETAG_GET( _reg ) \
-  ( ( ( _reg ) & DSU4_DTTC_TIMETAG_MASK ) >> \
-    DSU4_DTTC_TIMETAG_SHIFT )
-#define DSU4_DTTC_TIMETAG_SET( _reg, _val ) \
+  ( ( ( _reg ) & DSU4_DTTC_TIMETAG_MASK ) >> DSU4_DTTC_TIMETAG_SHIFT )
+#define DSU4_DTTC_TIMETAG_SET( _reg, _val )  \
   ( ( ( _reg ) & ~DSU4_DTTC_TIMETAG_MASK ) | \
-    ( ( ( _val ) << DSU4_DTTC_TIMETAG_SHIFT ) & \
-      DSU4_DTTC_TIMETAG_MASK ) )
+    ( ( ( _val ) << DSU4_DTTC_TIMETAG_SHIFT ) & DSU4_DTTC_TIMETAG_MASK ) )
 #define DSU4_DTTC_TIMETAG( _val ) \
-  ( ( ( _val ) << DSU4_DTTC_TIMETAG_SHIFT ) & \
-    DSU4_DTTC_TIMETAG_MASK )
+  ( ( ( _val ) << DSU4_DTTC_TIMETAG_SHIFT ) & DSU4_DTTC_TIMETAG_MASK )
 
 /** @} */
 
@@ -139,30 +136,24 @@ extern "C" {
  */
 
 #define DSU4_BRSS_SS_3_0_SHIFT 16
-#define DSU4_BRSS_SS_3_0_MASK 0xf0000U
+#define DSU4_BRSS_SS_3_0_MASK  0xf0000U
 #define DSU4_BRSS_SS_3_0_GET( _reg ) \
-  ( ( ( _reg ) & DSU4_BRSS_SS_3_0_MASK ) >> \
-    DSU4_BRSS_SS_3_0_SHIFT )
-#define DSU4_BRSS_SS_3_0_SET( _reg, _val ) \
+  ( ( ( _reg ) & DSU4_BRSS_SS_3_0_MASK ) >> DSU4_BRSS_SS_3_0_SHIFT )
+#define DSU4_BRSS_SS_3_0_SET( _reg, _val )  \
   ( ( ( _reg ) & ~DSU4_BRSS_SS_3_0_MASK ) | \
-    ( ( ( _val ) << DSU4_BRSS_SS_3_0_SHIFT ) & \
-      DSU4_BRSS_SS_3_0_MASK ) )
+    ( ( ( _val ) << DSU4_BRSS_SS_3_0_SHIFT ) & DSU4_BRSS_SS_3_0_MASK ) )
 #define DSU4_BRSS_SS_3_0( _val ) \
-  ( ( ( _val ) << DSU4_BRSS_SS_3_0_SHIFT ) & \
-    DSU4_BRSS_SS_3_0_MASK )
+  ( ( ( _val ) << DSU4_BRSS_SS_3_0_SHIFT ) & DSU4_BRSS_SS_3_0_MASK )
 
 #define DSU4_BRSS_BN_3_0_SHIFT 0
-#define DSU4_BRSS_BN_3_0_MASK 0xfU
+#define DSU4_BRSS_BN_3_0_MASK  0xfU
 #define DSU4_BRSS_BN_3_0_GET( _reg ) \
-  ( ( ( _reg ) & DSU4_BRSS_BN_3_0_MASK ) >> \
-    DSU4_BRSS_BN_3_0_SHIFT )
-#define DSU4_BRSS_BN_3_0_SET( _reg, _val ) \
+  ( ( ( _reg ) & DSU4_BRSS_BN_3_0_MASK ) >> DSU4_BRSS_BN_3_0_SHIFT )
+#define DSU4_BRSS_BN_3_0_SET( _reg, _val )  \
   ( ( ( _reg ) & ~DSU4_BRSS_BN_3_0_MASK ) | \
-    ( ( ( _val ) << DSU4_BRSS_BN_3_0_SHIFT ) & \
-      DSU4_BRSS_BN_3_0_MASK ) )
+    ( ( ( _val ) << DSU4_BRSS_BN_3_0_SHIFT ) & DSU4_BRSS_BN_3_0_MASK ) )
 #define DSU4_BRSS_BN_3_0( _val ) \
-  ( ( ( _val ) << DSU4_BRSS_BN_3_0_SHIFT ) & \
-    DSU4_BRSS_BN_3_0_MASK )
+  ( ( ( _val ) << DSU4_BRSS_BN_3_0_SHIFT ) & DSU4_BRSS_BN_3_0_MASK )
 
 /** @} */
 
@@ -175,30 +166,24 @@ extern "C" {
  */
 
 #define DSU4_DBGM_DM_3_0_SHIFT 16
-#define DSU4_DBGM_DM_3_0_MASK 0xf0000U
+#define DSU4_DBGM_DM_3_0_MASK  0xf0000U
 #define DSU4_DBGM_DM_3_0_GET( _reg ) \
-  ( ( ( _reg ) & DSU4_DBGM_DM_3_0_MASK ) >> \
-    DSU4_DBGM_DM_3_0_SHIFT )
-#define DSU4_DBGM_DM_3_0_SET( _reg, _val ) \
+  ( ( ( _reg ) & DSU4_DBGM_DM_3_0_MASK ) >> DSU4_DBGM_DM_3_0_SHIFT )
+#define DSU4_DBGM_DM_3_0_SET( _reg, _val )  \
   ( ( ( _reg ) & ~DSU4_DBGM_DM_3_0_MASK ) | \
-    ( ( ( _val ) << DSU4_DBGM_DM_3_0_SHIFT ) & \
-      DSU4_DBGM_DM_3_0_MASK ) )
+    ( ( ( _val ) << DSU4_DBGM_DM_3_0_SHIFT ) & DSU4_DBGM_DM_3_0_MASK ) )
 #define DSU4_DBGM_DM_3_0( _val ) \
-  ( ( ( _val ) << DSU4_DBGM_DM_3_0_SHIFT ) & \
-    DSU4_DBGM_DM_3_0_MASK )
+  ( ( ( _val ) << DSU4_DBGM_DM_3_0_SHIFT ) & DSU4_DBGM_DM_3_0_MASK )
 
 #define DSU4_DBGM_ED_3_0_SHIFT 0
-#define DSU4_DBGM_ED_3_0_MASK 0xfU
+#define DSU4_DBGM_ED_3_0_MASK  0xfU
 #define DSU4_DBGM_ED_3_0_GET( _reg ) \
-  ( ( ( _reg ) & DSU4_DBGM_ED_3_0_MASK ) >> \
-    DSU4_DBGM_ED_3_0_SHIFT )
-#define DSU4_DBGM_ED_3_0_SET( _reg, _val ) \
+  ( ( ( _reg ) & DSU4_DBGM_ED_3_0_MASK ) >> DSU4_DBGM_ED_3_0_SHIFT )
+#define DSU4_DBGM_ED_3_0_SET( _reg, _val )  \
   ( ( ( _reg ) & ~DSU4_DBGM_ED_3_0_MASK ) | \
-    ( ( ( _val ) << DSU4_DBGM_ED_3_0_SHIFT ) & \
-      DSU4_DBGM_ED_3_0_MASK ) )
+    ( ( ( _val ) << DSU4_DBGM_ED_3_0_SHIFT ) & DSU4_DBGM_ED_3_0_MASK ) )
 #define DSU4_DBGM_ED_3_0( _val ) \
-  ( ( ( _val ) << DSU4_DBGM_ED_3_0_SHIFT ) & \
-    DSU4_DBGM_ED_3_0_MASK )
+  ( ( ( _val ) << DSU4_DBGM_ED_3_0_SHIFT ) & DSU4_DBGM_ED_3_0_MASK )
 
 /** @} */
 
@@ -213,17 +198,14 @@ extern "C" {
 #define DSU4_DTR_EM 0x1000U
 
 #define DSU4_DTR_TRAPTYPE_SHIFT 4
-#define DSU4_DTR_TRAPTYPE_MASK 0xff0U
+#define DSU4_DTR_TRAPTYPE_MASK  0xff0U
 #define DSU4_DTR_TRAPTYPE_GET( _reg ) \
-  ( ( ( _reg ) & DSU4_DTR_TRAPTYPE_MASK ) >> \
-    DSU4_DTR_TRAPTYPE_SHIFT )
-#define DSU4_DTR_TRAPTYPE_SET( _reg, _val ) \
+  ( ( ( _reg ) & DSU4_DTR_TRAPTYPE_MASK ) >> DSU4_DTR_TRAPTYPE_SHIFT )
+#define DSU4_DTR_TRAPTYPE_SET( _reg, _val )  \
   ( ( ( _reg ) & ~DSU4_DTR_TRAPTYPE_MASK ) | \
-    ( ( ( _val ) << DSU4_DTR_TRAPTYPE_SHIFT ) & \
-      DSU4_DTR_TRAPTYPE_MASK ) )
+    ( ( ( _val ) << DSU4_DTR_TRAPTYPE_SHIFT ) & DSU4_DTR_TRAPTYPE_MASK ) )
 #define DSU4_DTR_TRAPTYPE( _val ) \
-  ( ( ( _val ) << DSU4_DTR_TRAPTYPE_SHIFT ) & \
-    DSU4_DTR_TRAPTYPE_MASK )
+  ( ( ( _val ) << DSU4_DTR_TRAPTYPE_SHIFT ) & DSU4_DTR_TRAPTYPE_MASK )
 
 /** @} */
 
@@ -236,17 +218,14 @@ extern "C" {
  */
 
 #define DSU4_DASI_ASI_SHIFT 0
-#define DSU4_DASI_ASI_MASK 0xffU
+#define DSU4_DASI_ASI_MASK  0xffU
 #define DSU4_DASI_ASI_GET( _reg ) \
-  ( ( ( _reg ) & DSU4_DASI_ASI_MASK ) >> \
-    DSU4_DASI_ASI_SHIFT )
-#define DSU4_DASI_ASI_SET( _reg, _val ) \
+  ( ( ( _reg ) & DSU4_DASI_ASI_MASK ) >> DSU4_DASI_ASI_SHIFT )
+#define DSU4_DASI_ASI_SET( _reg, _val )  \
   ( ( ( _reg ) & ~DSU4_DASI_ASI_MASK ) | \
-    ( ( ( _val ) << DSU4_DASI_ASI_SHIFT ) & \
-      DSU4_DASI_ASI_MASK ) )
+    ( ( ( _val ) << DSU4_DASI_ASI_SHIFT ) & DSU4_DASI_ASI_MASK ) )
 #define DSU4_DASI_ASI( _val ) \
-  ( ( ( _val ) << DSU4_DASI_ASI_SHIFT ) & \
-    DSU4_DASI_ASI_MASK )
+  ( ( ( _val ) << DSU4_DASI_ASI_SHIFT ) & DSU4_DASI_ASI_MASK )
 
 /** @} */
 
@@ -259,17 +238,14 @@ extern "C" {
  */
 
 #define DSU4_ATBC_DCNT_SHIFT 16
-#define DSU4_ATBC_DCNT_MASK 0xff0000U
+#define DSU4_ATBC_DCNT_MASK  0xff0000U
 #define DSU4_ATBC_DCNT_GET( _reg ) \
-  ( ( ( _reg ) & DSU4_ATBC_DCNT_MASK ) >> \
-    DSU4_ATBC_DCNT_SHIFT )
-#define DSU4_ATBC_DCNT_SET( _reg, _val ) \
+  ( ( ( _reg ) & DSU4_ATBC_DCNT_MASK ) >> DSU4_ATBC_DCNT_SHIFT )
+#define DSU4_ATBC_DCNT_SET( _reg, _val )  \
   ( ( ( _reg ) & ~DSU4_ATBC_DCNT_MASK ) | \
-    ( ( ( _val ) << DSU4_ATBC_DCNT_SHIFT ) & \
-      DSU4_ATBC_DCNT_MASK ) )
+    ( ( ( _val ) << DSU4_ATBC_DCNT_SHIFT ) & DSU4_ATBC_DCNT_MASK ) )
 #define DSU4_ATBC_DCNT( _val ) \
-  ( ( ( _val ) << DSU4_ATBC_DCNT_SHIFT ) & \
-    DSU4_ATBC_DCNT_MASK )
+  ( ( ( _val ) << DSU4_ATBC_DCNT_SHIFT ) & DSU4_ATBC_DCNT_MASK )
 
 #define DSU4_ATBC_DF 0x100U
 
@@ -280,17 +256,14 @@ extern "C" {
 #define DSU4_ATBC_TF 0x20U
 
 #define DSU4_ATBC_BW_SHIFT 3
-#define DSU4_ATBC_BW_MASK 0x18U
+#define DSU4_ATBC_BW_MASK  0x18U
 #define DSU4_ATBC_BW_GET( _reg ) \
-  ( ( ( _reg ) & DSU4_ATBC_BW_MASK ) >> \
-    DSU4_ATBC_BW_SHIFT )
-#define DSU4_ATBC_BW_SET( _reg, _val ) \
+  ( ( ( _reg ) & DSU4_ATBC_BW_MASK ) >> DSU4_ATBC_BW_SHIFT )
+#define DSU4_ATBC_BW_SET( _reg, _val )  \
   ( ( ( _reg ) & ~DSU4_ATBC_BW_MASK ) | \
-    ( ( ( _val ) << DSU4_ATBC_BW_SHIFT ) & \
-      DSU4_ATBC_BW_MASK ) )
+    ( ( ( _val ) << DSU4_ATBC_BW_SHIFT ) & DSU4_ATBC_BW_MASK ) )
 #define DSU4_ATBC_BW( _val ) \
-  ( ( ( _val ) << DSU4_ATBC_BW_SHIFT ) & \
-    DSU4_ATBC_BW_MASK )
+  ( ( ( _val ) << DSU4_ATBC_BW_SHIFT ) & DSU4_ATBC_BW_MASK )
 
 #define DSU4_ATBC_BR 0x4U
 
@@ -309,17 +282,14 @@ extern "C" {
  */
 
 #define DSU4_ATBI_INDEX_SHIFT 4
-#define DSU4_ATBI_INDEX_MASK 0xff0U
+#define DSU4_ATBI_INDEX_MASK  0xff0U
 #define DSU4_ATBI_INDEX_GET( _reg ) \
-  ( ( ( _reg ) & DSU4_ATBI_INDEX_MASK ) >> \
-    DSU4_ATBI_INDEX_SHIFT )
-#define DSU4_ATBI_INDEX_SET( _reg, _val ) \
+  ( ( ( _reg ) & DSU4_ATBI_INDEX_MASK ) >> DSU4_ATBI_INDEX_SHIFT )
+#define DSU4_ATBI_INDEX_SET( _reg, _val )  \
   ( ( ( _reg ) & ~DSU4_ATBI_INDEX_MASK ) | \
-    ( ( ( _val ) << DSU4_ATBI_INDEX_SHIFT ) & \
-      DSU4_ATBI_INDEX_MASK ) )
+    ( ( ( _val ) << DSU4_ATBI_INDEX_SHIFT ) & DSU4_ATBI_INDEX_MASK ) )
 #define DSU4_ATBI_INDEX( _val ) \
-  ( ( ( _val ) << DSU4_ATBI_INDEX_SHIFT ) & \
-    DSU4_ATBI_INDEX_MASK )
+  ( ( ( _val ) << DSU4_ATBI_INDEX_SHIFT ) & DSU4_ATBI_INDEX_MASK )
 
 /** @} */
 
@@ -333,30 +303,24 @@ extern "C" {
  */
 
 #define DSU4_ATBFC_WPF_SHIFT 12
-#define DSU4_ATBFC_WPF_MASK 0x3000U
+#define DSU4_ATBFC_WPF_MASK  0x3000U
 #define DSU4_ATBFC_WPF_GET( _reg ) \
-  ( ( ( _reg ) & DSU4_ATBFC_WPF_MASK ) >> \
-    DSU4_ATBFC_WPF_SHIFT )
-#define DSU4_ATBFC_WPF_SET( _reg, _val ) \
+  ( ( ( _reg ) & DSU4_ATBFC_WPF_MASK ) >> DSU4_ATBFC_WPF_SHIFT )
+#define DSU4_ATBFC_WPF_SET( _reg, _val )  \
   ( ( ( _reg ) & ~DSU4_ATBFC_WPF_MASK ) | \
-    ( ( ( _val ) << DSU4_ATBFC_WPF_SHIFT ) & \
-      DSU4_ATBFC_WPF_MASK ) )
+    ( ( ( _val ) << DSU4_ATBFC_WPF_SHIFT ) & DSU4_ATBFC_WPF_MASK ) )
 #define DSU4_ATBFC_WPF( _val ) \
-  ( ( ( _val ) << DSU4_ATBFC_WPF_SHIFT ) & \
-    DSU4_ATBFC_WPF_MASK )
+  ( ( ( _val ) << DSU4_ATBFC_WPF_SHIFT ) & DSU4_ATBFC_WPF_MASK )
 
 #define DSU4_ATBFC_BPF_SHIFT 8
-#define DSU4_ATBFC_BPF_MASK 0x300U
+#define DSU4_ATBFC_BPF_MASK  0x300U
 #define DSU4_ATBFC_BPF_GET( _reg ) \
-  ( ( ( _reg ) & DSU4_ATBFC_BPF_MASK ) >> \
-    DSU4_ATBFC_BPF_SHIFT )
-#define DSU4_ATBFC_BPF_SET( _reg, _val ) \
+  ( ( ( _reg ) & DSU4_ATBFC_BPF_MASK ) >> DSU4_ATBFC_BPF_SHIFT )
+#define DSU4_ATBFC_BPF_SET( _reg, _val )  \
   ( ( ( _reg ) & ~DSU4_ATBFC_BPF_MASK ) | \
-    ( ( ( _val ) << DSU4_ATBFC_BPF_SHIFT ) & \
-      DSU4_ATBFC_BPF_MASK ) )
+    ( ( ( _val ) << DSU4_ATBFC_BPF_SHIFT ) & DSU4_ATBFC_BPF_MASK ) )
 #define DSU4_ATBFC_BPF( _val ) \
-  ( ( ( _val ) << DSU4_ATBFC_BPF_SHIFT ) & \
-    DSU4_ATBFC_BPF_MASK )
+  ( ( ( _val ) << DSU4_ATBFC_BPF_SHIFT ) & DSU4_ATBFC_BPF_MASK )
 
 #define DSU4_ATBFC_PF 0x8U
 
@@ -378,30 +342,26 @@ extern "C" {
  */
 
 #define DSU4_ATBFM_SMASK_15_0_SHIFT 16
-#define DSU4_ATBFM_SMASK_15_0_MASK 0xffff0000U
+#define DSU4_ATBFM_SMASK_15_0_MASK  0xffff0000U
 #define DSU4_ATBFM_SMASK_15_0_GET( _reg ) \
-  ( ( ( _reg ) & DSU4_ATBFM_SMASK_15_0_MASK ) >> \
-    DSU4_ATBFM_SMASK_15_0_SHIFT )
-#define DSU4_ATBFM_SMASK_15_0_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~DSU4_ATBFM_SMASK_15_0_MASK ) | \
+  ( ( ( _reg ) & DSU4_ATBFM_SMASK_15_0_MASK ) >> DSU4_ATBFM_SMASK_15_0_SHIFT )
+#define DSU4_ATBFM_SMASK_15_0_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~DSU4_ATBFM_SMASK_15_0_MASK ) |    \
     ( ( ( _val ) << DSU4_ATBFM_SMASK_15_0_SHIFT ) & \
       DSU4_ATBFM_SMASK_15_0_MASK ) )
 #define DSU4_ATBFM_SMASK_15_0( _val ) \
-  ( ( ( _val ) << DSU4_ATBFM_SMASK_15_0_SHIFT ) & \
-    DSU4_ATBFM_SMASK_15_0_MASK )
+  ( ( ( _val ) << DSU4_ATBFM_SMASK_15_0_SHIFT ) & DSU4_ATBFM_SMASK_15_0_MASK )
 
 #define DSU4_ATBFM_MMASK_15_0_SHIFT 0
-#define DSU4_ATBFM_MMASK_15_0_MASK 0xffffU
+#define DSU4_ATBFM_MMASK_15_0_MASK  0xffffU
 #define DSU4_ATBFM_MMASK_15_0_GET( _reg ) \
-  ( ( ( _reg ) & DSU4_ATBFM_MMASK_15_0_MASK ) >> \
-    DSU4_ATBFM_MMASK_15_0_SHIFT )
-#define DSU4_ATBFM_MMASK_15_0_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~DSU4_ATBFM_MMASK_15_0_MASK ) | \
+  ( ( ( _reg ) & DSU4_ATBFM_MMASK_15_0_MASK ) >> DSU4_ATBFM_MMASK_15_0_SHIFT )
+#define DSU4_ATBFM_MMASK_15_0_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~DSU4_ATBFM_MMASK_15_0_MASK ) |    \
     ( ( ( _val ) << DSU4_ATBFM_MMASK_15_0_SHIFT ) & \
       DSU4_ATBFM_MMASK_15_0_MASK ) )
 #define DSU4_ATBFM_MMASK_15_0( _val ) \
-  ( ( ( _val ) << DSU4_ATBFM_MMASK_15_0_SHIFT ) & \
-    DSU4_ATBFM_MMASK_15_0_MASK )
+  ( ( ( _val ) << DSU4_ATBFM_MMASK_15_0_SHIFT ) & DSU4_ATBFM_MMASK_15_0_MASK )
 
 /** @} */
 
@@ -415,17 +375,15 @@ extern "C" {
  */
 
 #define DSU4_ATBBA_BADDR_31_2_SHIFT 2
-#define DSU4_ATBBA_BADDR_31_2_MASK 0xfffffffcU
+#define DSU4_ATBBA_BADDR_31_2_MASK  0xfffffffcU
 #define DSU4_ATBBA_BADDR_31_2_GET( _reg ) \
-  ( ( ( _reg ) & DSU4_ATBBA_BADDR_31_2_MASK ) >> \
-    DSU4_ATBBA_BADDR_31_2_SHIFT )
-#define DSU4_ATBBA_BADDR_31_2_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~DSU4_ATBBA_BADDR_31_2_MASK ) | \
+  ( ( ( _reg ) & DSU4_ATBBA_BADDR_31_2_MASK ) >> DSU4_ATBBA_BADDR_31_2_SHIFT )
+#define DSU4_ATBBA_BADDR_31_2_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~DSU4_ATBBA_BADDR_31_2_MASK ) |    \
     ( ( ( _val ) << DSU4_ATBBA_BADDR_31_2_SHIFT ) & \
       DSU4_ATBBA_BADDR_31_2_MASK ) )
 #define DSU4_ATBBA_BADDR_31_2( _val ) \
-  ( ( ( _val ) << DSU4_ATBBA_BADDR_31_2_SHIFT ) & \
-    DSU4_ATBBA_BADDR_31_2_MASK )
+  ( ( ( _val ) << DSU4_ATBBA_BADDR_31_2_SHIFT ) & DSU4_ATBBA_BADDR_31_2_MASK )
 
 /** @} */
 
@@ -439,17 +397,15 @@ extern "C" {
  */
 
 #define DSU4_ATBBM_BMASK_31_2_SHIFT 2
-#define DSU4_ATBBM_BMASK_31_2_MASK 0xfffffffcU
+#define DSU4_ATBBM_BMASK_31_2_MASK  0xfffffffcU
 #define DSU4_ATBBM_BMASK_31_2_GET( _reg ) \
-  ( ( ( _reg ) & DSU4_ATBBM_BMASK_31_2_MASK ) >> \
-    DSU4_ATBBM_BMASK_31_2_SHIFT )
-#define DSU4_ATBBM_BMASK_31_2_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~DSU4_ATBBM_BMASK_31_2_MASK ) | \
+  ( ( ( _reg ) & DSU4_ATBBM_BMASK_31_2_MASK ) >> DSU4_ATBBM_BMASK_31_2_SHIFT )
+#define DSU4_ATBBM_BMASK_31_2_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~DSU4_ATBBM_BMASK_31_2_MASK ) |    \
     ( ( ( _val ) << DSU4_ATBBM_BMASK_31_2_SHIFT ) & \
       DSU4_ATBBM_BMASK_31_2_MASK ) )
 #define DSU4_ATBBM_BMASK_31_2( _val ) \
-  ( ( ( _val ) << DSU4_ATBBM_BMASK_31_2_SHIFT ) & \
-    DSU4_ATBBM_BMASK_31_2_MASK )
+  ( ( ( _val ) << DSU4_ATBBM_BMASK_31_2_SHIFT ) & DSU4_ATBBM_BMASK_31_2_MASK )
 
 #define DSU4_ATBBM_LD 0x2U
 
@@ -472,17 +428,15 @@ extern "C" {
 #define DSU4_ICNT_PE 0x20000000U
 
 #define DSU4_ICNT_ICOUNT_28_0_SHIFT 0
-#define DSU4_ICNT_ICOUNT_28_0_MASK 0x1fffffffU
+#define DSU4_ICNT_ICOUNT_28_0_MASK  0x1fffffffU
 #define DSU4_ICNT_ICOUNT_28_0_GET( _reg ) \
-  ( ( ( _reg ) & DSU4_ICNT_ICOUNT_28_0_MASK ) >> \
-    DSU4_ICNT_ICOUNT_28_0_SHIFT )
-#define DSU4_ICNT_ICOUNT_28_0_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~DSU4_ICNT_ICOUNT_28_0_MASK ) | \
+  ( ( ( _reg ) & DSU4_ICNT_ICOUNT_28_0_MASK ) >> DSU4_ICNT_ICOUNT_28_0_SHIFT )
+#define DSU4_ICNT_ICOUNT_28_0_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~DSU4_ICNT_ICOUNT_28_0_MASK ) |    \
     ( ( ( _val ) << DSU4_ICNT_ICOUNT_28_0_SHIFT ) & \
       DSU4_ICNT_ICOUNT_28_0_MASK ) )
 #define DSU4_ICNT_ICOUNT_28_0( _val ) \
-  ( ( ( _val ) << DSU4_ICNT_ICOUNT_28_0_SHIFT ) & \
-    DSU4_ICNT_ICOUNT_28_0_MASK )
+  ( ( ( _val ) << DSU4_ICNT_ICOUNT_28_0_SHIFT ) & DSU4_ICNT_ICOUNT_28_0_MASK )
 
 /** @} */
 
@@ -518,17 +472,14 @@ extern "C" {
  */
 
 #define DSU4_AHBWPD_DATA_SHIFT 0
-#define DSU4_AHBWPD_DATA_MASK 0xffffffffU
+#define DSU4_AHBWPD_DATA_MASK  0xffffffffU
 #define DSU4_AHBWPD_DATA_GET( _reg ) \
-  ( ( ( _reg ) & DSU4_AHBWPD_DATA_MASK ) >> \
-    DSU4_AHBWPD_DATA_SHIFT )
-#define DSU4_AHBWPD_DATA_SET( _reg, _val ) \
+  ( ( ( _reg ) & DSU4_AHBWPD_DATA_MASK ) >> DSU4_AHBWPD_DATA_SHIFT )
+#define DSU4_AHBWPD_DATA_SET( _reg, _val )  \
   ( ( ( _reg ) & ~DSU4_AHBWPD_DATA_MASK ) | \
-    ( ( ( _val ) << DSU4_AHBWPD_DATA_SHIFT ) & \
-      DSU4_AHBWPD_DATA_MASK ) )
+    ( ( ( _val ) << DSU4_AHBWPD_DATA_SHIFT ) & DSU4_AHBWPD_DATA_MASK ) )
 #define DSU4_AHBWPD_DATA( _val ) \
-  ( ( ( _val ) << DSU4_AHBWPD_DATA_SHIFT ) & \
-    DSU4_AHBWPD_DATA_MASK )
+  ( ( ( _val ) << DSU4_AHBWPD_DATA_SHIFT ) & DSU4_AHBWPD_DATA_MASK )
 
 /** @} */
 
@@ -541,17 +492,14 @@ extern "C" {
  */
 
 #define DSU4_AHBWPM_MASK_SHIFT 0
-#define DSU4_AHBWPM_MASK_MASK 0xffffffffU
+#define DSU4_AHBWPM_MASK_MASK  0xffffffffU
 #define DSU4_AHBWPM_MASK_GET( _reg ) \
-  ( ( ( _reg ) & DSU4_AHBWPM_MASK_MASK ) >> \
-    DSU4_AHBWPM_MASK_SHIFT )
-#define DSU4_AHBWPM_MASK_SET( _reg, _val ) \
+  ( ( ( _reg ) & DSU4_AHBWPM_MASK_MASK ) >> DSU4_AHBWPM_MASK_SHIFT )
+#define DSU4_AHBWPM_MASK_SET( _reg, _val )  \
   ( ( ( _reg ) & ~DSU4_AHBWPM_MASK_MASK ) | \
-    ( ( ( _val ) << DSU4_AHBWPM_MASK_SHIFT ) & \
-      DSU4_AHBWPM_MASK_MASK ) )
+    ( ( ( _val ) << DSU4_AHBWPM_MASK_SHIFT ) & DSU4_AHBWPM_MASK_MASK ) )
 #define DSU4_AHBWPM_MASK( _val ) \
-  ( ( ( _val ) << DSU4_AHBWPM_MASK_SHIFT ) & \
-    DSU4_AHBWPM_MASK_MASK )
+  ( ( ( _val ) << DSU4_AHBWPM_MASK_SHIFT ) & DSU4_AHBWPM_MASK_MASK )
 
 /** @} */
 
@@ -565,30 +513,25 @@ extern "C" {
  */
 
 #define DSU4_ITBC0_TFILT_SHIFT 28
-#define DSU4_ITBC0_TFILT_MASK 0xf0000000U
+#define DSU4_ITBC0_TFILT_MASK  0xf0000000U
 #define DSU4_ITBC0_TFILT_GET( _reg ) \
-  ( ( ( _reg ) & DSU4_ITBC0_TFILT_MASK ) >> \
-    DSU4_ITBC0_TFILT_SHIFT )
-#define DSU4_ITBC0_TFILT_SET( _reg, _val ) \
+  ( ( ( _reg ) & DSU4_ITBC0_TFILT_MASK ) >> DSU4_ITBC0_TFILT_SHIFT )
+#define DSU4_ITBC0_TFILT_SET( _reg, _val )  \
   ( ( ( _reg ) & ~DSU4_ITBC0_TFILT_MASK ) | \
-    ( ( ( _val ) << DSU4_ITBC0_TFILT_SHIFT ) & \
-      DSU4_ITBC0_TFILT_MASK ) )
+    ( ( ( _val ) << DSU4_ITBC0_TFILT_SHIFT ) & DSU4_ITBC0_TFILT_MASK ) )
 #define DSU4_ITBC0_TFILT( _val ) \
-  ( ( ( _val ) << DSU4_ITBC0_TFILT_SHIFT ) & \
-    DSU4_ITBC0_TFILT_MASK )
+  ( ( ( _val ) << DSU4_ITBC0_TFILT_SHIFT ) & DSU4_ITBC0_TFILT_MASK )
 
 #define DSU4_ITBC0_ITPOINTER_SHIFT 0
-#define DSU4_ITBC0_ITPOINTER_MASK 0xffffU
+#define DSU4_ITBC0_ITPOINTER_MASK  0xffffU
 #define DSU4_ITBC0_ITPOINTER_GET( _reg ) \
-  ( ( ( _reg ) & DSU4_ITBC0_ITPOINTER_MASK ) >> \
-    DSU4_ITBC0_ITPOINTER_SHIFT )
-#define DSU4_ITBC0_ITPOINTER_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~DSU4_ITBC0_ITPOINTER_MASK ) | \
+  ( ( ( _reg ) & DSU4_ITBC0_ITPOINTER_MASK ) >> DSU4_ITBC0_ITPOINTER_SHIFT )
+#define DSU4_ITBC0_ITPOINTER_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~DSU4_ITBC0_ITPOINTER_MASK ) |    \
     ( ( ( _val ) << DSU4_ITBC0_ITPOINTER_SHIFT ) & \
       DSU4_ITBC0_ITPOINTER_MASK ) )
 #define DSU4_ITBC0_ITPOINTER( _val ) \
-  ( ( ( _val ) << DSU4_ITBC0_ITPOINTER_SHIFT ) & \
-    DSU4_ITBC0_ITPOINTER_MASK )
+  ( ( ( _val ) << DSU4_ITBC0_ITPOINTER_SHIFT ) & DSU4_ITBC0_ITPOINTER_MASK )
 
 /** @} */
 
@@ -604,17 +547,14 @@ extern "C" {
 #define DSU4_ITBC1_WO 0x8000000U
 
 #define DSU4_ITBC1_TLIM_SHIFT 24
-#define DSU4_ITBC1_TLIM_MASK 0x7000000U
+#define DSU4_ITBC1_TLIM_MASK  0x7000000U
 #define DSU4_ITBC1_TLIM_GET( _reg ) \
-  ( ( ( _reg ) & DSU4_ITBC1_TLIM_MASK ) >> \
-    DSU4_ITBC1_TLIM_SHIFT )
-#define DSU4_ITBC1_TLIM_SET( _reg, _val ) \
+  ( ( ( _reg ) & DSU4_ITBC1_TLIM_MASK ) >> DSU4_ITBC1_TLIM_SHIFT )
+#define DSU4_ITBC1_TLIM_SET( _reg, _val )  \
   ( ( ( _reg ) & ~DSU4_ITBC1_TLIM_MASK ) | \
-    ( ( ( _val ) << DSU4_ITBC1_TLIM_SHIFT ) & \
-      DSU4_ITBC1_TLIM_MASK ) )
+    ( ( ( _val ) << DSU4_ITBC1_TLIM_SHIFT ) & DSU4_ITBC1_TLIM_MASK ) )
 #define DSU4_ITBC1_TLIM( _val ) \
-  ( ( ( _val ) << DSU4_ITBC1_TLIM_SHIFT ) & \
-    DSU4_ITBC1_TLIM_MASK )
+  ( ( ( _val ) << DSU4_ITBC1_TLIM_SHIFT ) & DSU4_ITBC1_TLIM_MASK )
 
 #define DSU4_ITBC1_TOV 0x800000U
 

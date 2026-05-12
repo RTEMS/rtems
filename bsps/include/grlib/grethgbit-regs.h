@@ -84,17 +84,14 @@ extern "C" {
 #define GRETHGBIT_CR_EA 0x80000000U
 
 #define GRETHGBIT_CR_BS_SHIFT 28
-#define GRETHGBIT_CR_BS_MASK 0x70000000U
+#define GRETHGBIT_CR_BS_MASK  0x70000000U
 #define GRETHGBIT_CR_BS_GET( _reg ) \
-  ( ( ( _reg ) & GRETHGBIT_CR_BS_MASK ) >> \
-    GRETHGBIT_CR_BS_SHIFT )
-#define GRETHGBIT_CR_BS_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRETHGBIT_CR_BS_MASK ) >> GRETHGBIT_CR_BS_SHIFT )
+#define GRETHGBIT_CR_BS_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRETHGBIT_CR_BS_MASK ) | \
-    ( ( ( _val ) << GRETHGBIT_CR_BS_SHIFT ) & \
-      GRETHGBIT_CR_BS_MASK ) )
+    ( ( ( _val ) << GRETHGBIT_CR_BS_SHIFT ) & GRETHGBIT_CR_BS_MASK ) )
 #define GRETHGBIT_CR_BS( _val ) \
-  ( ( ( _val ) << GRETHGBIT_CR_BS_SHIFT ) & \
-    GRETHGBIT_CR_BS_MASK )
+  ( ( ( _val ) << GRETHGBIT_CR_BS_SHIFT ) & GRETHGBIT_CR_BS_MASK )
 
 #define GRETHGBIT_CR_GA 0x8000000U
 
@@ -171,17 +168,15 @@ extern "C" {
  */
 
 #define GRETHGBIT_MACMSB_MSB_SHIFT 0
-#define GRETHGBIT_MACMSB_MSB_MASK 0xffffU
+#define GRETHGBIT_MACMSB_MSB_MASK  0xffffU
 #define GRETHGBIT_MACMSB_MSB_GET( _reg ) \
-  ( ( ( _reg ) & GRETHGBIT_MACMSB_MSB_MASK ) >> \
-    GRETHGBIT_MACMSB_MSB_SHIFT )
-#define GRETHGBIT_MACMSB_MSB_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRETHGBIT_MACMSB_MSB_MASK ) | \
+  ( ( ( _reg ) & GRETHGBIT_MACMSB_MSB_MASK ) >> GRETHGBIT_MACMSB_MSB_SHIFT )
+#define GRETHGBIT_MACMSB_MSB_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRETHGBIT_MACMSB_MSB_MASK ) |    \
     ( ( ( _val ) << GRETHGBIT_MACMSB_MSB_SHIFT ) & \
       GRETHGBIT_MACMSB_MSB_MASK ) )
 #define GRETHGBIT_MACMSB_MSB( _val ) \
-  ( ( ( _val ) << GRETHGBIT_MACMSB_MSB_SHIFT ) & \
-    GRETHGBIT_MACMSB_MSB_MASK )
+  ( ( ( _val ) << GRETHGBIT_MACMSB_MSB_SHIFT ) & GRETHGBIT_MACMSB_MSB_MASK )
 
 /** @} */
 
@@ -194,17 +189,15 @@ extern "C" {
  */
 
 #define GRETHGBIT_MACLSB_LSB_SHIFT 0
-#define GRETHGBIT_MACLSB_LSB_MASK 0xffffffffU
+#define GRETHGBIT_MACLSB_LSB_MASK  0xffffffffU
 #define GRETHGBIT_MACLSB_LSB_GET( _reg ) \
-  ( ( ( _reg ) & GRETHGBIT_MACLSB_LSB_MASK ) >> \
-    GRETHGBIT_MACLSB_LSB_SHIFT )
-#define GRETHGBIT_MACLSB_LSB_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRETHGBIT_MACLSB_LSB_MASK ) | \
+  ( ( ( _reg ) & GRETHGBIT_MACLSB_LSB_MASK ) >> GRETHGBIT_MACLSB_LSB_SHIFT )
+#define GRETHGBIT_MACLSB_LSB_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRETHGBIT_MACLSB_LSB_MASK ) |    \
     ( ( ( _val ) << GRETHGBIT_MACLSB_LSB_SHIFT ) & \
       GRETHGBIT_MACLSB_LSB_MASK ) )
 #define GRETHGBIT_MACLSB_LSB( _val ) \
-  ( ( ( _val ) << GRETHGBIT_MACLSB_LSB_SHIFT ) & \
-    GRETHGBIT_MACLSB_LSB_MASK )
+  ( ( ( _val ) << GRETHGBIT_MACLSB_LSB_SHIFT ) & GRETHGBIT_MACLSB_LSB_MASK )
 
 /** @} */
 
@@ -217,41 +210,39 @@ extern "C" {
  */
 
 #define GRETHGBIT_MDIO_DATA_SHIFT 16
-#define GRETHGBIT_MDIO_DATA_MASK 0xffff0000U
+#define GRETHGBIT_MDIO_DATA_MASK  0xffff0000U
 #define GRETHGBIT_MDIO_DATA_GET( _reg ) \
-  ( ( ( _reg ) & GRETHGBIT_MDIO_DATA_MASK ) >> \
-    GRETHGBIT_MDIO_DATA_SHIFT )
-#define GRETHGBIT_MDIO_DATA_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRETHGBIT_MDIO_DATA_MASK ) | \
+  ( ( ( _reg ) & GRETHGBIT_MDIO_DATA_MASK ) >> GRETHGBIT_MDIO_DATA_SHIFT )
+#define GRETHGBIT_MDIO_DATA_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRETHGBIT_MDIO_DATA_MASK ) |    \
     ( ( ( _val ) << GRETHGBIT_MDIO_DATA_SHIFT ) & \
       GRETHGBIT_MDIO_DATA_MASK ) )
 #define GRETHGBIT_MDIO_DATA( _val ) \
-  ( ( ( _val ) << GRETHGBIT_MDIO_DATA_SHIFT ) & \
-    GRETHGBIT_MDIO_DATA_MASK )
+  ( ( ( _val ) << GRETHGBIT_MDIO_DATA_SHIFT ) & GRETHGBIT_MDIO_DATA_MASK )
 
 #define GRETHGBIT_MDIO_PHYADDR_SHIFT 11
-#define GRETHGBIT_MDIO_PHYADDR_MASK 0xf800U
-#define GRETHGBIT_MDIO_PHYADDR_GET( _reg ) \
+#define GRETHGBIT_MDIO_PHYADDR_MASK  0xf800U
+#define GRETHGBIT_MDIO_PHYADDR_GET( _reg )        \
   ( ( ( _reg ) & GRETHGBIT_MDIO_PHYADDR_MASK ) >> \
     GRETHGBIT_MDIO_PHYADDR_SHIFT )
-#define GRETHGBIT_MDIO_PHYADDR_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRETHGBIT_MDIO_PHYADDR_MASK ) | \
+#define GRETHGBIT_MDIO_PHYADDR_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRETHGBIT_MDIO_PHYADDR_MASK ) |    \
     ( ( ( _val ) << GRETHGBIT_MDIO_PHYADDR_SHIFT ) & \
       GRETHGBIT_MDIO_PHYADDR_MASK ) )
-#define GRETHGBIT_MDIO_PHYADDR( _val ) \
+#define GRETHGBIT_MDIO_PHYADDR( _val )             \
   ( ( ( _val ) << GRETHGBIT_MDIO_PHYADDR_SHIFT ) & \
     GRETHGBIT_MDIO_PHYADDR_MASK )
 
 #define GRETHGBIT_MDIO_REGADDR_SHIFT 6
-#define GRETHGBIT_MDIO_REGADDR_MASK 0x7c0U
-#define GRETHGBIT_MDIO_REGADDR_GET( _reg ) \
+#define GRETHGBIT_MDIO_REGADDR_MASK  0x7c0U
+#define GRETHGBIT_MDIO_REGADDR_GET( _reg )        \
   ( ( ( _reg ) & GRETHGBIT_MDIO_REGADDR_MASK ) >> \
     GRETHGBIT_MDIO_REGADDR_SHIFT )
-#define GRETHGBIT_MDIO_REGADDR_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRETHGBIT_MDIO_REGADDR_MASK ) | \
+#define GRETHGBIT_MDIO_REGADDR_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRETHGBIT_MDIO_REGADDR_MASK ) |    \
     ( ( ( _val ) << GRETHGBIT_MDIO_REGADDR_SHIFT ) & \
       GRETHGBIT_MDIO_REGADDR_MASK ) )
-#define GRETHGBIT_MDIO_REGADDR( _val ) \
+#define GRETHGBIT_MDIO_REGADDR( _val )             \
   ( ( ( _val ) << GRETHGBIT_MDIO_REGADDR_SHIFT ) & \
     GRETHGBIT_MDIO_REGADDR_MASK )
 
@@ -275,28 +266,28 @@ extern "C" {
  */
 
 #define GRETHGBIT_TDTBA_BASEADDR_SHIFT 10
-#define GRETHGBIT_TDTBA_BASEADDR_MASK 0xfffffc00U
-#define GRETHGBIT_TDTBA_BASEADDR_GET( _reg ) \
+#define GRETHGBIT_TDTBA_BASEADDR_MASK  0xfffffc00U
+#define GRETHGBIT_TDTBA_BASEADDR_GET( _reg )        \
   ( ( ( _reg ) & GRETHGBIT_TDTBA_BASEADDR_MASK ) >> \
     GRETHGBIT_TDTBA_BASEADDR_SHIFT )
-#define GRETHGBIT_TDTBA_BASEADDR_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRETHGBIT_TDTBA_BASEADDR_MASK ) | \
+#define GRETHGBIT_TDTBA_BASEADDR_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRETHGBIT_TDTBA_BASEADDR_MASK ) |    \
     ( ( ( _val ) << GRETHGBIT_TDTBA_BASEADDR_SHIFT ) & \
       GRETHGBIT_TDTBA_BASEADDR_MASK ) )
-#define GRETHGBIT_TDTBA_BASEADDR( _val ) \
+#define GRETHGBIT_TDTBA_BASEADDR( _val )             \
   ( ( ( _val ) << GRETHGBIT_TDTBA_BASEADDR_SHIFT ) & \
     GRETHGBIT_TDTBA_BASEADDR_MASK )
 
 #define GRETHGBIT_TDTBA_DESCPNT_SHIFT 3
-#define GRETHGBIT_TDTBA_DESCPNT_MASK 0x3f8U
-#define GRETHGBIT_TDTBA_DESCPNT_GET( _reg ) \
+#define GRETHGBIT_TDTBA_DESCPNT_MASK  0x3f8U
+#define GRETHGBIT_TDTBA_DESCPNT_GET( _reg )        \
   ( ( ( _reg ) & GRETHGBIT_TDTBA_DESCPNT_MASK ) >> \
     GRETHGBIT_TDTBA_DESCPNT_SHIFT )
-#define GRETHGBIT_TDTBA_DESCPNT_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRETHGBIT_TDTBA_DESCPNT_MASK ) | \
+#define GRETHGBIT_TDTBA_DESCPNT_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRETHGBIT_TDTBA_DESCPNT_MASK ) |    \
     ( ( ( _val ) << GRETHGBIT_TDTBA_DESCPNT_SHIFT ) & \
       GRETHGBIT_TDTBA_DESCPNT_MASK ) )
-#define GRETHGBIT_TDTBA_DESCPNT( _val ) \
+#define GRETHGBIT_TDTBA_DESCPNT( _val )             \
   ( ( ( _val ) << GRETHGBIT_TDTBA_DESCPNT_SHIFT ) & \
     GRETHGBIT_TDTBA_DESCPNT_MASK )
 
@@ -312,28 +303,28 @@ extern "C" {
  */
 
 #define GRETHGBIT_RDTBA_BASEADDR_SHIFT 10
-#define GRETHGBIT_RDTBA_BASEADDR_MASK 0xfffffc00U
-#define GRETHGBIT_RDTBA_BASEADDR_GET( _reg ) \
+#define GRETHGBIT_RDTBA_BASEADDR_MASK  0xfffffc00U
+#define GRETHGBIT_RDTBA_BASEADDR_GET( _reg )        \
   ( ( ( _reg ) & GRETHGBIT_RDTBA_BASEADDR_MASK ) >> \
     GRETHGBIT_RDTBA_BASEADDR_SHIFT )
-#define GRETHGBIT_RDTBA_BASEADDR_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRETHGBIT_RDTBA_BASEADDR_MASK ) | \
+#define GRETHGBIT_RDTBA_BASEADDR_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRETHGBIT_RDTBA_BASEADDR_MASK ) |    \
     ( ( ( _val ) << GRETHGBIT_RDTBA_BASEADDR_SHIFT ) & \
       GRETHGBIT_RDTBA_BASEADDR_MASK ) )
-#define GRETHGBIT_RDTBA_BASEADDR( _val ) \
+#define GRETHGBIT_RDTBA_BASEADDR( _val )             \
   ( ( ( _val ) << GRETHGBIT_RDTBA_BASEADDR_SHIFT ) & \
     GRETHGBIT_RDTBA_BASEADDR_MASK )
 
 #define GRETHGBIT_RDTBA_DESCPNT_SHIFT 3
-#define GRETHGBIT_RDTBA_DESCPNT_MASK 0x3f8U
-#define GRETHGBIT_RDTBA_DESCPNT_GET( _reg ) \
+#define GRETHGBIT_RDTBA_DESCPNT_MASK  0x3f8U
+#define GRETHGBIT_RDTBA_DESCPNT_GET( _reg )        \
   ( ( ( _reg ) & GRETHGBIT_RDTBA_DESCPNT_MASK ) >> \
     GRETHGBIT_RDTBA_DESCPNT_SHIFT )
-#define GRETHGBIT_RDTBA_DESCPNT_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRETHGBIT_RDTBA_DESCPNT_MASK ) | \
+#define GRETHGBIT_RDTBA_DESCPNT_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRETHGBIT_RDTBA_DESCPNT_MASK ) |    \
     ( ( ( _val ) << GRETHGBIT_RDTBA_DESCPNT_SHIFT ) & \
       GRETHGBIT_RDTBA_DESCPNT_MASK ) )
-#define GRETHGBIT_RDTBA_DESCPNT( _val ) \
+#define GRETHGBIT_RDTBA_DESCPNT( _val )             \
   ( ( ( _val ) << GRETHGBIT_RDTBA_DESCPNT_SHIFT ) & \
     GRETHGBIT_RDTBA_DESCPNT_MASK )
 
@@ -348,15 +339,15 @@ extern "C" {
  */
 
 #define GRETHGBIT_EDCLMACMSB_MSB_SHIFT 0
-#define GRETHGBIT_EDCLMACMSB_MSB_MASK 0xffffU
-#define GRETHGBIT_EDCLMACMSB_MSB_GET( _reg ) \
+#define GRETHGBIT_EDCLMACMSB_MSB_MASK  0xffffU
+#define GRETHGBIT_EDCLMACMSB_MSB_GET( _reg )        \
   ( ( ( _reg ) & GRETHGBIT_EDCLMACMSB_MSB_MASK ) >> \
     GRETHGBIT_EDCLMACMSB_MSB_SHIFT )
-#define GRETHGBIT_EDCLMACMSB_MSB_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRETHGBIT_EDCLMACMSB_MSB_MASK ) | \
+#define GRETHGBIT_EDCLMACMSB_MSB_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRETHGBIT_EDCLMACMSB_MSB_MASK ) |    \
     ( ( ( _val ) << GRETHGBIT_EDCLMACMSB_MSB_SHIFT ) & \
       GRETHGBIT_EDCLMACMSB_MSB_MASK ) )
-#define GRETHGBIT_EDCLMACMSB_MSB( _val ) \
+#define GRETHGBIT_EDCLMACMSB_MSB( _val )             \
   ( ( ( _val ) << GRETHGBIT_EDCLMACMSB_MSB_SHIFT ) & \
     GRETHGBIT_EDCLMACMSB_MSB_MASK )
 
@@ -371,15 +362,15 @@ extern "C" {
  */
 
 #define GRETHGBIT_EDCLMACLSB_LSB_SHIFT 0
-#define GRETHGBIT_EDCLMACLSB_LSB_MASK 0xffffffffU
-#define GRETHGBIT_EDCLMACLSB_LSB_GET( _reg ) \
+#define GRETHGBIT_EDCLMACLSB_LSB_MASK  0xffffffffU
+#define GRETHGBIT_EDCLMACLSB_LSB_GET( _reg )        \
   ( ( ( _reg ) & GRETHGBIT_EDCLMACLSB_LSB_MASK ) >> \
     GRETHGBIT_EDCLMACLSB_LSB_SHIFT )
-#define GRETHGBIT_EDCLMACLSB_LSB_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRETHGBIT_EDCLMACLSB_LSB_MASK ) | \
+#define GRETHGBIT_EDCLMACLSB_LSB_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRETHGBIT_EDCLMACLSB_LSB_MASK ) |    \
     ( ( ( _val ) << GRETHGBIT_EDCLMACLSB_LSB_SHIFT ) & \
       GRETHGBIT_EDCLMACLSB_LSB_MASK ) )
-#define GRETHGBIT_EDCLMACLSB_LSB( _val ) \
+#define GRETHGBIT_EDCLMACLSB_LSB( _val )             \
   ( ( ( _val ) << GRETHGBIT_EDCLMACLSB_LSB_SHIFT ) & \
     GRETHGBIT_EDCLMACLSB_LSB_MASK )
 

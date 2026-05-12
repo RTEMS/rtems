@@ -62,16 +62,16 @@ extern "C" {
 extern struct drvmgr_bus_res *gr_cpci_gr740_resources[];
 
 /* Options to gr_cpci_gr740_print function */
-#define GR_CPCI_GR740_OPTIONS_AMBA   0x01 /* Print AMBA bus devices */
+#define GR_CPCI_GR740_OPTIONS_AMBA 0x01 /* Print AMBA bus devices */
 
 /* Print information about all GR-CPCI-GR740 PCI boards */
-void gr_cpci_gr740_print(int options);
+void gr_cpci_gr740_print( int options );
 
 /* Print information about one GR-CPCI-GR740 PCI board */
-void gr_cpci_gr740_print_dev(struct drvmgr_dev *dev, int options);
+void gr_cpci_gr740_print_dev( struct drvmgr_dev *dev, int options );
 
 /* Register GR-CPCI-GR740 driver */
-void gr_cpci_gr740_register_drv(void);
+void gr_cpci_gr740_register_drv( void );
 
 #ifdef __cplusplus
 }

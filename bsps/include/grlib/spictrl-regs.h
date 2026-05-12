@@ -82,30 +82,25 @@ extern "C" {
  */
 
 #define SPICTRL_CAP_SSSZ_SHIFT 24
-#define SPICTRL_CAP_SSSZ_MASK 0xff000000U
+#define SPICTRL_CAP_SSSZ_MASK  0xff000000U
 #define SPICTRL_CAP_SSSZ_GET( _reg ) \
-  ( ( ( _reg ) & SPICTRL_CAP_SSSZ_MASK ) >> \
-    SPICTRL_CAP_SSSZ_SHIFT )
-#define SPICTRL_CAP_SSSZ_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPICTRL_CAP_SSSZ_MASK ) >> SPICTRL_CAP_SSSZ_SHIFT )
+#define SPICTRL_CAP_SSSZ_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPICTRL_CAP_SSSZ_MASK ) | \
-    ( ( ( _val ) << SPICTRL_CAP_SSSZ_SHIFT ) & \
-      SPICTRL_CAP_SSSZ_MASK ) )
+    ( ( ( _val ) << SPICTRL_CAP_SSSZ_SHIFT ) & SPICTRL_CAP_SSSZ_MASK ) )
 #define SPICTRL_CAP_SSSZ( _val ) \
-  ( ( ( _val ) << SPICTRL_CAP_SSSZ_SHIFT ) & \
-    SPICTRL_CAP_SSSZ_MASK )
+  ( ( ( _val ) << SPICTRL_CAP_SSSZ_SHIFT ) & SPICTRL_CAP_SSSZ_MASK )
 
 #define SPICTRL_CAP_MAXWLEN_SHIFT 20
-#define SPICTRL_CAP_MAXWLEN_MASK 0xf00000U
+#define SPICTRL_CAP_MAXWLEN_MASK  0xf00000U
 #define SPICTRL_CAP_MAXWLEN_GET( _reg ) \
-  ( ( ( _reg ) & SPICTRL_CAP_MAXWLEN_MASK ) >> \
-    SPICTRL_CAP_MAXWLEN_SHIFT )
-#define SPICTRL_CAP_MAXWLEN_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~SPICTRL_CAP_MAXWLEN_MASK ) | \
+  ( ( ( _reg ) & SPICTRL_CAP_MAXWLEN_MASK ) >> SPICTRL_CAP_MAXWLEN_SHIFT )
+#define SPICTRL_CAP_MAXWLEN_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~SPICTRL_CAP_MAXWLEN_MASK ) |    \
     ( ( ( _val ) << SPICTRL_CAP_MAXWLEN_SHIFT ) & \
       SPICTRL_CAP_MAXWLEN_MASK ) )
 #define SPICTRL_CAP_MAXWLEN( _val ) \
-  ( ( ( _val ) << SPICTRL_CAP_MAXWLEN_SHIFT ) & \
-    SPICTRL_CAP_MAXWLEN_MASK )
+  ( ( ( _val ) << SPICTRL_CAP_MAXWLEN_SHIFT ) & SPICTRL_CAP_MAXWLEN_MASK )
 
 #define SPICTRL_CAP_TWEN 0x80000U
 
@@ -116,45 +111,36 @@ extern "C" {
 #define SPICTRL_CAP_SSEN 0x10000U
 
 #define SPICTRL_CAP_FDEPTH_SHIFT 8
-#define SPICTRL_CAP_FDEPTH_MASK 0xff00U
+#define SPICTRL_CAP_FDEPTH_MASK  0xff00U
 #define SPICTRL_CAP_FDEPTH_GET( _reg ) \
-  ( ( ( _reg ) & SPICTRL_CAP_FDEPTH_MASK ) >> \
-    SPICTRL_CAP_FDEPTH_SHIFT )
-#define SPICTRL_CAP_FDEPTH_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPICTRL_CAP_FDEPTH_MASK ) >> SPICTRL_CAP_FDEPTH_SHIFT )
+#define SPICTRL_CAP_FDEPTH_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPICTRL_CAP_FDEPTH_MASK ) | \
-    ( ( ( _val ) << SPICTRL_CAP_FDEPTH_SHIFT ) & \
-      SPICTRL_CAP_FDEPTH_MASK ) )
+    ( ( ( _val ) << SPICTRL_CAP_FDEPTH_SHIFT ) & SPICTRL_CAP_FDEPTH_MASK ) )
 #define SPICTRL_CAP_FDEPTH( _val ) \
-  ( ( ( _val ) << SPICTRL_CAP_FDEPTH_SHIFT ) & \
-    SPICTRL_CAP_FDEPTH_MASK )
+  ( ( ( _val ) << SPICTRL_CAP_FDEPTH_SHIFT ) & SPICTRL_CAP_FDEPTH_MASK )
 
 #define SPICTRL_CAP_SR 0x80U
 
 #define SPICTRL_CAP_FT_SHIFT 5
-#define SPICTRL_CAP_FT_MASK 0x60U
+#define SPICTRL_CAP_FT_MASK  0x60U
 #define SPICTRL_CAP_FT_GET( _reg ) \
-  ( ( ( _reg ) & SPICTRL_CAP_FT_MASK ) >> \
-    SPICTRL_CAP_FT_SHIFT )
-#define SPICTRL_CAP_FT_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPICTRL_CAP_FT_MASK ) >> SPICTRL_CAP_FT_SHIFT )
+#define SPICTRL_CAP_FT_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPICTRL_CAP_FT_MASK ) | \
-    ( ( ( _val ) << SPICTRL_CAP_FT_SHIFT ) & \
-      SPICTRL_CAP_FT_MASK ) )
+    ( ( ( _val ) << SPICTRL_CAP_FT_SHIFT ) & SPICTRL_CAP_FT_MASK ) )
 #define SPICTRL_CAP_FT( _val ) \
-  ( ( ( _val ) << SPICTRL_CAP_FT_SHIFT ) & \
-    SPICTRL_CAP_FT_MASK )
+  ( ( ( _val ) << SPICTRL_CAP_FT_SHIFT ) & SPICTRL_CAP_FT_MASK )
 
 #define SPICTRL_CAP_REV_SHIFT 0
-#define SPICTRL_CAP_REV_MASK 0x1fU
+#define SPICTRL_CAP_REV_MASK  0x1fU
 #define SPICTRL_CAP_REV_GET( _reg ) \
-  ( ( ( _reg ) & SPICTRL_CAP_REV_MASK ) >> \
-    SPICTRL_CAP_REV_SHIFT )
-#define SPICTRL_CAP_REV_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPICTRL_CAP_REV_MASK ) >> SPICTRL_CAP_REV_SHIFT )
+#define SPICTRL_CAP_REV_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPICTRL_CAP_REV_MASK ) | \
-    ( ( ( _val ) << SPICTRL_CAP_REV_SHIFT ) & \
-      SPICTRL_CAP_REV_MASK ) )
+    ( ( ( _val ) << SPICTRL_CAP_REV_SHIFT ) & SPICTRL_CAP_REV_MASK ) )
 #define SPICTRL_CAP_REV( _val ) \
-  ( ( ( _val ) << SPICTRL_CAP_REV_SHIFT ) & \
-    SPICTRL_CAP_REV_MASK )
+  ( ( ( _val ) << SPICTRL_CAP_REV_SHIFT ) & SPICTRL_CAP_REV_MASK )
 
 /** @} */
 
@@ -181,30 +167,24 @@ extern "C" {
 #define SPICTRL_MODE_EN 0x1000000U
 
 #define SPICTRL_MODE_LEN_SHIFT 20
-#define SPICTRL_MODE_LEN_MASK 0xf00000U
+#define SPICTRL_MODE_LEN_MASK  0xf00000U
 #define SPICTRL_MODE_LEN_GET( _reg ) \
-  ( ( ( _reg ) & SPICTRL_MODE_LEN_MASK ) >> \
-    SPICTRL_MODE_LEN_SHIFT )
-#define SPICTRL_MODE_LEN_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPICTRL_MODE_LEN_MASK ) >> SPICTRL_MODE_LEN_SHIFT )
+#define SPICTRL_MODE_LEN_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPICTRL_MODE_LEN_MASK ) | \
-    ( ( ( _val ) << SPICTRL_MODE_LEN_SHIFT ) & \
-      SPICTRL_MODE_LEN_MASK ) )
+    ( ( ( _val ) << SPICTRL_MODE_LEN_SHIFT ) & SPICTRL_MODE_LEN_MASK ) )
 #define SPICTRL_MODE_LEN( _val ) \
-  ( ( ( _val ) << SPICTRL_MODE_LEN_SHIFT ) & \
-    SPICTRL_MODE_LEN_MASK )
+  ( ( ( _val ) << SPICTRL_MODE_LEN_SHIFT ) & SPICTRL_MODE_LEN_MASK )
 
 #define SPICTRL_MODE_PM_SHIFT 16
-#define SPICTRL_MODE_PM_MASK 0xf0000U
+#define SPICTRL_MODE_PM_MASK  0xf0000U
 #define SPICTRL_MODE_PM_GET( _reg ) \
-  ( ( ( _reg ) & SPICTRL_MODE_PM_MASK ) >> \
-    SPICTRL_MODE_PM_SHIFT )
-#define SPICTRL_MODE_PM_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPICTRL_MODE_PM_MASK ) >> SPICTRL_MODE_PM_SHIFT )
+#define SPICTRL_MODE_PM_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPICTRL_MODE_PM_MASK ) | \
-    ( ( ( _val ) << SPICTRL_MODE_PM_SHIFT ) & \
-      SPICTRL_MODE_PM_MASK ) )
+    ( ( ( _val ) << SPICTRL_MODE_PM_SHIFT ) & SPICTRL_MODE_PM_MASK ) )
 #define SPICTRL_MODE_PM( _val ) \
-  ( ( ( _val ) << SPICTRL_MODE_PM_SHIFT ) & \
-    SPICTRL_MODE_PM_MASK )
+  ( ( ( _val ) << SPICTRL_MODE_PM_SHIFT ) & SPICTRL_MODE_PM_MASK )
 
 #define SPICTRL_MODE_TWEN 0x8000U
 
@@ -215,30 +195,25 @@ extern "C" {
 #define SPICTRL_MODE_OD 0x1000U
 
 #define SPICTRL_MODE_CG_SHIFT 7
-#define SPICTRL_MODE_CG_MASK 0xf80U
+#define SPICTRL_MODE_CG_MASK  0xf80U
 #define SPICTRL_MODE_CG_GET( _reg ) \
-  ( ( ( _reg ) & SPICTRL_MODE_CG_MASK ) >> \
-    SPICTRL_MODE_CG_SHIFT )
-#define SPICTRL_MODE_CG_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPICTRL_MODE_CG_MASK ) >> SPICTRL_MODE_CG_SHIFT )
+#define SPICTRL_MODE_CG_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPICTRL_MODE_CG_MASK ) | \
-    ( ( ( _val ) << SPICTRL_MODE_CG_SHIFT ) & \
-      SPICTRL_MODE_CG_MASK ) )
+    ( ( ( _val ) << SPICTRL_MODE_CG_SHIFT ) & SPICTRL_MODE_CG_MASK ) )
 #define SPICTRL_MODE_CG( _val ) \
-  ( ( ( _val ) << SPICTRL_MODE_CG_SHIFT ) & \
-    SPICTRL_MODE_CG_MASK )
+  ( ( ( _val ) << SPICTRL_MODE_CG_SHIFT ) & SPICTRL_MODE_CG_MASK )
 
 #define SPICTRL_MODE_ASELDEL_SHIFT 5
-#define SPICTRL_MODE_ASELDEL_MASK 0x60U
+#define SPICTRL_MODE_ASELDEL_MASK  0x60U
 #define SPICTRL_MODE_ASELDEL_GET( _reg ) \
-  ( ( ( _reg ) & SPICTRL_MODE_ASELDEL_MASK ) >> \
-    SPICTRL_MODE_ASELDEL_SHIFT )
-#define SPICTRL_MODE_ASELDEL_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~SPICTRL_MODE_ASELDEL_MASK ) | \
+  ( ( ( _reg ) & SPICTRL_MODE_ASELDEL_MASK ) >> SPICTRL_MODE_ASELDEL_SHIFT )
+#define SPICTRL_MODE_ASELDEL_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~SPICTRL_MODE_ASELDEL_MASK ) |    \
     ( ( ( _val ) << SPICTRL_MODE_ASELDEL_SHIFT ) & \
       SPICTRL_MODE_ASELDEL_MASK ) )
 #define SPICTRL_MODE_ASELDEL( _val ) \
-  ( ( ( _val ) << SPICTRL_MODE_ASELDEL_SHIFT ) & \
-    SPICTRL_MODE_ASELDEL_MASK )
+  ( ( ( _val ) << SPICTRL_MODE_ASELDEL_SHIFT ) & SPICTRL_MODE_ASELDEL_MASK )
 
 #define SPICTRL_MODE_TAC 0x10U
 
@@ -319,17 +294,14 @@ extern "C" {
  */
 
 #define SPICTRL_TX_TDATA_SHIFT 0
-#define SPICTRL_TX_TDATA_MASK 0xffffffffU
+#define SPICTRL_TX_TDATA_MASK  0xffffffffU
 #define SPICTRL_TX_TDATA_GET( _reg ) \
-  ( ( ( _reg ) & SPICTRL_TX_TDATA_MASK ) >> \
-    SPICTRL_TX_TDATA_SHIFT )
-#define SPICTRL_TX_TDATA_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPICTRL_TX_TDATA_MASK ) >> SPICTRL_TX_TDATA_SHIFT )
+#define SPICTRL_TX_TDATA_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPICTRL_TX_TDATA_MASK ) | \
-    ( ( ( _val ) << SPICTRL_TX_TDATA_SHIFT ) & \
-      SPICTRL_TX_TDATA_MASK ) )
+    ( ( ( _val ) << SPICTRL_TX_TDATA_SHIFT ) & SPICTRL_TX_TDATA_MASK ) )
 #define SPICTRL_TX_TDATA( _val ) \
-  ( ( ( _val ) << SPICTRL_TX_TDATA_SHIFT ) & \
-    SPICTRL_TX_TDATA_MASK )
+  ( ( ( _val ) << SPICTRL_TX_TDATA_SHIFT ) & SPICTRL_TX_TDATA_MASK )
 
 /** @} */
 
@@ -342,17 +314,14 @@ extern "C" {
  */
 
 #define SPICTRL_RX_RDATA_SHIFT 0
-#define SPICTRL_RX_RDATA_MASK 0xffffffffU
+#define SPICTRL_RX_RDATA_MASK  0xffffffffU
 #define SPICTRL_RX_RDATA_GET( _reg ) \
-  ( ( ( _reg ) & SPICTRL_RX_RDATA_MASK ) >> \
-    SPICTRL_RX_RDATA_SHIFT )
-#define SPICTRL_RX_RDATA_SET( _reg, _val ) \
+  ( ( ( _reg ) & SPICTRL_RX_RDATA_MASK ) >> SPICTRL_RX_RDATA_SHIFT )
+#define SPICTRL_RX_RDATA_SET( _reg, _val )  \
   ( ( ( _reg ) & ~SPICTRL_RX_RDATA_MASK ) | \
-    ( ( ( _val ) << SPICTRL_RX_RDATA_SHIFT ) & \
-      SPICTRL_RX_RDATA_MASK ) )
+    ( ( ( _val ) << SPICTRL_RX_RDATA_SHIFT ) & SPICTRL_RX_RDATA_MASK ) )
 #define SPICTRL_RX_RDATA( _val ) \
-  ( ( ( _val ) << SPICTRL_RX_RDATA_SHIFT ) & \
-    SPICTRL_RX_RDATA_MASK )
+  ( ( ( _val ) << SPICTRL_RX_RDATA_SHIFT ) & SPICTRL_RX_RDATA_MASK )
 
 /** @} */
 
@@ -365,17 +334,15 @@ extern "C" {
  */
 
 #define SPICTRL_SLVSEL_SLVSEL_SHIFT 0
-#define SPICTRL_SLVSEL_SLVSEL_MASK 0x3U
+#define SPICTRL_SLVSEL_SLVSEL_MASK  0x3U
 #define SPICTRL_SLVSEL_SLVSEL_GET( _reg ) \
-  ( ( ( _reg ) & SPICTRL_SLVSEL_SLVSEL_MASK ) >> \
-    SPICTRL_SLVSEL_SLVSEL_SHIFT )
-#define SPICTRL_SLVSEL_SLVSEL_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~SPICTRL_SLVSEL_SLVSEL_MASK ) | \
+  ( ( ( _reg ) & SPICTRL_SLVSEL_SLVSEL_MASK ) >> SPICTRL_SLVSEL_SLVSEL_SHIFT )
+#define SPICTRL_SLVSEL_SLVSEL_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~SPICTRL_SLVSEL_SLVSEL_MASK ) |    \
     ( ( ( _val ) << SPICTRL_SLVSEL_SLVSEL_SHIFT ) & \
       SPICTRL_SLVSEL_SLVSEL_MASK ) )
 #define SPICTRL_SLVSEL_SLVSEL( _val ) \
-  ( ( ( _val ) << SPICTRL_SLVSEL_SLVSEL_SHIFT ) & \
-    SPICTRL_SLVSEL_SLVSEL_MASK )
+  ( ( ( _val ) << SPICTRL_SLVSEL_SLVSEL_SHIFT ) & SPICTRL_SLVSEL_SLVSEL_MASK )
 
 /** @} */
 
@@ -389,15 +356,15 @@ extern "C" {
  */
 
 #define SPICTRL_ASLVSEL_ASLVSEL_SHIFT 0
-#define SPICTRL_ASLVSEL_ASLVSEL_MASK 0x3U
-#define SPICTRL_ASLVSEL_ASLVSEL_GET( _reg ) \
+#define SPICTRL_ASLVSEL_ASLVSEL_MASK  0x3U
+#define SPICTRL_ASLVSEL_ASLVSEL_GET( _reg )        \
   ( ( ( _reg ) & SPICTRL_ASLVSEL_ASLVSEL_MASK ) >> \
     SPICTRL_ASLVSEL_ASLVSEL_SHIFT )
-#define SPICTRL_ASLVSEL_ASLVSEL_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~SPICTRL_ASLVSEL_ASLVSEL_MASK ) | \
+#define SPICTRL_ASLVSEL_ASLVSEL_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~SPICTRL_ASLVSEL_ASLVSEL_MASK ) |    \
     ( ( ( _val ) << SPICTRL_ASLVSEL_ASLVSEL_SHIFT ) & \
       SPICTRL_ASLVSEL_ASLVSEL_MASK ) )
-#define SPICTRL_ASLVSEL_ASLVSEL( _val ) \
+#define SPICTRL_ASLVSEL_ASLVSEL( _val )             \
   ( ( ( _val ) << SPICTRL_ASLVSEL_ASLVSEL_SHIFT ) & \
     SPICTRL_ASLVSEL_ASLVSEL_MASK )
 

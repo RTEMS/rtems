@@ -30,6 +30,6 @@
 #ifndef __APBUART_CONS_H__
 #define __APBUART_CONS_H__
 
-void apbuart_cons_register_drv (void);
+void apbuart_cons_register_drv( void );
 
 #endif

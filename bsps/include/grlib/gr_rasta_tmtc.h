@@ -69,29 +69,29 @@ extern "C" {
  * -- 9 : 0     SpaceCraft ID 
  */
 
-#define GR_TMTC_GPIO_PWRX		(1<<31)
-#define GR_TMTC_GPIO_PWTC		(1<<30)
-#define GR_TMTC_GPIO_RED_TM		(1<<29)
-#define GR_TMTC_GPIO_RED_TC		(1<<28)
-#define GR_TMTC_GPIO_GRTM_SEL		(1<<27)
-#define GR_TMTC_GPIO_LB_PW		(1<<26)
-#define GR_TMTC_GPIO_TRANSP_CLK		(1<<25)
-#define GR_TMTC_GPIO_PWTX_SEL		(1<<24)
-#define GR_TMTC_GPIO_PDEC_MAP		(1<<23)
-#define GR_TMTC_GPIO_PDEC_CPDU		(1<<22)
-#define GR_TMTC_GPIO_PDEC_SU		(1<<21)
-#define GR_TMTC_GPIO_PDEC_RM		(1<<20)
-#define GR_TMTC_GPIO_PDEC_AU		(1<<19)
-#define GR_TMTC_GPIO_PDEC_DYN_MODE	(1<<18)
-#define GR_TMTC_GPIO_PDEC_PRIO		(1<<17)
-#define GR_TMTC_GPIO_TC_PSS		(1<<16)
-#define GR_TMTC_GPIO_TC_MARK		(1<<15)
-#define GR_TMTC_GPIO_TC_PSEUDO		(1<<14)
-#define GR_TMTC_GPIO_TC_RISING_CLK	(1<<13)
-#define GR_TMTC_GPIO_TC_ACTIVE_HIGH	(1<<12)
-#define GR_TMTC_GPIO_TC_BIT_LOCK	(1<<11)
-#define GR_TMTC_GPIO_TC_RF_AVAIL	(1<<10)
-#define GR_TMTC_GPIO_SCID		(0x000003ff)
+#define GR_TMTC_GPIO_PWRX           ( 1 << 31 )
+#define GR_TMTC_GPIO_PWTC           ( 1 << 30 )
+#define GR_TMTC_GPIO_RED_TM         ( 1 << 29 )
+#define GR_TMTC_GPIO_RED_TC         ( 1 << 28 )
+#define GR_TMTC_GPIO_GRTM_SEL       ( 1 << 27 )
+#define GR_TMTC_GPIO_LB_PW          ( 1 << 26 )
+#define GR_TMTC_GPIO_TRANSP_CLK     ( 1 << 25 )
+#define GR_TMTC_GPIO_PWTX_SEL       ( 1 << 24 )
+#define GR_TMTC_GPIO_PDEC_MAP       ( 1 << 23 )
+#define GR_TMTC_GPIO_PDEC_CPDU      ( 1 << 22 )
+#define GR_TMTC_GPIO_PDEC_SU        ( 1 << 21 )
+#define GR_TMTC_GPIO_PDEC_RM        ( 1 << 20 )
+#define GR_TMTC_GPIO_PDEC_AU        ( 1 << 19 )
+#define GR_TMTC_GPIO_PDEC_DYN_MODE  ( 1 << 18 )
+#define GR_TMTC_GPIO_PDEC_PRIO      ( 1 << 17 )
+#define GR_TMTC_GPIO_TC_PSS         ( 1 << 16 )
+#define GR_TMTC_GPIO_TC_MARK        ( 1 << 15 )
+#define GR_TMTC_GPIO_TC_PSEUDO      ( 1 << 14 )
+#define GR_TMTC_GPIO_TC_RISING_CLK  ( 1 << 13 )
+#define GR_TMTC_GPIO_TC_ACTIVE_HIGH ( 1 << 12 )
+#define GR_TMTC_GPIO_TC_BIT_LOCK    ( 1 << 11 )
+#define GR_TMTC_GPIO_TC_RF_AVAIL    ( 1 << 10 )
+#define GR_TMTC_GPIO_SCID           ( 0x000003ff )
 
 /* An array of pointers to GR-RASTA-TMTC bus resources. The resources will be
  * used by the device drivers controlling the cores on the GR-RASTA-IO target
@@ -103,17 +103,17 @@ extern "C" {
 extern struct drvmgr_bus_res *gr_rasta_tmtc_resources[];
 
 /* Options to gr_rasta_io_print function */
-#define RASTA_TMTC_OPTIONS_AMBA   0x01 /* Print AMBA bus devices */
-#define RASTA_TMTC_OPTIONS_IRQ    0x02 /* Print current IRQ setup */
+#define RASTA_TMTC_OPTIONS_AMBA 0x01 /* Print AMBA bus devices */
+#define RASTA_TMTC_OPTIONS_IRQ  0x02 /* Print current IRQ setup */
 
 /* Print information about GR-RASTA-TMTC PCI boards */
-void gr_rasta_tmtc_print(int options);
+void gr_rasta_tmtc_print( int options );
 
 /* Print information about a GR-RASTA-TMTC PCI boards */
-void gr_rasta_tmtc_print_dev(struct drvmgr_dev *dev, int options);
+void gr_rasta_tmtc_print_dev( struct drvmgr_dev *dev, int options );
 
 /* Register GR-RASTA-TMTC driver */
-void gr_rasta_tmtc_register_drv(void);
+void gr_rasta_tmtc_register_drv( void );
 
 #ifdef __cplusplus
 }

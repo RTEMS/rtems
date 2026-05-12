@@ -54,7 +54,7 @@ extern "C" {
 #endif
 
 /* Register GR1553B driver needed by RT driver */
-extern void gr1553rt_register(void);
+extern void gr1553rt_register( void );
 
 struct gr1553rt_list;
 
@@ -63,37 +63,37 @@ struct gr1553rt_list;
  * Must be aligned to 16 byte boundary 
  */
 struct gr1553rt_bd {
-	volatile uint32_t	ctrl;	/* 0x00 Control/Status word */
-	volatile uint32_t	dptr;	/* 0x04 Data Pointer */
-	volatile uint32_t	next;	/* 0x08 Next Descriptor in list */
-	volatile uint32_t	unused;	/* 0x0C UNUSED BY HARDWARE */
+  volatile uint32_t ctrl;   /* 0x00 Control/Status word */
+  volatile uint32_t dptr;   /* 0x04 Data Pointer */
+  volatile uint32_t next;   /* 0x08 Next Descriptor in list */
+  volatile uint32_t unused; /* 0x0C UNUSED BY HARDWARE */
 };
 
 /* Sub address table entry, the hardware access */
 struct gr1553rt_sa {
-	volatile uint32_t ctrl;	/* 0x00 SUBADDRESS CONTROL WORD */
-	volatile uint32_t txptr;	/* 0x04 TRANSMIT BD POINTER */
-	volatile uint32_t rxptr;	/* 0x08 RECEIVE BD POINTER */
-	volatile uint32_t unused;	/* 0x0C UNUSED BY HARDWARE */
+  volatile uint32_t ctrl;   /* 0x00 SUBADDRESS CONTROL WORD */
+  volatile uint32_t txptr;  /* 0x04 TRANSMIT BD POINTER */
+  volatile uint32_t rxptr;  /* 0x08 RECEIVE BD POINTER */
+  volatile uint32_t unused; /* 0x0C UNUSED BY HARDWARE */
 };
 
 /* Configuration of a RT-SubAddress-List */
 struct gr1553rt_list_cfg {
-	unsigned int bd_cnt;		/* Number of hw-descriptors in list */
+  unsigned int bd_cnt; /* Number of hw-descriptors in list */
 };
 
 /* A TX or RX subaddress descriptor list */
 struct gr1553rt_list {
-	short listid;			/* ID/NUMBER of List. -1 unassigned */
-	short subadr;			/* SubAddress. -1 when not scheduled */
-	void *rt;			/* Scheduled on Device */
-	struct gr1553rt_list_cfg *cfg;	/* List configuration */
-	int bd_cnt;			/* Number of Descriptors */
+  short                     listid; /* ID/NUMBER of List. -1 unassigned */
+  short                     subadr; /* SubAddress. -1 when not scheduled */
+  void                     *rt;     /* Scheduled on Device */
+  struct gr1553rt_list_cfg *cfg;    /* List configuration */
+  int                       bd_cnt; /* Number of Descriptors */
 
-	/* !!Must be last in data structure!! 
+  /* !!Must be last in data structure!! 
 	 * !!Array must at least be of length bd_cnt!!
 	 */
-	unsigned short bds[0];		/* Array of BDIDs */
+  unsigned short bds[ 0 ]; /* Array of BDIDs */
 };
 
 /* GR1553B-RT Driver configuration options used when calling gr1553rt_config().
@@ -105,35 +105,35 @@ struct gr1553rt_list {
  *      into an address used by CPU.
  */
 struct gr1553rt_cfg {
-	unsigned char rtaddress;	/* RT Address 0..30 */
+  unsigned char rtaddress; /* RT Address 0..30 */
 
-	/*** MODE CODE CONFIG ***/
-	unsigned int modecode;		/* Mode codes enable/disable/IRQ/EV-Log.
+  /*** MODE CODE CONFIG ***/
+  unsigned int modecode; /* Mode codes enable/disable/IRQ/EV-Log.
 					 * Each modecode has a 2-bit cfg field.
 					 * See Mode Code Control Register in
 					 * hardware manual.
 					 */
 
-	/*** TIME CONFIG ***/
-	unsigned short time_res;	/* Time tag resolution in us */
+  /*** TIME CONFIG ***/
+  unsigned short time_res; /* Time tag resolution in us */
 
-	/*** SUBADDRESS TABLE CONFIG ***/
-	void *satab_buffer;		/* Optional Custom buffer. Must be 
+  /*** SUBADDRESS TABLE CONFIG ***/
+  void *satab_buffer; /* Optional Custom buffer. Must be 
 					 * At least 16*32 bytes, and be aligned
 					 * to 10-bit (1KB) boundary. Set to NULL
 					 * to make driver allocate buffer.
 					 */
 
-	/*** EVENT LOG CONFIG ***/
-	void *evlog_buffer;		/* Optional Custom buffer */
-	int evlog_size;			/* Length, must be a multiple of 2.
+  /*** EVENT LOG CONFIG ***/
+  void *evlog_buffer; /* Optional Custom buffer */
+  int   evlog_size;   /* Length, must be a multiple of 2.
 					 * If set to ZERO event log is disabled
 					 */
 
-	/*** TRANSFER DESCRIPTOR CONFIG ***/
-	int bd_count;			/* Number of transfer descriptors shared
+  /*** TRANSFER DESCRIPTOR CONFIG ***/
+  int   bd_count;  /* Number of transfer descriptors shared
 					 * by all RX/TX sub-addresses */
-	void *bd_buffer;		/* Optional Custom descriptor area.
+  void *bd_buffer; /* Optional Custom descriptor area.
 					 * Must hold bd_count*32 bytes.
 					 * If NULL, descriptors will be 	
 					 * allocated dynamically. */
@@ -143,13 +143,13 @@ struct gr1553rt_cfg {
  * here. Used when calling the gr1553rt_status() function.
  */
 struct gr1553rt_status {
-	unsigned int status;		/* RT Status word */
-	unsigned int bus_status;	/* BUS Status */
-	unsigned short synctime;	/* Time Tag of last sync with data */
-	unsigned short syncword;	/* Data of last mode code synchronize
+  unsigned int   status;     /* RT Status word */
+  unsigned int   bus_status; /* BUS Status */
+  unsigned short synctime;   /* Time Tag of last sync with data */
+  unsigned short syncword;   /* Data of last mode code synchronize
 					 * with data. */
-	unsigned short time_res;	/* Time resolution (set by config) */
-	unsigned short time;		/* Current Time Tag */
+  unsigned short time_res;   /* Time resolution (set by config) */
+  unsigned short time;       /* Current Time Tag */
 };
 
 /* ISR callback definition for ERRORs detected in the GR1553B-RT interrupt
@@ -160,7 +160,7 @@ struct gr1553rt_status {
  *                 Bit 10 - RT Table access error
  * \param data   Custom data assigned by user
  */
-typedef void (*gr1553rt_irqerr_t)(int err, void *data);
+typedef void ( *gr1553rt_irqerr_t )( int err, void *data );
 
 /* ISR callback definition for modecodes that are configured to generate
  * an IRQ. The callback is called from within the GR1553B-RT interrupt
@@ -170,7 +170,11 @@ typedef void (*gr1553rt_irqerr_t)(int err, void *data);
  * \param entry  The raw Eventlog Entry
  * \param data   Custom data assigned by user
  */
-typedef void (*gr1553rt_irqmc_t)(int mcode, unsigned int entry, void *data);
+typedef void ( *gr1553rt_irqmc_t )(
+  int          mcode,
+  unsigned int entry,
+  void        *data
+);
 
 /* Transfer ISR callback definition. Called from GR1553B-RT interrupt handler
  * when an interrupt has been generated and a event logged due to a 1553
@@ -182,12 +186,12 @@ typedef void (*gr1553rt_irqmc_t)(int mcode, unsigned int entry, void *data);
  *                 This can be used to process all descriptors upto entry_next.
  * \param data     Custom data assigned by user
  */
-typedef void (*gr1553rt_irq_t)(
-	struct gr1553rt_list *list, 
-	unsigned int entry,
-	int bd_next,
-	void *data
-	);
+typedef void ( *gr1553rt_irq_t )(
+  struct gr1553rt_list *list,
+  unsigned int          entry,
+  int                   bd_next,
+  void                 *data
+);
 
 /* Configure a list according to configuration. Assign the list
  * to a device, however not to a RT sub address yet. The rt
@@ -198,12 +202,11 @@ typedef void (*gr1553rt_irq_t)(
  * \param cfg      Configuration for list. Pointer to configuration is
  *                 stored within list for later use.
  */
-extern int gr1553rt_list_init
-	(
-	void *rt,
-	struct gr1553rt_list **plist,
-	struct gr1553rt_list_cfg *cfg
-	);
+extern int gr1553rt_list_init(
+  void                     *rt,
+  struct gr1553rt_list    **plist,
+  struct gr1553rt_list_cfg *cfg
+);
 
 /* Assign an Error Interrupt handler. Before the handler is called the 
  * RT hardware is stopped/disabled. The handler is optional, if not assigned
@@ -216,12 +219,7 @@ extern int gr1553rt_list_init
  * \param func     ISR called when an error causes an interrupt.
  * \param data     Custom data given as an argument when calling ISR
  */
-extern int gr1553rt_irq_err
-	(
-	void *rt,
-	gr1553rt_irqerr_t func,
-	void *data
-	);
+extern int gr1553rt_irq_err( void *rt, gr1553rt_irqerr_t func, void *data );
 
 /* Assign a ModeCode Interrupt handler callback. Called when a 1553 modecode
  * transfer is logged and cause an IRQ. The modecode IRQ generation is
@@ -230,12 +228,7 @@ extern int gr1553rt_irq_err
  * \param func     ISR called when a modecode causes an interrupt.
  * \param data     Custom data given as an argument when calling ISR
  */
-extern int gr1553rt_irq_mc
-	(
-	void *rt,
-	gr1553rt_irqmc_t func,
-	void *data
-	);
+extern int gr1553rt_irq_mc( void *rt, gr1553rt_irqmc_t func, void *data );
 
 /* Assign transfer interrupt handler callback. Called when a RX or TX
  * transfer is logged and cause an interrupt, the function is called
@@ -250,16 +243,15 @@ extern int gr1553rt_irq_mc
  *                 causes an interrupt.
  * \param data     Custom data given as an argument when calling ISR
  */
-extern int gr1553rt_irq_sa
-	(
-	void *rt,
-	int subadr,
-	int tx,
-	gr1553rt_irq_t func,
-	void *data
-	);
+extern int gr1553rt_irq_sa(
+  void          *rt,
+  int            subadr,
+  int            tx,
+  gr1553rt_irq_t func,
+  void          *data
+);
 
-#define GR1553RT_BD_FLAGS_IRQEN (1<<30)
+#define GR1553RT_BD_FLAGS_IRQEN ( 1 << 30 )
 /* Initialize a descriptor entry in a list. This is typically done
  * prior to scheduling the list.
  *
@@ -276,12 +268,12 @@ extern int gr1553rt_irq_sa
  *                  zero if entry_no is last descriptor in list (circular).
  */
 extern int gr1553rt_bd_init(
-	struct gr1553rt_list *list,
-	unsigned short entry_no,
-	unsigned int flags,
-	uint16_t *dptr,
-	unsigned short next
-	);
+  struct gr1553rt_list *list,
+  unsigned short        entry_no,
+  unsigned int          flags,
+  uint16_t             *dptr,
+  unsigned short        next
+);
 
 /* Manipulate/Read Control/Status and Data Pointer words of a buffer descriptor.
  * If status is zero, the control/status word is accessed. If dptr is non-zero
@@ -304,11 +296,11 @@ extern int gr1553rt_bd_init(
  *                   OUT: The old data pointer is stored here.
  */
 extern int gr1553rt_bd_update(
-	struct gr1553rt_list *list,
-	int entry_no,
-	unsigned int *status,
-	uint16_t **dptr
-	);
+  struct gr1553rt_list *list,
+  int                   entry_no,
+  unsigned int         *status,
+  uint16_t            **dptr
+);
 
 /* Get the next/current descriptor processed of a RT sub-address.
  *
@@ -316,7 +308,7 @@ extern int gr1553rt_bd_update(
  * \param txeno   Pointer to where TX descriptor number is stored.
  * \param rxeno   Pointer to where RX descriptor number is stored.
  */
-extern int gr1553rt_indication(void *rt, int subadr, int *txeno, int *rxeno);
+extern int gr1553rt_indication( void *rt, int subadr, int *txeno, int *rxeno );
 
 /* Take a GR1553RT hardware device identified by minor.
  * A pointer is returned that is used internally by the GR1553RT
@@ -325,10 +317,10 @@ extern int gr1553rt_indication(void *rt, int subadr, int *txeno, int *rxeno);
  *
  * This function initializes the RT hardware to a stopped/disable level.
  */
-extern void *gr1553rt_open(int minor);
+extern void *gr1553rt_open( int minor );
 
 /* Close and stop/disable the RT hardware. */
-extern void gr1553rt_close(void *rt);
+extern void gr1553rt_close( void *rt );
 
 /* Configure the RT. The RT device must be configured once before
  * started. A started RT device can not be configured.
@@ -336,7 +328,7 @@ extern void gr1553rt_close(void *rt);
  * \param rt    The RT to configure
  * \param cfg   Configuration parameters
  */
-extern int gr1553rt_config(void *rt, struct gr1553rt_cfg *cfg);
+extern int gr1553rt_config( void *rt, struct gr1553rt_cfg *cfg );
 
 /* Schedule a RX or TX list on a sub address. If a list has already been
  * schduled on the subaddress and on the same transfer type (RX/TX), the 
@@ -347,11 +339,11 @@ extern int gr1553rt_config(void *rt, struct gr1553rt_cfg *cfg);
  * \param list     Preconfigued RT list scheduled
  */
 extern void gr1553rt_sa_schedule(
-	void *rt,
-	int subadr,
-	int tx,
-	struct gr1553rt_list *list
-	);
+  void                 *rt,
+  int                   subadr,
+  int                   tx,
+  struct gr1553rt_list *list
+);
 
 /* Set SubAdress options. One may for example Enable or Disable a sub 
  * address RX and/or TX. See hardware manual for SA-Table configuration
@@ -363,11 +355,11 @@ extern void gr1553rt_sa_schedule(
  *
  */
 extern void gr1553rt_sa_setopts(
-	void *rt,
-	int subadr,
-	unsigned int mask,
-	unsigned int options
-	);
+  void        *rt,
+  int          subadr,
+  unsigned int mask,
+  unsigned int options
+);
 
 /* Get The Subaddress and transfer type of a scheduled list. Normally the
  * application knows which subaddress the list is for.
@@ -377,10 +369,10 @@ extern void gr1553rt_sa_setopts(
  * \param tx       Transfer type is stored here. 1=TX, 0=RX.
  */
 extern void gr1553rt_list_sa(
-	struct gr1553rt_list *list,
-	int *subadr,
-	int *tx
-	);
+  struct gr1553rt_list *list,
+  int                  *subadr,
+  int                  *tx
+);
 
 /* Start RT Communication
  *
@@ -389,7 +381,7 @@ extern void gr1553rt_list_sa(
  * RT to be stopped are no longer available. After the RT has been
  * started the configuration function can not be called.
  */
-extern int gr1553rt_start(void *rt);
+extern int gr1553rt_start( void *rt );
 
 /* Get Status of the RT core. See data structure gr1553rt_status for more
  * information about the result. It can be used to read out:
@@ -400,12 +392,12 @@ extern int gr1553rt_start(void *rt);
  * \param status   Pointer to where the status words will be stored. They
  *                 are stored according to the gr1553rt_status data structure.
  */
-extern void gr1553rt_status(void *rt, struct gr1553rt_status *status);
+extern void gr1553rt_status( void *rt, struct gr1553rt_status *status );
 
 /* Stop RT communication. Only possible to stop an already started RT device.
  * Interrupts are disabled and the RT Enable bit cleared.
  */
-extern void gr1553rt_stop(void *rt);
+extern void gr1553rt_stop( void *rt );
 
 /* Set RT vector and/or bit word.
  *
@@ -421,10 +413,10 @@ extern void gr1553rt_stop(void *rt);
  *  hw_words = (hw_words & ~mask) | (words & mask)
  */
 extern void gr1553rt_set_vecword(
-	void *rt,
-	unsigned int mask,
-	unsigned int words
-	);
+  void        *rt,
+  unsigned int mask,
+  unsigned int words
+);
 
 /* Set selectable bits of the "Bus Status Register". The bits written
  * is determined by the "mask" bit-mask. Operation:
@@ -432,7 +424,11 @@ extern void gr1553rt_set_vecword(
  * bus_status = (bus_status & ~mask) | (sts & mask)
  * 
  */
-extern void gr1553rt_set_bussts(void *rt, unsigned int mask, unsigned int sts);
+extern void gr1553rt_set_bussts(
+  void        *rt,
+  unsigned int mask,
+  unsigned int sts
+);
 
 /* Read up to MAX number of entries in eventlog log. 
  *
@@ -444,7 +440,7 @@ extern void gr1553rt_set_bussts(void *rt, unsigned int mask, unsigned int sts);
  *  zero       No entries available at the moment
  *  positive   Number of entries copied into dst
  */
-extern int gr1553rt_evlog_read(void *rt, unsigned int *dst, int max);
+extern int gr1553rt_evlog_read( void *rt, unsigned int *dst, int max );
 
 #ifdef __cplusplus
 }

@@ -85,15 +85,15 @@ extern "C" {
 #define GRSPWROUTER_OCHARCNT_OR 0x80000000U
 
 #define GRSPWROUTER_OCHARCNT_CC_SHIFT 0
-#define GRSPWROUTER_OCHARCNT_CC_MASK 0x7fffffffU
-#define GRSPWROUTER_OCHARCNT_CC_GET( _reg ) \
+#define GRSPWROUTER_OCHARCNT_CC_MASK  0x7fffffffU
+#define GRSPWROUTER_OCHARCNT_CC_GET( _reg )        \
   ( ( ( _reg ) & GRSPWROUTER_OCHARCNT_CC_MASK ) >> \
     GRSPWROUTER_OCHARCNT_CC_SHIFT )
-#define GRSPWROUTER_OCHARCNT_CC_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_OCHARCNT_CC_MASK ) | \
+#define GRSPWROUTER_OCHARCNT_CC_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_OCHARCNT_CC_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_OCHARCNT_CC_SHIFT ) & \
       GRSPWROUTER_OCHARCNT_CC_MASK ) )
-#define GRSPWROUTER_OCHARCNT_CC( _val ) \
+#define GRSPWROUTER_OCHARCNT_CC( _val )             \
   ( ( ( _val ) << GRSPWROUTER_OCHARCNT_CC_SHIFT ) & \
     GRSPWROUTER_OCHARCNT_CC_MASK )
 
@@ -111,15 +111,15 @@ extern "C" {
 #define GRSPWROUTER_ICHARCNT_OR 0x80000000U
 
 #define GRSPWROUTER_ICHARCNT_CC_SHIFT 0
-#define GRSPWROUTER_ICHARCNT_CC_MASK 0x7fffffffU
-#define GRSPWROUTER_ICHARCNT_CC_GET( _reg ) \
+#define GRSPWROUTER_ICHARCNT_CC_MASK  0x7fffffffU
+#define GRSPWROUTER_ICHARCNT_CC_GET( _reg )        \
   ( ( ( _reg ) & GRSPWROUTER_ICHARCNT_CC_MASK ) >> \
     GRSPWROUTER_ICHARCNT_CC_SHIFT )
-#define GRSPWROUTER_ICHARCNT_CC_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_ICHARCNT_CC_MASK ) | \
+#define GRSPWROUTER_ICHARCNT_CC_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_ICHARCNT_CC_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_ICHARCNT_CC_SHIFT ) & \
       GRSPWROUTER_ICHARCNT_CC_MASK ) )
-#define GRSPWROUTER_ICHARCNT_CC( _val ) \
+#define GRSPWROUTER_ICHARCNT_CC( _val )             \
   ( ( ( _val ) << GRSPWROUTER_ICHARCNT_CC_SHIFT ) & \
     GRSPWROUTER_ICHARCNT_CC_MASK )
 
@@ -137,15 +137,15 @@ extern "C" {
 #define GRSPWROUTER_OPKTCNT_OR 0x80000000U
 
 #define GRSPWROUTER_OPKTCNT_PC_SHIFT 0
-#define GRSPWROUTER_OPKTCNT_PC_MASK 0x7fffffffU
-#define GRSPWROUTER_OPKTCNT_PC_GET( _reg ) \
+#define GRSPWROUTER_OPKTCNT_PC_MASK  0x7fffffffU
+#define GRSPWROUTER_OPKTCNT_PC_GET( _reg )        \
   ( ( ( _reg ) & GRSPWROUTER_OPKTCNT_PC_MASK ) >> \
     GRSPWROUTER_OPKTCNT_PC_SHIFT )
-#define GRSPWROUTER_OPKTCNT_PC_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_OPKTCNT_PC_MASK ) | \
+#define GRSPWROUTER_OPKTCNT_PC_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_OPKTCNT_PC_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_OPKTCNT_PC_SHIFT ) & \
       GRSPWROUTER_OPKTCNT_PC_MASK ) )
-#define GRSPWROUTER_OPKTCNT_PC( _val ) \
+#define GRSPWROUTER_OPKTCNT_PC( _val )             \
   ( ( ( _val ) << GRSPWROUTER_OPKTCNT_PC_SHIFT ) & \
     GRSPWROUTER_OPKTCNT_PC_MASK )
 
@@ -163,15 +163,15 @@ extern "C" {
 #define GRSPWROUTER_IPKTCNT_OR 0x80000000U
 
 #define GRSPWROUTER_IPKTCNT_PC_SHIFT 0
-#define GRSPWROUTER_IPKTCNT_PC_MASK 0x7fffffffU
-#define GRSPWROUTER_IPKTCNT_PC_GET( _reg ) \
+#define GRSPWROUTER_IPKTCNT_PC_MASK  0x7fffffffU
+#define GRSPWROUTER_IPKTCNT_PC_GET( _reg )        \
   ( ( ( _reg ) & GRSPWROUTER_IPKTCNT_PC_MASK ) >> \
     GRSPWROUTER_IPKTCNT_PC_SHIFT )
-#define GRSPWROUTER_IPKTCNT_PC_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_IPKTCNT_PC_MASK ) | \
+#define GRSPWROUTER_IPKTCNT_PC_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_IPKTCNT_PC_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_IPKTCNT_PC_SHIFT ) & \
       GRSPWROUTER_IPKTCNT_PC_MASK ) )
-#define GRSPWROUTER_IPKTCNT_PC( _val ) \
+#define GRSPWROUTER_IPKTCNT_PC( _val )             \
   ( ( ( _val ) << GRSPWROUTER_IPKTCNT_PC_SHIFT ) & \
     GRSPWROUTER_IPKTCNT_PC_MASK )
 
@@ -227,17 +227,15 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_RTPMAP_PE_SHIFT 1
-#define GRSPWROUTER_RTPMAP_PE_MASK 0xfffffffeU
+#define GRSPWROUTER_RTPMAP_PE_MASK  0xfffffffeU
 #define GRSPWROUTER_RTPMAP_PE_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_RTPMAP_PE_MASK ) >> \
-    GRSPWROUTER_RTPMAP_PE_SHIFT )
-#define GRSPWROUTER_RTPMAP_PE_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_RTPMAP_PE_MASK ) | \
+  ( ( ( _reg ) & GRSPWROUTER_RTPMAP_PE_MASK ) >> GRSPWROUTER_RTPMAP_PE_SHIFT )
+#define GRSPWROUTER_RTPMAP_PE_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_RTPMAP_PE_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_RTPMAP_PE_SHIFT ) & \
       GRSPWROUTER_RTPMAP_PE_MASK ) )
 #define GRSPWROUTER_RTPMAP_PE( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_RTPMAP_PE_SHIFT ) & \
-    GRSPWROUTER_RTPMAP_PE_MASK )
+  ( ( ( _val ) << GRSPWROUTER_RTPMAP_PE_SHIFT ) & GRSPWROUTER_RTPMAP_PE_MASK )
 
 #define GRSPWROUTER_RTPMAP_PD 0x1U
 
@@ -288,30 +286,26 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_PCTRL_RD_SHIFT 24
-#define GRSPWROUTER_PCTRL_RD_MASK 0xff000000U
+#define GRSPWROUTER_PCTRL_RD_MASK  0xff000000U
 #define GRSPWROUTER_PCTRL_RD_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_PCTRL_RD_MASK ) >> \
-    GRSPWROUTER_PCTRL_RD_SHIFT )
-#define GRSPWROUTER_PCTRL_RD_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_PCTRL_RD_MASK ) | \
+  ( ( ( _reg ) & GRSPWROUTER_PCTRL_RD_MASK ) >> GRSPWROUTER_PCTRL_RD_SHIFT )
+#define GRSPWROUTER_PCTRL_RD_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_PCTRL_RD_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_PCTRL_RD_SHIFT ) & \
       GRSPWROUTER_PCTRL_RD_MASK ) )
 #define GRSPWROUTER_PCTRL_RD( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_PCTRL_RD_SHIFT ) & \
-    GRSPWROUTER_PCTRL_RD_MASK )
+  ( ( ( _val ) << GRSPWROUTER_PCTRL_RD_SHIFT ) & GRSPWROUTER_PCTRL_RD_MASK )
 
 #define GRSPWROUTER_PCTRL_RES_SHIFT 22
-#define GRSPWROUTER_PCTRL_RES_MASK 0xc00000U
+#define GRSPWROUTER_PCTRL_RES_MASK  0xc00000U
 #define GRSPWROUTER_PCTRL_RES_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_PCTRL_RES_MASK ) >> \
-    GRSPWROUTER_PCTRL_RES_SHIFT )
-#define GRSPWROUTER_PCTRL_RES_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_PCTRL_RES_MASK ) | \
+  ( ( ( _reg ) & GRSPWROUTER_PCTRL_RES_MASK ) >> GRSPWROUTER_PCTRL_RES_SHIFT )
+#define GRSPWROUTER_PCTRL_RES_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_PCTRL_RES_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_PCTRL_RES_SHIFT ) & \
       GRSPWROUTER_PCTRL_RES_MASK ) )
 #define GRSPWROUTER_PCTRL_RES( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_PCTRL_RES_SHIFT ) & \
-    GRSPWROUTER_PCTRL_RES_MASK )
+  ( ( ( _val ) << GRSPWROUTER_PCTRL_RES_SHIFT ) & GRSPWROUTER_PCTRL_RES_MASK )
 
 #define GRSPWROUTER_PCTRL_ST 0x200000U
 
@@ -385,15 +379,15 @@ typedef struct grspwrouter_portstats {
 #define GRSPWROUTER_PSTSCFG_CE 0x1000000U
 
 #define GRSPWROUTER_PSTSCFG_EC_SHIFT 20
-#define GRSPWROUTER_PSTSCFG_EC_MASK 0xf00000U
-#define GRSPWROUTER_PSTSCFG_EC_GET( _reg ) \
+#define GRSPWROUTER_PSTSCFG_EC_MASK  0xf00000U
+#define GRSPWROUTER_PSTSCFG_EC_GET( _reg )        \
   ( ( ( _reg ) & GRSPWROUTER_PSTSCFG_EC_MASK ) >> \
     GRSPWROUTER_PSTSCFG_EC_SHIFT )
-#define GRSPWROUTER_PSTSCFG_EC_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_PSTSCFG_EC_MASK ) | \
+#define GRSPWROUTER_PSTSCFG_EC_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_PSTSCFG_EC_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_PSTSCFG_EC_SHIFT ) & \
       GRSPWROUTER_PSTSCFG_EC_MASK ) )
-#define GRSPWROUTER_PSTSCFG_EC( _val ) \
+#define GRSPWROUTER_PSTSCFG_EC( _val )             \
   ( ( ( _val ) << GRSPWROUTER_PSTSCFG_EC_SHIFT ) & \
     GRSPWROUTER_PSTSCFG_EC_MASK )
 
@@ -404,43 +398,43 @@ typedef struct grspwrouter_portstats {
 #define GRSPWROUTER_PSTSCFG_ME 0x20000U
 
 #define GRSPWROUTER_PSTSCFG_IP_SHIFT 7
-#define GRSPWROUTER_PSTSCFG_IP_MASK 0xf80U
-#define GRSPWROUTER_PSTSCFG_IP_GET( _reg ) \
+#define GRSPWROUTER_PSTSCFG_IP_MASK  0xf80U
+#define GRSPWROUTER_PSTSCFG_IP_GET( _reg )        \
   ( ( ( _reg ) & GRSPWROUTER_PSTSCFG_IP_MASK ) >> \
     GRSPWROUTER_PSTSCFG_IP_SHIFT )
-#define GRSPWROUTER_PSTSCFG_IP_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_PSTSCFG_IP_MASK ) | \
+#define GRSPWROUTER_PSTSCFG_IP_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_PSTSCFG_IP_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_PSTSCFG_IP_SHIFT ) & \
       GRSPWROUTER_PSTSCFG_IP_MASK ) )
-#define GRSPWROUTER_PSTSCFG_IP( _val ) \
+#define GRSPWROUTER_PSTSCFG_IP( _val )             \
   ( ( ( _val ) << GRSPWROUTER_PSTSCFG_IP_SHIFT ) & \
     GRSPWROUTER_PSTSCFG_IP_MASK )
 
 #define GRSPWROUTER_PSTSCFG_RES_SHIFT 5
-#define GRSPWROUTER_PSTSCFG_RES_MASK 0x60U
-#define GRSPWROUTER_PSTSCFG_RES_GET( _reg ) \
+#define GRSPWROUTER_PSTSCFG_RES_MASK  0x60U
+#define GRSPWROUTER_PSTSCFG_RES_GET( _reg )        \
   ( ( ( _reg ) & GRSPWROUTER_PSTSCFG_RES_MASK ) >> \
     GRSPWROUTER_PSTSCFG_RES_SHIFT )
-#define GRSPWROUTER_PSTSCFG_RES_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_PSTSCFG_RES_MASK ) | \
+#define GRSPWROUTER_PSTSCFG_RES_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_PSTSCFG_RES_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_PSTSCFG_RES_SHIFT ) & \
       GRSPWROUTER_PSTSCFG_RES_MASK ) )
-#define GRSPWROUTER_PSTSCFG_RES( _val ) \
+#define GRSPWROUTER_PSTSCFG_RES( _val )             \
   ( ( ( _val ) << GRSPWROUTER_PSTSCFG_RES_SHIFT ) & \
     GRSPWROUTER_PSTSCFG_RES_MASK )
 
 #define GRSPWROUTER_PSTSCFG_CP 0x10U
 
 #define GRSPWROUTER_PSTSCFG_PC_SHIFT 0
-#define GRSPWROUTER_PSTSCFG_PC_MASK 0xfU
-#define GRSPWROUTER_PSTSCFG_PC_GET( _reg ) \
+#define GRSPWROUTER_PSTSCFG_PC_MASK  0xfU
+#define GRSPWROUTER_PSTSCFG_PC_GET( _reg )        \
   ( ( ( _reg ) & GRSPWROUTER_PSTSCFG_PC_MASK ) >> \
     GRSPWROUTER_PSTSCFG_PC_SHIFT )
-#define GRSPWROUTER_PSTSCFG_PC_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_PSTSCFG_PC_MASK ) | \
+#define GRSPWROUTER_PSTSCFG_PC_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_PSTSCFG_PC_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_PSTSCFG_PC_SHIFT ) & \
       GRSPWROUTER_PSTSCFG_PC_MASK ) )
-#define GRSPWROUTER_PSTSCFG_PC( _val ) \
+#define GRSPWROUTER_PSTSCFG_PC( _val )             \
   ( ( ( _val ) << GRSPWROUTER_PSTSCFG_PC_SHIFT ) & \
     GRSPWROUTER_PSTSCFG_PC_MASK )
 
@@ -455,17 +449,15 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_PSTS_PT_SHIFT 30
-#define GRSPWROUTER_PSTS_PT_MASK 0xc0000000U
+#define GRSPWROUTER_PSTS_PT_MASK  0xc0000000U
 #define GRSPWROUTER_PSTS_PT_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_PSTS_PT_MASK ) >> \
-    GRSPWROUTER_PSTS_PT_SHIFT )
-#define GRSPWROUTER_PSTS_PT_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_PSTS_PT_MASK ) | \
+  ( ( ( _reg ) & GRSPWROUTER_PSTS_PT_MASK ) >> GRSPWROUTER_PSTS_PT_SHIFT )
+#define GRSPWROUTER_PSTS_PT_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_PSTS_PT_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_PSTS_PT_SHIFT ) & \
       GRSPWROUTER_PSTS_PT_MASK ) )
 #define GRSPWROUTER_PSTS_PT( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_PSTS_PT_SHIFT ) & \
-    GRSPWROUTER_PSTS_PT_MASK )
+  ( ( ( _val ) << GRSPWROUTER_PSTS_PT_SHIFT ) & GRSPWROUTER_PSTS_PT_MASK )
 
 #define GRSPWROUTER_PSTS_PL 0x20000000U
 
@@ -492,30 +484,26 @@ typedef struct grspwrouter_portstats {
 #define GRSPWROUTER_PSTS_RE 0x8000U
 
 #define GRSPWROUTER_PSTS_LS_SHIFT 12
-#define GRSPWROUTER_PSTS_LS_MASK 0x7000U
+#define GRSPWROUTER_PSTS_LS_MASK  0x7000U
 #define GRSPWROUTER_PSTS_LS_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_PSTS_LS_MASK ) >> \
-    GRSPWROUTER_PSTS_LS_SHIFT )
-#define GRSPWROUTER_PSTS_LS_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_PSTS_LS_MASK ) | \
+  ( ( ( _reg ) & GRSPWROUTER_PSTS_LS_MASK ) >> GRSPWROUTER_PSTS_LS_SHIFT )
+#define GRSPWROUTER_PSTS_LS_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_PSTS_LS_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_PSTS_LS_SHIFT ) & \
       GRSPWROUTER_PSTS_LS_MASK ) )
 #define GRSPWROUTER_PSTS_LS( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_PSTS_LS_SHIFT ) & \
-    GRSPWROUTER_PSTS_LS_MASK )
+  ( ( ( _val ) << GRSPWROUTER_PSTS_LS_SHIFT ) & GRSPWROUTER_PSTS_LS_MASK )
 
 #define GRSPWROUTER_PSTS_IP_SHIFT 7
-#define GRSPWROUTER_PSTS_IP_MASK 0xf80U
+#define GRSPWROUTER_PSTS_IP_MASK  0xf80U
 #define GRSPWROUTER_PSTS_IP_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_PSTS_IP_MASK ) >> \
-    GRSPWROUTER_PSTS_IP_SHIFT )
-#define GRSPWROUTER_PSTS_IP_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_PSTS_IP_MASK ) | \
+  ( ( ( _reg ) & GRSPWROUTER_PSTS_IP_MASK ) >> GRSPWROUTER_PSTS_IP_SHIFT )
+#define GRSPWROUTER_PSTS_IP_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_PSTS_IP_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_PSTS_IP_SHIFT ) & \
       GRSPWROUTER_PSTS_IP_MASK ) )
 #define GRSPWROUTER_PSTS_IP( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_PSTS_IP_SHIFT ) & \
-    GRSPWROUTER_PSTS_IP_MASK )
+  ( ( ( _val ) << GRSPWROUTER_PSTS_IP_SHIFT ) & GRSPWROUTER_PSTS_IP_MASK )
 
 #define GRSPWROUTER_PSTS_PR 0x40U
 
@@ -542,17 +530,15 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_PTIMER_RL_SHIFT 0
-#define GRSPWROUTER_PTIMER_RL_MASK 0x3ffU
+#define GRSPWROUTER_PTIMER_RL_MASK  0x3ffU
 #define GRSPWROUTER_PTIMER_RL_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_PTIMER_RL_MASK ) >> \
-    GRSPWROUTER_PTIMER_RL_SHIFT )
-#define GRSPWROUTER_PTIMER_RL_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_PTIMER_RL_MASK ) | \
+  ( ( ( _reg ) & GRSPWROUTER_PTIMER_RL_MASK ) >> GRSPWROUTER_PTIMER_RL_SHIFT )
+#define GRSPWROUTER_PTIMER_RL_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_PTIMER_RL_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_PTIMER_RL_SHIFT ) & \
       GRSPWROUTER_PTIMER_RL_MASK ) )
 #define GRSPWROUTER_PTIMER_RL( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_PTIMER_RL_SHIFT ) & \
-    GRSPWROUTER_PTIMER_RL_MASK )
+  ( ( ( _val ) << GRSPWROUTER_PTIMER_RL_SHIFT ) & GRSPWROUTER_PTIMER_RL_MASK )
 
 /** @} */
 
@@ -566,28 +552,28 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_PCTRL2CFG_SM_SHIFT 24
-#define GRSPWROUTER_PCTRL2CFG_SM_MASK 0xff000000U
-#define GRSPWROUTER_PCTRL2CFG_SM_GET( _reg ) \
+#define GRSPWROUTER_PCTRL2CFG_SM_MASK  0xff000000U
+#define GRSPWROUTER_PCTRL2CFG_SM_GET( _reg )        \
   ( ( ( _reg ) & GRSPWROUTER_PCTRL2CFG_SM_MASK ) >> \
     GRSPWROUTER_PCTRL2CFG_SM_SHIFT )
-#define GRSPWROUTER_PCTRL2CFG_SM_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_PCTRL2CFG_SM_MASK ) | \
+#define GRSPWROUTER_PCTRL2CFG_SM_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_PCTRL2CFG_SM_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_PCTRL2CFG_SM_SHIFT ) & \
       GRSPWROUTER_PCTRL2CFG_SM_MASK ) )
-#define GRSPWROUTER_PCTRL2CFG_SM( _val ) \
+#define GRSPWROUTER_PCTRL2CFG_SM( _val )             \
   ( ( ( _val ) << GRSPWROUTER_PCTRL2CFG_SM_SHIFT ) & \
     GRSPWROUTER_PCTRL2CFG_SM_MASK )
 
 #define GRSPWROUTER_PCTRL2CFG_SV_SHIFT 16
-#define GRSPWROUTER_PCTRL2CFG_SV_MASK 0xff0000U
-#define GRSPWROUTER_PCTRL2CFG_SV_GET( _reg ) \
+#define GRSPWROUTER_PCTRL2CFG_SV_MASK  0xff0000U
+#define GRSPWROUTER_PCTRL2CFG_SV_GET( _reg )        \
   ( ( ( _reg ) & GRSPWROUTER_PCTRL2CFG_SV_MASK ) >> \
     GRSPWROUTER_PCTRL2CFG_SV_SHIFT )
-#define GRSPWROUTER_PCTRL2CFG_SV_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_PCTRL2CFG_SV_MASK ) | \
+#define GRSPWROUTER_PCTRL2CFG_SV_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_PCTRL2CFG_SV_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_PCTRL2CFG_SV_SHIFT ) & \
       GRSPWROUTER_PCTRL2CFG_SV_MASK ) )
-#define GRSPWROUTER_PCTRL2CFG_SV( _val ) \
+#define GRSPWROUTER_PCTRL2CFG_SV( _val )             \
   ( ( ( _val ) << GRSPWROUTER_PCTRL2CFG_SV_SHIFT ) & \
     GRSPWROUTER_PCTRL2CFG_SV_MASK )
 
@@ -604,30 +590,26 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_PCTRL2_SM_SHIFT 24
-#define GRSPWROUTER_PCTRL2_SM_MASK 0xff000000U
+#define GRSPWROUTER_PCTRL2_SM_MASK  0xff000000U
 #define GRSPWROUTER_PCTRL2_SM_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_PCTRL2_SM_MASK ) >> \
-    GRSPWROUTER_PCTRL2_SM_SHIFT )
-#define GRSPWROUTER_PCTRL2_SM_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_PCTRL2_SM_MASK ) | \
+  ( ( ( _reg ) & GRSPWROUTER_PCTRL2_SM_MASK ) >> GRSPWROUTER_PCTRL2_SM_SHIFT )
+#define GRSPWROUTER_PCTRL2_SM_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_PCTRL2_SM_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_PCTRL2_SM_SHIFT ) & \
       GRSPWROUTER_PCTRL2_SM_MASK ) )
 #define GRSPWROUTER_PCTRL2_SM( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_PCTRL2_SM_SHIFT ) & \
-    GRSPWROUTER_PCTRL2_SM_MASK )
+  ( ( ( _val ) << GRSPWROUTER_PCTRL2_SM_SHIFT ) & GRSPWROUTER_PCTRL2_SM_MASK )
 
 #define GRSPWROUTER_PCTRL2_SV_SHIFT 16
-#define GRSPWROUTER_PCTRL2_SV_MASK 0xff0000U
+#define GRSPWROUTER_PCTRL2_SV_MASK  0xff0000U
 #define GRSPWROUTER_PCTRL2_SV_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_PCTRL2_SV_MASK ) >> \
-    GRSPWROUTER_PCTRL2_SV_SHIFT )
-#define GRSPWROUTER_PCTRL2_SV_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_PCTRL2_SV_MASK ) | \
+  ( ( ( _reg ) & GRSPWROUTER_PCTRL2_SV_MASK ) >> GRSPWROUTER_PCTRL2_SV_SHIFT )
+#define GRSPWROUTER_PCTRL2_SV_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_PCTRL2_SV_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_PCTRL2_SV_SHIFT ) & \
       GRSPWROUTER_PCTRL2_SV_MASK ) )
 #define GRSPWROUTER_PCTRL2_SV( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_PCTRL2_SV_SHIFT ) & \
-    GRSPWROUTER_PCTRL2_SV_MASK )
+  ( ( ( _val ) << GRSPWROUTER_PCTRL2_SV_SHIFT ) & GRSPWROUTER_PCTRL2_SV_MASK )
 
 #define GRSPWROUTER_PCTRL2_OR 0x8000U
 
@@ -644,17 +626,15 @@ typedef struct grspwrouter_portstats {
 #define GRSPWROUTER_PCTRL2_IR 0x200U
 
 #define GRSPWROUTER_PCTRL2_SD_SHIFT 1
-#define GRSPWROUTER_PCTRL2_SD_MASK 0x3eU
+#define GRSPWROUTER_PCTRL2_SD_MASK  0x3eU
 #define GRSPWROUTER_PCTRL2_SD_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_PCTRL2_SD_MASK ) >> \
-    GRSPWROUTER_PCTRL2_SD_SHIFT )
-#define GRSPWROUTER_PCTRL2_SD_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_PCTRL2_SD_MASK ) | \
+  ( ( ( _reg ) & GRSPWROUTER_PCTRL2_SD_MASK ) >> GRSPWROUTER_PCTRL2_SD_SHIFT )
+#define GRSPWROUTER_PCTRL2_SD_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_PCTRL2_SD_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_PCTRL2_SD_SHIFT ) & \
       GRSPWROUTER_PCTRL2_SD_MASK ) )
 #define GRSPWROUTER_PCTRL2_SD( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_PCTRL2_SD_SHIFT ) & \
-    GRSPWROUTER_PCTRL2_SD_MASK )
+  ( ( ( _val ) << GRSPWROUTER_PCTRL2_SD_SHIFT ) & GRSPWROUTER_PCTRL2_SD_MASK )
 
 #define GRSPWROUTER_PCTRL2_SC 0x1U
 
@@ -670,43 +650,37 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_RTRCFG_SP_SHIFT 27
-#define GRSPWROUTER_RTRCFG_SP_MASK 0xf8000000U
+#define GRSPWROUTER_RTRCFG_SP_MASK  0xf8000000U
 #define GRSPWROUTER_RTRCFG_SP_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_RTRCFG_SP_MASK ) >> \
-    GRSPWROUTER_RTRCFG_SP_SHIFT )
-#define GRSPWROUTER_RTRCFG_SP_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_RTRCFG_SP_MASK ) | \
+  ( ( ( _reg ) & GRSPWROUTER_RTRCFG_SP_MASK ) >> GRSPWROUTER_RTRCFG_SP_SHIFT )
+#define GRSPWROUTER_RTRCFG_SP_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_RTRCFG_SP_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_RTRCFG_SP_SHIFT ) & \
       GRSPWROUTER_RTRCFG_SP_MASK ) )
 #define GRSPWROUTER_RTRCFG_SP( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_RTRCFG_SP_SHIFT ) & \
-    GRSPWROUTER_RTRCFG_SP_MASK )
+  ( ( ( _val ) << GRSPWROUTER_RTRCFG_SP_SHIFT ) & GRSPWROUTER_RTRCFG_SP_MASK )
 
 #define GRSPWROUTER_RTRCFG_AP_SHIFT 22
-#define GRSPWROUTER_RTRCFG_AP_MASK 0x7c00000U
+#define GRSPWROUTER_RTRCFG_AP_MASK  0x7c00000U
 #define GRSPWROUTER_RTRCFG_AP_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_RTRCFG_AP_MASK ) >> \
-    GRSPWROUTER_RTRCFG_AP_SHIFT )
-#define GRSPWROUTER_RTRCFG_AP_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_RTRCFG_AP_MASK ) | \
+  ( ( ( _reg ) & GRSPWROUTER_RTRCFG_AP_MASK ) >> GRSPWROUTER_RTRCFG_AP_SHIFT )
+#define GRSPWROUTER_RTRCFG_AP_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_RTRCFG_AP_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_RTRCFG_AP_SHIFT ) & \
       GRSPWROUTER_RTRCFG_AP_MASK ) )
 #define GRSPWROUTER_RTRCFG_AP( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_RTRCFG_AP_SHIFT ) & \
-    GRSPWROUTER_RTRCFG_AP_MASK )
+  ( ( ( _val ) << GRSPWROUTER_RTRCFG_AP_SHIFT ) & GRSPWROUTER_RTRCFG_AP_MASK )
 
 #define GRSPWROUTER_RTRCFG_FP_SHIFT 17
-#define GRSPWROUTER_RTRCFG_FP_MASK 0x3e0000U
+#define GRSPWROUTER_RTRCFG_FP_MASK  0x3e0000U
 #define GRSPWROUTER_RTRCFG_FP_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_RTRCFG_FP_MASK ) >> \
-    GRSPWROUTER_RTRCFG_FP_SHIFT )
-#define GRSPWROUTER_RTRCFG_FP_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_RTRCFG_FP_MASK ) | \
+  ( ( ( _reg ) & GRSPWROUTER_RTRCFG_FP_MASK ) >> GRSPWROUTER_RTRCFG_FP_SHIFT )
+#define GRSPWROUTER_RTRCFG_FP_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_RTRCFG_FP_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_RTRCFG_FP_SHIFT ) & \
       GRSPWROUTER_RTRCFG_FP_MASK ) )
 #define GRSPWROUTER_RTRCFG_FP( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_RTRCFG_FP_SHIFT ) & \
-    GRSPWROUTER_RTRCFG_FP_MASK )
+  ( ( ( _val ) << GRSPWROUTER_RTRCFG_FP_SHIFT ) & GRSPWROUTER_RTRCFG_FP_MASK )
 
 #define GRSPWROUTER_RTRCFG_R 0x10000U
 
@@ -757,30 +731,24 @@ typedef struct grspwrouter_portstats {
 #define GRSPWROUTER_TC_EN 0x100U
 
 #define GRSPWROUTER_TC_CF_SHIFT 6
-#define GRSPWROUTER_TC_CF_MASK 0xc0U
+#define GRSPWROUTER_TC_CF_MASK  0xc0U
 #define GRSPWROUTER_TC_CF_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_TC_CF_MASK ) >> \
-    GRSPWROUTER_TC_CF_SHIFT )
-#define GRSPWROUTER_TC_CF_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPWROUTER_TC_CF_MASK ) >> GRSPWROUTER_TC_CF_SHIFT )
+#define GRSPWROUTER_TC_CF_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPWROUTER_TC_CF_MASK ) | \
-    ( ( ( _val ) << GRSPWROUTER_TC_CF_SHIFT ) & \
-      GRSPWROUTER_TC_CF_MASK ) )
+    ( ( ( _val ) << GRSPWROUTER_TC_CF_SHIFT ) & GRSPWROUTER_TC_CF_MASK ) )
 #define GRSPWROUTER_TC_CF( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_TC_CF_SHIFT ) & \
-    GRSPWROUTER_TC_CF_MASK )
+  ( ( ( _val ) << GRSPWROUTER_TC_CF_SHIFT ) & GRSPWROUTER_TC_CF_MASK )
 
 #define GRSPWROUTER_TC_TC_SHIFT 0
-#define GRSPWROUTER_TC_TC_MASK 0x3fU
+#define GRSPWROUTER_TC_TC_MASK  0x3fU
 #define GRSPWROUTER_TC_TC_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_TC_TC_MASK ) >> \
-    GRSPWROUTER_TC_TC_SHIFT )
-#define GRSPWROUTER_TC_TC_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPWROUTER_TC_TC_MASK ) >> GRSPWROUTER_TC_TC_SHIFT )
+#define GRSPWROUTER_TC_TC_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPWROUTER_TC_TC_MASK ) | \
-    ( ( ( _val ) << GRSPWROUTER_TC_TC_SHIFT ) & \
-      GRSPWROUTER_TC_TC_MASK ) )
+    ( ( ( _val ) << GRSPWROUTER_TC_TC_SHIFT ) & GRSPWROUTER_TC_TC_MASK ) )
 #define GRSPWROUTER_TC_TC( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_TC_TC_SHIFT ) & \
-    GRSPWROUTER_TC_TC_MASK )
+  ( ( ( _val ) << GRSPWROUTER_TC_TC_SHIFT ) & GRSPWROUTER_TC_TC_MASK )
 
 /** @} */
 
@@ -793,56 +761,44 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_VER_MA_SHIFT 24
-#define GRSPWROUTER_VER_MA_MASK 0xff000000U
+#define GRSPWROUTER_VER_MA_MASK  0xff000000U
 #define GRSPWROUTER_VER_MA_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_VER_MA_MASK ) >> \
-    GRSPWROUTER_VER_MA_SHIFT )
-#define GRSPWROUTER_VER_MA_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPWROUTER_VER_MA_MASK ) >> GRSPWROUTER_VER_MA_SHIFT )
+#define GRSPWROUTER_VER_MA_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPWROUTER_VER_MA_MASK ) | \
-    ( ( ( _val ) << GRSPWROUTER_VER_MA_SHIFT ) & \
-      GRSPWROUTER_VER_MA_MASK ) )
+    ( ( ( _val ) << GRSPWROUTER_VER_MA_SHIFT ) & GRSPWROUTER_VER_MA_MASK ) )
 #define GRSPWROUTER_VER_MA( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_VER_MA_SHIFT ) & \
-    GRSPWROUTER_VER_MA_MASK )
+  ( ( ( _val ) << GRSPWROUTER_VER_MA_SHIFT ) & GRSPWROUTER_VER_MA_MASK )
 
 #define GRSPWROUTER_VER_MI_SHIFT 16
-#define GRSPWROUTER_VER_MI_MASK 0xff0000U
+#define GRSPWROUTER_VER_MI_MASK  0xff0000U
 #define GRSPWROUTER_VER_MI_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_VER_MI_MASK ) >> \
-    GRSPWROUTER_VER_MI_SHIFT )
-#define GRSPWROUTER_VER_MI_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPWROUTER_VER_MI_MASK ) >> GRSPWROUTER_VER_MI_SHIFT )
+#define GRSPWROUTER_VER_MI_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPWROUTER_VER_MI_MASK ) | \
-    ( ( ( _val ) << GRSPWROUTER_VER_MI_SHIFT ) & \
-      GRSPWROUTER_VER_MI_MASK ) )
+    ( ( ( _val ) << GRSPWROUTER_VER_MI_SHIFT ) & GRSPWROUTER_VER_MI_MASK ) )
 #define GRSPWROUTER_VER_MI( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_VER_MI_SHIFT ) & \
-    GRSPWROUTER_VER_MI_MASK )
+  ( ( ( _val ) << GRSPWROUTER_VER_MI_SHIFT ) & GRSPWROUTER_VER_MI_MASK )
 
 #define GRSPWROUTER_VER_PA_SHIFT 8
-#define GRSPWROUTER_VER_PA_MASK 0xff00U
+#define GRSPWROUTER_VER_PA_MASK  0xff00U
 #define GRSPWROUTER_VER_PA_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_VER_PA_MASK ) >> \
-    GRSPWROUTER_VER_PA_SHIFT )
-#define GRSPWROUTER_VER_PA_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPWROUTER_VER_PA_MASK ) >> GRSPWROUTER_VER_PA_SHIFT )
+#define GRSPWROUTER_VER_PA_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPWROUTER_VER_PA_MASK ) | \
-    ( ( ( _val ) << GRSPWROUTER_VER_PA_SHIFT ) & \
-      GRSPWROUTER_VER_PA_MASK ) )
+    ( ( ( _val ) << GRSPWROUTER_VER_PA_SHIFT ) & GRSPWROUTER_VER_PA_MASK ) )
 #define GRSPWROUTER_VER_PA( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_VER_PA_SHIFT ) & \
-    GRSPWROUTER_VER_PA_MASK )
+  ( ( ( _val ) << GRSPWROUTER_VER_PA_SHIFT ) & GRSPWROUTER_VER_PA_MASK )
 
 #define GRSPWROUTER_VER_ID_SHIFT 0
-#define GRSPWROUTER_VER_ID_MASK 0xffU
+#define GRSPWROUTER_VER_ID_MASK  0xffU
 #define GRSPWROUTER_VER_ID_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_VER_ID_MASK ) >> \
-    GRSPWROUTER_VER_ID_SHIFT )
-#define GRSPWROUTER_VER_ID_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPWROUTER_VER_ID_MASK ) >> GRSPWROUTER_VER_ID_SHIFT )
+#define GRSPWROUTER_VER_ID_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPWROUTER_VER_ID_MASK ) | \
-    ( ( ( _val ) << GRSPWROUTER_VER_ID_SHIFT ) & \
-      GRSPWROUTER_VER_ID_MASK ) )
+    ( ( ( _val ) << GRSPWROUTER_VER_ID_SHIFT ) & GRSPWROUTER_VER_ID_MASK ) )
 #define GRSPWROUTER_VER_ID( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_VER_ID_SHIFT ) & \
-    GRSPWROUTER_VER_ID_MASK )
+  ( ( ( _val ) << GRSPWROUTER_VER_ID_SHIFT ) & GRSPWROUTER_VER_ID_MASK )
 
 /** @} */
 
@@ -855,17 +811,15 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_IDIV_ID_SHIFT 0
-#define GRSPWROUTER_IDIV_ID_MASK 0xffU
+#define GRSPWROUTER_IDIV_ID_MASK  0xffU
 #define GRSPWROUTER_IDIV_ID_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_IDIV_ID_MASK ) >> \
-    GRSPWROUTER_IDIV_ID_SHIFT )
-#define GRSPWROUTER_IDIV_ID_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_IDIV_ID_MASK ) | \
+  ( ( ( _reg ) & GRSPWROUTER_IDIV_ID_MASK ) >> GRSPWROUTER_IDIV_ID_SHIFT )
+#define GRSPWROUTER_IDIV_ID_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_IDIV_ID_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_IDIV_ID_SHIFT ) & \
       GRSPWROUTER_IDIV_ID_MASK ) )
 #define GRSPWROUTER_IDIV_ID( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_IDIV_ID_SHIFT ) & \
-    GRSPWROUTER_IDIV_ID_MASK )
+  ( ( ( _val ) << GRSPWROUTER_IDIV_ID_SHIFT ) & GRSPWROUTER_IDIV_ID_MASK )
 
 /** @} */
 
@@ -891,15 +845,15 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_PRESCALER_RL_SHIFT 0
-#define GRSPWROUTER_PRESCALER_RL_MASK 0xffffffffU
-#define GRSPWROUTER_PRESCALER_RL_GET( _reg ) \
+#define GRSPWROUTER_PRESCALER_RL_MASK  0xffffffffU
+#define GRSPWROUTER_PRESCALER_RL_GET( _reg )        \
   ( ( ( _reg ) & GRSPWROUTER_PRESCALER_RL_MASK ) >> \
     GRSPWROUTER_PRESCALER_RL_SHIFT )
-#define GRSPWROUTER_PRESCALER_RL_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_PRESCALER_RL_MASK ) | \
+#define GRSPWROUTER_PRESCALER_RL_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_PRESCALER_RL_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_PRESCALER_RL_SHIFT ) & \
       GRSPWROUTER_PRESCALER_RL_MASK ) )
-#define GRSPWROUTER_PRESCALER_RL( _val ) \
+#define GRSPWROUTER_PRESCALER_RL( _val )             \
   ( ( ( _val ) << GRSPWROUTER_PRESCALER_RL_SHIFT ) & \
     GRSPWROUTER_PRESCALER_RL_MASK )
 
@@ -946,17 +900,15 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_IPMASK_IE_SHIFT 0
-#define GRSPWROUTER_IPMASK_IE_MASK 0xffffffffU
+#define GRSPWROUTER_IPMASK_IE_MASK  0xffffffffU
 #define GRSPWROUTER_IPMASK_IE_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_IPMASK_IE_MASK ) >> \
-    GRSPWROUTER_IPMASK_IE_SHIFT )
-#define GRSPWROUTER_IPMASK_IE_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_IPMASK_IE_MASK ) | \
+  ( ( ( _reg ) & GRSPWROUTER_IPMASK_IE_MASK ) >> GRSPWROUTER_IPMASK_IE_SHIFT )
+#define GRSPWROUTER_IPMASK_IE_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_IPMASK_IE_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_IPMASK_IE_SHIFT ) & \
       GRSPWROUTER_IPMASK_IE_MASK ) )
 #define GRSPWROUTER_IPMASK_IE( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_IPMASK_IE_SHIFT ) & \
-    GRSPWROUTER_IPMASK_IE_MASK )
+  ( ( ( _val ) << GRSPWROUTER_IPMASK_IE_SHIFT ) & GRSPWROUTER_IPMASK_IE_MASK )
 
 /** @} */
 
@@ -969,17 +921,14 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_PIP_IP_SHIFT 0
-#define GRSPWROUTER_PIP_IP_MASK 0xffffffffU
+#define GRSPWROUTER_PIP_IP_MASK  0xffffffffU
 #define GRSPWROUTER_PIP_IP_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_PIP_IP_MASK ) >> \
-    GRSPWROUTER_PIP_IP_SHIFT )
-#define GRSPWROUTER_PIP_IP_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPWROUTER_PIP_IP_MASK ) >> GRSPWROUTER_PIP_IP_SHIFT )
+#define GRSPWROUTER_PIP_IP_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPWROUTER_PIP_IP_MASK ) | \
-    ( ( ( _val ) << GRSPWROUTER_PIP_IP_SHIFT ) & \
-      GRSPWROUTER_PIP_IP_MASK ) )
+    ( ( ( _val ) << GRSPWROUTER_PIP_IP_SHIFT ) & GRSPWROUTER_PIP_IP_MASK ) )
 #define GRSPWROUTER_PIP_IP( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_PIP_IP_SHIFT ) & \
-    GRSPWROUTER_PIP_IP_MASK )
+  ( ( ( _val ) << GRSPWROUTER_PIP_IP_SHIFT ) & GRSPWROUTER_PIP_IP_MASK )
 
 /** @} */
 
@@ -1005,15 +954,15 @@ typedef struct grspwrouter_portstats {
 #define GRSPWROUTER_ICODEGEN_EN 0x20000U
 
 #define GRSPWROUTER_ICODEGEN_IN_SHIFT 6
-#define GRSPWROUTER_ICODEGEN_IN_MASK 0xffc0U
-#define GRSPWROUTER_ICODEGEN_IN_GET( _reg ) \
+#define GRSPWROUTER_ICODEGEN_IN_MASK  0xffc0U
+#define GRSPWROUTER_ICODEGEN_IN_GET( _reg )        \
   ( ( ( _reg ) & GRSPWROUTER_ICODEGEN_IN_MASK ) >> \
     GRSPWROUTER_ICODEGEN_IN_SHIFT )
-#define GRSPWROUTER_ICODEGEN_IN_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_ICODEGEN_IN_MASK ) | \
+#define GRSPWROUTER_ICODEGEN_IN_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_ICODEGEN_IN_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_ICODEGEN_IN_SHIFT ) & \
       GRSPWROUTER_ICODEGEN_IN_MASK ) )
-#define GRSPWROUTER_ICODEGEN_IN( _val ) \
+#define GRSPWROUTER_ICODEGEN_IN( _val )             \
   ( ( ( _val ) << GRSPWROUTER_ICODEGEN_IN_SHIFT ) & \
     GRSPWROUTER_ICODEGEN_IN_MASK )
 
@@ -1029,17 +978,15 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_ISR0_IB_SHIFT 0
-#define GRSPWROUTER_ISR0_IB_MASK 0xffffffffU
+#define GRSPWROUTER_ISR0_IB_MASK  0xffffffffU
 #define GRSPWROUTER_ISR0_IB_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_ISR0_IB_MASK ) >> \
-    GRSPWROUTER_ISR0_IB_SHIFT )
-#define GRSPWROUTER_ISR0_IB_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_ISR0_IB_MASK ) | \
+  ( ( ( _reg ) & GRSPWROUTER_ISR0_IB_MASK ) >> GRSPWROUTER_ISR0_IB_SHIFT )
+#define GRSPWROUTER_ISR0_IB_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_ISR0_IB_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_ISR0_IB_SHIFT ) & \
       GRSPWROUTER_ISR0_IB_MASK ) )
 #define GRSPWROUTER_ISR0_IB( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_ISR0_IB_SHIFT ) & \
-    GRSPWROUTER_ISR0_IB_MASK )
+  ( ( ( _val ) << GRSPWROUTER_ISR0_IB_SHIFT ) & GRSPWROUTER_ISR0_IB_MASK )
 
 /** @} */
 
@@ -1053,17 +1000,15 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_ISR1_IB_SHIFT 0
-#define GRSPWROUTER_ISR1_IB_MASK 0xffffffffU
+#define GRSPWROUTER_ISR1_IB_MASK  0xffffffffU
 #define GRSPWROUTER_ISR1_IB_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_ISR1_IB_MASK ) >> \
-    GRSPWROUTER_ISR1_IB_SHIFT )
-#define GRSPWROUTER_ISR1_IB_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_ISR1_IB_MASK ) | \
+  ( ( ( _reg ) & GRSPWROUTER_ISR1_IB_MASK ) >> GRSPWROUTER_ISR1_IB_SHIFT )
+#define GRSPWROUTER_ISR1_IB_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_ISR1_IB_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_ISR1_IB_SHIFT ) & \
       GRSPWROUTER_ISR1_IB_MASK ) )
 #define GRSPWROUTER_ISR1_IB( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_ISR1_IB_SHIFT ) & \
-    GRSPWROUTER_ISR1_IB_MASK )
+  ( ( ( _val ) << GRSPWROUTER_ISR1_IB_SHIFT ) & GRSPWROUTER_ISR1_IB_MASK )
 
 /** @} */
 
@@ -1077,15 +1022,15 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_ISRTIMER_RL_SHIFT 0
-#define GRSPWROUTER_ISRTIMER_RL_MASK 0xffffffffU
-#define GRSPWROUTER_ISRTIMER_RL_GET( _reg ) \
+#define GRSPWROUTER_ISRTIMER_RL_MASK  0xffffffffU
+#define GRSPWROUTER_ISRTIMER_RL_GET( _reg )        \
   ( ( ( _reg ) & GRSPWROUTER_ISRTIMER_RL_MASK ) >> \
     GRSPWROUTER_ISRTIMER_RL_SHIFT )
-#define GRSPWROUTER_ISRTIMER_RL_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_ISRTIMER_RL_MASK ) | \
+#define GRSPWROUTER_ISRTIMER_RL_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_ISRTIMER_RL_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_ISRTIMER_RL_SHIFT ) & \
       GRSPWROUTER_ISRTIMER_RL_MASK ) )
-#define GRSPWROUTER_ISRTIMER_RL( _val ) \
+#define GRSPWROUTER_ISRTIMER_RL( _val )             \
   ( ( ( _val ) << GRSPWROUTER_ISRTIMER_RL_SHIFT ) & \
     GRSPWROUTER_ISRTIMER_RL_MASK )
 
@@ -1101,15 +1046,15 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_AITIMER_RL_SHIFT 0
-#define GRSPWROUTER_AITIMER_RL_MASK 0xffffffffU
-#define GRSPWROUTER_AITIMER_RL_GET( _reg ) \
+#define GRSPWROUTER_AITIMER_RL_MASK  0xffffffffU
+#define GRSPWROUTER_AITIMER_RL_GET( _reg )        \
   ( ( ( _reg ) & GRSPWROUTER_AITIMER_RL_MASK ) >> \
     GRSPWROUTER_AITIMER_RL_SHIFT )
-#define GRSPWROUTER_AITIMER_RL_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_AITIMER_RL_MASK ) | \
+#define GRSPWROUTER_AITIMER_RL_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_AITIMER_RL_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_AITIMER_RL_SHIFT ) & \
       GRSPWROUTER_AITIMER_RL_MASK ) )
-#define GRSPWROUTER_AITIMER_RL( _val ) \
+#define GRSPWROUTER_AITIMER_RL( _val )             \
   ( ( ( _val ) << GRSPWROUTER_AITIMER_RL_SHIFT ) & \
     GRSPWROUTER_AITIMER_RL_MASK )
 
@@ -1125,15 +1070,15 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_ISRCTIMER_RL_SHIFT 0
-#define GRSPWROUTER_ISRCTIMER_RL_MASK 0x1fU
-#define GRSPWROUTER_ISRCTIMER_RL_GET( _reg ) \
+#define GRSPWROUTER_ISRCTIMER_RL_MASK  0x1fU
+#define GRSPWROUTER_ISRCTIMER_RL_GET( _reg )        \
   ( ( ( _reg ) & GRSPWROUTER_ISRCTIMER_RL_MASK ) >> \
     GRSPWROUTER_ISRCTIMER_RL_SHIFT )
-#define GRSPWROUTER_ISRCTIMER_RL_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_ISRCTIMER_RL_MASK ) | \
+#define GRSPWROUTER_ISRCTIMER_RL_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_ISRCTIMER_RL_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_ISRCTIMER_RL_SHIFT ) & \
       GRSPWROUTER_ISRCTIMER_RL_MASK ) )
-#define GRSPWROUTER_ISRCTIMER_RL( _val ) \
+#define GRSPWROUTER_ISRCTIMER_RL( _val )             \
   ( ( ( _val ) << GRSPWROUTER_ISRCTIMER_RL_SHIFT ) & \
     GRSPWROUTER_ISRCTIMER_RL_MASK )
 
@@ -1148,15 +1093,15 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_LRUNSTAT_LR_SHIFT 1
-#define GRSPWROUTER_LRUNSTAT_LR_MASK 0xfffffffeU
-#define GRSPWROUTER_LRUNSTAT_LR_GET( _reg ) \
+#define GRSPWROUTER_LRUNSTAT_LR_MASK  0xfffffffeU
+#define GRSPWROUTER_LRUNSTAT_LR_GET( _reg )        \
   ( ( ( _reg ) & GRSPWROUTER_LRUNSTAT_LR_MASK ) >> \
     GRSPWROUTER_LRUNSTAT_LR_SHIFT )
-#define GRSPWROUTER_LRUNSTAT_LR_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_LRUNSTAT_LR_MASK ) | \
+#define GRSPWROUTER_LRUNSTAT_LR_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_LRUNSTAT_LR_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_LRUNSTAT_LR_SHIFT ) & \
       GRSPWROUTER_LRUNSTAT_LR_MASK ) )
-#define GRSPWROUTER_LRUNSTAT_LR( _val ) \
+#define GRSPWROUTER_LRUNSTAT_LR( _val )             \
   ( ( ( _val ) << GRSPWROUTER_LRUNSTAT_LR_SHIFT ) & \
     GRSPWROUTER_LRUNSTAT_LR_MASK )
 
@@ -1173,47 +1118,38 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_CAP_AF_SHIFT 24
-#define GRSPWROUTER_CAP_AF_MASK 0x3000000U
+#define GRSPWROUTER_CAP_AF_MASK  0x3000000U
 #define GRSPWROUTER_CAP_AF_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_CAP_AF_MASK ) >> \
-    GRSPWROUTER_CAP_AF_SHIFT )
-#define GRSPWROUTER_CAP_AF_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPWROUTER_CAP_AF_MASK ) >> GRSPWROUTER_CAP_AF_SHIFT )
+#define GRSPWROUTER_CAP_AF_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPWROUTER_CAP_AF_MASK ) | \
-    ( ( ( _val ) << GRSPWROUTER_CAP_AF_SHIFT ) & \
-      GRSPWROUTER_CAP_AF_MASK ) )
+    ( ( ( _val ) << GRSPWROUTER_CAP_AF_SHIFT ) & GRSPWROUTER_CAP_AF_MASK ) )
 #define GRSPWROUTER_CAP_AF( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_CAP_AF_SHIFT ) & \
-    GRSPWROUTER_CAP_AF_MASK )
+  ( ( ( _val ) << GRSPWROUTER_CAP_AF_SHIFT ) & GRSPWROUTER_CAP_AF_MASK )
 
 #define GRSPWROUTER_CAP_R 0x800000U
 
 #define GRSPWROUTER_CAP_PF_SHIFT 20
-#define GRSPWROUTER_CAP_PF_MASK 0x700000U
+#define GRSPWROUTER_CAP_PF_MASK  0x700000U
 #define GRSPWROUTER_CAP_PF_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_CAP_PF_MASK ) >> \
-    GRSPWROUTER_CAP_PF_SHIFT )
-#define GRSPWROUTER_CAP_PF_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPWROUTER_CAP_PF_MASK ) >> GRSPWROUTER_CAP_PF_SHIFT )
+#define GRSPWROUTER_CAP_PF_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPWROUTER_CAP_PF_MASK ) | \
-    ( ( ( _val ) << GRSPWROUTER_CAP_PF_SHIFT ) & \
-      GRSPWROUTER_CAP_PF_MASK ) )
+    ( ( ( _val ) << GRSPWROUTER_CAP_PF_SHIFT ) & GRSPWROUTER_CAP_PF_MASK ) )
 #define GRSPWROUTER_CAP_PF( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_CAP_PF_SHIFT ) & \
-    GRSPWROUTER_CAP_PF_MASK )
+  ( ( ( _val ) << GRSPWROUTER_CAP_PF_SHIFT ) & GRSPWROUTER_CAP_PF_MASK )
 
 #define GRSPWROUTER_CAP_R 0x80000U
 
 #define GRSPWROUTER_CAP_RM_SHIFT 16
-#define GRSPWROUTER_CAP_RM_MASK 0x70000U
+#define GRSPWROUTER_CAP_RM_MASK  0x70000U
 #define GRSPWROUTER_CAP_RM_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_CAP_RM_MASK ) >> \
-    GRSPWROUTER_CAP_RM_SHIFT )
-#define GRSPWROUTER_CAP_RM_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPWROUTER_CAP_RM_MASK ) >> GRSPWROUTER_CAP_RM_SHIFT )
+#define GRSPWROUTER_CAP_RM_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPWROUTER_CAP_RM_MASK ) | \
-    ( ( ( _val ) << GRSPWROUTER_CAP_RM_SHIFT ) & \
-      GRSPWROUTER_CAP_RM_MASK ) )
+    ( ( ( _val ) << GRSPWROUTER_CAP_RM_SHIFT ) & GRSPWROUTER_CAP_RM_MASK ) )
 #define GRSPWROUTER_CAP_RM( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_CAP_RM_SHIFT ) & \
-    GRSPWROUTER_CAP_RM_MASK )
+  ( ( ( _val ) << GRSPWROUTER_CAP_RM_SHIFT ) & GRSPWROUTER_CAP_RM_MASK )
 
 #define GRSPWROUTER_CAP_R 0x8000U
 
@@ -1228,30 +1164,24 @@ typedef struct grspwrouter_portstats {
 #define GRSPWROUTER_CAP_SD 0x400U
 
 #define GRSPWROUTER_CAP_PC_SHIFT 5
-#define GRSPWROUTER_CAP_PC_MASK 0x3e0U
+#define GRSPWROUTER_CAP_PC_MASK  0x3e0U
 #define GRSPWROUTER_CAP_PC_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_CAP_PC_MASK ) >> \
-    GRSPWROUTER_CAP_PC_SHIFT )
-#define GRSPWROUTER_CAP_PC_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPWROUTER_CAP_PC_MASK ) >> GRSPWROUTER_CAP_PC_SHIFT )
+#define GRSPWROUTER_CAP_PC_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPWROUTER_CAP_PC_MASK ) | \
-    ( ( ( _val ) << GRSPWROUTER_CAP_PC_SHIFT ) & \
-      GRSPWROUTER_CAP_PC_MASK ) )
+    ( ( ( _val ) << GRSPWROUTER_CAP_PC_SHIFT ) & GRSPWROUTER_CAP_PC_MASK ) )
 #define GRSPWROUTER_CAP_PC( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_CAP_PC_SHIFT ) & \
-    GRSPWROUTER_CAP_PC_MASK )
+  ( ( ( _val ) << GRSPWROUTER_CAP_PC_SHIFT ) & GRSPWROUTER_CAP_PC_MASK )
 
 #define GRSPWROUTER_CAP_CC_SHIFT 0
-#define GRSPWROUTER_CAP_CC_MASK 0x1fU
+#define GRSPWROUTER_CAP_CC_MASK  0x1fU
 #define GRSPWROUTER_CAP_CC_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_CAP_CC_MASK ) >> \
-    GRSPWROUTER_CAP_CC_SHIFT )
-#define GRSPWROUTER_CAP_CC_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPWROUTER_CAP_CC_MASK ) >> GRSPWROUTER_CAP_CC_SHIFT )
+#define GRSPWROUTER_CAP_CC_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPWROUTER_CAP_CC_MASK ) | \
-    ( ( ( _val ) << GRSPWROUTER_CAP_CC_SHIFT ) & \
-      GRSPWROUTER_CAP_CC_MASK ) )
+    ( ( ( _val ) << GRSPWROUTER_CAP_CC_SHIFT ) & GRSPWROUTER_CAP_CC_MASK ) )
 #define GRSPWROUTER_CAP_CC( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_CAP_CC_SHIFT ) & \
-    GRSPWROUTER_CAP_CC_MASK )
+  ( ( ( _val ) << GRSPWROUTER_CAP_CC_SHIFT ) & GRSPWROUTER_CAP_CC_MASK )
 
 /** @} */
 
@@ -1265,28 +1195,28 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_PNPVEND_VI_SHIFT 16
-#define GRSPWROUTER_PNPVEND_VI_MASK 0xffff0000U
-#define GRSPWROUTER_PNPVEND_VI_GET( _reg ) \
+#define GRSPWROUTER_PNPVEND_VI_MASK  0xffff0000U
+#define GRSPWROUTER_PNPVEND_VI_GET( _reg )        \
   ( ( ( _reg ) & GRSPWROUTER_PNPVEND_VI_MASK ) >> \
     GRSPWROUTER_PNPVEND_VI_SHIFT )
-#define GRSPWROUTER_PNPVEND_VI_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_PNPVEND_VI_MASK ) | \
+#define GRSPWROUTER_PNPVEND_VI_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_PNPVEND_VI_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_PNPVEND_VI_SHIFT ) & \
       GRSPWROUTER_PNPVEND_VI_MASK ) )
-#define GRSPWROUTER_PNPVEND_VI( _val ) \
+#define GRSPWROUTER_PNPVEND_VI( _val )             \
   ( ( ( _val ) << GRSPWROUTER_PNPVEND_VI_SHIFT ) & \
     GRSPWROUTER_PNPVEND_VI_MASK )
 
 #define GRSPWROUTER_PNPVEND_PI_SHIFT 0
-#define GRSPWROUTER_PNPVEND_PI_MASK 0x3ffffffU
-#define GRSPWROUTER_PNPVEND_PI_GET( _reg ) \
+#define GRSPWROUTER_PNPVEND_PI_MASK  0x3ffffffU
+#define GRSPWROUTER_PNPVEND_PI_GET( _reg )        \
   ( ( ( _reg ) & GRSPWROUTER_PNPVEND_PI_MASK ) >> \
     GRSPWROUTER_PNPVEND_PI_SHIFT )
-#define GRSPWROUTER_PNPVEND_PI_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_PNPVEND_PI_MASK ) | \
+#define GRSPWROUTER_PNPVEND_PI_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_PNPVEND_PI_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_PNPVEND_PI_SHIFT ) & \
       GRSPWROUTER_PNPVEND_PI_MASK ) )
-#define GRSPWROUTER_PNPVEND_PI( _val ) \
+#define GRSPWROUTER_PNPVEND_PI( _val )             \
   ( ( ( _val ) << GRSPWROUTER_PNPVEND_PI_SHIFT ) & \
     GRSPWROUTER_PNPVEND_PI_MASK )
 
@@ -1302,28 +1232,28 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_PNPUVEND_VI_SHIFT 16
-#define GRSPWROUTER_PNPUVEND_VI_MASK 0xffff0000U
-#define GRSPWROUTER_PNPUVEND_VI_GET( _reg ) \
+#define GRSPWROUTER_PNPUVEND_VI_MASK  0xffff0000U
+#define GRSPWROUTER_PNPUVEND_VI_GET( _reg )        \
   ( ( ( _reg ) & GRSPWROUTER_PNPUVEND_VI_MASK ) >> \
     GRSPWROUTER_PNPUVEND_VI_SHIFT )
-#define GRSPWROUTER_PNPUVEND_VI_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_PNPUVEND_VI_MASK ) | \
+#define GRSPWROUTER_PNPUVEND_VI_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_PNPUVEND_VI_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_PNPUVEND_VI_SHIFT ) & \
       GRSPWROUTER_PNPUVEND_VI_MASK ) )
-#define GRSPWROUTER_PNPUVEND_VI( _val ) \
+#define GRSPWROUTER_PNPUVEND_VI( _val )             \
   ( ( ( _val ) << GRSPWROUTER_PNPUVEND_VI_SHIFT ) & \
     GRSPWROUTER_PNPUVEND_VI_MASK )
 
 #define GRSPWROUTER_PNPUVEND_PI_SHIFT 0
-#define GRSPWROUTER_PNPUVEND_PI_MASK 0x3ffffffU
-#define GRSPWROUTER_PNPUVEND_PI_GET( _reg ) \
+#define GRSPWROUTER_PNPUVEND_PI_MASK  0x3ffffffU
+#define GRSPWROUTER_PNPUVEND_PI_GET( _reg )        \
   ( ( ( _reg ) & GRSPWROUTER_PNPUVEND_PI_MASK ) >> \
     GRSPWROUTER_PNPUVEND_PI_SHIFT )
-#define GRSPWROUTER_PNPUVEND_PI_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_PNPUVEND_PI_MASK ) | \
+#define GRSPWROUTER_PNPUVEND_PI_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_PNPUVEND_PI_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_PNPUVEND_PI_SHIFT ) & \
       GRSPWROUTER_PNPUVEND_PI_MASK ) )
-#define GRSPWROUTER_PNPUVEND_PI( _val ) \
+#define GRSPWROUTER_PNPUVEND_PI( _val )             \
   ( ( ( _val ) << GRSPWROUTER_PNPUVEND_PI_SHIFT ) & \
     GRSPWROUTER_PNPUVEND_PI_MASK )
 
@@ -1339,17 +1269,15 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_PNPUSN_SN_SHIFT 0
-#define GRSPWROUTER_PNPUSN_SN_MASK 0xffffffffU
+#define GRSPWROUTER_PNPUSN_SN_MASK  0xffffffffU
 #define GRSPWROUTER_PNPUSN_SN_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_PNPUSN_SN_MASK ) >> \
-    GRSPWROUTER_PNPUSN_SN_SHIFT )
-#define GRSPWROUTER_PNPUSN_SN_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_PNPUSN_SN_MASK ) | \
+  ( ( ( _reg ) & GRSPWROUTER_PNPUSN_SN_MASK ) >> GRSPWROUTER_PNPUSN_SN_SHIFT )
+#define GRSPWROUTER_PNPUSN_SN_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_PNPUSN_SN_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_PNPUSN_SN_SHIFT ) & \
       GRSPWROUTER_PNPUSN_SN_MASK ) )
 #define GRSPWROUTER_PNPUSN_SN( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_PNPUSN_SN_SHIFT ) & \
-    GRSPWROUTER_PNPUSN_SN_MASK )
+  ( ( ( _val ) << GRSPWROUTER_PNPUSN_SN_SHIFT ) & GRSPWROUTER_PNPUSN_SN_MASK )
 
 /** @} */
 
@@ -1363,15 +1291,15 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_PNPNETDISC_ND_SHIFT 0
-#define GRSPWROUTER_PNPNETDISC_ND_MASK 0xffffffffU
-#define GRSPWROUTER_PNPNETDISC_ND_GET( _reg ) \
+#define GRSPWROUTER_PNPNETDISC_ND_MASK  0xffffffffU
+#define GRSPWROUTER_PNPNETDISC_ND_GET( _reg )        \
   ( ( ( _reg ) & GRSPWROUTER_PNPNETDISC_ND_MASK ) >> \
     GRSPWROUTER_PNPNETDISC_ND_SHIFT )
-#define GRSPWROUTER_PNPNETDISC_ND_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_PNPNETDISC_ND_MASK ) | \
+#define GRSPWROUTER_PNPNETDISC_ND_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_PNPNETDISC_ND_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_PNPNETDISC_ND_SHIFT ) & \
       GRSPWROUTER_PNPNETDISC_ND_MASK ) )
-#define GRSPWROUTER_PNPNETDISC_ND( _val ) \
+#define GRSPWROUTER_PNPNETDISC_ND( _val )             \
   ( ( ( _val ) << GRSPWROUTER_PNPNETDISC_ND_SHIFT ) & \
     GRSPWROUTER_PNPNETDISC_ND_MASK )
 
@@ -1387,15 +1315,15 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_MAXPLEN_ML_SHIFT 0
-#define GRSPWROUTER_MAXPLEN_ML_MASK 0x1ffffffU
-#define GRSPWROUTER_MAXPLEN_ML_GET( _reg ) \
+#define GRSPWROUTER_MAXPLEN_ML_MASK  0x1ffffffU
+#define GRSPWROUTER_MAXPLEN_ML_GET( _reg )        \
   ( ( ( _reg ) & GRSPWROUTER_MAXPLEN_ML_MASK ) >> \
     GRSPWROUTER_MAXPLEN_ML_SHIFT )
-#define GRSPWROUTER_MAXPLEN_ML_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_MAXPLEN_ML_MASK ) | \
+#define GRSPWROUTER_MAXPLEN_ML_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_MAXPLEN_ML_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_MAXPLEN_ML_SHIFT ) & \
       GRSPWROUTER_MAXPLEN_ML_MASK ) )
-#define GRSPWROUTER_MAXPLEN_ML( _val ) \
+#define GRSPWROUTER_MAXPLEN_ML( _val )             \
   ( ( ( _val ) << GRSPWROUTER_MAXPLEN_ML_SHIFT ) & \
     GRSPWROUTER_MAXPLEN_ML_MASK )
 
@@ -1411,28 +1339,28 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_CREDCNT_OC_SHIFT 6
-#define GRSPWROUTER_CREDCNT_OC_MASK 0xfc0U
-#define GRSPWROUTER_CREDCNT_OC_GET( _reg ) \
+#define GRSPWROUTER_CREDCNT_OC_MASK  0xfc0U
+#define GRSPWROUTER_CREDCNT_OC_GET( _reg )        \
   ( ( ( _reg ) & GRSPWROUTER_CREDCNT_OC_MASK ) >> \
     GRSPWROUTER_CREDCNT_OC_SHIFT )
-#define GRSPWROUTER_CREDCNT_OC_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_CREDCNT_OC_MASK ) | \
+#define GRSPWROUTER_CREDCNT_OC_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_CREDCNT_OC_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_CREDCNT_OC_SHIFT ) & \
       GRSPWROUTER_CREDCNT_OC_MASK ) )
-#define GRSPWROUTER_CREDCNT_OC( _val ) \
+#define GRSPWROUTER_CREDCNT_OC( _val )             \
   ( ( ( _val ) << GRSPWROUTER_CREDCNT_OC_SHIFT ) & \
     GRSPWROUTER_CREDCNT_OC_MASK )
 
 #define GRSPWROUTER_CREDCNT_IC_SHIFT 0
-#define GRSPWROUTER_CREDCNT_IC_MASK 0x3fU
-#define GRSPWROUTER_CREDCNT_IC_GET( _reg ) \
+#define GRSPWROUTER_CREDCNT_IC_MASK  0x3fU
+#define GRSPWROUTER_CREDCNT_IC_GET( _reg )        \
   ( ( ( _reg ) & GRSPWROUTER_CREDCNT_IC_MASK ) >> \
     GRSPWROUTER_CREDCNT_IC_SHIFT )
-#define GRSPWROUTER_CREDCNT_IC_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_CREDCNT_IC_MASK ) | \
+#define GRSPWROUTER_CREDCNT_IC_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_CREDCNT_IC_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_CREDCNT_IC_SHIFT ) & \
       GRSPWROUTER_CREDCNT_IC_MASK ) )
-#define GRSPWROUTER_CREDCNT_IC( _val ) \
+#define GRSPWROUTER_CREDCNT_IC( _val )             \
   ( ( ( _val ) << GRSPWROUTER_CREDCNT_IC_SHIFT ) & \
     GRSPWROUTER_CREDCNT_IC_MASK )
 
@@ -1448,17 +1376,15 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_GPO_GPO_SHIFT 0
-#define GRSPWROUTER_GPO_GPO_MASK 0xffffffffU
+#define GRSPWROUTER_GPO_GPO_MASK  0xffffffffU
 #define GRSPWROUTER_GPO_GPO_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_GPO_GPO_MASK ) >> \
-    GRSPWROUTER_GPO_GPO_SHIFT )
-#define GRSPWROUTER_GPO_GPO_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_GPO_GPO_MASK ) | \
+  ( ( ( _reg ) & GRSPWROUTER_GPO_GPO_MASK ) >> GRSPWROUTER_GPO_GPO_SHIFT )
+#define GRSPWROUTER_GPO_GPO_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_GPO_GPO_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_GPO_GPO_SHIFT ) & \
       GRSPWROUTER_GPO_GPO_MASK ) )
 #define GRSPWROUTER_GPO_GPO( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_GPO_GPO_SHIFT ) & \
-    GRSPWROUTER_GPO_GPO_MASK )
+  ( ( ( _val ) << GRSPWROUTER_GPO_GPO_SHIFT ) & GRSPWROUTER_GPO_GPO_MASK )
 
 /** @} */
 
@@ -1472,17 +1398,15 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_GPI_GPI_SHIFT 0
-#define GRSPWROUTER_GPI_GPI_MASK 0xffffffffU
+#define GRSPWROUTER_GPI_GPI_MASK  0xffffffffU
 #define GRSPWROUTER_GPI_GPI_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_GPI_GPI_MASK ) >> \
-    GRSPWROUTER_GPI_GPI_SHIFT )
-#define GRSPWROUTER_GPI_GPI_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_GPI_GPI_MASK ) | \
+  ( ( ( _reg ) & GRSPWROUTER_GPI_GPI_MASK ) >> GRSPWROUTER_GPI_GPI_SHIFT )
+#define GRSPWROUTER_GPI_GPI_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_GPI_GPI_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_GPI_GPI_SHIFT ) & \
       GRSPWROUTER_GPI_GPI_MASK ) )
 #define GRSPWROUTER_GPI_GPI( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_GPI_GPI_SHIFT ) & \
-    GRSPWROUTER_GPI_GPI_MASK )
+  ( ( ( _val ) << GRSPWROUTER_GPI_GPI_SHIFT ) & GRSPWROUTER_GPI_GPI_MASK )
 
 /** @} */
 
@@ -1504,17 +1428,15 @@ typedef struct grspwrouter_portstats {
 #define GRSPWROUTER_RTCOMB_HD 0x10000000U
 
 #define GRSPWROUTER_RTCOMB_PE_SHIFT 1
-#define GRSPWROUTER_RTCOMB_PE_MASK 0xffffffeU
+#define GRSPWROUTER_RTCOMB_PE_MASK  0xffffffeU
 #define GRSPWROUTER_RTCOMB_PE_GET( _reg ) \
-  ( ( ( _reg ) & GRSPWROUTER_RTCOMB_PE_MASK ) >> \
-    GRSPWROUTER_RTCOMB_PE_SHIFT )
-#define GRSPWROUTER_RTCOMB_PE_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_RTCOMB_PE_MASK ) | \
+  ( ( ( _reg ) & GRSPWROUTER_RTCOMB_PE_MASK ) >> GRSPWROUTER_RTCOMB_PE_SHIFT )
+#define GRSPWROUTER_RTCOMB_PE_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_RTCOMB_PE_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_RTCOMB_PE_SHIFT ) & \
       GRSPWROUTER_RTCOMB_PE_MASK ) )
 #define GRSPWROUTER_RTCOMB_PE( _val ) \
-  ( ( ( _val ) << GRSPWROUTER_RTCOMB_PE_SHIFT ) & \
-    GRSPWROUTER_RTCOMB_PE_MASK )
+  ( ( ( _val ) << GRSPWROUTER_RTCOMB_PE_SHIFT ) & GRSPWROUTER_RTCOMB_PE_MASK )
 
 #define GRSPWROUTER_RTCOMB_PD 0x1U
 
@@ -1529,15 +1451,15 @@ typedef struct grspwrouter_portstats {
  */
 
 #define GRSPWROUTER_APBAREA_APB_SHIFT 0
-#define GRSPWROUTER_APBAREA_APB_MASK 0xffffffffU
-#define GRSPWROUTER_APBAREA_APB_GET( _reg ) \
+#define GRSPWROUTER_APBAREA_APB_MASK  0xffffffffU
+#define GRSPWROUTER_APBAREA_APB_GET( _reg )        \
   ( ( ( _reg ) & GRSPWROUTER_APBAREA_APB_MASK ) >> \
     GRSPWROUTER_APBAREA_APB_SHIFT )
-#define GRSPWROUTER_APBAREA_APB_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPWROUTER_APBAREA_APB_MASK ) | \
+#define GRSPWROUTER_APBAREA_APB_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPWROUTER_APBAREA_APB_MASK ) |    \
     ( ( ( _val ) << GRSPWROUTER_APBAREA_APB_SHIFT ) & \
       GRSPWROUTER_APBAREA_APB_MASK ) )
-#define GRSPWROUTER_APBAREA_APB( _val ) \
+#define GRSPWROUTER_APBAREA_APB( _val )             \
   ( ( ( _val ) << GRSPWROUTER_APBAREA_APB_SHIFT ) & \
     GRSPWROUTER_APBAREA_APB_MASK )
 

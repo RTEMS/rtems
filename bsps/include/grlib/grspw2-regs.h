@@ -82,30 +82,25 @@ extern "C" {
  */
 
 #define GRSPW2_DMACTRL_INTNUM_SHIFT 26
-#define GRSPW2_DMACTRL_INTNUM_MASK 0xfc000000U
+#define GRSPW2_DMACTRL_INTNUM_MASK  0xfc000000U
 #define GRSPW2_DMACTRL_INTNUM_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_DMACTRL_INTNUM_MASK ) >> \
-    GRSPW2_DMACTRL_INTNUM_SHIFT )
-#define GRSPW2_DMACTRL_INTNUM_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_DMACTRL_INTNUM_MASK ) | \
+  ( ( ( _reg ) & GRSPW2_DMACTRL_INTNUM_MASK ) >> GRSPW2_DMACTRL_INTNUM_SHIFT )
+#define GRSPW2_DMACTRL_INTNUM_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_DMACTRL_INTNUM_MASK ) |    \
     ( ( ( _val ) << GRSPW2_DMACTRL_INTNUM_SHIFT ) & \
       GRSPW2_DMACTRL_INTNUM_MASK ) )
 #define GRSPW2_DMACTRL_INTNUM( _val ) \
-  ( ( ( _val ) << GRSPW2_DMACTRL_INTNUM_SHIFT ) & \
-    GRSPW2_DMACTRL_INTNUM_MASK )
+  ( ( ( _val ) << GRSPW2_DMACTRL_INTNUM_SHIFT ) & GRSPW2_DMACTRL_INTNUM_MASK )
 
 #define GRSPW2_DMACTRL_RES_SHIFT 24
-#define GRSPW2_DMACTRL_RES_MASK 0x3000000U
+#define GRSPW2_DMACTRL_RES_MASK  0x3000000U
 #define GRSPW2_DMACTRL_RES_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_DMACTRL_RES_MASK ) >> \
-    GRSPW2_DMACTRL_RES_SHIFT )
-#define GRSPW2_DMACTRL_RES_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPW2_DMACTRL_RES_MASK ) >> GRSPW2_DMACTRL_RES_SHIFT )
+#define GRSPW2_DMACTRL_RES_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPW2_DMACTRL_RES_MASK ) | \
-    ( ( ( _val ) << GRSPW2_DMACTRL_RES_SHIFT ) & \
-      GRSPW2_DMACTRL_RES_MASK ) )
+    ( ( ( _val ) << GRSPW2_DMACTRL_RES_SHIFT ) & GRSPW2_DMACTRL_RES_MASK ) )
 #define GRSPW2_DMACTRL_RES( _val ) \
-  ( ( ( _val ) << GRSPW2_DMACTRL_RES_SHIFT ) & \
-    GRSPW2_DMACTRL_RES_MASK )
+  ( ( ( _val ) << GRSPW2_DMACTRL_RES_SHIFT ) & GRSPW2_DMACTRL_RES_MASK )
 
 #define GRSPW2_DMACTRL_EP 0x800000U
 
@@ -166,30 +161,28 @@ extern "C" {
  */
 
 #define GRSPW2_DMAMAXLEN_RXMAXLEN_SHIFT 2
-#define GRSPW2_DMAMAXLEN_RXMAXLEN_MASK 0x1fffffcU
-#define GRSPW2_DMAMAXLEN_RXMAXLEN_GET( _reg ) \
+#define GRSPW2_DMAMAXLEN_RXMAXLEN_MASK  0x1fffffcU
+#define GRSPW2_DMAMAXLEN_RXMAXLEN_GET( _reg )        \
   ( ( ( _reg ) & GRSPW2_DMAMAXLEN_RXMAXLEN_MASK ) >> \
     GRSPW2_DMAMAXLEN_RXMAXLEN_SHIFT )
-#define GRSPW2_DMAMAXLEN_RXMAXLEN_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_DMAMAXLEN_RXMAXLEN_MASK ) | \
+#define GRSPW2_DMAMAXLEN_RXMAXLEN_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_DMAMAXLEN_RXMAXLEN_MASK ) |    \
     ( ( ( _val ) << GRSPW2_DMAMAXLEN_RXMAXLEN_SHIFT ) & \
       GRSPW2_DMAMAXLEN_RXMAXLEN_MASK ) )
-#define GRSPW2_DMAMAXLEN_RXMAXLEN( _val ) \
+#define GRSPW2_DMAMAXLEN_RXMAXLEN( _val )             \
   ( ( ( _val ) << GRSPW2_DMAMAXLEN_RXMAXLEN_SHIFT ) & \
     GRSPW2_DMAMAXLEN_RXMAXLEN_MASK )
 
 #define GRSPW2_DMAMAXLEN_RES_SHIFT 0
-#define GRSPW2_DMAMAXLEN_RES_MASK 0x3U
+#define GRSPW2_DMAMAXLEN_RES_MASK  0x3U
 #define GRSPW2_DMAMAXLEN_RES_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_DMAMAXLEN_RES_MASK ) >> \
-    GRSPW2_DMAMAXLEN_RES_SHIFT )
-#define GRSPW2_DMAMAXLEN_RES_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_DMAMAXLEN_RES_MASK ) | \
+  ( ( ( _reg ) & GRSPW2_DMAMAXLEN_RES_MASK ) >> GRSPW2_DMAMAXLEN_RES_SHIFT )
+#define GRSPW2_DMAMAXLEN_RES_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_DMAMAXLEN_RES_MASK ) |    \
     ( ( ( _val ) << GRSPW2_DMAMAXLEN_RES_SHIFT ) & \
       GRSPW2_DMAMAXLEN_RES_MASK ) )
 #define GRSPW2_DMAMAXLEN_RES( _val ) \
-  ( ( ( _val ) << GRSPW2_DMAMAXLEN_RES_SHIFT ) & \
-    GRSPW2_DMAMAXLEN_RES_MASK )
+  ( ( ( _val ) << GRSPW2_DMAMAXLEN_RES_SHIFT ) & GRSPW2_DMAMAXLEN_RES_MASK )
 
 /** @} */
 
@@ -203,28 +196,28 @@ extern "C" {
  */
 
 #define GRSPW2_DMATXDESC_DESCBASEADDR_SHIFT 0
-#define GRSPW2_DMATXDESC_DESCBASEADDR_MASK 0xffffffffU
-#define GRSPW2_DMATXDESC_DESCBASEADDR_GET( _reg ) \
+#define GRSPW2_DMATXDESC_DESCBASEADDR_MASK  0xffffffffU
+#define GRSPW2_DMATXDESC_DESCBASEADDR_GET( _reg )        \
   ( ( ( _reg ) & GRSPW2_DMATXDESC_DESCBASEADDR_MASK ) >> \
     GRSPW2_DMATXDESC_DESCBASEADDR_SHIFT )
-#define GRSPW2_DMATXDESC_DESCBASEADDR_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_DMATXDESC_DESCBASEADDR_MASK ) | \
+#define GRSPW2_DMATXDESC_DESCBASEADDR_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_DMATXDESC_DESCBASEADDR_MASK ) |    \
     ( ( ( _val ) << GRSPW2_DMATXDESC_DESCBASEADDR_SHIFT ) & \
       GRSPW2_DMATXDESC_DESCBASEADDR_MASK ) )
-#define GRSPW2_DMATXDESC_DESCBASEADDR( _val ) \
+#define GRSPW2_DMATXDESC_DESCBASEADDR( _val )             \
   ( ( ( _val ) << GRSPW2_DMATXDESC_DESCBASEADDR_SHIFT ) & \
     GRSPW2_DMATXDESC_DESCBASEADDR_MASK )
 
 #define GRSPW2_DMATXDESC_DESCSEL_SHIFT 4
-#define GRSPW2_DMATXDESC_DESCSEL_MASK 0xfffffff0U
-#define GRSPW2_DMATXDESC_DESCSEL_GET( _reg ) \
+#define GRSPW2_DMATXDESC_DESCSEL_MASK  0xfffffff0U
+#define GRSPW2_DMATXDESC_DESCSEL_GET( _reg )        \
   ( ( ( _reg ) & GRSPW2_DMATXDESC_DESCSEL_MASK ) >> \
     GRSPW2_DMATXDESC_DESCSEL_SHIFT )
-#define GRSPW2_DMATXDESC_DESCSEL_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_DMATXDESC_DESCSEL_MASK ) | \
+#define GRSPW2_DMATXDESC_DESCSEL_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_DMATXDESC_DESCSEL_MASK ) |    \
     ( ( ( _val ) << GRSPW2_DMATXDESC_DESCSEL_SHIFT ) & \
       GRSPW2_DMATXDESC_DESCSEL_MASK ) )
-#define GRSPW2_DMATXDESC_DESCSEL( _val ) \
+#define GRSPW2_DMATXDESC_DESCSEL( _val )             \
   ( ( ( _val ) << GRSPW2_DMATXDESC_DESCSEL_SHIFT ) & \
     GRSPW2_DMATXDESC_DESCSEL_MASK )
 
@@ -240,28 +233,28 @@ extern "C" {
  */
 
 #define GRSPW2_DMARXDESC_DESCBASEADDR_SHIFT 10
-#define GRSPW2_DMARXDESC_DESCBASEADDR_MASK 0xfffffc00U
-#define GRSPW2_DMARXDESC_DESCBASEADDR_GET( _reg ) \
+#define GRSPW2_DMARXDESC_DESCBASEADDR_MASK  0xfffffc00U
+#define GRSPW2_DMARXDESC_DESCBASEADDR_GET( _reg )        \
   ( ( ( _reg ) & GRSPW2_DMARXDESC_DESCBASEADDR_MASK ) >> \
     GRSPW2_DMARXDESC_DESCBASEADDR_SHIFT )
-#define GRSPW2_DMARXDESC_DESCBASEADDR_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_DMARXDESC_DESCBASEADDR_MASK ) | \
+#define GRSPW2_DMARXDESC_DESCBASEADDR_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_DMARXDESC_DESCBASEADDR_MASK ) |    \
     ( ( ( _val ) << GRSPW2_DMARXDESC_DESCBASEADDR_SHIFT ) & \
       GRSPW2_DMARXDESC_DESCBASEADDR_MASK ) )
-#define GRSPW2_DMARXDESC_DESCBASEADDR( _val ) \
+#define GRSPW2_DMARXDESC_DESCBASEADDR( _val )             \
   ( ( ( _val ) << GRSPW2_DMARXDESC_DESCBASEADDR_SHIFT ) & \
     GRSPW2_DMARXDESC_DESCBASEADDR_MASK )
 
 #define GRSPW2_DMARXDESC_DESCSEL_SHIFT 3
-#define GRSPW2_DMARXDESC_DESCSEL_MASK 0x3f8U
-#define GRSPW2_DMARXDESC_DESCSEL_GET( _reg ) \
+#define GRSPW2_DMARXDESC_DESCSEL_MASK  0x3f8U
+#define GRSPW2_DMARXDESC_DESCSEL_GET( _reg )        \
   ( ( ( _reg ) & GRSPW2_DMARXDESC_DESCSEL_MASK ) >> \
     GRSPW2_DMARXDESC_DESCSEL_SHIFT )
-#define GRSPW2_DMARXDESC_DESCSEL_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_DMARXDESC_DESCSEL_MASK ) | \
+#define GRSPW2_DMARXDESC_DESCSEL_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_DMARXDESC_DESCSEL_MASK ) |    \
     ( ( ( _val ) << GRSPW2_DMARXDESC_DESCSEL_SHIFT ) & \
       GRSPW2_DMARXDESC_DESCSEL_MASK ) )
-#define GRSPW2_DMARXDESC_DESCSEL( _val ) \
+#define GRSPW2_DMARXDESC_DESCSEL( _val )             \
   ( ( ( _val ) << GRSPW2_DMARXDESC_DESCSEL_SHIFT ) & \
     GRSPW2_DMARXDESC_DESCSEL_MASK )
 
@@ -276,30 +269,26 @@ extern "C" {
  */
 
 #define GRSPW2_DMAADDR_MASK_SHIFT 8
-#define GRSPW2_DMAADDR_MASK_MASK 0xff00U
+#define GRSPW2_DMAADDR_MASK_MASK  0xff00U
 #define GRSPW2_DMAADDR_MASK_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_DMAADDR_MASK_MASK ) >> \
-    GRSPW2_DMAADDR_MASK_SHIFT )
-#define GRSPW2_DMAADDR_MASK_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_DMAADDR_MASK_MASK ) | \
+  ( ( ( _reg ) & GRSPW2_DMAADDR_MASK_MASK ) >> GRSPW2_DMAADDR_MASK_SHIFT )
+#define GRSPW2_DMAADDR_MASK_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_DMAADDR_MASK_MASK ) |    \
     ( ( ( _val ) << GRSPW2_DMAADDR_MASK_SHIFT ) & \
       GRSPW2_DMAADDR_MASK_MASK ) )
 #define GRSPW2_DMAADDR_MASK( _val ) \
-  ( ( ( _val ) << GRSPW2_DMAADDR_MASK_SHIFT ) & \
-    GRSPW2_DMAADDR_MASK_MASK )
+  ( ( ( _val ) << GRSPW2_DMAADDR_MASK_SHIFT ) & GRSPW2_DMAADDR_MASK_MASK )
 
 #define GRSPW2_DMAADDR_ADDR_SHIFT 0
-#define GRSPW2_DMAADDR_ADDR_MASK 0xffU
+#define GRSPW2_DMAADDR_ADDR_MASK  0xffU
 #define GRSPW2_DMAADDR_ADDR_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_DMAADDR_ADDR_MASK ) >> \
-    GRSPW2_DMAADDR_ADDR_SHIFT )
-#define GRSPW2_DMAADDR_ADDR_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_DMAADDR_ADDR_MASK ) | \
+  ( ( ( _reg ) & GRSPW2_DMAADDR_ADDR_MASK ) >> GRSPW2_DMAADDR_ADDR_SHIFT )
+#define GRSPW2_DMAADDR_ADDR_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_DMAADDR_ADDR_MASK ) |    \
     ( ( ( _val ) << GRSPW2_DMAADDR_ADDR_SHIFT ) & \
       GRSPW2_DMAADDR_ADDR_MASK ) )
 #define GRSPW2_DMAADDR_ADDR( _val ) \
-  ( ( ( _val ) << GRSPW2_DMAADDR_ADDR_SHIFT ) & \
-    GRSPW2_DMAADDR_ADDR_MASK )
+  ( ( ( _val ) << GRSPW2_DMAADDR_ADDR_SHIFT ) & GRSPW2_DMAADDR_ADDR_MASK )
 
 /** @} */
 
@@ -364,17 +353,14 @@ typedef struct grspw2_dma {
 #define GRSPW2_CTRL_RC 0x20000000U
 
 #define GRSPW2_CTRL_NCH_SHIFT 27
-#define GRSPW2_CTRL_NCH_MASK 0x18000000U
+#define GRSPW2_CTRL_NCH_MASK  0x18000000U
 #define GRSPW2_CTRL_NCH_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_CTRL_NCH_MASK ) >> \
-    GRSPW2_CTRL_NCH_SHIFT )
-#define GRSPW2_CTRL_NCH_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPW2_CTRL_NCH_MASK ) >> GRSPW2_CTRL_NCH_SHIFT )
+#define GRSPW2_CTRL_NCH_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPW2_CTRL_NCH_MASK ) | \
-    ( ( ( _val ) << GRSPW2_CTRL_NCH_SHIFT ) & \
-      GRSPW2_CTRL_NCH_MASK ) )
+    ( ( ( _val ) << GRSPW2_CTRL_NCH_SHIFT ) & GRSPW2_CTRL_NCH_MASK ) )
 #define GRSPW2_CTRL_NCH( _val ) \
-  ( ( ( _val ) << GRSPW2_CTRL_NCH_SHIFT ) & \
-    GRSPW2_CTRL_NCH_MASK )
+  ( ( ( _val ) << GRSPW2_CTRL_NCH_SHIFT ) & GRSPW2_CTRL_NCH_MASK )
 
 #define GRSPW2_CTRL_PO 0x4000000U
 
@@ -391,17 +377,14 @@ typedef struct grspw2_dma {
 #define GRSPW2_CTRL_NP 0x100000U
 
 #define GRSPW2_CTRL_PNPA_SHIFT 18
-#define GRSPW2_CTRL_PNPA_MASK 0xc0000U
+#define GRSPW2_CTRL_PNPA_MASK  0xc0000U
 #define GRSPW2_CTRL_PNPA_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_CTRL_PNPA_MASK ) >> \
-    GRSPW2_CTRL_PNPA_SHIFT )
-#define GRSPW2_CTRL_PNPA_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPW2_CTRL_PNPA_MASK ) >> GRSPW2_CTRL_PNPA_SHIFT )
+#define GRSPW2_CTRL_PNPA_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPW2_CTRL_PNPA_MASK ) | \
-    ( ( ( _val ) << GRSPW2_CTRL_PNPA_SHIFT ) & \
-      GRSPW2_CTRL_PNPA_MASK ) )
+    ( ( ( _val ) << GRSPW2_CTRL_PNPA_SHIFT ) & GRSPW2_CTRL_PNPA_MASK ) )
 #define GRSPW2_CTRL_PNPA( _val ) \
-  ( ( ( _val ) << GRSPW2_CTRL_PNPA_SHIFT ) & \
-    GRSPW2_CTRL_PNPA_MASK )
+  ( ( ( _val ) << GRSPW2_CTRL_PNPA_SHIFT ) & GRSPW2_CTRL_PNPA_MASK )
 
 #define GRSPW2_CTRL_RD 0x20000U
 
@@ -450,32 +433,26 @@ typedef struct grspw2_dma {
  */
 
 #define GRSPW2_STS_NRXD_SHIFT 26
-#define GRSPW2_STS_NRXD_MASK 0xc000000U
+#define GRSPW2_STS_NRXD_MASK  0xc000000U
 #define GRSPW2_STS_NRXD_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_STS_NRXD_MASK ) >> \
-    GRSPW2_STS_NRXD_SHIFT )
-#define GRSPW2_STS_NRXD_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPW2_STS_NRXD_MASK ) >> GRSPW2_STS_NRXD_SHIFT )
+#define GRSPW2_STS_NRXD_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPW2_STS_NRXD_MASK ) | \
-    ( ( ( _val ) << GRSPW2_STS_NRXD_SHIFT ) & \
-      GRSPW2_STS_NRXD_MASK ) )
+    ( ( ( _val ) << GRSPW2_STS_NRXD_SHIFT ) & GRSPW2_STS_NRXD_MASK ) )
 #define GRSPW2_STS_NRXD( _val ) \
-  ( ( ( _val ) << GRSPW2_STS_NRXD_SHIFT ) & \
-    GRSPW2_STS_NRXD_MASK )
+  ( ( ( _val ) << GRSPW2_STS_NRXD_SHIFT ) & GRSPW2_STS_NRXD_MASK )
 
 #define GRSPW2_STS_NTXD 0x2000000U
 
 #define GRSPW2_STS_LS_SHIFT 21
-#define GRSPW2_STS_LS_MASK 0xe00000U
+#define GRSPW2_STS_LS_MASK  0xe00000U
 #define GRSPW2_STS_LS_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_STS_LS_MASK ) >> \
-    GRSPW2_STS_LS_SHIFT )
-#define GRSPW2_STS_LS_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPW2_STS_LS_MASK ) >> GRSPW2_STS_LS_SHIFT )
+#define GRSPW2_STS_LS_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPW2_STS_LS_MASK ) | \
-    ( ( ( _val ) << GRSPW2_STS_LS_SHIFT ) & \
-      GRSPW2_STS_LS_MASK ) )
+    ( ( ( _val ) << GRSPW2_STS_LS_SHIFT ) & GRSPW2_STS_LS_MASK ) )
 #define GRSPW2_STS_LS( _val ) \
-  ( ( ( _val ) << GRSPW2_STS_LS_SHIFT ) & \
-    GRSPW2_STS_LS_MASK )
+  ( ( ( _val ) << GRSPW2_STS_LS_SHIFT ) & GRSPW2_STS_LS_MASK )
 
 #define GRSPW2_STS_AP 0x200U
 
@@ -484,17 +461,14 @@ typedef struct grspw2_dma {
 #define GRSPW2_STS_IA 0x80U
 
 #define GRSPW2_STS_RES_SHIFT 5
-#define GRSPW2_STS_RES_MASK 0x60U
+#define GRSPW2_STS_RES_MASK  0x60U
 #define GRSPW2_STS_RES_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_STS_RES_MASK ) >> \
-    GRSPW2_STS_RES_SHIFT )
-#define GRSPW2_STS_RES_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPW2_STS_RES_MASK ) >> GRSPW2_STS_RES_SHIFT )
+#define GRSPW2_STS_RES_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPW2_STS_RES_MASK ) | \
-    ( ( ( _val ) << GRSPW2_STS_RES_SHIFT ) & \
-      GRSPW2_STS_RES_MASK ) )
+    ( ( ( _val ) << GRSPW2_STS_RES_SHIFT ) & GRSPW2_STS_RES_MASK ) )
 #define GRSPW2_STS_RES( _val ) \
-  ( ( ( _val ) << GRSPW2_STS_RES_SHIFT ) & \
-    GRSPW2_STS_RES_MASK )
+  ( ( ( _val ) << GRSPW2_STS_RES_SHIFT ) & GRSPW2_STS_RES_MASK )
 
 #define GRSPW2_STS_PE 0x10U
 
@@ -517,28 +491,28 @@ typedef struct grspw2_dma {
  */
 
 #define GRSPW2_DEFADDR_DEFMASK_SHIFT 8
-#define GRSPW2_DEFADDR_DEFMASK_MASK 0xff00U
-#define GRSPW2_DEFADDR_DEFMASK_GET( _reg ) \
+#define GRSPW2_DEFADDR_DEFMASK_MASK  0xff00U
+#define GRSPW2_DEFADDR_DEFMASK_GET( _reg )        \
   ( ( ( _reg ) & GRSPW2_DEFADDR_DEFMASK_MASK ) >> \
     GRSPW2_DEFADDR_DEFMASK_SHIFT )
-#define GRSPW2_DEFADDR_DEFMASK_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_DEFADDR_DEFMASK_MASK ) | \
+#define GRSPW2_DEFADDR_DEFMASK_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_DEFADDR_DEFMASK_MASK ) |    \
     ( ( ( _val ) << GRSPW2_DEFADDR_DEFMASK_SHIFT ) & \
       GRSPW2_DEFADDR_DEFMASK_MASK ) )
-#define GRSPW2_DEFADDR_DEFMASK( _val ) \
+#define GRSPW2_DEFADDR_DEFMASK( _val )             \
   ( ( ( _val ) << GRSPW2_DEFADDR_DEFMASK_SHIFT ) & \
     GRSPW2_DEFADDR_DEFMASK_MASK )
 
 #define GRSPW2_DEFADDR_DEFADDR_SHIFT 0
-#define GRSPW2_DEFADDR_DEFADDR_MASK 0xffU
-#define GRSPW2_DEFADDR_DEFADDR_GET( _reg ) \
+#define GRSPW2_DEFADDR_DEFADDR_MASK  0xffU
+#define GRSPW2_DEFADDR_DEFADDR_GET( _reg )        \
   ( ( ( _reg ) & GRSPW2_DEFADDR_DEFADDR_MASK ) >> \
     GRSPW2_DEFADDR_DEFADDR_SHIFT )
-#define GRSPW2_DEFADDR_DEFADDR_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_DEFADDR_DEFADDR_MASK ) | \
+#define GRSPW2_DEFADDR_DEFADDR_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_DEFADDR_DEFADDR_MASK ) |    \
     ( ( ( _val ) << GRSPW2_DEFADDR_DEFADDR_SHIFT ) & \
       GRSPW2_DEFADDR_DEFADDR_MASK ) )
-#define GRSPW2_DEFADDR_DEFADDR( _val ) \
+#define GRSPW2_DEFADDR_DEFADDR( _val )             \
   ( ( ( _val ) << GRSPW2_DEFADDR_DEFADDR_SHIFT ) & \
     GRSPW2_DEFADDR_DEFADDR_MASK )
 
@@ -553,28 +527,28 @@ typedef struct grspw2_dma {
  */
 
 #define GRSPW2_CLKDIV_CLKDIVSTART_SHIFT 8
-#define GRSPW2_CLKDIV_CLKDIVSTART_MASK 0xff00U
-#define GRSPW2_CLKDIV_CLKDIVSTART_GET( _reg ) \
+#define GRSPW2_CLKDIV_CLKDIVSTART_MASK  0xff00U
+#define GRSPW2_CLKDIV_CLKDIVSTART_GET( _reg )        \
   ( ( ( _reg ) & GRSPW2_CLKDIV_CLKDIVSTART_MASK ) >> \
     GRSPW2_CLKDIV_CLKDIVSTART_SHIFT )
-#define GRSPW2_CLKDIV_CLKDIVSTART_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_CLKDIV_CLKDIVSTART_MASK ) | \
+#define GRSPW2_CLKDIV_CLKDIVSTART_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_CLKDIV_CLKDIVSTART_MASK ) |    \
     ( ( ( _val ) << GRSPW2_CLKDIV_CLKDIVSTART_SHIFT ) & \
       GRSPW2_CLKDIV_CLKDIVSTART_MASK ) )
-#define GRSPW2_CLKDIV_CLKDIVSTART( _val ) \
+#define GRSPW2_CLKDIV_CLKDIVSTART( _val )             \
   ( ( ( _val ) << GRSPW2_CLKDIV_CLKDIVSTART_SHIFT ) & \
     GRSPW2_CLKDIV_CLKDIVSTART_MASK )
 
 #define GRSPW2_CLKDIV_CLKDIVRUN_SHIFT 0
-#define GRSPW2_CLKDIV_CLKDIVRUN_MASK 0xffU
-#define GRSPW2_CLKDIV_CLKDIVRUN_GET( _reg ) \
+#define GRSPW2_CLKDIV_CLKDIVRUN_MASK  0xffU
+#define GRSPW2_CLKDIV_CLKDIVRUN_GET( _reg )        \
   ( ( ( _reg ) & GRSPW2_CLKDIV_CLKDIVRUN_MASK ) >> \
     GRSPW2_CLKDIV_CLKDIVRUN_SHIFT )
-#define GRSPW2_CLKDIV_CLKDIVRUN_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_CLKDIV_CLKDIVRUN_MASK ) | \
+#define GRSPW2_CLKDIV_CLKDIVRUN_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_CLKDIV_CLKDIVRUN_MASK ) |    \
     ( ( ( _val ) << GRSPW2_CLKDIV_CLKDIVRUN_SHIFT ) & \
       GRSPW2_CLKDIV_CLKDIVRUN_MASK ) )
-#define GRSPW2_CLKDIV_CLKDIVRUN( _val ) \
+#define GRSPW2_CLKDIV_CLKDIVRUN( _val )             \
   ( ( ( _val ) << GRSPW2_CLKDIV_CLKDIVRUN_SHIFT ) & \
     GRSPW2_CLKDIV_CLKDIVRUN_MASK )
 
@@ -589,17 +563,15 @@ typedef struct grspw2_dma {
  */
 
 #define GRSPW2_DKEY_DESTKEY_SHIFT 0
-#define GRSPW2_DKEY_DESTKEY_MASK 0xffU
+#define GRSPW2_DKEY_DESTKEY_MASK  0xffU
 #define GRSPW2_DKEY_DESTKEY_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_DKEY_DESTKEY_MASK ) >> \
-    GRSPW2_DKEY_DESTKEY_SHIFT )
-#define GRSPW2_DKEY_DESTKEY_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_DKEY_DESTKEY_MASK ) | \
+  ( ( ( _reg ) & GRSPW2_DKEY_DESTKEY_MASK ) >> GRSPW2_DKEY_DESTKEY_SHIFT )
+#define GRSPW2_DKEY_DESTKEY_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_DKEY_DESTKEY_MASK ) |    \
     ( ( ( _val ) << GRSPW2_DKEY_DESTKEY_SHIFT ) & \
       GRSPW2_DKEY_DESTKEY_MASK ) )
 #define GRSPW2_DKEY_DESTKEY( _val ) \
-  ( ( ( _val ) << GRSPW2_DKEY_DESTKEY_SHIFT ) & \
-    GRSPW2_DKEY_DESTKEY_MASK )
+  ( ( ( _val ) << GRSPW2_DKEY_DESTKEY_SHIFT ) & GRSPW2_DKEY_DESTKEY_MASK )
 
 /** @} */
 
@@ -612,30 +584,24 @@ typedef struct grspw2_dma {
  */
 
 #define GRSPW2_TC_TCTRL_SHIFT 6
-#define GRSPW2_TC_TCTRL_MASK 0xc0U
+#define GRSPW2_TC_TCTRL_MASK  0xc0U
 #define GRSPW2_TC_TCTRL_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_TC_TCTRL_MASK ) >> \
-    GRSPW2_TC_TCTRL_SHIFT )
-#define GRSPW2_TC_TCTRL_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPW2_TC_TCTRL_MASK ) >> GRSPW2_TC_TCTRL_SHIFT )
+#define GRSPW2_TC_TCTRL_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPW2_TC_TCTRL_MASK ) | \
-    ( ( ( _val ) << GRSPW2_TC_TCTRL_SHIFT ) & \
-      GRSPW2_TC_TCTRL_MASK ) )
+    ( ( ( _val ) << GRSPW2_TC_TCTRL_SHIFT ) & GRSPW2_TC_TCTRL_MASK ) )
 #define GRSPW2_TC_TCTRL( _val ) \
-  ( ( ( _val ) << GRSPW2_TC_TCTRL_SHIFT ) & \
-    GRSPW2_TC_TCTRL_MASK )
+  ( ( ( _val ) << GRSPW2_TC_TCTRL_SHIFT ) & GRSPW2_TC_TCTRL_MASK )
 
 #define GRSPW2_TC_TIMECNT_SHIFT 0
-#define GRSPW2_TC_TIMECNT_MASK 0x3fU
+#define GRSPW2_TC_TIMECNT_MASK  0x3fU
 #define GRSPW2_TC_TIMECNT_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_TC_TIMECNT_MASK ) >> \
-    GRSPW2_TC_TIMECNT_SHIFT )
-#define GRSPW2_TC_TIMECNT_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPW2_TC_TIMECNT_MASK ) >> GRSPW2_TC_TIMECNT_SHIFT )
+#define GRSPW2_TC_TIMECNT_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPW2_TC_TIMECNT_MASK ) | \
-    ( ( ( _val ) << GRSPW2_TC_TIMECNT_SHIFT ) & \
-      GRSPW2_TC_TIMECNT_MASK ) )
+    ( ( ( _val ) << GRSPW2_TC_TIMECNT_SHIFT ) & GRSPW2_TC_TIMECNT_MASK ) )
 #define GRSPW2_TC_TIMECNT( _val ) \
-  ( ( ( _val ) << GRSPW2_TC_TIMECNT_SHIFT ) & \
-    GRSPW2_TC_TIMECNT_MASK )
+  ( ( ( _val ) << GRSPW2_TC_TIMECNT_SHIFT ) & GRSPW2_TC_TIMECNT_MASK )
 
 /** @} */
 
@@ -648,17 +614,15 @@ typedef struct grspw2_dma {
  */
 
 #define GRSPW2_INTCTRL_INTNUM_SHIFT 26
-#define GRSPW2_INTCTRL_INTNUM_MASK 0xfc000000U
+#define GRSPW2_INTCTRL_INTNUM_MASK  0xfc000000U
 #define GRSPW2_INTCTRL_INTNUM_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_INTCTRL_INTNUM_MASK ) >> \
-    GRSPW2_INTCTRL_INTNUM_SHIFT )
-#define GRSPW2_INTCTRL_INTNUM_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_INTCTRL_INTNUM_MASK ) | \
+  ( ( ( _reg ) & GRSPW2_INTCTRL_INTNUM_MASK ) >> GRSPW2_INTCTRL_INTNUM_SHIFT )
+#define GRSPW2_INTCTRL_INTNUM_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_INTCTRL_INTNUM_MASK ) |    \
     ( ( ( _val ) << GRSPW2_INTCTRL_INTNUM_SHIFT ) & \
       GRSPW2_INTCTRL_INTNUM_MASK ) )
 #define GRSPW2_INTCTRL_INTNUM( _val ) \
-  ( ( ( _val ) << GRSPW2_INTCTRL_INTNUM_SHIFT ) & \
-    GRSPW2_INTCTRL_INTNUM_MASK )
+  ( ( ( _val ) << GRSPW2_INTCTRL_INTNUM_SHIFT ) & GRSPW2_INTCTRL_INTNUM_MASK )
 
 #define GRSPW2_INTCTRL_RS 0x2000000U
 
@@ -669,17 +633,14 @@ typedef struct grspw2_dma {
 #define GRSPW2_INTCTRL_RES 0x2U
 
 #define GRSPW2_INTCTRL_TQ_SHIFT 21
-#define GRSPW2_INTCTRL_TQ_MASK 0x600000U
+#define GRSPW2_INTCTRL_TQ_MASK  0x600000U
 #define GRSPW2_INTCTRL_TQ_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_INTCTRL_TQ_MASK ) >> \
-    GRSPW2_INTCTRL_TQ_SHIFT )
-#define GRSPW2_INTCTRL_TQ_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPW2_INTCTRL_TQ_MASK ) >> GRSPW2_INTCTRL_TQ_SHIFT )
+#define GRSPW2_INTCTRL_TQ_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPW2_INTCTRL_TQ_MASK ) | \
-    ( ( ( _val ) << GRSPW2_INTCTRL_TQ_SHIFT ) & \
-      GRSPW2_INTCTRL_TQ_MASK ) )
+    ( ( ( _val ) << GRSPW2_INTCTRL_TQ_SHIFT ) & GRSPW2_INTCTRL_TQ_MASK ) )
 #define GRSPW2_INTCTRL_TQ( _val ) \
-  ( ( ( _val ) << GRSPW2_INTCTRL_TQ_SHIFT ) & \
-    GRSPW2_INTCTRL_TQ_MASK )
+  ( ( ( _val ) << GRSPW2_INTCTRL_TQ_SHIFT ) & GRSPW2_INTCTRL_TQ_MASK )
 
 #define GRSPW2_INTCTRL_AQ 0x100000U
 
@@ -688,17 +649,14 @@ typedef struct grspw2_dma {
 #define GRSPW2_INTCTRL_RES 0x40000U
 
 #define GRSPW2_INTCTRL_AA_SHIFT 16
-#define GRSPW2_INTCTRL_AA_MASK 0x30000U
+#define GRSPW2_INTCTRL_AA_MASK  0x30000U
 #define GRSPW2_INTCTRL_AA_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_INTCTRL_AA_MASK ) >> \
-    GRSPW2_INTCTRL_AA_SHIFT )
-#define GRSPW2_INTCTRL_AA_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPW2_INTCTRL_AA_MASK ) >> GRSPW2_INTCTRL_AA_SHIFT )
+#define GRSPW2_INTCTRL_AA_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPW2_INTCTRL_AA_MASK ) | \
-    ( ( ( _val ) << GRSPW2_INTCTRL_AA_SHIFT ) & \
-      GRSPW2_INTCTRL_AA_MASK ) )
+    ( ( ( _val ) << GRSPW2_INTCTRL_AA_SHIFT ) & GRSPW2_INTCTRL_AA_MASK ) )
 #define GRSPW2_INTCTRL_AA( _val ) \
-  ( ( ( _val ) << GRSPW2_INTCTRL_AA_SHIFT ) & \
-    GRSPW2_INTCTRL_AA_MASK )
+  ( ( ( _val ) << GRSPW2_INTCTRL_AA_SHIFT ) & GRSPW2_INTCTRL_AA_MASK )
 
 #define GRSPW2_INTCTRL_AT 0x8000U
 
@@ -707,17 +665,14 @@ typedef struct grspw2_dma {
 #define GRSPW2_INTCTRL_RES 0x2000U
 
 #define GRSPW2_INTCTRL_ID_SHIFT 8
-#define GRSPW2_INTCTRL_ID_MASK 0x1f00U
+#define GRSPW2_INTCTRL_ID_MASK  0x1f00U
 #define GRSPW2_INTCTRL_ID_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_INTCTRL_ID_MASK ) >> \
-    GRSPW2_INTCTRL_ID_SHIFT )
-#define GRSPW2_INTCTRL_ID_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPW2_INTCTRL_ID_MASK ) >> GRSPW2_INTCTRL_ID_SHIFT )
+#define GRSPW2_INTCTRL_ID_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPW2_INTCTRL_ID_MASK ) | \
-    ( ( ( _val ) << GRSPW2_INTCTRL_ID_SHIFT ) & \
-      GRSPW2_INTCTRL_ID_MASK ) )
+    ( ( ( _val ) << GRSPW2_INTCTRL_ID_SHIFT ) & GRSPW2_INTCTRL_ID_MASK ) )
 #define GRSPW2_INTCTRL_ID( _val ) \
-  ( ( ( _val ) << GRSPW2_INTCTRL_ID_SHIFT ) & \
-    GRSPW2_INTCTRL_ID_MASK )
+  ( ( ( _val ) << GRSPW2_INTCTRL_ID_SHIFT ) & GRSPW2_INTCTRL_ID_MASK )
 
 #define GRSPW2_INTCTRL_II 0x80U
 
@@ -734,17 +689,14 @@ typedef struct grspw2_dma {
  */
 
 #define GRSPW2_INTRX_RXIRQ_SHIFT 0
-#define GRSPW2_INTRX_RXIRQ_MASK 0xffffffffU
+#define GRSPW2_INTRX_RXIRQ_MASK  0xffffffffU
 #define GRSPW2_INTRX_RXIRQ_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_INTRX_RXIRQ_MASK ) >> \
-    GRSPW2_INTRX_RXIRQ_SHIFT )
-#define GRSPW2_INTRX_RXIRQ_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPW2_INTRX_RXIRQ_MASK ) >> GRSPW2_INTRX_RXIRQ_SHIFT )
+#define GRSPW2_INTRX_RXIRQ_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPW2_INTRX_RXIRQ_MASK ) | \
-    ( ( ( _val ) << GRSPW2_INTRX_RXIRQ_SHIFT ) & \
-      GRSPW2_INTRX_RXIRQ_MASK ) )
+    ( ( ( _val ) << GRSPW2_INTRX_RXIRQ_SHIFT ) & GRSPW2_INTRX_RXIRQ_MASK ) )
 #define GRSPW2_INTRX_RXIRQ( _val ) \
-  ( ( ( _val ) << GRSPW2_INTRX_RXIRQ_SHIFT ) & \
-    GRSPW2_INTRX_RXIRQ_MASK )
+  ( ( ( _val ) << GRSPW2_INTRX_RXIRQ_SHIFT ) & GRSPW2_INTRX_RXIRQ_MASK )
 
 /** @} */
 
@@ -757,17 +709,14 @@ typedef struct grspw2_dma {
  */
 
 #define GRSPW2_INTTO_INTTO_SHIFT 0
-#define GRSPW2_INTTO_INTTO_MASK 0xffffffffU
+#define GRSPW2_INTTO_INTTO_MASK  0xffffffffU
 #define GRSPW2_INTTO_INTTO_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_INTTO_INTTO_MASK ) >> \
-    GRSPW2_INTTO_INTTO_SHIFT )
-#define GRSPW2_INTTO_INTTO_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPW2_INTTO_INTTO_MASK ) >> GRSPW2_INTTO_INTTO_SHIFT )
+#define GRSPW2_INTTO_INTTO_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPW2_INTTO_INTTO_MASK ) | \
-    ( ( ( _val ) << GRSPW2_INTTO_INTTO_SHIFT ) & \
-      GRSPW2_INTTO_INTTO_MASK ) )
+    ( ( ( _val ) << GRSPW2_INTTO_INTTO_SHIFT ) & GRSPW2_INTTO_INTTO_MASK ) )
 #define GRSPW2_INTTO_INTTO( _val ) \
-  ( ( ( _val ) << GRSPW2_INTTO_INTTO_SHIFT ) & \
-    GRSPW2_INTTO_INTTO_MASK )
+  ( ( ( _val ) << GRSPW2_INTTO_INTTO_SHIFT ) & GRSPW2_INTTO_INTTO_MASK )
 
 /** @} */
 
@@ -780,15 +729,15 @@ typedef struct grspw2_dma {
  */
 
 #define GRSPW2_INTTOEXT_INTTOEXT_SHIFT 0
-#define GRSPW2_INTTOEXT_INTTOEXT_MASK 0xffffffffU
-#define GRSPW2_INTTOEXT_INTTOEXT_GET( _reg ) \
+#define GRSPW2_INTTOEXT_INTTOEXT_MASK  0xffffffffU
+#define GRSPW2_INTTOEXT_INTTOEXT_GET( _reg )        \
   ( ( ( _reg ) & GRSPW2_INTTOEXT_INTTOEXT_MASK ) >> \
     GRSPW2_INTTOEXT_INTTOEXT_SHIFT )
-#define GRSPW2_INTTOEXT_INTTOEXT_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_INTTOEXT_INTTOEXT_MASK ) | \
+#define GRSPW2_INTTOEXT_INTTOEXT_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_INTTOEXT_INTTOEXT_MASK ) |    \
     ( ( ( _val ) << GRSPW2_INTTOEXT_INTTOEXT_SHIFT ) & \
       GRSPW2_INTTOEXT_INTTOEXT_MASK ) )
-#define GRSPW2_INTTOEXT_INTTOEXT( _val ) \
+#define GRSPW2_INTTOEXT_INTTOEXT( _val )             \
   ( ( ( _val ) << GRSPW2_INTTOEXT_INTTOEXT_SHIFT ) & \
     GRSPW2_INTTOEXT_INTTOEXT_MASK )
 
@@ -803,17 +752,15 @@ typedef struct grspw2_dma {
  */
 
 #define GRSPW2_TICKMASK_MASK_SHIFT 0
-#define GRSPW2_TICKMASK_MASK_MASK 0xffffffffU
+#define GRSPW2_TICKMASK_MASK_MASK  0xffffffffU
 #define GRSPW2_TICKMASK_MASK_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_TICKMASK_MASK_MASK ) >> \
-    GRSPW2_TICKMASK_MASK_SHIFT )
-#define GRSPW2_TICKMASK_MASK_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_TICKMASK_MASK_MASK ) | \
+  ( ( ( _reg ) & GRSPW2_TICKMASK_MASK_MASK ) >> GRSPW2_TICKMASK_MASK_SHIFT )
+#define GRSPW2_TICKMASK_MASK_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_TICKMASK_MASK_MASK ) |    \
     ( ( ( _val ) << GRSPW2_TICKMASK_MASK_SHIFT ) & \
       GRSPW2_TICKMASK_MASK_MASK ) )
 #define GRSPW2_TICKMASK_MASK( _val ) \
-  ( ( ( _val ) << GRSPW2_TICKMASK_MASK_SHIFT ) & \
-    GRSPW2_TICKMASK_MASK_MASK )
+  ( ( ( _val ) << GRSPW2_TICKMASK_MASK_SHIFT ) & GRSPW2_TICKMASK_MASK_MASK )
 
 /** @} */
 
@@ -827,15 +774,15 @@ typedef struct grspw2_dma {
  */
 
 #define GRSPW2_AUTOACK_TICKMASKEXT_AAMASK_SHIFT 0
-#define GRSPW2_AUTOACK_TICKMASKEXT_AAMASK_MASK 0xffffffffU
-#define GRSPW2_AUTOACK_TICKMASKEXT_AAMASK_GET( _reg ) \
+#define GRSPW2_AUTOACK_TICKMASKEXT_AAMASK_MASK  0xffffffffU
+#define GRSPW2_AUTOACK_TICKMASKEXT_AAMASK_GET( _reg )        \
   ( ( ( _reg ) & GRSPW2_AUTOACK_TICKMASKEXT_AAMASK_MASK ) >> \
     GRSPW2_AUTOACK_TICKMASKEXT_AAMASK_SHIFT )
-#define GRSPW2_AUTOACK_TICKMASKEXT_AAMASK_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_AUTOACK_TICKMASKEXT_AAMASK_MASK ) | \
+#define GRSPW2_AUTOACK_TICKMASKEXT_AAMASK_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_AUTOACK_TICKMASKEXT_AAMASK_MASK ) |    \
     ( ( ( _val ) << GRSPW2_AUTOACK_TICKMASKEXT_AAMASK_SHIFT ) & \
       GRSPW2_AUTOACK_TICKMASKEXT_AAMASK_MASK ) )
-#define GRSPW2_AUTOACK_TICKMASKEXT_AAMASK( _val ) \
+#define GRSPW2_AUTOACK_TICKMASKEXT_AAMASK( _val )             \
   ( ( ( _val ) << GRSPW2_AUTOACK_TICKMASKEXT_AAMASK_SHIFT ) & \
     GRSPW2_AUTOACK_TICKMASKEXT_AAMASK_MASK )
 
@@ -851,69 +798,59 @@ typedef struct grspw2_dma {
  */
 
 #define GRSPW2_INTCFG_INTNUM3_SHIFT 26
-#define GRSPW2_INTCFG_INTNUM3_MASK 0xfc000000U
+#define GRSPW2_INTCFG_INTNUM3_MASK  0xfc000000U
 #define GRSPW2_INTCFG_INTNUM3_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_INTCFG_INTNUM3_MASK ) >> \
-    GRSPW2_INTCFG_INTNUM3_SHIFT )
-#define GRSPW2_INTCFG_INTNUM3_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_INTCFG_INTNUM3_MASK ) | \
+  ( ( ( _reg ) & GRSPW2_INTCFG_INTNUM3_MASK ) >> GRSPW2_INTCFG_INTNUM3_SHIFT )
+#define GRSPW2_INTCFG_INTNUM3_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_INTCFG_INTNUM3_MASK ) |    \
     ( ( ( _val ) << GRSPW2_INTCFG_INTNUM3_SHIFT ) & \
       GRSPW2_INTCFG_INTNUM3_MASK ) )
 #define GRSPW2_INTCFG_INTNUM3( _val ) \
-  ( ( ( _val ) << GRSPW2_INTCFG_INTNUM3_SHIFT ) & \
-    GRSPW2_INTCFG_INTNUM3_MASK )
+  ( ( ( _val ) << GRSPW2_INTCFG_INTNUM3_SHIFT ) & GRSPW2_INTCFG_INTNUM3_MASK )
 
 #define GRSPW2_INTCFG_INTNUM2_SHIFT 20
-#define GRSPW2_INTCFG_INTNUM2_MASK 0x3f00000U
+#define GRSPW2_INTCFG_INTNUM2_MASK  0x3f00000U
 #define GRSPW2_INTCFG_INTNUM2_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_INTCFG_INTNUM2_MASK ) >> \
-    GRSPW2_INTCFG_INTNUM2_SHIFT )
-#define GRSPW2_INTCFG_INTNUM2_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_INTCFG_INTNUM2_MASK ) | \
+  ( ( ( _reg ) & GRSPW2_INTCFG_INTNUM2_MASK ) >> GRSPW2_INTCFG_INTNUM2_SHIFT )
+#define GRSPW2_INTCFG_INTNUM2_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_INTCFG_INTNUM2_MASK ) |    \
     ( ( ( _val ) << GRSPW2_INTCFG_INTNUM2_SHIFT ) & \
       GRSPW2_INTCFG_INTNUM2_MASK ) )
 #define GRSPW2_INTCFG_INTNUM2( _val ) \
-  ( ( ( _val ) << GRSPW2_INTCFG_INTNUM2_SHIFT ) & \
-    GRSPW2_INTCFG_INTNUM2_MASK )
+  ( ( ( _val ) << GRSPW2_INTCFG_INTNUM2_SHIFT ) & GRSPW2_INTCFG_INTNUM2_MASK )
 
 #define GRSPW2_INTCFG_INTNUM1_SHIFT 14
-#define GRSPW2_INTCFG_INTNUM1_MASK 0xfc000U
+#define GRSPW2_INTCFG_INTNUM1_MASK  0xfc000U
 #define GRSPW2_INTCFG_INTNUM1_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_INTCFG_INTNUM1_MASK ) >> \
-    GRSPW2_INTCFG_INTNUM1_SHIFT )
-#define GRSPW2_INTCFG_INTNUM1_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_INTCFG_INTNUM1_MASK ) | \
+  ( ( ( _reg ) & GRSPW2_INTCFG_INTNUM1_MASK ) >> GRSPW2_INTCFG_INTNUM1_SHIFT )
+#define GRSPW2_INTCFG_INTNUM1_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_INTCFG_INTNUM1_MASK ) |    \
     ( ( ( _val ) << GRSPW2_INTCFG_INTNUM1_SHIFT ) & \
       GRSPW2_INTCFG_INTNUM1_MASK ) )
 #define GRSPW2_INTCFG_INTNUM1( _val ) \
-  ( ( ( _val ) << GRSPW2_INTCFG_INTNUM1_SHIFT ) & \
-    GRSPW2_INTCFG_INTNUM1_MASK )
+  ( ( ( _val ) << GRSPW2_INTCFG_INTNUM1_SHIFT ) & GRSPW2_INTCFG_INTNUM1_MASK )
 
 #define GRSPW2_INTCFG_INTNUM0_SHIFT 8
-#define GRSPW2_INTCFG_INTNUM0_MASK 0x3f00U
+#define GRSPW2_INTCFG_INTNUM0_MASK  0x3f00U
 #define GRSPW2_INTCFG_INTNUM0_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_INTCFG_INTNUM0_MASK ) >> \
-    GRSPW2_INTCFG_INTNUM0_SHIFT )
-#define GRSPW2_INTCFG_INTNUM0_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_INTCFG_INTNUM0_MASK ) | \
+  ( ( ( _reg ) & GRSPW2_INTCFG_INTNUM0_MASK ) >> GRSPW2_INTCFG_INTNUM0_SHIFT )
+#define GRSPW2_INTCFG_INTNUM0_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_INTCFG_INTNUM0_MASK ) |    \
     ( ( ( _val ) << GRSPW2_INTCFG_INTNUM0_SHIFT ) & \
       GRSPW2_INTCFG_INTNUM0_MASK ) )
 #define GRSPW2_INTCFG_INTNUM0( _val ) \
-  ( ( ( _val ) << GRSPW2_INTCFG_INTNUM0_SHIFT ) & \
-    GRSPW2_INTCFG_INTNUM0_MASK )
+  ( ( ( _val ) << GRSPW2_INTCFG_INTNUM0_SHIFT ) & GRSPW2_INTCFG_INTNUM0_MASK )
 
 #define GRSPW2_INTCFG_NUMINT_SHIFT 4
-#define GRSPW2_INTCFG_NUMINT_MASK 0xf0U
+#define GRSPW2_INTCFG_NUMINT_MASK  0xf0U
 #define GRSPW2_INTCFG_NUMINT_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_INTCFG_NUMINT_MASK ) >> \
-    GRSPW2_INTCFG_NUMINT_SHIFT )
-#define GRSPW2_INTCFG_NUMINT_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_INTCFG_NUMINT_MASK ) | \
+  ( ( ( _reg ) & GRSPW2_INTCFG_NUMINT_MASK ) >> GRSPW2_INTCFG_NUMINT_SHIFT )
+#define GRSPW2_INTCFG_NUMINT_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_INTCFG_NUMINT_MASK ) |    \
     ( ( ( _val ) << GRSPW2_INTCFG_NUMINT_SHIFT ) & \
       GRSPW2_INTCFG_NUMINT_MASK ) )
 #define GRSPW2_INTCFG_NUMINT( _val ) \
-  ( ( ( _val ) << GRSPW2_INTCFG_NUMINT_SHIFT ) & \
-    GRSPW2_INTCFG_NUMINT_MASK )
+  ( ( ( _val ) << GRSPW2_INTCFG_NUMINT_SHIFT ) & GRSPW2_INTCFG_NUMINT_MASK )
 
 #define GRSPW2_INTCFG_PR 0x8U
 
@@ -934,17 +871,14 @@ typedef struct grspw2_dma {
  */
 
 #define GRSPW2_ISR_ISR_SHIFT 0
-#define GRSPW2_ISR_ISR_MASK 0xffffffffU
+#define GRSPW2_ISR_ISR_MASK  0xffffffffU
 #define GRSPW2_ISR_ISR_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_ISR_ISR_MASK ) >> \
-    GRSPW2_ISR_ISR_SHIFT )
-#define GRSPW2_ISR_ISR_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPW2_ISR_ISR_MASK ) >> GRSPW2_ISR_ISR_SHIFT )
+#define GRSPW2_ISR_ISR_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPW2_ISR_ISR_MASK ) | \
-    ( ( ( _val ) << GRSPW2_ISR_ISR_SHIFT ) & \
-      GRSPW2_ISR_ISR_MASK ) )
+    ( ( ( _val ) << GRSPW2_ISR_ISR_SHIFT ) & GRSPW2_ISR_ISR_MASK ) )
 #define GRSPW2_ISR_ISR( _val ) \
-  ( ( ( _val ) << GRSPW2_ISR_ISR_SHIFT ) & \
-    GRSPW2_ISR_ISR_MASK )
+  ( ( ( _val ) << GRSPW2_ISR_ISR_SHIFT ) & GRSPW2_ISR_ISR_MASK )
 
 /** @} */
 
@@ -958,17 +892,14 @@ typedef struct grspw2_dma {
  */
 
 #define GRSPW2_ISREXT_ISR_SHIFT 0
-#define GRSPW2_ISREXT_ISR_MASK 0xffffffffU
+#define GRSPW2_ISREXT_ISR_MASK  0xffffffffU
 #define GRSPW2_ISREXT_ISR_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_ISREXT_ISR_MASK ) >> \
-    GRSPW2_ISREXT_ISR_SHIFT )
-#define GRSPW2_ISREXT_ISR_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPW2_ISREXT_ISR_MASK ) >> GRSPW2_ISREXT_ISR_SHIFT )
+#define GRSPW2_ISREXT_ISR_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPW2_ISREXT_ISR_MASK ) | \
-    ( ( ( _val ) << GRSPW2_ISREXT_ISR_SHIFT ) & \
-      GRSPW2_ISREXT_ISR_MASK ) )
+    ( ( ( _val ) << GRSPW2_ISREXT_ISR_SHIFT ) & GRSPW2_ISREXT_ISR_MASK ) )
 #define GRSPW2_ISREXT_ISR( _val ) \
-  ( ( ( _val ) << GRSPW2_ISREXT_ISR_SHIFT ) & \
-    GRSPW2_ISREXT_ISR_MASK )
+  ( ( ( _val ) << GRSPW2_ISREXT_ISR_SHIFT ) & GRSPW2_ISREXT_ISR_MASK )
 
 /** @} */
 
@@ -984,17 +915,15 @@ typedef struct grspw2_dma {
 #define GRSPW2_PRESCALER_R 0x80000000U
 
 #define GRSPW2_PRESCALER_RL_SHIFT 0
-#define GRSPW2_PRESCALER_RL_MASK 0x7fffffffU
+#define GRSPW2_PRESCALER_RL_MASK  0x7fffffffU
 #define GRSPW2_PRESCALER_RL_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_PRESCALER_RL_MASK ) >> \
-    GRSPW2_PRESCALER_RL_SHIFT )
-#define GRSPW2_PRESCALER_RL_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_PRESCALER_RL_MASK ) | \
+  ( ( ( _reg ) & GRSPW2_PRESCALER_RL_MASK ) >> GRSPW2_PRESCALER_RL_SHIFT )
+#define GRSPW2_PRESCALER_RL_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_PRESCALER_RL_MASK ) |    \
     ( ( ( _val ) << GRSPW2_PRESCALER_RL_SHIFT ) & \
       GRSPW2_PRESCALER_RL_MASK ) )
 #define GRSPW2_PRESCALER_RL( _val ) \
-  ( ( ( _val ) << GRSPW2_PRESCALER_RL_SHIFT ) & \
-    GRSPW2_PRESCALER_RL_MASK )
+  ( ( ( _val ) << GRSPW2_PRESCALER_RL_SHIFT ) & GRSPW2_PRESCALER_RL_MASK )
 
 /** @} */
 
@@ -1010,17 +939,14 @@ typedef struct grspw2_dma {
 #define GRSPW2_ISRTIMER_EN 0x80000000U
 
 #define GRSPW2_ISRTIMER_RL_SHIFT 0
-#define GRSPW2_ISRTIMER_RL_MASK 0x7fffffffU
+#define GRSPW2_ISRTIMER_RL_MASK  0x7fffffffU
 #define GRSPW2_ISRTIMER_RL_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_ISRTIMER_RL_MASK ) >> \
-    GRSPW2_ISRTIMER_RL_SHIFT )
-#define GRSPW2_ISRTIMER_RL_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPW2_ISRTIMER_RL_MASK ) >> GRSPW2_ISRTIMER_RL_SHIFT )
+#define GRSPW2_ISRTIMER_RL_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPW2_ISRTIMER_RL_MASK ) | \
-    ( ( ( _val ) << GRSPW2_ISRTIMER_RL_SHIFT ) & \
-      GRSPW2_ISRTIMER_RL_MASK ) )
+    ( ( ( _val ) << GRSPW2_ISRTIMER_RL_SHIFT ) & GRSPW2_ISRTIMER_RL_MASK ) )
 #define GRSPW2_ISRTIMER_RL( _val ) \
-  ( ( ( _val ) << GRSPW2_ISRTIMER_RL_SHIFT ) & \
-    GRSPW2_ISRTIMER_RL_MASK )
+  ( ( ( _val ) << GRSPW2_ISRTIMER_RL_SHIFT ) & GRSPW2_ISRTIMER_RL_MASK )
 
 /** @} */
 
@@ -1036,17 +962,14 @@ typedef struct grspw2_dma {
 #define GRSPW2_IATIMER_EN 0x80000000U
 
 #define GRSPW2_IATIMER_RL_SHIFT 0
-#define GRSPW2_IATIMER_RL_MASK 0x7fffffffU
+#define GRSPW2_IATIMER_RL_MASK  0x7fffffffU
 #define GRSPW2_IATIMER_RL_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_IATIMER_RL_MASK ) >> \
-    GRSPW2_IATIMER_RL_SHIFT )
-#define GRSPW2_IATIMER_RL_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPW2_IATIMER_RL_MASK ) >> GRSPW2_IATIMER_RL_SHIFT )
+#define GRSPW2_IATIMER_RL_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPW2_IATIMER_RL_MASK ) | \
-    ( ( ( _val ) << GRSPW2_IATIMER_RL_SHIFT ) & \
-      GRSPW2_IATIMER_RL_MASK ) )
+    ( ( ( _val ) << GRSPW2_IATIMER_RL_SHIFT ) & GRSPW2_IATIMER_RL_MASK ) )
 #define GRSPW2_IATIMER_RL( _val ) \
-  ( ( ( _val ) << GRSPW2_IATIMER_RL_SHIFT ) & \
-    GRSPW2_IATIMER_RL_MASK )
+  ( ( ( _val ) << GRSPW2_IATIMER_RL_SHIFT ) & GRSPW2_IATIMER_RL_MASK )
 
 /** @} */
 
@@ -1062,17 +985,14 @@ typedef struct grspw2_dma {
 #define GRSPW2_ICTIMER_EN 0x80000000U
 
 #define GRSPW2_ICTIMER_RL_SHIFT 0
-#define GRSPW2_ICTIMER_RL_MASK 0x7fffffffU
+#define GRSPW2_ICTIMER_RL_MASK  0x7fffffffU
 #define GRSPW2_ICTIMER_RL_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_ICTIMER_RL_MASK ) >> \
-    GRSPW2_ICTIMER_RL_SHIFT )
-#define GRSPW2_ICTIMER_RL_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPW2_ICTIMER_RL_MASK ) >> GRSPW2_ICTIMER_RL_SHIFT )
+#define GRSPW2_ICTIMER_RL_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPW2_ICTIMER_RL_MASK ) | \
-    ( ( ( _val ) << GRSPW2_ICTIMER_RL_SHIFT ) & \
-      GRSPW2_ICTIMER_RL_MASK ) )
+    ( ( ( _val ) << GRSPW2_ICTIMER_RL_SHIFT ) & GRSPW2_ICTIMER_RL_MASK ) )
 #define GRSPW2_ICTIMER_RL( _val ) \
-  ( ( ( _val ) << GRSPW2_ICTIMER_RL_SHIFT ) & \
-    GRSPW2_ICTIMER_RL_MASK )
+  ( ( ( _val ) << GRSPW2_ICTIMER_RL_SHIFT ) & GRSPW2_ICTIMER_RL_MASK )
 
 /** @} */
 
@@ -1086,30 +1006,26 @@ typedef struct grspw2_dma {
  */
 
 #define GRSPW2_PNPVEND_VEND_SHIFT 16
-#define GRSPW2_PNPVEND_VEND_MASK 0xffff0000U
+#define GRSPW2_PNPVEND_VEND_MASK  0xffff0000U
 #define GRSPW2_PNPVEND_VEND_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_PNPVEND_VEND_MASK ) >> \
-    GRSPW2_PNPVEND_VEND_SHIFT )
-#define GRSPW2_PNPVEND_VEND_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_PNPVEND_VEND_MASK ) | \
+  ( ( ( _reg ) & GRSPW2_PNPVEND_VEND_MASK ) >> GRSPW2_PNPVEND_VEND_SHIFT )
+#define GRSPW2_PNPVEND_VEND_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_PNPVEND_VEND_MASK ) |    \
     ( ( ( _val ) << GRSPW2_PNPVEND_VEND_SHIFT ) & \
       GRSPW2_PNPVEND_VEND_MASK ) )
 #define GRSPW2_PNPVEND_VEND( _val ) \
-  ( ( ( _val ) << GRSPW2_PNPVEND_VEND_SHIFT ) & \
-    GRSPW2_PNPVEND_VEND_MASK )
+  ( ( ( _val ) << GRSPW2_PNPVEND_VEND_SHIFT ) & GRSPW2_PNPVEND_VEND_MASK )
 
 #define GRSPW2_PNPVEND_PROD_SHIFT 0
-#define GRSPW2_PNPVEND_PROD_MASK 0xffffU
+#define GRSPW2_PNPVEND_PROD_MASK  0xffffU
 #define GRSPW2_PNPVEND_PROD_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_PNPVEND_PROD_MASK ) >> \
-    GRSPW2_PNPVEND_PROD_SHIFT )
-#define GRSPW2_PNPVEND_PROD_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_PNPVEND_PROD_MASK ) | \
+  ( ( ( _reg ) & GRSPW2_PNPVEND_PROD_MASK ) >> GRSPW2_PNPVEND_PROD_SHIFT )
+#define GRSPW2_PNPVEND_PROD_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_PNPVEND_PROD_MASK ) |    \
     ( ( ( _val ) << GRSPW2_PNPVEND_PROD_SHIFT ) & \
       GRSPW2_PNPVEND_PROD_MASK ) )
 #define GRSPW2_PNPVEND_PROD( _val ) \
-  ( ( ( _val ) << GRSPW2_PNPVEND_PROD_SHIFT ) & \
-    GRSPW2_PNPVEND_PROD_MASK )
+  ( ( ( _val ) << GRSPW2_PNPVEND_PROD_SHIFT ) & GRSPW2_PNPVEND_PROD_MASK )
 
 /** @} */
 
@@ -1123,17 +1039,14 @@ typedef struct grspw2_dma {
  */
 
 #define GRSPW2_PNPOA0_RA_SHIFT 0
-#define GRSPW2_PNPOA0_RA_MASK 0xffffffffU
+#define GRSPW2_PNPOA0_RA_MASK  0xffffffffU
 #define GRSPW2_PNPOA0_RA_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_PNPOA0_RA_MASK ) >> \
-    GRSPW2_PNPOA0_RA_SHIFT )
-#define GRSPW2_PNPOA0_RA_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPW2_PNPOA0_RA_MASK ) >> GRSPW2_PNPOA0_RA_SHIFT )
+#define GRSPW2_PNPOA0_RA_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPW2_PNPOA0_RA_MASK ) | \
-    ( ( ( _val ) << GRSPW2_PNPOA0_RA_SHIFT ) & \
-      GRSPW2_PNPOA0_RA_MASK ) )
+    ( ( ( _val ) << GRSPW2_PNPOA0_RA_SHIFT ) & GRSPW2_PNPOA0_RA_MASK ) )
 #define GRSPW2_PNPOA0_RA( _val ) \
-  ( ( ( _val ) << GRSPW2_PNPOA0_RA_SHIFT ) & \
-    GRSPW2_PNPOA0_RA_MASK )
+  ( ( ( _val ) << GRSPW2_PNPOA0_RA_SHIFT ) & GRSPW2_PNPOA0_RA_MASK )
 
 /** @} */
 
@@ -1147,17 +1060,14 @@ typedef struct grspw2_dma {
  */
 
 #define GRSPW2_PNPOA1_RA_SHIFT 0
-#define GRSPW2_PNPOA1_RA_MASK 0xffffffffU
+#define GRSPW2_PNPOA1_RA_MASK  0xffffffffU
 #define GRSPW2_PNPOA1_RA_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_PNPOA1_RA_MASK ) >> \
-    GRSPW2_PNPOA1_RA_SHIFT )
-#define GRSPW2_PNPOA1_RA_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPW2_PNPOA1_RA_MASK ) >> GRSPW2_PNPOA1_RA_SHIFT )
+#define GRSPW2_PNPOA1_RA_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPW2_PNPOA1_RA_MASK ) | \
-    ( ( ( _val ) << GRSPW2_PNPOA1_RA_SHIFT ) & \
-      GRSPW2_PNPOA1_RA_MASK ) )
+    ( ( ( _val ) << GRSPW2_PNPOA1_RA_SHIFT ) & GRSPW2_PNPOA1_RA_MASK ) )
 #define GRSPW2_PNPOA1_RA( _val ) \
-  ( ( ( _val ) << GRSPW2_PNPOA1_RA_SHIFT ) & \
-    GRSPW2_PNPOA1_RA_MASK )
+  ( ( ( _val ) << GRSPW2_PNPOA1_RA_SHIFT ) & GRSPW2_PNPOA1_RA_MASK )
 
 /** @} */
 
@@ -1171,17 +1081,14 @@ typedef struct grspw2_dma {
  */
 
 #define GRSPW2_PNPOA2_RA_SHIFT 0
-#define GRSPW2_PNPOA2_RA_MASK 0xffffffffU
+#define GRSPW2_PNPOA2_RA_MASK  0xffffffffU
 #define GRSPW2_PNPOA2_RA_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_PNPOA2_RA_MASK ) >> \
-    GRSPW2_PNPOA2_RA_SHIFT )
-#define GRSPW2_PNPOA2_RA_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPW2_PNPOA2_RA_MASK ) >> GRSPW2_PNPOA2_RA_SHIFT )
+#define GRSPW2_PNPOA2_RA_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPW2_PNPOA2_RA_MASK ) | \
-    ( ( ( _val ) << GRSPW2_PNPOA2_RA_SHIFT ) & \
-      GRSPW2_PNPOA2_RA_MASK ) )
+    ( ( ( _val ) << GRSPW2_PNPOA2_RA_SHIFT ) & GRSPW2_PNPOA2_RA_MASK ) )
 #define GRSPW2_PNPOA2_RA( _val ) \
-  ( ( ( _val ) << GRSPW2_PNPOA2_RA_SHIFT ) & \
-    GRSPW2_PNPOA2_RA_MASK )
+  ( ( ( _val ) << GRSPW2_PNPOA2_RA_SHIFT ) & GRSPW2_PNPOA2_RA_MASK )
 
 /** @} */
 
@@ -1195,17 +1102,15 @@ typedef struct grspw2_dma {
  */
 
 #define GRSPW2_PNPDEVID_DID_SHIFT 0
-#define GRSPW2_PNPDEVID_DID_MASK 0xffffffffU
+#define GRSPW2_PNPDEVID_DID_MASK  0xffffffffU
 #define GRSPW2_PNPDEVID_DID_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_PNPDEVID_DID_MASK ) >> \
-    GRSPW2_PNPDEVID_DID_SHIFT )
-#define GRSPW2_PNPDEVID_DID_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_PNPDEVID_DID_MASK ) | \
+  ( ( ( _reg ) & GRSPW2_PNPDEVID_DID_MASK ) >> GRSPW2_PNPDEVID_DID_SHIFT )
+#define GRSPW2_PNPDEVID_DID_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_PNPDEVID_DID_MASK ) |    \
     ( ( ( _val ) << GRSPW2_PNPDEVID_DID_SHIFT ) & \
       GRSPW2_PNPDEVID_DID_MASK ) )
 #define GRSPW2_PNPDEVID_DID( _val ) \
-  ( ( ( _val ) << GRSPW2_PNPDEVID_DID_SHIFT ) & \
-    GRSPW2_PNPDEVID_DID_MASK )
+  ( ( ( _val ) << GRSPW2_PNPDEVID_DID_SHIFT ) & GRSPW2_PNPDEVID_DID_MASK )
 
 /** @} */
 
@@ -1219,30 +1124,26 @@ typedef struct grspw2_dma {
  */
 
 #define GRSPW2_PNPUVEND_VEND_SHIFT 16
-#define GRSPW2_PNPUVEND_VEND_MASK 0xffff0000U
+#define GRSPW2_PNPUVEND_VEND_MASK  0xffff0000U
 #define GRSPW2_PNPUVEND_VEND_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_PNPUVEND_VEND_MASK ) >> \
-    GRSPW2_PNPUVEND_VEND_SHIFT )
-#define GRSPW2_PNPUVEND_VEND_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_PNPUVEND_VEND_MASK ) | \
+  ( ( ( _reg ) & GRSPW2_PNPUVEND_VEND_MASK ) >> GRSPW2_PNPUVEND_VEND_SHIFT )
+#define GRSPW2_PNPUVEND_VEND_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_PNPUVEND_VEND_MASK ) |    \
     ( ( ( _val ) << GRSPW2_PNPUVEND_VEND_SHIFT ) & \
       GRSPW2_PNPUVEND_VEND_MASK ) )
 #define GRSPW2_PNPUVEND_VEND( _val ) \
-  ( ( ( _val ) << GRSPW2_PNPUVEND_VEND_SHIFT ) & \
-    GRSPW2_PNPUVEND_VEND_MASK )
+  ( ( ( _val ) << GRSPW2_PNPUVEND_VEND_SHIFT ) & GRSPW2_PNPUVEND_VEND_MASK )
 
 #define GRSPW2_PNPUVEND_PROD_SHIFT 0
-#define GRSPW2_PNPUVEND_PROD_MASK 0xffffU
+#define GRSPW2_PNPUVEND_PROD_MASK  0xffffU
 #define GRSPW2_PNPUVEND_PROD_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_PNPUVEND_PROD_MASK ) >> \
-    GRSPW2_PNPUVEND_PROD_SHIFT )
-#define GRSPW2_PNPUVEND_PROD_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~GRSPW2_PNPUVEND_PROD_MASK ) | \
+  ( ( ( _reg ) & GRSPW2_PNPUVEND_PROD_MASK ) >> GRSPW2_PNPUVEND_PROD_SHIFT )
+#define GRSPW2_PNPUVEND_PROD_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~GRSPW2_PNPUVEND_PROD_MASK ) |    \
     ( ( ( _val ) << GRSPW2_PNPUVEND_PROD_SHIFT ) & \
       GRSPW2_PNPUVEND_PROD_MASK ) )
 #define GRSPW2_PNPUVEND_PROD( _val ) \
-  ( ( ( _val ) << GRSPW2_PNPUVEND_PROD_SHIFT ) & \
-    GRSPW2_PNPUVEND_PROD_MASK )
+  ( ( ( _val ) << GRSPW2_PNPUVEND_PROD_SHIFT ) & GRSPW2_PNPUVEND_PROD_MASK )
 
 /** @} */
 
@@ -1256,17 +1157,14 @@ typedef struct grspw2_dma {
  */
 
 #define GRSPW2_PNPUSN_USN_SHIFT 0
-#define GRSPW2_PNPUSN_USN_MASK 0xffffffffU
+#define GRSPW2_PNPUSN_USN_MASK  0xffffffffU
 #define GRSPW2_PNPUSN_USN_GET( _reg ) \
-  ( ( ( _reg ) & GRSPW2_PNPUSN_USN_MASK ) >> \
-    GRSPW2_PNPUSN_USN_SHIFT )
-#define GRSPW2_PNPUSN_USN_SET( _reg, _val ) \
+  ( ( ( _reg ) & GRSPW2_PNPUSN_USN_MASK ) >> GRSPW2_PNPUSN_USN_SHIFT )
+#define GRSPW2_PNPUSN_USN_SET( _reg, _val )  \
   ( ( ( _reg ) & ~GRSPW2_PNPUSN_USN_MASK ) | \
-    ( ( ( _val ) << GRSPW2_PNPUSN_USN_SHIFT ) & \
-      GRSPW2_PNPUSN_USN_MASK ) )
+    ( ( ( _val ) << GRSPW2_PNPUSN_USN_SHIFT ) & GRSPW2_PNPUSN_USN_MASK ) )
 #define GRSPW2_PNPUSN_USN( _val ) \
-  ( ( ( _val ) << GRSPW2_PNPUSN_USN_SHIFT ) & \
-    GRSPW2_PNPUSN_USN_MASK )
+  ( ( ( _val ) << GRSPW2_PNPUSN_USN_SHIFT ) & GRSPW2_PNPUSN_USN_MASK )
 
 /** @} */
 

@@ -82,32 +82,26 @@ extern "C" {
  */
 
 #define AHBTRACE_CTRL_DCNT_SHIFT 16
-#define AHBTRACE_CTRL_DCNT_MASK 0x7f0000U
+#define AHBTRACE_CTRL_DCNT_MASK  0x7f0000U
 #define AHBTRACE_CTRL_DCNT_GET( _reg ) \
-  ( ( ( _reg ) & AHBTRACE_CTRL_DCNT_MASK ) >> \
-    AHBTRACE_CTRL_DCNT_SHIFT )
-#define AHBTRACE_CTRL_DCNT_SET( _reg, _val ) \
+  ( ( ( _reg ) & AHBTRACE_CTRL_DCNT_MASK ) >> AHBTRACE_CTRL_DCNT_SHIFT )
+#define AHBTRACE_CTRL_DCNT_SET( _reg, _val )  \
   ( ( ( _reg ) & ~AHBTRACE_CTRL_DCNT_MASK ) | \
-    ( ( ( _val ) << AHBTRACE_CTRL_DCNT_SHIFT ) & \
-      AHBTRACE_CTRL_DCNT_MASK ) )
+    ( ( ( _val ) << AHBTRACE_CTRL_DCNT_SHIFT ) & AHBTRACE_CTRL_DCNT_MASK ) )
 #define AHBTRACE_CTRL_DCNT( _val ) \
-  ( ( ( _val ) << AHBTRACE_CTRL_DCNT_SHIFT ) & \
-    AHBTRACE_CTRL_DCNT_MASK )
+  ( ( ( _val ) << AHBTRACE_CTRL_DCNT_SHIFT ) & AHBTRACE_CTRL_DCNT_MASK )
 
 #define AHBTRACE_CTRL_PF 0x100U
 
 #define AHBTRACE_CTRL_BW_SHIFT 6
-#define AHBTRACE_CTRL_BW_MASK 0xc0U
+#define AHBTRACE_CTRL_BW_MASK  0xc0U
 #define AHBTRACE_CTRL_BW_GET( _reg ) \
-  ( ( ( _reg ) & AHBTRACE_CTRL_BW_MASK ) >> \
-    AHBTRACE_CTRL_BW_SHIFT )
-#define AHBTRACE_CTRL_BW_SET( _reg, _val ) \
+  ( ( ( _reg ) & AHBTRACE_CTRL_BW_MASK ) >> AHBTRACE_CTRL_BW_SHIFT )
+#define AHBTRACE_CTRL_BW_SET( _reg, _val )  \
   ( ( ( _reg ) & ~AHBTRACE_CTRL_BW_MASK ) | \
-    ( ( ( _val ) << AHBTRACE_CTRL_BW_SHIFT ) & \
-      AHBTRACE_CTRL_BW_MASK ) )
+    ( ( ( _val ) << AHBTRACE_CTRL_BW_SHIFT ) & AHBTRACE_CTRL_BW_MASK ) )
 #define AHBTRACE_CTRL_BW( _val ) \
-  ( ( ( _val ) << AHBTRACE_CTRL_BW_SHIFT ) & \
-    AHBTRACE_CTRL_BW_MASK )
+  ( ( ( _val ) << AHBTRACE_CTRL_BW_SHIFT ) & AHBTRACE_CTRL_BW_MASK )
 
 #define AHBTRACE_CTRL_RF 0x20U
 
@@ -132,17 +126,15 @@ extern "C" {
  */
 
 #define AHBTRACE_INDEX_INDEX_SHIFT 4
-#define AHBTRACE_INDEX_INDEX_MASK 0x7f0U
+#define AHBTRACE_INDEX_INDEX_MASK  0x7f0U
 #define AHBTRACE_INDEX_INDEX_GET( _reg ) \
-  ( ( ( _reg ) & AHBTRACE_INDEX_INDEX_MASK ) >> \
-    AHBTRACE_INDEX_INDEX_SHIFT )
-#define AHBTRACE_INDEX_INDEX_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~AHBTRACE_INDEX_INDEX_MASK ) | \
+  ( ( ( _reg ) & AHBTRACE_INDEX_INDEX_MASK ) >> AHBTRACE_INDEX_INDEX_SHIFT )
+#define AHBTRACE_INDEX_INDEX_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~AHBTRACE_INDEX_INDEX_MASK ) |    \
     ( ( ( _val ) << AHBTRACE_INDEX_INDEX_SHIFT ) & \
       AHBTRACE_INDEX_INDEX_MASK ) )
 #define AHBTRACE_INDEX_INDEX( _val ) \
-  ( ( ( _val ) << AHBTRACE_INDEX_INDEX_SHIFT ) & \
-    AHBTRACE_INDEX_INDEX_MASK )
+  ( ( ( _val ) << AHBTRACE_INDEX_INDEX_SHIFT ) & AHBTRACE_INDEX_INDEX_MASK )
 
 /** @} */
 
@@ -156,15 +148,15 @@ extern "C" {
  */
 
 #define AHBTRACE_TIMETAG_TIMETAG_SHIFT 0
-#define AHBTRACE_TIMETAG_TIMETAG_MASK 0xffffffffU
-#define AHBTRACE_TIMETAG_TIMETAG_GET( _reg ) \
+#define AHBTRACE_TIMETAG_TIMETAG_MASK  0xffffffffU
+#define AHBTRACE_TIMETAG_TIMETAG_GET( _reg )        \
   ( ( ( _reg ) & AHBTRACE_TIMETAG_TIMETAG_MASK ) >> \
     AHBTRACE_TIMETAG_TIMETAG_SHIFT )
-#define AHBTRACE_TIMETAG_TIMETAG_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~AHBTRACE_TIMETAG_TIMETAG_MASK ) | \
+#define AHBTRACE_TIMETAG_TIMETAG_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~AHBTRACE_TIMETAG_TIMETAG_MASK ) |    \
     ( ( ( _val ) << AHBTRACE_TIMETAG_TIMETAG_SHIFT ) & \
       AHBTRACE_TIMETAG_TIMETAG_MASK ) )
-#define AHBTRACE_TIMETAG_TIMETAG( _val ) \
+#define AHBTRACE_TIMETAG_TIMETAG( _val )             \
   ( ( ( _val ) << AHBTRACE_TIMETAG_TIMETAG_SHIFT ) & \
     AHBTRACE_TIMETAG_TIMETAG_MASK )
 
@@ -180,28 +172,28 @@ extern "C" {
  */
 
 #define AHBTRACE_MSFILT_SMASK_15_0_SHIFT 16
-#define AHBTRACE_MSFILT_SMASK_15_0_MASK 0xffff0000U
-#define AHBTRACE_MSFILT_SMASK_15_0_GET( _reg ) \
+#define AHBTRACE_MSFILT_SMASK_15_0_MASK  0xffff0000U
+#define AHBTRACE_MSFILT_SMASK_15_0_GET( _reg )        \
   ( ( ( _reg ) & AHBTRACE_MSFILT_SMASK_15_0_MASK ) >> \
     AHBTRACE_MSFILT_SMASK_15_0_SHIFT )
-#define AHBTRACE_MSFILT_SMASK_15_0_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~AHBTRACE_MSFILT_SMASK_15_0_MASK ) | \
+#define AHBTRACE_MSFILT_SMASK_15_0_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~AHBTRACE_MSFILT_SMASK_15_0_MASK ) |    \
     ( ( ( _val ) << AHBTRACE_MSFILT_SMASK_15_0_SHIFT ) & \
       AHBTRACE_MSFILT_SMASK_15_0_MASK ) )
-#define AHBTRACE_MSFILT_SMASK_15_0( _val ) \
+#define AHBTRACE_MSFILT_SMASK_15_0( _val )             \
   ( ( ( _val ) << AHBTRACE_MSFILT_SMASK_15_0_SHIFT ) & \
     AHBTRACE_MSFILT_SMASK_15_0_MASK )
 
 #define AHBTRACE_MSFILT_MMASK_15_0_SHIFT 0
-#define AHBTRACE_MSFILT_MMASK_15_0_MASK 0xffffU
-#define AHBTRACE_MSFILT_MMASK_15_0_GET( _reg ) \
+#define AHBTRACE_MSFILT_MMASK_15_0_MASK  0xffffU
+#define AHBTRACE_MSFILT_MMASK_15_0_GET( _reg )        \
   ( ( ( _reg ) & AHBTRACE_MSFILT_MMASK_15_0_MASK ) >> \
     AHBTRACE_MSFILT_MMASK_15_0_SHIFT )
-#define AHBTRACE_MSFILT_MMASK_15_0_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~AHBTRACE_MSFILT_MMASK_15_0_MASK ) | \
+#define AHBTRACE_MSFILT_MMASK_15_0_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~AHBTRACE_MSFILT_MMASK_15_0_MASK ) |    \
     ( ( ( _val ) << AHBTRACE_MSFILT_MMASK_15_0_SHIFT ) & \
       AHBTRACE_MSFILT_MMASK_15_0_MASK ) )
-#define AHBTRACE_MSFILT_MMASK_15_0( _val ) \
+#define AHBTRACE_MSFILT_MMASK_15_0( _val )             \
   ( ( ( _val ) << AHBTRACE_MSFILT_MMASK_15_0_SHIFT ) & \
     AHBTRACE_MSFILT_MMASK_15_0_MASK )
 
@@ -217,15 +209,15 @@ extern "C" {
  */
 
 #define AHBTRACE_TBBA_BADDR_31_2_SHIFT 2
-#define AHBTRACE_TBBA_BADDR_31_2_MASK 0xfffffffcU
-#define AHBTRACE_TBBA_BADDR_31_2_GET( _reg ) \
+#define AHBTRACE_TBBA_BADDR_31_2_MASK  0xfffffffcU
+#define AHBTRACE_TBBA_BADDR_31_2_GET( _reg )        \
   ( ( ( _reg ) & AHBTRACE_TBBA_BADDR_31_2_MASK ) >> \
     AHBTRACE_TBBA_BADDR_31_2_SHIFT )
-#define AHBTRACE_TBBA_BADDR_31_2_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~AHBTRACE_TBBA_BADDR_31_2_MASK ) | \
+#define AHBTRACE_TBBA_BADDR_31_2_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~AHBTRACE_TBBA_BADDR_31_2_MASK ) |    \
     ( ( ( _val ) << AHBTRACE_TBBA_BADDR_31_2_SHIFT ) & \
       AHBTRACE_TBBA_BADDR_31_2_MASK ) )
-#define AHBTRACE_TBBA_BADDR_31_2( _val ) \
+#define AHBTRACE_TBBA_BADDR_31_2( _val )             \
   ( ( ( _val ) << AHBTRACE_TBBA_BADDR_31_2_SHIFT ) & \
     AHBTRACE_TBBA_BADDR_31_2_MASK )
 
@@ -241,15 +233,15 @@ extern "C" {
  */
 
 #define AHBTRACE_TBBM_BMASK_31_2_SHIFT 2
-#define AHBTRACE_TBBM_BMASK_31_2_MASK 0xfffffffcU
-#define AHBTRACE_TBBM_BMASK_31_2_GET( _reg ) \
+#define AHBTRACE_TBBM_BMASK_31_2_MASK  0xfffffffcU
+#define AHBTRACE_TBBM_BMASK_31_2_GET( _reg )        \
   ( ( ( _reg ) & AHBTRACE_TBBM_BMASK_31_2_MASK ) >> \
     AHBTRACE_TBBM_BMASK_31_2_SHIFT )
-#define AHBTRACE_TBBM_BMASK_31_2_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~AHBTRACE_TBBM_BMASK_31_2_MASK ) | \
+#define AHBTRACE_TBBM_BMASK_31_2_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~AHBTRACE_TBBM_BMASK_31_2_MASK ) |    \
     ( ( ( _val ) << AHBTRACE_TBBM_BMASK_31_2_SHIFT ) & \
       AHBTRACE_TBBM_BMASK_31_2_MASK ) )
-#define AHBTRACE_TBBM_BMASK_31_2( _val ) \
+#define AHBTRACE_TBBM_BMASK_31_2( _val )             \
   ( ( ( _val ) << AHBTRACE_TBBM_BMASK_31_2_SHIFT ) & \
     AHBTRACE_TBBM_BMASK_31_2_MASK )
 

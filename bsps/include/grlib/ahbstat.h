@@ -38,10 +38,10 @@ extern "C" {
 
 /* AHBSTAT Registers layout */
 struct ahbstat_regs {
-	volatile uint32_t status;
-	volatile uint32_t failing;
-	volatile uint32_t status2;
-	volatile uint32_t failing2;
+  volatile uint32_t status;
+  volatile uint32_t failing;
+  volatile uint32_t status2;
+  volatile uint32_t failing2;
 };
 
 /* AHB fail interrupt callback to user. This function is declared weak so that
@@ -59,11 +59,12 @@ struct ahbstat_regs {
  *  2: just print error
  *  3: do nothing, let user do custom handling
  */
-extern int (*ahbstat_error)(
-	int minor,
-	struct ahbstat_regs *regs,
-	uint32_t status,
-	uint32_t failing_address);
+extern int ( *ahbstat_error )(
+  int                  minor,
+  struct ahbstat_regs *regs,
+  uint32_t             status,
+  uint32_t             failing_address
+);
 
 /* Get Last received AHB Error
  *
@@ -76,7 +77,11 @@ extern int (*ahbstat_error)(
  *   1: Error Received, last status and address stored into argument pointers
  *  -1: No such AHBSTAT device
  */
-extern int ahbstat_last_error(int minor, uint32_t *status, uint32_t *address);
+extern int ahbstat_last_error(
+  int       minor,
+  uint32_t *status,
+  uint32_t *address
+);
 
 /* Get AHBSTAT registers address from minor. Can also be used to check if
  * AHBSTAT hardware is present.
@@ -85,10 +90,10 @@ extern int ahbstat_last_error(int minor, uint32_t *status, uint32_t *address);
  *   NULL       returned if no such device
  *   non-zero   Address to AHBSTAT register
  */
-extern struct ahbstat_regs *ahbstat_get_regs(int minor);
+extern struct ahbstat_regs *ahbstat_get_regs( int minor );
 
 /* Registers the AHBSTAT driver to the Driver Manager */
-void ahbstat_register_drv (void);
+void ahbstat_register_drv( void );
 
 #ifdef __cplusplus
 }

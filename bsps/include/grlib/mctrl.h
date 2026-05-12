@@ -36,7 +36,7 @@ extern "C" {
 #endif
 
 /* Register MEMCTRL driver to Driver manager */
-void mctrl_register_drv (void);
+void mctrl_register_drv( void );
 
 #ifdef __cplusplus
 }

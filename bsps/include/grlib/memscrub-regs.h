@@ -82,30 +82,26 @@ extern "C" {
  */
 
 #define MEMSCRUB_AHBS_CECNT_SHIFT 22
-#define MEMSCRUB_AHBS_CECNT_MASK 0xffc00000U
+#define MEMSCRUB_AHBS_CECNT_MASK  0xffc00000U
 #define MEMSCRUB_AHBS_CECNT_GET( _reg ) \
-  ( ( ( _reg ) & MEMSCRUB_AHBS_CECNT_MASK ) >> \
-    MEMSCRUB_AHBS_CECNT_SHIFT )
-#define MEMSCRUB_AHBS_CECNT_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MEMSCRUB_AHBS_CECNT_MASK ) | \
+  ( ( ( _reg ) & MEMSCRUB_AHBS_CECNT_MASK ) >> MEMSCRUB_AHBS_CECNT_SHIFT )
+#define MEMSCRUB_AHBS_CECNT_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MEMSCRUB_AHBS_CECNT_MASK ) |    \
     ( ( ( _val ) << MEMSCRUB_AHBS_CECNT_SHIFT ) & \
       MEMSCRUB_AHBS_CECNT_MASK ) )
 #define MEMSCRUB_AHBS_CECNT( _val ) \
-  ( ( ( _val ) << MEMSCRUB_AHBS_CECNT_SHIFT ) & \
-    MEMSCRUB_AHBS_CECNT_MASK )
+  ( ( ( _val ) << MEMSCRUB_AHBS_CECNT_SHIFT ) & MEMSCRUB_AHBS_CECNT_MASK )
 
 #define MEMSCRUB_AHBS_UECNT_SHIFT 14
-#define MEMSCRUB_AHBS_UECNT_MASK 0x3fc000U
+#define MEMSCRUB_AHBS_UECNT_MASK  0x3fc000U
 #define MEMSCRUB_AHBS_UECNT_GET( _reg ) \
-  ( ( ( _reg ) & MEMSCRUB_AHBS_UECNT_MASK ) >> \
-    MEMSCRUB_AHBS_UECNT_SHIFT )
-#define MEMSCRUB_AHBS_UECNT_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MEMSCRUB_AHBS_UECNT_MASK ) | \
+  ( ( ( _reg ) & MEMSCRUB_AHBS_UECNT_MASK ) >> MEMSCRUB_AHBS_UECNT_SHIFT )
+#define MEMSCRUB_AHBS_UECNT_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MEMSCRUB_AHBS_UECNT_MASK ) |    \
     ( ( ( _val ) << MEMSCRUB_AHBS_UECNT_SHIFT ) & \
       MEMSCRUB_AHBS_UECNT_MASK ) )
 #define MEMSCRUB_AHBS_UECNT( _val ) \
-  ( ( ( _val ) << MEMSCRUB_AHBS_UECNT_SHIFT ) & \
-    MEMSCRUB_AHBS_UECNT_MASK )
+  ( ( ( _val ) << MEMSCRUB_AHBS_UECNT_SHIFT ) & MEMSCRUB_AHBS_UECNT_MASK )
 
 #define MEMSCRUB_AHBS_DONE 0x2000U
 
@@ -120,30 +116,26 @@ extern "C" {
 #define MEMSCRUB_AHBS_HWRITE 0x80U
 
 #define MEMSCRUB_AHBS_HMASTER_SHIFT 3
-#define MEMSCRUB_AHBS_HMASTER_MASK 0x78U
+#define MEMSCRUB_AHBS_HMASTER_MASK  0x78U
 #define MEMSCRUB_AHBS_HMASTER_GET( _reg ) \
-  ( ( ( _reg ) & MEMSCRUB_AHBS_HMASTER_MASK ) >> \
-    MEMSCRUB_AHBS_HMASTER_SHIFT )
-#define MEMSCRUB_AHBS_HMASTER_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MEMSCRUB_AHBS_HMASTER_MASK ) | \
+  ( ( ( _reg ) & MEMSCRUB_AHBS_HMASTER_MASK ) >> MEMSCRUB_AHBS_HMASTER_SHIFT )
+#define MEMSCRUB_AHBS_HMASTER_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MEMSCRUB_AHBS_HMASTER_MASK ) |    \
     ( ( ( _val ) << MEMSCRUB_AHBS_HMASTER_SHIFT ) & \
       MEMSCRUB_AHBS_HMASTER_MASK ) )
 #define MEMSCRUB_AHBS_HMASTER( _val ) \
-  ( ( ( _val ) << MEMSCRUB_AHBS_HMASTER_SHIFT ) & \
-    MEMSCRUB_AHBS_HMASTER_MASK )
+  ( ( ( _val ) << MEMSCRUB_AHBS_HMASTER_SHIFT ) & MEMSCRUB_AHBS_HMASTER_MASK )
 
 #define MEMSCRUB_AHBS_HSIZE_SHIFT 0
-#define MEMSCRUB_AHBS_HSIZE_MASK 0x7U
+#define MEMSCRUB_AHBS_HSIZE_MASK  0x7U
 #define MEMSCRUB_AHBS_HSIZE_GET( _reg ) \
-  ( ( ( _reg ) & MEMSCRUB_AHBS_HSIZE_MASK ) >> \
-    MEMSCRUB_AHBS_HSIZE_SHIFT )
-#define MEMSCRUB_AHBS_HSIZE_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MEMSCRUB_AHBS_HSIZE_MASK ) | \
+  ( ( ( _reg ) & MEMSCRUB_AHBS_HSIZE_MASK ) >> MEMSCRUB_AHBS_HSIZE_SHIFT )
+#define MEMSCRUB_AHBS_HSIZE_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MEMSCRUB_AHBS_HSIZE_MASK ) |    \
     ( ( ( _val ) << MEMSCRUB_AHBS_HSIZE_SHIFT ) & \
       MEMSCRUB_AHBS_HSIZE_MASK ) )
 #define MEMSCRUB_AHBS_HSIZE( _val ) \
-  ( ( ( _val ) << MEMSCRUB_AHBS_HSIZE_SHIFT ) & \
-    MEMSCRUB_AHBS_HSIZE_MASK )
+  ( ( ( _val ) << MEMSCRUB_AHBS_HSIZE_SHIFT ) & MEMSCRUB_AHBS_HSIZE_MASK )
 
 /** @} */
 
@@ -157,15 +149,15 @@ extern "C" {
  */
 
 #define MEMSCRUB_AHBFAR_AHB_FAILING_ADDRESS_SHIFT 0
-#define MEMSCRUB_AHBFAR_AHB_FAILING_ADDRESS_MASK 0xffffffffU
-#define MEMSCRUB_AHBFAR_AHB_FAILING_ADDRESS_GET( _reg ) \
+#define MEMSCRUB_AHBFAR_AHB_FAILING_ADDRESS_MASK  0xffffffffU
+#define MEMSCRUB_AHBFAR_AHB_FAILING_ADDRESS_GET( _reg )        \
   ( ( ( _reg ) & MEMSCRUB_AHBFAR_AHB_FAILING_ADDRESS_MASK ) >> \
     MEMSCRUB_AHBFAR_AHB_FAILING_ADDRESS_SHIFT )
-#define MEMSCRUB_AHBFAR_AHB_FAILING_ADDRESS_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MEMSCRUB_AHBFAR_AHB_FAILING_ADDRESS_MASK ) | \
+#define MEMSCRUB_AHBFAR_AHB_FAILING_ADDRESS_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MEMSCRUB_AHBFAR_AHB_FAILING_ADDRESS_MASK ) |    \
     ( ( ( _val ) << MEMSCRUB_AHBFAR_AHB_FAILING_ADDRESS_SHIFT ) & \
       MEMSCRUB_AHBFAR_AHB_FAILING_ADDRESS_MASK ) )
-#define MEMSCRUB_AHBFAR_AHB_FAILING_ADDRESS( _val ) \
+#define MEMSCRUB_AHBFAR_AHB_FAILING_ADDRESS( _val )             \
   ( ( ( _val ) << MEMSCRUB_AHBFAR_AHB_FAILING_ADDRESS_SHIFT ) & \
     MEMSCRUB_AHBFAR_AHB_FAILING_ADDRESS_MASK )
 
@@ -181,28 +173,28 @@ extern "C" {
  */
 
 #define MEMSCRUB_AHBERC_CECNTT_SHIFT 22
-#define MEMSCRUB_AHBERC_CECNTT_MASK 0xffc00000U
-#define MEMSCRUB_AHBERC_CECNTT_GET( _reg ) \
+#define MEMSCRUB_AHBERC_CECNTT_MASK  0xffc00000U
+#define MEMSCRUB_AHBERC_CECNTT_GET( _reg )        \
   ( ( ( _reg ) & MEMSCRUB_AHBERC_CECNTT_MASK ) >> \
     MEMSCRUB_AHBERC_CECNTT_SHIFT )
-#define MEMSCRUB_AHBERC_CECNTT_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MEMSCRUB_AHBERC_CECNTT_MASK ) | \
+#define MEMSCRUB_AHBERC_CECNTT_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MEMSCRUB_AHBERC_CECNTT_MASK ) |    \
     ( ( ( _val ) << MEMSCRUB_AHBERC_CECNTT_SHIFT ) & \
       MEMSCRUB_AHBERC_CECNTT_MASK ) )
-#define MEMSCRUB_AHBERC_CECNTT( _val ) \
+#define MEMSCRUB_AHBERC_CECNTT( _val )             \
   ( ( ( _val ) << MEMSCRUB_AHBERC_CECNTT_SHIFT ) & \
     MEMSCRUB_AHBERC_CECNTT_MASK )
 
 #define MEMSCRUB_AHBERC_UECNTT_SHIFT 14
-#define MEMSCRUB_AHBERC_UECNTT_MASK 0x3fc000U
-#define MEMSCRUB_AHBERC_UECNTT_GET( _reg ) \
+#define MEMSCRUB_AHBERC_UECNTT_MASK  0x3fc000U
+#define MEMSCRUB_AHBERC_UECNTT_GET( _reg )        \
   ( ( ( _reg ) & MEMSCRUB_AHBERC_UECNTT_MASK ) >> \
     MEMSCRUB_AHBERC_UECNTT_SHIFT )
-#define MEMSCRUB_AHBERC_UECNTT_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MEMSCRUB_AHBERC_UECNTT_MASK ) | \
+#define MEMSCRUB_AHBERC_UECNTT_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MEMSCRUB_AHBERC_UECNTT_MASK ) |    \
     ( ( ( _val ) << MEMSCRUB_AHBERC_UECNTT_SHIFT ) & \
       MEMSCRUB_AHBERC_UECNTT_MASK ) )
-#define MEMSCRUB_AHBERC_UECNTT( _val ) \
+#define MEMSCRUB_AHBERC_UECNTT( _val )             \
   ( ( ( _val ) << MEMSCRUB_AHBERC_UECNTT_SHIFT ) & \
     MEMSCRUB_AHBERC_UECNTT_MASK )
 
@@ -221,43 +213,43 @@ extern "C" {
  */
 
 #define MEMSCRUB_STAT_RUNCOUNT_SHIFT 22
-#define MEMSCRUB_STAT_RUNCOUNT_MASK 0xffc00000U
-#define MEMSCRUB_STAT_RUNCOUNT_GET( _reg ) \
+#define MEMSCRUB_STAT_RUNCOUNT_MASK  0xffc00000U
+#define MEMSCRUB_STAT_RUNCOUNT_GET( _reg )        \
   ( ( ( _reg ) & MEMSCRUB_STAT_RUNCOUNT_MASK ) >> \
     MEMSCRUB_STAT_RUNCOUNT_SHIFT )
-#define MEMSCRUB_STAT_RUNCOUNT_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MEMSCRUB_STAT_RUNCOUNT_MASK ) | \
+#define MEMSCRUB_STAT_RUNCOUNT_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MEMSCRUB_STAT_RUNCOUNT_MASK ) |    \
     ( ( ( _val ) << MEMSCRUB_STAT_RUNCOUNT_SHIFT ) & \
       MEMSCRUB_STAT_RUNCOUNT_MASK ) )
-#define MEMSCRUB_STAT_RUNCOUNT( _val ) \
+#define MEMSCRUB_STAT_RUNCOUNT( _val )             \
   ( ( ( _val ) << MEMSCRUB_STAT_RUNCOUNT_SHIFT ) & \
     MEMSCRUB_STAT_RUNCOUNT_MASK )
 
 #define MEMSCRUB_STAT_BLKCOUNT_SHIFT 14
-#define MEMSCRUB_STAT_BLKCOUNT_MASK 0x3fc000U
-#define MEMSCRUB_STAT_BLKCOUNT_GET( _reg ) \
+#define MEMSCRUB_STAT_BLKCOUNT_MASK  0x3fc000U
+#define MEMSCRUB_STAT_BLKCOUNT_GET( _reg )        \
   ( ( ( _reg ) & MEMSCRUB_STAT_BLKCOUNT_MASK ) >> \
     MEMSCRUB_STAT_BLKCOUNT_SHIFT )
-#define MEMSCRUB_STAT_BLKCOUNT_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MEMSCRUB_STAT_BLKCOUNT_MASK ) | \
+#define MEMSCRUB_STAT_BLKCOUNT_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MEMSCRUB_STAT_BLKCOUNT_MASK ) |    \
     ( ( ( _val ) << MEMSCRUB_STAT_BLKCOUNT_SHIFT ) & \
       MEMSCRUB_STAT_BLKCOUNT_MASK ) )
-#define MEMSCRUB_STAT_BLKCOUNT( _val ) \
+#define MEMSCRUB_STAT_BLKCOUNT( _val )             \
   ( ( ( _val ) << MEMSCRUB_STAT_BLKCOUNT_SHIFT ) & \
     MEMSCRUB_STAT_BLKCOUNT_MASK )
 
 #define MEMSCRUB_STAT_DONE 0x2000U
 
 #define MEMSCRUB_STAT_BURSTLEN_SHIFT 1
-#define MEMSCRUB_STAT_BURSTLEN_MASK 0x1eU
-#define MEMSCRUB_STAT_BURSTLEN_GET( _reg ) \
+#define MEMSCRUB_STAT_BURSTLEN_MASK  0x1eU
+#define MEMSCRUB_STAT_BURSTLEN_GET( _reg )        \
   ( ( ( _reg ) & MEMSCRUB_STAT_BURSTLEN_MASK ) >> \
     MEMSCRUB_STAT_BURSTLEN_SHIFT )
-#define MEMSCRUB_STAT_BURSTLEN_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MEMSCRUB_STAT_BURSTLEN_MASK ) | \
+#define MEMSCRUB_STAT_BURSTLEN_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MEMSCRUB_STAT_BURSTLEN_MASK ) |    \
     ( ( ( _val ) << MEMSCRUB_STAT_BURSTLEN_SHIFT ) & \
       MEMSCRUB_STAT_BURSTLEN_MASK ) )
-#define MEMSCRUB_STAT_BURSTLEN( _val ) \
+#define MEMSCRUB_STAT_BURSTLEN( _val )             \
   ( ( ( _val ) << MEMSCRUB_STAT_BURSTLEN_SHIFT ) & \
     MEMSCRUB_STAT_BURSTLEN_MASK )
 
@@ -274,17 +266,15 @@ extern "C" {
  */
 
 #define MEMSCRUB_CONFIG_DELAY_SHIFT 8
-#define MEMSCRUB_CONFIG_DELAY_MASK 0xff00U
+#define MEMSCRUB_CONFIG_DELAY_MASK  0xff00U
 #define MEMSCRUB_CONFIG_DELAY_GET( _reg ) \
-  ( ( ( _reg ) & MEMSCRUB_CONFIG_DELAY_MASK ) >> \
-    MEMSCRUB_CONFIG_DELAY_SHIFT )
-#define MEMSCRUB_CONFIG_DELAY_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MEMSCRUB_CONFIG_DELAY_MASK ) | \
+  ( ( ( _reg ) & MEMSCRUB_CONFIG_DELAY_MASK ) >> MEMSCRUB_CONFIG_DELAY_SHIFT )
+#define MEMSCRUB_CONFIG_DELAY_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MEMSCRUB_CONFIG_DELAY_MASK ) |    \
     ( ( ( _val ) << MEMSCRUB_CONFIG_DELAY_SHIFT ) & \
       MEMSCRUB_CONFIG_DELAY_MASK ) )
 #define MEMSCRUB_CONFIG_DELAY( _val ) \
-  ( ( ( _val ) << MEMSCRUB_CONFIG_DELAY_SHIFT ) & \
-    MEMSCRUB_CONFIG_DELAY_MASK )
+  ( ( ( _val ) << MEMSCRUB_CONFIG_DELAY_SHIFT ) & MEMSCRUB_CONFIG_DELAY_MASK )
 
 #define MEMSCRUB_CONFIG_IRQD 0x80U
 
@@ -293,17 +283,15 @@ extern "C" {
 #define MEMSCRUB_CONFIG_LOOP 0x10U
 
 #define MEMSCRUB_CONFIG_MODE_SHIFT 2
-#define MEMSCRUB_CONFIG_MODE_MASK 0xcU
+#define MEMSCRUB_CONFIG_MODE_MASK  0xcU
 #define MEMSCRUB_CONFIG_MODE_GET( _reg ) \
-  ( ( ( _reg ) & MEMSCRUB_CONFIG_MODE_MASK ) >> \
-    MEMSCRUB_CONFIG_MODE_SHIFT )
-#define MEMSCRUB_CONFIG_MODE_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MEMSCRUB_CONFIG_MODE_MASK ) | \
+  ( ( ( _reg ) & MEMSCRUB_CONFIG_MODE_MASK ) >> MEMSCRUB_CONFIG_MODE_SHIFT )
+#define MEMSCRUB_CONFIG_MODE_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MEMSCRUB_CONFIG_MODE_MASK ) |    \
     ( ( ( _val ) << MEMSCRUB_CONFIG_MODE_SHIFT ) & \
       MEMSCRUB_CONFIG_MODE_MASK ) )
 #define MEMSCRUB_CONFIG_MODE( _val ) \
-  ( ( ( _val ) << MEMSCRUB_CONFIG_MODE_SHIFT ) & \
-    MEMSCRUB_CONFIG_MODE_MASK )
+  ( ( ( _val ) << MEMSCRUB_CONFIG_MODE_SHIFT ) & MEMSCRUB_CONFIG_MODE_MASK )
 
 #define MEMSCRUB_CONFIG_ES 0x2U
 
@@ -320,15 +308,15 @@ extern "C" {
  */
 
 #define MEMSCRUB_RANGEL_RLADDR_SHIFT 0
-#define MEMSCRUB_RANGEL_RLADDR_MASK 0xffffffffU
-#define MEMSCRUB_RANGEL_RLADDR_GET( _reg ) \
+#define MEMSCRUB_RANGEL_RLADDR_MASK  0xffffffffU
+#define MEMSCRUB_RANGEL_RLADDR_GET( _reg )        \
   ( ( ( _reg ) & MEMSCRUB_RANGEL_RLADDR_MASK ) >> \
     MEMSCRUB_RANGEL_RLADDR_SHIFT )
-#define MEMSCRUB_RANGEL_RLADDR_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MEMSCRUB_RANGEL_RLADDR_MASK ) | \
+#define MEMSCRUB_RANGEL_RLADDR_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MEMSCRUB_RANGEL_RLADDR_MASK ) |    \
     ( ( ( _val ) << MEMSCRUB_RANGEL_RLADDR_SHIFT ) & \
       MEMSCRUB_RANGEL_RLADDR_MASK ) )
-#define MEMSCRUB_RANGEL_RLADDR( _val ) \
+#define MEMSCRUB_RANGEL_RLADDR( _val )             \
   ( ( ( _val ) << MEMSCRUB_RANGEL_RLADDR_SHIFT ) & \
     MEMSCRUB_RANGEL_RLADDR_MASK )
 
@@ -344,15 +332,15 @@ extern "C" {
  */
 
 #define MEMSCRUB_RANGEH_RHADDR_SHIFT 0
-#define MEMSCRUB_RANGEH_RHADDR_MASK 0xffffffffU
-#define MEMSCRUB_RANGEH_RHADDR_GET( _reg ) \
+#define MEMSCRUB_RANGEH_RHADDR_MASK  0xffffffffU
+#define MEMSCRUB_RANGEH_RHADDR_GET( _reg )        \
   ( ( ( _reg ) & MEMSCRUB_RANGEH_RHADDR_MASK ) >> \
     MEMSCRUB_RANGEH_RHADDR_SHIFT )
-#define MEMSCRUB_RANGEH_RHADDR_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MEMSCRUB_RANGEH_RHADDR_MASK ) | \
+#define MEMSCRUB_RANGEH_RHADDR_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MEMSCRUB_RANGEH_RHADDR_MASK ) |    \
     ( ( ( _val ) << MEMSCRUB_RANGEH_RHADDR_SHIFT ) & \
       MEMSCRUB_RANGEH_RHADDR_MASK ) )
-#define MEMSCRUB_RANGEH_RHADDR( _val ) \
+#define MEMSCRUB_RANGEH_RHADDR( _val )             \
   ( ( ( _val ) << MEMSCRUB_RANGEH_RHADDR_SHIFT ) & \
     MEMSCRUB_RANGEH_RHADDR_MASK )
 
@@ -367,17 +355,15 @@ extern "C" {
  */
 
 #define MEMSCRUB_POS_POSITION_SHIFT 0
-#define MEMSCRUB_POS_POSITION_MASK 0xffffffffU
+#define MEMSCRUB_POS_POSITION_MASK  0xffffffffU
 #define MEMSCRUB_POS_POSITION_GET( _reg ) \
-  ( ( ( _reg ) & MEMSCRUB_POS_POSITION_MASK ) >> \
-    MEMSCRUB_POS_POSITION_SHIFT )
-#define MEMSCRUB_POS_POSITION_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MEMSCRUB_POS_POSITION_MASK ) | \
+  ( ( ( _reg ) & MEMSCRUB_POS_POSITION_MASK ) >> MEMSCRUB_POS_POSITION_SHIFT )
+#define MEMSCRUB_POS_POSITION_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MEMSCRUB_POS_POSITION_MASK ) |    \
     ( ( ( _val ) << MEMSCRUB_POS_POSITION_SHIFT ) & \
       MEMSCRUB_POS_POSITION_MASK ) )
 #define MEMSCRUB_POS_POSITION( _val ) \
-  ( ( ( _val ) << MEMSCRUB_POS_POSITION_SHIFT ) & \
-    MEMSCRUB_POS_POSITION_MASK )
+  ( ( ( _val ) << MEMSCRUB_POS_POSITION_SHIFT ) & MEMSCRUB_POS_POSITION_MASK )
 
 /** @} */
 
@@ -390,30 +376,26 @@ extern "C" {
  */
 
 #define MEMSCRUB_ETHRES_RECT_SHIFT 22
-#define MEMSCRUB_ETHRES_RECT_MASK 0xffc00000U
+#define MEMSCRUB_ETHRES_RECT_MASK  0xffc00000U
 #define MEMSCRUB_ETHRES_RECT_GET( _reg ) \
-  ( ( ( _reg ) & MEMSCRUB_ETHRES_RECT_MASK ) >> \
-    MEMSCRUB_ETHRES_RECT_SHIFT )
-#define MEMSCRUB_ETHRES_RECT_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MEMSCRUB_ETHRES_RECT_MASK ) | \
+  ( ( ( _reg ) & MEMSCRUB_ETHRES_RECT_MASK ) >> MEMSCRUB_ETHRES_RECT_SHIFT )
+#define MEMSCRUB_ETHRES_RECT_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MEMSCRUB_ETHRES_RECT_MASK ) |    \
     ( ( ( _val ) << MEMSCRUB_ETHRES_RECT_SHIFT ) & \
       MEMSCRUB_ETHRES_RECT_MASK ) )
 #define MEMSCRUB_ETHRES_RECT( _val ) \
-  ( ( ( _val ) << MEMSCRUB_ETHRES_RECT_SHIFT ) & \
-    MEMSCRUB_ETHRES_RECT_MASK )
+  ( ( ( _val ) << MEMSCRUB_ETHRES_RECT_SHIFT ) & MEMSCRUB_ETHRES_RECT_MASK )
 
 #define MEMSCRUB_ETHRES_BECT_SHIFT 14
-#define MEMSCRUB_ETHRES_BECT_MASK 0x3fc000U
+#define MEMSCRUB_ETHRES_BECT_MASK  0x3fc000U
 #define MEMSCRUB_ETHRES_BECT_GET( _reg ) \
-  ( ( ( _reg ) & MEMSCRUB_ETHRES_BECT_MASK ) >> \
-    MEMSCRUB_ETHRES_BECT_SHIFT )
-#define MEMSCRUB_ETHRES_BECT_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MEMSCRUB_ETHRES_BECT_MASK ) | \
+  ( ( ( _reg ) & MEMSCRUB_ETHRES_BECT_MASK ) >> MEMSCRUB_ETHRES_BECT_SHIFT )
+#define MEMSCRUB_ETHRES_BECT_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MEMSCRUB_ETHRES_BECT_MASK ) |    \
     ( ( ( _val ) << MEMSCRUB_ETHRES_BECT_SHIFT ) & \
       MEMSCRUB_ETHRES_BECT_MASK ) )
 #define MEMSCRUB_ETHRES_BECT( _val ) \
-  ( ( ( _val ) << MEMSCRUB_ETHRES_BECT_SHIFT ) & \
-    MEMSCRUB_ETHRES_BECT_MASK )
+  ( ( ( _val ) << MEMSCRUB_ETHRES_BECT_SHIFT ) & MEMSCRUB_ETHRES_BECT_MASK )
 
 #define MEMSCRUB_ETHRES_RECTE 0x2U
 
@@ -430,17 +412,14 @@ extern "C" {
  */
 
 #define MEMSCRUB_INIT_DATA_SHIFT 0
-#define MEMSCRUB_INIT_DATA_MASK 0xffffffffU
+#define MEMSCRUB_INIT_DATA_MASK  0xffffffffU
 #define MEMSCRUB_INIT_DATA_GET( _reg ) \
-  ( ( ( _reg ) & MEMSCRUB_INIT_DATA_MASK ) >> \
-    MEMSCRUB_INIT_DATA_SHIFT )
-#define MEMSCRUB_INIT_DATA_SET( _reg, _val ) \
+  ( ( ( _reg ) & MEMSCRUB_INIT_DATA_MASK ) >> MEMSCRUB_INIT_DATA_SHIFT )
+#define MEMSCRUB_INIT_DATA_SET( _reg, _val )  \
   ( ( ( _reg ) & ~MEMSCRUB_INIT_DATA_MASK ) | \
-    ( ( ( _val ) << MEMSCRUB_INIT_DATA_SHIFT ) & \
-      MEMSCRUB_INIT_DATA_MASK ) )
+    ( ( ( _val ) << MEMSCRUB_INIT_DATA_SHIFT ) & MEMSCRUB_INIT_DATA_MASK ) )
 #define MEMSCRUB_INIT_DATA( _val ) \
-  ( ( ( _val ) << MEMSCRUB_INIT_DATA_SHIFT ) & \
-    MEMSCRUB_INIT_DATA_MASK )
+  ( ( ( _val ) << MEMSCRUB_INIT_DATA_SHIFT ) & MEMSCRUB_INIT_DATA_MASK )
 
 /** @} */
 
@@ -454,15 +433,15 @@ extern "C" {
  */
 
 #define MEMSCRUB_RANGEL2_RLADDR_SHIFT 0
-#define MEMSCRUB_RANGEL2_RLADDR_MASK 0xffffffffU
-#define MEMSCRUB_RANGEL2_RLADDR_GET( _reg ) \
+#define MEMSCRUB_RANGEL2_RLADDR_MASK  0xffffffffU
+#define MEMSCRUB_RANGEL2_RLADDR_GET( _reg )        \
   ( ( ( _reg ) & MEMSCRUB_RANGEL2_RLADDR_MASK ) >> \
     MEMSCRUB_RANGEL2_RLADDR_SHIFT )
-#define MEMSCRUB_RANGEL2_RLADDR_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MEMSCRUB_RANGEL2_RLADDR_MASK ) | \
+#define MEMSCRUB_RANGEL2_RLADDR_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MEMSCRUB_RANGEL2_RLADDR_MASK ) |    \
     ( ( ( _val ) << MEMSCRUB_RANGEL2_RLADDR_SHIFT ) & \
       MEMSCRUB_RANGEL2_RLADDR_MASK ) )
-#define MEMSCRUB_RANGEL2_RLADDR( _val ) \
+#define MEMSCRUB_RANGEL2_RLADDR( _val )             \
   ( ( ( _val ) << MEMSCRUB_RANGEL2_RLADDR_SHIFT ) & \
     MEMSCRUB_RANGEL2_RLADDR_MASK )
 
@@ -478,15 +457,15 @@ extern "C" {
  */
 
 #define MEMSCRUB_RANGEH2_RHADDR_SHIFT 0
-#define MEMSCRUB_RANGEH2_RHADDR_MASK 0xffffffffU
-#define MEMSCRUB_RANGEH2_RHADDR_GET( _reg ) \
+#define MEMSCRUB_RANGEH2_RHADDR_MASK  0xffffffffU
+#define MEMSCRUB_RANGEH2_RHADDR_GET( _reg )        \
   ( ( ( _reg ) & MEMSCRUB_RANGEH2_RHADDR_MASK ) >> \
     MEMSCRUB_RANGEH2_RHADDR_SHIFT )
-#define MEMSCRUB_RANGEH2_RHADDR_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~MEMSCRUB_RANGEH2_RHADDR_MASK ) | \
+#define MEMSCRUB_RANGEH2_RHADDR_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~MEMSCRUB_RANGEH2_RHADDR_MASK ) |    \
     ( ( ( _val ) << MEMSCRUB_RANGEH2_RHADDR_SHIFT ) & \
       MEMSCRUB_RANGEH2_RHADDR_MASK ) )
-#define MEMSCRUB_RANGEH2_RHADDR( _val ) \
+#define MEMSCRUB_RANGEH2_RHADDR( _val )             \
   ( ( ( _val ) << MEMSCRUB_RANGEH2_RHADDR_SHIFT ) & \
     MEMSCRUB_RANGEH2_RHADDR_MASK )
 

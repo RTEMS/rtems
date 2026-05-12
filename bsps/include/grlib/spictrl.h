@@ -35,27 +35,27 @@
 extern "C" {
 #endif
 
-extern void spictrl_register_drv (void);
+extern void spictrl_register_drv( void );
 
 /*** REGISTER LAYOUT ***/
 struct spictrl_regs {
-	volatile uint32_t capability;	/* 0x00 */
-	volatile uint32_t resv[7];		/* 0x04 */
-	volatile uint32_t mode;		/* 0x20 */
-	volatile uint32_t event;		/* 0x24 */
-	volatile uint32_t mask;		/* 0x28 */
-	volatile uint32_t command;		/* 0x2c */
-	volatile uint32_t tx;		/* 0x30 */
-	volatile uint32_t rx;		/* 0x34 */
-	volatile uint32_t slvsel;		/* 0x38 */
-	volatile uint32_t am_slvsel;	/* 0x3c */
-	volatile uint32_t am_cfg;		/* 0x40 */
-	volatile uint32_t am_period;	/* 0x44 */
-	uint32_t reserved0[2];
-	volatile uint32_t am_mask[4];	/* 0x50-0x5C */
-	uint32_t reserved1[(0x200-0x60)/4];
-	volatile uint32_t am_tx[128];	/* 0x200-0x3FC */
-	volatile uint32_t am_rx[128];	/* 0x400-0x5FC */
+  volatile uint32_t capability; /* 0x00 */
+  volatile uint32_t resv[ 7 ];  /* 0x04 */
+  volatile uint32_t mode;       /* 0x20 */
+  volatile uint32_t event;      /* 0x24 */
+  volatile uint32_t mask;       /* 0x28 */
+  volatile uint32_t command;    /* 0x2c */
+  volatile uint32_t tx;         /* 0x30 */
+  volatile uint32_t rx;         /* 0x34 */
+  volatile uint32_t slvsel;     /* 0x38 */
+  volatile uint32_t am_slvsel;  /* 0x3c */
+  volatile uint32_t am_cfg;     /* 0x40 */
+  volatile uint32_t am_period;  /* 0x44 */
+  uint32_t          reserved0[ 2 ];
+  volatile uint32_t am_mask[ 4 ]; /* 0x50-0x5C */
+  uint32_t          reserved1[ ( 0x200 - 0x60 ) / 4 ];
+  volatile uint32_t am_tx[ 128 ]; /* 0x200-0x3FC */
+  volatile uint32_t am_rx[ 128 ]; /* 0x400-0x5FC */
 };
 
 /* -- About automated periodic transfer mode --
@@ -85,39 +85,48 @@ struct spictrl_regs {
  */
 
 /* Custom SPICTRL driver ioctl commands */
-#define SPICTRL_IOCTL_PERIOD_START	5000	/* Start automated periodic transfer mode */
-#define SPICTRL_IOCTL_PERIOD_STOP	5001	/* Stop to SPI core from doing periodic transfers */
-#define SPICTRL_IOCTL_CONFIG		5002	/* Configure Periodic transfer mode (before calling write() and START) */
-#define SPICTRL_IOCTL_STATUS		5003	/* Get status */
+#define SPICTRL_IOCTL_PERIOD_START \
+  5000 /* Start automated periodic transfer mode */
+#define SPICTRL_IOCTL_PERIOD_STOP \
+  5001 /* Stop to SPI core from doing periodic transfers */
+#define SPICTRL_IOCTL_CONFIG \
+  5002 /* Configure Periodic transfer mode (before calling write() and START) */
+#define SPICTRL_IOCTL_STATUS 5003 /* Get status */
 
-#define SPICTRL_IOCTL_PERIOD_READ	5005	/* Write transmit registers and mask register 
+#define SPICTRL_IOCTL_PERIOD_READ \
+  5005 /* Write transmit registers and mask register 
 						 * (only in automatic periodic mode) 
 						 * Note that it is probably prefferred to read
 						 * the received words using the read() using
 						 * operations instead.
 						 */
-#define SPICTRL_IOCTL_PERIOD_WRITE	5006	/* Read receive registers and mask register 
+#define SPICTRL_IOCTL_PERIOD_WRITE \
+  5006                          /* Read receive registers and mask register 
 						 * (only in automatic periodic mode) */
-#define SPICTRL_IOCTL_REGS		5007	/* Get SPICTRL Register */
+#define SPICTRL_IOCTL_REGS 5007 /* Get SPICTRL Register */
 
 /* SPICTRL_IOCTL_CONFIG argument */
 struct spictrl_ioctl_config {
-	int		clock_gap;	/* Clock GAP between */
-	unsigned int	flags;		/* Normal mode flags */
-	int		periodic_mode;	/* 1=Enables Automated periodic transfers if supported by hardware */
-	unsigned int	period;		/* Number of clocks between automated transfers are started */
-	unsigned int	period_flags;	/* Options */
-	unsigned int	period_slvsel;	/* Slave Select when transfer is not active, default is 0xffffffff */
+  int          clock_gap; /* Clock GAP between */
+  unsigned int flags;     /* Normal mode flags */
+  int
+    periodic_mode; /* 1=Enables Automated periodic transfers if supported by hardware */
+  unsigned int
+    period; /* Number of clocks between automated transfers are started */
+  unsigned int period_flags; /* Options */
+  unsigned int
+    period_slvsel; /* Slave Select when transfer is not active, default is 0xffffffff */
 };
-#define SPICTRL_FLAGS_TAC		0x10
+#define SPICTRL_FLAGS_TAC 0x10
 
-#define SPICTRL_PERIOD_FLAGS_ERPT	0x80	/* Trigger start-period from external signal */
-#define SPICTRL_PERIOD_FLAGS_SEQ	0x40
-#define SPICTRL_PERIOD_FLAGS_STRICT	0x20
-#define SPICTRL_PERIOD_FLAGS_OVTB	0x10
-#define SPICTRL_PERIOD_FLAGS_OVDB	0x08
-#define SPICTRL_PERIOD_FLAGS_ASEL	0x04
-#define SPICTRL_PERIOD_FLAGS_EACT	0x01
+#define SPICTRL_PERIOD_FLAGS_ERPT \
+  0x80 /* Trigger start-period from external signal */
+#define SPICTRL_PERIOD_FLAGS_SEQ    0x40
+#define SPICTRL_PERIOD_FLAGS_STRICT 0x20
+#define SPICTRL_PERIOD_FLAGS_OVTB   0x10
+#define SPICTRL_PERIOD_FLAGS_OVDB   0x08
+#define SPICTRL_PERIOD_FLAGS_ASEL   0x04
+#define SPICTRL_PERIOD_FLAGS_EACT   0x01
 
 /* SPICTRL_IOCTL_PERIOD_READ and SPICTRL_IOCTL_PERIOD_WRITE Argument data structure 
  *
@@ -125,7 +134,7 @@ struct spictrl_ioctl_config {
  *      operation. See options notes.
  */
 struct spictrl_period_io {
-	int options;	/* READ: bit0=Read Mask Registers into masks[].
+  int          options; /* READ: bit0=Read Mask Registers into masks[].
 			 *       bit1=Read Receive registers according to masks[]
 			 *            (after reading masks).
 			 *
@@ -133,9 +142,9 @@ struct spictrl_period_io {
 			 *        bit1=Update Transmit registers according to masks[].
 			 *             (before reading masks)
 			 */
-	unsigned int masks[4];
+  unsigned int masks[ 4 ];
 
-	void *data;	/* Data read sequentially according to masks[] bit. */
+  void *data; /* Data read sequentially according to masks[] bit. */
 };
 
 #ifdef __cplusplus

@@ -82,7 +82,7 @@ static inline irqamp_timestamp *irqamp_get_timestamp_registers(
 )
 {
   irqamp_timestamp *timestamp_regs;
-  uint32_t itstmpc;
+  uint32_t          itstmpc;
 
   timestamp_regs = &irqamp_regs->itstmp[ 0 ];
   itstmpc = grlib_load_32( &timestamp_regs->itstmpc );

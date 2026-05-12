@@ -40,7 +40,7 @@ extern "C" {
  */
 
 /* Register GPTIMER and GRTIMER driver to Driver Manager */
-void gptimer_register_drv (void);
+void gptimer_register_drv( void );
 
 #ifdef __cplusplus
 }

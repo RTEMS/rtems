@@ -51,47 +51,47 @@ extern "C" {
 #endif
 
 struct brm_reg {
-    volatile uint32_t ctrl;            /* 0x00 */
-    volatile uint32_t oper;            /* 0x04 */
-    volatile uint32_t cur_cmd;         /* 0x08 */
-    volatile uint32_t imask;           /* 0x0C */
-    volatile uint32_t ipend;           /* 0x10 */
-    volatile uint32_t ipoint;          /* 0x14 */
-    volatile uint32_t bit_reg;         /* 0x18 */
-    volatile uint32_t ttag;            /* 0x1C */
-    volatile uint32_t dpoint;          /* 0x20 */
-    volatile uint32_t sw;              /* 0x24 */
-    volatile uint32_t initcount;       /* 0x28 */
-    volatile uint32_t mcpoint;         /* 0x2C */
-    volatile uint32_t mdpoint;         /* 0x30 */
-    volatile uint32_t mbc;             /* 0x34 */
-    volatile uint32_t mfilta;          /* 0x38 */
-    volatile uint32_t mfiltb;          /* 0x3C */
-    volatile uint32_t rt_cmd_leg[16];  /* 0x40-0x80 */
-    volatile uint32_t enhanced;        /* 0x84 */
+  volatile uint32_t ctrl;             /* 0x00 */
+  volatile uint32_t oper;             /* 0x04 */
+  volatile uint32_t cur_cmd;          /* 0x08 */
+  volatile uint32_t imask;            /* 0x0C */
+  volatile uint32_t ipend;            /* 0x10 */
+  volatile uint32_t ipoint;           /* 0x14 */
+  volatile uint32_t bit_reg;          /* 0x18 */
+  volatile uint32_t ttag;             /* 0x1C */
+  volatile uint32_t dpoint;           /* 0x20 */
+  volatile uint32_t sw;               /* 0x24 */
+  volatile uint32_t initcount;        /* 0x28 */
+  volatile uint32_t mcpoint;          /* 0x2C */
+  volatile uint32_t mdpoint;          /* 0x30 */
+  volatile uint32_t mbc;              /* 0x34 */
+  volatile uint32_t mfilta;           /* 0x38 */
+  volatile uint32_t mfiltb;           /* 0x3C */
+  volatile uint32_t rt_cmd_leg[ 16 ]; /* 0x40-0x80 */
+  volatile uint32_t enhanced;         /* 0x84 */
 
-    volatile uint32_t dummy[31];
+  volatile uint32_t dummy[ 31 ];
 
-    volatile uint32_t w_ctrl;          /* 0x100 */
-    volatile uint32_t w_irqctrl;       /* 0x104 */
-    volatile uint32_t w_ahbaddr;       /* 0x108 */
+  volatile uint32_t w_ctrl;    /* 0x100 */
+  volatile uint32_t w_irqctrl; /* 0x104 */
+  volatile uint32_t w_ahbaddr; /* 0x108 */
 };
 
 struct bm_msg {
-    unsigned short miw;
-    unsigned short cw1;
-    unsigned short cw2;
-    unsigned short sw1;
-    unsigned short sw2;
-    unsigned short time;
-    unsigned short data[32];
+  unsigned short miw;
+  unsigned short cw1;
+  unsigned short cw2;
+  unsigned short sw1;
+  unsigned short sw2;
+  unsigned short time;
+  unsigned short data[ 32 ];
 };
 
 struct rt_msg {
-    unsigned short miw;
-    unsigned short time;
-    unsigned short data[32];
-    unsigned short desc;
+  unsigned short miw;
+  unsigned short time;
+  unsigned short data[ 32 ];
+  unsigned short desc;
 };
 
 /*
@@ -114,37 +114,36 @@ struct rt_msg {
  *
  */
 struct bc_msg {
-    unsigned char  rtaddr[2];
-    unsigned char  subaddr[2];
-    unsigned short wc;
-    unsigned short ctrl;
-    unsigned short tsw[2];
-    unsigned short data[32];
+  unsigned char  rtaddr[ 2 ];
+  unsigned char  subaddr[ 2 ];
+  unsigned short wc;
+  unsigned short ctrl;
+  unsigned short tsw[ 2 ];
+  unsigned short data[ 32 ];
 };
 
 /* BC control bits */
-#define BC_TR     0x0001
-#define BC_RTRT   0x0002
-#define BC_BUSA   0x0004
-#define BC_EOL    0x0020
-#define BC_SKIP   0x0040
-#define BC_BAME   0x8000
+#define BC_TR   0x0001
+#define BC_RTRT 0x0002
+#define BC_BUSA 0x0004
+#define BC_EOL  0x0020
+#define BC_SKIP 0x0040
+#define BC_BAME 0x8000
 
-#define BRM_MBC_IRQ        1                    /* Monitor Block Counter irq */
-#define BRM_CBA_IRQ        2                    /* Command Block Accessed irq */
-#define BRM_RTF_IRQ        4                    /* Retry Fail irq */
-#define BRM_ILLOP_IRQ      8                    /* Illogical Opcode irq */
-#define BRM_BC_ILLCMD_IRQ  16                   /* BC Illocigal Command irq */
-#define BRM_EOL_IRQ        32                   /* End Of List irq */
-#define BRM_RT_ILLCMD_IRQ  128                  /* RT Illegal Command irq */
-#define BRM_IXEQ0_IRQ      256                  /* Index Equal Zero irq */
-#define BRM_BDRCV_IRQ      512                  /* Broadcast Command Received irq */
-#define BRM_SUBAD_IRQ      1024                 /* Subaddress Accessed irq */
-#define BRM_MERR_IRQ       2048                 /* Message Error irq */
-#define BRM_TAPF_IRQ       8192                 /* Terminal Address Parity Fail irq */
-#define BRM_WRAPF_IRQ      16384                /* Wrap Fail irq */
-#define BRM_DMAF_IRQ       32768                /* DMA Fail irq */
-
+#define BRM_MBC_IRQ       1     /* Monitor Block Counter irq */
+#define BRM_CBA_IRQ       2     /* Command Block Accessed irq */
+#define BRM_RTF_IRQ       4     /* Retry Fail irq */
+#define BRM_ILLOP_IRQ     8     /* Illogical Opcode irq */
+#define BRM_BC_ILLCMD_IRQ 16    /* BC Illocigal Command irq */
+#define BRM_EOL_IRQ       32    /* End Of List irq */
+#define BRM_RT_ILLCMD_IRQ 128   /* RT Illegal Command irq */
+#define BRM_IXEQ0_IRQ     256   /* Index Equal Zero irq */
+#define BRM_BDRCV_IRQ     512   /* Broadcast Command Received irq */
+#define BRM_SUBAD_IRQ     1024  /* Subaddress Accessed irq */
+#define BRM_MERR_IRQ      2048  /* Message Error irq */
+#define BRM_TAPF_IRQ      8192  /* Terminal Address Parity Fail irq */
+#define BRM_WRAPF_IRQ     16384 /* Wrap Fail irq */
+#define BRM_DMAF_IRQ      32768 /* DMA Fail irq */
 
 #define BRM_SET_MODE    0
 #define BRM_SET_BUS     1
@@ -155,32 +154,31 @@ struct bc_msg {
 #define BRM_TX_BLOCK    7
 #define BRM_RX_BLOCK    8
 
-#define BRM_DO_LIST     10
-#define BRM_LIST_DONE   11
+#define BRM_DO_LIST   10
+#define BRM_LIST_DONE 11
 
 #define BRM_CLR_STATUS  12
 #define BRM_GET_STATUS  13
 #define BRM_SET_EVENTID 14
 
-#define GET_ERROR_DESCRIPTOR(event_in) (event_in>>16)
+#define GET_ERROR_DESCRIPTOR( event_in ) ( event_in >> 16 )
 
-
-#define BRM_MODE_BC 0x0
-#define BRM_MODE_RT 0x1
-#define BRM_MODE_BM 0x2
+#define BRM_MODE_BC    0x0
+#define BRM_MODE_RT    0x1
+#define BRM_MODE_BM    0x2
 #define BRM_MODE_BM_RT 0x3 /* both RT and BM */
 
 #define BRM_FREQ_12MHZ 0
 #define BRM_FREQ_16MHZ 1
 #define BRM_FREQ_20MHZ 2
 #define BRM_FREQ_24MHZ 3
-#define BRM_FREQ_MASK 0x3
+#define BRM_FREQ_MASK  0x3
 
 #define CLKDIV_MASK 0xf
 
 #define CLKSEL_MASK 0x7
 
-void b1553brm_register_drv(void);
+void b1553brm_register_drv( void );
 
 /* Default initialization of the RT legalization registers. The values in this
  * array are written to the registers on boot driver initialization and when
@@ -188,13 +186,13 @@ void b1553brm_register_drv(void);
  * update the array first then call ioctl(BRM_SET_MODE) for the changes to have
  * an affect. Note that this affects all B1553BRM RTs in the system.
  */
-extern unsigned short b1553brm_rt_cmd_legalize[16];
+extern unsigned short b1553brm_rt_cmd_legalize[ 16 ];
 
 /* Print information about all BRM devices handled by this driver */
-void b1553brm_print(int options);
+void b1553brm_print( int options );
 
 /* Print information about one BRM device */
-void b1553brm_print_dev(struct drvmgr_dev *dev, int options);
+void b1553brm_print_dev( struct drvmgr_dev *dev, int options );
 
 #ifdef __cplusplus
 }
@@ -203,4 +201,3 @@ void b1553brm_print_dev(struct drvmgr_dev *dev, int options);
 /** @} */
 
 #endif /* __BRM_H__ */
-

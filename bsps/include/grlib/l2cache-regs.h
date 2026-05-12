@@ -86,56 +86,47 @@ extern "C" {
 #define L2CACHE_L2CC_EDAC 0x40000000U
 
 #define L2CACHE_L2CC_REPL_SHIFT 28
-#define L2CACHE_L2CC_REPL_MASK 0x30000000U
+#define L2CACHE_L2CC_REPL_MASK  0x30000000U
 #define L2CACHE_L2CC_REPL_GET( _reg ) \
-  ( ( ( _reg ) & L2CACHE_L2CC_REPL_MASK ) >> \
-    L2CACHE_L2CC_REPL_SHIFT )
-#define L2CACHE_L2CC_REPL_SET( _reg, _val ) \
+  ( ( ( _reg ) & L2CACHE_L2CC_REPL_MASK ) >> L2CACHE_L2CC_REPL_SHIFT )
+#define L2CACHE_L2CC_REPL_SET( _reg, _val )  \
   ( ( ( _reg ) & ~L2CACHE_L2CC_REPL_MASK ) | \
-    ( ( ( _val ) << L2CACHE_L2CC_REPL_SHIFT ) & \
-      L2CACHE_L2CC_REPL_MASK ) )
+    ( ( ( _val ) << L2CACHE_L2CC_REPL_SHIFT ) & L2CACHE_L2CC_REPL_MASK ) )
 #define L2CACHE_L2CC_REPL( _val ) \
-  ( ( ( _val ) << L2CACHE_L2CC_REPL_SHIFT ) & \
-    L2CACHE_L2CC_REPL_MASK )
+  ( ( ( _val ) << L2CACHE_L2CC_REPL_SHIFT ) & L2CACHE_L2CC_REPL_MASK )
 
 #define L2CACHE_L2CC_BBS_SHIFT 16
-#define L2CACHE_L2CC_BBS_MASK 0x70000U
+#define L2CACHE_L2CC_BBS_MASK  0x70000U
 #define L2CACHE_L2CC_BBS_GET( _reg ) \
-  ( ( ( _reg ) & L2CACHE_L2CC_BBS_MASK ) >> \
-    L2CACHE_L2CC_BBS_SHIFT )
-#define L2CACHE_L2CC_BBS_SET( _reg, _val ) \
+  ( ( ( _reg ) & L2CACHE_L2CC_BBS_MASK ) >> L2CACHE_L2CC_BBS_SHIFT )
+#define L2CACHE_L2CC_BBS_SET( _reg, _val )  \
   ( ( ( _reg ) & ~L2CACHE_L2CC_BBS_MASK ) | \
-    ( ( ( _val ) << L2CACHE_L2CC_BBS_SHIFT ) & \
-      L2CACHE_L2CC_BBS_MASK ) )
+    ( ( ( _val ) << L2CACHE_L2CC_BBS_SHIFT ) & L2CACHE_L2CC_BBS_MASK ) )
 #define L2CACHE_L2CC_BBS( _val ) \
-  ( ( ( _val ) << L2CACHE_L2CC_BBS_SHIFT ) & \
-    L2CACHE_L2CC_BBS_MASK )
+  ( ( ( _val ) << L2CACHE_L2CC_BBS_SHIFT ) & L2CACHE_L2CC_BBS_MASK )
 
 #define L2CACHE_L2CC_INDEX_WAY_SHIFT 12
-#define L2CACHE_L2CC_INDEX_WAY_MASK 0xf000U
-#define L2CACHE_L2CC_INDEX_WAY_GET( _reg ) \
+#define L2CACHE_L2CC_INDEX_WAY_MASK  0xf000U
+#define L2CACHE_L2CC_INDEX_WAY_GET( _reg )        \
   ( ( ( _reg ) & L2CACHE_L2CC_INDEX_WAY_MASK ) >> \
     L2CACHE_L2CC_INDEX_WAY_SHIFT )
-#define L2CACHE_L2CC_INDEX_WAY_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~L2CACHE_L2CC_INDEX_WAY_MASK ) | \
+#define L2CACHE_L2CC_INDEX_WAY_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~L2CACHE_L2CC_INDEX_WAY_MASK ) |    \
     ( ( ( _val ) << L2CACHE_L2CC_INDEX_WAY_SHIFT ) & \
       L2CACHE_L2CC_INDEX_WAY_MASK ) )
-#define L2CACHE_L2CC_INDEX_WAY( _val ) \
+#define L2CACHE_L2CC_INDEX_WAY( _val )             \
   ( ( ( _val ) << L2CACHE_L2CC_INDEX_WAY_SHIFT ) & \
     L2CACHE_L2CC_INDEX_WAY_MASK )
 
 #define L2CACHE_L2CC_LOCK_SHIFT 8
-#define L2CACHE_L2CC_LOCK_MASK 0xf00U
+#define L2CACHE_L2CC_LOCK_MASK  0xf00U
 #define L2CACHE_L2CC_LOCK_GET( _reg ) \
-  ( ( ( _reg ) & L2CACHE_L2CC_LOCK_MASK ) >> \
-    L2CACHE_L2CC_LOCK_SHIFT )
-#define L2CACHE_L2CC_LOCK_SET( _reg, _val ) \
+  ( ( ( _reg ) & L2CACHE_L2CC_LOCK_MASK ) >> L2CACHE_L2CC_LOCK_SHIFT )
+#define L2CACHE_L2CC_LOCK_SET( _reg, _val )  \
   ( ( ( _reg ) & ~L2CACHE_L2CC_LOCK_MASK ) | \
-    ( ( ( _val ) << L2CACHE_L2CC_LOCK_SHIFT ) & \
-      L2CACHE_L2CC_LOCK_MASK ) )
+    ( ( ( _val ) << L2CACHE_L2CC_LOCK_SHIFT ) & L2CACHE_L2CC_LOCK_MASK ) )
 #define L2CACHE_L2CC_LOCK( _val ) \
-  ( ( ( _val ) << L2CACHE_L2CC_LOCK_SHIFT ) & \
-    L2CACHE_L2CC_LOCK_MASK )
+  ( ( ( _val ) << L2CACHE_L2CC_LOCK_SHIFT ) & L2CACHE_L2CC_LOCK_MASK )
 
 #define L2CACHE_L2CC_HPRHB 0x20U
 
@@ -166,56 +157,46 @@ extern "C" {
 #define L2CACHE_L2CS_MP 0x400000U
 
 #define L2CACHE_L2CS_MTRR_SHIFT 16
-#define L2CACHE_L2CS_MTRR_MASK 0x3f0000U
+#define L2CACHE_L2CS_MTRR_MASK  0x3f0000U
 #define L2CACHE_L2CS_MTRR_GET( _reg ) \
-  ( ( ( _reg ) & L2CACHE_L2CS_MTRR_MASK ) >> \
-    L2CACHE_L2CS_MTRR_SHIFT )
-#define L2CACHE_L2CS_MTRR_SET( _reg, _val ) \
+  ( ( ( _reg ) & L2CACHE_L2CS_MTRR_MASK ) >> L2CACHE_L2CS_MTRR_SHIFT )
+#define L2CACHE_L2CS_MTRR_SET( _reg, _val )  \
   ( ( ( _reg ) & ~L2CACHE_L2CS_MTRR_MASK ) | \
-    ( ( ( _val ) << L2CACHE_L2CS_MTRR_SHIFT ) & \
-      L2CACHE_L2CS_MTRR_MASK ) )
+    ( ( ( _val ) << L2CACHE_L2CS_MTRR_SHIFT ) & L2CACHE_L2CS_MTRR_MASK ) )
 #define L2CACHE_L2CS_MTRR( _val ) \
-  ( ( ( _val ) << L2CACHE_L2CS_MTRR_SHIFT ) & \
-    L2CACHE_L2CS_MTRR_MASK )
+  ( ( ( _val ) << L2CACHE_L2CS_MTRR_SHIFT ) & L2CACHE_L2CS_MTRR_MASK )
 
 #define L2CACHE_L2CS_BBUS_W_SHIFT 13
-#define L2CACHE_L2CS_BBUS_W_MASK 0xe000U
+#define L2CACHE_L2CS_BBUS_W_MASK  0xe000U
 #define L2CACHE_L2CS_BBUS_W_GET( _reg ) \
-  ( ( ( _reg ) & L2CACHE_L2CS_BBUS_W_MASK ) >> \
-    L2CACHE_L2CS_BBUS_W_SHIFT )
-#define L2CACHE_L2CS_BBUS_W_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~L2CACHE_L2CS_BBUS_W_MASK ) | \
+  ( ( ( _reg ) & L2CACHE_L2CS_BBUS_W_MASK ) >> L2CACHE_L2CS_BBUS_W_SHIFT )
+#define L2CACHE_L2CS_BBUS_W_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~L2CACHE_L2CS_BBUS_W_MASK ) |    \
     ( ( ( _val ) << L2CACHE_L2CS_BBUS_W_SHIFT ) & \
       L2CACHE_L2CS_BBUS_W_MASK ) )
 #define L2CACHE_L2CS_BBUS_W( _val ) \
-  ( ( ( _val ) << L2CACHE_L2CS_BBUS_W_SHIFT ) & \
-    L2CACHE_L2CS_BBUS_W_MASK )
+  ( ( ( _val ) << L2CACHE_L2CS_BBUS_W_SHIFT ) & L2CACHE_L2CS_BBUS_W_MASK )
 
 #define L2CACHE_L2CS_WAY_SIZE_SHIFT 2
-#define L2CACHE_L2CS_WAY_SIZE_MASK 0x1ffcU
+#define L2CACHE_L2CS_WAY_SIZE_MASK  0x1ffcU
 #define L2CACHE_L2CS_WAY_SIZE_GET( _reg ) \
-  ( ( ( _reg ) & L2CACHE_L2CS_WAY_SIZE_MASK ) >> \
-    L2CACHE_L2CS_WAY_SIZE_SHIFT )
-#define L2CACHE_L2CS_WAY_SIZE_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~L2CACHE_L2CS_WAY_SIZE_MASK ) | \
+  ( ( ( _reg ) & L2CACHE_L2CS_WAY_SIZE_MASK ) >> L2CACHE_L2CS_WAY_SIZE_SHIFT )
+#define L2CACHE_L2CS_WAY_SIZE_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~L2CACHE_L2CS_WAY_SIZE_MASK ) |    \
     ( ( ( _val ) << L2CACHE_L2CS_WAY_SIZE_SHIFT ) & \
       L2CACHE_L2CS_WAY_SIZE_MASK ) )
 #define L2CACHE_L2CS_WAY_SIZE( _val ) \
-  ( ( ( _val ) << L2CACHE_L2CS_WAY_SIZE_SHIFT ) & \
-    L2CACHE_L2CS_WAY_SIZE_MASK )
+  ( ( ( _val ) << L2CACHE_L2CS_WAY_SIZE_SHIFT ) & L2CACHE_L2CS_WAY_SIZE_MASK )
 
 #define L2CACHE_L2CS_WAY_SHIFT 0
-#define L2CACHE_L2CS_WAY_MASK 0x3U
+#define L2CACHE_L2CS_WAY_MASK  0x3U
 #define L2CACHE_L2CS_WAY_GET( _reg ) \
-  ( ( ( _reg ) & L2CACHE_L2CS_WAY_MASK ) >> \
-    L2CACHE_L2CS_WAY_SHIFT )
-#define L2CACHE_L2CS_WAY_SET( _reg, _val ) \
+  ( ( ( _reg ) & L2CACHE_L2CS_WAY_MASK ) >> L2CACHE_L2CS_WAY_SHIFT )
+#define L2CACHE_L2CS_WAY_SET( _reg, _val )  \
   ( ( ( _reg ) & ~L2CACHE_L2CS_WAY_MASK ) | \
-    ( ( ( _val ) << L2CACHE_L2CS_WAY_SHIFT ) & \
-      L2CACHE_L2CS_WAY_MASK ) )
+    ( ( ( _val ) << L2CACHE_L2CS_WAY_SHIFT ) & L2CACHE_L2CS_WAY_MASK ) )
 #define L2CACHE_L2CS_WAY( _val ) \
-  ( ( ( _val ) << L2CACHE_L2CS_WAY_SHIFT ) & \
-    L2CACHE_L2CS_WAY_MASK )
+  ( ( ( _val ) << L2CACHE_L2CS_WAY_SHIFT ) & L2CACHE_L2CS_WAY_MASK )
 
 /** @} */
 
@@ -229,32 +210,28 @@ extern "C" {
  */
 
 #define L2CACHE_L2CFMA_ADDR_SHIFT 5
-#define L2CACHE_L2CFMA_ADDR_MASK 0xffffffe0U
+#define L2CACHE_L2CFMA_ADDR_MASK  0xffffffe0U
 #define L2CACHE_L2CFMA_ADDR_GET( _reg ) \
-  ( ( ( _reg ) & L2CACHE_L2CFMA_ADDR_MASK ) >> \
-    L2CACHE_L2CFMA_ADDR_SHIFT )
-#define L2CACHE_L2CFMA_ADDR_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~L2CACHE_L2CFMA_ADDR_MASK ) | \
+  ( ( ( _reg ) & L2CACHE_L2CFMA_ADDR_MASK ) >> L2CACHE_L2CFMA_ADDR_SHIFT )
+#define L2CACHE_L2CFMA_ADDR_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~L2CACHE_L2CFMA_ADDR_MASK ) |    \
     ( ( ( _val ) << L2CACHE_L2CFMA_ADDR_SHIFT ) & \
       L2CACHE_L2CFMA_ADDR_MASK ) )
 #define L2CACHE_L2CFMA_ADDR( _val ) \
-  ( ( ( _val ) << L2CACHE_L2CFMA_ADDR_SHIFT ) & \
-    L2CACHE_L2CFMA_ADDR_MASK )
+  ( ( ( _val ) << L2CACHE_L2CFMA_ADDR_SHIFT ) & L2CACHE_L2CFMA_ADDR_MASK )
 
 #define L2CACHE_L2CFMA_DI 0x8U
 
 #define L2CACHE_L2CFMA_FMODE_SHIFT 0
-#define L2CACHE_L2CFMA_FMODE_MASK 0x7U
+#define L2CACHE_L2CFMA_FMODE_MASK  0x7U
 #define L2CACHE_L2CFMA_FMODE_GET( _reg ) \
-  ( ( ( _reg ) & L2CACHE_L2CFMA_FMODE_MASK ) >> \
-    L2CACHE_L2CFMA_FMODE_SHIFT )
-#define L2CACHE_L2CFMA_FMODE_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~L2CACHE_L2CFMA_FMODE_MASK ) | \
+  ( ( ( _reg ) & L2CACHE_L2CFMA_FMODE_MASK ) >> L2CACHE_L2CFMA_FMODE_SHIFT )
+#define L2CACHE_L2CFMA_FMODE_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~L2CACHE_L2CFMA_FMODE_MASK ) |    \
     ( ( ( _val ) << L2CACHE_L2CFMA_FMODE_SHIFT ) & \
       L2CACHE_L2CFMA_FMODE_MASK ) )
 #define L2CACHE_L2CFMA_FMODE( _val ) \
-  ( ( ( _val ) << L2CACHE_L2CFMA_FMODE_SHIFT ) & \
-    L2CACHE_L2CFMA_FMODE_MASK )
+  ( ( ( _val ) << L2CACHE_L2CFMA_FMODE_SHIFT ) & L2CACHE_L2CFMA_FMODE_MASK )
 
 /** @} */
 
@@ -268,30 +245,25 @@ extern "C" {
  */
 
 #define L2CACHE_L2CFSI_INDEX_SHIFT 16
-#define L2CACHE_L2CFSI_INDEX_MASK 0xffff0000U
+#define L2CACHE_L2CFSI_INDEX_MASK  0xffff0000U
 #define L2CACHE_L2CFSI_INDEX_GET( _reg ) \
-  ( ( ( _reg ) & L2CACHE_L2CFSI_INDEX_MASK ) >> \
-    L2CACHE_L2CFSI_INDEX_SHIFT )
-#define L2CACHE_L2CFSI_INDEX_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~L2CACHE_L2CFSI_INDEX_MASK ) | \
+  ( ( ( _reg ) & L2CACHE_L2CFSI_INDEX_MASK ) >> L2CACHE_L2CFSI_INDEX_SHIFT )
+#define L2CACHE_L2CFSI_INDEX_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~L2CACHE_L2CFSI_INDEX_MASK ) |    \
     ( ( ( _val ) << L2CACHE_L2CFSI_INDEX_SHIFT ) & \
       L2CACHE_L2CFSI_INDEX_MASK ) )
 #define L2CACHE_L2CFSI_INDEX( _val ) \
-  ( ( ( _val ) << L2CACHE_L2CFSI_INDEX_SHIFT ) & \
-    L2CACHE_L2CFSI_INDEX_MASK )
+  ( ( ( _val ) << L2CACHE_L2CFSI_INDEX_SHIFT ) & L2CACHE_L2CFSI_INDEX_MASK )
 
 #define L2CACHE_L2CFSI_TAG_SHIFT 10
-#define L2CACHE_L2CFSI_TAG_MASK 0xfffffc00U
+#define L2CACHE_L2CFSI_TAG_MASK  0xfffffc00U
 #define L2CACHE_L2CFSI_TAG_GET( _reg ) \
-  ( ( ( _reg ) & L2CACHE_L2CFSI_TAG_MASK ) >> \
-    L2CACHE_L2CFSI_TAG_SHIFT )
-#define L2CACHE_L2CFSI_TAG_SET( _reg, _val ) \
+  ( ( ( _reg ) & L2CACHE_L2CFSI_TAG_MASK ) >> L2CACHE_L2CFSI_TAG_SHIFT )
+#define L2CACHE_L2CFSI_TAG_SET( _reg, _val )  \
   ( ( ( _reg ) & ~L2CACHE_L2CFSI_TAG_MASK ) | \
-    ( ( ( _val ) << L2CACHE_L2CFSI_TAG_SHIFT ) & \
-      L2CACHE_L2CFSI_TAG_MASK ) )
+    ( ( ( _val ) << L2CACHE_L2CFSI_TAG_SHIFT ) & L2CACHE_L2CFSI_TAG_MASK ) )
 #define L2CACHE_L2CFSI_TAG( _val ) \
-  ( ( ( _val ) << L2CACHE_L2CFSI_TAG_SHIFT ) & \
-    L2CACHE_L2CFSI_TAG_MASK )
+  ( ( ( _val ) << L2CACHE_L2CFSI_TAG_SHIFT ) & L2CACHE_L2CFSI_TAG_MASK )
 
 #define L2CACHE_L2CFSI_FL 0x200U
 
@@ -300,34 +272,29 @@ extern "C" {
 #define L2CACHE_L2CFSI_DB 0x80U
 
 #define L2CACHE_L2CFSI_WAY_SHIFT 4
-#define L2CACHE_L2CFSI_WAY_MASK 0x30U
+#define L2CACHE_L2CFSI_WAY_MASK  0x30U
 #define L2CACHE_L2CFSI_WAY_GET( _reg ) \
-  ( ( ( _reg ) & L2CACHE_L2CFSI_WAY_MASK ) >> \
-    L2CACHE_L2CFSI_WAY_SHIFT )
-#define L2CACHE_L2CFSI_WAY_SET( _reg, _val ) \
+  ( ( ( _reg ) & L2CACHE_L2CFSI_WAY_MASK ) >> L2CACHE_L2CFSI_WAY_SHIFT )
+#define L2CACHE_L2CFSI_WAY_SET( _reg, _val )  \
   ( ( ( _reg ) & ~L2CACHE_L2CFSI_WAY_MASK ) | \
-    ( ( ( _val ) << L2CACHE_L2CFSI_WAY_SHIFT ) & \
-      L2CACHE_L2CFSI_WAY_MASK ) )
+    ( ( ( _val ) << L2CACHE_L2CFSI_WAY_SHIFT ) & L2CACHE_L2CFSI_WAY_MASK ) )
 #define L2CACHE_L2CFSI_WAY( _val ) \
-  ( ( ( _val ) << L2CACHE_L2CFSI_WAY_SHIFT ) & \
-    L2CACHE_L2CFSI_WAY_MASK )
+  ( ( ( _val ) << L2CACHE_L2CFSI_WAY_SHIFT ) & L2CACHE_L2CFSI_WAY_MASK )
 
 #define L2CACHE_L2CFSI_DI 0x8U
 
 #define L2CACHE_L2CFSI_WF 0x4U
 
 #define L2CACHE_L2CFSI_FMODE_SHIFT 0
-#define L2CACHE_L2CFSI_FMODE_MASK 0x3U
+#define L2CACHE_L2CFSI_FMODE_MASK  0x3U
 #define L2CACHE_L2CFSI_FMODE_GET( _reg ) \
-  ( ( ( _reg ) & L2CACHE_L2CFSI_FMODE_MASK ) >> \
-    L2CACHE_L2CFSI_FMODE_SHIFT )
-#define L2CACHE_L2CFSI_FMODE_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~L2CACHE_L2CFSI_FMODE_MASK ) | \
+  ( ( ( _reg ) & L2CACHE_L2CFSI_FMODE_MASK ) >> L2CACHE_L2CFSI_FMODE_SHIFT )
+#define L2CACHE_L2CFSI_FMODE_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~L2CACHE_L2CFSI_FMODE_MASK ) |    \
     ( ( ( _val ) << L2CACHE_L2CFSI_FMODE_SHIFT ) & \
       L2CACHE_L2CFSI_FMODE_MASK ) )
 #define L2CACHE_L2CFSI_FMODE( _val ) \
-  ( ( ( _val ) << L2CACHE_L2CFSI_FMODE_SHIFT ) & \
-    L2CACHE_L2CFSI_FMODE_MASK )
+  ( ( ( _val ) << L2CACHE_L2CFSI_FMODE_SHIFT ) & L2CACHE_L2CFSI_FMODE_MASK )
 
 /** @} */
 
@@ -341,32 +308,30 @@ extern "C" {
  */
 
 #define L2CACHE_L2CERR_AHB_MASTER_INDEX_SHIFT 28
-#define L2CACHE_L2CERR_AHB_MASTER_INDEX_MASK 0xf0000000U
-#define L2CACHE_L2CERR_AHB_MASTER_INDEX_GET( _reg ) \
+#define L2CACHE_L2CERR_AHB_MASTER_INDEX_MASK  0xf0000000U
+#define L2CACHE_L2CERR_AHB_MASTER_INDEX_GET( _reg )        \
   ( ( ( _reg ) & L2CACHE_L2CERR_AHB_MASTER_INDEX_MASK ) >> \
     L2CACHE_L2CERR_AHB_MASTER_INDEX_SHIFT )
-#define L2CACHE_L2CERR_AHB_MASTER_INDEX_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~L2CACHE_L2CERR_AHB_MASTER_INDEX_MASK ) | \
+#define L2CACHE_L2CERR_AHB_MASTER_INDEX_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~L2CACHE_L2CERR_AHB_MASTER_INDEX_MASK ) |    \
     ( ( ( _val ) << L2CACHE_L2CERR_AHB_MASTER_INDEX_SHIFT ) & \
       L2CACHE_L2CERR_AHB_MASTER_INDEX_MASK ) )
-#define L2CACHE_L2CERR_AHB_MASTER_INDEX( _val ) \
+#define L2CACHE_L2CERR_AHB_MASTER_INDEX( _val )             \
   ( ( ( _val ) << L2CACHE_L2CERR_AHB_MASTER_INDEX_SHIFT ) & \
     L2CACHE_L2CERR_AHB_MASTER_INDEX_MASK )
 
 #define L2CACHE_L2CERR_SCRUB 0x8000000U
 
 #define L2CACHE_L2CERR_TYPE_SHIFT 24
-#define L2CACHE_L2CERR_TYPE_MASK 0x7000000U
+#define L2CACHE_L2CERR_TYPE_MASK  0x7000000U
 #define L2CACHE_L2CERR_TYPE_GET( _reg ) \
-  ( ( ( _reg ) & L2CACHE_L2CERR_TYPE_MASK ) >> \
-    L2CACHE_L2CERR_TYPE_SHIFT )
-#define L2CACHE_L2CERR_TYPE_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~L2CACHE_L2CERR_TYPE_MASK ) | \
+  ( ( ( _reg ) & L2CACHE_L2CERR_TYPE_MASK ) >> L2CACHE_L2CERR_TYPE_SHIFT )
+#define L2CACHE_L2CERR_TYPE_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~L2CACHE_L2CERR_TYPE_MASK ) |    \
     ( ( ( _val ) << L2CACHE_L2CERR_TYPE_SHIFT ) & \
       L2CACHE_L2CERR_TYPE_MASK ) )
 #define L2CACHE_L2CERR_TYPE( _val ) \
-  ( ( ( _val ) << L2CACHE_L2CERR_TYPE_SHIFT ) & \
-    L2CACHE_L2CERR_TYPE_MASK )
+  ( ( ( _val ) << L2CACHE_L2CERR_TYPE_SHIFT ) & L2CACHE_L2CERR_TYPE_MASK )
 
 #define L2CACHE_L2CERR_TAG_DATA 0x800000U
 
@@ -379,67 +344,67 @@ extern "C" {
 #define L2CACHE_L2CERR_DISERESP 0x80000U
 
 #define L2CACHE_L2CERR_CORRECTABLE_ERROR_COUNTER_SHIFT 16
-#define L2CACHE_L2CERR_CORRECTABLE_ERROR_COUNTER_MASK 0x70000U
-#define L2CACHE_L2CERR_CORRECTABLE_ERROR_COUNTER_GET( _reg ) \
+#define L2CACHE_L2CERR_CORRECTABLE_ERROR_COUNTER_MASK  0x70000U
+#define L2CACHE_L2CERR_CORRECTABLE_ERROR_COUNTER_GET( _reg )        \
   ( ( ( _reg ) & L2CACHE_L2CERR_CORRECTABLE_ERROR_COUNTER_MASK ) >> \
     L2CACHE_L2CERR_CORRECTABLE_ERROR_COUNTER_SHIFT )
-#define L2CACHE_L2CERR_CORRECTABLE_ERROR_COUNTER_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~L2CACHE_L2CERR_CORRECTABLE_ERROR_COUNTER_MASK ) | \
+#define L2CACHE_L2CERR_CORRECTABLE_ERROR_COUNTER_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~L2CACHE_L2CERR_CORRECTABLE_ERROR_COUNTER_MASK ) |    \
     ( ( ( _val ) << L2CACHE_L2CERR_CORRECTABLE_ERROR_COUNTER_SHIFT ) & \
       L2CACHE_L2CERR_CORRECTABLE_ERROR_COUNTER_MASK ) )
-#define L2CACHE_L2CERR_CORRECTABLE_ERROR_COUNTER( _val ) \
+#define L2CACHE_L2CERR_CORRECTABLE_ERROR_COUNTER( _val )             \
   ( ( ( _val ) << L2CACHE_L2CERR_CORRECTABLE_ERROR_COUNTER_SHIFT ) & \
     L2CACHE_L2CERR_CORRECTABLE_ERROR_COUNTER_MASK )
 
 #define L2CACHE_L2CERR_IRQ_PENDING_SHIFT 12
-#define L2CACHE_L2CERR_IRQ_PENDING_MASK 0xf000U
-#define L2CACHE_L2CERR_IRQ_PENDING_GET( _reg ) \
+#define L2CACHE_L2CERR_IRQ_PENDING_MASK  0xf000U
+#define L2CACHE_L2CERR_IRQ_PENDING_GET( _reg )        \
   ( ( ( _reg ) & L2CACHE_L2CERR_IRQ_PENDING_MASK ) >> \
     L2CACHE_L2CERR_IRQ_PENDING_SHIFT )
-#define L2CACHE_L2CERR_IRQ_PENDING_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~L2CACHE_L2CERR_IRQ_PENDING_MASK ) | \
+#define L2CACHE_L2CERR_IRQ_PENDING_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~L2CACHE_L2CERR_IRQ_PENDING_MASK ) |    \
     ( ( ( _val ) << L2CACHE_L2CERR_IRQ_PENDING_SHIFT ) & \
       L2CACHE_L2CERR_IRQ_PENDING_MASK ) )
-#define L2CACHE_L2CERR_IRQ_PENDING( _val ) \
+#define L2CACHE_L2CERR_IRQ_PENDING( _val )             \
   ( ( ( _val ) << L2CACHE_L2CERR_IRQ_PENDING_SHIFT ) & \
     L2CACHE_L2CERR_IRQ_PENDING_MASK )
 
 #define L2CACHE_L2CERR_IRQ_MASK_SHIFT 8
-#define L2CACHE_L2CERR_IRQ_MASK_MASK 0xf00U
-#define L2CACHE_L2CERR_IRQ_MASK_GET( _reg ) \
+#define L2CACHE_L2CERR_IRQ_MASK_MASK  0xf00U
+#define L2CACHE_L2CERR_IRQ_MASK_GET( _reg )        \
   ( ( ( _reg ) & L2CACHE_L2CERR_IRQ_MASK_MASK ) >> \
     L2CACHE_L2CERR_IRQ_MASK_SHIFT )
-#define L2CACHE_L2CERR_IRQ_MASK_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~L2CACHE_L2CERR_IRQ_MASK_MASK ) | \
+#define L2CACHE_L2CERR_IRQ_MASK_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~L2CACHE_L2CERR_IRQ_MASK_MASK ) |    \
     ( ( ( _val ) << L2CACHE_L2CERR_IRQ_MASK_SHIFT ) & \
       L2CACHE_L2CERR_IRQ_MASK_MASK ) )
-#define L2CACHE_L2CERR_IRQ_MASK( _val ) \
+#define L2CACHE_L2CERR_IRQ_MASK( _val )             \
   ( ( ( _val ) << L2CACHE_L2CERR_IRQ_MASK_SHIFT ) & \
     L2CACHE_L2CERR_IRQ_MASK_MASK )
 
 #define L2CACHE_L2CERR_SELECT_CB_SHIFT 6
-#define L2CACHE_L2CERR_SELECT_CB_MASK 0xc0U
-#define L2CACHE_L2CERR_SELECT_CB_GET( _reg ) \
+#define L2CACHE_L2CERR_SELECT_CB_MASK  0xc0U
+#define L2CACHE_L2CERR_SELECT_CB_GET( _reg )        \
   ( ( ( _reg ) & L2CACHE_L2CERR_SELECT_CB_MASK ) >> \
     L2CACHE_L2CERR_SELECT_CB_SHIFT )
-#define L2CACHE_L2CERR_SELECT_CB_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~L2CACHE_L2CERR_SELECT_CB_MASK ) | \
+#define L2CACHE_L2CERR_SELECT_CB_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~L2CACHE_L2CERR_SELECT_CB_MASK ) |    \
     ( ( ( _val ) << L2CACHE_L2CERR_SELECT_CB_SHIFT ) & \
       L2CACHE_L2CERR_SELECT_CB_MASK ) )
-#define L2CACHE_L2CERR_SELECT_CB( _val ) \
+#define L2CACHE_L2CERR_SELECT_CB( _val )             \
   ( ( ( _val ) << L2CACHE_L2CERR_SELECT_CB_SHIFT ) & \
     L2CACHE_L2CERR_SELECT_CB_MASK )
 
 #define L2CACHE_L2CERR_SELECT_TCB_SHIFT 4
-#define L2CACHE_L2CERR_SELECT_TCB_MASK 0x30U
-#define L2CACHE_L2CERR_SELECT_TCB_GET( _reg ) \
+#define L2CACHE_L2CERR_SELECT_TCB_MASK  0x30U
+#define L2CACHE_L2CERR_SELECT_TCB_GET( _reg )        \
   ( ( ( _reg ) & L2CACHE_L2CERR_SELECT_TCB_MASK ) >> \
     L2CACHE_L2CERR_SELECT_TCB_SHIFT )
-#define L2CACHE_L2CERR_SELECT_TCB_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~L2CACHE_L2CERR_SELECT_TCB_MASK ) | \
+#define L2CACHE_L2CERR_SELECT_TCB_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~L2CACHE_L2CERR_SELECT_TCB_MASK ) |    \
     ( ( ( _val ) << L2CACHE_L2CERR_SELECT_TCB_SHIFT ) & \
       L2CACHE_L2CERR_SELECT_TCB_MASK ) )
-#define L2CACHE_L2CERR_SELECT_TCB( _val ) \
+#define L2CACHE_L2CERR_SELECT_TCB( _val )             \
   ( ( ( _val ) << L2CACHE_L2CERR_SELECT_TCB_SHIFT ) & \
     L2CACHE_L2CERR_SELECT_TCB_MASK )
 
@@ -463,17 +428,15 @@ extern "C" {
  */
 
 #define L2CACHE_L2CERRA_EADDR_SHIFT 0
-#define L2CACHE_L2CERRA_EADDR_MASK 0xffffffffU
+#define L2CACHE_L2CERRA_EADDR_MASK  0xffffffffU
 #define L2CACHE_L2CERRA_EADDR_GET( _reg ) \
-  ( ( ( _reg ) & L2CACHE_L2CERRA_EADDR_MASK ) >> \
-    L2CACHE_L2CERRA_EADDR_SHIFT )
-#define L2CACHE_L2CERRA_EADDR_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~L2CACHE_L2CERRA_EADDR_MASK ) | \
+  ( ( ( _reg ) & L2CACHE_L2CERRA_EADDR_MASK ) >> L2CACHE_L2CERRA_EADDR_SHIFT )
+#define L2CACHE_L2CERRA_EADDR_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~L2CACHE_L2CERRA_EADDR_MASK ) |    \
     ( ( ( _val ) << L2CACHE_L2CERRA_EADDR_SHIFT ) & \
       L2CACHE_L2CERRA_EADDR_MASK ) )
 #define L2CACHE_L2CERRA_EADDR( _val ) \
-  ( ( ( _val ) << L2CACHE_L2CERRA_EADDR_SHIFT ) & \
-    L2CACHE_L2CERRA_EADDR_MASK )
+  ( ( ( _val ) << L2CACHE_L2CERRA_EADDR_SHIFT ) & L2CACHE_L2CERRA_EADDR_MASK )
 
 /** @} */
 
@@ -486,17 +449,14 @@ extern "C" {
  */
 
 #define L2CACHE_L2CTCB_TCB_SHIFT 0
-#define L2CACHE_L2CTCB_TCB_MASK 0x7fU
+#define L2CACHE_L2CTCB_TCB_MASK  0x7fU
 #define L2CACHE_L2CTCB_TCB_GET( _reg ) \
-  ( ( ( _reg ) & L2CACHE_L2CTCB_TCB_MASK ) >> \
-    L2CACHE_L2CTCB_TCB_SHIFT )
-#define L2CACHE_L2CTCB_TCB_SET( _reg, _val ) \
+  ( ( ( _reg ) & L2CACHE_L2CTCB_TCB_MASK ) >> L2CACHE_L2CTCB_TCB_SHIFT )
+#define L2CACHE_L2CTCB_TCB_SET( _reg, _val )  \
   ( ( ( _reg ) & ~L2CACHE_L2CTCB_TCB_MASK ) | \
-    ( ( ( _val ) << L2CACHE_L2CTCB_TCB_SHIFT ) & \
-      L2CACHE_L2CTCB_TCB_MASK ) )
+    ( ( ( _val ) << L2CACHE_L2CTCB_TCB_SHIFT ) & L2CACHE_L2CTCB_TCB_MASK ) )
 #define L2CACHE_L2CTCB_TCB( _val ) \
-  ( ( ( _val ) << L2CACHE_L2CTCB_TCB_SHIFT ) & \
-    L2CACHE_L2CTCB_TCB_MASK )
+  ( ( ( _val ) << L2CACHE_L2CTCB_TCB_SHIFT ) & L2CACHE_L2CTCB_TCB_MASK )
 
 /** @} */
 
@@ -509,17 +469,14 @@ extern "C" {
  */
 
 #define L2CACHE_L2CCB_CB_SHIFT 0
-#define L2CACHE_L2CCB_CB_MASK 0xfffffffU
+#define L2CACHE_L2CCB_CB_MASK  0xfffffffU
 #define L2CACHE_L2CCB_CB_GET( _reg ) \
-  ( ( ( _reg ) & L2CACHE_L2CCB_CB_MASK ) >> \
-    L2CACHE_L2CCB_CB_SHIFT )
-#define L2CACHE_L2CCB_CB_SET( _reg, _val ) \
+  ( ( ( _reg ) & L2CACHE_L2CCB_CB_MASK ) >> L2CACHE_L2CCB_CB_SHIFT )
+#define L2CACHE_L2CCB_CB_SET( _reg, _val )  \
   ( ( ( _reg ) & ~L2CACHE_L2CCB_CB_MASK ) | \
-    ( ( ( _val ) << L2CACHE_L2CCB_CB_SHIFT ) & \
-      L2CACHE_L2CCB_CB_MASK ) )
+    ( ( ( _val ) << L2CACHE_L2CCB_CB_SHIFT ) & L2CACHE_L2CCB_CB_MASK ) )
 #define L2CACHE_L2CCB_CB( _val ) \
-  ( ( ( _val ) << L2CACHE_L2CCB_CB_SHIFT ) & \
-    L2CACHE_L2CCB_CB_MASK )
+  ( ( ( _val ) << L2CACHE_L2CCB_CB_SHIFT ) & L2CACHE_L2CCB_CB_MASK )
 
 /** @} */
 
@@ -533,30 +490,28 @@ extern "C" {
  */
 
 #define L2CACHE_L2CSCRUB_INDEX_SHIFT 16
-#define L2CACHE_L2CSCRUB_INDEX_MASK 0xffff0000U
-#define L2CACHE_L2CSCRUB_INDEX_GET( _reg ) \
+#define L2CACHE_L2CSCRUB_INDEX_MASK  0xffff0000U
+#define L2CACHE_L2CSCRUB_INDEX_GET( _reg )        \
   ( ( ( _reg ) & L2CACHE_L2CSCRUB_INDEX_MASK ) >> \
     L2CACHE_L2CSCRUB_INDEX_SHIFT )
-#define L2CACHE_L2CSCRUB_INDEX_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~L2CACHE_L2CSCRUB_INDEX_MASK ) | \
+#define L2CACHE_L2CSCRUB_INDEX_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~L2CACHE_L2CSCRUB_INDEX_MASK ) |    \
     ( ( ( _val ) << L2CACHE_L2CSCRUB_INDEX_SHIFT ) & \
       L2CACHE_L2CSCRUB_INDEX_MASK ) )
-#define L2CACHE_L2CSCRUB_INDEX( _val ) \
+#define L2CACHE_L2CSCRUB_INDEX( _val )             \
   ( ( ( _val ) << L2CACHE_L2CSCRUB_INDEX_SHIFT ) & \
     L2CACHE_L2CSCRUB_INDEX_MASK )
 
 #define L2CACHE_L2CSCRUB_WAY_SHIFT 2
-#define L2CACHE_L2CSCRUB_WAY_MASK 0xcU
+#define L2CACHE_L2CSCRUB_WAY_MASK  0xcU
 #define L2CACHE_L2CSCRUB_WAY_GET( _reg ) \
-  ( ( ( _reg ) & L2CACHE_L2CSCRUB_WAY_MASK ) >> \
-    L2CACHE_L2CSCRUB_WAY_SHIFT )
-#define L2CACHE_L2CSCRUB_WAY_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~L2CACHE_L2CSCRUB_WAY_MASK ) | \
+  ( ( ( _reg ) & L2CACHE_L2CSCRUB_WAY_MASK ) >> L2CACHE_L2CSCRUB_WAY_SHIFT )
+#define L2CACHE_L2CSCRUB_WAY_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~L2CACHE_L2CSCRUB_WAY_MASK ) |    \
     ( ( ( _val ) << L2CACHE_L2CSCRUB_WAY_SHIFT ) & \
       L2CACHE_L2CSCRUB_WAY_MASK ) )
 #define L2CACHE_L2CSCRUB_WAY( _val ) \
-  ( ( ( _val ) << L2CACHE_L2CSCRUB_WAY_SHIFT ) & \
-    L2CACHE_L2CSCRUB_WAY_MASK )
+  ( ( ( _val ) << L2CACHE_L2CSCRUB_WAY_SHIFT ) & L2CACHE_L2CSCRUB_WAY_MASK )
 
 #define L2CACHE_L2CSCRUB_PEN 0x2U
 
@@ -573,17 +528,15 @@ extern "C" {
  */
 
 #define L2CACHE_L2CSDEL_DEL_SHIFT 0
-#define L2CACHE_L2CSDEL_DEL_MASK 0xffffU
+#define L2CACHE_L2CSDEL_DEL_MASK  0xffffU
 #define L2CACHE_L2CSDEL_DEL_GET( _reg ) \
-  ( ( ( _reg ) & L2CACHE_L2CSDEL_DEL_MASK ) >> \
-    L2CACHE_L2CSDEL_DEL_SHIFT )
-#define L2CACHE_L2CSDEL_DEL_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~L2CACHE_L2CSDEL_DEL_MASK ) | \
+  ( ( ( _reg ) & L2CACHE_L2CSDEL_DEL_MASK ) >> L2CACHE_L2CSDEL_DEL_SHIFT )
+#define L2CACHE_L2CSDEL_DEL_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~L2CACHE_L2CSDEL_DEL_MASK ) |    \
     ( ( ( _val ) << L2CACHE_L2CSDEL_DEL_SHIFT ) & \
       L2CACHE_L2CSDEL_DEL_MASK ) )
 #define L2CACHE_L2CSDEL_DEL( _val ) \
-  ( ( ( _val ) << L2CACHE_L2CSDEL_DEL_SHIFT ) & \
-    L2CACHE_L2CSDEL_DEL_MASK )
+  ( ( ( _val ) << L2CACHE_L2CSDEL_DEL_SHIFT ) & L2CACHE_L2CSDEL_DEL_MASK )
 
 /** @} */
 
@@ -597,17 +550,15 @@ extern "C" {
  */
 
 #define L2CACHE_L2CEINJ_ADDR_SHIFT 2
-#define L2CACHE_L2CEINJ_ADDR_MASK 0xfffffffcU
+#define L2CACHE_L2CEINJ_ADDR_MASK  0xfffffffcU
 #define L2CACHE_L2CEINJ_ADDR_GET( _reg ) \
-  ( ( ( _reg ) & L2CACHE_L2CEINJ_ADDR_MASK ) >> \
-    L2CACHE_L2CEINJ_ADDR_SHIFT )
-#define L2CACHE_L2CEINJ_ADDR_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~L2CACHE_L2CEINJ_ADDR_MASK ) | \
+  ( ( ( _reg ) & L2CACHE_L2CEINJ_ADDR_MASK ) >> L2CACHE_L2CEINJ_ADDR_SHIFT )
+#define L2CACHE_L2CEINJ_ADDR_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~L2CACHE_L2CEINJ_ADDR_MASK ) |    \
     ( ( ( _val ) << L2CACHE_L2CEINJ_ADDR_SHIFT ) & \
       L2CACHE_L2CEINJ_ADDR_MASK ) )
 #define L2CACHE_L2CEINJ_ADDR( _val ) \
-  ( ( ( _val ) << L2CACHE_L2CEINJ_ADDR_SHIFT ) & \
-    L2CACHE_L2CEINJ_ADDR_MASK )
+  ( ( ( _val ) << L2CACHE_L2CEINJ_ADDR_SHIFT ) & L2CACHE_L2CEINJ_ADDR_MASK )
 
 #define L2CACHE_L2CEINJ_INJ 0x1U
 
@@ -673,43 +624,37 @@ extern "C" {
  */
 
 #define L2CACHE_L2CMTRR_ADDR_SHIFT 18
-#define L2CACHE_L2CMTRR_ADDR_MASK 0xfffc0000U
+#define L2CACHE_L2CMTRR_ADDR_MASK  0xfffc0000U
 #define L2CACHE_L2CMTRR_ADDR_GET( _reg ) \
-  ( ( ( _reg ) & L2CACHE_L2CMTRR_ADDR_MASK ) >> \
-    L2CACHE_L2CMTRR_ADDR_SHIFT )
-#define L2CACHE_L2CMTRR_ADDR_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~L2CACHE_L2CMTRR_ADDR_MASK ) | \
+  ( ( ( _reg ) & L2CACHE_L2CMTRR_ADDR_MASK ) >> L2CACHE_L2CMTRR_ADDR_SHIFT )
+#define L2CACHE_L2CMTRR_ADDR_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~L2CACHE_L2CMTRR_ADDR_MASK ) |    \
     ( ( ( _val ) << L2CACHE_L2CMTRR_ADDR_SHIFT ) & \
       L2CACHE_L2CMTRR_ADDR_MASK ) )
 #define L2CACHE_L2CMTRR_ADDR( _val ) \
-  ( ( ( _val ) << L2CACHE_L2CMTRR_ADDR_SHIFT ) & \
-    L2CACHE_L2CMTRR_ADDR_MASK )
+  ( ( ( _val ) << L2CACHE_L2CMTRR_ADDR_SHIFT ) & L2CACHE_L2CMTRR_ADDR_MASK )
 
 #define L2CACHE_L2CMTRR_ACC_SHIFT 16
-#define L2CACHE_L2CMTRR_ACC_MASK 0x30000U
+#define L2CACHE_L2CMTRR_ACC_MASK  0x30000U
 #define L2CACHE_L2CMTRR_ACC_GET( _reg ) \
-  ( ( ( _reg ) & L2CACHE_L2CMTRR_ACC_MASK ) >> \
-    L2CACHE_L2CMTRR_ACC_SHIFT )
-#define L2CACHE_L2CMTRR_ACC_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~L2CACHE_L2CMTRR_ACC_MASK ) | \
+  ( ( ( _reg ) & L2CACHE_L2CMTRR_ACC_MASK ) >> L2CACHE_L2CMTRR_ACC_SHIFT )
+#define L2CACHE_L2CMTRR_ACC_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~L2CACHE_L2CMTRR_ACC_MASK ) |    \
     ( ( ( _val ) << L2CACHE_L2CMTRR_ACC_SHIFT ) & \
       L2CACHE_L2CMTRR_ACC_MASK ) )
 #define L2CACHE_L2CMTRR_ACC( _val ) \
-  ( ( ( _val ) << L2CACHE_L2CMTRR_ACC_SHIFT ) & \
-    L2CACHE_L2CMTRR_ACC_MASK )
+  ( ( ( _val ) << L2CACHE_L2CMTRR_ACC_SHIFT ) & L2CACHE_L2CMTRR_ACC_MASK )
 
 #define L2CACHE_L2CMTRR_MASK_SHIFT 2
-#define L2CACHE_L2CMTRR_MASK_MASK 0xfffcU
+#define L2CACHE_L2CMTRR_MASK_MASK  0xfffcU
 #define L2CACHE_L2CMTRR_MASK_GET( _reg ) \
-  ( ( ( _reg ) & L2CACHE_L2CMTRR_MASK_MASK ) >> \
-    L2CACHE_L2CMTRR_MASK_SHIFT )
-#define L2CACHE_L2CMTRR_MASK_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~L2CACHE_L2CMTRR_MASK_MASK ) | \
+  ( ( ( _reg ) & L2CACHE_L2CMTRR_MASK_MASK ) >> L2CACHE_L2CMTRR_MASK_SHIFT )
+#define L2CACHE_L2CMTRR_MASK_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~L2CACHE_L2CMTRR_MASK_MASK ) |    \
     ( ( ( _val ) << L2CACHE_L2CMTRR_MASK_SHIFT ) & \
       L2CACHE_L2CMTRR_MASK_MASK ) )
 #define L2CACHE_L2CMTRR_MASK( _val ) \
-  ( ( ( _val ) << L2CACHE_L2CMTRR_MASK_SHIFT ) & \
-    L2CACHE_L2CMTRR_MASK_MASK )
+  ( ( ( _val ) << L2CACHE_L2CMTRR_MASK_SHIFT ) & L2CACHE_L2CMTRR_MASK_MASK )
 
 #define L2CACHE_L2CMTRR_WP 0x2U
 

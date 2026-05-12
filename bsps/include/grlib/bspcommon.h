@@ -38,7 +38,7 @@ extern "C" {
 #endif
 
 /* Count driver resource array length. Array must be terminated with a NULL */
-int get_resarray_count(struct drvmgr_bus_res **array);
+int get_resarray_count( struct drvmgr_bus_res **array );
 
 #ifdef __cplusplus
 }

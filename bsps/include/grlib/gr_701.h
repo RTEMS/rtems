@@ -51,17 +51,17 @@ extern "C" {
  */
 extern struct drvmgr_bus_res *gr701_resources[];
 
-#define GR701_OPTIONS_AMBA   0x01
-#define GR701_OPTIONS_IRQ    0x02
+#define GR701_OPTIONS_AMBA 0x01
+#define GR701_OPTIONS_IRQ  0x02
 
 /* Print information about all GR-701 PCI boards */
-void gr701_print(int options);
+void gr701_print( int options );
 
 /* Print information about one GR-701 PCI board */
-void gr701_print_dev(struct drvmgr_dev *dev, int options);
+void gr701_print_dev( struct drvmgr_dev *dev, int options );
 
 /* Register GR-701 driver */
-void gr701_register_drv(void);
+void gr701_register_drv( void );
 
 #ifdef __cplusplus
 }

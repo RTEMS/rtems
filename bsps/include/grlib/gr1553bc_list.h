@@ -222,7 +222,7 @@
 #define GR1553BC_TIMESLOT
 
 #define GR1553BC_MINOR_MAX 256
-#define GR1553BC_SLOT_MAX 32
+#define GR1553BC_SLOT_MAX  32
 
 #ifdef __cplusplus
 extern "C" {
@@ -235,22 +235,22 @@ struct gr1553bc_minor_cfg;
 struct gr1553bc_major_cfg;
 
 struct gr1553bc_minor_cfg {
-	int slot_cnt;
-	int timeslot;		/* Total time of minor frame in us */
+  int slot_cnt;
+  int timeslot; /* Total time of minor frame in us */
 };
 
 struct gr1553bc_major_cfg {
-	int minor_cnt;				/* Number of Minor Frames */
-	struct gr1553bc_minor_cfg minor_cfgs[1];
+  int                       minor_cnt; /* Number of Minor Frames */
+  struct gr1553bc_minor_cfg minor_cfgs[ 1 ];
 };
 
 struct gr1553bc_list_cfg {
-	unsigned char rt_timeout[31];	/* Number of us timeout tolerance per RT */
-	unsigned char bc_timeout;	/* Number of us timeout tolerance of 
+  unsigned char rt_timeout[ 31 ];   /* Number of us timeout tolerance per RT */
+  unsigned char bc_timeout;         /* Number of us timeout tolerance of 
 					 * broadcast transfers */
-	int tropt_irq_on_err;		/* Generate IRQ on transfer error */
-	int tropt_pause_on_err;		/* Pause list on transfer error */
-	int async_list;			/* Set to non-zero if asyncronous list*/
+  int           tropt_irq_on_err;   /* Generate IRQ on transfer error */
+  int           tropt_pause_on_err; /* Pause list on transfer error */
+  int           async_list;         /* Set to non-zero if asyncronous list*/
 };
 
 /* Default Configuration */
@@ -258,31 +258,31 @@ extern struct gr1553bc_list_cfg gr1553bc_def_cfg;
 
 /* Complete list of all major frames */
 struct gr1553bc_list {
-	void *_table_custom;		/* Config option given by user */
-	void *_table;			/* address of allocated bd-table */
-	uint32_t table_hw;		/* Descriptor table base HW-ADR */
-	uintptr_t table_cpu;		/* Descriptor table base CPU-ADR */
-	int table_size;			/* Descriptor Table Size */
-	void *bc;			/* BC HW, needed for adr translation */
-	unsigned char rt_timeout[32];	/* Tolerance per RT, default 20us
+  void                  *_table_custom; /* Config option given by user */
+  void                  *_table;        /* address of allocated bd-table */
+  uint32_t               table_hw;      /* Descriptor table base HW-ADR */
+  uintptr_t              table_cpu;     /* Descriptor table base CPU-ADR */
+  int                    table_size;    /* Descriptor Table Size */
+  void                  *bc;            /* BC HW, needed for adr translation */
+  unsigned char          rt_timeout[ 32 ]; /* Tolerance per RT, default 20us
 					 * Note: 31 is for Broadcast */
-	uint32_t tropts;		/* Transfer descriptor options:
+  uint32_t               tropts;           /* Transfer descriptor options:
 					 *  On transfer error the following bits
 					 *  do affect:
 					 *  - bit28 1=Generate IRQ
 					 *  - bit26 1=Pause transfer list
 					 *  
 					 */
-	int async_list;			/* async list or not */
-	int major_cnt;			/* Number of Major frames */
-	struct gr1553bc_major *majors[1];	/* Var-Array of Major Pointers*/
+  int                    async_list;       /* async list or not */
+  int                    major_cnt;        /* Number of Major frames */
+  struct gr1553bc_major *majors[ 1 ];      /* Var-Array of Major Pointers*/
 };
 
 /* Alloc a List with a maximum number of Major frames supported */
-extern int gr1553bc_list_alloc(struct gr1553bc_list **list, int max_major);
+extern int gr1553bc_list_alloc( struct gr1553bc_list **list, int max_major );
 
 /* Free List if allocated with gr1553bc_list_alloc() */
-extern void gr1553bc_list_free(struct gr1553bc_list *list);
+extern void gr1553bc_list_free( struct gr1553bc_list *list );
 
 /* Configure Global List parameters 
  *
@@ -291,12 +291,11 @@ extern void gr1553bc_list_free(struct gr1553bc_list *list);
  * \param bc      The BC hardware device description
  *                  (only needed for address translation)
  */
-extern int gr1553bc_list_config
-	(
-	struct gr1553bc_list *list,
-	struct gr1553bc_list_cfg *cfg,
-	void *bc
-	);
+extern int gr1553bc_list_config(
+  struct gr1553bc_list     *list,
+  struct gr1553bc_list_cfg *cfg,
+  void                     *bc
+);
 
 /* Link a 'major' Major frame with next major frame 
  * The links affected:
@@ -304,25 +303,26 @@ extern int gr1553bc_list_config
  *   - major->minor[LAST]->next
  */
 extern void gr1553bc_list_link_major(
-	struct gr1553bc_major *major,
-	struct gr1553bc_major *next
-	);
+  struct gr1553bc_major *major,
+  struct gr1553bc_major *next
+);
 
 /* Link in a Major frame into a BC list.
  * Calls gr1553bc_list_link_major() to link major frame with major-1 and
  * major+1. If ending or starting major frame the frame is wrapped around.
  */
 extern int gr1553bc_list_set_major(
-	struct gr1553bc_list *list,
-	struct gr1553bc_major *major,
-	int no);
+  struct gr1553bc_list  *list,
+  struct gr1553bc_major *major,
+  int                    no
+);
 
 /* Calculate the size required in the descriptor table by one minor frame. */
-extern int gr1553bc_minor_table_size(struct gr1553bc_minor *minor);
+extern int gr1553bc_minor_table_size( struct gr1553bc_minor *minor );
 
 /* Calculate the size required for the descriptor table.
  */
-extern int gr1553bc_list_table_size(struct gr1553bc_list *list);
+extern int gr1553bc_list_table_size( struct gr1553bc_list *list );
 
 /* Allocate an empty descriptor table from list description suitable for
  * the BC given by 'bc'.
@@ -334,45 +334,43 @@ extern int gr1553bc_list_table_size(struct gr1553bc_list *list);
  *                          is given as HW address (used with AMBA-over-PCI to
  *                          to specify RAM location on PCI board).
  */
-extern int gr1553bc_list_table_alloc
-	(
-	struct gr1553bc_list *list,
-	void *bdtab_custom
-	);
+extern int gr1553bc_list_table_alloc(
+  struct gr1553bc_list *list,
+  void                 *bdtab_custom
+);
 
 /* Free descriptor table allocated with gr1553bc_list_table_alloc() */
-extern void gr1553bc_list_table_free(struct gr1553bc_list *list);
+extern void gr1553bc_list_table_free( struct gr1553bc_list *list );
 
 /* Build an empty descriptor table from list description, 
  * the minor frames will be linked together.
  */
-extern int gr1553bc_list_table_build(struct gr1553bc_list *list);
+extern int gr1553bc_list_table_build( struct gr1553bc_list *list );
 
 /* Major Frame */
 struct gr1553bc_major {
-	struct gr1553bc_major *next;		/* Next Major Frame */
-	struct gr1553bc_major_cfg *cfg;		/* User Config of Major frame */
-	struct gr1553bc_minor *minors[1];	/* Minor frames */
+  struct gr1553bc_major     *next;        /* Next Major Frame */
+  struct gr1553bc_major_cfg *cfg;         /* User Config of Major frame */
+  struct gr1553bc_minor     *minors[ 1 ]; /* Minor frames */
 };
 
 /* Minor Frame */
 struct gr1553bc_minor {
-	struct gr1553bc_minor *next;	/* Next Minor Frame */
-	struct gr1553bc_minor_cfg *cfg;	/* User Config of Minor frame */
-	uint32_t alloc;			/* Descripts allocated */
+  struct gr1553bc_minor     *next;  /* Next Minor Frame */
+  struct gr1553bc_minor_cfg *cfg;   /* User Config of Minor frame */
+  uint32_t                   alloc; /* Descripts allocated */
 
-	/* Note: THIS POINTER MUST BE ALIGNED ON A 128-bit BOUNDARY */
-	union gr1553bc_bd *bds;	/* Descriptors for this minor frame (CPU ADRS)*/
+  /* Note: THIS POINTER MUST BE ALIGNED ON A 128-bit BOUNDARY */
+  union gr1553bc_bd *bds; /* Descriptors for this minor frame (CPU ADRS)*/
 };
 
 /* Alloc a Major/Minor frame skeleton according to the configuration structure. 
  * The descriptor table is not allocated.
  */
-extern int gr1553bc_major_alloc_skel
-	(
-	struct gr1553bc_major **major,
-	struct gr1553bc_major_cfg *cfg
-	);
+extern int gr1553bc_major_alloc_skel(
+  struct gr1553bc_major    **major,
+  struct gr1553bc_major_cfg *cfg
+);
 
 /* Unique Message/Descriptor ID. Can be used to identify a Major or Minor 
  * Frame, or a Slot.
@@ -381,36 +379,34 @@ extern int gr1553bc_major_alloc_skel
  * - If slot_num is 0xff, the ID identifies a Minor Frame
  * - If non of the above is true, the ID identifies a specific Slot
  */
-#define GR1553BC_ID(major_num, minor_num, slot_num) \
-		((((major_num)<<16)&0xff0000) | (((minor_num)<<8)&0xff00) | \
-		((slot_num) & 0xff))
-#define GR1553BC_MINOR_ID(major_num, minor_num) \
-		GR1553BC_ID(major_num, minor_num, 0xff)
-#define GR1553BC_MAJOR_ID(major_num) \
-		GR1553BC_ID(major_num, 0xff, 0xff)
+#define GR1553BC_ID( major_num, minor_num, slot_num ) \
+  ( ( ( ( major_num ) << 16 ) & 0xff0000 ) |          \
+    ( ( ( minor_num ) << 8 ) & 0xff00 ) | ( ( slot_num ) & 0xff ) )
+#define GR1553BC_MINOR_ID( major_num, minor_num ) \
+  GR1553BC_ID( major_num, minor_num, 0xff )
+#define GR1553BC_MAJOR_ID( major_num ) GR1553BC_ID( major_num, 0xff, 0xff )
 
-#define GR1553BC_MAJID_FROM_ID(mid) (((mid) >> 16) & 0xff)
-#define GR1553BC_MINID_FROM_ID(mid) (((mid) >> 8) & 0xff)
-#define GR1553BC_SLOTID_FROM_ID(mid) ((mid) & 0xff)
-#define GR1553BC_ID_SET_SLOT(mid, slot_num) (((mid) & ~0xff) | ((slot_num) & 0xff))
+#define GR1553BC_MAJID_FROM_ID( mid )  ( ( ( mid ) >> 16 ) & 0xff )
+#define GR1553BC_MINID_FROM_ID( mid )  ( ( ( mid ) >> 8 ) & 0xff )
+#define GR1553BC_SLOTID_FROM_ID( mid ) ( ( mid ) & 0xff )
+#define GR1553BC_ID_SET_SLOT( mid, slot_num ) \
+  ( ( ( mid ) & ~0xff ) | ( ( slot_num ) & 0xff ) )
 
-extern struct gr1553bc_major *gr1553bc_major_from_id
-	(
-	struct gr1553bc_list *list,
-	int mid
-	);
+extern struct gr1553bc_major *gr1553bc_major_from_id(
+  struct gr1553bc_list *list,
+  int                   mid
+);
 
-extern struct gr1553bc_minor *gr1553bc_minor_from_id
-	(
-	struct gr1553bc_list *list,
-	int mid
-	);
+extern struct gr1553bc_minor *gr1553bc_minor_from_id(
+  struct gr1553bc_list *list,
+  int                   mid
+);
 
 /* Get free time left of minor frame identified by MID 'mid' */
-extern int gr1553bc_list_freetime(struct gr1553bc_list *list, int mid);
+extern int gr1553bc_list_freetime( struct gr1553bc_list *list, int mid );
 
 /* Get free time left of minor frame */
-extern int gr1553bc_minor_freetime(struct gr1553bc_minor *minor);
+extern int gr1553bc_minor_freetime( struct gr1553bc_minor *minor );
 
 /* Allocate a time slot on a minor frame, major/minor frame is identified 
  * by MID. The 'mid' is a input/ouput parameter, the resulting slot taken
@@ -425,27 +421,27 @@ extern int gr1553bc_minor_freetime(struct gr1553bc_minor *minor);
  * MID points to a bad major/minor or major/minor/slot.
  */
 extern int gr1553bc_slot_alloc(
-	struct gr1553bc_list *list,
-	int *mid,
-	int timeslot,
-	union gr1553bc_bd **bd
-	);
+  struct gr1553bc_list *list,
+  int                  *mid,
+  int                   timeslot,
+  union gr1553bc_bd   **bd
+);
 /* Same as gr1553bc_slot_alloc but identifies a minor instead of list.
  * The major/minor part of MID is ignored.
  */
 extern int gr1553bc_slot_alloc2(
-	struct gr1553bc_minor *minor,
-	int *mid,
-	int timeslot,
-	union gr1553bc_bd **bd
-	);
+  struct gr1553bc_minor *minor,
+  int                   *mid,
+  int                    timeslot,
+  union gr1553bc_bd    **bd
+);
 
 /* Free message slot and the time associated with it. The time taken by the
  * message slot is added to the END TIME descriptor, if managed by the driver
  * for this minor frame. The descriptor will be 
  */
-extern int gr1553bc_slot_free(struct gr1553bc_list *list, int mid);
-extern int gr1553bc_slot_free2(struct gr1553bc_minor *minor, int mid);
+extern int gr1553bc_slot_free( struct gr1553bc_list *list, int mid );
+extern int gr1553bc_slot_free2( struct gr1553bc_minor *minor, int mid );
 
 /* Find MID from Descriptor pointer
  *
@@ -466,61 +462,54 @@ extern int gr1553bc_slot_free2(struct gr1553bc_minor *minor, int mid);
  * \param async  OUT: Function will store non-zero value if BD belogs to 
  *                    async list.
  */
-extern int gr1553bc_mid_from_bd(
-	union gr1553bc_bd *bd,
-	int *mid,
-	int *async
-	);
+extern int gr1553bc_mid_from_bd( union gr1553bc_bd *bd, int *mid, int *async );
 
 /********** TRANSFER DESCRIPTOR MANIPULATION **********/
 
 /* Get pointer to descriptor entry from MID. */
-extern union gr1553bc_bd *gr1553bc_slot_bd
-	(
-	struct gr1553bc_list *list,
-	int mid
-	);
+extern union gr1553bc_bd *gr1553bc_slot_bd(
+  struct gr1553bc_list *list,
+  int                   mid
+);
 
 /* IRQ function */
-typedef void (*bcirq_func_t)(union gr1553bc_bd *bd, void *data);
+typedef void ( *bcirq_func_t )( union gr1553bc_bd *bd, void *data );
 
 /* Create unconditional IRQ customly defined location.
  * The IRQ is disabled, enable it with gr1553bc_slot_irq_enable().
  */
-extern int gr1553bc_slot_irq_prepare
-	(
-	struct gr1553bc_list *list,
-	int mid,
-	bcirq_func_t func,
-	void *data
-	);
+extern int gr1553bc_slot_irq_prepare(
+  struct gr1553bc_list *list,
+  int                   mid,
+  bcirq_func_t          func,
+  void                 *data
+);
 
 /* Enable previously prepared unconditional IRQ */
-extern int gr1553bc_slot_irq_enable(struct gr1553bc_list *list, int mid);
+extern int gr1553bc_slot_irq_enable( struct gr1553bc_list *list, int mid );
 
 /* Disable unconditional IRQ point, changed to unconditional JUMP
  * to descriptor following.
  * After disabling it it can be enabled again, or freed.
  */
-extern int gr1553bc_slot_irq_disable(struct gr1553bc_list *list, int mid);
+extern int gr1553bc_slot_irq_disable( struct gr1553bc_list *list, int mid );
 
 /* Create custom jump to descriptor, conditional or unconditional, see 
  * hardware manual for conditions.
  *
  * set conditional to GR1553BC_UNCOND_JMP for unconditional jump.
  */
-extern int gr1553bc_slot_jump
-	(
-	struct gr1553bc_list *list,
-	int mid,
-	uint32_t condition,
-	int to_mid
-	);
+extern int gr1553bc_slot_jump(
+  struct gr1553bc_list *list,
+  int                   mid,
+  uint32_t              condition,
+  int                   to_mid
+);
 
 /* Create a dummy transfer, paused until external trigger is set. The
  * Slot is will have the dummy bit set, no transfer will take place.
  */
-extern int gr1553bc_slot_exttrig(struct gr1553bc_list *list, int mid);
+extern int gr1553bc_slot_exttrig( struct gr1553bc_list *list, int mid );
 
 /* Create a transfer on a previous allocated descriptor. It is assumed
  * that the descriptor has been initialized empty before calling this
@@ -559,25 +548,27 @@ extern int gr1553bc_slot_exttrig(struct gr1553bc_list *list, int mid);
  * 1553 core. This is an option only for AMBA-over-PCI.
  */
 extern int gr1553bc_slot_transfer(
-	struct gr1553bc_list *list,
-	int mid,
-	int options,
-	int tt,
-	uint16_t *dptr);
+  struct gr1553bc_list *list,
+  int                   mid,
+  int                   options,
+  int                   tt,
+  uint16_t             *dptr
+);
 
 /* Remove or set dummy bit of a transfer descriptor
  * Bit31 of *dummy is written to the dummy bit, the 
  * old descriptor value is stored into *dummy.
  */
 extern int gr1553bc_slot_dummy(
-	struct gr1553bc_list *list,
-	int mid,
-	unsigned int *dummy);
+  struct gr1553bc_list *list,
+  int                   mid,
+  unsigned int         *dummy
+);
 
 /* Make a slot empty (BC will not generate bus transfers), time slot 
  * allocated is untouched (if assigned).
  */
-extern int gr1553bc_slot_empty(struct gr1553bc_list *list, int mid);
+extern int gr1553bc_slot_empty( struct gr1553bc_list *list, int mid );
 
 /* Transfer descriptor status and/or update Transfer descriptor data pointer.
  *
@@ -597,10 +588,11 @@ extern int gr1553bc_slot_empty(struct gr1553bc_list *list, int mid);
  * 1553 core. This is an option only for AMBA-over-PCI.
  */
 extern int gr1553bc_slot_update(
-	struct gr1553bc_list *list,
-	int mid,
-	uint16_t *dptr,
-	unsigned int *stat);
+  struct gr1553bc_list *list,
+  int                   mid,
+  uint16_t             *dptr,
+  unsigned int         *stat
+);
 
 /* Modify a transfer descriptor in any way,
  * 
@@ -608,116 +600,121 @@ extern int gr1553bc_slot_update(
  *  bit[N=0..3]: 1 = set BD wordN according to argument wordN,
  *               0 = do not modify BD wordN
  */
-extern int gr1553bc_slot_raw
-	(
-	struct gr1553bc_list *list,
-	int mid,
-	unsigned int flags,
-	uint32_t word0,
-	uint32_t word1,
-	uint32_t word2,
-	uint32_t word3
-	);
-
+extern int gr1553bc_slot_raw(
+  struct gr1553bc_list *list,
+  int                   mid,
+  unsigned int          flags,
+  uint32_t              word0,
+  uint32_t              word1,
+  uint32_t              word2,
+  uint32_t              word3
+);
 
 /***** Macros to create BC Transfer Types (tt) for gr1553bc_slot_transfer() *****/
 
 /* WRITE TO RT (BC-to-RT) */
-#define GR1553BC_BC2RT(rtadr, subadr, word_count) \
-		((rtadr<<11) | (subadr<<5) | (0x1f<<21) | (0<<10) | \
-		((word_count>=32) ? 0 : word_count))
+#define GR1553BC_BC2RT( rtadr, subadr, word_count )                    \
+  ( ( rtadr << 11 ) | ( subadr << 5 ) | ( 0x1f << 21 ) | ( 0 << 10 ) | \
+    ( ( word_count >= 32 ) ? 0 : word_count ) )
 
 /* READ FROM RT (RT-to-BC) */
-#define GR1553BC_RT2BC(rtadr, subadr, word_count) \
-		((rtadr<<11) | (subadr<<5) | (0x1f<<21) | (1<<10) | \
-		((word_count>=32) ? 0 : word_count))
+#define GR1553BC_RT2BC( rtadr, subadr, word_count )                    \
+  ( ( rtadr << 11 ) | ( subadr << 5 ) | ( 0x1f << 21 ) | ( 1 << 10 ) | \
+    ( ( word_count >= 32 ) ? 0 : word_count ) )
 
 /* RT(TX) WRITE TO RT(RX) (RT-to-RT) */
-#define GR1553BC_RT2RT(tx_rtadr, tx_subadr, rx_rtadr, rx_subadr, word_count) \
-		((rx_rtadr<<11) | (rx_subadr<<5) | \
-		(tx_rtadr<<21) | (tx_subadr<<16) | \
-		(0<<10) | \
-		((word_count>=32) ? 0 : word_count))
+#define GR1553BC_RT2RT(                                            \
+  tx_rtadr,                                                        \
+  tx_subadr,                                                       \
+  rx_rtadr,                                                        \
+  rx_subadr,                                                       \
+  word_count                                                       \
+)                                                                  \
+  ( ( rx_rtadr << 11 ) | ( rx_subadr << 5 ) | ( tx_rtadr << 21 ) | \
+    ( tx_subadr << 16 ) | ( 0 << 10 ) |                            \
+    ( ( word_count >= 32 ) ? 0 : word_count ) )
 
 /* Mode command without data. (BC-to-RT)
  * Mode code: 0,1,2,3,4,5,6,7 or 8.
  */
-#define GR1553BC_MC_NODATA(rtadr, modecode) \
-		((rtadr<<11) | (0x1f<<5) | (0x1f<<21) | \
-		(modecode<<0) | (1<<10))
+#define GR1553BC_MC_NODATA( rtadr, modecode )                              \
+  ( ( rtadr << 11 ) | ( 0x1f << 5 ) | ( 0x1f << 21 ) | ( modecode << 0 ) | \
+    ( 1 << 10 ) )
 
 /* Mode command with 4 byte data (RT-to-BC)
  * Mode code: 16, 18 or 19.
  */
-#define GR1553BC_MC_RT2BC(rtadr, modecode) \
-		((rtadr<<11) | (0x1f<<5) | (0x1f<<21) | \
-		(modecode<<0) | (1<<10))
+#define GR1553BC_MC_RT2BC( rtadr, modecode )                               \
+  ( ( rtadr << 11 ) | ( 0x1f << 5 ) | ( 0x1f << 21 ) | ( modecode << 0 ) | \
+    ( 1 << 10 ) )
 
 /* Mode command with 4 byte data (BC-to-RT)
  * Mode code: 17, 20 or 21.
  */
-#define GR1553BC_MC_BC2RT(rtadr, modecode) \
-		((rtadr<<11) | (0x1f<<5) | (0x1f<<21) | \
-		(modecode<<0) | (0<<10))
+#define GR1553BC_MC_BC2RT( rtadr, modecode )                               \
+  ( ( rtadr << 11 ) | ( 0x1f << 5 ) | ( 0x1f << 21 ) | ( modecode << 0 ) | \
+    ( 0 << 10 ) )
 
 /* Broadcast to all RTs, to a specific subaddress (BC-to-RTs) */
-#define GR1553BC_BC_BC2RT(subadr, word_count) \
-		((0x1f<<11) | (subadr<<5) | (0x1f<<21) | \
-		(0<<10) | \
-		((word_count>=32) ? 0 : word_count))
+#define GR1553BC_BC_BC2RT( subadr, word_count )                       \
+  ( ( 0x1f << 11 ) | ( subadr << 5 ) | ( 0x1f << 21 ) | ( 0 << 10 ) | \
+    ( ( word_count >= 32 ) ? 0 : word_count ) )
 
 /* Request RT to broadcast to all RTs, to a specific subaddress (RT-to-RTs) */
-#define GR1553BC_BC_RT2RT(tx_rtadr, tx_subadr, rx_subadr, word_count) \
-		((0x1f<<11) | (rx_subadr<<5) | \
-		(tx_rtadr<<21) | (tx_subadr<<16) | \
-		(0<<10) | \
-		((word_count>=32) ? 0 : word_count))
+#define GR1553BC_BC_RT2RT( tx_rtadr, tx_subadr, rx_subadr, word_count ) \
+  ( ( 0x1f << 11 ) | ( rx_subadr << 5 ) | ( tx_rtadr << 21 ) |          \
+    ( tx_subadr << 16 ) | ( 0 << 10 ) |                                 \
+    ( ( word_count >= 32 ) ? 0 : word_count ) )
 
 /* Broadcast mode command without data (BC-to-RTs) 
  * Mode code: 1,3,4,5,6,7 or 8
  */
-#define GR1553BC_BC_MC_NODATA(modecode) \
-		((0x1f<<11) | (0x1f<<5) | (0x1f<<21) | \
-		((modecode)<<0) | (1<<10))
+#define GR1553BC_BC_MC_NODATA( modecode )                                     \
+  ( ( 0x1f << 11 ) | ( 0x1f << 5 ) | ( 0x1f << 21 ) | ( ( modecode ) << 0 ) | \
+    ( 1 << 10 ) )
 
 /* Broadcast mode command with 4 byte data (BC-to-RTs)
  * Mode code: 17, 20 or 21
  */
-#define GR1553BC_BC_MC_BC2RT(modecode) \
-		((0x1f<<11) | (0x1f<<5) | (0x1f<<21) | \
-		((modecode)<<0) | (0<<10))
-
+#define GR1553BC_BC_MC_BC2RT( modecode )                                      \
+  ( ( 0x1f << 11 ) | ( 0x1f << 5 ) | ( 0x1f << 21 ) | ( ( modecode ) << 0 ) | \
+    ( 0 << 10 ) )
 
 /***** Macros to create BC options (options) for gr1553bc_slot_transfer() *****/
 
 /* Dummy (BC does no bus trasactions) */
-#define GR1553BC_OPT_DUMMY (1<<1)
+#define GR1553BC_OPT_DUMMY ( 1 << 1 )
 
 /* Retry modes */
-#define GR1553BC_RETRY_SAME	0x0	/* Retry on the same bus only */
-#define GR1553BC_RETRY_ALTER	0x1	/* Retry alternating on both busses */
-#define GR1553BC_RETRY_ATTEMPT	0x2	/* Many attepts first on original 
+#define GR1553BC_RETRY_SAME  0x0 /* Retry on the same bus only */
+#define GR1553BC_RETRY_ALTER 0x1 /* Retry alternating on both busses */
+#define GR1553BC_RETRY_ATTEMPT \
+  0x2 /* Many attepts first on original 
 					 * bus then on other bus */
 /* Number of retires supported */
-#define GR1553BC_RETRY_CNT_MAX	6
+#define GR1553BC_RETRY_CNT_MAX 6
 
 /* Dummy bit: No transfer
  * Bus bit: 0=A, 1=B
  * Exttrig bit: Wait for external trigger (used for timesync)
  * Exclusive bit: 1=Don't allow other messages in this time slot.
  */
-#define GR1553BC_OPTIONS(dummy, exttrig, exclusive, retrymode, nretry, bus) \
-		((((exttrig) & 0x1) << 30) | (((exclusive) & 0x1) << 29) | \
-		((retrymode) << 23) | ((nretry) << 20) | \
-		((bus) & 1) | (((dummy) & 0x1) << 1))
+#define GR1553BC_OPTIONS( dummy, exttrig, exclusive, retrymode, nretry, bus ) \
+  ( ( ( ( exttrig ) & 0x1 ) << 30 ) | ( ( ( exclusive ) & 0x1 ) << 29 ) |     \
+    ( ( retrymode ) << 23 ) | ( ( nretry ) << 20 ) | ( ( bus ) & 1 ) |        \
+    ( ( ( dummy ) & 0x1 ) << 1 ) )
 
-#define GR1553BC_OPTIONS_BUSA GR1553BC_OPTIONS(0,0,0,GR1553BC_RETRY_SAME,0,0)
-#define GR1553BC_OPTIONS_BUSB GR1553BC_OPTIONS(0,0,0,GR1553BC_RETRY_SAME,0,1)
-#define GR1553BC_OPTIONS_BUSA_DUM GR1553BC_OPTIONS(1,0,0,GR1553BC_RETRY_SAME,0,0)
-#define GR1553BC_OPTIONS_BUSB_DUM GR1553BC_OPTIONS(1,0,0,GR1553BC_RETRY_SAME,0,1)
+#define GR1553BC_OPTIONS_BUSA \
+  GR1553BC_OPTIONS( 0, 0, 0, GR1553BC_RETRY_SAME, 0, 0 )
+#define GR1553BC_OPTIONS_BUSB \
+  GR1553BC_OPTIONS( 0, 0, 0, GR1553BC_RETRY_SAME, 0, 1 )
+#define GR1553BC_OPTIONS_BUSA_DUM \
+  GR1553BC_OPTIONS( 1, 0, 0, GR1553BC_RETRY_SAME, 0, 0 )
+#define GR1553BC_OPTIONS_BUSB_DUM \
+  GR1553BC_OPTIONS( 1, 0, 0, GR1553BC_RETRY_SAME, 0, 1 )
 
 /* Show parts of a list - this is for debugging only */
-extern void gr1553bc_show_list(struct gr1553bc_list *list, int options);
+extern void gr1553bc_show_list( struct gr1553bc_list *list, int options );
 
 #ifdef __cplusplus
 }

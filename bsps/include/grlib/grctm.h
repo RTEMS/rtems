@@ -30,161 +30,167 @@
 #ifndef __GRCTM_H__
 #define __GRCTM_H__
 
-#define DAT0_IRQ    0x1
-#define DAT1_IRQ    0x2
-#define DAT2_IRQ    0x4
-#define PULSE0_IRQ  0x10
-#define PULSE1_IRQ  0x20
-#define PULSE2_IRQ  0x40
-#define PULSE3_IRQ  0x80
-#define PULSE4_IRQ  0x100
-#define PULSE5_IRQ  0x200
-#define PULSE6_IRQ  0x400
-#define PULSE7_IRQ  0x800
+#define DAT0_IRQ   0x1
+#define DAT1_IRQ   0x2
+#define DAT2_IRQ   0x4
+#define PULSE0_IRQ 0x10
+#define PULSE1_IRQ 0x20
+#define PULSE2_IRQ 0x40
+#define PULSE3_IRQ 0x80
+#define PULSE4_IRQ 0x100
+#define PULSE5_IRQ 0x200
+#define PULSE6_IRQ 0x400
+#define PULSE7_IRQ 0x800
 
 struct grctm_regs {
-	volatile uint32_t grr;
-	volatile uint32_t gcr;
-	volatile uint32_t gsr;
-	volatile uint32_t unused[2];
-	volatile uint32_t pfr;
-	volatile uint32_t etcr;
-	volatile uint32_t etfr;
-	volatile uint32_t dcr0;
-	volatile uint32_t dfr0;
-	volatile uint32_t dcr1;
-	volatile uint32_t dfr1;
-	volatile uint32_t dcr2;
-	volatile uint32_t dfr2;
-	volatile uint32_t stcr;
-	volatile uint32_t stfr;
-	volatile uint32_t pdr[8];
-	volatile uint32_t pimsr;
-	volatile uint32_t pimr;
-	volatile uint32_t pisr;
-	volatile uint32_t pir;
-	volatile uint32_t imr;
-	volatile uint32_t picr;
-	volatile uint32_t unused1[2];
-	volatile uint32_t etir;
-	volatile uint32_t fsir;
-	volatile uint32_t serconf;
-	volatile uint32_t unused2;
-	volatile uint32_t twsc;
-	volatile uint32_t twadj;
-	volatile uint32_t twtx;
-	volatile uint32_t twrx;
+  volatile uint32_t grr;
+  volatile uint32_t gcr;
+  volatile uint32_t gsr;
+  volatile uint32_t unused[ 2 ];
+  volatile uint32_t pfr;
+  volatile uint32_t etcr;
+  volatile uint32_t etfr;
+  volatile uint32_t dcr0;
+  volatile uint32_t dfr0;
+  volatile uint32_t dcr1;
+  volatile uint32_t dfr1;
+  volatile uint32_t dcr2;
+  volatile uint32_t dfr2;
+  volatile uint32_t stcr;
+  volatile uint32_t stfr;
+  volatile uint32_t pdr[ 8 ];
+  volatile uint32_t pimsr;
+  volatile uint32_t pimr;
+  volatile uint32_t pisr;
+  volatile uint32_t pir;
+  volatile uint32_t imr;
+  volatile uint32_t picr;
+  volatile uint32_t unused1[ 2 ];
+  volatile uint32_t etir;
+  volatile uint32_t fsir;
+  volatile uint32_t serconf;
+  volatile uint32_t unused2;
+  volatile uint32_t twsc;
+  volatile uint32_t twadj;
+  volatile uint32_t twtx;
+  volatile uint32_t twrx;
 };
 
 struct grctm_stats {
-
-	/* IRQ Stats */
-	unsigned int nirqs;
-	unsigned int pulse;
+  /* IRQ Stats */
+  unsigned int nirqs;
+  unsigned int pulse;
 };
 
 /* Function ISR callback prototype */
-typedef void (*grctm_isr_t)(unsigned int pimr, void *data);
+typedef void ( *grctm_isr_t )( unsigned int pimr, void *data );
 
 /* Open a GRCTM device by minor number. */
-extern void *grctm_open(int minor);
+extern void *grctm_open( int minor );
 
 /* Close a previously opened GRCTM device */
-extern void grctm_close(void *spwcuc);
+extern void grctm_close( void *spwcuc );
 
 /* Hardware Reset of GRCTM */
-extern int grctm_reset(void *grctm);
+extern int grctm_reset( void *grctm );
 
 /* Enable Interrupts at Interrupt controller */
-extern void grctm_int_enable(void *grctm);
+extern void grctm_int_enable( void *grctm );
 
 /* Disable Interrupts at Interrupt controller */
-extern void grctm_int_disable(void *grctm);
+extern void grctm_int_disable( void *grctm );
 
 /* Clear Statistics gathered by the driver */
-extern void grctm_clr_stats(void *grctm);
+extern void grctm_clr_stats( void *grctm );
 
 /* Get Statistics gathered by the driver */
-extern void grctm_get_stats(void *grctm, struct grctm_stats *stats);
+extern void grctm_get_stats( void *grctm, struct grctm_stats *stats );
 
 /* Register an Interrupt handler and custom data, the function call is
  * removed by setting func to NULL.
  */
-extern void grctm_int_register(void *grctm, grctm_isr_t func, void *data);
+extern void grctm_int_register( void *grctm, grctm_isr_t func, void *data );
 
 /* Enable external synchronisation (from spwcuc) */
-extern void grctm_enable_ext_sync(void *grctm);
+extern void grctm_enable_ext_sync( void *grctm );
 
 /* Disable external synchronisation (from spwcuc) */
-extern void grctm_disable_ext_sync(void *grctm);
+extern void grctm_disable_ext_sync( void *grctm );
 
 /* Enable TimeWire synchronisation */
-extern void grctm_enable_tw_sync(void *grctm);
+extern void grctm_enable_tw_sync( void *grctm );
 
 /* Disable TimeWire synchronisation */
-extern void grctm_disable_tw_sync(void *grctm);
+extern void grctm_disable_tw_sync( void *grctm );
 
 /* Disable frequency synthesizer from driving ET */
-extern void grctm_disable_fs(void *grctm);
+extern void grctm_disable_fs( void *grctm );
 
 /* Enable frequency synthesizer to drive ET */
-extern void grctm_enable_fs(void *grctm);
+extern void grctm_enable_fs( void *grctm );
 
 /* Return elapsed coarse time */
-extern unsigned int grctm_get_et_coarse(void *grctm);
+extern unsigned int grctm_get_et_coarse( void *grctm );
 
 /* Return elapsed fine time */
-extern unsigned int grctm_get_et_fine(void *grctm);
+extern unsigned int grctm_get_et_fine( void *grctm );
 
 /* Return elapsed time (coarse and fine) */
-extern unsigned long long grctm_get_et(void *grctm);
+extern unsigned long long grctm_get_et( void *grctm );
 
 /* Return 1 if specified datation has been latched */
-extern int grctm_is_dat_latched(void *grctm, int dat);
+extern int grctm_is_dat_latched( void *grctm, int dat );
 
 /* Set triggering edge of datation input */
-extern void grctm_set_dat_edge(void *grctm, int dat, int edge);
+extern void grctm_set_dat_edge( void *grctm, int dat, int edge );
 
 /* Return latched datation coarse time */
-extern unsigned int grctm_get_dat_coarse(void *grctm, int dat);
+extern unsigned int grctm_get_dat_coarse( void *grctm, int dat );
 
 /* Return latched datation fine time */
-extern unsigned int grctm_get_dat_fine(void *grctm, int dat);
+extern unsigned int grctm_get_dat_fine( void *grctm, int dat );
 
 /* Return latched datation ET */
-extern unsigned long long grctm_get_dat_et(void *grctm, int dat);
+extern unsigned long long grctm_get_dat_et( void *grctm, int dat );
 
 /* Return current pulse configuration */
-extern unsigned int grctm_get_pulse_reg(void *grctm, int pulse);
+extern unsigned int grctm_get_pulse_reg( void *grctm, int pulse );
 
 /* Set pulse register */
-extern void grctm_set_pulse_reg(void *grctm, int pulse, unsigned int val);
+extern void grctm_set_pulse_reg( void *grctm, int pulse, unsigned int val );
 
 /* Configure pulse: pp = period, pw = width, pl = level, en = enable */
-extern void grctm_cfg_pulse(void *grctm, int pulse, int pp, int pw, int pl, int en);
+extern void grctm_cfg_pulse(
+  void *grctm,
+  int   pulse,
+  int   pp,
+  int   pw,
+  int   pl,
+  int   en
+);
 
 /* Enable pulse output */
-extern void grctm_enable_pulse(void *grctm, int pulse);
+extern void grctm_enable_pulse( void *grctm, int pulse );
 
 /* Disable pulse output */
-extern void grctm_disable_pulse(void *grctm, int pulse);
+extern void grctm_disable_pulse( void *grctm, int pulse );
 
 /* Clear interrupts */
-extern void grctm_clear_irqs(void *grctm, int irqs);
+extern void grctm_clear_irqs( void *grctm, int irqs );
 
 /* Enable interrupts */
-extern void grctm_enable_irqs(void *grctm, int irqs);
+extern void grctm_enable_irqs( void *grctm, int irqs );
 
 /* Set Frequency synthesizer increment */
-void grctm_set_fs_incr(void *grctm, int incr);
+void grctm_set_fs_incr( void *grctm, int incr );
 
 /* Set ET increment */
-void grctm_set_et_incr(void *grctm, int incr);
+void grctm_set_et_incr( void *grctm, int incr );
 
 /* Get register base address */
-struct grctm_regs *grctm_get_regs(void *grctm);
+struct grctm_regs *grctm_get_regs( void *grctm );
 
 /* Register the GRCTM driver to Driver Manager */
-extern void grctm_register(void);
+extern void grctm_register( void );
 
 #endif

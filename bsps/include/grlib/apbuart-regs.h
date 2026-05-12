@@ -82,17 +82,14 @@ extern "C" {
  */
 
 #define APBUART_DATA_DATA_SHIFT 0
-#define APBUART_DATA_DATA_MASK 0xffU
+#define APBUART_DATA_DATA_MASK  0xffU
 #define APBUART_DATA_DATA_GET( _reg ) \
-  ( ( ( _reg ) & APBUART_DATA_DATA_MASK ) >> \
-    APBUART_DATA_DATA_SHIFT )
-#define APBUART_DATA_DATA_SET( _reg, _val ) \
+  ( ( ( _reg ) & APBUART_DATA_DATA_MASK ) >> APBUART_DATA_DATA_SHIFT )
+#define APBUART_DATA_DATA_SET( _reg, _val )  \
   ( ( ( _reg ) & ~APBUART_DATA_DATA_MASK ) | \
-    ( ( ( _val ) << APBUART_DATA_DATA_SHIFT ) & \
-      APBUART_DATA_DATA_MASK ) )
+    ( ( ( _val ) << APBUART_DATA_DATA_SHIFT ) & APBUART_DATA_DATA_MASK ) )
 #define APBUART_DATA_DATA( _val ) \
-  ( ( ( _val ) << APBUART_DATA_DATA_SHIFT ) & \
-    APBUART_DATA_DATA_MASK )
+  ( ( ( _val ) << APBUART_DATA_DATA_SHIFT ) & APBUART_DATA_DATA_MASK )
 
 /** @} */
 
@@ -105,30 +102,26 @@ extern "C" {
  */
 
 #define APBUART_STATUS_RCNT_SHIFT 26
-#define APBUART_STATUS_RCNT_MASK 0xfc000000U
+#define APBUART_STATUS_RCNT_MASK  0xfc000000U
 #define APBUART_STATUS_RCNT_GET( _reg ) \
-  ( ( ( _reg ) & APBUART_STATUS_RCNT_MASK ) >> \
-    APBUART_STATUS_RCNT_SHIFT )
-#define APBUART_STATUS_RCNT_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~APBUART_STATUS_RCNT_MASK ) | \
+  ( ( ( _reg ) & APBUART_STATUS_RCNT_MASK ) >> APBUART_STATUS_RCNT_SHIFT )
+#define APBUART_STATUS_RCNT_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~APBUART_STATUS_RCNT_MASK ) |    \
     ( ( ( _val ) << APBUART_STATUS_RCNT_SHIFT ) & \
       APBUART_STATUS_RCNT_MASK ) )
 #define APBUART_STATUS_RCNT( _val ) \
-  ( ( ( _val ) << APBUART_STATUS_RCNT_SHIFT ) & \
-    APBUART_STATUS_RCNT_MASK )
+  ( ( ( _val ) << APBUART_STATUS_RCNT_SHIFT ) & APBUART_STATUS_RCNT_MASK )
 
 #define APBUART_STATUS_TCNT_SHIFT 20
-#define APBUART_STATUS_TCNT_MASK 0x3f00000U
+#define APBUART_STATUS_TCNT_MASK  0x3f00000U
 #define APBUART_STATUS_TCNT_GET( _reg ) \
-  ( ( ( _reg ) & APBUART_STATUS_TCNT_MASK ) >> \
-    APBUART_STATUS_TCNT_SHIFT )
-#define APBUART_STATUS_TCNT_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~APBUART_STATUS_TCNT_MASK ) | \
+  ( ( ( _reg ) & APBUART_STATUS_TCNT_MASK ) >> APBUART_STATUS_TCNT_SHIFT )
+#define APBUART_STATUS_TCNT_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~APBUART_STATUS_TCNT_MASK ) |    \
     ( ( ( _val ) << APBUART_STATUS_TCNT_SHIFT ) & \
       APBUART_STATUS_TCNT_MASK ) )
 #define APBUART_STATUS_TCNT( _val ) \
-  ( ( ( _val ) << APBUART_STATUS_TCNT_SHIFT ) & \
-    APBUART_STATUS_TCNT_MASK )
+  ( ( ( _val ) << APBUART_STATUS_TCNT_SHIFT ) & APBUART_STATUS_TCNT_MASK )
 
 #define APBUART_STATUS_RF 0x400U
 
@@ -205,15 +198,15 @@ extern "C" {
  */
 
 #define APBUART_SCALER_SCALER_RELOAD_VALUE_SHIFT 0
-#define APBUART_SCALER_SCALER_RELOAD_VALUE_MASK 0xfffffU
-#define APBUART_SCALER_SCALER_RELOAD_VALUE_GET( _reg ) \
+#define APBUART_SCALER_SCALER_RELOAD_VALUE_MASK  0xfffffU
+#define APBUART_SCALER_SCALER_RELOAD_VALUE_GET( _reg )        \
   ( ( ( _reg ) & APBUART_SCALER_SCALER_RELOAD_VALUE_MASK ) >> \
     APBUART_SCALER_SCALER_RELOAD_VALUE_SHIFT )
-#define APBUART_SCALER_SCALER_RELOAD_VALUE_SET( _reg, _val ) \
-  ( ( ( _reg ) & ~APBUART_SCALER_SCALER_RELOAD_VALUE_MASK ) | \
+#define APBUART_SCALER_SCALER_RELOAD_VALUE_SET( _reg, _val )     \
+  ( ( ( _reg ) & ~APBUART_SCALER_SCALER_RELOAD_VALUE_MASK ) |    \
     ( ( ( _val ) << APBUART_SCALER_SCALER_RELOAD_VALUE_SHIFT ) & \
       APBUART_SCALER_SCALER_RELOAD_VALUE_MASK ) )
-#define APBUART_SCALER_SCALER_RELOAD_VALUE( _val ) \
+#define APBUART_SCALER_SCALER_RELOAD_VALUE( _val )             \
   ( ( ( _val ) << APBUART_SCALER_SCALER_RELOAD_VALUE_SHIFT ) & \
     APBUART_SCALER_SCALER_RELOAD_VALUE_MASK )
 
@@ -228,17 +221,14 @@ extern "C" {
  */
 
 #define APBUART_FIFO_DATA_SHIFT 0
-#define APBUART_FIFO_DATA_MASK 0xffU
+#define APBUART_FIFO_DATA_MASK  0xffU
 #define APBUART_FIFO_DATA_GET( _reg ) \
-  ( ( ( _reg ) & APBUART_FIFO_DATA_MASK ) >> \
-    APBUART_FIFO_DATA_SHIFT )
-#define APBUART_FIFO_DATA_SET( _reg, _val ) \
+  ( ( ( _reg ) & APBUART_FIFO_DATA_MASK ) >> APBUART_FIFO_DATA_SHIFT )
+#define APBUART_FIFO_DATA_SET( _reg, _val )  \
   ( ( ( _reg ) & ~APBUART_FIFO_DATA_MASK ) | \
-    ( ( ( _val ) << APBUART_FIFO_DATA_SHIFT ) & \
-      APBUART_FIFO_DATA_MASK ) )
+    ( ( ( _val ) << APBUART_FIFO_DATA_SHIFT ) & APBUART_FIFO_DATA_MASK ) )
 #define APBUART_FIFO_DATA( _val ) \
-  ( ( ( _val ) << APBUART_FIFO_DATA_SHIFT ) & \
-    APBUART_FIFO_DATA_MASK )
+  ( ( ( _val ) << APBUART_FIFO_DATA_SHIFT ) & APBUART_FIFO_DATA_MASK )
 
 /** @} */
 
