@@ -41,4 +41,21 @@
 #define SATP_MODE_SHIFT (31)
 #endif
 
+#ifndef ASM
+
+#define _RISCV_FENCE( pred, succ )                              \
+  __asm__ volatile ( "fence " #pred ", " #succ : : : "memory" )
+
+static inline void _RISCV_data_barrier( void )
+{
+  _RISCV_FENCE( rw, rw );
+}
+
+static inline void _RISCV_MMIO_store_release_fence( void )
+{
+  _RISCV_FENCE( o, i );
+}
+
+#endif /* ASM */
+
 #endif

@@ -200,10 +200,7 @@ void bsp_interrupt_facility_initialize( void )
     bsp_interrupt_set_priority( vec, 14 );
   }
 
-  __asm__ volatile( "fence o, i"
-                    :
-                    :
-                    : "memory" );
+  _RISCV_MMIO_store_release_fence();
   riscv_interrupt_enable( cookie );
 
   /*

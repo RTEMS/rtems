@@ -145,11 +145,11 @@ static void riscv_interrupt_dispatch_machine(
       plic_hart_regs->claim_complete = interrupt_index;
 
       /*
-       * FIXME: It is not clear which fence is necessary here or if a fence is
+       * WARN: It is not clear which fence is necessary here or if a fence is
        * necessary at all.  The goal is that the complete signal is somehow
        * recognized by the PLIC before the next claim is issued.
        */
-      __asm__ volatile ("fence o, i" : : : "memory");
+      _RISCV_MMIO_store_release_fence();
     }
   } else if (mcause == (RISCV_INTERRUPT_SOFTWARE_MACHINE << 1)) {
     /*

@@ -212,6 +212,6 @@ BSP_START_TEXT_SECTION void riscv_mmu_setup_translation_table(
 BSP_START_TEXT_SECTION void riscv_mmu_setup( void )
 {
   riscv_mmu_setup_translation_table( &riscv_mmu_instance );
-  __asm__ volatile ("fence rw, rw");
+  _RISCV_data_barrier();
   riscv_mmu_enable( &riscv_mmu_instance );
 }
