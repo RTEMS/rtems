@@ -35,6 +35,8 @@
 
 #include "encoding.h"
 
+#define SIP_SEIP MIP_SEIP
+
 #if __riscv_xlen == 64
 #define SATP_MODE_SHIFT (60)
 #else

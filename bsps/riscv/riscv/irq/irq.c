@@ -49,10 +49,11 @@
 
 #include <libfdt.h>
 
-#ifndef RISCV_USE_S_MODE
 static volatile RISCV_PLIC_regs *riscv_plic;
 
+#ifndef RISCV_USE_S_MODE
 volatile RISCV_CLINT_regs *riscv_clint;
+#endif
 
 #ifdef RTEMS_SMP
 /*
@@ -72,66 +73,31 @@ riscv_plic_irq_to_cpu[RISCV_MAXIMUM_EXTERNAL_INTERRUPTS];
 
 RTEMS_INTERRUPT_LOCK_DEFINE(static, riscv_plic_lock, "PLIC")
 
-#endif /* !RISCV_USE_S_MODE */
-
-#ifdef RISCV_USE_S_MODE
-
-static void riscv_interrupt_dispatch_supervisor(
-    uintptr_t scause,
-    Per_CPU_Control *cpu_self
-)
+void _RISCV_Interrupt_dispatch(uintptr_t cause, Per_CPU_Control *cpu_self)
 {
-#ifndef RTEMS_SMP
+#if defined(RISCV_USE_S_MODE) && !defined(RTEMS_SMP)
   (void) cpu_self;
 #endif
 
-  /*
-   * Get rid of the most significant bit which indicates if the exception was
-   * caused by an interrupt or not.
-   */
-  scause <<= 1;
-
-  if (scause == (RISCV_INTERRUPT_TIMER_SUPERVISOR << 1)) {
-    bsp_interrupt_handler_dispatch_unchecked(RISCV_INTERRUPT_VECTOR_TIMER);
-  } else if (scause == (RISCV_INTERRUPT_EXTERNAL_SUPERVISOR << 1)) {
-      /* Reaching here requires delegation/coordination with the SBI.
-       * This is currently unsupported. */
-      bsp_fatal(RISCV_FATAL_UNEXPECTED_INTERRUPT_EXCEPTION);
-  } else if (scause == (RISCV_INTERRUPT_SOFTWARE_SUPERVISOR << 1)) {
-    /*
-     * Clear the software interrupt on this processor.  Synchronization of
-     * inter-processor interrupts is done via Per_CPU_Control::message in
-     * _SMP_Inter_processor_interrupt_handler().
-     */
-    clear_csr(sip, SIP_SSIP);
-
-#ifdef RTEMS_SMP
-    _SMP_Inter_processor_interrupt_handler(cpu_self);
-    bsp_interrupt_handler_dispatch_unlikely(RISCV_INTERRUPT_VECTOR_SOFTWARE);
+#ifdef RISCV_USE_S_MODE
+#define CAUSE_TIMER (RISCV_INTERRUPT_TIMER_SUPERVISOR << 1)
+#define CAUSE_EXTERNAL (RISCV_INTERRUPT_EXTERNAL_SUPERVISOR << 1)
+#define CAUSE_SOFTWARE (RISCV_INTERRUPT_SOFTWARE_SUPERVISOR << 1)
 #else
-    bsp_interrupt_handler_dispatch_unchecked(RISCV_INTERRUPT_VECTOR_SOFTWARE);
+#define CAUSE_TIMER (RISCV_INTERRUPT_TIMER_MACHINE << 1)
+#define CAUSE_EXTERNAL (RISCV_INTERRUPT_EXTERNAL_MACHINE << 1)
+#define CAUSE_SOFTWARE (RISCV_INTERRUPT_SOFTWARE_MACHINE << 1)
 #endif
-  } else {
-    bsp_fatal(RISCV_FATAL_UNEXPECTED_INTERRUPT_EXCEPTION);
-  }
-}
 
-#else
-
-static void riscv_interrupt_dispatch_machine(
-    uintptr_t mcause,
-    Per_CPU_Control *cpu_self
-)
-{
   /*
    * Get rid of the most significant bit which indicates if the exception was
    * caused by an interrupt or not.
    */
-  mcause <<= 1;
+  cause <<= 1;
 
-  if (mcause == (RISCV_INTERRUPT_TIMER_MACHINE << 1)) {
+  if (cause == CAUSE_TIMER) {
     bsp_interrupt_handler_dispatch_unchecked(RISCV_INTERRUPT_VECTOR_TIMER);
-  } else if (mcause == (RISCV_INTERRUPT_EXTERNAL_MACHINE << 1)) {
+  } else if (cause == CAUSE_EXTERNAL) {
     volatile RISCV_PLIC_hart_regs *plic_hart_regs;
     uint32_t interrupt_index;
 
@@ -151,13 +117,17 @@ static void riscv_interrupt_dispatch_machine(
        */
       _RISCV_MMIO_store_release_fence();
     }
-  } else if (mcause == (RISCV_INTERRUPT_SOFTWARE_MACHINE << 1)) {
+  } else if (cause == CAUSE_SOFTWARE) {
     /*
      * Clear the software interrupt on this processor.  Synchronization of
      * inter-processor interrupts is done via Per_CPU_Control::message in
      * _SMP_Inter_processor_interrupt_handler().
      */
+#ifdef RISCV_USE_S_MODE
+    clear_csr(sip, SIP_SSIP);
+#else
     *cpu_self->cpu_per_cpu.clint_msip = 0;
+#endif
 
 #ifdef RTEMS_SMP
     _SMP_Inter_processor_interrupt_handler(cpu_self);
@@ -168,17 +138,6 @@ static void riscv_interrupt_dispatch_machine(
   } else {
     bsp_fatal(RISCV_FATAL_UNEXPECTED_INTERRUPT_EXCEPTION);
   }
-}
-
-#endif /* RISCV_USE_S_MODE */
-
-void _RISCV_Interrupt_dispatch(uintptr_t mcause, Per_CPU_Control *cpu_self)
-{
-#ifdef RISCV_USE_S_MODE
-  riscv_interrupt_dispatch_supervisor(mcause, cpu_self);
-#else
-  riscv_interrupt_dispatch_machine(mcause, cpu_self);
-#endif
 }
 
 #ifndef RISCV_USE_S_MODE
@@ -192,6 +151,8 @@ static void riscv_clint_per_cpu_init(
   cpu->cpu_per_cpu.clint_msip = &clint->msip[index];
   cpu->cpu_per_cpu.clint_mtimecmp = &clint->mtimecmp[index];
 }
+
+#endif
 
 static void riscv_plic_per_cpu_init(
   volatile RISCV_PLIC_regs *plic,
@@ -239,8 +200,14 @@ static void riscv_plic_cpu_0_init(
    * External M-mode interrupts on secondary processors are enabled in
    * bsp_start_on_secondary_processor().
    */
+#ifdef RISCV_USE_S_MODE
+  set_csr(sie, SIP_SEIP);
+#else
   set_csr(mie, MIP_MEIP);
+#endif
 }
+
+#ifndef RISCV_USE_S_MODE
 
 static void riscv_clint_init(const void *fdt)
 {
@@ -296,6 +263,8 @@ static void riscv_clint_init(const void *fdt)
 #endif
   }
 }
+
+#endif
 
 static void riscv_plic_init(const void *fdt)
 {
@@ -374,9 +343,15 @@ static void riscv_plic_init(const void *fdt)
 #endif
 
     interrupt_index = fdt32_to_cpu(val[i / 4 + 1]);
+#ifdef RISCV_USE_S_MODE
+    if (interrupt_index != RISCV_INTERRUPT_EXTERNAL_SUPERVISOR) {
+      continue;
+    }
+#else
     if (interrupt_index != RISCV_INTERRUPT_EXTERNAL_MACHINE) {
       continue;
     }
+#endif
 
     riscv_plic_per_cpu_init(
       plic,
@@ -393,17 +368,17 @@ static void riscv_plic_init(const void *fdt)
   riscv_plic_cpu_0_init(plic, ndev);
 }
 
-#endif /* !RISCV_USE_S_MODE */
-
 void bsp_interrupt_facility_initialize(void)
 {
-#ifndef RISCV_USE_S_MODE
   const void *fdt;
 
   fdt = bsp_fdt_get();
+
+#ifndef RISCV_USE_S_MODE
   riscv_clint_init(fdt);
-  riscv_plic_init(fdt);
 #endif
+
+  riscv_plic_init(fdt);
 }
 
 bool bsp_interrupt_is_valid_vector(rtems_vector_number vector)
@@ -458,9 +433,6 @@ rtems_status_code bsp_interrupt_is_pending(
   bsp_interrupt_assert(pending != NULL);
 
   if (RISCV_INTERRUPT_VECTOR_IS_EXTERNAL(vector)) {
-#ifdef RISCV_USE_S_MODE
-    return RTEMS_NOT_DEFINED;
-#else
     uint32_t interrupt_index;
     uint32_t group;
     uint32_t bit;
@@ -470,7 +442,6 @@ rtems_status_code bsp_interrupt_is_pending(
     bit = UINT32_C(1) << (interrupt_index % 32);
     *pending = ((riscv_plic->pending[group] & bit) != 0);
     return RTEMS_SUCCESSFUL;
-#endif
   }
 
   if (vector == RISCV_INTERRUPT_VECTOR_TIMER) {
@@ -496,23 +467,13 @@ static inline rtems_status_code riscv_raise_on(
   uint32_t            cpu_index
 )
 {
-  Per_CPU_Control *cpu;
-
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
   if (vector != RISCV_INTERRUPT_VECTOR_SOFTWARE) {
     return RTEMS_UNSATISFIED;
   }
-
-#ifdef RISCV_USE_S_MODE
-  (void) cpu;
-  (void) cpu_index;
-  return RTEMS_NOT_DEFINED;
-#else
-  cpu = _Per_CPU_Get_by_index(cpu_index);
-  *cpu->cpu_per_cpu.clint_msip = 0x1;
+  riscv_send_ipi( cpu_index );
   return RTEMS_SUCCESSFUL;
-#endif
 }
 
 rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
@@ -547,9 +508,6 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
   bsp_interrupt_assert(enabled != NULL);
 
   if (RISCV_INTERRUPT_VECTOR_IS_EXTERNAL(vector)) {
-#ifdef RISCV_USE_S_MODE
-    return RTEMS_NOT_DEFINED;
-#else
     uint32_t interrupt_index;
     uint32_t group;
     uint32_t bit;
@@ -585,7 +543,6 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
 #endif
 
     return RTEMS_SUCCESSFUL;
-#endif /* RISCV_USE_S_MODE */
   }
 
   if (vector == RISCV_INTERRUPT_VECTOR_TIMER) {
@@ -611,9 +568,6 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
   if (RISCV_INTERRUPT_VECTOR_IS_EXTERNAL(vector)) {
-#ifdef RISCV_USE_S_MODE
-    return RTEMS_NOT_DEFINED;
-#else
     uint32_t interrupt_index;
     uint32_t group;
     uint32_t bit;
@@ -657,7 +611,6 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
 
     rtems_interrupt_lock_release(&riscv_plic_lock, &lock_context);
     return RTEMS_SUCCESSFUL;
-#endif /* RISCV_USE_S_MODE */
   }
 
   if (vector == RISCV_INTERRUPT_VECTOR_TIMER) {
@@ -683,9 +636,6 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
   if (RISCV_INTERRUPT_VECTOR_IS_EXTERNAL(vector)) {
-#ifdef RISCV_USE_S_MODE
-    return RTEMS_NOT_DEFINED;
-#else
     uint32_t interrupt_index;
     uint32_t group;
     uint32_t bit;
@@ -729,7 +679,6 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 
     rtems_interrupt_lock_release(&riscv_plic_lock, &lock_context);
     return RTEMS_SUCCESSFUL;
-#endif /* RISCV_USE_S_MODE */
   }
 
   if (vector == RISCV_INTERRUPT_VECTOR_TIMER) {
@@ -760,14 +709,9 @@ rtems_status_code bsp_interrupt_set_priority(
   if (!RISCV_INTERRUPT_VECTOR_IS_EXTERNAL(vector)) {
     return RTEMS_UNSATISFIED;
   }
-#ifdef RISCV_USE_S_MODE
-  (void) priority;
-  return RTEMS_NOT_DEFINED;
-#else
   riscv_plic->priority[RISCV_INTERRUPT_VECTOR_EXTERNAL_TO_INDEX(vector)] =
     UINT32_MAX - priority;
   return RTEMS_SUCCESSFUL;
-#endif
 }
 
 rtems_status_code bsp_interrupt_get_priority(
@@ -782,14 +726,9 @@ rtems_status_code bsp_interrupt_get_priority(
     return RTEMS_UNSATISFIED;
   }
 
-#ifdef RISCV_USE_S_MODE
-  (void) priority;
-  return RTEMS_NOT_DEFINED;
-#else
   *priority = UINT32_MAX -
     riscv_plic->priority[RISCV_INTERRUPT_VECTOR_EXTERNAL_TO_INDEX(vector)];
   return RTEMS_SUCCESSFUL;
-#endif
 }
 
 #ifdef RTEMS_SMP
@@ -799,10 +738,6 @@ rtems_status_code bsp_interrupt_set_affinity(
 )
 {
   if (RISCV_INTERRUPT_VECTOR_IS_EXTERNAL(vector)) {
-#ifdef RISCV_USE_S_MODE
-    (void) affinity;
-    return RTEMS_NOT_DEFINED;
-#else
     uint32_t interrupt_index;
     Processor_mask mask;
 
@@ -826,7 +761,6 @@ rtems_status_code bsp_interrupt_set_affinity(
     }
 
     return RTEMS_INVALID_NUMBER;
-#endif /* RISCV_USE_S_MODE */
   }
 
   return RTEMS_UNSATISFIED;
@@ -838,11 +772,6 @@ rtems_status_code bsp_interrupt_get_affinity(
 )
 {
   if (RISCV_INTERRUPT_VECTOR_IS_EXTERNAL(vector)) {
-#ifdef RISCV_USE_S_MODE
-    (void) vector;
-    (void) affinity;
-    return RTEMS_NOT_DEFINED;
-#else
     uint32_t interrupt_index;
     volatile uint32_t *enable;
 
@@ -870,7 +799,6 @@ rtems_status_code bsp_interrupt_get_affinity(
     }
 
     return RTEMS_SUCCESSFUL;
-#endif /* RISCV_USE_S_MODE */
   }
 
   return RTEMS_UNSATISFIED;

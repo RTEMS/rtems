@@ -31,6 +31,7 @@ source:
 - bsps/riscv/riscv/start/bspstart.c
 - bsps/riscv/shared/fdt/riscv-fdt.c
 - bsps/riscv/shared/start/bspgetworkarea.c
+- bsps/riscv/shared/start/sendipi.c
 - bsps/shared/cache/nocache.c
 - bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c

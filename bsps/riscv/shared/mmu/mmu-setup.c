@@ -186,6 +186,17 @@ BSP_START_TEXT_SECTION void riscv_mmu_setup_translation_table(
     two_MiB,
     mmio_flags
   );
+
+  riscv_map_megapages(
+    control,
+    riscv_l1_mmio_page_table,
+    0xc000000, /* TODO: get this from FDT? make sure it's in the same l0 pte */
+    2 * two_MiB,
+    mmio_flags,
+    1,
+    two_MiB
+  );
+
 #else
   riscv_map_megapages(
     control,
@@ -206,6 +217,17 @@ BSP_START_TEXT_SECTION void riscv_mmu_setup_translation_table(
     1,
     2 * two_MiB
   );
+
+  riscv_map_megapages(
+    control,
+    control->root,
+    0xc000000, /* TODO: get this from FDT? */
+    2 * two_MiB,
+    mmio_flags,
+    1,
+    2 * two_MiB
+  );
+
 #endif
 }
 

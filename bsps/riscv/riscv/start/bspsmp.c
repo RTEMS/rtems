@@ -88,34 +88,9 @@ void _CPU_SMP_Prepare_start_multitasking(void)
   /* Do nothing */
 }
 
-#ifdef RISCV_USE_S_MODE
-static void riscv_smp_s_mode_send_ipi(uint32_t target_processor_index)
-{
-  uint32_t hartid;
-  unsigned long hart_mask;
-
-  hartid = _RISCV_Map_cpu_index_to_hartid(target_processor_index);
-  hart_mask = 1UL << hartid;
-  sbi_send_ipi(&hart_mask);
-}
-#else
-static void riscv_smp_m_mode_send_ipi(uint32_t target_processor_index)
-{
-  Per_CPU_Control *cpu;
-
-  cpu = _Per_CPU_Get_by_index(target_processor_index);
-  *cpu->cpu_per_cpu.clint_msip = 0x1;
-}
-#endif
-
-
 void _CPU_SMP_Send_interrupt(uint32_t target_processor_index)
 {
-#ifdef RISCV_USE_S_MODE
-  riscv_smp_s_mode_send_ipi( target_processor_index );
-#else
-  riscv_smp_m_mode_send_ipi( target_processor_index );
-#endif
+  riscv_send_ipi( target_processor_index );
 }
 
 #ifdef RISCV_USE_S_MODE
