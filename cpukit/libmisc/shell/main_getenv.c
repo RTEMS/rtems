@@ -7,7 +7,7 @@
  */
 
 /*
- * COPYRIGHT (C) 2009 Chris Johns <chrisj@rtems.org>
+ * COPYRIGHT (C) 2009, 2026 Chris Johns <chrisj@rtems.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -51,8 +51,17 @@ static int rtems_shell_main_getenv(int argc, char *argv[])
 
   if (argc != 2)
   {
-    printf ("error: only argument is the variable name\n");
+    printf ("error: available arguments are '-a' or a variable name\n");
     return 1;
+  }
+
+  if (strcmp ("-a", argv[1]) == 0) {
+    char** e = environ;
+    while (e != NULL && *e != NULL) {
+      printf ("%s\n", *e);
+      ++e;
+    }
+    return 0;
   }
 
   string = getenv (argv[1]);
@@ -70,7 +79,7 @@ static int rtems_shell_main_getenv(int argc, char *argv[])
 
 rtems_shell_cmd_t rtems_shell_GETENV_Command = {
   .name = "getenv",
-  .usage = "getenv [var]",
+  .usage = "getenv [-a] [var]",
   .topic = "misc",
   .command = rtems_shell_main_getenv,
   .alias = NULL,
