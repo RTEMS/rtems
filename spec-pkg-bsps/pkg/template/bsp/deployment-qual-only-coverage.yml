@@ -1,0 +1,58 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+attribute-actions: []
+attributes:
+  copyrights-by-license: {}
+  directory: $${.:/component/deployment-directory}
+  directory-state-type: explicit
+  enabled-by: RTEMS_QUAL
+  files: []
+  hash: null
+  links:
+  - hash: null
+    name: component
+    role: input
+    uid: component
+  - hash: null
+    name: source
+    role: input
+    uid: rtems-qual-only
+  - hash: null
+    name: build-spec
+    role: input
+    uid: /pkg/source/rtems
+  - hash: null
+    name: tools
+    role: input
+    uid: ../../tools
+  - hash: null
+    name: config
+    role: input
+    uid: config-qual-only-coverage
+  - hash: null
+    name: version
+    role: input
+    uid: config-qual-only-version
+  - hash: null
+    output-name: deployment
+    params:
+      configure-options: []
+    role: make
+    uid: /pkg/make/bsp
+  - name: build
+    role: output
+    uid: build-qual-only-coverage
+  - hash: null
+    name: member
+    role: input-to
+    uid: /pkg/deployment/archive
+  pkg-type: directory-state
+  type: pkg
+copyrights:
+- Copyright (C) 2020, 2026 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: add-package-template
+  uid: component
+pkg-type: template
+template-type: inline-item
+type: pkg

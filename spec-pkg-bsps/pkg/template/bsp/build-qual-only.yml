@@ -1,0 +1,73 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+attribute-actions: []
+attributes:
+  copyrights-by-license: {}
+  directory: ${.:/component/build-directory}/${.:/component/arch}-${.:/bsp}${.:/config:dash}-bsp-qual-only
+  directory-state-type: patterns
+  enabled-by: RTEMS_QUAL
+  files: []
+  hash: null
+  links:
+  - hash: null
+    name: component
+    role: input
+    uid: component
+  - hash: null
+    name: source
+    role: input
+    uid: build-config-qual-only
+  - exclude-patterns: []
+    hash: null
+    include-path:
+    - enabled-by: true
+      path:
+      - ${.:/component/arch}/${.:/bsp}${.:/component/config:dash}-qual-only/bsps/include
+      - ${.:/component/arch}/${.:/bsp}${.:/component/config:dash}-qual-only/cpukit/include
+    input:
+    - enabled-by: true
+      path:
+      - ${.:/component/arch}/${.:/bsp}${.:/component/config:dash}-qual-only/bsps/include
+      - ${.:/component/arch}/${.:/bsp}${.:/component/config:dash}-qual-only/cpukit/include
+    name: doxygen
+    role: input-to
+    strip-from-path:
+    - enabled-by: true
+      path: ${.:/component/arch}/${.:/bsp}${.:/component/config:dash}-qual-only
+    uid: build-ddf-sdd-doxyfile
+  - exclude-patterns: []
+    hash: null
+    include-path:
+    - enabled-by: true
+      path:
+      - ${.:/component/arch}/${.:/bsp}${.:/component/config:dash}-qual-only/bsps/include
+      - ${.:/component/arch}/${.:/bsp}${.:/component/config:dash}-qual-only/cpukit/include
+    input:
+    - enabled-by: true
+      path:
+      - ${.:/component/arch}/${.:/bsp}${.:/component/config:dash}-qual-only/bsps/include
+      - ${.:/component/arch}/${.:/bsp}${.:/component/config:dash}-qual-only/cpukit/include
+    name: doxygen
+    role: input-to
+    strip-from-path:
+    - enabled-by: true
+      path: ${.:/component/arch}/${.:/bsp}${.:/component/config:dash}-qual-only
+    uid: doc-ddf-sdd-doxyfile
+  - arch: ${.:/component/arch}
+    build-label: $${build-config-qual-only:/build-label}
+    hash: null
+    name: membench-build
+    path: $${.:/directory}/${.:/component/arch}/${.:/bsp}${.:/component/config:dash}${.:/component/bsp-qual-only:dash}
+    role: input-to
+    uid: membench
+  patterns: '**/*'
+  pkg-type: directory-state
+  type: pkg
+copyrights:
+- Copyright (C) 2022, 2026 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: add-package-template
+  uid: component
+pkg-type: template
+template-type: inline-item
+type: pkg

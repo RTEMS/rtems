@@ -1,0 +1,77 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+attribute-actions: []
+attributes:
+  actions:
+  - action: create-ini-file
+    enabled-by: true
+    output-name: .
+    sections:
+    - enabled-by: true
+      key-value-pairs:
+      - enabled-by:
+          not:
+            eq:
+            - ${.:/component/bsp}
+            - ${.:/component/bsp}${.:/component/config:dash}${.:/component/bsp-extra:dash}
+        key: INHERIT
+        value: ${.:/component/bsp}
+      - enabled-by: true
+        key: RTEMS_BUILD_LABEL
+        value: $${build-config-extra:/build-label}
+      - enabled-by: RTEMS_SMP
+        key: RTEMS_SMP
+        value: 'True'
+      - enabled-by: RTEMS_QUAL
+        key: RTEMS_PPS_SYNC
+        value: 'False'
+      - enabled-by: true
+        key: BUILD_TESTS
+        value: 'True'
+      - enabled-by: true
+        key: BUILD_LIBDL_TESTS
+        value: 'False'
+      - enabled-by:
+          and:
+          - RTEMS_QUAL
+          - riscv
+        key: BSP_START_COPY_FDT_FROM_U_BOOT
+        value: 'False'
+      name: ${.:/component/arch}/${.:/component/bsp}${.:/component/config:dash}${.:/component/bsp-extra:dash}
+    target: null
+  copyrights-by-license: {}
+  directory: $${/pkg/source/rtems:/directory}
+  directory-state-type: explicit
+  enabled-by: true
+  files:
+  - file: config-${.:/component/arch}-${.:/bsp}${.:/config:dash}.ini
+    hash: null
+  hash: null
+  links:
+  - hash: null
+    name: component
+    role: input
+    uid: component
+  - hash: null
+    name: source
+    role: input
+    uid: /pkg/source/rtems
+  - hash: null
+    name: source
+    role: input
+    uid: build-config-extra
+  - hash: null
+    name: member
+    role: input-to
+    uid: /pkg/deployment/archive
+  params: {}
+  pkg-type: directory-state
+  type: pkg
+copyrights:
+- Copyright (C) 2022, 2026 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: add-package-template
+  uid: component
+pkg-type: template
+template-type: inline-item
+type: pkg

@@ -1,0 +1,148 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+attribute-actions:
+- action: extend
+  enabled-by: RTEMS_SMP
+  path: /extra-files
+  value:
+  - testsuites/validation/tr-chains-api-model.h
+  - testsuites/validation/tr-event-mgr-model.h
+attributes:
+  arch: ${.:/component/arch}
+  base-directory-map:
+  - source: ${.:/component/build-directory}/spec
+    target: $${.:/component/deployment-directory}/src
+  bsp: ${.:/bsp}
+  build-spec-directories: []
+  build-uids:
+  - /build/cpukit/librtemscpu
+  - /build/cpukit/librtemstest
+  - /build/testsuites/isvv/grp
+  - /build/testsuites/membench/grp
+  - /build/testsuites/validation/grp
+  - /build/testsuites/unit/grp
+  copyrights-by-license: {}
+  directory: $${.:/component/deployment-directory}/src/rtems-${.:/component/arch}-${.:/bsp}${.:/config:dash}-qual-only
+  directory-state-type: repository-subset
+  enabled-by: RTEMS_QUAL
+  enabled-set-extension:
+  - enable: INSTALL_LEGACY_MAKEFILES
+    enabled-by: true
+  extra-files:
+  - bsps/shared/doxygen.h
+  - bsps/shared/cache/cacheimpl.h
+  - bsps/shared/dev/clock/clockimpl.h
+  - bsps/sparc/leon3/include/tm27.h
+  - bsps/sparc/shared/doxygen.h
+  - cpukit/compiler-rt/lib/builtins/int_div_impl.inc
+  - cpukit/compiler-rt/lib/builtins/int_endianness.h
+  - cpukit/compiler-rt/lib/builtins/int_lib.h
+  - cpukit/compiler-rt/lib/builtins/int_types.h
+  - cpukit/compiler-rt/lib/builtins/int_util.h
+  - cpukit/doxygen.h
+  - cpukit/doxygen/appl-config.h
+  - cpukit/doxygen/build.h
+  - cpukit/doxygen/hash-algorithms.h
+  - cpukit/doxygen/mainpage.h
+  - cpukit/doxygen/top-level-groups.h
+  - cpukit/libc/string/local.h
+  - cpukit/libmisc/cpuuse/cpuuseimpl.h
+  - cpukit/libtest/t-test-rtems.h
+  - cpukit/score/cpu/sparc/syscall.h
+  - cpukit/score/src/opt_compat.h
+  - cpukit/score/src/opt_ffclock.h
+  - cpukit/score/src/opt_ntp.h
+  - gccdeps.py
+  - testsuites/isvv/shared/isvv_rtems_aux.h
+  - testsuites/isvv/shared/low_level_utils.h
+  - testsuites/isvv/shared/trig_tables.h
+  - testsuites/isvv/shared/utils.h
+  - testsuites/validation/tc-basedefs-pendant.h
+  - testsuites/validation/tc-userext.h
+  - testsuites/validation/ts-acfg.h
+  - testsuites/validation/ts-config.h
+  - testsuites/validation/ts-default.h
+  - testsuites/validation/ts-fatal-sysinit.h
+  - testsuites/validation/ts-idle.h
+  - testsuites/validation/tx-support.h
+  - testsuites/validation/tx-thread-queue.h
+  - waf
+  - wscript
+  files: []
+  hash: null
+  include-test-header: true
+  links:
+  - hash: null
+    name: component
+    role: input
+    uid: component
+  - hash: null
+    name: source
+    role: input
+    uid: /pkg/source/rtems
+  - exclude-patterns: []
+    hash: null
+    include-path:
+    - enabled-by: true
+      path:
+      - cpukit/include
+      - cpukit/score/cpu/${.:/component/arch}/include
+      - bsps/include
+      - bsps/${.:/component/arch}/include
+      - bsps/${.:/component/arch}/${.:/bsp-family}/include
+    input:
+    - enabled-by: true
+      path:
+      - bsps
+      - cpukit
+      - testsuites
+    name: doxygen
+    role: input-to
+    strip-from-path:
+    - enabled-by: true
+      path: .
+    uid: build-ddf-sdd-doxyfile
+  - exclude-patterns: []
+    hash: null
+    include-path:
+    - enabled-by: true
+      path:
+      - cpukit/include
+      - cpukit/score/cpu/${.:/component/arch}/include
+      - bsps/include
+      - bsps/${.:/component/arch}/include
+      - bsps/${.:/component/arch}/${.:/bsp-family}/include
+    input:
+    - enabled-by: true
+      path:
+      - bsps
+      - cpukit
+      - testsuites
+    name: doxygen
+    role: input-to
+    strip-from-path:
+    - enabled-by: true
+      path: .
+    uid: doc-ddf-sdd-doxyfile
+  - hash: null
+    name: source
+    role: input-to
+    uid: doc-ddf-sdd-tagfile-early
+  - hash: null
+    name: source
+    role: input-to
+    uid: doc-ddf-sdd
+  - hash: null
+    name: member
+    role: input-to
+    uid: /pkg/deployment/archive
+  pkg-type: directory-state
+  type: pkg
+copyrights:
+- Copyright (C) 2020, 2026 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: add-package-template
+  uid: component
+pkg-type: template
+template-type: inline-item
+type: pkg

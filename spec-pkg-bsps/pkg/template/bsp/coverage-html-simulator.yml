@@ -1,0 +1,41 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+attribute-actions: []
+attributes:
+  copyrights-by-license: {}
+  directory: $${.:/component/documentation-directory}/coverage/simulator
+  directory-state-type: patterns
+  enabled-by:
+    and:
+    - RTEMS_QUAL
+    - target/simulator
+  files: []
+  hash: null
+  links:
+  - hash: null
+    name: component
+    role: input
+    uid: component
+  - hash: null
+    name: target
+    role: input
+    uid: /target/simulator
+  - hash: null
+    name: build-configuration
+    role: input
+    uid: build-config-qual-only-coverage
+  - hash: null
+    name: member
+    role: input-to
+    uid: /pkg/deployment/archive
+  patterns: '**/*'
+  pkg-type: directory-state
+  type: pkg
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: add-package-template
+  uid: component
+pkg-type: template
+template-type: inline-item
+type: pkg

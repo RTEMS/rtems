@@ -1,0 +1,77 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+attribute-actions: []
+attributes:
+  copyrights-by-license: {}
+  directory: $${.:/component/documentation-directory}/coverage
+  directory-state-type: test-coverage
+  enabled-by:
+    and:
+    - RTEMS_QUAL
+    - target/simulator
+  files:
+  - file: simulator.json
+    hash: null
+  hash: null
+  limits:
+    overall:
+      branch-min-percent: 100.0
+      function-min-percent: 100.0
+      line-min-percent: 100.0
+    per-file:
+      branch-min-percent: 100.0
+      function-min-percent: 100.0
+      line-min-percent: 100.0
+  links:
+  - hash: null
+    name: component
+    role: input
+    uid: component
+  - hash: null
+    name: target
+    role: input
+    uid: /target/simulator
+  - hash: null
+    name: tools
+    role: input
+    uid: ../../tools
+  - hash: null
+    name: build-configuration
+    role: input
+    uid: build-config-qual-only-coverage
+  - hash: null
+    name: source
+    role: input
+    uid: rtems-qual-only
+  - hash: null
+    name: gcda
+    role: input
+    uid: gcda-qual-only-simulator
+  - hash: null
+    output-name: json
+    params:
+      gcda-sub-directory: $${.:/component/arch}/$${.:/component/bsp}$${.:/component/config:dash}-qual-only-coverage
+    role: make
+    uid: /pkg/make/gcovr
+  - name: html
+    role: output
+    uid: coverage-html-simulator
+  - hash: null
+    name: test-coverage
+    role: input-to
+    uid: aggregate-test-results
+  - hash: null
+    name: member
+    role: input-to
+    uid: /pkg/deployment/archive
+  pkg-type: directory-state
+  scope: Dummy
+  type: pkg
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: add-package-template
+  uid: component
+pkg-type: template
+template-type: inline-item
+type: pkg

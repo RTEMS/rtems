@@ -1,0 +1,59 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+attribute-actions: []
+attributes:
+  copyrights-by-license: {}
+  destination-directory: ${.:/documentation-directory}/test-logs
+  destination-file: extra-simulator.json
+  directory: ${.:/component/workspace-directory}/test-logs
+  enabled-by: target/simulator
+  links:
+  - hash: null
+    name: component
+    role: input
+    uid: component
+  - role: test-procedure
+    uid: component
+  - hash: null
+    name: target
+    role: input
+    uid: /target/simulator
+  - hash: null
+    name: build-configuration
+    role: input
+    uid: build-config-extra
+  - hash: null
+    name: source
+    role: input
+    uid: deployment-extra
+  - hash: null
+    output-name: log
+    params: {}
+    role: make
+    uid: /pkg/test-runner/simulator
+  - hash: null
+    name: test-log
+    role: input-to
+    uid: aggregate-test-results
+  - hash: null
+    name: member
+    role: input-to
+    uid: /pkg/deployment/archive
+  - hash: null
+    name: test-log
+    role: input-to
+    uid: /pkg/deployment/run
+  pkg-type: workspace
+  source-file:
+  - ${.:/component/arch}/${.:/bsp}/${.:/bsp-config}/extra-simulator.json
+  - empty.json
+  type: pkg
+  workspace-type: test-log
+copyrights:
+- Copyright (C) 2020, 2026 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: add-package-template
+  uid: component
+pkg-type: template
+template-type: inline-item
+type: pkg
