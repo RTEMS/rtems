@@ -49,6 +49,7 @@
 #include <libcpu/cpuIdent.h>
 #include <bsp/vectors.h>
 #include <bsp/irq-generic.h>
+#include <bsp/motload-gev-set.h>
 #include <bsp/VME.h>
 #include <bsp/vpd.h>
 
@@ -372,6 +373,17 @@ static void bsp_early( void )
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Number of PCI buses found is : %d\n", pci_bus_count());
 #endif
+
+  motload_gev_set_nvbase(BSP_NVRAM_BASE_ADDR);
+  if (board_type == MVME5500) {
+    motload_gev_set_net_unit(1);
+    motload_gev_set_net_label(1, "em0");
+  } else {
+    motload_gev_set_net_unit(1);
+    motload_gev_set_net_unit(2);
+    motload_gev_set_net_label(1, "em0");
+    motload_gev_set_net_label(2, "em1");
+  }
 
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("MSR 0x%lx \n", _read_MSR());

@@ -93,6 +93,9 @@ source:
 - bsps/powerpc/shared/start/pgtbl_activate.c
 - bsps/powerpc/shared/start/pgtbl_setup.c
 - bsps/powerpc/shared/start/probeMemEnd.c
+- bsps/powerpc/shared/start/motload-gev.c
+- bsps/powerpc/shared/start/motload-gev-net-env.c
+- bsps/powerpc/shared/start/motload-gev-set.c
 - bsps/powerpc/shared/start/showbats.c
 - bsps/powerpc/shared/start/vpd.c
 - bsps/powerpc/shared/start/zerobss.c
