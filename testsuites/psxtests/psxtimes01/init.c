@@ -72,6 +72,8 @@ static void test_times_functions( void )
   rtems_test_assert( start != 0 );
   rtems_test_assert( now != 0 );
 
+  /* spin for at least interval ticks */
+  rtems_test_spin_until_next_tick( );
   rtems_test_spin_for_ticks( interval );
 
   puts( "_times( &end_tm ) -- OK" );

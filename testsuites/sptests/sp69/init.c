@@ -90,10 +90,10 @@ rtems_task Init( rtems_task_argument argument )
   status = rtems_rate_monotonic_period( period_id, 100 );
   directive_failed( status, "rate_monotonic_period" );
 
-  /* Do some work */
+  /* Do some work: this will execute for just under 10 complete ticks. */
   rtems_test_spin_for_ticks( 10 );
 
-  /* Block a little */
+  /* Block a little: this will sleep for over 50 complete ticks. */
   status = rtems_task_wake_after( 50 );
 
   /* Check the status */
@@ -115,7 +115,7 @@ rtems_task Init( rtems_task_argument argument )
   rtems_test_assert( period_status.since_last_period.tv_nsec <= 610000000 );
   rtems_test_assert( period_status.executed_since_last_period.tv_sec == 0 );
   rtems_test_assert(
-    period_status.executed_since_last_period.tv_nsec >= 100000000
+    period_status.executed_since_last_period.tv_nsec >= 90000000
   );
   rtems_test_assert(
     period_status.executed_since_last_period.tv_nsec <= 110000000
