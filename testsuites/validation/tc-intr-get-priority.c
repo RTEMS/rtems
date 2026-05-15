@@ -214,7 +214,7 @@ typedef RtemsIntrReqGetPriority_Context Context;
 
 static void PriorityIsSet( uint32_t priority )
 {
-  T_lt_u32( priority, PRIORITY_UNSET );
+  T_ne_u32( priority, PRIORITY_UNSET );
 }
 
 static void PriorityIsNotSet( uint32_t priority )
