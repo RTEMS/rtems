@@ -51,6 +51,8 @@
 
 static volatile RISCV_PLIC_regs *riscv_plic;
 
+static uint32_t riscv_maximum_external_interrupts = 0;
+
 #ifndef RISCV_USE_S_MODE
 volatile RISCV_CLINT_regs *riscv_clint;
 #endif
@@ -274,7 +276,7 @@ static void riscv_plic_init(const void *fdt)
   const uint32_t *val;
   int len;
   uint32_t interrupt_index;
-  uint32_t ndev;
+  uint32_t enable_register_count;
 
   node = fdt_node_offset_by_compatible(fdt, -1, "riscv,plic0");
 
@@ -302,25 +304,27 @@ static void riscv_plic_init(const void *fdt)
     bsp_fatal(RISCV_FATAL_INVALID_PLIC_NDEV_IN_DEVICE_TREE);
   }
 
-  ndev = fdt32_to_cpu(val[0]);
-  if (ndev > RISCV_MAXIMUM_EXTERNAL_INTERRUPTS) {
+  riscv_maximum_external_interrupts = fdt32_to_cpu(val[0]);
+  if (riscv_maximum_external_interrupts > RISCV_MAXIMUM_EXTERNAL_INTERRUPTS) {
     bsp_fatal(RISCV_FATAL_TOO_LARGE_PLIC_NDEV_IN_DEVICE_TREE);
   }
+
+  /*
+   * Each interrupt enable register contains exactly 32 enable bits.
+   * Calculate the enable register count based on the number of interrupts
+   * supported by the PLIC.  Take the reserved interrupt ID zero into
+   * account.
+   */
+  enable_register_count = RTEMS_ALIGN_UP(
+    riscv_maximum_external_interrupts + 1,
+    32
+  ) / 32;
 
   val = fdt_getprop(fdt, node, "interrupts-extended", &len);
 
   for (i = 0; i < len; i += 8) {
     uint32_t hart_index;
-    uint32_t enable_register_count;
     uint32_t cpu_index;
-
-    /*
-     * Each interrupt enable register contains exactly 32 enable bits.
-     * Calculate the enable register count based on the number of interrupts
-     * supported by the PLIC.  Take the reserved interrupt ID zero into
-     * account.
-     */
-    enable_register_count = RTEMS_ALIGN_UP(ndev + 1, 32) / 32;
 
     hart_index = riscv_get_hart_index_by_phandle(fdt32_to_cpu(val[i / 4]));
 
@@ -365,7 +369,7 @@ static void riscv_plic_init(const void *fdt)
 #endif
   }
 
-  riscv_plic_cpu_0_init(plic, ndev);
+  riscv_plic_cpu_0_init(plic, riscv_maximum_external_interrupts);
 }
 
 void bsp_interrupt_facility_initialize(void)
@@ -383,6 +387,8 @@ void bsp_interrupt_facility_initialize(void)
 
 bool bsp_interrupt_is_valid_vector(rtems_vector_number vector)
 {
+  rtems_vector_number max;
+
   /*
    * The PLIC interrupt ID of zero is reserved.  For example, this ID is used
    * to indicate that no interrupt was claimed.
@@ -391,7 +397,9 @@ bool bsp_interrupt_is_valid_vector(rtems_vector_number vector)
     return false;
   }
 
-  return vector < (rtems_vector_number) BSP_INTERRUPT_VECTOR_COUNT;
+  max = RISCV_INTERRUPT_VECTOR_EXTERNAL(riscv_maximum_external_interrupts);
+
+  return vector < max;
 }
 
 rtems_status_code bsp_interrupt_get_attributes(
