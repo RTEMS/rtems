@@ -220,7 +220,7 @@ static void generic_bank_isr(void *arg)
 
   bank_number = *((uint32_t*) arg);
 
-  assert ( bank_number < GPIO_BANK_COUNT );
+  _Assert ( bank_number < GPIO_BANK_COUNT );
 
   /* Calculate bank start address in the pin_state array. */
   bank_start_pin = bank_number * BSP_GPIO_PINS_PER_BANK;
@@ -245,7 +245,7 @@ static void generic_bank_isr(void *arg)
     if ( event_status & (1 << i) ) {
       interrupt_state = gpio_pin_state[bank_start_pin + i].interrupt_state;
 
-      assert ( interrupt_state != NULL );
+      _Assert ( interrupt_state != NULL );
 
       handled_count = 0;
 
@@ -806,7 +806,7 @@ rtems_status_code rtems_gpio_define_pin_group(
            group_definition->input_count
          );
 
-    assert ( sc == RTEMS_SUCCESSFUL );
+    _Assert ( sc == RTEMS_SUCCESSFUL );
 
     return RTEMS_UNSATISFIED;
   }
@@ -823,14 +823,14 @@ rtems_status_code rtems_gpio_define_pin_group(
            group_definition->input_count
          );
 
-    assert ( sc == RTEMS_SUCCESSFUL );
+    _Assert ( sc == RTEMS_SUCCESSFUL );
 
     sc = rtems_gpio_release_multiple_pins(
            group_definition->digital_outputs,
            group_definition->output_count
          );
 
-    assert ( sc == RTEMS_SUCCESSFUL );
+    _Assert ( sc == RTEMS_SUCCESSFUL );
 
     return RTEMS_UNSATISFIED;
   }
