@@ -195,6 +195,8 @@ static void Init( rtems_task_argument arg )
 
 #define CONFIGURE_MAXIMUM_PROCESSORS CPU_COUNT
 
+#define CONFIGURE_MICROSECONDS_PER_TICK (100000)
+
 #define CONFIGURE_SCHEDULER_SIMPLE_SMP
 
 #include <rtems/scheduler.h>
