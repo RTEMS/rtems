@@ -11,7 +11,7 @@ do-build: |
   pre_tar_c, pre_tar_h = self.bin2c(bld, pre_tar, name="dl06_tar")
   objs = []
   objs.append(self.cc(bld, bic, pre_tar_c))
-  objs.append(self.cc(bld, bic, path + "pre-init.c", deps=[pre_tar_h], cppflags=bld.env.TEST_DL06_CPPFLAGS))
+  objs.append(self.cc(bld, bic, path + "pre-init.c", deps=[pre_tar_h, "cpukit/include/rtems/score/cpuopts.h"], cppflags=bld.env.TEST_DL06_CPPFLAGS))
   dl_load_o = self.cc(bld, bic, path + "dl-load.c")
   objs.append(dl_load_o)
   dl06_pre = path + "dl06.pre"
@@ -26,7 +26,7 @@ do-build: |
   tar_c, tar_h = self.bin2c(bld, tar)
   objs = []
   objs.append(self.cc(bld, bic, tar_c))
-  objs.append(self.cc(bld, bic, path + "init.c", deps=[tar_h], cppflags=bld.env.TEST_DL06_CPPFLAGS))
+  objs.append(self.cc(bld, bic, path + "init.c", deps=[tar_h, "cpukit/include/rtems/score/cpuopts.h"], cppflags=bld.env.TEST_DL06_CPPFLAGS))
   objs.append(dl_load_o)
   dl06_sym_o = path + "dl06-sym.o"
   objs.append(dl06_sym_o)

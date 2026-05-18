@@ -22,7 +22,7 @@ do-build: |
   tar_c, tar_h = self.bin2c(bld, tar)
   objs = []
   objs.append(self.cc(bld, bic, tar_c))
-  objs.append(self.cc(bld, bic, path + "init.c", deps=[tar_h], cppflags=bld.env.TEST_DL10_CPPFLAGS))
+  objs.append(self.cc(bld, bic, path + "init.c", deps=[tar_h, "cpukit/include/rtems/score/cpuopts.h"], cppflags=bld.env.TEST_DL10_CPPFLAGS))
   objs.append(self.cc(bld, bic, path + "dl-load.c"))
   dl10_pre = path + "dl10.pre"
   self.link_cc(bld, bic, objs, dl10_pre)

@@ -10,7 +10,7 @@ do-build: |
   tar_c, tar_h = self.bin2c(bld, tar, target=path + "tar02-tar")
   objs = []
   objs.append(self.cc(bld, bic, tar_c))
-  objs.append(self.cc(bld, bic, path + "init.c", deps=[tar_h], cppflags=bld.env.TEST_TAR02_CPPFLAGS))
+  objs.append(self.cc(bld, bic, path + "init.c", deps=[tar_h, "cpukit/include/rtems/score/cpuopts.h"], cppflags=bld.env.TEST_TAR02_CPPFLAGS))
   objs.append(self.cc(bld, bic, "testsuites/psxtests/psxfile01/test_cat.c", target=path + "test_cat.o"))
   self.link_cc(bld, bic, objs, "testsuites/libtests/tar02.exe")
 do-configure: null
