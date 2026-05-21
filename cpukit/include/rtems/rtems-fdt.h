@@ -42,7 +42,6 @@
 #define _RTEMS_FDT_H_
 
 #include <rtems.h>
-#include <rtems/chain.h>
 
 #ifdef __cplusplus
 extern "C" {

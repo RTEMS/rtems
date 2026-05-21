@@ -177,6 +177,7 @@ install:
   - cpukit/include/rtems/rtems-debugger.h
   - cpukit/include/rtems/rtems-fdt-shell.h
   - cpukit/include/rtems/rtems-fdt.h
+  - cpukit/include/rtems/rtems-fdtimpl.h
   - cpukit/include/rtems/rtems-rfs-format.h
   - cpukit/include/rtems/rtems-rfs-shell.h
   - cpukit/include/rtems/rtems-rfs.h

@@ -37,44 +37,7 @@
 #include <rtems/rtems-fdt.h>
 #include <rtems/thread.h>
 
-/**
- * An index for quick access to the FDT by name or offset.
- */
-
-typedef struct {
-  const char *name;   /**< The full path of the FDT item. */
-  int         offset; /**< The offset of the item in the FDT blob. */
-} rtems_fdt_index_entry;
-
-typedef struct {
-  int num_entries;                /**< The number of entries in this index. */
-  rtems_fdt_index_entry *entries; /**< An ordered set of entries which we
-                                          *  can binary search. */
-  char *names; /**< Storage allocated for all the path names. */
-} rtems_fdt_index;
-
-/**
- * A blob descriptor.
- */
-struct rtems_fdt_blob {
-  rtems_chain_node node; /**< The node's link in the chain. */
-  const void      *blob; /**< The FDT blob. */
-  const char      *name; /**< The name of the blob. */
-  int              refs; /**< The number of active references of the blob. */
-  rtems_fdt_index
-    index; /**< The index used for quick access to items in the blob. */
-};
-
-/**
- * The global FDT data. This structure is allocated on the heap when the first
- * call to load a FDT blob is made and released when all blobs have been
- * unloaded..
- */
-typedef struct {
-  rtems_mutex         lock;  /**< The FDT lock id */
-  rtems_chain_control blobs; /**< List if loaded blobs. */
-  const char         *paths; /**< Search paths for blobs. */
-} rtems_fdt_data;
+#include <rtems/rtems-fdtimpl.h>
 
 static void rtems_fdt_unlock( rtems_fdt_data *fdt )
 {
