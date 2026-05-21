@@ -68,6 +68,9 @@ BSP_START_TEXT_SECTION void bsp_start_hook_1( void )
   RTEMS_OBFUSCATE_VARIABLE( size );
 
   if ( size != 0 ) {
-    rtems_cache_flush_multiple_data_lines( bsp_section_fast_text_begin, size );
+    rtems_cache_instruction_sync_after_code_change(
+      bsp_section_fast_text_begin,
+      size
+    );
   }
 }
