@@ -447,12 +447,20 @@ int rtems_fdt_load( const char *filename, rtems_fdt_handle *handle )
     return -RTEMS_FDT_ERR_READ_FAIL;
   }
 
+  /* peek for a gzip header */
   r = read( bf, &gzip_id, sizeof( gzip_id ) );
   if ( r < 0 ) {
     close( bf );
     return -RTEMS_FDT_ERR_READ_FAIL;
   }
 
+  /* reset file pointer after peek */
+  if ( lseek( bf, 0, SEEK_SET ) < 0 ) {
+    close( bf );
+    return -RTEMS_FDT_ERR_READ_FAIL;
+  }
+
+  /* determine size of the dtb blob */
   if ( ( gzip_id[ 0 ] == 0x1f ) && ( gzip_id[ 1 ] == 0x8b ) ) {
     size_t offset;
 
@@ -460,12 +468,6 @@ int rtems_fdt_load( const char *filename, rtems_fdt_handle *handle )
     if ( !cdata ) {
       close( bf );
       return -RTEMS_FDT_ERR_NO_MEMORY;
-    }
-
-    if ( lseek( bf, 0, SEEK_SET ) < 0 ) {
-      free( cdata );
-      close( bf );
-      return -RTEMS_FDT_ERR_READ_FAIL;
     }
 
     size = sb.st_size;
@@ -497,6 +499,7 @@ int rtems_fdt_load( const char *filename, rtems_fdt_handle *handle )
     return -RTEMS_FDT_ERR_NO_MEMORY;
   }
 
+  /* read the blob */
   if ( ( gzip_id[ 0 ] == 0x1f ) && ( gzip_id[ 1 ] == 0x8b ) ) {
     z_stream stream;
     int      err;
