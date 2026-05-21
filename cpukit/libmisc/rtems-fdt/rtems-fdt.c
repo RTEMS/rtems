@@ -465,19 +465,15 @@ int rtems_fdt_find_path_offset( rtems_fdt_handle *handle, const char *path )
 
 int rtems_fdt_load( const char *filename, rtems_fdt_handle *handle )
 {
-  rtems_fdt_data *fdt;
-  rtems_fdt_blob *blob;
-  size_t          bsize;
-  int             bf;
-  ssize_t         r;
-  size_t          name_len;
-  int             fe;
-  struct stat     sb;
-  uint8_t         gzip_id[ 2 ];
-  uint8_t        *cdata;
-  size_t          size;
-
-  rtems_fdt_release_handle( handle );
+  void       *dtb;
+  size_t      bsize;
+  int         bf;
+  ssize_t     r;
+  int         fe;
+  struct stat sb;
+  uint8_t     gzip_id[ 2 ];
+  uint8_t    *cdata;
+  size_t      size;
 
   if ( stat( filename, &sb ) < 0 ) {
     return -RTEMS_FDT_ERR_NOT_FOUND;
@@ -531,26 +527,19 @@ int rtems_fdt_load( const char *filename, rtems_fdt_handle *handle )
     bsize = sb.st_size;
   }
 
-  name_len = strlen( filename ) + 1;
-
-  blob = rtems_malloc( sizeof( rtems_fdt_blob ) + name_len + bsize );
-  if ( !blob ) {
+  dtb = rtems_malloc( bsize );
+  if ( !dtb ) {
     free( cdata );
     close( bf );
     return -RTEMS_FDT_ERR_NO_MEMORY;
   }
-
-  blob->name = (const char *) ( blob + 1 );
-  blob->blob = blob->name + name_len + 1;
-
-  strcpy( (char *) blob->name, filename );
 
   if ( ( gzip_id[ 0 ] == 0x1f ) && ( gzip_id[ 1 ] == 0x8b ) ) {
     z_stream stream;
     int      err;
     stream.next_in = (Bytef *) cdata;
     stream.avail_in = (uInt) sb.st_size;
-    stream.next_out = (void *) ( blob->name + name_len + 1 );
+    stream.next_out = (void *) dtb;
     stream.avail_out = (uInt) bsize;
     stream.zalloc = (alloc_func) 0;
     stream.zfree = (free_func) 0;
@@ -565,7 +554,7 @@ int rtems_fdt_load( const char *filename, rtems_fdt_handle *handle )
       err = inflateEnd( &stream );
     }
     if ( ( err != Z_OK ) || ( bsize != stream.total_out ) ) {
-      free( blob );
+      free( dtb );
       free( cdata );
       close( bf );
       return -RTEMS_FDT_ERR_READ_FAIL;
@@ -573,12 +562,12 @@ int rtems_fdt_load( const char *filename, rtems_fdt_handle *handle )
     free( cdata );
     cdata = NULL;
   } else {
-    char *buf = (char *) blob->name + name_len + 1;
+    char *buf = (char *) dtb;
     size = bsize;
     while ( size ) {
       r = read( bf, buf, size );
       if ( r < 0 ) {
-        free( blob );
+        free( dtb );
         close( bf );
         return -RTEMS_FDT_ERR_READ_FAIL;
       }
@@ -587,29 +576,14 @@ int rtems_fdt_load( const char *filename, rtems_fdt_handle *handle )
     }
   }
 
-  fe = fdt_check_header( blob->blob );
+  fe = rtems_fdt_register( dtb, handle );
   if ( fe < 0 ) {
-    free( blob );
+    free( dtb );
     close( bf );
     return fe;
   }
 
-  fdt = rtems_fdt_lock();
-
-  rtems_chain_append_unprotected( &fdt->blobs, &blob->node );
-
-  blob->refs = 1;
-
-  rtems_fdt_unlock( fdt );
-
-  handle->blob = blob;
-
-  fe = rtems_fdt_init_index( handle, blob );
-  if ( fe < 0 ) {
-    free( blob );
-    close( bf );
-    return fe;
-  }
+  handle->blob->name = strdup( filename );
 
   close( bf );
   return 0;
@@ -675,6 +649,11 @@ int rtems_fdt_unload( rtems_fdt_handle *handle )
   rtems_chain_extract_unprotected( &handle->blob->node );
 
   rtems_fdt_release_index( &handle->blob->index );
+
+  if ( handle->blob->name ) {
+    free( (void *) handle->blob->name );
+    handle->blob->name = NULL;
+  }
 
   free( handle->blob );
 
