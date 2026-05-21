@@ -885,7 +885,11 @@ int rtems_fdt_node_check_compatible(
   if ( !handle->blob ) {
     return -RTEMS_FDT_ERR_INVALID_HANDLE;
   }
-  return fdt_node_check_compatible( handle, nodeoffset, compatible );
+  return fdt_node_check_compatible(
+    handle->blob->blob,
+    nodeoffset,
+    compatible
+  );
 }
 
 int rtems_fdt_node_offset_by_compatible(
