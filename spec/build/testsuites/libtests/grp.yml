@@ -17,6 +17,8 @@ links:
 - role: build-dependency
   uid: ../optbin2c
 - role: build-dependency
+  uid: ../optdtc
+- role: build-dependency
   uid: ../optgzip
 - role: build-dependency
   uid: ../optxz
@@ -128,6 +130,8 @@ links:
   uid: exit04
 - role: build-dependency
   uid: fcntl
+- role: build-dependency
+  uid: fdt01
 - role: build-dependency
   uid: flashdev01
 - role: build-dependency

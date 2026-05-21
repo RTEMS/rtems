@@ -1,0 +1,41 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: script
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+- Copyright (C) 2026 Gedare Bloom
+cppflags: []
+do-build: |
+  path = "testsuites/libtests/fdt01/"
+  dts = []
+  dts.append("bsps/aarch64/xilinx-zynqmp/fdt/zynqmp.dts")
+  dts.append("bsps/riscv/riscv/dts/mpfs.dts")
+  dts.append("bsps/microblaze/microblaze_fpga/dts/system.dts")
+  objs = [self.dtc(bld, dts_file, path) for dts_file in dts]
+  objs.extend([self.gzip(bld, dtb_file) for dtb_file in objs])
+  tar = path + "fdt01.tar"
+  self.tar(bld, objs, [path], tar)
+  tar_c, tar_h = self.bin2c(bld, tar)
+  hdrs = [tar_h]
+  hdrs.append("testsuites/libtests/fdt01/zynqmp-test-dtb.h")
+  hdrs.append("testsuites/libtests/fdt01/mpfs-test-dtb.h")
+  hdrs.append("testsuites/libtests/fdt01/microblaze-test-dtb.h")
+  objs = []
+  objs.append(self.cc(bld, bic, tar_c))
+  objs.append(self.cc(bld, bic, path + "init.c", deps=hdrs, cppflags=bld.env.TEST_FDT01_CPPFLAGS))
+  self.link_cc(bld, bic, objs, "testsuites/libtests/fdt01.exe")
+do-configure: null
+enabled-by:
+- not: TEST_FDT01_EXCLUDE
+includes:
+- testsuites/libtests/fdt01
+ldflags: []
+links: []
+prepare-build: null
+prepare-configure: null
+stlib: []
+target: testsuites/libtests/fdt01.exe
+type: build
+use-after:
+- z
+use-before: []
