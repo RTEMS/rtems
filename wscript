@@ -510,6 +510,14 @@ class Item(object):
         bld(rule=run, source=source, target=target)
         return target
 
+    def dtc(self, bld, source, outdir):
+        path, base = os.path.split(source)
+        root, ext = os.path.splitext(base)
+        target = os.path.join(outdir, root + ".dtb")
+        bld(rule="${DTC} -I dts -O dtb -o ${TGT} ${SRC} > ${TGT}",
+            source=source, target=target)
+        return target
+
     def bin2c(self, bld, source, name=None, target=None):
 
         def run(task):
