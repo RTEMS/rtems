@@ -443,6 +443,18 @@ CPU_Counter_ticks _CPU_Counter_read( void );
 
 typedef uintptr_t CPU_Uint32ptr;
 
+/**
+ * Pauses the CPU pipeline to prevent aggressive speculative execution
+ * and reduce thermal load during spin-wait loops.
+ */
+static inline void _CPU_Spin_wait( void )
+{
+  __asm__ volatile( "pause" ::: "memory" );
+}
+
+/* Explicitly define the macro so the preprocessor can see it in DHRL API */
+#define _CPU_Spin_wait _CPU_Spin_wait
+
 #ifdef __cplusplus
 }
 #endif
