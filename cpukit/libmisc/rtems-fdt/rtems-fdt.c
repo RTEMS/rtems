@@ -857,7 +857,7 @@ int rtems_fdt_node_offset_by_prop_value(
     return -RTEMS_FDT_ERR_INVALID_HANDLE;
   }
   return fdt_node_offset_by_prop_value(
-    handle,
+    handle->blob->blob,
     startoffset,
     propname,
     propval,
