@@ -600,12 +600,11 @@ int rtems_fdt_unload( rtems_fdt_handle *handle )
 {
   rtems_fdt_data *fdt;
 
-  fdt = rtems_fdt_lock();
-
   if ( !rtems_fdt_valid_handle( handle ) ) {
-    rtems_fdt_unlock( fdt );
     return -RTEMS_FDT_ERR_INVALID_HANDLE;
   }
+
+  fdt = rtems_fdt_lock();
 
   if ( handle->blob->refs > 1 ) {
     rtems_fdt_unlock( fdt );
