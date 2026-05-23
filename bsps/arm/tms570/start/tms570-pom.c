@@ -157,8 +157,14 @@ void tms570_pom_remap(void)
   TMS570_POM.REG[0].PROGSTART = TMS570_POM_PROGSTART_STARTADDRESS(64);
   TMS570_POM.REG[0].OVLSTART = TMS570_POM_OVLSTART_STARTADDRESS(vec_overlay_start);
   TMS570_POM.REG[0].REGSIZE = TMS570_POM_REGSIZE_SIZE(TMS570_POM_REGSIZE_64B);
-  TMS570_POM.GLBCTRL = TMS570_POM_GLBCTRL_ON_OFF(0xa) |
-                       TMS570_POM_GLBCTRL_ETO(0xa) |
-                       (TMS570_POM_GLBCTRL_OTADDR(~0) &
-                        pom_global_overlay_target_address_start);
+
+  uint32_t glbctrl = TMS570_POM_GLBCTRL_ON_OFF( 0xa ) |
+                     ( TMS570_POM_GLBCTRL_OTADDR( ~0 ) &
+                       pom_global_overlay_target_address_start );
+
+  #if TMS570_VARIANT == 3137
+    glbctrl |= TMS570_POM_GLBCTRL_ETO( 0xa );
+  #endif
+
+  TMS570_POM.GLBCTRL = glbctrl;
 }
