@@ -362,6 +362,7 @@ tms570_selftest_par_list[] = {
   &tms570_selftest_par_htu2_desc,
   &tms570_selftest_par_adc1_desc,
   &tms570_selftest_par_adc2_desc,
+#if TMS570_VARIANT == 3137
   &tms570_selftest_par_can1_desc,
   &tms570_selftest_par_can2_desc,
   &tms570_selftest_par_can3_desc,
@@ -370,6 +371,15 @@ tms570_selftest_par_list[] = {
   &tms570_selftest_par_spi1_desc,
   &tms570_selftest_par_spi3_desc,
   &tms570_selftest_par_spi5_desc,
+#else
+  /*
+   * FIXME: Add LC4357 ECC self-tests for DCAN, VIM, DMA, and MibSPI RAMs.
+   * These RAMs are ECC-protected on LC43x devices and should not be using 
+   * parity self-test descriptors.
+   * See RTEMS Issue 5586
+   * (https://gitlab.rtems.org/rtems/rtos/rtems/-/issues/5586)
+   */
+#endif
 };
 
 const int tms570_selftest_par_list_size =
