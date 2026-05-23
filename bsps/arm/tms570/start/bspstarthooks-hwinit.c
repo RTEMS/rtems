@@ -170,7 +170,7 @@ static RTEMS_USED void tms570_start_hook_0( void )
     /*
      * The next sequence tests TCRAM, main TMS570 system operation RAM area.
      * The tests are destructive, lead the first to fill memory by 0xc5c5c5c5
-     * and then to clear it to zero. The sequence is obliviously incompatible
+     * and then to clear it to zero. The sequence is obviously incompatible
      * with RTEMS image running from TCRAM area (code clears itself).
      *
      * But TCRAM clear leads to overwrite of stack which is used to store
@@ -178,7 +178,7 @@ static RTEMS_USED void tms570_start_hook_0( void )
      *
      * If the bsp_start_hook_0 by jump to bsp_start_hook_0_done
      * then generated C code does not use any variable which
-     * is stores on stack and code works OK even that memory
+     * is stored on the stack and code works OK even though memory
      * is cleared during bsp_start_hook_0 execution.
      *
      * The last assumption is a little fragile in respect to
@@ -284,7 +284,7 @@ static RTEMS_USED void tms570_start_hook_0( void )
   /* The system module auto-init will hang on the MibSPI RAM if the module is still in local reset.
    */
   /* NOTE : Please Refer DEVICE DATASHEET for the list of Supported Memories and their channel numbers.
-            Memory Initialization is perfomed only on the user selected memories in HALCoGen's GUI SAFETY INIT tab.
+            Memory Initialization is performed only on the user selected memories in HALCoGen's GUI SAFETY INIT tab.
    */
   tms570_memory_init(
     ( UINT32_C(1) << 1 ) |                /* DMA RAM */
@@ -320,7 +320,7 @@ static RTEMS_USED void tms570_start_hook_0( void )
    * directly by VIM. RTEMS require to route all interrupts
    * through _ARMV4_Exception_interrupt handler.
    *
-   * But actual RTEMS VIM initialization lefts some registers
+   * But actual RTEMS VIM initialization leaves some registers
    * default values untouched. All registers values should be
    * ensured/configured in future probably.
    */
