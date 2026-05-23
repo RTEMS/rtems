@@ -39,16 +39,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <bsp/tms570-pom.h>
+
 #include <stdint.h>
 #include <string.h>
-#include <bsp/tms570-pom.h>
+
+#include <bsp.h>
 #include <bsp/linker-symbols.h>
 #include <rtems/score/armv4.h>
-#include <bsp.h>
 
 /*
  * Placement of exceptions target addresses in memory
- * when insructions with opcode 0xe59ff018
+ * when instructions with opcode 0xe59ff018
  *      ldr pc, [pc, #0x18]
  * are used to fill ARM exception vectors area
  */
@@ -81,7 +83,7 @@ uint32_t pom_global_overlay_target_address_start = (uintptr_t)
   bsp_int_vec_overlay_start;
 
 /**
- * @brief initialize and clear parameters overlay module (POM)
+ * @brief initialize and clear the Parameter Overlay Module (POM)
  *
  * clears all remap regions. The actual POM enable is left to the first user.
  *
@@ -104,7 +106,7 @@ void tms570_pom_initialize_and_clear( void )
 /**
  * @brief remaps vector table
  *
- * transfer the rtems start vector table to address 0x0
+ * transfer the RTEMS start vector table to address 0x0
  *
  * @retval Void
  */
@@ -118,12 +120,13 @@ void tms570_pom_remap( void )
   }
 
   /*
-   * Copy RTEMS the first level exception processing code
+   * Copy the RTEMS first level exception processing code
    * to RAM area which can be used for later as POM overlay
-   * of Flash vectors. The code is expected to have for of eight
+   * of Flash vectors. The code is expected to consist of 
+   * eight instructions in the form:
    *   ldr pc, [pc,#0x18]
-   * instructions followed by eight words with actual exception
-   * service routines target addresses. This is case of RTEMS default
+   * followed by eight words with actual exception service
+   * routines target addresses. This is case of RTEMS default
    * table found in
    *   bsps/arm/shared/start/start.S
    */
