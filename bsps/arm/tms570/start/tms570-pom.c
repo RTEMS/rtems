@@ -52,7 +52,7 @@
  *      ldr pc, [pc, #0x18]
  * are used to fill ARM exception vectors area
  */
-typedef struct{
+typedef struct {
   uint32_t reserved1;
   uint32_t except_addr_undef;
   uint32_t except_addr_swi;
@@ -61,12 +61,13 @@ typedef struct{
   uint32_t reserved2;
   uint32_t except_addr_irq;
   uint32_t except_addr_fiq;
-}vec_remap_table;
+} vec_remap_table;
 
-void bsp_block_on_exception(void);
+void bsp_block_on_exception( void );
 
-void bsp_block_on_exception(void){
-  while(1);
+void bsp_block_on_exception( void )
+{
+  while ( 1 );
 }
 
 extern char bsp_int_vec_overlay_start[];
@@ -76,8 +77,8 @@ extern char bsp_int_vec_overlay_start[];
  * It is set to linker RAM_INT_VEC region - i.e. area reserved
  * at internal SRAM memory start, address 0x08000000
  */
-uint32_t pom_global_overlay_target_address_start =
-                                 (uintptr_t)bsp_int_vec_overlay_start;
+uint32_t pom_global_overlay_target_address_start = (uintptr_t)
+  bsp_int_vec_overlay_start;
 
 /**
  * @brief initialize and clear parameters overlay module (POM)
@@ -86,15 +87,17 @@ uint32_t pom_global_overlay_target_address_start =
  *
  * @retval Void
  */
-void tms570_pom_initialize_and_clear(void)
+void tms570_pom_initialize_and_clear( void )
 {
   int i;
 
-  TMS570_POM.GLBCTRL = 0 | (TMS570_POM_GLBCTRL_OTADDR(~0) &
-                            pom_global_overlay_target_address_start);
+  TMS570_POM.GLBCTRL = 0 | ( TMS570_POM_GLBCTRL_OTADDR( ~0 ) &
+                             pom_global_overlay_target_address_start );
 
   for ( i = 0; i < TMS570_POM_REGIONS; ++i ) {
-    TMS570_POM.REG[i].REGSIZE = TMS570_POM_REGSIZE_SIZE(TMS570_POM_REGSIZE_DISABLED);
+    TMS570_POM.REG[ i ].REGSIZE = TMS570_POM_REGSIZE_SIZE(
+      TMS570_POM_REGSIZE_DISABLED
+    );
   }
 }
 
@@ -105,12 +108,12 @@ void tms570_pom_initialize_and_clear(void)
  *
  * @retval Void
  */
-void tms570_pom_remap(void)
+void tms570_pom_remap( void )
 {
   void *vec_overlay_start = (void *) pom_global_overlay_target_address_start;
   void *addr_tab = (char *) bsp_start_vector_table_begin + 64;
 
-  if (vec_overlay_start == addr_tab) {
+  if ( vec_overlay_start == addr_tab ) {
     return;
   }
 
@@ -124,10 +127,10 @@ void tms570_pom_remap(void)
    * table found in
    *   bsps/arm/shared/start/start.S
    */
-  rtems_cache_invalidate_multiple_data_lines(addr_tab, 64);
-  memcpy(vec_overlay_start, addr_tab, 64);
-  rtems_cache_flush_multiple_data_lines(vec_overlay_start, 64);
-  rtems_cache_invalidate_multiple_instruction_lines(vec_overlay_start, 64);
+  rtems_cache_invalidate_multiple_data_lines( addr_tab, 64 );
+  memcpy( vec_overlay_start, addr_tab, 64 );
+  rtems_cache_flush_multiple_data_lines( vec_overlay_start, 64 );
+  rtems_cache_invalidate_multiple_instruction_lines( vec_overlay_start, 64 );
 
   #if 0
   {
@@ -154,16 +157,20 @@ void tms570_pom_remap(void)
    * (opcode 0xe59ff058) then the jump target addresses are replaced
    * by pointers to actual RTEMS exceptions service functions.
    */
-  TMS570_POM.REG[0].PROGSTART = TMS570_POM_PROGSTART_STARTADDRESS(64);
-  TMS570_POM.REG[0].OVLSTART = TMS570_POM_OVLSTART_STARTADDRESS(vec_overlay_start);
-  TMS570_POM.REG[0].REGSIZE = TMS570_POM_REGSIZE_SIZE(TMS570_POM_REGSIZE_64B);
+  TMS570_POM.REG[ 0 ].PROGSTART = TMS570_POM_PROGSTART_STARTADDRESS( 64 );
+  TMS570_POM.REG[ 0 ].OVLSTART = TMS570_POM_OVLSTART_STARTADDRESS(
+    vec_overlay_start
+  );
+  TMS570_POM.REG[ 0 ].REGSIZE = TMS570_POM_REGSIZE_SIZE(
+    TMS570_POM_REGSIZE_64B
+  );
 
   uint32_t glbctrl = TMS570_POM_GLBCTRL_ON_OFF( 0xa ) |
                      ( TMS570_POM_GLBCTRL_OTADDR( ~0 ) &
                        pom_global_overlay_target_address_start );
 
   #if TMS570_VARIANT == 3137
-    glbctrl |= TMS570_POM_GLBCTRL_ETO( 0xa );
+  glbctrl |= TMS570_POM_GLBCTRL_ETO( 0xa );
   #endif
 
   TMS570_POM.GLBCTRL = glbctrl;
