@@ -329,7 +329,8 @@ rtems_status_code bsp_interrupt_get_priority(
  */
 void bsp_interrupt_facility_initialize(void)
 {
-  void (**vim_vec)(void) = (void (**)(void)) 0xFFF82000;
+  void (* volatile *vim_vec)(void) =
+    (void (* volatile *)(void)) 0xFFF82000;
   unsigned int value = 0x00010203;
   unsigned int i = 0;
   uint32_t sctlr;
