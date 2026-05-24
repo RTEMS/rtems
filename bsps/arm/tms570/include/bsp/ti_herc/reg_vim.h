@@ -79,6 +79,14 @@ typedef struct{
   uint32_t CHANCTRL[24];      /*VIM Interrupt Control Register*/
 } tms570_vim_t;
 
+typedef struct{
+  uint32_t ECCSTAT;           /*Interrupt Vector Table ECC Status Register*/
+  uint32_t ECCCTL;            /*Interrupt Vector Table ECC Control Register*/
+  uint32_t UERRADDR;          /*Uncorrectable Error Address Register*/
+  uint32_t FBVECADDR;         /*Fallback Vector Address Register*/
+  uint32_t SBERRADDR;         /*Single-Bit Error Address Register*/
+} tms570_vim_ecc_t;
+
 
 /*---------------------TMS570_VIM_PARFLG---------------------*/
 /* field: PARFLG - The PARFLG indicates that a parity error has been found and that theInterrupt Vector Table is */
@@ -115,6 +123,41 @@ typedef struct{
 /*--------------------TMS570_VIM_FBPARERR--------------------*/
 /* field: FBPARERR - Fall back address parity error. */
 /* Whole 32 bits */
+
+
+/*--------------------TMS570_VIM_ECCSTAT---------------------*/
+#define TMS570_VIM_ECCSTAT_SBERR BSP_BIT32(8)
+#define TMS570_VIM_ECCSTAT_UERR BSP_BIT32(0)
+
+
+/*---------------------TMS570_VIM_ECCCTL---------------------*/
+#define TMS570_VIM_ECCCTL_SBE_EVT_DISABLE 0x5U
+#define TMS570_VIM_ECCCTL_SBE_EVT_ENABLE 0xAU
+
+#define TMS570_VIM_ECCCTL_EDAC_DISABLE 0x5U
+#define TMS570_VIM_ECCCTL_EDAC_ENABLE 0xAU
+
+#define TMS570_VIM_ECCCTL_TEST_DIAG_ENABLE 0x5U
+#define TMS570_VIM_ECCCTL_TEST_DIAG_DISABLE 0xAU
+
+#define TMS570_VIM_ECCCTL_ECC_DISABLE 0x5U
+#define TMS570_VIM_ECCCTL_ECC_ENABLE 0xAU
+
+#define TMS570_VIM_ECCCTL_SBE_EVT_EN(val) BSP_FLD32(val,24, 27)
+#define TMS570_VIM_ECCCTL_SBE_EVT_EN_GET(reg) BSP_FLD32GET(reg,24, 27)
+#define TMS570_VIM_ECCCTL_SBE_EVT_EN_SET(reg,val) BSP_FLD32SET(reg, val,24, 27)
+
+#define TMS570_VIM_ECCCTL_EDAC_MODE(val) BSP_FLD32(val,16, 19)
+#define TMS570_VIM_ECCCTL_EDAC_MODE_GET(reg) BSP_FLD32GET(reg,16, 19)
+#define TMS570_VIM_ECCCTL_EDAC_MODE_SET(reg,val) BSP_FLD32SET(reg, val,16, 19)
+
+#define TMS570_VIM_ECCCTL_TEST_DIAG_EN(val) BSP_FLD32(val,8, 11)
+#define TMS570_VIM_ECCCTL_TEST_DIAG_EN_GET(reg) BSP_FLD32GET(reg,8, 11)
+#define TMS570_VIM_ECCCTL_TEST_DIAG_EN_SET(reg,val) BSP_FLD32SET(reg, val,8, 11)
+
+#define TMS570_VIM_ECCCTL_ECCENA(val) BSP_FLD32(val,0, 3)
+#define TMS570_VIM_ECCCTL_ECCENA_GET(reg) BSP_FLD32GET(reg,0, 3)
+#define TMS570_VIM_ECCCTL_ECCENA_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 /*--------------------TMS570_VIM_IRQINDEX--------------------*/
 /* field: IRQINDEX - IRQ index vector. */

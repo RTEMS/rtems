@@ -156,6 +156,9 @@
 #define TMS570_TCRAM1 (*(volatile tms570_tcram_t*)0xFFFFF800)
 #define TMS570_TCRAM2 (*(volatile tms570_tcram_t*)0xFFFFF900)
 #define TMS570_VIM (*(volatile tms570_vim_t*)0xFFFFFDEC)
+#if TMS570_VARIANT == 4357
+#define TMS570_VIM_ECC (*(volatile tms570_vim_ecc_t*)0xFFFFFDEC)
+#endif
 #define TMS570_POM (*(volatile tms570_pom_t*)0xFFA04000)
 #define TMS570_SPI1 (*(volatile tms570_spi_t*)0xFFF7F400)
 #define TMS570_SPI2 (*(volatile tms570_spi_t*)0xFFF7F600)
