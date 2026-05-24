@@ -128,6 +128,10 @@
 #define TMS570_IRQ_DCC2_DONE_INTERRUPT 83
 #define TMS570_IRQ_HWAG1_INT_REQ_L 88
 #define TMS570_IRQ_HWAG2_INT_REQ_L 89
+/*
+ * The LC4357 VIM supports 128 interrupt request channels,  
+ * but this BSP currently only supports channels 0-94.
+ */
 #define BSP_INTERRUPT_VECTOR_COUNT 95
 
 #define TMS570_IRQ_PRIORITY_VALUE_MIN 0U

@@ -382,7 +382,7 @@ void bsp_interrupt_facility_initialize(void)
     TMS570_VIM_ECCCTL_ECCENA( TMS570_VIM_ECCCTL_ECC_ENABLE );
 #endif
 
-  for ( i = 0; i <= 94; ++i ) {
+  for ( i = 0; i < BSP_INTERRUPT_VECTOR_COUNT; ++i ) {
     vim_vec[i] = _ARMV4_Exception_interrupt;
   }
 
