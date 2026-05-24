@@ -361,9 +361,40 @@ void bsp_interrupt_facility_initialize(void)
     solution remaps that to address zero.
   */
 
+#if TMS570_VARIANT == 4357
+  /* FBVECADDR value is indeterminate after reset until explicitly set. */
+  TMS570_VIM_ECC.FBVECADDR =
+    (uint32_t) (uintptr_t) _ARMV4_Exception_interrupt;
+
+  /*
+   * Enable ECC for the LC4357 VIM vector table (disabled by default)
+   * 
+   * ECCCTL settings:
+   * SBE_EVT: disable to avoid sending single-bit errors to the ESM
+   * EDAC: detection-only mode (see TMS570LC4357 Silicon Errata VIM#28)
+   * TEST_DIAG: disable - we're in a normal start-up path
+   * ECCENA: enable ECC/SECDED feature
+   */
+  TMS570_VIM_ECC.ECCCTL =
+    TMS570_VIM_ECCCTL_SBE_EVT_EN( TMS570_VIM_ECCCTL_SBE_EVT_DISABLE ) |
+    TMS570_VIM_ECCCTL_EDAC_MODE( TMS570_VIM_ECCCTL_EDAC_DISABLE ) |
+    TMS570_VIM_ECCCTL_TEST_DIAG_EN( TMS570_VIM_ECCCTL_TEST_DIAG_DISABLE ) |
+    TMS570_VIM_ECCCTL_ECCENA( TMS570_VIM_ECCCTL_ECC_ENABLE );
+#endif
+
   for ( i = 0; i <= 94; ++i ) {
     vim_vec[i] = _ARMV4_Exception_interrupt;
   }
+
+#if TMS570_VARIANT == 4357
+  /*
+   * Clear any latched errors after the ECC bits were generated above 
+   * to start from a clean state at start-up.
+   */
+  TMS570_VIM_ECC.ECCSTAT =
+    TMS570_VIM_ECCSTAT_SBERR | TMS570_VIM_ECCSTAT_UERR;
+#endif
+
   /* Clear bit VE in SCTLR register to not use VIM IRQ exception bypass*/
   asm volatile ("mrc p15, 0, %0, c1, c0, 0\n": "=r" (sctlr));
   /*
