@@ -39,7 +39,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stdint.h>
 #include <bsp/tms570.h>
 #include <bsp/tms570_hwinit.h>
 
@@ -83,17 +82,14 @@ void tms570_esm_init( void )
   TMS570_ESM.ILCR4 = 0xFFFFFFFFU;
 
   /* Set interrupt level */
-  TMS570_ESM.ILSR1 = 0x00000000;
-
-  TMS570_ESM.ILSR4 = 0x00000000;
+  TMS570_ESM.ILSR1 = 0x00000000U;
+  TMS570_ESM.ILSR4 = 0x00000000U;
 
   /* Enable error pin channels */
   TMS570_ESM.EEPAPR1 = 0xFFFFFFFFU;
-
   TMS570_ESM.IEPSR4 = 0xFFFFFFFFU;
 
   /* Enable interrupts */
   TMS570_ESM.IESR1 = 0xFFFFFFFFU;
-
   TMS570_ESM.IESR4 = 0xFFFFFFFFU;
 }
