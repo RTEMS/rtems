@@ -49,25 +49,25 @@
  */
 void tms570_esm_init( void )
 {
-  /** - Disable error pin channels */
+  /* Disable error pin channels */
   TMS570_ESM.DEPAPR1 = 0xFFFFFFFFU;
   TMS570_ESM.IEPCR4 = 0xFFFFFFFFU;
 
-  /** - Disable interrupts */
+  /* Disable interrupts */
   TMS570_ESM.IECR1 = 0xFFFFFFFFU;
   TMS570_ESM.IECR4 = 0xFFFFFFFFU;
 
-  /** - Clear error status flags */
+  /* Clear error status flags */
   TMS570_ESM.SR[0U] = 0xFFFFFFFFU;
   TMS570_ESM.SR[1U] = 0xFFFFFFFFU;
   TMS570_ESM.SSR2   = 0xFFFFFFFFU;
   TMS570_ESM.SR[2U] = 0xFFFFFFFFU;
   TMS570_ESM.SR4    = 0xFFFFFFFFU;
 
-  /** - Setup LPC preload */
+  /* Set up LTC preload */
   TMS570_ESM.LTCPR = 16384U - 1U;
 
-  /** - Reset error pin */
+  /* Reset error pin */
   if (TMS570_ESM.EPSR == 0U) {
     /*
      * Per TMS570LC4x Errata DEVICE#60, the error pin cannot be cleared with a
@@ -78,21 +78,21 @@ void tms570_esm_init( void )
     TMS570_ESM.EKR = 0x00000000U;
   }
 
-  /** - Clear interrupt level */
+  /* Clear interrupt level */
   TMS570_ESM.ILCR1 = 0xFFFFFFFFU;
   TMS570_ESM.ILCR4 = 0xFFFFFFFFU;
 
-  /** - Set interrupt level */
+  /* Set interrupt level */
   TMS570_ESM.ILSR1 = 0x00000000;
 
   TMS570_ESM.ILSR4 = 0x00000000;
 
-  /** - Enable error pin channels */
+  /* Enable error pin channels */
   TMS570_ESM.EEPAPR1 = 0xFFFFFFFFU;
 
   TMS570_ESM.IEPSR4 = 0xFFFFFFFFU;
 
-  /** - Enable interrupts */
+  /* Enable interrupts */
   TMS570_ESM.IESR1 = 0xFFFFFFFFU;
 
   TMS570_ESM.IESR4 = 0xFFFFFFFFU;
