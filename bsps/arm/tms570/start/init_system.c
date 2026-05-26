@@ -52,7 +52,7 @@
 #include <bsp/tms570_hwinit.h>
 
 /**
- * @brief Adjust Low-Frequency (LPO) oscilator (HCG:trimLPO)
+ * @brief Adjust Low-Frequency (LPO) oscillator (HCG:trimLPO)
  *
  */
 /* SourceId : SYSTEM_SourceId_002 */
@@ -60,7 +60,7 @@
 /* Requirements : HL_SR468 */
 void tms570_trim_lpo_init( void )
 {
-  /** @b Initialize Lpo: */
+  /** @b Initialize LPO: */
   /** Load TRIM values from OTP if present else load user defined values */
   /*SAFETYMCUSW 139 S MR:13.7 <APPROVED> "Hardware status bit read check" */
   TMS570_SYS1.LPOMONCTL = TMS570_SYS1_LPOMONCTL_BIAS_ENABLE |

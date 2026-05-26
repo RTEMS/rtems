@@ -143,7 +143,7 @@ static RTEMS_USED void tms570_start_hook_0( void )
 #endif
   }
 
-  /* Initialize System - Clock, Flash settings with Efuse self check */
+  /* Initialize System - Clock, Flash settings with eFuse self check */
   tms570_system_hw_init();
 
   /* Workaround for Errata PBIST#4 */
@@ -351,8 +351,8 @@ static RTEMS_USED void tms570_start_hook_0( void )
 #if 1
   /*
    * Do not depend on link register to be restored to
-   * correct value from stack. If TCRAM self test is enabled
-   * the all stack content is zeroed there.
+   * correct value from stack. If TCRAM self test is 
+   * enabled all stack content is zeroed there.
    */
   bsp_start_hook_0_done();
 #endif
