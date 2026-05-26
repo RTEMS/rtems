@@ -45,6 +45,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <bsp/fatal.h>
 #include <bsp/tms570.h>
 #include <bsp/tms570-pinmux.h>
 #include <bsp/tms570_selftest.h>
@@ -177,15 +178,36 @@ void tms570_system_hw_init( void )
   if ( efc_check_status == 0U ) {
     /* Wait for eFuse controller self-test to complete and check results */
     if ( tms570_efc_check_self_test() == false ) { /* eFuse controller ECC logic self-test failed */
-      bsp_selftest_fail_notification( EFCCHECK_FAIL1 );           /* device operation is not reliable */
+      bsp_selftest_fail_notification( EFCCHECK_FAIL1 );  /* device operation is not reliable */
     }
   } else if ( efc_check_status == 2U ) {
     /* Wait for eFuse controller self-test to complete and check results */
     if ( tms570_efc_check_self_test() == false ) { /* eFuse controller ECC logic self-test failed */
-      bsp_selftest_fail_notification( EFCCHECK_FAIL1 );           /* device operation is not reliable */
+      bsp_selftest_fail_notification( EFCCHECK_FAIL1 );  /* device operation is not reliable */
     } else {
       bsp_selftest_fail_notification( EFCCHECK_FAIL2 );
     }
+  }
+  /* 
+   * If we got back status 1 or 3, tms570_efc_check() already reported 
+   * EFCCHECK_FAIL1 and did not start the EFC ECC logic self-test.
+   */
+  else if ( efc_check_status == 1U ) {
+    /*
+     * EFC stuck-at-zero safety check failed.
+     * This is a Class 2 Error (see TRM s38.3.2)
+     * eFuse controller safety checks cannot be trusted  
+     * and a more severe eFuse failure could be hidden.
+     */
+    bsp_fatal( TMS570_FATAL_EFC_STUCK_AT_ZERO_TEST );
+  } else if ( efc_check_status == 3U ) {
+    /*
+     * eFuse controller reported an uncorrected failure 
+     * during the autoload sequence.
+     * This is a Class 1 error (see TRM s38.3.2).
+     * Values read from the eFuses cannot be relied on.
+     */
+    bsp_fatal( TMS570_FATAL_EFC_AUTOLOAD_FAILURE );
   } else {
     /* Empty */
   }
