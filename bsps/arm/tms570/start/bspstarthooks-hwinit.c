@@ -335,7 +335,15 @@ static RTEMS_USED void tms570_start_hook_0( void )
   /* Configure system response to error conditions signaled to the ESM group1 */
   tms570_esm_init();
 
+#if TMS570_VARIANT != 4357
+   /*
+   * Keep the existing late SDRAM initialization here for non-LC4357
+   * variants. LC4357 initializes SDRAM earlier, before
+   * tms570_map_clock_init() in tms570_system_hw_init(), to satisfy 
+   * the recommendation in TMS570LC4x Silicon Erratum EMIF#5.
+   */
   tms570_emif_sdram_init();
+#endif
 
   /* Configures and enables the ARM-core Memory Protection Unit (MPU) */
   _mpuInit_();

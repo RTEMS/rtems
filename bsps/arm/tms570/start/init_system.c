@@ -178,12 +178,12 @@ void tms570_system_hw_init( void )
   if ( efc_check_status == 0U ) {
     /* Wait for eFuse controller self-test to complete and check results */
     if ( tms570_efc_check_self_test() == false ) { /* eFuse controller ECC logic self-test failed */
-      bsp_selftest_fail_notification( EFCCHECK_FAIL1 );  /* device operation is not reliable */
+      bsp_selftest_fail_notification( EFCCHECK_FAIL1 ); /* device operation is not reliable */
     }
   } else if ( efc_check_status == 2U ) {
     /* Wait for eFuse controller self-test to complete and check results */
     if ( tms570_efc_check_self_test() == false ) { /* eFuse controller ECC logic self-test failed */
-      bsp_selftest_fail_notification( EFCCHECK_FAIL1 );  /* device operation is not reliable */
+      bsp_selftest_fail_notification( EFCCHECK_FAIL1 ); /* device operation is not reliable */
     } else {
       bsp_selftest_fail_notification( EFCCHECK_FAIL2 );
     }
@@ -220,6 +220,19 @@ void tms570_system_hw_init( void )
 
   /** - Configure the LPO such that HF LPO is as close to 10MHz as possible */
   tms570_trim_lpo_init();
+
+#if TMS570_VARIANT == 4357
+  /*
+   * Workaround for TMS570LC4x Silicon Erratum EMIF#5:
+   *
+   * Given that the final LC4357 EMIF clock speed is greater than or 
+   * equal to 40 MHz, (we use 50 MHz), the SDRAM must be initialized 
+   * while the EMIF clock is still running on the OSCIN clock source. 
+   * The LC4357 SDRAM initialization must happen before calling
+   * tms570_map_clock_init().
+   */
+  tms570_emif_sdram_init();
+#endif
 
   /** - Wait for PLLs to start up and map clock domains to desired clock sources */
   tms570_map_clock_init();

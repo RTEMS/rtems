@@ -137,15 +137,17 @@ void tms570_emif_sdram_init( void )
 {
     uint32_t dummy;
 
-    /* Do not run attempt to initialize SDRAM when code is running from it */
+    /* Do not attempt to initialize SDRAM when code is running from it */
     if ( tms570_running_from_sdram() )
         return;
 
-    // Following the initialization procedure as described in EMIF-errata #5 for the tms570lc43
-    // at EMIF clock rates >= 40Mhz
-    // Note step one of this procedure is running this EMIF initialization sequence before PLL
-    // and clocks are mapped/enabled
-    // For additional details on startup procedure see tms570lc43 TRM s21.2.5.5.B
+    /*
+     * Due to TMS570LC4x Silicon Erratum EMIF#5 this call is made in 
+     * bsps/arm/tms570/start/init_system.c for the 4357 variant.
+     * See notes there for further detail.
+     * For additional details on the SDRAM startup procedure, see the 
+     * TMS570LC43x TRM section 21.2.5.5.B.
+     */
 
     // Set SDRAM timings. These are dependent on the EMIF CLK rate, which = VCLK3
     // Set these based on the final EMIF clock rate once PLL & VCLK is enabled
@@ -162,10 +164,11 @@ void tms570_emif_sdram_init( void )
     // Also set this based on the final EMIF clk
     TMS570_EMIF.SDSRETR = 2;
     // Program the RR Field of SDRCR to provide 200us of initialization time
-    // Per Errata#5, for EMIF startup, set this based on the non-VLCK3 clk rate.
+    // Per Errata#5, for EMIF startup, set this based on the non-VCLK3 clk rate.
     // The Errata is this register must be calculated as `SDRCR = 200us * EMIF_CLK`
     //  (typically this would be `SDRCR = (200us * EMIF_CLK) / 8` ) 
-    //  Since the PLL's arent enabled yet, EMIF_CLK would be EXT_OSCIN / 2
+    // Since PLL1 has not been selected as the active clock source yet,
+    // EMIF_CLK is still derived from EXT_OSCIN / 2.
     TMS570_EMIF.SDRCR = 1600;
 
     TMS570_EMIF.SDCR   = ((uint32_t)0U << 31U)|
