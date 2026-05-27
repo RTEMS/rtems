@@ -4,6 +4,7 @@ content: |
   include $$(RTEMS_ROOT)/make/custom/default.cfg
   CPU_DEFINES = -isystem$$(exec_prefix)/$$(RTEMS_BSP)/lib/include
   CPU_CFLAGS = ${ABI_FLAGS}
+  ABI_FLAGS = ${ABI_FLAGS}
   CFLAGS_OPTIMIZE_V = ${OPTIMIZATION_FLAGS}
   LDFLAGS = ${ABI_FLAGS} -B$$(exec_prefix)/$$(RTEMS_BSP)/lib ${PKGCONFIG_LDFLAGS}
 copyrights:
