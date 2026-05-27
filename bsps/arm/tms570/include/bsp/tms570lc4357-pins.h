@@ -251,7 +251,7 @@
                 TMS570_PIN_AND_FNC(TMS570_PIN_MMR_ALT_HET2_09, 1))
 
 #define TMS570_BALL_M17 TMS570_BALL_WITH_MMR(10, 1)
-#define TMS570_BALL_M17_EMIF_nCSl_4 TMS570_PIN_AND_FNC(TMS570_BALL_M17, 0)
+#define TMS570_BALL_M17_EMIF_nCS_4 TMS570_PIN_AND_FNC(TMS570_BALL_M17, 0)
 #define TMS570_BALL_M17_RTP_DATA_07 TMS570_PIN_AND_FNC(TMS570_BALL_M17, 1)
 #define TMS570_BALL_M17_GIOB_5 TMS570_PIN_WITH_IN_ALT( \
                 TMS570_PIN_AND_FNC(TMS570_BALL_M17, 2), \
@@ -1027,7 +1027,7 @@
   per_pin_action(common_arg, TMS570_BALL_N17_EMIF_nCS_0) \
   per_pin_action(common_arg, TMS570_BALL_L17_EMIF_nCS_2) \
   per_pin_action(common_arg, TMS570_BALL_K17_EMIF_nCS_3) \
-  per_pin_action(common_arg, TMS570_BALL_M17_EMIF_nCSl_4) \
+  per_pin_action(common_arg, TMS570_BALL_M17_EMIF_nCS_4) \
   per_pin_action(common_arg, TMS570_BALL_R3_EMIF_nRAS) \
   per_pin_action(common_arg, TMS570_BALL_P3_EMIF_nWAIT) \
   per_pin_action(common_arg, TMS570_BALL_D17_EMIF_nWE) \
