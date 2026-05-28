@@ -369,27 +369,14 @@ void rtems_fdt_release_handle( rtems_fdt_handle *handle )
 
 bool rtems_fdt_valid_handle( const rtems_fdt_handle *handle )
 {
-  if ( handle && handle->blob ) {
-    rtems_fdt_data   *fdt;
-    rtems_chain_node *node;
+  rtems_fdt_data *fdt;
+  bool            is_valid;
 
-    fdt = rtems_fdt_lock();
+  fdt = rtems_fdt_lock();
+  is_valid = rtems_fdt_valid_handle_unprotected( handle, fdt );
+  rtems_fdt_unlock( fdt );
 
-    node = rtems_chain_first( &fdt->blobs );
-
-    while ( !rtems_chain_is_tail( &fdt->blobs, node ) ) {
-      rtems_fdt_blob *blob = (rtems_fdt_blob *) node;
-      if ( handle->blob == blob ) {
-        rtems_fdt_unlock( fdt );
-        return true;
-      }
-      node = rtems_chain_next( node );
-    }
-
-    rtems_fdt_unlock( fdt );
-  }
-
-  return false;
+  return is_valid;
 }
 
 int rtems_fdt_find_path_offset( rtems_fdt_handle *handle, const char *path )
@@ -600,11 +587,12 @@ int rtems_fdt_unload( rtems_fdt_handle *handle )
 {
   rtems_fdt_data *fdt;
 
-  if ( !rtems_fdt_valid_handle( handle ) ) {
+  fdt = rtems_fdt_lock();
+
+  if ( !rtems_fdt_valid_handle_unprotected( handle ) ) {
+    rtems_fdt_unlock( fdt );
     return -RTEMS_FDT_ERR_INVALID_HANDLE;
   }
-
-  fdt = rtems_fdt_lock();
 
   if ( handle->blob->refs > 1 ) {
     rtems_fdt_unlock( fdt );

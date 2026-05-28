@@ -88,4 +88,38 @@ typedef struct {
   const char         *paths; /**< Search paths for blobs. */
 } rtems_fdt_data;
 
+/**
+ * @brief Check if a handle had a valid blob assigned.
+ *
+ * @param handle The handle to check.
+ * @param fdt The FDT instance.
+ * @retval true The handle has a valid blob.
+ * @retval false The handle does not have a valid blob.
+ *
+ * @note It does not acquire a lock to ensure consistency of the blobs chain.
+ *       It should be called with the @a fdt->lock() held.
+ *
+ * @see rtems_fdt_valid_handle().
+ */
+static inline bool rtems_fdt_valid_handle_unprotected(
+  const rtems_fdt_handle *handle,
+  const rtems_fdt_data   *fdt
+)
+{
+  if ( handle && handle->blob ) {
+    rtems_chain_node *node;
+
+    node = rtems_chain_first( &fdt->blobs );
+
+    while ( !rtems_chain_is_tail( &fdt->blobs, node ) ) {
+      rtems_fdt_blob *blob = (rtems_fdt_blob *) node;
+      if ( handle->blob == blob ) {
+        return true;
+      }
+      node = rtems_chain_next( node );
+    }
+  }
+  return false;
+}
+
 #endif
