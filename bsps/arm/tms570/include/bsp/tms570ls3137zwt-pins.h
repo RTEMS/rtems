@@ -704,7 +704,7 @@
   per_pin_action(common_arg, TMS570_BALL_D3_SPI2NENA) \
   per_pin_action(common_arg, TMS570_MMR_SELECT_EMIF_CLK_SEL) \
   per_pin_action(common_arg, TMS570_BALL_F2_GIOB_2) \
-  per_pin_action(common_arg, TMS570_MMR_SELECT_GMII_SEL) \
+  per_pin_action(common_arg, TMS570_MMR_SELECT_MII_MODE) \
   per_pin_action(common_arg, TMS570_MMR_SELECT_ADC_TRG1) \
 
 /* End of default PINMMR list */
