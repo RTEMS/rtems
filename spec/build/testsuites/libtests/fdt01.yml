@@ -20,6 +20,7 @@ do-build: |
   hdrs.append("testsuites/libtests/fdt01/zynqmp-test-dtb.h")
   hdrs.append("testsuites/libtests/fdt01/mpfs-test-dtb.h")
   hdrs.append("testsuites/libtests/fdt01/microblaze-test-dtb.h")
+  hdrs.append("cpukit/include/rtems/score/cpuopts.h")
   objs = []
   objs.append(self.cc(bld, bic, tar_c))
   objs.append(self.cc(bld, bic, path + "init.c", deps=hdrs, cppflags=bld.env.TEST_FDT01_CPPFLAGS))
