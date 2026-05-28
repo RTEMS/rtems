@@ -78,8 +78,8 @@ struct ambapp_apb_info {
 	struct ambapp_common_info common;
 
 	/* APB SPECIFIC */
-	unsigned int start;
-	unsigned int mask;
+	uint32_t start;
+	uint32_t mask;
 };
 
 struct ambapp_ahb_info {

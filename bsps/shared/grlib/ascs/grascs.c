@@ -46,11 +46,11 @@
 #endif
 
 typedef struct {
-  volatile unsigned int cmd;
-  volatile unsigned int clk;
-  volatile unsigned int sts;
-  volatile unsigned int tcd;
-  volatile unsigned int tmd;
+  volatile uint32_t cmd;
+  volatile uint32_t clk;
+  volatile uint32_t sts;
+  volatile uint32_t tcd;
+  volatile uint32_t tmd;
 } GRASCS_regs;
 
 typedef struct {
@@ -128,7 +128,7 @@ static int ASCS_get_sysfreq(void) {
   int tmp;
 
   if(ambapp_find_apbslv(ambapp_plb(), VENDOR_GAISLER, GAISLER_GPTIMER, &gpt) == 1) {
-    tregs = (struct gptimer_regs *) gpt.start;
+    tregs = (struct gptimer_regs *)(uintptr_t)gpt.start;
     tmp = (tregs->scaler_reload + 1)*1000;
     DBG("ASCS_get_sysfreq: Detected system frequency %i kHz\n",tmp);
     if((tmp < GRASCS_MIN_SFREQ) || (tmp > GRASCS_MAX_SFREQ)) {
@@ -163,15 +163,15 @@ static rtems_isr ASCS_irqhandler(void *v) {
       /* Block not sent yet, start next TC */
       if(cfg->caps->dbits == 8) {
 	cfg->tcptr++;
-	cfg->regs->tcd = *((unsigned char*)cfg->tcptr);
+	cfg->regs->tcd = *((unsigned char*)(uintptr_t)cfg->tcptr);
       }
       else if(cfg->caps->dbits == 16) {
 	cfg->tcptr += 2;
-	cfg->regs->tcd = *((unsigned short int*)cfg->tcptr);
+	cfg->regs->tcd = *((unsigned short int*)(uintptr_t)cfg->tcptr);
       }
       else {
 	cfg->tcptr += 4;
-	cfg->regs->tcd = *((unsigned int*)cfg->tcptr);
+	cfg->regs->tcd = *((unsigned int*)(uintptr_t)cfg->tcptr);
       }
     }
   }
@@ -182,15 +182,15 @@ static rtems_isr ASCS_irqhandler(void *v) {
 
     /* Store received data */
     if(cfg->caps->dbits == 8) {
-      *((unsigned char*)cfg->tmptr) = (unsigned char)(cfg->regs->tmd & 0xFF);
+      *((unsigned char*)(uintptr_t)cfg->tmptr) = (unsigned char)(cfg->regs->tmd & 0xFF);
       cfg->tmptr++;
     }
     else if(cfg->caps->dbits == 16) {
-      *((unsigned short int*)cfg->tmptr) = (unsigned short int)(cfg->regs->tmd & 0xFFFF);
+      *((unsigned short int*)(uintptr_t)cfg->tmptr) = (unsigned short int)(cfg->regs->tmd & 0xFFFF);
       cfg->tmptr += 2;
     }
     else {
-      *((unsigned int*)cfg->tmptr) = cfg->regs->tmd;
+      *((unsigned int*)(uintptr_t)cfg->tmptr) = cfg->regs->tmd;
       cfg->tmptr += 4;
     }
     
@@ -268,7 +268,7 @@ int ASCS_init(void) {
   if(ASCS_get_addr(&base, &irq) == -1)
     goto init_error2;
 
-  cfg->regs = (GRASCS_regs*)base;
+  cfg->regs = (GRASCS_regs*)(uintptr_t)base;
   
   /* Read core capabilities */
   tmp = cfg->regs->sts;
@@ -454,9 +454,9 @@ int ASCS_TC_send(int *word) {
     if(cfg->caps->dbits == 8)
       cfg->regs->tcd = *((unsigned char*)word);
     else if(cfg->caps->dbits == 16)
-      cfg->regs->tcd = *((unsigned short int*)((int)word & ~1));
+      cfg->regs->tcd = *((unsigned short int*)((uintptr_t)word & ~1));
     else
-      cfg->regs->tcd = *((unsigned int*)((int)word & ~3));
+      cfg->regs->tcd = *((unsigned int*)((uintptr_t)word & ~3));
     
     /* Wait until transfer is complete */
     rtems_semaphore_obtain(cfg->tcsem2,RTEMS_WAIT,RTEMS_NO_TIMEOUT);
@@ -503,16 +503,16 @@ int ASCS_TC_send_block(int *block, int ntrans) {
     /* Start the first transfer */
     cfg->tcwords = ntrans;
     if(cfg->caps->dbits == 8) {
-      cfg->tcptr = (int)block;
-      cfg->regs->tcd = *((unsigned char*)cfg->tcptr);
+      cfg->tcptr = (int)(uintptr_t)block;
+      cfg->regs->tcd = *((unsigned char*)(uintptr_t)cfg->tcptr);
     }
     else if(cfg->caps->dbits == 16) {
-      cfg->tcptr = (int)block & ~1;
-      cfg->regs->tcd = *((unsigned short int*)cfg->tcptr);
+      cfg->tcptr = (int)(uintptr_t)block & ~1;
+      cfg->regs->tcd = *((unsigned short int*)(uintptr_t)cfg->tcptr);
     }
     else {
-      cfg->tcptr = (int)block & ~3;
-      cfg->regs->tcd = *((unsigned int*)cfg->tcptr);
+      cfg->tcptr = (int)(uintptr_t)block & ~3;
+      cfg->regs->tcd = *((unsigned int*)(uintptr_t)cfg->tcptr);
     }
         
     /* Wait until all transfers are complete */
@@ -581,7 +581,7 @@ int ASCS_TM_recv(int *word) {
   else {
     /* Start transfer */
     cfg->tmwords = 1;
-    cfg->tmptr = (int)word;
+    cfg->tmptr = (int)(uintptr_t)word;
     cfg->regs->cmd |= GRASCS_CMD_SENDTM;
     
     /* Wait until transfer finishes */
@@ -627,7 +627,7 @@ int ASCS_TM_recv_block(int *block, int ntrans) {
   else {
     /* Start transfer */
     cfg->tmwords = ntrans;
-    cfg->tmptr = (int)block;
+    cfg->tmptr = (int)(uintptr_t)block;
     cfg->regs->cmd |= GRASCS_CMD_SENDTM;
     
     /* Wait until transfer finishes */

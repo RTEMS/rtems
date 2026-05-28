@@ -39,23 +39,23 @@ extern void spictrl_register_drv (void);
 
 /*** REGISTER LAYOUT ***/
 struct spictrl_regs {
-	volatile unsigned int capability;	/* 0x00 */
-	volatile unsigned int resv[7];		/* 0x04 */
-	volatile unsigned int mode;		/* 0x20 */
-	volatile unsigned int event;		/* 0x24 */
-	volatile unsigned int mask;		/* 0x28 */
-	volatile unsigned int command;		/* 0x2c */
-	volatile unsigned int tx;		/* 0x30 */
-	volatile unsigned int rx;		/* 0x34 */
-	volatile unsigned int slvsel;		/* 0x38 */
-	volatile unsigned int am_slvsel;	/* 0x3c */
-	volatile unsigned int am_cfg;		/* 0x40 */
-	volatile unsigned int am_period;	/* 0x44 */
-	int reserved0[2];
-	volatile unsigned int am_mask[4];	/* 0x50-0x5C */
-	int reserved1[(0x200-0x60)/4];
-	volatile unsigned int am_tx[128];	/* 0x200-0x3FC */
-	volatile unsigned int am_rx[128];	/* 0x400-0x5FC */
+	volatile uint32_t capability;	/* 0x00 */
+	volatile uint32_t resv[7];		/* 0x04 */
+	volatile uint32_t mode;		/* 0x20 */
+	volatile uint32_t event;		/* 0x24 */
+	volatile uint32_t mask;		/* 0x28 */
+	volatile uint32_t command;		/* 0x2c */
+	volatile uint32_t tx;		/* 0x30 */
+	volatile uint32_t rx;		/* 0x34 */
+	volatile uint32_t slvsel;		/* 0x38 */
+	volatile uint32_t am_slvsel;	/* 0x3c */
+	volatile uint32_t am_cfg;		/* 0x40 */
+	volatile uint32_t am_period;	/* 0x44 */
+	uint32_t reserved0[2];
+	volatile uint32_t am_mask[4];	/* 0x50-0x5C */
+	uint32_t reserved1[(0x200-0x60)/4];
+	volatile uint32_t am_tx[128];	/* 0x200-0x3FC */
+	volatile uint32_t am_rx[128];	/* 0x400-0x5FC */
 };
 
 /* -- About automated periodic transfer mode --

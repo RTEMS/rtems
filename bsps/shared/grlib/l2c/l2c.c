@@ -388,7 +388,7 @@ static struct l2cache_priv *l2cachepriv = NULL;
 static char * repl_names[4] = {"LRU","Random","Master-Idx-1","Master-IDx-2"};
 #endif
 
-static void REG_WRITE(volatile unsigned int *addr, unsigned int val) {
+static void REG_WRITE(volatile uint32_t *addr, unsigned int val) {
 	SPIN_IRQFLAGS(irqflags);
 
 	SPIN_LOCK_IRQ(&leon3_l2c_lock, irqflags);
@@ -396,7 +396,7 @@ static void REG_WRITE(volatile unsigned int *addr, unsigned int val) {
 	SPIN_UNLOCK_IRQ(&leon3_l2c_lock, irqflags);
 }
 
-static unsigned int REG_READ(volatile unsigned int *addr) {
+static unsigned int REG_READ(volatile uint32_t *addr) {
 	SPIN_IRQFLAGS(irqflags);
 	unsigned int val;
 
@@ -417,7 +417,7 @@ static inline uint32_t atomic_swap32(uint32_t *addr, uint32_t val) {
 	return val;
 }
 
-static void REG_WRITE_ATOMIC(volatile unsigned int *addr, unsigned int val) {
+static void REG_WRITE_ATOMIC(volatile uint32_t *addr, unsigned int val) {
 	SPIN_IRQFLAGS(irqflags);
 
 	SPIN_LOCK_IRQ(&leon3_l2c_lock, irqflags);
@@ -481,7 +481,7 @@ STATIC int l2cache_init(struct l2cache_priv *priv)
 	ahb = ainfo->info.ahb_slv;
 
 	/* Found L2CACHE core, init private structure */
-	priv->regs = (struct l2c_regs *)ahb->start[1];
+	priv->regs = (struct l2c_regs *)(uintptr_t)ahb->start[1];
 
 	/* Initialize L2CACHE status */
 	unsigned int status = l2cache_reg_status();

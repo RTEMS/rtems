@@ -1017,7 +1017,7 @@ int spictrl_device_init(struct spictrl_priv *priv)
 	}
 	pnpinfo = &ambadev->info;
 	priv->irq = pnpinfo->irq;
-	priv->regs = (struct spictrl_regs *)pnpinfo->apb_slv->start;
+	priv->regs = (struct spictrl_regs *)(uintptr_t)pnpinfo->apb_slv->start;
 	priv->fdepth = (priv->regs->capability & SPICTRL_CAP_FDEPTH) >> SPICTRL_CAP_FDEPTH_BIT;
 
 	DBG("SPCTRL: 0x%x irq %d, FIFO: %d\n", (unsigned int)priv->regs, priv->irq, priv->fdepth);

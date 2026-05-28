@@ -186,32 +186,32 @@
 #define GRP_AG_BIT 0
 
 
-#define REG_WRITE(addr, val) (*(volatile unsigned int *)(addr) = (unsigned int)(val))
-#define REG_READ(addr) (*(volatile unsigned int *)(addr))
+#define REG_WRITE(addr, val) (*(volatile uint32_t *)(addr) = (unsigned int)(val))
+#define REG_READ(addr) (*(volatile uint32_t *)(addr))
 
 /*
  * GRIOMMU APB Register MAP
  */
 struct griommu_regs {
-	volatile unsigned int cap0;			/* 0x00 - Capability 0 */
-	volatile unsigned int cap1;			/* 0x04 - Capability 1 */
-	volatile unsigned int cap2;			/* 0x08 - Capability 2 */
-	volatile unsigned int resv1;		/* 0x0c - Reserved */
-	volatile unsigned int ctrl;			/* 0x10 - Control */
-	volatile unsigned int flush;		/* 0x14 - TLB/cache flush */
-	volatile unsigned int status;		/* 0x18 - Status */
-	volatile unsigned int imask;		/* 0x1c - Interrupt mask */
-	volatile unsigned int ahbstat;		/* 0x20 - AHB Failing Access */
-	volatile unsigned int resv2[7];		/* 0x24-0x3c - Reserved. No access */
-	volatile unsigned int master[16];	/* 0x40-0x7c - Master configuration */
-	volatile unsigned int grp_ctrl[16]; /* 0x80-0xbc - Group control */
-	volatile unsigned int diag_ca;		/* 0xc0 - Diagnostic cache access */
-	volatile unsigned int diag_cad[8];	/* 0xc4-0xe0 - Diagnostic cache data */
-	volatile unsigned int diag_cat;		/* 0xe4 - Diagnostic cache tag */
-	volatile unsigned int ei_data;		/* 0xe8 - Data RAM error injection */
-	volatile unsigned int ei_tag;		/* 0xec - Tag RAM error injection */
-	volatile unsigned int resv3[4];		/* 0xf0-0xfc - Reserved. No access */
-	volatile unsigned int asmpctrl[16]; /* 0x100-0x13c - ASMP access control */
+	volatile uint32_t cap0;			/* 0x00 - Capability 0 */
+	volatile uint32_t cap1;			/* 0x04 - Capability 1 */
+	volatile uint32_t cap2;			/* 0x08 - Capability 2 */
+	volatile uint32_t resv1;		/* 0x0c - Reserved */
+	volatile uint32_t ctrl;			/* 0x10 - Control */
+	volatile uint32_t flush;		/* 0x14 - TLB/cache flush */
+	volatile uint32_t status;		/* 0x18 - Status */
+	volatile uint32_t imask;		/* 0x1c - Interrupt mask */
+	volatile uint32_t ahbstat;		/* 0x20 - AHB Failing Access */
+	volatile uint32_t resv2[7];		/* 0x24-0x3c - Reserved. No access */
+	volatile uint32_t master[16];	/* 0x40-0x7c - Master configuration */
+	volatile uint32_t grp_ctrl[16]; /* 0x80-0xbc - Group control */
+	volatile uint32_t diag_ca;		/* 0xc0 - Diagnostic cache access */
+	volatile uint32_t diag_cad[8];	/* 0xc4-0xe0 - Diagnostic cache data */
+	volatile uint32_t diag_cat;		/* 0xe4 - Diagnostic cache tag */
+	volatile uint32_t ei_data;		/* 0xe8 - Data RAM error injection */
+	volatile uint32_t ei_tag;		/* 0xec - Tag RAM error injection */
+	volatile uint32_t resv3[4];		/* 0xf0-0xfc - Reserved. No access */
+	volatile uint32_t asmpctrl[16]; /* 0x100-0x13c - ASMP access control */
 };
 
 #define DEVNAME_LEN 9
@@ -334,7 +334,7 @@ STATIC int griommu_init(struct griommu_priv *priv)
 	ahb = ainfo->info.ahb_slv;
 
 	/* Found GRIOMMU core, init private structure */
-	priv->regs = (struct griommu_regs *)ahb->start[0];
+	priv->regs = (struct griommu_regs *)(uintptr_t)ahb->start[0];
 
 	/* Mask all interrupts */
 	griommu_reg_imask_set(0);
@@ -1053,8 +1053,8 @@ void * griommu_apv_new(void)
 	if (orig_ptr == NULL) return NULL;
 
 	/* Get the aligned pointer */
-	unsigned int aligned_ptr = (
-		((unsigned int) orig_ptr + GRIOMMU_APV_ALIGN) &
+	uintptr_t aligned_ptr = (
+		((uintptr_t) orig_ptr + GRIOMMU_APV_ALIGN) &
 		~(GRIOMMU_APV_ALIGN - 1));
 
 	/* Save the original pointer before the aligned pointer */
@@ -1152,24 +1152,24 @@ int griommu_group_setup(int group, void * apv, int options)
 	}
 
 	if (options == GRIOMMU_OPTIONS_GROUP_DISABLE){
-		if ((unsigned int) apv & (GRIOMMU_APV_ALIGN -1)){
+		if ((uintptr_t) apv & (GRIOMMU_APV_ALIGN -1)){
 			DBG("Wrong pointer.\n");
 			return GRIOMMU_ERR_EINVAL;
 		}
 
 		/* Disable GROUP */
-		griommu_reg_group_set(group, (((unsigned int) apv) & GRP_BASE) | 0);
+		griommu_reg_group_set(group, (((unsigned int)(uintptr_t)apv) & GRP_BASE) | 0);
 		DBG("GROUP[%d] DISABLED.\n", group);
 		return GRIOMMU_ERR_OK;
 	}else if (options == GRIOMMU_OPTIONS_GROUP_PASSTHROUGH){
-		if ((unsigned int) apv & (GRIOMMU_APV_ALIGN -1)){
+		if ((uintptr_t) apv & (GRIOMMU_APV_ALIGN -1)){
 			DBG("Wrong pointer.\n");
 			return GRIOMMU_ERR_EINVAL;
 		}
 
 		/* Group in passthrough */
 		griommu_reg_group_set(group, 
-				(((unsigned int) apv) & GRP_BASE) | GRP_P | GRP_AG);
+				(((unsigned int)(uintptr_t)apv) & GRP_BASE) | GRP_P | GRP_AG);
 		DBG("GROUP[%d] set to PASSTHROUGH.\n", group);
 		return GRIOMMU_ERR_OK;
 	}else{
@@ -1178,14 +1178,14 @@ int griommu_group_setup(int group, void * apv, int options)
 			return GRIOMMU_ERR_IMPLEMENTED;
 		}
 
-		if ((apv == NULL) || ((unsigned int) apv & (GRIOMMU_APV_ALIGN -1))){
+		if ((apv == NULL) || ((uintptr_t) apv & (GRIOMMU_APV_ALIGN -1))){
 			DBG("Wrong pointer.\n");
 			return GRIOMMU_ERR_EINVAL;
 		}
 
 		/* Set up base and enable */
 		griommu_reg_group_set(group, 
-				(((unsigned int) apv) & GRP_BASE) | GRP_AG);
+				(((unsigned int)(uintptr_t)apv) & GRP_BASE) | GRP_AG);
 		DBG("GROUP[%d] set to APV (0x%08x).\n", group, (unsigned int) apv);
 		return GRIOMMU_ERR_OK;
 	}
@@ -1207,7 +1207,7 @@ int griommu_group_apv_init(int group, int options)
 	}
 
 	/* Get APV group */
-	apv = (void *) (griommu_reg_group(group) & GRP_BASE);
+	apv = (void *)(uintptr_t)(griommu_reg_group(group) & GRP_BASE);
 
 	if (apv == NULL){
 		DBG("Wrong pointer.\n");
@@ -1244,7 +1244,7 @@ int griommu_group_apv_page_set(int group, int index, int size, int options)
 	}
 
 	/* Get APV group */
-	apv = (void *) (griommu_reg_group(group) & GRP_BASE);
+	apv = (void *)(uintptr_t)(griommu_reg_group(group) & GRP_BASE);
 
 	if (apv == NULL){
 		DBG("Wrong pointer.\n");
@@ -1280,7 +1280,7 @@ int griommu_group_apv_address_set(int group, uint32_t addr, int size,
 	}
 
 	/* Get APV group */
-	apv = (void *) (griommu_reg_group(group) & GRP_BASE);
+	apv = (void *)(uintptr_t)(griommu_reg_group(group) & GRP_BASE);
 
 	if (apv == NULL){
 		DBG("Wrong pointer.\n");
@@ -1317,7 +1317,7 @@ int griommu_apv_init(void * apv, int options)
 		return GRIOMMU_ERR_NOINIT;
 	}
 
-	if ((apv == NULL) || ((unsigned int) apv & (GRIOMMU_APV_ALIGN -1))){
+	if ((apv == NULL) || ((uintptr_t) apv & (GRIOMMU_APV_ALIGN -1))){
 		DBG("Wrong pointer.\n");
 		return GRIOMMU_ERR_EINVAL;
 	}
@@ -1348,7 +1348,7 @@ int griommu_apv_page_set(void * apv, int index, int size, int options)
 		return GRIOMMU_ERR_NOINIT;
 	}
 
-	if ((apv == NULL) || ((unsigned int) apv & (GRIOMMU_APV_ALIGN -1))){
+	if ((apv == NULL) || ((uintptr_t) apv & (GRIOMMU_APV_ALIGN -1))){
 		DBG("Wrong pointer.\n");
 		return GRIOMMU_ERR_EINVAL;
 	}
@@ -1376,7 +1376,7 @@ int griommu_apv_address_set(void * apv, uint32_t addr, int size, int options)
 		return GRIOMMU_ERR_NOINIT;
 	}
 
-	if ((apv == NULL) || ((unsigned int) apv & (GRIOMMU_APV_ALIGN -1))){
+	if ((apv == NULL) || ((uintptr_t) apv & (GRIOMMU_APV_ALIGN -1))){
 		DBG("Wrong pointer.\n");
 		return GRIOMMU_ERR_EINVAL;
 	}

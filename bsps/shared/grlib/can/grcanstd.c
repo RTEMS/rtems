@@ -101,8 +101,8 @@ static int grcan_hw_read_try(
 		/* Read until i is 0 */
 		i = trunk_msg_cnt;
 
-		addr = (unsigned int)pDev->rx;
-		source = (struct grcan_msg *)(addr + rp);
+		addr = (unsigned int)(uintptr_t)pDev->rx;
+		source = (struct grcan_msg *)(uintptr_t)(addr + rp);
 		dest = buffer;
 		rxmax = addr + (size - GRCAN_MSG_SIZE);
 
@@ -134,8 +134,8 @@ static int grcan_hw_read_try(
 
 			/* wrap around if neccessary */
 			source =
-			    ((unsigned int)source >= rxmax) ?
-			    (struct grcan_msg *)addr : source + 1;
+			    ((uintptr_t)source >= rxmax) ?
+			    (struct grcan_msg *)(uintptr_t)addr : source + 1;
 			dest++;	/* straight user buffer */
 			i--;
 		}
@@ -145,7 +145,7 @@ static int grcan_hw_read_try(
 
 			SPIN_LOCK_IRQ(&pDev->devlock, oldLevel);
 			if (pDev->started == STATE_STARTED) {
-				regs->rx0rd = (unsigned int) source - addr;
+				regs->rx0rd = (uintptr_t)source - addr;
 				regs->rx0ctrl = GRCAN_RXCTRL_ENABLE;
 			} else {
 				DBGC(DBG_STATE, "cancelled due to a BUS OFF error\n");
@@ -191,9 +191,9 @@ static int grcan_hw_write_try(
 		space_left = count;
 	ret = space_left;
 
-	addr = (unsigned int)pDev->tx;
+	addr = (unsigned int)(uintptr_t)pDev->tx;
 
-	dest = (struct grcan_msg *)(addr + wp);
+	dest = (struct grcan_msg *)(uintptr_t)(addr + wp);
 	source = (CANMsg *) buffer;
 	txmax = addr + (size - GRCAN_MSG_SIZE);
 
@@ -212,8 +212,8 @@ static int grcan_hw_write_try(
 			dest->data[i] = source->data[i];
 		source++;	/* straight user buffer */
 		dest =
-		    ((unsigned int)dest >= txmax) ?
-		    (struct grcan_msg *)addr : dest + 1;
+		    ((uintptr_t)dest >= txmax) ?
+		    (struct grcan_msg *)(uintptr_t)addr : dest + 1;
 		space_left--;
 	}
 
@@ -223,7 +223,7 @@ static int grcan_hw_write_try(
 
 		SPIN_LOCK_IRQ(&pDev->devlock, oldLevel);
 		if (pDev->started == STATE_STARTED) {
-			regs->tx0wr = (unsigned int) dest - addr;
+			regs->tx0wr = (uintptr_t)dest - addr;
 			regs->tx0ctrl = GRCAN_TXCTRL_ENABLE;
 		} else {
 			DBGC(DBG_STATE, "cancelled due to a BUS OFF error\n");

@@ -240,7 +240,7 @@ static int gr_tmtc_1553_hw_init(struct gr_tmtc_1553_priv *priv)
 
 	bar0 = devinfo->resources[0].address;
 	bar0_size = devinfo->resources[0].size;
-	page0 = (unsigned int *)(bar0 + bar0_size/2); 
+	page0 = (unsigned int *)(uintptr_t)(bar0 + bar0_size/2); 
 
 	/* Point PAGE0 to start of board address map. RAM at 0xff000000, APB at 0xffc00000, IOAREA at 0xfff000000 */
 	/* XXX We assume little endian host with byte twisting enabled here */
@@ -274,14 +274,14 @@ static int gr_tmtc_1553_hw_init(struct gr_tmtc_1553_priv *priv)
 	ambapp_freq_init(&priv->abus, NULL, pci_freq_hz);
 
 	/* Find IRQ controller */
-	tmp = (struct ambapp_dev *)ambapp_for_each(&priv->abus,
+	tmp = (struct ambapp_dev *)(uintptr_t)ambapp_for_each(&priv->abus,
 					(OPTIONS_ALL|OPTIONS_APB_SLVS),
 					VENDOR_GAISLER, GAISLER_IRQMP,
 					ambapp_find_by_idx, NULL);
 	if ( !tmp ) {
 		return -4;
 	}
-	priv->irq = (struct irqmp_regs *)DEV_TO_APB(tmp)->start;
+	priv->irq = (struct irqmp_regs *)(uintptr_t)DEV_TO_APB(tmp)->start;
 	/* Set up irq controller */
 	priv->irq->mask[0] = 0;
 	priv->irq->iclear = 0xffff;
@@ -290,8 +290,8 @@ static int gr_tmtc_1553_hw_init(struct gr_tmtc_1553_priv *priv)
 	/* DOWN streams translation table */
 	priv->bus_maps_down[0].name = "PCI BAR0 -> AMBA";
 	priv->bus_maps_down[0].size = priv->amba_maps[0].size;
-	priv->bus_maps_down[0].from_adr = (void *)priv->amba_maps[0].local_adr;
-	priv->bus_maps_down[0].to_adr = (void *)priv->amba_maps[0].remote_adr;
+	priv->bus_maps_down[0].from_adr = (void *)(uintptr_t)priv->amba_maps[0].local_adr;
+	priv->bus_maps_down[0].to_adr = (void *)(uintptr_t)priv->amba_maps[0].remote_adr;
 	/* Mark end of translation table */
 	priv->bus_maps_down[1].size = 0;
 

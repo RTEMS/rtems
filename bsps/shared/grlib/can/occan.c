@@ -303,12 +303,12 @@ static rtems_driver_address_table occan_driver = OCCAN_DRIVER_TABLE_ENTRY;
 
 
 /* Bypass cache */
-#define READ_REG(priv, address) occan_reg_read(priv, (unsigned int)address)
-#define WRITE_REG(priv, address, data) occan_reg_write(priv, (unsigned int)address, data)
+#define READ_REG(priv, address) occan_reg_read(priv, (uintptr_t)address)
+#define WRITE_REG(priv, address, data) occan_reg_write(priv, (uintptr_t)address, data)
 
-static unsigned int occan_reg_read(occan_priv *priv, unsigned int address)
+static unsigned int occan_reg_read(occan_priv *priv, uintptr_t address)
 {
-	unsigned int adr;
+	uintptr_t adr;
 	if ( priv->byte_regs ) {
 		adr = address;
 	} else {
@@ -320,17 +320,17 @@ static unsigned int occan_reg_read(occan_priv *priv, unsigned int address)
 
 static void occan_reg_write(
 	occan_priv *priv, 
-	unsigned int address,
+	uintptr_t address,
 	unsigned char value)
 {
-	unsigned int adr;
+	uintptr_t adr;
 	if ( priv->byte_regs ) {
 		adr = address;
 	} else {
 		/* Word accessed registers */
 		adr = (address & (~0x7f)) | ((address & 0x7f)<<2);
 	}
-	*(volatile unsigned char *)adr = value;;
+	*(volatile unsigned char *)adr = value;
 }
 
 /* Mode register bit definitions */
@@ -573,7 +573,7 @@ int occan_device_init(occan_priv *pDev)
 	}
 	pnpinfo = &ambadev->info;
 	pDev->irq = pnpinfo->irq;
-	pDev->regs = (pelican_regs *)(pnpinfo->ahb_slv->start[0] + OCCAN_NCORE_OFS*pnpinfo->index);
+	pDev->regs = (pelican_regs *)(uintptr_t)(pnpinfo->ahb_slv->start[0] + OCCAN_NCORE_OFS*pnpinfo->index);
 	pDev->byte_regs = 1;
 	minor = pDev->dev->minor_drv;
 
@@ -1430,7 +1430,7 @@ static rtems_device_driver occan_ioctl(rtems_device_major_number major, rtems_de
 				return RTEMS_RESOURCE_IN_USE; /* EBUSY */
 
 			/* get speed rate from argument */
-			speed = (unsigned int)ioarg->buffer;
+			speed = (unsigned int)(uintptr_t)ioarg->buffer;
 			/* Calculate default timing register values */
 			ret = grlib_canbtrs_calc_timing(
 				speed, can->sys_freq_hz,
@@ -1455,8 +1455,8 @@ static rtems_device_driver occan_ioctl(rtems_device_major_number major, rtems_de
 				return RTEMS_RESOURCE_IN_USE; /* EBUSY */
 
 			can->speed = 0; /* custom */
-			can->timing.btr1 = (unsigned int)ioarg->buffer & 0xff;
-			can->timing.btr0 = ((unsigned int)ioarg->buffer>>8) & 0xff;
+			can->timing.btr1 = (unsigned int)(uintptr_t)ioarg->buffer & 0xff;
+			can->timing.btr0 = ((unsigned int)(uintptr_t)ioarg->buffer>>8) & 0xff;
 /*
 			can->timing.sjw = (btr0 >> OCCAN_BUSTIM_SJW_BIT) & 0x3;
 			can->timing.brp = btr0 & OCCAN_BUSTIM_BRP;
@@ -1474,8 +1474,8 @@ static rtems_device_driver occan_ioctl(rtems_device_major_number major, rtems_de
 			if ( can->started )
 				return RTEMS_RESOURCE_IN_USE; /* EBUSY */
 
-			rxcnt = (unsigned int)ioarg->buffer & 0x0000ffff;
-			txcnt = (unsigned int)ioarg->buffer >> 16;
+			rxcnt = (unsigned int)(uintptr_t)ioarg->buffer & 0x0000ffff;
+			txcnt = (unsigned int)(uintptr_t)ioarg->buffer >> 16;
 
 			occan_fifo_free(can->rxfifo);
 			occan_fifo_free(can->txfifo);
@@ -1553,8 +1553,8 @@ static rtems_device_driver occan_ioctl(rtems_device_major_number major, rtems_de
 			break;
 
 		case OCCAN_IOC_SET_BLK_MODE:
-			can->rxblk = (unsigned int)ioarg->buffer & OCCAN_BLK_MODE_RX;
-			can->txblk = ((unsigned int)ioarg->buffer & OCCAN_BLK_MODE_TX) >> 1;
+			can->rxblk = (unsigned int)(uintptr_t)ioarg->buffer & OCCAN_BLK_MODE_RX;
+			can->txblk = ((unsigned int)(uintptr_t)ioarg->buffer & OCCAN_BLK_MODE_TX) >> 1;
 			break;
 
 		case OCCAN_IOC_START:

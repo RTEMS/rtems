@@ -92,14 +92,14 @@
  * Bit encode for PCI_CONFIG_HEADER_TYPE register
  */
 struct grpci_regs {
-	volatile unsigned int cfg_stat;
-	volatile unsigned int bar0;
-	volatile unsigned int page0;
-	volatile unsigned int bar1;
-	volatile unsigned int page1;
-	volatile unsigned int iomap;
-	volatile unsigned int stat_cmd;
-	volatile unsigned int irq;
+	volatile uint32_t cfg_stat;
+	volatile uint32_t bar0;
+	volatile uint32_t page0;
+	volatile uint32_t bar1;
+	volatile uint32_t page1;
+	volatile uint32_t iomap;
+	volatile uint32_t stat_cmd;
+	volatile uint32_t irq;
 };
 
 #define HOST_TGT PCI_DEV(0xff, 0, 0)
@@ -212,7 +212,7 @@ static int grpci_cfg_r32(pci_dev_t dev, int ofs, uint32_t *val)
 	/* Select bus */
 	priv->regs->cfg_stat = (priv->regs->cfg_stat & ~(0xf<<23)) | (bus<<23);
 
-	pci_conf = (volatile uint32_t *)(priv->pci_conf | (devfn << 8) | ofs);
+	pci_conf = (volatile uint32_t *)(uintptr_t)(priv->pci_conf | (devfn << 8) | ofs);
 
 	if (priv->bt_enabled) {
 		*val =  CPU_swap_u32(*pci_conf);
@@ -285,7 +285,7 @@ static int grpci_cfg_w32(pci_dev_t dev, int ofs, uint32_t val)
 	/* Select bus */
 	priv->regs->cfg_stat = (priv->regs->cfg_stat & ~(0xf<<23)) | (bus<<23);
 
-	pci_conf = (volatile uint32_t *)(priv->pci_conf | (devfn << 8) | ofs);
+	pci_conf = (volatile uint32_t *)(uintptr_t)(priv->pci_conf | (devfn << 8) | ofs);
 
 	if ( priv->bt_enabled ) {
 		value = CPU_swap_u32(val);
@@ -446,11 +446,11 @@ struct pci_io_ops grpci_io_ops_be =
 
 static int grpci_hw_init(struct grpci_priv *priv)
 {
-	volatile unsigned int *mbar0, *page0;
+	volatile uint32_t *mbar0, *page0;
 	uint32_t data, addr, mbar0size;
 	pci_dev_t host = HOST_TGT;
 
-	mbar0 = (volatile unsigned int *)priv->pci_area;
+	mbar0 = (volatile uint32_t *)(uintptr_t)priv->pci_area;
 
 	if ( !priv->bt_enabled && ((priv->regs->page0 & PAGE0_BTEN) == PAGE0_BTEN) ) {
 		/* Byte twisting is on, turn it off */
@@ -533,7 +533,7 @@ static int grpci_init(struct grpci_priv *priv)
 
 	/* Found PCI core, init private structure */
 	priv->irq = apb->common.irq;
-	priv->regs = (struct grpci_regs *)apb->start;
+	priv->regs = (struct grpci_regs *)(uintptr_t)apb->start;
 	priv->bt_enabled = DEFAULT_BT_ENABLED;
 
 	/* Calculate the PCI windows 
@@ -598,16 +598,16 @@ static int grpci_init(struct grpci_priv *priv)
 	/* Down streams translation table */
 	priv->maps_down[0].name = "AMBA -> PCI MEM Window";
 	priv->maps_down[0].size = priv->pci_area_end - priv->pci_area;
-	priv->maps_down[0].from_adr = (void *)priv->pci_area;
-	priv->maps_down[0].to_adr = (void *)priv->pci_area;
+	priv->maps_down[0].from_adr = (void *)(uintptr_t)priv->pci_area;
+	priv->maps_down[0].to_adr = (void *)(uintptr_t)priv->pci_area;
 	/* End table */
 	priv->maps_down[1].size = 0;
 
 	/* Up streams translation table */
 	priv->maps_up[0].name = "Target BAR1 -> AMBA";
 	priv->maps_up[0].size = priv->bar1_size;
-	priv->maps_up[0].from_adr = (void *)priv->bar1_pci_adr;
-	priv->maps_up[0].to_adr = (void *)priv->bar1_pci_adr;
+	priv->maps_up[0].from_adr = (void *)(uintptr_t)priv->bar1_pci_adr;
+	priv->maps_up[0].to_adr = (void *)(uintptr_t)priv->bar1_pci_adr;
 	/* End table */
 	priv->maps_up[1].size = 0;
 

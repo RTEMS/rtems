@@ -63,18 +63,18 @@ struct gr1553rt_list;
  * Must be aligned to 16 byte boundary 
  */
 struct gr1553rt_bd {
-	volatile unsigned int	ctrl;	/* 0x00 Control/Status word */
-	volatile unsigned int	dptr;	/* 0x04 Data Pointer */
-	volatile unsigned int	next;	/* 0x08 Next Descriptor in list */
-	volatile unsigned int	unused;	/* 0x0C UNUSED BY HARDWARE */
+	volatile uint32_t	ctrl;	/* 0x00 Control/Status word */
+	volatile uint32_t	dptr;	/* 0x04 Data Pointer */
+	volatile uint32_t	next;	/* 0x08 Next Descriptor in list */
+	volatile uint32_t	unused;	/* 0x0C UNUSED BY HARDWARE */
 };
 
 /* Sub address table entry, the hardware access */
 struct gr1553rt_sa {
-	volatile unsigned int ctrl;	/* 0x00 SUBADDRESS CONTROL WORD */
-	volatile unsigned int txptr;	/* 0x04 TRANSMIT BD POINTER */
-	volatile unsigned int rxptr;	/* 0x08 RECEIVE BD POINTER */
-	volatile unsigned int unused;	/* 0x0C UNUSED BY HARDWARE */
+	volatile uint32_t ctrl;	/* 0x00 SUBADDRESS CONTROL WORD */
+	volatile uint32_t txptr;	/* 0x04 TRANSMIT BD POINTER */
+	volatile uint32_t rxptr;	/* 0x08 RECEIVE BD POINTER */
+	volatile uint32_t unused;	/* 0x0C UNUSED BY HARDWARE */
 };
 
 /* Configuration of a RT-SubAddress-List */

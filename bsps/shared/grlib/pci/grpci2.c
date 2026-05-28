@@ -98,17 +98,17 @@
  * GRPCI2 APB Register MAP
  */
 struct grpci2_regs {
-	volatile unsigned int ctrl;		/* 0x00 */
-	volatile unsigned int sts_cap;		/* 0x04 */
-	volatile unsigned int ppref;		/* 0x08 */
-	volatile unsigned int io_map;		/* 0x0C */
-	volatile unsigned int dma_ctrl;		/* 0x10 */
-	volatile unsigned int dma_bdbase;	/* 0x14 */
-	volatile unsigned int dma_chact;	/* 0x18 */
-	int res1;				/* 0x1C */
-	volatile unsigned int bars[6];		/* 0x20 */
-	int res2[2];				/* 0x38 */
-	volatile unsigned int ahbmst_map[16];	/* 0x40 */
+	volatile uint32_t ctrl;		/* 0x00 */
+	volatile uint32_t sts_cap;		/* 0x04 */
+	volatile uint32_t ppref;		/* 0x08 */
+	volatile uint32_t io_map;		/* 0x0C */
+	volatile uint32_t dma_ctrl;		/* 0x10 */
+	volatile uint32_t dma_bdbase;	/* 0x14 */
+	volatile uint32_t dma_chact;	/* 0x18 */
+	uint32_t res1;				/* 0x1C */
+	volatile uint32_t bars[6];		/* 0x20 */
+	uint32_t res2[2];				/* 0x38 */
+	volatile uint32_t ahbmst_map[16];	/* 0x40 */
 };
 
 #define CTRL_BUS_BIT 16
@@ -191,11 +191,11 @@ unsigned char grpci2_pci_irq_table[4] =
 
 /* Start of workspace/dynamical area */
 extern unsigned int _end;
-#define DMA_START ((unsigned int) &_end)
+#define DMA_START ((unsigned int)(uintptr_t)&_end)
 
 /* Default BAR mapping, set BAR0 256MB 1:1 mapped base of CPU RAM */
 struct grpci2_pcibar_cfg grpci2_default_bar_mapping[6] = {
-	/* BAR0 */ {DMA_START, DMA_START, 0x10000000},
+	/* BAR0 */ {0, 0, 0x10000000},
 	/* BAR1 */ {0, 0, 0},
 	/* BAR2 */ {0, 0, 0},
 	/* BAR3 */ {0, 0, 0},
@@ -323,7 +323,7 @@ static int grpci2_cfg_r32(pci_dev_t dev, int ofs, uint32_t *val)
 	else
 		devfn = PCI_DEV_DEVFUNC(dev);
 
-	pci_conf = (volatile uint32_t *) (priv->pci_conf | (devfn << 8) | ofs);
+	pci_conf = (volatile uint32_t *)(uintptr_t)(priv->pci_conf | (devfn << 8) | ofs);
 
 	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 
@@ -413,7 +413,7 @@ static int grpci2_cfg_w32(pci_dev_t dev, int ofs, uint32_t val)
 	else
 		devfn = PCI_DEV_DEVFUNC(dev);
 
-	pci_conf = (volatile uint32_t *) (priv->pci_conf | (devfn << 8) | ofs);
+	pci_conf = (volatile uint32_t *)(uintptr_t)(priv->pci_conf | (devfn << 8) | ofs);
 
 	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 
@@ -754,7 +754,7 @@ static int grpci2_init(struct grpci2_priv *priv)
 	/* Found PCI core, init private structure */
 	priv->irq = apb->common.irq;
 	priv->ver = apb->common.ver;
-	priv->regs = (struct grpci2_regs *)apb->start;
+	priv->regs = (struct grpci2_regs *)(uintptr_t)apb->start;
 	priv->bt_enabled = DEFAULT_BT_ENABLED;
 	priv->irq_mode = (priv->regs->sts_cap & STS_IRQMODE) >> STS_IRQMODE_BIT;
 	priv->latency_timer = DEFAULT_LATENCY_TIMER;
@@ -814,10 +814,13 @@ static int grpci2_init(struct grpci2_priv *priv)
 
 	/* Let user Configure the 6 target BARs */
 	value = drvmgr_dev_key_get(priv->dev, "tgtBarCfg", DRVMGR_KT_POINTER);
-	if (value)
+	if (value) {
 		priv->barcfg = value->ptr;
-	else
+	} else {
+		grpci2_default_bar_mapping[ 0 ].ahbadr = DMA_START;
+    grpci2_default_bar_mapping[ 0 ].pciadr = DMA_START;
 		priv->barcfg = grpci2_default_bar_mapping;
+	}
 
 	/* User may override DEFAULT_LATENCY_TIMER */
 	value = drvmgr_dev_key_get(priv->dev, "latencyTimer", DRVMGR_KT_INT);
@@ -836,8 +839,8 @@ static int grpci2_init(struct grpci2_priv *priv)
 	/* Down streams translation table */
 	priv->maps_down[0].name = "AMBA -> PCI MEM Window";
 	priv->maps_down[0].size = priv->pci_area_end - priv->pci_area;
-	priv->maps_down[0].from_adr = (void *)priv->pci_area;
-	priv->maps_down[0].to_adr = (void *)priv->pci_area;
+	priv->maps_down[0].from_adr = (void *)(uintptr_t)priv->pci_area;
+	priv->maps_down[0].to_adr = (void *)(uintptr_t)priv->pci_area;
 	/* End table */
 	priv->maps_down[1].size = 0;
 
@@ -852,9 +855,9 @@ static int grpci2_init(struct grpci2_priv *priv)
 		/* Make sure address is properly aligned */
 		priv->maps_up[j].name = "Target BAR[I] -> AMBA";
 		priv->maps_up[j].size = size;
-		priv->maps_up[j].from_adr = (void *)
+		priv->maps_up[j].from_adr = (void *)(uintptr_t)
 					(barcfg[i].pciadr & ~(size - 1));
-		priv->maps_up[j].to_adr = (void *)
+		priv->maps_up[j].to_adr = (void *)(uintptr_t)
 					(barcfg[i].ahbadr & ~(size - 1));
 		j++;
 	}

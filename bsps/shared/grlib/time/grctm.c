@@ -384,7 +384,7 @@ static int grctm_init2(struct drvmgr_dev *dev)
 		return -1;
 	}
 	pnpinfo = &ambadev->info;
-	regs = (struct grctm_regs *)pnpinfo->ahb_slv->start[0];
+	regs = (struct grctm_regs *)(uintptr_t)pnpinfo->ahb_slv->start[0];
 
 	priv->regs = regs;
 

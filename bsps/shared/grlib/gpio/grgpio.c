@@ -171,7 +171,7 @@ static int grgpio_find_port(void *handle, struct grgpio_priv **priv)
 	if ( portnr > 31 )
 		return -1;
 	*priv = (struct grgpio_priv *)
-		(((unsigned int)handle - portnr*sizeof(unsigned char)) - 
+		(((uintptr_t)handle - portnr*sizeof(unsigned char)) - 
 		offsetof(struct grgpio_priv, port_handles));
 	return portnr;
 }
@@ -341,7 +341,7 @@ static int grgpio_gpiolib_show(void *handle)
 {
 	struct grgpio_priv *priv;
 	int portnr, i, regs[7];
-	volatile unsigned int *reg;
+	volatile uint32_t *reg;
 
 	portnr = grgpio_find_port(handle, &priv);
 	if ( portnr < 0 ) {
@@ -417,7 +417,7 @@ int grgpio_device_init(struct grgpio_priv *priv)
 	}
 	pnpinfo = &ambadev->info;
 	priv->irq = pnpinfo->irq;
-	priv->regs = (struct grgpio_regs *)pnpinfo->apb_slv->start;
+	priv->regs = (struct grgpio_regs *)(uintptr_t)pnpinfo->apb_slv->start;
 
 	DBG("GRGPIO: 0x%08x irq %d\n", (unsigned int)priv->regs, priv->irq);
 

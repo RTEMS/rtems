@@ -214,7 +214,7 @@ static int gr1553_init2(struct drvmgr_dev *dev)
 	pnpinfo = &ambadev->info;
 	if ( pnpinfo->apb_slv == NULL )
 		return DRVMGR_EIO;
-	regs = (struct gr1553b_regs *)pnpinfo->apb_slv->start;
+	regs = (struct gr1553b_regs *)(uintptr_t)pnpinfo->apb_slv->start;
 
 	/* Stop IRQ */
 	GR1553B_WRITE_REG(&regs->imask, 0);
@@ -255,7 +255,7 @@ static int gr1553_init3(struct drvmgr_dev *dev)
 	/* Get device information from AMBA PnP information */
 	ambadev = (struct amba_dev_info *)dev->businfo;
 	pnpinfo = &ambadev->info;
-	regs = (struct gr1553b_regs *)pnpinfo->apb_slv->start;
+	regs = (struct gr1553b_regs *)(uintptr_t)pnpinfo->apb_slv->start;
 
 	if ( GR1553B_READ_REG(&regs->bm_stat) & GR1553B_BM_STAT_BMSUP ) {
 		priv->features |= FEAT_BM;

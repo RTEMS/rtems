@@ -301,7 +301,7 @@ static int i2cmst_device_init(gr_i2cmst_prv_t *priv)
 		return -1;
 	}
 	pnpinfo = &ambadev->info;
-	priv->reg_ptr = (gr_i2cmst_regs_t *)pnpinfo->apb_slv->start;
+	priv->reg_ptr = (gr_i2cmst_regs_t *)(uintptr_t)pnpinfo->apb_slv->start;
 
 	/* Disable core */
 	priv->reg_ptr->ctrl = 0;

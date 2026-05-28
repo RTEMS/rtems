@@ -62,7 +62,7 @@
  * CPU RAM is mapped 1:1 to PCI space.
  */
 extern unsigned int _RAM_START;
-#define AHBMST2PCIADR (((unsigned int)&_RAM_START) & 0xf0000000)
+#define AHBMST2PCIADR (((unsigned int)(uintptr_t)&_RAM_START) & 0xf0000000)
 
 /* Offset from 0x80000000 (dual bus version) */
 #define AHB1_BASE_ADDR 0x80000000
@@ -91,35 +91,35 @@ int gr_rasta_io_init2(struct drvmgr_dev *dev);
 void gr_rasta_io_isr (void *arg);
 
 struct grpci_regs {
-	volatile unsigned int cfg_stat;
-	volatile unsigned int bar0;
-	volatile unsigned int page0;
-	volatile unsigned int bar1;
-	volatile unsigned int page1;
-	volatile unsigned int iomap;
-	volatile unsigned int stat_cmd;
+	volatile uint32_t cfg_stat;
+	volatile uint32_t bar0;
+	volatile uint32_t page0;
+	volatile uint32_t bar1;
+	volatile uint32_t page1;
+	volatile uint32_t iomap;
+	volatile uint32_t stat_cmd;
 };
 
 struct grpci2_regs {
-	volatile unsigned int ctrl;
-	volatile unsigned int statcap;
-	volatile unsigned int pcimstprefetch;
-	volatile unsigned int ahbtopciiomap;
-	volatile unsigned int dmactrl;
-	volatile unsigned int dmadesc;
-	volatile unsigned int dmachanact;
-	volatile unsigned int reserved;
-	volatile unsigned int pcibartoahb[6];
-	volatile unsigned int reserved2[2];
-	volatile unsigned int ahbtopcimemmap[16];
-	volatile unsigned int trcctrl;
-	volatile unsigned int trccntmode;
-	volatile unsigned int trcadpat;
-	volatile unsigned int trcadmask;
-	volatile unsigned int trcctrlsigpat;
-	volatile unsigned int trcctrlsigmask;
-	volatile unsigned int trcadstate;
-	volatile unsigned int trcctrlsigstate;
+	volatile uint32_t ctrl;
+	volatile uint32_t statcap;
+	volatile uint32_t pcimstprefetch;
+	volatile uint32_t ahbtopciiomap;
+	volatile uint32_t dmactrl;
+	volatile uint32_t dmadesc;
+	volatile uint32_t dmachanact;
+	volatile uint32_t reserved;
+	volatile uint32_t pcibartoahb[6];
+	volatile uint32_t reserved2[2];
+	volatile uint32_t ahbtopcimemmap[16];
+	volatile uint32_t trcctrl;
+	volatile uint32_t trccntmode;
+	volatile uint32_t trcadpat;
+	volatile uint32_t trcadmask;
+	volatile uint32_t trcctrlsigpat;
+	volatile uint32_t trcctrlsigmask;
+	volatile uint32_t trcadstate;
+	volatile uint32_t trcctrlsigstate;
 };
 
 struct gr_rasta_io_ver {
@@ -292,7 +292,7 @@ static int gr_rasta_io_hw_init(struct gr_rasta_io_priv *priv)
 
 	bar0 = devinfo->resources[0].address;
 	bar0_size = devinfo->resources[0].size;
-	page0 = (unsigned int *)(bar0 + bar0_size/2); 
+	page0 = (unsigned int *)(uintptr_t)(bar0 + bar0_size/2); 
 
 	/* Point PAGE0 to start of Plug and Play information */
 	*page0 = priv->version->amba_ioarea & 0xff000000;
@@ -346,14 +346,14 @@ static int gr_rasta_io_hw_init(struct gr_rasta_io_priv *priv)
 	*page0 = AHB1_BASE_ADDR;	
 
 	/* Find GRPCI controller */
-	tmp = (struct ambapp_dev *)ambapp_for_each(&priv->abus,
+	tmp = (struct ambapp_dev *)(uintptr_t)ambapp_for_each(&priv->abus,
 					(OPTIONS_ALL|OPTIONS_APB_SLVS),
 					VENDOR_GAISLER, GAISLER_PCIFBRG,
 					ambapp_find_by_idx, NULL);
 	if ( !tmp ) {
 		return -3;
 	}
-	priv->grpci = (struct grpci_regs *)((struct ambapp_apb_info *)tmp->devinfo)->start;
+	priv->grpci = (struct grpci_regs *)(uintptr_t)((struct ambapp_apb_info *)tmp->devinfo)->start;
 
 	/* Set GRPCI mmap so that AMBA masters can access CPU-RAM over
 	 * the PCI window.
@@ -363,14 +363,14 @@ static int gr_rasta_io_hw_init(struct gr_rasta_io_priv *priv)
 	priv->grpci->page1 = 0x40000000;
 
 	/* Find IRQ controller, Clear all current IRQs */
-	tmp = (struct ambapp_dev *)ambapp_for_each(&priv->abus,
+	tmp = (struct ambapp_dev *)(uintptr_t)ambapp_for_each(&priv->abus,
 					(OPTIONS_ALL|OPTIONS_APB_SLVS),
 					VENDOR_GAISLER, GAISLER_IRQMP,
 					ambapp_find_by_idx, NULL);
 	if ( !tmp ) {
 		return -4;
 	}
-	priv->irq = (struct irqmp_regs *)DEV_TO_APB(tmp)->start;
+	priv->irq = (struct irqmp_regs *)(uintptr_t)DEV_TO_APB(tmp)->start;
 	/* Set up GR-RASTA-IO irq controller */
 	priv->irq->mask[0] = 0;
 	priv->irq->iclear = 0xffff;
@@ -379,19 +379,19 @@ static int gr_rasta_io_hw_init(struct gr_rasta_io_priv *priv)
 	/* DOWN streams translation table */
 	priv->bus_maps_down[0].name = "PCI BAR0 -> AMBA";
 	priv->bus_maps_down[0].size = priv->amba_maps[0].size;
-	priv->bus_maps_down[0].from_adr = (void *)priv->amba_maps[0].local_adr;
-	priv->bus_maps_down[0].to_adr = (void *)priv->amba_maps[0].remote_adr;
+	priv->bus_maps_down[0].from_adr = (void *)(uintptr_t)priv->amba_maps[0].local_adr;
+	priv->bus_maps_down[0].to_adr = (void *)(uintptr_t)priv->amba_maps[0].remote_adr;
 
 	priv->bus_maps_down[1].name = "PCI BAR1 -> AMBA";
 	priv->bus_maps_down[1].size = priv->amba_maps[1].size;
-	priv->bus_maps_down[1].from_adr = (void *)priv->amba_maps[1].local_adr;
-	priv->bus_maps_down[1].to_adr = (void *)priv->amba_maps[1].remote_adr;
+	priv->bus_maps_down[1].from_adr = (void *)(uintptr_t)priv->amba_maps[1].local_adr;
+	priv->bus_maps_down[1].to_adr = (void *)(uintptr_t)priv->amba_maps[1].remote_adr;
 
 	/* Mark end of translation table */
 	priv->bus_maps_down[2].size = 0;
 
 	/* Find GRPCI controller AHB Slave interface */
-	tmp = (struct ambapp_dev *)ambapp_for_each(&priv->abus,
+	tmp = (struct ambapp_dev *)(uintptr_t)ambapp_for_each(&priv->abus,
 					(OPTIONS_ALL|OPTIONS_AHB_SLVS),
 					VENDOR_GAISLER, GAISLER_PCIFBRG,
 					ambapp_find_by_idx, NULL);
@@ -403,8 +403,8 @@ static int gr_rasta_io_hw_init(struct gr_rasta_io_priv *priv)
 	/* UP streams translation table */
 	priv->bus_maps_up[0].name = "AMBA GRPCI Window";
 	priv->bus_maps_up[0].size = ahb->mask[0]; /* AMBA->PCI Window on GR-RASTA-IO board */
-	priv->bus_maps_up[0].from_adr = (void *)ahb->start[0];
-	priv->bus_maps_up[0].to_adr = (void *)
+	priv->bus_maps_up[0].from_adr = (void *)(uintptr_t)ahb->start[0];
+	priv->bus_maps_up[0].to_adr = (void *)(uintptr_t)
 					(priv->ahbmst2pci_map & 0xf0000000);
 
 	/* Mark end of translation table */
@@ -494,14 +494,14 @@ static int gr_rasta_io2_hw_init(struct gr_rasta_io_priv *priv)
 	ambapp_freq_init(&priv->abus, NULL, priv->version->amba_freq_hz);
 
 	/* Find IRQ controller, Clear all current IRQs */
-	tmp = (struct ambapp_dev *)ambapp_for_each(&priv->abus,
+	tmp = (struct ambapp_dev *)(uintptr_t)ambapp_for_each(&priv->abus,
 				(OPTIONS_ALL|OPTIONS_APB_SLVS),
 				VENDOR_GAISLER, GAISLER_IRQMP,
 				ambapp_find_by_idx, NULL);
 	if ( !tmp ) {
 		return -4;
 	}
-	priv->irq = (struct irqmp_regs *)DEV_TO_APB(tmp)->start;
+	priv->irq = (struct irqmp_regs *)(uintptr_t)DEV_TO_APB(tmp)->start;
 	/* Set up GR-RASTA-SPW-ROUTER irq controller */
 	priv->irq->mask[0] = 0;
 	priv->irq->iclear = 0xffff;
@@ -509,16 +509,16 @@ static int gr_rasta_io2_hw_init(struct gr_rasta_io_priv *priv)
 
 	priv->bus_maps_down[0].name = "PCI BAR0 -> AMBA";
 	priv->bus_maps_down[0].size = priv->amba_maps[0].size;
-	priv->bus_maps_down[0].from_adr = (void *)priv->amba_maps[0].local_adr;
-	priv->bus_maps_down[0].to_adr = (void *)priv->amba_maps[0].remote_adr;
+	priv->bus_maps_down[0].from_adr = (void *)(uintptr_t)priv->amba_maps[0].local_adr;
+	priv->bus_maps_down[0].to_adr = (void *)(uintptr_t)priv->amba_maps[0].remote_adr;
 	priv->bus_maps_down[1].name = "PCI BAR1 -> AMBA";
 	priv->bus_maps_down[1].size = priv->amba_maps[1].size;
-	priv->bus_maps_down[1].from_adr = (void *)priv->amba_maps[1].local_adr;
-	priv->bus_maps_down[1].to_adr = (void *)priv->amba_maps[1].remote_adr;
+	priv->bus_maps_down[1].from_adr = (void *)(uintptr_t)priv->amba_maps[1].local_adr;
+	priv->bus_maps_down[1].to_adr = (void *)(uintptr_t)priv->amba_maps[1].remote_adr;
 	priv->bus_maps_down[2].size = 0;
 
 	/* Find GRPCI2 controller AHB Slave interface */
-	tmp = (void *)ambapp_for_each(&priv->abus,
+	tmp = (void *)(uintptr_t)ambapp_for_each(&priv->abus,
 					(OPTIONS_ALL|OPTIONS_AHB_SLVS),
 					VENDOR_GAISLER, GAISLER_GRPCI2,
 					ambapp_find_by_idx, NULL);
@@ -528,20 +528,20 @@ static int gr_rasta_io2_hw_init(struct gr_rasta_io_priv *priv)
 	ahb = (struct ambapp_ahb_info *)tmp->devinfo;
 	priv->bus_maps_up[0].name = "AMBA GRPCI2 Window";
 	priv->bus_maps_up[0].size = ahb->mask[0]; /* AMBA->PCI Window on GR-RASTA-SPW-ROUTER board */
-	priv->bus_maps_up[0].from_adr = (void *)ahb->start[0];
-	priv->bus_maps_up[0].to_adr = (void *)
+	priv->bus_maps_up[0].from_adr = (void *)(uintptr_t)ahb->start[0];
+	priv->bus_maps_up[0].to_adr = (void *)(uintptr_t)
 				(priv->ahbmst2pci_map & ~(ahb->mask[0]-1));
 	priv->bus_maps_up[1].size = 0;
 
 	/* Find GRPCI2 controller APB Slave interface */
-	tmp = (void *)ambapp_for_each(&priv->abus,
+	tmp = (void *)(uintptr_t)ambapp_for_each(&priv->abus,
 					(OPTIONS_ALL|OPTIONS_APB_SLVS),
 					VENDOR_GAISLER, GAISLER_GRPCI2,
 					ambapp_find_by_idx, NULL);
 	if ( !tmp ) {
 		return -6;
 	}
-	priv->grpci2 = (struct grpci2_regs *)
+	priv->grpci2 = (struct grpci2_regs *)(uintptr_t)
 		((struct ambapp_apb_info *)tmp->devinfo)->start;
 
 	/* Set AHB to PCI mapping for all AMBA AHB masters */

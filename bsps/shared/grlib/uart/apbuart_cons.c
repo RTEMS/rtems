@@ -273,7 +273,7 @@ int apbuart_init1(struct drvmgr_dev *dev)
 	if (ambadev == NULL)
 		return -1;
 	pnpinfo = &ambadev->info;
-	priv->regs = (apbuart *)pnpinfo->apb_slv->start;
+	priv->regs = (apbuart *)(uintptr_t)pnpinfo->apb_slv->start;
 
 	/* Clear HW regs, leave baudrate register as it is */
 	grlib_store_32(&priv->regs->status, 0);

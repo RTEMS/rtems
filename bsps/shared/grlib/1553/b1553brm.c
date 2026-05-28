@@ -77,8 +77,8 @@
 #define FUNCDBG(x...) 
 #endif
 
-#define READ_REG(address) (*(volatile unsigned int *)address)
-#define READ_DMA(address) grlib_read_uncached16((unsigned int)address)
+#define READ_REG(address) (*(volatile uint32_t *)(uintptr_t)address)
+#define READ_DMA(address) grlib_read_uncached16((uintptr_t)address)
 
 static rtems_device_driver brm_initialize(rtems_device_major_number major, rtems_device_minor_number minor, void *arg);
 static rtems_device_driver brm_open(rtems_device_major_number major, rtems_device_minor_number minor, void *arg);
@@ -122,8 +122,8 @@ typedef struct {
 	char devName[52]; /* Device Name */
 	struct brm_reg *regs;
 
-	unsigned int memarea_base;
-	unsigned int memarea_base_remote;
+	uintptr_t memarea_base;
+	uint32_t memarea_base_remote;
 	unsigned int cfg_clksel;
 	unsigned int cfg_clkdiv;
 	unsigned int cfg_freq;
@@ -266,7 +266,7 @@ typedef struct {
 static void b1553brm_interrupt(void *arg);
 static rtems_device_driver rt_init(brm_priv *brm);
 
-#define OFS(ofs) (((unsigned int)&ofs & 0x1ffff)>>1)
+#define OFS(ofs) (((uint32_t)(uintptr_t)&ofs & 0x1ffff)>>1)
 
 static int b1553brm_driver_io_registered = 0;
 static rtems_device_major_number b1553brm_driver_io_major = 0;
@@ -435,7 +435,7 @@ int b1553brm_device_init(brm_priv *pDev)
 	struct amba_dev_info *ambadev;
 	struct ambapp_core *pnpinfo;
 	union drvmgr_key_value *value;
-	unsigned int mem;
+	uintptr_t mem;
 	int size;
 
 	/* Get device information from AMBA PnP information */
@@ -450,10 +450,10 @@ int b1553brm_device_init(brm_priv *pDev)
 	 */
 	if ( pnpinfo->ahb_slv ) {
 		/* Registers accessed over AHB */
-		pDev->regs = (struct brm_reg *)pnpinfo->ahb_slv->start[0];
+		pDev->regs = (struct brm_reg *)(uintptr_t)pnpinfo->ahb_slv->start[0];
 	} else {
 		/* Registers accessed over APB */
-		pDev->regs = (struct brm_reg *)pnpinfo->apb_slv->start;
+		pDev->regs = (struct brm_reg *)(uintptr_t)pnpinfo->apb_slv->start;
 	}
 	pDev->minor = pDev->dev->minor_drv;
 #ifdef DEBUG
@@ -470,7 +470,7 @@ int b1553brm_device_init(brm_priv *pDev)
 	/* Get memory configuration from bus resources */
 	value = drvmgr_dev_key_get(pDev->dev, "dmaBaseAdr", DRVMGR_KT_POINTER);
 	if (value)
-		mem = (unsigned int)value->ptr;
+		mem = (uintptr_t)value->ptr;
 
 	if (value && (mem & 1)) {
 		/* Remote address, address as BRM looks at it. */
@@ -478,7 +478,7 @@ int b1553brm_device_init(brm_priv *pDev)
 		/* Translate the base address into an address that the the CPU can understand */
 		pDev->memarea_base_remote = mem & ~1;
 		drvmgr_translate_check(pDev->dev, DMAMEM_TO_CPU,
-					(void *)pDev->memarea_base_remote,
+					(void *)(uintptr_t)pDev->memarea_base_remote,
 					(void **)&pDev->memarea_base,
 					size);
 	} else {
@@ -486,7 +486,7 @@ int b1553brm_device_init(brm_priv *pDev)
 			/* Use dynamically allocated memory + 128k for
 			 * alignment
 			 */
-			mem = (unsigned int)grlib_malloc(size + 128 * 1024);
+			mem = (uintptr_t)grlib_malloc(size + 128 * 1024);
 			if (!mem){
 				printk("BRM: Failed to allocate HW memory\n\r");
 				return -1;
@@ -508,8 +508,8 @@ int b1553brm_device_init(brm_priv *pDev)
 	memset((char *)pDev->memarea_base, 0, size);
 
 	/* Set base address of all descriptors */
-	pDev->desc = (struct desc_table *) pDev->memarea_base;
-	pDev->mem = (volatile unsigned short *) pDev->memarea_base;
+	pDev->desc = (struct desc_table *)pDev->memarea_base;
+	pDev->mem = (volatile unsigned short *)pDev->memarea_base;
 	pDev->irq_log	= (struct irq_log_list *)(pDev->memarea_base + (0xFFE0<<1)); /* last 64byte */
 
 	pDev->bm_event = NULL;
@@ -1248,7 +1248,7 @@ static rtems_device_driver brm_control(rtems_device_major_number major, rtems_de
 		break;
     
 		case BRM_SET_EVENTID:
-		brm->event_id = (rtems_id)ioarg->buffer;
+		brm->event_id = (rtems_id)(uintptr_t)ioarg->buffer;
 		break;
 
 		default:
@@ -1519,29 +1519,29 @@ void b1553brm_print_dev(struct drvmgr_dev *dev, int options)
 
 	/* Print */
 	printf("--- B1553BRM[%d] %s ---\n", pDev->minor, pDev->devName);
-	printf(" REGS:            0x%x\n", (unsigned int)pDev->regs);
+	printf(" REGS:            0x%x\n", (unsigned int)(uintptr_t)pDev->regs);
 	printf(" IRQ:             %d\n", pDev->irqno);
 	switch (pDev->mode) {
 		case BRM_MODE_BC:
 			printf(" MODE:            BC\n");
-			printf(" DESCS:           0x%x\n", (unsigned int)&pDev->bcmem->descs[0]);
-			printf(" DATA:            0x%x\n", (unsigned int)&pDev->bcmem->msg_data[0].data[0]);
-			printf(" IRQLOG:          0x%x\n", (unsigned int)&pDev->bcmem->irq_logs[0]);
+			printf(" DESCS:           0x%x\n", (unsigned int)(uintptr_t)&pDev->bcmem->descs[0]);
+			printf(" DATA:            0x%x\n", (unsigned int)(uintptr_t)&pDev->bcmem->msg_data[0].data[0]);
+			printf(" IRQLOG:          0x%x\n", (unsigned int)(uintptr_t)&pDev->bcmem->irq_logs[0]);
 			break;
 		case BRM_MODE_BM:
 			printf(" MODE:            BM\n");
 			break;
 		case BRM_MODE_RT:
 			printf(" MODE:            RT\n");
-			printf(" RXSUBS:          0x%x\n", (unsigned int)&pDev->rtmem->rxsubs[0]);
-			printf(" TXSUBS:          0x%x\n", (unsigned int)&pDev->rtmem->txsubs[0]);
-			printf(" RXMODES:         0x%x\n", (unsigned int)&pDev->rtmem->rxmodes[0]);
-			printf(" TXOMODES:        0x%x\n", (unsigned int)&pDev->rtmem->txmodes[0]);
-			printf(" RXSUBS MSGS:     0x%x\n", (unsigned int)&pDev->rtmem->rxsuba_msgs[0]);
-			printf(" TXSUBS MSGS:     0x%x\n", (unsigned int)&pDev->rtmem->txsuba_msgs[0]);
-			printf(" RXMODES MSGS:    0x%x\n", (unsigned int)&pDev->rtmem->rxmode_msgs[0]);
-			printf(" TXMODES MSGS:    0x%x\n", (unsigned int)&pDev->rtmem->txmode_msgs[0]);
-			printf(" IRQLOG:          0x%x\n", (unsigned int)&pDev->rtmem->irq_logs[0]);
+			printf(" RXSUBS:          0x%x\n", (unsigned int)(uintptr_t)&pDev->rtmem->rxsubs[0]);
+			printf(" TXSUBS:          0x%x\n", (unsigned int)(uintptr_t)&pDev->rtmem->txsubs[0]);
+			printf(" RXMODES:         0x%x\n", (unsigned int)(uintptr_t)&pDev->rtmem->rxmodes[0]);
+			printf(" TXOMODES:        0x%x\n", (unsigned int)(uintptr_t)&pDev->rtmem->txmodes[0]);
+			printf(" RXSUBS MSGS:     0x%x\n", (unsigned int)(uintptr_t)&pDev->rtmem->rxsuba_msgs[0]);
+			printf(" TXSUBS MSGS:     0x%x\n", (unsigned int)(uintptr_t)&pDev->rtmem->txsuba_msgs[0]);
+			printf(" RXMODES MSGS:    0x%x\n", (unsigned int)(uintptr_t)&pDev->rtmem->rxmode_msgs[0]);
+			printf(" TXMODES MSGS:    0x%x\n", (unsigned int)(uintptr_t)&pDev->rtmem->txmode_msgs[0]);
+			printf(" IRQLOG:          0x%x\n", (unsigned int)(uintptr_t)&pDev->rtmem->irq_logs[0]);
 			break;
 	}
 	printf(" CTRL:            0x%x\n", regs->ctrl);

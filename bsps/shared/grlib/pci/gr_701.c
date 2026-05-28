@@ -75,35 +75,35 @@ int gr701_init1(struct drvmgr_dev *dev);
 int gr701_init2(struct drvmgr_dev *dev);
 void gr701_interrupt(void *arg);
 
-#define READ_REG(address) (*(volatile unsigned int *)address)
+#define READ_REG(address) (*(volatile uint32_t *)address)
 
 /* PCI bride reg layout on AMBA side */
 struct amba_bridge_regs {
-	volatile unsigned int bar0;
-	volatile unsigned int bar1;
-	volatile unsigned int bar2;
-	volatile unsigned int bar3;
-	volatile unsigned int bar4;/* 0x10 */
+	volatile uint32_t bar0;
+	volatile uint32_t bar1;
+	volatile uint32_t bar2;
+	volatile uint32_t bar3;
+	volatile uint32_t bar4;/* 0x10 */
 	
-	volatile unsigned int unused[4*3-1];
+	volatile uint32_t unused[4*3-1];
 	
-	volatile unsigned int ambabars[1]; /* 0x40 */
+	volatile uint32_t ambabars[1]; /* 0x40 */
 };
 
 /* PCI bride reg layout on PCI side */
 struct pci_bridge_regs {
-	volatile unsigned int bar0;
-	volatile unsigned int bar1;
-	volatile unsigned int bar2;
-	volatile unsigned int bar3;
-	volatile unsigned int bar4; /* 0x10 */
+	volatile uint32_t bar0;
+	volatile uint32_t bar1;
+	volatile uint32_t bar2;
+	volatile uint32_t bar3;
+	volatile uint32_t bar4; /* 0x10 */
 
-	volatile unsigned int ilevel;
-	volatile unsigned int ipend;
-	volatile unsigned int iforce;
-	volatile unsigned int istatus;
-	volatile unsigned int iclear;
-	volatile unsigned int imask;
+	volatile uint32_t ilevel;
+	volatile uint32_t ipend;
+	volatile uint32_t iforce;
+	volatile uint32_t istatus;
+	volatile uint32_t iclear;
+	volatile uint32_t imask;
 };
 
 /* Private data structure for driver */
@@ -251,11 +251,11 @@ static int gr701_hw_init(struct gr701_priv *priv)
 	struct pci_dev_info *devinfo = priv->devinfo;
 
 	/* Set up PCI ==> AMBA */
-	priv->pcib = pcib = (void *)devinfo->resources[0].address;
+	priv->pcib = pcib = (void *)(uintptr_t)devinfo->resources[0].address;
 	pcib->bar0 = 0xfc000000;
 
 	/* Set up GR701 AMBA Masters connection to PCI */
-	priv->ambab = ambab = (struct amba_bridge_regs *)(
+	priv->ambab = ambab = (struct amba_bridge_regs *)(uintptr_t)(
 		devinfo->resources[1].address + 0x400);
 
 	/* Init all msters, max 16 */
@@ -281,7 +281,7 @@ static int gr701_hw_init(struct gr701_priv *priv)
 	/* Setup DOWN-streams address translation */
 	priv->bus_maps_down[0].name = "PCI BAR1 -> AMBA";
 	priv->bus_maps_down[0].size = priv->amba_maps[0].size;
-	priv->bus_maps_down[0].from_adr = (void *)devinfo->resources[1].address;
+	priv->bus_maps_down[0].from_adr = (void *)(uintptr_t)devinfo->resources[1].address;
 	priv->bus_maps_down[0].to_adr = (void *)0xfc000000;
 
 	/* Setup UP-streams address translation */

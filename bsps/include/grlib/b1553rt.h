@@ -37,12 +37,12 @@ extern "C" {
 #endif
 
 struct rt_reg {
-    volatile unsigned int stat;            /* 0x00 */
-    volatile unsigned int ctrl;            /* 0x04 */
-    volatile unsigned int vword;           /* 0x08 */
-    volatile unsigned int irq;             /* 0x0C */
-    volatile unsigned int addr;            /* 0x10 */
-		volatile unsigned int ipm;             /* 0x14 */
+    volatile uint32_t stat;            /* 0x00 */
+    volatile uint32_t ctrl;            /* 0x04 */
+    volatile uint32_t vword;           /* 0x08 */
+    volatile uint32_t irq;             /* 0x0C */
+    volatile uint32_t addr;            /* 0x10 */
+		volatile uint32_t ipm;             /* 0x14 */
 };
 
 

@@ -182,7 +182,7 @@ static int gr1553rt_bdid(void *rt, struct gr1553rt_sw_bd *bd)
 	unsigned short index;
 
 	/* Get Index of Software BD */
-	index = ((unsigned int)bd - (unsigned int)&priv->swbds[0]) /
+	index = ((uintptr_t)bd - (uintptr_t)&priv->swbds[0]) /
 		sizeof(struct gr1553rt_sw_bd);
 
 	return index;
@@ -328,7 +328,7 @@ int gr1553rt_bd_init(
 	struct gr1553rt_priv *priv;
 	unsigned short bdid;
 	struct gr1553rt_bd *bd;
-	unsigned int nextbd, dataptr;
+	uint32_t nextbd, dataptr;
 	SPIN_IRQFLAGS(irqflags);
 
 	if ( entry_no >= list->bd_cnt )
@@ -354,17 +354,17 @@ int gr1553rt_bd_init(
 		return -1;
 	} else {
 		bdid = list->bds[next];
-		nextbd = (unsigned int)&priv->bds_hw[bdid];
+		nextbd = (uint32_t)(uintptr_t)&priv->bds_hw[bdid];
 	}
 
-	dataptr = (unsigned int)dptr;
+	dataptr = (uint32_t)(uintptr_t)dptr;
 	if ( dataptr & 1 ) {
 		/* Translate address from CPU-local into remote */
 		dataptr &= ~1;
 		drvmgr_translate(
 			*priv->pdev,
 			CPUMEM_TO_DMA,
-			(void *)dataptr,
+			(void *)(uintptr_t)dataptr,
 			(void **)&dataptr
 			);
 	}
@@ -372,7 +372,7 @@ int gr1553rt_bd_init(
 	/* Init BD */
 	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 	bd->ctrl = flags & GR1553RT_BD_FLAGS_IRQEN;
-	bd->dptr = (unsigned int)dptr;
+	bd->dptr = (uint32_t)(uintptr_t)dptr;
 	bd->next = nextbd;
 	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 
@@ -401,7 +401,7 @@ int gr1553rt_bd_update(
 	bd = &priv->bds_cpu[bdid];
 
 	/* Prepare translation if needed */
-	if ( dptr && (dataptr=(unsigned int)*dptr) ) {
+	if ( dptr && (dataptr=(unsigned int)(uintptr_t)*dptr) ) {
 		if ( dataptr & 1 ) {
 			/* Translate address from CPU-local into remote. May
 			 * be used when RT core is accessed over the PCI bus.
@@ -410,7 +410,7 @@ int gr1553rt_bd_update(
 			drvmgr_translate(
 				*priv->pdev,
 				CPUMEM_TO_DMA,
-				(void *)dataptr,
+				(void *)(uintptr_t)dataptr,
 				(void **)&dataptr
 				);
 		}
@@ -432,7 +432,7 @@ int gr1553rt_bd_update(
 		if ( dataptr ) {
 			bd->dptr = dataptr;
 		}
-		*dptr = (uint16_t *)tmp;
+		*dptr = (uint16_t *)(uintptr_t)tmp;
 	}
 	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 
@@ -554,10 +554,10 @@ void gr1553rt_isr(void *data)
 	 * We convert hardware addresses into CPU accessable addresses
 	 * first.
 	 */
-	index = (firstirq - (unsigned int)priv->evlog_hw_base) /
+	index = (firstirq - (uintptr_t)priv->evlog_hw_base) /
 		sizeof(unsigned int);
 	curr = priv->evlog_cpu_base + index;
-	index = (lastpos - (unsigned int)priv->evlog_hw_base) /
+	index = (lastpos - (uintptr_t)priv->evlog_hw_base) /
 		sizeof(unsigned int);
 	last = priv->evlog_cpu_base + index;
 
@@ -584,7 +584,7 @@ void gr1553rt_isr(void *data)
 					pisr = &priv->irq_tx[subadr];
 				}
 
-				index = ((unsigned int)hwbd - (unsigned int)
+				index = ((uintptr_t)hwbd - (uintptr_t)
 					priv->bds_hw)/sizeof(struct gr1553rt_bd);
 
 				/* copy func and arg while owning lock */
@@ -649,7 +649,7 @@ int gr1553rt_indication(void *rt, int subadr, int *txeno, int *rxeno)
 	if ( txeno ) {
 		bd = sa->txptr;
 		/* Get Index of Hardware BD */
-		index = ((unsigned int)bd - (unsigned int)&priv->bds_hw[0]) /
+		index = (bd - (uint32_t)(uintptr_t)&priv->bds_hw[0]) /
 			sizeof(struct gr1553rt_bd);
 		*txeno = priv->swbds[index].this_next;
 	}
@@ -658,7 +658,7 @@ int gr1553rt_indication(void *rt, int subadr, int *txeno, int *rxeno)
 	if ( rxeno ) {
 		bd = sa->rxptr;
 		/* Get Index of Hardware BD */
-		index = ((unsigned int)bd - (unsigned int)&priv->bds_hw[0]) /
+		index = (bd - (uint32_t)(uintptr_t)&priv->bds_hw[0]) /
 			sizeof(struct gr1553rt_bd);
 		*rxeno = priv->swbds[index].this_next;
 	}
@@ -697,7 +697,7 @@ void *gr1553rt_open(int minor)
 	/* Get device information from AMBA PnP information */
 	ambadev = (struct amba_dev_info *)(*pdev)->businfo;
 	pnpinfo = &ambadev->info;
-	priv->regs = (struct gr1553b_regs *)pnpinfo->apb_slv->start;
+	priv->regs = (struct gr1553b_regs *)(uintptr_t)pnpinfo->apb_slv->start;
 
 	SPIN_INIT(&priv->devlock, "gr1553rt");
 
@@ -796,11 +796,11 @@ static int gr1553rt_sw_alloc(struct gr1553rt_priv *priv)
 	int retval = 0;
 
 	/* Allocate Event log */
-	if ((unsigned int)priv->cfg.evlog_buffer & 1) {
+	if ((uintptr_t)priv->cfg.evlog_buffer & 1) {
 		/* Translate Address from HARDWARE (REMOTE) to CPU-LOCAL */
 		priv->evlog_buffer = (void *)
-			((unsigned int)priv->cfg.evlog_buffer & ~0x1);
-		priv->evlog_hw_base = (unsigned int*)priv->evlog_buffer;
+			((uintptr_t)priv->cfg.evlog_buffer & ~0x1);
+		priv->evlog_hw_base = (unsigned int*)(uintptr_t)priv->evlog_buffer;
 		drvmgr_translate_check(
 			*priv->pdev,
 			DMAMEM_TO_CPU,
@@ -818,7 +818,7 @@ static int gr1553rt_sw_alloc(struct gr1553rt_priv *priv)
 			}
 			/* Align to SIZE bytes boundary */
 			priv->evlog_cpu_base = (unsigned int *)
-				(((unsigned int)priv->evlog_buffer +
+				(((uintptr_t)priv->evlog_buffer +
 				(priv->cfg.evlog_size-1)) & ~(priv->cfg.evlog_size-1));
 		} else {
 			/* Addess already CPU-LOCAL */
@@ -835,7 +835,7 @@ static int gr1553rt_sw_alloc(struct gr1553rt_priv *priv)
 			);
 	}
 	/* Verify alignment */
-	if ((unsigned int)priv->evlog_hw_base & (priv->cfg.evlog_size-1)) {
+	if ((uintptr_t)priv->evlog_hw_base & (priv->cfg.evlog_size-1)) {
 		retval = -2;
 		goto err;
 	}
@@ -845,10 +845,10 @@ static int gr1553rt_sw_alloc(struct gr1553rt_priv *priv)
 	/* Allocate Transfer Descriptors */
 	priv->bds_cnt = priv->cfg.bd_count;
 	size = priv->bds_cnt * sizeof(struct gr1553rt_bd);
-	if ((unsigned int)priv->cfg.bd_buffer & 1) {
+	if ((uintptr_t)priv->cfg.bd_buffer & 1) {
 		/* Translate Address from HARDWARE (REMOTE) to CPU-LOCAL */
 		priv->bd_buffer = (void *)
-			((unsigned int)priv->cfg.bd_buffer & ~0x1);
+			((uintptr_t)priv->cfg.bd_buffer & ~0x1);
 		priv->bds_hw = (struct gr1553rt_bd *)priv->bd_buffer;
 		drvmgr_translate_check(
 			*priv->pdev,
@@ -866,7 +866,7 @@ static int gr1553rt_sw_alloc(struct gr1553rt_priv *priv)
 			}
 			/* Align to 16 bytes boundary */
 			priv->bds_cpu = (struct gr1553rt_bd *)
-				(((unsigned int)priv->bd_buffer + 0xf) & ~0xf);
+				(((uintptr_t)priv->bd_buffer + 0xf) & ~0xf);
 		} else {
 			/* Addess already CPU-LOCAL */
 			priv->bd_buffer	= priv->cfg.bd_buffer;
@@ -883,7 +883,7 @@ static int gr1553rt_sw_alloc(struct gr1553rt_priv *priv)
 			);
 	}
 	/* Verify alignment */
-	if ((unsigned int)priv->bds_hw & (0xf)) {
+	if ((uintptr_t)priv->bds_hw & (0xf)) {
 		retval = -2;
 		goto err;
 	}
@@ -898,10 +898,10 @@ static int gr1553rt_sw_alloc(struct gr1553rt_priv *priv)
 #endif
 
 	/* Allocate Sub address table */
-	if ((unsigned int)priv->cfg.satab_buffer & 1) {
+	if ((uintptr_t)priv->cfg.satab_buffer & 1) {
 		/* Translate Address from HARDWARE (REMOTE) to CPU-LOCAL */
 		priv->satab_buffer = (void *)
-			((unsigned int)priv->cfg.satab_buffer & ~0x1);
+			((uintptr_t)priv->cfg.satab_buffer & ~0x1);
 		priv->sas_hw = (struct gr1553rt_sa *)priv->satab_buffer;
 
 		drvmgr_translate_check(
@@ -919,7 +919,7 @@ static int gr1553rt_sw_alloc(struct gr1553rt_priv *priv)
 			}
 			/* Align to 512 bytes boundary */
 			priv->sas_cpu = (struct gr1553rt_sa *)
-				(((unsigned int)priv->satab_buffer + 0x1ff) & ~0x1ff);
+				(((uintptr_t)priv->satab_buffer + 0x1ff) & ~0x1ff);
 		} else {
 			/* Addess already CPU-LOCAL */
 			priv->satab_buffer = priv->cfg.satab_buffer;
@@ -935,7 +935,7 @@ static int gr1553rt_sw_alloc(struct gr1553rt_priv *priv)
 			16 * 32);
 	}
 	/* Verify alignment */
-	if ((unsigned int)priv->sas_hw & (0x1ff)) {
+	if ((uintptr_t)priv->sas_hw & (0x1ff)) {
 		retval = -2;
 		goto err;
 	}
@@ -1003,7 +1003,7 @@ int gr1553rt_config(void *rt, struct gr1553rt_cfg *cfg)
 		return -1;
 	if ( (cfg->evlog_size & (cfg->evlog_size-1)) != 0)
 		return -2; /* SIZE: Not aligned to a power of 2 */
-	if ( ((unsigned int)priv->cfg.evlog_buffer & (cfg->evlog_size-1)) != 0 )
+	if ( ((uintptr_t)priv->cfg.evlog_buffer & (cfg->evlog_size-1)) != 0 )
 		return -2; /* Buffer: Not aligned to size */
 #if (RTBD_MAX > 0)
 	if ( cfg->bd_count > RTBD_MAX )
@@ -1042,7 +1042,7 @@ int gr1553rt_start(void *rt)
 	/*** Initialize Registers ***/
 
 	/* Subaddress table base */
-	priv->regs->rt_tab = (unsigned int)priv->sas_hw;
+	priv->regs->rt_tab = (uint32_t)(uintptr_t)priv->sas_hw;
 
 	/* Mode code configuration */
 	priv->regs->rt_mcctrl = priv->cfg.modecode;
@@ -1052,7 +1052,7 @@ int gr1553rt_start(void *rt)
 
 	/* Event LOG base and size */
 	priv->regs->rt_evsz = ~(priv->cfg.evlog_size - 1);
-	priv->regs->rt_evlog = (unsigned int)priv->evlog_hw_base;
+	priv->regs->rt_evlog = (uint32_t)(uintptr_t)priv->evlog_hw_base;
 	priv->regs->rt_evirq = 0;
 
 	/* Clear and old IRQ flag and Enable IRQ */
@@ -1115,10 +1115,10 @@ void gr1553rt_sa_schedule(
 	if ( tx ) {
 		list->subadr |= 0x100;
 		priv->subadrs[subadr].txlistid = list->listid;
-		priv->sas_cpu[subadr].txptr = (unsigned int)bd;
+		priv->sas_cpu[subadr].txptr = (uint32_t)(uintptr_t)bd;
 	} else {
 		priv->subadrs[subadr].rxlistid = list->listid;
-		priv->sas_cpu[subadr].rxptr = (unsigned int)bd;
+		priv->sas_cpu[subadr].rxptr = (uint32_t)(uintptr_t)bd;
 	}
 }
 
@@ -1205,25 +1205,25 @@ int gr1553rt_evlog_read(void *rt, unsigned int *dst, int max)
 {
 	struct gr1553rt_priv *priv = rt;
 	int cnt, top, bot, left;
-	unsigned int *hwpos;
+	uint32_t *hwpos;
 
 	/* Get address of hardware's current working entry */
-	hwpos = (unsigned int *)priv->regs->rt_evlog;
+	hwpos = (uint32_t *)(uintptr_t)priv->regs->rt_evlog;
 
 	/* Convert into CPU address */
-	hwpos = (unsigned int *)
-		((unsigned int)hwpos - (unsigned int)priv->evlog_hw_base +
-		(unsigned int)priv->evlog_cpu_base);
+	hwpos = (uint32_t *)
+		((uintptr_t)hwpos - (uintptr_t)priv->evlog_hw_base +
+		(uintptr_t)priv->evlog_cpu_base);
 
 	if ( priv->evlog_cpu_next == hwpos )
 		return 0;
 
 	if ( priv->evlog_cpu_next > hwpos ) {
-		top = (unsigned int)priv->evlog_cpu_end -
-			(unsigned int)priv->evlog_cpu_next;
-		bot = (unsigned int)hwpos - (unsigned int)priv->evlog_cpu_base;
+		top = (uintptr_t)priv->evlog_cpu_end -
+			(uintptr_t)priv->evlog_cpu_next;
+		bot = (uintptr_t)hwpos - (uintptr_t)priv->evlog_cpu_base;
 	} else {
-		top = (unsigned int)hwpos - (unsigned int)priv->evlog_cpu_next;
+		top = (uintptr_t)hwpos - (uintptr_t)priv->evlog_cpu_next;
 		bot = 0;
 	}
 	top = top / 4;
@@ -1255,9 +1255,9 @@ int gr1553rt_evlog_read(void *rt, unsigned int *dst, int max)
 	priv->evlog_cpu_next += cnt;
 	if ( priv->evlog_cpu_next >= priv->evlog_cpu_end ) {
 		priv->evlog_cpu_next = (unsigned int *)
-			((unsigned int)priv->evlog_cpu_base +
-			((unsigned int)priv->evlog_cpu_next -
-			 (unsigned int)priv->evlog_cpu_end ));
+			((uintptr_t)priv->evlog_cpu_base +
+			((uintptr_t)priv->evlog_cpu_next -
+			 (uintptr_t)priv->evlog_cpu_end ));
 	}
 
 	return max - left;

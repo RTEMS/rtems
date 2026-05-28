@@ -54,8 +54,8 @@
 
 #define THREAD_SAFE 1
 
-#define REG_WRITE(addr, val) (*(volatile unsigned int *)(addr) = (unsigned int)(val))
-#define REG_READ(addr) (*(volatile unsigned int *)(addr))
+#define REG_WRITE(addr, val) (*(volatile uint32_t *)(addr) = (unsigned int)(val))
+#define REG_READ(addr) (*(volatile uint32_t *)(addr))
 
 
 /*
@@ -637,7 +637,7 @@ int router_init2(struct drvmgr_dev *dev)
 		return DRVMGR_FAIL;
 	}
 	pnpinfo = &ambadev->info;
-	priv->regs = (struct router_regs *)pnpinfo->ahb_slv->start[0];
+	priv->regs = (struct router_regs *)(uintptr_t)pnpinfo->ahb_slv->start[0];
 	priv->minor = dev->minor_drv;
 
 	/* Initilize driver struct */

@@ -184,7 +184,7 @@ int gptimer_init1(struct drvmgr_dev *dev)
 		return -1;
 	}
 	pnpinfo = &ambadev->info;
-	regs = (gptimer *)pnpinfo->apb_slv->start;
+	regs = (gptimer *)(uintptr_t)pnpinfo->apb_slv->start;
 
 	DBG("GPTIMER[%d] on bus %s\n", dev->minor_drv, dev->parent->dev->name);
 
@@ -332,7 +332,7 @@ static int gptimer_info(
 static inline struct gptimer_priv *priv_from_timer(struct gptimer_timer_priv *t)
 {
 	return (struct gptimer_priv *)
-		((unsigned int)t -
+		((uintptr_t)t -
 		sizeof(struct gptimer_priv) -
 		t->index * sizeof(struct gptimer_timer_priv));
 }

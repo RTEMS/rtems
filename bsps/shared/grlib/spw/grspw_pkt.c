@@ -55,41 +55,41 @@
 #define GRSPW_DBG(args...)
 
 struct grspw_dma_regs {
-	volatile unsigned int ctrl;	/* DMA Channel Control */
-	volatile unsigned int rxmax;	/* RX Max Packet Length */
-	volatile unsigned int txdesc;	/* TX Descriptor Base/Current */
-	volatile unsigned int rxdesc;	/* RX Descriptor Base/Current */
-	volatile unsigned int addr;	/* Address Register */
-	volatile unsigned int resv[3];
+	volatile uint32_t ctrl;	/* DMA Channel Control */
+	volatile uint32_t rxmax;	/* RX Max Packet Length */
+	volatile uint32_t txdesc;	/* TX Descriptor Base/Current */
+	volatile uint32_t rxdesc;	/* RX Descriptor Base/Current */
+	volatile uint32_t addr;	/* Address Register */
+	volatile uint32_t resv[3];
 };
 
 struct grspw_regs {
-	volatile unsigned int ctrl;
-	volatile unsigned int status;
-	volatile unsigned int nodeaddr;
-	volatile unsigned int clkdiv;
-	volatile unsigned int destkey;
-	volatile unsigned int time;
-	volatile unsigned int timer;	/* Used only in GRSPW1 */
-	volatile unsigned int resv1;
+	volatile uint32_t ctrl;
+	volatile uint32_t status;
+	volatile uint32_t nodeaddr;
+	volatile uint32_t clkdiv;
+	volatile uint32_t destkey;
+	volatile uint32_t time;
+	volatile uint32_t timer;	/* Used only in GRSPW1 */
+	volatile uint32_t resv1;
 
 	/* DMA Registers, ctrl.NCH determines number of ports, 
 	 * up to 4 channels are supported
 	 */
 	struct grspw_dma_regs dma[4];
 
-	volatile unsigned int icctrl;
-	volatile unsigned int icrx;
-	volatile unsigned int icack;
-	volatile unsigned int ictimeout;
-	volatile unsigned int ictickomask;
-	volatile unsigned int icaamask;
-	volatile unsigned int icrlpresc;
-	volatile unsigned int icrlisr;
-	volatile unsigned int icrlintack;
-	volatile unsigned int resv2;
-	volatile unsigned int icisr;
-	volatile unsigned int resv3;
+	volatile uint32_t icctrl;
+	volatile uint32_t icrx;
+	volatile uint32_t icack;
+	volatile uint32_t ictimeout;
+	volatile uint32_t ictickomask;
+	volatile uint32_t icaamask;
+	volatile uint32_t icrlpresc;
+	volatile uint32_t icrlisr;
+	volatile uint32_t icrlintack;
+	volatile uint32_t resv2;
+	volatile uint32_t icisr;
+	volatile uint32_t resv3;
 };
 
 /* GRSPW - Control Register - 0x00 */
@@ -276,16 +276,16 @@ struct grspw_regs {
 
 /* RX Buffer Descriptor */
 struct grspw_rxbd {
-   volatile unsigned int ctrl;
-   volatile unsigned int addr;
+   volatile uint32_t ctrl;
+   volatile uint32_t addr;
 };
 
 /* TX Buffer Descriptor */
 struct grspw_txbd {
-   volatile unsigned int ctrl;
-   volatile unsigned int haddr;
-   volatile unsigned int dlen;
-   volatile unsigned int daddr;
+   volatile uint32_t ctrl;
+   volatile uint32_t haddr;
+   volatile uint32_t dlen;
+   volatile uint32_t daddr;
 };
 
 /* GRSPW - DMA RXBD Ctrl */
@@ -332,11 +332,11 @@ struct grspw_txbd {
 #define BDTAB_ALIGN 0x400	/* BD Table Alignment Requirement */
 
 /* Memory and HW Registers Access routines. All 32-bit access routines */
-#define BD_WRITE(addr, val) (*(volatile unsigned int *)(addr) = (unsigned int)(val))
-/*#define BD_READ(addr) (*(volatile unsigned int *)(addr))*/
-#define BD_READ(addr) grlib_read_uncached32((unsigned long)(addr))
-#define REG_WRITE(addr, val) (*(volatile unsigned int *)(addr) = (unsigned int)(val))
-#define REG_READ(addr) (*(volatile unsigned int *)(addr))
+#define BD_WRITE(addr, val) (*(volatile uint32_t *)(uintptr_t)(addr) = (unsigned int)(val))
+/*#define BD_READ(addr) (*(volatile uint32_t *)(addr))*/
+#define BD_READ(addr) grlib_read_uncached32((uintptr_t)(addr))
+#define REG_WRITE(addr, val) (*(volatile uint32_t *)(uintptr_t)(addr) = (unsigned int)(val))
+#define REG_READ(addr) (*(volatile uint32_t *)(uintptr_t)(addr))
 
 struct grspw_ring {
 	struct grspw_ring *next;	/* Next Descriptor */
@@ -568,7 +568,7 @@ void *grspw_open(int dev_no)
 			goto out;
 		}
 	} else {
-		priv->bd_mem_alloced = (unsigned int)grlib_malloc(bdtabsize + BDTAB_ALIGN - 1);
+		priv->bd_mem_alloced = (unsigned int)(uintptr_t)grlib_malloc(bdtabsize + BDTAB_ALIGN - 1);
 		if (priv->bd_mem_alloced == 0) {
 			priv = NULL;
 			goto out;
@@ -584,7 +584,7 @@ void *grspw_open(int dev_no)
 	drvmgr_translate_check(
 		priv->dev,
 		CPUMEM_TO_DMA,
-		(void *)priv->bd_mem,
+		(void *)(uintptr_t)priv->bd_mem,
 		(void **)&hwa,
 		bdtabsize);
 
@@ -597,13 +597,13 @@ void *grspw_open(int dev_no)
 		 * index & core are initialized by probe function.
 		 */
 		priv->dma[i].open = 0;
-		priv->dma[i].rx_bds = (struct grspw_rxbd *)
+		priv->dma[i].rx_bds = (struct grspw_rxbd *)(uintptr_t)
 			(priv->bd_mem + i*BDTAB_SIZE*2);
-		priv->dma[i].rx_bds_hwa = (struct grspw_rxbd *)
+		priv->dma[i].rx_bds_hwa = (struct grspw_rxbd *)(uintptr_t)
 			(hwa + BDTAB_SIZE*(2*i));
-		priv->dma[i].tx_bds = (struct grspw_txbd *)
+		priv->dma[i].tx_bds = (struct grspw_txbd *)(uintptr_t)
 			(priv->bd_mem + BDTAB_SIZE*(2*i+1));
-		priv->dma[i].tx_bds_hwa = (struct grspw_txbd *)
+		priv->dma[i].tx_bds_hwa = (struct grspw_txbd *)(uintptr_t)
 			(hwa + BDTAB_SIZE*(2*i+1));
 		GRSPW_DBG("  DMA[%i]: RX %p - %p (%p - %p)   TX %p - %p (%p - %p)\n",
 			i,
@@ -655,7 +655,7 @@ int grspw_close(void *d)
 
 	/* Free descriptor table memory if allocated using malloc() */
 	if (priv->bd_mem_alloced) {
-		free((void *)priv->bd_mem_alloced);
+		free((void *)(uintptr_t)priv->bd_mem_alloced);
 		priv->bd_mem_alloced = 0;
 	}
 
@@ -1243,7 +1243,7 @@ STATIC int grspw_rx_schedule_ready(struct grspw_dma_priv *dma)
 			if (curr_pkt->data == hwaddr) /* translation needed? */
 				curr_pkt->flags &= ~PKT_FLAG_TR_DATA;
 		}
-		BD_WRITE(&curr_bd->bd->addr, hwaddr);
+		BD_WRITE(&curr_bd->bd->addr, (uintptr_t)hwaddr);
 
 		ctrl = GRSPW_RXBD_EN;
 		if (curr_bd->next == dma->rx_ring_base) {
@@ -1459,7 +1459,7 @@ STATIC int grspw_tx_schedule_send(struct grspw_dma_priv *dma)
 				if (curr_pkt->hdr == hwaddr)
 					curr_pkt->flags &= ~PKT_FLAG_TR_HDR;
 			}
-			BD_WRITE(&curr_bd->bd->haddr, hwaddr);
+			BD_WRITE(&curr_bd->bd->haddr, (uintptr_t)hwaddr);
 			ctrl = GRSPW_TXBD_EN |
 			       (curr_pkt->hlen & GRSPW_TXBD_HLEN);
 		} else {
@@ -1500,7 +1500,7 @@ STATIC int grspw_tx_schedule_send(struct grspw_dma_priv *dma)
 				if (curr_pkt->data == hwaddr)
 					curr_pkt->flags &= ~PKT_FLAG_TR_DATA;
 			}
-			BD_WRITE(&curr_bd->bd->daddr, hwaddr);
+			BD_WRITE(&curr_bd->bd->daddr, (uintptr_t)hwaddr);
 			BD_WRITE(&curr_bd->bd->dlen, curr_pkt->dlen |
 			                             ((ctrl & 0x3f000) << 12));
 		} else {
@@ -2013,7 +2013,7 @@ void grspw_dma_tx_count(void *c, int *send, int *sched, int *sent, int *hw)
 		 */
 		hwbd = REG_READ(&dma->regs->txdesc);
 		tailbd = dma->tx_ring_tail->bd;
-		diff = ((hwbd - (unsigned int)tailbd) / GRSPW_TXBD_SIZE) &
+		diff = ((hwbd - (unsigned int)(uintptr_t)tailbd) / GRSPW_TXBD_SIZE) &
 			(GRSPW_TXBD_NR - 1);
 		/* Handle special case when HW and SW pointers are equal
 		 * because all TX descriptors have been processed by HW.
@@ -2260,7 +2260,7 @@ void grspw_dma_rx_count(void *c, int *ready, int *sched, int *recv, int *hw)
 		 */
 		hwbd = REG_READ(&dma->regs->rxdesc);
 		tailbd = dma->rx_ring_tail->bd;
-		diff = ((hwbd - (unsigned int)tailbd) / GRSPW_RXBD_SIZE) &
+		diff = ((hwbd - (unsigned int)(uintptr_t)tailbd) / GRSPW_RXBD_SIZE) &
 			(GRSPW_RXBD_NR - 1);
 		/* Handle special case when HW and SW pointers are equal
 		 * because all RX descriptors have been processed by HW.
@@ -2475,8 +2475,8 @@ int grspw_dma_start(void *c)
 	 * descriptors are enabled or it may ignore RX packets (NS=0) until
 	 * descriptors are enabled (writing RD bit).
 	 */
-	REG_WRITE(&dregs->txdesc, dma->tx_bds_hwa);
-	REG_WRITE(&dregs->rxdesc, dma->rx_bds_hwa);
+	REG_WRITE(&dregs->txdesc, (uintptr_t)dma->tx_bds_hwa);
+	REG_WRITE(&dregs->rxdesc, (uintptr_t)dma->rx_bds_hwa);
 
 	/* MAX Packet length */
 	REG_WRITE(&dma->regs->rxmax, dma->cfg.rxmaxlen);
@@ -2699,12 +2699,13 @@ static void grspw_work_dma_func(struct grspw_dma_priv *dma, unsigned int msg)
 /* Work task is receiving work for the work message queue posted from
  * the ISR.
  */
-void grspw_work_func(rtems_id msgQ)
+void grspw_work_func(rtems_task_argument arg)
 {
 	unsigned int message = 0, msg;
 	size_t size;
 	struct grspw_priv *priv;
 	int i;
+	rtems_id msgQ = arg;
 
 	/* Wait for ISR to schedule work */
 	while (rtems_message_queue_receive(msgQ, &message, &size,
@@ -3104,7 +3105,7 @@ static int grspw2_init3(struct drvmgr_dev *dev)
 		return -1;
 	pnpinfo = &ambadev->info;
 	priv->irq = pnpinfo->irq;
-	priv->regs = (struct grspw_regs *)pnpinfo->apb_slv->start;
+	priv->regs = (struct grspw_regs *)(uintptr_t)pnpinfo->apb_slv->start;
 
 	/* Read Hardware Support from Control Register */
 	ctrl = REG_READ(&priv->regs->ctrl);
@@ -3289,7 +3290,7 @@ static int grspw_msgqisr(void *data, unsigned int *buf, unsigned int n)
 {
   rtems_status_code sc;
 
-  sc = rtems_message_queue_send((rtems_id) data, buf, n);
+  sc = rtems_message_queue_send((rtems_id)(uintptr_t)data, buf, n);
   return sc;
 }
 

@@ -82,13 +82,13 @@
  * Bit encode for PCI_CONFIG_HEADER_TYPE register
  */
 struct pcif_regs {
-	volatile unsigned int bars[4];  /* 0x00-0x10 */
-	volatile unsigned int bus;      /* 0x10 */
-	volatile unsigned int map_io;   /* 0x14 */
-	volatile unsigned int status;   /* 0x18 */
-	volatile unsigned int intr;     /* 0x1c */
-	int unused[(0x40-0x20)/4];      /* 0x20-0x40 */
-	volatile unsigned int maps[(0x80-0x40)/4];   /* 0x40-0x80*/
+	volatile uint32_t bars[4];  /* 0x00-0x10 */
+	volatile uint32_t bus;      /* 0x10 */
+	volatile uint32_t map_io;   /* 0x14 */
+	volatile uint32_t status;   /* 0x18 */
+	volatile uint32_t intr;     /* 0x1c */
+	uint32_t unused[(0x40-0x20)/4];      /* 0x20-0x40 */
+	volatile uint32_t maps[(0x80-0x40)/4];   /* 0x40-0x80*/
 };
 
 /* Used internally for accessing the PCI bridge's configuration space itself */
@@ -200,7 +200,7 @@ static int pcif_cfg_r32(pci_dev_t dev, int ofs, uint32_t *val)
 	/* Select bus */
 	priv->regs->bus = bus << 16;
 
-	pci_conf = (volatile uint32_t *)(priv->pci_conf | (devfn << 8) | ofs);
+	pci_conf = (volatile uint32_t *)(uintptr_t)(priv->pci_conf | (devfn << 8) | ofs);
 
 	*val = *pci_conf;
 
@@ -268,7 +268,7 @@ static int pcif_cfg_w32(pci_dev_t dev, int ofs, uint32_t val)
 	/* Select bus */
 	priv->regs->bus = bus << 16;
 
-	pci_conf = (volatile uint32_t *)(priv->pci_conf | (devfn << 8) | ofs);
+	pci_conf = (volatile uint32_t *)(uintptr_t)(priv->pci_conf | (devfn << 8) | ofs);
 
 	*pci_conf = val;
 
@@ -450,7 +450,7 @@ static int pcif_init(struct pcif_priv *priv)
 
 	/* Found PCI core, init private structure */
 	priv->irq = apb->common.irq;
-	priv->regs = (struct pcif_regs *)apb->start;
+	priv->regs = (struct pcif_regs *)(uintptr_t)apb->start;
 
 	/* Calculate the PCI windows 
 	 *  AMBA->PCI Window:                       AHB SLAVE AREA0
@@ -505,8 +505,8 @@ static int pcif_init(struct pcif_priv *priv)
 	/* Down streams translation table */
 	priv->maps_down[0].name = "AMBA -> PCI MEM Window";
 	priv->maps_down[0].size = priv->pci_area_end - priv->pci_area;
-	priv->maps_down[0].from_adr = (void *)priv->pci_area;
-	priv->maps_down[0].to_adr = (void *)priv->pci_area;
+	priv->maps_down[0].from_adr = (void *)(uintptr_t)priv->pci_area;
+	priv->maps_down[0].to_adr = (void *)(uintptr_t)priv->pci_area;
 	/* End table */
 	priv->maps_down[1].size = 0;
 

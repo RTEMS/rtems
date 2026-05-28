@@ -49,11 +49,11 @@ struct gr1553bm_priv {
 	SPIN_DECLARE(devlock)
 
 	void *buffer;
-	unsigned int buffer_base_hw;
-	unsigned int buffer_base;
-	unsigned int buffer_end;
-	unsigned int buffer_size;
-	unsigned int read_pos;
+	uint32_t buffer_base_hw;
+	uint32_t buffer_base;
+	uint32_t buffer_end;
+	uint32_t buffer_size;
+	uint32_t read_pos;
 	int started;
 	struct gr1553bm_config cfg;
 
@@ -159,7 +159,7 @@ void *gr1553bm_open(int minor)
 	/* Get device information from AMBA PnP information */
 	ambadev = (struct amba_dev_info *)(*pdev)->businfo;
 	pnpinfo = &ambadev->info;
-	priv->regs = (struct gr1553b_regs *)pnpinfo->apb_slv->start;
+	priv->regs = (struct gr1553b_regs *)(uintptr_t)pnpinfo->apb_slv->start;
 	SPIN_INIT(&priv->devlock, "gr1553bm");
 
 	/* Start with default configuration */
@@ -210,16 +210,16 @@ int gr1553bm_config(void *bm, struct gr1553bm_config *cfg)
 		priv->buffer = NULL;
 	}
 	priv->buffer_size = cfg->buffer_size & ~0x7; /* on 8 byte bounadry */
-	if ((unsigned int)cfg->buffer_custom & 1) {
+	if ((uintptr_t)cfg->buffer_custom & 1) {
 		/* Custom address given in remote address. We need
 		 * to convert it into a hardware accessible address
 		 */
-		priv->buffer = (void*)((unsigned int)cfg->buffer_custom & ~1);
-		priv->buffer_base_hw = (unsigned int)priv->buffer;
+		priv->buffer = (void*)((uintptr_t)cfg->buffer_custom & ~1);
+		priv->buffer_base_hw = (uint32_t)(uintptr_t)priv->buffer;
 		drvmgr_translate_check(
 			*priv->pdev,
 			DMAMEM_TO_CPU,
-			(void *)priv->buffer_base_hw,
+			(void *)(uintptr_t)priv->buffer_base_hw,
 			(void **)&priv->buffer_base,
 			priv->buffer_size);
 	} else {
@@ -231,13 +231,13 @@ int gr1553bm_config(void *bm, struct gr1553bm_config *cfg)
 				goto err;
 			}
 			/* Align to 8 bytes */
-			priv->buffer_base = ((unsigned int)priv->buffer + (8-1)) & ~(8-1);
+			priv->buffer_base = ((uint32_t)(uintptr_t)priv->buffer + (8-1)) & ~(8-1);
 		} else {
 			/* Address given in CPU accessible address, no
 			 * translation required.
 			 */
 			priv->buffer = cfg->buffer_custom;
-			priv->buffer_base = (unsigned int)priv->buffer;
+			priv->buffer_base = (uint32_t)(uintptr_t)priv->buffer;
 		}
 		/* Translate address of buffer base into address that Hardware must
 		 * use to access the buffer.
@@ -245,7 +245,7 @@ int gr1553bm_config(void *bm, struct gr1553bm_config *cfg)
 		drvmgr_translate_check(
 			*priv->pdev,
 			CPUMEM_TO_DMA,
-			(void *)priv->buffer_base,
+			(void *)(uintptr_t)priv->buffer_base,
 			(void **)&priv->buffer_base_hw,
 			priv->buffer_size);
 
@@ -265,8 +265,8 @@ err:
 		if (cfg->buffer_custom == NULL && priv->buffer) {
 			free(priv->buffer);
 		}
-		priv->buffer_base_hw = (unsigned int)NULL;
-		priv->buffer_base = (unsigned int)NULL;
+		priv->buffer_base_hw = 0;
+		priv->buffer_base = 0;
 		priv->buffer = NULL;
 	}
 	return retval;
@@ -440,7 +440,7 @@ int gr1553bm_read(void *bm, struct gr1553bm_entry *dst, int *max)
 		botLen = (pos - priv->buffer_base)/sizeof(struct gr1553bm_entry);
 	}
 
-	dest = (unsigned int)dst;
+	dest = (unsigned int)(uintptr_t)dst;
 	if ( topLen > 0 ) {
 		/* Copy from top area first */
 		if ( topLen > left ) {
@@ -456,13 +456,13 @@ int gr1553bm_read(void *bm, struct gr1553bm_entry *dst, int *max)
 		if ( priv->cfg.copy_func ) {
 			dest += priv->cfg.copy_func(
 				dest,			/*Optional Destination*/
-				(void *)topAdr, 	/* DMA start address */
+				(void *)(uintptr_t)topAdr, 	/* DMA start address */
 				len,			/* Number of entries */
 				priv->cfg.copy_func_arg /* Custom ARG */
 				);
 		} else {
-			memcpy(	(void *)dest,
-				(void *)topAdr,
+			memcpy(	(void *)(uintptr_t)dest,
+				(void *)(uintptr_t)topAdr,
 				len * sizeof(struct gr1553bm_entry));
 			dest += len * sizeof(struct gr1553bm_entry);
 		}
@@ -482,13 +482,13 @@ int gr1553bm_read(void *bm, struct gr1553bm_entry *dst, int *max)
 		if ( priv->cfg.copy_func ) {
 			priv->cfg.copy_func(
 				dest,			/*Optional Destination*/
-				(void *)botAdr,		/* DMA start address */
+				(void *)(uintptr_t)botAdr,		/* DMA start address */
 				len,			/* Number of entries */
 				priv->cfg.copy_func_arg /* Custom ARG */
 				);
 		} else {
-			memcpy(	(void *)dest,
-				(void *)botAdr,
+			memcpy(	(void *)(uintptr_t)dest,
+				(void *)(uintptr_t)botAdr,
 				len * sizeof(struct gr1553bm_entry));
 		}
 	}

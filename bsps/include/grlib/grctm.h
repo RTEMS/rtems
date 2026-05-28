@@ -43,37 +43,37 @@
 #define PULSE7_IRQ  0x800
 
 struct grctm_regs {
-	volatile unsigned int grr;
-	volatile unsigned int gcr;
-	volatile unsigned int gsr;
-	volatile unsigned int unused[2];
-	volatile unsigned int pfr;
-	volatile unsigned int etcr;
-	volatile unsigned int etfr;
-	volatile unsigned int dcr0;
-	volatile unsigned int dfr0;
-	volatile unsigned int dcr1;
-	volatile unsigned int dfr1;
-	volatile unsigned int dcr2;
-	volatile unsigned int dfr2;
-	volatile unsigned int stcr;
-	volatile unsigned int stfr;
-	volatile unsigned int pdr[8];
-	volatile unsigned int pimsr;
-	volatile unsigned int pimr;
-	volatile unsigned int pisr;
-	volatile unsigned int pir;
-	volatile unsigned int imr;
-	volatile unsigned int picr;
-	volatile unsigned int unused1[2];
-	volatile unsigned int etir;
-	volatile unsigned int fsir;
-	volatile unsigned int serconf;
-	volatile unsigned int unused2;
-	volatile unsigned int twsc;
-	volatile unsigned int twadj;
-	volatile unsigned int twtx;
-	volatile unsigned int twrx;
+	volatile uint32_t grr;
+	volatile uint32_t gcr;
+	volatile uint32_t gsr;
+	volatile uint32_t unused[2];
+	volatile uint32_t pfr;
+	volatile uint32_t etcr;
+	volatile uint32_t etfr;
+	volatile uint32_t dcr0;
+	volatile uint32_t dfr0;
+	volatile uint32_t dcr1;
+	volatile uint32_t dfr1;
+	volatile uint32_t dcr2;
+	volatile uint32_t dfr2;
+	volatile uint32_t stcr;
+	volatile uint32_t stfr;
+	volatile uint32_t pdr[8];
+	volatile uint32_t pimsr;
+	volatile uint32_t pimr;
+	volatile uint32_t pisr;
+	volatile uint32_t pir;
+	volatile uint32_t imr;
+	volatile uint32_t picr;
+	volatile uint32_t unused1[2];
+	volatile uint32_t etir;
+	volatile uint32_t fsir;
+	volatile uint32_t serconf;
+	volatile uint32_t unused2;
+	volatile uint32_t twsc;
+	volatile uint32_t twadj;
+	volatile uint32_t twtx;
+	volatile uint32_t twrx;
 };
 
 struct grctm_stats {

@@ -67,15 +67,15 @@
 
 /* Local types */
 typedef struct {
-	volatile unsigned int clockscale;
-	volatile unsigned int ctrl;
-	volatile unsigned int nullwrd;
-	volatile unsigned int sts;
-	volatile unsigned int msk;
-	volatile unsigned int abase;
-	volatile unsigned int bbase;
-	volatile unsigned int td;
-	volatile unsigned int rd;
+	volatile uint32_t clockscale;
+	volatile uint32_t ctrl;
+	volatile uint32_t nullwrd;
+	volatile uint32_t sts;
+	volatile uint32_t msk;
+	volatile uint32_t abase;
+	volatile uint32_t bbase;
+	volatile uint32_t td;
+	volatile uint32_t rd;
 } SLINK_regs;
 
 typedef struct {
@@ -235,7 +235,7 @@ static int SLINK_getsysfreq(void)
 	struct gptimer_regs *tregs;
 		
 	if (ambapp_find_apbslv(ambapp_plb(),VENDOR_GAISLER,GAISLER_GPTIMER,&t)==1) {
-		tregs = (struct gptimer_regs *)t.start;
+		tregs = (struct gptimer_regs *)(uintptr_t)t.start;
 		DBG("SLINK_getsysfreq returning %d\n", 
 		    (tregs->scaler_reload+1)*1000*1000);
 		return (tregs->scaler_reload+1)*1000*1000;
@@ -393,7 +393,7 @@ int SLINK_init(unsigned int nullwrd, int parity, int qsize,
 		DBG("SLINK_init: Could not find core\n");
 		goto slink_initerr2;
 	}
-	cfg->reg = (SLINK_regs*)base;
+	cfg->reg = (SLINK_regs*)(uintptr_t)base;
 
 	/* Allocate status structure and initialize members */
 	if ((cfg->status = grlib_calloc(1, sizeof(*cfg->status))) == NULL) {
@@ -543,8 +543,8 @@ int SLINK_seqstart(int *a, int *b, int n, int channel, int reconly)
 		return -1;
 
 	/* Tell core about arrays */
-	cfg->reg->abase = (int)a;
-	cfg->reg->bbase = (int)b;
+	cfg->reg->abase = (int)(uintptr_t)a;
+	cfg->reg->bbase = (int)(uintptr_t)b;
 	
 	/* As far as software is concerned the sequence is now active */
 	cfg->status->seqstat = SLINK_ACTIVE;
@@ -646,8 +646,8 @@ int SLINK_queuestatus(int iocard)
 	if (ioq->first == ioq->last)
 		return 0;
 
-	first = ((unsigned int)ioq->first)/sizeof(unsigned int);
-	last = ((unsigned int)ioq->last)/sizeof(unsigned int);
+	first = ((unsigned int)(uintptr_t)ioq->first)/sizeof(unsigned int);
+	last = ((unsigned int)(uintptr_t)ioq->last)/sizeof(unsigned int);
 	
 	return first < last ? last - first : ioq->size - first + last; 
 }

@@ -344,7 +344,7 @@ static int spwcuc_init2(struct drvmgr_dev *dev)
 		return -1;
 	}
 	pnpinfo = &ambadev->info;
-	regs = (struct spwcuc_regs *)pnpinfo->apb_slv->start;
+	regs = (struct spwcuc_regs *)(uintptr_t)pnpinfo->apb_slv->start;
 
 	priv->regs = regs;
 

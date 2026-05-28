@@ -198,7 +198,7 @@ static int ambapp_scan2(
   prev = parent;
 
   /* AHB MASTERS */
-  ahb = (struct ambapp_pnp_ahb *) (ioarea | AMBA_CONF_AREA);
+  ahb = (struct ambapp_pnp_ahb *)(uintptr_t)(ioarea | AMBA_CONF_AREA);
   for (i = 0; i < maxloops; i++, ahb++) {
     (*ctx->copy_from_device)(&ahb_buf, ahb, sizeof(struct ambapp_pnp_ahb), abus);
     if (ahb_buf.id == 0)
@@ -221,7 +221,7 @@ static int ambapp_scan2(
   }
 
   /* AHB SLAVES */
-  ahb = (struct ambapp_pnp_ahb *)
+  ahb = (struct ambapp_pnp_ahb *)(uintptr_t)
     (ioarea | AMBA_CONF_AREA | AMBA_AHB_SLAVE_CONF_AREA);
   for (i = 0; i < maxloops; i++, ahb++) {
     (*ctx->copy_from_device)(&ahb_buf, ahb, sizeof(struct ambapp_pnp_ahb), abus);
@@ -272,7 +272,7 @@ static int ambapp_scan2(
       apbbase = ahb_info->start[0];
 
       /* APB SLAVES */
-      apb = (struct ambapp_pnp_apb *)
+      apb = (struct ambapp_pnp_apb *)(uintptr_t)
         (apbbase | AMBA_CONF_AREA);
       for (j=0; j<AMBA_APB_SLAVES; j++, apb++) {
         (*ctx->copy_from_device)(&apb_buf, apb, sizeof(*apb), abus);

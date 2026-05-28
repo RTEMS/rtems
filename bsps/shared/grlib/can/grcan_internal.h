@@ -94,7 +94,7 @@ struct grcan_priv {
 #ifdef GRCAN_REG_BYPASS_CACHE
 #define READ_REG(address) grlib_read_uncached32((unsigned int)(address))
 #else
-#define READ_REG(address) (*(volatile unsigned int *)(address))
+#define READ_REG(address) (*(volatile uint32_t *)(address))
 #endif
 
 #ifdef GRCAN_DMA_BYPASS_CACHE
@@ -103,8 +103,8 @@ struct grcan_priv {
 #define READ_DMA_BYTE(address) grlib_read_uncached8((unsigned int)(address))
 #else
 #define READ_DMA_DOUBLE(address) (*(volatile uint64_t *)(address))
-#define READ_DMA_WORD(address) (*(volatile unsigned int *)(address))
-#define READ_DMA_BYTE(address) (*(volatile unsigned char *)(address))
+#define READ_DMA_WORD(address) (*(volatile uint32_t *)(address))
+#define READ_DMA_BYTE(address) (*(volatile uint8_t *)(address))
 #endif
 
 extern int state2err[4];

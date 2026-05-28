@@ -166,9 +166,9 @@ STATIC int memscrub_init(struct memscrub_priv *priv)
 
 	/* Find MEMSCRUB core from Plug&Play information */
 	ahb = ainfo->info.ahb_slv;
-	priv->regs = (struct memscrub_regs *)ahb->start[0];
+	priv->regs = (struct memscrub_regs *)(uintptr_t)ahb->start[0];
 
-	DBG("MEMSCRUB regs 0x%08x\n", (unsigned int) priv->regs);
+	DBG("MEMSCRUB regs 0x%08x\n", (uint32_t)(uintptr_t) priv->regs);
 
 	/* Find MEMSCRUB capabilities */
 	tmp = REG_READ(&priv->regs->status);

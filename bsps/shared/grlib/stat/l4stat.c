@@ -48,8 +48,8 @@
 #define DBG(x...) 
 #endif
 
-#define REG_WRITE(addr, val) (*(volatile unsigned int *)(addr) = (unsigned int)(val))
-#define REG_READ(addr) (*(volatile unsigned int *)(addr))
+#define REG_WRITE(addr, val) (*(volatile uint32_t *)(addr) = (unsigned int)(val))
+#define REG_READ(addr) (*(volatile uint32_t *)(addr))
 
 
 /*
@@ -317,7 +317,7 @@ STATIC int l4stat_init(struct l4stat_priv *priv)
 	}
 
 	/* Found L4STAT core, init private structure */
-	priv->regs = (struct l4stat_regs *)apb->start;
+	priv->regs = (struct l4stat_regs *)(uintptr_t)apb->start;
 
 	DBG("L4STAT regs 0x%08x\n", (unsigned int) priv->regs);
 

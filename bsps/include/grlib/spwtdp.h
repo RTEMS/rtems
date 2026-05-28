@@ -46,37 +46,37 @@ extern "C" {
 
 /* SPWTDP Register layout */
 struct spwtdp_regs {
-	volatile unsigned int conf[4];       /* 0x000-0x00C */
-	volatile unsigned int stat[4];       /* 0x010-0x01C */
-	volatile unsigned int cmd_ctrl;      /* 0x020 */
-	volatile unsigned int cmd_et[5];     /* 0x024-0x034 */
-	volatile unsigned int resv1[2];      /* 0x038-0x03C */
-	volatile unsigned int dat_ctrl;      /* 0x040 */
-	volatile unsigned int dat_et[5];     /* 0x044-0x054 */
-	volatile unsigned int resv2[2];      /* 0x058-0x05C */
-	volatile unsigned int ts_rx_ctrl;    /* 0x060 */
-	volatile unsigned int ts_rx_et[5];   /* 0x064-0x074 */
-	volatile unsigned int resv3[2];      /* 0x078-0x07C */
-	volatile unsigned int ts_tx_ctrl;    /* 0x080 */
-	volatile unsigned int ts_tx_et[5];   /* 0x084-0x094 */
-	volatile unsigned int resv4[2];      /* 0x098 */
-	volatile unsigned int lat_ctrl;      /* 0x0A0 */
-	volatile unsigned int lat_et[5];     /* 0x0A4-0x0B4 */
-	volatile unsigned int resv5[2];      /* 0x0B8-0x0BC */
-	volatile unsigned int ien;           /* 0x0C0 */
-	volatile unsigned int ists;          /* 0x0C4 */
-	volatile unsigned int dlycnt;        /* 0x0C8 */
-	volatile unsigned int dissync;       /* 0x0CC */
-	volatile unsigned int resv6[12];     /* 0x0D0-0x0FC */
-	volatile unsigned int edmask[4];     /* 0x100-0x10C */
+	volatile uint32_t conf[4];       /* 0x000-0x00C */
+	volatile uint32_t stat[4];       /* 0x010-0x01C */
+	volatile uint32_t cmd_ctrl;      /* 0x020 */
+	volatile uint32_t cmd_et[5];     /* 0x024-0x034 */
+	volatile uint32_t resv1[2];      /* 0x038-0x03C */
+	volatile uint32_t dat_ctrl;      /* 0x040 */
+	volatile uint32_t dat_et[5];     /* 0x044-0x054 */
+	volatile uint32_t resv2[2];      /* 0x058-0x05C */
+	volatile uint32_t ts_rx_ctrl;    /* 0x060 */
+	volatile uint32_t ts_rx_et[5];   /* 0x064-0x074 */
+	volatile uint32_t resv3[2];      /* 0x078-0x07C */
+	volatile uint32_t ts_tx_ctrl;    /* 0x080 */
+	volatile uint32_t ts_tx_et[5];   /* 0x084-0x094 */
+	volatile uint32_t resv4[2];      /* 0x098 */
+	volatile uint32_t lat_ctrl;      /* 0x0A0 */
+	volatile uint32_t lat_et[5];     /* 0x0A4-0x0B4 */
+	volatile uint32_t resv5[2];      /* 0x0B8-0x0BC */
+	volatile uint32_t ien;           /* 0x0C0 */
+	volatile uint32_t ists;          /* 0x0C4 */
+	volatile uint32_t dlycnt;        /* 0x0C8 */
+	volatile uint32_t dissync;       /* 0x0CC */
+	volatile uint32_t resv6[12];     /* 0x0D0-0x0FC */
+	volatile uint32_t edmask[4];     /* 0x100-0x10C */
 	struct {
-		volatile unsigned int ctrl;          /* 0x110, 0x130, 0x150, 0x170 */
-		volatile unsigned int et[5];         /* 0x114-0x124, 0x134-0x144, 0x154-0x164, 0x174-0x184,  */
-		volatile unsigned int resv0[2];      /* 0x128-0x12C, 0x148-0x14C, 0x168-0x16C, 0x188-0x18C,  */
+		volatile uint32_t ctrl;          /* 0x110, 0x130, 0x150, 0x170 */
+		volatile uint32_t et[5];         /* 0x114-0x124, 0x134-0x144, 0x154-0x164, 0x174-0x184,  */
+		volatile uint32_t resv0[2];      /* 0x128-0x12C, 0x148-0x14C, 0x168-0x16C, 0x188-0x18C,  */
 	} edat[4];                           /* 0x110-0x18C */
-	volatile unsigned int resv7[4];      /* 0x190-0x19C */
-	volatile unsigned int pulse[8];      /* 0x1A0-0x1BC */
-	volatile unsigned int resv8[16];     /* 0x1C0-0x1FC */
+	volatile uint32_t resv7[4];      /* 0x190-0x19C */
+	volatile uint32_t pulse[8];      /* 0x1A0-0x1BC */
+	volatile uint32_t resv8[16];     /* 0x1C0-0x1FC */
 };
 
 /*

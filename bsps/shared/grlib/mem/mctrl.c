@@ -141,7 +141,7 @@ static int mctrl_init1(struct drvmgr_dev *dev)
 		/* LEON2 PnP systems are missing the APB interface */
 		priv->regs = (void *)0x80000000;
 	} else {
-		priv->regs = (void *)pnpinfo->apb_slv->start;
+		priv->regs = (void *)(uintptr_t)pnpinfo->apb_slv->start;
 	}
 
 	/* Depending on Hardware selection write/read routines */
@@ -206,7 +206,7 @@ static int mctrl_init1(struct drvmgr_dev *dev)
 				if ( length > 0 ) {
 					DBG("MCTRL: Washing 0x%08x-0x%08x\n", start, start+length-1);
 
-					MEMSET(priv, (void *)start, 0, length);
+					MEMSET(priv, (uintptr_t)start, 0, length);
 				}
 			}
 		}

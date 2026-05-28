@@ -56,7 +56,7 @@
 #ifdef DEBUG
 #define DBG(x...) printf(x)
 #else
-#define DBG(x...) 
+#define DBG(x...)
 #endif
 
 #define BD_CHAN_EN (1<<BD_CHAN_EN_BIT)
@@ -111,34 +111,34 @@
 /* GRPCI2 DMA does not allow transfer of more than 0x10000 words */
 #define MAX_DMA_TRANSFER_SIZE (0x10000*4)
 
-/* We use the following limits as default */ 
+/* We use the following limits as default */
 #define MAX_DMA_DATA 128
 
 /* Memory and HW Registers Access routines. All 32-bit access routines */
-#define BD_WRITE(addr, val) (*(volatile unsigned int *)(addr) = (unsigned int)(val))
-/*#define BD_READ(addr) (*(volatile unsigned int *)(addr))*/
-#define BD_READ(addr) grlib_read_uncached32((unsigned long)(addr))
-#define REG_WRITE(addr, val) (*(volatile unsigned int *)(addr) = (unsigned int)(val))
-#define REG_READ(addr) (*(volatile unsigned int *)(addr))
+#define BD_WRITE(addr, val) (*(volatile uint32_t *)(uintptr_t)(addr) = (uint32_t)(val))
+/*#define BD_READ(addr) (*(volatile uint32_t *)(addr))*/
+#define BD_READ(addr) grlib_read_uncached32((uintptr_t)(addr))
+#define REG_WRITE(addr, val) (*(volatile uint32_t *)(uintptr_t)(addr) = (uint32_t)(val))
+#define REG_READ(addr) (*(volatile uint32_t *)(uintptr_t)(addr))
 
 /*
  * GRPCI2 DMA Channel descriptor
  */
 struct grpci2_bd_chan {
-	volatile unsigned int ctrl;	/* 0x00 DMA Control */
-	volatile unsigned int nchan;	/* 0x04 Next DMA Channel Address */
-	volatile unsigned int nbd;	/* 0x08 Next Data Descriptor in channel */
-	volatile unsigned int res;	/* 0x0C Reserved */
+	volatile uint32_t ctrl;	/* 0x00 DMA Control */
+	volatile uint32_t nchan;	/* 0x04 Next DMA Channel Address */
+	volatile uint32_t nbd;	/* 0x08 Next Data Descriptor in channel */
+	volatile uint32_t res;	/* 0x0C Reserved */
 };
 
 /*
  * GRPCI2 DMA Data descriptor
  */
 struct grpci2_bd_data {
-	volatile unsigned int ctrl;	/* 0x00 DMA Data Control */
-	volatile unsigned int pci_adr;	/* 0x04 PCI Start Address */
-	volatile unsigned int ahb_adr;	/* 0x08 AHB Start address */
-	volatile unsigned int next;	/* 0x0C Next Data Descriptor in channel */
+	volatile uint32_t ctrl;	/* 0x00 DMA Data Control */
+	volatile uint32_t pci_adr;	/* 0x04 PCI Start Address */
+	volatile uint32_t ahb_adr;	/* 0x08 AHB Start address */
+	volatile uint32_t next;	/* 0x0C Next Data Descriptor in channel */
 };
 
 
@@ -146,9 +146,9 @@ struct grpci2_bd_data {
  * GRPCI2 DMA APB Register MAP
  */
 struct grpci2dma_regs {
-	volatile unsigned int dma_ctrl;		/* 0x00 */
-	volatile unsigned int dma_bdbase;	/* 0x04 */
-	volatile unsigned int dma_chact;	/* 0x08 */
+	volatile uint32_t dma_ctrl;		/* 0x00 */
+	volatile uint32_t dma_bdbase;	/* 0x04 */
+	volatile uint32_t dma_chact;	/* 0x08 */
 };
 
 #define DEVNAME_LEN 11
@@ -162,7 +162,7 @@ struct grpci2dma_priv {
 
 	/* Channel info */
 	struct {
-		/* Channel pointer. Indicates the assigned channel 
+		/* Channel pointer. Indicates the assigned channel
 		 * for a given cid (used as index). NULL if not assigned.
 		 */
 		struct grpci2_bd_chan * ptr;
@@ -174,7 +174,7 @@ struct grpci2dma_priv {
 		struct grpci2_bd_data * lastdata;
 		/* Is this channel active */
 		int active;
-		/* Interrupt-code Handling 
+		/* Interrupt-code Handling
 		 * - isr: Holds the ISR for each channel
 		 * - isr_arg: Holds the ISR arg for each channel
 		 */
@@ -191,7 +191,7 @@ struct grpci2dma_priv {
 	/* Indicates the number of active channels. */
 	int nactive;
 
-	/* Indicates if the number of DMA ISR that have been registered 
+	/* Indicates if the number of DMA ISR that have been registered
 	 * into the GRPCI2 DRIVER */
 	int isr_registered;
 
@@ -206,19 +206,19 @@ struct grpci2dma_priv {
 rtems_id grpci2dma_sem;
 
 /*
- * GRPCI2 DMA internal prototypes 
+ * GRPCI2 DMA internal prototypes
  */
 /* -Descriptor linked-list functions*/
-STATIC int grpci2dma_channel_list_add(struct grpci2_bd_chan * list, 
+STATIC int grpci2dma_channel_list_add(struct grpci2_bd_chan * list,
 		struct grpci2_bd_chan * chan);
 STATIC int grpci2dma_channel_list_remove(struct grpci2_bd_chan * chan);
-STATIC int grpci2dma_data_list_add(struct grpci2_bd_chan * chan, 
+STATIC int grpci2dma_data_list_add(struct grpci2_bd_chan * chan,
 		struct grpci2_bd_data * data, struct grpci2_bd_data * last_chan_data);
-STATIC int grpci2dma_data_list_remove(struct grpci2_bd_chan * chan, 
+STATIC int grpci2dma_data_list_remove(struct grpci2_bd_chan * chan,
 		struct grpci2_bd_data * data);
-STATIC int grpci2dma_channel_list_foreach(struct grpci2_bd_chan * chan, 
+STATIC int grpci2dma_channel_list_foreach(struct grpci2_bd_chan * chan,
 		int func( struct grpci2_bd_chan * chan), int maxindex);
-STATIC int grpci2dma_data_list_foreach(struct grpci2_bd_data * data, 
+STATIC int grpci2dma_data_list_foreach(struct grpci2_bd_data * data,
 		int func( struct grpci2_bd_data * data), int maxindex);
 
 /* -DMA ctrl access functions */
@@ -237,13 +237,13 @@ STATIC INLINE int grpci2dma_ctrl_interrupt_clear(void);
 
 /* -Descriptor access functions */
 STATIC int grpci2dma_channel_bd_init(struct grpci2_bd_chan * chan);
-STATIC int grpci2dma_data_bd_init(struct grpci2_bd_data * data, 
-		uint32_t pci_adr, uint32_t ahb_adr, int dir, int endianness, 
+STATIC int grpci2dma_data_bd_init(struct grpci2_bd_data * data,
+		uint32_t pci_adr, uint32_t ahb_adr, int dir, int endianness,
 		int size, struct grpci2_bd_data * next);
-STATIC int grpci2dma_channel_bd_enable(struct grpci2_bd_chan * chan, 
+STATIC int grpci2dma_channel_bd_enable(struct grpci2_bd_chan * chan,
 		unsigned int options);
 STATIC int grpci2dma_channel_bd_disable(struct grpci2_bd_chan * chan);
-STATIC void grpci2dma_channel_bd_set_cid(struct grpci2_bd_chan * chan, 
+STATIC void grpci2dma_channel_bd_set_cid(struct grpci2_bd_chan * chan,
 		int cid);
 STATIC int grpci2dma_channel_bd_get_cid(struct grpci2_bd_chan * chan);
 STATIC int grpci2dma_data_bd_status(struct grpci2_bd_data *data);
@@ -251,15 +251,15 @@ STATIC int grpci2dma_data_bd_disable(struct grpci2_bd_data *desc);
 STATIC int grpci2dma_data_bd_interrupt_enable(struct grpci2_bd_data * data);
 STATIC struct grpci2_bd_data * grpci2dma_channel_bd_get_data(
 		struct grpci2_bd_chan * chan);
-STATIC void grpci2dma_channel_bd_set_data(struct grpci2_bd_chan * chan, 
+STATIC void grpci2dma_channel_bd_set_data(struct grpci2_bd_chan * chan,
 		struct grpci2_bd_data * data);
 STATIC struct grpci2_bd_chan * grpci2dma_channel_bd_get_next(
 		struct grpci2_bd_chan * chan);
 STATIC struct grpci2_bd_data * grpci2dma_data_bd_get_next(
 		struct grpci2_bd_data * data);
-STATIC void grpci2dma_channel_bd_set_next(struct grpci2_bd_chan * chan, 
+STATIC void grpci2dma_channel_bd_set_next(struct grpci2_bd_chan * chan,
 		struct grpci2_bd_chan * next);
-STATIC void grpci2dma_data_bd_set_next(struct grpci2_bd_data * data, 
+STATIC void grpci2dma_data_bd_set_next(struct grpci2_bd_data * data,
 		struct grpci2_bd_data * next);
 
 /* -Channel functions */
@@ -268,7 +268,7 @@ STATIC int grpci2dma_channel_free_id(void);
 STATIC struct grpci2_bd_chan * grpci2dma_channel_get_active_list(void);
 STATIC int grpci2dma_channel_start(int chan_no, int options);
 STATIC int grpci2dma_channel_stop(int chan_no);
-STATIC int grpci2dma_channel_push(int chan_no, void *dataptr, int index, 
+STATIC int grpci2dma_channel_push(int chan_no, void *dataptr, int index,
 		int ndata);
 STATIC int grpci2dma_channel_close(int chan_no);
 STATIC int grpci2dma_channel_isr_unregister(int chan_no);
@@ -277,7 +277,7 @@ STATIC int grpci2dma_channel_isr_unregister(int chan_no);
 STATIC void grpci2dma_isr(void *arg);
 
 /* -Init function called by GRPCI2*/
-int grpci2dma_init(void * regs, 
+int grpci2dma_init(void * regs,
 		void isr_register( void (*isr)(void*), void * arg));
 
 
@@ -302,11 +302,11 @@ static ALIGNED struct grpci2_bd_data disabled_data = {
 
 /*** START OF DESCRIPTOR LINKED-LIST HELPER FUNCTIONS ***/
 
-/* This functions adds a channel descriptor to the DMA channel 
- * linked list. It assumes that someone has check the input 
+/* This functions adds a channel descriptor to the DMA channel
+ * linked list. It assumes that someone has check the input
  * parameters already.
  */
-STATIC int grpci2dma_channel_list_add(struct grpci2_bd_chan * list, 
+STATIC int grpci2dma_channel_list_add(struct grpci2_bd_chan * list,
 		struct grpci2_bd_chan * chan)
 {
 	DBG("Adding channel (0x%08x) to GRPCI2 DMA driver\n", (unsigned int) chan);
@@ -326,8 +326,8 @@ STATIC int grpci2dma_channel_list_add(struct grpci2_bd_chan * list,
 	}
 }
 
-/* This functions removes a channel descriptor from the DMA channel 
- * linked list. It assumes that someone has check the input 
+/* This functions removes a channel descriptor from the DMA channel
+ * linked list. It assumes that someone has check the input
  * parameters already.
  * It returns 0 if successfull. Otherwise,
  * it can return:
@@ -343,12 +343,12 @@ STATIC int grpci2dma_channel_list_remove(struct grpci2_bd_chan * chan)
 	struct grpci2_bd_chan * nchan = grpci2dma_channel_bd_get_next(chan);
 	if (nchan != chan){
 		/* There are more channels */
-		/* Since this is a circular linked list, we need to find last channel 
+		/* Since this is a circular linked list, we need to find last channel
 		 * and update the pointer to the next element */
-		/* Use index to avoid having an infinite loop in case of corrupted 
+		/* Use index to avoid having an infinite loop in case of corrupted
 		 * channels */
 		struct grpci2_bd_chan * new_first_chan = nchan;
-		struct grpci2_bd_chan * curr_chan;
+		struct grpci2_bd_chan * curr_chan = NULL;
 		int i=1;
 		while((nchan != chan) && (i<MAX_DMA_CHANS)){
 			curr_chan = nchan;
@@ -369,20 +369,20 @@ STATIC int grpci2dma_channel_list_remove(struct grpci2_bd_chan * chan)
 	}
 }
 
-/* This functions adds a data descriptor to the channel's data 
+/* This functions adds a data descriptor to the channel's data
  * linked list. The function assumes, that the data descriptor
  * points to either a DISABLED_DESCRIPTOR or to linked list of
- * data descriptors that ends with a DISABLED_DESCRIPTOR. 
+ * data descriptors that ends with a DISABLED_DESCRIPTOR.
  * It returns the number of active data descriptors
  * if successfull. Otherwise, it can return:
  * - ERROR: Different causes:
  *	  x Number of channels is corrupted.
  *	  x Last linked list element is not pointing to the first.
  */
-STATIC int grpci2dma_data_list_add(struct grpci2_bd_chan * chan, 
+STATIC int grpci2dma_data_list_add(struct grpci2_bd_chan * chan,
 		struct grpci2_bd_data * data, struct grpci2_bd_data * last_chan_data)
 {
-	DBG("Adding data (0x%08x) to channel (0x%08x)\n", 
+	DBG("Adding data (0x%08x) to channel (0x%08x)\n",
 			(unsigned int) data, (unsigned int) chan);
 
 	/* Add data to the linnked list */
@@ -410,10 +410,10 @@ STATIC int grpci2dma_data_list_add(struct grpci2_bd_chan * chan,
 	}
 }
 
-/* This functions removes a data descriptor from the channel's data 
- * linked list. Note that in a normal execution, the DMA will remove 
+/* This functions removes a data descriptor from the channel's data
+ * linked list. Note that in a normal execution, the DMA will remove
  * the data descriptors from the linked list, so there is no need to
- * use this function. It returns 0 if successfull. Otherwise, 
+ * use this function. It returns 0 if successfull. Otherwise,
  * it can return:
  * - WRONGPTR: The chan (or data) pointer is either NULL or not aligned to
  *	 0x10.
@@ -424,10 +424,10 @@ STATIC int grpci2dma_data_list_add(struct grpci2_bd_chan * chan,
  *	  x Number of channels is corrupted.
  *	  x Last linked list element is not pointing to the first.
  */
-UNUSED STATIC int grpci2dma_data_list_remove(struct grpci2_bd_chan * chan, 
+UNUSED STATIC int grpci2dma_data_list_remove(struct grpci2_bd_chan * chan,
 		struct grpci2_bd_data * data)
 {
-	DBG("Removing data (0x%08x) from channel (0x%08x)\n", 
+	DBG("Removing data (0x%08x) from channel (0x%08x)\n",
 			(unsigned int) data, (unsigned int) chan);
 
 	/* Remove data from the linked list */
@@ -466,7 +466,7 @@ UNUSED STATIC int grpci2dma_data_list_remove(struct grpci2_bd_chan * chan,
 			/* It is not the first data. Let's find it */
 			struct grpci2_bd_data * current = first_data;
 			struct grpci2_bd_data * next = grpci2dma_data_bd_get_next(current);
-			while( (next != data) && (next != DISABLED_DESCRIPTOR) && 
+			while( (next != data) && (next != DISABLED_DESCRIPTOR) &&
 					(next != NULL)){
 				current = next;
 				next = grpci2dma_data_bd_get_next(current);
@@ -486,10 +486,10 @@ UNUSED STATIC int grpci2dma_data_list_remove(struct grpci2_bd_chan * chan,
 	}
 }
 
-/* Iterate through all channel starting in FIRST_CHAN up to MAXINDEX 
+/* Iterate through all channel starting in FIRST_CHAN up to MAXINDEX
  * and execute FUNC*/
 UNUSED STATIC int grpci2dma_channel_list_foreach(
-		struct grpci2_bd_chan * first_chan, 
+		struct grpci2_bd_chan * first_chan,
 		int func( struct grpci2_bd_chan * chan), int maxindex)
 {
 	if (maxindex <= 0) return 0;
@@ -520,16 +520,16 @@ UNUSED STATIC int grpci2dma_channel_list_foreach(
 	return 0;
 }
 
-/* Iterate through all data starting in FIRST_DATA up to MAXINDEX 
+/* Iterate through all data starting in FIRST_DATA up to MAXINDEX
  * and execute FUNC*/
-STATIC int grpci2dma_data_list_foreach(struct grpci2_bd_data * first_data, 
+STATIC int grpci2dma_data_list_foreach(struct grpci2_bd_data * first_data,
 		int func( struct grpci2_bd_data * data), int maxindex)
 {
 	if (maxindex <= 0) return 0;
 	if (first_data == NULL) return GRPCI2DMA_ERR_WRONGPTR;
 	/* Available data */
 	/* Iterate through next data */
-	/* Use index to avoid having an infinite loop in case of corrupted 
+	/* Use index to avoid having an infinite loop in case of corrupted
 	 * channels */
 	int i=0;
 	int ret;
@@ -591,7 +591,7 @@ STATIC INLINE int grpci2dma_ctrl_start( struct grpci2_bd_chan * chan)
 	struct grpci2dma_priv *priv = grpci2dmapriv;
 
 	/* Set BDBASE to linked list of chans */
-	REG_WRITE(&priv->regs->dma_bdbase, (unsigned int) chan);
+	REG_WRITE(&priv->regs->dma_bdbase, (uintptr_t)chan);
 
 	/* Start DMA */
 	unsigned int ctrl = REG_READ(&priv->regs->dma_ctrl);
@@ -720,7 +720,7 @@ STATIC INLINE int grpci2dma_ctrl_numch_set(int numch)
 
 /*** START OF DESCRIPTOR ACCESS FUNCTIONS ***/
 
-STATIC int grpci2dma_data_bd_init(struct grpci2_bd_data * data, 
+STATIC int grpci2dma_data_bd_init(struct grpci2_bd_data * data,
 		uint32_t pci_adr, uint32_t ahb_adr, int dir, int endianness, int size,
 		struct grpci2_bd_data * next)
 {
@@ -733,29 +733,29 @@ STATIC int grpci2dma_data_bd_init(struct grpci2_bd_data * data,
 			);
 	BD_WRITE(&data->pci_adr, pci_adr);
 	BD_WRITE(&data->ahb_adr, ahb_adr);
-	BD_WRITE(&data->next, (unsigned int) next);
+	BD_WRITE(&data->next, (uintptr_t)next);
 	return 0;
 }
 
 STATIC int grpci2dma_channel_bd_init(struct grpci2_bd_chan * chan)
 {
 	BD_WRITE(&chan->ctrl, 0 | BD_CHAN_TYPE_DMA | BD_CHAN_EN);
-	BD_WRITE(&chan->nchan, (unsigned int) chan);
-	BD_WRITE(&chan->nbd, (unsigned int) DISABLED_DESCRIPTOR);
+	BD_WRITE(&chan->nchan, (uintptr_t)chan);
+	BD_WRITE(&chan->nbd, (uintptr_t)DISABLED_DESCRIPTOR);
 	return 0;
 }
 
 /* Enable a channel with options.
  * options include:
- * - options & 0xFFFF: Maximum data descriptor count before 
+ * - options & 0xFFFF: Maximum data descriptor count before
  *	 moving to next DMA channel.
  */
-STATIC int grpci2dma_channel_bd_enable(struct grpci2_bd_chan * chan, 
+STATIC int grpci2dma_channel_bd_enable(struct grpci2_bd_chan * chan,
 		unsigned int options)
 {
 	unsigned int ctrl = BD_READ(&chan->ctrl);
 	ctrl = (ctrl & ~(BD_CHAN_BDCNT));
-	BD_WRITE(&chan->ctrl, (ctrl | BD_CHAN_EN | 
+	BD_WRITE(&chan->ctrl, (ctrl | BD_CHAN_EN |
 				( (options << BD_CHAN_BDCNT_BIT) & BD_CHAN_BDCNT)));
 	return 0;
 }
@@ -822,42 +822,42 @@ STATIC int grpci2dma_data_bd_interrupt_enable(struct grpci2_bd_data * data)
 STATIC struct grpci2_bd_data * grpci2dma_channel_bd_get_data(
 		struct grpci2_bd_chan * chan)
 {
-	return	(struct grpci2_bd_data *) BD_READ(&chan->nbd);
+	return	(struct grpci2_bd_data *)(uintptr_t)BD_READ(&chan->nbd);
 }
 
 /* Set data descriptorl */
-STATIC void grpci2dma_channel_bd_set_data(struct grpci2_bd_chan * chan, 
+STATIC void grpci2dma_channel_bd_set_data(struct grpci2_bd_chan * chan,
 		struct grpci2_bd_data * data)
 {
-	BD_WRITE(&chan->nbd, (unsigned int) data);
+	BD_WRITE(&chan->nbd, (uintptr_t)data);
 }
 
 /* Get next channel */
 STATIC struct grpci2_bd_chan * grpci2dma_channel_bd_get_next(
 		struct grpci2_bd_chan * chan)
 {
-	return	(struct grpci2_bd_chan *) BD_READ(&chan->nchan);
+	return	(struct grpci2_bd_chan *)(uintptr_t)BD_READ(&chan->nchan);
 }
 
 /* Get next data */
 STATIC struct grpci2_bd_data * grpci2dma_data_bd_get_next(
 		struct grpci2_bd_data * data)
 {
-	return	(struct grpci2_bd_data *) BD_READ(&data->next);
+	return	(struct grpci2_bd_data *)(uintptr_t)BD_READ(&data->next);
 }
 
 /* Set next channel */
-STATIC void grpci2dma_channel_bd_set_next(struct grpci2_bd_chan * chan, 
+STATIC void grpci2dma_channel_bd_set_next(struct grpci2_bd_chan * chan,
 		struct grpci2_bd_chan * next)
 {
-	BD_WRITE(&chan->nchan,(unsigned int) next);
+	BD_WRITE(&chan->nchan, (uintptr_t)next);
 }
 
 /* Set next data */
-STATIC void grpci2dma_data_bd_set_next(struct grpci2_bd_data * data, 
+STATIC void grpci2dma_data_bd_set_next(struct grpci2_bd_data * data,
 		struct grpci2_bd_data * next)
 {
-	BD_WRITE(&data->next,(unsigned int) next);
+	BD_WRITE(&data->next, (uintptr_t)next);
 }
 
 /*** END OF DESCRIPTOR ACCESS FUNCTIONS ***/
@@ -965,7 +965,7 @@ STATIC int grpci2dma_channel_start(int chan_no, int options)
 
 	/* Start the channel by enabling it.
 	 * HWNOTE: In GRPCI2 this bit does not work as it is supposed.
-	 * So we better add/remove the channel from the active linked 
+	 * So we better add/remove the channel from the active linked
 	 * list. */
 	grpci2dma_channel_bd_enable(chan, desccnt);
 	priv->channel[chan_no].active = 1;
@@ -1027,7 +1027,7 @@ STATIC int grpci2dma_channel_stop(int chan_no)
 	 * channel is the active */
 	resume = 0;
 	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
-	if (grpci2dma_active() && (grpci2dma_ctrl_active() == (unsigned int)chan)){
+	if (grpci2dma_active() && (grpci2dma_ctrl_active() == (uintptr_t)chan)){
 		/* We need to stop the DMA */
 		grpci2dma_ctrl_stop();
 		SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
@@ -1040,16 +1040,16 @@ STATIC int grpci2dma_channel_stop(int chan_no)
 	}
 
 
-	/* Now either the DMA is stopped, or it is processing 
+	/* Now either the DMA is stopped, or it is processing
 	 * a different channel and the removed channel is no
 	 * longer in the linked list */
 
 	/* Now is safe to update the removed channel */
 	grpci2dma_channel_bd_set_next(chan, chan);
 
-	/* Stop the channel by disabling it. 
+	/* Stop the channel by disabling it.
 	 * HWNOTE: In GRPCI2 this bit does not work as it is supposed.
-	 * So we better remove the channel from the active linked 
+	 * So we better remove the channel from the active linked
 	 * list. */
 	grpci2dma_channel_bd_disable(chan);
 
@@ -1067,7 +1067,7 @@ STATIC int grpci2dma_channel_stop(int chan_no)
 		/* We have two options, either we stopped when the active
 		 * channel was still the active one, or we stopped when
 		 * the active channel was a different one */
-		if (grpci2dma_ctrl_active() == (unsigned int) chan){
+		if (grpci2dma_ctrl_active() == (uintptr_t)chan){
 			/* In this case, we need to start the DMA with
 			 * any active channel on the list */
 			int i;
@@ -1079,10 +1079,10 @@ STATIC int grpci2dma_channel_stop(int chan_no)
 			}
 		}else{
 			/* In this case, we need to resume the DMA operation */
-			/* HWNOTE: The GRPCI2 core does not update the channel next 
+			/* HWNOTE: The GRPCI2 core does not update the channel next
 			 * data descriptor if we stopped a channel. This means that
 			 * we need to resume the DMA from the descriptor is was,
-			 * by only setting the enable bit, and not changing the 
+			 * by only setting the enable bit, and not changing the
 			 * base register */
 			grpci2dma_ctrl_resume();
 		}
@@ -1203,16 +1203,16 @@ STATIC void grpci2dma_isr(void *arg)
 		/* Find which channels had the error.
 		 * The GRPCI2DMA core does not indicate which channel
 		 * had the error, so we need to get 1st the base descriptor register
-		 * and see if it a channel. If is not a channel, then the active 
+		 * and see if it a channel. If is not a channel, then the active
 		 * channel register tells us which channel is.
 		 * After having the channel we need to find out which channel was. */
 		struct grpci2_bd_chan * chan =
-			(struct grpci2_bd_chan *) grpci2dma_ctrl_base();
+			(struct grpci2_bd_chan *)(uintptr_t)grpci2dma_ctrl_base();
 		/* Check if the base is a channel descriptor */
 		if ((BD_READ(&chan->ctrl) & BD_CHAN_TYPE) != BD_CHAN_TYPE_DMA){
-			/* Is not a channel, so the channel is in the channel active 
+			/* Is not a channel, so the channel is in the channel active
 			 * register */
-			chan = (struct grpci2_bd_chan *) grpci2dma_ctrl_active();
+			chan = (struct grpci2_bd_chan *)(uintptr_t)grpci2dma_ctrl_active();
 		}
 		int i;
 		for (i=0; i<MAX_DMA_CHANS; i++){
@@ -1261,7 +1261,7 @@ STATIC int grpci2dma_channel_print(struct grpci2_bd_chan * chan)
 	printf("	  0x%08x  DMA channel control					  0x%08x\n", (unsigned int) chan, chan->ctrl);
 	printf("	  31	 en				   0x%01x		  Channel descriptor enable.\n", (chan->ctrl >> 31) & (0x1));
 	printf("	  24:22  cid			   0x%01x		  Channel ID.\n", (chan->ctrl >> 22) & (0x7));
-	printf("	  21:20  type			   0x%01x		  Descriptor type. 01=DMA channel descriptor.\n", (chan->ctrl >> 20) & (0x3)); 
+	printf("	  21:20  type			   0x%01x		  Descriptor type. 01=DMA channel descriptor.\n", (chan->ctrl >> 20) & (0x3));
 	printf("	  15:0	 dlen			0x%04x		   Data descriptor count.\n", (chan->ctrl >> 0) & (0xffff));
 	printf("\n");
 	printf("	  0x%08x  Next DMA channel						  0x%08x\n", (unsigned int) &(chan->nchan), chan->nchan);
@@ -1310,7 +1310,7 @@ void * grpci2dma_channel_new(int number)
 
 	/* Get the aligned pointer */
 	unsigned int aligned_ptr = (
-		((unsigned int) orig_ptr + GRPCI2DMA_BD_CHAN_ALIGN) &
+		((uintptr_t)orig_ptr + GRPCI2DMA_BD_CHAN_ALIGN) &
 		 ~(GRPCI2DMA_BD_CHAN_ALIGN - 1));
 
 	/* Save the original pointer just before the aligned pointer */
@@ -1319,7 +1319,7 @@ void * grpci2dma_channel_new(int number)
 	*tmp_ptr= orig_ptr;
 
 	/* Return aligned pointer */
-	return (void *) aligned_ptr;
+	return (void *)(uintptr_t)aligned_ptr;
 }
 
 void grpci2dma_channel_delete(void * chan)
@@ -1342,16 +1342,16 @@ void * grpci2dma_data_new(int number)
 
 	/* Get the aligned pointer */
 	unsigned int aligned_ptr = (
-		((unsigned int) orig_ptr + GRPCI2DMA_BD_DATA_ALIGN) & 
+		((uintptr_t) orig_ptr + GRPCI2DMA_BD_DATA_ALIGN) &
 		~(GRPCI2DMA_BD_DATA_ALIGN - 1));
 
 	/* Save the original pointer before the aligned pointer */
-	unsigned int ** tmp_ptr = 
+	unsigned int ** tmp_ptr =
 		(unsigned int **) (aligned_ptr - sizeof(orig_ptr));
 	*tmp_ptr= orig_ptr;
 
 	/* Return aligned pointer */
-	return (void *) aligned_ptr;
+	return (void *)(uintptr_t)aligned_ptr;
 }
 
 void grpci2dma_data_delete(void * data)
@@ -1558,7 +1558,7 @@ int grpci2dma_open(void * chanptr)
 	}
 
 	/* Check alignment */
-	if (((unsigned int ) chanptr) & (GRPCI2DMA_BD_CHAN_ALIGN-1)) {
+	if (((uintptr_t)chanptr) & (GRPCI2DMA_BD_CHAN_ALIGN-1)) {
 		/* Channel is not properly aligned */
 		return GRPCI2DMA_ERR_WRONGPTR;
 	}
@@ -1643,7 +1643,7 @@ int grpci2dma_close(int chan_no)
 
 	/* Delete channel semaphore */
 	if (ret == GRPCI2DMA_ERR_OK){
-		if (rtems_semaphore_delete(priv->channel[chan_no].sem) 
+		if (rtems_semaphore_delete(priv->channel[chan_no].sem)
 				!= RTEMS_SUCCESSFUL){
 			/* Release driver semaphore */
 			rtems_semaphore_release(grpci2dma_sem);
@@ -1665,8 +1665,8 @@ int grpci2dma_prepare(
 	struct grpci2_bd_data * data = dataptr;
 
 	/* Check data pointer */
-	if ((data == NULL) || 
-			(((unsigned int ) data) & (GRPCI2DMA_BD_DATA_ALIGN-1))){
+	if ((data == NULL) ||
+			(((uintptr_t)data) & (GRPCI2DMA_BD_DATA_ALIGN-1))){
 		return GRPCI2DMA_ERR_WRONGPTR;
 	}
 
@@ -1678,8 +1678,8 @@ int grpci2dma_prepare(
 	}
 
 	/* Check PCI transfer size */
-	if ( (transfer_size < 0) || 
-			(transfer_size > MAX_DMA_TRANSFER_SIZE) || 
+	if ( (transfer_size < 0) ||
+			(transfer_size > MAX_DMA_TRANSFER_SIZE) ||
 			(transfer_size%4 != 0) ) {
 		return GRPCI2DMA_ERR_WRONGPTR;
 	}
@@ -1740,8 +1740,8 @@ int grpci2dma_status(void *dataptr, int index, int ndata)
 	int i;
 
 	/* Check data pointer */
-	if ((data == NULL) || 
-			(((unsigned int ) data) & (GRPCI2DMA_BD_DATA_ALIGN-1))){
+	if ((data == NULL) ||
+			(((uintptr_t)data) & (GRPCI2DMA_BD_DATA_ALIGN-1))){
 		return GRPCI2DMA_ERR_WRONGPTR;
 	}
 
@@ -1755,7 +1755,7 @@ int grpci2dma_status(void *dataptr, int index, int ndata)
 	/* Check status of all packets in transfer */
 	int status;
 	for (i=0; i< maxdata; i++){
-		status = grpci2dma_data_bd_status(&data[i+index]); 
+		status = grpci2dma_data_bd_status(&data[i+index]);
 		if (status == GRPCI2DMA_BD_STATUS_ERR){
 			/* Error in one packet, means error in transfer */
 			return status;
@@ -1839,8 +1839,8 @@ int grpci2dma_interrupt_enable(
 	}
 
 	/* Check data pointer */
-	if ((data == NULL) || 
-			(((unsigned int ) data) & (GRPCI2DMA_BD_DATA_ALIGN-1))){
+	if ((data == NULL) ||
+			(((uintptr_t)data) & (GRPCI2DMA_BD_DATA_ALIGN-1))){
 		return GRPCI2DMA_ERR_WRONGPTR;
 	}
 
@@ -1869,8 +1869,8 @@ int grpci2dma_interrupt_enable(
 		SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 	}
 
-	DBG("Interrupts enabled for data (0x%08x), index:%d, maxindex:%d, %s.\n", 
-			(unsigned int) data, index, maxindex, 
+	DBG("Interrupts enabled for data (0x%08x), index:%d, maxindex:%d, %s.\n",
+			(unsigned int) data, index, maxindex,
 			(options & GRPCI2DMA_OPTIONS_ALL)? "ALL":"ONE" );
 
 	return GRPCI2DMA_ERR_OK;
@@ -1888,8 +1888,8 @@ int grpci2dma_push(int chan_no, void *dataptr, int index, int ndata)
 	}
 
 	/* Check data pointer */
-	if ((dataptr == NULL) || 
-			(((unsigned int ) dataptr) & (GRPCI2DMA_BD_DATA_ALIGN-1))){
+	if ((dataptr == NULL) ||
+			(((uintptr_t)dataptr) & (GRPCI2DMA_BD_DATA_ALIGN-1))){
 		return GRPCI2DMA_ERR_WRONGPTR;
 	}
 

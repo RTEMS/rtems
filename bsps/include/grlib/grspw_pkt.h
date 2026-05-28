@@ -445,7 +445,7 @@ extern void grspw_work_cfg(void *d, struct grspw_work_config *wc);
  * The messages are always 32-bit words and follows the format defined by the
  * WORK_* macros above.
  */
-extern void grspw_work_func(rtems_id msgQ);
+extern void grspw_work_func(rtems_task_argument arg);
 
 enum grspw_worktask_ev {
 	WORKTASK_EV_NONE = 0,

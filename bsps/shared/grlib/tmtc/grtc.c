@@ -58,30 +58,30 @@
 
 /* GRTC register map */
 struct grtc_regs {
-	volatile unsigned int	grst;	/* Global Reset Register (GRR 0x00) */
-	volatile unsigned int	gctrl;	/* Global Control Register (GCR 0x04) */
-	int unused0;
-	volatile unsigned int	sir;	/* Spacecraft Identifier Register (SIR 0x0c) */	
-	volatile unsigned int	far;	/* Frame Acceptance Report Register (FAR 0x10) */
+	volatile uint32_t	grst;	/* Global Reset Register (GRR 0x00) */
+	volatile uint32_t	gctrl;	/* Global Control Register (GCR 0x04) */
+	uint32_t unused0;
+	volatile uint32_t	sir;	/* Spacecraft Identifier Register (SIR 0x0c) */	
+	volatile uint32_t	far;	/* Frame Acceptance Report Register (FAR 0x10) */
 
-	volatile unsigned int	clcw1;	/* CLCW Register 1 (CLCWR1 0x14) */
-	volatile unsigned int	clcw2;	/* CLCW Register 2 (CLCWR2 0x18) */
-	volatile unsigned int	phir;	/* Physical Interface Register (PHIR 0x1c) */
-	volatile unsigned int	cor;	/* Control Register (COR 0x20) */
+	volatile uint32_t	clcw1;	/* CLCW Register 1 (CLCWR1 0x14) */
+	volatile uint32_t	clcw2;	/* CLCW Register 2 (CLCWR2 0x18) */
+	volatile uint32_t	phir;	/* Physical Interface Register (PHIR 0x1c) */
+	volatile uint32_t	cor;	/* Control Register (COR 0x20) */
 
-	volatile unsigned int	str;	/* Status Register (STR 0x24) */
-	volatile unsigned int	asr;	/* Address Space Register (ASR 0x28) */
-	volatile unsigned int	rp;	/* Receive Read Pointer Register (RRP 0x2c) */
-	volatile unsigned int	wp;	/* Receive Write Pointer Register (RWP 0x30) */
+	volatile uint32_t	str;	/* Status Register (STR 0x24) */
+	volatile uint32_t	asr;	/* Address Space Register (ASR 0x28) */
+	volatile uint32_t	rp;	/* Receive Read Pointer Register (RRP 0x2c) */
+	volatile uint32_t	wp;	/* Receive Write Pointer Register (RWP 0x30) */
 
-	int unused1[(0x60-0x34)/4];
+	uint32_t unused1[(0x60-0x34)/4];
 
-	volatile unsigned int	pimsr;	/* Pending Interrupt Masked Status Register (PIMSR 0x60) */
-	volatile unsigned int	pimr;	/* Pending Interrupt Masked Register (PIMR 0x64) */
-	volatile unsigned int	pisr;	/* Pending Interrupt Status Register (PISR 0x68) */
-	volatile unsigned int	pir;	/* Pending Interrupt Register (PIR 0x6c) */
-	volatile unsigned int	imr;	/* Interrupt Mask Register (IMR 0x70) */
-	volatile unsigned int	picr;	/* Pending Interrupt Clear Register (PICR 0x74) */
+	volatile uint32_t	pimsr;	/* Pending Interrupt Masked Status Register (PIMSR 0x60) */
+	volatile uint32_t	pimr;	/* Pending Interrupt Masked Register (PIMR 0x64) */
+	volatile uint32_t	pisr;	/* Pending Interrupt Status Register (PISR 0x68) */
+	volatile uint32_t	pir;	/* Pending Interrupt Register (PIR 0x6c) */
+	volatile uint32_t	imr;	/* Interrupt Mask Register (IMR 0x70) */
+	volatile uint32_t	picr;	/* Pending Interrupt Clear Register (PICR 0x74) */
 };
 
 /* Security Byte */
@@ -209,7 +209,7 @@ struct grtc_regs {
 
 #define GRTC_INT_ALL		(GRTC_INT_RFA|GRTC_INT_BLO|GRTC_INT_FAR|GRTC_INT_CR|GRTC_INT_OV|GRTC_INT_CS)
 
-#define READ_REG(address)	(*(volatile unsigned int *)address)
+#define READ_REG(address)	(*(volatile uint32_t *)address)
 
 /* Driver functions */
 static rtems_device_driver grtc_initialize(rtems_device_major_number  major, rtems_device_minor_number  minor, void *arg);
@@ -457,7 +457,7 @@ static int grtc_device_init(struct grtc_priv *pDev)
 	}
 	pnpinfo = &ambadev->info;
 	pDev->irq = pnpinfo->irq;
-	pDev->regs = (struct grtc_regs *)pnpinfo->ahb_slv->start[0];
+	pDev->regs = (struct grtc_regs *)(uintptr_t)pnpinfo->ahb_slv->start[0];
 	pDev->minor = pDev->dev->minor_drv;
 	pDev->open = 0;
 	pDev->running = 0;
@@ -584,7 +584,7 @@ static int grtc_hw_read_try(struct grtc_priv *pDev, char *buf, unsigned int max)
 		}
 		DBG("grtc_hw_read_try: COPYING %d from upper\n",cnt);
 		/* Convert from Remote address (RP) into CPU Local address */
-		memcpy(buf, (void *)((rp - (unsigned int)pDev->buf_remote) + (unsigned int)pDev->buf), cnt);
+		memcpy(buf, (void *)(uintptr_t)((rp - (unsigned int)(uintptr_t)pDev->buf_remote) + (unsigned int)(uintptr_t)pDev->buf), cnt);
 		buf += cnt;
 		left -= cnt;
 	}
@@ -637,9 +637,9 @@ static int grtc_data_avail(struct grtc_priv *pDev)
 
 static void *grtc_memalign(unsigned int boundary, unsigned int length, void *realbuf)
 {
-	*(int *)realbuf = (int)grlib_malloc(length+(~GRTC_ASR_BUFST)+1);
+	*(int *)realbuf = (int)(uintptr_t)grlib_malloc(length+(~GRTC_ASR_BUFST)+1);
 	DBG("GRTC: Alloced %d (0x%x) bytes, requested: %d\n",length+(~GRTC_ASR_BUFST)+1,length+(~GRTC_ASR_BUFST)+1,length);
-	return (void *)(((*(unsigned int *)realbuf)+(~GRTC_ASR_BUFST)+1) & ~(boundary-1));
+	return (void *)(uintptr_t)(((*(unsigned int *)realbuf)+(~GRTC_ASR_BUFST)+1) & ~(boundary-1));
 }
 
 static int grtc_start(struct grtc_priv *pDev)
@@ -647,7 +647,7 @@ static int grtc_start(struct grtc_priv *pDev)
 	struct grtc_regs *regs = pDev->regs;
 	unsigned int tmp;
 
-	if ( !pDev->buf || (((unsigned int)pDev->buf & ~GRTC_ASR_BUFST) != 0) ||
+	if ( !pDev->buf || (((uintptr_t)pDev->buf & ~GRTC_ASR_BUFST) != 0) ||
 	     (pDev->len>(1024*0x100)) || (pDev->len<1024) || ((pDev->len & (1024-1)) != 0) 
 	   ) {
 		DBG("GRTC: start: buffer not properly allocated(0x%x,0x%x,0x%x,0x%x)\n",pDev->buf,pDev->len,((unsigned int)pDev->buf & ~GRTC_ASR_BUFST),(pDev->len & ~(1024-1)));
@@ -699,8 +699,8 @@ static int grtc_start(struct grtc_priv *pDev)
 	 * 1. Let hardware know about our DMA area (size and location)
 	 * 2. Set DMA read/write posistions to zero.
 	 */
-	regs->asr = (unsigned int)pDev->buf_remote | ((pDev->len>>10)-1);
-	regs->rp = (unsigned int)pDev->buf_remote;
+	regs->asr = (unsigned int)(uintptr_t)pDev->buf_remote | ((pDev->len>>10)-1);
+	regs->rp = (unsigned int)(uintptr_t)pDev->buf_remote;
 
 	/* Mark running before enabling the receiver, we could receive 
 	 * an interrupt directly after enabling the receiver and it would 
@@ -1104,7 +1104,7 @@ static int grtc_hw_find_frm(struct grtc_priv *pDev)
 	 */	
 	if ( rp != wp ) {
 		/* At least 1 byte in buffer */
-		if ( ((*(unsigned short *)((rp - (unsigned int)pDev->buf_remote) + (unsigned int)pDev->buf)) & 0x00ff) == 0x01 ) {
+		if ( ((*(unsigned short *)(uintptr_t)((rp - (unsigned int)(uintptr_t)pDev->buf_remote) + (unsigned int)(uintptr_t)pDev->buf)) & 0x00ff) == 0x01 ) {
 			return 0;
 		}
 	}
@@ -1132,7 +1132,7 @@ static int grtc_hw_find_frm(struct grtc_priv *pDev)
 	
 	/* Read from upper part of data buffer */
 	if ( upper > 0 ){
-		cnt = grtc_scan((unsigned short *)((rp - (unsigned int)pDev->buf_remote) + (unsigned int)pDev->buf), upper, 0x01, &found);
+		cnt = grtc_scan((unsigned short *)(uintptr_t)((rp - (unsigned int)(uintptr_t)pDev->buf_remote) + (unsigned int)(uintptr_t)pDev->buf), upper, 0x01, &found);
 		count = cnt;
 		if ( found ) {
 			DBG("grtc_hw_find_frm: SCANNED upper %d bytes until found\n",cnt);
@@ -1234,12 +1234,12 @@ static int grtc_hw_check_ending(struct grtc_priv *pDev, int max)
 	if ( upper > 0 ){
 		if ( left <= upper ){
 			cnt = left;
-			if ( grtc_check_ending((unsigned short *)((rp-(unsigned int)pDev->buf_remote)+(unsigned int)pDev->buf), cnt-2, 1) ) {
+			if ( grtc_check_ending((unsigned short *)(uintptr_t)((rp-(unsigned int)(uintptr_t)pDev->buf_remote)+(unsigned int)(uintptr_t)pDev->buf), cnt-2, 1) ) {
 				return -1;
 			}
 		}else{
 			cnt = upper;	/* Read all upper data available */
-			if ( grtc_check_ending((unsigned short *)((rp-(unsigned int)pDev->buf_remote)+(unsigned int)pDev->buf), cnt, 0) ) {
+			if ( grtc_check_ending((unsigned short *)(uintptr_t)((rp-(unsigned int)(uintptr_t)pDev->buf_remote)+(unsigned int)(uintptr_t)pDev->buf), cnt, 0) ) {
 				return -1;
 			}
 		}
@@ -1315,7 +1315,7 @@ static int grtc_hw_copy(struct grtc_priv *pDev, unsigned char *buf, unsigned int
 			cnt = upper;	/* Read all upper data available */
 		}
 		DBG("grtc_hw_copy: COPYING %d from upper\n",cnt);
-		if ( (tot=grtc_copy((unsigned short *)((rp-(unsigned int)pDev->buf_remote)+(unsigned int)pDev->buf), buf, cnt)) != cnt ) {
+		if ( (tot=grtc_copy((unsigned short *)(uintptr_t)((rp-(unsigned int)(uintptr_t)pDev->buf_remote)+(unsigned int)(uintptr_t)pDev->buf), buf, cnt)) != cnt ) {
 			/* Failed to copy due to an receive error */
 			DBG("grtc_hw_copy(upper): not all in DMA buffer (%d)\n",tot);
 			count = tot;
@@ -1362,8 +1362,8 @@ out:
 void grtc_log_error(struct grtc_priv *pDev, int err)
 {
 	/* Stop Receiver */
-	*(volatile unsigned int *)&pDev->regs->cor = 0x55000000;
-	*(volatile unsigned int *)&pDev->regs->cor = 0x55000000;
+	*(volatile uint32_t *)&pDev->regs->cor = 0x55000000;
+	*(volatile uint32_t *)&pDev->regs->cor = 0x55000000;
 	pDev->last_error[pDev->last_error_cnt] = err;
 	if ( ++pDev->last_error_cnt > 128 )
 		pDev->last_error_cnt = 0;
@@ -1632,16 +1632,16 @@ static rtems_device_driver grtc_ioctl(rtems_device_major_number major, rtems_dev
 		break;
 
 		case GRTC_IOC_SET_BLOCKING_MODE:
-		if ( (unsigned int)data > GRTC_BLKMODE_COMPLETE ) {
+		if ( (unsigned int)(uintptr_t)data > GRTC_BLKMODE_COMPLETE ) {
 			return RTEMS_INVALID_NAME;
 		}
-		DBG("GRTC: Set blocking mode: %d\n",(unsigned int)data);
-		pDev->blocking = (unsigned int)data;
+		DBG("GRTC: Set blocking mode: %d\n",(unsigned int)(uintptr_t)data);
+		pDev->blocking = (unsigned int)(uintptr_t)data;
 		break;
 
 		case GRTC_IOC_SET_TIMEOUT:
-		DBG("GRTC: Timeout: %d\n",(unsigned int)data);
-		pDev->timeout = (rtems_interval)data;
+		DBG("GRTC: Timeout: %d\n",(unsigned int)(uintptr_t)data);
+		pDev->timeout = (rtems_interval)(uintptr_t)data;
 		break;
 
 		case GRTC_IOC_SET_BUF_PARAM:
@@ -1657,7 +1657,7 @@ static rtems_device_driver grtc_ioctl(rtems_device_major_number major, rtems_dev
 		DBG("GRTC: IOC_SET_BUF_PARAM: Len: 0x%x, Custom Buffer: 0x%x\n",buf_arg->length,buf_arg->custom_buffer);
 
 		/* Check alignment need, skip bit 0 since that bit only indicates remote address or not */
-		if ( (unsigned int)buf_arg->custom_buffer & (~GRTC_BUF_MASK) & (~0x1) ) {
+		if ( (uintptr_t)buf_arg->custom_buffer & (~GRTC_BUF_MASK) & (~0x1) ) {
 			return RTEMS_INVALID_NAME;
 		}
 
@@ -1676,7 +1676,7 @@ static rtems_device_driver grtc_ioctl(rtems_device_major_number major, rtems_dev
 
 		if (pDev->len <= 0)
 			break;
-		mem = (unsigned int)buf_arg->custom_buffer;
+		mem = (unsigned int)(uintptr_t)buf_arg->custom_buffer;
 		pDev->buf_custom = mem;
 
 		if (mem & 1) {
@@ -1684,7 +1684,7 @@ static rtems_device_driver grtc_ioctl(rtems_device_major_number major, rtems_dev
 			 * core looks at it. Translate the base address into
 			 * an address that the CPU can understand.
 			 */
-			pDev->buf_remote = (void *)(mem & ~0x1);
+			pDev->buf_remote = (void *)(uintptr_t)(mem & ~0x1);
 			drvmgr_translate_check(pDev->dev, DMAMEM_TO_CPU,
 						(void *)pDev->buf_remote,
 						(void **)&pDev->buf,
@@ -1789,9 +1789,9 @@ static rtems_device_driver grtc_ioctl(rtems_device_major_number major, rtems_dev
 		if ( pDev->running ) {
 			return RTEMS_RESOURCE_IN_USE;
 		}
-		if ( (int)data == GRTC_MODE_FRAME ) {
+		if ( (int)(uintptr_t)data == GRTC_MODE_FRAME ) {
 			pDev->mode = GRTC_MODE_FRAME;
-		} else if ( (int)data == GRTC_MODE_RAW ) {
+		} else if ( (int)(uintptr_t)data == GRTC_MODE_RAW ) {
 			pDev->mode = GRTC_MODE_RAW;
 		} else {
 			return RTEMS_INVALID_NAME;
@@ -1929,7 +1929,7 @@ static rtems_device_driver grtc_ioctl(rtems_device_major_number major, rtems_dev
 		if ( !data ) {
 			return RTEMS_INVALID_NAME;
 		}
-		*data = (unsigned int)&pDev->regs->clcw1;
+		*data = (unsigned int)(uintptr_t)&pDev->regs->clcw1;
 		break;
 
 		default:

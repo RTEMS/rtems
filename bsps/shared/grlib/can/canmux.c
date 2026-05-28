@@ -62,7 +62,7 @@
 #define BUSB_SELECT (1 << 1)
 
 struct canmux_priv {
-	volatile unsigned int *muxreg;
+	volatile uint32_t *muxreg;
 	rtems_id devsem;
 	int open;
 };
@@ -185,7 +185,7 @@ static rtems_device_driver canmux_initialize(rtems_device_major_number major, rt
 		return -1;
 	}
 	
-	priv->muxreg = (unsigned int*)d.start;
+	priv->muxreg = (unsigned int*)(uintptr_t)d.start;
 
 	status = rtems_semaphore_create(
 		rtems_build_name('M', 'd', 'v', '0'),

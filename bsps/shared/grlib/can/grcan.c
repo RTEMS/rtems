@@ -261,7 +261,7 @@ int grcan_device_init(struct grcan_priv *pDev)
 	}
 	pnpinfo = &ambadev->info;
 	pDev->irq = pnpinfo->irq;
-	pDev->regs = (struct grcan_regs *)pnpinfo->apb_slv->start;
+	pDev->regs = (struct grcan_regs *)(uintptr_t)pnpinfo->apb_slv->start;
 	pDev->minor = pDev->dev->minor_drv;
 	if (ambadev->id.device == GAISLER_GRCANFD)
 		pDev->fd_capable = 1;
@@ -349,11 +349,11 @@ static rtems_device_driver grcan_hw_start(struct grcan_priv *pDev)
 	}
 
 	/* Setup receiver */
-	pDev->regs->rx0addr = (unsigned int)pDev->_rx_hw;
+	pDev->regs->rx0addr = (uint32_t)(uintptr_t)pDev->_rx_hw;
 	pDev->regs->rx0size = pDev->rxbuf_size;
 
 	/* Setup Transmitter */
-	pDev->regs->tx0addr = (unsigned int)pDev->_tx_hw;
+	pDev->regs->tx0addr = (uint32_t)(uintptr_t)pDev->_tx_hw;
 	pDev->regs->tx0size = pDev->txbuf_size;
 
 	/* Setup acceptance filters */
@@ -735,12 +735,12 @@ static int grcan_alloc_buffers(struct grcan_priv *pDev, int rx, int tx)
 	FUNCDBG();
 
 	if ( tx ) {
-		adr = (unsigned int)pDev->txbuf_adr;
+		adr = (unsigned int)(uintptr_t)pDev->txbuf_adr;
 		if (adr & 0x1) {
 			/* User defined "remote" address. Translate it into
 			 * a CPU accessible address
 			 */
-			pDev->_tx_hw = (void *)(adr & ~0x1);
+			pDev->_tx_hw = (void *)(uintptr_t)(adr & ~0x1);
 			drvmgr_translate_check(
 				pDev->dev,
 				DMAMEM_TO_CPU,
@@ -758,11 +758,11 @@ static int grcan_alloc_buffers(struct grcan_priv *pDev, int rx, int tx)
 				/* User defined "cou-local" address. Translate
 				 * it into a CPU accessible address
 				 */
-				pDev->_tx = (void *)adr;
+				pDev->_tx = (void *)(uintptr_t)adr;
 			}
 			/* Align TX buffer */
 			pDev->tx = (struct grcan_msg *)
-			           (((unsigned int)pDev->_tx +
+			           (((uintptr_t)pDev->_tx +
 				   (BUFFER_ALIGNMENT_NEEDS-1)) &
 			           ~(BUFFER_ALIGNMENT_NEEDS-1));
 
@@ -779,12 +779,12 @@ static int grcan_alloc_buffers(struct grcan_priv *pDev, int rx, int tx)
 	}
 
 	if ( rx ) {
-		adr = (unsigned int)pDev->rxbuf_adr;
+		adr = (unsigned int)(uintptr_t)pDev->rxbuf_adr;
 		if (adr & 0x1) {
 			/* User defined "remote" address. Translate it into
 			 * a CPU accessible address
 			 */
-			pDev->_rx_hw = (void *)(adr & ~0x1);
+			pDev->_rx_hw = (void *)(uintptr_t)(adr & ~0x1);
 			drvmgr_translate_check(
 				pDev->dev,
 				DMAMEM_TO_CPU,
@@ -802,11 +802,11 @@ static int grcan_alloc_buffers(struct grcan_priv *pDev, int rx, int tx)
 				/* User defined "cou-local" address. Translate
 				 * it into a CPU accessible address
 				 */
-				pDev->_rx = (void *)adr;
+				pDev->_rx = (void *)(uintptr_t)adr;
 			}
 			/* Align RX buffer */
 			pDev->rx = (struct grcan_msg *)
-			           (((unsigned int)pDev->_rx +
+			           (((uintptr_t)pDev->_rx +
 				   (BUFFER_ALIGNMENT_NEEDS-1)) &
 			           ~(BUFFER_ALIGNMENT_NEEDS-1));
 

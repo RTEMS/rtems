@@ -51,10 +51,10 @@
 /*#define DBG(args...) printk(args)*/
 
 struct grlib_gptimer_regs {
-	volatile unsigned int scaler_value;   /* common timer registers */
-	volatile unsigned int scaler_reload;
-	volatile unsigned int status;
-	volatile unsigned int notused;
+	volatile uint32_t scaler_value;   /* common timer registers */
+	volatile uint32_t scaler_reload;
+	volatile uint32_t status;
+	volatile uint32_t notused;
 };
 
 /* AMBA IMPLEMENTATION */
@@ -330,15 +330,15 @@ void ambapp_bus_freq_register(
 
 	if ( amba_interface == DEV_AHB_MST ) {
 		adev = (struct ambapp_dev *)
-			((unsigned int)pnp->info.ahb_mst -
+			((uintptr_t)pnp->info.ahb_mst -
 				sizeof(struct ambapp_dev));
 	} else if ( amba_interface == DEV_AHB_SLV ) {
 		adev = (struct ambapp_dev *)
-			((unsigned int)pnp->info.ahb_slv -
+			((uintptr_t)pnp->info.ahb_slv -
 				sizeof(struct ambapp_dev));
 	} else if ( amba_interface == DEV_APB_SLV ) {
 		adev = (struct ambapp_dev *)
-			((unsigned int)pnp->info.apb_slv -
+			((uintptr_t)pnp->info.apb_slv -
 				sizeof(struct ambapp_dev));
 	} else {
 		return;
@@ -361,15 +361,15 @@ static int ambapp_bus_freq_get(
 
 	if ( options == DEV_AHB_MST ) {
 		adev = (struct ambapp_dev *)
-			((unsigned int)pnp->info.ahb_mst -
+			((uintptr_t)pnp->info.ahb_mst -
 				sizeof(struct ambapp_dev));
 	} else if ( options == DEV_AHB_SLV ) {
 		adev = (struct ambapp_dev *)
-			((unsigned int)pnp->info.ahb_slv -
+			((uintptr_t)pnp->info.ahb_slv -
 				sizeof(struct ambapp_dev));
 	} else if ( options == DEV_APB_SLV ) {
 		adev = (struct ambapp_dev *)
-			((unsigned int)pnp->info.apb_slv -
+			((uintptr_t)pnp->info.apb_slv -
 				sizeof(struct ambapp_dev));
 	} else {
 		*freq_hz = 0;

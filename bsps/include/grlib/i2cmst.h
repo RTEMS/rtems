@@ -54,10 +54,10 @@ extern "C" {
 /* I2C-master operational registers */
 
 typedef struct gr_i2cmst_regs {
-  volatile unsigned int prescl; /* Prescale register */
-  volatile unsigned int ctrl;   /* Control register */
-  volatile unsigned int tdrd;   /* Transmit and Receive registers */
-  volatile unsigned int cmdsts; /* Command and Status registers */
+  volatile uint32_t prescl; /* Prescale register */
+  volatile uint32_t ctrl;   /* Control register */
+  volatile uint32_t tdrd;   /* Transmit and Receive registers */
+  volatile uint32_t cmdsts; /* Command and Status registers */
 } gr_i2cmst_regs_t;
 
 /* Control (CTRL) register */

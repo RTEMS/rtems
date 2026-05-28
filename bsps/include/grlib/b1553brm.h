@@ -51,30 +51,30 @@ extern "C" {
 #endif
 
 struct brm_reg {
-    volatile unsigned int ctrl;            /* 0x00 */
-    volatile unsigned int oper;            /* 0x04 */
-    volatile unsigned int cur_cmd;         /* 0x08 */
-    volatile unsigned int imask;           /* 0x0C */
-    volatile unsigned int ipend;           /* 0x10 */
-    volatile unsigned int ipoint;          /* 0x14 */
-    volatile unsigned int bit_reg;         /* 0x18 */
-    volatile unsigned int ttag;            /* 0x1C */
-    volatile unsigned int dpoint;          /* 0x20 */
-    volatile unsigned int sw;              /* 0x24 */
-    volatile unsigned int initcount;       /* 0x28 */
-    volatile unsigned int mcpoint;         /* 0x2C */
-    volatile unsigned int mdpoint;         /* 0x30 */
-    volatile unsigned int mbc;             /* 0x34 */
-    volatile unsigned int mfilta;          /* 0x38 */
-    volatile unsigned int mfiltb;          /* 0x3C */
-    volatile unsigned int rt_cmd_leg[16];  /* 0x40-0x80 */
-    volatile unsigned int enhanced;        /* 0x84 */
+    volatile uint32_t ctrl;            /* 0x00 */
+    volatile uint32_t oper;            /* 0x04 */
+    volatile uint32_t cur_cmd;         /* 0x08 */
+    volatile uint32_t imask;           /* 0x0C */
+    volatile uint32_t ipend;           /* 0x10 */
+    volatile uint32_t ipoint;          /* 0x14 */
+    volatile uint32_t bit_reg;         /* 0x18 */
+    volatile uint32_t ttag;            /* 0x1C */
+    volatile uint32_t dpoint;          /* 0x20 */
+    volatile uint32_t sw;              /* 0x24 */
+    volatile uint32_t initcount;       /* 0x28 */
+    volatile uint32_t mcpoint;         /* 0x2C */
+    volatile uint32_t mdpoint;         /* 0x30 */
+    volatile uint32_t mbc;             /* 0x34 */
+    volatile uint32_t mfilta;          /* 0x38 */
+    volatile uint32_t mfiltb;          /* 0x3C */
+    volatile uint32_t rt_cmd_leg[16];  /* 0x40-0x80 */
+    volatile uint32_t enhanced;        /* 0x84 */
 
-    volatile unsigned int dummy[31];
+    volatile uint32_t dummy[31];
 
-    volatile unsigned int w_ctrl;          /* 0x100 */
-    volatile unsigned int w_irqctrl;       /* 0x104 */
-    volatile unsigned int w_ahbaddr;       /* 0x108 */
+    volatile uint32_t w_ctrl;          /* 0x100 */
+    volatile uint32_t w_irqctrl;       /* 0x104 */
+    volatile uint32_t w_ahbaddr;       /* 0x108 */
 };
 
 struct bm_msg {

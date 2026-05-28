@@ -123,11 +123,11 @@
 
 
 struct satcan_regs {
-	volatile unsigned int satcan[32];
-	volatile unsigned int ctrl;
-	volatile unsigned int irqpend;
-	volatile unsigned int irqmask;
-	volatile unsigned int membase;
+	volatile uint32_t satcan[32];
+	volatile uint32_t ctrl;
+	volatile uint32_t irqpend;
+	volatile uint32_t irqmask;
+	volatile uint32_t membase;
 };
 
 
@@ -168,7 +168,7 @@ static rtems_device_driver satcan_initialize(rtems_device_major_number major, rt
 static void almalloc(unsigned char **alptr, void **ptr, int sz)
 {
   *ptr = rtems_calloc(1,2*sz);
-  *alptr = (unsigned char *) (((int)*ptr+sz) & ~(sz-1));
+  *alptr = (unsigned char *) (((uintptr_t)*ptr+sz) & ~(sz-1));
 }
 
 static rtems_isr satcan_interrupt_handler(void *v)
@@ -240,8 +240,8 @@ static rtems_device_driver satcan_ioctl(rtems_device_major_number major, rtems_d
 			return RTEMS_NO_MEMORY;
 		}
 
-		regs->membase = (unsigned int)priv->alptr;
-		regs->satcan[SATCAN_RAM_BASE] = (unsigned int)priv->alptr >> OFFSET_2K_LOW_POS;
+		regs->membase = (uint32_t)(uintptr_t)priv->alptr;
+		regs->satcan[SATCAN_RAM_BASE] = (uint32_t)(uintptr_t)priv->alptr >> OFFSET_2K_LOW_POS;
 		regs->satcan[SATCAN_CMD1] = regs->satcan[SATCAN_CMD1] | Sel_2k_8kN;
 		break;
 
@@ -254,8 +254,8 @@ static rtems_device_driver satcan_ioctl(rtems_device_major_number major, rtems_d
 			return RTEMS_NO_MEMORY;
 		}
 		
-		regs->membase = (unsigned int)priv->alptr;
-		regs->satcan[SATCAN_RAM_BASE] = (unsigned int)priv->alptr >> OFFSET_8K_LOW_POS;
+		regs->membase = (uint32_t)(uintptr_t)priv->alptr;
+		regs->satcan[SATCAN_RAM_BASE] = (uint32_t)(uintptr_t)priv->alptr >> OFFSET_8K_LOW_POS;
 		regs->satcan[SATCAN_CMD1] = regs->satcan[SATCAN_CMD1] & ~Sel_2k_8kN;
 		break;
 		
@@ -534,7 +534,7 @@ static rtems_device_driver satcan_read(rtems_device_major_number major, rtems_de
 		canid = (ret[i].header[1] << 8) | ret[i].header[0];
 	
 		/* Copy message header from DMA header area to buffer */
-		buf = (char*)((int)priv->alptr | (canid << 3));
+		buf = (char*)((uintptr_t)priv->alptr | (canid << 3));
 		memcpy(ret[i].header, buf, SATCAN_HEADER_SIZE);
 
 		DBG("SatCAN: read: copied header from %p to %p\n\r", buf, ret[i].header);
@@ -543,7 +543,7 @@ static rtems_device_driver satcan_read(rtems_device_major_number major, rtems_de
 		buf[SATCAN_HEADER_NMM_POS] = 0;
 		
 		/* Copy message payload from DMA data area to buffer */
-		buf = (char*)((int)buf | 
+		buf = (char*)((uintptr_t)buf | 
 			      (regs->satcan[SATCAN_CMD1] & Sel_2k_8kN ? DMA_2K_DATA_SELECT : DMA_8K_DATA_SELECT));
 		memcpy(ret[i].payload, buf, SATCAN_PAYLOAD_SIZE);
 	
@@ -634,7 +634,7 @@ static rtems_device_driver satcan_initialize(rtems_device_major_number major, rt
 	if (RTEMS_SUCCESSFUL != status)
 		rtems_fatal_error_occurred(status);
 
-	regs = (struct satcan_regs*)d.start[0];
+	regs = (struct satcan_regs*)(uintptr_t)d.start[0];
 		
 	/* Set node number and DPS */
 	regs->ctrl |= ((priv->cfg->nodeno & 0xf) << 5) | (priv->cfg->dps << 1);
@@ -656,8 +656,8 @@ static rtems_device_driver satcan_initialize(rtems_device_major_number major, rt
 		;
 
 	/* Initialize core registers, default is 2K messages */
-	regs->membase = (unsigned int)priv->alptr;
-	regs->satcan[SATCAN_RAM_BASE] = (unsigned int)priv->alptr >> 15;
+	regs->membase = (uint32_t)(uintptr_t)priv->alptr;
+	regs->satcan[SATCAN_RAM_BASE] = (uint32_t)(uintptr_t)priv->alptr >> 15;
 	
 	DBG("regs->membase = %x\n\r", (unsigned int)priv->alptr);
 	DBG("regs->satcan[SATCAN_RAM_BASE] = %x\n\r", (unsigned int)priv->alptr >> 15);

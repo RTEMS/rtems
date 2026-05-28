@@ -218,7 +218,7 @@ int gradcadc_device_init(struct gradcdac_priv *pDev)
 	}
 	pnpinfo = &ambadev->info;
 	pDev->irqno = pnpinfo->irq;
-	pDev->regs = (struct gradcdac_regs *)pnpinfo->apb_slv->start;
+	pDev->regs = (struct gradcdac_regs *)(uintptr_t)pnpinfo->apb_slv->start;
 	pDev->minor = pDev->dev->minor_drv;
 
 	/* Reset Hardware before attaching IRQ handler */

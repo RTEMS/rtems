@@ -149,7 +149,7 @@ static int ahbstat_init2(struct drvmgr_dev *dev)
 	ambadev = (struct amba_dev_info *)dev->businfo;
 	if (ambadev == NULL)
 		return DRVMGR_FAIL;
-	priv->regs = (struct ahbstat_regs *)ambadev->info.apb_slv->start;
+	priv->regs = (struct ahbstat_regs *)(uintptr_t)ambadev->info.apb_slv->start;
 	priv->minor = dev->minor_drv;
 
 	strncpy(&priv->devname[0], "ahbstat0", DEVNAME_LEN);

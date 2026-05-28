@@ -145,10 +145,10 @@ static int grcan_hw_read_try_fd(
 		/* Get number of bytes available in RX buffer */
 		bds_hw_avail = grcan_hw_rxavail(rp, wp, size);
 
-		addr = (unsigned int)pDev->rx;
-		source = (struct grcanfd_bd0 *)(addr + rp);
+		addr = (unsigned int)(uintptr_t)pDev->rx;
+		source = (struct grcanfd_bd0 *)(uintptr_t)(addr + rp);
 		dest = buffer;
-		rxmax = (struct grcanfd_bd0 *)(addr + size);
+		rxmax = (struct grcanfd_bd0 *)(uintptr_t)(addr + size);
 		ret = bds_tot = 0;
 
 		/* Read as many can messages as possible */
@@ -186,7 +186,7 @@ static int grcan_hw_read_try_fd(
 			for (j = 0; j < ((dest->len + 7) / 8); j++) {
 				dest->data.dwords[j] = READ_DMA_DOUBLE(dp);
 				if (++dp >= (uint64_t *)rxmax)
-					dp = (uint64_t *)addr; /* wrap around */
+					dp = (uint64_t *)(uintptr_t)addr; /* wrap around */
 			}
 
 			/* wrap around if neccessary */
@@ -204,7 +204,7 @@ static int grcan_hw_read_try_fd(
 		/* A bus off interrupt may have occured after checking pDev->started */
 		SPIN_LOCK_IRQ(&pDev->devlock, oldLevel);
 		if (pDev->started == STATE_STARTED) {
-			regs->rx0rd = (unsigned int) source - addr;
+			regs->rx0rd = (unsigned int)(uintptr_t)source - addr;
 			regs->rx0ctrl = GRCAN_RXCTRL_ENABLE;
 		} else {
 			DBGC(DBG_STATE, "cancelled due to a BUS OFF error\n");
@@ -323,9 +323,9 @@ static int grcan_hw_write_try_fd(
 	size = READ_REG(&regs->tx0size);
 	space_left = grcan_hw_txspace(rp, wp, size);
 
-	addr = (unsigned int)pDev->tx;
-	dest = (struct grcanfd_bd0 *)(addr + wp);
-	txmax = (struct grcanfd_bd0 *)(addr + size);
+	addr = (unsigned int)(uintptr_t)pDev->tx;
+	dest = (struct grcanfd_bd0 *)(uintptr_t)(addr + wp);
+	txmax = (struct grcanfd_bd0 *)(uintptr_t)(addr + size);
 	ret = 0;
 
 	while (source < &buffer[count]) {
@@ -353,7 +353,7 @@ static int grcan_hw_write_try_fd(
 		for (i = 0; i < ((source->len + 7) / 8); i++) {
 			*dp++ = source->data.dwords[i];
 			if (dp >= (uint64_t *)txmax)
-				dp = (uint64_t *)addr; /* wrap around */
+				dp = (uint64_t *)(uintptr_t)addr; /* wrap around */
 		}
 		if (source->extended) {
 			tmp = (1 << 31) | (source->id & 0x3fffffff);
@@ -374,7 +374,7 @@ static int grcan_hw_write_try_fd(
 	/* A bus off interrupt may have occured after checking pDev->started */
 	SPIN_LOCK_IRQ(&pDev->devlock, oldLevel);
 	if (pDev->started == STATE_STARTED) {
-		regs->tx0wr = (unsigned int) dest - addr;
+		regs->tx0wr = (unsigned int)(uintptr_t)dest - addr;
 		regs->tx0ctrl = GRCAN_TXCTRL_ENABLE;
 	} else {
 		DBGC(DBG_STATE, "cancelled due to a BUS OFF error\n");

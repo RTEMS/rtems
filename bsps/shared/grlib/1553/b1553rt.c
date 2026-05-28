@@ -71,7 +71,7 @@
 #define FUNCDBG(x...) 
 #endif
 
-#define READ_DMA(address) grlib_read_uncached16((unsigned int)address)
+#define READ_DMA(address) grlib_read_uncached16((uintptr_t)address)
 
 static rtems_device_driver rt_initialize(rtems_device_major_number major, rtems_device_minor_number minor, void *arg);
 static rtems_device_driver rt_open(rtems_device_major_number major, rtems_device_minor_number minor, void *arg);
@@ -94,8 +94,8 @@ typedef struct {
 
     unsigned int cfg_freq;
 
-    unsigned int memarea_base;
-    unsigned int memarea_base_remote;
+    uintptr_t memarea_base;
+    uint32_t memarea_base_remote;
 
     volatile unsigned short *mem;
 
@@ -292,7 +292,7 @@ int b1553rt_device_init(rt_priv *pDev)
     struct amba_dev_info *ambadev;
     struct ambapp_core *pnpinfo;
     union drvmgr_key_value *value;
-    unsigned int mem;
+    uintptr_t mem;
     unsigned int sys_freq_hz;
 
     /* Get device information from AMBA PnP information */
@@ -302,7 +302,7 @@ int b1553rt_device_init(rt_priv *pDev)
     }
     pnpinfo = &ambadev->info;
     pDev->irqno = pnpinfo->irq;
-    pDev->regs = (struct rt_reg *)pnpinfo->apb_slv->start;
+    pDev->regs = (struct rt_reg *)(uintptr_t)pnpinfo->apb_slv->start;
     pDev->minor = pDev->dev->minor_drv;
 
 #ifdef DEBUG
@@ -315,7 +315,7 @@ int b1553rt_device_init(rt_priv *pDev)
     /* Get memory configuration from bus resources */
     value = drvmgr_dev_key_get(pDev->dev, "dmaBaseAdr", DRVMGR_KT_POINTER);
     if (value)
-        mem = (unsigned int)value->ptr;
+        mem = (uintptr_t)value->ptr;
 
     if (value && (mem & 1)) {
         /* Remote address, address as RT looks at it. */
@@ -323,7 +323,7 @@ int b1553rt_device_init(rt_priv *pDev)
         /* Translate the base address into an address that the the CPU can understand */
         pDev->memarea_base = mem & ~1;
         drvmgr_translate_check(pDev->dev, DMAMEM_TO_CPU,
-                                (void *)pDev->memarea_base_remote,
+                                (void *)(uintptr_t)pDev->memarea_base_remote,
                                 (void **)&pDev->memarea_base,
                                 4 * 1024);
     } else {
@@ -331,7 +331,7 @@ int b1553rt_device_init(rt_priv *pDev)
             /* Use dynamically allocated memory,
              * 4k DMA memory + 4k for alignment 
              */
-            mem = (unsigned int)grlib_malloc(4 * 1024 * 2);
+            mem = (uintptr_t)grlib_malloc(4 * 1024 * 2);
             if ( !mem ){
                 printk("RT: Failed to allocate HW memory\n\r");
                 return -1;
@@ -344,7 +344,7 @@ int b1553rt_device_init(rt_priv *pDev)
 
         /* Translate the base address into an address that the RT core can understand */
         drvmgr_translate_check(pDev->dev, CPUMEM_TO_DMA,
-                               (void *)pDev->memarea_base,
+                               (void *)(uintptr_t)pDev->memarea_base,
                                (void **)&pDev->memarea_base_remote,
                                4 * 1024);
     }
@@ -353,7 +353,7 @@ int b1553rt_device_init(rt_priv *pDev)
     memset((char *)pDev->memarea_base, 0, 4 * 1024);
 
     /* Set base address of all descriptors */
-    pDev->memarea_base = (unsigned int)mem;
+    pDev->memarea_base = (uintptr_t)mem;
     pDev->mem = (volatile unsigned short *)pDev->memarea_base;
 
     pDev->rt_event = NULL;
@@ -710,7 +710,7 @@ static rtems_device_driver rt_control(rtems_device_major_number major, rtems_dev
         break;
 
     case RT_SET_EVENTID:
-        rt->event_id = (rtems_id)ioarg->buffer;
+        rt->event_id = (rtems_id)(uintptr_t)ioarg->buffer;
         break;
 
     default:
@@ -871,7 +871,7 @@ void b1553rt_print_dev(struct drvmgr_dev *dev, int options)
 
     /* Print */
     printf("--- B1553RT[%d] %s ---\n", pDev->minor, pDev->devName);
-    printf(" REGS:            0x%x\n", (unsigned int)pDev->regs);
+    printf(" REGS:            0x%x\n", (unsigned int)(uintptr_t)pDev->regs);
     printf(" IRQ:             %d\n", pDev->irqno);
 
 }

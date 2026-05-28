@@ -57,24 +57,24 @@
 
 /* PWM Channel specific registers */
 struct grpwm_pwm_regs {
-	volatile unsigned int period;		/* 0x00 */
-	volatile unsigned int comp;		/* 0x04 */
-	volatile unsigned int dbcomp;		/* 0x08 */
-	volatile unsigned int ctrl;		/* 0x0C */
+	volatile uint32_t period;		/* 0x00 */
+	volatile uint32_t comp;		/* 0x04 */
+	volatile uint32_t dbcomp;		/* 0x08 */
+	volatile uint32_t ctrl;		/* 0x0C */
 };
 
 /* Core common registers */	
 struct grpwm_regs {
-	volatile unsigned int ctrl;		/* 0x00 */
-	volatile unsigned int scaler;		/* 0x04 */
-	volatile unsigned int ipend;		/* 0x08 */
-	volatile unsigned int cap1;		/* 0x0C */
-	volatile unsigned int cap2;		/* 0x10 */
-	volatile unsigned int wctrl;		/* 0x14 */
-	int reserved0[2];
+	volatile uint32_t ctrl;		/* 0x00 */
+	volatile uint32_t scaler;		/* 0x04 */
+	volatile uint32_t ipend;		/* 0x08 */
+	volatile uint32_t cap1;		/* 0x0C */
+	volatile uint32_t cap2;		/* 0x10 */
+	volatile uint32_t wctrl;		/* 0x14 */
+	uint32_t reserved0[2];
 	struct grpwm_pwm_regs pwms[8];		/* 0x20 */
-	int reserved1[(0x8000-0xA0)/4];		/* 0xA0-0x7FFC */
-	volatile unsigned int wram[0x8000/4];	/* 0x8000-0xFFFC */
+	uint32_t reserved1[(0x8000-0xA0)/4];		/* 0xA0-0x7FFC */
+	volatile uint32_t wram[0x8000/4];	/* 0x8000-0xFFFC */
 };
 
 /*** REGISTER BIT LAYOUT ***/
@@ -363,7 +363,7 @@ static void grpwm_write_wram(
 	int length)
 {
 	unsigned int *end;
-	volatile unsigned int *pos;
+	volatile uint32_t *pos;
 
 	pos = &regs->wram[0];
 
@@ -761,7 +761,7 @@ static rtems_device_driver grpwm_ioctl(rtems_device_major_number major, rtems_de
 		}
 		case GRPWM_IOCTL_IRQ:
 		{
-			unsigned int data = (unsigned int)ioarg->buffer;
+			unsigned int data = (unsigned int)(uintptr_t)ioarg->buffer;
 			int channel = (data >> 8) & 0x7;
 			struct grpwm_chan_priv *pwm;
 			unsigned int pctrl;
@@ -817,9 +817,9 @@ int grpwm_device_init(struct grpwm_priv *priv)
 	}
 	pnpinfo = &ambadev->info;
 	priv->irq = pnpinfo->irq;
-	regs = priv->regs = (struct grpwm_regs *)pnpinfo->apb_slv->start;
+	regs = priv->regs = (struct grpwm_regs *)(uintptr_t)pnpinfo->apb_slv->start;
 
-	DBG("GRPWM: 0x%08x irq %d\n", (unsigned int)regs, priv->irq);
+	DBG("GRPWM: 0x%08x irq %d\n", (uint32_t)(uintptr_t)regs, priv->irq);
 
 	/* Disable Core */
 	regs->ctrl = 0;

@@ -35,19 +35,19 @@ extern "C" {
 #endif
 
 struct gradcdac_regs {
-	volatile unsigned int config;      /* 0x00 Configuration Register */
-	volatile unsigned int status;      /* 0x04 Status Register */
-	int unused0[2];
-	volatile unsigned int adc_din;     /* 0x10 ADC Data Input Register */
-	volatile unsigned int dac_dout;    /* 0x14 DAC Data Output Register */
-	int unused1[2];
-	volatile unsigned int adrin;       /* 0x20 Address Input Register */
-	volatile unsigned int adrout;      /* 0x24 Address Output Register */
-	volatile unsigned int adrdir;      /* 0x28 Address Direction Register */
-	int unused2[1];
-	volatile unsigned int data_in;     /* 0x30 Data Input Register  */
-	volatile unsigned int data_out;    /* 0x34 Data Output Register */
-	volatile unsigned int data_dir;    /* 0x38 Data Direction Register */
+	volatile uint32_t config;      /* 0x00 Configuration Register */
+	volatile uint32_t status;      /* 0x04 Status Register */
+	uint32_t unused0[2];
+	volatile uint32_t adc_din;     /* 0x10 ADC Data Input Register */
+	volatile uint32_t dac_dout;    /* 0x14 DAC Data Output Register */
+	uint32_t unused1[2];
+	volatile uint32_t adrin;       /* 0x20 Address Input Register */
+	volatile uint32_t adrout;      /* 0x24 Address Output Register */
+	volatile uint32_t adrdir;      /* 0x28 Address Direction Register */
+	uint32_t unused2[1];
+	volatile uint32_t data_in;     /* 0x30 Data Input Register  */
+	volatile uint32_t data_out;    /* 0x34 Data Output Register */
+	volatile uint32_t data_dir;    /* 0x38 Data Direction Register */
 };
 
 #define GRADCDAC_CFG_DACWS    0x00f80000

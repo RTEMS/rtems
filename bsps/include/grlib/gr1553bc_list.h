@@ -260,8 +260,8 @@ extern struct gr1553bc_list_cfg gr1553bc_def_cfg;
 struct gr1553bc_list {
 	void *_table_custom;		/* Config option given by user */
 	void *_table;			/* address of allocated bd-table */
-	unsigned int table_hw;		/* Descriptor table base HW-ADR */
-	unsigned int table_cpu;		/* Descriptor table base CPU-ADR */
+	uint32_t table_hw;		/* Descriptor table base HW-ADR */
+	uintptr_t table_cpu;		/* Descriptor table base CPU-ADR */
 	int table_size;			/* Descriptor Table Size */
 	void *bc;			/* BC HW, needed for adr translation */
 	unsigned char rt_timeout[32];	/* Tolerance per RT, default 20us

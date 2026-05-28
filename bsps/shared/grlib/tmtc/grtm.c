@@ -52,36 +52,36 @@
 
 /* GRTM register map */
 struct grtm_regs {
-	volatile unsigned int	dma_ctrl;	/* DMA Control Register (0x00) */
-	volatile unsigned int	dma_status;	/* DMA Status Register (0x04) */
-	volatile unsigned int	dma_len;	/* DMA Length Register (0x08) */	
-	volatile unsigned int	dma_bd;		/* DMA Descriptor Pointer Register (0x0c) */
+	volatile uint32_t	dma_ctrl;	/* DMA Control Register (0x00) */
+	volatile uint32_t	dma_status;	/* DMA Status Register (0x04) */
+	volatile uint32_t	dma_len;	/* DMA Length Register (0x08) */	
+	volatile uint32_t	dma_bd;		/* DMA Descriptor Pointer Register (0x0c) */
 
-	volatile unsigned int	dma_cfg;	/* DMA Configuration Register (0x10) */
-	volatile unsigned int	revision;	/* GRTM Revision Register (0x14) */
+	volatile uint32_t	dma_cfg;	/* DMA Configuration Register (0x10) */
+	volatile uint32_t	revision;	/* GRTM Revision Register (0x14) */
 
-	int unused0[(0x80-0x18)/4];
+	uint32_t unused0[(0x80-0x18)/4];
 
-	volatile unsigned int	ctrl;		/* TM Control Register (0x80) */
-	volatile unsigned int	status;		/* TM Status Register (0x84) */
-	volatile unsigned int	cfg;		/* TM Configuration Register (0x88) */
-	volatile unsigned int	size;		/* TM Size Register (0x8c) */
+	volatile uint32_t	ctrl;		/* TM Control Register (0x80) */
+	volatile uint32_t	status;		/* TM Status Register (0x84) */
+	volatile uint32_t	cfg;		/* TM Configuration Register (0x88) */
+	volatile uint32_t	size;		/* TM Size Register (0x8c) */
 
-	volatile unsigned int	phy;		/* TM Physical Layer Register (0x90) */
-	volatile unsigned int	code;		/* TM Coding Sub-Layer Register (0x94) */
-	volatile unsigned int	asmr;		/* TM Attached Synchronization Marker Register (0x98) */
+	volatile uint32_t	phy;		/* TM Physical Layer Register (0x90) */
+	volatile uint32_t	code;		/* TM Coding Sub-Layer Register (0x94) */
+	volatile uint32_t	asmr;		/* TM Attached Synchronization Marker Register (0x98) */
 
-	int unused1;
+	uint32_t unused1;
 
-	volatile unsigned int	all_frm;	/* TM All Frames Generation Register (0xa0) */
-	volatile unsigned int	mst_frm;	/* TM Master Channel Frame Generation Register (0xa4) */
-	volatile unsigned int	idle_frm;	/* TM Idle Frame Generation Register (0xa8) */
+	volatile uint32_t	all_frm;	/* TM All Frames Generation Register (0xa0) */
+	volatile uint32_t	mst_frm;	/* TM Master Channel Frame Generation Register (0xa4) */
+	volatile uint32_t	idle_frm;	/* TM Idle Frame Generation Register (0xa8) */
 
-	int unused2[(0xc0-0xac)/4];
+	uint32_t unused2[(0xc0-0xac)/4];
 
-	volatile unsigned int	fsh[4];		/* TM FSH/Insert Zone Registers (0xc0..0xcc) */
+	volatile uint32_t	fsh[4];		/* TM FSH/Insert Zone Registers (0xc0..0xcc) */
 
-	volatile unsigned int	ocf;		/* TM Operational Control Field Register (0xd0) */
+	volatile uint32_t	ocf;		/* TM Operational Control Field Register (0xd0) */
 };
 
 /* DMA Control Register (0x00) */
@@ -312,7 +312,7 @@ struct grtm_regs {
 
 /* GRTM transmit descriptor (0x400 Alignment need) */
 struct grtm_bd {
-	volatile unsigned int	ctrl;
+	volatile uint32_t	ctrl;
 	unsigned int		address;
 };
 
@@ -344,7 +344,7 @@ struct grtm_bd {
 
 /* Load register */
 
-#define READ_REG(address)	(*(volatile unsigned int *)address)
+#define READ_REG(address)	(*(volatile uint32_t *)address)
 
 /* Driver functions */
 static rtems_device_driver grtm_initialize(rtems_device_major_number  major, rtems_device_minor_number  minor, void *arg);
@@ -570,7 +570,7 @@ static int grtm_device_init(struct grtm_priv *pDev)
 	}
 	pnpinfo = &ambadev->info;
 	pDev->irq = pnpinfo->irq;
-	pDev->regs = (struct grtm_regs *)pnpinfo->apb_slv->start;
+	pDev->regs = (struct grtm_regs *)(uintptr_t)pnpinfo->apb_slv->start;
 	pDev->minor = pDev->dev->minor_drv;
 	pDev->open = 0;
 	pDev->running = 0;
@@ -709,9 +709,9 @@ static void grtm_hw_get_default_modes(struct grtm_ioc_config *cfg, struct grtm_i
 
 static void *grtm_memalign(unsigned int boundary, unsigned int length, void *realbuf)
 {
-	*(int *)realbuf = (int)grlib_malloc(length+boundary);
+	*(uintptr_t *)realbuf = (uintptr_t)grlib_malloc(length+boundary);
 	DBG("GRTM: Alloced %d (0x%x) bytes, requested: %d\n",length+boundary,length+boundary,length);
-	return (void *)(((*(unsigned int *)realbuf)+boundary) & ~(boundary-1));
+	return (void *)(((*(uintptr_t *)realbuf)+boundary) & ~(boundary-1));
 }
 
 static int grtm_hw_set_config(struct grtm_priv *pDev, struct grtm_ioc_config *cfg, struct grtm_ioc_hw *hwcfg)
@@ -1119,7 +1119,7 @@ static int grtm_schedule_ready(struct grtm_priv *pDev)
 			/* Do translation */
 			drvmgr_translate(pDev->dev, CPUMEM_TO_DMA, (void *)curr_frm->payload, (void **)&curr_bd->bd->address);
 			if ( curr_frm->flags & GRTM_FLAGS_TRANSLATE_AND_REMEMBER ) {
-				if ( curr_frm->payload != (unsigned int *)curr_bd->bd->address ) {
+				if ( curr_frm->payload != (unsigned int *)(uintptr_t)curr_bd->bd->address ) {
 					/* Translation needed */
 					curr_frm->flags &= ~GRTM_FLAGS_TRANSLATE_AND_REMEMBER;
 					curr_frm->flags |= GRTM_FLAGS_TRANSLATE;
@@ -1130,7 +1130,7 @@ static int grtm_schedule_ready(struct grtm_priv *pDev)
 			}
 		} else {
 			/* Custom translation or no translation needed */
-			curr_bd->bd->address = (unsigned int)curr_frm->payload;
+			curr_bd->bd->address = (unsigned int)(uintptr_t)curr_frm->payload;
 		}
 
 		ctrl = GRTM_BD_EN;
@@ -1328,16 +1328,16 @@ static rtems_device_driver grtm_ioctl(rtems_device_major_number major, rtems_dev
 		break;
 
 		case GRTM_IOC_SET_BLOCKING_MODE:
-		if ( (unsigned int)data > GRTM_BLKMODE_BLK ) {
+		if ( (unsigned int)(uintptr_t)data > GRTM_BLKMODE_BLK ) {
 			return RTEMS_INVALID_NAME;
 		}
-		DBG("GRTM: Set blocking mode: %d\n",(unsigned int)data);
-		pDev->config.blocking = (unsigned int)data;
+		DBG("GRTM: Set blocking mode: %d\n",(unsigned int)(uintptr_t)data);
+		pDev->config.blocking = (unsigned int)(uintptr_t)data;
 		break;
 
 		case GRTM_IOC_SET_TIMEOUT:
-		DBG("GRTM: Timeout: %d\n",(unsigned int)data);
-		pDev->config.timeout = (rtems_interval)data;
+		DBG("GRTM: Timeout: %d\n",(unsigned int)(uintptr_t)data);
+		pDev->config.timeout = (rtems_interval)(uintptr_t)data;
 		break;
 
 		case GRTM_IOC_SET_CONFIG:

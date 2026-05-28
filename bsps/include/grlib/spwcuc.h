@@ -47,29 +47,29 @@
 
 /* SPWCUC Register layout */
 struct spwcuc_regs {
-	volatile unsigned int config;        /* 00 */
-	volatile unsigned int status;        /* 04 */
-	volatile unsigned int control;       /* 08 */
-	volatile unsigned int unused0;       /* 0c */
-	volatile unsigned int dla;           /* 10 */
-	volatile unsigned int pid;           /* 14 */
-	volatile unsigned int offset;        /* 18 */
-	volatile unsigned int unused1;       /* 1c */
-	volatile unsigned int pkt_ct;        /* 20 */
-	volatile unsigned int pkt_ft;        /* 24 */   
-	volatile unsigned int pkt_pf_crc;    /* 28 */
-	volatile unsigned int unused2;       /* 2c */
-	volatile unsigned int etct;          /* 30 */
-	volatile unsigned int etft;          /* 34 */
-	volatile unsigned int etct_next;     /* 38 */
-	volatile unsigned int etft_next;     /* 3c */
-	volatile unsigned int unused3[8];    /* 40-5c */
-	volatile unsigned int pimsr;         /* 60 */
-	volatile unsigned int pimr;          /* 64 */
-	volatile unsigned int pisr;          /* 68 */
-	volatile unsigned int pir;           /* 6c */
-	volatile unsigned int imr;           /* 70 */
-	volatile unsigned int picr;          /* 74 */
+	volatile uint32_t config;        /* 00 */
+	volatile uint32_t status;        /* 04 */
+	volatile uint32_t control;       /* 08 */
+	volatile uint32_t unused0;       /* 0c */
+	volatile uint32_t dla;           /* 10 */
+	volatile uint32_t pid;           /* 14 */
+	volatile uint32_t offset;        /* 18 */
+	volatile uint32_t unused1;       /* 1c */
+	volatile uint32_t pkt_ct;        /* 20 */
+	volatile uint32_t pkt_ft;        /* 24 */   
+	volatile uint32_t pkt_pf_crc;    /* 28 */
+	volatile uint32_t unused2;       /* 2c */
+	volatile uint32_t etct;          /* 30 */
+	volatile uint32_t etft;          /* 34 */
+	volatile uint32_t etct_next;     /* 38 */
+	volatile uint32_t etft_next;     /* 3c */
+	volatile uint32_t unused3[8];    /* 40-5c */
+	volatile uint32_t pimsr;         /* 60 */
+	volatile uint32_t pimr;          /* 64 */
+	volatile uint32_t pisr;          /* 68 */
+	volatile uint32_t pir;           /* 6c */
+	volatile uint32_t imr;           /* 70 */
+	volatile uint32_t picr;          /* 74 */
 };
 
 struct spwcuc_cfg {

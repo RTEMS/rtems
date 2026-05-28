@@ -30,6 +30,7 @@
 
 #include <rtems/score/basedefs.h>
 #include <rtems/malloc.h>
+#include <stdint.h>
 
 /*
  * Use interrupt lock primitives compatible with SMP defined in RTEMS 4.11.99
@@ -111,9 +112,9 @@ static inline void *grlib_calloc(size_t nelem, size_t elsize)
 
 #ifdef __sparc__
 
-static inline unsigned char grlib_read_uncached8(unsigned int address)
+static inline uint8_t grlib_read_uncached8(uintptr_t address)
 {
-       unsigned char tmp;
+       uint8_t tmp;
        __asm__ (" lduba [%1]1, %0 "
            : "=r"(tmp)
            : "r"(address)
@@ -121,8 +122,8 @@ static inline unsigned char grlib_read_uncached8(unsigned int address)
        return tmp;
 }
 
-static inline unsigned short grlib_read_uncached16(unsigned int addr) {
-       unsigned short tmp;
+static inline uint16_t grlib_read_uncached16(uintptr_t addr) {
+       uint16_t tmp;
        __asm__ (" lduha [%1]1, %0 "
          : "=r"(tmp)
          : "r"(addr)
@@ -131,9 +132,9 @@ static inline unsigned short grlib_read_uncached16(unsigned int addr) {
 }
 
 
-static inline unsigned int grlib_read_uncached32(unsigned int address)
+static inline uint32_t grlib_read_uncached32(uintptr_t address)
 {
-	unsigned int tmp;
+	uint32_t tmp;
 	__asm__ (" lda [%1]1, %0 "
 	        : "=r"(tmp)
 	        : "r"(address)
@@ -155,20 +156,26 @@ static inline uint64_t grlib_read_uncached64(uint64_t *address)
 
 #else
 
-static __inline__ unsigned char grlib_read_uncached8(unsigned int address)
+static inline uint8_t grlib_read_uncached8(uintptr_t address)
 {
-	unsigned char tmp = (*(volatile unsigned char *)(address));
+	uint8_t tmp = (*(volatile uint8_t *)(address));
 	return tmp;
 }
 
-static __inline__ unsigned short grlib_read_uncached16(unsigned int address) {
-	unsigned short tmp = (*(volatile unsigned short *)(address));
+static inline uint16_t grlib_read_uncached16(uintptr_t address) {
+	uint16_t tmp = (*(volatile uint16_t *)(address));
 	return tmp;
 }
 
-static inline unsigned int grlib_read_uncached32(unsigned int address)
+static inline uint32_t grlib_read_uncached32(uintptr_t address)
 {
-	unsigned int tmp = (*(volatile unsigned int *)(address));
+	uint32_t tmp = (*(volatile uint32_t *)(address));
+	return tmp;
+}
+
+static inline uint64_t grlib_read_uncached64(uintptr_t address)
+{
+	uint64_t tmp = (*(volatile uint64_t *)(address));
 	return tmp;
 }
 

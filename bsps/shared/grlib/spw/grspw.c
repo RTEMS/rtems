@@ -64,35 +64,35 @@
 #endif
 
 typedef struct {
-   volatile unsigned int ctrl;
-   volatile unsigned int status;
-   volatile unsigned int nodeaddr;
-   volatile unsigned int clkdiv;
-   volatile unsigned int destkey;
-   volatile unsigned int time;
-   volatile unsigned int timer;
-   volatile unsigned int pad;
+   volatile uint32_t ctrl;
+   volatile uint32_t status;
+   volatile uint32_t nodeaddr;
+   volatile uint32_t clkdiv;
+   volatile uint32_t destkey;
+   volatile uint32_t time;
+   volatile uint32_t timer;
+   volatile uint32_t pad;
    
-   volatile unsigned int dma0ctrl; 
-   volatile unsigned int dma0rxmax;
-   volatile unsigned int dma0txdesc;
-   volatile unsigned int dma0rxdesc;
+   volatile uint32_t dma0ctrl; 
+   volatile uint32_t dma0rxmax;
+   volatile uint32_t dma0txdesc;
+   volatile uint32_t dma0rxdesc;
    
    /* For GRSPW core 2 and onwards */
-   volatile unsigned int dma0addr;
+   volatile uint32_t dma0addr;
    
 } LEON3_SPACEWIRE_Regs_Map;
 
 typedef struct {
-   volatile unsigned int ctrl;
-   volatile unsigned int addr;
+   volatile uint32_t ctrl;
+   volatile uint32_t addr;
 } SPACEWIRE_RXBD;
 
 typedef struct {
-   volatile unsigned int ctrl;
-   volatile unsigned int addr_header;
-   volatile unsigned int len;
-   volatile unsigned int addr_data;
+   volatile uint32_t ctrl;
+   volatile uint32_t addr_header;
+   volatile uint32_t len;
+   volatile uint32_t addr_data;
 } SPACEWIRE_TXBD;
 
 #define SPACEWIRE_INIT_TIMEOUT 10
@@ -167,19 +167,19 @@ void (*grspw_timecode_callback)
     (void *pDev, void *regs, int minor, unsigned int tc) = NULL;
 
 #ifdef GRSPW_DONT_BYPASS_CACHE
-#define _SPW_READ(address) (*(volatile unsigned int *)(address))
-#define _MEM_READ8(address) (*(volatile unsigned char *)(address))
-#define _MEM_READ32(address) (*(volatile unsigned int *)(address))
+#define _SPW_READ(address) (*(volatile uint32_t *)(address))
+#define _MEM_READ8(address) (*(volatile uint8_t *)(address))
+#define _MEM_READ32(address) (*(volatile uint32_t *)(address))
 #else
-#define _SPW_READ(address) grlib_read_uncached32((unsigned int) address)
-#define _MEM_READ8(address) grlib_read_uncached8((unsigned int) address)
-#define _MEM_READ32(address) grlib_read_uncached32((unsigned int) address)
+#define _SPW_READ(address) grlib_read_uncached32((uintptr_t) address)
+#define _MEM_READ8(address) grlib_read_uncached8((uintptr_t) address)
+#define _MEM_READ32(address) grlib_read_uncached32((uintptr_t) address)
 #endif
 
 #define MEM_READ8(addr) _MEM_READ8((volatile void *)(addr))
 #define MEM_READ32(addr) _MEM_READ32((volatile void *)(addr))
 #define SPW_READ(addr) _SPW_READ((volatile void *)(addr))
-#define SPW_WRITE(addr,v) (*(volatile unsigned int *)addr)=v
+#define SPW_WRITE(addr,v) (*(volatile uint32_t *)addr)=v
 
 #define SPW_REG(c,r) (c->regs->r)
 #define SPW_REG_CTRL(c) SPW_REG(c,ctrl)
@@ -494,7 +494,7 @@ int grspw_device_init(GRSPW_DEV *pDev)
 	}
 	pnpinfo = &ambadev->info;
 	pDev->irq = pnpinfo->irq;
-	pDev->regs = (LEON3_SPACEWIRE_Regs_Map *)pnpinfo->apb_slv->start;
+	pDev->regs = (LEON3_SPACEWIRE_Regs_Map *)(uintptr_t)pnpinfo->apb_slv->start;
 	pDev->minor = pDev->dev->minor_drv;
 
 	/* Get SpaceWire core version */
@@ -618,7 +618,7 @@ static int grspw_buffer_alloc(GRSPW_DEV *pDev)
 	/* RX DMA AREA */
 	if (pDev->rx_dma_area & 1) {
 		/* Address given in remote address */
-		pDev->ptr_rxbuf0_remote = (char *)(pDev->rx_dma_area & ~1);
+		pDev->ptr_rxbuf0_remote = (char *)(uintptr_t)(pDev->rx_dma_area & ~1);
 		drvmgr_translate_check(
 			pDev->dev,
 			DMAMEM_TO_CPU,
@@ -629,14 +629,14 @@ static int grspw_buffer_alloc(GRSPW_DEV *pDev)
 	} else {
 		if (pDev->rx_dma_area == 0) {
 			if (pDev->_ptr_rxbuf0)
-				free((void *)pDev->_ptr_rxbuf0);
-			pDev->_ptr_rxbuf0 = (unsigned int) grlib_malloc(
+				free((void *)(uintptr_t)pDev->_ptr_rxbuf0);
+			pDev->_ptr_rxbuf0 = (unsigned int)(uintptr_t)grlib_malloc(
 				pDev->rxbufsize * pDev->rxbufcnt+4);
-			pDev->ptr_rxbuf0 = (char *)((pDev->_ptr_rxbuf0+7)&~7);
+			pDev->ptr_rxbuf0 = (char *)(uintptr_t)((pDev->_ptr_rxbuf0+7)&~7);
 			if ( !pDev->ptr_rxbuf0 )
 				return 1;
 		} else {
-			pDev->ptr_rxbuf0 = (char *)pDev->rx_dma_area;
+			pDev->ptr_rxbuf0 = (char *)(uintptr_t)pDev->rx_dma_area;
 		}
 		drvmgr_translate_check(
 			pDev->dev,
@@ -649,7 +649,7 @@ static int grspw_buffer_alloc(GRSPW_DEV *pDev)
 	/* TX-DATA DMA AREA */
 	if (pDev->tx_data_dma_area & 1) {
 		/* Address given in remote address */
-		pDev->ptr_txdbuf0_remote = (char*)(pDev->tx_data_dma_area & ~1);
+		pDev->ptr_txdbuf0_remote = (char*)(uintptr_t)(pDev->tx_data_dma_area & ~1);
 		drvmgr_translate_check(
 			pDev->dev,
 			DMAMEM_TO_CPU,
@@ -665,7 +665,7 @@ static int grspw_buffer_alloc(GRSPW_DEV *pDev)
 			if (!pDev->ptr_txdbuf0)
 				return 1;
 		} else {
-			pDev->ptr_txdbuf0 = (char *)pDev->tx_data_dma_area;
+			pDev->ptr_txdbuf0 = (char *)(uintptr_t)pDev->tx_data_dma_area;
 		}
 		drvmgr_translate_check(
 			pDev->dev,
@@ -678,7 +678,7 @@ static int grspw_buffer_alloc(GRSPW_DEV *pDev)
 	/* TX-HEADER DMA AREA */
 	if (pDev->tx_hdr_dma_area & 1) {
 		/* Address given in remote address */
-		pDev->ptr_txhbuf0_remote = (char *)(pDev->tx_hdr_dma_area & ~1);
+		pDev->ptr_txhbuf0_remote = (char *)(uintptr_t)(pDev->tx_hdr_dma_area & ~1);
 		drvmgr_translate_check(
 			pDev->dev,
 			DMAMEM_TO_CPU,
@@ -694,7 +694,7 @@ static int grspw_buffer_alloc(GRSPW_DEV *pDev)
 			if (!pDev->ptr_txhbuf0)
 				return 1;
 		} else {
-			pDev->ptr_txhbuf0 = (char *)pDev->tx_hdr_dma_area;
+			pDev->ptr_txhbuf0 = (char *)(uintptr_t)pDev->tx_hdr_dma_area;
 		}
 		drvmgr_translate_check(
 			pDev->dev,
@@ -711,7 +711,7 @@ static int grspw_dmatables_alloc(GRSPW_DEV *pDev)
 	/* DMA DESCRIPTOR TABLES */
 	if (pDev->bd_dma_area & 1) {
 		/* Address given in remote address */
-		pDev->ptr_bd0_remote = (char *)(pDev->bd_dma_area & ~1);
+		pDev->ptr_bd0_remote = (char *)(uintptr_t)(pDev->bd_dma_area & ~1);
 		drvmgr_translate_check(
 			pDev->dev,
 			DMAMEM_TO_CPU,
@@ -727,9 +727,9 @@ static int grspw_dmatables_alloc(GRSPW_DEV *pDev)
 					SPACEWIRE_BDTABLE_SIZE*2, 1024, 0);
 			if (!pDev->_ptr_bd0)
 				return 1;
-			pDev->ptr_bd0 = (char *)pDev->_ptr_bd0;
+			pDev->ptr_bd0 = (char *)(uintptr_t)pDev->_ptr_bd0;
 		} else {
-			pDev->ptr_bd0 = (char *)pDev->bd_dma_area;
+			pDev->ptr_bd0 = (char *)(uintptr_t)pDev->bd_dma_area;
 		}
 		drvmgr_translate_check(
 			pDev->dev, 
@@ -1082,11 +1082,11 @@ static rtems_device_driver grspw_control(
 	switch(ioarg->command) {
 		case SPACEWIRE_IOCTRL_SET_NODEADDR:
 			/*set node address*/
-			SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_NODEADDR %i\n",(unsigned int)ioarg->buffer);
-			if ((unsigned int)ioarg->buffer > 255) {
+			SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_NODEADDR %i\n",(uintptr_t)ioarg->buffer);
+			if ((uintptr_t)ioarg->buffer > 255) {
 				return RTEMS_INVALID_NAME;
 			}
-			nodeaddr = ((unsigned int)ioarg->buffer) & 0xff;
+			nodeaddr = ((uintptr_t)ioarg->buffer) & 0xff;
 			tmp = SPW_READ(&pDev->regs->nodeaddr);
 			tmp &= 0xffffff00; /* Remove old address */
 			tmp |= nodeaddr;
@@ -1098,12 +1098,12 @@ static rtems_device_driver grspw_control(
 			break;
 		case SPACEWIRE_IOCTRL_SET_NODEMASK:
 			/*set node address*/
-			SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_NODEMASK %i\n",(unsigned int)ioarg->buffer);
+			SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_NODEMASK %i\n",(uintptr_t)ioarg->buffer);
 			if ( pDev->core_ver > 1 ){
-				if ((unsigned int)ioarg->buffer > 255) {
+				if ((uintptr_t)ioarg->buffer > 255) {
 					return RTEMS_INVALID_NAME;
 				}
-				nodemask = ((unsigned int)ioarg->buffer) & 0xff;
+				nodemask = ((uintptr_t)ioarg->buffer) & 0xff;
 				tmp = SPW_READ(&pDev->regs->nodeaddr);
 				tmp &= 0xffff00ff; /* Remove old mask */
 				tmp |= nodemask<<8;
@@ -1117,36 +1117,36 @@ static rtems_device_driver grspw_control(
 			}
 			break;
 		case SPACEWIRE_IOCTRL_SET_RXBLOCK:
-			SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_RXBLOCK %i \n", (unsigned int)ioarg->buffer);
-			if ((unsigned int)ioarg->buffer > 1) {
+			SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_RXBLOCK %i \n", (uintptr_t)ioarg->buffer);
+			if ((uintptr_t)ioarg->buffer > 1) {
 				return RTEMS_INVALID_NAME;
 			}
-			pDev->config.rx_blocking = (unsigned int)ioarg->buffer;
+			pDev->config.rx_blocking = (uintptr_t)ioarg->buffer;
 			break;
 		case SPACEWIRE_IOCTRL_SET_DESTKEY:
-			SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_DESTKEY %i\n", (unsigned int)ioarg->buffer);
+			SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_DESTKEY %i\n", (uintptr_t)ioarg->buffer);
 			if (!pDev->config.is_rmap) {
 				return RTEMS_NOT_IMPLEMENTED;
 			}
-			if ((unsigned int)ioarg->buffer > 255) {
+			if ((uintptr_t)ioarg->buffer > 255) {
 				return RTEMS_INVALID_NAME;
 			}
-			SPW_WRITE(&pDev->regs->destkey, (unsigned int)ioarg->buffer);
-			if (SPW_READ(&pDev->regs->destkey) != (unsigned int)ioarg->buffer) {
+			SPW_WRITE(&pDev->regs->destkey, (uintptr_t)ioarg->buffer);
+			if (SPW_READ(&pDev->regs->destkey) != (uintptr_t)ioarg->buffer) {
 				return RTEMS_IO_ERROR;
 			}
-			pDev->config.destkey = (unsigned int)ioarg->buffer;
+			pDev->config.destkey = (uintptr_t)ioarg->buffer;
 			break;
 		case SPACEWIRE_IOCTRL_SET_CLKDIV:
-			SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_CLKDIV %i\n", (unsigned int)ioarg->buffer);
-			if ((unsigned int)ioarg->buffer > 255) {
+			SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_CLKDIV %i\n", (uintptr_t)ioarg->buffer);
+			if ((uintptr_t)ioarg->buffer > 255) {
 				return RTEMS_INVALID_NAME;
 			}
 			if ( pDev->core_ver == 3 )
 				break;
 			tmp = SPW_READ(&pDev->regs->clkdiv);
 			tmp &= ~0xff; /* Remove old Clockdiv Setting */
-			tmp |= ((unsigned int)ioarg->buffer) & 0xff; /* add new clockdiv setting */
+			tmp |= ((uintptr_t)ioarg->buffer) & 0xff; /* add new clockdiv setting */
 			SPW_WRITE(&pDev->regs->clkdiv, tmp);
 			if (SPW_READ(&pDev->regs->clkdiv) != tmp) {
 				return RTEMS_IO_ERROR;
@@ -1154,15 +1154,15 @@ static rtems_device_driver grspw_control(
 			pDev->config.clkdiv = tmp;
 			break;
 		case SPACEWIRE_IOCTRL_SET_CLKDIVSTART:
-			SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_CLKDIVSTART %i\n", (unsigned int)ioarg->buffer);
-			if ((unsigned int)ioarg->buffer > 255) {
+			SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_CLKDIVSTART %i\n", (uintptr_t)ioarg->buffer);
+			if ((uintptr_t)ioarg->buffer > 255) {
 				return RTEMS_INVALID_NAME;
 			}
 			if ( pDev->core_ver == 3 )
 				break;
 			tmp = SPW_READ(&pDev->regs->clkdiv);
 			tmp &= ~0xff00; /* Remove old Clockdiv Start Setting */
-			tmp |= (((unsigned int)ioarg->buffer) & 0xff)<<8; /* add new clockdiv start setting */
+			tmp |= (((uintptr_t)ioarg->buffer) & 0xff)<<8; /* add new clockdiv start setting */
 			SPW_WRITE(&pDev->regs->clkdiv, tmp);
 			if (SPW_READ(&pDev->regs->clkdiv) != tmp) {
 				return RTEMS_IO_ERROR;
@@ -1170,129 +1170,129 @@ static rtems_device_driver grspw_control(
 			pDev->config.clkdiv = tmp;
 			break;			
 		case SPACEWIRE_IOCTRL_SET_TIMER:
-			SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_TIMER %i\n", (unsigned int)ioarg->buffer);
+			SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_TIMER %i\n", (uintptr_t)ioarg->buffer);
 			if ( pDev->core_ver <= 1 ) {
-				if ((unsigned int)ioarg->buffer > 4095) {
+				if ((uintptr_t)ioarg->buffer > 4095) {
 					return RTEMS_INVALID_NAME;
 				}
-				SPW_WRITE(&pDev->regs->timer, (SPW_READ(&pDev->regs->timer) & 0xFFFFF000) | ((unsigned int)ioarg->buffer & 0xFFF));
-				if ((SPW_READ(&pDev->regs->timer) & 0xFFF) != (unsigned int)ioarg->buffer) {
+				SPW_WRITE(&pDev->regs->timer, (SPW_READ(&pDev->regs->timer) & 0xFFFFF000) | ((uintptr_t)ioarg->buffer & 0xFFF));
+				if ((SPW_READ(&pDev->regs->timer) & 0xFFF) != (uintptr_t)ioarg->buffer) {
 					return RTEMS_IO_ERROR;
 				}
-				pDev->config.timer = (unsigned int)ioarg->buffer;
+				pDev->config.timer = (uintptr_t)ioarg->buffer;
 			}else{
 				SPACEWIRE_DBG("SPACEWIRE_IOCTRL_SET_TIMER: removed in GRSPW2 HW\n");
 			}
 			break;
 		case SPACEWIRE_IOCTRL_SET_DISCONNECT:
-			SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_DISCONNECT %i\n", (unsigned int)ioarg->buffer);
+			SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_DISCONNECT %i\n", (uintptr_t)ioarg->buffer);
 			if ( pDev->core_ver <= 1 ) {
-				if ((unsigned int)ioarg->buffer > 1023) {
+				if ((uintptr_t)ioarg->buffer > 1023) {
 					return RTEMS_INVALID_NAME;
 				}
-				SPW_WRITE(&pDev->regs->timer, (SPW_READ(&pDev->regs->timer) & 0xFFC00FFF) | (((unsigned int)ioarg->buffer & 0x3FF) << 12));
-				if (((SPW_READ(&pDev->regs->timer) >> 12) & 0x3FF) != (unsigned int)ioarg->buffer) {
+				SPW_WRITE(&pDev->regs->timer, (SPW_READ(&pDev->regs->timer) & 0xFFC00FFF) | (((uintptr_t)ioarg->buffer & 0x3FF) << 12));
+				if (((SPW_READ(&pDev->regs->timer) >> 12) & 0x3FF) != (uintptr_t)ioarg->buffer) {
 					return RTEMS_IO_ERROR;
 				}
-				pDev->config.disconnect = (unsigned int)ioarg->buffer;
+				pDev->config.disconnect = (uintptr_t)ioarg->buffer;
 			}else{
 				SPACEWIRE_DBG("SPACEWIRE_IOCTRL_SET_DISCONNECT: not implemented for GRSPW2\n");
 			}
 			break;
 		case SPACEWIRE_IOCTRL_SET_PROMISCUOUS:	
-			SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_PROMISCUOUS %i \n", (unsigned int)ioarg->buffer);
-			if ((unsigned int)ioarg->buffer > 1) {
+			SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_PROMISCUOUS %i \n", (uintptr_t)ioarg->buffer);
+			if ((uintptr_t)ioarg->buffer > 1) {
 				return RTEMS_INVALID_NAME;
 			}
-			SPW_CTRL_WRITE(pDev, SPW_CTRL_READ(pDev) | ((unsigned int)ioarg->buffer << 5));
-			if (((SPW_CTRL_READ(pDev) >> 5) & 1) != (unsigned int)ioarg->buffer) {
+			SPW_CTRL_WRITE(pDev, SPW_CTRL_READ(pDev) | ((uintptr_t)ioarg->buffer << 5));
+			if (((SPW_CTRL_READ(pDev) >> 5) & 1) != (uintptr_t)ioarg->buffer) {
 				return RTEMS_IO_ERROR;
 			}
-			pDev->config.promiscuous = (unsigned int)ioarg->buffer;
+			pDev->config.promiscuous = (uintptr_t)ioarg->buffer;
 			break;
 		case SPACEWIRE_IOCTRL_SET_RMAPEN:
-			SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_RMAPEN %i \n", (unsigned int)ioarg->buffer);
-			if ((unsigned int)ioarg->buffer > 1) {
+			SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_RMAPEN %i \n", (uintptr_t)ioarg->buffer);
+			if ((uintptr_t)ioarg->buffer > 1) {
 				return RTEMS_INVALID_NAME;
 			}
-			SPW_CTRL_WRITE(pDev, (SPW_CTRL_READ(pDev) & 0xFFFEFFFF) | ((unsigned int)ioarg->buffer << 16));
-			if (((SPW_CTRL_READ(pDev) >> 16) & 1) != (unsigned int)ioarg->buffer) {
+			SPW_CTRL_WRITE(pDev, (SPW_CTRL_READ(pDev) & 0xFFFEFFFF) | ((uintptr_t)ioarg->buffer << 16));
+			if (((SPW_CTRL_READ(pDev) >> 16) & 1) != (uintptr_t)ioarg->buffer) {
 				return RTEMS_IO_ERROR;
 			}
-			pDev->config.rmapen = (unsigned int)ioarg->buffer;
+			pDev->config.rmapen = (uintptr_t)ioarg->buffer;
 			break;
 		case SPACEWIRE_IOCTRL_SET_RMAPBUFDIS: 
-			SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_RMAPBUFDIS %i \n", (unsigned int)ioarg->buffer);
-			if ((unsigned int)ioarg->buffer > 1) {
+			SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_RMAPBUFDIS %i \n", (uintptr_t)ioarg->buffer);
+			if ((uintptr_t)ioarg->buffer > 1) {
 				return RTEMS_INVALID_NAME;
 			}
-			SPW_CTRL_WRITE(pDev, (SPW_CTRL_READ(pDev) & 0xFFFDFFFF) | ((unsigned int)ioarg->buffer << 17));
-			if (((SPW_CTRL_READ(pDev) >> 17) & 1) != (unsigned int)ioarg->buffer) {
+			SPW_CTRL_WRITE(pDev, (SPW_CTRL_READ(pDev) & 0xFFFDFFFF) | ((uintptr_t)ioarg->buffer << 17));
+			if (((SPW_CTRL_READ(pDev) >> 17) & 1) != (uintptr_t)ioarg->buffer) {
 				return RTEMS_IO_ERROR;
 			}
-			pDev->config.rmapbufdis = (unsigned int)ioarg->buffer;
+			pDev->config.rmapbufdis = (uintptr_t)ioarg->buffer;
 			break;
 		case SPACEWIRE_IOCTRL_SET_CHECK_RMAP: 
-			SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_CHECK_RMAP %i \n", (unsigned int)ioarg->buffer);
-			if ((unsigned int)ioarg->buffer > 1) {
+			SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_CHECK_RMAP %i \n", (uintptr_t)ioarg->buffer);
+			if ((uintptr_t)ioarg->buffer > 1) {
 				return RTEMS_INVALID_NAME;
 			}
-			pDev->config.check_rmap_err = (unsigned int)ioarg->buffer;
+			pDev->config.check_rmap_err = (uintptr_t)ioarg->buffer;
 			break;
 		case SPACEWIRE_IOCTRL_SET_RM_PROT_ID: 
-			SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_RM_PROT_ID %i \n", (unsigned int)ioarg->buffer);
-			if ((unsigned int)ioarg->buffer > 1) {
+			SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_RM_PROT_ID %i \n", (uintptr_t)ioarg->buffer);
+			if ((uintptr_t)ioarg->buffer > 1) {
 				return RTEMS_INVALID_NAME;
 			}
-			pDev->config.rm_prot_id = (unsigned int)ioarg->buffer;
+			pDev->config.rm_prot_id = (uintptr_t)ioarg->buffer;
 			break;
 		case SPACEWIRE_IOCTRL_SET_KEEP_SOURCE: 
-			SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_KEEP_SOURCE %i \n", (unsigned int)ioarg->buffer);
-			if ((unsigned int)ioarg->buffer > 1) {
+			SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_KEEP_SOURCE %i \n", (uintptr_t)ioarg->buffer);
+			if ((uintptr_t)ioarg->buffer > 1) {
 				return RTEMS_INVALID_NAME;
 			}
-			pDev->config.keep_source = (unsigned int)ioarg->buffer;
+			pDev->config.keep_source = (uintptr_t)ioarg->buffer;
 			break;
 		case SPACEWIRE_IOCTRL_SET_TXBLOCK: 
-			SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_TXBLOCK %i \n", (unsigned int)ioarg->buffer);
-			if ((unsigned int)ioarg->buffer > 1) {
+			SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_TXBLOCK %i \n", (uintptr_t)ioarg->buffer);
+			if ((uintptr_t)ioarg->buffer > 1) {
 				return RTEMS_INVALID_NAME;
 			}
-			pDev->config.tx_blocking = (unsigned int)ioarg->buffer;
+			pDev->config.tx_blocking = (uintptr_t)ioarg->buffer;
 			break;
 		case SPACEWIRE_IOCTRL_SET_TXBLOCK_ON_FULL: 
-			SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_TXBLOCK_ON_FULL %i \n", (unsigned int)ioarg->buffer);
-			if ((unsigned int)ioarg->buffer > 1) {
+			SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_TXBLOCK_ON_FULL %i \n", (uintptr_t)ioarg->buffer);
+			if ((uintptr_t)ioarg->buffer > 1) {
 				return RTEMS_INVALID_NAME;
 			}
-			pDev->config.tx_block_on_full = (unsigned int)ioarg->buffer;
+			pDev->config.tx_block_on_full = (uintptr_t)ioarg->buffer;
 			break;	
 		case SPACEWIRE_IOCTRL_SET_DISABLE_ERR: 
-			SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_DISABLE_ERR %i \n", (unsigned int)ioarg->buffer);
-			if ((unsigned int)ioarg->buffer > 1) {
+			SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_DISABLE_ERR %i \n", (uintptr_t)ioarg->buffer);
+			if ((uintptr_t)ioarg->buffer > 1) {
 				return RTEMS_INVALID_NAME;
 			}
-			pDev->config.disable_err = (unsigned int)ioarg->buffer;
+			pDev->config.disable_err = (uintptr_t)ioarg->buffer;
 			break;
 		case SPACEWIRE_IOCTRL_SET_LINK_ERR_IRQ: 
-			SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_LINK_ERR_IRQ %i \n", (unsigned int)ioarg->buffer);
+			SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_LINK_ERR_IRQ %i \n", (uintptr_t)ioarg->buffer);
 			SPACEWIRE_DBGC(DBGSPW_IOCTRL, "CTRL REG: %x\n", SPW_CTRL_READ(pDev));
-			if ((unsigned int)ioarg->buffer > 1) {
+			if ((uintptr_t)ioarg->buffer > 1) {
 				return RTEMS_INVALID_NAME;
 			}
-			tmp = (SPW_CTRL_READ(pDev) & 0xFFFFFDF7) | ((unsigned int)ioarg->buffer << 9);
+			tmp = (SPW_CTRL_READ(pDev) & 0xFFFFFDF7) | ((uintptr_t)ioarg->buffer << 9);
 			if (tmp & (SPW_CTRL_LI|SPW_CTRL_TQ))
 				tmp |= SPW_CTRL_IE;
 			SPW_CTRL_WRITE(pDev, tmp);
 			SPACEWIRE_DBGC(DBGSPW_IOCTRL, "CTRL REG: %x\n", SPW_CTRL_READ(pDev));
-			if (((SPW_CTRL_READ(pDev) >> 9) & 1) != (unsigned int)ioarg->buffer) {
+			if (((SPW_CTRL_READ(pDev) >> 9) & 1) != (uintptr_t)ioarg->buffer) {
 				return RTEMS_IO_ERROR;
 			}
-			pDev->config.link_err_irq = (unsigned int)ioarg->buffer;
+			pDev->config.link_err_irq = (uintptr_t)ioarg->buffer;
 			break;
 		case SPACEWIRE_IOCTRL_SET_EVENT_ID:
-			SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_EVENT_ID %i \n", (unsigned int)ioarg->buffer);
-			pDev->config.event_id = (rtems_id)ioarg->buffer;
+			SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_EVENT_ID %i \n", (uintptr_t)ioarg->buffer);
+			pDev->config.event_id = (rtems_id)(uintptr_t)ioarg->buffer;
 			SPACEWIRE_DBGC(DBGSPW_IOCTRL, "Event id: %i\n", pDev->config.event_id);
 			break;
 
@@ -1306,7 +1306,7 @@ static rtems_device_driver grspw_control(
 			if (ioarg->buffer == NULL)
 				return RTEMS_INVALID_NAME;
 			ps = (spw_ioctl_packetsize*) ioarg->buffer;
-			SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_RXPACKETSIZE %i \n", (unsigned int)ioarg->buffer);
+			SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_RXPACKETSIZE %i \n", (uintptr_t)ioarg->buffer);
 
 			tmp = pDev->running;
 
@@ -1478,7 +1478,7 @@ static rtems_device_driver grspw_control(
 		 *  - SPACEWIRE_IOCTRL_SET_TIMER
 		 */
 		case SPACEWIRE_IOCTRL_SET_COREFREQ:
-			pDev->core_freq_khz = (unsigned int)ioarg->buffer;
+			pDev->core_freq_khz = (uintptr_t)ioarg->buffer;
 			if ( pDev->core_freq_khz == 0 ){
 				/* Get GRSPW clock frequency from system clock.
 				 * System clock has been read from timer inited
@@ -1526,7 +1526,7 @@ static rtems_device_driver grspw_control(
 			 *   *  positive     = specifies number of system clock ticks that
 			 *		     startup will wait for link to enter ready mode.
 			 */
-			timeout = (int)ioarg->buffer;
+			timeout = (int)(uintptr_t)ioarg->buffer;
 			
 			if ( (ret=grspw_hw_startup(pDev,timeout)) != RTEMS_SUCCESSFUL ) {
 				return ret;
@@ -1555,7 +1555,7 @@ static rtems_device_driver grspw_control(
 		 * grspw_timecode_callback if using interrupts.
 		 */
 		case SPACEWIRE_IOCTRL_SET_TCODE_CTRL:
-			tmp = (unsigned int)ioarg->buffer;
+			tmp = (uintptr_t)ioarg->buffer;
 			mask = tmp & (SPACEWIRE_TCODE_CTRL_IE_MSK|SPACEWIRE_TCODE_CTRL_TT_MSK|SPACEWIRE_TCODE_CTRL_TR_MSK);
 			mask <<= 8;
 			tmp &= mask;
@@ -1567,7 +1567,7 @@ static rtems_device_driver grspw_control(
 
 		/* Set time register and optionaly send a time code */
 		case SPACEWIRE_IOCTRL_SET_TCODE:
-			tmp = (unsigned int)ioarg->buffer;
+			tmp = (uintptr_t)ioarg->buffer;
 			/* Set timecode register */
 			if (tmp & SPACEWIRE_TCODE_SET) {
 				SPW_WRITE(&pDev->regs->time,
@@ -1583,21 +1583,21 @@ static rtems_device_driver grspw_control(
 
 		/* Read time code register and tick-out status bit */
 		case SPACEWIRE_IOCTRL_GET_TCODE:
-			tmp = (unsigned int)ioarg->buffer;
+			tmp = (uintptr_t)ioarg->buffer;
 			if ( !tmp ){
 			    return RTEMS_INVALID_NAME;
 			}
 
 			/* Copy timecode register */
 			if (SPW_READ(&pDev->regs->status) & SPW_STATUS_TO) {
-				*(unsigned int *)tmp = (1 << 8) | SPW_READ(&pDev->regs->time);
+				*(unsigned int *)(uintptr_t)tmp = (1 << 8) | SPW_READ(&pDev->regs->time);
 			} else {
-				*(unsigned int *)tmp = SPW_READ(&pDev->regs->time);
+				*(unsigned int *)(uintptr_t)tmp = SPW_READ(&pDev->regs->time);
 			}
 			break;
 
 		case SPACEWIRE_IOCTRL_SET_READ_TIMEOUT:
-			pDev->config.rtimeout = (unsigned int)ioarg->buffer;
+			pDev->config.rtimeout = (uintptr_t)ioarg->buffer;
 			break;
 
 		default:
@@ -1629,7 +1629,7 @@ static int grspw_hw_init(GRSPW_DEV *pDev) {
 	pDev->tx = (SPACEWIRE_TXBD *) (pDev->ptr_bd0 + SPACEWIRE_BDTABLE_SIZE);
 
 	/* Set up remote addresses */
-	pDev->rx_remote = (unsigned int)pDev->ptr_bd0_remote;
+	pDev->rx_remote = (unsigned int)(uintptr_t)pDev->ptr_bd0_remote;
 	pDev->tx_remote = pDev->rx_remote + SPACEWIRE_BDTABLE_SIZE;
 
 	SPACEWIRE_DBG("hw_init [minor %i]\n", pDev->minor);
@@ -1747,8 +1747,8 @@ static int grspw_hw_startup (GRSPW_DEV *pDev, int timeout)
 	/* prepare transmit buffers */
 	for (i = 0; i < pDev->txbufcnt; i++) {
 		pDev->tx[i].ctrl = 0;
-		pDev->tx[i].addr_header = ((unsigned int)&pDev->ptr_txhbuf0_remote[0]) + (i * pDev->txhbufsize);
-		pDev->tx[i].addr_data = ((unsigned int)&pDev->ptr_txdbuf0_remote[0]) + (i * pDev->txdbufsize);
+		pDev->tx[i].addr_header = ((unsigned int)(uintptr_t)&pDev->ptr_txhbuf0_remote[0]) + (i * pDev->txhbufsize);
+		pDev->tx[i].addr_data = ((unsigned int)(uintptr_t)&pDev->ptr_txdbuf0_remote[0]) + (i * pDev->txdbufsize);
 	}
 	pDev->tx_cur = 0;
 	pDev->tx_sent = 0;
@@ -1761,7 +1761,7 @@ static int grspw_hw_startup (GRSPW_DEV *pDev, int timeout)
 		} else {
 			pDev->rx[i].ctrl = SPW_RXBD_IE | SPW_RXBD_EN;
 		}
-		pDev->rx[i].addr = ((unsigned int)&pDev->ptr_rxbuf0_remote[0]) + (i * pDev->rxbufsize);
+		pDev->rx[i].addr = ((unsigned int)(uintptr_t)&pDev->ptr_rxbuf0_remote[0]) + (i * pDev->rxbufsize);
 	}
 	pDev->rxcur = 0;
 	pDev->rxbufcur = -1;
@@ -1856,9 +1856,9 @@ int grspw_hw_send(GRSPW_DEV *pDev, unsigned int hlen, char *hdr, unsigned int dl
 	}
 #endif
 	
-	pDev->tx[cur].addr_header = (unsigned int)txh_remote;
+	pDev->tx[cur].addr_header = (unsigned int)(uintptr_t)txh_remote;
 	pDev->tx[cur].len = dlen;
-	pDev->tx[cur].addr_data = (unsigned int)txd_remote;
+	pDev->tx[cur].addr_data = (unsigned int)(uintptr_t)txd_remote;
 
 	bdctrl = SPW_TXBD_IE | SPW_TXBD_EN | hlen;
 	if ( options & GRSPW_PKTSEND_OPTION_HDR_CRC )
@@ -1946,7 +1946,7 @@ static int grspw_hw_receive(GRSPW_DEV *pDev, char *b, int c) {
 		} else {
 			int left = rxlen;
 			/* Copy word wise if Aligned */
-			if ( (((int)b & 3) == 0) && (((int)(rxb+pDev->rxbufcur) & 3) == 0) ){
+			if ( (((int)(uintptr_t)b & 3) == 0) && (((int)(uintptr_t)(rxb+pDev->rxbufcur) & 3) == 0) ){
 				while(left>=32){
 					*(int *)(b+0) = MEM_READ32(rxb+pDev->rxbufcur+0);
 					*(int *)(b+4) = MEM_READ32(rxb+pDev->rxbufcur+4);
@@ -2040,14 +2040,14 @@ static void grspw_print_dev(struct drvmgr_dev *dev, int options)
 
 	/* Print */
 	printf("--- GRSPW %s ---\n", pDev->devName);
-	printf(" REGS:            0x%x\n", (unsigned int)pDev->regs);
+	printf(" REGS:            0x%x\n", (unsigned int)(uintptr_t)pDev->regs);
 	printf(" IRQ:             %d\n", pDev->irq);
 	printf(" CORE VERSION:    %d\n", pDev->core_ver);
 	printf(" CTRL:            0x%x\n", pDev->regs->ctrl);
 	printf(" STATUS:          0x%x\n", pDev->regs->status);
 	printf(" DMA0CTRL:        0x%x\n", pDev->regs->dma0ctrl);
-	printf(" TXBD:            0x%x\n", (unsigned int)pDev->tx);
-	printf(" RXBD:            0x%x\n", (unsigned int)pDev->rx);
+	printf(" TXBD:            0x%x\n", (unsigned int)(uintptr_t)pDev->tx);
+	printf(" RXBD:            0x%x\n", (unsigned int)(uintptr_t)pDev->rx);
 }
 
 void grspw_print(int options)

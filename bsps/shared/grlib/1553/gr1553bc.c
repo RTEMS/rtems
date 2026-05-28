@@ -38,11 +38,11 @@
 
 #include <grlib/grlib_impl.h>
 
-#define GR1553BC_WRITE_MEM(adr, val) *(volatile uint32_t *)(adr) = (uint32_t)(val)
-#define GR1553BC_READ_MEM(adr) (*(volatile uint32_t *)(adr))
+#define GR1553BC_WRITE_MEM(adr, val) *(volatile uint32_t *)(uintptr_t)(adr) = (uint32_t)(val)
+#define GR1553BC_READ_MEM(adr) (*(volatile uint32_t *)(uintptr_t)(adr))
 
-#define GR1553BC_WRITE_REG(adr, val) *(volatile uint32_t *)(adr) = (uint32_t)(val)
-#define GR1553BC_READ_REG(adr) (*(volatile uint32_t *)(adr))
+#define GR1553BC_WRITE_REG(adr, val) *(volatile uint32_t *)(uintptr_t)(adr) = (uint32_t)(val)
+#define GR1553BC_READ_REG(adr) (*(volatile uint32_t *)(uintptr_t)(adr))
 
 /* Needed by list for data pinter and BD translation */
 struct gr1553bc_priv {
@@ -240,7 +240,7 @@ static inline union gr1553bc_bd *gr1553bc_bd_cpu2hw
 	union gr1553bc_bd *bd
 	)
 {
-	return (union gr1553bc_bd *)(((unsigned int)bd - list->table_cpu) +
+	return (union gr1553bc_bd *)(uintptr_t)(((uint32_t)(uintptr_t)bd - list->table_cpu) +
 		list->table_hw);
 }
 
@@ -251,7 +251,7 @@ static inline union gr1553bc_bd *gr1553bc_bd_hw2cpu
 	union gr1553bc_bd *bd
 	)
 {
-	return (union gr1553bc_bd *)(((unsigned int)bd - list->table_hw) +
+	return (union gr1553bc_bd *)(uintptr_t)(((uint32_t)(uintptr_t)bd - list->table_hw) +
 		list->table_cpu);
 }
 
@@ -301,7 +301,7 @@ int gr1553bc_list_table_alloc
 {
 	struct gr1553bc_major *major;
 	int i, j, minor_cnt, size;
-	unsigned int table;
+	uintptr_t table;
 	struct gr1553bc_priv *bcpriv = list->bc;
 	int retval = 0;
 
@@ -314,16 +314,16 @@ int gr1553bc_list_table_alloc
 	/* Get Size required for descriptors */
 	size = gr1553bc_list_table_size(list);
 
-	if ((unsigned int)bdtab_custom & 0x1) {
+	if ((uintptr_t)bdtab_custom & 0x1) {
 		/* Address given in Hardware accessible address, we
 		 * convert it into CPU-accessible address.
 		 */
-		list->_table = (void*)((unsigned int)bdtab_custom & ~0x1);
-		list->table_hw = (unsigned int)list->_table;
+		list->_table = (void*)((uintptr_t)bdtab_custom & ~0x1);
+		list->table_hw = (uint32_t)(uintptr_t)list->_table;
 		drvmgr_translate_check(
 			*bcpriv->pdev,
 			DMAMEM_TO_CPU,
-			(void *)list->table_hw,
+			(void *)(uintptr_t)list->table_hw,
 			(void **)&list->table_cpu,
 			size);
 	} else {
@@ -336,12 +336,12 @@ int gr1553bc_list_table_alloc
 			}
 			/* 128-bit Alignment required by HW */
 			list->table_cpu =
-				(((unsigned int)list->_table + (GR1553BC_BD_ALIGN-1)) &
+				(((uintptr_t)list->_table + (GR1553BC_BD_ALIGN-1)) &
 				~(GR1553BC_BD_ALIGN-1));
 		} else {
 			/* Custom address, given in CPU-accessible address */
 			list->_table = bdtab_custom;
-			list->table_cpu = (unsigned int)list->_table;
+			list->table_cpu = (uint32_t)(uintptr_t)list->_table;
 		}
 
 		/* We got CPU accessible descriptor table address, now we
@@ -352,7 +352,7 @@ int gr1553bc_list_table_alloc
 			drvmgr_translate_check(
 				*bcpriv->pdev,
 				CPUMEM_TO_DMA,
-				(void *)list->table_cpu,
+				(void *)(uintptr_t)list->table_cpu,
 				(void **)&list->table_hw,
 				size
 				);
@@ -487,7 +487,7 @@ int gr1553bc_list_table_build(struct gr1553bc_list *list)
 					&bds[k],
 					0xf,
 					GR1553BC_UNCOND_JMP,
-					(uint32_t)hwbd,
+					(uint32_t)(uintptr_t)hwbd,
 					((GR1553BC_ID(i,j,k) << 8) | marker),
 					0
 					);
@@ -508,7 +508,7 @@ int gr1553bc_list_table_build(struct gr1553bc_list *list)
 
 void gr1553bc_bd_init(
 	union gr1553bc_bd *bd,
-	unsigned int flags,
+	uint32_t flags,
 	uint32_t word0,
 	uint32_t word1,
 	uint32_t word2,
@@ -873,7 +873,7 @@ int gr1553bc_slot_raw
 	(
 	struct gr1553bc_list *list,
 	int mid,
-	unsigned int flags,
+	uint32_t flags,
 	uint32_t word0,
 	uint32_t word1,
 	uint32_t word2,
@@ -943,9 +943,9 @@ int gr1553bc_slot_irq_prepare
 		mid,
 		0xF,
 		GR1553BC_UNCOND_JMP,
-		(uint32_t)bd,
-		(uint32_t)func,
-		(uint32_t)data
+		(uint32_t)(uintptr_t)bd,
+		(uint32_t)(uintptr_t)func,
+		(uint32_t)(uintptr_t)data
 		);
 }
 
@@ -1034,7 +1034,7 @@ int gr1553bc_slot_jump
 		mid,
 		0xF,
 		condition,
-		(uint32_t)bd,
+		(uint32_t)(uintptr_t)bd,
 		0,
 		0);
 }
@@ -1059,13 +1059,13 @@ int gr1553bc_slot_transfer(
 	 * address if user wants that. This may be useful for AMBA-over-PCI
 	 * cores.
 	 */
-	if ( (unsigned int)dptr & 0x1 ) {
+	if ( (uintptr_t)dptr & 0x1 ) {
 		struct gr1553bc_priv *bcpriv = list->bc;
 
 		drvmgr_translate(
 			*bcpriv->pdev,
 			CPUMEM_TO_DMA,
-			(void *)((unsigned int)dptr & ~0x1),
+			(void *)((uintptr_t)dptr & ~0x1),
 			(void **)&dptr);
 	}
 
@@ -1100,7 +1100,7 @@ int gr1553bc_slot_transfer(
 	set1 = ((timeout & 0xf) << 27) | (tt & 0x27ffffff) | ((options & 0x3)<<30);
 
 	GR1553BC_WRITE_MEM(&bd->tr.settings[0], set0);
-	GR1553BC_WRITE_MEM(&bd->tr.dptr, (uint32_t)dptr);
+	GR1553BC_WRITE_MEM(&bd->tr.dptr, (uint32_t)(uintptr_t)dptr);
 	/* Write UNUSED BIT, when cleared it Indicates that BC has written it */
 	GR1553BC_WRITE_MEM(&bd->tr.status, 0x80000000);
 	GR1553BC_WRITE_MEM(&bd->tr.settings[1], set1);
@@ -1113,12 +1113,12 @@ int gr1553bc_slot_update
 	struct gr1553bc_list *list,
 	int mid,
 	uint16_t *dptr,
-	unsigned int *stat
+	uint32_t *stat
 	)
 {
 	union gr1553bc_bd *bd;
-	unsigned int status;
-	unsigned int dataptr = (unsigned int)dptr;
+	uint32_t status;
+	uint32_t dataptr = (uint32_t)(uintptr_t)dptr;
 
 	/* Get BD address */
 	bd = gr1553bc_slot_bd(list, mid);
@@ -1137,7 +1137,7 @@ int gr1553bc_slot_update
 			drvmgr_translate(
 				*bcpriv->pdev,
 				CPUMEM_TO_DMA,
-				(void *)(dataptr & ~0x1),
+				(void *)(uintptr_t)(dataptr & ~0x1),
 				(void **)&dptr
 				);
 		}
@@ -1168,10 +1168,10 @@ int gr1553bc_slot_update
 int gr1553bc_slot_dummy(
 	struct gr1553bc_list *list,
 	int mid,
-	unsigned int *dummy)
+	uint32_t *dummy)
 {
 	union gr1553bc_bd *bd;
-	unsigned int set1, new_set1;
+	uint32_t set1, new_set1;
 
 	/* Get BD address */
 	bd = gr1553bc_slot_bd(list, mid);
@@ -1305,7 +1305,7 @@ void *gr1553bc_open(int minor)
 	/* Get device information from AMBA PnP information */
 	ambadev = (struct amba_dev_info *)(*pdev)->businfo;
 	pnpinfo = &ambadev->info;
-	priv->regs = (struct gr1553b_regs *)pnpinfo->apb_slv->start;
+	priv->regs = (struct gr1553b_regs *)(uintptr_t)pnpinfo->apb_slv->start;
 
 	SPIN_INIT(&priv->devlock, "gr1553bc");
 
@@ -1356,11 +1356,11 @@ int gr1553bc_indication(void *bc, int async, int *mid)
 
 	/* Get current descriptor pointer */
 	if ( async ) {
-		bd = (union gr1553bc_bd *)
+		bd = (union gr1553bc_bd *)(uintptr_t)
 			GR1553BC_READ_REG(&priv->regs->bc_aslot);
 		bd = gr1553bc_bd_hw2cpu(priv->alist, bd);
 	} else {
-		bd = (union gr1553bc_bd *)
+		bd = (union gr1553bc_bd *)(uintptr_t)
 			GR1553BC_READ_REG(&priv->regs->bc_slot);
 		bd = gr1553bc_bd_hw2cpu(priv->list, bd);
 	}
@@ -1403,11 +1403,11 @@ int gr1553bc_start(void *bc, struct gr1553bc_list *list, struct gr1553bc_list *l
 
 	if ( list ) {
 		priv->list = list;
-		GR1553BC_WRITE_REG(&priv->regs->bc_bd, (uint32_t)bd);
+		GR1553BC_WRITE_REG(&priv->regs->bc_bd, (uintptr_t)bd);
 	}
 	if ( list_async ) {
 		priv->alist = list_async;
-		GR1553BC_WRITE_REG(&priv->regs->bc_abd, (uint32_t)bd_async);
+		GR1553BC_WRITE_REG(&priv->regs->bc_abd, (uintptr_t)bd_async);
 	}
 
 	/* If not enabled before, we enable it now. */
@@ -1502,8 +1502,8 @@ void gr1553bc_device_init(struct gr1553bc_priv *priv)
 	priv->list = NULL;
 	priv->alist = NULL;
 
-	priv->irq_log_base = (uint32_t *)
-		(((uint32_t)priv->irq_log_p + (GR1553BC_IRQLOG_SIZE-1)) &
+	priv->irq_log_base = (uint32_t *)(uintptr_t)
+		(((uint32_t)(uintptr_t)priv->irq_log_p + (GR1553BC_IRQLOG_SIZE-1)) &
 		~(GR1553BC_IRQLOG_SIZE-1));
 	/* Translate into a hardware accessible address */
 	drvmgr_translate_check(
@@ -1517,7 +1517,7 @@ void gr1553bc_device_init(struct gr1553bc_priv *priv)
 	priv->irq_func = gr1553bc_isr_std;
 	priv->irq_data = NULL;
 
-	GR1553BC_WRITE_REG(&priv->regs->bc_irqptr,(uint32_t)priv->irq_log_base_hw);
+	GR1553BC_WRITE_REG(&priv->regs->bc_irqptr,(uintptr_t)priv->irq_log_base_hw);
 }
 
 void gr1553bc_device_uninit(struct gr1553bc_priv *priv)
@@ -1566,16 +1566,16 @@ void gr1553bc_isr(void *arg)
 	}
 
 	/* Get current posistion in hardware */
-	pos = (uint32_t *)GR1553BC_READ_REG(&priv->regs->bc_irqptr);
+	pos = (uint32_t *)(uintptr_t)GR1553BC_READ_REG(&priv->regs->bc_irqptr);
 	/* Converting into CPU address */
 	pos = priv->irq_log_base +
-		((unsigned int)pos - (unsigned int)priv->irq_log_base_hw)/4;
+		((uintptr_t)pos - (uintptr_t)priv->irq_log_base_hw)/4;
 
 	/* Step in IRQ log until we reach the end. */
 	handled = 0;
 	curr = priv->irq_log_curr;
 	while ( curr != pos ) {
-		bd = (union gr1553bc_bd *)(GR1553BC_READ_MEM(curr) & ~1);
+		bd = (union gr1553bc_bd *)(uintptr_t)(GR1553BC_READ_MEM(curr) & ~1);
 		GR1553BC_WRITE_MEM(curr, 0x2); /* Mark Handled */
 
 		/* Convert Descriptor in IRQ log into CPU address. In order
@@ -1584,14 +1584,14 @@ void gr1553bc_isr(void *arg)
 		 * descriptor table area.
 		 */
 		SPIN_LOCK(&priv->devlock, irqflags);
-		if ( priv->alist && ((unsigned int)bd>=priv->alist->table_hw) &&
-		     ((unsigned int)bd <
+		if ( priv->alist && ((uint32_t)(uintptr_t)bd>=priv->alist->table_hw) &&
+		     ((uint32_t)(uintptr_t)bd <
 		     (priv->alist->table_hw + priv->alist->table_size))) {
 		     	/* BD in async list */
 			bd = gr1553bc_bd_hw2cpu(priv->alist, bd);
 		} else if (priv->list &&
-		           ((unsigned int)bd >= priv->list->table_hw) &&
-			   ((unsigned int)bd <
+		           ((uint32_t)(uintptr_t)bd >= priv->list->table_hw) &&
+			   ((uint32_t)(uintptr_t)bd <
 			   (priv->list->table_hw + priv->list->table_size))) {
 			/* BD in sync list */
 			bd = gr1553bc_bd_hw2cpu(priv->list, bd);
@@ -1615,8 +1615,8 @@ void gr1553bc_isr(void *arg)
 			SPIN_UNLOCK(&priv->devlock, irqflags);
 			if ( word0 == GR1553BC_UNCOND_IRQ ) {
 				if ( (word2 & 0x3) == 0 ) {
-					func = (bcirq_func_t)(word2 & ~0x3);
-					data = (void *)
+					func = (bcirq_func_t)(uintptr_t)(word2 & ~0x3);
+					data = (void *)(uintptr_t)
 					  GR1553BC_READ_MEM(&bd->raw.words[3]);
 					func(bd, data);
 					handled = 1;
@@ -1663,7 +1663,7 @@ int gr1553bc_irq_setup
 void gr1553bc_ext_trig(void *bc, int trig)
 {
 	struct gr1553bc_priv *priv = bc;
-	unsigned int trigger;
+	uint32_t trigger;
 
 	if ( trig )
 		trigger = GR1553B_BC_ACT_SETT;
@@ -1710,8 +1710,8 @@ void gr1553bc_show_list(struct gr1553bc_list *list, int options)
 
 			printf("   MINOR[%d]\n", j);
 			printf("     bd:        0x%08x (HW:0x%08x)\n",
-				(unsigned int)&minor->bds[0],
-				(unsigned int)gr1553bc_bd_cpu2hw(list,
+				(uint32_t)(uintptr_t)&minor->bds[0],
+				(uint32_t)(uintptr_t)gr1553bc_bd_cpu2hw(list,
 							&minor->bds[0]));
 			printf("     slot cnt:  %d\n", minor->cfg->slot_cnt);
 			if ( minor->cfg->timeslot ) {
