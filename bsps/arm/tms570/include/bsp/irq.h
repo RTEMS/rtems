@@ -173,9 +173,9 @@ rtems_status_code tms570_irq_set_priority(
  * Control (CHANCTRL) registers are searched to get the channel associated with
  * the interrupt vector.
  *
- * @param vector is the number of the interrupt vector to set the priority.
+ * @param vector is the number of the interrupt vector to get the priority of.
  *
- * @param priority is the priority to set.
+ * @param priority is the pointer to store the priority value.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
