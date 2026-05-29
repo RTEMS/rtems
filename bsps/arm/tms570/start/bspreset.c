@@ -46,12 +46,12 @@
 static void handle_esm_errors( uint32_t esm_irq_channel )
 {
   /* ESMR3 errors don't generate interrupts. */
-  if ( esm_irq_channel < 0x20u ) {
-    TMS570_ESM.SR[ 0 ] = 1 << esm_irq_channel;
-  } else if ( esm_irq_channel < 0x40u ) {
-    TMS570_ESM.SR[ 1 ] = 1 << ( esm_irq_channel - 32u );
-  } else if ( esm_irq_channel < 0x60u ) {
-    TMS570_ESM.SR4 = 1 << ( esm_irq_channel - 64u );
+  if ( esm_irq_channel < 0x20U ) {
+    TMS570_ESM.SR[ 0 ] = 1U << esm_irq_channel;
+  } else if ( esm_irq_channel < 0x40U ) {
+    TMS570_ESM.SR[ 1 ] = 1U << ( esm_irq_channel - 32U );
+  } else if ( esm_irq_channel < 0x60U ) {
+    TMS570_ESM.SR4 = 1U << ( esm_irq_channel - 64U );
   }
 }
 
