@@ -589,7 +589,7 @@ int rtems_fdt_unload( rtems_fdt_handle *handle )
 
   fdt = rtems_fdt_lock();
 
-  if ( !rtems_fdt_valid_handle_unprotected( handle ) ) {
+  if ( !rtems_fdt_valid_handle_unprotected( handle, fdt ) ) {
     rtems_fdt_unlock( fdt );
     return -RTEMS_FDT_ERR_INVALID_HANDLE;
   }
