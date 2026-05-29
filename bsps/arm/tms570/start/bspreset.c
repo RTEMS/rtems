@@ -58,6 +58,7 @@ static void handle_esm_errors(uint32_t esm_irq_channel)
 void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
    rtems_interrupt_level level;
+   uint32_t esm_irq_offset;
    uint32_t esm_irq_channel;
 
    (void) source;
@@ -67,11 +68,13 @@ void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
    (void) level;
 
    tms570_pom_initialize_and_clear();
-   esm_irq_channel = TMS570_ESM.IOFFHR - 1;
 
-   if (esm_irq_channel) {
-     handle_esm_errors(esm_irq_channel);
-   }
+   esm_irq_offset = TMS570_ESM.IOFFHR;
+
+  if (esm_irq_offset != 0U) {
+    esm_irq_channel = esm_irq_offset - 1U;
+    handle_esm_errors(esm_irq_channel);
+  }
 
    /* Reset the board */
    /* write of value other than 1 cause system reset */
