@@ -71,6 +71,13 @@ void test_getprop(
   int               plen
 );
 
+void test_subnode(
+  rtems_fdt_handle *handle,
+  int               offset,
+  const char       *sname,
+  int               slen
+);
+
 const char rtems_test_name[] = "FDT 01";
 
 /* triplets of identical uncompressed/compressed dtbs */
@@ -166,6 +173,38 @@ void test_getprop(
   rtems_test_assert( strncmp( namep, pname, name_len ) == 0 );
 }
 
+void test_subnode(
+  rtems_fdt_handle *handle,
+  int               offset,
+  const char       *sname,
+  int               slen
+)
+{
+  int         idx1, idx2;
+  const char *name;
+  int         len = 0;
+  int         parent_offset;
+
+  name = rtems_fdt_get_name( handle, offset, &len );
+  rtems_test_assert( strncmp( name, sname, slen ) == 0 );
+
+  parent_offset = rtems_fdt_parent_offset( handle, offset );
+  rtems_test_assert( parent_offset >= 0 );
+
+  idx1 = rtems_fdt_subnode_offset( handle, parent_offset, sname );
+  rtems_test_assert( idx1 >= 0 );
+  rtems_test_assert( idx1 != parent_offset );
+
+  idx2 = rtems_fdt_subnode_offset_namelen(
+    handle,
+    parent_offset,
+    sname,
+    slen
+  );
+  rtems_test_assert( idx2 >= 0 );
+  rtems_test_assert( idx1 == idx2 );
+}
+
 rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
@@ -173,6 +212,8 @@ rtems_task Init( rtems_task_argument ignored )
   int               rc;
   size_t            i;
   uint32_t          val;
+  int               idx;
+  const char       *name = "interrupt-controller@c000000";
   rtems_fdt_handle  handles[ NUM_DTB ];
 
   TEST_BEGIN();
@@ -232,6 +273,21 @@ rtems_task Init( rtems_task_argument ignored )
   test_get_phandle( &handles[ 0 ], 0x7 );
   val = cpu_to_fdt32( 0x2 );
   test_getprop( &handles[ 0 ], "clocks", &val, sizeof( val ) );
+
+  idx = rtems_fdt_node_offset_by_compatible(
+    &handles[ 6 ],
+    -1,
+    "riscv,plic0"
+  );
+  rtems_test_assert( idx >= 0 );
+  test_subnode( &handles[ 6 ], idx, name, strlen( name ) );
+  /* try again with length truncated to the unit address */
+  test_subnode(
+    &handles[ 6 ],
+    idx,
+    name,
+    (const char *) memchr( name, '@', strlen( name ) ) - name
+  );
 
   for ( i = 0; i < NUM_DTB; i++ ) {
     rc = rtems_fdt_unload( &handles[ i ] );

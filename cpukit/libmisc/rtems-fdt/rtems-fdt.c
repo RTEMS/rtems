@@ -289,38 +289,6 @@ static int rtems_fdt_index_find_by_name(
   return -FDT_ERR_NOTFOUND;
 }
 
-/**
- * For a given FDT offset, find the corresponding path name.
- */
-static const char *rtems_fdt_index_find_name_by_offset(
-  rtems_fdt_index *index,
-  int              offset
-)
-{
-  int min = 0;
-  int max = index->num_entries;
-
-  /*
-   * Binary search for the offset.
-   */
-  while ( min < max ) {
-    int middle = ( min + max ) / 2;
-    if ( offset < index->entries[ middle ].offset ) {
-      /* Look lower than here. */
-      max = middle;
-    } else if ( offset > index->entries[ middle ].offset ) {
-      /* Look higher than here. */
-      min = middle + 1;
-    } else {
-      /* Found it. */
-      return index->entries[ middle ].name;
-    }
-  }
-
-  /* Didn't find it. */
-  return NULL;
-}
-
 void rtems_fdt_init_handle( rtems_fdt_handle *handle )
 {
   if ( handle ) {
@@ -662,20 +630,11 @@ int rtems_fdt_subnode_offset(
   const char       *name
 )
 {
-  char        full_name[ 256 ];
-  const char *path;
-
   if ( !handle->blob ) {
     return -RTEMS_FDT_ERR_INVALID_HANDLE;
   }
 
-  path = rtems_fdt_index_find_name_by_offset(
-    &handle->blob->index,
-    parentoffset
-  );
-  snprintf( full_name, sizeof( full_name ), "%s/%s", path, name );
-
-  return rtems_fdt_index_find_by_name( &handle->blob->index, full_name );
+  return fdt_subnode_offset( handle->blob->blob, parentoffset, name );
 }
 
 int rtems_fdt_path_offset( rtems_fdt_handle *handle, const char *path )
@@ -693,15 +652,7 @@ const char *rtems_fdt_get_name(
     return NULL;
   }
 
-  const char *name = rtems_fdt_index_find_name_by_offset(
-    &handle->blob->index,
-    nodeoffset
-  );
-  if ( name && length ) {
-    *length = strlen( name );
-  }
-
-  return name;
+  return fdt_get_name( handle->blob->blob, nodeoffset, length );
 }
 
 int rtems_fdt_first_prop_offset( rtems_fdt_handle *handle, int nodeoffset )
