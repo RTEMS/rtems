@@ -43,41 +43,41 @@
 #include <bsp/tms570.h>
 #include <bsp/tms570-pom.h>
 
-static void handle_esm_errors(uint32_t esm_irq_channel)
+static void handle_esm_errors( uint32_t esm_irq_channel )
 {
-   /* ESMR3 errors don't generate interrupts. */
-   if (esm_irq_channel < 0x20u) {
-     TMS570_ESM.SR[0] = 1 << esm_irq_channel;
-   } else if (esm_irq_channel < 0x40u) {
-     TMS570_ESM.SR[1] = 1 << (esm_irq_channel - 32u);
-   } else if (esm_irq_channel < 0x60u) {
-     TMS570_ESM.SR4 = 1 << (esm_irq_channel - 64u);
-   }
+  /* ESMR3 errors don't generate interrupts. */
+  if ( esm_irq_channel < 0x20u ) {
+    TMS570_ESM.SR[ 0 ] = 1 << esm_irq_channel;
+  } else if ( esm_irq_channel < 0x40u ) {
+    TMS570_ESM.SR[ 1 ] = 1 << ( esm_irq_channel - 32u );
+  } else if ( esm_irq_channel < 0x60u ) {
+    TMS570_ESM.SR4 = 1 << ( esm_irq_channel - 64u );
+  }
 }
 
 void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
-   rtems_interrupt_level level;
-   uint32_t esm_irq_offset;
-   uint32_t esm_irq_channel;
+  rtems_interrupt_level level;
+  uint32_t              esm_irq_offset;
+  uint32_t              esm_irq_channel;
 
-   (void) source;
-   (void) code;
+  (void) source;
+  (void) code;
 
-   rtems_interrupt_disable(level);
-   (void) level;
+  rtems_interrupt_disable( level );
+  (void) level;
 
-   tms570_pom_initialize_and_clear();
+  tms570_pom_initialize_and_clear();
 
-   esm_irq_offset = TMS570_ESM.IOFFHR;
+  esm_irq_offset = TMS570_ESM.IOFFHR;
 
-  if (esm_irq_offset != 0U) {
+  if ( esm_irq_offset != 0U ) {
     esm_irq_channel = esm_irq_offset - 1U;
-    handle_esm_errors(esm_irq_channel);
+    handle_esm_errors( esm_irq_channel );
   }
 
-   /* Reset the board */
-   /* write of value other than 1 cause system reset */
-   TMS570_SYS1.SYSECR = TMS570_SYS1_SYSECR_RESET(2);
-   RTEMS_UNREACHABLE();
+  /* Reset the board */
+  /* write of value other than 1 cause system reset */
+  TMS570_SYS1.SYSECR = TMS570_SYS1_SYSECR_RESET( 2 );
+  RTEMS_UNREACHABLE();
 }
