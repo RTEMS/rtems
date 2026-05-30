@@ -375,6 +375,28 @@ rtems_task Task_1( rtems_task_argument argument )
     directive_failed( status, "rtems_message_queue_delete" );
   }
 
+  Fill_buffer( "BUFFER 1 TO Q 3", buffer );
+  puts( "TA1 - rtems_message_queue_send - BUFFER 1 TO Q 3 (construct)" );
+  status = rtems_message_queue_send( Queue_id[ 3 ], buffer, MESSAGE_SIZE );
+  directive_failed( status, "rtems_message_queue_send to constructed queue" );
+
+  puts( "TA1 - rtems_message_queue_receive - receive from Q 3 (construct)" );
+  status = rtems_message_queue_receive(
+    Queue_id[ 3 ],
+    buffer,
+    &size,
+    RTEMS_DEFAULT_OPTIONS,
+    RTEMS_NO_TIMEOUT
+  );
+  directive_failed( status, "rtems_message_queue_receive from constructed queue" );
+  puts_nocr( "TA1 - buffer received: " );
+  Put_buffer( buffer );
+  new_line;
+
+  puts( "TA1 - rtems_message_queue_delete - delete queue 3 (construct)" );
+  status = rtems_message_queue_delete( Queue_id[ 3 ] );
+  directive_failed( status, "rtems_message_queue_delete of constructed queue" );
+
   TEST_END();
   rtems_test_exit( 0 );
 }
