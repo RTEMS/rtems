@@ -377,7 +377,7 @@ rtems_debugger_soft_step_and_continue(CPU_Exception_frame* frame) {
   rtems_debugger_target* target = rtems_debugger->target;
   Thread_Control* thread = _Thread_Get_executing();
   const rtems_id tid = thread->Object.id;
-  rtems_debugger_thread fake_debugger_thread;
+  rtems_debugger_thread fake_debugger_thread = {0};
 
   /*
    * If this was a hwbreak, cascade. If this is a swbreak replace the contents
