@@ -78,6 +78,23 @@ void test_subnode(
   int               slen
 );
 
+void test_path(
+  rtems_fdt_handle *handle,
+  int               offset,
+  const char       *pname,
+  int               plen,
+  const char       *propname,
+  void             *propval,
+  int               proplen
+);
+
+void test_alias(
+  rtems_fdt_handle *handle,
+  const char       *alias_name,
+  const char       *alias_path,
+  int               plen
+);
+
 const char rtems_test_name[] = "FDT 01";
 
 /* triplets of identical uncompressed/compressed dtbs */
@@ -146,7 +163,7 @@ void test_getprop(
   const void *prop;
   const char *namep;
   int         len;
-  size_t      name_len = strlen( pname );
+  size_t      name_len;
 
   idx = rtems_fdt_node_offset_by_prop_value( handle, -1, pname, pval, plen );
   rtems_test_assert( idx >= 0 );
@@ -155,6 +172,7 @@ void test_getprop(
   rtems_test_assert( prop != NULL );
   rtems_test_assert( plen == len );
 
+  name_len = strlen( pname );
   prop = rtems_fdt_getprop_namelen( handle, idx, pname, name_len, &len );
   rtems_test_assert( prop != NULL );
   rtems_test_assert( plen == len );
@@ -205,15 +223,77 @@ void test_subnode(
   rtems_test_assert( idx1 == idx2 );
 }
 
+void test_path(
+  rtems_fdt_handle *handle,
+  int               offset,
+  const char       *pname,
+  int               plen,
+  const char       *propname,
+  void             *propval,
+  int               proplen
+)
+{
+  int              rc;
+  int              idx;
+  char             buffer[ 256 ];
+  size_t           len;
+  rtems_fdt_handle temp_handle;
+
+  rc = rtems_fdt_get_path( handle, offset, buffer, sizeof( buffer ) );
+  rtems_test_assert( rc == 0 );
+  len = strnlen( buffer, sizeof( buffer ) );
+  rtems_test_assert( len == strnlen( pname, plen ) );
+  rtems_test_assert( strncmp( pname, buffer, len ) == 0 );
+
+  idx = rtems_fdt_find_path_offset( &temp_handle, pname );
+  rtems_test_assert( idx == offset );
+  rtems_fdt_release_handle( &temp_handle );
+
+  len = 256;
+  rc = rtems_fdt_prop_value( pname, propname, buffer, &len );
+  rtems_test_assert( rc == 0 );
+  rtems_test_assert( len == (size_t) proplen );
+  rtems_test_assert( memcmp( buffer, propval, proplen ) == 0 );
+}
+
+void test_alias(
+  rtems_fdt_handle *handle,
+  const char       *alias_name,
+  const char       *alias_path,
+  int               plen
+)
+{
+  const char *p;
+  size_t      len;
+
+  p = rtems_fdt_get_alias( handle, alias_name );
+  rtems_test_assert( p != NULL );
+  len = strlen( p );
+  rtems_test_assert( len == (size_t) plen );
+  rtems_test_assert( strncmp( p, alias_path, len ) == 0 );
+
+  p = rtems_fdt_get_alias_namelen( handle, alias_name, strlen( alias_name ) );
+  rtems_test_assert( p != NULL );
+  len = strlen( p );
+  rtems_test_assert( len == (size_t) plen );
+  rtems_test_assert( strncmp( p, alias_path, len ) == 0 );
+}
+
 rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
   rtems_status_code sc;
   int               rc;
   size_t            i;
-  uint32_t          val;
   int               idx;
-  const char       *name = "interrupt-controller@c000000";
+  uint32_t          val = 0x2;
+  const char       *path = "/soc/interrupt-controller@c000000";
+  const char       *name = &path[ 5 ];
+  const char       *propname = "riscv,ndev";
+  uint32_t          propval = 186;
+  const char       *alias = "serial1";
+  const char       *alias_path = "/soc/serial@20100000";
+
   rtems_fdt_handle  handles[ NUM_DTB ];
 
   TEST_BEGIN();
@@ -271,7 +351,8 @@ rtems_task Init( rtems_task_argument ignored )
   test_compatible( &handles[ 0 ], "fixed-clock", true );
   test_compatible( &handles[ 3 ], "fixed-clock", false );
   test_get_phandle( &handles[ 0 ], 0x7 );
-  val = cpu_to_fdt32( 0x2 );
+
+  val = cpu_to_fdt32( val );
   test_getprop( &handles[ 0 ], "clocks", &val, sizeof( val ) );
 
   idx = rtems_fdt_node_offset_by_compatible(
@@ -288,6 +369,19 @@ rtems_task Init( rtems_task_argument ignored )
     name,
     (const char *) memchr( name, '@', strlen( name ) ) - name
   );
+
+  propval = cpu_to_fdt32( propval );
+  test_path(
+    &handles[ 6 ],
+    idx,
+    path,
+    strlen( path ),
+    propname,
+    &propval,
+    sizeof( propval )
+  );
+
+  test_alias( &handles[ 6 ], alias, alias_path, strlen( alias_path ) );
 
   for ( i = 0; i < NUM_DTB; i++ ) {
     rc = rtems_fdt_unload( &handles[ i ] );
