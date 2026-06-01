@@ -893,13 +893,12 @@ int rtems_fdt_prop_value(
   }
 
   prop = rtems_fdt_getprop( &fdt, node, propname, &length );
+  rtems_fdt_release_handle( &fdt );
   if ( length < 0 ) {
-    rtems_fdt_release_handle( &fdt );
     return length;
   }
 
   if ( length > (int) *size ) {
-    rtems_fdt_release_handle( &fdt );
     return -RTEMS_FDT_ERR_BADPATH;
   }
 
@@ -974,6 +973,8 @@ int rtems_fdt_prop_map(
 
     values[ item ] = rtems_fdt_get_offset_len_uintptr( prop, 0, length );
   }
+
+  rtems_fdt_release_handle( &fdt );
 
   return 0;
 }
