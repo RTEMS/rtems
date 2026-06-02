@@ -11,8 +11,13 @@ do-build: |
   dts.append("bsps/aarch64/xilinx-zynqmp/fdt/zynqmp.dts")
   dts.append("bsps/riscv/riscv/dts/mpfs.dts")
   dts.append("bsps/microblaze/microblaze_fpga/dts/system.dts")
-  objs = [self.dtc(bld, dts_file, path) for dts_file in dts]
-  objs.extend([self.gzip(bld, dtb_file) for dtb_file in objs])
+  objs = []
+  for dts_file in dts:
+    objs.append(self.dtc(bld, dts_file, path))
+  gzip_objs = []
+  for dtb_file in objs:
+    gzip_objs.append(self.gzip(bld, dtb_file))
+  objs.extend(gzip_objs)
   tar = path + "fdt01.tar"
   self.tar(bld, objs, [path], tar)
   tar_c, tar_h = self.bin2c(bld, tar)
