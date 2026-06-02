@@ -103,6 +103,14 @@ void test_getprop_address_map(
   rtems_fdt_address_map *exp_map
 );
 
+void test_prop_map(
+  const char *path,
+  const char *propname,
+  const char *names[],
+  uintptr_t  *exp_values,
+  size_t      count
+);
+
 const char rtems_test_name[] = "FDT 01";
 
 /* triplets of identical uncompressed/compressed dtbs */
@@ -319,21 +327,50 @@ void test_getprop_address_map(
   rtems_test_assert( rc == addr_map.size_cells );
 }
 
+void test_prop_map(
+  const char *path,
+  const char *propname,
+  const char *names[],
+  uintptr_t  *exp_values,
+  size_t      count
+)
+{
+  int        rc;
+  uintptr_t *values;
+  size_t     size;
+
+  values = (uintptr_t *) calloc( count, sizeof( uintptr_t ) );
+  rtems_test_assert( values != NULL );
+
+  rc = rtems_fdt_prop_map( path, propname, names, values, count );
+  rtems_test_assert( rc == 0 );
+
+  size = count * sizeof( uintptr_t );
+  rtems_test_assert( memcmp( values, exp_values, size ) == 0 );
+  free( values );
+}
+
 rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
   rtems_status_code sc;
-  int               rc;
-  size_t            i;
-  int               idx;
-  uint32_t          val = 0x2;
-  const char       *path = "/soc/interrupt-controller@c000000";
-  const char       *name = &path[ 5 ];
-  const char       *propname = "riscv,ndev";
-  uint32_t          propval = 186;
-  const char       *alias = "serial1";
-  const char       *alias_path = "/soc/serial@20100000";
   rtems_fdt_handle  handles[ NUM_DTB ];
+
+  int         rc;
+  size_t      i;
+  int         idx;
+  uint32_t    val = 0x2;
+  const char *path = "/soc/interrupt-controller@c000000";
+  const char *name = &path[ 5 ];
+  const char *propname = "riscv,ndev";
+  uint32_t    propval = 186;
+  const char *alias = "serial1";
+  const char *alias_path = "/soc/serial@20100000";
+  const char *map_path = "/soc/i2c@2010b000/pac193x@10";
+  const char *map_names[] = { "channel0", "channel1", "channel2", "channel3" };
+  const char *map_propname = "uohms-shunt-res";
+  uintptr_t   map_values[] = { 10000, 10000, 10000, 10000 };
+  size_t      map_count = 4;
 
   rtems_fdt_address_map addr_map = {
     .node = 2576,
@@ -438,8 +475,9 @@ rtems_task Init( rtems_task_argument ignored )
     sizeof( "memory" )
   );
   rtems_test_assert( idx >= 0 );
-
   test_getprop_address_map( &handles[ 6 ], idx, "/memory", "reg", &addr_map );
+
+  test_prop_map( map_path, map_propname, map_names, map_values, map_count );
 
   for ( i = 0; i < NUM_DTB; i++ ) {
     rc = rtems_fdt_unload( &handles[ i ] );
