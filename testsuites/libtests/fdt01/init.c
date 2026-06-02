@@ -95,6 +95,14 @@ void test_alias(
   int               plen
 );
 
+void test_getprop_address_map(
+  rtems_fdt_handle      *handle,
+  int                    offset,
+  const char            *path,
+  const char            *name,
+  rtems_fdt_address_map *exp_map
+);
+
 const char rtems_test_name[] = "FDT 01";
 
 /* triplets of identical uncompressed/compressed dtbs */
@@ -279,6 +287,38 @@ void test_alias(
   rtems_test_assert( strncmp( p, alias_path, len ) == 0 );
 }
 
+void test_getprop_address_map(
+  rtems_fdt_handle      *handle,
+  int                    offset,
+  const char            *path,
+  const char            *name,
+  rtems_fdt_address_map *exp_map
+)
+{
+  int                   rc;
+  rtems_fdt_address_map addr_map;
+  char                  buffer[ 256 ];
+  size_t                blen, plen;
+
+  rc = rtems_fdt_get_path( handle, offset, buffer, sizeof( buffer ) );
+  rtems_test_assert( rc == 0 );
+  blen = strnlen( buffer, sizeof( buffer ) );
+  plen = strnlen( path, blen + 1 );
+  plen = plen < blen ? plen : blen;
+  rtems_test_assert( strncmp( path, buffer, plen ) == 0 );
+
+  rc = rtems_fdt_getprop_address_map( handle, buffer, name, &addr_map );
+  rtems_test_assert( rc == 0 );
+
+  rtems_test_assert( memcmp( &addr_map, exp_map, sizeof( addr_map ) ) == 0 );
+
+  rc = rtems_fdt_getprop_address_cells( handle, addr_map.node );
+  rtems_test_assert( rc == addr_map.address_cells );
+
+  rc = rtems_fdt_getprop_size_cells( handle, addr_map.node );
+  rtems_test_assert( rc == addr_map.size_cells );
+}
+
 rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
@@ -293,8 +333,15 @@ rtems_task Init( rtems_task_argument ignored )
   uint32_t          propval = 186;
   const char       *alias = "serial1";
   const char       *alias_path = "/soc/serial@20100000";
-
   rtems_fdt_handle  handles[ NUM_DTB ];
+
+  rtems_fdt_address_map addr_map = {
+    .node = 2576,
+    .address = 0x1000000000,
+    .size = 0x10000000,
+    .address_cells = 2,
+    .size_cells = 2
+  };
 
   TEST_BEGIN();
 
@@ -382,6 +429,17 @@ rtems_task Init( rtems_task_argument ignored )
   );
 
   test_alias( &handles[ 6 ], alias, alias_path, strlen( alias_path ) );
+
+  idx = rtems_fdt_node_offset_by_prop_value(
+    &handles[ 6 ],
+    -1,
+    "device_type",
+    "memory",
+    sizeof( "memory" )
+  );
+  rtems_test_assert( idx >= 0 );
+
+  test_getprop_address_map( &handles[ 6 ], idx, "/memory", "reg", &addr_map );
 
   for ( i = 0; i < NUM_DTB; i++ ) {
     rc = rtems_fdt_unload( &handles[ i ] );
