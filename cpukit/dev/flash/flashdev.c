@@ -46,10 +46,13 @@
 #define RTEMS_FLASHDEV_REGION_UNDEFINED       0xFFFFFFFFUL
 #define RTEMS_FLASHDEV_REGION_BITALLOC_LENGTH 32
 
-#define RTEMS_FLASHDEV_BITALLOC_LENGTH( t ) \
-  ( t->max_regions / RTEMS_FLASHDEV_REGION_BITALLOC_LENGTH )
-#define RTEMS_FLASHDEV_BITALLOC_FINAL_BITS( t ) \
-  ( t->max_regions % RTEMS_FLASHDEV_REGION_BITALLOC_LENGTH )
+/* Number of uint32_t words required to hold t->max_regions bits. */
+#define RTEMS_FLASHDEV_BITALLOC_WORD_LENGTH( t ) \
+  ( ( t->max_regions + RTEMS_FLASHDEV_REGION_BITALLOC_LENGTH - 1 ) / \
+    RTEMS_FLASHDEV_REGION_BITALLOC_LENGTH )
+/* Size in bytes of the region bit allocator. */
+#define RTEMS_FLASHDEV_BITALLOC_BYTE_LENGTH( t ) \
+  ( RTEMS_FLASHDEV_BITALLOC_WORD_LENGTH( t ) * sizeof( uint32_t ) )
 
 static int rtems_flashdev_do_init(
   rtems_flashdev *flash,
@@ -526,7 +529,6 @@ int rtems_flashdev_register( rtems_flashdev *flash, const char *flash_path )
 {
   int                          rv;
   rtems_flashdev_region_table *table = flash->region_table;
-  int                          alloc_array_len;
 
   rv = IMFS_make_generic_node(
     flash_path,
@@ -539,10 +541,7 @@ int rtems_flashdev_register( rtems_flashdev *flash, const char *flash_path )
     ( *flash->destroy )( flash );
   }
 
-  alloc_array_len = RTEMS_FLASHDEV_BITALLOC_LENGTH( table ) +
-                    ( ( RTEMS_FLASHDEV_BITALLOC_FINAL_BITS( table ) ) != 0 );
-
-  memset( table->bit_allocator, 0, alloc_array_len );
+  memset( table->bit_allocator, 0, RTEMS_FLASHDEV_BITALLOC_BYTE_LENGTH( table ) );
 
   return rv;
 }
@@ -1284,7 +1283,7 @@ static uint32_t rtems_flashdev_find_unallocated_region(
     array_index = bit_index / RTEMS_FLASHDEV_REGION_BITALLOC_LENGTH;
     shift = bit_index % RTEMS_FLASHDEV_REGION_BITALLOC_LENGTH;
 
-    /* Check if region available in next BITALLOC_LENGTH regions */
+    /* Check if region available in next REGION_BITALLOC_LENGTH regions */
     if (
       ( shift == 0 ) && ( region_table->bit_allocator[ array_index ] ==
                           RTEMS_FLASHDEV_REGION_ALLOC_FULL )
