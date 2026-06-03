@@ -46,6 +46,17 @@ directives:
   * rtems_fdt_node_offset_by_prop_value
   * rtems_fdt_first_prop_offset
   * rtems_fdt_next_prop_offset
+  * rtems_fdt_get_name
+  * rtems_fdt_parent_offset
+  * rtems_fdt_subnode_offset
+  * rtems_fdt_subnode_offset_namelen
+  * rtems_fdt_get_path
+  * rtems_fdt_find_path_offset
+  * rtems_fdt_prop_value
+  * rtems_fdt_get_alias
+  * rtems_fdt_get_alias_namelen
+  * rtems_fdt_getprop_address_map
+  * rtems_fdt_prop_map
 
 concepts:
 
