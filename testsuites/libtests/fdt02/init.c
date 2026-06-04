@@ -50,7 +50,45 @@
 
 const char rtems_test_name[] = "FDT 02";
 
+void test_mem_rsv(
+  rtems_fdt_handle *handle,
+  int               count,
+  int               n,
+  uint64_t          exp_address,
+  uint64_t          exp_size
+);
+
 rtems_task Init( rtems_task_argument argument );
+
+void test_mem_rsv(
+  rtems_fdt_handle *handle,
+  int               count,
+  int               n,
+  uint64_t          exp_address,
+  uint64_t          exp_size
+)
+{
+  int      rc, num;
+  uint64_t address, size;
+
+  num = rtems_fdt_num_mem_rsv( handle );
+  rtems_test_assert( num == count );
+
+  rc = rtems_fdt_get_mem_rsv( handle, n, &address, &size );
+
+  if ( n < 0 ) {
+    rtems_test_assert( rc < 0 );
+  } else if ( n == num ) {
+    rtems_test_assert( rc == 0 );
+    rtems_test_assert( size == 0 );
+  } else {
+    rtems_test_assert( rc == 0 );
+    rtems_test_assert( exp_address == address );
+    rtems_test_assert( exp_size == size );
+  }
+}
+
+#define NUM_MEM_RSV ( 3 )
 
 rtems_task Init( rtems_task_argument ignored )
 {
@@ -58,6 +96,13 @@ rtems_task Init( rtems_task_argument ignored )
   rtems_status_code sc;
   rtems_fdt_handle  handle;
   int               rc;
+  int               i;
+  int               num_mem_rsv = NUM_MEM_RSV;
+
+  uint64_t addresses[] =
+    { 0x1000000000000000, 0x2000000000000000, 0x0000000000000000 };
+  uint64_t sizes[] =
+    { 0x0000000002000000, 0x0100000000000000, 0x0000000000000014 };
 
   TEST_BEGIN();
 
@@ -66,6 +111,13 @@ rtems_task Init( rtems_task_argument ignored )
 
   rc = rtems_fdt_load_blob_file_binary( "/test01.dtb", &handle );
   rtems_test_assert( rc == 0 );
+
+  test_mem_rsv( &handle, num_mem_rsv, -1, 0, 0 );
+  test_mem_rsv( &handle, num_mem_rsv, num_mem_rsv, 0, 0 );
+
+  for ( i = 0; i < num_mem_rsv; i++ ) {
+    test_mem_rsv( &handle, num_mem_rsv, i, addresses[ i ], sizes[ i ] );
+  }
 
   rc = rtems_fdt_unload( &handle );
   rtems_test_assert( rc == 0 );
