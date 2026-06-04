@@ -1,0 +1,37 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: script
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+- Copyright (C) 2026 Gedare Bloom
+cppflags: []
+do-build: |
+  path = "testsuites/libtests/fdt02/"
+  dts = []
+  dts.append(path + "test01.dts")
+  objs = []
+  for dts_file in dts:
+    objs.append(self.dtc(bld, dts_file, path))
+  tar = path + "fdt02.tar"
+  self.tar(bld, objs, [path], tar)
+  tar_c, tar_h = self.bin2c(bld, tar)
+  hdrs = [tar_h]
+  hdrs.append("cpukit/include/rtems/score/cpuopts.h")
+  objs = []
+  objs.append(self.cc(bld, bic, tar_c))
+  objs.append(self.cc(bld, bic, path + "init.c", deps=hdrs, cppflags=bld.env.TEST_FDT02_CPPFLAGS))
+  self.link_cc(bld, bic, objs, "testsuites/libtests/fdt02.exe")
+do-configure: null
+enabled-by:
+- not: TEST_FDT02_EXCLUDE
+includes:
+- testsuites/libtests/fdt02
+ldflags: []
+links: []
+prepare-build: null
+prepare-configure: null
+stlib: []
+target: testsuites/libtests/fdt02.exe
+type: build
+use-after: []
+use-before: []

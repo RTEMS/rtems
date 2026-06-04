@@ -133,6 +133,8 @@ links:
 - role: build-dependency
   uid: fdt01
 - role: build-dependency
+  uid: fdt02
+- role: build-dependency
   uid: flashdev01
 - role: build-dependency
   uid: flashdisk01
