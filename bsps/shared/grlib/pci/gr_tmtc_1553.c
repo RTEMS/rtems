@@ -265,6 +265,8 @@ static int gr_tmtc_1553_hw_init( struct gr_tmtc_1553_priv *priv )
   /* Frequency is the hsame as the PCI bus frequency */
   drvmgr_freq_get( priv->dev, 0, &pci_freq_hz );
 
+  ambapp_freq_init( &priv->abus, NULL, pci_freq_hz );
+
   /* Find IRQ controller */
   tmp = (struct ambapp_dev *) (uintptr_t) ambapp_for_each(
     &priv->abus,
@@ -290,14 +292,6 @@ static int gr_tmtc_1553_hw_init( struct gr_tmtc_1553_priv *priv )
                                         .local_adr;
   priv->bus_maps_down[ 0 ].to_adr = (void *) (uintptr_t) priv->amba_maps[ 0 ]
                                       .remote_adr;
-  /* Mark end of translation table */
-  priv->bus_maps_down[ 1 ].size = 0;
-
-  /* DOWN streams translation table */
-  priv->bus_maps_down[ 0 ].name = "PCI BAR0 -> AMBA";
-  priv->bus_maps_down[ 0 ].size = priv->amba_maps[ 0 ].size;
-  priv->bus_maps_down[ 0 ].from_adr = (void *) priv->amba_maps[ 0 ].local_adr;
-  priv->bus_maps_down[ 0 ].to_adr = (void *) priv->amba_maps[ 0 ].remote_adr;
   /* Mark end of translation table */
   priv->bus_maps_down[ 1 ].size = 0;
 

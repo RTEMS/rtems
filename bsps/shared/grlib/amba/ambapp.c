@@ -217,121 +217,119 @@ static int ambapp_scan2(
     if ( ahb_buf.id == 0 ) {
       continue;
     }
-  }
 
-  /* An AHB device present here */
-  dev = ambapp_alloc_dev_struct( ctx, DEV_AHB_MST );
-  if ( !dev ) {
-    return -1;
-  }
-
-  ambapp_ahb_dev_init( ioarea, abus->mmaps, &ahb_buf, dev, ahbidx );
-
-  if ( *root == NULL ) {
-    *root = dev;
-  }
-
-  if ( prev != parent ) {
-    prev->next = dev;
-  }
-  dev->prev = prev;
-  prev = dev;
-}
-
-/* AHB SLAVES */
-ahb = (struct ambapp_pnp_ahb *) (uintptr_t) ( ioarea | AMBA_CONF_AREA |
-                                              AMBA_AHB_SLAVE_CONF_AREA );
-for ( i = 0; i < maxloops; i++, ahb++ ) {
-  ( *ctx->copy_from_device )(
-    &ahb_buf,
-    ahb,
-    sizeof( struct ambapp_pnp_ahb ),
-    abus
-  );
-  if ( ahb_buf.id == 0 ) {
-    continue;
-  }
-}
-
-/* An AHB device present here */
-dev = ambapp_alloc_dev_struct( ctx, DEV_AHB_SLV );
-if ( !dev ) {
-  return -1;
-}
-
-ambapp_ahb_dev_init( ioarea, abus->mmaps, &ahb_buf, dev, ahbidx );
-
-if ( *root == NULL ) {
-  *root = dev;
-}
-
-if ( prev != parent ) {
-  prev->next = dev;
-}
-dev->prev = prev;
-prev = dev;
-
-ahb_info = DEV_TO_AHB( dev );
-
-/* Is it a AHB/AHB Bridge ? */
-if (
-  ( ( dev->device == GAISLER_AHB2AHB ) && ( dev->vendor == VENDOR_GAISLER ) &&
-    ( ahb_info->common.ver > 0 ) ) ||
-  ( ( dev->device == GAISLER_L2CACHE ) &&
-    ( dev->vendor == VENDOR_GAISLER ) ) ||
-  ( ( dev->device == GAISLER_GRIOMMU ) && ( dev->vendor == VENDOR_GAISLER ) )
-) {
-  /* AHB/AHB Bridge Found, recurse down the
-       * Bridge
-       */
-  if ( ahb_info->custom[ 1 ] != 0 ) {
-    bridge_adr = ambapp_addr_from( abus->mmaps, ahb_info->custom[ 1 ] );
-    /* Scan next bus if not already scanned */
-    if ( ambapp_scan2( abus, bridge_adr, ctx, dev, &dev->children ) ) {
+    /* An AHB device present here */
+    dev = ambapp_alloc_dev_struct( ctx, DEV_AHB_MST );
+    if ( !dev ) {
       return -1;
     }
+
+    ambapp_ahb_dev_init( ioarea, abus->mmaps, &ahb_buf, dev, ahbidx );
+
+    if ( *root == NULL ) {
+      *root = dev;
+    }
+
+    if ( prev != parent ) {
+      prev->next = dev;
+    }
+    dev->prev = prev;
+    prev = dev;
   }
-} else if (
-  ( dev->device == GAISLER_APBMST ) && ( dev->vendor == VENDOR_GAISLER )
-) {
-  /* AHB/APB Bridge Found, add the APB devices to this
+
+  /* AHB SLAVES */
+  ahb = (struct ambapp_pnp_ahb *) (uintptr_t) ( ioarea | AMBA_CONF_AREA |
+                                                AMBA_AHB_SLAVE_CONF_AREA );
+  for ( i = 0; i < maxloops; i++, ahb++ ) {
+    ( *ctx->copy_from_device )(
+      &ahb_buf,
+      ahb,
+      sizeof( struct ambapp_pnp_ahb ),
+      abus
+    );
+    if ( ahb_buf.id == 0 ) {
+      continue;
+    }
+
+    /* An AHB device present here */
+    dev = ambapp_alloc_dev_struct( ctx, DEV_AHB_SLV );
+    if ( !dev ) {
+      return -1;
+    }
+
+    ambapp_ahb_dev_init( ioarea, abus->mmaps, &ahb_buf, dev, ahbidx );
+
+    if ( *root == NULL ) {
+      *root = dev;
+    }
+
+    if ( prev != parent ) {
+      prev->next = dev;
+    }
+    dev->prev = prev;
+    prev = dev;
+
+    ahb_info = DEV_TO_AHB( dev );
+
+    /* Is it a AHB/AHB Bridge ? */
+    if (
+      ( ( dev->device == GAISLER_AHB2AHB ) &&
+        ( dev->vendor == VENDOR_GAISLER ) && ( ahb_info->common.ver > 0 ) ) ||
+      ( ( dev->device == GAISLER_L2CACHE ) &&
+        ( dev->vendor == VENDOR_GAISLER ) ) ||
+      ( ( dev->device == GAISLER_GRIOMMU ) &&
+        ( dev->vendor == VENDOR_GAISLER ) )
+    ) {
+      /* AHB/AHB Bridge Found, recurse down the
+       * Bridge
+       */
+      if ( ahb_info->custom[ 1 ] != 0 ) {
+        bridge_adr = ambapp_addr_from( abus->mmaps, ahb_info->custom[ 1 ] );
+        /* Scan next bus if not already scanned */
+        if ( ambapp_scan2( abus, bridge_adr, ctx, dev, &dev->children ) ) {
+          return -1;
+        }
+      }
+    } else if (
+      ( dev->device == GAISLER_APBMST ) && ( dev->vendor == VENDOR_GAISLER )
+    ) {
+      /* AHB/APB Bridge Found, add the APB devices to this
        * AHB Slave's children
        */
-  prevapb = dev;
-  apbbase = ahb_info->start[ 0 ];
+      prevapb = dev;
+      apbbase = ahb_info->start[ 0 ];
 
-  /* APB SLAVES */
-  apb = (struct ambapp_pnp_apb *) (uintptr_t) ( apbbase | AMBA_CONF_AREA );
-  for ( j = 0; j < AMBA_APB_SLAVES; j++, apb++ ) {
-    ( *ctx->copy_from_device )( &apb_buf, apb, sizeof( *apb ), abus );
-    if ( apb_buf.id == 0 ) {
-      continue;
+      /* APB SLAVES */
+      apb = (struct ambapp_pnp_apb *) (uintptr_t) ( apbbase | AMBA_CONF_AREA );
+      for ( j = 0; j < AMBA_APB_SLAVES; j++, apb++ ) {
+        ( *ctx->copy_from_device )( &apb_buf, apb, sizeof( *apb ), abus );
+        if ( apb_buf.id == 0 ) {
+          continue;
+        }
+
+        apbdev = ambapp_alloc_dev_struct( ctx, DEV_APB_SLV );
+        if ( !apbdev ) {
+          return -1;
+        }
+
+        ambapp_apb_dev_init( apbbase, abus->mmaps, &apb_buf, apbdev, ahbidx );
+
+        if ( prevapb != dev ) {
+          prevapb->next = apbdev;
+        } else {
+          dev->children = apbdev;
+        }
+        apbdev->prev = prevapb;
+        prevapb = apbdev;
+      }
     }
   }
 
-  apbdev = ambapp_alloc_dev_struct( ctx, DEV_APB_SLV );
-  if ( !apbdev ) {
-    return -1;
-  }
+  /* Remember first AHB MST/SLV device on bus and Parent Bridge */
+  abus->ahbs[ ahbidx ].dev = *root;
+  abus->ahbs[ ahbidx ].bridge = parent;
 
-  ambapp_apb_dev_init( apbbase, abus->mmaps, &apb_buf, apbdev, ahbidx );
-
-  if ( prevapb != dev ) {
-    prevapb->next = apbdev;
-  } else {
-    dev->children = apbdev;
-  }
-  apbdev->prev = prevapb;
-  prevapb = apbdev;
-}
-}
-}
-
-/* Remember first AHB MST/SLV device on bus and Parent Bridge */
-abus->ahbs[ ahbidx ].dev = *root;
-abus->ahbs[ ahbidx ].bridge = parent;
-
-return 0;
+  return 0;
 }
 
 static void *ambapp_memcpy(

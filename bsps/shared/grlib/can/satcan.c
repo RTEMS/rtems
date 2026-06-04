@@ -305,31 +305,6 @@ static rtems_device_driver satcan_ioctl(
       }
       break;
 
-      regs->membase = (unsigned int) priv->alptr;
-      regs->satcan[ SATCAN_RAM_BASE ] = (unsigned int) priv->alptr >>
-                                        OFFSET_8K_LOW_POS;
-      regs->satcan[ SATCAN_CMD1 ] = regs->satcan[ SATCAN_CMD1 ] & ~Sel_2k_8kN;
-      break;
-
-    case SATCAN_IOC_GET_REG:
-      /* Get regmod structure from argument */
-      regmod = (satcan_regmod *) ioarg->buffer;
-      DBG( "SatCAN: ioctl: getting register %d\n\r", regmod->reg );
-      if ( regmod->reg <= SATCAN_FILTER_STOP ) {
-        regmod->val = regs->satcan[ regmod->reg ];
-      } else if ( regmod->reg == SATCAN_WCTRL ) {
-        regmod->val = regs->ctrl;
-      } else if ( regmod->reg == SATCAN_WIPEND ) {
-        regmod->val = regs->irqpend;
-      } else if ( regmod->reg == SATCAN_WIMASK ) {
-        regmod->val = regs->irqmask;
-      } else if ( regmod->reg == SATCAN_WAHBADDR ) {
-        regmod->val = regs->membase;
-      } else {
-        return RTEMS_INVALID_NAME;
-      }
-      break;
-
     case SATCAN_IOC_SET_REG:
       /* Get regmod structure from argument */
       regmod = (satcan_regmod *) ioarg->buffer;
@@ -619,6 +594,17 @@ static rtems_device_driver satcan_read(
     return RTEMS_INVALID_NAME; /* -EINVAL */
   }
 
+  /* Check that size matches any number of satcan_msg */
+  if ( rw_args->count % sizeof( satcan_msg ) ) {
+    DBG(
+      "SatCAN: read: count can not be evenly divided with satcan_msg size\n\r"
+    );
+    return RTEMS_INVALID_NAME; /* EINVAL */
+  }
+
+  messages = rw_args->count / sizeof( satcan_msg );
+  ret = (satcan_msg *) rw_args->buffer;
+
   DBG( "SatCAN: read: reading %d messages to %p\n\r", messages, ret );
 
   for ( i = 0; i < messages; i++ ) {
@@ -626,34 +612,6 @@ static rtems_device_driver satcan_read(
 
     /* Copy message header from DMA header area to buffer */
     buf = (char *) ( (uintptr_t) priv->alptr | ( canid << 3 ) );
-    memcpy( ret[ i ].header, buf, SATCAN_HEADER_SIZE );
-
-    messages = rw_args->count / sizeof( satcan_msg );
-    ret = (satcan_msg *) rw_args->buffer;
-
-    /* Clear New Message Marker */
-    buf[ SATCAN_HEADER_NMM_POS ] = 0;
-
-    /* Copy message payload from DMA data area to buffer */
-    buf = (char *) ( (uintptr_t) buf |
-                     ( regs->satcan[ SATCAN_CMD1 ] & Sel_2k_8kN
-                         ? DMA_2K_DATA_SELECT
-                         : DMA_8K_DATA_SELECT ) );
-    memcpy( ret[ i ].payload, buf, SATCAN_PAYLOAD_SIZE );
-
-    DBG(
-      "SatCAN: read: copied payload from %p to %p\n\r",
-      buf,
-      ret[ i ].payload
-    );
-  }
-  rw_args->bytes_moved = rw_args->count;
-
-  for ( i = 0; i < messages; i++ ) {
-    canid = ( ret[ i ].header[ 1 ] << 8 ) | ret[ i ].header[ 0 ];
-
-    /* Copy message header from DMA header area to buffer */
-    buf = (char *) ( (int) priv->alptr | ( canid << 3 ) );
     memcpy( ret[ i ].header, buf, SATCAN_HEADER_SIZE );
 
     DBG(
@@ -666,9 +624,10 @@ static rtems_device_driver satcan_read(
     buf[ SATCAN_HEADER_NMM_POS ] = 0;
 
     /* Copy message payload from DMA data area to buffer */
-    buf = (char *) ( (int) buf | ( regs->satcan[ SATCAN_CMD1 ] & Sel_2k_8kN
-                                     ? DMA_2K_DATA_SELECT
-                                     : DMA_8K_DATA_SELECT ) );
+    buf = (char *) ( (uintptr_t) buf |
+                     ( regs->satcan[ SATCAN_CMD1 ] & Sel_2k_8kN
+                         ? DMA_2K_DATA_SELECT
+                         : DMA_8K_DATA_SELECT ) );
     memcpy( ret[ i ].payload, buf, SATCAN_PAYLOAD_SIZE );
 
     DBG(
@@ -784,28 +743,24 @@ static rtems_device_driver satcan_initialize(
   /* Set node number and DPS */
   regs->ctrl |= ( ( priv->cfg->nodeno & 0xf ) << 5 ) | ( priv->cfg->dps << 1 );
 
-  /* Set node number and DPS */
-  regs->ctrl |= ( ( priv->cfg->nodeno & 0xf ) << 5 ) | ( priv->cfg->dps << 1 );
-
   /* Reset core */
   regs->ctrl |= CTRL_RST;
 
-  /* Initialize core registers, default is 2K messages */
-  regs->membase = (uint32_t) (uintptr_t) priv->alptr;
-  regs->satcan[ SATCAN_RAM_BASE ] = (uint32_t) (uintptr_t) priv->alptr >> 15;
-
-  DBG( "regs->membase = %x\n\r", (unsigned int) priv->alptr );
-  DBG(
-    "regs->satcan[SATCAN_RAM_BASE] = %x\n\r",
-    (unsigned int) priv->alptr >> 15
-  );
+  /* Allocate DMA area */
+  almalloc( &priv->alptr, &priv->dmaptr, ALIGN_2KMEM );
+  if ( priv->dmaptr == NULL ) {
+    printk( "SatCAN: Failed to allocate DMA memory\n\r" );
+    free( priv->cfg );
+    free( priv );
+    return -1;
+  }
 
   /* Wait until core reset has completed */
   while ( regs->ctrl & CTRL_RST );
 
   /* Initialize core registers, default is 2K messages */
-  regs->membase = (unsigned int) priv->alptr;
-  regs->satcan[ SATCAN_RAM_BASE ] = (unsigned int) priv->alptr >> 15;
+  regs->membase = (uint32_t) (uintptr_t) priv->alptr;
+  regs->satcan[ SATCAN_RAM_BASE ] = (uint32_t) (uintptr_t) priv->alptr >> 15;
 
   DBG( "regs->membase = %x\n\r", (unsigned int) priv->alptr );
   DBG(

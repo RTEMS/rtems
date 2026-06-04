@@ -306,8 +306,6 @@ int ASCS_init( void )
     goto init_error2;
   }
 
-  cfg->regs = (GRASCS_regs *) base;
-
   cfg->regs = (GRASCS_regs *) (uintptr_t) base;
 
   /* Read core capabilities */

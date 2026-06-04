@@ -54,11 +54,8 @@ int ambapp_find_by_idx( struct ambapp_dev *dev, int index, void *pcount )
     } else {
       return 0;
     }
+  } else {
+    /* Satisfied with first matching device, stop search */
+    return (int) (uintptr_t) dev;
   }
-}
-else
-{
-  /* Satisfied with first matching device, stop search */
-  return (int) (uintptr_t) dev;
-}
 }

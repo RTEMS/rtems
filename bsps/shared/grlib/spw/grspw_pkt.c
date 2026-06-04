@@ -1301,16 +1301,6 @@ STATIC int grspw_rx_schedule_ready( struct grspw_dma_priv *dma )
         curr_pkt->flags &= ~PKT_FLAG_TR_DATA;
       }
     }
-    BD_WRITE( &curr_bd->bd->addr, hwaddr );
-
-    /* Prepare descriptor address. */
-    hwaddr = curr_pkt->data;
-    if ( curr_pkt->flags & PKT_FLAG_TR_DATA ) {
-      drvmgr_translate( dma->core->dev, CPUMEM_TO_DMA, hwaddr, &hwaddr );
-      if ( curr_pkt->data == hwaddr ) { /* translation needed? */
-        curr_pkt->flags &= ~PKT_FLAG_TR_DATA;
-      }
-    }
     BD_WRITE( &curr_bd->bd->addr, (uintptr_t) hwaddr );
 
     ctrl = GRSPW_RXBD_EN;
@@ -1525,9 +1515,6 @@ STATIC int grspw_tx_schedule_send( struct grspw_dma_priv *dma )
   lst.head = curr_pkt = dma->send.head;
   curr_bd = dma->tx_ring_head;
   while ( !curr_bd->pkt ) {
-    /* Assign Packet to descriptor */
-    curr_bd->pkt = curr_pkt;
-
     /* Assign Packet to descriptor */
     curr_bd->pkt = curr_pkt;
 

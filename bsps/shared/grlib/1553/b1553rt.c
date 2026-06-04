@@ -117,11 +117,10 @@ typedef struct {
 
   unsigned int cfg_freq;
 
-  unsigned int memarea_base;
-  unsigned int memarea_base_remote;
-
   uintptr_t memarea_base;
   uint32_t  memarea_base_remote;
+
+  volatile unsigned short *mem;
 
   /* Received events waiting to be read */
   struct rt_msg *rt_event;
@@ -390,82 +389,71 @@ int b1553rt_device_init( rt_priv *pDev )
     );
   }
 
-  /* Translate the base address into an address that the RT core can understand */
-  drvmgr_translate_check(
-    pDev->dev,
-    CPUMEM_TO_DMA,
-    (void *) pDev->memarea_base,
-    (void **) &pDev->memarea_base_remote,
-    4 * 1024
-  );
-}
+  /* clear the used memory */
+  memset( (char *) pDev->memarea_base, 0, 4 * 1024 );
 
-/* Set base address of all descriptors */
-pDev->memarea_base = (uintptr_t) mem;
-pDev->mem = (volatile unsigned short *) pDev->memarea_base;
+  /* Set base address of all descriptors */
+  pDev->memarea_base = (uintptr_t) mem;
+  pDev->mem = (volatile unsigned short *) pDev->memarea_base;
 
-/* Set base address of all descriptors */
-pDev->memarea_base = (unsigned int) mem;
-pDev->mem = (volatile unsigned short *) pDev->memarea_base;
+  pDev->rt_event = NULL;
 
-pDev->rt_event = NULL;
-
-/* The RT is always clocked at the same frequency as the bus 
+  /* The RT is always clocked at the same frequency as the bus 
      * If the frequency doesnt match it is defaulted to 24MHz, 
      * user can always override it.
      */
-pDev->cfg_freq = RT_FREQ_24MHZ;
+  pDev->cfg_freq = RT_FREQ_24MHZ;
 
-/* Get frequency in Hz */
-if ( drvmgr_freq_get( pDev->dev, DEV_APB_SLV, &sys_freq_hz ) == 0 ) {
-  if ( sys_freq_hz == 20000000 ) {
-    pDev->cfg_freq = RT_FREQ_20MHZ;
-  } else if ( sys_freq_hz == 16000000 ) {
-    pDev->cfg_freq = RT_FREQ_16MHZ;
-  } else if ( sys_freq_hz == 12000000 ) {
-    pDev->cfg_freq = RT_FREQ_12MHZ;
+  /* Get frequency in Hz */
+  if ( drvmgr_freq_get( pDev->dev, DEV_APB_SLV, &sys_freq_hz ) == 0 ) {
+    if ( sys_freq_hz == 20000000 ) {
+      pDev->cfg_freq = RT_FREQ_20MHZ;
+    } else if ( sys_freq_hz == 16000000 ) {
+      pDev->cfg_freq = RT_FREQ_16MHZ;
+    } else if ( sys_freq_hz == 12000000 ) {
+      pDev->cfg_freq = RT_FREQ_12MHZ;
+    }
   }
-}
 
-value = drvmgr_dev_key_get( pDev->dev, "coreFreq", DRVMGR_KT_INT );
-if ( value ) {
-  pDev->cfg_freq = value->i & RT_FREQ_MASK;
-}
+  value = drvmgr_dev_key_get( pDev->dev, "coreFreq", DRVMGR_KT_INT );
+  if ( value ) {
+    pDev->cfg_freq = value->i & RT_FREQ_MASK;
+  }
 
-/* RX Semaphore created with count = 0 */
-if (
-  rtems_semaphore_create(
-    rtems_build_name( 'R', 'T', '0', '0' + pDev->minor ),
-    0,
-    RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY |
-      RTEMS_LOCAL | RTEMS_NO_PRIORITY_CEILING,
-    0,
-    &pDev->rx_sem
-  ) != RTEMS_SUCCESSFUL
-) {
-  printk( "RT: Failed to create rx semaphore\n" );
-  return RTEMS_INTERNAL_ERROR;
-}
+  /* RX Semaphore created with count = 0 */
+  if (
+    rtems_semaphore_create(
+      rtems_build_name( 'R', 'T', '0', '0' + pDev->minor ),
+      0,
+      RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY |
+        RTEMS_LOCAL | RTEMS_NO_PRIORITY_CEILING,
+      0,
+      &pDev->rx_sem
+    ) != RTEMS_SUCCESSFUL
+  ) {
+    printk( "RT: Failed to create rx semaphore\n" );
+    return RTEMS_INTERNAL_ERROR;
+  }
 
-/* Device Semaphore created with count = 1 */
-if (
-  rtems_semaphore_create(
-    rtems_build_name( 'R', 'T', '0', '0' + pDev->minor ),
-    1,
-    RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY |
-      RTEMS_LOCAL | RTEMS_NO_PRIORITY_CEILING,
-    0,
-    &pDev->dev_sem
-  ) != RTEMS_SUCCESSFUL
-) {
-  printk( "RT: Failed to create device semaphore\n" );
-  return RTEMS_INTERNAL_ERROR;
-}
+  /* Device Semaphore created with count = 1 */
+  if (
+    rtems_semaphore_create(
+      rtems_build_name( 'R', 'T', '0', '0' + pDev->minor ),
+      1,
+      RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY |
+        RTEMS_LOCAL | RTEMS_NO_PRIORITY_CEILING,
+      0,
+      &pDev->dev_sem
+    ) != RTEMS_SUCCESSFUL
+  ) {
+    printk( "RT: Failed to create device semaphore\n" );
+    return RTEMS_INTERNAL_ERROR;
+  }
 
-/* Default to RT-mode */
-rt_init( pDev );
+  /* Default to RT-mode */
+  rt_init( pDev );
 
-return 0;
+  return 0;
 }
 
 static int odd_parity( unsigned int data )
@@ -979,11 +967,6 @@ void b1553rt_print_dev( struct drvmgr_dev *dev, int options )
   /* Print */
   printf( "--- B1553RT[%d] %s ---\n", pDev->minor, pDev->devName );
   printf( " REGS:            0x%x\n", (unsigned int) (uintptr_t) pDev->regs );
-  printf( " IRQ:             %d\n", pDev->irqno );
-
-  /* Print */
-  printf( "--- B1553RT[%d] %s ---\n", pDev->minor, pDev->devName );
-  printf( " REGS:            0x%x\n", (unsigned int) pDev->regs );
   printf( " IRQ:             %d\n", pDev->irqno );
 }
 

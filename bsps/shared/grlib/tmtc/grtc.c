@@ -613,25 +613,11 @@ static int grtc_hw_read_try(
     return 0;
   }
 
-  /* Read from upper part of data buffer */
-  if ( upper > 0 ) {
-    if ( left < upper ) {
-      cnt = left;
-    } else {
-      cnt = upper; /* Read all upper data available */
-    }
-    DBG( "grtc_hw_read_try: COPYING %d from upper\n", cnt );
-    /* Convert from Remote address (RP) into CPU Local address */
-    memcpy(
-      buf,
-      (void *) (uintptr_t) ( ( rp -
-                               (unsigned int) (uintptr_t) pDev->buf_remote ) +
-                             (unsigned int) (uintptr_t) pDev->buf ),
-      cnt
-    );
-    buf += cnt;
-    left -= cnt;
-  }
+  rp = READ_REG( &regs->rp );
+  asr = READ_REG( &regs->asr );
+  bufmax = ( asr & GRTC_ASR_RXLEN ) >> GRTC_ASR_RXLEN_BIT;
+  bufmax = ( bufmax + 1 ) << 10; /* Convert from 1kbyte blocks into bytes */
+  wp = READ_REG( &regs->wp );
 
   /* Relative rp and wp */
   rrp = rp - ( asr & GRTC_ASR_BUFST );
@@ -670,8 +656,9 @@ static int grtc_hw_read_try(
     /* Convert from Remote address (RP) into CPU Local address */
     memcpy(
       buf,
-      (void *) ( ( rp - (unsigned int) pDev->buf_remote ) +
-                 (unsigned int) pDev->buf ),
+      (void *) (uintptr_t) ( ( rp -
+                               (unsigned int) (uintptr_t) pDev->buf_remote ) +
+                             (unsigned int) (uintptr_t) pDev->buf ),
       cnt
     );
     buf += cnt;
@@ -1329,392 +1316,285 @@ static int grtc_hw_find_frm( struct grtc_priv *pDev )
     cnt = grtc_scan( (unsigned short *) pDev->buf, lower, 0x01, &found );
     count += cnt;
 
-    /* Relative rp and wp */
-    rrp = rp - ( asr & GRTC_ASR_BUFST );
-    rwp = wp - ( asr & GRTC_ASR_BUFST );
-
-    lower = grtc_hw_data_avail_lower( rrp, rwp, bufmax );
-    upper = grtc_hw_data_avail_upper( rrp, rwp, bufmax );
-
-    DBG( "grtc_hw_find_frm: AVAIL: Lower: %d, Upper: %d\n", lower, upper );
-    DBG(
-      "grtc_hw_find_frm: rp: 0x%x, rrp: 0x%x, wp: 0x%x, rwp: 0x%x, bufmax: %d\n, start: 0x%x\n",
-      rp,
-      rrp,
-      wp,
-      rwp,
-      bufmax,
-      pDev->buf_remote
-    );
-
-    if ( ( upper + lower ) == 0 ) {
-      return 1;
-    }
-
-    /* Count bytes will be read */
-    count = 0;
-    found = 0;
-
-    /* Read from upper part of data buffer */
-    if ( upper > 0 ) {
-      cnt = grtc_scan(
-        (unsigned short *) ( ( rp - (unsigned int) pDev->buf_remote ) +
-                             (unsigned int) pDev->buf ),
-        upper,
-        0x01,
-        &found
-      );
-      count = cnt;
-      if ( found ) {
-        DBG( "grtc_hw_find_frm: SCANNED upper %d bytes until found\n", cnt );
-        goto out;
-      }
-
-      DBG( "grtc_hw_find_frm: SCANNED all upper %d bytes, not found\n", cnt );
-    }
-
-    /* Read from lower part of data buffer */
-    if ( lower > 0 ) {
-      cnt = grtc_scan( (unsigned short *) pDev->buf, lower, 0x01, &found );
-      count += cnt;
-
-      if ( found ) {
-        DBG( "grtc_hw_find_frm: SCANNED lower %d bytes until found\n", cnt );
-        goto out;
-      }
-
-      DBG( "grtc_hw_find_frm: SCANNED all lower %d bytes, not found\n", cnt );
-    }
-
-  out:
-    /* Update hardware RP pointer to tell hardware about new space available */
-    if ( count > 0 ) {
-      if ( ( rp + count ) >= ( ( asr & GRTC_ASR_BUFST ) + bufmax ) ) {
-        regs->rp = ( rp + count - bufmax );
-      } else {
-        regs->rp = rp + count;
-      }
-    }
     if ( found ) {
-      return 0;
+      DBG( "grtc_hw_find_frm: SCANNED lower %d bytes until found\n", cnt );
+      goto out;
     }
-    return 1;
+
+    DBG( "grtc_hw_find_frm: SCANNED all lower %d bytes, not found\n", cnt );
   }
 
-  static int grtc_check_ending( unsigned short *src, int max, int end )
-  {
-    while ( max > 0 ) {
-      /* Check Filler */
-      if ( *src != 0x5500 ) {
-        /* Filler is wrong */
-        return -1;
-      }
-      src++;
-      max -= 2;
-    }
-
-    /* Check ending (at least */
-    if ( end ) {
-      if ( ( *src & 0x00ff ) != 0x02 ) {
-        return -1;
-      }
-    }
-
-    return 0;
-  }
-
-  static int grtc_hw_check_ending( struct grtc_priv * pDev, int max )
-  {
-    struct grtc_regs *regs = pDev->regs;
-    unsigned int      rp, wp, asr, bufmax, rrp, rwp;
-    unsigned int      upper, lower;
-    unsigned int      count, cnt, left;
-
-    FUNCDBG();
-
-    if ( max < 1 ) {
-      return 0;
-    }
-    max = max * 2;
-    max += 2; /* Check ending also (2 byte extra) */
-
-    rp = READ_REG( &regs->rp );
-    asr = READ_REG( &regs->asr );
-    bufmax = ( asr & GRTC_ASR_RXLEN ) >> GRTC_ASR_RXLEN_BIT;
-    bufmax = ( bufmax + 1 ) << 10; /* Convert from 1kbyte blocks into bytes */
-    wp = READ_REG( &regs->wp );
-
-    /* Relative rp and wp */
-    rrp = rp - ( asr & GRTC_ASR_BUFST );
-    rwp = wp - ( asr & GRTC_ASR_BUFST );
-
-    lower = grtc_hw_data_avail_lower( rrp, rwp, bufmax );
-    upper = grtc_hw_data_avail_upper( rrp, rwp, bufmax );
-
-    DBG( "grtc_hw_check_ending: AVAIL: Lower: %d, Upper: %d\n", lower, upper );
-    DBG(
-      "grtc_hw_check_ending: rp: 0x%x, rrp: 0x%x, wp: 0x%x, rwp: 0x%x, bufmax: %d\n, start: 0x%x\n",
-      rp,
-      rrp,
-      wp,
-      rwp,
-      bufmax,
-      pDev->buf_remote
-    );
-
-    if ( ( upper + lower ) < (unsigned int) max ) {
-      return 0;
-    }
-
-    /* Count bytes will be read */
-    count = max;
-    left = count;
-
-    /* Read from upper part of data buffer */
-    if ( upper > 0 ) {
-      if ( left <= upper ) {
-        cnt = left;
-        if (
-          grtc_check_ending(
-            (unsigned short *) (uintptr_t) ( ( rp - (unsigned int) (uintptr_t)
-                                                      pDev->buf_remote ) +
-                                             (unsigned int) (uintptr_t)
-                                               pDev->buf ),
-            cnt - 2,
-            1
-          )
-        ) {
-          return -1;
-        }
-      } else {
-        cnt = upper; /* Read all upper data available */
-        if (
-          grtc_check_ending(
-            (unsigned short *) (uintptr_t) ( ( rp - (unsigned int) (uintptr_t)
-                                                      pDev->buf_remote ) +
-                                             (unsigned int) (uintptr_t)
-                                               pDev->buf ),
-            cnt,
-            0
-          )
-        ) {
-          return -1;
-        }
-      }
-      left -= cnt;
-    }
-
-    /* Read from lower part of data buffer */
-    if ( left > 0 ) {
-      cnt = left;
-      if ( grtc_check_ending( (unsigned short *) pDev->buf, cnt - 2, 1 ) ) {
-        return -1;
-      }
-      left -= cnt;
-    }
-
-    DBG( "grtc_hw_check_ending: AVAIL: Lower: %d, Upper: %d\n", lower, upper );
-    DBG(
-      "grtc_hw_check_ending: rp: 0x%x, rrp: 0x%x, wp: 0x%x, rwp: 0x%x, bufmax: %d\n, start: 0x%x\n",
-      rp,
-      rrp,
-      wp,
-      rwp,
-      bufmax,
-      pDev->buf_remote
-    );
-
-    if ( ( upper + lower ) < (unsigned int) max ) {
-      return 0;
-    }
-
-    /* Count bytes will be read */
-    count = max;
-    left = count;
-
-    /* Read from upper part of data buffer */
-    if ( upper > 0 ) {
-      if ( left <= upper ) {
-        cnt = left;
-        if (
-          grtc_check_ending(
-            (unsigned short *) ( ( rp - (unsigned int) pDev->buf_remote ) +
-                                 (unsigned int) pDev->buf ),
-            cnt - 2,
-            1
-          )
-        ) {
-          return -1;
-        }
-      } else {
-        cnt = upper; /* Read all upper data available */
-        if (
-          grtc_check_ending(
-            (unsigned short *) ( ( rp - (unsigned int) pDev->buf_remote ) +
-                                 (unsigned int) pDev->buf ),
-            cnt,
-            0
-          )
-        ) {
-          return -1;
-        }
-      }
-      left -= cnt;
-    }
-
-    /* Read from lower part of data buffer */
-    if ( left > 0 ) {
-      cnt = left;
-      if ( grtc_check_ending( (unsigned short *) pDev->buf, cnt - 2, 1 ) ) {
-        return -1;
-      }
-      left -= cnt;
-    }
-
-    /* Update hardware RP pointer to tell hardware about new space available */
+out:
+  /* Update hardware RP pointer to tell hardware about new space available */
+  if ( count > 0 ) {
     if ( ( rp + count ) >= ( ( asr & GRTC_ASR_BUFST ) + bufmax ) ) {
       regs->rp = ( rp + count - bufmax );
     } else {
       regs->rp = rp + count;
     }
+  }
+  if ( found ) {
+    return 0;
+  }
+  return 1;
+}
 
+static int grtc_check_ending( unsigned short *src, int max, int end )
+{
+  while ( max > 0 ) {
+    /* Check Filler */
+    if ( *src != 0x5500 ) {
+      /* Filler is wrong */
+      return -1;
+    }
+    src++;
+    max -= 2;
+  }
+
+  /* Check ending (at least */
+  if ( end ) {
+    if ( ( *src & 0x00ff ) != 0x02 ) {
+      return -1;
+    }
+  }
+
+  return 0;
+}
+
+static int grtc_hw_check_ending( struct grtc_priv *pDev, int max )
+{
+  struct grtc_regs *regs = pDev->regs;
+  unsigned int      rp, wp, asr, bufmax, rrp, rwp;
+  unsigned int      upper, lower;
+  unsigned int      count, cnt, left;
+
+  FUNCDBG();
+
+  if ( max < 1 ) {
+    return 0;
+  }
+  max = max * 2;
+  max += 2; /* Check ending also (2 byte extra) */
+
+  rp = READ_REG( &regs->rp );
+  asr = READ_REG( &regs->asr );
+  bufmax = ( asr & GRTC_ASR_RXLEN ) >> GRTC_ASR_RXLEN_BIT;
+  bufmax = ( bufmax + 1 ) << 10; /* Convert from 1kbyte blocks into bytes */
+  wp = READ_REG( &regs->wp );
+
+  /* Relative rp and wp */
+  rrp = rp - ( asr & GRTC_ASR_BUFST );
+  rwp = wp - ( asr & GRTC_ASR_BUFST );
+
+  lower = grtc_hw_data_avail_lower( rrp, rwp, bufmax );
+  upper = grtc_hw_data_avail_upper( rrp, rwp, bufmax );
+
+  DBG( "grtc_hw_check_ending: AVAIL: Lower: %d, Upper: %d\n", lower, upper );
+  DBG(
+    "grtc_hw_check_ending: rp: 0x%x, rrp: 0x%x, wp: 0x%x, rwp: 0x%x, bufmax: %d\n, start: 0x%x\n",
+    rp,
+    rrp,
+    wp,
+    rwp,
+    bufmax,
+    pDev->buf_remote
+  );
+
+  if ( ( upper + lower ) < (unsigned int) max ) {
     return 0;
   }
 
-  /* Copies Data from DMA area to buf, the control bytes are stripped. For
+  /* Count bytes will be read */
+  count = max;
+  left = count;
+
+  /* Read from upper part of data buffer */
+  if ( upper > 0 ) {
+    if ( left <= upper ) {
+      cnt = left;
+      if (
+        grtc_check_ending(
+          (unsigned short *) (uintptr_t) ( ( rp - (unsigned int) (uintptr_t)
+                                                    pDev->buf_remote ) +
+                                           (unsigned int) (uintptr_t)
+                                             pDev->buf ),
+          cnt - 2,
+          1
+        )
+      ) {
+        return -1;
+      }
+    } else {
+      cnt = upper; /* Read all upper data available */
+      if (
+        grtc_check_ending(
+          (unsigned short *) (uintptr_t) ( ( rp - (unsigned int) (uintptr_t)
+                                                    pDev->buf_remote ) +
+                                           (unsigned int) (uintptr_t)
+                                             pDev->buf ),
+          cnt,
+          0
+        )
+      ) {
+        return -1;
+      }
+    }
+    left -= cnt;
+  }
+
+  /* Read from lower part of data buffer */
+  if ( left > 0 ) {
+    cnt = left;
+    if ( grtc_check_ending( (unsigned short *) pDev->buf, cnt - 2, 1 ) ) {
+      return -1;
+    }
+    left -= cnt;
+  }
+
+  /* Update hardware RP pointer to tell hardware about new space available */
+  if ( ( rp + count ) >= ( ( asr & GRTC_ASR_BUFST ) + bufmax ) ) {
+    regs->rp = ( rp + count - bufmax );
+  } else {
+    regs->rp = rp + count;
+  }
+
+  return 0;
+}
+
+/* Copies Data from DMA area to buf, the control bytes are stripped. For
  * every data byte, in the DMA area, one control byte is stripped.
  */
-  static int grtc_hw_copy(
-    struct grtc_priv * pDev,
-    unsigned char *buf,
-    unsigned int   max,
-    int            partial
-  )
-  {
-    struct grtc_regs *regs = pDev->regs;
-    unsigned int      rp, wp, asr, bufmax, rrp, rwp;
-    unsigned int      upper, lower;
-    unsigned int      count, left;
-    int               cnt;
-    int               ret, tot, tmp;
+static int grtc_hw_copy(
+  struct grtc_priv *pDev,
+  unsigned char    *buf,
+  unsigned int      max,
+  int               partial
+)
+{
+  struct grtc_regs *regs = pDev->regs;
+  unsigned int      rp, wp, asr, bufmax, rrp, rwp;
+  unsigned int      upper, lower;
+  unsigned int      count, left;
+  int               cnt;
+  int               ret, tot, tmp;
 
-    FUNCDBG();
+  FUNCDBG();
 
-    if ( max < 1 ) {
-      return 0;
-    }
-
-    rp = READ_REG( &regs->rp );
-    asr = READ_REG( &regs->asr );
-    bufmax = ( asr & GRTC_ASR_RXLEN ) >> GRTC_ASR_RXLEN_BIT;
-    bufmax = ( bufmax + 1 ) << 10; /* Convert from 1kbyte blocks into bytes */
-    wp = READ_REG( &regs->wp );
-
-    /* Relative rp and wp */
-    rrp = rp - ( asr & GRTC_ASR_BUFST );
-    rwp = wp - ( asr & GRTC_ASR_BUFST );
-
-    lower = grtc_hw_data_avail_lower( rrp, rwp, bufmax ) >> 1;
-    upper = grtc_hw_data_avail_upper( rrp, rwp, bufmax ) >> 1;
-
-    DBG( "grtc_hw_copy: AVAIL: Lower: %d, Upper: %d\n", lower, upper );
-    DBG(
-      "grtc_hw_copy: rp: 0x%x, rrp: 0x%x, wp: 0x%x, rwp: 0x%x, bufmax: %d\n, start: 0x%x\n",
-      rp,
-      rrp,
-      wp,
-      rwp,
-      bufmax,
-      pDev->buf_remote
-    );
-
-    if (
-      ( upper + lower ) == 0 || ( !partial && ( ( upper + lower ) < max ) )
-    ) {
-      return 0;
-    }
-
-    /* Count bytes will be read */
-    count = ( upper + lower ) > max ? max : ( upper + lower );
-    left = count;
-    tot = 0;
-
-    /* Read from upper part of data buffer */
-    if ( upper > 0 ) {
-      if ( left < upper ) {
-        cnt = left;
-      } else {
-        cnt = upper; /* Read all upper data available */
-      }
-      DBG( "grtc_hw_copy: COPYING %d from upper\n", cnt );
-      if (
-        ( tot = grtc_copy(
-            (unsigned short *) (uintptr_t) ( ( rp - (unsigned int) (uintptr_t)
-                                                      pDev->buf_remote ) +
-                                             (unsigned int) (uintptr_t)
-                                               pDev->buf ),
-            buf,
-            cnt
-          ) ) != cnt
-      ) {
-        /* Failed to copy due to an receive error */
-        DBG( "grtc_hw_copy(upper): not all in DMA buffer (%d)\n", tot );
-        count = tot;
-        ret = -1;
-        goto out;
-      }
-      buf += cnt;
-      left -= cnt;
-    }
-
-    /* Read from lower part of data buffer */
-    if ( left > 0 ) {
-      if ( left < lower ) {
-        cnt = left;
-      } else {
-        cnt = lower; /* Read all lower data available */
-      }
-      DBG( "grtc_hw_copy: COPYING %d from lower\n", cnt );
-      if (
-        ( tmp = grtc_copy( (unsigned short *) pDev->buf, buf, cnt ) ) != cnt
-      ) {
-        /* Failed to copy due to an receive error */
-        DBG( "grtc_hw_copy(lower): not all in DMA buffer (%d)\n", tot );
-        count = tot + tmp;
-        ret = -1;
-        goto out;
-      }
-      buf += cnt;
-      left -= cnt;
-    }
-    ret = count;
-
-  out:
-    count = count * 2;
-    /* Update hardware RP pointer to tell hardware about new space available */
-    if ( ( rp + count ) >= ( ( asr & GRTC_ASR_BUFST ) + bufmax ) ) {
-      regs->rp = ( rp + count - bufmax );
-    } else {
-      regs->rp = rp + count;
-    }
-
-    return ret;
+  if ( max < 1 ) {
+    return 0;
   }
+
+  rp = READ_REG( &regs->rp );
+  asr = READ_REG( &regs->asr );
+  bufmax = ( asr & GRTC_ASR_RXLEN ) >> GRTC_ASR_RXLEN_BIT;
+  bufmax = ( bufmax + 1 ) << 10; /* Convert from 1kbyte blocks into bytes */
+  wp = READ_REG( &regs->wp );
+
+  /* Relative rp and wp */
+  rrp = rp - ( asr & GRTC_ASR_BUFST );
+  rwp = wp - ( asr & GRTC_ASR_BUFST );
+
+  lower = grtc_hw_data_avail_lower( rrp, rwp, bufmax ) >> 1;
+  upper = grtc_hw_data_avail_upper( rrp, rwp, bufmax ) >> 1;
+
+  DBG( "grtc_hw_copy: AVAIL: Lower: %d, Upper: %d\n", lower, upper );
+  DBG(
+    "grtc_hw_copy: rp: 0x%x, rrp: 0x%x, wp: 0x%x, rwp: 0x%x, bufmax: %d\n, start: 0x%x\n",
+    rp,
+    rrp,
+    wp,
+    rwp,
+    bufmax,
+    pDev->buf_remote
+  );
+
+  if (
+    ( upper + lower ) == 0 || ( !partial && ( ( upper + lower ) < max ) )
+  ) {
+    return 0;
+  }
+
+  /* Count bytes will be read */
+  count = ( upper + lower ) > max ? max : ( upper + lower );
+  left = count;
+  tot = 0;
+
+  /* Read from upper part of data buffer */
+  if ( upper > 0 ) {
+    if ( left < upper ) {
+      cnt = left;
+    } else {
+      cnt = upper; /* Read all upper data available */
+    }
+    DBG( "grtc_hw_copy: COPYING %d from upper\n", cnt );
+    if (
+      ( tot = grtc_copy(
+          (unsigned short *) (uintptr_t) ( ( rp - (unsigned int) (uintptr_t)
+                                                    pDev->buf_remote ) +
+                                           (unsigned int) (uintptr_t)
+                                             pDev->buf ),
+          buf,
+          cnt
+        ) ) != cnt
+    ) {
+      /* Failed to copy due to an receive error */
+      DBG( "grtc_hw_copy(upper): not all in DMA buffer (%d)\n", tot );
+      count = tot;
+      ret = -1;
+      goto out;
+    }
+    buf += cnt;
+    left -= cnt;
+  }
+
+  /* Read from lower part of data buffer */
+  if ( left > 0 ) {
+    if ( left < lower ) {
+      cnt = left;
+    } else {
+      cnt = lower; /* Read all lower data available */
+    }
+    DBG( "grtc_hw_copy: COPYING %d from lower\n", cnt );
+    if (
+      ( tmp = grtc_copy( (unsigned short *) pDev->buf, buf, cnt ) ) != cnt
+    ) {
+      /* Failed to copy due to an receive error */
+      DBG( "grtc_hw_copy(lower): not all in DMA buffer (%d)\n", tot );
+      count = tot + tmp;
+      ret = -1;
+      goto out;
+    }
+    buf += cnt;
+    left -= cnt;
+  }
+  ret = count;
+
+out:
+  count = count * 2;
+  /* Update hardware RP pointer to tell hardware about new space available */
+  if ( ( rp + count ) >= ( ( asr & GRTC_ASR_BUFST ) + bufmax ) ) {
+    regs->rp = ( rp + count - bufmax );
+  } else {
+    regs->rp = rp + count;
+  }
+
+  return ret;
+}
 
 #ifdef DEBUG_ERROR
-  void grtc_log_error( struct grtc_priv * pDev, int err )
-  {
-    /* Stop Receiver */
-    *(volatile uint32_t *) &pDev->regs->cor = 0x55000000;
-    *(volatile uint32_t *) &pDev->regs->cor = 0x55000000;
-    pDev->last_error[ pDev->last_error_cnt ] = err;
-    if ( ++pDev->last_error_cnt > 128 ) {
-      pDev->last_error_cnt = 0;
-    }
+void grtc_log_error( struct grtc_priv *pDev, int err )
+{
+  /* Stop Receiver */
+  *(volatile uint32_t *) &pDev->regs->cor = 0x55000000;
+  *(volatile uint32_t *) &pDev->regs->cor = 0x55000000;
+  pDev->last_error[ pDev->last_error_cnt ] = err;
+  if ( ++pDev->last_error_cnt > 128 ) {
+    pDev->last_error_cnt = 0;
   }
+}
 #endif
 
-  /* Read one frame from DMA buffer 
+/* Read one frame from DMA buffer 
  * 
  * Return Values
  *  Zero - nothing more to process
@@ -1722,183 +1602,183 @@ static int grtc_hw_find_frm( struct grtc_priv *pDev )
  *  2 - more to process, frame received
  *  negative - more to process, frame dropped
  */
-  static int process_dma( struct grtc_priv * pDev )
-  {
-    int                ret, err;
-    int                left, total_len;
-    unsigned char     *dst;
-    struct grtc_frame *frm;
+static int process_dma( struct grtc_priv *pDev )
+{
+  int                ret, err;
+  int                left, total_len;
+  unsigned char     *dst;
+  struct grtc_frame *frm;
 
-    switch ( pDev->frame_state ) {
-      case FRM_STATE_NONE:
-        DBG2( "FRAME_STATE_NONE\n" );
+  switch ( pDev->frame_state ) {
+    case FRM_STATE_NONE:
+      DBG2( "FRAME_STATE_NONE\n" );
 
-        /* Find Start of next frame by searching for 0x01 */
-        ret = grtc_hw_find_frm( pDev );
-        if ( ret != 0 ) {
-          /* Frame start not found */
-          return 0;
-        }
+      /* Find Start of next frame by searching for 0x01 */
+      ret = grtc_hw_find_frm( pDev );
+      if ( ret != 0 ) {
+        /* Frame start not found */
+        return 0;
+      }
 
-        /* Start of frame found, Try to copy header */
-        pDev->frm = NULL;
-        pDev->frame_state = FRM_STATE_HDR;
-        /* Fall through */
+      /* Start of frame found, Try to copy header */
+      pDev->frm = NULL;
+      pDev->frame_state = FRM_STATE_HDR;
+      /* Fall through */
 
-      case FRM_STATE_HDR:
-        DBG2( "FRAME_STATE_HDR\n" );
+    case FRM_STATE_HDR:
+      DBG2( "FRAME_STATE_HDR\n" );
 
-        /* Wait for all of header to be in place by setting partial to 0 */
-        ret = grtc_hw_copy( pDev, (unsigned char *) pDev->hdr, 5, 0 );
-        if ( ret < 0 ) {
-          /* Error copying header, restart scanning for new frame */
-          DEBUG_ERR_LOG( pDev, 1 );
-          pDev->stats.err++;
-          pDev->stats.err_hdr++;
-          DBG( "FRAME_STATE_HDR: copying failed %d\n", ret );
-          pDev->frame_state = FRM_STATE_NONE;
-          return -1;
-        } else if ( ret != 5 ) {
-          DBG( "FRAME_STATE_HDR: no header (%d)\n", ret );
-          /* Not all bytes available, come back later */
-          return 0;
-        }
+      /* Wait for all of header to be in place by setting partial to 0 */
+      ret = grtc_hw_copy( pDev, (unsigned char *) pDev->hdr, 5, 0 );
+      if ( ret < 0 ) {
+        /* Error copying header, restart scanning for new frame */
+        DEBUG_ERR_LOG( pDev, 1 );
+        pDev->stats.err++;
+        pDev->stats.err_hdr++;
+        DBG( "FRAME_STATE_HDR: copying failed %d\n", ret );
+        pDev->frame_state = FRM_STATE_NONE;
+        return -1;
+      } else if ( ret != 5 ) {
+        DBG( "FRAME_STATE_HDR: no header (%d)\n", ret );
+        /* Not all bytes available, come back later */
+        return 0;
+      }
 
-        /* The complete header has been copied, parse it */
-        pDev->frmlen = ( ( (unsigned short *) pDev->hdr )[ 1 ] & 0x3ff ) + 1;
-        if ( pDev->frmlen < 5 ) {
-          /* Error: frame length is not correct */
-          pDev->stats.err++;
-          pDev->stats.err_hdr++;
-          DBG( "FRAME_STATE_HDR: frame length error: %d\n", pDev->frmlen );
-          pDev->frame_state = FRM_STATE_NONE;
-          return -1;
-        }
-        pDev->frame_state = FRM_STATE_ALLOC;
-        /* Fall through */
+      /* The complete header has been copied, parse it */
+      pDev->frmlen = ( ( (unsigned short *) pDev->hdr )[ 1 ] & 0x3ff ) + 1;
+      if ( pDev->frmlen < 5 ) {
+        /* Error: frame length is not correct */
+        pDev->stats.err++;
+        pDev->stats.err_hdr++;
+        DBG( "FRAME_STATE_HDR: frame length error: %d\n", pDev->frmlen );
+        pDev->frame_state = FRM_STATE_NONE;
+        return -1;
+      }
+      pDev->frame_state = FRM_STATE_ALLOC;
+      /* Fall through */
 
-      case FRM_STATE_ALLOC:
-        DBG2( "FRAME_STATE_ALLOC\n" );
-        /* Header has been read, allocate a frame to put payload and header into */
+    case FRM_STATE_ALLOC:
+      DBG2( "FRAME_STATE_ALLOC\n" );
+      /* Header has been read, allocate a frame to put payload and header into */
 
-        /* Allocate Frame matching Frame length */
-        err = 0;
-        frm = grtc_pool_get_frm( pDev, pDev->frmlen, &err );
-        if ( !frm ) {
-          /* Couldn't find frame  */
-          DEBUG_ERR_LOG( pDev, 2 );
-          pDev->stats.dropped++;
-          DBG2( "No free frames\n" );
-          if ( err == 0 ) {
-            /* Frame length exist in pool configuration, but no
+      /* Allocate Frame matching Frame length */
+      err = 0;
+      frm = grtc_pool_get_frm( pDev, pDev->frmlen, &err );
+      if ( !frm ) {
+        /* Couldn't find frame  */
+        DEBUG_ERR_LOG( pDev, 2 );
+        pDev->stats.dropped++;
+        DBG2( "No free frames\n" );
+        if ( err == 0 ) {
+          /* Frame length exist in pool configuration, but no
 				 * frames are available for that frame length.
 				 */
-            DEBUG_ERR_LOG( pDev, 3 );
-            pDev->stats.dropped_no_buf++;
-            return 1;
-          } else {
-            /* Frame length of incoming frame is larger than the
+          DEBUG_ERR_LOG( pDev, 3 );
+          pDev->stats.dropped_no_buf++;
+          return 1;
+        } else {
+          /* Frame length of incoming frame is larger than the
 				 * frame length in any of the configured frame pools.
 				 * 
 				 * This may be because of an corrupt header. We simply
 				 * scan for the end of frame marker in the DMA buffer
 				 * so we can drop the frame.
 				 */
-            DEBUG_ERR_LOG( pDev, 4 );
-            pDev->stats.dropped_too_long++;
-            pDev->frame_state = FRM_STATE_NONE;
-            return -2;
-          }
-        }
-        frm->len = 5; /* Only header currenlty in frame */
-
-        /* Copy Frame Header into frame structure */
-        ( (unsigned char *) &frm->hdr )[ 0 ] = ( (unsigned char *)
-                                                   pDev->hdr )[ 0 ];
-        ( (unsigned char *) &frm->hdr )[ 1 ] = ( (unsigned char *)
-                                                   pDev->hdr )[ 1 ];
-        ( (unsigned char *) &frm->hdr )[ 2 ] = ( (unsigned char *)
-                                                   pDev->hdr )[ 2 ];
-        ( (unsigned char *) &frm->hdr )[ 3 ] = ( (unsigned char *)
-                                                   pDev->hdr )[ 3 ];
-        ( (unsigned char *) &frm->hdr )[ 4 ] = ( (unsigned char *)
-                                                   pDev->hdr )[ 4 ];
-
-        /* Calc Total and Filler byte count in frame */
-        total_len = pDev->frmlen / 7;
-        total_len = total_len * 7;
-        if ( pDev->frmlen != total_len ) {
-          total_len += 7;
-        }
-
-        pDev->filler = total_len - pDev->frmlen;
-
-        pDev->frame_state = FRM_STATE_PAYLOAD;
-        pDev->frm = frm;
-        /* Fall through */
-
-      case FRM_STATE_PAYLOAD:
-        DBG2( "FRAME_STATE_PAYLOAD\n" );
-        /* Parts of payload and the complete header has been read */
-        frm = pDev->frm;
-
-        dst = (unsigned char *) &frm->data[ frm->len - 5 ];
-        left = pDev->frmlen - frm->len;
-
-        ret = grtc_hw_copy( pDev, dst, left, 1 );
-        if ( ret < 0 ) {
-          DEBUG_ERR_LOG( pDev, 5 );
-          /* Error copying header, restart scanning for new frame */
+          DEBUG_ERR_LOG( pDev, 4 );
+          pDev->stats.dropped_too_long++;
           pDev->frame_state = FRM_STATE_NONE;
-          frm->next = NULL;
-          grtc_pool_add_frms( frm );
-          pDev->frm = NULL;
-          pDev->stats.err++;
-          pDev->stats.err_payload++;
-          return -1;
-        } else if ( ret != left ) {
-          /* Not all bytes available, come back later */
-          frm->len += ret;
-          return 0;
+          return -2;
         }
-        frm->len += ret;
-        pDev->frame_state = FRM_STATE_FILLER;
-        /* Fall through */
+      }
+      frm->len = 5; /* Only header currenlty in frame */
 
-      case FRM_STATE_FILLER:
-        DBG2( "FRAME_STATE_FILLER\n" );
-        /* check filler data */
-        frm = pDev->frm;
+      /* Copy Frame Header into frame structure */
+      ( (unsigned char *) &frm->hdr )[ 0 ] = ( (unsigned char *)
+                                                 pDev->hdr )[ 0 ];
+      ( (unsigned char *) &frm->hdr )[ 1 ] = ( (unsigned char *)
+                                                 pDev->hdr )[ 1 ];
+      ( (unsigned char *) &frm->hdr )[ 2 ] = ( (unsigned char *)
+                                                 pDev->hdr )[ 2 ];
+      ( (unsigned char *) &frm->hdr )[ 3 ] = ( (unsigned char *)
+                                                 pDev->hdr )[ 3 ];
+      ( (unsigned char *) &frm->hdr )[ 4 ] = ( (unsigned char *)
+                                                 pDev->hdr )[ 4 ];
 
-        ret = grtc_hw_check_ending( pDev, pDev->filler );
-        if ( ret != 0 ) {
-          /* Error in frame, drop frame */
-          DEBUG_ERR_LOG( pDev, 6 );
-          pDev->frame_state = FRM_STATE_NONE;
-          frm->next = NULL;
-          grtc_pool_add_frms( frm );
-          pDev->frm = NULL;
-          pDev->stats.err++;
-          pDev->stats.err_ending++;
-          return -1;
-        }
+      /* Calc Total and Filler byte count in frame */
+      total_len = pDev->frmlen / 7;
+      total_len = total_len * 7;
+      if ( pDev->frmlen != total_len ) {
+        total_len += 7;
+      }
 
-        /* A complete frame received, put it into received frame queue */
-        if ( pDev->ready.head ) {
-          /* Queue not empty */
-          pDev->ready.tail->next = frm;
-        } else {
-          /* Queue empty */
-          pDev->ready.head = frm;
-        }
-        pDev->ready.tail = frm;
-        frm->next = NULL;
-        pDev->ready.cnt++;
-        pDev->stats.frames_recv++;
+      pDev->filler = total_len - pDev->frmlen;
 
+      pDev->frame_state = FRM_STATE_PAYLOAD;
+      pDev->frm = frm;
+      /* Fall through */
+
+    case FRM_STATE_PAYLOAD:
+      DBG2( "FRAME_STATE_PAYLOAD\n" );
+      /* Parts of payload and the complete header has been read */
+      frm = pDev->frm;
+
+      dst = (unsigned char *) &frm->data[ frm->len - 5 ];
+      left = pDev->frmlen - frm->len;
+
+      ret = grtc_hw_copy( pDev, dst, left, 1 );
+      if ( ret < 0 ) {
+        DEBUG_ERR_LOG( pDev, 5 );
+        /* Error copying header, restart scanning for new frame */
         pDev->frame_state = FRM_STATE_NONE;
         frm->next = NULL;
-        return 2;
+        grtc_pool_add_frms( frm );
+        pDev->frm = NULL;
+        pDev->stats.err++;
+        pDev->stats.err_payload++;
+        return -1;
+      } else if ( ret != left ) {
+        /* Not all bytes available, come back later */
+        frm->len += ret;
+        return 0;
+      }
+      frm->len += ret;
+      pDev->frame_state = FRM_STATE_FILLER;
+      /* Fall through */
+
+    case FRM_STATE_FILLER:
+      DBG2( "FRAME_STATE_FILLER\n" );
+      /* check filler data */
+      frm = pDev->frm;
+
+      ret = grtc_hw_check_ending( pDev, pDev->filler );
+      if ( ret != 0 ) {
+        /* Error in frame, drop frame */
+        DEBUG_ERR_LOG( pDev, 6 );
+        pDev->frame_state = FRM_STATE_NONE;
+        frm->next = NULL;
+        grtc_pool_add_frms( frm );
+        pDev->frm = NULL;
+        pDev->stats.err++;
+        pDev->stats.err_ending++;
+        return -1;
+      }
+
+      /* A complete frame received, put it into received frame queue */
+      if ( pDev->ready.head ) {
+        /* Queue not empty */
+        pDev->ready.tail->next = frm;
+      } else {
+        /* Queue empty */
+        pDev->ready.head = frm;
+      }
+      pDev->ready.tail = frm;
+      frm->next = NULL;
+      pDev->ready.cnt++;
+      pDev->stats.frames_recv++;
+
+      pDev->frame_state = FRM_STATE_NONE;
+      frm->next = NULL;
+      return 2;
 
 #if 0
 		case FRM_STATE_DROP:
@@ -1906,520 +1786,511 @@ static int grtc_hw_find_frm( struct grtc_priv *pDev )
 		break;
 #endif
 
-      default:
-        printk( "GRTC: internal error\n" );
-        pDev->frame_state = FRM_STATE_NONE;
-        break;
-    }
-
-    return 0;
+    default:
+      printk( "GRTC: internal error\n" );
+      pDev->frame_state = FRM_STATE_NONE;
+      break;
   }
 
-  static rtems_device_driver grtc_ioctl(
-    rtems_device_major_number major,
-    rtems_device_minor_number minor,
-    void                     *arg
-  )
-  {
-    (void) major;
+  return 0;
+}
 
-    struct grtc_priv                *pDev;
-    struct drvmgr_dev               *dev;
-    rtems_libio_ioctl_args_t        *ioarg = (rtems_libio_ioctl_args_t *) arg;
-    unsigned int                    *data;
-    int                              status, ret;
-    unsigned int                     frm_len;
-    unsigned int                     i;
-    struct grtc_ioc_buf_params      *buf_arg;
-    struct grtc_ioc_config          *cfg;
-    struct grtc_ioc_hw_status       *hwregs;
-    struct grtc_ioc_pools_setup     *pocfg;
-    struct grtc_ioc_assign_frm_pool *poassign;
-    struct grtc_frame               *frm, *frms;
-    struct grtc_frame_pool          *pool;
-    struct grtc_list                *frmlist;
-    struct grtc_ioc_stats           *stats;
-    unsigned int                     mem;
-    IRQ_LOCAL_DECLARE( oldLevel );
+static rtems_device_driver grtc_ioctl(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
+)
+{
+  (void) major;
 
-    FUNCDBG();
+  struct grtc_priv                *pDev;
+  struct drvmgr_dev               *dev;
+  rtems_libio_ioctl_args_t        *ioarg = (rtems_libio_ioctl_args_t *) arg;
+  unsigned int                    *data;
+  int                              status, ret;
+  unsigned int                     frm_len;
+  unsigned int                     i;
+  struct grtc_ioc_buf_params      *buf_arg;
+  struct grtc_ioc_config          *cfg;
+  struct grtc_ioc_hw_status       *hwregs;
+  struct grtc_ioc_pools_setup     *pocfg;
+  struct grtc_ioc_assign_frm_pool *poassign;
+  struct grtc_frame               *frm, *frms;
+  struct grtc_frame_pool          *pool;
+  struct grtc_list                *frmlist;
+  struct grtc_ioc_stats           *stats;
+  unsigned int                     mem;
+  IRQ_LOCAL_DECLARE( oldLevel );
 
-    if ( drvmgr_get_dev( &grtc_drv_info.general, minor, &dev ) ) {
-      return RTEMS_INVALID_NUMBER;
-    }
-    pDev = (struct grtc_priv *) dev->priv;
+  FUNCDBG();
 
-    if ( !ioarg ) {
-      return RTEMS_INVALID_NAME;
-    }
+  if ( drvmgr_get_dev( &grtc_drv_info.general, minor, &dev ) ) {
+    return RTEMS_INVALID_NUMBER;
+  }
+  pDev = (struct grtc_priv *) dev->priv;
 
-    data = ioarg->buffer;
+  if ( !ioarg ) {
+    return RTEMS_INVALID_NAME;
+  }
 
-    ioarg->ioctl_return = 0;
-    switch ( ioarg->command ) {
-      case GRTC_IOC_START:
-        if ( pDev->running ) {
-          return RTEMS_RESOURCE_IN_USE; /* EBUSY */
-        }
-        if ( ( status = grtc_start( pDev ) ) != RTEMS_SUCCESSFUL ) {
-          return status;
-        }
-        /* Register ISR and Unmask interrupt */
-        drvmgr_interrupt_register(
-          pDev->dev,
-          0,
-          "grtc",
-          grtc_interrupt,
-          pDev
-        );
+  data = ioarg->buffer;
 
-        /* Read and write are now open... */
+  ioarg->ioctl_return = 0;
+  switch ( ioarg->command ) {
+    case GRTC_IOC_START:
+      if ( pDev->running ) {
+        return RTEMS_RESOURCE_IN_USE; /* EBUSY */
+      }
+      if ( ( status = grtc_start( pDev ) ) != RTEMS_SUCCESSFUL ) {
+        return status;
+      }
+      /* Register ISR and Unmask interrupt */
+      drvmgr_interrupt_register( pDev->dev, 0, "grtc", grtc_interrupt, pDev );
+
+      /* Read and write are now open... */
+      break;
+
+    case GRTC_IOC_STOP:
+      if ( !pDev->running ) {
+        return RTEMS_RESOURCE_IN_USE;
+      }
+      drvmgr_interrupt_unregister( pDev->dev, 0, grtc_interrupt, pDev );
+      grtc_stop( pDev, 0 );
+      break;
+
+    case GRTC_IOC_ISSTARTED:
+      if ( !pDev->running ) {
+        return RTEMS_RESOURCE_IN_USE;
+      } else if ( pDev->overrun_condition ) {
+        return RTEMS_IO_ERROR;
+      }
+      break;
+
+    case GRTC_IOC_SET_BLOCKING_MODE:
+      if ( (unsigned int) (uintptr_t) data > GRTC_BLKMODE_COMPLETE ) {
+        return RTEMS_INVALID_NAME;
+      }
+      DBG( "GRTC: Set blocking mode: %d\n", (unsigned int) (uintptr_t) data );
+      pDev->blocking = (unsigned int) (uintptr_t) data;
+      break;
+
+    case GRTC_IOC_SET_TIMEOUT:
+      DBG( "GRTC: Timeout: %d\n", (unsigned int) (uintptr_t) data );
+      pDev->timeout = (rtems_interval) (uintptr_t) data;
+      break;
+
+    case GRTC_IOC_SET_BUF_PARAM:
+      if ( pDev->running ) {
+        return RTEMS_RESOURCE_IN_USE; /* EBUSY */
+      }
+
+      buf_arg = (struct grtc_ioc_buf_params *) data;
+      if ( !buf_arg ) {
+        return RTEMS_INVALID_NAME;
+      }
+
+      DBG(
+        "GRTC: IOC_SET_BUF_PARAM: Len: 0x%x, Custom Buffer: 0x%x\n",
+        buf_arg->length,
+        buf_arg->custom_buffer
+      );
+
+      /* Check alignment need, skip bit 0 since that bit only indicates remote address or not */
+      if (
+        (uintptr_t) buf_arg->custom_buffer & ( ~GRTC_BUF_MASK ) & ( ~0x1 )
+      ) {
+        return RTEMS_INVALID_NAME;
+      }
+
+      if ( buf_arg->length > 0x100 ) {
+        DBG( "GRTC: Too big buffer requested\n" );
+        return RTEMS_INVALID_NAME;
+      }
+
+      /* If current buffer allocated by driver we must free it */
+      if ( !pDev->buf_custom && pDev->buf ) {
+        free( pDev->_buf );
+        pDev->_buf = NULL;
+      }
+      pDev->buf = NULL;
+      pDev->len = buf_arg->length * 1024;
+
+      if ( pDev->len <= 0 ) {
         break;
+      }
+      mem = (unsigned int) (uintptr_t) buf_arg->custom_buffer;
+      pDev->buf_custom = mem;
 
-      case GRTC_IOC_STOP:
-        if ( !pDev->running ) {
-          return RTEMS_RESOURCE_IN_USE;
-        }
-        drvmgr_interrupt_unregister( pDev->dev, 0, grtc_interrupt, pDev );
-        grtc_stop( pDev, 0 );
-        break;
-
-      case GRTC_IOC_ISSTARTED:
-        if ( !pDev->running ) {
-          return RTEMS_RESOURCE_IN_USE;
-        } else if ( pDev->overrun_condition ) {
-          return RTEMS_IO_ERROR;
-        }
-        break;
-
-      case GRTC_IOC_SET_BLOCKING_MODE:
-        if ( (unsigned int) (uintptr_t) data > GRTC_BLKMODE_COMPLETE ) {
-          return RTEMS_INVALID_NAME;
-        }
-        DBG(
-          "GRTC: Set blocking mode: %d\n",
-          (unsigned int) (uintptr_t) data
-        );
-        pDev->blocking = (unsigned int) (uintptr_t) data;
-        break;
-
-      case GRTC_IOC_SET_TIMEOUT:
-        DBG( "GRTC: Timeout: %d\n", (unsigned int) (uintptr_t) data );
-        pDev->timeout = (rtems_interval) (uintptr_t) data;
-        break;
-
-      case GRTC_IOC_SET_BUF_PARAM:
-        if ( pDev->running ) {
-          return RTEMS_RESOURCE_IN_USE; /* EBUSY */
-        }
-
-        buf_arg = (struct grtc_ioc_buf_params *) data;
-        if ( !buf_arg ) {
-          return RTEMS_INVALID_NAME;
-        }
-
-        DBG(
-          "GRTC: IOC_SET_BUF_PARAM: Len: 0x%x, Custom Buffer: 0x%x\n",
-          buf_arg->length,
-          buf_arg->custom_buffer
-        );
-
-        /* Check alignment need, skip bit 0 since that bit only indicates remote address or not */
-        if (
-          (uintptr_t) buf_arg->custom_buffer & ( ~GRTC_BUF_MASK ) & ( ~0x1 )
-        ) {
-          return RTEMS_INVALID_NAME;
-        }
-
-        if ( buf_arg->length > 0x100 ) {
-          DBG( "GRTC: Too big buffer requested\n" );
-          return RTEMS_INVALID_NAME;
-        }
-
-        /* If current buffer allocated by driver we must free it */
-        if ( !pDev->buf_custom && pDev->buf ) {
-          free( pDev->_buf );
-          pDev->_buf = NULL;
-        }
-        pDev->buf = NULL;
-        pDev->len = buf_arg->length * 1024;
-
-        if ( pDev->len <= 0 ) {
-          break;
-        }
-        mem = (unsigned int) (uintptr_t) buf_arg->custom_buffer;
-        pDev->buf_custom = mem;
-
-        if ( mem & 1 ) {
-          /* Remote address given, the address is as the GRTC
+      if ( mem & 1 ) {
+        /* Remote address given, the address is as the GRTC
 			 * core looks at it. Translate the base address into
 			 * an address that the CPU can understand.
 			 */
-          pDev->buf_remote = (void *) (uintptr_t) ( mem & ~0x1 );
-          drvmgr_translate_check(
-            pDev->dev,
-            DMAMEM_TO_CPU,
-            (void *) pDev->buf_remote,
-            (void **) &pDev->buf,
+        pDev->buf_remote = (void *) (uintptr_t) ( mem & ~0x1 );
+        drvmgr_translate_check(
+          pDev->dev,
+          DMAMEM_TO_CPU,
+          (void *) pDev->buf_remote,
+          (void **) &pDev->buf,
+          pDev->len
+        );
+      } else {
+        if ( mem == 0 ) {
+          pDev->buf = grtc_memalign(
+            ( ~GRTC_ASR_BUFST ) + 1,
+            pDev->len,
+            &pDev->_buf
+          );
+          DBG(
+            "grtc_ioctl: SETBUF: new buf: 0x%x(0x%x), Len: %d\n",
+            pDev->buf,
+            pDev->_buf,
             pDev->len
           );
-        } else {
-          if ( mem == 0 ) {
-            pDev->buf = grtc_memalign(
-              ( ~GRTC_ASR_BUFST ) + 1,
-              pDev->len,
-              &pDev->_buf
-            );
-            DBG(
-              "grtc_ioctl: SETBUF: new buf: 0x%x(0x%x), Len: %d\n",
-              pDev->buf,
-              pDev->_buf,
-              pDev->len
-            );
-            if ( !pDev->buf ) {
-              pDev->len = 0;
-              pDev->buf_custom = 0;
-              pDev->_buf = NULL;
-              pDev->buf_remote = 0;
-              DBG( "GRTC: Failed to allocate memory\n" );
-              return RTEMS_NO_MEMORY;
-            }
-          } else {
-            pDev->buf = buf_arg->custom_buffer;
+          if ( !pDev->buf ) {
+            pDev->len = 0;
+            pDev->buf_custom = 0;
+            pDev->_buf = NULL;
+            pDev->buf_remote = 0;
+            DBG( "GRTC: Failed to allocate memory\n" );
+            return RTEMS_NO_MEMORY;
           }
+        } else {
+          pDev->buf = buf_arg->custom_buffer;
+        }
 
-          /* Translate into a remote address so that GRTC core
+        /* Translate into a remote address so that GRTC core
 			 * on a remote AMBA bus (for example over the PCI bus)
 			 * gets a valid address
 			 */
-          drvmgr_translate_check(
-            pDev->dev,
-            CPUMEM_TO_DMA,
-            (void *) pDev->buf,
-            (void **) &pDev->buf_remote,
-            pDev->len
-          );
-        }
-        break;
+        drvmgr_translate_check(
+          pDev->dev,
+          CPUMEM_TO_DMA,
+          (void *) pDev->buf,
+          (void **) &pDev->buf_remote,
+          pDev->len
+        );
+      }
+      break;
 
-      case GRTC_IOC_GET_BUF_PARAM:
-        if ( pDev->running ) {
-          return RTEMS_RESOURCE_IN_USE; /* EBUSY */
-        }
+    case GRTC_IOC_GET_BUF_PARAM:
+      if ( pDev->running ) {
+        return RTEMS_RESOURCE_IN_USE; /* EBUSY */
+      }
 
-        buf_arg = (struct grtc_ioc_buf_params *) data;
-        if ( !buf_arg ) {
-          return RTEMS_INVALID_NAME;
-        }
+      buf_arg = (struct grtc_ioc_buf_params *) data;
+      if ( !buf_arg ) {
+        return RTEMS_INVALID_NAME;
+      }
 
-        buf_arg->length = pDev->len >> 10; /* Length in 1kByte blocks */
-        if ( pDev->buf_custom ) {
-          buf_arg->custom_buffer = (void *) pDev->buf;
-        } else {
-          buf_arg->custom_buffer = 0; /* Don't reveal internal driver buffer */
-        }
-        break;
+      buf_arg->length = pDev->len >> 10; /* Length in 1kByte blocks */
+      if ( pDev->buf_custom ) {
+        buf_arg->custom_buffer = (void *) pDev->buf;
+      } else {
+        buf_arg->custom_buffer = 0; /* Don't reveal internal driver buffer */
+      }
+      break;
 
-      case GRTC_IOC_SET_CONFIG:
-        cfg = (struct grtc_ioc_config *) data;
-        if ( !cfg ) {
-          return RTEMS_INVALID_NAME;
-        }
+    case GRTC_IOC_SET_CONFIG:
+      cfg = (struct grtc_ioc_config *) data;
+      if ( !cfg ) {
+        return RTEMS_INVALID_NAME;
+      }
 
-        if ( pDev->running ) {
-          return RTEMS_RESOURCE_IN_USE;
-        }
+      if ( pDev->running ) {
+        return RTEMS_RESOURCE_IN_USE;
+      }
 
-        pDev->config = *cfg;
-        break;
+      pDev->config = *cfg;
+      break;
 
-      case GRTC_IOC_GET_CONFIG:
-        cfg = (struct grtc_ioc_config *) data;
-        if ( !cfg ) {
-          return RTEMS_INVALID_NAME;
-        }
+    case GRTC_IOC_GET_CONFIG:
+      cfg = (struct grtc_ioc_config *) data;
+      if ( !cfg ) {
+        return RTEMS_INVALID_NAME;
+      }
 
-        *cfg = pDev->config;
-        break;
+      *cfg = pDev->config;
+      break;
 
-      case GRTC_IOC_GET_HW_STATUS:
-        hwregs = (struct grtc_ioc_hw_status *) data;
-        if ( !hwregs ) {
-          return RTEMS_INVALID_NAME;
-        }
-        /* We disable interrupt on the local CPU in order to get a
+    case GRTC_IOC_GET_HW_STATUS:
+      hwregs = (struct grtc_ioc_hw_status *) data;
+      if ( !hwregs ) {
+        return RTEMS_INVALID_NAME;
+      }
+      /* We disable interrupt on the local CPU in order to get a
 		 * snapshot of the registers.
 		 */
-        IRQ_LOCAL_DISABLE( oldLevel );
-        hwregs->sir = READ_REG( &pDev->regs->sir );
-        hwregs->far = READ_REG( &pDev->regs->far );
-        hwregs->clcw1 = READ_REG( &pDev->regs->clcw1 );
-        hwregs->clcw2 = READ_REG( &pDev->regs->clcw2 );
-        hwregs->phir = READ_REG( &pDev->regs->phir );
-        hwregs->str = READ_REG( &pDev->regs->str );
-        IRQ_LOCAL_ENABLE( oldLevel );
-        break;
+      IRQ_LOCAL_DISABLE( oldLevel );
+      hwregs->sir = READ_REG( &pDev->regs->sir );
+      hwregs->far = READ_REG( &pDev->regs->far );
+      hwregs->clcw1 = READ_REG( &pDev->regs->clcw1 );
+      hwregs->clcw2 = READ_REG( &pDev->regs->clcw2 );
+      hwregs->phir = READ_REG( &pDev->regs->phir );
+      hwregs->str = READ_REG( &pDev->regs->str );
+      IRQ_LOCAL_ENABLE( oldLevel );
+      break;
 
-      case GRTC_IOC_GET_STATS:
-        stats = (struct grtc_ioc_stats *) data;
-        if ( !stats ) {
+    case GRTC_IOC_GET_STATS:
+      stats = (struct grtc_ioc_stats *) data;
+      if ( !stats ) {
+        return RTEMS_INVALID_NAME;
+      }
+      memcpy( stats, &pDev->stats, sizeof( struct grtc_ioc_stats ) );
+      break;
+
+    case GRTC_IOC_CLR_STATS:
+      memset( &pDev->stats, 0, sizeof( struct grtc_ioc_stats ) );
+      break;
+
+    case GRTC_IOC_SET_MODE:
+      if ( pDev->running ) {
+        return RTEMS_RESOURCE_IN_USE;
+      }
+      if ( (int) (uintptr_t) data == GRTC_MODE_FRAME ) {
+        pDev->mode = GRTC_MODE_FRAME;
+      } else if ( (int) (uintptr_t) data == GRTC_MODE_RAW ) {
+        pDev->mode = GRTC_MODE_RAW;
+      } else {
+        return RTEMS_INVALID_NAME;
+      }
+      break;
+
+    case GRTC_IOC_POOLS_SETUP:
+      if ( pDev->running ) {
+        return RTEMS_RESOURCE_IN_USE;
+      }
+      pocfg = (struct grtc_ioc_pools_setup *) data;
+      if ( ( pDev->mode != GRTC_MODE_FRAME ) || !pocfg ) {
+        return RTEMS_INVALID_NAME;
+      }
+
+      /* Check that list is sorted */
+      frm_len = 0;
+      for ( i = 0; i < pocfg->pool_cnt; i++ ) {
+        if ( pocfg->pool_frame_len[ i ] <= frm_len ) {
           return RTEMS_INVALID_NAME;
         }
-        memcpy( stats, &pDev->stats, sizeof( struct grtc_ioc_stats ) );
-        break;
+        frm_len = pocfg->pool_frame_len[ i ];
+      }
 
-      case GRTC_IOC_CLR_STATS:
-        memset( &pDev->stats, 0, sizeof( struct grtc_ioc_stats ) );
-        break;
-
-      case GRTC_IOC_SET_MODE:
-        if ( pDev->running ) {
-          return RTEMS_RESOURCE_IN_USE;
-        }
-        if ( (int) (uintptr_t) data == GRTC_MODE_FRAME ) {
-          pDev->mode = GRTC_MODE_FRAME;
-        } else if ( (int) (uintptr_t) data == GRTC_MODE_RAW ) {
-          pDev->mode = GRTC_MODE_RAW;
-        } else {
-          return RTEMS_INVALID_NAME;
-        }
-        break;
-
-      case GRTC_IOC_POOLS_SETUP:
-        if ( pDev->running ) {
-          return RTEMS_RESOURCE_IN_USE;
-        }
-        pocfg = (struct grtc_ioc_pools_setup *) data;
-        if ( ( pDev->mode != GRTC_MODE_FRAME ) || !pocfg ) {
-          return RTEMS_INVALID_NAME;
-        }
-
-        /* Check that list is sorted */
-        frm_len = 0;
-        for ( i = 0; i < pocfg->pool_cnt; i++ ) {
-          if ( pocfg->pool_frame_len[ i ] <= frm_len ) {
-            return RTEMS_INVALID_NAME;
-          }
-          frm_len = pocfg->pool_frame_len[ i ];
-        }
-
-        /* Ok, we trust user. The pool descriptions are allocated
+      /* Ok, we trust user. The pool descriptions are allocated
 		 * but not frames, that the user must do self.
 		 */
-        if ( pDev->pools ) {
-          free( pDev->pools );
-        }
-        pDev->pools = grlib_malloc( pocfg->pool_cnt * sizeof( *pDev->pools ) );
-        if ( !pDev->pools ) {
-          pDev->pool_cnt = 0;
-          return RTEMS_NO_MEMORY;
-        }
-        pDev->pool_cnt = pocfg->pool_cnt;
-        for ( i = 0; i < pocfg->pool_cnt; i++ ) {
-          pDev->pools[ i ].frame_len = pocfg->pool_frame_len[ i ];
-          pDev->pools[ i ].frame_cnt = 0;
-          pDev->pools[ i ].frms = NULL;
-        }
-        break;
+      if ( pDev->pools ) {
+        free( pDev->pools );
+      }
+      pDev->pools = grlib_malloc( pocfg->pool_cnt * sizeof( *pDev->pools ) );
+      if ( !pDev->pools ) {
+        pDev->pool_cnt = 0;
+        return RTEMS_NO_MEMORY;
+      }
+      pDev->pool_cnt = pocfg->pool_cnt;
+      for ( i = 0; i < pocfg->pool_cnt; i++ ) {
+        pDev->pools[ i ].frame_len = pocfg->pool_frame_len[ i ];
+        pDev->pools[ i ].frame_cnt = 0;
+        pDev->pools[ i ].frms = NULL;
+      }
+      break;
 
-      case GRTC_IOC_ASSIGN_FRM_POOL:
-        if ( pDev->running ) {
-          return RTEMS_RESOURCE_IN_USE;
-        }
+    case GRTC_IOC_ASSIGN_FRM_POOL:
+      if ( pDev->running ) {
+        return RTEMS_RESOURCE_IN_USE;
+      }
 
-        if (( pDev->mode != GRTC_MODE_FRAME )) {
-          return RTEMS_INVALID_NAME;
-        }
+      if (( pDev->mode != GRTC_MODE_FRAME )) {
+        return RTEMS_INVALID_NAME;
+      }
 
-        poassign = (struct grtc_ioc_assign_frm_pool *) data;
-        if ( !poassign ) {
-          return RTEMS_INVALID_NAME;
-        }
+      poassign = (struct grtc_ioc_assign_frm_pool *) data;
+      if ( !poassign ) {
+        return RTEMS_INVALID_NAME;
+      }
 
-        /* Find pool to assign the frames to */
-        pool = NULL;
-        for ( i = 0; i < pDev->pool_cnt; i++ ) {
-          if ( pDev->pools[ i ].frame_len == poassign->frame_len ) {
-            pool = &pDev->pools[ i ];
-            break;
-          }
+      /* Find pool to assign the frames to */
+      pool = NULL;
+      for ( i = 0; i < pDev->pool_cnt; i++ ) {
+        if ( pDev->pools[ i ].frame_len == poassign->frame_len ) {
+          pool = &pDev->pools[ i ];
+          break;
         }
-        if ( !pool ) {
-          /* No Pool matching frame length */
-          return RTEMS_INVALID_NAME;
-        }
+      }
+      if ( !pool ) {
+        /* No Pool matching frame length */
+        return RTEMS_INVALID_NAME;
+      }
 
-        /* Assign frames to pool */
-        frm = poassign->frames;
-        while ( frm ) {
-          frm->pool = pool; /* Assign Frame to pool */
-          frm = frm->next;
-        }
-        break;
+      /* Assign frames to pool */
+      frm = poassign->frames;
+      while ( frm ) {
+        frm->pool = pool; /* Assign Frame to pool */
+        frm = frm->next;
+      }
+      break;
 
-      case GRTC_IOC_ADD_BUFF:
-        frms = (struct grtc_frame *) data;
+    case GRTC_IOC_ADD_BUFF:
+      frms = (struct grtc_frame *) data;
 
-        if (( pDev->mode != GRTC_MODE_FRAME )) {
-          return RTEMS_NOT_DEFINED;
-        }
-        if ( !frms ) {
-          return RTEMS_INVALID_NAME;
-        }
+      if (( pDev->mode != GRTC_MODE_FRAME )) {
+        return RTEMS_NOT_DEFINED;
+      }
+      if ( !frms ) {
+        return RTEMS_INVALID_NAME;
+      }
 
-        /* Add frames to respicative pools */
-        if ( grtc_pool_add_frms( frms ) ) {
-          return RTEMS_INVALID_NAME;
-        }
-        break;
+      /* Add frames to respicative pools */
+      if ( grtc_pool_add_frms( frms ) ) {
+        return RTEMS_INVALID_NAME;
+      }
+      break;
 
-      /* Try to read as much data as possible from DMA area and
+    /* Try to read as much data as possible from DMA area and
 		 * put it into free frames.
 		 *
 		 * If receiver is in stopped mode, let user only read previously
 		 * received frames.
 		 */
-      case GRTC_IOC_RECV:
+    case GRTC_IOC_RECV:
 
-        if (( pDev->mode != GRTC_MODE_FRAME )) {
-          return RTEMS_NOT_DEFINED;
-        }
-
-        while (
-          pDev->running &&
-          ( ( ret = process_dma( pDev ) == 2 ) || ( ret == -1 ) )
-        ) {
-          /* Frame received or dropped, process next frame */
-        }
-
-        /* Take frames out from ready queue and put them to user */
-        frmlist = (struct grtc_list *) data;
-        if ( !frmlist ) {
-          return RTEMS_INVALID_NAME;
-        }
-
-        frmlist->head = pDev->ready.head;
-        frmlist->tail = pDev->ready.tail;
-        frmlist->cnt = pDev->ready.cnt;
-
-        /* Empty list */
-        pDev->ready.head = NULL;
-        pDev->ready.tail = NULL;
-        pDev->ready.cnt = 0;
-
-        if ( ( frmlist->cnt == 0 ) && pDev->overrun_condition ) {
-          /* signal to the user that overrun has happend when
-			 * no more data can be read out.
-			 */
-          return RTEMS_IO_ERROR;
-        }
-        break;
-
-      case GRTC_IOC_GET_CLCW_ADR:
-        if ( !data ) {
-          return RTEMS_INVALID_NAME;
-        }
-        *data = (unsigned int) (uintptr_t) &pDev->regs->clcw1;
-        break;
-
-      default:
+      if (( pDev->mode != GRTC_MODE_FRAME )) {
         return RTEMS_NOT_DEFINED;
-    }
-    return RTEMS_SUCCESSFUL;
-  }
-
-  static void grtc_interrupt( void *arg )
-  {
-    struct grtc_priv *pDev = arg;
-    struct grtc_regs *regs = pDev->regs;
-    unsigned int      status;
-    SPIN_ISR_IRQFLAGS( irqflags );
-
-    /* Clear interrupt by reading it */
-    status = READ_REG( &regs->pisr );
-
-    /* Spurious Interrupt? */
-    if ( !pDev->running ) {
-      return;
-    }
-
-    if ( status & GRTC_INT_OV ) {
-      /* Stop core (Disable receiver, interrupts), set overrun condition, 
-		 * Flush semaphore if thread waiting for data in grtc_wait_data(). 
-		 */
-      grtc_stop( pDev, 1 );
-
-      /* No need to handle the reset of interrupts, we are still */
-      goto out;
-    }
-
-    if ( status & GRTC_INT_CS ) {
-      SPIN_LOCK( &pDev->devlock, irqflags );
-
-      if ( ( pDev->blocking == GRTC_BLKMODE_COMPLETE ) && pDev->timeout ) {
-        /* Signal to thread only if enough data is available */
-        if ( pDev->wait_for_nbytes > grtc_data_avail( pDev ) ) {
-          /* Not enough data available */
-          goto procceed_processing_interrupts;
-        }
-
-        /* Enough data is available which means that we should
-			 * wake up the thread sleeping.
-			 */
       }
 
-      /* Disable further CLTUs Stored interrupts, no point until
+      while (
+        pDev->running &&
+        ( ( ret = process_dma( pDev ) == 2 ) || ( ret == -1 ) )
+      ) {
+        /* Frame received or dropped, process next frame */
+      }
+
+      /* Take frames out from ready queue and put them to user */
+      frmlist = (struct grtc_list *) data;
+      if ( !frmlist ) {
+        return RTEMS_INVALID_NAME;
+      }
+
+      frmlist->head = pDev->ready.head;
+      frmlist->tail = pDev->ready.tail;
+      frmlist->cnt = pDev->ready.cnt;
+
+      /* Empty list */
+      pDev->ready.head = NULL;
+      pDev->ready.tail = NULL;
+      pDev->ready.cnt = 0;
+
+      if ( ( frmlist->cnt == 0 ) && pDev->overrun_condition ) {
+        /* signal to the user that overrun has happend when
+			 * no more data can be read out.
+			 */
+        return RTEMS_IO_ERROR;
+      }
+      break;
+
+    case GRTC_IOC_GET_CLCW_ADR:
+      if ( !data ) {
+        return RTEMS_INVALID_NAME;
+      }
+      *data = (unsigned int) (uintptr_t) &pDev->regs->clcw1;
+      break;
+
+    default:
+      return RTEMS_NOT_DEFINED;
+  }
+  return RTEMS_SUCCESSFUL;
+}
+
+static void grtc_interrupt( void *arg )
+{
+  struct grtc_priv *pDev = arg;
+  struct grtc_regs *regs = pDev->regs;
+  unsigned int      status;
+  SPIN_ISR_IRQFLAGS( irqflags );
+
+  /* Clear interrupt by reading it */
+  status = READ_REG( &regs->pisr );
+
+  /* Spurious Interrupt? */
+  if ( !pDev->running ) {
+    return;
+  }
+
+  if ( status & GRTC_INT_OV ) {
+    /* Stop core (Disable receiver, interrupts), set overrun condition, 
+		 * Flush semaphore if thread waiting for data in grtc_wait_data(). 
+		 */
+    grtc_stop( pDev, 1 );
+
+    /* No need to handle the reset of interrupts, we are still */
+    goto out;
+  }
+
+  if ( status & GRTC_INT_CS ) {
+    SPIN_LOCK( &pDev->devlock, irqflags );
+
+    if ( ( pDev->blocking == GRTC_BLKMODE_COMPLETE ) && pDev->timeout ) {
+      /* Signal to thread only if enough data is available */
+      if ( pDev->wait_for_nbytes > grtc_data_avail( pDev ) ) {
+        /* Not enough data available */
+        goto procceed_processing_interrupts;
+      }
+
+      /* Enough data is available which means that we should
+			 * wake up the thread sleeping.
+			 */
+    }
+
+    /* Disable further CLTUs Stored interrupts, no point until
 		 * thread waiting for them says it want to wait for more.
 		 */
-      regs->imr = READ_REG( &regs->imr ) & ~GRTC_INT_CS;
-      SPIN_UNLOCK( &pDev->devlock, irqflags );
+    regs->imr = READ_REG( &regs->imr ) & ~GRTC_INT_CS;
+    SPIN_UNLOCK( &pDev->devlock, irqflags );
 
-      /* Signal Semaphore to wake waiting thread in read() */
-      rtems_semaphore_release( pDev->sem_rx );
-    }
-
-  procceed_processing_interrupts:
-
-    if ( status & GRTC_INT_CR ) {
-    }
-
-    if ( status & GRTC_INT_FAR ) {
-    }
-
-    if ( status & GRTC_INT_BLO ) {
-    }
-
-    if ( status & GRTC_INT_RFA ) {
-    }
-  out:
-    if ( status ) {
-      regs->picr = status;
-    }
+    /* Signal Semaphore to wake waiting thread in read() */
+    rtems_semaphore_release( pDev->sem_rx );
   }
 
-  static rtems_device_driver grtc_initialize(
-    rtems_device_major_number major,
-    rtems_device_minor_number minor,
-    void                     *arg
-  )
-  {
-    (void) major;
-    (void) minor;
-    (void) arg;
+procceed_processing_interrupts:
 
-    /* Device Semaphore created with count = 1 */
-    if (
-      rtems_semaphore_create(
-        rtems_build_name( 'G', 'R', 'T', 'C' ),
-        1,
-        RTEMS_FIFO | RTEMS_NO_INHERIT_PRIORITY | RTEMS_LOCAL |
-          RTEMS_NO_PRIORITY_CEILING,
-        0,
-        &grtc_dev_sem
-      ) != RTEMS_SUCCESSFUL
-    ) {
-      return RTEMS_INTERNAL_ERROR;
-    }
-
-    return RTEMS_SUCCESSFUL;
+  if ( status & GRTC_INT_CR ) {
   }
+
+  if ( status & GRTC_INT_FAR ) {
+  }
+
+  if ( status & GRTC_INT_BLO ) {
+  }
+
+  if ( status & GRTC_INT_RFA ) {
+  }
+out:
+  if ( status ) {
+    regs->picr = status;
+  }
+}
+
+static rtems_device_driver grtc_initialize(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *arg
+)
+{
+  (void) major;
+  (void) minor;
+  (void) arg;
+
+  /* Device Semaphore created with count = 1 */
+  if (
+    rtems_semaphore_create(
+      rtems_build_name( 'G', 'R', 'T', 'C' ),
+      1,
+      RTEMS_FIFO | RTEMS_NO_INHERIT_PRIORITY | RTEMS_LOCAL |
+        RTEMS_NO_PRIORITY_CEILING,
+      0,
+      &grtc_dev_sem
+    ) != RTEMS_SUCCESSFUL
+  ) {
+    return RTEMS_INTERNAL_ERROR;
+  }
+
+  return RTEMS_SUCCESSFUL;
+}

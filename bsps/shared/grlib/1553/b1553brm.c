@@ -145,17 +145,19 @@ typedef struct {
   char               devName[ 52 ]; /* Device Name */
   struct brm_reg    *regs;
 
-  unsigned int memarea_base;
-  unsigned int memarea_base_remote;
-  unsigned int cfg_clksel;
-  unsigned int cfg_clkdiv;
-  unsigned int cfg_freq;
-
   uintptr_t    memarea_base;
   uint32_t     memarea_base_remote;
   unsigned int cfg_clksel;
   unsigned int cfg_clkdiv;
   unsigned int cfg_freq;
+
+  /* BRM descriptors */
+  struct desc_table {
+    volatile unsigned short ctrl;
+    volatile unsigned short top;
+    volatile unsigned short cur;
+    volatile unsigned short bot;
+  } *desc;
 
   volatile unsigned short *mem;
   /* bc mem struct */
@@ -1419,10 +1421,6 @@ static rtems_device_driver brm_control(
 
     case BRM_SET_EVENTID:
       brm->event_id = (rtems_id) (uintptr_t) ioarg->buffer;
-      break;
-
-    case BRM_SET_EVENTID:
-      brm->event_id = (rtems_id) ioarg->buffer;
       break;
 
     default:

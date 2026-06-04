@@ -223,15 +223,16 @@ static rtems_device_driver canmux_initialize(
 
   strcpy( fs_name, CANMUX_DEVNAME );
 
-  /* Create private structure */
-  if ( ( priv = grlib_malloc( sizeof( *priv ) ) ) == NULL ) {
-    printk(
-      "CAN_MUX driver could not allocate memory for priv structure\n\r"
-    );
+  /* Find core and initialize register pointer */
+  if ( !ambapp_find_apbslv(
+         ambapp_plb(),
+         VENDOR_GAISLER,
+         GAISLER_CANMUX,
+         &d
+       ) ) {
+    printk( "CAN_MUX: Failed to find CAN_MUX core\n\r" );
     return -1;
   }
-
-  priv->muxreg = (unsigned int *) (uintptr_t) d.start;
 
   status = rtems_io_register_name( fs_name, major, minor );
   if ( RTEMS_SUCCESSFUL != status ) {
@@ -246,7 +247,7 @@ static rtems_device_driver canmux_initialize(
     return -1;
   }
 
-  priv->muxreg = (unsigned int *) d.start;
+  priv->muxreg = (unsigned int *) (uintptr_t) d.start;
 
   status = rtems_semaphore_create(
     rtems_build_name( 'M', 'd', 'v', '0' ),

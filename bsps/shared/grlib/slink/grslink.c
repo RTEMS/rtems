@@ -413,27 +413,6 @@ int SLINK_init(
   }
   cfg->reg = (SLINK_regs *) (uintptr_t) base;
 
-  /* Create simple binary semaphore for blocking SLINK_read */
-  st = rtems_semaphore_create(
-    rtems_build_name( 'S', 'L', 'R', '0' ),
-    0,
-    ( RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY |
-      RTEMS_LOCAL | RTEMS_NO_PRIORITY_CEILING ),
-    0,
-    &cfg->read_sem
-  );
-  if ( st != RTEMS_SUCCESSFUL ) {
-    DBG( "SLINK_init: Could not create semaphore\n" );
-    goto slink_initerr1;
-  }
-
-  /* Initialize pointer to SLINK core registers and get IRQ line */
-  if ( SLINK_getaddr( &base, &irq ) == -1 ) {
-    DBG( "SLINK_init: Could not find core\n" );
-    goto slink_initerr2;
-  }
-  cfg->reg = (SLINK_regs *) base;
-
   /* Allocate status structure and initialize members */
   if ( ( cfg->status = grlib_calloc( 1, sizeof( *cfg->status ) ) ) == NULL ) {
     DBG( "SLINK_init: Could not allocate status structure\n" );
@@ -598,9 +577,6 @@ int SLINK_seqstart( int *a, int *b, int n, int channel, int reconly )
   /* As far as software is concerned the sequence is now active */
   cfg->status->seqstat = SLINK_ACTIVE;
 
-  /* As far as software is concerned the sequence is now active */
-  cfg->status->seqstat = SLINK_ACTIVE;
-
   /* Enable SEQUENCE operation with SCN = channel and SLEN = n-1 */
   if ( reconly == 1 ) {
     cfg->reg->ctrl =
@@ -695,6 +671,13 @@ int SLINK_queuestatus( int iocard )
   }
 
   ioq = cfg->queues + iocard;
+
+  if ( ioq->full ) {
+    return ioq->size;
+  }
+  if ( ioq->first == ioq->last ) {
+    return 0;
+  }
 
   first = ( (unsigned int) (uintptr_t) ioq->first ) / sizeof( unsigned int );
   last = ( (unsigned int) (uintptr_t) ioq->last ) / sizeof( unsigned int );

@@ -1544,7 +1544,7 @@ static rtems_device_driver grspw_control(
       SPACEWIRE_DBGC( DBGSPW_IOCTRL, "Event id: %i\n", pDev->config.event_id );
       break;
 
-      /* Change MAX Packet size by:
+    /* Change MAX Packet size by:
 		 *  - stop RX/TX (if on)
 		 *  - wait for hw to complete RX DMA (if on)
 		 *  - reallocate buffers with new size
@@ -1768,7 +1768,7 @@ static rtems_device_driver grspw_control(
       }
       break;
 
-      /* Calculate timer register from GRSPW Core frequency 
+    /* Calculate timer register from GRSPW Core frequency 
 		 * Also possible to set disconnect and timer64 from
 		 *  - SPACEWIRE_IOCTRL_SET_DISCONNECT
 		 *  - SPACEWIRE_IOCTRL_SET_TIMER
@@ -1840,19 +1840,6 @@ static rtems_device_driver grspw_control(
         pDev
       );
 
-      if ( ( ret = grspw_hw_startup( pDev, timeout ) ) != RTEMS_SUCCESSFUL ) {
-        return ret;
-      }
-      pDev->running = 1;
-      /* Register interrupt routine and unmask IRQ */
-      drvmgr_interrupt_register(
-        pDev->dev,
-        0,
-        "grspw",
-        grspw_interrupt,
-        pDev
-      );
-
       break;
 
     case SPACEWIRE_IOCTRL_STOP:
@@ -1868,7 +1855,7 @@ static rtems_device_driver grspw_control(
       grspw_hw_stop( pDev, 1, 1 );
       break;
 
-      /* Set time-code control register bits, and Enables/Disables 
+    /* Set time-code control register bits, and Enables/Disables 
 		 * Time code interrupt, make sure to connect the callback 
 		 * grspw_timecode_callback if using interrupts.
 		 */
@@ -1961,41 +1948,6 @@ static int grspw_hw_init( GRSPW_DEV *pDev )
 
   /* Set up remote addresses */
   pDev->rx_remote = (unsigned int) (uintptr_t) pDev->ptr_bd0_remote;
-  pDev->tx_remote = pDev->rx_remote + SPACEWIRE_BDTABLE_SIZE;
-
-  SPACEWIRE_DBG( "hw_init [minor %i]\n", pDev->minor );
-
-  pDev->config.is_rmap = ctrl & SPW_CTRL_RA;
-  pDev->config.is_rxunaligned = ctrl & SPW_CTRL_RX;
-  pDev->config.is_rmapcrc = ctrl & SPW_CTRL_RC;
-  return 0;
-}
-
-static int grspw_hw_waitlink( GRSPW_DEV *pDev, int timeout )
-{
-  unsigned int rxmax;
-  SPW_WRITE(
-    &pDev->regs->dma0rxmax,
-    pDev->config.rxmaxlen
-  ); /*set rx maxlength*/
-  rxmax = SPW_READ( &pDev->regs->dma0rxmax );
-  if ( rxmax != pDev->config.rxmaxlen ) {
-    return 0;
-  }
-  return 1;
-}
-
-static int grspw_hw_init( GRSPW_DEV *pDev )
-{
-  unsigned int ctrl;
-
-  ctrl = SPW_CTRL_READ( pDev );
-
-  pDev->rx = (SPACEWIRE_RXBD *) pDev->ptr_bd0;
-  pDev->tx = (SPACEWIRE_TXBD *) ( pDev->ptr_bd0 + SPACEWIRE_BDTABLE_SIZE );
-
-  /* Set up remote addresses */
-  pDev->rx_remote = (unsigned int) pDev->ptr_bd0_remote;
   pDev->tx_remote = pDev->rx_remote + SPACEWIRE_BDTABLE_SIZE;
 
   SPACEWIRE_DBG( "hw_init [minor %i]\n", pDev->minor );
@@ -2276,10 +2228,6 @@ int grspw_hw_send(
   pDev->tx[ cur ].len = dlen;
   pDev->tx[ cur ].addr_data = (unsigned int) (uintptr_t) txd_remote;
 
-  pDev->tx[ cur ].addr_header = (unsigned int) txh_remote;
-  pDev->tx[ cur ].len = dlen;
-  pDev->tx[ cur ].addr_data = (unsigned int) txd_remote;
-
   bdctrl = SPW_TXBD_IE | SPW_TXBD_EN | hlen;
   if ( options & GRSPW_PKTSEND_OPTION_HDR_CRC ) {
     bdctrl |= SPW_TXBD_HC;
@@ -2427,106 +2375,6 @@ static int grspw_hw_receive( GRSPW_DEV *pDev, char *b, int c )
 
 static void grspw_rxnext( GRSPW_DEV *pDev )
 {
-  unsigned int len, ctrl;
-  int          rxlen;
-  unsigned int cur;
-  int          tmp;
-  unsigned int dump_start_len;
-  int          i;
-  char        *rxb;
-
-  if ( pDev->config.promiscuous || pDev->config.keep_source ) {
-    dump_start_len =
-      0; /* make sure address and prot can be read in promiscuous mode */
-  } else if ( pDev->config.rm_prot_id ) {
-    dump_start_len = 2; /* skip source address and protocol id */
-  } else {
-    dump_start_len = 1; /* default: skip only source address */
-  }
-
-  rxlen = 0;
-  cur = pDev->rxcur;
-  rxb = pDev->ptr_rxbuf0 + ( cur * pDev->rxbufsize );
-
-  SPACEWIRE_DBGC(
-    DBGSPW_RX,
-    "0x%x: waitin packet at pos %i\n",
-    (unsigned int) pDev->regs,
-    cur
-  );
-
-  ctrl = SPW_READ( (volatile void *) &pDev->rx[ cur ].ctrl );
-  if ( ctrl & SPW_RXBD_EN ) {
-    return rxlen;
-  }
-  SPACEWIRE_DBGC( DBGSPW_RX, "checking packet\n" );
-
-  len = SPW_RXBD_LENGTH & ctrl;
-  if ( !( ( ctrl & SPW_RXBD_ERROR ) || ( pDev->config.check_rmap_err &&
-                                         ( ctrl & SPW_RXBD_RMAPERROR ) ) ) ) {
-    if ( pDev->rxbufcur == (unsigned int) -1 ) {
-      SPACEWIRE_DBGC( DBGSPW_RX, "incoming packet len %i\n", len );
-      pDev->stat.packets_received++;
-      pDev->rxbufcur = dump_start_len;
-    }
-    rxlen = tmp = len - pDev->rxbufcur;
-    SPACEWIRE_DBGC( DBGSPW_RX, "C %i\n", c );
-    SPACEWIRE_DBGC( DBGSPW_RX, "Dump %i\n", dump_start_len );
-    SPACEWIRE_DBGC( DBGSPW_RX, "Bufcur %i\n", pDev->rxbufcur );
-    SPACEWIRE_DBGC( DBGSPW_RX, "Rxlen %i\n", rxlen );
-    if ( rxlen > c ) {
-      rxlen = c;
-    }
-    if ( GRLIB_DMA_IS_CACHE_COHERENT ) {
-      /*		if ( 1 ) {*/
-      /*printf("RX_MEMCPY(0x%x, 0x%x, 0x%x)\n", (unsigned int)b, (unsigned int)(rxb+pDev->rxbufcur), (unsigned int)rxlen);*/
-      memcpy( b, rxb + pDev->rxbufcur, rxlen );
-    } else {
-      int left = rxlen;
-      /* Copy word wise if Aligned */
-      if (
-        ( ( (int) b & 3 ) == 0 ) &&
-        ( ( (int) ( rxb + pDev->rxbufcur ) & 3 ) == 0 )
-      ) {
-        while ( left >= 32 ) {
-          *(int *) ( b + 0 ) = MEM_READ32( rxb + pDev->rxbufcur + 0 );
-          *(int *) ( b + 4 ) = MEM_READ32( rxb + pDev->rxbufcur + 4 );
-          *(int *) ( b + 8 ) = MEM_READ32( rxb + pDev->rxbufcur + 8 );
-          *(int *) ( b + 12 ) = MEM_READ32( rxb + pDev->rxbufcur + 12 );
-          *(int *) ( b + 16 ) = MEM_READ32( rxb + pDev->rxbufcur + 16 );
-          *(int *) ( b + 20 ) = MEM_READ32( rxb + pDev->rxbufcur + 20 );
-          *(int *) ( b + 24 ) = MEM_READ32( rxb + pDev->rxbufcur + 24 );
-          *(int *) ( b + 28 ) = MEM_READ32( rxb + pDev->rxbufcur + 28 );
-          rxb += 32;
-          b += 32;
-          left -= 32;
-        }
-        while ( left >= 4 ) {
-          *(int *) b = MEM_READ32( rxb + pDev->rxbufcur );
-          rxb += 4;
-          b += 4;
-          left -= 4;
-        }
-      }
-      for ( i = 0; i < left; i++ ) {
-        b[ i ] = MEM_READ8( rxb + pDev->rxbufcur + i );
-      }
-    }
-
-    pDev->rxbufcur += rxlen;
-    if ( c >= tmp ) {
-      SPACEWIRE_DBGC( DBGSPW_RX, "Next descriptor\n" );
-      grspw_rxnext( pDev );
-    }
-  } else {
-    check_rx_errors( pDev, ctrl );
-    grspw_rxnext( pDev );
-  }
-  return rxlen;
-}
-
-static void grspw_rxnext( GRSPW_DEV *pDev )
-{
   unsigned int          dmactrl;
   unsigned int          cur = pDev->rxcur;
   unsigned int          ctrl = 0;
@@ -2558,6 +2406,26 @@ static void grspw_rxnext( GRSPW_DEV *pDev )
 
 static void check_rx_errors( GRSPW_DEV *pDev, int ctrl )
 {
+  if ( ctrl & SPW_RXBD_EEP ) {
+    pDev->stat.rx_eep_err++;
+  }
+  if ( ctrl & SPW_RXBD_EHC ) {
+    if ( pDev->config.check_rmap_err ) {
+      pDev->stat.rx_rmap_header_crc_err++;
+    }
+  }
+  if ( ctrl & SPW_RXBD_EDC ) {
+    if ( pDev->config.check_rmap_err ) {
+      pDev->stat.rx_rmap_data_crc_err++;
+    }
+  }
+  if ( ctrl & SPW_RXBD_ETR ) {
+    pDev->stat.rx_truncated++;
+  }
+}
+
+static void grspw_print_dev( struct drvmgr_dev *dev, int options )
+{
   (void) options;
 
   GRSPW_DEV *pDev = dev->priv;
@@ -2572,24 +2440,6 @@ static void check_rx_errors( GRSPW_DEV *pDev, int ctrl )
   printf( " DMA0CTRL:        0x%x\n", pDev->regs->dma0ctrl );
   printf( " TXBD:            0x%x\n", (unsigned int) (uintptr_t) pDev->tx );
   printf( " RXBD:            0x%x\n", (unsigned int) (uintptr_t) pDev->rx );
-}
-
-static void grspw_print_dev( struct drvmgr_dev *dev, int options )
-{
-  (void) options;
-
-  GRSPW_DEV *pDev = dev->priv;
-
-  /* Print */
-  printf( "--- GRSPW %s ---\n", pDev->devName );
-  printf( " REGS:            0x%x\n", (unsigned int) pDev->regs );
-  printf( " IRQ:             %d\n", pDev->irq );
-  printf( " CORE VERSION:    %d\n", pDev->core_ver );
-  printf( " CTRL:            0x%x\n", pDev->regs->ctrl );
-  printf( " STATUS:          0x%x\n", pDev->regs->status );
-  printf( " DMA0CTRL:        0x%x\n", pDev->regs->dma0ctrl );
-  printf( " TXBD:            0x%x\n", (unsigned int) pDev->tx );
-  printf( " RXBD:            0x%x\n", (unsigned int) pDev->rx );
 }
 
 void grspw_print( int options )
