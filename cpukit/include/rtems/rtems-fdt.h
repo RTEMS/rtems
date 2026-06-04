@@ -233,21 +233,51 @@ bool rtems_fdt_valid_handle( const rtems_fdt_handle *handle );
 int rtems_fdt_find_path_offset( rtems_fdt_handle *handle, const char *path );
 
 /**
- * Load a device tree blob or DTB file into memory and register it on the chain
- * of blobs.
+ * @brief Loads a device tree blob (DTB) file into memory and registers it on
+ *        the chain of blobs. The DTB may be gzip compressed or binary format.
  *
  * @param filename The name of the blob file to load.
  * @param handle The handle returns the reference to the blob once load.
- * @return int If less than 0 it is an error code else it is the blob descriptor.
+ * @return int If less than 0 an error code else successful.
  */
 int rtems_fdt_load( const char *const filename, rtems_fdt_handle *handle );
+
+/**
+ * @brief Loads a raw DTB file int memory and registers it on the
+ *        chain of blobs.
+ *
+ * @param filename The name of the raw blob file to load.
+ * @param handle The handle returns the reference to the blob once load.
+ * @return int If less than 0 an error code else successful.
+ *
+ * @see rtems_fdt_load
+ */
+int rtems_fdt_load_blob_file_binary(
+  const char *filename,
+  rtems_fdt_handle *handle
+);
+
+/**
+ * @brief Loads a gzip compressed DTB file int memory and registers it on the
+ *        chain of blobs.
+ *
+ * @param filename The name of the compressed blob file to load.
+ * @param handle The handle returns the reference to the blob once load.
+ * @return int If less than 0 an error code else successful.
+ *
+ * @see rtems_fdt_load
+ */
+int rtems_fdt_load_blob_file_gzip(
+  const char *filename,
+  rtems_fdt_handle *handle
+);
 
 /**
  * Register a device tree blob or DTB on to the chain of blobs.
  *
  * @param blob_desc A pointer to the blob.
  * @param handle The handle returns the reference to the blob once load.
- * @return int If less than 0 it is an error code else it is the blob descriptor.
+ * @return int If less than 0 an error code else successful.
  */
 int rtems_fdt_register( const void *blob, rtems_fdt_handle *handle );
 

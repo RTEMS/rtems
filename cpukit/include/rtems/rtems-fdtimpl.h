@@ -47,6 +47,8 @@
 #ifndef RTEMS_FDTIMPL_H
 #define RTEMS_FDTIMPL_H
 
+#include <zlib.h>
+
 #include <rtems/chain.h>
 
 /**
@@ -120,6 +122,72 @@ static inline bool rtems_fdt_valid_handle_unprotected(
     }
   }
   return false;
+}
+
+static inline int rtems_fdt_deflate(
+  void *dtb,
+  size_t dtb_size,
+  void *cdata,
+  size_t c_size
+)
+{
+  z_stream stream;
+  int      err;
+  stream.next_in = (Bytef *) cdata;
+  stream.avail_in = (uInt) c_size;
+  stream.next_out = (void *) dtb;
+  stream.avail_out = (uInt) dtb_size;
+  stream.zalloc = (alloc_func) 0;
+  stream.zfree = (free_func) 0;
+  err = inflateInit( &stream );
+  if ( err == Z_OK ) {
+    err = inflateReset2( &stream, 31 );
+  }
+  if ( err == Z_OK ) {
+    err = inflate( &stream, Z_FINISH );
+  }
+  if ( ( err == Z_OK ) || ( err == Z_STREAM_END ) ) {
+    err = inflateEnd( &stream );
+  }
+  if ( ( err != Z_OK ) || ( dtb_size != stream.total_out ) ) {
+    return -RTEMS_FDT_ERR_READ_FAIL;
+  }
+  return 0;
+}
+
+static inline int rtems_fdt_read_file( int fp, void *data, size_t size )
+{
+  size_t offset = 0;
+  int    r;
+
+  while ( size ) {
+    r = read( fp, data + offset, size );
+    if ( r < 0 ) {
+      return r;
+    }
+    size -= r;
+    offset += r;
+  }
+
+  return offset;
+}
+
+static inline int rtems_fdt_load_file(
+  const char *filename,
+  struct stat *stat_buf
+)
+{
+  int bf;
+  if ( stat( filename, stat_buf ) < 0 ) {
+    return -RTEMS_FDT_ERR_NOT_FOUND;
+  }
+
+  bf = open( filename, O_RDONLY );
+  if ( bf < 0 ) {
+    return -RTEMS_FDT_ERR_READ_FAIL;
+  }
+
+  return bf;
 }
 
 #endif

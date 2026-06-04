@@ -31,7 +31,6 @@
 #include <sys/types.h>
 
 #include <libfdt.h>
-#include <zlib.h>
 
 #include <rtems/malloc.h>
 #include <rtems/rtems-fdt.h>
@@ -381,120 +380,36 @@ int rtems_fdt_find_path_offset( rtems_fdt_handle *handle, const char *path )
   return -FDT_ERR_NOTFOUND;
 }
 
-int rtems_fdt_load( const char *filename, rtems_fdt_handle *handle )
+int rtems_fdt_load_blob_file_binary(
+  const char *filename,
+  rtems_fdt_handle *handle
+)
 {
+  struct stat sb;
+  int         bf;
   void       *dtb;
   size_t      bsize;
-  int         bf;
   ssize_t     r;
   int         fe;
-  struct stat sb;
-  uint8_t     gzip_id[ 2 ];
-  uint8_t    *cdata;
-  size_t      size;
 
-  if ( stat( filename, &sb ) < 0 ) {
-    return -RTEMS_FDT_ERR_NOT_FOUND;
-  }
-
-  bf = open( filename, O_RDONLY );
+  bf = rtems_fdt_load_file( filename, &sb );
   if ( bf < 0 ) {
-    return -RTEMS_FDT_ERR_READ_FAIL;
+    return bf;
   }
 
-  /* peek for a gzip header */
-  r = read( bf, &gzip_id, sizeof( gzip_id ) );
-  if ( r < 0 ) {
-    close( bf );
-    return -RTEMS_FDT_ERR_READ_FAIL;
-  }
-
-  /* reset file pointer after peek */
-  if ( lseek( bf, 0, SEEK_SET ) < 0 ) {
-    close( bf );
-    return -RTEMS_FDT_ERR_READ_FAIL;
-  }
-
-  /* determine size of the dtb blob */
-  if ( ( gzip_id[ 0 ] == 0x1f ) && ( gzip_id[ 1 ] == 0x8b ) ) {
-    size_t offset;
-
-    cdata = rtems_malloc( sb.st_size );
-    if ( !cdata ) {
-      close( bf );
-      return -RTEMS_FDT_ERR_NO_MEMORY;
-    }
-
-    size = sb.st_size;
-    offset = 0;
-    while ( size ) {
-      r = read( bf, cdata + offset, size );
-      if ( r < 0 ) {
-        free( cdata );
-        close( bf );
-        return -RTEMS_FDT_ERR_READ_FAIL;
-      }
-      size -= r;
-      offset += r;
-    }
-
-    offset = sb.st_size - 4;
-    bsize =
-      ( ( cdata[ offset + 3 ] << 24 ) | ( cdata[ offset + 2 ] << 16 ) |
-        ( cdata[ offset + 1 ] << 8 ) | cdata[ offset + 0 ] );
-  } else {
-    cdata = NULL;
-    bsize = sb.st_size;
-  }
+  bsize = sb.st_size;
 
   dtb = rtems_malloc( bsize );
   if ( !dtb ) {
-    free( cdata );
     close( bf );
     return -RTEMS_FDT_ERR_NO_MEMORY;
   }
 
-  /* read the blob */
-  if ( ( gzip_id[ 0 ] == 0x1f ) && ( gzip_id[ 1 ] == 0x8b ) ) {
-    z_stream stream;
-    int      err;
-    stream.next_in = (Bytef *) cdata;
-    stream.avail_in = (uInt) sb.st_size;
-    stream.next_out = (void *) dtb;
-    stream.avail_out = (uInt) bsize;
-    stream.zalloc = (alloc_func) 0;
-    stream.zfree = (free_func) 0;
-    err = inflateInit( &stream );
-    if ( err == Z_OK ) {
-      err = inflateReset2( &stream, 31 );
-    }
-    if ( err == Z_OK ) {
-      err = inflate( &stream, Z_FINISH );
-    }
-    if ( ( err == Z_OK ) || ( err == Z_STREAM_END ) ) {
-      err = inflateEnd( &stream );
-    }
-    if ( ( err != Z_OK ) || ( bsize != stream.total_out ) ) {
-      free( dtb );
-      free( cdata );
-      close( bf );
-      return -RTEMS_FDT_ERR_READ_FAIL;
-    }
-    free( cdata );
-    cdata = NULL;
-  } else {
-    char *buf = (char *) dtb;
-    size = bsize;
-    while ( size ) {
-      r = read( bf, buf, size );
-      if ( r < 0 ) {
-        free( dtb );
-        close( bf );
-        return -RTEMS_FDT_ERR_READ_FAIL;
-      }
-      size -= r;
-      buf += r;
-    }
+  r = rtems_fdt_read_file( bf, dtb, bsize );
+  if ( r < 0 ) {
+    free( dtb );
+    close( bf );
+    return -RTEMS_FDT_ERR_READ_FAIL;
   }
 
   fe = rtems_fdt_register( dtb, handle );
@@ -508,6 +423,104 @@ int rtems_fdt_load( const char *filename, rtems_fdt_handle *handle )
 
   close( bf );
   return 0;
+}
+
+int rtems_fdt_load_blob_file_gzip(
+  const char *filename,
+  rtems_fdt_handle *handle
+)
+{
+  struct stat sb;
+  int         bf;
+  uint8_t     gzip_id[ 2 ];
+  uint8_t    *cdata;
+  void       *dtb;
+  size_t      bsize;
+  ssize_t     r;
+  int         fe;
+  size_t      offset;
+
+  bf = rtems_fdt_load_file( filename, &sb );
+  if ( bf < 0 ) {
+    return bf;
+  }
+
+  /* peek for a gzip header */
+  r = read( bf, &gzip_id, sizeof( gzip_id ) );
+  if ( r < 0 ) {
+    close( bf );
+    return -RTEMS_FDT_ERR_READ_FAIL;
+  }
+
+  if ( gzip_id[ 0 ] != 0x1f || gzip_id[ 1 ] != 0x8b ) {
+    close( bf );
+    return -RTEMS_FDT_ERR_READ_FAIL;
+  }
+
+  /* reset file pointer after peek */
+  if ( lseek( bf, 0, SEEK_SET ) < 0 ) {
+    close( bf );
+    return -RTEMS_FDT_ERR_READ_FAIL;
+  }
+
+  cdata = rtems_malloc( sb.st_size );
+  if ( !cdata ) {
+    close( bf );
+    return -RTEMS_FDT_ERR_NO_MEMORY;
+  }
+
+  r = rtems_fdt_read_file( bf, cdata, sb.st_size );
+  if ( r < 0 ) {
+    free( cdata );
+    close( bf );
+    return -RTEMS_FDT_ERR_READ_FAIL;
+  }
+
+  offset = sb.st_size - 4;
+  bsize = ( ( cdata[ offset + 3 ] << 24 ) | ( cdata[ offset + 2 ] << 16 ) |
+            ( cdata[ offset + 1 ] << 8 ) | cdata[ offset + 0 ] );
+
+  dtb = rtems_malloc( bsize );
+  if ( !dtb ) {
+    free( cdata );
+    close( bf );
+    return -RTEMS_FDT_ERR_NO_MEMORY;
+  }
+
+  if ( rtems_fdt_deflate( dtb, bsize, cdata, sb.st_size ) < 0 ) {
+    free( dtb );
+    free( cdata );
+    close( bf );
+    return -RTEMS_FDT_ERR_READ_FAIL;
+  }
+
+  free( cdata );
+  cdata = NULL;
+
+  fe = rtems_fdt_register( dtb, handle );
+  if ( fe < 0 ) {
+    free( dtb );
+    close( bf );
+    return fe;
+  }
+
+  handle->blob->name = strdup( filename );
+
+  close( bf );
+  return 0;
+}
+
+int rtems_fdt_load( const char *filename, rtems_fdt_handle *handle )
+{
+  int rc;
+
+  rc = rtems_fdt_load_blob_file_gzip( filename, handle );
+
+  if ( rc < 0 ) {
+    rc = rtems_fdt_load_blob_file_binary( filename, handle );
+  }
+
+  return rc;
 }
 
 int rtems_fdt_register( const void *dtb, rtems_fdt_handle *handle )
