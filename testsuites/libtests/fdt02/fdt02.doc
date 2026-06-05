@@ -35,6 +35,9 @@ directives:
   + rtems_fdt_unload
   * rtems_fdt_num_mem_rsv
   * rtems_fdt_get_mem_rsv
+  * rtems_fdt_num_entries
+  * rtems_fdt_entry_name
+  * rtems_fdt_entry_offset
 
 concepts:
 

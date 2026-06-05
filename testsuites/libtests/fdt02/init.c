@@ -58,6 +58,14 @@ void test_mem_rsv(
   uint64_t          exp_size
 );
 
+void test_entry_index(
+  rtems_fdt_handle *handle,
+  int exp_entries,
+  int id,
+  const char *exp_name,
+  int exp_offset
+);
+
 rtems_task Init( rtems_task_argument argument );
 
 void test_mem_rsv(
@@ -86,6 +94,35 @@ void test_mem_rsv(
     rtems_test_assert( exp_address == address );
     rtems_test_assert( exp_size == size );
   }
+}
+
+void test_entry_index(
+  rtems_fdt_handle *handle,
+  int exp_entries,
+  int id,
+  const char *exp_name,
+  int exp_offset
+)
+{
+  int         entries;
+  const char *name;
+  const char *at;
+  int         offset;
+
+  entries = rtems_fdt_num_entries( handle );
+  rtems_test_assert( entries == exp_entries );
+
+  name = rtems_fdt_entry_name( handle, id );
+  rtems_test_assert( name );
+  if ( strchr( exp_name, '@' ) == NULL ) {
+    at = strchr( name, '@' );
+  } else {
+    at = strchr( name, 0 );
+  }
+  rtems_test_assert( strncmp( name, exp_name, at - name ) == 0 );
+
+  offset = rtems_fdt_entry_offset( handle, id );
+  rtems_test_assert( offset == exp_offset );
 }
 
 #define NUM_MEM_RSV ( 3 )
@@ -118,6 +155,10 @@ rtems_task Init( rtems_task_argument ignored )
   for ( i = 0; i < num_mem_rsv; i++ ) {
     test_mem_rsv( &handle, num_mem_rsv, i, addresses[ i ], sizes[ i ] );
   }
+
+  test_entry_index( &handle, 6, 1, "/cpus", 108 );
+  test_entry_index( &handle, 6, 4, "/memory", 548 );
+  test_entry_index( &handle, 6, 4, "/memory@0", 548 );
 
   rc = rtems_fdt_unload( &handle );
   rtems_test_assert( rc == 0 );
