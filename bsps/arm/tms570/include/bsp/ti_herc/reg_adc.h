@@ -224,8 +224,8 @@ typedef struct{
 
 
 /*----------------------TMS570_ADC_G1SRC----------------------*/
-/* field: GI_EDG_BOTH - Group1 Trigger Edge Polarity Select. */
-#define TMS570_ADC_G1SRC_GI_EDG_BOTH BSP_BIT32(4)
+/* field: G1_EDG_BOTH - Group1 Trigger Edge Polarity Select. */
+#define TMS570_ADC_G1SRC_G1_EDG_BOTH BSP_BIT32(4)
 
 /* field: G1_EDG_SEL - Group1 Trigger Edge Polarity Select. */
 #define TMS570_ADC_G1SRC_G1_EDG_SEL BSP_BIT32(3)
