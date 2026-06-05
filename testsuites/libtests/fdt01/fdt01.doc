@@ -57,6 +57,8 @@ directives:
   * rtems_fdt_get_alias_namelen
   * rtems_fdt_getprop_address_map
   * rtems_fdt_prop_map
+  * rtems_fdt_node_depth
+  * rtems_fdt_supernode_atdepth_offset
 
 concepts:
 

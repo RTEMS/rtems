@@ -111,6 +111,13 @@ void test_prop_map(
   size_t      count
 );
 
+void test_depth(
+  rtems_fdt_handle *handle,
+  int               offset,
+  int               exp_depth,
+  const char       *parent_path
+);
+
 const char rtems_test_name[] = "FDT 01";
 
 /* triplets of identical uncompressed/compressed dtbs */
@@ -350,6 +357,38 @@ void test_prop_map(
   free( values );
 }
 
+void test_depth(
+  rtems_fdt_handle *handle,
+  int               offset,
+  int               exp_depth,
+  const char       *parent_path
+)
+{
+  int depth, depth2;
+  int parent_offset, parent_offset2, parent_offset3;
+  int offset2;
+
+  depth = rtems_fdt_node_depth( handle, offset );
+  rtems_test_assert( depth == exp_depth );
+
+  parent_offset = rtems_fdt_parent_offset( handle, offset );
+  rtems_test_assert( parent_offset >= 0 || depth == 0 );
+  parent_offset2 = rtems_fdt_path_offset( handle, parent_path );
+  rtems_test_assert( parent_offset == parent_offset2 );
+
+  parent_offset3 = rtems_fdt_supernode_atdepth_offset(
+    handle,
+    offset,
+    depth - 1,
+    &depth2
+  );
+  rtems_test_assert( depth == depth2 );
+  rtems_test_assert( parent_offset == parent_offset3 );
+
+  offset2 = rtems_fdt_supernode_atdepth_offset( handle, offset, depth, NULL );
+  rtems_test_assert( offset == offset2 );
+}
+
 rtems_task Init( rtems_task_argument ignored )
 {
   (void) ignored;
@@ -454,6 +493,8 @@ rtems_task Init( rtems_task_argument ignored )
     (const char *) memchr( name, '@', strlen( name ) ) - name
   );
 
+  test_depth( &handles[ 6 ], idx, 2, "/soc" );
+
   propval = cpu_to_fdt32( propval );
   test_path(
     &handles[ 6 ],
@@ -478,6 +519,8 @@ rtems_task Init( rtems_task_argument ignored )
   test_getprop_address_map( &handles[ 6 ], idx, "/memory", "reg", &addr_map );
 
   test_prop_map( map_path, map_propname, map_names, map_values, map_count );
+
+  test_depth( &handles[ 6 ], idx, 1, "/" );
 
   for ( i = 0; i < NUM_DTB; i++ ) {
     rc = rtems_fdt_unload( &handles[ i ] );
