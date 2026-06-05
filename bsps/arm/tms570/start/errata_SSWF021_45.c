@@ -47,7 +47,7 @@
 
 #define SYS_CLKSRC_PLL1 0x00000002U
 #define SYS_CLKSRC_PLL2 0x00000040U
-#define SYS_CLKCNTRL_PENA 0x00000100U
+#define SYS_CLKCNTL_PENA 0x00000100U
 #define ESM_SR1_PLL1SLIP 0x400U
 #define ESM_SR4_PLL2SLIP 0x400U
 #define PLL1 0x08
@@ -83,7 +83,7 @@ uint32_t _errata_SSWF021_45_both_plls(uint32_t count) {
     /* First set VCLK2 = HCLK */
     TMS570_SYS1.CLKCNTL = clkCntlSav & 0x000F0100U;
     /* Now set VCLK = HCLK and enable peripherals */
-    TMS570_SYS1.CLKCNTL = SYS_CLKCNTRL_PENA;
+    TMS570_SYS1.CLKCNTL = SYS_CLKCNTL_PENA;
     failCode = 0U;
     for (retries = 0U; (retries < count); retries++) {
         failCode = 0U;
@@ -163,7 +163,7 @@ uint32_t _errata_SSWF021_45_pll1(uint32_t count) {
     /* First set VCLK2 = HCLK */
     TMS570_SYS1.CLKCNTL = clkCntlSav & 0x000F0100U;
     /* Now set VCLK = HCLK and enable peripherals */
-    TMS570_SYS1.CLKCNTL = SYS_CLKCNTRL_PENA;
+    TMS570_SYS1.CLKCNTL = SYS_CLKCNTL_PENA;
     failCode = 0U;
     for (retries = 0U; (retries < count); retries++) {
         failCode = 0U;
@@ -232,7 +232,7 @@ uint32_t _errata_SSWF021_45_pll2(uint32_t count) {
     /* First set VCLK2 = HCLK */
     TMS570_SYS1.CLKCNTL = clkCntlSav & 0x000F0100U;
     /* Now set VCLK = HCLK and enable peripherals */
-    TMS570_SYS1.CLKCNTL = SYS_CLKCNTRL_PENA;
+    TMS570_SYS1.CLKCNTL = SYS_CLKCNTL_PENA;
     failCode = 0U;
     for (retries = 0U; (retries < count); retries++) {
         failCode = 0U;
