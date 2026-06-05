@@ -1317,6 +1317,48 @@ uint32_t _CPU_Counter_frequency( void );
  */
 CPU_Counter_ticks _CPU_Counter_read( void );
 
+
+/**
+ * @brief Pauses the CPU pipeline to mitigate aggressive speculative execution and 
+ * reduce bus contention during spin-wait loops.
+ *
+ * @details
+ * This function acts as an architectural hint to the processor that the calling 
+ * thread is currently executing a tight polling loop (spin-wait). Without this 
+ * hint, modern superscalar processors will aggressively speculatively execute 
+ * the loop instructions, spamming the memory subsystem with continuous read 
+ * requests and driving the core to maximum power states.
+ *
+ * By invoking this function, the CPU temporarily pauses or throttles its 
+ * instruction pipeline. This achieves three critical hardware benefits:
+ * -# **Reduced Thermal Load:** It prevents the core from wasting energy and 
+ * generating heat on speculative execution paths that will ultimately be flushed.
+ * -# **Shared Resource Yielding:** On SMT (Simultaneous Multithreading) architectures, 
+ * it temporarily frees up ALUs and execution units for the sibling hardware thread.
+ * -# **Reduced Bus Contention:** It drastically lowers the rate of memory read 
+ * requests, preventing the polling core from saturating the memory controller.
+ *
+ * @note This is an optional interface. It is only available on BSPs that 
+ * support RTEMS_SMP
+ */
+static inline void _CPU_Spin_wait( void )
+{
+  /*
+   * Default fallback implementation for SMP capable architectures.
+   * Architecture-specific ports should override this with an optimal 
+   * assembly-level processor pause tailored specifically.
+   *
+   * For example, the x86_64 architecture implementation uses:
+   * __asm__ volatile( "pause" ::: "memory" );
+   *
+   * Similarly, an ARM architecture implementation might use:
+   * __asm__ volatile( "yield" ::: "memory" );
+   */
+  RTEMS_COMPILER_MEMORY_BARRIER();
+}
+
+#define _CPU_Spin_wait _CPU_Spin_wait
+
 #ifdef RTEMS_SMP
   /**
    * @brief Performs CPU specific SMP initialization in the context of the boot
