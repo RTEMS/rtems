@@ -773,7 +773,7 @@ int rtems_fdt_supernode_atdepth_offset(
     return -RTEMS_FDT_ERR_INVALID_HANDLE;
   }
   return fdt_supernode_atdepth_offset(
-    handle,
+    handle->blob->blob,
     nodeoffset,
     supernodedepth,
     nodedepth
