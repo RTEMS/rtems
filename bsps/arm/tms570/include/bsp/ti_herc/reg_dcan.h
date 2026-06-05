@@ -923,6 +923,9 @@ typedef struct{
 /* field: Out - CAN_TX data out write. */
 #define TMS570_DCAN_TIOC_Out BSP_BIT32(1)
 
+/* field: In - CAN_TX data in. */
+#define TMS570_DCAN_TIOC_In BSP_BIT32(0)
+
 
 /*----------------------TMS570_DCAN_RIOC----------------------*/
 /* field: PU - CAN_RX Pullup/Pulldown select. This bit is only active when CAN_RX is configured to be an input. */
