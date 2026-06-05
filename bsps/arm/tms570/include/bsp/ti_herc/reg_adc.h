@@ -81,7 +81,7 @@ typedef struct{
   uint32_t BNDCR;             /*ADC Results Memory Configuration Register*/
   uint32_t BNDEND;            /*ADC Results Memory Size Configuration Register*/
   uint32_t EVSAMP;            /*ADC Event Group Sampling Time Configuration Register*/
-  uint32_t G1SAMP;            /*ADC Group1 Sampling Time Configuration Register()*/
+  uint32_t G1SAMP;            /*ADC Group1 Sampling Time Configuration Register*/
   uint32_t G2SAMP;            /*ADC Group2 Sampling Time Configuration Register*/
   uint32_t EVSR;              /*ADC Event Group Status Register*/
   uint32_t G1SR;              /*ADC Group1 Status Register*/
@@ -105,12 +105,12 @@ typedef struct{
   uint32_t EVSAMPDISEN;       /*ADC Event Group Sample Cap Discharge Control Register*/
   uint32_t G1SAMPDISEN;       /*ADC Group1 Sample Cap Discharge Control Register*/
   uint32_t G2SAMPDISEN;       /*ADC Group2 Sample Cap Discharge Control Register*/
-  uint32_t MAGINTCR1;         /*ADC Magnitude Compare Interrupt Control Register 2*/
-  uint32_t MAGINT1MASK;       /*ADC Magnitude Compare Mask Register 0*/
+  uint32_t MAGINTCR1;         /*ADC Magnitude Compare Interrupt Control Register 1*/
+  uint32_t MAGINT1MASK;       /*ADC Magnitude Compare Mask Register 1*/
   uint32_t MAGINTCR2;         /*ADC Magnitude Compare Interrupt Control Register 2*/
-  uint32_t MAGINT2MASK;       /*ADC Magnitude Compare Mask Register 0*/
-  uint32_t MAGINTCR3;         /*ADC Magnitude Compare Interrupt Control Register 2*/
-  uint32_t MAGINT3MASK;       /*ADC Magnitude Compare Mask Register 0*/
+  uint32_t MAGINT2MASK;       /*ADC Magnitude Compare Mask Register 2*/
+  uint32_t MAGINTCR3;         /*ADC Magnitude Compare Interrupt Control Register 3*/
+  uint32_t MAGINT3MASK;       /*ADC Magnitude Compare Mask Register 3*/
   uint8_t reserved1 [24];
   uint32_t MAGTHRINTENASET;   /*ADC Magnitude Compare Interrupt Enable Set Register*/
   uint32_t MAGTHRINTENACLR;   /*ADC Magnitude Compare Interrupt Enable Clear Register*/
@@ -264,7 +264,7 @@ typedef struct{
 /* field: EV_END - Event Group Conversion End. */
 #define TMS570_ADC_GxINTFLG_EV_END BSP_BIT32(3)
 
-/* field: EV_MEM_EMPTY - Event Group Results Memory Empty. This is a read-only bit; writes have no effect. It is not asource of an interrupt from the ADC module. */
+/* field: EV_MEM_EMPTY - Event Group Results Memory Empty. This is a read-only bit; writes have no effect. It is not a source of an interrupt from the ADC module. */
 #define TMS570_ADC_GxINTFLG_EV_MEM_EMPTY BSP_BIT32(2)
 
 /* field: EV_MEM_OVERRUN - Event Group Memory Overrun. This is a read-only bit; writes have no effect. */
