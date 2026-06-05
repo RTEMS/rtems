@@ -16,6 +16,5 @@ source:
 stlib: []
 target: testsuites/validation/bsps/ts-fatal-sparc-leon3-clock-initialization.exe
 type: build
-use-after:
-- validation
+use-after: []
 use-before: []

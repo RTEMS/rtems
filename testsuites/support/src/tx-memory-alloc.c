@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSTestSuitesValidation
  *
- * @brief This source file contains the implementation of SetIORelaxHandler().
+ * @brief This source file contains the implementation of
+ *   MemoryAllocationFailWhen() and __wrap_rtems_malloc().
  */
 
 /*
@@ -37,31 +38,42 @@
 #include "config.h"
 #endif
 
-#include "tx-support.h"
+#include "rtems/test-support.h"
 
-void __real__IO_Relax( void );
+void *__real_rtems_malloc( size_t );
 
-void __wrap__IO_Relax( void );
+void *__wrap_rtems_malloc( size_t );
 
-static void ( *io_relax_handler )( void * );
+static uint32_t fail_when_counter;
 
-static void *io_relax_arg;
-
-void __wrap__IO_Relax( void )
+void MemoryAllocationFailWhen( uint32_t counter )
 {
-  void ( *handler )( void * );
-
-  handler = io_relax_handler;
-
-  if ( handler != NULL ) {
-    ( *handler )( io_relax_arg );
-  }
-
-  __real__IO_Relax();
+  fail_when_counter = counter;
 }
 
-void SetIORelaxHandler( void ( *handler )( void * ), void *arg )
+static bool IsFail( void )
 {
-  io_relax_handler = handler;
-  io_relax_arg = arg;
+  uint32_t counter;
+
+  counter = fail_when_counter;
+
+  if ( counter == 1 ) {
+    fail_when_counter = 0;
+    return true;
+  }
+
+  if ( counter > 1 ) {
+    fail_when_counter = counter - 1;
+  }
+
+  return false;
+}
+
+void *__wrap_rtems_malloc( size_t size )
+{
+  if ( IsFail() ) {
+    return NULL;
+  }
+
+  return __real_rtems_malloc( size );
 }

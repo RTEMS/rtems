@@ -23,6 +23,5 @@ stlib: []
 target: testsuites/unit/ts-unit-no-clock-0.exe
 type: build
 use-after:
-- validation
 - z
 use-before: []

@@ -8,12 +8,11 @@ cxxflags: []
 enabled-by: BUILD_VALIDATIONTESTS
 includes:
 - ${BSP_INCLUDES}
+- testsuites/support/include
 - testsuites/validation
 install: []
 ldflags: []
 links:
-- role: build-dependency
-  uid: libvalidation
 - role: build-dependency
   uid: fatal-boot-processor-not-assigned-to-scheduler
 - role: build-dependency
@@ -98,6 +97,5 @@ links:
   uid: bsps/validation-bsp-0
 type: build
 use-after:
-- validation
 - rtemstest
 use-before: []

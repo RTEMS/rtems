@@ -19,6 +19,5 @@ source:
 stlib: []
 target: testsuites/validation/ts-validation-0.exe
 type: build
-use-after:
-- validation
+use-after: []
 use-before: []

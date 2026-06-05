@@ -5,12 +5,11 @@
  *
  * @ingroup RTEMSTestSuitesValidation
  *
- * @brief This source file contains the implementation of
- *   MemoryAllocationFailWhen() and __wrap_rtems_malloc().
+ * @brief This source file contains the definition of ::DefaultTaskConfig.
  */
 
 /*
- * Copyright (C) 2021 embedded brains GmbH & Co. KG
+ * Copyright (C) 2022 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -38,42 +37,24 @@
 #include "config.h"
 #endif
 
-#include "tx-support.h"
+#include "rtems/test-support.h"
 
-void *__real_rtems_malloc( size_t );
+#define TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
 
-void *__wrap_rtems_malloc( size_t );
+RTEMS_ALIGNED( RTEMS_TASK_STORAGE_ALIGNMENT )
+static char DefaultTaskStorage[
+  RTEMS_TASK_STORAGE_SIZE(
+    TEST_MAXIMUM_TLS_SIZE + TEST_MINIMUM_STACK_SIZE,
+    TASK_ATTRIBUTES
+  )
+];
 
-static uint32_t fail_when_counter;
-
-void MemoryAllocationFailWhen( uint32_t counter )
-{
-  fail_when_counter = counter;
-}
-
-static bool IsFail( void )
-{
-  uint32_t counter;
-
-  counter = fail_when_counter;
-
-  if ( counter == 1 ) {
-    fail_when_counter = 0;
-    return true;
-  }
-
-  if ( counter > 1 ) {
-    fail_when_counter = counter - 1;
-  }
-
-  return false;
-}
-
-void *__wrap_rtems_malloc( size_t size )
-{
-  if ( IsFail() ) {
-    return NULL;
-  }
-
-  return __real_rtems_malloc( size );
-}
+const rtems_task_config DefaultTaskConfig = {
+  .name = rtems_build_name( 'D', 'T', 'S', 'K' ),
+  .initial_priority = 1,
+  .storage_area = DefaultTaskStorage,
+  .storage_size = sizeof( DefaultTaskStorage ),
+  .maximum_thread_local_storage_size = TEST_MAXIMUM_TLS_SIZE,
+  .initial_modes = RTEMS_DEFAULT_MODES,
+  .attributes = TASK_ATTRIBUTES
+};

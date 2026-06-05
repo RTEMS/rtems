@@ -39,7 +39,7 @@
 #include "config.h"
 #endif
 
-#include "tx-support.h"
+#include "rtems/test-support.h"
 
 #include <rtems/sysinit.h>
 #include <rtems/test.h>

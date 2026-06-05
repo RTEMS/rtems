@@ -21,6 +21,5 @@ source:
 stlib: []
 target: testsuites/validation/bsps/ts-fatal-sparc-leon3-ipi-invalid-vector.exe
 type: build
-use-after:
-- validation
+use-after: []
 use-before: []

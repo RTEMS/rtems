@@ -20,6 +20,5 @@ source:
 stlib: []
 target: testsuites/validation/bsps/ts-fatal-sparc-leon3-cache-snooping-disabled-secondary.exe
 type: build
-use-after:
-- validation
+use-after: []
 use-before: []
