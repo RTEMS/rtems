@@ -75,7 +75,7 @@ struct rtems_gpio_group
   uint32_t digital_output_bank;
   uint32_t output_count;
 
-  uint32_t *bsp_speficifc_pins;
+  uint32_t *bsp_specific_pins;
   uint32_t bsp_specific_bank;
   uint32_t bsp_specific_pin_count;
 
@@ -762,7 +762,7 @@ rtems_status_code rtems_gpio_define_pin_group(
   group->bsp_specific_pin_count = group_definition->bsp_specific_pin_count;
 
   if ( group->bsp_specific_pin_count > 0 ) {
-    group->bsp_speficifc_pins =
+    group->bsp_specific_pins =
       (uint32_t *) malloc(
                      group->bsp_specific_pin_count *
                      sizeof(uint32_t)
@@ -772,7 +772,7 @@ rtems_status_code rtems_gpio_define_pin_group(
            group_definition->bsp_specifics,
            group->bsp_specific_pin_count,
            &group->bsp_specific_bank,
-           group->bsp_speficifc_pins
+           group->bsp_specific_pins
          );
 
     if ( sc != RTEMS_SUCCESSFUL ) {
@@ -780,7 +780,7 @@ rtems_status_code rtems_gpio_define_pin_group(
     }
   }
   else {
-    group->bsp_speficifc_pins = NULL;
+    group->bsp_specific_pins = NULL;
   }
 
   /* Request the pins. */
@@ -969,7 +969,7 @@ rtems_status_code rtems_gpio_group_bsp_specific_operation(
 
   sc = rtems_gpio_bsp_specific_group_operation(
          bank,
-         group->bsp_speficifc_pins,
+         group->bsp_specific_pins,
          group->bsp_specific_pin_count,
          arg
        );
@@ -1556,7 +1556,7 @@ rtems_status_code rtems_gpio_release_pin_group(
   }
 
   for ( i = 0; i < group->bsp_specific_pin_count; ++i ) {
-    sc = rtems_gpio_release_pin(group->bsp_speficifc_pins[i]);
+    sc = rtems_gpio_release_pin(group->bsp_specific_pins[i]);
 
     if ( sc != RTEMS_SUCCESSFUL ) {
       return sc;
@@ -1564,7 +1564,7 @@ rtems_status_code rtems_gpio_release_pin_group(
   }
 
   if ( group->bsp_specific_pin_count > 0 ) {
-    free(group->bsp_speficifc_pins);
+    free(group->bsp_specific_pins);
   }
 
   rtems_chain_extract(&group->node);
