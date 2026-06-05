@@ -601,10 +601,10 @@ typedef struct{
 
 
 /*-------------------TMS570_ADC_EVRAMWRADDR-------------------*/
-/* field: G1_RAM_ADDR - Group1 results memory write pointer. */
-#define TMS570_ADC_EVRAMWRADDR_G1_RAM_ADDR(val) BSP_FLD32(val,0, 8)
-#define TMS570_ADC_EVRAMWRADDR_G1_RAM_ADDR_GET(reg) BSP_FLD32GET(reg,0, 8)
-#define TMS570_ADC_EVRAMWRADDR_G1_RAM_ADDR_SET(reg,val) BSP_FLD32SET(reg, val,0, 8)
+/* field: EV_RAM_ADDR - Event Group results memory write pointer. */
+#define TMS570_ADC_EVRAMWRADDR_EV_RAM_ADDR(val) BSP_FLD32(val,0, 8)
+#define TMS570_ADC_EVRAMWRADDR_EV_RAM_ADDR_GET(reg) BSP_FLD32GET(reg,0, 8)
+#define TMS570_ADC_EVRAMWRADDR_EV_RAM_ADDR_SET(reg,val) BSP_FLD32SET(reg, val,0, 8)
 
 
 /*-------------------TMS570_ADC_G1RAMWRADDR-------------------*/
