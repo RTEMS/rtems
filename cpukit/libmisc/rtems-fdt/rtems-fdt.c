@@ -254,6 +254,10 @@ static int rtems_fdt_index_find_by_name(
   size_t namelen = strlen( name );
   if ( namelen > 0 && name[ namelen - 1 ] == '/' ) {
     namelen--;
+    /* handle the root node */
+    if ( namelen == 0 ) {
+      return 0;
+    }
   }
 
   /* Binary search for the name. */
