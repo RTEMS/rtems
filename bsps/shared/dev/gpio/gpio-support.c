@@ -696,11 +696,23 @@ rtems_gpio_group *rtems_gpio_create_pin_group(void)
   return group;
 }
 
+static void release_group_allocations(rtems_gpio_group *group)
+{
+  free(group->digital_inputs);
+  free(group->digital_outputs);
+  free(group->bsp_specific_pins);
+
+  group->digital_inputs = NULL;
+  group->digital_outputs = NULL;
+  group->bsp_specific_pins = NULL;
+}
+
 rtems_status_code rtems_gpio_define_pin_group(
   const rtems_gpio_group_definition *group_definition,
   rtems_gpio_group *group
 ) {
   rtems_status_code sc;
+  rtems_status_code release_sc;
 
   if ( group_definition == NULL || group == NULL ) {
     return RTEMS_UNSATISFIED;
@@ -714,11 +726,20 @@ rtems_status_code rtems_gpio_define_pin_group(
     return RTEMS_UNSATISFIED;
   }
 
+  group->digital_inputs = NULL;
+  group->digital_outputs = NULL;
+  group->bsp_specific_pins = NULL;
+
   group->input_count = group_definition->input_count;
 
   if ( group->input_count > 0 ) {
     group->digital_inputs =
       (uint32_t *) malloc(group->input_count * sizeof(uint32_t));
+
+    if ( group->digital_inputs == NULL ) {
+      release_group_allocations(group);
+      return RTEMS_NO_MEMORY;
+    }
 
     /* Evaluate if the pins that will constitute the group are available and
      * that pins with the same function within the group all belong
@@ -731,11 +752,9 @@ rtems_status_code rtems_gpio_define_pin_group(
          );
 
     if ( sc != RTEMS_SUCCESSFUL ) {
+      release_group_allocations(group);
       return sc;
     }
-  }
-  else {
-    group->digital_inputs = NULL;
   }
 
   group->output_count = group_definition->output_count;
@@ -743,6 +762,10 @@ rtems_status_code rtems_gpio_define_pin_group(
   if ( group->output_count > 0 ) {
     group->digital_outputs =
       (uint32_t *) malloc(group->output_count * sizeof(uint32_t));
+    if ( group->digital_outputs == NULL ) {
+      release_group_allocations(group);
+      return RTEMS_NO_MEMORY;
+    }
 
     sc = check_same_bank_and_availability(
            group_definition->digital_outputs,
@@ -752,11 +775,9 @@ rtems_status_code rtems_gpio_define_pin_group(
          );
 
     if ( sc != RTEMS_SUCCESSFUL ) {
+      release_group_allocations(group);
       return sc;
     }
-  }
-  else {
-    group->digital_outputs = NULL;
   }
 
   group->bsp_specific_pin_count = group_definition->bsp_specific_pin_count;
@@ -768,6 +789,11 @@ rtems_status_code rtems_gpio_define_pin_group(
                      sizeof(uint32_t)
                    );
 
+    if ( group->bsp_specific_pins == NULL ) {
+      release_group_allocations(group);
+      return RTEMS_NO_MEMORY;
+    }
+
     sc = check_same_bank_and_availability(
            group_definition->bsp_specifics,
            group->bsp_specific_pin_count,
@@ -776,11 +802,9 @@ rtems_status_code rtems_gpio_define_pin_group(
          );
 
     if ( sc != RTEMS_SUCCESSFUL ) {
+      release_group_allocations(group);
       return sc;
     }
-  }
-  else {
-    group->bsp_specific_pins = NULL;
   }
 
   /* Request the pins. */
@@ -791,6 +815,7 @@ rtems_status_code rtems_gpio_define_pin_group(
        );
 
   if ( sc != RTEMS_SUCCESSFUL ) {
+    release_group_allocations(group);
     return RTEMS_UNSATISFIED;
   }
 
@@ -808,6 +833,7 @@ rtems_status_code rtems_gpio_define_pin_group(
 
     _Assert ( sc == RTEMS_SUCCESSFUL );
 
+    release_group_allocations(group);
     return RTEMS_UNSATISFIED;
   }
 
@@ -832,6 +858,7 @@ rtems_status_code rtems_gpio_define_pin_group(
 
     _Assert ( sc == RTEMS_SUCCESSFUL );
 
+    release_group_allocations(group);
     return RTEMS_UNSATISFIED;
   }
 
@@ -839,6 +866,25 @@ rtems_status_code rtems_gpio_define_pin_group(
   sc = CREATE_LOCK(rtems_build_name('G', 'R', 'P', 'L'), &group->group_lock);
 
   if ( sc != RTEMS_SUCCESSFUL ) {
+    release_sc = rtems_gpio_release_multiple_pins(
+                   group_definition->digital_inputs,
+                   group_definition->input_count
+                 );
+    _Assert( release_sc == RTEMS_SUCCESSFUL );
+
+    release_sc = rtems_gpio_release_multiple_pins(
+                   group_definition->digital_outputs,
+                   group_definition->output_count
+                 );
+    _Assert( release_sc == RTEMS_SUCCESSFUL );
+
+    release_sc = rtems_gpio_release_multiple_pins(
+                   group_definition->bsp_specifics,
+                   group_definition->bsp_specific_pin_count
+                 );
+    _Assert( release_sc == RTEMS_SUCCESSFUL );
+
+    release_group_allocations(group);
     return sc;
   }
 
