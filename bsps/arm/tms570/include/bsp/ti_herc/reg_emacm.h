@@ -554,6 +554,11 @@ typedef struct{
 /* field: RXMULTEN - RX multicast enable. */
 #define TMS570_EMACM_RXMBPENABLE_RXMULTEN BSP_BIT32(5)
 
+/* field: RXMULTCH - Receive multicast channel select */
+#define TMS570_EMACM_RXMBPENABLE_RXMULTCH(val) BSP_FLD32(val,0, 2)
+#define TMS570_EMACM_RXMBPENABLE_RXMULTCH_GET(reg) BSP_FLD32GET(reg,0, 2)
+#define TMS570_EMACM_RXMBPENABLE_RXMULTCH_SET(reg,val) BSP_FLD32SET(reg, val,0, 2)
+
 
 /*-----------------TMS570_EMACM_RXUNICASTSET-----------------*/
 /* field: RXCH7EN - Receive channel 7 unicast enable set bit. Write 1 to set the enable, a write of 0 has no effect. */
