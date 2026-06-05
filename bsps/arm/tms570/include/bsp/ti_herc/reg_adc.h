@@ -50,6 +50,7 @@
 #define LIBBSP_ARM_TMS570_ADC
 
 #include <bsp/utility.h>
+#include <bspopts.h>
 
 typedef struct{
   uint32_t BUF0;              /*Group 0-2 result buffer 0 register*/
@@ -122,6 +123,18 @@ typedef struct{
   uint32_t PARCR;             /*ADC Parity Control Register*/
   uint32_t PARADDR;           /*ADC Parity Error Address Register*/
   uint32_t PWRUPDLYCTRL;      /*ADC Power-Up Delay Control Register*/
+#if TMS570_VARIANT == 4357
+  uint8_t reserved2 [4];       /* 32-bit gap at 0x18c (after PWRUPDLYCTRL) */
+  uint32_t ADEVCHNSELMODECTRL; /*ADC Event Enhanced Channel-Selection Mode Control Register*/
+  uint32_t ADG1CHNSELMODECTRL; /*ADC Group1 Enhanced Channel-Selection Mode Control Register*/
+  uint32_t ADG2CHNSELMODECTRL; /*ADC Group2 Enhanced Channel-Selection Mode Control Register*/
+  uint32_t ADEVCURRCOUNT;      /*ADC Event Enhanced Channel-Selection Current Count Register*/
+  uint32_t ADEVMAXCOUNT;       /*ADC Event Enhanced Channel-Selection Maximum Count Register*/
+  uint32_t ADG1CURRCOUNT;      /*ADC Group1 Enhanced Channel-Selection Current Count Register*/
+  uint32_t ADG1MAXCOUNT;       /*ADC Group1 Enhanced Channel-Selection Maximum Count Register*/
+  uint32_t ADG2CURRCOUNT;      /*ADC Group2 Enhanced Channel-Selection Current Count Register*/
+  uint32_t ADG2MAXCOUNT;       /*ADC Group2 Enhanced Channel-Selection Maximum Count Register*/
+#endif
 } tms570_adc_t;
 
 
