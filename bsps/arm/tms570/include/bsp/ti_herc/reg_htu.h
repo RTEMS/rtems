@@ -167,6 +167,32 @@ typedef struct{
 /* field: ERRF - Error Flag */
 #define TMS570_HTU_ACPE_ERRF BSP_BIT32(31)
 
+/* field: ERRETC - Error Element Transfer Count */
+#define TMS570_HTU_ACPE_ERRETC(val) BSP_FLD32(val,24, 28)
+#define TMS570_HTU_ACPE_ERRETC_GET(reg) BSP_FLD32GET(reg,24, 28)
+#define TMS570_HTU_ACPE_ERRETC_SET(reg,val) BSP_FLD32SET(reg, val,24, 28)
+
+/* field: ERRCPN - Error Control Packet Number */
+#define TMS570_HTU_ACPE_ERRCPN(val) BSP_FLD32(val,16, 19)
+#define TMS570_HTU_ACPE_ERRCPN_GET(reg) BSP_FLD32GET(reg,16, 19)
+#define TMS570_HTU_ACPE_ERRCPN_SET(reg,val) BSP_FLD32SET(reg, val,16, 19)
+
+/* field: TIPF - Transfer in Progress Flag */
+#define TMS570_HTU_ACPE_TIPF BSP_BIT32(15)
+
+/* field: BUSBUSY - Bus is Busy */
+#define TMS570_HTU_ACPE_BUSBUSY BSP_BIT32(14)
+
+/* field: CETCOUNT - Current Element Transfer Count */
+#define TMS570_HTU_ACPE_CETCOUNT(val) BSP_FLD32(val,8, 12)
+#define TMS570_HTU_ACPE_CETCOUNT_GET(reg) BSP_FLD32GET(reg,8, 12)
+#define TMS570_HTU_ACPE_CETCOUNT_SET(reg,val) BSP_FLD32SET(reg, val,8, 12)
+
+/* field: NACP - Number of Active Control Packet */
+#define TMS570_HTU_ACPE_NACP(val) BSP_FLD32(val,0, 3)
+#define TMS570_HTU_ACPE_NACP_GET(reg) BSP_FLD32GET(reg,0, 3)
+#define TMS570_HTU_ACPE_NACP_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
+
 
 /*--------------------TMS570_HTU_RLBECTRL--------------------*/
 /* field: BERINTENA - Bus Error Interrupt Enable Bit */
