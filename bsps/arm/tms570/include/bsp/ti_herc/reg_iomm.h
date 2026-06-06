@@ -72,7 +72,7 @@ typedef struct{
 #if TMS570_VARIANT == 4357
   uint32_t PINMMR[180]; /* 0x110 - 1A4 : Output Pin Multiplexing Control
                            Registers (38 registers); 0x250 - 0x29C : Input Pin
-                           Multiplexing Control Registers (20); 0X390 - 3DC :
+                           Multiplexing Control Registers (20); 0x390 - 3DC :
                            Special Functionality Control Registers (20) */
 #else
   uint32_t PINMMR[31]; /*Pin Multiplexing Control Register 0-30*/
@@ -91,7 +91,7 @@ typedef struct{
 #define TMS570_IOMM_PINMMRx_PINMMRx16To23_GET(reg) BSP_FLD32GET(reg,16, 23)
 #define TMS570_IOMM_PINMMRx_PINMMRx16To23_SET(reg,val) BSP_FLD32SET(reg, val,16, 23)
 
-/* field: PINMMRx8To16 - Each of these byte-fields control the functionality on a given ball/pin. */
+/* field: PINMMRx8To15 - Each of these byte-fields control the functionality on a given ball/pin. */
 #define TMS570_IOMM_PINMMRx_PINMMRx8To16(val) BSP_FLD32(val,8, 15)
 #define TMS570_IOMM_PINMMRx_PINMMRx8To16_GET(reg) BSP_FLD32GET(reg,8, 15)
 #define TMS570_IOMM_PINMMRx_PINMMRx8To16_SET(reg,val) BSP_FLD32SET(reg, val,8, 15)
@@ -167,7 +167,7 @@ typedef struct{
 /* field: ADDR_ERR_EN - Addressing Error Signaling Enable */
 #define TMS570_IOMM_ERR_ENABLE_REG_ADDR_ERR_EN BSP_BIT32(1)
 
-/* field: PROT_ERR_EN - Protection ErrorSignaling Enable */
+/* field: PROT_ERR_EN - Protection Error Signaling Enable */
 #define TMS570_IOMM_ERR_ENABLE_REG_PROT_ERR_EN BSP_BIT32(0)
 
 
