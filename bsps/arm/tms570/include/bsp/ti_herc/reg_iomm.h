@@ -75,7 +75,7 @@ typedef struct{
                            Multiplexing Control Registers (20); 0X390 - 3DC :
                            Special Functionality Control Registers (20) */
 #else
-  uint32_t PINMMR[30]; /*Pin Multiplexing Control Register 0-30*/
+  uint32_t PINMMR[31]; /*Pin Multiplexing Control Register 0-30*/
 #endif
 } tms570_iomm_t;
 
