@@ -63,7 +63,8 @@ typedef struct{
   uint32_t RLBECTRL;          /*Request Lost and Bus Error Control Register*/
   uint32_t BFINTS;            /*Buffer Full Interrupt Enable Set Register*/
   uint32_t BFINTC;            /*Buffer Full Interrupt Enable Clear Register*/
-  uint8_t reserved2 [8];
+  uint32_t INTMAP;            /*Interrupt Mapping Register*/
+  uint8_t reserved2 [4];
   uint32_t INTOFF0;           /*Interrupt Offset Register 0*/
   uint32_t INTOFF1;           /*Interrupt Offset Register 1*/
   uint32_t BIM;               /*Buffer Initialization Mode Register*/
@@ -190,6 +191,16 @@ typedef struct{
 #define TMS570_HTU_BFINTC_BFINTDIS(val) BSP_FLD32(val,0, 15)
 #define TMS570_HTU_BFINTC_BFINTDIS_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_HTU_BFINTC_BFINTDIS_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
+
+
+/*---------------------TMS570_HTU_INTMAP---------------------*/
+/* field: MAPSEL - Interrupt Mapping Select Bit */
+#define TMS570_HTU_INTMAP_MAPSEL BSP_BIT32(16)
+
+/* field: CPINTMAP - CP Interrupt Mapping Bits */
+#define TMS570_HTU_INTMAP_CPINTMAP(val) BSP_FLD32(val,0, 15)
+#define TMS570_HTU_INTMAP_CPINTMAP_GET(reg) BSP_FLD32GET(reg,0, 15)
+#define TMS570_HTU_INTMAP_CPINTMAP_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
 /*---------------------TMS570_HTU_INTOFF0---------------------*/
