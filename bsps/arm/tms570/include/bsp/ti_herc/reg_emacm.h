@@ -63,7 +63,7 @@ typedef struct{
   uint32_t TXINTSTATRAW;      /*Transmit Interrupt Status (Unmasked) Register*/
   uint32_t TXINTSTATMASKED;   /*Transmit Interrupt Status (Masked) Register*/
   uint32_t TXINTMASKSET;      /*Transmit Interrupt Mask Set Register*/
-  uint32_t TXINTMASKCLEAR;    /*Transmit Interrupt Clear Register*/
+  uint32_t TXINTMASKCLEAR;    /*Transmit Interrupt Mask Clear Register*/
   uint32_t MACINVECTOR;       /*MAC Input Vector Register*/
   uint32_t MACEOIVECTOR;      /*MAC End Of Interrupt Vector Register*/
   uint8_t reserved3 [8];
@@ -154,7 +154,7 @@ typedef struct{
 /* field: TX5PEND - TX5PEND raw interrupt read (before mask) */
 #define TMS570_EMACM_TXINTSTATRAW_TX5PEND BSP_BIT32(5)
 
-/* field: TX4PEND - X4PEND raw interrupt read (before mask) */
+/* field: TX4PEND - TX4PEND raw interrupt read (before mask) */
 #define TMS570_EMACM_TXINTSTATRAW_TX4PEND BSP_BIT32(4)
 
 /* field: TX3PEND - TX3PEND raw interrupt read (before mask) */
@@ -762,7 +762,7 @@ typedef struct{
 
 
 /*-----------------TMS570_EMACM_MACSRCADDRLO-----------------*/
-/* field: MACSRCADDR0 - MAC source address lower 8-0 bits (byte 0) */
+/* field: MACSRCADDR0 - MAC source address lower 7-0 bits (byte 0) */
 #define TMS570_EMACM_MACSRCADDRLO_MACSRCADDR0(val) BSP_FLD32(val,8, 15)
 #define TMS570_EMACM_MACSRCADDRLO_MACSRCADDR0_GET(reg) BSP_FLD32GET(reg,8, 15)
 #define TMS570_EMACM_MACSRCADDRLO_MACSRCADDR0_SET(reg,val) BSP_FLD32SET(reg, val,8, 15)
@@ -853,7 +853,7 @@ typedef struct{
 #define TMS570_EMACM_MACADDRLO_CHANNEL_GET(reg) BSP_FLD32GET(reg,16, 18)
 #define TMS570_EMACM_MACADDRLO_CHANNEL_SET(reg,val) BSP_FLD32SET(reg, val,16, 18)
 
-/* field: MACADDR0 - MAC address lower 8-0 bits (byte 0) */
+/* field: MACADDR0 - MAC address lower 7-0 bits (byte 0) */
 #define TMS570_EMACM_MACADDRLO_MACADDR0(val) BSP_FLD32(val,8, 15)
 #define TMS570_EMACM_MACADDRLO_MACADDR0_GET(reg) BSP_FLD32GET(reg,8, 15)
 #define TMS570_EMACM_MACADDRLO_MACADDR0_SET(reg,val) BSP_FLD32SET(reg, val,8, 15)
