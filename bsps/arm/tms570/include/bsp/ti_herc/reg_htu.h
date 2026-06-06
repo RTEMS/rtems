@@ -206,14 +206,14 @@ typedef struct{
 
 
 /*---------------------TMS570_HTU_BFINTS---------------------*/
-/* field: BFINTENA - Bus Full Interrupt Enable Bits. */
+/* field: BFINTENA - Buffer Full Interrupt Enable Bits. */
 #define TMS570_HTU_BFINTS_BFINTENA(val) BSP_FLD32(val,0, 15)
 #define TMS570_HTU_BFINTS_BFINTENA_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_HTU_BFINTS_BFINTENA_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
 /*---------------------TMS570_HTU_BFINTC---------------------*/
-/* field: BFINTDIS -  */
+/* field: BFINTDIS - Buffer Full Interrupt Disable Bits. */
 #define TMS570_HTU_BFINTC_BFINTDIS(val) BSP_FLD32(val,0, 15)
 #define TMS570_HTU_BFINTC_BFINTDIS_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_HTU_BFINTC_BFINTDIS_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
@@ -242,7 +242,7 @@ typedef struct{
 
 
 /*---------------------TMS570_HTU_INTOFF1---------------------*/
-/* field: INTTYPE1 - INTTYPE1 Interrupt Type of Interrupt Line 1. */
+/* field: INTTYPE1 - Interrupt Type of Interrupt Line 1. */
 #define TMS570_HTU_INTOFF1_INTTYPE1(val) BSP_FLD32(val,8, 9)
 #define TMS570_HTU_INTOFF1_INTTYPE1_GET(reg) BSP_FLD32GET(reg,8, 9)
 #define TMS570_HTU_INTOFF1_INTTYPE1_SET(reg,val) BSP_FLD32SET(reg, val,8, 9)
@@ -282,7 +282,7 @@ typedef struct{
 
 
 /*----------------------TMS570_HTU_MP1S----------------------*/
-/* field: STARTADDRESS1 - he start address defines at which main memory address the region begins. */
+/* field: STARTADDRESS1 - The start address defines at which main memory address the region begins. */
 /* Whole 32 bits */
 
 /*----------------------TMS570_HTU_MP1E----------------------*/
@@ -356,7 +356,7 @@ typedef struct{
 #define TMS570_HTU_MPCS_CPNUM0_GET(reg) BSP_FLD32GET(reg,24, 27)
 #define TMS570_HTU_MPCS_CPNUM0_SET(reg,val) BSP_FLD32SET(reg, val,24, 27)
 
-/* field: MPEFT1 - MPEFT1 */
+/* field: MPEFT1 - Memory Protection Error Fault Flag 1. */
 #define TMS570_HTU_MPCS_MPEFT1 BSP_BIT32(17)
 
 /* field: MPEFT0 - Memory Protection Error Fault Flag 0. */
