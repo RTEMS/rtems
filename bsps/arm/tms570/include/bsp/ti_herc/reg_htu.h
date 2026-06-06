@@ -367,6 +367,24 @@ typedef struct{
 #define TMS570_HTU_MPCS_CPNUM1_GET(reg) BSP_FLD32GET(reg,8, 11)
 #define TMS570_HTU_MPCS_CPNUM1_SET(reg,val) BSP_FLD32SET(reg, val,8, 11)
 
+/* field: INTENA01 - Interrupt Enable 01. */
+#define TMS570_HTU_MPCS_INTENA01 BSP_BIT32(5)
+
+/* field: ACCR01 - Access Rights 01. */
+#define TMS570_HTU_MPCS_ACCR01 BSP_BIT32(4)
+
+/* field: REG01ENA - Region Enable 01. */
+#define TMS570_HTU_MPCS_REG01ENA BSP_BIT32(3)
+
+/* field: INTENA0 - Interrupt Enable 0. */
+#define TMS570_HTU_MPCS_INTENA0 BSP_BIT32(2)
+
+/* field: ACCR - Access Rights 0. */
+#define TMS570_HTU_MPCS_ACCR BSP_BIT32(1)
+
+/* field: REG0ENA - Region Enable 0 */
+#define TMS570_HTU_MPCS_REG0ENA BSP_BIT32(0)
+
 
 /*----------------------TMS570_HTU_MP0S----------------------*/
 /* field: ISTARTADDRESS0 - The start address defines at which main memory address the region begins. */
