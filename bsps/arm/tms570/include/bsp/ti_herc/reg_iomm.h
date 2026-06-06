@@ -210,10 +210,4 @@ typedef struct{
 #define TMS570_IOMM_FAULT_CLEAR_REG_FAULT_CLEAR BSP_BIT32(0)
 
 
-/*---------------------TMS570_IOMM_PINMUX---------------------*/
-/* field: FAULT_CLEAR - Fault Clear */
-#define TMS570_IOMM_PINMUX_FAULT_CLEAR BSP_BIT32(0)
-
-
-
 #endif /* LIBBSP_ARM_TMS570_IOMM */
