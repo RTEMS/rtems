@@ -194,26 +194,26 @@ typedef struct{
 
 /*---------------------TMS570_HTU_INTOFF0---------------------*/
 /* field: INTTYPE0 - Interrupt Type of Interrupt Line 0. */
-#define TMS570_HTU_INTOFF0_INTTYPE0(val) BSP_FLD32(val,8, 10)
-#define TMS570_HTU_INTOFF0_INTTYPE0_GET(reg) BSP_FLD32GET(reg,8, 10)
-#define TMS570_HTU_INTOFF0_INTTYPE0_SET(reg,val) BSP_FLD32SET(reg, val,8, 10)
+#define TMS570_HTU_INTOFF0_INTTYPE0(val) BSP_FLD32(val,8, 9)
+#define TMS570_HTU_INTOFF0_INTTYPE0_GET(reg) BSP_FLD32GET(reg,8, 9)
+#define TMS570_HTU_INTOFF0_INTTYPE0_SET(reg,val) BSP_FLD32SET(reg, val,8, 9)
 
 /* field: CPOFF0 - CP Offset. */
-#define TMS570_HTU_INTOFF0_CPOFF0(val) BSP_FLD32(val,0, 4)
-#define TMS570_HTU_INTOFF0_CPOFF0_GET(reg) BSP_FLD32GET(reg,0, 4)
-#define TMS570_HTU_INTOFF0_CPOFF0_SET(reg,val) BSP_FLD32SET(reg, val,0, 4)
+#define TMS570_HTU_INTOFF0_CPOFF0(val) BSP_FLD32(val,0, 3)
+#define TMS570_HTU_INTOFF0_CPOFF0_GET(reg) BSP_FLD32GET(reg,0, 3)
+#define TMS570_HTU_INTOFF0_CPOFF0_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
 /*---------------------TMS570_HTU_INTOFF1---------------------*/
 /* field: INTTYPE1 - INTTYPE1 Interrupt Type of Interrupt Line 1. */
-#define TMS570_HTU_INTOFF1_INTTYPE1(val) BSP_FLD32(val,8, 10)
-#define TMS570_HTU_INTOFF1_INTTYPE1_GET(reg) BSP_FLD32GET(reg,8, 10)
-#define TMS570_HTU_INTOFF1_INTTYPE1_SET(reg,val) BSP_FLD32SET(reg, val,8, 10)
+#define TMS570_HTU_INTOFF1_INTTYPE1(val) BSP_FLD32(val,8, 9)
+#define TMS570_HTU_INTOFF1_INTTYPE1_GET(reg) BSP_FLD32GET(reg,8, 9)
+#define TMS570_HTU_INTOFF1_INTTYPE1_SET(reg,val) BSP_FLD32SET(reg, val,8, 9)
 
 /* field: CPOFF1 - CP Offset. */
-#define TMS570_HTU_INTOFF1_CPOFF1(val) BSP_FLD32(val,0, 4)
-#define TMS570_HTU_INTOFF1_CPOFF1_GET(reg) BSP_FLD32GET(reg,0, 4)
-#define TMS570_HTU_INTOFF1_CPOFF1_SET(reg,val) BSP_FLD32SET(reg, val,0, 4)
+#define TMS570_HTU_INTOFF1_CPOFF1(val) BSP_FLD32(val,0, 3)
+#define TMS570_HTU_INTOFF1_CPOFF1_GET(reg) BSP_FLD32GET(reg,0, 3)
+#define TMS570_HTU_INTOFF1_CPOFF1_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
 /*-----------------------TMS570_HTU_BIM-----------------------*/
