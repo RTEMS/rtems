@@ -38,6 +38,13 @@ directives:
   * rtems_fdt_num_entries
   * rtems_fdt_entry_name
   * rtems_fdt_entry_offset
+  * rtems_fdt_get_offset_len_uintptr
+  * rtems_fdt_get_uint32
+  * rtems_fdt_get_offset_uint32
+  * rtems_fdt_get_uint64
+  * rtems_fdt_get_offset_uint64
+  * rtems_fdt_get_uintptr
+  * rtems_fdt_get_offset_uintptr
 
 concepts:
 

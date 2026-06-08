@@ -60,10 +60,19 @@ void test_mem_rsv(
 
 void test_entry_index(
   rtems_fdt_handle *handle,
-  int exp_entries,
-  int id,
-  const char *exp_name,
-  int exp_offset
+  int               exp_entries,
+  int               id,
+  const char       *exp_name,
+  int               exp_offset
+);
+
+void test_get_uint(
+  rtems_fdt_handle *handle,
+  int               offset,
+  const char       *name,
+  uint32_t          exp_value0,
+  uint32_t          exp_value1,
+  uint32_t          exp_value2
 );
 
 rtems_task Init( rtems_task_argument argument );
@@ -98,10 +107,10 @@ void test_mem_rsv(
 
 void test_entry_index(
   rtems_fdt_handle *handle,
-  int exp_entries,
-  int id,
-  const char *exp_name,
-  int exp_offset
+  int               exp_entries,
+  int               id,
+  const char       *exp_name,
+  int               exp_offset
 )
 {
   int         entries;
@@ -125,6 +134,114 @@ void test_entry_index(
   rtems_test_assert( offset == exp_offset );
 }
 
+void test_get_uint(
+  rtems_fdt_handle *handle,
+  int               offset,
+  const char       *name,
+  uint32_t          exp_value0,
+  uint32_t          exp_value1,
+  uint32_t          exp_value2
+)
+{
+  int         len;
+  const void *prop;
+  uint32_t    v32;
+  uint64_t    v64;
+  uint64_t    exp64, exp64_1;
+  uintptr_t   vptr;
+
+  exp64 = ( (uint64_t) exp_value0 << 8 * sizeof( uint32_t ) ) | exp_value1;
+  exp64_1 = ( (uint64_t) exp_value1 << 8 * sizeof( uint32_t ) ) | exp_value2;
+
+  prop = rtems_fdt_getprop( handle, offset, name, &len );
+  rtems_test_assert( prop != NULL );
+  rtems_test_assert( (size_t) len >= sizeof( uint32_t ) );
+
+  v32 = rtems_fdt_get_uint32( prop );
+  rtems_test_assert( v32 == exp_value0 );
+
+  if ( sizeof( uintptr_t ) == sizeof( uint32_t ) ) {
+    vptr = rtems_fdt_get_uintptr( prop );
+    rtems_test_assert( vptr == (uintptr_t) exp_value0 );
+  }
+
+  /* full read for 32-bit pointer, truncated to 4 bytes for 64-bit */
+  vptr = rtems_fdt_get_offset_len_uintptr( prop, 0, sizeof( uint32_t ) );
+  rtems_test_assert( vptr == (uintptr_t) exp_value0 );
+
+  /* truncate to two bytes */
+  vptr = rtems_fdt_get_offset_len_uintptr( prop, 0, 2 );
+  rtems_test_assert( vptr == (uintptr_t) exp_value0 >> 16 );
+
+  if ( (size_t) len >= sizeof( uint64_t ) ) {
+    v32 = rtems_fdt_get_offset_uint32( prop, 1 );
+    rtems_test_assert( v32 == exp_value1 );
+
+    v64 = rtems_fdt_get_uint64( prop );
+    rtems_test_assert( v64 == exp64 );
+
+    if ( sizeof( uintptr_t ) == sizeof( uint64_t ) ) {
+      vptr = rtems_fdt_get_uintptr( prop );
+      rtems_test_assert( vptr == (uintptr_t) exp64 );
+
+      vptr = rtems_fdt_get_offset_len_uintptr( prop, 0, sizeof( uint64_t ) );
+      rtems_test_assert( vptr == (uintptr_t) exp64 );
+
+      /* truncate to 6 bytes */
+      vptr = rtems_fdt_get_offset_len_uintptr( prop, 0, 6 );
+      rtems_test_assert( vptr == (uintptr_t) exp64 >> 16 );
+    } else {
+      vptr = rtems_fdt_get_offset_uintptr( prop, 1 );
+      rtems_test_assert( vptr == (uintptr_t) exp_value1 );
+    }
+
+    vptr = rtems_fdt_get_offset_len_uintptr( prop, 4, sizeof( uint32_t ) );
+    rtems_test_assert( vptr == (uintptr_t) exp_value1 );
+
+    /* truncate to 1 byte */
+    vptr = rtems_fdt_get_offset_len_uintptr( prop, 4, 1 );
+    rtems_test_assert( vptr == (uintptr_t) exp_value1 >> 24 );
+
+    /* check across 32-bit boundary */
+    vptr = rtems_fdt_get_offset_len_uintptr( prop, 1, sizeof( uint32_t ) );
+    rtems_test_assert(
+      vptr == ( (uintptr_t) ( exp_value0 << 8 ) | ( exp_value1 >> 24 ) )
+    );
+  }
+
+  if ( (size_t) len > sizeof( uint64_t ) + sizeof( uint32_t ) ) {
+    v32 = rtems_fdt_get_offset_uint32( prop, 2 );
+    rtems_test_assert( v32 == exp_value2 );
+
+    v64 = rtems_fdt_get_offset_uint64( prop, 1 );
+    rtems_test_assert( v64 == exp64_1 );
+
+    if ( sizeof( uintptr_t ) == sizeof( uint64_t ) ) {
+      vptr = rtems_fdt_get_offset_uintptr( prop, 1 );
+      rtems_test_assert( vptr == (uintptr_t) exp64_1 );
+
+      vptr = rtems_fdt_get_offset_len_uintptr( prop, 4, sizeof( uint64_t ) );
+      rtems_test_assert( vptr == (uintptr_t) exp64_1 );
+    } else {
+      vptr = rtems_fdt_get_offset_uintptr( prop, 2 );
+      rtems_test_assert( vptr == (uintptr_t) exp_value2 );
+    }
+
+    vptr = rtems_fdt_get_offset_len_uintptr( prop, 8, sizeof( uint32_t ) );
+    rtems_test_assert( vptr == (uintptr_t) exp_value2 );
+
+    /* truncate to 3 byte */
+    vptr = rtems_fdt_get_offset_len_uintptr( prop, 8, 3 );
+    rtems_test_assert( vptr == (uintptr_t) exp_value2 >> 8 );
+
+    /* check across 64-bit boundary */
+    vptr = rtems_fdt_get_offset_len_uintptr( prop, 6, 4 );
+    rtems_test_assert(
+      vptr == ( (uintptr_t) ( exp_value1 << 16 ) | ( exp_value2 >> 16 ) )
+    );
+  }
+}
+
 #define NUM_MEM_RSV ( 3 )
 
 rtems_task Init( rtems_task_argument ignored )
@@ -135,6 +252,7 @@ rtems_task Init( rtems_task_argument ignored )
   int               rc;
   int               i;
   int               num_mem_rsv = NUM_MEM_RSV;
+  int               idx;
 
   uint64_t addresses[] =
     { 0x1000000000000000, 0x2000000000000000, 0x0000000000000000 };
@@ -159,6 +277,11 @@ rtems_task Init( rtems_task_argument ignored )
   test_entry_index( &handle, 6, 1, "/cpus", 108 );
   test_entry_index( &handle, 6, 4, "/memory", 548 );
   test_entry_index( &handle, 6, 4, "/memory@0", 548 );
+
+  idx = rtems_fdt_find_path_offset( &handle, "/randomnode" );
+  rtems_test_assert( idx >= 0 );
+  test_get_uint( &handle, idx, "blob", 0x0a0b0c0d, 0xdeeaadbe, 0 );
+  test_get_uint( &handle, idx, "string", 0xff007374, 0x75666673, 0x74756666 );
 
   rc = rtems_fdt_unload( &handle );
   rtems_test_assert( rc == 0 );
