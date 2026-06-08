@@ -50,34 +50,9 @@
 
 const char rtems_test_name[] = "FDT 02";
 
-void test_mem_rsv(
-  rtems_fdt_handle *handle,
-  int               count,
-  int               n,
-  uint64_t          exp_address,
-  uint64_t          exp_size
-);
-
-void test_entry_index(
-  rtems_fdt_handle *handle,
-  int               exp_entries,
-  int               id,
-  const char       *exp_name,
-  int               exp_offset
-);
-
-void test_get_uint(
-  rtems_fdt_handle *handle,
-  int               offset,
-  const char       *name,
-  uint32_t          exp_value0,
-  uint32_t          exp_value1,
-  uint32_t          exp_value2
-);
-
 rtems_task Init( rtems_task_argument argument );
 
-void test_mem_rsv(
+static void test_mem_rsv(
   rtems_fdt_handle *handle,
   int               count,
   int               n,
@@ -105,7 +80,7 @@ void test_mem_rsv(
   }
 }
 
-void test_entry_index(
+static void test_entry_index(
   rtems_fdt_handle *handle,
   int               exp_entries,
   int               id,
@@ -134,7 +109,7 @@ void test_entry_index(
   rtems_test_assert( offset == exp_offset );
 }
 
-void test_get_uint(
+static void test_get_uint(
   rtems_fdt_handle *handle,
   int               offset,
   const char       *name,
