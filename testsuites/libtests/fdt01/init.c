@@ -54,74 +54,10 @@
 
 rtems_task Init( rtems_task_argument argument );
 
-void test_fdt_handle( rtems_fdt_handle *handle );
-
-void test_compatible(
-  rtems_fdt_handle *handle,
-  const char       *compatible,
-  bool              should_pass
-);
-
-void test_get_phandle( rtems_fdt_handle *handle, uint32_t phandle );
-
-void test_getprop(
-  rtems_fdt_handle *handle,
-  const char       *pname,
-  const void       *pval,
-  int               plen
-);
-
-void test_subnode(
-  rtems_fdt_handle *handle,
-  int               offset,
-  const char       *sname,
-  int               slen
-);
-
-void test_path(
-  rtems_fdt_handle *handle,
-  int               offset,
-  const char       *pname,
-  int               plen,
-  const char       *propname,
-  void             *propval,
-  int               proplen
-);
-
-void test_alias(
-  rtems_fdt_handle *handle,
-  const char       *alias_name,
-  const char       *alias_path,
-  int               plen
-);
-
-void test_getprop_address_map(
-  rtems_fdt_handle      *handle,
-  int                    offset,
-  const char            *path,
-  const char            *name,
-  rtems_fdt_address_map *exp_map
-);
-
-void test_prop_map(
-  const char *path,
-  const char *propname,
-  const char *names[],
-  uintptr_t  *exp_values,
-  size_t      count
-);
-
-void test_depth(
-  rtems_fdt_handle *handle,
-  int               offset,
-  int               exp_depth,
-  const char       *parent_path
-);
-
 const char rtems_test_name[] = "FDT 01";
 
 /* triplets of identical uncompressed/compressed dtbs */
-const char *dtbs[] = {
+static const char *dtbs[] = {
   "/system.dtb",
   "/system.dtb.gz",
   (const char *) microblaze_test_dtb,
@@ -134,7 +70,7 @@ const char *dtbs[] = {
 };
 #define NUM_DTB ( 3 * 3 )
 
-void test_fdt_handle( rtems_fdt_handle *handle )
+static void test_fdt_handle( rtems_fdt_handle *handle )
 {
   rtems_fdt_handle test_handle;
 
@@ -147,7 +83,7 @@ void test_fdt_handle( rtems_fdt_handle *handle )
   rtems_test_assert( !rtems_fdt_valid_handle( &test_handle ) );
 }
 
-void test_compatible(
+static void test_compatible(
   rtems_fdt_handle *handle,
   const char       *compatible,
   bool              should_pass
@@ -163,7 +99,7 @@ void test_compatible(
   );
 }
 
-void test_get_phandle( rtems_fdt_handle *handle, uint32_t phandle )
+static void test_get_phandle( rtems_fdt_handle *handle, uint32_t phandle )
 {
   int      idx;
   uint32_t test_phandle;
@@ -175,7 +111,7 @@ void test_get_phandle( rtems_fdt_handle *handle, uint32_t phandle )
   rtems_test_assert( test_phandle == phandle );
 }
 
-void test_getprop(
+static void test_getprop(
   rtems_fdt_handle *handle,
   const char       *pname,
   const void       *pval,
@@ -214,7 +150,7 @@ void test_getprop(
   rtems_test_assert( strncmp( namep, pname, name_len ) == 0 );
 }
 
-void test_subnode(
+static void test_subnode(
   rtems_fdt_handle *handle,
   int               offset,
   const char       *sname,
@@ -246,7 +182,7 @@ void test_subnode(
   rtems_test_assert( idx1 == idx2 );
 }
 
-void test_path(
+static void test_path(
   rtems_fdt_handle *handle,
   int               offset,
   const char       *pname,
@@ -279,7 +215,7 @@ void test_path(
   rtems_test_assert( memcmp( buffer, propval, proplen ) == 0 );
 }
 
-void test_alias(
+static void test_alias(
   rtems_fdt_handle *handle,
   const char       *alias_name,
   const char       *alias_path,
@@ -302,7 +238,7 @@ void test_alias(
   rtems_test_assert( strncmp( p, alias_path, len ) == 0 );
 }
 
-void test_getprop_address_map(
+static void test_getprop_address_map(
   rtems_fdt_handle      *handle,
   int                    offset,
   const char            *path,
@@ -334,7 +270,7 @@ void test_getprop_address_map(
   rtems_test_assert( rc == addr_map.size_cells );
 }
 
-void test_prop_map(
+static void test_prop_map(
   const char *path,
   const char *propname,
   const char *names[],
@@ -357,7 +293,7 @@ void test_prop_map(
   free( values );
 }
 
-void test_depth(
+static void test_depth(
   rtems_fdt_handle *handle,
   int               offset,
   int               exp_depth,
