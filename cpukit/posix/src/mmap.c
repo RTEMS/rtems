@@ -185,9 +185,7 @@ void *mmap(
     /* Check to see if the mapping is valid for a regular file. */
     if (
       S_ISREG( sb.st_mode )
-      /* FIXME: Should this be using strict inequality (>) comparisons? It would
-     * be valid to map a region exactly equal to the st_size, e.g. see below. */
-      && ( ( off >= sb.st_size ) || ( ( off + (off_t) len ) >= sb.st_size ) )
+      && ( ( off >= sb.st_size ) || ( (off_t) len > sb.st_size - off ) )
     ) {
       errno = EOVERFLOW;
       return MAP_FAILED;
