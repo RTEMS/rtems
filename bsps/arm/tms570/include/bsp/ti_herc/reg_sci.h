@@ -147,7 +147,7 @@ typedef struct{
 
 
 /*---------------------TMS570_SCI_SETINT---------------------*/
-/* field: SET_FE_INT -  */
+/* field: SET_FE_INT - Set framing-error interrupt. */
 #define TMS570_SCI_SETINT_SET_FE_INT BSP_BIT32(26)
 
 /* field: SET_OE_INT - SET OE INT */
@@ -174,7 +174,7 @@ typedef struct{
 /* field: SET_WAKEUP_INT - Set wakeup interrupt. */
 #define TMS570_SCI_SETINT_SET_WAKEUP_INT BSP_BIT32(1)
 
-/* field: SET_BRKDT_INT - Set breakdetect interrupt. */
+/* field: SET_BRKDT_INT - Set break detect interrupt. */
 #define TMS570_SCI_SETINT_SET_BRKDT_INT BSP_BIT32(0)
 
 
@@ -206,7 +206,7 @@ typedef struct{
 /* field: CLR_WAKEUP_INT - Clear wakeup interrupt. This bit disables the wakeup interrupt when set. */
 #define TMS570_SCI_CLEARINT_CLR_WAKEUP_INT BSP_BIT32(1)
 
-/* field: CLR_BRKDT_INT - Clear breakdetect interrupt. This bit disables the break-detect interrupt when set. */
+/* field: CLR_BRKDT_INT - Clear break detect interrupt. This bit disables the break-detect interrupt when set. */
 #define TMS570_SCI_CLEARINT_CLR_BRKDT_INT BSP_BIT32(0)
 
 
@@ -243,7 +243,7 @@ typedef struct{
 /* field: CLR_OE_INT_LVL - Clear overrun-error interrupt level. */
 #define TMS570_SCI_CLEARINTLVL_CLR_OE_INT_LVL BSP_BIT32(25)
 
-/* field: CLR_PE_INT_LVL -  */
+/* field: CLR_PE_INT_LVL - Clear parity interrupt level. */
 #define TMS570_SCI_CLEARINTLVL_CLR_PE_INT_LVL BSP_BIT32(24)
 
 /* field: CLR_RX_DMA_ALL_LVL - Clear receive DMA interrupt level. */
@@ -258,7 +258,7 @@ typedef struct{
 /* field: CLR_WAKEUP_INT_LVL - Clear wakeup interrupt. */
 #define TMS570_SCI_CLEARINTLVL_CLR_WAKEUP_INT_LVL BSP_BIT32(1)
 
-/* field: CLR_BRKDT_INT_LVL - Clear breakdetect interrupt. */
+/* field: CLR_BRKDT_INT_LVL - Clear break detect interrupt. */
 #define TMS570_SCI_CLEARINTLVL_CLR_BRKDT_INT_LVL BSP_BIT32(0)
 
 
@@ -287,7 +287,7 @@ typedef struct{
 /* field: TXRDY - Transmitter buffer register ready flag. */
 #define TMS570_SCI_FLR_TXRDY BSP_BIT32(8)
 
-/* field: BUSY - Bus busy flag. TThis bit indicates whether the receiver is in the process of receiving a frame. */
+/* field: BUSY - Bus busy flag. This bit indicates whether the receiver is in the process of receiving a frame. */
 #define TMS570_SCI_FLR_BUSY BSP_BIT32(3)
 
 /* field: IDLE - SCI receiver in idle state. */
@@ -350,10 +350,10 @@ typedef struct{
 
 
 /*----------------------TMS570_SCI_PIO0----------------------*/
-/* field: TX_FUNC - Transfer function. This bit defines the function of pin SCITX. */
+/* field: TX_FUNC - Transmit function. This bit defines the function of pin SCITX. */
 #define TMS570_SCI_PIO0_TX_FUNC BSP_BIT32(2)
 
-/* field: RX_FUNC - Receive function.This bit defines the function of pin SCIRX. */
+/* field: RX_FUNC - Receive function. This bit defines the function of pin SCIRX. */
 #define TMS570_SCI_PIO0_RX_FUNC BSP_BIT32(1)
 
 
