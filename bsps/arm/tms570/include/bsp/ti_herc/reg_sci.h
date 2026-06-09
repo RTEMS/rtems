@@ -182,8 +182,8 @@ typedef struct{
 /* field: CLR_FE_INT - Clear framing-error interrupt. This bit disables the framing-error interrupt when set. */
 #define TMS570_SCI_CLEARINT_CLR_FE_INT BSP_BIT32(26)
 
-/* field: CLR_CE_INT - Clear overrun-error interrupt. This bit disables the SCI overrun error interrupt when set. */
-#define TMS570_SCI_CLEARINT_CLR_CE_INT BSP_BIT32(25)
+/* field: CLR_OE_INT - Clear overrun-error interrupt. This bit disables the SCI overrun error interrupt when set. */
+#define TMS570_SCI_CLEARINT_CLR_OE_INT BSP_BIT32(25)
 
 /* field: CLR_PE_INT - Clear parity interrupt. This bit disables the parity error interrupt when set. */
 #define TMS570_SCI_CLEARINT_CLR_PE_INT BSP_BIT32(24)
@@ -214,8 +214,8 @@ typedef struct{
 /* field: SET_FE_INT_LVL - Set framing-error interrupt level. */
 #define TMS570_SCI_SETINTLVL_SET_FE_INT_LVL BSP_BIT32(26)
 
-/* field: SET_CE_INT_LVL - Set overrun-error interrupt level. */
-#define TMS570_SCI_SETINTLVL_SET_CE_INT_LVL BSP_BIT32(25)
+/* field: SET_OE_INT_LVL - Set overrun-error interrupt level. */
+#define TMS570_SCI_SETINTLVL_SET_OE_INT_LVL BSP_BIT32(25)
 
 /* field: SET_PE_INT_LVL - Set parity error interrupt level. */
 #define TMS570_SCI_SETINTLVL_SET_PE_INT_LVL BSP_BIT32(24)
@@ -240,11 +240,8 @@ typedef struct{
 /* field: CLR_FE_INT_LVL - Clear framing-error interrupt. */
 #define TMS570_SCI_CLEARINTLVL_CLR_FE_INT_LVL BSP_BIT32(26)
 
-/* field: CLR_CE_INT_LVL - CLR CE INT LVL */
-#define TMS570_SCI_CLEARINTLVL_CLR_CE_INT_LVL BSP_BIT32(25)
-
-/* field: CLR_CE_INT_LVL - CLR CE INT LVL */
-#define TMS570_SCI_CLEARINTLVL_CLR_CE_INT_LVL BSP_BIT32(25)
+/* field: CLR_OE_INT_LVL - Clear overrun-error interrupt level. */
+#define TMS570_SCI_CLEARINTLVL_CLR_OE_INT_LVL BSP_BIT32(25)
 
 /* field: CLR_PE_INT_LVL -  */
 #define TMS570_SCI_CLEARINTLVL_CLR_PE_INT_LVL BSP_BIT32(24)
@@ -255,8 +252,8 @@ typedef struct{
 /* field: CLR_RX_INT_LVL - Clear receiver interrupt. */
 #define TMS570_SCI_CLEARINTLVL_CLR_RX_INT_LVL BSP_BIT32(9)
 
-/* field: 8 - CLR TX INT LVL Clear transmitter interrupt. */
-#define TMS570_SCI_CLEARINTLVL_8 BSP_BIT32(8)
+/* field: CLR_TX_INT_LVL - Clear transmitter interrupt level. */
+#define TMS570_SCI_CLEARINTLVL_CLR_TX_INT_LVL BSP_BIT32(8)
 
 /* field: CLR_WAKEUP_INT_LVL - Clear wakeup interrupt. */
 #define TMS570_SCI_CLEARINTLVL_CLR_WAKEUP_INT_LVL BSP_BIT32(1)
