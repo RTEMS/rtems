@@ -253,7 +253,7 @@ static int can_bus_ioctl_create_queue(
    * Check whether correct queue priority is to be set.
    * Note that priority is unsigned and does not need to be checked for < 0.
    */
-  if ( queue.priority > RTEMS_CAN_QUEUE_PRIO_NR ) {
+  if ( queue.priority >= RTEMS_CAN_QUEUE_PRIO_NR ) {
     return -EINVAL;
   }
 
