@@ -39,7 +39,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/heapimpl.h>
+#include <rtems/score/heapfirstfitimpl.h>
 
 bool _Heap_Size_of_alloc_area(
   Heap_Control *heap,

@@ -1,0 +1,470 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreHeapFirstFit
+ *
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreHeapFirstFit which are only used by the implementation.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2008.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#ifndef _RTEMS_SCORE_HEAPFIRSTFITIMPL_H
+#define _RTEMS_SCORE_HEAPFIRSTFITIMPL_H
+
+#include <rtems/score/heapimpl.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/**
+ * @addtogroup RTEMSScoreHeapFirstFit
+ *
+ * @{
+ */
+
+/**
+ * @brief See also @ref Heap_Block.size_and_flag.
+ */
+#define HEAP_PREV_BLOCK_USED ( (uintptr_t) 1 )
+
+/**
+ * @brief Size of the part at the block begin which may be used for allocation
+ * in charge of the previous block.
+ */
+#define HEAP_ALLOC_BONUS sizeof( uintptr_t )
+
+/**
+ * @brief Gets the first and last block for the heap area.
+ *
+ * Nothing will be written to this area.
+ *
+ * @param heap_area_begin The starting address of the heap area.
+ * @param heap_area_size The size of the heap area.
+ * @param page_size The page size for the calculation.
+ * @param min_block_size The minimal block size for the calculation.
+ * @param[out] first_block_ptr The pointer to the first block in the case of success
+ * @param[out] last_block_ptr The pointer to the last block in the case of success
+ *
+ * @retval true The area is big enough.
+ * @retval false The area is not big enough.
+ */
+bool _Heap_Get_first_and_last_block(
+  uintptr_t    heap_area_begin,
+  uintptr_t    heap_area_size,
+  uintptr_t    page_size,
+  uintptr_t    min_block_size,
+  Heap_Block **first_block_ptr,
+  Heap_Block **last_block_ptr
+);
+
+/**
+ * @brief Allocates the memory area.
+ * starting at @a alloc_begin of size
+ * @a alloc_size bytes in the block @a block.
+ *
+ * The block may be split up into multiple blocks.  The previous and next block
+ * may be used or free.  Free block parts which form a vaild new block will be
+ * inserted into the free list or merged with an adjacent free block.  If the
+ * block is used, they will be inserted after the free list head.  If the block
+ * is free, they will be inserted after the previous block in the free list.
+ *
+ * Inappropriate values for @a alloc_begin or @a alloc_size may corrupt the
+ * heap.
+ *
+ * @param[in, out] heap The heap to operate upon.
+ * @param block The block in which the memory area should be allocated
+ * @param alloc_begin The starting address of the memory area that shall be allocated.
+ * @param alloc_size The size of the desired allocated area in bytes.
+ *
+ * @return The block containing the allocated memory area.
+ */
+Heap_Block *_Heap_Block_allocate(
+  Heap_Control *heap,
+  Heap_Block   *block,
+  uintptr_t     alloc_begin,
+  uintptr_t     alloc_size
+);
+
+#ifndef HEAP_PROTECTION
+  #define _Heap_Protection_block_initialize( heap, block )    ( (void) 0 )
+  #define _Heap_Protection_block_check( heap, block )         ( (void) 0 )
+  #define _Heap_Protection_block_error( heap, block, reason ) ( (void) 0 )
+#else
+static inline void _Heap_Protection_block_initialize(
+  Heap_Control *heap,
+  Heap_Block   *block
+)
+{
+  ( *heap->Protection.block_initialize )( heap, block );
+}
+
+static inline void _Heap_Protection_block_check(
+  Heap_Control *heap,
+  Heap_Block   *block
+)
+{
+  ( *heap->Protection.block_check )( heap, block );
+}
+
+static inline void _Heap_Protection_block_error(
+  Heap_Control     *heap,
+  Heap_Block       *block,
+  Heap_Error_reason reason
+)
+{
+  ( *heap->Protection.block_error )( heap, block, reason );
+}
+#endif
+
+/**
+ * @brief Returns the head of the free list of the heap.
+ *
+ * @param heap The heap to operate upon.
+ *
+ * @return The head of the free list.
+ */
+static inline Heap_Block *_Heap_Free_list_head( Heap_Control *heap )
+{
+  return &heap->free_list;
+}
+
+/**
+ * @brief Returns the tail of the free list of the heap.
+ *
+ * @param heap The heap to operate upon.
+ *
+ * @return The tail of the free list.
+ */
+static inline Heap_Block *_Heap_Free_list_tail( Heap_Control *heap )
+{
+  return &heap->free_list;
+}
+
+/**
+ * @brief Returns the first block of the free list of the heap.
+ *
+ * @param heap The heap to operate upon.
+ *
+ * @return The first block of the free list.
+ */
+static inline Heap_Block *_Heap_Free_list_first( Heap_Control *heap )
+{
+  return _Heap_Free_list_head( heap )->next;
+}
+
+/**
+ * @brief Returns the last block of the free list of the heap.
+ *
+ * @param heap The heap to operate upon.
+ *
+ * @return The last block of the free list.
+ */
+static inline Heap_Block *_Heap_Free_list_last( Heap_Control *heap )
+{
+  return _Heap_Free_list_tail( heap )->prev;
+}
+
+/**
+ * @brief Removes the block from the free list.
+ *
+ * @param block The block to be removed.
+ */
+static inline void _Heap_Free_list_remove( Heap_Block *block )
+{
+  Heap_Block *next = block->next;
+  Heap_Block *prev = block->prev;
+
+  prev->next = next;
+  next->prev = prev;
+}
+
+/**
+ * @brief Replaces one block in the free list by another.
+ *
+ * @param old_block The block in the free list to replace.
+ * @param new_block The block that should replace @a old_block.
+ */
+static inline void _Heap_Free_list_replace(
+  Heap_Block *old_block,
+  Heap_Block *new_block
+)
+{
+  Heap_Block *next = old_block->next;
+  Heap_Block *prev = old_block->prev;
+
+  new_block->next = next;
+  new_block->prev = prev;
+
+  next->prev = new_block;
+  prev->next = new_block;
+}
+
+/**
+ * @brief Inserts a block after an existing block in the free list.
+ *
+ * @param block_before The block that is already in the free list.
+ * @param new_block The block to be inserted after @a block_before.
+ */
+static inline void _Heap_Free_list_insert_after(
+  Heap_Block *block_before,
+  Heap_Block *new_block
+)
+{
+  Heap_Block *next = block_before->next;
+
+  new_block->next = next;
+  new_block->prev = block_before;
+  block_before->next = new_block;
+  next->prev = new_block;
+}
+
+/**
+ * @brief Inserts a block before an existing block in the free list.
+ *
+ * @param block_before The block that is already in the free list.
+ * @param new_block The block to be inserted before @a block_before.
+ */
+static inline void _Heap_Free_list_insert_before(
+  Heap_Block *block_next,
+  Heap_Block *new_block
+)
+{
+  Heap_Block *prev = block_next->prev;
+
+  new_block->next = block_next;
+  new_block->prev = prev;
+  prev->next = new_block;
+  block_next->prev = new_block;
+}
+
+/**
+ * @brief Returns the block which is @a offset away from @a block.
+ *
+ * @param block The block for the relative calculation.
+ * @param offset The offset for the calculation.
+ *
+ * @return The address of the block which is @a offset away from @a block.
+ */
+static inline Heap_Block *_Heap_Block_at(
+  const Heap_Block *block,
+  uintptr_t         offset
+)
+{
+  return (Heap_Block *) ( (uintptr_t) block + offset );
+}
+
+/**
+ * @brief Returns the address of the previous block.
+ *
+ * @param block The block of which the address of the previous block is requested.
+ *
+ * @return The address of the previous block.
+ */
+static inline Heap_Block *_Heap_Prev_block( const Heap_Block *block )
+{
+  return (Heap_Block *) ( (uintptr_t) block - block->prev_size );
+}
+
+/**
+ * @brief Returns the first address in the block without the heap header.
+ *
+ * @param block The block for the operation.
+ *
+ * @return The first address after the heap header.
+ */
+static inline uintptr_t _Heap_Alloc_area_of_block( const Heap_Block *block )
+{
+  return (uintptr_t) block + HEAP_BLOCK_HEADER_SIZE;
+}
+
+/**
+ * @brief Returns the starting address of the block corresponding to the allocatable area.
+ *
+ * @param alloc_begin The starting address of the allocatable area.
+ * @param page_size The page size for the calculation.
+ *
+ * @return The Starting address of the corresponding block of the allocatable area.
+ */
+static inline Heap_Block *_Heap_Block_of_alloc_area(
+  uintptr_t alloc_begin,
+  uintptr_t page_size
+)
+{
+  return (Heap_Block *) ( _Heap_Align_down( alloc_begin, page_size ) -
+                          HEAP_BLOCK_HEADER_SIZE );
+}
+
+/**
+ * @brief Returns the block size.
+ *
+ * @param block The block of which the size is requested.
+ *
+ * @return The block size.
+ */
+static inline uintptr_t _Heap_Block_size( const Heap_Block *block )
+{
+  return block->size_and_flag & ~HEAP_PREV_BLOCK_USED;
+}
+
+/**
+ * @brief Sets the block size.
+ *
+ * @param[in, out] block The block of which the size shall be set.
+ * @param size The new size of the block.
+ */
+static inline void _Heap_Block_set_size( Heap_Block *block, uintptr_t size )
+{
+  uintptr_t flag = block->size_and_flag & HEAP_PREV_BLOCK_USED;
+
+  block->size_and_flag = size | flag;
+}
+
+/**
+ * @brief Returns if the previous heap block is used.
+ *
+ * @param block The block of which the information about the previous
+ *      block is requested.
+ *
+ * @retval true The previous block is used.
+ * @retval false The previous block is not used.
+ */
+static inline bool _Heap_Is_prev_used( const Heap_Block *block )
+{
+  return block->size_and_flag & HEAP_PREV_BLOCK_USED;
+}
+
+/**
+ * @brief Returns if the heap block is used.
+ *
+ * @param block The block of which the information is requested.
+ *
+ * @retval true The block is used.
+ * @retval false The block is not used.
+ */
+static inline bool _Heap_Is_used( const Heap_Block *block )
+{
+  const Heap_Block *const next_block = _Heap_Block_at(
+    block,
+    _Heap_Block_size( block )
+  );
+
+  return _Heap_Is_prev_used( next_block );
+}
+
+/**
+ * @brief Returns if the heap block is free.
+ *
+ * @param block The block of which the information is requested.
+ *
+ * @retval true The block is free.
+ * @retval false The block is not free.
+ */
+static inline bool _Heap_Is_free( const Heap_Block *block )
+{
+  return !_Heap_Is_used( block );
+}
+
+/**
+ * @brief Returns if the block is part of the heap.
+ *
+ * @param heap The heap to test if the @a block is part of it.
+ * @param block The block of which the information is requested.
+ *
+ * @retval true The block is part of the heap.
+ * @retval false The block is not part of the heap.
+ */
+static inline bool _Heap_Is_block_in_heap(
+  const Heap_Control *heap,
+  const Heap_Block   *block
+)
+{
+  return (uintptr_t) block >= (uintptr_t) heap->first_block &&
+         (uintptr_t) block <= (uintptr_t) heap->last_block;
+}
+
+/**
+ * @brief Sets the size of the last block for the heap.
+ *
+ * The next block of the last block will be the first block.  Since the first
+ * block indicates that the previous block is used, this ensures that the last
+ * block appears as used for the _Heap_Is_used() and _Heap_Is_free()
+ * functions.
+ *
+ * This feature will be used to terminate the scattered heap area list.  See
+ * also _Heap_Extend().
+ *
+ * @param[in, out] heap The heap to set the last block size of.
+ */
+static inline void _Heap_Set_last_block_size( Heap_Control *heap )
+{
+  _Heap_Block_set_size(
+    heap->last_block,
+    (uintptr_t) heap->first_block - (uintptr_t) heap->last_block
+  );
+}
+
+#ifndef HEAP_PROTECTION
+  #define _Heap_Protection_free_all_delayed_blocks( heap )    ( (void) 0 )
+#else
+void _Heap_Protection_free_all_delayed_blocks( Heap_Control *heap );
+#endif
+
+/**
+ * @brief Sets the fraction of delayed free blocks that is actually freed
+ * during memory shortage.
+ *
+ * The default is to free half the delayed free blocks.  This is equal to a
+ * fraction value of two.
+ *
+ * @param[in, out] heap The heap control.
+ * @param fraction The fraction is one divided by this fraction value.
+ */
+static inline void _Heap_Protection_set_delayed_free_fraction(
+  Heap_Control *heap,
+  uintptr_t     fraction
+)
+{
+#ifdef HEAP_PROTECTION
+  heap->Protection.delayed_free_fraction = fraction;
+#else
+  (void) heap;
+  (void) fraction;
+#endif
+}
+
+/** @} */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif
+/* end of include file */

@@ -41,7 +41,7 @@
 #include <inttypes.h>
 #include <errno.h>
 #include <string.h>
-#include <rtems/score/heapimpl.h>
+#include <rtems/score/heapfirstfitimpl.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/dumpbuf.h>
 

@@ -39,7 +39,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/heapimpl.h>
+#include <rtems/score/heapfirstfitimpl.h>
 
 void _Heap_Get_free_information(
   Heap_Control     *the_heap,

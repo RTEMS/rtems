@@ -41,7 +41,7 @@
 
 #include <string.h>
 
-#include <rtems/score/heapimpl.h>
+#include <rtems/score/heapfirstfitimpl.h>
 
 static bool _Heap_Get_information_visitor(
   const Heap_Block *block RTEMS_UNUSED,

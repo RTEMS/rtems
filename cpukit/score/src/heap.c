@@ -41,7 +41,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/heapimpl.h>
+#include <rtems/score/heapfirstfitimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/interr.h>
 

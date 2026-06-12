@@ -41,7 +41,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/heapimpl.h>
+#include <rtems/score/heapfirstfitimpl.h>
 
 static Heap_Resize_status _Heap_Resize_block_checked(
   Heap_Control *heap,

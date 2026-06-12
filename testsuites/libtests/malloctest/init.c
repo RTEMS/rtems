@@ -39,6 +39,7 @@
 #include <string.h>
 #include <inttypes.h>
 #include <errno.h>
+#include <rtems/score/heapfirstfitimpl.h>
 #include <rtems/score/protectedheap.h>
 #include <rtems/malloc.h>
 #include <rtems/sysinit.h>

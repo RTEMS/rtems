@@ -41,7 +41,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/heapimpl.h>
+#include <rtems/score/heapfirstfitimpl.h>
 
 #ifndef HEAP_PROTECTION
   #define _Heap_Protection_free_delayed_blocks( heap, alloc_begin ) false

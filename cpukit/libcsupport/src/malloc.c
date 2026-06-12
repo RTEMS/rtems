@@ -63,8 +63,7 @@ void *malloc( size_t size )
 
 size_t malloc_usable_size( void *area )
 {
-  Heap_Block *block = NULL;
-  size_t      size = 0;
+  uintptr_t   size = 0;
   bool        needs_lock;
 
   if ( area == NULL ) {
@@ -77,20 +76,17 @@ size_t malloc_usable_size( void *area )
     _RTEMS_Lock_allocator();
   }
 
-  block = _Heap_Block_of_alloc_area(
-    (uintptr_t) area,
-    RTEMS_Malloc_Heap->page_size
+  _Heap_Size_of_alloc_area(
+    RTEMS_Malloc_Heap,
+    area,
+    &size
   );
-
-  if ( block ) {
-    size = _Heap_Block_size( block );
-  }
 
   if ( needs_lock ) {
     _RTEMS_Unlock_allocator();
   }
 
-  return size;
+  return (size_t) size;
 }
 
 #endif

@@ -39,7 +39,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/heapimpl.h>
+#include <rtems/score/heapfirstfitimpl.h>
 
 Heap_Block *_Heap_Greedy_allocate(
   Heap_Control    *heap,

@@ -39,7 +39,7 @@
 
 #include <rtems/rtems/regiondata.h>
 #include <rtems/score/apimutex.h>
-#include <rtems/score/heapimpl.h>
+#include <rtems/score/heapfirstfitimpl.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/threadqimpl.h>
 

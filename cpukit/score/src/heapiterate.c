@@ -38,7 +38,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/heapimpl.h>
+#include <rtems/score/heapfirstfitimpl.h>
 
 void _Heap_Iterate(
   Heap_Control      *heap,

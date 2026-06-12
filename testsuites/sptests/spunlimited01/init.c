@@ -30,7 +30,7 @@
 #endif
 
 #include <rtems.h>
-#include <rtems/score/heapimpl.h>
+#include <rtems/score/heapfirstfitimpl.h>
 
 #include <string.h>
 

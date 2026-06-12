@@ -41,7 +41,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/heapimpl.h>
+#include <rtems/score/heapfirstfitimpl.h>
 
 static void _Heap_Free_block( Heap_Control *heap, Heap_Block *block )
 {
