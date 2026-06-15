@@ -265,7 +265,7 @@ void tms570_pbist_self_check( void )
   /* Run a diagnostic check on the memory self-test controller */
   /* First set up the PBIST ROM clock as this clock frequency is limited to 90MHz */
 
-  /* Disable PBIST clocks and ROM clock */
+  /* Disable PBIST internal clocks */
   TMS570_PBIST.PACT = 0x0U;
 
   /* Disable memory self controller */
@@ -285,8 +285,8 @@ void tms570_pbist_self_check( void )
 
   tms570_pbist_reset_delay();
 
-  /* Enable PBIST clocks and ROM clock */
-  TMS570_PBIST.PACT = 0x1U;
+  /* Enable PBIST internal clocks */
+  TMS570_PBIST.PACT = TMS570_PBIST_PACT_ENABLE;
 
   /* CPU control of PBIST */
   TMS570_PBIST.DLR = 0x10U;
@@ -329,7 +329,7 @@ void tms570_pbist_self_check( void )
       bsp_selftest_fail_notification( PBISTSELFCHECK_FAIL2 );
     }
 
-    /* Disable PBIST clocks and ROM clock */
+    /* Disable PBIST internal clocks */
     TMS570_PBIST.PACT = 0x0U;
 
     /* Disable PBIST */
@@ -367,8 +367,8 @@ void tms570_pbist_run(
 
   tms570_pbist_reset_delay();
 
-  /* Enable PBIST clocks and ROM clock */
-  TMS570_PBIST.PACT = 0x1U;
+  /* Enable PBIST internal clocks */
+  TMS570_PBIST.PACT = TMS570_PBIST_PACT_ENABLE;
 
   /* Select all algorithms to be tested */
   TMS570_PBIST.ALGO = algomask;
@@ -399,7 +399,7 @@ void tms570_pbist_run(
 /* Requirements : HL_SR523 */
 void tms570_pbist_stop( void )
 {
-  /* disable pbist clocks and ROM clock */
+  /* Disable PBIST internal clocks */
   TMS570_PBIST.PACT = 0x0U;
   TMS570_SYS1.MSTGCR &= 0xFFFFFFF0U;
   TMS570_SYS1.MSTGCR |= 0x5U;
