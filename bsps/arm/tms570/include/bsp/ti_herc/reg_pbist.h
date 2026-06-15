@@ -73,7 +73,7 @@ typedef struct{
   uint32_t ROM;               /*ROM Mask Register*/
   uint32_t ALGO;              /*ROM Algorithm Mask Register*/
   uint32_t RINFOL;            /*RAM Info Mask Lower Register*/
-  uint32_t RINFOUL;           /*RAM Info Mask Upper Register*/
+  uint32_t RINFOU;            /*RAM Info Mask Upper Register*/
 } tms570_pbist_t;
 
 
@@ -196,7 +196,7 @@ typedef struct{
 /* field: RAM_ALG_MASK_LOW - Each bit corresponds to a specific algorithm */
 /* Whole 32 bits */
 
-/*--------------------TMS570_PBIST_RINFOUL--------------------*/
+/*--------------------TMS570_PBIST_RINFOU--------------------*/
 /* field: RAM_ALG_MASK_UP - Each bit corresponds to a specific algorithm */
 /* Whole 32 bits */
 

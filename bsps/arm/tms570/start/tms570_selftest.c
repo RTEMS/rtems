@@ -377,7 +377,7 @@ void tms570_pbist_run(
   TMS570_PBIST.RINFOL = raminfoL;
 
   /* Select all RAM groups */
-  TMS570_PBIST.RINFOUL = 0x00000000U;
+  TMS570_PBIST.RINFOU = 0x00000000U;
 
   /* ROM contents will not override RINFOx settings */
   TMS570_PBIST.OVER = 0x0U;
