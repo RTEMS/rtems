@@ -122,11 +122,10 @@ typedef struct{
 
 
 /*---------------------TMS570_PBIST_PACT---------------------*/
-/* field: PACT1 - PBIST Activate */
-#define TMS570_PBIST_PACT_PACT1 BSP_BIT32(1)
-
-/* field: PACT0 - ROM Clock Enable Register */
+/* field: PACT0 - PBIST internal clocks enable */
 #define TMS570_PBIST_PACT_PACT0 BSP_BIT32(0)
+
+#define TMS570_PBIST_PACT_ENABLE TMS570_PBIST_PACT_PACT0
 
 
 /*--------------------TMS570_PBIST_PBISTID--------------------*/
