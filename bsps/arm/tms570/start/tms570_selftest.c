@@ -79,7 +79,7 @@ static void tms570_pbist_reset_delay( void )
 
 /**
  * @brief Checks to see if the EFUSE Stuck at zero test is completed successfully (HCG:efcStuckZeroTest).
- /
+ *
  * @return 1 if EFUSE Stuck at zero test completed, otherwise 0.
  *
  * Checks to see if the EFUSE Stuck at zero test is completed successfully.
@@ -141,7 +141,7 @@ bool tms570_efc_stuck_zero( void )
 /**
  * @brief EFUSE module self check Driver (HCG:efcSelfTest)
  *
- * This function self checks the EFSUE module.
+ * This function self checks the EFUSE module.
  */
 /* SourceId : SELFTEST_SourceId_013 */
 /* DesignId : SELFTEST_DesignId_013 */
