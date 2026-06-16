@@ -124,7 +124,7 @@ typedef struct{
 /* Whole 32 bits */
 
 /*----------------------TMS570_RTI_rsvd----------------------*/
-/* field: CAUC0 - Capture up counter 0. */
+/* field: rsvd - Reserved. */
 /* Whole 32 bits */
 
 /*----------------------TMS570_RTI_GCTRL----------------------*/
@@ -275,7 +275,7 @@ typedef struct{
 
 
 /*---------------------TMS570_RTI_DWDCTRL---------------------*/
-/* field: DWDCTRL - DWDCTRL Digital Watchdog Control. */
+/* field: DWDCTRL - Digital Watchdog Control. */
 /* Whole 32 bits */
 
 /*---------------------TMS570_RTI_DWDPRLD---------------------*/
@@ -354,7 +354,7 @@ typedef struct{
 /* Whole 32 bits */
 
 /*--------------------TMS570_RTI_COMP1CLR--------------------*/
-/* field: CMP0CLR - Compare 1 clear. */
+/* field: COMP1CLR - Compare 1 clear. */
 /* Whole 32 bits */
 
 /*--------------------TMS570_RTI_COMP2CLR--------------------*/
