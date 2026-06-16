@@ -170,8 +170,7 @@ typedef struct{
 /* field: VCLKAOFF - VCLKA4 domain off. */
 #define TMS570_SYS1_CDDIS_VCLKAOFF4 BSP_BIT32(11)
 
-/* field: VCLKAOFF - VCLKA3 domain off. */
-#define TMS570_SYS1_CDDIS_VCLKAOFF3 BSP_BIT32(10)
+/* Bits 10 and 9 are reserved. */
 
 /* field: VCLK3OFF - VCLK3 domain off. */
 #define TMS570_SYS1_CDDIS_VCLK3OFF BSP_BIT32(8)
@@ -199,10 +198,10 @@ typedef struct{
 
 
 /*--------------------TMS570_SYS1_CDDISSET--------------------*/
-/* field: SETVCLKA_OFF - Set VCLKA[4-3] domain. */
-#define TMS570_SYS1_CDDISSET_SETVCLKA_OFF(val) BSP_FLD32(val,10, 11)
-#define TMS570_SYS1_CDDISSET_SETVCLKA_OFF_GET(reg) BSP_FLD32GET(reg,10, 11)
-#define TMS570_SYS1_CDDISSET_SETVCLKA_OFF_SET(reg,val) BSP_FLD32SET(reg, val,10, 11)
+/* field: SETVCLKA4OFF - Set VCLKA4 domain. */
+#define TMS570_SYS1_CDDISSET_SETVCLKA4OFF BSP_BIT32(11)
+
+/* Bits 10 and 9 are reserved. */
 
 /* field: SETVCLK3OFF - Set VCLK3 domain. */
 #define TMS570_SYS1_CDDISSET_SETVCLK3OFF BSP_BIT32(8)
@@ -210,8 +209,8 @@ typedef struct{
 /* field: SETRTI1CLKOFF - Set RTICLK1 domain. */
 #define TMS570_SYS1_CDDISSET_SETRTI1CLKOFF BSP_BIT32(6)
 
-/* field: SETTVCLKA2OFF - Set VCLKA2 domain. */
-#define TMS570_SYS1_CDDISSET_SETTVCLKA2OFF BSP_BIT32(5)
+/* field: SETVCLKA2OFF - Set VCLKA2 domain. */
+#define TMS570_SYS1_CDDISSET_SETVCLKA2OFF BSP_BIT32(5)
 
 /* field: SETVCLKA1OFF - Set VCLKA1 domain. */
 #define TMS570_SYS1_CDDISSET_SETVCLKA1OFF BSP_BIT32(4)
@@ -230,13 +229,10 @@ typedef struct{
 
 
 /*--------------------TMS570_SYS1_CDDISCLR--------------------*/
-/* field: CLRVCLKAOFF - Clear VCLKA[4-3] domain. */
-#define TMS570_SYS1_CDDISCLR_CLRVCLKAOFF(val) BSP_FLD32(val,10, 11)
-#define TMS570_SYS1_CDDISCLR_CLRVCLKAOFF_GET(reg) BSP_FLD32GET(reg,10, 11)
-#define TMS570_SYS1_CDDISCLR_CLRVCLKAOFF_SET(reg,val) BSP_FLD32SET(reg, val,10, 11)
+/* field: CLRVCLKA4OFF - Clear VCLKA4 domain. */
+#define TMS570_SYS1_CDDISCLR_CLRVCLKA4OFF BSP_BIT32(11)
 
-/* field: Reserved - Reserved */
-#define TMS570_SYS1_CDDISCLR_Reserved BSP_BIT32(9)
+/* Bits 10 and 9 are reserved. */
 
 /* field: CLRVCLK3OFF - Clear VCLK3 domain. */
 #define TMS570_SYS1_CDDISCLR_CLRVCLK3OFF BSP_BIT32(8)
@@ -244,8 +240,8 @@ typedef struct{
 /* field: CLRRTI1CLKOFF - Clear RTICLK1 domain. */
 #define TMS570_SYS1_CDDISCLR_CLRRTI1CLKOFF BSP_BIT32(6)
 
-/* field: CLRTVCLKA2OFF - Clear VCLKA2 domain. */
-#define TMS570_SYS1_CDDISCLR_CLRTVCLKA2OFF BSP_BIT32(5)
+/* field: CLRVCLKA2OFF - Clear VCLKA2 domain. */
+#define TMS570_SYS1_CDDISCLR_CLRVCLKA2OFF BSP_BIT32(5)
 
 /* field: CLRVCLKA1OFF - Clear VCLKA1 domain. */
 #define TMS570_SYS1_CDDISCLR_CLRVCLKA1OFF BSP_BIT32(4)
@@ -659,9 +655,9 @@ typedef struct{
 
 /*--------------------TMS570_SYS1_SYSTASR--------------------*/
 /* field: EFUSE_Abort - Test Abort status flag. */
-#define TMS570_SYS1_SYSTASR_EFUSE_Abort(val) BSP_FLD32(val,0, 4)
-#define TMS570_SYS1_SYSTASR_EFUSE_Abort_GET(reg) BSP_FLD32GET(reg,0, 4)
-#define TMS570_SYS1_SYSTASR_EFUSE_Abort_SET(reg,val) BSP_FLD32SET(reg, val,0, 4)
+#define TMS570_SYS1_SYSTASR_EFUSE_ABORT(val) BSP_FLD32(val,0, 4)
+#define TMS570_SYS1_SYSTASR_EFUSE_ABORT_GET(reg) BSP_FLD32GET(reg,0, 4)
+#define TMS570_SYS1_SYSTASR_EFUSE_ABORT_SET(reg,val) BSP_FLD32SET(reg, val,0, 4)
 
 
 /*--------------------TMS570_SYS1_GLBSTAT--------------------*/
