@@ -409,28 +409,6 @@ typedef struct{
 #define TMS570_SYS1_PLLCTL2_SPR_AMOUNT_SET(reg,val) BSP_FLD32SET(reg, val,0, 8)
 
 
-/*--------------------TMS570_SYS1_PLLCTL3--------------------*/
-/* field: ODPLL2 - Internal PLL Output Divider. */
-#define TMS570_SYS1_PLLCTL3_ODPLL2(val) BSP_FLD32(val, 29, 31)
-#define TMS570_SYS1_PLLCTL3_ODPLL2_GET(reg) BSP_FLD32GET(reg, 29, 31)
-#define TMS570_SYS1_PLLCTL3_ODPLL2_SET(reg,val) BSP_FLD32SET(reg, val, 29, 31)
-
-/* field: PLLDIV2 - PLL2 Output Clock Divider. */
-#define TMS570_SYS1_PLLCTL3_PLLDIV2(val) BSP_FLD32(val, 24, 28)
-#define TMS570_SYS1_PLLCTL3_PLLDIV2_GET(reg) BSP_FLD32GET(reg, 24, 28)
-#define TMS570_SYS1_PLLCTL3_PLLDIV2_SET(reg,val) BSP_FLD32SET(reg, val, 24, 28)
-
-/* field: REFCLKDIV2 - Reference Clock Divider. */
-#define TMS570_SYS1_PLLCTL3_REFCLKDIV2(val) BSP_FLD32(val, 16, 21)
-#define TMS570_SYS1_PLLCTL3_REFCLKDIV2_GET(reg) BSP_FLD32GET(reg, 16, 21)
-#define TMS570_SYS1_PLLCTL3_REFCLKDIV2_SET(reg,val) BSP_FLD32SET(reg, val, 16, 21)
-
-/* field: PLLMUL2 - PLL2 Multiplication Factor. */
-#define TMS570_SYS1_PLLCTL3_PLLMUL2(val) BSP_FLD32(val, 0, 15)
-#define TMS570_SYS1_PLLCTL3_PLLMUL2_GET(reg) BSP_FLD32GET(reg, 0, 15)
-#define TMS570_SYS1_PLLCTL3_PLLMUL2_SET(reg,val) BSP_FLD32SET(reg, val, 0, 15)
-
-
 /*--------------------TMS570_SYS1_SYSPC10--------------------*/
 /* field: ECPCLK_SLEW - ECPCLK slew control. This bit controls between the fast or slow slew mode. */
 #define TMS570_SYS1_SYSPC10_ECPCLK_SLEW BSP_BIT32(0)
