@@ -596,9 +596,9 @@ typedef struct{
 #define TMS570_SYS1_ECPCNTL_ECPCOS BSP_BIT32(23)
 
 /* field: ECPINSEL - Select ECP input clock source. */
-#define TMS570_SYS1_ECPCNTL_ECPINSEL(val) BSP_FLD32(val,6, 17)
-#define TMS570_SYS1_ECPCNTL_ECPINSEL_GET(reg) BSP_FLD32GET(reg,6, 17)
-#define TMS570_SYS1_ECPCNTL_ECPINSEL_SET(reg,val) BSP_FLD32SET(reg, val,6, 17)
+#define TMS570_SYS1_ECPCNTL_ECPINSEL(val) BSP_FLD32(val,16, 17)
+#define TMS570_SYS1_ECPCNTL_ECPINSEL_GET(reg) BSP_FLD32GET(reg,16, 17)
+#define TMS570_SYS1_ECPCNTL_ECPINSEL_SET(reg,val) BSP_FLD32SET(reg, val,16, 17)
 
 /* field: ECPDIV - ECP divider value. */
 #define TMS570_SYS1_ECPCNTL_ECPDIV(val) BSP_FLD32(val,0, 15)
