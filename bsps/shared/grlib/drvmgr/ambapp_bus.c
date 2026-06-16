@@ -364,14 +364,11 @@ void ambapp_bus_freq_register(
   }
 
   if ( amba_interface == DEV_AHB_MST ) {
-    adev = (struct ambapp_dev *) ( (uintptr_t) pnp->info.ahb_mst -
-                                   sizeof( struct ambapp_dev ) );
+    adev = RTEMS_CONTAINER_OF( pnp->info.ahb_mst, struct ambapp_dev, devinfo );
   } else if ( amba_interface == DEV_AHB_SLV ) {
-    adev = (struct ambapp_dev *) ( (uintptr_t) pnp->info.ahb_slv -
-                                   sizeof( struct ambapp_dev ) );
+    adev = RTEMS_CONTAINER_OF( pnp->info.ahb_slv, struct ambapp_dev, devinfo );
   } else if ( amba_interface == DEV_APB_SLV ) {
-    adev = (struct ambapp_dev *) ( (uintptr_t) pnp->info.apb_slv -
-                                   sizeof( struct ambapp_dev ) );
+    adev = RTEMS_CONTAINER_OF( pnp->info.apb_slv, struct ambapp_dev, devinfo );
   } else {
     return;
   }
@@ -393,14 +390,11 @@ static int ambapp_bus_freq_get(
   struct amba_dev_info *pnp = dev->businfo;
 
   if ( options == DEV_AHB_MST ) {
-    adev = (struct ambapp_dev *) ( (uintptr_t) pnp->info.ahb_mst -
-                                   sizeof( struct ambapp_dev ) );
+    adev = RTEMS_CONTAINER_OF( pnp->info.ahb_mst, struct ambapp_dev, devinfo );
   } else if ( options == DEV_AHB_SLV ) {
-    adev = (struct ambapp_dev *) ( (uintptr_t) pnp->info.ahb_slv -
-                                   sizeof( struct ambapp_dev ) );
+    adev = RTEMS_CONTAINER_OF( pnp->info.ahb_slv, struct ambapp_dev, devinfo );
   } else if ( options == DEV_APB_SLV ) {
-    adev = (struct ambapp_dev *) ( (uintptr_t) pnp->info.apb_slv -
-                                   sizeof( struct ambapp_dev ) );
+    adev = RTEMS_CONTAINER_OF( pnp->info.apb_slv, struct ambapp_dev, devinfo );
   } else {
     *freq_hz = 0;
     return -1;
