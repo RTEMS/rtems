@@ -280,9 +280,9 @@ typedef struct{
 
 /*---------------------TMS570_RTI_DWDPRLD---------------------*/
 /* field: DWDPRLD - Digital Watchdog Preload Value. */
-#define TMS570_RTI_DWDPRLD_DWDPRLD(val) BSP_FLD32(val,0, 15)
-#define TMS570_RTI_DWDPRLD_DWDPRLD_GET(reg) BSP_FLD32GET(reg,0, 15)
-#define TMS570_RTI_DWDPRLD_DWDPRLD_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
+#define TMS570_RTI_DWDPRLD_DWDPRLD(val) BSP_FLD32(val,0, 11)
+#define TMS570_RTI_DWDPRLD_DWDPRLD_GET(reg) BSP_FLD32GET(reg,0, 11)
+#define TMS570_RTI_DWDPRLD_DWDPRLD_SET(reg,val) BSP_FLD32SET(reg, val,0, 11)
 
 
 /*--------------------TMS570_RTI_WDSTATUS--------------------*/
