@@ -148,9 +148,9 @@ static rtems_device_driver tlib_clock_find_timer( void )
   } else
 #endif
   {
-    volatile struct irqmp_timestamp_regs *irqmp_ts;
+    volatile irqamp_timestamp *irqmp_ts;
 
-    irqmp_ts = &LEON3_IrqCtrl_Regs->timestamp[ 0 ];
+    irqmp_ts = &LEON3_IrqCtrl_Regs->itstmp[ 0 ];
     if ( irqmp_has_timestamp( irqmp_ts ) ) {
       priv.ops = &ops_irqamp;
       return RTEMS_SUCCESSFUL;
@@ -392,12 +392,12 @@ static uint32_t irqamp_get_timecount( struct timecounter *tc )
 {
   (void) tc;
 
-  return LEON3_IrqCtrl_Regs->timestamp[ 0 ].counter;
+  return LEON3_IrqCtrl_Regs->itstmp[ 0 ].itcnt;
 }
 
 static rtems_device_driver irqamp_initialize_counter( void )
 {
-  volatile struct irqmp_timestamp_regs *irqmp_ts;
+  volatile irqamp_timestamp            *irqmp_ts;
   static const uint32_t                 A_TSISEL_FIELD = 0xf;
 
   /* Configure free running counter: timetag */
@@ -411,8 +411,8 @@ static rtems_device_driver irqamp_initialize_counter( void )
    * The counter increments whenever a TSISEL field in a Timestamp Control
    * Register is non-zero.
    */
-  irqmp_ts = &LEON3_IrqCtrl_Regs->timestamp[ 0 ];
-  irqmp_ts->control = A_TSISEL_FIELD;
+  irqmp_ts = &LEON3_IrqCtrl_Regs->itstmp[ 0 ];
+  irqmp_ts->itstmpc = A_TSISEL_FIELD;
 
   return RTEMS_SUCCESSFUL;
 }

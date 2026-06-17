@@ -38,6 +38,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include <grlib/irqamp-regs.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -73,11 +75,9 @@ struct irqmp_timestamp_regs {
   volatile uint32_t ack;       /* 0x0c */
 };
 
-static inline bool irqmp_has_timestamp(
-  volatile struct irqmp_timestamp_regs *irqmp_ts
-)
+static inline bool irqmp_has_timestamp( volatile irqamp_timestamp *irqmp_ts )
 {
-  return ( irqmp_ts->control >> 27 ) > 0;
+  return IRQAMP_ITSTMPC_TSTAMP_GET( irqmp_ts->itstmpc ) > 0;
 }
 
 /* IRQMP and IRQAMP interrupt controllers */
