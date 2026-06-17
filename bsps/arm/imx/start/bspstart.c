@@ -37,7 +37,22 @@
 
 #include <libfdt.h>
 
-#define MAGIC_IRQ_OFFSET 32
+#define GIC_DT_SPI 0U
+#define GIC_DT_PPI 1U
+
+#define GIC_SPI_INTID_OFFSET 32U
+#define GIC_PPI_INTID_OFFSET 16U
+
+static rtems_vector_number imx_gic_intid(uint32_t type, uint32_t number)
+{
+  if (type == GIC_DT_SPI) {
+    return number + GIC_SPI_INTID_OFFSET;
+  } else if (type == GIC_DT_PPI) {
+    return number + GIC_PPI_INTID_OFFSET;
+  }
+
+  return BSP_INTERRUPT_VECTOR_INVALID;
+}
 
 void *imx_get_reg_of_node(const void *fdt, int node)
 {
@@ -66,14 +81,17 @@ rtems_vector_number imx_get_irq_of_node(
     return BSP_INTERRUPT_VECTOR_INVALID;
   }
 
-  return fdt32_to_cpu(val[index * 3 + 1]) + MAGIC_IRQ_OFFSET;
+  return imx_gic_intid(
+    fdt32_to_cpu(val[index * 3]),
+    fdt32_to_cpu(val[index * 3 + 1])
+  );
 }
 
 uint32_t bsp_fdt_map_intr(const uint32_t *intr, size_t icells)
 {
   (void) icells;
 
-  return intr[1] + MAGIC_IRQ_OFFSET;
+  return imx_gic_intid(intr[0], intr[1]);
 }
 
 static bool imx_is_imx6(const void *fdt)
@@ -154,8 +172,7 @@ void arm_generic_timer_get_config(
     *frequency = imx_syscnt_enable_and_return_frequency(fdt);
   }
 
-  /* FIXME: Figure out how Linux gets a proper IRQ number */
-  *irq = imx_get_irq_of_node(fdt, node, 0) - 16;
+  *irq = imx_get_irq_of_node(fdt, node, 0);
 }
 
 uintptr_t imx_gic_dist_base;
