@@ -87,6 +87,20 @@
 /** @} */
 
 /**
+ * @name STM32F4XXXX SPI
+ * @{
+ */
+
+#include <bsp/stm32f4xxxx_spi.h>
+/* SPI1 is on APB2; SPI2 and SPI3 are on APB1 (RM0090 table 1) */
+#define STM32F4_SPI1 ((volatile stm32f4_spi *) (STM32F4_BASE + 0x40013000))
+#define STM32F4_SPI2 ((volatile stm32f4_spi *) (STM32F4_BASE + 0x40003800))
+#define STM32F4_SPI3 ((volatile stm32f4_spi *) (STM32F4_BASE + 0x40003C00))
+
+/** @} */
+
+
+/**
  * @name STM32 USART
  * @{
  */

@@ -30,6 +30,8 @@ install:
   - bsps/arm/stm32f4/include/bsp/stm32f4xxxx_otgfs.h
   - bsps/arm/stm32f4/include/bsp/stm32f4xxxx_pwr.h
   - bsps/arm/stm32f4/include/bsp/stm32f4xxxx_rcc.h
+  - bsps/arm/stm32f4/include/bsp/stm32f4xxxx_spi.h
+  - bsps/arm/stm32f4/include/bsp/stm32f4-spi.h
   - bsps/arm/stm32f4/include/bsp/stm32f4xxxx_syscfg.h
   - bsps/arm/stm32f4/include/bsp/stm32f4xxxx_tim.h
   - bsps/arm/stm32f4/include/bsp/usart.h
@@ -50,6 +52,7 @@ source:
 - bsps/arm/stm32f4/console/usart.c
 - bsps/arm/stm32f4/i2c/i2c-config.c
 - bsps/arm/stm32f4/i2c/i2c.c
+- bsps/arm/stm32f4/spi/spi.c
 - bsps/arm/stm32f4/start/bspreset.c
 - bsps/arm/stm32f4/start/bspstart.c
 - bsps/arm/stm32f4/start/bspstarthook.c
