@@ -90,48 +90,45 @@ typedef struct{
   uint32_t HBCMAP;            /*HBC Interrupt Mapping Register*/
   uint8_t reserved15 [4];
   uint32_t BTCMAP;            /*BTC Interrupt Mapping Register*/
-  uint8_t reserved16 [4];
-  uint32_t BERMAP;            /*BER Interrupt Mapping Register*/
-  uint8_t reserved17 [4];
+  uint8_t reserved16 [12];
   uint32_t FTCINTENAS;        /*FTC Interrupt Enable Set*/
-  uint8_t reserved18 [4];
+  uint8_t reserved17 [4];
   uint32_t FTCINTENAR;        /*FTC Interrupt Enable Reset*/
-  uint8_t reserved19 [4];
+  uint8_t reserved18 [4];
   uint32_t LFSINTENAS;        /*LFS Interrupt Enable Set*/
-  uint8_t reserved20 [4];
+  uint8_t reserved19 [4];
   uint32_t LFSINTENAR;        /*LFS Interrupt Enable Reset*/
-  uint8_t reserved21 [4];
+  uint8_t reserved20 [4];
   uint32_t HBCINTENAS;        /*HBC Interrupt Enable Set*/
-  uint8_t reserved22 [4];
+  uint8_t reserved21 [4];
   uint32_t HBCINTENAR;        /*HBC Interrupt Enable Reset*/
-  uint8_t reserved23 [4];
+  uint8_t reserved22 [4];
   uint32_t BTCINTENAS;        /*BTC Interrupt Enable Set*/
-  uint8_t reserved24 [4];
+  uint8_t reserved23 [4];
   uint32_t BTCINTENAR;        /*BTC Interrupt Enable Reset*/
-  uint8_t reserved25 [4];
+  uint8_t reserved24 [4];
   uint32_t GINTFLAG;          /*Global Interrupt Flag Register*/
-  uint8_t reserved26 [4];
+  uint8_t reserved25 [4];
   uint32_t FTCFLAG;           /*FTC Interrupt Flag Register*/
-  uint8_t reserved27 [4];
+  uint8_t reserved26 [4];
   uint32_t LFSFLAG;           /*LFS Interrupt Flag Register*/
-  uint8_t reserved28 [4];
+  uint8_t reserved27 [4];
   uint32_t HBCFLAG;           /*HBC Interrupt Flag Register*/
-  uint8_t reserved29 [4];
+  uint8_t reserved28 [4];
   uint32_t BTCFLAG;           /*BTC Interrupt Flag Register*/
-  uint8_t reserved30 [4];
+  uint8_t reserved29 [4];
   uint32_t BERFLAG;           /*BER Interrupt Flag Register*/
-  uint8_t reserved31 [4];
+  uint8_t reserved30 [4];
   uint32_t FTCAOFFSET;        /*FTCA Interrupt Channel Offset Register*/
   uint32_t LFSAOFFSET;        /*LFSA Interrupt Channel Offset Register*/
   uint32_t HBCAOFFSET;        /*HBCA Interrupt Channel Offset Register*/
   uint32_t BTCAOFFSET;        /*BTCA Interrupt Channel Offset Register*/
-  uint32_t BERAOFFSET;        /*BERA Interrupt Channel Offset Register*/
+  uint8_t reserved31 [4];
   uint32_t FTCBOFFSET;        /*FTCB Interrupt Channel Offset Register*/
   uint32_t LFSBOFFSET;        /*LFSB Interrupt Channel Offset Register*/
   uint32_t HBCBOFFSET;        /*HBCB Interrupt Channel Offset Register*/
   uint32_t BTCBOFFSET;        /*BTCB Interrupt Channel Offset Register*/
-  uint32_t BERBOFFSET;        /*BERB Interrupt Channel Offset Register*/
-  uint8_t reserved32 [4];
+  uint8_t reserved32 [8];
   uint32_t PTCRL;             /*Port Control Register*/
   uint32_t RTCTRL;            /*RAM Test Control Register*/
   uint32_t DCTRL;             /*Debug Control*/
@@ -378,13 +375,6 @@ typedef struct{
 #define TMS570_DMA_BTCMAP_BTCAB_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_DMA_BERMAP---------------------*/
-/* field: BERAB - Bus error (BER) interrupt to Group A or Group B. */
-#define TMS570_DMA_BERMAP_BERAB(val) BSP_FLD32(val,0, 15)
-#define TMS570_DMA_BERMAP_BERAB_GET(reg) BSP_FLD32GET(reg,0, 15)
-#define TMS570_DMA_BERMAP_BERAB_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
-
-
 /*-------------------TMS570_DMA_FTCINTENAS-------------------*/
 /* field: FTCINTENA - Frame transfer complete (FTC) interrupt enable. */
 #define TMS570_DMA_FTCINTENAS_FTCINTENA(val) BSP_FLD32(val,0, 15)
@@ -516,13 +506,6 @@ typedef struct{
 #define TMS570_DMA_BTCAOFFSET_BTCA_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
 
 
-/*-------------------TMS570_DMA_BERAOFFSET-------------------*/
-/* field: BERA - Channel causing BER interrupt Group A. */
-#define TMS570_DMA_BERAOFFSET_BERA(val) BSP_FLD32(val,0, 5)
-#define TMS570_DMA_BERAOFFSET_BERA_GET(reg) BSP_FLD32GET(reg,0, 5)
-#define TMS570_DMA_BERAOFFSET_BERA_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
-
-
 /*-------------------TMS570_DMA_FTCBOFFSET-------------------*/
 /* field: FTCB - Channel causing FTC interrupt Group B. */
 #define TMS570_DMA_FTCBOFFSET_FTCB(val) BSP_FLD32(val,0, 5)
@@ -549,13 +532,6 @@ typedef struct{
 #define TMS570_DMA_BTCBOFFSET_BTCB(val) BSP_FLD32(val,0, 5)
 #define TMS570_DMA_BTCBOFFSET_BTCB_GET(reg) BSP_FLD32GET(reg,0, 5)
 #define TMS570_DMA_BTCBOFFSET_BTCB_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
-
-
-/*-------------------TMS570_DMA_BERBOFFSET-------------------*/
-/* field: BERB - Channel causing BER interrupt Group B. */
-#define TMS570_DMA_BERBOFFSET_BERB(val) BSP_FLD32(val,0, 5)
-#define TMS570_DMA_BERBOFFSET_BERB_GET(reg) BSP_FLD32GET(reg,0, 5)
-#define TMS570_DMA_BERBOFFSET_BERB_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
 
 
 /*----------------------TMS570_DMA_PTCRL----------------------*/
