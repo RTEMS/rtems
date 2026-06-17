@@ -41,6 +41,7 @@
 #include <rtems/clockdrv.h>
 #include <stdlib.h>
 #include <bsp.h>
+#include <bsp/fatal.h>
 #include <grlib/tlib.h>
 
 #ifdef RTEMS_DRVMGR_STARTUP
@@ -91,7 +92,9 @@ struct ops {
 static const struct ops ops_simple;
 #else
 /* Hardware support up-counter using LEON3 %asr23. */
+#ifdef LEON3_PROBE_ASR_22_23_UP_COUNTER
 static const struct ops ops_timetag;
+#endif
 /* Timestamp counter available in some IRQ(A)MP instantiations. */
 static const struct ops ops_irqamp;
 /* Separate GPTIMER subtimer as timecounter */
@@ -137,11 +140,14 @@ static rtems_device_driver tlib_clock_find_timer( void )
   priv.ops = &ops_simple;
 #else
   /* When on LEON3 try to use dedicated hardware free running counter. */
+#if defined( LEON3_PROBE_ASR_22_23_UP_COUNTER )
   leon3_up_counter_enable();
   if ( leon3_up_counter_is_available() ) {
     priv.ops = &ops_timetag;
     return RTEMS_SUCCESSFUL;
-  } else {
+  } else
+#endif
+  {
     volatile struct irqmp_timestamp_regs *irqmp_ts;
 
     irqmp_ts = &LEON3_IrqCtrl_Regs->timestamp[ 0 ];
@@ -202,6 +208,8 @@ static uint32_t simple_tlib_tc_get( rtems_timecounter_simple *tc )
 {
   unsigned int clicks = 0;
 
+  (void) tc;
+
   if ( priv.tlib_tick != NULL ) {
     tlib_get_counter( priv.tlib_tick, &clicks );
   }
@@ -212,6 +220,8 @@ static uint32_t simple_tlib_tc_get( rtems_timecounter_simple *tc )
 static bool simple_tlib_tc_is_pending( rtems_timecounter_simple *tc )
 {
   bool pending = false;
+
+  (void) tc;
 
   if ( priv.tlib_tick != NULL ) {
     pending = tlib_interrupt_pending( priv.tlib_tick, 0 ) != 0;
@@ -249,6 +259,7 @@ static rtems_device_driver simple_initialize_counter( void )
 static void simple_tlib_tc_at_tick( rtems_timecounter_simple *tc )
 {
   /* Nothing to do */
+  (void) tc;
 }
 
 /*
@@ -285,6 +296,8 @@ static const struct ops ops_simple = {
 static uint32_t subtimer_get_timecount( struct timecounter *tc )
 {
   unsigned int counter;
+
+  (void) tc;
 
   tlib_get_counter( priv.tlib_counter, &counter );
 
@@ -340,9 +353,12 @@ static const struct ops ops_subtimer = {
   .shutdown_hardware = subtimer_shutdown_hardware,
 };
 
+#ifdef LEON3_PROBE_ASR_22_23_UP_COUNTER
 /** DSU timetag as counter **/
 static uint32_t timetag_get_timecount( struct timecounter *tc )
 {
+  (void) tc;
+
   return leon3_up_counter_low();
 }
 
@@ -369,10 +385,13 @@ static const struct ops ops_timetag = {
   .timecounter_tick = timetag_timecounter_tick,
   .shutdown_hardware = NULL,
 };
+#endif
 
 /** IRQ(A)MP timestamp as counter **/
 static uint32_t irqamp_get_timecount( struct timecounter *tc )
 {
+  (void) tc;
+
   return LEON3_IrqCtrl_Regs->timestamp[ 0 ].counter;
 }
 
@@ -412,13 +431,13 @@ static const struct ops ops_irqamp = {
 #endif
 
 /** Interface to the Clock Driver Shell (dev/clock/clockimpl.h) **/
-#define Clock_driver_support_find_timer() \
-  do {                                    \
-    rtems_device_driver ret;              \
-    ret = tlib_clock_find_timer();        \
-    if ( RTEMS_SUCCESSFUL != ret ) {      \
-      return ret;                         \
-    }                                     \
+#define Clock_driver_support_find_timer()            \
+  do {                                               \
+    rtems_device_driver ret;                         \
+    ret = tlib_clock_find_timer();                   \
+    if ( RTEMS_SUCCESSFUL != ret ) {                 \
+      bsp_fatal( LEON3_FATAL_CLOCK_INITIALIZATION ); \
+    }                                                \
   } while ( 0 )
 
 #define Clock_driver_support_install_isr( isr ) tlib_clock_install_isr( isr )
@@ -427,15 +446,13 @@ static const struct ops ops_irqamp = {
 /* Done by tlib_clock_install_isr() */
 
 #define Clock_driver_support_initialize_hardware() \
-  do {                                             \
-    rtems_device_driver ret;                       \
-    ret = tlib_clock_initialize_hardware();        \
-    if ( RTEMS_SUCCESSFUL != ret ) {               \
-      return ret;                                  \
-    }                                              \
-  } while ( 0 )
+  tlib_clock_initialize_hardware()
 
-#define Clock_driver_timecounter_tick( arg ) tlib_clock_timecounter_tick()
+#define Clock_driver_timecounter_tick( arg ) \
+  do {                                       \
+    (void) arg;                              \
+    tlib_clock_timecounter_tick();           \
+  } while ( 0 )
 
 #define Clock_driver_support_at_tick( arg ) \
   do {                                      \

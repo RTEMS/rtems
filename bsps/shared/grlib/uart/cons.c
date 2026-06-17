@@ -56,7 +56,7 @@ struct console_priv {
 
 #define CONSOLE_MAX BSP_NUMBER_OF_TERMIOS_PORTS
 struct console_priv cons[ CONSOLE_MAX ] = {
-  { 0, 0 },
+  { 0, 0, NULL },
 };
 
 /* Install Console in TERMIOS layer */
@@ -147,6 +147,10 @@ rtems_device_driver console_initialize(
 )
 {
   int i;
+
+  (void) major;
+  (void) minor;
+  (void) arg;
 
   rtems_termios_initialize();
 
