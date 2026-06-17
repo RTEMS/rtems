@@ -52,7 +52,7 @@
 #include <bsp/utility.h>
 
 typedef struct{
-  uint32_t STARTADD;          /*DMA Memory Protection Region start Address Register*/
+  uint32_t STARTADD;          /*DMA Memory Protection Region Start Address Register*/
   uint32_t ENDADD;            /*DMA Memory Protection Region End Address Register*/
 } tms570_memory_prot_t;
 
@@ -425,7 +425,7 @@ typedef struct{
 
 
 /*-------------------TMS570_DMA_BTCINTENAR-------------------*/
-/* field: BTCINTDIS - Block transfer complete (BTC) interurpt disable. */
+/* field: BTCINTDIS - Block transfer complete (BTC) interrupt disable. */
 #define TMS570_DMA_BTCINTENAR_BTCINTDIS(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_BTCINTENAR_BTCINTDIS_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_BTCINTENAR_BTCINTDIS_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
@@ -528,7 +528,7 @@ typedef struct{
 
 
 /*-------------------TMS570_DMA_BTCBOFFSET-------------------*/
-/* field: BTCB - interrupt for Group B if the corresponding interrupt enable is set. */
+/* field: BTCB - Channel causing BTC interrupt Group B. */
 #define TMS570_DMA_BTCBOFFSET_BTCB(val) BSP_FLD32(val,0, 5)
 #define TMS570_DMA_BTCBOFFSET_BTCB_GET(reg) BSP_FLD32GET(reg,0, 5)
 #define TMS570_DMA_BTCBOFFSET_BTCB_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
@@ -579,7 +579,7 @@ typedef struct{
 /* Whole 32 bits */
 
 /*--------------------TMS570_DMA_PBACDADDR--------------------*/
-/* field: PBACDA - address of the active channel as broadcasted in Section 16.3.1.3 for Port B. */
+/* field: PBACDA - Port B Active Channel Destination Address. */
 /* Whole 32 bits */
 
 /*---------------------TMS570_DMA_PBACTC---------------------*/
