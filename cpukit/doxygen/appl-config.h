@@ -2457,19 +2457,19 @@
  * correspondingly smaller. The following shows the maximum file size possible
  * based on the configured block size:
  *
- * - when the block size is 16 bytes, the maximum file size is 1,328 bytes.
+ * - when the block size is 16 bytes, the maximum file size is 1,344 bytes.
  *
- * - when the block size is 32 bytes, the maximum file size is 18,656 bytes.
+ * - when the block size is 32 bytes, the maximum file size is 18,688 bytes.
  *
- * - when the block size is 64 bytes, the maximum file size is 279,488 bytes.
+ * - when the block size is 64 bytes, the maximum file size is 279,552 bytes.
  *
- * - when the block size is 128 bytes, the maximum file size is 4,329,344
+ * - when the block size is 128 bytes, the maximum file size is 4,329,472
  *   bytes.
  *
- * - when the block size is 256 bytes, the maximum file size is 68,173,568
+ * - when the block size is 256 bytes, the maximum file size is 68,173,824
  *   bytes.
  *
- * - when the block size is 512 bytes, the maximum file size is 1,082,195,456
+ * - when the block size is 512 bytes, the maximum file size is 1,082,195,968
  *   bytes.
  * @endparblock
  */
