@@ -115,15 +115,15 @@ extern "C" {
  * directive and have no effect.  Default attributes can be selected by using
  * the #RTEMS_DEFAULT_ATTRIBUTES constant.  The attribute set defines
  *
- * * the scope of the semaphore: #RTEMS_LOCAL (default) or #RTEMS_GLOBAL,
+ * - the scope of the semaphore: #RTEMS_LOCAL (default) or #RTEMS_GLOBAL,
  *
- * * the task wait queue discipline used by the semaphore: #RTEMS_FIFO
+ * - the task wait queue discipline used by the semaphore: #RTEMS_FIFO
  *   (default) or #RTEMS_PRIORITY,
  *
- * * the class of the semaphore: #RTEMS_COUNTING_SEMAPHORE (default),
+ * - the class of the semaphore: #RTEMS_COUNTING_SEMAPHORE (default),
  *   #RTEMS_BINARY_SEMAPHORE, or #RTEMS_SIMPLE_BINARY_SEMAPHORE, and
  *
- * * the locking protocol of a binary semaphore: no locking protocol (default),
+ * - the locking protocol of a binary semaphore: no locking protocol (default),
  *   #RTEMS_INHERIT_PRIORITY, #RTEMS_PRIORITY_CEILING, or
  *   #RTEMS_MULTIPROCESSOR_RESOURCE_SHARING.
  *
@@ -131,35 +131,35 @@ extern "C" {
  * (this attribute does not refer to SMP systems).  The scope is selected by
  * the mutually exclusive #RTEMS_LOCAL and #RTEMS_GLOBAL attributes.
  *
- * * A **local scope** is the default and can be emphasized through the use of
+ * - A **local scope** is the default and can be emphasized through the use of
  *   the #RTEMS_LOCAL attribute.  A local semaphore can be only used by the
  *   node which created it.
  *
- * * A **global scope** is established if the #RTEMS_GLOBAL attribute is set.
+ * - A **global scope** is established if the #RTEMS_GLOBAL attribute is set.
  *   Setting the global attribute in a single node system has no effect.
  *
  * The **task wait queue discipline** is selected by the mutually exclusive
  * #RTEMS_FIFO and #RTEMS_PRIORITY attributes.
  *
- * * The **FIFO discipline** is the default and can be emphasized through use
+ * - The **FIFO discipline** is the default and can be emphasized through use
  *   of the #RTEMS_FIFO attribute.
  *
- * * The **priority discipline** is selected by the #RTEMS_PRIORITY attribute.
+ * - The **priority discipline** is selected by the #RTEMS_PRIORITY attribute.
  *   The locking protocols require the priority discipline.
  *
  * The **semaphore class** is selected by the mutually exclusive
  * #RTEMS_COUNTING_SEMAPHORE, #RTEMS_BINARY_SEMAPHORE, and
  * #RTEMS_SIMPLE_BINARY_SEMAPHORE attributes.
  *
- * * The **counting semaphore class** is the default and can be emphasized
+ * - The **counting semaphore class** is the default and can be emphasized
  *   through use of the #RTEMS_COUNTING_SEMAPHORE attribute.
  *
- * * The **binary semaphore class** is selected by the #RTEMS_BINARY_SEMAPHORE
+ * - The **binary semaphore class** is selected by the #RTEMS_BINARY_SEMAPHORE
  *   attribute.  Binary semaphores are mutual exclusion (mutex) synchronization
  *   primitives which may have an owner.  The count of a binary semaphore is
  *   restricted to 0 and 1 values.
  *
- * * The **simple binary semaphore class** is selected by the
+ * - The **simple binary semaphore class** is selected by the
  *   #RTEMS_SIMPLE_BINARY_SEMAPHORE attribute.  Simple binary semaphores have
  *   no owner.  They may be used for task and interrupt synchronization.  The
  *   count of a simple binary semaphore is restricted to 0 and 1 values.
@@ -170,19 +170,19 @@ extern "C" {
  * mutually exclusive #RTEMS_INHERIT_PRIORITY, #RTEMS_PRIORITY_CEILING, and
  * #RTEMS_MULTIPROCESSOR_RESOURCE_SHARING attributes.
  *
- * * The default is **no locking protocol**.  This can be emphasized through
+ * - The default is **no locking protocol**.  This can be emphasized through
  *   use of the #RTEMS_NO_INHERIT_PRIORITY,
  *   #RTEMS_NO_MULTIPROCESSOR_RESOURCE_SHARING, and #RTEMS_NO_PRIORITY_CEILING
  *   attributes.
  *
- * * The **priority inheritance locking protocol** is selected by the
+ * - The **priority inheritance locking protocol** is selected by the
  *   #RTEMS_INHERIT_PRIORITY attribute.
  *
- * * The **priority ceiling locking protocol** is selected by the
+ * - The **priority ceiling locking protocol** is selected by the
  *   #RTEMS_PRIORITY_CEILING attribute.  For this locking protocol a priority
  *   ceiling shall be specified in ``priority_ceiling``.
  *
- * * The **MrsP locking protocol** is selected by the
+ * - The **MrsP locking protocol** is selected by the
  *   #RTEMS_MULTIPROCESSOR_RESOURCE_SHARING attribute in SMP configurations,
  *   otherwise this attribute selects the **priority ceiling locking
  *   protocol**.  For these locking protocols a priority ceiling shall be
@@ -283,13 +283,13 @@ rtems_status_code rtems_semaphore_create(
  *
  * The node to search is specified in ``node``.  It shall be
  *
- * * a valid node number,
+ * - a valid node number,
  *
- * * the constant #RTEMS_SEARCH_ALL_NODES to search in all nodes,
+ * - the constant #RTEMS_SEARCH_ALL_NODES to search in all nodes,
  *
- * * the constant #RTEMS_SEARCH_LOCAL_NODE to search in the local node only, or
+ * - the constant #RTEMS_SEARCH_LOCAL_NODE to search in the local node only, or
  *
- * * the constant #RTEMS_SEARCH_OTHER_NODES to search in all nodes except the
+ * - the constant #RTEMS_SEARCH_OTHER_NODES to search in all nodes except the
  *   local node.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
@@ -434,13 +434,13 @@ rtems_status_code rtems_semaphore_delete( rtems_id id );
  * The calling task can **wait** or **try to obtain** the semaphore according
  * to the mutually exclusive #RTEMS_WAIT and #RTEMS_NO_WAIT options.
  *
- * * **Waiting to obtain** the semaphore is the default and can be emphasized
+ * - **Waiting to obtain** the semaphore is the default and can be emphasized
  *   through the use of the #RTEMS_WAIT option.  The ``timeout`` parameter
  *   defines how long the calling task is willing to wait.  Use
  *   #RTEMS_NO_TIMEOUT to wait potentially forever, otherwise set a timeout
  *   interval in clock ticks.
  *
- * * **Trying to obtain** the semaphore is selected by the #RTEMS_NO_WAIT
+ * - **Trying to obtain** the semaphore is selected by the #RTEMS_NO_WAIT
  *   option.  If this option is defined, then the ``timeout`` parameter is
  *   ignored.  When the semaphore cannot be immediately obtained, then the
  *   ::RTEMS_UNSATISFIED status is returned.
@@ -567,10 +567,10 @@ rtems_status_code rtems_semaphore_obtain(
  * This directive releases the semaphore specified by ``id``.  If the
  * semaphore's wait queue is not empty, then
  *
- * * the first task on the wait queue is removed and unblocked, the semaphore's
+ * - the first task on the wait queue is removed and unblocked, the semaphore's
  *   count is not changed, otherwise
  *
- * * the semaphore's count is incremented by one for counting semaphores and
+ * - the semaphore's count is incremented by one for counting semaphores and
  *   set to one for binary and simple binary semaphores.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
@@ -753,13 +753,13 @@ rtems_status_code rtems_semaphore_flush( rtems_id id );
  * The availability and use of a priority depends on the class and locking
  * protocol of the semaphore:
  *
- * * For local, binary semaphores using the MrsP locking protocol, the ceiling
+ * - For local, binary semaphores using the MrsP locking protocol, the ceiling
  *   priority for each scheduler can be set by this directive.
  *
- * * For local, binary semaphores using the priority ceiling protocol, the
+ * - For local, binary semaphores using the priority ceiling protocol, the
  *   ceiling priority can be set by this directive.
  *
- * * For other semaphore classes and locking protocols, setting a priority is
+ * - For other semaphore classes and locking protocols, setting a priority is
  *   undefined behaviour.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.

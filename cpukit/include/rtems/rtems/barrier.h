@@ -113,13 +113,13 @@ extern "C" {
  * #RTEMS_BARRIER_MANUAL_RELEASE and #RTEMS_BARRIER_AUTOMATIC_RELEASE
  * attributes.
  *
- * * The **manual release class** is the default and can be emphasized through
+ * - The **manual release class** is the default and can be emphasized through
  *   use of the #RTEMS_BARRIER_MANUAL_RELEASE attribute.  For this class, there
  *   is no limit on the number of tasks that will block at the barrier. Only
  *   when the rtems_barrier_release() directive is invoked, are the tasks
  *   waiting at the barrier unblocked.
  *
- * * The **automatic release class** is selected by the
+ * - The **automatic release class** is selected by the
  *   #RTEMS_BARRIER_AUTOMATIC_RELEASE attribute.  For this class, tasks calling
  *   the rtems_barrier_wait() directive will block until there are
  *   ``maximum_waiters`` minus one tasks waiting at the barrier.  When the

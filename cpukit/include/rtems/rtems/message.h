@@ -172,10 +172,10 @@ typedef struct {
  * directive and have no effect.  Default attributes can be selected by using
  * the #RTEMS_DEFAULT_ATTRIBUTES constant.  The attribute set defines
  *
- * * the scope of the message queue: #RTEMS_LOCAL (default) or #RTEMS_GLOBAL
+ * - the scope of the message queue: #RTEMS_LOCAL (default) or #RTEMS_GLOBAL
  *   and
  *
- * * the task wait queue discipline used by the message queue: #RTEMS_FIFO
+ * - the task wait queue discipline used by the message queue: #RTEMS_FIFO
  *   (default) or #RTEMS_PRIORITY.
  *
  * The message queue has a local or global **scope** in a multiprocessing
@@ -183,11 +183,11 @@ typedef struct {
  * selected by the mutually exclusive #RTEMS_LOCAL and #RTEMS_GLOBAL
  * attributes.
  *
- * * A **local scope** is the default and can be emphasized through the use of
+ * - A **local scope** is the default and can be emphasized through the use of
  *   the #RTEMS_LOCAL attribute.  A local message queue can be only used by the
  *   node which created it.
  *
- * * A **global scope** is established if the #RTEMS_GLOBAL attribute is set.
+ * - A **global scope** is established if the #RTEMS_GLOBAL attribute is set.
  *   Setting the global attribute in a single node system has no effect.
  *
  * The **task wait queue discipline** is selected by the mutually exclusive
@@ -195,10 +195,10 @@ typedef struct {
  * in which tasks wait for a message to receive on a currently empty message
  * queue.
  *
- * * The **FIFO discipline** is the default and can be emphasized through use
+ * - The **FIFO discipline** is the default and can be emphasized through use
  *   of the #RTEMS_FIFO attribute.
  *
- * * The **priority discipline** is selected by the #RTEMS_PRIORITY attribute.
+ * - The **priority discipline** is selected by the #RTEMS_PRIORITY attribute.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
@@ -400,13 +400,13 @@ rtems_status_code rtems_message_queue_construct(
  *
  * The node to search is specified in ``node``.  It shall be
  *
- * * a valid node number,
+ * - a valid node number,
  *
- * * the constant #RTEMS_SEARCH_ALL_NODES to search in all nodes,
+ * - the constant #RTEMS_SEARCH_ALL_NODES to search in all nodes,
  *
- * * the constant #RTEMS_SEARCH_LOCAL_NODE to search in the local node only, or
+ * - the constant #RTEMS_SEARCH_LOCAL_NODE to search in the local node only, or
  *
- * * the constant #RTEMS_SEARCH_OTHER_NODES to search in all nodes except the
+ * - the constant #RTEMS_SEARCH_OTHER_NODES to search in all nodes except the
  *   local node.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
@@ -747,13 +747,13 @@ rtems_status_code rtems_message_queue_broadcast(
  * The calling task can **wait** or **try to receive** a message from the queue
  * according to the mutually exclusive #RTEMS_WAIT and #RTEMS_NO_WAIT options.
  *
- * * **Waiting to receive** a message from the queue is the default and can be
+ * - **Waiting to receive** a message from the queue is the default and can be
  *   emphasized through the use of the #RTEMS_WAIT option. The ``timeout``
  *   parameter defines how long the calling task is willing to wait.  Use
  *   #RTEMS_NO_TIMEOUT to wait potentially forever, otherwise set a timeout
  *   interval in clock ticks.
  *
- * * **Trying to receive** a message from the queue is selected by the
+ * - **Trying to receive** a message from the queue is selected by the
  *   #RTEMS_NO_WAIT option.  If this option is defined, then the ``timeout``
  *   parameter is ignored.  When a message from the queue cannot be immediately
  *   received, then the ::RTEMS_UNSATISFIED status is returned.

@@ -180,10 +180,10 @@ rtems_status_code rtems_region_get_segment_size(
  * #RTEMS_FIFO and #RTEMS_PRIORITY attributes. The discipline defines the order
  * in which tasks wait for allocatable segments on a currently empty region.
  *
- * * The **FIFO discipline** is the default and can be emphasized through use
+ * - The **FIFO discipline** is the default and can be emphasized through use
  *   of the #RTEMS_FIFO attribute.
  *
- * * The **priority discipline** is selected by the #RTEMS_PRIORITY attribute.
+ * - The **priority discipline** is selected by the #RTEMS_PRIORITY attribute.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
@@ -420,13 +420,13 @@ rtems_status_code rtems_region_extend(
  * The calling task can **wait** or **try to get** a segment from the region
  * according to the mutually exclusive #RTEMS_WAIT and #RTEMS_NO_WAIT options.
  *
- * * **Waiting to get** a segment from the region is the default and can be
+ * - **Waiting to get** a segment from the region is the default and can be
  *   emphasized through the use of the #RTEMS_WAIT option. The ``timeout``
  *   parameter defines how long the calling task is willing to wait.  Use
  *   #RTEMS_NO_TIMEOUT to wait potentially forever, otherwise set a timeout
  *   interval in clock ticks.
  *
- * * **Trying to get** a segment from the region is selected by the
+ * - **Trying to get** a segment from the region is selected by the
  *   #RTEMS_NO_WAIT option.  If this option is defined, then the ``timeout``
  *   parameter is ignored.  When a segment from the region cannot be
  *   immediately allocated, then the ::RTEMS_UNSATISFIED status is returned.
@@ -524,9 +524,9 @@ rtems_status_code rtems_region_get_segment(
  * This directive will cause the calling task to be preempted if one or more
  * local tasks are waiting for a segment and the following conditions exist:
  *
- * * A waiting task has a higher priority than the calling task.
+ * - A waiting task has a higher priority than the calling task.
  *
- * * The size of the segment required by the waiting task is less than or equal
+ * - The size of the segment required by the waiting task is less than or equal
  *   to the size of the segment returned.
  * @endparblock
  *

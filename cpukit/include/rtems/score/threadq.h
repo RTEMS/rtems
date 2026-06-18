@@ -548,13 +548,13 @@ typedef Thread_Control *( *Thread_queue_First_operation )(
  *
  * The standard thread queue operation variants are:
  *
- * * ::_Thread_queue_Operations_default
+ * - ::_Thread_queue_Operations_default
  *
- * * ::_Thread_queue_Operations_FIFO
+ * - ::_Thread_queue_Operations_FIFO
  *
- * * ::_Thread_queue_Operations_priority
+ * - ::_Thread_queue_Operations_priority
  *
- * * ::_Thread_queue_Operations_priority_inherit
+ * - ::_Thread_queue_Operations_priority_inherit
  *
  * @see _Thread_wait_Set_operations().
  */

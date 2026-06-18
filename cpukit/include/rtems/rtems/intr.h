@@ -1166,9 +1166,9 @@ static inline void rtems_interrupt_entry_initialize(
  *
  * One of the following mutually exclusive options
  *
- * * #RTEMS_INTERRUPT_UNIQUE, and
+ * - #RTEMS_INTERRUPT_UNIQUE, and
  *
- * * #RTEMS_INTERRUPT_SHARED
+ * - #RTEMS_INTERRUPT_SHARED
  *
  * shall be set in the ``options`` parameter.
  *
@@ -1311,11 +1311,11 @@ rtems_status_code rtems_interrupt_entry_remove(
  *
  * One of the following mutually exclusive options
  *
- * * #RTEMS_INTERRUPT_UNIQUE,
+ * - #RTEMS_INTERRUPT_UNIQUE,
  *
- * * #RTEMS_INTERRUPT_SHARED, and
+ * - #RTEMS_INTERRUPT_SHARED, and
  *
- * * #RTEMS_INTERRUPT_REPLACE
+ * - #RTEMS_INTERRUPT_REPLACE
  *
  * shall be set in the ``options`` parameter.
  *

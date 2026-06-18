@@ -950,27 +950,27 @@
  * @parblock
  * If this configuration option is specified, then
  *
- * * a task storage area of the specified size is statically allocated by
+ * - a task storage area of the specified size is statically allocated by
  *   ``<rtems/confdefs.h>`` for the Classic API initialization task,
  *
- * * the Classic API initialization task is constructed by
+ * - the Classic API initialization task is constructed by
  *   rtems_task_construct() instead of using rtems_task_create(),
  *
- * * the maximum thread-local storage size defined by @ref
+ * - the maximum thread-local storage size defined by @ref
  *   CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE is used for the Classic API
  *   initialization task,
  *
- * * the Classic API initialization task should be accounted for in @ref
+ * - the Classic API initialization task should be accounted for in @ref
  *   CONFIGURE_MINIMUM_TASKS_WITH_USER_PROVIDED_STORAGE, and
  *
- * * the task storage area used for the Classic API initialization task is not
+ * - the task storage area used for the Classic API initialization task is not
  *   reclaimed by the system if the task is deleted.
  *
  * The
  *
- * * @ref CONFIGURE_INIT_TASK_STACK_SIZE and
+ * - @ref CONFIGURE_INIT_TASK_STACK_SIZE and
  *
- * * `CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE`
+ * - `CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE`
  *
  * configuration options are mutually exclusive.
  * @endparblock
@@ -1091,9 +1091,9 @@
  * @parblock
  * The
  *
- * * `CONFIGURE_INIT_TASK_STACK_SIZE` and
+ * - `CONFIGURE_INIT_TASK_STACK_SIZE` and
  *
- * * @ref CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE
+ * - @ref CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE
  *
  * configuration options are mutually exclusive.
  * @endparblock
@@ -1119,11 +1119,11 @@
  * The application shall define at least one of the following configuration
  * options
  *
- * * `CONFIGURE_RTEMS_INIT_TASKS_TABLE`,
+ * - `CONFIGURE_RTEMS_INIT_TASKS_TABLE`,
  *
- * * @ref CONFIGURE_POSIX_INIT_THREAD_TABLE, or
+ * - @ref CONFIGURE_POSIX_INIT_THREAD_TABLE, or
  *
- * * @ref CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
+ * - @ref CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
  *
  * otherwise a compile time error in the configuration file will occur.
  *
@@ -1173,11 +1173,11 @@
  * The application shall define exactly one of the following configuration
  * options
  *
- * * @ref CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER,
+ * - @ref CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER,
  *
- * * `CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER`, or
+ * - `CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER`, or
  *
- * * @ref CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER,
+ * - @ref CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER,
  *
  * otherwise a compile time error in the configuration file will occur.
  * @endparblock
@@ -1258,11 +1258,11 @@
  * The application shall define exactly one of the following configuration
  * options
  *
- * * `CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER`,
+ * - `CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER`,
  *
- * * @ref CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER, or
+ * - @ref CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER, or
  *
- * * @ref CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER,
+ * - @ref CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER,
  *
  * otherwise a compile time error in the configuration file will occur.
  * @endparblock
@@ -1294,11 +1294,11 @@
  *
  * The
  *
- * * `CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER`,
+ * - `CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER`,
  *
- * * @ref CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER, and
+ * - @ref CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER, and
  *
- * * @ref CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER
+ * - @ref CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER
  *
  * configuration options are mutually exclusive.
  * @endparblock
@@ -1427,11 +1427,11 @@
  *
  * The
  *
- * * @ref CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER,
+ * - @ref CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER,
  *
- * * `CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER`, and
+ * - `CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER`, and
  *
- * * @ref CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER
+ * - @ref CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER
  *
  * configuration options are mutually exclusive.
  * @endparblock
@@ -1476,11 +1476,11 @@
  *
  * The
  *
- * * @ref CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER,
+ * - @ref CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER,
  *
- * * @ref CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER, and
+ * - @ref CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER, and
  *
- * * `CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER`
+ * - `CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER`
  *
  * configuration options are mutually exclusive.
  * @endparblock
@@ -1529,11 +1529,11 @@
  * The application shall define exactly one of the following configuration
  * options
  *
- * * @ref CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER,
+ * - @ref CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER,
  *
- * * @ref CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER, or
+ * - @ref CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER, or
  *
- * * `CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER`,
+ * - `CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER`,
  *
  * otherwise a compile time error will occur.
  * @endparblock
@@ -1676,37 +1676,37 @@
  * configured device drivers configured using the following configuration
  * options:
  *
- * * @ref CONFIGURE_APPLICATION_EXTRA_DRIVERS
+ * - @ref CONFIGURE_APPLICATION_EXTRA_DRIVERS
  *
- * * @ref CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
+ * - @ref CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
  *
- * * @ref CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+ * - @ref CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
  *
- * * @ref CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+ * - @ref CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
  *
- * * @ref CONFIGURE_APPLICATION_NEEDS_FRAME_BUFFER_DRIVER
+ * - @ref CONFIGURE_APPLICATION_NEEDS_FRAME_BUFFER_DRIVER
  *
- * * @ref CONFIGURE_APPLICATION_NEEDS_IDE_DRIVER
+ * - @ref CONFIGURE_APPLICATION_NEEDS_IDE_DRIVER
  *
- * * @ref CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
+ * - @ref CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
  *
- * * @ref CONFIGURE_APPLICATION_NEEDS_NULL_DRIVER
+ * - @ref CONFIGURE_APPLICATION_NEEDS_NULL_DRIVER
  *
- * * @ref CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER
+ * - @ref CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER
  *
- * * @ref CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
+ * - @ref CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
  *
- * * @ref CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER
+ * - @ref CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER
  *
- * * @ref CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
+ * - @ref CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
  *
- * * @ref CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
+ * - @ref CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
  *
- * * @ref CONFIGURE_APPLICATION_NEEDS_WATCHDOG_DRIVER
+ * - @ref CONFIGURE_APPLICATION_NEEDS_WATCHDOG_DRIVER
  *
- * * @ref CONFIGURE_APPLICATION_NEEDS_ZERO_DRIVER
+ * - @ref CONFIGURE_APPLICATION_NEEDS_ZERO_DRIVER
  *
- * * @ref CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS
+ * - @ref CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS
  *
  * If the @ref CONFIGURE_DISABLE_BSP_SETTINGS configuration option is not
  * defined and the BSP provides #CONFIGURE_BSP_PREREQUISITE_DRIVERS, then the
@@ -1759,9 +1759,9 @@
  *
  * In case
  *
- * * this configuration option is defined
+ * - this configuration option is defined
  *
- * * and @ref CONFIGURE_RECORD_PER_PROCESSOR_ITEMS is properly defined,
+ * - and @ref CONFIGURE_RECORD_PER_PROCESSOR_ITEMS is properly defined,
  *
  * then the event record extensions are enabled.
  *
@@ -1784,11 +1784,11 @@
  *
  * In case
  *
- * * this configuration option is defined
+ * - this configuration option is defined
  *
- * * and @ref CONFIGURE_RECORD_PER_PROCESSOR_ITEMS is properly defined,
+ * - and @ref CONFIGURE_RECORD_PER_PROCESSOR_ITEMS is properly defined,
  *
- * * and @ref CONFIGURE_RECORD_FATAL_DUMP_BASE64_ZLIB is undefined,
+ * - and @ref CONFIGURE_RECORD_FATAL_DUMP_BASE64_ZLIB is undefined,
  *
  * then the event records are dumped in Base64 encoding in a fatal error
  * extension (see <a
@@ -1813,9 +1813,9 @@
  *
  * In case
  *
- * * this configuration option is defined
+ * - this configuration option is defined
  *
- * * and @ref CONFIGURE_RECORD_PER_PROCESSOR_ITEMS is properly defined,
+ * - and @ref CONFIGURE_RECORD_PER_PROCESSOR_ITEMS is properly defined,
  *
  * then the event records are compressed by zlib and dumped in Base64 encoding
  * in a fatal error extension (see <a
@@ -1841,9 +1841,9 @@
  *
  * In case
  *
- * * this configuration option is defined
+ * - this configuration option is defined
  *
- * * and @ref CONFIGURE_RECORD_PER_PROCESSOR_ITEMS is properly defined,
+ * - and @ref CONFIGURE_RECORD_PER_PROCESSOR_ITEMS is properly defined,
  *
  * then the interrupt event recording is enabled.
  *
@@ -1968,33 +1968,33 @@
  * Features of the IMFS can be disabled and enabled with the following
  * configuration options:
  *
- * * @ref CONFIGURE_IMFS_DISABLE_CHMOD
+ * - @ref CONFIGURE_IMFS_DISABLE_CHMOD
  *
- * * @ref CONFIGURE_IMFS_DISABLE_CHOWN
+ * - @ref CONFIGURE_IMFS_DISABLE_CHOWN
  *
- * * @ref CONFIGURE_IMFS_DISABLE_LINK
+ * - @ref CONFIGURE_IMFS_DISABLE_LINK
  *
- * * @ref CONFIGURE_IMFS_DISABLE_MKNOD
+ * - @ref CONFIGURE_IMFS_DISABLE_MKNOD
  *
- * * @ref CONFIGURE_IMFS_DISABLE_MKNOD_FILE
+ * - @ref CONFIGURE_IMFS_DISABLE_MKNOD_FILE
  *
- * * @ref CONFIGURE_IMFS_DISABLE_MOUNT
+ * - @ref CONFIGURE_IMFS_DISABLE_MOUNT
  *
- * * @ref CONFIGURE_IMFS_DISABLE_READDIR
+ * - @ref CONFIGURE_IMFS_DISABLE_READDIR
  *
- * * @ref CONFIGURE_IMFS_DISABLE_READLINK
+ * - @ref CONFIGURE_IMFS_DISABLE_READLINK
  *
- * * @ref CONFIGURE_IMFS_DISABLE_RENAME
+ * - @ref CONFIGURE_IMFS_DISABLE_RENAME
  *
- * * @ref CONFIGURE_IMFS_DISABLE_RMNOD
+ * - @ref CONFIGURE_IMFS_DISABLE_RMNOD
  *
- * * @ref CONFIGURE_IMFS_DISABLE_SYMLINK
+ * - @ref CONFIGURE_IMFS_DISABLE_SYMLINK
  *
- * * @ref CONFIGURE_IMFS_DISABLE_UNMOUNT
+ * - @ref CONFIGURE_IMFS_DISABLE_UNMOUNT
  *
- * * @ref CONFIGURE_IMFS_DISABLE_UTIME
+ * - @ref CONFIGURE_IMFS_DISABLE_UTIME
  *
- * * @ref CONFIGURE_IMFS_ENABLE_MKFIFO
+ * - @ref CONFIGURE_IMFS_ENABLE_MKFIFO
  *
  * @{
  */
@@ -2031,19 +2031,19 @@
  * In case this configuration option is defined, then the following
  * configuration options will be defined as well
  *
- * * @ref CONFIGURE_FILESYSTEM_DOSFS,
+ * - @ref CONFIGURE_FILESYSTEM_DOSFS,
  *
- * * @ref CONFIGURE_FILESYSTEM_FTPFS,
+ * - @ref CONFIGURE_FILESYSTEM_FTPFS,
  *
- * * @ref CONFIGURE_FILESYSTEM_IMFS,
+ * - @ref CONFIGURE_FILESYSTEM_IMFS,
  *
- * * @ref CONFIGURE_FILESYSTEM_JFFS2,
+ * - @ref CONFIGURE_FILESYSTEM_JFFS2,
  *
- * * @ref CONFIGURE_FILESYSTEM_NFS,
+ * - @ref CONFIGURE_FILESYSTEM_NFS,
  *
- * * @ref CONFIGURE_FILESYSTEM_RFS, and
+ * - @ref CONFIGURE_FILESYSTEM_RFS, and
  *
- * * @ref CONFIGURE_FILESYSTEM_TFTPFS.
+ * - @ref CONFIGURE_FILESYSTEM_TFTPFS.
  *
  * @par Default Configuration
  * If this configuration option is undefined, then the described feature is not
@@ -2457,19 +2457,19 @@
  * correspondingly smaller. The following shows the maximum file size possible
  * based on the configured block size:
  *
- * * when the block size is 16 bytes, the maximum file size is 1,328 bytes.
+ * - when the block size is 16 bytes, the maximum file size is 1,328 bytes.
  *
- * * when the block size is 32 bytes, the maximum file size is 18,656 bytes.
+ * - when the block size is 32 bytes, the maximum file size is 18,656 bytes.
  *
- * * when the block size is 64 bytes, the maximum file size is 279,488 bytes.
+ * - when the block size is 64 bytes, the maximum file size is 279,488 bytes.
  *
- * * when the block size is 128 bytes, the maximum file size is 4,329,344
+ * - when the block size is 128 bytes, the maximum file size is 4,329,344
  *   bytes.
  *
- * * when the block size is 256 bytes, the maximum file size is 68,173,568
+ * - when the block size is 256 bytes, the maximum file size is 68,173,568
  *   bytes.
  *
- * * when the block size is 512 bytes, the maximum file size is 1,082,195,456
+ * - when the block size is 512 bytes, the maximum file size is 1,082,195,456
  *   bytes.
  * @endparblock
  */
@@ -2514,29 +2514,29 @@
  * In case this configuration option is defined, then the following
  * configuration options will be defined as well
  *
- * * @ref CONFIGURE_IMFS_DISABLE_CHMOD,
+ * - @ref CONFIGURE_IMFS_DISABLE_CHMOD,
  *
- * * @ref CONFIGURE_IMFS_DISABLE_CHOWN,
+ * - @ref CONFIGURE_IMFS_DISABLE_CHOWN,
  *
- * * @ref CONFIGURE_IMFS_DISABLE_LINK,
+ * - @ref CONFIGURE_IMFS_DISABLE_LINK,
  *
- * * @ref CONFIGURE_IMFS_DISABLE_MKNOD_FILE,
+ * - @ref CONFIGURE_IMFS_DISABLE_MKNOD_FILE,
  *
- * * @ref CONFIGURE_IMFS_DISABLE_MOUNT,
+ * - @ref CONFIGURE_IMFS_DISABLE_MOUNT,
  *
- * * @ref CONFIGURE_IMFS_DISABLE_READDIR,
+ * - @ref CONFIGURE_IMFS_DISABLE_READDIR,
  *
- * * @ref CONFIGURE_IMFS_DISABLE_READLINK,
+ * - @ref CONFIGURE_IMFS_DISABLE_READLINK,
  *
- * * @ref CONFIGURE_IMFS_DISABLE_RENAME,
+ * - @ref CONFIGURE_IMFS_DISABLE_RENAME,
  *
- * * @ref CONFIGURE_IMFS_DISABLE_RMNOD,
+ * - @ref CONFIGURE_IMFS_DISABLE_RMNOD,
  *
- * * @ref CONFIGURE_IMFS_DISABLE_SYMLINK,
+ * - @ref CONFIGURE_IMFS_DISABLE_SYMLINK,
  *
- * * @ref CONFIGURE_IMFS_DISABLE_UTIME, and
+ * - @ref CONFIGURE_IMFS_DISABLE_UTIME, and
  *
- * * @ref CONFIGURE_IMFS_DISABLE_UNMOUNT.
+ * - @ref CONFIGURE_IMFS_DISABLE_UNMOUNT.
  *
  * In addition, a simplified path evaluation is enabled.  It allows only a look
  * up of absolute paths.
@@ -2567,21 +2567,21 @@
  * In case this configuration option is defined, then the following
  * configuration options will be defined as well
  *
- * * @ref CONFIGURE_IMFS_DISABLE_CHMOD,
+ * - @ref CONFIGURE_IMFS_DISABLE_CHMOD,
  *
- * * @ref CONFIGURE_IMFS_DISABLE_CHOWN,
+ * - @ref CONFIGURE_IMFS_DISABLE_CHOWN,
  *
- * * @ref CONFIGURE_IMFS_DISABLE_LINK,
+ * - @ref CONFIGURE_IMFS_DISABLE_LINK,
  *
- * * @ref CONFIGURE_IMFS_DISABLE_READLINK,
+ * - @ref CONFIGURE_IMFS_DISABLE_READLINK,
  *
- * * @ref CONFIGURE_IMFS_DISABLE_RENAME,
+ * - @ref CONFIGURE_IMFS_DISABLE_RENAME,
  *
- * * @ref CONFIGURE_IMFS_DISABLE_SYMLINK,
+ * - @ref CONFIGURE_IMFS_DISABLE_SYMLINK,
  *
- * * @ref CONFIGURE_IMFS_DISABLE_UTIME, and
+ * - @ref CONFIGURE_IMFS_DISABLE_UTIME, and
  *
- * * @ref CONFIGURE_IMFS_DISABLE_UNMOUNT.
+ * - @ref CONFIGURE_IMFS_DISABLE_UNMOUNT.
  * @endparblock
  */
 #define CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
@@ -2642,11 +2642,11 @@
  * The optional BSP provided default values for the following application
  * configuration options are disabled:
  *
- * * @ref CONFIGURE_IDLE_TASK_BODY
+ * - @ref CONFIGURE_IDLE_TASK_BODY
  *
- * * @ref CONFIGURE_IDLE_TASK_STACK_SIZE
+ * - @ref CONFIGURE_IDLE_TASK_STACK_SIZE
  *
- * * @ref CONFIGURE_INTERRUPT_STACK_SIZE
+ * - @ref CONFIGURE_INTERRUPT_STACK_SIZE
  *
  * The optional BSP provided initial extension set is disabled (see initial
  * extension sets).  The optional BSP provided prerequisite IO device drivers
@@ -3541,11 +3541,11 @@
  * The application shall define at least one of the following configuration
  * options
  *
- * * @ref CONFIGURE_RTEMS_INIT_TASKS_TABLE,
+ * - @ref CONFIGURE_RTEMS_INIT_TASKS_TABLE,
  *
- * * @ref CONFIGURE_POSIX_INIT_THREAD_TABLE, or
+ * - @ref CONFIGURE_POSIX_INIT_THREAD_TABLE, or
  *
- * * `CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION`
+ * - `CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION`
  *
  * otherwise a compile time error in the configuration file will occur.
  *
@@ -3639,9 +3639,9 @@
  *
  * The
  *
- * * `CONFIGURE_IDLE_TASK_STORAGE_SIZE`, and
+ * - `CONFIGURE_IDLE_TASK_STORAGE_SIZE`, and
  *
- * * @ref CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE
+ * - @ref CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE
  *
  * configuration options are mutually exclusive.
  * @endparblock
@@ -4406,11 +4406,11 @@
  * The application shall define at least one of the following configuration
  * options
  *
- * * @ref CONFIGURE_RTEMS_INIT_TASKS_TABLE,
+ * - @ref CONFIGURE_RTEMS_INIT_TASKS_TABLE,
  *
- * * `CONFIGURE_POSIX_INIT_THREAD_TABLE`, or
+ * - `CONFIGURE_POSIX_INIT_THREAD_TABLE`, or
  *
- * * @ref CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
+ * - @ref CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
  *
  * otherwise a compile time error in the configuration file will occur.
  *
@@ -4503,18 +4503,18 @@
  *
  * For the following schedulers
  *
- * * <a
+ * - <a
  *   href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/uniprocessor-schedulers.html#deterministic-priority-scheduler">Deterministic
  *   Priority Scheduler</a>, which is the default in uniprocessor
  *   configurations and can be configured through the @ref
  *   CONFIGURE_SCHEDULER_PRIORITY configuration option,
  *
- * * <a
+ * - <a
  *   href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/smp-schedulers.html#deterministic-priority-smp-scheduler">Deterministic
  *   Priority SMP Scheduler</a> which can be configured through the @ref
  *   CONFIGURE_SCHEDULER_PRIORITY_SMP configuration option, and
  *
- * * <a
+ * - <a
  *   href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/smp-schedulers.html#arbitrary-processor-affinity-priority-smp-scheduler">Arbitrary
  *   Processor Affinity Priority SMP Scheduler</a> which can be configured
  *   through the @ref CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP configuration
@@ -4575,9 +4575,9 @@
  * - The value of the configuration option shall be a list of the following
  *   macros:
  *
- *   * `RTEMS_SCHEDULER_ASSIGN( scheduler_index, attributes )`
+ *   - `RTEMS_SCHEDULER_ASSIGN( scheduler_index, attributes )`
  *
- *   * `RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER`
+ *   - `RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER`
  *
  *   The `scheduler_index` macro parameter shall be a valid index of the
  *   scheduler table defined by the @ref CONFIGURE_SCHEDULER_TABLE_ENTRIES
@@ -4586,9 +4586,9 @@
  *   The `attributes` macro parameter shall be set to exactly one of the
  *   following constants:
  *
- *   * `RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY`
+ *   - `RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY`
  *
- *   * `RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL`
+ *   - `RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL`
  *
  * - The value of the configuration option shall be a list of exactly @ref
  *   CONFIGURE_MAXIMUM_PROCESSORS elements.
@@ -4712,35 +4712,35 @@
  * @parblock
  * The default value is
  *
- * * `"MEDF"` for the <a
+ * - `"MEDF"` for the <a
  *   href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/smp-schedulers.html#earliest-deadline-first-smp-scheduler">Earliest
  *   Deadline First SMP Scheduler</a>,
  *
- * * `"MPA "` for the <a
+ * - `"MPA "` for the <a
  *   href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/smp-schedulers.html#arbitrary-processor-affinity-priority-smp-scheduler">Arbitrary
  *   Processor Affinity Priority SMP Scheduler</a>,
  *
- * * `"MPD "` for the <a
+ * - `"MPD "` for the <a
  *   href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/smp-schedulers.html#deterministic-priority-smp-scheduler">Deterministic
  *   Priority SMP Scheduler</a>,
  *
- * * `"MPS "` for the <a
+ * - `"MPS "` for the <a
  *   href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/smp-schedulers.html#simple-priority-smp-scheduler">Simple
  *   Priority SMP Scheduler</a>,
  *
- * * `"UCBS"` for the <a
+ * - `"UCBS"` for the <a
  *   href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/uniprocessor-schedulers.html#constant-bandwidth-server-scheduling-cbs">Constant
  *   Bandwidth Server Scheduling (CBS)</a>,
  *
- * * `"UEDF"` for the <a
+ * - `"UEDF"` for the <a
  *   href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/uniprocessor-schedulers.html#earliest-deadline-first-scheduler">Earliest
  *   Deadline First Scheduler</a>,
  *
- * * `"UPD "` for the <a
+ * - `"UPD "` for the <a
  *   href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/uniprocessor-schedulers.html#deterministic-priority-scheduler">Deterministic
  *   Priority Scheduler</a>, and
  *
- * * `"UPS "` for the <a
+ * - `"UPS "` for the <a
  *   href="https://docs.rtems.org/branches/master/c-user/scheduling-concepts/uniprocessor-schedulers.html#simple-priority-scheduler">Simple
  *   Priority Scheduler</a>.
  * @endparblock
@@ -4971,23 +4971,23 @@
  * - The value of the configuration option shall be a list of the following
  *   macros:
  *
- *   * `RTEMS_SCHEDULER_TABLE_CBS( name, obj_name )`
+ *   - `RTEMS_SCHEDULER_TABLE_CBS( name, obj_name )`
  *
- *   * `RTEMS_SCHEDULER_TABLE_EDF( name, obj_name )`
+ *   - `RTEMS_SCHEDULER_TABLE_EDF( name, obj_name )`
  *
- *   * `RTEMS_SCHEDULER_TABLE_EDF_SMP( name, obj_name )`
+ *   - `RTEMS_SCHEDULER_TABLE_EDF_SMP( name, obj_name )`
  *
- *   * `RTEMS_SCHEDULER_TABLE_PRIORITY_AFFINITY_SMP( name, obj_name )`
+ *   - `RTEMS_SCHEDULER_TABLE_PRIORITY_AFFINITY_SMP( name, obj_name )`
  *
- *   * `RTEMS_SCHEDULER_TABLE_PRIORITY( name, obj_name )`
+ *   - `RTEMS_SCHEDULER_TABLE_PRIORITY( name, obj_name )`
  *
- *   * `RTEMS_SCHEDULER_TABLE_PRIORITY_SMP( name, obj_name )`
+ *   - `RTEMS_SCHEDULER_TABLE_PRIORITY_SMP( name, obj_name )`
  *
- *   * `RTEMS_SCHEDULER_TABLE_SIMPLE( name, obj_name )`
+ *   - `RTEMS_SCHEDULER_TABLE_SIMPLE( name, obj_name )`
  *
- *   * `RTEMS_SCHEDULER_TABLE_SIMPLE_SMP( name, obj_name )`
+ *   - `RTEMS_SCHEDULER_TABLE_SIMPLE_SMP( name, obj_name )`
  *
- *   * `RTEMS_SCHEDULER_TABLE_STRONG_APA( name, obj_name )`
+ *   - `RTEMS_SCHEDULER_TABLE_STRONG_APA( name, obj_name )`
  *
  *   The `name` macro parameter shall be the name associated with the scheduler
  *   data structures, see <a
@@ -5040,13 +5040,13 @@
  * `CONFIGURE_SCHEDULER_USER` is defined then the following additional macros
  * shall be defined:
  *
- * * `CONFIGURE_SCHEDULER` shall be defined to a static definition of the
+ * - `CONFIGURE_SCHEDULER` shall be defined to a static definition of the
  *   scheduler data structures of the user scheduler.
  *
- * * `CONFIGURE_SCHEDULER_TABLE_ENTRIES` shall be defined to a scheduler table
+ * - `CONFIGURE_SCHEDULER_TABLE_ENTRIES` shall be defined to a scheduler table
  *   entry initializer for the user scheduler.
  *
- * * `CONFIGURE_SCHEDULER_USER_PER_THREAD` shall be defined to the type of the
+ * - `CONFIGURE_SCHEDULER_USER_PER_THREAD` shall be defined to the type of the
  *   per-thread information of the user scheduler.
  *
  * At this time, the mechanics and requirements for writing a new scheduler are
@@ -5102,11 +5102,11 @@
  * A correctly configured system shall configure the following to be
  * consistent:
  *
- * * @ref CONFIGURE_TASK_STACK_ALLOCATOR_INIT
+ * - @ref CONFIGURE_TASK_STACK_ALLOCATOR_INIT
  *
- * * `CONFIGURE_TASK_STACK_ALLOCATOR`
+ * - `CONFIGURE_TASK_STACK_ALLOCATOR`
  *
- * * @ref CONFIGURE_TASK_STACK_DEALLOCATOR
+ * - @ref CONFIGURE_TASK_STACK_DEALLOCATOR
  * @endparblock
  */
 #define CONFIGURE_TASK_STACK_ALLOCATOR
@@ -5172,9 +5172,9 @@
  *
  * The
  *
- * * @ref CONFIGURE_IDLE_TASK_STORAGE_SIZE, and
+ * - @ref CONFIGURE_IDLE_TASK_STORAGE_SIZE, and
  *
- * * `CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE`
+ * - `CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE`
  *
  * configuration options are mutually exclusive.
  * @endparblock
@@ -5205,11 +5205,11 @@
  * A correctly configured system shall configure the following to be
  * consistent:
  *
- * * `CONFIGURE_TASK_STACK_ALLOCATOR_INIT`
+ * - `CONFIGURE_TASK_STACK_ALLOCATOR_INIT`
  *
- * * @ref CONFIGURE_TASK_STACK_ALLOCATOR
+ * - @ref CONFIGURE_TASK_STACK_ALLOCATOR
  *
- * * @ref CONFIGURE_TASK_STACK_DEALLOCATOR
+ * - @ref CONFIGURE_TASK_STACK_DEALLOCATOR
  * @endparblock
  */
 #define CONFIGURE_TASK_STACK_ALLOCATOR_INIT
@@ -5237,11 +5237,11 @@
  * A correctly configured system shall configure the following to be
  * consistent:
  *
- * * @ref CONFIGURE_TASK_STACK_ALLOCATOR_INIT
+ * - @ref CONFIGURE_TASK_STACK_ALLOCATOR_INIT
  *
- * * @ref CONFIGURE_TASK_STACK_ALLOCATOR
+ * - @ref CONFIGURE_TASK_STACK_ALLOCATOR
  *
- * * `CONFIGURE_TASK_STACK_DEALLOCATOR`
+ * - `CONFIGURE_TASK_STACK_DEALLOCATOR`
  * @endparblock
  */
 #define CONFIGURE_TASK_STACK_DEALLOCATOR

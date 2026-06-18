@@ -136,11 +136,11 @@ extern "C" {
  * (this attribute does not refer to SMP systems).  The scope is selected by
  * the mutually exclusive #RTEMS_LOCAL and #RTEMS_GLOBAL attributes.
  *
- * * A **local scope** is the default and can be emphasized through the use of
+ * - A **local scope** is the default and can be emphasized through the use of
  *   the #RTEMS_LOCAL attribute.  A local partition can be only used by the
  *   node which created it.
  *
- * * A **global scope** is established if the #RTEMS_GLOBAL attribute is set.
+ * - A **global scope** is established if the #RTEMS_GLOBAL attribute is set.
  *   The memory space used for the partition must reside in shared memory.
  *   Setting the global attribute in a single node system has no effect.
  *
@@ -261,13 +261,13 @@ rtems_status_code rtems_partition_create(
  *
  * The node to search is specified in ``node``.  It shall be
  *
- * * a valid node number,
+ * - a valid node number,
  *
- * * the constant #RTEMS_SEARCH_ALL_NODES to search in all nodes,
+ * - the constant #RTEMS_SEARCH_ALL_NODES to search in all nodes,
  *
- * * the constant #RTEMS_SEARCH_LOCAL_NODE to search in the local node only, or
+ * - the constant #RTEMS_SEARCH_LOCAL_NODE to search in the local node only, or
  *
- * * the constant #RTEMS_SEARCH_OTHER_NODES to search in all nodes except the
+ * - the constant #RTEMS_SEARCH_OTHER_NODES to search in all nodes except the
  *   local node.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.

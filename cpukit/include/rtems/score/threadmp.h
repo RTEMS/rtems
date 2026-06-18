@@ -84,7 +84,7 @@ void _Thread_MP_Handler_initialization( uint32_t maximum_proxies );
  * @note This function returns a thread control pointer
  *       because proxies are substitutes for remote threads.
  *
- * * @param the_state The state for the allocated MP proxy control block.
+ * - @param the_state The state for the allocated MP proxy control block.
  */
 Thread_Control *_Thread_MP_Allocate_proxy( States_Control the_state );
 

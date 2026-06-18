@@ -676,7 +676,7 @@ static inline rtems_status_code rtems_event_transient_send( rtems_id id )
  * identified by ``id``.  Based upon the state of the target task, one of the
  * following situations applies:
  *
- * * The target task is blocked waiting for events, then
+ * - The target task is blocked waiting for events, then
  *
  *   * if the waiting task's input event condition is satisfied, then the task
  *     is made ready for execution, or
@@ -684,7 +684,7 @@ static inline rtems_status_code rtems_event_transient_send( rtems_id id )
  *   * otherwise, the event set is posted but left pending and the task remains
  *     blocked.
  *
- * * The target task is not waiting for events, then the event set is posted
+ * - The target task is not waiting for events, then the event set is posted
  *   and left pending.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
@@ -753,9 +753,9 @@ rtems_status_code rtems_event_send( rtems_id id, rtems_event_set event_in );
  *
  * This directive can be used to
  *
- * * get the pending events of the calling task, or
+ * - get the pending events of the calling task, or
  *
- * * receive events.
+ * - receive events.
  *
  * To **get the pending events** use the constant #RTEMS_PENDING_EVENTS for the
  * ``event_in`` parameter.  The pending events are returned to the calling task
@@ -774,28 +774,28 @@ rtems_status_code rtems_event_send( rtems_id id, rtems_event_set event_in );
  * Default options can be selected by using the #RTEMS_DEFAULT_OPTIONS
  * constant.  The option set defines
  *
- * * if the calling task will wait or poll for the events, and
+ * - if the calling task will wait or poll for the events, and
  *
- * * if the calling task wants to receive all or any of the input events.
+ * - if the calling task wants to receive all or any of the input events.
  *
  * The calling task can **wait** or **poll** for the events.
  *
- * * **Waiting** for events is the default and can be emphasized through the
+ * - **Waiting** for events is the default and can be emphasized through the
  *   use of the #RTEMS_WAIT option.  The ``ticks`` parameter defines how long
  *   the calling task is willing to wait.  Use #RTEMS_NO_TIMEOUT to wait
  *   potentially forever, otherwise set a timeout interval in clock ticks.
  *
- * * Not waiting for events (**polling**) is selected by the #RTEMS_NO_WAIT
+ * - Not waiting for events (**polling**) is selected by the #RTEMS_NO_WAIT
  *   option.  If this option is defined, then the ``ticks`` parameter is
  *   ignored.
  *
  * The calling task can receive **all** or **any** of the input events
  * specified in ``event_in``.
  *
- * * Receiving **all** input events is the default and can be emphasized
+ * - Receiving **all** input events is the default and can be emphasized
  *   through the use of the #RTEMS_EVENT_ALL option.
  *
- * * Receiving **any** of the input events is selected by the #RTEMS_EVENT_ANY
+ * - Receiving **any** of the input events is selected by the #RTEMS_EVENT_ANY
  *   option.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.

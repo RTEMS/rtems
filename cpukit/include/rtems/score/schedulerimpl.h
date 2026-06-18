@@ -63,11 +63,11 @@ extern "C" {
  * Schedulers are used by the system to manage sets of threads that are ready
  * for execution.  A scheduler consists of
  *
- * * a scheduler algorithm implementation,
+ * - a scheduler algorithm implementation,
  *
- * * a scheduler index and an associated name, and
+ * - a scheduler index and an associated name, and
  *
- * * a set of processors owned by the scheduler (may be empty, but never
+ * - a set of processors owned by the scheduler (may be empty, but never
  *   overlaps with a set owned by another scheduler).
  *
  * Each thread uses exactly one scheduler as its home scheduler.  Threads may

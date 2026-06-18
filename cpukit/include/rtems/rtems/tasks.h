@@ -459,7 +459,7 @@ typedef bool ( *rtems_task_visitor )( rtems_tcb *, void * );
  * addition to being able to specify the task stack size as a integer, there
  * are two constants which may be specified:
  *
- * * The #RTEMS_MINIMUM_STACK_SIZE constant can be specified to use the
+ * - The #RTEMS_MINIMUM_STACK_SIZE constant can be specified to use the
  *   **recommended minimum stack size** for the target processor.  This value
  *   is selected by the RTEMS maintainers conservatively to minimize the risk
  *   of blown stacks for most user applications.  Using this constant when
@@ -468,7 +468,7 @@ typedef bool ( *rtems_task_visitor )( rtems_tcb *, void * );
  *   minimum stack size is larger than the recommended minimum, then it will be
  *   used.
  *
- * * The #RTEMS_CONFIGURED_MINIMUM_STACK_SIZE constant can be specified to use
+ * - The #RTEMS_CONFIGURED_MINIMUM_STACK_SIZE constant can be specified to use
  *   the minimum stack size that was configured by the application.  If not
  *   explicitly configured by the application, the default configured minimum
  *   stack size is the target processor dependent value
@@ -485,48 +485,48 @@ typedef bool ( *rtems_task_visitor )( rtems_tcb *, void * );
  * modes can be selected by using the #RTEMS_DEFAULT_MODES constant.  The task
  * mode set defines
  *
- * * the preemption mode of the task: #RTEMS_PREEMPT (default) or
+ * - the preemption mode of the task: #RTEMS_PREEMPT (default) or
  *   #RTEMS_NO_PREEMPT,
  *
- * * the timeslicing mode of the task: #RTEMS_TIMESLICE or #RTEMS_NO_TIMESLICE
+ * - the timeslicing mode of the task: #RTEMS_TIMESLICE or #RTEMS_NO_TIMESLICE
  *   (default),
  *
- * * the ASR processing mode of the task: #RTEMS_ASR (default) or
+ * - the ASR processing mode of the task: #RTEMS_ASR (default) or
  *   #RTEMS_NO_ASR,
  *
- * * the interrupt level of the task: RTEMS_INTERRUPT_LEVEL() with a default of
+ * - the interrupt level of the task: RTEMS_INTERRUPT_LEVEL() with a default of
  *   `RTEMS_INTERRUPT_LEVEL( 0 )` which is associated with enabled interrupts.
  *
  * The **initial preemption mode** of the task is enabled or disabled.
  *
- * * An **enabled preemption** is the default and can be emphasized through the
+ * - An **enabled preemption** is the default and can be emphasized through the
  *   use of the #RTEMS_PREEMPT mode constant.
  *
- * * A **disabled preemption** is set by the #RTEMS_NO_PREEMPT mode constant.
+ * - A **disabled preemption** is set by the #RTEMS_NO_PREEMPT mode constant.
  *
  * The **initial timeslicing mode** of the task is enabled or disabled.
  *
- * * A **disabled timeslicing** is the default and can be emphasized through
+ * - A **disabled timeslicing** is the default and can be emphasized through
  *   the use of the #RTEMS_NO_TIMESLICE mode constant.
  *
- * * An **enabled timeslicing** is set by the #RTEMS_TIMESLICE mode constant.
+ * - An **enabled timeslicing** is set by the #RTEMS_TIMESLICE mode constant.
  *
  * The **initial ASR processing mode** of the task is enabled or disabled.
  *
- * * An **enabled ASR processing** is the default and can be emphasized through
+ * - An **enabled ASR processing** is the default and can be emphasized through
  *   the use of the #RTEMS_ASR mode constant.
  *
- * * A **disabled ASR processing** is set by the #RTEMS_NO_ASR mode constant.
+ * - A **disabled ASR processing** is set by the #RTEMS_NO_ASR mode constant.
  *
  * The **initial interrupt level mode** of the task is defined by
  * RTEMS_INTERRUPT_LEVEL().
  *
- * * Task execution with **interrupts enabled** the default and can be
+ * - Task execution with **interrupts enabled** the default and can be
  *   emphasized through the use of the RTEMS_INTERRUPT_LEVEL() mode macro with
  *   a value of zero (0) for the parameter.  An interrupt level of zero is
  *   associated with enabled interrupts on all target processors.
  *
- * * Task execution at a **non-zero interrupt level** can be specified by the
+ * - Task execution at a **non-zero interrupt level** can be specified by the
  *   RTEMS_INTERRUPT_LEVEL() mode macro with a non-zero value for the
  *   parameter.  The interrupt level portion of the task mode supports a
  *   maximum of 256 interrupt levels.  These levels are mapped onto the
@@ -541,20 +541,20 @@ typedef bool ( *rtems_task_visitor )( rtems_tcb *, void * );
  * directive and have no effect.  Default attributes can be selected by using
  * the #RTEMS_DEFAULT_ATTRIBUTES constant.  The attribute set defines
  *
- * * the scope of the task: #RTEMS_LOCAL (default) or #RTEMS_GLOBAL and
+ * - the scope of the task: #RTEMS_LOCAL (default) or #RTEMS_GLOBAL and
  *
- * * the floating-point unit use of the task: #RTEMS_FLOATING_POINT or
+ * - the floating-point unit use of the task: #RTEMS_FLOATING_POINT or
  *   #RTEMS_NO_FLOATING_POINT (default).
  *
  * The task has a local or global **scope** in a multiprocessing network (this
  * attribute does not refer to SMP systems).  The scope is selected by the
  * mutually exclusive #RTEMS_LOCAL and #RTEMS_GLOBAL attributes.
  *
- * * A **local scope** is the default and can be emphasized through the use of
+ * - A **local scope** is the default and can be emphasized through the use of
  *   the #RTEMS_LOCAL attribute.  A local task can be only used by the node
  *   which created it.
  *
- * * A **global scope** is established if the #RTEMS_GLOBAL attribute is set.
+ * - A **global scope** is established if the #RTEMS_GLOBAL attribute is set.
  *   Setting the global attribute in a single node system has no effect.the
  *
  * The **use of the floating-point unit** is selected by the mutually exclusive
@@ -564,12 +564,12 @@ typedef bool ( *rtems_task_visitor )( rtems_tcb *, void * );
  * floating-point unit or enable the use of the floating-point unit for all
  * tasks.  Consult the *RTEMS CPU Architecture Supplement* for the details.
  *
- * * A **disabled floating-point unit** is the default and can be emphasized
+ * - A **disabled floating-point unit** is the default and can be emphasized
  *   through use of the #RTEMS_NO_FLOATING_POINT attribute.  For performance
  *   reasons, it is recommended that tasks not using the floating-point unit
  *   should specify this attribute.
  *
- * * An **enabled floating-point unit** is selected by the
+ * - An **enabled floating-point unit** is selected by the
  *   #RTEMS_FLOATING_POINT attribute.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
@@ -800,13 +800,13 @@ rtems_status_code rtems_task_construct(
  *
  * The node to search is specified in ``node``.  It shall be
  *
- * * a valid node number,
+ * - a valid node number,
  *
- * * the constant #RTEMS_SEARCH_ALL_NODES to search in all nodes,
+ * - the constant #RTEMS_SEARCH_ALL_NODES to search in all nodes,
  *
- * * the constant #RTEMS_SEARCH_LOCAL_NODE to search in the local node only, or
+ * - the constant #RTEMS_SEARCH_LOCAL_NODE to search in the local node only, or
  *
- * * the constant #RTEMS_SEARCH_OTHER_NODES to search in all nodes except the
+ * - the constant #RTEMS_SEARCH_OTHER_NODES to search in all nodes except the
  *   local node.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
@@ -1450,16 +1450,16 @@ rtems_status_code rtems_task_get_priority(
  * selected by using the #RTEMS_DEFAULT_MODES constant.  The task mode set
  * defines
  *
- * * the preemption mode of the task: #RTEMS_PREEMPT (default) or
+ * - the preemption mode of the task: #RTEMS_PREEMPT (default) or
  *   #RTEMS_NO_PREEMPT,
  *
- * * the timeslicing mode of the task: #RTEMS_TIMESLICE or #RTEMS_NO_TIMESLICE
+ * - the timeslicing mode of the task: #RTEMS_TIMESLICE or #RTEMS_NO_TIMESLICE
  *   (default),
  *
- * * the ASR processing mode of the task: #RTEMS_ASR (default) or
+ * - the ASR processing mode of the task: #RTEMS_ASR (default) or
  *   #RTEMS_NO_ASR,
  *
- * * the interrupt level of the task: RTEMS_INTERRUPT_LEVEL() with a default of
+ * - the interrupt level of the task: RTEMS_INTERRUPT_LEVEL() with a default of
  *   `RTEMS_INTERRUPT_LEVEL( 0 )` which is associated with enabled interrupts.
  *
  * The **mode mask** specified in ``mask`` is built through a *bitwise or* of
@@ -1468,16 +1468,16 @@ rtems_status_code rtems_task_get_priority(
  * When the #RTEMS_PREEMPT_MASK is set in ``mask``, the **preemption mode** of
  * the calling task is
  *
- * * enabled by using the #RTEMS_PREEMPT mode constant in ``mode_set`` and
+ * - enabled by using the #RTEMS_PREEMPT mode constant in ``mode_set`` and
  *
- * * disabled by using the #RTEMS_NO_PREEMPT mode constant in ``mode_set``.
+ * - disabled by using the #RTEMS_NO_PREEMPT mode constant in ``mode_set``.
  *
  * When the #RTEMS_TIMESLICE_MASK is set in ``mask``, the **timeslicing mode**
  * of the calling task is
  *
- * * enabled by using the #RTEMS_TIMESLICE mode constant in ``mode_set`` and
+ * - enabled by using the #RTEMS_TIMESLICE mode constant in ``mode_set`` and
  *
- * * disabled by using the #RTEMS_NO_TIMESLICE mode constant in ``mode_set``.
+ * - disabled by using the #RTEMS_NO_TIMESLICE mode constant in ``mode_set``.
  *
  * Enabling timeslicing has no effect if preemption is disabled.  For a task to
  * be timesliced, that task must have both preemption and timeslicing enabled.
@@ -1485,17 +1485,17 @@ rtems_status_code rtems_task_get_priority(
  * When the #RTEMS_ASR_MASK is set in ``mask``, the **ASR processing mode** of
  * the calling task is
  *
- * * enabled by using the #RTEMS_ASR mode constant in ``mode_set`` and
+ * - enabled by using the #RTEMS_ASR mode constant in ``mode_set`` and
  *
- * * disabled by using the #RTEMS_NO_ASR mode constant in ``mode_set``.
+ * - disabled by using the #RTEMS_NO_ASR mode constant in ``mode_set``.
  *
  * When the #RTEMS_INTERRUPT_MASK is set in ``mask``, **interrupts** of the
  * calling task are
  *
- * * enabled by using the RTEMS_INTERRUPT_LEVEL() mode macro with a value of
+ * - enabled by using the RTEMS_INTERRUPT_LEVEL() mode macro with a value of
  *   zero (0) in ``mode_set`` and
  *
- * * disabled up to the specified level by using the RTEMS_INTERRUPT_LEVEL()
+ * - disabled up to the specified level by using the RTEMS_INTERRUPT_LEVEL()
  *   mode macro with a positive value in ``mode_set``.
  *
  * An interrupt level of zero is associated with enabled interrupts on all
