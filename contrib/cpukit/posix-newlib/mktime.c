@@ -46,6 +46,16 @@ ANSI C requires <<mktime>>.
 #include <time.h>
 #include "local.h"
 
+#ifdef __rtems__
+static inline div_t
+_mktime_div (int _n, int _d)
+{
+  return (div_t){.quot = _n / _d, .rem = _n % _d};
+}
+
+/* Drop dependency on C library for div() */
+#define div(_n, _d) _mktime_div(_n, _d)
+#endif /* __rtems__ */
 #define _SEC_IN_MINUTE 60L
 #define _SEC_IN_HOUR 3600L
 #define _SEC_IN_DAY 86400L
