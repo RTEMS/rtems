@@ -222,12 +222,21 @@ static void Disable( const Context *ctx )
   T_rsc_success( sc );
 }
 
-static void Raise( const Context *ctx )
+static void Raise(
+  const Context                    *ctx,
+  const rtems_interrupt_attributes *attr
+)
 {
   rtems_status_code sc;
 
+  if ( !attr->can_raise ) {
+    return;
+  }
+
   sc = rtems_interrupt_raise( ctx->vector );
   T_rsc_success( sc );
+
+  T_true( IsPending( ctx ) );
 }
 
 static void Clear( const Context *ctx )
@@ -324,8 +333,7 @@ static void CheckClear(
 
       if ( attr->can_disable ) {
         Disable( ctx );
-        Raise( ctx );
-        T_true( IsPending( ctx ) );
+        Raise( ctx, attr );
         Clear( ctx );
         T_false( IsPending( ctx ) );
 
@@ -338,8 +346,7 @@ static void CheckClear(
       T_false( IsPending( ctx ) );
 
       rtems_interrupt_local_disable( level );
-      Raise( ctx );
-      T_true( IsPending( ctx ) );
+      Raise( ctx, attr );
       Clear( ctx );
       T_false( IsPending( ctx ) );
       rtems_interrupt_local_enable( level );
