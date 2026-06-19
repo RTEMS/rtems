@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (C) 2021 embedded brains GmbH & Co. KG
+ * Copyright (C) 2021, 2026 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -58,8 +58,6 @@
 #include "tx-support.h"
 
 #include <rtems/test.h>
-
-#define CPUUSE_SOFT_TICKS 4295
 
 /**
  * @defgroup RtemsCpuuseValCpuuse spec:/rtems/cpuuse/val/cpuuse
@@ -142,10 +140,15 @@ static void RtemsCpuuseValCpuuse_Action_0( void )
    * Our CPU usage after the last reset is now exactly one tick of the
    * software timecounter.
    */
-  T_eq_i64( _Thread_Get_CPU_time_used_after_last_reset( self ), CPUUSE_SOFT_TICKS );
+  T_eq_i64(
+    _Thread_Get_CPU_time_used_after_last_reset( self ),
+    SOFTWARE_TIMECOUNTER_INTERVAL
+  );
   T_eq_i64(
     _Thread_Get_CPU_time_used( self ),
-    cpu_usage_self + (3*CPUUSE_SOFT_TICKS) + (CPUUSE_SOFT_TICKS * idle_tasks)
+    cpu_usage_self +
+    3 * SOFTWARE_TIMECOUNTER_INTERVAL +
+    idle_tasks * SOFTWARE_TIMECOUNTER_INTERVAL
   );
 
   T_eq_i64( _Thread_Get_CPU_time_used_after_last_reset( other ), 0 );

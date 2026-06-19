@@ -10,7 +10,7 @@
  */
 
 /*
- * Copyright (C) 2021 embedded brains GmbH & Co. KG
+ * Copyright (C) 2021, 2026 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -303,6 +303,12 @@ GetTimecountHandler SetGetTimecountHandler( GetTimecountHandler handler );
  *   timecounter.
  */
 #define SOFTWARE_TIMECOUNTER_FREQUENCY 1000000
+
+/**
+ * @brief This constant represents the amount of binary time units per software
+ *   timecounter tick.
+ */
+#define SOFTWARE_TIMECOUNTER_INTERVAL 4295
 
 /**
  * @brief Gets the software timecount counter value.
