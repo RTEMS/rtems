@@ -59,7 +59,9 @@ u32 XNandPsu_OnfiParamPageCrc(u8 *ParamBuf, u32 StartOff, u32 Length)
 	u32 i, j, c, Bit;
 	u32 Crc = CrcInit;
 	u32 DataIn;
+#ifndef __rtems__
 	u32 DataByteCount = 0U;
+#endif /* __rtems__ */
 	u32 CrcMask, CrcHighBit;
 
 	CrcMask = ((u32)(((u32)1 << (Order - (u32)1)) -(u32)1) << (u32)1) | (u32)1;
@@ -71,7 +73,9 @@ u32 XNandPsu_OnfiParamPageCrc(u8 *ParamBuf, u32 StartOff, u32 Length)
 	for(i = StartOff; i < Length; i++) {
 		DataIn = *(ParamBuf + i);
 		c = (u32)DataIn;
+#ifndef __rtems__
 		DataByteCount++;
+#endif /* __rtems__ */
 		j = 0x80U;
 		while(j != 0U) {
 			Bit = Crc & CrcHighBit;
