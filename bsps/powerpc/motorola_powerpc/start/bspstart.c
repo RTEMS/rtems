@@ -59,6 +59,7 @@
 #include <bsp/VME.h>
 #include <bsp/motorola.h>
 #include <rtems/powerpc/powerpc.h>
+#include <bsp/ppcbug-nvram-set.h>
 
 extern void _return_to_ppcbug(void);
 extern unsigned long __rtems_end[];
@@ -387,6 +388,23 @@ static void bsp_early( void )
 #if defined(DEBUG_BATS)
   ShowBATS();
 #endif
+
+  uintptr_t nvram_base;
+  bool nvram_indirect;
+  switch (myBoard) {
+    case MVME_2600_2700_W_MVME761:
+      nvram_base = 0x80000074;
+      nvram_indirect = true;
+      break;
+    default:
+      nvram_base = 0xFFE81000;
+      nvram_indirect = false;
+      break;
+  }
+
+  ppcbug_nvram_set_nvbase(nvram_base, nvram_indirect);
+  ppcbug_nvram_set_net_unit(1);
+  ppcbug_nvram_set_net_label(1, "dc0");
 
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Exit from bspstart\n");
