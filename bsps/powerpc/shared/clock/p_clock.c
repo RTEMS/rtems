@@ -55,6 +55,7 @@ int BSP_disconnect_clock_handler(void)
 {
 #ifdef BSP_POWERPC_IRQ_GENERIC_SUPPORT
   rtems_status_code sc;
+  clockOff(0);
   if ( ppc_cpu_is_bookE() )
     sc = rtems_interrupt_handler_remove(
       BSP_DECREMENTER,
@@ -91,6 +92,7 @@ int BSP_connect_clock_handler(void)
         (rtems_interrupt_handler) clockIsr,
         NULL
       );
+  clockOn(0);
   return sc == RTEMS_SUCCESSFUL;
 #else
   if ( ppc_cpu_is_bookE() )
