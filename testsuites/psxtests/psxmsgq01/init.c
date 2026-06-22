@@ -826,6 +826,10 @@ void verify_timed_send_queue( int que, int is_blocking )
   gettimeofday( &tv2, &tz2 );
   tv3.tv_sec = tv2.tv_sec - tv1.tv_sec;
   tv3.tv_usec = tv2.tv_usec - tv1.tv_usec;
+  if ( tv3.tv_usec < 0 ) {
+    tv3.tv_usec += 1000000;
+    tv3.tv_sec--;
+  }
 
   if ( is_blocking ) { /* Don't verify the non-blocking queue */
     fatal_int_service_status( status, -1, "mq_timedsend status" );
@@ -878,6 +882,10 @@ void verify_timed_receive_queue( char *task_name, int que, int is_blocking )
   gettimeofday( &tv2, &tz2 );
   tv3.tv_sec = tv2.tv_sec - tv1.tv_sec;
   tv3.tv_usec = tv2.tv_usec - tv1.tv_usec;
+  if ( tv3.tv_usec < 0 ) {
+    tv3.tv_usec += 1000000;
+    tv3.tv_sec--;
+  }
 
   fatal_int_service_status( status, -1, "mq_timedreceive status" );
   if ( is_blocking ) {
@@ -1235,10 +1243,12 @@ void verify_timedout_mq_timedreceive(
   gettimeofday( &tv2, &tz2 );
   tv3.tv_sec = tv2.tv_sec - tv1.tv_sec;
   tv3.tv_usec = tv2.tv_usec - tv1.tv_usec;
+  if ( tv3.tv_usec < 0 ) {
+    tv3.tv_usec += 1000000;
+    tv3.tv_sec--;
+  }
 
   fatal_int_service_status( status, -1, "mq_timedreceive status" );
-
-  /* FIXME: This is wrong. */
   printf( "Init: %ld sec %ld us\n", (long) tv3.tv_sec, (long) tv3.tv_usec );
 }
 
@@ -1283,6 +1293,10 @@ void verify_timedout_mq_timedsend( int que, int is_blocking )
   gettimeofday( &tv2, &tz2 );
   tv3.tv_sec = tv2.tv_sec - tv1.tv_sec;
   tv3.tv_usec = tv2.tv_usec - tv1.tv_usec;
+  if ( tv3.tv_usec < 0 ) {
+    tv3.tv_usec += 1000000;
+    tv3.tv_sec--;
+  }
 
   printf( "Init: %ld sec %ld us\n", (long) tv3.tv_sec, (long) tv3.tv_usec );
 
