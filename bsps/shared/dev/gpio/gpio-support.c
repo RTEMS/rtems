@@ -883,6 +883,7 @@ rtems_status_code rtems_gpio_define_pin_group(
                    group_definition->bsp_specific_pin_count
                  );
     _Assert( release_sc == RTEMS_SUCCESSFUL );
+    (void) release_sc;
 
     release_group_allocations(group);
     return sc;
