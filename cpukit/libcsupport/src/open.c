@@ -94,7 +94,9 @@ static int do_open(
   bool truncate = ( oflag & O_TRUNC ) == O_TRUNC;
   bool open_dir;
 #ifdef O_NOFOLLOW
-  int follow = ( oflag & O_NOFOLLOW ) == O_NOFOLLOW ? 0 : RTEMS_FS_FOLLOW_LINK;
+  int follow = ( oflag & O_NOFOLLOW ) == O_NOFOLLOW
+    ? RTEMS_FS_FOLLOW_HARD_LINK
+    : RTEMS_FS_FOLLOW_LINK;
 #else
   int follow = RTEMS_FS_FOLLOW_LINK;
 #endif
