@@ -40,6 +40,7 @@
 
 #include <bsp/irq-generic.h>
 #include <bsp/irqimpl.h>
+#include <bsp/fatal.h>
 #include <rtems/score/processormaskimpl.h>
 
 #if !defined( LEON3_IRQAMP_EXTENDED_INTERRUPT )
@@ -85,6 +86,19 @@ bool bsp_interrupt_is_valid_vector( rtems_vector_number vector )
 Processor_mask leon3_interrupt_affinities[ BSP_INTERRUPT_VECTOR_MAX_STD + 1 ];
 #endif
 
+#if defined( RTEMS_SMP ) || defined( RTEMS_MULTIPROCESSING )
+static void leon3_check_ipi_vector( void )
+{
+  rtems_interrupt_attributes ipi_attributes;
+  rtems_status_code          status;
+
+  status = bsp_interrupt_get_attributes( LEON3_mp_irq, &ipi_attributes );
+  if ( ( status != RTEMS_SUCCESSFUL ) || !ipi_attributes.can_raise_on ) {
+    bsp_fatal( LEON3_FATAL_IPI_INITIALIZATION );
+  }
+}
+#endif
+
 void bsp_interrupt_facility_initialize( void )
 {
 #if defined( RTEMS_SMP )
@@ -99,6 +113,10 @@ void bsp_interrupt_facility_initialize( void )
 #endif
 
   leon3_ext_irq_init( LEON3_IrqCtrl_Regs );
+
+#if defined( RTEMS_SMP ) || defined( RTEMS_MULTIPROCESSING )
+  leon3_check_ipi_vector();
+#endif
 }
 
 static bool leon3_interrupt_is_maskable( rtems_vector_number vector )
