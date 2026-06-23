@@ -68,8 +68,7 @@
     RTEMS_INTERRUPT_UNIQUE,            \
     handler,                           \
     NULL                               \
-  );                                   \
-  SPARC_Clear_and_unmask_interrupt( TEST_VECTOR );
+  );
 
 #define Cause_tm27_intr() __asm__ volatile( "ta 0x10; nop " );
 

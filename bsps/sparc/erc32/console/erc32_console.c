@@ -361,7 +361,6 @@ static void erc32_console_initialize( int minor )
       RTEMS_INTERRUPT_UNIQUE,
       &erc32_UART_A
     );
-    SPARC_Clear_and_unmask_interrupt( CONSOLE_UART_A_TRAP );
 
     rtems_interrupt_entry_initialize(
       &erc32_UART_B,
@@ -374,7 +373,6 @@ static void erc32_console_initialize( int minor )
       RTEMS_INTERRUPT_UNIQUE,
       &erc32_UART_B
     );
-    SPARC_Clear_and_unmask_interrupt( CONSOLE_UART_B_TRAP );
 
     rtems_interrupt_entry_initialize(
       &erc32_UART_ERROR,
@@ -387,7 +385,6 @@ static void erc32_console_initialize( int minor )
       RTEMS_INTERRUPT_UNIQUE,
       &erc32_UART_ERROR
     );
-    SPARC_Clear_and_unmask_interrupt( CONSOLE_UART_ERROR_TRAP );
     interrupts_installed = true;
   }
   #endif

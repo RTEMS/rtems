@@ -91,8 +91,6 @@ static void erc32_install_inter_processor_interrupt( void )
     RTEMS_INTERRUPT_UNIQUE,
     &erc32_handle_ipi
   );
-
-  SPARC_Clear_and_unmask_interrupt( IPI_VECTOR );
 }
 
 RTEMS_SYSINIT_ITEM(

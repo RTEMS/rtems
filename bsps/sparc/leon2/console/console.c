@@ -219,7 +219,6 @@ void console_initialize_interrupts( void )
     RTEMS_INTERRUPT_UNIQUE,
     &leon_UART_1
   );
-  SPARC_Clear_and_unmask_interrupt( CONSOLE_UART_1_TRAP );
 
   rtems_interrupt_entry_initialize(
     &leon_UART_2,
@@ -235,7 +234,6 @@ void console_initialize_interrupts( void )
       RTEMS_INTERRUPT_UNIQUE,
       &leon_UART_2
     );
-  SPARC_Clear_and_unmask_interrupt( CONSOLE_UART_2_TRAP );
 }
 
 /*
