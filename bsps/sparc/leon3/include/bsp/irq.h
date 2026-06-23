@@ -38,13 +38,30 @@
 #define LIBBSP_LEON3_IRQ_CONFIG_H
 
 #include <rtems.h>
+#include <bspopts.h>
 
 #define BSP_INTERRUPT_VECTOR_MAX_STD 15 /* Standard IRQ controller */
 #define BSP_INTERRUPT_VECTOR_MAX_EXT 31 /* Extended IRQ controller */
+#define BSP_INTERRUPT_VECTOR_MAX_MAP 63 /* Extended IRQ controller with mapping registers */
 
 #define BSP_INTERRUPT_VECTOR_COUNT ( BSP_INTERRUPT_VECTOR_MAX_EXT + 1 )
 
 /* The check is different depending on IRQ controller, runtime detected */
 #define BSP_INTERRUPT_CUSTOM_VALID_VECTOR
+
+#ifdef LEON3_IRQAMP_IRQMAP
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+extern rtems_vector_number
+  LEON3_IrqCtrl_Mapping[ BSP_INTERRUPT_VECTOR_MAX_MAP + 1 ];
+
+#ifdef __cplusplus
+}
+#endif
+
+#define bsp_interrupt_vector_modify( v ) LEON3_IrqCtrl_Mapping[ ( v ) ]
+#endif
 
 #endif /* LIBBSP_LEON3_IRQ_CONFIG_H */

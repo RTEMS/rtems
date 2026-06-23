@@ -114,7 +114,11 @@ void _CPU_SMP_Send_interrupt( uint32_t target_processor_index )
   /* send interrupt to destination CPU */
   grlib_store_32(
     &LEON3_IrqCtrl_Regs->piforce[ target_processor_index ],
+#ifdef LEON3_IRQAMP_IRQMAP
+    1U << leon3_irqmap_get_unchecked( LEON3_mp_irq )
+#else
     1U << LEON3_mp_irq
+#endif
   );
 }
 

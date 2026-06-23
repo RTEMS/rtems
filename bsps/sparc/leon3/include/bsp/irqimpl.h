@@ -42,6 +42,7 @@
 #include <grlib/io.h>
 
 #include <bspopts.h>
+#include <bsp/irq.h>
 
 struct ambapp_dev;
 
@@ -141,6 +142,43 @@ static inline uint32_t bsp_irq_fixup( uint32_t irq )
 
   return eirq;
 }
+
+#ifdef LEON3_IRQAMP_IRQMAP
+/* Mapping from bus interrupt lines to IRQ(A)MP interrupt lines */
+extern rtems_vector_number
+  LEON3_IrqCtrl_Mapping[ BSP_INTERRUPT_VECTOR_MAX_MAP + 1 ];
+
+/**
+ * @brief Gets the mapping from a bus interrupt line to an IRQ(A)MP interrupt line.
+ *
+ * @param bus_line is the bus interrupt line number.
+ * @param[out] irqmp_line is the IRQ(A)MP interrupt line number to which the bus interrupt line is mapped.
+ *
+ * @retval RTEMS_SUCCESSFUL if the mapping was retrieved successfully
+ * @retval RTEMS_INVALID_NUMBER if the bus line number is invalid
+ *
+ */
+rtems_status_code leon3_irqmap_get(
+  rtems_vector_number  bus_line,
+  rtems_vector_number *irqmp_line
+);
+
+/**
+ * @brief Gets the IRQ(A)MP interrupt line mapped to a bus interrupt line.
+ *
+ * This function does not perform any validation on the bus line number and
+ * should only be used when the caller is certain that it is valid.
+ *
+ * @param bus_line is the bus interrupt line number.
+ * @return the IRQ(A)MP interrupt line to which the bus interrupt line is mapped.
+ */
+static inline rtems_vector_number leon3_irqmap_get_unchecked(
+  rtems_vector_number bus_line
+)
+{
+  return LEON3_IrqCtrl_Mapping[ bus_line ];
+}
+#endif
 
 /** @} */
 

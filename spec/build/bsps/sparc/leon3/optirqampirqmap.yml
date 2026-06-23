@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2026 Frontgrade Gaisler
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+default:
+- enabled-by: sparc/gr740
+  value: true
+- enabled-by: true
+  value: false
+enabled-by: true
+links: []
+name: LEON3_IRQAMP_IRQMAP
+description: |
+  This option specifies if the IRQ(A)MP interrupt (re-)map registers are available.
+type: build
