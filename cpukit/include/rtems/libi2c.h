@@ -119,6 +119,8 @@ extern rtems_status_code rtems_i2c_ioctl(
 
 extern const rtems_driver_address_table rtems_libi2c_io_ops;
 
+extern bool rtems_libi2c_is_initialized;
+
 /* Unfortunately, if you want to add this driver to
  * a RTEMS configuration table then you need all the
  * members explicitly :-( (Device_driver_table should
