@@ -29,6 +29,8 @@ links:
 - role: build-dependency
   uid: ../optramsize
 - role: build-dependency
+  uid: ../optriscvmmuvirtualaddressbits
+- role: build-dependency
   uid: abi
 - role: build-dependency
   uid: obj

@@ -40,6 +40,7 @@
 #include <bsp/utility.h>
 #include <bspopts.h>
 
+#include <rtems/score/basedefs.h>
 #include <rtems/score/riscv-utility.h>
 
 #ifdef __cplusplus
@@ -101,20 +102,10 @@ riscv_mmu_enable( const riscv_mmu_control *control )
   /* Enable MMU */
   unsigned long value;
 
-#define SATP_SET_VA_SIZE_CASE( _va_bits )                          \
-    case _va_bits:                                                 \
-      value = (uintptr_t) SATP_MODE_##_va_bits << SATP_MODE_SHIFT; \
-      break
-
-  switch ( control->va_bits ) {
-#if __riscv_xlen == 64
-    SATP_SET_VA_SIZE_CASE( SV39 );
-#else
-    SATP_SET_VA_SIZE_CASE( SV32 );
-#endif
-    default:
-      bsp_fatal( RISCV_FATAL_MMU_CANNOT_MAP_BLOCK );
-  }
+  value = (uintptr_t) RTEMS_XCONCAT(
+    SATP_MODE_SV,
+    RISCV_MMU_VIRTUAL_ADDRESS_BITS
+  ) << SATP_MODE_SHIFT;
 
   value |= (uintptr_t) control->root >> RISCV_PGSHIFT;
   write_csr( satp, value );

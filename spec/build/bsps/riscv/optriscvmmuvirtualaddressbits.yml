@@ -6,10 +6,20 @@ build-type: option
 copyrights:
 - Copyright (C) 2026 Gedare Bloom
 default:
+- enabled-by:
+  - riscv/rv32i
+  - riscv/rv32iac
+  - riscv/rv32im
+  - riscv/rv32imac
+  - riscv/rv32imafc
+  - riscv/rv32imafd
+  - riscv/rv32imafdc
+  value: 32
 - enabled-by: true
-  value: 0
+  value: 39
 description: |
-  TODO
+  Set the number of bits to use in the virtual address. Must be 32 for rv32,
+  and can be 39, 48, or 57 for rv64.
 enabled-by: riscv
 format: '{}'
 links: []

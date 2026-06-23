@@ -58,8 +58,6 @@ links:
 - role: build-dependency
   uid: optprofiling
 - role: build-dependency
-  uid: optriscvmmuvirtualaddressbits
-- role: build-dependency
   uid: optriscvusesmode
 - role: build-dependency
   uid: optsmp
