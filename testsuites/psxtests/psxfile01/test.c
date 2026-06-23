@@ -78,6 +78,10 @@ rtems_filesystem_operations_table IMFS_ops_no_rename;
 
 static const char somefile[] = "somefile";
 
+static const char hardlink[] = "hardlink";
+
+static const char hardlink_marker[] = "hard link O_NOFOLLOW marker";
+
 static const char somelink[] = "somelink";
 
 /*
@@ -201,12 +205,58 @@ static void test_open_nofollow( void )
   int         status;
   int         fd;
   struct stat st;
+  struct stat hardlink_st;
+#ifdef O_NOFOLLOW
+  ssize_t     n;
+  char        buf[ sizeof( hardlink_marker ) ];
+#endif
 
-  fd = open( somefile, O_CREAT, S_IRWXU );
+  fd = open( somefile, O_CREAT | O_WRONLY, S_IRWXU );
   rtems_test_assert( fd >= 0 );
+
+#ifdef O_NOFOLLOW
+  n = write( fd, hardlink_marker, sizeof( hardlink_marker ) );
+  rtems_test_assert( n == (ssize_t) sizeof( hardlink_marker ) );
+#endif
 
   status = close( fd );
   rtems_test_assert( status == 0 );
+
+#ifdef O_NOFOLLOW
+  status = link( somefile, hardlink );
+  rtems_test_assert( status == 0 );
+
+  status = stat( somefile, &st );
+  rtems_test_assert( status == 0 );
+
+  fd = open( hardlink, O_RDONLY | O_NOFOLLOW );
+  rtems_test_assert( fd >= 0 );
+
+  status = fstat( fd, &hardlink_st );
+  rtems_test_assert( status == 0 );
+  rtems_test_assert( S_ISREG( hardlink_st.st_mode ) );
+  rtems_test_assert( hardlink_st.st_ino == st.st_ino );
+
+  /*
+   * Read the file contents through the hard link.  This is what actually
+   * exercises the fix.  A hard link node forwards fstat() to its target,
+   * so the stat checks above pass even when open() wrongly stops at the
+   * hard link node instead of resolving it.  The hard link node's read
+   * handler, however, is the default one which fails with ENOTSUP, so the
+   * read only returns the data when open() resolved the hard link to the
+   * target regular file.
+   */
+  memset( buf, 0, sizeof( buf ) );
+  n = read( fd, buf, sizeof( buf ) );
+  rtems_test_assert( n == (ssize_t) sizeof( hardlink_marker ) );
+  rtems_test_assert( memcmp( buf, hardlink_marker, sizeof( buf ) ) == 0 );
+
+  status = close( fd );
+  rtems_test_assert( status == 0 );
+
+  status = unlink( hardlink );
+  rtems_test_assert( status == 0 );
+#endif
 
   status = symlink( somefile, somelink );
   rtems_test_assert( status == 0 );
