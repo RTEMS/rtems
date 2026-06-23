@@ -184,7 +184,8 @@ struct ambapp_pnp_apb {
 #define ambapp_pnp_vendor( id ) ( ( ( id ) >> 24 ) & 0xff )
 #define ambapp_pnp_device( id ) ( ( ( id ) >> 12 ) & 0xfff )
 #define ambapp_pnp_ver( id )    ( ( ( id ) >> 5 ) & 0x1f )
-#define ambapp_pnp_irq( id )    ( ( id ) & 0x1f )
+#define ambapp_pnp_irq( id ) \
+  ( ( ( ( id ) >> 5 ) & ( 0x3 << 5 ) ) | ( ( id ) & 0x1f ) )
 
 #define ambapp_pnp_start( mbar ) \
   ( ( ( mbar ) & 0xfff00000 ) & ( ( ( mbar ) & 0xfff0 ) << 16 ) )
