@@ -745,6 +745,9 @@ ALT_STATUS_CODE alt_qspi_read(void * dst, uint32_t src, size_t size)
     uint32_t bank_ofst  = src & (ALT_QSPI_BANK_SIZE - 1);
 
     char * data = (char *)dst;
+#ifdef __rtems__
+    (void)data;
+#endif /* __rtems__ */
 
     uint32_t copy_length = MIN(size, ALT_QSPI_BANK_SIZE - bank_ofst);
 
@@ -768,7 +771,9 @@ ALT_STATUS_CODE alt_qspi_read(void * dst, uint32_t src, size_t size)
         }
 
         bank_addr += ALT_QSPI_BANK_SIZE;
+#ifndef __rtems__
         data += copy_length;
+#endif /* __rtems__ */
         size -= copy_length;
 
         copy_length = MIN(size, ALT_QSPI_BANK_SIZE);
