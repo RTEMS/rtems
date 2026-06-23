@@ -47,6 +47,9 @@
 /*
  * adaptations to also handle SPI devices
  * by Thomas Doerfler, embedded brains GmbH & Co. KG
+ *
+ * adaptations to use RTEMS API for mutex handling
+ * by Vijay Banerjee
  */
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,6 +67,7 @@
 #include <rtems/bspIo.h>
 #include <rtems/libio.h>
 #include <rtems/score/sysstate.h>
+#include <rtems/thread.h>
 
 #include <rtems/libi2c.h>
 
@@ -105,31 +109,20 @@
 
 rtems_device_major_number rtems_libi2c_major;
 
-static bool is_initialized = false;
+bool rtems_libi2c_is_initialized = false;
 
 static struct i2cbus {
-  rtems_libi2c_bus_t *bush;
-  volatile rtems_id   mutex; /* lock this across start -> stop */
-  volatile bool       started;
-  char               *name;
-} busses[ MAX_NO_BUSSES ] = { { NULL, RTEMS_ID_NONE, false, NULL } };
+  rtems_libi2c_bus_t   *bush;
+  rtems_recursive_mutex mutex;
+  volatile bool         started;
+  char                 *name;
+} busses[MAX_NO_BUSSES] = { { NULL, {}, false, NULL } };
 
 static struct {
   rtems_libi2c_drv_t *drv;
 } drvs[ MAX_NO_DRIVERS ] = { { NULL } };
 
-static rtems_id libmutex = RTEMS_ID_NONE;
-
-#define LOCK( m ) \
-  assert( !rtems_semaphore_obtain( ( m ), RTEMS_WAIT, RTEMS_NO_TIMEOUT ) )
-#define UNLOCK( m ) rtems_semaphore_release(( m ))
-
-#define LIBLOCK()   LOCK( libmutex )
-#define LIBUNLOCK() UNLOCK( libmutex )
-
-#define MUTEX_ATTS                                                     \
-  ( RTEMS_PRIORITY | RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | \
-    RTEMS_NO_PRIORITY_CEILING | RTEMS_LOCAL )
+static rtems_mutex libmutex = RTEMS_MUTEX_INITIALIZER("LIBI2C");
 
 /* During early stages of life, stdio is not available */
 
@@ -146,23 +139,6 @@ static void safe_printf( const char *fmt, ... )
   va_end( ap );
 }
 
-static rtems_status_code mutexCreate( rtems_name nm, rtems_id *pm )
-{
-  rtems_status_code sc;
-
-  if (
-    RTEMS_SUCCESSFUL !=
-    ( sc = rtems_semaphore_create( nm, 1, MUTEX_ATTS, 0, pm ) )
-  ) {
-    if ( _System_state_Is_up( _System_state_Get() ) ) {
-      rtems_error( sc, DRVNM "Unable to create mutex\n" );
-    } else {
-      printk( DRVNM "Unable to create mutex (status code %i)\n", sc );
-    }
-  }
-  return sc;
-}
-
 /* Lock a bus avoiding to have a mutex, which is mostly
  * unused, hanging around all the time. We just create
  * and delete it on the fly...
@@ -172,37 +148,12 @@ static rtems_status_code mutexCreate( rtems_name nm, rtems_id *pm )
 
 static void lock_bus( int busno )
 {
-  struct i2cbus *bus = &busses[ busno ];
-
-  if ( bus->mutex == RTEMS_ID_NONE ) {
-    /*
-     * Nobody is holding the bus mutex - it's not there.  Create it on the fly.
-     */
-    LIBLOCK();
-    if ( bus->mutex == RTEMS_ID_NONE ) {
-      rtems_id          m = RTEMS_ID_NONE;
-      rtems_status_code sc = mutexCreate(
-        rtems_build_name( 'i', '2', 'c', '0' + busno ),
-        &m
-      );
-      if ( sc != RTEMS_SUCCESSFUL ) {
-        LIBUNLOCK();
-        rtems_panic( DRVNM "Unable to create bus lock" );
-        return;
-      }
-      bus->mutex = m;
-    }
-    LIBUNLOCK();
-  }
-
-  /* Now lock this bus */
-  LOCK( bus->mutex );
+  rtems_recursive_mutex_lock(&busses[busno].mutex);
 }
 
 static void unlock_bus( int busno )
 {
-  struct i2cbus *bus = &busses[ busno ];
-  UNLOCK( bus->mutex );
+  rtems_recursive_mutex_unlock(&busses[busno].mutex);
 }
 
 /* Note that 'arg' is always passed in as NULL */
@@ -212,24 +163,12 @@ rtems_status_code rtems_i2c_init(
   void                     *arg
 )
 {
-  (void) minor;
-  (void) arg;
+  rtems_mutex_lock(&libmutex);
+  rtems_libi2c_is_initialized     = true;
+  rtems_libi2c_major = major;
+  rtems_mutex_unlock(&libmutex);
+  return 0;
 
-  rtems_status_code rval;
-  /* No busses or drivers can be registered at this point;
-   * avoid the macro aborting with an error
-  DECL_CHECKED_DRV (drv, busno, minor)
-   */
-
-  rval = mutexCreate( rtems_build_name( 'l', 'I', '2', 'C' ), &libmutex );
-
-  if ( RTEMS_SUCCESSFUL == rval ) {
-    is_initialized = true;
-    rtems_libi2c_major = major;
-  } else {
-    libmutex = RTEMS_ID_NONE;
-  }
-  return rval;
 }
 
 rtems_status_code rtems_i2c_open(
@@ -365,7 +304,7 @@ int rtems_libi2c_initialize( void )
 {
   rtems_status_code sc;
 
-  if ( is_initialized ) {
+  if (rtems_libi2c_is_initialized) {
     /*
      * already called before? then skip this step
      */
@@ -376,7 +315,7 @@ int rtems_libi2c_initialize( void )
    * the return code of the 'init' operation, so we cannot
    * rely on return code since it may seem OK even if the driver 'init;
    * op failed.
-   * Let 'init' handle 'is_initialized'...
+   * Let 'init' handle 'rtems_libi2c_is_initialized'...
    */
   sc = rtems_io_register_driver(
     0,
@@ -385,14 +324,9 @@ int rtems_libi2c_initialize( void )
   );
   if ( RTEMS_SUCCESSFUL != sc ) {
     safe_printf(
-      DRVNM "Claiming driver slot failed (rtems status code %i)\n",
-      sc
-    );
-    if ( libmutex != RTEMS_ID_NONE ) {
-      rtems_semaphore_delete( libmutex );
-    }
-    libmutex = RTEMS_ID_NONE;
-    is_initialized = false;
+             DRVNM "Claiming driver slot failed (rtems status code %i)\n",
+             sc);
+    rtems_libi2c_is_initialized = false;
     return -1;
   }
 
@@ -447,11 +381,14 @@ int rtems_libi2c_register_bus( const char *name, rtems_libi2c_bus_t *bus )
   }
   /* should be a directory since name terminates in '/' */
 
-  if ( libmutex == RTEMS_ID_NONE ) {
-    safe_printf( DRVNM "Library not initialized\n" );
+  rtems_mutex_lock(&libmutex);
+  if (!rtems_libi2c_is_initialized){
+    safe_printf ( DRVNM "Library not initialized\n");
     free( nmcpy );
+    rtems_mutex_unlock(&libmutex);
     return -RTEMS_NOT_DEFINED;
   }
+  rtems_mutex_unlock(&libmutex);
 
   if ( bus == NULL || bus->size < sizeof( *bus ) ) {
     safe_printf( DRVNM "No bus-ops or size too small -- misconfiguration?\n" );
@@ -459,17 +396,23 @@ int rtems_libi2c_register_bus( const char *name, rtems_libi2c_bus_t *bus )
     return -RTEMS_NOT_CONFIGURED;
   }
 
-  LIBLOCK();
-  for ( i = 0; i < MAX_NO_BUSSES; i++ ) {
-    if ( !busses[ i ].bush ) {
+
+  for (i = 0; i < MAX_NO_BUSSES; i++) {
+    rtems_mutex_lock(&libmutex);
+    if (!busses[i].bush) {
       /* found a free slot */
-      busses[ i ].bush = bus;
-      busses[ i ].mutex = RTEMS_ID_NONE;
-      busses[ i ].started = false;
+      char bus_mtx[5];
+      snprintf(bus_mtx, 5, "I2C%d", i);
+      rtems_recursive_mutex_init(&busses[i].mutex, bus_mtx);
+
+      busses[i].bush = bus;
+      busses[i].started = false;
 
       if ( !name ) {
         sprintf( nmcpy + strlen( nmcpy ), "%i", i );
       }
+
+      rtems_mutex_unlock(&libmutex);
 
       if (( err = busses[ i ].bush->ops->init( busses[ i ].bush ) )) {
         /* initialization failed */
@@ -481,8 +424,8 @@ int rtems_libi2c_register_bus( const char *name, rtems_libi2c_bus_t *bus )
 
       break;
     }
+    rtems_mutex_unlock(&libmutex);
   }
-  LIBUNLOCK();
 
   if ( i >= MAX_NO_BUSSES ) {
     i = -RTEMS_TOO_MANY;
@@ -495,11 +438,7 @@ int rtems_libi2c_register_bus( const char *name, rtems_libi2c_bus_t *bus )
 
 static int not_started( int busno )
 {
-  int rval;
-  lock_bus( busno );
-  rval = !busses[ busno ].started;
-  unlock_bus( busno );
-  return rval;
+  return !busses[ busno ].started;
 }
 
 rtems_status_code rtems_libi2c_send_start( rtems_device_minor_number minor )
@@ -743,10 +682,13 @@ int rtems_libi2c_register_drv(
   rtems_status_code         err;
   rtems_device_minor_number minor;
 
-  if ( libmutex == RTEMS_ID_NONE ) {
-    safe_printf( DRVNM "Library not initialized\n" );
+  rtems_mutex_lock(&libmutex);
+  if (!rtems_libi2c_is_initialized){
+    safe_printf ( DRVNM "Library not initialized\n");
+    rtems_mutex_unlock(&libmutex);
     return -RTEMS_NOT_DEFINED;
   }
+  rtems_mutex_unlock(&libmutex);
 
   if ( name && strchr( name, '/' ) ) {
     safe_printf( DRVNM "Invalid name: '%s' -- must not contain '/'\n", name );
@@ -768,9 +710,9 @@ int rtems_libi2c_register_drv(
   }
 
   /* allocate slot */
-  LIBLOCK();
-  for ( i = 0; i < MAX_NO_DRIVERS; i++ ) {
+  for (i = 0; i < MAX_NO_DRIVERS; i++) {
     /* driver # 0 is special, it is the built-in raw driver */
+    rtems_mutex_lock(&libmutex);
     if ( !drvs[ i ].drv ) {
       char    *str;
       dev_t    dev;
@@ -808,6 +750,8 @@ int rtems_libi2c_register_drv(
 
       drvs[ i ].drv = drvtbl;
 
+      rtems_mutex_unlock(&libmutex);
+
       if ( drvtbl->ops->initialization_entry ) {
         err = drvs[ i ].drv->ops->initialization_entry(
           rtems_libi2c_major,
@@ -818,10 +762,9 @@ int rtems_libi2c_register_drv(
         err = RTEMS_SUCCESSFUL;
       }
 
-      LIBUNLOCK();
       return err ? -err : minor;
     }
+    rtems_mutex_unlock(&libmutex);
   }
-  LIBUNLOCK();
   return -RTEMS_TOO_MANY;
 }
