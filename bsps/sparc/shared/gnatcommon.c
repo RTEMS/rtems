@@ -111,7 +111,6 @@ void __gnat_install_handler_common( int t1, int t2 )
         SPARC_SYNCHRONOUS_TRAP( trap ),
         &previous_isr_b
       );
-      SPARC_Clear_and_unmask_interrupt( SPARC_SYNCHRONOUS_TRAP( trap ) );
     }
   }
 }
