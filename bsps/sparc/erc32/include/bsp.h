@@ -86,8 +86,6 @@ extern int end; /* last address in the program */
 
 /* functions */
 
-void SPARC_Clear_and_unmask_interrupt( rtems_vector_number vector );
-
 void BSP_fatal_exit( uint32_t error );
 
 /* Interrupt Service Routine (ISR) pointer */

@@ -123,8 +123,6 @@ extern int CLOCK_SPEED;
 
 extern int end; /* last address in the program */
 
-void SPARC_Clear_and_unmask_interrupt( rtems_vector_number vector );
-
 void BSP_fatal_exit( uint32_t error );
 
 /*

@@ -36,7 +36,6 @@ source:
 - bsps/shared/dev/serial/console-termios.c
 - bsps/shared/irq/irq-default-handler.c
 - bsps/shared/start/sbrk.c
-- bsps/sparc/shared/start/sparctrap.c
 - bsps/sparc/leon3/btimer/btimer.c
 - bsps/sparc/leon3/btimer/watchdog.c
 - bsps/sparc/leon3/clock/ckinit.c
