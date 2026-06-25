@@ -41,20 +41,33 @@
 #include <rtems/score/basedefs.h>
 #include <rtems/score/riscv-utility.h>
 
-BSP_START_DATA_SECTION RTEMS_ALIGNED( RISCV_PGSIZE ) static uintptr_t
-    riscv_root_page_table[1 << RISCV_PGLEVEL_BITS];
+BSP_START_DATA_SECTION RTEMS_ALIGNED(
+  RISCV_PGSIZE
+) static uintptr_t riscv_root_page_table[ 1 << RISCV_PGLEVEL_BITS ] = {};
 
 #if __riscv_xlen == 64
-BSP_START_DATA_SECTION RTEMS_ALIGNED( RISCV_PGSIZE ) static uintptr_t
-    riscv_l1_ram_page_table[1 << RISCV_PGLEVEL_BITS];
+BSP_START_DATA_SECTION RTEMS_ALIGNED(
+  RISCV_PGSIZE
+) static uintptr_t riscv_l1_ram_page_table[ 1 << RISCV_PGLEVEL_BITS ] = {};
 
-BSP_START_DATA_SECTION RTEMS_ALIGNED( RISCV_PGSIZE ) static uintptr_t
-    riscv_l1_mmio_page_table[1 << RISCV_PGLEVEL_BITS];
+BSP_START_DATA_SECTION RTEMS_ALIGNED(
+  RISCV_PGSIZE
+) static uintptr_t riscv_l1_mmio_page_table[ 1 << RISCV_PGLEVEL_BITS ] = {};
+#if RISCV_MMU_VIRTUAL_ADDRESS_BITS > 39
+BSP_START_DATA_SECTION RTEMS_ALIGNED(
+  RISCV_PGSIZE
+) static uintptr_t riscv_l2_page_table[ 1 << RISCV_PGLEVEL_BITS ] = {};
+#endif
+#if RISCV_MMU_VIRTUAL_ADDRESS_BITS > 48
+BSP_START_DATA_SECTION RTEMS_ALIGNED(
+  RISCV_PGSIZE
+) static uintptr_t riscv_l3_page_table[ 1 << RISCV_PGLEVEL_BITS ] = {};
+#endif
 #endif
 
 BSP_START_DATA_SECTION riscv_mmu_control riscv_mmu_instance = {
   .root = (uintptr_t *) riscv_root_page_table,
-  .va_bits = RTEMS_XCONCAT(SV, RISCV_MMU_VIRTUAL_ADDRESS_BITS)
+  .va_bits = RTEMS_XCONCAT( SV, RISCV_MMU_VIRTUAL_ADDRESS_BITS )
 };
 
 BSP_START_TEXT_SECTION static inline uintptr_t riscv_page_to_ppn(
