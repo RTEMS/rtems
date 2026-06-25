@@ -99,18 +99,23 @@ BSP_START_TEXT_SECTION static inline uintptr_t riscv_create_pte(
   uintptr_t page = address >> RISCV_PGSHIFT;
 
   pte |= riscv_page_to_ppn( page, 0 );
-  pte |= riscv_page_to_ppn( page, 1 );
 
-#if __riscv_xlen == 32 || RISCV_MMU_VIRTUAL_ADDRESS_BITS == 32
-  if ( control->va_bits != SV32 ) {
-    bsp_fatal( RISCV_FATAL_MMU_CANNOT_MAP_BLOCK );
+  switch ( control->va_bits ) {
+    case SV57:
+      pte |= riscv_page_to_ppn( page, 4 );
+      RTEMS_FALL_THROUGH();
+    case SV48:
+      pte |= riscv_page_to_ppn( page, 3 );
+      RTEMS_FALL_THROUGH();
+    case SV39:
+      pte |= riscv_page_to_ppn( page, 2 );
+      RTEMS_FALL_THROUGH();
+    case SV32:
+      pte |= riscv_page_to_ppn( page, 1 );
+      break;
+    default:
+      bsp_fatal( RISCV_FATAL_MMU_CANNOT_MAP_BLOCK );
   }
-#else
-  pte |= riscv_page_to_ppn( page, 2 );
-  if ( control->va_bits != SV39 ) {
-    bsp_fatal( RISCV_FATAL_MMU_CANNOT_MAP_BLOCK );
-  }
-#endif
 
   return pte;
 }
@@ -123,8 +128,8 @@ BSP_START_TEXT_SECTION static inline uint32_t riscv_mmu_get_index(
   uint32_t shift_bits;
   const uint32_t mask = (1 << RISCV_PGLEVEL_BITS) - 1;
 
-  if ( level == 0 || level > 2 ) {
-      bsp_fatal( RISCV_FATAL_MMU_CANNOT_MAP_BLOCK );
+  if ( level == 0 || level > 4 ) {
+    bsp_fatal( RISCV_FATAL_MMU_CANNOT_MAP_BLOCK );
   }
 
   shift_bits = RISCV_PGSHIFT + level * RISCV_PGLEVEL_BITS;
@@ -140,17 +145,27 @@ BSP_START_TEXT_SECTION static inline void riscv_map_megapages(
   uint32_t flags,
   int level,
   size_t megapage_size
-) {
+)
+{
   size_t i;
 
   uintptr_t index;
 
-  for ( i = 0; i < size / megapage_size; i++ )
-  {
+  for ( i = 0; i < size / megapage_size; i++ ) {
     index = riscv_mmu_get_index( address, level );
     page_table[index] = riscv_create_pte( control, address, flags );
     address += (uintptr_t) megapage_size;
   }
+}
+
+BSP_START_TEXT_SECTION static inline uintptr_t riscv_pte_to_paddr(
+  uintptr_t pte
+)
+{
+  uintptr_t addr = pte & ~PTE_ATTR;
+  addr >>= PTE_PPN_SHIFT;
+  addr <<= RISCV_PGSHIFT;
+  return addr;
 }
 
 BSP_START_TEXT_SECTION static inline void riscv_mmu_add_subtable(
@@ -163,13 +178,57 @@ BSP_START_TEXT_SECTION static inline void riscv_mmu_add_subtable(
 {
   uint32_t nonleaf_flags = PTE_V | PTE_G;
   size_t two_MiB = 2 * 1024 * 1024;
-  uintptr_t index = riscv_mmu_get_index( address, 2 );
+  uintptr_t *table;
+  uintptr_t index;
+  int level;
 
-  control->root[index] = riscv_create_pte(
+  switch ( control->va_bits ) {
+    case SV57:
+      level = 4;
+      break;
+    case SV48:
+      level = 3;
+      break;
+    case SV39:
+      level = 2;
+      break;
+    default:
+      bsp_fatal( RISCV_FATAL_MMU_CANNOT_MAP_BLOCK );
+  }
+
+  index = riscv_mmu_get_index( address, level );
+  table = control->root;
+#if RISCV_MMU_VIRTUAL_ADDRESS_BITS > 39
+  while ( level > 2 ) {
+    uintptr_t st = table[ index ];
+    if ( st == 0 ) {
+      if ( level == 3 ) {
+        st = (uintptr_t) riscv_l2_page_table;
+      } else {
+        _Assert( level == 4 );
+#if RISCV_MMU_VIRTUAL_ADDRESS_BITS > 48
+        st = (uintptr_t) riscv_l3_page_table;
+#endif
+      }
+      table[ index ] = riscv_create_pte( control, st, nonleaf_flags );
+    } else {
+      st = riscv_pte_to_paddr( st );
+    }
+    _Assert( st );
+    level--;
+    index = riscv_mmu_get_index( address, level );
+    table = (uintptr_t *) st;
+  }
+#endif
+  if ( table[ index ] == 0 ) {
+    table[ index ] = riscv_create_pte(
       control,
       (uintptr_t) subtable,
       nonleaf_flags
-  );
+    );
+  } else {
+    _Assert( table[ index ] == (uintptr_t) subtable );
+  }
 
   /* TODO: check that size fits in the root index PTE */
   riscv_map_megapages( control, subtable, address, size, flags, 1, two_MiB );
