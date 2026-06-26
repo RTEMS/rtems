@@ -163,6 +163,8 @@ rtems_status_code rtems_i2c_init(
   void                     *arg
 )
 {
+  (void) minor;
+  (void) arg;
   rtems_mutex_lock(&libmutex);
   rtems_libi2c_is_initialized     = true;
   rtems_libi2c_major = major;
