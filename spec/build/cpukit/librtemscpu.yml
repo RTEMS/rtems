@@ -49,16 +49,7 @@ install:
   - cpukit/include/dev/can/can.h
 - destination: ${BSP_INCLUDEDIR}/dev/i2c
   source:
-  - cpukit/include/dev/i2c/eeprom.h
-  - cpukit/include/dev/i2c/fpga-i2c-slave.h
-  - cpukit/include/dev/i2c/gpio-nxp-pca9535.h
   - cpukit/include/dev/i2c/i2c.h
-  - cpukit/include/dev/i2c/sensor-lm75a.h
-  - cpukit/include/dev/i2c/switch-nxp-pca9548a.h
-  - cpukit/include/dev/i2c/ti-ads-16bit-adc.h
-  - cpukit/include/dev/i2c/ti-lm25066a.h
-  - cpukit/include/dev/i2c/ti-tmp112.h
-  - cpukit/include/dev/i2c/xilinx-axi-i2c.h
 - destination: ${BSP_INCLUDEDIR}/dev/serial
   source:
   - cpukit/include/dev/serial/sc16is752.h
@@ -555,17 +546,8 @@ source:
 - cpukit/dev/can/can-queue.c
 - cpukit/dev/contrib/iovprintf.c
 - cpukit/dev/flash/flashdev.c
-- cpukit/dev/i2c/eeprom.c
-- cpukit/dev/i2c/fpga-i2c-slave.c
-- cpukit/dev/i2c/gpio-nxp-pca9535.c
 - cpukit/dev/i2c/i2c-bus.c
 - cpukit/dev/i2c/i2c-dev.c
-- cpukit/dev/i2c/sensor-lm75a.c
-- cpukit/dev/i2c/switch-nxp-pca9548a.c
-- cpukit/dev/i2c/ti-ads-16bit-adc.c
-- cpukit/dev/i2c/ti-lm25066a.c
-- cpukit/dev/i2c/ti-tmp112.c
-- cpukit/dev/i2c/xilinx-axi-i2c.c
 - cpukit/dev/ioprintf.c
 - cpukit/dev/iorelax.c
 - cpukit/dev/io/iodev.c

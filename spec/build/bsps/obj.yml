@@ -99,6 +99,15 @@ source:
 - bsps/shared/dev/i2c/spi-fram-fm25l256.c
 - bsps/shared/dev/i2c/spi-memdrv.c
 - bsps/shared/dev/i2c/spi-sd-card.c
+- bsps/shared/dev/i2c/eeprom.c
+- bsps/shared/dev/i2c/fpga-i2c-slave.c
+- bsps/shared/dev/i2c/gpio-nxp-pca9535.c
+- bsps/shared/dev/i2c/sensor-lm75a.c
+- bsps/shared/dev/i2c/switch-nxp-pca9548a.c
+- bsps/shared/dev/i2c/ti-ads-16bit-adc.c
+- bsps/shared/dev/i2c/ti-lm25066a.c
+- bsps/shared/dev/i2c/ti-tmp112.c
+- bsps/shared/dev/i2c/xilinx-axi-i2c.c
 - bsps/shared/dev/ide/ata.c
 - bsps/shared/dev/ide/ata_util.c
 - bsps/shared/dev/ide/ide_controller.c
