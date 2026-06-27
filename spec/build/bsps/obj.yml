@@ -70,6 +70,11 @@ install:
   source:
   - bsps/include/arm/ti/ti_pinmux.h
   - bsps/include/arm/ti/ti_cpuid.h
+- destination: ${BSP_INCLUDEDIR}/dev/can
+  source:
+  - bsps/include/dev/can/can-virtual.h
+  - bsps/include/dev/can/ctucanfd.h
+  - bsps/include/dev/can/sja1000.h
 links:
 - role: build-dependency
   uid: objmpci
@@ -80,6 +85,9 @@ links:
 - role: build-dependency
   uid: optclkfastidle
 source:
+- bsps/shared/dev/can/can-virtual.c
+- bsps/shared/dev/can/ctucanfd/ctucanfd.c
+- bsps/shared/dev/can/sja1000/sja1000.c
 - bsps/shared/dev/display/disp_hcms29xx.c
 - bsps/shared/dev/display/font_hcms29xx.c
 - bsps/shared/dev/flash/flash_sim_flashdev.c

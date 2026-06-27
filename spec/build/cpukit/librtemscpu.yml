@@ -46,10 +46,7 @@ install:
   - cpukit/include/dev/can/can-impl.h
   - cpukit/include/dev/can/can-queue.h
   - cpukit/include/dev/can/can-stats.h
-  - cpukit/include/dev/can/can-virtual.h
   - cpukit/include/dev/can/can.h
-  - cpukit/include/dev/can/ctucanfd.h
-  - cpukit/include/dev/can/sja1000.h
 - destination: ${BSP_INCLUDEDIR}/dev/i2c
   source:
   - cpukit/include/dev/i2c/eeprom.h
@@ -556,9 +553,6 @@ source:
 - cpukit/dev/can/can-devcommon.c
 - cpukit/dev/can/can-quekern.c
 - cpukit/dev/can/can-queue.c
-- cpukit/dev/can/can-virtual.c
-- cpukit/dev/can/ctucanfd/ctucanfd.c
-- cpukit/dev/can/sja1000/sja1000.c
 - cpukit/dev/contrib/iovprintf.c
 - cpukit/dev/flash/flashdev.c
 - cpukit/dev/i2c/eeprom.c
