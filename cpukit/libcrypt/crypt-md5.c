@@ -26,6 +26,8 @@
  * SUCH DAMAGE.
  */
 
+#warning "MD5-based password hashing (crypt_md5_r / $1$) is cryptographically broken. Use SHA-256 ($5$) or SHA-512 ($6$) crypt instead."
+
 #include <sys/cdefs.h>
 __FBSDID("$FreeBSD$");
 
@@ -102,9 +104,7 @@ crypt_md5_r(const char *pw, const char *salt, struct crypt_data *data)
 		    MD5Update(&ctx, (const u_char *)pw, 1);
 
 	/* Now make the output string */
-	strcpy(passwd, magic);
-	strncat(passwd, sp, (u_int)sl);
-	strcat(passwd, "$");
+	snprintf(passwd, sizeof(data->buffer), "%s%.*s$", magic, sl, sp);
 
 	MD5Final(final, &ctx);
 
