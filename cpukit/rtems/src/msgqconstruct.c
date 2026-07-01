@@ -117,12 +117,6 @@ rtems_status_code _Message_queue_Create(
     is_global = false;
   }
 
-#if 1
-  /*
-   * I am not 100% sure this should be an error.
-   * It seems reasonable to create a que with a large max size,
-   * and then just send smaller msgs from remote (or all) nodes.
-   */
   if ( is_global ) {
     size_t max_packet_payload_size = _MPCI_table->maximum_packet_size -
                                      MESSAGE_QUEUE_MP_PACKET_SIZE;
@@ -131,7 +125,6 @@ rtems_status_code _Message_queue_Create(
       return RTEMS_INVALID_SIZE;
     }
   }
-#endif
 #endif
 
   the_message_queue = _Message_queue_Allocate();

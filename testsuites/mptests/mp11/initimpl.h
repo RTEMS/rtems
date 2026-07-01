@@ -47,6 +47,7 @@
 
 #define CONFIGURE_INIT
 #include "system.h"
+#include <rtems/rtems/messageimpl.h>
 
 uint8_t my_partition[ 0x30000 ] CPU_STRUCTURE_ALIGNMENT;
 
@@ -120,6 +121,46 @@ rtems_task Init( rtems_task_argument argument )
     fatal_directive_status( status, RTEMS_TOO_MANY, "rtems_partition_create" );
     puts( "rtems_partition_create correctly returned RTEMS_TOO_MANY" );
   }
+
+  size_t max_packet_payload_size = _MPCI_table->maximum_packet_size -
+                                     MESSAGE_QUEUE_MP_PACKET_SIZE;
+  size_t too_big_message_size = max_packet_payload_size + 1;
+
+  puts( "Attempting to create Message Queue (Global) with too-large message size" );
+  status = rtems_message_queue_create(
+    Queue_name[ 1 ],
+    1,
+    too_big_message_size,
+    RTEMS_GLOBAL,
+    &Queue_id[ 1 ]
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_SIZE,
+    "rtems_message_queue_create"
+  );
+  puts( "rtems_message_queue_create correctly returned RTEMS_INVALID_SIZE" );
+
+  RTEMS_MESSAGE_QUEUE_BUFFER( too_big_message_size ) buffers[ 1 ];
+
+  rtems_message_queue_config mq_config_too_big = {
+    .name = rtems_build_name( 'T', 'B', 'I', 'G' ),
+    .maximum_pending_messages = RTEMS_ARRAY_SIZE( buffers ),
+    .maximum_message_size = too_big_message_size,
+    .storage_area = buffers,
+    .storage_size = sizeof( buffers ),
+    .attributes = RTEMS_GLOBAL
+  };
+
+  puts( "Attempting to construct Message Queue (Global) with too-large message size" );
+  status = rtems_message_queue_construct( &mq_config_too_big, &Queue_id[ 1 ] );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_SIZE,
+    "rtems_message_queue_construct"
+  );
+  puts( "rtems_message_queue_construct correctly returned RTEMS_INVALID_SIZE" ); 
+
   puts( "*** END OF TEST 11 ***" );
   rtems_test_exit( 0 );
 }

@@ -7,4 +7,8 @@ Attempting to create Semaphore (Global)
 rtems_semaphore_create correctly returned RTEMS_TOO_MANY
 Attempting to create Partition (Global)
 rtems_partition_create correctly returned RTEMS_TOO_MANY
+Attempting to create Message Queue (Global) with too-large message size
+rtems_message_queue_create correctly returned RTEMS_INVALID_SIZE
+Attempting to construct Message Queue (Global) with too-large message size
+rtems_message_queue_construct correctly returned RTEMS_INVALID_SIZE
 *** END OF TEST 11 ***

@@ -33,7 +33,7 @@ TOO MANY GLOBAL OBJECTS ERROR TEST
 
 directives:
   ex_init, ex_start, t_create, t_start, tm_tick, i_return,
-  t_create, q_create, sm_create, pt_create
+  t_create, q_create, q_construct, sm_create, pt_create
 
 concepts:
 
@@ -55,3 +55,8 @@ concepts:
 
   g.  Verifies that all object create directives correctly return
       E_TOOMANYGOBJECTS.
+
+  j.  Verifies that global message queue create and construct directives
+      return RTEMS_INVALID_SIZE when the configured maximum message size is
+      exactly max_packet_payload_size + 1, where max_packet_payload_size is
+      _MPCI_table->maximum_packet_size - MESSAGE_QUEUE_MP_PACKET_SIZE.
