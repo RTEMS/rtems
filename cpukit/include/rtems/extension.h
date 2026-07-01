@@ -641,7 +641,8 @@ typedef User_extensions_thread_switch_extension rtems_task_switch_extension;
  * - The executing thread is not the owner of the object allocator mutex.
  * @endparblock
  */
-typedef User_extensions_thread_terminate_extension rtems_task_terminate_extension;
+typedef User_extensions_thread_terminate_extension
+  rtems_task_terminate_extension;
 
 #ifdef __cplusplus
 }
