@@ -63,7 +63,6 @@
 #define  RTCSD_PWR     0x80  /* clock lost power                       */
 
 #define RTC_DIAG       0x0e  /* status register E - bios diagnostic    */
-#define RTCDG_BITS     "\020\010clock_battery\007ROM_cksum\006config_unit\005memory_size\004fixed_disk\003invalid_time"
 
 #define RTC_CENTURY    0x32  /* current century - increment in Dec99   */
 
@@ -163,10 +162,7 @@ init_rtc(void)
   outport_byte(IO_RTC,   RTC_DIAG);
   inport_byte (IO_RTC+1, s);
   if (s)
-    printk("RTC BIOS diagnostic error %b\n", s);
-
-  /* FIXME: This was last line's original version. How was it supposed to work?
-       printf("RTC BIOS diagnostic error %b\n", s, RTCDG_BITS); */
+    printk("RTC BIOS diagnostic error 0x%02x\n", s);
 } /* init_rtc */
 
 /*-------------------------------------------------------------------------+
