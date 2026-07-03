@@ -270,6 +270,20 @@ rpi_mbox_property_message_init(mbox_property_message *msg, size_t buffer_size,
                                const mbox_property_tag_metadata *tags,
                                unsigned int tag_count);
 
+/**
+ * @brief Return the next property tag in a mailbox property message.
+ *
+ * Returns a pointer to the property tag immediately following the current
+ * tag, accounting for the tag header and aligned value buffer. This helper
+ * is used to iterate over the tags in a mailbox property message after it
+ * has been initialized by rpi_mbox_property_message_init().
+ *
+ * @param tag Pointer to the current property tag.
+ *
+ * @return Pointer to the next property tag.
+ */
+mbox_property_tag *rpi_get_next_tag(mbox_property_tag *tag);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

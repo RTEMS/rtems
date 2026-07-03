@@ -49,6 +49,11 @@ static inline size_t mbox_tag_total_size(uint32_t value_size) {
   return sizeof(mbox_property_tag) + aligned_value;
 }
 
+mbox_property_tag *rpi_get_next_tag(mbox_property_tag *tag) {
+  return (mbox_property_tag *)((uintptr_t)tag +
+                              mbox_tag_total_size(tag->buffer_size));
+}
+
 rtems_status_code rpi_mbox_property_buffer_prepare(void *buffer, size_t size) {
   if (((uintptr_t)buffer & (MBOX_BUFFER_ALIGNMENT - 1)) != 0) {
     return RTEMS_INVALID_ADDRESS;
