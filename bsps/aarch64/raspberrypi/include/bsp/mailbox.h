@@ -159,7 +159,49 @@ typedef enum {
   BCM2711_TAG_EXECUTE_CODE = 0x00030010,    /**< Execute code on Videocore */
 
   BCM2711_TAG_GET_EDID_BLOCK = 0x00030020, /**< Get EDID block */
-  BCM2711_TAG_END = 0x00000000             /**< End Tag */
+  BCM2711_TAG_END = 0x00000000,            /**< End Tag */
+
+  BCM2711_TAG_ALLOCATE_BUFFER = 0x00040001, /**< Allocate Framebuffer */
+  BCM2711_TAG_RELEASE_BUFFER = 0x00048001, /**< Release Framebuffer */
+
+  BCM2711_TAG_BLANK_SCREEN = 0x00040002, /**< Blank the screen */
+
+  BCM2711_TAG_GET_PHYSICAL_WIDTH_HEIGHT = 0x00040003, /**< Get display size */
+  BCM2711_TAG_TEST_PHYSICAL_WIDTH_HEIGHT = 0x00044003, /**< Test display size */
+  BCM2711_TAG_SET_PHYSICAL_WIDTH_HEIGHT = 0x00048003, /**< Set display size */
+
+  BCM2711_TAG_GET_VIRTUAL_WIDTH_HEIGHT = 0x00040004, /**< Get virtual size */
+  BCM2711_TAG_TEST_VIRTUAL_WIDTH_HEIGHT = 0x00044004, /**< Test virtual size */
+  BCM2711_TAG_SET_VIRTUAL_WIDTH_HEIGHT = 0x00048004, /**< Set virtual size */
+
+  BCM2711_TAG_GET_DEPTH = 0x00040005,  /**< Get color depth */
+  BCM2711_TAG_TEST_DEPTH = 0x00044005, /**< Test color depth */
+  BCM2711_TAG_SET_DEPTH = 0x00048005,  /**< Set color depth */
+
+  BCM2711_TAG_GET_PIXEL_ORDER = 0x00040006,  /**< Get pixel order (RGB/BGR) */
+  BCM2711_TAG_TEST_PIXEL_ORDER = 0x00044006, /**< Test pixel order */
+  BCM2711_TAG_SET_PIXEL_ORDER = 0x00048006,  /**< Set pixel order */
+
+  BCM2711_TAG_GET_ALPHA_MODE = 0x00040007,  /**< Get alpha channel mode */
+  BCM2711_TAG_TEST_ALPHA_MODE = 0x00044007, /**< Test alpha channel mode */
+  BCM2711_TAG_SET_ALPHA_MODE = 0x00048007,  /**< Set alpha channel mode */
+
+  BCM2711_TAG_GET_PITCH = 0x00040008, /**< Get bytes per scanline */
+
+  BCM2711_TAG_GET_VIRTUAL_OFFSET = 0x00040009,  /**< Get virtual offset */
+  BCM2711_TAG_TEST_VIRTUAL_OFFSET = 0x00044009, /**< Test virtual offset */
+  BCM2711_TAG_SET_VIRTUAL_OFFSET = 0x00048009,  /**< Set virtual offset */
+
+  BCM2711_TAG_GET_OVERSCAN = 0x0004000A,  /**< Get overscan */
+  BCM2711_TAG_TEST_OVERSCAN = 0x0004400A, /**< Test overscan */
+  BCM2711_TAG_SET_OVERSCAN = 0x0004800A,  /**< Set overscan */
+
+  BCM2711_TAG_GET_PALETTE = 0x0004000B,  /**< Get palette */
+  BCM2711_TAG_TEST_PALETTE = 0x0004400B, /**< Test palette */
+  BCM2711_TAG_SET_PALETTE = 0x0004800B,  /**< Set palette */
+
+  BCM2711_TAG_SET_CURSOR_INFO = 0x00008010,  /**< Set cursor image/info */
+  BCM2711_TAG_SET_CURSOR_STATE = 0x00008011, /**< Set cursor state/position */
 } bcm2711_mbox_property_tag;
 
 /**
