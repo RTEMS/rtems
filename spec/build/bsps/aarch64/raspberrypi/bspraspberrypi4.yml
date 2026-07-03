@@ -75,6 +75,8 @@ links:
   uid: objdma
 - role: build-dependency
   uid: objmbox
+- role: build-dependency
+  uid: objfb
 source:
 - bsps/aarch64/raspberrypi/fdt/bsp_fdt.c
 - bsps/aarch64/raspberrypi/fdt/rpi4b_dtb.c
