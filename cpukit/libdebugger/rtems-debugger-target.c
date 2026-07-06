@@ -91,9 +91,9 @@ int rtems_debugger_target_create(void) {
       return -1;
     }
 
-    r = rtems_debugger_block_create(&target->swbreaks,
-                                    RTEMS_DEBUGGER_TARGET_SWBREAK_NUM,
-                                    sizeof(rtems_debugger_target_swbreak));
+    r = rtems_debugger_block_create(
+        &target->swbreaks, RTEMS_DEBUGGER_TARGET_SWBREAK_NUM,
+        sizeof(rtems_debugger_target_swbreak), NULL);
     if (r < 0) {
       free(target);
       return -1;

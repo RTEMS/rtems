@@ -718,7 +718,7 @@ int rtems_debugger_target_configure(rtems_debugger_target* target) {
 
 static void powerpc_print_exception_frame(CPU_Exception_frame* frame) {
 #if (TARGET_DEBUG == 0)
-  (void) frame;
+  (void)frame;
 #else
   uintptr_t* gpr;
   int r;
@@ -841,7 +841,7 @@ static bool rtems_debugger_is_int_reg(size_t reg) {
 
 static void rtems_debugger_set_int_reg(rtems_debugger_thread* thread,
                                        const uintptr_t reg,
-                                       const uint32_t value) {
+                                       const uintptr_t value) {
   const size_t offset = ppc_reg_offsets[reg];
   /*
    * Use memcpy to avoid alignment issues.
@@ -891,7 +891,8 @@ int rtems_debugger_target_disable(void) {
 }
 
 int rtems_debugger_target_read_regs(rtems_debugger_thread* thread) {
-  target_printk("]] rtems-db: powerpc: %s\n", __func__);
+  target_printk("]] rtems-db: powerpc: %s have-frame=%s\n", __func__,
+                thread->frame != NULL ? "true" : "false");
   if (!rtems_debugger_thread_flag(thread,
                                   RTEMS_DEBUGGER_THREAD_FLAG_REG_VALID)) {
     static const uintptr_t good_address = (uintptr_t)&good_address;
@@ -903,7 +904,7 @@ int rtems_debugger_target_read_regs(rtems_debugger_thread* thread) {
       }
     }
 
-    if (thread->frame) {
+    if (thread->frame != NULL) {
       CPU_Exception_frame* frame = thread->frame;
       rtems_debugger_set_int_reg(thread, REG_R0, frame->GPR0);
       rtems_debugger_set_int_reg(thread, REG_R1, frame->GPR1);
@@ -978,7 +979,6 @@ int rtems_debugger_target_read_regs(rtems_debugger_thread* thread) {
       rtems_debugger_set_int_reg(thread, REG_CNT, 0);
       rtems_debugger_set_int_reg(thread, REG_XER, 0);
       rtems_debugger_set_int_reg(thread, REG_SPEFSCR, 0);
-
       /*
        * Blocked threads have no signal.
        */

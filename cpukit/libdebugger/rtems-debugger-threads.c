@@ -51,6 +51,30 @@ static void rtems_debugger_thread_free(rtems_debugger_threads* threads) {
   threads->next = 0;
 }
 
+static void rebase_registers(void* previous, void* new) {
+  rtems_debugger_threads* threads = rtems_debugger->threads;
+  rtems_debugger_thread* current;
+  current = rtems_debugger_thread_current(threads);
+  if (current != NULL) {
+    size_t i;
+    for (i = 0; i < threads->current.level; ++i) {
+      rtems_debugger_thread* thread = &current[i];
+      thread->registers =
+          rtems_debugger_block_transform(previous, new, thread->registers);
+    }
+  }
+}
+
+static bool rtems_debugger_thread_excluded(const char* name) {
+  size_t i;
+  for (i = 0; i < RTEMS_DEBUGGER_NUMOF(excludes_defaults); ++i) {
+    if (strcmp(excludes_defaults[i], name) == 0) {
+      return true;
+    }
+  }
+  return false;
+}
+
 int rtems_debugger_thread_create(void) {
   rtems_debugger_threads* threads;
   int r;
@@ -65,7 +89,7 @@ int rtems_debugger_thread_create(void) {
 
   r = rtems_debugger_block_create(&threads->current,
                                   RTEMS_DEBUGGER_THREAD_BLOCK_SIZE,
-                                  sizeof(rtems_debugger_thread));
+                                  sizeof(rtems_debugger_thread), NULL);
   if (r < 0) {
     rtems_debugger_thread_free(threads);
     free(threads);
@@ -74,9 +98,9 @@ int rtems_debugger_thread_create(void) {
     return -1;
   }
 
-  r = rtems_debugger_block_create(&threads->registers,
-                                  RTEMS_DEBUGGER_THREAD_BLOCK_SIZE,
-                                  rtems_debugger_target_reg_table_size());
+  r = rtems_debugger_block_create(
+      &threads->registers, RTEMS_DEBUGGER_THREAD_BLOCK_SIZE,
+      rtems_debugger_target_reg_table_size(), rebase_registers);
   if (r < 0) {
     rtems_debugger_thread_free(threads);
     free(threads);
@@ -85,18 +109,20 @@ int rtems_debugger_thread_create(void) {
     return -1;
   }
 
-  r = rtems_debugger_block_create(
-      &threads->excludes, RTEMS_DEBUGGER_THREAD_BLOCK_SIZE, sizeof(rtems_id));
+  r = rtems_debugger_block_create(&threads->excludes,
+                                  RTEMS_DEBUGGER_THREAD_BLOCK_SIZE,
+                                  sizeof(rtems_id), NULL);
   if (r < 0) {
     rtems_debugger_thread_free(threads);
     free(threads);
-    rtems_debugger_printf("error: rtems-db: thread: exlcudes alloc: (%d) %s\n",
+    rtems_debugger_printf("error: rtems-db: thread: excludes alloc: (%d) %s\n",
                           errno, strerror(errno));
     return -1;
   }
 
-  r = rtems_debugger_block_create(
-      &threads->stopped, RTEMS_DEBUGGER_THREAD_BLOCK_SIZE, sizeof(rtems_id));
+  r = rtems_debugger_block_create(&threads->stopped,
+                                  RTEMS_DEBUGGER_THREAD_BLOCK_SIZE,
+                                  sizeof(rtems_id), NULL);
   if (r < 0) {
     rtems_debugger_thread_free(threads);
     free(threads);
@@ -107,7 +133,7 @@ int rtems_debugger_thread_create(void) {
 
   r = rtems_debugger_block_create(&threads->steppers,
                                   RTEMS_DEBUGGER_THREAD_BLOCK_SIZE,
-                                  sizeof(rtems_debugger_thread_stepper));
+                                  sizeof(rtems_debugger_thread_stepper), NULL);
   if (r < 0) {
     rtems_debugger_thread_free(threads);
     free(threads);
@@ -147,14 +173,13 @@ int rtems_debugger_thread_find_index(rtems_id id) {
 }
 
 static bool snapshot_thread(rtems_tcb* tcb, void* arg) {
-  (void)arg;
-
   rtems_debugger_threads* threads = rtems_debugger->threads;
   rtems_id id = tcb->Object.id;
   char name[RTEMS_DEBUGGER_THREAD_NAME_SIZE];
   bool exclude = false;
-  size_t i;
   int sc;
+
+  (void)arg;
 
   /*
    * The only time the threads pointer is NULL is a realloc error so we stop
@@ -173,12 +198,24 @@ static bool snapshot_thread(rtems_tcb* tcb, void* arg) {
     exclude = true;
     break;
   default:
+    /*
+     * There are object names that can be a string or the classic 4
+     * byte name and threads that are based on object can optionally
+     * hold a name in it's Join_queue that points to the last section
+     * of the TCB. The API to get an object name has no ability to see
+     * the thread name extension. The POSIX np calls to set the name
+     * only set the thread extension name. The score is not uniform and
+     * as a result the APIs are not aligned.
+     *
+     * To entrench this state of affairs LibBSD uses the object name
+     * and thread name and they are not the same. This makes detecting
+     * exclusions harder. We need to deal with both names.
+     */
     rtems_object_get_name(id, sizeof(name), (char*)&name[0]);
-    for (i = 0; i < RTEMS_DEBUGGER_NUMOF(excludes_defaults); ++i) {
-      if (strcmp(excludes_defaults[i], name) == 0) {
-        exclude = true;
-        break;
-      }
+    exclude = rtems_debugger_thread_excluded(name);
+    if (!exclude) {
+      _Thread_Get_name(tcb, &name[0], sizeof(name));
+      exclude = rtems_debugger_thread_excluded(name);
     }
     break;
   }

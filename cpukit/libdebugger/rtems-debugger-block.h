@@ -38,6 +38,14 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
+ * Block resize base change handler. This is called when a block resize
+ * moves the base address of the block. The handler is called with the
+ * previous and new values and you can call transform to relocate your
+ * pointer to the new base.
+ */
+typedef void (*rtems_debugger_block_rebase)(void* previous, void* new);
+
+/**
  * DB server block manages a block of re-sizable memory. The block only
  * grows. As more threads enter the system the block becomes the peak and then
  * sits at that level.
@@ -48,13 +56,15 @@ typedef struct rtems_debugger_block {
   size_t size;  /**< The size of the elements in the block. */
   size_t count; /**< The number of elements in the block. */
   size_t level; /**< The usage level in the block. */
+  rtems_debugger_block_rebase rebaser; /**< Rebase handler if set */
 } rtems_debugger_block;
 
 /**
  * Create a block.
  */
 extern int rtems_debugger_block_create(rtems_debugger_block* block, size_t step,
-                                       size_t size);
+                                       size_t size,
+                                       rtems_debugger_block_rebase rebaser);
 
 /**
  * Destroy a block.
@@ -65,6 +75,12 @@ extern int rtems_debugger_block_destroy(rtems_debugger_block* block);
  * Resize a block.
  */
 extern int rtems_debugger_block_resize(rtems_debugger_block* block);
+
+/**
+ * Transform a pointer to a new base. Using when rebasing.
+ */
+extern void* rtems_debugger_block_transform(void* previous, void* new,
+                                            void* addr);
 
 #ifdef __cplusplus
 }
