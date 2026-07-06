@@ -44,7 +44,7 @@ extern "C" {
 /**
  * Debugger thread name size, fixed size. ASCIIZ format.
  */
-#define RTEMS_DEBUGGER_THREAD_NAME_SIZE (5)
+#define RTEMS_DEBUGGER_THREAD_NAME_SIZE (16)
 
 /**
  * Debugger thread allocation block size.

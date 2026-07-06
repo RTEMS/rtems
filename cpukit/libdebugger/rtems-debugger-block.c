@@ -29,20 +29,20 @@
 
 #include "rtems-debugger-block.h"
 
-int
-rtems_debugger_block_create(rtems_debugger_block* block,
-                            size_t                step,
-                            size_t                size)
-{
-  int r = 0;
+int rtems_debugger_block_create(rtems_debugger_block* block, size_t step,
+                                size_t size,
+                                rtems_debugger_block_rebase rebaser) {
   block->level = 0;
   block->step = step;
   block->count = step;
   block->size = size;
+  block->rebaser = rebaser;
   block->block = calloc(block->count, block->size);
-  if (block->block == NULL)
+  if (block->block == NULL) {
     errno = ENOMEM;
-  return r;
+    return -1;
+  }
+  return 0;
 }
 
 int
@@ -56,19 +56,28 @@ rtems_debugger_block_destroy(rtems_debugger_block* block)
   return 0;
 }
 
-int
-rtems_debugger_block_resize(rtems_debugger_block* block)
-{
-  int r = 0;
+int rtems_debugger_block_resize(rtems_debugger_block* block) {
   if (block->level >= block->count) {
     block->count += block->step;
-    block->block = realloc(block->block, block->count * block->size);
-    if (block->block == NULL) {
+    void* new_block = realloc(block->block, block->count * block->size);
+    if (new_block == NULL) {
+      block->block = NULL;
       block->level = 0;
       block->count = 0;
       errno = ENOMEM;
-      r = -1;
+      return -1;
     }
+    if (block->block != new_block && block->rebaser != NULL) {
+      block->rebaser(block->block, new_block);
+    }
+    block->block = new_block;
   }
-  return r;
+  return 0;
+}
+
+void* rtems_debugger_block_transform(void* previous, void* new, void* addr) {
+  uintptr_t previous_u = (uintptr_t)previous;
+  uintptr_t new_u = (uintptr_t)new;
+  uintptr_t addr_u = (uintptr_t)addr;
+  return (void*)((addr_u - previous_u) + new_u);
 }
