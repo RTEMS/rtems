@@ -51,6 +51,10 @@ links:
 - role: build-dependency
   uid: optuboot
 - role: build-dependency
+  uid: optubootenvbase
+- role: build-dependency
+  uid: optubootenvsize
+- role: build-dependency
   uid: start
 - role: build-dependency
   uid: ../grp

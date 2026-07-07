@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2026 Ran Hong
+default:
+- enabled-by: true
+  value: 0xfff00000
+description: |
+  Base address of U-Boot environment variables
+
+  The default base address 0xfff00000 is the starting address of the MRAM
+  of board mvme2500 according to its manual. MRAM is a type of nonvolatile
+  memory.
+
+  For other qoriq boards, users should update the base address accordingly
+  via the UBOOT_ENV_BASE build option. User should export the U-Boot
+  environment to this base address in U-Boot terminal before accessing it
+  in RTEMS.
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: UBOOT_ENV_BASE
+type: build

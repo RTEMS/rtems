@@ -27,19 +27,26 @@
  */
 
 #include <bsp.h>
-
-/*
- * If the BSP variant does not have UBoot, then disable all contents
- * of this file.
- */
-#if defined(HAS_UBOOT)
-
 #include <stdint.h>
 #include <string.h>
 
-/* Assumed to be provided by BSP */
-extern const uint8_t *uboot_environment;
-extern const size_t uboot_environment_size;
+/*
+ * Base address and size of the U-Boot environment variable area. The
+ * UBOOT_ENV_BASE and UBOOT_ENV_SIZE values are provided per BSP through the
+ * build configuration (bspopts.h). Users should export the U-Boot
+ * environment to this base address in the U-Boot terminal before accessing
+ * it in RTEMS.
+ */
+#ifndef UBOOT_ENV_BASE
+#define UBOOT_ENV_BASE 0
+#endif
+
+#ifndef UBOOT_ENV_SIZE
+#define UBOOT_ENV_SIZE 0
+#endif
+
+const uint8_t *uboot_environment = (const uint8_t *) UBOOT_ENV_BASE;
+const size_t uboot_environment_size = UBOOT_ENV_SIZE;
 
 /*
  * The U-Boot source code appears to use the CRC32 code from zlib.
@@ -90,4 +97,3 @@ const char *bsp_uboot_getenv(
   return NULL;
 }
 
-#endif /* defined(HAS_UBOOT) */

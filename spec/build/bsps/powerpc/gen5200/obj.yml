@@ -95,7 +95,6 @@ source:
 - bsps/powerpc/gen5200/start/bspreset.c
 - bsps/powerpc/gen5200/start/bspstart.c
 - bsps/powerpc/gen5200/start/cpuinit.c
-- bsps/powerpc/gen5200/start/uboot_support.c
 - bsps/powerpc/shared/btimer/btimer-ppc-dec.c
 - bsps/powerpc/shared/cache/cache.c
 - bsps/powerpc/shared/clock/clock.c
