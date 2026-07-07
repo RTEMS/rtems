@@ -509,7 +509,7 @@ fat_file_write_fat32_or_non_root_dir(
     int            rc = RC_OK;
     uint32_t       cmpltd = 0;
     uint32_t       cur_cln = 0;
-    uint32_t       save_cln = 0; /* FIXME: This might be incorrect, cf. below */
+    uint32_t       save_cln = 0;
     uint32_t       start_cln = start >> fs_info->vol.bpc_log2;
     uint32_t       ofs_cln = start - (start_cln << fs_info->vol.bpc_log2);
     uint32_t       ofs_cln_save = ofs_cln;
@@ -546,10 +546,11 @@ fat_file_write_fat32_or_non_root_dir(
         }
 
         /* update cache */
-        /* XXX: check this - I'm not sure :( */
-        fat_fd->map.file_cln = start_cln +
-                               ((ofs_cln_save + cmpltd - 1) >> fs_info->vol.bpc_log2);
-        fat_fd->map.disk_cln = save_cln;
+        if (0 < cmpltd) {
+            fat_fd->map.file_cln = start_cln +
+                ((ofs_cln_save + cmpltd - 1) >> fs_info->vol.bpc_log2);
+            fat_fd->map.disk_cln = save_cln;
+        }
     }
 
     if (RC_OK != rc)
