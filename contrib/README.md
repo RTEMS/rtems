@@ -48,6 +48,7 @@ Git log in order to find out version and update details
 
 | Directory                             | Source                                                         |
 | ------------------------------------- | -------------------------------------------------------------- |
+| bsps/aarch64/psci/                    | https://github.com/freebsd/freebsd-src/blob/main/sys/dev/psci  |
 | bsps/arm/efm32gg11/                   | https://github.com/SiliconLabs/gecko_sdk.git                   |
 | bsps/arm/stm32h7/cmsis-device-h7/     | https://github.com/STMicroelectronics/cmsis_device_h7.git      |
 | bsps/arm/stm32h7/stm32h7xx_hal_driver | https://github.com/STMicroelectronics/stm32u5xx-hal-driver     |
