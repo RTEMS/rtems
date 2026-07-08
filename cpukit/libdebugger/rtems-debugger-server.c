@@ -839,7 +839,9 @@ static int remote_gq_thread_extra_info(uint8_t* buffer, int size) {
                      rtems_debugger_thread_stack_area(thread));
         remote_packet_out_append_hex((const uint8_t*)buf, l);
         rtems_debugger_thread_state_str(thread, str, sizeof(str));
-        l = snprintf(buf, sizeof(buf), "state(%s)", str);
+        l = snprintf(buf, sizeof(buf), "state(%s), ", str);
+        remote_packet_out_append_hex((const uint8_t*)buf, l);
+        l = snprintf(buf, sizeof(buf), "tcb:%p", thread->tcb);
         remote_packet_out_append_hex((const uint8_t*)buf, l);
       }
     }
