@@ -305,8 +305,9 @@ static bool task_usage( Thread_Control *thread, void *arg )
 static void rtems_cpuusage_top_thread( rtems_task_argument arg )
 {
   rtems_cpu_usage_data  *data = (rtems_cpu_usage_data *) arg;
-  char                   name[ 13 ];
-  uint32_t               i;
+  char                   cname[ 32 + 1 ];
+  char                   pname[ _Thread_Maximum_name_size + 1 ];
+  size_t                 i;
   Heap_Information_block wksp;
   uint32_t               ival, fval;
   uint32_t               task_count;
@@ -460,9 +461,23 @@ static void rtems_cpuusage_top_thread( rtems_task_argument arg )
     rtems_printf(
       data->printer,
       "\n"
-      " ID         | NAME                | RPRI | CPRI   | TIME                | TOTAL   | CURRENT\n"
-      "-%s---------+---------------------+-%s-----%s-----+---------------------+-%s------+--%s----\n",
-      data->sort_order == RTEMS_TOP_SORT_ID ? "^^" : "--",
+      " ID         | NAME "
+    );
+    for ( i = 0; i < _Thread_Maximum_name_size; ++i ) {
+      rtems_printf( data->printer, " " );
+    }
+    rtems_printf(
+      data->printer,
+      " | RPRI | CPRI   | TIME                | TOTAL   | CURRENT\n"
+      "-%s---------+-",
+      data->sort_order == RTEMS_TOP_SORT_ID ? "^^" : "--"
+    );
+    for ( i = 0; i < ( 4 + 1 + _Thread_Maximum_name_size ); ++i ) {
+      rtems_printf( data->printer, "-" );
+    }
+    rtems_printf(
+      data->printer,
+      "-+-%s-----%s-----+---------------------+-%s------+--%s----\n",
       data->sort_order == RTEMS_TOP_SORT_REAL_PRI ? "^^" : "--",
       data->sort_order == RTEMS_TOP_SORT_CURRENT_PRI ? "^^" : "--",
       data->sort_order == RTEMS_TOP_SORT_TOTAL ? "^^" : "--",
@@ -479,6 +494,7 @@ static void rtems_cpuusage_top_thread( rtems_task_argument arg )
       const Scheduler_Control *scheduler;
       Priority_Control         real_priority;
       Priority_Control         priority;
+      bool                     show_id = true;
 
       if ( thread == NULL ) {
         break;
@@ -497,11 +513,21 @@ static void rtems_cpuusage_top_thread( rtems_task_argument arg )
       /*
        * If the API os POSIX print the entry point.
        */
-      rtems_object_get_name( thread->Object.id, sizeof( name ), name );
-      if ( name[ 0 ] == '\0' ) {
+      cname[ 0 ] = '\0';
+      rtems_object_get_name( thread->Object.id, sizeof( cname ), cname );
+      if ( cname[ 0 ] != '\0' ) {
+        show_id = false;
+      }
+      pname[ 0 ] = '\0';
+      _Thread_Get_name( thread, &pname[ 0 ], sizeof( pname ) );
+      if ( pname[ 0 ] != '\0' ) {
+        show_id = false;
+      }
+
+      if ( show_id ) {
         snprintf(
-          name,
-          sizeof( name ) - 1,
+          pname,
+          sizeof( pname ) - 1,
           "(%p)",
           thread->Start.Entry.Kinds.Numeric.entry
         );
@@ -516,9 +542,11 @@ static void rtems_cpuusage_top_thread( rtems_task_argument arg )
 
       rtems_printf(
         data->printer,
-        " 0x%08" PRIx32 " | %-19s |  %3" PRId32 " |  %3" PRId32 "   | ",
+        " 0x%08" PRIx32 " | %-4s %-*s |  %3" PRId32 " |  %3" PRId32 "   | ",
         thread->Object.id,
-        name,
+        cname,
+        (int) _Thread_Maximum_name_size,
+        pname,
         _RTEMS_Priority_From_core( scheduler, real_priority ),
         _RTEMS_Priority_From_core( scheduler, priority )
       );
