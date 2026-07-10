@@ -53,6 +53,12 @@
 
 #define RISCV_INTERRUPT_VECTOR_EXTERNAL_TO_INDEX( x ) ( ( x ) - 2 )
 
+#ifdef RISCV_SMRNMI
+#error "Smrnmi support is not implemented for this BSP"
+#else /* RISCV_SMRNMI */
+#define RISCV_INTERRUPT_VECTOR_IS_RNMI( x ) false
+#endif /* RISCV_SMRNMI */
+
 #define BSP_INTERRUPT_VECTOR_COUNT \
   RISCV_INTERRUPT_VECTOR_EXTERNAL( RISCV_MAXIMUM_EXTERNAL_INTERRUPTS )
 

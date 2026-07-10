@@ -248,6 +248,17 @@ void _CPU_Context_Initialize(
 #define _CPU_Context_Restart_self( _the_context ) \
    _CPU_Context_restore( (_the_context) )
 
+#if defined(RISCV_SMRNMI) && !defined(RTEMS_SMP)
+/* On SMP configurations, _RISCV_Start_multitasking() sets NMIE. */
+#define _CPU_Context_Initialization_at_thread_begin() \
+  __asm__ volatile ( \
+    ".option push\n" \
+    ".option arch, +zicsr, +smrnmi\n" \
+    "csrsi mnstatus, %0\n" \
+    ".option pop" : : "i" ( MNSTATUS_NMIE ) \
+  )
+#endif
+
 #define CPU_USE_GENERIC_BITFIELD_CODE TRUE
 
 #define CPU_USE_GENERIC_BITFIELD_DATA TRUE

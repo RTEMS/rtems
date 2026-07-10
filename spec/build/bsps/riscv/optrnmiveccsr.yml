@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- assert-ge: 0
+- assert-le: 0xfff
+- format-and-define: null
+build-type: option
+copyrights:
+- Copyright (C) 2026 Intel Corporation
+default:
+- enabled-by: true
+  value: 0x0
+description: |
+  CSR address of the RNMI handler address register for BSPs that set the RNMI
+  handler address through a CSR; zero if there is no such CSR
+enabled-by: RISCV_SMRNMI
+format: '{:#05x}'
+links: []
+name: RISCV_RNMI_VECTOR_CSR
+type: build

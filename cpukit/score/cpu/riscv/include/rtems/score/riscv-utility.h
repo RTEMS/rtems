@@ -46,6 +46,9 @@
 #define SATP_MODE_SHIFT (31)
 #endif
 
+/* The only part of mncause which Smrnmi defines */
+#define MNCAUSE_INTERRUPT (_RISCV_UL(1) << (__riscv_xlen - 1))
+
 #ifndef ASM
 
 #define _RISCV_FENCE( pred, succ )                              \

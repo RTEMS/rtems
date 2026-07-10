@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2026 Intel Corporation
+cppflags: []
+cxxflags: []
+enabled-by:
+- RISCV_SMRNMI
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/rtems/score
+  source:
+  - cpukit/score/cpu/riscv/include/rtems/score/riscv-rnmi.h
+links: []
+source:
+- cpukit/score/cpu/riscv/riscv-rnmi-handler.S
+type: build

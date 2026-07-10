@@ -9,6 +9,7 @@
  */
 
 /*
+ * Copyright (C) 2026 Intel Corporation
  * Copyright (C) 2026 Gedare Bloom
  * Copyright (C) 2018, 2026 embedded brains GmbH & Co. KG
  *
@@ -41,6 +42,10 @@
 #include <bsp/irq-generic.h>
 #include <bsp/irqimpl.h>
 #include <bsp/riscv.h>
+
+#ifdef RISCV_SMRNMI
+#include <rtems/score/riscv-rnmi.h>
+#endif
 
 #include <rtems/score/percpu.h>
 #include <rtems/score/riscv-utility.h>
@@ -135,6 +140,13 @@ void _RISCV_Interrupt_dispatch(uintptr_t cause, Per_CPU_Control *cpu_self)
 
 #ifdef RTEMS_SMP
     _SMP_Inter_processor_interrupt_handler(cpu_self);
+#endif
+
+#ifdef RISCV_SMRNMI
+    _RISCV_RNMI_deferred();
+#endif
+
+#if defined(RTEMS_SMP) || defined(RISCV_SMRNMI)
     bsp_interrupt_handler_dispatch_unlikely(RISCV_INTERRUPT_VECTOR_SOFTWARE);
 #else
     bsp_interrupt_handler_dispatch_unchecked(RISCV_INTERRUPT_VECTOR_SOFTWARE);
@@ -317,6 +329,11 @@ bool bsp_interrupt_is_valid_vector(rtems_vector_number vector)
 {
   rtems_vector_number max;
 
+  /* The RNMI vectors are located above the external interrupts */
+  if (RISCV_INTERRUPT_VECTOR_IS_RNMI(vector)) {
+    return true;
+  }
+
   /*
    * The PLIC interrupt ID of zero is reserved.  For example, this ID is used
    * to indicate that no interrupt was claimed.
@@ -336,12 +353,14 @@ rtems_status_code bsp_interrupt_get_attributes(
 )
 {
   bool is_external = RISCV_INTERRUPT_VECTOR_IS_EXTERNAL(vector);
+  bool is_rnmi = RISCV_INTERRUPT_VECTOR_IS_RNMI(vector);
 
-  attributes->is_maskable = true;
-  attributes->can_enable = true;
+  /* RNMIs are enabled by the boot code and cannot be masked or disabled */
+  attributes->is_maskable = !is_rnmi;
+  attributes->can_enable = !is_rnmi;
   attributes->maybe_enable = true;
-  attributes->can_disable = true;
-  attributes->maybe_disable = true;
+  attributes->can_disable = !is_rnmi;
+  attributes->maybe_disable = !is_rnmi;
   attributes->can_raise = (vector == RISCV_INTERRUPT_VECTOR_SOFTWARE);
   attributes->can_raise_on = attributes->can_raise;
   attributes->cleared_by_acknowledge = true;
@@ -386,6 +405,12 @@ rtems_status_code bsp_interrupt_is_pending(
 #else
     *pending = (read_csr(mip) & MIP_MTIP) != 0;
 #endif
+    return RTEMS_SUCCESSFUL;
+  }
+
+  if (RISCV_INTERRUPT_VECTOR_IS_RNMI(vector)) {
+    /* RNMI sources have no architectural pending bit */
+    *pending = false;
     return RTEMS_SUCCESSFUL;
   }
 
@@ -490,6 +515,12 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
     return RTEMS_SUCCESSFUL;
   }
 
+  if (RISCV_INTERRUPT_VECTOR_IS_RNMI(vector)) {
+    /* RNMIs are enabled by the boot code and stay enabled */
+    *enabled = true;
+    return RTEMS_SUCCESSFUL;
+  }
+
   _Assert(vector == RISCV_INTERRUPT_VECTOR_SOFTWARE);
 #ifdef RISCV_USE_S_MODE
     *enabled = (read_csr(sie) & SIP_SSIP) != 0;
@@ -553,6 +584,11 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
 #else
     set_csr(mie, MIP_MTIP);
 #endif
+    return RTEMS_SUCCESSFUL;
+  }
+
+  if (RISCV_INTERRUPT_VECTOR_IS_RNMI(vector)) {
+    /* Already enabled, must not fall through to the software interrupt */
     return RTEMS_SUCCESSFUL;
   }
 
@@ -620,6 +656,10 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
     clear_csr(mie, MIP_MTIP);
 #endif
     return RTEMS_SUCCESSFUL;
+  }
+
+  if (RISCV_INTERRUPT_VECTOR_IS_RNMI(vector)) {
+    return RTEMS_UNSATISFIED;
   }
 
   _Assert(vector == RISCV_INTERRUPT_VECTOR_SOFTWARE);

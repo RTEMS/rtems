@@ -182,6 +182,40 @@ RTEMS_STATIC_ASSERT(
   riscv_interrupt_frame_size
 );
 
+RTEMS_STATIC_ASSERT(
+  sizeof( CPU_Exception_frame ) == RISCV_EXCEPTION_FRAME_SIZE,
+  riscv_exception_frame_size
+);
+
+#ifndef RISCV_USE_S_MODE
+RTEMS_STATIC_ASSERT(
+  offsetof( CPU_Per_CPU_control, clint_msip ) == RISCV_PER_CPU_CLINT_MSIP,
+  riscv_per_cpu_clint_msip_offset
+);
+#endif
+
+#ifdef RISCV_SMRNMI
+RTEMS_STATIC_ASSERT(
+  offsetof( CPU_Per_CPU_control, rnmi.mncause ) == RISCV_PER_CPU_RNMI_MNCAUSE,
+  riscv_per_cpu_rnmi_mncause_offset
+);
+
+RTEMS_STATIC_ASSERT(
+  offsetof( CPU_Per_CPU_control, rnmi.mnepc ) == RISCV_PER_CPU_RNMI_MNEPC,
+  riscv_per_cpu_rnmi_mnepc_offset
+);
+
+RTEMS_STATIC_ASSERT(
+  offsetof( CPU_Per_CPU_control, rnmi.dropped ) == RISCV_PER_CPU_RNMI_DROPPED,
+  riscv_per_cpu_rnmi_dropped_offset
+);
+
+RTEMS_STATIC_ASSERT(
+  offsetof( CPU_Per_CPU_control, rnmi.deferred ) == RISCV_PER_CPU_RNMI_DEFERRED,
+  riscv_per_cpu_rnmi_deferred_offset
+);
+#endif
+
 /**
  * @brief Performs processor dependent initialization.
  */

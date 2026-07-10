@@ -24,7 +24,9 @@ install:
   - contrib/cpukit/riscv-opcodes/encoding.h
   - cpukit/score/cpu/riscv/include/rtems/score/riscv-utility.h
   - cpukit/score/cpu/riscv/include/rtems/score/riscv.h
-links: []
+links:
+- role: build-dependency
+  uid: cpuriscvsmrnmi
 source:
 - cpukit/score/cpu/riscv/cpu.c
 - cpukit/score/cpu/riscv/riscv-context-initialize.c

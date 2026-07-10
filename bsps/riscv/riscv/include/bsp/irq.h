@@ -9,6 +9,8 @@
  */
 
 /*
+ * Copyright (C) 2026 Intel Corporation
+ *
  * Copyright (c) 2018 embedded brains GmbH & Co. KG
  *
  * Copyright (c) 2015 University of York.
@@ -43,17 +45,49 @@
 
 #include <bsp.h>
 
+/*
+ * Vector layout:
+ *
+ *   0                      software (CLINT)
+ *   1                      timer (CLINT)
+ *   2 ...                  external (PLIC), PLIC interrupt ID 0 is reserved
+ *   after the externals    RNMI, if RISCV_SMRNMI is enabled
+ */
+
 #define RISCV_INTERRUPT_VECTOR_SOFTWARE 0
 
 #define RISCV_INTERRUPT_VECTOR_TIMER 1
 
 #define RISCV_INTERRUPT_VECTOR_EXTERNAL(x) ((x) + 2)
 
-#define RISCV_INTERRUPT_VECTOR_IS_EXTERNAL(x) ((x) >= 2)
-
 #define RISCV_INTERRUPT_VECTOR_EXTERNAL_TO_INDEX(x) ((x) - 2)
 
-#define BSP_INTERRUPT_VECTOR_COUNT RISCV_INTERRUPT_VECTOR_EXTERNAL(RISCV_MAXIMUM_EXTERNAL_INTERRUPTS)
+#define RISCV_INTERRUPT_VECTOR_IS_EXTERNAL(x) \
+  ((x) >= RISCV_INTERRUPT_VECTOR_EXTERNAL(0) && \
+    (x) < RISCV_INTERRUPT_VECTOR_EXTERNAL(RISCV_MAXIMUM_EXTERNAL_INTERRUPTS))
+
+#ifdef RISCV_SMRNMI
+
+#define RISCV_INTERRUPT_VECTOR_RNMI(x) \
+  (RISCV_INTERRUPT_VECTOR_EXTERNAL(RISCV_MAXIMUM_EXTERNAL_INTERRUPTS) + (x))
+
+#define RISCV_MAXIMUM_RNMI_INTERRUPTS 16
+
+#define RISCV_INTERRUPT_VECTOR_IS_RNMI(x) \
+  ((x) >= RISCV_INTERRUPT_VECTOR_RNMI(0) && \
+    (x) < RISCV_INTERRUPT_VECTOR_RNMI(RISCV_MAXIMUM_RNMI_INTERRUPTS))
+
+#else /* RISCV_SMRNMI */
+
+#define RISCV_MAXIMUM_RNMI_INTERRUPTS 0
+
+#define RISCV_INTERRUPT_VECTOR_IS_RNMI(x) false
+
+#endif /* RISCV_SMRNMI */
+
+#define BSP_INTERRUPT_VECTOR_COUNT \
+  (RISCV_INTERRUPT_VECTOR_EXTERNAL(RISCV_MAXIMUM_EXTERNAL_INTERRUPTS) + \
+    RISCV_MAXIMUM_RNMI_INTERRUPTS)
 
 #define BSP_INTERRUPT_CUSTOM_VALID_VECTOR
 

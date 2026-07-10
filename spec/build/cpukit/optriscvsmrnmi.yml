@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- env-enable: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2026 Intel Corporation
+default:
+- enabled-by: true
+  value: false
+description: |
+  Enable support for the RISC-V Smrnmi extension (resumable NMIs). Resumable
+  NMIs trap to machine mode, so this option is not available if
+  RISCV_USE_S_MODE is enabled.
+enabled-by:
+- and:
+  - not: RISCV_USE_S_MODE
+  - bsps/riscv/riscv
+format: '{}'
+links: []
+name: RISCV_SMRNMI
+type: build

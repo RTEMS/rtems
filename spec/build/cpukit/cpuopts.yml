@@ -60,6 +60,8 @@ links:
 - role: build-dependency
   uid: optriscvusesmode
 - role: build-dependency
+  uid: optriscvsmrnmi
+- role: build-dependency
   uid: optsmp
 - role: build-dependency
   uid: optlibdebugger

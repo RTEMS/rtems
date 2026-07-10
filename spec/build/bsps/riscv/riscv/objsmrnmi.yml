@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2026 Intel Corporation
+cppflags: []
+cxxflags: []
+enabled-by:
+- RISCV_SMRNMI
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/riscv/riscv/include/bsp/rnmi.h
+links: []
+source:
+- bsps/riscv/riscv/irq/rnmi.c
+type: build

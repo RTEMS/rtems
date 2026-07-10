@@ -24,7 +24,8 @@ content: |
   INCLUDE linkcmds.base
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
-enabled-by: true
+enabled-by:
+  not: RISCV_RNMI_VECTOR_ADDRESS
 install-path: ${BSP_LIBDIR}
 links: []
 target: linkcmds

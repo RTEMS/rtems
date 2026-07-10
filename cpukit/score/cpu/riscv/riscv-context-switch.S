@@ -195,6 +195,14 @@ SYM(_RISCV_Start_multitasking):
 	/* Switch to the temporary interrupt stack of this processor */
 	addi	sp, a2, PER_CPU_INTERRUPT_FRAME_AREA + CPU_INTERRUPT_FRAME_SIZE
 
+#ifdef RISCV_SMRNMI
+	/* NMIE=0 masks all interrupts, so set it before the first enable */
+	.option	push
+	.option	arch, +smrnmi
+	csrsi	mnstatus, MNSTATUS_NMIE
+	.option	pop
+#endif
+
 	/* Enable interrupts */
 #ifdef RISCV_USE_S_MODE
 	csrrs	zero, sstatus, SSTATUS_SIE

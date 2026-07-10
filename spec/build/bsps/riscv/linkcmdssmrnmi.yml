@@ -1,0 +1,44 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: config-file
+content: |
+  MEMORY {
+    RAM : ORIGIN = ${RISCV_RAM_REGION_BEGIN}, LENGTH = ${RISCV_RAM_REGION_SIZE}
+  }
+
+  REGION_ALIAS ("REGION_START", RAM);
+  REGION_ALIAS ("REGION_START_LOAD", RAM);
+  REGION_ALIAS ("REGION_TEXT", RAM);
+  REGION_ALIAS ("REGION_TEXT_LOAD", RAM);
+  REGION_ALIAS ("REGION_FAST_TEXT", RAM);
+  REGION_ALIAS ("REGION_FAST_TEXT_LOAD", RAM);
+  REGION_ALIAS ("REGION_RODATA", RAM);
+  REGION_ALIAS ("REGION_RODATA_LOAD", RAM);
+  REGION_ALIAS ("REGION_DATA", RAM);
+  REGION_ALIAS ("REGION_DATA_LOAD", RAM);
+  REGION_ALIAS ("REGION_FAST_DATA", RAM);
+  REGION_ALIAS ("REGION_FAST_DATA_LOAD", RAM);
+  REGION_ALIAS ("REGION_BSS", RAM);
+  REGION_ALIAS ("REGION_RTEMSSTACK", RAM);
+  REGION_ALIAS ("REGION_WORK", RAM);
+
+  /* Must precede linkcmds.base, which places .text.* in .text otherwise */
+  SECTIONS {
+    .rnmi ${RISCV_RNMI_VECTOR_ADDRESS} : {
+      KEEP (*(.text.rnmi))
+    }
+  }
+
+  /* Validates that RISCV_RNMI_VECTOR_ADDRESS does not overlap RAM region */
+  ASSERT (${RISCV_RNMI_VECTOR_ADDRESS} >= ORIGIN (RAM) + LENGTH (RAM) ||
+    ${RISCV_RNMI_VECTOR_ADDRESS} + SIZEOF (.rnmi) <= ORIGIN (RAM),
+    "the RNMI handler overlaps the RAM region")
+
+  INCLUDE linkcmds.base
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+- Copyright (C) 2026 Intel Corporation
+enabled-by: RISCV_RNMI_VECTOR_ADDRESS
+install-path: ${BSP_LIBDIR}
+links: []
+target: linkcmds
+type: build

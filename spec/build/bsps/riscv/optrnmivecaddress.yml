@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- assert-uint64: null
+- assert-aligned: 4
+- env-assign: null
+- env-enable: null
+- format-and-define: null
+build-type: option
+copyrights:
+- Copyright (C) 2026 Intel Corporation
+default:
+- enabled-by: true
+  value: 0x0
+description: |
+  fixed RNMI vector address of the platform, the RNMI handler is placed at this
+  address; zero if the platform has no fixed RNMI vector address
+enabled-by: RISCV_SMRNMI
+format: '{:#010x}'
+links: []
+name: RISCV_RNMI_VECTOR_ADDRESS
+type: build

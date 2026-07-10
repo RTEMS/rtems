@@ -61,8 +61,33 @@
 
 #define RISCV_CPU_PER_CPU_PLIC_SIZE (2 * __riscv_xlen / 8)
 
+#ifdef RISCV_SMRNMI
+#define RISCV_CPU_PER_CPU_RNMI_SIZE (4 * __riscv_xlen / 8 + 16)
+#else
+#define RISCV_CPU_PER_CPU_RNMI_SIZE 0
+#endif
+
 #define CPU_PER_CPU_CONTROL_SIZE ( RISCV_CPU_PER_CPU_ATOMIC_SIZE + \
+    RISCV_CPU_PER_CPU_MODE_SIZE + RISCV_CPU_PER_CPU_PLIC_SIZE + \
+    RISCV_CPU_PER_CPU_RNMI_SIZE)
+
+#ifndef RISCV_USE_S_MODE
+/* Offset of clint_msip in CPU_Per_CPU_control, for assembly */
+#define RISCV_PER_CPU_CLINT_MSIP ( RISCV_CPU_PER_CPU_ATOMIC_SIZE + \
+    RISCV_CPU_PER_CPU_PLIC_SIZE + __riscv_xlen / 8)
+#endif
+
+#ifdef RISCV_SMRNMI
+/* Offsets of the RNMI context in CPU_Per_CPU_control, for assembly */
+#define RISCV_PER_CPU_RNMI_MNCAUSE ( RISCV_CPU_PER_CPU_ATOMIC_SIZE + \
     RISCV_CPU_PER_CPU_MODE_SIZE + RISCV_CPU_PER_CPU_PLIC_SIZE)
+#define RISCV_PER_CPU_RNMI_MNEPC ( RISCV_PER_CPU_RNMI_MNCAUSE + \
+    __riscv_xlen / 8)
+#define RISCV_PER_CPU_RNMI_DROPPED ( RISCV_PER_CPU_RNMI_MNEPC + \
+    __riscv_xlen / 8)
+#define RISCV_PER_CPU_RNMI_DEFERRED ( RISCV_PER_CPU_RNMI_DROPPED + \
+    2 * __riscv_xlen / 8)
+#endif
 
 #define CPU_THREAD_LOCAL_STORAGE_VARIANT 10
 
@@ -116,6 +141,8 @@
 
 #define CPU_INTERRUPT_FRAME_SIZE 80
 
+#define RISCV_EXCEPTION_FRAME_SIZE 144
+
 #elif __riscv_flen == 32
 
 #define RISCV_CONTEXT_FCSR 68
@@ -131,6 +158,8 @@
 
 #define CPU_INTERRUPT_FRAME_SIZE 176
 
+#define RISCV_EXCEPTION_FRAME_SIZE 288
+
 #elif __riscv_flen == 64
 
 #define RISCV_CONTEXT_FCSR 68
@@ -145,6 +174,8 @@
 #define RISCV_INTERRUPT_FRAME_A1 244
 
 #define CPU_INTERRUPT_FRAME_SIZE 256
+
+#define RISCV_EXCEPTION_FRAME_SIZE 416
 
 #endif /* __riscv_flen */
 
@@ -194,6 +225,8 @@
 
 #define CPU_INTERRUPT_FRAME_SIZE 160
 
+#define RISCV_EXCEPTION_FRAME_SIZE 272
+
 #elif __riscv_flen == 32
 
 #define RISCV_CONTEXT_FCSR 128
@@ -209,6 +242,8 @@
 
 #define CPU_INTERRUPT_FRAME_SIZE 256
 
+#define RISCV_EXCEPTION_FRAME_SIZE 416
+
 #elif __riscv_flen == 64
 
 #define RISCV_CONTEXT_FCSR 128
@@ -223,6 +258,8 @@
 #define RISCV_INTERRUPT_FRAME_A1 320
 
 #define CPU_INTERRUPT_FRAME_SIZE 336
+
+#define RISCV_EXCEPTION_FRAME_SIZE 544
 
 #endif /* __riscv_flen */
 
@@ -352,6 +389,37 @@ typedef struct {
   RISCV_PLIC_hart_regs harts[RISCV_PLIC_MAX_CONTEXTS];
 } RISCV_PLIC_regs;
 
+#ifdef RISCV_SMRNMI
+/* Per-CPU RNMI context for deferred processing */
+
+typedef struct {
+  volatile uintptr_t mncause;
+  uintptr_t mnepc;
+  /* Incremented by the RNMI handler for each RNMI ignored while busy */
+  volatile uintptr_t dropped;
+  /* Value of dropped at the previous deferred work dispatch */
+  uintptr_t dropped_reported;
+  /* Non-zero enables the deferred path */
+  uint32_t deferred;
+  uint32_t reserved_for_alignment_of_interrupt_frame3[ 3 ];
+} RISCV_RNMI_context;
+
+/**
+ * @brief The RNMI stack size, see CONFIGURE_RISCV_RNMI_STACK_SIZE.
+ */
+RTEMS_DECLARE_GLOBAL_SYMBOL( _RISCV_RNMI_stack_size );
+
+/**
+ * @brief The RNMI stack area begin, with one RNMI stack per processor.
+ */
+extern char _RISCV_RNMI_stack_area_begin[];
+
+/**
+ * @brief The RNMI stack area end.
+ */
+extern const char _RISCV_RNMI_stack_area_end[];
+#endif
+
 typedef struct {
 #ifdef __riscv_atomic
   uint64_t clear_reservations;
@@ -366,6 +434,9 @@ typedef struct {
 #ifndef RISCV_USE_S_MODE
   volatile RISCV_CLINT_timer_reg *clint_mtimecmp;
   volatile uint32_t *clint_msip;
+#endif
+#ifdef RISCV_SMRNMI
+  RISCV_RNMI_context rnmi;
 #endif
 } CPU_Per_CPU_control;
 
