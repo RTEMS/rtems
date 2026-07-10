@@ -818,6 +818,18 @@ struct _Thread_Control *GetThread( rtems_id id );
 struct _Thread_Control *GetExecuting( void );
 
 /**
+ * @brief Checks whether the object is in the thread-local storage area of the
+ *   task.
+ *
+ * @param id is the identifier of the task.
+ * @param obj is the address of the object.
+ *
+ * @retval true The object is in the thread-local storage area of the task.
+ * @retval false The object is not in this area, or the identifier is invalid.
+ */
+bool IsTLSObjectOfThread( rtems_id id, const void *obj );
+
+/**
  * @brief Runs the timeout of the thread.
  *
  * The routine hands the token which the watchdog of the thread carries, as

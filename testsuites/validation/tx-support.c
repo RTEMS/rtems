@@ -47,6 +47,7 @@
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/threadimpl.h>
+#include <rtems/score/tls.h>
 #include <rtems/rtems/semimpl.h>
 
 #include <pthread.h>
@@ -611,6 +612,20 @@ Thread_Control *GetThread( rtems_id id )
 Thread_Control *GetExecuting( void )
 {
   return _Thread_Get_executing();
+}
+
+bool IsTLSObjectOfThread( rtems_id id, const void *obj )
+{
+  Thread_Control *the_thread;
+
+  the_thread = GetThread( id );
+
+  if ( the_thread == NULL ) {
+    return false;
+  }
+
+  return ( (uintptr_t) obj - (uintptr_t) the_thread->Start.tls_area ) <
+         _TLS_Get_allocation_size();
 }
 
 void KillZombies( void )
