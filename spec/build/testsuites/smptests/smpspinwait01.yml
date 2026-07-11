@@ -1,0 +1,20 @@
+SPDX-License-Identifier: BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2026 Wayne Michael Thornton <wmthornton-dev@outlook.com>
+cppflags: []
+cxxflags: []
+enabled-by:
+- RTEMS_SMP
+features: c cprogram
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/smptests/smpspinwait01/init.c
+stlib: []
+target: testsuites/smptests/smpspinwait01.exe
+type: build
+use-after: []
+use-before: []
