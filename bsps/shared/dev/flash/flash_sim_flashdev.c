@@ -282,9 +282,7 @@ static int flash_sim_oob_read(
   uint64_t start_time = rtems_clock_get_uptime_nanoseconds();
   struct nand_priv_data *flash_driver = (struct nand_priv_data *) flash->driver;
   struct flash_sim_flashdev_attributes *attr = &flash_driver->attr;
-  uint32_t page_index = offset / attr->page_size_bytes;
-  uint32_t oob_offset = page_index * attr->page_oob_bytes;
-  unsigned char *chunk = &flash_driver->oob[ oob_offset ];
+  unsigned char *chunk = &flash_driver->oob[ offset ];
 
   memcpy( buffer, chunk, size_of_buffer );
 
@@ -303,9 +301,7 @@ static int flash_sim_oob_write(
   uint64_t start_time = rtems_clock_get_uptime_nanoseconds();
   struct nand_priv_data *flash_driver = (struct nand_priv_data *) flash->driver;
   struct flash_sim_flashdev_attributes *attr = &flash_driver->attr;
-  uint32_t page_index = offset / attr->page_size_bytes;
-  uint32_t oob_offset = page_index * attr->page_oob_bytes;
-  unsigned char *chunk = &flash_driver->oob[ oob_offset ];
+  unsigned char *chunk = &flash_driver->oob[ offset ];
   const uint8_t *cbuff = buffer;
   size_t i;
 

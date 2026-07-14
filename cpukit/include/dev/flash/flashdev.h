@@ -337,7 +337,7 @@ typedef struct rtems_flashdev_ioctl_sector_health {
  */
 typedef struct rtems_flashdev_ioctl_oob_rw_info {
   /**
-   * @brief Offset at which to operate.
+   * @brief Offset into contiguous OOB space at which to operate.
    */
   off_t offset;
 
@@ -552,6 +552,9 @@ struct rtems_flashdev {
    * @brief Call to the device driver to read the out of band space of the flash
    * device.
    *
+   * The offset specified is relative to a contiguous out of band space, not to
+   * normal data space.
+   *
    * @param[in] flash Pointer to flash device.
    * @param[in] offset Address to read from.
    * @param[in] count Number of bytes to read.
@@ -570,6 +573,9 @@ struct rtems_flashdev {
   /**
    * @brief Call to the device driver to write to the out of band space of the
    * flash device.
+   *
+   * The offset specified is relative to a contiguous out of band space, not to
+   * normal data space.
    *
    * @param[in] flash Pointer to flash device.
    * @param[in] offset Address to write to.
