@@ -1100,6 +1100,10 @@ static int get_region_first_page_index(
   return 0;
 }
 
+/*
+ * This converts a region-relative OOB space offset to a device-global OOB
+ * space offset
+ */
 static int rtems_flashdev_get_region_oob_addr(
   rtems_flashdev *flash,
   rtems_libio_t  *iop,

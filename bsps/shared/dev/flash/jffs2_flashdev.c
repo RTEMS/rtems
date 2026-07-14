@@ -141,6 +141,36 @@ static int do_block_mark_bad(
   return ioctl(fd, RTEMS_FLASHDEV_IOCTL_REGION_SECTOR_MARK_BAD, &o_offset);
 }
 
+static uint32_t do_get_oob_size(
+  rtems_jffs2_flash_control *super
+)
+{
+  int rv;
+  int fd = fileno(get_flash_control( super )->handle);
+  size_t bytes_per_page = 0;
+
+  rv = ioctl(fd, RTEMS_FLASHDEV_IOCTL_OOB_BYTES_PER_PAGE, &bytes_per_page);
+
+  if (rv != 0) {
+    return 0;
+  }
+
+  return bytes_per_page;
+}
+
+static uint32_t page_offset_to_oob_offset(
+  rtems_jffs2_flash_control *super,
+  uint32_t page_offset
+)
+{
+  uint32_t page_size = super->write_size;
+  uint32_t oob_bytes_per_page = do_get_oob_size(super);
+  uint32_t page_index = page_offset / page_size;
+
+  /* JFFS2 only makes these requests on even page boundaries */
+  return page_index * oob_bytes_per_page;
+}
+
 static int do_read_oob(
   rtems_jffs2_flash_control *super,
   uint32_t offset,
@@ -151,7 +181,7 @@ static int do_read_oob(
   int fd = fileno(get_flash_control( super )->handle);
   rtems_flashdev_ioctl_oob_rw_info args;
 
-  args.offset = offset;
+  args.offset = page_offset_to_oob_offset(super, offset);
   args.count = ooblen;
   args.buffer = oobbuf;
 
@@ -168,28 +198,11 @@ static int do_write_oob(
   int fd = fileno(get_flash_control( super )->handle);
   rtems_flashdev_ioctl_oob_rw_info args;
 
-  args.offset = offset;
+  args.offset = page_offset_to_oob_offset(super, offset);
   args.count = ooblen;
   args.buffer = oobbuf;
 
   return ioctl(fd, RTEMS_FLASHDEV_IOCTL_REGION_OOB_WRITE, &args);
-}
-
-static uint32_t do_get_oob_size(
-  rtems_jffs2_flash_control *super
-)
-{
-  int rv;
-  int fd = fileno(get_flash_control( super )->handle);
-  size_t bytes_per_page = 0;
-
-  rv = ioctl(fd, RTEMS_FLASHDEV_IOCTL_OOB_BYTES_PER_PAGE, &bytes_per_page);
-
-  if (rv != 0) {
-    return 0;
-  }
-
-  return bytes_per_page;
 }
 
 static void do_destroy( rtems_jffs2_flash_control *super )

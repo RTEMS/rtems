@@ -331,8 +331,8 @@ static int xnandpsu_oob_read(
     return -EIO;
   }
 
-  /* Get page index */
-  uint32_t PageIndex = offset / nandpsu->Geometry.BytesPerPage;
+  /* Get page index, offset is in oob-space */
+  uint32_t PageIndex = offset / nandpsu->Geometry.SpareBytesPerPage;
 
   spare_bytes = rtems_malloc( SpareBytesPerPage );
   if ( spare_bytes == NULL ) {
@@ -402,8 +402,8 @@ static int xnandpsu_oob_write(
     memcpy( buffer, oobbuf, ooblen );
   }
 
-  /* Get page index */
-  uint32_t PageIndex = offset / nandpsu->Geometry.BytesPerPage;
+  /* Get page index, offset is in oob-space */
+  uint32_t PageIndex = offset / nandpsu->Geometry.SpareBytesPerPage;
 
   sc = XNandPsu_WriteSpareBytes( nandpsu, PageIndex, buffer );
   free( spare_bytes );
