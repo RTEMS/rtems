@@ -1,0 +1,20 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpspinwait01
+
+directives:
+
+ - _CPU_Spin_wait()
+
+concepts:
+
+ - Ensure that _CPU_Spin_wait() executes without faulting across multiple SMP cores.
+
+ - Verify that _CPU_Spin_wait() acts as a valid compiler memory barrier, ensuring non-volatile 
+   shared memory flags are re-read during busy loops to prevent optimization deadlocks.
+
+ - Ensure that MESI cache-line invalidation and atomic memory visibility propagate correctly 
+   across core boundaries under pipeline throttling via an inter-core ring token pass.
+
+ - Verify that multiple secondary cores spinning simultaneously on a read-shared cache line 
+   reliably detect and wake up from a single broadcast release.

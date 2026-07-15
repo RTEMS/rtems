@@ -452,9 +452,6 @@ static inline void _CPU_Spin_wait( void )
   __asm__ volatile( "pause" ::: "memory" );
 }
 
-/* Explicitly define the macro so the preprocessor can see it in DHRL API */
-#define _CPU_Spin_wait _CPU_Spin_wait
-
 #ifdef __cplusplus
 }
 #endif

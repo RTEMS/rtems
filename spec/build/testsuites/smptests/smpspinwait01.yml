@@ -6,7 +6,10 @@ copyrights:
 cppflags: []
 cxxflags: []
 enabled-by:
-- RTEMS_SMP
+  and:
+  - RTEMS_SMP
+  - or:
+    - x86_64
 features: c cprogram
 includes: []
 ldflags: []
