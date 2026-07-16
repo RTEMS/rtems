@@ -11,6 +11,8 @@ enabled-by:
   - or:
     - x86_64
     - arm
+    - aarch64
+    - riscv
 features: c cprogram
 includes: []
 ldflags: []
@@ -22,3 +24,4 @@ target: testsuites/smptests/smpspinwait01.exe
 type: build
 use-after: []
 use-before: []
+

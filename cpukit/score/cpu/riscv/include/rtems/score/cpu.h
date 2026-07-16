@@ -532,6 +532,29 @@ RTEMS_NO_RETURN void _RISCV_Start_multitasking( Context_Control *heir );
 /** Type that can store a 32-bit integer or a pointer. */
 typedef uintptr_t CPU_Uint32ptr;
 
+/**
+ * Pauses the CPU pipeline to prevent aggressive speculative execution
+ * and reduce thermal load during spin-wait loops.
+ */
+static inline void _CPU_Spin_wait( void )
+{
+  /*
+   * Push the current architecture options and enable zihintpause locally.
+   * This guarantees the assembler accepts the "pause" mnemonic regardless of
+   * whether "-march=..._zihintpause" was passed globally to the compiler.
+   *
+   * Executes as a pipeline pause on supported cores, and degrades safely
+   * to a harmless NOP FENCE hint on older RISC-V hardware.
+   */
+  __asm__ volatile(
+    ".option push\n\t"
+    ".option arch, +zihintpause\n\t"
+    "pause\n\t"
+    ".option pop"
+    ::: "memory"
+  );
+}
+
 #endif /* ASM */
 
 #ifdef __cplusplus
