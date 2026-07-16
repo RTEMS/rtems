@@ -10,6 +10,7 @@ enabled-by:
   - RTEMS_SMP
   - or:
     - x86_64
+    - arm
 features: c cprogram
 includes: []
 ldflags: []

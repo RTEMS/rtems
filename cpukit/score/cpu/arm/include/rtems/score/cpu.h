@@ -675,6 +675,15 @@ RTEMS_NO_RETURN void _ARM_Exception_default( CPU_Exception_frame *frame );
 /** Type that can store a 32-bit integer or a pointer. */
 typedef uintptr_t CPU_Uint32ptr;
 
+/**
+ * Pauses the CPU pipeline to prevent aggressive speculative execution
+ * and reduce thermal load during spin-wait loops.
+ */
+static inline void _CPU_Spin_wait( void )
+{
+  __asm__ volatile( "yield" ::: "memory" );
+}
+
 #ifdef __cplusplus
 }
 #endif
