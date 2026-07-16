@@ -320,11 +320,12 @@ rtems_dosfs_convert_control *rtems_dosfs_create_utf8_converter(
       super->handler = &msdos_utf8_convert_handler;
       super->buffer.data = &self->buffer;
       super->buffer.size = sizeof( self->buffer );
+
+      return &self->super;
     } else {
       msdos_utf8_destroy( &self->super );
-      self = NULL;
     }
   }
 
-  return &self->super;
+  return NULL;
 }

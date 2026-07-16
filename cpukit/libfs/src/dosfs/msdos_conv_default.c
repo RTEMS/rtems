@@ -194,7 +194,9 @@ rtems_dosfs_convert_control *rtems_dosfs_create_default_converter(void)
     super->handler = &msdos_default_convert_handler;
     super->buffer.data = &self->buffer;
     super->buffer.size = sizeof( self->buffer );
+
+    return &self->super;
   }
 
-  return &self->super;
+  return NULL;
 }
