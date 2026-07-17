@@ -1072,6 +1072,7 @@ static bool shell_main_loop(
 )
 {
   bool result = false;
+  bool login_failed = false;
   int line = 0;
   int cmd_count;
   char *cmds[RTEMS_SHELL_CMD_COUNT];
@@ -1114,6 +1115,7 @@ static bool shell_main_loop(
     }
 
     do {
+      login_failed = false;
       result = rtems_shell_init_user_env();
 
       if (result) {
@@ -1124,6 +1126,7 @@ static bool shell_main_loop(
          */
         if (shell_env->login_check != NULL) {
           result = rtems_shell_login(shell_env, stdin, stdout);
+          login_failed = !result;
         } else {
           setuid(shell_env->uid);
           setgid(shell_env->gid);
@@ -1228,7 +1231,7 @@ static bool shell_main_loop(
         fflush( stderr );
       }
       shell_std_debug("end: %d %d\n", result, shell_env->forever);
-    } while (result && shell_env->forever);
+    } while (shell_env->forever && (result || login_failed));
   }
 
   free(cmds[0]);
