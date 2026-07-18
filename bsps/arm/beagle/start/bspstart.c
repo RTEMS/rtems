@@ -39,6 +39,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <bsp/dcan_am335x.h>
 
 #include "bspdebug.h"
 
@@ -98,6 +99,8 @@ static void bbb_drivers_initialize(void)
   phandle_t node = rtems_ofw_peer(0);
 
   traverse_fdt_nodes(node);
+
+  rtems_am335x_dcan_initialize();
 }
 
 int beagle_get_node_unit(phandle_t node)
