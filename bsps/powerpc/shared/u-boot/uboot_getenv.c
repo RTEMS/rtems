@@ -48,28 +48,7 @@
 const uint8_t *uboot_environment = (const uint8_t *) UBOOT_ENV_BASE;
 const size_t uboot_environment_size = UBOOT_ENV_SIZE;
 
-/*
- * The U-Boot source code appears to use the CRC32 code from zlib.
- * But I cannot find a way to get the crc32() in zlib code to
- * generate the CRC found in the Flash on the Icecube board.
- * So for now, always return TRUE.
- */
-static int bsp_uboot_environ_check_crc(void)
-{
-#if 0
-  unsigned long crc;
-  unsigned long max;
-
-  for (max=0 ; max <= 0x20000 ; max+=4 ) {
-    crc = crc32( 0, NULL, 0 );
-    crc = crc32( crc, &uboot_environment[4], max);
-    printk( "crc=0x%08lx need %0x max=%d\n", crc,
-            *(int *)uboot_environment, max  );
-  }
-#endif
-  return 1;
-}
-
+#if defined(HAS_UBOOT)
 const char *bsp_uboot_getenv(
   const char *name
 )
@@ -96,4 +75,5 @@ const char *bsp_uboot_getenv(
   }
   return NULL;
 }
+#endif
 
