@@ -223,9 +223,22 @@ def _enable_cxx_explicit_target(self):
     self.mappings[".cc"] = _cxx_explicit_target
 
 
+def _cfg_file_nodes(bld):
+    # The configuration files (for example a generated linker script) are
+    # written during ./waf configure.  Depend on them so that a reconfiguration
+    # which changes a linker script triggers a relink of the executables.
+    try:
+        return bld.cfg_file_nodes
+    except AttributeError:
+        nodes = [bld.root.make_node(f) for f in bld.env.cfg_files]
+        bld.cfg_file_nodes = nodes
+        return nodes
+
+
 @after("apply_link")
 @feature("cprogram", "cxxprogram")
 def process_start_files(self):
+    self.link_task.dep_nodes.extend(_cfg_file_nodes(self.bld))
     if getattr(self, "start_files", False):
         self.link_task.dep_nodes.extend(self.bld.start_files)
 
@@ -434,6 +447,7 @@ class Item(object):
                    bic.ldflags + self.substitute(bld, self.data["ldflags"]))
         tsk.set_inputs([bld.bldnode.make_node(s) for s in source])
         tsk.set_outputs(bld.bldnode.make_node(target))
+        tsk.dep_nodes.extend(_cfg_file_nodes(bld))
         bld.add_to_group(tsk)
         return target
 
@@ -503,6 +517,7 @@ class Item(object):
                 )
 
         tsk = gnatmake(bld, bic, objdir, objs, main, target, self)
+        tsk.dep_nodes.extend(_cfg_file_nodes(bld))
         bld.add_to_group(tsk)
         return target
 
