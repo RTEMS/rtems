@@ -896,6 +896,9 @@ static void ctucanfd_err_interrupt( struct rtems_can_chip *chip, uint32_t isr )
   uint16_t                  rxerr;
   uint16_t                  txerr;
 
+  /* Set the standard CAN error-frame payload length (8 bytes) */
+  err_frame.header.dlen = CAN_FRAME_STANDARD_DLEN;
+
   regval = ctucanfd_read32( internal, CTUCANFD_REC );
 
   rxerr = FIELD_GET( REG_REC_REC_VAL, regval );
