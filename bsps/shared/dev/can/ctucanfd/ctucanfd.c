@@ -105,9 +105,9 @@ enum ctucanfd_txtb_status {
 enum ctucanfd_txtb_command {
   /* Requests TXT buffer to move to "Empty" state */
   TXT_CMD_SET_EMPTY = 0x01,
-  /* Requests TXT buffer to move to "Aborted" or "Abort in progress" state */
-  TXT_CMD_SET_READY = 0x02,
   /* Requests TXT buffer to move to "Ready" state*/
+  TXT_CMD_SET_READY = 0x02,
+  /* Requests TXT buffer to move to "Aborted" or "Abort in progress" state */
   TXT_CMD_SET_ABORT = 0x04
 };
 
@@ -275,7 +275,7 @@ static int ctucanfd_check_state(
         ( internal->txb_info[ i ].edge != NULL )
       ) {
         printk(
-          "CTUCANFD CHECK at %s: txb_info[%d] filled, but shoul be inactive "
+          "CTUCANFD CHECK at %s: txb_info[%d] filled, but should be inactive "
           "active in txb_order = 0x%08x, ntxbufs %d, tail %d\n",
           where,
           i,
@@ -428,7 +428,7 @@ static int ctucanfd_set_btr(
 
   /* The timing calculation functions have only constraints on tseg1, which is
    * prop_seg + phase1_seg combined. tseg1 is then split in half and stored
-   * into prog_seg and phase_seg1. In CTU CAN FD, PROP is 6/7 bits wide
+   * into prop_seg and phase_seg1. In CTU CAN FD, PROP is 6/7 bits wide
    * but PH1 only 6/5, so we must re-distribute the values here.
    */
   if ( phase_seg1 > max_ph1_len ) {
@@ -1198,7 +1198,7 @@ static void ctucanfd_tx_interrupt( struct rtems_can_chip *chip )
 /**
  * @brief  This function handles CAN interrupts.
  *
- * @param  arg Argument passed throught interrupt routine.
+ * @param  arg Argument passed through the interrupt routine.
  *
  * @return None
  */
@@ -1367,7 +1367,7 @@ static rtems_task ctucanfd_worker( rtems_task_argument arg )
       }
     } else if ( internal->txb_prio_tail[ 0 ] < internal->ntxbufs ) {
       /* We have some space in HW buffers for outgoing messages,
-       * chek whether there is something to send.
+       * check whether there is something to send.
        */
       ret = rtems_can_queue_test_outslot( qends, &qedge, &slot );
       if ( ret >= 0 ) {
@@ -1407,7 +1407,7 @@ static rtems_task ctucanfd_worker( rtems_task_argument arg )
       }
     } else {
       /* There is no free space in HW buffers. Check whether pending
-       * message has higher priority class then some message in HW buffers.
+       * message has higher priority class than some message in HW buffers.
        */
       int pending_prio = -1;
       int avail_prio;
@@ -1453,7 +1453,7 @@ static rtems_task ctucanfd_worker( rtems_task_argument arg )
  *
  * @param  chip    Pointer to chip structure.
  * @param  command IOCTL command
- * @param  arg     Void pointer to IOCL argument
+ * @param  arg     Void pointer to IOCTL argument
  *
  * @return Negative value on error.
  */
@@ -1478,7 +1478,7 @@ static int ctucanfd_chip_ioctl(
 }
 
 /**
- * @brief  This function calculates and sets bittiming from giver bitrate
+ * @brief  This function calculates and sets bittiming from given bitrate
  *
  * @param  chip  Pointer to chip structure.
  * @param  type  Bittiming type (nominal, FD)
@@ -1614,7 +1614,7 @@ static int ctucanfd_stop_chip(
   }
 
   if ( ret < 0 ) {
-    /* The controller didn't managed to clear all frames before timeout,
+    /* The controller didn't manage to clear all frames before timeout,
      * flush the buffers.
      */
     rtems_can_queue_ends_flush_outlist( &chip->qends_dev->base );
@@ -1803,7 +1803,7 @@ struct rtems_can_chip *rtems_can_ctucanfd_initialize(
 
   if ( txb_count == 0 ) {
     /* Ensure the compatibility with older IP core versions before synthesis
-     * parameter for TX buffer count was been added.
+     * parameter for TX buffer count was added.
      */
     txb_count = 4;
   }
