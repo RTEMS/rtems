@@ -961,7 +961,7 @@ static void ctucanfd_err_interrupt( struct rtems_can_chip *chip, uint32_t isr )
   /* Check for RX overflow interrupt */
   if ( FIELD_GET( REG_INT_STAT_DOI, isr ) ) {
     rtems_can_stats_add_rx_overflows( &chip->chip_stats );
-    ctucanfd_write32( internal, CTUCANFD_TX_COMMAND, REG_COMMAND_CDO );
+    ctucanfd_write32( internal, CTUCANFD_COMMAND, REG_COMMAND_CDO );
     err_frame.header.can_id |= CAN_ERR_ID_CRTL;
     err_frame.header.flags |= CAN_FRAME_ERR;
     err_frame.data[ CAN_ERR_DATA_BYTE_TRX_CTRL ] |= CAN_ERR_CRTL_RX_OVERFLOW;
