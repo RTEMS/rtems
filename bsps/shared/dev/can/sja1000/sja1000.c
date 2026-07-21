@@ -51,9 +51,9 @@
 #include <string.h>
 
 /* FIXME find or implement portable I/O mapped devices access routines */
-#if 0 && defined(__i386__)
+#if defined(__i386__)
 #define RTEMS_CAN_SJA1000_ARCH_WITH_IO_PORTS 1
-#include "i386_io.h"
+#include <i386_io.h>
 #endif
 
 #include <rtems.h>
