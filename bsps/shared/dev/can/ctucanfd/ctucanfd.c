@@ -964,7 +964,7 @@ static void ctucanfd_err_interrupt( struct rtems_can_chip *chip, uint32_t isr )
     ctucanfd_write32( internal, CTUCANFD_TX_COMMAND, REG_COMMAND_CDO );
     err_frame.header.can_id |= CAN_ERR_ID_CRTL;
     err_frame.header.flags |= CAN_FRAME_ERR;
-    err_frame.data[ CAN_ERR_ID_LOSTARB ] |= CAN_ERR_CRTL_RX_OVERFLOW;
+    err_frame.data[ CAN_ERR_DATA_BYTE_TRX_CTRL ] |= CAN_ERR_CRTL_RX_OVERFLOW;
   }
 
   if ( err_frame.header.flags != 0 ) {
