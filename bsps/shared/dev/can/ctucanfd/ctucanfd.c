@@ -1396,7 +1396,6 @@ static rtems_task ctucanfd_worker( rtems_task_argument arg )
             ctucanfd_txb_order2prio( internal->txb_order )
           );
           ctucanfd_give_txtb_cmd( internal, TXT_CMD_SET_READY, txtb_id );
-          ctucanfd_give_txtb_cmd( internal, TXT_CMD_SET_READY, txtb_id );
           ctucanfd_check_state( internal, "after insert_frame succeed" );
           continue;
         } else {
