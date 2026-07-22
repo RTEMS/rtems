@@ -1,0 +1,5 @@
+*** BEGIN OF TEST libdl (RAP) 14 ***
+Init - allocating most of heap -- OK
+Init - attempt to load RAP app - expect failure
+Init - freeing allocated memory -- OK
+*** END OF TEST libdl (RAP) 14 ***

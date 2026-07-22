@@ -146,9 +146,14 @@ static rtems_rap_app* rtems_rap_check_handle(void* handle) {
 }
 
 static rtems_rap_app* rtems_rap_app_alloc(void) {
-  rtems_rap_app* app = malloc(sizeof(rtems_rap_app));
-  memset(app, 0, sizeof(rtems_rap_app));
+  rtems_rap_app* app = malloc(sizeof(*app));
+  if (app == NULL) {
+    return NULL;
+  }
+
+  memset(app, 0, sizeof(*app));
   rtems_chain_append(&rap_.apps, &app->node);
+
   return app;
 }
 
