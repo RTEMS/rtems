@@ -44,7 +44,7 @@
 #undef TXT_MASK
 #undef TXT_ANY_DONE
 #undef TXB_BF
-#undef TXB_M
+#undef TXB_MASK
 #undef TXB_ALL
 #undef TXB_SH
 
