@@ -1846,6 +1846,45 @@ rtems_status_code rtems_task_set_affinity(
   const cpu_set_t *cpuset
 );
 
+/**
+ * @ingroup RTEMSAPIClassicTasks
+ *
+ * @brief Returns CPU usage time for a specific task.
+ *
+ * @param id is the task identifier.
+ *
+ * @param[out] ts is a pointer to a timestamp structure. When the directive
+ *   call is successful, the CPU usage time used by the specified id will be
+ *   stored here.
+ *
+ * This directive retrieves the cpu usage time under the specified id.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no task associated with the identifier
+ *   specified by ``id``.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``ts`` parameter was NULL.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * - The directive may be called from within interrupt context.
+ *
+ * - The directive may be called from within device driver initialization
+ *   context.
+ *
+ * - The directive may be called from within task context.
+ *
+ * - The directive will not cause the calling task to be preempted.
+ * @endparblock
+ */
+rtems_status_code rtems_task_get_cpu_usage(
+  rtems_id id,
+  struct timespec *ts
+);
+
 /* Generated from spec:/rtems/task/if/iterate */
 
 /**

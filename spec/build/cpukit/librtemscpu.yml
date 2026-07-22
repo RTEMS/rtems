@@ -1330,6 +1330,7 @@ source:
 - cpukit/rtems/src/taskresume.c
 - cpukit/rtems/src/tasks.c
 - cpukit/rtems/src/tasksetaffinity.c
+- cpukit/rtems/src/taskgetcpuusage.c
 - cpukit/rtems/src/tasksetpriority.c
 - cpukit/rtems/src/tasksetscheduler.c
 - cpukit/rtems/src/taskstart.c
