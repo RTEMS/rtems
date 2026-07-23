@@ -205,6 +205,53 @@ typedef enum {
 } bcm2711_mbox_property_tag;
 
 /**
+ * @name Property Tag Value Buffer Sizes
+ *
+ * @brief Value buffer size in bytes for each property tag that has a fixed
+ * value buffer size.
+ *
+ * @{
+ */
+#define BCM2711_TAG_SIZE_FIRMWARE_REVISION 4 /**< Firmware revision, bytes */
+#define BCM2711_TAG_SIZE_BOARD_MODEL 4 /**< Board model, bytes */
+#define BCM2711_TAG_SIZE_BOARD_REVISION 4 /**< Board revision, bytes */
+#define BCM2711_TAG_SIZE_BOARD_MAC 8 /**< Board MAC, 6 bytes padded */
+#define BCM2711_TAG_SIZE_BOARD_SERIAL 8 /**< Board serial, bytes */
+#define BCM2711_TAG_SIZE_ARM_MEMORY 8 /**< ARM memory, bytes */
+#define BCM2711_TAG_SIZE_VC_MEMORY 8 /**< VC memory, bytes */
+#define BCM2711_TAG_SIZE_DMA_CHANNELS 4 /**< DMA channels, bytes */
+#define BCM2711_TAG_SIZE_POWER_STATE 8 /**< Get/set power state, bytes */
+#define BCM2711_TAG_SIZE_TIMING 8 /**< Get timing, bytes */
+#define BCM2711_TAG_SIZE_CLOCK_STATE 8 /**< Get/set clock state, bytes */
+#define BCM2711_TAG_SIZE_CLOCK_RATE 8 /**< Get/max/min/measured rate, bytes */
+#define BCM2711_TAG_SIZE_SET_CLOCK_RATE 12 /**< Set clock rate, bytes */
+#define BCM2711_TAG_SIZE_TURBO 8 /**< Get/set turbo, bytes */
+#define BCM2711_TAG_SIZE_VOLTAGE 8 /**< Get/set/max/min voltage, bytes */
+#define BCM2711_TAG_SIZE_TEMPERATURE 8 /**< Get/max temperature, bytes */
+#define BCM2711_TAG_SIZE_LED 8 /**< Get/test/set LED status, bytes */
+#define BCM2711_TAG_SIZE_MEM_ALLOC 12 /**< Allocate memory, bytes */
+#define BCM2711_TAG_SIZE_MEM_LOCK 4 /**< Lock memory, bytes */
+#define BCM2711_TAG_SIZE_MEM_UNLOCK 4 /**< Unlock memory, bytes */
+#define BCM2711_TAG_SIZE_MEM_RELEASE 4 /**< Release memory, bytes */
+#define BCM2711_TAG_SIZE_EXEC 28 /**< Execute code, bytes */
+#define BCM2711_TAG_SIZE_EDID_BLOCK 136 /**< Get EDID block, bytes */
+#define BCM2711_TAG_SIZE_FB_ALLOC 8 /**< Allocate framebuffer, bytes */
+#define BCM2711_TAG_SIZE_FB_RELEASE 0 /**< Release framebuffer, bytes */
+#define BCM2711_TAG_SIZE_BLANK 4 /**< Blank screen, bytes */
+#define BCM2711_TAG_SIZE_PHYS_WIDTH_HEIGHT 8 /**< Physical size, bytes */
+#define BCM2711_TAG_SIZE_VIRT_WIDTH_HEIGHT 8 /**< Virtual size, bytes */
+#define BCM2711_TAG_SIZE_DEPTH 4 /**< Depth, bytes */
+#define BCM2711_TAG_SIZE_PIXEL_ORDER 4 /**< Pixel order, bytes */
+#define BCM2711_TAG_SIZE_ALPHA_MODE 4 /**< Alpha mode, bytes */
+#define BCM2711_TAG_SIZE_PITCH 4 /**< Get pitch, bytes */
+#define BCM2711_TAG_SIZE_VIRT_OFFSET 8 /**< Virtual offset, bytes */
+#define BCM2711_TAG_SIZE_OVERSCAN 16 /**< Overscan, bytes */
+#define BCM2711_TAG_SIZE_GET_PALETTE 1024 /**< Get palette, 256 RGBA, bytes */
+#define BCM2711_TAG_SIZE_CURSOR_INFO 24 /**< Set cursor info, bytes */
+#define BCM2711_TAG_SIZE_CURSOR_STATE 16 /**< Set cursor state, bytes */
+/** @} */
+
+/**
  * @brief Mailbox Property Interface Tag structure
  * Represents a single property tag in the mailbox message.
  */
