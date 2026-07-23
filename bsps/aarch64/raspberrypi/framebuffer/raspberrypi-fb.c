@@ -82,11 +82,13 @@ static rtems_status_code rpi_fb_init(
 )
 {
   static const mbox_property_tag_metadata fb_tags[RPI_FB_TAG_COUNT] = {
-    { BCM2711_TAG_SET_PHYSICAL_WIDTH_HEIGHT, 8 },
-    { BCM2711_TAG_SET_VIRTUAL_WIDTH_HEIGHT,  8 },
-    { BCM2711_TAG_SET_DEPTH,                 4 },
-    { BCM2711_TAG_ALLOCATE_BUFFER,           8 },
-    { BCM2711_TAG_GET_PITCH,                 4 },
+    { BCM2711_TAG_SET_PHYSICAL_WIDTH_HEIGHT,
+      BCM2711_TAG_SIZE_PHYS_WIDTH_HEIGHT },
+    { BCM2711_TAG_SET_VIRTUAL_WIDTH_HEIGHT,
+      BCM2711_TAG_SIZE_VIRT_WIDTH_HEIGHT },
+    { BCM2711_TAG_SET_DEPTH,       BCM2711_TAG_SIZE_DEPTH },
+    { BCM2711_TAG_ALLOCATE_BUFFER, BCM2711_TAG_SIZE_FB_ALLOC },
+    { BCM2711_TAG_GET_PITCH,       BCM2711_TAG_SIZE_PITCH },
   };
 
   rpi_fb_tags tag;
@@ -196,9 +198,10 @@ static rtems_status_code rpi_fb_get_display_config(
 )
 {
   static const mbox_property_tag_metadata tags[] = {
-    { BCM2711_TAG_GET_PHYSICAL_WIDTH_HEIGHT, 8 },
-    { BCM2711_TAG_GET_DEPTH,                 4 },
-    { BCM2711_TAG_GET_PIXEL_ORDER,           4 },
+    { BCM2711_TAG_GET_PHYSICAL_WIDTH_HEIGHT,
+      BCM2711_TAG_SIZE_PHYS_WIDTH_HEIGHT },
+    { BCM2711_TAG_GET_DEPTH,       BCM2711_TAG_SIZE_DEPTH },
+    { BCM2711_TAG_GET_PIXEL_ORDER, BCM2711_TAG_SIZE_PIXEL_ORDER },
   };
 
   mbox_property_message *msg =
