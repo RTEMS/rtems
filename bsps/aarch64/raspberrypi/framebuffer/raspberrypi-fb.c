@@ -139,26 +139,27 @@ static rtems_status_code rpi_fb_init(
 
   tag.pitch = current;
 
-  tag.phys->value_buffer[0] = cfg->width;
-  tag.phys->value_buffer[1] = cfg->height;
+  tag.phys->value_buffer[BCM2711_TAG_OFF_PHYS_WIDTH]  = cfg->width;
+  tag.phys->value_buffer[BCM2711_TAG_OFF_PHYS_HEIGHT] = cfg->height;
 
-  tag.virt->value_buffer[0] = cfg->width;
-  tag.virt->value_buffer[1] = cfg->height;
+  tag.virt->value_buffer[BCM2711_TAG_OFF_VIRT_WIDTH]  = cfg->width;
+  tag.virt->value_buffer[BCM2711_TAG_OFF_VIRT_HEIGHT] = cfg->height;
 
-  tag.depth->value_buffer[0] = cfg->depth;
+  tag.depth->value_buffer[BCM2711_TAG_OFF_DEPTH_BPP] = cfg->depth;
 
   /* requested alignment in bytes */
-  tag.alloc->value_buffer[0] = RPI_FB_ALIGNMENT;
-  tag.alloc->value_buffer[1] = 0;
+  tag.alloc->value_buffer[BCM2711_TAG_OFF_FB_ALLOC_ALIGNMENT] =
+    RPI_FB_ALIGNMENT;
+  tag.alloc->value_buffer[BCM2711_TAG_OFF_FB_ALLOC_SIZE] = 0;
 
   sc = rpi_mbox_process(msg);
   if (sc != RTEMS_SUCCESSFUL) {
     return sc;
   }
 
-  fb_bus  = tag.alloc->value_buffer[0];
-  fb_size = tag.alloc->value_buffer[1];
-  pitch   = tag.pitch->value_buffer[0];
+  fb_bus  = tag.alloc->value_buffer[BCM2711_TAG_OFF_FB_ALLOC_BASE];
+  fb_size = tag.alloc->value_buffer[BCM2711_TAG_OFF_FB_ALLOC_SIZE];
+  pitch   = tag.pitch->value_buffer[BCM2711_TAG_OFF_PITCH_BYTES];
 
   if (fb_bus == 0 || fb_size == 0 || pitch == 0) {
     return RTEMS_IO_ERROR;
@@ -248,10 +249,10 @@ static rtems_status_code rpi_fb_get_display_config(
 
   pixel = current;
 
-  cfg->width  = phys->value_buffer[0];
-  cfg->height = phys->value_buffer[1];
-  cfg->depth  = depth->value_buffer[0];
-  cfg->pixel_order = pixel->value_buffer[0];
+  cfg->width  = phys->value_buffer[BCM2711_TAG_OFF_PHYS_WIDTH];
+  cfg->height = phys->value_buffer[BCM2711_TAG_OFF_PHYS_HEIGHT];
+  cfg->depth  = depth->value_buffer[BCM2711_TAG_OFF_DEPTH_BPP];
+  cfg->pixel_order = pixel->value_buffer[BCM2711_TAG_OFF_PIXEL_ORDER];
 
   if (cfg->width == 0 || cfg->height == 0) {
     return RTEMS_IO_ERROR;
