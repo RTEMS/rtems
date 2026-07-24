@@ -13,6 +13,7 @@ enabled-by:
     - arm
     - aarch64
     - riscv
+    - i386
 features: c cprogram
 includes: []
 ldflags: []
@@ -24,4 +25,3 @@ target: testsuites/smptests/smpspinwait01.exe
 type: build
 use-after: []
 use-before: []
-

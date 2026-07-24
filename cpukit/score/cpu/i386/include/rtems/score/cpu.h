@@ -661,6 +661,15 @@ CPU_Counter_ticks _CPU_Counter_read( void );
 /** Type that can store a 32-bit integer or a pointer. */
 typedef uintptr_t CPU_Uint32ptr;
 
+/**
+ * Pauses the CPU pipeline to prevent aggressive speculative execution
+ * and reduce thermal load during spin-wait loops.
+ */
+static inline void _CPU_Spin_wait( void )
+{
+  __asm__ volatile( "pause" ::: "memory" );
+}
+
 #endif /* ASM */
 
 #ifdef __cplusplus
