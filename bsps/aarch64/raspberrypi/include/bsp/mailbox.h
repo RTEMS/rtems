@@ -205,6 +205,134 @@ typedef enum {
 } bcm2711_mbox_property_tag;
 
 /**
+ * @name Property Tag Value Buffer Offsets
+ *
+ * @brief Tag specific word offsets into the value buffer.
+ *
+ * Offsets are in 32-bit words. Where a response overwrites the request, two
+ * names may resolve to the same offset. Tags with a byte-array or
+ * variable-length payload (board MAC, get clocks, command line, get palette)
+ * have offsets only for their fixed header fields, if any.
+ * @{
+ */
+#define BCM2711_TAG_OFF_FIRMWARE_REVISION 0 /**< Firmware revision */
+
+#define BCM2711_TAG_OFF_BOARD_MODEL 0 /**< Board model */
+
+#define BCM2711_TAG_OFF_BOARD_REVISION 0 /**< Board revision */
+
+#define BCM2711_TAG_OFF_BOARD_SERIAL_LOW 0  /**< Serial, low word */
+#define BCM2711_TAG_OFF_BOARD_SERIAL_HIGH 1 /**< Serial, high word */
+
+#define BCM2711_TAG_OFF_ARM_MEMORY_BASE 0 /**< ARM memory base address */
+#define BCM2711_TAG_OFF_ARM_MEMORY_SIZE 1 /**< ARM memory size */
+
+#define BCM2711_TAG_OFF_VC_MEMORY_BASE 0 /**< VC memory base address */
+#define BCM2711_TAG_OFF_VC_MEMORY_SIZE 1 /**< VC memory size */
+
+#define BCM2711_TAG_OFF_CLOCKS_PARENT_ID 0 /**< Parent clock id (0 = root) */
+#define BCM2711_TAG_OFF_CLOCKS_ID 1        /**< Clock id */
+
+#define BCM2711_TAG_OFF_DMA_CHANNELS_MASK 0 /**< Usable DMA channel bitmask */
+
+#define BCM2711_TAG_OFF_POWER_DEVICE_ID 0 /**< Device id */
+#define BCM2711_TAG_OFF_POWER_STATE 1     /**< Power state bits */
+
+#define BCM2711_TAG_OFF_TIMING_DEVICE_ID 0 /**< Device id */
+#define BCM2711_TAG_OFF_TIMING_WAIT 1      /**< Enable wait time (microsec) */
+
+#define BCM2711_TAG_OFF_CLOCK_ID 0              /**< Clock id (shared) */
+#define BCM2711_TAG_OFF_CLOCK_STATE 1           /**< Clock state bits */
+#define BCM2711_TAG_OFF_CLOCK_RATE 1            /**< Clock rate (Hz) */
+#define BCM2711_TAG_OFF_CLOCK_RATE_SKIP_TURBO 2 /**< Set rate: skip turbo */
+
+#define BCM2711_TAG_OFF_TURBO_ID 0    /**< Turbo id (0) */
+#define BCM2711_TAG_OFF_TURBO_LEVEL 1 /**< Turbo level (0/1) */
+
+#define BCM2711_TAG_OFF_VOLTAGE_ID 0    /**< Voltage id */
+#define BCM2711_TAG_OFF_VOLTAGE_VALUE 1 /**< Voltage (microvolts) */
+
+#define BCM2711_TAG_OFF_TEMPERATURE_ID 0    /**< Temperature id (0) */
+#define BCM2711_TAG_OFF_TEMPERATURE_VALUE 1 /**< Temperature (millideg C) */
+
+#define BCM2711_TAG_OFF_LED_PIN 0    /**< Pin (42 = status, 130 = power) */
+#define BCM2711_TAG_OFF_LED_STATUS 1 /**< LED status (0/1) */
+
+#define BCM2711_TAG_OFF_MEM_ALLOC_SIZE 0      /**< Request: size in bytes */
+#define BCM2711_TAG_OFF_MEM_ALLOC_ALIGNMENT 1 /**< Request: alignment */
+#define BCM2711_TAG_OFF_MEM_ALLOC_FLAGS 2     /**< Request: flags */
+#define BCM2711_TAG_OFF_MEM_ALLOC_HANDLE 0    /**< Response: handle */
+
+#define BCM2711_TAG_OFF_MEM_LOCK_HANDLE 0   /**< Request: handle */
+#define BCM2711_TAG_OFF_MEM_LOCK_BUS_ADDR 0 /**< Response: bus address */
+
+#define BCM2711_TAG_OFF_MEM_UNLOCK_HANDLE 0 /**< Request: handle */
+#define BCM2711_TAG_OFF_MEM_UNLOCK_STATUS 0 /**< Response: status */
+
+#define BCM2711_TAG_OFF_MEM_RELEASE_HANDLE 0 /**< Request: handle */
+#define BCM2711_TAG_OFF_MEM_RELEASE_STATUS 0 /**< Response: status */
+
+#define BCM2711_TAG_OFF_EXEC_FUNCTION 0 /**< Request: function pointer */
+#define BCM2711_TAG_OFF_EXEC_R0 1       /**< Request: r0 (resp: return) */
+#define BCM2711_TAG_OFF_EXEC_R1 2       /**< Request: r1 */
+#define BCM2711_TAG_OFF_EXEC_R2 3       /**< Request: r2 */
+#define BCM2711_TAG_OFF_EXEC_R3 4       /**< Request: r3 */
+#define BCM2711_TAG_OFF_EXEC_R4 5       /**< Request: r4 */
+#define BCM2711_TAG_OFF_EXEC_R5 6       /**< Request: r5 */
+
+#define BCM2711_TAG_OFF_EDID_BLOCK_NUMBER 0 /**< Block number */
+#define BCM2711_TAG_OFF_EDID_STATUS 1       /**< Response: status */
+#define BCM2711_TAG_OFF_EDID_DATA 2         /**< First word of EDID payload */
+
+#define BCM2711_TAG_OFF_FB_ALLOC_ALIGNMENT 0 /**< Request: alignment */
+#define BCM2711_TAG_OFF_FB_ALLOC_BASE 0      /**< Response: base address */
+#define BCM2711_TAG_OFF_FB_ALLOC_SIZE 1      /**< Response: size in bytes */
+
+#define BCM2711_TAG_OFF_BLANK_STATE 0 /**< Blank state (0/1) */
+
+#define BCM2711_TAG_OFF_PHYS_WIDTH 0  /**< Width in pixels */
+#define BCM2711_TAG_OFF_PHYS_HEIGHT 1 /**< Height in pixels */
+
+#define BCM2711_TAG_OFF_VIRT_WIDTH 0  /**< Width in pixels */
+#define BCM2711_TAG_OFF_VIRT_HEIGHT 1 /**< Height in pixels */
+
+#define BCM2711_TAG_OFF_DEPTH_BPP 0 /**< Bits per pixel */
+
+#define BCM2711_TAG_OFF_PIXEL_ORDER 0 /**< Pixel order (0 = BGR, 1 = RGB) */
+
+#define BCM2711_TAG_OFF_ALPHA_MODE 0 /**< Alpha mode (0/1/2) */
+
+#define BCM2711_TAG_OFF_PITCH_BYTES 0 /**< Bytes per scanline */
+
+#define BCM2711_TAG_OFF_VIRT_OFFSET_X 0 /**< X offset in pixels */
+#define BCM2711_TAG_OFF_VIRT_OFFSET_Y 1 /**< Y offset in pixels */
+
+#define BCM2711_TAG_OFF_OVERSCAN_TOP 0    /**< Top in pixels */
+#define BCM2711_TAG_OFF_OVERSCAN_BOTTOM 1 /**< Bottom in pixels */
+#define BCM2711_TAG_OFF_OVERSCAN_LEFT 2   /**< Left in pixels */
+#define BCM2711_TAG_OFF_OVERSCAN_RIGHT 3  /**< Right in pixels */
+
+#define BCM2711_TAG_OFF_PALETTE_OFFSET 0   /**< Request: first index (0-255) */
+#define BCM2711_TAG_OFF_PALETTE_LENGTH 1   /**< Request: entry count (1-256) */
+#define BCM2711_TAG_OFF_PALETTE_DATA 2     /**< Request: first RGBA entry */
+#define BCM2711_TAG_OFF_PALETTE_VALIDITY 0 /**< Response: validity */
+
+#define BCM2711_TAG_OFF_CURSOR_INFO_WIDTH 0     /**< Width in pixels */
+#define BCM2711_TAG_OFF_CURSOR_INFO_HEIGHT 1    /**< Height in pixels */
+#define BCM2711_TAG_OFF_CURSOR_INFO_UNUSED 2    /**< Unused */
+#define BCM2711_TAG_OFF_CURSOR_INFO_PIXELS 3    /**< 32-bit VideoCore address */
+#define BCM2711_TAG_OFF_CURSOR_INFO_HOTSPOT_X 4 /**< Hotspot X */
+#define BCM2711_TAG_OFF_CURSOR_INFO_HOTSPOT_Y 5 /**< Hotspot Y */
+#define BCM2711_TAG_OFF_CURSOR_INFO_VALIDITY 0  /**< Response: validity */
+
+#define BCM2711_TAG_OFF_CURSOR_STATE_ENABLE 0   /**< Enable (0/1) */
+#define BCM2711_TAG_OFF_CURSOR_STATE_X 1        /**< X position */
+#define BCM2711_TAG_OFF_CURSOR_STATE_Y 2        /**< Y position */
+#define BCM2711_TAG_OFF_CURSOR_STATE_FLAGS 3    /**< Flags */
+#define BCM2711_TAG_OFF_CURSOR_STATE_VALIDITY 0 /**< Response: validity */
+/** @} */
+
+/**
  * @name Property Tag Value Buffer Sizes
  *
  * @brief Value buffer size in bytes for each property tag that has a fixed
