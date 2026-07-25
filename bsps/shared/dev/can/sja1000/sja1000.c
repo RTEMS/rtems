@@ -492,6 +492,9 @@ static void sja1000_err_interrupt( struct rtems_can_chip *chip, uint32_t isr )
   uint8_t txerr;
   uint8_t ecc;
 
+  /* Set the standard CAN error-frame payload length (8 bytes) */
+  err_frame.header.dlen = CAN_FRAME_STANDARD_DLEN;
+
   rxerr = sja1000_read_reg( internal, SJA1000_RXERR );
   txerr = sja1000_read_reg( internal, SJA1000_TXERR1 );
 
