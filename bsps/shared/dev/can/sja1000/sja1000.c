@@ -578,7 +578,7 @@ static void sja1000_err_interrupt( struct rtems_can_chip *chip, uint32_t isr )
     rtems_can_stats_add_rx_overflows( &chip->chip_stats );
     err_frame.header.can_id |= CAN_ERR_ID_CRTL;
     err_frame.header.flags |= CAN_FRAME_ERR;
-    err_frame.data[CAN_ERR_ID_LOSTARB] |= CAN_ERR_CRTL_RX_OVERFLOW;
+    err_frame.data[CAN_ERR_DATA_BYTE_TRX_CTRL] |= CAN_ERR_CRTL_RX_OVERFLOW;
     sja1000_write_reg( internal, SJA1000_CMR, REG_CMR_CDO );
   }
 
