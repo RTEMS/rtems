@@ -302,7 +302,9 @@ static int rtems_iodev_do_init(
 
 void rtems_iodev_destroy_unregistered( rtems_iodev *iodev )
 {
-  ( *iodev->destroy )( iodev );
+  if ( iodev != NULL ) {
+    ( *iodev->destroy )( iodev );
+  }
 }
 
 static void iodev_destroy_internal( rtems_iodev *iodev )
