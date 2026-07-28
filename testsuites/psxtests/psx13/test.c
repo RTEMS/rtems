@@ -170,6 +170,41 @@ static void DupTest( void )
 }
 
 /**
+ * @brief Exercises fcntl( F_DUPFD_CLOEXEC ).
+ */
+static void FcntlDupCloexecTest( void )
+{
+  int fd1, fd2;
+  int rv;
+
+  fd1 = open( "testfile1.tst", O_RDONLY );
+  rtems_test_assert( fd1 != -1 );
+
+  /* The duplicate has FD_CLOEXEC set. */
+  fd2 = fcntl( fd1, F_DUPFD_CLOEXEC, 0 );
+  rtems_test_assert( fd2 != -1 );
+
+  rv = fcntl( fd2, F_GETFD );
+  rtems_test_assert( rv == 1 );
+
+  rv = close( fd2 );
+  rtems_test_assert( rv == 0 );
+
+  /* A plain F_DUPFD duplicate does not. */
+  fd2 = fcntl( fd1, F_DUPFD, 0 );
+  rtems_test_assert( fd2 != -1 );
+
+  rv = fcntl( fd2, F_GETFD );
+  rtems_test_assert( rv == 0 );
+
+  rv = close( fd2 );
+  rtems_test_assert( rv == 0 );
+
+  rv = close( fd1 );
+  rtems_test_assert( rv == 0 );
+}
+
+/**
  * @brief Exercises dup2().
  */
 static void Dup2Test( void )
@@ -886,6 +921,7 @@ int test_main( void )
 
   DeviceLSeekTest();
   DupTest();
+  FcntlDupCloexecTest();
   Dup2Test();
   FDataSyncTest();
   UMaskTest();

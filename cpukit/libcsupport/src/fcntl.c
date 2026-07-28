@@ -143,6 +143,16 @@ static int vfcntl( int fd, int cmd, va_list ap )
       ret = duplicate_iop( iop );
       break;
 
+    case F_DUPFD_CLOEXEC: /* dup, close on exec */
+      ret = duplicate_iop( iop );
+      if ( ret >= 0 ) {
+        rtems_libio_iop_flags_set(
+          rtems_libio_iop( ret ),
+          LIBIO_FLAGS_CLOSE_ON_EXEC
+        );
+      }
+      break;
+
     case F_DUP2FD: /* dup2 */
       fd2 = va_arg( ap, int );
       ret = duplicate2_iop( iop, fd2 );
