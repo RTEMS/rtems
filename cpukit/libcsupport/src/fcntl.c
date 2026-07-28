@@ -44,14 +44,18 @@
 
 #include <rtems/libio_.h>
 
-static int duplicate_iop( rtems_libio_t *iop )
+static int duplicate_iop( rtems_libio_t *iop, int minimum )
 {
   int            rv;
   int            oflag;
   rtems_libio_t *diop;
 
+  if ( minimum < 0 || (uint32_t) minimum >= rtems_libio_number_iops ) {
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  }
+
   oflag = rtems_libio_to_fcntl_flags( rtems_libio_iop_flags( iop ) );
-  diop = rtems_libio_allocate();
+  diop = rtems_libio_allocate_minimum( minimum );
 
   if ( diop != NULL ) {
     rtems_filesystem_instance_lock( &iop->pathinfo );
@@ -72,6 +76,7 @@ static int duplicate_iop( rtems_libio_t *iop )
       rtems_libio_free( diop );
     }
   } else {
+    errno = EMFILE;
     rv = -1;
   }
 
@@ -140,11 +145,13 @@ static int vfcntl( int fd, int cmd, va_list ap )
 
   switch ( cmd ) {
     case F_DUPFD: /* dup */
-      ret = duplicate_iop( iop );
+      fd2 = va_arg( ap, int );
+      ret = duplicate_iop( iop, fd2 );
       break;
 
     case F_DUPFD_CLOEXEC: /* dup, close on exec */
-      ret = duplicate_iop( iop );
+      fd2 = va_arg( ap, int );
+      ret = duplicate_iop( iop, fd2 );
       if ( ret >= 0 ) {
         rtems_libio_iop_flags_set(
           rtems_libio_iop( ret ),

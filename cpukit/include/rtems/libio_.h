@@ -114,6 +114,13 @@ extern rtems_filesystem_global_location_t rtems_filesystem_global_location_null;
 rtems_libio_t *rtems_libio_allocate(void);
 
 /**
+ * This routine searches the IOP Table for the unused entry with the
+ * lowest file descriptor number greater than or equal to minimum.  If
+ * it finds one, it returns it.  Otherwise, it returns NULL.
+ */
+rtems_libio_t *rtems_libio_allocate_minimum( int minimum );
+
+/**
  * Convert UNIX fnctl(2) flags to ones that RTEMS drivers understand
  */
 unsigned int rtems_libio_from_fcntl_flags( int fcntl_flags );

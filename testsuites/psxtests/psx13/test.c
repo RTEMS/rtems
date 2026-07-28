@@ -170,6 +170,71 @@ static void DupTest( void )
 }
 
 /**
+ * @brief Exercises the file descriptor minimum of fcntl( F_DUPFD ).
+ */
+static void FcntlDupMinimumTest( void )
+{
+  int fd1, fd2, lo, hi;
+  int rv;
+
+  fd1 = open( "testfile1.tst", O_RDONLY );
+  rtems_test_assert( fd1 != -1 );
+
+  /* Occupy two free descriptors to learn their numbers. */
+  lo = fcntl( fd1, F_DUPFD, 0 );
+  rtems_test_assert( lo != -1 );
+
+  hi = fcntl( fd1, F_DUPFD, 0 );
+  rtems_test_assert( hi != -1 );
+
+  if ( hi < lo ) {
+    fd2 = lo;
+    lo = hi;
+    hi = fd2;
+  }
+
+  /*
+   * Free the higher descriptor first, so that a duplication which
+   * ignores the minimum and recycles descriptors in close order would
+   * yield the higher one.
+   */
+  rv = close( hi );
+  rtems_test_assert( rv == 0 );
+
+  rv = close( lo );
+  rtems_test_assert( rv == 0 );
+
+  /* The duplicate is the lowest free descriptor at or above the
+   * minimum. */
+  fd2 = fcntl( fd1, F_DUPFD, lo );
+  rtems_test_assert( fd2 == lo );
+
+  rv = close( fd2 );
+  rtems_test_assert( rv == 0 );
+
+  /* A free descriptor below the minimum is not eligible. */
+  fd2 = fcntl( fd1, F_DUPFD, hi );
+  rtems_test_assert( fd2 == hi );
+
+  rv = close( fd2 );
+  rtems_test_assert( rv == 0 );
+
+  /* A negative or out-of-range minimum is EINVAL. */
+  errno = 0;
+  rv = fcntl( fd1, F_DUPFD, -1 );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  errno = 0;
+  rv = fcntl( fd1, F_DUPFD, 1000000 );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  rv = close( fd1 );
+  rtems_test_assert( rv == 0 );
+}
+
+/**
  * @brief Exercises fcntl( F_DUPFD_CLOEXEC ).
  */
 static void FcntlDupCloexecTest( void )
@@ -921,6 +986,7 @@ int test_main( void )
 
   DeviceLSeekTest();
   DupTest();
+  FcntlDupMinimumTest();
   FcntlDupCloexecTest();
   Dup2Test();
   FDataSyncTest();
