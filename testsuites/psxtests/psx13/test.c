@@ -363,6 +363,45 @@ static void Dup2Test( void )
 }
 
 /**
+ * @brief Exercises dup2() with a target that is not open.
+ */
+static void Dup2ClosedTargetTest( void )
+{
+  int fd1, fd2;
+  int rv;
+
+  fd1 = open( "testfile1.tst", O_RDONLY );
+  rtems_test_assert( fd1 != -1 );
+
+  /* Learn a free descriptor number. */
+  fd2 = dup( fd1 );
+  rtems_test_assert( fd2 != -1 );
+
+  rv = close( fd2 );
+  rtems_test_assert( rv == 0 );
+
+  /* dup2() onto a closed descriptor reuses that descriptor. */
+  rv = dup2( fd1, fd2 );
+  rtems_test_assert( rv == fd2 );
+
+  rv = close( fd2 );
+  rtems_test_assert( rv == 0 );
+
+  /* dup2() of a descriptor onto itself answers the descriptor. */
+  rv = dup2( fd1, fd1 );
+  rtems_test_assert( rv == fd1 );
+
+  /* An out-of-range target is EBADF. */
+  errno = 0;
+  rv = dup2( fd1, 1000000 );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EBADF );
+
+  rv = close( fd1 );
+  rtems_test_assert( rv == 0 );
+}
+
+/**
  * @brief Exercises fdatasync().
  */
 static void FDataSyncTest( void )
@@ -1038,6 +1077,7 @@ int test_main( void )
   FcntlDupCloexecTest();
   FcntlDup2FreeTargetTest();
   Dup2Test();
+  Dup2ClosedTargetTest();
   FDataSyncTest();
   UMaskTest();
   UTimeTest();

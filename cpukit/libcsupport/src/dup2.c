@@ -47,29 +47,11 @@
  */
 int dup2( int fildes, int fildes2 )
 {
-  int         status;
-  struct stat buf;
-
   /*
-   *  If fildes is not valid, then fildes2 should not be closed.
-   */
-
-  status = fstat( fildes, &buf );
-  if ( status == -1 ) {
-    return -1;
-  }
-
-  /*
-   *  If fildes2 is not valid, then we should not do anything either.
-   */
-
-  status = fstat( fildes2, &buf );
-  if ( status == -1 ) {
-    return -1;
-  }
-
-  /*
-   *  This fcntl handles everything else.
+   *  fcntl() checks fildes before it touches fildes2, so an invalid
+   *  fildes does not close fildes2, and it range checks fildes2.  A
+   *  fildes2 that is not open must not be rejected here: duplicating
+   *  onto a closed descriptor is the normal use of dup2().
    */
 
   return fcntl( fildes, F_DUP2FD, fildes2 );
