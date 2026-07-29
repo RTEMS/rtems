@@ -785,10 +785,9 @@ void test_statvfs( void )
   status = mkdir( "/tmp", 0777 );
   rtems_test_assert( status == 0 );
 
-  puts( "statvfs, with valid path - expect ENOSYS" );
+  puts( "statvfs, with valid path - expect success" );
   status = statvfs( "/tmp", &stat );
-  rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == ENOSYS );
+  rtems_test_assert( status == 0 );
 
   puts( "statvfs tested!" );
 }
