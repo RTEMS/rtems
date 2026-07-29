@@ -53,6 +53,7 @@
 
 #include <rtems.h>
 #include <rtems/libio.h>
+#include <rtems/libio_.h>
 #include <rtems/score/timespec.h>
 #include <rtems/score/todimpl.h>
 #include <sys/time.h>
@@ -264,6 +265,53 @@ static void FcntlDupCloexecTest( void )
 
   rv = close( fd2 );
   rtems_test_assert( rv == 0 );
+
+  rv = close( fd1 );
+  rtems_test_assert( rv == 0 );
+}
+
+/**
+ * @brief Exercises fcntl( F_DUP2FD ) with a target that is not open.
+ */
+static void FcntlDup2FreeTargetTest( void )
+{
+  int fd1, fd2, fd3;
+  int rv;
+  struct stat st;
+
+  fd1 = open( "testfile1.tst", O_RDONLY );
+  rtems_test_assert( fd1 != -1 );
+
+  /* Learn a free descriptor number. */
+  fd2 = dup( fd1 );
+  rtems_test_assert( fd2 != -1 );
+
+  rv = close( fd2 );
+  rtems_test_assert( rv == 0 );
+
+  /* Duplicate onto the free descriptor. */
+  rv = fcntl( fd1, F_DUP2FD, fd2 );
+  rtems_test_assert( rv == fd2 );
+
+  /* The duplicate is a live descriptor. */
+  rv = fstat( fd2, &st );
+  rtems_test_assert( rv == 0 );
+
+  /* The duplicate left the free list; a fresh duplicate must not
+   * alias it. */
+  fd3 = dup( fd1 );
+  rtems_test_assert( fd3 != -1 );
+  rtems_test_assert( fd3 != fd2 );
+
+  rv = close( fd3 );
+  rtems_test_assert( rv == 0 );
+
+  rv = close( fd2 );
+  rtems_test_assert( rv == 0 );
+
+  /* Duplicating a descriptor onto itself answers the descriptor. */
+  rv = fcntl( fd1, F_DUP2FD, fd1 );
+  rtems_test_assert( rv == fd1 );
 
   rv = close( fd1 );
   rtems_test_assert( rv == 0 );
@@ -988,6 +1036,7 @@ int test_main( void )
   DupTest();
   FcntlDupMinimumTest();
   FcntlDupCloexecTest();
+  FcntlDup2FreeTargetTest();
   Dup2Test();
   FDataSyncTest();
   UMaskTest();

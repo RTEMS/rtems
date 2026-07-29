@@ -121,6 +121,13 @@ rtems_libio_t *rtems_libio_allocate(void);
 rtems_libio_t *rtems_libio_allocate_minimum( int minimum );
 
 /**
+ * This routine removes the unused entry of the file descriptor fd
+ * from the free list and returns it.  If the entry is not on the free
+ * list, it returns NULL.
+ */
+rtems_libio_t *rtems_libio_allocate_specific( int fd );
+
+/**
  * Convert UNIX fnctl(2) flags to ones that RTEMS drivers understand
  */
 unsigned int rtems_libio_from_fcntl_flags( int fcntl_flags );

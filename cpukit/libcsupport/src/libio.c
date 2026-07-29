@@ -197,6 +197,39 @@ rtems_libio_t *rtems_libio_allocate_minimum( int minimum )
   return best;
 }
 
+rtems_libio_t *rtems_libio_allocate_specific( int fd )
+{
+  rtems_libio_t  *wanted;
+  rtems_libio_t  *iop;
+  void          **link;
+
+  wanted = rtems_libio_iop( fd );
+
+  rtems_libio_lock();
+
+  link = &rtems_libio_iop_free_head;
+
+  for ( iop = *link; iop != NULL; iop = iop->data1 ) {
+    if ( iop == wanted ) {
+      rtems_libio_iop_flags_clear( iop, LIBIO_FLAGS_FREE );
+
+      *link = iop->data1;
+
+      if ( iop->data1 == NULL ) {
+        rtems_libio_iop_free_tail = link;
+      }
+
+      break;
+    }
+
+    link = &iop->data1;
+  }
+
+  rtems_libio_unlock();
+
+  return iop;
+}
+
 void rtems_libio_free_iop( rtems_libio_t *iop )
 {
   size_t zero;
