@@ -7,6 +7,7 @@ cppflags: []
 cxxflags: []
 enabled-by: true
 includes:
+- contrib/cpukit/fatfs
 - testsuites/fstests/fatfs_support
 install: []
 install-path: null
