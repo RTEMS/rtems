@@ -10,7 +10,7 @@
  */
 
 /*
- * Copyright (C) 2020 embedded brains GmbH & Co. KG
+ * Copyright (C) 2020, 2026 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -55,6 +55,17 @@
 typedef T_interrupt_test_state ( *T_interrupt_test_handler )( void * );
 
 #define T_INTERRUPT_SAMPLE_COUNT 8
+
+/*
+ * Number of consecutive continue results after which the search is considered
+ * to be stalled on one time point.
+ */
+#define T_INTERRUPT_STALL_COUNT 16
+
+/*
+ * Number of time points visited by one sweep through the bracket.
+ */
+#define T_INTERRUPT_SWEEP_STEPS 64
 
 typedef struct {
   uint_fast32_t   one_tick_busy;
@@ -370,6 +381,7 @@ T_interrupt_test_state T_interrupt_test(
   int32_t              ns_per_tick;
   size_t               sample;
   uint32_t             iter;
+  uint_fast32_t        stall;
 
   ctx = T_interrupt_setup( config, arg );
   T_push_fixture( &ctx->node, &T_interrupt_fixture );
@@ -383,6 +395,7 @@ T_interrupt_test_state T_interrupt_test(
   }
 
   sample = 0;
+  stall = 0;
 
   for ( iter = 0; iter < config->max_iteration_count; ++iter ) {
     T_interrupt_test_state state;
@@ -402,6 +415,36 @@ T_interrupt_test_state T_interrupt_test(
      * interrupt time point.
      */
     busy = ( lower_sum + upper_sum ) / ( 2 * T_INTERRUPT_SAMPLE_COUNT );
+
+    /*
+     * A continue tells us that the interrupt did hit the action, but that
+     * the test was not satisfied by this time point.  It says nothing about
+     * the interrupt being early or late, so the bisection gets no gradient
+     * from it.  A run of them means the search is stalled on one time point
+     * and would stay there for every remaining iteration.  Only then step
+     * the time point through the bracket, so that a search which does make
+     * progress is left alone.  A stepped time point which leaves the action
+     * yields an early or a late result again, which lets the bisection
+     * narrow the bracket around the action.
+     *
+     * The bracket is covered in a fixed number of steps, so that the step
+     * follows the width of the bracket and a bracket narrower than the step
+     * count degrades to a step of one.
+     */
+    if ( stall >= T_INTERRUPT_STALL_COUNT ) {
+      uint_fast32_t sweep;
+      uint_fast32_t step;
+
+      sweep = ( stall - T_INTERRUPT_STALL_COUNT ) % T_INTERRUPT_SWEEP_STEPS;
+      step = ( upper_sum - lower_sum ) /
+             ( T_INTERRUPT_SAMPLE_COUNT * T_INTERRUPT_SWEEP_STEPS );
+
+      if ( step == 0 ) {
+        step = 1;
+      }
+
+      busy = lower_sum / T_INTERRUPT_SAMPLE_COUNT + sweep * step;
+    }
 
     t = sbttons( _Timecounter_Sbinuptime() );
     d = ( t - ctx->t0 ) % ns_per_tick;
@@ -451,12 +494,24 @@ T_interrupt_test_state T_interrupt_test(
     if ( state == T_INTERRUPT_TEST_EARLY ) {
       uint_fast32_t lower;
 
+      stall = 0;
       upper_sum -= upper_bound[ sample ];
       upper_sum += busy;
       upper_bound[ sample ] = busy;
 
-      /* Round down to make sure no underflow happens */
+      /*
+       * A stepped busy count comes from the bracket of all samples and may lie
+       * below the lower bound of this sample.  Pull the lower bound along, so
+       * that it stays below the upper bound.
+       */
       lower = lower_bound[ sample ];
+
+      if ( lower > busy ) {
+        lower_sum -= lower - busy;
+        lower = busy;
+      }
+
+      /* Round down to make sure no underflow happens */
       delta = lower / 32;
       lower_sum -= delta;
       lower_bound[ sample ] = lower - delta;
@@ -473,21 +528,35 @@ T_interrupt_test_state T_interrupt_test(
        * interrupt would be late.
        */
 
+      stall = 0;
       lower_sum -= lower_bound[ sample ];
       lower_sum += busy;
       lower_bound[ sample ] = busy;
+
+      /*
+       * A stepped busy count comes from the bracket of all samples and may lie
+       * above the upper bound of this sample.  Pull the upper bound along, so
+       * that it stays above the lower bound.
+       */
+      upper = upper_bound[ sample ];
+
+      if ( upper < busy ) {
+        upper_sum += busy - upper;
+        upper = busy;
+      }
 
       /*
        * The one tick busy count value is not really
        * trustable on some platforms.  Allow the upper bound
        * to grow over this value in time.
        */
-      upper = upper_bound[ sample ];
       delta = ( upper + 31 ) / 32;
       upper_sum += delta;
       upper_bound[ sample ] = upper + delta;
 
       sample = ( sample + 1 ) % T_INTERRUPT_SAMPLE_COUNT;
+    } else if ( state == T_INTERRUPT_TEST_CONTINUE ) {
+      ++stall;
     }
   }
 
