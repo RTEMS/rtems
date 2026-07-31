@@ -18,7 +18,7 @@
  * Modifications to support reference counting in the file system are
  * Copyright (C) 2012 embedded brains GmbH & Co. KG
  *
- * Copyright (C) 2025 Contemporary Software
+ * Copyright (C) 2025, 2026 Contemporary Software
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -1920,6 +1920,41 @@ typedef struct {
 
 extern const rtems_filesystem_mount_configuration
   rtems_filesystem_root_configuration;
+
+/** @} */
+
+/**
+ * @defgroup Pipe
+ *
+ * @ingroup LibIO
+ *
+ * @brief Pipe support for different types of descriptors
+ */
+/**@{**/
+
+/**
+ * @brief Pipe handler
+ */
+typedef int (*rtems_pipe_handler_t)( int filsdes[ 2 ] );
+
+/**
+ * @brief Pipe2 handler
+ */
+typedef int (*rtems_pipe2_handler_t)( int filsdes[ 2 ], int flags );
+
+/**
+ * @brief Register a file system pipe call handler.
+ *
+ * @param[in] pipe_handler Handler to called when `pipe()` is called.
+ */
+void rtems_filesystem_register_pipe( rtems_pipe_handler_t pipe_handler );
+
+/**
+ * @brief Register a file system pipe2 call handler.
+ *
+ * @param[in] pipe2_handler Handler to called when `pipe2()` is called.
+ */
+void rtems_filesystem_register_pipe2( rtems_pipe2_handler_t pipe2_handler );
 
 /** @} */
 

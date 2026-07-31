@@ -33,8 +33,10 @@ directives:
 
 + pipe
 + pipe_create
++ register pipe handler
++ register pipe2 handler
 
 concepts:
 
 + Exercise the posix pipe creation routines, including the error paths
-
++ Exercise the RTEMS pipe and pipe2 handler hook registration

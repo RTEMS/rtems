@@ -26,6 +26,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#define _GNU_SOURCE
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -38,6 +40,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <rtems/libcsupport.h>
+#include <rtems/libio.h>
 #include <rtems/malloc.h>
 
 const char rtems_test_name[] = "PSXPIPE 1";
@@ -60,17 +63,56 @@ static int dup_fd_test( int *fd )
   return 0;
 }
 
-rtems_task Init( rtems_task_argument ignored )
+static int pipe_handler( int fildes[ 2 ] )
 {
-  (void) ignored;
+  fildes[ 0 ] = 0x1234;
+  fildes[ 1 ] = 0xabcd;
+  return 54321;
+}
 
+static int pipe2_handler( int fildes[ 2 ], int flags )
+{
+  rtems_test_assert( flags == 0x77654321 );
+  fildes[ 0 ] = 0xfedc;
+  fildes[ 1 ] = 0x5432;
+  return -2;
+}
+
+static void pipe_handler_test()
+{
+  int fd[ 2 ] = { 0, 0 };
+  int status = 0;
+
+  puts( "" );
+  puts( "Pipe handler tests:" );
+
+  puts( " Register handlers" );
+  rtems_filesystem_register_pipe( pipe_handler );
+  rtems_filesystem_register_pipe2( pipe2_handler );
+
+  puts( " Check pipe handler call" );
+  status = pipe( &fd[ 0 ] );
+  rtems_test_assert( status == 54321 );
+  rtems_test_assert( fd[ 0 ] == 0x1234 );
+  rtems_test_assert( fd[ 1 ] == 0xabcd );
+
+  puts( " Check pipe2 handler call" );
+  status = pipe2( &fd[ 0 ], 0x77654321 );
+  rtems_test_assert( status == -2 );
+  rtems_test_assert( fd[ 0 ] == 0xfedc );
+  rtems_test_assert( fd[ 1 ] == 0x5432 );
+}
+
+static void pipe_default_test()
+{
   int   fd[ 2 ] = { 0, 0 };
   int   dummy_fd[ 4 ] = { 0, 0 };
   int   status = 0;
   void *opaque = NULL;
   char  c;
 
-  TEST_BEGIN();
+  puts( "" );
+  puts( "Default pipe tests:" );
 
   puts( "Init - attempt to create pipe -- expect EFAULT" );
   status = pipe( NULL );
@@ -143,6 +185,16 @@ rtems_task Init( rtems_task_argument ignored )
   status |= close( dummy_fd[ 2 ] );
   status |= unlink( "/file03" );
   rtems_test_assert( status == 0 );
+}
+
+rtems_task Init( rtems_task_argument ignored )
+{
+  (void) ignored;
+
+  TEST_BEGIN();
+
+  pipe_default_test();
+  pipe_handler_test();
 
   TEST_END();
   rtems_test_exit( 0 );
