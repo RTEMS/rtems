@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- *  Copyright (C) 2020 embedded brains GmbH & Co. KG
+ *  Copyright (C) 2020, 2026 embedded brains GmbH & Co. KG
  *
  *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
@@ -96,6 +96,10 @@ static T_interrupt_test_state interrupt( void *arg )
   T_interrupt_test_state state;
   Thread_Wait_flags      flags;
   rtems_status_code      status;
+
+  if ( T_interrupt_test_get_state() != T_INTERRUPT_TEST_ACTION ) {
+    return T_INTERRUPT_TEST_CONTINUE;
+  }
 
   ctx = arg;
   flags = _Thread_Wait_flags_get( ctx->thread );
