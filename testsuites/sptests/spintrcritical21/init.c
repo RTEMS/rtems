@@ -3,7 +3,7 @@
 /*
  *  Classic API Signal to Task from ISR
  *
- *  Copyright (C) 2020 embedded brains GmbH & Co. KG
+ *  Copyright (C) 2020, 2026 embedded brains GmbH & Co. KG
  *
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
@@ -79,6 +79,10 @@ static T_interrupt_test_state event_from_isr_interrupt( void *arg )
   T_interrupt_test_state state;
   Thread_Wait_flags      flags;
   rtems_status_code      status;
+
+  if ( T_interrupt_test_get_state() != T_INTERRUPT_TEST_ACTION ) {
+    return T_INTERRUPT_TEST_CONTINUE;
+  }
 
   ctx = arg;
   flags = _Thread_Wait_flags_get( ctx->main_thread );
@@ -164,6 +168,10 @@ static T_interrupt_test_state event_with_timeout_from_isr_interrupt(
   T_interrupt_test_state state;
   Thread_Wait_flags      flags;
   rtems_status_code      status;
+
+  if ( T_interrupt_test_get_state() != T_INTERRUPT_TEST_ACTION ) {
+    return T_INTERRUPT_TEST_CONTINUE;
+  }
 
   ctx = arg;
   flags = _Thread_Wait_flags_get( ctx->main_thread );
