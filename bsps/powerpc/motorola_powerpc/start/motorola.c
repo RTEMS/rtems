@@ -264,6 +264,51 @@ static struct _int_map mvme27xx_intmap[] = {
              NULL_PINMAP}},
    NULL_INTMAP };
 
+static struct _int_map mvme51xx_intmap[] = {
+/* Hawk PCI hostbridge has int_pin == 0 */
+   {0,  0, 0, {{0, {-1,-1,-1,-1}},
+               NULL_PINMAP}},
+
+/* PCI/ISA bridge */
+   {0, 11, 0, {{1, {16,-1,-1,-1}},
+               NULL_PINMAP}},
+
+/* Universe VME card */
+   {0, 13, PCI_FIXUP_OPT_OVERRIDE_NAME,
+			{{1, {21,-1,-1,-1}},
+			 {2, {22,-1,-1,-1}},
+			 {3, {23,-1,-1,-1}},
+			 {4, {24,-1,-1,-1}},
+             NULL_PINMAP}},
+
+/* Ethernet Port 1 */
+   {0, 14, PCI_FIXUP_OPT_OVERRIDE_NAME,
+			{{1, {18,-1,-1,-1}},
+             NULL_PINMAP}},
+
+/* PCI/PMC slot 1 */
+   {0, 16, PCI_FIXUP_OPT_OVERRIDE_NAME,
+	        {{1, {25,-1,-1,-1}},
+             {2, {26,-1,-1,-1}},
+             {3, {27,-1,-1,-1}},
+             {4, {28,-1,-1,-1}},
+             NULL_PINMAP}},
+
+/* PCI/PMC slot 2 */
+   {0, 17, PCI_FIXUP_OPT_OVERRIDE_NAME,
+	        {{1, {28,-1,-1,-1}},
+             {2, {25,-1,-1,-1}},
+             {3, {26,-1,-1,-1}},
+             {4, {27,-1,-1,-1}},
+             NULL_PINMAP}},
+
+/* Ethernet Port 2 */
+   {0, 19, PCI_FIXUP_OPT_OVERRIDE_NAME,
+	        {{1, {29,-1,-1,-1}},
+             NULL_PINMAP}},
+
+   NULL_INTMAP };
+
 static struct _int_map mvme2100_intmap[] = {
    {0, 0, 0, {{1, {16,-1,-1,-1}}, /* something shows up in slot 0 and OpenPIC  */
                                   /* 0 is unused.  This hushes the init code.  */
@@ -360,6 +405,7 @@ static const mot_info_t mot_boards[] = {
   {0x1E0, 0xFF, PPC_UNKNOWN, "MVME 1600-001 or 1600-011", NULL, NULL},
   {0x000, 0x00, PPC_UNKNOWN, "", NULL, NULL},   /* end of probeable values for automatic scan */
   {0x000, 0x00, PPC_UNKNOWN, "MVME 2100", mvme2100_intmap, prep_pci_swizzle},
+  {0x200, 0x00, PPC_UNKNOWN, "MVME 5100 (PPC 750)", mvme51xx_intmap, prep_pci_swizzle},
 };
 
 prep_t currentPrepType;
@@ -396,6 +442,8 @@ motorolaBoard getMotorolaBoard(void)
  */
 #if defined(mot_ppc_mvme2100)
   currentBoard = (motorolaBoard) MVME_2100;
+#elif defined(mot_ppc_mvme5100)
+  currentBoard = (motorolaBoard) MVME_5100;
 #else
   unsigned char  cpu_type;
   unsigned char  base_mod;

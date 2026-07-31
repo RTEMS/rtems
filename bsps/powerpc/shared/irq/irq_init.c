@@ -146,6 +146,46 @@ static unsigned char mvme2100_openpic_initsenses[] = {
     0,  /* Front panel Abort Switch */
     1,  /* RTC IRQ */
 };
+#elif defined(mot_ppc_mvme5100)
+/* MVME5100 Hawk MPIC source wiring */
+static unsigned char mvme5100_openpic_initpolarities[16] = {
+    1,  /* IRQ0  PIB (8259) - active high */
+    0,  /* IRQ1  TL16C550 UART port 1 & 2 */
+    0,  /* IRQ2  PCI-Ethernet Port 1 (front panel) */
+    0,  /* IRQ3  Hawk WDT1/2 */
+    0,  /* IRQ4  Thermal alarm (DS1621) */
+    0,  /* IRQ5  Universe LINT0 */
+    0,  /* IRQ6  Universe LINT1 */
+    0,  /* IRQ7  Universe LINT2 */
+    0,  /* IRQ8  Universe LINT3 */
+    0,  /* IRQ9  PMC INTA */
+    0,  /* IRQ10 PMC INTB */
+    0,  /* IRQ11 PMC INTC */
+    0,  /* IRQ12 PMC INTD */
+    0,  /* IRQ13 PCI-Ethernet Port 2 */
+    0,  /* IRQ14 ABORT_L */
+    0,  /* IRQ15 RTC alarm */
+};
+
+static unsigned char mvme5100_openpic_initsenses[16] = {
+    1,  /* IRQ0  PIB (8259)                        - level */
+    1,  /* IRQ1  TL16C550 UART port 1 & 2          - level */
+    1,  /* IRQ2  PCI-Ethernet Port 1 (front panel) - level */
+    1,  /* IRQ3  Hawk WDT1/2                        - level */
+    1,  /* IRQ4  Thermal alarm (DS1621)            - level */
+    1,  /* IRQ5  Universe LINT0                     - level */
+    1,  /* IRQ6  Universe LINT1                     - level */
+    1,  /* IRQ7  Universe LINT2                     - level */
+    1,  /* IRQ8  Universe LINT3                     - level */
+    1,  /* IRQ9  PMC INTA                           - level */
+    1,  /* IRQ10 PMC INTB                           - level */
+    1,  /* IRQ11 PMC INTC                           - level */
+    1,  /* IRQ12 PMC INTD                           - level */
+    1,  /* IRQ13 PCI-Ethernet Port 2                - level */
+    1,  /* IRQ14 ABORT_L                            - level */
+    1,  /* IRQ15 RTC alarm                          - level */
+};
+
 #else
 static unsigned char mcp750_openpic_initpolarities[16] = {
     1,  /* 8259 cascade */
@@ -310,7 +350,11 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
 #ifdef TRACE_IRQ_INIT
   printk("Going to initialize raven interrupt controller (openpic compliant)\n");
 #endif
+#if defined(mot_ppc_mvme5100)
+  openpic_init(1, mvme5100_openpic_initpolarities, mvme5100_openpic_initsenses, 0, 0, 0);
+#else
   openpic_init(1, mcp750_openpic_initpolarities, mcp750_openpic_initsenses, 0, 0, 0);
+#endif
 #ifdef TRACE_IRQ_INIT
   printk("Going to initialize the PCI/ISA bridge IRQ related setting (VIA 82C586)\n");
 #endif
@@ -329,6 +373,10 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   }
   if ( currentBoard == MTX_WO_PP || currentBoard == MTX_W_PP ) {
      /* W83C554, don't to anything at the moment.  gregm 11/6/2002 */
+     known_cpi_isa_bridge = 1;
+  }
+  if ( currentBoard == MVME_5100 ) {
+     /* Don't need to do anything for MVME5100 */
      known_cpi_isa_bridge = 1;
   }
 

@@ -69,6 +69,7 @@ typedef enum {
   MVME_1600			= 20,
   /* In the table, slot 21 is the marker for end of automatic probe and scan */
   MVME_2100			= 22,
+  MVME_5100			= 23,
   MOTOROLA_UNKNOWN		= 255
 } motorolaBoard;
 

@@ -177,28 +177,53 @@ static void bsp_early( void )
    * Init MMU block address translation to enable hardware access
    */
 
-#if !defined(mot_ppc_mvme2100)
+  /*
+   * Map the DBATs needed for initialization
+   */
+
+  /*
+   * Must have access to open pic PCI ACK registers provided by the RAVEN
+   */
+
+  /*
+   * PCI hostbridge memory area
+   */
+#if defined(qemu)
+  setdbat(3, 0xb0000000, 0xb0000000, 0x10000000, IO_PAGE);
+#elif defined(mot_ppc_mvme5100)
+  setdbat(2, 0xf0000000, 0xf0000000, 0x10000000, IO_PAGE);
+#else
+  setdbat(3, 0xf0000000, 0xf0000000, 0x10000000, IO_PAGE);
+#endif
+
+#ifndef mot_ppc_mvme2100
   /*
    * PC legacy IO space used for inb/outb and all PC compatible hardware
    */
   setdbat(1, _IO_BASE, _IO_BASE, 0x10000000, IO_PAGE);
 #endif
 
+
+#ifdef mot_ppc_mvme5100
+  setdbat(3, PCI_MEM_BASE+PCI_MEM_WIN0,
+          PCI_MEM_BASE+PCI_MEM_WIN0, 0x10000000, IO_PAGE);
+
+  /* Setting PCI I/O Base address to default memory map
+   * Refer to MVME5100 Programmer's reference guide (Sep 2001)
+   * 0xfeff0058 holds the XSADD3
+   * 0xfeff005c holds the XSOFF3
+   * */
+  out_be32((volatile uint32_t *)0xfeff0058, 0x80008080);
+  out_be32((volatile uint32_t *)0xfeff005c, 0x800000c0);
+#else
   /*
    * PCI devices memory area. Needed to access OpenPIC features
    * provided by the Raven
    *
    * T. Straumann: give more PCI address space
    */
-  setdbat(2, PCI_MEM_BASE+PCI_MEM_WIN0, PCI_MEM_BASE+PCI_MEM_WIN0, 0x10000000, IO_PAGE);
-
-  /*
-   * Must have acces to open pic PCI ACK registers provided by the RAVEN
-   */
-#ifndef qemu
-  setdbat(3, 0xf0000000, 0xf0000000, 0x10000000, IO_PAGE);
-#else
-  setdbat(3, 0xb0000000, 0xb0000000, 0x10000000, IO_PAGE);
+  setdbat(2, PCI_MEM_BASE+PCI_MEM_WIN0,
+          PCI_MEM_BASE+PCI_MEM_WIN0, 0x10000000, IO_PAGE);
 #endif
 
 #if defined(mot_ppc_mvme2100)
@@ -394,6 +419,10 @@ static void bsp_early( void )
   switch (myBoard) {
     case MVME_2600_2700_W_MVME761:
       nvram_base = 0x80000074;
+      nvram_indirect = true;
+      break;
+    case MVME_5100:
+      nvram_base = 0xfef880C8;
       nvram_indirect = true;
       break;
     default:

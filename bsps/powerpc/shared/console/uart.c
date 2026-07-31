@@ -73,13 +73,13 @@ static struct uart_data uart_data[2] = {
 static inline unsigned char
 uread(int uart, unsigned int reg)
 {
-	return in_8((uint8_t*)(uart_data[uart].ioBase + reg));
+	return in_8((uint8_t*)(uart_data[uart].ioBase + BSP_REG_OFF(reg)));
 }
 
 static inline void
 uwrite(int uart, int reg, unsigned int val)
 {
-	out_8((uint8_t*)(uart_data[uart].ioBase + reg), val);
+	out_8((uint8_t*)(uart_data[uart].ioBase + BSP_REG_OFF(reg)), val);
 }
 
 

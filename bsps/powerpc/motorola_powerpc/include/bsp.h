@@ -109,12 +109,24 @@ extern "C" {
 #define	PCI_DRAM_OFFSET		PREP_PCI_DRAM_OFFSET
 /* offset of pci memory as seen from the CPU */
 #define PCI_MEM_BASE		PREP_ISA_MEM_BASE
+
+#if defined(mot_ppc_mvme5100)
+#define _REG_STRIDE 		4
+#define PCI_MEM_WIN0		0x80000000
+#else
 #define PCI_MEM_WIN0		0
+#endif
 #else
 #define	PCI_DRAM_OFFSET		0
 #define PCI_MEM_BASE		0
 #define PCI_MEM_WIN0		PREP_ISA_MEM_BASE
 #endif
+#endif
+
+#if defined(_REG_STRIDE)
+#define BSP_REG_OFF(val)	((val) << _REG_STRIDE)
+#else
+#define BSP_REG_OFF(val)	(val)
 #endif
 
 /*
@@ -162,6 +174,9 @@ extern "C" {
 #define BSP_OPEN_PIC_BASE_OFFSET 0x40000
 
 #define MVME_HAS_DEC21140
+#elif defined(mot_ppc_mvme5100)
+#define BSP_UART_IOBASE_COM1 (0xfef88000)
+#define BSP_UART_IOBASE_COM2 (0xfef88200)
 #else
 #define BSP_UART_IOBASE_COM1 ((_IO_BASE)+0x3f8)
 #define BSP_UART_IOBASE_COM2 ((_IO_BASE)+0x2f8)

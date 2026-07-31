@@ -379,7 +379,8 @@ static inline u_long
 find_next_zone(RESIDUAL *res, u_long lowpage, u_long flags) {
 	u_long i, newmin=0, size=0;
 	for(i=0; i<res->ActualNumMemSegs; i++) {
-		if (res->Segs[i].Usage & flags
+		if (res->Segs[i].PageCount != 0
+		    && res->Segs[i].Usage & flags
 		    && res->Segs[i].BasePage<lowpage
 		    && res->Segs[i].BasePage>newmin) {
 			newmin=res->Segs[i].BasePage;
@@ -396,7 +397,8 @@ find_zone_start(RESIDUAL *res, u_long highpage, u_long flags) {
 	do {
 		progress=0;
 		for (i=0; i<res->ActualNumMemSegs; i++) {
-		  	if ( (res->Segs[i].BasePage+res->Segs[i].PageCount
+			if ( res->Segs[i].PageCount != 0
+			     && (res->Segs[i].BasePage+res->Segs[i].PageCount
 			      == highpage)
 			     && res->Segs[i].Usage & flags) {
 			  	highpage=res->Segs[i].BasePage;

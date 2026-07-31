@@ -11,13 +11,13 @@
 #define INL_IN_DECL(name,base) \
 static inline unsigned char name(int off) \
 { \
-	return in_8((uint8_t*)(((unsigned long)base) + off)); \
+	return in_8((uint8_t*)(((unsigned long)base) + BSP_REG_OFF(off))); \
 }
 
 #define INL_OUT_DECL(name,base) \
 static inline void name(int off, unsigned int val) \
 { \
-	out_8((uint8_t*)(((unsigned long)base) + off), val); \
+	out_8((uint8_t*)(((unsigned long)base) + BSP_REG_OFF(off)), val); \
 }
 
 #ifdef BSP_UART_IOBASE_COM1

@@ -18,9 +18,17 @@
 #ifndef _LIBCPU_IO_H
 #define _LIBCPU_IO_H
 
+#ifndef ASM
+
+#include <bsp.h>		/* for _IO_BASE & friends */
+#include <stdint.h>
 
 #define PREP_ISA_IO_BASE 	0x80000000
+#if defined (mot_ppc_mvme5100)
+#define PREP_ISA_MEM_BASE 	0x00000000
+#else
 #define PREP_ISA_MEM_BASE 	0xc0000000
+#endif
 #define PREP_PCI_DRAM_OFFSET 	0x80000000
 
 #define CHRP_ISA_IO_BASE	0xfe000000
@@ -28,11 +36,6 @@
 #define CHRP_PCI_DRAM_OFFSET	0x00000000
 
 /* _IO_BASE, _ISA_MEM_BASE, PCI_DRAM_OFFSET are now defined by bsp.h */
-
-#ifndef ASM
-
-#include <bsp.h>		/* for _IO_BASE & friends */
-#include <stdint.h>
 
 /* NOTE: The use of these macros is DISCOURAGED.
  *       you should consider e.g. using in_xxx / out_xxx
