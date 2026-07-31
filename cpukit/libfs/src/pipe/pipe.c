@@ -14,6 +14,8 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
+#define _GNU_SOURCE
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -21,7 +23,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
+#include <unistd.h>
 #include <rtems/libio_.h>
+#include <rtems/libio.h>
 #include <rtems/seterr.h>
 #include <rtems/pipe.h>
 
@@ -29,9 +33,7 @@
 /* FIXME: This approach is questionable */
 static uint16_t rtems_pipe_no = 0;
 
-int pipe(
-  int filsdes[2]
-)
+static int pipe_default( int filsdes[ 2 ] )
 {
   rtems_libio_t *iop;
   int err = 0;
@@ -83,3 +85,45 @@ int pipe(
   return 0;
 }
 
+static int pipe2_default( int fildes[ 2 ], int flags )
+{
+  (void) fildes;
+  (void) flags;
+  errno = ENXIO;
+  return -1;
+}
+
+static rtems_pipe_handler_t  pipe_handler = pipe_default;
+static rtems_pipe2_handler_t pipe2_handler = pipe2_default;
+
+void rtems_filesystem_register_pipe( rtems_pipe_handler_t phandler )
+{
+  rtems_libio_lock();
+  pipe_handler = phandler;
+  rtems_libio_unlock();
+}
+
+void rtems_filesystem_register_pipe2( rtems_pipe2_handler_t p2handler )
+{
+  rtems_libio_lock();
+  pipe2_handler = p2handler;
+  rtems_libio_unlock();
+}
+
+int pipe( int fildes[ 2 ] )
+{
+  rtems_pipe_handler_t phandler;
+  rtems_libio_lock();
+  phandler = pipe_handler;
+  rtems_libio_unlock();
+  return phandler( fildes );
+}
+
+int pipe2( int fildes[ 2 ], int flags )
+{
+  rtems_pipe2_handler_t p2handler;
+  rtems_libio_lock();
+  p2handler = pipe2_handler;
+  rtems_libio_unlock();
+  return p2handler( fildes, flags );
+}

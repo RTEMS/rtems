@@ -1,4 +1,10 @@
-*** TEST POSIX PIPE CREATION - 01 ***
+*** BEGIN OF TEST PSXPIPE 1 ***
+*** TEST VERSION: 7.0.0.e468a3c9b4fde4c636166ba25dd67b38e65d5b6c
+*** TEST STATE: EXPECTED_PASS
+*** TEST BUILD: RTEMS_DEBUG RTEMS_POSIX_API
+*** TEST TOOLS: 15.2.0 20250808 (RTEMS 7, Build 2026.06.12, RSB 677c31c6360ca84c78e310af46c9f5b4e3ca199c, Newlib 7d4336cf)
+
+Default pipe tests:
 Init - attempt to create pipe -- expect EFAULT
 Init - create pipe -- OK
 Init - dup pipe -- OK
@@ -7,4 +13,10 @@ Init - create pipe -- OK
 Init - attempt to create pipe -- expect ENOMEM
 Init - create pipe -- expect ENFILE
 Init - create pipe -- expect ENFILE
-*** END OF TEST POSIX PIPE CREATION - 01 ***
+
+Pipe handler tests:
+ Register handlers
+ Check pipe handler call
+ Check pipe2 handler call
+
+*** END OF TEST PSXPIPE 1 ***
