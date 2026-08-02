@@ -288,12 +288,14 @@ rtems_status_code jffs2_flashdev_mount(
   /* Get JEDEC ID, device_identifier is a 64bit dev_t */
   status = get_jedec_id(fd, &jedec_id);
   if ( status != 0 ) {
+    fclose(file);
     return status;
   }
 
   /* Retrieve page size as sector/block size */
   status = get_sector_size(fd, &block_size);
   if ( status != 0 ) {
+    fclose(file);
     return status;
   }
 
@@ -302,17 +304,20 @@ rtems_status_code jffs2_flashdev_mount(
 
   /* Enforce maximum JFFS2 filesystem size */
   if (region->size > max_jffs2_size) {
+    fclose(file);
     return RTEMS_INVALID_SIZE;
   }
 
   status = get_flash_type(fd, &flash_type);
   if ( status != 0 ) {
+    fclose(file);
     return status;
   }
 
   if (flash_type == RTEMS_FLASHDEV_NAND) {
     status = get_page_size(fd, &write_size);
     if ( status != 0 ) {
+      fclose(file);
       return status;
     }
   }
