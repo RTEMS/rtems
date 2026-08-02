@@ -364,7 +364,7 @@ rtems_status_code jffs2_flashdev_mount(
     NULL,
     mount_dir,
     RTEMS_FILESYSTEM_TYPE_JFFS2,
-    RTEMS_FILESYSTEM_READ_WRITE,
+    read_only ? RTEMS_FILESYSTEM_READ_ONLY : RTEMS_FILESYSTEM_READ_WRITE,
     mount_data
   );
   if ( status != 0 ) {
