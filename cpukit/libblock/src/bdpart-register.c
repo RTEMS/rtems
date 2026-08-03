@@ -105,7 +105,7 @@ rtems_status_code rtems_bdpart_register(
     &logical_disk_marker
   );
   if ( logical_disk_name == NULL ) {
-    esc = sc;
+    esc = RTEMS_NO_MEMORY;
     goto cleanup;
   }
 
