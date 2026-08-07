@@ -46,8 +46,20 @@ static rtems_status_code bsp_interrupt_handler_do_remove(
 {
   rtems_interrupt_entry    *entry;
   rtems_interrupt_entry   **previous_next;
+  rtems_vector_number       modified_vector;
 
-  entry = bsp_interrupt_entry_find( vector, routine, arg, &previous_next );
+#ifdef bsp_interrupt_vector_modify
+  modified_vector = bsp_interrupt_vector_modify( vector );
+#else
+  modified_vector = vector;
+#endif
+
+  entry = bsp_interrupt_entry_find(
+    modified_vector,
+    routine,
+    arg,
+    &previous_next
+  );
 
   if ( entry == NULL ) {
     return RTEMS_UNSATISFIED;

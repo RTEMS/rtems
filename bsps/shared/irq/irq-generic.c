@@ -173,6 +173,13 @@ static rtems_status_code bsp_interrupt_entry_install_first(
 )
 {
   rtems_vector_number index;
+  rtems_vector_number modified_vector;
+
+#ifdef bsp_interrupt_vector_modify
+  modified_vector = bsp_interrupt_vector_modify( vector );
+#else
+  modified_vector = vector;
+#endif
 
 #ifdef BSP_INTERRUPT_USE_INDEX_TABLE
   index = bsp_interrupt_allocate_handler_index();
@@ -182,11 +189,11 @@ static rtems_status_code bsp_interrupt_entry_install_first(
     return RTEMS_NO_MEMORY;
   }
 #else
-  index = vector;
+  index = modified_vector;
 #endif
 
 #ifdef BSP_INTERRUPT_USE_INDEX_TABLE
-  bsp_interrupt_dispatch_index_table[ vector ] = index;
+  bsp_interrupt_dispatch_index_table[ modified_vector ] = index;
 #endif
   bsp_interrupt_entry_store_release(
     bsp_interrupt_get_dispatch_table_slot( index ),
@@ -216,12 +223,19 @@ static rtems_status_code bsp_interrupt_entry_install(
   rtems_interrupt_entry  *first;
   rtems_interrupt_entry  *other;
   rtems_interrupt_entry **previous_next;
+  rtems_vector_number     modified_vector;
 
   if ( RTEMS_INTERRUPT_IS_REPLACE( options ) ) {
     return RTEMS_INVALID_NUMBER;
   }
 
-  index = bsp_interrupt_dispatch_index( vector );
+#ifdef bsp_interrupt_vector_modify
+  modified_vector = bsp_interrupt_vector_modify( vector );
+#else
+  modified_vector = vector;
+#endif
+
+  index = bsp_interrupt_dispatch_index( modified_vector );
   first = *bsp_interrupt_get_dispatch_table_slot( index );
 
   if ( first == NULL ) {
@@ -242,7 +256,7 @@ static rtems_status_code bsp_interrupt_entry_install(
   }
 
   other = bsp_interrupt_entry_find(
-    vector,
+    modified_vector,
     entry->handler,
     entry->arg,
     &previous_next

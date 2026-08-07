@@ -45,8 +45,15 @@ void bsp_interrupt_entry_remove(
   rtems_vector_number    index;
   rtems_interrupt_entry *first;
   rtems_interrupt_entry *entry_next;
+  rtems_vector_number    modified_vector;
 
-  index = bsp_interrupt_dispatch_index( vector );
+#ifdef bsp_interrupt_vector_modify
+  modified_vector = bsp_interrupt_vector_modify( vector );
+#else
+  modified_vector = vector;
+#endif
+
+  index = bsp_interrupt_dispatch_index( modified_vector );
   first = *bsp_interrupt_get_dispatch_table_slot( index );
   entry_next = entry->next;
 
@@ -60,7 +67,7 @@ void bsp_interrupt_entry_remove(
 #endif
     bsp_interrupt_set_handler_unique( index, false );
 #if defined(BSP_INTERRUPT_USE_INDEX_TABLE)
-    bsp_interrupt_dispatch_index_table[ vector ] = 0;
+    bsp_interrupt_dispatch_index_table[ modified_vector ] = 0;
 #endif
   }
 
@@ -74,9 +81,16 @@ static rtems_status_code bsp_interrupt_entry_do_remove(
 {
   rtems_interrupt_entry  *installed;
   rtems_interrupt_entry **previous_next;
+  rtems_vector_number     modified_vector;
+
+#ifdef bsp_interrupt_vector_modify
+  modified_vector = bsp_interrupt_vector_modify( vector );
+#else
+  modified_vector = vector;
+#endif
 
   installed = bsp_interrupt_entry_find(
-    vector,
+    modified_vector,
     entry->handler,
     entry->arg,
     &previous_next

@@ -53,6 +53,7 @@ rtems_status_code rtems_interrupt_handler_iterate(
   rtems_option           options;
   rtems_interrupt_entry *entry;
   rtems_interrupt_handler check_lock_handler = NULL;
+  rtems_vector_number     modified_vector;
 
   if ( routine != NULL ) {
     check_lock_handler = dummy_handler;
@@ -72,7 +73,13 @@ rtems_status_code rtems_interrupt_handler_iterate(
     return sc;
   }
 
-  index = bsp_interrupt_dispatch_index( vector );
+#ifdef bsp_interrupt_vector_modify
+  modified_vector = bsp_interrupt_vector_modify( vector );
+#else
+  modified_vector = vector;
+#endif
+
+  index = bsp_interrupt_dispatch_index( modified_vector );
   entry = *bsp_interrupt_get_dispatch_table_slot( index );
   options = bsp_interrupt_is_handler_unique( index ) ?
     RTEMS_INTERRUPT_UNIQUE : RTEMS_INTERRUPT_SHARED;

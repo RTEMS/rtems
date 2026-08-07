@@ -137,6 +137,10 @@ static inline rtems_vector_number bsp_interrupt_dispatch_index(
  * - bsp_interrupt_vector_disable()
  * - bsp_interrupt_handler_default()
  *
+ * Optionally, the BSP may define the following macros to customize vector
+ * index modifications before installing entries and before removing entries:
+ * - bsp_interrupt_vector_modify()
+ *
  * Optionally, the BSP may define the following macros to customize the vector
  * installation after installing the first entry and the vector removal before
  * removing the last entry:
