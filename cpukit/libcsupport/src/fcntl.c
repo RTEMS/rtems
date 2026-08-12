@@ -74,6 +74,12 @@ static int duplicate_iop( rtems_libio_t *iop, int minimum )
       rv = rtems_libio_iop_to_descriptor( diop );
     } else {
       rtems_libio_free( diop );
+
+      if ( rv > 0 ) {
+        errno = rv;
+      }
+
+      rv = -1;
     }
   } else {
     errno = EMFILE;
@@ -129,6 +135,12 @@ static int duplicate2_iop( rtems_libio_t *iop, int fd2 )
     rv = fd2;
   } else {
     rtems_libio_free( iop2 );
+
+    if ( rv > 0 ) {
+      errno = rv;
+    }
+
+    rv = -1;
   }
 
   return rv;
