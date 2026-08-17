@@ -62,7 +62,12 @@ void _CPU_Context_validate( uintptr_t pattern );
 
 static inline void _CPU_Instruction_illegal( void )
 {
-  __asm__ volatile ( ".word 0" );
+  /*
+   * A ".word 0" is an "l.j 0" on this architecture, which branches to itself.
+   * The primary opcode 0x07 is reserved, so it raises the illegal instruction
+   * exception.
+   */
+  __asm__ volatile ( ".word 0x1c000000" );
 }
 
 static inline void _CPU_Instruction_no_operation( void )
