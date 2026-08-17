@@ -1,13 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-/**
- * @file
- *
- * @brief CPU Port Implementation API
- */
-
 /*
- * Copyright (c) 2013 embedded brains GmbH & Co. KG
+ * Copyright (C) 2026 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,66 +25,30 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _RTEMS_SCORE_CPUIMPL_H
-#define _RTEMS_SCORE_CPUIMPL_H
-
-#include <rtems/score/cpu.h>
-
-/**
- * @defgroup RTEMSScoreCPUMoxie Moxie
- *
- * @ingroup RTEMSScoreCPU
- *
- * @brief Moxie Architecture Support
- *
- * @{
- */
-
-#define CPU_PER_CPU_CONTROL_SIZE 0
-
-#define CPU_THREAD_LOCAL_STORAGE_VARIANT 10
-
-#ifndef ASM
-
-#ifdef __cplusplus
-extern "C" {
+#ifdef HAVE_CONFIG_H
+#include "config.h"
 #endif
 
-void _CPU_Context_volatile_clobber( uintptr_t pattern );
+#include <rtems/asm.h>
 
-void _CPU_Context_validate( uintptr_t pattern );
+/* The argument registers $r0 to $r5 of the ABI are the caller saved ones */
 
-static inline void _CPU_Instruction_illegal( void )
-{
-  __asm__ volatile ( ".word 0" );
-}
+	.text
+	.align 2
+	.global SYM(_CPU_Context_volatile_clobber)
 
-static inline void _CPU_Instruction_no_operation( void )
-{
-  __asm__ volatile ( "nop" );
-}
+SYM(_CPU_Context_volatile_clobber):
 
-static inline void _CPU_Use_thread_local_storage(
-  const Context_Control *context
-)
-{
-  (void) context;
-}
+.macro clobber_register reg, inc
+	mov	\reg, $r0
+	inc	\reg, \inc
+.endm
 
-static inline void *_CPU_Get_TLS_thread_pointer(
-  const Context_Control *context
-)
-{
-  (void) context;
-  return NULL;
-}
+	clobber_register	$r1, 1
+	clobber_register	$r2, 2
+	clobber_register	$r3, 3
+	clobber_register	$r4, 4
+	clobber_register	$r5, 5
+	inc	$r0, 6
 
-#ifdef __cplusplus
-}
-#endif
-
-#endif /* ASM */
-
-/** @} */
-
-#endif /* _RTEMS_SCORE_CPUIMPL_H */
+	ret
