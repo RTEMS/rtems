@@ -319,7 +319,12 @@ static inline void or1k_interrupt_enable(uint32_t level)
 
 static inline bool _CPU_ISR_Is_enabled( uint32_t level )
 {
-  return ( level & CPU_OR1K_SPR_SR ) != 0;
+  /*
+   * The level is a supervision register value.  CPU_OR1K_SPR_SR is the
+   * number of that register and not a bit in it, so it must not be used as
+   * a mask here.
+   */
+  return ( level & CPU_OR1K_SPR_SR_IEE ) != 0;
 }
 
 /*
