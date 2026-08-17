@@ -42,10 +42,6 @@ links:
 - role: build-dependency
   uid: ../grp
 - role: build-dependency
-  uid: ../../tstnoiconv
-- role: build-dependency
-  uid: ../../tstnointrcrit
-- role: build-dependency
   uid: ../../bspopts
 source:
 - bsps/or1k/generic_or1k/btimer/btimer.c
