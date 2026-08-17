@@ -47,6 +47,14 @@ RTEMS_LINKER_ROSET( t_self_test, const char * );
 
 typedef enum { CENSOR_PASS_THROUGH, CENSOR_DISCARD } censor_state;
 
+/*
+ * The test framework runs on itself here, so its output is a report of a test
+ * suite which fails on purpose.  Quote it with this prefix.  Without it the
+ * report is the report of this test for every tool which reads the output of a
+ * test executable, and the deliberate failures are failures of this test.
+ */
+#define QUOTE "| "
+
 typedef struct {
   const char  *c;
   size_t       case_begin_count;
@@ -55,6 +63,7 @@ typedef struct {
   void        *putchar_arg;
   const char  *censor_c;
   censor_state censor_state;
+  bool         line_begin;
 } test_context;
 
 static test_context test_instance;
@@ -76,6 +85,15 @@ static void test_putchar( int c, void *arg )
     ++ctx->c;
   }
 
+  if ( ctx->line_begin ) {
+    const char *q;
+
+    for ( q = QUOTE; *q != '\0'; ++q ) {
+      rtems_putc( *q );
+    }
+  }
+
+  ctx->line_begin = ( c == '\n' );
   rtems_putc( (char) c );
 }
 
@@ -179,6 +197,7 @@ static void run_initialize( void )
 
   ctx = &test_instance;
   ctx->censor_c = censored_init;
+  ctx->line_begin = true;
   T_set_putchar( censor_putchar, ctx, &ctx->putchar, &ctx->putchar_arg );
 }
 
