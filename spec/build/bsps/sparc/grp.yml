@@ -19,9 +19,7 @@ install:
   source:
   - bsps/sparc/include/grlib/io.h
 ldflags: []
-links:
-- role: build-dependency
-  uid: ../tst-xfail-dl06
+links: []
 type: build
 use-after: []
 use-before: []

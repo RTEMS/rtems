@@ -19,6 +19,12 @@ actions:
     - whetstone
 - set-test-state:
     reason: |
+      Fails due to lack of TLS support in rtems-ld and RAP format
+    state: expected-fail
+    tests:
+    - dl06
+- set-test-state:
+    reason: |
       Fails because of #2169, rename to existing entries is
       not supported
     state: expected-fail
