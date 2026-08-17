@@ -59,6 +59,12 @@ extern "C" {
 #define LAPIC_REGISTER_ID            LAPIC_OFFSET(0x20)
 #define LAPIC_REGISTER_EOI           LAPIC_OFFSET(0x0B0)
 #define LAPIC_REGISTER_SPURIOUS      LAPIC_OFFSET(0x0F0)
+/*
+ * The interrupt request register is a bit field of 256 bits.  It is split into
+ * eight 32-bit registers which are 16 bytes apart.
+ */
+#define LAPIC_REGISTER_IRR_BASE      LAPIC_OFFSET(0x200)
+#define LAPIC_REGISTER_IRR_STRIDE    LAPIC_OFFSET(0x010)
 #define LAPIC_REGISTER_ICR_LOW       LAPIC_OFFSET(0x300)
 #define LAPIC_REGISTER_ICR_HIGH      LAPIC_OFFSET(0x310)
 #define LAPIC_REGISTER_LVT_TIMER     LAPIC_OFFSET(0x320)
@@ -75,6 +81,7 @@ extern "C" {
 #define LAPIC_ICR_DELIV_STAT_PEND    0x1000
 #define LAPIC_ICR_ASSERT             0x4000
 #define LAPIC_ICR_TRIG_LEVEL         0x8000
+#define LAPIC_ICR_DEST_SELF          0x40000
 
 #define LAPIC_EOI_ACK                0
 #define LAPIC_SELECT_TMR_PERIODIC    0x20000
@@ -198,6 +205,23 @@ uint32_t lapic_timer_calc_ticks(uint64_t desired_freq_hz);
  * @param reload_value Number of ticks per interrupt.
  */
 void lapic_timer_enable(uint32_t reload_value);
+
+/**
+ * @brief Raises the interrupt vector on the processor executing this function.
+ *
+ * @param vector The vector of the interrupt to raise.
+ */
+void lapic_raise_self(uint32_t vector);
+
+/**
+ * @brief Checks if the interrupt vector is pending on the processor executing
+ *        this function.
+ *
+ * @param vector The vector of the interrupt to check.
+ *
+ * @return true if the interrupt request register bit of the vector is set.
+ */
+bool lapic_is_pending(uint32_t vector);
 
 #ifdef RTEMS_SMP
 /**

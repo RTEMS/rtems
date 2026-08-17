@@ -94,7 +94,8 @@ static uintptr_t rtemsIRQs[BSP_IRQ_VECTOR_NUMBER] = {
   (uintptr_t) rtems_irq_prologue_30,
   (uintptr_t) rtems_irq_prologue_31,
   (uintptr_t) rtems_irq_prologue_32,
-  (uintptr_t) rtems_irq_prologue_33
+  (uintptr_t) rtems_irq_prologue_33,
+  (uintptr_t) rtems_irq_prologue_34
 };
 
 void lidt(struct idt_record *ptr)
@@ -209,8 +210,14 @@ rtems_status_code bsp_interrupt_get_attributes(
   rtems_interrupt_attributes *attributes
 )
 {
-  (void) vector;
-  (void) attributes;
+  if (vector >= BSP_VECTOR_APIC_FIRST) {
+    attributes->is_maskable = true;
+    attributes->can_raise = true;
+    attributes->cleared_by_acknowledge = true;
+#ifdef RTEMS_SMP
+    attributes->can_raise_on = true;
+#endif
+  }
 
   return RTEMS_SUCCESSFUL;
 }
@@ -220,20 +227,28 @@ rtems_status_code bsp_interrupt_is_pending(
   bool               *pending
 )
 {
-  (void) vector;
-
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(pending != NULL);
-  *pending = false;
-  return RTEMS_UNSATISFIED;
+
+  if (vector < BSP_VECTOR_APIC_FIRST) {
+    *pending = false;
+    return RTEMS_UNSATISFIED;
+  }
+
+  *pending = lapic_is_pending(vector);
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
 {
-  (void) vector;
-
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  return RTEMS_UNSATISFIED;
+
+  if (vector < BSP_VECTOR_APIC_FIRST) {
+    return RTEMS_UNSATISFIED;
+  }
+
+  lapic_raise_self(vector);
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_clear(rtems_vector_number vector)
@@ -293,10 +308,13 @@ rtems_status_code bsp_interrupt_raise_on(
   uint32_t            cpu_index
 )
 {
-  (void) vector;
-  (void) cpu_index;
-
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  return RTEMS_UNSATISFIED;
+
+  if (vector < BSP_VECTOR_APIC_FIRST) {
+    return RTEMS_UNSATISFIED;
+  }
+
+  lapic_send_ipi(cpu_index, (uint8_t) vector);
+  return RTEMS_SUCCESSFUL;
 }
 #endif

@@ -56,6 +56,8 @@ extern "C" {
 #define BSP_VECTOR_APIC_TIMER  32
 /* Target vector number for the APIC timer */
 #define BSP_VECTOR_IPI         33
+/* Target vector number for interrupts raised by software */
+#define BSP_VECTOR_SOFTWARE    34
 
 typedef struct _interrupt_descriptor {
   uint16_t offset_0;              // bits 0-15
@@ -134,6 +136,7 @@ extern void rtems_irq_prologue_30(void);
 extern void rtems_irq_prologue_31(void);
 extern void rtems_irq_prologue_32(void);
 extern void rtems_irq_prologue_33(void);
+extern void rtems_irq_prologue_34(void);
 
 #ifdef __cplusplus
 }
