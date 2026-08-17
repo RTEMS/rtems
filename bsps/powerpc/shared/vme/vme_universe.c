@@ -189,7 +189,7 @@ int rval=theOps->xlate_adrs(1,0,am,vmeaddr,plocaladdr);
 int
 BSP_local2vme_adrs(unsigned long am, unsigned long localaddr, unsigned long *pvmeaddr)
 {
-	return theOps->xlate_adrs(0, 0, am,localaddr+PCI_DRAM_OFFSET,pvmeaddr);
+	return theOps->xlate_adrs(0, 0, am,BSP_LOCAL2PCI_ADDR(localaddr),pvmeaddr);
 }
 
 int

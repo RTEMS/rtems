@@ -59,6 +59,10 @@
 /* address modifiers & friends */
 #include <bsp/vme_am_defs.h>
 
+#ifndef BSP_LOCAL2PCI_ADDR
+#define BSP_LOCAL2PCI_ADDR(a) ((unsigned long)(a) + PCI_DRAM_OFFSET)
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
