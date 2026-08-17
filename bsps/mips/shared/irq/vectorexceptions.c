@@ -50,6 +50,41 @@ struct regdef
   char *name;
 };
 
+static const char *const cause_strings[32] = {
+  /*  0 */ "Int",
+  /*  1 */ "TLB Mods",
+  /*  2 */ "TLB Load",
+  /*  3 */ "TLB Store",
+  /*  4 */ "Address Load",
+  /*  5 */ "Address Store",
+  /*  6 */ "Instruction Bus Error",
+  /*  7 */ "Data Bus Error",
+  /*  8 */ "Syscall",
+  /*  9 */ "Breakpoint",
+  /* 10 */ "Reserved Instruction",
+  /* 11 */ "Coprocessor Unuseable",
+  /* 12 */ "Overflow",
+  /* 13 */ "Trap",
+  /* 14 */ "Instruction Virtual Coherency Error",
+  /* 15 */ "FP Exception",
+  /* 16 */ "Reserved 16",
+  /* 17 */ "Reserved 17",
+  /* 18 */ "Reserved 18",
+  /* 19 */ "Reserved 19",
+  /* 20 */ "Reserved 20",
+  /* 21 */ "Reserved 21",
+  /* 22 */ "Reserved 22",
+  /* 23 */ "Watch",
+  /* 24 */ "Reserved 24",
+  /* 25 */ "Reserved 25",
+  /* 26 */ "Reserved 26",
+  /* 27 */ "Reserved 27",
+  /* 28 */ "Reserved 28",
+  /* 29 */ "Reserved 29",
+  /* 30 */ "Reserved 30",
+  /* 31 */ "Data Virtual Coherency Error"
+};
+
 static const struct regdef dumpregs[]= {
   { R_RA, "R_RA" }, { R_V0, "R_V0" },     { R_V1, "R_V1" },
   { R_A0, "R_A0" }, { R_A1, "R_A1" },     { R_A2, "R_A2" },
@@ -66,6 +101,12 @@ void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
   uint32_t *frame_u32;
   int       i;
   size_t    j;
+
+  printk(
+    "   CAUSE   %08" PRIx32 " --> %s\n",
+    (uint32_t) frame->cause,
+    cause_strings[ ( (uint32_t) frame->cause >> 2 ) & 0x1f ]
+  );
 
   frame_u32 = (uint32_t *)frame;
   for(i=0; dumpregs[i].offset > -1; i++)
@@ -89,6 +130,13 @@ void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
  *  all be close to the same set.
  */
 
+/*
+ * The frame of the exception being vectored, or NULL outside such a vector.
+ * bsp_interrupt_handler_default() uses it to tell an exception which no
+ * handler consumed from a spurious interrupt.
+ */
+CPU_Exception_frame *mips_exception_frame;
+
 void mips_vector_exceptions( CPU_Interrupt_frame *frame )
 {
   (void) frame;
@@ -99,5 +147,7 @@ void mips_vector_exceptions( CPU_Interrupt_frame *frame )
   mips_get_cause( cause );
   exc = (cause >> 2) & 0x1f;
 
+  mips_exception_frame = frame;
   bsp_interrupt_handler_dispatch( exc );
+  mips_exception_frame = NULL;
 }

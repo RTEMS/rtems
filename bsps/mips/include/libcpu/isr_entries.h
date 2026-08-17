@@ -39,6 +39,11 @@
 extern void mips_install_isr_entries( void );
 extern void mips_vector_isr_handlers( CPU_Interrupt_frame *frame );
 
+/*
+ * The frame of the exception being vectored, or NULL outside such a vector.
+ */
+extern CPU_Exception_frame *mips_exception_frame;
+
 #if __mips == 1
 extern void exc_utlb_code(void);
 extern void exc_dbg_code(void);
