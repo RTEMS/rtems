@@ -33,22 +33,36 @@
 
 .section .text
 
+/*
+ * The volatile registers of the ABI are the arguments r3 to r8, the return
+ * address r9, the return values r11 and r12, and the odd numbered registers
+ * from r13 on.  The thread pointer r10 is not one of them.
+ */
+
+.macro	clobber_register reg, inc
+	l.addi	r\reg, r3, \inc
+.endm
+
 PUBLIC(_CPU_Context_volatile_clobber)
 SYM(_CPU_Context_volatile_clobber):
 
-.macro clobber_register reg
-  l.addi r0, r0, -1
-  l.addi  \reg, r0, 0
-.endm
+	clobber_register	4, 1
+	clobber_register	5, 2
+	clobber_register	6, 3
+	clobber_register	7, 4
+	clobber_register	8, 5
+	clobber_register	11, 6
+	clobber_register	12, 7
+	clobber_register	13, 8
+	clobber_register	15, 9
+	clobber_register	17, 10
+	clobber_register	19, 11
+	clobber_register	21, 12
+	clobber_register	23, 13
+	clobber_register	25, 14
+	clobber_register	27, 15
+	clobber_register	29, 16
+	clobber_register	31, 17
 
-  clobber_register  r3
-  clobber_register  r4
-  clobber_register  r5
-  clobber_register  r6
-  clobber_register  r7
-  clobber_register  r8
-  clobber_register  r13
-  clobber_register  r31
-
-  l.jr  r9
-  l.nop
+	l.jr	r9
+	 l.nop
