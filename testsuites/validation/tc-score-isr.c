@@ -128,6 +128,35 @@ void __wrap_bsp_interrupt_dispatch( void )
 }
 #endif
 
+#if defined(__or1k__)
+void __real_bsp_interrupt_dispatch(
+  uint32_t             vector,
+  CPU_Exception_frame *frame
+);
+
+void __wrap_bsp_interrupt_dispatch(
+  uint32_t             vector,
+  CPU_Exception_frame *frame
+);
+
+void __wrap_bsp_interrupt_dispatch(
+  uint32_t             vector,
+  CPU_Exception_frame *frame
+)
+{
+  if ( interrupted_stack_at_multitasking_start == 0 ) {
+    /*
+     * The exception prologue builds the frame on the stack of the interrupted
+     * context and switches to the interrupt stack afterwards, so the address
+     * of the frame is an address within the interrupted stack.
+     */
+    interrupted_stack_at_multitasking_start = (uintptr_t) frame;
+  }
+
+  __real_bsp_interrupt_dispatch( vector, frame );
+}
+#endif
+
 #if defined(__microblaze__)
 void __real_bsp_interrupt_dispatch( uint32_t source );
 

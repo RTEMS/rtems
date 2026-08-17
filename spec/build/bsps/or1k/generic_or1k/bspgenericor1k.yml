@@ -26,7 +26,7 @@ links:
 - role: build-dependency
   uid: ../../obj
 - role: build-dependency
-  uid: ../../objirqdflt
+  uid: ../../objirq
 - role: build-dependency
   uid: ../../objmem
 - role: build-dependency
@@ -52,9 +52,12 @@ source:
 - bsps/or1k/generic_or1k/clock/clockdrv.c
 - bsps/or1k/generic_or1k/console/console-config.c
 - bsps/or1k/generic_or1k/console/uart.c
+- bsps/or1k/generic_or1k/irq/irq-dispatch.c
+- bsps/or1k/generic_or1k/irq/irq.c
 - bsps/or1k/generic_or1k/start/bspstart.c
 - bsps/or1k/shared/cache/cache.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/irq/irq-default-handler.c
 - bsps/shared/dev/serial/legacy-console-control.c
 - bsps/shared/dev/serial/legacy-console-select.c
 - bsps/shared/dev/serial/legacy-console.c

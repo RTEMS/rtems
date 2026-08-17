@@ -3,13 +3,14 @@
 /**
  * @file
  *
- * @ingroup OR1K_IRQ
+ * @ingroup RTEMSImplClassicIntr
  *
- * @brief Interrupt definitions.
+ * @brief This source file contains the interrupt dispatch of the
+ *   generic_or1k BSP.
  */
 
-/**
- * COPYRIGHT (c) 2014-2015 Hesham ALMatary <heshamelmatary@gmail.com>
+/*
+ * Copyright (C) 2026 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -33,35 +34,43 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LIBBSP_GENERIC_OR1K_IRQ_H
-#define LIBBSP_GENERIC_OR1K_IRQ_H
+#include <bsp/irq-generic.h>
 
-#ifndef ASM
-
-#include <rtems.h>
-#include <rtems/irq.h>
-#include <rtems/irq-extension.h>
+#include <rtems/score/cpu.h>
+#include <rtems/score/or1k-utility.h>
 
 /*
- * The programmable interrupt controller of the architecture has one input per
- * bit of its mask and status register.
+ * The exception handlers of this architecture are called with the vector
+ * number of the exception and the frame of the interrupted context.
  */
-#define BSP_INTERRUPT_VECTOR_COUNT 32
+void bsp_interrupt_dispatch( uint32_t vector, CPU_Exception_frame *frame );
 
-/* Interrupt Identification Register */
-#define OR1K_BSP_UART_REG_INT_ID_MSI    (0x00)
-#define OR1K_BSP_UART_REG_INT_ID_NO_INT (0x01)
-#define OR1K_BSP_UART_REG_INT_ID_THRI   (0x02)
-#define OR1K_BSP_UART_REG_INT_ID_RDI    (0x04)
-#define OR1K_BSP_UART_REG_INT_ID_ID     (0x06)
-#define OR1K_BSP_UART_REG_INT_ID_RLSI   (0x06)
-#define OR1K_BSP_UART_REG_INT_ID_TOI    (0x0c)
+void bsp_interrupt_dispatch( uint32_t vector, CPU_Exception_frame *frame )
+{
+  uint32_t pending;
 
-/* Interrupt Enable Register */
-#define OR1K_BSP_UART_REG_INT_ENABLE_RDI  (0x01)
-#define OR1K_BSP_UART_REG_INT_ENABLE_THRI (0x02)
-#define OR1K_BSP_UART_REG_INT_ENABLE_RLSI (0x04)
-#define OR1K_BSP_UART_REG_INT_ENABLE_MSI  (0x08)
+  (void) vector;
+  (void) frame;
 
-#endif /* ASM */
-#endif /* LIBBSP_GENERIC_OR1K_IRQ_H */
+  /*
+   * A source which is masked in the interrupt controller does not raise the
+   * exception, but its status bit is set nevertheless, so the mask has to be
+   * applied here as well.
+   */
+  pending = _OR1K_mfspr( CPU_OR1K_SPR_PICSR ) &
+    _OR1K_mfspr( CPU_OR1K_SPR_PICMR );
+
+  while ( pending != 0 ) {
+    uint32_t bit = pending & ( ~pending + 1 );
+    uint32_t index = (uint32_t) __builtin_ctz( bit );
+
+    /*
+     * The inputs of the interrupt controller are level triggered, so the
+     * status bit is set again as long as the device raises the interrupt.
+     * Acknowledge after the handler served the device.
+     */
+    bsp_interrupt_handler_dispatch( index );
+    _OR1K_mtspr( CPU_OR1K_SPR_PICSR, bit );
+    pending &= ~bit;
+  }
+}

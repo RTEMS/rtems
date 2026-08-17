@@ -35,9 +35,11 @@
 
 #include <bsp.h>
 #include <bsp/bootcard.h>
+#include <bsp/irq-generic.h>
 
 void bsp_start( void )
 {
   rtems_cache_enable_instruction();
   rtems_cache_enable_data();
+  bsp_interrupt_initialize();
 }
