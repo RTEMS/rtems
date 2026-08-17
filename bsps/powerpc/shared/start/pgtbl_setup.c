@@ -1,8 +1,13 @@
 #include <sys/param.h>
 #include <rtems.h>
+#include <bsp.h>
 #include <libcpu/mmu.h>
 #include <rtems/bspIo.h>
 #include <libcpu/pte121.h>
+
+#ifndef BSP_PGTBL_EXTRA_SIZE
+#define BSP_PGTBL_EXTRA_SIZE 0
+#endif
 
 /* Default setup of the page tables. This is a weak
  * alias, so applications may easily override this
@@ -87,7 +92,7 @@ unsigned		ldPtSize,tmp;
   /* get minimal size (log base 2) of PT for
    * this board's memory
    */
-  ldPtSize = triv121PgTblLdMinSize(*pmemsize);
+  ldPtSize = triv121PgTblLdMinSize(*pmemsize + BSP_PGTBL_EXTRA_SIZE);
   ldPtSize++; /* double this amount -- then why? */
 
   /* allocate the page table at the top of the physical

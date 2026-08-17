@@ -57,6 +57,7 @@
 #include <libcpu/cpuIdent.h>
 #include <bsp/vectors.h>
 #include <bsp/VME.h>
+#include <bsp/VMEConfig.h>
 #include <bsp/motorola.h>
 #include <rtems/powerpc/powerpc.h>
 #include <bsp/ppcbug-nvram-set.h>
@@ -205,14 +206,17 @@ static void bsp_early( void )
 
 
 #ifdef mot_ppc_mvme5100
-  setdbat(3, PCI_MEM_BASE+PCI_MEM_WIN0,
-          PCI_MEM_BASE+PCI_MEM_WIN0, 0x10000000, IO_PAGE);
-
   /* Setting PCI I/O Base address to default memory map
    * Refer to MVME5100 Programmer's reference guide (Sep 2001)
-   * 0xfeff0058 holds the XSADD3
-   * 0xfeff005c holds the XSOFF3
-   * */
+   *
+   * Initializing the PCI registers from here removes
+   * dependance on debug monitor for initializing the registers
+   * correctly
+   */
+  out_be32((volatile uint32_t *)0xfeff0040, 0xf000f3ff);
+  out_be32((volatile uint32_t *)0xfeff0044, 0x000000d2);
+  out_be32((volatile uint32_t *)0xfeff0050, 0xa000bfff);
+  out_be32((volatile uint32_t *)0xfeff0054, 0x000000c2);
   out_be32((volatile uint32_t *)0xfeff0058, 0x80008080);
   out_be32((volatile uint32_t *)0xfeff005c, 0x800000c0);
 #else
@@ -385,6 +389,18 @@ static void bsp_early( void )
 	printk("WARNING: unable to setup page tables VME "
                "bridge must share PCI space\n");
   }
+
+#ifdef mot_ppc_mvme5100
+  /* Use page tables to map the VME windows instead of DBATS. */
+  if (!pt || TRIV121_MAP_SUCCESS != triv121PgTblMap(
+            pt, TRIV121_121_VSID,
+            PCI_MEM_BASE + _VME_A32_WIN0_ON_PCI,
+            BSP_VME_APERTURE_SIZE >> 12,
+            TRIV121_ATTR_IO_PAGE, TRIV121_PP_RW_PAGE)) {
+	printk("WARNING: unable to map VME aperture; "
+               "VME will be inaccessible\n");
+  }
+#endif
 
   /*
    *  initialize the device driver parameters

@@ -55,6 +55,11 @@
 #endif
 #include <rtems/bspIo.h>
 
+/* Define _VME_A32_WIN0_SIZE in VMEConfig.h to change the default */
+#ifndef _VME_A32_WIN0_SIZE
+#define _VME_A32_WIN0_SIZE   0x0e000000
+#endif
+
 extern int BSP_VMEInit(void);
 extern int BSP_VMEIrqMgrInstall(void);
 
@@ -97,7 +102,7 @@ __BSP_default_vme_config(void)
 	VME_AM_EXT_SUP_DATA,
 	_VME_A32_WIN0_ON_VME,
 	_VME_A32_WIN0_ON_PCI,
-	0x0e000000);
+	_VME_A32_WIN0_SIZE);
   BSP_VMEOutboundPortCfg(
 	1,
 	VME_AM_STD_SUP_DATA,
@@ -130,7 +135,7 @@ __BSP_default_vme_config(void)
 	0,
 	VME_AM_EXT_SUP_DATA | VME_AM_IS_MEMORY,
 	_VME_DRAM_OFFSET,
-	PCI_DRAM_OFFSET,
+	BSP_LOCAL2PCI_ADDR(0),
 	BSP_mem_size);
 #endif
 

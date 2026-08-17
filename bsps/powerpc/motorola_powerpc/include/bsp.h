@@ -113,6 +113,7 @@ extern "C" {
 #if defined(mot_ppc_mvme5100)
 #define _REG_STRIDE 		4
 #define PCI_MEM_WIN0		0x80000000
+#define BSP_VME_APERTURE_SIZE	0x20000000
 #else
 #define PCI_MEM_WIN0		0
 #endif
@@ -129,6 +130,10 @@ extern "C" {
 #define BSP_REG_OFF(val)	(val)
 #endif
 
+#ifdef mot_ppc_mvme5100
+#define BSP_PGTBL_EXTRA_SIZE	BSP_VME_APERTURE_SIZE
+#endif
+
 /*
  * The BSP has PCI devices. Enable support in LibBSD.
  */
@@ -139,6 +144,12 @@ extern "C" {
  */
 #define RTEMS_BSP_PCI_IO_REGION_BASE  0
 #define RTEMS_BSP_PCI_MEM_REGION_BASE PCI_DRAM_OFFSET
+#if defined(mot_ppc_mvme5100)
+#define BSP_LOCAL2PCI_ADDR(a) ((uint32_t)(a))
+#define RTEMS_BSP_PCI_DMA_REGION_BASE 0
+#else
+#define RTEMS_BSP_PCI_DMA_REGION_BASE PCI_DRAM_OFFSET
+#endif
 
 /*
  * Remap the PCI address space for LibBSD
