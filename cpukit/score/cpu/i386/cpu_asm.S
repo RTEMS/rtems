@@ -86,6 +86,21 @@ SYM (_CPU_Context_switch_no_return):
         movl      edi,REG_EDI(eax)         /* save destination register */
         movl      ecx, I386_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE(eax)
 
+      /*
+       * Save the descriptor of the segment which provides the thread pointer.
+       * The restore below installs it in the descriptor table, so a context
+       * which was not initialized by _CPU_Context_Initialize() gets a present
+       * descriptor from the context switch which saved into it.  Loading the
+       * segment register with a descriptor which is not present raises a
+       * general protection exception.  EBX is free here, its value is already
+       * in the context and the restore loads it again.
+       */
+        GET_CPU_ID ecx
+        movl      _Global_descriptor_table+24(,ecx,8),ebx
+        movl      ebx,REG_GS_0(eax)
+        movl      _Global_descriptor_table+28(,ecx,8),ebx
+        movl      ebx,REG_GS_1(eax)
+
         movl      eax,ecx                  /* ecx = running threads context */
         movl      HEIRCONTEXT_ARG(esp),eax /* eax = heir threads context */
 
