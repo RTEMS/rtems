@@ -347,7 +347,7 @@ static int read_tftp_file(
   if ( *fd >= 0 ) {
     data_buffer = malloc( buffer_size );
 
-    while ( bytes > 0 && (ssize_t) max_bytes >= bytes ) {
+    while ( bytes > 0 && max_bytes >= (size_t) bytes ) {
       errno = 0;
       bytes = read(
         *fd,
