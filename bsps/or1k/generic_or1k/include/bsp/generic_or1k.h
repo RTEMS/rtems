@@ -75,6 +75,19 @@
 /** @} */
 
 /**
+ * @name Tick Timer
+ *
+ * The tick timer counts at this frequency.  Qemu uses 20 MHz for the
+ * or1k-sim and the virtual machine alike, see TIMER_PERIOD in
+ * hw/or1k/cputimer.c.
+ *
+ * @{
+ */
+#define OR1K_BSP_TIMER_FREQ       20000000UL
+
+/** @} */
+
+/**
  * @name Internal OR1K UART Registers
  *
  * @{

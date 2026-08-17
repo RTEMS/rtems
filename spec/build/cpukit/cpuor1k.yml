@@ -21,7 +21,6 @@ install:
   - cpukit/score/cpu/or1k/include/rtems/score/or1k.h
 links: []
 source:
-- cpukit/score/cpu/no_cpu/cpucounterfrequency.c
 - cpukit/score/cpu/or1k/cpu.c
 - cpukit/score/cpu/or1k/or1k-context-initialize.c
 - cpukit/score/cpu/or1k/or1k-context-switch.S
