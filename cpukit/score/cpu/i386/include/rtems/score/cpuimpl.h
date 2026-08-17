@@ -76,7 +76,12 @@ static inline void _CPU_Context_validate( uintptr_t pattern )
 
 static inline void _CPU_Instruction_illegal( void )
 {
-  __asm__ volatile ( ".word 0" );
+  /*
+   * The two zero bytes of a ".word 0" are a valid instruction on this
+   * architecture.  The undefined instruction is the architected way to raise
+   * the invalid opcode exception.
+   */
+  __asm__ volatile ( "ud2" );
 }
 
 static inline void _CPU_Instruction_no_operation( void )
