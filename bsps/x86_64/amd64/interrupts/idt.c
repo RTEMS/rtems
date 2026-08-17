@@ -202,11 +202,20 @@ void bsp_interrupt_facility_initialize(void)
   }
 }
 
+/*
+ * Only the local vector table entry of the Local APIC timer has a mask bit.
+ * The interprocessor and software vectors are delivered by a write to the
+ * interrupt command register and there is nothing which masks them.
+ */
 rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
-  (void) vector;
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
-  /* XXX: Should be implemented once I/O APIC support is added */
+  if (vector != BSP_VECTOR_APIC_TIMER) {
+    return RTEMS_UNSATISFIED;
+  }
+
+  lapic_timer_set_masked(true);
   return RTEMS_SUCCESSFUL;
 }
 
@@ -240,13 +249,20 @@ rtems_status_code bsp_interrupt_get_attributes(
   rtems_interrupt_attributes *attributes
 )
 {
-  if (vector >= BSP_VECTOR_APIC_FIRST) {
-    attributes->is_maskable = true;
-    attributes->can_raise = true;
-    attributes->cleared_by_acknowledge = true;
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+
+  attributes->is_maskable = true;
+  attributes->can_raise = true;
+  attributes->cleared_by_acknowledge = true;
 #ifdef RTEMS_SMP
-    attributes->can_raise_on = true;
+  attributes->can_raise_on = true;
 #endif
+
+  if (vector == BSP_VECTOR_APIC_TIMER) {
+    attributes->can_enable = true;
+    attributes->maybe_enable = true;
+    attributes->can_disable = true;
+    attributes->maybe_disable = true;
   }
 
   return RTEMS_SUCCESSFUL;
@@ -285,19 +301,27 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
   bool               *enabled
 )
 {
-  (void) vector;
-
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(enabled != NULL);
-  *enabled = false;
-  return RTEMS_UNSATISFIED;
+
+  if (vector == BSP_VECTOR_APIC_TIMER) {
+    *enabled = !lapic_timer_is_masked();
+  } else {
+    *enabled = true;
+  }
+
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
-  (void) vector;
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
-  /* XXX: Should be implemented once I/O APIC support is added */
+  if (vector != BSP_VECTOR_APIC_TIMER) {
+    return RTEMS_UNSATISFIED;
+  }
+
+  lapic_timer_set_masked(false);
   return RTEMS_SUCCESSFUL;
 }
 

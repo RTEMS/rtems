@@ -207,6 +207,22 @@ uint32_t lapic_timer_calc_ticks(uint64_t desired_freq_hz);
 void lapic_timer_enable(uint32_t reload_value);
 
 /**
+ * @brief Masks or unmasks the local vector table entry of the Local APIC
+ *        timer.
+ *
+ * @param masked Mask the entry, if true, otherwise unmask it.
+ */
+void lapic_timer_set_masked(bool masked);
+
+/**
+ * @brief Checks if the local vector table entry of the Local APIC timer is
+ *        masked.
+ *
+ * @return true if the entry is masked.
+ */
+bool lapic_timer_is_masked(void);
+
+/**
  * @brief Raises the interrupt vector on the processor executing this function.
  *
  * @param vector The vector of the interrupt to raise.
