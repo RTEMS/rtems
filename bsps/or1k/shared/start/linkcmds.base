@@ -56,7 +56,7 @@ bsp_stack_align = DEFINED (bsp_stack_align) ? bsp_stack_align : 8;
 SECTIONS {
 
   .vector : ALIGN_WITH_INPUT {
-    *(.vector)
+    KEEP (*(.vector))
     . = ALIGN(bsp_vector_table_size);
     bsp_section_vector_end = .;
   } > REGION_VECTOR AT > REGION_VECTOR
