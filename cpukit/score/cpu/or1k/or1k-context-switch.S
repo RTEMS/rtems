@@ -105,6 +105,9 @@ SYM(restore):
   l.lwz  r7,24(r4)
   l.lwz  r8,28(r4)
   l.lwz  r9,32(r4)
+  /* r10 is the thread pointer.  It is set once per thread by
+     _CPU_Context_Initialize() and only restored here, never saved. */
+  l.lwz  r10,36(r4)
   l.lwz  r14,52(r4)
   l.lwz  r16,60(r4)
   l.lwz  r18,68(r4)

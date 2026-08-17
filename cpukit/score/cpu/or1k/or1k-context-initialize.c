@@ -37,6 +37,7 @@
 #include <rtems/score/cpu.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/or1k-utility.h>
+#include <rtems/score/tls.h>
 
 void _CPU_Context_Initialize(
   Context_Control *context,
@@ -50,7 +51,6 @@ void _CPU_Context_Initialize(
 {
   (void) new_level;
   (void) is_fp;
-  (void) tls_area;
 
   /* Decrement 200 byte to account for red-zone */
   uint32_t stack = ((uint32_t) stack_area_begin) - 200;
@@ -65,4 +65,15 @@ void _CPU_Context_Initialize(
   context->r2 = stack_high;
   context->r9 = (uint32_t) entry_point;
   context->sr = sr;
+
+  if ( tls_area != NULL ) {
+    TLS_Thread_control_block *tcb;
+
+    /*
+     * r10 is the thread pointer of the OpenRISC ABI.  It points to the first
+     * byte after the thread control block.
+     */
+    tcb = _TLS_Initialize_area( tls_area );
+    context->r10 = (uint32_t) ( tcb + 1 );
+  }
 }

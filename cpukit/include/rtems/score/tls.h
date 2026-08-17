@@ -126,6 +126,14 @@ typedef struct TLS_Thread_control_block {
 #if CPU_SIZEOF_POINTER == 4 || defined( AARCH64_MULTILIB_ARCH_V8 )
   uintptr_t reserved;
 #endif
+/*
+ * The linker computes the thread-local storage offsets of OpenRISC relative
+ * to a 16 byte thread control block, see TCB_SIZE in bfd/elf32-or1k.c.  The
+ * difference is visible only for objects with an alignment above 16 bytes.
+ */
+#if defined( __or1k__ )
+  uintptr_t reserved_or1k[ 2 ];
+#endif
 #endif /* __i386__ || __x86_64__ */
 } TLS_Thread_control_block;
 

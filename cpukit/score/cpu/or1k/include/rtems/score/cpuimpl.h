@@ -48,7 +48,12 @@
 
 #define CPU_PER_CPU_CONTROL_SIZE 0
 
-#define CPU_THREAD_LOCAL_STORAGE_VARIANT 10
+/*
+ * The thread pointer points to the first byte after the thread control block
+ * and the linker reserves an aligned block of that size before the data, so
+ * the offsets it emits include the block.  See tpoff() in bfd/elf32-or1k.c.
+ */
+#define CPU_THREAD_LOCAL_STORAGE_VARIANT 11
 
 #ifndef ASM
 
@@ -79,15 +84,19 @@ static inline void _CPU_Use_thread_local_storage(
   const Context_Control *context
 )
 {
-  (void) context;
+  /*
+   * r10 is the thread pointer of the OpenRISC ABI.  It is a fixed register,
+   * so it cannot be named by a register variable and is set here directly.
+   */
+  __asm__ volatile ( "l.or r10, %0, %0" : : "r" ( context->r10 ) );
 }
 
 static inline void *_CPU_Get_TLS_thread_pointer(
   const Context_Control *context
 )
 {
-  (void) context;
-  return NULL;
+  /* r10 is the thread pointer of the OpenRISC ABI */
+  return (void *) context->r10;
 }
 
 #ifdef __cplusplus
