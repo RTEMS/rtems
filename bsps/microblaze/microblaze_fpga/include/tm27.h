@@ -40,22 +40,96 @@
 #ifndef __tm27_h
 #define __tm27_h
 
+#include <bsp.h>
+#include <bsp/intc.h>
+#include <bsp/irq.h>
+#include <bsp/microblaze-fdt-support.h>
+#include <bsp/microblaze-timer.h>
+
+#include <rtems/score/isr.h>
+
 /*
- * Time Test 27 cannot be implemented reliably because the AXI interrupt
- * controller is not guaranteed to support software interrupts.
+ * The AXI interrupt controller cannot raise an interrupt in software once the
+ * hardware interrupt inputs are enabled, which the clock needs.  Use the
+ * second counter of the AXI timer instead.  It shares the interrupt of the
+ * counter used by the clock, so the interrupt is shared and each handler
+ * checks its own interrupt bit.
  */
 
-#define MUST_WAIT_FOR_INTERRUPT 0
+#define MUST_WAIT_FOR_INTERRUPT 1
 
-#define Install_tm27_vector( handler ) \
-  do { \
-    (void) (handler); \
-  } while (0)
+/* Number of counter ticks until the interrupt is raised */
+#define MICROBLAZE_TM27_TICKS 10
 
-#define Cause_tm27_intr()  /* empty */
+static rtems_interrupt_entry microblaze_tm27_interrupt_entry;
 
-#define Clear_tm27_intr()  /* empty */
+static volatile Microblaze_Timer *microblaze_tm27_timer;
 
-#define Lower_tm27_intr() /* empty */
+static volatile Microblaze_INTC *microblaze_tm27_intc;
+
+static uint32_t microblaze_tm27_irq;
+
+static inline void Install_tm27_vector( rtems_interrupt_handler handler )
+{
+  uint32_t irq;
+
+  microblaze_tm27_intc = (volatile Microblaze_INTC *)
+    try_get_prop_from_device_tree(
+      "xlnx,xps-intc-1.00.a",
+      "reg",
+      BSP_MICROBLAZE_FPGA_INTC_BASE
+    );
+  microblaze_tm27_timer = (volatile Microblaze_Timer *)
+    try_get_prop_from_device_tree(
+      "xlnx,xps-timer-1.00.a",
+      "reg",
+      BSP_MICROBLAZE_FPGA_TIMER_BASE
+    );
+  irq = try_get_prop_from_device_tree(
+    "xlnx,xps-timer-1.00.a",
+    "interrupts",
+    0
+  );
+  microblaze_tm27_irq = irq;
+
+  /* Stop the counter and clear a pending interrupt */
+  microblaze_tm27_timer->tcsr1 = MICROBLAZE_TIMER_TCSR0_T0INT;
+
+  rtems_interrupt_entry_initialize(
+    &microblaze_tm27_interrupt_entry,
+    handler,
+    NULL,
+    "tm27"
+  );
+  (void) rtems_interrupt_entry_install(
+    irq,
+    RTEMS_INTERRUPT_SHARED,
+    &microblaze_tm27_interrupt_entry
+  );
+}
+
+static inline void Cause_tm27_intr( void )
+{
+  microblaze_tm27_timer->tlr1 = MICROBLAZE_TM27_TICKS;
+  microblaze_tm27_timer->tcsr1 = MICROBLAZE_TIMER_TCSR0_LOAD0;
+  microblaze_tm27_timer->tcsr1 = MICROBLAZE_TIMER_TCSR0_ENIT0 |
+    MICROBLAZE_TIMER_TCSR0_ENT0 | MICROBLAZE_TIMER_TCSR0_UDT0;
+}
+
+static inline void Clear_tm27_intr( void )
+{
+  microblaze_tm27_timer->tcsr1 = MICROBLAZE_TIMER_TCSR0_T0INT;
+}
+
+static inline void Lower_tm27_intr( void )
+{
+  /*
+   * The dispatch acknowledges the interrupt controller only after the handler
+   * returned.  Acknowledge here so that the interrupt raised next is delivered
+   * as a nested interrupt.  The acknowledge of the dispatch is then a no-op.
+   */
+  microblaze_tm27_intc->iar = UINT32_C( 1 ) << microblaze_tm27_irq;
+  _ISR_Set_level( 0 );
+}
 
 #endif /* __tm27_h */
