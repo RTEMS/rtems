@@ -278,7 +278,7 @@ static void compute_i8259_masks_from_prio (void)
   rtems_interrupt_lock_release(&rtems_i8259_access_lock, &lock_context);
 }
 
-static inline bool bsp_interrupt_vector_is_valid(rtems_vector_number vector)
+static inline bool is_i8259a_vector(rtems_vector_number vector)
 {
   return BSP_i8259a_irq_valid((const rtems_irq_number) vector);
 }
@@ -353,6 +353,11 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
 rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+
+  if (!is_i8259a_vector(vector)) {
+    return RTEMS_UNSATISFIED;
+  }
+
   BSP_irq_enable_at_i8259a(vector);
   return RTEMS_SUCCESSFUL;
 }
@@ -360,6 +365,11 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
 rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+
+  if (!is_i8259a_vector(vector)) {
+    return RTEMS_UNSATISFIED;
+  }
+
   BSP_irq_disable_at_i8259a(vector);
   return RTEMS_SUCCESSFUL;
 }
