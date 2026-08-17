@@ -1,13 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-/**
- * @file
- *
- * @brief CPU Port Implementation API
- */
-
 /*
- * Copyright (c) 2013 embedded brains GmbH & Co. KG
+ * Copyright (C) 2026 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,66 +25,45 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _RTEMS_SCORE_CPUIMPL_H
-#define _RTEMS_SCORE_CPUIMPL_H
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
-#include <rtems/score/cpu.h>
+#include <rtems/asm.h>
+#include <rtems/mips/iregdef.h>
 
-/**
- * @defgroup RTEMSScoreCPUMIPS MIPS
- *
- * @ingroup RTEMSScoreCPU
- *
- * @brief MIPS Architecture Support
- *
- * @{
+/*
+ * The caller saved registers of the ABI are v0, v1, a0 to a3 and t0 to t9.
+ * a0 arrives with the pattern and is clobbered last.
  */
 
-#define CPU_PER_CPU_CONTROL_SIZE 0
+	.set noreorder
 
-#define CPU_THREAD_LOCAL_STORAGE_VARIANT 10
+	.text
 
-#ifndef ASM
+FRAME(_CPU_Context_volatile_clobber,sp,0,ra)
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+.macro clobber_register reg, inc
+	addiu	\reg, a0, \inc
+.endm
 
-void _CPU_Context_volatile_clobber( uintptr_t pattern );
+	clobber_register	v0, 1
+	clobber_register	v1, 2
+	clobber_register	a1, 3
+	clobber_register	a2, 4
+	clobber_register	a3, 5
+	clobber_register	t0, 6
+	clobber_register	t1, 7
+	clobber_register	t2, 8
+	clobber_register	t3, 9
+	clobber_register	t4, 10
+	clobber_register	t5, 11
+	clobber_register	t6, 12
+	clobber_register	t7, 13
+	clobber_register	t8, 14
+	clobber_register	t9, 15
 
-void _CPU_Context_validate( uintptr_t pattern );
+	j	ra
+	 clobber_register	a0, 16
 
-static inline void _CPU_Instruction_illegal( void )
-{
-  __asm__ volatile ( ".word -1" );
-}
-
-static inline void _CPU_Instruction_no_operation( void )
-{
-  __asm__ volatile ( "nop" );
-}
-
-static inline void _CPU_Use_thread_local_storage(
-  const Context_Control *context
-)
-{
-  (void) context;
-}
-
-static inline void *_CPU_Get_TLS_thread_pointer(
-  const Context_Control *context
-)
-{
-  (void) context;
-  return NULL;
-}
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif /* ASM */
-
-/** @} */
-
-#endif /* _RTEMS_SCORE_CPUIMPL_H */
+ENDFRAME(_CPU_Context_volatile_clobber)
