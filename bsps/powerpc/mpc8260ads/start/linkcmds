@@ -108,7 +108,7 @@ SECTIONS
     KEEP (*(.dtors))
 
     /* Exception frame info */
-    *(.eh_frame)
+    KEEP (*(.eh_frame))
 
     /* Miscellaneous read-only data */
     _rodata_start = . ;

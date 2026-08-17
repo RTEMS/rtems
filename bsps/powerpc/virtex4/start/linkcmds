@@ -130,7 +130,7 @@ SECTIONS
                     } > RAM
 
   /* Exception frame info */
-  .eh_frame       : { *(.eh_frame .eh_frame.*)                         } > RAM
+  .eh_frame       : { KEEP (*(.eh_frame .eh_frame.*))                  } > RAM
   .eh_frame_hdr   : { *(.eh_frame_hdr)                                 } > RAM
 
   /*  Declares where the .text section ends */
