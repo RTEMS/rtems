@@ -142,7 +142,7 @@ extern "C" {
 /* 24-30 reserved */
 #define MIPS_EXCEPTION_VCED             MIPS_EXCEPTION_BASE+31
 
-#define MIPS_INTERRUPT_BASE             MIPS_EXCEPTION_BASE+32
+#define MIPS_INTERRUPT_BASE             (MIPS_EXCEPTION_BASE + 32)
 
 /*
  *  Some macros to access registers
