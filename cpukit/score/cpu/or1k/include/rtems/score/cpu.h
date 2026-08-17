@@ -280,12 +280,13 @@ static inline uint32_t or1k_interrupt_disable( void )
 
 static inline void or1k_interrupt_enable(uint32_t level)
 {
-  uint32_t sr;
-
-  /* Enable interrupts and restore rs */
-  sr = level | CPU_OR1K_SPR_SR_IEE | CPU_OR1K_SPR_SR_TEE;
-  _OR1K_mtspr(CPU_OR1K_SPR_SR, sr);
-
+  /*
+   * Restore the supervision register which or1k_interrupt_disable() returned.
+   * Enabling the interrupts unconditionally here would leave them enabled
+   * after a critical section which ran with them disabled, and system
+   * initialization runs that way.
+   */
+  _OR1K_mtspr(CPU_OR1K_SPR_SR, level);
 }
 
 #define _CPU_ISR_Disable( _level ) \
