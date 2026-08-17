@@ -41,8 +41,38 @@ extern "C" {
 #endif
 
 #ifndef ASM
+  #include <stdint.h>
+
   void lapic_timer_install_handler(void);
   void amd64_clock_driver_initialize(void);
+
+  /**
+   * @brief Returns the frequency of the time stamp counter.
+   *
+   * The counter is calibrated against the PIT together with the local APIC
+   * timer, so the value is available once the APIC is initialized.
+   *
+   * @return The frequency in Hz.
+   */
+  uint64_t amd64_tsc_frequency(void);
+
+  /**
+   * @brief Reads the time stamp counter.
+   *
+   * The counter is free running and counts up, so it needs no interrupt to
+   * carry a period and it never runs backwards.
+   *
+   * @return The value of the counter.
+   */
+  static inline uint64_t amd64_rdtsc(void)
+  {
+    uint32_t low;
+    uint32_t high;
+
+    __asm__ volatile ("rdtsc" : "=a" (low), "=d" (high));
+
+    return ((uint64_t) high << 32) | low;
+  }
 #endif
 
 #ifdef __cplusplus

@@ -56,7 +56,7 @@ static uint32_t amd64_clock_get_timecount(struct timecounter *tc)
 {
   (void) tc;
 
-  return Clock_driver_ticks;
+  return (uint32_t) amd64_rdtsc();
 }
 
 static void lapic_timer_isr(void *param)
@@ -103,9 +103,17 @@ void amd64_clock_driver_initialize(void)
   lapic_timer_enable(lapic_reload_value);
 #endif
 
+  /*
+   * The time stamp counter is free running, so it needs no interrupt to carry
+   * a period and a reader never sees it go backwards.  The local APIC timer
+   * would offer the same resolution, but its count restarts with every clock
+   * tick and the acknowledge of the tick happens before the handlers run, so
+   * a reader between the restart and the tick handler cannot tell whether a
+   * period has to be added.
+   */
   amd64_clock_tc.tc_get_timecount = amd64_clock_get_timecount;
   amd64_clock_tc.tc_counter_mask = 0xffffffff;
-  amd64_clock_tc.tc_frequency = irq_ticks_per_sec;
+  amd64_clock_tc.tc_frequency = (uint32_t) amd64_tsc_frequency();
   amd64_clock_tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
   rtems_timecounter_install(&amd64_clock_tc);
 }
