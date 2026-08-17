@@ -42,6 +42,7 @@ source:
 - bsps/mips/jmr3904/btimer/btimer.c
 - bsps/mips/jmr3904/clock/clockdrv.c
 - bsps/mips/jmr3904/console/console-io.c
+- bsps/mips/jmr3904/irq/irq.c
 - bsps/mips/jmr3904/irq/vectorisrs.c
 - bsps/mips/jmr3904/start/bspstart.c
 - bsps/mips/shared/irq/installisrentries.c

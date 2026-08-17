@@ -52,6 +52,7 @@ source:
 - bsps/mips/shared/irq/i8259.c
 - bsps/mips/shared/irq/installisrentries.c
 - bsps/mips/shared/irq/irq.c
+- bsps/mips/shared/irq/irqstubs.c
 - bsps/mips/shared/irq/isr_entries.S
 - bsps/mips/shared/irq/vectorexceptions.c
 - bsps/mips/shared/start/idttlb.S

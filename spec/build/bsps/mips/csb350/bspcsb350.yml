@@ -46,6 +46,7 @@ source:
 - bsps/mips/shared/irq/installisrentries.c
 - bsps/mips/shared/irq/interruptmask.c
 - bsps/mips/shared/irq/irq.c
+- bsps/mips/shared/irq/irqstubs.c
 - bsps/mips/shared/irq/isr_entries.S
 - bsps/mips/shared/irq/vectorexceptions.c
 - bsps/shared/cache/nocache.c
