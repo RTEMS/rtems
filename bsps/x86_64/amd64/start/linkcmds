@@ -40,6 +40,8 @@ SECTIONS
 /*  .multiboot2_header          : { *(.multiboot2_header) }*/
   .interp         : { *(.interp) }
   .note.gnu.build-id : { *(.note.gnu.build-id) }
+  /* Publishes the x86/HVM direct boot entry point */
+  .note.Xen : { KEEP (*(.note.Xen)) }
   .hash           : { *(.hash) }
   .gnu.hash       : { *(.gnu.hash) }
   .dynsym         : { *(.dynsym) }

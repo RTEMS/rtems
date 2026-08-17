@@ -19,4 +19,5 @@ source:
 - bsps/x86_64/amd64/clock/clock.c
 - bsps/x86_64/amd64/console/console.c
 - bsps/x86_64/amd64/start/freebsd_loader.c
+- bsps/x86_64/amd64/start/pvh.c
 type: build

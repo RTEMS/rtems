@@ -16,6 +16,7 @@ install:
   - bsps/x86_64/amd64/include/freebsd_loader.h
   - bsps/x86_64/amd64/include/gdt.h
   - bsps/x86_64/amd64/include/pic.h
+  - bsps/x86_64/amd64/include/pvh.h
   - bsps/x86_64/amd64/include/start.h
 - destination: ${BSP_INCLUDEDIR}/acpi
   source:

@@ -155,4 +155,148 @@ _multiboot2_magic:
 _multiboot2_info_ptr:
         .quad   0
 
+#else /* !BSP_MULTIBOOT_SUPPORT */
+
+/*
+ * Virtual machine monitors such as Qemu start a kernel through the x86/HVM
+ * direct boot ABI.  The entry point of this protocol is published by an ELF
+ * note.  The processor is in 32-bit protected mode with paging disabled and
+ * %ebx holds the physical address of the boot information.  Long mode must be
+ * established before the common start-up code can run.
+ */
+
+#define XEN_ELFNOTE_PHYS32_ENTRY 18
+
+#define PVH_PAGE_SIZE 4096
+
+/* One first level, one second level and four third level tables */
+#define PVH_PAGE_TABLE_SIZE 24576
+#define PVH_PAGE_TABLE_DWORDS 6144
+#define PVH_SECOND_LEVEL_OFFSET 4096
+#define PVH_THIRD_LEVEL_OFFSET 8192
+#define PVH_THIRD_LEVEL_COUNT 4
+
+#define PVH_PAGE_PRESENT_WRITE 0x3
+#define PVH_PAGE_PRESENT_WRITE_LARGE 0x83
+#define PVH_LARGE_PAGE_SIZE 0x200000
+
+/* Four third level tables identity map the first 4 GiB */
+#define PVH_LARGE_PAGE_COUNT 2048
+
+/* Paging and the monitor coprocessor bit required by SSE */
+#define PVH_CR0_PG_MP 0x80000002
+
+/* Physical address extension and the SSE support of the operating system */
+#define PVH_CR4_PAE_OSFXSR_OSXMMEXCPT 0x620
+
+#define PVH_MSR_EFER 0xc0000080
+#define PVH_EFER_LME 0x100
+
+	.section	.note.Xen,"a",@note
+	.p2align	2
+	.long		4
+	.long		8
+	.long		XEN_ELFNOTE_PHYS32_ENTRY
+	.asciz		"Xen"
+	.p2align	2
+	.quad		_pvh_start
+	.p2align	2
+
+	.section	.text._pvh_start,"ax",@progbits
+	.code32
+	.p2align 4,,15
+	.globl	_pvh_start
+	.type	_pvh_start, @function
+_pvh_start:
+	cli
+	cld
+
+	/* The boot information is evaluated once long mode is active */
+	movl	%ebx, pvh_start_info_address
+
+	/* Clear the temporary page tables */
+	movl	$pvh_page_tables, %edi
+	movl	$PVH_PAGE_TABLE_DWORDS, %ecx
+	xorl	%eax, %eax
+	rep	stosl
+
+	/* The first level table maps the single second level table */
+	movl	$pvh_page_tables, %edi
+	leal	PVH_SECOND_LEVEL_OFFSET(%edi), %eax
+	orl	$PVH_PAGE_PRESENT_WRITE, %eax
+	movl	%eax, (%edi)
+
+	/* The second level table maps the four third level tables */
+	leal	PVH_SECOND_LEVEL_OFFSET(%edi), %esi
+	leal	PVH_THIRD_LEVEL_OFFSET(%edi), %eax
+	orl	$PVH_PAGE_PRESENT_WRITE, %eax
+	movl	$PVH_THIRD_LEVEL_COUNT, %ecx
+1:
+	movl	%eax, (%esi)
+	addl	$PVH_PAGE_SIZE, %eax
+	addl	$8, %esi
+	loop	1b
+
+	/* The third level tables identity map memory with large pages */
+	leal	PVH_THIRD_LEVEL_OFFSET(%edi), %esi
+	movl	$PVH_PAGE_PRESENT_WRITE_LARGE, %eax
+	movl	$PVH_LARGE_PAGE_COUNT, %ecx
+2:
+	movl	%eax, (%esi)
+	addl	$PVH_LARGE_PAGE_SIZE, %eax
+	addl	$8, %esi
+	loop	2b
+
+	movl	%edi, %cr3
+
+	/*
+	 * The physical address extension is mandatory for long mode.  The
+	 * compiler uses SSE instructions, so enable them here since no boot
+	 * loader did it for us.
+	 */
+	movl	%cr4, %eax
+	orl	$PVH_CR4_PAE_OSFXSR_OSXMMEXCPT, %eax
+	movl	%eax, %cr4
+
+	/* Enable long mode */
+	movl	$PVH_MSR_EFER, %ecx
+	rdmsr
+	orl	$PVH_EFER_LME, %eax
+	wrmsr
+
+	/* Paging activates long mode */
+	movl	%cr0, %eax
+	orl	$PVH_CR0_PG_MP, %eax
+	movl	%eax, %cr0
+
+	/* Only our own descriptor table provides a 64-bit code segment */
+	lgdt	amd64_gdt_descriptor
+	ljmpl	$GDT_CODE_SEG_OFFSET, $_pvh_start_64
+
+	.code64
+_pvh_start_64:
+	movw	$GDT_DATA_SEG_OFFSET, %ax
+	movw	%ax, %ds
+	movw	%ax, %es
+	movw	%ax, %ss
+	movw	%ax, %fs
+
+	movabsq	$_ISR_Stack_area_begin, %rsp
+	addq	$_ISR_Stack_size, %rsp
+
+	xorl	%edi, %edi
+	movabsq	$boot_card, %rax
+	call	*%rax
+
+	.data
+	.p2align	3
+	.globl	pvh_start_info_address
+pvh_start_info_address:
+	.quad	0
+
+	.section	.bss.pvh_page_tables,"aw",@nobits
+	.p2align	12
+pvh_page_tables:
+	.space	PVH_PAGE_TABLE_SIZE
+
 #endif

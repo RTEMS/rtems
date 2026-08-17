@@ -41,6 +41,7 @@
 #include <libcpu/page.h>
 #include <bsp/irq-generic.h>
 #include <multiboot2impl.h>
+#include <pvh.h>
 #include <rtems/score/assert.h>
 
 #if defined(BSP_USE_EFI_BOOT_SERVICES) && !defined(BSP_MULTIBOOT_SUPPORT)
@@ -52,6 +53,8 @@ void bsp_start(void)
 #ifdef BSP_MULTIBOOT_SUPPORT
    process_multiboot2_info();
    if (!uefi_bootservices_running()) {
+#else
+   pvh_retrieve_boot_information();
 #endif
      paging_init();
      bool acpi_table_result = acpi_tables_initialize();
