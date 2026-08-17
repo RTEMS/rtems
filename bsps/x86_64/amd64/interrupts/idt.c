@@ -39,6 +39,7 @@
 #include <rtems.h>
 #include <rtems/score/idt.h>
 #include <rtems/score/basedefs.h>
+#include <rtems/score/interr.h>
 #include <rtems/score/x86_64.h>
 #include <rtems/score/cpuimpl.h>
 #include <rtems/score/processormaskimpl.h>
@@ -57,42 +58,51 @@ struct idt_record amd64_idtr = {
 };
 
 /**
+ * Exception vectors of the processor
+ * @see EXCEPTION_ENTRY
+ */
+static const uintptr_t amd64_exceptions[BSP_VECTOR_APIC_FIRST] = {
+  (uintptr_t) amd64_exception_prologue_0,
+  (uintptr_t) amd64_exception_prologue_1,
+  (uintptr_t) amd64_exception_prologue_2,
+  (uintptr_t) amd64_exception_prologue_3,
+  (uintptr_t) amd64_exception_prologue_4,
+  (uintptr_t) amd64_exception_prologue_5,
+  (uintptr_t) amd64_exception_prologue_6,
+  (uintptr_t) amd64_exception_prologue_7,
+  (uintptr_t) amd64_exception_prologue_8,
+  (uintptr_t) amd64_exception_prologue_9,
+  (uintptr_t) amd64_exception_prologue_10,
+  (uintptr_t) amd64_exception_prologue_11,
+  (uintptr_t) amd64_exception_prologue_12,
+  (uintptr_t) amd64_exception_prologue_13,
+  (uintptr_t) amd64_exception_prologue_14,
+  (uintptr_t) amd64_exception_prologue_15,
+  (uintptr_t) amd64_exception_prologue_16,
+  (uintptr_t) amd64_exception_prologue_17,
+  (uintptr_t) amd64_exception_prologue_18,
+  (uintptr_t) amd64_exception_prologue_19,
+  (uintptr_t) amd64_exception_prologue_20,
+  (uintptr_t) amd64_exception_prologue_21,
+  (uintptr_t) amd64_exception_prologue_22,
+  (uintptr_t) amd64_exception_prologue_23,
+  (uintptr_t) amd64_exception_prologue_24,
+  (uintptr_t) amd64_exception_prologue_25,
+  (uintptr_t) amd64_exception_prologue_26,
+  (uintptr_t) amd64_exception_prologue_27,
+  (uintptr_t) amd64_exception_prologue_28,
+  (uintptr_t) amd64_exception_prologue_29,
+  (uintptr_t) amd64_exception_prologue_30,
+  (uintptr_t) amd64_exception_prologue_31
+};
+
+/**
  * IRQs that the RTEMS Interrupt Manager will manage
  * @see DISTINCT_INTERRUPT_ENTRY
  */
-static uintptr_t rtemsIRQs[BSP_IRQ_VECTOR_NUMBER] = {
-  (uintptr_t) rtems_irq_prologue_0,
-  (uintptr_t) rtems_irq_prologue_1,
-  (uintptr_t) rtems_irq_prologue_2,
-  (uintptr_t) rtems_irq_prologue_3,
-  (uintptr_t) rtems_irq_prologue_4,
-  (uintptr_t) rtems_irq_prologue_5,
-  (uintptr_t) rtems_irq_prologue_6,
-  (uintptr_t) rtems_irq_prologue_7,
-  (uintptr_t) rtems_irq_prologue_8,
-  (uintptr_t) rtems_irq_prologue_9,
-  (uintptr_t) rtems_irq_prologue_10,
-  (uintptr_t) rtems_irq_prologue_11,
-  (uintptr_t) rtems_irq_prologue_12,
-  (uintptr_t) rtems_irq_prologue_13,
-  (uintptr_t) rtems_irq_prologue_14,
-  (uintptr_t) rtems_irq_prologue_15,
-  (uintptr_t) rtems_irq_prologue_16,
-  (uintptr_t) rtems_irq_prologue_17,
-  (uintptr_t) rtems_irq_prologue_18,
-  (uintptr_t) rtems_irq_prologue_19,
-  (uintptr_t) rtems_irq_prologue_20,
-  (uintptr_t) rtems_irq_prologue_21,
-  (uintptr_t) rtems_irq_prologue_22,
-  (uintptr_t) rtems_irq_prologue_23,
-  (uintptr_t) rtems_irq_prologue_24,
-  (uintptr_t) rtems_irq_prologue_25,
-  (uintptr_t) rtems_irq_prologue_26,
-  (uintptr_t) rtems_irq_prologue_27,
-  (uintptr_t) rtems_irq_prologue_28,
-  (uintptr_t) rtems_irq_prologue_29,
-  (uintptr_t) rtems_irq_prologue_30,
-  (uintptr_t) rtems_irq_prologue_31,
+static const uintptr_t rtemsIRQs[
+  BSP_IRQ_VECTOR_NUMBER - BSP_VECTOR_APIC_FIRST
+] = {
   (uintptr_t) rtems_irq_prologue_32,
   (uintptr_t) rtems_irq_prologue_33,
   (uintptr_t) rtems_irq_prologue_34
@@ -142,27 +152,47 @@ void amd64_install_raw_interrupt(
 void amd64_dispatch_isr(rtems_vector_number vector)
 {
   /*
-   * The vectors below the first Local APIC vector are raised by the processor
-   * itself and are not acknowledged at the Local APIC.
-   *
    * Acknowledge before the handlers run.  All interrupt sources of this BSP
    * are edge triggered, so the request is not raised again by the
    * acknowledge.  It clears the in service bit and thus the processor
    * priority, which is what allows a handler to enable interrupts and take a
    * nested interrupt of the same vector.
    */
-  if (vector >= BSP_VECTOR_APIC_FIRST) {
-    lapic_eoi();
-  }
+  lapic_eoi();
 
   bsp_interrupt_handler_dispatch(vector);
+}
+
+void amd64_exception_handler(CPU_Exception_frame *frame)
+{
+  _Terminate(RTEMS_FATAL_SOURCE_EXCEPTION, (rtems_fatal_code) frame);
+}
+
+bool bsp_interrupt_is_valid_vector(rtems_vector_number vector)
+{
+  /*
+   * The vectors below the first Local APIC vector are the exception vectors of
+   * the processor.  They terminate the system and are not vectors of the
+   * interrupt manager.
+   */
+  return vector >= BSP_VECTOR_APIC_FIRST &&
+    vector < (rtems_vector_number) BSP_INTERRUPT_VECTOR_COUNT;
 }
 
 void bsp_interrupt_facility_initialize(void)
 {
   uintptr_t old;
-  for (uint32_t i = 0; i < BSP_IRQ_VECTOR_NUMBER; i++) {
-    amd64_install_raw_interrupt(i, rtemsIRQs[i], &old);
+
+  for (uint32_t i = 0; i < BSP_VECTOR_APIC_FIRST; i++) {
+    amd64_install_raw_interrupt(i, amd64_exceptions[i], &old);
+  }
+
+  for (uint32_t i = BSP_VECTOR_APIC_FIRST; i < BSP_IRQ_VECTOR_NUMBER; i++) {
+    amd64_install_raw_interrupt(
+      i,
+      rtemsIRQs[i - BSP_VECTOR_APIC_FIRST],
+      &old
+    );
   }
 
   lidt(&amd64_idtr);
@@ -230,11 +260,6 @@ rtems_status_code bsp_interrupt_is_pending(
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(pending != NULL);
 
-  if (vector < BSP_VECTOR_APIC_FIRST) {
-    *pending = false;
-    return RTEMS_UNSATISFIED;
-  }
-
   *pending = lapic_is_pending(vector);
   return RTEMS_SUCCESSFUL;
 }
@@ -242,10 +267,6 @@ rtems_status_code bsp_interrupt_is_pending(
 rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-
-  if (vector < BSP_VECTOR_APIC_FIRST) {
-    return RTEMS_UNSATISFIED;
-  }
 
   lapic_raise_self(vector);
   return RTEMS_SUCCESSFUL;
@@ -309,10 +330,6 @@ rtems_status_code bsp_interrupt_raise_on(
 )
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-
-  if (vector < BSP_VECTOR_APIC_FIRST) {
-    return RTEMS_UNSATISFIED;
-  }
 
   lapic_send_ipi(cpu_index, (uint8_t) vector);
   return RTEMS_SUCCESSFUL;

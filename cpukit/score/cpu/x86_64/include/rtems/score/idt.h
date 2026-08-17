@@ -29,6 +29,7 @@
 #define _RTEMS_SCORE_IDT_H
 
 #include <rtems/score/basedefs.h>
+#include <rtems/score/cpu.h>
 #include <rtems/rtems/intr.h>
 
 #ifdef __cplusplus
@@ -101,39 +102,47 @@ void amd64_install_raw_interrupt(
  */
 void amd64_dispatch_isr(rtems_vector_number vector);
 
+/*
+ * Called by the exception prologues with the frame they built on the stack of
+ * the interrupted context.  Terminates the system.
+ */
+RTEMS_NO_RETURN void amd64_exception_handler(CPU_Exception_frame *frame);
+
+/* Defined in exception.S */
+extern void amd64_exception_prologue_0(void);
+extern void amd64_exception_prologue_1(void);
+extern void amd64_exception_prologue_2(void);
+extern void amd64_exception_prologue_3(void);
+extern void amd64_exception_prologue_4(void);
+extern void amd64_exception_prologue_5(void);
+extern void amd64_exception_prologue_6(void);
+extern void amd64_exception_prologue_7(void);
+extern void amd64_exception_prologue_8(void);
+extern void amd64_exception_prologue_9(void);
+extern void amd64_exception_prologue_10(void);
+extern void amd64_exception_prologue_11(void);
+extern void amd64_exception_prologue_12(void);
+extern void amd64_exception_prologue_13(void);
+extern void amd64_exception_prologue_14(void);
+extern void amd64_exception_prologue_15(void);
+extern void amd64_exception_prologue_16(void);
+extern void amd64_exception_prologue_17(void);
+extern void amd64_exception_prologue_18(void);
+extern void amd64_exception_prologue_19(void);
+extern void amd64_exception_prologue_20(void);
+extern void amd64_exception_prologue_21(void);
+extern void amd64_exception_prologue_22(void);
+extern void amd64_exception_prologue_23(void);
+extern void amd64_exception_prologue_24(void);
+extern void amd64_exception_prologue_25(void);
+extern void amd64_exception_prologue_26(void);
+extern void amd64_exception_prologue_27(void);
+extern void amd64_exception_prologue_28(void);
+extern void amd64_exception_prologue_29(void);
+extern void amd64_exception_prologue_30(void);
+extern void amd64_exception_prologue_31(void);
+
 /* Defined in isr_handler.S */
-extern void rtems_irq_prologue_0(void);
-extern void rtems_irq_prologue_1(void);
-extern void rtems_irq_prologue_2(void);
-extern void rtems_irq_prologue_3(void);
-extern void rtems_irq_prologue_4(void);
-extern void rtems_irq_prologue_5(void);
-extern void rtems_irq_prologue_6(void);
-extern void rtems_irq_prologue_7(void);
-extern void rtems_irq_prologue_8(void);
-extern void rtems_irq_prologue_9(void);
-extern void rtems_irq_prologue_10(void);
-extern void rtems_irq_prologue_11(void);
-extern void rtems_irq_prologue_12(void);
-extern void rtems_irq_prologue_13(void);
-extern void rtems_irq_prologue_14(void);
-extern void rtems_irq_prologue_15(void);
-extern void rtems_irq_prologue_16(void);
-extern void rtems_irq_prologue_17(void);
-extern void rtems_irq_prologue_18(void);
-extern void rtems_irq_prologue_19(void);
-extern void rtems_irq_prologue_20(void);
-extern void rtems_irq_prologue_21(void);
-extern void rtems_irq_prologue_22(void);
-extern void rtems_irq_prologue_23(void);
-extern void rtems_irq_prologue_24(void);
-extern void rtems_irq_prologue_25(void);
-extern void rtems_irq_prologue_26(void);
-extern void rtems_irq_prologue_27(void);
-extern void rtems_irq_prologue_28(void);
-extern void rtems_irq_prologue_29(void);
-extern void rtems_irq_prologue_30(void);
-extern void rtems_irq_prologue_31(void);
 extern void rtems_irq_prologue_32(void);
 extern void rtems_irq_prologue_33(void);
 extern void rtems_irq_prologue_34(void);
