@@ -33,8 +33,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LIBBSP_GENERIC_OR1K_H
-#define LIBBSP_GENERIC_OR1K_H
+#ifndef LIBBSP_OR1K_GENERIC_OR1K_BSP_H
+#define LIBBSP_OR1K_GENERIC_OR1K_BSP_H
 
 /**
  * @addtogroup RTEMSBSPsOR1K
@@ -60,5 +60,5 @@ extern "C" {
 
 /** @} */
 
-#endif /* LIBBSP_GENERIC_OR1K_H */
+#endif /* LIBBSP_OR1K_GENERIC_OR1K_BSP_H */
 
