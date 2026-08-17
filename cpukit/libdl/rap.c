@@ -213,13 +213,31 @@ static void rtems_rap_get_rtl_error(void) {
       rtems_rtl_get_error(rap_.last_error, sizeof(rap_.last_error));
 }
 
+/*
+ * The caller must hold the lock.
+ */
+static void* rtems_rap_find_unprotected(const char* name) {
+  rtems_chain_node* node = rtems_chain_first(&rap_.apps);
+
+  while (!rtems_chain_is_tail(&rap_.apps, node)) {
+    rtems_rap_app* app = (rtems_rap_app*)node;
+    if (rtems_rap_match_name(app, name)) {
+      return app;
+    }
+    node = rtems_chain_next(node);
+  }
+
+  return NULL;
+}
+
+/*
+ * The caller must hold the lock.
+ */
 static void rtems_rap_set_error(int error, const char* format, ...) {
-  rtems_rap_data* rap = rtems_rap_lock();
   va_list ap;
   va_start(ap, format);
-  rap->last_errno = error;
-  vsnprintf(rap->last_error, sizeof(rap->last_error), format, ap);
-  rtems_rap_unlock();
+  rap_.last_errno = error;
+  vsnprintf(rap_.last_error, sizeof(rap_.last_error), format, ap);
   va_end(ap);
 }
 
@@ -237,7 +255,7 @@ bool rtems_rap_load(const char* name, int mode, int argc, const char* argv[]) {
   /*
    * See if the app has already been loaded.
    */
-  if (!rtems_rap_find(name)) {
+  if (!rtems_rap_find_unprotected(name)) {
     rtems_rap_app* app;
     rtems_rap_entry init;
     rtems_rap_entry fini;
@@ -309,7 +327,7 @@ bool rtems_rap_unload(const char* name) {
 
   rtems_rap_lock();
 
-  app = rtems_rap_find(name);
+  app = rtems_rap_find_unprotected(name);
 
   if (rap_verbose) {
     printf("rap: unloading '%s'\n", name);
@@ -342,23 +360,13 @@ bool rtems_rap_unload(const char* name) {
 }
 
 void* rtems_rap_find(const char* name) {
-  rtems_rap_data* rap = rtems_rap_lock();
-  rtems_chain_node* node;
+  void* app;
 
-  node = rtems_chain_first(&rap->apps);
-
-  while (!rtems_chain_is_tail(&rap->apps, node)) {
-    rtems_rap_app* app = (rtems_rap_app*)node;
-    if (rtems_rap_match_name(app, name)) {
-      rtems_rap_unlock();
-      return app;
-    }
-    node = rtems_chain_next(node);
-  }
-
+  rtems_rap_lock();
+  app = rtems_rap_find_unprotected(name);
   rtems_rap_unlock();
 
-  return NULL;
+  return app;
 }
 
 bool rtems_rap_iterate(rtems_rap_iterator iterator) {
