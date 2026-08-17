@@ -42,18 +42,48 @@
   #include <rtems/keyboard.h>
 #endif
 #include <bsp.h>
+#include <bsp/bspimpl.h>
 #include <libchip/serial.h>
 #include <libchip/ns16550.h>
+#include <libchip/ns16550_p.h>
 #include "../../shared/dev/serial/legacy-console.h"
 
-rtems_device_minor_number BSPPrintkPort = 0;
+#if USE_COM1_AS_CONSOLE
+rtems_device_minor_number BSPPrintkPort = BSP_CONSOLE_COM1;
+#else
+rtems_device_minor_number BSPPrintkPort = BSP_CONSOLE_VGA;
+#endif
 
 static bool serialInit;
 static bool serialOK;
 
+/*
+ * The console driver builds its port table with a memory allocation in
+ * bsp_start().  Everything it offers uses that table, so nothing of it works
+ * before the allocation, and a system which terminates in an early system
+ * initialization item would print nothing at all.  Drive the port directly
+ * until the table is there.  The port keeps the settings of the firmware,
+ * since programming it would need the same table.
+ */
+static bool early_write_polled(const console_tbl *port, char ch)
+{
+  uint8_t status;
+
+  if (port == NULL || port->deviceType != SERIAL_NS16550) {
+    return false;
+  }
+
+  do {
+    inport_byte(port->ulCtrlPort1 + NS16550_LINE_STATUS, status);
+  } while ((status & SP_LSR_THOLD) == 0);
+
+  outport_byte(port->ulDataPort + NS16550_TRANSMIT_BUFFER, ch);
+  return true;
+}
+
 static bool serialValid(console_tbl *port)
 {
-  if (port->pDeviceFns) {
+  if (port != NULL && port->pDeviceFns) {
     if (!serialInit) {
       serialOK = true;
       if (port->pDeviceFns->deviceProbe != NULL) {
@@ -82,8 +112,13 @@ void BSP_outch(char ch)
   #endif
 
   if ( !isVga ) {
-    console_tbl *port = Console_Port_Tbl[BSPPrintkPort];
-    if (serialValid(port)) {
+    console_tbl *port = pc386_console_port(BSPPrintkPort);
+
+    if (Console_Port_Tbl == NULL) {
+      if (early_write_polled(port, ch)) {
+        return;
+      }
+    } else if (serialValid(port)) {
       if (port->pDeviceFns->deviceWritePolled) {
         port->pDeviceFns->deviceWritePolled( BSPPrintkPort, ch );
       }
@@ -106,8 +141,8 @@ int BSP_inch(void)
 
   int result = -1;
 
-  if ( !isVga ) {
-    console_tbl *port = Console_Port_Tbl[BSPPrintkPort];
+  if ( !isVga && Console_Port_Tbl != NULL ) {
+    console_tbl *port = pc386_console_port(BSPPrintkPort);
     if (serialValid(port)) {
       if (port->pDeviceFns->deviceRead) {
         do {

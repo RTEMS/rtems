@@ -196,6 +196,37 @@ static console_tbl Legacy_Ports[] = {
 #define Legacy_Port_Count \
     (sizeof(Legacy_Ports)/sizeof(console_tbl))
 
+console_tbl *pc386_console_port(rtems_device_minor_number minor)
+{
+  if ( Console_Port_Tbl != NULL ) {
+    if ( minor < Console_Port_Count ) {
+      return Console_Port_Tbl[ minor ];
+    }
+
+    return NULL;
+  }
+
+  /*
+   * The console driver did not build the port table yet.  The static port set
+   * is what the driver starts from, so use it in the same order.
+   */
+#if BSP_ENABLE_VGA
+  if ( minor < Console_Configuration_Count ) {
+    return &Console_Configuration_Ports[ minor ];
+  }
+
+  minor -= Console_Configuration_Count;
+#endif
+
+#if BSP_ENABLE_COM1_COM4
+  if ( minor < Legacy_Port_Count ) {
+    return &Legacy_Ports[ minor ];
+  }
+#endif
+
+  return NULL;
+}
+
 void legacy_uart_probe(void)
 {
 #if BSP_ENABLE_COM1_COM4

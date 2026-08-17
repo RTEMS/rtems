@@ -37,6 +37,16 @@
 
 #include <rtems/pci.h>
 
+#include <libchip/serial.h>
+
+/*
+ * Get the console port of the minor number or NULL, if there is no such port.
+ * The console driver builds its port table with a memory allocation late in
+ * the system initialization.  This helper uses the statically defined ports
+ * until then, so that printk() works from the first character on.
+ */
+console_tbl *pc386_console_port(rtems_device_minor_number minor);
+
 /*
  * PCI Support Methods
  */

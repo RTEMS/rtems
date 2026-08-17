@@ -201,8 +201,13 @@ static inline const char *get_name(
 void pc386_parse_console_arguments(void)
 {
   rtems_device_minor_number minor;
-  rtems_device_minor_number minor_console = 0;
-  rtems_device_minor_number minor_printk = 0;
+#if USE_COM1_AS_CONSOLE
+  rtems_device_minor_number minor_console = BSP_CONSOLE_COM1;
+  rtems_device_minor_number minor_printk = BSP_CONSOLE_COM1;
+#else
+  rtems_device_minor_number minor_console = BSP_CONSOLE_VGA;
+  rtems_device_minor_number minor_printk = BSP_CONSOLE_VGA;
+#endif
 
   /*
    * Assume that if only --console is specified, that printk() should
