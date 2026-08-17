@@ -91,7 +91,6 @@ static void bsp_inter_processor_interrupt(void* arg)
   (void) arg;
 
   _SMP_Inter_processor_interrupt_handler(_Per_CPU_Get());
-  lapic_eoi();
 }
 
 void _CPU_SMP_Prepare_start_multitasking(void)

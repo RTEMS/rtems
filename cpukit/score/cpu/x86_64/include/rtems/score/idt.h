@@ -46,6 +46,12 @@ extern "C" {
 
 /* Target vector number for spurious IRQs */
 #define BSP_VECTOR_SPURIOUS    0xFF
+/*
+ * First vector number delivered by the Local APIC.  The vectors below are
+ * raised by the processor itself and must not be acknowledged at the Local
+ * APIC.
+ */
+#define BSP_VECTOR_APIC_FIRST  32
 /* Target vector number for the APIC timer */
 #define BSP_VECTOR_APIC_TIMER  32
 /* Target vector number for the APIC timer */

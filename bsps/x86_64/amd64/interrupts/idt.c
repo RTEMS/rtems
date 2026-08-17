@@ -140,6 +140,20 @@ void amd64_install_raw_interrupt(
 
 void amd64_dispatch_isr(rtems_vector_number vector)
 {
+  /*
+   * The vectors below the first Local APIC vector are raised by the processor
+   * itself and are not acknowledged at the Local APIC.
+   *
+   * Acknowledge before the handlers run.  All interrupt sources of this BSP
+   * are edge triggered, so the request is not raised again by the
+   * acknowledge.  It clears the in service bit and thus the processor
+   * priority, which is what allows a handler to enable interrupts and take a
+   * nested interrupt of the same vector.
+   */
+  if (vector >= BSP_VECTOR_APIC_FIRST) {
+    lapic_eoi();
+  }
+
   bsp_interrupt_handler_dispatch(vector);
 }
 

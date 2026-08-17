@@ -62,7 +62,6 @@ static uint32_t amd64_clock_get_timecount(struct timecounter *tc)
 static void lapic_timer_isr(void *param)
 {
   Clock_isr(param);
-  lapic_eoi();
 }
 
 #ifdef RTEMS_SMP
