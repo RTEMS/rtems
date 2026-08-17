@@ -42,6 +42,9 @@
 #include <rtems/mips/iregdef.h>
 #include <rtems/mips/idtcpu.h>
 #include <rtems/bspIo.h>
+#include <rtems/score/cpuimpl.h>
+#include <rtems/score/percpu.h>
+#include <rtems/score/thread.h>
 #include <bsp/irq-generic.h>
 
 struct regdef
@@ -126,6 +129,57 @@ void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
 }
 
 /*
+ * Encoding of rdhwr rt, $29 with the rt field masked out.  The instruction
+ * reads the User Local Register, which holds the thread pointer of the
+ * thread-local storage area.  The compiler emits it for every access to a
+ * thread-local object.
+ */
+#define MIPS_RDHWR_ULR      UINT32_C( 0x7c00e83b )
+#define MIPS_RDHWR_ULR_MASK UINT32_C( 0xffe0f83f )
+
+/*
+ * rdhwr exists since MIPS32r2.  Earlier processors raise a reserved
+ * instruction exception instead, so the thread pointer is supplied here.
+ * This mirrors what other operating systems do for these processors.
+ */
+static bool mips_emulate_rdhwr_ulr( CPU_Interrupt_frame *frame )
+{
+  uint32_t              instruction;
+  unsigned int          rt;
+  __MIPS_REGISTER_TYPE *registers;
+
+  /*
+   * In a branch delay slot the exception program counter references the
+   * branch, so the faulting instruction cannot be resumed by advancing it.
+   */
+  if ( ( frame->cause & CAUSE_BD ) != 0 ) {
+    return false;
+  }
+
+  instruction = *(const uint32_t *) (uintptr_t) frame->epc;
+
+  if ( ( instruction & MIPS_RDHWR_ULR_MASK ) != MIPS_RDHWR_ULR ) {
+    return false;
+  }
+
+  rt = ( instruction >> 16 ) & 0x1f;
+
+  if ( rt != 0 ) {
+    /*
+     * The general purpose registers occupy the first 32 members of the
+     * interrupt frame in register number order.
+     */
+    registers = (__MIPS_REGISTER_TYPE *) frame;
+    registers[ rt ] = (__MIPS_REGISTER_TYPE) (uintptr_t)
+      _CPU_Get_TLS_thread_pointer( &_Thread_Get_executing()->Registers );
+  }
+
+  frame->epc += 4;
+
+  return true;
+}
+
+/*
  *  There are constants defined for these but they should basically
  *  all be close to the same set.
  */
@@ -139,13 +193,15 @@ CPU_Exception_frame *mips_exception_frame;
 
 void mips_vector_exceptions( CPU_Interrupt_frame *frame )
 {
-  (void) frame;
-
   uint32_t   cause;
   uint32_t   exc;
 
   mips_get_cause( cause );
   exc = (cause >> 2) & 0x1f;
+
+  if ( exc == MIPS_EXCEPTION_RI && mips_emulate_rdhwr_ulr( frame ) ) {
+    return;
+  }
 
   mips_exception_frame = frame;
   bsp_interrupt_handler_dispatch( exc );
