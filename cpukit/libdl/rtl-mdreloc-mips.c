@@ -38,6 +38,7 @@
 #include <errno.h>
 #include <inttypes.h>
 #include <stdio.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 
@@ -138,6 +139,23 @@ rtems_rtl_elf_rel_status rtems_rtl_elf_relocate_rel_tramp(
   return rtems_rtl_elf_rel_no_error;
 }
 
+/*
+ * A data relocation may target any byte offset.  The debug sections and the
+ * .eh_frame of an object pack their pointers without alignment, and this
+ * processor takes an address error exception for an unaligned load or store.
+ * Every relocation below other than R_MIPS_32 targets an instruction and is
+ * therefore aligned by construction.
+ */
+static Elf_Addr rtems_rtl_mips_load(const Elf_Addr* where) {
+  Elf_Addr value;
+  memcpy(&value, where, sizeof(value));
+  return value;
+}
+
+static void rtems_rtl_mips_store(Elf_Addr* where, Elf_Addr value) {
+  memcpy(where, &value, sizeof(value));
+}
+
 #define RTEMS_RTL_MIPS_HI16_MAX (128)
 
 static struct {
@@ -169,7 +187,7 @@ rtems_rtl_elf_relocate_rel(rtems_rtl_obj* obj, const Elf_Rel* rel,
   uint32_t t;
 
   where = (Elf_Addr*)(sect->base + rel->r_offset);
-  addend = *where;
+  addend = rtems_rtl_mips_load(where);
 
   if (syminfo == STT_SECTION) {
     local = 1;
@@ -201,11 +219,12 @@ rtems_rtl_elf_relocate_rel(rtems_rtl_obj* obj, const Elf_Rel* rel,
   case R_TYPE(32):
     tmp = symvalue + addend;
     if (addend != tmp) {
-      *where = tmp;
+      rtems_rtl_mips_store(where, tmp);
     }
 
     if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
-      printf("rtl: R_MIPS_32 %p @ %p in %s\n", (void*)*(where), where,
+      printf("rtl: R_MIPS_32 %p @ %p in %s\n",
+             (void*)rtems_rtl_mips_load(where), where,
              rtems_rtl_obj_oname(obj));
     }
     break;
@@ -317,7 +336,7 @@ rtems_rtl_elf_relocate_rel(rtems_rtl_obj* obj, const Elf_Rel* rel,
            ", offset = %p, "
            "contents = %p\n",
            ELF_R_SYM(rel->r_info), (uint32_t)ELF_R_TYPE(rel->r_info),
-           (void*)rel->r_offset, (void*)*where);
+           (void*)rel->r_offset, (void*)rtems_rtl_mips_load(where));
     rtems_rtl_set_error(EINVAL,
                         "%s: Unsupported relocation type %" PRIu32
                         "in non-PLT relocations",
