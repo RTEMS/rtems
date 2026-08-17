@@ -5,12 +5,11 @@
  *
  * @ingroup RTEMSBSPsAArch64A53
  *
- * @brief Core BSP definitions
+ * @brief This source file contains the MMU and cache setup.
  */
 
 /*
- * Copyright (C) 2020 On-Line Applications Research Corporation (OAR)
- * Written by Kinsey Moore <kinsey.moore@oarcorp.com>
+ * Copyright (C) 2026 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -34,46 +33,22 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LIBBSP_AARCH64_A53_QEMU_BSP_H
-#define LIBBSP_AARCH64_A53_QEMU_BSP_H
-
-/**
- * @addtogroup RTEMSBSPsAArch64
- *
- * @{
- */
-
-#include <bspopts.h>
-
-#ifndef ASM
-
-#include <bsp/default-initial-extension.h>
+#include <bsp.h>
+#include <bsp/aarch64-mmu.h>
 #include <bsp/start.h>
+#include <libcpu/mmu-vmsav8-64.h>
 
-#include <rtems.h>
+BSP_START_TEXT_SECTION void a53_setup_mmu_and_cache( void )
+{
+  aarch64_mmu_control *control = &aarch64_mmu_instance;
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+  aarch64_mmu_setup();
 
-#define BSP_ARM_GIC_CPUIF_BASE 0x08010000
-#define BSP_ARM_GIC_DIST_BASE 0x08000000
-#define BSP_ARM_GIC_REDIST_BASE 0x080A0000
+  aarch64_mmu_setup_translation_table(
+    control,
+    &aarch64_mmu_config_table[ 0 ],
+    aarch64_mmu_config_table_size
+  );
 
-#define BSP_A53_QEMU_VPL011_BASE 0x9000000
-#define BSP_A53_QEMU_VPL011_LENGTH 0x1000
-
-/**
- * @brief Sets up the MMU translation table and enables the MMU and the caches.
- */
-BSP_START_TEXT_SECTION void a53_setup_mmu_and_cache( void );
-
-#ifdef __cplusplus
+  aarch64_mmu_enable( control );
 }
-#endif /* __cplusplus */
-
-#endif /* ASM */
-
-/** @} */
-
-#endif /* LIBBSP_AARCH64_A53_QEMU_BSP_H */

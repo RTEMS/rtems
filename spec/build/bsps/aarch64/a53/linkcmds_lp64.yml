@@ -30,7 +30,8 @@ content: |
    */
 
   MEMORY {
-    RAM       : ORIGIN = ${BSP_A53_RAM_BASE} + ${BSP_A53_LOAD_OFFSET}, LENGTH = ${BSP_A53_RAM_LENGTH} - ${BSP_A53_LOAD_OFFSET} - ${BSP_A53_NOCACHE_LENGTH}
+    RAM       : ORIGIN = ${BSP_A53_RAM_BASE} + ${BSP_A53_LOAD_OFFSET}, LENGTH = ${BSP_A53_RAM_LENGTH} - ${BSP_A53_LOAD_OFFSET} - ${BSP_A53_NOCACHE_LENGTH} - (0x1000 * ${AARCH64_MMU_TRANSLATION_TABLE_PAGES})
+    RAM_MMU   : ORIGIN = ${BSP_A53_RAM_BASE} + ${BSP_A53_RAM_LENGTH} - (0x1000 * ${AARCH64_MMU_TRANSLATION_TABLE_PAGES}) - ${BSP_A53_NOCACHE_LENGTH}, LENGTH = 0x1000 * ${AARCH64_MMU_TRANSLATION_TABLE_PAGES}
     NOCACHE   : ORIGIN = ${BSP_A53_RAM_BASE} + ${BSP_A53_RAM_LENGTH} - ${BSP_A53_NOCACHE_LENGTH}, LENGTH = ${BSP_A53_NOCACHE_LENGTH}
   }
 
@@ -57,6 +58,8 @@ content: |
   bsp_section_rwbarrier_align = DEFINED (bsp_section_rwbarrier_align) ? bsp_section_rwbarrier_align : 1M;
 
   bsp_vector_table_in_start_section = 1;
+  bsp_translation_table_base = ORIGIN (RAM_MMU);
+  bsp_translation_table_end = ORIGIN (RAM_MMU) + LENGTH (RAM_MMU);
 
   OUTPUT_FORMAT ("elf64-littleaarch64")
   OUTPUT_ARCH (aarch64)

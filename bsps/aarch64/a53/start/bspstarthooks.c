@@ -48,5 +48,14 @@ BSP_START_TEXT_SECTION void bsp_start_hook_1(void)
 {
   AArch64_start_set_vector_base();
   bsp_start_copy_sections();
+
+  /*
+   * Enable the MMU and the caches before .bss is cleared.  While the MMU is
+   * off, all memory is Device-nGnRnE.  Unaligned accesses and DC ZVA are not
+   * permitted for this memory type, but the C library memset() and memcpy()
+   * use both.
+   */
+  a53_setup_mmu_and_cache();
+
   bsp_start_clear_bss();
 }

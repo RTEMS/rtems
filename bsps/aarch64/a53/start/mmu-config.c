@@ -5,12 +5,12 @@
  *
  * @ingroup RTEMSBSPsAArch64A53
  *
- * @brief Core BSP definitions
+ * @brief This source file contains the definition of ::aarch64_mmu_config_table
+ *   and ::aarch64_mmu_config_table_size.
  */
 
 /*
- * Copyright (C) 2020 On-Line Applications Research Corporation (OAR)
- * Written by Kinsey Moore <kinsey.moore@oarcorp.com>
+ * Copyright (C) 2026 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -34,46 +34,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LIBBSP_AARCH64_A53_QEMU_BSP_H
-#define LIBBSP_AARCH64_A53_QEMU_BSP_H
-
-/**
- * @addtogroup RTEMSBSPsAArch64
- *
- * @{
- */
-
-#include <bspopts.h>
-
-#ifndef ASM
-
-#include <bsp/default-initial-extension.h>
+#include <bsp.h>
+#include <bsp/aarch64-mmu.h>
 #include <bsp/start.h>
+#include <libcpu/mmu-vmsav8-64.h>
 
-#include <rtems.h>
+BSP_START_DATA_SECTION const aarch64_mmu_config_entry
+aarch64_mmu_config_table[] = {
+  AARCH64_MMU_DEFAULT_SECTIONS,
+  { /* GIC distributor, CPU interface and redistributors */
+    .begin = 0x08000000U,
+    .end = 0x09000000U,
+    .flags = AARCH64_MMU_DEVICE
+  }, { /* PL011 console */
+    .begin = BSP_A53_QEMU_VPL011_BASE,
+    .end = BSP_A53_QEMU_VPL011_BASE + BSP_A53_QEMU_VPL011_LENGTH,
+    .flags = AARCH64_MMU_DEVICE
+  }
+};
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
-#define BSP_ARM_GIC_CPUIF_BASE 0x08010000
-#define BSP_ARM_GIC_DIST_BASE 0x08000000
-#define BSP_ARM_GIC_REDIST_BASE 0x080A0000
-
-#define BSP_A53_QEMU_VPL011_BASE 0x9000000
-#define BSP_A53_QEMU_VPL011_LENGTH 0x1000
-
-/**
- * @brief Sets up the MMU translation table and enables the MMU and the caches.
- */
-BSP_START_TEXT_SECTION void a53_setup_mmu_and_cache( void );
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
-#endif /* ASM */
-
-/** @} */
-
-#endif /* LIBBSP_AARCH64_A53_QEMU_BSP_H */
+BSP_START_DATA_SECTION const size_t aarch64_mmu_config_table_size =
+  RTEMS_ARRAY_SIZE( aarch64_mmu_config_table );
