@@ -33,8 +33,10 @@
  */
 
 #include <bsp.h>
+#include <bsp/apic.h>
 #include <bsp/irq.h>
 #include <bsp/irq-generic.h>
+#include <libcpu/cpuModel.h>
 #include <rtems/score/cpu.h>
 #include <rtems/score/processormaskimpl.h>
 
@@ -111,6 +113,66 @@ uint32_t BSP_irq_count_dump(FILE *f)
    fprintf(f,"IRQ %2u: %c %9"PRIu32"\n", i, type, irq_count[i]);
  }
  return tot;
+}
+
+/*
+ * The Local APIC is the only interrupt source of this BSP which software can
+ * raise.  It is optional, the processors this BSP started out with had none.
+ */
+#define X86_CPUID_APIC (1 << 9)
+
+/* Delivery mode of the local vector table entry connected to the 8259A */
+#define LAPIC_LVT_DM_EXTINT 0x700
+/* Delivery mode of the local vector table entry connected to the NMI line */
+#define LAPIC_LVT_DM_NMI 0x400
+/* Vector of the interrupt the Local APIC delivers if it has nothing else */
+#define LAPIC_SPURIOUS_VECTOR 0xFF
+
+extern void apic_spurious_handler(void);
+
+static volatile uint32_t *lapic_base;
+
+static inline uint32_t lapic_read(uint32_t reg)
+{
+  return lapic_base[reg / sizeof(*lapic_base)];
+}
+
+static inline void lapic_write(uint32_t reg, uint32_t value)
+{
+  lapic_base[reg / sizeof(*lapic_base)] = value;
+}
+
+static void lapic_initialize(void)
+{
+  uint32_t         low;
+  uint32_t         high;
+  CPU_ISR_handler  old;
+
+  if ((x86_capability & X86_CPUID_APIC) == 0) {
+    return;
+  }
+
+  __asm__ volatile ("rdmsr" : "=a" (low), "=d" (high) : "c" (0x1b));
+  lapic_base = (volatile uint32_t *) (uintptr_t) (low & 0xfffff000);
+
+  /*
+   * Enabling the Local APIC takes the 8259A off the interrupt line of the
+   * processor, so the first local vector table entry has to pass it through.
+   */
+  lapic_write(LAPIC_LVT0, LAPIC_LVT_DM_EXTINT);
+  lapic_write(LAPIC_LVT1, LAPIC_LVT_DM_NMI);
+
+  _CPU_ISR_install_vector(
+    LAPIC_SPURIOUS_VECTOR,
+    (CPU_ISR_handler) apic_spurious_handler,
+    &old
+  );
+  lapic_write(LAPIC_SPIV, LAPIC_SPIV_ENABLE_APIC | LAPIC_SPURIOUS_VECTOR);
+}
+
+static bool lapic_is_available(void)
+{
+  return lapic_base != NULL;
 }
 
 /*
@@ -283,13 +345,27 @@ static inline bool is_i8259a_vector(rtems_vector_number vector)
   return BSP_i8259a_irq_valid((const rtems_irq_number) vector);
 }
 
+RTEMS_STATIC_ASSERT(
+  BSP_SOFTWARE_IRQ_IDT_INDEX == BSP_IRQ_VECTOR_BASE + BSP_SOFTWARE_IRQ,
+  BSP_SOFTWARE_IRQ_IDT_INDEX
+);
+
 rtems_status_code bsp_interrupt_get_attributes(
   rtems_vector_number         vector,
   rtems_interrupt_attributes *attributes
 )
 {
-  (void) vector;
-  (void) attributes;
+  if (is_i8259a_vector(vector)) {
+    attributes->is_maskable = true;
+    attributes->can_enable = true;
+    attributes->maybe_enable = true;
+    attributes->can_disable = true;
+    attributes->maybe_disable = true;
+  } else if (vector == BSP_SOFTWARE_IRQ && lapic_is_available()) {
+    attributes->is_maskable = true;
+    attributes->can_raise = true;
+    attributes->cleared_by_acknowledge = true;
+  }
 
   return RTEMS_SUCCESSFUL;
 }
@@ -299,20 +375,37 @@ rtems_status_code bsp_interrupt_is_pending(
   bool               *pending
 )
 {
-  (void) vector;
-
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(pending != NULL);
   *pending = false;
-  return RTEMS_UNSATISFIED;
+
+  if (vector != BSP_SOFTWARE_IRQ || !lapic_is_available()) {
+    return RTEMS_UNSATISFIED;
+  }
+
+  *pending = (lapic_read(LAPIC_IRR + (BSP_SOFTWARE_IRQ_IDT_INDEX / 32) * 16) &
+    (UINT32_C(1) << (BSP_SOFTWARE_IRQ_IDT_INDEX % 32))) != 0;
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
 {
-  (void) vector;
-
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  return RTEMS_UNSATISFIED;
+
+  if (vector != BSP_SOFTWARE_IRQ || !lapic_is_available()) {
+    return RTEMS_UNSATISFIED;
+  }
+
+  lapic_write(
+    LAPIC_ICR,
+    LAPIC_ICR_DS_SELF | LAPIC_ICR_LEVELASSERT | BSP_SOFTWARE_IRQ_IDT_INDEX
+  );
+
+  while ((lapic_read(LAPIC_ICR) & LAPIC_ICR_STATUS_PEND) != 0) {
+    /* Wait for the delivery */
+  }
+
+  return RTEMS_SUCCESSFUL;
 }
 
 #if defined(RTEMS_SMP)
@@ -442,6 +535,8 @@ void bsp_interrupt_facility_initialize(void)
 
   for (i = 0; i < BSP_IRQ_LINES_NUMBER; i++)
     irq_trigger[i] = elcr_read_trigger(i);
+
+  lapic_initialize();
 }
 
 static bool bsp_interrupt_handler_is_empty(rtems_vector_number vector)
@@ -504,6 +599,14 @@ void BSP_dispatch_isr(int vector)
       BSP_irq_ack_at_i8259a(vector);
 
       rtems_interrupt_lock_release_isr(&rtems_i8259_access_lock, &lock_context);
+    }
+
+    if (vector == BSP_SOFTWARE_IRQ) {
+      /*
+       * Acknowledge before the handlers run, so that a handler which enables
+       * the interrupts can take a nested interrupt of the same vector.
+       */
+      lapic_write(LAPIC_EOI, 0);
     }
 
     /*

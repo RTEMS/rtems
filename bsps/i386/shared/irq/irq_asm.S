@@ -281,6 +281,17 @@ DISTINCT_INTERRUPT_ENTRY(13)
 DISTINCT_INTERRUPT_ENTRY(14)
 DISTINCT_INTERRUPT_ENTRY(15)
 DISTINCT_INTERRUPT_ENTRY(16)
+DISTINCT_INTERRUPT_ENTRY(17)
+
+	/*
+	 * The Local APIC delivers this vector if it has nothing else to
+	 * deliver.  It needs no acknowledge.
+	 */
+
+PUBLIC (apic_spurious_handler)
+
+SYM (apic_spurious_handler):
+	iret
 
 	/*
 	 * routine used to initialize the IDT by default
