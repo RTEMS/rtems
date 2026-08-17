@@ -1052,7 +1052,14 @@ static void RandomOps( size_t n, bool unique )
       _RBTree_Extract( &tree, &tn->Node );
     }
 
-    T_ne_int( VerifyTree( _RBTree_Root( &tree ) ), -1 );
+    /*
+     * The tree is verified after every single operation and the number of
+     * operations is cubic in the tree size, so this check runs a few hundred
+     * thousand times.  Recording each one as a test step dominates the step
+     * count of the whole test suite and buys nothing: a quiet check still
+     * counts a failure and still reports the line it happened on.
+     */
+    T_quiet_ne_int( VerifyTree( _RBTree_Root( &tree ) ), -1 );
 
     v = SimpleRandom( v );
   }
