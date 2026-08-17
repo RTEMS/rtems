@@ -42,6 +42,7 @@
 #include "tx-support.h"
 
 #include <rtems/sysinit.h>
+#include <rtems/test.h>
 #include <rtems/score/chainimpl.h>
 
 #include <bsp.h>
@@ -142,10 +143,31 @@ void CallWithinISRSubmit( CallWithinISRRequest *request )
   CallWithinISRRaise();
 }
 
+/*
+ * The interrupt is raised by Cause_tm27_intr() and is delivered as soon as
+ * the interrupts are enabled, so it arrives after a few instructions.  Some
+ * BSPs cannot raise an interrupt in software and use the default of
+ * <rtems/tm27-default.h>, where Cause_tm27_intr() does nothing at all.  An
+ * unbounded wait spins forever there and takes the rest of the test suite
+ * with it, so give up after a while and let the test fail instead.
+ */
+#define CALL_WITHIN_ISR_MAX_SPINS 10000000UL
+
 void CallWithinISRWait( const CallWithinISRRequest *request )
 {
+  unsigned long spins;
+
+  spins = 0;
+
   while ( _Atomic_Load_uint( &request->done, ATOMIC_ORDER_ACQUIRE ) == 0 ) {
-    /* Wait */
+    ++spins;
+
+    if ( spins >= CALL_WITHIN_ISR_MAX_SPINS ) {
+      T_assert_true(
+        false,
+        "the interrupt raised by Cause_tm27_intr() was not delivered"
+      );
+    }
   }
 }
 
