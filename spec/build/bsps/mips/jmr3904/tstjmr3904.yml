@@ -1,10 +1,5 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-actions:
-- set-test-state:
-    reason: null
-    state: exclude
-    tests:
-    - spfatal26
+actions: []
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
