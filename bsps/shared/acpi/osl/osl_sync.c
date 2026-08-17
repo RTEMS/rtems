@@ -124,8 +124,19 @@ ACPI_STATUS AcpiOsWaitSemaphore(
   ACPI_STATUS ac_status = (AE_OK);
   acpi_semaphore* ac_sem = (acpi_semaphore*) Handle;
 
-  if (ac_sem == NULL || Units == 0) {
+  if (Units == 0) {
     return (AE_BAD_PARAMETER);
+  }
+
+  /*
+   * The table manager runs before AcpiInitializeSubsystem() creates the mutex
+   * objects, so the handle of a predefined mutex is a null pointer until then.
+   * There is a single thread of execution at that point and nothing to
+   * serialize, so treat the operation as done.  Without this every table which
+   * is installed early reports that it could not acquire the table mutex.
+   */
+  if (ac_sem == NULL) {
+    return (AE_OK);
   }
 
   eno = pthread_mutex_lock(&ac_sem->mutex);
@@ -196,8 +207,13 @@ ACPI_STATUS AcpiOsSignalSemaphore(ACPI_SEMAPHORE Handle, UINT32 Units)
   int eno;
   acpi_semaphore* ac_sem = (acpi_semaphore*) Handle;
 
-  if (ac_sem == NULL || Units == 0) {
+  if (Units == 0) {
     return (AE_BAD_PARAMETER);
+  }
+
+  /* See AcpiOsWaitSemaphore() */
+  if (ac_sem == NULL) {
+    return (AE_OK);
   }
 
   eno = pthread_mutex_lock(&ac_sem->mutex);
