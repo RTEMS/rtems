@@ -102,6 +102,9 @@ uint32_t try_get_prop_from_device_tree(
   }
 
   value = fdt32_to_cpu( prop[0] );
+#else
+  (void) compatible;
+  (void) prop_name;
 #endif /* BSP_MICROBLAZE_FPGA_USE_FDT */
 
    return value;
