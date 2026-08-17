@@ -16,6 +16,7 @@ install:
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/mips/jmr3904/include/bsp/irq.h
+  - bsps/mips/jmr3904/include/bsp/jmr3904-counter.h
 - destination: ${BSP_LIBDIR}
   source:
   - bsps/mips/jmr3904/start/linkcmds
@@ -39,20 +40,19 @@ links:
 - role: build-dependency
   uid: ../../bspopts
 source:
-- bsps/mips/jmr3904/btimer/btimer.c
 - bsps/mips/jmr3904/clock/clockdrv.c
 - bsps/mips/jmr3904/console/console-io.c
 - bsps/mips/jmr3904/irq/irq.c
 - bsps/mips/jmr3904/irq/vectorisrs.c
 - bsps/mips/jmr3904/start/bspstart.c
+- bsps/mips/jmr3904/start/cpucounter.c
 - bsps/mips/shared/irq/installisrentries.c
 - bsps/mips/shared/irq/interruptmask.c
 - bsps/mips/shared/irq/irq.c
 - bsps/mips/shared/irq/isr_entries.S
 - bsps/mips/shared/irq/vectorexceptions.c
 - bsps/shared/cache/nocache.c
-- bsps/shared/dev/cpucounter/cpucounterfrequency.c
-- bsps/shared/dev/cpucounter/cpucounterread.c
+- bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/serial/console-polled.c
 - bsps/shared/start/gettargethash-default.c
