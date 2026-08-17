@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: microblaze
+bsp: petalogix_s3adsp1800
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+cppflags: []
+enabled-by: true
+family: microblaze_fpga
+includes: []
+install: []
+links:
+- role: build-dependency
+  uid: ../../opto0
+- role: build-dependency
+  uid: grp
+source:
+- bsps/microblaze/microblaze_fpga/start/bspreset.c
+type: build

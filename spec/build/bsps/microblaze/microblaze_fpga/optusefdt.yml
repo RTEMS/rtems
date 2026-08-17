@@ -6,6 +6,8 @@ build-type: option
 copyrights:
 - Copyright (C) 2022 On-Line Applications Research Corporation (OAR)
 default:
+- enabled-by: microblaze/petalogix_s3adsp1800
+  value: false
 - enabled-by: true
   value: true
 description: |

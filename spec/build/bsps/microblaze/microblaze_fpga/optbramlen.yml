@@ -7,7 +7,9 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) Sam Price 
-default: 
+default:
+- enabled-by: microblaze/petalogix_s3adsp1800
+  value: 0x20000
 - enabled-by: true
   value: 0x10000
 description: |
