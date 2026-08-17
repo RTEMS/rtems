@@ -56,6 +56,28 @@ static bool is_expected_fatal_code( rtems_fatal_code code )
   return frame->trap == 4;
 }
 
+#elif defined( PPC_HAS_FPU ) && PPC_HAS_FPU == 1 && \
+  !defined( PPC_MULTILIB_FPU )
+
+/*
+ * The classic PowerPC floating point support disables the floating point unit
+ * in exception context and the exception prologue does not save the volatile
+ * floating point context. A use of the floating point unit in interrupt
+ * context raises a floating point unavailable exception.
+ */
+
+#include <bsp/vectors.h>
+
+#define EXPECTED_FATAL_SOURCE RTEMS_FATAL_SOURCE_EXCEPTION
+
+static bool is_expected_fatal_code( rtems_fatal_code code )
+{
+  const rtems_exception_frame *frame;
+
+  frame = (const rtems_exception_frame *) code;
+  return frame->_EXC_number == ASM_FLOAT_VECTOR;
+}
+
 #endif
 
 static volatile double f = 1.0;
