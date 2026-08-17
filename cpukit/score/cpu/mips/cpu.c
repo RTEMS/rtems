@@ -73,6 +73,7 @@
 
 #include <rtems/score/cpuimpl.h>
 #include <rtems/score/isr.h>
+#include <rtems/score/tls.h>
 
 #if CPU_HARDWARE_FP
 Context_Control_fp _CPU_Null_fp_context;
@@ -150,7 +151,6 @@ void _CPU_Context_Initialize(
 )
 {
   (void) is_fp;
-  (void) tls_area;
 
   uintptr_t             stack_tmp;
   __MIPS_REGISTER_TYPE  intlvl = new_level & 0xff;
@@ -181,6 +181,13 @@ void _CPU_Context_Initialize(
   }
 #endif
   the_context->c0_sr = c0_sr;
+
+  if ( tls_area != NULL ) {
+    the_context->thread_pointer = (char *) _TLS_Initialize_area( tls_area ) +
+      MIPS_TLS_THREAD_POINTER_OFFSET;
+  } else {
+    the_context->thread_pointer = NULL;
+  }
 }
 /*
  *  _CPU_Internal_threads_Idle_thread_body

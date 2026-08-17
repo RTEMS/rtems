@@ -53,6 +53,13 @@
 
 #define CPU_THREAD_LOCAL_STORAGE_VARIANT 10
 
+/*
+ * The ABI places the thread pointer this many bytes above the thread-local
+ * storage data, so that the signed 16-bit offsets emitted by the linker reach
+ * a larger part of the area.
+ */
+#define MIPS_TLS_THREAD_POINTER_OFFSET 0x7000
+
 #ifndef ASM
 
 #ifdef __cplusplus
@@ -77,6 +84,11 @@ static inline void _CPU_Use_thread_local_storage(
   const Context_Control *context
 )
 {
+  /*
+   * There is no register which holds the thread pointer.  The compiler reads
+   * it with rdhwr, which the exception handler emulates for processors which
+   * lack the instruction.
+   */
   (void) context;
 }
 
@@ -84,8 +96,7 @@ static inline void *_CPU_Get_TLS_thread_pointer(
   const Context_Control *context
 )
 {
-  (void) context;
-  return NULL;
+  return context->thread_pointer;
 }
 
 #ifdef __cplusplus

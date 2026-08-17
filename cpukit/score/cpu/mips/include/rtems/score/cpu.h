@@ -295,6 +295,12 @@ typedef struct {
     __MIPS_REGISTER_TYPE ra;
     __MIPS_REGISTER_TYPE c0_sr;
     __MIPS_REGISTER_TYPE c0_epc;
+    /*
+     * The thread pointer of the thread-local storage area.  It follows the
+     * registers saved by _CPU_Context_switch(), which addresses the members
+     * above through the offsets defined in cpu_asm.S.
+     */
+    void                *thread_pointer;
 } Context_Control;
 
 #define _CPU_Context_Get_SP( _context ) \
