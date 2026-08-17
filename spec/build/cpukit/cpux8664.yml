@@ -30,4 +30,6 @@ source:
 - cpukit/score/cpu/x86_64/cpu.c
 - cpukit/score/cpu/x86_64/x86_64-context-initialize.c
 - cpukit/score/cpu/x86_64/x86_64-context-switch.S
+- cpukit/score/cpu/x86_64/x86_64-context-validate.S
+- cpukit/score/cpu/x86_64/x86_64-context-volatile-clobber.S
 type: build
