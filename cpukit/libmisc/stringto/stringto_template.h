@@ -122,6 +122,28 @@ rtems_status_code STRING_TO_NAME(
     return RTEMS_INVALID_NUMBER;
   }
 
+#if defined( STRING_TO_INTEGER )
+  /* the conversion method detected an overflow or underflow */
+  if ( errno == ERANGE ) {
+    return RTEMS_INVALID_NUMBER;
+  }
+
+  /*
+   * The conversion method returns a type which can be wider than the type of
+   * the value, so the range of the value has to be checked.
+   */
+  if ( result > STRING_TO_MAX ) {
+    errno = ERANGE;
+    return RTEMS_INVALID_NUMBER;
+  }
+
+#ifdef STRING_TO_MIN
+  if ( result < STRING_TO_MIN ) {
+    errno = ERANGE;
+    return RTEMS_INVALID_NUMBER;
+  }
+#endif
+#else
 #ifdef STRING_TO_MAX
   /* there was an overflow */
   if ( ( result == STRING_TO_MAX ) && ( errno == ERANGE ) ) {
@@ -135,13 +157,6 @@ rtems_status_code STRING_TO_NAME(
     return RTEMS_INVALID_NUMBER;
   }
 #endif
-
-#ifdef STRING_TO_UCHAR_MAX
-  /* special case for uchar */
-  if ( result > STRING_TO_UCHAR_MAX ) {
-    errno = ERANGE;
-    return RTEMS_INVALID_NUMBER;
-  }
 #endif
 
   *n = result;

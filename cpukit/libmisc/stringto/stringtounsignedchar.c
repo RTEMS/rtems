@@ -42,7 +42,6 @@
 #define STRING_TO_TYPE        unsigned char
 #define STRING_TO_NAME        rtems_string_to_unsigned_char
 #define STRING_TO_METHOD      strtoul
-#define STRING_TO_MAX         ULONG_MAX
-#define STRING_TO_UCHAR_MAX   UCHAR_MAX
+#define STRING_TO_MAX         UCHAR_MAX
 #define STRING_TO_RESULT_TYPE unsigned long
 #include "stringto_template.h"
