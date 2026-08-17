@@ -148,7 +148,7 @@ SECTIONS
          * Exception frame info
          */
         . = ALIGN (16);
-        *(.eh_frame)
+        KEEP (*(.eh_frame))
 
         /*
          * Read-only data
