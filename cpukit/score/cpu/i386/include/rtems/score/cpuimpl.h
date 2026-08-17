@@ -58,21 +58,9 @@
 extern "C" {
 #endif
 
-static inline void _CPU_Context_volatile_clobber( uintptr_t pattern )
-{
-  (void) pattern;
+void _CPU_Context_volatile_clobber( uintptr_t pattern );
 
-  /* TODO */
-}
-
-static inline void _CPU_Context_validate( uintptr_t pattern )
-{
-  (void) pattern;
-
-  while (1) {
-    /* TODO */
-  }
-}
+void _CPU_Context_validate( uintptr_t pattern );
 
 static inline void _CPU_Instruction_illegal( void )
 {
