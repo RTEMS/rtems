@@ -55,6 +55,7 @@
  */
 
  #define OR1K_REG(x)           (*((volatile unsigned char *) (x)))
+ #define OR1K_REG32(x)         (*((volatile uint32_t *) (x)))
  #define OR1K_BIT(n)           (1 << (n))
 
 /** @} */
@@ -84,6 +85,30 @@
  * @{
  */
 #define OR1K_BSP_TIMER_FREQ       20000000UL
+
+/** @} */
+
+/**
+ * @name Goldfish Real Time Clock
+ *
+ * The virtual machine of Qemu provides this device.  The BSP has no driver
+ * for it and uses its alarm as an interrupt which software can raise.  An
+ * alarm time which already passed raises the interrupt at once.
+ *
+ * @{
+ */
+#define OR1K_BSP_RTC_BASE         0x96005000
+#define OR1K_BSP_RTC_IRQ          3
+
+#define OR1K_BSP_RTC_REG_ALARM_LOW       (OR1K_BSP_RTC_BASE+0x08)
+#define OR1K_BSP_RTC_REG_ALARM_HIGH      (OR1K_BSP_RTC_BASE+0x0c)
+#define OR1K_BSP_RTC_REG_IRQ_ENABLED     (OR1K_BSP_RTC_BASE+0x10)
+#define OR1K_BSP_RTC_REG_CLEAR_ALARM     (OR1K_BSP_RTC_BASE+0x14)
+#define OR1K_BSP_RTC_REG_CLEAR_INTERRUPT (OR1K_BSP_RTC_BASE+0x1c)
+
+/* The registers of the device are little endian, the processor is big endian */
+#define OR1K_BSP_RTC_WRITE(reg, value) \
+  (OR1K_REG32(reg) = __builtin_bswap32(value))
 
 /** @} */
 
