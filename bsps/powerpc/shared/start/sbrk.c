@@ -121,7 +121,17 @@ static ptrdiff_t bsp_sbrk_init(const Memory_Information *mem, uintptr_t min_size
     remaining_size  = rval;
   }
 
-  policy = (0 == BSP_sbrk_policy[0] ? (uintptr_t)(-1) : BSP_sbrk_policy[0]);
+  /*
+   * BSP_sbrk_policy is an optional application provided symbol. Test the
+   * symbol address before the dereference, otherwise an application which
+   * does not provide the symbol reads whatever resides at address zero.
+   */
+  if (BSP_sbrk_policy == NULL || BSP_sbrk_policy[0] == 0) {
+    policy = (uintptr_t)(-1);
+  } else {
+    policy = BSP_sbrk_policy[0];
+  }
+
   switch ( policy ) {
       case (uintptr_t)(-1):
         _Memory_Set_end(area, (const char *) _Memory_Get_end(area) + rval);
