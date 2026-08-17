@@ -268,12 +268,19 @@ typedef Context_Control CPU_Interrupt_frame;
  *
  */
 
+/*
+ * The tick timer has an exception enable of its own.  A critical section which
+ * clears only the interrupt exception enable runs with the clock tick.
+ */
+#define OR1K_INTERRUPT_ENABLE_BITS \
+  ( CPU_OR1K_SPR_SR_IEE | CPU_OR1K_SPR_SR_TEE )
+
 static inline uint32_t or1k_interrupt_disable( void )
 {
   uint32_t sr;
   sr = _OR1K_mfspr(CPU_OR1K_SPR_SR);
 
-  _OR1K_mtspr(CPU_OR1K_SPR_SR, (sr & ~CPU_OR1K_SPR_SR_IEE));
+  _OR1K_mtspr(CPU_OR1K_SPR_SR, (sr & ~OR1K_INTERRUPT_ENABLE_BITS));
 
   return sr;
 }
@@ -314,7 +321,7 @@ static inline void or1k_interrupt_enable(uint32_t level)
 #define _CPU_ISR_Flash( _level ) \
   do{ \
       _CPU_ISR_Enable( _level ); \
-      _OR1K_mtspr(CPU_OR1K_SPR_SR, (_level & ~CPU_OR1K_SPR_SR_IEE)); \
+      _OR1K_mtspr(CPU_OR1K_SPR_SR, (_level & ~OR1K_INTERRUPT_ENABLE_BITS)); \
     } while(0)
 
 static inline bool _CPU_ISR_Is_enabled( uint32_t level )

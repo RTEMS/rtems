@@ -69,10 +69,10 @@ void _CPU_ISR_Set_level(uint32_t level)
   sr = _OR1K_mfspr(CPU_OR1K_SPR_SR);
 
   if (level == 0){ /* Enable all interrupts */
-    sr |= CPU_OR1K_SPR_SR_IEE | CPU_OR1K_SPR_SR_TEE;
+    sr |= OR1K_INTERRUPT_ENABLE_BITS;
 
   } else{
-    sr &= ~CPU_OR1K_SPR_SR_IEE;
+    sr &= ~OR1K_INTERRUPT_ENABLE_BITS;
   }
 
   _OR1K_mtspr(CPU_OR1K_SPR_SR, sr);
