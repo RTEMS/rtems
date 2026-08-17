@@ -155,6 +155,41 @@ static uint32_t tx3904_cpu_bit( rtems_vector_number vector )
   return 0;
 }
 
+/*
+ * The mask of the status register is global state of the controller since the
+ * context switch stopped restoring it, so a source disabled here stays
+ * disabled for every thread.
+ */
+static rtems_status_code tx3904_set_cpu_mask(
+  rtems_vector_number vector,
+  bool                enable
+)
+{
+  uint32_t              bit;
+  uint32_t              sr;
+  rtems_interrupt_level level;
+
+  bit = tx3904_cpu_bit( vector );
+
+  if ( bit == 0 ) {
+    return RTEMS_UNSATISFIED;
+  }
+
+  rtems_interrupt_local_disable( level );
+  mips_get_sr( sr );
+
+  if ( enable ) {
+    sr |= bit;
+  } else {
+    sr &= ~bit;
+  }
+
+  mips_set_sr( sr );
+  rtems_interrupt_local_enable( level );
+
+  return RTEMS_SUCCESSFUL;
+}
+
 rtems_status_code bsp_interrupt_get_attributes(
   rtems_vector_number         vector,
   rtems_interrupt_attributes *attributes
@@ -172,13 +207,26 @@ rtems_status_code bsp_interrupt_get_attributes(
 
   if ( tx3904_irc_is_leveled( vector ) ) {
     attributes->can_enable = true;
+    attributes->maybe_enable = true;
     attributes->can_disable = true;
+    attributes->maybe_disable = true;
     attributes->can_get_priority = true;
     attributes->can_set_priority = true;
     attributes->maximum_priority = TX3904_IRC_LEVEL_MAX;
-  } else if ( tx3904_is_software( vector ) ) {
-    attributes->can_raise = true;
-    attributes->can_clear = true;
+  } else if ( tx3904_cpu_bit( vector ) != 0 ) {
+    /*
+     * The mask of the status register is global state, so a disable of one of
+     * these sources survives a context switch.
+     */
+    attributes->can_enable = true;
+    attributes->maybe_enable = true;
+    attributes->can_disable = true;
+    attributes->maybe_disable = true;
+
+    if ( tx3904_is_software( vector ) ) {
+      attributes->can_raise = true;
+      attributes->can_clear = true;
+    }
   }
 
   return RTEMS_SUCCESSFUL;
@@ -269,11 +317,13 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
     source = tx3904_irc_source( vector );
     *enabled = tx3904_irc_get_level( source ) >
       *tx3904_irc_reg( TX3904_IRC_IMR );
+  } else if ( tx3904_cpu_bit( vector ) != 0 ) {
+    uint32_t sr;
+
+    mips_get_sr( sr );
+    *enabled = ( sr & tx3904_cpu_bit( vector ) ) != 0;
   } else {
-    /*
-     * The remaining sources are masked in the status register, which the
-     * context of every thread enables completely, so they are always enabled.
-     */
+    /* An exception cannot be masked */
     *enabled = true;
   }
 
@@ -286,27 +336,27 @@ rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number vector )
 
   bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
 
-  if ( !tx3904_irc_is_leveled( vector ) ) {
-    return RTEMS_UNSATISFIED;
+  if ( tx3904_irc_is_leveled( vector ) ) {
+    source = tx3904_irc_source( vector );
+    tx3904_irc_set_level( source, tx3904_irc_priority_of( source ) );
+
+    return RTEMS_SUCCESSFUL;
   }
 
-  source = tx3904_irc_source( vector );
-  tx3904_irc_set_level( source, tx3904_irc_priority_of( source ) );
-
-  return RTEMS_SUCCESSFUL;
+  return tx3904_set_cpu_mask( vector, true );
 }
 
 rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number vector )
 {
   bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
 
-  if ( !tx3904_irc_is_leveled( vector ) ) {
-    return RTEMS_UNSATISFIED;
+  if ( tx3904_irc_is_leveled( vector ) ) {
+    tx3904_irc_set_level( tx3904_irc_source( vector ), 0 );
+
+    return RTEMS_SUCCESSFUL;
   }
 
-  tx3904_irc_set_level( tx3904_irc_source( vector ), 0 );
-
-  return RTEMS_SUCCESSFUL;
+  return tx3904_set_cpu_mask( vector, false );
 }
 
 rtems_status_code bsp_interrupt_set_priority(
