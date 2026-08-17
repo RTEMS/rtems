@@ -22,33 +22,47 @@
  */
 
 #include <bsp/irq.h>
+#include <rtems/score/isr.h>
 
 #define MUST_WAIT_FOR_INTERRUPT 1
 
-#define Install_tm27_vector( handler ) \
-   rtems_interrupt_handler_install( \
-      TX3904_IRQ_TMR0, "benchmark", 0, \
-      handler, NULL );
+#define TM27_INTERRUPT_VECTOR_DEFAULT TX3904_IRQ_SOFTWARE_1
 
-#define Cause_tm27_intr() \
-  do { \
-    uint32_t   _clicks = 20; \
-    TX3904_TIMER_WRITE( TX3904_TIMER0_BASE, TX3904_TIMER_CCDR, 0x3 ); \
-    TX3904_TIMER_WRITE( TX3904_TIMER0_BASE, TX3904_TIMER_CPRA, _clicks ); \
-    TX3904_TIMER_WRITE( TX3904_TIMER0_BASE, TX3904_TIMER_TISR, 0x00 ); \
-    TX3904_TIMER_WRITE( TX3904_TIMER0_BASE, TX3904_TIMER_ITMR, 0x8001 ); \
-    TX3904_TIMER_WRITE( TX3904_TIMER0_BASE, TX3904_TIMER_TCR,   0xC0 ); \
-    *((volatile uint32_t*) 0xFFFFC01C) = 0x00000700; \
-  } while(0)
+static rtems_interrupt_entry jmr3904_tm27_interrupt_entry;
 
-#define Clear_tm27_intr() \
-  do { \
-    TX3904_TIMER_WRITE( TX3904_TIMER0_BASE, TX3904_TIMER_ITMR, 0x0001 ); \
-    TX3904_TIMER_WRITE( TX3904_TIMER0_BASE, TX3904_TIMER_CCDR, 0x3 ); \
-    TX3904_TIMER_WRITE( TX3904_TIMER0_BASE, TX3904_TIMER_TISR,   0x00 ); \
-  } while(0)
+static inline void Install_tm27_vector( rtems_interrupt_handler handler )
+{
+  rtems_interrupt_entry_initialize(
+    &jmr3904_tm27_interrupt_entry,
+    handler,
+    NULL,
+    "tm27"
+  );
+  (void) rtems_interrupt_entry_install(
+    TM27_INTERRUPT_VECTOR_DEFAULT,
+    RTEMS_INTERRUPT_SHARED,
+    &jmr3904_tm27_interrupt_entry
+  );
+}
 
-#define Lower_tm27_intr() \
-  mips_enable_in_interrupt_mask( 0xff01 );
+/*
+ * The software interrupt of the processor is a bit of the cause register, so
+ * it is pending from the write on and arrives as soon as the interrupts are
+ * enabled.  It stays pending until it is cleared.
+ */
+static inline void Cause_tm27_intr( void )
+{
+  (void) rtems_interrupt_raise( TM27_INTERRUPT_VECTOR_DEFAULT );
+}
+
+static inline void Clear_tm27_intr( void )
+{
+  (void) rtems_interrupt_clear( TM27_INTERRUPT_VECTOR_DEFAULT );
+}
+
+static inline void Lower_tm27_intr( void )
+{
+  _ISR_Set_level( 0 );
+}
 
 #endif
