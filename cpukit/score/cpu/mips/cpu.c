@@ -116,22 +116,39 @@ void _CPU_Initialize(void)
 uint32_t   _CPU_ISR_Get_level( void )
 {
   unsigned int sr;
+  unsigned int mask;
+  unsigned int enable;
 
   mips_get_sr(sr);
 
   /* printf("current sr=%08X, ",sr); */
 
+  mask = mips_interrupt_mask();
+
 #if (__mips == 3) || (__mips == 32)
 /* IE bit and shift down hardware ints into bits 1 thru 6 */
-  sr = (sr & SR_IE) | ((sr & mips_interrupt_mask()) >> 9);
+  enable = SR_IE;
 
 #elif __mips == 1
 /* IEC bit and shift down hardware ints into bits 1 thru 6 */
-  sr = (sr & SR_IEC) | ((sr & mips_interrupt_mask()) >> 9);
+  enable = SR_IEC;
 
 #else
 #error "CPU ISR level: unknown MIPS level for SR handling"
 #endif
+  sr = (sr & enable) | ((sr & mask) >> 9);
+
+  /*
+   * For level zero _CPU_ISR_Set_level() enables every interrupt source, which
+   * is the same status register content as the highest level of this
+   * encoding.  Both name the state in which no interrupt is disabled, so
+   * report the canonical value for it.  A caller uses a non-zero level to mean
+   * that interrupts are disabled.
+   */
+  if ( sr == ( enable | ( mask >> 9 ) ) ) {
+    sr = 0;
+  }
+
   return sr;
 }
 void _CPU_ISR_Set_level( uint32_t   new_level )
