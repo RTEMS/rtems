@@ -116,88 +116,24 @@ void _CPU_Initialize(void)
 uint32_t   _CPU_ISR_Get_level( void )
 {
   unsigned int sr;
-  unsigned int mask;
-  unsigned int enable;
 
-  mips_get_sr(sr);
+  mips_get_sr( sr );
 
-  /* printf("current sr=%08X, ",sr); */
-
-  mask = mips_interrupt_mask();
-
-#if (__mips == 3) || (__mips == 32)
-/* IE bit and shift down hardware ints into bits 1 thru 6 */
-  enable = SR_IE;
-
-#elif __mips == 1
-/* IEC bit and shift down hardware ints into bits 1 thru 6 */
-  enable = SR_IEC;
-
-#else
-#error "CPU ISR level: unknown MIPS level for SR handling"
-#endif
-  sr = (sr & enable) | ((sr & mask) >> 9);
-
-  /*
-   * For level zero _CPU_ISR_Set_level() enables every interrupt source, which
-   * is the same status register content as the highest level of this
-   * encoding.  Both name the state in which no interrupt is disabled, so
-   * report the canonical value for it.  A caller uses a non-zero level to mean
-   * that interrupts are disabled.
-   */
-  if ( sr == ( enable | ( mask >> 9 ) ) ) {
-    sr = 0;
-  }
-
-  return sr;
+  return ( sr & SR_INTERRUPT_ENABLE_BITS ) != 0 ? 0 : 1;
 }
+
 void _CPU_ISR_Set_level( uint32_t   new_level )
 {
-  unsigned int sr, srbits;
+  unsigned int sr;
 
-  /*
-  ** mask off the int level bits only so we can
-  ** preserve software int settings and FP enable
-  ** for this thread.  Note we don't force software ints
-  ** enabled when changing level, they were turned on
-  ** when this task was created, but may have been turned
-  ** off since, so we'll just leave them alone.
-  */
+  mips_get_sr( sr );
 
-  new_level &= 0xff;
-
-  mips_get_sr(sr);
-
-#if (__mips == 3) || (__mips == 32)
-  mips_set_sr( (sr & ~SR_IE) );                 /* first disable ie bit (recommended) */
-
-   srbits = sr & ~(0xfc00 | SR_IE);
-
-   sr = srbits | ((new_level==0)? (mips_interrupt_mask() | SR_IE): \
-		 (((new_level<<9) & mips_interrupt_mask()) | \
-                   ((new_level & 1)?SR_IE:0)));
-/*
-  if ( (new_level & SR_EXL) == (sr & SR_EXL) )
-    return;
-
-  if ( (new_level & SR_EXL) == 0 ) {
-    sr &= ~SR_EXL;                    * clear the EXL bit *
-    mips_set_sr(sr);
+  if ( new_level == 0 ) {
+    sr |= SR_INTERRUPT_ENABLE_BITS;
   } else {
-
-    sr |= SR_EXL|SR_IE;              * enable exception level *
-    mips_set_sr(sr);                 * first disable ie bit (recommended) *
+    sr &= ~SR_INTERRUPT_ENABLE_BITS;
   }
-*/
 
-#elif __mips == 1
-  mips_set_sr( (sr & ~SR_IEC) );
-  srbits = sr & ~(0xfc00 | SR_IEC);
-  sr = srbits | ((new_level==0)?0xfc01:( ((new_level<<9) & 0xfc00) | \
-                                         (new_level & SR_IEC)));
-#else
-#error "CPU ISR level: unknown MIPS level for SR handling"
-#endif
   mips_set_sr( sr );
 }
 
@@ -226,11 +162,17 @@ void _CPU_Context_Initialize(
   the_context->fp = (__MIPS_REGISTER_TYPE) stack_tmp;
   the_context->ra = (__MIPS_REGISTER_TYPE) (uintptr_t)entry_point;
 
-  c0_sr =
-    ((intlvl==0)? (mips_interrupt_mask() | 0x300 | _INTON):
-      ( ((intlvl<<9) & mips_interrupt_mask()) | 0x300 |
-      ((intlvl & 1)?_INTON:0)) ) |
-      SR_CU0 | _EXTRABITS;
+  /*
+   * Every interrupt source of the status register is enabled.  Which of them
+   * reaches the processor is decided by the interrupt controller, so that a
+   * source disabled with rtems_interrupt_vector_disable() stays disabled
+   * across a context switch.  The level carries the interrupt enable bit.
+   */
+  c0_sr = mips_interrupt_mask() | 0x300 | SR_CU0 | _EXTRABITS;
+
+  if ( intlvl == 0 ) {
+    c0_sr |= _INTON;
+  }
 #if MIPS_HAS_FPU == 1
   if ( is_fp ) {
     c0_sr |= SR_CU1;

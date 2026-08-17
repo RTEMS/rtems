@@ -210,9 +210,14 @@ extern "C" {
  *  The following defines the number of bits actually used in the
  *  interrupt field of the task mode.  How those bits map to the
  *  CPU interrupt levels is defined by the routine _CPU_ISR_Set_level().
+ *
+ *  The processor has one interrupt enable bit.  The interrupt mask of the
+ *  status register is a set of independent enables of the interrupt sources
+ *  and not a level, so it belongs to the interrupt controller support and not
+ *  to the level.
  */
 
-#define CPU_MODES_INTERRUPT_MASK   0x000000ff
+#define CPU_MODES_INTERRUPT_MASK   0x00000001
 
 #define CPU_SIZEOF_POINTER 4
 
