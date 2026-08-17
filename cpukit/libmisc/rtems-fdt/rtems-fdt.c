@@ -27,6 +27,7 @@
 
 #include <fcntl.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 
@@ -37,6 +38,19 @@
 #include <rtems/thread.h>
 
 #include <rtems/rtems-fdtimpl.h>
+
+/*
+ * A flattened device tree blob must start at an 8-byte aligned address.
+ * libfdt rejects a blob at any other address with FDT_ERR_ALIGNMENT, so the
+ * heap alignment of the target, which is 4 bytes on some architectures, is not
+ * enough.
+ */
+#define RTEMS_FDT_BLOB_ALIGNMENT 8
+
+static void *rtems_fdt_allocate_blob( size_t size )
+{
+  return aligned_alloc( RTEMS_FDT_BLOB_ALIGNMENT, size );
+}
 
 static void rtems_fdt_unlock( rtems_fdt_data *fdt )
 {
@@ -403,7 +417,7 @@ int rtems_fdt_load_blob_file_binary(
 
   bsize = sb.st_size;
 
-  dtb = rtems_malloc( bsize );
+  dtb = rtems_fdt_allocate_blob( bsize );
   if ( !dtb ) {
     close( bf );
     return -RTEMS_FDT_ERR_NO_MEMORY;
@@ -484,7 +498,7 @@ int rtems_fdt_load_blob_file_gzip(
   bsize = ( ( cdata[ offset + 3 ] << 24 ) | ( cdata[ offset + 2 ] << 16 ) |
             ( cdata[ offset + 1 ] << 8 ) | cdata[ offset + 0 ] );
 
-  dtb = rtems_malloc( bsize );
+  dtb = rtems_fdt_allocate_blob( bsize );
   if ( !dtb ) {
     free( cdata );
     close( bf );
