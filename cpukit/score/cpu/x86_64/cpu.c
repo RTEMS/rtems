@@ -41,9 +41,75 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/tls.h>
 
+#include <rtems/bspIo.h>
+
+#include <inttypes.h>
+
+static const char *const amd64_exception_names[] = {
+  "divide error",
+  "debug",
+  "non-maskable interrupt",
+  "breakpoint",
+  "overflow",
+  "bound range exceeded",
+  "invalid opcode",
+  "device not available",
+  "double fault",
+  "coprocessor segment overrun",
+  "invalid TSS",
+  "segment not present",
+  "stack-segment fault",
+  "general protection",
+  "page fault",
+  "reserved",
+  "x87 floating-point error",
+  "alignment check",
+  "machine check",
+  "SIMD floating-point error",
+  "virtualization",
+  "control protection",
+  "reserved",
+  "reserved",
+  "reserved",
+  "reserved",
+  "reserved",
+  "reserved",
+  "hypervisor injection",
+  "VMM communication",
+  "security",
+  "reserved"
+};
+
 void _CPU_Exception_frame_print(const CPU_Exception_frame *ctx)
 {
-  (void) ctx;
+  const char *name;
+
+  if (ctx->vector < RTEMS_ARRAY_SIZE(amd64_exception_names)) {
+    name = amd64_exception_names[ctx->vector];
+  } else {
+    name = "unknown";
+  }
+
+  printk(
+    "exception vector: %" PRIu64 " (%s)\n"
+    "error code: 0x%016" PRIx64 "\n"
+    "RIP: 0x%016" PRIx64 " CS:  0x%016" PRIx64 "\n"
+    "RFLAGS: 0x%016" PRIx64 " RSP: 0x%016" PRIx64 " SS: 0x%016" PRIx64 "\n"
+    "RAX: 0x%016" PRIx64 " RBX: 0x%016" PRIx64 " RCX: 0x%016" PRIx64 "\n"
+    "RDX: 0x%016" PRIx64 " RSI: 0x%016" PRIx64 " RDI: 0x%016" PRIx64 "\n"
+    "RBP: 0x%016" PRIx64 " R8:  0x%016" PRIx64 " R9:  0x%016" PRIx64 "\n"
+    "R10: 0x%016" PRIx64 " R11: 0x%016" PRIx64 " R12: 0x%016" PRIx64 "\n"
+    "R13: 0x%016" PRIx64 " R14: 0x%016" PRIx64 " R15: 0x%016" PRIx64 "\n",
+    ctx->vector, name,
+    ctx->error_code,
+    ctx->rip, ctx->cs,
+    ctx->rflags, ctx->rsp, ctx->ss,
+    ctx->rax, ctx->rbx, ctx->rcx,
+    ctx->rdx, ctx->rsi, ctx->rdi,
+    ctx->rbp, ctx->r8, ctx->r9,
+    ctx->r10, ctx->r11, ctx->r12,
+    ctx->r13, ctx->r14, ctx->r15
+  );
 }
 
 Context_Control_fp _CPU_Null_fp_context;
