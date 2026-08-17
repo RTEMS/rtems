@@ -52,9 +52,10 @@ static void output_char( char c )
     );
   }
 
-    if ( c == '\n' ) {
-    XUartLite_SendByte( mblaze_uart_base, '\r' );
-  }
+  /*
+   * Send exactly the character.  rtems_putc() already emits the carriage
+   * return of a line feed, so a translation here would double it.
+   */
   XUartLite_SendByte( mblaze_uart_base, c );
 }
 
