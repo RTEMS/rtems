@@ -35,4 +35,54 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <rtems/tm27-default.h>
+#ifndef _RTEMS_TMTEST27
+#error "This is an RTEMS internal file you must not include directly."
+#endif
+
+#ifndef __tm27_h
+#define __tm27_h
+
+#include <bsp/irq.h>
+#include <rtems/score/idt.h>
+#include <rtems/score/isr.h>
+
+#define MUST_WAIT_FOR_INTERRUPT 1
+
+#define TM27_INTERRUPT_VECTOR_DEFAULT BSP_VECTOR_SOFTWARE
+
+static rtems_interrupt_entry amd64_tm27_interrupt_entry;
+
+static inline void Install_tm27_vector( rtems_interrupt_handler handler )
+{
+  rtems_interrupt_entry_initialize(
+    &amd64_tm27_interrupt_entry,
+    handler,
+    NULL,
+    "tm27"
+  );
+  (void) rtems_interrupt_entry_install(
+    BSP_VECTOR_SOFTWARE,
+    RTEMS_INTERRUPT_SHARED,
+    &amd64_tm27_interrupt_entry
+  );
+}
+
+static inline void Cause_tm27_intr( void )
+{
+  (void) rtems_interrupt_raise( BSP_VECTOR_SOFTWARE );
+}
+
+/*
+ * The Local APIC clears the interrupt request bit when the processor
+ * acknowledges the interrupt, so there is nothing left to clear.
+ */
+static inline void Clear_tm27_intr( void )
+{
+}
+
+static inline void Lower_tm27_intr( void )
+{
+  _ISR_Set_level( 0 );
+}
+
+#endif /* __tm27_h */
