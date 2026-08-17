@@ -60,6 +60,21 @@
 /** @} */
 
 /**
+ * @name SiFive Test Finisher
+ *
+ * The virtual machine of Qemu provides this device.  Writing one of the
+ * values below to it stops the machine.  The or1k-sim machine has no such
+ * device.
+ *
+ * @{
+ */
+#define OR1K_BSP_TEST_BASE        0x96000000
+#define OR1K_BSP_TEST_FAIL        0x3333
+#define OR1K_BSP_TEST_PASS        0x5555
+
+/** @} */
+
+/**
  * @name Internal OR1K UART Registers
  *
  * @{
