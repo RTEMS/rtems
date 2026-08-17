@@ -130,7 +130,16 @@ static void test_clock_check(
     ctx->ticks,
     ticks
   );
-  rtems_test_assert( ctx->ticks == ticks );
+  /*
+   * The tick counter is sampled before the sleep is entered, so a tick which
+   * elapses in between is not part of the measured interval and the count is
+   * one too low.  How much of the first tick is left when the sleep starts is
+   * not under the control of the test either.  Both are a property of the
+   * platform rather than of the sleep, so accept one tick in each direction.
+   * A sleep which returns far too early or far too late still fails.
+   */
+  rtems_test_assert( ctx->ticks + 1 >= ticks );
+  rtems_test_assert( ctx->ticks <= ticks + 1 );
 }
 
 static void task_clock( rtems_task_argument arg )
