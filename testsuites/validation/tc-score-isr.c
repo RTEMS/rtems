@@ -214,6 +214,87 @@ __asm__ (
 );
 #endif
 
+/*
+ * The interrupt prologue of these two ports leaves the frame base of the
+ * interrupted context in the frame pointer register and may then switch to
+ * the interrupt stack, so the value has to be taken before the compiler
+ * establishes a frame of its own.  A register variable cannot do that.
+ */
+#if defined(__i386__)
+void __real_BSP_dispatch_isr( int vector );
+
+static RTEMS_USED void InterruptDispatch( int vector, uintptr_t sp )
+{
+  if ( interrupted_stack_at_multitasking_start == 0 ) {
+    interrupted_stack_at_multitasking_start = sp;
+  }
+
+  __real_BSP_dispatch_isr( vector );
+}
+
+__asm__ (
+  "\t.section\t\".text\"\n"
+  "\t.align\t4\n"
+  "\t.globl\t__wrap_BSP_dispatch_isr\n"
+  "\t.type\t__wrap_BSP_dispatch_isr, @function\n"
+  "__wrap_BSP_dispatch_isr:\n"
+  "\tpushl\t%ebp\n"
+  "\tpushl\t8(%esp)\n"
+  "\tcall\tInterruptDispatch\n"
+  "\taddl\t$8, %esp\n"
+  "\tret\n"
+  "\t.previous\n"
+);
+#endif
+
+#if defined(__x86_64__)
+void __real_amd64_dispatch_isr( rtems_vector_number vector );
+
+static RTEMS_USED void InterruptDispatch(
+  rtems_vector_number vector,
+  uintptr_t           sp
+)
+{
+  if ( interrupted_stack_at_multitasking_start == 0 ) {
+    interrupted_stack_at_multitasking_start = sp;
+  }
+
+  __real_amd64_dispatch_isr( vector );
+}
+
+__asm__ (
+  "\t.section\t\".text\"\n"
+  "\t.align\t8\n"
+  "\t.globl\t__wrap_amd64_dispatch_isr\n"
+  "\t.type\t__wrap_amd64_dispatch_isr, @function\n"
+  "__wrap_amd64_dispatch_isr:\n"
+  "\tmovq\t%rbp, %rsi\n"
+  "\tjmp\tInterruptDispatch\n"
+  "\t.previous\n"
+);
+#endif
+
+#if defined(__mips__)
+void __real_mips_vector_isr_handlers( CPU_Interrupt_frame *frame );
+
+void __wrap_mips_vector_isr_handlers( CPU_Interrupt_frame *frame );
+
+void __wrap_mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
+{
+  if ( interrupted_stack_at_multitasking_start == 0 ) {
+    /*
+     * The frame is built on the stack of the interrupted context, so its own
+     * address is an address within that stack.  The stack pointer member of
+     * the frame is not used: the interrupt path never fills it, only the path
+     * which the debugger stub takes does.
+     */
+    interrupted_stack_at_multitasking_start = (uintptr_t) frame;
+  }
+
+  __real_mips_vector_isr_handlers( frame );
+}
+#endif
+
 static void ISRHandler( void *arg )
 {
   uintptr_t begin;
@@ -271,7 +352,12 @@ static void ScoreIsrValIsr_Action_0( void )
    * Check that stack of the interrupted context was valid when an interrupt
    * was serviced during the multitasking start.
    */
-  T_true( interrupted_stack_at_multitasking_start_is_valid );
+  T_true(
+    interrupted_stack_at_multitasking_start_is_valid,
+    "the stack of the interrupted context was not the stack of the running"
+    " thread; a zero means that the interrupt dispatch of this architecture"
+    " has no wrapper in this test and the address was never taken"
+  );
 }
 
 /**

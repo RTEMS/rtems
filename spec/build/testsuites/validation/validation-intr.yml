@@ -12,6 +12,9 @@ ldflags:
 - -Wl,--wrap=bsp_interrupt_dispatch
 - -Wl,--wrap=bsp_interrupt_handler_default
 - -Wl,--wrap=bsp_interrupt_spurious
+- -Wl,--wrap=amd64_dispatch_isr
+- -Wl,--wrap=BSP_dispatch_isr
+- -Wl,--wrap=mips_vector_isr_handlers
 - -Wl,--wrap=_RISCV_Interrupt_dispatch
 - -Wl,--wrap=_SPARC_Interrupt_dispatch
 links: []
