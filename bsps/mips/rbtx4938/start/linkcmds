@@ -44,7 +44,7 @@ SECTIONS
 
       *(.gcc_except_table*)
       *(.eh_frame_hdr)
-      *(.eh_frame)
+      KEEP (*(.eh_frame))
     }
 
   .init :
