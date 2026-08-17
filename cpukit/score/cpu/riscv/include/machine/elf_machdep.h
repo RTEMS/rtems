@@ -114,6 +114,10 @@
 #define R_RISCV_SET32       56
 
 #define R_RISCV_32_PCREL    57
+#define R_RISCV_IRELATIVE   58
+#define R_RISCV_PLT32       59
+#define R_RISCV_SET_ULEB128 60
+#define R_RISCV_SUB_ULEB128 61
 
 /* These are aliases we can use R_TYPESZ */
 #define R_RISCV_ADDR32		R_RISCV_32
