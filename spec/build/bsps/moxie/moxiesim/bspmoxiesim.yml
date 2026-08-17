@@ -21,6 +21,8 @@ install:
   - bsps/moxie/moxiesim/start/linkcmds
 links:
 - role: build-dependency
+  uid: ../../tst-xfail-psxfenv01
+- role: build-dependency
   uid: abi
 - role: build-dependency
   uid: start

@@ -13,7 +13,9 @@ install:
   - bsps/include/bsp/linker-symbols.h
   - bsps/or1k/include/bsp/linker-symbols-arch.h
 ldflags: []
-links: []
+links:
+- role: build-dependency
+  uid: ../tst-xfail-psxfenv01
 type: build
 use-after: []
 use-before: []
