@@ -60,6 +60,8 @@ source:
 - bsps/mips/shared/timer/gettime.S
 - bsps/mips/shared/timer/timer.c
 - bsps/shared/cache/nocache.c
+- bsps/shared/dev/cpucounter/cpucounterfrequency.c
+- bsps/shared/dev/cpucounter/cpucounterread.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/start/bspreset-loop.c
 - bsps/shared/start/gettargethash-default.c

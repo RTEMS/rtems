@@ -50,6 +50,8 @@ source:
 - bsps/mips/shared/irq/isr_entries.S
 - bsps/mips/shared/irq/vectorexceptions.c
 - bsps/shared/cache/nocache.c
+- bsps/shared/dev/cpucounter/cpucounterfrequency.c
+- bsps/shared/dev/cpucounter/cpucounterread.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/serial/console-polled.c
 - bsps/shared/start/gettargethash-default.c
