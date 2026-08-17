@@ -97,6 +97,16 @@ SYM (_ISR_Handler):
 	 */
 	movl      esp, eax
 	subl      $FRM_SIZ, esp
+#ifdef __SSE__
+	/*
+	 * The fxsave below faults unless its operand is 16 byte aligned, and
+	 * the stack pointer of the interrupted context is not necessarily
+	 * aligned.  FRM_SIZ keeps the alignment, it does not establish it, so
+	 * align the frame here.  The original stack pointer is already in eax
+	 * and is restored from ESP_OFF at the end.
+	 */
+	andl      $ - CPU_STACK_ALIGNMENT, esp
+#endif
 	movl      eax, ESP_OFF(esp)
 	movl      ebp, EBP_OFF(esp)
 	movl      ebx, EBX_OFF(esp)
