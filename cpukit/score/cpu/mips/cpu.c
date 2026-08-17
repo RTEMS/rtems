@@ -163,12 +163,12 @@ void _CPU_Context_Initialize(
   the_context->ra = (__MIPS_REGISTER_TYPE) (uintptr_t)entry_point;
 
   /*
-   * Every interrupt source of the status register is enabled.  Which of them
-   * reaches the processor is decided by the interrupt controller, so that a
-   * source disabled with rtems_interrupt_vector_disable() stays disabled
-   * across a context switch.  The level carries the interrupt enable bit.
+   * The interrupt mask is not part of the context.  It is global state of the
+   * interrupt controller, so that a source disabled with
+   * rtems_interrupt_vector_disable() stays disabled across a context switch.
+   * The level carries the interrupt enable bit.
    */
-  c0_sr = mips_interrupt_mask() | 0x300 | SR_CU0 | _EXTRABITS;
+  c0_sr = SR_CU0 | _EXTRABITS;
 
   if ( intlvl == 0 ) {
     c0_sr |= _INTON;

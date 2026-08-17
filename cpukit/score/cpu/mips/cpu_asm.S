@@ -524,21 +524,18 @@ _CPU_Context_switch_restore:
 
 
 /*
-** Incorporate the incoming task's FP coprocessor state and interrupt mask/enable
+** Incorporate the incoming task's FP coprocessor state and interrupt enable
 ** into the status register.  We jump thru the requisite hoops to ensure we
 ** maintain all other SR bits as global values.
 **
-** Get the task's FPU enable, int mask & int enable bits.  Although we keep the
-** software int enables on a per-task basis, the rtems_task_create
-** Interrupt Level & int level manipulation functions cannot enable/disable them,
-** so they are automatically enabled for all tasks.  To turn them off, a task
-** must itself manipulate the SR register.
+** The interrupt mask is not one of them.  It is the enable of each interrupt
+** source, which rtems_interrupt_vector_enable() and its counterpart own, so it
+** is global state of the interrupt controller rather than state of a thread.
+** Restoring it per thread would undo a disable at the next context switch.
 **
-** Although something of a hack on this processor, we treat the SR register
-** int enables as the RTEMS interrupt level.  We use the int level
-** value as a bitmask, not as any sort of greater than/less than metric.
-** Manipulation of a task's interrupt level corresponds directly to manipulation
-** of that task's SR bits, as seen in cpu.c
+** The interrupt enable is the RTEMS interrupt level of this port, and it is
+** per task.  Manipulation of a task's interrupt level corresponds directly to
+** manipulation of that bit, as seen in cpu.c
 **
 ** Note, interrupts are disabled before context is saved, though the task's
 ** interrupt enable state is recorded.  The task swapping in will apply its
@@ -548,7 +545,6 @@ _CPU_Context_switch_restore:
 */
 
 	li	t2,SR_CU1
-	or	t2,SR_IMASK
 
 	/* int enable bits */
 #if (__mips == 3) || (__mips == 32)

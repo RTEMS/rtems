@@ -45,7 +45,20 @@
 
 void bsp_interrupt_facility_initialize(void)
 {
+  uint32_t sr;
+
   mips_install_isr_entries();
+
+  /*
+   * The interrupt mask of the status register is global state of the
+   * interrupt controller and no longer part of the context of a thread, so it
+   * is established once here.  Every source of the processor starts enabled,
+   * including the two software interrupts, which mips_interrupt_mask() leaves
+   * out.  Which of them reaches the processor is up to the controller.
+   */
+  mips_get_sr( sr );
+  sr |= mips_interrupt_mask() | SR_IBIT1 | SR_IBIT2;
+  mips_set_sr( sr );
 }
 
 void bsp_interrupt_handler_default(rtems_vector_number vector)
