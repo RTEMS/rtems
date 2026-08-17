@@ -40,7 +40,7 @@
 #include <rtems/irq-extension.h>
 
 #define BSP_IRQ_VECTOR_NUMBER     34
-#define BSP_INTERRUPT_VECTOR_COUNT (BSP_IRQ_VECTOR_NUMBER + 1)
+#define BSP_INTERRUPT_VECTOR_COUNT BSP_IRQ_VECTOR_NUMBER
 
 #endif /* !ASM */
 #endif /* LIBBSP_GENERIC_RISCV_IRQ_H */
