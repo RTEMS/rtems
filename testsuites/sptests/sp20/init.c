@@ -49,7 +49,16 @@ const char rtems_test_name[] = "SP 20";
 
 void end_of_test( void )
 {
+  /*
+   * This test prints through a stream and rtems_test_exit() shuts the system
+   * down without the exit processing of the C library, so the report has to
+   * reach the device here.  It takes both steps.  fflush() moves the buffer of
+   * the stream into the console driver and fsync() makes the driver write it
+   * out.  A stream which is line buffered needs only the second step, which is
+   * why the first one was missing.
+   */
   TEST_END();
+  fflush( stdout );
   fsync( STDOUT_FILENO );
   rtems_test_exit( 0 );
 }
