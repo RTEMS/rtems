@@ -27,6 +27,8 @@ links:
 - role: build-dependency
   uid: start
 - role: build-dependency
+  uid: tstmoxiesim
+- role: build-dependency
   uid: ../../obj
 - role: build-dependency
   uid: ../../objirqdflt

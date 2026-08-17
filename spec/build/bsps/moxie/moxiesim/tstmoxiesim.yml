@@ -1,0 +1,77 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- set-test-state:
+    reason: |
+      The BSP has neither a clock driver nor interrupt support.  Its clock is
+      the idle thread, which calls rtems_clock_tick() in a loop, so time only
+      advances while the system is idle and there is no clock interrupt at
+      all.  The CPU port leaves _CPU_ISR_Disable(), _CPU_ISR_Enable() and
+      _CPU_ISR_Set_level() empty, so an interrupt level is never established
+      and no source can be masked.  Tests which need a timer, a time source
+      with a resolution below the tick or an interrupt cannot work here.  The
+      remaining tests in this list fail for reasons of their own, thread local
+      storage among them, which nobody has taken up either.  Excluding them
+      keeps the results of this BSP readable.
+    state: exclude
+    tests:
+    - capture01
+    - crypt01
+    - exit03
+    - fatal-idle-thread-stack-too-small
+    - fatal-too-large-tls-size
+    - flashdev01
+    - fsjffs2empty01
+    - fsjffs2gc01
+    - iostream
+    - linpack
+    - performance-no-clock-0
+    - psxglobalcon01
+    - psxglobalcon02
+    - rcxx01
+    - record04
+    - regulator01
+    - shell01
+    - sp37
+    - spcan01
+    - spconsole01
+    - spedfsched04
+    - spfatal26
+    - spfatal33
+    - spglobalcon02
+    - spintrcritical21
+    - spintrcritical22
+    - spintrcritical23
+    - spintrcritical24
+    - sprmsched01
+    - sprmsched02
+    - sptimecounter02
+    - sptimecounter03
+    - sptls01
+    - sptls02
+    - sptls04
+    - stackchk01
+    - terminate
+    - tftpfs
+    - tm21
+    - tmfine01
+    - tmonetoone
+    - ttest01
+    - ttest02
+    - unit-no-clock-0
+    - validation-0
+    - validation-1
+    - validation-intr
+    - validation-no-clock-0
+    - validation-one-cpu-0
+    - validation-one-cpu-1
+    - validation-timecounter-1
+    - validation-tls-0
+    - validation-tls-1
+build-type: option
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+default: []
+description: ''
+enabled-by: true
+links: []
+type: build
