@@ -67,14 +67,14 @@ T_TEST_OUTPUT(
   assert2,
   "B:assert2\n"
   "L:setup\n"
-  "P:0:0:UI1:test-assert.c:18\n"
-  "P:1:0:UI1:test-assert.c:54\n"
-  "F:2:0:UI1:test-assert.c:55:test fails and we stop the test case\n"
+  "P:0:0:UI1:test-assert.c:17\n"
+  "P:1:0:UI1:test-assert.c:51\n"
+  "F:2:0:UI1:test-assert.c:52:test fails and we stop the test case\n"
   "L:stop\n"
-  "P:3:0:UI1:test-assert.c:29\n"
+  "P:3:0:UI1:test-assert.c:27\n"
   "L:teardown\n"
-  "P:4:0:UI1:test-assert.c:40\n"
-  "P:5:0:UI1:test-assert.c:42\n"
+  "P:4:0:UI1:test-assert.c:37\n"
+  "P:5:0:UI1:test-assert.c:39\n"
   "E:assert2:N:6:F:1:D:0.001000\n"
 );
 

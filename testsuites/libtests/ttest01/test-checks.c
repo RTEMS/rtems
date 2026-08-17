@@ -3066,7 +3066,7 @@ T_TEST_OUTPUT(
   step_assert_eq_mem,
   "B:step_assert_eq_mem\n"
   "P:0:0:UI1:test-checks.c:183\n"
-  "F:1:0:UI1:test-checks.c:184:memcmp(&a, &b, sizeof(a)) == 0\n"
+  "F:1:0:UI1:test-checks.c:184:memcmp(&a, &b, sizeof( a )) == 0\n"
   "E:step_assert_eq_mem:N:2:F:1:D:0.001000\n"
 );
 
@@ -3074,12 +3074,12 @@ T_TEST_OUTPUT(
   check_eq_mem,
   "B:check_eq_mem\n"
   "P:0:0:UI1:test-checks.c:192\n"
-  "F:1:0:UI1:test-checks.c:193:memcmp(&a, &b, sizeof(a)) == 0\n"
-  "F:*:0:UI1:test-checks.c:195:memcmp(&a, &b, sizeof(a)) == 0\n"
+  "F:1:0:UI1:test-checks.c:193:memcmp(&a, &b, sizeof( a )) == 0\n"
+  "F:*:0:UI1:test-checks.c:195:memcmp(&a, &b, sizeof( a )) == 0\n"
   "P:2:0:UI1:test-checks.c:196\n"
-  "F:3:0:UI1:test-checks.c:197:memcmp(&a, &b, sizeof(a)) == 0\n"
+  "F:3:0:UI1:test-checks.c:197:memcmp(&a, &b, sizeof( a )) == 0\n"
   "P:4:0:UI1:test-checks.c:198\n"
-  "F:5:0:UI1:test-checks.c:199:memcmp(&a, &b, sizeof(a)) == 0\n"
+  "F:5:0:UI1:test-checks.c:199:memcmp(&a, &b, sizeof( a )) == 0\n"
   "E:check_eq_mem:N:6:F:4:D:0.001000\n"
 );
 
@@ -3087,7 +3087,7 @@ T_TEST_OUTPUT(
   step_assert_ne_mem,
   "B:step_assert_ne_mem\n"
   "P:0:0:UI1:test-checks.c:208\n"
-  "F:1:0:UI1:test-checks.c:209:memcmp(&a, &a, sizeof(a)) != 0\n"
+  "F:1:0:UI1:test-checks.c:209:memcmp(&a, &a, sizeof( a )) != 0\n"
   "E:step_assert_ne_mem:N:2:F:1:D:0.001000\n"
 );
 
@@ -3095,12 +3095,12 @@ T_TEST_OUTPUT(
   check_ne_mem,
   "B:check_ne_mem\n"
   "P:0:0:UI1:test-checks.c:217\n"
-  "F:1:0:UI1:test-checks.c:218:memcmp(&a, &a, sizeof(a)) != 0\n"
-  "F:*:0:UI1:test-checks.c:220:memcmp(&a, &a, sizeof(a)) != 0\n"
+  "F:1:0:UI1:test-checks.c:218:memcmp(&a, &a, sizeof( a )) != 0\n"
+  "F:*:0:UI1:test-checks.c:220:memcmp(&a, &a, sizeof( a )) != 0\n"
   "P:2:0:UI1:test-checks.c:221\n"
-  "F:3:0:UI1:test-checks.c:222:memcmp(&a, &a, sizeof(a)) != 0\n"
+  "F:3:0:UI1:test-checks.c:222:memcmp(&a, &a, sizeof( a )) != 0\n"
   "P:4:0:UI1:test-checks.c:223\n"
-  "F:5:0:UI1:test-checks.c:224:memcmp(&a, &a, sizeof(a)) != 0\n"
+  "F:5:0:UI1:test-checks.c:224:memcmp(&a, &a, sizeof( a )) != 0\n"
   "E:check_ne_mem:N:6:F:4:D:0.001000\n"
 );
 

@@ -19,7 +19,7 @@ T_TEST_CASE( destructor )
 T_TEST_OUTPUT(
   destructor,
   "B:destructor\n"
-  "P:0:0:UI1:test-destructor.c:7\n"
+  "P:0:0:UI1:test-destructor.c:6\n"
   "E:destructor:N:1:F:0:D:0.001000\n"
 );
 

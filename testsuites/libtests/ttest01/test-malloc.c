@@ -72,24 +72,24 @@ T_TEST_OUTPUT(
 T_TEST_OUTPUT(
   zalloc_auto,
   "B:zalloc_auto\n"
-  "P:0:0:UI1:test-malloc.c:35\n"
-  "P:1:0:UI1:test-malloc.c:36\n"
-  "P:2:0:UI1:test-malloc.c:26\n"
+  "P:0:0:UI1:test-malloc.c:34\n"
+  "P:1:0:UI1:test-malloc.c:35\n"
+  "P:2:0:UI1:test-malloc.c:25\n"
   "E:zalloc_auto:N:3:F:0:D:0.001000\n"
 );
 
 T_TEST_OUTPUT(
   malloc_huge,
   "B:malloc_huge\n"
-  "P:0:0:UI1:test-malloc.c:45\n"
+  "P:0:0:UI1:test-malloc.c:44\n"
   "E:malloc_huge:N:1:F:0:D:0.001000\n"
 );
 
 T_TEST_OUTPUT(
   calloc_auto,
   "B:calloc_auto\n"
-  "P:0:0:UI1:test-malloc.c:53\n"
-  "P:1:0:UI1:test-malloc.c:54\n"
+  "P:0:0:UI1:test-malloc.c:52\n"
+  "P:1:0:UI1:test-malloc.c:53\n"
   "E:calloc_auto:N:2:F:0:D:0.001000\n"
 );
 
