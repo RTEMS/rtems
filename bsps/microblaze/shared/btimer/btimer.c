@@ -35,6 +35,13 @@
 static volatile Microblaze_Timer *mblaze_timer;
 bool                              benchmark_timer_find_average_overhead;
 
+/* The value loaded into the down counter by benchmark_timer_initialize() */
+static uint32_t mblaze_timer_reload_value;
+
+/* The counter frequency in Hz used by benchmark_timer_initialize() */
+static uint32_t mblaze_timer_frequency_in_hz =
+  BSP_MICROBLAZE_FPGA_TIMER_FREQUENCY;
+
 void benchmark_timer_initialize ( void )
 {
   mblaze_timer = (volatile Microblaze_Timer *) try_get_prop_from_device_tree (
@@ -62,6 +69,9 @@ void benchmark_timer_initialize ( void )
                                     BSP_MICROBLAZE_FPGA_TIMER_FREQUENCY );
   uint32_t counter_ticks_per_clock_tick =
     ( counter_frequency_in_hz * us_per_tick ) / 1000000;
+
+  mblaze_timer_frequency_in_hz = counter_frequency_in_hz;
+  mblaze_timer_reload_value = counter_ticks_per_clock_tick;
 
   /* Set a reset value for the timer counter */
   mblaze_timer->tlr0 = counter_ticks_per_clock_tick;
@@ -92,9 +102,15 @@ benchmark_timer_t benchmark_timer_read ( void )
   uint32_t ticks;
   uint32_t total;
 
-  ticks = 1000000 - mblaze_timer->tcr0;
+  /*
+   * The counter runs down from the value loaded by
+   * benchmark_timer_initialize(), so the elapsed counter ticks are the
+   * difference to it.  Both the reload value and the frequency depend on the
+   * BSP variant and on the configured clock tick interval.
+   */
+  ticks = mblaze_timer_reload_value - mblaze_timer->tcr0;
 
-  total = ticks / ( BSP_MICROBLAZE_FPGA_TIMER_FREQUENCY / 1000000 );
+  total = ticks / ( mblaze_timer_frequency_in_hz / 1000000 );
 
   if ( benchmark_timer_find_average_overhead == true )
     return total; /* in XXX microsecond units */
