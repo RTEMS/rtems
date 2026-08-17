@@ -53,8 +53,14 @@ rtems_status_code bsp_interrupt_get_attributes(
 {
   (void) vector;
 
+  /*
+   * The interrupt enable register of the interrupt controller holds one bit
+   * per vector, so every vector can be enabled and disabled.
+   */
   attributes->is_maskable = true;
+  attributes->can_enable = true;
   attributes->maybe_enable = true;
+  attributes->can_disable = true;
   attributes->maybe_disable = true;
   attributes->can_clear = true;
   attributes->cleared_by_acknowledge = true;
@@ -67,12 +73,15 @@ rtems_status_code bsp_interrupt_is_pending(
   bool               *pending
 )
 {
-  (void) vector;
-
   bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
   bsp_interrupt_assert( pending != NULL );
-  *pending = false;
-  return RTEMS_UNSATISFIED;
+
+  uint32_t mask = 1U << vector;
+
+  /* The interrupt status register holds the pending status of each source */
+  *pending = ( mblaze_intc->isr & mask ) != 0;
+
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_raise( rtems_vector_number vector )
