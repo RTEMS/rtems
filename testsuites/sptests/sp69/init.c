@@ -110,8 +110,15 @@ rtems_task Init( rtems_task_argument argument )
     "cpu time should be ~100000000 is %ld\n",
     period_status.executed_since_last_period.tv_nsec
   );
+  /*
+   * The wall time is the sum of a sleep, which is quantised to the clock
+   * tick, and a busy period, which ends when enough processor time was
+   * consumed.  Neither lands exactly on the nominal 600 milliseconds, so
+   * allow the same ten milliseconds below it which the upper bound allows
+   * above it.
+   */
   rtems_test_assert( period_status.since_last_period.tv_sec == 0 );
-  rtems_test_assert( period_status.since_last_period.tv_nsec >= 600000000 );
+  rtems_test_assert( period_status.since_last_period.tv_nsec >= 590000000 );
   rtems_test_assert( period_status.since_last_period.tv_nsec <= 610000000 );
   rtems_test_assert( period_status.executed_since_last_period.tv_sec == 0 );
   rtems_test_assert(
