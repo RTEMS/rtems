@@ -225,9 +225,6 @@ void pc386_parse_console_arguments(void)
     minor_printk = minor;
   }
 
-  printk( "Console: %s printk: %s\n",
-          get_name(minor_console),get_name(minor_printk) );
-
   /*
    * Any output after this can cause problems until termios is initialised.
    */

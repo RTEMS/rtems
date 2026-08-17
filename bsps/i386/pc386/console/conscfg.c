@@ -239,7 +239,6 @@ void legacy_uart_probe(void)
     printk( "COM1-COM4: disabled\n" );
   } else {
     if (Legacy_Port_Count) {
-      printk("Legacy UART Ports: COM1-COM4\n");
       console_register_devices( Legacy_Ports, Legacy_Port_Count );
     }
   }

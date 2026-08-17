@@ -736,7 +736,7 @@ void vesa_realmode_bootup_init(void)
             printk(FB_VESA_NAME " selected not to initialize graphics\n");
             return;
         case NO_MODE_REQ:
-            printk(FB_VESA_NAME " not initialized, no video selected\n");
+            /* No video mode was requested, which is not an error */
             return;
     }
 

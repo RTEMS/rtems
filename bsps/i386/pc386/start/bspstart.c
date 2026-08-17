@@ -55,14 +55,12 @@ static void bsp_pci_initialize_helper(void)
 
   pci_accessors = pci_bios_initialize();
   if (pci_accessors != NULL) {
-    printk("PCI bus: using PCI BIOS interface\n");
     BSP_pci_configuration.pci_functions = pci_accessors;
     return;
   }
 
   pci_accessors = pci_io_initialize();
   if (pci_accessors != NULL) {
-    printk("PCI bus: using PCI I/O interface\n");
     BSP_pci_configuration.pci_functions = pci_accessors;
     return;
   }

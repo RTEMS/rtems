@@ -57,7 +57,6 @@ unsigned char pci_bus_count(void)
   }
 
   if ( pci_number_of_buses == 0 ) {
-    printk("pci_bus_count() found 0 busses, assuming 1\n");
     pci_number_of_buses = 1;
   } else if ( pci_number_of_buses == 0xff ) {
     printk("pci_bus_count() found 0xff busses, assuming 1\n");

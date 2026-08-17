@@ -186,8 +186,6 @@ static int BSP_irq_enable_at_i8259a(const rtems_irq_number irqLine)
 {
   unsigned short        mask;
   rtems_interrupt_lock_context lock_context;
-  uint8_t               isr;
-  uint8_t               irr;
 
   rtems_interrupt_lock_acquire(&rtems_i8259_access_lock, &lock_context);
 
@@ -196,19 +194,12 @@ static int BSP_irq_enable_at_i8259a(const rtems_irq_number irqLine)
 
   if (irqLine < 8)
   {
-    isr = BSP_i8259a_irq_in_service_reg(PIC_MASTER_COMMAND_IO_PORT);
-    irr = BSP_i8259a_irq_int_request_reg(PIC_MASTER_COMMAND_IO_PORT);
     BSP_i8259a_irq_update_master_imr();
   }
   else
   {
-    isr = BSP_i8259a_irq_in_service_reg(PIC_SLAVE_COMMAND_IO_PORT);
-    irr = BSP_i8259a_irq_int_request_reg(PIC_SLAVE_COMMAND_IO_PORT);
     BSP_i8259a_irq_update_slave_imr();
   }
-
-  if (((isr ^ irr) & mask) != 0)
-    printk("i386: isr=%x irr=%x\n", isr, irr);
 
   rtems_interrupt_lock_release(&rtems_i8259_access_lock, &lock_context);
 

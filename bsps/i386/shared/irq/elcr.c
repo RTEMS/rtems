@@ -73,7 +73,7 @@ int elcr_found;
 #ifdef __rtems__
 #undef printf
 #define printf printk
-#define bootverbose 1
+#define bootverbose 0
 #define KASSERT(...)
 #endif /* __rtems__ */
 
