@@ -183,9 +183,18 @@ static void test_bintime_fini(
 
   for ( i = 0; i < active_workers; ++i ) {
     sbintime_t error;
+    sbintime_t limit;
+
+    /*
+     * The job runs for a number of clock ticks, so the measured duration is
+     * quantised to the tick period.  A limit of one millisecond only holds
+     * where the tick is shorter than that.  Allow one tick and a millisecond
+     * for the granularity of the loop which observes the stop condition.
+     */
+    limit = SBT_1S / (sbintime_t) rtems_clock_get_ticks_per_second() + SBT_1MS;
 
     error = DURATION_IN_SECONDS * SBT_1S - ctx->duration_per_job[ i ];
-    rtems_test_assert( error * error < SBT_1MS * SBT_1MS );
+    rtems_test_assert( error * error < limit * limit );
   }
 
   test_print_results( "Clock Driver", ctx, active_workers );
