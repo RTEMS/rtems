@@ -138,8 +138,8 @@ SECTIONS {
        } > REGION_RODATA AT > REGION_RODATA_LOAD
        .fini_array : ALIGN_WITH_INPUT {
                PROVIDE_HIDDEN (__fini_array_start = .);
-               KEEP (*(.fini_array))
                KEEP (*(SORT(.fini_array.*)))
+               KEEP (*(.fini_array))
                PROVIDE_HIDDEN (__fini_array_end = .);
        } > REGION_RODATA AT > REGION_RODATA_LOAD
        .ctors : ALIGN_WITH_INPUT {
