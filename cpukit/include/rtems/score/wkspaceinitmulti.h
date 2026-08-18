@@ -38,7 +38,7 @@
 #define _RTEMS_SCORE_WKSPACEINITMULTI_H
 
 #include <rtems/score/wkspace.h>
-#include <rtems/score/heapimpl.h>
+#include <rtems/score/heapfirstfitimpl.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/memory.h>
 #include <rtems/config.h>
