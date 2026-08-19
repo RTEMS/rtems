@@ -5,8 +5,8 @@
  *
  * @ingroup Termios
  *
- * @brief This source file contains the task driven variant of the simple
- *   console driver.
+ * @brief This source file contains the implementation of
+ *   _Console_simple_task_Initialize().
  */
 
 /*

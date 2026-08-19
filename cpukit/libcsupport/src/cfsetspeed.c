@@ -5,8 +5,7 @@
  *
  * @ingroup Termios
  *
- * @brief This source file contains the implementation of cfsetspeed() and
- *   cfmakeraw().
+ * @brief This source file contains the implementation of cfsetspeed().
  */
 
 /*

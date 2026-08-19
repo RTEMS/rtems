@@ -1,11 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Associate Local by Remote
+ * @ingroup RTEMSImplAssociativity
  *
- *  @ingroup RTEMSImplAssociativity
+ * @brief This source file contains the implementation of
+ *   rtems_assoc_local_by_remote().
  */
 
 /*

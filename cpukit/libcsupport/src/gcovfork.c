@@ -5,8 +5,8 @@
  *
  * @ingroup libcsupport
  *
- * @brief This source file contains functions required by GCC if code and
- *   branch coverage instrumentation (gcov) is enabled.
+ * @brief This source file contains the fork support of the gcov coverage
+ *   data.
  */
 
 /*

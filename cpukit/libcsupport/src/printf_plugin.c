@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Plugin Printf
- *  @ingroup libcsupport
+ * @ingroup libcsupport
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_print_printer_printf().
  */
 
 /*

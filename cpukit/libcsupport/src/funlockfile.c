@@ -1,8 +1,9 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Unlock File for Stdio
- *  @ingroup libcsupport
+ * @ingroup libcsupport
+ *
+ * @brief This source file contains the implementation of funlockfile().
  */
 
 /*

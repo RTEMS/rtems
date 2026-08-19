@@ -5,7 +5,8 @@
  *
  * @ingroup FileSystemTypesAndMount
  *
- * @brief Mount table entry visitor.
+ * @brief This source file contains the implementation of
+ *   rtems_filesystem_mount_iterate().
  */
 
 /*

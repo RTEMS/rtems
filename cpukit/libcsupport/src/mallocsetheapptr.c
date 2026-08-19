@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Malloc Set Heap Pointer
- *  @ingroup libcsupport
+ * @ingroup libcsupport
+ *
+ * @brief This source file contains the implementation of
+ *   malloc_set_heap_pointer().
  */
 
 /*

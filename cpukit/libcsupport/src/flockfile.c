@@ -1,8 +1,9 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Lock File for Stdio
- *  @ingroup libcsupport
+ * @ingroup libcsupport
+ *
+ * @brief This source file contains the implementation of flockfile().
  */
 /*
  * Copyright (c) 2009 by

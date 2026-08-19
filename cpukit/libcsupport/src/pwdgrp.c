@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: GPL-2.0-with-RTEMS-exception */
 
 /**
- *  @file
+ * @file
  *
- *  @brief User Database Access Routines
- *  @ingroup libcsupport
+ * @ingroup libcsupport
+ *
+ * @brief This source file contains the implementation of the password and
+ *   group database support.
  */
 
 /*

@@ -5,9 +5,8 @@
  *
  * @ingroup LibIOInternal
  *
- * @brief This source file provides rtems_libio_iops and
- *   rtems_libio_number_iops for a zero file descriptor application
- *   configuration.
+ * @brief This source file contains the input and output pointer table for a
+ *   configuration with zero file descriptors.
  */
 
 /*

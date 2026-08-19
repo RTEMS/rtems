@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Base File System Initialization
- *  @ingroup LibIO
+ * @ingroup LibIO
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_filesystem_initialize().
  */
 
 /*

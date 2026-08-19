@@ -1,11 +1,11 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Set Process Group ID for Job Control
+ * @ingroup libcsupport
  *
- *  @ingroup libcsupport
+ * @brief This source file contains the implementation of setpgid().
  */
 
 /*

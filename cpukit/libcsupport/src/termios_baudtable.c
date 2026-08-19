@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief  RTEMS Termios Baud Table
- *  @ingroup TermiostypesSupport
+ * @ingroup TermiostypesSupport
+ *
+ * @brief This source file contains the table which maps a Termios baud
+ *   constant to a baud rate.
  */
 
 /*

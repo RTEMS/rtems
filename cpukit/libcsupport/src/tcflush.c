@@ -4,7 +4,8 @@
  * @file
  *
  * @ingroup Termios
- * @brief tcflush() - POSIX 1003.1b 7.2.2 - Line Control Functions
+ *
+ * @brief This source file contains the implementation of tcflush().
  */
 
 /*

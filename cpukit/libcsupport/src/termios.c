@@ -4,7 +4,9 @@
  * @file
  *
  * @ingroup Termios
- * TERMIOS serial line support
+ *
+ * @brief This source file contains the implementation of the Termios device
+ *   support.
  */
 
 /*

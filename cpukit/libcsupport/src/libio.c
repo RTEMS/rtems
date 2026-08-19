@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief File Descriptor Routines
- *  @ingroup LibIOInternal
+ * @ingroup LibIOInternal
+ *
+ * @brief This source file contains the implementation of the input and
+ *   output library.
  */
 
 /*

@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS File System Location Support
- *  @ingroup LibIOInternal
+ * @ingroup LibIOInternal
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_current_user_env_get().
  */
 
 /*

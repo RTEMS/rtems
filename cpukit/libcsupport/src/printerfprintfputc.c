@@ -5,8 +5,8 @@
  *
  * @ingroup RTEMSImplPrintSupport
  *
- * @brief This source file contains the implementation of the printer which
- *   uses fprintf().
+ * @brief This source file contains the implementation of
+ *   rtems_print_printer_fprintf_putc().
  */
 
 /*

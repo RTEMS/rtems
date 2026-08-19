@@ -5,7 +5,7 @@
  *
  * @ingroup libcsupport
  *
- * @brief ioctl() system call
+ * @brief This source file contains the implementation of ioctl().
  */
 
 /*

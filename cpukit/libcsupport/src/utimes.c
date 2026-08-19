@@ -1,11 +1,11 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @ingroup libcsupport
+ * @ingroup libcsupport
  *
- *  @brief Set file access and modification times in milliseconds.
+ * @brief This source file contains the implementation of utimes().
  */
 
 /*

@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Sets the Initial Baud in the Termios Context
- *  @ingroup TermiostypesSupport
+ * @ingroup TermiostypesSupport
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_termios_set_initial_baud().
  */
 
 /*

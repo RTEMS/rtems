@@ -4,7 +4,9 @@
  * @file
  *
  * @ingroup RTEMSImplClassicCache
- * @brief RTEMS Cache Aligned Malloc
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_cache_aligned_malloc().
  */
 
 /*

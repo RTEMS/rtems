@@ -5,8 +5,8 @@
  *
  * @ingroup MallocSupport
  *
- * @brief This source file provides the C Program Heap control along with the
- *   system initialization handler.
+ * @brief This source file contains the implementation of
+ *   _Malloc_Initialize().
  */
 
 /*

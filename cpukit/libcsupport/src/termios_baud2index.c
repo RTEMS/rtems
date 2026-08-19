@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Convert Bxxx Constant to Index
- *  @ingroup TermiostypesSupport
+ * @ingroup TermiostypesSupport
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_termios_baud_to_index().
  */
 
 /*

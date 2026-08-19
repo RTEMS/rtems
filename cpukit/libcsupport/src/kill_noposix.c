@@ -5,7 +5,8 @@
  *
  * @ingroup libcsupport
  *
- * @brief Kill No POSIX
+ * @brief This source file contains the implementation of kill() and
+ *   _kill_r().
  *
  *  Marginal implementations of some POSIX API routines
  *  to be used when POSIX is disabled.

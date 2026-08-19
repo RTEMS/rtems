@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Instantiate a Private User Environment
- *  @ingroup LibIOEnv
+ * @ingroup LibIOEnv
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_libio_set_private_env() and rtems_libio_use_global_env().
  */
 
 /*

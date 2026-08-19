@@ -5,7 +5,8 @@
  *
  * @ingroup LibIO
  *
- * @brief mount_and_make_target_path() implementation.
+ * @brief This source file contains the implementation of
+ *   mount_and_make_target_path().
  */
 
 /*

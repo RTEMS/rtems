@@ -5,8 +5,8 @@
  *
  * @ingroup RTEMSImplPrintSupport
  *
- * @brief This source file contains the implementation of the task driven
- *   printer.
+ * @brief This source file contains the implementation of
+ *   rtems_print_printer_task() and rtems_printer_task_drain().
  */
 
 /*

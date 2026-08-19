@@ -5,7 +5,7 @@
  *
  * @ingroup libcsupport
  *
- * @brief POSIX 1003.1b 6.2.1 Duplicate an Open File Descriptor
+ * @brief This source file contains the implementation of dup().
  */
 
 /*

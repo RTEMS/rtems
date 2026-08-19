@@ -1,10 +1,11 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Variation on Aligned Memory Allocation
- *  @ingroup MallocSupport
+ * @ingroup MallocSupport
+ *
+ * @brief This source file contains the implementation of rtems_memalign().
  */
 
 /*

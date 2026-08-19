@@ -4,6 +4,8 @@
  * @file
  *
  * @ingroup libcsupport
+ *
+ * @brief This source file contains the implementation of posix_memalign().
  */
 
 /*

@@ -5,7 +5,7 @@
  *
  * @ingroup libcsupport
  *
- * @brief Change Root Directory
+ * @brief This source file contains the implementation of chroot().
  */
 
 /*

@@ -5,8 +5,7 @@
  *
  * @ingroup MallocSupport
  *
- * @brief This source file contains the implementation of aligned_alloc()
- *   and memalign().
+ * @brief This source file contains the implementation of aligned_alloc().
  */
 
 /*

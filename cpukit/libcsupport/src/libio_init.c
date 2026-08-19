@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS LibIO Initialization
- *  @ingroup LibIO
+ * @ingroup LibIO
+ *
+ * @brief This source file contains the implementation of rtems_libio_lock()
+ *   and rtems_libio_unlock().
  */
 
 /*

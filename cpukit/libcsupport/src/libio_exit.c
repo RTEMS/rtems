@@ -4,6 +4,9 @@
  * @file
  *
  * @ingroup LibIO
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_libio_exit().
  */
 
 /*

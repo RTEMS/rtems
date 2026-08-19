@@ -5,7 +5,7 @@
  *
  * @ingroup libcsupport
  *
- * @brief POSIX 1003.1b 6.6.2 - Synchronize the Data of a File
+ * @brief This source file contains the implementation of fdatasync().
  */
 
 /*

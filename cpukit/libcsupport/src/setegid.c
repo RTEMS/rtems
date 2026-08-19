@@ -5,7 +5,7 @@
  *
  * @ingroup libcsupport
  *
- * @brief Get Real User, Effective User, Ral Group, and Effective Group IDs
+ * @brief This source file contains the implementation of setegid().
  */
 
 /*

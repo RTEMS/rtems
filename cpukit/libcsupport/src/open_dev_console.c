@@ -4,7 +4,9 @@
  * @file
  *
  * @ingroup LibIO
- * @brief open_dev_console - open /dev/console
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_libio_post_driver().
  */
 
 /*

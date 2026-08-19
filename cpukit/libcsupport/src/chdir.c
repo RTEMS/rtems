@@ -5,7 +5,8 @@
  *
  * @ingroup libcsupport
  *
- * @brief POSIX 1003.1b - 5.2.1 - Change Current Working Directory
+ * @brief This source file contains the implementation of
+ *   rtems_filesystem_chdir() and chdir().
  */
 
 /*

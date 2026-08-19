@@ -4,7 +4,9 @@
  * @file
  *
  * @ingroup LibIO
- * @brief lseek() - POSIX 1003.1b 6.5.3 - Reposition Read/Write File Offset
+ *
+ * @brief This source file contains the implementation of lseek() and
+ *   _lseek_r().
  */
 
 /*

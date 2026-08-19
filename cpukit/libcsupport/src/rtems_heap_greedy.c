@@ -1,10 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Greedy Allocate that Empties the Heap
- *  @ingroup MallocSupport
+ * @ingroup MallocSupport
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_heap_greedy_allocate(),
+ *   rtems_heap_greedy_allocate_all_except_largest() and
+ *   rtems_heap_greedy_free().
  */
 
 /*

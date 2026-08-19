@@ -5,7 +5,8 @@
  *
  * @ingroup libcsupport
  *
- * @brief POSIX 1003.1b 6.5.2 - File Control
+ * @brief This source file contains the implementation of fcntl() and
+ *   _fcntl_r().
  */
 
 /*

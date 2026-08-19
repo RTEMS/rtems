@@ -5,7 +5,8 @@
  *
  * @ingroup libcsupport
  *
- * @brief POSIX 1003.1b 6.3.1 - Close a File
+ * @brief This source file contains the implementation of close() and
+ *   _close_r().
  */
 
 /*

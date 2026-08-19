@@ -1,10 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS File System Permissions Check Support
- *  @ingroup LibIOInternal
+ * @ingroup LibIOInternal
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_filesystem_check_access() and
+ *   rtems_filesystem_eval_path_check_access().
  */
 
 /*

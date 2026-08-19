@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: GPL-2.0-with-RTEMS-exception */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Newlib Support
- *  @ingroup libcsupport
+ * @ingroup libcsupport
+ *
+ * @brief This source file contains the implementation of
+ *   newlib_create_hook() and newlib_terminate_hook().
  */
 
 /*

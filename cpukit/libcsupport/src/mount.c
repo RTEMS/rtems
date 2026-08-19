@@ -1,10 +1,11 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Mounts a File System
- *  @ingroup FileSystemTypesAndMount
+ * @ingroup FileSystemTypesAndMount
+ *
+ * @brief This source file contains the implementation of mount().
  */
 
 /*

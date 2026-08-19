@@ -4,6 +4,10 @@
  * @file
  *
  * @ingroup RTEMSImplClassicCache
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_cache_coherent_allocate(), rtems_cache_coherent_free() and
+ *   rtems_cache_coherent_add_area().
  */
 
 /*

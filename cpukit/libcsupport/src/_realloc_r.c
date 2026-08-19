@@ -5,7 +5,7 @@
  *
  * @ingroup libcsupport
  *
- * @brief  _realloc_r Implementation
+ * @brief This source file contains the implementation of _realloc_r().
  */
 
 /*

@@ -5,8 +5,9 @@
  *
  * @ingroup libcsupport
  *
- * @brief This source file contains the implementation of the resource
- *   snapshot support.
+ * @brief This source file contains the implementation of
+ *   rtems_resource_snapshot_take(), rtems_resource_snapshot_equal() and
+ *   rtems_resource_snapshot_check().
  */
 
 /*

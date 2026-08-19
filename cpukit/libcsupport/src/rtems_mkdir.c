@@ -3,7 +3,7 @@
  *
  * @ingroup LibIO
  *
- * @brief rtems_mkdir() implementation.
+ * @brief This source file contains the implementation of rtems_mkdir().
  *
  * The implementation is based on FreeBSD 'bin/mkdir/mkdir.c' revision 163213.
  */

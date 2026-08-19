@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Extend Heap via Sbrk
- *  @ingroup MallocSupport
+ * @ingroup MallocSupport
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_heap_set_sbrk_amount() and rtems_heap_extend_via_sbrk().
  */
 
 /*

@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS DeviceIO Support
- *  @ingroup IMFSDevices
+ * @ingroup IMFSDevices
+ *
+ * @brief This source file contains the implementation of the device input
+ *   and output handlers.
  */
 
 /*

@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Dirty Memory Function
- *  @ingroup MallocSupport
+ * @ingroup MallocSupport
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_malloc_dirty_memory().
  */
 
 /*

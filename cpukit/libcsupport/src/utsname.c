@@ -5,7 +5,7 @@
  *
  * @ingroup libcsupport
  *
- * @brief Get System Name
+ * @brief This source file contains the implementation of uname().
  */
 
 /*

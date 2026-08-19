@@ -1,11 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @ingroup libcsupport
+ * @ingroup libcsupport
  *
- *  @brief Set file access and modification times in nanoseconds.
+ * @brief This source file contains the implementation of utimensat() and of
+ *   the utime support functions of the file system.
  */
 
 /*

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplAssociativity
  *
- * @brief RTEMS Assoc Routines
+ * @brief This source file contains the implementation of
+ *   rtems_assoc_remote_by_local_bitfield().
  */
 
 /*

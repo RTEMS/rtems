@@ -5,7 +5,7 @@
  *
  * @ingroup libcsupport
  *
- * @brief POSIX 1003.1b 6.4.2 - Write to a File
+ * @brief This source file contains the implementation of _write_r().
  */
 
 /*

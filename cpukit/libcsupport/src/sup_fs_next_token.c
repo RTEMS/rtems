@@ -1,10 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS File System Eval Eat Delimiter Path
- *  @ingroup LibIOInternal
+ * @ingroup LibIOInternal
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_filesystem_eval_path_eat_delimiter() and
+ *   rtems_filesystem_eval_path_next_token().
  */
 
 /*

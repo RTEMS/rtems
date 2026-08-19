@@ -1,11 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
  * @ingroup ErrorPanicSupport
  *
- *  @brief
+ * @brief This source file contains the implementation of rtems_verror() and
+ *   rtems_error().
  */
 
 /*

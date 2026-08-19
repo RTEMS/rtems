@@ -5,7 +5,8 @@
  *
  * @ingroup libcsupport
  *
- * @brief rtems_heap_extend() implementation.
+ * @brief This source file contains the implementation of
+ *   rtems_heap_extend().
  */
 
 /*

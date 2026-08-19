@@ -5,7 +5,8 @@
  *
  * @ingroup LibIO
  *
- * @brief This source file contains the implementation of fstat().
+ * @brief This source file contains the implementation of fstat() and
+ *   _fstat_r().
  */
 
 /*

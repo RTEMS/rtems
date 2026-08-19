@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Convert Baud Part of Termios control flags to an integral Baud Value
- *  @ingroup TermiostypesSupport
+ * @ingroup TermiostypesSupport
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_termios_baud_to_number().
  */
 
 /*

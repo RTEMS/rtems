@@ -1,11 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Associate Pointer by Name
+ * @ingroup RTEMSImplAssociativity
  *
- *  @ingroup RTEMSImplAssociativity
+ * @brief This source file contains the implementation of
+ *   rtems_assoc_ptr_by_name().
  */
 
 /*

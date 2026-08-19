@@ -1,11 +1,11 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Get Real User, Effective User, Ral Group, and Effective Group IDs
+ * @ingroup libcsupport
  *
- *  @ingroup libcsupport
+ * @brief This source file contains the implementation of getegid().
  */
 
 /*

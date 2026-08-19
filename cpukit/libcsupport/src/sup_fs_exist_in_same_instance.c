@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Checks that the Locations Exist in the Same File System Instance
- *  @ingroup LibIOInternal
+ * @ingroup LibIOInternal
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_filesystem_location_exists_in_same_instance_as().
  */
 
 /*

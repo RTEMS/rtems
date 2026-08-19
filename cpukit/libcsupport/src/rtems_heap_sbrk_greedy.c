@@ -3,11 +3,10 @@
 /**
  * @file
  *
- * @brief Greedy Allocate that Empties the sbrk system call
- *
  * @ingroup MallocSupport
  *
- * @brief Greedy allocation os sbrk system call memory
+ * @brief This source file contains the implementation of
+ *   rtems_heap_sbrk_greedy_allocate().
  *
  * The call consumes all the avialable sbrk memory extending
  * the supplied heap with it. There is no free as sbrk memory

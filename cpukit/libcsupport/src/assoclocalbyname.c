@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplAssociativity
  *
- * @brief RTEMS Associate Local by Name
+ * @brief This source file contains the implementation of
+ *   rtems_assoc_local_by_name().
  */
 
 /*

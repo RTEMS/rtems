@@ -5,7 +5,8 @@
  *
  * @ingroup libcsupport
  *
- * @brief calloc()
+ * @brief This source file contains the implementation of
+ *   _Malloc_Process_deferred_frees() and free().
  */
 
 /*

@@ -1,11 +1,11 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
  * @ingroup libcsupport
  *
- *  @brief POSIX sets user and group ids
+ * @brief This source file contains the implementation of setgid().
  */
 
 /*
