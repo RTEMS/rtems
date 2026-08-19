@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup Shell
+ * @ingroup RTEMSImplTrace
  *
  * @brief Access to the RTEMS Trace Buffer Generator (TBG).
  */
@@ -41,6 +41,17 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+/**
+ * @defgroup RTEMSImplTrace Trace Buffer Generator Support
+ *
+ * @ingroup RTEMSImpl
+ *
+ * @brief This group contains the trace buffer generator support
+ *   implementation.
+ *
+ * @{
+ */
 
 /**
  * These functions are provided as a separated interface to the Trace Buffer
@@ -183,6 +194,8 @@ void rtems_trace_buffering_stop( void );
  * Resume tracing by setting the finished flag.
  */
 void rtems_trace_buffering_resume( void );
+
+/** @} */
 
 #ifdef __cplusplus
 }

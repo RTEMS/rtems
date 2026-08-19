@@ -36,6 +36,32 @@
 
 #include <rtems/shell.h>
 
+/**
+ * @defgroup RTEMSImplShell Shell
+ *
+ * @ingroup RTEMSImpl
+ *
+ * @brief This group contains the shell implementation.
+ *
+ * @{
+ */
+
+/**
+ * @defgroup RTEMSImplShellCommands Shell Commands
+ *
+ * @ingroup RTEMSImplShell
+ *
+ * @brief This group contains the shell commands.
+ */
+
+/**
+ * @defgroup RTEMSImplShellUtilities Shell Utilities
+ *
+ * @ingroup RTEMSImplShell
+ *
+ * @brief This group contains the utility code which the shell commands use.
+ */
+
 extern rtems_shell_cmd_t   * rtems_shell_first_cmd;
 extern rtems_shell_topic_t * rtems_shell_first_topic;
 
@@ -57,5 +83,7 @@ extern void rtems_shell_print_unified_work_area_message(void);
 extern void strmode(mode_t mode, char *p);
 extern const char *user_from_uid(uid_t uid, int nouser);
 extern char *group_from_gid(gid_t gid, int nogroup);
+
+/** @} */
 
 #endif

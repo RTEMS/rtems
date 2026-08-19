@@ -52,6 +52,16 @@
 extern "C" {
 #endif
 
+/**
+ * @defgroup RTEMSImplPCI PCI Bus Support
+ *
+ * @ingroup RTEMSImpl
+ *
+ * @brief This group contains the PCI bus support implementation.
+ *
+ * @{
+ */
+
 /* The PCI Library have the following build time configuration options. It is
  * up to the BSP header file (bsp.h) to set options properly.
  *
@@ -132,6 +142,8 @@ extern int pci_for_each( int ( *func )( pci_dev_t, void * ), void *arg );
  *  0  device was found, *pdev was updated with the device's BUS|SLOT|FUNC
  */
 extern int pci_find( uint16_t ven, uint16_t dev, int index, pci_dev_t *pdev );
+
+/** @} */
 
 #ifdef __cplusplus
 }

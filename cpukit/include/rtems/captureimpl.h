@@ -46,6 +46,16 @@ extern "C" {
 #endif
 
 /**
+ * @defgroup RTEMSImplCapture Capture Engine
+ *
+ * @ingroup RTEMSImpl
+ *
+ * @brief This group contains the capture engine implementation.
+ *
+ * @{
+ */
+
+/**
  * @brief Capture set extension index.
  *
  * This function is used to set the extension index
@@ -189,6 +199,8 @@ void rtems_capture_print_record_capture(
  * This function  prints a capture watch list
  */
 void rtems_capture_print_watch_list( void );
+
+/** @} */
 
 #ifdef __cplusplus
 }

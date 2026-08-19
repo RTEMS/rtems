@@ -42,6 +42,16 @@
 extern "C" {
 #endif
 
+/**
+ * @defgroup RTEMSImplMonitor Monitor
+ *
+ * @ingroup RTEMSImpl
+ *
+ * @brief This group contains the monitor implementation.
+ *
+ * @{
+ */
+
 /* Forward decls from symbols.h */
 typedef struct _rtems_symbol_t       rtems_symbol_t;
 typedef struct _rtems_symbol_table_t rtems_symbol_table_t;
@@ -657,6 +667,8 @@ const rtems_monitor_object_info_t *rtems_monitor_object_lookup(
 extern rtems_symbol_table_t *rtems_monitor_symbols;
 
 #define MONITOR_WAKEUP_EVENT RTEMS_EVENT_0
+
+/** @} */
 
 #ifdef __cplusplus
 }

@@ -42,6 +42,16 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
+ * @defgroup RTEMSImplDebugger Debugger Server
+ *
+ * @ingroup RTEMSImpl
+ *
+ * @brief This group contains the debugger server implementation.
+ *
+ * @{
+ */
+
+/**
  * Timeout period for an ack
  */
 #define RTEMS_DEBUGGER_TIMEOUT (3)
@@ -80,6 +90,8 @@ extern void rtems_debugger_set_verbose(bool on);
  * Control remote debug printing.
  */
 extern int rtems_debugger_remote_debug(bool state);
+
+/** @} */
 
 #ifdef __cplusplus
 }

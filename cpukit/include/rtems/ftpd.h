@@ -40,6 +40,16 @@
 extern "C" {
 #endif
 
+/**
+ * @defgroup RTEMSImplFTPD FTP Daemon
+ *
+ * @ingroup RTEMSImpl
+ *
+ * @brief This group contains the FTP daemon implementation.
+ *
+ * @{
+ */
+
 #define FTPD_CONTROL_PORT 21
 
 /* Various buffer sizes */
@@ -91,6 +101,8 @@ rtems_status_code rtems_ftpd_start(
 extern struct rtems_ftpd_configuration rtems_ftpd_configuration;
 
 rtems_status_code rtems_initialize_ftpd( void );
+
+/** @} */
 
 #ifdef __cplusplus
 }
