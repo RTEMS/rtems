@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIX_AIO
+ * @ingroup RTEMSImplPOSIXAio
  * 
  * @brief POSIX Asynchronous I/O Support
  * 
@@ -47,7 +47,7 @@ extern "C" {
 #endif
 
 /**
- * @defgroup POSIX_AIO POSIX Asynchronous I/O Support
+ * @defgroup RTEMSImplPOSIXAio POSIX Asynchronous I/O Support
  * 
  * @ingroup RTEMSImplPOSIX
  * @{

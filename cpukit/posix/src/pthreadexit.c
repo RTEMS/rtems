@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIX_THREAD Thread API Extension
+ * @ingroup RTEMSImplPOSIXThreadExtension
  *
  * @brief POSIX Thread Exit Shared Helper
  */

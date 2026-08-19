@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIX_AIO
+ * @ingroup RTEMSImplPOSIXAio
  *
  * @brief Cancel Asynchronous I/O Operation.
  */

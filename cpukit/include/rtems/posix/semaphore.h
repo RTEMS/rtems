@@ -48,7 +48,7 @@ extern "C" {
 #endif
 
 /**
- * @defgroup POSIXSemaphorePrivate POSIX Semaphore Private Support
+ * @defgroup RTEMSImplPOSIXSemaphore POSIX Semaphore Private Support
  *
  * @ingroup RTEMSImplPOSIX
  *

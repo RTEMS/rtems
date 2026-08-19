@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIX_MQUEUE
+ * @ingroup RTEMSImplPOSIXMessageQueue
  *
  * @brief Notify Process that a Message is Available on a Queue
  */

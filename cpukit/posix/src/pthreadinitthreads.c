@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIX_PTHREAD
+ * @ingroup RTEMSImplPOSIXThread
  *
  * @brief POSIX Threads Initialize User Threads Body
  */

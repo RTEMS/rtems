@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIX_AIO
+ * @ingroup RTEMSImplPOSIXAio
  *
  * @brief Final return status for Asynchronous I/O request.
  */

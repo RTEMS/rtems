@@ -46,7 +46,7 @@ extern "C" {
 #endif
 
 /**
- * @defgroup POSIX_PTHREAD POSIX Threads Support
+ * @defgroup RTEMSImplPOSIXThread POSIX Threads Support
  *
  * @ingroup RTEMSImplPOSIX
  *

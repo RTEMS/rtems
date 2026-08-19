@@ -56,7 +56,7 @@
 #include <sys/types.h>
 
 /**
- * @defgroup POSIX_MQUEUE POSIX Message Queues
+ * @defgroup RTEMSImplPOSIXMessageQueue POSIX Message Queues
  *
  * @ingroup RTEMSImplPOSIX
  * 

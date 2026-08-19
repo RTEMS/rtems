@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIX_MQUEUE
+ * @ingroup RTEMSImplPOSIXMessageQueue
  *
  * @brief Set Message Queue Attributes
  */

@@ -48,7 +48,7 @@ extern "C" {
 #endif
 
 /**
- * @defgroup POSIX_INTERNAL_TIMERS POSIX Timer Private Support
+ * @defgroup RTEMSImplPOSIXTimer POSIX Timer Private Support
  *
  * @ingroup RTEMSImplPOSIX
  */

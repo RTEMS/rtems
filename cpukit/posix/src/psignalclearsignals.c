@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIX_SIGNALS POSIX Signals Support
+ * @ingroup RTEMSImplPOSIXSignal
  *
  * @brief POSIX Signals Clear Signals
  */

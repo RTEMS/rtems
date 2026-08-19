@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIX_SIGNALS
+ * @ingroup RTEMSImplPOSIXSignal
  *
  * @brief POSIX Signals Thread Unlock
  */

@@ -50,7 +50,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup POSIX_KEY
+ * @addtogroup RTEMSImplPOSIXKey
  *
  * @{
  */

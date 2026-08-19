@@ -44,7 +44,7 @@ extern "C" {
 #endif
 
 /**
- * @defgroup POSIXShmPrivate POSIX Shared Memory Private Support
+ * @defgroup RTEMSImplPOSIXShm POSIX Shared Memory Private Support
  *
  * @ingroup RTEMSImplPOSIX
  *

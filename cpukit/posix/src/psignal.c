@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief POSIX Signals Manager Initialization
- *  @ingroup POSIX_SIGNALS
+ *  @ingroup RTEMSImplPOSIXSignal
  */
 
 /*

@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief POSIX Delete Message Queue
- *  @ingroup POSIX_MQUEUE
+ *  @ingroup RTEMSImplPOSIXMessageQueue
  */
 
 /*

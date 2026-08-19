@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIX_AIO
+ * @ingroup RTEMSImplPOSIXAio
  *
  * @brief Syncing of all Outstanding Asynchronous I/O Operations.
  */

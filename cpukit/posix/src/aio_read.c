@@ -3,7 +3,7 @@
 /**
  * @file
  * 
- * @ingroup POSIX_AIO
+ * @ingroup RTEMSImplPOSIXAio
  *
  * @brief Asynchronous read operation.
  */

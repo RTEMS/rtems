@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIXShmPrivate
+ * @ingroup RTEMSImplPOSIXShm
  *
  * @brief POSIX Shared Memory Information with Zero Objects
  */

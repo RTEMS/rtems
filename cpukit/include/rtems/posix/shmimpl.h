@@ -46,7 +46,7 @@ extern "C" {
 #endif
 
 /**
- * @ingroup POSIXShmPrivate
+ * @ingroup RTEMSImplPOSIXShm
  * @{
  */
 

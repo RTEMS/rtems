@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIXSemaphorePrivate
+ * @ingroup RTEMSImplPOSIXSemaphore
  *
  * @brief POSIX Semaphore Information with Zero Objects
  */

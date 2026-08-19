@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIX_KEY
+ * @ingroup RTEMSImplPOSIXKey
  *
  * @brief POSIX Keys Information with Zero Objects
  */

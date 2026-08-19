@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief POSIX Signals Set Process Signals
- *  @ingroup POSIX_SIGNALS
+ *  @ingroup RTEMSImplPOSIXSignal
  */
 
 /*

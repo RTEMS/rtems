@@ -52,7 +52,7 @@ extern "C" {
 #endif
 
 /**
- * @defgroup POSIX_KEY POSIX Key
+ * @defgroup RTEMSImplPOSIXKey POSIX Key
  *
  * @ingroup RTEMSImplPOSIX
  *

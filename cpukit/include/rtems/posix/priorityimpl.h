@@ -46,7 +46,7 @@ extern "C" {
 #endif
 
 /**
- * @defgroup POSIX_PRIORITY POSIX Priority Support
+ * @defgroup RTEMSImplPOSIXPriority POSIX Priority Support
  *
  * @ingroup RTEMSImplPOSIX
  *

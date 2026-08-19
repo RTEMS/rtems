@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief Send a Message to a Message Queue
- *  @ingroup POSIX_MQUEUE
+ *  @ingroup RTEMSImplPOSIXMessageQueue
  */
 
 /*

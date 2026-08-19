@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief POSIX Is Priority Valid
- *  @ingroup POSIX_PRIORITY
+ *  @ingroup RTEMSImplPOSIXPriority
  */
 
 /*

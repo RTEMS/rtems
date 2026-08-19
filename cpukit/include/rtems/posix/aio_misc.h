@@ -3,7 +3,7 @@
 /**
  * @file
  * 
- * @ingroup POSIX_AIO
+ * @ingroup RTEMSImplPOSIXAio
  *
  * @brief POSIX Asynchronous I/O Private Support
  *

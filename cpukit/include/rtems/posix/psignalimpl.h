@@ -38,7 +38,7 @@
 #define _RTEMS_POSIX_PSIGNALIMPL_H
 
 /**
- * @defgroup POSIX_SIGNALS POSIX Signals Support
+ * @defgroup RTEMSImplPOSIXSignal POSIX Signals Support
  *
  * @ingroup RTEMSImplPOSIX
  *

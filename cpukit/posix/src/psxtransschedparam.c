@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIX_PTHREAD Private POSIX Threads
+ * @ingroup RTEMSImplPOSIXThread
  *
  * @brief Translate sched_param into SuperCore Terms
  */

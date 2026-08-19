@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIX_MQUEUE_P Message Queues Private Support Information
+ * @ingroup RTEMSImplPOSIXMessageQueuePrivate
  *
  * @brief POSIX Message Queue Receive Support
  */

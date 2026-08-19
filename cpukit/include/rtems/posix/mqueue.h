@@ -62,7 +62,7 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup POSIX_MQUEUE_P Message Queues Private Support
+ *  @defgroup RTEMSImplPOSIXMessageQueuePrivate Message Queues Private Support
  *
  *  @ingroup RTEMSImplPOSIX
  * 

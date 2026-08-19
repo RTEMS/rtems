@@ -44,7 +44,7 @@
 #include <signal.h>
 
 /**
- *  @defgroup POSIX_THREAD POSIX Thread API Extension
+ *  @defgroup RTEMSImplPOSIXThreadExtension POSIX Thread API Extension
  *
  *  @ingroup RTEMSImplPOSIX
  * 

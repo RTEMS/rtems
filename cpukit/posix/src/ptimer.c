@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIX_INTERNAL_TIMERS
+ * @ingroup RTEMSImplPOSIXTimer
  *
  * @brief POSIX Timer Information with Zero Objects
  */

@@ -51,7 +51,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup POSIX_PTHREAD
+ * @addtogroup RTEMSImplPOSIXThread
  */
 /**@{**/
 
