@@ -51,16 +51,16 @@
 
 #include <unistd.h>
 
-#if defined( _POSIX_MESSAGE_PASSING )
-
-#include <sys/types.h>
-
 /**
  * @defgroup RTEMSImplPOSIXMessageQueue POSIX Message Queues
  *
  * @ingroup RTEMSImplPOSIX
- * 
  */
+
+#if defined( _POSIX_MESSAGE_PASSING )
+
+#include <sys/types.h>
+
 /**@{**/
 
 #ifdef __cplusplus
