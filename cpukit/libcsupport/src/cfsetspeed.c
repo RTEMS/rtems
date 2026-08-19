@@ -1,9 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-/*  @file
+/**
+ * @file
  *
- *  @brief Baud Rate Functions
- *  @ingroup Termios
+ * @ingroup Termios
+ *
+ * @brief This source file contains the implementation of cfsetspeed() and
+ *   cfmakeraw().
  */
 
 /*
