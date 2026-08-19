@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplPOSIXMman
+ *
+ * @brief This source file contains the implementation of munmap().
+ */
+
 /*
  * Copyright (c) 2012 Chris Johns (chrisj@rtems.org)
  * Copyright (c) 2017 Gedare Bloom (gedare@rtems.org)

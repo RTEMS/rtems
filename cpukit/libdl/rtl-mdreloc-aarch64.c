@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplLibDL
+ *
+ * @brief This source file contains the AArch64 relocation support of the
+ *   dynamic linker.
+ */
+
 /*
  * Taken from NetBSD and stripped of the relocations not needed on RTEMS.
  */

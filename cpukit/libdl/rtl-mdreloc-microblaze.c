@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplLibDL
+ *
+ * @brief This source file contains the MicroBlaze relocation support of the
+ *   dynamic linker.
+ */
+
 /*
  * Copyright (C) 2023 On-Line Applications Research Corporation (OAR)
  *

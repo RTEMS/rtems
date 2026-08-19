@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplPOSIXSignal
+ *
+ * @brief This source file contains the configuration of the POSIX signal
+ *   support.
+ */
+
 /*
  * Copyright (C) 2018, 2019 embedded brains GmbH & Co. KG
  *

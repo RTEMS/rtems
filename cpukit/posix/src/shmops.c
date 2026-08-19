@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplPOSIXShm
+ *
+ * @brief This source file contains the file system operations of the POSIX
+ *   shared memory objects.
+ */
+
 /*
  * Copyright (c) 2018, embedded brains GmbH & Co. KG
  *

@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplPOSIXMessageQueue
+ *
+ * @brief This source file contains the configuration of the POSIX message
+ *   queue objects.
+ */
+
 /*
  * Copyright 2018, embedded brains GmbH & Co. KG
  *

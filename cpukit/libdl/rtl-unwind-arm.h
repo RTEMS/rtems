@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplLibDL
+ *
+ * @brief This header file provides the ARM unwind interfaces of the dynamic
+ *   linker.
+ */
+
 #include <unwind.h>
 
 #include "rtl-unwind.h"

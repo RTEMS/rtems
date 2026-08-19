@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplPOSIXKey
+ *
+ * @brief This source file contains the implementation which clears the
+ *   POSIX key value pairs.
+ */
+
 /*
  * Copyright (C) 2018 embedded brains GmbH & Co. KG
  *

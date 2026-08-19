@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSTestFrameworkImpl
+ *
+ * @brief This source file contains the implementation of the parallel test
+ *   support.
+ */
+
 /*
  * Copyright (C) 2013, 2016 embedded brains GmbH & Co. KG
  *

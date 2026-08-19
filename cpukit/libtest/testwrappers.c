@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSTestFrameworkImpl
+ *
+ * @brief This source file contains the implementation of the printf() and
+ *   puts() wrappers of the test support.
+ */
+
 /*
  * Copyright (c) 2017 Chris Johns <chrisj@rtems.org>. All rights reserved.
  *

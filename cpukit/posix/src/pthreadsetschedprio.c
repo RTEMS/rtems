@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplPOSIXThread
+ *
+ * @brief This source file contains the implementation of
+ *   pthread_setschedprio().
+ */
+
 /*
  * Copyright (c) 2016 embedded brains GmbH & Co. KG
  *

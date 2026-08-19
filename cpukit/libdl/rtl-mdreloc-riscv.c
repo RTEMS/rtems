@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplLibDL
+ *
+ * @brief This source file contains the RISC-V relocation support of the
+ *   dynamic linker.
+ */
+
 /*-
  * Copyright (c) 2019 Hesham Almatary
  *

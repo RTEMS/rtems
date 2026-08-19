@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplLibDL
+ *
+ * @brief This source file contains the ARM unwind support of the dynamic
+ *   linker.
+ */
+
 #include "rtl-unwind-arm.h"
 
 bool rtems_rtl_elf_unwind_parse(const rtems_rtl_obj* obj, const char* name,
