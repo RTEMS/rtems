@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUMicroBlaze
  *
- * @brief MicroBlaze assembler support
+ * @brief This header file provides the assembly language definitions of the
+ *   MicroBlaze CPU port.
  *
  * This include file attempts to address the problems
  * caused by incompatible flavors of assemblers and

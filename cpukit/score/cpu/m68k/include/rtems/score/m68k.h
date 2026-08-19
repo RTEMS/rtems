@@ -4,11 +4,12 @@
  * @file
  *
  * @ingroup RTEMSScoreCPUm68k
- * 
- * @brief Motorola M68K CPU Dependent Source
- * 
+ *
+ * @brief This header file provides the architecture definitions of the m68k
+ *   CPU port.
+ *
  * @addtogroup RTEMSScoreCPUm68k
- * 
+ *
  * This include file contains information pertaining to the Motorola
  * m68xxx processor family.
  */

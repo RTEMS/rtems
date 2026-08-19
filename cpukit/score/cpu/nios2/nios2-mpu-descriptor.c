@@ -5,7 +5,9 @@
  *
  * @ingroup RTEMSScoreCPUnios2
  *
- * @brief NIOS2 MPU Descriptor
+ * @brief This source file contains the implementation of
+ *   _Nios2_MPU_Setup_region_registers() and
+ *   _Nios2_MPU_Get_region_descriptor().
  */
 
 /*

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUnios2
  *
- * @brief CPU Port Implementation API
+ * @brief This header file provides the implementation interfaces of the
+ *   Nios II CPU port.
  */
 
 /*

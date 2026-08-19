@@ -3,8 +3,8 @@
  *
  * @ingroup RTEMSScoreCPUnios2
  *
- * @brief Address the Problems Caused by Incompatible Flavor of
- * Assemblers and Toolsets
+ * @brief This header file provides the assembly language definitions of the
+ *   Nios II CPU port.
  *
  * This include file attempts to address the problems
  * caused by incompatible flavors of assemblers and

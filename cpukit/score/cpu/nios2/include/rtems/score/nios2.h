@@ -5,8 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUnios2
  *
- * @brief NIOS II Set up Basic CPU Dependency Settings Based on
- * Compiler Settings
+ * @brief This header file provides the architecture definitions of the Nios
+ *   II CPU port.
  *
  * This file sets up basic CPU dependency settings based on
  * compiler settings.  For example, it can determine if

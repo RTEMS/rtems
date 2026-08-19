@@ -1,11 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
  * @ingroup RTEMSScoreCPUPowerPC
  *
- *  @brief PowerPC Dependent Source
+ * @brief This source file contains the implementation of the PowerPC CPU
+ *   port.
  */
 
 /*

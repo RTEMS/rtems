@@ -4,11 +4,10 @@
  * @file
  *
  * @ingroup RTEMSScoreCPUPowerPC
- * 
- * @addtogroup RTEMSScoreCPUPowerPC
- * 
- * @brief PowerPc MSR and Registers Access Definitions
- * 
+ *
+ * @brief This header file provides the machine state register and register
+ *   access definitions of the PowerPC CPU port.
+ *
  * This file contains some powerpc MSR and registers access definitions.
  */
 

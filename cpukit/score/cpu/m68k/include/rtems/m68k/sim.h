@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUm68k
  *
- * @brief Motorola M68K System Integration Module
+ * @brief This header file provides the register definitions of the m68k
+ *   system integration module.
  *
  * The system integration module (SIM) is used on many Motorola 16-
  * and 32-bit MCUs for the following functions:

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUARM
  *
- * @brief ARM interrupt exception prologue and epilogue.
+ * @brief This source file contains the interrupt exception entry of the ARM
+ *   CPU port.
  */
 
 /*

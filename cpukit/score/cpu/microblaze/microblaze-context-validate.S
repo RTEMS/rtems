@@ -1,11 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @ingroup RTEMSScoreCPUMicroBlaze
+ * @ingroup RTEMSScoreCPUMicroBlaze
  *
- *  @brief MicroBlaze context validate implementation
+ * @brief This source file contains the implementation of
+ *   _CPU_Context_validate() for the MicroBlaze architecture.
  */
 
 /*

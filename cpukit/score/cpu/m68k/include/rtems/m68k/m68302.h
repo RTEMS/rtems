@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreCPUm68k
  *
- * @brief Definitions for Motorola MC68302 Processor
+ * @brief This header file provides the register definitions of the Motorola
+ *   MC68302 processor.
  *
  * Section references in this file refer to revision 2 of Motorola's
  * "MC68302 Integrated Multiprotocol Processor User's Manual".

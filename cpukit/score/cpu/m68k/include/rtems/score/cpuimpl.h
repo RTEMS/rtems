@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUm68k
  *
- * @brief CPU Port Implementation API
+ * @brief This header file provides the implementation interfaces of the
+ *   m68k CPU port.
  */
 
 /*

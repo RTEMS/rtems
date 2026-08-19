@@ -4,10 +4,8 @@
  * @file
  *
  * @ingroup RTEMSScoreCPUPowerPC
- * 
- * @addtogroup RTEMSScoreCPUPowerPC
- * 
- * @brief PowerPC CPU Department Source
+ *
+ * @brief This header file provides the interfaces of the PowerPC CPU port.
  */
 
 /*

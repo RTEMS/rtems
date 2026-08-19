@@ -4,6 +4,9 @@
  * @file
  *
  * @ingroup RTEMSScoreCPUMoxie
+ *
+ * @brief This header file provides the architecture definitions of the
+ *   Moxie CPU port.
  */
 
 /*

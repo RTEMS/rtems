@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUMicroBlaze
  *
- * @brief MicroBlaze architecture support
+ * @brief This header file provides the architecture definitions of the
+ *   MicroBlaze CPU port.
  */
 
 /*

@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSScoreCPUx86_64
  *
- * @brief x86_64 Dependent Source
+ * @brief This header file provides the interfaces of the x86-64 CPU port.
  *
  * This include file contains information pertaining to the x86_64 processor.
  */

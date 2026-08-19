@@ -5,11 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUMoxie
  *
- *  This include file attempts to address the problems
- *  caused by incompatible flavors of assemblers and
- *  toolsets.  It primarily addresses variations in the
- *  use of leading underscores on symbols and the requirement
- *  that register names be preceded by a %.
+ * @brief This header file provides the assembly language definitions of the
+ *   Moxie CPU port.
  */
 
 /*

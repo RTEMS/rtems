@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSScoreCPUnios2
  *
- * @brief NIOS2 CPU Initialize
+ * @brief This source file contains the implementation of _CPU_Initialize().
  */
 
 /*

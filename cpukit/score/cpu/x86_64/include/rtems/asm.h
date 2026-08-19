@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUx86_64ASM
  *
- * @brief Addresses Incompatible Flavors Problems
+ * @brief This header file provides the assembly language definitions of the
+ *   x86-64 CPU port.
  *
  *  This include file attempts to address the problems
  *  caused by incompatible flavors of assemblers and

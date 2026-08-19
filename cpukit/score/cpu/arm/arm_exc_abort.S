@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUARM
  *
- * @brief ARM data and prefetch abort exception prologue and epilogue.
+ * @brief This source file contains the data abort and prefetch abort
+ *   exception entry of the ARM CPU port.
  */
 
 /*

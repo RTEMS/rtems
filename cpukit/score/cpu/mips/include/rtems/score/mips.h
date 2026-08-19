@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUMIPS
  *
- * @brief Information to build RTEMS for a "no cpu" while in protected mode.
+ * @brief This header file provides the architecture definitions of the MIPS
+ *   CPU port.
  *
  *  This file contains the information required to build
  *  RTEMS for a particular member of the "no cpu"

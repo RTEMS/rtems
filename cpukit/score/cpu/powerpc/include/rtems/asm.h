@@ -2,16 +2,16 @@
  * @file
  *
  * @ingroup RTEMSScoreCPUPowerPC
- * 
- * @brief Address the Problems Caused by Incompatible Flavor of 
- * Assemblers and Toolsets
+ *
+ * @brief This header file provides the assembly language definitions of the
+ *   PowerPC CPU port.
  *
  * This include file attempts to address the problems
  * caused by incompatible flavors of assemblers and
  * toolsets.  It primarily addresses variations in the
  * use of leading underscores on symbols and the requirement
  * that register names be preceded by a %.
- * 
+ *
  * NOTE: The spacing in the use of these macros
  *       is critical to them working as advertised.
  */

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUAArch64
  *
- * @brief Implementation of _CPU_Context_validate
+ * @brief This source file contains the implementation of
+ *   _CPU_Context_validate() for the AArch64 architecture.
  *
  * This file implements _CPU_Context_validate for use in spcontext01.
  */

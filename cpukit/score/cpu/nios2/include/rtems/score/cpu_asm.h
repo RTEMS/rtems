@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUnios2
  *
- * @brief Altera Nios II Assembly File
+ * @brief This header file provides the assembly language interfaces of the
+ *   Nios II CPU port.
  *
  * Very loose template for an include file for the cpu_asm.? file
  * if it is implemented as a ".S" file (preprocessed by cpp) instead

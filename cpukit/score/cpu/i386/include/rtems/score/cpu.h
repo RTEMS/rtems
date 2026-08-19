@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSScoreCPUi386
  *
- * @brief Intel I386 CPU Dependent Source
+ * @brief This header file provides the interfaces of the i386 CPU port.
  *
  * This include file contains information pertaining to the Intel
  * i386 processor.

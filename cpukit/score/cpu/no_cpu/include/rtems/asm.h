@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreCPUExample
  *
- * @brief Addresses Incompatible Flavors Problems
+ * @brief This header file provides the assembly language definitions of the
+ *   example CPU port.
  *
  *  This include file attempts to address the problems
  *  caused by incompatible flavors of assemblers and

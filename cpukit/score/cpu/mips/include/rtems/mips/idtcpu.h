@@ -1,9 +1,10 @@
 /**
- *  @file
+ * @file
  *
  * @ingroup RTEMSScoreCPUMIPS
  *
- *  @brief CPU Related Definitions
+ * @brief This header file provides the processor definitions of the MIPS
+ *   CPU port.
  *
  * 950313: Ketan added sreg/lreg and R_SZ for 64-bit saves
  *         added Register definition for XContext reg.

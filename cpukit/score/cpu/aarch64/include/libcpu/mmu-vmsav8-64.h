@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUAArch64
  *
- * @brief Definitions used in MMU setup.
+ * @brief This header file provides the memory management unit definitions
+ *   of the AArch64 CPU port.
  */
 
 /*

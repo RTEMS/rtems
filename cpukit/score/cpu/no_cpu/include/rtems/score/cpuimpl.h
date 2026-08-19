@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUExample
  *
- * @brief CPU Port Implementation API
+ * @brief This header file provides the implementation interfaces of the
+ *   example CPU port.
  */
 
 /*

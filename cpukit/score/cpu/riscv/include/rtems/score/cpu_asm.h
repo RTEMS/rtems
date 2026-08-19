@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreCPURISCV
  *
- * @brief riscv32 Assembly File
+ * @brief This header file provides the assembly language interfaces of the
+ *   RISC-V CPU port.
  *
  * Very loose template for an include file for the cpu_asm.? file
  * if it is implemented as a ".S" file (preprocessed by cpp) instead

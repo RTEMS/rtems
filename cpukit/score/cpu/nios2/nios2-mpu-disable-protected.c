@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUnios2
  *
- * @brief NIOS2 MPU Disable Protected
+ * @brief This source file contains the implementation of
+ *   _Nios2_MPU_Disable_protected().
  */
 
 /*

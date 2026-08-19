@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUm68k
  *
- * @brief Motorola M68K Queued Serial Module
+ * @brief This header file provides the register definitions of the m68k
+ *   queued serial module.
  *
  * The QSM contains two serial interfaces: (a) the queued serial
  * peripheral interface (QSPI) and the serial communication interface

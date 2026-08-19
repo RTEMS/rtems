@@ -5,8 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUSPARC
  *
- * @brief This header file defines implementation interfaces pertaining to the
- *   port of the executive to the SPARC processor.
+ * @brief This header file provides the implementation interfaces of the
+ *   SPARC CPU port.
  */
 
 /*

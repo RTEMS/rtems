@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUnios2
  *
- * @brief NIOS2 ISR Set Level
+ * @brief This source file contains the implementation of
+ *   _Nios2_ISR_Set_level() and _CPU_ISR_Set_level().
  */
 
 /*

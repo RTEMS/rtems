@@ -4,11 +4,12 @@
  * @file
  *
  * @ingroup RTEMSScoreCPUi386
- * 
- * @brief Intel CPU Constants and Definitions
- * 
+ *
+ * @brief This header file provides the register definitions of the i386 CPU
+ *   port.
+ *
  * @addtogroup RTEMSScoreCPUi386
- * 
+ *
  * This file contains definition and constants related to Intel Cpu
  */
 

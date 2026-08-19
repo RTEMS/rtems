@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUARM
  *
- * @brief ARM architecture support implementation.
+ * @brief This source file contains the assembly language support of the ARM
+ *   CPU port.
  */
 
 /*

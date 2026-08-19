@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUor1k
  *
- * @brief OR1K utility
+ * @brief This header file provides the utility interfaces of the OpenRISC
+ *   1000 CPU port.
  */
 /*
  * COPYRIGHT (c) 2014 Hesham ALMatary <heshamelmatary@gmail.com>

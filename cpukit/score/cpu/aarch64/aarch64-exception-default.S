@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUAArch64
  *
- * @brief Implementation of AArch64 exception vector table.
+ * @brief This source file contains the exception vector table of the
+ *   AArch64 CPU port.
  *
  * This file implements the AArch64 exception vector table and its embedded
  * jump handlers along with the code necessary to call higher level C handlers.

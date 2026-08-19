@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUAArch64
  *
- * @brief ARM AArch64 Exception API.
+ * @brief This header file provides the exception vector interfaces of the
+ *   AArch64 CPU port.
  */
 
 /*

@@ -4,10 +4,8 @@
  * @file
  *
  * @ingroup RTEMSScoreCPUnios2
- * 
- * @addtogroup RTEMSScoreCPUnios2
  *
- * @brief Altera Nios II CPU Department Source
+ * @brief This header file provides the interfaces of the Nios II CPU port.
  */
 
 /*

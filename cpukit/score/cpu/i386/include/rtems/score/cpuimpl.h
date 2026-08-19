@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUi386
  *
- * @brief CPU Port Implementation API
+ * @brief This header file provides the implementation interfaces of the
+ *   i386 CPU port.
  */
 
 /*

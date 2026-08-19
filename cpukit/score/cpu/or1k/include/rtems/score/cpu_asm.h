@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUor1k
  *
- * @brief OR1K Assembly File
+ * @brief This header file provides the assembly language interfaces of the
+ *   OpenRISC 1000 CPU port.
  *
  * Very loose template for an include file for the cpu_asm.? file
  * if it is implemented as a ".S" file (preprocessed by cpp) instead

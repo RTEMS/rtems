@@ -1,11 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @ingroup RTEMSScoreCPUMicroBlaze
+ * @ingroup RTEMSScoreCPUMicroBlaze
  *
- *  @brief MicroBlaze context volatile clobber implementation
+ * @brief This source file contains the implementation of
+ *   _CPU_Context_volatile_clobber() for the MicroBlaze architecture.
  */
 
 /*

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUARMCP15
  *
- * @brief ARM co-processor 15 (CP15) API.
+ * @brief This header file provides the co-processor 15 interfaces of the
+ *   ARM CPU port.
  */
 
 /*

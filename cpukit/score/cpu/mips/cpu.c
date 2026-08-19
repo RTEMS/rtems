@@ -1,11 +1,11 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
  * @ingroup RTEMSScoreCPUMIPS
  *
- *  @brief MIPS CPU Dependent Source
+ * @brief This source file contains the implementation of the MIPS CPU port.
  */
 
 /*

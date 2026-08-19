@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUnios2
  *
- * @brief NIOS2 CPU ISR Install Vector
+ * @brief This source file contains the implementation of
+ *   _CPU_ISR_install_vector().
  */
 
 /*

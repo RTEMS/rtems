@@ -1,9 +1,10 @@
 /**
- *  @file
+ * @file
  *
  * @ingroup RTEMSScoreCPUx86_64
  *
- *  @brief x86_64 Dependent Source
+ * @brief This source file contains the implementation of the x86-64 CPU
+ *   port.
  */
 
 /*

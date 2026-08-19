@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreCPURISCV
  *
- * @brief CPU Port Implementation API
+ * @brief This header file provides the implementation interfaces of the
+ *   RISC-V CPU port.
  */
 
 /*

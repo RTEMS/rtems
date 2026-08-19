@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUMIPS
  *
- * @brief CPU Port Implementation API
+ * @brief This header file provides the implementation interfaces of the
+ *   MIPS CPU port.
  */
 
 /*

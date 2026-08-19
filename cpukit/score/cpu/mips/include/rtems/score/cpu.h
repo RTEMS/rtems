@@ -1,11 +1,11 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
  * @ingroup RTEMSScoreCPUMIPS
  *
- *  @brief Mips CPU Dependent Header File
+ * @brief This header file provides the interfaces of the MIPS CPU port.
  */
 
 /*

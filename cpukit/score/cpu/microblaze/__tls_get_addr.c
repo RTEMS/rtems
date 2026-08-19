@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUMicroBlaze
  *
- * @brief MicroBlaze thread-local storage implementation
+ * @brief This source file contains the thread-local storage support of the
+ *   MicroBlaze CPU port.
  */
 
 /*

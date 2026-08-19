@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUMicroBlaze
  *
- * @brief MicroBlaze architecture support implementation
+ * @brief This source file contains the implementation of the MicroBlaze CPU
+ *   port.
  */
 
 /*

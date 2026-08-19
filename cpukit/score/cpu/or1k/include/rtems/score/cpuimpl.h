@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUor1k
  *
- * @brief CPU Port Implementation API
+ * @brief This header file provides the implementation interfaces of the
+ *   OpenRISC 1000 CPU port.
  */
 
 /*

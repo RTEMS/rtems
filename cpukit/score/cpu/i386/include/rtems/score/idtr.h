@@ -4,11 +4,12 @@
  * @file
  *
  * @ingroup RTEMSScoreCPUi386
- * 
- * @brief Intel I386 Data Structures
- * 
+ *
+ * @brief This header file provides the interrupt descriptor table
+ *   definitions of the i386 CPU port.
+ *
  * @addtogroup RTEMSScoreCPUi386
- * 
+ *
  * This file contains definitions for data structure related
  *          to Intel system programming. More information can be found
  *          on Intel site and more precisely in the following book :

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUPowerPC
  *
- * @brief PowerPC Paravirtualization Definitions
+ * @brief This header file provides the paravirtualization definitions of
+ *   the PowerPC CPU port.
  *
  * This include file contains definitions pertaining to paravirtualization
  * of the PowerPC port.

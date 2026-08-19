@@ -1,9 +1,10 @@
 /**
- *  @file
+ * @file
  *
  * @ingroup RTEMSScoreCPUi386
  *
- *  @brief Test FPU/SSE Context Save and Restore
+ * @brief This source file contains a test of the floating point and SSE
+ *   context save and restore.
  */
 
 /*

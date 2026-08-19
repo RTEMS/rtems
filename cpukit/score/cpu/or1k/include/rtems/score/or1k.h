@@ -4,6 +4,9 @@
  * @file
  *
  * @ingroup RTEMSScoreCPUor1k
+ *
+ * @brief This header file provides the architecture definitions of the
+ *   OpenRISC 1000 CPU port.
  */
 
 /*

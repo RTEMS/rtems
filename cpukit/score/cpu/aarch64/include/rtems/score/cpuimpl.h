@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUAArch64
  *
- * @brief CPU Port Implementation API
+ * @brief This header file provides the implementation interfaces of the
+ *   AArch64 CPU port.
  */
 
 /*

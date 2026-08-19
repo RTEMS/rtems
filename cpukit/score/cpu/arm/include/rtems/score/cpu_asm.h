@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUARM
  *
- * @brief ARM Assembler Support API
+ * @brief This header file provides the assembly language interfaces of the
+ *   ARM CPU port.
  */
 
 /*

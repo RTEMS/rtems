@@ -29,7 +29,8 @@
  *
  * @ingroup RTEMSScoreCPURISCV
  *
- * @brief RISC-V utility helpers.
+ * @brief This header file provides the utility interfaces of the RISC-V CPU
+ *   port.
  */
 
 #ifndef _RTEMS_SCORE_RISCV_UTILITY_H

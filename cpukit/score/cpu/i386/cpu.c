@@ -1,9 +1,9 @@
 /**
- *  @file
+ * @file
  *
  * @ingroup RTEMSScoreCPUi386
  *
- *  @brief Intel i386 Dependent Source
+ * @brief This source file contains the implementation of the i386 CPU port.
  */
 
 /*

@@ -5,8 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUARM
  *
- * @brief This header file defines implementation interfaces pertaining to the
- *   port of the executive to the ARM architecture.
+ * @brief This header file provides the implementation interfaces of the ARM
+ *   CPU port.
  */
 
 /*

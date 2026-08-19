@@ -3,9 +3,8 @@
  *
  * @ingroup RTEMSScoreCPURISCV
  *
- * @addtogroup RTEMSScoreCPURISCV
- *
- * @brief RISC-V exception support implementation.
+ * @brief This source file contains the exception entry of the RISC-V CPU
+ *   port.
  */
 
 /*

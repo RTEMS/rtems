@@ -1,11 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
  * @ingroup RTEMSScoreCPUExample
  *
- *  @brief No CPU Dependent Source
+ * @brief This source file contains the implementation of the example CPU
+ *   port.
  */
 
 /*

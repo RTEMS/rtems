@@ -1,11 +1,11 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
  * @ingroup RTEMSScoreCPUm68k
  *
- *  @brief Motorola MC68xxx Dependent Source
+ * @brief This source file contains the implementation of the m68k CPU port.
  */
 
 /*

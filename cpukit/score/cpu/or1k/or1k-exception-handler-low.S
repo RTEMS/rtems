@@ -5,9 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUor1k
  *
- * @addtogroup RTEMSScoreCPU
- *
- * @brief OR1K exception support implementation.
+ * @brief This source file contains the exception entry of the OpenRISC 1000
+ *   CPU port.
  */
 
 /*

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUMicroBlaze
  *
- * @brief MicroBlaze interrupt handler implementation
+ * @brief This source file contains the assembly language support of the
+ *   MicroBlaze CPU port.
  */
 
 /*

@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreCPUm68k
  *
- * @brief Definitions for Motorola MC68360 Processor
+ * @brief This header file provides the register definitions of the Motorola
+ *   MC68360 processor.
  *
  * Motorola MC68360 Quad Integrated Communications Controller (QUICC)
  */

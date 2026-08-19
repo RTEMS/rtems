@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreCPUx86_64
  *
- * @brief CPU Port Implementation API
+ * @brief This header file provides the implementation interfaces of the
+ *   x86-64 CPU port.
  */
 
 /*

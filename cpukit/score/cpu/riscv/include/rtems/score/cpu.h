@@ -2,7 +2,8 @@
  * @file
  *
  * @ingroup RTEMSScoreCPURISCV
- * 
+ *
+ * @brief This header file provides the interfaces of the RISC-V CPU port.
  */
 
 /*

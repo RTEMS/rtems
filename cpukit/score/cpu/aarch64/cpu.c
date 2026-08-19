@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUAArch64
  *
- * @brief AArch64 architecture support implementation.
+ * @brief This source file contains the implementation of the AArch64 CPU
+ *   port.
  */
 
 /*

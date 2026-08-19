@@ -1,11 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
  * @ingroup RTEMSScoreCPUExample
  *
- *  @brief No CPU Assembly File
+ * @brief This source file contains the assembly language support of the
+ *   example CPU port.
  */
 
 /*  cpu_asm.c  ===> cpu_asm.S or cpu_asm.s

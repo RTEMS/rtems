@@ -4,9 +4,10 @@
  * @file
  *
  * @ingroup RTEMSScoreCPUPowerPC
- * 
- * @brief IBM/Motorola PowerPC Definitions
- * 
+ *
+ * @brief This header file provides the architecture definitions of the
+ *   PowerPC CPU port.
+ *
  * This file contains definitions for the IBM/Motorola PowerPC
  * family members.
  */

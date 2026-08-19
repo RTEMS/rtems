@@ -4,8 +4,8 @@
  * @file
  *
  * @ingroup RTEMSScoreCPUMoxie
- * 
- * @addtogroup RTEMSScoreCPUMoxie
+ *
+ * @brief This header file provides the interfaces of the Moxie CPU port.
  */
 
 /*

@@ -1,12 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
  * @ingroup RTEMSScoreCPUi386
  *
- *  This file contains all assembly code for the Intel i386 implementation
- *  of RTEMS.
+ * @brief This source file contains the assembly language support of the
+ *   i386 CPU port.
  */
 
 /*

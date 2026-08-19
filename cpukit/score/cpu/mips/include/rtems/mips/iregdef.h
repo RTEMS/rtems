@@ -1,9 +1,10 @@
 /**
- *  @file
+ * @file
  *
  * @ingroup RTEMSScoreCPUMIPS
  *
- *  @brief IDT R3000 Register Structure
+ * @brief This header file provides the register structure of the IDT R3000
+ *   processor.
  *
  * 950313: Ketan added sreg/lreg and R_SZ for 64-bit saves
  *         added Register definition for XContext reg.

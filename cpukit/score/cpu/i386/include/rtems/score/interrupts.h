@@ -4,8 +4,9 @@
  * @file
  *
  * @ingroup RTEMSScoreCPUi386
- * 
- * @brief Intel I386 Interrupt Macros
+ *
+ * @brief This header file provides the interrupt macros of the i386 CPU
+ *   port.
  *
  * Formerly contained in and extracted from libcpu/i386/cpu.h
  *

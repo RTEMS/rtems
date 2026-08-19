@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUMoxie
  *
- * @brief CPU Port Implementation API
+ * @brief This header file provides the implementation interfaces of the
+ *   Moxie CPU port.
  */
 
 /*

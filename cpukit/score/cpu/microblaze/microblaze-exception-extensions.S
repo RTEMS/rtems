@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUMicroBlaze
  *
- * @brief MicroBlaze exception extensions ASM implementation
+ * @brief This source file contains the assembly language exception
+ *   extensions of the MicroBlaze CPU port.
  */
 
 /*

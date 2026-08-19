@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUAArch64
  *
- * @brief AArch64 architecture context switch implementation.
+ * @brief This source file contains the assembly language support of the
+ *   AArch64 CPU port.
  */
 
 /*

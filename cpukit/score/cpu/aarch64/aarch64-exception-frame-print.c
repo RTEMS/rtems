@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUAArch64
  *
- * @brief Implementation of _CPU_Exception_frame_print.
+ * @brief This source file contains the implementation of
+ *   _CPU_Exception_frame_print().
  *
  * This file implements _CPU_Exception_frame_print for use in fatal output.
  * It dumps all standard integer and floating point registers as well as some

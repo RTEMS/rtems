@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSScoreCPUExample
  *
- * @brief NO_CPU Department Source
+ * @brief This header file provides the interfaces of the example CPU port.
  *
  * This include file contains information pertaining to the NO_CPU
  * processor.

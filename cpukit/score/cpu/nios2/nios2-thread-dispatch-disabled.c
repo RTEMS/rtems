@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUnios2
  *
- * @brief NIOS II Specific Thread Dispatch Disabled Indicator.
+ * @brief This source file contains the thread dispatch disabled indicator
+ *   of the Nios II CPU port.
  */
 
 /*

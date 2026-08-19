@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUAArch64
  *
- * @brief AArch64 IRQ definitions
+ * @brief This header file provides the interrupt definitions of the AArch64
+ *   CPU port.
  */
 
 /*

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUnios2
  *
- * @brief NIOS2 Exception and Interrupt Handler
+ * @brief This source file contains the internal interrupt controller
+ *   support of the Nios II CPU port.
  *
  * @note Derived from c4x/irq.c
  */

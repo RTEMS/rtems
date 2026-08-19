@@ -4,9 +4,10 @@
  * @file
  *
  * @ingroup RTEMSScoreCPUExample
- * 
- * @brief No-CPU Assembly File
- * 
+ *
+ * @brief This header file provides the assembly language interfaces of the
+ *   example CPU port.
+ *
  * Very loose template for an include file for the cpu_asm.? file
  * if it is implemented as a ".S" file (preprocessed by cpp) instead
  * of a ".s" file (preprocessed by gm4 or gasp).

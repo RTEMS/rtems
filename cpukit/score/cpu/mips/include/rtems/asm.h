@@ -3,8 +3,8 @@
  *
  * @ingroup RTEMSScoreCPUMIPS
  *
- * @brief Address the Problems Caused by Incompatible Flavor of
- * Assemblers and Toolsets
+ * @brief This header file provides the assembly language definitions of the
+ *   MIPS CPU port.
  *
  * This include file attempts to address the problems
  * caused by incompatible flavors of assemblers and

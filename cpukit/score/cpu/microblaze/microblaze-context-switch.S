@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUMicroBlaze
  *
- * @brief MicroBlaze context switch implementation
+ * @brief This source file contains the implementation of
+ *   _CPU_Context_switch() for the MicroBlaze architecture.
  */
 
 /*

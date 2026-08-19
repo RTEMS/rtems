@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUPowerPC
  *
- * @brief CPU Port Implementation API
+ * @brief This header file provides the implementation interfaces of the
+ *   PowerPC CPU port.
  */
 
 /*

@@ -2,6 +2,9 @@
  * @file
  *
  * @ingroup RTEMSScoreCPURISCV
+ *
+ * @brief This header file provides the architecture definitions of the
+ *   RISC-V CPU port.
  */
 
 /*

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUAArch64
  *
- * @brief ARM AArch64 Assembler Support API
+ * @brief This header file provides the assembly language support of the
+ *   AArch64 CPU port.
  */
 
 /*

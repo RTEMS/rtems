@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUi386
  *
- * @brief i386 Paravirtualization Definitions
+ * @brief This header file provides the paravirtualization definitions of
+ *   the i386 CPU port.
  *
  * This include file contains definitions pertaining to paravirtualization
  * of the i386 port.

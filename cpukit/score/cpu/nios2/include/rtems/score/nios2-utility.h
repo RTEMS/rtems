@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreCPUnios2
  *
- * @brief NIOS II Utility
+ * @brief This header file provides the utility interfaces of the Nios II
+ *   CPU port.
  */
 /*
  * Copyright (c) 2011 embedded brains GmbH & Co. KG

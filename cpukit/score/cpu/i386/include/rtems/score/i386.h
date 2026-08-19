@@ -5,8 +5,9 @@
  *
  * @ingroup RTEMSScoreCPUi386
  *
- * @brief Intel I386 CPU Dependent Source
- * 
+ * @brief This header file provides the architecture definitions of the i386
+ *   CPU port.
+ *
  * @addtogroup RTEMSScoreCPUi386
  *
  * This include file contains information pertaining to the Intel
