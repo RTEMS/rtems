@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup libblock
+ * @ingroup RTEMSFDisk
  *
  * @brief Flash Disk Block Device Implementation
  */

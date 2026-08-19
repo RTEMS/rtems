@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSAPIClassicTimecounter
+ * @ingroup RTEMSScoreTimecounter
  *
  * @brief This source file contains the implementation of
  *   rtems_timecounter_simple_install().

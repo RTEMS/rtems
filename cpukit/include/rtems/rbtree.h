@@ -3,7 +3,7 @@
 /**
  * @file
  * 
- * @ingroup RTEMSAPIClassicRBTrees
+ * @ingroup RTEMSAPIRBTrees
  *
  * @brief This header file provides the Red-Black Trees API.
  */

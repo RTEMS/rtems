@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSAPIRBHeap
+ * @ingroup RTEMSImplRBHeap
  *
  * @brief This source file contains the implementation of
  *   rtems_rbheap_allocate(), rtems_rbheap_extend_descriptors_never(),

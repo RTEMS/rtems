@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup libblock
+ * @ingroup rtems_libblock
  *
  * @brief Provide SRAM support for the NV Disk
  */

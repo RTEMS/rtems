@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSAPICounter
+ * @ingroup RTEMSImplCounter
  *
  * @brief This source file contains the implementation of
  *   rtems_counter_delay_ticks().

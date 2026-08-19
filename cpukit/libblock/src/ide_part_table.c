@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup libblock
+ * @ingroup rtems_libblock
  *
  * @brief Library supporting "MS-DOS-style" Partition Table
  */

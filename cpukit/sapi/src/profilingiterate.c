@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSAPIProfiling
+ * @ingroup RTEMSScoreProfiling
  *
  * @brief This source file contains the implementation of
  *   rtems_profiling_iterate().

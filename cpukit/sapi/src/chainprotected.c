@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSAPIClassicChains
+ * @ingroup RTEMSScoreChain
  *
  * @brief This source file contains the implementation of rtems_chain_append(),
  *   rtems_chain_append_with_empty_check(), rtems_chain_extract(),

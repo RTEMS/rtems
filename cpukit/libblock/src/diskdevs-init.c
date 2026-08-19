@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup rtems_disk Block Device Disk Management
+ * @ingroup rtems_disk
  *
  * @brief Block Device Disk Management Initialize
  */

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup libblock
+ * @ingroup rtems_blkdev
  *
  * @brief Block Device IMFS
  */
