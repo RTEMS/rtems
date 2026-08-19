@@ -5,7 +5,7 @@
  *
  * @brief Constants/Data Structures/Prototypes for Operations on "fat-file"
  *
- * @ingroup libfs_ff
+ * @ingroup DOSFS
  */
 
 /*
@@ -28,12 +28,6 @@
 
 #include "fat.h"
 
-/**
- *  @defgroup libfs_ff Fat File
- *
- *  @ingroup libfs_dosfs
- */
-/**@{*/
 
 #ifdef __cplusplus
 extern "C" {
@@ -265,5 +259,4 @@ fat_file_get_new_inode_for(fat_fs_info_t *fs_info,
 #ifdef __cplusplus
 }
 #endif
-/**@}*/
 #endif /* __DOSFS_FAT_FILE_H__ */

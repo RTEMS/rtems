@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup LibFSIMFS
+ * @ingroup IMFS
  *
  * @brief IMFS initialization.
  */

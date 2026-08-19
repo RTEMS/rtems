@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup ClassicIO
+ * @ingroup IMFS
  *
  * @brief Implementation of IMFS_eval_path_devfs().
  */

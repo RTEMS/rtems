@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup LibIOFSOps File System Operations 
+ * @ingroup LibIOFSOps
  *
  * @brief RTEMS Default Filesystem succeeds synchronizing file's in-core state
  */

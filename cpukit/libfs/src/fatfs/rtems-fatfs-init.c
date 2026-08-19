@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup FatFS
+ * @ingroup RTEMSImplFATFS
  *
  * @brief RTEMS FATFS initialization
  */

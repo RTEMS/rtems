@@ -5,7 +5,7 @@
  *
  * @brief Constants/Data Structures/Prototypes for Files Allocation Table
  *
- * @ingroup libfs_ffo
+ * @ingroup DOSFS
  *
  * Constants/Data Structures/Prototypes for
  * Operations on Files Allocation Table
@@ -28,12 +28,6 @@
 
 #include <rtems/bdbuf.h>
 
-/**
- *  @defgroup libfs_ffo Fat Fat Operations
- *
- *  @ingroup libfs_dosfs
- */
-/**@{*/
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -69,5 +63,4 @@ fat_free_fat_clusters_chain(
 #ifdef __cplusplus
 }
 #endif
-/**@}*/
 #endif /* __DOSFS_FAT_FAT_OPERATIONS_H__ */

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup libfs_msdos MSDOS FileSystem
+ * @ingroup DOSFS
  *
  * @brief Shut Down MSDOS FileSystem
  */

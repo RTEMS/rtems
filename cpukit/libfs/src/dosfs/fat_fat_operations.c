@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup libfs_ffo Fat Fat Operations
+ * @ingroup DOSFS
  *
  * @brief General operations on File Allocation Table
  */

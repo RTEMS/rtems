@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup libfs_msdos MSDOS FileSystem
+ * @ingroup DOSFS
  *
  * @brief MSDOS Directory Handlers Implementation
  */

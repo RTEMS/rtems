@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup libfs_msdos MSDOS FileSystem
+ * @ingroup DOSFS
  *
  * @brief Create a new MSDOS FileSystem node
  */

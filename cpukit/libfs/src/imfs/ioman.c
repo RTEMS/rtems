@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup ClassicIO
+ * @ingroup RTEMSImplClassicIO
  *
  * @brief RTEMS Register IO Name
  */

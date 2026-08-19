@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup FatFS
+ * @ingroup RTEMSImplFATFS
  *
  * @brief RTEMS Disk I/O Interface for FatFs
  */
