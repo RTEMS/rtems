@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplRecord
+ *
+ * @brief This source file contains the implementation of the event record
+ *   line producers.
+ */
+
 /*
  * Copyright (C) 2018, 2019 embedded brains GmbH & Co. KG
  *

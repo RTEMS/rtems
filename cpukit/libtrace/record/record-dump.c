@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplRecord
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_record_dump().
+ */
+
 /*
  * Copyright (C) 2020, 2024 embedded brains GmbH & Co. KG
  *

@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplRecord
+ *
+ * @brief This source file contains the implementation which dumps the event
+ *   records in Base64.
+ */
+
 /*
  * Copyright (C) 2020 embedded brains GmbH & Co. KG
  *

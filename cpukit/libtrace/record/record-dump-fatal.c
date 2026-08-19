@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplRecord
+ *
+ * @brief This source file contains the implementation of
+ *   _Record_Fatal_dump_base64().
+ */
+
 /*
  * Copyright (C) 2020, 2024 embedded brains GmbH & Co. KG
  *
