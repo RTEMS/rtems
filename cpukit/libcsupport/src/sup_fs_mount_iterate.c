@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup Termios Termios
+ * @ingroup FileSystemTypesAndMount
  *
  * @brief Mount table entry visitor.
  */
