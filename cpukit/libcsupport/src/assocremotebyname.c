@@ -5,7 +5,7 @@
  *
  *  @brief RTEMS Associate Remote by Name
  *
- *  @ingroup Associativity
+ *  @ingroup RTEMSImplAssociativity
  */
 
 /*

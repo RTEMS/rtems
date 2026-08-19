@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup LibIO
  * @brief lseek() - POSIX 1003.1b 6.5.3 - Reposition Read/Write File Offset
  */
 

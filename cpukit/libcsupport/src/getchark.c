@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSAPIKernelCharIO
+ * @ingroup RTEMSImplKernelCharIO
  *
  * @brief This source file contains the implementation of getchark().
  */

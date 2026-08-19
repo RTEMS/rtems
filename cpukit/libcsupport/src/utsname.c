@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup utsname Service
+ * @ingroup libcsupport
  *
  * @brief Get System Name
  */

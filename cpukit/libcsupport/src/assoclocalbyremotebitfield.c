@@ -5,7 +5,7 @@
  *
  *  @brief RTEMS Associate Local by Remote Bitfield
  *
- *  @ingroup Associativity
+ *  @ingroup RTEMSImplAssociativity
  */
 
 /*

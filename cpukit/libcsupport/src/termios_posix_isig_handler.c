@@ -1,5 +1,7 @@
 /**
  * @file
+ *
+ * @ingroup Termios
  * TERMIOS POSIX behavior on INTR and QUIT characters
  */
 

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup ClassicCache
+ * @ingroup RTEMSImplClassicCache
  */
 
 /*

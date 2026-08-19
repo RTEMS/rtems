@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSImplClassicCache
  * @brief RTEMS Cache Aligned Malloc
  */
 

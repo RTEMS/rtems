@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief RTEMS DeviceIO Support
- *  @ingroup Device
+ *  @ingroup IMFSDevices
  */
 
 /*

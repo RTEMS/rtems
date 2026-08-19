@@ -3,8 +3,8 @@
 /**
  * @file
  *
- * @ingroup RTEMSAPIKernelCharIO
- * @ingroup RTEMSPrintSupport
+ * @ingroup RTEMSImplKernelCharIO
+ * @ingroup RTEMSImplPrintSupport
  *
  * @brief This source file contains the implementation of
  *   rtems_printk_printer() and rtems_print_printer_printk().

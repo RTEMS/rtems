@@ -3,6 +3,8 @@
 /**
  *  @file
  *
+ * @ingroup libcsupport
+ *
  *  @brief POSIX sets user and group ids
  */
 

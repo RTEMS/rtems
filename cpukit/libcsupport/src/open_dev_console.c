@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup LibIO
  * @brief open_dev_console - open /dev/console
  */
 

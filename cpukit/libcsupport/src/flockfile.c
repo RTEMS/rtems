@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Lock File for Stdio
- *  @ingroup SET
+ *  @ingroup libcsupport
  */
 /*
  * Copyright (c) 2009 by

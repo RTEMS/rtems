@@ -5,7 +5,7 @@
  *
  *  @brief RTEMS Associate Pointer by Local
  *
- *  @ingroup Associativity
+ *  @ingroup RTEMSImplAssociativity
  */
 
 /*

@@ -5,7 +5,7 @@
  *
  *  @brief RTEMS Associate Bad Name
  *
- *  @ingroup SET
+ *  @ingroup RTEMSImplAssociativity
  */
 
 /*

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup Associativity Routines
+ * @ingroup RTEMSImplAssociativity
  *
  * @brief RTEMS Associate Local by Name
  */

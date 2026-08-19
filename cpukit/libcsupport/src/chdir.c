@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup libio Internal Interface
+ * @ingroup libcsupport
  *
  * @brief POSIX 1003.1b - 5.2.1 - Change Current Working Directory
  */

@@ -5,7 +5,7 @@
  *
  *  @brief RTEMS Associate Pointer by Remote
  *
- *  @ingroup Associativity
+ *  @ingroup RTEMSImplAssociativity
  */
 
 /*

@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup Termios
  * TERMIOS serial line support
  */
 

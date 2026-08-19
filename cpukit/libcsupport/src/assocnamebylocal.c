@@ -5,7 +5,7 @@
  *
  *  @brief RTEMS Associate Name by Local
  *
- *  @ingroup Associativity
+ *  @ingroup RTEMSImplAssociativity
  */
 
 /*

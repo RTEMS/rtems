@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup Termios
  * @brief tcflush() - POSIX 1003.1b 7.2.2 - Line Control Functions
  */
 
