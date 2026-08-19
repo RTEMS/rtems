@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup Termios
+ *
+ * @brief This source file contains the task driven variant of the simple
+ *   console driver.
+ */
+
 /*
  * Copyright (C) 2018, 2020 embedded brains GmbH & Co. KG
  *

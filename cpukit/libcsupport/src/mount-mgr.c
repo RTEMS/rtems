@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup FileSystemTypesAndMount
+ *
+ * @brief This source file contains the implementation of the file system
+ *   type registry.
+ */
+
 /*
  *  mount()
  *

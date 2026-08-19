@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup libcsupport
+ *
+ * @brief This source file contains the implementation of the resource
+ *   snapshot support.
+ */
+
 /*
  * Copyright (C) 2012, 2014 embedded brains GmbH & Co. KG
  *

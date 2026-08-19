@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup libcsupport
+ *
+ * @brief This source file contains the implementation of
+ *   _arc4random_getentropy_fail().
+ */
+
 /*
  * Copyright (c) 2017 embedded brains GmbH & Co. KG
  *

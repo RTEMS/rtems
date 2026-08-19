@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup LibIOEnv
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_current_user_env_getgroups().
+ */
+
 /*
  * Copyright (c) 2014 embedded brains GmbH & Co. KG
  *

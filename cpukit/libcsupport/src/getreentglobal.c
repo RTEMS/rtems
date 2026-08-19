@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup libcsupport
+ *
+ * @brief This source file contains the implementation of __getreent().
+ */
+
 /*
  * Copyright (c) 2018 embedded brains GmbH & Co. KG
  *

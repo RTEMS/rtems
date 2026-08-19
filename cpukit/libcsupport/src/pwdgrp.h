@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup libcsupport
+ *
+ * @brief This header file provides the internal interfaces of the password
+ *   and group file support.
+ */
+
 /*
  * Copyright (c) 2014 embedded brains GmbH & Co. KG
  *

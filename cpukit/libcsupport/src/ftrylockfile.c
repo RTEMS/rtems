@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup libcsupport
+ *
+ * @brief This source file contains the implementation of ftrylockfile().
+ */
+
 /*
  * Copyright (c) 2009 by
  * Ralf Corsepius, Ulm, Germany. All rights reserved.

@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup libcsupport
+ *
+ * @brief This source file contains the implementation of clock().
+ */
+
 /*
  * Copyright (c) 2017 embedded brains GmbH & Co. KG
  *

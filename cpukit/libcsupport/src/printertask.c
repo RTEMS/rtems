@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplPrintSupport
+ *
+ * @brief This source file contains the implementation of the task driven
+ *   printer.
+ */
+
 /*
  * Copyright (c) 2016 embedded brains GmbH & Co. KG
  *

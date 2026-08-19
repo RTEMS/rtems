@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup Termios
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_termios_set_best_baud().
+ */
+
 /*
  * Copyright (c) 2014 embedded brains GmbH & Co. KG
  *

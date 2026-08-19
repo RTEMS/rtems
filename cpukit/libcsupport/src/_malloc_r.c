@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup MallocSupport
+ *
+ * @brief This source file contains the implementation of _malloc_r().
+ */
+
 /*
  *  _malloc_r Implementation
  *

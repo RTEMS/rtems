@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup MallocSupport
+ *
+ * @brief This source file contains the default implementation which extends
+ *   the heap of the allocator.
+ */
+
 /*
  * Copyright (C) 2020 embedded brains GmbH & Co. KG
  *

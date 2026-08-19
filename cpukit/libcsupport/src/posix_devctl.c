@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup libcsupport
+ *
+ * @brief This source file contains the implementation of posix_devctl().
+ */
+
 /*
  * Copyright (c) 2016, 2020 Joel Sherrill <joel@rtems.org>.
  * All rights reserved.

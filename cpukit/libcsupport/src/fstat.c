@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup LibIO
+ *
+ * @brief This source file contains the implementation of fstat().
+ */
+
 /*
  *  fstat() - POSIX 1003.1b 5.6.2 - Get File Status
  *

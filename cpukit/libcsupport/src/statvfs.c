@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup LibIO
+ *
+ * @brief This source file contains the implementation of statvfs().
+ */
+
 /*
  *  COPYRIGHT (c) 2009 Chris Johns <chrisj@rtems.org>
  *

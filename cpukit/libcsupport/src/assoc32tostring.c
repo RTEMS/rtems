@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplAssociativity
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_assoc_32_to_string().
+ */
+
 /*
  * Copyright (c) 2016 embedded brains GmbH & Co. KG
  *

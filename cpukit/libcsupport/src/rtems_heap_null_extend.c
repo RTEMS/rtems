@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup MallocSupport
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_heap_null_extend().
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH & Co. KG
  *

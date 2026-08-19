@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup Termios
+ *
+ * @brief This header file provides the interfaces of the simple console
+ *   driver.
+ */
+
 /*
  * Copyright (c) 2018 embedded brains GmbH & Co. KG
  *

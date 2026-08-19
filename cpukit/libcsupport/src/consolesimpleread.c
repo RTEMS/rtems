@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup Termios
+ *
+ * @brief This source file contains the read support of the simple console
+ *   driver.
+ */
+
 /*
  * Copyright (c) 2017 embedded brains GmbH & Co. KG
  *

@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: GPL-2.0-with-RTEMS-exception */
 
+/**
+ * @file
+ *
+ * @ingroup libcsupport
+ *
+ * @brief This source file contains the implementation of _exit().
+ */
+
 /*
  *  COPYRIGHT (c) 1994 by Division Incorporated
  *
