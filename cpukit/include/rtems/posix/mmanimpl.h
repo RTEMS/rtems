@@ -43,6 +43,16 @@
 extern "C" {
 #endif
 
+/**
+ * @defgroup RTEMSImplPOSIXMman POSIX Memory Management
+ *
+ * @ingroup RTEMSImplPOSIX
+ *
+ * @brief This group contains the POSIX memory management implementation.
+ *
+ * @{
+ */
+
 /* FIXME: add Doxygen */
 
 /**
@@ -67,6 +77,8 @@ static inline void mmap_mappings_lock_release( void )
 {
   rtems_libio_unlock();
 }
+
+/** @} */
 
 #ifdef __cplusplus
 }

@@ -48,6 +48,16 @@
 extern "C" {
 #endif
 
+/**
+ * @defgroup RTEMSImplPOSIXMutex POSIX Mutex
+ *
+ * @ingroup RTEMSImplPOSIX
+ *
+ * @brief This group contains the POSIX mutex implementation.
+ *
+ * @{
+ */
+
 typedef struct {
   unsigned long            flags;
   Mutex_recursive_Control  Recursive;
@@ -449,6 +459,8 @@ bool _POSIX_Mutex_Auto_initialization( POSIX_Mutex_Control *the_mutex );
       }                                                                  \
     }                                                                    \
   } while ( 0 )
+
+/** @} */
 
 #ifdef __cplusplus
 }

@@ -50,6 +50,16 @@
 extern "C" {
 #endif
 
+/**
+ * @defgroup RTEMSImplPOSIXBarrier POSIX Barrier
+ *
+ * @ingroup RTEMSImplPOSIX
+ *
+ * @brief This group contains the POSIX barrier implementation.
+ *
+ * @{
+ */
+
 #define POSIX_BARRIER_MAGIC 0x1cf03773UL
 
 #define POSIX_BARRIER_TQ_OPERATIONS &_Thread_queue_Operations_FIFO
@@ -109,6 +119,8 @@ static inline void _POSIX_Barrier_Queue_release(
       return EINVAL;                                                   \
     }                                                                  \
   } while ( 0 )
+
+/** @} */
 
 #ifdef __cplusplus
 }

@@ -46,6 +46,16 @@
 extern "C" {
 #endif
 
+/**
+ * @defgroup RTEMSImplPOSIXConditionVariable POSIX Condition Variable
+ *
+ * @ingroup RTEMSImplPOSIX
+ *
+ * @brief This group contains the POSIX condition variable implementation.
+ *
+ * @{
+ */
+
 typedef struct {
   unsigned long              flags;
   Thread_queue_Syslock_queue Queue;
@@ -193,6 +203,8 @@ bool _POSIX_Condition_variables_Auto_initialization(
       }                                                                    \
     }                                                                      \
   } while ( 0 )
+
+/** @} */
 
 #ifdef __cplusplus
 }

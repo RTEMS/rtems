@@ -47,6 +47,16 @@
 extern "C" {
 #endif
 
+/**
+ * @defgroup RTEMSImplPOSIXRWLock POSIX Read-Write Lock
+ *
+ * @ingroup RTEMSImplPOSIX
+ *
+ * @brief This group contains the POSIX read-write lock implementation.
+ *
+ * @{
+ */
+
 #define POSIX_RWLOCK_MAGIC 0x9621dabdUL
 
 typedef struct {
@@ -74,6 +84,8 @@ bool _POSIX_RWLock_Auto_initialization( POSIX_RWLock_Control *the_rwlock );
       }                                                                   \
     }                                                                     \
   } while ( 0 )
+
+/** @} */
 
 #ifdef __cplusplus
 }

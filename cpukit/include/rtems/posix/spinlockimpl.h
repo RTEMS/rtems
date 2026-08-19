@@ -53,6 +53,16 @@
 extern "C" {
 #endif
 
+/**
+ * @defgroup RTEMSImplPOSIXSpinlock POSIX Spinlock
+ *
+ * @ingroup RTEMSImplPOSIX
+ *
+ * @brief This group contains the POSIX spinlock implementation.
+ *
+ * @{
+ */
+
 typedef struct {
 #if defined( RTEMS_SMP )
   SMP_ticket_lock_Control Lock;
@@ -68,6 +78,8 @@ static inline POSIX_Spinlock_Control *_POSIX_Spinlock_Get(
 {
   return (POSIX_Spinlock_Control *) lock;
 }
+
+/** @} */
 
 #ifdef __cplusplus
 }
