@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIXAPI
+ * @ingroup RTEMSImplPOSIX
  *
  * @brief Returns the Current Priority Ceiling of the Mutex
  */

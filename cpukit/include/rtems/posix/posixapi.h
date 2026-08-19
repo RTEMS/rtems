@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIXAPI
+ * @ingroup RTEMSImplPOSIX
  *
  * @brief This header file provides interfaces used by the POSIX API
  *   implementation.
@@ -47,7 +47,7 @@
 #include <pthread.h>
 
 /**
- * @defgroup POSIXAPI POSIX API
+ * @defgroup RTEMSImplPOSIX POSIX API
  *
  * @ingroup RTEMSImpl
  *

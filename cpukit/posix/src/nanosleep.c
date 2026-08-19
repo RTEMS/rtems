@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIXAPI
+ * @ingroup RTEMSImplPOSIX
  *
  * @brief Suspends Execution of calling thread until Time elapses
  */

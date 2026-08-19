@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIXAPI
+ * @ingroup RTEMSImplPOSIX
  *
  * @brief Function Sets Thread Creation Stack Attributes in the attr object
  */

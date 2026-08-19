@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIXAPI
+ * @ingroup RTEMSImplPOSIX
  *
  * @brief Send a Signal to a Process
  */

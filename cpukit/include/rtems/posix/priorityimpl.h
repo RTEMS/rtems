@@ -48,7 +48,7 @@ extern "C" {
 /**
  * @defgroup POSIX_PRIORITY POSIX Priority Support
  *
- * @ingroup POSIXAPI
+ * @ingroup RTEMSImplPOSIX
  *
  * @brief Interface to the POSIX Priority Implementation.
  *

@@ -58,7 +58,7 @@
 /**
  * @defgroup POSIX_MQUEUE POSIX Message Queues
  *
- * @ingroup POSIXAPI
+ * @ingroup RTEMSImplPOSIX
  * 
  */
 /**@{**/

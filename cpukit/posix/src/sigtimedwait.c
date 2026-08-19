@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief Wait for Queued Signals
- *  @ingroup POSIXAPI
+ *  @ingroup RTEMSImplPOSIX
  */
 
 /*

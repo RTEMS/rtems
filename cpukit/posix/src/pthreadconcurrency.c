@@ -7,7 +7,7 @@
 /**
  * @file
  *
- * @ingroup POSIXAPI
+ * @ingroup RTEMSImplPOSIX
  *
  * @brief Pthread Get/Set Concurrency
  *

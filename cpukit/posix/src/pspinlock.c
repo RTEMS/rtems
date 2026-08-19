@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief Wait at a Spinlock
- *  @ingroup POSIXAPI
+ *  @ingroup RTEMSImplPOSIX
  */
 
 /*

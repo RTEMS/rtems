@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief Initialize a Condition Variable
- *  @ingroup POSIXAPI
+ *  @ingroup RTEMSImplPOSIX
  */
 
 /*

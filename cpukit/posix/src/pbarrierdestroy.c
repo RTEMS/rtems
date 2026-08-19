@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief Destroy a Barrier Object 
- *  @ingroup POSIXAPI
+ *  @ingroup RTEMSImplPOSIX
  */
 
 /*

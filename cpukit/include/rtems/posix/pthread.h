@@ -48,7 +48,7 @@ extern "C" {
 /**
  * @defgroup POSIX_PTHREAD POSIX Threads Support
  *
- * @ingroup POSIXAPI
+ * @ingroup RTEMSImplPOSIX
  *
  * @brief Private Support Information for POSIX Threads
  *

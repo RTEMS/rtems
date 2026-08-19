@@ -54,7 +54,7 @@ extern "C" {
 /**
  * @defgroup POSIX_KEY POSIX Key
  *
- * @ingroup POSIXAPI
+ * @ingroup RTEMSImplPOSIX
  *
  */
 /**@{**/

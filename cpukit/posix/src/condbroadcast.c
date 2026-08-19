@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief Broadcast a Condition
- *  @ingroup POSIXAPI
+ *  @ingroup RTEMSImplPOSIX
  */
 
 /*

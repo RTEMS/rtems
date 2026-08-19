@@ -49,7 +49,7 @@ extern "C" {
 /**
  * @defgroup POSIX_AIO POSIX Asynchronous I/O Support
  * 
- * @ingroup POSIXAPI
+ * @ingroup RTEMSImplPOSIX
  * @{
  */
 

@@ -40,7 +40,7 @@
 /**
  * @defgroup POSIX_SIGNALS POSIX Signals Support
  *
- * @ingroup POSIXAPI
+ * @ingroup RTEMSImplPOSIX
  *
  * @brief Internal Information about POSIX Signals
  * 

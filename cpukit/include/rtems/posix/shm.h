@@ -46,7 +46,7 @@ extern "C" {
 /**
  * @defgroup POSIXShmPrivate POSIX Shared Memory Private Support
  *
- * @ingroup POSIXAPI
+ * @ingroup RTEMSImplPOSIX
  *
  * Internal implementation support for POSIX shared memory.
  * @{

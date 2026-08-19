@@ -64,7 +64,7 @@ extern "C" {
 /**
  *  @defgroup POSIX_MQUEUE_P Message Queues Private Support
  *
- *  @ingroup POSIXAPI
+ *  @ingroup RTEMSImplPOSIX
  * 
  */
 /**@{**/

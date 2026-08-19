@@ -50,7 +50,7 @@ extern "C" {
 /**
  * @defgroup POSIX_INTERNAL_TIMERS POSIX Timer Private Support
  *
- * @ingroup POSIXAPI
+ * @ingroup RTEMSImplPOSIX
  */
 /**@{*/
 

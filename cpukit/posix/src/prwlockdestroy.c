@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief Destroy a RWLock
- *  @ingroup POSIXAPI
+ *  @ingroup RTEMSImplPOSIX
  */
 /*
  *  COPYRIGHT (c) 1989-2007.

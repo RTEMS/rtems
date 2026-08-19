@@ -40,7 +40,7 @@
 /**
  * @defgroup UTSNAME utsname Service
  * 
- * @ingroup POSIXAPI
+ * @ingroup RTEMSImplPOSIX
  */
 /**@{*/
 

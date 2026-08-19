@@ -50,7 +50,7 @@ extern "C" {
 /**
  * @defgroup POSIXSemaphorePrivate POSIX Semaphore Private Support
  *
- * @ingroup POSIXAPI
+ * @ingroup RTEMSImplPOSIX
  *
  * This defines the internal implementation support for POSIX semaphores.
  */

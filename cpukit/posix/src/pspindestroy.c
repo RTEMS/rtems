@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief Destroy a Spinlock
- *  @ingroup POSIXAPI
+ *  @ingroup RTEMSImplPOSIX
  */
 
 /*

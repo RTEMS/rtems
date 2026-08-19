@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief Wait for Process to Change State 
- *  @ingroup POSIXAPI
+ *  @ingroup RTEMSImplPOSIX
  */
 
 /*

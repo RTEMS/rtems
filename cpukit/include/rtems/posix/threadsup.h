@@ -46,7 +46,7 @@
 /**
  *  @defgroup POSIX_THREAD POSIX Thread API Extension
  *
- *  @ingroup POSIXAPI
+ *  @ingroup RTEMSImplPOSIX
  * 
  */
 /**@{**/

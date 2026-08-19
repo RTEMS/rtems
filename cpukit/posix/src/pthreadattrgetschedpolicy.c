@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief Get The Schedpolicy Attribute
- *  @ingroup POSIXAPI
+ *  @ingroup RTEMSImplPOSIX
  */
 
 /*
