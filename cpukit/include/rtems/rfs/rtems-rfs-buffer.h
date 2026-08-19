@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_rfs
  *
- * @brief Maps Blocks to the Media Interface Layers
+ * @brief This header file provides the buffer interfaces of the RFS file
+ *   system.
  *
  * These functions map blocks to the media interface layers.
  */

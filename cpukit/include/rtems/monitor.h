@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplMonitor
  *
- * @brief The RTEMS Monitor Task
+ * @brief This header file provides the interfaces of the monitor.
  */
 
 /*

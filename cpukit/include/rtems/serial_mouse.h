@@ -4,8 +4,9 @@
  * @file
  *
  * @ingroup libmisc_mouse
- * 
- * @brief Serial Mouse Driver
+ *
+ * @brief This header file provides the interfaces of the serial mouse
+ *   driver.
  *
  * This file describes the Serial Mouse Driver for all boards.
  * This driver assumes that the BSP or application will provide

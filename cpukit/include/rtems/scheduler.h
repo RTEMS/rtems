@@ -5,8 +5,8 @@
  *
  * @ingroup RTEMSApplConfigGeneralSchedulerConfiguration
  *
- * @brief This header file contains interfaces to define a scheduler
- *   configuration for an application.
+ * @brief This header file provides the interfaces which define a scheduler
+ *   configuration.
  */
 
 /*

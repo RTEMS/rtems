@@ -1,11 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @ingroup shared_tm27
+ * @ingroup shared_tm27
  *
- *  @brief Empty stub for tm27.h
+ * @brief This header file provides an empty default of the time test 27
+ *   support.
  */
 
 /*

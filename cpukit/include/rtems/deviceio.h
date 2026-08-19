@@ -5,7 +5,7 @@
  *
  * @ingroup IMFSDevices
  *
- * @brief Operations on IMFS Device Nodes 
+ * @brief This header file provides the device node handlers of the IMFS.
  */
 
 /*

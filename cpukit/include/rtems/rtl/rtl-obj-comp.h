@@ -29,8 +29,8 @@
  *
  * @ingroup rtems_rtl
  *
- * @brief RTEMS Run-Time Linker Object File Compression manages a
- *        compressed stream of data.
+ * @brief This header file provides the object file decompressor interfaces
+ *   of the dynamic linker.
  *
  * This is a simple interface to the object file cache to stream data from
  * from a compressed object file. There is no ability to seek with the

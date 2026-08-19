@@ -5,7 +5,8 @@
  *
  * @ingroup RegulatorInternalAPI
  *
- * @brief Regulator Library Implementation Support
+ * @brief This header file provides the implementation interfaces of the
+ *   regulator.
  */
 
 /*

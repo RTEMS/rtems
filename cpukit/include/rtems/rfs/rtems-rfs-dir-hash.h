@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @brief Provides a 32bit Hash of a String used to Search a Directory
- *
  * @ingroup rtems_rfs
+ *
+ * @brief This header file provides the directory hash interfaces of the RFS
+ *   file system.
  *
  * RTEMS File Systems Directory Hash provides a 32bit hash of a string. This is
  * used to search a directory.

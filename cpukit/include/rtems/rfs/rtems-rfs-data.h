@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @brief RTEMS File System Data
- *
  * @ingroup rtems_rfs
+ *
+ * @brief This header file provides the data access helpers of the RFS file
+ *   system.
  *
  * RTEMS File System Data.
  *

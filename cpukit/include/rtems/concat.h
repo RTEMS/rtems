@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSAPIBaseDefs
  *
- * This include file defines ANSI concatenation macros.
+ * @brief This header file provides the token concatenation macros.
  */
 
 /*

@@ -5,7 +5,8 @@
  *
  * @ingroup LibIOInternal
  *
- * @brief LibIO Internal Interface
+ * @brief This header file provides the implementation interfaces of the
+ *   input and output library.
  *
  * This file is the libio internal interface.
  */

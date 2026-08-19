@@ -4,7 +4,8 @@
  * @file
  *
  * @ingroup RTEMSDeviceDrivers
- * @brief Interrupt Handler Support
+ *
+ * @brief This header file provides the legacy interrupt handler interfaces.
  *
  * This include file describe the data structure and the functions implemented
  * by rtems to write interrupt handlers.

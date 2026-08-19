@@ -5,8 +5,8 @@
  *
  * @ingroup RTEMSScoreSchedulerCBS
  *
- * @brief Constants and Structures Associated
- * with the CBS library in RTEMS
+ * @brief This header file provides the interfaces of the constant bandwidth
+ *   server scheduler.
  *
  * This include file contains all the constants and structures associated
  * with the CBS library in RTEMS.

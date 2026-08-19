@@ -5,8 +5,8 @@
  *
  * @ingroup RTEMSDeviceDrivers
  *
- * @brief Executive's Pre-Initialized Tables used in a
- * Multiprocessor Configuration
+ * @brief This header file provides the pre-initialized tables of a
+ *   multiprocessing configuration.
  *
  * This include file contains the executive's pre-initialized tables
  * used in a multiprocessor configuration.

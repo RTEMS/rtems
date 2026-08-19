@@ -5,7 +5,8 @@
  *
  * @ingroup TermiostypesSupport
  *
- * RTEMS termios device support internal data structures
+ * @brief This header file provides the implementation interfaces of the
+ *   Termios device support.
  */
 
 /*

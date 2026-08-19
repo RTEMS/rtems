@@ -3,7 +3,8 @@
  *
  * @ingroup libi2c
  *
- * @brief Legacy I2C Library
+ * @brief This header file provides the interfaces of the legacy I2C
+ *   library.
  */
 
 #ifndef _RTEMS_LIBI2C_H

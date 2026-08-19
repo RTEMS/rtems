@@ -3,7 +3,8 @@
  *
  * @ingroup libmisc_fb_mw
  *
- * @brief Input Devices for MicroWindows
+ * @brief This header file provides the input device interfaces of the
+ *   MicroWindows frame buffer.
  *
  * This file defines the interface for input devices used by MicroWindows
  * in an embedded system environment.

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplClassicUserExt
  *
- * @brief Classic User Extensions Implementation
+ * @brief This header file provides the implementation interfaces of the
+ *   Classic User Extensions Manager.
  */
 
 /*

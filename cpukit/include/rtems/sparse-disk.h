@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_sparse_disk
  *
- * @brief Sparse disk block device API.
+ * @brief This header file provides the interfaces of the sparse disk block
+ *   device driver.
  */
 
 /*

@@ -5,8 +5,9 @@
  *
  * @ingroup libmisc_dumpbuf
  *
- * @brief Print a Memory Buffer
- * 
+ * @brief This header file provides the interfaces which print a memory
+ *   buffer.
+ *
  * This file defines the interface to the RTEMS methods to print a
  * memory buffer in a style similar to many ROM monitors and debuggers.
  */

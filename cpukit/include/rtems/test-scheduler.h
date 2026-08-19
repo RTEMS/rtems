@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSTestFramework
  *
- * @brief This header file defines the scheduler test support API.
+ * @brief This header file provides the interfaces of the scheduler test
+ *   support.
  */
 
 /*

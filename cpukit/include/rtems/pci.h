@@ -3,7 +3,7 @@
  *
  * @ingroup RTEMSImplPCI
  *
- * PCI defines and function prototypes
+ * @brief This header file provides the interfaces of the PCI library.
  */
 
 /*

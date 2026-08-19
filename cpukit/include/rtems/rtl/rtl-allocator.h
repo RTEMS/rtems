@@ -29,7 +29,8 @@
  *
  * @ingroup rtems_rtl
  *
- * @brief RTEMS Run-Time Linker Allocator
+ * @brief This header file provides the allocator interfaces of the dynamic
+ *   linker.
  */
 
 #if !defined(_RTEMS_RTL_ALLOCATOR_H_)

@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSAPIBSD
  *
- * @brief BSD Compatibility API
+ * @brief This header file provides the BSD compatibility interfaces.
  */
 
 /*

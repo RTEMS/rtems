@@ -5,7 +5,8 @@
  *
  * @ingroup libmisc_devzero
  *
- * @brief RTEMS /dev/zero Device Driver
+ * @brief This header file provides the interfaces of the zero device
+ *   driver.
  *
  * This include file defines the interface to the RTEMS /dev/zero
  * device driver.

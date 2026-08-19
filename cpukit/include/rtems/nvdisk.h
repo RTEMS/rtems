@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_libblock
  *
- * @brief Non-volatile Disk Block Device Implementation
+ * @brief This header file provides the interfaces of the non-volatile disk
+ *   block device driver.
  */
 
 /*

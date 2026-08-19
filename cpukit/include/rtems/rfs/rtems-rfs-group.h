@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @brief RTEMS File Systems Group Management
- *
  * @ingroup rtems_rfs
+ *
+ * @brief This header file provides the group interfaces of the RFS file
+ *   system.
  *
  * RTEMS File Systems Group Management.
  *

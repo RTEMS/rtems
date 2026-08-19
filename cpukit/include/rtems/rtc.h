@@ -5,8 +5,9 @@
  *
  * @ingroup rtems_rtc
  *
- * @brief Real-Time Clock Driver Interface
- * 
+ * @brief This header file provides the interfaces of the real-time clock
+ *   driver.
+ *
  * Real-time clock driver interface.
  */
 

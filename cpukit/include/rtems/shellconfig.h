@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSAPIShell
  *
- * RTEMS Shell Command Set Configuration
+ * @brief This header file provides the command set configuration of the
+ *   shell.
  */
 
 /*

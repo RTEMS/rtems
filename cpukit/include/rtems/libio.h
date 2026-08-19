@@ -5,7 +5,8 @@
  *
  * @ingroup LibIO
  *
- * @brief Basic IO API
+ * @brief This header file provides the interfaces of the input and output
+ *   library.
  *
  * This file contains the support infrastructure used to manage the
  * table of integer style file descriptors used by the low level

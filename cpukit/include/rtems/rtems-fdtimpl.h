@@ -31,7 +31,8 @@
  *
  * @ingroup RTEMSImplFDT
  *
- * @brief RTEMS Flattened Device Tree Implementation
+ * @brief This header file provides the implementation interfaces of the
+ *   flattened device tree support.
  *
  * Internal implementation Support for loading, managing and accessing FDT blobs in RTEMS.
  */

@@ -3,13 +3,12 @@
 /**
  * @file
  *
- * @defgroup rtems_fstab File System Mount Support
- *
  * @ingroup FileSystemTypesAndMount
- * @brief File System Mount Functions
  *
- * This file contains the fsmount functions. These functions       
- * are used to mount a list of filesystems (and create their mount 
+ * @brief This header file provides the file system mount interfaces.
+ *
+ * This file contains the fsmount functions. These functions
+ * are used to mount a list of filesystems (and create their mount
  * points before).
  */
 

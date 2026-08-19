@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @brief RTEMS File System Information Node
- *
  * @ingroup rtems_rfs
+ *
+ * @brief This header file provides the inode interfaces of the RFS file
+ *   system.
  *
  * RTEMS File System Information Node.
  *

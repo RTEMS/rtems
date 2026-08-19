@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @brief RTEMS File System Mutex
- *
  * @ingroup rtems_rfs
+ *
+ * @brief This header file provides the mutex interfaces of the RFS file
+ *   system.
  *
  * RTEMS File System Mutex.
  *

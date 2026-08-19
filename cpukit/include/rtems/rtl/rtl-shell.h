@@ -29,7 +29,8 @@
  *
  * @ingroup rtems_rtl
  *
- * @brief RTEMS Run-Time Linker ELF Shell Support.
+ * @brief This header file provides the shell command interfaces of the
+ *   dynamic linker.
  */
 
 #if !defined(_RTEMS_RTL_SHELL_H_)

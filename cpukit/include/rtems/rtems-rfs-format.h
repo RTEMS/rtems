@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_rfs
  *
- * @brief RTEMS File System Format
+ * @brief This header file provides the format interfaces of the RFS file
+ *   system.
  *
  * This function lets you format a disk in the RFS format.
  */

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplCapture
  *
- * @brief Capture Implementation file
+ * @brief This header file provides the implementation interfaces of the
+ *   capture engine.
  *
  * This file contains an interface between the capture engine and
  * capture user extension methods.

@@ -2,8 +2,9 @@
  * @file
  *
  * @ingroup Termios
- * 
- * @brief /dev/ptyXX  (A first version for pseudo-terminals)
+ *
+ * @brief This header file provides the interfaces of the pseudo-terminal
+ *   driver.
  */
 
 /*

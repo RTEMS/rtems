@@ -3,7 +3,8 @@
  *
  * @ingroup rtems_blkdev
  *
- * @brief Block Device Management
+ * @brief This header file provides the interfaces of the block device
+ *   management.
  */
 
 /*

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMS
  *
- * @brief Provide printf() PRIxxx Constante Beyond Standards
+ * @brief This header file provides the printf() format constants which
+ *   RTEMS adds to the standards.
  *
  * This include file defines PRIxxx constants beyond those in
  * the C and POSIX standards. These are used to write portable

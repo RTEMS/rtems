@@ -30,7 +30,7 @@
  *
  * @ingroup rtems_rtl
  *
- * @brief RTEMS Run-Time Linker
+ * @brief This header file provides the interfaces of the dynamic linker.
  *
  * This is the POSIX interface to run-time loading of code into RTEMS.
  */

@@ -5,7 +5,8 @@
  *
  * @ingroup FIFO_PIPE
  *
- * @brief POSIX FIFO/pipe File System Support
+ * @brief This header file provides the FIFO and pipe file system
+ *   interfaces.
  *
  * This include file defines the interface to the POSIX FIFO/pipe file system
  * support.

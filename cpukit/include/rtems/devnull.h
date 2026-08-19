@@ -5,8 +5,9 @@
  *
  * @ingroup libmisc_devnull
  *
- * @brief RTEMS /dev/null Device Driver
- * 
+ * @brief This header file provides the interfaces of the null device
+ *   driver.
+ *
  * This include file defines the interface to the RTEMS /dev/null
  * device driver.
  */

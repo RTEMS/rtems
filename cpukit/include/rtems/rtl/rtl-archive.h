@@ -29,7 +29,8 @@
  *
  * @ingroup rtems_rtl
  *
- * @brief RTEMS Run-Time Linker Archive
+ * @brief This header file provides the archive interfaces of the dynamic
+ *   linker.
  *
  * The RTL Archive module manages dependent loading of object files from
  * archives. The archives need to have a `ranlib` generated symbol table.

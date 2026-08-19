@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSAPIShell
  *
- * @brief Instantatiate a New Terminal Shell
+ * @brief This header file provides the interfaces of the shell.
  */
 
 /*

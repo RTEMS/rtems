@@ -1,11 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
  * @ingroup RTEMSImplFreeBSDKernel
  *
- *  @brief Includes endian information about the target
+ * @brief This header file provides the byte order definitions of the
+ *   target.
  */
 
 /*

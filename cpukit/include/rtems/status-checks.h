@@ -5,7 +5,7 @@
  *
  * @ingroup rtems_status_checks
  *
- * @brief Header File for Status Checks
+ * @brief This header file provides the status check macros.
  *
  * @warning Do not include this file in other header files.  Use it only in
  * source files.

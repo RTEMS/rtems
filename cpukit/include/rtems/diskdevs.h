@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Block Device Disk Management API
- *
  * @ingroup rtems_disk
+ *
+ * @brief This header file provides the interfaces of the disk device
+ *   management.
  */
 
 /*

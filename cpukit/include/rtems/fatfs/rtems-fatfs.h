@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplFATFS
  *
- * @brief RTEMS FatFS headers
+ * @brief This header file provides the mount interfaces of the FatFS file
+ *   system.
  */
 
 /*

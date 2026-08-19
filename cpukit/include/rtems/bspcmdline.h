@@ -5,7 +5,8 @@
  *
  * @ingroup BSPCommandLine
  *
- * @brief BSP Command Line Handler
+ * @brief This header file provides the interfaces of the BSP command line
+ *   handler.
  *
  * This include file contains all prototypes and specifications
  * related to the BSP Command Line String and associated helper

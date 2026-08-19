@@ -5,7 +5,7 @@
  *
  * @ingroup ErrorPanicSupport
  *
- * @brief RTEMS Error Reporting
+ * @brief This header file provides the error reporting interfaces.
  *
  * Defines and externs for rtems error reporting
  *

@@ -5,8 +5,7 @@
  *
  * @ingroup RegulatorAPI
  *
- * @brief This header file defines the Regulator API.
- *
+ * @brief This header file provides the interfaces of the Regulator.
  */
 
 /*

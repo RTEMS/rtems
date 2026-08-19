@@ -29,8 +29,8 @@
  *
  * @ingroup rtems_rtl
  *
- * @brief RTEMS Run-Time Linker Indirect Pointer Management allows memory
- *        compaction in the allocator.
+ * @brief This header file provides the indirect pointer interfaces of the
+ *   dynamic linker.
  */
 
 #if !defined(_RTEMS_RTL_INDIRECT_PTR_H_)

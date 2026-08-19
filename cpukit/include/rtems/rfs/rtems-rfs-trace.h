@@ -3,10 +3,10 @@
 /**
  * @file
  *
- * @brief Manages the Trace and Debugging Features of the
- * RTEMS RFS File System
- *
  * @ingroup rtems_rfs
+ *
+ * @brief This header file provides the trace interfaces of the RFS file
+ *   system.
  *
  * RTEMS File Systems Trace manages the trace and debugging features of the
  * RTEMS RFS file system. The design allows all tracing code and strings to be

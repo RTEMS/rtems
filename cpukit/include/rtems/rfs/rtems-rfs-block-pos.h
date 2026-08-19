@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @brief RTEMS File Systems Block Position and Size Management
- *
  * @ingroup rtems_rfs
+ *
+ * @brief This header file provides the block position and size interfaces
+ *   of the RFS file system.
  *
  * RTEMS File Systems Block Position and Size Management.
  *

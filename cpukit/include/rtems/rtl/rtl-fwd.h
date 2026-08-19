@@ -29,7 +29,8 @@
  *
  * @ingroup rtems_rtl
  *
- * @brief RTEMS Run-Time Linker ELF Headers
+ * @brief This header file provides the forward declarations of the dynamic
+ *   linker.
  */
 
 #if !defined(_RTEMS_RTL_FWD_H_)

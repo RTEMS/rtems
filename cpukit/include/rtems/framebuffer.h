@@ -5,7 +5,8 @@
  *
  * @ingroup libmisc_fb
  *
- * @brief Frame Buffer Device Driver for all Boards
+ * @brief This header file provides the driver table entries of the frame
+ *   buffer device driver.
  *
  * This file describes the Frame Buffer Device Driver for all boards.
  */

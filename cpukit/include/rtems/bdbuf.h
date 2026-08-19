@@ -3,7 +3,8 @@
  *
  * @ingroup rtems_bdbuf
  *
- * @brief Block Device Buffer Management
+ * @brief This header file provides the interfaces of the block device
+ *   buffer cache.
  */
 
 /*

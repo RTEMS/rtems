@@ -5,7 +5,7 @@
  *
  * @ingroup TermiostypesSupport
  *
- * @brief Simple Ring Buffer Functionality
+ * @brief This header file provides the ring buffer macros.
  *
  * This file provides simple ring buffer functionality.
  */

@@ -29,7 +29,8 @@
  *
  * @ingroup rtems_rtl
  *
- * @brief RTEMS Run-Time Linker ELF Trace Support.
+ * @brief This header file provides the trace interfaces of the dynamic
+ *   linker.
  */
 
 #if !defined(_RTEMS_RTL_TRACE_H_)

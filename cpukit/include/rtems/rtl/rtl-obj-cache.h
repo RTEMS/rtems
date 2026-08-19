@@ -29,8 +29,8 @@
  *
  * @ingroup rtems_rtl
  *
- * @brief RTEMS Run-Time Linker Object File cache buffers a section of the
- *        object file in a buffer to localise read performance.
+ * @brief This header file provides the object file cache interfaces of the
+ *   dynamic linker.
  *
  * This is a simple object file cache that holds a buffer of data from the
  * offset in the file the read is requested from. Writes are not supported.

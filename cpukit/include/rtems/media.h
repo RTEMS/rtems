@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSIOMedia
  *
- * @brief Media Manager API.
+ * @brief This header file provides the interfaces of the media server.
  */
 
 /*

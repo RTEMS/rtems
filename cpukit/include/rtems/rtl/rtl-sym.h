@@ -29,7 +29,8 @@
  *
  * @ingroup rtems_rtl
  *
- * @brief RTEMS Run-Time Linker Object File Symbol Table.
+ * @brief This header file provides the symbol table interfaces of the
+ *   dynamic linker.
  */
 
 #if !defined(_RTEMS_RTL_SYM_H_)

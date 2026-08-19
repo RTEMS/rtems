@@ -4,8 +4,8 @@
  * @file
  *
  * @ingroup RTEMSDeviceConsole
- * 
- * @brief Console Driver for all Boards
+ *
+ * @brief This header file provides the interfaces of the console driver.
  *
  * This file describes the Console Device Driver for all boards.
  * This driver provides support for the standard C Library.

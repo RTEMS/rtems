@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_libblock
  *
- * This driver maps an NV disk to static RAM. You can use this
+ * @brief This header file provides the SRAM interfaces of the non-volatile
+ *   disk driver.
  */
 
 /*

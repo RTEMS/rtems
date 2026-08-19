@@ -4,9 +4,9 @@
  * @file
  *
  * @ingroup RTEMSAPICounter
- * 
- * @brief This header file defines the Free-Running Counter and Busy Wait Delay
- *   API.
+ *
+ * @brief This header file provides the interfaces of the free-running
+ *   counter and the busy wait support.
  */
 
 /*

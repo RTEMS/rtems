@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @brief RTEMS File Systems Data Forward Declaration
- *
  * @ingroup rtems_rfs
+ *
+ * @brief This header file provides the forward declaration of the RFS file
+ *   system data.
  *
  * RTEMS File Systems Data forward decl.
  */

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSLegacyBenchmarkDrivers
  *
- * @brief RTEMS Benchmark Timer API for all Boards
+ * @brief This header file provides the interfaces of the benchmark timer
+ *   driver.
  */
 
 /*

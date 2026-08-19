@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @brief RTEMS File System File Support
- *
  * @ingroup rtems_rfs
+ *
+ * @brief This header file provides the file interfaces of the RFS file
+ *   system.
  *
  * RTEMS File System File Support
  *

@@ -1,11 +1,12 @@
 /* SPDX-License-Identifier: GPL-2.0-with-RTEMS-exception */
 
 /**
- *  @file
+ * @file
  *
- *  @ingroup shared_tod
+ * @ingroup shared_tod
  *
- *  @brief Real Time Clock Time of Day API Definition
+ * @brief This header file provides the time of day interfaces of the
+ *   real-time clock driver.
  */
 
 /*

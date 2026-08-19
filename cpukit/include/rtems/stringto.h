@@ -5,7 +5,7 @@
  *
  * @ingroup libmisc_conv_help
  *
- * @brief Convert String to Pointer (with validation)
+ * @brief This header file provides the string conversion interfaces.
  *
  * This file defines the interface to a set of string conversion helpers.
  */

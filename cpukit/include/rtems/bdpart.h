@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_bdpart
  *
- * @brief Block Device Partition Management
+ * @brief This header file provides the interfaces of the block device
+ *   partition management.
  */
 
 /*

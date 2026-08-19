@@ -29,7 +29,8 @@
  *
  * @ingroup rtems_fdt
  *
- * @brief RTEMS Flattened Device Tree Shell Command
+ * @brief This header file provides the shell command interfaces of the
+ *   flattened device tree support.
  *
  * Support for loading, managing and accessing FDT blobs in RTEMS.
  */

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplTrace
  *
- * @brief Access to the RTEMS Trace Buffer Generator (TBG).
+ * @brief This header file provides the interfaces which read the trace
+ *   buffer variables.
  */
 /*
  *  Copyright (c) 2015 Chris Johns <chrisj@rtems.org>

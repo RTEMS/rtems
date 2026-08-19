@@ -29,7 +29,8 @@
  *
  * @ingroup rtems_rtl
  *
- * @brief RTEMS Run-Time Linker Object File Unresolved Relocations Table.
+ * @brief This header file provides the unresolved relocation interfaces of
+ *   the dynamic linker.
  *
  * The unresolved relocation table holds relocations in a loaded object file
  * which reference unresolved external symbols. The support is needed to allow

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSDeviceDrivers
  *
- * This include file defines some special characters of interest.
+ * @brief This header file provides the input and output support definitions
+ *   of the device drivers.
  */
 
 /*

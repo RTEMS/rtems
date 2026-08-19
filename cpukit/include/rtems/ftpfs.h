@@ -5,7 +5,7 @@
  *
  * @ingroup FileSystemTypesAndMount
  *
- * @brief File Transfer Protocol file system (FTP client).
+ * @brief This header file provides the interfaces of the FTP file system.
  */
 
 /*

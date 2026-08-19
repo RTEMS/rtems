@@ -29,7 +29,8 @@
  *
  * @ingroup rtems_rtl
  *
- * @brief RTEMS Run-Time Linker Object Support.
+ * @brief This header file provides the object file interfaces of the
+ *   dynamic linker.
  */
 
 #if !defined(_RTEMS_RTL_OBJ_H_)

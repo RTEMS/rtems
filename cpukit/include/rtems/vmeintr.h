@@ -4,8 +4,8 @@
  * @file
  *
  * @ingroup RTEMSDeviceDrivers
- * 
- * @brief VMEbus Interface Library
+ *
+ * @brief This header file provides the VMEbus interrupt interfaces.
  *
  * This file is the specification for the VMEbus interface library
  * which should be provided by all BSPs for VMEbus Single Board

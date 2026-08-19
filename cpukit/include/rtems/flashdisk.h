@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSFDisk
  *
- * @brief Interface to a Flash Disk Block Device
+ * @brief This header file provides the interfaces of the flash disk block
+ *   device driver.
  *
  * This file defines the interface to a flash disk block device.
  */

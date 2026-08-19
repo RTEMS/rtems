@@ -5,10 +5,10 @@
  *
  * @ingroup rtems_rfs
  *
- * @brief RFS File system Initialization
+ * @brief This header file provides the mount interfaces of the RFS file
+ *   system.
  *
  * RTEMS File System
- *
  */
 
 /*

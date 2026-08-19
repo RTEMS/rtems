@@ -5,7 +5,7 @@
  *
  * @ingroup TimespecAPI
  *
- * @brief Timespec API
+ * @brief This header file provides the timespec helper interfaces.
  *
  * This include file contains API for manipulating timespecs.
  */

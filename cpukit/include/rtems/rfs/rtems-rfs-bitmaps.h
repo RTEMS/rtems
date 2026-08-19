@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @brief RTEMS File Systems Bitmap Routines
- *
  * @ingroup rtems_rfs
+ *
+ * @brief This header file provides the bitmap interfaces of the RFS file
+ *   system.
  *
  * RTEMS File Systems Bitmap Routines.
  *

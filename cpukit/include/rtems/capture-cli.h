@@ -5,8 +5,8 @@
  *
  * @ingroup RTEMSImplCapture
  *
- * This is the Target Interface Command Line Interface. You need
- * start the RTEMS monitor.
+ * @brief This header file provides the command line interfaces of the
+ *   capture engine.
  */
 
 /*

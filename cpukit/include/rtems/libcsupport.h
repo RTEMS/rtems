@@ -5,7 +5,7 @@
  *
  * @ingroup libcsupport
  *
- * @brief Standard C Library Support
+ * @brief This header file provides the C library support interfaces.
  *
  * This include file contains the information regarding the
  * RTEMS specific support for the standard C library.

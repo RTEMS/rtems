@@ -5,7 +5,7 @@
  *
  * @ingroup FileSystemTypesAndMount
  *
- * @brief Basic Filesystem Types
+ * @brief This header file provides the basic file system types.
  *
  * This file defines basic filesystem types
  */

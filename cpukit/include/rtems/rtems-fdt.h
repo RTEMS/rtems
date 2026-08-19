@@ -33,7 +33,8 @@
  *
  * @ingroup rtems_fdt
  *
- * @brief RTEMS Flattened Device Tree
+ * @brief This header file provides the interfaces of the flattened device
+ *   tree support.
  *
  * Support for loading, managing and accessing FDT blobs in RTEMS.
  */

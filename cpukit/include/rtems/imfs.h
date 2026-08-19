@@ -5,7 +5,8 @@
  *
  * @ingroup IMFS
  *
- * @brief This header file defines the API of the In-Memory File System.
+ * @brief This header file provides the interfaces of the In-Memory File
+ *   System.
  */
 
 /*

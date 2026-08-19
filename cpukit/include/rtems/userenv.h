@@ -4,7 +4,8 @@
  * @file
  *
  * @ingroup LibIOEnv
- * @brief User Environment Support
+ *
+ * @brief This header file provides the user environment interfaces.
  */
 
 /*

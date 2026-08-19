@@ -4,8 +4,9 @@
  * @file
  *
  * @ingroup rtems_libblock
- * 
- * @brief "MS-DOS-style" Partition Tables Support
+ *
+ * @brief This header file provides the interfaces of the MS-DOS style
+ *   partition table support.
  */
 
 /*

@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSAPIAssociativity
  *
- * @brief RTEMS Associativity Routines
+ * @brief This header file provides the associativity interfaces.
  */
 
 /*

@@ -29,7 +29,8 @@
  *
  * @ingroup rtems_rap
  *
- * @brief RTEMS Application Loader
+ * @brief This header file provides the interfaces of the RAP application
+ *   loader.
  *
  * This is the RTEMS Application loader for files in the RAP format.
  */

@@ -5,8 +5,7 @@
  *
  * @ingroup RTEMSImplCapture
  *
- * @brief Capture Engine Component of the RTEMS Measurement and
- * Monitoring System
+ * @brief This header file provides the interfaces of the capture engine.
  *
  * This is the Capture Engine component of the RTEMS Measurement and
  * Monitoring system.

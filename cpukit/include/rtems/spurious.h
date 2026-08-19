@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSDeviceDrivers
  *
- * This file describes the Spurious Interrupt Driver for all boards.
+ * @brief This header file provides the interfaces of the spurious interrupt
+ *   driver.
  */
 
 /*

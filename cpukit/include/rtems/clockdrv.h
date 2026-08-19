@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSDriverClock
  *
- * @brief This header file defines the Clock Driver API.
+ * @brief This header file provides the interfaces of the Clock Driver.
  */
 
 /*

@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @brief RTEMS File Systems Block Management
- *
  * @ingroup rtems_rfs
+ *
+ * @brief This header file provides the block interfaces of the RFS file
+ *   system.
  *
  * RTEMS File Systems Block Management.
  *

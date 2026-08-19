@@ -4,11 +4,10 @@
  * @file
  *
  * @ingroup MallocSupport
- *
  * @ingroup RTEMSAPIMalloc
  *
- * @brief This header file defines interfaces to support and use dynamic memory
- *   allocation.
+ * @brief This header file provides the interfaces which support and use the
+ *   dynamic memory allocation.
  */
 
 /*

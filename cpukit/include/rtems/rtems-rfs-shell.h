@@ -4,7 +4,9 @@
  * @file
  *
  * @ingroup rtems_rfs
- * @brief RTEMS File Systems Shell Commands
+ *
+ * @brief This header file provides the shell command interfaces of the RFS
+ *   file system.
  *
  * RTEMS File Systems Shell commands provide a CLI interface to support and
  * development of the RFS file system.

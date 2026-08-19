@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSPrintSupport
  *
- * @brief User print interface to the bspIO print plug in.
+ * @brief This header file provides the user print interfaces.
  *
  * This include file defines the user interface to kernel print methods.
  */

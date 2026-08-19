@@ -5,8 +5,8 @@
  *
  * @ingroup RTEMSAPISetErrno
  *
- * @brief This header file defines macros to set ``errno`` and return minus
- *   one.
+ * @brief This header file provides the macros which set errno and return
+ *   minus one.
  */
 
 /*

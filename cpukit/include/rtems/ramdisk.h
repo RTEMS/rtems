@@ -3,7 +3,8 @@
  *
  * @ingroup rtems_ramdisk
  *
- * @brief RAM Disk Block Device API
+ * @brief This header file provides the interfaces of the RAM disk block
+ *   device driver.
  */
 
 /*

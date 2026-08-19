@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @brief Application Interface to FAT Filesystem
- *
  * @ingroup DOSFS
+ *
+ * @brief This header file provides the mount and format interfaces of the
+ *   DOS file system.
  */
 
 /*
