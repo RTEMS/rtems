@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Link Editor
+ * @brief This source file contains the RAP file support of the dynamic
+ *   linker.
  *
  * This is the RAP format loader support..
  */

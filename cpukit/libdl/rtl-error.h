@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Linker Error
+ * @brief This header file provides the error interfaces of the dynamic
+ *   linker.
  */
 
 /*

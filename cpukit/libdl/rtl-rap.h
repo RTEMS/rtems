@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Linker ELF Headers
+ * @brief This header file provides the RAP file interfaces of the dynamic
+ *   linker.
  */
 
 /*

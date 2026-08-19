@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Linker Error
+ * @brief This source file contains the error support of the dynamic linker.
  */
 
 /*

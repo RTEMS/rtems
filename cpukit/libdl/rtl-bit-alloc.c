@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Link Editor Bit Allocator
+ * @brief This source file contains the bit allocator of the dynamic linker.
  *
  * A configurable allocator for small peices of memory where embedding
  * control blocks into the memory are not viable. The amount of memory

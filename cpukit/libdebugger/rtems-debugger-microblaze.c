@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplDebugger
  *
- * @brief MicroBlaze libdebugger implementation
+ * @brief This source file contains the MicroBlaze target support of the
+ *   debugger server.
  */
 
 /*

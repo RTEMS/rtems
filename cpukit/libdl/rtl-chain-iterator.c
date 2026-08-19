@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Link Editor Chain Iterator
+ * @brief This source file contains the chain iterator of the dynamic
+ *   linker.
  *
  * A means of executing an iterator on a chain.
  */

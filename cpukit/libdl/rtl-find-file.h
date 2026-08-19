@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Linker Object Support.
+ * @brief This header file provides the file lookup interfaces of the
+ *   dynamic linker.
  */
 
 /*

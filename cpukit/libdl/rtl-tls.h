@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Link Editor Thread Local Storage
+ * @brief This header file provides the thread-local storage interfaces of
+ *   the dynamic linker.
  *
  * TLS support the RTL.
  */

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Linker Object File Trampoline Relocations Table.
+ * @brief This header file provides the trampoline interfaces of the dynamic
+ *   linker.
  *
  * Cache relocation records that could result in a trampoline. The unresolved
  * symbol table holds variable the symbol name (length string) and the object

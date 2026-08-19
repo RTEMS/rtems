@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplDoxygen
  *
- * @brief This header file contains Doxygen items related to hash algorithms.
+ * @brief This header file provides the Doxygen definitions of the hash
+ *   algorithms.
  */
 
 /*

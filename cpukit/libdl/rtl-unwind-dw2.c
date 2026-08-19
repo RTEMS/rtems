@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Link Editor
+ * @brief This source file contains the DWARF 2 unwind support of the
+ *   dynamic linker.
  *
  * This is the RTL implementation.
  */

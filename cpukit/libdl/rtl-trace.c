@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Link Editor Trace
+ * @brief This source file contains the trace support of the dynamic linker.
  *
  * A configurable tracer for the RTL. See the header file for the enable and
  * disable.

@@ -5,10 +5,11 @@
  *
  * @ingroup RTEMSImplPOSIXMessageQueue
  *
- * @brief POSIX Message Queues
- * 
+ * @brief This header file provides the interfaces of the POSIX message
+ *   queues.
+ *
  * This file contains the definitions related to POSIX Message Queues.
- * 
+ *
  * The structure of the routines is identical to that of POSIX
  * Message_queues to leave the option of having unnamed message
  * queues at a future date.  They are currently not part of the

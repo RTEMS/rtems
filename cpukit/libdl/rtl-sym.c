@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Linker Object File Symbol Table.
+ * @brief This source file contains the symbol table of the dynamic linker.
  */
 
 /*

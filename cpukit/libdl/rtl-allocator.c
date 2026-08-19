@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Linker Allocator
+ * @brief This source file contains the allocator of the dynamic linker.
  */
 
 /*

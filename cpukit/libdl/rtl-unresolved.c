@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Linker Object File Unresolved Relocations Table.
+ * @brief This source file contains the unresolved symbol table of the
+ *   dynamic linker.
  */
 
 /*

@@ -1,11 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
  * @ingroup RTEMSImplFreeBSDKernel
  *
- *  @brief Dummy include file for FreeBSD routines
+ * @brief This header file provides the memory function declarations used by
+ *   ported components.
  */
 
 /*

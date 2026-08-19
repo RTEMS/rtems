@@ -4,9 +4,10 @@
  * @file
  *
  * @ingroup RTEMSImplPOSIXAio
- * 
- * @brief POSIX Asynchronous I/O Support
- * 
+ *
+ * @brief This header file provides the interfaces of the POSIX asynchronous
+ *   input and output support.
+ *
  * This file contains the definitions related to POSIX I/O.
  */
 

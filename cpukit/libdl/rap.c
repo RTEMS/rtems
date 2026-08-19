@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplLibDLRAP
  *
- * @brief RTEMS Application Loader
+ * @brief This source file contains the implementation of the RAP loader.
  *
  * This is the RAP implementation.
  */

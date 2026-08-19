@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Link Editor Shell Commands
+ * @brief This source file contains the shell commands of the dynamic
+ *   linker.
  *
  * A simple RTL command to aid using the RTL.
  */

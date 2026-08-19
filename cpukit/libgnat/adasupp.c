@@ -1,11 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
  * @ingroup RTEMSImplGnat
  *
- *  @brief ada supplmental functions
+ * @brief This source file contains the support functions of the Ada
+ *   run-time.
  */
 
 /*

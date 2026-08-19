@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Linker Bit Allocator Header
+ * @brief This header file provides the bit allocator interfaces of the
+ *   dynamic linker.
  */
 
 /*

@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Application Loader.
+ * @brief This source file contains the shell command of the RAP loader.
  *
  * Shell command wrappers for the RTEMS Application loader.
  */

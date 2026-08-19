@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Linker Error
+ * @brief This source file contains the implementation of
+ *   rtems_rtl_find_file().
  */
 
 /*

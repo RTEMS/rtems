@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplDoxygen
  *
- * @brief This header file defines build system related Doxygen items.
+ * @brief This header file provides the Doxygen definitions of the build
+ *   system.
  */
 
 /*

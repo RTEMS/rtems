@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Linker Unwind DWARF  Support.
+ * @brief This header file provides the DWARF 2 unwind interfaces of the
+ *   dynamic linker.
  */
 
 /*

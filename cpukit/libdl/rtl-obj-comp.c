@@ -5,8 +5,8 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Linker Object Compression manages a compress
- *        stream of data.
+ * @brief This source file contains the object file decompressor of the
+ *   dynamic linker.
  */
 
 /*

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Module Loading Debugger Interface.
+ * @brief This source file contains the debugger interface of the dynamic
+ *   linker.
  *
  * Inspection of run-time linkers in NetBSD and Android show a common type of
  * structure that is used to interface to GDB. The NetBSD definition of this

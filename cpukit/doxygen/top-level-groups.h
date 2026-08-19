@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplDoxygen
  *
- * @brief This header file defines high level Doxygen groups.
+ * @brief This header file provides the high level Doxygen group
+ *   definitions.
  */
 
 /*

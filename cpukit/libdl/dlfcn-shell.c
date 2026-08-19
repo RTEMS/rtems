@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Link Editor Dynamic Loading API Shell Support.
+ * @brief This source file contains the shell commands of the dynamic
+ *   linker.
  *
  * Shell command wrappers for the Dynamic Loading API.
  */

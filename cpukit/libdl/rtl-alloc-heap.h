@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Linker Allocator for the standard heap.
+ * @brief This header file provides the heap allocator interfaces of the
+ *   dynamic linker.
  */
 
 /*

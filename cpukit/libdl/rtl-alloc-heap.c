@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Linker Allocator for the standard heap.
+ * @brief This source file contains the heap allocator of the dynamic
+ *   linker.
  */
 
 /*

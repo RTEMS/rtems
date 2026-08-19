@@ -1,11 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
  * @ingroup RTEMSImplLibDL
  *
- *  @brief
+ * @brief This source file contains the LatticeMico32 relocation support of
+ *   the dynamic linker.
  */
 
 /*

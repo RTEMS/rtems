@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Linker String managment.
+ * @brief This header file provides the string interfaces of the dynamic
+ *   linker.
  */
 
 /*

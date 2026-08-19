@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Linker Archive
+ * @brief This source file contains the archive support of the dynamic
+ *   linker.
  */
 
 /*

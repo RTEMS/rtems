@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplFTPD
  *
- * @brief
+ * @brief This source file contains the implementation of the FTP daemon.
  */
 
 /* FIXME: 1. Parse command is a hack.  We can do better.

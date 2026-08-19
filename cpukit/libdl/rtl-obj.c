@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Linker Error
+ * @brief This source file contains the object file support of the dynamic
+ *   linker.
  */
 
 /*

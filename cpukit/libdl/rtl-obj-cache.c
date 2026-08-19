@@ -5,8 +5,8 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Linker Object File cache buffers a section of the
- *        object file in a buffer to localise read performance.
+ * @brief This source file contains the object file cache of the dynamic
+ *   linker.
  */
 
 /*

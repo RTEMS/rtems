@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Linker Unwind Support.
+ * @brief This header file provides the unwind interfaces of the dynamic
+ *   linker.
  */
 
 /*

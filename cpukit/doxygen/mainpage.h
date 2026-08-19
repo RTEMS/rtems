@@ -5,8 +5,8 @@
  *
  * @ingroup RTEMSImplDoxygen
  *
- * @brief This file exists to provide a top level description of RTEMS for
- *   Doxygen.
+ * @brief This header file provides the main page of the generated
+ *   documentation.
  */
 
 /*

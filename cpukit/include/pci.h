@@ -5,11 +5,10 @@
  *
  * @ingroup RTEMSImplPCI
  *
- * @brief PCI Library
+ * @brief This header file provides the interfaces of the PCI library.
  *
  * Defines in this file was taken from FreeBSD and auto-generated
  * pci_ids.h reused from RTEMS.
- *
  */
 
 /*

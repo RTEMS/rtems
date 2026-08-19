@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS Run-Time Linker Chain Iterator.
+ * @brief This header file provides the chain iterator interfaces of the
+ *   dynamic linker.
  */
 
 /*

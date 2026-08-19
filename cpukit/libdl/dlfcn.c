@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplLibDL
  *
- * @brief RTEMS POSIX Dynamic Module Loading Interface.
+ * @brief This source file contains the implementation of dlopen(),
+ *   dlclose(), dlsym(), dlerror() and dlinfo().
  *
  * This is the POSIX interface to run-time loading of code into RTEMS.
  */
