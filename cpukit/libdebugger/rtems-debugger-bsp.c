@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplDebugger
+ *
+ * @brief This source file contains the BSP support of the debugger server.
+ */
+
 /*
  * Copyright (c) 2019 Chris Johns <chrisj@rtems.org>.
  * All rights reserved.

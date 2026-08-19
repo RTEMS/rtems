@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplDebugger
+ *
+ * @brief This source file contains the implementation of the TCP remote
+ *   transport.
+ */
+
 /*
  * Copyright (c) 2016 Chris Johns <chrisj@rtems.org>.  All rights reserved.
  *

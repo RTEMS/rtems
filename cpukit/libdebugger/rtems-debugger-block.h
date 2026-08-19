@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplDebugger
+ *
+ * @brief This header file provides the interfaces of the resizable block of
+ *   the debugger server.
+ */
+
 /*
  * Copyright (c) 2016 Chris Johns <chrisj@rtems.org>.
  * All rights reserved.

@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplDebugger
+ *
+ * @brief This source file contains the PowerPC target support of the
+ *   debugger server.
+ */
+
 /*
  * Copyright (c) 2024 Contemporary Software
  * All rights reserved.

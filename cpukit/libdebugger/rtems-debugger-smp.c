@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplDebugger
+ *
+ * @brief This source file contains the SMP support of the debugger server.
+ */
+
 /*
  * Copyright (c) 2021 Kinsey Moore
  * Copyright (c) 2025 Chris Johns

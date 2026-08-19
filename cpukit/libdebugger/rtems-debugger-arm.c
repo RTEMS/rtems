@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplDebugger
+ *
+ * @brief This source file contains the ARM target support of the debugger
+ *   server.
+ */
+
 /*
  * Copyright (c) 2016-2022 Chris Johns <chrisj@rtems.org>.
  * All rights reserved.
