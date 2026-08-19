@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPUnios2
+ *
  * @brief NIOS2 Exception and Interrupt Handler
  *
  * @note Derived from c4x/irq.c

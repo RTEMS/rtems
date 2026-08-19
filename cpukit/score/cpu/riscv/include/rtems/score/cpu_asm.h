@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPURISCV
+ *
  * @brief riscv32 Assembly File
  *
  * Very loose template for an include file for the cpu_asm.? file

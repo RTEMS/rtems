@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPUm68k
+ *
  * @brief Motorola M68K System Integration Module
  *
  * The system integration module (SIM) is used on many Motorola 16-

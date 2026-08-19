@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPUx86_64ASM
+ *
  * @brief Addresses Incompatible Flavors Problems
  *
  *  This include file attempts to address the problems
@@ -44,9 +46,9 @@
 #include <rtems/score/percpu.h>
 
 /**
- * @defgroup RTEMSScoreCPUx86-64ASM x86-64 Assembler Support
+ * @defgroup RTEMSScoreCPUx86_64ASM x86-64 Assembler Support
  *
- * @ingroup RTEMSScoreCPUx86-64
+ * @ingroup RTEMSScoreCPUx86_64
  *
  * @brief x86-64 Assembler Support
  *

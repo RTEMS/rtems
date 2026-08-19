@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreCPU
+ * @ingroup RTEMSScoreCPUMicroBlaze
  *
  * @brief MicroBlaze architecture support
  */

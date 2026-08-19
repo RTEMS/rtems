@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPUnios2
+ *
  * @brief NIOS2 MPU Descriptor
  */
 

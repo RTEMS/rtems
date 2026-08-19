@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPUExample
+ *
  * @brief NO_CPU Department Source
  *
  * This include file contains information pertaining to the NO_CPU

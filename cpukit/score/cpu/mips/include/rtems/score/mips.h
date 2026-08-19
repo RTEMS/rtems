@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPUMIPS
+ *
  * @brief Information to build RTEMS for a "no cpu" while in protected mode.
  *
  *  This file contains the information required to build

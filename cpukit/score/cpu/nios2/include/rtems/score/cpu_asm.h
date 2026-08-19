@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPUnios2
+ *
  * @brief Altera Nios II Assembly File
  *
  * Very loose template for an include file for the cpu_asm.? file

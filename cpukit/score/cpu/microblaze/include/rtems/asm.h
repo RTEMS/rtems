@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPUMicroBlaze
+ *
  * @brief MicroBlaze assembler support
  *
  * This include file attempts to address the problems

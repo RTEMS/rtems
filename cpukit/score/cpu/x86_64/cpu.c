@@ -1,6 +1,8 @@
 /**
  *  @file
  *
+ * @ingroup RTEMSScoreCPUx86_64
+ *
  *  @brief x86_64 Dependent Source
  */
 

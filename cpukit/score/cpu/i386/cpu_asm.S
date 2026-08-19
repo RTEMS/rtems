@@ -3,6 +3,8 @@
 /**
  *  @file
  *
+ * @ingroup RTEMSScoreCPUi386
+ *
  *  This file contains all assembly code for the Intel i386 implementation
  *  of RTEMS.
  */

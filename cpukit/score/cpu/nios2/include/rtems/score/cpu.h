@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSScoreCPUnios2
  * 
  * @addtogroup RTEMSScoreCPUnios2
  *

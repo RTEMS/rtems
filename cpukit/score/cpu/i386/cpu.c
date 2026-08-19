@@ -1,6 +1,8 @@
 /**
  *  @file
  *
+ * @ingroup RTEMSScoreCPUi386
+ *
  *  @brief Intel i386 Dependent Source
  */
 

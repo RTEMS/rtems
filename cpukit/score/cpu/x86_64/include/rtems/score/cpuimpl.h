@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPUx86_64
+ *
  * @brief CPU Port Implementation API
  */
 
@@ -37,7 +39,7 @@
 #include <rtems/score/cpu.h>
 
 /**
- * @defgroup RTEMSScoreCPUx86-64 x86-64
+ * @defgroup RTEMSScoreCPUx86_64 x86-64
  *
  * @ingroup RTEMSScoreCPU
  *

@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPURISCV
+ *
  * @addtogroup RTEMSScoreCPURISCV
  *
  * @brief RISC-V exception support implementation.

@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPUm68k
+ *
  * @brief Motorola M68K Queued Serial Module
  *
  * The QSM contains two serial interfaces: (a) the queued serial

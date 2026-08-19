@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPUi386
+ *
  * @brief Intel I386 CPU Dependent Source
  * 
  * @addtogroup RTEMSScoreCPUi386

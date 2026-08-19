@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPUPowerPC
+ *
  * @brief PowerPC Paravirtualization Definitions
  *
  * This include file contains definitions pertaining to paravirtualization

@@ -1,6 +1,8 @@
 /**
  *  @file
  *
+ * @ingroup RTEMSScoreCPUi386
+ *
  *  @brief Test FPU/SSE Context Save and Restore
  */
 

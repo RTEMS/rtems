@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreCPU
+ * @ingroup RTEMSScoreCPUExample
  *
  * @brief This source file contains the implementation of the
  *   _CPU_Thread_Idle_body().

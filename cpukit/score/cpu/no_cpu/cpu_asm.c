@@ -3,6 +3,8 @@
 /**
  *  @file
  *
+ * @ingroup RTEMSScoreCPUExample
+ *
  *  @brief No CPU Assembly File
  */
 

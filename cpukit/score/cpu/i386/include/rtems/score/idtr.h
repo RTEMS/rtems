@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSScoreCPUi386
  * 
  * @brief Intel I386 Data Structures
  * 

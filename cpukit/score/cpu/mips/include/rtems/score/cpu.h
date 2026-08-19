@@ -3,6 +3,8 @@
 /**
  *  @file
  *
+ * @ingroup RTEMSScoreCPUMIPS
+ *
  *  @brief Mips CPU Dependent Header File
  */
 

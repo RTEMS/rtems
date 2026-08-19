@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPUm68k
+ *
  * @brief Definitions for Motorola MC68302 Processor
  *
  * Section references in this file refer to revision 2 of Motorola's

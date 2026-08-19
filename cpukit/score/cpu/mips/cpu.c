@@ -3,6 +3,8 @@
 /**
  *  @file
  *
+ * @ingroup RTEMSScoreCPUMIPS
+ *
  *  @brief MIPS CPU Dependent Source
  */
 

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreCPU
+ * @ingroup RTEMSScoreCPUAArch64
  *
  * @brief ARM AArch64 Assembler Support API
  */

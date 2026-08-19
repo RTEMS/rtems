@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPUExample
+ *
  * @brief CPU Port Implementation API
  */
 

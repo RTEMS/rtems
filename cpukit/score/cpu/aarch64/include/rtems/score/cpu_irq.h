@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreCPU
+ * @ingroup RTEMSScoreCPUAArch64
  *
  * @brief AArch64 IRQ definitions
  */

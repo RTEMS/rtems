@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPUx86_64
+ *
  * @brief x86_64 Dependent Source
  *
  * This include file contains information pertaining to the x86_64 processor.

@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPURISCV
+ *
  * @brief CPU Port Implementation API
  */
 

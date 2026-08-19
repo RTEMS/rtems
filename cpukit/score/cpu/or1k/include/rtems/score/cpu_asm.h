@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPUor1k
+ *
  * @brief OR1K Assembly File
  *
  * Very loose template for an include file for the cpu_asm.? file

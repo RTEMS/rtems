@@ -1,5 +1,7 @@
 /**
  * @file
+ *
+ * @ingroup RTEMSScoreCPUm68k
  * 
  * @brief Address the Problems Caused by Incompatible Flavor of 
  * Assemblers and Toolsets

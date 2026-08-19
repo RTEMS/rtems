@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSScoreCPUm68k
  * 
  * @brief Motorola M68K CPU Dependent Source
  * 

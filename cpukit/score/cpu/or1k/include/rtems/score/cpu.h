@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMScoreCPUor1k
+ * @ingroup RTEMSScoreCPUor1k
  */
 
 /*

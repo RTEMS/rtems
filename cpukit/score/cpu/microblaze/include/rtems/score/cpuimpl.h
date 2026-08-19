@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreCPU
+ * @ingroup RTEMSScoreCPUMicroBlaze
  *
  * @brief CPU Port Implementation API
  */

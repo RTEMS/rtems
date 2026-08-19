@@ -27,6 +27,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPURISCV
+ *
  * @brief RISC-V utility helpers.
  */
 

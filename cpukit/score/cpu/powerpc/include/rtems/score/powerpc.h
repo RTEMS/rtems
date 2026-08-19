@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSScoreCPUPowerPC
  * 
  * @brief IBM/Motorola PowerPC Definitions
  * 

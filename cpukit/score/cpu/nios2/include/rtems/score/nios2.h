@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPUnios2
+ *
  * @brief NIOS II Set up Basic CPU Dependency Settings Based on
  * Compiler Settings
  *

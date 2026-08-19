@@ -3,6 +3,8 @@
 /**
  *  @file
  *
+ * @ingroup RTEMSScoreCPUm68k
+ *
  *  @brief Motorola MC68xxx Dependent Source
  */
 

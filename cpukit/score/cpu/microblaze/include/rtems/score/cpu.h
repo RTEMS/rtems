@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreCPU
+ * @ingroup RTEMSScoreCPUMicroBlaze
  *
  * @brief MicroBlaze architecture support
  */
@@ -110,7 +110,7 @@ extern "C" {
 #endif
 
 /**
- *  @ingroup CPUContext Management
+ *  @ingroup RTEMSScoreCPUMicroBlaze
  *  This defines the minimal set of integer and processor state registers
  *  that must be saved during a voluntary context switch from one thread
  *  to another.
@@ -141,7 +141,7 @@ typedef struct {
 } Context_Control;
 
 /**
- *  @ingroup CPUContext Management
+ *  @ingroup RTEMSScoreCPUMicroBlaze
  *
  *  This macro returns the stack pointer associated with @a _context.
  *
@@ -161,7 +161,7 @@ typedef struct {
 #define CPU_MAXIMUM_PROCESSORS 32
 
 /**
- *  @ingroup CPUInterrupt
+ *  @ingroup RTEMSScoreCPUMicroBlaze
  *  This defines the highest interrupt vector number for this port.
  */
 #define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER (CPU_INTERRUPT_NUMBER_OF_VECTORS - 1)

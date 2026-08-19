@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPUExample
+ *
  * @brief Addresses Incompatible Flavors Problems
  *
  *  This include file attempts to address the problems

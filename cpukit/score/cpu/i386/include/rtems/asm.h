@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPUi386
+ *
  * @brief Address the Problems Caused by Incompatible Flavor of 
  * Assemblers and Toolsets
  * 

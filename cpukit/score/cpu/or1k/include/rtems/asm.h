@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPUor1k
+ *
  *  This include file attempts to address the problems
  *  caused by incompatible flavors of assemblers and
  *  toolsets.  It primarily addresses variations in the

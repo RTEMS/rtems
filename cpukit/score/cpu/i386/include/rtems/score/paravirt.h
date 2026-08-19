@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPUi386
+ *
  * @brief i386 Paravirtualization Definitions
  *
  * This include file contains definitions pertaining to paravirtualization

@@ -3,6 +3,8 @@
 /**
  *  @file
  *
+ * @ingroup RTEMSScoreCPUPowerPC
+ *
  *  @brief PowerPC Dependent Source
  */
 

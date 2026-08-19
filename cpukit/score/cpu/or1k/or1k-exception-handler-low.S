@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPUor1k
+ *
  * @addtogroup RTEMSScoreCPU
  *
  * @brief OR1K exception support implementation.

@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreCPUm68k
+ *
  * @brief Definitions for Motorola MC68360 Processor
  *
  * Motorola MC68360 Quad Integrated Communications Controller (QUICC)
