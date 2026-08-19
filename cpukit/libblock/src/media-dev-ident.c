@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSMedia
+ * @ingroup RTEMSDeviceMedia
  *
  * @brief Media implementation.
  */

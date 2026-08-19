@@ -44,6 +44,14 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
+ * @defgroup RTEMSDeviceMedia Media Server
+ *
+ * @ingroup RTEMSDeviceDrivers
+ *
+ * @brief This group contains the media server.
+ */
+
+/**
  * @defgroup RTEMSIOMedia Media Manager
  *
  * @ingroup LibIO

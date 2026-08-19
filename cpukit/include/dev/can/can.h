@@ -56,6 +56,16 @@
 #include <dev/can/can-frame.h>
 #include <dev/can/can-filter.h>
 
+/**
+ * @defgroup CANFDStack CAN and CAN FD Stack
+ *
+ * @ingroup RTEMSDeviceDrivers
+ *
+ * @brief This group contains the CAN and CAN FD stack.
+ *
+ * @{
+ */
+
 #define CAN_IOC_MAGIC 'd'
 
 /**
@@ -242,6 +252,8 @@
 
 /** @} */
 
+/** @} */
+
 /**
  * @defgroup CANIoctl
  *
@@ -380,6 +392,8 @@ struct rtems_can_queue_param {
    */
   struct rtems_can_filter filter;
 };
+
+/** @} */
 
 /** @} */
 
