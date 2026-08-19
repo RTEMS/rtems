@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUor1k
+ *
+ * @brief This source file contains the implementation of the OpenRISC 1000
+ *   CPU port.
+ */
+
 /*
  *  Opencore OR1K CPU Dependent Source
  *

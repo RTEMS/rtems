@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUSPARC
+ *
+ * @brief This source file contains the system call traps of the SPARC CPU
+ *   port.
+ */
+
 /*
  *  systrap.S
  *

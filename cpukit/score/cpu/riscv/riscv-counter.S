@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPURISCV
+ *
+ * @brief This source file contains the CPU counter of the RISC-V CPU port.
+ */
+
 /*
  * Copyright (c) 2018 embedded brains GmbH & Co. KG
  *

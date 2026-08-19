@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPURISCV
+ *
+ * @brief This header file provides the byte order access interfaces of the
+ *   RISC-V CPU port.
+ */
+
 /*
  * Copyright (C) 2019 Jiri Gaisler <jiri@gaisler.se>
  *

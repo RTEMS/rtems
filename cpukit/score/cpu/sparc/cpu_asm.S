@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUSPARC
+ *
+ * @brief This source file contains the assembly language support of the
+ *   SPARC CPU port.
+ */
+
 /*  cpu_asm.s
  *
  *  This file contains the basic algorithms for all assembly code used

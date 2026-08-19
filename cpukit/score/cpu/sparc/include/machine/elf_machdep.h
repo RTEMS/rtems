@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUSPARC
+ *
+ * @brief This header file provides the ELF definitions of the SPARC
+ *   architecture.
+ */
+
 /*	$NetBSD: elf_machdep.h,v 1.7 2009/05/30 05:56:53 skrll Exp $	*/
 
 #define ELF32_MACHDEP_ENDIANNESS	ELFDATA2MSB

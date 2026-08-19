@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUx86_64
+ *
+ * @brief This source file contains the implementation of
+ *   _CPU_Context_switch() for the x86-64 architecture.
+ */
+
 /*
  * Copyright (C) 2024 Matheus Pecoraro
  * Copyright (c) 2018 Amaan Cheval <amaan.cheval@gmail.com>

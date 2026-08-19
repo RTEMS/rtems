@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUnios2
+ *
+ * @brief This source file contains the internal interrupt controller vector
+ *   of the Nios II CPU port.
+ */
+
 /*
  *  This file contains all assembly code for the
  *  NIOS2 implementation of RTEMS.

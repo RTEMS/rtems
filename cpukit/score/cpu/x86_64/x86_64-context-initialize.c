@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUx86_64
+ *
+ * @brief This source file contains the implementation of
+ *   _CPU_Context_Initialize() for the x86-64 architecture.
+ */
+
 /*
  * Copyright (c) 2018 Amaan Cheval <amaan.cheval@gmail.com>
  *

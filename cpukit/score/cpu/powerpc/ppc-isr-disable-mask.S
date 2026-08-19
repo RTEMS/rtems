@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUPowerPC
+ *
+ * @brief This source file contains the interrupt disable mask of the
+ *   PowerPC architecture.
+ */
+
 /*
  * Copyright (c) 2014 embedded brains GmbH & Co. KG
  *

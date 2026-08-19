@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUSPARC
+ *
+ * @brief This source file contains the interrupt handler entry of the SPARC
+ *   architecture.
+ */
+
 /*
  *  This file contains the basic algorithms for all assembly code used
  *  in an specific CPU port of RTEMS.  These algorithms must be implemented

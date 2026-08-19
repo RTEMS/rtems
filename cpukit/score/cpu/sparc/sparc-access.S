@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUSPARC
+ *
+ * @brief This source file contains the assembly language access functions
+ *   of the SPARC CPU port.
+ */
+
 /*
  *  Optimized access routines for SPARC.
  *

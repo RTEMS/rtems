@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUm68k
+ *
+ * @brief This source file contains the implementation of __m68k_read_tp().
+ */
+
 /*
  * Copyright (C) 2014, 2015 embedded brains GmbH & Co. KG
  *

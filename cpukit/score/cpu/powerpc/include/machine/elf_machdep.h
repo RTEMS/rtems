@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUPowerPC
+ *
+ * @brief This header file provides the ELF definitions of the PowerPC
+ *   architecture.
+ */
+
 /*	$NetBSD: elf_machdep.h,v 1.9 2011/01/15 10:00:07 matt Exp $	*/
 
 #define	ELF32_MACHDEP_ENDIANNESS	ELFDATA2MSB

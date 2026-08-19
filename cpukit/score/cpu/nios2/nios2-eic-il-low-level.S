@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUnios2
+ *
+ * @brief This source file contains the external interrupt controller
+ *   dispatch of the Nios II CPU port.
+ */
+
 /*
  * Copyright (C) 2011, 2015 embedded brains GmbH & Co. KG
  *

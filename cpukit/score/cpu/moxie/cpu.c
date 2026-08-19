@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUMoxie
+ *
+ * @brief This source file contains the implementation of the Moxie CPU
+ *   port.
+ */
+
 /*
  *  Moxie CPU Dependent Source
  *

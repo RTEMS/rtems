@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUAArch64
+ *
+ * @brief This header file provides the ELF definitions of the AArch64
+ *   architecture.
+ */
+
 /* $NetBSD: elf_machdep.h,v 1.4 2018/10/12 01:28:58 ryo Exp $ */
 
 /*-

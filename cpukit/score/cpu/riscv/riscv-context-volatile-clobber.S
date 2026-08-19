@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPURISCV
+ *
+ * @brief This source file contains the implementation of
+ *   _CPU_Context_volatile_clobber() for the RISC-V architecture.
+ */
+
 /*
  * Copyright (c) 2018 embedded brains GmbH & Co. KG
  * Copyright (c) 2015 Hesham Almatary <hesham@alumni.york.ac.uk>

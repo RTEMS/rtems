@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUSPARC
+ *
+ * @brief This source file contains the little endian access functions of
+ *   the SPARC CPU port.
+ */
+
 /*
  *  Little-endian access routines for SPARC
  *

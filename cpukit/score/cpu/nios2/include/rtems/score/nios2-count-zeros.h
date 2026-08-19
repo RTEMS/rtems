@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUnios2
+ *
+ * @brief This header file provides the count zeros interfaces of the Nios
+ *   II CPU port.
+ */
+
 /*
  * Author: Jeffrey O. Hill
  *

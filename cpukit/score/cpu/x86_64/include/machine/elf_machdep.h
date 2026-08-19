@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUx86_64
+ *
+ * @brief This header file provides the ELF definitions of the x86-64
+ *   architecture.
+ */
+
 /*	$NetBSD: elf_machdep.h,v 1.4.18.1 2017/12/03 11:35:47 jdolecek Exp $	*/
 
 #if !defined __i386__

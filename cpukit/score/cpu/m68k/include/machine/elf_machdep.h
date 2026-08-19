@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUm68k
+ *
+ * @brief This header file provides the ELF definitions of the m68k
+ *   architecture.
+ */
+
 /*	$NetBSD: elf_machdep.h,v 1.7 2002/01/28 21:34:48 thorpej Exp $	*/
 
 #define	ELF32_MACHDEP_ENDIANNESS	ELFDATA2MSB

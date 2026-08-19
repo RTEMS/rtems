@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUMIPS
+ *
+ * @brief This header file provides the ELF definitions of the MIPS
+ *   architecture.
+ */
+
 /*	$NetBSD: elf_machdep.h,v 1.15 2011/03/15 07:39:22 matt Exp $	*/
 
 #ifndef _MIPS_ELF_MACHDEP_H_

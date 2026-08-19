@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUor1k
+ *
+ * @brief This source file contains the default exception handler of the
+ *   OpenRISC 1000 architecture.
+ */
+
 /*
  * COPYRIGHT (c) 2014 Hesham ALMatary <heshamelmatary@gmail.com>
  *

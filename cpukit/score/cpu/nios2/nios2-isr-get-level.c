@@ -1,5 +1,15 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUnios2
+ *
+ * @brief This source file contains the implementation of
+ *   _CPU_ISR_Get_level() and _CPU_ISR_Is_enabled() for the Nios II
+ *   architecture.
+ */
+
 /*
  * Copyright (C) 2011, 2016 embedded brains GmbH & Co. KG
  *

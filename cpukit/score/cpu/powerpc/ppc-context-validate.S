@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUPowerPC
+ *
+ * @brief This source file contains the implementation of
+ *   _CPU_Context_validate() for the PowerPC architecture.
+ */
+
 /*
  * Copyright (C) 2013, 2020 embedded brains GmbH & Co. KG
  *

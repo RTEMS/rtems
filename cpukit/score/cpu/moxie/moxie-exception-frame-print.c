@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUMoxie
+ *
+ * @brief This source file contains the implementation of
+ *   _CPU_Exception_frame_print() for the Moxie architecture.
+ */
+
 /*
  * Copyright (c) 2013  Anthony Green
  *

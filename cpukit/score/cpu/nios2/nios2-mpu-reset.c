@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUnios2
+ *
+ * @brief This source file contains the implementation of
+ *   _Nios2_MPU_Reset().
+ */
+
 /*
  * Copyright (c) 2011 embedded brains GmbH & Co. KG
  *

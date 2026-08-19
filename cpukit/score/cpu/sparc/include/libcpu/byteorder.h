@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUSPARC
+ *
+ * @brief This header file provides the byte order access interfaces of the
+ *   SPARC CPU port.
+ */
+
 /*
  *  byteorder.h  - Endian conversion for SPARC. SPARC is big endian only.
  *

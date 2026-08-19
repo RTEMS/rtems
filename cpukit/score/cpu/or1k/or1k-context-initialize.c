@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUor1k
+ *
+ * @brief This source file contains the implementation of
+ *   _CPU_Context_Initialize() for the OpenRISC 1000 architecture.
+ */
+
 /*
  * COPYRIGHT (c) 2014 Hesham ALMatary <heshamelmatary@gmail.com>
  *

@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUx86_64
+ *
+ * @brief This header file provides the assembly language interfaces of the
+ *   x86-64 CPU port.
+ */
+
 /*
  * Copyright (c) 2018 Amaan Cheval <amaan.cheval@gmail.com>
  *

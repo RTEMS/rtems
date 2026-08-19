@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUnios2
+ *
+ * @brief This source file contains the implementation of
+ *   _CPU_Exception_frame_print() for the Nios II architecture.
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH & Co. KG
  *

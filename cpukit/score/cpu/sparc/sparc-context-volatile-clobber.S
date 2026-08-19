@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUSPARC
+ *
+ * @brief This source file contains the implementation of
+ *   _CPU_Context_volatile_clobber() for the SPARC architecture.
+ */
+
 /*
  * Copyright (c) 2015 embedded brains GmbH & Co. KG
  *

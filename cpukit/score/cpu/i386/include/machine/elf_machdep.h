@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUi386
+ *
+ * @brief This header file provides the ELF definitions of the i386
+ *   architecture.
+ */
+
 /*	$NetBSD: elf_machdep.h,v 1.10 2009/05/30 05:56:52 skrll Exp $	*/
 
 #define	ELF32_MACHDEP_ENDIANNESS	ELFDATA2LSB

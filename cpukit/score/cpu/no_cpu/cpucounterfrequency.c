@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUExample
+ *
+ * @brief This source file contains the implementation of
+ *   _CPU_Counter_frequency() of the example CPU port.
+ */
+
 /*
  * Copyright (c) 2018 embedded brains GmbH & Co. KG
  *

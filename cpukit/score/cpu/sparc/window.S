@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUSPARC
+ *
+ * @brief This source file contains the register window flush support of the
+ *   SPARC CPU port.
+ */
+
 /*
  *  window.s
  *

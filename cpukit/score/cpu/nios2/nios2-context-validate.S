@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUnios2
+ *
+ * @brief This source file contains the implementation of
+ *   _CPU_Context_validate() for the Nios II architecture.
+ */
+
 /*
  * Copyright (c) 2013 embedded brains GmbH & Co. KG
  *

@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUm68k
+ *
+ * @brief This source file contains the assembly language support of the
+ *   m68k CPU port.
+ */
+
 /*  cpu_asm.s
  *
  *  This file contains all assembly code for the MC68020 implementation

@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUMicroBlaze
+ *
+ * @brief This header file provides the ELF definitions of the MicroBlaze
+ *   architecture.
+ */
+
 /*
  * Copyright (C) 2023 On-Line Applications Research Corporation (OAR)
  *

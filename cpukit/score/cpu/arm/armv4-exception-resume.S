@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUARM
+ *
+ * @brief This source file contains the exception resume support of the ARM
+ *   architecture.
+ */
+
 /*
  * Copyright (c) 2024 embedded brains GmbH & Co. KG
  *

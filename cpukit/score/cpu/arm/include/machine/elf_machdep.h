@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUARM
+ *
+ * @brief This header file provides the ELF definitions of the ARM
+ *   architecture.
+ */
+
 /*	$NetBSD: elf_machdep.h,v 1.19 2017/11/06 03:47:45 christos Exp $	*/
 
 #ifndef _ARM_ELF_MACHDEP_H_

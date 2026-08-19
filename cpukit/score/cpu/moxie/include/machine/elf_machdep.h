@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUMoxie
+ *
+ * @brief This header file provides the ELF definitions of the Moxie
+ *   architecture.
+ */
+
 #define ELF32_MACHDEP_ENDIANNESS		ELFDATA2MSB
 
 #define ELF32_MACHDEP_ID_CASES \

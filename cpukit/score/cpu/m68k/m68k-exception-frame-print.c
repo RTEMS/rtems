@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUm68k
+ *
+ * @brief This source file contains the implementation of
+ *   _CPU_Exception_frame_print() for the m68k architecture.
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH & Co. KG
  *

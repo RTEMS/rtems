@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUx86_64
+ *
+ * @brief This header file provides the architecture definitions of the
+ *   x86-64 CPU port.
+ */
+
 /*
  * Copyright (c) 2018 Amaan Cheval <amaan.cheval@gmail.com>
  *

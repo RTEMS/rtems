@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPURISCV
+ *
+ * @brief This header file provides the ELF definitions of the RISC-V
+ *   architecture.
+ */
+
 /* $NetBSD: elf_machdep.h,v 1.6 2017/11/06 03:47:48 christos Exp $ */
 
 /*-

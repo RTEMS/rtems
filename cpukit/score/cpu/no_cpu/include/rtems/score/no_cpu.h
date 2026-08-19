@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPUExample
+ *
+ * @brief This header file provides the architecture definitions of the
+ *   example CPU port.
+ */
+
 /*  no_cpu.h
  *
  *  This file sets up basic CPU dependency settings based on

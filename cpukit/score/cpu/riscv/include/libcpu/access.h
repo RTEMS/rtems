@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreCPURISCV
+ *
+ * @brief This header file provides the access function interfaces of the
+ *   RISC-V CPU port.
+ */
+
 /*
  *  access.h  - access routines for SPARC. SPARC is big endian only.
  *
