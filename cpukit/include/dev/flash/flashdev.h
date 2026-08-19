@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup Flash
+ * @ingroup RTEMSGenericFlashAPI
  *
  * @brief Generic Flash API
  */

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSLibdebugger
+ * @ingroup RTEMSImplDebugger
  *
  * @brief MicroBlaze libdebugger implementation
  */

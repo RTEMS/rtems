@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup
+ * @ingroup RTEMSImplShellCommands
  *
  * @brief This source file contains the kernel command.
  */

@@ -3,7 +3,7 @@
  *
  * @brief Serial Peripheral Interface (SPI) Bus Implementation
  *
- * @ingroup SPIBus
+ * @ingroup SPI
  */
 
 /*

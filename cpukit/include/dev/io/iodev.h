@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSGenericIODevAPI
+ * @ingroup RTEMSGenericIOSpaceAPI
  *
  * @brief Generic IO Device API
  */
