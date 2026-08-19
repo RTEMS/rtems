@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSDeviceDrivers
+ *
  * This include file defines some special characters of interest.
  */
 

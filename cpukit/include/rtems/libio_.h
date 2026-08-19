@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup LibIOInternal
+ *
  * @brief LibIO Internal Interface
  *
  * This file is the libio internal interface.

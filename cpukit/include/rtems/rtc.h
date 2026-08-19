@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup rtems_rtc
+ *
  * @brief Real-Time Clock Driver Interface
  * 
  * Real-time clock driver interface.

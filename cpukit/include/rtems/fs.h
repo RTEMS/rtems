@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup FileSystemTypesAndMount
+ *
  * @brief Basic Filesystem Types
  *
  * This file defines basic filesystem types

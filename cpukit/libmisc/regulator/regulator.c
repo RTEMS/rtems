@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RegulatorInternalAPI
+ *
  * @brief Regulator Library Implementation
  */
 

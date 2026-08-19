@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplPCI
+ *
  * @brie PCI Peripheral Configuration Libraryf
  */
 

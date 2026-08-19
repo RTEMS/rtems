@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup libmisc_dumpbuf
+ *
  * @brief Print a Memory Buffer
  * 
  * This file defines the interface to the RTEMS methods to print a

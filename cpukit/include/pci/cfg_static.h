@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplPCI
+ *
  * @brief Static PCI Auto Configuration Library
  */
 

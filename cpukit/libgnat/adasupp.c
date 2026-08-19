@@ -3,6 +3,8 @@
 /**
  *  @file
  *
+ * @ingroup RTEMSImplGnat
+ *
  *  @brief ada supplmental functions
  */
 

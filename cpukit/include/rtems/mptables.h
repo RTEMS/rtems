@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSDeviceDrivers
+ *
  * @brief Executive's Pre-Initialized Tables used in a
  * Multiprocessor Configuration
  *

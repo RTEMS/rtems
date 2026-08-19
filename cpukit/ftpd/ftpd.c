@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplFTPD
+ *
  * @brief
  */
 

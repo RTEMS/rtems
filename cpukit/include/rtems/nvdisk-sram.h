@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup rtems_libblock
+ *
  * This driver maps an NV disk to static RAM. You can use this
  */
 

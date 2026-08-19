@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup IMFS
+ *
  * @brief This header file contains interfaces used by the implementation of
  *   the In-Memory File System.
  */

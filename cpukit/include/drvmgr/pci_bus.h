@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplDriverManager
+ *
  * @brief PCI bus driver Interface.
  */
 

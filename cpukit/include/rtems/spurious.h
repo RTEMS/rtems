@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSDeviceDrivers
+ *
  * This file describes the Spurious Interrupt Driver for all boards.
  */
 

@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSDeviceConsole
  * 
  * @brief Console Driver for all Boards
  *

@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup libmisc_devzero
+ *
  * @brief RTEMS /dev/zero Device Driver
  *
  * This include file defines the interface to the RTEMS /dev/zero

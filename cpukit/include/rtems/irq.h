@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSDeviceDrivers
  * @brief Interrupt Handler Support
  *
  * This include file describe the data structure and the functions implemented

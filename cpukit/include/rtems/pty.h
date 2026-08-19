@@ -1,5 +1,7 @@
 /**
  * @file
+ *
+ * @ingroup Termios
  * 
  * @brief /dev/ptyXX  (A first version for pseudo-terminals)
  */

@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSDeviceDrivers
  * 
  * @brief VMEbus Interface Library
  *

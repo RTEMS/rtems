@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMS
+ *
  * @brief Provide printf() PRIxxx Constante Beyond Standards
  *
  * This include file defines PRIxxx constants beyond those in

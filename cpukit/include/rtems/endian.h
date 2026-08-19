@@ -3,6 +3,8 @@
 /**
  *  @file
  *
+ * @ingroup RTEMSImplFreeBSDKernel
+ *
  *  @brief Includes endian information about the target
  */
 

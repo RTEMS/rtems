@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplPCI
+ *
  * @brief PCI Read Configuration Library
  *
  * Read current config where bootloader/BIOS has setup.

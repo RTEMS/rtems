@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup rtems_libblock
+ *
  * @brief Non-volatile Disk Block Device Implementation
  */
 

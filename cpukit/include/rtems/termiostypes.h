@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup TermiostypesSupport
+ *
  * RTEMS termios device support internal data structures
  */
 

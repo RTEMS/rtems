@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup IMFS
+ *
  * @brief This header file defines the API of the In-Memory File System.
  */
 

@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup TermiostypesSupport
+ *
  * @brief Simple Ring Buffer Functionality
  *
  * This file provides simple ring buffer functionality.

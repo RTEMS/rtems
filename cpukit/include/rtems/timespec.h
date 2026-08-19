@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup TimespecAPI
+ *
  * @brief Timespec API
  *
  * This include file contains API for manipulating timespecs.

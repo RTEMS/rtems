@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup LibIOFSOps
+ *
  * @brief RTEMS Default File System Link
  */
 

@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup IMFSDevices
+ *
  * @brief Operations on IMFS Device Nodes 
  */
 

@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup LibIOFSHandler
+ *
  * @brief RTEMS Default File System Close
  */
 

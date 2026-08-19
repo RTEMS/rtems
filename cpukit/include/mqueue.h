@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplPOSIXMessageQueue
+ *
  * @brief POSIX Message Queues
  * 
  * This file contains the definitions related to POSIX Message Queues.

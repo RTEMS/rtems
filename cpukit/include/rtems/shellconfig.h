@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSAPIShell
+ *
  * RTEMS Shell Command Set Configuration
  */
 

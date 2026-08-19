@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplDriverManager
+ *
  * @brief Linked list help functions used by driver manager.
  */
 

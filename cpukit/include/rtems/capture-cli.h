@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplCapture
+ *
  * This is the Target Interface Command Line Interface. You need
  * start the RTEMS monitor.
  */

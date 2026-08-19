@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplPCI
+ *
  * PCI defines and function prototypes
  */
 

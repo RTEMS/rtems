@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup libmisc_fb
+ *
  * @brief Frame Buffer Device Driver for all Boards
  *
  * This file describes the Frame Buffer Device Driver for all boards.

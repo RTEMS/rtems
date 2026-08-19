@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplCapture
+ *
  * @brief Capture Implementation file
  *
  * This file contains an interface between the capture engine and

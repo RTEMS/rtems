@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplPCI
+ *
  * @brief PCI Access Methods
  *
  * Routines to access PCI memory/configuration space and other PCI related

@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup ErrorPanicSupport
+ *
  * @brief RTEMS Error Reporting
  *
  * Defines and externs for rtems error reporting

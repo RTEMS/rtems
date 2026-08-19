@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup libmisc_untar_img
+ *
  * @brief Untar an Image
  *
  * This file defines the interface to methods which can untar an image.

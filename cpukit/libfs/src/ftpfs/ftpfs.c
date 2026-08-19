@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup FileSystemTypesAndMount
+ *
  * File Transfer Protocol file system (FTP client).
  */
 

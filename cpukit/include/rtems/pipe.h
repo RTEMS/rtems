@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup FIFO_PIPE
+ *
  * @brief POSIX FIFO/pipe File System Support
  *
  * This include file defines the interface to the POSIX FIFO/pipe file system

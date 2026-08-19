@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSAPIBaseDefs
+ *
  * This include file defines ANSI concatenation macros.
  */
 

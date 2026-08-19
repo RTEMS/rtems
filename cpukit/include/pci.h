@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplPCI
+ *
  * @brief PCI Library
  *
  * Defines in this file was taken from FreeBSD and auto-generated

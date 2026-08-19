@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup rtems_libblock
  * 
  * @brief "MS-DOS-style" Partition Tables Support
  */

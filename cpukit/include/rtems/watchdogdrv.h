@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSDeviceDrivers
+ *
  *  This file describes the Watchdog Driver for all boards.
  *  A watchdog is a hardware device that will reset the board
  *  if not touched in a specific way at a regular interval.

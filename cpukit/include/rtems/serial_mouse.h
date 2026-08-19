@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup libmisc_mouse
  * 
  * @brief Serial Mouse Driver
  *

@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSLegacyBenchmarkDrivers
+ *
  * @brief RTEMS Benchmark Timer API for all Boards
  */
 

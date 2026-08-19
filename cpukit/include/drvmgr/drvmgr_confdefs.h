@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplDriverManager
+ *
  * @brief Driver Manager Configuration file.
  */
 

@@ -1,6 +1,8 @@
 /** 
  * @file
  *
+ * @ingroup libmisc_fb
+ *
  * @brief Frame Buffer Device Driver
  *
  * This file defines the interface to a frame buffer device driver.

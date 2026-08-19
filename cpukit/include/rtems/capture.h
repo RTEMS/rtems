@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplCapture
+ *
  * @brief Capture Engine Component of the RTEMS Measurement and
  * Monitoring System
  *

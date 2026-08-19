@@ -3,6 +3,8 @@
 /**
  *  @file
  *
+ * @ingroup RTEMSImplFreeBSDKernel
+ *
  *  @brief Dummy include file for FreeBSD routines
  */
 
