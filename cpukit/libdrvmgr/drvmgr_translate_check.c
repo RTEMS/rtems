@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplDriverManager
+ *
+ * @brief This source file contains the implementation of
+ *   drvmgr_translate_check().
+ */
+
 /* Driver Manager Driver Translate Interface Implementation
  *
  * COPYRIGHT (c) 2010 Cobham Gaisler AB.

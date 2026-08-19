@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplDriverManager
+ *
+ * @brief This source file contains the implementation of
+ *   drvmgr_func_call().
+ */
+
 /* Driver Manager optional dynamic function interface
  *
  * COPYRIGHT (c) 2011 Cobham Gaisler AB.

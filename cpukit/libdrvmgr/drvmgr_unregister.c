@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplDriverManager
+ *
+ * @brief This source file contains the implementation which unregisters a
+ *   device or a bus.
+ */
+
 /* Driver Manager Device Unregister (removal) implementation
  *
  * COPYRIGHT (c) 2011 Cobham Gaisler AB.

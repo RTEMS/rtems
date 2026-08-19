@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplDriverManager
+ *
+ * @brief This source file contains the implementation of
+ *   drvmgr_for_each_dev().
+ */
+
 /* Iterate over device tree topology, breadth or depth-first
  *
  * COPYRIGHT (c) 2009 Cobham Gaisler AB.

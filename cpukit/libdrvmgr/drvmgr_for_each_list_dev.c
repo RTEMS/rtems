@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplDriverManager
+ *
+ * @brief This source file contains the implementation of
+ *   drvmgr_for_each_listdev().
+ */
+
 /* Iterate over one list of devices used internally by driver manager
  *
  * COPYRIGHT (c) 2009 Cobham Gaisler AB.

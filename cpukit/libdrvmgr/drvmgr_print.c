@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplDriverManager
+ *
+ * @brief This source file contains the implementation which prints the
+ *   driver manager information.
+ */
+
 /* Driver Manager Information printing Interface Implementation
  *
  * COPYRIGHT (c) 2009 Cobham Gaisler AB.

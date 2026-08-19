@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplDriverManager
+ *
+ * @brief This source file contains the implementation of drvmgr_init().
+ */
+
 /* Driver Manager Initialization
  *
  * COPYRIGHT (c) 2009 Cobham Gaisler AB.

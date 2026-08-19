@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplDriverManager
+ *
+ * @brief This header file provides the internal interfaces of the driver
+ *   manager.
+ */
+
 /* Private driver manager declarations
  *
  * COPYRIGHT (c) 2009 Cobham Gaisler AB.

@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplDriverManager
+ *
+ * @brief This source file contains the implementation of the driver
+ *   resource interface.
+ */
+
 /* Driver Manager Driver Resource Interface Implementation.
  *
  * COPYRIGHT (c) 2009 Cobham Gaisler AB.
