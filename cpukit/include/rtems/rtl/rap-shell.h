@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup rtems_rap
+ *
+ * @brief This header file provides the interfaces of the RAP loader shell
+ *   command.
+ */
+
 /*
  *  COPYRIGHT (c) 2013 Chris Johns <chrisj@rtems.org>
  *

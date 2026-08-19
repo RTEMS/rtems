@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplRecord
+ *
+ * @brief This header file provides the interfaces of the event recording.
+ */
+
 /*
  * Copyright (C) 2018, 2024 embedded brains GmbH & Co. KG
  *

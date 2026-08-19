@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup FileSystemTypesAndMount
+ *
+ * @brief This header file provides the interfaces of the JFFS2 file system.
+ */
+
 /*
  * Copyright (C) 2013, 2016 embedded brains GmbH & Co. KG
  *

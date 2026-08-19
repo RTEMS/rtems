@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup IMFS
+ *
+ * @brief This source file contains the implementation of
+ *   IMFS_make_linearfile().
+ */
+
 /*
  * Copyright (C) 2019 embedded brains GmbH & Co. KG
  *

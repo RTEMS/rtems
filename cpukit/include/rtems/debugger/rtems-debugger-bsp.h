@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplDebugger
+ *
+ * @brief This header file provides the BSP interfaces of the debugger
+ *   server.
+ */
+
 /*
  * Copyright (c) 2019 Chris Johns <chrisj@rtems.org>.
  * All rights reserved.

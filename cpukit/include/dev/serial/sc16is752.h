@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup TermiostypesSupport
+ *
+ * @brief This header file provides the interfaces of the SC16IS752 serial
+ *   device driver.
+ */
+
 /*
  * Copyright (c) 2016 embedded brains GmbH & Co. KG
  *

@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplFTPD
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_initialize_ftpd().
+ */
+
 /*
  * Copyright (c) 2018 embedded brains GmbH & Co. KG
  *

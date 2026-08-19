@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplCPUUsageReporting
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_cpu_info_report().
+ */
+
 /*
  * Copyright (c) 2016 embedded brains GmbH & Co. KG
  *

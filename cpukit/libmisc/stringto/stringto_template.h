@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplStringConversion
+ *
+ * @brief This header file provides the template of the string conversion
+ *   functions.
+ */
+
 /*
  * Copyright (c) 2009 On-Line Applications Research Corporation (OAR).
  *

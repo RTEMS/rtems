@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSGenericFlashAPI
+ *
+ * @brief This source file contains the implementation of the generic flash
+ *   device driver.
+ */
+
 /*
  * Copyright (C) 2023 Aaron Nyholm
  *

@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup TermiostypesSupport
+ *
+ * @brief This header file provides the register definitions of the
+ *   SC16IS752 serial device.
+ */
+
 /*
  * Copyright (C) 2016 embedded brains GmbH & Co. KG
  *

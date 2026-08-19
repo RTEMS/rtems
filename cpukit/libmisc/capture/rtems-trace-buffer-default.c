@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplTrace
+ *
+ * @brief This source file contains the default trace buffer variables of
+ *   the trace buffer generator.
+ */
+
 /*
  *  Copyright (c) 2015 Chris Johns <chrisj@rtems.org>
  *

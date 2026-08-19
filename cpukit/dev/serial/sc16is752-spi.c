@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup TermiostypesSupport
+ *
+ * @brief This source file contains the SPI attachment of the SC16IS752
+ *   serial device driver.
+ */
+
 /*
  * Copyright (C) 2016 embedded brains GmbH & Co. KG
  *

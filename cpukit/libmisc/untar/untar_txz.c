@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup libmisc_untar_img
+ *
+ * @brief This source file contains the implementation which untars an xz
+ *   compressed archive.
+ */
+
 /*
  * Copyright (c) 2016 Chris Johns <chrisj.rtems.org>.  All rights reserved.
  *

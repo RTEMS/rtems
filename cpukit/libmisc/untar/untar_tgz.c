@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup libmisc_untar_img
+ *
+ * @brief This source file contains the implementation which untars a gzip
+ *   compressed archive.
+ */
+
 /*
  * Copyright (c) 2016 embedded brains GmbH & Co. KG
  *

@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup LibIO
+ *
+ * @brief This header file provides the interfaces of the stdio redirector.
+ */
+
 /*
  * Copyright (c) 2014 Chris Johns <chrisj@rtems.org>.  All rights reserved.
  *

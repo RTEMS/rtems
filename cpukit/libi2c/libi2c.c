@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup libi2c
+ *
+ * @brief This source file contains the implementation of the legacy I2C
+ *   library.
+ */
+
 /* libi2c Implementation */
 
 /*

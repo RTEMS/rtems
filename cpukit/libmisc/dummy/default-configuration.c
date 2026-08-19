@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplApplConfig
+ *
+ * @brief This source file contains a default application configuration for
+ *   link tests.
+ */
+
 /*
  *  Default configuration file
  *

@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSGenericIOSpaceAPI
+ *
+ * @brief This source file contains the implementation of the generic I/O
+ *   device driver.
+ */
+
 /*
  * Copyright (C) 2026 Aaron Nyholm
  *

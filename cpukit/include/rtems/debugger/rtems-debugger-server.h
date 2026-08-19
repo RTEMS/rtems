@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplDebugger
+ *
+ * @brief This header file provides the server interfaces of the debugger
+ *   server.
+ */
+
 /*
  * Copyright (c) 2016-2019 Chris Johns <chrisj@rtems.org>.
  * All rights reserved.

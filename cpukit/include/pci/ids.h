@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplPCI
+ *
+ * @brief This header file provides the PCI vendor and device identifiers.
+ */
+
 /*
  *  Copyright 1994, Drew Eckhardt
  *  Copyright 1997, 1998 Martin Mares <mj@atrey.karlin.mff.cuni.cz>

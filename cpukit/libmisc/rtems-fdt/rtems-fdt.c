@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplFDT
+ *
+ * @brief This source file contains the implementation of the flattened
+ *   device tree support.
+ */
+
 /*
  *  COPYRIGHT (c) 2013-2017 Chris Johns <chrisj@rtems.org>
  *

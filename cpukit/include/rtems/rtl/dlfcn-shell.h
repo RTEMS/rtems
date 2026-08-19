@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup rtems_rtl
+ *
+ * @brief This header file provides the interfaces of the dlopen() shell
+ *   command.
+ */
+
 /*
  *  COPYRIGHT (c) 2012 Chris Johns <chrisj@rtems.org>
  *

@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplTrace
+ *
+ * @brief This source file contains the implementation which reads the trace
+ *   buffer variables.
+ */
+
 /*
  *  Copyright (c) 2015 Chris Johns <chrisj@rtems.org>
  *

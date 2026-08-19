@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplFreeBSDKernel
+ *
+ * @brief This header file provides the Linux red-black tree interfaces used
+ *   by ported components.
+ */
+
 /*
  * Copyright (c) 2015 embedded brains GmbH & Co. KG
  *
