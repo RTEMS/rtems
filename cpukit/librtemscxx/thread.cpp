@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplCXX
+ *
+ * @brief This source file contains the implementation of the C++ thread
+ *   support.
+ */
+
 /*
  * Copyright (C) 2020 Chris Johns <chris@contemporary.software>
  *
@@ -28,6 +37,14 @@
 #if !defined(_GNU_SOURCE)
 #define _GNU_SOURCE
 #endif
+
+/**
+ * @defgroup RTEMSImplCXX C++ Support
+ *
+ * @ingroup RTEMSImpl
+ *
+ * @brief This group contains the implementation of the C++ API of RTEMS.
+ */
 
 #include <system_error>
 

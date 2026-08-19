@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSC++
+ * @ingroup RTEMSAPICXX
  *
- * @brief C++ standard thread support with thread attribute control.
+ * @brief This header file provides the C++ thread support with control of
+ *   the thread attributes.
  *
  * Provide a way to create a thread in C++ with attributes that let
  * you control the real-time embedded parameters need to run
@@ -41,6 +42,16 @@
 
 #if !defined(RTEMS_THREAD_HPP)
 #define RTEMS_THREAD_HPP
+
+/**
+ * @defgroup RTEMSAPICXX C++ API
+ *
+ * @ingroup RTEMSAPI
+ *
+ * @brief This group contains the C++ API of RTEMS.
+ *
+ * @{
+ */
 
 #include <functional>
 #include <iostream>
@@ -467,5 +478,7 @@ inline std::basic_ostream<C, T>& operator<<(std::basic_ostream<C, T>& out,
 }
 }; // namespace thread
 }; // namespace rtems
+
+/** @} */
 
 #endif

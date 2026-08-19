@@ -3,9 +3,9 @@
 /**
  * @file
  *
- * @ingroup RTEMSC++
+ * @ingroup RTEMSAPICXX
  *
- * @brief RTEMS Error exception.
+ * @brief This header file provides the C++ error exception support.
  *
  * Provide an error exception for RTEMS errors.
  */

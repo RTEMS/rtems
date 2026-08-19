@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplCXX
+ *
+ * @brief This source file contains the implementation of the C++ error
+ *   support.
+ */
+
 /*
  * Copyright (C) 2020 Chris Johns <chris@contemporary.software>
  *
