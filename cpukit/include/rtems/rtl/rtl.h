@@ -70,6 +70,8 @@ extern "C" {
  * The object file format is currently ELF and object files can be separate
  * files or in an archive. Object files in an archive are referenced by
  * specifying 'archive:object' format. For example 'libfoo.a:bar.o'.
+ *
+ * @{
  */
 
 /**
@@ -410,6 +412,8 @@ void rtems_rtl_base_sym_global_add(const unsigned char* esyms,
  *                  returned if the load fails.
  */
 rtems_rtl_obj* rtems_rtl_baseimage(void);
+
+/** @} */
 
 #ifdef __cplusplus
 }

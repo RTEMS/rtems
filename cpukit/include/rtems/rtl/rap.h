@@ -58,6 +58,8 @@ extern "C" {
  * The compressed container is a stream of ELF relocatable object files.
  *
  *  TBD.
+ *
+ * @{
  */
 
 /**
@@ -128,6 +130,8 @@ void* rtems_rap_dl_handle(void* handle);
  * @return int The last error number.
  */
 int rtems_rap_get_error(char* message, size_t max_message);
+
+/** @} */
 
 #ifdef __cplusplus
 }

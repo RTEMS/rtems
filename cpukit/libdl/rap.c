@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup rtems_rap
+ * @ingroup RTEMSImplLibDLRAP
  *
  * @brief RTEMS Application Loader
  *
@@ -33,6 +33,14 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/**
+ * @defgroup RTEMSImplLibDLRAP Application Loader
+ *
+ * @ingroup RTEMSImplLibDL
+ *
+ * @brief This group contains the implementation of the application loader.
  */
 
 #ifdef HAVE_CONFIG_H

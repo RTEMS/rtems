@@ -35,6 +35,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+/**
+ * @defgroup RTEMSImplLibDL Runtime Link Editor
+ *
+ * @ingroup RTEMSImpl
+ *
+ * @brief This group contains the implementation of the runtime link editor.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup rtems_rtl
+ * @ingroup RTEMSImplLibDL
  *
  * @brief RTEMS Run-Time Linker Object File Symbol Table.
  */
