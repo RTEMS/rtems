@@ -45,6 +45,14 @@ extern "C" {
 #endif
 
 /**
+ * @defgroup RTEMSScoreHeapFirstFit First Fit Heap Handler
+ *
+ * @ingroup RTEMSScoreHeap
+ *
+ * @brief This group contains the first fit heap handler implementation.
+ */
+
+/**
  * @addtogroup RTEMSScoreHeapFirstFit
  *
  * @{

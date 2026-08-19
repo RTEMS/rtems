@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreExceptionMapping
+ * @ingroup RTEMSScoreException
  *
  * @brief AArch64 machine exception to POSIX signal mapping.
  */
