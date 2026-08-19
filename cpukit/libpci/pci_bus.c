@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplPCI
+ *
+ * @brief This source file contains the implementation of the PCI bus driver
+ *   of the driver manager.
+ */
+
 /*  PCI bus driver.
  *
  *  COPYRIGHT (c) 2008 Cobham Gaisler AB.

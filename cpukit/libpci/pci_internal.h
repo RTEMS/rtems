@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplPCI
+ *
+ * @brief This header file provides the internal interfaces of the PCI
+ *   library.
+ */
+
 /* Private libpci declarations
  *
  * COPYRIGHT (c) 2015 Cobham Gaisler AB.

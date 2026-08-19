@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplPCI
+ *
+ * @brief This source file contains the implementation of
+ *   pci_for_each_child().
+ */
+
 /*  PCI Help function, iterate all PCI device children of PCI bus.
  *
  *  COPYRIGHT (c) 2010 Cobham Gaisler AB.

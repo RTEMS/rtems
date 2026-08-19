@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplPCI
+ *
+ * @brief This source file contains the implementation which reads the PCI
+ *   configuration set up by the boot loader.
+ */
+
 /*  Read current PCI configuration that bootloader or BIOS has already setup
  *  and initialize the PCI structures.
  *

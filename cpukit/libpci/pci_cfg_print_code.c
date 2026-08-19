@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplPCI
+ *
+ * @brief This source file contains the implementation which prints the PCI
+ *   configuration as C code.
+ */
+
 /* PCI (Static) Configuration Library. PCI Configuration C code console
  * printout routines that can be used to build a static PCI configuration.
  *

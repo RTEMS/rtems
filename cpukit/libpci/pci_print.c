@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplPCI
+ *
+ * @brief This source file contains the implementation which prints the PCI
+ *   configuration.
+ */
+
 /*  PCI Print Current Configuration To Terminal
  *
  *  COPYRIGHT (c) 2010 Cobham Gaisler AB.

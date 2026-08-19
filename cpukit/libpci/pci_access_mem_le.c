@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplPCI
+ *
+ * @brief This source file contains the implementation of the PCI registers
+ *   over memory space access functions for a little endian PCI bus.
+ */
+
 /*  PCI Access Library
  *  Registers-over-Memory Space - Generic Little endian PCI bus definitions
  *

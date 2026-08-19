@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplPCI
+ *
+ * @brief This source file contains the implementation of the automatic PCI
+ *   configuration.
+ */
+
 /*  PCI (Auto) configuration Library. Setup PCI configuration space and IRQ.
  *
  *  COPYRIGHT (c) 2010 Cobham Gaisler AB.

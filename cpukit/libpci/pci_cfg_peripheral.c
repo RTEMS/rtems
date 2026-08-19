@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplPCI
+ *
+ * @brief This source file contains the implementation of
+ *   pci_config_peripheral().
+ */
+
 /*  PCI (Peripheral) Configuration Library
  *
  *  COPYRIGHT (c) 2011 Cobham Gaisler AB.

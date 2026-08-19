@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplPCI
+ *
+ * @brief This source file contains the implementation of pci_dev_irq().
+ */
+
 /*  PCI IRQ Library
  *
  *  COPYRIGHT (c) 2010 Cobham Gaisler AB.

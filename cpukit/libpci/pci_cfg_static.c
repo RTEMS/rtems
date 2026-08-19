@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplPCI
+ *
+ * @brief This source file contains the implementation of the static PCI
+ *   configuration.
+ */
+
 /*  PCI (Static) Configuration Library
  *
  *  COPYRIGHT (c) 2010 Cobham Gaisler AB.
