@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSImplShellCommands
  * @brief debugrfs Shell Command Implementation
  */
 

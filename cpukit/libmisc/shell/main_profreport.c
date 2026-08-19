@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSImplShellCommands
  * @brief profreport Shell Command Implementation
  */
 

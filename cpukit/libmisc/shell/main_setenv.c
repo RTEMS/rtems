@@ -3,6 +3,8 @@
 /**
  *  @file
  *
+ * @ingroup RTEMSImplShellCommands
+ *
  *  @brief Set an environment variable
  */
 

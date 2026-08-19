@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSImplShellCommands
  * @brief top Command Implementation
  */
 

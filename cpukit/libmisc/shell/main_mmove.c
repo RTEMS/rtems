@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSImplShellCommands
  * 
  * @brief MMOVE Shell Command Implementation
  */

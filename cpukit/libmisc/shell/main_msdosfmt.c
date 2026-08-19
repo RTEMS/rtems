@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSImplShellCommands
  * @brief msdosfmt Shell Command Implementation
  */
 

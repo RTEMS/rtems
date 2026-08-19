@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSImplShellCommands
  * 
  * @brief Mount NFS Shell Command Implementation
  */

@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplShell
+ *
  * @brief Instantatiate a new terminal shell.
  */
 

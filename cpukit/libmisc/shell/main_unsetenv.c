@@ -3,6 +3,8 @@
 /**
  *  @file
  *
+ * @ingroup RTEMSImplShellCommands
+ *
  *  @brief Unset an environment variable
  */
 

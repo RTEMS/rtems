@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSImplShell
  * 
  * @brief CAT Command Implementation
  */

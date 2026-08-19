@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplShellCommands
+ *
  * Real time clock shell command.
  */
 

@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSImplShell
  * 
  * @brief Integrate monitor commands as a set
  */

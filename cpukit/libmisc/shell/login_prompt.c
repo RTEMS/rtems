@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplShell
+ *
  * @brief Shell login prompt functions.
  */
 

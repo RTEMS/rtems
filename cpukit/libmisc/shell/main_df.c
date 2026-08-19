@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup DOSFS
+ * @ingroup RTEMSImplShellCommands
  *
  * @brief df Shell Command Implementation
  */
