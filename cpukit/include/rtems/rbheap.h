@@ -45,6 +45,14 @@ extern "C" {
 #endif
 
 /**
+ * @defgroup RTEMSImplRBHeap Red-Black Tree Heap
+ *
+ * @ingroup RTEMSImpl
+ *
+ * @brief This group contains the red-black tree heap implementation.
+ */
+
+/**
  * @defgroup RTEMSAPIRBHeap Red-Black Tree Heap
  *
  * @ingroup RTEMSAPI

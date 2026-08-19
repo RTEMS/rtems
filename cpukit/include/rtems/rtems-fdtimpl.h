@@ -52,6 +52,17 @@
 #include <rtems/chain.h>
 
 /**
+ * @defgroup RTEMSImplFDT Flattened Device Tree Support
+ *
+ * @ingroup RTEMSImpl
+ *
+ * @brief This group contains the flattened device tree support
+ *   implementation.
+ *
+ * @{
+ */
+
+/**
  * An index for quick access to the FDT by name or offset.
  */
 
@@ -189,5 +200,7 @@ static inline int rtems_fdt_load_file(
 
   return bf;
 }
+
+/** @} */
 
 #endif

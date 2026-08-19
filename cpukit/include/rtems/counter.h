@@ -44,6 +44,14 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
+ * @defgroup RTEMSImplCounter Counter
+ *
+ * @ingroup RTEMSImpl
+ *
+ * @brief This group contains the counter implementation.
+ */
+
+/**
  * @defgroup RTEMSAPICounter Free-Running Counter and Busy Wait Delay
  *
  * @ingroup RTEMSAPI

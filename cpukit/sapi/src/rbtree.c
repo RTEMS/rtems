@@ -34,6 +34,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+/**
+ * @defgroup RTEMSImplRBTrees Classic Red-Black Trees
+ *
+ * @ingroup RTEMSImpl
+ *
+ * @brief This group contains the Classic red-black tree implementation.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif

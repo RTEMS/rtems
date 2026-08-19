@@ -64,6 +64,15 @@
 extern "C" {
 #endif
 
+/**
+ * @defgroup RTEMSImplKernelCharIO Kernel Character Input and Output
+ *
+ * @ingroup RTEMSImpl
+ *
+ * @brief This group contains the kernel character input and output
+ *   implementation.
+ */
+
 /* Generated from spec:/rtems/io/if/group-3 */
 
 /**

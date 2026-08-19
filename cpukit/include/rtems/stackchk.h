@@ -51,6 +51,14 @@ extern "C" {
 #endif
 
 /**
+ * @defgroup RTEMSImplStackChecker Stack Checker
+ *
+ * @ingroup RTEMSImpl
+ *
+ * @brief This group contains the stack checker implementation.
+ */
+
+/**
  * @brief Checks if current task is blown its stack.
  *
  * This method is used to determine if the current stack pointer

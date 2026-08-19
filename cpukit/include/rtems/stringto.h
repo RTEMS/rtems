@@ -48,6 +48,14 @@
 #include <rtems.h>
 
 /**
+ * @defgroup RTEMSImplStringConversion String Conversion
+ *
+ * @ingroup RTEMSImpl
+ *
+ * @brief This group contains the string conversion implementation.
+ */
+
+/**
  * @brief Convert String to Pointer (with validation).
  *
  * This method converts a string to a pointer (void *) with

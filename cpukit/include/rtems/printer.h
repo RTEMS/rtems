@@ -52,6 +52,14 @@ extern "C" {
 #endif
 
 /**
+ * @defgroup RTEMSImplPrintSupport Print Support
+ *
+ * @ingroup RTEMSImpl
+ *
+ * @brief This group contains the print support implementation.
+ */
+
+/**
  * @addtogroup RTEMSPrintSupport
  *
  * @{

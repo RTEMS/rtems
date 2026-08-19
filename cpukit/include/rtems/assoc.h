@@ -44,6 +44,14 @@ extern "C" {
 #endif
 
 /**
+ * @defgroup RTEMSImplAssociativity Associativity Support
+ *
+ * @ingroup RTEMSImpl
+ *
+ * @brief This group contains the associativity support implementation.
+ */
+
+/**
  * @defgroup RTEMSAPIAssociativity Associativity Routines
  *
  * @ingroup RTEMSAPI

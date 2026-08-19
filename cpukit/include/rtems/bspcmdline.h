@@ -61,6 +61,14 @@ extern "C" {
 #endif
 
 /**
+ * @defgroup RTEMSImplBSPCommandLine BSP Command Line
+ *
+ * @ingroup RTEMSImpl
+ *
+ * @brief This group contains the BSP command line implementation.
+ */
+
+/**
  * @brief Obtain Pointer to BSP Boot Command String
  *
  * This method returns a pointer to the BSP Boot Command String. It

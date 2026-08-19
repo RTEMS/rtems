@@ -40,6 +40,14 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
+ * @defgroup RTEMSImplRecord Event Recording
+ *
+ * @ingroup RTEMSImpl
+ *
+ * @brief This group contains the event recording implementation.
+ */
+
+/**
  * @defgroup RTEMSRecord Event Recording
  *
  * @ingroup RTEMSAPITracing

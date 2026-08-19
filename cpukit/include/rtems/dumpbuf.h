@@ -49,6 +49,14 @@ extern "C" {
 #endif
 
 /**
+ * @defgroup RTEMSImplDumpBuffer Dump Buffer
+ *
+ * @ingroup RTEMSImpl
+ *
+ * @brief This group contains the dump buffer implementation.
+ */
+
+/**
  * @brief Print memory buffer.
  *
  * This method prints @a length bytes beginning at @a buffer in
