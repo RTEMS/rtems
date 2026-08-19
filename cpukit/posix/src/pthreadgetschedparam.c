@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXThread
  *
  * @brief Gets Scheduling Policy and Parameters of Individual Threads
  */

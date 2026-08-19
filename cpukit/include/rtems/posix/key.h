@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplPOSIXKey
+ *
  * @brief POSIX Key Private Support
  *
  * This include file contains all the private support information for

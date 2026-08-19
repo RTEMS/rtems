@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplPOSIXConditionVariable
+ *
  * This include file contains the static inline implementation of the private 
  * inlined routines for POSIX condition variables.
  */

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXThread
  *
  * @brief Setting Cancelability State
  */

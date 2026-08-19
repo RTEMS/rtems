@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSImplPOSIXTimer
  * 
  * @brief POSIX Timers Internal Support
  *

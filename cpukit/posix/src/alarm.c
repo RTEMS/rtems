@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXSignal
  *
  * @brief System Generates Signal for process after realtime seconds elapsed
  */

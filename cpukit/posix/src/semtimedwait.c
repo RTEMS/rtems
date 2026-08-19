@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIX_SEMAPHORE POSIX Semaphores Support
+ * @ingroup RTEMSImplPOSIXSemaphore
  *
  * @brief Lock a Semaphore
  */

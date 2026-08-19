@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief Mutex Initialization Attribute
- *  @ingroup RTEMSImplPOSIX
+ *  @ingroup RTEMSImplPOSIXMutex
  */
 
 /*

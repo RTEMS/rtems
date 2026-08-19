@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXMutex
  *
  * @brief Obtaining process-shared Attribute Value from the Attributes Object
  */

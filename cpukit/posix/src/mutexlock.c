@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXMutex
  *
  * @brief Call to function enables locking of Mutex Object referenced by mutex
  */

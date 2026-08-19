@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIX_PTHREADS Private Threads
+ * @ingroup RTEMSImplPOSIXThread
  *
  * @brief Private Support Information for POSIX Threads
  */

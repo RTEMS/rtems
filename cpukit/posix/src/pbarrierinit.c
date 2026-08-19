@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXBarrier
  *
  * @brief Call to Function Enables Reinitializing of the Barrier
  */

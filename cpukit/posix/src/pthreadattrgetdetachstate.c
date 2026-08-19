@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXThread
  *
  * @brief Function gets the detachstate Attribute in the attr Object
  */

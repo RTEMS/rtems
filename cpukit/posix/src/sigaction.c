@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXSignal
  *
  * @brief Allows calling process to examine action of a Specific Signal
  */

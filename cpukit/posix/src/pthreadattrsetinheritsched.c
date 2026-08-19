@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXThread
  *
  * @brief Function sets the inheritsched Attribute in the attr Argument
  */

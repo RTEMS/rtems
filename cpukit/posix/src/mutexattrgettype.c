@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXMutex
  *
  * @brief Function gets the Mutex Type Attribute
  */

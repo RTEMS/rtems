@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXRWLock
  *
  * @brief RWLock Attributes Set Process Shared
  */

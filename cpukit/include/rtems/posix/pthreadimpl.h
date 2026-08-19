@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplPOSIXThread
+ *
  * @brief POSIX Threads Private Support
  *
  * This include file contains all the private support information for

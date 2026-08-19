@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXClock
  *
  * @brief Function Returns the Resolution of any Clock
  */

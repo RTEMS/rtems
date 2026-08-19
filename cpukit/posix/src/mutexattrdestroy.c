@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXMutex
  *
  * @brief Destroy Mutex Attributes Object
  */

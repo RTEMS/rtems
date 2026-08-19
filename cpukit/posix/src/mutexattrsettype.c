@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief Set a Mutex Type
- *  @ingroup RTEMSImplPOSIX
+ *  @ingroup RTEMSImplPOSIXMutex
  */
 
 /*

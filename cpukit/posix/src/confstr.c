@@ -2,6 +2,8 @@
 
 /**
  *  @file
+ *
+ * @ingroup RTEMSImplPOSIX
  *  @brief Implementation for confstr method
  */
 

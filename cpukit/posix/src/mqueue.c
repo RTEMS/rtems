@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIXMessageQueuePrivate
+ * @ingroup RTEMSImplPOSIXMessageQueue
  *
  * @brief POSIX Message Queue Information with Zero Objects
  */

@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplPOSIXSemaphore
+ *
  * @brief Private Support Information for POSIX Semaphores
  *
  * This include file contains all the private support information for

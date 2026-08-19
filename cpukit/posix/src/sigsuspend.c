@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXSignal
  *
  * @brief Replacing signal mask with *sigmask and suspending calling process
  */

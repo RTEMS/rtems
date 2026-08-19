@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXMutex
  *
  * @brief Mutex Initialization Scheduling Attributes
  */

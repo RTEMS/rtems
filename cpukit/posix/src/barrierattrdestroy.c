@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXBarrier
  *
  * @brief Function shall Destroy a Barrier Attribues Object
  */

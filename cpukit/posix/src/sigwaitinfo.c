@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplPOSIXSignal
+ *
  * @brief Suspends Execution of Calling Thread until Signals in set Delivered
  */
 

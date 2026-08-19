@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSImplPOSIXBarrier
  * 
  * @brief Inlined Routines from the POSIX Barrier Manager
  *

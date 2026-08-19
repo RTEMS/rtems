@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIX_PRIV_TIMERS Timers
+ * @ingroup RTEMSImplPOSIXTimer
  *
  * @brief Create a Per-Process Timer
  */

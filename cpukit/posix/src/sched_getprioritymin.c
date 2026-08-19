@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief Get the Minimum Priority Limit 
- *  @ingroup RTEMSImplPOSIX
+ *  @ingroup RTEMSImplPOSIXScheduler
  */
 
 /*

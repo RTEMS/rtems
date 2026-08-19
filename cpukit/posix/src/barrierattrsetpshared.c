@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief Set the Process-Shared Attribute of the Barrier Attributes Object
- *  @ingroup RTEMSImplPOSIX
+ *  @ingroup RTEMSImplPOSIXBarrier
  */
 
 /*

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIX_SEMAPHORE
+ * @ingroup RTEMSImplPOSIXSemaphore
  *
  * @brief Close a Named Semaphore
  */

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXTimer
  *
  * @brief Deletes a POSIX Interval Timer
  */

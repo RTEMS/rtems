@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXTimer
  *
  * @brief Function Gets Value of an Interval Timer
  */

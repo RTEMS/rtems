@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXConditionVariable
  *
  * @brief Get the Process-Shared Condition Variable Attributes
  */

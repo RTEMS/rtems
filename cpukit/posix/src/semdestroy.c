@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief Destroy an Unnamed Semaphore
- *  @ingroup POSIX_SEMAPHORE
+ *  @ingroup RTEMSImplPOSIXSemaphore
  */
 
 /*

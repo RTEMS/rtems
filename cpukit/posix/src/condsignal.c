@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief Signal a Condition 
- *  @ingroup RTEMSImplPOSIX
+ *  @ingroup RTEMSImplPOSIXConditionVariable
  */
 
 /*

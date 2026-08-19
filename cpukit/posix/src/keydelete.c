@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXKey
  *
  * @brief Deletes Thread-specific Data Key Previously Returned by keycreate.c
  */

@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief Initialize a Condition Variable
- *  @ingroup RTEMSImplPOSIX
+ *  @ingroup RTEMSImplPOSIXConditionVariable
  */
 
 /*

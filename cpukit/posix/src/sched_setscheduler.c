@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXScheduler
  *
  * @brief Set Scheduling Policy and Scheduling Parameters
  */

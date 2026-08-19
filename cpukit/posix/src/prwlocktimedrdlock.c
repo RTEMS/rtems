@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXRWLock
  *
  * @brief Attempt to Obtain a Read Lock on a RWLock Instance
  */

@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplPOSIXShm
+ *
  * @brief Private Support Information for POSIX Shared Memory
  *
  */

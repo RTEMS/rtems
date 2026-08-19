@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXRWLock
  *
  * @brief Function applies a Write lock to RWLock referenced by rwlock 
  */

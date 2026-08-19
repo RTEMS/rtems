@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXClock
  *
  * @brief Function Returns Clock ID of CPU-time Clock of process specified 
  */

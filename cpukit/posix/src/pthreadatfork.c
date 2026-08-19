@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief Register Fork Handlers
- *  @ingroup RTEMSImplPOSIX
+ *  @ingroup RTEMSImplPOSIXThread
  */
 
 /*

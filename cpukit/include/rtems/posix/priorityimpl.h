@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSImplPOSIXPriority
  * 
  * @brief POSIX Priority Support
  *

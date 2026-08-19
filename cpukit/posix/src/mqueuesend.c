@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXMessageQueue
  *
  * @brief Adds Message Pointed by msg_ptr to Message Queue Reffered by mqdes 
  */

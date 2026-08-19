@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIXThread
+ * @ingroup RTEMSImplPOSIXPriority
  *
  * @brief Translate sched_param into SuperCore Terms
  */

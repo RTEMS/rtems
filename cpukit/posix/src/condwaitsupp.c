@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIX_COND_VARS
+ * @ingroup RTEMSImplPOSIXConditionVariable
  *
  * @brief POSIX Condition Variables Wait Support
  */

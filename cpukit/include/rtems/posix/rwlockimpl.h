@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSImplPOSIXRWLock
  * 
  * @brief Inlined Routines from the POSIX RWLock Manager
  *

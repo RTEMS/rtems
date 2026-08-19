@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIX_SEMAPHORE
+ * @ingroup RTEMSImplPOSIXSemaphore
  *
  * @brief Get the Value of a Semaphore
  */

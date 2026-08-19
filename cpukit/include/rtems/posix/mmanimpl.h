@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplPOSIXMman
+ *
  * @brief Internal Support for POSIX 1003.1b 6.3.1 - map pages of memory
  *
  */

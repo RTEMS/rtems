@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief POSIX Delete Semaphore
- *  @ingroup POSIX_SEMAPHORE
+ *  @ingroup RTEMSImplPOSIXSemaphore
  */
 
 /*

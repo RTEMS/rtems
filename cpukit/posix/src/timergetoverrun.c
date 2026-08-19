@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief Get Overrun Count for a POSIX Per-Process Timer
- *  @ingroup POSIX_PRIV_TIMERS
+ *  @ingroup RTEMSImplPOSIXTimer
  */
 
 /*

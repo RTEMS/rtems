@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplPOSIXKey
+ *
  * @brief Private Inlined Routines for POSIX Key's
  *
  * This include file contains the static inline implementation of the private

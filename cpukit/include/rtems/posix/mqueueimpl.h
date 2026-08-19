@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplPOSIXMessageQueue
+ *
  * @brief Private Inlined Routines for POSIX Message Queue
  * 
  * This include file contains the static inline implementation of the private 

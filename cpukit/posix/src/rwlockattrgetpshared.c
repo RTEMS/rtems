@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief Get the Process-Shared Attribute of the RWLock
- *  @ingroup RTEMSImplPOSIX
+ *  @ingroup RTEMSImplPOSIXRWLock
  */
 
 /*

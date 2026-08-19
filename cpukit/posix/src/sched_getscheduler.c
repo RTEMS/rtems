@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXScheduler
  *
  * @brief Function Returns Scheduling Policy of the process specified by pid
  */

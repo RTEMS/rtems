@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief Lock a Semaphore 
- *  @ingroup POSIX_SEMAPHORE
+ *  @ingroup RTEMSImplPOSIXSemaphore
  */
 
 /*

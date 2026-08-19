@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief Destroy a Condition Variable
- *  @ingroup RTEMSImplPOSIX
+ *  @ingroup RTEMSImplPOSIXConditionVariable
  */
 
 /*

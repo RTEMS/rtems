@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXSpinlock
  *
  * @brief Function Unlocks a Spin Lock Object
  */

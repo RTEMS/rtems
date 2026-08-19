@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXConditionVariable
  *
  * @brief Condition variable Attributes structure
  */

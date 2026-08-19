@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXSemaphore
  *
  * @brief Function Creates New POSIX semaphore or Opens an existing Semaphore
  */

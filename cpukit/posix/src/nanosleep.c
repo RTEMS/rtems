@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXClock
  *
  * @brief Suspends Execution of calling thread until Time elapses
  */

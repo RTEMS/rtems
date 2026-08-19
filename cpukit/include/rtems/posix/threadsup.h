@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSImplPOSIXThreadExtension
  * 
  * @brief POSIX Thread API Support
  *

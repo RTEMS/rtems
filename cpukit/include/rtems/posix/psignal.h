@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSImplPOSIXSignal
  * 
  * @brief Internal Information about POSIX Signals
  *

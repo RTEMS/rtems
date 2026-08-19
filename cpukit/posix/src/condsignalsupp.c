@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup POSIX_COND_VARS Condition Variables
+ * @ingroup RTEMSImplPOSIXConditionVariable
  *
  * @brief Implements wake up version of the "signal" operation
  */

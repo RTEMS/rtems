@@ -4,7 +4,7 @@
  *  @file
  *
  *  @brief Initialize the Barrier Attributes Object
- *  @ingroup RTEMSImplPOSIX
+ *  @ingroup RTEMSImplPOSIXBarrier
  */
 
 /*

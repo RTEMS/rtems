@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplPOSIXTimer
+ *
  * @brief Inlined Routines from the POSIX Timer Manager
  * 
  * This file contains the static inline implementation of the inlined routines

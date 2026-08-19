@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXSemaphore
  *
  * @brief Initializing of an Unnamed Semaphore
  */

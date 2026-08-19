@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXSpinlock
  *
  * @brief POSIX Function Initializes a Spinlock Instance
  */

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXSpinlock
  *
  * @brief This header file provides interfaces used by the POSIX Spinlock
  *   implementation.

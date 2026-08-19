@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXTimer
  *
  * @brief Function Arms or Disarms the Timer Identified by timerid 
  */

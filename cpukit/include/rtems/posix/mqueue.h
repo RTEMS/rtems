@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSImplPOSIXMessageQueue
  * 
  * @brief POSIX Message Queues Private Private Support
  *

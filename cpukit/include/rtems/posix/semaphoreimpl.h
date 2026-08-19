@@ -2,6 +2,8 @@
 
 /**
  * @file
+ *
+ * @ingroup RTEMSImplPOSIXSemaphore
  * 
  * @brief Private Inlined Routines for POSIX Semaphores
  *

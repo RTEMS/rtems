@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIXTimer
  *
  * @brief Function Fetches State of POSIX Per-Process Timers
  */
