@@ -6,7 +6,7 @@
  * @ingroup RTEMSScoreThread
  *
  * @brief This source file contains the implementation of
- *   _Thread_Set_state_locked() and _Thread_Set_state.
+ *   _Thread_Set_state_locked() and _Thread_Set_state().
  */
 
 /*

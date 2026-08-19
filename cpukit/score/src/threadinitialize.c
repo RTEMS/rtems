@@ -6,7 +6,7 @@
  * @ingroup RTEMSScoreThread
  *
  * @brief This source file contains the implementation of
- *   _Thread_Initialize().
+ *   _Thread_Initialize() and _Thread_Free().
  */
 
 /*

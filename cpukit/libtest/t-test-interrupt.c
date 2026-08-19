@@ -5,8 +5,8 @@
  *
  * @ingroup RTEMSTestFrameworkImpl
  *
- * @brief This source file contains the implementation of
- *   T_interrupt_test().
+ * @brief This source file contains the implementation of the interrupt test
+ *   support of the test framework.
  */
 
 /*

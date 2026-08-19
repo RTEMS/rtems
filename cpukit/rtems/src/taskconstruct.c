@@ -6,7 +6,8 @@
  * @ingroup RTEMSImplClassicTask
  *
  * @brief This source file contains the implementation of
- *   rtems_task_construct() and the Task Manager system initialization.
+ *   rtems_task_construct() and _RTEMS_tasks_Create() and the Task Manager
+ *   system initialization.
  */
 
 /*

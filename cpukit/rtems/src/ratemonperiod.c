@@ -6,7 +6,8 @@
  * @ingroup RTEMSImplClassicRateMonotonic
  *
  * @brief This source file contains the implementation of
- *   rtems_rate_monotonic_period_states().
+ *   rtems_rate_monotonic_period(), _Rate_monotonic_Get_status() and
+ *   _Rate_monotonic_Restart().
  */
 
 /*

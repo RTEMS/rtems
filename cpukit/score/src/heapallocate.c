@@ -6,7 +6,8 @@
  * @ingroup RTEMSScoreHeap
  *
  * @brief This source file contains the implementation of
- *   _Heap_Allocate_aligned_with_boundary().
+ *   _Heap_Allocate_aligned_with_boundary() and
+ *   _Heap_Protection_free_all_delayed_blocks().
  */
 
 /*

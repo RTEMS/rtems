@@ -6,7 +6,7 @@
  * @ingroup RTEMSTestFrameworkImpl
  *
  * @brief This source file contains the implementation of
- *   T_measure_runtime().
+ *   T_measure_runtime_create() and T_measure_runtime().
  */
 
 /*

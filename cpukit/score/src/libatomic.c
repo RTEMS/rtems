@@ -5,8 +5,8 @@
  *
  * @ingroup RTEMSScoreAtomic
  *
- * @brief This source file contains the implementation of
- *   _Libatomic_Protect_start() and _Libatomic_Protect_end().
+ * @brief This source file contains the implementation of the lock and
+ *   protect functions of the libatomic support.
  */
 
 /*

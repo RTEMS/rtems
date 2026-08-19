@@ -6,7 +6,7 @@
  * @ingroup RTEMSScoreSchedulerCBS
  *
  * @brief This source file contains the implementation of
- *   _Scheduler_CBS_Release_job().
+ *   _Scheduler_CBS_Release_job() and _Scheduler_CBS_Cancel_job().
  */
 
 /*

@@ -6,7 +6,7 @@
  * @ingroup RTEMSScoreScheduler
  *
  * @brief This source file contains the implementation of
- *   _Scheduler_Request_ask_for_help().
+ *   _Scheduler_SMP_Remove_ask_for_help_from_processor().
  */
 
 /*

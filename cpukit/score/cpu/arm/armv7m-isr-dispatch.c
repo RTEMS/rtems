@@ -6,7 +6,7 @@
  * @ingroup RTEMSScoreCPUARM
  *
  * @brief This source file contains the implementation of
- *   _ARMV7M_Thread_dispatch().
+ *   _ARMV7M_Pendable_service_call() and _ARMV7M_Supervisor_call().
  */
 
 /*

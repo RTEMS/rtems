@@ -6,7 +6,8 @@
  * @ingroup RTEMSImplClassicTimer
  *
  * @brief This source file contains the implementation of
- *   rtems_timer_initiate_server().
+ *   rtems_timer_initiate_server() and of the routine adaptor of the timer
+ *   server.
  */
 
 /*  COPYRIGHT (c) 1989-2008.

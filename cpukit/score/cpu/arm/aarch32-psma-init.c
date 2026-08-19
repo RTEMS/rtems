@@ -6,7 +6,7 @@
  * @ingroup RTEMSScoreCPUARMPMSAv8
  *
  * @brief This source file contains the implementation of
- *   _AArch32_PMSA_Initialize().
+ *   _AArch32_PMSA_Initialize() and _AArch32_PMSA_Map_sections_to_regions().
  */
 
 /*

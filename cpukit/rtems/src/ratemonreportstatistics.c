@@ -6,6 +6,7 @@
  * @ingroup RTEMSImplClassicRateMonotonic
  *
  * @brief This source file contains the implementation of
+ *   rtems_rate_monotonic_report_statistics() and
  *   rtems_rate_monotonic_report_statistics_with_plugin().
  */
 

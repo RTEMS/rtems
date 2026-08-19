@@ -6,7 +6,7 @@
  * @ingroup RTEMSImplClassicRateMonotonic
  *
  * @brief This source file contains the implementation of
- *   rtems_rate_monotonic_cancel().
+ *   rtems_rate_monotonic_cancel() and _Rate_monotonic_Cancel().
  */
 
 /*

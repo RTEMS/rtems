@@ -6,7 +6,8 @@
  * @ingroup RTEMSScoreHeap
  *
  * @brief This source file contains the implementation of
- *   _Heap_Initialize() and _Heap_Block_allocate().
+ *   _Heap_Initialize(), _Heap_Block_allocate() and
+ *   _Heap_Get_first_and_last_block().
  */
 
 /*
