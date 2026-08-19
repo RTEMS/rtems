@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup libmisc_dumpbuf Print Memory Buffer
+ * @ingroup RTEMSImplDumpBuffer
  *
  * @brief Dump Buffer
  */

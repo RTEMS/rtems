@@ -3,7 +3,7 @@
 /**
  * @file 
  * 
- * @ingroup libmisc_stackchk Stack Checker Mechanism 
+ * @ingroup RTEMSImplStackChecker
  * 
  * @brief This file contains the Stack Overflow Check user extension set.
  * 

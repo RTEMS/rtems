@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplMonitor
+ *
  * @brief RTEMS Monitor "manager" support.
  *
  * Used to traverse object (chain) lists and print them out.

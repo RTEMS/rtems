@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup libmisc_devnull Device Driver
+ * @ingroup libmisc_devnull
  *
  * @brief Devzero
  */

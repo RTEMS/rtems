@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplMonitor
+ *
  * @brief RTEMS monitor IO (device drivers) support
  *
  * There are 2 "driver" things the monitor knows about.

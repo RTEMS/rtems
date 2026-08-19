@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplMonitor
+ *
  * @brief RTEMS MPCI Config display support
  */
 

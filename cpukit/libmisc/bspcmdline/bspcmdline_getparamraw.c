@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup BSPCommandLine BSP Command Line Helpers
+ * @ingroup RTEMSImplBSPCommandLine
  *
  * @brief Obtain Pointer to the Entire Matching Argument
  */

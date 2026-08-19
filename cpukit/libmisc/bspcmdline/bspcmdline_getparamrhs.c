@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup BSPCommandLine BSP Command Line Helpers
+ * @ingroup RTEMSImplBSPCommandLine
  *
  * @brief Obtain COPY of the Right Hand Side of the Matching Argument
  */

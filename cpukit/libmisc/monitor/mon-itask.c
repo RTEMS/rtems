@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplMonitor
+ *
  * @brief RTEMS Monitor init task support
  */
 

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup libmisc_conv_help Conversion Helpers
+ * @ingroup RTEMSImplStringConversion
  *
  * @brief Convert String to Unsigned Long Long (with validation)
  */

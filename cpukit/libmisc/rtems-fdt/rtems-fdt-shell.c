@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup rtems_fdt
+ * @ingroup RTEMSImplFDT
  *
  * @brief RTEMS Flattened Device Tree Shell Command
  *

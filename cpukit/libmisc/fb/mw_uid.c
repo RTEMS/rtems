@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup libmisc_fb_mw Input Devices for MicroWindows
+ * @ingroup libmisc_fb_mw
  *
  * @brief MicroWindows UID
  *

@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplMonitor
+ *
  * @brief RTEMS monitor symbol table functions
  *
  * Entry points for symbol table routines.

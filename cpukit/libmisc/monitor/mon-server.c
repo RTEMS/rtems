@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplMonitor
+ *
  * @brief RTEMS monitor server
  *
  * This handles requests for info from RTEMS monitors running on

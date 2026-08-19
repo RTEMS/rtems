@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplCapture
+ *
  * @brief RTEMS Performance Monitoring and Measurement Framework.
  *
  * This is a set of print support routines that may be shared between

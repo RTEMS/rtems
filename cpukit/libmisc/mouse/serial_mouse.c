@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup libmisc_mouse Serial Mouse Driver
+ * @ingroup libmisc_mouse
  *
  * @brief Serial Mouse Driver
  */

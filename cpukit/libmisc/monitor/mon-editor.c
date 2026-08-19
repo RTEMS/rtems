@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplMonitor
+ *
  * @brief Command line editor for RTEMS monitor.
  */
 

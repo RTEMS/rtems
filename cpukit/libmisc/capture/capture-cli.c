@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplCapture
+ *
  * @brief RTEMS Performance Monitoring and Measurement Framework.
  *
  * This is the Target Interface Command Line Interface. You need

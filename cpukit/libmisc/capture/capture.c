@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplCapture
+ *
  * @brief RTEMS Performance Monitoring and Measurement Framework.
  *
  * This is the Capture Engine component.

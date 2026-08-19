@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplMonitor
+ *
  * @brief Print misc stuff for the monitor dump routines
  *
  * Each routine returns the number of characters it output.

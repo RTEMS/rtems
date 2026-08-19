@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup LibIO
+ *
  * @brief RTEMS std redirector.
  */
 

@@ -5,7 +5,7 @@
  *
  * @brief Untar an Image
  *
- * @ingroup libmisc_untar_img Untar Image
+ * @ingroup libmisc_untar_img
  */
 
 /*

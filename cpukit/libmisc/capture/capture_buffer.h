@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplCapture
+ *
  * @brief Capture buffer
  *
  * This is a set of functions to control a variable length capture

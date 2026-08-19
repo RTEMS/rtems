@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplMonitor
+ *
  * @brief Symbol table manager for the RTEMS monitor
  *
  * These routines may be used by other system resources also.
