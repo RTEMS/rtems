@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXMessageQueue
  *
- * @brief POSIX Message Queue and Send Support
+ * @brief This source file contains the implementation of
+ *   _POSIX_Message_queue_Send_support().
  */
 
 /*

@@ -1,10 +1,11 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Lock a Semaphore
- *  @ingroup RTEMSImplPOSIXSemaphore
+ * @ingroup RTEMSImplPOSIXSemaphore
+ *
+ * @brief This source file contains the implementation of sem_wait().
  */
 
 /*

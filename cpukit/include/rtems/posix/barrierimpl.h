@@ -4,8 +4,9 @@
  * @file
  *
  * @ingroup RTEMSImplPOSIXBarrier
- * 
- * @brief Inlined Routines from the POSIX Barrier Manager
+ *
+ * @brief This header file provides the implementation interfaces of the
+ *   POSIX barriers.
  *
  * This file contains the static inlin implementation of the inlined
  * routines from the POSIX Barrier Manager.

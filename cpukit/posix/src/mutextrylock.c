@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXMutex
  *
- * @brief Try to Lock Mutex
+ * @brief This source file contains the implementation of
+ *   pthread_mutex_trylock().
  */
 
 /*

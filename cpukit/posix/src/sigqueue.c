@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXSignal
  *
- * @brief Queue a Signal to a Process
+ * @brief This source file contains the implementation of sigqueue().
  */
 
 /*

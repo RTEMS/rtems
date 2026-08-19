@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXMutex
  *
- * @brief Mutex Initialization Scheduling Attributes
+ * @brief This source file contains the implementation of
+ *   pthread_mutexattr_getprioceiling().
  */
 
 /*

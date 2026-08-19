@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXSignal
  *
- * @brief POSIX Signals Thread Unlock
+ * @brief This source file contains the implementation of
+ *   _POSIX_signals_Unblock_thread().
  */
 
 /*

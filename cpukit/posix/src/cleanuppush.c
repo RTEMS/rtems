@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief POSIX Cleanup Support
+ * @brief This source file contains the implementation of
+ *   _pthread_cleanup_push() and _pthread_cleanup_pop().
  */
 
 /*

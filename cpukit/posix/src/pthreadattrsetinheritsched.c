@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief Function sets the inheritsched Attribute in the attr Argument
+ * @brief This source file contains the implementation of
+ *   pthread_attr_setinheritsched().
  */
 
 /*

@@ -4,8 +4,9 @@
  * @file
  *
  * @ingroup RTEMSImplPOSIXSignal
- * 
- * @brief Internal Information about POSIX Signals
+ *
+ * @brief This header file provides the data structures of the POSIX
+ *   signals.
  *
  * This include file defines internal information about POSIX signals.
  */

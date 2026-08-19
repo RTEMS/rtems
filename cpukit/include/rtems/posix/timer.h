@@ -4,8 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplPOSIXTimer
- * 
- * @brief POSIX Timers Internal Support
+ *
+ * @brief This header file provides the data structures of the POSIX timers.
  *
  * This include files defines the internal support for implementation of
  * POSIX Timers.

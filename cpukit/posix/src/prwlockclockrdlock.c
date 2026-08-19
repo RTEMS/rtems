@@ -5,8 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXRWLock
  *
- * @brief This source file contains the implementation of 
- *  pthread_rwlock_clockrdlock().
+ * @brief This source file contains the implementation of
+ *   pthread_rwlock_clockrdlock().
  */
 
 /*

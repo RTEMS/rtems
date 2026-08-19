@@ -1,10 +1,11 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Register Fork Handlers
- *  @ingroup RTEMSImplPOSIXThread
+ * @ingroup RTEMSImplPOSIXThread
+ *
+ * @brief This source file contains the implementation of pthread_atfork().
  */
 
 /*

@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXMessageQueue
  *
- * @brief Adds Message Pointed by msg_ptr to Message Queue Reffered by mqdes 
+ * @brief This source file contains the implementation of mq_send().
  */
 
 /*

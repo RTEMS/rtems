@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief Function Sets the Contentionscope Attribute in the attr Object
+ * @brief This source file contains the implementation of
+ *   pthread_attr_setscope().
  */
 
 /*

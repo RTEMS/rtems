@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Get the Process-Shared Attribute of the RWLock
- *  @ingroup RTEMSImplPOSIXRWLock
+ * @ingroup RTEMSImplPOSIXRWLock
+ *
+ * @brief This source file contains the implementation of
+ *   pthread_rwlockattr_getpshared().
  */
 
 /*

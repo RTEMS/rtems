@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXConditionVariable
  *
- * @brief Get the Process-Shared Condition Variable Attributes
+ * @brief This source file contains the implementation of
+ *   pthread_condattr_getpshared().
  */
 
 /*

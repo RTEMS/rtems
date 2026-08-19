@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief POSIX Signals Manager Initialization
- *  @ingroup RTEMSImplPOSIXSignal
+ * @ingroup RTEMSImplPOSIXSignal
+ *
+ * @brief This source file contains the implementation of
+ *   _POSIX_signals_Abnormal_termination_handler().
  */
 
 /*

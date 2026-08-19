@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief POSIX Delete Semaphore
- *  @ingroup RTEMSImplPOSIXSemaphore
+ * @ingroup RTEMSImplPOSIXSemaphore
+ *
+ * @brief This source file contains the implementation of
+ *   _POSIX_Semaphore_Delete().
  */
 
 /*

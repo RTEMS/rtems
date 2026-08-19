@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXSemaphore
  *
- * @brief POSIX Semaphore Information with Zero Objects
+ * @brief This source file contains the object information of the POSIX
+ *   semaphores for a configuration with zero objects.
  */
 
 /*

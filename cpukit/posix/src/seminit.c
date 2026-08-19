@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXSemaphore
  *
- * @brief Initializing of an Unnamed Semaphore
+ * @brief This source file contains the implementation of sem_init().
  */
 
 /*

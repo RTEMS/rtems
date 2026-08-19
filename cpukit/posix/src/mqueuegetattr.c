@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXMessageQueue
  *
- * @brief Message Queue Attributes
+ * @brief This source file contains the implementation of mq_getattr().
  */
 
 /*

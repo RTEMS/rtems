@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXMutex
  *
- * @brief Obtaining process-shared Attribute Value from the Attributes Object
+ * @brief This source file contains the implementation of
+ *   pthread_mutexattr_getpshared().
  */
 
 /*

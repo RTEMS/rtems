@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXMutex
  *
- * @brief Support Call to function Enables Locking of Mutex Object 
+ * @brief This source file contains the implementation of
+ *   _POSIX_Mutex_Seize_slow() and _POSIX_Mutex_Lock_support().
  */
 
 /*

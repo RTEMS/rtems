@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXKey
  *
- * @brief POSIX Key Private Support
+ * @brief This header file provides the data structures of the POSIX keys.
  *
  * This include file contains all the private support information for
  * POSIX key.

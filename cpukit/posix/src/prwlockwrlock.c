@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXRWLock
  *
- * @brief Obtain a Write Lock on a RWlock Instance
+ * @brief This source file contains the implementation of
+ *   pthread_rwlock_wrlock().
  */
 
 /*

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief Function sets scheduling policy and parameters of the thread
+ * @brief This source file contains the implementation of
+ *   pthread_setschedparam().
  */
 
 /*

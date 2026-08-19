@@ -4,6 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplPOSIXShm
+ *
+ * @brief This source file contains the implementation of shm_open().
  */
 
 /*

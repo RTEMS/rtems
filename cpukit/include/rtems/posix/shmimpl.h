@@ -5,8 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXShm
  *
- * @brief Private Support Information for POSIX Shared Memory
- *
+ * @brief This header file provides the implementation interfaces of the
+ *   POSIX shared memory objects.
  */
 
 /*

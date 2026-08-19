@@ -2,10 +2,11 @@
 
 /**
  * @file
- * 
+ *
  * @ingroup RTEMSImplPOSIXAio
  *
- * @brief POSIX Asynchronous I/O Private Support
+ * @brief This header file provides the implementation interfaces of the
+ *   POSIX asynchronous input and output support.
  *
  * This defines private information for the AIO implementation.
  */

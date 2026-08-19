@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXRWLock
  *
- * @brief RWLock Attributes Set Process Shared
+ * @brief This source file contains the implementation of
+ *   pthread_rwlockattr_setpshared().
  */
 
 /*

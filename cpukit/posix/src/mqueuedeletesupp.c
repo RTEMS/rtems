@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief POSIX Delete Message Queue
- *  @ingroup RTEMSImplPOSIXMessageQueue
+ * @ingroup RTEMSImplPOSIXMessageQueue
+ *
+ * @brief This source file contains the implementation of
+ *   _POSIX_Message_queue_Delete().
  */
 
 /*

@@ -4,12 +4,13 @@
  * @file
  *
  * @ingroup RTEMSImplPOSIXMessageQueue
- * 
- * @brief POSIX Message Queues Private Private Support
+ *
+ * @brief This header file provides the data structures of the POSIX message
+ *   queues.
  *
  * This include file contains all the private support information for
  * POSIX Message Queues.
- * 
+ *
  * The structure of the routines is identical to that of POSIX
  * Message_queues to leave the option of having unnamed message
  * queues at a future date.  They are currently not part of the

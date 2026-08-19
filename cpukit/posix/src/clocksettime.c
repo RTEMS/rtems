@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXClock
  *
- * @brief Set Time of Clock
+ * @brief This source file contains the implementation of clock_settime().
  */
 
 /*

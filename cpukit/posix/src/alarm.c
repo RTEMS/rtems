@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXSignal
  *
- * @brief System Generates Signal for process after realtime seconds elapsed
+ * @brief This source file contains the implementation of alarm().
  */
 
 /*

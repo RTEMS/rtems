@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXSignal
  *
- * @brief POSIX_signals clear_process_signals
+ * @brief This source file contains the implementation of
+ *   _POSIX_signals_Clear_process_signals().
  */
 
 /*

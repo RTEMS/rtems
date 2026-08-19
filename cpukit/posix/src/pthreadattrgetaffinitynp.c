@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief Pthread Attribute Get Affinity
+ * @brief This source file contains the implementation of
+ *   pthread_attr_getaffinity_np().
  */
 
 /*

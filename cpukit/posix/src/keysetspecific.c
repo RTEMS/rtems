@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXKey
  *
- * @brief Set Specific Key
+ * @brief This source file contains the implementation of
+ *   pthread_setspecific().
  */
 
 /*

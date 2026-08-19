@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXTimer
  *
- * @brief Deletes a POSIX Interval Timer
+ * @brief This source file contains the implementation of timer_delete().
  */
 
 /*

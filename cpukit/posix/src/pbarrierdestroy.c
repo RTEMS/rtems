@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Destroy a Barrier Object 
- *  @ingroup RTEMSImplPOSIXBarrier
+ * @ingroup RTEMSImplPOSIXBarrier
+ *
+ * @brief This source file contains the implementation of
+ *   pthread_barrier_destroy().
  */
 
 /*

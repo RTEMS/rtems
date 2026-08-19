@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXSignal
  *
- * @brief Schedule Alarm
+ * @brief This source file contains the implementation of ualarm().
  */
 
 /*

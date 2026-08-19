@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXSemaphore
  *
- * @brief Lock a Semaphore
+ * @brief This source file contains the implementation of sem_timedwait().
  */
 
 /*

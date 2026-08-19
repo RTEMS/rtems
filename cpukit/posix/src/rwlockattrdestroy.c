@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXRWLock
  *
- * @brief Function Destroys a read-write lock Attributes object 
+ * @brief This source file contains the implementation of
+ *   pthread_rwlockattr_destroy().
  */
 
 /*

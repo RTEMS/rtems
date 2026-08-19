@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief POSIX Threads Initialize User Threads Body
+ * @brief This source file contains the implementation of
+ *   _POSIX_Threads_Initialize_user_thread().
  */
 
 /*

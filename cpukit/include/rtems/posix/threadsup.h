@@ -4,8 +4,9 @@
  * @file
  *
  * @ingroup RTEMSImplPOSIXThreadExtension
- * 
- * @brief POSIX Thread API Support
+ *
+ * @brief This header file provides the POSIX thread support of the thread
+ *   control block.
  *
  * This defines the POSIX thread API extension.
  */

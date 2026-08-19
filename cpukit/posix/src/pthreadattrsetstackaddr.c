@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief Sets the Thread Creation stackaddr Attribute in the attr Object
+ * @brief This source file contains the implementation of
+ *   pthread_attr_setstackaddr().
  */
 
 /*

@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXScheduler
  *
- * @brief Sets Scheduling Parameters Associated with Scheduling Policies 
+ * @brief This source file contains the implementation of sched_setparam().
  */
 
 /*

@@ -4,8 +4,9 @@
  * @file
  *
  * @ingroup RTEMSImplPOSIXRWLock
- * 
- * @brief Inlined Routines from the POSIX RWLock Manager
+ *
+ * @brief This header file provides the implementation interfaces of the
+ *   POSIX read-write locks.
  *
  * This file contains the static inlin implementation of the inlined
  * routines from the POSIX RWLock Manager.

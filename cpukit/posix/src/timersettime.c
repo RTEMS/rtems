@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXTimer
  *
- * @brief Function Arms or Disarms the Timer Identified by timerid 
+ * @brief This source file contains the implementation of _POSIX_Timer_TSR()
+ *   and timer_settime().
  */
 
 /*

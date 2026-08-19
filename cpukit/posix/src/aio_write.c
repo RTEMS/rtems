@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXAio
  *
- * @brief Asynchronous write operation.
+ * @brief This source file contains the implementation of aio_write().
  */
 
 /*

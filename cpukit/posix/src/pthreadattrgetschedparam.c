@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief Returns Scheduling Parameter Attributes of Thread Attributes Object
+ * @brief This source file contains the implementation of
+ *   pthread_attr_getschedparam().
  */
 
 /*

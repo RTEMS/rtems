@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXSignal
  *
- * @brief Suspends Execution of Calling Thread until Signals in set Delivered
+ * @brief This source file contains the implementation of sigwaitinfo().
  */
 
 /*

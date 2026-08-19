@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXTimer
  *
- * @brief Function Fetches State of POSIX Per-Process Timers
+ * @brief This source file contains the implementation of timer_gettime().
  */
 
 /*

@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXTimer
  *
- * @brief Function Gets Value of an Interval Timer
+ * @brief This source file contains the implementation of getitimer().
  */
 
 /*

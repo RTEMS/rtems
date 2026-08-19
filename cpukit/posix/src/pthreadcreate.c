@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief Function Starts a New Thread in The Calling Process
+ * @brief This source file contains the implementation of pthread_create()
+ *   and _POSIX_Threads_Sporadic_timer().
  */
 
 /*

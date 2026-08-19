@@ -9,7 +9,8 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief Pthread Get/Set Concurrency
+ * @brief This source file contains the implementation of
+ *   pthread_getconcurrency() and pthread_setconcurrency().
  *
  * Per the Open Group specification, when user pthreads are mapped 1:1
  * onto kernel threads, the implementation simply tracks an internal

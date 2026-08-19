@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXClock
  *
- * @brief Function Returns the Resolution of any Clock
+ * @brief This source file contains the implementation of clock_getres().
  */
 
 /*

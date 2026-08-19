@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXClock
  *
- * @brief Function Returns Clock ID of CPU-time Clock of process specified 
+ * @brief This source file contains the implementation of
+ *   clock_getcpuclockid().
  */
 
 /*

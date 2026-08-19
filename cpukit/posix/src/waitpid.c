@@ -1,10 +1,11 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Wait for Process to Change State 
- *  @ingroup RTEMSImplPOSIX
+ * @ingroup RTEMSImplPOSIX
+ *
+ * @brief This source file contains the implementation of waitpid().
  */
 
 /*

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXScheduler
  *
- * @brief Limits for Scheduling Parameter
+ * @brief This source file contains the implementation of
+ *   sched_rr_get_interval().
  */
 
 /*

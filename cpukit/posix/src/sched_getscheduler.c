@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXScheduler
  *
- * @brief Function Returns Scheduling Policy of the process specified by pid
+ * @brief This source file contains the implementation of
+ *   sched_getscheduler().
  */
 
 /*

@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Mutex Initialization Attribute
- *  @ingroup RTEMSImplPOSIXMutex
+ * @ingroup RTEMSImplPOSIXMutex
+ *
+ * @brief This source file contains the implementation of
+ *   pthread_mutexattr_init().
  */
 
 /*

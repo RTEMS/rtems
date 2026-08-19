@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXBarrier
  *
- * @brief Barrier Attributes Get Process Shared
+ * @brief This source file contains the implementation of
+ *   pthread_barrierattr_getpshared().
  */
 
 /*

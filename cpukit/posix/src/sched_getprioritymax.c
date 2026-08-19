@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXScheduler
  *
- * @brief Returns the Appropriate Maximum for Scheduling policy
+ * @brief This source file contains the implementation of
+ *   sched_get_priority_max().
  */
 
 /*

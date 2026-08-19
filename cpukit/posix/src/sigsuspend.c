@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXSignal
  *
- * @brief Replacing signal mask with *sigmask and suspending calling process
+ * @brief This source file contains the implementation of sigsuspend().
  */
 
 /*

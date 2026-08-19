@@ -4,8 +4,9 @@
  * @file
  *
  * @ingroup RTEMSImplPOSIXSignal
- * 
- * @brief POSIX Signal Sets Management Helper
+ *
+ * @brief This header file provides the implementation interfaces of the
+ *   POSIX signal sets.
  *
  * This file defines the interface to implementation helper for management
  * of POSIX Signal Sets.

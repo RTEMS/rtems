@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief Suspends Execution of Calling Thread until Target Thread Terminates 
+ * @brief This source file contains the implementation of pthread_join().
  */
 
 /*

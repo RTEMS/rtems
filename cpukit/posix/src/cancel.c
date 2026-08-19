@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief Canceling Execution of a Thread
+ * @brief This source file contains the implementation of pthread_cancel().
  */
 
 /*

@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXAio
  *
- * @brief Wait for Asynchronous I/O Request.
+ * @brief This source file contains the implementation of aio_suspend().
  */
 
 /*

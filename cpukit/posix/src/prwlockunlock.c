@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXRWLock
  *
- * @brief Function Releases a lock held on RWLock object referenced by rwlock 
+ * @brief This source file contains the implementation of
+ *   _POSIX_RWLock_Auto_initialization() and pthread_rwlock_unlock().
  */
 
 /*

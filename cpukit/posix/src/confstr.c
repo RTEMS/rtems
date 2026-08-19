@@ -1,10 +1,11 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
  * @ingroup RTEMSImplPOSIX
- *  @brief Implementation for confstr method
+ *
+ * @brief This source file contains the implementation of confstr().
  */
 
 /*

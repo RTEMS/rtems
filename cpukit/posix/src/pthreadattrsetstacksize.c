@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief Sets the Thread Creation Stacksize Attribute in the attr object 
+ * @brief This source file contains the implementation of
+ *   pthread_attr_setstacksize().
  */
 
 /*

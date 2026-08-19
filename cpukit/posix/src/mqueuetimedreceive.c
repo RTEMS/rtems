@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXMessageQueue
  *
- * @brief Receive Message from Message Queue
+ * @brief This source file contains the implementation of mq_timedreceive().
  */
 
 /*

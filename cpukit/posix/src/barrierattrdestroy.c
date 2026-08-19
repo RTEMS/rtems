@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXBarrier
  *
- * @brief Function shall Destroy a Barrier Attribues Object
+ * @brief This source file contains the implementation of
+ *   pthread_barrierattr_destroy().
  */
 
 /*

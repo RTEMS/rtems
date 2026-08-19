@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXKey
  *
- * @brief Private Inlined Routines for POSIX Key's
+ * @brief This header file provides the implementation interfaces of the
+ *   POSIX keys.
  *
  * This include file contains the static inline implementation of the private
  * inlined routines for POSIX key's.

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXShm
  *
- * @brief Internal Support for POSIX Shared Memory
+ * @brief This header file provides the data structures of the POSIX shared
+ *   memory objects.
  */
 
 /*

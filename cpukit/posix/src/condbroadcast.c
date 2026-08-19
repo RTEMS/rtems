@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Broadcast a Condition
- *  @ingroup RTEMSImplPOSIXConditionVariable
+ * @ingroup RTEMSImplPOSIXConditionVariable
+ *
+ * @brief This source file contains the implementation of
+ *   pthread_cond_broadcast().
  */
 
 /*

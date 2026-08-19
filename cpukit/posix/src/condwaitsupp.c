@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXConditionVariable
  *
- * @brief POSIX Condition Variables Wait Support
+ * @brief This source file contains the implementation of
+ *   _POSIX_Condition_variables_Wait_support().
  */
 
 /*

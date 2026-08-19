@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIX
  *
- * @brief Inoperable implementation of fork() for POSIX threads
+ * @brief This source file contains the implementation of fork().
  */
 
 /*

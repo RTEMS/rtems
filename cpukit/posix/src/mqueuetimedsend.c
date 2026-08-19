@@ -1,10 +1,11 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Send a Message to a Message Queue
- *  @ingroup RTEMSImplPOSIXMessageQueue
+ * @ingroup RTEMSImplPOSIXMessageQueue
+ *
+ * @brief This source file contains the implementation of mq_timedsend().
  */
 
 /*

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXSpinlock
  *
- * @brief Function Unlocks a Spin Lock Object
+ * @brief This source file contains the implementation of
+ *   pthread_spin_unlock().
  */
 
 /*

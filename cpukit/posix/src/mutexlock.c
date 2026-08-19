@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXMutex
  *
- * @brief Call to function enables locking of Mutex Object referenced by mutex
+ * @brief This source file contains the implementation of
+ *   pthread_mutex_lock().
  */
 
 /*

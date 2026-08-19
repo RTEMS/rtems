@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXMutex
  *
- * @brief Mutex Timed Lock
+ * @brief This source file contains the implementation of
+ *   pthread_mutex_timedlock().
  */
 
 /*

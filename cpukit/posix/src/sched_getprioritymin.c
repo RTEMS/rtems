@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Get the Minimum Priority Limit 
- *  @ingroup RTEMSImplPOSIXScheduler
+ * @ingroup RTEMSImplPOSIXScheduler
+ *
+ * @brief This source file contains the implementation of
+ *   sched_get_priority_min().
  */
 
 /*

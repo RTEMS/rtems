@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXKey
  *
- * @brief Thread-Specific Data Key Create
+ * @brief This source file contains the implementation of
+ *   pthread_key_create() and _POSIX_Keys_Key_value_allocate().
  */
 
 /*

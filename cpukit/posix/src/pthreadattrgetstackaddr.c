@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief Thread Creation Attributes
+ * @brief This source file contains the implementation of
+ *   pthread_attr_getstackaddr().
  */
 
 /*

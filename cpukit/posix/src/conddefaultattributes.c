@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXConditionVariable
  *
- * @brief Condition variable Attributes structure
+ * @brief This source file contains the default attributes of the POSIX
+ *   condition variables.
  */
 
 /*

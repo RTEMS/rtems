@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXClock
  *
- * @brief Suspends Execution of calling thread until Time elapses
+ * @brief This source file contains the implementation of clock_nanosleep().
  */
 
 /*

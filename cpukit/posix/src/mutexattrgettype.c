@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXMutex
  *
- * @brief Function gets the Mutex Type Attribute
+ * @brief This source file contains the implementation of
+ *   pthread_mutexattr_gettype().
  */
 
 /*

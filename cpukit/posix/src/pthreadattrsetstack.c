@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief Function Sets Thread Creation Stack Attributes in the attr object
+ * @brief This source file contains the implementation of
+ *   pthread_attr_setstack().
  */
 
 /*

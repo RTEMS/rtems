@@ -5,8 +5,9 @@
  *
  * @ingroup RTEMSImplPOSIXTimer
  *
- * @brief Inlined Routines from the POSIX Timer Manager
- * 
+ * @brief This header file provides the implementation interfaces of the
+ *   POSIX timers.
+ *
  * This file contains the static inline implementation of the inlined routines
  * from the POSIX Timer Manager.
  */

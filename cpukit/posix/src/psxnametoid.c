@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIX
  *
- * @brief POSIX Name to ID
+ * @brief This source file contains the error table which maps a name lookup
+ *   status to an errno value.
  */
 
 /*

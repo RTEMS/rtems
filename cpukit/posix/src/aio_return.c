@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXAio
  *
- * @brief Final return status for Asynchronous I/O request.
+ * @brief This source file contains the implementation of aio_return().
  */
 
 /*

@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXSemaphore
  *
- * @brief Function Creates New POSIX semaphore or Opens an existing Semaphore
+ * @brief This source file contains the implementation of sem_open().
  */
 
 /*

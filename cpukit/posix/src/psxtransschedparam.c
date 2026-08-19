@@ -5,7 +5,9 @@
  *
  * @ingroup RTEMSImplPOSIXPriority
  *
- * @brief Translate sched_param into SuperCore Terms
+ * @brief This source file contains the implementation of
+ *   _POSIX_Thread_Translate_to_sched_policy() and
+ *   _POSIX_Thread_Translate_sched_param().
  */
 
 /*

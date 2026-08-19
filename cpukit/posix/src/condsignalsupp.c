@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXConditionVariable
  *
- * @brief Implements wake up version of the "signal" operation
+ * @brief This source file contains the implementation of
+ *   _POSIX_Condition_variables_Signal_support().
  */
 
 /*

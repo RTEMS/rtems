@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief Function Gets the Thread Creation Stack Attributes in the attr 
+ * @brief This source file contains the implementation of
+ *   pthread_attr_getstack().
  */
 
 /*

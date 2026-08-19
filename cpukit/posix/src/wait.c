@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIX
  *
- * @brief Wait for Process to Change State 
+ * @brief This source file contains the implementation of wait().
  */
 
 /*

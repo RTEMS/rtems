@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXAio
  *
- * @brief Cancel Asynchronous I/O Operation.
+ * @brief This source file contains the implementation of aio_cancel().
  */
 
 /*

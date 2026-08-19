@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXMman
  *
- * @brief Change Memory Protection
+ * @brief This source file contains the implementation of mprotect().
  *
  * 12.2.3 Change Memory Protection, P1003.1b-1996, p. 277.
  *

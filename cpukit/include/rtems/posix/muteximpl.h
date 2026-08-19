@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXMutex
  *
- * @brief Private Inlined Routines for POSIX Mutex's.
+ * @brief This header file provides the implementation interfaces of the
+ *   POSIX mutexes.
  *
  * This include file contains the static inline implementation of the private
  * inlined routines for POSIX mutex's.

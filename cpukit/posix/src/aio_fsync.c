@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXAio
  *
- * @brief Syncing of all Outstanding Asynchronous I/O Operations.
+ * @brief This source file contains the implementation of aio_fsync().
  */
 
 /*

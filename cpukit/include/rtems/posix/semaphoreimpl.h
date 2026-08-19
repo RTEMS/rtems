@@ -4,10 +4,11 @@
  * @file
  *
  * @ingroup RTEMSImplPOSIXSemaphore
- * 
- * @brief Private Inlined Routines for POSIX Semaphores
  *
- * This include file contains the static inline implementation of the private 
+ * @brief This header file provides the implementation interfaces of the
+ *   POSIX semaphores.
+ *
+ * This include file contains the static inline implementation of the private
  * inlined routines for POSIX Semaphores.
  */
 

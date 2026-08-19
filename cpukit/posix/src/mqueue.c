@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXMessageQueue
  *
- * @brief POSIX Message Queue Information with Zero Objects
+ * @brief This source file contains the object information of the POSIX
+ *   message queues for a configuration with zero objects.
  */
 
 /*

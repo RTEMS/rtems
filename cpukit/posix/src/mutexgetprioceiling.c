@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXMutex
  *
- * @brief Returns the Current Priority Ceiling of the Mutex
+ * @brief This source file contains the implementation of
+ *   pthread_mutex_getprioceiling().
  */
 
 /*

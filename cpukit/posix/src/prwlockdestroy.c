@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Destroy a RWLock
- *  @ingroup RTEMSImplPOSIXRWLock
+ * @ingroup RTEMSImplPOSIXRWLock
+ *
+ * @brief This source file contains the implementation of
+ *   pthread_rwlock_destroy().
  */
 /*
  *  COPYRIGHT (c) 1989-2007.

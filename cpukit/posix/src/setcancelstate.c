@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief Setting Cancelability State
+ * @brief This source file contains the implementation of
+ *   pthread_setcancelstate().
  */
 
 /*

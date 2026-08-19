@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Get The Schedpolicy Attribute
- *  @ingroup RTEMSImplPOSIXThread
+ * @ingroup RTEMSImplPOSIXThread
+ *
+ * @brief This source file contains the implementation of
+ *   pthread_attr_getschedpolicy().
  */
 
 /*

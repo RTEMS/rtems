@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXMutex
  *
- * @brief This source file contains the implementation of pthread_mutex_clocklock().
+ * @brief This source file contains the implementation of
+ *   pthread_mutex_clocklock().
  */
 
 /*

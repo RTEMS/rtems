@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXSemaphore
  *
- * @brief Get the Value of a Semaphore
+ * @brief This source file contains the implementation of sem_getvalue().
  */
 
 /*

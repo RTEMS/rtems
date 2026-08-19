@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXMessageQueue
  *
- * @brief Creates a new POSIX Message Queue or Opens an Existing Queue 
+ * @brief This source file contains the implementation of mq_open().
  */
 
 /*

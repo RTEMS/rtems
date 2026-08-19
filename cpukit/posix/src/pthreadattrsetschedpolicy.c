@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief Sets Scheduling policy Attributes of Thread Attributes Object
+ * @brief This source file contains the implementation of
+ *   pthread_attr_setschedpolicy().
  */
 
 /*

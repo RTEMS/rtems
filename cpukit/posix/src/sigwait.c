@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXSignal
  *
- * @brief Synchronously Accept a Signal
+ * @brief This source file contains the implementation of sigwait().
  */
 
 /*

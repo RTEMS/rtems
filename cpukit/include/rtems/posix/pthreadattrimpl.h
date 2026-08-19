@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief POSIX Threads Private Support
+ * @brief This header file provides the implementation interfaces of the
+ *   POSIX thread attributes.
  *
  * This include file contains all the private support information for
  * POSIX threads.

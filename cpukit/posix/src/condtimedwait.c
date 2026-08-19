@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXConditionVariable
  *
- * @brief Waiting on a Condition
+ * @brief This source file contains the implementation of
+ *   pthread_cond_timedwait().
  */
 
 /*

@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXMessageQueue
  *
- * @brief Set Message Queue Attributes
+ * @brief This source file contains the implementation of mq_setattr().
  */
 
 /*

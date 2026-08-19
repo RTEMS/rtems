@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXMutex
  *
- * @brief Locking and Unlocking a Mutex
+ * @brief This source file contains the implementation of
+ *   _POSIX_Mutex_Auto_initialization() and pthread_mutex_unlock().
  */
 
 /*

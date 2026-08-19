@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXRWLock
  *
- * @brief Initialises a RWLock Attributes object attr with the default value
+ * @brief This source file contains the implementation of
+ *   pthread_rwlockattr_init().
  */
 
 /*

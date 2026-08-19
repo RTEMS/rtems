@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief Thread Attributes Creation
+ * @brief This source file contains the implementation of
+ *   pthread_attr_init().
  */
 
 /*

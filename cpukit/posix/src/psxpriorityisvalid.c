@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief POSIX Is Priority Valid
- *  @ingroup RTEMSImplPOSIXPriority
+ * @ingroup RTEMSImplPOSIXPriority
+ *
+ * @brief This source file contains the implementation of
+ *   _POSIX_Priority_To_core() and _POSIX_Priority_From_core().
  */
 
 /*

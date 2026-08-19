@@ -5,8 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIX
  *
- * @brief This header file provides interfaces used by the POSIX API
- *   implementation.
+ * @brief This header file provides the implementation interfaces which the
+ *   POSIX managers share.
  */
 
 /*

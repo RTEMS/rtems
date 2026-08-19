@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXRWLock
  *
- * @brief Function applies a Write lock to RWLock referenced by rwlock 
+ * @brief This source file contains the implementation of
+ *   pthread_rwlock_timedwrlock().
  */
 
 /*

@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Set a Mutex Type
- *  @ingroup RTEMSImplPOSIXMutex
+ * @ingroup RTEMSImplPOSIXMutex
+ *
+ * @brief This source file contains the implementation of
+ *   pthread_mutexattr_settype().
  */
 
 /*

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXRWLock
  *
- * @brief Attempt to Obtain a Read Lock on a RWLock Instance
+ * @brief This source file contains the implementation of
+ *   pthread_rwlock_timedrdlock().
  */
 
 /*

@@ -5,7 +5,9 @@
  *
  * @ingroup RTEMSImplPOSIXConditionVariable
  *
- * @brief Waiting on a Condition
+ * @brief This source file contains the implementation of
+ *   _POSIX_Condition_variables_Auto_initialization() and
+ *   pthread_cond_wait().
  */
 
 /*

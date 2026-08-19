@@ -4,8 +4,9 @@
  * @file
  *
  * @ingroup RTEMSImplPOSIXPriority
- * 
- * @brief POSIX Priority Support
+ *
+ * @brief This header file provides the implementation interfaces of the
+ *   POSIX priority support.
  *
  * This include file defines the interface to the POSIX priority
  * implementation.

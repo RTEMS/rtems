@@ -4,6 +4,9 @@
  * @file
  *
  * @ingroup RTEMSImplPOSIXShm
+ *
+ * @brief This source file contains the implementation of the POSIX shared
+ *   memory objects which use the heap.
  */
 
 /*

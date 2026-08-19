@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXShm
  *
- * @brief POSIX Shared Memory Information with Zero Objects
+ * @brief This source file contains the object information of the POSIX
+ *   shared memory objects for a configuration with zero objects.
  */
 
 /*

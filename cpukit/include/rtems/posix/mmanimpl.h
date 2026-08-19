@@ -5,8 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXMman
  *
- * @brief Internal Support for POSIX 1003.1b 6.3.1 - map pages of memory
- *
+ * @brief This header file provides the implementation interfaces of the
+ *   POSIX memory management.
  */
 
 /*

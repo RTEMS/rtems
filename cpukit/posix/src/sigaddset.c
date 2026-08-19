@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXSignal
  *
- * @brief Function Adds Signal from Set
+ * @brief This source file contains the implementation of sigaddset().
  */
 
 /*

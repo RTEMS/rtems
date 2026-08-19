@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXRWLock
  *
- * @brief Allocate resources to use the read-write lock and Initialize it
+ * @brief This source file contains the implementation of
+ *   pthread_rwlock_init().
  */
 
 /*

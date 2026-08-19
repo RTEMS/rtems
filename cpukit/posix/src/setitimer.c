@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXTimer
  *
- * @brief Set the Timer
+ * @brief This source file contains the implementation of setitimer().
  */
 
 /*

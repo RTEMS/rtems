@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXSignal
  *
- * @brief POSIX Function Installs signal Handler
+ * @brief This source file contains the implementation of signal().
  */
 
 /*

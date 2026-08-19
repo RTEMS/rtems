@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXScheduler
  *
- * @brief Yield Processor
+ * @brief This source file contains the implementation of sched_yield().
  */
 
 /*

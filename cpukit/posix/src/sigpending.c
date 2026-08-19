@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXSignal
  *
- * @brief Examine Pending Signals
+ * @brief This source file contains the implementation of sigpending().
  */
 
 /*

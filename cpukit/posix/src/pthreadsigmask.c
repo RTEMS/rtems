@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief Examine and/or change the calling thread's signal mask
+ * @brief This source file contains the implementation of pthread_sigmask().
  */
 
 /*

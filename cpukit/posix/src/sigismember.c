@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXSignal
  *
- * @brief Manipulate Signal Sets
+ * @brief This source file contains the implementation of sigismember().
  */
 
 /*

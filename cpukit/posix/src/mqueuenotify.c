@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXMessageQueue
  *
- * @brief Notify Process that a Message is Available on a Queue
+ * @brief This source file contains the implementation of mq_notify().
  */
 
 /*

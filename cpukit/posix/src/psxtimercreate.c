@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXTimer
  *
- * @brief Create a Per-Process Timer
+ * @brief This source file contains the implementation of
+ *   _POSIX_Timer_Is_allowed() and timer_create().
  */
 
 /*

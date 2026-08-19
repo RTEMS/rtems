@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXAio
  *
- * @brief Private implementation for Asynchronous I/O.
+ * @brief This source file contains the implementation of the asynchronous
+ *   input and output support.
  *
  * This file contains the implementation of private methods used for the processing of Asynchronous I/O requests.
  */

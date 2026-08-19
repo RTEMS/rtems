@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Get Overrun Count for a POSIX Per-Process Timer
- *  @ingroup RTEMSImplPOSIXTimer
+ * @ingroup RTEMSImplPOSIXTimer
+ *
+ * @brief This source file contains the implementation of
+ *   timer_getoverrun().
  */
 
 /*

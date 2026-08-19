@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIX
  *
- * @brief Get Configurable System Variables
+ * @brief This source file contains the implementation of sysconf().
  */
 
 /*

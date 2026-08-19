@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXKey
  *
- * @brief Deletes Thread-specific Data Key Previously Returned by keycreate.c
+ * @brief This source file contains the implementation of
+ *   pthread_key_delete().
  */
 
 /*

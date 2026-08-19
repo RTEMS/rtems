@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXMutex
  *
- * @brief Changes the Priority Ceiling of a Mutex and Releases it
+ * @brief This source file contains the implementation of
+ *   pthread_mutex_setprioceiling().
  */
 
 /*

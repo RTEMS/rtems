@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXSignal
  *
- * @brief Examine and Change Blocked Signals
+ * @brief This source file contains the implementation of sigprocmask().
  */
 
 /*

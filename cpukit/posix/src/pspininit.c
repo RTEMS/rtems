@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXSpinlock
  *
- * @brief POSIX Function Initializes a Spinlock Instance
+ * @brief This source file contains the implementation of
+ *   pthread_spin_init().
  */
 
 /*

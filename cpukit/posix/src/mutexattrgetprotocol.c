@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXMutex
  *
- * @brief Get protocol Attribute of Mutex Attribute Obect
+ * @brief This source file contains the implementation of
+ *   pthread_mutexattr_getprotocol().
  */
 
 /*

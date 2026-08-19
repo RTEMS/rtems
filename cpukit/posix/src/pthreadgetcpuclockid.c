@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief Returns Clock ID for CPU time clock of the thread 
+ * @brief This source file contains the implementation of
+ *   pthread_getcpuclockid().
  */
 
 /*

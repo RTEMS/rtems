@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXAio
  *
- * @brief Function Initiates a List of I/O Requests with Single Function Call 
+ * @brief This source file contains the implementation of lio_listio().
  */
 
 /*

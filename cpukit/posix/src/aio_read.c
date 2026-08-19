@@ -2,10 +2,10 @@
 
 /**
  * @file
- * 
+ *
  * @ingroup RTEMSImplPOSIXAio
  *
- * @brief Asynchronous read operation.
+ * @brief This source file contains the implementation of aio_read().
  */
 
 /*

@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIX
  *
- * @brief Creates Child process Of The Calling process
+ * @brief This source file contains the implementation of vfork().
  */
 
 /*

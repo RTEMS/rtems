@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXSemaphore
  *
- * @brief Close a Named Semaphore
+ * @brief This source file contains the implementation of sem_close().
  */
 
 /*

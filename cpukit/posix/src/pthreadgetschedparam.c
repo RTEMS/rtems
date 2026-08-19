@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief Gets Scheduling Policy and Parameters of Individual Threads
+ * @brief This source file contains the implementation of
+ *   pthread_getschedparam().
  */
 
 /*

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief Pthread Get Attribute
+ * @brief This source file contains the implementation of
+ *   pthread_getattr_np().
  */
 
 /*

@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Wait at a Spinlock
- *  @ingroup RTEMSImplPOSIXSpinlock
+ * @ingroup RTEMSImplPOSIXSpinlock
+ *
+ * @brief This source file contains the implementation of
+ *   pthread_spin_lock().
  */
 
 /*

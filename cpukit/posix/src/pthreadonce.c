@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief Call to function by Thread will call init_routine with no Arguments
+ * @brief This source file contains the implementation of pthread_once().
  */
 
 /*

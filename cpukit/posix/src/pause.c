@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXSignal
  *
- * @brief Suspend Process Execution
+ * @brief This source file contains the implementation of pause().
  */
 
 /*

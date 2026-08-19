@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXBarrier
  *
- * @brief Wait at a Barrier
+ * @brief This source file contains the implementation of
+ *   pthread_barrier_wait().
  */
 
 /*

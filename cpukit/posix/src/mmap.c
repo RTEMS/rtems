@@ -4,6 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplPOSIXMman
+ *
+ * @brief This source file contains the implementation of mmap().
  */
 
 /*

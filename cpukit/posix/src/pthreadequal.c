@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief Compare Thread IDs
+ * @brief This source file contains the implementation of pthread_equal().
  */
 
 /*

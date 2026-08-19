@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXAio
  *
- * @brief Returns the error status for the Asynchronous I/O request.
+ * @brief This source file contains the implementation of aio_error().
  */
 
 /*

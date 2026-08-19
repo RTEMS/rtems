@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXSignal
  *
- * @brief Send a Signal to a Process
+ * @brief This source file contains the implementation of _kill_r().
  */
 
 /*

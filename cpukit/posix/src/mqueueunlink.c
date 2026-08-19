@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXMessageQueue
  *
- * @brief Remove a Message Queue
+ * @brief This source file contains the implementation of mq_unlink().
  */
 
 /*

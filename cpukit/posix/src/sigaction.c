@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPOSIXSignal
  *
- * @brief Allows calling process to examine action of a Specific Signal
+ * @brief This source file contains the implementation of sigaction().
  */
 
 /*

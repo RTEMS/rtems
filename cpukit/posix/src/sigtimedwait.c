@@ -1,10 +1,11 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @brief Wait for Queued Signals
- *  @ingroup RTEMSImplPOSIXSignal
+ * @ingroup RTEMSImplPOSIXSignal
+ *
+ * @brief This source file contains the implementation of sigtimedwait().
  */
 
 /*

@@ -5,9 +5,10 @@
  *
  * @ingroup RTEMSImplPOSIXMessageQueue
  *
- * @brief Private Inlined Routines for POSIX Message Queue
- * 
- * This include file contains the static inline implementation of the private 
+ * @brief This header file provides the implementation interfaces of the
+ *   POSIX message queues.
+ *
+ * This include file contains the static inline implementation of the private
  * inlined routines for POSIX Message Queue.
  */
 

@@ -4,8 +4,9 @@
  * @file
  *
  * @ingroup RTEMSImplPOSIXSignal
- * 
- * @brief POSIX Signals Support
+ *
+ * @brief This header file provides the implementation interfaces of the
+ *   POSIX signals.
  *
  * This include file defines internal information about POSIX signals.
  */

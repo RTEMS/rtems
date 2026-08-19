@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief Sets the Cancelability Type of Calling Thread to value given in type 
+ * @brief This source file contains the implementation of
+ *   pthread_setcanceltype().
  */
 
 /*

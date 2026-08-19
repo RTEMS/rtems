@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXThread
  *
- * @brief Private Support Information for POSIX Threads
+ * @brief This source file contains the minimum stack size of the POSIX
+ *   threads.
  */
 
 /*

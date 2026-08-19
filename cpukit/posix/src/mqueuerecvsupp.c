@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXMessageQueue
  *
- * @brief POSIX Message Queue Receive Support
+ * @brief This source file contains the implementation of
+ *   _POSIX_Message_queue_Receive_support().
  */
 
 /*

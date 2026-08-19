@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPOSIXKey
  *
- * @brief POSIX Keys Information with Zero Objects
+ * @brief This source file contains the object information of the POSIX keys
+ *   for a configuration with zero objects.
  */
 
 /*
