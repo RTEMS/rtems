@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplDriverManager
  *
- * @brief Linked list help functions used by driver manager.
+ * @brief This header file provides the list interfaces of the driver
+ *   manager.
  */
 
 /*

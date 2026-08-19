@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPCI
  *
- * @brief PCI IRQ Library
+ * @brief This header file provides the PCI interrupt interfaces.
  */
 
 /*

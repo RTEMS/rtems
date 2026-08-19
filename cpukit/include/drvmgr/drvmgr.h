@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplDriverManager
  *
- * @brief Driver Manager Interface.
+ * @brief This header file provides the interfaces of the driver manager.
  */
 
 /*

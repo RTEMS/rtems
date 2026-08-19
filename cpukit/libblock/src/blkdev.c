@@ -3,7 +3,8 @@
  *
  * @ingroup rtems_blkdev
  *
- * @brief Block Device Management
+ * @brief This source file contains the generic read and write handlers of
+ *   the block device driver.
  */
 
 /*

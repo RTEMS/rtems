@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSTest
  *
- * @brief This source file provides the implementation of rtems_test_run().
+ * @brief This source file contains the implementation of rtems_test_run().
  */
 
 /*

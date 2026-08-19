@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPCI
  *
- * @brie PCI Peripheral Configuration Libraryf
+ * @brief This header file provides the peripheral PCI configuration
+ *   interfaces.
  */
 
 /*

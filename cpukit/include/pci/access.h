@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplPCI
  *
- * @brief PCI Access Methods
+ * @brief This header file provides the PCI access interfaces.
  *
  * Routines to access PCI memory/configuration space and other PCI related
  * functions the PCI Library provides.

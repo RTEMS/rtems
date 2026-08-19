@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSFDisk
  *
- * @brief Flash Disk Block Device Implementation
+ * @brief This source file contains the implementation of
+ *   rtems_fdisk_initialize().
  */
 
 /*

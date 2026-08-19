@@ -3,7 +3,8 @@
  *
  * @ingroup rtems_bdbuf
  *
- * Block device buffer management.
+ * @brief This source file contains the implementation of the block device
+ *   buffer cache.
  */
 
 /*

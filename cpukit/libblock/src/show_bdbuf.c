@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_bdpart
  *
- * @brief Enable the Monitor to Show bdbuf Information
+ * @brief This source file contains the monitor support which shows the
+ *   block device buffer cache.
  *
  * This module inspects the bdbuf data structures,
  * assuming they are static, but in fact they are used very

@@ -5,7 +5,7 @@
  *
  * @ingroup rtems_blkdev
  *
- * @brief Block device management.
+ * @brief This source file contains the block device operations tables.
  */
 
 /*

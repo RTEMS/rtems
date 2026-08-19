@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_blkdev
  *
- * @brief Block Device IMFS
+ * @brief This source file contains the implementation of
+ *   rtems_blkdev_create() and rtems_blkdev_create_partition().
  */
 
 /*

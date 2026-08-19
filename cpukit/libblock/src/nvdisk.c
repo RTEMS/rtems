@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_libblock
  *
- * @brief Non-Volatile Disk Block Device Implementation
+ * @brief This source file contains the implementation of
+ *   rtems_nvdisk_initialize().
  */
 
 /*

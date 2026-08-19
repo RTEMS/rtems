@@ -3,7 +3,8 @@
  *
  * @ingroup rtems_disk
  *
- * @brief Block device disk management implementation.
+ * @brief This source file contains the implementation of the disk device
+ *   management.
  */
 
 /*

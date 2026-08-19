@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPCI
  *
- * @brief PCI Read Configuration Library
+ * @brief This header file provides the interfaces which read the PCI
+ *   configuration.
  *
  * Read current config where bootloader/BIOS has setup.
  */

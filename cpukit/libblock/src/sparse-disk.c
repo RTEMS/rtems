@@ -5,7 +5,9 @@
  *
  * @ingroup rtems_sparse_disk
  *
- * @brief Sparse disk block device implementation.
+ * @brief This source file contains the implementation of
+ *   rtems_sparse_disk_free(), rtems_sparse_disk_create_and_register() and
+ *   rtems_sparse_disk_register().
  */
 
 /*

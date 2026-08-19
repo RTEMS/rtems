@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSScoreHash
  *
- * @brief This source file the implementation of _Hash_Finalize().
+ * @brief This source file contains the implementation of _Hash_Finalize().
  */
 
 /*

@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Serial Peripheral Interface (SPI) Bus Implementation
- *
  * @ingroup SPI
+ *
+ * @brief This source file contains the implementation of the SPI bus
+ *   driver.
  */
 
 /*

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSGenericFlashAPI
  *
- * @brief Generic Flash API
+ * @brief This header file provides the interfaces of the generic flash
+ *   device driver.
  */
 
 /*

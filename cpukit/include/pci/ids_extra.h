@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPCI
  *
- * @brief RTEMS local PCI data base
+ * @brief This header file provides the PCI identifiers which RTEMS adds to
+ *   the database.
  */
 
 /*

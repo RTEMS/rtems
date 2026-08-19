@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Inter-Integrated Circuit (I2C) Bus Implementation
- *
  * @ingroup I2CDevice
+ *
+ * @brief This source file contains the implementation of the I2C device
+ *   driver.
  */
 
 /*

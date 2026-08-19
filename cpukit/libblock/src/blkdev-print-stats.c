@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_blkdev
  *
- * @brief Prints the Block Device Statistics
+ * @brief This source file contains the implementation of
+ *   rtems_blkdev_print_stats().
  */
 
 /*

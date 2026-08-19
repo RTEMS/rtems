@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSDeviceMedia
  *
- * @brief Media implementation.
+ * @brief This source file contains the implementation of
+ *   rtems_media_server_initialize() and rtems_media_server_post_event().
  */
 
 /*

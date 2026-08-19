@@ -5,7 +5,9 @@
  *
  * @ingroup RTEMSDeviceMedia
  *
- * @brief Media implementation.
+ * @brief This source file contains the implementation of
+ *   rtems_media_listener_add(), rtems_media_listener_remove() and
+ *   rtems_media_post_event().
  */
 
 /*

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreException
  *
- * @brief AArch64 machine exception to POSIX signal mapping.
+ * @brief This source file contains the implementation of
+ *   _Exception_Raise_signal().
  */
 
 /*

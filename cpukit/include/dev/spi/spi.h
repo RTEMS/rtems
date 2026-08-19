@@ -3,9 +3,9 @@
 /**
  * @file
  *
- * @brief Serial Peripheral Interface (SPI) Driver API
- *
  * @ingroup SPI
+ *
+ * @brief This header file provides the interfaces of the SPI bus driver.
  */
 
 /*

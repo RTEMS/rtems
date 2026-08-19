@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_libblock
  *
- * @brief Provide SRAM support for the NV Disk
+ * @brief This source file contains the SRAM support of the non-volatile
+ *   disk driver.
  */
 
 /*

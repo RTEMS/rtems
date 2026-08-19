@@ -5,7 +5,9 @@
  *
  * @ingroup RTEMSDeviceMedia
  *
- * @brief Media implementation.
+ * @brief This source file contains the implementation of
+ *   rtems_media_create_path(), rtems_media_replace_prefix() and
+ *   rtems_media_append_minor().
  */
 
 /*

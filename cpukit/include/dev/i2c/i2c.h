@@ -3,9 +3,9 @@
 /**
  * @file
  *
- * @brief Inter-Integrated Circuit (I2C) Driver API
- *
  * @ingroup I2C
+ *
+ * @brief This header file provides the interfaces of the I2C bus driver.
  */
 
 /*

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplDriverManager
  *
- * @brief PCI bus driver Interface.
+ * @brief This header file provides the interfaces of the PCI bus driver of
+ *   the driver manager.
  */
 
 /*

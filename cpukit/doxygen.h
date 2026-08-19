@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSImplDoxygen
  *
- * @brief This header file defines some Doxygen groups.
+ * @brief This header file provides the Doxygen group definitions which no
+ *   other header provides.
  */
 
 /**

@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_bdpart
  *
- * @brief Block Device Partition Management
+ * @brief This source file contains the implementation of
+ *   rtems_bdpart_sort().
  */
 
 /*

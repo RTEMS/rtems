@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSDeviceMedia
  *
- * @brief Media implementation.
+ * @brief This source file contains the implementation of
+ *   rtems_media_event_description() and rtems_media_state_description().
  */
 
 /*

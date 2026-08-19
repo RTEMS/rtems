@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @brief RTEMS Port of Linux I2C API
- *
  * @ingroup I2CLinux
+ *
+ * @brief This header file provides the Linux I2C interfaces ported to
+ *   RTEMS.
  */
 
 /*

@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_bdpart
  *
- * @brief Block Device Partition Management
+ * @brief This source file contains the implementation which reads the
+ *   partition table of a disk device.
  */
 
 /*

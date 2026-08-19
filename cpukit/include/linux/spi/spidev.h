@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @brief RTEMS Port of Linux SPI API
- *
  * @ingroup SPILinux
+ *
+ * @brief This header file provides the Linux SPI device interfaces ported
+ *   to RTEMS.
  */
 
 /*

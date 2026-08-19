@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_ramdisk
  *
- * @brief RAM disk block device implementation.
+ * @brief This source file contains the implementation of ramdisk_allocate()
+ *   and ramdisk_free().
  */
 
 /*

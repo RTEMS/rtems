@@ -5,7 +5,7 @@
  *
  * @ingroup rtems_blkdev
  *
- * @brief Block Device Statistics Command
+ * @brief This source file contains the implementation of rtems_blkstats().
  */
 
 /*

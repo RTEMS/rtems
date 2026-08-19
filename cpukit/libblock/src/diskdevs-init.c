@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_disk
  *
- * @brief Block Device Disk Management Initialize
+ * @brief This source file contains the implementation of
+ *   rtems_disk_init_phys() and rtems_disk_init_log().
  */
 
 /*

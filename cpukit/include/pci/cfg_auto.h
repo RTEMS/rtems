@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplPCI
  *
- * @brief PCI Auto Configuration Library
+ * @brief This header file provides the automatic PCI configuration
+ *   interfaces.
  */
 
 /*

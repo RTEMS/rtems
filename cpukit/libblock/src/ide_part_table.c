@@ -5,7 +5,9 @@
  *
  * @ingroup rtems_libblock
  *
- * @brief Library supporting "MS-DOS-style" Partition Table
+ * @brief This source file contains the implementation of
+ *   rtems_ide_part_table_free(), rtems_ide_part_table_get() and
+ *   rtems_ide_part_table_initialize().
  */
 
 /*

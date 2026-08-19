@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_bdpart
  *
- * @brief Prints the Partition Table @a Partitions with @a Count Partitions
+ * @brief This source file contains the implementation of
+ *   rtems_bdpart_dump().
  */
 
 /*

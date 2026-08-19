@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSGenericIOSpaceAPI
  *
- * @brief Generic IO Device API
+ * @brief This header file provides the interfaces of the generic I/O device
+ *   driver.
  */
 
 /*
