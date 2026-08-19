@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplShellUtilities
+ *
+ * @brief This source file contains the format parsing of the hexdump shell
+ *   command.
+ */
+
 /*
  * Copyright (c) 1989, 1993
  *	The Regents of the University of California.  All rights reserved.

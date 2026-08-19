@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplShellUtilities
+ *
+ * @brief This source file contains the implementation of the visual
+ *   character encoding functions.
+ */
+
 /*	$NetBSD: vis.c,v 1.33 2005/05/28 13:11:14 lukem Exp $	*/
 
 /*-

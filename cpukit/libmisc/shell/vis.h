@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplShellUtilities
+ *
+ * @brief This header file provides the interfaces of the visual character
+ *   encoding functions.
+ */
+
 /*	$NetBSD: vis.h,v 1.16 2005/09/13 01:44:32 christos Exp $	*/
 
 /*-

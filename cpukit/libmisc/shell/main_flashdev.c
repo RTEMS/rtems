@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplShellCommands
+ *
+ * @brief This source file contains the flashdev shell command.
+ */
+
 /*
  * Copyright (C) 2023 Aaron Nyholm
  *

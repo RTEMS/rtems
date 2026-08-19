@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplShellCommands
+ *
+ * @brief This source file contains the ls shell command.
+ */
+
 /*	$NetBSD: ls.c,v 1.58 2005/10/26 02:24:22 jschauma Exp $	*/
 
 /*

@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplShellUtilities
+ *
+ * @brief This source file contains the utility functions of the ls shell
+ *   command.
+ */
+
 /*	$NetBSD: util.c,v 1.28 2005/06/17 14:36:16 hira Exp $	*/
 
 /*

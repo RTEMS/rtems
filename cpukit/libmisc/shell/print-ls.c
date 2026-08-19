@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplShellUtilities
+ *
+ * @brief This source file contains the output of the ls shell command.
+ */
+
 /*	$NetBSD: print.c,v 1.40 2004/11/17 17:00:00 mycroft Exp $	*/
 
 /*

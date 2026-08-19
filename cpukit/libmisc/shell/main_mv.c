@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplShellCommands
+ *
+ * @brief This source file contains the mv shell command.
+ */
+
 /* $NetBSD: mv.c,v 1.41 2008/07/20 00:52:40 lukem Exp $ */
 
 /*

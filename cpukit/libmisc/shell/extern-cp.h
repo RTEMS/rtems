@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplShellUtilities
+ *
+ * @brief This header file provides the internal interfaces of the cp shell
+ *   command.
+ */
+
 /* $NetBSD: extern.h,v 1.12 2005/10/15 18:22:18 christos Exp $ */
 
 /*-

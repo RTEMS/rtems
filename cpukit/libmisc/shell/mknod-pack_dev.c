@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplShellUtilities
+ *
+ * @brief This source file contains the device number packing of the mknod
+ *   shell command.
+ */
+
 /*	$NetBSD: pack_dev.c,v 1.10 2009/02/13 01:37:23 lukem Exp $	*/
 
 /*-

@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplShellCommands
+ *
+ * @brief This source file contains the mknod shell command.
+ */
+
 /*	$NetBSD: mknod.c,v 1.39 2009/02/13 01:37:23 lukem Exp $	*/
 
 /*-

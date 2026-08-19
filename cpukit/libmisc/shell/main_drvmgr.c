@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplShellCommands
+ *
+ * @brief This source file contains the drvmgr shell command.
+ */
+
 /*
  * DRVMGR Command Implementation
  *

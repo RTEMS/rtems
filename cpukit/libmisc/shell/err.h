@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplShellUtilities
+ *
+ * @brief This header file provides the error reporting interfaces used by
+ *   the shell commands.
+ */
+
 /*	$NetBSD: err.h,v 1.14 2005/02/03 04:39:32 perry Exp $	*/
 
 /*-

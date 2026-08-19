@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplShellCommands
+ *
+ * @brief This source file contains the cp shell command.
+ */
+
 /* $NetBSD: cp.c,v 1.39 2005/10/24 12:59:07 kleink Exp $ */
 
 /*

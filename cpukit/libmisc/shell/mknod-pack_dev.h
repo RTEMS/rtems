@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplShellUtilities
+ *
+ * @brief This header file provides the device number packing interfaces of
+ *   the mknod shell command.
+ */
+
 /*	$NetBSD: pack_dev.h,v 1.7 2008/04/28 20:23:09 martin Exp $	*/
 
 /*-

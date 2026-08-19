@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplShellCommands
+ *
+ * @brief This source file contains the echo shell command.
+ */
+
 /*  $NetBSD: echo.c,v 1.12 2005/02/06 04:43:43 perry Exp $  */
 
 /*-

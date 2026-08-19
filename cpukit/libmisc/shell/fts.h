@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplShellUtilities
+ *
+ * @brief This header file provides the interfaces of the file hierarchy
+ *   traversal functions.
+ */
+
 /*	$NetBSD: fts.h,v 1.14 2005/09/13 01:44:32 christos Exp $	*/
 
 /*

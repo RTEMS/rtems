@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplShellUtilities
+ *
+ * @brief This source file contains the implementation of vwarnx().
+ */
+
 /*	$NetBSD: vwarnx.c,v 1.13 2005/09/13 01:44:09 christos Exp $	*/
 
 /*-

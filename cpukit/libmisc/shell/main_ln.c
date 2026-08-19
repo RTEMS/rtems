@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplShellCommands
+ *
+ * @brief This source file contains the ln shell command.
+ */
+
 /* $NetBSD: ln.c,v 1.34 2008/07/20 00:52:40 lukem Exp $ */
 
 /*

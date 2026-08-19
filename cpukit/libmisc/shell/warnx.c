@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplShellUtilities
+ *
+ * @brief This source file contains the implementation of warnx().
+ */
+
 /*	$NetBSD: warnx.c,v 1.13 2005/09/13 13:51:50 christos Exp $	*/
 
 /*-

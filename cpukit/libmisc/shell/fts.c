@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplShellUtilities
+ *
+ * @brief This source file contains the implementation of the file hierarchy
+ *   traversal functions.
+ */
+
 /*	$NetBSD: fts.c,v 1.40 2009/11/02 17:17:34 stacktic Exp $	*/
 
 /*-

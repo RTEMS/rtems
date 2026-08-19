@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplShellUtilities
+ *
+ * @brief This source file contains the name comparison functions of the ls
+ *   shell command.
+ */
+
 /*	$NetBSD: cmp.c,v 1.17 2003/08/07 09:05:14 agc Exp $	*/
 
 /*

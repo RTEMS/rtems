@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplShellUtilities
+ *
+ * @brief This source file contains the utility functions of the cp shell
+ *   command.
+ */
+
 /* $NetBSD: utils.c,v 1.29 2005/10/15 18:22:18 christos Exp $ */
 
 /*-

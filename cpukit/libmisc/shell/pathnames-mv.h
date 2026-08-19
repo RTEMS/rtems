@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplShellUtilities
+ *
+ * @brief This header file provides the path names used by the mv shell
+ *   command.
+ */
+
 /*	$NetBSD: pathnames.h,v 1.8 2004/08/19 22:26:07 christos Exp $	*/
 
 /*
