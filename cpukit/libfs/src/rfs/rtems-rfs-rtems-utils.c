@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_rfs
  *
- * @brief Set of Utility Functions to Support RTEMS RFS on RTEMS
+ * @brief This source file contains the utility functions of the RFS file
+ *   system.
  */
 
 /*

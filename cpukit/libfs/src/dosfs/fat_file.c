@@ -3,7 +3,7 @@
  *
  * @ingroup DOSFS
  *
- * @brief General operations on "fat-file"
+ * @brief This source file contains the file support of the DOS file system.
  */
 
 /*

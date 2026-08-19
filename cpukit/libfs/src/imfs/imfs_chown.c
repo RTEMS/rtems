@@ -5,7 +5,7 @@
  *
  * @ingroup IMFS
  *
- * @brief IMFS Change Owner
+ * @brief This source file contains the implementation of IMFS_chown().
  */
 
 /*

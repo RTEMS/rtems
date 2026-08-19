@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_rfs
  *
- * @brief RTEMS File Systems Block Routines
+ * @brief This source file contains the block support of the RFS file
+ *   system.
  *
  * These functions manage blocks in the RFS file system. A block is an area of
  * the media and its size is set for a each specific media. The block size is

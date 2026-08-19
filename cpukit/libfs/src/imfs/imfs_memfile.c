@@ -5,7 +5,7 @@
  *
  * @ingroup IMFS
  *
- * @brief IMFS Memory File Handlers
+ * @brief This source file contains the memory file support of the IMFS.
  */
 
 /*

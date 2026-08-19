@@ -5,7 +5,7 @@
  *
  * @ingroup IMFS
  *
- * @brief IMFS Create a New Link Node
+ * @brief This source file contains the implementation of IMFS_link().
  */
 
 /*

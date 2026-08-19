@@ -5,7 +5,8 @@
  *
  * @ingroup LibIOFSOps
  *
- * @brief RTEMS Default Filesystem succeeds synchronizing file's in-core state
+ * @brief This source file contains the implementation of
+ *   rtems_filesystem_default_fsync_or_fdatasync_success().
  */
 
 /*

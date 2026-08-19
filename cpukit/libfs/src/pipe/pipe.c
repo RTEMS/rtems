@@ -5,7 +5,8 @@
  *
  * @ingroup FIFO_PIPE
  *
- * @brief Create an Anonymous Pipe
+ * @brief This source file contains the implementation of pipe(), pipe2(),
+ *   rtems_filesystem_register_pipe() and rtems_filesystem_register_pipe2().
  */
 
 /*

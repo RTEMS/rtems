@@ -5,8 +5,8 @@
  *
  * @ingroup RTEMSImplTFTPFS
  *
- * @brief This header file provides private interfaces of the
- *   TFTP client library.
+ * @brief This header file provides the implementation interfaces of the
+ *   TFTP file system.
  *
  * This file declares the private functions of the Trivial File
  * Transfer Protocol (TFTP) client library.

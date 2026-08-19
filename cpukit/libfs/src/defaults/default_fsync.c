@@ -5,7 +5,8 @@
  *
  * @ingroup LibIOFSOps
  *
- * @brief RTEMS Default File System Synchronises changes to a file
+ * @brief This source file contains the implementation of
+ *   rtems_filesystem_default_fsync_or_fdatasync().
  */
 
 /*

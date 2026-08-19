@@ -5,7 +5,8 @@
  *
  * @ingroup DOSFS
  *
- * @brief MSDOS File Handlers Implementation
+ * @brief This source file contains the file operations of the DOS file
+ *   system.
  */
 
 /*

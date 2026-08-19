@@ -5,7 +5,7 @@
  *
  * @ingroup IMFS
  *
- * @brief IMFS initialization.
+ * @brief This source file contains the implementation of IMFS_initialize().
  */
 
 /*

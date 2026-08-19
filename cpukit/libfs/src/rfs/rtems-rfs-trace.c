@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_rfs
  *
- * @brief RTEMS File Systems Trace Support
+ * @brief This source file contains the trace support of the RFS file
+ *   system.
  */
 /*
  *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>

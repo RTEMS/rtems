@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplFATFS
  *
- * @brief RTEMS FATFS directory operations
+ * @brief This source file contains the directory operations of the FatFS
+ *   file system.
  */
 
 /*

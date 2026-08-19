@@ -5,7 +5,8 @@
  *
  * @ingroup LibIOFSHandler
  *
- * @brief RTEMS Default Filesystem - Default FCNTL
+ * @brief This source file contains the implementation of
+ *   rtems_filesystem_default_fcntl().
  */
 
 /*

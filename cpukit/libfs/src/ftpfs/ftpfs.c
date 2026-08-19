@@ -5,7 +5,8 @@
  *
  * @ingroup FileSystemTypesAndMount
  *
- * File Transfer Protocol file system (FTP client).
+ * @brief This source file contains the implementation of the FTP file
+ *   system.
  */
 
 /*

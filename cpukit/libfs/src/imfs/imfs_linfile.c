@@ -4,6 +4,8 @@
  * @file
  *
  * @ingroup IMFS
+ *
+ * @brief This source file contains the linear file handlers of the IMFS.
  */
 
 /*

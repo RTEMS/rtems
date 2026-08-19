@@ -4,6 +4,9 @@
  * @file
  *
  * @ingroup IMFS
+ *
+ * @brief This source file contains the implementation of
+ *   IMFS_node_initialize_directory() and IMFS_node_remove_directory().
  */
 
 /*

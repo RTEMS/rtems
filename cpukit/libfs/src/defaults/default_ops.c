@@ -5,7 +5,8 @@
  *
  * @ingroup LibIO
  *
- * @brief rtems_filesystem_operations_default definition.
+ * @brief This source file contains the default file system operations
+ *   table.
  */
 
 /*

@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_rfs
  *
- * @brief RTEMS File Systems Format
+ * @brief This source file contains the implementation of
+ *   rtems_rfs_format().
  *
  * Format the file system ready for use.
  */

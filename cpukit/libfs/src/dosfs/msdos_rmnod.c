@@ -5,7 +5,7 @@
  *
  * @ingroup DOSFS
  *
- * @brief Remove Node from MSDOS Directory
+ * @brief This source file contains the node removal of the DOS file system.
  */
 
 /*

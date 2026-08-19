@@ -5,9 +5,8 @@
  *
  * @ingroup rtems_rfs
  *
- * RTEMS File System RTEMS Header file.
- *
- * This file is not to be installed. It binds the RFS file system to RTEMS.
+ * @brief This header file provides the implementation interfaces of the RFS
+ *   file system.
  */
 
 /*

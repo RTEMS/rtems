@@ -5,7 +5,8 @@
  *
  * @ingroup DOSFS
  *
- * @brief Directory Handlers Table for MSDOS FileSystem
+ * @brief This source file contains the directory handlers table of the DOS
+ *   file system.
  */
 
 /*

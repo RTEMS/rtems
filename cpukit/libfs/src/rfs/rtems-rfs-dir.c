@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_rfs
  *
- * @brief RTEMS File Systems Directory Routines
+ * @brief This source file contains the directory support of the RFS file
+ *   system.
  *
  * These functions manage blocks in the directory format. A directory entry is
  * a variable length record in the block. The entry consists of a length, hash

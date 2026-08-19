@@ -5,7 +5,8 @@
  *
  * @ingroup LibIOFSOps
  *
- * @brief RTEMS Default File System Truncates a file to indicated length
+ * @brief This source file contains the implementation of
+ *   rtems_filesystem_default_ftruncate().
  */
 
 /*

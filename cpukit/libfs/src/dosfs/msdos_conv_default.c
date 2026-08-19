@@ -3,7 +3,8 @@
  *
  * @ingroup DOSFS
  *
- * @brief Default Converter
+ * @brief This source file contains the implementation of
+ *   rtems_dosfs_create_default_converter().
  */
 
 /*

@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_rfs
  *
- * @brief RTEMS File Systems Shell Commands Support
+ * @brief This source file contains the implementation of
+ *   rtems_shell_debugrfs() and rtems_shell_rfs_format().
  */
 
 /*

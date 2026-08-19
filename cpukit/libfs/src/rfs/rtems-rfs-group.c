@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_rfs
  *
- * @brief RTEMS File Systems Group Routines
+ * @brief This source file contains the group support of the RFS file
+ *   system.
  *
  * These functions open and close a group as well as manage bit allocations
  * within a group.

@@ -5,7 +5,7 @@
  *
  * @ingroup IMFS
  *
- * @brief Evaluation IMFS Node Support
+ * @brief This source file contains the implementation of IMFS_eval_path().
  */
 
 /*

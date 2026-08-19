@@ -6,7 +6,7 @@
  * @ingroup RTEMSImplTFTPFS
  *
  * @brief This source file contains the implementation of
- *   the Trivial File Transfer Protocol (TFTP) file system.
+ *   _Tftpfs_Parse_options() and rtems_tftpfs_initialize().
  *
  * The code in this file handles the file system operations (such as
  * `mount()`, `open()`, `read()`, `write()`, `close()` etc.).

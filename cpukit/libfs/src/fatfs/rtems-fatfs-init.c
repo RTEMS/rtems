@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplFATFS
  *
- * @brief RTEMS FATFS initialization
+ * @brief This source file contains the mount support of the FatFS file
+ *   system.
  */
 
 /*

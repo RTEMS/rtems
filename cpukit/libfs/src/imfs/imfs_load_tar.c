@@ -5,7 +5,8 @@
  *
  * @ingroup IMFS
  *
- * @brief RTEMS Load Tarfs
+ * @brief This source file contains the implementation of
+ *   rtems_tarfs_load().
  */
 
 /*

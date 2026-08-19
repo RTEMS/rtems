@@ -5,7 +5,8 @@
  *
  * @ingroup LibIOFSOps
  *
- * @brief RTEMS Default File System locks and unlocks rtems filesystem
+ * @brief This source file contains the implementation of
+ *   rtems_filesystem_default_lock() and rtems_filesystem_default_unlock().
  */
 
 /*

@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_rfs
  *
- * @brief RTEMS File Systems Buffer Routines
+ * @brief This source file contains the device input and output of the RFS
+ *   buffers.
  */
 
 /*

@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_rfs
  *
- * @brief RTEMS File Systems Inode Routines
+ * @brief This source file contains the inode support of the RFS file
+ *   system.
  *
  * These functions manage inodes in the RFS file system. An inode is part of a
  * block that reside after the bitmaps in the group.

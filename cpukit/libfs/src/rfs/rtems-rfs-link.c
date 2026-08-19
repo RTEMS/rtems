@@ -5,7 +5,7 @@
  *
  * @ingroup rtems_rfs
  *
- * @brief RTEMS File Systems Link Routines
+ * @brief This source file contains the link support of the RFS file system.
  *
  * These functions manage links. A link is the addition of a directory entry
  * in a parent directory and incrementing the links count in the inode.

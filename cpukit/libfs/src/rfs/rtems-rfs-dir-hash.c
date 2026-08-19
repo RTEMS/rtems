@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_rfs
  *
- * @brief RTEMS File Systems Directory Hash function
+ * @brief This source file contains the implementation of
+ *   rtems_rfs_dir_hash().
  */
 
 /*

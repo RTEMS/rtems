@@ -5,7 +5,7 @@
  *
  * @ingroup DOSFS
  *
- * @brief Routine for Node Creation in MSDOS Filesystem
+ * @brief This source file contains the implementation of msdos_mknod().
  */
 
 /*

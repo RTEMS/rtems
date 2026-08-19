@@ -4,6 +4,8 @@
  * @file
  *
  * @ingroup IMFS
+ *
+ * @brief This source file contains the implementation of IMFS_stat_file().
  */
 
 /*

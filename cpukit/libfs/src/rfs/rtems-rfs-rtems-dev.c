@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_rfs
  *
- * @brief RTEMS RFS Device Interface
+ * @brief This source file contains the device handlers of the RFS file
+ *   system.
  *
  * This file contains the set of handlers used to map operations on RFS device
  * nodes onto calls to the RTEMS Classic API IO Manager.

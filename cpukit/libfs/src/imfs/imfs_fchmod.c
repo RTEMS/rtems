@@ -5,7 +5,7 @@
  *
  * @ingroup IMFS
  *
- * @brief Change IMFS File Mode
+ * @brief This source file contains the implementation of IMFS_fchmod().
  */
 
 /*

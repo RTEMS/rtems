@@ -5,7 +5,8 @@
  *
  * @ingroup DOSFS
  *
- * @brief File Operations Table for MSDOS FileSystem
+ * @brief This source file contains the file handlers table of the DOS file
+ *   system.
  */
 
 /*

@@ -5,7 +5,8 @@
  *
  * @ingroup IMFS
  *
- * @brief IMFS Create a New Symbolic Link Node
+ * @brief This source file contains the implementation of IMFS_symlink() and
+ *   IMFS_readlink().
  */
 
 /*

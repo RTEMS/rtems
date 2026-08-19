@@ -5,7 +5,8 @@
  *
  * @ingroup IMFS
  *
- * @brief Create an IMFS Node
+ * @brief This source file contains the implementation of
+ *   IMFS_create_node().
  */
 /*
  *  COPYRIGHT (c) 1989-2010.

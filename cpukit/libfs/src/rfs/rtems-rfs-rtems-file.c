@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_rfs
  *
- * @brief RTEMS RFS File Handlers
+ * @brief This source file contains the file handlers of the RFS file
+ *   system.
  *
  * This file contains the set of handlers used to process operations on
  * RFS file nodes.

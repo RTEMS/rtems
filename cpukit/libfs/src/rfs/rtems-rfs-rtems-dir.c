@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_rfs
  *
- * @brief RTEMS RFS Directory Access Routines
+ * @brief This source file contains the directory handlers of the RFS file
+ *   system.
  */
 /*
  *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>

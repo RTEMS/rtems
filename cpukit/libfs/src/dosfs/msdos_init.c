@@ -5,7 +5,8 @@
  *
  * @ingroup DOSFS
  *
- * @brief MS-DOS Filesystem Initialization
+ * @brief This source file contains the implementation of msdos_lock(),
+ *   msdos_unlock() and rtems_dosfs_initialize().
  */
 
 /*

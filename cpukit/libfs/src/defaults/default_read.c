@@ -5,7 +5,8 @@
  *
  * @ingroup LibIOFSHandler
  *
- * @brief RTEMS Default File System Read
+ * @brief This source file contains the implementation of
+ *   rtems_filesystem_default_read().
  */
 
 /*

@@ -5,10 +5,10 @@
  *
  * @ingroup rtems_rfs
  *
- * @brief RTEMS File Systems Buffer Routines
+ * @brief This source file contains the implementation of
+ *   rtems_rfs_buffer_bdbuf_request() and rtems_rfs_buffer_bdbuf_release().
  *
  * RTEMS File Systems Buffer Routines for the RTEMS libblock BD buffer cache.
- *
  */
 
 /*

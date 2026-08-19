@@ -5,7 +5,7 @@
  *
  * @ingroup IMFS
  *
- * @brief FIFO Support
+ * @brief This source file contains the FIFO handlers of the IMFS.
  */
 
 /*

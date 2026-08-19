@@ -3,7 +3,8 @@
  *
  * @ingroup DOSFS
  *
- * @brief General operations on File Allocation Table
+ * @brief This source file contains the cluster chain support of the DOS
+ *   file system.
  */
 
 /*

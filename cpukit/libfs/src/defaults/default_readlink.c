@@ -5,7 +5,8 @@
  *
  * @ingroup LibIOFSOps
  *
- * @brief RTEMS Default Filesystem - Default Readlink
+ * @brief This source file contains the implementation of
+ *   rtems_filesystem_default_readlink().
  */
 
 /*

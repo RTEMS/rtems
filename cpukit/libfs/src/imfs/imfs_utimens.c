@@ -5,7 +5,7 @@
  *
  * @ingroup IMFS
  *
- * @brief Set IMFS File Access and Modification Times
+ * @brief This source file contains the implementation of IMFS_utimens().
  */
 
 /*

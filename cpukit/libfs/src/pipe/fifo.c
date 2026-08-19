@@ -5,7 +5,8 @@
  *
  * @ingroup FIFO_PIPE
  *
- * @brief FIFO/Pipe Support
+ * @brief This source file contains the implementation of the FIFO and pipe
+ *   support.
  */
 
 /*

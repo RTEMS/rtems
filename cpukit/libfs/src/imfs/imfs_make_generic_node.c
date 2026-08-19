@@ -5,7 +5,9 @@
  *
  * @ingroup IMFS
  *
- * @brief IMFS Make a Generic Node
+ * @brief This source file contains the implementation of
+ *   IMFS_node_initialize_generic(), IMFS_make_generic_node() and
+ *   IMFS_make_node().
  */
 
 /*

@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_rfs
  *
- * @brief RTEMS File System Interface for RTEMS
+ * @brief This source file contains the file system operations of the RFS
+ *   file system.
  */
 
 /*

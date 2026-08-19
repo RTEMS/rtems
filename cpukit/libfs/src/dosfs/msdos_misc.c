@@ -5,7 +5,8 @@
  *
  * @ingroup DOSFS
  *
- * @brief Miscellaneous Routines Implementation for MSDOS FileSystem
+ * @brief This source file contains the implementation of
+ *   msdos_find_node_by_cluster_num_in_fat_file().
  */
 
 /*

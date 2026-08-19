@@ -5,7 +5,8 @@
  *
  * @ingroup LibIOFSOps
  *
- * @brief RTEMS Default File System Change Owner
+ * @brief This source file contains the implementation of
+ *   rtems_filesystem_default_chown().
  */
 
 /*

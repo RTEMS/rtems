@@ -5,7 +5,7 @@
  *
  * @ingroup LibIO
  *
- * @brief rtems_filesystem_handlers_default definition.
+ * @brief This source file contains the default file handlers table.
  */
 
 /*

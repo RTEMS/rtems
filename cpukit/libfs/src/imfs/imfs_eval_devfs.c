@@ -5,7 +5,8 @@
  *
  * @ingroup IMFS
  *
- * @brief Implementation of IMFS_eval_path_devfs().
+ * @brief This source file contains the implementation of
+ *   IMFS_eval_path_devfs().
  */
 
 /*

@@ -3,7 +3,8 @@
  *
  * @ingroup DOSFS
  *
- * @brief Low-level Operations on a Volume with a DOSFS FAT filesystem
+ * @brief This source file contains the implementation of the FAT support of
+ *   the DOS file system.
  */
 
 /*

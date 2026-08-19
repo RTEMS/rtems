@@ -5,7 +5,8 @@
  *
  * @ingroup IMFS
  *
- * @brief IMFS Node Support
+ * @brief This source file contains the implementation of
+ *   IMFS_initialize_support() and IMFS_node_initialize_default().
  */
 
 /*

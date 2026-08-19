@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_rfs
  *
- * @brief RTEMS File System Mutex
+ * @brief This source file contains the implementation of
+ *   rtems_rfs_mutex_create() and rtems_rfs_mutex_destroy().
  */
 /*
  *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>

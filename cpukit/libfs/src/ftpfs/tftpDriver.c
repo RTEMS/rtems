@@ -5,8 +5,8 @@
  *
  * @ingroup RTEMSImplTFTPFS
  *
- * @brief This source file contains the implementation of
- *   a Trivial File Transfer Protocol (TFTP) client library.
+ * @brief This source file contains the implementation of the TFTP file
+ *   system.
  *
  * The code in this file provides the ability to read files from and
  * to write files to remote servers using the Trivial File Transfer

@@ -5,7 +5,8 @@
  *
  * @ingroup DOSFS
  *
- * @brief Rename a MSDOS FileSystem Node
+ * @brief This source file contains the rename support of the DOS file
+ *   system.
  */
 
 /*

@@ -5,7 +5,7 @@
  *
  * @ingroup rtems_rfs
  *
- * @brief RTEMS File Systems File Routines
+ * @brief This source file contains the file support of the RFS file system.
  *
  * These functions manage files.
  */

@@ -5,7 +5,7 @@
  *
  * @ingroup IMFS
  *
- * @brief IMFS Rename
+ * @brief This source file contains the implementation of IMFS_rename().
  */
 
 /*

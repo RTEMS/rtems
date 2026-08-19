@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_rfs
  *
- * @brief RTEMS File Systems Open
+ * @brief This source file contains the file system support of the RFS file
+ *   system.
  *
  * Open the file system by reading the superblock and then the group data.
  */

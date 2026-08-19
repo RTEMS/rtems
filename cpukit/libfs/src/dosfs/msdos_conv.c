@@ -3,7 +3,8 @@
  *
  * @ingroup DOSFS
  *
- * @brief MDOS Date Conversion
+ * @brief This source file contains the character conversion of the DOS file
+ *   system.
  */
 
 /*

@@ -5,7 +5,7 @@
  *
  * @ingroup IMFS
  *
- * @brief Create a IMFS Node
+ * @brief This source file contains the implementation of IMFS_mknod().
  */
 
 /*

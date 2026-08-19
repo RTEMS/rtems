@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @brief Default Poll Handler
- *
  * @ingroup LibIOFSHandler
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_filesystem_default_poll().
  */
 
 /*

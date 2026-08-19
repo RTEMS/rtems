@@ -5,7 +5,8 @@
  *
  * @ingroup rtems_rfs
  *
- * @brief RTEMS File Systems Bitmap Routines
+ * @brief This source file contains the bitmap support of the RFS file
+ *   system.
  *
  * These functions manage bit maps. A bit map consists of the map of bit
  * allocated in a block and a search map where a bit represents 32 actual

@@ -5,7 +5,8 @@
  *
  * @ingroup DOSFS
  *
- * @brief Create a new MSDOS FileSystem node
+ * @brief This source file contains the node creation of the DOS file
+ *   system.
  */
 
 /*

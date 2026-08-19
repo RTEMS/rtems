@@ -4,6 +4,9 @@
  * @file
  *
  * @ingroup IMFS
+ *
+ * @brief This source file contains the minimal directory handlers of the
+ *   IMFS.
  */
 
 /*

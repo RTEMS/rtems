@@ -5,7 +5,8 @@
  *
  * @ingroup DOSFS
  *
- * @brief Shut Down MSDOS FileSystem
+ * @brief This source file contains the unmount support of the DOS file
+ *   system.
  */
 
 /*

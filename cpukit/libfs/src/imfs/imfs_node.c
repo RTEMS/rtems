@@ -5,7 +5,7 @@
  *
  * @ingroup IMFS
  *
- * @brief IMFS Node Support
+ * @brief This source file contains the node support of the IMFS.
  */
 
 /*

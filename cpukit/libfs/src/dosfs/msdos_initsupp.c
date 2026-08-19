@@ -5,7 +5,8 @@
  *
  * @ingroup DOSFS
  *
- * @brief MSDOS Filesystem Initialization
+ * @brief This source file contains the mount support of the DOS file
+ *   system.
  */
 
 /*

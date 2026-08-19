@@ -5,7 +5,7 @@
  *
  * @ingroup DOSFS
  *
- * @brief RTEMS MSDOS Format Functionality
+ * @brief This source file contains the implementation of msdos_format().
  *
  * This function formats a disk partition conforming to MS-DOS conventions
  */

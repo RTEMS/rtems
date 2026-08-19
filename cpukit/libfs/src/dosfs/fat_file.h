@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @brief Constants/Data Structures/Prototypes for Operations on "fat-file"
- *
  * @ingroup DOSFS
+ *
+ * @brief This header file provides the file interfaces of the DOS file
+ *   system.
  */
 
 /*

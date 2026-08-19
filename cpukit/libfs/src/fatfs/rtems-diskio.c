@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplFATFS
  *
- * @brief RTEMS Disk I/O Interface for FatFs
+ * @brief This source file contains the disk input and output glue of the
+ *   FatFS file system.
  */
 
 /*

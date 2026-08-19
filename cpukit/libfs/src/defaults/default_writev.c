@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @brief Default Read IO Vector Handler
- *
  * @ingroup LibIOFSHandler
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_filesystem_default_writev().
  */
 
 /*

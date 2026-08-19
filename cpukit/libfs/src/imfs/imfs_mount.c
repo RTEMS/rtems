@@ -5,7 +5,7 @@
  *
  * @ingroup IMFS
  *
- * @brief Mount an IMFS
+ * @brief This source file contains the implementation of IMFS_mount().
  */
 
 /*

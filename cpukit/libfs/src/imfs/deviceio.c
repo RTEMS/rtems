@@ -5,7 +5,7 @@
  *
  * @ingroup IMFS
  *
- * @brief IMFS Device Node Handlers
+ * @brief This source file contains the device handlers of the IMFS.
  */
 
 /*

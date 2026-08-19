@@ -5,7 +5,7 @@
  *
  * @ingroup DOSFS
  *
- * @brief Obtain MS-DOS filesystem information
+ * @brief This source file contains the implementation of msdos_statvfs().
  */
 
 /*

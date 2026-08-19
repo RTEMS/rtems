@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @brief Constants/Data Structures/Prototypes for Files Allocation Table
- *
  * @ingroup DOSFS
+ *
+ * @brief This header file provides the cluster chain interfaces of the DOS
+ *   file system.
  *
  * Constants/Data Structures/Prototypes for
  * Operations on Files Allocation Table

@@ -5,7 +5,8 @@
  *
  * @ingroup DOSFS
  *
- * @brief MS-DOS Filesystem Support
+ * @brief This header file provides the implementation interfaces of the DOS
+ *   file system.
  */
 
 /*

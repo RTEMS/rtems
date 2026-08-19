@@ -5,7 +5,7 @@
  *
  * @ingroup IMFS
  *
- * @brief Device Operations Table
+ * @brief This source file contains the device handlers table of the IMFS.
  */
 
 /*

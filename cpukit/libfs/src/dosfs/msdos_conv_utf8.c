@@ -3,7 +3,8 @@
  *
  * @ingroup DOSFS
  *
- * @brief UTF-8 Converter
+ * @brief This source file contains the implementation of
+ *   rtems_dosfs_create_utf8_converter().
  */
 
 /*

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplClassicIO
  *
- * @brief RTEMS Register IO Name
+ * @brief This source file contains the implementation of
+ *   rtems_io_register_name().
  */
 
 /*

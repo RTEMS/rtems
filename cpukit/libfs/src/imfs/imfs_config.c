@@ -5,7 +5,7 @@
  *
  * @ingroup IMFS
  *
- * @brief IMFS Limits and Options
+ * @brief This source file contains the configuration of the IMFS.
  */
 
 /*

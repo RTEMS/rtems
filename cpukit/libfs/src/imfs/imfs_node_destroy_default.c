@@ -5,7 +5,8 @@
  *
  * @ingroup IMFS
  *
- * @brief IMFS Default Node Destruction
+ * @brief This source file contains the implementation of
+ *   IMFS_node_destroy_default().
  */
 
 /*

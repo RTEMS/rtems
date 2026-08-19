@@ -5,7 +5,7 @@
  *
  * @ingroup DOSFS
  *
- * @brief MSDOS Evaluation Routines
+ * @brief This source file contains the implementation of msdos_eval_path().
  */
 
 /*

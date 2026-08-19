@@ -5,7 +5,7 @@
  *
  * @ingroup IMFS
  *
- * @brief Unmount this Instance of IMFS
+ * @brief This source file contains the implementation of IMFS_fsunmount().
  */
 
 /*

@@ -5,7 +5,7 @@
  *
  * @ingroup DOSFS
  *
- * @brief Call Fat-File Close Routine
+ * @brief This source file contains the node release of the DOS file system.
  */
 
 /*
