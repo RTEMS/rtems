@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplStringConversion
  *
- * @brief Convert String to Unsigned Character (with validation)
+ * @brief This source file contains the implementation of
+ *   rtems_string_to_unsigned_char().
  */
 
 /*

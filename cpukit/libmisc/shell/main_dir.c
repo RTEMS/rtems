@@ -4,8 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * 
- * @brief DIR Shell Command Implementation
+ *
+ * @brief This source file contains the dir shell command.
  */
 
 /*

@@ -5,7 +5,7 @@
  *
  * @ingroup RegulatorInternalAPI
  *
- * @brief Regulator Library Implementation
+ * @brief This source file contains the implementation of the regulator.
  */
 
 /*

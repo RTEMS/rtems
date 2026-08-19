@@ -5,7 +5,9 @@
  *
  * @ingroup RTEMSImplMonitor
  *
- * @brief Monitor Support for Message Queues
+ * @brief This source file contains the implementation of
+ *   rtems_monitor_queue_canonical(), rtems_monitor_queue_dump_header() and
+ *   rtems_monitor_queue_dump().
  */
 
 /*

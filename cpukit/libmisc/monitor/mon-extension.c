@@ -5,7 +5,10 @@
  *
  * @ingroup RTEMSImplMonitor
  *
- * @brief RTEMS Monitor extension support
+ * @brief This source file contains the implementation of
+ *   rtems_monitor_extension_canonical(),
+ *   rtems_monitor_extension_dump_header() and
+ *   rtems_monitor_extension_dump().
  */
 
 /*

@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup libmisc_mouse Mouse Parser Engine
+ * @ingroup libmisc_mouse
  *
- * @brief Opens a Serial Port Directly, and Interprets Serial Data
+ * @brief This source file contains the implementation of
+ *   mouse_parser_initialize() and mouse_parser_enqueue().
  */
 
 /*

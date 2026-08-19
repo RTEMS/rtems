@@ -5,7 +5,8 @@
  *
  * @ingroup libmisc_mouse
  *
- * @brief Serial Mouse Driver
+ * @brief This source file contains the implementation of the serial mouse
+ *   driver.
  */
 
 /*

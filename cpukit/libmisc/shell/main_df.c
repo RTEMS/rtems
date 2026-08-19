@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplShellCommands
  *
- * @brief df Shell Command Implementation
+ * @brief This source file contains the df shell command.
  */
 
 /*

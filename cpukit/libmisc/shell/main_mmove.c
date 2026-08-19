@@ -4,8 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * 
- * @brief MMOVE Shell Command Implementation
+ *
+ * @brief This source file contains the mmove shell command.
  */
 
 /*

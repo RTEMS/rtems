@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplShellCommands
  *
- * Real time clock shell command.
+ * @brief This source file contains the rtc shell command.
  */
 
 /*

@@ -5,7 +5,8 @@
  *
  * @ingroup libmisc_fb_mw
  *
- * @brief MicroWindows Print
+ * @brief This source file contains the implementation of
+ *   uid_print_message() and uid_print_message_with_plugin().
  */
 
 /*

@@ -4,8 +4,9 @@
  * @file
  *
  * @ingroup RTEMSImplShell
- * 
- * @brief Integrate monitor commands as a set
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_shell_main_monitor() and rtems_shell_register_monitor_commands().
  */
 
 /*

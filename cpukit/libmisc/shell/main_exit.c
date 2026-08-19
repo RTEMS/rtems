@@ -4,8 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * 
- * @brief exit Shell Command Implementation
+ *
+ * @brief This source file contains the exit shell command.
  */
 
 /*

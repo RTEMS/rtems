@@ -4,7 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * @brief blkstats Shell Command Implementation
+ *
+ * @brief This source file contains the blkstats shell command.
  */
 
 /*

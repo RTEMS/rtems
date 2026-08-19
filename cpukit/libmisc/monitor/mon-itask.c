@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplMonitor
  *
- * @brief RTEMS Monitor init task support
+ * @brief This source file contains the initialization task display of the
+ *   monitor.
  */
 
 /*

@@ -4,8 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * 
- * @brief CAT Shell Command Implementation
+ *
+ * @brief This source file contains the cat shell command.
  */
 
 /*

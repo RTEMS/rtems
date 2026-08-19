@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplBSPCommandLine
  *
- * @brief Obtain COPY of the Right Hand Side of the Matching Argument
+ * @brief This source file contains the implementation of
+ *   rtems_bsp_cmdline_get_param_rhs().
  */
 
 /*

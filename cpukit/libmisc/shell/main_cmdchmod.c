@@ -4,7 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * @brief chmod Shell Command Implementation
+ *
+ * @brief This source file contains the cmdchmod shell command.
  */
 
 /*

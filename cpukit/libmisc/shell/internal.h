@@ -4,7 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShell
- * @brief Shell Internal Information
+ *
+ * @brief This header file provides the internal interfaces of the shell.
  */
 
 /*

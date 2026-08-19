@@ -4,7 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * @brief profreport Shell Command Implementation
+ *
+ * @brief This source file contains the profreport shell command.
  */
 
 /*

@@ -1,11 +1,11 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
  * @ingroup RTEMSImplShellCommands
  *
- *  @brief Get an environment variable
+ * @brief This source file contains the getenv shell command.
  */
 
 /*

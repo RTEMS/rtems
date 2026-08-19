@@ -4,8 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * 
- * @brief Mount NFS Shell Command Implementation
+ *
+ * @brief This source file contains the mount_nfs shell command.
  */
 
 /*

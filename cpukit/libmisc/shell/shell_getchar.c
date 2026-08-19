@@ -4,7 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShell
- * @brief Handle keys for the shell.
+ *
+ * @brief This source file contains the key handling of the shell.
  */
 
 /*

@@ -3,7 +3,7 @@
  *
  * @ingroup RTEMSImplMonitor
  *
- * @brief Command line editor for RTEMS monitor.
+ * @brief This source file contains the command line editor of the monitor.
  */
 
 /*

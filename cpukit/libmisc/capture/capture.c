@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplCapture
  *
- * @brief RTEMS Performance Monitoring and Measurement Framework.
+ * @brief This source file contains the implementation of the capture
+ *   engine.
  *
  * This is the Capture Engine component.
  */

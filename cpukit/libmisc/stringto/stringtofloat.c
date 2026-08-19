@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplStringConversion
  *
- * @brief Convert String to Float (with validation)
+ * @brief This source file contains the implementation of
+ *   rtems_string_to_float().
  */
 
 /*

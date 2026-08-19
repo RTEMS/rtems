@@ -4,8 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * 
- * @brief UMASK Shell Command Implementation
+ *
+ * @brief This source file contains the umask shell command.
  */
 
 /*

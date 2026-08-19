@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplMonitor
  *
- * @brief RTEMS monitor server
+ * @brief This source file contains the server of the monitor.
  *
  * This handles requests for info from RTEMS monitors running on
  * other nodes.

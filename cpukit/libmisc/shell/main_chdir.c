@@ -4,8 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * 
- * @brief chdir Shell Command Implementation
+ *
+ * @brief This source file contains the chdir shell command.
  */
 
 /*

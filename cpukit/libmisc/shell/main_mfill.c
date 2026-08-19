@@ -4,8 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * 
- * @brief MFILL Shell Command Implementation
+ *
+ * @brief This source file contains the mfill shell command.
  */
 
 /*

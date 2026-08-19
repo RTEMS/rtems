@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplMonitor
  *
- * @brief RTEMS monitor IO (device drivers) support
+ * @brief This source file contains the device driver display of the
+ *   monitor.
  *
  * There are 2 "driver" things the monitor knows about.
  *

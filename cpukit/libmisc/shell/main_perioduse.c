@@ -4,7 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * @brief perioduse Command Implementation
+ *
+ * @brief This source file contains the perioduse shell command.
  */
 
 /*

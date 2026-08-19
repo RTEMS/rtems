@@ -3,7 +3,8 @@
  *
  * @ingroup libmisc_fb_mw
  *
- * @brief MicroWindows UID
+ * @brief This source file contains the input device support of the
+ *   MicroWindows frame buffer.
  *
  * This module implements the input devices interface used by MicroWindows
  * in an embedded system environment.  It uses the RTEMS message queue as

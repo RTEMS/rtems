@@ -4,7 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * @brief  MALLOC_INFO Shell Command Implementation
+ *
+ * @brief This source file contains the mallocinfo shell command.
  */
 
 /*

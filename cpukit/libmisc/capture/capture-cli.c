@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplCapture
  *
- * @brief RTEMS Performance Monitoring and Measurement Framework.
+ * @brief This source file contains the implementation of
+ *   rtems_capture_cli_init().
  *
  * This is the Target Interface Command Line Interface. You need
  * start the RTEMS monitor.

@@ -4,8 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * 
- * @brief MEDIT Shell Command Implementation
+ *
+ * @brief This source file contains the medit shell command.
  */
 
 /*

@@ -4,7 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * @brief lsof Shell Command Implementation
+ *
+ * @brief This source file contains the lsof shell command.
  */
 
 /*

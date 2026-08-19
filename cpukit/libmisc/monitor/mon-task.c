@@ -5,7 +5,9 @@
  *
  * @ingroup RTEMSImplMonitor
  *
- * @brief RTEMS Monitor task support
+ * @brief This source file contains the implementation of
+ *   rtems_monitor_task_canonical(), rtems_monitor_task_dump_header() and
+ *   rtems_monitor_task_dump().
  */
 
 /*

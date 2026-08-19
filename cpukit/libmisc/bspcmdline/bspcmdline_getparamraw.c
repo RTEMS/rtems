@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplBSPCommandLine
  *
- * @brief Obtain Pointer to the Entire Matching Argument
+ * @brief This source file contains the implementation of
+ *   rtems_bsp_cmdline_get_param_raw().
  */
 
 /*

@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplMonitor
  *
- * @brief Print misc stuff for the monitor dump routines
+ * @brief This source file contains the print helpers of the monitor.
  *
  * Each routine returns the number of characters it output.
  */

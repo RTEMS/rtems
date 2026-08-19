@@ -4,8 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * 
- * @brief RMDIR Shell Command Implementation
+ *
+ * @brief This source file contains the rmdir shell command.
  */
 
 /*

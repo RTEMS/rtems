@@ -4,8 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShell
- * 
- * @brief Shell Command Set Management
+ *
+ * @brief This source file contains the command set management of the shell.
  */
 
 /*

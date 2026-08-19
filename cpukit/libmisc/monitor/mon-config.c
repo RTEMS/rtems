@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplMonitor
  *
- * @brief RTEMS Config display support
+ * @brief This source file contains the configuration display of the
+ *   monitor.
  */
 
 /*

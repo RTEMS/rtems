@@ -4,8 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * 
- * @brief RM Shell Command Implementation
+ *
+ * @brief This source file contains the blksync shell command.
  */
 
 /*

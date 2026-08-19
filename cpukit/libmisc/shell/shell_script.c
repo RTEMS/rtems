@@ -4,7 +4,9 @@
  * @file
  *
  * @ingroup RTEMSImplShell
- * @brief Shell Script Invocation Implementation
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_shell_script_file().
  */
 
 /*

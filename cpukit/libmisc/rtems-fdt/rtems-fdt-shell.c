@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplFDT
  *
- * @brief RTEMS Flattened Device Tree Shell Command
+ * @brief This source file contains the flattened device tree shell command.
  *
  * Command to play with the memory in a FDT.
  */

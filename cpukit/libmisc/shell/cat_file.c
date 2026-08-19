@@ -4,8 +4,9 @@
  * @file
  *
  * @ingroup RTEMSImplShell
- * 
- * @brief CAT Command Implementation
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_shell_cat_file().
  */
 
 /*

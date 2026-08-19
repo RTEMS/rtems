@@ -4,8 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * 
- * @brief DATE Shell Command Implementation
+ *
+ * @brief This source file contains the date shell command.
  */
 
 /*

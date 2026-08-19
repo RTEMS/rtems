@@ -5,7 +5,7 @@
  *
  * @ingroup rtems_fstab
  *
- * @brief File System Mount Functions
+ * @brief This source file contains the implementation of rtems_fsmount().
  *
  * This file contains the fsmount functions. These functions
  * are used to mount a list of filesystems (and create their mount

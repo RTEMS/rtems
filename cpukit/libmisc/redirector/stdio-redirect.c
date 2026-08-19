@@ -5,7 +5,9 @@
  *
  * @ingroup LibIO
  *
- * @brief RTEMS std redirector.
+ * @brief This source file contains the implementation of
+ *   rtems_stdio_redirect_open(), rtems_stdio_redirect_close() and
+ *   rtems_stdio_redirect_read().
  */
 
 /*

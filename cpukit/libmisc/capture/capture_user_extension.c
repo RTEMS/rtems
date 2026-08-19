@@ -5,7 +5,9 @@
  *
  * @ingroup RTEMSImplCapture
  *
- * @brief RTEMS Performance Monitoring and Measurement Framework.
+ * @brief This source file contains the implementation of
+ *   rtems_capture_user_extension_open() and
+ *   rtems_capture_user_extension_close().
  *
  * This is the Capture Engine component.
  */

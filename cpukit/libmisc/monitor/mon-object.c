@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplMonitor
  *
- * @brief RTEMS Monitor "object" support.
+ * @brief This source file contains the object display of the monitor.
  *
  * Used to traverse object lists and print them out.
  * An object can be an RTEMS object (chain based stuff) or

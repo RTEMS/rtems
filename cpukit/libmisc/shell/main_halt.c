@@ -4,7 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * @brief halt Command Implementation
+ *
+ * @brief This source file contains the halt shell command.
  */
 
 /*

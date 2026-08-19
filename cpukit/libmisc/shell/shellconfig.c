@@ -4,7 +4,9 @@
  * @file
  *
  * @ingroup RTEMSImplShell
- * @brief debugrfs Shell Command Implementation
+ *
+ * @brief This source file contains the command set configuration of the
+ *   shell.
  */
 
 /*

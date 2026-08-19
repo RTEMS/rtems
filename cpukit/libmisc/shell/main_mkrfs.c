@@ -4,7 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * @brief mkrfs Shell Command Implementation
+ *
+ * @brief This source file contains the mkrfs shell command.
  */
 
 /*

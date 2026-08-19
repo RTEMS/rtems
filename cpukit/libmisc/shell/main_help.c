@@ -4,7 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * @brief  Shell Help Command
+ *
+ * @brief This source file contains the help shell command.
  */
 
 /*

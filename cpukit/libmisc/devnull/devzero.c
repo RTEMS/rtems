@@ -5,7 +5,8 @@
  *
  * @ingroup libmisc_devnull
  *
- * @brief Devzero
+ * @brief This source file contains the implementation of the zero device
+ *   driver.
  */
 
 /*

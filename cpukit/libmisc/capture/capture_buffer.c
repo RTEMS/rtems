@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplCapture
  *
- * @brief RTEMS Performance Monitoring and Measurement Framework.
+ * @brief This source file contains the implementation of
+ *   rtems_capture_buffer_allocate() and rtems_capture_buffer_free().
  *
  * This is the Target Interface Command Line Interface. You need
  * to start the RTEMS monitor.

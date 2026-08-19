@@ -4,7 +4,9 @@
  * @file
  *
  * @ingroup RTEMSImplShell
- * @brief Block device partition management.
+ *
+ * @brief This source file contains the block device partition management of
+ *   the shell.
  */
 
 /*

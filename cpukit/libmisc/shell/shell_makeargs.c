@@ -4,7 +4,9 @@
  * @file
  *
  * @ingroup RTEMSImplShell
- * @brief Split string into argc/argv style argument list
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_shell_make_args().
  */
 
 /*

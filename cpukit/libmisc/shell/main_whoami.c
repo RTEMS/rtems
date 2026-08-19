@@ -4,8 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * 
- * @brief WHOAMI Shell Command Implementation
+ *
+ * @brief This source file contains the whoami shell command.
  */
 
 /*

@@ -4,8 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * 
- * @brief CD Shell Command Implementation
+ *
+ * @brief This source file contains the cd shell command.
  */
 
 /*

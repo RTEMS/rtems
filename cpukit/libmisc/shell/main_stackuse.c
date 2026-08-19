@@ -4,7 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * @brief stackuse Command Implementation
+ *
+ * @brief This source file contains the stackuse shell command.
  */
 
 /*

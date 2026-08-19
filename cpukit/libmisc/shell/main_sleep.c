@@ -4,7 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * @brief sleep Shell Command Implementation
+ *
+ * @brief This source file contains the sleep shell command.
  */
 
 /*

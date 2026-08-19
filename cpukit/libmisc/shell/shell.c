@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplShell
  *
- * @brief Instantatiate a new terminal shell.
+ * @brief This source file contains the implementation of the shell.
  */
 
 /*

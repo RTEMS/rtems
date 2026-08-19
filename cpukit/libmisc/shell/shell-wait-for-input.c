@@ -4,7 +4,9 @@
  * @file
  *
  * @ingroup RTEMSImplShell
- * @brief Shell Wait for Input Implementation
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_shell_wait_for_explicit_input() and rtems_shell_wait_for_input().
  */
 
 /*

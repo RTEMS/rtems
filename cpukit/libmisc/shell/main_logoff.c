@@ -4,8 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * 
- * @brief LOGOFF Shell Command Implementation
+ *
+ * @brief This source file contains the logoff shell command.
  */
 
 /*

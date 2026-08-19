@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplMonitor
  *
- * @brief RTEMS Monitor "manager" support.
+ * @brief This source file contains the implementation of
+ *   rtems_monitor_manager_next().
  *
  * Used to traverse object (chain) lists and print them out.
  */

@@ -3,9 +3,9 @@
 /**
  * @file
  *
- * @brief Untar an Image
- *
  * @ingroup libmisc_untar_img
+ *
+ * @brief This source file contains the implementation of the untar support.
  */
 
 /*

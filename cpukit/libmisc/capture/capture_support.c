@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplCapture
  *
- * @brief RTEMS Performance Monitoring and Measurement Framework.
+ * @brief This source file contains the print support of the capture engine.
  *
  * This is a set of print support routines that may be shared between
  * the RTEMS monitor and direct callers of the capture engine.

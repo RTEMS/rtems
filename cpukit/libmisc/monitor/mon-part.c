@@ -5,7 +5,9 @@
  *
  * @ingroup RTEMSImplMonitor
  *
- * @brief RTEMS Monitor partition support
+ * @brief This source file contains the implementation of
+ *   rtems_monitor_part_canonical(), rtems_monitor_part_dump_header() and
+ *   rtems_monitor_part_dump().
  */
 
 /*

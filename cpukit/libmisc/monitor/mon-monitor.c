@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplMonitor
  *
- * @brief RTEMS monitor main body
+ * @brief This source file contains the main body of the monitor.
  *
  *  TODO:
  *      add stuff to RTEMS api

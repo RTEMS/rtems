@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSImplMonitor
  *
- * @brief Symbol table manager for the RTEMS monitor
+ * @brief This source file contains the symbol table manager of the monitor.
  *
  * These routines may be used by other system resources also.
  */

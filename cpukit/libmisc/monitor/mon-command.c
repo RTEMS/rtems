@@ -5,7 +5,9 @@
  *
  * @ingroup RTEMSImplMonitor
  *
- * @brief Command support routines for RTEMS monitor.
+ * @brief This source file contains the implementation of
+ *   rtems_monitor_command_usage(), rtems_monitor_help_cmd() and
+ *   rtems_monitor_command_lookup().
  */
 
 /*

@@ -4,7 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * @brief ls Shell Command Implementation
+ *
+ * @brief This source file contains the id shell command.
  */
 
 /*

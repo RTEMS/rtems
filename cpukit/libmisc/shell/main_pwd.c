@@ -4,8 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * 
- * @brief PWD Shell Command Implementation
+ *
+ * @brief This source file contains the pwd shell command.
  */
 
 /*

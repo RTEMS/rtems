@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplDumpBuffer
  *
- * @brief Dump Buffer
+ * @brief This source file contains the implementation of
+ *   rtems_print_buffer().
  */
 
 /*

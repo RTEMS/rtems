@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplMonitor
  *
- * @brief RTEMS monitor symbol table functions
+ * @brief This header file provides the symbol table interfaces of the
+ *   monitor.
  *
  * Entry points for symbol table routines.
  */

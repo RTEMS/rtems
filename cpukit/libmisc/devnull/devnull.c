@@ -5,7 +5,8 @@
  *
  * @ingroup libmisc_devnull
  *
- * @brief Null Device Driver Init Routine
+ * @brief This source file contains the implementation of the null device
+ *   driver.
  *
  * Derived from rtems' stub driver.
  */

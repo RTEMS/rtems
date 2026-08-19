@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplCapture
  *
- * @brief Capture buffer
+ * @brief This header file provides the buffer interfaces of the capture
+ *   engine.
  *
  * This is a set of functions to control a variable length capture
  * record buffer.

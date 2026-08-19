@@ -4,8 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * 
- * @brief MDUMP Shell Command Implementation
+ *
+ * @brief This source file contains the mdump shell command.
  */
 
 /*

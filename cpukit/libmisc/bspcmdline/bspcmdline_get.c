@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplBSPCommandLine
  *
- * @brief Obtain Pointer to BSP Boot Command String
+ * @brief This source file contains the implementation of
+ *   rtems_bsp_cmdline_get().
  */
 
 /*

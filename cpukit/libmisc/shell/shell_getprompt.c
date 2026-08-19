@@ -4,7 +4,9 @@
  * @file
  *
  * @ingroup RTEMSImplShell
- * @brief Dynamically build the shell prompt
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_shell_get_prompt().
  */
 
 /*

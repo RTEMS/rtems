@@ -1,13 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- * @file 
- * 
+ * @file
+ *
  * @ingroup RTEMSImplStackChecker
- * 
- * @brief This file contains the Stack Overflow Check user extension set.
- * 
- * @note This extension set uses conditional compilation to account for 
+ *
+ * @brief This source file contains the implementation of the stack checker.
+ *
+ * @note This extension set uses conditional compilation to account for
  *       stack growth direction.
  */
 

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplMonitor
  *
- * @brief RTEMS MPCI Config display support
+ * @brief This source file contains the multiprocessing configuration
+ *   display of the monitor.
  */
 
 /*

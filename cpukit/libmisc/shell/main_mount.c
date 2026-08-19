@@ -4,8 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * 
- * @brief Shell Command Implementation
+ *
+ * @brief This source file contains the mount shell command.
  */
 
 /*

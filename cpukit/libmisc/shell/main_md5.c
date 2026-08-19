@@ -4,7 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * @brief MD5 Shell Command Implementation
+ *
+ * @brief This source file contains the md5 shell command.
  */
 
 /*

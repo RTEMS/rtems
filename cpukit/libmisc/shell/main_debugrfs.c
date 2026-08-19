@@ -4,7 +4,8 @@
  * @file
  *
  * @ingroup RTEMSImplShellCommands
- * @brief debugrfs Shell Command Implementation
+ *
+ * @brief This source file contains the debugrfs shell command.
  */
 
 /*

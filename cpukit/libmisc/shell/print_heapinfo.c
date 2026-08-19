@@ -4,7 +4,9 @@
  * @file
  *
  * @ingroup RTEMSImplShell
- * @brief Print Heap Information Structure
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_shell_print_heap_info() and rtems_shell_print_heap_stats().
  */
 
 /*
