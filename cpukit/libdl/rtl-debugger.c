@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup rtl
+ * @ingroup RTEMSImplLibDL
  *
  * @brief RTEMS Module Loading Debugger Interface.
  *

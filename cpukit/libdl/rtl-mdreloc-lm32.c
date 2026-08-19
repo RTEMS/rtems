@@ -3,7 +3,7 @@
 /**
  *  @file
  *
- *  @ingroup
+ * @ingroup RTEMSImplLibDL
  *
  *  @brief
  */

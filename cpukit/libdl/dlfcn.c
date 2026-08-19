@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup rtl
+ * @ingroup RTEMSImplLibDL
  *
  * @brief RTEMS POSIX Dynamic Module Loading Interface.
  *

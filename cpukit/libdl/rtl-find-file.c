@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup rtl
+ * @ingroup RTEMSImplLibDL
  *
  * @brief RTEMS Run-Time Linker Error
  */

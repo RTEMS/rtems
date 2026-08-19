@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup rtems_rtld
+ * @ingroup RTEMSImplLibDL
  *
  * @brief RTEMS Run-Time Link Editor Trace
  *
