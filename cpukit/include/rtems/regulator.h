@@ -37,6 +37,8 @@
 /**
  * @defgroup RegulatorAPI Regulator API
  *
+ * @ingroup RTEMSAPI
+ *
  * @brief Regulator APIs
  *
  * The Regulator provides a set of APIs to manage input sources which 

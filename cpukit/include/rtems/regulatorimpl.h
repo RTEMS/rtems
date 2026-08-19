@@ -36,6 +36,8 @@
 /**
  * @defgroup RegulatorInternalAPI Regulator API Internals
  *
+ * @ingroup RTEMSImpl
+ *
  * @brief Regulator Internal Information
  *
  * This concerns implementation information about the Regulator.

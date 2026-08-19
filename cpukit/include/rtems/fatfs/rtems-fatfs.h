@@ -53,6 +53,16 @@
 extern "C" {
 #endif
 
+/**
+ * @defgroup RTEMSImplFATFS FatFS File System
+ *
+ * @ingroup LibIO
+ *
+ * @brief This group contains the FatFS file system implementation.
+ *
+ * @{
+ */
+
 #define DT_REG 8
 #define DT_DIR 4
 
@@ -388,6 +398,8 @@ int rtems_fatfs_closefile( rtems_libio_t *iop );
 extern const rtems_filesystem_operations_table rtems_fatfs_ops;
 extern const rtems_filesystem_file_handlers_r  rtems_fatfs_file_handlers;
 extern const rtems_filesystem_file_handlers_r  rtems_fatfs_dir_handlers;
+
+/** @} */
 
 #ifdef __cplusplus
 }

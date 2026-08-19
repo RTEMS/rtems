@@ -48,6 +48,16 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
+ * @defgroup rtems_fdt Flattened Device Tree
+ *
+ * @ingroup RTEMSAPI
+ *
+ * @brief This group contains the flattened device tree API.
+ *
+ * @{
+ */
+
+/**
  * A blob.
  */
 struct rtems_fdt_blob;
@@ -807,6 +817,8 @@ int rtems_fdt_getprop_address_map(
   const char            *name,
   rtems_fdt_address_map *addr_map
 );
+
+/** @} */
 
 #ifdef __cplusplus
 }

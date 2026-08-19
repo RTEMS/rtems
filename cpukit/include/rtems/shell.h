@@ -47,6 +47,16 @@
 extern "C" {
 #endif
 
+/**
+ * @defgroup RTEMSAPIShell Shell
+ *
+ * @ingroup RTEMSAPI
+ *
+ * @brief This group contains the shell API.
+ *
+ * @{
+ */
+
 /*
  * Some key labels to define special keys.
  */
@@ -424,6 +434,8 @@ extern int rtems_shell_main_monitor(int argc, char **argv);
 int rtems_shell_main_mv(int argc, char *argv[]);
 int rtems_shell_main_cp(int argc, char *argv[]);
 int rtems_shell_main_rm(int argc, char *argv[]);
+
+/** @} */
 
 #ifdef __cplusplus
 }
