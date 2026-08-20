@@ -857,7 +857,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
  *
  * @brief It is defined if a static analysis run is performed.
  */
-#if defined( __COVERITY__ )
+#if defined( __COVERITY__ ) || defined( __clang_analyzer__ )
   #define RTEMS_STATIC_ANALYSIS
 #endif
 
