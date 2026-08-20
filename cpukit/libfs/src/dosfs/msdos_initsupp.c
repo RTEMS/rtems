@@ -69,8 +69,6 @@ msdos_initialize_support(
     if (!fs_info)
         rtems_set_errno_and_return_minus_one(ENOMEM);
 
-    temp_mt_entry->fs_info = fs_info;
-
     fs_info->converter = converter;
 
     rc = fat_init_volume_info(&fs_info->fat, temp_mt_entry->dev);
@@ -138,6 +136,7 @@ msdos_initialize_support(
     rtems_recursive_mutex_init(&fs_info->vol_mutex,
                                RTEMS_FILESYSTEM_TYPE_DOSFS);
 
+    temp_mt_entry->fs_info = fs_info;
     temp_mt_entry->mt_fs_root->location.node_access = fat_fd;
     temp_mt_entry->mt_fs_root->location.handlers = directory_handlers;
     temp_mt_entry->ops = op_table;
