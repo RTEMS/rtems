@@ -207,17 +207,37 @@ void TEST_STRING_TO_NAME( void )
   rtems_test_assert( endptr );
   #endif
 
-  /* Conversion of number that is too large for unsigned char */
-  #if defined( TEST_TOO_LARGE_FOR_UCHAR )
+  /* Conversion of number that is too large for the type of the value */
+  #if defined( TEST_TOO_LARGE_FOR_TYPE )
   endptr = NULL;
   value = 0;
   puts( STRING_TO_NAME_METHOD_STRING " - overflow - RTEMS_INVALID_NUMBER" );
     #if defined( STRING_TO_INTEGER )
   status = STRING_TO_NAME_METHOD(
-    TEST_TOO_LARGE_FOR_UCHAR,
+    TEST_TOO_LARGE_FOR_TYPE,
     &value,
     &endptr,
-    get_base_10_or_16( TEST_TOO_LARGE_FOR_UCHAR )
+    get_base_10_or_16( TEST_TOO_LARGE_FOR_TYPE )
+  );
+    #endif
+  if ( status != RTEMS_INVALID_NUMBER ) {
+    printf( "ERROR = %s\n", rtems_status_text( status ) );
+  }
+  rtems_test_assert( status == RTEMS_INVALID_NUMBER );
+  rtems_test_assert( endptr );
+  #endif
+
+  /* Conversion of number that is too small for the type of the value */
+  #if defined( TEST_TOO_SMALL_FOR_TYPE )
+  endptr = NULL;
+  value = 0;
+  puts( STRING_TO_NAME_METHOD_STRING " - underflow - RTEMS_INVALID_NUMBER" );
+    #if defined( STRING_TO_INTEGER )
+  status = STRING_TO_NAME_METHOD(
+    TEST_TOO_SMALL_FOR_TYPE,
+    &value,
+    &endptr,
+    get_base_10_or_16( TEST_TOO_SMALL_FOR_TYPE )
   );
     #endif
   if ( status != RTEMS_INVALID_NUMBER ) {
@@ -262,4 +282,5 @@ void TEST_STRING_TO_NAME( void )
 #undef BAD_VALUE_STRING
 #undef TEST_TOO_LARGE_STRING
 #undef TEST_TOO_SMALL_STRING
-#undef TEST_TOO_LARGE_FOR_UCHAR
+#undef TEST_TOO_LARGE_FOR_TYPE
+#undef TEST_TOO_SMALL_FOR_TYPE

@@ -70,7 +70,7 @@ static int get_base_10_or_16( const char *s )
 #define STRING_TO_NAME_METHOD        rtems_string_to_unsigned_char
 #define STRING_TO_NAME_METHOD_STRING "rtems_string_to_unsigned_char"
 #define TEST_TOO_LARGE_STRING        "987654321123456789123456789"
-#define TEST_TOO_LARGE_FOR_UCHAR     "256"
+#define TEST_TOO_LARGE_FOR_TYPE      "256"
 #define STRING_TO_INTEGER
 #include "stringto_test_template.h"
 
@@ -83,6 +83,10 @@ static int get_base_10_or_16( const char *s )
 #define STRING_TO_NAME_METHOD_STRING "rtems_string_to_int"
 #define TEST_TOO_LARGE_STRING        "987654321123456789123456789"
 #define TEST_TOO_SMALL_STRING        "-98765432198765432123456789"
+#if INT_MAX == 2147483647 && LONG_MAX > INT_MAX
+#define TEST_TOO_LARGE_FOR_TYPE      "2147483648"
+#define TEST_TOO_SMALL_FOR_TYPE      "-2147483649"
+#endif
 #define STRING_TO_INTEGER
 #include "stringto_test_template.h"
 
@@ -92,6 +96,9 @@ static int get_base_10_or_16( const char *s )
 #define STRING_TO_NAME_METHOD        rtems_string_to_unsigned_int
 #define STRING_TO_NAME_METHOD_STRING "rtems_string_to_unsigned_int"
 #define TEST_TOO_LARGE_STRING        "987654321123456789123456789"
+#if UINT_MAX == 4294967295U && ULONG_MAX > UINT_MAX
+#define TEST_TOO_LARGE_FOR_TYPE      "4294967296"
+#endif
 #define STRING_TO_INTEGER
 #include "stringto_test_template.h"
 
