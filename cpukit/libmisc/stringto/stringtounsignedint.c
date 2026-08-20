@@ -44,4 +44,5 @@
 #define STRING_TO_METHOD      strtoul
 #define STRING_TO_MAX         UINT_MAX
 #define STRING_TO_RESULT_TYPE unsigned long
+#define STRING_TO_RESULT_MAX  ULONG_MAX
 #include "stringto_template.h"

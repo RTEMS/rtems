@@ -66,6 +66,10 @@
 #error "STRING_TO_MAX not defined"
 #endif
 
+#if defined( STRING_TO_RESULT_TYPE ) && !defined( STRING_TO_RESULT_MAX )
+#error "STRING_TO_RESULT_MAX not defined"
+#endif
+
 #undef ZERO
 #ifdef STRING_TO_FLOAT
 #define ZERO 0.0
@@ -128,9 +132,10 @@ rtems_status_code STRING_TO_NAME(
     return RTEMS_INVALID_NUMBER;
   }
 
+#if defined( STRING_TO_RESULT_TYPE ) && STRING_TO_RESULT_MAX > STRING_TO_MAX
   /*
-   * The conversion method returns a type which can be wider than the type of
-   * the value, so the range of the value has to be checked.
+   * The conversion method returns a type which is wider than the type of the
+   * value, so the range of the value has to be checked.
    */
   if ( result > STRING_TO_MAX ) {
     errno = ERANGE;
@@ -142,6 +147,7 @@ rtems_status_code STRING_TO_NAME(
     errno = ERANGE;
     return RTEMS_INVALID_NUMBER;
   }
+#endif
 #endif
 #else
 #ifdef STRING_TO_MAX

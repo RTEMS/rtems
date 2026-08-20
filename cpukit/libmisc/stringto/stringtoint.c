@@ -45,4 +45,5 @@
 #define STRING_TO_MAX         INT_MAX
 #define STRING_TO_MIN         INT_MIN
 #define STRING_TO_RESULT_TYPE long
+#define STRING_TO_RESULT_MAX  LONG_MAX
 #include "stringto_template.h"
