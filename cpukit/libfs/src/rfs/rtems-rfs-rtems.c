@@ -697,7 +697,6 @@ int rtems_rfs_rtems_initialise(rtems_filesystem_mount_table_entry_t* mt_entry,
    * Parse the options the user specifiies.
    */
   while (options) {
-    printf("options=%s\n", options);
     if (strncmp(options, "hold-bitmaps", sizeof("hold-bitmaps") - 1) == 0) {
       flags |= RTEMS_RFS_FS_BITMAPS_HOLD;
     } else if (strncmp(options, "no-local-cache",
@@ -706,6 +705,19 @@ int rtems_rfs_rtems_initialise(rtems_filesystem_mount_table_entry_t* mt_entry,
     } else if (strncmp(options, "max-held-bufs", sizeof("max-held-bufs") - 1) ==
                0) {
       max_held_buffers = strtoul(options + sizeof("max-held-bufs"), 0, 0);
+      /*
+       * Zero is not a valid cache size and is not merely useless.  The
+       * eviction test in rtems_rfs_buffer_handle_release is
+       * (release_count + release_modified_count) >= max_held_buffers, so at
+       * zero it is true on the first release with both queues still empty,
+       * the else branch takes from the empty release_modified queue,
+       * rtems_chain_get_unprotected returns NULL, the count underflows and
+       * the NULL is dereferenced.
+       */
+      if (max_held_buffers < 1) {
+        return rtems_rfs_rtems_error("initialise: invalid max-held-bufs",
+                                     EINVAL);
+      }
     } else {
       return rtems_rfs_rtems_error("initialise: invalid option", EINVAL);
     }

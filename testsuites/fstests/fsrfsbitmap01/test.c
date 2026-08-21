@@ -46,6 +46,13 @@
 #include "fs_config.h"
 #include "tmacros.h"
 #include <rtems/malloc.h>
+#include <rtems/libio.h>
+#include <rtems/userenv.h>
+
+#include <errno.h>
+#include <unistd.h>
+
+#include "ramdisk_support.h"
 
 const char             rtems_test_name[] = "FSRFSBITMAP 1";
 const RTEMS_TEST_STATE rtems_test_state = TEST_STATE;
@@ -704,6 +711,54 @@ static void open_failure( void )
   rtems_heap_greedy_free( opaque );
 }
 
+/*
+ * max-held-bufs=0 must be rejected at mount.  Were it accepted, the eviction
+ * test in rtems_rfs_buffer_handle_release,
+ * (release_count + release_modified_count) >= max_held_buffers, would be true
+ * on the first release with both queues still empty; the else branch would
+ * take from the empty queue, rtems_chain_get_unprotected would return NULL,
+ * the count would underflow, and the NULL would be dereferenced.
+ *
+ * Choosing mount options means owning the mount, and the harness has chrooted
+ * into the file system before calling test().  Leave that environment for the
+ * duration and restore it, mounted and chrooted as it was, before returning.
+ */
+static void max_held_bufs_test( void )
+{
+  int rc;
+
+  puts( "\n START of RFS max-held-bufs Test" );
+
+  rtems_libio_use_global_env();
+
+  rc = unmount( BASE_FOR_TEST );
+  rtems_test_assert( rc == 0 );
+
+  errno = 0;
+  rc    = mount( RAMDISK_PATH, BASE_FOR_TEST, "rfs",
+                 RTEMS_FILESYSTEM_READ_WRITE, "max-held-bufs=0" );
+  printf( "mount(max-held-bufs=0) = %d, errno %d\n", rc, errno );
+  rtems_test_assert( rc == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  /*
+   * One is the boundary.  The guard is >=, so at one the first release sees
+   * 0 >= 1, false, and evicts nothing.  Only zero is rejected.
+   */
+  rc = mount( RAMDISK_PATH, BASE_FOR_TEST, "rfs",
+              RTEMS_FILESYSTEM_READ_WRITE, "max-held-bufs=1" );
+  rtems_test_assert( rc == 0 );
+  rtems_test_assert( unmount( BASE_FOR_TEST ) == 0 );
+
+  rc = mount( RAMDISK_PATH, BASE_FOR_TEST, "rfs",
+              RTEMS_FILESYSTEM_READ_WRITE, NULL );
+  rtems_test_assert( rc == 0 );
+  rc = chroot( BASE_FOR_TEST );
+  rtems_test_assert( rc == 0 );
+
+  puts( "\n END of RFS max-held-bufs Test" );
+}
+
 void test( void )
 {
   puts( "\n START of RFS Bitmap Unit Test" );
@@ -713,4 +768,6 @@ void test( void )
   open_failure();
 
   puts( "\n END of RFS Bitmap Unit Test" );
+
+  max_held_bufs_test();
 }
