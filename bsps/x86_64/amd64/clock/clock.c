@@ -112,7 +112,7 @@ void amd64_clock_driver_initialize(void)
    */
   amd64_clock_tc.tc_get_timecount = amd64_clock_get_timecount;
   amd64_clock_tc.tc_counter_mask = 0xffffffff;
-  amd64_clock_tc.tc_frequency = (uint32_t) amd64_tsc_frequency();
+  amd64_clock_tc.tc_frequency = amd64_tsc_frequency();
   amd64_clock_tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
   rtems_timecounter_install(&amd64_clock_tc);
 }
