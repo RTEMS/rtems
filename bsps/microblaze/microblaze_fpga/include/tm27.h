@@ -46,6 +46,8 @@
 #include <bsp/microblaze-fdt-support.h>
 #include <bsp/microblaze-timer.h>
 
+#include <dev/serial/uartlite_l.h>
+
 #include <rtems/score/isr.h>
 
 /*
@@ -76,6 +78,18 @@ static uint32_t microblaze_tm27_irq;
 
 static bool microblaze_tm27_software_raise;
 
+static uint32_t microblaze_tm27_uart;
+
+static uint32_t microblaze_tm27_uart_irq;
+
+/*
+ * The test needs a second interrupt which it can raise and which no handler
+ * occupies.  The AXI UART Lite is the only other device of this design.  The
+ * console driver of this BSP polls, so nothing else uses the interrupt of the
+ * device.
+ */
+#define TM27_INTERRUPT_VECTOR_ALTERNATIVE microblaze_tm27_uart_irq
+
 static inline void Install_tm27_vector( rtems_interrupt_handler handler )
 {
   uint32_t irq;
@@ -99,6 +113,18 @@ static inline void Install_tm27_vector( rtems_interrupt_handler handler )
     0
   );
   microblaze_tm27_irq = irq;
+
+  microblaze_tm27_uart = try_get_prop_from_device_tree(
+    "xlnx,xps-uartlite-1.00.a",
+    "reg",
+    BSP_MICROBLAZE_FPGA_UART_BASE
+  );
+  microblaze_tm27_uart_irq = try_get_prop_from_device_tree(
+    "xlnx,xps-uartlite-1.00.a",
+    "interrupts",
+    BSP_MICROBLAZE_FPGA_UART_IRQ
+  );
+  XUartLite_DisableIntr( microblaze_tm27_uart );
 
   /* Stop the counter and clear a pending interrupt */
   microblaze_tm27_timer->tcsr1 = MICROBLAZE_TIMER_TCSR0_T0INT;
@@ -158,6 +184,25 @@ static inline void Lower_tm27_intr( void )
    */
   microblaze_tm27_intc->iar = UINT32_C( 1 ) << microblaze_tm27_irq;
   _ISR_Set_level( 0 );
+}
+
+/*
+ * The interrupt controller latches the request of the UART on the rising edge
+ * of its input.  A pulse of the interrupt enable of the device gives exactly
+ * one request.
+ */
+static inline rtems_status_code _TM27_Raise_alternative( void )
+{
+  XUartLite_EnableIntr( microblaze_tm27_uart );
+  XUartLite_DisableIntr( microblaze_tm27_uart );
+  return RTEMS_SUCCESSFUL;
+}
+
+static inline rtems_status_code _TM27_Clear_alternative( void )
+{
+  XUartLite_DisableIntr( microblaze_tm27_uart );
+  microblaze_tm27_intc->iar = UINT32_C( 1 ) << microblaze_tm27_uart_irq;
+  return RTEMS_SUCCESSFUL;
 }
 
 #endif /* __tm27_h */
