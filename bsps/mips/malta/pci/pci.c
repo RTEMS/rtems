@@ -94,10 +94,12 @@
 /*
  * PROTOTYPES
  */
-void print_bars(
+#ifdef DEBUG_PCI
+static void print_bars(
   unsigned char slot,
   unsigned char func
 );
+#endif
 int direct_pci_read_config_byte(
   unsigned char bus,
   unsigned char slot,
@@ -953,7 +955,8 @@ void FixupPCI( const struct _int_map *bspmap, int (*swizzler)(int,int) )
   }
 }
 
-void print_bars(
+#ifdef DEBUG_PCI
+static void print_bars(
   unsigned char slot,
   unsigned char func
 )
@@ -974,6 +977,7 @@ void print_bars(
   pci_read_config_dword (0, slot, func, PCI_BASE_ADDRESS_5, &addr);
   printk("***    PCI DEVICE BAR5: 0x%" PRIu32 "\n", addr);
 }
+#endif
 
 void pci_memory_enable(
   unsigned char bus,
@@ -1101,7 +1105,9 @@ int pci_initialize(void)
           // print_bars( slot, func );
        } else if ( vendor == PCI_VENDOR_ID_AMD &&
                    device == PCI_DEVICE_ID_AMD_LANCE ) {
+#ifdef DEBUG_PCI
          print_bars( slot, func );
+#endif
          pci_memory_enable(0, slot, func);
          pci_io_enable(0, slot, func);
          pci_busmaster_enable(0, slot, func);
@@ -1111,7 +1117,9 @@ int pci_initialize(void)
 
          // BAR1: Memory at 0x1201_1020
          pci_write_config_dword(0, slot, func, PCI_BASE_ADDRESS_1, 0x12011020);
+#ifdef DEBUG_PCI
          print_bars( slot, func );
+#endif
        }
 
       }
