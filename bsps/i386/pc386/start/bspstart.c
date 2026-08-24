@@ -78,14 +78,6 @@ static void bsp_pci_initialize_helper(void)
 static void bsp_start_default( void )
 {
   /*
-   * Turn off watchdog
-   */
-  /*
-   * Calibrate variable for 1ms-loop (see timer.c)
-   */
-  Calibrate_loop_1ms();
-
-  /*
    * Init rtems interrupt management
    */
   rtems_irq_mngt_init();

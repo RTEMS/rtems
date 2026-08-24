@@ -37,13 +37,6 @@
  */
 #define AVG_OVERHEAD  0         /* 0.1 microseconds to start/stop timer. */
 #define LEAST_VALID   1         /* Don't trust a value lower than this.  */
-#define SLOW_DOWN_IO  0x80      /* io which does nothing */
-
-#define TWO_MS (uint32_t)(2000) /* TWO_MS = 2000us (sic!) */
-
-#define MSK_NULL_COUNT 0x40     /* bit counter available for reading */
-
-#define CMD_READ_BACK_STATUS 0xE2   /* command read back status */
 
 RTEMS_INTERRUPT_LOCK_DEFINE( /* visible global variable */ ,
    rtems_i386_i8254_access_lock, "rtems_i386_i8254_access_lock" );
@@ -53,7 +46,6 @@ RTEMS_INTERRUPT_LOCK_DEFINE( /* visible global variable */ ,
  */
 volatile uint32_t         Ttimer_val;
 bool                      benchmark_timer_find_average_overhead = true;
-volatile unsigned int     fastLoop1ms, slowLoop1ms;
 
 void              (*benchmark_timer_initialize_function)(void) = 0;
 benchmark_timer_t (*benchmark_timer_read_function)(void) = 0;
@@ -279,275 +271,66 @@ void benchmark_timer_disable_subtracting_average_overhead(bool find_flag)
   benchmark_timer_find_average_overhead = find_flag;
 }
 
-static unsigned short lastLoadedValue;
+/*
+ * The ports and the command of channel 2 of the 8254.  Software gates that
+ * channel and no interrupt takes its output, so a delay may own it.  The
+ * clock driver takes the tick interrupt from channel 0.
+ */
+#define PC386_WAIT_CHAN2        0x42
+#define PC386_WAIT_MCR          0x43
+#define PC386_WAIT_GATE         0x61
+#define PC386_WAIT_GATE_TIMER   0x01
+#define PC386_WAIT_GATE_SPEAKER 0x02
+#define PC386_WAIT_SELECT_CHAN2 0x80
+#define PC386_WAIT_ACCESS_LOHI  0x30
+#define PC386_WAIT_ONE_SHOT     0x02
+
+/* The counter of the 8254 is 16 bits wide, which is 54.9ms at TIMER_TICK */
+#define PC386_WAIT_COUNTS_PER_MS ( TIMER_TICK / 1000 )
 
 /*
- *  Loads timer 0 with value passed as arguemnt.
+ *  waits at least timeToWait ms
  *
- *  Returns: Nothing. Loaded value must be a number of clock bits...
- */
-static void loadTimerValue( unsigned short loadedValue )
-{
-  rtems_interrupt_lock_context lock_context;
-  rtems_interrupt_lock_acquire(&rtems_i386_i8254_access_lock, &lock_context);
-  lastLoadedValue = loadedValue;
-  outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_SQWAVE);
-  outport_byte(TIMER_CNTR0, loadedValue & 0xff);
-  outport_byte(TIMER_CNTR0, (loadedValue >> 8) & 0xff);
-  rtems_interrupt_lock_release(&rtems_i386_i8254_access_lock, &lock_context);
-}
-
-/*
- * Reads the current value of the timer, and converts the
- *  number of ticks to micro-seconds.
- *
- * Returns: number of clock bits elapsed since last load.
- */
-static unsigned int readTimer0(void)
-{
-  unsigned short lsb, msb;
-  unsigned char  status;
-  unsigned int  count;
-  rtems_interrupt_lock_context lock_context;
-  rtems_interrupt_lock_acquire(&rtems_i386_i8254_access_lock, &lock_context);
-
-  outport_byte(
-    TIMER_MODE,
-    (TIMER_RD_BACK | (RB_COUNT_0 & ~(RB_NOT_STATUS | RB_NOT_COUNT)))
-  );
-  inport_byte(TIMER_CNTR0, status);
-  inport_byte(TIMER_CNTR0, lsb);
-  inport_byte(TIMER_CNTR0, msb);
-
-  rtems_interrupt_lock_release(&rtems_i386_i8254_access_lock, &lock_context);
-
-  count = ( msb << 8 ) | lsb ;
-  if (status & RB_OUTPUT )
-    count += lastLoadedValue;
-
-  return (2*lastLoadedValue - count);
-}
-
-static void Timer0Reset(void)
-{
-  loadTimerValue(0xffff);
-  readTimer0();
-}
-
-static void fastLoop (unsigned int loopCount)
-{
-  unsigned int i;
-  for( i=0; i < loopCount; i++ )outport_byte( SLOW_DOWN_IO, 0 );
-}
-
-static void slowLoop (unsigned int loopCount)
-{
-  unsigned int j;
-  for (j=0; j <100 ;  j++) {
-    fastLoop (loopCount);
-  }
-}
-
-/*
- * #define DEBUG_CALIBRATE
- */
-void
-Calibrate_loop_1ms(void)
-{
-  unsigned int offset, offsetTmp, emptyCall, emptyCallTmp, res, i, j;
-  unsigned int targetClockBits, currentClockBits;
-  unsigned int slowLoopGranularity, fastLoopGranularity;
-  rtems_interrupt_level  level;
-  int retries = 0;
-
-  /*
-   * This code is designed to run before interrupt management
-   * is enabled and running it on multiple CPUs and or after
-   * secondary CPUs are bring up seems really broken.
-   * Disabling of local interrupts is enough.
-   */
-  rtems_interrupt_local_disable(level);
-
-retry:
-  if ( ++retries >= 5 ) {
-    printk( "Calibrate_loop_1ms: too many attempts. giving up!!\n" );
-    while (1);
-  }
-#ifdef DEBUG_CALIBRATE
-  printk("Calibrate_loop_1ms is starting,  please wait (but not too long.)\n");
-#endif
-  targetClockBits = US_TO_TICK(1000);
-  /*
-   * Fill up the cache to get a correct offset
-   */
-  Timer0Reset();
-  readTimer0();
-  /*
-   * Compute the minimal offset to apply due to read counter register.
-   */
-  offset = 0xffffffff;
-  for (i=0; i <1000; i++) {
-    Timer0Reset();
-    offsetTmp = readTimer0();
-    offset += offsetTmp;
-  }
-  offset = offset / 1000; /* compute average */
-  /*
-   * calibrate empty call
-   */
-  fastLoop (0);
-  emptyCall = 0;
-  j = 0;
-  for (i=0; i <10; i++) {
-    Timer0Reset();
-    fastLoop (0);
-    res =  readTimer0();
-    /* res may be inferior to offset on fast
-     * machine because we took an average for offset
-     */
-    if (res >  offset) {
-      ++j;
-      emptyCallTmp = res - offset;
-      emptyCall += emptyCallTmp;
-    }
-  }
-  if (j == 0) emptyCall = 0;
-  else emptyCall = emptyCall / j; /* compute average */
-  /*
-   * calibrate fast loop
-   */
-  Timer0Reset();
-  fastLoop (10000);
-  res = readTimer0() - offset;
-  if (res < emptyCall) {
-    printk(
-      "Problem #1 in offset computation in Calibrate_loop_1ms "
-        " in file bsps/i386/pc386/btimer/btimer.c\n"
-    );
-    goto retry;
-  }
-  fastLoopGranularity = (res - emptyCall) / 10000;
-  /*
-   * calibrate slow loop
-   */
-  Timer0Reset();
-  slowLoop(10);
-  res = readTimer0();
-  if (res < offset + emptyCall) {
-    printk(
-      "Problem #2 in offset computation in Calibrate_loop_1ms "
-        " in file bsps/i386/pc386/btimer/btimer.c\n"
-    );
-    goto retry;
-  }
-  slowLoopGranularity = (res - offset - emptyCall)/ 10;
-
-  if (slowLoopGranularity == 0) {
-    printk(
-      "Problem #3 in offset computation in Calibrate_loop_1ms "
-        " in file bsps/i386/pc386/btimer/btimer.c\n"
-    );
-    goto retry;
-  }
-
-  targetClockBits += offset;
-#ifdef DEBUG_CALIBRATE
-  printk("offset = %u, emptyCall = %u, targetClockBits = %u\n",
-  offset, emptyCall, targetClockBits);
-  printk("slowLoopGranularity = %u fastLoopGranularity =  %u\n",
-  slowLoopGranularity, fastLoopGranularity);
-#endif
-  slowLoop1ms = (targetClockBits - emptyCall) / slowLoopGranularity;
-  if (slowLoop1ms != 0) {
-    fastLoop1ms = targetClockBits % slowLoopGranularity;
-    if (fastLoop1ms > emptyCall) fastLoop1ms -= emptyCall;
-  }
-  else
-    fastLoop1ms = targetClockBits - emptyCall / fastLoopGranularity;
-
-  if (slowLoop1ms != 0) {
-    /*
-     * calibrate slow loop
-     */
-
-    while(1)
-      {
- int previousSign = 0; /* 0 = unset, 1 = incrementing,  2 = decrementing */
- Timer0Reset();
- slowLoop(slowLoop1ms);
- currentClockBits = readTimer0();
- if (currentClockBits > targetClockBits) {
-   if ((currentClockBits - targetClockBits) < slowLoopGranularity) {
-     /* decrement loop counter anyway to be sure slowLoop(slowLoop1ms) < targetClockBits */
-     --slowLoop1ms;
-     break;
-   }
-   else {
-     --slowLoop1ms;
-     if (slowLoop1ms == 0) break;
-     if (previousSign == 0) previousSign = 2;
-     if (previousSign == 1) break;
-   }
- }
- else {
-   if ((targetClockBits - currentClockBits) < slowLoopGranularity) {
-      break;
-    }
-    else {
-      ++slowLoop1ms;
-      if (previousSign == 0) previousSign = 1;
-      if (previousSign == 2) break;
-    }
-  }
-      }
-  }
-  /*
-   * calibrate fast loop
-   */
-
-  if (fastLoopGranularity != 0 ) {
-    while(1) {
-      int previousSign = 0; /* 0 = unset, 1 = incrementing,  2 = decrementing */
-      Timer0Reset();
-      if (slowLoop1ms != 0) slowLoop(slowLoop1ms);
-      fastLoop(fastLoop1ms);
-      currentClockBits = readTimer0();
-      if (currentClockBits > targetClockBits) {
-  if ((currentClockBits - targetClockBits) < fastLoopGranularity)
-    break;
-  else {
-    --fastLoop1ms;
-    if (previousSign == 0) previousSign = 2;
-    if (previousSign == 1) break;
-  }
-      }
-      else {
-  if ((targetClockBits - currentClockBits) < fastLoopGranularity)
-    break;
-  else {
-    ++fastLoop1ms;
-    if (previousSign == 0) previousSign = 1;
-    if (previousSign == 2) break;
-  }
-      }
-    }
-  }
-#ifdef DEBUG_CALIBRATE
-  printk("slowLoop1ms = %u, fastLoop1ms = %u\n", slowLoop1ms, fastLoop1ms);
-#endif
-  rtems_interrupt_local_enable(level);
-
-}
-
-/*
- *  loop which waits at least timeToWait ms
+ * Channel 2 runs in the hardware retriggerable one shot mode, so a rising edge
+ * of the gate starts the count.  The counter counts down through zero and
+ * continues at 0xffff, so a count above the load value shows that the
+ * millisecond elapsed.
  */
 void Wait_X_ms( unsigned int timeToWait)
 {
   unsigned int j;
+  uint8_t      gate;
+
+  inport_byte( PC386_WAIT_GATE, gate );
+  gate = ( gate | PC386_WAIT_GATE_TIMER ) & ~PC386_WAIT_GATE_SPEAKER;
+  outport_byte( PC386_WAIT_GATE, gate );
 
   for (j=0; j<timeToWait ; j++) {
-    if (slowLoop1ms != 0) slowLoop(slowLoop1ms);
-    fastLoop(fastLoop1ms);
+    uint32_t count;
+
+    outport_byte(
+      PC386_WAIT_MCR,
+      PC386_WAIT_SELECT_CHAN2 | PC386_WAIT_ACCESS_LOHI | PC386_WAIT_ONE_SHOT
+    );
+    outport_byte( PC386_WAIT_CHAN2, PC386_WAIT_COUNTS_PER_MS & 0xff );
+    outport_byte( PC386_WAIT_CHAN2, ( PC386_WAIT_COUNTS_PER_MS >> 8 ) & 0xff );
+
+    gate &= ~PC386_WAIT_GATE_TIMER;
+    outport_byte( PC386_WAIT_GATE, gate );
+    gate |= PC386_WAIT_GATE_TIMER;
+    outport_byte( PC386_WAIT_GATE, gate );
+
+    do {
+      uint8_t lsb;
+      uint8_t msb;
+
+      outport_byte( PC386_WAIT_MCR, PC386_WAIT_SELECT_CHAN2 );
+      inport_byte( PC386_WAIT_CHAN2, lsb );
+      inport_byte( PC386_WAIT_CHAN2, msb );
+      count = ( (uint32_t) msb << 8 ) | lsb;
+    } while ( count <= PC386_WAIT_COUNTS_PER_MS );
   }
+
+  gate &= ~PC386_WAIT_GATE_TIMER;
+  outport_byte( PC386_WAIT_GATE, gate );
 }

@@ -177,7 +177,6 @@ int           getch( void );             /* from 'inch.c' */
 void           add_to_queue( unsigned short b ); /* from 'inch.c' */
 
 void Wait_X_ms(unsigned int timeToWait); /* from 'timer.c'  */
-void Calibrate_loop_1ms(void);           /* from 'timer.c'  */
 
 void rtems_irq_mngt_init(void);          /* from 'irq_init.c' */
 
