@@ -1208,7 +1208,7 @@ static ssize_t msdos_short_entry_to_utf8_name (
   uint8_t                         *buf,
   const size_t                     buf_size)
 {
-  char         char_buf[MSDOS_NAME_MAX_WITH_DOT];
+  char         char_buf[MSDOS_NAME_MAX_WITH_DOT + 1];
   int          eno             = 0;
   size_t       bytes_converted = buf_size;
   ssize_t      bytes_written   = msdos_format_dirent_with_dot(char_buf, entry);
