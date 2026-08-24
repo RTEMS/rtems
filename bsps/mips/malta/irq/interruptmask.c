@@ -50,6 +50,6 @@ uint32_t mips_interrupt_mask( void )
    * This has only been tested with qemu for the mips malta and
    * may not be correct for the 24k on real hardware.
    */
-  interrupt_mask = 0x0000ff00;
+  interrupt_mask = 0x00007f00;
   return(interrupt_mask);
 }
