@@ -60,7 +60,8 @@
  * shares the interrupt of the counter used by the clock, so each handler of
  * the vector checks its own interrupt bit.  The counter raises the interrupt
  * some ticks after the request.  A test which needs the interrupt in a narrow
- * window fails with this delay.
+ * window fails with this delay.  The second counter is also the CPU counter,
+ * which this test takes over for its duration.
  */
 
 #define MUST_WAIT_FOR_INTERRUPT 1
