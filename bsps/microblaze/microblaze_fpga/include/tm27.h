@@ -49,11 +49,16 @@
 #include <rtems/score/isr.h>
 
 /*
- * The AXI interrupt controller cannot raise an interrupt in software once the
- * hardware interrupt inputs are enabled, which the clock needs.  Use the
- * second counter of the AXI timer instead.  It shares the interrupt of the
- * counter used by the clock, so the interrupt is shared and each handler
- * checks its own interrupt bit.
+ * A write to the interrupt status register of the AXI interrupt controller
+ * raises an interrupt in software.  The controller accepts this write only
+ * while the hardware interrupt enable of the master enable register is clear.
+ * This enable is write once on some implementations of the controller.
+ * Install_tm27_vector() probes the controller.  Where the probe fails,
+ * Cause_tm27_intr() uses the second counter of the AXI timer.  That counter
+ * shares the interrupt of the counter used by the clock, so each handler of
+ * the vector checks its own interrupt bit.  The counter raises the interrupt
+ * some ticks after the request.  A test which needs the interrupt in a narrow
+ * window fails with this delay.
  */
 
 #define MUST_WAIT_FOR_INTERRUPT 1
@@ -69,9 +74,12 @@ static volatile Microblaze_INTC *microblaze_tm27_intc;
 
 static uint32_t microblaze_tm27_irq;
 
+static bool microblaze_tm27_software_raise;
+
 static inline void Install_tm27_vector( rtems_interrupt_handler handler )
 {
   uint32_t irq;
+  uint32_t mask;
 
   microblaze_tm27_intc = (volatile Microblaze_INTC *)
     try_get_prop_from_device_tree(
@@ -95,6 +103,18 @@ static inline void Install_tm27_vector( rtems_interrupt_handler handler )
   /* Stop the counter and clear a pending interrupt */
   microblaze_tm27_timer->tcsr1 = MICROBLAZE_TIMER_TCSR0_T0INT;
 
+  /*
+   * The processor takes no interrupt during the system initialization, so the
+   * probe raises and clears the interrupt without a handler call.
+   */
+  mask = UINT32_C( 1 ) << irq;
+  microblaze_tm27_intc->mer = MICROBLAZE_INTC_MER_ME;
+  microblaze_tm27_intc->isr = mask;
+  microblaze_tm27_software_raise = ( microblaze_tm27_intc->isr & mask ) != 0;
+  microblaze_tm27_intc->iar = mask;
+  microblaze_tm27_intc->mer = MICROBLAZE_INTC_MER_ME |
+    MICROBLAZE_INTC_MER_HIE;
+
   rtems_interrupt_entry_initialize(
     &microblaze_tm27_interrupt_entry,
     handler,
@@ -110,15 +130,23 @@ static inline void Install_tm27_vector( rtems_interrupt_handler handler )
 
 static inline void Cause_tm27_intr( void )
 {
-  microblaze_tm27_timer->tlr1 = MICROBLAZE_TM27_TICKS;
-  microblaze_tm27_timer->tcsr1 = MICROBLAZE_TIMER_TCSR0_LOAD0;
-  microblaze_tm27_timer->tcsr1 = MICROBLAZE_TIMER_TCSR0_ENIT0 |
-    MICROBLAZE_TIMER_TCSR0_ENT0 | MICROBLAZE_TIMER_TCSR0_UDT0;
+  if ( microblaze_tm27_software_raise ) {
+    microblaze_tm27_intc->mer = MICROBLAZE_INTC_MER_ME;
+    microblaze_tm27_intc->isr = UINT32_C( 1 ) << microblaze_tm27_irq;
+    microblaze_tm27_intc->mer = MICROBLAZE_INTC_MER_ME |
+      MICROBLAZE_INTC_MER_HIE;
+  } else {
+    microblaze_tm27_timer->tlr1 = MICROBLAZE_TM27_TICKS;
+    microblaze_tm27_timer->tcsr1 = MICROBLAZE_TIMER_TCSR0_LOAD0;
+    microblaze_tm27_timer->tcsr1 = MICROBLAZE_TIMER_TCSR0_ENIT0 |
+      MICROBLAZE_TIMER_TCSR0_ENT0 | MICROBLAZE_TIMER_TCSR0_UDT0;
+  }
 }
 
 static inline void Clear_tm27_intr( void )
 {
   microblaze_tm27_timer->tcsr1 = MICROBLAZE_TIMER_TCSR0_T0INT;
+  microblaze_tm27_intc->iar = UINT32_C( 1 ) << microblaze_tm27_irq;
 }
 
 static inline void Lower_tm27_intr( void )
