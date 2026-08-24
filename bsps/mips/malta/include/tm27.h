@@ -5,11 +5,11 @@
  *
  * @ingroup RTEMSBSPsMIPSMalta
  *
- * @brief This header file includes the generic tm27 support implementation.
+ * @brief This header file provides the tm27 test support.
  */
 
 /*
- * Copyright (C) 2017 embedded brains GmbH & Co. KG
+ * Copyright (C) 2026 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -33,4 +33,72 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <rtems/tm27-default.h>
+#ifndef _RTEMS_TMTEST27
+#error "This is an RTEMS internal file you must not include directly."
+#endif
+
+#ifndef __tm27_h
+#define __tm27_h
+
+#include <bsp/irq.h>
+
+#include <rtems/score/isr.h>
+
+#define MUST_WAIT_FOR_INTERRUPT 1
+
+/*
+ * The two software interrupts of the processor are the only sources this BSP
+ * can raise.  The first carries the test interrupt and the second is the
+ * alternative vector, so a test which needs two of them has one of each.
+ */
+#define TM27_INTERRUPT_VECTOR_DEFAULT     MALTA_CPU_INT_SW0
+#define TM27_INTERRUPT_VECTOR_ALTERNATIVE MALTA_CPU_INT_SW1
+
+static rtems_interrupt_entry malta_tm27_interrupt_entry;
+
+static inline void Install_tm27_vector( rtems_interrupt_handler handler )
+{
+  rtems_interrupt_entry_initialize(
+    &malta_tm27_interrupt_entry,
+    handler,
+    NULL,
+    "tm27"
+  );
+  (void) rtems_interrupt_entry_install(
+    TM27_INTERRUPT_VECTOR_DEFAULT,
+    RTEMS_INTERRUPT_SHARED,
+    &malta_tm27_interrupt_entry
+  );
+}
+
+/*
+ * A software interrupt of the processor is a bit of the cause register.  It
+ * is pending from the write on.  It arrives as soon as the interrupts are
+ * enabled.  It stays pending until it is cleared.
+ */
+static inline void Cause_tm27_intr( void )
+{
+  (void) rtems_interrupt_raise( TM27_INTERRUPT_VECTOR_DEFAULT );
+}
+
+static inline void Clear_tm27_intr( void )
+{
+  (void) rtems_interrupt_clear( TM27_INTERRUPT_VECTOR_DEFAULT );
+}
+
+static inline void Lower_tm27_intr( void )
+{
+  _ISR_Set_level( 0 );
+}
+
+static inline rtems_status_code _TM27_Raise_alternative( void )
+{
+  return rtems_interrupt_raise( TM27_INTERRUPT_VECTOR_ALTERNATIVE );
+}
+
+static inline rtems_status_code _TM27_Clear_alternative( void )
+{
+  return rtems_interrupt_clear( TM27_INTERRUPT_VECTOR_ALTERNATIVE );
+}
+
+#endif /* __tm27_h */
