@@ -103,8 +103,9 @@ void bsp_start( void )
    *  initialize the device driver parameters
    */
   BSP_bus_frequency        = (unsigned int)PSIM_INSTRUCTIONS_PER_MICROSECOND;
-  bsp_clicks_per_usec      = BSP_bus_frequency;
   BSP_time_base_divisor    = 1;
+  bsp_clicks_per_usec      =
+    BSP_bus_frequency / ( BSP_time_base_divisor * 1000 );
 
   ppc_exc_initialize_with_vector_base(
     (uintptr_t) _ISR_Stack_area_begin,
