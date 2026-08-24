@@ -42,7 +42,9 @@
 
 #include <bsp/irq.h>
 
+#include <rtems/mips/idtcpu.h>
 #include <rtems/score/isr.h>
+#include <rtems/score/mips.h>
 
 #define MUST_WAIT_FOR_INTERRUPT 1
 
@@ -88,6 +90,20 @@ static inline void Clear_tm27_intr( void )
 
 static inline void Lower_tm27_intr( void )
 {
+  uint32_t sr;
+
+  /*
+   * The entry of an exception sets the exception level, which holds off every
+   * interrupt of the processor while the handler runs.  The interrupt enable
+   * alone does not undo that.  Clear the exception level, so that the
+   * interrupt raised next arrives as a nested interrupt.  The frame of the
+   * handler holds the exception program counter and the exit restores it.  A
+   * nested exception which overwrites the register therefore does no harm.
+   */
+  mips_get_sr( sr );
+  sr &= ~SR_EXL;
+  mips_set_sr( sr );
+
   _ISR_Set_level( 0 );
 }
 
