@@ -16,6 +16,7 @@ install:
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/mips/malta/include/bsp/irq.h
+  - bsps/mips/malta/include/bsp/malta-counter.h
   - bsps/mips/malta/include/bsp/pci.h
 - destination: ${BSP_LIBDIR}
   source:
@@ -44,6 +45,7 @@ source:
 - bsps/mips/malta/irq/vectorisrs.c
 - bsps/mips/malta/pci/pci.c
 - bsps/mips/malta/start/bspreset.c
+- bsps/mips/malta/start/cpucounter.c
 - bsps/mips/malta/start/bspstart.c
 - bsps/mips/malta/start/inittlb.c
 - bsps/mips/malta/start/simple_access.c
@@ -58,8 +60,6 @@ source:
 - bsps/mips/shared/start/idttlb.S
 - bsps/shared/cache/nocache.c
 - bsps/shared/dev/btimer/btimer-cpucounter.c
-- bsps/shared/dev/cpucounter/cpucounterfrequency.c
-- bsps/shared/dev/cpucounter/cpucounterread.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/pci/pci_find_device.c
 - bsps/shared/dev/serial/legacy-console-control.c

@@ -28,7 +28,10 @@
 
 #include <bsp.h>
 #include <bsp/irq.h>
+#include <bsp/malta-counter.h>
 #include <bspopts.h>
+
+#include <rtems/timecounter.h>
 
 /* XXX convert to macros? Move to score/cpu? */
 void mips_set_timer(uint32_t timer_clock_interval);
@@ -39,9 +42,35 @@ uint32_t mips_get_timer(void);
 #define CLOCK_VECTOR_MASK    EXT_INT5
 #define CLOCK_VECTOR         (MIPS_INTERRUPT_BASE+0x7)
 
-extern uint32_t bsp_clicks_per_microsecond;
-
 static uint32_t mips_timer_rate = 0;
+
+static struct timecounter mips_tc;
+
+static uint32_t mips_tc_get_timecount( struct timecounter *tc )
+{
+  (void) tc;
+
+  return malta_counter_read();
+}
+
+/*
+ * The count register of the coprocessor carries the timecounter as well as the
+ * clock tick.  It is free running, so it resolves an interval below the tick,
+ * which the tick counter of the dummy timecounter cannot.
+ */
+static void mips_clock_initialize( void )
+{
+  mips_timer_rate = rtems_configuration_get_microseconds_per_tick() *
+    bsp_clicks_per_microsecond;
+  mips_set_timer( mips_timer_rate );
+  mips_enable_in_interrupt_mask( CLOCK_VECTOR_MASK );
+
+  mips_tc.tc_get_timecount = mips_tc_get_timecount;
+  mips_tc.tc_counter_mask = 0xffffffff;
+  mips_tc.tc_frequency = malta_counter_frequency();
+  mips_tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
+  rtems_timecounter_install( &mips_tc );
+}
 
 /* refresh the internal CPU timer */
 #define Clock_driver_support_at_tick(arg) \
@@ -51,13 +80,6 @@ static uint32_t mips_timer_rate = 0;
   rtems_interrupt_handler_install(CLOCK_VECTOR, "PIT clock",0, _new, NULL)
 
 #define Clock_driver_support_initialize_hardware() \
-  do { \
-    mips_timer_rate = rtems_configuration_get_microseconds_per_tick() * \
-      bsp_clicks_per_microsecond; \
-    mips_set_timer( mips_timer_rate ); \
-    mips_enable_in_interrupt_mask(CLOCK_VECTOR_MASK); \
-  } while(0)
-
-#define CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER
+  mips_clock_initialize()
 
 #include "../../../shared/dev/clock/clockimpl.h"
