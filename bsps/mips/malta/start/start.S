@@ -108,7 +108,7 @@ _start_in_ram:
 	move	s0,$31
 #endif
 #endif
-	li	v0, SR_CU1|SR_PE|SR_FR|SR_KX|SR_SX|SR_UX
+	li	v0, SR_CU1|SR_PE|SR_KX|SR_SX|SR_UX
 	mtc0	v0, C0_SR
 	mtc0	zero, C0_CAUSE
 
@@ -137,7 +137,7 @@ _start_in_ram:
 #endif
 
 1:
-	li	v0, SR_PE|SR_FR|SR_KX|SR_SX|SR_UX
+	li	v0, SR_CU1|SR_PE|SR_KX|SR_SX|SR_UX
 	mtc0	v0, C0_SR
 2:
 /* Fix high bits, if any, of the PC so that exception handling

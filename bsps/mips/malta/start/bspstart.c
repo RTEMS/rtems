@@ -39,6 +39,8 @@
 #include <bsp/irq-generic.h>
 #include <bsp/i8259.h>
 
+#include <rtems/mips/idtcpu.h>
+
 /*
  * STRUCTURES
  */
@@ -83,10 +85,11 @@ void bsp_start( void )
   int       pci_init_retval;
 
   /*
-   * Note: This is the value that works for qemu, and it was
-   * unable to be validated on the actual hardware.
+   * Enable the coprocessor of the floating point unit.  The additional
+   * floating point registers stay disabled, because the ABI of this BSP holds
+   * a double in a pair of the 32 bit registers.
    */
-  mips_set_sr( 0x04100000 );
+  mips_set_sr( SR_CU1 );
 
   bsp_interrupt_initialize();
 
