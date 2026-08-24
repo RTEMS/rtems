@@ -131,8 +131,6 @@ static bool parse_madt(void)
   return true;
 }
 
-static uint64_t amd64_tsc_ticks_per_sec;
-
 /**
  * @brief Calculates the amount of LAPIC timer ticks per second using the PIT.
  *
@@ -169,13 +167,9 @@ static uint32_t lapic_timer_calc_ticks_per_sec(void)
 
   PIT_CHAN2_START_DELAY(chan2_value);
   amd64_lapic_base[LAPIC_REGISTER_TIMER_INITCNT] = lapic_calibrate_init_count;
-  uint64_t tsc_begin = amd64_rdtsc();
 
   PIT_CHAN2_WAIT_DELAY(pit_ticks);
   uint32_t lapic_currcnt = amd64_lapic_base[LAPIC_REGISTER_TIMER_CURRCNT];
-  uint64_t tsc_end = amd64_rdtsc();
-
-  amd64_tsc_ticks_per_sec = (tsc_end - tsc_begin) * PIT_CALIBRATE_DIVIDER;
 
   DBG_PRINTF("PIT stopped at 0x%" PRIx32 "\n", pit_ticks);
 
@@ -354,11 +348,6 @@ bool lapic_is_pending(uint32_t vector)
     (vector / 32) * LAPIC_REGISTER_IRR_STRIDE;
 
   return (amd64_lapic_base[reg] & (UINT32_C(1) << (vector % 32))) != 0;
-}
-
-uint64_t amd64_tsc_frequency(void)
-{
-  return amd64_tsc_ticks_per_sec;
 }
 
 #ifdef RTEMS_SMP

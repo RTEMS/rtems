@@ -49,8 +49,9 @@ extern "C" {
   /**
    * @brief Returns the frequency of the time stamp counter.
    *
-   * The counter is calibrated against the PIT together with the local APIC
-   * timer, so the value is available once the APIC is initialized.
+   * The CPU counter support calibrates the counter against the PIT, so the
+   * value is available from the CPU counter step of the system
+   * initialization on.
    *
    * @return The frequency in Hz.
    */

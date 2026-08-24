@@ -50,6 +50,7 @@ source:
 - bsps/x86_64/amd64/interrupts/pic.c
 - bsps/x86_64/amd64/start/bspstart.c
 - bsps/x86_64/amd64/start/bspreset.c
+- bsps/x86_64/amd64/start/cpucounter.c
 - bsps/x86_64/amd64/start/gdt.c
 - bsps/x86_64/amd64/start/page.c
 type: build

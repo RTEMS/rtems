@@ -24,8 +24,6 @@ install:
   - cpukit/score/cpu/x86_64/include/rtems/score/x86_64.h
 links: []
 source:
-- cpukit/score/cpu/no_cpu/cpucounterfrequency.c
-- cpukit/score/cpu/no_cpu/cpucounterread.c
 - cpukit/score/cpu/no_cpu/cpuidle.c
 - cpukit/score/cpu/x86_64/cpu.c
 - cpukit/score/cpu/x86_64/x86_64-context-initialize.c
