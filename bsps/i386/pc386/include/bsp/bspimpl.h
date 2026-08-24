@@ -35,6 +35,8 @@
 #ifndef __BSPIMPL_h
 #define __BSPIMPL_h
 
+#include <stdint.h>
+
 #include <rtems/pci.h>
 
 #include <libchip/serial.h>
@@ -46,6 +48,14 @@
  * until then, so that printk() works from the first character on.
  */
 console_tbl *pc386_console_port(rtems_device_minor_number minor);
+
+/*
+ * The frequency of the time stamp counter in Hz.  It is zero on a processor
+ * which has no time stamp counter.  The CPU counter support measures it
+ * against the 8254 before the clock driver starts.  The timecounter takes the
+ * full value, while the CPU counter interface gives it in 32 bits.
+ */
+extern uint64_t pc386_tsc_frequency;
 
 /*
  * PCI Support Methods

@@ -43,6 +43,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/bspimpl.h>
 #include <bsp/irq-generic.h>
 #include <bspopts.h>
 #include <libcpu/cpuModel.h>
@@ -61,15 +62,6 @@ uint32_t pc386_clock_click_count;
 /* forward declaration */
 void Clock_isr(void *param);
 static void Clock_isr_handler(void *param);
-
-/*
- * Roughly the number of cycles per second. Note that these
- * will be wildly inaccurate if the chip speed changes due to power saving
- * or thermal modes.
- *
- * NOTE: These are only used when the TSC method is used.
- */
-static uint64_t pc586_tsc_frequency;
 
 static struct timecounter pc386_tc;
 
@@ -132,62 +124,8 @@ static uint32_t pc386_get_timecount_i8254(struct timecounter *tc)
   return (irqs + 1) * pc386_microseconds_per_isr - ((msb << 8) | lsb);
 }
 
-/*
- * Calibrate CPU cycles per tick. Interrupts should be disabled.
- * Will also set the PIT, so call this before registering the 
- * periodic timer for rtems tick generation
- */
-static void calibrate_tsc(void)
-{
-  uint64_t              begin_time;
-  uint8_t               lsb, msb;
-  uint32_t              max_timer_value;
-  uint32_t              last_tick, cur_tick;
-  int32_t               diff, remaining;
-
-  /* Set the timer to free running mode */
-  outport_byte(TIMER_MODE, TIMER_SEL0 | TIMER_16BIT | TIMER_INTTC);
-  /* Reset the 16 timer reload value, first LSB, then MSB */
-  outport_byte(TIMER_CNTR0, 0);
-  outport_byte(TIMER_CNTR0, 0);
-  /* We use the full 16 bit */
-  max_timer_value = 0xffff;
-  /* Calibrate for 1s, i.e. TIMER_TICK PIT ticks */
-  remaining = TIMER_TICK;
-
-  begin_time = rdtsc();
-  READ_8254(lsb, msb);
-  last_tick = (msb << 8) | lsb;
-  while(remaining > 0) {
-    READ_8254(lsb, msb);
-    cur_tick = (msb << 8) | lsb;
-    /* PIT counts down, so subtract cur from last */
-    diff = last_tick - cur_tick;
-    last_tick = cur_tick;
-    if (diff < 0) {
-        diff += max_timer_value;
-    }
-    remaining -= diff;
-  }
-
-  pc586_tsc_frequency = rdtsc() - begin_time;
-
-#if 0
-  printk( "CPU clock at %u Hz\n", (uint32_t)(pc586_tsc_frequency ));
-#endif
-}
-
 static void clockOn(void)
 {
-
-  /*
-   * First calibrate the TSC. Do this every time we
-   * turn the clock on in case the CPU clock speed has changed.
-   */
-  if ( x86_has_tsc() ) {
-    calibrate_tsc();
-  }
-
   rtems_interrupt_lock_context lock_context;
   pc386_isrs_per_tick        = 1;
   pc386_microseconds_per_isr = rtems_configuration_get_microseconds_per_tick();
@@ -270,7 +208,7 @@ void Clock_driver_support_initialize_hardware(void)
     /* printk( "Use TSC\n" ); */
     pc386_tc.tc_get_timecount = pc386_get_timecount_tsc;
     pc386_tc.tc_counter_mask = 0xffffffff;
-    pc386_tc.tc_frequency = pc586_tsc_frequency;
+    pc386_tc.tc_frequency = pc386_tsc_frequency;
   }
 
   pc386_tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;

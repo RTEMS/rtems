@@ -58,6 +58,7 @@ source:
 - bsps/i386/pc386/start/bspreset.c
 - bsps/i386/pc386/start/bspstart.c
 - bsps/i386/pc386/start/cpuModel.S
+- bsps/i386/pc386/start/cpucounter.c
 - bsps/i386/pc386/start/displayCpu.c
 - bsps/i386/pc386/start/idtr.S
 - bsps/i386/pc386/start/ldsegs.S
