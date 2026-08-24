@@ -135,10 +135,18 @@ void __wrap_bsp_interrupt_dispatch( uint32_t source );
 
 void __wrap_bsp_interrupt_dispatch( uint32_t source )
 {
-  register uintptr_t sp __asm__( "1" );
-
   if ( interrupted_stack_at_multitasking_start == 0 ) {
-    interrupted_stack_at_multitasking_start = sp;
+    const Per_CPU_Control *cpu_self;
+    const uintptr_t       *frame;
+
+    /*
+     * The dispatch runs on the interrupt stack.  The frame at the top of that
+     * stack holds the stack pointer of the interrupted context.
+     */
+    cpu_self = _Per_CPU_Get();
+    frame = (const uintptr_t *) ( (uintptr_t) cpu_self->interrupt_stack_high -
+      CPU_INTERRUPT_FRAME_SIZE + MICROBLAZE_ISR_STACK_FRAME_SP );
+    interrupted_stack_at_multitasking_start = *frame;
   }
 
   __real_bsp_interrupt_dispatch( source );
