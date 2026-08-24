@@ -6,7 +6,7 @@ copyrights:
 cppflags: []
 cxxflags: []
 enabled-by:
-- bsps/aarch64/xilinx-zynqmp
+- aarch64
 - bsps/arm/xilinx-zynq
 includes: []
 install: []
