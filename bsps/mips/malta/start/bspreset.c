@@ -36,21 +36,17 @@
 
 void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
-  uint32_t *reset;
+  volatile uint32_t *reset;
 
   (void) source;
   (void) code;
 
-  reset= (uint32_t *)0x9F000500;
   /*
-   * Qemu understands 0x42 to reset simulated machine.
-   * We added code to recognize 0xFF to exit simulator.
-   *
-   * TBD: Qemu PC simulation has option to exit on reset.
-   *      find processing of that command line option and
-   *      use it to change behaviour of 0x42.
+   * The software reset register of the Malta FPGA resets the board on 0x42.
+   * The address is the uncached alias of the register, so the store reaches
+   * it without a cache flush.
    */
-  // *reset = 0x42;
-  *reset = 0xFF;
+  reset = (volatile uint32_t *) 0xBF000500;
+  *reset = 0x42;
   RTEMS_UNREACHABLE();
 }
