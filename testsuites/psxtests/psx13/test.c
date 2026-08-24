@@ -822,6 +822,9 @@ static void FutimensTest( void )
   fd = open( "testfile1.tst", O_RDWR );
   rtems_test_assert( fd != -1 );
 
+  rv = stat( "testfile1.tst", &fstat );
+  rtems_test_assert( rv == 0 );
+
   /* EACCES test cases */
 
   /* Case: When times is NULL and the user has insufficient privileges */
