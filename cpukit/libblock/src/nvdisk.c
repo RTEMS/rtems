@@ -860,7 +860,7 @@ rtems_device_driver rtems_nvdisk_initialize(
     uint32_t device;
     uint32_t blocks = 0;
 
-    name[ sizeof( RTEMS_NVDISK_DEVICE_BASE_NAME ) ] += i;
+    name[ sizeof( RTEMS_NVDISK_DEVICE_BASE_NAME ) - 1 ] += i;
 
     nvd->flags = c->flags;
     nvd->block_size = c->block_size;

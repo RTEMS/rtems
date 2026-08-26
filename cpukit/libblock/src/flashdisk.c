@@ -2790,7 +2790,7 @@ rtems_device_driver rtems_fdisk_initialize(
     uint32_t blocks = 0;
     int      ret;
 
-    name[ sizeof( RTEMS_FLASHDISK_DEVICE_BASE_NAME ) ] += minor;
+    name[ sizeof( RTEMS_FLASHDISK_DEVICE_BASE_NAME ) - 1 ] += minor;
 
     fd->major = major;
     fd->minor = minor;
