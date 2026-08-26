@@ -79,6 +79,7 @@ source:
 - cpukit/libmisc/shell/main_mv.c
 - cpukit/libmisc/shell/main_perioduse.c
 - cpukit/libmisc/shell/main_profreport.c
+- cpukit/libmisc/shell/main_prio.c
 - cpukit/libmisc/shell/main_pwd.c
 - cpukit/libmisc/shell/main_rm.c
 - cpukit/libmisc/shell/main_rmdir.c
