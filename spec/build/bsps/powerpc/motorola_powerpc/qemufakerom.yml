@@ -14,8 +14,8 @@ do-build: |
           target=target,
       )
       return target
-  fakerom_o = cc(self, bld, bic, "-DASM", "bsps/powerpc/motorola_powerpc/bootloader/qemu_fakerom.S")
-  fakeres_o = cc(self, bld, bic, "", "bsps/powerpc/motorola_powerpc/bootloader/qemu_fakeres.c")
+  fakerom_o = cc(self, bld, bic, "-DASM", "bsps/powerpc/shared/motppc/bootloader/qemu_fakerom.S")
+  fakeres_o = cc(self, bld, bic, "", "bsps/powerpc/shared/motppc/bootloader/qemu_fakeres.c")
   rule = "${LD} -o ${TGT} ${SRC} -nostdlib -Ttext 0xfff00000 --section-start=.romentry=0xfffffffc"
   elf = "qemu_fakerom.elf"
   bld(
