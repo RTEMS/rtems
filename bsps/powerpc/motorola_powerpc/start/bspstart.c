@@ -11,10 +11,14 @@
  */
 
 /*
- * Copyright (c) 1989-2007 On-Line Applications Research Corporation (OAR).
+ * Copyright (C) 2026 UChicago Argonne LLC,
+ * as operator of Argonne National Laboratory
+ * Author: Vijay Banerjee <vijay@rtems.org>
+ *
+ * Copyright (C) 1989-2007 On-Line Applications Research Corporation (OAR).
  *
  * Modified to support the MCP750.
- * Copyright (c) 1998 Eric Valette <eric.valette@free.fr>
+ * Copyright (C) 1998 Eric Valette <eric.valette@free.fr>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions

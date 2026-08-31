@@ -9,7 +9,7 @@
  */
 
 /*
- * Copyright (c) 1999 Eric Valette <eric.valette@free.fr>
+ * Copyright (C) 1999 Eric Valette <eric.valette@free.fr>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
