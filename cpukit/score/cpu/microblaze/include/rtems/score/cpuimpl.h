@@ -54,6 +54,7 @@
 
 #define CPU_THREAD_LOCAL_STORAGE_VARIANT 10
 
+/* The prologue saves these on the stack of the interrupted context. */
 #define MICROBLAZE_INTERRUPT_FRAME_R3   0
 #define MICROBLAZE_INTERRUPT_FRAME_R4   4
 #define MICROBLAZE_INTERRUPT_FRAME_R5   8
@@ -68,6 +69,14 @@
 #define MICROBLAZE_INTERRUPT_FRAME_R15 44
 #define MICROBLAZE_INTERRUPT_FRAME_R18 48
 #define MICROBLAZE_INTERRUPT_FRAME_MSR 52
+
+/*
+ * _ISR_Handler builds a second frame at the top of the interrupt stack.  The
+ * frame is CPU_INTERRUPT_FRAME_SIZE bytes, which covers the 28 bytes the ABI
+ * reserves for the callee.  This member is the link register slot of the ABI
+ * and holds the stack pointer of the interrupted context.
+ */
+#define MICROBLAZE_ISR_STACK_FRAME_SP 0
 
 #ifndef ASM
 

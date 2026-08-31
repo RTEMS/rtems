@@ -62,7 +62,7 @@ switch_to_interrupt_stack:
 	add r4, r0, r1
 	lwi r1, r0, _Per_CPU_Information + 4
 	addik r1, r1, -(CPU_INTERRUPT_FRAME_SIZE)
-	swi r4, r1, 0
+	swi r4, r1, MICROBLAZE_ISR_STACK_FRAME_SP
 
 on_interrupt_stack:
 	/* Add 1 to ISR_NEST_LEVEL */
@@ -82,7 +82,7 @@ on_interrupt_stack:
 	bgti r3, after_stack_switch
 
 	/* Switch back to interrupted thread stack */
-	lwi r1, r1, 0
+	lwi r1, r1, MICROBLAZE_ISR_STACK_FRAME_SP
 
 after_stack_switch:
 	/* Subtract 1 from THREAD_DISPATCH_DISABLE_LEVEL */
