@@ -70,7 +70,8 @@ void _CPU_Context_Initialize(
   memset( context, 0, sizeof(*context) ) ;
 
   context->r1 = stack_high - 64;
-  context->r15 = (uint32_t) entry_point;
+  /* The context restore returns with rtsd r15, 8. */
+  context->r15 = (uint32_t) entry_point - 8;
 
   uint32_t msr;
   _CPU_MSR_GET( msr );
