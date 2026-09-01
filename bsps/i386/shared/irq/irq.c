@@ -142,7 +142,7 @@ static inline void lapic_write(uint32_t reg, uint32_t value)
   lapic_base[reg / sizeof(*lapic_base)] = value;
 }
 
-static void lapic_initialize(void)
+static void bsp_lapic_initialize(void)
 {
   uint32_t         low;
   uint32_t         high;
@@ -397,11 +397,11 @@ rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
   }
 
   lapic_write(
-    LAPIC_ICR,
+    LAPIC_ICR_LOW,
     LAPIC_ICR_DS_SELF | LAPIC_ICR_LEVELASSERT | BSP_SOFTWARE_IRQ_IDT_INDEX
   );
 
-  while ((lapic_read(LAPIC_ICR) & LAPIC_ICR_STATUS_PEND) != 0) {
+  while ((lapic_read(LAPIC_ICR_LOW) & LAPIC_ICR_STATUS_PEND) != 0) {
     /* Wait for the delivery */
   }
 
@@ -536,7 +536,7 @@ void bsp_interrupt_facility_initialize(void)
   for (i = 0; i < BSP_IRQ_LINES_NUMBER; i++)
     irq_trigger[i] = elcr_read_trigger(i);
 
-  lapic_initialize();
+  bsp_lapic_initialize();
 }
 
 static bool bsp_interrupt_handler_is_empty(rtems_vector_number vector)
