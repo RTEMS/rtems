@@ -55,7 +55,7 @@
 #include <rtems/score/watchdogimpl.h>
 
 #define THREAD_QUEUE_BLOCKED \
-  ( THREAD_WAIT_CLASS_OBJECT | THREAD_WAIT_STATE_BLOCKED )
+  ( THREAD_WAIT_CLASS_QUEUE | THREAD_WAIT_STATE_BLOCKED )
 
 #if defined( RTEMS_SMP )
 /*
@@ -452,7 +452,7 @@ void _Thread_queue_Enqueue(
   _Thread_queue_Path_release( queue_context );
 
   the_thread->Wait.return_code = STATUS_SUCCESSFUL;
-  _Thread_Wait_flags_set( the_thread, THREAD_WAIT_CLASS_OBJECT );
+  _Thread_Wait_flags_set( the_thread, THREAD_WAIT_CLASS_QUEUE );
   cpu_self = _Thread_queue_Dispatch_disable( queue_context );
   _Thread_queue_Queue_release(
     queue,
@@ -482,7 +482,7 @@ void _Thread_queue_Enqueue(
    */
   success = _Thread_Wait_flags_try_change_acquire(
     the_thread,
-    THREAD_WAIT_CLASS_OBJECT,
+    THREAD_WAIT_CLASS_QUEUE,
     THREAD_QUEUE_BLOCKED
   );
   if ( !success ) {
@@ -533,7 +533,7 @@ Status_Control _Thread_queue_Enqueue_sticky(
   _Thread_queue_Path_release( queue_context );
 
   the_thread->Wait.return_code = STATUS_SUCCESSFUL;
-  _Thread_Wait_flags_set( the_thread, THREAD_WAIT_CLASS_OBJECT );
+  _Thread_Wait_flags_set( the_thread, THREAD_WAIT_CLASS_QUEUE );
   cpu_self = _Thread_queue_Dispatch_disable( queue_context );
   _Thread_queue_Queue_release(
     queue,
@@ -558,7 +558,7 @@ Status_Control _Thread_queue_Enqueue_sticky(
   _Thread_Dispatch_enable( cpu_self );
 
   while (
-    _Thread_Wait_flags_get_acquire( the_thread ) == THREAD_WAIT_CLASS_OBJECT
+    _Thread_Wait_flags_get_acquire( the_thread ) == THREAD_WAIT_CLASS_QUEUE
   ) {
     /* Wait */
   }
@@ -870,7 +870,7 @@ void _Thread_queue_Surrender_sticky(
    * Instead, the thread busy waits for a change of its thread wait flags.
    * Timeouts cannot interfere since we hold the thread queue lock.
    */
-  _Assert( _Thread_Wait_flags_get( new_owner ) == THREAD_WAIT_CLASS_OBJECT );
+  _Assert( _Thread_Wait_flags_get( new_owner ) == THREAD_WAIT_CLASS_QUEUE );
   _Thread_queue_Force_ready_again( new_owner );
 
   cpu_self = _Thread_queue_Dispatch_disable( queue_context );

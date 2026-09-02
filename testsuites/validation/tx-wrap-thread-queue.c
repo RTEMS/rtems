@@ -68,7 +68,7 @@ static void Prepare( WrapThreadQueueContext *ctx, Thread_Control *thread )
     ctx->wrapped_ops = NULL;
     _Thread_queue_Context_initialize( &queue_context );
     _Thread_queue_Acquire( &ctx->thread_queue, &queue_context );
-    _Thread_Wait_flags_set( thread, THREAD_WAIT_CLASS_OBJECT );
+    _Thread_Wait_flags_set( thread, THREAD_WAIT_CLASS_QUEUE );
     _Thread_Wait_claim( thread, &ctx->thread_queue.Queue );
     _Thread_Wait_claim_finalize( thread, &ctx->tq_ops );
     _Thread_queue_Release( &ctx->thread_queue, &queue_context );
