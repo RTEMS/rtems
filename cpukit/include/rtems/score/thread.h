@@ -441,8 +441,9 @@ typedef union {
  * The mutually exclusive wait class flags are
  * - @ref THREAD_WAIT_CLASS_EVENT,
  * - @ref THREAD_WAIT_CLASS_SYSTEM_EVENT,
- * - @ref THREAD_WAIT_CLASS_OBJECT, and
- * - @ref THREAD_WAIT_CLASS_PERIOD.
+ * - @ref THREAD_WAIT_CLASS_OBJECT,
+ * - @ref THREAD_WAIT_CLASS_PERIOD, and
+ * - @ref THREAD_WAIT_CLASS_TIME.
  *
  * The mutually exclusive wait state flags are
  * - @ref THREAD_WAIT_STATE_BLOCKED and
