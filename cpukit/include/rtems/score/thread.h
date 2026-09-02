@@ -439,9 +439,9 @@ typedef union {
  * class and state of a thread.
  *
  * The mutually exclusive wait class flags are
+ * - @ref THREAD_WAIT_CLASS_QUEUE,
  * - @ref THREAD_WAIT_CLASS_EVENT,
  * - @ref THREAD_WAIT_CLASS_SYSTEM_EVENT,
- * - @ref THREAD_WAIT_CLASS_OBJECT,
  * - @ref THREAD_WAIT_CLASS_PERIOD, and
  * - @ref THREAD_WAIT_CLASS_TIME.
  *

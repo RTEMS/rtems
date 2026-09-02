@@ -2256,7 +2256,7 @@ static inline void _Thread_Wait_cancel(
 /**
  * @brief Mask to get the thread wait state flags.
  */
-#define THREAD_WAIT_STATE_MASK 0xffU
+#define THREAD_WAIT_STATE_MASK 0x1U
 
 /**
  * @brief Indicates that the thread did not complete a blocking operation.
@@ -2272,37 +2272,37 @@ static inline void _Thread_Wait_cancel(
 /**
  * @brief Indicates that the thread completed the blocking operation.
  */
-#define THREAD_WAIT_STATE_BLOCKED 0x2U
+#define THREAD_WAIT_STATE_BLOCKED 0x1U
 
 /**
  * @brief Mask to get the thread wait class flags.
  */
-#define THREAD_WAIT_CLASS_MASK 0xff00U
+#define THREAD_WAIT_CLASS_MASK 0x3eU
+
+/**
+ * @brief Indicates that the thread waits for a thread queue.
+ */
+#define THREAD_WAIT_CLASS_QUEUE 0x2U
 
 /**
  * @brief Indicates that the thread waits for an event.
  */
-#define THREAD_WAIT_CLASS_EVENT 0x100U
+#define THREAD_WAIT_CLASS_EVENT 0x4U
 
 /**
  * @brief Indicates that the thread waits for a system event.
  */
-#define THREAD_WAIT_CLASS_SYSTEM_EVENT 0x200U
-
-/**
- * @brief Indicates that the thread waits for an object.
- */
-#define THREAD_WAIT_CLASS_OBJECT 0x400U
+#define THREAD_WAIT_CLASS_SYSTEM_EVENT 0x8U
 
 /**
  * @brief Indicates that the thread waits for a period.
  */
-#define THREAD_WAIT_CLASS_PERIOD 0x800U
+#define THREAD_WAIT_CLASS_PERIOD 0x10U
 
 /**
  * @brief Indicates that the thread waits for a point in time.
  */
-#define THREAD_WAIT_CLASS_TIME 0x1000U
+#define THREAD_WAIT_CLASS_TIME 0x20U
 
 /**
  * @brief Sets the thread's wait flags.

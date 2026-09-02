@@ -60,10 +60,10 @@ static T_interrupt_test_state interrupt( void *arg )
   ctx = arg;
   flags = _Thread_Wait_flags_get( ctx->thread );
 
-  if ( flags == THREAD_WAIT_CLASS_OBJECT ) {
+  if ( flags == THREAD_WAIT_CLASS_QUEUE ) {
     state = T_INTERRUPT_TEST_DONE;
   } else if (
-    flags == ( THREAD_WAIT_CLASS_OBJECT | THREAD_WAIT_STATE_BLOCKED )
+    flags == ( THREAD_WAIT_CLASS_QUEUE | THREAD_WAIT_STATE_BLOCKED )
   ) {
     state = T_INTERRUPT_TEST_LATE;
   } else {
