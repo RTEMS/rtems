@@ -69,6 +69,10 @@ rtems_status_code rtems_semaphore_delete( rtems_id id )
     &the_semaphore->Core_control.Wait_queue,
     &queue_context
   );
+  _Thread_queue_Context_set_MP_callout(
+    &queue_context,
+    _Semaphore_MP_Send_object_was_deleted
+  );
   flags = _Semaphore_Get_flags( the_semaphore );
   variant = _Semaphore_Get_variant( flags );
 
