@@ -68,7 +68,15 @@ static void Prepare( WrapThreadQueueContext *ctx, Thread_Control *thread )
     ctx->wrapped_ops = NULL;
     _Thread_queue_Context_initialize( &queue_context );
     _Thread_queue_Acquire( &ctx->thread_queue, &queue_context );
-    _Thread_Wait_flags_set( thread, THREAD_WAIT_CLASS_QUEUE );
+    /*
+     * The thread may wait for something else.  Force the class of a wait for
+     * a thread queue on it and keep the generation.
+     */
+    _Thread_Wait_flags_set(
+      thread,
+      ( _Thread_Wait_flags_get( thread ) & THREAD_WAIT_GENERATION_MASK ) |
+        THREAD_WAIT_CLASS_QUEUE
+    );
     _Thread_Wait_claim( thread, &ctx->thread_queue.Queue );
     _Thread_Wait_claim_finalize( thread, &ctx->tq_ops );
     _Thread_queue_Release( &ctx->thread_queue, &queue_context );

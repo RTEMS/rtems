@@ -49,7 +49,8 @@ typedef struct {
 
 static bool is_interrupt_timeout( test_context *ctx )
 {
-  Thread_Wait_flags flags = _Thread_Wait_flags_get( ctx->thread );
+  Thread_Wait_flags flags = _Thread_Wait_flags_get( ctx->thread ) &
+                            THREAD_WAIT_MASK;
 
   return flags == THREAD_WAIT_STATE_READY;
 }

@@ -61,9 +61,6 @@ extern "C" {
  * @{
  */
 
-#define RATE_MONOTONIC_BLOCKED \
-  ( THREAD_WAIT_CLASS_PERIOD | THREAD_WAIT_STATE_BLOCKED )
-
 /**
  *  @brief Allocates a period control block from
  *  the inactive chain of free period control blocks.

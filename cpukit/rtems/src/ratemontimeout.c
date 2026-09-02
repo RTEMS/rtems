@@ -95,7 +95,7 @@ void _Rate_monotonic_Timeout( Watchdog_Control *the_watchdog )
     owner->Wait.return_argument = NULL;
     previous_wait_flags = _Thread_Wait_flags_exchange_release(
       owner,
-      THREAD_WAIT_STATE_READY
+      _Thread_Wait_flags_end( wait_flags )
     );
     unblock = ( previous_wait_flags & THREAD_WAIT_STATE_BLOCKED ) != 0U;
 

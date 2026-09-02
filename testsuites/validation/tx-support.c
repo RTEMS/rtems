@@ -614,7 +614,8 @@ void WaitForIntendToBlock( rtems_id task_id )
   T_assert_not_null( the_thread );
 
   while (
-    _Thread_Wait_flags_get_acquire( the_thread ) != THREAD_WAIT_CLASS_QUEUE
+    ( _Thread_Wait_flags_get_acquire( the_thread ) & THREAD_WAIT_MASK ) !=
+    THREAD_WAIT_CLASS_QUEUE
   ) {
     /* Wait */
   }

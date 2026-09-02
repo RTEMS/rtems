@@ -2305,6 +2305,25 @@ static inline void _Thread_Wait_cancel(
 #define THREAD_WAIT_CLASS_TIME 0x20U
 
 /**
+ * @brief Mask to get the thread wait state and the thread wait class.
+ */
+#define THREAD_WAIT_MASK ( THREAD_WAIT_STATE_MASK | THREAD_WAIT_CLASS_MASK )
+
+/**
+ * @brief Mask to get the generation of the thread wait flags.
+ *
+ * The generation names one wait of a thread.  It steps at the end of every
+ * wait.  A party which took the generation of a wait can therefore tell that
+ * wait from every later wait of the thread.
+ */
+#define THREAD_WAIT_GENERATION_MASK 0xffffffc0U
+
+/**
+ * @brief The step of the generation of the thread wait flags.
+ */
+#define THREAD_WAIT_GENERATION_STEP 0x40U
+
+/**
  * @brief Sets the thread's wait flags.
  *
  * @param[in, out] the_thread The thread to set the wait flags of.
@@ -2433,6 +2452,75 @@ static inline Thread_Wait_flags _Thread_Wait_flags_exchange_release(
 
   return flags;
 #endif
+}
+
+/**
+ * @brief Starts a wait of the thread.
+ *
+ * The routine adds the wait class to the thread wait flags of the thread.  It
+ * reads the flags and writes them back.  A thread which waits on nothing has
+ * no other writer of its flags, so the caller needs no lock.
+ *
+ * @param[in, out] the_thread is the thread.
+ *
+ * @param wait_class is the wait class of the new wait.
+ *
+ * @return Returns the thread wait flags of the new wait.
+ */
+static inline Thread_Wait_flags _Thread_Wait_flags_start(
+  Thread_Control   *the_thread,
+  Thread_Wait_flags wait_class
+)
+{
+  Thread_Wait_flags flags;
+
+  flags = _Thread_Wait_flags_get( the_thread );
+  _Assert( ( flags & THREAD_WAIT_MASK ) == 0U );
+  flags |= wait_class;
+  _Thread_Wait_flags_set( the_thread, flags );
+
+  return flags;
+}
+
+/**
+ * @brief Starts a wait of the thread which completed the blocking operation.
+ *
+ * The routine works like _Thread_Wait_flags_start() and adds
+ * THREAD_WAIT_STATE_BLOCKED.
+ *
+ * @param[in, out] the_thread is the thread.
+ *
+ * @param wait_class is the wait class of the new wait.
+ *
+ * @return Returns the thread wait flags of the new wait.
+ */
+static inline Thread_Wait_flags _Thread_Wait_flags_start_blocked(
+  Thread_Control   *the_thread,
+  Thread_Wait_flags wait_class
+)
+{
+  return _Thread_Wait_flags_start(
+    the_thread,
+    wait_class | THREAD_WAIT_STATE_BLOCKED
+  );
+}
+
+/**
+ * @brief Gets the thread wait flags which end the wait.
+ *
+ * The wait class and the wait state are zero in the return value.  The
+ * generation is the generation of the next wait of the thread.
+ *
+ * @param wait_flags are the thread wait flags of the wait which ends.
+ *
+ * @return Returns the thread wait flags which end the wait.
+ */
+static inline Thread_Wait_flags _Thread_Wait_flags_end(
+  Thread_Wait_flags wait_flags
+)
+{
+  return ( wait_flags + THREAD_WAIT_GENERATION_STEP ) &
+         THREAD_WAIT_GENERATION_MASK;
 }
 
 /**

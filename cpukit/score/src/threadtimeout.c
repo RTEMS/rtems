@@ -54,7 +54,7 @@ void _Thread_Continue( Thread_Control *the_thread, Status_Control status )
 
   wait_flags = _Thread_Wait_flags_get( the_thread );
 
-  if ( wait_flags != THREAD_WAIT_STATE_READY ) {
+  if ( ( wait_flags & THREAD_WAIT_CLASS_MASK ) != 0U ) {
     Thread_Wait_flags previous_wait_flags;
 
     _Thread_Wait_cancel( the_thread, &queue_context );
@@ -62,7 +62,7 @@ void _Thread_Continue( Thread_Control *the_thread, Status_Control status )
     the_thread->Wait.return_code = status;
     previous_wait_flags = _Thread_Wait_flags_exchange_release(
       the_thread,
-      THREAD_WAIT_STATE_READY
+      _Thread_Wait_flags_end( wait_flags )
     );
     unblock = ( previous_wait_flags & THREAD_WAIT_STATE_BLOCKED ) != 0U;
   } else {

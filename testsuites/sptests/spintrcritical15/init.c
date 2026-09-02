@@ -68,7 +68,7 @@ static T_interrupt_test_state interrupt( void *arg )
   T_interrupt_test_state state;
 
   ctx = arg;
-  flags = _Thread_Wait_flags_get( ctx->main_thread );
+  flags = _Thread_Wait_flags_get( ctx->main_thread ) & THREAD_WAIT_MASK;
 
   if ( flags == THREAD_WAIT_CLASS_QUEUE ) {
     state = T_INTERRUPT_TEST_DONE;
