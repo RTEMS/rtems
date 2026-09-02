@@ -361,7 +361,10 @@ void *POSIX_Init( void *argument )
 
   puts( "Init: Go into low priority and set scheduler" );
 
-  sc = rtems_scheduler_ident_by_processor( 1, &scheduler_id );
+  sc = rtems_scheduler_ident_by_processor(
+    rtems_scheduler_get_processor_maximum() - 1,
+    &scheduler_id
+  );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   schedparam.sched_priority = high_priority;
