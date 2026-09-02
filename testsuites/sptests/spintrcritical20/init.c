@@ -125,7 +125,10 @@ static void action( void *arg )
     ctx->thread_queue_was_null = true;
   }
 
-  _Thread_Timeout( &ctx->semaphore_task_tcb->Timer.Watchdog );
+  _Thread_Timeout(
+    &ctx->semaphore_task_tcb->Timer.Watchdog,
+    ctx->semaphore_task_tcb->Timer.Watchdog.token
+  );
 
   switch ( _Thread_Wait_get_status( ctx->semaphore_task_tcb ) ) {
     case STATUS_SUCCESSFUL:

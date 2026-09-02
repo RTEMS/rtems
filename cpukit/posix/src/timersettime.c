@@ -71,11 +71,13 @@ static void _POSIX_Timer_Insert(
 /*
  *  This is the operation that is run when a timer expires
  */
-void _POSIX_Timer_TSR( Watchdog_Control *the_watchdog )
+void _POSIX_Timer_TSR( Watchdog_Control *the_watchdog, unsigned int token )
 {
   POSIX_Timer_Control *ptimer;
   ISR_lock_Context     lock_context;
   Per_CPU_Control     *cpu;
+
+  (void) token;
 
   ptimer = RTEMS_CONTAINER_OF( the_watchdog, POSIX_Timer_Control, Timer );
   _ISR_lock_ISR_disable( &lock_context );

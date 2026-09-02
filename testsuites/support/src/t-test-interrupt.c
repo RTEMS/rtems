@@ -155,12 +155,14 @@ static int64_t T_interrupt_time_close_to_tick( void )
   return ct[ 1 + ( n - 1 ) / 2 ].t;
 }
 
-static void T_interrupt_watchdog( Watchdog_Control *wdg )
+static void T_interrupt_watchdog( Watchdog_Control *wdg, unsigned int token )
 {
   T_interrupt_context   *ctx;
   ISR_Level              level;
   T_interrupt_test_state state;
   unsigned int           expected;
+
+  (void) token;
 
   ctx = RTEMS_CONTAINER_OF( wdg, T_interrupt_context, wdg );
 

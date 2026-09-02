@@ -81,7 +81,10 @@ static inline void _POSIX_Threads_Sporadic_timer_insert(
 }
 #endif
 
-void _POSIX_Threads_Sporadic_timer( Watchdog_Control *watchdog );
+void _POSIX_Threads_Sporadic_timer(
+  Watchdog_Control *watchdog,
+  unsigned int      token
+);
 
 /**
  * @brief The POSIX threads sporadic budget operations.

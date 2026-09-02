@@ -2616,7 +2616,7 @@ void _Thread_Continue( Thread_Control *the_thread, Status_Control status );
  *
  * @param the_watchdog The thread timer watchdog.
  */
-void _Thread_Timeout( Watchdog_Control *the_watchdog );
+void _Thread_Timeout( Watchdog_Control *the_watchdog, unsigned int token );
 
 /**
  * @brief Initializes the thread timer.

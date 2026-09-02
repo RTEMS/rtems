@@ -82,7 +82,8 @@ typedef void Watchdog_Service_routine;
  *  This type define a pointer to a watchdog service routine.
  */
 typedef Watchdog_Service_routine ( *Watchdog_Service_routine_entry )(
-  Watchdog_Control *
+  Watchdog_Control *,
+  unsigned int
 );
 
 /**
@@ -132,6 +133,18 @@ struct Watchdog_Control {
 
   /** @brief This field is the function to invoke. */
   Watchdog_Service_routine_entry routine;
+
+  /**
+   * @brief This field is an opaque value of the party which schedules the
+   * watchdog.
+   *
+   * _Watchdog_Do_tickle() reads the value under protection of the lock of the
+   * watchdog header and hands it to the service routine.  The value therefore
+   * belongs to the schedule which expired, even if another party schedules the
+   * watchdog again before the service routine runs.  The watchdog does not
+   * interpret the value.
+   */
+  unsigned int token;
 
   /** @brief This field is the expiration time point. */
   uint64_t expire;

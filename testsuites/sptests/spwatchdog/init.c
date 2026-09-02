@@ -51,9 +51,11 @@ typedef struct {
   int              counter;
 } test_watchdog;
 
-static void test_watchdog_routine( Watchdog_Control *base )
+static void test_watchdog_routine( Watchdog_Control *base, unsigned int token )
 {
   test_watchdog *watchdog = (test_watchdog *) base;
+
+  (void) token;
 
   ++watchdog->counter;
 }

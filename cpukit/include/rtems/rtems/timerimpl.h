@@ -189,9 +189,15 @@ rtems_status_code _Timer_Fire_when(
 
 void _Timer_Cancel( Per_CPU_Control *cpu, Timer_Control *the_timer );
 
-void _Timer_Routine_adaptor( Watchdog_Control *the_watchdog );
+void _Timer_Routine_adaptor(
+  Watchdog_Control *the_watchdog,
+  unsigned int      token
+);
 
-void _Timer_server_Routine_adaptor( Watchdog_Control *the_watchdog );
+void _Timer_server_Routine_adaptor(
+  Watchdog_Control *the_watchdog,
+  unsigned int      token
+);
 
 static inline void _Timer_server_Acquire_critical(
   Timer_server_Control *timer_server,

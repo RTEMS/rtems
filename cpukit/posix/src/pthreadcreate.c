@@ -304,7 +304,7 @@ int pthread_create(
 #if defined( RTEMS_SCORE_THREAD_HAS_SCHEDULER_CHANGE_INHIBITORS )
     the_thread->is_scheduler_change_inhibited = true;
 #endif
-    _POSIX_Threads_Sporadic_timer( &api->Sporadic.Timer );
+    _POSIX_Threads_Sporadic_timer( &api->Sporadic.Timer, 0 );
   }
 #endif
 
@@ -338,11 +338,16 @@ int pthread_create(
 }
 
 #if defined( RTEMS_POSIX_API )
-void _POSIX_Threads_Sporadic_timer( Watchdog_Control *watchdog )
+void _POSIX_Threads_Sporadic_timer(
+  Watchdog_Control *watchdog,
+  unsigned int      token
+)
 {
   POSIX_API_Control   *api;
   Thread_Control      *the_thread;
   Thread_queue_Context queue_context;
+
+  (void) token;
 
   api = RTEMS_CONTAINER_OF( watchdog, POSIX_API_Control, Sporadic.Timer );
   the_thread = api->Sporadic.thread;

@@ -97,7 +97,7 @@ static inline void _POSIX_Timer_Free( POSIX_Timer_Control *the_timer )
   _Objects_Free( &_POSIX_Timer_Information, &the_timer->Object );
 }
 
-void _POSIX_Timer_TSR( Watchdog_Control *the_watchdog );
+void _POSIX_Timer_TSR( Watchdog_Control *the_watchdog, unsigned int token );
 
 /**
  *  @brief POSIX Timer Get
