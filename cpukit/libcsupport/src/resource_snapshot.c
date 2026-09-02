@@ -41,6 +41,7 @@
 
 #include <rtems/libcsupport.h>
 
+#include <stddef.h>
 #include <string.h>
 
 #include <rtems/libio_.h>
@@ -54,26 +55,62 @@
 static const struct {
   Objects_APIs api;
   uint16_t     cls;
+  uint16_t     offset;
 } objects_info_table[] = {
-  { OBJECTS_POSIX_API, OBJECTS_POSIX_KEYS },
-  { OBJECTS_CLASSIC_API, OBJECTS_RTEMS_BARRIERS },
-  { OBJECTS_CLASSIC_API, OBJECTS_RTEMS_EXTENSIONS },
-  { OBJECTS_CLASSIC_API, OBJECTS_RTEMS_MESSAGE_QUEUES },
-  { OBJECTS_CLASSIC_API, OBJECTS_RTEMS_PARTITIONS },
-  { OBJECTS_CLASSIC_API, OBJECTS_RTEMS_PERIODS },
-  { OBJECTS_CLASSIC_API, OBJECTS_RTEMS_PORTS },
-  { OBJECTS_CLASSIC_API, OBJECTS_RTEMS_REGIONS },
-  { OBJECTS_CLASSIC_API, OBJECTS_RTEMS_SEMAPHORES },
-  { OBJECTS_CLASSIC_API, OBJECTS_RTEMS_TASKS },
-  { OBJECTS_CLASSIC_API, OBJECTS_RTEMS_TIMERS },
-  { OBJECTS_POSIX_API, OBJECTS_POSIX_MESSAGE_QUEUES },
-  { OBJECTS_POSIX_API, OBJECTS_POSIX_SEMAPHORES },
-  { OBJECTS_POSIX_API, OBJECTS_POSIX_THREADS }
+  { OBJECTS_POSIX_API,
+    OBJECTS_POSIX_KEYS,
+    offsetof( rtems_resource_snapshot, active_posix_keys ) },
+  { OBJECTS_CLASSIC_API,
+    OBJECTS_RTEMS_BARRIERS,
+    offsetof( rtems_resource_snapshot, rtems_api.active_barriers ) },
+  { OBJECTS_CLASSIC_API,
+    OBJECTS_RTEMS_EXTENSIONS,
+    offsetof( rtems_resource_snapshot, rtems_api.active_extensions ) },
+  { OBJECTS_CLASSIC_API,
+    OBJECTS_RTEMS_MESSAGE_QUEUES,
+    offsetof( rtems_resource_snapshot, rtems_api.active_message_queues ) },
+  { OBJECTS_CLASSIC_API,
+    OBJECTS_RTEMS_PARTITIONS,
+    offsetof( rtems_resource_snapshot, rtems_api.active_partitions ) },
+  { OBJECTS_CLASSIC_API,
+    OBJECTS_RTEMS_PERIODS,
+    offsetof( rtems_resource_snapshot, rtems_api.active_periods ) },
+  { OBJECTS_CLASSIC_API,
+    OBJECTS_RTEMS_PORTS,
+    offsetof( rtems_resource_snapshot, rtems_api.active_ports ) },
+  { OBJECTS_CLASSIC_API,
+    OBJECTS_RTEMS_REGIONS,
+    offsetof( rtems_resource_snapshot, rtems_api.active_regions ) },
+  { OBJECTS_CLASSIC_API,
+    OBJECTS_RTEMS_SEMAPHORES,
+    offsetof( rtems_resource_snapshot, rtems_api.active_semaphores ) },
+  { OBJECTS_CLASSIC_API,
+    OBJECTS_RTEMS_TASKS,
+    offsetof( rtems_resource_snapshot, rtems_api.active_tasks ) },
+  { OBJECTS_CLASSIC_API,
+    OBJECTS_RTEMS_TIMERS,
+    offsetof( rtems_resource_snapshot, rtems_api.active_timers ) },
+  { OBJECTS_POSIX_API,
+    OBJECTS_POSIX_MESSAGE_QUEUES,
+    offsetof( rtems_resource_snapshot, posix_api.active_message_queues ) },
+  { OBJECTS_POSIX_API,
+    OBJECTS_POSIX_SEMAPHORES,
+    offsetof( rtems_resource_snapshot, posix_api.active_semaphores ) },
+  { OBJECTS_POSIX_API,
+    OBJECTS_POSIX_THREADS,
+    offsetof( rtems_resource_snapshot, posix_api.active_threads ) }
   #ifdef RTEMS_POSIX_API
   ,
-  { OBJECTS_POSIX_API, OBJECTS_POSIX_TIMERS }
+  { OBJECTS_POSIX_API,
+    OBJECTS_POSIX_TIMERS,
+    offsetof( rtems_resource_snapshot, posix_api.active_timers ) }
   #endif
 };
+
+RTEMS_STATIC_ASSERT(
+  sizeof( rtems_resource_snapshot ) <= UINT16_MAX,
+  RESOURCE_SNAPSHOT_OFFSET
+);
 
 static int open_files( void )
 {
@@ -123,8 +160,7 @@ static uint32_t get_active_posix_key_value_pairs( void )
 
 void rtems_resource_snapshot_take( rtems_resource_snapshot *snapshot )
 {
-  uint32_t *active;
-  size_t    i;
+  size_t i;
 
   memset( snapshot, 0, sizeof( *snapshot ) );
 
@@ -135,8 +171,6 @@ void rtems_resource_snapshot_take( rtems_resource_snapshot *snapshot )
   get_heap_info( RTEMS_Malloc_Heap, &snapshot->heap_info );
   get_heap_info( &_Workspace_Area, &snapshot->workspace_info );
 
-  active = &snapshot->active_posix_keys;
-
   for ( i = 0; i < RTEMS_ARRAY_SIZE( objects_info_table ); ++i ) {
     const Objects_Information *information;
 
@@ -146,7 +180,12 @@ void rtems_resource_snapshot_take( rtems_resource_snapshot *snapshot )
     );
 
     if ( information != NULL ) {
-      active[ i ] = _Objects_Active_count( information );
+      uint32_t *active;
+
+      active = (uint32_t *) (
+        (char *) snapshot + objects_info_table[ i ].offset
+      );
+      *active = _Objects_Active_count( information );
     }
   }
 
