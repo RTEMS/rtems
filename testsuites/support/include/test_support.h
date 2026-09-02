@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2026.
  *  On-Line Applications Research Corporation (OAR).
  *
  * Redistribution and use in source and binary forms, with or without
@@ -91,6 +91,18 @@ void locked_print_initialize( void );
 int locked_printf( const char *fmt, ... );
 
 int locked_vprintf( const char *fmt, va_list ap );
+
+/*********************************************************************/
+/*********************************************************************/
+/**************         FILE TEST SUPPORT               **************/
+/*********************************************************************/
+/*********************************************************************/
+
+void test_cat( char *file, off_t offset_arg, size_t length );
+
+void test_write( char *file, off_t offset, char *buffer );
+
+void test_extend( char *file, off_t new_len );
 
 #ifdef __cplusplus
 };

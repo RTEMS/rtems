@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2026.
  *  On-Line Applications Research Corporation (OAR).
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,6 +43,7 @@
 #include <unistd.h>
 #include <string.h>
 
+#include "test-support.h"
 #include "tar02-tar.h"
 
 const char rtems_test_name[] = "TAR 2";
@@ -105,9 +106,6 @@ static void write_file( const char *file, const char *content, size_t size )
   rv = close( fd );
   rtems_test_assert( rv == 0 );
 }
-
-/* FIXME */
-void test_cat( const char *file, int offset_arg, int length );
 
 void test_tarfs_load( void )
 {

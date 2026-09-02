@@ -1,15 +1,15 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  A test support function which performs a crude version of
- *  "cat" so you can look at specific parts of a file.
+ * A test support function which performs a crude version of
+ * "cat" so you can look at specific parts of a file.
  */
 
 /*
- *  COPYRIGHT (c) 1989-2012.
- *  On-Line Applications Research Corporation (OAR).
+ * COPYRIGHT (c) 1989-2012.
+ * On-Line Applications Research Corporation (OAR).
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -49,16 +49,15 @@
 
 #include <tmacros.h>
 
-/* forward declarations to avoid warnings */
-void test_cat( char *file, int offset_arg, size_t length );
+#include "test_support.h"
 
 /*
  *  test_cat routine
  */
 
-unsigned char test_cat_buffer[ 1024 ];
+static unsigned char test_cat_buffer[ 1024 ];
 
-void test_cat( char *file, int offset_arg, size_t length )
+void test_cat( char *file, off_t offset_arg, size_t length )
 {
   int           fd;
   int           status;

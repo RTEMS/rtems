@@ -63,6 +63,7 @@
 #include <rtems/libio.h>
 
 #include "primode.h"
+#include "test_support.h"
 
 const char rtems_test_name[] = "PSXFILE 1";
 
@@ -83,16 +84,6 @@ static const char hardlink[] = "hardlink";
 static const char hardlink_marker[] = "hard link O_NOFOLLOW marker";
 
 static const char somelink[] = "somelink";
-
-/*
- *  File test support routines.
- */
-
-void test_cat( char *file, int offset_arg, int length );
-
-void test_write( char *file, off_t offset, char *buffer );
-
-void test_extend( char *file, off_t new_len );
 
 /*
  *  dump_statbuf

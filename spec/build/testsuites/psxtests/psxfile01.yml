@@ -13,9 +13,9 @@ links: []
 source:
 - testsuites/psxtests/psxfile01/main.c
 - testsuites/psxtests/psxfile01/test.c
-- testsuites/psxtests/psxfile01/test_cat.c
-- testsuites/psxtests/psxfile01/test_extend.c
-- testsuites/psxtests/psxfile01/test_write.c
+- testsuites/support/src/test_cat.c
+- testsuites/support/src/test_extend.c
+- testsuites/support/src/test_write.c
 stlib: []
 target: testsuites/psxtests/psxfile01.exe
 type: build

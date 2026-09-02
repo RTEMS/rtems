@@ -1,19 +1,15 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  A test support function which extends the file to the specified
- *  length.  This handles the implied open(), lseek(), write(), and close()
- *  operations.
- *
- *  The defined behavior is a seek() followed by a write() extends the file
- *  and zero fills the new length part.
+ * A test support function which performs a write() and
+ * handles implied open(), lseek(), write(), and close() operations.
  */
 
 /*
- *  COPYRIGHT (c) 1989-2012.
- *  On-Line Applications Research Corporation (OAR).
+ * COPYRIGHT (c) 1989-2026.
+ * On-Line Applications Research Corporation (OAR).
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -49,47 +45,43 @@
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
-#include <ctype.h>
 
 #include <pmacros.h>
 
-/* forward declarations to avoid warnings */
-void test_extend( char *file, off_t offset );
+#include "test_support.h"
 
 /*
- *  test_extend routine
+ *  test_write routine
  */
-void test_extend( char *file, off_t offset )
+void test_write( char *file, off_t offset, char *buffer )
 {
-  int  fd;
-  int  status;
-  char c = 0;
+  int fd;
+  int status;
+  int length;
+
+  length = strlen( buffer );
 
   fd = open( file, O_WRONLY );
   if ( fd == -1 ) {
-    printf( "test_extend: open( %s ) failed : %s\n", file, strerror( errno ) );
+    printf( "test_write: open( %s ) failed : %s\n", file, strerror( errno ) );
     rtems_test_exit( 0 );
   }
 
-  status = lseek( fd, offset - 1, SEEK_SET );
+  status = lseek( fd, offset, SEEK_SET );
   rtems_test_assert( status != -1 );
 
-  status = write( fd, &c, 1 );
+  status = write( fd, buffer, length );
   if ( status == -1 ) {
-    printf(
-      "test_extend: write( %s ) failed : %s\n",
-      file,
-      strerror( errno )
-    );
+    printf( "test_write: write( %s ) failed : %s\n", file, strerror( errno ) );
     rtems_test_exit( 0 );
   }
 
-  if ( status != 1 ) {
+  if ( status != length ) {
     printf(
-      "test_extend: write( %s ) only wrote %d of %d bytes\n",
+      "test_write: write( %s ) only wrote %d of %d bytes\n",
       file,
       status,
-      1
+      length
     );
     rtems_test_exit( 0 );
   }
