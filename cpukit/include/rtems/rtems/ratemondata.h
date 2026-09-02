@@ -146,6 +146,16 @@ typedef struct {
   uint32_t postponed_jobs;
 
   /**
+   * @brief This field is the generation of the timer of the period.
+   *
+   * _Rate_monotonic_Insert_timer() and _Rate_monotonic_Remove_timer() step
+   * the value.  The insert writes the value into the token of the timer.
+   * _Rate_monotonic_Timeout() compares the token against the value, so a
+   * timeout of a schedule which ended does nothing.
+   */
+  unsigned int timer_generation;
+
+  /**
    *  This field contains the tick of the latest deadline decided by the period
    *  watchdog.
    */

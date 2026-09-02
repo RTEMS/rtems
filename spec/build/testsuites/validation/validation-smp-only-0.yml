@@ -9,6 +9,7 @@ enabled-by: RTEMS_SMP
 features: c cprogram
 includes: []
 ldflags:
+- -Wl,--wrap=_Rate_monotonic_Timeout
 - -Wl,--wrap=_Scheduler_EDF_SMP_Yield
 - -Wl,--wrap=_Thread_queue_Path_acquire
 - -Wl,--wrap=_Thread_Timeout
@@ -16,6 +17,7 @@ links: []
 source:
 - testsuites/validation/tc-acfg-scheduler-edf-smp.c
 - testsuites/validation/tc-intr-smp-only.c
+- testsuites/validation/tc-ratemon-timeout-smp.c
 - testsuites/validation/tc-sched-smp-edf-set-affinity.c
 - testsuites/validation/tc-sched-smp-edf.c
 - testsuites/validation/tc-sched-smp.c

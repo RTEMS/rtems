@@ -57,8 +57,8 @@ static void _Rate_monotonic_Renew_deadline(
 
   the_period->state = RATE_MONOTONIC_EXPIRED;
 
-  deadline = _Watchdog_Per_CPU_insert_ticks(
-    &the_period->Timer,
+  deadline = _Rate_monotonic_Insert_timer(
+    the_period,
     _Per_CPU_Get(),
     the_period->next_length
   );
@@ -77,8 +77,6 @@ void _Rate_monotonic_Timeout(
   ISR_lock_Context        lock_context;
   Thread_Wait_flags       wait_flags;
 
-  (void) token;
-
   the_period = RTEMS_CONTAINER_OF(
     the_watchdog,
     Rate_monotonic_Control,
@@ -88,6 +86,23 @@ void _Rate_monotonic_Timeout(
 
   _ISR_lock_ISR_disable( &lock_context );
   _Rate_monotonic_Acquire_critical( the_period, &lock_context );
+
+#if defined( RTEMS_SMP )
+  /*
+   * _Watchdog_Do_tickle() reads the token under the lock of the header, so
+   * the token names the schedule which expired.  A party which ends that
+   * schedule steps the generation of the period.  A tickle of a watchdog runs
+   * with thread dispatch disabled, so only another processor can end the
+   * schedule here.
+   */
+  if ( token != the_period->timer_generation ) {
+    _Rate_monotonic_Release( the_period, &lock_context );
+    return;
+  }
+#else
+  (void) token;
+#endif
+
   wait_flags = _Thread_Wait_flags_get( owner );
 
   if (
