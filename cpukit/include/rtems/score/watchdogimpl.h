@@ -97,10 +97,11 @@ typedef enum {
   { { { { NULL, NULL, NULL, WATCHDOG_INACTIVE } } }, \
     &_Per_CPU_Information[ 0 ].per_cpu,              \
     ( routine ),                                     \
+    0,                                               \
     0 }
 #else
   #define WATCHDOG_INITIALIZER( routine ) \
-  { { { { NULL, NULL, NULL, WATCHDOG_INACTIVE } } }, ( routine ), 0 }
+  { { { { NULL, NULL, NULL, WATCHDOG_INACTIVE } } }, ( routine ), 0, 0 }
 #endif
 
 /**
@@ -227,6 +228,7 @@ static inline void _Watchdog_Preinitialize(
 {
   _Watchdog_Set_CPU( the_watchdog, cpu );
   _Watchdog_Set_state( the_watchdog, WATCHDOG_INACTIVE );
+  the_watchdog->token = 0;
 
 #if defined( RTEMS_DEBUG )
   the_watchdog->routine = NULL;

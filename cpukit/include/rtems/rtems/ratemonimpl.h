@@ -107,7 +107,7 @@ static inline Rate_monotonic_Control *_Rate_monotonic_Get(
   ) _Objects_Get( id, lock_context, &_Rate_monotonic_Information );
 }
 
-void _Rate_monotonic_Timeout( Watchdog_Control *watchdog );
+void _Rate_monotonic_Timeout( Watchdog_Control *watchdog, unsigned int token );
 
 /**
  * @brief Gets the rate monotonic CPU usage status.

@@ -53,11 +53,16 @@ static ISR_lock_Control _POSIX_signals_Alarm_lock = ISR_LOCK_INITIALIZER(
 );
 #endif
 
-static void _POSIX_signals_Alarm_TSR( Watchdog_Control *the_watchdog )
+static void _POSIX_signals_Alarm_TSR(
+  Watchdog_Control *the_watchdog,
+  unsigned int      token
+)
 {
   (void) the_watchdog;
 
   int status;
+
+  (void) token;
 
   status = kill( getpid(), SIGALRM );
 

@@ -67,12 +67,17 @@ static void _Rate_monotonic_Renew_deadline(
   _Rate_monotonic_Release( the_period, lock_context );
 }
 
-void _Rate_monotonic_Timeout( Watchdog_Control *the_watchdog )
+void _Rate_monotonic_Timeout(
+  Watchdog_Control *the_watchdog,
+  unsigned int      token
+)
 {
   Rate_monotonic_Control *the_period;
   Thread_Control         *owner;
   ISR_lock_Context        lock_context;
   Thread_Wait_flags       wait_flags;
+
+  (void) token;
 
   the_period = RTEMS_CONTAINER_OF(
     the_watchdog,

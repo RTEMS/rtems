@@ -64,14 +64,16 @@ void _Watchdog_Do_tickle(
   do {
     if ( first->expire <= now ) {
       Watchdog_Service_routine_entry routine;
+      unsigned int                   token;
 
       _Watchdog_Next_first( header, first );
       _RBTree_Extract( &header->Watchdogs, &first->Node.RBTree );
       _Watchdog_Set_state( first, WATCHDOG_INACTIVE );
       routine = first->routine;
+      token = first->token;
 
       _ISR_lock_Release_and_ISR_enable( lock, lock_context );
-      ( *routine )( first );
+      ( *routine )( first, token );
       _ISR_lock_ISR_disable_and_acquire( lock, lock_context );
     } else {
       break;

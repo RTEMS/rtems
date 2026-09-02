@@ -291,6 +291,11 @@ static void EnqueueFatal( TQContext *const ctx, TQWorkerKind const worker )
   }
 }
 
+void TQTimeout( Thread_Control *thread )
+{
+  _Thread_Timeout( &thread->Timer.Watchdog, thread->Timer.Watchdog.token );
+}
+
 static void Worker( rtems_task_argument arg, TQWorkerKind worker )
 {
   TQContext *ctx;
@@ -335,7 +340,7 @@ static void Worker( rtems_task_argument arg, TQWorkerKind worker )
       Per_CPU_Control *cpu_self;
 
       cpu_self = _Thread_Dispatch_disable();
-      _Thread_Timeout( &ctx->worker_tcb[ worker ]->Timer.Watchdog );
+      TQTimeout( ctx->worker_tcb[ worker ] );
       _Thread_Dispatch_direct( cpu_self );
     }
 

@@ -84,9 +84,11 @@ void _Thread_Continue( Thread_Control *the_thread, Status_Control status )
   }
 }
 
-void _Thread_Timeout( Watchdog_Control *the_watchdog )
+void _Thread_Timeout( Watchdog_Control *the_watchdog, unsigned int token )
 {
   Thread_Control *the_thread;
+
+  (void) token;
 
   the_thread = RTEMS_CONTAINER_OF(
     the_watchdog,

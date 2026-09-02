@@ -68,13 +68,18 @@ static void _Timer_server_Release(
   _ISR_lock_Release_and_ISR_enable( &ts->Lock, lock_context );
 }
 
-void _Timer_server_Routine_adaptor( Watchdog_Control *the_watchdog )
+void _Timer_server_Routine_adaptor(
+  Watchdog_Control *the_watchdog,
+  unsigned int      token
+)
 {
   Timer_Control        *the_timer;
   ISR_lock_Context      lock_context;
   Per_CPU_Control      *cpu;
   Timer_server_Control *ts;
   bool                  wakeup;
+
+  (void) token;
 
   ts = _Timer_server;
   _Assert( ts != NULL );

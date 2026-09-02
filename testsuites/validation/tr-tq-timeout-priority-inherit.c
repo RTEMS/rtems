@@ -344,7 +344,7 @@ static void ThreadTimeout( void *arg )
 
   ctx = arg;
   TQSchedulerRecordStart( ctx->tq_ctx );
-  _Thread_Timeout( &ctx->tq_ctx->worker_tcb[ THREAD ]->Timer.Watchdog );
+  TQTimeout( ctx->tq_ctx->worker_tcb[ THREAD ] );
   TQSchedulerRecordStop( ctx->tq_ctx );
 }
 

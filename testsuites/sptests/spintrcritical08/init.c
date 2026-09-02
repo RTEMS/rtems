@@ -91,7 +91,7 @@ static T_interrupt_test_state interrupt( void *arg )
   _ISR_Local_enable( level );
 
   previous_period_state = getState( ctx );
-  ( *watchdog->routine )( watchdog );
+  ( *watchdog->routine )( watchdog, watchdog->token );
 
   if ( flags == THREAD_WAIT_CLASS_PERIOD ) {
     T_quiet_eq_int( previous_period_state, RATE_MONOTONIC_ACTIVE );

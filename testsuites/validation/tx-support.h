@@ -236,6 +236,16 @@ struct _Thread_Control *GetThread( rtems_id id );
 
 struct _Thread_Control *GetExecuting( void );
 
+/**
+ * @brief Runs the timeout of the thread.
+ *
+ * The routine hands the token which the watchdog of the thread carries, as
+ * _Watchdog_Do_tickle() does.
+ *
+ * @param thread is the thread.
+ */
+void TQTimeout( struct _Thread_Control *thread );
+
 void KillZombies( void );
 
 void WaitForExecutionStop( rtems_id task_id );

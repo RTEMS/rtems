@@ -53,10 +53,15 @@ static ISR_lock_Control _POSIX_signals_Ualarm_lock = ISR_LOCK_INITIALIZER(
 
 static uint32_t _POSIX_signals_Ualarm_interval;
 
-static void _POSIX_signals_Ualarm_TSR( Watchdog_Control *the_watchdog )
+static void _POSIX_signals_Ualarm_TSR(
+  Watchdog_Control *the_watchdog,
+  unsigned int      token
+)
 {
   int              status;
   ISR_lock_Context lock_context;
+
+  (void) token;
 
   status = kill( getpid(), SIGALRM );
 

@@ -70,11 +70,13 @@ void _Record_Initialize( void )
   }
 }
 
-static void _Record_Watchdog( Watchdog_Control *watchdog )
+static void _Record_Watchdog( Watchdog_Control *watchdog, unsigned int token )
 {
   ISR_Level            level;
   rtems_record_context context;
   sbintime_t           now;
+
+  (void) token;
 
   _ISR_Local_disable( level );
   _Watchdog_Per_CPU_insert_ticks(

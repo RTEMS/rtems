@@ -59,10 +59,15 @@ RTEMS_STATIC_ASSERT(
 
 Timer_server_Control *volatile _Timer_server;
 
-void _Timer_Routine_adaptor( Watchdog_Control *the_watchdog )
+void _Timer_Routine_adaptor(
+  Watchdog_Control *the_watchdog,
+  unsigned int      token
+)
 {
   Timer_Control   *the_timer;
   Per_CPU_Control *cpu;
+
+  (void) token;
 
   the_timer = RTEMS_CONTAINER_OF( the_watchdog, Timer_Control, Ticker );
   cpu = _Watchdog_Get_CPU( &the_timer->Ticker );

@@ -54,9 +54,11 @@ static void Shm_Poll_Set_timer( Watchdog_Control *the_watchdog )
   _ISR_lock_ISR_enable( &lock_context );
 }
 
-static void Shm_Poll_TSR( Watchdog_Control *the_watchdog )
+static void Shm_Poll_TSR( Watchdog_Control *the_watchdog, unsigned int token )
 {
   uint32_t tmpfront;
+
+  (void) token;
 
   /*
    *  This should NEVER happen but just in case.
