@@ -61,7 +61,8 @@ void _Thread_queue_Add_timeout_ticks(
     _Thread_Add_timeout_ticks(
       the_thread,
       cpu_self,
-      queue_context->Timeout.ticks
+      queue_context->Timeout.ticks,
+      queue_context->timeout_token
     );
   }
 }
@@ -108,6 +109,7 @@ static void _Thread_queue_Add_timeout_timespec(
 
       the_thread->Timer.header = header;
       the_thread->Timer.Watchdog.routine = _Thread_Timeout;
+      the_thread->Timer.Watchdog.token = queue_context->timeout_token;
       _Watchdog_Per_CPU_insert(
         &the_thread->Timer.Watchdog,
         cpu_self,

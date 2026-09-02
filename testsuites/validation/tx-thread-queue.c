@@ -293,7 +293,7 @@ static void EnqueueFatal( TQContext *const ctx, TQWorkerKind const worker )
 
 void TQTimeout( Thread_Control *thread )
 {
-  _Thread_Timeout( &thread->Timer.Watchdog, thread->Timer.Watchdog.token );
+  _Thread_Timeout( &thread->Timer.Watchdog, _Thread_Wait_flags_get( thread ) );
 }
 
 static void Worker( rtems_task_argument arg, TQWorkerKind worker )

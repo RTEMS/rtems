@@ -256,6 +256,49 @@ void WaitForHeir( uint32_t cpu_index, rtems_id task_id );
 
 void WaitForNextTask( uint32_t cpu_index, rtems_id task_id );
 
+/**
+ * @brief Sets the flag of a test window.
+ *
+ * The release store publishes every write which the caller made before it to
+ * a party which reads the flag with GetFlag().
+ *
+ * @param flag is the flag.
+ * @param value is the value to set.
+ */
+static inline void SetFlag( Atomic_Uint *flag, unsigned int value )
+{
+  _Atomic_Store_uint( flag, value, ATOMIC_ORDER_RELEASE );
+}
+
+/**
+ * @brief Gets the flag of a test window.
+ *
+ * The acquire load pairs with the release store of SetFlag(), so the caller
+ * observes every write which the setter made before it.
+ *
+ * @param flag is the flag.
+ *
+ * @return Returns the value of the flag.
+ */
+static inline unsigned int GetFlag( const Atomic_Uint *flag )
+{
+  return _Atomic_Load_uint( flag, ATOMIC_ORDER_ACQUIRE );
+}
+
+/**
+ * @brief Checks whether the bound of a wait of a test window expired.
+ *
+ * A wait which needs a predicate of its own uses this check.  WaitForFlag()
+ * and WaitForBlockedState() serve the two common predicates and apply the
+ * bound themselves.
+ *
+ * @param begin is the monotonic time point at which the wait began.
+ *
+ * @retval true The bound expired.
+ * @retval false The wait may go on.
+ */
+bool WaitTimedOut( int64_t begin );
+
 typedef enum {
   TASK_TIMER_INVALID,
   TASK_TIMER_INACTIVE,

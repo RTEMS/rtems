@@ -49,6 +49,7 @@
 #include <rtems/rtems/semimpl.h>
 
 #include <string.h>
+#include <sys/time.h>
 
 rtems_id DoCreateTask( rtems_name name, rtems_task_priority priority )
 {
@@ -648,6 +649,14 @@ void WaitForNextTask( uint32_t cpu_index, rtems_id task_id )
   while ( cpu->thread_dispatch_disable_level != 0 ) {
     RTEMS_COMPILER_MEMORY_BARRIER();
   }
+}
+
+/* The bound of a wait of a test window. */
+#define WAIT_FOR_BOUND SBT_1S
+
+bool WaitTimedOut( int64_t begin )
+{
+  return rtems_clock_get_monotonic_sbintime() - begin > WAIT_FOR_BOUND;
 }
 
 void GetTaskTimerInfo( rtems_id id, TaskTimerInfo *info )
