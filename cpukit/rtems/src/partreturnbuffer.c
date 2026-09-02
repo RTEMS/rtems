@@ -78,6 +78,8 @@ static void _Partition_Free_buffer(
   void              *the_buffer
 )
 {
+  /* The buffer belongs to the application, which may write to every byte. */
+  _Chain_Initialize_node( the_buffer );
   _Chain_Append_unprotected( &the_partition->Memory, the_buffer );
 }
 
