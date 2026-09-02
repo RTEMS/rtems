@@ -161,6 +161,9 @@ rtems_task Test_task( rtems_task_argument argument )
 
   Test_Task_Support( 2 );
 
+  status = rtems_task_wake_after( 3 * rtems_clock_get_ticks_per_second() );
+  directive_failed( status, "rtems_task_wake_after" );
+
   puts( "*** END OF TEST 3 ***" );
   rtems_test_exit( 0 );
 }

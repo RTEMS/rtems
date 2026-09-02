@@ -119,8 +119,8 @@ rtems_task Init( rtems_task_argument argument )
     );
     directive_failed( status, "rtems_partition_create" );
 
-    puts( "Sleeping for two seconds" );
-    status = rtems_task_wake_after( 2 * rtems_clock_get_ticks_per_second() );
+    puts( "Sleeping for six seconds" );
+    status = rtems_task_wake_after( 6 * rtems_clock_get_ticks_per_second() );
     directive_failed( status, "rtems_task_wake_after" );
 
     puts( "Deleting Partition (Global)" );
