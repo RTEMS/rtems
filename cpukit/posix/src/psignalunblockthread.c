@@ -143,10 +143,7 @@ static void _POSIX_signals_Action_handler(
    *  In case the executing thread is blocked or about to block on something
    *  that uses the thread wait information, then this is a kernel bug.
    */
-  _Assert(
-    ( _Thread_Wait_flags_get( executing ) &
-      ( THREAD_WAIT_STATE_BLOCKED | THREAD_WAIT_STATE_INTEND_TO_BLOCK ) ) == 0
-  );
+  _Assert( _Thread_Wait_flags_get( executing ) == THREAD_WAIT_STATE_READY );
 
   /*
    *  If we invoke any user code, there is the possibility that

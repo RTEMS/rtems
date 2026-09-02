@@ -55,30 +55,16 @@ void _Thread_Continue( Thread_Control *the_thread, Status_Control status )
   wait_flags = _Thread_Wait_flags_get( the_thread );
 
   if ( wait_flags != THREAD_WAIT_STATE_READY ) {
-    Thread_Wait_flags wait_class;
-    bool              success;
+    Thread_Wait_flags previous_wait_flags;
 
     _Thread_Wait_cancel( the_thread, &queue_context );
 
     the_thread->Wait.return_code = status;
-
-    wait_class = wait_flags & THREAD_WAIT_CLASS_MASK;
-    success = _Thread_Wait_flags_try_change_release(
+    previous_wait_flags = _Thread_Wait_flags_exchange_release(
       the_thread,
-      wait_class | THREAD_WAIT_STATE_INTEND_TO_BLOCK,
       THREAD_WAIT_STATE_READY
     );
-
-    if ( success ) {
-      unblock = false;
-    } else {
-      _Assert(
-        _Thread_Wait_flags_get( the_thread ) ==
-        ( wait_class | THREAD_WAIT_STATE_BLOCKED )
-      );
-      _Thread_Wait_flags_set( the_thread, THREAD_WAIT_STATE_READY );
-      unblock = true;
-    }
+    unblock = ( previous_wait_flags & THREAD_WAIT_STATE_BLOCKED ) != 0U;
   } else {
     unblock = false;
   }

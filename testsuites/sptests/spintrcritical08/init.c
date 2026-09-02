@@ -93,7 +93,7 @@ static T_interrupt_test_state interrupt( void *arg )
   previous_period_state = getState( ctx );
   ( *watchdog->routine )( watchdog );
 
-  if ( flags == RATE_MONOTONIC_INTEND_TO_BLOCK ) {
+  if ( flags == THREAD_WAIT_CLASS_PERIOD ) {
     T_quiet_eq_int( previous_period_state, RATE_MONOTONIC_ACTIVE );
     T_quiet_eq_int( getState( ctx ), RATE_MONOTONIC_ACTIVE );
     state = T_INTERRUPT_TEST_DONE;

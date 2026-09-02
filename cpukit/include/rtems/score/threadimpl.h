@@ -13,7 +13,7 @@
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (C) 2014, 2017 embedded brains GmbH & Co. KG
+ *  Copyright (C) 2014, 2026 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -2259,22 +2259,15 @@ static inline void _Thread_Wait_cancel(
 #define THREAD_WAIT_STATE_MASK 0xffU
 
 /**
- * @brief Indicates that the thread does not wait on something.
+ * @brief Indicates that the thread did not complete a blocking operation.
  *
- * In this wait state, the wait class is zero.  This wait state is set
- * initially by _Thread_Initialize() and after each wait operation once the
- * thread is ready again.
- */
-#define THREAD_WAIT_STATE_READY 0x0U
-
-/**
- * @brief Indicates that the thread begins with the blocking operation.
- *
- * A blocking operation consists of an optional watchdog initialization and the
+ * A wait class of zero means the thread waits on nothing.  A wait class which
+ * is not zero means the thread started a wait and did not block yet.  A
+ * blocking operation consists of an optional watchdog initialization and the
  * setting of the appropriate thread blocking state with the corresponding
  * scheduler block operation.
  */
-#define THREAD_WAIT_STATE_INTEND_TO_BLOCK 0x1U
+#define THREAD_WAIT_STATE_READY 0x0U
 
 /**
  * @brief Indicates that the thread completed the blocking operation.
@@ -2400,6 +2393,40 @@ static inline bool _Thread_Wait_flags_try_change_release(
   }
 
   return success;
+#endif
+}
+
+/**
+ * @brief Exchanges the thread wait flags with release semantics.
+ *
+ * The caller must own the thread wait lock.
+ *
+ * @param[in, out] the_thread is the thread.
+ *
+ * @param new_flags are the new thread wait flags.
+ *
+ * @return Returns the thread wait flags before the exchange.
+ */
+static inline Thread_Wait_flags _Thread_Wait_flags_exchange_release(
+  Thread_Control   *the_thread,
+  Thread_Wait_flags new_flags
+)
+{
+  _Assert( _ISR_Get_level() != 0 );
+
+#if defined( RTEMS_SMP )
+  return _Atomic_Exchange_uint(
+    &the_thread->Wait.flags,
+    new_flags,
+    ATOMIC_ORDER_RELEASE
+  );
+#else
+  Thread_Wait_flags flags;
+
+  flags = the_thread->Wait.flags;
+  the_thread->Wait.flags = new_flags;
+
+  return flags;
 #endif
 }
 

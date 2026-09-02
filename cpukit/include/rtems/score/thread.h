@@ -14,7 +14,7 @@
  *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (C) 2014, 2016 embedded brains GmbH & Co. KG
+ *  Copyright (C) 2014, 2026 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -440,12 +440,12 @@ typedef union {
  *
  * The mutually exclusive wait class flags are
  * - @ref THREAD_WAIT_CLASS_EVENT,
- * - @ref THREAD_WAIT_CLASS_SYSTEM_EVENT, and
- * - @ref THREAD_WAIT_CLASS_OBJECT.
+ * - @ref THREAD_WAIT_CLASS_SYSTEM_EVENT,
+ * - @ref THREAD_WAIT_CLASS_OBJECT, and
+ * - @ref THREAD_WAIT_CLASS_PERIOD.
  *
  * The mutually exclusive wait state flags are
- * - @ref THREAD_WAIT_STATE_INTEND_TO_BLOCK,
- * - @ref THREAD_WAIT_STATE_BLOCKED, and
+ * - @ref THREAD_WAIT_STATE_BLOCKED and
  * - @ref THREAD_WAIT_STATE_READY.
  */
 typedef unsigned int Thread_Wait_flags;

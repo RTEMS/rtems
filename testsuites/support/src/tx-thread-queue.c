@@ -95,14 +95,13 @@ void TQSendAndWaitForExecutionStop(
 
 void TQWaitForIntendToBlock( const TQContext *ctx, TQWorkerKind worker )
 {
-  const rtems_tcb  *thread;
-  Thread_Wait_flags intend_to_block;
+  const rtems_tcb *thread;
 
   thread = ctx->worker_tcb[ worker ];
-  intend_to_block = THREAD_WAIT_CLASS_OBJECT |
-    THREAD_WAIT_STATE_INTEND_TO_BLOCK;
 
-  while ( _Thread_Wait_flags_get_acquire( thread ) != intend_to_block ) {
+  while (
+    _Thread_Wait_flags_get_acquire( thread ) != THREAD_WAIT_CLASS_OBJECT
+  ) {
     /* Wait */
   }
 }
@@ -128,8 +127,7 @@ void TQSendAndWaitForExecutionStopOrIntendToBlock(
 )
 {
 #if defined( RTEMS_SMP )
-  const rtems_tcb  *thread;
-  Thread_Wait_flags intend_to_block;
+  const rtems_tcb *thread;
 #endif
 
   TQSend( ctx, worker, events );
@@ -137,12 +135,10 @@ void TQSendAndWaitForExecutionStopOrIntendToBlock(
 #if defined( RTEMS_SMP )
   TQWaitForEventsReceived( ctx, worker );
   thread = ctx->worker_tcb[ worker ];
-  intend_to_block = THREAD_WAIT_CLASS_OBJECT |
-    THREAD_WAIT_STATE_INTEND_TO_BLOCK;
 
   while (
     _Thread_Is_executing_on_a_processor( thread ) &&
-    _Thread_Wait_flags_get_acquire( thread ) != intend_to_block
+    _Thread_Wait_flags_get_acquire( thread ) != THREAD_WAIT_CLASS_OBJECT
   ) {
     /* Wait */
   }

@@ -13,7 +13,7 @@
 /*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
- *  Copyright (c) 2016 embedded brains GmbH & Co. KG
+ *  Copyright (C) 2016, 2026 embedded brains GmbH & Co. KG
  *  COPYRIGHT (c) 2016 Kuan-Hsun Chen.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -262,7 +262,7 @@ static rtems_status_code _Rate_monotonic_Block_while_active(
    */
   the_period->next_length = length;
   executing->Wait.return_argument = the_period;
-  _Thread_Wait_flags_set( executing, RATE_MONOTONIC_INTEND_TO_BLOCK );
+  _Thread_Wait_flags_set( executing, THREAD_WAIT_CLASS_PERIOD );
 
   cpu_self = _Thread_Dispatch_disable_critical( lock_context );
   _Rate_monotonic_Release( the_period, lock_context );
@@ -271,7 +271,7 @@ static rtems_status_code _Rate_monotonic_Block_while_active(
 
   success = _Thread_Wait_flags_try_change_acquire(
     executing,
-    RATE_MONOTONIC_INTEND_TO_BLOCK,
+    THREAD_WAIT_CLASS_PERIOD,
     RATE_MONOTONIC_BLOCKED
   );
   if ( !success ) {

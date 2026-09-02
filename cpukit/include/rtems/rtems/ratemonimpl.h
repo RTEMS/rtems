@@ -11,7 +11,7 @@
 
 /*  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
- *  Copyright (c) 2016 embedded brains GmbH & Co. KG
+ *  Copyright (C) 2016, 2026 embedded brains GmbH & Co. KG
  *  COPYRIGHT (c) 2016 Kuan-Hsun Chen.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -60,9 +60,6 @@ extern "C" {
  *
  * @{
  */
-
-#define RATE_MONOTONIC_INTEND_TO_BLOCK \
-  ( THREAD_WAIT_CLASS_PERIOD | THREAD_WAIT_STATE_INTEND_TO_BLOCK )
 
 #define RATE_MONOTONIC_BLOCKED \
   ( THREAD_WAIT_CLASS_PERIOD | THREAD_WAIT_STATE_BLOCKED )

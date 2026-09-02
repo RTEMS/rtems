@@ -89,23 +89,15 @@ void _Rate_monotonic_Timeout( Watchdog_Control *the_watchdog )
     ( wait_flags & THREAD_WAIT_CLASS_PERIOD ) != 0 &&
     owner->Wait.return_argument == the_period
   ) {
-    bool unblock;
-    bool success;
+    Thread_Wait_flags previous_wait_flags;
+    bool              unblock;
 
     owner->Wait.return_argument = NULL;
-
-    success = _Thread_Wait_flags_try_change_release(
+    previous_wait_flags = _Thread_Wait_flags_exchange_release(
       owner,
-      RATE_MONOTONIC_INTEND_TO_BLOCK,
       THREAD_WAIT_STATE_READY
     );
-    if ( success ) {
-      unblock = false;
-    } else {
-      _Assert( _Thread_Wait_flags_get( owner ) == RATE_MONOTONIC_BLOCKED );
-      _Thread_Wait_flags_set( owner, THREAD_WAIT_STATE_READY );
-      unblock = true;
-    }
+    unblock = ( previous_wait_flags & THREAD_WAIT_STATE_BLOCKED ) != 0U;
 
     _Rate_monotonic_Restart( the_period, owner, &lock_context );
 
