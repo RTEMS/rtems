@@ -77,7 +77,10 @@ rtems_status_code rtems_task_wake_when( const rtems_time_of_day *time_buffer )
   cpu_self = _Thread_Dispatch_disable();
   executing = _Per_CPU_Get_executing( cpu_self );
   _Thread_Set_state( executing, STATES_WAITING_FOR_TIME );
-  _Thread_Wait_flags_set( executing, THREAD_WAIT_STATE_BLOCKED );
+  _Thread_Wait_flags_set(
+    executing,
+    THREAD_WAIT_CLASS_TIME | THREAD_WAIT_STATE_BLOCKED
+  );
   _Thread_Timer_insert_realtime(
     executing,
     cpu_self,
