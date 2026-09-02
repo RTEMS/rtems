@@ -66,6 +66,9 @@ rtems_task Test_task( rtems_task_argument argument )
       RTEMS_SEARCH_ALL_NODES,
       &remote_tid
     );
+    if ( status != RTEMS_SUCCESSFUL ) {
+      (void) rtems_task_wake_after( 1 );
+    }
   } while ( status != RTEMS_SUCCESSFUL );
 
   directive_failed( status, "rtems_task_ident" );
