@@ -123,9 +123,8 @@ void bsp_start( void )
   /* Memory */
   setdbat(0, 0x0<<28, 0x0<<28, 1<<28, _PAGE_RW);
   setibat(0, 0x0<<28, 0x0<<28, 1<<28,        0);
-  /* PCI    */
-  setdbat(1, 0x08<<24, 0x08<<24, 1<<24,  IO_PAGE);
-  setdbat(2, 0xfc<<24, 0xfc<<24, 1<<24,  IO_PAGE);
+  /* Devices */
+  setdbat(1, 0xfc<<24, 0xfc<<24, 1<<24,  IO_PAGE);
 
   _write_MSR(_read_MSR() | MSR_DR | MSR_IR);
   __asm__ volatile("sync; isync");
