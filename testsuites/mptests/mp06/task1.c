@@ -121,17 +121,21 @@ rtems_task Test_task( rtems_task_argument argument )
 
   if ( rtems_object_get_local_node() == 1 ) {
     puts( "Sending events to remote task" );
+
+    /*
+     * Node 1 bounds the test.  Node 2 leaves the loop where a receive of it
+     * times out.  Node 1 stops before that point.
+     */
+    status = rtems_timer_fire_after(
+      Timer_id[ 1 ],
+      5 * rtems_clock_get_ticks_per_second(),
+      Stop_Test_TSR,
+      NULL
+    );
+    directive_failed( status, "rtems_timer_fire_after" );
   } else {
     puts( "Receiving events from remote task" );
   }
-
-  status = rtems_timer_fire_after(
-    Timer_id[ 1 ],
-    5 * rtems_clock_get_ticks_per_second(),
-    Stop_Test_TSR,
-    NULL
-  );
-  directive_failed( status, "rtems_timer_fire_after" );
 
   count = 0;
 
@@ -156,11 +160,7 @@ rtems_task Test_task( rtems_task_argument argument )
         &event_out
       );
       if ( rtems_are_statuses_equal( status, RTEMS_TIMEOUT ) ) {
-        if ( rtems_object_get_local_node() == 2 ) {
-          puts( "\nCorrect behavior if the other node exitted." );
-        } else {
-          puts( "\nERROR... node 1 died" );
-        }
+        puts( "\nThe other node sends no more events" );
         break;
       } else {
         directive_failed( status, "rtems_event_receive" );
