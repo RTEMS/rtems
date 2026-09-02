@@ -59,10 +59,7 @@ rtems_status_code rtems_task_wake_after( rtems_interval ticks )
     _Thread_Yield( executing );
   } else {
     _Thread_Set_state( executing, STATES_WAITING_FOR_TIME );
-    _Thread_Wait_flags_set(
-      executing,
-      THREAD_WAIT_CLASS_TIME | THREAD_WAIT_STATE_BLOCKED
-    );
+    _Thread_Wait_flags_start_blocked( executing, THREAD_WAIT_CLASS_TIME );
     _Thread_Add_timeout_ticks( executing, cpu_self, ticks );
   }
   _Thread_Dispatch_direct( cpu_self );

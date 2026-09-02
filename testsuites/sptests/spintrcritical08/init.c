@@ -84,7 +84,7 @@ static T_interrupt_test_state interrupt( void *arg )
   T_quiet_eq_u64( watchdog->expire, cpu_self->Watchdog.ticks );
   T_quiet_eq_ptr( watchdog->routine, _Rate_monotonic_Timeout );
 
-  flags = _Thread_Wait_flags_get( ctx->thread );
+  flags = _Thread_Wait_flags_get( ctx->thread ) & THREAD_WAIT_MASK;
 
   _ISR_Local_disable( level );
   _Watchdog_Per_CPU_remove( watchdog, cpu_self, header );
@@ -104,7 +104,10 @@ static T_interrupt_test_state interrupt( void *arg )
     );
     state = T_INTERRUPT_TEST_EARLY;
   } else {
-    T_quiet_eq_int( flags, RATE_MONOTONIC_BLOCKED );
+    T_quiet_eq_int(
+      flags,
+      THREAD_WAIT_CLASS_PERIOD | THREAD_WAIT_STATE_BLOCKED
+    );
     T_quiet_true(
       previous_period_state == RATE_MONOTONIC_ACTIVE ||
       previous_period_state == RATE_MONOTONIC_EXPIRED

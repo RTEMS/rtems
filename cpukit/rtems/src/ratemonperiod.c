@@ -247,8 +247,9 @@ static rtems_status_code _Rate_monotonic_Block_while_active(
   ISR_lock_Context       *lock_context
 )
 {
-  Per_CPU_Control *cpu_self;
-  bool             success;
+  Thread_Wait_flags wait_flags;
+  bool              success;
+  Per_CPU_Control  *cpu_self;
 
   /*
    *  Update statistics from the concluding period.
@@ -262,7 +263,7 @@ static rtems_status_code _Rate_monotonic_Block_while_active(
    */
   the_period->next_length = length;
   executing->Wait.return_argument = the_period;
-  _Thread_Wait_flags_set( executing, THREAD_WAIT_CLASS_PERIOD );
+  wait_flags = _Thread_Wait_flags_start( executing, THREAD_WAIT_CLASS_PERIOD );
 
   cpu_self = _Thread_Dispatch_disable_critical( lock_context );
   _Rate_monotonic_Release( the_period, lock_context );
@@ -271,11 +272,13 @@ static rtems_status_code _Rate_monotonic_Block_while_active(
 
   success = _Thread_Wait_flags_try_change_acquire(
     executing,
-    THREAD_WAIT_CLASS_PERIOD,
-    RATE_MONOTONIC_BLOCKED
+    wait_flags,
+    wait_flags | THREAD_WAIT_STATE_BLOCKED
   );
   if ( !success ) {
-    _Assert( _Thread_Wait_flags_get( executing ) == THREAD_WAIT_STATE_READY );
+    _Assert(
+      ( _Thread_Wait_flags_get( executing ) & THREAD_WAIT_MASK ) == 0U
+    );
     _Thread_Unblock( executing );
   }
 

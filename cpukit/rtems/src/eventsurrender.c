@@ -56,14 +56,10 @@ static void _Event_Satisfy(
 }
 
 static bool _Event_Is_blocking_on_event(
-  const Thread_Control *the_thread,
-  Thread_Wait_flags     wait_class
+  Thread_Wait_flags wait_flags,
+  Thread_Wait_flags wait_class
 )
 {
-  Thread_Wait_flags wait_flags;
-
-  wait_flags = _Thread_Wait_flags_get( the_thread );
-
   return ( wait_flags & THREAD_WAIT_CLASS_MASK ) == wait_class;
 }
 
@@ -93,17 +89,19 @@ rtems_status_code _Event_Surrender(
   ISR_lock_Context *lock_context
 )
 {
-  rtems_event_set pending_events;
-  rtems_event_set seized_events;
-  bool            unblock;
+  rtems_event_set   pending_events;
+  rtems_event_set   seized_events;
+  Thread_Wait_flags wait_flags;
+  bool              unblock;
 
   _Thread_Wait_acquire_default_critical( the_thread, lock_context );
 
   _Event_sets_Post( event_in, &event->pending_events );
   pending_events = event->pending_events;
+  wait_flags = _Thread_Wait_flags_get( the_thread );
 
   if (
-    _Event_Is_blocking_on_event( the_thread, wait_class ) &&
+    _Event_Is_blocking_on_event( wait_flags, wait_class ) &&
     _Event_Is_satisfied( the_thread, pending_events, &seized_events )
   ) {
     Thread_Wait_flags previous_wait_flags;
@@ -112,7 +110,7 @@ rtems_status_code _Event_Surrender(
 
     previous_wait_flags = _Thread_Wait_flags_exchange_release(
       the_thread,
-      THREAD_WAIT_STATE_READY
+      _Thread_Wait_flags_end( wait_flags )
     );
     unblock = ( previous_wait_flags & THREAD_WAIT_STATE_BLOCKED ) != 0U;
   } else {
