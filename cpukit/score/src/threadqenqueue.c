@@ -692,6 +692,10 @@ void _Thread_queue_Resume(
 {
   bool unblock;
 
+#if defined( RTEMS_MULTIPROCESSING )
+  _Thread_queue_MP_set_callout( the_thread, queue_context );
+#endif
+
   unblock = _Thread_queue_Make_ready_again( the_thread );
 
   if ( unblock ) {
@@ -775,10 +779,6 @@ void _Thread_queue_Surrender_no_priority(
   _Assert( queue->owner == NULL );
 
   the_thread = ( *operations->surrender )( queue, heads, NULL, queue_context );
-
-#if defined( RTEMS_MULTIPROCESSING )
-  _Thread_queue_MP_set_callout( the_thread, queue_context );
-#endif
 
   _Thread_queue_Resume( queue, the_thread, queue_context );
 }
