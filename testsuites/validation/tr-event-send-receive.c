@@ -354,7 +354,7 @@ static bool BlockedForEvent( Context *ctx, Thread_Wait_flags flags )
 
 static bool IntendsToBlockForEvent( Context *ctx, Thread_Wait_flags flags )
 {
-  return flags == ( ctx->wait_class | THREAD_WAIT_STATE_INTEND_TO_BLOCK );
+  return flags == ctx->wait_class;
 }
 
 static bool IsReady( Thread_Wait_flags flags )

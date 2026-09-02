@@ -59,11 +59,10 @@ rtems_status_code _Event_Seize(
   ISR_lock_Context *lock_context
 )
 {
-  rtems_event_set   seized_events;
-  rtems_event_set   pending_events;
-  bool              success;
-  Thread_Wait_flags intend_to_block;
-  Per_CPU_Control  *cpu_self;
+  rtems_event_set  seized_events;
+  rtems_event_set  pending_events;
+  bool             success;
+  Per_CPU_Control *cpu_self;
 
   pending_events = event->pending_events;
   seized_events = _Event_sets_Get( pending_events, event_in );
@@ -84,8 +83,6 @@ rtems_status_code _Event_Seize(
     return RTEMS_UNSATISFIED;
   }
 
-  intend_to_block = wait_class | THREAD_WAIT_STATE_INTEND_TO_BLOCK;
-
   /*
    *  Note what we are waiting for BEFORE we enter the critical section.
    *  The interrupt critical section management code needs this to be
@@ -98,7 +95,7 @@ rtems_status_code _Event_Seize(
   executing->Wait.option = option_set;
   executing->Wait.count = event_in;
   executing->Wait.return_argument = event_out;
-  _Thread_Wait_flags_set( executing, intend_to_block );
+  _Thread_Wait_flags_set( executing, wait_class );
 
   cpu_self = _Thread_Dispatch_disable_critical( lock_context );
   _Thread_Wait_release_default( executing, lock_context );
@@ -111,7 +108,7 @@ rtems_status_code _Event_Seize(
 
   success = _Thread_Wait_flags_try_change_acquire(
     executing,
-    intend_to_block,
+    wait_class,
     wait_class | THREAD_WAIT_STATE_BLOCKED
   );
   if ( !success ) {

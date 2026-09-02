@@ -63,9 +63,7 @@ static T_interrupt_test_state release_semaphore( void *arg )
 
   flags = _Thread_Wait_flags_get( ctx->main_task_control );
 
-  if (
-    flags == ( THREAD_WAIT_CLASS_OBJECT | THREAD_WAIT_STATE_INTEND_TO_BLOCK )
-  ) {
+  if ( flags == THREAD_WAIT_CLASS_OBJECT ) {
     CORE_semaphore_Control *sem;
 
     state = T_INTERRUPT_TEST_DONE;

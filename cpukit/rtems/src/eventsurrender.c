@@ -106,26 +106,15 @@ rtems_status_code _Event_Surrender(
     _Event_Is_blocking_on_event( the_thread, wait_class ) &&
     _Event_Is_satisfied( the_thread, pending_events, &seized_events )
   ) {
-    bool success;
+    Thread_Wait_flags previous_wait_flags;
 
     _Event_Satisfy( the_thread, event, pending_events, seized_events );
 
-    success = _Thread_Wait_flags_try_change_release(
+    previous_wait_flags = _Thread_Wait_flags_exchange_release(
       the_thread,
-      wait_class | THREAD_WAIT_STATE_INTEND_TO_BLOCK,
       THREAD_WAIT_STATE_READY
     );
-
-    if ( success ) {
-      unblock = false;
-    } else {
-      _Assert(
-        _Thread_Wait_flags_get( the_thread ) ==
-        ( wait_class | THREAD_WAIT_STATE_BLOCKED )
-      );
-      _Thread_Wait_flags_set( the_thread, THREAD_WAIT_STATE_READY );
-      unblock = true;
-    }
+    unblock = ( previous_wait_flags & THREAD_WAIT_STATE_BLOCKED ) != 0U;
   } else {
     unblock = false;
   }

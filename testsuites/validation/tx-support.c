@@ -608,16 +608,14 @@ void WaitForExecutionStop( rtems_id task_id )
 void WaitForIntendToBlock( rtems_id task_id )
 {
 #if defined( RTEMS_SMP )
-  Thread_Control   *the_thread;
-  Thread_Wait_flags intend_to_block;
+  Thread_Control *the_thread;
 
   the_thread = GetThread( task_id );
   T_assert_not_null( the_thread );
 
-  intend_to_block = THREAD_WAIT_CLASS_OBJECT |
-                    THREAD_WAIT_STATE_INTEND_TO_BLOCK;
-
-  while ( _Thread_Wait_flags_get_acquire( the_thread ) != intend_to_block ) {
+  while (
+    _Thread_Wait_flags_get_acquire( the_thread ) != THREAD_WAIT_CLASS_OBJECT
+  ) {
     /* Wait */
   }
 #else

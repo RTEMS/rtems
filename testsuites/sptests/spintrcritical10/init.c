@@ -56,15 +56,13 @@ typedef struct {
 
 static bool blocks_for_event( Thread_Wait_flags flags )
 {
-  return flags ==
-           ( THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_INTEND_TO_BLOCK ) ||
+  return flags == THREAD_WAIT_CLASS_EVENT ||
          flags == ( THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_BLOCKED );
 }
 
 static bool interrupts_blocking_op( Thread_Wait_flags flags )
 {
-  return flags ==
-         ( THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_INTEND_TO_BLOCK );
+  return flags == THREAD_WAIT_CLASS_EVENT;
 }
 
 static T_interrupt_test_state any_satisfy_before_timeout_interrupt( void *arg )

@@ -86,8 +86,7 @@ static bool is_blocked( Thread_Wait_flags flags )
 
 static bool interrupts_blocking_op( Thread_Wait_flags flags )
 {
-  return flags ==
-         ( THREAD_WAIT_CLASS_OBJECT | THREAD_WAIT_STATE_INTEND_TO_BLOCK );
+  return flags == THREAD_WAIT_CLASS_OBJECT;
 }
 
 static T_interrupt_test_state interrupt( void *arg )
