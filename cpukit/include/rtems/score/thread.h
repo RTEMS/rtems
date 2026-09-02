@@ -112,7 +112,7 @@ extern "C" {
 #define RTEMS_SCORE_THREAD_REAL_PRIORITY_MAY_BE_INACTIVE
 #endif
 
-#if defined( RTEMS_POSIX_API ) && defined( RTEMS_SMP )
+#if defined( RTEMS_POSIX_API )
 /**
  * @brief This define enables support to inhibit scheduler changes.
  *
