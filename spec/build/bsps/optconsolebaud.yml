@@ -12,6 +12,7 @@ default:
   - powerpc/beatnik
   - powerpc/hsc_cm01
   - powerpc/mvme3100
+  - powerpc/mvme5100
   value: 9600
 - enabled-by: m68k/COBRA5475
   value: 19200

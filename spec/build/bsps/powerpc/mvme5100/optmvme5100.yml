@@ -4,7 +4,8 @@ actions:
 - define-condition: null
 build-type: option
 copyrights:
-- Copyright (C) 2026 Vijay Banerjee
+- Copyright (C) 2026 UChicago Argonne LLC, as operator of
+  Argonne National Laboratory
 default:
 - enabled-by: powerpc/mvme5100
   value: true

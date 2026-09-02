@@ -101,10 +101,17 @@ unsigned merst;
 
 void detect_host_bridge(void)
 {
+#ifndef mot_ppc_mvme5100
   PPC_DEVICE *hostbridge;
+#endif
   uint32_t id0;
   uint32_t tmp;
 
+#ifdef mot_ppc_mvme5100
+  pci.pci_functions   = &pci_indirect_functions;
+  pci.pci_config_addr = (volatile unsigned char *)(_IO_BASE + 0xcf8);
+  pci.pci_config_data = (volatile unsigned char *)(_IO_BASE + 0xcfc);
+#else
   /*
    * This code assumes that the host bridge is located at
    * bus 0, dev 0, func 0 AND that the old pre PCI 2.1
@@ -148,6 +155,7 @@ void detect_host_bridge(void)
      * situation, that we probably can't even tell it.
      */
   }
+#endif
   pci_read_config_dword(0, 0, 0, 0, &id0);
 #ifdef SHOW_RAVEN_SETTINGS
   printk("idreg 0 = 0x%" PRIu32 "\n",id0);

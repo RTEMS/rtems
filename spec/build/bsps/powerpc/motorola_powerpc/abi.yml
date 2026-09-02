@@ -27,10 +27,6 @@ default:
   - -mmultiple
   - -mstrict-align
   - -meabi
-- enabled-by: [powerpc/mvme5100]
-  value:
-  - -mcpu=750
-  - -mstrict-align
 - enabled-by: powerpc/mcp750
   value:
   - -mcpu=750

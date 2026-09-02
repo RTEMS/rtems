@@ -7,7 +7,7 @@ copyrights:
 - Copyright (C) 2026 Vijay Banerjee
 cppflags: []
 enabled-by: true
-family: motorola_powerpc
+family: mvme5100
 includes: []
 install: []
 links:

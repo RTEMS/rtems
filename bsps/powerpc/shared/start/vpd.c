@@ -76,6 +76,10 @@ extern rtems_libi2c_bus_t *dev;
 #define I2C_READ		1
 #define I2C_WRITE		0
 
+#ifndef BSP_VPD_I2C_ADDR_BYTES
+#define BSP_VPD_I2C_ADDR_BYTES	2
+#endif
+
 static ssize_t	(*read_bytes)(int fd, void *buf, size_t len) = 0;
 
 static ssize_t early_fp = 0;
@@ -94,9 +98,13 @@ uint8_t            fp[2];
 	 */
 	start(d);
 	addr(d, BSP_VPD_I2C_ADDR, I2C_WRITE);
+#if BSP_VPD_I2C_ADDR_BYTES > 1
 	fp[0] = early_fp>>8;
 	fp[1] = early_fp;
-	write_bytes(dev,fp,2);
+#else
+	fp[0] = early_fp;
+#endif
+	write_bytes(dev,fp,BSP_VPD_I2C_ADDR_BYTES);
 
 	start(d);
 	addr(d, BSP_VPD_I2C_ADDR, I2C_READ);

@@ -1,0 +1,8 @@
+INPUT(vectors_entry.o)
+STARTUP(start.o)
+ENTRY(__rtems_entry_point)
+EXTERN(_vectors)
+
+bsp_section_small_data_area_size = 65536;
+
+INCLUDE linkcmds.share
