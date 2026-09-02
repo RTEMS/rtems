@@ -2640,11 +2640,13 @@ static inline void _Thread_Timer_initialize(
  * @param[in, out] the_thread The thread to add the timeout ticks to.
  * @param cpu The cpu for the operation.
  * @param ticks The ticks to add to the timeout ticks.
+ * @param token are the thread wait flags of the wait which the timeout ends.
  */
 static inline void _Thread_Add_timeout_ticks(
   Thread_Control   *the_thread,
   Per_CPU_Control  *cpu,
-  Watchdog_Interval ticks
+  Watchdog_Interval ticks,
+  Thread_Wait_flags token
 )
 {
   ISR_lock_Context lock_context;
@@ -2653,6 +2655,7 @@ static inline void _Thread_Add_timeout_ticks(
 
   the_thread->Timer.header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_TICKS ];
   the_thread->Timer.Watchdog.routine = _Thread_Timeout;
+  the_thread->Timer.Watchdog.token = token;
   _Watchdog_Per_CPU_insert_ticks( &the_thread->Timer.Watchdog, cpu, ticks );
 
   _ISR_lock_Release_and_ISR_enable( &the_thread->Timer.Lock, &lock_context );
@@ -2665,12 +2668,14 @@ static inline void _Thread_Add_timeout_ticks(
  * @param cpu The cpu to get the watchdog header from.
  * @param routine The watchdog routine for the thread.
  * @param expire Expiration for the watchdog.
+ * @param token are the thread wait flags of the wait which the timeout ends.
  */
 static inline void _Thread_Timer_insert_realtime(
   Thread_Control                *the_thread,
   Per_CPU_Control               *cpu,
   Watchdog_Service_routine_entry routine,
-  uint64_t                       expire
+  uint64_t                       expire,
+  Thread_Wait_flags              token
 )
 {
   ISR_lock_Context lock_context;
@@ -2681,6 +2686,7 @@ static inline void _Thread_Timer_insert_realtime(
   header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_REALTIME ];
   the_thread->Timer.header = header;
   the_thread->Timer.Watchdog.routine = routine;
+  the_thread->Timer.Watchdog.token = token;
   _Watchdog_Per_CPU_insert( &the_thread->Timer.Watchdog, cpu, header, expire );
 
   _ISR_lock_Release_and_ISR_enable( &the_thread->Timer.Lock, &lock_context );

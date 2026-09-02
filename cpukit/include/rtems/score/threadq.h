@@ -225,6 +225,15 @@ struct Thread_queue_Context {
   States_Control thread_state;
 
   /**
+   * @brief The watchdog token for a timeout of the wait which
+   * _Thread_queue_Enqueue() starts.
+   *
+   * The value holds the thread wait flags of that wait.  A timeout of the
+   * thread therefore carries the generation of the wait.
+   */
+  unsigned int timeout_token;
+
+  /**
    * @brief The enqueue callout for _Thread_queue_Enqueue().
    *
    * The callout is invoked after the release of the thread queue lock with
