@@ -118,11 +118,7 @@ static void _Rate_monotonic_Release_job(
 
   cpu_self = _Thread_Dispatch_disable_critical( lock_context );
 
-  deadline = _Watchdog_Per_CPU_insert_ticks(
-    &the_period->Timer,
-    cpu_self,
-    next_length
-  );
+  deadline = _Rate_monotonic_Insert_timer( the_period, cpu_self, next_length );
   _Scheduler_Release_job(
     owner,
     &the_period->Priority,

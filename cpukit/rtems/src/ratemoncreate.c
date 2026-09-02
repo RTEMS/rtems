@@ -73,6 +73,7 @@ rtems_status_code rtems_rate_monotonic_create( rtems_name name, rtems_id *id )
   the_period->owner = _Thread_Get_executing();
   the_period->state = RATE_MONOTONIC_INACTIVE;
   the_period->postponed_jobs = 0;
+  the_period->timer_generation = 0;
 
   _Watchdog_Preinitialize( &the_period->Timer, _Per_CPU_Get_by_index( 0 ) );
   _Watchdog_Initialize( &the_period->Timer, _Rate_monotonic_Timeout );

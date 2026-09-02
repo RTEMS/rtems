@@ -139,6 +139,49 @@ void _Rate_monotonic_Cancel(
   ISR_lock_Context       *lock_context
 );
 
+/**
+ * @brief Arms the timer of the period.
+ *
+ * The generation of the period steps, so the token of the timer names this
+ * schedule of it.
+ *
+ * @param[in, out] the_period is the period.
+ * @param cpu is the processor which holds the watchdog header.
+ * @param length is the length of the schedule in clock ticks.
+ *
+ * @return Returns the expiration time point of the schedule.
+ */
+static inline uint64_t _Rate_monotonic_Insert_timer(
+  Rate_monotonic_Control *the_period,
+  Per_CPU_Control        *cpu,
+  rtems_interval          length
+)
+{
+  unsigned int generation;
+
+  generation = the_period->timer_generation + 1U;
+  the_period->timer_generation = generation;
+  the_period->Timer.token = generation;
+
+  return _Watchdog_Per_CPU_insert_ticks( &the_period->Timer, cpu, length );
+}
+
+/**
+ * @brief Takes the timer of the period out of the tree.
+ *
+ * The generation of the period steps, so the token of the schedule which ends
+ * here names no schedule of the timer.
+ *
+ * @param[in, out] the_period is the period.
+ */
+static inline void _Rate_monotonic_Remove_timer(
+  Rate_monotonic_Control *the_period
+)
+{
+  ++the_period->timer_generation;
+  _Watchdog_Per_CPU_remove_ticks( &the_period->Timer );
+}
+
 static inline void _Rate_monotonic_Reset_min_time(
   Timestamp_Control *min_time
 )
