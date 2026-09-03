@@ -57,7 +57,7 @@
 
 static unsigned char test_cat_buffer[ 1024 ];
 
-void test_cat( char *file, off_t offset_arg, size_t length )
+void test_cat( const char *file, off_t offset_arg, size_t length )
 {
   int           fd;
   int           status;

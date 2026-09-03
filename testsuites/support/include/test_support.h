@@ -98,7 +98,7 @@ int locked_vprintf( const char *fmt, va_list ap );
 /*********************************************************************/
 /*********************************************************************/
 
-void test_cat( char *file, off_t offset_arg, size_t length );
+void test_cat( const char *file, off_t offset_arg, size_t length );
 
 void test_write( char *file, off_t offset, char *buffer );
 

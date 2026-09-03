@@ -43,7 +43,7 @@
 #include <unistd.h>
 #include <string.h>
 
-#include "test-support.h"
+#include "test_support.h"
 #include "tar02-tar.h"
 
 const char rtems_test_name[] = "TAR 2";
