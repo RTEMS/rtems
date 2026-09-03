@@ -89,14 +89,14 @@ static rtems_status_code bbb_select_pin_function(
 
 rtems_status_code rtems_gpio_bsp_multi_set(uint32_t bank, uint32_t bitmask)
 {
-  mmio_set(bbb_reg(bank, AM335X_GPIO_SETDATAOUT), bitmask);
+  mmio_write(bbb_reg(bank, AM335X_GPIO_SETDATAOUT), bitmask);
 
   return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code rtems_gpio_bsp_multi_clear(uint32_t bank, uint32_t bitmask)
 {
-  mmio_set(bbb_reg(bank, AM335X_GPIO_CLEARDATAOUT), bitmask);
+  mmio_write(bbb_reg(bank, AM335X_GPIO_CLEARDATAOUT), bitmask);
 
   return RTEMS_SUCCESSFUL;
 }
@@ -108,14 +108,14 @@ uint32_t rtems_gpio_bsp_multi_read(uint32_t bank, uint32_t bitmask)
 
 rtems_status_code rtems_gpio_bsp_set(uint32_t bank, uint32_t pin)
 {
-  mmio_set(bbb_reg(bank, AM335X_GPIO_SETDATAOUT), BIT(pin));
+  mmio_write(bbb_reg(bank, AM335X_GPIO_SETDATAOUT), BIT(pin));
 
   return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code rtems_gpio_bsp_clear(uint32_t bank, uint32_t pin)
 {
-  mmio_set(bbb_reg(bank, AM335X_GPIO_CLEARDATAOUT), BIT(pin));
+  mmio_write(bbb_reg(bank, AM335X_GPIO_CLEARDATAOUT), BIT(pin));
 
   return RTEMS_SUCCESSFUL;
 }
