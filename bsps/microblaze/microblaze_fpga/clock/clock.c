@@ -99,16 +99,23 @@ static void microblaze_clock_initialize( void )
   /* Set a reset value for the timer counter */
   mblaze_timer->tlr0 = counter_ticks_per_clock_tick;
   uint32_t control_status_reg = mblaze_timer->tcsr0;
-  /* Load the reset value into the counter register */
-  mblaze_timer->tcsr0 = MICROBLAZE_TIMER_TCSR0_LOAD0;
+  /*
+   * Load the reset value into the counter register.  The down counter bit
+   * stays set, so a read of the counter register keeps its meaning.
+   */
+  mblaze_timer->tcsr0 = control_status_reg | MICROBLAZE_TIMER_TCSR0_LOAD0;
 
+  /* Enable the timer */
+  mblaze_timer->tcsr0 = control_status_reg | MICROBLAZE_TIMER_TCSR0_ENT0;
+
+  /*
+   * The installation reads the counter register to get the offset of the
+   * first period, so the timer must run at this point.
+   */
   rtems_timecounter_simple_install ( &mblaze_tc,
                                      counter_frequency_in_hz,
                                      counter_ticks_per_clock_tick,
                                      microblaze_tc_get_timecount );
-
-  /* Enable the timer */
-  mblaze_timer->tcsr0 = control_status_reg | MICROBLAZE_TIMER_TCSR0_ENT0;
 }
 
 static void microblaze_clock_at_tick ( rtems_timecounter_simple *tc )
