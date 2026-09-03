@@ -50,6 +50,7 @@
 #include <rtems/timecounter.h>
 #include <rtems/score/percpu.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/watchdogimpl.h>
 
 #include <bspopts.h>   /* for CLOCK_DRIVER_USE_FAST_IDLE */
 
@@ -119,6 +120,21 @@ void clockOn(void* unused)
   }
 }
 
+#if (CLOCK_DRIVER_USE_FAST_IDLE == 1)
+static bool clock_has_watchdogs(const Per_CPU_Control *cpu)
+{
+  size_t i;
+
+  for (i = 0; i < RTEMS_ARRAY_SIZE(cpu->Watchdog.Header); ++i) {
+    if (_Watchdog_Header_first(&cpu->Watchdog.Header[i]) != NULL) {
+      return true;
+    }
+  }
+
+  return false;
+}
+#endif
+
 static void clockHandler(void)
 {
   #if (CLOCK_DRIVER_USE_FAST_IDLE == 1)
@@ -136,6 +152,7 @@ static void clockHandler(void)
       cpu_self->thread_dispatch_disable_level == cpu_self->isr_nest_level
         && cpu_self->heir == cpu_self->executing
         && cpu_self->executing->is_idle
+        && clock_has_watchdogs(cpu_self)
     ) {
       tb += Clock_Decrementer_value;
       ppc_set_time_base( tb );
