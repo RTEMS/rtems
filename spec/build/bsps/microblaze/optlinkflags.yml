@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- split: null
+- env-append: LINKFLAGS
+- env-append: PKGCONFIG_LDFLAGS
+build-type: option
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+default:
+- enabled-by: true
+  value:
+  - -Wl,--no-relax
+description: |
+  MicroBlaze-specific flags passed to the linker.  The compiler driver
+  enables the linker relaxation.  The relaxation deletes instructions.  It
+  does not correct the call site table of .gcc_except_table, which the
+  assembler resolved to constants.  A C++ exception then finds the wrong
+  landing pad.  The default value disables the relaxation.
+enabled-by: true
+links: []
+name: MICROBLAZE_LINKFLAGS
+type: build
