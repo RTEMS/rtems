@@ -69,6 +69,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+#include "test_support.h"
 #include "tar01-tar.h"
 #include "tar01-tar-gz.h"
 #if HAVE_XZ
@@ -93,8 +94,6 @@ void       test_untar_unzip_txz( void );
 #define TARFILE_XZ_START tar01_tar_xz
 #define TARFILE_XZ_SIZE  tar01_tar_xz_size
 #endif
-
-void test_cat( char *file, int offset_arg, int length );
 
 static void test_untar_check_mode( const char *file, int mode )
 {
