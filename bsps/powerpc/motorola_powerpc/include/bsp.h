@@ -133,13 +133,7 @@ extern "C" {
 /* offset of pci memory as seen from the CPU */
 #define PCI_MEM_BASE		PREP_ISA_MEM_BASE
 
-#if defined(mot_ppc_mvme5100)
-#define _REG_STRIDE 		4
-#define PCI_MEM_WIN0		0x80000000
-#define BSP_VME_APERTURE_SIZE	0x20000000
-#else
 #define PCI_MEM_WIN0		0
-#endif
 #else
 #define	PCI_DRAM_OFFSET		0
 #define PCI_MEM_BASE		0
@@ -147,15 +141,7 @@ extern "C" {
 #endif
 #endif
 
-#if defined(_REG_STRIDE)
-#define BSP_REG_OFF(val)	((val) << _REG_STRIDE)
-#else
 #define BSP_REG_OFF(val)	(val)
-#endif
-
-#ifdef mot_ppc_mvme5100
-#define BSP_PGTBL_EXTRA_SIZE	BSP_VME_APERTURE_SIZE
-#endif
 
 /*
  * The BSP has PCI devices. Enable support in LibBSD.
@@ -167,12 +153,7 @@ extern "C" {
  */
 #define RTEMS_BSP_PCI_IO_REGION_BASE  0
 #define RTEMS_BSP_PCI_MEM_REGION_BASE PCI_DRAM_OFFSET
-#if defined(mot_ppc_mvme5100)
-#define BSP_LOCAL2PCI_ADDR(a) ((uint32_t)(a))
-#define RTEMS_BSP_PCI_DMA_REGION_BASE 0
-#else
 #define RTEMS_BSP_PCI_DMA_REGION_BASE PCI_DRAM_OFFSET
-#endif
 
 /*
  * Remap the PCI address space for LibBSD
@@ -208,9 +189,6 @@ extern "C" {
 #define BSP_OPEN_PIC_BASE_OFFSET 0x40000
 
 #define MVME_HAS_DEC21140
-#elif defined(mot_ppc_mvme5100)
-#define BSP_UART_IOBASE_COM1 (0xfef88000)
-#define BSP_UART_IOBASE_COM2 (0xfef88200)
 #else
 #define BSP_UART_IOBASE_COM1 ((_IO_BASE)+0x3f8)
 #define BSP_UART_IOBASE_COM2 ((_IO_BASE)+0x2f8)

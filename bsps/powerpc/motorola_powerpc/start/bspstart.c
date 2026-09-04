@@ -195,8 +195,6 @@ static void bsp_early( void )
    */
 #if defined(qemu)
   setdbat(3, 0xb0000000, 0xb0000000, 0x10000000, IO_PAGE);
-#elif defined(mot_ppc_mvme5100)
-  setdbat(2, 0xf0000000, 0xf0000000, 0x10000000, IO_PAGE);
 #else
   setdbat(3, 0xf0000000, 0xf0000000, 0x10000000, IO_PAGE);
 #endif
@@ -209,21 +207,6 @@ static void bsp_early( void )
 #endif
 
 
-#ifdef mot_ppc_mvme5100
-  /* Setting PCI I/O Base address to default memory map
-   * Refer to MVME5100 Programmer's reference guide (Sep 2001)
-   *
-   * Initializing the PCI registers from here removes
-   * dependance on debug monitor for initializing the registers
-   * correctly
-   */
-  out_be32((volatile uint32_t *)0xfeff0040, 0xf000f3ff);
-  out_be32((volatile uint32_t *)0xfeff0044, 0x000000d2);
-  out_be32((volatile uint32_t *)0xfeff0050, 0xa000bfff);
-  out_be32((volatile uint32_t *)0xfeff0054, 0x000000c2);
-  out_be32((volatile uint32_t *)0xfeff0058, 0x80008080);
-  out_be32((volatile uint32_t *)0xfeff005c, 0x800000c0);
-#else
   /*
    * PCI devices memory area. Needed to access OpenPIC features
    * provided by the Raven
@@ -232,7 +215,6 @@ static void bsp_early( void )
    */
   setdbat(2, PCI_MEM_BASE+PCI_MEM_WIN0,
           PCI_MEM_BASE+PCI_MEM_WIN0, 0x10000000, IO_PAGE);
-#endif
 
 #if defined(mot_ppc_mvme2100)
   /* Need 0xfec00000 mapped for this */
@@ -394,18 +376,6 @@ static void bsp_early( void )
                "bridge must share PCI space\n");
   }
 
-#ifdef mot_ppc_mvme5100
-  /* Use page tables to map the VME windows instead of DBATS. */
-  if (!pt || TRIV121_MAP_SUCCESS != triv121PgTblMap(
-            pt, TRIV121_121_VSID,
-            PCI_MEM_BASE + _VME_A32_WIN0_ON_PCI,
-            BSP_VME_APERTURE_SIZE >> 12,
-            TRIV121_ATTR_IO_PAGE, TRIV121_PP_RW_PAGE)) {
-	printk("WARNING: unable to map VME aperture; "
-               "VME will be inaccessible\n");
-  }
-#endif
-
   /*
    *  initialize the device driver parameters
    */
@@ -439,10 +409,6 @@ static void bsp_early( void )
   switch (myBoard) {
     case MVME_2600_2700_W_MVME761:
       nvram_base = 0x80000074;
-      nvram_indirect = true;
-      break;
-    case MVME_5100:
-      nvram_base = 0xfef880C8;
       nvram_indirect = true;
       break;
     default:
