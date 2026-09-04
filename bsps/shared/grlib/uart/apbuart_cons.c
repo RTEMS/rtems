@@ -54,6 +54,8 @@
 
 #ifdef LEON3
 #include <bsp/leon3.h>
+#elif defined( NOELV )
+#include <bsp/riscv.h>
 #endif
 
 /*#define DEBUG 1  */
@@ -246,6 +248,7 @@ int apbuart_init1( struct drvmgr_dev *dev )
   char                    prefix[ 32 ];
   unsigned int            db;
   static int              first_uart = 1;
+  apbuart                *debug_uart;
   uint32_t                ctrl;
 
   /* The default operation in AMP is to use APBUART[0] for CPU[0],
@@ -291,11 +294,17 @@ int apbuart_init1( struct drvmgr_dev *dev )
    */
   db = 0;
 #ifdef LEON3
-  if ( priv->regs == leon3_debug_uart ) {
+  debug_uart = leon3_debug_uart;
+#elif defined( NOELV )
+  debug_uart = grlib_debug_uart;
+#else
+  debug_uart = NULL;
+#endif
+  if ( priv->regs == debug_uart ) {
     db = ctrl & ( APBUART_CTRL_RE | APBUART_CTRL_TE | APBUART_CTRL_PE |
                   APBUART_CTRL_PS );
   }
-#endif
+
   /* Let UART debug tunnelling be untouched if Flow-control is set.
    *
    * With old APBUARTs debug is enabled by setting LB and FL, since LB or
@@ -489,6 +498,7 @@ static void last_close(
   struct apbuart_priv         *uart = base_get_priv( base );
   apbuart                     *regs = uart->regs;
   rtems_interrupt_lock_context lock_context;
+  apbuart                     *debug_uart;
   uint32_t                     ctrl;
 
   if ( uart->mode != TERMIOS_POLLED ) {
@@ -515,13 +525,18 @@ static void last_close(
   }
 
 #ifdef LEON3
+  debug_uart = leon3_debug_uart;
+#elif defined( NOELV )
+  debug_uart = grlib_debug_uart;
+#else
+  debug_uart = NULL;
+#endif
   /* Disable TX/RX if not used for DEBUG */
-  if ( regs != leon3_debug_uart ) {
+  if ( regs != debug_uart ) {
     ctrl = grlib_load_32( &regs->ctrl );
     ctrl &= ~( APBUART_CTRL_RE | APBUART_CTRL_TE );
     grlib_store_32( &regs->ctrl, ctrl );
   }
-#endif
 }
 
 static int read_polled( rtems_termios_device_context *base )

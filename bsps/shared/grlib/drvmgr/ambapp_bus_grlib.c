@@ -206,14 +206,25 @@ static int ambapp_grlib_int_register(
 )
 {
   (void) dev;
+  int ret;
 
-  return rtems_interrupt_handler_install(
+#if defined( __riscv )
+  irq = RISCV_INTERRUPT_VECTOR_EXTERNAL( irq );
+#endif
+
+  ret = rtems_interrupt_handler_install(
     irq,
     info,
     RTEMS_INTERRUPT_SHARED,
     isr,
     arg
   );
+
+  if ( ret != RTEMS_SUCCESSFUL ) {
+    return DRVMGR_FAIL;
+  }
+
+  return DRVMGR_OK;
 }
 
 static int ambapp_grlib_int_unregister(
@@ -225,12 +236,20 @@ static int ambapp_grlib_int_unregister(
 {
   (void) dev;
 
+#if defined( __riscv )
+  irq = RISCV_INTERRUPT_VECTOR_EXTERNAL( irq );
+#endif
+
   return rtems_interrupt_handler_remove( irq, isr, arg );
 }
 
 static int ambapp_grlib_int_clear( struct drvmgr_dev *dev, int irq )
 {
   (void) dev;
+
+#if defined( __riscv )
+  irq = RISCV_INTERRUPT_VECTOR_EXTERNAL( irq );
+#endif
 
   if ( rtems_interrupt_clear( irq ) != RTEMS_SUCCESSFUL ) {
     return DRVMGR_FAIL;
@@ -243,6 +262,10 @@ static int ambapp_grlib_int_mask( struct drvmgr_dev *dev, int irq )
 {
   (void) dev;
 
+#if defined( __riscv )
+  irq = RISCV_INTERRUPT_VECTOR_EXTERNAL( irq );
+#endif
+
   if ( rtems_interrupt_vector_disable( irq ) != RTEMS_SUCCESSFUL ) {
     return DRVMGR_FAIL;
   }
@@ -253,6 +276,10 @@ static int ambapp_grlib_int_mask( struct drvmgr_dev *dev, int irq )
 static int ambapp_grlib_int_unmask( struct drvmgr_dev *dev, int irq )
 {
   (void) dev;
+
+#if defined( __riscv )
+  irq = RISCV_INTERRUPT_VECTOR_EXTERNAL( irq );
+#endif
 
   if ( rtems_interrupt_vector_enable( irq ) != RTEMS_SUCCESSFUL ) {
     return DRVMGR_FAIL;
@@ -269,6 +296,10 @@ static int ambapp_grlib_int_set_affinity(
 )
 {
   (void) dev;
+
+#if defined( __riscv )
+  irq = RISCV_INTERRUPT_VECTOR_EXTERNAL( irq );
+#endif
 
   bsp_interrupt_set_affinity( irq, cpus );
   return DRVMGR_OK;

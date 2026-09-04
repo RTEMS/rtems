@@ -44,6 +44,8 @@
 #include <bsp/fatal.h>
 #include <grlib/tlib.h>
 
+#ifndef NOELV
+
 #ifdef RTEMS_DRVMGR_STARTUP
 
 #if defined( LEON3 )
@@ -466,3 +468,5 @@ static const struct ops ops_irqamp = {
 #include "../../../shared/dev/clock/clockimpl.h"
 
 #endif /* RTEMS_DRVMGR_STARTUP */
+
+#endif /* NOELV */
