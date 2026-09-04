@@ -1,6 +1,12 @@
 /* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
 
-/*
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsSPARCERC32
+ *
+ * @brief This file contains the Clock Driver for the ERC32 BSP.
+ *
  *  This routine initializes the Real Time Clock Counter Timer which is
  *  part of the MEC on the ERC32 CPU.
  *

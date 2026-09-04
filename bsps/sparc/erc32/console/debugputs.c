@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsSPARCERC32
+ *
+ * @brief This file contains the polled console support for the ERC32 BSP.
+ */
+
 /*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
