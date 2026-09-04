@@ -63,6 +63,14 @@ extern "C" {
 */
 BSP_START_TEXT_SECTION void bsp_start_copy_sections( void );
 
+/**
+ * @brief This object provides the stack pointer of the boot processor at the
+ *   entry of the start code.
+ *
+ * The start code sets it, if RISCV_START_SAVE_STACK_POINTER is enabled.
+ */
+extern uintptr_t riscv_start_stack_pointer;
+
 /** @} */
 
 #ifdef __cplusplus

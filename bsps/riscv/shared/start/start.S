@@ -78,6 +78,14 @@ SYM(_start):
 	mv	s0, a0
 	mv	s1, a1
 
+#ifdef RISCV_START_SAVE_STACK_POINTER
+	/*
+	 * The boot loader passes the end of RAM in the stack pointer, as GRMON
+	 * does.
+	 */
+	mv	s2, sp
+#endif
+
 #ifdef RISCV_USE_S_MODE
 	/* start boot hartid */
 	li	t0, RISCV_BOOT_HARTID
@@ -108,6 +116,11 @@ SYM(_start):
 	call RISCV_Start_on_processor
 
 	/* only boot hartid returns here */
+
+#ifdef RISCV_START_SAVE_STACK_POINTER
+	LADDR	t0, riscv_start_stack_pointer
+	SREG	s2, 0(t0)
+#endif
 
 .Lclear_bss:
 
@@ -295,3 +308,14 @@ RISCV_Start_on_processor:
 #endif
 
 #endif /* RTEMS_SMP */
+
+#ifdef RISCV_START_SAVE_STACK_POINTER
+	.section	.data, "aw"
+	.align	PTR_ALIGN
+
+	.globl	riscv_start_stack_pointer
+	.type	riscv_start_stack_pointer, @object
+	.size	riscv_start_stack_pointer, PTR_SIZE
+riscv_start_stack_pointer:
+	PTR_VALUE	0
+#endif

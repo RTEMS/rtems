@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+default:
+- enabled-by: bsps/riscv/noel
+  value: true
+- enabled-by: true
+  value: false
+description: |
+  If this option is enabled, then the start code saves the stack pointer of
+  the boot processor at the entry in riscv_start_stack_pointer.  The boot
+  loader shall pass the end of RAM in the stack pointer, as GRMON does.
+enabled-by: true
+links: []
+name: RISCV_START_SAVE_STACK_POINTER
+type: build
