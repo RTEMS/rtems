@@ -132,11 +132,23 @@
 
 #define SREG sw
 
+#define PTR_ALIGN 2
+
+#define PTR_SIZE 4
+
+#define PTR_VALUE .word
+
 #elif __riscv_xlen == 64
 
 #define LREG ld
 
 #define SREG sd
+
+#define PTR_ALIGN 3
+
+#define PTR_SIZE 8
+
+#define PTR_VALUE .dword
 
 #endif /* __riscv_xlen */
 

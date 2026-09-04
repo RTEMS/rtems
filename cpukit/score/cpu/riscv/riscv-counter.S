@@ -31,15 +31,7 @@
  * SUCH DAMAGE.
  */
 
-#if __riscv_xlen == 32
-#define PTR_ALIGN 2
-#define PTR_SIZE 4
-#define PTR_VALUE .word
-#elif __riscv_xlen == 64
-#define PTR_ALIGN 3
-#define PTR_SIZE 8
-#define PTR_VALUE .dword
-#endif
+#include <rtems/asm.h>
 
 	.section	.sdata, "aw"
 	.align	PTR_ALIGN
