@@ -6,27 +6,35 @@ copyrights:
 cppflags: []
 cxxflags: []
 enabled-by: true
+extra-files:
+- bsps/riscv/shared/doxygen.h
 includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}
   source:
+  - bsps/riscv/noel/include/amba.h
   - bsps/riscv/noel/include/bsp.h
-  - bsps/riscv/noel/include/tm27.h
+  - bsps/riscv/noel/include/noel.h
+  - bsps/riscv/riscv/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/riscv/noel/include/bsp/irq.h
   - bsps/riscv/noel/include/bsp/irqimpl.h
   - bsps/riscv/noel/include/bsp/riscv.h
+  - bsps/riscv/noel/include/bsp/rvintctrl.h
+- destination: ${BSP_INCLUDEDIR}/grlib
+  source:
+  - bsps/riscv/include/grlib/io.h
 links: []
 source:
-- bsps/riscv/noel/console/console-config.c
+- bsps/riscv/noel/console/console.c
+- bsps/riscv/noel/console/printk_support.c
+- bsps/riscv/noel/start/amba.c
 - bsps/riscv/noel/start/bsp_fatal_halt.c
-- bsps/riscv/riscv/start/bspstart.c
+- bsps/riscv/noel/start/bspstart.c
 - bsps/riscv/shared/clock/clockdrv.c
-- bsps/riscv/shared/fdt/riscv-fdt-irq.c
-- bsps/riscv/shared/fdt/riscv-fdt.c
 - bsps/riscv/shared/irq/irq.c
-- bsps/riscv/shared/start/bspgetworkarea.c
+- bsps/riscv/shared/start/bspgetworkarea-fromstack.c
 - bsps/riscv/shared/start/sendipi.c
 - bsps/shared/cache/nocache.c
 - bsps/shared/dev/btimer/btimer-cpucounter.c
@@ -35,6 +43,5 @@ source:
 - bsps/shared/grlib/uart/apbuart_polled.c
 - bsps/shared/grlib/uart/apbuart_termios.c
 - bsps/shared/irq/irq-default-handler.c
-- bsps/shared/start/bsp-fdt.c
 - bsps/shared/start/gettargethash-default.c
 type: build

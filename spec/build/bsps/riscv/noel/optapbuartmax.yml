@@ -6,6 +6,10 @@ build-type: option
 copyrights:
 - Copyright (C) 2022 Cobham Gaisler AB
 default:
+- enabled-by: riscv/gr765
+  value: 12
+- enabled-by: riscv/gr801
+  value: 3
 - enabled-by: true
   value: 2
 description: |

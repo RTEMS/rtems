@@ -1,7 +1,16 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsRISCVNOEL
+ *
+ * @brief This source file contains the implementation of bsp_reset().
+ */
+
 /*
  * Copyright (C) 2021 Cobham Gaisler AB
+ * Copyright (C) 2026 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,19 +38,47 @@
 
 #include <bsp/riscv.h>
 
+#ifdef RISCV_USE_S_MODE
+#include <machine/sbi.h>
+#endif
+
 /* From bsps/arm/fvp/include/bsp/semihosting.h */
 #define TARGET_SYS_EXIT_EXTENDED    0x20
 #define ADP_Stopped_ApplicationExit 0x20026
+
+/*
+ * The semihosting exit takes the operation in a0 and the address of the
+ * parameter block in a1.  The trap sequence must not cross a page boundary.
+ */
+#define SEMIHOSTING_EXIT( block )                                      \
+  do {                                                                 \
+    register uintptr_t  a0 __asm__( "a0" ) = TARGET_SYS_EXIT_EXTENDED; \
+    register uintptr_t *a1 __asm__( "a1" ) = block;                    \
+    __asm__ volatile( ".option push\n\t"                               \
+                      ".option norvc\n\t"                              \
+                      ".align 4\n\t"                                   \
+                      "slli zero, zero, 0x1f\n\t"                      \
+                      "ebreak\n\t"                                     \
+                      "srai zero, zero, 0x7\n\t"                       \
+                      ".option pop"                                    \
+                      :                                                \
+                      : "r"( a0 ), "r"( a1 )                           \
+                      : "memory" );                                    \
+    RTEMS_UNREACHABLE();                                               \
+  } while ( 0 )
 
 void bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
 {
   (void) source;
 
-  uint64_t args[ 2 ] = { ADP_Stopped_ApplicationExit, code };
-  __asm__ volatile( "li a0, %0" ::"i"( TARGET_SYS_EXIT_EXTENDED ) );
-  __asm__ volatile( "mv a1, %0" ::"r"( &args ) );
-  __asm__ volatile( ".align 4; slli zero, zero, 0x1f" );
-  __asm__ volatile( "ebreak" );
-  __asm__ volatile( "srai zero, zero, 0x7" );
+#ifdef RISCV_USE_S_MODE
+  (void) code;
+
+  sbi_system_reset( SBI_SRST_TYPE_SHUTDOWN, SBI_SRST_REASON_NONE );
   RTEMS_UNREACHABLE();
+#else
+  uintptr_t block[ 2 ] = { ADP_Stopped_ApplicationExit, code };
+
+  SEMIHOSTING_EXIT( block );
+#endif
 }

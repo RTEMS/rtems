@@ -32,10 +32,12 @@ enabled-by:
 - riscv/grv32imac
 - riscv/grv32imafdc
 - riscv/mpfs64imafdc
-- riscv/noel32imafd
-- riscv/noel64imac
-- riscv/noel64imafdc
-- riscv/noel64imafd
+- riscv/noelgp32
+- riscv/noelmcl32
+- riscv/noelgp64
+- riscv/noelmcl64
+- riscv/gr765
+- riscv/gr801
 - riscv/rv32iac
 - riscv/rv32imac
 - riscv/rv32imafc

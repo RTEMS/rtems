@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RISCV_IRQ
+ * @ingroup RTEMSBSPsRISCVNOEL
  *
  * @brief Interrupt definitions.
  */

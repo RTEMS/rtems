@@ -2,14 +2,20 @@
 
 /**
  * @file
- *
- * @ingroup RTEMSBSPsRISCVGeneric
- *
- * @brief This header file includes the generic tm27 support implementation.
+ * @ingroup RTEMSBSPsRISCVNOEL
+ * @brief NOEL-V BSP data types and macros
  */
 
-/*
- * Copyright (C) 2017 embedded brains GmbH & Co. KG
+/*  noel.h
+ *
+ *  NOEL-V BSP data types and macros.
+ *
+ *  COPYRIGHT (c) 1989-1998.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  Modified for NOEL-V BSP.
+ *  COPYRIGHT (c) 2024.
+ *  Gaisler Research.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -33,4 +39,30 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <rtems/tm27-default.h>
+#ifndef _INCLUDE_NOEL_H
+#define _INCLUDE_NOEL_H
+
+#include <rtems.h>
+#include <amba.h>
+#include <bsp/riscv.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#if !defined( GRLIB_APBUART_BASE )
+/* Let user override which on-chip APBUART will be debug UART
+ * 0 = Default APBUART. On MP system CPU0=APBUART0, CPU1=APBUART1...
+ * 1 = APBUART[0]
+ * 2 = APBUART[1]
+ * 3 = APBUART[2]
+ * ...
+ */
+extern int grlib_debug_uart_index;
+#endif
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* !_INCLUDE_NOEL_H */

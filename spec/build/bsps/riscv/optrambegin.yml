@@ -10,11 +10,12 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 default:
 - enabled-by:
-  - riscv/noel32im
-  - riscv/noel32imafd
-  - riscv/noel64imac
-  - riscv/noel64imafd
-  - riscv/noel64imafdc
+  - riscv/noelgp32
+  - riscv/noelmcl32
+  - riscv/noelgp64
+  - riscv/noelmcl64
+  - riscv/gr765
+  - riscv/gr801
   value: 0x00000000
 - enabled-by: riscv/griscv
   value: 0x40000000

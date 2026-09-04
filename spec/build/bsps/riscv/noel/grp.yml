@@ -13,6 +13,8 @@ links:
 - role: build-dependency
   uid: ../../obj
 - role: build-dependency
+  uid: ../../objgrlib
+- role: build-dependency
   uid: ../../objirq
 - role: build-dependency
   uid: ../../optclang
@@ -39,14 +41,6 @@ links:
 - role: build-dependency
   uid: ../optplicprobeprio
 - role: build-dependency
-  uid: ../../optfdtcpyro
-- role: build-dependency
-  uid: ../../optfdtmxsz
-- role: build-dependency
-  uid: ../../optfdtro
-- role: build-dependency
-  uid: ../../optfdtuboot
-- role: build-dependency
   uid: ../../optconsoleirq
 - role: build-dependency
   uid: ../linkcmds
@@ -57,9 +51,15 @@ links:
 - role: build-dependency
   uid: ../optstartsavesp
 - role: build-dependency
-  uid: ../../bspopts
+  uid: optapbuartbase
 - role: build-dependency
   uid: optapbuartmax
+- role: build-dependency
+  uid: optconirq
+- role: build-dependency
+  uid: ../../bspopts
+- role: build-dependency
+  uid: optincludes
 type: build
 use-after: []
 use-before: []

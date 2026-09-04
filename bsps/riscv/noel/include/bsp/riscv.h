@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsRISCVNOEL
+ *
+ * @brief This header file provides the CPU counter, the IPI and the debug UART
+ *   interfaces of the NOEL-V BSP.
+ */
+
 /*
  * Copyright (c) 2018 embedded brains GmbH & Co. KG
  *
@@ -31,26 +40,36 @@
 #include <bsp.h>
 
 #include <rtems/score/cpuimpl.h>
+#include <grlib/apbuart-regs.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-extern volatile RISCV_CLINT_regs *riscv_clint;
+static inline uint32_t riscv_up_counter_low( void )
+{
+  unsigned long counter;
+  __asm__ volatile( ".option push\n"
+                    ".option arch, +zicsr\n"
+                    "csrr %0, time\n"
+                    ".option pop"
+                    : "=r"( counter ) );
 
-void *riscv_fdt_get_address( const void *fdt, int node );
+  return (uint32_t) ( counter & __UINT32_MAX__ );
+}
 
-uint32_t riscv_get_core_frequency( void );
+extern volatile RISCV_CLINT_regs *noel_clint;
 
-#ifdef RTEMS_SMP
-extern uint32_t riscv_hart_count;
+void riscv_send_ipi( uint32_t cpu_index );
+
+/**
+ * @brief This pointer provides the debug APBUART register block address.
+ */
+#if defined( GRLIB_APBUART_BASE )
+#define grlib_debug_uart ( (struct apbuart *) GRLIB_APBUART_BASE )
 #else
-#define riscv_hart_count 1
+extern apbuart *grlib_debug_uart;
 #endif
-
-uint32_t riscv_get_hart_index_by_phandle( uint32_t phandle );
-
-void riscv_send_ipi(uint32_t cpu_index);
 
 #ifdef __cplusplus
 }

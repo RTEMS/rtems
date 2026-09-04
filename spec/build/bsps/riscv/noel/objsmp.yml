@@ -11,5 +11,5 @@ includes: []
 install: []
 links: []
 source:
-- bsps/riscv/riscv/start/bspsmp.c
+- bsps/riscv/noel/start/bspsmp.c
 type: build

@@ -7,38 +7,43 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 default:
-- enabled-by: riscv/noel64imafdc
+- enabled-by: riscv/gr765
   value:
   - -march=rv64imafdc
   - -mabi=lp64d
   - -mcmodel=medany
-- enabled-by: riscv/noel64imafd
+  - -mstrict-align
+- enabled-by: riscv/gr801
   value:
-  - -march=rv64imafd
+  - -march=rv64imafdc
   - -mabi=lp64d
   - -mcmodel=medany
-- enabled-by: riscv/noel64imac
+  - -mstrict-align
+- enabled-by: riscv/noelgp64
   value:
-  - -march=rv64imac
+  - -march=rv64imafdc
+  - -mabi=lp64d
+  - -mcmodel=medany
+  - -mstrict-align
+- enabled-by: riscv/noelmcl64
+  value:
+  - -march=rv64ima
   - -mabi=lp64
   - -mcmodel=medany
-- enabled-by: []
-  value:
-  - -march=rv64im
-  - -mabi=lp64
-  - -mcmodel=medany
-- enabled-by: riscv/noel32imafd
+- enabled-by: riscv/noelgp32
   value:
   - -march=rv32imafd
   - -mabi=ilp32d
-- enabled-by: riscv/noel32im
-  value:
-  - -march=rv32im
-  - -mabi=ilp32
-- enabled-by: true
+- enabled-by: riscv/noelmcl32
   value:
   - -march=rv32ima
   - -mabi=ilp32
+- enabled-by: true
+  value:
+  - -march=rv64imafdc
+  - -mabi=lp64d
+  - -mcmodel=medany
+  - -mstrict-align
 description: |
   ABI flags
 enabled-by: true

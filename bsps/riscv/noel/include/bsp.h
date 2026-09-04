@@ -53,13 +53,11 @@
  */
 
 #include <rtems.h>
-#include <rtems/clockdrv.h>
-#include <rtems/console.h>
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
 
-#include <rtems/devnull.h>
+#include <noel.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -67,7 +65,12 @@ extern "C" {
 
 #define BSP_FEATURE_IRQ_EXTENSION
 
-#define BSP_FDT_IS_SUPPORTED
+#define BSP_NUMBER_OF_TERMIOS_PORTS RISCV_CONSOLE_MAX_APBUART_DEVICES
+
+#define NOELV 1
+
+#define GRETH_SUPPORTED
+#define GRETH2_SUPPORTED
 
 #ifdef __cplusplus
 }

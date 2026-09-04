@@ -10,9 +10,10 @@ default:
 - enabled-by:
   - riscv/beaglevfire
   - riscv/mpfs64imafdc
-  - riscv/noel64imac
-  - riscv/noel64imafd
-  - riscv/noel64imafdc
+  - riscv/noelgp64
+  - riscv/noelmcl64
+  - riscv/gr765
+  - riscv/gr801
   - riscv/rv64imac
   - riscv/rv64imafd
   - riscv/rv64imafdc
@@ -21,8 +22,8 @@ default:
   - '64'
 - enabled-by:
   - riscv/griscv
-  - riscv/noel32im
-  - riscv/noel32imafd
+  - riscv/noelgp32
+  - riscv/noelmcl32
   - riscv/rv32i
   - riscv/rv32iac
   - riscv/rv32im
