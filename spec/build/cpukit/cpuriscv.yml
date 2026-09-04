@@ -29,6 +29,7 @@ links:
   uid: cpuriscvsmrnmi
 source:
 - cpukit/score/cpu/riscv/cpu.c
+- cpukit/score/cpu/riscv/riscv-access.S
 - cpukit/score/cpu/riscv/riscv-context-initialize.c
 - cpukit/score/cpu/riscv/riscv-context-switch.S
 - cpukit/score/cpu/riscv/riscv-context-validate.S
