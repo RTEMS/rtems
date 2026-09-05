@@ -40,6 +40,7 @@
 
 #include <rtems/score/todimpl.h>
 #include <rtems/score/assert.h>
+#include <rtems/score/threaddispatch.h>
 #include <rtems/score/watchdogimpl.h>
 
 Status_Control _TOD_Set(
@@ -47,11 +48,12 @@ Status_Control _TOD_Set(
   ISR_lock_Context      *lock_context
 )
 {
-  struct bintime tod_as_bintime;
-  uint64_t       tod_as_ticks;
-  uint32_t       cpu_max;
-  uint32_t       cpu_index;
-  Status_Control status;
+  struct bintime   tod_as_bintime;
+  uint64_t         tod_as_ticks;
+  uint32_t         cpu_max;
+  uint32_t         cpu_index;
+  Status_Control   status;
+  Per_CPU_Control *cpu_self;
 
   _Assert( _TOD_Is_owner() );
   _Assert( _TOD_Is_valid_new_time_of_day( tod ) == STATUS_SUCCESSFUL );
@@ -67,6 +69,14 @@ Status_Control _TOD_Set(
 
   tod_as_ticks = _Watchdog_Ticks_from_timespec( tod );
   cpu_max = _SMP_Get_processor_maximum();
+
+  /*
+   * The watchdog routines run with interrupts enabled under the ownership of
+   * the TOD mutex.  We have to disable thread dispatching to prevent arbitrary
+   * delays of the routine invocations at the new TOD.  In uniprocessor
+   * configuration, this prevents also the deletion of watchdogs in use.
+   */
+  cpu_self = _Thread_Dispatch_disable();
 
   for ( cpu_index = 0; cpu_index < cpu_max; ++cpu_index ) {
     Per_CPU_Control  *cpu;
@@ -95,6 +105,7 @@ Status_Control _TOD_Set(
   }
 
   _TOD.is_set = true;
+  _Thread_Dispatch_enable( cpu_self );
 
   return STATUS_SUCCESSFUL;
 }
