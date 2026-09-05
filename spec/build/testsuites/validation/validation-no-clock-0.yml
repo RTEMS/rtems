@@ -33,6 +33,7 @@ source:
 - testsuites/validation/tc-clock-get-tod.c
 - testsuites/validation/tc-clock-get-uptime.c
 - testsuites/validation/tc-clock-nanosleep.c
+- testsuites/validation/tc-clock-set-no-dispatch.c
 - testsuites/validation/tc-clock-set.c
 - testsuites/validation/tc-clock.c
 - testsuites/validation/tc-cpuuse.c
