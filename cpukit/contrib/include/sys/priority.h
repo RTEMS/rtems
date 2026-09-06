@@ -77,6 +77,9 @@
 #define PRI_MIN_ITHD            (PRI_MIN)
 #define PRI_MAX_ITHD            (PRI_MIN_REALTIME - 1)
 
+#ifdef __rtems__
+#define RQ_PPQ                  (4)
+#endif
 #define PI_REALTIME             (PRI_MIN_ITHD + 0)
 #define PI_AV                   (PRI_MIN_ITHD + 4)
 #define PI_NET                  (PRI_MIN_ITHD + 8)
