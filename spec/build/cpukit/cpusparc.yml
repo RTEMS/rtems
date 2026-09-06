@@ -36,6 +36,7 @@ source:
 - cpukit/score/cpu/sparc/sparc-context-validate.S
 - cpukit/score/cpu/sparc/sparc-context-volatile-clobber.S
 - cpukit/score/cpu/sparc/sparc-exception-frame-print.c
+- cpukit/score/cpu/sparc/sparc-exception-resume.S
 - cpukit/score/cpu/sparc/sparc-isr-handler.S
 - cpukit/score/cpu/sparc/sparc-isr-install.c
 - cpukit/score/cpu/sparc/syscall.S

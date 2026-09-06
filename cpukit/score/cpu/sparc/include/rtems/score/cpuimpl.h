@@ -235,6 +235,8 @@ void _CPU_Context_volatile_clobber( uintptr_t pattern );
 
 void _CPU_Context_validate( uintptr_t pattern );
 
+RTEMS_NO_RETURN void _CPU_Exception_resume( const CPU_Exception_frame *frame );
+
 static inline void _CPU_Instruction_illegal( void )
 {
   __asm__ volatile ( "unimp 0" );
