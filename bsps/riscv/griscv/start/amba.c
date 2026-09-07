@@ -37,7 +37,7 @@ rtems_interrupt_lock GRLIB_IrqCtrl_Lock =
   RTEMS_INTERRUPT_LOCK_INITIALIZER("GRLIB IrqCtrl");
 
 /* Pointers to Interrupt Controller configuration registers */
-volatile struct irqmp_regs *GRLIB_IrqCtrl_Regs;
+volatile irqamp   *GRLIB_IrqCtrl_Regs;
 struct ambapp_dev *GRLIB_IrqCtrl_Adev;
 
 /* GRLIB extended IRQ controller IRQ number */
@@ -70,20 +70,20 @@ void irqmp_initialize(void)
                                  ambapp_find_by_idx, NULL);
   if (adev != NULL) {
 
-    GRLIB_IrqCtrl_Regs = (volatile struct irqmp_regs *)DEV_TO_APB(adev)->start;
+    GRLIB_IrqCtrl_Regs = (volatile irqamp *)DEV_TO_APB(adev)->start;
     GRLIB_IrqCtrl_Adev = adev;
-    if ((GRLIB_IrqCtrl_Regs->ampctrl >> 28) > 0) {
+    if ((GRLIB_IrqCtrl_Regs->asmpctrl >> 28) > 0) {
     /* IRQ Controller has support for multiple IRQ Controllers, each
      * CPU can be routed to different Controllers, we find out which
      * controller by looking at the IRQCTRL Select Register for this CPU.
      * Each Controller is located at a 4KByte offset.
      */
-      icsel = GRLIB_IrqCtrl_Regs->icsel[GRLIB_Cpu_Index/8];
+      icsel = GRLIB_IrqCtrl_Regs->icselr[GRLIB_Cpu_Index/8];
       icsel = (icsel >> ((7 - (GRLIB_Cpu_Index & 0x7)) * 4)) & 0xf;
       GRLIB_IrqCtrl_Regs += icsel;
     }
-    GRLIB_IrqCtrl_Regs->mask[GRLIB_Cpu_Index] = 0;
-    GRLIB_IrqCtrl_Regs->force[GRLIB_Cpu_Index] = 0;
+    GRLIB_IrqCtrl_Regs->pimask[GRLIB_Cpu_Index] = 0;
+    GRLIB_IrqCtrl_Regs->piforce[GRLIB_Cpu_Index] = 0;
     GRLIB_IrqCtrl_Regs->iclear = 0xffffffff;
 
   /* Init Extended IRQ controller if available */

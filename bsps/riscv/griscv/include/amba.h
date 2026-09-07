@@ -91,7 +91,7 @@ extern "C" {
 extern uint32_t GRLIB_Cpu_Index;
 extern const unsigned char GRLIB_mp_irq;
 
-extern volatile struct irqmp_regs *GRLIB_IrqCtrl_Regs;
+extern volatile irqamp *GRLIB_IrqCtrl_Regs;
 extern struct ambapp_dev *GRLIB_IrqCtrl_Adev;
 extern int GRLIB_IrqCtrl_EIrq;
 extern volatile struct gptimer_regs *GRLIB_Timer_Regs;
@@ -112,7 +112,7 @@ extern rtems_interrupt_lock GRLIB_IrqCtrl_Lock;
 
 
 static inline uint32_t grlib_get_cpu_count(
-  volatile struct irqmp_regs *irqmp
+  volatile irqamp *irqmp
 )
 {
   uint32_t mpstat = irqmp->mpstat;
@@ -130,7 +130,7 @@ static inline uint32_t grlib_get_cpu_count(
   do { \
     rtems_interrupt_lock_context _lock_context; \
     GRLIB_IRQCTRL_ACQUIRE( &_lock_context ); \
-    GRLIB_IrqCtrl_Regs->mask[_cpu]  |= (1U << (_source)); \
+    GRLIB_IrqCtrl_Regs->pimask[_cpu]  |= (1U << (_source)); \
     GRLIB_IRQCTRL_RELEASE( &_lock_context ); \
   } while (0)
 
@@ -138,7 +138,7 @@ static inline uint32_t grlib_get_cpu_count(
   do { \
     rtems_interrupt_lock_context _lock_context; \
     GRLIB_IRQCTRL_ACQUIRE( &_lock_context ); \
-     GRLIB_IrqCtrl_Regs->mask[_cpu]  &= ~(1U << (_source)); \
+     GRLIB_IrqCtrl_Regs->pimask[_cpu]  &= ~(1U << (_source)); \
     GRLIB_IRQCTRL_RELEASE( &_lock_context ); \
   } while (0)
 
@@ -147,7 +147,7 @@ static inline uint32_t grlib_get_cpu_count(
     rtems_interrupt_lock_context _lock_context; \
     uint32_t _mask = 1U << ( _source ); \
     GRLIB_IRQCTRL_ACQUIRE( &_lock_context ); \
-    GRLIB_IrqCtrl_Regs->bcast |= _mask; \
+    GRLIB_IrqCtrl_Regs->brdcst |= _mask; \
     GRLIB_IRQCTRL_RELEASE( &_lock_context ); \
   } while (0)
 
@@ -156,12 +156,12 @@ static inline uint32_t grlib_get_cpu_count(
     rtems_interrupt_lock_context _lock_context; \
     uint32_t _mask = 1U << ( _source ); \
     GRLIB_IRQCTRL_ACQUIRE( &_lock_context ); \
-    GRLIB_IrqCtrl_Regs->bcast &= ~_mask; \
+    GRLIB_IrqCtrl_Regs->brdcst &= ~_mask; \
     GRLIB_IRQCTRL_RELEASE( &_lock_context ); \
   } while (0)
 
 #define BSP_Cpu_Is_interrupt_masked( _source, _cpu ) \
-     (!(GRLIB_IrqCtrl_Regs->mask[_cpu] & (1U << (_source))))
+     (!(GRLIB_IrqCtrl_Regs->pimask[_cpu] & (1U << (_source))))
 
 #ifdef __cplusplus
 }

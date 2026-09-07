@@ -73,12 +73,12 @@ static struct timecounter grlib_tc;
 
 static void grlib_tc_tick_irqmp_timestamp(void)
 {
-  volatile struct irqmp_timestamp_regs *irqmp_ts =
-    &GRLIB_IrqCtrl_Regs->timestamp[0];
-  unsigned int first = irqmp_ts->assertion;
-  unsigned int second = irqmp_ts->counter;
+  volatile irqamp_timestamp *irqmp_ts =
+    &GRLIB_IrqCtrl_Regs->itstmp[0];
+  unsigned int first = irqmp_ts->itstmpas;
+  unsigned int second = irqmp_ts->itcnt;
 
-  irqmp_ts->control |= IRQMP_TIMESTAMP_S1_S2;
+  irqmp_ts->itstmpc |= IRQMP_TIMESTAMP_S1_S2;
 
   _Profiling_Update_max_interrupt_delay(_Per_CPU_Get(), second - first);
 
@@ -104,11 +104,11 @@ static void grlib_tc_tick_irqmp_timestamp_init(void)
   bool done = true;
 #endif
 
-  volatile struct irqmp_timestamp_regs *irqmp_ts =
-    &GRLIB_IrqCtrl_Regs->timestamp[0];
+  volatile irqamp_timestamp *irqmp_ts =
+    &GRLIB_IrqCtrl_Regs->itstmp[0];
   unsigned int ks = 1U << 5;
 
-  irqmp_ts->control = ks | IRQMP_TIMESTAMP_S1_S2 | clkirq;
+  irqmp_ts->itstmpc = ks | IRQMP_TIMESTAMP_S1_S2 | clkirq;
 
   if (done) {
     grlib_tc_tick = grlib_tc_tick_irqmp_timestamp;
@@ -189,8 +189,8 @@ static void grlib_clock_initialize(void)
   tc->tc_frequency = grlib_up_counter_frequency();
 
 #ifdef RTEMS_PROFILING
-  volatile struct irqmp_timestamp_regs *irqmp_ts =
-    &GRLIB_IrqCtrl_Regs->timestamp[0];
+    volatile irqamp_timestamp *irqmp_ts =
+    &GRLIB_IrqCtrl_Regs->itstmp[0];
 
     if (!irqmp_has_timestamp(irqmp_ts)) {
       bsp_fatal(GRLIB_FATAL_CLOCK_NO_IRQMP_TIMESTAMP_SUPPORT);
