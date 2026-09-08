@@ -487,13 +487,13 @@ rtems_timer_service_routine test_unblock_task( rtems_id timer, void *arg )
   status = rtems_task_is_suspended( blocked_task_id );
   if ( in_isr ) {
     status = rtems_timer_fire_after( timer, 1, test_unblock_task, NULL );
-    directive_failed( status, "timer_fire_after failed" );
+    directive_failed_with_level( status, "timer_fire_after failed", 1 );
     return;
   }
 
   if (( status != RTEMS_ALREADY_SUSPENDED )) {
     status = rtems_timer_fire_after( timer, 1, test_unblock_task, NULL );
-    directive_failed( status, "timer_fire_after failed" );
+    directive_failed_with_level( status, "timer_fire_after failed", 1 );
     return;
   }
 
@@ -501,7 +501,7 @@ rtems_timer_service_routine test_unblock_task( rtems_id timer, void *arg )
   cpu_self = _Thread_Dispatch_disable();
   status = rtems_task_resume( blocked_task_id );
   _Thread_Dispatch_enable( cpu_self );
-  directive_failed( status, "rtems_task_resume" );
+  directive_failed_with_level( status, "rtems_task_resume", 1 );
 }
 
 #undef rtems_interrupt_disable
