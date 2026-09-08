@@ -46,6 +46,14 @@
 rtems_status_code rtems_clock_tick( void )
 {
   ISR_lock_Context lock_context;
+  Per_CPU_Control *cpu_self;
+
+  /*
+   * The watchdog routines run outside the lock of the collection and with
+   * interrupts enabled.  A caller at task level would let a dispatch take the
+   * processor away in the middle of a tickle phase.
+   */
+  cpu_self = _Thread_Dispatch_disable();
 
   _Timecounter_Acquire( &lock_context );
   _Timecounter_Tick_simple(
@@ -54,9 +62,7 @@ rtems_status_code rtems_clock_tick( void )
     &lock_context
   );
 
-  if ( _Thread_Dispatch_is_enabled() ) {
-    _Thread_Dispatch();
-  }
+  _Thread_Dispatch_enable( cpu_self );
 
   return RTEMS_SUCCESSFUL;
 }
