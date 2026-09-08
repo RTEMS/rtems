@@ -39,6 +39,7 @@
 #endif
 
 #include <rtems/score/watchdogimpl.h>
+#include <rtems/score/assert.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/timecounter.h>
@@ -53,6 +54,13 @@ void _Watchdog_Do_tickle(
   ISR_lock_Context *lock_context
 )
 {
+  /*
+   * A service routine runs outside the lock of the collection and with
+   * interrupts enabled.  A thread dispatch in that window would take the
+   * processor away from the phase.
+   */
+  _Assert( !_Thread_Dispatch_is_enabled() );
+
   do {
     if ( first->expire <= now ) {
       Watchdog_Service_routine_entry routine;

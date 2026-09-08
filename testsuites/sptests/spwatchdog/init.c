@@ -42,6 +42,7 @@
 #include "system.h"
 
 #include <rtems/score/watchdogimpl.h>
+#include <rtems/score/threaddispatch.h>
 
 const char rtems_test_name[] = "SPWATCHDOG";
 
@@ -98,7 +99,9 @@ static uint64_t test_watchdog_tick( Watchdog_Header *header, uint64_t now )
 #endif
   ISR_lock_Context  lock_context;
   Watchdog_Control *first;
+  Per_CPU_Control  *cpu_self;
 
+  cpu_self = _Thread_Dispatch_disable();
   _ISR_lock_ISR_disable_and_acquire( &lock, &lock_context );
 
   ++now;
@@ -110,6 +113,7 @@ static uint64_t test_watchdog_tick( Watchdog_Header *header, uint64_t now )
 
   _ISR_lock_Release_and_ISR_enable( &lock, &lock_context );
   _ISR_lock_Destroy( &lock );
+  _Thread_Dispatch_enable( cpu_self );
 
   return now;
 }
