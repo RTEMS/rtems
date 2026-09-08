@@ -574,6 +574,7 @@ static void Init( rtems_task_argument arg )
   (void) arg;
 
   T_register();
+  T_make_runner();
   T_run_all();
 
   if ( rtems_scheduler_get_processor_maximum() > 1 ) {
