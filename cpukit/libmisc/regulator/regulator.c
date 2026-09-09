@@ -36,6 +36,7 @@
 #include <stdlib.h>
 
 #include <rtems.h>
+#include <rtems/score/assert.h>
 #include <rtems/regulator.h>
 #include <string.h>
 
@@ -121,7 +122,7 @@ static rtems_task _Regulator_Output_task_body( rtems_task_argument arg )
         RTEMS_NO_WAIT,
         0
       );
-      _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
+      _Assert( sc == RTEMS_SUCCESSFUL || sc == RTEMS_UNSATISFIED );
       if ( sc != RTEMS_SUCCESSFUL ) {
         break;
       }
