@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- split: null
+- env-append: null
+build-type: option
+copyrights:
+- Copyright (C) 2026 UChicago Argonne LLC, as operator of
+  Argonne National Laboratory
+default:
+- enabled-by: true
+  value:
+  - -mcpu=603e
+  - -mstrict-align
+description: |
+  ABI flags
+enabled-by: true
+links: []
+name: ABI_FLAGS
+type: build

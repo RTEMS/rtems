@@ -1,0 +1,49 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: script
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+do-build: |
+  def cc(self, bld, bic, flags, source):
+      root, ext = os.path.splitext(source)
+      target = root + ".o"
+      bld(
+          features="asm c",
+          includes=bic.includes,
+          rule="${CC} " + flags + " ${CPPFLAGS} ${DEFINES_ST:DEFINES} ${CPPPATH_ST:INCPATHS} -c ${SRC} -o ${TGT}",
+          source=source,
+          target=target,
+      )
+      return target
+  flags = "-D__BOOT__ -mrelocatable"
+  for f in bld.env.ABI_FLAGS:
+        if f != "-meabi":
+            flags += " " + f
+  asmflags = "-DASM " + flags
+  cflags = "-msoft-float -mstrict-align -fno-builtin -Wall -mmultiple -O2 -fomit-frame-pointer -ffixed-r13 -mno-sdata " + flags
+  source = []
+  source.append(cc(self, bld, bic, asmflags, "bsps/powerpc/shared/motppc/bootloader/head.S"))
+  source.append(cc(self, bld, bic, asmflags, "bsps/powerpc/shared/motppc/bootloader/exception.S"))
+  source.append(cc(self, bld, bic, asmflags, "bsps/powerpc/shared/motppc/bootloader/em86real.S"))
+  source.append(cc(self, bld, bic, cflags, "bsps/powerpc/shared/motppc/bootloader/misc.c"))
+  source.append(cc(self, bld, bic, cflags, "bsps/powerpc/shared/motppc/bootloader/pci.c"))
+  source.append(cc(self, bld, bic, cflags, "bsps/powerpc/shared/motppc/bootloader/zlib.c"))
+  source.append(cc(self, bld, bic, cflags, "bsps/powerpc/shared/motppc/bootloader/mm.c"))
+  source.append(cc(self, bld, bic, cflags, "bsps/powerpc/shared/motppc/bootloader/em86.c"))
+  source.append(cc(self, bld, bic, cflags, "bsps/powerpc/shared/motppc/console/polled_io.c"))
+  source.append(cc(self, bld, bic, cflags, "bsps/powerpc/shared/motppc/bootloader/lib.c"))
+  target = "bootloader.o"
+  bld(
+      rule="${LD} -o ${TGT} -r ${SRC}",
+      source=source,
+      target=target,
+  )
+  bld.install_files(
+      "${BSP_LIBDIR}",
+      [target, "bsps/powerpc/shared/motppc/bootloader/ppcboot.lds"],
+  )
+do-configure: null
+enabled-by: true
+links: []
+prepare-build: null
+prepare-configure: null
+type: build

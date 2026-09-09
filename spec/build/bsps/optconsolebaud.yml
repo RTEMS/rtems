@@ -11,6 +11,7 @@ default:
   - m68k/m5484FireEngine
   - powerpc/beatnik
   - powerpc/hsc_cm01
+  - powerpc/mvme2100
   - powerpc/mvme3100
   - powerpc/mvme5100
   value: 9600
