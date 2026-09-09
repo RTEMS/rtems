@@ -256,6 +256,7 @@ const ppc_exc_categories *ppc_exc_categories_for_cpu(ppc_cpu_id_t cpu)
   if (ppc_cpu_has_altivec()) {
     switch (cpu) {
       case PPC_7400:
+      case PPC_7410:
         return &mpc_750_altivec_category_table;
       case PPC_7455:
       case PPC_7457:
@@ -267,6 +268,7 @@ const ppc_exc_categories *ppc_exc_categories_for_cpu(ppc_cpu_id_t cpu)
 
   switch (cpu) {
     case PPC_7400:
+    case PPC_7410:
     case PPC_750:
     case PPC_750_IBM:
       return &mpc_750_category_table;

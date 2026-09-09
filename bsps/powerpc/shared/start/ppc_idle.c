@@ -80,6 +80,7 @@ uint32_t msr;
 	switch ( current_ppc_cpu ) {
 
 		case PPC_7400:
+		case PPC_7410:
 		case PPC_7455:
 		case PPC_7457:
 			/* Must enable NAP mode in HID0 for MSR_POW to work */

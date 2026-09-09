@@ -145,6 +145,7 @@ register uint32_t v, x;
 				break;
 
 		case PPC_7400:
+		case PPC_7410:
 						v = _read_L2CR();
 						x = 1<<(31-21);
 						v = doLock ? v | x : v & ~x;

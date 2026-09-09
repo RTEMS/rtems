@@ -58,6 +58,7 @@ const char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu)
     case PPC_750:		return "MPC750";
     case PPC_750_IBM:		return "IBM PPC750";
     case PPC_7400:		return "MPC7400";
+    case PPC_7410:		return "MPC7410";
     case PPC_7455:		return "MPC7455";
     case PPC_7457:              return "MPC7457";
     case PPC_603le:		return "MPC603le";
@@ -134,6 +135,7 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
     case PPC_750:
     case PPC_750_IBM:
     case PPC_7400:
+    case PPC_7410:
     case PPC_7455:
     case PPC_7457:
     case PPC_604e:
@@ -171,6 +173,7 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
 		current_ppc_features.has_8_bats			= 1;
 		RTEMS_FALL_THROUGH();
     case PPC_7400:
+    case PPC_7410:
 	/* NOTE: PSIM PVR doesn't tell us anything (its
      *       contents are not set based on what model
        *       the user chooses but has to be programmed via

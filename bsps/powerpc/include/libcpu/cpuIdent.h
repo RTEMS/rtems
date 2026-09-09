@@ -49,6 +49,7 @@ typedef enum
   PPC_604e = 0x9,
   PPC_604r = 0xA,
   PPC_7400 = 0xC,
+  PPC_7410 = 0x800C,
   PPC_405  = 0x2001,  /* Xilinx Virtex-II Pro or -4 */
   PPC_405EX = 0x1291,	/* + 405EXr */
   PPC_405GP = 0x4011,	/* + 405CR */
