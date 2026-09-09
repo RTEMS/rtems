@@ -42,6 +42,12 @@
 
 #include <rtems/regulatorimpl.h>
 
+/*
+ * RTEMS_ID_NONE is not usable for this, because rtems_task_delete() takes
+ * the identifier zero as the calling task.
+ */
+#define REGULATOR_NO_ID ( (rtems_id) UINT32_MAX )
+
 /**
  * @ingroup RegulatorInternalAPI
  *
@@ -160,12 +166,15 @@ static rtems_task _Regulator_Output_task_body( rtems_task_argument arg )
    * This thread was requested to exit. Do so.
    */
 exit_delivery_thread:
-  the_regulator->delivery_thread_is_running = false;
-  the_regulator->delivery_thread_has_exited = true;
+  if ( the_regulator->delivery_thread_period_id != 0 ) {
+    (void) rtems_rate_monotonic_delete(
+      the_regulator->delivery_thread_period_id
+    );
+    the_regulator->delivery_thread_period_id = 0;
+  }
 
-  (void) rtems_rate_monotonic_delete(
-    the_regulator->delivery_thread_period_id
-  );
+  the_regulator->delivery_thread_has_exited = true;
+  the_regulator->delivery_thread_is_running = false;
 
   rtems_task_exit();
 }
@@ -189,48 +198,70 @@ static bool _Regulator_Free_helper(
   rtems_interval      ticks
 )
 {
-  rtems_status_code sc;
-
   /*
-   * If the output thread has not started running, then we can just delete it.
+   * If the output thread was created and has not already exited, delete it
+   * or wait for it to exit.
    */
+  if (
+    the_regulator->delivery_thread_id != REGULATOR_NO_ID &&
+    the_regulator->delivery_thread_has_exited == false
+  ) {
+    if ( ticks == 0 || the_regulator->delivery_thread_is_running == false ) {
+      rtems_status_code sc;
 
-  if ( ticks == 0 || the_regulator->delivery_thread_is_running == false ) {
-    sc = rtems_task_delete( the_regulator->delivery_thread_id );
-    _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
-  } else {
-    rtems_interval remaining = ticks;
+      sc = rtems_task_delete( the_regulator->delivery_thread_id );
+      _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
 
-    the_regulator->delivery_thread_request_exit = true;
-
-    while ( 1 ) {
-      if ( the_regulator->delivery_thread_has_exited ) {
-        break;
+      if ( the_regulator->delivery_thread_period_id != 0 ) {
+        (void) rtems_rate_monotonic_delete(
+          the_regulator->delivery_thread_period_id
+        );
       }
+    } else {
+      rtems_interval remaining = ticks;
 
-      if ( remaining == 0 ) {
-        return false;
+      the_regulator->delivery_thread_request_exit = true;
+
+      while ( 1 ) {
+        if ( the_regulator->delivery_thread_has_exited ) {
+          break;
+        }
+
+        if ( remaining == 0 ) {
+          return false;
+        }
+
+        (void) rtems_task_wake_after( 1 );
+        remaining--;
       }
-
-      (void) rtems_task_wake_after( 1 );
-      remaining--;
     }
   }
 
   /*
-   * The output thread deletes the rate monotonic period that it created.
+   * Delete the message queue if it was created. Its message_queue_storage is
+   * implicitly freed by rtems_message_queue_delete(). If queue creation
+   * failed, free the storage directly.
    */
+  if ( the_regulator->queue_id != REGULATOR_NO_ID ) {
+    rtems_status_code sc;
+
+    sc = rtems_message_queue_delete( the_regulator->queue_id );
+    _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
+  } else if ( the_regulator->message_queue_storage != NULL ) {
+    free( the_regulator->message_queue_storage );
+  }
 
   /*
-   * The regulator's message_queue_storage is implicitly freed by this call.
+   * Delete the partition if it was created.
    */
-  sc = rtems_message_queue_delete( the_regulator->queue_id );
-  _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
+  if ( the_regulator->messages_partition_id != REGULATOR_NO_ID ) {
+    rtems_status_code sc;
 
-  sc = rtems_partition_delete( the_regulator->messages_partition_id );
-  _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
+    sc = rtems_partition_delete( the_regulator->messages_partition_id );
+    _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
+  }
 
-  if ( the_regulator->message_memory ) {
+  if ( the_regulator->message_memory != NULL ) {
     free( the_regulator->message_memory );
   }
 
@@ -298,14 +329,9 @@ rtems_status_code rtems_regulator_create(
     return RTEMS_NO_MEMORY;
   }
 
-  /**
-   * We do NOT want the delivery_thread_id field to be initialized to 0. If the
-   * @a rtems_task_create() fails, then the field will not be overwritten.
-   * This results in an attempt to rtems_task_delete(0) during clean
-   * up. The thread ID of 0 is self which results in the calling thread
-   * accidentally deleting itself.
-   */
-  the_regulator->delivery_thread_id = (rtems_id) -1;
+  the_regulator->delivery_thread_id = REGULATOR_NO_ID;
+  the_regulator->queue_id = REGULATOR_NO_ID;
+  the_regulator->messages_partition_id = REGULATOR_NO_ID;
 
   /**
    * Copy the attributes to an internal area for later use
