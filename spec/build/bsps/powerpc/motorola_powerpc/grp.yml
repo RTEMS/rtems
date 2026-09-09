@@ -29,10 +29,6 @@ links:
 - role: build-dependency
   uid: optmpc750
 - role: build-dependency
-  uid: optmpc8240
-- role: build-dependency
-  uid: optmvme2100
-- role: build-dependency
   uid: optmvme2307
 - role: build-dependency
   uid: optmvme2700

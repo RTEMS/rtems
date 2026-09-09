@@ -6,9 +6,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
 default:
-- enabled-by:
-  - powerpc/mtx603e
-  - powerpc/mvme2100
+- enabled-by: powerpc/mtx603e
   value: true
 - enabled-by: true
   value: false

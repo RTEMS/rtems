@@ -142,20 +142,6 @@ char *save_boot_params(
   return loaderParam;
 }
 
-#if defined(mot_ppc_mvme2100)
-unsigned int EUMBBAR;
-
-/*
- * Return the current value of the Embedded Utilities Memory Block Base Address
- * Register (EUMBBAR) as read from the processor configuration register using
- * Processor Address Map B (CHRP).
- */
-static unsigned int get_eumbbar(void) {
-  out_le32( (volatile uint32_t *)0xfec00000, 0x80000078 );
-  return in_le32( (volatile uint32_t *)0xfee00000 );
-}
-#endif
-
 uint32_t _CPU_Counter_frequency(void)
 {
   return BSP_bus_frequency / (BSP_time_base_divisor / 1000);
@@ -163,9 +149,7 @@ uint32_t _CPU_Counter_frequency(void)
 
 static void bsp_early( void )
 {
-#if !defined(mot_ppc_mvme2100)
   unsigned l2cr;
-#endif
   prep_t boardManufacturer;
   motorolaBoard myBoard;
   Triv121PgTbl	pt=0;
@@ -199,12 +183,10 @@ static void bsp_early( void )
   setdbat(3, 0xf0000000, 0xf0000000, 0x10000000, IO_PAGE);
 #endif
 
-#ifndef mot_ppc_mvme2100
   /*
    * PC legacy IO space used for inb/outb and all PC compatible hardware
    */
   setdbat(1, _IO_BASE, _IO_BASE, 0x10000000, IO_PAGE);
-#endif
 
 
   /*
@@ -215,11 +197,6 @@ static void bsp_early( void )
    */
   setdbat(2, PCI_MEM_BASE+PCI_MEM_WIN0,
           PCI_MEM_BASE+PCI_MEM_WIN0, 0x10000000, IO_PAGE);
-
-#if defined(mot_ppc_mvme2100)
-  /* Need 0xfec00000 mapped for this */
-  EUMBBAR = get_eumbbar();
-#endif
 
   /*
    * enables L1 Cache. Note that the L1_caches_enables() codes checks for
@@ -243,7 +220,6 @@ static void bsp_early( void )
 #endif
 
 
-#if !defined(mot_ppc_mvme2100)
   /*
    * Enable L2 Cache. Note that the set_L2CR(L2CR) codes checks for
    * relevant CPU type (mpc750)...
@@ -254,7 +230,6 @@ static void bsp_early( void )
 #endif
   if ( (! (l2cr & 0x80000000)) && ((int) l2cr == -1))
     set_L2CR(0xb9A14000);
-#endif
 
   ppc_exc_initialize();
 

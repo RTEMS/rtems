@@ -60,17 +60,10 @@
  * available and unused!
  */
 
-#if defined(mot_ppc_mvme2100)
-#define _VME_A32_WIN0_ON_PCI  0x90000000
-#define _VME_A24_ON_PCI      0x9f000000
-#define _VME_A16_ON_PCI      0x9fff0000
-#define BSP_VME_BAT_IDX      1
-#else
 #define _VME_A32_WIN0_ON_PCI  0x10000000
 #define _VME_A24_ON_PCI      0x1f000000
 #define _VME_A16_ON_PCI      0x1fff0000
 #define BSP_VME_BAT_IDX      0
-#endif
 
 /* start of the A32 window on the VME bus
  * TODO: this should perhaps be a run-time configuration option

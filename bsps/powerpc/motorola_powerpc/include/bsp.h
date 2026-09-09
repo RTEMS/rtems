@@ -114,17 +114,6 @@ extern "C" {
  */
 
 /* fundamental addresses for BSP (CHRPxxx and PREPxxx are from libcpu/io.h) */
-#if defined(mot_ppc_mvme2100)
-#define	_IO_BASE		CHRP_ISA_IO_BASE
-#define	_ISA_MEM_BASE		CHRP_ISA_MEM_BASE
-/* address of our ram on the PCI bus   */
-#define	PCI_DRAM_OFFSET		CHRP_PCI_DRAM_OFFSET
-/* offset of pci memory as seen from the CPU */
-#define PCI_MEM_BASE		0
-/* where (in CPU addr. space) does the PCI window start */
-#define PCI_MEM_WIN0		0x80000000
-
-#else
 #define	_IO_BASE		PREP_ISA_IO_BASE
 #define	_ISA_MEM_BASE		PREP_ISA_MEM_BASE
 #ifndef qemu
@@ -138,7 +127,6 @@ extern "C" {
 #define	PCI_DRAM_OFFSET		0
 #define PCI_MEM_BASE		0
 #define PCI_MEM_WIN0		PREP_ISA_MEM_BASE
-#endif
 #endif
 
 #define BSP_REG_OFF(val)	(val)
@@ -183,13 +171,6 @@ extern "C" {
  *  find out what it is which is VERY different from other Motorola boards.
  */
 
-#if defined(mot_ppc_mvme2100)
-#define BSP_UART_IOBASE_COM1 ((_IO_BASE)+0x01e10000)
-/* #define BSP_UART_IOBASE_COM1     (0xffe10000) */
-#define BSP_OPEN_PIC_BASE_OFFSET 0x40000
-
-#define MVME_HAS_DEC21140
-#else
 #define BSP_UART_IOBASE_COM1 ((_IO_BASE)+0x3f8)
 #define BSP_UART_IOBASE_COM2 ((_IO_BASE)+0x2f8)
 
@@ -200,7 +181,6 @@ extern "C" {
 
 #if defined(mvme2300) || defined(mot_ppc_mvme2307) || defined(mot_ppc_mvme2700)
 #define MVME_HAS_DEC21140
-#endif
 #endif
 
 #define BSP_CONSOLE_PORT	BSP_UART_COM1

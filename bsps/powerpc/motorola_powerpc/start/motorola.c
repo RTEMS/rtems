@@ -264,38 +264,6 @@ static struct _int_map mvme27xx_intmap[] = {
              NULL_PINMAP}},
    NULL_INTMAP };
 
-static struct _int_map mvme2100_intmap[] = {
-   {0, 0, 0, {{1, {16,-1,-1,-1}}, /* something shows up in slot 0 and OpenPIC  */
-                                  /* 0 is unused.  This hushes the init code.  */
-               NULL_PINMAP}},
-
-   {0, 13, 0, {{1, {23,-1,-1,-1}},  /* Universe Lint[0-3]; not quite legal     */
-               {2, {24,-1,-1,-1}},  /* since the universe is a single-function */
-               {3, {25,-1,-1,-1}},  /* device. We leave it for info purposes   */
-               {4, {26,-1,-1,-1}},
-               NULL_PINMAP}},
-
-   {0, 14, 0, {{1, {17,-1,-1,-1}},  /* onboard ethernet */
-               NULL_PINMAP}},
-
-   {0, 16, PCI_FIXUP_OPT_OVERRIDE_NAME,
-              {{1, {18,-1,-1,-1}},  /* PMC slot; all pins are routed to 18     */
-               {2, {18,-1,-1,-1}},  /* I give the OVERRIDE option since I had  */
-               {3, {18,-1,-1,-1}},  /* problems with devices behind a bridge   */
-               {4, {18,-1,-1,-1}},  /* on a PMC card reading irq line 0...     */
-               NULL_PINMAP}},
-
-   /* FIXME: I don't know how MIP works or what it is; these probably won't work */
-
-   {0, -1, PCI_FIXUP_OPT_OVERRIDE_NAME,
-              {{1, {23,-1,-1,-1}},  /* PCI INT[A-D] expansion */
-               {2, {24,-1,-1,-1}},
-               {3, {25,-1,-1,-1}},
-               {4, {26,-1,-1,-1}},
-               NULL_PINMAP}},
-
-   NULL_INTMAP };
-
 /*
  * This table represents the standard PCI swizzle defined in the
  * PCI bus specification.  Table taken from Linux 2.4.18, prep_pci.c,
@@ -359,7 +327,6 @@ static const mot_info_t mot_boards[] = {
   {0x1E0, 0xFE, PPC_UNKNOWN, "MVME 3600 with MVME761", NULL, NULL},
   {0x1E0, 0xFF, PPC_UNKNOWN, "MVME 1600-001 or 1600-011", NULL, NULL},
   {0x000, 0x00, PPC_UNKNOWN, "", NULL, NULL},   /* end of probeable values for automatic scan */
-  {0x000, 0x00, PPC_UNKNOWN, "MVME 2100", mvme2100_intmap, prep_pci_swizzle},
 };
 
 prep_t currentPrepType;
@@ -394,9 +361,6 @@ motorolaBoard getMotorolaBoard(void)
  *
  *  NOTE: Every path must set currentBoard.
  */
-#if defined(mot_ppc_mvme2100)
-  currentBoard = (motorolaBoard) MVME_2100;
-#else
   unsigned char  cpu_type;
   unsigned char  base_mod;
   ppc_cpu_id_t   proc_type;
@@ -434,7 +398,6 @@ motorolaBoard getMotorolaBoard(void)
     return currentBoard;
   }
   currentBoard = (motorolaBoard) mot_entry;
-#endif
   return currentBoard;
 }
 
