@@ -96,6 +96,7 @@ source:
 - testsuites/validation/tc-status.c
 - testsuites/validation/tc-support-is-name-valid.c
 - testsuites/validation/tc-support.c
+- testsuites/validation/tc-sys-lock-condition.c
 - testsuites/validation/tc-sys-lock.c
 - testsuites/validation/tc-task-create-errors.c
 - testsuites/validation/tc-task-delete.c
@@ -132,6 +133,7 @@ source:
 - testsuites/validation/tc-userext-create.c
 - testsuites/validation/tc-userext-delete.c
 - testsuites/validation/tc-userext-ident.c
+- testsuites/validation/tr-cond-wait.c
 - testsuites/validation/tr-event-constant.c
 - testsuites/validation/tr-mtx-seize-try.c
 - testsuites/validation/tr-mtx-seize-wait.c

@@ -501,6 +501,37 @@ typedef struct TQMtxContext {
   rtems_task_priority priority_ceiling;
 } TQMtxContext;
 
+typedef struct TQCondContext {
+  /**
+   * @brief This member contains the base thread queue test context.
+   */
+  TQContext base;
+
+  /**
+   * @brief This member contains the test context of the mutex under the
+   *   condition variable.
+   */
+  TQMtxContext mtx;
+
+  /**
+   * @brief This member defines how often the calling thread seizes the mutex
+   *   before it waits on the condition variable.
+   */
+  unsigned int nest;
+
+  /**
+   * @brief This member contains the owner of the mutex after the wait on the
+   *   condition variable and before the release of the mutex.
+   */
+  rtems_tcb *owner_after;
+
+  /**
+   * @brief This member contains the nest level of the mutex after the wait on
+   *   the condition variable and before the release of the mutex.
+   */
+  unsigned int nest_after;
+} TQCondContext;
+
 /** @} */
 
 #ifdef __cplusplus
