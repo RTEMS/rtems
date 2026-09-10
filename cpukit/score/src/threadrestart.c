@@ -180,6 +180,7 @@ void _Thread_Kill_zombies( void )
     _ISR_lock_Release_and_ISR_enable( &zombies->Lock, &lock_context );
 
     _Thread_Wait_for_execution_stop( the_thread );
+    _Watchdog_Wait_for_service_stop( &the_thread->Timer.Watchdog );
     information = _Thread_Get_objects_information( the_thread );
     _Thread_Free( information, the_thread );
 

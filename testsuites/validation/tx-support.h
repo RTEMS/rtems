@@ -299,6 +299,41 @@ static inline unsigned int GetFlag( const Atomic_Uint *flag )
  */
 bool WaitTimedOut( int64_t begin );
 
+/**
+ * @brief Waits until the flag is set or the bound of the wait expires.
+ *
+ * A wait of a test window can run in the tickle of the processor which counts
+ * the ticks.  A monotonic time point and not the tick counter therefore bounds
+ * the wait.  The bound is one second.
+ *
+ * @param flag is the flag to wait for.
+ *
+ * @retval true The flag is set.
+ * @retval false The bound of the wait expired.
+ */
+bool WaitForFlag( const Atomic_Uint *flag );
+
+/**
+ * @brief Waits until the task reaches one of the states, the flag is set, or
+ *   the bound of the wait expires.
+ *
+ * The wait ends with the block of the task and not with the entry of the task
+ * into a directive, so a task which reaches no block has the time to end the
+ * directive.  The bound is one second.
+ *
+ * @param task_id is the identifier of the task.
+ * @param states is the set of states to wait for.
+ * @param flag is the flag which ends the wait as well.
+ *
+ * @retval true The task reached one of the states or the flag is set.
+ * @retval false The bound of the wait expired.
+ */
+bool WaitForBlockedState(
+  rtems_id           task_id,
+  uint32_t           states,
+  const Atomic_Uint *flag
+);
+
 typedef enum {
   TASK_TIMER_INVALID,
   TASK_TIMER_INACTIVE,

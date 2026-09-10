@@ -54,6 +54,7 @@ rtems_status_code rtems_rate_monotonic_delete( rtems_id id )
   if ( the_period != NULL ) {
     _Objects_Close( &_Rate_monotonic_Information, &the_period->Object );
     _Rate_monotonic_Cancel( the_period, the_period->owner, &lock_context );
+    _Watchdog_Wait_for_service_stop( &the_period->Timer );
     _Objects_Free( &_Rate_monotonic_Information, &the_period->Object );
     status = RTEMS_SUCCESSFUL;
   } else {

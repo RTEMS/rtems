@@ -31,4 +31,5 @@ source:
 - cpukit/score/src/smpsynchronize.c
 - cpukit/score/src/smpunicastaction.c
 - cpukit/score/src/threadunpin.c
+- cpukit/score/src/watchdogwait.c
 type: build

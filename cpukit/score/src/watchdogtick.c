@@ -83,6 +83,60 @@ void _Watchdog_Do_tickle(
   } while ( first != NULL );
 }
 
+/*
+ * One party produces the ticks of a processor, so the phase which begins
+ * hands its value to the phase which ends.  The store of the end therefore
+ * needs no read modify write operation.  A second party breaks that rule with
+ * a phase which nests or overlaps.  The mask of the load keeps the count odd
+ * for the time of such a phase.  Every end stores an even count, so the count
+ * never stays odd and no party waits for ever.  The assertion below reports
+ * the broken rule.
+ */
+static unsigned int _Watchdog_Begin_tick( Per_CPU_Control *cpu )
+{
+#if defined( RTEMS_SMP )
+  unsigned int generation;
+
+  generation = _Atomic_Load_uint(
+    &cpu->Watchdog.generation,
+    ATOMIC_ORDER_RELAXED
+  );
+  _Assert( ( generation & 1U ) == 0U );
+  generation &= ~(unsigned int) 1U;
+  _Atomic_Store_uint(
+    &cpu->Watchdog.generation,
+    generation + 1U,
+    ATOMIC_ORDER_RELAXED
+  );
+
+  return generation;
+#else
+  (void) cpu;
+
+  return 0;
+#endif
+}
+
+/*
+ * The store releases every write of a service routine of the phase to a party
+ * which reads the count with an acquire load.  The value of the begin carries
+ * no least significant bit, so the store leaves none either.
+ */
+static void _Watchdog_End_tick( Per_CPU_Control *cpu, unsigned int generation )
+{
+#if defined( RTEMS_SMP )
+  _Assert( ( generation & 1U ) == 0U );
+  _Atomic_Store_uint(
+    &cpu->Watchdog.generation,
+    generation + 2U,
+    ATOMIC_ORDER_RELEASE
+  );
+#else
+  (void) cpu;
+  (void) generation;
+#endif
+}
+
 void _Watchdog_Tick( Per_CPU_Control *cpu )
 {
   ISR_lock_Context                    lock_context;
@@ -92,6 +146,7 @@ void _Watchdog_Tick( Per_CPU_Control *cpu )
   struct timespec                     now;
   Thread_Control                     *executing;
   const Thread_CPU_budget_operations *cpu_budget_operations;
+  unsigned int                        generation;
 
 #ifdef RTEMS_SMP
   if ( _Per_CPU_Is_boot_processor( cpu ) ) {
@@ -102,6 +157,7 @@ void _Watchdog_Tick( Per_CPU_Control *cpu )
 #endif
 
   _ISR_lock_ISR_disable_and_acquire( &cpu->Watchdog.Lock, &lock_context );
+  generation = _Watchdog_Begin_tick( cpu );
 
   ticks = cpu->Watchdog.ticks;
   _Assert( ticks < UINT64_MAX );
@@ -149,6 +205,7 @@ void _Watchdog_Tick( Per_CPU_Control *cpu )
     );
   }
 
+  _Watchdog_End_tick( cpu, generation );
   _ISR_lock_Release_and_ISR_enable( &cpu->Watchdog.Lock, &lock_context );
 
   /*

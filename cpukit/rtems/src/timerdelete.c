@@ -56,6 +56,7 @@ rtems_status_code rtems_timer_delete( rtems_id id )
     cpu = _Timer_Acquire_critical( the_timer, &lock_context );
     _Timer_Cancel( cpu, the_timer );
     _Timer_Release( cpu, &lock_context );
+    _Watchdog_Wait_for_service_stop( &the_timer->Ticker );
     _Timer_Free( the_timer );
     _Objects_Allocator_unlock();
     return RTEMS_SUCCESSFUL;

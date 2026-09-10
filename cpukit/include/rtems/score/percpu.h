@@ -497,6 +497,17 @@ typedef struct Per_CPU_Control {
      * @brief Protects all watchdog operations on this processor.
      */
     ISR_lock_Control Lock;
+
+    /**
+     * @brief The count of the tickle phases of this processor.
+     *
+     * _Watchdog_Tick() increments the count at the begin of a phase.  It
+     * stores the next even count at the end of the phase.  An odd count tells
+     * a party that a collection of this processor may run a service routine.
+     * The store happens under the lock of this processor, the load of a party
+     * does not.
+     */
+    Atomic_Uint generation;
 #endif
 
     /**

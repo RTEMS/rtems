@@ -76,6 +76,7 @@ int timer_delete( timer_t timerid )
       &ptimer->Timer
     );
     _POSIX_Timer_Release( cpu, &lock_context );
+    _Watchdog_Wait_for_service_stop( &ptimer->Timer );
     _POSIX_Timer_Free( ptimer );
     _Objects_Allocator_unlock();
     return 0;

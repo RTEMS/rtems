@@ -148,6 +148,36 @@ static inline void _Watchdog_Header_destroy( Watchdog_Header *header )
 void _Watchdog_Tick( struct Per_CPU_Control *cpu );
 
 /**
+ * @brief Waits until no service routine of the watchdog runs.
+ *
+ * A tickle phase calls the routine of a watchdog outside the lock of the
+ * collection.  The routine gets the watchdog which the caller of
+ * _Watchdog_Insert() owns.  A party which returns the memory of that owner
+ * calls this function first.
+ *
+ * The caller shall take the watchdog out of its collection before the call.
+ * It shall hold no lock of a watchdog collection.  It shall run with
+ * interrupts enabled.  It shall run in no tickle phase of the processor of
+ * the watchdog, since such a caller would wait for the phase which it runs
+ * in itself.
+ *
+ * The routine may schedule the watchdog again or hand it to another party.
+ * The caller shall undo such a registration after this function returns.
+ *
+ * @param the_watchdog is the watchdog to wait for.
+ */
+#if defined( RTEMS_SMP )
+void _Watchdog_Wait_for_service_stop( const Watchdog_Control *the_watchdog );
+#else
+static inline void _Watchdog_Wait_for_service_stop(
+  const Watchdog_Control *the_watchdog
+)
+{
+  (void) the_watchdog;
+}
+#endif
+
+/**
  * @brief Gets the state of the watchdog.
  *
  * @param the_watchdog The watchdog to get the state of.

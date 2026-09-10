@@ -13,6 +13,8 @@ ldflags:
 - -Wl,--wrap=_Scheduler_EDF_SMP_Yield
 - -Wl,--wrap=_Thread_queue_Path_acquire
 - -Wl,--wrap=_Thread_Timeout
+- -Wl,--wrap=_Timer_Routine_adaptor
+- -Wl,--wrap=_Watchdog_Wait_for_service_stop
 links: []
 source:
 - testsuites/validation/tc-acfg-scheduler-edf-smp.c
@@ -29,6 +31,7 @@ source:
 - testsuites/validation/tc-sem-mrsp-obtain.c
 - testsuites/validation/tc-sem-smp.c
 - testsuites/validation/tc-task-smp.c
+- testsuites/validation/tc-timer-delete-during-tickle.c
 - testsuites/validation/ts-validation-smp-only-0.c
 stlib: []
 target: testsuites/validation/ts-validation-smp-only-0.exe

@@ -659,6 +659,45 @@ bool WaitTimedOut( int64_t begin )
   return rtems_clock_get_monotonic_sbintime() - begin > WAIT_FOR_BOUND;
 }
 
+bool WaitForFlag( const Atomic_Uint *flag )
+{
+  int64_t begin;
+
+  begin = rtems_clock_get_monotonic_sbintime();
+
+  while ( GetFlag( flag ) == 0 ) {
+    if ( WaitTimedOut( begin ) ) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+bool WaitForBlockedState(
+  rtems_id           task_id,
+  uint32_t           states,
+  const Atomic_Uint *flag
+)
+{
+  const Thread_Control *the_thread;
+  int64_t               begin;
+
+  the_thread = GetThread( task_id );
+  T_assert_not_null( the_thread );
+  begin = rtems_clock_get_monotonic_sbintime();
+
+  while (
+    ( the_thread->current_state & states ) == 0 && GetFlag( flag ) == 0
+  ) {
+    if ( WaitTimedOut( begin ) ) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 void GetTaskTimerInfo( rtems_id id, TaskTimerInfo *info )
 {
   GetTaskTimerInfoByThread( GetThread( id ), info );
