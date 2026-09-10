@@ -135,13 +135,13 @@ extern "C" {
     ( 4 * TOD_SECONDS_PER_DAY ) )
 
 /**
- * @brief Seconds from 1970-01-01T00:00:00Z to 2400-01-01T00:00:00Z.
+ * @brief Seconds from 1970-01-01T00:00:00Z to 2401-01-01T00:00:00Z.
  *
- * This is the latest time of day which should be set by _TOD_Set().  The year
- * 2400 was chosen to guarantee a defined CLOCK_REALTIME within the range of a
- * system uptime of about 114 years.
+ * A time of day below this value lies in the range which _TOD_Set() accepts.
+ * The year 2400 was chosen to guarantee a defined CLOCK_REALTIME within the
+ * range of a system uptime of about 113 years.
  */
-#define TOD_SECONDS_1970_THROUGH_2400 13569465600
+#define TOD_SECONDS_1970_THROUGH_2400 13601088000
 
 /**
  *  @brief Earliest year to which an time of day can be initialized.
@@ -158,18 +158,11 @@ extern "C" {
  * The following constant defines the latest year to which an
  * RTEMS time of day can be set using rtems_clock_set().
  *
- * This reflects the need for a day to be skipped around 4183 due to
- * a build up of the rounding error in the length of a year.
- * See https://users.rtems.org/t/rtems-time-representation-limits-or-rtems-end-of-time/483
- * for a detailed discussion of this and limits on time representations.
- *
- * The internal CLOCK_REALTIME based on seconds and nanoseconds
- * from the POSIX epoch does not have this limitation. But it cannot
- * be reliably converted to a "broken down" representation.
- *
- * This is the RTEMS Y4K limit. :)
+ * The year 2400 was chosen to guarantee that the 34-bit seconds counter
+ * used by realtime watchdogs does not overflow during a system uptime
+ * of more than 113 years.
  */
-#define TOD_LATEST_YEAR 4095
+#define TOD_LATEST_YEAR 2400
 
 /**
  * @addtogroup RTEMSScoreTOD
