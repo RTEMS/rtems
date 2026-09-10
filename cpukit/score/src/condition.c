@@ -3,12 +3,11 @@
 /**
  * @file
  *
- * @ingroup RTEMSScore
+ * @ingroup RTEMSScoreSysLockCondition
  *
  * @brief This source file contains the implementation of
  *   _Condition_Wait(), _Condition_Wait_timed(), _Condition_Wait_recursive(),
- *   _Condition_Wait_recursive_timed(),
- *   _Condition_Wait_recursive_timed_ticks(), _Condition_Signal(), and
+ *   _Condition_Wait_recursive_timed(), _Condition_Signal(), and
  *   _Condition_Broadcast().
  */
 
@@ -51,6 +50,20 @@
 #include <rtems/score/threadqimpl.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/score/watchdogimpl.h>
+
+/**
+ * @defgroup RTEMSScoreSysLockCondition System Lock Condition Handler
+ *
+ * @ingroup RTEMSScore
+ *
+ * @brief This group contains the System Lock Condition Handler
+ *   implementation.
+ *
+ * The interfaces are defined by Newlib in <sys/lock.h>.  The system lock
+ * condition variables are used by the C++ standard library provided by GCC,
+ * the C11 threads support, and the self-contained objects API provided by
+ * RTEMS (see ::rtems_condition_variable).
+ */
 
 #define CONDITION_TQ_OPERATIONS &_Thread_queue_Operations_FIFO
 
