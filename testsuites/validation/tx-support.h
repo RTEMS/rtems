@@ -517,6 +517,74 @@ void WrapThreadQueueExtractDirect(
 
 void WrapThreadQueueDestroy( WrapThreadQueueContext *ctx );
 
+/**
+ * @brief This structure counts the calls of a function which one task makes.
+ *
+ * A link time wrapper of the function adds to the counter.  The test arms the
+ * counter for one task, runs the directive, and reads how often the directive
+ * called the function.
+ */
+typedef struct {
+  /**
+   * @brief This member contains the identifier of the task which the counter
+   *   observes, or zero where it observes none.
+   */
+  Atomic_Uint task;
+
+  /**
+   * @brief This member contains the count of the calls.
+   */
+  Atomic_Uint count;
+} CallCounter;
+
+/**
+ * @brief Arms the counter for the task and clears the count.
+ *
+ * @param counter is the counter.
+ * @param task_id is the identifier of the task to observe.  A zero disarms
+ *   the counter, which every teardown shall do.
+ */
+void CallCounterObserve( CallCounter *counter, rtems_id task_id );
+
+/**
+ * @brief Adds one call to the counter where the executing task is the one
+ *   which the counter observes.
+ *
+ * A wrapper of the observed function calls the real function and then this,
+ * so the count states that the call returned.  A wrapper which counts first
+ * states that a call which still blocks already happened.
+ *
+ * @warning The counter counts calls and not critical sections.  A recursive
+ *   lock adds one count per nesting level.  A test which reads the count of
+ *   such a lock as a count of critical sections reads it wrong.
+ *
+ * @param counter is the counter.
+ */
+void CallCounterAdd( CallCounter *counter );
+
+/**
+ * @brief Gets the count of the calls.
+ *
+ * @param counter is the counter.
+ *
+ * @return Returns the count since the arm of the counter.
+ */
+unsigned int CallCounterGet( const CallCounter *counter );
+
+/**
+ * @brief This counter observes the obtains of the object allocator mutex.
+ *
+ * A directive which releases the mutex and obtains it again counts twice.  A
+ * directive which holds it counts once.  The suite of the caller shall carry
+ * the link flag ``-Wl,--wrap=_RTEMS_Lock_allocator``.
+ *
+ * The object allocator mutex is recursive, so a directive which obtains it
+ * twice in a nest counts twice as well.  No directive of the tree does that
+ * today.  A test which uses this counter shall check that claim for its
+ * directive.
+ */
+extern CallCounter AllocatorLockCounter;
+
 struct Per_CPU_Control;
 
 void SetPreemptionIntervention(

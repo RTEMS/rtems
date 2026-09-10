@@ -8,7 +8,8 @@ cxxflags: []
 enabled-by: true
 features: c cprogram
 includes: []
-ldflags: []
+ldflags:
+- -Wl,--wrap=_RTEMS_Lock_allocator
 links:
 - role: build-dependency
   uid: objnodebug

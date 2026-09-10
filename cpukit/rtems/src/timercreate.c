@@ -196,18 +196,19 @@ void _Timer_Cancel( Per_CPU_Control *cpu, Timer_Control *the_timer )
     );
   } else if ( _Timer_Is_on_task_class( the_class ) ) {
     Timer_server_Control *timer_server;
-    ISR_lock_Context      lock_context;
+    Thread_queue_Context  queue_context;
 
     timer_server = _Timer_server;
     _Assert( timer_server != NULL );
-    _Timer_server_Acquire_critical( timer_server, &lock_context );
+    _Thread_queue_Context_initialize( &queue_context );
+    _Timer_server_Acquire_critical( timer_server, &queue_context );
 
     if ( _Watchdog_Get_state( &the_timer->Ticker ) == WATCHDOG_PENDING ) {
       _Watchdog_Set_state( &the_timer->Ticker, WATCHDOG_INACTIVE );
       _Chain_Extract_unprotected( &the_timer->Ticker.Node.Chain );
     }
 
-    _Timer_server_Release_critical( timer_server, &lock_context );
+    _Timer_server_Release_critical( timer_server, &queue_context );
   }
 }
 

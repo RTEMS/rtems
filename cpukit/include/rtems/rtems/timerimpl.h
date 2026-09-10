@@ -41,6 +41,7 @@
 #define _RTEMS_RTEMS_TIMER_INL
 
 #include <rtems/rtems/timerdata.h>
+#include <rtems/score/condimpl.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/watchdogimpl.h>
@@ -60,9 +61,24 @@ extern "C" {
  */
 
 typedef struct Timer_server_Control {
-#if ISR_LOCK_NEEDS_OBJECT
-  ISR_lock_Control Lock;
-#endif
+  /**
+   * @brief This member provides the condition variable of the timer server.
+   *
+   * The thread queue lock of the condition variable is the lock of the timer
+   * server.  A task which waits for the end of a tickle phase of the server
+   * is enqueued on the condition variable.
+   */
+  struct _Condition_Control Condition;
+
+  /**
+   * @brief This member is true while the timer server runs the service
+   *   routines of a tickle phase.
+   *
+   * The server sets the member with every ticker which it takes off the
+   * chain.  It clears the member once the chain is empty and wakes every
+   * task which waits on the condition variable.
+   */
+  bool tickling;
 
   Chain_Control Pending;
 
@@ -201,24 +217,18 @@ void _Timer_server_Routine_adaptor(
 
 static inline void _Timer_server_Acquire_critical(
   Timer_server_Control *timer_server,
-  ISR_lock_Context     *lock_context
+  Thread_queue_Context *queue_context
 )
 {
-  _ISR_lock_Acquire( &timer_server->Lock, lock_context );
-#ifndef RTEMS_SMP
-  (void) timer_server;
-#endif
+  _Condition_Acquire_critical( &timer_server->Condition, queue_context );
 }
 
 static inline void _Timer_server_Release_critical(
   Timer_server_Control *timer_server,
-  ISR_lock_Context     *lock_context
+  Thread_queue_Context *queue_context
 )
 {
-  _ISR_lock_Release( &timer_server->Lock, lock_context );
-#ifndef RTEMS_SMP
-  (void) timer_server;
-#endif
+  _Condition_Release_critical( &timer_server->Condition, queue_context );
 }
 
 /**@}*/

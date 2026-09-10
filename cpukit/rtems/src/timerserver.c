@@ -50,22 +50,19 @@ static Timer_server_Control _Timer_server_Default;
 
 static void _Timer_server_Acquire(
   Timer_server_Control *ts,
-  ISR_lock_Context     *lock_context
+  Thread_queue_Context *queue_context
 )
 {
-  (void) ts;
-
-  _ISR_lock_ISR_disable_and_acquire( &ts->Lock, lock_context );
+  _Thread_queue_Context_initialize( queue_context );
+  _Condition_Acquire( &ts->Condition, queue_context );
 }
 
 static void _Timer_server_Release(
   Timer_server_Control *ts,
-  ISR_lock_Context     *lock_context
+  Thread_queue_Context *queue_context
 )
 {
-  (void) ts;
-
-  _ISR_lock_Release_and_ISR_enable( &ts->Lock, lock_context );
+  _Condition_Release( &ts->Condition, queue_context );
 }
 
 void _Timer_server_Routine_adaptor(
@@ -74,7 +71,7 @@ void _Timer_server_Routine_adaptor(
 )
 {
   Timer_Control        *the_timer;
-  ISR_lock_Context      lock_context;
+  Thread_queue_Context  queue_context;
   Per_CPU_Control      *cpu;
   Timer_server_Control *ts;
   bool                  wakeup;
@@ -85,7 +82,7 @@ void _Timer_server_Routine_adaptor(
   _Assert( ts != NULL );
   the_timer = RTEMS_CONTAINER_OF( the_watchdog, Timer_Control, Ticker );
 
-  _Timer_server_Acquire( ts, &lock_context );
+  _Timer_server_Acquire( ts, &queue_context );
 
   _Assert( _Watchdog_Get_state( &the_timer->Ticker ) == WATCHDOG_INACTIVE );
   _Watchdog_Set_state( &the_timer->Ticker, WATCHDOG_PENDING );
@@ -95,7 +92,7 @@ void _Timer_server_Routine_adaptor(
   _Chain_Set_off_chain( &the_timer->Ticker.Node.Chain );
   _Chain_Append_unprotected( &ts->Pending, &the_timer->Ticker.Node.Chain );
 
-  _Timer_server_Release( ts, &lock_context );
+  _Timer_server_Release( ts, &queue_context );
 
   if ( wakeup ) {
     (void) rtems_event_system_send( ts->server_id, RTEMS_EVENT_SYSTEM_SERVER );
@@ -119,10 +116,10 @@ static rtems_task _Timer_server_Body( rtems_task_argument arg )
 #endif
 
   while ( true ) {
-    ISR_lock_Context lock_context;
-    rtems_event_set  events;
+    Thread_queue_Context queue_context;
+    rtems_event_set      events;
 
-    _Timer_server_Acquire( ts, &lock_context );
+    _Timer_server_Acquire( ts, &queue_context );
 
     while ( true ) {
       Watchdog_Control                 *the_watchdog;
@@ -138,6 +135,7 @@ static rtems_task _Timer_server_Body( rtems_task_argument arg )
         break;
       }
 
+      ts->tickling = true;
       _Assert( _Watchdog_Get_state( the_watchdog ) == WATCHDOG_PENDING );
       _Watchdog_Set_state( the_watchdog, WATCHDOG_INACTIVE );
       the_timer = RTEMS_CONTAINER_OF( the_watchdog, Timer_Control, Ticker );
@@ -145,17 +143,23 @@ static rtems_task _Timer_server_Body( rtems_task_argument arg )
       id = the_timer->Object.id;
       user_data = the_timer->user_data;
 
-      _Timer_server_Release( ts, &lock_context );
+      _Timer_server_Release( ts, &queue_context );
 
       ( *routine )( id, user_data );
 #if defined( RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT )
       _Assert( !_Thread_Owns_resources( executing ) );
 #endif
 
-      _Timer_server_Acquire( ts, &lock_context );
+      _Timer_server_Acquire( ts, &queue_context );
     }
 
-    _Timer_server_Release( ts, &lock_context );
+    /*
+     * A task which waits for the end of this phase reads the member under the
+     * lock which the flush releases, so the wake reaches every waiter which
+     * the phase found.
+     */
+    ts->tickling = false;
+    (void) _Condition_Flush( &ts->Condition, &queue_context );
 
     (void) rtems_event_system_receive(
       RTEMS_EVENT_SYSTEM_SERVER,
@@ -225,7 +229,8 @@ static rtems_status_code _Timer_server_Initiate(
    */
 
   ts = &_Timer_server_Default;
-  _ISR_lock_Initialize( &ts->Lock, "Timer Server" );
+  _Condition_Initialize_named( &ts->Condition, "Timer Server" );
+  ts->tickling = false;
   _Chain_Initialize_empty( &ts->Pending );
   ts->server_id = id;
 

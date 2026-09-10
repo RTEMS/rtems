@@ -21,6 +21,7 @@ source:
 - testsuites/validation/tx-thread-queue.c
 - testsuites/validation/tx-timecounter.c
 - testsuites/validation/tx-timer-server.c
+- testsuites/validation/tx-wrap-allocator.c
 - testsuites/validation/tx-wrap-thread-queue.c
 target: validation
 type: build

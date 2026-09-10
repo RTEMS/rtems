@@ -412,7 +412,13 @@ rtems_status_code rtems_timer_cancel( rtems_id id );
  *   specified by ``id``.
  *
  * @par Notes
+ * @parblock
  * The TMCB for the deleted timer is reclaimed by RTEMS.
+ *
+ * A Timer Service Routine which the Timer Server task calls shall not wait for
+ * the task which deletes the timer. Such a routine stops the directive for
+ * ever.
+ * @endparblock
  *
  * @par Constraints
  * @parblock
@@ -425,6 +431,10 @@ rtems_status_code rtems_timer_cancel( rtems_id id );
  *
  * - The directive may obtain and release the object allocator mutex.  This may
  *   cause the calling task to be preempted.
+ *
+ * - The directive may wait for the end of a Timer Service Routine which the
+ *   Timer Server task calls.  The directive releases the object allocator
+ *   mutex while it waits.
  *
  * - The calling task does not have to be the task that created the object.
  *   Any local task that knows the object identifier can delete the object.

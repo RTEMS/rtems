@@ -62,7 +62,7 @@ bool DeleteTimerServer( void )
   }
 
   DeleteTask( server->server_id );
-  _ISR_lock_Destroy( &server->Lock );
+  _Condition_Destroy( &server->Condition );
   T_true( _Chain_Is_empty( &server->Pending ) );
   _Timer_server = NULL;
 
@@ -117,7 +117,7 @@ Timer_States GetTimerState( rtems_id id )
   Per_CPU_Control      *cpu;
   Timer_Classes         the_class;
   Timer_server_Control *timer_server = _Timer_server;
-  ISR_lock_Context      lock_context_server;
+  Thread_queue_Context  queue_context_server;
 
   the_timer = _Timer_Get( id, &lock_context );
   if ( the_timer != NULL ) {
@@ -129,11 +129,12 @@ Timer_States GetTimerState( rtems_id id )
       result = TIMER_SCHEDULED;
     } else if ( _Timer_Is_on_task_class( the_class ) ) {
       _Assert( timer_server != NULL );
-      _Timer_server_Acquire_critical( timer_server, &lock_context_server );
+      _Thread_queue_Context_initialize( &queue_context_server );
+      _Timer_server_Acquire_critical( timer_server, &queue_context_server );
       if ( _Watchdog_Get_state( &the_timer->Ticker ) == WATCHDOG_PENDING ) {
         result = TIMER_PENDING;
       }
-      _Timer_server_Release_critical( timer_server, &lock_context_server );
+      _Timer_server_Release_critical( timer_server, &queue_context_server );
     }
     _Timer_Release( cpu, &lock_context );
   }

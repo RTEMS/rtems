@@ -699,6 +699,28 @@ bool WaitForBlockedState(
   return true;
 }
 
+void CallCounterObserve( CallCounter *counter, rtems_id task_id )
+{
+  SetFlag( &counter->count, 0 );
+  SetFlag( &counter->task, (unsigned int) task_id );
+}
+
+void CallCounterAdd( CallCounter *counter )
+{
+  unsigned int task_id;
+
+  task_id = GetFlag( &counter->task );
+
+  if ( task_id != 0 && rtems_task_self() == (rtems_id) task_id ) {
+    SetFlag( &counter->count, GetFlag( &counter->count ) + 1 );
+  }
+}
+
+unsigned int CallCounterGet( const CallCounter *counter )
+{
+  return GetFlag( &counter->count );
+}
+
 void GetTaskTimerInfo( rtems_id id, TaskTimerInfo *info )
 {
   GetTaskTimerInfoByThread( GetThread( id ), info );
