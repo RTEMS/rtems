@@ -199,26 +199,6 @@ extern TOD_Control _TOD;
 extern const uint16_t _TOD_Days_to_date[ 2 ][ 13 ];
 
 /**
- * @brief Locks the time of day mutex.
- */
-void _TOD_Lock( void );
-
-/**
- * @brief Unlocks the time of day mutex.
- */
-void _TOD_Unlock( void );
-
-/**
- * @brief Checks if api mutex is owner of the time of day mutex.
- *
- * @retval true It is owner of the time of day mutex.
- * @retval false It is not owner of the time of day mutex.
- */
-#if defined( RTEMS_DEBUG )
-bool _TOD_Is_owner( void );
-#endif
-
-/**
  * @brief Acquires the lock context for the timecounter.
  *
  * @param lock_context The lock to acquire.
@@ -252,14 +232,13 @@ Status_Control _TOD_Is_valid_new_time_of_day( const struct timespec *tod );
 /**
  * @brief Sets the time of day.
  *
- * The caller must be the owner of the TOD lock.
+ * The caller must be the owner of the object allocator mutex.
  *
  * @param tod The new time of day in timespec format representing
  *   the time since UNIX Epoch.  The new time of day shall be valid according
  *   to _TOD_Is_valid_new_time_of_day().
  * @param lock_context The ISR lock context used for the corresponding
- *   _TOD_Acquire().  The caller must be the owner of the TOD lock.  This
- *   function will release the TOD lock.
+ *   _TOD_Acquire().  This function will release the lock of the timecounter.
  *
  * @retval STATUS_SUCCESSFUL Successful operation.
  * @retval other Some error occurred.

@@ -40,6 +40,7 @@
 
 #include <rtems/score/todimpl.h>
 #include <rtems/score/assert.h>
+#include <rtems/score/objectimpl.h>
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/watchdogimpl.h>
 
@@ -55,7 +56,7 @@ Status_Control _TOD_Set(
   Status_Control   status;
   Per_CPU_Control *cpu_self;
 
-  _Assert( _TOD_Is_owner() );
+  _Assert( _Objects_Allocator_is_owner() );
   _Assert( _TOD_Is_valid_new_time_of_day( tod ) == STATUS_SUCCESSFUL );
 
   status = _TOD_Hook_Run( TOD_ACTION_SET_CLOCK, tod );
@@ -72,9 +73,10 @@ Status_Control _TOD_Set(
 
   /*
    * The watchdog routines run with interrupts enabled under the ownership of
-   * the TOD mutex.  We have to disable thread dispatching to prevent arbitrary
-   * delays of the routine invocations at the new TOD.  In uniprocessor
-   * configuration, this prevents also the deletion of watchdogs in use.
+   * the object allocator mutex.  The thread dispatch disable prevents
+   * arbitrary delays of the routine invocations at the new TOD.  The mutex
+   * keeps a delete of a watchdog in use away, because every delete directive
+   * obtains it.
    */
   cpu_self = _Thread_Dispatch_disable();
 

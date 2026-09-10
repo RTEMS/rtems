@@ -40,6 +40,7 @@
 
 #include <time.h>
 
+#include <rtems/score/objectimpl.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/seterr.h>
 
@@ -63,10 +64,10 @@ int clock_settime( clockid_t clock_id, const struct timespec *tp )
       rtems_set_errno_and_return_minus_one( STATUS_GET_POSIX( status ) );
     }
 
-    _TOD_Lock();
+    _Objects_Allocator_lock();
     _TOD_Acquire( &lock_context );
     status = _TOD_Set( tp, &lock_context );
-    _TOD_Unlock();
+    _Objects_Allocator_unlock();
 
     if ( status != STATUS_SUCCESSFUL ) {
       rtems_set_errno_and_return_minus_one( STATUS_GET_POSIX( status ) );

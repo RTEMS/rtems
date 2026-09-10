@@ -111,8 +111,10 @@ struct bintime;
  * may unblock tasks, which may preempt the calling task. User-provided timer
  * routines will execute in the context of the caller.
  *
- * It is allowed to call this directive from within interrupt context, however,
- * this is not recommended since an arbitrary number of timers may fire.
+ * The directive obtains the object allocator mutex.  A directive of another
+ * task which creates or deletes an object waits while the timers fire.  A
+ * Timer Service Routine which the directive fires shall create and delete no
+ * object.
  *
  * The directive shall be called at least once to enable the service of
  * CLOCK_REALTIME related directives.  If the clock is not set at least once,
@@ -123,7 +125,13 @@ struct bintime;
  * @parblock
  * The following constraints apply to this directive:
  *
- * - The directive may be called from within any runtime context.
+ * - The directive may be called from within device driver initialization
+ *   context.
+ *
+ * - The directive may be called from within task context.
+ *
+ * - The directive may obtain and release the object allocator mutex.  This may
+ *   cause the calling task to be preempted.
  *
  * - The directive may change the priority of a task.  This may cause the
  *   calling task to be preempted.

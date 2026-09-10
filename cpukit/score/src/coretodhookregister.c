@@ -41,19 +41,21 @@
 
 #include <rtems/score/todimpl.h>
 #include <rtems/score/chainimpl.h>
+#include <rtems/score/objectimpl.h>
 
 void _TOD_Hook_Register( TOD_Hook *hook )
 {
   /*
    * At this time, this method does NOT have a Classic or POSIX API
    * that exports it. Any use of this method will be a direct call.
-   * It should only be called while NOT holding the TOD lock.
+   * It should only be called while NOT holding the object allocator
+   * mutex.
    */
-  _Assert( !_TOD_Is_owner() );
+  _Assert( !_Objects_Allocator_is_owner() );
 
   _Assert( hook != NULL );
 
-  _TOD_Lock();
+  _Objects_Allocator_lock();
   _Chain_Append_unprotected( &_TOD_Hooks, &hook->Node );
-  _TOD_Unlock();
+  _Objects_Allocator_unlock();
 }

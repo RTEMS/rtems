@@ -31,6 +31,7 @@ source:
 - testsuites/validation/tc-sem-mrsp-obtain.c
 - testsuites/validation/tc-sem-smp.c
 - testsuites/validation/tc-task-smp.c
+- testsuites/validation/tc-timer-delete-during-clock-set.c
 - testsuites/validation/tc-timer-delete-during-tickle.c
 - testsuites/validation/ts-validation-smp-only-0.c
 stlib: []

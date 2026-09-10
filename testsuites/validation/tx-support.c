@@ -42,6 +42,7 @@
 #include "ts-config.h"
 
 #include <rtems/test.h>
+#include <rtems/score/objectimpl.h>
 #include <rtems/score/percpu.h>
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/threaddispatch.h>
@@ -844,6 +845,12 @@ void FinalClockTick( void )
 {
   Per_CPU_Control *cpu_self;
 
+  /*
+   * The tickle runs a service routine at task level and writes no generation
+   * of a processor.  The mutex which every delete directive obtains therefore
+   * keeps a delete of a watchdog in use away.
+   */
+  _Objects_Allocator_lock();
   cpu_self = _Thread_Dispatch_disable();
 #if defined( RTEMS_SMP )
   DoFinalWatchdogTick( NULL );
@@ -852,6 +859,7 @@ void FinalClockTick( void )
   FinalWatchdogTick( cpu_self );
 #endif
   _Thread_Dispatch_enable( cpu_self );
+  _Objects_Allocator_unlock();
 }
 
 static FatalHandler fatal_handler;

@@ -92,7 +92,12 @@ rtems_timer_service_routine TA1_send_10_to_self(
   rtems_status_code status;
 
   status = rtems_event_send( Task_id[ 1 ], RTEMS_EVENT_10 );
-  directive_failed_with_level( status, "rtems_event_send of 10", -1 );
+  /* rtems_clock_set() fires this routine under the object allocator mutex. */
+  fatal_directive_check_status_only(
+    status,
+    RTEMS_SUCCESSFUL,
+    "rtems_event_send of 10"
+  );
 }
 
 rtems_timer_service_routine TA1_send_1_to_self_every_second(
@@ -120,7 +125,12 @@ rtems_timer_service_routine TA1_send_11_to_self(
   rtems_status_code status;
 
   status = rtems_event_send( Task_id[ 1 ], RTEMS_EVENT_11 );
-  directive_failed_with_level( status, "rtems_event_send of 11", -1 );
+  /* rtems_clock_set() fires this routine under the object allocator mutex. */
+  fatal_directive_check_status_only(
+    status,
+    RTEMS_SUCCESSFUL,
+    "rtems_event_send of 11"
+  );
 }
 
 rtems_timer_service_routine TA2_send_10_to_self(
