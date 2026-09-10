@@ -46,6 +46,7 @@
 
 #include <rtems/score/atomic.h>
 #include <rtems/score/chainimpl.h>
+#include <rtems/score/condimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
 #include <rtems/score/todimpl.h>
@@ -65,12 +66,6 @@
  * RTEMS (see ::rtems_condition_variable).
  */
 
-#define CONDITION_TQ_OPERATIONS &_Thread_queue_Operations_FIFO
-
-typedef struct {
-  Thread_queue_Syslock_queue Queue;
-} Condition_Control;
-
 RTEMS_STATIC_ASSERT(
   offsetof( Condition_Control, Queue ) ==
     offsetof( struct _Condition_Control, _Queue ),
@@ -81,41 +76,6 @@ RTEMS_STATIC_ASSERT(
   sizeof( Condition_Control ) == sizeof( struct _Condition_Control ),
   CONDITION_CONTROL_SIZE
 );
-
-static Condition_Control *_Condition_Get(
-  struct _Condition_Control *_condition
-)
-{
-  return (Condition_Control *) _condition;
-}
-
-static Thread_Control *_Condition_Queue_acquire_critical(
-  Condition_Control    *condition,
-  Thread_queue_Context *queue_context
-)
-{
-  Thread_Control *executing;
-
-  executing = _Thread_Executing;
-  _Thread_queue_Queue_acquire_critical(
-    &condition->Queue.Queue,
-    &executing->Potpourri_stats,
-    &queue_context->Lock_context.Lock_context
-  );
-
-  return executing;
-}
-
-static void _Condition_Queue_release(
-  Condition_Control    *condition,
-  Thread_queue_Context *queue_context
-)
-{
-  _Thread_queue_Queue_release(
-    &condition->Queue.Queue,
-    &queue_context->Lock_context.Lock_context
-  );
-}
 
 typedef struct {
   Thread_queue_Context   Base;
@@ -166,19 +126,17 @@ static Thread_Control *_Condition_Do_wait(
   Condition_Enqueue_context *context
 )
 {
-  Condition_Control *condition;
-  Thread_Control    *executing;
+  Thread_Control *executing;
 
   context->mutex = _mutex;
-  condition = _Condition_Get( _condition );
-  _ISR_lock_ISR_disable( &context->Base.Lock_context.Lock_context );
-  executing = _Condition_Queue_acquire_critical( condition, &context->Base );
+  _Condition_Acquire( _condition, &context->Base );
+  executing = _Thread_Executing;
   _Thread_queue_Context_set_thread_state(
     &context->Base,
     STATES_WAITING_FOR_CONDITION_VARIABLE
   );
   _Thread_queue_Enqueue(
-    &condition->Queue.Queue,
+    _Condition_Get_queue( _condition ),
     CONDITION_TQ_OPERATIONS,
     executing,
     &context->Base
@@ -311,28 +269,25 @@ static Thread_Control *_Condition_Flush_filter(
 
 static void _Condition_Wake( struct _Condition_Control *_condition, int count )
 {
-  Condition_Control      *condition;
   Condition_Flush_context context;
+  Thread_queue_Queue     *queue;
 
-  condition = _Condition_Get( _condition );
+  queue = _Condition_Get_queue( _condition );
   _Thread_queue_Context_initialize( &context.Base );
-  _ISR_lock_ISR_disable( &context.Base.Lock_context.Lock_context );
-  _Condition_Queue_acquire_critical( condition, &context.Base );
+  _Condition_Acquire( _condition, &context.Base );
 
   /*
    * In common uses cases of condition variables there are normally no threads
    * on the queue, so check this condition early.
    */
-  if (
-    RTEMS_PREDICT_TRUE( _Thread_queue_Is_empty( &condition->Queue.Queue ) )
-  ) {
-    _Condition_Queue_release( condition, &context.Base );
+  if ( RTEMS_PREDICT_TRUE( _Thread_queue_Is_empty( queue ) ) ) {
+    _Condition_Release( _condition, &context.Base );
     return;
   }
 
   context.count = count;
   _Thread_queue_Flush_critical(
-    &condition->Queue.Queue,
+    queue,
     CONDITION_TQ_OPERATIONS,
     _Condition_Flush_filter,
     &context.Base
