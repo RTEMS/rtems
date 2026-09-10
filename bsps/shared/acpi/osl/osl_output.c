@@ -27,18 +27,18 @@
 
 #include <acpi/acpica/acpi.h>
 
-#include <stdio.h>
+#include <rtems/bspIo.h>
 
 void AcpiOsPrintf(const char* Format, ...)
 {
   va_list ap;
 
   va_start(ap, Format);
-  vprintf(Format, ap);
+  vprintk(Format, ap);
   va_end(ap);
 }
 
 void AcpiOsVprintf(const char* Format, va_list Args)
 {
-  vprintf(Format, Args);
+  vprintk(Format, Args);
 }
