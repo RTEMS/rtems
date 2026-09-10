@@ -6,7 +6,9 @@ actions:
 - define-condition: null
 build-type: option
 default:
-- enabled-by: sparc/gr740
+- enabled-by:
+  - sparc/gr740
+  - sparc/gr765
   value: true
 - enabled-by: true
   value: false

@@ -9,6 +9,7 @@ default:
 - enabled-by:
   - sparc/gr712rc
   - sparc/gr740
+  - sparc/gr765
   value: false
 - enabled-by: true
   value: true

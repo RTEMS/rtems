@@ -26,6 +26,7 @@ install:
   source:
   - bsps/sparc/leon3/start/linkcmds.gr712rc
   - bsps/sparc/leon3/start/linkcmds.gr740
+  - bsps/sparc/leon3/start/linkcmds.gr765
   - bsps/sparc/leon3/start/linkcmds.leon3
   - bsps/sparc/leon3/start/linkcmds.ut699
   - bsps/sparc/leon3/start/linkcmds.ut700

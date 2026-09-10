@@ -20,6 +20,7 @@ enabled-by:
 - powerpc/qoriq_core_1
 - sparc/gr712rc
 - sparc/gr740
+- sparc/gr765
 - sparc/leon3
 - sparc/ut699
 - sparc/ut700

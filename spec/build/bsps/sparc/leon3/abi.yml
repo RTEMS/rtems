@@ -19,6 +19,9 @@ default:
   value:
   - -mcpu=leon3
   - -mfix-gr712rc
+- enabled-by: sparc/gr765
+  value:
+  - -mcpu=leon5
 - enabled-by: true
   value:
   - -mcpu=leon3

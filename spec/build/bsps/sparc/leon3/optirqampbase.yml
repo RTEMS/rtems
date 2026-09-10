@@ -8,7 +8,9 @@ build-type: option
 default:
 - enabled-by: sparc/gr712rc
   value: 0x80000200
-- enabled-by: sparc/gr740
+- enabled-by:
+  - sparc/gr740
+  - sparc/gr765
   value: 0xff904000
 enabled-by: true
 format: '{:#010x}'

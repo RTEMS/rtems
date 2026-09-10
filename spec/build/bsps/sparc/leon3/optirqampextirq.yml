@@ -6,7 +6,9 @@ actions:
 - format-and-define: null
 build-type: option
 default:
-- enabled-by: sparc/gr712rc
+- enabled-by:
+  - sparc/gr712rc
+  - sparc/gr765
   value: 12
 - enabled-by: sparc/gr740
   value: 10

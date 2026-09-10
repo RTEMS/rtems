@@ -50,6 +50,7 @@ enabled-by:
 - riscv/kendrytek210
 - sparc/gr712rc
 - sparc/gr740
+- sparc/gr765
 - sparc/leon3
 - x86_64/amd64
 links: []

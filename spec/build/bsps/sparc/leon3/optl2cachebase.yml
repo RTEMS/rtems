@@ -10,6 +10,8 @@ default:
   value: 0x00000000
 - enabled-by: sparc/gr740
   value: 0xf0000000
+- enabled-by: sparc/gr765
+  value: 0xb1000000
 enabled-by: true
 format: '{:#010x}'
 links: []
