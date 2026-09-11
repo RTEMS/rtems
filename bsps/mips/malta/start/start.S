@@ -186,9 +186,9 @@ zerobss:
 init:
         nop
 	jal	init_tlb		/* clear the tlb */
-	move	a0,zero				# set command line to 0
-	jal	boot_card			# call the program start function
 	nop
+	jal	boot_card			# call the program start function
+	move	a0,zero				# the boot loader passes no command line
 
 dead:
 	b	dead
