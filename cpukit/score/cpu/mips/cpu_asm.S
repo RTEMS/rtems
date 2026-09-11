@@ -762,13 +762,13 @@ _ISR_Handler_Exception:
         STREG    t1,R_BADVADDR*R_SZ(sp)
 
 #if ( MIPS_HAS_FPU == 1 )
+        /*
+         * The prologue above stores the control and status register of
+         * coprocessor 1, so the frame carries it already.
+         */
         la       a1,R_F0*R_SZ(sp)
         jal      _CPU_Context_save_fp_from_exception
         NOP
-        mfc1     t0,C1_REVISION
-        mfc1     t1,C1_STATUS
-        STREG    t0,R_FEIR*R_SZ(sp)
-        STREG    t1,R_FCSR*R_SZ(sp)
 #endif
 
 	move	 a0,sp
@@ -786,13 +786,13 @@ _ISR_Handler_Exception:
 
 
 #if ( MIPS_HAS_FPU == 1 )
+        /*
+         * The exit below restores the control and status register of
+         * coprocessor 1 from the frame.
+         */
         la       a1,R_F0*R_SZ(sp)
         jal      _CPU_Context_restore_fp_from_exception
         NOP
-        LDREG    t0,R_FEIR*R_SZ(sp)
-        LDREG    t1,R_FCSR*R_SZ(sp)
-        mtc1     t0,C1_REVISION
-        mtc1     t1,C1_STATUS
 #endif
         LDREG    s0,R_S0*R_SZ(sp)    /* restore s0 - s7 */
         LDREG    s1,R_S1*R_SZ(sp)

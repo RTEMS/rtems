@@ -425,10 +425,9 @@ typedef struct
   __MIPS_FPU_REGISTER_TYPE f29;   /* 67 -- saved if FP enabled */
   __MIPS_FPU_REGISTER_TYPE f30;   /* 68 -- saved if FP enabled */
   __MIPS_FPU_REGISTER_TYPE f31;   /* 69 -- saved if FP enabled */
-  __MIPS_REGISTER_TYPE     fcsr;  /* 70 -- saved on exceptions */
-                                  /*    (oddly not documented on MGV) */
-  __MIPS_REGISTER_TYPE     feir;  /* 71 -- saved on exceptions */
-                                  /*    (oddly not documented on MGV) */
+  __MIPS_REGISTER_TYPE     fcsr;  /* 70 -- saved if FP enabled */
+  __MIPS_REGISTER_TYPE     feir;  /* 71 -- NOT FILLED IN, the register */
+                                  /*         exists on no MIPS32 CPU */
 
   /* GDB does not seem to care about anything past this point */
 
