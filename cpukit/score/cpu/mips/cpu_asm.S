@@ -1045,13 +1045,15 @@ _ISR_Handler_exit:
 
 #if (__mips == 3) || (__mips == 32)
 	/*
-	** A handler may change the exception program counter of the frame,
-	** which is how the emulation of an instruction resumes past it.  The
-	** eret below takes the address from the control register, so the
-	** value of the frame reaches it here.  The write needs the exception
-	** level, which the eret clears again.
+	** The exit returns to the interrupted context, so the status register
+	** and the exception program counter of the frame reach the control
+	** registers here.  A handler may change either one.  An extension
+	** which leaves a fatal error with a longjmp() keeps the interrupt
+	** enable which _Terminate() cleared, and the emulation of an
+	** instruction advances the counter past it.  The eret needs the
+	** exception level, which it clears again.
 	*/
-	mfc0	k0,C0_SR
+	LDREG	k0,R_SR*R_SZ(sp)
 	NOP
 	or	k0,SR_EXL
 	mtc0	k0,C0_SR
@@ -1062,12 +1064,6 @@ _ISR_Handler_exit:
 	NOP
 #endif
 
-/*
-** Skip the SR restore because its a global register. _CPU_Context_switch_restore
-** adjusts it according to each task's configuration.  If we didn't dispatch, the
-** SR value isn't changed, so all we need to do is return.
-**
-*/
 	/* restore context from stack */
 
 #ifdef INSTRUMENT_EXECUTING_THREAD
