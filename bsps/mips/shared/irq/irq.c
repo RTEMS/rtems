@@ -63,19 +63,5 @@ void bsp_interrupt_facility_initialize(void)
 
 void bsp_interrupt_handler_default(rtems_vector_number vector)
 {
-  /*
-   * An exception which no handler consumed is reported with the source and
-   * the argument every other port uses, so that a fatal error extension can
-   * recognise it and, where the exception is expected, resume with a
-   * longjmp().  Do not report it here: the extension prints the frame if the
-   * system really terminates.
-   */
-  if ( mips_exception_frame != NULL ) {
-    rtems_fatal(
-      RTEMS_FATAL_SOURCE_EXCEPTION,
-      (rtems_fatal_code) mips_exception_frame
-    );
-  }
-
   _Terminate( RTEMS_FATAL_SOURCE_SPURIOUS_INTERRUPT, vector );
 }

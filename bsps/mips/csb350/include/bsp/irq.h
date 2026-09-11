@@ -136,6 +136,9 @@
 
 #define BSP_INTERRUPT_VECTOR_COUNT    (AU1X00_MAXIMUM_VECTORS + 1)
 
+/* The exception codes below MIPS_INTERRUPT_BASE are not interrupts. */
+#define BSP_INTERRUPT_CUSTOM_VALID_VECTOR
+
 /** @} */
 
 #endif /* LIBBSP_MIPS_AU1X00_IRQ_H */

@@ -53,6 +53,9 @@
 #define RM5231_MAXIMUM_VECTORS      (MIPS_INTERRUPT_BASE+8)
 #define BSP_INTERRUPT_VECTOR_COUNT  (RM5231_MAXIMUM_VECTORS + 1)
 
+/* The exception codes below MIPS_INTERRUPT_BASE are not interrupts. */
+#define BSP_INTERRUPT_CUSTOM_VALID_VECTOR
+
 /** @} */
 
 #endif /* LIBBSP_MIPS_JMR3904_IRQ_H */

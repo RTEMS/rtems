@@ -12,6 +12,7 @@ install:
   source:
   - bsps/mips/include/bsp/i8259.h
   - bsps/mips/include/bsp/regs.h
+  - bsps/mips/include/bsp/vectors.h
 - destination: ${BSP_INCLUDEDIR}/libcpu
   source:
   - bsps/mips/include/libcpu/au1x00.h

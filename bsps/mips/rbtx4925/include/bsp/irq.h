@@ -93,6 +93,9 @@
 
 #define BSP_INTERRUPT_VECTOR_COUNT (TX4925_MAXIMUM_VECTORS + 1)
 
+/* The exception codes below MIPS_INTERRUPT_BASE are not interrupts. */
+#define BSP_INTERRUPT_CUSTOM_VALID_VECTOR
+
 /** @} */
 
 #endif /* LIBBSP_MIPS_ TX4925_IRQ_H */

@@ -89,6 +89,9 @@
 
 #define BSP_INTERRUPT_VECTOR_COUNT ( MALTA_SB_IRQ_LAST + 1 )
 
+/* The exception codes below MIPS_INTERRUPT_BASE are not interrupts. */
+#define BSP_INTERRUPT_CUSTOM_VALID_VECTOR
+
 /*
  * Redefine interrupts with more descriptive names.
  * The Generic ones above match the hardware name,

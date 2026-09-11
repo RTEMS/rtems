@@ -46,6 +46,8 @@
 #include <rtems/score/percpu.h>
 #include <rtems/score/thread.h>
 #include <bsp/irq-generic.h>
+#include <bsp/irq.h>
+#include <bsp/vectors.h>
 
 struct regdef
 {
@@ -184,12 +186,59 @@ static bool mips_emulate_rdhwr_ulr( CPU_Interrupt_frame *frame )
  *  all be close to the same set.
  */
 
+static void mips_exc_handler_default( CPU_Exception_frame *frame )
+{
+  rtems_fatal( RTEMS_FATAL_SOURCE_EXCEPTION, (rtems_fatal_code) frame );
+}
+
+static mips_exc_handler_t mips_exc_handler_table[ MIPS_EXCEPTION_COUNT ] = {
+  [ 0 ... MIPS_EXCEPTION_COUNT - 1 ] = mips_exc_handler_default
+};
+
+rtems_status_code mips_exc_set_handler(
+  unsigned int       vector,
+  mips_exc_handler_t handler
+)
+{
+  if ( vector >= MIPS_EXCEPTION_COUNT ) {
+    return RTEMS_INVALID_ID;
+  }
+
+  if ( handler == NULL ) {
+    handler = mips_exc_handler_default;
+  }
+
+  mips_exc_handler_table[ vector ] = handler;
+  return RTEMS_SUCCESSFUL;
+}
+
+mips_exc_handler_t mips_exc_get_handler( unsigned int vector )
+{
+  mips_exc_handler_t handler;
+
+  if ( vector >= MIPS_EXCEPTION_COUNT ) {
+    return NULL;
+  }
+
+  handler = mips_exc_handler_table[ vector ];
+
+  if ( handler == mips_exc_handler_default ) {
+    return NULL;
+  }
+
+  return handler;
+}
+
 /*
- * The frame of the exception being vectored, or NULL outside such a vector.
- * bsp_interrupt_handler_default() uses it to tell an exception which no
- * handler consumed from a spurious interrupt.
+ * The exception codes occupy the vectors below MIPS_INTERRUPT_BASE.  They
+ * reach their handler through mips_exc_set_handler(), so the interrupt
+ * manager owns none of them.
  */
-CPU_Exception_frame *mips_exception_frame;
+bool bsp_interrupt_is_valid_vector( rtems_vector_number vector )
+{
+  return vector >= (rtems_vector_number) MIPS_INTERRUPT_BASE &&
+    vector < (rtems_vector_number) BSP_INTERRUPT_VECTOR_COUNT;
+}
 
 void mips_vector_exceptions( CPU_Interrupt_frame *frame )
 {
@@ -203,7 +252,5 @@ void mips_vector_exceptions( CPU_Interrupt_frame *frame )
     return;
   }
 
-  mips_exception_frame = frame;
-  bsp_interrupt_handler_dispatch( exc );
-  mips_exception_frame = NULL;
+  ( *mips_exc_handler_table[ exc ] )( frame );
 }

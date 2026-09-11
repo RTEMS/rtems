@@ -80,6 +80,9 @@
 
 #define BSP_INTERRUPT_VECTOR_COUNT (TX3904_MAXIMUM_VECTORS + 1)
 
+/* The exception codes below MIPS_INTERRUPT_BASE are not interrupts. */
+#define BSP_INTERRUPT_CUSTOM_VALID_VECTOR
+
 /** @} */
 
 #endif /* LIBBSP_MIPS_JMR3904_IRQ_H */
