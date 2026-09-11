@@ -1,0 +1,226 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsPowerPCMVME2700
+ *
+ * @brief Interrupt Handler Support
+ *
+ * This include file describe the data structure and the functions implemented
+ * by RTEMS to write interrupt handlers.
+ */
+
+/*
+ * Copyright (C) 1998 Eric Valette <eric.valette@free.fr>
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#ifndef BSP_POWERPC_IRQ_H
+#define BSP_POWERPC_IRQ_H
+
+#ifndef BSP_SHARED_HANDLER_SUPPORT
+#define BSP_SHARED_HANDLER_SUPPORT 1
+#endif
+
+#include <rtems/irq.h>
+
+/*
+ * Switch to using the generic support. Remove this when all BSPs have
+ * been converted.
+ */
+#define BSP_POWERPC_IRQ_GENERIC_SUPPORT 1
+
+/*
+ * 8259 edge/level control definitions at VIA
+ */
+#define ISA8259_M_ELCR 0x4d0
+#define ISA8259_S_ELCR 0x4d1
+
+#define ELCRS_INT15_LVL 0x80
+#define ELCRS_INT14_LVL 0x40
+#define ELCRS_INT13_LVL 0x20
+#define ELCRS_INT12_LVL 0x10
+#define ELCRS_INT11_LVL 0x08
+#define ELCRS_INT10_LVL 0x04
+#define ELCRS_INT9_LVL 0x02
+#define ELCRS_INT8_LVL 0x01
+#define ELCRM_INT7_LVL 0x80
+#define ELCRM_INT6_LVL 0x40
+#define ELCRM_INT5_LVL 0x20
+#define ELCRM_INT4_LVL 0x10
+#define ELCRM_INT3_LVL 0x8
+#define ELCRM_INT2_LVL 0x4
+#define ELCRM_INT1_LVL 0x2
+#define ELCRM_INT0_LVL 0x1
+
+/* PIC's command and mask registers */
+#define PIC_MASTER_COMMAND_IO_PORT 0x20 /* Master PIC command register */
+#define PIC_SLAVE_COMMAND_IO_PORT 0xa0  /* Slave PIC command register */
+#define PIC_MASTER_IMR_IO_PORT 0x21     /* Master PIC Interrupt Mask Register */
+#define PIC_SLAVE_IMR_IO_PORT 0xa1      /* Slave PIC Interrupt Mask Register */
+
+/* Command for specific EOI (End Of Interrupt): Interrupt acknowledge */
+#define PIC_EOSI 0x60       /* End of Specific Interrupt (EOSI) */
+#define SLAVE_PIC_EOSI 0x62 /* End of Specific Interrupt (EOSI) for cascade */
+#define PIC_EOI 0x20        /* Generic End of Interrupt (EOI) */
+
+#ifndef ASM
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/*
+ * rtems_irq_number Definitions
+ */
+
+/*
+ * ISA IRQ handler related definitions
+ */
+#define BSP_ISA_IRQ_NUMBER (16)
+#define BSP_ISA_IRQ_LOWEST_OFFSET (0)
+#define BSP_ISA_IRQ_MAX_OFFSET                                                 \
+  (BSP_ISA_IRQ_LOWEST_OFFSET + BSP_ISA_IRQ_NUMBER - 1)
+
+/*
+ * PCI IRQ handlers related definitions
+ * CAUTION : BSP_PCI_IRQ_LOWEST_OFFSET should be equal to OPENPIC_VEC_SOURCE
+ */
+#define BSP_PCI_IRQ_NUMBER (16)
+#define BSP_PCI_IRQ_LOWEST_OFFSET (BSP_ISA_IRQ_NUMBER)
+#define BSP_PCI_IRQ_MAX_OFFSET                                                 \
+  (BSP_PCI_IRQ_LOWEST_OFFSET + BSP_PCI_IRQ_NUMBER - 1)
+
+/*
+ * PowerPC exceptions handled as interrupt where an RTEMS managed interrupt
+ * handler might be connected
+ */
+#define BSP_PROCESSOR_IRQ_NUMBER (1)
+#define BSP_PROCESSOR_IRQ_LOWEST_OFFSET (BSP_PCI_IRQ_MAX_OFFSET + 1)
+#define BSP_PROCESSOR_IRQ_MAX_OFFSET                                           \
+  (BSP_PROCESSOR_IRQ_LOWEST_OFFSET + BSP_PROCESSOR_IRQ_NUMBER - 1)
+
+/* Misc vectors for OPENPIC irqs (IPI, timers)
+ */
+#define BSP_MISC_IRQ_NUMBER (8)
+
+#define BSP_MISC_IRQ_LOWEST_OFFSET (BSP_PROCESSOR_IRQ_MAX_OFFSET + 1)
+#define BSP_MISC_IRQ_MAX_OFFSET                                                \
+  (BSP_MISC_IRQ_LOWEST_OFFSET + BSP_MISC_IRQ_NUMBER - 1)
+
+/*
+ * Summary
+ */
+#define BSP_IRQ_NUMBER (BSP_MISC_IRQ_MAX_OFFSET + 1)
+#define BSP_LOWEST_OFFSET (BSP_ISA_IRQ_LOWEST_OFFSET)
+#define BSP_MAX_OFFSET (BSP_MISC_IRQ_MAX_OFFSET)
+#define BSP_INTERRUPT_VECTOR_COUNT (BSP_MAX_OFFSET + 1)
+
+/*
+ * Some ISA IRQ symbolic name definition
+ */
+#define BSP_ISA_PERIODIC_TIMER (0)
+#define BSP_ISA_KEYBOARD (1)
+#define BSP_ISA_UART_COM2_IRQ (3)
+#define BSP_ISA_UART_COM1_IRQ (4)
+#define BSP_ISA_RT_TIMER1 (8)
+#define BSP_ISA_RT_TIMER3 (10)
+
+/*
+ * Some PCI IRQ symbolic name definition
+ */
+#define BSP_PCI_IRQ0 (BSP_PCI_IRQ_LOWEST_OFFSET)
+#if BSP_PCI_IRQ_NUMBER > 0
+#define BSP_PCI_ISA_BRIDGE_IRQ (BSP_PCI_IRQ0)
+#endif
+
+#define BSP_UART_COM1_IRQ BSP_ISA_UART_COM1_IRQ
+#define BSP_UART_COM2_IRQ BSP_ISA_UART_COM2_IRQ
+
+/*
+ * Some Processor execption handled as RTEMS IRQ symbolic name definition
+ */
+#define BSP_DECREMENTER (BSP_PROCESSOR_IRQ_LOWEST_OFFSET)
+
+/*
+ * Type definition for RTEMS managed interrupts
+ */
+typedef unsigned short rtems_i8259_masks;
+
+extern volatile rtems_i8259_masks i8259s_cache;
+
+/*-------------------------------------------------------------------------+
+| Function Prototypes.
++--------------------------------------------------------------------------*/
+/*
+ * ------------------------ Intel 8259 (or emulation) Mngt Routines -------
+ */
+void BSP_i8259s_init(void);
+
+/*
+ * function to disable a particular irq at 8259 level. After calling
+ * this function, even if the device asserts the interrupt line it will
+ * not be propagated further to the processor
+ *
+ * RETURNS: 1/0 if the interrupt was enabled/disabled originally or
+ *          a value < 0 on error.
+ */
+int BSP_irq_disable_at_i8259s(const rtems_irq_number irqLine);
+
+/*
+ * function to enable a particular irq at 8259 level. After calling
+ * this function, if the device asserts the interrupt line it will
+ * be propagated further to the processor
+ */
+int BSP_irq_enable_at_i8259s(const rtems_irq_number irqLine);
+
+/*
+ * function to acknowledge a particular irq at 8259 level. After calling
+ * this function, if a device asserts an enabled interrupt line it will
+ * be propagated further to the processor. Mainly useful for people
+ * writing raw handlers as this is automagically done for RTEMS managed
+ * handlers.
+ */
+int BSP_irq_ack_at_i8259s(const rtems_irq_number irqLine);
+
+/*
+ * function to check if a particular irq is enabled at 8259 level. After calling
+ */
+int BSP_irq_enabled_at_i8259s(const rtems_irq_number irqLine);
+
+unsigned short BSP_irq_suspend_i8259s(unsigned short mask);
+void BSP_irq_resume_i8259s(unsigned short in_progress_save);
+
+extern void BSP_rtems_irq_mng_init(unsigned cpuId);
+extern void BSP_i8259s_init(void);
+
+/* Stuff in irq_supp.h should eventually go into <rtems/irq.h> */
+#include <bsp/irq_supp.h>
+
+#ifdef __cplusplus
+};
+#endif
+
+#endif
+#endif
