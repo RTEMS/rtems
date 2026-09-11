@@ -8,6 +8,7 @@ copyrights:
 default:
 - enabled-by:
   - bsps/powerpc/motorola_powerpc
+  - bsps/powerpc/mvme2700
   - m68k/m5484FireEngine
   - powerpc/beatnik
   - powerpc/hsc_cm01

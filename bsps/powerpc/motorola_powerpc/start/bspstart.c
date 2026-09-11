@@ -381,16 +381,8 @@ static void bsp_early( void )
 
   uintptr_t nvram_base;
   bool nvram_indirect;
-  switch (myBoard) {
-    case MVME_2600_2700_W_MVME761:
-      nvram_base = 0x80000074;
-      nvram_indirect = true;
-      break;
-    default:
-      nvram_base = 0xFFE81000;
-      nvram_indirect = false;
-      break;
-  }
+  nvram_base = 0xFFE81000;
+  nvram_indirect = false;
 
   ppcbug_nvram_set_nvbase(nvram_base, nvram_indirect);
   ppcbug_nvram_set_net_unit(1);
