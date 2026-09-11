@@ -13,6 +13,8 @@ links:
 - role: build-dependency
   uid: objnodebug
 - role: build-dependency
+  uid: bsps/objmips
+- role: build-dependency
   uid: objpreinitarray
 - role: build-dependency
   uid: objmrsp
