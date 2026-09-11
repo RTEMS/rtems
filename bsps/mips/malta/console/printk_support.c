@@ -62,9 +62,12 @@ int BSP_com_inch( void )
 
   cptr = &Console_Configuration_Ports[BSPPrintkPort];
 
-  do {
-    result = ns16550_inch_polled( cptr );
-  } while (result == -1);
+  /*
+   * The device dequeues the least recently received character.  Where it
+   * holds none, the polled read returns minus one, which is what a caller
+   * of BSP_poll_char expects.
+   */
+  result = ns16550_inch_polled( cptr );
 
   return result;
 }
