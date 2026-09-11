@@ -146,7 +146,8 @@ int BSP_irq_enabled_at_i8259s(const rtems_irq_number irqLine)
 
   mask = (1 << irqLine);
 
-  return  (~(i8259s_cache & mask));
+  /* A set bit of the cache masks the line in the interrupt mask register. */
+  return (i8259s_cache & mask) == 0;
 }
 
 /*-------------------------------------------------------------------------+

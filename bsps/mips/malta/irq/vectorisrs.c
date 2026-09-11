@@ -39,73 +39,34 @@
 #include <bsp.h>
 #include <libcpu/isr_entries.h>
 
-void mips_default_isr( int vector );
-
-#include <rtems/bspIo.h>  /* for printk */
-
 void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
 {
-  (void) frame;
-
   unsigned int sr;
   unsigned int cause;
   unsigned int pending;
+  unsigned int bit;
+
+  (void) frame;
 
   mips_get_sr( sr );
   mips_get_cause( cause );
 
-  pending = (cause & sr & 0xff00) >> CAUSE_IPSHIFT;
+  pending = ( cause & sr & 0xff00 ) >> CAUSE_IPSHIFT;
 
-  /* SW Bits */
-  if ( pending & 0x01) {
-    printk("Pending IRQ Q 0x%x\n", pending );
-  }
+  /*
+   * The eight sources of the processor occupy the first eight vectors of the
+   * interrupt range in the order of the pending field.  The third of them
+   * carries every line of the south bridge, which has a decode of its own.
+   */
+  for ( bit = 0; bit < 8; ++bit ) {
+    if ( ( pending & ( 1U << bit ) ) == 0 ) {
+      continue;
+    }
 
-  if ( pending & 0x02) {
-    printk("Pending IRQ Q 0x%x\n", pending );
-  }
-
-  /* South Bridge Interrupt */
-  if ( pending & 0x04) {
-     BSP_i8259s_int_process();
-  }
-
-  /* South Bridge SMI */
-  if (pending & 0x08){
-    printk( "Pending IRQ 0x%x\n", pending );
-  }
-
-  /* TTY 2 */
-  if (pending & 0x10) {
-    printk( "Pending IRQ 0x%x\n", pending );
-  }
-  /* Core HI */
-  if (pending & 0x20) {
-    printk( "Pending IRQ 0x%x\n", pending );
-  }
-   /* Core LO */
-  if (pending & 0x40) {
-    printk( "Pending IRQ 0x%x\n", pending );
-  }
-
-  if ( pending & 0x80 ) {
-    bsp_interrupt_handler_dispatch( MALTA_INT_TICKER );
+    if ( bit == 2 ) {
+      BSP_i8259s_int_process();
+    } else {
+      bsp_interrupt_handler_dispatch( MALTA_CPU_INT_START + bit );
+    }
   }
 }
-
-void mips_default_isr( int vector )
-{
-  unsigned int sr;
-  unsigned int cause;
-
-  mips_get_sr( sr );
-  mips_get_cause( cause );
-
-  printk( "Unhandled isr exception: vector 0x%02x, cause 0x%08X, sr 0x%08X\n",
-      vector, cause, sr );
-
-  while(1);      /* Lock it up */
-
-  rtems_fatal_error_occurred(1);
-}
-
