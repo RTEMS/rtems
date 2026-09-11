@@ -120,11 +120,15 @@ extern "C" {
  *  an i387 and wish to leave floating point support out of RTEMS.
  */
 
-#if ( MIPS_HAS_FPU == 1 )
-#define CPU_HARDWARE_FP     TRUE
-#else
 #define CPU_HARDWARE_FP     FALSE
-#endif
+#define CPU_SOFTWARE_FP     FALSE
+
+/*
+ *  The coprocessor enable of the floating point unit is global state of this
+ *  port.  Every BSP of the architecture sets SR_CU1 in its start code and no
+ *  code of the tree clears it.  A context switch, an interrupt and an
+ *  exception therefore reach coprocessor 1 without a test of the bit.
+ */
 
 /*
  *  Are all tasks RTEMS_FLOATING_POINT tasks implicitly?
@@ -146,7 +150,7 @@ extern "C" {
  *  all tasks floating point.
  */
 
-#define CPU_ALL_TASKS_ARE_FP CPU_HARDWARE_FP
+#define CPU_ALL_TASKS_ARE_FP FALSE
 
 /*
  *  Should the IDLE task have a floating point context?
@@ -188,7 +192,7 @@ extern "C" {
  *  be saved or restored.
  */
 
-#define CPU_USE_DEFERRED_FP_SWITCH       TRUE
+#define CPU_USE_DEFERRED_FP_SWITCH       FALSE
 
 #define CPU_ENABLE_ROBUST_THREAD_DISPATCH FALSE
 
@@ -241,10 +245,9 @@ extern "C" {
  *     1. Interrupt registers to save
  *     2. Task level registers to save
  *
- *  This means we have the following 3 context items:
+ *  This means we have the following 2 context items:
  *     1. task level context stuff::  Context_Control
- *     2. floating point task stuff:: Context_Control_fp
- *     3. special interrupt level context :: Context_Control_interrupt
+ *     2. special interrupt level context :: Context_Control_interrupt
  *
  *  On some processors, it is cost-effective to save only the callee
  *  preserved registers during a task context switch.  This means
@@ -259,14 +262,9 @@ extern "C" {
  *  Additionally, if gdb is to be made aware of RTEMS tasks for this CPU, then
  *  care should be used in designing the context area.
  *
- *  On some CPUs with hardware floating point support, the Context_Control_fp
- *  structure will not be used or it simply consist of an array of a
- *  fixed number of bytes.   This is done when the floating point context
- *  is dumped by a "FP save context" type instruction and the format
- *  is not really defined by the CPU.  In this case, there is no need
- *  to figure out the exact format -- only the size.  Of course, although
- *  this is enough information for RTEMS, it is probably not enough for
- *  a debugger such as gdb.  But that is another problem.
+ *  The call-saved floating point registers are members of Context_Control,
+ *  so the context switch preserves them and a task needs no floating point
+ *  attribute.
  */
 
 #ifndef ASM
@@ -295,6 +293,30 @@ typedef struct {
     __MIPS_REGISTER_TYPE ra;
     __MIPS_REGISTER_TYPE c0_sr;
     __MIPS_REGISTER_TYPE c0_epc;
+#if ( MIPS_HAS_FPU == 1 )
+    /*
+     * The call-saved floating point registers of the ABI.  The psABI
+     * preserves $f20 to $f30.  A single precision operation leaves the odd
+     * register of a pair undefined, so the back end preserves $f31 as well.
+     */
+    __MIPS_FPU_REGISTER_TYPE f20;
+    __MIPS_FPU_REGISTER_TYPE f21;
+    __MIPS_FPU_REGISTER_TYPE f22;
+    __MIPS_FPU_REGISTER_TYPE f23;
+    __MIPS_FPU_REGISTER_TYPE f24;
+    __MIPS_FPU_REGISTER_TYPE f25;
+    __MIPS_FPU_REGISTER_TYPE f26;
+    __MIPS_FPU_REGISTER_TYPE f27;
+    __MIPS_FPU_REGISTER_TYPE f28;
+    __MIPS_FPU_REGISTER_TYPE f29;
+    __MIPS_FPU_REGISTER_TYPE f30;
+    __MIPS_FPU_REGISTER_TYPE f31;
+    /*
+     * The control and status register of coprocessor 1.  It holds the
+     * floating-point environment, which has thread storage duration.
+     */
+    __MIPS_REGISTER_TYPE     fcr31;
+#endif
     /*
      * The thread pointer of the thread-local storage area.  It follows the
      * registers saved by _CPU_Context_switch(), which addresses the members
@@ -305,50 +327,6 @@ typedef struct {
 
 #define _CPU_Context_Get_SP( _context ) \
   (uintptr_t) (_context)->sp
-
-/* WARNING: If this structure is modified, the constants in cpu.h
- *          must also be updated.
- */
-
-typedef struct {
-#if ( CPU_HARDWARE_FP == TRUE )
-    __MIPS_FPU_REGISTER_TYPE fp0;
-    __MIPS_FPU_REGISTER_TYPE fp1;
-    __MIPS_FPU_REGISTER_TYPE fp2;
-    __MIPS_FPU_REGISTER_TYPE fp3;
-    __MIPS_FPU_REGISTER_TYPE fp4;
-    __MIPS_FPU_REGISTER_TYPE fp5;
-    __MIPS_FPU_REGISTER_TYPE fp6;
-    __MIPS_FPU_REGISTER_TYPE fp7;
-    __MIPS_FPU_REGISTER_TYPE fp8;
-    __MIPS_FPU_REGISTER_TYPE fp9;
-    __MIPS_FPU_REGISTER_TYPE fp10;
-    __MIPS_FPU_REGISTER_TYPE fp11;
-    __MIPS_FPU_REGISTER_TYPE fp12;
-    __MIPS_FPU_REGISTER_TYPE fp13;
-    __MIPS_FPU_REGISTER_TYPE fp14;
-    __MIPS_FPU_REGISTER_TYPE fp15;
-    __MIPS_FPU_REGISTER_TYPE fp16;
-    __MIPS_FPU_REGISTER_TYPE fp17;
-    __MIPS_FPU_REGISTER_TYPE fp18;
-    __MIPS_FPU_REGISTER_TYPE fp19;
-    __MIPS_FPU_REGISTER_TYPE fp20;
-    __MIPS_FPU_REGISTER_TYPE fp21;
-    __MIPS_FPU_REGISTER_TYPE fp22;
-    __MIPS_FPU_REGISTER_TYPE fp23;
-    __MIPS_FPU_REGISTER_TYPE fp24;
-    __MIPS_FPU_REGISTER_TYPE fp25;
-    __MIPS_FPU_REGISTER_TYPE fp26;
-    __MIPS_FPU_REGISTER_TYPE fp27;
-    __MIPS_FPU_REGISTER_TYPE fp28;
-    __MIPS_FPU_REGISTER_TYPE fp29;
-    __MIPS_FPU_REGISTER_TYPE fp30;
-    __MIPS_FPU_REGISTER_TYPE fp31;
-    uint32_t fpcs;
-#else
-    uint32_t unused; /* avoid empty structure warning */
-#endif
-} Context_Control_fp;
 
 /*
  *  This struct reflects the stack frame employed in ISR_Handler.  Note
@@ -500,28 +478,10 @@ typedef struct
 typedef CPU_Interrupt_frame CPU_Exception_frame;
 
 /*
- *  This variable is optional.  It is used on CPUs on which it is difficult
- *  to generate an "uninitialized" FP context.  It is filled in by
- *  _CPU_Initialize and copied into the task's FP context area during
- *  _CPU_Context_Initialize.
- */
-
-extern Context_Control_fp _CPU_Null_fp_context;
-
-/*
  *  Nothing prevents the porter from declaring more CPU specific variables.
  */
 
 /* XXX: if needed, put more variables here */
-
-/*
- *  The size of the floating point context area.  On some CPUs this
- *  will not be a "sizeof" because the format of the floating point
- *  area is not defined -- only the size is.  This is usually on
- *  CPUs with a "floating point save context" instruction.
- */
-
-#define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp )
 
 /*
  *  Amount of extra stack (above minimum stack size) required by
@@ -723,25 +683,6 @@ void _CPU_Context_Initialize(
 #define _CPU_Context_Restart_self( _the_context ) \
    _CPU_Context_restore( (_the_context) );
 
-/*
- *  This routine initializes the FP context area passed to it to.
- *  There are a few standard ways in which to initialize the
- *  floating point context.  The code included for this macro assumes
- *  that this is a CPU in which a "initial" FP context was saved into
- *  _CPU_Null_fp_context and it simply copies it to the destination
- *  context passed to it.
- *
- *  Other models include (1) not doing anything, and (2) putting
- *  a "null FP status word" in the correct place in the FP context.
- */
-
-#if ( CPU_HARDWARE_FP == TRUE )
-#define _CPU_Context_Initialize_fp( _destination ) \
-  { \
-   *(*(_destination)) = _CPU_Null_fp_context; \
-  }
-#endif
-
 /* end of Context handler macros */
 
 
@@ -782,26 +723,6 @@ void _CPU_Context_switch(
  */
 
 RTEMS_NO_RETURN void _CPU_Context_restore( Context_Control *new_context );
-
-/*
- *  _CPU_Context_save_fp
- *
- *  This routine saves the floating point context passed to it.
- */
-
-void _CPU_Context_save_fp(
-  Context_Control_fp **fp_context_ptr
-);
-
-/*
- *  _CPU_Context_restore_fp
- *
- *  This routine restores the floating point context passed to it.
- */
-
-void _CPU_Context_restore_fp(
-  Context_Control_fp **fp_context_ptr
-);
 
 void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
 

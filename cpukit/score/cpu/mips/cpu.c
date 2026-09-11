@@ -75,10 +75,6 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/tls.h>
 
-#if CPU_HARDWARE_FP
-Context_Control_fp _CPU_Null_fp_context;
-#endif
-
 /*
 ** Exception stack frame pointer used in cpu_asm to pass the exception stack frame
 ** address to the context switch code.
@@ -108,12 +104,6 @@ void _CPU_Initialize(void)
    *  the task's during Context_Initialize.
    */
 
-#if CPU_HARDWARE_FP
-  /* FP context initialization support goes here */
-  _CPU_Null_fp_context.fpcs = 0x1000000; 	/* Set FS flag in floating point coprocessor
-  						   control register to prevent underflow and
-  						   inexact exceptions */
-#endif
 }
 
 uint32_t   _CPU_ISR_Get_level( void )
@@ -175,12 +165,16 @@ void _CPU_Context_Initialize(
   if ( intlvl == 0 ) {
     c0_sr |= _INTON;
   }
-#if MIPS_HAS_FPU == 1
-  if ( is_fp ) {
-    c0_sr |= SR_CU1;
-  }
-#endif
   the_context->c0_sr = c0_sr;
+
+#if MIPS_HAS_FPU == 1
+  /*
+   * The FS flag of the control and status register of coprocessor 1 flushes
+   * a denormalised result to zero, so that no underflow and no inexact
+   * exception reaches the task.
+   */
+  the_context->fcr31 = 0x1000000;
+#endif
 
   if ( tls_area != NULL ) {
     the_context->thread_pointer = (char *) _TLS_Initialize_area( tls_area ) +
