@@ -37,8 +37,6 @@ links:
 - role: build-dependency
   uid: ../../opto2
 - role: build-dependency
-  uid: ../../tstnolibdl
-- role: build-dependency
   uid: ../../bspopts
 source:
 - bsps/mips/rbtx4925/clock/clockdrv.c
