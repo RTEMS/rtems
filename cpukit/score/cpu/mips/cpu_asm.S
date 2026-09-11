@@ -115,7 +115,6 @@
 /* #define INSTRUMENT_EXECUTING_THREAD */
 
 
-
 /*  Ifdefs prevent the duplication of code for MIPS ISA Level 3 ( R4xxx )
  *  and MIPS ISA Level 1 (R3xxx).
  */
@@ -471,8 +470,7 @@ FRAME(_CPU_Context_switch,sp,0,ra)
 	/*
 	** this code grabs the userspace EPC if we're dispatching from
 	** an interrupt frame or supplies the address of the dispatch
-	** routines if not.  This is entirely for the gdbstub's benefit so
-	** it can know where each task is running.
+	** routines if not, so the context records where each task runs.
 	**
 	** Its value is only set when calling threadDispatch from
 	** the interrupt handler and is cleared immediately when this
@@ -716,8 +714,6 @@ _ISR_Handler_Exception:
          *  bad is going on and we can continue to run normally.
          *  But we want to save the entire CPU context so exception
          *  handlers can look at it and change it.
-         *
-         *  NOTE: This is the path the debugger stub will take.
          */
 
 	/* already got t0 = cause in the interrupt test above */
@@ -778,66 +774,7 @@ _ISR_Handler_Exception:
 	** this is not done, we might get stuck in an infinite loop because
 	** we'll return to the instruction where the exception occurred and
 	** it could throw again.
-	**
-	** It is expected the only code using the exception processing is
-	** either the gdb stub or some user code which is either going to
-	** panic or do something useful.  Regardless, it is up to each
-	** exception routine to properly adjust EPC, so the code below
-	** may be helpful for doing just that.
 	*/
-
-/* *********************************************************************
-** this code follows the R3000's exception return logic, but is not
-** needed because the gdb stub does it for us.  It might be useful
-** for something else at some point...
-**
-	* compute the address of the instruction we'll return to *
-
-	LDREG	t1, R_CAUSE*R_SZ(sp)
-	LDREG	t0, R_EPC*R_SZ(sp)
-
-	* first see if the exception happened in the delay slot *
-	li	t3,CAUSE_BD
-	AND	t4,t1,t3
-	beqz	t4,excnodelay
-	NOP
-
-	* it did, now see if the branch occurred or not *
-	li	t3,CAUSE_BT
-	AND	t4,t1,t3
-	beqz	t4,excnobranch
-	NOP
-
-	* branch was taken, we resume at the branch target *
-	LDREG	t0, R_TAR*R_SZ(sp)
-	j	excreturn
-	NOP
-
-excnobranch:
-	ADDU	t0,R_SZ
-
-excnodelay:
-	ADDU	t0,R_SZ
-
-excreturn:
-	STREG	t0, R_EPC*R_SZ(sp)
-	NOP
-********************************************************************* */
-
-
- /* if we're returning into mips_break, move to the next instruction */
-
-        LDREG	t0,R_EPC*R_SZ(sp)
-	la	t1,mips_break
-	xor	t2,t0,t1
-	bnez	t2,3f
-
-	addu	t0,R_SZ
-	STREG	t0,R_EPC*R_SZ(sp)
-	NOP
-3:
-
-
 
 
 #if ( CPU_HARDWARE_FP == TRUE )
@@ -871,11 +808,11 @@ excreturn:
 
 	/*
 	** Jump all the way out.  If theres a pending interrupt, just
-	** let it be serviced later.  Since we're probably using the
-	** gdb stub, we've already disrupted the ISR service timing
-	** anyhow.  We oughtn't mix exception and interrupt processing
-	** in the same exception call in case the exception stuff
-	** might interfere with the dispatching & timer ticks.
+	** let it be serviced later.  An exception handler has already
+	** disrupted the ISR service timing anyhow.  We oughtn't mix
+	** exception and interrupt processing in the same exception call
+	** in case the exception stuff might interfere with the
+	** dispatching & timer ticks.
 	*/
 	j	 _ISR_Handler_exit
 	NOP
@@ -975,7 +912,6 @@ _ISR_Handler_1:
         NOP
 
 
-
 #ifdef INSTRUMENT_EXECUTING_THREAD
 	lw	t0,THREAD_EXECUTING
 	NOP
@@ -1062,10 +998,6 @@ _ISR_Handler_1:
 #endif
 
 
-
-
-
-
 #ifdef INSTRUMENT_EXECUTING_THREAD
 	lw	t0,THREAD_EXECUTING
 	NOP
@@ -1142,13 +1074,4 @@ _ISR_Handler_exit:
        .set    reorder
 ENDFRAME(_ISR_Handler)
 
-
-FRAME(mips_break,sp,0,ra)
-        .set noreorder
-	break	0x0	/* this statement must be first in this function, assumed so by mips-stub.c */
-	NOP
-        j	ra
-        NOP
-       .set    reorder
-ENDFRAME(mips_break)
 

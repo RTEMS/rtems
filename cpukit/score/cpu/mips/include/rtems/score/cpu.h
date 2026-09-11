@@ -744,7 +744,6 @@ void _CPU_Context_Initialize(
 
 /* end of Context handler macros */
 
-extern void mips_break( int error );
 
 #define CPU_USE_GENERIC_BITFIELD_CODE TRUE
 
