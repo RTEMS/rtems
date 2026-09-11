@@ -1042,6 +1042,26 @@ _ISR_Handler_exit:
         LDREGC1  $f18,R_F18*R_SZ(sp)
         LDREGC1  $f19,R_F19*R_SZ(sp)
 #endif
+
+#if (__mips == 3) || (__mips == 32)
+	/*
+	** A handler may change the exception program counter of the frame,
+	** which is how the emulation of an instruction resumes past it.  The
+	** eret below takes the address from the control register, so the
+	** value of the frame reaches it here.  The write needs the exception
+	** level, which the eret clears again.
+	*/
+	mfc0	k0,C0_SR
+	NOP
+	or	k0,SR_EXL
+	mtc0	k0,C0_SR
+	NOP
+	LDREG	k0,R_EPC*R_SZ(sp)
+	NOP
+	MTCO	k0,C0_EPC
+	NOP
+#endif
+
 /*
 ** Skip the SR restore because its a global register. _CPU_Context_switch_restore
 ** adjusts it according to each task's configuration.  If we didn't dispatch, the
