@@ -164,6 +164,60 @@ static inline void _Condition_Release(
   );
 }
 
+/**
+ * @brief Enqueues the calling thread on the condition variable.
+ *
+ * The caller shall acquire the thread queue lock of the condition variable
+ * with _Condition_Acquire() and @a queue_context.  The caller shall run in
+ * task context with thread dispatching enabled.  The directive releases the
+ * lock, restores the interrupt level and returns after another party extracts
+ * the calling thread from the thread queue.
+ *
+ * In contrast to _Condition_Wait(), the directive releases no mutex.  A caller
+ * which owns a mutex shall release it before it acquires the thread queue
+ * lock.  The state which the caller waits for shall live under the thread
+ * queue lock.  The check of the state and this enqueue are then one atomic
+ * step.
+ *
+ * @warning The caller shall own no ISR lock other than the thread queue lock
+ *   of the condition variable.  The directive blocks the calling thread while
+ *   the caller still owns that other lock.  No party can release it, so every
+ *   later acquire of that lock spins forever.
+ *
+ * @param condition is the condition variable.
+ *
+ * @param[in, out] queue_context is the thread queue context of the lock
+ *   acquire.
+ */
+void _Condition_Enqueue(
+  struct _Condition_Control *condition,
+  Thread_queue_Context      *queue_context
+);
+
+/**
+ * @brief Extracts every thread enqueued on the condition variable.
+ *
+ * The caller shall acquire the thread queue lock of the condition variable
+ * with _Condition_Acquire() and @a queue_context.  The directive releases the
+ * lock and restores the interrupt level.
+ *
+ * @warning The caller shall own no ISR lock other than the thread queue lock
+ *   of the condition variable.  The directive calls the thread dispatcher
+ *   while the caller still owns that other lock.  A thread which the
+ *   dispatcher runs and which acquires that lock spins forever.
+ *
+ * @param condition is the condition variable.
+ *
+ * @param[in, out] queue_context is the thread queue context of the lock
+ *   acquire.
+ *
+ * @return Returns the count of extracted threads.
+ */
+size_t _Condition_Flush(
+  struct _Condition_Control *condition,
+  Thread_queue_Context      *queue_context
+);
+
 /** @} */
 
 #ifdef __cplusplus

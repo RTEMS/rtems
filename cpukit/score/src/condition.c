@@ -7,8 +7,8 @@
  *
  * @brief This source file contains the implementation of
  *   _Condition_Wait(), _Condition_Wait_timed(), _Condition_Wait_recursive(),
- *   _Condition_Wait_recursive_timed(), _Condition_Signal(), and
- *   _Condition_Broadcast().
+ *   _Condition_Wait_recursive_timed(), _Condition_Enqueue(),
+ *   _Condition_Signal(), _Condition_Broadcast(), and _Condition_Flush().
  */
 
 /*
@@ -241,6 +241,24 @@ int _Condition_Wait_recursive_timed(
   return eno;
 }
 
+void _Condition_Enqueue(
+  struct _Condition_Control *condition,
+  Thread_queue_Context      *queue_context
+)
+{
+  _Thread_queue_Context_set_enqueue_do_nothing_extra( queue_context );
+  _Thread_queue_Context_set_thread_state(
+    queue_context,
+    STATES_WAITING_FOR_CONDITION_VARIABLE
+  );
+  _Thread_queue_Enqueue(
+    _Condition_Get_queue( condition ),
+    CONDITION_TQ_OPERATIONS,
+    _Thread_Executing,
+    queue_context
+  );
+}
+
 typedef struct {
   Thread_queue_Context Base;
   int                  count;
@@ -302,4 +320,30 @@ void _Condition_Signal( struct _Condition_Control *_condition )
 void _Condition_Broadcast( struct _Condition_Control *_condition )
 {
   _Condition_Wake( _condition, INT_MAX );
+}
+
+size_t _Condition_Flush(
+  struct _Condition_Control *condition,
+  Thread_queue_Context      *queue_context
+)
+{
+  Thread_queue_Queue *queue;
+
+  queue = _Condition_Get_queue( condition );
+
+  /*
+   * In common uses cases of condition variables there are normally no threads
+   * on the queue, so check this condition early.
+   */
+  if ( RTEMS_PREDICT_TRUE( _Thread_queue_Is_empty( queue ) ) ) {
+    _Condition_Release( condition, queue_context );
+    return 0;
+  }
+
+  return _Thread_queue_Flush_critical(
+    queue,
+    CONDITION_TQ_OPERATIONS,
+    _Thread_queue_Flush_default_filter,
+    queue_context
+  );
 }
