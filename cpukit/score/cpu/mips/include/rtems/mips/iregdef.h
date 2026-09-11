@@ -211,11 +211,11 @@
 #define	R_F10		48
 #define	R_F11		49
 #define	R_F12		50
-#define	R_F13		41
-#define	R_F14		42
-#define	R_F15		43
-#define	R_F16		44
-#define	R_F17		45
+#define	R_F13		51
+#define	R_F14		52
+#define	R_F15		53
+#define	R_F16		54
+#define	R_F17		55
 #define	R_F18		56
 #define	R_F19		57
 #define	R_F20		58
