@@ -6,7 +6,7 @@ actions:
 - format-and-define: null
 build-type: option
 copyrights:
-- Copyright (C) Sam Price 
+- Copyright (C) 2025 Sam Price 
 default:
 - enabled-by: microblaze/petalogix_s3adsp1800
   value: 0x20000
