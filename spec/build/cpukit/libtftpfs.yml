@@ -8,8 +8,7 @@ cppflags: []
 cxxflags:
 - ${COVERAGE_COMPILER_FLAGS}
 enabled-by: true
-includes:
-- cpukit/libnetworking
+includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}/rtems
   source:

@@ -7,8 +7,7 @@ cppflags: []
 cxxflags: []
 enabled-by: true
 features: c cprogram
-includes:
-- cpukit/libnetworking
+includes: []
 ldflags: []
 links: []
 source:
