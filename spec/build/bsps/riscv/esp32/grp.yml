@@ -19,6 +19,8 @@ links:
 - role: build-dependency
   uid: ../../optgcc
 - role: build-dependency
+  uid: optchipvariant
+- role: build-dependency
   uid: optvariant
 - role: build-dependency
   uid: ../../objirq
