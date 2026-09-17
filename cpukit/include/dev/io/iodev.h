@@ -226,7 +226,9 @@ struct rtems_iodev {
   );
 
   /**
-   * @brief Call to the device driver to wait on event.
+   * @brief Call to the device driver to wait on event. The iodev lock is not
+   * held when event_wait is called to allow other IOCTL calls while waiting
+   * on an event.
    *
    * @param[in] iodev Pointer to iodev device.
    * @param[in,out] event_args Arguments for wait operation.

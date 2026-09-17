@@ -273,7 +273,9 @@ static int rtems_iodev_event_wait_on( struct rtems_iodev *iodev, void *arg )
     rtems_set_errno_and_return_minus_one( ENODEV );
   }
 
+  rtems_iodev_release( iodev );
   status = ( *iodev->event_wait )( iodev, e_args );
+  rtems_iodev_obtain( iodev );
 
   return status;
 }
