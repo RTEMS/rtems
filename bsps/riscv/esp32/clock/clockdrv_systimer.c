@@ -115,7 +115,7 @@ static void systimer_clock_handler_install( rtems_interrupt_handler handler )
 #define SYSTIMER_REG( reg ) *( (volatile uint32_t *) ( SYSTIMER_BASE + reg ) )
 
 /* The SYSTIMER always operates at 16MHz */
-#define SYSTIMER_FREQUENCY ( 16ULL * 1024 * 1024 )
+#define SYSTIMER_FREQUENCY ( 16000000ULL )
 
 static uint32_t systimer_get_timecount( struct timecounter *arg )
 {
