@@ -171,18 +171,6 @@ int pthread_mutex_init(
   }
 #endif
 
-  the_mutex = _POSIX_Mutex_Get( mutex );
-
-  flags = (uintptr_t) the_mutex ^ POSIX_MUTEX_MAGIC;
-  flags &= ~POSIX_MUTEX_FLAGS_MASK;
-  flags |= protocol;
-
-  if ( the_attr->type == PTHREAD_MUTEX_RECURSIVE ) {
-    flags |= POSIX_MUTEX_RECURSIVE;
-  }
-
-  the_mutex->flags = flags;
-
   if ( protocol == POSIX_MUTEX_PRIORITY_CEILING ) {
     int  prio_ceiling;
     bool valid;
@@ -203,6 +191,16 @@ int pthread_mutex_init(
     scheduler = NULL;
   }
 
+  the_mutex = _POSIX_Mutex_Get( mutex );
+
+  flags = (uintptr_t) the_mutex ^ POSIX_MUTEX_MAGIC;
+  flags &= ~POSIX_MUTEX_FLAGS_MASK;
+  flags |= protocol;
+
+  if ( the_attr->type == PTHREAD_MUTEX_RECURSIVE ) {
+    flags |= POSIX_MUTEX_RECURSIVE;
+  }
+
   _Thread_queue_Queue_initialize(
     &the_mutex->Recursive.Mutex.Queue.Queue,
     NULL
@@ -210,5 +208,6 @@ int pthread_mutex_init(
   the_mutex->Recursive.nest_level = 0;
   _Priority_Node_initialize( &the_mutex->Priority_ceiling, priority );
   the_mutex->scheduler = scheduler;
+  the_mutex->flags = flags;
   return 0;
 }

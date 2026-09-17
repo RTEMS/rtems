@@ -345,6 +345,44 @@ static void test_mutex_not_initialized( void )
   rtems_test_assert( eno == EINVAL );
 }
 
+static void test_mutex_init_failed( void )
+{
+  pthread_mutex_t     mutex;
+  pthread_mutex_t     expected_mutex;
+  pthread_mutexattr_t attr;
+  int                 eno;
+
+  memset( &mutex, 0xa5, sizeof( mutex ) );
+  memcpy( &expected_mutex, &mutex, sizeof( expected_mutex ) );
+
+  eno = pthread_mutexattr_init( &attr );
+  rtems_test_assert( eno == 0 );
+
+  eno = pthread_mutexattr_setprotocol( &attr, PTHREAD_PRIO_PROTECT );
+  rtems_test_assert( eno == 0 );
+
+  eno = pthread_mutexattr_setprioceiling(
+    &attr,
+    sched_get_priority_max( SCHED_FIFO ) + 1
+  );
+  rtems_test_assert( eno == 0 );
+
+  eno = pthread_mutex_init( &mutex, &attr );
+  rtems_test_assert( eno == EINVAL );
+  rtems_test_assert(
+    memcmp( &mutex, &expected_mutex, sizeof( mutex ) ) == 0
+  );
+
+  eno = pthread_mutex_trylock( &mutex );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_mutex_destroy( &mutex );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_mutexattr_destroy( &attr );
+  rtems_test_assert( eno == 0 );
+}
+
 static void test_mutex_invalid_copy( void )
 {
   pthread_mutex_t mutex;
@@ -517,6 +555,7 @@ void *POSIX_Init( void *argument )
   test_mutex_pshared_init();
   test_mutex_null();
   test_mutex_not_initialized();
+  test_mutex_init_failed();
   test_mutex_invalid_copy();
   test_mutex_auto_initialization();
   test_mutex_prio_protect_with_cv();
