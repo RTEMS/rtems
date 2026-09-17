@@ -172,7 +172,11 @@ int rtems_mdump(void* addr, int max, int sz)
   pb = addr;
   for (m=0; m<max; m++) {
     cnt = m==(max-1)?res:0xf;
-    printf("%10p ", pb);
+#if (__SIZEOF_POINTER__ == 4)
+    printf("0x%08" PRIxPTR " ", (uintptr_t) pb);
+#else
+    printf("0x%016" PRIxPTR " ", (uintptr_t) pb);
+#endif
     if      (sz == 1)  mdumpB(pb, cnt);
     else if (sz == 2)  mdumpW(pb, cnt);
     else if (sz == 4)  mdumpL(pb, cnt);
