@@ -1,27 +1,43 @@
-/* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
+/* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
  * @file
- * @breif MVME3100 Interrupt Initialization
+ *
+ * @ingroup RTEMSBSPsPowerPCMVME3100
+ *
+ * @brief MVME3100 Interrupt Initialization
  *
  * This file contains the implementation of rtems initialization
  * related to interrupt handling.
  */
 
 /*
- * Copyright (c) 1999 Eric Valette <eric.valette@free.fr>
+ * Copyright (C) 2001, 2007 Till Straumann <strauman@slac.stanford.edu>
+ * Copyright (C) 1999 Eric Valette <eric.valette@free.fr>
  *
  * Enhanced by Jay Kulpinski <jskulpin@eng01.gdds.com>
  * to make it valid for MVME2300 Motorola boards.
  *
- * Till Straumann <strauman@slac.stanford.edu>, 12/20/2001:
- * Use the new interface to openpic_init
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
  *
- * Adapted for the mvme3100 BSP by T. Straumann, 2007.
- *
- * The license and distribution terms for this file may be
- * found in the file LICENSE in this distribution or at
- * http://www.rtems.org/license/LICENSE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
 
 #include <libcpu/io.h>
