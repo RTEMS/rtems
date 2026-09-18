@@ -10,6 +10,8 @@ build-type: option
 copyrights:
 - Copyright (C) 2026 Intel Corporation
 default:
+- enabled-by: riscv/rv64imafdc_smrnmi
+  value: 0x84000000
 - enabled-by: true
   value: 0x0
 description: |

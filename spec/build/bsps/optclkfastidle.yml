@@ -57,6 +57,7 @@ enabled-by:
   - riscv/rv64imac
   - riscv/rv64imafd
   - riscv/rv64imafdc
+  - riscv/rv64imafdc_smrnmi
 links: []
 name: CLOCK_DRIVER_USE_FAST_IDLE
 type: build

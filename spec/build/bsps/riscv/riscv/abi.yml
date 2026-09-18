@@ -17,6 +17,7 @@ default:
   - -mstrict-align
 - enabled-by:
   - riscv/rv64imafdc
+  - riscv/rv64imafdc_smrnmi
   - riscv/kendrytek210
   value:
   - -march=rv64imafdc
