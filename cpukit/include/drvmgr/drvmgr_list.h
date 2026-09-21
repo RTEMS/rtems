@@ -55,27 +55,28 @@ struct drvmgr_list {
 };
 
 /* Static initialization of list */
-#define LIST_INITIALIZER( type, field ) { NULL, NULL, offsetof( type, field ) }
+#define DRVMGR_LIST_INITIALIZER( type, field ) \
+  { NULL, NULL, offsetof( type, field ) }
 
 /* Return the first element in list */
-#define LIST_HEAD( list, type ) ( (type *) ( list )->head )
+#define DRVMGR_LIST_HEAD( list, type ) ( (type *) ( list )->head )
 
 /* Return the last element in list */
-#define LIST_TAIL( list, type ) ( (type *) ( list )->tail )
+#define DRVMGR_LIST_TAIL( list, type ) ( (type *) ( list )->tail )
 
 /* Get the next pointer of an entry */
-#define LIST_FIELD( list, entry ) \
+#define DRVMGR_LIST_FIELD( list, entry ) \
   ( *(void **) ( (char *) ( entry ) + ( list )->ofs ) )
 
 /* Return the next emlement in list */
-#define LIST_NEXT( list, entry, type ) \
-  ( (type *) ( LIST_FIELD( list, entry ) ) )
+#define DRVMGR_LIST_NEXT( list, entry, type ) \
+  ( (type *) ( DRVMGR_LIST_FIELD( list, entry ) ) )
 
 /* Iterate through all entries in list */
-#define LIST_FOR_EACH( list, entry, type )  \
-  for (                                     \
-    entry = LIST_HEAD( list, type ); entry; \
-    entry = LIST_NEXT( list, entry, type )  \
+#define DRVMGR_LIST_FOR_EACH( list, entry, type )  \
+  for (                                            \
+    entry = DRVMGR_LIST_HEAD( list, type ); entry; \
+    entry = DRVMGR_LIST_NEXT( list, entry, type )  \
   )
 
 /*! Initialize a list during runtime

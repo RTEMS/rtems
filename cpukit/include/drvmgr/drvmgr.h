@@ -73,12 +73,12 @@ struct drvmgr_bus; /* Bus */
 struct drvmgr_drv; /* Driver */
 
 /*** List Interface shortcuts ***/
-#define BUS_LIST_HEAD( list ) LIST_HEAD( list, struct drvmgr_bus )
-#define BUS_LIST_TAIL( list ) LIST_TAIL( list, struct drvmgr_bus )
-#define DEV_LIST_HEAD( list ) LIST_HEAD( list, struct drvmgr_dev )
-#define DEV_LIST_TAIL( list ) LIST_TAIL( list, struct drvmgr_dev )
-#define DRV_LIST_HEAD( list ) LIST_HEAD( list, struct drvmgr_drv )
-#define DRV_LIST_TAIL( list ) LIST_TAIL( list, struct drvmgr_drv )
+#define BUS_LIST_HEAD( list ) DRVMGR_LIST_HEAD( list, struct drvmgr_bus )
+#define BUS_LIST_TAIL( list ) DRVMGR_LIST_TAIL( list, struct drvmgr_bus )
+#define DEV_LIST_HEAD( list ) DRVMGR_LIST_HEAD( list, struct drvmgr_dev )
+#define DEV_LIST_TAIL( list ) DRVMGR_LIST_TAIL( list, struct drvmgr_dev )
+#define DRV_LIST_HEAD( list ) DRVMGR_LIST_HEAD( list, struct drvmgr_drv )
+#define DRV_LIST_TAIL( list ) DRVMGR_LIST_TAIL( list, struct drvmgr_drv )
 
 /*** Bus indentification ***/
 #define DRVMGR_BUS_TYPE_NONE       0 /* Not a valid bus */

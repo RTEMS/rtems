@@ -62,27 +62,27 @@ struct drvmgr drvmgr = {
   .root_dev = { 0 },
   .root_drv = NULL,
 
-  .drivers = LIST_INITIALIZER( struct drvmgr_drv, next ),
+  .drivers = DRVMGR_LIST_INITIALIZER( struct drvmgr_drv, next ),
 
   .buses =
     {
-      LIST_INITIALIZER( struct drvmgr_bus, next ),
-      LIST_INITIALIZER( struct drvmgr_bus, next ),
-      LIST_INITIALIZER( struct drvmgr_bus, next ),
-      LIST_INITIALIZER( struct drvmgr_bus, next ),
-      LIST_INITIALIZER( struct drvmgr_bus, next ),
+      DRVMGR_LIST_INITIALIZER( struct drvmgr_bus, next ),
+      DRVMGR_LIST_INITIALIZER( struct drvmgr_bus, next ),
+      DRVMGR_LIST_INITIALIZER( struct drvmgr_bus, next ),
+      DRVMGR_LIST_INITIALIZER( struct drvmgr_bus, next ),
+      DRVMGR_LIST_INITIALIZER( struct drvmgr_bus, next ),
     },
-  .buses_inactive = LIST_INITIALIZER( struct drvmgr_bus, next ),
+  .buses_inactive = DRVMGR_LIST_INITIALIZER( struct drvmgr_bus, next ),
 
   .devices =
     {
-      LIST_INITIALIZER( struct drvmgr_dev, next ),
-      LIST_INITIALIZER( struct drvmgr_dev, next ),
-      LIST_INITIALIZER( struct drvmgr_dev, next ),
-      LIST_INITIALIZER( struct drvmgr_dev, next ),
-      LIST_INITIALIZER( struct drvmgr_dev, next ),
+      DRVMGR_LIST_INITIALIZER( struct drvmgr_dev, next ),
+      DRVMGR_LIST_INITIALIZER( struct drvmgr_dev, next ),
+      DRVMGR_LIST_INITIALIZER( struct drvmgr_dev, next ),
+      DRVMGR_LIST_INITIALIZER( struct drvmgr_dev, next ),
+      DRVMGR_LIST_INITIALIZER( struct drvmgr_dev, next ),
     },
-  .devices_inactive = LIST_INITIALIZER( struct drvmgr_dev, next ),
+  .devices_inactive = DRVMGR_LIST_INITIALIZER( struct drvmgr_dev, next ),
 };
 
 static int do_bus_init(
@@ -374,7 +374,7 @@ int drvmgr_drv_register( struct drvmgr_drv *drv )
 {
   struct drvmgr *mgr = &drvmgr;
 
-  /* All drivers must have been registered before start of init, 
+  /* All drivers must have been registered before start of init,
 	 * because the manager does not scan all existing devices to find
 	 * suitable hardware for this driver, and it is not protected with
 	 * a lock therefore.

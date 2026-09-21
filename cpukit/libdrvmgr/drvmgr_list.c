@@ -53,7 +53,7 @@ void drvmgr_list_empty( struct drvmgr_list *list )
 
 void drvmgr_list_add_head( struct drvmgr_list *list, void *entry )
 {
-  LIST_FIELD( list, entry ) = list->head;
+  DRVMGR_LIST_FIELD( list, entry ) = list->head;
   if ( list->head == NULL ) {
     list->tail = entry;
   }
@@ -65,15 +65,15 @@ void drvmgr_list_add_tail( struct drvmgr_list *list, void *entry )
   if ( list->tail == NULL ) {
     list->head = entry;
   } else {
-    LIST_FIELD( list, list->tail ) = entry;
+    DRVMGR_LIST_FIELD( list, list->tail ) = entry;
   }
-  LIST_FIELD( list, entry ) = NULL;
+  DRVMGR_LIST_FIELD( list, entry ) = NULL;
   list->tail = entry;
 }
 
 void drvmgr_list_remove_head( struct drvmgr_list *list )
 {
-  list->head = LIST_FIELD( list, list->head );
+  list->head = DRVMGR_LIST_FIELD( list, list->head );
   if ( list->head == NULL ) {
     list->tail = NULL;
   }
@@ -88,10 +88,10 @@ void drvmgr_list_remove( struct drvmgr_list *list, void *entry )
   curr = list->head;
   while ( curr != entry ) {
     prev = curr;
-    prevptr = &LIST_FIELD( list, curr );
-    curr = LIST_FIELD( list, curr );
+    prevptr = &DRVMGR_LIST_FIELD( list, curr );
+    curr = DRVMGR_LIST_FIELD( list, curr );
   }
-  *prevptr = LIST_FIELD( list, entry );
+  *prevptr = DRVMGR_LIST_FIELD( list, entry );
   if ( list->tail == entry ) {
     list->tail = prev;
   }
