@@ -1735,6 +1735,12 @@ s32 XNandPsu_Erase(XNandPsu *InstancePtr, u64 Offset, u64 Length)
 	}
 	/* Calculate number of blocks to erase */
 	StartBlock = (u32) (OffsetVar/InstancePtr->Geometry.BlockSize);
+#ifdef __rtems__
+	if (InstancePtr->PartialDataPageIndex != XNANDPSU_PAGE_CACHE_UNAVAILABLE) {
+		/* All erases invalidate the page cache */
+		InstancePtr->PartialDataPageIndex = XNANDPSU_PAGE_CACHE_NONE;
+	}
+#endif
 
 	while (LengthVar > 0U) {
 		Block = (u32) (OffsetVar/InstancePtr->Geometry.BlockSize);
