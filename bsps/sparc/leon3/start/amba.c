@@ -98,42 +98,6 @@ struct ambapp_bus *ambapp_plb( void )
   return plb;
 }
 
-/* If RTEMS_DRVMGR_STARTUP is defined extra code is added that
- * registers the GRLIB AMBA PnP bus driver as root driver.
- */
-#ifdef RTEMS_DRVMGR_STARTUP
-#include <drvmgr/drvmgr.h>
-#include <grlib/ambapp_bus_grlib.h>
-
-/* Driver resources configuration for AMBA root bus. It is declared weak
- * so that the user may override it, if the defualt settings are not
- * enough.
- */
-struct drvmgr_bus_res grlib_drv_resources __attribute__(( weak )) = {
-  .next = NULL,
-  .resource = {
-    DRVMGR_RES_EMPTY,
-  }
-};
-
-/* GRLIB AMBA bus configuration (the LEON3 root bus configuration) */
-struct grlib_config grlib_bus_config;
-
-static void ambapp_grlib_root_initialize( void )
-{
-  /* Register Root bus, Use GRLIB AMBA PnP bus as root bus for LEON3 */
-  grlib_bus_config.abus = ambapp_plb();
-  grlib_bus_config.resources = &grlib_drv_resources;
-  ambapp_grlib_root_register( &grlib_bus_config );
-}
-
-RTEMS_SYSINIT_ITEM(
-  ambapp_grlib_root_initialize,
-  RTEMS_SYSINIT_BSP_START,
-  RTEMS_SYSINIT_ORDER_SECOND
-);
-#endif
-
 #if !defined( LEON3_IRQAMP_BASE )
 irqamp            *LEON3_IrqCtrl_Regs;
 struct ambapp_dev *LEON3_IrqCtrl_Adev;
