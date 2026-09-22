@@ -160,7 +160,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
 	initial_config.irqBase	= BSP_LOWEST_OFFSET;
 	initial_config.irqPrioTbl	= irqPrioTable;
 
-	if (!BSP_rtems_irq_mngt_set(&initial_config)) {
+	if (!BSP_rtems_irq_generic_set(&initial_config)) {
 		/*
 		 * put something here that will show the failure...
 		 */

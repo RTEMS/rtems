@@ -302,14 +302,9 @@ rtems_status_code sc;
 				0,
 				&syncsem);
 		if ( RTEMS_SUCCESSFUL == sc ) {
-			rtems_irq_connect_data xxx;
-			xxx.name   = BSP_I2C_IRQ;
-			xxx.on     = 0;
-			xxx.off    = 0;
-			xxx.isOn   = 0;
-			xxx.hdl    = i2c_isr;
-			xxx.handle = 0;
-			if ( ! BSP_install_rtems_irq_handler( &xxx ) ) {
+			if ( RTEMS_SUCCESSFUL != rtems_interrupt_handler_install(
+					BSP_I2C_IRQ, "i2c", RTEMS_INTERRUPT_UNIQUE,
+					(rtems_interrupt_handler) i2c_isr, 0 ) ) {
 				printk("Unable to install i2c ISR -- falling back to polling mode\n");
 				rtems_semaphore_delete( syncsem );
 				/* fall back to polling mode */

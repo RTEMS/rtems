@@ -54,6 +54,7 @@
 #include <libcpu/e500_mmu.h>
 #include <bsp/uart.h>
 #include <bsp/irq.h>
+#include <bsp/irq-generic.h>
 #include <bsp/pci.h>
 #include <bsp/vpd.h>
 #include <libcpu/cpuIdent.h>
@@ -385,7 +386,7 @@ VpdBufRec          vpdData [] = {
   /*
    * Initialize RTEMS IRQ system
    */
-  BSP_rtems_irq_mng_init(0);
+  bsp_interrupt_initialize();
 
   if (1) {
     int i;

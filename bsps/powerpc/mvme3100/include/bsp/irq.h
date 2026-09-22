@@ -52,9 +52,9 @@
 #endif
 #include <rtems/irq.h>
 
-#ifndef ASM
+#define BSP_POWERPC_IRQ_GENERIC_SUPPORT 1
 
-#include <bsp/irq-default.h>
+#ifndef ASM
 
 #ifdef __cplusplus
 extern "C" {
@@ -106,6 +106,7 @@ extern "C" {
 #define BSP_IRQ_NUMBER			(BSP_MISC_IRQ_MAX_OFFSET + 1)
 #define BSP_LOWEST_OFFSET		(BSP_PCI_IRQ_LOWEST_OFFSET)
 #define BSP_MAX_OFFSET			(BSP_MISC_IRQ_MAX_OFFSET)
+#define BSP_INTERRUPT_VECTOR_COUNT	(BSP_MAX_OFFSET + 1)
 
 /*
  * Some PCI IRQ symbolic name definition

@@ -27,7 +27,7 @@ links:
 - role: build-dependency
   uid: ../../obj
 - role: build-dependency
-  uid: ../../objirqdflt
+  uid: ../../objirq
 - role: build-dependency
   uid: ../../opto2
 - role: build-dependency
@@ -75,7 +75,7 @@ source:
 - bsps/powerpc/shared/flash/spansionFlash.c
 - bsps/powerpc/shared/irq/openpic.c
 - bsps/powerpc/shared/irq/openpic_i8259_irq.c
-- bsps/powerpc/shared/irq/ppc-irq-legacy.c
+- bsps/powerpc/shared/irq/ppc-irq-generic.c
 - bsps/powerpc/shared/mmu/e500-mmu.c
 - bsps/powerpc/shared/pci/generic_clear_hberrs.c
 - bsps/powerpc/shared/pci/pci.c
@@ -85,5 +85,6 @@ source:
 - bsps/powerpc/shared/start/zerobss.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/rtc/rtc-support.c
+- bsps/shared/irq/irq-default-handler.c
 - bsps/shared/start/gettargethash-default.c
 type: build
