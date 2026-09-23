@@ -251,13 +251,23 @@ void __wrap_bsp_interrupt_handler_default( rtems_vector_number vector );
 void __wrap_bsp_interrupt_handler_default( rtems_vector_number vector )
 {
   if ( test_case_active ) {
-    Context *ctx;
+    Context              *ctx;
+    rtems_interrupt_level level;
 
     ctx = T_fixture_context();
     ProcessInterrupt( ctx );
+    rtems_interrupt_local_disable( level );
+    rtems_interrupt_local_enable( level );
 
     if ( setjmp( ctx->before_call ) == 0 ) {
       __real_bsp_interrupt_handler_default( vector );
+    } else {
+      /*
+       * _Terminate() disabled interrupts before it called the fatal
+       * handler.  On ARMv7-M, the exception return does not restore
+       * BASEPRI.
+       */
+      rtems_interrupt_local_enable( level );
     }
   } else {
     __real_bsp_interrupt_handler_default( vector );
