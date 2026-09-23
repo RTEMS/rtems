@@ -66,11 +66,8 @@ static inline int isThumb(Elf_Word symvalue) {
   }
 }
 
-static inline Elf_SOff sign_extend31(Elf_Addr val) {
-  if (0x40000000 & val) {
-    val = ~((Elf_Addr)0x7fffffff) | (0x7fffffff & val);
-  }
-  return 0x7fffffff & val;
+static inline Elf_Addr prel31_field(Elf_Addr value, Elf_Addr place) {
+  return (value & 0x7fffffff) | (place & 0x80000000);
 }
 
 static void* set_arm_veneer(void* trampoline, Elf_Addr target) {
@@ -367,7 +364,7 @@ rtems_rtl_elf_reloc_rel(rtems_rtl_obj* obj, const Elf_Rel* rel,
             ELF_R_TYPE(rel->r_info) == R_TYPE(TARGET2)) {
           tmp -= (Elf_Addr)where;
         } else if (ELF_R_TYPE(rel->r_info) == R_TYPE(PREL31)) {
-          tmp = sign_extend31(tmp - (Elf_Addr)where);
+          tmp = prel31_field(tmp - (Elf_Addr)where, *where);
         }
         if (!parsing) {
           *where = tmp;
@@ -381,7 +378,7 @@ rtems_rtl_elf_reloc_rel(rtems_rtl_obj* obj, const Elf_Rel* rel,
             ELF_R_TYPE(rel->r_info) == R_TYPE(TARGET2)) {
           tmp -= (Elf_Addr)where;
         } else if (ELF_R_TYPE(rel->r_info) == R_TYPE(PREL31)) {
-          tmp = sign_extend31(tmp - (Elf_Addr)where);
+          tmp = prel31_field(tmp - (Elf_Addr)where, load_ptr(where));
         }
         store_ptr(where, tmp);
       }
