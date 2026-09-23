@@ -80,6 +80,8 @@ links:
 - role: build-dependency
   uid: optcoverage
 - role: build-dependency
+  uid: optteststacksizefactor
+- role: build-dependency
   uid: optcoveragecflags
 - role: build-dependency
   uid: optnocoveragecflags

@@ -111,8 +111,9 @@ extern "C" {
  * @{
  */
 
-#if defined( __OPTIMIZE__ ) && !defined( RTEMS_GCOV_COVERAGE )
-#define TEST_BASE_STACK_SIZE RTEMS_MINIMUM_STACK_SIZE
+#if defined( __OPTIMIZE__ )
+#define TEST_BASE_STACK_SIZE \
+  ( RTEMS_TEST_STACK_SIZE_FACTOR * RTEMS_MINIMUM_STACK_SIZE )
 #else
 #define TEST_BASE_STACK_SIZE ( 4 * RTEMS_MINIMUM_STACK_SIZE )
 #endif

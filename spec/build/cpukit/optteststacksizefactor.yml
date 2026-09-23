@@ -1,0 +1,24 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+default:
+- enabled-by: RTEMS_GCOV_COVERAGE
+  value: 4
+- enabled-by: true
+  value: 1
+description: |
+  Sets the factor which multiplies RTEMS_MINIMUM_STACK_SIZE to give the base
+  stack size of the tests compiled with optimisation.  The stack size of a
+  test task, an idle task and the interrupt stack derive from this base.  The
+  code and branch coverage instrumentation increases the stack use.  The
+  default factor is four with coverage and one without it.  A BSP with little
+  memory may select a smaller factor.
+enabled-by: true
+format: '{}'
+links: []
+name: RTEMS_TEST_STACK_SIZE_FACTOR
+type: build
