@@ -8,9 +8,9 @@ copyrights:
 - Copyright (C) 2026 Kinsey Moore <wkmoore@gmail.com>
 default:
 - enabled-by: riscv/esp32c3db
-  value: 'c3/chip_definitions.h'
+  value: c3/chip_definitions.h
 - enabled-by: true
-  value: 'invalid'
+  value: invalid
 description: ''
 enabled-by: true
 format: '{}'

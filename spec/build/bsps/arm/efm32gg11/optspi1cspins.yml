@@ -7,7 +7,7 @@ copyrights:
 - Copyright (C) 2025 Allan N. Hessenflow
 default:
 - enabled-by: true
-  value: "{{-1, 0, false, 0}}"
+  value: '{{-1, 0, false, 0}}'
 description: |
   spi-1 cs pins
 enabled-by: true

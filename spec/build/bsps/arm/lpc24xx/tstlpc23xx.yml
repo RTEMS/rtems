@@ -56,7 +56,7 @@ actions:
     - ttest01
     - utf8proc01
 - set-test-state:
-    reason: "These are too large to link with Debug enabled"
+    reason: These are too large to link with Debug enabled
     state: exclude
     tests:
     - mdosfsfsrename
