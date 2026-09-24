@@ -54,8 +54,8 @@
  * This test case performs the following actions:
  *
  * - Set the interrupt map entry of a bus line which no driver uses in the
- *   interrupt map copy to zero.  Check whether the interrupt vector of the bus
- *   line is enabled.  Restore the interrupt map entry.
+ *   interrupt map copy to zero. Check whether the interrupt vector of the bus
+ *   line is enabled. Restore the interrupt map entry.
  *
  *   - Check that the number of the bus line is associated with no interrupt
  *     vector.
@@ -68,8 +68,8 @@
 
 /**
  * @brief Set the interrupt map entry of a bus line which no driver uses in the
- *   interrupt map copy to zero.  Check whether the interrupt vector of the bus
- *   line is enabled.  Restore the interrupt map entry.
+ *   interrupt map copy to zero. Check whether the interrupt vector of the bus
+ *   line is enabled. Restore the interrupt map entry.
  */
 static void BspSparcLeon3ValIrqmap_Action_0( void )
 {

@@ -367,7 +367,7 @@ static void RtemsSignalReqCatch_Pre_Handler_Prepare(
   switch ( state ) {
     case RtemsSignalReqCatch_Pre_Handler_Invalid: {
       /*
-       * While the ``asr_handler`` parameter is NULL.
+       * While the `asr_handler` parameter is NULL.
        */
       ctx->handler = NULL;
       break;
@@ -375,7 +375,7 @@ static void RtemsSignalReqCatch_Pre_Handler_Prepare(
 
     case RtemsSignalReqCatch_Pre_Handler_Valid: {
       /*
-       * While the ``asr_handler`` parameter is a valid ASR handler.
+       * While the `asr_handler` parameter is a valid ASR handler.
        */
       ctx->handler = SignalHandler;
       break;
@@ -394,7 +394,7 @@ static void RtemsSignalReqCatch_Pre_Preempt_Prepare(
   switch ( state ) {
     case RtemsSignalReqCatch_Pre_Preempt_Yes: {
       /*
-       * While the ``mode_set`` parameter specifies that preemption is enabled.
+       * While the `mode_set` parameter specifies that preemption is enabled.
        */
       if ( rtems_configuration_get_maximum_processors() == 1 ) {
         ctx->normal_mode |= RTEMS_NO_PREEMPT;
@@ -404,8 +404,7 @@ static void RtemsSignalReqCatch_Pre_Preempt_Prepare(
 
     case RtemsSignalReqCatch_Pre_Preempt_No: {
       /*
-       * While the ``mode_set`` parameter specifies that preemption is
-       * disabled.
+       * While the `mode_set` parameter specifies that preemption is disabled.
        */
       ctx->mode |= RTEMS_NO_PREEMPT;
       break;
@@ -424,8 +423,7 @@ static void RtemsSignalReqCatch_Pre_Timeslice_Prepare(
   switch ( state ) {
     case RtemsSignalReqCatch_Pre_Timeslice_Yes: {
       /*
-       * While the ``mode_set`` parameter specifies that timeslicing is
-       * enabled.
+       * While the `mode_set` parameter specifies that timeslicing is enabled.
        */
       ctx->mode |= RTEMS_TIMESLICE;
       break;
@@ -433,8 +431,7 @@ static void RtemsSignalReqCatch_Pre_Timeslice_Prepare(
 
     case RtemsSignalReqCatch_Pre_Timeslice_No: {
       /*
-       * While the ``mode_set`` parameter specifies that timeslicing is
-       * disabled.
+       * While the `mode_set` parameter specifies that timeslicing is disabled.
        */
       ctx->normal_mode |= RTEMS_TIMESLICE;
       break;
@@ -453,7 +450,7 @@ static void RtemsSignalReqCatch_Pre_ASR_Prepare(
   switch ( state ) {
     case RtemsSignalReqCatch_Pre_ASR_Yes: {
       /*
-       * While the ``mode_set`` parameter specifies that ASR processing is
+       * While the `mode_set` parameter specifies that ASR processing is
        * enabled.
        */
       /*
@@ -464,7 +461,7 @@ static void RtemsSignalReqCatch_Pre_ASR_Prepare(
 
     case RtemsSignalReqCatch_Pre_ASR_No: {
       /*
-       * While the ``mode_set`` parameter specifies that ASR processing is
+       * While the `mode_set` parameter specifies that ASR processing is
        * disabled.
        */
       ctx->mode |= RTEMS_NO_ASR;
@@ -484,7 +481,7 @@ static void RtemsSignalReqCatch_Pre_IntLvl_Prepare(
   switch ( state ) {
     case RtemsSignalReqCatch_Pre_IntLvl_Zero: {
       /*
-       * While the ``mode_set`` parameter specifies an interrupt level of zero.
+       * While the `mode_set` parameter specifies an interrupt level of zero.
        */
       #if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE && !defined( RTEMS_SMP )
       ctx->normal_mode |= RTEMS_INTERRUPT_LEVEL( 1 );
@@ -494,7 +491,7 @@ static void RtemsSignalReqCatch_Pre_IntLvl_Prepare(
 
     case RtemsSignalReqCatch_Pre_IntLvl_Positive: {
       /*
-       * While the ``mode_set`` parameter specifies an interrupt level greater
+       * While the `mode_set` parameter specifies an interrupt level greater
        * than or equal to one and less than or equal to
        * CPU_MODES_INTERRUPT_MASK.
        */
@@ -590,8 +587,8 @@ static void RtemsSignalReqCatch_Post_ASRInfo_Check(
        *
        * Where the system does not need inter-processor interrupts, the ASR
        * processing for the caller of rtems_signal_catch() shall be done using
-       * the handler specified by ``asr_handler`` in the mode specified by
-       * ``mode_set``.
+       * the handler specified by `asr_handler` in the mode specified by
+       * `mode_set`.
        */
       if ( rtems_configuration_get_maximum_processors() > 1 ) {
         CheckNoASRChange( ctx );
@@ -609,8 +606,8 @@ static void RtemsSignalReqCatch_Post_ASRInfo_Check(
        *
        * Where the scheduler does support the no-preempt mode, the ASR
        * processing for the caller of rtems_signal_catch() shall be done using
-       * the handler specified by ``asr_handler`` in the mode specified by
-       * ``mode_set``.
+       * the handler specified by `asr_handler` in the mode specified by
+       * `mode_set`.
        */
       if ( rtems_configuration_get_maximum_processors() > 1 ) {
         CheckNoASRChange( ctx );
@@ -623,8 +620,8 @@ static void RtemsSignalReqCatch_Post_ASRInfo_Check(
     case RtemsSignalReqCatch_Post_ASRInfo_New: {
       /*
        * The ASR processing for the caller of rtems_signal_catch() shall be
-       * done using the handler specified by ``asr_handler`` in the mode
-       * specified by ``mode_set``.
+       * done using the handler specified by `asr_handler` in the mode
+       * specified by `mode_set`.
        */
       CheckNewASRSettings( ctx );
       break;

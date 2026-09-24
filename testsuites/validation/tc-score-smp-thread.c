@@ -54,53 +54,53 @@
  *
  * This test case performs the following actions:
  *
- * - Create three worker threads and a mutex.  Use the mutex and the worker to
+ * - Create three worker threads and a mutex. Use the mutex and the worker to
  *   move to a helping scheduler.
  *
  *   - Pin the runner thread while it executes on a processor owned by a
  *     helping scheduler.
  *
- *   - Pin and unpin the runner thread.  This is a nested operation.
+ *   - Pin and unpin the runner thread. This is a nested operation.
  *
- *   - Preempt the pinned runner thread.  Worker B and C execute at the same
- *     time on processor 0 and 1 respectively for some point in time.  This
+ *   - Preempt the pinned runner thread. Worker B and C execute at the same
+ *     time on processor 0 and 1 respectively for some point in time. This
  *     shows that the pinning of the runner thread is maintained.
  *
- *   - Unpin the runner thread.  The runner moves back to its home scheduler.
+ *   - Unpin the runner thread. The runner moves back to its home scheduler.
  *
  *   - Release the mutex.
  *
- *   - Pin the runner thread.  Unpin the runner thread while it is suspended.
+ *   - Pin the runner thread. Unpin the runner thread while it is suspended.
  *
  *   - Make sure the worker released the mutex.
  *
  *   - Clean up all used resources.
  *
- * - Create three worker threads and a mutex.  Use the mutex and the worker to
+ * - Create three worker threads and a mutex. Use the mutex and the worker to
  *   check that a suspended thread does not reconsider help requests.
  *
- *   - Let worker B help worker A through the mutex.  Preempt worker A.  Delay
+ *   - Let worker B help worker A through the mutex. Preempt worker A. Delay
  *     the thread switch to worker A.
  *
- *   - Suspend worker A and let it wait on its thread state lock.  Check that
+ *   - Suspend worker A and let it wait on its thread state lock. Check that
  *     worker A did not reconsider help requests.
  *
- *   - Resume worker A.  Check that worker A did reconsider help requests after
+ *   - Resume worker A. Check that worker A did reconsider help requests after
  *     the thread dispatch.
  *
  *   - Clean up all used resources.
  *
- * - Create four worker threads and three mutexes.  Provoke an explicit thread
- *   priority change while a priority inheritance change is in progress.  The
+ * - Create four worker threads and three mutexes. Provoke an explicit thread
+ *   priority change while a priority inheritance change is in progress. The
  *   explicit thread priority change propagates through priority inheritance.
  *
  *   - Create the following dependencies MA -> WA and TC -> MB -> WA.
  *
- *   - Acquire the worker A default thread wait lock.  Start creating the
- *     dependency TB -> MB (we already have MB -> WA).  Make sure it stops
- *     while acquiring the worker A default thread wait lock.  Prepare the
- *     worker A default thread wait lock release.  Raise the worker C priority.
- *     This operation will call the wrapped _Thread_queue_Path_acquire() and
+ *   - Acquire the worker A default thread wait lock. Start creating the
+ *     dependency TB -> MB (we already have MB -> WA). Make sure it stops while
+ *     acquiring the worker A default thread wait lock. Prepare the worker A
+ *     default thread wait lock release. Raise the worker C priority. This
+ *     operation will call the wrapped \_Thread_queue_Path_acquire() and
  *     trigger the prepared release of the worker A default thread wait lock.
  *     The worker A default wait lock critical sections will execute now in the
  *     prepared sequence.
@@ -407,8 +407,8 @@ static T_fixture ScoreThreadValSmp_Fixture = {
 };
 
 /**
- * @brief Create three worker threads and a mutex.  Use the mutex and the
- *   worker to move to a helping scheduler.
+ * @brief Create three worker threads and a mutex. Use the mutex and the worker
+ *   to move to a helping scheduler.
  */
 static void ScoreThreadValSmp_Action_0( ScoreThreadValSmp_Context *ctx )
 {
@@ -444,15 +444,15 @@ static void ScoreThreadValSmp_Action_0( ScoreThreadValSmp_Context *ctx )
   _Thread_Pin( executing );
 
   /*
-   * Pin and unpin the runner thread.  This is a nested operation.
+   * Pin and unpin the runner thread. This is a nested operation.
    */
   T_eq_u32( rtems_scheduler_get_processor(), 1 );
   _Thread_Pin( executing );
   _Thread_Unpin( executing, _Per_CPU_Get_snapshot() );
 
   /*
-   * Preempt the pinned runner thread.  Worker B and C execute at the same time
-   * on processor 0 and 1 respectively for some point in time.  This shows that
+   * Preempt the pinned runner thread. Worker B and C execute at the same time
+   * on processor 0 and 1 respectively for some point in time. This shows that
    * the pinning of the runner thread is maintained.
    */
   ctx->busy = false;
@@ -463,7 +463,7 @@ static void ScoreThreadValSmp_Action_0( ScoreThreadValSmp_Context *ctx )
   T_eq_u32( ctx->counter, 1 );
 
   /*
-   * Unpin the runner thread.  The runner moves back to its home scheduler.
+   * Unpin the runner thread. The runner moves back to its home scheduler.
    */
   cpu_self = _Thread_Dispatch_disable();
   _Thread_Unpin( executing, cpu_self );
@@ -478,7 +478,7 @@ static void ScoreThreadValSmp_Action_0( ScoreThreadValSmp_Context *ctx )
   T_eq_u32( rtems_scheduler_get_processor(), 0 );
 
   /*
-   * Pin the runner thread.  Unpin the runner thread while it is suspended.
+   * Pin the runner thread. Unpin the runner thread while it is suspended.
    */
   _Thread_Pin( executing );
 
@@ -509,8 +509,8 @@ static void ScoreThreadValSmp_Action_0( ScoreThreadValSmp_Context *ctx )
 }
 
 /**
- * @brief Create three worker threads and a mutex.  Use the mutex and the
- *   worker to check that a suspended thread does not reconsider help requests.
+ * @brief Create three worker threads and a mutex. Use the mutex and the worker
+ *   to check that a suspended thread does not reconsider help requests.
  */
 static void ScoreThreadValSmp_Action_1( ScoreThreadValSmp_Context *ctx )
 {
@@ -536,8 +536,8 @@ static void ScoreThreadValSmp_Action_1( ScoreThreadValSmp_Context *ctx )
   StartTask( ctx->worker_c_id, WorkerTask, ctx );
 
   /*
-   * Let worker B help worker A through the mutex.  Preempt worker A.  Delay
-   * the thread switch to worker A.
+   * Let worker B help worker A through the mutex. Preempt worker A. Delay the
+   * thread switch to worker A.
    */
   ctx->busy = true;
   SendEvents(
@@ -554,7 +554,7 @@ static void ScoreThreadValSmp_Action_1( ScoreThreadValSmp_Context *ctx )
   _SMP_barrier_Wait( &ctx->barrier, &ctx->barrier_state, 2 );
 
   /*
-   * Suspend worker A and let it wait on its thread state lock.  Check that
+   * Suspend worker A and let it wait on its thread state lock. Check that
    * worker A did not reconsider help requests.
    */
   T_scheduler_record_10( &scheduler_log );
@@ -573,7 +573,7 @@ static void ScoreThreadValSmp_Action_1( ScoreThreadValSmp_Context *ctx )
   SetTaskSwitchExtension( NULL );
 
   /*
-   * Resume worker A.  Check that worker A did reconsider help requests after
+   * Resume worker A. Check that worker A did reconsider help requests after
    * the thread dispatch.
    */
   T_scheduler_record_10( &scheduler_log );
@@ -613,7 +613,7 @@ static void ScoreThreadValSmp_Action_1( ScoreThreadValSmp_Context *ctx )
 }
 
 /**
- * @brief Create four worker threads and three mutexes.  Provoke an explicit
+ * @brief Create four worker threads and three mutexes. Provoke an explicit
  *   thread priority change while a priority inheritance change is in progress.
  *   The explicit thread priority change propagates through priority
  *   inheritance.
@@ -644,12 +644,12 @@ static void ScoreThreadValSmp_Action_2( ScoreThreadValSmp_Context *ctx )
   DoMutexOperation( ctx->worker_c_id, ctx->mutex_a_id, EVENT_A_OBTAIN );
 
   /*
-   * Acquire the worker A default thread wait lock.  Start creating the
-   * dependency TB -> MB (we already have MB -> WA).  Make sure it stops while
-   * acquiring the worker A default thread wait lock.  Prepare the worker A
-   * default thread wait lock release.  Raise the worker C priority.  This
-   * operation will call the wrapped _Thread_queue_Path_acquire() and trigger
-   * the prepared release of the worker A default thread wait lock.  The worker
+   * Acquire the worker A default thread wait lock. Start creating the
+   * dependency TB -> MB (we already have MB -> WA). Make sure it stops while
+   * acquiring the worker A default thread wait lock. Prepare the worker A
+   * default thread wait lock release. Raise the worker C priority. This
+   * operation will call the wrapped \_Thread_queue_Path_acquire() and trigger
+   * the prepared release of the worker A default thread wait lock. The worker
    * A default wait lock critical sections will execute now in the prepared
    * sequence.
    */

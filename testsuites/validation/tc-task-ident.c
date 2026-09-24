@@ -134,7 +134,7 @@ static void RtemsTaskReqIdent_Pre_Name_Prepare(
   switch ( state ) {
     case RtemsTaskReqIdent_Pre_Name_WhoAmI: {
       /*
-       * While the ``name`` parameter is equal to RTEMS_WHO_AM_I, while ``id``
+       * While the `name` parameter is equal to RTEMS_WHO_AM_I, while `id`
        * parameter is not equal to NULL.
        */
       ctx->id_value = 0xffffffff;
@@ -144,9 +144,9 @@ static void RtemsTaskReqIdent_Pre_Name_Prepare(
 
     case RtemsTaskReqIdent_Pre_Name_NotWhoAmI: {
       /*
-       * While the ``name`` is not equal to RTEMS_WHO_AM_I or ``id`` parameter
-       * is equal to NULL, the behaviour of rtems_task_ident() shall be
-       * specified by spec:/rtems/req/ident.
+       * While the `name` is not equal to RTEMS_WHO_AM_I or `id` parameter is
+       * equal to NULL, the behaviour of rtems_task_ident() shall be specified
+       * by spec:/rtems/req/ident.
        */
       ctx->id = NULL;
       /* Preparation performed by RtemsReqIdent_Run() */
@@ -166,9 +166,9 @@ static void RtemsTaskReqIdent_Post_Status_Check(
   switch ( state ) {
     case RtemsTaskReqIdent_Post_Status_OkAndWhoAmI: {
       /*
-       * The return status of rtems_task_ident() shall be RTEMS_SUCCESSFUL.
-       * The value of the object identifier referenced by the ``name``
-       * parameter shall be the identifier of the executing thread.
+       * The return status of rtems_task_ident() shall be RTEMS_SUCCESSFUL. The
+       * value of the object identifier referenced by the `name` parameter
+       * shall be the identifier of the executing thread.
        */
       T_rsc( ctx->status, RTEMS_SUCCESSFUL );
       T_eq_ptr( ctx->id, &ctx->id_value );

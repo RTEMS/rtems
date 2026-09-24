@@ -132,7 +132,7 @@ static void RtemsTimerReqDelete_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsTimerReqDelete_Pre_Id_NoObj: {
       /*
-       * While the ``id`` parameter is not associated with a timer.
+       * While the `id` parameter is not associated with a timer.
        */
       ctx->id = 0;
       break;
@@ -140,7 +140,7 @@ static void RtemsTimerReqDelete_Pre_Id_Prepare(
 
     case RtemsTimerReqDelete_Pre_Id_Timer: {
       /*
-       * While the ``id`` parameter is associated with a timer.
+       * While the `id` parameter is associated with a timer.
        */
       ctx->id = ctx->timer_id;
       break;

@@ -118,7 +118,7 @@ typedef struct {
   rtems_vector_number some_vector;
 
   /**
-   * @brief This member provides the object referenced by the ``affinity``
+   * @brief This member provides the object referenced by the `affinity`
    *   parameter.
    */
   cpu_set_t cpuset_obj[ 2 ];
@@ -130,18 +130,17 @@ typedef struct {
   rtems_status_code status;
 
   /**
-   * @brief If this member is true, then the ``vector`` parameter shall be
-   *   valid.
+   * @brief If this member is true, then the `vector` parameter shall be valid.
    */
   bool valid_vector;
 
   /**
-   * @brief This member specifies if the ``affinity_size`` parameter value.
+   * @brief This member specifies if the `affinity_size` parameter value.
    */
   size_t cpusetsize;
 
   /**
-   * @brief This member specifies if the ``affinity`` parameter value.
+   * @brief This member specifies if the `affinity` parameter value.
    */
   cpu_set_t *cpuset;
 
@@ -248,7 +247,7 @@ static void RtemsIntrReqGetAffinity_Pre_Vector_Prepare(
   switch ( state ) {
     case RtemsIntrReqGetAffinity_Pre_Vector_Valid: {
       /*
-       * While the ``vector`` parameter is associated with an interrupt vector.
+       * While the `vector` parameter is associated with an interrupt vector.
        */
       ctx->valid_vector = true;
       break;
@@ -256,7 +255,7 @@ static void RtemsIntrReqGetAffinity_Pre_Vector_Prepare(
 
     case RtemsIntrReqGetAffinity_Pre_Vector_Invalid: {
       /*
-       * While the ``vector`` parameter is not associated with an interrupt
+       * While the `vector` parameter is not associated with an interrupt
        * vector.
        */
       ctx->valid_vector = false;
@@ -276,10 +275,10 @@ static void RtemsIntrReqGetAffinity_Pre_CPUSetSize_Prepare(
   switch ( state ) {
     case RtemsIntrReqGetAffinity_Pre_CPUSetSize_Valid: {
       /*
-       * While the ``affinity_size`` parameter is an integral multiple of the
-       * size of `long`, while the ``affinity_size`` parameter specifies a
+       * While the `affinity_size` parameter is an integral multiple of the
+       * size of `long`, while the `affinity_size` parameter specifies a
        * processor set which is large enough to contain the processor affinity
-       * set of the interrupt specified by ``vector``.
+       * set of the interrupt specified by `vector`.
        */
       ctx->cpusetsize = sizeof( ctx->cpuset_obj );
       break;
@@ -287,10 +286,10 @@ static void RtemsIntrReqGetAffinity_Pre_CPUSetSize_Prepare(
 
     case RtemsIntrReqGetAffinity_Pre_CPUSetSize_TooSmall: {
       /*
-       * While the ``affinity_size`` parameter is an integral multiple of the
-       * size of `long`, while the ``affinity_size`` parameter specifies a
+       * While the `affinity_size` parameter is an integral multiple of the
+       * size of `long`, while the `affinity_size` parameter specifies a
        * processor set which is not large enough to contain the processor
-       * affinity set of the interrupt specified by ``vector``.
+       * affinity set of the interrupt specified by `vector`.
        */
       ctx->cpusetsize = 0;
       break;
@@ -298,8 +297,8 @@ static void RtemsIntrReqGetAffinity_Pre_CPUSetSize_Prepare(
 
     case RtemsIntrReqGetAffinity_Pre_CPUSetSize_Askew: {
       /*
-       * While the ``affinity_size`` parameter is not an integral multiple of
-       * the size of `long`.
+       * While the `affinity_size` parameter is not an integral multiple of the
+       * size of `long`.
        */
       ctx->cpusetsize = SIZE_MAX;
       break;
@@ -318,8 +317,7 @@ static void RtemsIntrReqGetAffinity_Pre_CPUSet_Prepare(
   switch ( state ) {
     case RtemsIntrReqGetAffinity_Pre_CPUSet_Valid: {
       /*
-       * While the ``affinity`` parameter references an object of type
-       * cpu_set_t.
+       * While the `affinity` parameter references an object of type cpu_set_t.
        */
       ctx->cpuset = ctx->cpuset_obj;
       break;
@@ -327,7 +325,7 @@ static void RtemsIntrReqGetAffinity_Pre_CPUSet_Prepare(
 
     case RtemsIntrReqGetAffinity_Pre_CPUSet_Null: {
       /*
-       * While the ``affinity`` parameter is equal to NULL.
+       * While the `affinity` parameter is equal to NULL.
        */
       ctx->cpuset = NULL;
       break;
@@ -346,7 +344,7 @@ static void RtemsIntrReqGetAffinity_Pre_CanGetAffinity_Prepare(
     case RtemsIntrReqGetAffinity_Pre_CanGetAffinity_Yes: {
       /*
        * While getting the affinity for the interrupt vector specified by
-       * ``vector`` parameter is supported.
+       * `vector` parameter is supported.
        */
       /* Validation done by CheckGetAffinity() for each interrupt vector */
       break;
@@ -355,7 +353,7 @@ static void RtemsIntrReqGetAffinity_Pre_CanGetAffinity_Prepare(
     case RtemsIntrReqGetAffinity_Pre_CanGetAffinity_No: {
       /*
        * While getting the affinity for the interrupt vector specified by
-       * ``vector`` parameter is not supported.
+       * `vector` parameter is not supported.
        */
       /* Validation done by CheckGetAffinity() for each interrupt vector */
       break;
@@ -429,9 +427,9 @@ static void RtemsIntrReqGetAffinity_Post_CPUSetObj_Check(
   switch ( state ) {
     case RtemsIntrReqGetAffinity_Post_CPUSetObj_Set: {
       /*
-       * The value of the object referenced by the ``affinity`` parameter shall
+       * The value of the object referenced by the `affinity` parameter shall
        * be set to the processor affinity set of the interrupt specified by the
-       * ``vector`` parameter at some point during the call after the return of
+       * `vector` parameter at some point during the call after the return of
        * the rtems_interrupt_get_affinity() call.
        */
       /* Validation done by CheckGetAffinity() for each interrupt vector */
@@ -440,9 +438,9 @@ static void RtemsIntrReqGetAffinity_Post_CPUSetObj_Check(
 
     case RtemsIntrReqGetAffinity_Post_CPUSetObj_Partial: {
       /*
-       * The value of the object referenced by the ``affinity`` parameter shall
+       * The value of the object referenced by the `affinity` parameter shall
        * be set to the subset of the processor affinity set which fits into the
-       * object of the interrupt specified by the ``vector`` parameter at some
+       * object of the interrupt specified by the `vector` parameter at some
        * point during the call after the return of the
        * rtems_interrupt_get_affinity() call.
        */
@@ -452,7 +450,7 @@ static void RtemsIntrReqGetAffinity_Post_CPUSetObj_Check(
 
     case RtemsIntrReqGetAffinity_Post_CPUSetObj_Zero: {
       /*
-       * The value of the object referenced by the ``affinity`` parameter shall
+       * The value of the object referenced by the `affinity` parameter shall
        * be set to zero.
        */
       /*
@@ -464,7 +462,7 @@ static void RtemsIntrReqGetAffinity_Post_CPUSetObj_Check(
 
     case RtemsIntrReqGetAffinity_Post_CPUSetObj_Nop: {
       /*
-       * Objects referenced by the ``affinity`` parameter in past calls to
+       * Objects referenced by the `affinity` parameter in past calls to
        * rtems_interrupt_get_affinity() shall not be accessed by the
        * rtems_interrupt_get_affinity() call.
        */

@@ -198,7 +198,7 @@ static T_fixture RtemsEventValPerf_Fixture = {
  */
 
 /**
- * @brief Send two events from with interrupt context.  Satisfy the event
+ * @brief Send two events from with interrupt context. Satisfy the event
  *   condition.
  */
 static void RtemsEventReqPerfIsrPreempt_Body( RtemsEventValPerf_Context *ctx )
@@ -215,7 +215,7 @@ static void RtemsEventReqPerfIsrPreempt_Body_Wrap( void *arg )
 }
 
 /**
- * @brief Set the measured runtime.  Discard samples interrupted by a clock
+ * @brief Set the measured runtime. Discard samples interrupted by a clock
  *   tick.
  */
 static bool RtemsEventReqPerfIsrPreempt_Teardown(
@@ -272,7 +272,7 @@ static void RtemsEventReqPerfOther_Setup_Wrap( void *arg )
 }
 
 /**
- * @brief Send two events.  Satisfy the event condition.
+ * @brief Send two events. Satisfy the event condition.
  */
 static void RtemsEventReqPerfOther_Body( RtemsEventValPerf_Context *ctx )
 {
@@ -288,7 +288,7 @@ static void RtemsEventReqPerfOther_Body_Wrap( void *arg )
 }
 
 /**
- * @brief Restore the worker priority.  Discard samples interrupted by a clock
+ * @brief Restore the worker priority. Discard samples interrupted by a clock
  *   tick.
  */
 static bool RtemsEventReqPerfOther_Teardown(
@@ -338,7 +338,7 @@ static void RtemsEventReqPerfOtherCpu_Prepare( RtemsEventValPerf_Context *ctx )
 }
 
 /**
- * @brief Send two events.  Satisfy the event condition.
+ * @brief Send two events. Satisfy the event condition.
  */
 static void RtemsEventReqPerfOtherCpu_Body( RtemsEventValPerf_Context *ctx )
 {
@@ -355,7 +355,7 @@ static void RtemsEventReqPerfOtherCpu_Body_Wrap( void *arg )
 }
 
 /**
- * @brief Make sure the worker waits for the next event.  Set the measured
+ * @brief Make sure the worker waits for the next event. Set the measured
  *   runtime. Discard samples interrupted by a clock tick.
  */
 static bool RtemsEventReqPerfOtherCpu_Teardown(
@@ -407,7 +407,7 @@ static void RtemsEventReqPerfOtherCpu_Cleanup( RtemsEventValPerf_Context *ctx )
  */
 
 /**
- * @brief Send an event.  Do not satisfy the event condition.
+ * @brief Send an event. Do not satisfy the event condition.
  */
 static void RtemsEventReqPerfOtherNotSatisfied_Body(
   RtemsEventValPerf_Context *ctx
@@ -425,7 +425,7 @@ static void RtemsEventReqPerfOtherNotSatisfied_Body_Wrap( void *arg )
 }
 
 /**
- * @brief Let the worker wait for the next set of events.  Discard samples
+ * @brief Let the worker wait for the next set of events. Discard samples
  *   interrupted by a clock tick.
  */
 static bool RtemsEventReqPerfOtherNotSatisfied_Teardown(
@@ -467,7 +467,7 @@ static bool RtemsEventReqPerfOtherNotSatisfied_Teardown_Wrap(
  */
 
 /**
- * @brief Send two events.  Satisfy the event condition.
+ * @brief Send two events. Satisfy the event condition.
  */
 static void RtemsEventReqPerfOtherPreempt_Body(
   RtemsEventValPerf_Context *ctx
@@ -486,7 +486,7 @@ static void RtemsEventReqPerfOtherPreempt_Body_Wrap( void *arg )
 }
 
 /**
- * @brief Set the measured runtime.  Discard samples interrupted by a clock
+ * @brief Set the measured runtime. Discard samples interrupted by a clock
  *   tick.
  */
 static bool RtemsEventReqPerfOtherPreempt_Teardown(

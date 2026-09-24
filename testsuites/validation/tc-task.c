@@ -61,19 +61,18 @@
  *
  * - Call rtems_task_iterate() with a visitor which always returns false.
  *
- *   - Check that the all counter is equal to the count of tasks.  Check that
- *     the calling task was visited exacly once.  Firstly, this shows that
- *     rtems_task_iterate() used the parameters specified by ``visitor`` and
- *     ``arg``. Secondly, this shows that the iteration was done over all
- *     tasks.
+ *   - Check that the all counter is equal to the count of tasks. Check that
+ *     the calling task was visited exacly once. Firstly, this shows that
+ *     rtems_task_iterate() used the parameters specified by `visitor` and
+ *     `arg`. Secondly, this shows that the iteration was done over all tasks.
  *
  *   - Check that the object alloctor mutex was not owned before and after the
- *     call.  Check that the object alloctor mutex was owned during the
+ *     call. Check that the object alloctor mutex was owned during the
  *     iteration.
  *
  * - Call rtems_task_iterate() with a visitor which returns true.
  *
- *   - Check that the all counter is equal to one.  This shows that the
+ *   - Check that the all counter is equal to one. This shows that the
  *     iteration stops when the visitor returns true.
  *
  * - Assert that RTEMS_TASK_STORAGE_ALIGNMENT is a constant expression which
@@ -99,10 +98,10 @@
  * - Validate the home scheduler of tasks created by rtems_task_create() and
  *   constructed by rtems_task_construct().
  *
- *   - Create a task.  Check that the home scheduler of the created task is
+ *   - Create a task. Check that the home scheduler of the created task is
  *     scheduler A.
  *
- *   - Construct a task.  Check that the home scheduler of the constructed task
+ *   - Construct a task. Check that the home scheduler of the constructed task
  *     is scheduler A.
  *
  * @{
@@ -171,18 +170,17 @@ static void RtemsTaskValTask_Action_1( void )
   iter_ctx.owner_after = _RTEMS_Allocator_is_owner();
 
   /*
-   * Check that the all counter is equal to the count of tasks.  Check that the
-   * calling task was visited exacly once.  Firstly, this shows that
-   * rtems_task_iterate() used the parameters specified by ``visitor`` and
-   * ``arg``. Secondly, this shows that the iteration was done over all tasks.
+   * Check that the all counter is equal to the count of tasks. Check that the
+   * calling task was visited exacly once. Firstly, this shows that
+   * rtems_task_iterate() used the parameters specified by `visitor` and `arg`.
+   * Secondly, this shows that the iteration was done over all tasks.
    */
   T_step_eq_u32( 1, iter_ctx.counter_all, task_count );
   T_step_eq_u32( 2, iter_ctx.counter_self, 1 );
 
   /*
    * Check that the object alloctor mutex was not owned before and after the
-   * call.  Check that the object alloctor mutex was owned during the
-   * iteration.
+   * call. Check that the object alloctor mutex was owned during the iteration.
    */
   T_step_false( 3, iter_ctx.owner_before );
   T_step_true( 4, iter_ctx.owner_in_visitor );
@@ -201,7 +199,7 @@ static void RtemsTaskValTask_Action_2( void )
   rtems_task_iterate( TaskVisitor, &iter_ctx );
 
   /*
-   * Check that the all counter is equal to one.  This shows that the iteration
+   * Check that the all counter is equal to one. This shows that the iteration
    * stops when the visitor returns true.
    */
   T_step_eq_u32( 6, iter_ctx.counter_all, 1 );
@@ -289,7 +287,7 @@ static void RtemsTaskValTask_Action_9( void )
   rtems_id          id;
 
   /*
-   * Create a task.  Check that the home scheduler of the created task is
+   * Create a task. Check that the home scheduler of the created task is
    * scheduler A.
    */
   sc = rtems_task_create(
@@ -306,8 +304,8 @@ static void RtemsTaskValTask_Action_9( void )
   DeleteTask( id );
 
   /*
-   * Construct a task.  Check that the home scheduler of the constructed task
-   * is scheduler A.
+   * Construct a task. Check that the home scheduler of the constructed task is
+   * scheduler A.
    */
   sc = rtems_task_construct( &DefaultTaskConfig, &id );
   T_step_rsc_success( 10, sc );

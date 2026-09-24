@@ -65,7 +65,7 @@
  * - Calculate the bitwise or of all non-default option constants.
  *
  *   - Check that the count of set bits in the calculated value is equal to the
- *     count of non-default option constants.  Since each non-default option
+ *     count of non-default option constants. Since each non-default option
  *     constant is a power of two, this proves that each constant has a unique
  *     value.
  *
@@ -149,7 +149,7 @@ static void RtemsOptionValOptions_Action_2( void )
 
   /*
    * Check that the count of set bits in the calculated value is equal to the
-   * count of non-default option constants.  Since each non-default option
+   * count of non-default option constants. Since each non-default option
    * constant is a power of two, this proves that each constant has a unique
    * value.
    */

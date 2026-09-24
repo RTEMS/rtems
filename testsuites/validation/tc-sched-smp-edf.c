@@ -52,24 +52,24 @@
  *
  * This test case performs the following actions:
  *
- * - Validate a set affinity error case with an unsupported subset.  This
- *   requires an affinity set with at least two processors.  On a system with
+ * - Validate a set affinity error case with an unsupported subset. This
+ *   requires an affinity set with at least two processors. On a system with
  *   exactly two processors, this is the set of all online processors and the
  *   unsupported subset is infeasible since the scheduler would select an
- *   affinity to all processors.  In this case, fake the set of online
- *   processors.  On systems with three or more processors, unsupported subsets
+ *   affinity to all processors. In this case, fake the set of online
+ *   processors. On systems with three or more processors, unsupported subsets
  *   are possible to construct.
  *
  * @{
  */
 
 /**
- * @brief Validate a set affinity error case with an unsupported subset.  This
- *   requires an affinity set with at least two processors.  On a system with
+ * @brief Validate a set affinity error case with an unsupported subset. This
+ *   requires an affinity set with at least two processors. On a system with
  *   exactly two processors, this is the set of all online processors and the
  *   unsupported subset is infeasible since the scheduler would select an
- *   affinity to all processors.  In this case, fake the set of online
- *   processors.  On systems with three or more processors, unsupported subsets
+ *   affinity to all processors. In this case, fake the set of online
+ *   processors. On systems with three or more processors, unsupported subsets
  *   are possible to construct.
  */
 static void ScoreSchedSmpEdfValEdf_Action_0( void )

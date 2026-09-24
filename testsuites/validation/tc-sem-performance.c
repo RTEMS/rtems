@@ -246,7 +246,7 @@ static void RtemsSemReqPerfMtxPiObtain_Body_Wrap( void *arg )
 }
 
 /**
- * @brief Release the mutex.  Discard samples interrupted by a clock tick.
+ * @brief Release the mutex. Discard samples interrupted by a clock tick.
  */
 static bool RtemsSemReqPerfMtxPiObtain_Teardown(
   RtemsSemValPerf_Context *ctx,
@@ -401,7 +401,7 @@ static void RtemsSemReqPerfMtxPiReleaseOne_Body_Wrap( void *arg )
 }
 
 /**
- * @brief Restore the worker priority.  Discard samples interrupted by a clock
+ * @brief Restore the worker priority. Discard samples interrupted by a clock
  *   tick.
  */
 static bool RtemsSemReqPerfMtxPiReleaseOne_Teardown(
@@ -493,7 +493,7 @@ static void RtemsSemReqPerfMtxPiReleaseOtherCpu_Body_Wrap( void *arg )
 }
 
 /**
- * @brief Make sure the worker waits for the next event.  Set the measured
+ * @brief Make sure the worker waits for the next event. Set the measured
  *   runtime. Discard samples interrupted by a clock tick.
  */
 static bool RtemsSemReqPerfMtxPiReleaseOtherCpu_Teardown(
@@ -585,7 +585,7 @@ static void RtemsSemReqPerfMtxPiReleasePreempt_Body_Wrap( void *arg )
 }
 
 /**
- * @brief Set the measured runtime.  Discard samples interrupted by a clock
+ * @brief Set the measured runtime. Discard samples interrupted by a clock
  *   tick.
  */
 static bool RtemsSemReqPerfMtxPiReleasePreempt_Teardown(
@@ -740,7 +740,7 @@ static void RtemsSemReqPerfMtxPiWaitForever_Body_Wrap( void *arg )
 }
 
 /**
- * @brief Set the measured runtime.  Restore the worker priority.  Release the
+ * @brief Set the measured runtime. Restore the worker priority. Release the
  *   mutex. Discard samples interrupted by a clock tick.
  */
 static bool RtemsSemReqPerfMtxPiWaitForever_Teardown(
@@ -823,7 +823,7 @@ static void RtemsSemReqPerfMtxPiWaitTimed_Body_Wrap( void *arg )
 }
 
 /**
- * @brief Set the measured runtime.  Restore the worker priority.  Release the
+ * @brief Set the measured runtime. Restore the worker priority. Release the
  *   mutex. Discard samples interrupted by a clock tick.
  */
 static bool RtemsSemReqPerfMtxPiWaitTimed_Teardown(

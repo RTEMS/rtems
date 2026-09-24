@@ -248,19 +248,19 @@ typedef struct {
   uint32_t signal_counter_after;
 
   /**
-   * @brief This member specifies the ``mode_set`` parameter for
+   * @brief This member specifies the `mode_set` parameter for
    *   rtems_task_mode().
    */
   rtems_mode mode_set;
 
   /**
-   * @brief This member specifies the mode mask ``mask`` parameter for
+   * @brief This member specifies the mode mask `mask` parameter for
    *   rtems_task_mode() for the action.
    */
   rtems_mode mode_mask;
 
   /**
-   * @brief This member specifies the previous mode set ``previous_mode_set``
+   * @brief This member specifies the previous mode set `previous_mode_set`
    *   parameter for rtems_task_mode().
    */
   rtems_mode *previous_mode_set;
@@ -463,7 +463,7 @@ static void RtemsTaskReqMode_Pre_PrevMode_Prepare(
   switch ( state ) {
     case RtemsTaskReqMode_Pre_PrevMode_Valid: {
       /*
-       * While the ``previous_mode_set`` parameter references an object of type
+       * While the `previous_mode_set` parameter references an object of type
        * rtems_mode.
        */
       ctx->previous_mode_set = &ctx->previous_mode_set_value;
@@ -472,7 +472,7 @@ static void RtemsTaskReqMode_Pre_PrevMode_Prepare(
 
     case RtemsTaskReqMode_Pre_PrevMode_Null: {
       /*
-       * While the ``previous_mode_set`` parameter is NULL.
+       * While the `previous_mode_set` parameter is NULL.
        */
       ctx->previous_mode_set = NULL;
       break;
@@ -616,7 +616,7 @@ static void RtemsTaskReqMode_Pre_Preempt_Prepare(
   switch ( state ) {
     case RtemsTaskReqMode_Pre_Preempt_Yes: {
       /*
-       * While the ``mode_set`` parameter specifies that preemption is enabled.
+       * While the `mode_set` parameter specifies that preemption is enabled.
        */
       ctx->mode_set |= RTEMS_PREEMPT;
       break;
@@ -624,8 +624,7 @@ static void RtemsTaskReqMode_Pre_Preempt_Prepare(
 
     case RtemsTaskReqMode_Pre_Preempt_No: {
       /*
-       * While the ``mode_set`` parameter specifies that preemption is
-       * disabled.
+       * While the `mode_set` parameter specifies that preemption is disabled.
        */
       ctx->mode_set |= RTEMS_NO_PREEMPT;
       break;
@@ -644,8 +643,7 @@ static void RtemsTaskReqMode_Pre_Timeslice_Prepare(
   switch ( state ) {
     case RtemsTaskReqMode_Pre_Timeslice_Yes: {
       /*
-       * While the ``mode_set`` parameter specifies that timeslicing is
-       * enabled.
+       * While the `mode_set` parameter specifies that timeslicing is enabled.
        */
       ctx->mode_set |= RTEMS_TIMESLICE;
       break;
@@ -653,8 +651,7 @@ static void RtemsTaskReqMode_Pre_Timeslice_Prepare(
 
     case RtemsTaskReqMode_Pre_Timeslice_No: {
       /*
-       * While the ``mode_set`` parameter specifies that timeslicing is
-       * disabled.
+       * While the `mode_set` parameter specifies that timeslicing is disabled.
        */
       ctx->mode_set |= RTEMS_NO_TIMESLICE;
       break;
@@ -673,7 +670,7 @@ static void RtemsTaskReqMode_Pre_ASR_Prepare(
   switch ( state ) {
     case RtemsTaskReqMode_Pre_ASR_Yes: {
       /*
-       * While the ``mode_set`` parameter specifies that ASR processing is
+       * While the `mode_set` parameter specifies that ASR processing is
        * enabled.
        */
       ctx->mode_set |= RTEMS_ASR;
@@ -682,7 +679,7 @@ static void RtemsTaskReqMode_Pre_ASR_Prepare(
 
     case RtemsTaskReqMode_Pre_ASR_No: {
       /*
-       * While the ``mode_set`` parameter specifies that ASR processing is
+       * While the `mode_set` parameter specifies that ASR processing is
        * disabled.
        */
       ctx->mode_set |= RTEMS_NO_ASR;
@@ -702,7 +699,7 @@ static void RtemsTaskReqMode_Pre_IntLvl_Prepare(
   switch ( state ) {
     case RtemsTaskReqMode_Pre_IntLvl_Zero: {
       /*
-       * While the ``mode_set`` parameter specifies an interrupt level of zero.
+       * While the `mode_set` parameter specifies an interrupt level of zero.
        */
       ctx->mode_set |= RTEMS_INTERRUPT_LEVEL( 0 );
       break;
@@ -710,7 +707,7 @@ static void RtemsTaskReqMode_Pre_IntLvl_Prepare(
 
     case RtemsTaskReqMode_Pre_IntLvl_Positive: {
       /*
-       * While the ``mode_set`` parameter specifies an interrupt level greater
+       * While the `mode_set` parameter specifies an interrupt level greater
        * than zero and less than or equal to CPU_MODES_INTERRUPT_MASK.
        */
       ctx->mode_set |= RTEMS_INTERRUPT_LEVEL( 1 );
@@ -730,8 +727,8 @@ static void RtemsTaskReqMode_Pre_PreemptMsk_Prepare(
   switch ( state ) {
     case RtemsTaskReqMode_Pre_PreemptMsk_Yes: {
       /*
-       * While the ``mask`` parameter specifies that the preemption mode shall
-       * be set.
+       * While the `mask` parameter specifies that the preemption mode shall be
+       * set.
        */
       ctx->mode_mask |= RTEMS_PREEMPT_MASK;
       break;
@@ -739,7 +736,7 @@ static void RtemsTaskReqMode_Pre_PreemptMsk_Prepare(
 
     case RtemsTaskReqMode_Pre_PreemptMsk_No: {
       /*
-       * While the ``mask`` parameter specifies that the preemption mode shall
+       * While the `mask` parameter specifies that the preemption mode shall
        * not be set.
        */
       /* This is the default mode mask */
@@ -759,7 +756,7 @@ static void RtemsTaskReqMode_Pre_TimesliceMsk_Prepare(
   switch ( state ) {
     case RtemsTaskReqMode_Pre_TimesliceMsk_Yes: {
       /*
-       * While the ``mask`` parameter specifies that the timeslicing mode shall
+       * While the `mask` parameter specifies that the timeslicing mode shall
        * be set.
        */
       ctx->mode_mask |= RTEMS_TIMESLICE_MASK;
@@ -768,7 +765,7 @@ static void RtemsTaskReqMode_Pre_TimesliceMsk_Prepare(
 
     case RtemsTaskReqMode_Pre_TimesliceMsk_No: {
       /*
-       * While the ``mask`` parameter specifies that the timeslicing mode shall
+       * While the `mask` parameter specifies that the timeslicing mode shall
        * not be set.
        */
       /* This is the default mode mask */
@@ -788,7 +785,7 @@ static void RtemsTaskReqMode_Pre_ASRMsk_Prepare(
   switch ( state ) {
     case RtemsTaskReqMode_Pre_ASRMsk_Yes: {
       /*
-       * While the ``mask`` parameter specifies that the ASR processing mode
+       * While the `mask` parameter specifies that the ASR processing mode
        * shall be set.
        */
       ctx->mode_mask |= RTEMS_ASR_MASK;
@@ -797,7 +794,7 @@ static void RtemsTaskReqMode_Pre_ASRMsk_Prepare(
 
     case RtemsTaskReqMode_Pre_ASRMsk_No: {
       /*
-       * While the ``mask`` parameter specifies that the ASR processing mode
+       * While the `mask` parameter specifies that the ASR processing mode
        * shall not be set.
        */
       /* This is the default mode mask */
@@ -817,8 +814,8 @@ static void RtemsTaskReqMode_Pre_IntLvlMsk_Prepare(
   switch ( state ) {
     case RtemsTaskReqMode_Pre_IntLvlMsk_Yes: {
       /*
-       * While the ``mask`` parameter specifies that the interrupt level shall
-       * be set.
+       * While the `mask` parameter specifies that the interrupt level shall be
+       * set.
        */
       ctx->mode_mask |= RTEMS_INTERRUPT_MASK;
       break;
@@ -826,7 +823,7 @@ static void RtemsTaskReqMode_Pre_IntLvlMsk_Prepare(
 
     case RtemsTaskReqMode_Pre_IntLvlMsk_No: {
       /*
-       * While the ``mask`` parameter specifies that the interrupt level shall
+       * While the `mask` parameter specifies that the interrupt level shall
        * not be set.
        */
       /* This is the default mode mask */
@@ -1004,7 +1001,7 @@ static void RtemsTaskReqMode_Post_PMVar_Check(
   switch ( state ) {
     case RtemsTaskReqMode_Post_PMVar_Set: {
       /*
-       * The value of the object referenced by the ``previous_mode_set``
+       * The value of the object referenced by the `previous_mode_set`
        * parameter shall be set to the task modes of the calling task on entry
        * of the call to rtems_task_mode().
        */
@@ -1015,7 +1012,7 @@ static void RtemsTaskReqMode_Post_PMVar_Check(
 
     case RtemsTaskReqMode_Post_PMVar_Nop: {
       /*
-       * Objects referenced by the ``stack_size`` parameter in past calls to
+       * Objects referenced by the `stack_size` parameter in past calls to
        * rtems_task_mode() shall not be accessed by the rtems_task_mode() call.
        */
       T_eq_u32( ctx->previous_mode_set_value, INVALID_MODE );
@@ -1025,12 +1022,12 @@ static void RtemsTaskReqMode_Post_PMVar_Check(
     case RtemsTaskReqMode_Post_PMVar_Maybe: {
       /*
        * Where the scheduler does not support the no-preempt mode, objects
-       * referenced by the ``stack_size`` parameter in past calls to
+       * referenced by the `stack_size` parameter in past calls to
        * rtems_task_mode() shall not be accessed by the rtems_task_mode() call.
        *
        * Where the scheduler does support the no-preempt mode, the value of the
-       * object referenced by the ``previous_mode_set`` parameter shall be set
-       * to the task modes of the calling task on entry of the call to
+       * object referenced by the `previous_mode_set` parameter shall be set to
+       * the task modes of the calling task on entry of the call to
        * rtems_task_mode().
        */
       T_eq_ptr( ctx->previous_mode_set, &ctx->previous_mode_set_value );
@@ -1056,8 +1053,8 @@ static void RtemsTaskReqMode_Post_Mode_Check(
   switch ( state ) {
     case RtemsTaskReqMode_Post_Mode_Set: {
       /*
-       * The task modes of the calling task indicated by the ``mask`` parameter
-       * shall be set to the corrsponding modes specified by the ``mode_set``
+       * The task modes of the calling task indicated by the `mask` parameter
+       * shall be set to the corrsponding modes specified by the `mode_set`
        * parameter.
        */
       CheckMode( ctx, ctx->current_mode, ctx->mode_mask, ctx->mode_set );
@@ -1080,8 +1077,8 @@ static void RtemsTaskReqMode_Post_Mode_Check(
        * rtems_task_mode() call.
        *
        * Where the scheduler does support the no-preempt mode, the task modes
-       * of the calling task indicated by the ``mask`` parameter shall be set
-       * to the corrsponding modes specified by the ``mode_set`` parameter.
+       * of the calling task indicated by the `mask` parameter shall be set to
+       * the corrsponding modes specified by the `mode_set` parameter.
        */
       if ( rtems_configuration_get_maximum_processors() > 1 ) {
         CheckMode( ctx, ctx->current_mode, 0, 0 );

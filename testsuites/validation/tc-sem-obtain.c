@@ -282,7 +282,7 @@ static void RtemsSemReqObtain_Pre_Id_Prepare( RtemsSemReqObtain_Pre_Id state )
   switch ( state ) {
     case RtemsSemReqObtain_Pre_Id_Valid: {
       /*
-       * While the ``id`` parameter is associated with the semaphore.
+       * While the `id` parameter is associated with the semaphore.
        */
       /* Nothing to prepare */
       break;
@@ -290,7 +290,7 @@ static void RtemsSemReqObtain_Pre_Id_Prepare( RtemsSemReqObtain_Pre_Id state )
 
     case RtemsSemReqObtain_Pre_Id_Invalid: {
       /*
-       * While the ``id`` parameter is not associated with a semaphore.
+       * While the `id` parameter is not associated with a semaphore.
        */
       /* Nothing to prepare */
       break;
@@ -309,7 +309,7 @@ static void RtemsSemReqObtain_Pre_Wait_Prepare(
   switch ( state ) {
     case RtemsSemReqObtain_Pre_Wait_No: {
       /*
-       * While the ``option_set`` parameter indicates the RTEMS_NO_WAIT option.
+       * While the `option_set` parameter indicates the RTEMS_NO_WAIT option.
        */
       ctx->tq_ctx.wait = TQ_NO_WAIT;
       break;
@@ -317,8 +317,8 @@ static void RtemsSemReqObtain_Pre_Wait_Prepare(
 
     case RtemsSemReqObtain_Pre_Wait_Timeout: {
       /*
-       * While the ``option_set`` parameter indicates the RTEMS_WAIT option,
-       * while the ``timeout`` parameter is not equal to RTEMS_NO_TIMEOUT.
+       * While the `option_set` parameter indicates the RTEMS_WAIT option,
+       * while the `timeout` parameter is not equal to RTEMS_NO_TIMEOUT.
        */
       ctx->tq_ctx.wait = TQ_WAIT_TIMED;
       break;
@@ -326,8 +326,8 @@ static void RtemsSemReqObtain_Pre_Wait_Prepare(
 
     case RtemsSemReqObtain_Pre_Wait_Forever: {
       /*
-       * While the ``option_set`` parameter indicates the RTEMS_WAIT option,
-       * while the ``timeout`` parameter is equal to RTEMS_NO_TIMEOUT.
+       * While the `option_set` parameter indicates the RTEMS_WAIT option,
+       * while the `timeout` parameter is equal to RTEMS_NO_TIMEOUT.
        */
       ctx->tq_ctx.wait = TQ_WAIT_FOREVER;
       break;

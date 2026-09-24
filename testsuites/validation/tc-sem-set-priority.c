@@ -159,7 +159,7 @@ typedef struct {
   rtems_id the_semaphore_id;
 
   /**
-   * @brief If this member is true, then the ``semaphore_id`` parameter value
+   * @brief If this member is true, then the `semaphore_id` parameter value
    *   shall be associated with the semaphore, otherwise it shall be not
    *   associated with a semaphore.
    */
@@ -172,25 +172,25 @@ typedef struct {
   rtems_task_priority old_priority_value;
 
   /**
-   * @brief This member specifies the ``semaphore_id`` parameter for the
+   * @brief This member specifies the `semaphore_id` parameter for the
    *   rtems_semaphore_set_priority() call.
    */
   rtems_id semaphore_id;
 
   /**
-   * @brief This member specifies the ``scheduler_id`` parameter for the
+   * @brief This member specifies the `scheduler_id` parameter for the
    *   rtems_semaphore_set_priority() call.
    */
   rtems_id scheduler_id;
 
   /**
-   * @brief This member specifies the ``new_priority`` parameter for the
+   * @brief This member specifies the `new_priority` parameter for the
    *   rtems_semaphore_set_priority() call.
    */
   rtems_task_priority new_priority;
 
   /**
-   * @brief This member specifies the ``old_priority`` parameter for the
+   * @brief This member specifies the `old_priority` parameter for the
    *   rtems_semaphore_set_priority() call.
    */
   rtems_task_priority *old_priority;
@@ -411,7 +411,7 @@ static void RtemsSemReqSetPriority_Pre_SemId_Prepare(
   switch ( state ) {
     case RtemsSemReqSetPriority_Pre_SemId_Valid: {
       /*
-       * While the ``semaphore_id`` parameter is associated with the semaphore.
+       * While the `semaphore_id` parameter is associated with the semaphore.
        */
       ctx->valid_id = true;
       break;
@@ -419,8 +419,7 @@ static void RtemsSemReqSetPriority_Pre_SemId_Prepare(
 
     case RtemsSemReqSetPriority_Pre_SemId_Invalid: {
       /*
-       * While the ``semaphore_id`` parameter is not associated with a
-       * semaphore.
+       * While the `semaphore_id` parameter is not associated with a semaphore.
        */
       ctx->valid_id = false;
       break;
@@ -439,8 +438,7 @@ static void RtemsSemReqSetPriority_Pre_SchedId_Prepare(
   switch ( state ) {
     case RtemsSemReqSetPriority_Pre_SchedId_Invalid: {
       /*
-       * While the ``scheduler_id`` parameter is not associated with a
-       * scheduler.
+       * While the `scheduler_id` parameter is not associated with a scheduler.
        */
       ctx->scheduler_id = INVALID_ID;
       break;
@@ -448,7 +446,7 @@ static void RtemsSemReqSetPriority_Pre_SchedId_Prepare(
 
     case RtemsSemReqSetPriority_Pre_SchedId_Create: {
       /*
-       * While the ``scheduler_id`` parameter is associated with the scheduler
+       * While the `scheduler_id` parameter is associated with the scheduler
        * used to create the semaphore.
        */
       ctx->scheduler_id = ctx->runner_scheduler_id;
@@ -457,7 +455,7 @@ static void RtemsSemReqSetPriority_Pre_SchedId_Prepare(
 
     case RtemsSemReqSetPriority_Pre_SchedId_Other: {
       /*
-       * While the ``scheduler_id`` parameter is associated with a scheduler
+       * While the `scheduler_id` parameter is associated with a scheduler
        * other than the one used to create the semaphore.
        */
       ctx->scheduler_id = ctx->other_scheduler_id;
@@ -477,8 +475,7 @@ static void RtemsSemReqSetPriority_Pre_NewPrio_Prepare(
   switch ( state ) {
     case RtemsSemReqSetPriority_Pre_NewPrio_Current: {
       /*
-       * While the ``new_priority`` parameter is equal to
-       * RTEMS_CURRENT_PRIORITY.
+       * While the `new_priority` parameter is equal to RTEMS_CURRENT_PRIORITY.
        */
       ctx->new_priority = RTEMS_CURRENT_PRIORITY;
       break;
@@ -486,9 +483,9 @@ static void RtemsSemReqSetPriority_Pre_NewPrio_Prepare(
 
     case RtemsSemReqSetPriority_Pre_NewPrio_Valid: {
       /*
-       * While the ``new_priority`` parameter is not equal to
+       * While the `new_priority` parameter is not equal to
        * RTEMS_CURRENT_PRIORITY and valid with respect to the scheduler
-       * specified by the ``scheduler_id`` parameter.
+       * specified by the `scheduler_id` parameter.
        */
       ctx->new_priority = PRIO_VERY_HIGH;
       break;
@@ -496,8 +493,8 @@ static void RtemsSemReqSetPriority_Pre_NewPrio_Prepare(
 
     case RtemsSemReqSetPriority_Pre_NewPrio_Invalid: {
       /*
-       * While the ``new_priority`` parameter is invalid with respect to the
-       * scheduler specified by the ``scheduler_id`` parameter.
+       * While the `new_priority` parameter is invalid with respect to the
+       * scheduler specified by the `scheduler_id` parameter.
        */
       ctx->new_priority = PRIO_INVALID;
       break;
@@ -516,7 +513,7 @@ static void RtemsSemReqSetPriority_Pre_OldPrio_Prepare(
   switch ( state ) {
     case RtemsSemReqSetPriority_Pre_OldPrio_Valid: {
       /*
-       * While the ``old_priority`` parameter references an object of type
+       * While the `old_priority` parameter references an object of type
        * rtems_task_priority.
        */
       ctx->old_priority = &ctx->old_priority_value;
@@ -525,7 +522,7 @@ static void RtemsSemReqSetPriority_Pre_OldPrio_Prepare(
 
     case RtemsSemReqSetPriority_Pre_OldPrio_Null: {
       /*
-       * While the ``old_priority`` parameter is NULL.
+       * While the `old_priority` parameter is NULL.
        */
       ctx->old_priority = NULL;
       break;
@@ -601,7 +598,7 @@ static void RtemsSemReqSetPriority_Post_OwnerPrio_Check(
     case RtemsSemReqSetPriority_Post_OwnerPrio_Nop: {
       /*
        * The current priority of the owner task of the semaphore for the
-       * scheduler specified by the ``scheduler_id`` parameter shall not be
+       * scheduler specified by the `scheduler_id` parameter shall not be
        * modified by the rtems_semaphore_set_priority() call.
        */
       T_eq_u32( GetSelfPriority(), PRIO_HIGH );
@@ -612,8 +609,8 @@ static void RtemsSemReqSetPriority_Post_OwnerPrio_Check(
     case RtemsSemReqSetPriority_Post_OwnerPrio_New: {
       /*
        * The current priority of the owner task of the semaphore for the
-       * scheduler specified by the ``scheduler_id`` parameter shall be less
-       * than or equal to the value of the ``new_priority`` parameter.
+       * scheduler specified by the `scheduler_id` parameter shall be less than
+       * or equal to the value of the `new_priority` parameter.
        */
       T_eq_u32( GetSelfPriority(), PRIO_VERY_HIGH );
       ReleaseSemaphore( ctx );
@@ -633,11 +630,11 @@ static void RtemsSemReqSetPriority_Post_SemPrio_Check(
   switch ( state ) {
     case RtemsSemReqSetPriority_Post_SemPrio_Set: {
       /*
-       * The priority used for the scheduler specified by the ``scheduler_id``
+       * The priority used for the scheduler specified by the `scheduler_id`
        * parameter of the semaphore associated with the identifier specified by
-       * the ``semaphore_id`` parameter shall be set to the prioriy specified
-       * by the ``new_priority`` parameter during the
-       * rtems_semaphore_set_priority() call.
+       * the `semaphore_id` parameter shall be set to the prioriy specified by
+       * the `new_priority` parameter during the rtems_semaphore_set_priority()
+       * call.
        */
       if (
         ( ctx->attribute_set & RTEMS_MULTIPROCESSOR_RESOURCE_SHARING ) != 0
@@ -690,11 +687,11 @@ static void RtemsSemReqSetPriority_Post_OldPrioVar_Check(
   switch ( state ) {
     case RtemsSemReqSetPriority_Post_OldPrioVar_Set: {
       /*
-       * The value of the object referenced by the ``old_priority`` parameter
+       * The value of the object referenced by the `old_priority` parameter
        * shall be set to the priority used for the scheduler specified by the
-       * ``scheduler_id`` parameter of the semaphore associated with the
-       * identifier specified by the ``semaphore_id`` parameter right before
-       * the priority is set by the rtems_semaphore_set_priority() call.
+       * `scheduler_id` parameter of the semaphore associated with the
+       * identifier specified by the `semaphore_id` parameter right before the
+       * priority is set by the rtems_semaphore_set_priority() call.
        */
       T_eq_ptr( ctx->old_priority, &ctx->old_priority_value );
 
@@ -708,7 +705,7 @@ static void RtemsSemReqSetPriority_Post_OldPrioVar_Check(
 
     case RtemsSemReqSetPriority_Post_OldPrioVar_Nop: {
       /*
-       * Objects referenced by the ``old_priority`` parameter in past calls to
+       * Objects referenced by the `old_priority` parameter in past calls to
        * rtems_semaphore_set_priority() shall not be accessed by the
        * rtems_semaphore_set_priority() call.
        */

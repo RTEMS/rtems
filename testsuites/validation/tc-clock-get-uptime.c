@@ -129,7 +129,7 @@ static void RtemsClockReqGetUptime_Pre_Uptime_Prepare(
   switch ( state ) {
     case RtemsClockReqGetUptime_Pre_Uptime_Valid: {
       /*
-       * While the ``uptime`` parameter references an object of type struct
+       * While the `uptime` parameter references an object of type struct
        * timespec.
        */
       ctx->uptime = &ctx->uptime_value;
@@ -138,7 +138,7 @@ static void RtemsClockReqGetUptime_Pre_Uptime_Prepare(
 
     case RtemsClockReqGetUptime_Pre_Uptime_Null: {
       /*
-       * While the ``uptime`` parameter is NULL.
+       * While the `uptime` parameter is NULL.
        */
       ctx->uptime = NULL;
       break;
@@ -186,8 +186,8 @@ static void RtemsClockReqGetUptime_Post_Uptime_Check(
   switch ( state ) {
     case RtemsClockReqGetUptime_Post_Uptime_Set: {
       /*
-       * The value of the object referenced by the ``uptime`` parameter shall
-       * be set to seconds and nanoseconds elapsed since a point in time during
+       * The value of the object referenced by the `uptime` parameter shall be
+       * set to seconds and nanoseconds elapsed since a point in time during
        * the system initialization and a point in time during the call of
        * rtems_clock_get_uptime() using CLOCK_MONOTONIC as result of the
        * rtems_clock_get_uptime() call.
@@ -201,7 +201,7 @@ static void RtemsClockReqGetUptime_Post_Uptime_Check(
 
     case RtemsClockReqGetUptime_Post_Uptime_Unchanged: {
       /*
-       * Objects referenced by the ``uptime`` parameter in calls to
+       * Objects referenced by the `uptime` parameter in calls to
        * rtems_clock_get_uptime() shall not be modified by the
        * rtems_clock_get_uptime() call.
        */

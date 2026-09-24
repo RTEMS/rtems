@@ -50,8 +50,8 @@
  *
  * This test case performs the following actions:
  *
- * - Synchronize with the clock tick.  Disable interrupts.  Busy wait three
- *   clock tick intervals.  Enable interrupts.
+ * - Synchronize with the clock tick. Disable interrupts. Busy wait three clock
+ *   tick intervals. Enable interrupts.
  *
  *   - Check that exactly three clock ticks happened once interrupts are
  *     enabled again.
@@ -60,8 +60,8 @@
  */
 
 /**
- * @brief Synchronize with the clock tick.  Disable interrupts.  Busy wait
- *   three clock tick intervals.  Enable interrupts.
+ * @brief Synchronize with the clock tick. Disable interrupts. Busy wait three
+ *   clock tick intervals. Enable interrupts.
  */
 static void DevClockXilTtcValTickCatchUp_Action_0( void )
 {

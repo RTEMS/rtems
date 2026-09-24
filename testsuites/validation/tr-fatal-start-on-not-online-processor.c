@@ -51,7 +51,7 @@
  *
  * This test case performs the following actions:
  *
- * - The test action is carried out by the wrapped _CPU_SMP_Start_processor().
+ * - The test action is carried out by the wrapped \_CPU_SMP_Start_processor().
  *
  *   - Check that the expected fatal source is present.
  *
@@ -101,7 +101,7 @@ static T_fixture ScoreSmpValFatalStartOnNotOnlineProcessor_Fixture = {
 
 /**
  * @brief The test action is carried out by the wrapped
- *   _CPU_SMP_Start_processor().
+ *   \_CPU_SMP_Start_processor().
  */
 static void ScoreSmpValFatalStartOnNotOnlineProcessor_Action_0(
   ScoreSmpValFatalStartOnNotOnlineProcessor_Context *ctx

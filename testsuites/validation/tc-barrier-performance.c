@@ -238,7 +238,7 @@ static void RtemsBarrierReqPerfReleaseAuto_Cleanup(
  */
 
 /**
- * @brief Create an automatic release barrier.  Create and start a worker task.
+ * @brief Create an automatic release barrier. Create and start a worker task.
  */
 static void RtemsBarrierReqPerfReleaseAutoOtherCpu_Prepare(
   RtemsBarrierValPerf_Context *ctx
@@ -280,7 +280,7 @@ static void RtemsBarrierReqPerfReleaseAutoOtherCpu_Body_Wrap( void *arg )
 }
 
 /**
- * @brief Make sure the worker waits for the next event.  Set the measured
+ * @brief Make sure the worker waits for the next event. Set the measured
  *   runtime. Discard samples interrupted by a clock tick.
  */
 static bool RtemsBarrierReqPerfReleaseAutoOtherCpu_Teardown(
@@ -344,7 +344,7 @@ static void RtemsBarrierReqPerfReleaseAutoOtherCpu_Cleanup(
  */
 
 /**
- * @brief Create a manual release barrier.  Create and start a worker task.
+ * @brief Create a manual release barrier. Create and start a worker task.
  */
 static void RtemsBarrierReqPerfReleaseManual_Prepare(
   RtemsBarrierValPerf_Context *ctx
@@ -456,7 +456,7 @@ static void RtemsBarrierReqPerfReleaseManual_Cleanup(
  */
 
 /**
- * @brief Create a manual release barrier.  Create and start a worker task.
+ * @brief Create a manual release barrier. Create and start a worker task.
  */
 static void RtemsBarrierReqPerfReleaseManualPreempt_Prepare(
   RtemsBarrierValPerf_Context *ctx
@@ -499,7 +499,7 @@ static void RtemsBarrierReqPerfReleaseManualPreempt_Body_Wrap( void *arg )
 }
 
 /**
- * @brief Set the measured runtime.  Discard samples interrupted by a clock
+ * @brief Set the measured runtime. Discard samples interrupted by a clock
  *   tick.
  */
 static bool RtemsBarrierReqPerfReleaseManualPreempt_Teardown(

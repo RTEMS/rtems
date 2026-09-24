@@ -87,7 +87,7 @@ typedef struct {
  */
 typedef struct {
   /**
-   * @brief This member provides the object referenced by the ``scheduler_id``
+   * @brief This member provides the object referenced by the `scheduler_id`
    *   parameter.
    */
   rtems_id scheduler_id_obj;
@@ -99,12 +99,12 @@ typedef struct {
   rtems_status_code status;
 
   /**
-   * @brief This member specifies if the ``task_id`` parameter value.
+   * @brief This member specifies if the `task_id` parameter value.
    */
   rtems_id id;
 
   /**
-   * @brief This member specifies if the ``scheduler_id`` parameter value.
+   * @brief This member specifies if the `scheduler_id` parameter value.
    */
   rtems_id *scheduler_id;
 
@@ -159,7 +159,7 @@ static void RtemsTaskReqGetScheduler_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsTaskReqGetScheduler_Pre_Id_Invalid: {
       /*
-       * While the ``task_id`` parameter is not associated with a task.
+       * While the `task_id` parameter is not associated with a task.
        */
       ctx->id = INVALID_ID;
       break;
@@ -167,7 +167,7 @@ static void RtemsTaskReqGetScheduler_Pre_Id_Prepare(
 
     case RtemsTaskReqGetScheduler_Pre_Id_Task: {
       /*
-       * While the ``task_id`` parameter is associated with a task.
+       * While the `task_id` parameter is associated with a task.
        */
       ctx->id = RTEMS_SELF;
       break;
@@ -186,7 +186,7 @@ static void RtemsTaskReqGetScheduler_Pre_SchedulerID_Prepare(
   switch ( state ) {
     case RtemsTaskReqGetScheduler_Pre_SchedulerID_Valid: {
       /*
-       * While the ``scheduler_id`` parameter references an object of type
+       * While the `scheduler_id` parameter references an object of type
        * rtems_id.
        */
       ctx->scheduler_id = &ctx->scheduler_id_obj;
@@ -195,7 +195,7 @@ static void RtemsTaskReqGetScheduler_Pre_SchedulerID_Prepare(
 
     case RtemsTaskReqGetScheduler_Pre_SchedulerID_Null: {
       /*
-       * While the ``scheduler_id`` parameter is equal to NULL.
+       * While the `scheduler_id` parameter is equal to NULL.
        */
       ctx->scheduler_id = NULL;
       break;
@@ -252,9 +252,9 @@ static void RtemsTaskReqGetScheduler_Post_SchedulerIDObj_Check(
   switch ( state ) {
     case RtemsTaskReqGetScheduler_Post_SchedulerIDObj_Set: {
       /*
-       * The value of the object referenced by the ``scheduler_id`` parameter
+       * The value of the object referenced by the `scheduler_id` parameter
        * shall be set to the object identifier of the home scheduler of the
-       * task specified by the ``task_id`` parameter at some point during the
+       * task specified by the `task_id` parameter at some point during the
        * call after the return of the rtems_task_get_scheduler() call.
        */
       T_eq_u32( ctx->scheduler_id_obj, 0x0f010001 );
@@ -263,7 +263,7 @@ static void RtemsTaskReqGetScheduler_Post_SchedulerIDObj_Check(
 
     case RtemsTaskReqGetScheduler_Post_SchedulerIDObj_Nop: {
       /*
-       * Objects referenced by the ``scheduler_id`` parameter in past calls to
+       * Objects referenced by the `scheduler_id` parameter in past calls to
        * rtems_task_get_scheduler() shall not be accessed by the
        * rtems_task_get_scheduler() call.
        */

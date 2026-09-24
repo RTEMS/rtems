@@ -96,7 +96,7 @@ typedef struct {
  */
 typedef struct {
   /**
-   * @brief This member provides the object referenced by the ``cpuset``
+   * @brief This member provides the object referenced by the `cpuset`
    *   parameter.
    */
   cpu_set_t cpuset_obj;
@@ -108,17 +108,17 @@ typedef struct {
   rtems_status_code status;
 
   /**
-   * @brief This member specifies if the ``id`` parameter value.
+   * @brief This member specifies if the `id` parameter value.
    */
   rtems_id id;
 
   /**
-   * @brief This member specifies if the ``cpusetsize`` parameter value.
+   * @brief This member specifies if the `cpusetsize` parameter value.
    */
   size_t cpusetsize;
 
   /**
-   * @brief This member specifies if the ``cpuset`` parameter value.
+   * @brief This member specifies if the `cpuset` parameter value.
    */
   cpu_set_t *cpuset;
 
@@ -177,7 +177,7 @@ static void RtemsTaskReqGetAffinity_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsTaskReqGetAffinity_Pre_Id_Invalid: {
       /*
-       * While the ``id`` parameter is not associated with a task.
+       * While the `id` parameter is not associated with a task.
        */
       ctx->id = INVALID_ID;
       break;
@@ -185,7 +185,7 @@ static void RtemsTaskReqGetAffinity_Pre_Id_Prepare(
 
     case RtemsTaskReqGetAffinity_Pre_Id_Task: {
       /*
-       * While the ``id`` parameter is associated with a task.
+       * While the `id` parameter is associated with a task.
        */
       ctx->id = RTEMS_SELF;
       break;
@@ -204,8 +204,8 @@ static void RtemsTaskReqGetAffinity_Pre_CPUSetSize_Prepare(
   switch ( state ) {
     case RtemsTaskReqGetAffinity_Pre_CPUSetSize_Valid: {
       /*
-       * While the ``cpusetsize`` parameter is an integral multiple of the size
-       * of long, while the ``cpusetsize`` parameter specifies a processor set
+       * While the `cpusetsize` parameter is an integral multiple of the size
+       * of long, while the `cpusetsize` parameter specifies a processor set
        * which is large enough to contain the processor affinity set of the
        * task.
        */
@@ -215,8 +215,8 @@ static void RtemsTaskReqGetAffinity_Pre_CPUSetSize_Prepare(
 
     case RtemsTaskReqGetAffinity_Pre_CPUSetSize_TooSmall: {
       /*
-       * While the ``cpusetsize`` parameter is an integral multiple of the size
-       * of long, while the ``cpusetsize`` parameter specifies a processor set
+       * While the `cpusetsize` parameter is an integral multiple of the size
+       * of long, while the `cpusetsize` parameter specifies a processor set
        * which is not large enough to contain the processor affinity set of the
        * task.
        */
@@ -226,7 +226,7 @@ static void RtemsTaskReqGetAffinity_Pre_CPUSetSize_Prepare(
 
     case RtemsTaskReqGetAffinity_Pre_CPUSetSize_Askew: {
       /*
-       * While the ``cpusetsize`` parameter is not an integral multiple of the
+       * While the `cpusetsize` parameter is not an integral multiple of the
        * size of long.
        */
       ctx->cpusetsize = SIZE_MAX;
@@ -246,7 +246,7 @@ static void RtemsTaskReqGetAffinity_Pre_CPUSet_Prepare(
   switch ( state ) {
     case RtemsTaskReqGetAffinity_Pre_CPUSet_Valid: {
       /*
-       * While the ``cpuset`` parameter references an object of type cpu_set_t.
+       * While the `cpuset` parameter references an object of type cpu_set_t.
        */
       ctx->cpuset = &ctx->cpuset_obj;
       break;
@@ -254,7 +254,7 @@ static void RtemsTaskReqGetAffinity_Pre_CPUSet_Prepare(
 
     case RtemsTaskReqGetAffinity_Pre_CPUSet_Null: {
       /*
-       * While the ``cpuset`` parameter is equal to NULL.
+       * While the `cpuset` parameter is equal to NULL.
        */
       ctx->cpuset = NULL;
       break;
@@ -324,9 +324,9 @@ static void RtemsTaskReqGetAffinity_Post_CPUSetObj_Check(
   switch ( state ) {
     case RtemsTaskReqGetAffinity_Post_CPUSetObj_Set: {
       /*
-       * The value of the object referenced by the ``cpuset`` parameter shall
-       * be set to the processor affinity set of the task specified by the
-       * ``id`` parameter at some point during the call after the return of the
+       * The value of the object referenced by the `cpuset` parameter shall be
+       * set to the processor affinity set of the task specified by the `id`
+       * parameter at some point during the call after the return of the
        * rtems_task_get_affinity() call.
        */
       CPU_ZERO( &set );
@@ -348,7 +348,7 @@ static void RtemsTaskReqGetAffinity_Post_CPUSetObj_Check(
 
     case RtemsTaskReqGetAffinity_Post_CPUSetObj_Nop: {
       /*
-       * Objects referenced by the ``cpuset`` parameter in past calls to
+       * Objects referenced by the `cpuset` parameter in past calls to
        * rtems_task_get_affinity() shall not be accessed by the
        * rtems_task_get_affinity() call.
        */

@@ -143,8 +143,9 @@ typedef struct {
 #include <tm27.h>
 
 /*
- * The IRQ(A)MP provides 32 controller lines, see the GR740 User's Manual,
- * section 21.3.19, and the GR765 datasheet, section 14.3.20.
+ * The IRQ(A)MP provides 32 controller lines, see the
+ * GR740 User's Manual, section 21.3.19, and the
+ * GR765 datasheet, section 14.3.20.
  */
 #define CONTROLLER_LINE_COUNT 32
 

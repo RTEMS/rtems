@@ -266,7 +266,7 @@ static void RtemsSemReqRelease_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsSemReqRelease_Pre_Id_Valid: {
       /*
-       * While the ``id`` parameter is associated with the semaphore.
+       * While the `id` parameter is associated with the semaphore.
        */
       /* Nothing to prepare */
       break;
@@ -274,7 +274,7 @@ static void RtemsSemReqRelease_Pre_Id_Prepare(
 
     case RtemsSemReqRelease_Pre_Id_Invalid: {
       /*
-       * While the ``id`` parameter is not associated with a semaphore.
+       * While the `id` parameter is not associated with a semaphore.
        */
       /* Nothing to prepare */
       break;

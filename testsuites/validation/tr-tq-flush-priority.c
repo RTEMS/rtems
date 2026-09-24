@@ -204,7 +204,7 @@ static void ScoreTqReqFlushPriority_Post_Operation_Check(
     case ScoreTqReqFlushPriority_Post_Operation_TryExtract: {
       /*
        * The enqueued threads of the thread queue may be extracted in priority
-       * order for each priority queue associated with a scheduler.  The
+       * order for each priority queue associated with a scheduler. The
        * priority queues of the thread queue shall be accessed in FIFO order.
        */
       event = GetUnblock( ctx, &i );

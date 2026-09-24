@@ -49,7 +49,7 @@
  * @ingroup TestsuitesBspsValidationBsp0
  *
  * @brief This test case collection provides validation test cases for the
- *   ``sparc/gr740`` BSP.
+ *   `sparc/gr740` BSP.
  *
  * This test case performs the following actions:
  *

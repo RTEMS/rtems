@@ -85,7 +85,7 @@
  *   - Check that the value of the object is equal to the stored value.
  *
  * - Call apbuart_outbyte_polled() to store a character to the data register.
- *   The transmitter FIFO shall be initially non-empty.  The status is checked
+ *   The transmitter FIFO shall be initially non-empty. The status is checked
  *   by apbuart_outbyte_wait().
  *
  *   - Check that the transmitter FIFO empty flag was set by ApbuartIORelax().
@@ -234,8 +234,8 @@ static void DevGrlibValIo_Action_7( void )
 
 /**
  * @brief Call apbuart_outbyte_polled() to store a character to the data
- *   register.  The transmitter FIFO shall be initially non-empty.  The status
- *   is checked by apbuart_outbyte_wait().
+ *   register. The transmitter FIFO shall be initially non-empty. The status is
+ *   checked by apbuart_outbyte_wait().
  */
 static void DevGrlibValIo_Action_8( void )
 {

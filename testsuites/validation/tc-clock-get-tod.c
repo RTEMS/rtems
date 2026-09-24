@@ -231,7 +231,7 @@ static void RtemsClockReqGetTod_Pre_Param_Prepare(
   switch ( state ) {
     case RtemsClockReqGetTod_Pre_Param_Valid: {
       /*
-       * While the ``time_of_day`` parameter references an object of type
+       * While the `time_of_day` parameter references an object of type
        * rtems_time_of_day.
        */
       ctx->get_tod_ref = &ctx->get_tod_value;
@@ -240,7 +240,7 @@ static void RtemsClockReqGetTod_Pre_Param_Prepare(
 
     case RtemsClockReqGetTod_Pre_Param_Null: {
       /*
-       * While the ``time_of_day`` parameter is NULL.
+       * While the `time_of_day` parameter is NULL.
        */
       ctx->get_tod_ref = NULL;
       break;
@@ -296,7 +296,7 @@ static void RtemsClockReqGetTod_Post_Value_Check(
   switch ( state ) {
     case RtemsClockReqGetTod_Post_Value_TimeOfDay: {
       /*
-       * The value of the object referenced by the ``time_of_day`` parameter
+       * The value of the object referenced by the `time_of_day` parameter
        * shall be set to the value of the CLOCK_REALTIME at a point in time
        * during the call to rtems_clock_get_tod().
        */
@@ -315,7 +315,7 @@ static void RtemsClockReqGetTod_Post_Value_Check(
 
     case RtemsClockReqGetTod_Post_Value_Unchanged: {
       /*
-       * Object referenced by the ``time_of_day`` parameter in past call to
+       * Object referenced by the `time_of_day` parameter in past call to
        * rtems_clock_get_tod() shall not be modified by the
        * rtems_clock_get_tod() call.
        */

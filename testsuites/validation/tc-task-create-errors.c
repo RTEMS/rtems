@@ -294,7 +294,7 @@ static void RtemsTaskReqCreateErrors_Pre_Name_Prepare(
   switch ( state ) {
     case RtemsTaskReqCreateErrors_Pre_Name_Valid: {
       /*
-       * While the ``name`` parameter is valid.
+       * While the `name` parameter is valid.
        */
       ctx->name = NAME;
       break;
@@ -302,7 +302,7 @@ static void RtemsTaskReqCreateErrors_Pre_Name_Prepare(
 
     case RtemsTaskReqCreateErrors_Pre_Name_Inv: {
       /*
-       * While the ``name`` parameter is invalid.
+       * While the `name` parameter is invalid.
        */
       ctx->name = 0;
       break;
@@ -321,7 +321,7 @@ static void RtemsTaskReqCreateErrors_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsTaskReqCreateErrors_Pre_Id_Valid: {
       /*
-       * While the ``id`` parameter references an object of type rtems_id.
+       * While the `id` parameter references an object of type rtems_id.
        */
       ctx->id = &ctx->id_value;
       break;
@@ -329,7 +329,7 @@ static void RtemsTaskReqCreateErrors_Pre_Id_Prepare(
 
     case RtemsTaskReqCreateErrors_Pre_Id_Null: {
       /*
-       * While the ``id`` parameter is NULL.
+       * While the `id` parameter is NULL.
        */
       ctx->id = NULL;
       break;
@@ -348,7 +348,7 @@ static void RtemsTaskReqCreateErrors_Pre_SysTsk_Prepare(
   switch ( state ) {
     case RtemsTaskReqCreateErrors_Pre_SysTsk_Yes: {
       /*
-       * While the ``attribute_set`` parameter specifies a system task.
+       * While the `attribute_set` parameter specifies a system task.
        */
       ctx->attributes = RTEMS_SYSTEM_TASK;
       break;
@@ -356,7 +356,7 @@ static void RtemsTaskReqCreateErrors_Pre_SysTsk_Prepare(
 
     case RtemsTaskReqCreateErrors_Pre_SysTsk_No: {
       /*
-       * While the ``attribute_set`` parameter specifies an application task.
+       * While the `attribute_set` parameter specifies an application task.
        */
       ctx->attributes = RTEMS_DEFAULT_ATTRIBUTES;
       break;
@@ -375,7 +375,7 @@ static void RtemsTaskReqCreateErrors_Pre_Prio_Prepare(
   switch ( state ) {
     case RtemsTaskReqCreateErrors_Pre_Prio_Valid: {
       /*
-       * While the ``initial_priority`` parameter is valid and non-zero.
+       * While the `initial_priority` parameter is valid and non-zero.
        */
       ctx->initial_priority = RTEMS_MAXIMUM_PRIORITY - 1;
       break;
@@ -383,7 +383,7 @@ static void RtemsTaskReqCreateErrors_Pre_Prio_Prepare(
 
     case RtemsTaskReqCreateErrors_Pre_Prio_Zero: {
       /*
-       * While the ``initial_priority`` parameter is zero.
+       * While the `initial_priority` parameter is zero.
        */
       ctx->initial_priority = 0;
       break;
@@ -391,7 +391,7 @@ static void RtemsTaskReqCreateErrors_Pre_Prio_Prepare(
 
     case RtemsTaskReqCreateErrors_Pre_Prio_Inv: {
       /*
-       * While the ``initial_priority`` parameter is invalid.
+       * While the `initial_priority` parameter is invalid.
        */
       ctx->initial_priority = 0xffffffff;
       break;
@@ -437,9 +437,9 @@ static void RtemsTaskReqCreateErrors_Pre_Stack_Prepare(
   switch ( state ) {
     case RtemsTaskReqCreateErrors_Pre_Stack_Normal: {
       /*
-       * While the ``initial_priority`` parameter is greater than or equal to
-       * the configured minimum size and less than or equal to the maximum
-       * stack size which can be allocated by the system.
+       * While the `initial_priority` parameter is greater than or equal to the
+       * configured minimum size and less than or equal to the maximum stack
+       * size which can be allocated by the system.
        */
       ctx->stack_size = RTEMS_MINIMUM_STACK_SIZE;
       break;
@@ -447,7 +447,7 @@ static void RtemsTaskReqCreateErrors_Pre_Stack_Prepare(
 
     case RtemsTaskReqCreateErrors_Pre_Stack_Small: {
       /*
-       * While the ``initial_priority`` parameter is less than the configured
+       * While the `initial_priority` parameter is less than the configured
        * minimum size.
        */
       ctx->stack_size = 0;
@@ -456,7 +456,7 @@ static void RtemsTaskReqCreateErrors_Pre_Stack_Prepare(
 
     case RtemsTaskReqCreateErrors_Pre_Stack_Huge: {
       /*
-       * While the ``initial_priority`` parameter is greater than the maximum
+       * While the `initial_priority` parameter is greater than the maximum
        * stack size which can be allocated by the system.
        */
       ctx->stack_size = SIZE_MAX;
@@ -599,9 +599,9 @@ static void RtemsTaskReqCreateErrors_Post_IdVar_Check(
   switch ( state ) {
     case RtemsTaskReqCreateErrors_Post_IdVar_Set: {
       /*
-       * The value of the object referenced by the ``id`` parameter shall be
-       * set to the object identifier of the created task after the return of
-       * the rtems_task_create() call.
+       * The value of the object referenced by the `id` parameter shall be set
+       * to the object identifier of the created task after the return of the
+       * rtems_task_create() call.
        */
       T_eq_ptr( ctx->id, &ctx->id_value );
       T_ne_u32( ctx->id_value, INVALID_ID );
@@ -610,7 +610,7 @@ static void RtemsTaskReqCreateErrors_Post_IdVar_Check(
 
     case RtemsTaskReqCreateErrors_Post_IdVar_Nop: {
       /*
-       * Objects referenced by the ``id`` parameter in past calls to
+       * Objects referenced by the `id` parameter in past calls to
        * rtems_task_create() shall not be accessed by the rtems_task_create()
        * call.
        */

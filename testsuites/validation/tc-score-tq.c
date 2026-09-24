@@ -56,7 +56,7 @@
  *
  *   - Let blocker A block on a counting semaphore.
  *
- *   - Let blocker B block on mutex A.  The deadlock detection will stop since
+ *   - Let blocker B block on mutex A. The deadlock detection will stop since
  *     blocker A blocks on the counting semaphore which has no owner.
  *
  *   - Clean up all used resources.
@@ -144,7 +144,7 @@ static void ScoreTqValTq_Action_0( ScoreTqValTq_Context *ctx )
   TQSend( &ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_MUTEX_D_OBTAIN );
 
   /*
-   * Let blocker B block on mutex A.  The deadlock detection will stop since
+   * Let blocker B block on mutex A. The deadlock detection will stop since
    * blocker A blocks on the counting semaphore which has no owner.
    */
   TQSend( &ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_MUTEX_A_OBTAIN );

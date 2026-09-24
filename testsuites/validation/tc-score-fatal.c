@@ -56,27 +56,27 @@
  *
  * This test case performs the following actions:
  *
- * - Construct a task with a task body which returns.  Check that the right
+ * - Construct a task with a task body which returns. Check that the right
  *   fatal error occurred.
  *
  * - Construct a task which performs a direct thread dispatch with maskable
- *   interrupts disabled.  Where robust thread dispatching is required, check
+ *   interrupts disabled. Where robust thread dispatching is required, check
  *   that the right fatal error occurred, otherwise check that no fatal error
  *   occurred.
  *
  * - Construct a task which performs an on demand thread dispatch with maskable
- *   interrupts disabled.  Where robust thread dispatching is required, check
+ *   interrupts disabled. Where robust thread dispatching is required, check
  *   that the right fatal error occurred, otherwise check that no fatal error
  *   occurred.
  *
  * - Construct a task which performs a direct thread dispatch with a thread
- *   dispatch level not equal to one.  Check that the right fatal error
+ *   dispatch level not equal to one. Check that the right fatal error
  *   occurred.
  *
  * - Create a mutex and construct a task which produces a deadlock which
  *   involves the allocator mutex.
  *
- * - Check that rtems_fatal() terminates the system.  Since SetFatalHandler()
+ * - Check that rtems_fatal() terminates the system. Since SetFatalHandler()
  *   requires an initial extension this validates CONFIGURE_INITIAL_EXTENSIONS.
  *
  * @{
@@ -246,8 +246,8 @@ static T_fixture ScoreValFatal_Fixture = {
 };
 
 /**
- * @brief Construct a task with a task body which returns.  Check that the
- *   right fatal error occurred.
+ * @brief Construct a task with a task body which returns. Check that the right
+ *   fatal error occurred.
  */
 static void ScoreValFatal_Action_0( ScoreValFatal_Context *ctx )
 {
@@ -268,9 +268,9 @@ static void ScoreValFatal_Action_0( ScoreValFatal_Context *ctx )
 
 /**
  * @brief Construct a task which performs a direct thread dispatch with
- *   maskable interrupts disabled.  Where robust thread dispatching is
- *   required, check that the right fatal error occurred, otherwise check that
- *   no fatal error occurred.
+ *   maskable interrupts disabled. Where robust thread dispatching is required,
+ *   check that the right fatal error occurred, otherwise check that no fatal
+ *   error occurred.
  */
 static void ScoreValFatal_Action_1( ScoreValFatal_Context *ctx )
 {
@@ -301,9 +301,9 @@ static void ScoreValFatal_Action_1( ScoreValFatal_Context *ctx )
 
 /**
  * @brief Construct a task which performs an on demand thread dispatch with
- *   maskable interrupts disabled.  Where robust thread dispatching is
- *   required, check that the right fatal error occurred, otherwise check that
- *   no fatal error occurred.
+ *   maskable interrupts disabled. Where robust thread dispatching is required,
+ *   check that the right fatal error occurred, otherwise check that no fatal
+ *   error occurred.
  */
 static void ScoreValFatal_Action_2( ScoreValFatal_Context *ctx )
 {
@@ -334,7 +334,7 @@ static void ScoreValFatal_Action_2( ScoreValFatal_Context *ctx )
 
 /**
  * @brief Construct a task which performs a direct thread dispatch with a
- *   thread dispatch level not equal to one.  Check that the right fatal error
+ *   thread dispatch level not equal to one. Check that the right fatal error
  *   occurred.
  */
 static void ScoreValFatal_Action_3( ScoreValFatal_Context *ctx )
@@ -406,7 +406,7 @@ static void ScoreValFatal_Action_4( ScoreValFatal_Context *ctx )
 }
 
 /**
- * @brief Check that rtems_fatal() terminates the system.  Since
+ * @brief Check that rtems_fatal() terminates the system. Since
  *   SetFatalHandler() requires an initial extension this validates
  *   CONFIGURE_INITIAL_EXTENSIONS.
  */

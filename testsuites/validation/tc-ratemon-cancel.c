@@ -129,7 +129,7 @@ typedef struct {
   rtems_rate_monotonic_period_status period_status;
 
   /**
-   * @brief This member specifies the ``id`` parameter for the action.
+   * @brief This member specifies the `id` parameter for the action.
    */
   rtems_id id_param;
 
@@ -143,7 +143,7 @@ typedef struct {
    *   action.
    *
    * The action is either executed by the owner task or by the worker task
-   * depending on the function pointer used here.  `argument` is a pointer to
+   * depending on the function pointer used here. `argument` is a pointer to
    * this context structure.
    */
   void ( *do_action )( void *ctx );
@@ -312,7 +312,7 @@ static void RtemsRatemonReqCancel_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsRatemonReqCancel_Pre_Id_Valid: {
       /*
-       * While the ``id`` parameter is valid.
+       * While the `id` parameter is valid.
        */
       ctx->id_param = ctx->period_id;
       break;
@@ -320,7 +320,7 @@ static void RtemsRatemonReqCancel_Pre_Id_Prepare(
 
     case RtemsRatemonReqCancel_Pre_Id_Invalid: {
       /*
-       * While the ``id`` parameter is invalid.
+       * While the `id` parameter is invalid.
        */
       ctx->id_param = RTEMS_ID_NONE;
       break;
@@ -368,7 +368,7 @@ static void RtemsRatemonReqCancel_Pre_State_Prepare(
   switch ( state ) {
     case RtemsRatemonReqCancel_Pre_State_Inactive: {
       /*
-       * While the ``id`` parameter references an period object in inactive
+       * While the `id` parameter references an period object in inactive
        * state.
        */
       /* Nothing to do here as the period is newly created. */
@@ -378,8 +378,7 @@ static void RtemsRatemonReqCancel_Pre_State_Prepare(
 
     case RtemsRatemonReqCancel_Pre_State_Active: {
       /*
-       * While the ``id`` parameter references an period object in active
-       * state.
+       * While the `id` parameter references an period object in active state.
        */
       rtems_status_code status;
       status = rtems_rate_monotonic_period( ctx->period_id, period_length );
@@ -390,8 +389,7 @@ static void RtemsRatemonReqCancel_Pre_State_Prepare(
 
     case RtemsRatemonReqCancel_Pre_State_Expired: {
       /*
-       * While the ``id`` parameter references an period object in expired
-       * state.
+       * While the `id` parameter references an period object in expired state.
        */
       rtems_status_code status;
       status = rtems_rate_monotonic_period( ctx->period_id, period_length );
@@ -495,7 +493,7 @@ static void RtemsRatemonReqCancel_Post_State_Check(
 
     case RtemsRatemonReqCancel_Post_State_Nop: {
       /*
-       * Objects referenced by the ``id`` parameter in past calls to
+       * Objects referenced by the `id` parameter in past calls to
        * rtems_rate_monotonic_cancel() shall not be accessed by the
        * rtems_rate_monotonic_cancel() call (see also Nop).
        */
@@ -525,7 +523,7 @@ static void RtemsRatemonReqCancel_Post_Postponed_Check(
 
     case RtemsRatemonReqCancel_Post_Postponed_Nop: {
       /*
-       * Objects referenced by the ``id`` parameter in past calls to
+       * Objects referenced by the `id` parameter in past calls to
        * rtems_rate_monotonic_cancel() shall not be accessed by the
        * rtems_rate_monotonic_cancel() call (see also Nop).
        */

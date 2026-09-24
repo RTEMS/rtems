@@ -104,8 +104,7 @@ typedef struct {
   rtems_vector_number vector;
 
   /**
-   * @brief If this member is true, then the ``vector`` parameter shall be
-   *   valid.
+   * @brief If this member is true, then the `vector` parameter shall be valid.
    */
   bool valid_vector;
 
@@ -330,7 +329,7 @@ static void RtemsIntrReqRaise_Pre_Vector_Prepare(
   switch ( state ) {
     case RtemsIntrReqRaise_Pre_Vector_Valid: {
       /*
-       * While the ``vector`` parameter is associated with an interrupt vector.
+       * While the `vector` parameter is associated with an interrupt vector.
        */
       ctx->valid_vector = true;
       break;
@@ -338,7 +337,7 @@ static void RtemsIntrReqRaise_Pre_Vector_Prepare(
 
     case RtemsIntrReqRaise_Pre_Vector_Invalid: {
       /*
-       * While the ``vector`` parameter is not associated with an interrupt
+       * While the `vector` parameter is not associated with an interrupt
        * vector.
        */
       ctx->valid_vector = false;
@@ -357,8 +356,8 @@ static void RtemsIntrReqRaise_Pre_CanRaise_Prepare(
   switch ( state ) {
     case RtemsIntrReqRaise_Pre_CanRaise_Yes: {
       /*
-       * While the interrupt vector associated with the ``vector`` parameter
-       * can be raised.
+       * While the interrupt vector associated with the `vector` parameter can
+       * be raised.
        */
       /*
        * This pre-condition depends on the attributes of an interrupt vector,
@@ -369,7 +368,7 @@ static void RtemsIntrReqRaise_Pre_CanRaise_Prepare(
 
     case RtemsIntrReqRaise_Pre_CanRaise_No: {
       /*
-       * While the interrupt vector associated with the ``vector`` parameter
+       * While the interrupt vector associated with the `vector` parameter
        * cannot be raised.
        */
       /*
@@ -430,7 +429,7 @@ static void RtemsIntrReqRaise_Post_Pending_Check(
     case RtemsIntrReqRaise_Post_Pending_Yes: {
       /*
        * The interrupt associated with the interrupt vector specified by
-       * ``vector`` shall be made pending by the rtems_interrupt_raise() call.
+       * `vector` shall be made pending by the rtems_interrupt_raise() call.
        */
       /* Validation is done by CheckRaise() for each interrupt vector */
       break;
@@ -439,7 +438,7 @@ static void RtemsIntrReqRaise_Post_Pending_Check(
     case RtemsIntrReqRaise_Post_Pending_No: {
       /*
        * The interrupt associated with the interrupt vector specified by
-       * ``vector`` shall not be made pending by the rtems_interrupt_raise()
+       * `vector` shall not be made pending by the rtems_interrupt_raise()
        * call.
        */
       /* Validation is done by CheckRaise() for each interrupt vector */

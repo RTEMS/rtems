@@ -53,9 +53,9 @@
  *
  * This test case performs the following actions:
  *
- * - Submit an ISR request during system initialization.  Check the stack of
- *   the interrupted context while the ISR request is serviced.  Store the
- *   result of the check in interrupted_stack_at_multitasking_start_is_valid.
+ * - Submit an ISR request during system initialization. Check the stack of the
+ *   interrupted context while the ISR request is serviced. Store the result of
+ *   the check in interrupted_stack_at_multitasking_start_is_valid.
  *
  *   - Check that stack of the interrupted context was valid when an interrupt
  *     was serviced during the multitasking start.
@@ -348,8 +348,8 @@ RTEMS_SYSINIT_ITEM(
 );
 
 /**
- * @brief Submit an ISR request during system initialization.  Check the stack
- *   of the interrupted context while the ISR request is serviced.  Store the
+ * @brief Submit an ISR request during system initialization. Check the stack
+ *   of the interrupted context while the ISR request is serviced. Store the
  *   result of the check in interrupted_stack_at_multitasking_start_is_valid.
  */
 static void ScoreIsrValIsr_Action_0( void )

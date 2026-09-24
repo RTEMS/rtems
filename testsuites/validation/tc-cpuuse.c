@@ -51,10 +51,10 @@
  *
  * This test case performs the following actions:
  *
- * - Create a worker thread.  Generate some CPU usage.
+ * - Create a worker thread. Generate some CPU usage.
  *
- *   - Check that we have a non-zero CPU usage.  Reset the CPU usage.  Check
- *     that it was cleared to zero.
+ *   - Check that we have a non-zero CPU usage. Reset the CPU usage. Check that
+ *     it was cleared to zero.
  *
  *   - Clean up all used resources.
  *
@@ -71,7 +71,7 @@ static void Worker( rtems_task_argument arg )
 }
 
 /**
- * @brief Create a worker thread.  Generate some CPU usage.
+ * @brief Create a worker thread. Generate some CPU usage.
  */
 static void RtemsCpuuseValCpuuse_Action_0( void )
 {
@@ -109,7 +109,7 @@ static void RtemsCpuuseValCpuuse_Action_0( void )
   Yield();
 
   /*
-   * Check that we have a non-zero CPU usage.  Reset the CPU usage.  Check that
+   * Check that we have a non-zero CPU usage. Reset the CPU usage. Check that
    * it was cleared to zero.
    */
   TimecounterTick();

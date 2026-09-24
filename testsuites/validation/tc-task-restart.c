@@ -405,7 +405,7 @@ typedef struct {
   rtems_status_code status;
 
   /**
-   * @brief This member specifies if the ``id`` parameter value.
+   * @brief This member specifies if the `id` parameter value.
    */
   rtems_id id;
 
@@ -876,7 +876,7 @@ static void RtemsTaskReqRestart_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsTaskReqRestart_Pre_Id_Invalid: {
       /*
-       * While the ``id`` parameter is not associated with a task.
+       * While the `id` parameter is not associated with a task.
        */
       ctx->id = INVALID_ID;
       break;
@@ -884,7 +884,7 @@ static void RtemsTaskReqRestart_Pre_Id_Prepare(
 
     case RtemsTaskReqRestart_Pre_Id_Executing: {
       /*
-       * While the ``id`` parameter is associated with the calling task.
+       * While the `id` parameter is associated with the calling task.
        */
       ctx->id = RTEMS_SELF;
       break;
@@ -892,7 +892,7 @@ static void RtemsTaskReqRestart_Pre_Id_Prepare(
 
     case RtemsTaskReqRestart_Pre_Id_Other: {
       /*
-       * While the ``id`` parameter is associated with a task other than the
+       * While the `id` parameter is associated with a task other than the
        * calling task.
        */
       ctx->id = ctx->worker_id;
@@ -912,7 +912,7 @@ static void RtemsTaskReqRestart_Pre_Dormant_Prepare(
   switch ( state ) {
     case RtemsTaskReqRestart_Pre_Dormant_Yes: {
       /*
-       * While the task specified by the ``id`` parameter is dormant.
+       * While the task specified by the `id` parameter is dormant.
        */
       ctx->dormant = true;
       break;
@@ -920,7 +920,7 @@ static void RtemsTaskReqRestart_Pre_Dormant_Prepare(
 
     case RtemsTaskReqRestart_Pre_Dormant_No: {
       /*
-       * While the task specified by the ``id`` parameter is not dormant.
+       * While the task specified by the `id` parameter is not dormant.
        */
       ctx->dormant = false;
       break;
@@ -939,7 +939,7 @@ static void RtemsTaskReqRestart_Pre_Suspended_Prepare(
   switch ( state ) {
     case RtemsTaskReqRestart_Pre_Suspended_Yes: {
       /*
-       * While the task specified by the ``id`` parameter is suspended.
+       * While the task specified by the `id` parameter is suspended.
        */
       ctx->suspended = true;
       break;
@@ -947,7 +947,7 @@ static void RtemsTaskReqRestart_Pre_Suspended_Prepare(
 
     case RtemsTaskReqRestart_Pre_Suspended_No: {
       /*
-       * While the task specified by the ``id`` parameter is not suspended.
+       * While the task specified by the `id` parameter is not suspended.
        */
       ctx->suspended = false;
       break;
@@ -966,7 +966,7 @@ static void RtemsTaskReqRestart_Pre_Restarting_Prepare(
   switch ( state ) {
     case RtemsTaskReqRestart_Pre_Restarting_Yes: {
       /*
-       * While the task specified by the ``id`` parameter is restarting.
+       * While the task specified by the `id` parameter is restarting.
        */
       ctx->restarting = true;
       break;
@@ -974,7 +974,7 @@ static void RtemsTaskReqRestart_Pre_Restarting_Prepare(
 
     case RtemsTaskReqRestart_Pre_Restarting_No: {
       /*
-       * While the task specified by the ``id`` parameter is not restarting.
+       * While the task specified by the `id` parameter is not restarting.
        */
       ctx->restarting = false;
       break;
@@ -993,7 +993,7 @@ static void RtemsTaskReqRestart_Pre_Terminating_Prepare(
   switch ( state ) {
     case RtemsTaskReqRestart_Pre_Terminating_Yes: {
       /*
-       * While the task specified by the ``id`` parameter is terminating.
+       * While the task specified by the `id` parameter is terminating.
        */
       ctx->terminating = true;
       break;
@@ -1001,7 +1001,7 @@ static void RtemsTaskReqRestart_Pre_Terminating_Prepare(
 
     case RtemsTaskReqRestart_Pre_Terminating_No: {
       /*
-       * While the task specified by the ``id`` parameter is not terminating.
+       * While the task specified by the `id` parameter is not terminating.
        */
       ctx->terminating = false;
       break;
@@ -1020,7 +1020,7 @@ static void RtemsTaskReqRestart_Pre_Protected_Prepare(
   switch ( state ) {
     case RtemsTaskReqRestart_Pre_Protected_Yes: {
       /*
-       * While thread life of the task specified by the ``id`` parameter is
+       * While thread life of the task specified by the `id` parameter is
        * protected.
        */
       ctx->protected = true;
@@ -1029,7 +1029,7 @@ static void RtemsTaskReqRestart_Pre_Protected_Prepare(
 
     case RtemsTaskReqRestart_Pre_Protected_No: {
       /*
-       * While thread life of the task specified by the ``id`` parameter is not
+       * While thread life of the task specified by the `id` parameter is not
        * protected.
        */
       ctx->protected = false;
@@ -1090,7 +1090,7 @@ static void RtemsTaskReqRestart_Pre_State_Prepare(
   switch ( state ) {
     case RtemsTaskReqRestart_Pre_State_Ready: {
       /*
-       * While the task specified by the ``id`` parameter is a ready task or
+       * While the task specified by the `id` parameter is a ready task or
        * scheduled task.
        */
       ctx->blocked = false;
@@ -1099,7 +1099,7 @@ static void RtemsTaskReqRestart_Pre_State_Prepare(
 
     case RtemsTaskReqRestart_Pre_State_Blocked: {
       /*
-       * While the task specified by the ``id`` parameter is blocked.
+       * While the task specified by the `id` parameter is blocked.
        */
       ctx->blocked = true;
       ctx->enqueued = false;
@@ -1108,7 +1108,7 @@ static void RtemsTaskReqRestart_Pre_State_Prepare(
 
     case RtemsTaskReqRestart_Pre_State_Enqueued: {
       /*
-       * While the task specified by the ``id`` parameter is enqueued on a wait
+       * While the task specified by the `id` parameter is enqueued on a wait
        * queue.
        */
       ctx->blocked = true;
@@ -1129,7 +1129,7 @@ static void RtemsTaskReqRestart_Pre_Timer_Prepare(
   switch ( state ) {
     case RtemsTaskReqRestart_Pre_Timer_Inactive: {
       /*
-       * While timer of the task specified by the ``id`` parameter is inactive.
+       * While timer of the task specified by the `id` parameter is inactive.
        */
       ctx->timer_active = false;
       break;
@@ -1137,7 +1137,7 @@ static void RtemsTaskReqRestart_Pre_Timer_Prepare(
 
     case RtemsTaskReqRestart_Pre_Timer_Active: {
       /*
-       * While timer of the task specified by the ``id`` parameter is active.
+       * While timer of the task specified by the `id` parameter is active.
        */
       ctx->timer_active = true;
       break;
@@ -1156,7 +1156,7 @@ static void RtemsTaskReqRestart_Pre_RealPriority_Prepare(
   switch ( state ) {
     case RtemsTaskReqRestart_Pre_RealPriority_Initial: {
       /*
-       * While real priority of the task specified by the ``id`` parameter is
+       * While real priority of the task specified by the `id` parameter is
        * equal to the initial priority.
        */
       ctx->real_priority_is_initial = true;
@@ -1165,8 +1165,8 @@ static void RtemsTaskReqRestart_Pre_RealPriority_Prepare(
 
     case RtemsTaskReqRestart_Pre_RealPriority_Changed: {
       /*
-       * While real priority of the task specified by the ``id`` parameter is
-       * not equal to the initial priority.
+       * While real priority of the task specified by the `id` parameter is not
+       * equal to the initial priority.
        */
       ctx->real_priority_is_initial = false;
       break;
@@ -1285,32 +1285,32 @@ static void RtemsTaskReqRestart_Post_Argument_Check(
   switch ( state ) {
     case RtemsTaskReqRestart_Post_Argument_Set: {
       /*
-       * The entry point argument of the task specified by the ``id`` parameter
-       * shall be set to the value specified by the ``argument`` parameter
-       * before the task is unblocked by the rtems_task_restart() call.
+       * The entry point argument of the task specified by the `id` parameter
+       * shall be set to the value specified by the `argument` parameter before
+       * the task is unblocked by the rtems_task_restart() call.
        */
       if ( ctx->restart_counter != 0 ) {
-        #if CPU_SIZEOF_POINTER > 4
+      #if CPU_SIZEOF_POINTER > 4
         T_eq_u64( ctx->actual_argument, RESTART_ARGUMENT );
-        #else
+      #else
         T_eq_u32( ctx->actual_argument, RESTART_ARGUMENT );
-        #endif
+      #endif
 
         T_eq_u32( ctx->restart_counter, 1 );
       } else {
-        #if CPU_SIZEOF_POINTER > 4
+      #if CPU_SIZEOF_POINTER > 4
         T_eq_u64(
           ctx->worker_tcb->Start.Entry.Kinds.Numeric.argument,
           RESTART_ARGUMENT
         );
         T_eq_u64( ctx->actual_argument, UNSET_ARGUMENT );
-        #else
+      #else
         T_eq_u32(
           ctx->worker_tcb->Start.Entry.Kinds.Numeric.argument,
           RESTART_ARGUMENT
         );
         T_eq_u32( ctx->actual_argument, UNSET_ARGUMENT );
-        #endif
+      #endif
       }
       break;
     }
@@ -1343,8 +1343,8 @@ static void RtemsTaskReqRestart_Post_State_Check(
   switch ( state ) {
     case RtemsTaskReqRestart_Post_State_Dormant: {
       /*
-       * The state of the task specified by the ``id`` parameter shall be
-       * dormant after the rtems_task_restart() call.
+       * The state of the task specified by the `id` parameter shall be dormant
+       * after the rtems_task_restart() call.
        */
       T_eq_u32( ctx->worker_state, STATES_DORMANT )
 
@@ -1355,8 +1355,8 @@ static void RtemsTaskReqRestart_Post_State_Check(
 
     case RtemsTaskReqRestart_Post_State_DormantSuspended: {
       /*
-       * The state of the task specified by the ``id`` parameter shall be
-       * dormant and suspended after the rtems_task_restart() call.
+       * The state of the task specified by the `id` parameter shall be dormant
+       * and suspended after the rtems_task_restart() call.
        */
       T_eq_u32( ctx->worker_state, STATES_DORMANT | STATES_SUSPENDED )
 
@@ -1367,8 +1367,8 @@ static void RtemsTaskReqRestart_Post_State_Check(
 
     case RtemsTaskReqRestart_Post_State_Blocked: {
       /*
-       * The state of the task specified by the ``id`` parameter shall be
-       * blocked after the rtems_task_restart() call.
+       * The state of the task specified by the `id` parameter shall be blocked
+       * after the rtems_task_restart() call.
        */
       T_ne_u32( ctx->worker_state & STATES_BLOCKED, 0 )
         T_eq_u32( ctx->worker_state & STATES_BLOCKED, ctx->worker_state )
@@ -1393,7 +1393,7 @@ static void RtemsTaskReqRestart_Post_State_Check(
 
     case RtemsTaskReqRestart_Post_State_Ready: {
       /*
-       * The state of the task specified by the ``id`` parameter shall be ready
+       * The state of the task specified by the `id` parameter shall be ready
        * after the rtems_task_restart() call.
        */
       T_eq_u32( ctx->worker_state, STATES_READY )
@@ -1436,7 +1436,7 @@ static void RtemsTaskReqRestart_Post_State_Check(
 
     case RtemsTaskReqRestart_Post_State_Zombie: {
       /*
-       * The state of the task specified by the ``id`` parameter shall be the
+       * The state of the task specified by the `id` parameter shall be the
        * zombie state after the rtems_task_restart() call.
        */
       T_eq_u32( ctx->worker_state, STATES_ZOMBIE )
@@ -1489,7 +1489,7 @@ static void RtemsTaskReqRestart_Post_State_Check(
 
     case RtemsTaskReqRestart_Post_State_Nop: {
       /*
-       * The state of the task specified by the ``id`` parameter shall not be
+       * The state of the task specified by the `id` parameter shall not be
        * modified by the rtems_task_restart() call.
        */
       T_ne_u32( ctx->worker_state & STATES_LIFE_IS_CHANGING, 0 )
@@ -1519,7 +1519,7 @@ static void RtemsTaskReqRestart_Post_Enqueued_Check(
   switch ( state ) {
     case RtemsTaskReqRestart_Post_Enqueued_Yes: {
       /*
-       * The task specified by the ``id`` parameter shall be enqueued on a wait
+       * The task specified by the `id` parameter shall be enqueued on a wait
        * queue after the rtems_task_restart() call.
        */
       T_not_null( ctx->worker_tcb->Wait.queue );
@@ -1528,7 +1528,7 @@ static void RtemsTaskReqRestart_Post_Enqueued_Check(
 
     case RtemsTaskReqRestart_Post_Enqueued_No: {
       /*
-       * The task specified by the ``id`` parameter shall not be enqueued on a
+       * The task specified by the `id` parameter shall not be enqueued on a
        * wait queue after the rtems_task_restart() call.
        */
       T_null( ctx->worker_tcb->Wait.queue );
@@ -1550,8 +1550,8 @@ static void RtemsTaskReqRestart_Post_Timer_Check(
   switch ( state ) {
     case RtemsTaskReqRestart_Post_Timer_Active: {
       /*
-       * The timer of the task specified by the ``id`` parameter shall be
-       * active after the rtems_task_restart() call.
+       * The timer of the task specified by the `id` parameter shall be active
+       * after the rtems_task_restart() call.
        */
       GetTaskTimerInfoByThread( ctx->worker_tcb, &info );
       T_eq_int( info.state, TASK_TIMER_TICKS );
@@ -1560,7 +1560,7 @@ static void RtemsTaskReqRestart_Post_Timer_Check(
 
     case RtemsTaskReqRestart_Post_Timer_Inactive: {
       /*
-       * The timer of the task specified by the ``id`` parameter shall be
+       * The timer of the task specified by the `id` parameter shall be
        * inactive after the rtems_task_restart() call.
        */
       GetTaskTimerInfoByThread( ctx->worker_tcb, &info );
@@ -1581,8 +1581,8 @@ static void RtemsTaskReqRestart_Post_Restarting_Check(
   switch ( state ) {
     case RtemsTaskReqRestart_Post_Restarting_Yes: {
       /*
-       * The task specified by the ``id`` parameter shall be restarting after
-       * the rtems_task_restart() call.
+       * The task specified by the `id` parameter shall be restarting after the
+       * rtems_task_restart() call.
        */
       T_ne_int( ctx->worker_life_state & THREAD_LIFE_RESTARTING, 0 );
       break;
@@ -1590,8 +1590,8 @@ static void RtemsTaskReqRestart_Post_Restarting_Check(
 
     case RtemsTaskReqRestart_Post_Restarting_No: {
       /*
-       * The task specified by the ``id`` parameter shall not be restarting
-       * after the rtems_task_restart() call.
+       * The task specified by the `id` parameter shall not be restarting after
+       * the rtems_task_restart() call.
        */
       T_eq_int( ctx->worker_life_state & THREAD_LIFE_RESTARTING, 0 );
       break;
@@ -1610,7 +1610,7 @@ static void RtemsTaskReqRestart_Post_Terminating_Check(
   switch ( state ) {
     case RtemsTaskReqRestart_Post_Terminating_Yes: {
       /*
-       * The task specified by the ``id`` parameter shall be terminating after
+       * The task specified by the `id` parameter shall be terminating after
        * the rtems_task_restart() call.
        */
       T_ne_int( ctx->worker_life_state & THREAD_LIFE_TERMINATING, 0 );
@@ -1619,7 +1619,7 @@ static void RtemsTaskReqRestart_Post_Terminating_Check(
 
     case RtemsTaskReqRestart_Post_Terminating_No: {
       /*
-       * The task specified by the ``id`` parameter shall not be terminating
+       * The task specified by the `id` parameter shall not be terminating
        * after the rtems_task_restart() call.
        */
       T_eq_int( ctx->worker_life_state & THREAD_LIFE_TERMINATING, 0 );
@@ -1639,7 +1639,7 @@ static void RtemsTaskReqRestart_Post_Protected_Check(
   switch ( state ) {
     case RtemsTaskReqRestart_Post_Protected_Yes: {
       /*
-       * The thread life of the task specified by the ``id`` parameter be
+       * The thread life of the task specified by the `id` parameter be
        * protected after the rtems_task_restart() call.
        */
       T_ne_int( ctx->worker_life_state & THREAD_LIFE_PROTECTED, 0 );
@@ -1648,8 +1648,8 @@ static void RtemsTaskReqRestart_Post_Protected_Check(
 
     case RtemsTaskReqRestart_Post_Protected_No: {
       /*
-       * The thread life of the task specified by the ``id`` parameter shall
-       * not be protected after the rtems_task_restart() call.
+       * The thread life of the task specified by the `id` parameter shall not
+       * be protected after the rtems_task_restart() call.
        */
       T_eq_int( ctx->worker_life_state & THREAD_LIFE_PROTECTED, 0 );
       break;

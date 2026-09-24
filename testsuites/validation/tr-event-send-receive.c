@@ -826,7 +826,7 @@ static void RtemsEventReqSendReceive_Post_ReceiveStatus_Check(
 
     case RtemsEventReqSendReceive_Post_ReceiveStatus_Timeout: {
       /*
-       * The receive event status shall be RTEMS_TIMEOUT.  The receiver task
+       * The receive event status shall be RTEMS_TIMEOUT. The receiver task
        * shall have all events sent after the timeout pending.
        */
       T_rsc( ctx->receive_status, RTEMS_TIMEOUT );
@@ -839,7 +839,7 @@ static void RtemsEventReqSendReceive_Post_ReceiveStatus_Check(
       /*
        * The receive event status shall be RTEMS_SUCCESSFUL. The receiver task
        * shall receive all events sent which are an element of the input
-       * events.  The receiver task shall have all events sent which are not an
+       * events. The receiver task shall have all events sent which are not an
        * element of the input events pending.
        */
       T_rsc( ctx->receive_status, RTEMS_SUCCESSFUL );
@@ -867,7 +867,7 @@ static void RtemsEventReqSendReceive_Post_ReceiveStatus_Check(
     case RtemsEventReqSendReceive_Post_ReceiveStatus_Blocked: {
       /*
        * The receiver task shall remain blocked waiting for events after the
-       * directive call.  The receiver task shall have all events sent pending.
+       * directive call. The receiver task shall have all events sent pending.
        */
       T_eq_int( ctx->receive_condition_state, RECEIVE_COND_UNSATISFIED );
       T_eq_u32( ctx->unsatisfied_pending, ctx->events_to_send );
@@ -876,7 +876,7 @@ static void RtemsEventReqSendReceive_Post_ReceiveStatus_Check(
 
     case RtemsEventReqSendReceive_Post_ReceiveStatus_InvAddr: {
       /*
-       * The receive event status shall be RTEMS_INVALID_ADDRESS.  The receiver
+       * The receive event status shall be RTEMS_INVALID_ADDRESS. The receiver
        * task shall have all events sent pending.
        */
       T_rsc( ctx->receive_status, RTEMS_INVALID_ADDRESS );

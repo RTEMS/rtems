@@ -244,7 +244,7 @@ static void RtemsReqIdentLocal_Post_Id_Check(
       /*
        * The value of the object identifier referenced by the id parameter
        * shall be the identifier of a local object of the specified class with
-       * a name equal to the name parameter.  If more than one local object of
+       * a name equal to the name parameter. If more than one local object of
        * the specified class with such a name exists, then it shall be the
        * identifier of the object with the lowest object index.
        */

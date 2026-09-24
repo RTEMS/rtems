@@ -639,7 +639,7 @@ static void RtemsTaskReqConstruct_Pre_Config_Prepare(
   switch ( state ) {
     case RtemsTaskReqConstruct_Pre_Config_Valid: {
       /*
-       * While the ``config`` parameter references an object of type
+       * While the `config` parameter references an object of type
        * rtems_task_config.
        */
       ctx->config = &ctx->config_obj;
@@ -648,7 +648,7 @@ static void RtemsTaskReqConstruct_Pre_Config_Prepare(
 
     case RtemsTaskReqConstruct_Pre_Config_Null: {
       /*
-       * While the ``config`` parameter is NULL.
+       * While the `config` parameter is NULL.
        */
       ctx->config = NULL;
       break;
@@ -694,7 +694,7 @@ static void RtemsTaskReqConstruct_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsTaskReqConstruct_Pre_Id_Valid: {
       /*
-       * While the ``id`` parameter references an object of type rtems_id.
+       * While the `id` parameter references an object of type rtems_id.
        */
       ctx->id = &ctx->id_obj;
       break;
@@ -702,7 +702,7 @@ static void RtemsTaskReqConstruct_Pre_Id_Prepare(
 
     case RtemsTaskReqConstruct_Pre_Id_Null: {
       /*
-       * While the ``id`` parameter is NULL.
+       * While the `id` parameter is NULL.
        */
       ctx->id = NULL;
       break;
@@ -1151,9 +1151,9 @@ static void RtemsTaskReqConstruct_Post_IdObj_Check(
   switch ( state ) {
     case RtemsTaskReqConstruct_Post_IdObj_Set: {
       /*
-       * The value of the object referenced by the ``id`` parameter shall be
-       * set to the object identifier of the constructed task after the return
-       * of the rtems_task_construct() call.
+       * The value of the object referenced by the `id` parameter shall be set
+       * to the object identifier of the constructed task after the return of
+       * the rtems_task_construct() call.
        */
       T_eq_ptr( ctx->id, &ctx->id_obj );
       T_ne_u32( ctx->id_obj, INVALID_ID );
@@ -1162,7 +1162,7 @@ static void RtemsTaskReqConstruct_Post_IdObj_Check(
 
     case RtemsTaskReqConstruct_Post_IdObj_Nop: {
       /*
-       * Objects referenced by the ``id`` parameter in past calls to
+       * Objects referenced by the `id` parameter in past calls to
        * rtems_task_construct() shall not be accessed by the
        * rtems_task_construct() call.
        */

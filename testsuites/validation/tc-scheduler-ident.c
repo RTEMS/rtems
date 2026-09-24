@@ -88,7 +88,7 @@ typedef struct {
  */
 typedef struct {
   /**
-   * @brief This member provides the object referenced by the ``id`` parameter.
+   * @brief This member provides the object referenced by the `id` parameter.
    */
   rtems_id id_value;
 
@@ -99,12 +99,12 @@ typedef struct {
   rtems_status_code status;
 
   /**
-   * @brief This member specifies if the ``name`` parameter value.
+   * @brief This member specifies if the `name` parameter value.
    */
   rtems_name name;
 
   /**
-   * @brief This member specifies if the ``id`` parameter value.
+   * @brief This member specifies if the `id` parameter value.
    */
   rtems_id *id;
 
@@ -159,7 +159,7 @@ static void RtemsSchedulerReqIdent_Pre_Name_Prepare(
   switch ( state ) {
     case RtemsSchedulerReqIdent_Pre_Name_Invalid: {
       /*
-       * While the ``name`` parameter is not associated with a scheduler.
+       * While the `name` parameter is not associated with a scheduler.
        */
       ctx->name = 0;
       break;
@@ -167,7 +167,7 @@ static void RtemsSchedulerReqIdent_Pre_Name_Prepare(
 
     case RtemsSchedulerReqIdent_Pre_Name_Valid: {
       /*
-       * While the ``name`` parameter is associated with a scheduler.
+       * While the `name` parameter is associated with a scheduler.
        */
       ctx->name = TEST_SCHEDULER_A_NAME;
       break;
@@ -186,7 +186,7 @@ static void RtemsSchedulerReqIdent_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsSchedulerReqIdent_Pre_Id_Valid: {
       /*
-       * While the ``id`` parameter references an object of type rtems_id.
+       * While the `id` parameter references an object of type rtems_id.
        */
       ctx->id = &ctx->id_value;
       break;
@@ -194,7 +194,7 @@ static void RtemsSchedulerReqIdent_Pre_Id_Prepare(
 
     case RtemsSchedulerReqIdent_Pre_Id_Null: {
       /*
-       * While the ``id`` parameter is equal to NULL.
+       * While the `id` parameter is equal to NULL.
        */
       ctx->id = NULL;
       break;
@@ -251,9 +251,9 @@ static void RtemsSchedulerReqIdent_Post_IdVar_Check(
   switch ( state ) {
     case RtemsSchedulerReqIdent_Post_IdVar_Set: {
       /*
-       * The value of the object referenced by the ``id`` parameter shall be
-       * set to the identifier of the scheduler with the lowest scheduler index
-       * and a name equal to the ``name`` parameter after the return of the
+       * The value of the object referenced by the `id` parameter shall be set
+       * to the identifier of the scheduler with the lowest scheduler index and
+       * a name equal to the `name` parameter after the return of the
        * rtems_scheduler_ident() call.
        */
       T_eq_ptr( ctx->id, &ctx->id_value );
@@ -263,7 +263,7 @@ static void RtemsSchedulerReqIdent_Post_IdVar_Check(
 
     case RtemsSchedulerReqIdent_Post_IdVar_Nop: {
       /*
-       * Objects referenced by the ``id`` parameter in past calls to
+       * Objects referenced by the `id` parameter in past calls to
        * rtems_scheduler_ident() shall not be accessed by the
        * rtems_scheduler_ident() call.
        */

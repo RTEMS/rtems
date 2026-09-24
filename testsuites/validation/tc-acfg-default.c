@@ -91,12 +91,12 @@
  *
  *   - Check that the returned status code is RTEMS_TOO_MANY.
  *
- *   - Check the default CONFIGURE_MAXIMUM_TASKS value.  A maximum Classic API
+ *   - Check the default CONFIGURE_MAXIMUM_TASKS value. A maximum Classic API
  *     task value of zero is only configurable if
  *     CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION is defined or
- *     CONFIGURE_MAXIMUM_POSIX_THREADS is set to a positive value.  The default
+ *     CONFIGURE_MAXIMUM_POSIX_THREADS is set to a positive value. The default
  *     value of zero for CONFIGURE_MAXIMUM_POSIX_THREADS is used by the test
- *     suite containing the test case.  The test suite defines
+ *     suite containing the test case. The test suite defines
  *     CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION.
  *
  * - Try to create a timer.
@@ -302,12 +302,12 @@ static void AcfgValDefault_Action_7( void )
   T_step_rsc( 11, sc, RTEMS_TOO_MANY );
 
   /*
-   * Check the default CONFIGURE_MAXIMUM_TASKS value.  A maximum Classic API
+   * Check the default CONFIGURE_MAXIMUM_TASKS value. A maximum Classic API
    * task value of zero is only configurable if
    * CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION is defined or
-   * CONFIGURE_MAXIMUM_POSIX_THREADS is set to a positive value.  The default
+   * CONFIGURE_MAXIMUM_POSIX_THREADS is set to a positive value. The default
    * value of zero for CONFIGURE_MAXIMUM_POSIX_THREADS is used by the test
-   * suite containing the test case.  The test suite defines
+   * suite containing the test case. The test suite defines
    * CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION.
    */
   T_step_eq_u32( 12, rtems_configuration_get_maximum_tasks(), 0 );

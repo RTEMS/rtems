@@ -145,7 +145,7 @@ typedef struct {
   rtems_id semaphore_id;
 
   /**
-   * @brief If this member is true, then the ``name`` parameter shall be valid,
+   * @brief If this member is true, then the `name` parameter shall be valid,
    *   otherwise it should be NULL.
    */
   bool valid_id;
@@ -157,7 +157,7 @@ typedef struct {
   bool blocked;
 
   /**
-   * @brief This member specifies the ``name`` parameter for the
+   * @brief This member specifies the `name` parameter for the
    *   rtems_semaphore_delete() call.
    */
   rtems_id id;
@@ -290,7 +290,7 @@ static void RtemsSemReqDelete_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsSemReqDelete_Pre_Id_NoObj: {
       /*
-       * While the ``id`` parameter is not associated with a semaphore.
+       * While the `id` parameter is not associated with a semaphore.
        */
       ctx->valid_id = false;
       break;
@@ -298,7 +298,7 @@ static void RtemsSemReqDelete_Pre_Id_Prepare(
 
     case RtemsSemReqDelete_Pre_Id_Counting: {
       /*
-       * While the ``id`` parameter is associated with a counting semaphore.
+       * While the `id` parameter is associated with a counting semaphore.
        */
       ctx->attribute_set |= RTEMS_COUNTING_SEMAPHORE;
       ctx->obtain_status = RTEMS_OBJECT_WAS_DELETED;
@@ -307,8 +307,7 @@ static void RtemsSemReqDelete_Pre_Id_Prepare(
 
     case RtemsSemReqDelete_Pre_Id_Simple: {
       /*
-       * While the ``id`` parameter is associated with a simple binary
-       * semaphore.
+       * While the `id` parameter is associated with a simple binary semaphore.
        */
       ctx->attribute_set |= RTEMS_SIMPLE_BINARY_SEMAPHORE;
       ctx->obtain_status = RTEMS_OBJECT_WAS_DELETED;
@@ -317,7 +316,7 @@ static void RtemsSemReqDelete_Pre_Id_Prepare(
 
     case RtemsSemReqDelete_Pre_Id_Binary: {
       /*
-       * While the ``id`` parameter is associated with a binary semaphore.
+       * While the `id` parameter is associated with a binary semaphore.
        */
       ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE;
       break;
@@ -325,7 +324,7 @@ static void RtemsSemReqDelete_Pre_Id_Prepare(
 
     case RtemsSemReqDelete_Pre_Id_PrioCeiling: {
       /*
-       * While the ``id`` parameter is associated with a priority ceiling
+       * While the `id` parameter is associated with a priority ceiling
        * semaphore.
        */
       ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY_CEILING;
@@ -334,7 +333,7 @@ static void RtemsSemReqDelete_Pre_Id_Prepare(
 
     case RtemsSemReqDelete_Pre_Id_PrioInherit: {
       /*
-       * While the ``id`` parameter is associated with a priority inheritance
+       * While the `id` parameter is associated with a priority inheritance
        * semaphore.
        */
       ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY;
@@ -343,7 +342,7 @@ static void RtemsSemReqDelete_Pre_Id_Prepare(
 
     case RtemsSemReqDelete_Pre_Id_MrsP: {
       /*
-       * While the ``id`` parameter is associated with a MrsP semaphore.
+       * While the `id` parameter is associated with a MrsP semaphore.
        */
       ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE |
                             RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;

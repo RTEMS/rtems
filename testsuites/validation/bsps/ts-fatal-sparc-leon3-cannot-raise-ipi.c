@@ -61,11 +61,11 @@
  *   fatal error during system initialization.
  *
  * Where the BSP uses the interrupt map, the test defines the inter-processor
- * interrupt bus line by the bus line of TM27_IRQMAP_BUS_LINE.  A system
- * initialization handler runs before the BSP reads the interrupt map.  It maps
- * the bus line to the first extended controller line.  Where the BSP uses no
+ * interrupt bus line by the bus line of TM27_IRQMAP_BUS_LINE. A system
+ * initialization handler runs before the BSP reads the interrupt map. It maps
+ * the bus line to the first extended controller line. Where the BSP uses no
  * interrupt map, the test defines the inter-processor interrupt bus line as
- * the first extended controller line.  An extended controller line cannot be
+ * the first extended controller line. An extended controller line cannot be
  * raised on a processor.
  *
  * @{

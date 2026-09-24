@@ -70,7 +70,7 @@
  *
  *   - Clean up all used resources.
  *
- * - Construct a system state in which a thread is rescheduled  while it is not
+ * - Construct a system state in which a thread is rescheduled while it is not
  *   scheduled on another scheduler.
  *
  *   - Reschedule worker A by the home scheduler while worker A is not
@@ -81,10 +81,10 @@
  * - Construct a system state in which an ask for help request is cancelled
  *   while it is processed on another processor.
  *
- *   - Unblock worker A.  It cannot be scheduled on its home scheduler.
- *     Intercept the ask for help request.  Block the worker A.  This will
- *     cancel the ask for help request.  Remove the request while the other
- *     processor tries to cancel the request.
+ *   - Unblock worker A. It cannot be scheduled on its home scheduler.
+ *     Intercept the ask for help request. Block the worker A. This will cancel
+ *     the ask for help request. Remove the request while the other processor
+ *     tries to cancel the request.
  *
  *   - Clean up all used resources.
  *
@@ -197,19 +197,19 @@
  *
  *   - Clean up all used resources.
  *
- * - Create three worker threads and a mutex.  Use the mutex and the worker to
+ * - Create three worker threads and a mutex. Use the mutex and the worker to
  *   check that a not scheduled thread does not get removed from the set of
  *   ready threads of a scheduler when a help request is reconsidered.
  *
  *   - Prevent that worker B can perform a post-switch cleanup.
  *
- *   - Give worker C a lower priority than worker B.  Worker B will try to
- *     finish the thread dispatch by doing a post-switch cleanup.  The
+ *   - Give worker C a lower priority than worker B. Worker B will try to
+ *     finish the thread dispatch by doing a post-switch cleanup. The
  *     post-switch cleanup cannot progress since the runner owns the thread
- *     state lock.  Wait until the other processor waits on the thread state
+ *     state lock. Wait until the other processor waits on the thread state
  *     lock of worker B.
  *
- *   - Give worker C a higher priority than worker B.  Let worker B do its
+ *   - Give worker C a higher priority than worker B. Let worker B do its
  *     post-switch cleanup which will carry out the reconsider help requests
  *     for a not scheduled thread.
  *
@@ -939,8 +939,8 @@ static void ScoreSchedSmpValSmp_Action_1( ScoreSchedSmpValSmp_Context *ctx )
 }
 
 /**
- * @brief Construct a system state in which a thread is rescheduled  while it
- *   is not scheduled on another scheduler.
+ * @brief Construct a system state in which a thread is rescheduled while it is
+ *   not scheduled on another scheduler.
  */
 static void ScoreSchedSmpValSmp_Action_2( ScoreSchedSmpValSmp_Context *ctx )
 {
@@ -982,10 +982,10 @@ static void ScoreSchedSmpValSmp_Action_3( ScoreSchedSmpValSmp_Context *ctx )
   PrepareOwnerScheduled( ctx );
 
   /*
-   * Unblock worker A.  It cannot be scheduled on its home scheduler. Intercept
-   * the ask for help request.  Block the worker A.  This will cancel the ask
-   * for help request.  Remove the request while the other processor tries to
-   * cancel the request.
+   * Unblock worker A. It cannot be scheduled on its home scheduler. Intercept
+   * the ask for help request. Block the worker A. This will cancel the ask for
+   * help request. Remove the request while the other processor tries to cancel
+   * the request.
    */
   SuspendTask( ctx->worker_id[ WORKER_A ] );
   T_scheduler_set_event_handler( UnblockAskForHelp, ctx );
@@ -1291,9 +1291,9 @@ static void ScoreSchedSmpValSmp_Action_16( ScoreSchedSmpValSmp_Context *ctx )
 }
 
 /**
- * @brief Create three worker threads and a mutex.  Use the mutex and the
- *   worker to check that a not scheduled thread does not get removed from the
- *   set of ready threads of a scheduler when a help request is reconsidered.
+ * @brief Create three worker threads and a mutex. Use the mutex and the worker
+ *   to check that a not scheduled thread does not get removed from the set of
+ *   ready threads of a scheduler when a help request is reconsidered.
  */
 static void ScoreSchedSmpValSmp_Action_17( ScoreSchedSmpValSmp_Context *ctx )
 {
@@ -1317,16 +1317,16 @@ static void ScoreSchedSmpValSmp_Action_17( ScoreSchedSmpValSmp_Context *ctx )
   _ISR_lock_ISR_enable( &ctx->lock_context );
 
   /*
-   * Give worker C a lower priority than worker B.  Worker B will try to finish
-   * the thread dispatch by doing a post-switch cleanup.  The post-switch
-   * cleanup cannot progress since the runner owns the thread state lock.  Wait
+   * Give worker C a lower priority than worker B. Worker B will try to finish
+   * the thread dispatch by doing a post-switch cleanup. The post-switch
+   * cleanup cannot progress since the runner owns the thread state lock. Wait
    * until the other processor waits on the thread state lock of worker B.
    */
   SetPriority( ctx->worker_id[ WORKER_C ], PRIO_LOW );
   TicketLockWaitForOthers( &worker_b->Join_queue.Queue.Lock, 1 );
 
   /*
-   * Give worker C a higher priority than worker B.  Let worker B do its
+   * Give worker C a higher priority than worker B. Let worker B do its
    * post-switch cleanup which will carry out the reconsider help requests for
    * a not scheduled thread.
    */

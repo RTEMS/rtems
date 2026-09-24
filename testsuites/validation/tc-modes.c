@@ -107,7 +107,7 @@
  * - Calculate the bitwise or of all non-default task mode constants.
  *
  *   - Check that the count of set bits in the calculated value is equal to the
- *     count of non-default task mode constants.  Since each non-default task
+ *     count of non-default task mode constants. Since each non-default task
  *     mode constants except is a power of this proves that each constant has a
  *     unique value.
  *
@@ -299,9 +299,9 @@ static void RtemsModeValModes_Action_5( void )
 
   /*
    * Check that the count of set bits in the calculated value is equal to the
-   * count of non-default task mode constants.  Since each non-default task
-   * mode constants except is a power of this proves that each constant has a
-   * unique value.
+   * count of non-default task mode constants. Since each non-default task mode
+   * constants except is a power of this proves that each constant has a unique
+   * value.
    */
   T_step_eq_int( 15, PopCount( modes ), 3 );
 }

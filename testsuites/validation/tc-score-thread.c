@@ -54,9 +54,9 @@
  * This test case performs the following actions:
  *
  * - Create an extension set with a thread terminate extension which deletes
- *   the killer task if it is invoked for the worker task.  Create and start
- *   the worker task.  Create and start the killer task.  The killer task
- *   deletes the worker task.
+ *   the killer task if it is invoked for the worker task. Create and start the
+ *   worker task. Create and start the killer task. The killer task deletes the
+ *   worker task.
  *
  *   - Check that the killer task was deleted.
  *
@@ -72,13 +72,13 @@
  *
  * - Delete a thread which least recently used the floating point coprocessor.
  *
- *   - Start the worker thread.  Let it use the floating point coprocessor.
+ *   - Start the worker thread. Let it use the floating point coprocessor.
  *
  *   - Delete the worker thread and free the thread resources.
  *
  *   - Clean up all used resources.
  *
- * - Validate the global construction.  Mark that the test case executed.
+ * - Validate the global construction. Mark that the test case executed.
  *
  *   - Check that the global constructor was called exactly once.
  *
@@ -87,8 +87,8 @@
  *
  *   - Check that the global constructor was called before the task entry.
  *
- * - Validate that thread dispatching does not recurse.  Issue a couple of
- *   thread context switches during a thread dispatch.  Record the stack
+ * - Validate that thread dispatching does not recurse. Issue a couple of
+ *   thread context switches during a thread dispatch. Record the stack
  *   pointers of the heir threads.
  *
  *   - Check that the thread dispatching did not recurse through the recorded
@@ -247,8 +247,8 @@ static T_fixture ScoreThreadValThread_Fixture = {
 
 /**
  * @brief Create an extension set with a thread terminate extension which
- *   deletes the killer task if it is invoked for the worker task.  Create and
- *   start the worker task.  Create and start the killer task.  The killer task
+ *   deletes the killer task if it is invoked for the worker task. Create and
+ *   start the worker task. Create and start the killer task. The killer task
  *   deletes the worker task.
  */
 static void ScoreThreadValThread_Action_0( ScoreThreadValThread_Context *ctx )
@@ -334,7 +334,7 @@ static void ScoreThreadValThread_Action_1( ScoreThreadValThread_Context *ctx )
   T_rsc_success( sc );
 
   /*
-   * Start the worker thread.  Let it use the floating point coprocessor.
+   * Start the worker thread. Let it use the floating point coprocessor.
    */
   StartTask( ctx->worker_id, FloatingPointTask, ctx );
 
@@ -351,7 +351,7 @@ static void ScoreThreadValThread_Action_1( ScoreThreadValThread_Context *ctx )
 }
 
 /**
- * @brief Validate the global construction.  Mark that the test case executed.
+ * @brief Validate the global construction. Mark that the test case executed.
  */
 static void ScoreThreadValThread_Action_2( void )
 {
@@ -375,8 +375,8 @@ static void ScoreThreadValThread_Action_2( void )
 }
 
 /**
- * @brief Validate that thread dispatching does not recurse.  Issue a couple of
- *   thread context switches during a thread dispatch.  Record the stack
+ * @brief Validate that thread dispatching does not recurse. Issue a couple of
+ *   thread context switches during a thread dispatch. Record the stack
  *   pointers of the heir threads.
  */
 static void ScoreThreadValThread_Action_3( ScoreThreadValThread_Context *ctx )

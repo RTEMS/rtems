@@ -53,19 +53,18 @@
  * @brief Checks that the context switch saves and restores every call-saved
  *   register.
  *
- * The action calls the switch directly.  A call through the operating system
- * runs a chain of functions.  A function of the chain can preserve a register
- * on its own stack.  This hides a defect of the switch in that register.
+ * The action calls the switch directly. A call through the operating system
+ * runs a chain of functions. A function of the chain can preserve a register
+ * on its own stack. This hides a defect of the switch in that register.
  *
  * The set of a MIPS call-saved register holds 11 registers and the action
- * covers 10 of them.  It loads a pattern into 16 to 23.  For 30 it reads the
+ * covers 10 of them. It loads a pattern into 16 to 23. For 30 it reads the
  * value of the caller, because the compiler can hold a frame of its own in
- * that register.  A requirement of its own covers 29.
+ * that register. A requirement of its own covers 29.
  *
- * No check covers 28.  One value of the global pointer serves the whole
- * program of this port.  The size criterion of the small data area is zero, so
- * the area is empty.  A switch of the register would therefore observe
- * nothing.
+ * No check covers 28. One value of the global pointer serves the whole program
+ * of this port. The size criterion of the small data area is zero, so the area
+ * is empty. A switch of the register would therefore observe nothing.
  *
  * The action reads the registers of its checks out of the exception frame, so
  * each check also observes the save of the exception path.
@@ -73,99 +72,99 @@
  * This test case performs the following actions:
  *
  * - Load a distinct pattern into every MIPS call-saved register which takes
- *   one and into every MIPS call-saved floating-point register.  Call the
- *   context switch directly.  The heir switches back.  Trap, so the frame
+ *   one and into every MIPS call-saved floating-point register. Call the
+ *   context switch directly. The heir switches back. Trap, so the frame
  *   reports every register.
  *
- *   - Check that the switch restored the MIPS register $s0.
+ *   - Check that the switch restored the MIPS register \$s0.
  *
- *   - Check that the switch restored the MIPS register $s1.
+ *   - Check that the switch restored the MIPS register \$s1.
  *
- *   - Check that the switch restored the MIPS register $s2.
+ *   - Check that the switch restored the MIPS register \$s2.
  *
- *   - Check that the switch restored the MIPS register $s3.
+ *   - Check that the switch restored the MIPS register \$s3.
  *
- *   - Check that the switch restored the MIPS register $s4.
+ *   - Check that the switch restored the MIPS register \$s4.
  *
- *   - Check that the switch restored the MIPS register $s5.
+ *   - Check that the switch restored the MIPS register \$s5.
  *
- *   - Check that the switch restored the MIPS register $s6.
+ *   - Check that the switch restored the MIPS register \$s6.
  *
- *   - Check that the switch restored the MIPS register $s7.
+ *   - Check that the switch restored the MIPS register \$s7.
  *
- *   - Check that the switch restored the MIPS register $f21.
+ *   - Check that the switch restored the MIPS register \$f21.
  *
- *   - Check that the switch restored the MIPS register $f22.
+ *   - Check that the switch restored the MIPS register \$f22.
  *
- *   - Check that the switch restored the MIPS register $f23.
+ *   - Check that the switch restored the MIPS register \$f23.
  *
- *   - Check that the switch restored the MIPS register $f24.
+ *   - Check that the switch restored the MIPS register \$f24.
  *
- *   - Check that the switch restored the MIPS register $f25.
+ *   - Check that the switch restored the MIPS register \$f25.
  *
- *   - Check that the switch restored the MIPS register $f26.
+ *   - Check that the switch restored the MIPS register \$f26.
  *
- *   - Check that the switch restored the MIPS register $f27.
+ *   - Check that the switch restored the MIPS register \$f27.
  *
- *   - Check that the switch restored the MIPS register $f28.
+ *   - Check that the switch restored the MIPS register \$f28.
  *
- *   - Check that the switch restored the MIPS register $f29.
+ *   - Check that the switch restored the MIPS register \$f29.
  *
- *   - Check that the switch restored the MIPS register $f30.
+ *   - Check that the switch restored the MIPS register \$f30.
  *
- *   - Check that the switch restored the MIPS register $f31.
+ *   - Check that the switch restored the MIPS register \$f31.
  *
  *   - Check that the switch restored the rounding mode of the MIPS register
  *     fcr31.
  *
- *   - Check that the switch saved the MIPS register $s0.
+ *   - Check that the switch saved the MIPS register \$s0.
  *
- *   - Check that the switch saved the MIPS register $s1.
+ *   - Check that the switch saved the MIPS register \$s1.
  *
- *   - Check that the switch saved the MIPS register $s2.
+ *   - Check that the switch saved the MIPS register \$s2.
  *
- *   - Check that the switch saved the MIPS register $s3.
+ *   - Check that the switch saved the MIPS register \$s3.
  *
- *   - Check that the switch saved the MIPS register $s4.
+ *   - Check that the switch saved the MIPS register \$s4.
  *
- *   - Check that the switch saved the MIPS register $s5.
+ *   - Check that the switch saved the MIPS register \$s5.
  *
- *   - Check that the switch saved the MIPS register $s6.
+ *   - Check that the switch saved the MIPS register \$s6.
  *
- *   - Check that the switch saved the MIPS register $s7.
+ *   - Check that the switch saved the MIPS register \$s7.
  *
- *   - Check that the switch saved the MIPS register $f20.
+ *   - Check that the switch saved the MIPS register \$f20.
  *
- *   - Check that the switch saved the MIPS register $f21.
+ *   - Check that the switch saved the MIPS register \$f21.
  *
- *   - Check that the switch saved the MIPS register $f22.
+ *   - Check that the switch saved the MIPS register \$f22.
  *
- *   - Check that the switch saved the MIPS register $f23.
+ *   - Check that the switch saved the MIPS register \$f23.
  *
- *   - Check that the switch saved the MIPS register $f24.
+ *   - Check that the switch saved the MIPS register \$f24.
  *
- *   - Check that the switch saved the MIPS register $f25.
+ *   - Check that the switch saved the MIPS register \$f25.
  *
- *   - Check that the switch saved the MIPS register $f26.
+ *   - Check that the switch saved the MIPS register \$f26.
  *
- *   - Check that the switch saved the MIPS register $f27.
+ *   - Check that the switch saved the MIPS register \$f27.
  *
- *   - Check that the switch saved the MIPS register $f28.
+ *   - Check that the switch saved the MIPS register \$f28.
  *
- *   - Check that the switch saved the MIPS register $f29.
+ *   - Check that the switch saved the MIPS register \$f29.
  *
- *   - Check that the switch saved the MIPS register $f30.
+ *   - Check that the switch saved the MIPS register \$f30.
  *
- *   - Check that the switch saved the MIPS register $f31.
+ *   - Check that the switch saved the MIPS register \$f31.
  *
  *   - Check that the switch saved the rounding mode of the MIPS register
  *     fcr31.
  *
- *   - Check that the switch saved the MIPS register $fp.  The register is
- *     call-saved and the compiler can hold a frame of its own in it.  The
+ *   - Check that the switch saved the MIPS register \$fp. The register is
+ *     call-saved and the compiler can hold a frame of its own in it. The
  *     action therefore reads the value of the caller rather than a pattern.
  *
- *   - Check that the switch restored the MIPS register $fp.
+ *   - Check that the switch restored the MIPS register \$fp.
  *
  *   - Check that the context initialization enables no trap of the MIPS
  *     register fcr31.
@@ -173,8 +172,8 @@
  *   - Check that the context initialization sets the flush to zero flag of the
  *     MIPS register fcr31.
  *
- *   - Check that the round trip reached the trap.  The heir returns through
- *     the stack pointer of the caller.
+ *   - Check that the round trip reached the trap. The heir returns through the
+ *     stack pointer of the caller.
  *
  *   - Check that the switch saved the return address of the caller.
  *
@@ -367,8 +366,8 @@ static const CPU_Exception_frame *ContextRunSwitch( void )
 
 /**
  * @brief Load a distinct pattern into every MIPS call-saved register which
- *   takes one and into every MIPS call-saved floating-point register.  Call
- *   the context switch directly.  The heir switches back.  Trap, so the frame
+ *   takes one and into every MIPS call-saved floating-point register. Call the
+ *   context switch directly. The heir switches back. Trap, so the frame
  *   reports every register.
  */
 static void ScoreCpuMipsValContext_Action_0( void )
@@ -378,42 +377,42 @@ static void ScoreCpuMipsValContext_Action_0( void )
   frame = ContextRunSwitch();
 
   /*
-   * Check that the switch restored the MIPS register $s0.
+   * Check that the switch restored the MIPS register \$s0.
    */
   T_eq_u32( (uint32_t) frame->s0, 0x11121314 );
 
   /*
-   * Check that the switch restored the MIPS register $s1.
+   * Check that the switch restored the MIPS register \$s1.
    */
   T_eq_u32( (uint32_t) frame->s1, 0x12131415 );
 
   /*
-   * Check that the switch restored the MIPS register $s2.
+   * Check that the switch restored the MIPS register \$s2.
    */
   T_eq_u32( (uint32_t) frame->s2, 0x13141516 );
 
   /*
-   * Check that the switch restored the MIPS register $s3.
+   * Check that the switch restored the MIPS register \$s3.
    */
   T_eq_u32( (uint32_t) frame->s3, 0x14151617 );
 
   /*
-   * Check that the switch restored the MIPS register $s4.
+   * Check that the switch restored the MIPS register \$s4.
    */
   T_eq_u32( (uint32_t) frame->s4, 0x15161718 );
 
   /*
-   * Check that the switch restored the MIPS register $s5.
+   * Check that the switch restored the MIPS register \$s5.
    */
   T_eq_u32( (uint32_t) frame->s5, 0x16171819 );
 
   /*
-   * Check that the switch restored the MIPS register $s6.
+   * Check that the switch restored the MIPS register \$s6.
    */
   T_eq_u32( (uint32_t) frame->s6, 0x1718191a );
 
   /*
-   * Check that the switch restored the MIPS register $s7.
+   * Check that the switch restored the MIPS register \$s7.
    */
   T_eq_u32( (uint32_t) frame->s7, 0x18191a1b );
   #if MIPS_HAS_FPU == 1
@@ -421,77 +420,77 @@ static void ScoreCpuMipsValContext_Action_0( void )
   #endif
 
   /*
-   * Check that the switch restored the MIPS register $f21.
+   * Check that the switch restored the MIPS register \$f21.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f21, 0x32333435 );
   #endif
 
   /*
-   * Check that the switch restored the MIPS register $f22.
+   * Check that the switch restored the MIPS register \$f22.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f22, 0x33343536 );
   #endif
 
   /*
-   * Check that the switch restored the MIPS register $f23.
+   * Check that the switch restored the MIPS register \$f23.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f23, 0x34353637 );
   #endif
 
   /*
-   * Check that the switch restored the MIPS register $f24.
+   * Check that the switch restored the MIPS register \$f24.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f24, 0x35363738 );
   #endif
 
   /*
-   * Check that the switch restored the MIPS register $f25.
+   * Check that the switch restored the MIPS register \$f25.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f25, 0x36373839 );
   #endif
 
   /*
-   * Check that the switch restored the MIPS register $f26.
+   * Check that the switch restored the MIPS register \$f26.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f26, 0x3738393a );
   #endif
 
   /*
-   * Check that the switch restored the MIPS register $f27.
+   * Check that the switch restored the MIPS register \$f27.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f27, 0x38393a3b );
   #endif
 
   /*
-   * Check that the switch restored the MIPS register $f28.
+   * Check that the switch restored the MIPS register \$f28.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f28, 0x393a3b3c );
   #endif
 
   /*
-   * Check that the switch restored the MIPS register $f29.
+   * Check that the switch restored the MIPS register \$f29.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f29, 0x3a3b3c3d );
   #endif
 
   /*
-   * Check that the switch restored the MIPS register $f30.
+   * Check that the switch restored the MIPS register \$f30.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f30, 0x3b3c3d3e );
   #endif
 
   /*
-   * Check that the switch restored the MIPS register $f31.
+   * Check that the switch restored the MIPS register \$f31.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f31, 0x3c3d3e3f );
@@ -506,124 +505,124 @@ static void ScoreCpuMipsValContext_Action_0( void )
   #endif
 
   /*
-   * Check that the switch saved the MIPS register $s0.
+   * Check that the switch saved the MIPS register \$s0.
    */
   T_eq_u32( (uint32_t) context_executing.s0, 0x11121314 );
 
   /*
-   * Check that the switch saved the MIPS register $s1.
+   * Check that the switch saved the MIPS register \$s1.
    */
   T_eq_u32( (uint32_t) context_executing.s1, 0x12131415 );
 
   /*
-   * Check that the switch saved the MIPS register $s2.
+   * Check that the switch saved the MIPS register \$s2.
    */
   T_eq_u32( (uint32_t) context_executing.s2, 0x13141516 );
 
   /*
-   * Check that the switch saved the MIPS register $s3.
+   * Check that the switch saved the MIPS register \$s3.
    */
   T_eq_u32( (uint32_t) context_executing.s3, 0x14151617 );
 
   /*
-   * Check that the switch saved the MIPS register $s4.
+   * Check that the switch saved the MIPS register \$s4.
    */
   T_eq_u32( (uint32_t) context_executing.s4, 0x15161718 );
 
   /*
-   * Check that the switch saved the MIPS register $s5.
+   * Check that the switch saved the MIPS register \$s5.
    */
   T_eq_u32( (uint32_t) context_executing.s5, 0x16171819 );
 
   /*
-   * Check that the switch saved the MIPS register $s6.
+   * Check that the switch saved the MIPS register \$s6.
    */
   T_eq_u32( (uint32_t) context_executing.s6, 0x1718191a );
 
   /*
-   * Check that the switch saved the MIPS register $s7.
+   * Check that the switch saved the MIPS register \$s7.
    */
   T_eq_u32( (uint32_t) context_executing.s7, 0x18191a1b );
 
   /*
-   * Check that the switch saved the MIPS register $f20.
+   * Check that the switch saved the MIPS register \$f20.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) context_executing.f20, 0x31323334 );
   #endif
 
   /*
-   * Check that the switch saved the MIPS register $f21.
+   * Check that the switch saved the MIPS register \$f21.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) context_executing.f21, 0x32333435 );
   #endif
 
   /*
-   * Check that the switch saved the MIPS register $f22.
+   * Check that the switch saved the MIPS register \$f22.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) context_executing.f22, 0x33343536 );
   #endif
 
   /*
-   * Check that the switch saved the MIPS register $f23.
+   * Check that the switch saved the MIPS register \$f23.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) context_executing.f23, 0x34353637 );
   #endif
 
   /*
-   * Check that the switch saved the MIPS register $f24.
+   * Check that the switch saved the MIPS register \$f24.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) context_executing.f24, 0x35363738 );
   #endif
 
   /*
-   * Check that the switch saved the MIPS register $f25.
+   * Check that the switch saved the MIPS register \$f25.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) context_executing.f25, 0x36373839 );
   #endif
 
   /*
-   * Check that the switch saved the MIPS register $f26.
+   * Check that the switch saved the MIPS register \$f26.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) context_executing.f26, 0x3738393a );
   #endif
 
   /*
-   * Check that the switch saved the MIPS register $f27.
+   * Check that the switch saved the MIPS register \$f27.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) context_executing.f27, 0x38393a3b );
   #endif
 
   /*
-   * Check that the switch saved the MIPS register $f28.
+   * Check that the switch saved the MIPS register \$f28.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) context_executing.f28, 0x393a3b3c );
   #endif
 
   /*
-   * Check that the switch saved the MIPS register $f29.
+   * Check that the switch saved the MIPS register \$f29.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) context_executing.f29, 0x3a3b3c3d );
   #endif
 
   /*
-   * Check that the switch saved the MIPS register $f30.
+   * Check that the switch saved the MIPS register \$f30.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) context_executing.f30, 0x3b3c3d3e );
   #endif
 
   /*
-   * Check that the switch saved the MIPS register $f31.
+   * Check that the switch saved the MIPS register \$f31.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) context_executing.f31, 0x3c3d3e3f );
@@ -637,14 +636,14 @@ static void ScoreCpuMipsValContext_Action_0( void )
   #endif
 
   /*
-   * Check that the switch saved the MIPS register $fp.  The register is
-   * call-saved and the compiler can hold a frame of its own in it.  The action
+   * Check that the switch saved the MIPS register \$fp. The register is
+   * call-saved and the compiler can hold a frame of its own in it. The action
    * therefore reads the value of the caller rather than a pattern.
    */
   T_eq_u32( (uint32_t) context_executing.fp, context_fp_before );
 
   /*
-   * Check that the switch restored the MIPS register $fp.
+   * Check that the switch restored the MIPS register \$fp.
    */
   T_eq_u32( context_fp_after, context_fp_before );
 
@@ -665,7 +664,7 @@ static void ScoreCpuMipsValContext_Action_0( void )
   #endif
 
   /*
-   * Check that the round trip reached the trap.  The heir returns through the
+   * Check that the round trip reached the trap. The heir returns through the
    * stack pointer of the caller.
    */
   T_eq_int( context_trap, 1 );

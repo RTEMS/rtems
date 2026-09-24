@@ -354,7 +354,7 @@ static void RtemsMessageReqPerfReceiveWaitForever_Setup_Wrap( void *arg )
 }
 
 /**
- * @brief Receive a message.  Wait forever.
+ * @brief Receive a message. Wait forever.
  */
 static void RtemsMessageReqPerfReceiveWaitForever_Body(
   RtemsMessageValPerf_Context *ctx
@@ -382,7 +382,7 @@ static void RtemsMessageReqPerfReceiveWaitForever_Body_Wrap( void *arg )
 }
 
 /**
- * @brief Set the measured runtime.  Restore the worker priority.  Discard
+ * @brief Set the measured runtime. Restore the worker priority. Discard
  *   samples interrupted by a clock tick.
  */
 static bool RtemsMessageReqPerfReceiveWaitForever_Teardown(
@@ -449,7 +449,7 @@ static void RtemsMessageReqPerfReceiveWaitTimed_Setup_Wrap( void *arg )
 }
 
 /**
- * @brief Receive a message.  Wait with a timeout.
+ * @brief Receive a message. Wait with a timeout.
  */
 static void RtemsMessageReqPerfReceiveWaitTimed_Body(
   RtemsMessageValPerf_Context *ctx
@@ -477,7 +477,7 @@ static void RtemsMessageReqPerfReceiveWaitTimed_Body_Wrap( void *arg )
 }
 
 /**
- * @brief Set the measured runtime.  Restore the worker priority.  Discard
+ * @brief Set the measured runtime. Restore the worker priority. Discard
  *   samples interrupted by a clock tick.
  */
 static bool RtemsMessageReqPerfReceiveWaitTimed_Teardown(
@@ -539,8 +539,7 @@ static void RtemsMessageReqPerfSend_Body_Wrap( void *arg )
 }
 
 /**
- * @brief Flush the message queue.  Discard samples interrupted by a clock
- *   tick.
+ * @brief Flush the message queue. Discard samples interrupted by a clock tick.
  */
 static bool RtemsMessageReqPerfSend_Teardown(
   RtemsMessageValPerf_Context *ctx,
@@ -627,7 +626,7 @@ static void RtemsMessageReqPerfSendOther_Body_Wrap( void *arg )
 }
 
 /**
- * @brief Restore the worker priority.  Discard samples interrupted by a clock
+ * @brief Restore the worker priority. Discard samples interrupted by a clock
  *   tick.
  */
 static bool RtemsMessageReqPerfSendOther_Teardown(
@@ -722,7 +721,7 @@ static void RtemsMessageReqPerfSendOtherCpu_Body_Wrap( void *arg )
 }
 
 /**
- * @brief Make sure the worker waits for the next event.  Set the measured
+ * @brief Make sure the worker waits for the next event. Set the measured
  *   runtime. Discard samples interrupted by a clock tick.
  */
 static bool RtemsMessageReqPerfSendOtherCpu_Teardown(
@@ -817,7 +816,7 @@ static void RtemsMessageReqPerfSendPreempt_Body_Wrap( void *arg )
 }
 
 /**
- * @brief Set the measured runtime.  Discard samples interrupted by a clock
+ * @brief Set the measured runtime. Discard samples interrupted by a clock
  *   tick.
  */
 static bool RtemsMessageReqPerfSendPreempt_Teardown(

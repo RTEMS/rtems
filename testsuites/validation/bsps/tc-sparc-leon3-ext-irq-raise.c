@@ -57,13 +57,13 @@
  *   BSPs.
  *
  * The test raises an extended controller line through a read-modify-write of
- * the pending register.  This is safe only in the test, since no peripheral
+ * the pending register. This is safe only in the test, since no peripheral
  * drives the tested bus lines.
  *
  * This test case performs the following actions:
  *
  * - Iterate through each interrupt vector whose bus line maps to an extended
- *   controller line and which has no interrupt handler installed.  Get the
+ *   controller line and which has no interrupt handler installed. Get the
  *   attributes of the vector and try to raise it through the directive.
  *   Install an interrupt handler, enable the vector, raise the extended
  *   controller line through the pending register and wait for the handler.
@@ -82,7 +82,7 @@
  *     handler of each tested interrupt vector exactly once.
  *
  * - Get the interrupt vector of a bus line which maps to the controller line
- *   of the extended interrupt.  Where the BSP uses an interrupt map, map the
+ *   of the extended interrupt. Where the BSP uses an interrupt map, map the
  *   bus line `TM27_IRQMAP_BUS_LINE` to this controller line. Install an
  *   interrupt handler, enable the vector, raise it and wait for the handler.
  *   Clear and disable the vector, remove the handler and restore the interrupt
@@ -189,11 +189,11 @@ static T_fixture BspSparcLeon3ValExtIrqRaise_Fixture = {
 
 /**
  * @brief Iterate through each interrupt vector whose bus line maps to an
- *   extended controller line and which has no interrupt handler installed.
- *   Get the attributes of the vector and try to raise it through the
- *   directive. Install an interrupt handler, enable the vector, raise the
- *   extended controller line through the pending register and wait for the
- *   handler. Clear and disable the vector and remove the handler.
+ *   extended controller line and which has no interrupt handler installed. Get
+ *   the attributes of the vector and try to raise it through the directive.
+ *   Install an interrupt handler, enable the vector, raise the extended
+ *   controller line through the pending register and wait for the handler.
+ *   Clear and disable the vector and remove the handler.
  */
 static void BspSparcLeon3ValExtIrqRaise_Action_0(
   BspSparcLeon3ValExtIrqRaise_Context *ctx
@@ -312,7 +312,7 @@ static void BspSparcLeon3ValExtIrqRaise_Action_0(
 
 /**
  * @brief Get the interrupt vector of a bus line which maps to the controller
- *   line of the extended interrupt.  Where the BSP uses an interrupt map, map
+ *   line of the extended interrupt. Where the BSP uses an interrupt map, map
  *   the bus line `TM27_IRQMAP_BUS_LINE` to this controller line. Install an
  *   interrupt handler, enable the vector, raise it and wait for the handler.
  *   Clear and disable the vector, remove the handler and restore the interrupt

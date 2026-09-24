@@ -50,8 +50,8 @@
  * @brief Unit tests for the configuration manager.
  *
  * Parts of the file `cpukit/sapi/src/getconfigmax.c` are only executed when
- * unlimited objects are configured.  The space qualified code subset does not
- * support this feature.  This test exercises the code parts otherwise not
+ * unlimited objects are configured. The space qualified code subset does not
+ * support this feature. This test exercises the code parts otherwise not
  * reached in order to achieve full code coverage.
  *
  * This test case performs the following actions:

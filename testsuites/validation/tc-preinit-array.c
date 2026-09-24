@@ -49,7 +49,7 @@
  *
  * This test case performs the following actions:
  *
- * - Validate the `.preinit_array` constructor invocation.  Mark that the test
+ * - Validate the `.preinit_array` constructor invocation. Mark that the test
  *   case executed.
  *
  *   - Check that the `.preinit_array` constructor was called exactly once.
@@ -97,7 +97,7 @@ static RTEMS_USED RTEMS_SECTION(
 ) void ( *const constructor_registration )( void ) = Constructor;
 
 /**
- * @brief Validate the `.preinit_array` constructor invocation.  Mark that the
+ * @brief Validate the `.preinit_array` constructor invocation. Mark that the
  *   test case executed.
  */
 static void ScoreThreadValPreinitArray_Action_0( void )

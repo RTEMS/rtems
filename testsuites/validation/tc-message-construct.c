@@ -299,7 +299,7 @@ static void RtemsMessageReqConstruct_Pre_Config_Prepare(
   switch ( state ) {
     case RtemsMessageReqConstruct_Pre_Config_Valid: {
       /*
-       * While the ``config`` parameter references an object of type
+       * While the `config` parameter references an object of type
        * rtems_message_queue_config.
        */
       ctx->config = &ctx->config_obj;
@@ -308,7 +308,7 @@ static void RtemsMessageReqConstruct_Pre_Config_Prepare(
 
     case RtemsMessageReqConstruct_Pre_Config_Null: {
       /*
-       * While the ``config`` parameter is NULL.
+       * While the `config` parameter is NULL.
        */
       ctx->config = NULL;
       break;
@@ -354,7 +354,7 @@ static void RtemsMessageReqConstruct_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsMessageReqConstruct_Pre_Id_Id: {
       /*
-       * While the ``id`` parameter references an object of type rtems_id.
+       * While the `id` parameter references an object of type rtems_id.
        */
       ctx->id = &ctx->id_obj;
       break;
@@ -362,7 +362,7 @@ static void RtemsMessageReqConstruct_Pre_Id_Prepare(
 
     case RtemsMessageReqConstruct_Pre_Id_Null: {
       /*
-       * While the ``id`` parameter is NULL.
+       * While the `id` parameter is NULL.
        */
       ctx->id = NULL;
       break;
@@ -700,9 +700,9 @@ static void RtemsMessageReqConstruct_Post_IdObj_Check(
   switch ( state ) {
     case RtemsMessageReqConstruct_Post_IdObj_Set: {
       /*
-       * The value of the object referenced by the ``id`` parameter shall be
-       * set to the object identifier of the constructed message queue after
-       * the return of the rtems_message_queue_construct() call.
+       * The value of the object referenced by the `id` parameter shall be set
+       * to the object identifier of the constructed message queue after the
+       * return of the rtems_message_queue_construct() call.
        */
       T_eq_ptr( ctx->id, &ctx->id_obj );
       T_ne_u32( ctx->id_obj, INVALID_ID );
@@ -711,7 +711,7 @@ static void RtemsMessageReqConstruct_Post_IdObj_Check(
 
     case RtemsMessageReqConstruct_Post_IdObj_Nop: {
       /*
-       * Objects referenced by the ``id`` parameter in past calls to
+       * Objects referenced by the `id` parameter in past calls to
        * rtems_message_queue_construct() shall not be accessed by the
        * rtems_message_queue_construct() call.
        */
@@ -733,7 +733,7 @@ static void RtemsMessageReqConstruct_Post_StorageFree_Check(
     case RtemsMessageReqConstruct_Post_StorageFree_Free: {
       /*
        * The storage free handler of the message queue configuration specified
-       * by the ``config`` parameter shall be used to free the message queue
+       * by the `config` parameter shall be used to free the message queue
        * storage area.
        */
       ctx->expected_storage_free_counter = 1;

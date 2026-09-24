@@ -167,12 +167,12 @@ typedef struct {
   rtems_rate_monotonic_period_status period_status;
 
   /**
-   * @brief This member specifies the ``id`` parameter for the action.
+   * @brief This member specifies the `id` parameter for the action.
    */
   rtems_id id_param;
 
   /**
-   * @brief This member specifies the ``status`` parameter for the action.
+   * @brief This member specifies the `status` parameter for the action.
    */
   rtems_rate_monotonic_period_status *status_param;
 
@@ -335,7 +335,7 @@ static void RtemsRatemonReqGetStatus_Pre_StatusAddr_Prepare(
   switch ( state ) {
     case RtemsRatemonReqGetStatus_Pre_StatusAddr_Valid: {
       /*
-       * While the ``status`` parameter references an object of type
+       * While the `status` parameter references an object of type
        * rtems_rate_monotonic_period_status.
        */
       ctx->status_param = &ctx->period_status;
@@ -344,7 +344,7 @@ static void RtemsRatemonReqGetStatus_Pre_StatusAddr_Prepare(
 
     case RtemsRatemonReqGetStatus_Pre_StatusAddr_Null: {
       /*
-       * While the ``status`` parameter is NULL.
+       * While the `status` parameter is NULL.
        */
       ctx->status_param = NULL;
       break;
@@ -363,7 +363,7 @@ static void RtemsRatemonReqGetStatus_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsRatemonReqGetStatus_Pre_Id_Valid: {
       /*
-       * While the ``id`` parameter is valid.
+       * While the `id` parameter is valid.
        */
       ctx->id_param = ctx->period_id;
       break;
@@ -371,7 +371,7 @@ static void RtemsRatemonReqGetStatus_Pre_Id_Prepare(
 
     case RtemsRatemonReqGetStatus_Pre_Id_Invalid: {
       /*
-       * While the ``id`` parameter is invalid.
+       * While the `id` parameter is invalid.
        */
       ctx->id_param = RTEMS_ID_NONE;
       break;
@@ -390,7 +390,7 @@ static void RtemsRatemonReqGetStatus_Pre_State_Prepare(
   switch ( state ) {
     case RtemsRatemonReqGetStatus_Pre_State_Inactive: {
       /*
-       * While the ``id`` parameter references an period object in inactive
+       * While the `id` parameter references an period object in inactive
        * state.
        */
       /* Nothing to do here as the period is newly created. */
@@ -400,8 +400,7 @@ static void RtemsRatemonReqGetStatus_Pre_State_Prepare(
 
     case RtemsRatemonReqGetStatus_Pre_State_Active: {
       /*
-       * While the ``id`` parameter references an period object in active
-       * state.
+       * While the `id` parameter references an period object in active state.
        */
       rtems_status_code status;
       status = rtems_rate_monotonic_period( ctx->period_id, period_length );
@@ -412,8 +411,7 @@ static void RtemsRatemonReqGetStatus_Pre_State_Prepare(
 
     case RtemsRatemonReqGetStatus_Pre_State_Expired: {
       /*
-       * While the ``id`` parameter references an period object in expired
-       * state.
+       * While the `id` parameter references an period object in expired state.
        */
       rtems_status_code status;
       status = rtems_rate_monotonic_period( ctx->period_id, period_length );
@@ -547,10 +545,10 @@ static void RtemsRatemonReqGetStatus_Post_Owner_Check(
   switch ( state ) {
     case RtemsRatemonReqGetStatus_Post_Owner_OwnerTask: {
       /*
-       * The value of the member owner of the object referenced by the
-       * ``status`` parameter shall be set to the object identifier of the
-       * owner task of the period after the return of the
-       * rtems_rate_monotonic_get_status() call.
+       * The value of the member owner of the object referenced by the `status`
+       * parameter shall be set to the object identifier of the owner task of
+       * the period after the return of the rtems_rate_monotonic_get_status()
+       * call.
        */
       T_eq_u32( ctx->period_status.owner, ctx->task_id );
       break;
@@ -558,7 +556,7 @@ static void RtemsRatemonReqGetStatus_Post_Owner_Check(
 
     case RtemsRatemonReqGetStatus_Post_Owner_Nop: {
       /*
-       * Objects referenced by the ``status`` parameter in past call to
+       * Objects referenced by the `status` parameter in past call to
        * rtems_rate_monotonic_get_status() shall not be accessed by the
        * rtems_rate_monotonic_get_status() call (see also Nop).
        */
@@ -579,10 +577,9 @@ static void RtemsRatemonReqGetStatus_Post_State_Check(
   switch ( state ) {
     case RtemsRatemonReqGetStatus_Post_State_Inactive: {
       /*
-       * The value of the member state of the object referenced by the
-       * ``status`` parameter shall be set to RATE_MONOTONIC_INACTIVE after the
-       * return of the rtems_rate_monotonic_get_status() call. (See also
-       * inactive)
+       * The value of the member state of the object referenced by the `status`
+       * parameter shall be set to RATE_MONOTONIC_INACTIVE after the return of
+       * the rtems_rate_monotonic_get_status() call. (See also inactive)
        */
       T_eq_int( ctx->period_status.state, RATE_MONOTONIC_INACTIVE );
       break;
@@ -590,10 +587,9 @@ static void RtemsRatemonReqGetStatus_Post_State_Check(
 
     case RtemsRatemonReqGetStatus_Post_State_Active: {
       /*
-       * The value of the member state of the object referenced by the
-       * ``status`` parameter shall be set to RATE_MONOTONIC_ACTIVE after the
-       * return of the rtems_rate_monotonic_get_status() call. (See also
-       * active)
+       * The value of the member state of the object referenced by the `status`
+       * parameter shall be set to RATE_MONOTONIC_ACTIVE after the return of
+       * the rtems_rate_monotonic_get_status() call. (See also active)
        */
       T_eq_int( ctx->period_status.state, RATE_MONOTONIC_ACTIVE );
       break;
@@ -601,10 +597,9 @@ static void RtemsRatemonReqGetStatus_Post_State_Check(
 
     case RtemsRatemonReqGetStatus_Post_State_Expired: {
       /*
-       * The value of the member state of the object referenced by the
-       * ``status`` parameter shall be set to RATE_MONOTONIC_EXPIRED after the
-       * return of the rtems_rate_monotonic_get_status() call. (See also
-       * expired)
+       * The value of the member state of the object referenced by the `status`
+       * parameter shall be set to RATE_MONOTONIC_EXPIRED after the return of
+       * the rtems_rate_monotonic_get_status() call. (See also expired)
        */
       T_eq_int( ctx->period_status.state, RATE_MONOTONIC_EXPIRED );
       break;
@@ -612,7 +607,7 @@ static void RtemsRatemonReqGetStatus_Post_State_Check(
 
     case RtemsRatemonReqGetStatus_Post_State_Nop: {
       /*
-       * Objects referenced by the ``status`` parameter in past calls to
+       * Objects referenced by the `status` parameter in past calls to
        * rtems_rate_monotonic_get_status() shall not be accessed by the
        * rtems_rate_monotonic_get_status() call (see also Nop).
        */
@@ -634,7 +629,7 @@ static void RtemsRatemonReqGetStatus_Post_Elapsed_Check(
     case RtemsRatemonReqGetStatus_Post_Elapsed_Time: {
       /*
        * The value of the member since_last_period of the object referenced by
-       * the ``status`` parameter shall be set to the time elapsed.
+       * the `status` parameter shall be set to the time elapsed.
        */
       T_log(
         T_VERBOSE,
@@ -663,7 +658,7 @@ static void RtemsRatemonReqGetStatus_Post_Elapsed_Check(
     case RtemsRatemonReqGetStatus_Post_Elapsed_Zero: {
       /*
        * The value of the member since_last_period of the object referenced by
-       * the ``status`` parameter shall be set to 0.
+       * the `status` parameter shall be set to 0.
        */
       T_eq_u64( ctx->period_status.since_last_period.tv_sec, 0 );
       T_eq_long( ctx->period_status.since_last_period.tv_nsec, 0 );
@@ -672,7 +667,7 @@ static void RtemsRatemonReqGetStatus_Post_Elapsed_Check(
 
     case RtemsRatemonReqGetStatus_Post_Elapsed_Nop: {
       /*
-       * Objects referenced by the ``status`` parameter in past calls to
+       * Objects referenced by the `status` parameter in past calls to
        * rtems_rate_monotonic_get_status() shall not be accessed by the
        * rtems_rate_monotonic_get_status() call (see also Nop).
        */
@@ -701,7 +696,7 @@ static void RtemsRatemonReqGetStatus_Post_Consumed_Check(
     case RtemsRatemonReqGetStatus_Post_Consumed_CpuTime: {
       /*
        * The value of the member executed_since_last_period of the object
-       * referenced by the ``status`` parameter shall be set to the CPU time
+       * referenced by the `status` parameter shall be set to the CPU time
        * consumed by the owner task.
        */
       T_log(
@@ -731,7 +726,7 @@ static void RtemsRatemonReqGetStatus_Post_Consumed_Check(
     case RtemsRatemonReqGetStatus_Post_Consumed_Zero: {
       /*
        * The value of the member since_last_period of the object referenced by
-       * the ``status`` parameter shall be set to 0.
+       * the `status` parameter shall be set to 0.
        */
       T_eq_u64( ctx->period_status.executed_since_last_period.tv_sec, 0 );
       T_eq_long( ctx->period_status.executed_since_last_period.tv_nsec, 0 );
@@ -740,7 +735,7 @@ static void RtemsRatemonReqGetStatus_Post_Consumed_Check(
 
     case RtemsRatemonReqGetStatus_Post_Consumed_Nop: {
       /*
-       * Objects referenced by the ``status`` parameter in past calls to
+       * Objects referenced by the `status` parameter in past calls to
        * rtems_rate_monotonic_get_status() shall not be accessed by the
        * rtems_rate_monotonic_get_status() call (see also Nop).
        */
@@ -769,7 +764,7 @@ static void RtemsRatemonReqGetStatus_Post_Postponed_Check(
     case RtemsRatemonReqGetStatus_Post_Postponed_Zero: {
       /*
        * The value of the member postponed_jobs_count of the object referenced
-       * by the ``status`` parameter shall be set to 0 after the return of the
+       * by the `status` parameter shall be set to 0 after the return of the
        * rtems_rate_monotonic_get_status() call.
        */
       T_eq_u32( ctx->period_status.postponed_jobs_count, 0 );
@@ -779,9 +774,9 @@ static void RtemsRatemonReqGetStatus_Post_Postponed_Check(
     case RtemsRatemonReqGetStatus_Post_Postponed_One: {
       /*
        * The value of the member postponed_jobs_count of the object referenced
-       * by the ``status`` parameter shall be set to the number of postponed
-       * jobs (here 1) after the return of the
-       * rtems_rate_monotonic_get_status() call.
+       * by the `status` parameter shall be set to the number of postponed jobs
+       * (here 1) after the return of the rtems_rate_monotonic_get_status()
+       * call.
        */
       T_eq_u32( ctx->period_status.postponed_jobs_count, 1 );
       break;
@@ -790,8 +785,8 @@ static void RtemsRatemonReqGetStatus_Post_Postponed_Check(
     case RtemsRatemonReqGetStatus_Post_Postponed_Several: {
       /*
        * The value of the member postponed_jobs_count of the object referenced
-       * by the ``status`` parameter shall be set to the number of postponed
-       * jobs after the return of the rtems_rate_monotonic_get_status() call.
+       * by the `status` parameter shall be set to the number of postponed jobs
+       * after the return of the rtems_rate_monotonic_get_status() call.
        */
       T_eq_u32(
         ctx->period_status.postponed_jobs_count,
@@ -802,7 +797,7 @@ static void RtemsRatemonReqGetStatus_Post_Postponed_Check(
 
     case RtemsRatemonReqGetStatus_Post_Postponed_Nop: {
       /*
-       * Objects referenced by the ``status`` parameter in past calls to
+       * Objects referenced by the `status` parameter in past calls to
        * rtems_rate_monotonic_get_status() shall not be accessed by the
        * rtems_rate_monotonic_get_status() call (see also Nop).
        */

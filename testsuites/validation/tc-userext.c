@@ -53,8 +53,8 @@
  *
  * This test case performs the following actions:
  *
- * - Create five dynamic extensions.  Switch to a started thread.  Delete three
- *   dynamic extension during the thread begin invocation.  Clean up the used
+ * - Create five dynamic extensions. Switch to a started thread. Delete three
+ *   dynamic extension during the thread begin invocation. Clean up the used
  *   resources.
  *
  *   - Check that the thread switch extensions were invoked in the right order
@@ -67,8 +67,8 @@
  *   - Check that the thread begin extension of the extension set deleted
  *     before its turn in the invocation was not invoked.
  *
- * - Create five dynamic extensions.  Create a thread.  Delete three dynamic
- *   extension during the thread create invocation.  Clean up the used
+ * - Create five dynamic extensions. Create a thread. Delete three dynamic
+ *   extension during the thread create invocation. Clean up the used
  *   resources.
  *
  *   - Check that the thread create extensions were invoked in the right order.
@@ -81,8 +81,8 @@
  *   - Check that the thread create extension of the extension set deleted
  *     before its turn in the invocation was not invoked.
  *
- * - Create five dynamic extensions.  Delete a thread.  Delete three dynamic
- *   extension during the thread delete invocation.  Clean up the used
+ * - Create five dynamic extensions. Delete a thread. Delete three dynamic
+ *   extension during the thread delete invocation. Clean up the used
  *   resources.
  *
  *   - Check that the thread delete extensions were invoked in the right order.
@@ -95,8 +95,8 @@
  *   - Check that the thread delete extension of the extension set deleted
  *     before its turn in the invocation was not invoked.
  *
- * - Create five dynamic extensions.  Return from a thread entry.  Delete three
- *   dynamic extension during the thread exitted invocation.  Clean up the used
+ * - Create five dynamic extensions. Return from a thread entry. Delete three
+ *   dynamic extension during the thread exitted invocation. Clean up the used
  *   resources.
  *
  *   - Check that the thread exitted extensions were invoked in the right
@@ -107,8 +107,8 @@
  *   - Check that the thread exitted extension of the extension set deleted
  *     before its turn in the invocation was not invoked.
  *
- * - Create five dynamic extensions.  Restart a thread.  Delete three dynamic
- *   extension during the thread restart invocation.  Clean up the used
+ * - Create five dynamic extensions. Restart a thread. Delete three dynamic
+ *   extension during the thread restart invocation. Clean up the used
  *   resources.
  *
  *   - Check that the thread restart extensions were invoked in the right
@@ -119,9 +119,8 @@
  *   - Check that the thread restart extension of the extension set deleted
  *     before its turn in the invocation was not invoked.
  *
- * - Create five dynamic extensions.  Start a thread.  Delete three dynamic
- *   extension during the thread start invocation.  Clean up the used
- *   resources.
+ * - Create five dynamic extensions. Start a thread. Delete three dynamic
+ *   extension during the thread start invocation. Clean up the used resources.
  *
  *   - Check that the thread start extensions were invoked in the right order.
  *
@@ -130,8 +129,8 @@
  *   - Check that the thread start extension of the extension set deleted
  *     before its turn in the invocation was not invoked.
  *
- * - Create five dynamic extensions.  Terminate a thread.  Delete three dynamic
- *   extension during the thread terminate invocation.  Clean up the used
+ * - Create five dynamic extensions. Terminate a thread. Delete three dynamic
+ *   extension during the thread terminate invocation. Clean up the used
  *   resources.
  *
  *   - Check that the thread terminate extensions were invoked in the right
@@ -142,9 +141,9 @@
  *   - Check that the thread terminate extension of the extension set deleted
  *     before its turn in the invocation was not invoked.
  *
- * - Create five dynamic extensions.  Let an idle thread return from its entry.
- *   Delete three dynamic extension during the thread exitted invocation.
- *   Clean up the used resources.
+ * - Create five dynamic extensions. Let an idle thread return from its entry.
+ *   Delete three dynamic extension during the thread exitted invocation. Clean
+ *   up the used resources.
  *
  *   - Check that the thread exitted extensions were invoked in the right
  *     order.
@@ -550,8 +549,8 @@ static T_fixture RtemsUserextValUserext_Fixture = {
 };
 
 /**
- * @brief Create five dynamic extensions.  Switch to a started thread.  Delete
- *   three dynamic extension during the thread begin invocation.  Clean up the
+ * @brief Create five dynamic extensions. Switch to a started thread. Delete
+ *   three dynamic extension during the thread begin invocation. Clean up the
  *   used resources.
  */
 static void RtemsUserextValUserext_Action_0( void )
@@ -596,8 +595,8 @@ static void RtemsUserextValUserext_Action_0( void )
 }
 
 /**
- * @brief Create five dynamic extensions.  Create a thread.  Delete three
- *   dynamic extension during the thread create invocation.  Clean up the used
+ * @brief Create five dynamic extensions. Create a thread. Delete three dynamic
+ *   extension during the thread create invocation. Clean up the used
  *   resources.
  */
 static void RtemsUserextValUserext_Action_1( void )
@@ -643,8 +642,8 @@ static void RtemsUserextValUserext_Action_1( void )
 }
 
 /**
- * @brief Create five dynamic extensions.  Delete a thread.  Delete three
- *   dynamic extension during the thread delete invocation.  Clean up the used
+ * @brief Create five dynamic extensions. Delete a thread. Delete three dynamic
+ *   extension during the thread delete invocation. Clean up the used
  *   resources.
  */
 static void RtemsUserextValUserext_Action_2( void )
@@ -690,9 +689,9 @@ static void RtemsUserextValUserext_Action_2( void )
 }
 
 /**
- * @brief Create five dynamic extensions.  Return from a thread entry.  Delete
- *   three dynamic extension during the thread exitted invocation.  Clean up
- *   the used resources.
+ * @brief Create five dynamic extensions. Return from a thread entry. Delete
+ *   three dynamic extension during the thread exitted invocation. Clean up the
+ *   used resources.
  */
 static void RtemsUserextValUserext_Action_3( void )
 {
@@ -728,8 +727,8 @@ static void RtemsUserextValUserext_Action_3( void )
 }
 
 /**
- * @brief Create five dynamic extensions.  Restart a thread.  Delete three
- *   dynamic extension during the thread restart invocation.  Clean up the used
+ * @brief Create five dynamic extensions. Restart a thread. Delete three
+ *   dynamic extension during the thread restart invocation. Clean up the used
  *   resources.
  */
 static void RtemsUserextValUserext_Action_4( void )
@@ -766,9 +765,8 @@ static void RtemsUserextValUserext_Action_4( void )
 }
 
 /**
- * @brief Create five dynamic extensions.  Start a thread.  Delete three
- *   dynamic extension during the thread start invocation.  Clean up the used
- *   resources.
+ * @brief Create five dynamic extensions. Start a thread. Delete three dynamic
+ *   extension during the thread start invocation. Clean up the used resources.
  */
 static void RtemsUserextValUserext_Action_5( void )
 {
@@ -808,8 +806,8 @@ static void RtemsUserextValUserext_Action_5( void )
 }
 
 /**
- * @brief Create five dynamic extensions.  Terminate a thread.  Delete three
- *   dynamic extension during the thread terminate invocation.  Clean up the
+ * @brief Create five dynamic extensions. Terminate a thread. Delete three
+ *   dynamic extension during the thread terminate invocation. Clean up the
  *   used resources.
  */
 static void RtemsUserextValUserext_Action_6( void )
@@ -847,9 +845,9 @@ static void RtemsUserextValUserext_Action_6( void )
 }
 
 /**
- * @brief Create five dynamic extensions.  Let an idle thread return from its
+ * @brief Create five dynamic extensions. Let an idle thread return from its
  *   entry. Delete three dynamic extension during the thread exitted
- *   invocation.  Clean up the used resources.
+ *   invocation. Clean up the used resources.
  */
 static void RtemsUserextValUserext_Action_7( void )
 {

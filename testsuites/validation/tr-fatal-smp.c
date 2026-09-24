@@ -66,13 +66,13 @@
  *   - Check that a second shutdown request does not end in a recursive
  *     shutdown response.
  *
- * - Issue a job on a processor in the shutdown state.  Check that the right
+ * - Issue a job on a processor in the shutdown state. Check that the right
  *   fatal error occurs if we try to wait for this job to complete.
  *
- * - Start multitasking on an invalid processor.  Check that the right fatal
+ * - Start multitasking on an invalid processor. Check that the right fatal
  *   error occurs.
  *
- * - Start multitasking on an unassigned processor.  Check that the right fatal
+ * - Start multitasking on an unassigned processor. Check that the right fatal
  *   error occurs.
  *
  * @{
@@ -183,7 +183,7 @@ static void ScoreSmpValFatal_Action_0( ScoreSmpValFatal_Context *ctx )
 }
 
 /**
- * @brief Issue a job on a processor in the shutdown state.  Check that the
+ * @brief Issue a job on a processor in the shutdown state. Check that the
  *   right fatal error occurs if we try to wait for this job to complete.
  */
 static void ScoreSmpValFatal_Action_1( ScoreSmpValFatal_Context *ctx )
@@ -208,7 +208,7 @@ static void ScoreSmpValFatal_Action_1( ScoreSmpValFatal_Context *ctx )
 }
 
 /**
- * @brief Start multitasking on an invalid processor.  Check that the right
+ * @brief Start multitasking on an invalid processor. Check that the right
  *   fatal error occurs.
  */
 static void ScoreSmpValFatal_Action_2( ScoreSmpValFatal_Context *ctx )
@@ -241,7 +241,7 @@ static void ScoreSmpValFatal_Action_2( ScoreSmpValFatal_Context *ctx )
 }
 
 /**
- * @brief Start multitasking on an unassigned processor.  Check that the right
+ * @brief Start multitasking on an unassigned processor. Check that the right
  *   fatal error occurs.
  */
 static void ScoreSmpValFatal_Action_3( ScoreSmpValFatal_Context *ctx )

@@ -49,36 +49,40 @@
  *
  * @brief These unit tests check compiler builtins.
  *
- * Explicitly test the 64-bit integer division and modulo operations.  They are
- * essential for the timekeeping services.  On most 32-bit targets, they need a
+ * Explicitly test the 64-bit integer division and modulo operations. They are
+ * essential for the timekeeping services. On most 32-bit targets, they need a
  * software implementation.
  *
  * This test case performs the following actions:
  *
- * - Check the return value of __builtin_clz() for a sample set of inputs.
+ * - Check the return value of \_\_builtin_clz() for a sample set of inputs.
  *
- * - Check the return value of __builtin_clzll() for a sample set of inputs.
+ * - Check the return value of \_\_builtin_clzll() for a sample set of inputs.
  *
- * - Check the return value of __builtin_ctz() for a sample set of inputs.
+ * - Check the return value of \_\_builtin_ctz() for a sample set of inputs.
  *
- * - Check the return value of __builtin_ctzll() for a sample set of inputs.
+ * - Check the return value of \_\_builtin_ctzll() for a sample set of inputs.
  *
- * - Check the return value of __builtin_ffs() for a sample set of inputs.
+ * - Check the return value of \_\_builtin_ffs() for a sample set of inputs.
  *
- * - Check the return value of __builtin_ffsll() for a sample set of inputs.
+ * - Check the return value of \_\_builtin_ffsll() for a sample set of inputs.
  *
- * - Check the return value of __builtin_parity() for a sample set of inputs.
+ * - Check the return value of \_\_builtin_parity() for a sample set of inputs.
  *
- * - Check the return value of __builtin_parityll() for a sample set of inputs.
- *
- * - Check the return value of __builtin_popcount() for a sample set of inputs.
- *
- * - Check the return value of __builtin_popcountll() for a sample set of
+ * - Check the return value of \_\_builtin_parityll() for a sample set of
  *   inputs.
  *
- * - Check the return value of __builtin_bswap32() for a sample set of inputs.
+ * - Check the return value of \_\_builtin_popcount() for a sample set of
+ *   inputs.
  *
- * - Check the return value of __builtin_bswap64() for a sample set of inputs.
+ * - Check the return value of \_\_builtin_popcountll() for a sample set of
+ *   inputs.
+ *
+ * - Check the return value of \_\_builtin_bswap32() for a sample set of
+ *   inputs.
+ *
+ * - Check the return value of \_\_builtin_bswap64() for a sample set of
+ *   inputs.
  *
  * - Check signed 64-bit comparisons for a sample set of values.
  *
@@ -173,7 +177,8 @@ static T_fixture CompilerUnitBuiltins_Fixture = {
 };
 
 /**
- * @brief Check the return value of __builtin_clz() for a sample set of inputs.
+ * @brief Check the return value of \_\_builtin_clz() for a sample set of
+ *   inputs.
  */
 static void CompilerUnitBuiltins_Action_0( void )
 {
@@ -193,7 +198,7 @@ static void CompilerUnitBuiltins_Action_0( void )
 }
 
 /**
- * @brief Check the return value of __builtin_clzll() for a sample set of
+ * @brief Check the return value of \_\_builtin_clzll() for a sample set of
  *   inputs.
  */
 static void CompilerUnitBuiltins_Action_1( void )
@@ -220,7 +225,8 @@ static void CompilerUnitBuiltins_Action_1( void )
 }
 
 /**
- * @brief Check the return value of __builtin_ctz() for a sample set of inputs.
+ * @brief Check the return value of \_\_builtin_ctz() for a sample set of
+ *   inputs.
  */
 static void CompilerUnitBuiltins_Action_2( void )
 {
@@ -240,7 +246,7 @@ static void CompilerUnitBuiltins_Action_2( void )
 }
 
 /**
- * @brief Check the return value of __builtin_ctzll() for a sample set of
+ * @brief Check the return value of \_\_builtin_ctzll() for a sample set of
  *   inputs.
  */
 static void CompilerUnitBuiltins_Action_3( void )
@@ -267,7 +273,8 @@ static void CompilerUnitBuiltins_Action_3( void )
 }
 
 /**
- * @brief Check the return value of __builtin_ffs() for a sample set of inputs.
+ * @brief Check the return value of \_\_builtin_ffs() for a sample set of
+ *   inputs.
  */
 static void CompilerUnitBuiltins_Action_4( void )
 {
@@ -287,7 +294,7 @@ static void CompilerUnitBuiltins_Action_4( void )
 }
 
 /**
- * @brief Check the return value of __builtin_ffsll() for a sample set of
+ * @brief Check the return value of \_\_builtin_ffsll() for a sample set of
  *   inputs.
  */
 static void CompilerUnitBuiltins_Action_5( void )
@@ -314,7 +321,7 @@ static void CompilerUnitBuiltins_Action_5( void )
 }
 
 /**
- * @brief Check the return value of __builtin_parity() for a sample set of
+ * @brief Check the return value of \_\_builtin_parity() for a sample set of
  *   inputs.
  */
 static void CompilerUnitBuiltins_Action_6( void )
@@ -332,7 +339,7 @@ static void CompilerUnitBuiltins_Action_6( void )
 }
 
 /**
- * @brief Check the return value of __builtin_parityll() for a sample set of
+ * @brief Check the return value of \_\_builtin_parityll() for a sample set of
  *   inputs.
  */
 static void CompilerUnitBuiltins_Action_7( void )
@@ -350,7 +357,7 @@ static void CompilerUnitBuiltins_Action_7( void )
 }
 
 /**
- * @brief Check the return value of __builtin_popcount() for a sample set of
+ * @brief Check the return value of \_\_builtin_popcount() for a sample set of
  *   inputs.
  */
 static void CompilerUnitBuiltins_Action_8( void )
@@ -371,8 +378,8 @@ static void CompilerUnitBuiltins_Action_8( void )
 }
 
 /**
- * @brief Check the return value of __builtin_popcountll() for a sample set of
- *   inputs.
+ * @brief Check the return value of \_\_builtin_popcountll() for a sample set
+ *   of inputs.
  */
 static void CompilerUnitBuiltins_Action_9( void )
 {
@@ -392,7 +399,7 @@ static void CompilerUnitBuiltins_Action_9( void )
 }
 
 /**
- * @brief Check the return value of __builtin_bswap32() for a sample set of
+ * @brief Check the return value of \_\_builtin_bswap32() for a sample set of
  *   inputs.
  */
 static void CompilerUnitBuiltins_Action_10( void )
@@ -416,7 +423,7 @@ static void CompilerUnitBuiltins_Action_10( void )
 }
 
 /**
- * @brief Check the return value of __builtin_bswap64() for a sample set of
+ * @brief Check the return value of \_\_builtin_bswap64() for a sample set of
  *   inputs.
  */
 static void CompilerUnitBuiltins_Action_11( void )

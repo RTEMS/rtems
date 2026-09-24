@@ -227,7 +227,7 @@ static void RtemsTaskReqPerfConstruct_Body_Wrap( void *arg )
 }
 
 /**
- * @brief Delete the worker.  Discard samples interrupted by a clock tick.
+ * @brief Delete the worker. Discard samples interrupted by a clock tick.
  */
 static bool RtemsTaskReqPerfConstruct_Teardown(
   RtemsTaskValPerf_Context *ctx,
@@ -376,7 +376,7 @@ static void RtemsTaskReqPerfRestartPreempt_Body_Wrap( void *arg )
 }
 
 /**
- * @brief Set the measured runtime.  Discard samples interrupted by a clock
+ * @brief Set the measured runtime. Discard samples interrupted by a clock
  *   tick.
  */
 static bool RtemsTaskReqPerfRestartPreempt_Teardown(
@@ -454,7 +454,7 @@ static void RtemsTaskReqPerfRestartSelf_Body_Wrap( void *arg )
 }
 
 /**
- * @brief Set the measured runtime.  Discard samples interrupted by a clock
+ * @brief Set the measured runtime. Discard samples interrupted by a clock
  *   tick.
  */
 static bool RtemsTaskReqPerfRestartSelf_Teardown(
@@ -683,8 +683,8 @@ static void RtemsTaskReqPerfSetSchedulerOther_Body_Wrap( void *arg )
 }
 
 /**
- * @brief Move the worker back to scheduler B.  Discard samples interrupted by
- *   a clock tick.
+ * @brief Move the worker back to scheduler B. Discard samples interrupted by a
+ *   clock tick.
  */
 static bool RtemsTaskReqPerfSetSchedulerOther_Teardown(
   RtemsTaskValPerf_Context *ctx,
@@ -737,7 +737,7 @@ static void RtemsTaskReqPerfSetSchedulerOther_Cleanup(
  */
 
 /**
- * @brief Create and start two worker tasks for scheduler B.  Make the second
+ * @brief Create and start two worker tasks for scheduler B. Make the second
  *   worker busy.
  */
 static void RtemsTaskReqPerfSetSchedulerPreempt_Prepare(
@@ -758,7 +758,7 @@ static void RtemsTaskReqPerfSetSchedulerPreempt_Prepare(
 }
 
 /**
- * @brief Move the worker to scheduler B.  Make the worker ready to set the end
+ * @brief Move the worker to scheduler B. Make the worker ready to set the end
  *   time.
  */
 static void RtemsTaskReqPerfSetSchedulerPreempt_Setup(
@@ -802,7 +802,7 @@ static void RtemsTaskReqPerfSetSchedulerPreempt_Body_Wrap( void *arg )
 }
 
 /**
- * @brief Set the measured runtime.  Discard samples interrupted by a clock
+ * @brief Set the measured runtime. Discard samples interrupted by a clock
  *   tick.
  */
 static bool RtemsTaskReqPerfSetSchedulerPreempt_Teardown(
@@ -893,7 +893,7 @@ static void RtemsTaskReqPerfStart_Body_Wrap( void *arg )
 }
 
 /**
- * @brief Delete the worker.  Discard samples interrupted by a clock tick.
+ * @brief Delete the worker. Discard samples interrupted by a clock tick.
  */
 static bool RtemsTaskReqPerfStart_Teardown(
   RtemsTaskValPerf_Context *ctx,
@@ -971,7 +971,7 @@ static void RtemsTaskReqPerfStartPreempt_Body_Wrap( void *arg )
 }
 
 /**
- * @brief Set the measured runtime.  Delete the worker.  Discard samples
+ * @brief Set the measured runtime. Delete the worker. Discard samples
  *   interrupted by a clock tick.
  */
 static bool RtemsTaskReqPerfStartPreempt_Teardown(

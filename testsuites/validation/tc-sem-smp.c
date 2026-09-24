@@ -52,7 +52,7 @@
  *
  * This test case performs the following actions:
  *
- * - Create a worker thread and a MrsP mutex.  Use the mutex and the worker to
+ * - Create a worker thread and a MrsP mutex. Use the mutex and the worker to
  *   perform a bad sticky thread queue enqueue.
  *
  * - Create two worker threads, a MrsP mutex, and a priority inheritance mutex.
@@ -60,39 +60,39 @@
  *   priority than the ceiling priority of the mutex while one of the workers
  *   waits on the mutex.
  *
- *   - Let the first worker try to obtain the MrsP mutex.  Check that it
+ *   - Let the first worker try to obtain the MrsP mutex. Check that it
  *     acquired the ceiling priority.
  *
  *   - Let the second worker try to obtain the priority inheritance mutex.
  *     Check that the first worker inherited the priority from the second
  *     worker.
  *
- *   - Set the real priority of the first worker.  Check that it defines the
+ *   - Set the real priority of the first worker. Check that it defines the
  *     current priority.
  *
- *   - Release the MrsP mutex so that the first worker can to obtain it.  It
+ *   - Release the MrsP mutex so that the first worker can to obtain it. It
  *     will replace a temporary priority node which is the maximum priority
- *     node.  This is the first scenario we want to test.
+ *     node. This is the first scenario we want to test.
  *
  *   - Obtain the MrsP mutex for the runner thread to start the second scenario
  *     we would like to test.
  *
- *   - Let the first worker try to obtain the MrsP mutex.  Check that it
+ *   - Let the first worker try to obtain the MrsP mutex. Check that it
  *     acquired the ceiling priority.
  *
  *   - Let the second worker try to obtain the priority inheritance mutex.
  *     Check that the first worker inherited the priority from the second
  *     worker.
  *
- *   - Lower the priority of the second worker.  Check that the inherited
+ *   - Lower the priority of the second worker. Check that the inherited
  *     priority of the first worker reflects this priority change.
  *
  *   - Change the real priority of the first worker so that it defines its
  *     current priority.
  *
- *   - Release the MrsP mutex so that the first worker can to obtain it.  It
+ *   - Release the MrsP mutex so that the first worker can to obtain it. It
  *     will replace a temporary priority node which is between the minimum and
- *     maximum priority node.  This is the second scenario we want to test.
+ *     maximum priority node. This is the second scenario we want to test.
  *
  *   - Clean up all used resources.
  *
@@ -221,8 +221,8 @@ static T_fixture RtemsSemValSmp_Fixture = {
 };
 
 /**
- * @brief Create a worker thread and a MrsP mutex.  Use the mutex and the
- *   worker to perform a bad sticky thread queue enqueue.
+ * @brief Create a worker thread and a MrsP mutex. Use the mutex and the worker
+ *   to perform a bad sticky thread queue enqueue.
  */
 static void RtemsSemValSmp_Action_0( RtemsSemValSmp_Context *ctx )
 {
@@ -305,7 +305,7 @@ static void RtemsSemValSmp_Action_1( RtemsSemValSmp_Context *ctx )
   SetScheduler( worker_2_id, scheduler_b_id, PRIO_VERY_HIGH );
 
   /*
-   * Let the first worker try to obtain the MrsP mutex.  Check that it acquired
+   * Let the first worker try to obtain the MrsP mutex. Check that it acquired
    * the ceiling priority.
    */
   ObtainMutex( ctx->mutex_id );
@@ -338,7 +338,7 @@ static void RtemsSemValSmp_Action_1( RtemsSemValSmp_Context *ctx )
   T_eq_u32( prio, PRIO_VERY_HIGH );
 
   /*
-   * Set the real priority of the first worker.  Check that it defines the
+   * Set the real priority of the first worker. Check that it defines the
    * current priority.
    */
   SetPriority( worker_id, PRIO_ULTRA_HIGH );
@@ -347,9 +347,9 @@ static void RtemsSemValSmp_Action_1( RtemsSemValSmp_Context *ctx )
   T_eq_u32( prio, PRIO_ULTRA_HIGH );
 
   /*
-   * Release the MrsP mutex so that the first worker can to obtain it.  It will
-   * replace a temporary priority node which is the maximum priority node.
-   * This is the first scenario we want to test.
+   * Release the MrsP mutex so that the first worker can to obtain it. It will
+   * replace a temporary priority node which is the maximum priority node. This
+   * is the first scenario we want to test.
    */
   ReleaseMutex( ctx->mutex_id );
 
@@ -367,7 +367,7 @@ static void RtemsSemValSmp_Action_1( RtemsSemValSmp_Context *ctx )
   ObtainMutex( ctx->mutex_id );
 
   /*
-   * Let the first worker try to obtain the MrsP mutex.  Check that it acquired
+   * Let the first worker try to obtain the MrsP mutex. Check that it acquired
    * the ceiling priority.
    */
   ctx->done = false;
@@ -401,8 +401,8 @@ static void RtemsSemValSmp_Action_1( RtemsSemValSmp_Context *ctx )
   T_eq_u32( prio, PRIO_VERY_HIGH );
 
   /*
-   * Lower the priority of the second worker.  Check that the inherited
-   * priority of the first worker reflects this priority change.
+   * Lower the priority of the second worker. Check that the inherited priority
+   * of the first worker reflects this priority change.
    */
   SetPriority( worker_2_id, PRIO_LOW );
 
@@ -419,9 +419,9 @@ static void RtemsSemValSmp_Action_1( RtemsSemValSmp_Context *ctx )
   T_eq_u32( prio, PRIO_ULTRA_HIGH );
 
   /*
-   * Release the MrsP mutex so that the first worker can to obtain it.  It will
+   * Release the MrsP mutex so that the first worker can to obtain it. It will
    * replace a temporary priority node which is between the minimum and maximum
-   * priority node.  This is the second scenario we want to test.
+   * priority node. This is the second scenario we want to test.
    */
   ReleaseMutex( ctx->mutex_id );
 

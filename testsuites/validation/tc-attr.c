@@ -95,7 +95,7 @@
  * - Calculate the bitwise or of all non-default attribute constants.
  *
  *   - Check that the count of set bits in the calculated value is equal to the
- *     count of non-default attribute constants.  Since each non-default
+ *     count of non-default attribute constants. Since each non-default
  *     attribute constant is a power of two, this proves that each constant has
  *     a unique value.
  *
@@ -269,9 +269,9 @@ static void RtemsAttrValAttr_Action_2( void )
 
   /*
    * Check that the count of set bits in the calculated value is equal to the
-   * count of non-default attribute constants.  Since each non-default
-   * attribute constant is a power of two, this proves that each constant has a
-   * unique value.
+   * count of non-default attribute constants. Since each non-default attribute
+   * constant is a power of two, this proves that each constant has a unique
+   * value.
    */
   T_step_eq_int( 20, PopCount( attributes ), 10 );
 }

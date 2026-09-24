@@ -47,7 +47,7 @@
  *
  * @brief This SMP-only test suite validates the clustered scheduler
  *   configuration through an application configuration with a processor
- *   maximum of two.  The second processor is not assigned to a scheduler.
+ *   maximum of two. The second processor is not assigned to a scheduler.
  *
  * @{
  */

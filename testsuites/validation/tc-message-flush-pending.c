@@ -156,12 +156,12 @@ typedef struct {
   rtems_status_code ( *action )( rtems_id id, uint32_t *count );
 
   /**
-   * @brief This member specifies the ``id`` parameter of the action.
+   * @brief This member specifies the `id` parameter of the action.
    */
   rtems_id id_param;
 
   /**
-   * @brief This member specifies the ``count`` parameter of the action.
+   * @brief This member specifies the `count` parameter of the action.
    */
   uint32_t *count_param;
 
@@ -171,8 +171,8 @@ typedef struct {
   rtems_status_code status;
 
   /**
-   * @brief This member contains the value returned in parameter ``count`` of
-   *   the action.
+   * @brief This member contains the value returned in parameter `count` of the
+   *   action.
    */
   uint32_t count;
 
@@ -368,7 +368,7 @@ static void RtemsMessageReqFlushPending_Pre_Count_Prepare(
   switch ( state ) {
     case RtemsMessageReqFlushPending_Pre_Count_Valid: {
       /*
-       * While the ``count`` parameter references an `uint32_t` object.
+       * While the `count` parameter references an `uint32_t` object.
        */
       ctx->count_param = &ctx->count;
       break;
@@ -376,7 +376,7 @@ static void RtemsMessageReqFlushPending_Pre_Count_Prepare(
 
     case RtemsMessageReqFlushPending_Pre_Count_Null: {
       /*
-       * While the ``count`` parameter is NULL.
+       * While the `count` parameter is NULL.
        */
       ctx->count_param = NULL;
       break;
@@ -395,7 +395,7 @@ static void RtemsMessageReqFlushPending_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsMessageReqFlushPending_Pre_Id_Valid: {
       /*
-       * While the ``id`` parameter is valid.
+       * While the `id` parameter is valid.
        */
       ctx->id_param = ctx->message_queue_id;
       break;
@@ -403,7 +403,7 @@ static void RtemsMessageReqFlushPending_Pre_Id_Prepare(
 
     case RtemsMessageReqFlushPending_Pre_Id_Invalid: {
       /*
-       * While the ``id`` parameter is invalid.
+       * While the `id` parameter is invalid.
        */
       ctx->id_param = RTEMS_ID_NONE;
       break;
@@ -573,8 +573,8 @@ static void RtemsMessageReqFlushPending_Post_Count_Check(
   switch ( state ) {
     case RtemsMessageReqFlushPending_Post_Count_Zero: {
       /*
-       * The value of the object referenced by the ``count`` parameter shall be
-       * 0 after the return of the rtems_message_queue_flush() or
+       * The value of the object referenced by the `count` parameter shall be 0
+       * after the return of the rtems_message_queue_flush() or
        * rtems_message_queue_get_number_pending() call.
        */
       T_eq_u32( ctx->count, 0 );
@@ -584,13 +584,13 @@ static void RtemsMessageReqFlushPending_Post_Count_Check(
     case RtemsMessageReqFlushPending_Post_Count_Set: {
       /*
        * The rtems_message_queue_get_number_pending() directive shall set the
-       * value of the object referenced by the ``count`` parameter to the
-       * number of messages present in the message queue at a point in time
-       * during the single execution of the
-       * rtems_message_queue_get_number_pending() directive.
+       * value of the object referenced by the `count` parameter to the number
+       * of messages present in the message queue at a point in time during the
+       * single execution of the rtems_message_queue_get_number_pending()
+       * directive.
        *
        * The rtems_message_queue_flush() directive shall set the value of the
-       * object referenced by the ``count`` parameter to the number of messages
+       * object referenced by the `count` parameter to the number of messages
        * it removed from the message queue during the single execution of the
        * rtems_message_queue_flush() directive.
        */
@@ -600,7 +600,7 @@ static void RtemsMessageReqFlushPending_Post_Count_Check(
 
     case RtemsMessageReqFlushPending_Post_Count_Nop: {
       /*
-       * The value of the object referenced by the ``count`` parameter in past
+       * The value of the object referenced by the `count` parameter in past
        * call to rtems_message_queue_flush() or
        * rtems_message_queue_get_number_pending() shall not be accessed by the
        * rtems_message_queue_flush() or
@@ -624,7 +624,7 @@ static void RtemsMessageReqFlushPending_Post_MsgQueue_Check(
     case RtemsMessageReqFlushPending_Post_MsgQueue_Empty: {
       /*
        * The message queue shall contain no messages after the last call to
-       * ``id``.
+       * `id`.
        */
       PopMessage( ctx, CheckForNoMessage );
       break;
@@ -632,7 +632,7 @@ static void RtemsMessageReqFlushPending_Post_MsgQueue_Check(
 
     case RtemsMessageReqFlushPending_Post_MsgQueue_Nop: {
       /*
-       * Objects referenced by the ``id`` parameter in the past call to
+       * Objects referenced by the `id` parameter in the past call to
        * rtems_message_queue_flush() or
        * rtems_message_queue_get_number_pending() shall not be changed by that
        * call (see also Nop).

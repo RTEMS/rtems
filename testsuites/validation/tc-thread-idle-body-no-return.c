@@ -51,8 +51,8 @@
  *
  * This test case performs the following actions:
  *
- * - Create threads which execute an thread idle body.  Check that the thread
- *   idle body does not return.  If it would return, then an
+ * - Create threads which execute an thread idle body. Check that the thread
+ *   idle body does not return. If it would return, then an
  *   INTERNAL_ERROR_THREAD_EXITTED fatal error would occur.
  *
  *   - Check that the CPU port thread idle body does not return.
@@ -141,8 +141,8 @@ static T_fixture ScoreThreadValIdleBodyNoReturn_Fixture = {
 };
 
 /**
- * @brief Create threads which execute an thread idle body.  Check that the
- *   thread idle body does not return.  If it would return, then an
+ * @brief Create threads which execute an thread idle body. Check that the
+ *   thread idle body does not return. If it would return, then an
  *   INTERNAL_ERROR_THREAD_EXITTED fatal error would occur.
  */
 static void ScoreThreadValIdleBodyNoReturn_Action_0(

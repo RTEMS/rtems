@@ -80,8 +80,8 @@
  *     observe a generation number of zero as well as a generation number
  *     change.
  *
- *   - Delete the synchronous worker task.  Reinitialize the barrier and
- *     barrier states.  Start the zero worker task.
+ *   - Delete the synchronous worker task. Reinitialize the barrier and barrier
+ *     states. Start the zero worker task.
  *
  *   - Call the rtems_clock_get_realtime_coarse() directive and try to let it
  *     observe a generation number of zero.
@@ -110,8 +110,8 @@
  *   - Call the rtems_clock_get_boot_time_timeval() directive and try to let it
  *     observe a generation number of zero.
  *
- *   - Delete the zero worker task.  Reinitialize the barrier and barrier
- *     states.  Start the change worker task.
+ *   - Delete the zero worker task. Reinitialize the barrier and barrier
+ *     states. Start the change worker task.
  *
  *   - Call the rtems_clock_get_realtime_coarse() directive and try to let it
  *     observe a changing generation number.
@@ -491,8 +491,8 @@ static void ScoreTimecounterValGetSmp_Action_0( void )
   CleanupSynchronousWork( tc );
 
   /*
-   * Delete the synchronous worker task.  Reinitialize the barrier and barrier
-   * states.  Start the zero worker task.
+   * Delete the synchronous worker task. Reinitialize the barrier and barrier
+   * states. Start the zero worker task.
    */
   tc->base.tc_get_timecount = GetTimecount;
   DeleteTask( worker_id );
@@ -578,7 +578,7 @@ static void ScoreTimecounterValGetSmp_Action_0( void )
   CleanupZeroWork( tc );
 
   /*
-   * Delete the zero worker task.  Reinitialize the barrier and barrier states.
+   * Delete the zero worker task. Reinitialize the barrier and barrier states.
    * Start the change worker task.
    */
   DeleteTask( worker_id );

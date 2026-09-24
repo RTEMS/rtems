@@ -132,7 +132,7 @@ DevGrlibReqIrqampGetTimestamp_Pre_NumberOfTimestampRegisterSets_Prepare(
     case DevGrlibReqIrqampGetTimestamp_Pre_NumberOfTimestampRegisterSets_Zero: {
       /*
        * While the number of timestamp register sets indicated by the IRQ(A)MP
-       * register block specified by the ``irqamp_regs`` parameter is zero.
+       * register block specified by the `irqamp_regs` parameter is zero.
        */
       ctx->irqamp_regs.itstmp[ 0 ].itstmpc = 0;
       break;
@@ -141,7 +141,7 @@ DevGrlibReqIrqampGetTimestamp_Pre_NumberOfTimestampRegisterSets_Prepare(
     case DevGrlibReqIrqampGetTimestamp_Pre_NumberOfTimestampRegisterSets_Positive: {
       /*
        * While the number of timestamp register sets indicated by the IRQ(A)MP
-       * register block specified by the ``irqamp_regs`` parameter is positive.
+       * register block specified by the `irqamp_regs` parameter is positive.
        */
       ctx->irqamp_regs.itstmp[ 0 ].itstmpc = IRQAMP_ITSTMPC_TSTAMP( 1 );
       break;
@@ -162,7 +162,7 @@ static void DevGrlibReqIrqampGetTimestamp_Post_Result_Check(
       /*
        * The return value of irqamp_get_timestamp_registers() shall be address
        * of the timestamping register block contained in the IRQ(A)MP register
-       * block specified by the ``irqamp_regs`` parameter.
+       * block specified by the `irqamp_regs` parameter.
        */
       T_not_null( ctx->result );
       break;

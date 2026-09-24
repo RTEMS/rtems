@@ -50,8 +50,8 @@
  *
  * This test case performs the following actions:
  *
- * - Create a worker thread and two MrsP mutexes.  Obtain the Mrsp mutexes and
- *   check that a task yield works (owner is not sticky).  We need two mutexes
+ * - Create a worker thread and two MrsP mutexes. Obtain the Mrsp mutexes and
+ *   check that a task yield works (owner is not sticky). We need two mutexes
  *   since the uniprocessor schedulers do not increment the stick level in the
  *   scheduler unblock operation.
  *
@@ -134,8 +134,8 @@ static T_fixture RtemsSemValUni_Fixture = {
 };
 
 /**
- * @brief Create a worker thread and two MrsP mutexes.  Obtain the Mrsp mutexes
- *   and check that a task yield works (owner is not sticky).  We need two
+ * @brief Create a worker thread and two MrsP mutexes. Obtain the Mrsp mutexes
+ *   and check that a task yield works (owner is not sticky). We need two
  *   mutexes since the uniprocessor schedulers do not increment the stick level
  *   in the scheduler unblock operation.
  */

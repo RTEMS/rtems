@@ -56,7 +56,7 @@
  *     which evaluates to a non-zero value.
  *
  *   - Check that RTEMS_INTERRUPT_LOCK_REFERENCE() expanded to a lock reference
- *     definition.  Check that the lock is available after static
+ *     definition. Check that the lock is available after static
  *     initialization.
  *
  *   - Check that the lock is available after initialization.
@@ -65,26 +65,26 @@
  *     rtems_interrupt_lock_interrupt_disable() and disabled afterwards.
  *
  *   - Check that the maskable interrupt status is not changed by the
- *     rtems_interrupt_lock_acquire_isr() call.  Check that the lock is no
+ *     rtems_interrupt_lock_acquire_isr() call. Check that the lock is no
  *     longer available.
  *
  *   - Check that the maskable interrupt status is restored by the call to
- *     rtems_interrupt_lock_release() according to the ``_lock_context``
- *     parameter.  Check that the lock is available afterwards.
+ *     rtems_interrupt_lock_release() according to the `_lock_context`
+ *     parameter. Check that the lock is available afterwards.
  *
  *   - Check that the maskable interrupt status is not changed by the
  *     rtems_interrupt_lock_destroy() call.
  *
- *   - Initialize the lock using rtems_interrupt_lock_initialize().  Check that
+ *   - Initialize the lock using rtems_interrupt_lock_initialize(). Check that
  *     the lock is available after initialization.
  *
  *   - Check that maskable interrupts are disabled before the call to
- *     rtems_interrupt_lock_acquire() and disabled afterwards.  Check that the
+ *     rtems_interrupt_lock_acquire() and disabled afterwards. Check that the
  *     lock is no longer available.
  *
  *   - Check that the maskable interrupt status is restored by the call to
- *     rtems_interrupt_lock_release() according to the ``_lock_context``
- *     parameter.  Check that the lock is available afterwards.
+ *     rtems_interrupt_lock_release() according to the `_lock_context`
+ *     parameter. Check that the lock is available afterwards.
  *
  *   - Check that the maskable interrupt status is not changed by the
  *     rtems_interrupt_lock_destroy() call.
@@ -117,7 +117,7 @@ static void RtemsIntrValIntrSmpOnly_Action_0( void )
 
   /*
    * Check that RTEMS_INTERRUPT_LOCK_REFERENCE() expanded to a lock reference
-   * definition.  Check that the lock is available after static initialization.
+   * definition. Check that the lock is available after static initialization.
    */
   T_true( ISRLockIsAvailable( ref ) );
 
@@ -138,7 +138,7 @@ static void RtemsIntrValIntrSmpOnly_Action_0( void )
 
   /*
    * Check that the maskable interrupt status is not changed by the
-   * rtems_interrupt_lock_acquire_isr() call.  Check that the lock is no longer
+   * rtems_interrupt_lock_acquire_isr() call. Check that the lock is no longer
    * available.
    */
   T_false( AreInterruptsEnabled() );
@@ -149,8 +149,8 @@ static void RtemsIntrValIntrSmpOnly_Action_0( void )
 
   /*
    * Check that the maskable interrupt status is restored by the call to
-   * rtems_interrupt_lock_release() according to the ``_lock_context``
-   * parameter.  Check that the lock is available afterwards.
+   * rtems_interrupt_lock_release() according to the `_lock_context` parameter.
+   * Check that the lock is available afterwards.
    */
   T_false( AreInterruptsEnabled() );
   T_false( ISRLockIsAvailable( &lock.member ) );
@@ -167,7 +167,7 @@ static void RtemsIntrValIntrSmpOnly_Action_0( void )
   T_true( AreInterruptsEnabled() );
 
   /*
-   * Initialize the lock using rtems_interrupt_lock_initialize().  Check that
+   * Initialize the lock using rtems_interrupt_lock_initialize(). Check that
    * the lock is available after initialization.
    */
   rtems_interrupt_lock_initialize( &lock.member, "name" );
@@ -175,7 +175,7 @@ static void RtemsIntrValIntrSmpOnly_Action_0( void )
 
   /*
    * Check that maskable interrupts are disabled before the call to
-   * rtems_interrupt_lock_acquire() and disabled afterwards.  Check that the
+   * rtems_interrupt_lock_acquire() and disabled afterwards. Check that the
    * lock is no longer available.
    */
   T_true( AreInterruptsEnabled() );
@@ -186,8 +186,8 @@ static void RtemsIntrValIntrSmpOnly_Action_0( void )
 
   /*
    * Check that the maskable interrupt status is restored by the call to
-   * rtems_interrupt_lock_release() according to the ``_lock_context``
-   * parameter.  Check that the lock is available afterwards.
+   * rtems_interrupt_lock_release() according to the `_lock_context` parameter.
+   * Check that the lock is available afterwards.
    */
   T_false( AreInterruptsEnabled() );
   T_false( ISRLockIsAvailable( &lock.member ) );

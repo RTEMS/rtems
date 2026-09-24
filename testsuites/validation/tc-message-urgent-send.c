@@ -200,17 +200,17 @@ typedef struct {
   );
 
   /**
-   * @brief This member specifies the ``id`` parameter for the action.
+   * @brief This member specifies the `id` parameter for the action.
    */
   rtems_id id_param;
 
   /**
-   * @brief This member specifies the ``buffer`` parameter for the action.
+   * @brief This member specifies the `buffer` parameter for the action.
    */
   void *buffer_param;
 
   /**
-   * @brief This member specifies the ``size`` parameter for the action.
+   * @brief This member specifies the `size` parameter for the action.
    */
   size_t size_param;
 
@@ -477,7 +477,7 @@ static void RtemsMessageReqUrgentSend_Pre_Buffer_Prepare(
   switch ( state ) {
     case RtemsMessageReqUrgentSend_Pre_Buffer_Valid: {
       /*
-       * While the ``buffer`` parameter references a memory area where the
+       * While the `buffer` parameter references a memory area where the
        * message to be sent is stored.
        */
       uint8_t i;
@@ -490,7 +490,7 @@ static void RtemsMessageReqUrgentSend_Pre_Buffer_Prepare(
 
     case RtemsMessageReqUrgentSend_Pre_Buffer_Null: {
       /*
-       * While the ``buffer`` parameter is NULL.
+       * While the `buffer` parameter is NULL.
        */
       ctx->buffer_param = NULL;
       break;
@@ -509,7 +509,7 @@ static void RtemsMessageReqUrgentSend_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsMessageReqUrgentSend_Pre_Id_Valid: {
       /*
-       * While the ``id`` parameter is valid.
+       * While the `id` parameter is valid.
        */
       ctx->id_param = ctx->message_queue_id;
       break;
@@ -517,7 +517,7 @@ static void RtemsMessageReqUrgentSend_Pre_Id_Prepare(
 
     case RtemsMessageReqUrgentSend_Pre_Id_Invalid: {
       /*
-       * While the ``id`` parameter is invalid.
+       * While the `id` parameter is invalid.
        */
       ctx->id_param = RTEMS_ID_NONE;
       break;
@@ -536,7 +536,7 @@ static void RtemsMessageReqUrgentSend_Pre_Size_Prepare(
   switch ( state ) {
     case RtemsMessageReqUrgentSend_Pre_Size_Zero: {
       /*
-       * While the ``size`` parameter is 0.
+       * While the `size` parameter is 0.
        */
       ctx->size_param = 0;
       break;
@@ -544,7 +544,7 @@ static void RtemsMessageReqUrgentSend_Pre_Size_Prepare(
 
     case RtemsMessageReqUrgentSend_Pre_Size_SomeSize: {
       /*
-       * While the ``size`` parameter has a value between 0 and the maximum
+       * While the `size` parameter has a value between 0 and the maximum
        * message size.
        */
       ctx->size_param = MAXIMUM_MESSAGE_SIZE / 2 + 1;
@@ -553,7 +553,7 @@ static void RtemsMessageReqUrgentSend_Pre_Size_Prepare(
 
     case RtemsMessageReqUrgentSend_Pre_Size_MaxSize: {
       /*
-       * While the ``size`` parameter has a value of the maximum message size.
+       * While the `size` parameter has a value of the maximum message size.
        */
       ctx->size_param = MAXIMUM_MESSAGE_SIZE;
       break;
@@ -561,7 +561,7 @@ static void RtemsMessageReqUrgentSend_Pre_Size_Prepare(
 
     case RtemsMessageReqUrgentSend_Pre_Size_TooLarge: {
       /*
-       * While the ``size`` parameter has a value greater than the maximum
+       * While the `size` parameter has a value greater than the maximum
        * message size.
        */
       ctx->size_param = MAXIMUM_MESSAGE_SIZE + 1;
@@ -809,7 +809,7 @@ static void RtemsMessageReqUrgentSend_Post_MsgQueue_Check(
 
     case RtemsMessageReqUrgentSend_Post_MsgQueue_Nop: {
       /*
-       * Objects referenced by the ``id`` parameter in past call to
+       * Objects referenced by the `id` parameter in past call to
        * rtems_message_queue_send() or rtems_message_queue_urgent() shall not
        * be accessed by that call (see also Nop).
        */

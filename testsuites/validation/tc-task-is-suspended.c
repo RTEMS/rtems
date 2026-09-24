@@ -97,7 +97,7 @@ typedef struct {
   rtems_status_code status;
 
   /**
-   * @brief This member specifies if the ``id`` parameter value.
+   * @brief This member specifies if the `id` parameter value.
    */
   rtems_id id;
 
@@ -167,7 +167,7 @@ static void RtemsTaskReqIsSuspended_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsTaskReqIsSuspended_Pre_Id_Invalid: {
       /*
-       * While the ``id`` parameter is not associated with a task.
+       * While the `id` parameter is not associated with a task.
        */
       ctx->id = INVALID_ID;
       break;
@@ -175,7 +175,7 @@ static void RtemsTaskReqIsSuspended_Pre_Id_Prepare(
 
     case RtemsTaskReqIsSuspended_Pre_Id_Task: {
       /*
-       * While the ``id`` parameter is associated with a task.
+       * While the `id` parameter is associated with a task.
        */
       ctx->id = ctx->worker_id;
       break;
@@ -194,7 +194,7 @@ static void RtemsTaskReqIsSuspended_Pre_Suspended_Prepare(
   switch ( state ) {
     case RtemsTaskReqIsSuspended_Pre_Suspended_Yes: {
       /*
-       * While the task specified by the ``id`` parameter is suspended.
+       * While the task specified by the `id` parameter is suspended.
        */
       ctx->suspend = true;
       break;
@@ -202,7 +202,7 @@ static void RtemsTaskReqIsSuspended_Pre_Suspended_Prepare(
 
     case RtemsTaskReqIsSuspended_Pre_Suspended_No: {
       /*
-       * While the task specified by the ``id`` parameter is not suspended.
+       * While the task specified by the `id` parameter is not suspended.
        */
       ctx->suspend = false;
       break;

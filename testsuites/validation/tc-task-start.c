@@ -179,17 +179,17 @@ typedef struct {
   rtems_status_code status;
 
   /**
-   * @brief This member specifies if the ``id`` parameter value.
+   * @brief This member specifies if the `id` parameter value.
    */
   rtems_id id;
 
   /**
-   * @brief This member specifies if the ``entry_point`` parameter value.
+   * @brief This member specifies if the `entry_point` parameter value.
    */
   rtems_task_entry entry_point;
 
   /**
-   * @brief This member specifies if the ``argument`` parameter value.
+   * @brief This member specifies if the `argument` parameter value.
    */
   rtems_task_argument argument;
 
@@ -301,7 +301,7 @@ static void RtemsTaskReqStart_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsTaskReqStart_Pre_Id_Invalid: {
       /*
-       * While the ``id`` parameter is not associated with a task.
+       * While the `id` parameter is not associated with a task.
        */
       ctx->id = INVALID_ID;
       break;
@@ -309,7 +309,7 @@ static void RtemsTaskReqStart_Pre_Id_Prepare(
 
     case RtemsTaskReqStart_Pre_Id_Task: {
       /*
-       * While the ``id`` parameter is associated with a task.
+       * While the `id` parameter is associated with a task.
        */
       ctx->id = ctx->worker_id;
       break;
@@ -328,8 +328,8 @@ static void RtemsTaskReqStart_Pre_EntryPoint_Prepare(
   switch ( state ) {
     case RtemsTaskReqStart_Pre_EntryPoint_Valid: {
       /*
-       * While the task entry point specified by the ``entry_point`` parameter
-       * is valid.
+       * While the task entry point specified by the `entry_point` parameter is
+       * valid.
        */
       ctx->entry_point = WorkerA;
       break;
@@ -337,8 +337,8 @@ static void RtemsTaskReqStart_Pre_EntryPoint_Prepare(
 
     case RtemsTaskReqStart_Pre_EntryPoint_Null: {
       /*
-       * While the task entry point specified by the ``entry_point`` parameter
-       * is equal to NULL.
+       * While the task entry point specified by the `entry_point` parameter is
+       * equal to NULL.
        */
       ctx->entry_point = NULL;
       break;
@@ -357,7 +357,7 @@ static void RtemsTaskReqStart_Pre_Argument_Prepare(
   switch ( state ) {
     case RtemsTaskReqStart_Pre_Argument_Pointer: {
       /*
-       * While the entry point argument specified by the ``argument`` parameter
+       * While the entry point argument specified by the `argument` parameter
        * is a pointer.
        */
       ctx->argument = (rtems_task_argument) ctx;
@@ -366,7 +366,7 @@ static void RtemsTaskReqStart_Pre_Argument_Prepare(
 
     case RtemsTaskReqStart_Pre_Argument_Number: {
       /*
-       * While the entry point argument specified by the ``argument`` parameter
+       * While the entry point argument specified by the `argument` parameter
        * is a 32-bit number.
        */
       ctx->argument = UINT32_C( 0x87654321 );
@@ -386,7 +386,7 @@ static void RtemsTaskReqStart_Pre_Dormant_Prepare(
   switch ( state ) {
     case RtemsTaskReqStart_Pre_Dormant_Yes: {
       /*
-       * While the task specified by the ``id`` parameter is dormant.
+       * While the task specified by the `id` parameter is dormant.
        */
       ctx->start = false;
       break;
@@ -394,7 +394,7 @@ static void RtemsTaskReqStart_Pre_Dormant_Prepare(
 
     case RtemsTaskReqStart_Pre_Dormant_No: {
       /*
-       * While the task specified by the ``id`` parameter is not dormant.
+       * While the task specified by the `id` parameter is not dormant.
        */
       ctx->start = true;
       break;
@@ -413,7 +413,7 @@ static void RtemsTaskReqStart_Pre_Suspended_Prepare(
   switch ( state ) {
     case RtemsTaskReqStart_Pre_Suspended_Yes: {
       /*
-       * While the task specified by the ``id`` parameter is suspended.
+       * While the task specified by the `id` parameter is suspended.
        */
       ctx->suspend = true;
       break;
@@ -421,7 +421,7 @@ static void RtemsTaskReqStart_Pre_Suspended_Prepare(
 
     case RtemsTaskReqStart_Pre_Suspended_No: {
       /*
-       * While the task specified by the ``id`` parameter is not suspended.
+       * While the task specified by the `id` parameter is not suspended.
        */
       ctx->suspend = false;
       break;
@@ -485,8 +485,8 @@ static void RtemsTaskReqStart_Post_EntryPoint_Check(
   switch ( state ) {
     case RtemsTaskReqStart_Post_EntryPoint_Set: {
       /*
-       * The entry point of the task specified by the ``id`` parameter shall be
-       * set to the function specified by the ``entry_point`` parameter before
+       * The entry point of the task specified by the `id` parameter shall be
+       * set to the function specified by the `entry_point` parameter before
        * the task is unblocked by the rtems_task_start() call.
        */
       T_eq_u32( ctx->counter, 1 );
@@ -515,9 +515,9 @@ static void RtemsTaskReqStart_Post_Argument_Check(
   switch ( state ) {
     case RtemsTaskReqStart_Post_Argument_Set: {
       /*
-       * The entry point argument of the task specified by the ``id`` parameter
-       * shall be set to the value specified by the ``argument`` parameter
-       * before the task is unblocked by the rtems_task_start() call.
+       * The entry point argument of the task specified by the `id` parameter
+       * shall be set to the value specified by the `argument` parameter before
+       * the task is unblocked by the rtems_task_start() call.
        */
       T_eq_u32( ctx->actual_argument, ctx->argument );
       break;
@@ -545,7 +545,7 @@ static void RtemsTaskReqStart_Post_Unblock_Check(
   switch ( state ) {
     case RtemsTaskReqStart_Post_Unblock_Yes: {
       /*
-       * The task specified by the ``id`` parameter shall be unblocked by the
+       * The task specified by the `id` parameter shall be unblocked by the
        * rtems_task_start() call.
        */
       T_eq_sz( ctx->scheduler_log.header.recorded, 1 );

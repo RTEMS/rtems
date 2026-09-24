@@ -64,18 +64,18 @@ typedef struct {
  */
 typedef struct {
   /**
-   * @brief This member specifies the ``vector`` parameter value.
+   * @brief This member specifies the `vector` parameter value.
    */
   rtems_vector_number vector;
 
   /**
-   * @brief This member provides the object referenced by the ``priority``
+   * @brief This member provides the object referenced by the `priority`
    *   parameter.
    */
   uint32_t priority_obj;
 
   /**
-   * @brief This member specifies the ``priority`` parameter value.
+   * @brief This member specifies the `priority` parameter value.
    */
   uint32_t *priority;
 
@@ -159,7 +159,7 @@ static void RtemsIntrReqGetPriority_Pre_Vector_Prepare(
   switch ( state ) {
     case RtemsIntrReqGetPriority_Pre_Vector_Valid: {
       /*
-       * While the ``vector`` parameter is associated with an interrupt vector.
+       * While the `vector` parameter is associated with an interrupt vector.
        */
       ctx->vector = ctx->valid_vector;
       break;
@@ -167,7 +167,7 @@ static void RtemsIntrReqGetPriority_Pre_Vector_Prepare(
 
     case RtemsIntrReqGetPriority_Pre_Vector_Invalid: {
       /*
-       * While the ``vector`` parameter is not associated with an interrupt
+       * While the `vector` parameter is not associated with an interrupt
        * vector.
        */
       ctx->vector = BSP_INTERRUPT_VECTOR_COUNT;
@@ -187,8 +187,7 @@ static void RtemsIntrReqGetPriority_Pre_Priority_Prepare(
   switch ( state ) {
     case RtemsIntrReqGetPriority_Pre_Priority_Valid: {
       /*
-       * While the ``priority`` parameter references an object of type
-       * uint32_t.
+       * While the `priority` parameter references an object of type uint32_t.
        */
       ctx->priority = &ctx->priority_obj;
       break;
@@ -196,7 +195,7 @@ static void RtemsIntrReqGetPriority_Pre_Priority_Prepare(
 
     case RtemsIntrReqGetPriority_Pre_Priority_Null: {
       /*
-       * While the ``priority`` parameter is equal to NULL.
+       * While the `priority` parameter is equal to NULL.
        */
       ctx->priority = NULL;
       break;
@@ -216,7 +215,7 @@ static void RtemsIntrReqGetPriority_Pre_CanGetPriority_Prepare(
     case RtemsIntrReqGetPriority_Pre_CanGetPriority_Yes: {
       /*
        * While getting the priority for the interrupt vector specified by
-       * ``vector`` parameter is supported.
+       * `vector` parameter is supported.
        */
       if ( !ctx->can_get_priority ) {
         ctx->Map.skip = true;
@@ -227,7 +226,7 @@ static void RtemsIntrReqGetPriority_Pre_CanGetPriority_Prepare(
     case RtemsIntrReqGetPriority_Pre_CanGetPriority_No: {
       /*
        * While getting the priority for the interrupt vector specified by
-       * ``vector`` parameter is not supported.
+       * `vector` parameter is not supported.
        */
       if ( ctx->can_get_priority ) {
         ctx->Map.skip = true;
@@ -295,10 +294,10 @@ static void RtemsIntrReqGetPriority_Post_PriorityObj_Check(
   switch ( state ) {
     case RtemsIntrReqGetPriority_Post_PriorityObj_Set: {
       /*
-       * The value of the object referenced by the ``priority`` parameter shall
+       * The value of the object referenced by the `priority` parameter shall
        * be set by the directive call to a priority which the interrupt
-       * specified by the ``vector`` parameter had at some time point during
-       * the directive call.
+       * specified by the `vector` parameter had at some time point during the
+       * directive call.
        */
       T_ne_u32( ctx->priority_obj, PRIORITY_UNSET );
       break;
@@ -306,7 +305,7 @@ static void RtemsIntrReqGetPriority_Post_PriorityObj_Check(
 
     case RtemsIntrReqGetPriority_Post_PriorityObj_Nop: {
       /*
-       * The value of the object referenced by the ``priority`` parameter shall
+       * The value of the object referenced by the `priority` parameter shall
        * not be changed by the directive call.
        */
       T_eq_u32( ctx->priority_obj, PRIORITY_UNSET );

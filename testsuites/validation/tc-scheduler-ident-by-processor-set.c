@@ -118,19 +118,19 @@ typedef struct {
   rtems_id second_scheduler_id;
 
   /**
-   * @brief This member provides the object referenced by the ``cpuset``
+   * @brief This member provides the object referenced by the `cpuset`
    *   parameter.
    */
   cpu_set_t cpuset_value;
 
   /**
-   * @brief This member provides the object referenced by the ``id`` parameter.
+   * @brief This member provides the object referenced by the `id` parameter.
    */
   rtems_id id_value;
 
   /**
    * @brief If this member is true, then the processor specified by the
-   *   ``cpusetsize`` parameter shall be owned by a scheduler.
+   *   `cpusetsize` parameter shall be owned by a scheduler.
    */
   bool cpu_has_scheduler;
 
@@ -141,17 +141,17 @@ typedef struct {
   rtems_status_code status;
 
   /**
-   * @brief This member specifies if the ``cpusetsize`` parameter value.
+   * @brief This member specifies if the `cpusetsize` parameter value.
    */
   size_t cpusetsize;
 
   /**
-   * @brief This member specifies if the ``cpuset`` parameter value.
+   * @brief This member specifies if the `cpuset` parameter value.
    */
   const cpu_set_t *cpuset;
 
   /**
-   * @brief This member specifies if the ``id`` parameter value.
+   * @brief This member specifies if the `id` parameter value.
    */
   rtems_id *id;
 
@@ -293,7 +293,7 @@ static void RtemsSchedulerReqIdentByProcessorSet_Pre_CPUSetSize_Prepare(
   switch ( state ) {
     case RtemsSchedulerReqIdentByProcessorSet_Pre_CPUSetSize_Valid: {
       /*
-       * While the ``cpusetsize`` parameter is an integral multiple of the size
+       * While the `cpusetsize` parameter is an integral multiple of the size
        * of long.
        */
       ctx->cpusetsize = sizeof( ctx->cpuset_value );
@@ -302,7 +302,7 @@ static void RtemsSchedulerReqIdentByProcessorSet_Pre_CPUSetSize_Prepare(
 
     case RtemsSchedulerReqIdentByProcessorSet_Pre_CPUSetSize_Invalid: {
       /*
-       * While the ``cpusetsize`` parameter is not an integral multiple of the
+       * While the `cpusetsize` parameter is not an integral multiple of the
        * size of long.
        */
       ctx->cpusetsize = 1;
@@ -322,7 +322,7 @@ static void RtemsSchedulerReqIdentByProcessorSet_Pre_CPUSet_Prepare(
   switch ( state ) {
     case RtemsSchedulerReqIdentByProcessorSet_Pre_CPUSet_Valid: {
       /*
-       * While the ``cpuset`` parameter references an object of type cpu_set_t.
+       * While the `cpuset` parameter references an object of type cpu_set_t.
        */
       ctx->cpuset = &ctx->cpuset_value;
       break;
@@ -330,7 +330,7 @@ static void RtemsSchedulerReqIdentByProcessorSet_Pre_CPUSet_Prepare(
 
     case RtemsSchedulerReqIdentByProcessorSet_Pre_CPUSet_Null: {
       /*
-       * While the ``cpuset`` parameter is equal to NULL.
+       * While the `cpuset` parameter is equal to NULL.
        */
       ctx->cpuset = NULL;
       break;
@@ -349,7 +349,7 @@ static void RtemsSchedulerReqIdentByProcessorSet_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsSchedulerReqIdentByProcessorSet_Pre_Id_Valid: {
       /*
-       * While the ``id`` parameter references an object of type rtems_id.
+       * While the `id` parameter references an object of type rtems_id.
        */
       ctx->id_value = INVALID_ID;
       ctx->id = &ctx->id_value;
@@ -358,7 +358,7 @@ static void RtemsSchedulerReqIdentByProcessorSet_Pre_Id_Prepare(
 
     case RtemsSchedulerReqIdentByProcessorSet_Pre_Id_Null: {
       /*
-       * While the ``id`` parameter is equal to NULL.
+       * While the `id` parameter is equal to NULL.
        */
       ctx->id = NULL;
       break;
@@ -433,10 +433,10 @@ static void RtemsSchedulerReqIdentByProcessorSet_Post_IdVar_Check(
   switch ( state ) {
     case RtemsSchedulerReqIdentByProcessorSet_Post_IdVar_Set: {
       /*
-       * The value of the object referenced by the ``id`` parameter shall be
-       * set to the identifier of the scheduler which owned the highest
-       * numbered online processor specified by the ``cpusetsize`` ``cpuset``
-       * parameters at some point during the call after the return of the
+       * The value of the object referenced by the `id` parameter shall be set
+       * to the identifier of the scheduler which owned the highest numbered
+       * online processor specified by the `cpusetsize` `cpuset` parameters at
+       * some point during the call after the return of the
        * rtems_scheduler_ident_by_processor_set() call.
        */
       T_eq_u32( ctx->id_value, 0x0f010001 );
@@ -445,7 +445,7 @@ static void RtemsSchedulerReqIdentByProcessorSet_Post_IdVar_Check(
 
     case RtemsSchedulerReqIdentByProcessorSet_Post_IdVar_Nop: {
       /*
-       * Objects referenced by the ``id`` parameter in past calls to
+       * Objects referenced by the `id` parameter in past calls to
        * rtems_scheduler_ident_by_processor_set() shall not be accessed by the
        * rtems_scheduler_ident_by_processor_set() call.
        */

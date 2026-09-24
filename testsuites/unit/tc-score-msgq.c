@@ -53,24 +53,24 @@
  *
  * Parts of the files `cpukit/score/src/coremsginsert.c`,
  * `cpukit/score/src/coremsgseize.c`, and `cpukit/score/src/coremsgsubmit.c`
- * are only executed by the POSIX API.  Currently, the pre-qualified subset of
- * RTEMS does not contain the POSIX API.  This test exercises the code parts
+ * are only executed by the POSIX API. Currently, the pre-qualified subset of
+ * RTEMS does not contain the POSIX API. This test exercises the code parts
  * otherwise only reached by the POSIX API to achieve full code coverage.
  *
  * This test case performs the following actions:
  *
- * - Use _CORE_message_queue_Insert_message() to insert two messages into a
+ * - Use \_CORE_message_queue_Insert_message() to insert two messages into a
  *   message queue and use the POSIX message priority to define their order in
  *   the queue.
  *
- *   - Check that _CORE_message_queue_Submit() was executed successfully.
+ *   - Check that \_CORE_message_queue_Submit() was executed successfully.
  *
  *   - Check that the messages are in the right order in the message queue.
  *
  * - Submit three messages into a message queue which can only store two and
  *   have the third submit() blocked till a seize() occurs.
  *
- *   - Check that the third _CORE_message_queue_Submit() did actually block
+ *   - Check that the third \_CORE_message_queue_Submit() did actually block
  *     till there was room for the message in the message queue.
  *
  * - Submit messages in the queue from within an ISR.
@@ -289,7 +289,7 @@ static T_fixture ScoreMsgqUnitMsgq_Fixture = {
 };
 
 /**
- * @brief Use _CORE_message_queue_Insert_message() to insert two messages into
+ * @brief Use \_CORE_message_queue_Insert_message() to insert two messages into
  *   a message queue and use the POSIX message priority to define their order
  *   in the queue.
  */
@@ -333,7 +333,7 @@ static void ScoreMsgqUnitMsgq_Action_0( ScoreMsgqUnitMsgq_Context *ctx )
   );
 
   /*
-   * Check that _CORE_message_queue_Submit() was executed successfully.
+   * Check that \_CORE_message_queue_Submit() was executed successfully.
    */
   T_rsc_success( status_submit_low );
   T_rsc_success( status_submit_high );
@@ -371,7 +371,7 @@ static void ScoreMsgqUnitMsgq_Action_1( ScoreMsgqUnitMsgq_Context *ctx )
   T_rsc_success( ReceiveOneMessages( ctx ) );
 
   /*
-   * Check that the third _CORE_message_queue_Submit() did actually block till
+   * Check that the third \_CORE_message_queue_Submit() did actually block till
    * there was room for the message in the message queue.
    */
   T_true( is_worker_blocked_after_third_send );

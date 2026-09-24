@@ -261,12 +261,12 @@ typedef struct {
   rtems_interrupt_entry entry_obj;
 
   /**
-   * @brief This member specifies if the ``vector`` parameter value.
+   * @brief This member specifies if the `vector` parameter value.
    */
   rtems_vector_number vector;
 
   /**
-   * @brief This member specifies if the ``entry`` parameter value.
+   * @brief This member specifies if the `entry` parameter value.
    */
   rtems_interrupt_entry *entry;
 
@@ -530,7 +530,7 @@ static void RtemsIntrReqEntryRemove_Pre_Vector_Prepare(
   switch ( state ) {
     case RtemsIntrReqEntryRemove_Pre_Vector_Valid: {
       /*
-       * While the ``vector`` parameter is associated with an interrupt vector.
+       * While the `vector` parameter is associated with an interrupt vector.
        */
       ctx->vector = ctx->test_vector;
       break;
@@ -538,7 +538,7 @@ static void RtemsIntrReqEntryRemove_Pre_Vector_Prepare(
 
     case RtemsIntrReqEntryRemove_Pre_Vector_Invalid: {
       /*
-       * While the ``vector`` parameter is not associated with an interrupt
+       * While the `vector` parameter is not associated with an interrupt
        * vector.
        */
       ctx->vector = BSP_INTERRUPT_VECTOR_COUNT;
@@ -558,7 +558,7 @@ static void RtemsIntrReqEntryRemove_Pre_Entry_Prepare(
   switch ( state ) {
     case RtemsIntrReqEntryRemove_Pre_Entry_Obj: {
       /*
-       * While the ``entry`` parameter references an object of type
+       * While the `entry` parameter references an object of type
        * rtems_interrupt_entry.
        */
       ctx->entry = &ctx->entry_obj;
@@ -567,7 +567,7 @@ static void RtemsIntrReqEntryRemove_Pre_Entry_Prepare(
 
     case RtemsIntrReqEntryRemove_Pre_Entry_Null: {
       /*
-       * While the ``entry`` parameter is equal to NULL.
+       * While the `entry` parameter is equal to NULL.
        */
       ctx->entry = NULL;
       break;
@@ -586,7 +586,7 @@ static void RtemsIntrReqEntryRemove_Pre_Routine_Prepare(
   switch ( state ) {
     case RtemsIntrReqEntryRemove_Pre_Routine_Valid: {
       /*
-       * While the handler routine of the entry referenced by the ``options``
+       * While the handler routine of the entry referenced by the `options`
        * parameter is valid.
        */
       rtems_interrupt_entry_initialize(
@@ -600,7 +600,7 @@ static void RtemsIntrReqEntryRemove_Pre_Routine_Prepare(
 
     case RtemsIntrReqEntryRemove_Pre_Routine_Null: {
       /*
-       * While the handler routine of the entry referenced by the ``options``
+       * While the handler routine of the entry referenced by the `options`
        * parameter is equal to NULL.
        */
       rtems_interrupt_entry_initialize(
@@ -625,8 +625,8 @@ static void RtemsIntrReqEntryRemove_Pre_EntryObj_Prepare(
   switch ( state ) {
     case RtemsIntrReqEntryRemove_Pre_EntryObj_Installed: {
       /*
-       * While the entry referenced by the ``options`` parameter is installed
-       * at the interrupt vector specified by the ``vector`` parameter.
+       * While the entry referenced by the `options` parameter is installed at
+       * the interrupt vector specified by the `vector` parameter.
        */
       ctx->installed = true;
       break;
@@ -634,12 +634,12 @@ static void RtemsIntrReqEntryRemove_Pre_EntryObj_Prepare(
 
     case RtemsIntrReqEntryRemove_Pre_EntryObj_Match: {
       /*
-       * While the entry referenced by the ``options`` parameter not installed
-       * at the interrupt vector specified by the ``vector`` parameter, while
-       * the entry referenced by the ``options`` has a handler routine and
-       * argument pair which is equal to the handler routine and argument pair
-       * of an entry installed at the interrupt vector specified by the
-       * ``vector`` parameter.
+       * While the entry referenced by the `options` parameter not installed at
+       * the interrupt vector specified by the `vector` parameter, while the
+       * entry referenced by the `options` has a handler routine and argument
+       * pair which is equal to the handler routine and argument pair of an
+       * entry installed at the interrupt vector specified by the `vector`
+       * parameter.
        */
       ctx->installed = false;
       ctx->other_installed = true;
@@ -649,12 +649,12 @@ static void RtemsIntrReqEntryRemove_Pre_EntryObj_Prepare(
 
     case RtemsIntrReqEntryRemove_Pre_EntryObj_NoMatch: {
       /*
-       * While the entry referenced by the ``options`` parameter not installed
-       * at the interrupt vector specified by the ``vector`` parameter, while
-       * the entry referenced by the ``options`` has a handler routine and
-       * argument pair which is not equal to the handler routine and argument
-       * pairs of all entries installed at the interrupt vector specified by
-       * the ``vector`` parameter.
+       * While the entry referenced by the `options` parameter not installed at
+       * the interrupt vector specified by the `vector` parameter, while the
+       * entry referenced by the `options` has a handler routine and argument
+       * pair which is not equal to the handler routine and argument pairs of
+       * all entries installed at the interrupt vector specified by the
+       * `vector` parameter.
        */
       ctx->installed = false;
       ctx->other_installed = true;
@@ -730,8 +730,8 @@ static void RtemsIntrReqEntryRemove_Pre_CanDisable_Prepare(
   switch ( state ) {
     case RtemsIntrReqEntryRemove_Pre_CanDisable_Yes: {
       /*
-       * While the interrupt vector associated with the ``vector`` parameter
-       * can be disabled.
+       * While the interrupt vector associated with the `vector` parameter can
+       * be disabled.
        */
       /*
        * This pre-condition depends on the attributes of an interrupt vector.
@@ -745,8 +745,8 @@ static void RtemsIntrReqEntryRemove_Pre_CanDisable_Prepare(
 
     case RtemsIntrReqEntryRemove_Pre_CanDisable_Maybe: {
       /*
-       * While the interrupt vector associated with the ``vector`` parameter
-       * may be disabled.
+       * While the interrupt vector associated with the `vector` parameter may
+       * be disabled.
        */
       /* See comment for `Yes` state */
       break;
@@ -754,7 +754,7 @@ static void RtemsIntrReqEntryRemove_Pre_CanDisable_Prepare(
 
     case RtemsIntrReqEntryRemove_Pre_CanDisable_No: {
       /*
-       * While the interrupt vector associated with the ``vector`` parameter
+       * While the interrupt vector associated with the `vector` parameter
        * cannot be disabled.
        */
       /* See comment for `Yes` state */
@@ -774,8 +774,8 @@ static void RtemsIntrReqEntryRemove_Pre_First_Prepare(
   switch ( state ) {
     case RtemsIntrReqEntryRemove_Pre_First_Yes: {
       /*
-       * While the entry referenced by the ``entry`` parameter is installed as
-       * the first entry at the interrupt vector specified by the ``vector``
+       * While the entry referenced by the `entry` parameter is installed as
+       * the first entry at the interrupt vector specified by the `vector`
        * parameter.
        */
       ctx->first = true;
@@ -784,9 +784,9 @@ static void RtemsIntrReqEntryRemove_Pre_First_Prepare(
 
     case RtemsIntrReqEntryRemove_Pre_First_No: {
       /*
-       * While the entry referenced by the ``entry`` parameter is installed as
-       * not the first entry at the interrupt vector specified by the
-       * ``vector`` parameter.
+       * While the entry referenced by the `entry` parameter is installed as
+       * not the first entry at the interrupt vector specified by the `vector`
+       * parameter.
        */
       ctx->first = false;
       break;
@@ -805,8 +805,8 @@ static void RtemsIntrReqEntryRemove_Pre_Last_Prepare(
   switch ( state ) {
     case RtemsIntrReqEntryRemove_Pre_Last_Yes: {
       /*
-       * While the entry referenced by the ``entry`` parameter is installed as
-       * the last entry at the interrupt vector specified by the ``vector``
+       * While the entry referenced by the `entry` parameter is installed as
+       * the last entry at the interrupt vector specified by the `vector`
        * parameter.
        */
       ctx->last = true;
@@ -815,8 +815,8 @@ static void RtemsIntrReqEntryRemove_Pre_Last_Prepare(
 
     case RtemsIntrReqEntryRemove_Pre_Last_No: {
       /*
-       * While the entry referenced by the ``entry`` parameter is installed as
-       * not the last entry at the interrupt vector specified by the ``vector``
+       * While the entry referenced by the `entry` parameter is installed as
+       * not the last entry at the interrupt vector specified by the `vector`
        * parameter.
        */
       ctx->last = false;
@@ -901,8 +901,8 @@ static void RtemsIntrReqEntryRemove_Post_Disabled_Check(
   switch ( state ) {
     case RtemsIntrReqEntryRemove_Post_Disabled_Nop: {
       /*
-       * The enabled status of the interrupt vector specified by ``vector``
-       * shall not be modified by the rtems_interrupt_entry_remove() call.
+       * The enabled status of the interrupt vector specified by `vector` shall
+       * not be modified by the rtems_interrupt_entry_remove() call.
        */
       if ( !ctx->interrupt_occurred ) {
         T_eq( ctx->enabled_before, ctx->enabled_after );
@@ -912,7 +912,7 @@ static void RtemsIntrReqEntryRemove_Post_Disabled_Check(
 
     case RtemsIntrReqEntryRemove_Post_Disabled_Yes: {
       /*
-       * The interrupt vector specified by ``vector`` shall be disabled.
+       * The interrupt vector specified by `vector` shall be disabled.
        */
       if ( ctx->attributes.can_disable ) {
         T_false( ctx->enabled_after );
@@ -922,7 +922,7 @@ static void RtemsIntrReqEntryRemove_Post_Disabled_Check(
 
     case RtemsIntrReqEntryRemove_Post_Disabled_Maybe: {
       /*
-       * The interrupt vector specified by ``vector`` may be disabled.
+       * The interrupt vector specified by `vector` may be disabled.
        */
       /* The comment of pre-condition `CanDisable` for the `Yes` state. */
       if ( ctx->attributes.can_disable ) {
@@ -933,7 +933,7 @@ static void RtemsIntrReqEntryRemove_Post_Disabled_Check(
 
     case RtemsIntrReqEntryRemove_Post_Disabled_No: {
       /*
-       * The interrupt vector specified by ``vector`` shall not be disabled.
+       * The interrupt vector specified by `vector` shall not be disabled.
        */
       /* The comment of pre-condition `CanDisable` for the `Yes` state. */
       if ( ctx->attributes.can_disable ) {
@@ -958,8 +958,8 @@ static void RtemsIntrReqEntryRemove_Post_Installed_Check(
   switch ( state ) {
     case RtemsIntrReqEntryRemove_Post_Installed_No: {
       /*
-       * The entry referenced by ``entry`` shall not be installed at the
-       * interrupt vector specified by ``vector``.
+       * The entry referenced by `entry` shall not be installed at the
+       * interrupt vector specified by `vector`.
        */
       ctx->visited_entries = 0;
       sc = rtems_interrupt_handler_iterate(
@@ -996,7 +996,7 @@ static void RtemsIntrReqEntryRemove_Post_Installed_Check(
 
     case RtemsIntrReqEntryRemove_Post_Installed_Nop: {
       /*
-       * The entries installed at the interrupt vector specified by ``vector``
+       * The entries installed at the interrupt vector specified by `vector`
        * shall not be modified by the rtems_interrupt_entry_remove() call.
        */
       ctx->visited_entries = 0;

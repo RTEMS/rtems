@@ -52,7 +52,7 @@
  * This test case performs the following actions:
  *
  * - The test action is carried out by the application configuration of the
- *   test suite and the wrapped _CPU_SMP_Start_processor().
+ *   test suite and the wrapped \_CPU_SMP_Start_processor().
  *
  *   - Check that the expected fatal source is present.
  *
@@ -100,7 +100,7 @@ static T_fixture ScoreSmpValFatalStartOfMandatoryProcessorFailed_Fixture = {
 
 /**
  * @brief The test action is carried out by the application configuration of
- *   the test suite and the wrapped _CPU_SMP_Start_processor().
+ *   the test suite and the wrapped \_CPU_SMP_Start_processor().
  */
 static void ScoreSmpValFatalStartOfMandatoryProcessorFailed_Action_0(
   ScoreSmpValFatalStartOfMandatoryProcessorFailed_Context *ctx

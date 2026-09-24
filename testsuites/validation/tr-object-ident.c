@@ -330,7 +330,7 @@ static void RtemsReqIdent_Post_Id_Check(
       /*
        * The value of the object identifier referenced by the id parameter
        * shall be the identifier of a local object of the specified class with
-       * a name equal to the name parameter.  If more than one local object of
+       * a name equal to the name parameter. If more than one local object of
        * the specified class with such a name exists, then it shall be the
        * identifier of the object with the lowest object index.
        */
@@ -344,9 +344,9 @@ static void RtemsReqIdent_Post_Id_Check(
        * The value of the object identifier referenced by the id parameter
        * shall be the identifier of a remote object of the specified class on a
        * eligible node defined by the node parameter with a name equal to the
-       * name parameter.  If more than one local object of the specified class
+       * name parameter. If more than one local object of the specified class
        * with such a name exists, then it shall be the identifier of the object
-       * with the lowest object index.  Otherwise, if more than one object of
+       * with the lowest object index. Otherwise, if more than one object of
        * the specified class with such a name exists on remote eligible nodes,
        * then it shall be the identifier of the object with the lowest node
        * index and the lowest object index on this node.

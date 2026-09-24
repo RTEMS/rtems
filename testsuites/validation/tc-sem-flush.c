@@ -328,7 +328,7 @@ static void RtemsSemReqFlush_Pre_Id_Prepare( RtemsSemReqFlush_Pre_Id state )
   switch ( state ) {
     case RtemsSemReqFlush_Pre_Id_Valid: {
       /*
-       * While the ``id`` parameter is associated with the semaphore.
+       * While the `id` parameter is associated with the semaphore.
        */
       /* Nothing to prepare */
       break;
@@ -336,7 +336,7 @@ static void RtemsSemReqFlush_Pre_Id_Prepare( RtemsSemReqFlush_Pre_Id state )
 
     case RtemsSemReqFlush_Pre_Id_Invalid: {
       /*
-       * While the ``id`` parameter is not associated with a semaphore.
+       * While the `id` parameter is not associated with a semaphore.
        */
       /* Nothing to prepare */
       break;

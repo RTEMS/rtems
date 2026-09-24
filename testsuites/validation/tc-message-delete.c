@@ -201,7 +201,7 @@ static void RtemsMessageReqDelete_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsMessageReqDelete_Pre_Id_NoObj: {
       /*
-       * While the ``id`` parameter is not associated with a message queue.
+       * While the `id` parameter is not associated with a message queue.
        */
       ctx->id = 0;
       break;
@@ -209,7 +209,7 @@ static void RtemsMessageReqDelete_Pre_Id_Prepare(
 
     case RtemsMessageReqDelete_Pre_Id_MsgQueue: {
       /*
-       * While the ``id`` parameter is associated with a message queue.
+       * While the `id` parameter is associated with a message queue.
        */
       ctx->id = ctx->message_queue_id;
       break;

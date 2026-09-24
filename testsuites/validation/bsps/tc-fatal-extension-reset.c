@@ -52,9 +52,9 @@
  *
  * - Check the effects of the BSP-specific fatal extension.
  *
- *   - Check that no dynamic fatal error extension was invoked.  This shows
- *     that the BSP-specific fatal extension called the wrapped bsp_reset()
- *     function of the test suite.
+ *   - Check that no dynamic fatal error extension was invoked. This shows that
+ *     the BSP-specific fatal extension called the wrapped bsp_reset() function
+ *     of the test suite.
  *
  * @{
  */
@@ -102,7 +102,7 @@ static void BspValFatalExtensionReset_Action_0( void )
   uint32_t counter;
 
   /*
-   * Check that no dynamic fatal error extension was invoked.  This shows that
+   * Check that no dynamic fatal error extension was invoked. This shows that
    * the BSP-specific fatal extension called the wrapped bsp_reset() function
    * of the test suite.
    */

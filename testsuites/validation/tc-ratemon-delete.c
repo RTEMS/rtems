@@ -132,7 +132,7 @@ static void RtemsRatemonReqDelete_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsRatemonReqDelete_Pre_Id_NoObj: {
       /*
-       * While the ``id`` parameter is not associated with a period.
+       * While the `id` parameter is not associated with a period.
        */
       ctx->id = 0;
       break;
@@ -140,7 +140,7 @@ static void RtemsRatemonReqDelete_Pre_Id_Prepare(
 
     case RtemsRatemonReqDelete_Pre_Id_Period: {
       /*
-       * While the ``id`` parameter is associated with a period.
+       * While the `id` parameter is associated with a period.
        */
       ctx->id = ctx->period_id;
       break;

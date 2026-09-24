@@ -233,12 +233,12 @@ typedef struct {
   rtems_status_code status;
 
   /**
-   * @brief This member specifies the ``scheduler_id`` parameter value.
+   * @brief This member specifies the `scheduler_id` parameter value.
    */
   rtems_id id;
 
   /**
-   * @brief This member specifies the ``cpu_index`` parameter value.
+   * @brief This member specifies the `cpu_index` parameter value.
    */
   uint32_t cpu_index;
 
@@ -567,8 +567,7 @@ static void RtemsSchedulerReqRemoveProcessor_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsSchedulerReqRemoveProcessor_Pre_Id_Invalid: {
       /*
-       * While the ``scheduler_id`` parameter is not associated with a
-       * scheduler.
+       * While the `scheduler_id` parameter is not associated with a scheduler.
        */
       ctx->id = INVALID_ID;
       break;
@@ -576,7 +575,7 @@ static void RtemsSchedulerReqRemoveProcessor_Pre_Id_Prepare(
 
     case RtemsSchedulerReqRemoveProcessor_Pre_Id_Scheduler: {
       /*
-       * While the ``scheduler_id`` parameter is associated with a scheduler.
+       * While the `scheduler_id` parameter is associated with a scheduler.
        */
       ctx->id = SCHEDULER_A_ID;
       break;
@@ -595,8 +594,8 @@ static void RtemsSchedulerReqRemoveProcessor_Pre_CPUIndex_Prepare(
   switch ( state ) {
     case RtemsSchedulerReqRemoveProcessor_Pre_CPUIndex_Valid: {
       /*
-       * While the ``cpu_index`` parameter is less than the configured
-       * processor maximum.
+       * While the `cpu_index` parameter is less than the configured processor
+       * maximum.
        */
       ctx->cpu_index = 0;
       break;
@@ -604,7 +603,7 @@ static void RtemsSchedulerReqRemoveProcessor_Pre_CPUIndex_Prepare(
 
     case RtemsSchedulerReqRemoveProcessor_Pre_CPUIndex_Invalid: {
       /*
-       * While the ``cpu_index`` parameter is greater than or equal to the
+       * While the `cpu_index` parameter is greater than or equal to the
        * configured processor maximum.
        */
       ctx->cpu_index = rtems_configuration_get_maximum_processors();
@@ -624,8 +623,8 @@ static void RtemsSchedulerReqRemoveProcessor_Pre_Owned_Prepare(
   switch ( state ) {
     case RtemsSchedulerReqRemoveProcessor_Pre_Owned_Yes: {
       /*
-       * While the processor specified by the ``cpu_index`` parameter is owned
-       * by the scheduler specified by the ``scheduler_id`` parameter.
+       * While the processor specified by the `cpu_index` parameter is owned by
+       * the scheduler specified by the `scheduler_id` parameter.
        */
       ctx->owned = true;
       break;
@@ -633,8 +632,8 @@ static void RtemsSchedulerReqRemoveProcessor_Pre_Owned_Prepare(
 
     case RtemsSchedulerReqRemoveProcessor_Pre_Owned_No: {
       /*
-       * While the processor specified by the ``cpu_index`` parameter is not
-       * owned by the scheduler specified by the ``scheduler_id`` parameter.
+       * While the processor specified by the `cpu_index` parameter is not
+       * owned by the scheduler specified by the `scheduler_id` parameter.
        */
       ctx->owned = false;
       break;
@@ -653,9 +652,9 @@ static void RtemsSchedulerReqRemoveProcessor_Pre_Last_Prepare(
   switch ( state ) {
     case RtemsSchedulerReqRemoveProcessor_Pre_Last_Yes: {
       /*
-       * While the processor specified by the ``cpu_index`` parameter is the
-       * last processor owned by the scheduler specified by the
-       * ``scheduler_id`` parameter.
+       * While the processor specified by the `cpu_index` parameter is the last
+       * processor owned by the scheduler specified by the `scheduler_id`
+       * parameter.
        */
       ctx->last = true;
       break;
@@ -663,9 +662,9 @@ static void RtemsSchedulerReqRemoveProcessor_Pre_Last_Prepare(
 
     case RtemsSchedulerReqRemoveProcessor_Pre_Last_No: {
       /*
-       * While the processor specified by the ``cpu_index`` parameter is not
-       * the last processor owned by the scheduler specified by the
-       * ``scheduler_id`` parameter.
+       * While the processor specified by the `cpu_index` parameter is not the
+       * last processor owned by the scheduler specified by the `scheduler_id`
+       * parameter.
        */
       ctx->last = false;
       break;
@@ -685,7 +684,7 @@ static void RtemsSchedulerReqRemoveProcessor_Pre_Home_Prepare(
     case RtemsSchedulerReqRemoveProcessor_Pre_Home_Yes: {
       /*
        * While at least one non-idle task exists which uses the scheduler
-       * specified by the ``scheduler_id`` parameter as its home scheduler.
+       * specified by the `scheduler_id` parameter as its home scheduler.
        */
       ctx->home = true;
       break;
@@ -694,7 +693,7 @@ static void RtemsSchedulerReqRemoveProcessor_Pre_Home_Prepare(
     case RtemsSchedulerReqRemoveProcessor_Pre_Home_No: {
       /*
        * While no non-idle task exists which uses the scheduler specified by
-       * the ``scheduler_id`` parameter as its home scheduler.
+       * the `scheduler_id` parameter as its home scheduler.
        */
       ctx->home = false;
       break;
@@ -714,9 +713,9 @@ static void RtemsSchedulerReqRemoveProcessor_Pre_RequiredByAffinity_Prepare(
     case RtemsSchedulerReqRemoveProcessor_Pre_RequiredByAffinity_Yes: {
       /*
        * While at least one non-idle task which uses the scheduler specified by
-       * the ``scheduler_id`` parameter as its home scheduler exists those
+       * the `scheduler_id` parameter as its home scheduler exists those
        * processor affinity set requires the processor specified by the
-       * ``cpu_index`` parameter.
+       * `cpu_index` parameter.
        */
       ctx->required_by_affinity = true;
       break;
@@ -725,9 +724,9 @@ static void RtemsSchedulerReqRemoveProcessor_Pre_RequiredByAffinity_Prepare(
     case RtemsSchedulerReqRemoveProcessor_Pre_RequiredByAffinity_No: {
       /*
        * While no non-idle task which uses the scheduler specified by the
-       * ``scheduler_id`` parameter as its home scheduler exists those
-       * processor affinity set requires the processor specified by the
-       * ``cpu_index`` parameter.
+       * `scheduler_id` parameter as its home scheduler exists those processor
+       * affinity set requires the processor specified by the `cpu_index`
+       * parameter.
        */
       ctx->required_by_affinity = false;
       break;
@@ -746,8 +745,8 @@ static void RtemsSchedulerReqRemoveProcessor_Pre_UsedBy_Prepare(
   switch ( state ) {
     case RtemsSchedulerReqRemoveProcessor_Pre_UsedBy_Idle: {
       /*
-       * While the processor specified by the ``cpu_index`` parameter is used
-       * by an idle task.
+       * While the processor specified by the `cpu_index` parameter is used by
+       * an idle task.
        */
       ctx->idle = true;
       ctx->task = false;
@@ -757,9 +756,9 @@ static void RtemsSchedulerReqRemoveProcessor_Pre_UsedBy_Prepare(
 
     case RtemsSchedulerReqRemoveProcessor_Pre_UsedBy_Task: {
       /*
-       * While the processor specified by the ``cpu_index`` parameter is used
-       * by a task task which uses the scheduler specified by the
-       * ``scheduler_id`` parameter as its home scheduler.
+       * While the processor specified by the `cpu_index` parameter is used by
+       * a task task which uses the scheduler specified by the `scheduler_id`
+       * parameter as its home scheduler.
        */
       ctx->idle = false;
       ctx->task = true;
@@ -769,9 +768,9 @@ static void RtemsSchedulerReqRemoveProcessor_Pre_UsedBy_Prepare(
 
     case RtemsSchedulerReqRemoveProcessor_Pre_UsedBy_TaskIdle: {
       /*
-       * While the processor specified by the ``cpu_index`` parameter is used
-       * by an idle task on behalf of a task task which uses the scheduler
-       * specified by the ``scheduler_id`` parameter as its home scheduler.
+       * While the processor specified by the `cpu_index` parameter is used by
+       * an idle task on behalf of a task task which uses the scheduler
+       * specified by the `scheduler_id` parameter as its home scheduler.
        */
       ctx->idle = true;
       ctx->task = true;
@@ -781,9 +780,9 @@ static void RtemsSchedulerReqRemoveProcessor_Pre_UsedBy_Prepare(
 
     case RtemsSchedulerReqRemoveProcessor_Pre_UsedBy_Helping: {
       /*
-       * While the processor specified by the ``cpu_index`` parameter is used
-       * by a task task which uses the scheduler specified by the
-       * ``scheduler_id`` parameter as a helping scheduler.
+       * While the processor specified by the `cpu_index` parameter is used by
+       * a task task which uses the scheduler specified by the `scheduler_id`
+       * parameter as a helping scheduler.
        */
       if ( !ctx->last && rtems_scheduler_get_processor_maximum() < 3 ) {
         ctx->Map.skip = true;
@@ -855,8 +854,8 @@ static void RtemsSchedulerReqRemoveProcessor_Post_Removed_Check(
   switch ( state ) {
     case RtemsSchedulerReqRemoveProcessor_Post_Removed_Yes: {
       /*
-       * The processor specified by the ``cpu_index`` parameter shall be
-       * removed from the scheduler specified by the ``scheduler_id`` by the
+       * The processor specified by the `cpu_index` parameter shall be removed
+       * from the scheduler specified by the `scheduler_id` by the
        * rtems_scheduler_remove_processor() call.
        */
       if ( ctx->home && ctx->helping ) {

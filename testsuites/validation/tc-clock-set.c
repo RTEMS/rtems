@@ -254,7 +254,7 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
   switch ( state ) {
     case RtemsClockReqSet_Pre_ToD_Valid: {
       /*
-       * While the ``time_of_day`` parameter references an arbitrary valid date
+       * While the `time_of_day` parameter references an arbitrary valid date
        * and time between 1988-01-01T00:00:00.000000000Z and
        * 2105-12-31T23:59:59.999999999Z.
        */
@@ -272,7 +272,7 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
 
     case RtemsClockReqSet_Pre_ToD_ValidLeap4: {
       /*
-       * While the ``time_of_day`` parameter references a date for a leap year
+       * While the `time_of_day` parameter references a date for a leap year
        * with the value of 29th of February.
        */
       ctx->target_tod_value = (rtems_time_of_day) { 2096, 2, 29, 0, 0, 0, 0 };
@@ -281,7 +281,7 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
 
     case RtemsClockReqSet_Pre_ToD_ValidLeap400: {
       /*
-       * While the ``time_of_day`` parameter references a date for a leap year
+       * While the `time_of_day` parameter references a date for a leap year
        * with the value of 29th of February.
        */
       ctx->target_tod_value = (rtems_time_of_day) { 2000, 2, 29, 0, 0, 0, 0 };
@@ -290,7 +290,7 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
 
     case RtemsClockReqSet_Pre_ToD_Youngest: {
       /*
-       * While the ``time_of_day`` parameter references the youngest date and
+       * While the `time_of_day` parameter references the youngest date and
        * time accepted (1988-01-01T00:00:00.000000000Z).
        */
       ctx->target_tod_value = (rtems_time_of_day) { 1988, 1, 1, 0, 0, 0, 0 };
@@ -299,8 +299,8 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
 
     case RtemsClockReqSet_Pre_ToD_Oldest: {
       /*
-       * While the ``time_of_day`` parameter references the oldest date and
-       * time accepted (2400-12-31T23:59:59.999999999Z).
+       * While the `time_of_day` parameter references the oldest date and time
+       * accepted (2400-12-31T23:59:59.999999999Z).
        */
       ctx->target_tod_value = (rtems_time_of_day) {
         2400,
@@ -316,7 +316,7 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
 
     case RtemsClockReqSet_Pre_ToD_TooJung: {
       /*
-       * While the ``time_of_day`` parameter references a valid date and time
+       * While the `time_of_day` parameter references a valid date and time
        * younger than 1988-01-01T00:00:00.000000000Z.
        */
       ctx->target_tod_value = (rtems_time_of_day) {
@@ -333,7 +333,7 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
 
     case RtemsClockReqSet_Pre_ToD_TooOld: {
       /*
-       * While the ``time_of_day`` parameter references a valid date and time
+       * While the `time_of_day` parameter references a valid date and time
        * older than 2400-12-31T23:59:59.999999999Z.
        */
       ctx->target_tod_value = (rtems_time_of_day) { 2401, 1, 1, 0, 0, 0, 0 };
@@ -342,8 +342,8 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
 
     case RtemsClockReqSet_Pre_ToD_InvMonth0: {
       /*
-       * While the ``time_of_day`` parameter is invalid because the value of
-       * the month is 0.
+       * While the `time_of_day` parameter is invalid because the value of the
+       * month is 0.
        */
       ctx->target_tod_value =
         (rtems_time_of_day) { 2021, 0, 11, 11, 10, 59, 1 };
@@ -352,8 +352,8 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
 
     case RtemsClockReqSet_Pre_ToD_InvMonth: {
       /*
-       * While the ``time_of_day`` parameter is invalid because the value of
-       * the month is larger than 12.
+       * While the `time_of_day` parameter is invalid because the value of the
+       * month is larger than 12.
        */
       ctx->target_tod_value =
         (rtems_time_of_day) { 2021, 13, 11, 11, 10, 59, 1 };
@@ -362,8 +362,8 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
 
     case RtemsClockReqSet_Pre_ToD_InvDay0: {
       /*
-       * While the ``time_of_day`` parameter is invalid because the value of
-       * the day is 0.
+       * While the `time_of_day` parameter is invalid because the value of the
+       * day is 0.
        */
       ctx->target_tod_value =
         (rtems_time_of_day) { 2021, 3, 0, 11, 10, 59, 1 };
@@ -372,8 +372,8 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
 
     case RtemsClockReqSet_Pre_ToD_InvDay: {
       /*
-       * While the ``time_of_day`` parameter is invalid because the value of
-       * the day is larger than the days of the month.
+       * While the `time_of_day` parameter is invalid because the value of the
+       * day is larger than the days of the month.
        */
       ctx->target_tod_value =
         (rtems_time_of_day) { 2021, 2, 29, 11, 10, 59, 1 };
@@ -382,8 +382,8 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
 
     case RtemsClockReqSet_Pre_ToD_InvHour: {
       /*
-       * While the ``time_of_day`` parameter is invalid because the value of
-       * the hour is larger than 23.
+       * While the `time_of_day` parameter is invalid because the value of the
+       * hour is larger than 23.
        */
       ctx->target_tod_value =
         (rtems_time_of_day) { 2021, 3, 11, 24, 10, 59, 1 };
@@ -392,8 +392,8 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
 
     case RtemsClockReqSet_Pre_ToD_InvMinute: {
       /*
-       * While the ``time_of_day`` parameter is invalid because the value of
-       * the minute is larger than 59.
+       * While the `time_of_day` parameter is invalid because the value of the
+       * minute is larger than 59.
        */
       ctx->target_tod_value =
         (rtems_time_of_day) { 2021, 3, 11, 11, 60, 59, 1 };
@@ -402,8 +402,8 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
 
     case RtemsClockReqSet_Pre_ToD_InvSecond: {
       /*
-       * While the ``time_of_day`` parameter is invalid because the value of
-       * the second is larger than 59.
+       * While the `time_of_day` parameter is invalid because the value of the
+       * second is larger than 59.
        */
       ctx->target_tod_value =
         (rtems_time_of_day) { 2021, 3, 11, 11, 10, 60, 1 };
@@ -412,8 +412,8 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
 
     case RtemsClockReqSet_Pre_ToD_InvTicks: {
       /*
-       * While the ``time_of_day`` parameter is invalid because the value of
-       * the ticks are larger or equal to the ticks per second.
+       * While the `time_of_day` parameter is invalid because the value of the
+       * ticks are larger or equal to the ticks per second.
        */
       ctx->target_tod_value = (rtems_time_of_day) {
         2021,
@@ -429,8 +429,8 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
 
     case RtemsClockReqSet_Pre_ToD_InvLeap4: {
       /*
-       * While the ``time_of_day`` parameter is invalid because the value 30th
-       * of February does not exist in a leap year.
+       * While the `time_of_day` parameter is invalid because the value 30th of
+       * February does not exist in a leap year.
        */
       ctx->target_tod_value = (rtems_time_of_day) { 2104, 2, 30, 0, 0, 0, 0 };
       break;
@@ -438,8 +438,8 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
 
     case RtemsClockReqSet_Pre_ToD_InvLeap100: {
       /*
-       * While the ``time_of_day`` parameter is invalid because the value 29th
-       * of February does not exist in a non-leap year.
+       * While the `time_of_day` parameter is invalid because the value 29th of
+       * February does not exist in a non-leap year.
        */
       ctx->target_tod_value = (rtems_time_of_day) { 2100, 2, 29, 0, 0, 0, 0 };
       break;
@@ -447,8 +447,8 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
 
     case RtemsClockReqSet_Pre_ToD_InvLeap400: {
       /*
-       * While the ``time_of_day`` parameter is invalid because the value 30th
-       * of February does not exist in a leap year.
+       * While the `time_of_day` parameter is invalid because the value 30th of
+       * February does not exist in a leap year.
        */
       ctx->target_tod_value = (rtems_time_of_day) { 2000, 2, 30, 0, 0, 0, 0 };
       break;
@@ -456,7 +456,7 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
 
     case RtemsClockReqSet_Pre_ToD_AtTimer: {
       /*
-       * While the ``time_of_day`` parameter references the same point in time
+       * While the `time_of_day` parameter references the same point in time
        * when a timer should fire.
        */
       ctx->target_tod_value = (rtems_time_of_day) { 1989, 1, 1, 0, 0, 0, 0 };
@@ -466,8 +466,8 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
 
     case RtemsClockReqSet_Pre_ToD_BeforeTimer: {
       /*
-       * While the ``time_of_day`` parameter references a point in time before
-       * a timer should fire.
+       * While the `time_of_day` parameter references a point in time before a
+       * timer should fire.
        */
       ctx->target_tod_value =
         (rtems_time_of_day) { 1988, 12, 31, 23, 59, 59, 0 };
@@ -477,7 +477,7 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
 
     case RtemsClockReqSet_Pre_ToD_AfterTimer: {
       /*
-       * While the ``time_of_day`` parameter references a point in time after a
+       * While the `time_of_day` parameter references a point in time after a
        * timer should fire.
        */
       ctx->target_tod_value = (rtems_time_of_day) { 1989, 1, 1, 1, 0, 0, 0 };
@@ -487,7 +487,7 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
 
     case RtemsClockReqSet_Pre_ToD_Null: {
       /*
-       * WHile the ``time_of_day`` parameter is NULL.
+       * WHile the `time_of_day` parameter is NULL.
        */
       ctx->target_tod = NULL;
       break;
@@ -590,7 +590,7 @@ static void RtemsClockReqSet_Post_Clock_Check(
     case RtemsClockReqSet_Post_Clock_Set: {
       /*
        * The CLOCK_REALTIME shall be set to the values of the object referenced
-       * by the ``time_of_day`` parameter during the rtems_clock_set() call.
+       * by the `time_of_day` parameter during the rtems_clock_set() call.
        */
       T_eq_ptr( ctx->target_tod, &ctx->target_tod_value );
       T_rsc_success( ctx->get_tod_after_status );

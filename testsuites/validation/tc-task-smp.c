@@ -57,10 +57,10 @@
  *
  *   - Move runner from scheduler A to B.
  *
- *   - Create a task.  Check that the home scheduler of the created task is
+ *   - Create a task. Check that the home scheduler of the created task is
  *     scheduler B.
  *
- *   - Construct a task.  Check that the home scheduler of the constructed task
+ *   - Construct a task. Check that the home scheduler of the constructed task
  *     is scheduler B.
  *
  *   - Restore runner scheduler.
@@ -84,7 +84,7 @@ static void RtemsTaskValSmp_Action_0( void )
   SetSelfScheduler( SCHEDULER_B_ID, 1 );
 
   /*
-   * Create a task.  Check that the home scheduler of the created task is
+   * Create a task. Check that the home scheduler of the created task is
    * scheduler B.
    */
   sc = rtems_task_create(
@@ -101,8 +101,8 @@ static void RtemsTaskValSmp_Action_0( void )
   DeleteTask( id );
 
   /*
-   * Construct a task.  Check that the home scheduler of the constructed task
-   * is scheduler B.
+   * Construct a task. Check that the home scheduler of the constructed task is
+   * scheduler B.
    */
   sc = rtems_task_construct( &DefaultTaskConfig, &id );
   T_step_rsc_success( 3, sc );

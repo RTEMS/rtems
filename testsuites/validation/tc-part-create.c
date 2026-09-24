@@ -251,7 +251,7 @@ static void RtemsPartReqCreate_Pre_Name_Prepare(
   switch ( state ) {
     case RtemsPartReqCreate_Pre_Name_Valid: {
       /*
-       * While the ``name`` parameter is valid.
+       * While the `name` parameter is valid.
        */
       ctx->name = NAME;
       break;
@@ -259,7 +259,7 @@ static void RtemsPartReqCreate_Pre_Name_Prepare(
 
     case RtemsPartReqCreate_Pre_Name_Invalid: {
       /*
-       * While the ``name`` parameter is invalid.
+       * While the `name` parameter is invalid.
        */
       ctx->name = 0;
       break;
@@ -278,7 +278,7 @@ static void RtemsPartReqCreate_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsPartReqCreate_Pre_Id_Valid: {
       /*
-       * While the ``id`` parameter references an object of type rtems_id.
+       * While the `id` parameter references an object of type rtems_id.
        */
       ctx->id = &ctx->id_value;
       break;
@@ -286,7 +286,7 @@ static void RtemsPartReqCreate_Pre_Id_Prepare(
 
     case RtemsPartReqCreate_Pre_Id_Null: {
       /*
-       * While the ``id`` parameter is NULL.
+       * While the `id` parameter is NULL.
        */
       ctx->id = NULL;
       break;
@@ -305,7 +305,7 @@ static void RtemsPartReqCreate_Pre_Start_Prepare(
   switch ( state ) {
     case RtemsPartReqCreate_Pre_Start_Valid: {
       /*
-       * While the ``starting_address`` parameter is valid.
+       * While the `starting_address` parameter is valid.
        */
       ctx->starting_address = buffers;
       break;
@@ -313,7 +313,7 @@ static void RtemsPartReqCreate_Pre_Start_Prepare(
 
     case RtemsPartReqCreate_Pre_Start_Null: {
       /*
-       * While the ``starting_address`` parameter is NULL.
+       * While the `starting_address` parameter is NULL.
        */
       ctx->starting_address = NULL;
       break;
@@ -321,7 +321,7 @@ static void RtemsPartReqCreate_Pre_Start_Prepare(
 
     case RtemsPartReqCreate_Pre_Start_BadAlign: {
       /*
-       * While the ``starting_address`` parameter is misaligned.
+       * While the `starting_address` parameter is misaligned.
        */
       ctx->starting_address = &buffers[ 0 ][ 1 ];
       break;
@@ -340,7 +340,7 @@ static void RtemsPartReqCreate_Pre_Length_Prepare(
   switch ( state ) {
     case RtemsPartReqCreate_Pre_Length_Valid: {
       /*
-       * While the ``length`` parameter is valid.
+       * While the `length` parameter is valid.
        */
       ctx->length = sizeof( buffers );
       break;
@@ -348,7 +348,7 @@ static void RtemsPartReqCreate_Pre_Length_Prepare(
 
     case RtemsPartReqCreate_Pre_Length_Zero: {
       /*
-       * While the ``length`` parameter is zero.
+       * While the `length` parameter is zero.
        */
       ctx->length = 0;
       break;
@@ -356,7 +356,7 @@ static void RtemsPartReqCreate_Pre_Length_Prepare(
 
     case RtemsPartReqCreate_Pre_Length_Invalid: {
       /*
-       * While the ``length`` parameter is less than the buffer size.
+       * While the `length` parameter is less than the buffer size.
        */
       ctx->length = sizeof( buffers[ 0 ] ) - 1;
       break;
@@ -375,7 +375,7 @@ static void RtemsPartReqCreate_Pre_Size_Prepare(
   switch ( state ) {
     case RtemsPartReqCreate_Pre_Size_Valid: {
       /*
-       * While the ``buffer_size`` parameter is valid.
+       * While the `buffer_size` parameter is valid.
        */
       ctx->buffer_size = sizeof( buffers[ 0 ] );
       break;
@@ -383,7 +383,7 @@ static void RtemsPartReqCreate_Pre_Size_Prepare(
 
     case RtemsPartReqCreate_Pre_Size_Zero: {
       /*
-       * While the ``buffer_size`` parameter is zero.
+       * While the `buffer_size` parameter is zero.
        */
       ctx->buffer_size = 0;
       break;
@@ -391,7 +391,7 @@ static void RtemsPartReqCreate_Pre_Size_Prepare(
 
     case RtemsPartReqCreate_Pre_Size_Skew: {
       /*
-       * The ``buffer_size`` parameter shall not an integral multiple of the
+       * The `buffer_size` parameter shall not an integral multiple of the
        * pointer size.
        */
       ctx->buffer_size = 1;
@@ -400,7 +400,7 @@ static void RtemsPartReqCreate_Pre_Size_Prepare(
 
     case RtemsPartReqCreate_Pre_Size_Small: {
       /*
-       * The ``buffer_size`` parameter shall greater than zero and an integral
+       * The `buffer_size` parameter shall greater than zero and an integral
        * multiple of the pointer size and less than the size of two pointers.
        */
       ctx->buffer_size = sizeof( uintptr_t );
@@ -545,9 +545,9 @@ static void RtemsPartReqCreate_Post_IdVar_Check(
   switch ( state ) {
     case RtemsPartReqCreate_Post_IdVar_Set: {
       /*
-       * The value of the object referenced by the ``id`` parameter shall be
-       * set to the object identifier of the created partition after the return
-       * of the rtems_partition_create() call.
+       * The value of the object referenced by the `id` parameter shall be set
+       * to the object identifier of the created partition after the return of
+       * the rtems_partition_create() call.
        */
       T_eq_ptr( ctx->id, &ctx->id_value );
       T_ne_u32( ctx->id_value, INVALID_ID );
@@ -575,7 +575,7 @@ static void RtemsPartReqCreate_Post_IdVar_Check(
 
     case RtemsPartReqCreate_Post_IdVar_Nop: {
       /*
-       * Objects referenced by the ``id`` parameter in past calls to
+       * Objects referenced by the `id` parameter in past calls to
        * rtems_partition_create() shall not be accessed by the
        * rtems_partition_create() call.
        */

@@ -243,17 +243,17 @@ typedef struct {
   rtems_interrupt_entry entry_obj;
 
   /**
-   * @brief This member specifies if the ``vector`` parameter value.
+   * @brief This member specifies if the `vector` parameter value.
    */
   rtems_vector_number vector;
 
   /**
-   * @brief This member specifies if the ``options`` parameter value.
+   * @brief This member specifies if the `options` parameter value.
    */
   rtems_option options;
 
   /**
-   * @brief This member specifies if the ``entry`` parameter value.
+   * @brief This member specifies if the `entry` parameter value.
    */
   rtems_interrupt_entry *entry;
 
@@ -540,7 +540,7 @@ static void RtemsIntrReqEntryInstall_Pre_Vector_Prepare(
   switch ( state ) {
     case RtemsIntrReqEntryInstall_Pre_Vector_Valid: {
       /*
-       * While the ``vector`` parameter is associated with an interrupt vector.
+       * While the `vector` parameter is associated with an interrupt vector.
        */
       ctx->vector = ctx->test_vector;
       break;
@@ -548,7 +548,7 @@ static void RtemsIntrReqEntryInstall_Pre_Vector_Prepare(
 
     case RtemsIntrReqEntryInstall_Pre_Vector_Invalid: {
       /*
-       * While the ``vector`` parameter is not associated with an interrupt
+       * While the `vector` parameter is not associated with an interrupt
        * vector.
        */
       ctx->vector = BSP_INTERRUPT_VECTOR_COUNT;
@@ -568,8 +568,7 @@ static void RtemsIntrReqEntryInstall_Pre_Options_Prepare(
   switch ( state ) {
     case RtemsIntrReqEntryInstall_Pre_Options_Unique: {
       /*
-       * While the ``options`` indicates that an unique entry shall be
-       * installed.
+       * While the `options` indicates that an unique entry shall be installed.
        */
       ctx->options = RTEMS_INTERRUPT_UNIQUE;
       break;
@@ -577,8 +576,7 @@ static void RtemsIntrReqEntryInstall_Pre_Options_Prepare(
 
     case RtemsIntrReqEntryInstall_Pre_Options_Shared: {
       /*
-       * While the ``options`` indicates that a shared entry shall be
-       * installed.
+       * While the `options` indicates that a shared entry shall be installed.
        */
       ctx->options = RTEMS_INTERRUPT_SHARED;
       break;
@@ -586,8 +584,8 @@ static void RtemsIntrReqEntryInstall_Pre_Options_Prepare(
 
     case RtemsIntrReqEntryInstall_Pre_Options_Replace: {
       /*
-       * While the ``options`` indicates that the entry handler routine shall
-       * be replaced.
+       * While the `options` indicates that the entry handler routine shall be
+       * replaced.
        */
       ctx->options = RTEMS_INTERRUPT_REPLACE;
       break;
@@ -606,7 +604,7 @@ static void RtemsIntrReqEntryInstall_Pre_Entry_Prepare(
   switch ( state ) {
     case RtemsIntrReqEntryInstall_Pre_Entry_Obj: {
       /*
-       * While the ``entry`` parameter references an object of type
+       * While the `entry` parameter references an object of type
        * rtems_interrupt_entry.
        */
       ctx->entry = &ctx->entry_obj;
@@ -615,7 +613,7 @@ static void RtemsIntrReqEntryInstall_Pre_Entry_Prepare(
 
     case RtemsIntrReqEntryInstall_Pre_Entry_Null: {
       /*
-       * While the ``entry`` parameter is equal to NULL.
+       * While the `entry` parameter is equal to NULL.
        */
       ctx->entry = NULL;
       break;
@@ -634,7 +632,7 @@ static void RtemsIntrReqEntryInstall_Pre_Routine_Prepare(
   switch ( state ) {
     case RtemsIntrReqEntryInstall_Pre_Routine_Valid: {
       /*
-       * While the handler routine of the object referenced by the ``entry``
+       * While the handler routine of the object referenced by the `entry`
        * parameter is valid.
        */
       rtems_interrupt_entry_initialize(
@@ -648,7 +646,7 @@ static void RtemsIntrReqEntryInstall_Pre_Routine_Prepare(
 
     case RtemsIntrReqEntryInstall_Pre_Routine_Null: {
       /*
-       * While the handler routine of the object referenced by the ``entry``
+       * While the handler routine of the object referenced by the `entry`
        * parameter is equal to NULL.
        */
       rtems_interrupt_entry_initialize(
@@ -728,8 +726,8 @@ static void RtemsIntrReqEntryInstall_Pre_CanEnable_Prepare(
   switch ( state ) {
     case RtemsIntrReqEntryInstall_Pre_CanEnable_Yes: {
       /*
-       * While the interrupt vector associated with the ``vector`` parameter
-       * can be enabled.
+       * While the interrupt vector associated with the `vector` parameter can
+       * be enabled.
        */
       /*
        * This pre-condition depends on the attributes of an interrupt vector.
@@ -743,8 +741,8 @@ static void RtemsIntrReqEntryInstall_Pre_CanEnable_Prepare(
 
     case RtemsIntrReqEntryInstall_Pre_CanEnable_Maybe: {
       /*
-       * While the interrupt vector associated with the ``vector`` parameter
-       * may be enabled.
+       * While the interrupt vector associated with the `vector` parameter may
+       * be enabled.
        */
       /* See comment for `Yes` state */
       break;
@@ -752,7 +750,7 @@ static void RtemsIntrReqEntryInstall_Pre_CanEnable_Prepare(
 
     case RtemsIntrReqEntryInstall_Pre_CanEnable_No: {
       /*
-       * While the interrupt vector associated with the ``vector`` parameter
+       * While the interrupt vector associated with the `vector` parameter
        * cannot be enabled.
        */
       /* See comment for `Yes` state */
@@ -773,7 +771,7 @@ static void RtemsIntrReqEntryInstall_Pre_Installed_Prepare(
     case RtemsIntrReqEntryInstall_Pre_Installed_None: {
       /*
        * While the no entry is installed at the interrupt vector specified by
-       * the ``vector`` parameter.
+       * the `vector` parameter.
        */
       /* Nothing to do */
       break;
@@ -782,7 +780,7 @@ static void RtemsIntrReqEntryInstall_Pre_Installed_Prepare(
     case RtemsIntrReqEntryInstall_Pre_Installed_Unique: {
       /*
        * While a unique entry is installed at the interrupt vector specified by
-       * the ``vector`` parameter.
+       * the `vector` parameter.
        */
       Install( ctx, RTEMS_INTERRUPT_UNIQUE, EntryRoutine, &entry_arg );
       break;
@@ -791,13 +789,13 @@ static void RtemsIntrReqEntryInstall_Pre_Installed_Prepare(
     case RtemsIntrReqEntryInstall_Pre_Installed_Other: {
       /*
        * While at least one non-unique entry is installed at the interrupt
-       * vector specified by the ``vector`` parameter, while all entries
-       * installed at the interrupt vector specified by the ``vector``
-       * parameter have a handler routine which is not equal to the handler
-       * routine of the object referenced by the ``entry`` parameter, while all
-       * entries installed at the interrupt vector specified by the ``vector``
-       * parameter have a handler argument which is not equal to the handler
-       * argument of the object referenced by the ``entry`` parameter.
+       * vector specified by the `vector` parameter, while all entries
+       * installed at the interrupt vector specified by the `vector` parameter
+       * have a handler routine which is not equal to the handler routine of
+       * the object referenced by the `entry` parameter, while all entries
+       * installed at the interrupt vector specified by the `vector` parameter
+       * have a handler argument which is not equal to the handler argument of
+       * the object referenced by the `entry` parameter.
        */
       Install( ctx, RTEMS_INTERRUPT_SHARED, OtherRoutine, &other_arg );
       InstallThird( ctx );
@@ -807,13 +805,13 @@ static void RtemsIntrReqEntryInstall_Pre_Installed_Prepare(
     case RtemsIntrReqEntryInstall_Pre_Installed_EqRoutine: {
       /*
        * While at least one non-unique entry is installed at the interrupt
-       * vector specified by the ``vector`` parameter, while at least one entry
-       * installed at the interrupt vector specified by the ``vector``
-       * parameter has a handler routine which is equal to the handler routine
-       * of the object referenced by the ``entry`` parameter, while all entries
-       * installed at the interrupt vector specified by the ``vector``
-       * parameter have a handler argument which is not equal to the handler
-       * argument of the object referenced by the ``entry`` parameter.
+       * vector specified by the `vector` parameter, while at least one entry
+       * installed at the interrupt vector specified by the `vector` parameter
+       * has a handler routine which is equal to the handler routine of the
+       * object referenced by the `entry` parameter, while all entries
+       * installed at the interrupt vector specified by the `vector` parameter
+       * have a handler argument which is not equal to the handler argument of
+       * the object referenced by the `entry` parameter.
        */
       Install( ctx, RTEMS_INTERRUPT_SHARED, EntryRoutine, &other_arg );
       break;
@@ -822,13 +820,13 @@ static void RtemsIntrReqEntryInstall_Pre_Installed_Prepare(
     case RtemsIntrReqEntryInstall_Pre_Installed_EqArg: {
       /*
        * While at least one non-unique entry is installed at the interrupt
-       * vector specified by the ``vector`` parameter, while all entries
-       * installed at the interrupt vector specified by the ``vector``
-       * parameter have a handler routine which is not equal to the handler
-       * routine of the object referenced by the ``entry`` parameter, while at
-       * least one entry installed at the interrupt vector specified by the
-       * ``vector`` parameter has a handler argument which is equal to the
-       * handler argument of the object referenced by the ``entry`` parameter.
+       * vector specified by the `vector` parameter, while all entries
+       * installed at the interrupt vector specified by the `vector` parameter
+       * have a handler routine which is not equal to the handler routine of
+       * the object referenced by the `entry` parameter, while at least one
+       * entry installed at the interrupt vector specified by the `vector`
+       * parameter has a handler argument which is equal to the handler
+       * argument of the object referenced by the `entry` parameter.
        */
       Install( ctx, RTEMS_INTERRUPT_SHARED, OtherRoutine, &other_arg );
       break;
@@ -837,11 +835,10 @@ static void RtemsIntrReqEntryInstall_Pre_Installed_Prepare(
     case RtemsIntrReqEntryInstall_Pre_Installed_Match: {
       /*
        * While at least one non-unique entry with a handler routine which is
-       * equal to the handler routine of the object referenced by the ``entry``
+       * equal to the handler routine of the object referenced by the `entry`
        * parameter and with a handler argument which is equal to the handler
-       * argument of the object referenced by the ``entry`` parameter is
-       * installed at the interrupt vector specified by the ``vector``
-       * parameter.
+       * argument of the object referenced by the `entry` parameter is
+       * installed at the interrupt vector specified by the `vector` parameter.
        */
       Install( ctx, RTEMS_INTERRUPT_SHARED, EntryRoutine, &entry_arg );
       break;
@@ -943,8 +940,8 @@ static void RtemsIntrReqEntryInstall_Post_Enable_Check(
   switch ( state ) {
     case RtemsIntrReqEntryInstall_Post_Enable_Nop: {
       /*
-       * The enabled status of the interrupt vector specified by ``vector``
-       * shall not be modified by the rtems_interrupt_entry_install() call.
+       * The enabled status of the interrupt vector specified by `vector` shall
+       * not be modified by the rtems_interrupt_entry_install() call.
        */
       if ( ctx->handler_counter == 0 ) {
         T_eq( ctx->enabled_before, ctx->enabled_after );
@@ -954,7 +951,7 @@ static void RtemsIntrReqEntryInstall_Post_Enable_Check(
 
     case RtemsIntrReqEntryInstall_Post_Enable_Yes: {
       /*
-       * The interrupt vector specified by ``vector`` shall be enabled.
+       * The interrupt vector specified by `vector` shall be enabled.
        */
       T_true( ctx->enabled_after || ctx->handler_counter > 3 );
       break;
@@ -962,7 +959,7 @@ static void RtemsIntrReqEntryInstall_Post_Enable_Check(
 
     case RtemsIntrReqEntryInstall_Post_Enable_Maybe: {
       /*
-       * The interrupt vector specified by ``vector`` may be enabled.
+       * The interrupt vector specified by `vector` may be enabled.
        */
       /*
        * Interrupt vectors which cannot be enabled are not selected as a
@@ -976,7 +973,7 @@ static void RtemsIntrReqEntryInstall_Post_Enable_Check(
 
     case RtemsIntrReqEntryInstall_Post_Enable_No: {
       /*
-       * The interrupt vector specified by ``vector`` shall not be enabled.
+       * The interrupt vector specified by `vector` shall not be enabled.
        */
       /*
        * Interrupt vectors which cannot be enabled are not selected as a
@@ -1029,8 +1026,8 @@ static void RtemsIntrReqEntryInstall_Post_Installed_Check(
   switch ( state ) {
     case RtemsIntrReqEntryInstall_Post_Installed_No: {
       /*
-       * The entry referenced by ``entry`` shall not be installed at the
-       * interrupt vector specified by ``vector``.
+       * The entry referenced by `entry` shall not be installed at the
+       * interrupt vector specified by `vector`.
        */
       if ( ctx->other_installed && ctx->third_installed ) {
         T_eq_u32( ctx->visited_entries, 2 );
@@ -1044,8 +1041,8 @@ static void RtemsIntrReqEntryInstall_Post_Installed_Check(
 
     case RtemsIntrReqEntryInstall_Post_Installed_Last: {
       /*
-       * The entry referenced by ``entry`` shall be installed as the last entry
-       * at the interrupt vector specified by ``vector``.
+       * The entry referenced by `entry` shall be installed as the last entry
+       * at the interrupt vector specified by `vector`.
        */
       if ( ctx->other_installed && ctx->third_installed ) {
         T_eq_u32( ctx->visited_entries, 3 );

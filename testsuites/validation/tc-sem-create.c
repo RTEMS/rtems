@@ -356,7 +356,7 @@ static void RtemsSemReqCreate_Pre_Name_Prepare(
   switch ( state ) {
     case RtemsSemReqCreate_Pre_Name_Valid: {
       /*
-       * While the ``name`` parameter is valid.
+       * While the `name` parameter is valid.
        */
       ctx->name = NAME;
       break;
@@ -364,7 +364,7 @@ static void RtemsSemReqCreate_Pre_Name_Prepare(
 
     case RtemsSemReqCreate_Pre_Name_Invalid: {
       /*
-       * While the ``name`` parameter is invalid.
+       * While the `name` parameter is invalid.
        */
       ctx->name = 0;
       break;
@@ -383,7 +383,7 @@ static void RtemsSemReqCreate_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsSemReqCreate_Pre_Id_Valid: {
       /*
-       * While the ``id`` parameter references an object of type rtems_id.
+       * While the `id` parameter references an object of type rtems_id.
        */
       ctx->id = &ctx->id_value;
       break;
@@ -391,7 +391,7 @@ static void RtemsSemReqCreate_Pre_Id_Prepare(
 
     case RtemsSemReqCreate_Pre_Id_Null: {
       /*
-       * While the ``id`` parameter is NULL.
+       * While the `id` parameter is NULL.
        */
       ctx->id = NULL;
       break;
@@ -410,7 +410,7 @@ static void RtemsSemReqCreate_Pre_Count_Prepare(
   switch ( state ) {
     case RtemsSemReqCreate_Pre_Count_Zero: {
       /*
-       * While the ``count`` parameter is zero.
+       * While the `count` parameter is zero.
        */
       ctx->count = 0;
       break;
@@ -418,7 +418,7 @@ static void RtemsSemReqCreate_Pre_Count_Prepare(
 
     case RtemsSemReqCreate_Pre_Count_One: {
       /*
-       * While the ``count`` parameter is one.
+       * While the `count` parameter is one.
        */
       ctx->count = 1;
       break;
@@ -426,7 +426,7 @@ static void RtemsSemReqCreate_Pre_Count_Prepare(
 
     case RtemsSemReqCreate_Pre_Count_GtOne: {
       /*
-       * While the ``count`` parameter is greater than one.
+       * While the `count` parameter is greater than one.
        */
       ctx->count = UINT32_MAX;
       break;
@@ -445,7 +445,7 @@ static void RtemsSemReqCreate_Pre_Binary_Prepare(
   switch ( state ) {
     case RtemsSemReqCreate_Pre_Binary_Yes: {
       /*
-       * While the ``attribute_set`` parameter specifies the binary semaphore
+       * While the `attribute_set` parameter specifies the binary semaphore
        * class.
        */
       ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE;
@@ -454,7 +454,7 @@ static void RtemsSemReqCreate_Pre_Binary_Prepare(
 
     case RtemsSemReqCreate_Pre_Binary_No: {
       /*
-       * While the ``attribute_set`` parameter does not specify the binary
+       * While the `attribute_set` parameter does not specify the binary
        * semaphore class.
        */
       /* Use default */
@@ -474,7 +474,7 @@ static void RtemsSemReqCreate_Pre_Simple_Prepare(
   switch ( state ) {
     case RtemsSemReqCreate_Pre_Simple_Yes: {
       /*
-       * While the ``attribute_set`` parameter specifies the simple binary
+       * While the `attribute_set` parameter specifies the simple binary
        * semaphore class.
        */
       ctx->attribute_set |= RTEMS_SIMPLE_BINARY_SEMAPHORE;
@@ -483,8 +483,8 @@ static void RtemsSemReqCreate_Pre_Simple_Prepare(
 
     case RtemsSemReqCreate_Pre_Simple_No: {
       /*
-       * While the ``attribute_set`` parameter does not specify the simple
-       * binary semaphore class.
+       * While the `attribute_set` parameter does not specify the simple binary
+       * semaphore class.
        */
       /* Use default */
       break;
@@ -503,8 +503,8 @@ static void RtemsSemReqCreate_Pre_Inherit_Prepare(
   switch ( state ) {
     case RtemsSemReqCreate_Pre_Inherit_Yes: {
       /*
-       * While the ``attribute_set`` parameter specifies the priority
-       * inheritance locking protocol.
+       * While the `attribute_set` parameter specifies the priority inheritance
+       * locking protocol.
        */
       ctx->attribute_set |= RTEMS_INHERIT_PRIORITY;
       break;
@@ -512,7 +512,7 @@ static void RtemsSemReqCreate_Pre_Inherit_Prepare(
 
     case RtemsSemReqCreate_Pre_Inherit_No: {
       /*
-       * While the ``attribute_set`` parameter does not specify the priority
+       * While the `attribute_set` parameter does not specify the priority
        * inheritance locking protocol.
        */
       ctx->attribute_set |= RTEMS_NO_INHERIT_PRIORITY;
@@ -532,7 +532,7 @@ static void RtemsSemReqCreate_Pre_Ceiling_Prepare(
   switch ( state ) {
     case RtemsSemReqCreate_Pre_Ceiling_Yes: {
       /*
-       * While the ``attribute_set`` parameter specifies the priority ceiling
+       * While the `attribute_set` parameter specifies the priority ceiling
        * locking protocol.
        */
       ctx->attribute_set |= RTEMS_PRIORITY_CEILING;
@@ -541,7 +541,7 @@ static void RtemsSemReqCreate_Pre_Ceiling_Prepare(
 
     case RtemsSemReqCreate_Pre_Ceiling_No: {
       /*
-       * While the ``attribute_set`` parameter does not specify the priority
+       * While the `attribute_set` parameter does not specify the priority
        * ceiling locking protocol.
        */
       ctx->attribute_set |= RTEMS_NO_PRIORITY_CEILING;
@@ -561,7 +561,7 @@ static void RtemsSemReqCreate_Pre_MrsP_Prepare(
   switch ( state ) {
     case RtemsSemReqCreate_Pre_MrsP_Yes: {
       /*
-       * While the ``attribute_set`` parameter specifies the MrsP locking
+       * While the `attribute_set` parameter specifies the MrsP locking
        * protocol.
        */
       ctx->attribute_set |= RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
@@ -570,8 +570,8 @@ static void RtemsSemReqCreate_Pre_MrsP_Prepare(
 
     case RtemsSemReqCreate_Pre_MrsP_No: {
       /*
-       * While the ``attribute_set`` parameter does not specify the MrsP
-       * locking protocol.
+       * While the `attribute_set` parameter does not specify the MrsP locking
+       * protocol.
        */
       ctx->attribute_set |= RTEMS_NO_MULTIPROCESSOR_RESOURCE_SHARING;
       break;
@@ -590,8 +590,8 @@ static void RtemsSemReqCreate_Pre_Disc_Prepare(
   switch ( state ) {
     case RtemsSemReqCreate_Pre_Disc_FIFO: {
       /*
-       * While the ``attribute_set`` parameter specifies the FIFO task wait
-       * queue discipline or the default task wait queue discipline.
+       * While the `attribute_set` parameter specifies the FIFO task wait queue
+       * discipline or the default task wait queue discipline.
        */
       RTEMS_STATIC_ASSERT(
         RTEMS_DEFAULT_ATTRIBUTES == RTEMS_FIFO,
@@ -603,7 +603,7 @@ static void RtemsSemReqCreate_Pre_Disc_Prepare(
 
     case RtemsSemReqCreate_Pre_Disc_Prio: {
       /*
-       * While the ``attribute_set`` parameter specifies the priority task wait
+       * While the `attribute_set` parameter specifies the priority task wait
        * queue discipline.
        */
       ctx->attribute_set |= RTEMS_PRIORITY;
@@ -623,7 +623,7 @@ static void RtemsSemReqCreate_Pre_Prio_Prepare(
   switch ( state ) {
     case RtemsSemReqCreate_Pre_Prio_LeCur: {
       /*
-       * While the ``priority_ceiling`` parameter is a valid task priority less
+       * While the `priority_ceiling` parameter is a valid task priority less
        * than or equal to the current priority of the calling task with respect
        * to the scheduler of the calling task at some point during the
        * directive call.
@@ -634,7 +634,7 @@ static void RtemsSemReqCreate_Pre_Prio_Prepare(
 
     case RtemsSemReqCreate_Pre_Prio_GtCur: {
       /*
-       * While the ``priority_ceiling`` parameter is a valid task priority
+       * While the `priority_ceiling` parameter is a valid task priority
        * greater than the current priority of the calling task with respect to
        * the scheduler of the calling task at some point during the directive
        * call.
@@ -645,7 +645,7 @@ static void RtemsSemReqCreate_Pre_Prio_Prepare(
 
     case RtemsSemReqCreate_Pre_Prio_Invalid: {
       /*
-       * The ``priority_ceiling`` parameter shall not be a valid task priority
+       * The `priority_ceiling` parameter shall not be a valid task priority
        * with respect to the scheduler of the calling task at some point during
        * the directive call.
        */
@@ -804,9 +804,9 @@ static void RtemsSemReqCreate_Post_IdVar_Check(
   switch ( state ) {
     case RtemsSemReqCreate_Post_IdVar_Set: {
       /*
-       * The value of the object referenced by the ``id`` parameter shall be
-       * set to the object identifier of the created semaphore after the return
-       * of the rtems_semaphore_create() call.
+       * The value of the object referenced by the `id` parameter shall be set
+       * to the object identifier of the created semaphore after the return of
+       * the rtems_semaphore_create() call.
        */
       T_eq_ptr( ctx->id, &ctx->id_value );
       T_ne_u32( ctx->id_value, INVALID_ID );
@@ -815,7 +815,7 @@ static void RtemsSemReqCreate_Post_IdVar_Check(
 
     case RtemsSemReqCreate_Post_IdVar_Nop: {
       /*
-       * Objects referenced by the ``id`` parameter in past calls to
+       * Objects referenced by the `id` parameter in past calls to
        * rtems_semaphore_create() shall not be accessed by the
        * rtems_semaphore_create() call.
        */
@@ -935,7 +935,7 @@ static void RtemsSemReqCreate_Post_Count_Check(
     case RtemsSemReqCreate_Post_Count_Initial: {
       /*
        * The semaphore created by the rtems_semaphore_create() call shall have
-       * an initial count equal to the value of the ``count`` parameter.
+       * an initial count equal to the value of the `count` parameter.
        */
       T_eq_u32( ctx->sem_count, ctx->count );
       break;
@@ -984,7 +984,7 @@ static void RtemsSemReqCreate_Post_Prio_Check(
     case RtemsSemReqCreate_Post_Prio_Ceiling: {
       /*
        * The current priority of the task which called rtems_semaphore_create()
-       * shall be equal to the value of the ``priority_ceiling`` parameter.
+       * shall be equal to the value of the `priority_ceiling` parameter.
        */
       T_eq_u32( GetSelfPriority(), ctx->priority_ceiling );
       break;

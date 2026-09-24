@@ -155,7 +155,7 @@ static void RtemsPartReqReturnBuffer_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsPartReqReturnBuffer_Pre_Id_NoObj: {
       /*
-       * While the ``id`` parameter is invalid.
+       * While the `id` parameter is invalid.
        */
       ctx->id = 0xffffffff;
       break;
@@ -163,7 +163,7 @@ static void RtemsPartReqReturnBuffer_Pre_Id_Prepare(
 
     case RtemsPartReqReturnBuffer_Pre_Id_Part: {
       /*
-       * While the ``id`` parameter is associated with a partition.
+       * While the `id` parameter is associated with a partition.
        */
       ctx->id = ctx->id_value;
       break;
@@ -182,7 +182,7 @@ static void RtemsPartReqReturnBuffer_Pre_Buf_Prepare(
   switch ( state ) {
     case RtemsPartReqReturnBuffer_Pre_Buf_Valid: {
       /*
-       * While the ``buffer`` parameter references a buffer previously returned
+       * While the `buffer` parameter references a buffer previously returned
        * by rtems_partition_get_buffer().
        */
       ctx->buffer = ctx->buffer_in_use;
@@ -191,7 +191,7 @@ static void RtemsPartReqReturnBuffer_Pre_Buf_Prepare(
 
     case RtemsPartReqReturnBuffer_Pre_Buf_BadAlign: {
       /*
-       * While the ``buffer`` parameter is an address inside the buffer area of
+       * While the `buffer` parameter is an address inside the buffer area of
        * the partition, while the address is not on a valid buffer boundary.
        */
       ctx->buffer = (void *) ( (uintptr_t) ctx->buffer_in_use + 1 );
@@ -200,7 +200,7 @@ static void RtemsPartReqReturnBuffer_Pre_Buf_Prepare(
 
     case RtemsPartReqReturnBuffer_Pre_Buf_BelowArea: {
       /*
-       * While the ``buffer`` parameter is an address below the buffer area of
+       * While the `buffer` parameter is an address below the buffer area of
        * the partition.
        */
       ctx->buffer = (void *) ( (uintptr_t) buffers - 1 );
@@ -209,7 +209,7 @@ static void RtemsPartReqReturnBuffer_Pre_Buf_Prepare(
 
     case RtemsPartReqReturnBuffer_Pre_Buf_AboveArea: {
       /*
-       * While the ``buffer`` parameter is an address above the buffer area of
+       * While the `buffer` parameter is an address above the buffer area of
        * the partition.
        */
       ctx->buffer = (void *) ( (uintptr_t) buffers + sizeof( buffers ) );

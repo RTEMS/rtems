@@ -117,13 +117,12 @@ typedef struct {
   bool pending_obj;
 
   /**
-   * @brief If this member is true, then the ``vector`` parameter shall be
-   *   valid.
+   * @brief If this member is true, then the `vector` parameter shall be valid.
    */
   bool valid_vector;
 
   /**
-   * @brief This member specifies if the ``pending`` parameter value.
+   * @brief This member specifies if the `pending` parameter value.
    */
   bool *pending;
 
@@ -333,7 +332,7 @@ static void RtemsIntrReqIsPending_Pre_Vector_Prepare(
   switch ( state ) {
     case RtemsIntrReqIsPending_Pre_Vector_Valid: {
       /*
-       * While the ``vector`` parameter is associated with an interrupt vector.
+       * While the `vector` parameter is associated with an interrupt vector.
        */
       ctx->valid_vector = true;
       break;
@@ -341,7 +340,7 @@ static void RtemsIntrReqIsPending_Pre_Vector_Prepare(
 
     case RtemsIntrReqIsPending_Pre_Vector_Invalid: {
       /*
-       * While the ``vector`` parameter is not associated with an interrupt
+       * While the `vector` parameter is not associated with an interrupt
        * vector.
        */
       ctx->valid_vector = false;
@@ -361,7 +360,7 @@ static void RtemsIntrReqIsPending_Pre_Pending_Prepare(
   switch ( state ) {
     case RtemsIntrReqIsPending_Pre_Pending_Obj: {
       /*
-       * While the ``pending`` parameter references an object of type `bool`.
+       * While the `pending` parameter references an object of type `bool`.
        */
       ctx->pending = &ctx->pending_obj;
       break;
@@ -369,7 +368,7 @@ static void RtemsIntrReqIsPending_Pre_Pending_Prepare(
 
     case RtemsIntrReqIsPending_Pre_Pending_Null: {
       /*
-       * While the ``pending`` parameter is equal to NULL.
+       * While the `pending` parameter is equal to NULL.
        */
       ctx->pending = NULL;
       break;
@@ -388,7 +387,7 @@ static void RtemsIntrReqIsPending_Pre_IsPending_Prepare(
     case RtemsIntrReqIsPending_Pre_IsPending_Yes: {
       /*
        * While the interrupt associated with the interrupt vector specified by
-       * ``vector`` was pending for the processor executing the
+       * `vector` was pending for the processor executing the
        * rtems_interrupt_is_pending() call at some time point during the call.
        */
       /* Validation is done by CheckIsPending() for each interrupt vector */
@@ -398,7 +397,7 @@ static void RtemsIntrReqIsPending_Pre_IsPending_Prepare(
     case RtemsIntrReqIsPending_Pre_IsPending_No: {
       /*
        * While the interrupt associated with the interrupt vector specified by
-       * ``vector`` was not pending for the processor executing the
+       * `vector` was not pending for the processor executing the
        * rtems_interrupt_is_pending() call at some time point during the call.
        */
       /* Validation is done by CheckIsPending() for each interrupt vector */
@@ -458,7 +457,7 @@ static void RtemsIntrReqIsPending_Post_IsPending_Check(
   switch ( state ) {
     case RtemsIntrReqIsPending_Post_IsPending_Nop: {
       /*
-       * Objects referenced by the ``pending`` parameter in past calls to
+       * Objects referenced by the `pending` parameter in past calls to
        * rtems_interrupt_is_pending() shall not be accessed by the
        * rtems_interrupt_is_pending() call.
        */
@@ -469,8 +468,8 @@ static void RtemsIntrReqIsPending_Post_IsPending_Check(
 
     case RtemsIntrReqIsPending_Post_IsPending_Yes: {
       /*
-       * The value of the object referenced by the ``pending`` parameter shall
-       * be set to true.
+       * The value of the object referenced by the `pending` parameter shall be
+       * set to true.
        */
       /* Validation is done by CheckIsPending() for each interrupt vector */
       break;
@@ -478,8 +477,8 @@ static void RtemsIntrReqIsPending_Post_IsPending_Check(
 
     case RtemsIntrReqIsPending_Post_IsPending_No: {
       /*
-       * The value of the object referenced by the ``pending`` parameter shall
-       * be set to false.
+       * The value of the object referenced by the `pending` parameter shall be
+       * set to false.
        */
       /* Validation is done by CheckIsPending() for each interrupt vector */
       break;

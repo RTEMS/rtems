@@ -204,7 +204,7 @@ static void RtemsUserextReqCreate_Pre_Name_Prepare(
   switch ( state ) {
     case RtemsUserextReqCreate_Pre_Name_Valid: {
       /*
-       * While the ``name`` parameter is valid.
+       * While the `name` parameter is valid.
        */
       ctx->name = NAME;
       break;
@@ -212,7 +212,7 @@ static void RtemsUserextReqCreate_Pre_Name_Prepare(
 
     case RtemsUserextReqCreate_Pre_Name_Invalid: {
       /*
-       * While the ``name`` parameter is invalid.
+       * While the `name` parameter is invalid.
        */
       ctx->name = 0;
       break;
@@ -231,7 +231,7 @@ static void RtemsUserextReqCreate_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsUserextReqCreate_Pre_Id_Valid: {
       /*
-       * While the ``id`` parameter references an object of type rtems_id.
+       * While the `id` parameter references an object of type rtems_id.
        */
       ctx->id = &ctx->id_value;
       break;
@@ -239,7 +239,7 @@ static void RtemsUserextReqCreate_Pre_Id_Prepare(
 
     case RtemsUserextReqCreate_Pre_Id_Null: {
       /*
-       * While the ``id`` parameter is NULL.
+       * While the `id` parameter is NULL.
        */
       ctx->id = NULL;
       break;
@@ -258,7 +258,7 @@ static void RtemsUserextReqCreate_Pre_Table_Prepare(
   switch ( state ) {
     case RtemsUserextReqCreate_Pre_Table_TdSw: {
       /*
-       * While the ``extension_table`` parameter references an object of type
+       * While the `extension_table` parameter references an object of type
        * rtems_extensions_table, while all extensions except the thread switch
        * extension of the referenced object are set to NULL or the address of a
        * corresponding extension, while the thread switch extension of the
@@ -271,7 +271,7 @@ static void RtemsUserextReqCreate_Pre_Table_Prepare(
 
     case RtemsUserextReqCreate_Pre_Table_NoTdSw: {
       /*
-       * While the ``extension_table`` parameter references an object of type
+       * While the `extension_table` parameter references an object of type
        * rtems_id, while all extensions except the thread switch extension of
        * the referenced object are set to NULL or the address of a
        * corresponding extension, while the thread switch extension of the
@@ -284,7 +284,7 @@ static void RtemsUserextReqCreate_Pre_Table_Prepare(
 
     case RtemsUserextReqCreate_Pre_Table_Null: {
       /*
-       * While the ``extension_table`` parameter is NULL.
+       * While the `extension_table` parameter is NULL.
        */
       ctx->table = NULL;
       break;
@@ -412,9 +412,9 @@ static void RtemsUserextReqCreate_Post_IdVar_Check(
   switch ( state ) {
     case RtemsUserextReqCreate_Post_IdVar_Set: {
       /*
-       * The value of the object referenced by the ``extension_table``
-       * parameter shall be set to the object identifier of the created
-       * extension set after the return of the rtems_extension_create() call.
+       * The value of the object referenced by the `extension_table` parameter
+       * shall be set to the object identifier of the created extension set
+       * after the return of the rtems_extension_create() call.
        */
       T_eq_ptr( ctx->id, &ctx->id_value );
       T_ne_u32( ctx->id_value, INVALID_ID );
@@ -423,8 +423,8 @@ static void RtemsUserextReqCreate_Post_IdVar_Check(
 
     case RtemsUserextReqCreate_Post_IdVar_Nop: {
       /*
-       * Objects referenced by the ``extension_table`` parameter in past calls
-       * to rtems_extension_create() shall not be accessed by the
+       * Objects referenced by the `extension_table` parameter in past calls to
+       * rtems_extension_create() shall not be accessed by the
        * rtems_extension_create() call.
        */
       T_eq_u32( ctx->id_value, INVALID_ID );

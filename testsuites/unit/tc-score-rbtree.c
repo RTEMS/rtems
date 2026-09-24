@@ -53,7 +53,7 @@
  *
  * This test case performs the following actions:
  *
- * - Call _RBTree_Initialize_one() and check the tree properties.
+ * - Call \_RBTree_Initialize_one() and check the tree properties.
  *
  *   - Check that the tree is not emtpy.
  *
@@ -77,16 +77,16 @@
  *
  *   - Check that the tree is emtpy after extraction of the node.
  *
- * - Call _RBTree_Insert_inline() and check the return status for a sample set
+ * - Call \_RBTree_Insert_inline() and check the return status for a sample set
  *   of nodes.
  *
- *   - Insert the first node.  Check that it is the new minimum node.
+ *   - Insert the first node. Check that it is the new minimum node.
  *
- *   - Insert the second node.  Check that it is not the new minimum node.
+ *   - Insert the second node. Check that it is not the new minimum node.
  *
- *   - Insert the third node.  Check that it is the new minimum node.
+ *   - Insert the third node. Check that it is the new minimum node.
  *
- * - Call _RBTree_Insert_inline() and _RBTree_Extract() for a sample set of
+ * - Call \_RBTree_Insert_inline() and \_RBTree_Extract() for a sample set of
  *   trees.
  *
  * @{
@@ -1045,7 +1045,7 @@ static void RandomOps( size_t n, bool unique )
 }
 
 /**
- * @brief Call _RBTree_Initialize_one() and check the tree properties.
+ * @brief Call \_RBTree_Initialize_one() and check the tree properties.
  */
 static void ScoreRbtreeUnitRbtree_Action_0( void )
 {
@@ -1113,8 +1113,8 @@ static void ScoreRbtreeUnitRbtree_Action_0( void )
 }
 
 /**
- * @brief Call _RBTree_Insert_inline() and check the return status for a sample
- *   set of nodes.
+ * @brief Call \_RBTree_Insert_inline() and check the return status for a
+ *   sample set of nodes.
  */
 static void ScoreRbtreeUnitRbtree_Action_1( void )
 {
@@ -1127,7 +1127,7 @@ static void ScoreRbtreeUnitRbtree_Action_1( void )
   _RBTree_Initialize_empty( &tree );
 
   /*
-   * Insert the first node.  Check that it is the new minimum node.
+   * Insert the first node. Check that it is the new minimum node.
    */
   _RBTree_Initialize_node( &b.Node );
   b.key = 2;
@@ -1135,7 +1135,7 @@ static void ScoreRbtreeUnitRbtree_Action_1( void )
   T_true( is_new_minimum );
 
   /*
-   * Insert the second node.  Check that it is not the new minimum node.
+   * Insert the second node. Check that it is not the new minimum node.
    */
   _RBTree_Initialize_node( &c.Node );
   c.key = 3;
@@ -1143,7 +1143,7 @@ static void ScoreRbtreeUnitRbtree_Action_1( void )
   T_false( is_new_minimum );
 
   /*
-   * Insert the third node.  Check that it is the new minimum node.
+   * Insert the third node. Check that it is the new minimum node.
    */
   _RBTree_Initialize_node( &a.Node );
   a.key = 1;
@@ -1152,7 +1152,7 @@ static void ScoreRbtreeUnitRbtree_Action_1( void )
 }
 
 /**
- * @brief Call _RBTree_Insert_inline() and _RBTree_Extract() for a sample set
+ * @brief Call \_RBTree_Insert_inline() and \_RBTree_Extract() for a sample set
  *   of trees.
  */
 static void ScoreRbtreeUnitRbtree_Action_2( void )

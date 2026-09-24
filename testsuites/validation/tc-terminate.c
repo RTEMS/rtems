@@ -56,7 +56,7 @@
  *
  * This test case performs the following actions:
  *
- * - Create five dynamic extensions.  Call the system termination procedure.
+ * - Create five dynamic extensions. Call the system termination procedure.
  *   Delete three dynamic extension during the fatal extension invocation.
  *   Delete the two remaining dynamic extensions.
  *
@@ -241,7 +241,7 @@ static void FatalExtension6(
 }
 
 /**
- * @brief Create five dynamic extensions.  Call the system termination
+ * @brief Create five dynamic extensions. Call the system termination
  *   procedure. Delete three dynamic extension during the fatal extension
  *   invocation. Delete the two remaining dynamic extensions.
  */

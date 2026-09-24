@@ -143,7 +143,7 @@ static void RtemsPartReqDelete_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsPartReqDelete_Pre_Id_NoObj: {
       /*
-       * While the ``id`` parameter is not associated with a partition.
+       * While the `id` parameter is not associated with a partition.
        */
       ctx->id = 0xffffffff;
       break;
@@ -151,7 +151,7 @@ static void RtemsPartReqDelete_Pre_Id_Prepare(
 
     case RtemsPartReqDelete_Pre_Id_Part: {
       /*
-       * While the ``id`` parameter is associated with a partition.
+       * While the `id` parameter is associated with a partition.
        */
       ctx->id = ctx->id_value;
       break;
@@ -205,7 +205,7 @@ static void RtemsPartReqDelete_Post_Status_Check(
   switch ( state ) {
     case RtemsPartReqDelete_Post_Status_Ok: {
       /*
-       * The status shall be RTEMS_SUCCESSFUL.  The deleted partition object
+       * The status shall be RTEMS_SUCCESSFUL. The deleted partition object
        * shall be inactive.
        */
       T_rsc_success( ctx->status );

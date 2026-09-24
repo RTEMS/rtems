@@ -119,13 +119,12 @@ typedef struct {
   rtems_vector_number some_vector;
 
   /**
-   * @brief If this member is true, then the ``vector`` parameter shall be
-   *   valid.
+   * @brief If this member is true, then the `vector` parameter shall be valid.
    */
   bool valid_vector;
 
   /**
-   * @brief This member specifies the ``cpu_index`` parameter.
+   * @brief This member specifies the `cpu_index` parameter.
    */
   uint32_t cpu_index;
 
@@ -354,7 +353,7 @@ static void RtemsIntrReqRaiseOn_Pre_Vector_Prepare(
   switch ( state ) {
     case RtemsIntrReqRaiseOn_Pre_Vector_Valid: {
       /*
-       * While the ``vector`` parameter is associated with an interrupt vector.
+       * While the `vector` parameter is associated with an interrupt vector.
        */
       ctx->valid_vector = true;
       break;
@@ -362,7 +361,7 @@ static void RtemsIntrReqRaiseOn_Pre_Vector_Prepare(
 
     case RtemsIntrReqRaiseOn_Pre_Vector_Invalid: {
       /*
-       * While the ``vector`` parameter is not associated with an interrupt
+       * While the `vector` parameter is not associated with an interrupt
        * vector.
        */
       ctx->valid_vector = false;
@@ -382,9 +381,8 @@ static void RtemsIntrReqRaiseOn_Pre_CPU_Prepare(
   switch ( state ) {
     case RtemsIntrReqRaiseOn_Pre_CPU_Online: {
       /*
-       * While the ``cpu_index`` parameter is associated with a configured
-       * processor, while the processor specified by ``cpu_index`` is not
-       * online.
+       * While the `cpu_index` parameter is associated with a configured
+       * processor, while the processor specified by `cpu_index` is not online.
        */
       ctx->cpu_index = 0;
       break;
@@ -392,9 +390,8 @@ static void RtemsIntrReqRaiseOn_Pre_CPU_Prepare(
 
     case RtemsIntrReqRaiseOn_Pre_CPU_NotOnline: {
       /*
-       * While the ``cpu_index`` parameter is associated with a configured
-       * processor, while the processor specified by ``cpu_index`` is not
-       * online.
+       * While the `cpu_index` parameter is associated with a configured
+       * processor, while the processor specified by `cpu_index` is not online.
        */
       ctx->cpu_index = 4;
       break;
@@ -402,7 +399,7 @@ static void RtemsIntrReqRaiseOn_Pre_CPU_Prepare(
 
     case RtemsIntrReqRaiseOn_Pre_CPU_NotConf: {
       /*
-       * While the ``cpu_index`` parameter is not associated with a configured
+       * While the `cpu_index` parameter is not associated with a configured
        * processor.
        */
       ctx->cpu_index = 5;
@@ -421,8 +418,8 @@ static void RtemsIntrReqRaiseOn_Pre_CanRaiseOn_Prepare(
   switch ( state ) {
     case RtemsIntrReqRaiseOn_Pre_CanRaiseOn_Yes: {
       /*
-       * While the interrupt vector associated with the ``vector`` parameter
-       * can be raised on a processor.
+       * While the interrupt vector associated with the `vector` parameter can
+       * be raised on a processor.
        */
       /*
        * This pre-condition depends on the attributes of an interrupt vector,
@@ -433,7 +430,7 @@ static void RtemsIntrReqRaiseOn_Pre_CanRaiseOn_Prepare(
 
     case RtemsIntrReqRaiseOn_Pre_CanRaiseOn_No: {
       /*
-       * While the interrupt vector associated with the ``vector`` parameter
+       * While the interrupt vector associated with the `vector` parameter
        * cannot be raised on a processor.
        */
       /*
@@ -512,8 +509,7 @@ static void RtemsIntrReqRaiseOn_Post_Pending_Check(
     case RtemsIntrReqRaiseOn_Post_Pending_Yes: {
       /*
        * The interrupt associated with the interrupt vector specified by
-       * ``vector`` shall be made pending by the rtems_interrupt_raise_on()
-       * call.
+       * `vector` shall be made pending by the rtems_interrupt_raise_on() call.
        */
       /* Validation is done by CheckRaiseOn() for each interrupt vector */
       break;
@@ -522,7 +518,7 @@ static void RtemsIntrReqRaiseOn_Post_Pending_Check(
     case RtemsIntrReqRaiseOn_Post_Pending_No: {
       /*
        * The interrupt associated with the interrupt vector specified by
-       * ``vector`` shall not be made pending by the rtems_interrupt_raise_on()
+       * `vector` shall not be made pending by the rtems_interrupt_raise_on()
        * call.
        */
       /* Validation is done by CheckRaiseOn() for each interrupt vector */

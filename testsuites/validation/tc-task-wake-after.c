@@ -136,7 +136,7 @@ typedef struct {
   rtems_status_code status;
 
   /**
-   * @brief This member specifies the ``ticks`` parameter value.
+   * @brief This member specifies the `ticks` parameter value.
    */
   rtems_interval ticks;
 
@@ -233,7 +233,7 @@ static void RtemsTaskReqWakeAfter_Pre_Ticks_Prepare(
   switch ( state ) {
     case RtemsTaskReqWakeAfter_Pre_Ticks_Yield: {
       /*
-       * While the ``ticks`` parameter is equal to RTEMS_YIELD_PROCESSOR.
+       * While the `ticks` parameter is equal to RTEMS_YIELD_PROCESSOR.
        */
       ctx->ticks = RTEMS_YIELD_PROCESSOR;
       break;
@@ -241,7 +241,7 @@ static void RtemsTaskReqWakeAfter_Pre_Ticks_Prepare(
 
     case RtemsTaskReqWakeAfter_Pre_Ticks_Interval: {
       /*
-       * While the ``ticks`` parameter is not equal to RTEMS_YIELD_PROCESSOR.
+       * While the `ticks` parameter is not equal to RTEMS_YIELD_PROCESSOR.
        */
       ctx->ticks = UINT32_MAX;
       break;
@@ -336,7 +336,7 @@ static void RtemsTaskReqWakeAfter_Post_Expire_Check(
       /*
        * The timer of the calling task shall expire at the time point specified
        * by the sum of the current clock tick and the interval specified by the
-       * ``ticks`` parameter.
+       * `ticks` parameter.
        */
       T_eq_u64( ctx->timer_info.expire_ticks, ctx->now + UINT32_MAX );
       break;

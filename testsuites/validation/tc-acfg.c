@@ -53,20 +53,20 @@
  *
  * This test case performs the following actions:
  *
- * - Check the effect of application configuration options.  In addition, this
- *   test case validates the effect of CONFIGURE_INIT.  The test case includes
- *   rtems/confdefs.h without defining CONFIGURE_INIT before the include.  If
+ * - Check the effect of application configuration options. In addition, this
+ *   test case validates the effect of CONFIGURE_INIT. The test case includes
+ *   rtems/confdefs.h without defining CONFIGURE_INIT before the include. If
  *   this header would define configuration data structures, then linking the
- *   test suite executable would result in multiple definition errors.  This
+ *   test suite executable would result in multiple definition errors. This
  *   header is included in the test suite runner translation unit while
- *   CONFIGURE_INIT is defined before the include.  If this would not result in
+ *   CONFIGURE_INIT is defined before the include. If this would not result in
  *   the definition of application defined configuration data structures, then
  *   the checks below for non-default settings would fail.
  *
  *   - Check the default value CONFIGURE_IDLE_TASK_BODY where the optional
  *     BSP-provided default value is enabled.
  *
- *   - Check the configured CONFIGURE_INIT_TASK_ARGUMENTS.  This validates also
+ *   - Check the configured CONFIGURE_INIT_TASK_ARGUMENTS. This validates also
  *     the effect of CONFIGURE_INIT_TASK_ENTRY_POINT and
  *     CONFIGURE_RTEMS_INIT_TASKS_TABLE.
  *
@@ -74,8 +74,8 @@
  *
  *   - Check the configured CONFIGURE_INIT_TASK_NAME.
  *
- *   - Check the configured CONFIGURE_INIT_TASK_PRIORITY.  A priority of zero
- *     can only be set for system tasks.  This validates also
+ *   - Check the configured CONFIGURE_INIT_TASK_PRIORITY. A priority of zero
+ *     can only be set for system tasks. This validates also
  *     CONFIGURE_INIT_TASK_ATTRIBUTES.
  *
  *   - Check that the configured
@@ -113,13 +113,13 @@
  *   - Check the configured CONFIGURE_MICROSECONDS_PER_TICK value in
  *     nanoseconds.
  *
- *   - Check the configured CONFIGURE_TASK_STACK_ALLOCATOR hook.  Using the
- *     test stack allocator validates also
+ *   - Check the configured CONFIGURE_TASK_STACK_ALLOCATOR hook. Using the test
+ *     stack allocator validates also
  *     spec:/acfg/if/init-task-construct-storage-size, since the
  *     test_task_stack_allocate() allocate handler only supports
  *     CONFIGURE_MAXIMUM_TASKS minus one stacks and the validation test for
  *     spec:/rtems/task/req/create-errors creates for some pre-condition
- *     variants all tasks until RTEMS_TOO_MANY is returned.  In addition,
+ *     variants all tasks until RTEMS_TOO_MANY is returned. In addition,
  *     test_task_stack_allocate() checks that the allocation size is greater
  *     than or equal to TEST_MINIMUM_STACK_SIZE which validates
  *     CONFIGURE_MINIMUM_TASK_STACK_SIZE.
@@ -141,13 +141,13 @@
  */
 
 /**
- * @brief Check the effect of application configuration options.  In addition,
- *   this test case validates the effect of CONFIGURE_INIT.  The test case
+ * @brief Check the effect of application configuration options. In addition,
+ *   this test case validates the effect of CONFIGURE_INIT. The test case
  *   includes rtems/confdefs.h without defining CONFIGURE_INIT before the
- *   include.  If this header would define configuration data structures, then
+ *   include. If this header would define configuration data structures, then
  *   linking the test suite executable would result in multiple definition
- *   errors.  This header is included in the test suite runner translation unit
- *   while CONFIGURE_INIT is defined before the include.  If this would not
+ *   errors. This header is included in the test suite runner translation unit
+ *   while CONFIGURE_INIT is defined before the include. If this would not
  *   result in the definition of application defined configuration data
  *   structures, then the checks below for non-default settings would fail.
  */
@@ -170,7 +170,7 @@ static void AcfgValAcfg_Action_0( void )
   );
 
   /*
-   * Check the configured CONFIGURE_INIT_TASK_ARGUMENTS.  This validates also
+   * Check the configured CONFIGURE_INIT_TASK_ARGUMENTS. This validates also
    * the effect of CONFIGURE_INIT_TASK_ENTRY_POINT and
    * CONFIGURE_RTEMS_INIT_TASKS_TABLE.
    */
@@ -189,8 +189,8 @@ static void AcfgValAcfg_Action_0( void )
   T_eq_u32( id, rtems_task_self() );
 
   /*
-   * Check the configured CONFIGURE_INIT_TASK_PRIORITY.  A priority of zero can
-   * only be set for system tasks.  This validates also
+   * Check the configured CONFIGURE_INIT_TASK_PRIORITY. A priority of zero can
+   * only be set for system tasks. This validates also
    * CONFIGURE_INIT_TASK_ATTRIBUTES.
    */
   T_eq_u32( test_runner_initial_priority, 0 );
@@ -309,13 +309,13 @@ static void AcfgValAcfg_Action_0( void )
   );
 
   /*
-   * Check the configured CONFIGURE_TASK_STACK_ALLOCATOR hook.  Using the test
+   * Check the configured CONFIGURE_TASK_STACK_ALLOCATOR hook. Using the test
    * stack allocator validates also
    * spec:/acfg/if/init-task-construct-storage-size, since the
    * test_task_stack_allocate() allocate handler only supports
    * CONFIGURE_MAXIMUM_TASKS minus one stacks and the validation test for
    * spec:/rtems/task/req/create-errors creates for some pre-condition variants
-   * all tasks until RTEMS_TOO_MANY is returned.  In addition,
+   * all tasks until RTEMS_TOO_MANY is returned. In addition,
    * test_task_stack_allocate() checks that the allocation size is greater than
    * or equal to TEST_MINIMUM_STACK_SIZE which validates
    * CONFIGURE_MINIMUM_TASK_STACK_SIZE.

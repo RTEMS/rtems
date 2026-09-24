@@ -44,7 +44,7 @@
  * @ingroup RTEMSTestSuitesValidation
  *
  * @brief This validation test suite is intended test cases related to the
- *   installation of timecouters.  The Clock Driver is disabled.
+ *   installation of timecouters. The Clock Driver is disabled.
  *
  * @{
  */

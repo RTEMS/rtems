@@ -50,8 +50,8 @@
  *
  * This test case performs the following actions:
  *
- * - Issue two jobs on the current processor with interrupts disabled.  Wait
- *   for completion of the second job.
+ * - Issue two jobs on the current processor with interrupts disabled. Wait for
+ *   completion of the second job.
  *
  *   - Check that the first job was processed firstly.
  *

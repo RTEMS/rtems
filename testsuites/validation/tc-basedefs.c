@@ -151,7 +151,7 @@
  *     checked that such a macro exists and one can manually check that no
  *     compiler warnings are produced for the compiler_unused_attribute_var.
  *
- * - Invoke the  RTEMS_CONCAT() macro on examples.
+ * - Invoke the RTEMS_CONCAT() macro on examples.
  *
  *   - Check that the two arguments of RTEMS_CONCAT() are concatenated to a new
  *     token.
@@ -209,15 +209,15 @@
  *   - Check that the RTEMS_DEVOLATILE() macro returns a pointer which allows
  *     to write into an otherwise volatile value.
  *
- * - Invoke the  RTEMS_EXPAND() macro on an example.
+ * - Invoke the RTEMS_EXPAND() macro on an example.
  *
  *   - Check that the argument of RTEMS_EXPAND() is expanded and returned.
  *
- * - Invoke the  FALSE macro on an example.
+ * - Invoke the FALSE macro on an example.
  *
  *   - Check that of FALSE is substituted by 0.
  *
- * - Invoke the  RTEMS_HAVE_MEMBER_SAME_TYPE() macro on examples.
+ * - Invoke the RTEMS_HAVE_MEMBER_SAME_TYPE() macro on examples.
  *
  *   - Check that of RTEMS_HAVE_MEMBER_SAME_TYPE() returns 0 and 1 depending on
  *     whether these types are compatible.
@@ -322,11 +322,11 @@
  *   - Check that the RTEMS_SYMBOL_NAME() macro expands to the expected symbol
  *     name.
  *
- * - Invoke the  TRUE macro on an example.
+ * - Invoke the TRUE macro on an example.
  *
  *   - Check that of TRUE is substituted by 0.
  *
- * - Use of the  RTEMS_TYPEOF_REFX() macro on several examples. This use is
+ * - Use of the RTEMS_TYPEOF_REFX() macro on several examples. This use is
  *   already the test as the statements will not compile without error if the
  *   macro did not evaluate to the correct type.
  *
@@ -1010,7 +1010,7 @@ static void RtemsBasedefsValBasedefs_Action_15( void )
 }
 
 /**
- * @brief Invoke the  RTEMS_CONCAT() macro on examples.
+ * @brief Invoke the RTEMS_CONCAT() macro on examples.
  */
 static void RtemsBasedefsValBasedefs_Action_16( void )
 {
@@ -1232,7 +1232,7 @@ static void RtemsBasedefsValBasedefs_Action_25( void )
 }
 
 /**
- * @brief Invoke the  RTEMS_EXPAND() macro on an example.
+ * @brief Invoke the RTEMS_EXPAND() macro on an example.
  */
 static void RtemsBasedefsValBasedefs_Action_26( void )
 {
@@ -1246,7 +1246,7 @@ static void RtemsBasedefsValBasedefs_Action_26( void )
 }
 
 /**
- * @brief Invoke the  FALSE macro on an example.
+ * @brief Invoke the FALSE macro on an example.
  */
 static void RtemsBasedefsValBasedefs_Action_27( void )
 {
@@ -1260,7 +1260,7 @@ static void RtemsBasedefsValBasedefs_Action_27( void )
 }
 
 /**
- * @brief Invoke the  RTEMS_HAVE_MEMBER_SAME_TYPE() macro on examples.
+ * @brief Invoke the RTEMS_HAVE_MEMBER_SAME_TYPE() macro on examples.
  */
 static void RtemsBasedefsValBasedefs_Action_28( void )
 {
@@ -1699,7 +1699,7 @@ static void RtemsBasedefsValBasedefs_Action_45( void )
 }
 
 /**
- * @brief Invoke the  TRUE macro on an example.
+ * @brief Invoke the TRUE macro on an example.
  */
 static void RtemsBasedefsValBasedefs_Action_46( void )
 {
@@ -1713,9 +1713,9 @@ static void RtemsBasedefsValBasedefs_Action_46( void )
 }
 
 /**
- * @brief Use of the  RTEMS_TYPEOF_REFX() macro on several examples. This use
- *   is already the test as the statements will not compile without error if
- *   the macro did not evaluate to the correct type.
+ * @brief Use of the RTEMS_TYPEOF_REFX() macro on several examples. This use is
+ *   already the test as the statements will not compile without error if the
+ *   macro did not evaluate to the correct type.
  */
 static void RtemsBasedefsValBasedefs_Action_47( void )
 {

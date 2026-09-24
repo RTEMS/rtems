@@ -76,12 +76,12 @@ typedef struct {
   bool result;
 
   /**
-   * @brief This member specifies if the ``left_status_code`` parameter value.
+   * @brief This member specifies if the `left_status_code` parameter value.
    */
   rtems_status_code status_0;
 
   /**
-   * @brief This member specifies if the ``right_status_code`` parameter value.
+   * @brief This member specifies if the `right_status_code` parameter value.
    */
   rtems_status_code status_1;
 
@@ -132,8 +132,8 @@ static void RtemsStatusReqIsEqual_Pre_Status_Prepare(
   switch ( state ) {
     case RtemsStatusReqIsEqual_Pre_Status_Equal: {
       /*
-       * While the ``left_status_code`` parameter is equal to the
-       * ``right_status_code`` parameter.
+       * While the `left_status_code` parameter is equal to the
+       * `right_status_code` parameter.
        */
       ctx->status_0 = RTEMS_INVALID_NAME;
       ctx->status_1 = RTEMS_INVALID_NAME;
@@ -142,8 +142,8 @@ static void RtemsStatusReqIsEqual_Pre_Status_Prepare(
 
     case RtemsStatusReqIsEqual_Pre_Status_NotEqual: {
       /*
-       * While the ``left_status_code`` parameter is not equal to the
-       * ``right_status_code`` parameter.
+       * While the `left_status_code` parameter is not equal to the
+       * `right_status_code` parameter.
        */
       ctx->status_0 = RTEMS_SUCCESSFUL;
       ctx->status_1 = RTEMS_INVALID_ID;

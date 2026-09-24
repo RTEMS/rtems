@@ -68,12 +68,12 @@ typedef struct {
   uint32_t current_priority;
 
   /**
-   * @brief This member specifies the ``vector`` parameter value.
+   * @brief This member specifies the `vector` parameter value.
    */
   rtems_vector_number vector;
 
   /**
-   * @brief This member specifies the ``priority`` parameter value.
+   * @brief This member specifies the `priority` parameter value.
    */
   uint32_t priority;
 
@@ -161,7 +161,7 @@ static void RtemsIntrReqSetPriority_Pre_Vector_Prepare(
   switch ( state ) {
     case RtemsIntrReqSetPriority_Pre_Vector_Valid: {
       /*
-       * While the ``vector`` parameter is associated with an interrupt vector.
+       * While the `vector` parameter is associated with an interrupt vector.
        */
       ctx->vector = ctx->valid_vector;
       break;
@@ -169,7 +169,7 @@ static void RtemsIntrReqSetPriority_Pre_Vector_Prepare(
 
     case RtemsIntrReqSetPriority_Pre_Vector_Invalid: {
       /*
-       * While the ``vector`` parameter is not associated with an interrupt
+       * While the `vector` parameter is not associated with an interrupt
        * vector.
        */
       ctx->vector = BSP_INTERRUPT_VECTOR_COUNT;
@@ -189,7 +189,7 @@ static void RtemsIntrReqSetPriority_Pre_Priority_Prepare(
   switch ( state ) {
     case RtemsIntrReqSetPriority_Pre_Priority_Valid: {
       /*
-       * While the ``priority`` parameter is a valid priority value.
+       * While the `priority` parameter is a valid priority value.
        */
       ctx->priority = ctx->current_priority;
       break;
@@ -197,7 +197,7 @@ static void RtemsIntrReqSetPriority_Pre_Priority_Prepare(
 
     case RtemsIntrReqSetPriority_Pre_Priority_Invalid: {
       /*
-       * While the ``priority`` parameter is an invalid priority value.
+       * While the `priority` parameter is an invalid priority value.
        */
       if ( ctx->maximum_priority < UINT32_MAX ) {
         ctx->priority = UINT32_MAX;
@@ -221,7 +221,7 @@ static void RtemsIntrReqSetPriority_Pre_CanSetPriority_Prepare(
     case RtemsIntrReqSetPriority_Pre_CanSetPriority_Yes: {
       /*
        * While setting the priority for the interrupt vector specified by
-       * ``vector`` parameter is supported.
+       * `vector` parameter is supported.
        */
       if ( !ctx->can_set_priority ) {
         ctx->Map.skip = true;
@@ -232,7 +232,7 @@ static void RtemsIntrReqSetPriority_Pre_CanSetPriority_Prepare(
     case RtemsIntrReqSetPriority_Pre_CanSetPriority_No: {
       /*
        * While setting the priority for the interrupt vector specified by
-       * ``vector`` parameter is not supported.
+       * `vector` parameter is not supported.
        */
       if ( ctx->can_set_priority ) {
         ctx->Map.skip = true;

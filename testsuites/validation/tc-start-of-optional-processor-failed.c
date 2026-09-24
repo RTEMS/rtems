@@ -49,7 +49,7 @@
  *
  * This test case performs the following actions:
  *
- * - The test action was carried by the system initialization.  If we execute
+ * - The test action was carried by the system initialization. If we execute
  *   this test case, then the failed start of an optional processor did not
  *   abort the system initialization.
  *
@@ -61,7 +61,7 @@
  */
 
 /**
- * @brief The test action was carried by the system initialization.  If we
+ * @brief The test action was carried by the system initialization. If we
  *   execute this test case, then the failed start of an optional processor did
  *   not abort the system initialization.
  */

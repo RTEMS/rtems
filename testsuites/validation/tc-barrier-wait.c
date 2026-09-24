@@ -253,7 +253,7 @@ static void RtemsBarrierReqWait_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsBarrierReqWait_Pre_Id_NoObj: {
       /*
-       * While the ``id`` parameter is not associated with a barrier.
+       * While the `id` parameter is not associated with a barrier.
        */
       ctx->id = 0xffffffff;
       break;
@@ -261,8 +261,7 @@ static void RtemsBarrierReqWait_Pre_Id_Prepare(
 
     case RtemsBarrierReqWait_Pre_Id_Manual: {
       /*
-       * While the ``id`` parameter is associated with a manual release
-       * barrier.
+       * While the `id` parameter is associated with a manual release barrier.
        */
       ctx->id = ctx->manual_release_id;
       break;
@@ -270,7 +269,7 @@ static void RtemsBarrierReqWait_Pre_Id_Prepare(
 
     case RtemsBarrierReqWait_Pre_Id_Auto: {
       /*
-       * While the ``id`` parameter is associated with an automatic release
+       * While the `id` parameter is associated with an automatic release
        * barrier.
        */
       ctx->id = ctx->auto_release_id;
@@ -290,7 +289,7 @@ static void RtemsBarrierReqWait_Pre_Timeout_Prepare(
   switch ( state ) {
     case RtemsBarrierReqWait_Pre_Timeout_Ticks: {
       /*
-       * While the ``released`` parameter is a clock tick interval.
+       * While the `released` parameter is a clock tick interval.
        */
       ctx->timeout = UINT32_MAX;
       break;
@@ -298,7 +297,7 @@ static void RtemsBarrierReqWait_Pre_Timeout_Prepare(
 
     case RtemsBarrierReqWait_Pre_Timeout_Forever: {
       /*
-       * While the ``released`` parameter is RTEMS_NO_TIMEOUT.
+       * While the `released` parameter is RTEMS_NO_TIMEOUT.
        */
       ctx->timeout = RTEMS_NO_TIMEOUT;
       break;

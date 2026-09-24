@@ -55,8 +55,8 @@
  * This test case performs the following actions:
  *
  * - Call the simple timecounter tick service with a zero delta and offset.
- *   This will lead to an overflow to zero of the timehand generation.  It
- *   shall not change the initial clock values.
+ *   This will lead to an overflow to zero of the timehand generation. It shall
+ *   not change the initial clock values.
  *
  * - Call the directives to get the initial value of CLOCK_REALTIME and the
  *   initial boot time.
@@ -145,7 +145,7 @@
  *   - Install a timecounter with a high quality level and high frequency.
  *     Check that it was installed.
  *
- *   - Install a timecounter with a low quality level.  Check that it was not
+ *   - Install a timecounter with a low quality level. Check that it was not
  *     installed.
  *
  * - Call the directives to get the time in the highest resolution available to
@@ -201,25 +201,25 @@
  * - Call the directives to get the time in the highest resolution available to
  *   the system.
  *
- *   - Prepare the timecounter to get a large time difference.  Check that
+ *   - Prepare the timecounter to get a large time difference. Check that
  *     rtems_clock_get_realtime() returns the correct time.
  *
- *   - Prepare the timecounter to get a large time difference.  Check that
+ *   - Prepare the timecounter to get a large time difference. Check that
  *     rtems_clock_get_realtime_bintime() returns the correct time.
  *
- *   - Prepare the timecounter to get a large time difference.  Check that
+ *   - Prepare the timecounter to get a large time difference. Check that
  *     rtems_clock_get_realtime_timeval() returns the correct time.
  *
- *   - Prepare the timecounter to get a large time difference.  Check that
+ *   - Prepare the timecounter to get a large time difference. Check that
  *     rtems_clock_get_monotonic() returns the correct time.
  *
- *   - Prepare the timecounter to get a large time difference.  Check that
+ *   - Prepare the timecounter to get a large time difference. Check that
  *     rtems_clock_get_monotonic_bintime() returns the correct time.
  *
- *   - Prepare the timecounter to get a large time difference.  Check that
+ *   - Prepare the timecounter to get a large time difference. Check that
  *     rtems_clock_get_monotonic_sbintime() returns the correct time.
  *
- *   - Prepare the timecounter to get a large time difference.  Check that
+ *   - Prepare the timecounter to get a large time difference. Check that
  *     rtems_clock_get_monotonic_timeval() returns the correct time.
  *
  * - Update the oldest timehand after a large time interval.
@@ -660,7 +660,7 @@ static void ScoreTimecounterValInstall_Action_3( void )
   T_eq_i64( sb, SBT_1S + 28 );
 
   /*
-   * Install a timecounter with a low quality level.  Check that it was not
+   * Install a timecounter with a low quality level. Check that it was not
    * installed.
    */
   lq->base.tc_get_timecount = GetTimecount;
@@ -837,7 +837,7 @@ static void ScoreTimecounterValInstall_Action_6( void )
   counter = 3 * tc->base.tc_frequency + 123456789;
 
   /*
-   * Prepare the timecounter to get a large time difference.  Check that
+   * Prepare the timecounter to get a large time difference. Check that
    * rtems_clock_get_realtime() returns the correct time.
    */
   SetCounter( tc, counter );
@@ -846,7 +846,7 @@ static void ScoreTimecounterValInstall_Action_6( void )
   T_eq_u64( ts.tv_nsec, 114978100 );
 
   /*
-   * Prepare the timecounter to get a large time difference.  Check that
+   * Prepare the timecounter to get a large time difference. Check that
    * rtems_clock_get_realtime_bintime() returns the correct time.
    */
   SetCounter( tc, counter );
@@ -855,7 +855,7 @@ static void ScoreTimecounterValInstall_Action_6( void )
   T_eq_u64( bt.frac, 2120971587975905280 );
 
   /*
-   * Prepare the timecounter to get a large time difference.  Check that
+   * Prepare the timecounter to get a large time difference. Check that
    * rtems_clock_get_realtime_timeval() returns the correct time.
    */
   SetCounter( tc, counter );
@@ -864,7 +864,7 @@ static void ScoreTimecounterValInstall_Action_6( void )
   T_eq_long( tv.tv_usec, 114978 );
 
   /*
-   * Prepare the timecounter to get a large time difference.  Check that
+   * Prepare the timecounter to get a large time difference. Check that
    * rtems_clock_get_monotonic() returns the correct time.
    */
   SetCounter( tc, counter );
@@ -873,7 +873,7 @@ static void ScoreTimecounterValInstall_Action_6( void )
   T_eq_u64( ts.tv_nsec, 114978100 );
 
   /*
-   * Prepare the timecounter to get a large time difference.  Check that
+   * Prepare the timecounter to get a large time difference. Check that
    * rtems_clock_get_monotonic_bintime() returns the correct time.
    */
   SetCounter( tc, counter );
@@ -882,7 +882,7 @@ static void ScoreTimecounterValInstall_Action_6( void )
   T_eq_u64( bt.frac, 2120971587975905280 );
 
   /*
-   * Prepare the timecounter to get a large time difference.  Check that
+   * Prepare the timecounter to get a large time difference. Check that
    * rtems_clock_get_monotonic_sbintime() returns the correct time.
    */
   SetCounter( tc, counter );
@@ -890,7 +890,7 @@ static void ScoreTimecounterValInstall_Action_6( void )
   T_eq_i64( sb, 17673696364 );
 
   /*
-   * Prepare the timecounter to get a large time difference.  Check that
+   * Prepare the timecounter to get a large time difference. Check that
    * rtems_clock_get_monotonic_timeval() returns the correct time.
    */
   SetCounter( tc, counter );

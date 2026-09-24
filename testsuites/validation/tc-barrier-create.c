@@ -243,7 +243,7 @@ static void RtemsBarrierReqCreate_Pre_Name_Prepare(
   switch ( state ) {
     case RtemsBarrierReqCreate_Pre_Name_Valid: {
       /*
-       * While the ``name`` parameter is valid.
+       * While the `name` parameter is valid.
        */
       ctx->name = NAME;
       break;
@@ -251,7 +251,7 @@ static void RtemsBarrierReqCreate_Pre_Name_Prepare(
 
     case RtemsBarrierReqCreate_Pre_Name_Invalid: {
       /*
-       * While the ``name`` parameter is invalid.
+       * While the `name` parameter is invalid.
        */
       ctx->name = 0;
       break;
@@ -270,7 +270,7 @@ static void RtemsBarrierReqCreate_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsBarrierReqCreate_Pre_Id_Valid: {
       /*
-       * While the ``id`` parameter references an object of type rtems_id.
+       * While the `id` parameter references an object of type rtems_id.
        */
       ctx->id = &ctx->id_value;
       break;
@@ -278,7 +278,7 @@ static void RtemsBarrierReqCreate_Pre_Id_Prepare(
 
     case RtemsBarrierReqCreate_Pre_Id_Null: {
       /*
-       * While the ``id`` parameter is NULL.
+       * While the `id` parameter is NULL.
        */
       ctx->id = NULL;
       break;
@@ -297,7 +297,7 @@ static void RtemsBarrierReqCreate_Pre_Class_Prepare(
   switch ( state ) {
     case RtemsBarrierReqCreate_Pre_Class_Default: {
       /*
-       * While the ``attribute_set`` parameter specifies the default class.
+       * While the `attribute_set` parameter specifies the default class.
        */
       /* Nothing to do */
       break;
@@ -305,7 +305,7 @@ static void RtemsBarrierReqCreate_Pre_Class_Prepare(
 
     case RtemsBarrierReqCreate_Pre_Class_Manual: {
       /*
-       * While the ``attribute_set`` parameter specifies the manual release
+       * While the `attribute_set` parameter specifies the manual release
        * class.
        */
       ctx->attribute_set |= RTEMS_BARRIER_MANUAL_RELEASE;
@@ -314,7 +314,7 @@ static void RtemsBarrierReqCreate_Pre_Class_Prepare(
 
     case RtemsBarrierReqCreate_Pre_Class_Auto: {
       /*
-       * While the ``attribute_set`` parameter specifies the automatic release
+       * While the `attribute_set` parameter specifies the automatic release
        * class.
        */
       ctx->attribute_set |= RTEMS_BARRIER_AUTOMATIC_RELEASE;
@@ -334,7 +334,7 @@ static void RtemsBarrierReqCreate_Pre_MaxWait_Prepare(
   switch ( state ) {
     case RtemsBarrierReqCreate_Pre_MaxWait_Zero: {
       /*
-       * While the ``maximum_waiters`` parameter is zero.
+       * While the `maximum_waiters` parameter is zero.
        */
       ctx->maximum_waiters = 0;
       break;
@@ -342,7 +342,7 @@ static void RtemsBarrierReqCreate_Pre_MaxWait_Prepare(
 
     case RtemsBarrierReqCreate_Pre_MaxWait_Positive: {
       /*
-       * While the ``maximum_waiters`` parameter is positive.
+       * While the `maximum_waiters` parameter is positive.
        */
       ctx->maximum_waiters = 1;
       break;
@@ -515,9 +515,9 @@ static void RtemsBarrierReqCreate_Post_IdVar_Check(
   switch ( state ) {
     case RtemsBarrierReqCreate_Post_IdVar_Set: {
       /*
-       * The value of the object referenced by the ``id`` parameter shall be
-       * set to the object identifier of the created barrier after the return
-       * of the rtems_barrier_create() call.
+       * The value of the object referenced by the `id` parameter shall be set
+       * to the object identifier of the created barrier after the return of
+       * the rtems_barrier_create() call.
        */
       T_eq_ptr( ctx->id, &ctx->id_value );
       T_ne_u32( ctx->id_value, INVALID_ID );
@@ -526,7 +526,7 @@ static void RtemsBarrierReqCreate_Post_IdVar_Check(
 
     case RtemsBarrierReqCreate_Post_IdVar_Nop: {
       /*
-       * Objects referenced by the ``id`` parameter in past calls to
+       * Objects referenced by the `id` parameter in past calls to
        * rtems_barrier_create() shall not be accessed by the
        * rtems_barrier_create() call.
        */

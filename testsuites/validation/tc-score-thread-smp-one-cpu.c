@@ -54,7 +54,7 @@
  * - Create one worker thread to validate the thread pinning on only one
  *   processor using a uniprocessor scheduler.
  *
- *   - Pin the runner thread.  Preempt the runner thread.  Unpin the runner
+ *   - Pin the runner thread. Preempt the runner thread. Unpin the runner
  *     thread.
  *
  *   - Clean up all used resources.
@@ -127,8 +127,7 @@ static void ScoreThreadValSmpOneCpu_Action_0(
   StartTask( ctx->worker_id, WorkerTask, ctx );
 
   /*
-   * Pin the runner thread.  Preempt the runner thread.  Unpin the runner
-   * thread.
+   * Pin the runner thread. Preempt the runner thread. Unpin the runner thread.
    */
   _Thread_Pin( executing );
 

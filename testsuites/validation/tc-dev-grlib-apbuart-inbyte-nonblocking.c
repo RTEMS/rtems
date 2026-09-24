@@ -137,7 +137,7 @@ static void DevGrlibReqApbuartInbyteNonblocking_Pre_DataReady_Prepare(
     case DevGrlibReqApbuartInbyteNonblocking_Pre_DataReady_Yes: {
       /*
        * While the data ready flag is set in the status register of the
-       * register block specified by ``regs`` parameter.
+       * register block specified by `regs` parameter.
        */
       ctx->regs.status |= APBUART_STATUS_DR;
       break;
@@ -146,7 +146,7 @@ static void DevGrlibReqApbuartInbyteNonblocking_Pre_DataReady_Prepare(
     case DevGrlibReqApbuartInbyteNonblocking_Pre_DataReady_No: {
       /*
        * While the data ready flag is cleared in the status register of the
-       * register block specified by ``regs`` parameter.
+       * register block specified by `regs` parameter.
        */
       ctx->regs.status &= ~APBUART_STATUS_DR;
       break;
@@ -166,8 +166,7 @@ static void DevGrlibReqApbuartInbyteNonblocking_Post_Result_Check(
     case DevGrlibReqApbuartInbyteNonblocking_Post_Result_Data: {
       /*
        * The return value of apbuart_inbyte_nonblocking() shall be the data
-       * read from the data register of the register block specified by
-       * ``regs``.
+       * read from the data register of the register block specified by `regs`.
        */
       T_eq_int( ctx->result, 0xff );
       break;
@@ -195,8 +194,8 @@ static void DevGrlibReqApbuartInbyteNonblocking_Post_ErrorFlags_Check(
     case DevGrlibReqApbuartInbyteNonblocking_Post_ErrorFlags_Cleared: {
       /*
        * The framing error, parity error, overrun, and break received flags in
-       * the status register of the register block specified by ``regs`` shall
-       * be cleared.
+       * the status register of the register block specified by `regs` shall be
+       * cleared.
        */
       T_eq_u32( ctx->regs.status & 0x78, 0 );
       break;

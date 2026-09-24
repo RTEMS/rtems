@@ -194,17 +194,17 @@ typedef struct {
   rtems_id timer_cover_id;
 
   /**
-   * @brief This member specifies the ``id`` parameter for the action.
+   * @brief This member specifies the `id` parameter for the action.
    */
   rtems_id id_param;
 
   /**
-   * @brief This member specifies the ``ticks`` parameter for the action.
+   * @brief This member specifies the `ticks` parameter for the action.
    */
   rtems_interval ticks_param;
 
   /**
-   * @brief This member specifies the ``routine`` parameter for the action.
+   * @brief This member specifies the `routine` parameter for the action.
    */
   rtems_timer_service_routine_entry routine_param;
 
@@ -424,7 +424,7 @@ static void RtemsTimerReqServerFireAfter_Pre_Ticks_Prepare(
   switch ( state ) {
     case RtemsTimerReqServerFireAfter_Pre_Ticks_Valid: {
       /*
-       * While the ``ticks`` parameter is a positive (greater 0) number.
+       * While the `ticks` parameter is a positive (greater 0) number.
        */
       ctx->ticks_param = SCHEDULE_LATER;
       break;
@@ -432,7 +432,7 @@ static void RtemsTimerReqServerFireAfter_Pre_Ticks_Prepare(
 
     case RtemsTimerReqServerFireAfter_Pre_Ticks_Is0: {
       /*
-       * While the ``ticks`` parameter is 0.
+       * While the `ticks` parameter is 0.
        */
       ctx->ticks_param = 0;
       break;
@@ -451,7 +451,7 @@ static void RtemsTimerReqServerFireAfter_Pre_Routine_Prepare(
   switch ( state ) {
     case RtemsTimerReqServerFireAfter_Pre_Routine_Valid: {
       /*
-       * While the ``routine`` parameter references an object of type
+       * While the `routine` parameter references an object of type
        * rtems_timer_service_routine_entry.
        */
       ctx->routine_param = TimerServiceRoutine;
@@ -460,7 +460,7 @@ static void RtemsTimerReqServerFireAfter_Pre_Routine_Prepare(
 
     case RtemsTimerReqServerFireAfter_Pre_Routine_Null: {
       /*
-       * While the ``routine`` parameter is NULL..
+       * While the `routine` parameter is NULL..
        */
       ctx->routine_param = NULL;
       break;
@@ -479,7 +479,7 @@ static void RtemsTimerReqServerFireAfter_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsTimerReqServerFireAfter_Pre_Id_Valid: {
       /*
-       * While the ``id`` parameter is valid.
+       * While the `id` parameter is valid.
        */
       ctx->id_param = ctx->timer_id;
       break;
@@ -487,7 +487,7 @@ static void RtemsTimerReqServerFireAfter_Pre_Id_Prepare(
 
     case RtemsTimerReqServerFireAfter_Pre_Id_Invalid: {
       /*
-       * While the ``id`` parameter is invalid.
+       * While the `id` parameter is invalid.
        */
       ctx->id_param = RTEMS_ID_NONE;
       break;
@@ -864,8 +864,8 @@ static void RtemsTimerReqServerFireAfter_Post_Interval_Check(
     case RtemsTimerReqServerFireAfter_Post_Interval_Param: {
       /*
        * The Timer Service Routine shall be invoked the number of ticks (see
-       * tick), which are provided by the ``ticks`` parameter in the past call
-       * to rtems_timer_server_fire_after(), after a point in time during the
+       * tick), which are provided by the `ticks` parameter in the past call to
+       * rtems_timer_server_fire_after(), after a point in time during the
        * execution of the rtems_timer_server_fire_after() call.
        */
       T_eq_int( ctx->ticks_till_fire, ctx->ticks_param );
@@ -902,7 +902,7 @@ static void RtemsTimerReqServerFireAfter_Post_Routine_Check(
     case RtemsTimerReqServerFireAfter_Post_Routine_Param: {
       /*
        * The function reference used to invoke the Timer Service Routine when
-       * the timer will fire shall be the one provided by the ``routine``
+       * the timer will fire shall be the one provided by the `routine`
        * parameter in the past call to rtems_timer_server_fire_after().
        */
       T_eq_int( ctx->invocations, 1 );
@@ -936,8 +936,8 @@ static void RtemsTimerReqServerFireAfter_Post_UserData_Check(
     case RtemsTimerReqServerFireAfter_Post_UserData_Param: {
       /*
        * The user data argument for invoking the Timer Service Routine when the
-       * timer will fire shall be the one provided by the ``user_data``
-       * parameter in the past call to rtems_timer_server_fire_after().
+       * timer will fire shall be the one provided by the `user_data` parameter
+       * in the past call to rtems_timer_server_fire_after().
        */
       T_eq_ptr( ctx->routine_user_data, ctx );
       break;

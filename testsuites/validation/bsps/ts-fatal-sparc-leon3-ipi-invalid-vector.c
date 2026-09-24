@@ -61,10 +61,10 @@
  *   fatal error during system initialization.
  *
  * Where the BSP uses the interrupt map, the test defines the inter-processor
- * interrupt bus line by the bus line of TM27_IRQMAP_BUS_LINE.  A system
- * initialization handler runs before the BSP reads the interrupt map.  It maps
- * the bus line to the controller line zero.  Where the BSP uses no interrupt
- * map, the test defines the inter-processor interrupt bus line as zero.  In
+ * interrupt bus line by the bus line of TM27_IRQMAP_BUS_LINE. A system
+ * initialization handler runs before the BSP reads the interrupt map. It maps
+ * the bus line to the controller line zero. Where the BSP uses no interrupt
+ * map, the test defines the inter-processor interrupt bus line as zero. In
  * both cases, the interrupt vector of the inter-processor interrupt is no
  * valid interrupt vector.
  *

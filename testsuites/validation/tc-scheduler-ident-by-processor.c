@@ -103,13 +103,13 @@ typedef struct {
   rtems_id second_scheduler_id;
 
   /**
-   * @brief This member provides the object referenced by the ``id`` parameter.
+   * @brief This member provides the object referenced by the `id` parameter.
    */
   rtems_id id_value;
 
   /**
    * @brief If this member is true, then the processor specified by the
-   *   ``cpu_index`` parameter shall be owned by a scheduler.
+   *   `cpu_index` parameter shall be owned by a scheduler.
    */
   bool cpu_has_scheduler;
 
@@ -120,12 +120,12 @@ typedef struct {
   rtems_status_code status;
 
   /**
-   * @brief This member specifies if the ``cpu_index`` parameter value.
+   * @brief This member specifies if the `cpu_index` parameter value.
    */
   uint32_t cpu_index;
 
   /**
-   * @brief This member specifies if the ``id`` parameter value.
+   * @brief This member specifies if the `id` parameter value.
    */
   rtems_id *id;
 
@@ -192,8 +192,8 @@ static void RtemsSchedulerReqIdentByProcessor_Pre_CPUOwnedByScheduler_Prepare(
   switch ( state ) {
     case RtemsSchedulerReqIdentByProcessor_Pre_CPUOwnedByScheduler_Yes: {
       /*
-       * While the processor specified by the ``cpu_index`` parameter is owned
-       * by a scheduler.
+       * While the processor specified by the `cpu_index` parameter is owned by
+       * a scheduler.
        */
       ctx->cpu_has_scheduler = true;
       break;
@@ -201,7 +201,7 @@ static void RtemsSchedulerReqIdentByProcessor_Pre_CPUOwnedByScheduler_Prepare(
 
     case RtemsSchedulerReqIdentByProcessor_Pre_CPUOwnedByScheduler_No: {
       /*
-       * While the processor specified by the ``cpu_index`` parameter is not
+       * While the processor specified by the `cpu_index` parameter is not
        * owned by a scheduler.
        */
       ctx->cpu_has_scheduler = false;
@@ -221,7 +221,7 @@ static void RtemsSchedulerReqIdentByProcessor_Pre_CPUIndex_Prepare(
   switch ( state ) {
     case RtemsSchedulerReqIdentByProcessor_Pre_CPUIndex_Invalid: {
       /*
-       * While the ``cpu_index`` parameter is greater than or equal to the
+       * While the `cpu_index` parameter is greater than or equal to the
        * processor maximum.
        */
       ctx->cpu_index = rtems_scheduler_get_processor_maximum();
@@ -230,7 +230,7 @@ static void RtemsSchedulerReqIdentByProcessor_Pre_CPUIndex_Prepare(
 
     case RtemsSchedulerReqIdentByProcessor_Pre_CPUIndex_Valid: {
       /*
-       * While the ``cpu_index`` parameter is less than the processor maximum.
+       * While the `cpu_index` parameter is less than the processor maximum.
        */
       if ( ctx->cpu_has_scheduler ) {
         ctx->cpu_index = 0;
@@ -253,7 +253,7 @@ static void RtemsSchedulerReqIdentByProcessor_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsSchedulerReqIdentByProcessor_Pre_Id_Valid: {
       /*
-       * While the ``id`` parameter references an object of type rtems_id.
+       * While the `id` parameter references an object of type rtems_id.
        */
       ctx->id_value = INVALID_ID;
       ctx->id = &ctx->id_value;
@@ -262,7 +262,7 @@ static void RtemsSchedulerReqIdentByProcessor_Pre_Id_Prepare(
 
     case RtemsSchedulerReqIdentByProcessor_Pre_Id_Null: {
       /*
-       * While the ``id`` parameter is equal to NULL.
+       * While the `id` parameter is equal to NULL.
        */
       ctx->id = NULL;
       break;
@@ -328,10 +328,10 @@ static void RtemsSchedulerReqIdentByProcessor_Post_IdVar_Check(
   switch ( state ) {
     case RtemsSchedulerReqIdentByProcessor_Post_IdVar_Set: {
       /*
-       * The value of the object referenced by the ``id`` parameter shall be
-       * set to the identifier of the scheduler which owned the processor
-       * specified by the ``cpu_index`` parameter at some point during the call
-       * after the return of the rtems_scheduler_ident_by_processor() call.
+       * The value of the object referenced by the `id` parameter shall be set
+       * to the identifier of the scheduler which owned the processor specified
+       * by the `cpu_index` parameter at some point during the call after the
+       * return of the rtems_scheduler_ident_by_processor() call.
        */
       T_eq_ptr( ctx->id, &ctx->id_value );
       T_eq_u32( ctx->id_value, 0x0f010001 );
@@ -340,7 +340,7 @@ static void RtemsSchedulerReqIdentByProcessor_Post_IdVar_Check(
 
     case RtemsSchedulerReqIdentByProcessor_Post_IdVar_Nop: {
       /*
-       * Objects referenced by the ``id`` parameter in past calls to
+       * Objects referenced by the `id` parameter in past calls to
        * rtems_scheduler_ident_by_processor() shall not be accessed by the
        * rtems_scheduler_ident_by_processor() call.
        */

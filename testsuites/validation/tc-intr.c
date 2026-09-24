@@ -63,13 +63,12 @@
  *     rtems_interrupt_local_disable() and disabled afterwards.
  *
  *   - Check that the maskable interrupt status is restored by the call to
- *     rtems_interrupt_local_enable() according to the ``_isr_cookie``
- *     parameter.  In this case maskable interrupts are still disabled
- *     afterwards.
+ *     rtems_interrupt_local_enable() according to the `_isr_cookie` parameter.
+ *     In this case maskable interrupts are still disabled afterwards.
  *
  *   - Check that the maskable interrupt status is restored by the call to
- *     rtems_interrupt_local_enable() according to the ``_isr_cookie``
- *     parameter.  In this case maskable interrupts are enabled afterwards.
+ *     rtems_interrupt_local_enable() according to the `_isr_cookie` parameter.
+ *     In this case maskable interrupts are enabled afterwards.
  *
  * - Validate the interrupt lock directives.
  *
@@ -80,14 +79,14 @@
  *     rtems_interrupt_lock_acquire_isr() call.
  *
  *   - Check that the maskable interrupt status is restored by the call to
- *     rtems_interrupt_lock_release() according to the ``_lock_context``
+ *     rtems_interrupt_lock_release() according to the `_lock_context`
  *     parameter.
  *
  *   - Check that maskable interrupts are disabled before the call to
  *     rtems_interrupt_lock_acquire() and disabled afterwards.
  *
  *   - Check that the maskable interrupt status is restored by the call to
- *     rtems_interrupt_lock_release() according to the ``_lock_context``
+ *     rtems_interrupt_lock_release() according to the `_lock_context`
  *     parameter.
  *
  *   - Check that the maskable interrupt status is not changed by the
@@ -98,7 +97,7 @@
  *   - Check that the entry is properly initialized by
  *     RTEMS_INTERRUPT_ENTRY_INITIALIZER().
  *
- *   - Call rtems_interrupt_entry_initialize().  Check that the entry is
+ *   - Call rtems_interrupt_entry_initialize(). Check that the entry is
  *     properly initialized by rtems_interrupt_entry_initialize().
  *
  * - Check rtems_interrupt_get_priority() for each valid vector.
@@ -145,7 +144,7 @@ static void RtemsIntrValIntr_Action_0( void )
 
   /*
    * Check that the maskable interrupt status is restored by the call to
-   * rtems_interrupt_local_enable() according to the ``_isr_cookie`` parameter.
+   * rtems_interrupt_local_enable() according to the `_isr_cookie` parameter.
    * In this case maskable interrupts are still disabled afterwards.
    */
   T_false( AreInterruptsEnabled() );
@@ -154,7 +153,7 @@ static void RtemsIntrValIntr_Action_0( void )
 
   /*
    * Check that the maskable interrupt status is restored by the call to
-   * rtems_interrupt_local_enable() according to the ``_isr_cookie`` parameter.
+   * rtems_interrupt_local_enable() according to the `_isr_cookie` parameter.
    * In this case maskable interrupts are enabled afterwards.
    */
   T_false( AreInterruptsEnabled() );
@@ -188,8 +187,7 @@ static void RtemsIntrValIntr_Action_1( void )
 
   /*
    * Check that the maskable interrupt status is restored by the call to
-   * rtems_interrupt_lock_release() according to the ``_lock_context``
-   * parameter.
+   * rtems_interrupt_lock_release() according to the `_lock_context` parameter.
    */
   T_false( AreInterruptsEnabled() );
   rtems_interrupt_lock_release( &lock, &lock_context );
@@ -205,8 +203,7 @@ static void RtemsIntrValIntr_Action_1( void )
 
   /*
    * Check that the maskable interrupt status is restored by the call to
-   * rtems_interrupt_lock_release() according to the ``_lock_context``
-   * parameter.
+   * rtems_interrupt_lock_release() according to the `_lock_context` parameter.
    */
   T_false( AreInterruptsEnabled() );
   rtems_interrupt_lock_release( &lock, &lock_context );
@@ -246,7 +243,7 @@ static void RtemsIntrValIntr_Action_2( void )
   T_eq_ptr( entry.info, entry_info );
 
   /*
-   * Call rtems_interrupt_entry_initialize().  Check that the entry is properly
+   * Call rtems_interrupt_entry_initialize(). Check that the entry is properly
    * initialized by rtems_interrupt_entry_initialize().
    */
   entry.next = &entry;

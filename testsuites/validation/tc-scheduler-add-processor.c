@@ -158,12 +158,12 @@ typedef struct {
   rtems_status_code status;
 
   /**
-   * @brief This member specifies if the ``scheduler_id`` parameter value.
+   * @brief This member specifies if the `scheduler_id` parameter value.
    */
   rtems_id id;
 
   /**
-   * @brief This member specifies if the ``cpu_index`` parameter value.
+   * @brief This member specifies if the `cpu_index` parameter value.
    */
   uint32_t cpu_index;
 
@@ -266,8 +266,7 @@ static void RtemsSchedulerReqAddProcessor_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsSchedulerReqAddProcessor_Pre_Id_Invalid: {
       /*
-       * While the ``scheduler_id`` parameter is not associated with a
-       * scheduler.
+       * While the `scheduler_id` parameter is not associated with a scheduler.
        */
       ctx->id = INVALID_ID;
       break;
@@ -275,7 +274,7 @@ static void RtemsSchedulerReqAddProcessor_Pre_Id_Prepare(
 
     case RtemsSchedulerReqAddProcessor_Pre_Id_Scheduler: {
       /*
-       * While the ``scheduler_id`` parameter is associated with a scheduler.
+       * While the `scheduler_id` parameter is associated with a scheduler.
        */
       ctx->id = ctx->scheduler_id;
       break;
@@ -294,8 +293,8 @@ static void RtemsSchedulerReqAddProcessor_Pre_CPUIndex_Prepare(
   switch ( state ) {
     case RtemsSchedulerReqAddProcessor_Pre_CPUIndex_Valid: {
       /*
-       * While the ``cpu_index`` parameter is less than the configured
-       * processor maximum.
+       * While the `cpu_index` parameter is less than the configured processor
+       * maximum.
        */
       #if defined( RTEMS_SMP )
       ctx->cpu_index = CPU_TO_ADD;
@@ -307,7 +306,7 @@ static void RtemsSchedulerReqAddProcessor_Pre_CPUIndex_Prepare(
 
     case RtemsSchedulerReqAddProcessor_Pre_CPUIndex_Invalid: {
       /*
-       * While the ``cpu_index`` parameter is greater than or equal to the
+       * While the `cpu_index` parameter is greater than or equal to the
        * configured processor maximum.
        */
       ctx->cpu_index = rtems_configuration_get_maximum_processors();
@@ -329,11 +328,10 @@ static void RtemsSchedulerReqAddProcessor_Pre_CPUState_Prepare(
   switch ( state ) {
     case RtemsSchedulerReqAddProcessor_Pre_CPUState_Idle: {
       /*
-       * While the processor associated with the ``cpu_index`` parameter is
+       * While the processor associated with the `cpu_index` parameter is
        * configured to be used by a scheduler, while the processor associated
-       * with the ``cpu_index`` parameter is online, while the processor
-       * associated with the ``cpu_index`` parameter is not owned by a
-       * scheduler.
+       * with the `cpu_index` parameter is online, while the processor
+       * associated with the `cpu_index` parameter is not owned by a scheduler.
        */
       sc = rtems_scheduler_remove_processor( ctx->scheduler_b_id, CPU_TO_ADD );
       T_rsc_success( sc );
@@ -343,8 +341,8 @@ static void RtemsSchedulerReqAddProcessor_Pre_CPUState_Prepare(
 
     case RtemsSchedulerReqAddProcessor_Pre_CPUState_InUse: {
       /*
-       * While the processor associated with the ``cpu_index`` parameter is
-       * owned by a scheduler.
+       * While the processor associated with the `cpu_index` parameter is owned
+       * by a scheduler.
        */
       /* Nothing to do */
       break;
@@ -352,7 +350,7 @@ static void RtemsSchedulerReqAddProcessor_Pre_CPUState_Prepare(
 
     case RtemsSchedulerReqAddProcessor_Pre_CPUState_NotOnline: {
       /*
-       * While the processor associated with the ``cpu_index`` parameter is not
+       * While the processor associated with the `cpu_index` parameter is not
        * online.
        */
       sc = rtems_scheduler_remove_processor( ctx->scheduler_b_id, CPU_TO_ADD );
@@ -366,7 +364,7 @@ static void RtemsSchedulerReqAddProcessor_Pre_CPUState_Prepare(
 
     case RtemsSchedulerReqAddProcessor_Pre_CPUState_NotUsable: {
       /*
-       * While the processor associated with the ``cpu_index`` parameter is not
+       * While the processor associated with the `cpu_index` parameter is not
        * configured to be used by a scheduler.
        */
       ctx->cpu_index = rtems_configuration_get_maximum_processors() - 1;
@@ -446,8 +444,8 @@ static void RtemsSchedulerReqAddProcessor_Post_Added_Check(
   switch ( state ) {
     case RtemsSchedulerReqAddProcessor_Post_Added_Yes: {
       /*
-       * The processor specified by the ``cpu_index`` parameter shall be added
-       * to the scheduler specified by the ``scheduler_id`` by the
+       * The processor specified by the `cpu_index` parameter shall be added to
+       * the scheduler specified by the `scheduler_id` by the
        * rtems_scheduler_add_processor() call.
        */
       T_eq_sz( ctx->scheduler_log.header.recorded, 2 );

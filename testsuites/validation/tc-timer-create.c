@@ -115,12 +115,12 @@ typedef struct {
   rtems_id id_value;
 
   /**
-   * @brief This member specifies the ``name`` parameter for the action.
+   * @brief This member specifies the `name` parameter for the action.
    */
   rtems_name name;
 
   /**
-   * @brief This member specifies the ``id`` parameter for the action.
+   * @brief This member specifies the `id` parameter for the action.
    */
   rtems_id *id;
 
@@ -193,7 +193,7 @@ static void RtemsTimerReqCreate_Pre_Name_Prepare(
   switch ( state ) {
     case RtemsTimerReqCreate_Pre_Name_Valid: {
       /*
-       * While the ``name`` parameter is valid.
+       * While the `name` parameter is valid.
        */
       ctx->name = NAME;
       break;
@@ -201,7 +201,7 @@ static void RtemsTimerReqCreate_Pre_Name_Prepare(
 
     case RtemsTimerReqCreate_Pre_Name_Invalid: {
       /*
-       * While the ``name`` parameter is invalid.
+       * While the `name` parameter is invalid.
        */
       ctx->name = 0;
       break;
@@ -220,7 +220,7 @@ static void RtemsTimerReqCreate_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsTimerReqCreate_Pre_Id_Valid: {
       /*
-       * While the ``id`` parameter references an object of type rtems_id.
+       * While the `id` parameter references an object of type rtems_id.
        */
       ctx->id = &ctx->id_value;
       break;
@@ -228,7 +228,7 @@ static void RtemsTimerReqCreate_Pre_Id_Prepare(
 
     case RtemsTimerReqCreate_Pre_Id_Null: {
       /*
-       * While the ``id`` parameter is NULL.
+       * While the `id` parameter is NULL.
        */
       ctx->id = NULL;
       break;
@@ -353,9 +353,9 @@ static void RtemsTimerReqCreate_Post_IdVar_Check(
   switch ( state ) {
     case RtemsTimerReqCreate_Post_IdVar_Set: {
       /*
-       * The value of the object referenced by the ``id`` parameter shall be
-       * set to the object identifier of the created timer after the return of
-       * the rtems_timer_create() call.
+       * The value of the object referenced by the `id` parameter shall be set
+       * to the object identifier of the created timer after the return of the
+       * rtems_timer_create() call.
        */
       T_eq_ptr( ctx->id, &ctx->id_value );
       T_ne_u32( ctx->id_value, INVALID_ID );
@@ -364,7 +364,7 @@ static void RtemsTimerReqCreate_Post_IdVar_Check(
 
     case RtemsTimerReqCreate_Post_IdVar_Nop: {
       /*
-       * Objects referenced by the ``id`` parameter in past calls to
+       * Objects referenced by the `id` parameter in past calls to
        * rtems_timer_create() shall not be accessed by the rtems_timer_create()
        * call.
        */

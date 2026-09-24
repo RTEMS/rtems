@@ -52,100 +52,100 @@
  * @brief Checks that interrupt processing preserves the registers of the
  *   interrupted context.
  *
- * The action needs a BSP which supplies the TM27 support.  A BSP without it
+ * The action needs a BSP which supplies the TM27 support. A BSP without it
  * raises no interrupt.
  *
  * The action reads every register of its checks out of the exception frame, so
- * each check also observes the save of the exception path.  The set of a MIPS
+ * each check also observes the save of the exception path. The set of a MIPS
  * wrapper-private register is empty on this architecture, so no check covers
  * one.
  *
  * This test case performs the following actions:
  *
  * - Load a distinct pattern into every MIPS call-used register and every MIPS
- *   call-used floating-point register.  Raise the interrupt.  Trap, so the
- *   frame captures every register.
+ *   call-used floating-point register. Raise the interrupt. Trap, so the frame
+ *   captures every register.
  *
- *   - Check that the interrupt happened.  Without it the test proves nothing
+ *   - Check that the interrupt happened. Without it the test proves nothing
  *     about interrupt processing.
  *
- *   - Check that the interrupt preserved the MIPS register $at.
+ *   - Check that the interrupt preserved the MIPS register \$at.
  *
- *   - Check that the interrupt preserved the MIPS register $v0.
+ *   - Check that the interrupt preserved the MIPS register \$v0.
  *
- *   - Check that the interrupt preserved the MIPS register $v1.
+ *   - Check that the interrupt preserved the MIPS register \$v1.
  *
- *   - Check that the interrupt preserved the MIPS register $a0.
+ *   - Check that the interrupt preserved the MIPS register \$a0.
  *
- *   - Check that the interrupt preserved the MIPS register $a1.
+ *   - Check that the interrupt preserved the MIPS register \$a1.
  *
- *   - Check that the interrupt preserved the MIPS register $a2.
+ *   - Check that the interrupt preserved the MIPS register \$a2.
  *
- *   - Check that the interrupt preserved the MIPS register $a3.
+ *   - Check that the interrupt preserved the MIPS register \$a3.
  *
- *   - Check that the interrupt preserved the MIPS register $t0.
+ *   - Check that the interrupt preserved the MIPS register \$t0.
  *
- *   - Check that the interrupt preserved the MIPS register $t1.
+ *   - Check that the interrupt preserved the MIPS register \$t1.
  *
- *   - Check that the interrupt preserved the MIPS register $t2.
+ *   - Check that the interrupt preserved the MIPS register \$t2.
  *
- *   - Check that the interrupt preserved the MIPS register $t3.
+ *   - Check that the interrupt preserved the MIPS register \$t3.
  *
- *   - Check that the interrupt preserved the MIPS register $t4.
+ *   - Check that the interrupt preserved the MIPS register \$t4.
  *
- *   - Check that the interrupt preserved the MIPS register $t5.
+ *   - Check that the interrupt preserved the MIPS register \$t5.
  *
- *   - Check that the interrupt preserved the MIPS register $t6.
+ *   - Check that the interrupt preserved the MIPS register \$t6.
  *
- *   - Check that the interrupt preserved the MIPS register $t7.
+ *   - Check that the interrupt preserved the MIPS register \$t7.
  *
- *   - Check that the interrupt preserved the MIPS register $t8.
+ *   - Check that the interrupt preserved the MIPS register \$t8.
  *
- *   - Check that the interrupt preserved the MIPS register $t9.
+ *   - Check that the interrupt preserved the MIPS register \$t9.
  *
  *   - Check that the interrupt preserved the MIPS register lo.
  *
  *   - Check that the interrupt preserved the MIPS register hi.
  *
- *   - Check that the interrupt preserved the MIPS register $f0.
+ *   - Check that the interrupt preserved the MIPS register \$f0.
  *
- *   - Check that the interrupt preserved the MIPS register $f1.
+ *   - Check that the interrupt preserved the MIPS register \$f1.
  *
- *   - Check that the interrupt preserved the MIPS register $f2.
+ *   - Check that the interrupt preserved the MIPS register \$f2.
  *
- *   - Check that the interrupt preserved the MIPS register $f3.
+ *   - Check that the interrupt preserved the MIPS register \$f3.
  *
- *   - Check that the interrupt preserved the MIPS register $f4.
+ *   - Check that the interrupt preserved the MIPS register \$f4.
  *
- *   - Check that the interrupt preserved the MIPS register $f5.
+ *   - Check that the interrupt preserved the MIPS register \$f5.
  *
- *   - Check that the interrupt preserved the MIPS register $f6.
+ *   - Check that the interrupt preserved the MIPS register \$f6.
  *
- *   - Check that the interrupt preserved the MIPS register $f7.
+ *   - Check that the interrupt preserved the MIPS register \$f7.
  *
- *   - Check that the interrupt preserved the MIPS register $f8.
+ *   - Check that the interrupt preserved the MIPS register \$f8.
  *
- *   - Check that the interrupt preserved the MIPS register $f9.
+ *   - Check that the interrupt preserved the MIPS register \$f9.
  *
- *   - Check that the interrupt preserved the MIPS register $f10.
+ *   - Check that the interrupt preserved the MIPS register \$f10.
  *
- *   - Check that the interrupt preserved the MIPS register $f11.
+ *   - Check that the interrupt preserved the MIPS register \$f11.
  *
- *   - Check that the interrupt preserved the MIPS register $f12.
+ *   - Check that the interrupt preserved the MIPS register \$f12.
  *
- *   - Check that the interrupt preserved the MIPS register $f13.
+ *   - Check that the interrupt preserved the MIPS register \$f13.
  *
- *   - Check that the interrupt preserved the MIPS register $f14.
+ *   - Check that the interrupt preserved the MIPS register \$f14.
  *
- *   - Check that the interrupt preserved the MIPS register $f15.
+ *   - Check that the interrupt preserved the MIPS register \$f15.
  *
- *   - Check that the interrupt preserved the MIPS register $f16.
+ *   - Check that the interrupt preserved the MIPS register \$f16.
  *
- *   - Check that the interrupt preserved the MIPS register $f17.
+ *   - Check that the interrupt preserved the MIPS register \$f17.
  *
- *   - Check that the interrupt preserved the MIPS register $f18.
+ *   - Check that the interrupt preserved the MIPS register \$f18.
  *
- *   - Check that the interrupt preserved the MIPS register $f19.
+ *   - Check that the interrupt preserved the MIPS register \$f19.
  *
  *   - Check that the interrupt preserved the rounding mode of the MIPS
  *     register fcr31.
@@ -292,8 +292,8 @@ static void InterruptFatal(
 
 /**
  * @brief Load a distinct pattern into every MIPS call-used register and every
- *   MIPS call-used floating-point register.  Raise the interrupt.  Trap, so
- *   the frame captures every register.
+ *   MIPS call-used floating-point register. Raise the interrupt. Trap, so the
+ *   frame captures every register.
  */
 static void ScoreCpuMipsValInterrupt_Action_0( void )
 {
@@ -354,93 +354,93 @@ static void ScoreCpuMipsValInterrupt_Action_0( void )
   frame = &interrupt_frame;
 
   /*
-   * Check that the interrupt happened.  Without it the test proves nothing
+   * Check that the interrupt happened. Without it the test proves nothing
    * about interrupt processing.
    */
   T_eq_int( interrupt_count, 1 );
 
   /*
-   * Check that the interrupt preserved the MIPS register $at.
+   * Check that the interrupt preserved the MIPS register \$at.
    */
   T_eq_u32( (uint32_t) frame->at, 0x71727374 );
 
   /*
-   * Check that the interrupt preserved the MIPS register $v0.
+   * Check that the interrupt preserved the MIPS register \$v0.
    */
   T_eq_u32( (uint32_t) frame->v0, 0x72737475 );
 
   /*
-   * Check that the interrupt preserved the MIPS register $v1.
+   * Check that the interrupt preserved the MIPS register \$v1.
    */
   T_eq_u32( (uint32_t) frame->v1, 0x73747576 );
 
   /*
-   * Check that the interrupt preserved the MIPS register $a0.
+   * Check that the interrupt preserved the MIPS register \$a0.
    */
   T_eq_u32( (uint32_t) frame->a0, 0x74757677 );
 
   /*
-   * Check that the interrupt preserved the MIPS register $a1.
+   * Check that the interrupt preserved the MIPS register \$a1.
    */
   T_eq_u32( (uint32_t) frame->a1, 0x75767778 );
 
   /*
-   * Check that the interrupt preserved the MIPS register $a2.
+   * Check that the interrupt preserved the MIPS register \$a2.
    */
   T_eq_u32( (uint32_t) frame->a2, 0x76777879 );
 
   /*
-   * Check that the interrupt preserved the MIPS register $a3.
+   * Check that the interrupt preserved the MIPS register \$a3.
    */
   T_eq_u32( (uint32_t) frame->a3, 0x7778797a );
 
   /*
-   * Check that the interrupt preserved the MIPS register $t0.
+   * Check that the interrupt preserved the MIPS register \$t0.
    */
   T_eq_u32( (uint32_t) frame->t0, 0x78797a7b );
 
   /*
-   * Check that the interrupt preserved the MIPS register $t1.
+   * Check that the interrupt preserved the MIPS register \$t1.
    */
   T_eq_u32( (uint32_t) frame->t1, 0x797a7b7c );
 
   /*
-   * Check that the interrupt preserved the MIPS register $t2.
+   * Check that the interrupt preserved the MIPS register \$t2.
    */
   T_eq_u32( (uint32_t) frame->t2, 0x7a7b7c7d );
 
   /*
-   * Check that the interrupt preserved the MIPS register $t3.
+   * Check that the interrupt preserved the MIPS register \$t3.
    */
   T_eq_u32( (uint32_t) frame->t3, 0x7b7c7d7e );
 
   /*
-   * Check that the interrupt preserved the MIPS register $t4.
+   * Check that the interrupt preserved the MIPS register \$t4.
    */
   T_eq_u32( (uint32_t) frame->t4, 0x7c7d7e7f );
 
   /*
-   * Check that the interrupt preserved the MIPS register $t5.
+   * Check that the interrupt preserved the MIPS register \$t5.
    */
   T_eq_u32( (uint32_t) frame->t5, 0x7d7e7f80 );
 
   /*
-   * Check that the interrupt preserved the MIPS register $t6.
+   * Check that the interrupt preserved the MIPS register \$t6.
    */
   T_eq_u32( (uint32_t) frame->t6, 0x7e7f8081 );
 
   /*
-   * Check that the interrupt preserved the MIPS register $t7.
+   * Check that the interrupt preserved the MIPS register \$t7.
    */
   T_eq_u32( (uint32_t) frame->t7, 0x7f808182 );
 
   /*
-   * Check that the interrupt preserved the MIPS register $t8.
+   * Check that the interrupt preserved the MIPS register \$t8.
    */
   T_eq_u32( (uint32_t) frame->t8, 0x80818283 );
 
   /*
-   * Check that the interrupt preserved the MIPS register $t9.
+   * Check that the interrupt preserved the MIPS register \$t9.
    */
   T_eq_u32( (uint32_t) frame->t9, 0x81828384 );
 
@@ -455,140 +455,140 @@ static void ScoreCpuMipsValInterrupt_Action_0( void )
   T_eq_u32( (uint32_t) frame->mdhi, 0x83848586 );
 
   /*
-   * Check that the interrupt preserved the MIPS register $f0.
+   * Check that the interrupt preserved the MIPS register \$f0.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f0, 0x91929394 );
   #endif
 
   /*
-   * Check that the interrupt preserved the MIPS register $f1.
+   * Check that the interrupt preserved the MIPS register \$f1.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f1, 0x91939495 );
   #endif
 
   /*
-   * Check that the interrupt preserved the MIPS register $f2.
+   * Check that the interrupt preserved the MIPS register \$f2.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f2, 0x91949596 );
   #endif
 
   /*
-   * Check that the interrupt preserved the MIPS register $f3.
+   * Check that the interrupt preserved the MIPS register \$f3.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f3, 0x91959697 );
   #endif
 
   /*
-   * Check that the interrupt preserved the MIPS register $f4.
+   * Check that the interrupt preserved the MIPS register \$f4.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f4, 0x91969798 );
   #endif
 
   /*
-   * Check that the interrupt preserved the MIPS register $f5.
+   * Check that the interrupt preserved the MIPS register \$f5.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f5, 0x91979899 );
   #endif
 
   /*
-   * Check that the interrupt preserved the MIPS register $f6.
+   * Check that the interrupt preserved the MIPS register \$f6.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f6, 0x9198999a );
   #endif
 
   /*
-   * Check that the interrupt preserved the MIPS register $f7.
+   * Check that the interrupt preserved the MIPS register \$f7.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f7, 0x91999a9b );
   #endif
 
   /*
-   * Check that the interrupt preserved the MIPS register $f8.
+   * Check that the interrupt preserved the MIPS register \$f8.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f8, 0x919a9b9c );
   #endif
 
   /*
-   * Check that the interrupt preserved the MIPS register $f9.
+   * Check that the interrupt preserved the MIPS register \$f9.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f9, 0x919b9c9d );
   #endif
 
   /*
-   * Check that the interrupt preserved the MIPS register $f10.
+   * Check that the interrupt preserved the MIPS register \$f10.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f10, 0x919c9d9e );
   #endif
 
   /*
-   * Check that the interrupt preserved the MIPS register $f11.
+   * Check that the interrupt preserved the MIPS register \$f11.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f11, 0x919d9e9f );
   #endif
 
   /*
-   * Check that the interrupt preserved the MIPS register $f12.
+   * Check that the interrupt preserved the MIPS register \$f12.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f12, 0x919e9fa0 );
   #endif
 
   /*
-   * Check that the interrupt preserved the MIPS register $f13.
+   * Check that the interrupt preserved the MIPS register \$f13.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f13, 0x919fa0a1 );
   #endif
 
   /*
-   * Check that the interrupt preserved the MIPS register $f14.
+   * Check that the interrupt preserved the MIPS register \$f14.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f14, 0x91a0a1a2 );
   #endif
 
   /*
-   * Check that the interrupt preserved the MIPS register $f15.
+   * Check that the interrupt preserved the MIPS register \$f15.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f15, 0x91a1a2a3 );
   #endif
 
   /*
-   * Check that the interrupt preserved the MIPS register $f16.
+   * Check that the interrupt preserved the MIPS register \$f16.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f16, 0x91a2a3a4 );
   #endif
 
   /*
-   * Check that the interrupt preserved the MIPS register $f17.
+   * Check that the interrupt preserved the MIPS register \$f17.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f17, 0x91a3a4a5 );
   #endif
 
   /*
-   * Check that the interrupt preserved the MIPS register $f18.
+   * Check that the interrupt preserved the MIPS register \$f18.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f18, 0x91a4a5a6 );
   #endif
 
   /*
-   * Check that the interrupt preserved the MIPS register $f19.
+   * Check that the interrupt preserved the MIPS register \$f19.
    */
   #if MIPS_HAS_FPU == 1
   T_eq_u32( (uint32_t) frame->f19, 0x91a5a6a7 );
