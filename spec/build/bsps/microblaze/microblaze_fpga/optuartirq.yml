@@ -13,7 +13,7 @@ default:
 description: |
   irq number of the AXI UART Lite
 enabled-by: true
-format: '{:#010x}'
+format: '{}'
 links: []
 name: BSP_MICROBLAZE_FPGA_UART_IRQ
 type: build
