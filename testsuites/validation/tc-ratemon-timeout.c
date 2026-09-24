@@ -791,6 +791,8 @@ static void RtemsRatemonReqTimeout_Cleanup( void )
   Yield();
 }
 
+/* clang-format off */
+
 static const RtemsRatemonReqTimeout_Entry
 RtemsRatemonReqTimeout_Entries[] = {
   { 0, 0, 1, 0, RtemsRatemonReqTimeout_Post_PostponedJobs_PlusOne,
@@ -834,6 +836,8 @@ static const uint8_t
 RtemsRatemonReqTimeout_Map[] = {
   3, 1, 1, 4, 1, 1, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2
 };
+
+/* clang-format on */
 
 static size_t RtemsRatemonReqTimeout_Scope( void *arg, char *buf, size_t n )
 {

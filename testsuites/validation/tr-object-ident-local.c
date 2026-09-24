@@ -291,6 +291,8 @@ static void RtemsReqIdentLocal_Action( RtemsReqIdentLocal_Context *ctx )
   ctx->status = ( *ctx->action )( ctx->name, ctx->id );
 }
 
+/* clang-format off */
+
 static const RtemsReqIdentLocal_Entry
 RtemsReqIdentLocal_Entries[] = {
   { 0, 0, 0, RtemsReqIdentLocal_Post_Status_InvAddr,
@@ -304,6 +306,8 @@ static const uint8_t
 RtemsReqIdentLocal_Map[] = {
   1, 0, 2, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsReqIdentLocal_Scope( void *arg, char *buf, size_t n )
 {

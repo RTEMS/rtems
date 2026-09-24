@@ -597,6 +597,8 @@ static void RtemsIntrReqVectorEnable_Action(
   }
 }
 
+/* clang-format off */
+
 static const RtemsIntrReqVectorEnable_Entry
 RtemsIntrReqVectorEnable_Entries[] = {
   { 0, 0, 1, 1, RtemsIntrReqVectorEnable_Post_Status_InvId,
@@ -613,6 +615,8 @@ static const uint8_t
 RtemsIntrReqVectorEnable_Map[] = {
   1, 2, 3, 1, 2, 3, 0, 0, 0, 0, 0, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsIntrReqVectorEnable_Scope( void *arg, char *buf, size_t n )
 {

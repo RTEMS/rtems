@@ -1163,6 +1163,8 @@ static void RtemsSchedulerReqRemoveProcessor_Action(
   }
 }
 
+/* clang-format off */
+
 static const RtemsSchedulerReqRemoveProcessor_Entry
 RtemsSchedulerReqRemoveProcessor_Entries[] = {
 #if !defined(RTEMS_SMP)
@@ -1252,6 +1254,8 @@ RtemsSchedulerReqRemoveProcessor_Map[] = {
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsSchedulerReqRemoveProcessor_Scope(
   void  *arg,

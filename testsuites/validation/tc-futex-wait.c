@@ -332,6 +332,8 @@ static void NewlibReqFutexWait_Cleanup( NewlibReqFutexWait_Context *ctx )
   _Futex_Destroy( &ctx->futex );
 }
 
+/* clang-format off */
+
 static const NewlibReqFutexWait_Entry
 NewlibReqFutexWait_Entries[] = {
   { 0, 0, NewlibReqFutexWait_Post_Result_Zero,
@@ -344,6 +346,8 @@ static const uint8_t
 NewlibReqFutexWait_Map[] = {
   0, 1
 };
+
+/* clang-format on */
 
 static size_t NewlibReqFutexWait_Scope( void *arg, char *buf, size_t n )
 {

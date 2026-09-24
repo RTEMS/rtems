@@ -745,6 +745,8 @@ static void RtemsClockReqSet_Action( RtemsClockReqSet_Context *ctx )
   }
 }
 
+/* clang-format off */
+
 static const RtemsClockReqSet_Entry
 RtemsClockReqSet_Entries[] = {
   { 0, 0, 0, RtemsClockReqSet_Post_Status_InvClk,
@@ -765,6 +767,8 @@ RtemsClockReqSet_Map[] = {
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 3, 3, 2, 1, 1, 2, 3, 3, 2, 4, 4, 4
 };
+
+/* clang-format on */
 
 static size_t RtemsClockReqSet_Scope( void *arg, char *buf, size_t n )
 {

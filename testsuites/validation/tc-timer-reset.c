@@ -928,6 +928,8 @@ static void RtemsTimerReqReset_Cleanup( RtemsTimerReqReset_Context *ctx )
   T_rsc_success( rtems_timer_delete( ctx->timer_id ) );
 }
 
+/* clang-format off */
+
 static const RtemsTimerReqReset_Entry
 RtemsTimerReqReset_Entries[] = {
   { 1, 0, 0, 0, 0, RtemsTimerReqReset_Post_Status_NA,
@@ -962,6 +964,8 @@ RtemsTimerReqReset_Map[] = {
   2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1,
   1, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsTimerReqReset_Scope( void *arg, char *buf, size_t n )
 {

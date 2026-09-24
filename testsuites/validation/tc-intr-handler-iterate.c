@@ -576,6 +576,8 @@ static void RtemsIntrReqHandlerIterate_Action(
   }
 }
 
+/* clang-format off */
+
 static const RtemsIntrReqHandlerIterate_Entry
 RtemsIntrReqHandlerIterate_Entries[] = {
   { 0, 0, 0, 0, 0, RtemsIntrReqHandlerIterate_Post_Status_IncStat,
@@ -596,6 +598,8 @@ static const uint8_t
 RtemsIntrReqHandlerIterate_Map[] = {
   4, 5, 0, 0, 1, 1, 2, 2, 3, 3, 0, 0, 1, 1, 2, 2
 };
+
+/* clang-format on */
 
 static size_t RtemsIntrReqHandlerIterate_Scope(
   void  *arg,

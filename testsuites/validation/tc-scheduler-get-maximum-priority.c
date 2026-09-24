@@ -350,6 +350,8 @@ static void RtemsSchedulerReqGetMaximumPriority_Action(
   ctx->status = rtems_scheduler_get_maximum_priority( ctx->id, ctx->priority );
 }
 
+/* clang-format off */
+
 static const RtemsSchedulerReqGetMaximumPriority_Entry
 RtemsSchedulerReqGetMaximumPriority_Entries[] = {
   { 0, 0, 0, RtemsSchedulerReqGetMaximumPriority_Post_Status_InvAddr,
@@ -364,6 +366,8 @@ static const uint8_t
 RtemsSchedulerReqGetMaximumPriority_Map[] = {
   1, 0, 2, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsSchedulerReqGetMaximumPriority_Scope(
   void  *arg,

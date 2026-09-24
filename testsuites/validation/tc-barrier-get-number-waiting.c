@@ -340,6 +340,8 @@ static void RtemsBarrierReqGetNumberWaiting_Action(
   ctx->status = rtems_barrier_get_number_waiting( ctx->id, ctx->waiting );
 }
 
+/* clang-format off */
+
 static const RtemsBarrierReqGetNumberWaiting_Entry
 RtemsBarrierReqGetNumberWaiting_Entries[] = {
   { 0, 0, 0, RtemsBarrierReqGetNumberWaiting_Post_Status_InvAddr,
@@ -354,6 +356,8 @@ static const uint8_t
 RtemsBarrierReqGetNumberWaiting_Map[] = {
   1, 0, 2, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsBarrierReqGetNumberWaiting_Scope(
   void  *arg,

@@ -249,6 +249,8 @@ static void RtemsIoReqGetchark_Action( RtemsIoReqGetchark_Context *ctx )
   BSP_poll_char = poll_char;
 }
 
+/* clang-format off */
+
 static const RtemsIoReqGetchark_Entry
 RtemsIoReqGetchark_Entries[] = {
   { 0, 0, RtemsIoReqGetchark_Post_Result_PollChar,
@@ -261,6 +263,8 @@ static const uint8_t
 RtemsIoReqGetchark_Map[] = {
   0, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsIoReqGetchark_Scope( void *arg, char *buf, size_t n )
 {

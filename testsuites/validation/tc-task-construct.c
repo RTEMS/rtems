@@ -1643,6 +1643,8 @@ static void RtemsTaskReqConstruct_Cleanup( RtemsTaskReqConstruct_Context *ctx )
   T_surrender_objects( &ctx->seized_objects, rtems_task_delete );
 }
 
+/* clang-format off */
+
 static const RtemsTaskReqConstruct_Entry
 RtemsTaskReqConstruct_Entries[] = {
   { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -4671,6 +4673,8 @@ RtemsTaskReqConstruct_Map[] = {
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsTaskReqConstruct_Scope( void *arg, char *buf, size_t n )
 {

@@ -1332,6 +1332,8 @@ static void ScoreTqReqSurrenderPriorityInherit_Cleanup(
   }
 }
 
+/* clang-format off */
+
 static const ScoreTqReqSurrenderPriorityInherit_Entry
 ScoreTqReqSurrenderPriorityInherit_Entries[] = {
   { 1, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -2275,6 +2277,8 @@ ScoreTqReqSurrenderPriorityInherit_Map[] = {
   43, 64, 65, 66, 67, 44, 45, 46, 47, 48, 49, 50, 51, 8, 9, 10, 11, 64, 65, 66,
   67, 44, 45, 46, 47, 48, 49, 50, 51, 8, 9, 10, 11
 };
+
+/* clang-format on */
 
 static size_t ScoreTqReqSurrenderPriorityInherit_Scope(
   void  *arg,

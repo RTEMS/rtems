@@ -649,6 +649,8 @@ static void RtemsSemReqDelete_Cleanup( RtemsSemReqDelete_Context *ctx )
   }
 }
 
+/* clang-format off */
+
 static const RtemsSemReqDelete_Entry
 RtemsSemReqDelete_Entries[] = {
   { 0, 0, 0, 0, RtemsSemReqDelete_Post_Status_Ok,
@@ -670,6 +672,8 @@ RtemsSemReqDelete_Map[] = {
   3, 3, 3, 3, 3, 3, 0, 0, 4, 0, 0, 5, 0, 0, 4, 0, 0, 5, 0, 1, 1, 0, 1, 1, 2, 2,
   2, 0, 1, 1, 2, 2, 2, 0, 1, 1, 2, 2, 2, 0, 1, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsSemReqDelete_Scope( void *arg, char *buf, size_t n )
 {

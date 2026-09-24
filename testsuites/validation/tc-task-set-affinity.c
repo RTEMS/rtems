@@ -528,6 +528,8 @@ static void RtemsTaskReqSetAffinity_Action(
   T_eq_ptr( &log->header, &ctx->scheduler_log.header );
 }
 
+/* clang-format off */
+
 static const RtemsTaskReqSetAffinity_Entry
 RtemsTaskReqSetAffinity_Entries[] = {
   { 0, 0, 0, 1, 1, 0, RtemsTaskReqSetAffinity_Post_Status_InvAddr,
@@ -551,6 +553,8 @@ RtemsTaskReqSetAffinity_Map[] = {
   1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 3, 0, 3, 0, 3, 0, 3, 0, 2, 0,
   2, 0, 2, 0, 2, 0, 4, 0, 4, 0, 2, 0, 2, 0, 5, 0, 5, 0, 6, 0, 6, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsTaskReqSetAffinity_Scope( void *arg, char *buf, size_t n )
 {

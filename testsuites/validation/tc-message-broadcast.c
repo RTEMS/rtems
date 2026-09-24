@@ -991,6 +991,8 @@ static void RtemsMessageReqBroadcast_Cleanup(
   T_rsc_success( rtems_message_queue_delete( ctx->message_queue_id ) );
 }
 
+/* clang-format off */
+
 static const RtemsMessageReqBroadcast_Entry
 RtemsMessageReqBroadcast_Entries[] = {
   { 0, 0, 0, 0, 0, 0, 0, 0, RtemsMessageReqBroadcast_Post_Status_InvAddr,
@@ -1057,6 +1059,8 @@ RtemsMessageReqBroadcast_Map[] = {
   1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0,
   2, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsMessageReqBroadcast_Scope( void *arg, char *buf, size_t n )
 {

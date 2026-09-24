@@ -522,6 +522,8 @@ static void RtemsIntrReqClear_Action( RtemsIntrReqClear_Context *ctx )
   }
 }
 
+/* clang-format off */
+
 static const RtemsIntrReqClear_Entry
 RtemsIntrReqClear_Entries[] = {
   { 0, 0, 1, RtemsIntrReqClear_Post_Status_InvId,
@@ -536,6 +538,8 @@ static const uint8_t
 RtemsIntrReqClear_Map[] = {
   1, 2, 0, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsIntrReqClear_Scope( void *arg, char *buf, size_t n )
 {

@@ -394,6 +394,8 @@ static void RtemsMessageReqDelete_Cleanup( RtemsMessageReqDelete_Context *ctx )
   }
 }
 
+/* clang-format off */
+
 static const RtemsMessageReqDelete_Entry
 RtemsMessageReqDelete_Entries[] = {
   { 0, 0, RtemsMessageReqDelete_Post_Status_InvId,
@@ -407,6 +409,8 @@ static const uint8_t
 RtemsMessageReqDelete_Map[] = {
   0, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsMessageReqDelete_Scope( void *arg, char *buf, size_t n )
 {

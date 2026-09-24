@@ -391,6 +391,8 @@ static void RtemsReqIdent_Action( RtemsReqIdent_Context *ctx )
   ctx->status = ( *ctx->action )( ctx->name, ctx->node, ctx->id );
 }
 
+/* clang-format off */
+
 static const RtemsReqIdent_Entry
 RtemsReqIdent_Entries[] = {
   { 0, 0, 0, 0, RtemsReqIdent_Post_Status_InvAddr, RtemsReqIdent_Post_Id_Null },
@@ -407,6 +409,8 @@ static const uint8_t
 RtemsReqIdent_Map[] = {
   1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 3, 0, 1, 0, 2, 0, 3, 0, 2, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsReqIdent_Scope( void *arg, char *buf, size_t n )
 {

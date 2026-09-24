@@ -831,6 +831,8 @@ static void RtemsMessageReqConstruct_Cleanup(
   T_surrender_objects( &ctx->seized_objects, rtems_message_queue_delete );
 }
 
+/* clang-format off */
+
 static const RtemsMessageReqConstruct_Entry
 RtemsMessageReqConstruct_Entries[] = {
   { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, RtemsMessageReqConstruct_Post_Status_InvAddr,
@@ -915,6 +917,8 @@ RtemsMessageReqConstruct_Map[] = {
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsMessageReqConstruct_Scope( void *arg, char *buf, size_t n )
 {

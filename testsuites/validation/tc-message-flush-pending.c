@@ -789,6 +789,8 @@ static void RtemsMessageReqFlushPending_Cleanup(
   T_rsc_success( rtems_message_queue_delete( ctx->message_queue_id ) );
 }
 
+/* clang-format off */
+
 static const RtemsMessageReqFlushPending_Entry
 RtemsMessageReqFlushPending_Entries[] = {
   { 1, 0, 0, 0, 0, 0, 0, RtemsMessageReqFlushPending_Post_Status_NA,
@@ -842,6 +844,8 @@ RtemsMessageReqFlushPending_Map[] = {
   5, 6, 7, 8, 0, 0, 9, 10, 4, 4, 2, 2, 0, 0, 2, 2, 3, 3, 1, 1, 0, 0, 1, 1, 3,
   3, 1, 1, 0, 0, 1, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsMessageReqFlushPending_Scope(
   void  *arg,

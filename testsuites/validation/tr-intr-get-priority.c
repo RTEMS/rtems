@@ -353,6 +353,8 @@ static void RtemsIntrReqGetPriority_Action(
   ctx->status = rtems_interrupt_get_priority( ctx->vector, ctx->priority );
 }
 
+/* clang-format off */
+
 static const RtemsIntrReqGetPriority_Entry
 RtemsIntrReqGetPriority_Entries[] = {
   { 0, 0, 0, 0, RtemsIntrReqGetPriority_Post_Status_InvAddr,
@@ -371,6 +373,8 @@ static const uint8_t
 RtemsIntrReqGetPriority_Map[] = {
   3, 4, 0, 0, 1, 1, 2, 2
 };
+
+/* clang-format on */
 
 static size_t RtemsIntrReqGetPriority_Scope( void *arg, char *buf, size_t n )
 {

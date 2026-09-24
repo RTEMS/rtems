@@ -867,6 +867,8 @@ static void RtemsTaskReqExit_Cleanup( RtemsTaskReqExit_Context *ctx )
   }
 }
 
+/* clang-format off */
+
 static const RtemsTaskReqExit_Entry
 RtemsTaskReqExit_Entries[] = {
   { 0, 0, 0, 0, 0, RtemsTaskReqExit_Post_FatalError_Nop,
@@ -887,6 +889,8 @@ static const uint8_t
 RtemsTaskReqExit_Map[] = {
   0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsTaskReqExit_Scope( void *arg, char *buf, size_t n )
 {

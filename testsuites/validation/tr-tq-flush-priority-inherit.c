@@ -440,6 +440,8 @@ static void ScoreTqReqFlushPriorityInherit_Action(
   TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE_DONE );
 }
 
+/* clang-format off */
+
 static const ScoreTqReqFlushPriorityInherit_Entry
 ScoreTqReqFlushPriorityInherit_Entries[] = {
   { 0, 1, 0, ScoreTqReqFlushPriorityInherit_Post_Extract_Nop,
@@ -454,6 +456,8 @@ static const uint8_t
 ScoreTqReqFlushPriorityInherit_Map[] = {
   0, 1, 0, 2
 };
+
+/* clang-format on */
 
 static size_t ScoreTqReqFlushPriorityInherit_Scope(
   void  *arg,

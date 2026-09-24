@@ -532,6 +532,8 @@ static void RtemsTaskReqWakeWhen_Action( RtemsTaskReqWakeWhen_Context *ctx )
   FinalClockTick();
 }
 
+/* clang-format off */
+
 static const RtemsTaskReqWakeWhen_Entry
 RtemsTaskReqWakeWhen_Entries[] = {
   { 0, 0, 0, 1, RtemsTaskReqWakeWhen_Post_Status_InvAddr,
@@ -560,6 +562,8 @@ static const uint8_t
 RtemsTaskReqWakeWhen_Map[] = {
   4, 3, 3, 0, 0, 0, 1, 1, 1, 2, 2, 2
 };
+
+/* clang-format on */
 
 static size_t RtemsTaskReqWakeWhen_Scope( void *arg, char *buf, size_t n )
 {

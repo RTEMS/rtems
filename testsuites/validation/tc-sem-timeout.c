@@ -380,6 +380,8 @@ static void RtemsSemReqTimeout_Cleanup( RtemsSemReqTimeout_Context *ctx )
   }
 }
 
+/* clang-format off */
+
 static const RtemsSemReqTimeout_Entry
 RtemsSemReqTimeout_Entries[] = {
   { 0, 0, 0, RtemsSemReqTimeout_Post_Action_Timeout },
@@ -396,6 +398,8 @@ static const uint8_t
 RtemsSemReqTimeout_Map[] = {
   0, 0, 0, 0, 0, 0, 1, 0, 1, 2, 1, 3
 };
+
+/* clang-format on */
 
 static size_t RtemsSemReqTimeout_Scope( void *arg, char *buf, size_t n )
 {

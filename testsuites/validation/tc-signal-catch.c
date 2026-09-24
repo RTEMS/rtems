@@ -774,6 +774,8 @@ static void RtemsSignalReqCatch_Action( RtemsSignalReqCatch_Context *ctx )
   T_rsc_success( sc );
 }
 
+/* clang-format off */
+
 static const RtemsSignalReqCatch_Entry
 RtemsSignalReqCatch_Entries[] = {
   { 0, 0, 0, 0, 0, 0, 0, RtemsSignalReqCatch_Post_Status_Ok,
@@ -805,6 +807,8 @@ RtemsSignalReqCatch_Map[] = {
   3, 1, 3, 1, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 2, 1,
   2, 1, 2, 1, 3, 1, 3, 1, 3, 1, 3, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsSignalReqCatch_Scope( void *arg, char *buf, size_t n )
 {

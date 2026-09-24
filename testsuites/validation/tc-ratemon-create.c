@@ -427,6 +427,8 @@ static void RtemsRatemonReqCreate_Cleanup( RtemsRatemonReqCreate_Context *ctx )
   T_surrender_objects( &ctx->seized_objects, rtems_rate_monotonic_delete );
 }
 
+/* clang-format off */
+
 static const RtemsRatemonReqCreate_Entry
 RtemsRatemonReqCreate_Entries[] = {
   { 0, 0, 0, 0, RtemsRatemonReqCreate_Post_Status_InvName,
@@ -446,6 +448,8 @@ static const uint8_t
 RtemsRatemonReqCreate_Map[] = {
   2, 3, 1, 1, 0, 0, 0, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsRatemonReqCreate_Scope( void *arg, char *buf, size_t n )
 {

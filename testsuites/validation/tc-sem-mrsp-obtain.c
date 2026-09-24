@@ -1039,6 +1039,8 @@ static void RtemsSemReqMrspObtain_Cleanup( RtemsSemReqMrspObtain_Context *ctx )
   MoveToScheduler( ctx, SCHEDULER_A_ID );
 }
 
+/* clang-format off */
+
 static const RtemsSemReqMrspObtain_Entry
 RtemsSemReqMrspObtain_Entries[] = {
   { 1, 0, 0, 0, 0, RtemsSemReqMrspObtain_Post_Home_NA,
@@ -1105,6 +1107,8 @@ RtemsSemReqMrspObtain_Map[] = {
   2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
 };
+
+/* clang-format on */
 
 static size_t RtemsSemReqMrspObtain_Scope( void *arg, char *buf, size_t n )
 {

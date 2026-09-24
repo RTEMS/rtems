@@ -611,6 +611,8 @@ static void RtemsIntrReqRaiseOn_Action( RtemsIntrReqRaiseOn_Context *ctx )
   }
 }
 
+/* clang-format off */
+
 static const RtemsIntrReqRaiseOn_Entry
 RtemsIntrReqRaiseOn_Entries[] = {
   { 0, 0, 0, 1, RtemsIntrReqRaiseOn_Post_Status_InvId,
@@ -641,6 +643,8 @@ static const uint8_t
 RtemsIntrReqRaiseOn_Map[] = {
   4, 5, 1, 1, 2, 2, 0, 0, 3, 3, 0, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsIntrReqRaiseOn_Scope( void *arg, char *buf, size_t n )
 {

@@ -1922,6 +1922,8 @@ static void RtemsTaskReqRestart_Cleanup( RtemsTaskReqRestart_Context *ctx )
   SetSelfPriority( PRIO_NORMAL );
 }
 
+/* clang-format off */
+
 static const RtemsTaskReqRestart_Entry
 RtemsTaskReqRestart_Entries[] = {
   { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, RtemsTaskReqRestart_Post_Status_NA,
@@ -2541,6 +2543,8 @@ RtemsTaskReqRestart_Map[] = {
   10, 0, 13, 0, 13, 0, 13, 0, 13, 0, 13, 0, 13, 0, 13, 0, 13, 0, 6, 6, 6, 6, 6,
   6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6
 };
+
+/* clang-format on */
 
 static size_t RtemsTaskReqRestart_Scope( void *arg, char *buf, size_t n )
 {

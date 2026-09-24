@@ -634,6 +634,8 @@ static void ScoreMtxReqSeizeTry_Action( ScoreMtxReqSeizeTry_Context *ctx )
   }
 }
 
+/* clang-format off */
+
 static const ScoreMtxReqSeizeTry_Entry
 ScoreMtxReqSeizeTry_Entries[] = {
   { 1, 0, 0, 0, 0, 0, ScoreMtxReqSeizeTry_Post_Status_NA,
@@ -679,6 +681,8 @@ ScoreMtxReqSeizeTry_Map[] = {
   1, 1, 1, 8, 8, 8, 3, 3, 3, 1, 1, 1, 1, 1, 1, 3, 3, 3, 1, 1, 1, 7, 7, 7, 3, 3,
   3, 1, 1, 1, 8, 8, 8, 3, 3, 3
 };
+
+/* clang-format on */
 
 static size_t ScoreMtxReqSeizeTry_Scope( void *arg, char *buf, size_t n )
 {

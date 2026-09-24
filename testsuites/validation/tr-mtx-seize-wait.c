@@ -836,6 +836,8 @@ static void ScoreMtxReqSeizeWait_Action( ScoreMtxReqSeizeWait_Context *ctx )
   }
 }
 
+/* clang-format off */
+
 static const ScoreMtxReqSeizeWait_Entry
 ScoreMtxReqSeizeWait_Entries[] = {
   { 1, 0, 0, 0, 0, 0, 0, ScoreMtxReqSeizeWait_Post_Status_NA,
@@ -937,6 +939,8 @@ ScoreMtxReqSeizeWait_Map[] = {
   9, 9, 13, 4, 4, 18, 18, 15, 16, 17, 17, 16, 9, 9, 13, 4, 4, 14, 14, 15, 16,
   17, 17, 16, 10, 10, 13, 4, 4, 19, 19, 15, 16, 17, 17, 16, 10, 10
 };
+
+/* clang-format on */
 
 static size_t ScoreMtxReqSeizeWait_Scope( void *arg, char *buf, size_t n )
 {

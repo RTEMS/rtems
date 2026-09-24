@@ -516,6 +516,8 @@ static void ScoreTqReqSurrender_Action( ScoreTqReqSurrender_Context *ctx )
   }
 }
 
+/* clang-format off */
+
 static const ScoreTqReqSurrender_Entry
 ScoreTqReqSurrender_Entries[] = {
   { 0, 0, 0, 0, ScoreTqReqSurrender_Post_Dequeue_FIFO,
@@ -546,6 +548,8 @@ static const uint8_t
 ScoreTqReqSurrender_Map[] = {
   0, 2, 1, 3, 0, 4, 1, 5
 };
+
+/* clang-format on */
 
 static size_t ScoreTqReqSurrender_Scope( void *arg, char *buf, size_t n )
 {

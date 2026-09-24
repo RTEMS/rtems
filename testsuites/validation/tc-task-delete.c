@@ -1795,6 +1795,8 @@ static void RtemsTaskReqDelete_Action( RtemsTaskReqDelete_Context *ctx )
   Cleanup( ctx );
 }
 
+/* clang-format off */
+
 static const RtemsTaskReqDelete_Entry
 RtemsTaskReqDelete_Entries[] = {
   { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, RtemsTaskReqDelete_Post_Status_NA,
@@ -4624,6 +4626,8 @@ RtemsTaskReqDelete_Map[] = {
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsTaskReqDelete_Scope( void *arg, char *buf, size_t n )
 {

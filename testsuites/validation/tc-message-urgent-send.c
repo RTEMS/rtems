@@ -982,6 +982,8 @@ static void RtemsMessageReqUrgentSend_Cleanup(
   T_rsc_success( rtems_message_queue_delete( ctx->message_queue_id ) );
 }
 
+/* clang-format off */
+
 static const RtemsMessageReqUrgentSend_Entry
 RtemsMessageReqUrgentSend_Entries[] = {
   { 1, 0, 0, 0, 0, 0, 0, 0, RtemsMessageReqUrgentSend_Post_Status_NA,
@@ -1035,6 +1037,8 @@ RtemsMessageReqUrgentSend_Map[] = {
   0, 0, 1, 1, 3, 3, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 3, 3, 1, 1, 0, 0,
   1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 3, 3, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsMessageReqUrgentSend_Scope( void *arg, char *buf, size_t n )
 {

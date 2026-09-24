@@ -434,6 +434,8 @@ static void RtemsSchedulerReqIdentByProcessor_Action(
   #endif
 }
 
+/* clang-format off */
+
 static const RtemsSchedulerReqIdentByProcessor_Entry
 RtemsSchedulerReqIdentByProcessor_Entries[] = {
   { 0, 1, 0, 0, RtemsSchedulerReqIdentByProcessor_Post_Status_InvName,
@@ -464,6 +466,8 @@ static const uint8_t
 RtemsSchedulerReqIdentByProcessor_Map[] = {
   0, 1, 2, 3, 0, 1, 4, 5
 };
+
+/* clang-format on */
 
 static size_t RtemsSchedulerReqIdentByProcessor_Scope(
   void  *arg,

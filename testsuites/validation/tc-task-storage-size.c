@@ -321,6 +321,8 @@ static void RtemsTaskReqStorageSize_Action(
   }
 }
 
+/* clang-format off */
+
 static const RtemsTaskReqStorageSize_Entry
 RtemsTaskReqStorageSize_Entries[] = {
   { 0, 0, 1, RtemsTaskReqStorageSize_Post_Status_InvId },
@@ -332,6 +334,8 @@ static const uint8_t
 RtemsTaskReqStorageSize_Map[] = {
   0, 0, 1, 2
 };
+
+/* clang-format on */
 
 static size_t RtemsTaskReqStorageSize_Scope( void *arg, char *buf, size_t n )
 {

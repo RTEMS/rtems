@@ -543,6 +543,8 @@ static void ScoreTqReqEnqueueMrsp_Action( ScoreTqReqEnqueueMrsp_Context *ctx )
   }
 }
 
+/* clang-format off */
+
 static const ScoreTqReqEnqueueMrsp_Entry
 ScoreTqReqEnqueueMrsp_Entries[] = {
   { 1, 0, 0, 0, ScoreTqReqEnqueueMrsp_Post_Position_NA },
@@ -557,6 +559,8 @@ static const uint8_t
 ScoreTqReqEnqueueMrsp_Map[] = {
   4, 5, 0, 0, 1, 0, 2, 3, 1, 0, 2, 3, 4, 5, 0, 0, 1, 0, 2, 3, 1, 0, 2, 3
 };
+
+/* clang-format on */
 
 static size_t ScoreTqReqEnqueueMrsp_Scope( void *arg, char *buf, size_t n )
 {

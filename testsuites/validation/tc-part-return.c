@@ -385,6 +385,8 @@ static void RtemsPartReqReturnBuffer_Action(
   ctx->status = rtems_partition_return_buffer( ctx->id, ctx->buffer );
 }
 
+/* clang-format off */
+
 static const RtemsPartReqReturnBuffer_Entry
 RtemsPartReqReturnBuffer_Entries[] = {
   { 0, 0, 0, RtemsPartReqReturnBuffer_Post_Status_InvId,
@@ -399,6 +401,8 @@ static const uint8_t
 RtemsPartReqReturnBuffer_Map[] = {
   0, 0, 0, 0, 2, 1, 1, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsPartReqReturnBuffer_Scope( void *arg, char *buf, size_t n )
 {

@@ -379,6 +379,8 @@ static void ScoreTqReqTimeoutMrsp_Cleanup( ScoreTqReqTimeoutMrsp_Context *ctx )
   }
 }
 
+/* clang-format off */
+
 static const ScoreTqReqTimeoutMrsp_Entry
 ScoreTqReqTimeoutMrsp_Entries[] = {
   { 0, 0, 0, ScoreTqReqTimeoutMrsp_Post_Status_Timeout,
@@ -391,6 +393,8 @@ static const uint8_t
 ScoreTqReqTimeoutMrsp_Map[] = {
   0, 1, 0, 1
 };
+
+/* clang-format on */
 
 static size_t ScoreTqReqTimeoutMrsp_Scope( void *arg, char *buf, size_t n )
 {

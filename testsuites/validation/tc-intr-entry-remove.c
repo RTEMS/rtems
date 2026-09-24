@@ -1201,6 +1201,8 @@ static void RtemsIntrReqEntryRemove_Cleanup(
   }
 }
 
+/* clang-format off */
+
 static const RtemsIntrReqEntryRemove_Entry
 RtemsIntrReqEntryRemove_Entries[] = {
   { 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, RtemsIntrReqEntryRemove_Post_Status_InvAddr,
@@ -1297,6 +1299,8 @@ RtemsIntrReqEntryRemove_Map[] = {
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsIntrReqEntryRemove_Scope( void *arg, char *buf, size_t n )
 {

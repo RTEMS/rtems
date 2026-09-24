@@ -207,6 +207,8 @@ static void DevGrlibReqIrqampGetTimestamp_Action(
   ctx->result = irqamp_get_timestamp_registers( &ctx->irqamp_regs );
 }
 
+/* clang-format off */
+
 static const DevGrlibReqIrqampGetTimestamp_Entry
 DevGrlibReqIrqampGetTimestamp_Entries[] = {
   { 0, 0, DevGrlibReqIrqampGetTimestamp_Post_Result_Null },
@@ -217,6 +219,8 @@ static const uint8_t
 DevGrlibReqIrqampGetTimestamp_Map[] = {
   0, 1
 };
+
+/* clang-format on */
 
 static size_t DevGrlibReqIrqampGetTimestamp_Scope(
   void  *arg,

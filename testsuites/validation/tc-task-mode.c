@@ -1248,6 +1248,8 @@ static void RtemsTaskReqMode_Cleanup( void )
   T_rsc_success( sc );
 }
 
+/* clang-format off */
+
 static const RtemsTaskReqMode_Entry
 RtemsTaskReqMode_Entries[] = {
   { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -1858,6 +1860,8 @@ RtemsTaskReqMode_Map[] = {
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsTaskReqMode_Scope( void *arg, char *buf, size_t n )
 {

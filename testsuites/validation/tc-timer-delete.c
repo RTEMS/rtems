@@ -282,6 +282,8 @@ static void RtemsTimerReqDelete_Action( RtemsTimerReqDelete_Context *ctx )
   ctx->status = rtems_timer_delete( ctx->id );
 }
 
+/* clang-format off */
+
 static const RtemsTimerReqDelete_Entry
 RtemsTimerReqDelete_Entries[] = {
   { 0, 0, RtemsTimerReqDelete_Post_Status_InvId,
@@ -294,6 +296,8 @@ static const uint8_t
 RtemsTimerReqDelete_Map[] = {
   0, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsTimerReqDelete_Scope( void *arg, char *buf, size_t n )
 {

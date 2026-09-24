@@ -1070,6 +1070,8 @@ static void RtemsTimerReqServerFireAfter_Cleanup(
   DeleteTimerServer();
 }
 
+/* clang-format off */
+
 static const RtemsTimerReqServerFireAfter_Entry
 RtemsTimerReqServerFireAfter_Entries[] = {
   { 1, 0, 0, 0, 0, 0, 0, 0, RtemsTimerReqServerFireAfter_Post_Status_NA,
@@ -1143,6 +1145,8 @@ RtemsTimerReqServerFireAfter_Map[] = {
   3, 3, 0, 3, 3, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 3, 3, 0, 3, 3, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsTimerReqServerFireAfter_Scope(
   void  *arg,

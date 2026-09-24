@@ -305,6 +305,8 @@ static void ScoreSemReqSeizeWait_Action( void )
   /* Action performed by Status post-condition */
 }
 
+/* clang-format off */
+
 static const ScoreSemReqSeizeWait_Entry
 ScoreSemReqSeizeWait_Entries[] = {
   { 0, 0, ScoreSemReqSeizeWait_Post_Status_Enqueued,
@@ -319,6 +321,8 @@ static const uint8_t
 ScoreSemReqSeizeWait_Map[] = {
   0, 1
 };
+
+/* clang-format on */
 
 static size_t ScoreSemReqSeizeWait_Scope( void *arg, char *buf, size_t n )
 {

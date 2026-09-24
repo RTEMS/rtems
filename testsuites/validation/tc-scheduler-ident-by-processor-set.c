@@ -545,6 +545,8 @@ static void RtemsSchedulerReqIdentByProcessorSet_Action(
   #endif
 }
 
+/* clang-format off */
+
 static const RtemsSchedulerReqIdentByProcessorSet_Entry
 RtemsSchedulerReqIdentByProcessorSet_Entries[] = {
   { 0, 1, 0, 0, 0, 0, RtemsSchedulerReqIdentByProcessorSet_Post_Status_InvAddr,
@@ -587,6 +589,8 @@ RtemsSchedulerReqIdentByProcessorSet_Map[] = {
   3, 0, 0, 0, 4, 0, 0, 0, 5, 1, 1, 1, 6, 1, 1, 1, 3, 0, 0, 0, 4, 0, 0, 0, 7, 2,
   2, 2, 8, 2, 2, 2
 };
+
+/* clang-format on */
 
 static size_t RtemsSchedulerReqIdentByProcessorSet_Scope(
   void  *arg,

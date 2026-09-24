@@ -593,6 +593,8 @@ static void RtemsIntrReqGetAffinity_Action(
   }
 }
 
+/* clang-format off */
+
 static const RtemsIntrReqGetAffinity_Entry
 RtemsIntrReqGetAffinity_Entries[] = {
   { 0, 0, 0, 0, 0, RtemsIntrReqGetAffinity_Post_Status_InvAddr,
@@ -615,6 +617,8 @@ static const uint8_t
 RtemsIntrReqGetAffinity_Map[] = {
   5, 3, 0, 0, 6, 3, 0, 0, 4, 4, 0, 0, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2
 };
+
+/* clang-format on */
 
 static size_t RtemsIntrReqGetAffinity_Scope( void *arg, char *buf, size_t n )
 {

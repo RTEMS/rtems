@@ -380,6 +380,8 @@ static void RtemsClockReqGetTod_Cleanup( void )
   UnsetClock();
 }
 
+/* clang-format off */
+
 static const RtemsClockReqGetTod_Entry
 RtemsClockReqGetTod_Entries[] = {
   { 0, 0, 0, RtemsClockReqGetTod_Post_Status_InvAddr,
@@ -394,6 +396,8 @@ static const uint8_t
 RtemsClockReqGetTod_Map[] = {
   1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsClockReqGetTod_Scope( void *arg, char *buf, size_t n )
 {

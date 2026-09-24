@@ -366,6 +366,8 @@ static void RtemsIntrReqGetAttributes_Action(
   }
 }
 
+/* clang-format off */
+
 static const RtemsIntrReqGetAttributes_Entry
 RtemsIntrReqGetAttributes_Entries[] = {
   { 0, 0, 0, RtemsIntrReqGetAttributes_Post_Status_InvAddr,
@@ -380,6 +382,8 @@ static const uint8_t
 RtemsIntrReqGetAttributes_Map[] = {
   1, 0, 2, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsIntrReqGetAttributes_Scope( void *arg, char *buf, size_t n )
 {

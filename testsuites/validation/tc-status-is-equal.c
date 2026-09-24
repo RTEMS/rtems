@@ -208,6 +208,8 @@ static void RtemsStatusReqIsEqual_Action( RtemsStatusReqIsEqual_Context *ctx )
   ctx->result = rtems_are_statuses_equal( ctx->status_0, ctx->status_1 );
 }
 
+/* clang-format off */
+
 static const RtemsStatusReqIsEqual_Entry
 RtemsStatusReqIsEqual_Entries[] = {
   { 0, 0, RtemsStatusReqIsEqual_Post_Result_True },
@@ -218,6 +220,8 @@ static const uint8_t
 RtemsStatusReqIsEqual_Map[] = {
   0, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsStatusReqIsEqual_Scope( void *arg, char *buf, size_t n )
 {

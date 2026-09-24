@@ -246,6 +246,8 @@ static void ScoreTqReqEnqueueFifo_Action( ScoreTqReqEnqueueFifo_Context *ctx )
   TQSchedulerRecordStop( ctx->tq_ctx );
 }
 
+/* clang-format off */
+
 static const ScoreTqReqEnqueueFifo_Entry
 ScoreTqReqEnqueueFifo_Entries[] = {
   { 0, 0, ScoreTqReqEnqueueFifo_Post_Position_First },
@@ -256,6 +258,8 @@ static const uint8_t
 ScoreTqReqEnqueueFifo_Map[] = {
   0, 1
 };
+
+/* clang-format on */
 
 static size_t ScoreTqReqEnqueueFifo_Scope( void *arg, char *buf, size_t n )
 {

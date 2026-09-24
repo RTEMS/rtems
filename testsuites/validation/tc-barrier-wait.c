@@ -513,6 +513,8 @@ static void RtemsBarrierReqWait_Action( RtemsBarrierReqWait_Context *ctx )
   ctx->status = rtems_barrier_wait( ctx->id, ctx->timeout );
 }
 
+/* clang-format off */
+
 static const RtemsBarrierReqWait_Entry
 RtemsBarrierReqWait_Entries[] = {
   { 0, 0, 1, 1, RtemsBarrierReqWait_Post_Status_InvId },
@@ -527,6 +529,8 @@ static const uint8_t
 RtemsBarrierReqWait_Map[] = {
   0, 0, 0, 0, 0, 0, 0, 0, 3, 4, 1, 2, 5, 4, 1, 2, 3, 1, 1, 2, 5, 1, 1, 2
 };
+
+/* clang-format on */
 
 static size_t RtemsBarrierReqWait_Scope( void *arg, char *buf, size_t n )
 {

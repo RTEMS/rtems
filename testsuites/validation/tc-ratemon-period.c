@@ -1036,6 +1036,8 @@ static void RtemsRatemonReqPeriod_Cleanup( RtemsRatemonReqPeriod_Context *ctx )
   OwnerDoWork( ctx, DeletePeriod );
 }
 
+/* clang-format off */
+
 static const RtemsRatemonReqPeriod_Entry
 RtemsRatemonReqPeriod_Entries[] = {
   { 0, 0, 0, 0, 0, 0, 1, RtemsRatemonReqPeriod_Post_Status_InvId,
@@ -1129,6 +1131,8 @@ RtemsRatemonReqPeriod_Map[] = {
   0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 3, 4, 3, 4, 3, 4, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0,
   0, 0, 3, 4, 3, 4, 3, 4, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsRatemonReqPeriod_Scope( void *arg, char *buf, size_t n )
 {

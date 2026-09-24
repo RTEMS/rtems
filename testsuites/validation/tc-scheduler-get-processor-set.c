@@ -425,6 +425,8 @@ static void RtemsSchedulerReqGetProcessorSet_Action(
   );
 }
 
+/* clang-format off */
+
 static const RtemsSchedulerReqGetProcessorSet_Entry
 RtemsSchedulerReqGetProcessorSet_Entries[] = {
   { 0, 0, 0, 0, RtemsSchedulerReqGetProcessorSet_Post_Status_InvAddr,
@@ -441,6 +443,8 @@ static const uint8_t
 RtemsSchedulerReqGetProcessorSet_Map[] = {
   1, 0, 1, 0, 1, 0, 3, 0, 2, 0, 2, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsSchedulerReqGetProcessorSet_Scope(
   void  *arg,

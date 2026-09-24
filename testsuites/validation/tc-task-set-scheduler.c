@@ -1082,6 +1082,8 @@ static void RtemsTaskReqSetScheduler_Action(
   }
 }
 
+/* clang-format off */
+
 static const RtemsTaskReqSetScheduler_Entry
 RtemsTaskReqSetScheduler_Entries[] = {
 #if !defined(RTEMS_SMP)
@@ -1267,6 +1269,8 @@ RtemsTaskReqSetScheduler_Map[] = {
   2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
   2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
 };
+
+/* clang-format on */
 
 static size_t RtemsTaskReqSetScheduler_Scope( void *arg, char *buf, size_t n )
 {

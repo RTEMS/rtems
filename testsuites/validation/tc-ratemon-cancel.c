@@ -719,6 +719,8 @@ static void RtemsRatemonReqCancel_Cleanup( RtemsRatemonReqCancel_Context *ctx )
   T_rsc_success( rtems_rate_monotonic_delete( ctx->period_id ) );
 }
 
+/* clang-format off */
+
 static const RtemsRatemonReqCancel_Entry
 RtemsRatemonReqCancel_Entries[] = {
   { 0, 0, 0, 0, 0, RtemsRatemonReqCancel_Post_Status_InvId,
@@ -760,6 +762,8 @@ RtemsRatemonReqCancel_Map[] = {
   6, 1, 1, 2, 2, 2, 4, 2, 2, 7, 1, 1, 3, 3, 3, 4, 3, 3, 5, 1, 1, 0, 0, 0, 4, 0,
   0, 5, 1, 1, 0, 0, 0, 4, 0, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsRatemonReqCancel_Scope( void *arg, char *buf, size_t n )
 {

@@ -1124,6 +1124,8 @@ static void ScoreTqReqEnqueuePriorityInherit_Action(
   TQMutexRelease( ctx->tq_ctx, TQ_MUTEX_B );
 }
 
+/* clang-format off */
+
 static const ScoreTqReqEnqueuePriorityInherit_Entry
 ScoreTqReqEnqueuePriorityInherit_Entries[] = {
   { 1, 0, 0, 0, 0, 0, 0, ScoreTqReqEnqueuePriorityInherit_Post_Position_NA,
@@ -1523,6 +1525,8 @@ ScoreTqReqEnqueuePriorityInherit_Map[] = {
   27, 27, 51, 34, 34, 34, 56, 15, 15, 15, 15, 35, 35, 35, 57, 28, 28, 28, 52,
   36, 36, 36, 58, 16, 16, 16, 16
 };
+
+/* clang-format on */
 
 static size_t ScoreTqReqEnqueuePriorityInherit_Scope(
   void  *arg,

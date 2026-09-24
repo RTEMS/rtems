@@ -1335,6 +1335,8 @@ static void ScoreTqReqTimeoutPriorityInherit_Cleanup(
   }
 }
 
+/* clang-format off */
+
 static const ScoreTqReqTimeoutPriorityInherit_Entry
 ScoreTqReqTimeoutPriorityInherit_Entries[] = {
 #if !defined(RTEMS_SMP)
@@ -1947,6 +1949,8 @@ ScoreTqReqTimeoutPriorityInherit_Map[] = {
   0, 0, 0, 0, 0, 0, 0, 13, 14, 4, 0, 0, 0, 13, 14, 4, 15, 16, 4, 0, 0, 0, 15,
   16, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 16, 4, 0, 0, 0, 15, 16, 4
 };
+
+/* clang-format on */
 
 static size_t ScoreTqReqTimeoutPriorityInherit_Scope(
   void  *arg,

@@ -683,6 +683,8 @@ static void RtemsTimerReqCancel_Cleanup( RtemsTimerReqCancel_Context *ctx )
   T_rsc_success( rtems_timer_delete( ctx->timer_id ) );
 }
 
+/* clang-format off */
+
 static const RtemsTimerReqCancel_Entry
 RtemsTimerReqCancel_Entries[] = {
   { 1, 0, 0, 0, 0, RtemsTimerReqCancel_Post_Status_NA,
@@ -718,6 +720,8 @@ RtemsTimerReqCancel_Map[] = {
   3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1,
   1, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsTimerReqCancel_Scope( void *arg, char *buf, size_t n )
 {

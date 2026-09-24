@@ -630,6 +630,8 @@ static void RtemsBarrierReqCreate_Cleanup( RtemsBarrierReqCreate_Context *ctx )
   T_surrender_objects( &ctx->seized_objects, rtems_barrier_delete );
 }
 
+/* clang-format off */
+
 static const RtemsBarrierReqCreate_Entry
 RtemsBarrierReqCreate_Entries[] = {
   { 0, 0, 0, 0, 0, 0, RtemsBarrierReqCreate_Post_Status_InvName,
@@ -658,6 +660,8 @@ RtemsBarrierReqCreate_Map[] = {
   3, 2, 3, 2, 3, 2, 3, 2, 4, 4, 5, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsBarrierReqCreate_Scope( void *arg, char *buf, size_t n )
 {

@@ -408,6 +408,8 @@ static void RtemsTaskReqGetAffinity_Action(
   );
 }
 
+/* clang-format off */
+
 static const RtemsTaskReqGetAffinity_Entry
 RtemsTaskReqGetAffinity_Entries[] = {
   { 0, 0, 0, 0, RtemsTaskReqGetAffinity_Post_Status_InvAddr,
@@ -424,6 +426,8 @@ static const uint8_t
 RtemsTaskReqGetAffinity_Map[] = {
   1, 0, 1, 0, 1, 0, 3, 0, 2, 0, 2, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsTaskReqGetAffinity_Scope( void *arg, char *buf, size_t n )
 {

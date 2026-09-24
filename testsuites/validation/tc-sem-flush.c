@@ -500,6 +500,8 @@ static void RtemsSemReqFlush_Cleanup( RtemsSemReqFlush_Context *ctx )
   T_rsc_success( sc );
 }
 
+/* clang-format off */
+
 static const RtemsSemReqFlush_Entry
 RtemsSemReqFlush_Entries[] = {
   { 0, 1, 1, 0, RtemsSemReqFlush_Post_Action_InvId },
@@ -519,6 +521,8 @@ static const uint8_t
 RtemsSemReqFlush_Map[] = {
   1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 2, 0, 3, 0, 4, 0, 3, 0, 5, 0, 3, 0, 6, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsSemReqFlush_Scope( void *arg, char *buf, size_t n )
 {

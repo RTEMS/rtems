@@ -456,6 +456,8 @@ static void RtemsBarrierReqRelease_Action(
   ctx->status = rtems_barrier_release( ctx->id, ctx->released );
 }
 
+/* clang-format off */
+
 static const RtemsBarrierReqRelease_Entry
 RtemsBarrierReqRelease_Entries[] = {
   { 0, 0, 0, 1, RtemsBarrierReqRelease_Post_Status_InvAddr,
@@ -470,6 +472,8 @@ static const uint8_t
 RtemsBarrierReqRelease_Map[] = {
   2, 2, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsBarrierReqRelease_Scope( void *arg, char *buf, size_t n )
 {

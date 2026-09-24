@@ -586,6 +586,8 @@ static void ScoreTqReqEnqueuePriority_Action(
   }
 }
 
+/* clang-format off */
+
 static const ScoreTqReqEnqueuePriority_Entry
 ScoreTqReqEnqueuePriority_Entries[] = {
   { 1, 0, 0, 0, ScoreTqReqEnqueuePriority_Post_Position_NA },
@@ -639,6 +641,8 @@ ScoreTqReqEnqueuePriority_Map[] = {
   8, 3, 0, 0, 4, 0, 1, 2, 4, 0, 1, 2, 9, 0, 5, 6, 10, 3, 0, 0, 7, 0, 1, 2, 7,
   0, 1, 2, 11, 0, 5, 6
 };
+
+/* clang-format on */
 
 static size_t ScoreTqReqEnqueuePriority_Scope( void *arg, char *buf, size_t n )
 {

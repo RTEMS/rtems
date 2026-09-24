@@ -314,6 +314,8 @@ static void RtemsTaskReqGetScheduler_Action(
   ctx->status = rtems_task_get_scheduler( ctx->id, ctx->scheduler_id );
 }
 
+/* clang-format off */
+
 static const RtemsTaskReqGetScheduler_Entry
 RtemsTaskReqGetScheduler_Entries[] = {
   { 0, 0, 0, RtemsTaskReqGetScheduler_Post_Status_InvAddr,
@@ -328,6 +330,8 @@ static const uint8_t
 RtemsTaskReqGetScheduler_Map[] = {
   1, 0, 2, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsTaskReqGetScheduler_Scope( void *arg, char *buf, size_t n )
 {

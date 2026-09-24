@@ -657,6 +657,8 @@ static void RtemsPartReqCreate_Cleanup( RtemsPartReqCreate_Context *ctx )
   T_surrender_objects( &ctx->seized_objects, rtems_partition_delete );
 }
 
+/* clang-format off */
+
 static const RtemsPartReqCreate_Entry
 RtemsPartReqCreate_Entries[] = {
   { 0, 0, 0, 0, 0, 0, 0, RtemsPartReqCreate_Post_Status_InvName,
@@ -686,6 +688,8 @@ RtemsPartReqCreate_Map[] = {
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsPartReqCreate_Scope( void *arg, char *buf, size_t n )
 {

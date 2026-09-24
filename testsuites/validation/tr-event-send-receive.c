@@ -1102,6 +1102,8 @@ static void RtemsEventReqSendReceive_Cleanup(
   }
 }
 
+/* clang-format off */
+
 static const RtemsEventReqSendReceive_Entry
 RtemsEventReqSendReceive_Entries[] = {
   { 0, 0, 1, 1, 1, RtemsEventReqSendReceive_Post_SendStatus_InvId,
@@ -1157,6 +1159,8 @@ RtemsEventReqSendReceive_Map[] = {
   1, 1, 5, 3, 4, 4, 2, 3, 2, 3, 2, 7, 6, 8, 2, 3, 1, 1, 1, 1, 3, 3, 4, 4, 3, 3,
   3, 3, 7, 7, 8, 8, 3, 3
 };
+
+/* clang-format on */
 
 static size_t RtemsEventReqSendReceive_Scope( void *arg, char *buf, size_t n )
 {

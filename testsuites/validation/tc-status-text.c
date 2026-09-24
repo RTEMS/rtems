@@ -808,6 +808,8 @@ static void RtemsStatusReqText_Action( RtemsStatusReqText_Context *ctx )
   ctx->result = rtems_status_text( ctx->code );
 }
 
+/* clang-format off */
+
 static const RtemsStatusReqText_Entry
 RtemsStatusReqText_Entries[] = {
   { 0, 0, RtemsStatusReqText_Post_Result_AlreadySuspended },
@@ -848,6 +850,8 @@ RtemsStatusReqText_Map[] = {
   0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
   22, 23, 24, 25, 26, 27, 28, 29, 30
 };
+
+/* clang-format on */
 
 static size_t RtemsStatusReqText_Scope( void *arg, char *buf, size_t n )
 {

@@ -1255,6 +1255,8 @@ static void RtemsMessageReqReceive_Action(
   ctx->action_duration = WaitForWorker( ctx );
 }
 
+/* clang-format off */
+
 static const RtemsMessageReqReceive_Entry
 RtemsMessageReqReceive_Entries[] = {
   { 0, 0, 0, 0, 0, 0, 0, 0, 0, RtemsMessageReqReceive_Post_Status_InvAddr,
@@ -1341,6 +1343,8 @@ RtemsMessageReqReceive_Map[] = {
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
   1, 1, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsMessageReqReceive_Scope( void *arg, char *buf, size_t n )
 {

@@ -344,6 +344,8 @@ static void RtemsIntrReqSetPriority_Cleanup(
   (void) rtems_interrupt_set_priority( ctx->valid_vector, ctx->current_priority );
 }
 
+/* clang-format off */
+
 static const RtemsIntrReqSetPriority_Entry
 RtemsIntrReqSetPriority_Entries[] = {
   { 0, 0, 1, 1, RtemsIntrReqSetPriority_Post_Status_InvId },
@@ -356,6 +358,8 @@ static const uint8_t
 RtemsIntrReqSetPriority_Map[] = {
   2, 1, 3, 1, 0, 0, 0, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsIntrReqSetPriority_Scope( void *arg, char *buf, size_t n )
 {

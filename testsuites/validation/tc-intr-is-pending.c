@@ -554,6 +554,8 @@ static void RtemsIntrReqIsPending_Action( RtemsIntrReqIsPending_Context *ctx )
   }
 }
 
+/* clang-format off */
+
 static const RtemsIntrReqIsPending_Entry
 RtemsIntrReqIsPending_Entries[] = {
   { 0, 0, 0, 0, RtemsIntrReqIsPending_Post_Status_InvAddr,
@@ -572,6 +574,8 @@ static const uint8_t
 RtemsIntrReqIsPending_Map[] = {
   3, 4, 0, 0, 1, 1, 2, 2
 };
+
+/* clang-format on */
 
 static size_t RtemsIntrReqIsPending_Scope( void *arg, char *buf, size_t n )
 {

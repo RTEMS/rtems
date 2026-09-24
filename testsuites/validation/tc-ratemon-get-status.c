@@ -925,6 +925,8 @@ static void RtemsRatemonReqGetStatus_Cleanup(
   T_rsc_success( rtems_rate_monotonic_delete( ctx->period_id ) );
 }
 
+/* clang-format off */
+
 static const RtemsRatemonReqGetStatus_Entry
 RtemsRatemonReqGetStatus_Entries[] = {
   { 0, 0, 0, 0, 0, 0, 0, RtemsRatemonReqGetStatus_Post_Status_InvAddr,
@@ -1006,6 +1008,8 @@ RtemsRatemonReqGetStatus_Map[] = {
   5, 1, 1, 6, 7, 8, 3, 9, 10, 11, 1, 1, 2, 2, 2, 3, 2, 2, 4, 1, 1, 0, 0, 0, 3,
   0, 0, 4, 1, 1, 0, 0, 0, 3, 0, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsRatemonReqGetStatus_Scope( void *arg, char *buf, size_t n )
 {

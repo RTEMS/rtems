@@ -502,6 +502,8 @@ static void RtemsSemReqRelease_Cleanup( RtemsSemReqRelease_Context *ctx )
   sc = rtems_semaphore_delete( ctx->tq_ctx.thread_queue_id ); T_rsc_success( sc );
 }
 
+/* clang-format off */
+
 static const RtemsSemReqRelease_Entry
 RtemsSemReqRelease_Entries[] = {
   { 0, 0, 0, 0, RtemsSemReqRelease_Post_Action_InvId },
@@ -527,6 +529,8 @@ static const uint8_t
 RtemsSemReqRelease_Map[] = {
   2, 0, 2, 0, 3, 0, 3, 0, 4, 0, 4, 0, 1, 1, 5, 0, 1, 1, 6, 0, 1, 1, 7, 8
 };
+
+/* clang-format on */
 
 static size_t RtemsSemReqRelease_Scope( void *arg, char *buf, size_t n )
 {

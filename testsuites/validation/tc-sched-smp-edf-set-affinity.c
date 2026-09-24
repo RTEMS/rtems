@@ -1111,6 +1111,8 @@ static void ScoreSchedSmpEdfReqSetAffinity_Cleanup(
   }
 }
 
+/* clang-format off */
+
 static const ScoreSchedSmpEdfReqSetAffinity_Entry
 ScoreSchedSmpEdfReqSetAffinity_Entries[] = {
   { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -1441,6 +1443,8 @@ ScoreSchedSmpEdfReqSetAffinity_Map[] = {
   4, 3, 4, 1, 2, 1, 2, 1, 2, 1, 2, 3, 4, 3, 4, 3, 4, 3, 4, 1, 2, 1, 2, 1, 2, 1,
   2, 3, 4, 3, 4, 3, 4, 3, 4
 };
+
+/* clang-format on */
 
 static size_t ScoreSchedSmpEdfReqSetAffinity_Scope(
   void  *arg,

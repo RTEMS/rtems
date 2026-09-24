@@ -878,6 +878,8 @@ static void ScoreMtxReqSurrender_Action( ScoreMtxReqSurrender_Context *ctx )
   }
 }
 
+/* clang-format off */
+
 static const ScoreMtxReqSurrender_Entry
 ScoreMtxReqSurrender_Entries[] = {
   { 1, 0, 0, 0, 0, 0, 0, 0, 0, ScoreMtxReqSurrender_Post_Status_NA,
@@ -1003,6 +1005,8 @@ ScoreMtxReqSurrender_Map[] = {
   2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 15, 15, 18, 9, 9, 14,
   2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1
 };
+
+/* clang-format on */
 
 static size_t ScoreMtxReqSurrender_Scope( void *arg, char *buf, size_t n )
 {

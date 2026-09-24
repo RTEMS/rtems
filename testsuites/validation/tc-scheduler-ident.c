@@ -314,6 +314,8 @@ static void RtemsSchedulerReqIdent_Action(
   ctx->status = rtems_scheduler_ident( ctx->name, ctx->id );
 }
 
+/* clang-format off */
+
 static const RtemsSchedulerReqIdent_Entry
 RtemsSchedulerReqIdent_Entries[] = {
   { 0, 0, 0, RtemsSchedulerReqIdent_Post_Status_InvAddr,
@@ -328,6 +330,8 @@ static const uint8_t
 RtemsSchedulerReqIdent_Map[] = {
   1, 0, 2, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsSchedulerReqIdent_Scope( void *arg, char *buf, size_t n )
 {

@@ -438,6 +438,8 @@ static void RtemsTimerReqCreate_Cleanup( RtemsTimerReqCreate_Context *ctx )
   T_surrender_objects( &ctx->seized_objects, rtems_timer_delete );
 }
 
+/* clang-format off */
+
 static const RtemsTimerReqCreate_Entry
 RtemsTimerReqCreate_Entries[] = {
   { 0, 0, 0, 0, RtemsTimerReqCreate_Post_Status_InvName,
@@ -454,6 +456,8 @@ static const uint8_t
 RtemsTimerReqCreate_Map[] = {
   2, 3, 1, 1, 0, 0, 0, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsTimerReqCreate_Scope( void *arg, char *buf, size_t n )
 {

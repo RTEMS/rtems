@@ -262,6 +262,8 @@ static void RtemsTaskReqIdent_Action( RtemsTaskReqIdent_Context *ctx )
   }
 }
 
+/* clang-format off */
+
 static const RtemsTaskReqIdent_Entry
 RtemsTaskReqIdent_Entries[] = {
   { 0, 0, RtemsTaskReqIdent_Post_Status_OkAndWhoAmI },
@@ -272,6 +274,8 @@ static const uint8_t
 RtemsTaskReqIdent_Map[] = {
   0, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsTaskReqIdent_Scope( void *arg, char *buf, size_t n )
 {

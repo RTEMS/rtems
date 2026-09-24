@@ -257,6 +257,8 @@ static void RtemsClockReqGetUptime_Action(
   ctx->status = rtems_clock_get_uptime( ctx->uptime );
 }
 
+/* clang-format off */
+
 static const RtemsClockReqGetUptime_Entry
 RtemsClockReqGetUptime_Entries[] = {
   { 0, 0, RtemsClockReqGetUptime_Post_Status_Ok,
@@ -269,6 +271,8 @@ static const uint8_t
 RtemsClockReqGetUptime_Map[] = {
   0, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsClockReqGetUptime_Scope( void *arg, char *buf, size_t n )
 {

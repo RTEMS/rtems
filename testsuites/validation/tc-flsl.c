@@ -195,6 +195,8 @@ static void CReqFlsl_Action( void )
   /* The action is performed in the post-condition states */
 }
 
+/* clang-format off */
+
 static const CReqFlsl_Entry
 CReqFlsl_Entries[] = {
   { 0, 0, CReqFlsl_Post_Result_Zero },
@@ -205,6 +207,8 @@ static const uint8_t
 CReqFlsl_Map[] = {
   0, 1
 };
+
+/* clang-format on */
 
 static size_t CReqFlsl_Scope( void *arg, char *buf, size_t n )
 {

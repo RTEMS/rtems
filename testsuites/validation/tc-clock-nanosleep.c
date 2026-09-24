@@ -811,6 +811,8 @@ static void CReqClockNanosleep_Action( CReqClockNanosleep_Context *ctx )
   FinalClockTick();
 }
 
+/* clang-format off */
+
 static const CReqClockNanosleep_Entry
 CReqClockNanosleep_Entries[] = {
   { 0, 0, 0, 0, 1, 1, 0, CReqClockNanosleep_Post_Status_EINVAL,
@@ -887,6 +889,8 @@ CReqClockNanosleep_Map[] = {
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 4, 4, 4, 5, 5, 5, 5, 4, 4, 4, 4, 5, 5, 5, 5,
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
 };
+
+/* clang-format on */
 
 static size_t CReqClockNanosleep_Scope( void *arg, char *buf, size_t n )
 {

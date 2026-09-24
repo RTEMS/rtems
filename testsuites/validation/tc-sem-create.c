@@ -1113,6 +1113,8 @@ static void RtemsSemReqCreate_Cleanup( RtemsSemReqCreate_Context *ctx )
   T_surrender_objects( &ctx->seized_objects, rtems_semaphore_delete );
 }
 
+/* clang-format off */
+
 static const RtemsSemReqCreate_Entry
 RtemsSemReqCreate_Entries[] = {
   { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, RtemsSemReqCreate_Post_Status_InvName,
@@ -1414,6 +1416,8 @@ RtemsSemReqCreate_Map[] = {
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsSemReqCreate_Scope( void *arg, char *buf, size_t n )
 {

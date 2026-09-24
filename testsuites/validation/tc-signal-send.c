@@ -763,6 +763,8 @@ static void RtemsSignalReqSend_Action( RtemsSignalReqSend_Context *ctx )
   }
 }
 
+/* clang-format off */
+
 static const RtemsSignalReqSend_Entry
 RtemsSignalReqSend_Entries[] = {
   { 0, 0, 0, 0, 0, 0, RtemsSignalReqSend_Post_Status_InvNum,
@@ -796,6 +798,8 @@ RtemsSignalReqSend_Map[] = {
   0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2,
   2, 2, 4, 5, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 6, 7, 3, 3
 };
+
+/* clang-format on */
 
 static size_t RtemsSignalReqSend_Scope( void *arg, char *buf, size_t n )
 {

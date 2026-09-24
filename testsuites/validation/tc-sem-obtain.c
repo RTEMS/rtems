@@ -606,6 +606,8 @@ static void RtemsSemReqObtain_Cleanup( RtemsSemReqObtain_Context *ctx )
   sc = rtems_semaphore_delete( ctx->tq_ctx.thread_queue_id ); T_rsc_success( sc );
 }
 
+/* clang-format off */
+
 static const RtemsSemReqObtain_Entry
 RtemsSemReqObtain_Entries[] = {
   { 0, 0, 0, 0, 0, RtemsSemReqObtain_Post_Action_InvId },
@@ -636,6 +638,8 @@ RtemsSemReqObtain_Map[] = {
   4, 0, 0, 0, 5, 4, 4, 0, 0, 0, 1, 1, 1, 1, 1, 1, 9, 6, 6, 0, 0, 0, 1, 1, 1, 1,
   1, 1, 10, 7, 7, 0, 0, 0, 1, 1, 1, 1, 1, 1, 11, 8, 8, 0, 0, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsSemReqObtain_Scope( void *arg, char *buf, size_t n )
 {

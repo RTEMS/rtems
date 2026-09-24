@@ -286,6 +286,8 @@ static void RtemsRatemonReqDelete_Action( RtemsRatemonReqDelete_Context *ctx )
   ctx->status = rtems_rate_monotonic_delete( ctx->id );
 }
 
+/* clang-format off */
+
 static const RtemsRatemonReqDelete_Entry
 RtemsRatemonReqDelete_Entries[] = {
   { 0, 0, RtemsRatemonReqDelete_Post_Status_InvId,
@@ -298,6 +300,8 @@ static const uint8_t
 RtemsRatemonReqDelete_Map[] = {
   0, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsRatemonReqDelete_Scope( void *arg, char *buf, size_t n )
 {

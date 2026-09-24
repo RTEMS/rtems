@@ -305,6 +305,8 @@ static void RtemsUserextReqDelete_Cleanup( RtemsUserextReqDelete_Context *ctx )
   }
 }
 
+/* clang-format off */
+
 static const RtemsUserextReqDelete_Entry
 RtemsUserextReqDelete_Entries[] = {
   { 0, 0, RtemsUserextReqDelete_Post_Status_Ok,
@@ -317,6 +319,8 @@ static const uint8_t
 RtemsUserextReqDelete_Map[] = {
   1, 0, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsUserextReqDelete_Scope( void *arg, char *buf, size_t n )
 {

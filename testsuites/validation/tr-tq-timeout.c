@@ -369,6 +369,8 @@ static void ScoreTqReqTimeout_Action( void )
    */
 }
 
+/* clang-format off */
+
 static const ScoreTqReqTimeout_Entry
 ScoreTqReqTimeout_Entries[] = {
   { 0, 0, ScoreTqReqTimeout_Post_Status_Timeout,
@@ -382,6 +384,8 @@ static const uint8_t
 ScoreTqReqTimeout_Map[] = {
   0, 1, 2
 };
+
+/* clang-format on */
 
 static size_t ScoreTqReqTimeout_Scope( void *arg, char *buf, size_t n )
 {

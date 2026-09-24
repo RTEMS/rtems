@@ -321,6 +321,8 @@ static void ScoreTqReqFlushPriority_Action(
   TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE_DONE );
 }
 
+/* clang-format off */
+
 static const ScoreTqReqFlushPriority_Entry
 ScoreTqReqFlushPriority_Entries[] = {
   { 0, 0, ScoreTqReqFlushPriority_Post_Operation_Nop },
@@ -331,6 +333,8 @@ static const uint8_t
 ScoreTqReqFlushPriority_Map[] = {
   0, 1
 };
+
+/* clang-format on */
 
 static size_t ScoreTqReqFlushPriority_Scope( void *arg, char *buf, size_t n )
 {

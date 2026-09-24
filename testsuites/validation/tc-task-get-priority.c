@@ -465,6 +465,8 @@ static void RtemsTaskReqGetPriority_Action(
   );
 }
 
+/* clang-format off */
+
 static const RtemsTaskReqGetPriority_Entry
 RtemsTaskReqGetPriority_Entries[] = {
   { 0, 0, 0, 1, 0, RtemsTaskReqGetPriority_Post_Status_InvId,
@@ -495,6 +497,8 @@ static const uint8_t
 RtemsTaskReqGetPriority_Map[] = {
   0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 2, 3, 4, 5
 };
+
+/* clang-format on */
 
 static size_t RtemsTaskReqGetPriority_Scope( void *arg, char *buf, size_t n )
 {

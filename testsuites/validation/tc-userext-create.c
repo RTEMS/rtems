@@ -501,6 +501,8 @@ static void RtemsUserextReqCreate_Cleanup( RtemsUserextReqCreate_Context *ctx )
   T_surrender_objects( &ctx->seized_objects, rtems_extension_delete );
 }
 
+/* clang-format off */
+
 static const RtemsUserextReqCreate_Entry
 RtemsUserextReqCreate_Entries[] = {
   { 0, 0, 0, 0, 0, RtemsUserextReqCreate_Post_Status_InvName,
@@ -520,6 +522,8 @@ static const uint8_t
 RtemsUserextReqCreate_Map[] = {
   2, 3, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsUserextReqCreate_Scope( void *arg, char *buf, size_t n )
 {

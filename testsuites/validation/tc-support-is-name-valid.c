@@ -201,6 +201,8 @@ static void RtemsSupportReqIsNameValid_Action(
   ctx->result = rtems_is_name_valid( ctx->name );
 }
 
+/* clang-format off */
+
 static const RtemsSupportReqIsNameValid_Entry
 RtemsSupportReqIsNameValid_Entries[] = {
   { 0, 0, RtemsSupportReqIsNameValid_Post_Result_True },
@@ -211,6 +213,8 @@ static const uint8_t
 RtemsSupportReqIsNameValid_Map[] = {
   0, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsSupportReqIsNameValid_Scope(
   void  *arg,

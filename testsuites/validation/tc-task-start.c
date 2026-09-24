@@ -706,6 +706,8 @@ static void RtemsTaskReqStart_Cleanup( RtemsTaskReqStart_Context *ctx )
   DeleteTask( ctx->worker_id );
 }
 
+/* clang-format off */
+
 static const RtemsTaskReqStart_Entry
 RtemsTaskReqStart_Entries[] = {
   { 0, 0, 0, 0, 0, 0, RtemsTaskReqStart_Post_Status_InvAddr,
@@ -731,6 +733,8 @@ RtemsTaskReqStart_Map[] = {
   1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 3, 3, 2, 2, 3, 3, 0, 0,
   0, 0, 0, 0, 0, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsTaskReqStart_Scope( void *arg, char *buf, size_t n )
 {

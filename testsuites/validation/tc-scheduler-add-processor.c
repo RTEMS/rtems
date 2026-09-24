@@ -617,6 +617,8 @@ static void RtemsSchedulerReqAddProcessor_Cleanup(
   #endif
 }
 
+/* clang-format off */
+
 static const RtemsSchedulerReqAddProcessor_Entry
 RtemsSchedulerReqAddProcessor_Entries[] = {
   { 0, 0, 0, 0, 1, RtemsSchedulerReqAddProcessor_Post_Status_InvId,
@@ -662,6 +664,8 @@ RtemsSchedulerReqAddProcessor_Map[] = {
   2, 3, 2, 2, 0, 0, 0, 0, 4, 5, 6, 7, 1, 1, 1, 1, 2, 3, 2, 2, 0, 0, 0, 0, 4, 5,
   6, 7, 1, 1, 1, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsSchedulerReqAddProcessor_Scope(
   void  *arg,

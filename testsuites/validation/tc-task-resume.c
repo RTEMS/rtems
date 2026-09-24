@@ -315,6 +315,8 @@ static void RtemsTaskReqResume_Action( RtemsTaskReqResume_Context *ctx )
   }
 }
 
+/* clang-format off */
+
 static const RtemsTaskReqResume_Entry
 RtemsTaskReqResume_Entries[] = {
   { 0, 0, 1, RtemsTaskReqResume_Post_Status_InvId },
@@ -326,6 +328,8 @@ static const uint8_t
 RtemsTaskReqResume_Map[] = {
   0, 0, 1, 2
 };
+
+/* clang-format on */
 
 static size_t RtemsTaskReqResume_Scope( void *arg, char *buf, size_t n )
 {

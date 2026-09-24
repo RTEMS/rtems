@@ -657,6 +657,8 @@ static void RtemsTimerReqInitiateServer_Cleanup(
   T_surrender_objects( &ctx->task_objects, rtems_task_delete );
 }
 
+/* clang-format off */
+
 static const RtemsTimerReqInitiateServer_Entry
 RtemsTimerReqInitiateServer_Entries[] = {
   { 0, 0, 0, 0, 0, RtemsTimerReqInitiateServer_Post_Status_IncStat,
@@ -690,6 +692,8 @@ static const uint8_t
 RtemsTimerReqInitiateServer_Map[] = {
   0, 0, 3, 1, 0, 0, 4, 1, 0, 0, 3, 1, 0, 0, 4, 1, 0, 0, 2, 2, 0, 0, 2, 2
 };
+
+/* clang-format on */
 
 static size_t RtemsTimerReqInitiateServer_Scope(
   void  *arg,

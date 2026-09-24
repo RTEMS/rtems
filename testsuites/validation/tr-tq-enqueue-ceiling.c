@@ -541,6 +541,8 @@ static void ScoreTqReqEnqueueCeiling_Action(
   }
 }
 
+/* clang-format off */
+
 static const ScoreTqReqEnqueueCeiling_Entry
 ScoreTqReqEnqueueCeiling_Entries[] = {
   { 1, 0, 0, 0, ScoreTqReqEnqueueCeiling_Post_Position_NA },
@@ -583,6 +585,8 @@ static const uint8_t
 ScoreTqReqEnqueueCeiling_Map[] = {
   4, 0, 0, 5, 1, 2, 6, 1, 3, 7, 0, 0, 8, 1, 2, 9, 1, 3
 };
+
+/* clang-format on */
 
 static size_t ScoreTqReqEnqueueCeiling_Scope( void *arg, char *buf, size_t n )
 {

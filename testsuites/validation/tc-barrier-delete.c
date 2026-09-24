@@ -374,6 +374,8 @@ static void RtemsBarrierReqDelete_Cleanup( RtemsBarrierReqDelete_Context *ctx )
   }
 }
 
+/* clang-format off */
+
 static const RtemsBarrierReqDelete_Entry
 RtemsBarrierReqDelete_Entries[] = {
   { 0, 0, RtemsBarrierReqDelete_Post_Status_InvId,
@@ -387,6 +389,8 @@ static const uint8_t
 RtemsBarrierReqDelete_Map[] = {
   0, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsBarrierReqDelete_Scope( void *arg, char *buf, size_t n )
 {

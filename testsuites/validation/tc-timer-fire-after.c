@@ -983,6 +983,8 @@ static void RtemsTimerReqFireAfter_Cleanup(
   T_rsc_success( rtems_timer_delete( ctx->timer_id ) );
 }
 
+/* clang-format off */
+
 static const RtemsTimerReqFireAfter_Entry
 RtemsTimerReqFireAfter_Entries[] = {
   { 1, 0, 0, 0, 0, 0, 0, RtemsTimerReqFireAfter_Post_Status_NA,
@@ -1033,6 +1035,8 @@ RtemsTimerReqFireAfter_Map[] = {
   0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0,
   0, 0, 1, 1, 1, 1, 1, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsTimerReqFireAfter_Scope( void *arg, char *buf, size_t n )
 {

@@ -1643,7 +1643,9 @@ static void RtemsBasedefsValBasedefs_Action_44( void )
   const char *string_empty_var;
   const char *string_multi_args_var;
   /* strange spacing and tabs belong to the test */
+  /* clang-format off */
   string_var = RTEMS_STRING( \\ STRING_PREFIX 		cat""\n   );
+  /* clang-format on */
   string_empty_var = RTEMS_STRING();
   string_multi_args_var = RTEMS_STRING( STRING_PREFIX, "abc", DEF );
 
@@ -1935,7 +1937,9 @@ static void RtemsBasedefsValBasedefs_Action_55( void )
   const char *xstring_empty_var;
   const char *string_multi_args_var;
   /* strange spacing and tabs belong to the test */
+  /* clang-format off */
   xstring_var = RTEMS_XSTRING( \\ STRING_PREFIX 		cat""\n   );
+  /* clang-format on */
   xstring_empty_var = RTEMS_XSTRING();
   string_multi_args_var = RTEMS_XSTRING( STRING_PREFIX, abc, "abc", DEF );
 

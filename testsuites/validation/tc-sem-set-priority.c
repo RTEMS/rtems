@@ -847,6 +847,8 @@ static void RtemsSemReqSetPriority_Cleanup(
   T_rsc_success( sc );
 }
 
+/* clang-format off */
+
 static const RtemsSemReqSetPriority_Entry
 RtemsSemReqSetPriority_Entries[] = {
   { 0, 0, 0, 0, 0, 0, RtemsSemReqSetPriority_Post_Status_InvAddr,
@@ -1019,6 +1021,8 @@ RtemsSemReqSetPriority_Map[] = {
   0, 8, 0, 19, 2, 20, 2, 9, 2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 3, 2, 3, 2,
   3, 2
 };
+
+/* clang-format on */
 
 static size_t RtemsSemReqSetPriority_Scope( void *arg, char *buf, size_t n )
 {

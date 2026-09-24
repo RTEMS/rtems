@@ -244,6 +244,8 @@ static void DevGrlibReqApbuartInbyteNonblocking_Action(
   ctx->result = apbuart_inbyte_nonblocking( &ctx->regs );
 }
 
+/* clang-format off */
+
 static const DevGrlibReqApbuartInbyteNonblocking_Entry
 DevGrlibReqApbuartInbyteNonblocking_Entries[] = {
   { 0, 0, DevGrlibReqApbuartInbyteNonblocking_Post_Result_Data,
@@ -256,6 +258,8 @@ static const uint8_t
 DevGrlibReqApbuartInbyteNonblocking_Map[] = {
   0, 1
 };
+
+/* clang-format on */
 
 static size_t DevGrlibReqApbuartInbyteNonblocking_Scope(
   void  *arg,

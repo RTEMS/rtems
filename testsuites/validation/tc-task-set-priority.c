@@ -646,6 +646,8 @@ static void RtemsTaskReqSetPriority_Cleanup(
   DeleteTask( ctx->worker_id );
 }
 
+/* clang-format off */
+
 static const RtemsTaskReqSetPriority_Entry
 RtemsTaskReqSetPriority_Entries[] = {
   { 0, 0, 1, 0, 1, 0, RtemsTaskReqSetPriority_Post_Status_InvId,
@@ -679,6 +681,8 @@ RtemsTaskReqSetPriority_Map[] = {
   6, 4, 2, 3, 2, 3, 2, 3, 2, 3, 5, 4, 5, 4, 5, 4, 6, 4, 2, 3, 2, 3, 2, 3, 2, 3,
   5, 4, 5, 4, 5, 4, 6, 4, 2, 3, 2, 3, 2, 3, 2, 3, 5, 4, 5, 4, 5, 4, 6, 4
 };
+
+/* clang-format on */
 
 static size_t RtemsTaskReqSetPriority_Scope( void *arg, char *buf, size_t n )
 {

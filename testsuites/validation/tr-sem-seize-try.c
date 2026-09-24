@@ -237,6 +237,8 @@ static void ScoreSemReqSeizeTry_Action( ScoreSemReqSeizeTry_Context *ctx )
   ctx->count_after = TQSemGetCount( ctx->tq_ctx );
 }
 
+/* clang-format off */
+
 static const ScoreSemReqSeizeTry_Entry
 ScoreSemReqSeizeTry_Entries[] = {
   { 0, 0, ScoreSemReqSeizeTry_Post_Status_Unsat,
@@ -249,6 +251,8 @@ static const uint8_t
 ScoreSemReqSeizeTry_Map[] = {
   0, 1
 };
+
+/* clang-format on */
 
 static size_t ScoreSemReqSeizeTry_Scope( void *arg, char *buf, size_t n )
 {

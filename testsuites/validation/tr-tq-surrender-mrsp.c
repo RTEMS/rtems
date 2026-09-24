@@ -781,6 +781,8 @@ static void ScoreTqReqSurrenderMrsp_Cleanup(
   T_eq_u32( rtems_scheduler_get_processor(), 0 );
 }
 
+/* clang-format off */
+
 static const ScoreTqReqSurrenderMrsp_Entry
 ScoreTqReqSurrenderMrsp_Entries[] = {
   { 0, 0, 0, 0, 0, 0, 0, ScoreTqReqSurrenderMrsp_Post_Dequeue_Priority,
@@ -886,6 +888,8 @@ ScoreTqReqSurrenderMrsp_Map[] = {
   0, 1, 2, 3, 0, 1, 2, 3, 4, 5, 6, 7, 4, 5, 6, 7, 8, 9, 10, 11, 8, 9, 10, 11,
   12, 13, 14, 15, 12, 13, 14, 15
 };
+
+/* clang-format on */
 
 static size_t ScoreTqReqSurrenderMrsp_Scope( void *arg, char *buf, size_t n )
 {

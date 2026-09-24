@@ -243,6 +243,8 @@ static void RtemsIoReqPutc_Action( RtemsIoReqPutc_Context *ctx )
   BSP_output_char = output_char;
 }
 
+/* clang-format off */
+
 static const RtemsIoReqPutc_Entry
 RtemsIoReqPutc_Entries[] = {
   { 0, 0, RtemsIoReqPutc_Post_Output_CrNl },
@@ -253,6 +255,8 @@ static const uint8_t
 RtemsIoReqPutc_Map[] = {
   0, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsIoReqPutc_Scope( void *arg, char *buf, size_t n )
 {

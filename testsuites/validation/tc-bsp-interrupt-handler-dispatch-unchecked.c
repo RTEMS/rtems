@@ -501,6 +501,8 @@ static void BspReqInterruptHandlerDispatchUnchecked_Action(
   Disable( ctx );
 }
 
+/* clang-format off */
+
 static const BspReqInterruptHandlerDispatchUnchecked_Entry
 BspReqInterruptHandlerDispatchUnchecked_Entries[] = {
   { 0, 0, 1, BspReqInterruptHandlerDispatchUnchecked_Post_Result_Dispatch,
@@ -530,6 +532,8 @@ static const uint8_t
 BspReqInterruptHandlerDispatchUnchecked_Map[] = {
   1, 2, 0, 0
 };
+
+/* clang-format on */
 
 static size_t BspReqInterruptHandlerDispatchUnchecked_Scope(
   void  *arg,

@@ -201,6 +201,8 @@ static void RtemsStatusReqIsSuccessful_Action(
   ctx->result = rtems_is_status_successful( ctx->status );
 }
 
+/* clang-format off */
+
 static const RtemsStatusReqIsSuccessful_Entry
 RtemsStatusReqIsSuccessful_Entries[] = {
   { 0, 0, RtemsStatusReqIsSuccessful_Post_Result_True },
@@ -211,6 +213,8 @@ static const uint8_t
 RtemsStatusReqIsSuccessful_Map[] = {
   0, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsStatusReqIsSuccessful_Scope(
   void  *arg,

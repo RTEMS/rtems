@@ -807,6 +807,8 @@ static void RtemsTaskReqCreateErrors_Cleanup(
   T_surrender_objects( &ctx->seized_objects, rtems_task_delete );
 }
 
+/* clang-format off */
+
 static const RtemsTaskReqCreateErrors_Entry
 RtemsTaskReqCreateErrors_Entries[] = {
   { 0, 0, 0, 0, 0, 0, 0, 0, RtemsTaskReqCreateErrors_Post_Status_InvName,
@@ -861,6 +863,8 @@ RtemsTaskReqCreateErrors_Map[] = {
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsTaskReqCreateErrors_Scope( void *arg, char *buf, size_t n )
 {

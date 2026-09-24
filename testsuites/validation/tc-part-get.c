@@ -424,6 +424,8 @@ static void RtemsPartReqGetBuffer_Cleanup( RtemsPartReqGetBuffer_Context *ctx )
   }
 }
 
+/* clang-format off */
+
 static const RtemsPartReqGetBuffer_Entry
 RtemsPartReqGetBuffer_Entries[] = {
   { 0, 0, 0, 0, RtemsPartReqGetBuffer_Post_Status_InvAddr,
@@ -440,6 +442,8 @@ static const uint8_t
 RtemsPartReqGetBuffer_Map[] = {
   1, 1, 0, 0, 2, 3, 0, 0
 };
+
+/* clang-format on */
 
 static size_t RtemsPartReqGetBuffer_Scope( void *arg, char *buf, size_t n )
 {

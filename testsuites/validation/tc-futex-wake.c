@@ -328,6 +328,8 @@ static void NewlibReqFutexWake_Cleanup( NewlibReqFutexWake_Context *ctx )
   _Futex_Destroy( &ctx->futex );
 }
 
+/* clang-format off */
+
 static const NewlibReqFutexWake_Entry
 NewlibReqFutexWake_Entries[] = {
   { 0, 0, NewlibReqFutexWake_Post_Result_Count,
@@ -340,6 +342,8 @@ static const uint8_t
 NewlibReqFutexWake_Map[] = {
   0, 1
 };
+
+/* clang-format on */
 
 static size_t NewlibReqFutexWake_Scope( void *arg, char *buf, size_t n )
 {

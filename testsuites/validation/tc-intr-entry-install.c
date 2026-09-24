@@ -1205,6 +1205,8 @@ static void RtemsIntrReqEntryInstall_Cleanup(
   }
 }
 
+/* clang-format off */
+
 static const RtemsIntrReqEntryInstall_Entry
 RtemsIntrReqEntryInstall_Entries[] = {
   { 0, 0, 0, 0, 1, 0, 0, 0, 0, RtemsIntrReqEntryInstall_Post_Status_InvAddr,
@@ -1322,6 +1324,8 @@ RtemsIntrReqEntryInstall_Map[] = {
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
 };
+
+/* clang-format on */
 
 static size_t RtemsIntrReqEntryInstall_Scope( void *arg, char *buf, size_t n )
 {

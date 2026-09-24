@@ -305,6 +305,8 @@ static void ScoreTqReqEnqueueDeadlock_Action(
   }
 }
 
+/* clang-format off */
+
 static const ScoreTqReqEnqueueDeadlock_Entry
 ScoreTqReqEnqueueDeadlock_Entries[] = {
   { 0, 0, 0, ScoreTqReqEnqueueDeadlock_Post_Result_Status },
@@ -315,6 +317,8 @@ static const uint8_t
 ScoreTqReqEnqueueDeadlock_Map[] = {
   0, 0, 1, 1
 };
+
+/* clang-format on */
 
 static size_t ScoreTqReqEnqueueDeadlock_Scope( void *arg, char *buf, size_t n )
 {
