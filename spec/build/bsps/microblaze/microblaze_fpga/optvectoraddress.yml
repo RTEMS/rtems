@@ -7,7 +7,7 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2022 On-Line Applications Research Corporation (OAR)
-default: 
+default:
 - enabled-by: true
   value: 0x00000000
 description: |
@@ -15,5 +15,5 @@ description: |
 enabled-by: true
 format: '{:#010x}'
 links: []
-name: BSP_MICROBLAZE_FPGA_VECTOR_ADDR 
+name: BSP_MICROBLAZE_FPGA_VECTOR_ADDR
 type: build
