@@ -7,7 +7,7 @@ copyrights:
 - Copyright (C) 2024 embedded brains GmbH & Co. KG
 default:
 - enabled-by: true
-  value: 0x002F0000
+  value: 0x002f0000
 description: |
   Size of the Internal SRAM memory area in bytes.
 enabled-by: true

@@ -2,7 +2,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - get-integer: null
 - assert-uint64: null
-- assert-aligned: 0x1000
+- assert-aligned: 0x00001000
 - env-assign: null
 - format-and-define: null
 build-type: option
@@ -10,7 +10,7 @@ copyrights:
 - Copyright (C) 2024 Kevin Kirspel
 default:
 - enabled-by: true
-  value: 4096
+  value: 0x00001000
 description: ''
 enabled-by: true
 format: '{:#010x}'

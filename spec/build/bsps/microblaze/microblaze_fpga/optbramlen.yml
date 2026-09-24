@@ -9,9 +9,9 @@ copyrights:
 - Copyright (C) 2025 Sam Price
 default:
 - enabled-by: microblaze/petalogix_s3adsp1800
-  value: 0x20000
+  value: 0x00020000
 - enabled-by: true
-  value: 0x10000
+  value: 0x00010000
 description: |
   length of block memory area
 enabled-by: true

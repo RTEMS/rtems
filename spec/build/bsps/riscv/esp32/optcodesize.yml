@@ -9,7 +9,7 @@ copyrights:
 - Copyright (C) 2026 Kinsey Moore <wkmoore@gmail.com>
 default:
 - enabled-by: true
-  value: 0x100000
+  value: 0x00100000
 description: ''
 enabled-by: true
 format: '{:#010x}'

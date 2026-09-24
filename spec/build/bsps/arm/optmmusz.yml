@@ -1,8 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - get-integer: null
-- assert-ge: 16384
-- assert-le: 33554432
+- assert-ge: 0x00004000
+- assert-le: 0x02000000
 - env-assign: null
 - format-and-define: null
 build-type: option
