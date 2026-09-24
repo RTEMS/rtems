@@ -5,8 +5,7 @@ actions:
 - env-append: null
 build-type: option
 copyrights:
-- Copyright (C) 2026 UChicago Argonne LLC, as operator of
-  Argonne National Laboratory
+- Copyright (C) 2026 UChicago Argonne LLC, as operator of Argonne National Laboratory
 default:
 - enabled-by: true
   value:
