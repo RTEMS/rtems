@@ -2,7 +2,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 build-type: test-program
 cflags: []
 copyrights:
-  - Copyright (C) 2026 Aaron Nyholm
+- Copyright (C) 2026 Aaron Nyholm
 cppflags: []
 cxxflags: []
 enabled-by: true
@@ -11,8 +11,8 @@ includes: []
 ldflags: []
 links: []
 source:
-  - testsuites/libtests/iodev01/init.c
-  - testsuites/libtests/iodev01/test_iodev.c
+- testsuites/libtests/iodev01/init.c
+- testsuites/libtests/iodev01/test_iodev.c
 stlib: []
 target: testsuites/libtests/iodev01.exe
 type: build

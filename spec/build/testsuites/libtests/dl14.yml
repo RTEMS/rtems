@@ -2,7 +2,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 build-type: test-program
 cflags: []
 copyrights:
-  - Copyright (C) 2026 Yang Zhang
+- Copyright (C) 2026 Yang Zhang
 cppflags: []
 cxxflags: []
 enabled-by: BUILD_LIBDL
@@ -11,7 +11,7 @@ includes: []
 ldflags: []
 links: []
 source:
-  - testsuites/libtests/dl14/init.c
+- testsuites/libtests/dl14/init.c
 stlib: []
 target: testsuites/libtests/dl14.exe
 type: build

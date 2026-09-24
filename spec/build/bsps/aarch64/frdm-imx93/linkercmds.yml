@@ -76,7 +76,7 @@ content: |
 
   INCLUDE linkcmds.base
 copyrights:
-  - Copyright (C) 2026 Rongjie Lee
+- Copyright (C) 2026 Rongjie Lee
 enabled-by: true
 install-path: ${BSP_LIBDIR}
 links: []
