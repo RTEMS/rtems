@@ -94,7 +94,7 @@ static void RtemsIoValKernel_Action_0( void )
 static void RtemsIoValKernel_Action_1( void )
 {
   BSP_polling_getchar_function_type poll_char;
-  int c;
+  int                               c;
 
   poll_char = BSP_poll_char;
 

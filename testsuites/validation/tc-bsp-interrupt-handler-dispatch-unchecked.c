@@ -206,22 +206,19 @@ typedef struct {
 static BspReqInterruptHandlerDispatchUnchecked_Context
   BspReqInterruptHandlerDispatchUnchecked_Instance;
 
-static const char * const BspReqInterruptHandlerDispatchUnchecked_PreDesc_LoadFirst[] = {
-  "Null",
-  "Entry",
-  "NA"
-};
+static const char *const
+  BspReqInterruptHandlerDispatchUnchecked_PreDesc_LoadFirst[] =
+    { "Null", "Entry", "NA" };
 
-static const char * const BspReqInterruptHandlerDispatchUnchecked_PreDesc_LoadFirstAgain[] = {
-  "Null",
-  "Entry",
-  "NA"
-};
+static const char *const
+  BspReqInterruptHandlerDispatchUnchecked_PreDesc_LoadFirstAgain[] =
+    { "Null", "Entry", "NA" };
 
-static const char * const * const BspReqInterruptHandlerDispatchUnchecked_PreDesc[] = {
-  BspReqInterruptHandlerDispatchUnchecked_PreDesc_LoadFirst,
-  BspReqInterruptHandlerDispatchUnchecked_PreDesc_LoadFirstAgain,
-  NULL
+static const char *const *const
+  BspReqInterruptHandlerDispatchUnchecked_PreDesc[] = {
+    BspReqInterruptHandlerDispatchUnchecked_PreDesc_LoadFirst,
+    BspReqInterruptHandlerDispatchUnchecked_PreDesc_LoadFirstAgain,
+    NULL
 };
 
 typedef BspReqInterruptHandlerDispatchUnchecked_Context Context;
@@ -284,7 +281,7 @@ void __wrap_bsp_interrupt_handler_default( rtems_vector_number vector )
   }
 }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 void __real_bsp_interrupt_spurious( rtems_vector_number vector );
 
 void __wrap_bsp_interrupt_spurious( rtems_vector_number vector );
@@ -440,9 +437,9 @@ static void BspReqInterruptHandlerDispatchUnchecked_Setup(
   ctx->first = NULL;
   ctx->test_vector = CallWithinISRGetVector();
   T_assert_lt_u32( ctx->test_vector, BSP_INTERRUPT_VECTOR_COUNT );
-  ctx->first = &bsp_interrupt_dispatch_table[
-    bsp_interrupt_dispatch_index( ctx->test_vector )
-  ];
+  ctx->first = &bsp_interrupt_dispatch_table[ bsp_interrupt_dispatch_index(
+    ctx->test_vector
+  ) ];
   ctx->entry_to_restore = *ctx->first;
 
   rtems_interrupt_entry_initialize( &ctx->entry, EntryRoutine, ctx, "Info" );
@@ -574,9 +571,8 @@ BspReqInterruptHandlerDispatchUnchecked_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return BspReqInterruptHandlerDispatchUnchecked_Entries[
-    BspReqInterruptHandlerDispatchUnchecked_Map[ index ]
-  ];
+  return BspReqInterruptHandlerDispatchUnchecked_Entries
+    [ BspReqInterruptHandlerDispatchUnchecked_Map[ index ] ];
 }
 
 static void BspReqInterruptHandlerDispatchUnchecked_SetPreConditionStates(
@@ -586,7 +582,8 @@ static void BspReqInterruptHandlerDispatchUnchecked_SetPreConditionStates(
   ctx->Map.pcs[ 0 ] = ctx->Map.pci[ 0 ];
 
   if ( ctx->Map.entry.Pre_LoadFirstAgain_NA ) {
-    ctx->Map.pcs[ 1 ] = BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirstAgain_NA;
+    ctx->Map.pcs[ 1 ] =
+      BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirstAgain_NA;
   } else {
     ctx->Map.pcs[ 1 ] = ctx->Map.pci[ 1 ];
   }
@@ -634,13 +631,17 @@ T_TEST_CASE_FIXTURE(
   ctx->Map.index = 0;
 
   for (
-    ctx->Map.pci[ 0 ] = BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirst_Null;
-    ctx->Map.pci[ 0 ] < BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirst_NA;
+    ctx->Map.pci[ 0 ] =
+      BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirst_Null;
+    ctx->Map.pci[ 0 ] <
+    BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirst_NA;
     ++ctx->Map.pci[ 0 ]
   ) {
     for (
-      ctx->Map.pci[ 1 ] = BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirstAgain_Null;
-      ctx->Map.pci[ 1 ] < BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirstAgain_NA;
+      ctx->Map.pci[ 1 ] =
+        BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirstAgain_Null;
+      ctx->Map.pci[ 1 ] <
+      BspReqInterruptHandlerDispatchUnchecked_Pre_LoadFirstAgain_NA;
       ++ctx->Map.pci[ 1 ]
     ) {
       ctx->Map.entry = BspReqInterruptHandlerDispatchUnchecked_PopEntry( ctx );

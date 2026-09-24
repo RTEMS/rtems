@@ -91,13 +91,7 @@ static void RtemsBasedefsValBasedefsNoDebug_Action_0( void )
   /*
    * Check that the string is equal to the expected statement.
    */
-  T_step_true(
-    0,
-    IsEqualIgnoreWhiteSpace(
-      s,
-      "__builtin_unreachable()"
-    )
-  );
+  T_step_true( 0, IsEqualIgnoreWhiteSpace( s, "__builtin_unreachable()" ) );
 }
 
 /**
@@ -114,10 +108,7 @@ static void RtemsBasedefsValBasedefsNoDebug_Action_1( void )
    */
   T_step_true(
     1,
-    IsEqualIgnoreWhiteSpace(
-      s,
-      "RtemsBasedefsValBasedefsNoDebug_Action_1"
-    )
+    IsEqualIgnoreWhiteSpace( s, "RtemsBasedefsValBasedefsNoDebug_Action_1" )
   );
 }
 

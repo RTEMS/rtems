@@ -151,44 +151,24 @@ typedef struct {
   } Map;
 } ScoreMtxReqSeizeTry_Context;
 
-static ScoreMtxReqSeizeTry_Context
-  ScoreMtxReqSeizeTry_Instance;
+static ScoreMtxReqSeizeTry_Context ScoreMtxReqSeizeTry_Instance;
 
-static const char * const ScoreMtxReqSeizeTry_PreDesc_Protocol[] = {
-  "Ceiling",
-  "MrsP",
-  "Other",
-  "NA"
-};
+static const char *const ScoreMtxReqSeizeTry_PreDesc_Protocol[] =
+  { "Ceiling", "MrsP", "Other", "NA" };
 
-static const char * const ScoreMtxReqSeizeTry_PreDesc_Discipline[] = {
-  "FIFO",
-  "Priority",
-  "NA"
-};
+static const char *const ScoreMtxReqSeizeTry_PreDesc_Discipline[] =
+  { "FIFO", "Priority", "NA" };
 
-static const char * const ScoreMtxReqSeizeTry_PreDesc_Recursive[] = {
-  "Allowed",
-  "Unavailable",
-  "Deadlock",
-  "NA"
-};
+static const char *const ScoreMtxReqSeizeTry_PreDesc_Recursive[] =
+  { "Allowed", "Unavailable", "Deadlock", "NA" };
 
-static const char * const ScoreMtxReqSeizeTry_PreDesc_Owner[] = {
-  "None",
-  "Caller",
-  "Other",
-  "NA"
-};
+static const char *const ScoreMtxReqSeizeTry_PreDesc_Owner[] =
+  { "None", "Caller", "Other", "NA" };
 
-static const char * const ScoreMtxReqSeizeTry_PreDesc_Priority[] = {
-  "High",
-  "Equal",
-  "Low",
-  "NA"
-};
+static const char *const ScoreMtxReqSeizeTry_PreDesc_Priority[] =
+  { "High", "Equal", "Low", "NA" };
 
-static const char * const * const ScoreMtxReqSeizeTry_PreDesc[] = {
+static const char *const *const ScoreMtxReqSeizeTry_PreDesc[] = {
   ScoreMtxReqSeizeTry_PreDesc_Protocol,
   ScoreMtxReqSeizeTry_PreDesc_Discipline,
   ScoreMtxReqSeizeTry_PreDesc_Recursive,
@@ -705,9 +685,7 @@ static T_fixture ScoreMtxReqSeizeTry_Fixture = {
   .initial_context = &ScoreMtxReqSeizeTry_Instance
 };
 
-static const uint8_t ScoreMtxReqSeizeTry_Weights[] = {
-  54, 27, 9, 3, 1
-};
+static const uint8_t ScoreMtxReqSeizeTry_Weights[] = { 54, 27, 9, 3, 1 };
 
 static void ScoreMtxReqSeizeTry_Skip(
   ScoreMtxReqSeizeTry_Context *ctx,
@@ -751,9 +729,7 @@ static inline ScoreMtxReqSeizeTry_Entry ScoreMtxReqSeizeTry_PopEntry(
 
   ctx->Map.index = index + 1;
 
-  return ScoreMtxReqSeizeTry_Entries[
-    ScoreMtxReqSeizeTry_Map[ index ]
-  ];
+  return ScoreMtxReqSeizeTry_Entries[ ScoreMtxReqSeizeTry_Map[ index ] ];
 }
 
 static void ScoreMtxReqSeizeTry_SetPreConditionStates(

@@ -131,26 +131,16 @@ typedef struct {
   } Map;
 } RtemsReqIdentLocal_Context;
 
-static RtemsReqIdentLocal_Context
-  RtemsReqIdentLocal_Instance;
+static RtemsReqIdentLocal_Context RtemsReqIdentLocal_Instance;
 
-static const char * const RtemsReqIdentLocal_PreDesc_Name[] = {
-  "Invalid",
-  "Valid",
-  "NA"
-};
+static const char *const RtemsReqIdentLocal_PreDesc_Name[] =
+  { "Invalid", "Valid", "NA" };
 
-static const char * const RtemsReqIdentLocal_PreDesc_Id[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsReqIdentLocal_PreDesc_Id[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const * const RtemsReqIdentLocal_PreDesc[] = {
-  RtemsReqIdentLocal_PreDesc_Name,
-  RtemsReqIdentLocal_PreDesc_Id,
-  NULL
-};
+static const char *const *const RtemsReqIdentLocal_PreDesc[] =
+  { RtemsReqIdentLocal_PreDesc_Name, RtemsReqIdentLocal_PreDesc_Id, NULL };
 
 static void RtemsReqIdentLocal_Pre_Name_Prepare(
   RtemsReqIdentLocal_Context *ctx,
@@ -264,8 +254,7 @@ static void RtemsReqIdentLocal_Post_Id_Check(
       /*
        * While the id is NULL.
        */
-      T_null( ctx->id )
-      break;
+      T_null( ctx->id ) break;
     }
 
     case RtemsReqIdentLocal_Post_Id_Id: {
@@ -338,9 +327,7 @@ static inline RtemsReqIdentLocal_Entry RtemsReqIdentLocal_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsReqIdentLocal_Entries[
-    RtemsReqIdentLocal_Map[ index ]
-  ];
+  return RtemsReqIdentLocal_Entries[ RtemsReqIdentLocal_Map[ index ] ];
 }
 
 static void RtemsReqIdentLocal_TestVariant( RtemsReqIdentLocal_Context *ctx )
@@ -360,8 +347,8 @@ static T_remark RtemsReqIdentLocal_Remark = {
 };
 
 void RtemsReqIdentLocal_Run(
-  rtems_id             id_local_object,
-  rtems_name           name_local_object,
+  rtems_id   id_local_object,
+  rtems_name name_local_object,
   rtems_status_code ( *action )( rtems_name, rtems_id * )
 )
 {
@@ -372,7 +359,10 @@ void RtemsReqIdentLocal_Run(
   ctx->name_local_object = name_local_object;
   ctx->action = action;
 
-  ctx = T_push_fixture( &RtemsReqIdentLocal_Node, &RtemsReqIdentLocal_Fixture );
+  ctx = T_push_fixture(
+    &RtemsReqIdentLocal_Node,
+    &RtemsReqIdentLocal_Fixture
+  );
   ctx->Map.in_action_loop = true;
   ctx->Map.index = 0;
 

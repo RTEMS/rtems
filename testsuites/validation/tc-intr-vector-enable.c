@@ -171,29 +171,18 @@ typedef struct {
   } Map;
 } RtemsIntrReqVectorEnable_Context;
 
-static RtemsIntrReqVectorEnable_Context
-  RtemsIntrReqVectorEnable_Instance;
+static RtemsIntrReqVectorEnable_Context RtemsIntrReqVectorEnable_Instance;
 
-static const char * const RtemsIntrReqVectorEnable_PreDesc_Vector[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsIntrReqVectorEnable_PreDesc_Vector[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsIntrReqVectorEnable_PreDesc_IsEnabled[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsIntrReqVectorEnable_PreDesc_IsEnabled[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsIntrReqVectorEnable_PreDesc_CanEnable[] = {
-  "Yes",
-  "Maybe",
-  "No",
-  "NA"
-};
+static const char *const RtemsIntrReqVectorEnable_PreDesc_CanEnable[] =
+  { "Yes", "Maybe", "No", "NA" };
 
-static const char * const * const RtemsIntrReqVectorEnable_PreDesc[] = {
+static const char *const *const RtemsIntrReqVectorEnable_PreDesc[] = {
   RtemsIntrReqVectorEnable_PreDesc_Vector,
   RtemsIntrReqVectorEnable_PreDesc_IsEnabled,
   RtemsIntrReqVectorEnable_PreDesc_CanEnable,
@@ -279,8 +268,8 @@ static void CheckVectorEnable(
     cpu_set_t affinity_old;
     cpu_set_t affinity_new;
 
-    CPU_ZERO(&affinity_old);
-    CPU_ZERO(&affinity_new);
+    CPU_ZERO( &affinity_old );
+    CPU_ZERO( &affinity_new );
     T_true( IsEnabled( ctx ) );
 
     if ( attr->can_get_affinity ) {
@@ -571,9 +560,7 @@ static void RtemsIntrReqVectorEnable_Action(
 {
   if ( ctx->valid_vector ) {
     for (
-      ctx->vector = 0;
-      ctx->vector < BSP_INTERRUPT_VECTOR_COUNT;
-      ++ctx->vector
+      ctx->vector = 0; ctx->vector < BSP_INTERRUPT_VECTOR_COUNT; ++ctx->vector
     ) {
       rtems_status_code          sc;
       rtems_interrupt_attributes attr;
@@ -588,7 +575,9 @@ static void RtemsIntrReqVectorEnable_Action(
 
       T_rsc_success( sc );
 
-      has_installed_entries = HasInterruptVectorEntriesInstalled( ctx->vector );
+      has_installed_entries = HasInterruptVectorEntriesInstalled(
+        ctx->vector
+      );
       CheckVectorEnable( ctx, &attr, has_installed_entries );
     }
   } else {
@@ -652,9 +641,8 @@ static inline RtemsIntrReqVectorEnable_Entry RtemsIntrReqVectorEnable_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsIntrReqVectorEnable_Entries[
-    RtemsIntrReqVectorEnable_Map[ index ]
-  ];
+  return RtemsIntrReqVectorEnable_Entries
+    [ RtemsIntrReqVectorEnable_Map[ index ] ];
 }
 
 static void RtemsIntrReqVectorEnable_SetPreConditionStates(

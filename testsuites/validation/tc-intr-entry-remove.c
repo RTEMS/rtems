@@ -328,66 +328,36 @@ typedef struct {
   } Map;
 } RtemsIntrReqEntryRemove_Context;
 
-static RtemsIntrReqEntryRemove_Context
-  RtemsIntrReqEntryRemove_Instance;
+static RtemsIntrReqEntryRemove_Context RtemsIntrReqEntryRemove_Instance;
 
-static const char * const RtemsIntrReqEntryRemove_PreDesc_Vector[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsIntrReqEntryRemove_PreDesc_Vector[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsIntrReqEntryRemove_PreDesc_Entry[] = {
-  "Obj",
-  "Null",
-  "NA"
-};
+static const char *const RtemsIntrReqEntryRemove_PreDesc_Entry[] =
+  { "Obj", "Null", "NA" };
 
-static const char * const RtemsIntrReqEntryRemove_PreDesc_Routine[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsIntrReqEntryRemove_PreDesc_Routine[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsIntrReqEntryRemove_PreDesc_EntryObj[] = {
-  "Installed",
-  "Match",
-  "NoMatch",
-  "NA"
-};
+static const char *const RtemsIntrReqEntryRemove_PreDesc_EntryObj[] =
+  { "Installed", "Match", "NoMatch", "NA" };
 
-static const char * const RtemsIntrReqEntryRemove_PreDesc_Init[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsIntrReqEntryRemove_PreDesc_Init[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsIntrReqEntryRemove_PreDesc_ISR[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsIntrReqEntryRemove_PreDesc_ISR[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsIntrReqEntryRemove_PreDesc_CanDisable[] = {
-  "Yes",
-  "Maybe",
-  "No",
-  "NA"
-};
+static const char *const RtemsIntrReqEntryRemove_PreDesc_CanDisable[] =
+  { "Yes", "Maybe", "No", "NA" };
 
-static const char * const RtemsIntrReqEntryRemove_PreDesc_First[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsIntrReqEntryRemove_PreDesc_First[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsIntrReqEntryRemove_PreDesc_Last[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsIntrReqEntryRemove_PreDesc_Last[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const RtemsIntrReqEntryRemove_PreDesc[] = {
+static const char *const *const RtemsIntrReqEntryRemove_PreDesc[] = {
   RtemsIntrReqEntryRemove_PreDesc_Vector,
   RtemsIntrReqEntryRemove_PreDesc_Entry,
   RtemsIntrReqEntryRemove_PreDesc_Routine,
@@ -419,12 +389,7 @@ static void Install(
 {
   rtems_status_code sc;
 
-  rtems_interrupt_entry_initialize(
-    entry,
-    routine,
-    arg,
-    info
-  );
+  rtems_interrupt_entry_initialize( entry, routine, arg, info );
 
   sc = rtems_interrupt_entry_install(
     ctx->test_vector,
@@ -552,8 +517,8 @@ static void VisitInstalledNop(
     }
   } else if ( visited_entries == 1 ) {
     if (
-      ctx->installed && ( ( !ctx->first && ctx->last ) ||
-        ( !ctx->first && !ctx->last ) )
+      ctx->installed &&
+      ( ( !ctx->first && ctx->last ) || ( !ctx->first && !ctx->last ) )
     ) {
       T_eq_ptr( handler_routine, ctx->entry_obj.handler );
       T_eq_ptr( handler_arg, ctx->entry_obj.arg );
@@ -1038,9 +1003,9 @@ static void RtemsIntrReqEntryRemove_Post_Installed_Check(
       } else {
         rtems_interrupt_entry *first;
 
-        first = bsp_interrupt_dispatch_table[
-          bsp_interrupt_dispatch_index( ctx->test_vector )
-        ];
+        first = bsp_interrupt_dispatch_table[ bsp_interrupt_dispatch_index(
+          ctx->test_vector
+        ) ];
         T_null( first );
       }
       break;
@@ -1336,9 +1301,8 @@ static inline RtemsIntrReqEntryRemove_Entry RtemsIntrReqEntryRemove_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsIntrReqEntryRemove_Entries[
-    RtemsIntrReqEntryRemove_Map[ index ]
-  ];
+  return RtemsIntrReqEntryRemove_Entries
+    [ RtemsIntrReqEntryRemove_Map[ index ] ];
 }
 
 static void RtemsIntrReqEntryRemove_SetPreConditionStates(

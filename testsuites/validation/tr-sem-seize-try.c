@@ -126,16 +126,12 @@ typedef struct {
   } Map;
 } ScoreSemReqSeizeTry_Context;
 
-static ScoreSemReqSeizeTry_Context
-  ScoreSemReqSeizeTry_Instance;
+static ScoreSemReqSeizeTry_Context ScoreSemReqSeizeTry_Instance;
 
-static const char * const ScoreSemReqSeizeTry_PreDesc_Count[] = {
-  "Zero",
-  "Positive",
-  "NA"
-};
+static const char *const ScoreSemReqSeizeTry_PreDesc_Count[] =
+  { "Zero", "Positive", "NA" };
 
-static const char * const * const ScoreSemReqSeizeTry_PreDesc[] = {
+static const char *const *const ScoreSemReqSeizeTry_PreDesc[] = {
   ScoreSemReqSeizeTry_PreDesc_Count,
   NULL
 };
@@ -283,9 +279,7 @@ static inline ScoreSemReqSeizeTry_Entry ScoreSemReqSeizeTry_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return ScoreSemReqSeizeTry_Entries[
-    ScoreSemReqSeizeTry_Map[ index ]
-  ];
+  return ScoreSemReqSeizeTry_Entries[ ScoreSemReqSeizeTry_Map[ index ] ];
 }
 
 static void ScoreSemReqSeizeTry_TestVariant( ScoreSemReqSeizeTry_Context *ctx )

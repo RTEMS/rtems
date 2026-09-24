@@ -132,24 +132,19 @@ typedef struct {
   } Map;
 } RtemsUserextReqDelete_Context;
 
-static RtemsUserextReqDelete_Context
-  RtemsUserextReqDelete_Instance;
+static RtemsUserextReqDelete_Context RtemsUserextReqDelete_Instance;
 
-static const char * const RtemsUserextReqDelete_PreDesc_Id[] = {
-  "NoObj",
-  "ExtTdSw",
-  "ExtNoTdSw",
-  "NA"
-};
+static const char *const RtemsUserextReqDelete_PreDesc_Id[] =
+  { "NoObj", "ExtTdSw", "ExtNoTdSw", "NA" };
 
-static const char * const * const RtemsUserextReqDelete_PreDesc[] = {
+static const char *const *const RtemsUserextReqDelete_PreDesc[] = {
   RtemsUserextReqDelete_PreDesc_Id,
   NULL
 };
 
 #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
 
-static void ThreadSwitch( rtems_tcb *executing,  rtems_tcb *heir)
+static void ThreadSwitch( rtems_tcb *executing, rtems_tcb *heir )
 {
   (void) executing;
   (void) heir;
@@ -198,11 +193,7 @@ static void RtemsUserextReqDelete_Pre_Id_Prepare(
       break;
   }
 
-  sc = rtems_extension_create(
-    NAME,
-    &ctx->table,
-    &ctx->extension_id
-  );
+  sc = rtems_extension_create( NAME, &ctx->table, &ctx->extension_id );
   T_rsc_success( sc );
 
   if ( valid_id ) {
@@ -351,9 +342,7 @@ static inline RtemsUserextReqDelete_Entry RtemsUserextReqDelete_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsUserextReqDelete_Entries[
-    RtemsUserextReqDelete_Map[ index ]
-  ];
+  return RtemsUserextReqDelete_Entries[ RtemsUserextReqDelete_Map[ index ] ];
 }
 
 static void RtemsUserextReqDelete_TestVariant(

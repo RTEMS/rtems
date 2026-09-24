@@ -208,47 +208,27 @@ typedef struct {
   } Map;
 } RtemsIntrReqSetAffinity_Context;
 
-static RtemsIntrReqSetAffinity_Context
-  RtemsIntrReqSetAffinity_Instance;
+static RtemsIntrReqSetAffinity_Context RtemsIntrReqSetAffinity_Instance;
 
-static const char * const RtemsIntrReqSetAffinity_PreDesc_Vector[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsIntrReqSetAffinity_PreDesc_Vector[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsIntrReqSetAffinity_PreDesc_CPUSetSize[] = {
-  "Askew",
-  "Normal",
-  "Huge",
-  "NA"
-};
+static const char *const RtemsIntrReqSetAffinity_PreDesc_CPUSetSize[] =
+  { "Askew", "Normal", "Huge", "NA" };
 
-static const char * const RtemsIntrReqSetAffinity_PreDesc_CPUSetOnline[] = {
-  "Valid",
-  "Empty",
-  "NA"
-};
+static const char *const RtemsIntrReqSetAffinity_PreDesc_CPUSetOnline[] =
+  { "Valid", "Empty", "NA" };
 
-static const char * const RtemsIntrReqSetAffinity_PreDesc_CPUSetHuge[] = {
-  "NotZero",
-  "Zero",
-  "NA"
-};
+static const char *const RtemsIntrReqSetAffinity_PreDesc_CPUSetHuge[] =
+  { "NotZero", "Zero", "NA" };
 
-static const char * const RtemsIntrReqSetAffinity_PreDesc_CPUSet[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsIntrReqSetAffinity_PreDesc_CPUSet[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsIntrReqSetAffinity_PreDesc_CanSetAffinity[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsIntrReqSetAffinity_PreDesc_CanSetAffinity[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const RtemsIntrReqSetAffinity_PreDesc[] = {
+static const char *const *const RtemsIntrReqSetAffinity_PreDesc[] = {
   RtemsIntrReqSetAffinity_PreDesc_Vector,
   RtemsIntrReqSetAffinity_PreDesc_CPUSetSize,
   RtemsIntrReqSetAffinity_PreDesc_CPUSetOnline,
@@ -611,9 +591,7 @@ static void RtemsIntrReqSetAffinity_Action(
     ctx->cpuset == &ctx->cpuset_obj[ 0 ] && !CPU_EMPTY( &ctx->cpuset_obj[ 0 ] )
   ) {
     for (
-      ctx->vector = 0;
-      ctx->vector < BSP_INTERRUPT_VECTOR_COUNT;
-      ++ctx->vector
+      ctx->vector = 0; ctx->vector < BSP_INTERRUPT_VECTOR_COUNT; ++ctx->vector
     ) {
       rtems_interrupt_attributes attr;
 
@@ -735,9 +713,8 @@ static inline RtemsIntrReqSetAffinity_Entry RtemsIntrReqSetAffinity_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsIntrReqSetAffinity_Entries[
-    RtemsIntrReqSetAffinity_Map[ index ]
-  ];
+  return RtemsIntrReqSetAffinity_Entries
+    [ RtemsIntrReqSetAffinity_Map[ index ] ];
 }
 
 static void RtemsIntrReqSetAffinity_SetPreConditionStates(
@@ -825,8 +802,10 @@ T_TEST_CASE_FIXTURE(
             ++ctx->Map.pci[ 4 ]
           ) {
             for (
-              ctx->Map.pci[ 5 ] = RtemsIntrReqSetAffinity_Pre_CanSetAffinity_Yes;
-              ctx->Map.pci[ 5 ] < RtemsIntrReqSetAffinity_Pre_CanSetAffinity_NA;
+              ctx->Map.pci[ 5 ] =
+                RtemsIntrReqSetAffinity_Pre_CanSetAffinity_Yes;
+              ctx->Map.pci[ 5 ] <
+              RtemsIntrReqSetAffinity_Pre_CanSetAffinity_NA;
               ++ctx->Map.pci[ 5 ]
             ) {
               ctx->Map.entry = RtemsIntrReqSetAffinity_PopEntry( ctx );

@@ -84,7 +84,7 @@ static uintptr_t interrupted_stack_at_multitasking_start;
 
 static bool interrupted_stack_at_multitasking_start_is_valid;
 
-#if defined(__aarch64__)
+#if defined( __aarch64__ )
 void __real_bsp_interrupt_dispatch( void );
 
 void __wrap_bsp_interrupt_dispatch( void );
@@ -96,12 +96,10 @@ void __wrap_bsp_interrupt_dispatch( void )
     rtems_interrupt_level level;
 
     rtems_interrupt_local_disable( level );
-    __asm__ volatile (
-      "msr spsel, #1\n"
-      "mov %0, sp\n"
-      "msr spsel, #0"
-      : "=r" ( sp )
-    );
+    __asm__ volatile( "msr spsel, #1\n"
+                      "mov %0, sp\n"
+                      "msr spsel, #0"
+                      : "=r"( sp ) );
     rtems_interrupt_local_enable( level );
 
     interrupted_stack_at_multitasking_start = sp;
@@ -111,7 +109,7 @@ void __wrap_bsp_interrupt_dispatch( void )
 }
 #endif
 
-#if defined(ARM_MULTILIB_ARCH_V4)
+#if defined( ARM_MULTILIB_ARCH_V4 )
 void __real_bsp_interrupt_dispatch( void );
 
 void __wrap_bsp_interrupt_dispatch( void );
@@ -128,7 +126,7 @@ void __wrap_bsp_interrupt_dispatch( void )
 }
 #endif
 
-#if defined(__or1k__)
+#if defined( __or1k__ )
 void __real_bsp_interrupt_dispatch(
   uint32_t             vector,
   CPU_Exception_frame *frame
@@ -157,7 +155,7 @@ void __wrap_bsp_interrupt_dispatch(
 }
 #endif
 
-#if defined(__microblaze__)
+#if defined( __microblaze__ )
 void __real_bsp_interrupt_dispatch( uint32_t source );
 
 void __wrap_bsp_interrupt_dispatch( uint32_t source );
@@ -174,7 +172,8 @@ void __wrap_bsp_interrupt_dispatch( uint32_t source )
      */
     cpu_self = _Per_CPU_Get();
     frame = (const uintptr_t *) ( (uintptr_t) cpu_self->interrupt_stack_high -
-      CPU_INTERRUPT_FRAME_SIZE + MICROBLAZE_ISR_STACK_FRAME_SP );
+                                  CPU_INTERRUPT_FRAME_SIZE +
+                                  MICROBLAZE_ISR_STACK_FRAME_SP );
     interrupted_stack_at_multitasking_start = *frame;
   }
 
@@ -182,7 +181,7 @@ void __wrap_bsp_interrupt_dispatch( uint32_t source )
 }
 #endif
 
-#if defined(__PPC__) || defined(__powerpc64__)
+#if defined( __PPC__ ) || defined( __powerpc64__ )
 void __real_bsp_interrupt_dispatch( void );
 
 void __wrap_bsp_interrupt_dispatch( void );
@@ -199,7 +198,7 @@ void __wrap_bsp_interrupt_dispatch( void )
 }
 #endif
 
-#if defined(__riscv)
+#if defined( __riscv )
 void __real__RISCV_Interrupt_dispatch(
   uintptr_t        mcause,
   Per_CPU_Control *cpu_self
@@ -225,7 +224,7 @@ void __wrap__RISCV_Interrupt_dispatch(
 }
 #endif
 
-#if defined(__sparc__)
+#if defined( __sparc__ )
 void __real__SPARC_Interrupt_dispatch( uint32_t irq );
 
 static RTEMS_USED void InterruptDispatch( uint32_t irq, uintptr_t sp )
@@ -237,18 +236,16 @@ static RTEMS_USED void InterruptDispatch( uint32_t irq, uintptr_t sp )
   __real__SPARC_Interrupt_dispatch( irq );
 }
 
-__asm__ (
-  "\t.section\t\".text\"\n"
-  "\t.align\t4\n"
-  "\t.globl\t__wrap__SPARC_Interrupt_dispatch\n"
-  "\t.type\t__wrap__SPARC_Interrupt_dispatch, #function\n"
-  "__wrap__SPARC_Interrupt_dispatch:\n"
-  "\tmov\t%fp, %o1\n"
-  "\tor\t%o7, %g0, %g1\n"
-  "\tcall\tInterruptDispatch, 0\n"
-  "\t or\t%g1, %g0, %o7\n"
-  "\t.previous\n"
-);
+__asm__( "\t.section\t\".text\"\n"
+         "\t.align\t4\n"
+         "\t.globl\t__wrap__SPARC_Interrupt_dispatch\n"
+         "\t.type\t__wrap__SPARC_Interrupt_dispatch, #function\n"
+         "__wrap__SPARC_Interrupt_dispatch:\n"
+         "\tmov\t%fp, %o1\n"
+         "\tor\t%o7, %g0, %g1\n"
+         "\tcall\tInterruptDispatch, 0\n"
+         "\t or\t%g1, %g0, %o7\n"
+         "\t.previous\n" );
 #endif
 
 /*
@@ -257,7 +254,7 @@ __asm__ (
  * the interrupt stack, so the value has to be taken before the compiler
  * establishes a frame of its own.  A register variable cannot do that.
  */
-#if defined(__i386__)
+#if defined( __i386__ )
 void __real_BSP_dispatch_isr( int vector );
 
 static RTEMS_USED void InterruptDispatch( int vector, uintptr_t sp )
@@ -269,22 +266,20 @@ static RTEMS_USED void InterruptDispatch( int vector, uintptr_t sp )
   __real_BSP_dispatch_isr( vector );
 }
 
-__asm__ (
-  "\t.section\t\".text\"\n"
-  "\t.align\t4\n"
-  "\t.globl\t__wrap_BSP_dispatch_isr\n"
-  "\t.type\t__wrap_BSP_dispatch_isr, @function\n"
-  "__wrap_BSP_dispatch_isr:\n"
-  "\tpushl\t%ebp\n"
-  "\tpushl\t8(%esp)\n"
-  "\tcall\tInterruptDispatch\n"
-  "\taddl\t$8, %esp\n"
-  "\tret\n"
-  "\t.previous\n"
-);
+__asm__( "\t.section\t\".text\"\n"
+         "\t.align\t4\n"
+         "\t.globl\t__wrap_BSP_dispatch_isr\n"
+         "\t.type\t__wrap_BSP_dispatch_isr, @function\n"
+         "__wrap_BSP_dispatch_isr:\n"
+         "\tpushl\t%ebp\n"
+         "\tpushl\t8(%esp)\n"
+         "\tcall\tInterruptDispatch\n"
+         "\taddl\t$8, %esp\n"
+         "\tret\n"
+         "\t.previous\n" );
 #endif
 
-#if defined(__x86_64__)
+#if defined( __x86_64__ )
 void __real_amd64_dispatch_isr( rtems_vector_number vector );
 
 static RTEMS_USED void InterruptDispatch(
@@ -299,19 +294,17 @@ static RTEMS_USED void InterruptDispatch(
   __real_amd64_dispatch_isr( vector );
 }
 
-__asm__ (
-  "\t.section\t\".text\"\n"
-  "\t.align\t8\n"
-  "\t.globl\t__wrap_amd64_dispatch_isr\n"
-  "\t.type\t__wrap_amd64_dispatch_isr, @function\n"
-  "__wrap_amd64_dispatch_isr:\n"
-  "\tmovq\t%rbp, %rsi\n"
-  "\tjmp\tInterruptDispatch\n"
-  "\t.previous\n"
-);
+__asm__( "\t.section\t\".text\"\n"
+         "\t.align\t8\n"
+         "\t.globl\t__wrap_amd64_dispatch_isr\n"
+         "\t.type\t__wrap_amd64_dispatch_isr, @function\n"
+         "__wrap_amd64_dispatch_isr:\n"
+         "\tmovq\t%rbp, %rsi\n"
+         "\tjmp\tInterruptDispatch\n"
+         "\t.previous\n" );
 #endif
 
-#if defined(__mips__)
+#if defined( __mips__ )
 void __real_mips_vector_isr_handlers( CPU_Interrupt_frame *frame );
 
 void __wrap_mips_vector_isr_handlers( CPU_Interrupt_frame *frame );
@@ -339,7 +332,7 @@ static void ISRHandler( void *arg )
 
   (void) arg;
 
-#if defined(RTEMS_SMP) && !(defined(__PPC__) || (__powerpc64__))
+#if defined( RTEMS_SMP ) && !( defined( __PPC__ ) || ( __powerpc64__ ) )
   Per_CPU_Control *cpu_self;
 
   cpu_self = _Per_CPU_Get();
@@ -358,9 +351,7 @@ static void ISRHandler( void *arg )
       interrupted_stack_at_multitasking_start < end );
 }
 
-static CallWithinISRRequest isr_request = {
-  .handler = ISRHandler
-};
+static CallWithinISRRequest isr_request = { .handler = ISRHandler };
 
 static void SubmitISRRequest( void )
 {

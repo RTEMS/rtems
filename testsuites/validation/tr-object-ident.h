@@ -113,8 +113,8 @@ typedef enum {
  * @param action is the action handler.
  */
 void RtemsReqIdent_Run(
-  rtems_id             id_local_object,
-  rtems_name           name_local_object,
+  rtems_id   id_local_object,
+  rtems_name name_local_object,
   rtems_status_code ( *action )( rtems_name, uint32_t, rtems_id * )
 );
 

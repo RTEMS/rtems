@@ -118,17 +118,12 @@ typedef struct {
   } Map;
 } ScoreTqReqTimeout_Context;
 
-static ScoreTqReqTimeout_Context
-  ScoreTqReqTimeout_Instance;
+static ScoreTqReqTimeout_Context ScoreTqReqTimeout_Instance;
 
-static const char * const ScoreTqReqTimeout_PreDesc_WaitState[] = {
-  "Blocked",
-  "IntendToBlock",
-  "ReadyAgain",
-  "NA"
-};
+static const char *const ScoreTqReqTimeout_PreDesc_WaitState[] =
+  { "Blocked", "IntendToBlock", "ReadyAgain", "NA" };
 
-static const char * const * const ScoreTqReqTimeout_PreDesc[] = {
+static const char *const *const ScoreTqReqTimeout_PreDesc[] = {
   ScoreTqReqTimeout_PreDesc_WaitState,
   NULL
 };
@@ -165,10 +160,7 @@ static void SchedulerBlock(
 
   ctx = arg;
 
-  if (
-    when == T_SCHEDULER_BEFORE &&
-    event->operation == T_SCHEDULER_BLOCK
-  ) {
+  if ( when == T_SCHEDULER_BEFORE && event->operation == T_SCHEDULER_BLOCK ) {
     T_scheduler_set_event_handler( NULL, NULL );
     ctx->request.handler = Tick;
     CallWithinISRSubmit( &ctx->request );
@@ -181,9 +173,7 @@ static void ThreadTimeout( void *arg )
 
   ctx = arg;
   TQSchedulerRecordStart( ctx->tq_ctx );
-  _Thread_Timeout(
-    &ctx->tq_ctx->worker_tcb[ TQ_BLOCKER_A ]->Timer.Watchdog
-  );
+  _Thread_Timeout( &ctx->tq_ctx->worker_tcb[ TQ_BLOCKER_A ]->Timer.Watchdog );
   TQSchedulerRecordStop( ctx->tq_ctx );
 }
 
@@ -198,8 +188,7 @@ static void SchedulerUnblock(
   ctx = arg;
 
   if (
-    when == T_SCHEDULER_BEFORE &&
-    event->operation == T_SCHEDULER_UNBLOCK
+    when == T_SCHEDULER_BEFORE && event->operation == T_SCHEDULER_UNBLOCK
   ) {
     T_scheduler_set_event_handler( NULL, NULL );
     ctx->request.handler = ThreadTimeout;
@@ -416,9 +405,7 @@ static inline ScoreTqReqTimeout_Entry ScoreTqReqTimeout_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return ScoreTqReqTimeout_Entries[
-    ScoreTqReqTimeout_Map[ index ]
-  ];
+  return ScoreTqReqTimeout_Entries[ ScoreTqReqTimeout_Map[ index ] ];
 }
 
 static void ScoreTqReqTimeout_TestVariant( ScoreTqReqTimeout_Context *ctx )

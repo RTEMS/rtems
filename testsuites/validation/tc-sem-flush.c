@@ -165,10 +165,9 @@ typedef struct {
   } Map;
 } RtemsSemReqFlush_Context;
 
-static RtemsSemReqFlush_Context
-  RtemsSemReqFlush_Instance;
+static RtemsSemReqFlush_Context RtemsSemReqFlush_Instance;
 
-static const char * const RtemsSemReqFlush_PreDesc_Class[] = {
+static const char *const RtemsSemReqFlush_PreDesc_Class[] = {
   "Counting",
   "Simple",
   "Binary",
@@ -178,19 +177,13 @@ static const char * const RtemsSemReqFlush_PreDesc_Class[] = {
   "NA"
 };
 
-static const char * const RtemsSemReqFlush_PreDesc_Discipline[] = {
-  "FIFO",
-  "Priority",
-  "NA"
-};
+static const char *const RtemsSemReqFlush_PreDesc_Discipline[] =
+  { "FIFO", "Priority", "NA" };
 
-static const char * const RtemsSemReqFlush_PreDesc_Id[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsSemReqFlush_PreDesc_Id[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const * const RtemsSemReqFlush_PreDesc[] = {
+static const char *const *const RtemsSemReqFlush_PreDesc[] = {
   RtemsSemReqFlush_PreDesc_Class,
   RtemsSemReqFlush_PreDesc_Discipline,
   RtemsSemReqFlush_PreDesc_Id,
@@ -306,7 +299,7 @@ static void RtemsSemReqFlush_Pre_Class_Prepare(
        * While the semaphore object is a MrsP semaphore.
        */
       ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE |
-        RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
+                            RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
       ctx->initial_count = 1;
       ctx->tq_ctx.enqueue_prepare = EnqueuePrepare;
       ctx->tq_ctx.enqueue_done = TQEnqueueDoneDefault;
@@ -553,9 +546,7 @@ static inline RtemsSemReqFlush_Entry RtemsSemReqFlush_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsSemReqFlush_Entries[
-    RtemsSemReqFlush_Map[ index ]
-  ];
+  return RtemsSemReqFlush_Entries[ RtemsSemReqFlush_Map[ index ] ];
 }
 
 static void RtemsSemReqFlush_SetPreConditionStates(

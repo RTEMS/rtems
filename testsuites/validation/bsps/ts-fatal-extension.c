@@ -79,9 +79,7 @@ const char rtems_test_name[] = "TestsuitesBspsFatalExtension";
 
 static char buffer[ 512 ];
 
-static const T_action actions[] = {
-  T_report_hash_sha256
-};
+static const T_action actions[] = { T_report_hash_sha256 };
 
 static const T_config test_config = {
   .name = rtems_test_name,
@@ -111,13 +109,13 @@ void __wrap_bsp_reset( rtems_fatal_source source, rtems_fatal_code code )
     rtems_test_end( rtems_test_name );
   }
 
-#if defined(RTEMS_GCOV_COVERAGE)
+#if defined( RTEMS_GCOV_COVERAGE )
   rtems_test_gcov_dump_info();
 #endif
   __real_bsp_reset( source, code );
 }
 
-#if !defined(RTEMS_SMP)
+#if !defined( RTEMS_SMP )
 void *__real__CPU_Thread_Idle_body( void *arg );
 
 void *__wrap__CPU_Thread_Idle_body( void *arg );
@@ -130,7 +128,7 @@ void *__wrap__CPU_Thread_Idle_body( void *arg )
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 #define CONFIGURE_MAXIMUM_PROCESSORS 2
 
 #include <rtems/score/scheduleredfsmp.h>
@@ -144,9 +142,9 @@ RTEMS_SCHEDULER_EDF_SMP( a );
 #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
   RTEMS_SCHEDULER_TABLE_EDF_SMP( a, TEST_SCHEDULER_A_NAME )
 
-#define CONFIGURE_SCHEDULER_ASSIGNMENTS \
+#define CONFIGURE_SCHEDULER_ASSIGNMENTS                                    \
   RTEMS_SCHEDULER_ASSIGN( 0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY ), \
-  RTEMS_SCHEDULER_ASSIGN( 0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY )
+    RTEMS_SCHEDULER_ASSIGN( 0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY )
 #endif /* RTEMS_SMP */
 
 #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 0
@@ -163,7 +161,7 @@ RTEMS_SCHEDULER_EDF_SMP( a );
 
 static void *ShutdownIdleBody( uintptr_t arg )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   if ( rtems_scheduler_get_processor() == 0 ) {
     rtems_test_begin( rtems_test_name, TEST_STATE );
     rtems_fatal( RTEMS_FATAL_SOURCE_SMP, SMP_FATAL_SHUTDOWN );

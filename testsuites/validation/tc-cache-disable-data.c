@@ -99,13 +99,13 @@ static void RtemsCacheValCacheDisableData_Action_1( void )
 {
   rtems_interrupt_level level;
 
-  rtems_interrupt_local_disable(level);
+  rtems_interrupt_local_disable( level );
   T_step( 3 );
   rtems_cache_disable_data();
   T_step( 4 );
   rtems_cache_enable_data();
   T_step( 5 );
-  rtems_interrupt_local_enable(level);
+  rtems_interrupt_local_enable( level );
 }
 
 /**
@@ -116,7 +116,7 @@ static void RtemsCacheValCacheDisableData_Action_2( void )
 {
   rtems_interrupt_level level;
 
-  rtems_interrupt_local_disable(level);
+  rtems_interrupt_local_disable( level );
   T_step( 6 );
   rtems_cache_disable_data();
   T_step( 7 );
@@ -124,7 +124,7 @@ static void RtemsCacheValCacheDisableData_Action_2( void )
   T_step( 8 );
   rtems_cache_enable_data();
   T_step( 9 );
-  rtems_interrupt_local_enable(level);
+  rtems_interrupt_local_enable( level );
 }
 
 /**

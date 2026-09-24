@@ -163,29 +163,18 @@ typedef struct {
   } Map;
 } RtemsBarrierReqRelease_Context;
 
-static RtemsBarrierReqRelease_Context
-  RtemsBarrierReqRelease_Instance;
+static RtemsBarrierReqRelease_Context RtemsBarrierReqRelease_Instance;
 
-static const char * const RtemsBarrierReqRelease_PreDesc_Id[] = {
-  "NoObj",
-  "Manual",
-  "Auto",
-  "NA"
-};
+static const char *const RtemsBarrierReqRelease_PreDesc_Id[] =
+  { "NoObj", "Manual", "Auto", "NA" };
 
-static const char * const RtemsBarrierReqRelease_PreDesc_Released[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsBarrierReqRelease_PreDesc_Released[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsBarrierReqRelease_PreDesc_Waiting[] = {
-  "Zero",
-  "Positive",
-  "NA"
-};
+static const char *const RtemsBarrierReqRelease_PreDesc_Waiting[] =
+  { "Zero", "Positive", "NA" };
 
-static const char * const * const RtemsBarrierReqRelease_PreDesc[] = {
+static const char *const *const RtemsBarrierReqRelease_PreDesc[] = {
   RtemsBarrierReqRelease_PreDesc_Id,
   RtemsBarrierReqRelease_PreDesc_Released,
   RtemsBarrierReqRelease_PreDesc_Waiting,
@@ -504,9 +493,7 @@ static inline RtemsBarrierReqRelease_Entry RtemsBarrierReqRelease_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsBarrierReqRelease_Entries[
-    RtemsBarrierReqRelease_Map[ index ]
-  ];
+  return RtemsBarrierReqRelease_Entries[ RtemsBarrierReqRelease_Map[ index ] ];
 }
 
 static void RtemsBarrierReqRelease_SetPreConditionStates(

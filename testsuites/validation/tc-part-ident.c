@@ -88,7 +88,7 @@ static rtems_status_code ClassicPartIdentAction(
  */
 static void RtemsPartValIdent_Action_0( void )
 {
-  static RTEMS_ALIGNED( RTEMS_PARTITION_ALIGNMENT ) long area[32];
+  static RTEMS_ALIGNED( RTEMS_PARTITION_ALIGNMENT ) long area[ 32 ];
   rtems_status_code                                      sc;
   rtems_id                                               id_local_object;
 

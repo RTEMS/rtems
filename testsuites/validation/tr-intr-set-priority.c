@@ -152,28 +152,18 @@ typedef struct {
   } Map;
 } RtemsIntrReqSetPriority_Context;
 
-static RtemsIntrReqSetPriority_Context
-  RtemsIntrReqSetPriority_Instance;
+static RtemsIntrReqSetPriority_Context RtemsIntrReqSetPriority_Instance;
 
-static const char * const RtemsIntrReqSetPriority_PreDesc_Vector[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsIntrReqSetPriority_PreDesc_Vector[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsIntrReqSetPriority_PreDesc_Priority[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsIntrReqSetPriority_PreDesc_Priority[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsIntrReqSetPriority_PreDesc_CanSetPriority[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsIntrReqSetPriority_PreDesc_CanSetPriority[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const RtemsIntrReqSetPriority_PreDesc[] = {
+static const char *const *const RtemsIntrReqSetPriority_PreDesc[] = {
   RtemsIntrReqSetPriority_PreDesc_Vector,
   RtemsIntrReqSetPriority_PreDesc_Priority,
   RtemsIntrReqSetPriority_PreDesc_CanSetPriority,
@@ -324,10 +314,8 @@ static void RtemsIntrReqSetPriority_Prepare(
 )
 {
   ctx->current_priority = 0;
-  (void) rtems_interrupt_get_priority(
-    ctx->valid_vector,
-    &ctx->current_priority
-  );
+  (void)
+    rtems_interrupt_get_priority( ctx->valid_vector, &ctx->current_priority );
 }
 
 static void RtemsIntrReqSetPriority_Action(
@@ -341,7 +329,8 @@ static void RtemsIntrReqSetPriority_Cleanup(
   RtemsIntrReqSetPriority_Context *ctx
 )
 {
-  (void) rtems_interrupt_set_priority( ctx->valid_vector, ctx->current_priority );
+  (void)
+    rtems_interrupt_set_priority( ctx->valid_vector, ctx->current_priority );
 }
 
 /* clang-format off */
@@ -387,9 +376,7 @@ static T_fixture RtemsIntrReqSetPriority_Fixture = {
   .initial_context = &RtemsIntrReqSetPriority_Instance
 };
 
-static const uint8_t RtemsIntrReqSetPriority_Weights[] = {
-  4, 2, 1
-};
+static const uint8_t RtemsIntrReqSetPriority_Weights[] = { 4, 2, 1 };
 
 static void RtemsIntrReqSetPriority_Skip(
   RtemsIntrReqSetPriority_Context *ctx,
@@ -427,9 +414,8 @@ static inline RtemsIntrReqSetPriority_Entry RtemsIntrReqSetPriority_PopEntry(
 
   ctx->Map.index = index + 1;
 
-  return RtemsIntrReqSetPriority_Entries[
-    RtemsIntrReqSetPriority_Map[ index ]
-  ];
+  return RtemsIntrReqSetPriority_Entries
+    [ RtemsIntrReqSetPriority_Map[ index ] ];
 }
 
 static void RtemsIntrReqSetPriority_SetPreConditionStates(

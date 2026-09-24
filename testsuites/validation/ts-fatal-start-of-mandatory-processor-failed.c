@@ -69,7 +69,8 @@
  * @{
  */
 
-const char rtems_test_name[] = "TestsuitesFatalStartOfMandatoryProcessorFailed";
+const char
+  rtems_test_name[] = "TestsuitesFatalStartOfMandatoryProcessorFailed";
 
 #define FATAL_SYSINIT_RUN ScoreSmpValFatalStartOfMandatoryProcessorFailed_Run
 
@@ -88,9 +89,9 @@ RTEMS_SCHEDULER_EDF_SMP( a );
 #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
   RTEMS_SCHEDULER_TABLE_EDF_SMP( a, TEST_SCHEDULER_A_NAME )
 
-#define CONFIGURE_SCHEDULER_ASSIGNMENTS \
+#define CONFIGURE_SCHEDULER_ASSIGNMENTS                                    \
   RTEMS_SCHEDULER_ASSIGN( 0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY ), \
-  RTEMS_SCHEDULER_ASSIGN( 0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY )
+    RTEMS_SCHEDULER_ASSIGN( 0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY )
 
 #include "ts-fatal-sysinit.h"
 

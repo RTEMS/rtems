@@ -94,8 +94,7 @@ typedef struct {
   volatile uint32_t counter;
 } ScoreThreadValSmpOneCpu_Context;
 
-static ScoreThreadValSmpOneCpu_Context
-  ScoreThreadValSmpOneCpu_Instance;
+static ScoreThreadValSmpOneCpu_Context ScoreThreadValSmpOneCpu_Instance;
 
 #define EVENT_COUNT RTEMS_EVENT_0
 

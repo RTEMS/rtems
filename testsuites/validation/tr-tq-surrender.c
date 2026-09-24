@@ -138,28 +138,18 @@ typedef struct {
   } Map;
 } ScoreTqReqSurrender_Context;
 
-static ScoreTqReqSurrender_Context
-  ScoreTqReqSurrender_Instance;
+static ScoreTqReqSurrender_Context ScoreTqReqSurrender_Instance;
 
-static const char * const ScoreTqReqSurrender_PreDesc_HasOwner[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const ScoreTqReqSurrender_PreDesc_HasOwner[] =
+  { "Yes", "No", "NA" };
 
-static const char * const ScoreTqReqSurrender_PreDesc_Discipline[] = {
-  "FIFO",
-  "Priority",
-  "NA"
-};
+static const char *const ScoreTqReqSurrender_PreDesc_Discipline[] =
+  { "FIFO", "Priority", "NA" };
 
-static const char * const ScoreTqReqSurrender_PreDesc_WaitState[] = {
-  "Blocked",
-  "IntendToBlock",
-  "NA"
-};
+static const char *const ScoreTqReqSurrender_PreDesc_WaitState[] =
+  { "Blocked", "IntendToBlock", "NA" };
 
-static const char * const * const ScoreTqReqSurrender_PreDesc[] = {
+static const char *const *const ScoreTqReqSurrender_PreDesc[] = {
   ScoreTqReqSurrender_PreDesc_HasOwner,
   ScoreTqReqSurrender_PreDesc_Discipline,
   ScoreTqReqSurrender_PreDesc_WaitState,
@@ -192,7 +182,7 @@ static void Surrender( void *arg )
   TQSchedulerRecordStop( ctx->tq_ctx );
 }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 static void Delay( void *arg )
 {
   Context          *ctx;
@@ -219,12 +209,9 @@ static void SchedulerBlock(
 
   ctx = arg;
 
-  if (
-    when == T_SCHEDULER_BEFORE &&
-    event->operation == T_SCHEDULER_BLOCK
-  ) {
+  if ( when == T_SCHEDULER_BEFORE && event->operation == T_SCHEDULER_BLOCK ) {
     T_scheduler_set_event_handler( NULL, NULL );
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
     ctx->request.handler = Delay;
 #else
     ctx->request.handler = Surrender;
@@ -395,7 +382,7 @@ static void ScoreTqReqSurrender_Setup( ScoreTqReqSurrender_Context *ctx )
   TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_A, PRIO_VERY_HIGH );
   TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_B, PRIO_HIGH );
 
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   /*
    * For the mutexes with priority ceiling protocol, we need a scheduler with
    * two processors to set up the intend to block wait state.
@@ -418,7 +405,7 @@ static void ScoreTqReqSurrender_Teardown( ScoreTqReqSurrender_Context *ctx )
 {
   TQReset( ctx->tq_ctx );
 
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   RemoveProcessor( SCHEDULER_A_ID, 1 );
   AddProcessor( SCHEDULER_B_ID, 1 );
   #endif
@@ -444,7 +431,7 @@ static void ScoreTqReqSurrender_Action( ScoreTqReqSurrender_Context *ctx )
   T_eq_int( status, TQConvertStatus( ctx->tq_ctx, STATUS_SUCCESSFUL ) );
 
   if ( ctx->intend_to_block ) {
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
     SMP_barrier_State state;
   #endif
 
@@ -462,8 +449,7 @@ static void ScoreTqReqSurrender_Action( ScoreTqReqSurrender_Context *ctx )
       ctx->expected_blocker_b_counter = 2;
     }
 
-
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
     _SMP_barrier_Control_initialize( &ctx->barrier );
     _SMP_barrier_State_initialize( &state );
   #endif
@@ -471,7 +457,7 @@ static void ScoreTqReqSurrender_Action( ScoreTqReqSurrender_Context *ctx )
     T_scheduler_set_event_handler( SchedulerBlock, ctx );
     TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
 
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
     /* B0 */
     _SMP_barrier_Wait( &ctx->barrier, &state, 2 );
 
@@ -572,9 +558,7 @@ static T_fixture ScoreTqReqSurrender_Fixture = {
   .initial_context = &ScoreTqReqSurrender_Instance
 };
 
-static const uint8_t ScoreTqReqSurrender_Weights[] = {
-  4, 2, 1
-};
+static const uint8_t ScoreTqReqSurrender_Weights[] = { 4, 2, 1 };
 
 static void ScoreTqReqSurrender_Skip(
   ScoreTqReqSurrender_Context *ctx,
@@ -612,9 +596,7 @@ static inline ScoreTqReqSurrender_Entry ScoreTqReqSurrender_PopEntry(
 
   ctx->Map.index = index + 1;
 
-  return ScoreTqReqSurrender_Entries[
-    ScoreTqReqSurrender_Map[ index ]
-  ];
+  return ScoreTqReqSurrender_Entries[ ScoreTqReqSurrender_Map[ index ] ];
 }
 
 static void ScoreTqReqSurrender_TestVariant( ScoreTqReqSurrender_Context *ctx )

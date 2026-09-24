@@ -179,11 +179,9 @@ static uint32_t GetTimecount( struct timecounter *base )
 
   tc = (Timecounter *) base;
 
-  return (uint32_t) _Atomic_Fetch_add_ulong(
-    &tc->counter,
-    1,
-    ATOMIC_ORDER_RELAXED
-  );
+  return (
+    uint32_t
+  ) _Atomic_Fetch_add_ulong( &tc->counter, 1, ATOMIC_ORDER_RELAXED );
 }
 
 static uint32_t GetTimecountBarrier( struct timecounter *base )
@@ -203,19 +201,12 @@ static uint32_t GetTimecountBarrier( struct timecounter *base )
 
 static uint32_t GetCounter( const Timecounter *tc )
 {
-  return (uint32_t) _Atomic_Load_ulong(
-    &tc->counter,
-    ATOMIC_ORDER_RELAXED
-  );
+  return (uint32_t) _Atomic_Load_ulong( &tc->counter, ATOMIC_ORDER_RELAXED );
 }
 
 static void SetCounter( Timecounter *tc, uint32_t counter )
 {
-  _Atomic_Store_ulong(
-    &tc->counter,
-    counter,
-    ATOMIC_ORDER_RELAXED
-  );
+  _Atomic_Store_ulong( &tc->counter, counter, ATOMIC_ORDER_RELAXED );
 }
 
 static void CallTimecounterTick( void )
@@ -414,13 +405,13 @@ static void NtpUpdateSecond( int64_t *adjustment, time_t *newsec )
  */
 static void ScoreTimecounterValGetSmp_Action_0( void )
 {
-  Timecounter     *tc;
-  rtems_id         worker_id;
-  struct bintime   bt;
-  sbintime_t       sbt;
-  struct timespec  ts;
-  struct timeval   tv;
-  unsigned int     i;
+  Timecounter    *tc;
+  rtems_id        worker_id;
+  struct bintime  bt;
+  sbintime_t      sbt;
+  struct timespec ts;
+  struct timeval  tv;
+  unsigned int    i;
 
   tc = &test_timecounter;
   tc->base.tc_get_timecount = GetTimecount;

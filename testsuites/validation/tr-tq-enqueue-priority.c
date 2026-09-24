@@ -139,32 +139,19 @@ typedef struct {
   } Map;
 } ScoreTqReqEnqueuePriority_Context;
 
-static ScoreTqReqEnqueuePriority_Context
-  ScoreTqReqEnqueuePriority_Instance;
+static ScoreTqReqEnqueuePriority_Context ScoreTqReqEnqueuePriority_Instance;
 
-static const char * const ScoreTqReqEnqueuePriority_PreDesc_EligibleScheduler[] = {
-  "Home",
-  "Helping",
-  "NA"
-};
+static const char *const
+  ScoreTqReqEnqueuePriority_PreDesc_EligibleScheduler[] =
+    { "Home", "Helping", "NA" };
 
-static const char * const ScoreTqReqEnqueuePriority_PreDesc_QueueEligible[] = {
-  "None",
-  "High",
-  "Equal",
-  "Low",
-  "NA"
-};
+static const char *const ScoreTqReqEnqueuePriority_PreDesc_QueueEligible[] =
+  { "None", "High", "Equal", "Low", "NA" };
 
-static const char * const ScoreTqReqEnqueuePriority_PreDesc_QueueIneligible[] = {
-  "None",
-  "Only",
-  "Before",
-  "After",
-  "NA"
-};
+static const char *const ScoreTqReqEnqueuePriority_PreDesc_QueueIneligible[] =
+  { "None", "Only", "Before", "After", "NA" };
 
-static const char * const * const ScoreTqReqEnqueuePriority_PreDesc[] = {
+static const char *const *const ScoreTqReqEnqueuePriority_PreDesc[] = {
   ScoreTqReqEnqueuePriority_PreDesc_EligibleScheduler,
   ScoreTqReqEnqueuePriority_PreDesc_QueueEligible,
   ScoreTqReqEnqueuePriority_PreDesc_QueueIneligible,
@@ -533,12 +520,8 @@ static void ScoreTqReqEnqueuePriority_Action(
   }
 
   if ( ctx->priority != PRIO_PSEUDO_ISR ) {
-    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_B , ctx->priority );
-    TQSend(
-      ctx->tq_ctx,
-      TQ_BLOCKER_B,
-      TQ_EVENT_ENQUEUE | TQ_EVENT_SURRENDER
-    );
+    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_B, ctx->priority );
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_ENQUEUE | TQ_EVENT_SURRENDER );
   }
 
   if ( ctx->other_after ) {
@@ -677,9 +660,8 @@ ScoreTqReqEnqueuePriority_PopEntry( ScoreTqReqEnqueuePriority_Context *ctx )
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return ScoreTqReqEnqueuePriority_Entries[
-    ScoreTqReqEnqueuePriority_Map[ index ]
-  ];
+  return ScoreTqReqEnqueuePriority_Entries
+    [ ScoreTqReqEnqueuePriority_Map[ index ] ];
 }
 
 static void ScoreTqReqEnqueuePriority_TestVariant(

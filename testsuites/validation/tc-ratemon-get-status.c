@@ -212,7 +212,7 @@ typedef struct {
    * @brief If the rtems_cpu_usage_reset() directive should be called before
    *   rtems_rate_monotonic_get_status(), this member contains a pointer to it.
    */
-  void (*do_reset)( void );
+  void ( *do_reset )( void );
 
   /**
    * @brief This member contains the CLOCK_MONOTONIC time elapsed.
@@ -264,46 +264,31 @@ typedef struct {
   } Map;
 } RtemsRatemonReqGetStatus_Context;
 
-static RtemsRatemonReqGetStatus_Context
-  RtemsRatemonReqGetStatus_Instance;
+static RtemsRatemonReqGetStatus_Context RtemsRatemonReqGetStatus_Instance;
 
-static const char * const RtemsRatemonReqGetStatus_PreDesc_StatusAddr[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsRatemonReqGetStatus_PreDesc_StatusAddr[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsRatemonReqGetStatus_PreDesc_Id[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsRatemonReqGetStatus_PreDesc_Id[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsRatemonReqGetStatus_PreDesc_State[] = {
-  "Inactive",
-  "Active",
-  "Expired",
-  "NA"
-};
+static const char *const RtemsRatemonReqGetStatus_PreDesc_State[] =
+  { "Inactive", "Active", "Expired", "NA" };
 
-static const char * const RtemsRatemonReqGetStatus_PreDesc_Elapsed[] = {
+static const char *const RtemsRatemonReqGetStatus_PreDesc_Elapsed[] = {
   "Time",
   "NA"
 };
 
-static const char * const RtemsRatemonReqGetStatus_PreDesc_Consumed[] = {
+static const char *const RtemsRatemonReqGetStatus_PreDesc_Consumed[] = {
   "CpuTime",
   "NA"
 };
 
-static const char * const RtemsRatemonReqGetStatus_PreDesc_Postponed[] = {
-  "Zero",
-  "One",
-  "Several",
-  "NA"
-};
+static const char *const RtemsRatemonReqGetStatus_PreDesc_Postponed[] =
+  { "Zero", "One", "Several", "NA" };
 
-static const char * const * const RtemsRatemonReqGetStatus_PreDesc[] = {
+static const char *const *const RtemsRatemonReqGetStatus_PreDesc[] = {
   RtemsRatemonReqGetStatus_PreDesc_StatusAddr,
   RtemsRatemonReqGetStatus_PreDesc_Id,
   RtemsRatemonReqGetStatus_PreDesc_State,
@@ -314,12 +299,12 @@ static const char * const * const RtemsRatemonReqGetStatus_PreDesc[] = {
 };
 
 static const rtems_id initial_owner = 0xFFFFFFFF;
-static const rtems_rate_monotonic_period_states initial_state =
-  (rtems_rate_monotonic_period_states) 0xFFFFFFFF;
+static const rtems_rate_monotonic_period_states
+  initial_state = (rtems_rate_monotonic_period_states) 0xFFFFFFFF;
 static const struct timespec initial_period = { 0xFFFFFFFF, 0xFFFFFFFF };
-static const uint32_t initial_postponed_jobs_count = 0xFFFFFFFF;
-static const rtems_interval period_length = 5;
-static const uint32_t elapsed_cpu_ticks = 3;
+static const uint32_t        initial_postponed_jobs_count = 0xFFFFFFFF;
+static const rtems_interval  period_length = 5;
+static const uint32_t        elapsed_cpu_ticks = 3;
 
 static uint32_t FreezeTime( void )
 {
@@ -328,20 +313,20 @@ static uint32_t FreezeTime( void )
 
 static void TickTheClock(
   RtemsRatemonReqGetStatus_Context *ctx,
-  uint32_t ticks
+  uint32_t                          ticks
 )
 {
   uint32_t i;
   for ( i = 0; i < ticks; ++i ) {
     TimecounterTick();
   }
-  ctx->elapsed.tv_nsec +=
-    rtems_configuration_get_nanoseconds_per_tick() * ticks;
+  ctx->elapsed.tv_nsec += rtems_configuration_get_nanoseconds_per_tick() *
+                          ticks;
 }
 
 static void CreatePostponedJobs(
   RtemsRatemonReqGetStatus_Context *ctx,
-  uint32_t jobs_count
+  uint32_t                          jobs_count
 )
 {
   rtems_status_code status;
@@ -355,9 +340,8 @@ static void CreatePostponedJobs(
     /* ctx->previous_state == RATE_MONOTONIC_INACTIVE || _EXPIRED */
     TickTheClock( ctx, jobs_count * period_length );
   }
-  ctx->consumed.tv_nsec +=
-    rtems_configuration_get_nanoseconds_per_tick() *
-    jobs_count * period_length;
+  ctx->consumed.tv_nsec += rtems_configuration_get_nanoseconds_per_tick() *
+                           jobs_count * period_length;
 }
 
 static void RtemsRatemonReqGetStatus_Pre_StatusAddr_Prepare(
@@ -489,8 +473,8 @@ static void RtemsRatemonReqGetStatus_Pre_Consumed_Prepare(
        * While the owner task has consumed a certain amount of CPU time.
        */
       TickTheClock( ctx, elapsed_cpu_ticks );
-      ctx->consumed.tv_nsec +=
-        rtems_configuration_get_nanoseconds_per_tick() * elapsed_cpu_ticks;
+      ctx->consumed.tv_nsec += rtems_configuration_get_nanoseconds_per_tick() *
+                               elapsed_cpu_ticks;
       break;
     }
 
@@ -669,7 +653,9 @@ static void RtemsRatemonReqGetStatus_Post_Elapsed_Check(
        * The value of the member since_last_period of the object referenced by
        * the ``status`` parameter shall be set to the time elapsed.
        */
-      T_log( T_VERBOSE, "Elapsed: %lld.%ld (expected: %lld.%ld)",
+      T_log(
+        T_VERBOSE,
+        "Elapsed: %lld.%ld (expected: %lld.%ld)",
         ctx->period_status.since_last_period.tv_sec,
         ctx->period_status.since_last_period.tv_nsec,
         ctx->elapsed.tv_sec,
@@ -696,7 +682,7 @@ static void RtemsRatemonReqGetStatus_Post_Elapsed_Check(
        * The value of the member since_last_period of the object referenced by
        * the ``status`` parameter shall be set to 0.
        */
-      T_eq_u64( ctx->period_status.since_last_period.tv_sec,   0 );
+      T_eq_u64( ctx->period_status.since_last_period.tv_sec, 0 );
       T_eq_long( ctx->period_status.since_last_period.tv_nsec, 0 );
       break;
     }
@@ -735,7 +721,9 @@ static void RtemsRatemonReqGetStatus_Post_Consumed_Check(
        * referenced by the ``status`` parameter shall be set to the CPU time
        * consumed by the owner task.
        */
-      T_log( T_VERBOSE, "CPU elapsed: %lld.%ld (expected: %lld.%ld)",
+      T_log(
+        T_VERBOSE,
+        "CPU elapsed: %lld.%ld (expected: %lld.%ld)",
         ctx->period_status.executed_since_last_period.tv_sec,
         ctx->period_status.executed_since_last_period.tv_nsec,
         ctx->consumed.tv_sec,
@@ -762,7 +750,7 @@ static void RtemsRatemonReqGetStatus_Post_Consumed_Check(
        * The value of the member since_last_period of the object referenced by
        * the ``status`` parameter shall be set to 0.
        */
-      T_eq_u64( ctx->period_status.executed_since_last_period.tv_sec,   0 );
+      T_eq_u64( ctx->period_status.executed_since_last_period.tv_sec, 0 );
       T_eq_long( ctx->period_status.executed_since_last_period.tv_nsec, 0 );
       break;
     }
@@ -835,8 +823,10 @@ static void RtemsRatemonReqGetStatus_Post_Postponed_Check(
        * rtems_rate_monotonic_get_status() shall not be accessed by the
        * rtems_rate_monotonic_get_status() call (see also Nop).
        */
-      T_eq_u32( ctx->period_status.postponed_jobs_count,
-        initial_postponed_jobs_count );
+      T_eq_u32(
+        ctx->period_status.postponed_jobs_count,
+        initial_postponed_jobs_count
+      );
       break;
     }
 
@@ -883,7 +873,7 @@ static void RtemsRatemonReqGetStatus_Prepare(
 )
 {
   rtems_status_code status;
-  status =  rtems_rate_monotonic_create(
+  status = rtems_rate_monotonic_create(
     rtems_build_name( 'R', 'M', 'O', 'N' ),
     &ctx->period_id
   );
@@ -897,9 +887,9 @@ static void RtemsRatemonReqGetStatus_Prepare(
     .postponed_jobs_count = initial_postponed_jobs_count
   };
 
-  ctx->elapsed.tv_sec  = 0;
+  ctx->elapsed.tv_sec = 0;
   ctx->elapsed.tv_nsec = 0;
-  ctx->consumed.tv_sec  = 0;
+  ctx->consumed.tv_sec = 0;
   ctx->consumed.tv_nsec = 0;
   ctx->postponed_jobs_count = 0;
   TimecounterTick();
@@ -910,7 +900,7 @@ static void RtemsRatemonReqGetStatus_Action(
 )
 {
   if ( ctx->do_reset != NULL ) {
-      ctx->do_reset();
+    ctx->do_reset();
   }
   ctx->status = rtems_rate_monotonic_get_status(
     ctx->id_param,
@@ -1045,9 +1035,8 @@ static inline RtemsRatemonReqGetStatus_Entry RtemsRatemonReqGetStatus_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsRatemonReqGetStatus_Entries[
-    RtemsRatemonReqGetStatus_Map[ index ]
-  ];
+  return RtemsRatemonReqGetStatus_Entries
+    [ RtemsRatemonReqGetStatus_Map[ index ] ];
 }
 
 static void RtemsRatemonReqGetStatus_SetPreConditionStates(

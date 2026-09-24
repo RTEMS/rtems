@@ -250,30 +250,18 @@ typedef struct {
   } Map;
 } RtemsRatemonReqTimeout_Context;
 
-static RtemsRatemonReqTimeout_Context
-  RtemsRatemonReqTimeout_Instance;
+static RtemsRatemonReqTimeout_Context RtemsRatemonReqTimeout_Instance;
 
-static const char * const RtemsRatemonReqTimeout_PreDesc_WaitFor[] = {
-  "PeriodSelf",
-  "PeriodOther",
-  "Other",
-  "NA"
-};
+static const char *const RtemsRatemonReqTimeout_PreDesc_WaitFor[] =
+  { "PeriodSelf", "PeriodOther", "Other", "NA" };
 
-static const char * const RtemsRatemonReqTimeout_PreDesc_WaitState[] = {
-  "Blocked",
-  "IntendToBlock",
-  "NA"
-};
+static const char *const RtemsRatemonReqTimeout_PreDesc_WaitState[] =
+  { "Blocked", "IntendToBlock", "NA" };
 
-static const char * const RtemsRatemonReqTimeout_PreDesc_PostponedJobs[] = {
-  "Zero",
-  "NotZeroOrMax",
-  "Max",
-  "NA"
-};
+static const char *const RtemsRatemonReqTimeout_PreDesc_PostponedJobs[] =
+  { "Zero", "NotZeroOrMax", "Max", "NA" };
 
-static const char * const * const RtemsRatemonReqTimeout_PreDesc[] = {
+static const char *const *const RtemsRatemonReqTimeout_PreDesc[] = {
   RtemsRatemonReqTimeout_PreDesc_WaitFor,
   RtemsRatemonReqTimeout_PreDesc_WaitState,
   RtemsRatemonReqTimeout_PreDesc_PostponedJobs,
@@ -346,10 +334,7 @@ static void SchedulerBlock(
 
   ctx = arg;
 
-  if (
-    when == T_SCHEDULER_BEFORE &&
-    event->operation == T_SCHEDULER_BLOCK
-  ) {
+  if ( when == T_SCHEDULER_BEFORE && event->operation == T_SCHEDULER_BLOCK ) {
     T_scheduler_set_event_handler( NULL, NULL );
     ctx->request.handler = Tick;
     CallWithinISRSubmit( &ctx->request );
@@ -868,9 +853,7 @@ static inline RtemsRatemonReqTimeout_Entry RtemsRatemonReqTimeout_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsRatemonReqTimeout_Entries[
-    RtemsRatemonReqTimeout_Map[ index ]
-  ];
+  return RtemsRatemonReqTimeout_Entries[ RtemsRatemonReqTimeout_Map[ index ] ];
 }
 
 static void RtemsRatemonReqTimeout_SetPreConditionStates(

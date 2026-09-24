@@ -141,16 +141,12 @@ typedef struct {
   } Map;
 } NewlibReqFutexWake_Context;
 
-static NewlibReqFutexWake_Context
-  NewlibReqFutexWake_Instance;
+static NewlibReqFutexWake_Context NewlibReqFutexWake_Instance;
 
-static const char * const NewlibReqFutexWake_PreDesc_Count[] = {
-  "NegativeOrZero",
-  "Positive",
-  "NA"
-};
+static const char *const NewlibReqFutexWake_PreDesc_Count[] =
+  { "NegativeOrZero", "Positive", "NA" };
 
-static const char * const * const NewlibReqFutexWake_PreDesc[] = {
+static const char *const *const NewlibReqFutexWake_PreDesc[] = {
   NewlibReqFutexWake_PreDesc_Count,
   NULL
 };
@@ -374,9 +370,7 @@ static inline NewlibReqFutexWake_Entry NewlibReqFutexWake_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return NewlibReqFutexWake_Entries[
-    NewlibReqFutexWake_Map[ index ]
-  ];
+  return NewlibReqFutexWake_Entries[ NewlibReqFutexWake_Map[ index ] ];
 }
 
 static void NewlibReqFutexWake_TestVariant( NewlibReqFutexWake_Context *ctx )

@@ -201,29 +201,18 @@ typedef struct {
   } Map;
 } RtemsTaskReqWakeWhen_Context;
 
-static RtemsTaskReqWakeWhen_Context
-  RtemsTaskReqWakeWhen_Instance;
+static RtemsTaskReqWakeWhen_Context RtemsTaskReqWakeWhen_Instance;
 
-static const char * const RtemsTaskReqWakeWhen_PreDesc_TODSet[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqWakeWhen_PreDesc_TODSet[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqWakeWhen_PreDesc_TOD[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsTaskReqWakeWhen_PreDesc_TOD[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsTaskReqWakeWhen_PreDesc_TODObj[] = {
-  "Future",
-  "PastOrNow",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsTaskReqWakeWhen_PreDesc_TODObj[] =
+  { "Future", "PastOrNow", "Invalid", "NA" };
 
-static const char * const * const RtemsTaskReqWakeWhen_PreDesc[] = {
+static const char *const *const RtemsTaskReqWakeWhen_PreDesc[] = {
   RtemsTaskReqWakeWhen_PreDesc_TODSet,
   RtemsTaskReqWakeWhen_PreDesc_TOD,
   RtemsTaskReqWakeWhen_PreDesc_TODObj,
@@ -467,10 +456,7 @@ static void RtemsTaskReqWakeWhen_Post_Scheduler_Check(
        * rtems_task_wake_when() call.
        */
       T_eq_sz( ctx->scheduler_log.header.recorded, 1 );
-      T_eq_int(
-        ctx->scheduler_log.events[ 0 ].operation,
-        T_SCHEDULER_BLOCK
-      );
+      T_eq_int( ctx->scheduler_log.events[ 0 ].operation, T_SCHEDULER_BLOCK );
       break;
     }
 
@@ -594,9 +580,7 @@ static inline RtemsTaskReqWakeWhen_Entry RtemsTaskReqWakeWhen_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsTaskReqWakeWhen_Entries[
-    RtemsTaskReqWakeWhen_Map[ index ]
-  ];
+  return RtemsTaskReqWakeWhen_Entries[ RtemsTaskReqWakeWhen_Map[ index ] ];
 }
 
 static void RtemsTaskReqWakeWhen_SetPreConditionStates(

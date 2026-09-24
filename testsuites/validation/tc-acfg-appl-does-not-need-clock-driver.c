@@ -83,11 +83,11 @@
  */
 static void AcfgValApplDoesNotNeedClockDriver_Action_0( void )
 {
-  T_time  time_per_clock_tick;
-  T_ticks duration;
-  T_ticks elapsed;
-  T_ticks t0;
-  T_ticks t1;
+  T_time         time_per_clock_tick;
+  T_ticks        duration;
+  T_ticks        elapsed;
+  T_ticks        t0;
+  T_ticks        t1;
   rtems_interval ticks_since_boot;
 
   ticks_since_boot = rtems_clock_get_ticks_since_boot();
@@ -110,11 +110,7 @@ static void AcfgValApplDoesNotNeedClockDriver_Action_0( void )
    * Check that the clock ticks since boot count did not change while busy
    * waiting for more than one clock tick interval.
    */
-  T_step_eq_u32(
-    0,
-    rtems_clock_get_ticks_since_boot(),
-    ticks_since_boot
-  );
+  T_step_eq_u32( 0, rtems_clock_get_ticks_since_boot(), ticks_since_boot );
 }
 
 /**

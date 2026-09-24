@@ -204,34 +204,21 @@ typedef struct {
   } Map;
 } RtemsIntrReqHandlerIterate_Context;
 
-static RtemsIntrReqHandlerIterate_Context
-  RtemsIntrReqHandlerIterate_Instance;
+static RtemsIntrReqHandlerIterate_Context RtemsIntrReqHandlerIterate_Instance;
 
-static const char * const RtemsIntrReqHandlerIterate_PreDesc_Vector[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsIntrReqHandlerIterate_PreDesc_Vector[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsIntrReqHandlerIterate_PreDesc_Routine[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsIntrReqHandlerIterate_PreDesc_Routine[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsIntrReqHandlerIterate_PreDesc_Init[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsIntrReqHandlerIterate_PreDesc_Init[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsIntrReqHandlerIterate_PreDesc_ISR[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsIntrReqHandlerIterate_PreDesc_ISR[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const RtemsIntrReqHandlerIterate_PreDesc[] = {
+static const char *const *const RtemsIntrReqHandlerIterate_PreDesc[] = {
   RtemsIntrReqHandlerIterate_PreDesc_Vector,
   RtemsIntrReqHandlerIterate_PreDesc_Routine,
   RtemsIntrReqHandlerIterate_PreDesc_Init,
@@ -545,10 +532,7 @@ static void RtemsIntrReqHandlerIterate_Teardown(
 {
   rtems_status_code sc;
 
-  sc = rtems_interrupt_entry_remove(
-    ctx->test_vector,
-    &ctx->entry
-  );
+  sc = rtems_interrupt_entry_remove( ctx->test_vector, &ctx->entry );
   T_rsc_success( sc );
 
   if ( ctx->test_vector_was_enabled ) {
@@ -638,9 +622,8 @@ RtemsIntrReqHandlerIterate_PopEntry( RtemsIntrReqHandlerIterate_Context *ctx )
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsIntrReqHandlerIterate_Entries[
-    RtemsIntrReqHandlerIterate_Map[ index ]
-  ];
+  return RtemsIntrReqHandlerIterate_Entries
+    [ RtemsIntrReqHandlerIterate_Map[ index ] ];
 }
 
 static void RtemsIntrReqHandlerIterate_TestVariant(

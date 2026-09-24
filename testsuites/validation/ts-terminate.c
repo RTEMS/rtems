@@ -72,8 +72,10 @@ const char rtems_test_name[] = "TestsuitesTerminate";
 #define CONFIGURE_MAXIMUM_PROCESSORS 2
 
 #define CONFIGURE_INITIAL_EXTENSIONS \
-  { .fatal = FatalExtension0 }, \
-  { .fatal = FatalExtension1 }
+  { .fatal = FatalExtension0 },      \
+  {                                  \
+    .fatal = FatalExtension1         \
+  }
 
 #define CONFIGURE_DISABLE_BSP_SETTINGS
 

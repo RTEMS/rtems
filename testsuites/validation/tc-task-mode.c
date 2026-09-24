@@ -317,88 +317,48 @@ typedef struct {
   } Map;
 } RtemsTaskReqMode_Context;
 
-static RtemsTaskReqMode_Context
-  RtemsTaskReqMode_Instance;
+static RtemsTaskReqMode_Context RtemsTaskReqMode_Instance;
 
-static const char * const RtemsTaskReqMode_PreDesc_PrevMode[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsTaskReqMode_PreDesc_PrevMode[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsTaskReqMode_PreDesc_PreemptCur[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqMode_PreDesc_PreemptCur[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqMode_PreDesc_TimesliceCur[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqMode_PreDesc_TimesliceCur[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqMode_PreDesc_ASRCur[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqMode_PreDesc_ASRCur[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqMode_PreDesc_IntLvlCur[] = {
-  "Zero",
-  "Positive",
-  "NA"
-};
+static const char *const RtemsTaskReqMode_PreDesc_IntLvlCur[] =
+  { "Zero", "Positive", "NA" };
 
-static const char * const RtemsTaskReqMode_PreDesc_Preempt[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqMode_PreDesc_Preempt[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqMode_PreDesc_Timeslice[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqMode_PreDesc_Timeslice[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqMode_PreDesc_ASR[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqMode_PreDesc_ASR[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqMode_PreDesc_IntLvl[] = {
-  "Zero",
-  "Positive",
-  "NA"
-};
+static const char *const RtemsTaskReqMode_PreDesc_IntLvl[] =
+  { "Zero", "Positive", "NA" };
 
-static const char * const RtemsTaskReqMode_PreDesc_PreemptMsk[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqMode_PreDesc_PreemptMsk[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqMode_PreDesc_TimesliceMsk[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqMode_PreDesc_TimesliceMsk[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqMode_PreDesc_ASRMsk[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqMode_PreDesc_ASRMsk[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqMode_PreDesc_IntLvlMsk[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqMode_PreDesc_IntLvlMsk[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const RtemsTaskReqMode_PreDesc[] = {
+static const char *const *const RtemsTaskReqMode_PreDesc[] = {
   RtemsTaskReqMode_PreDesc_PrevMode,
   RtemsTaskReqMode_PreDesc_PreemptCur,
   RtemsTaskReqMode_PreDesc_TimesliceCur,
@@ -457,9 +417,7 @@ static void ExhaustTimeslice( void )
   uint32_t ticks;
 
   for (
-    ticks = 0;
-    ticks < rtems_configuration_get_ticks_per_timeslice();
-    ++ticks
+    ticks = 0; ticks < rtems_configuration_get_ticks_per_timeslice(); ++ticks
   ) {
     ClockTick();
   }
@@ -1892,9 +1850,7 @@ static inline RtemsTaskReqMode_Entry RtemsTaskReqMode_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsTaskReqMode_Entries[
-    RtemsTaskReqMode_Map[ index ]
-  ];
+  return RtemsTaskReqMode_Entries[ RtemsTaskReqMode_Map[ index ] ];
 }
 
 static void RtemsTaskReqMode_TestVariant( RtemsTaskReqMode_Context *ctx )
@@ -1982,8 +1938,10 @@ T_TEST_CASE_FIXTURE( RtemsTaskReqMode, &RtemsTaskReqMode_Fixture )
                       ++ctx->Map.pcs[ 9 ]
                     ) {
                       for (
-                        ctx->Map.pcs[ 10 ] = RtemsTaskReqMode_Pre_TimesliceMsk_Yes;
-                        ctx->Map.pcs[ 10 ] < RtemsTaskReqMode_Pre_TimesliceMsk_NA;
+                        ctx->Map.pcs[ 10 ] =
+                          RtemsTaskReqMode_Pre_TimesliceMsk_Yes;
+                        ctx->Map.pcs[ 10 ] <
+                        RtemsTaskReqMode_Pre_TimesliceMsk_NA;
                         ++ctx->Map.pcs[ 10 ]
                       ) {
                         for (
@@ -1992,8 +1950,10 @@ T_TEST_CASE_FIXTURE( RtemsTaskReqMode, &RtemsTaskReqMode_Fixture )
                           ++ctx->Map.pcs[ 11 ]
                         ) {
                           for (
-                            ctx->Map.pcs[ 12 ] = RtemsTaskReqMode_Pre_IntLvlMsk_Yes;
-                            ctx->Map.pcs[ 12 ] < RtemsTaskReqMode_Pre_IntLvlMsk_NA;
+                            ctx->Map.pcs[ 12 ] =
+                              RtemsTaskReqMode_Pre_IntLvlMsk_Yes;
+                            ctx->Map.pcs[ 12 ] <
+                            RtemsTaskReqMode_Pre_IntLvlMsk_NA;
                             ++ctx->Map.pcs[ 12 ]
                           ) {
                             ctx->Map.entry = RtemsTaskReqMode_PopEntry( ctx );

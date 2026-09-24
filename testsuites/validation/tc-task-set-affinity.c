@@ -195,41 +195,24 @@ typedef struct {
   } Map;
 } RtemsTaskReqSetAffinity_Context;
 
-static RtemsTaskReqSetAffinity_Context
-  RtemsTaskReqSetAffinity_Instance;
+static RtemsTaskReqSetAffinity_Context RtemsTaskReqSetAffinity_Instance;
 
-static const char * const RtemsTaskReqSetAffinity_PreDesc_Id[] = {
-  "Invalid",
-  "Task",
-  "NA"
-};
+static const char *const RtemsTaskReqSetAffinity_PreDesc_Id[] =
+  { "Invalid", "Task", "NA" };
 
-static const char * const RtemsTaskReqSetAffinity_PreDesc_CPUSetSize[] = {
-  "Askew",
-  "Normal",
-  "Huge",
-  "NA"
-};
+static const char *const RtemsTaskReqSetAffinity_PreDesc_CPUSetSize[] =
+  { "Askew", "Normal", "Huge", "NA" };
 
-static const char * const RtemsTaskReqSetAffinity_PreDesc_CPUSetOnline[] = {
-  "Supported",
-  "Unsupported",
-  "NA"
-};
+static const char *const RtemsTaskReqSetAffinity_PreDesc_CPUSetOnline[] =
+  { "Supported", "Unsupported", "NA" };
 
-static const char * const RtemsTaskReqSetAffinity_PreDesc_CPUSetHuge[] = {
-  "NotZero",
-  "Zero",
-  "NA"
-};
+static const char *const RtemsTaskReqSetAffinity_PreDesc_CPUSetHuge[] =
+  { "NotZero", "Zero", "NA" };
 
-static const char * const RtemsTaskReqSetAffinity_PreDesc_CPUSet[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsTaskReqSetAffinity_PreDesc_CPUSet[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const * const RtemsTaskReqSetAffinity_PreDesc[] = {
+static const char *const *const RtemsTaskReqSetAffinity_PreDesc[] = {
   RtemsTaskReqSetAffinity_PreDesc_Id,
   RtemsTaskReqSetAffinity_PreDesc_CPUSetSize,
   RtemsTaskReqSetAffinity_PreDesc_CPUSetOnline,
@@ -457,7 +440,7 @@ static void RtemsTaskReqSetAffinity_Post_SetAffinity_Check(
        * be set with respect to the home scheduler of the task at some point
        * during the rtems_task_set_affinity() call.
        */
-      #if defined(RTEMS_SMP)
+      #if defined( RTEMS_SMP )
       T_eq_sz( ctx->scheduler_log.header.recorded, 1 );
       T_eq_int(
         ctx->scheduler_log.events[ 0 ].operation,
@@ -478,7 +461,7 @@ static void RtemsTaskReqSetAffinity_Post_SetAffinity_Check(
        * No task affinity shall be modified by the rtems_task_set_affinity()
        * call.
        */
-      #if defined(RTEMS_SMP)
+      #if defined( RTEMS_SMP )
       if ( ctx->scheduler_log.header.recorded == 1 ) {
         T_eq_int(
           ctx->scheduler_log.events[ 0 ].operation,
@@ -590,9 +573,8 @@ static inline RtemsTaskReqSetAffinity_Entry RtemsTaskReqSetAffinity_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsTaskReqSetAffinity_Entries[
-    RtemsTaskReqSetAffinity_Map[ index ]
-  ];
+  return RtemsTaskReqSetAffinity_Entries
+    [ RtemsTaskReqSetAffinity_Map[ index ] ];
 }
 
 static void RtemsTaskReqSetAffinity_SetPreConditionStates(

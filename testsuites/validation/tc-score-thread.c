@@ -149,8 +149,7 @@ typedef struct {
   uintptr_t worker_stack[ 2 ];
 } ScoreThreadValThread_Context;
 
-static ScoreThreadValThread_Context
-  ScoreThreadValThread_Instance;
+static ScoreThreadValThread_Context ScoreThreadValThread_Instance;
 
 typedef ScoreThreadValThread_Context Context;
 
@@ -271,12 +270,10 @@ static T_fixture ScoreThreadValThread_Fixture = {
  */
 static void ScoreThreadValThread_Action_0( ScoreThreadValThread_Context *ctx )
 {
-  rtems_extensions_table table = {
-    .thread_terminate = TaskTerminate
-  };
-  rtems_status_code sc;
-  rtems_id          id;
-  rtems_tcb        *worker_tcb;
+  rtems_extensions_table table = { .thread_terminate = TaskTerminate };
+  rtems_status_code      sc;
+  rtems_id               id;
+  rtems_tcb             *worker_tcb;
 
   sc = rtems_extension_create(
     rtems_build_name( 'T', 'E', 'S', 'T' ),
@@ -315,16 +312,13 @@ static void ScoreThreadValThread_Action_0( ScoreThreadValThread_Context *ctx )
   /*
    * Check that the worker task is waiting for a joining thread.
    */
-  T_eq_u32(
-    worker_tcb->current_state,
-    STATES_WAITING_FOR_JOIN_AT_EXIT
-  );
+  T_eq_u32( worker_tcb->current_state, STATES_WAITING_FOR_JOIN_AT_EXIT );
 
   /*
    * Delete the worker task using brute force.
    */
-  worker_tcb->Life.state = THREAD_LIFE_DETACHED |
-    THREAD_LIFE_PROTECTED | THREAD_LIFE_TERMINATING;
+  worker_tcb->Life.state = THREAD_LIFE_DETACHED | THREAD_LIFE_PROTECTED |
+                           THREAD_LIFE_TERMINATING;
   _Thread_Clear_state( worker_tcb, STATES_WAITING_FOR_JOIN_AT_EXIT );
 
   /*
@@ -347,7 +341,7 @@ static void ScoreThreadValThread_Action_1( ScoreThreadValThread_Context *ctx )
 
   SetSelfPriority( PRIO_NORMAL );
   sc = rtems_task_create(
-    rtems_build_name( 'W', 'O', 'R', 'K'),
+    rtems_build_name( 'W', 'O', 'R', 'K' ),
     PRIO_HIGH,
     TEST_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,

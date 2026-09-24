@@ -289,80 +289,46 @@ typedef struct {
 static ScoreSchedSmpEdfReqSetAffinity_Context
   ScoreSchedSmpEdfReqSetAffinity_Instance;
 
-static const char * const ScoreSchedSmpEdfReqSetAffinity_PreDesc_Before[] = {
-  "All",
-  "X",
-  "NA"
-};
+static const char *const ScoreSchedSmpEdfReqSetAffinity_PreDesc_Before[] =
+  { "All", "X", "NA" };
 
-static const char * const ScoreSchedSmpEdfReqSetAffinity_PreDesc_After[] = {
-  "All",
-  "X",
-  "Y",
-  "NA"
-};
+static const char *const ScoreSchedSmpEdfReqSetAffinity_PreDesc_After[] =
+  { "All", "X", "Y", "NA" };
 
-static const char * const ScoreSchedSmpEdfReqSetAffinity_PreDesc_Priority[] = {
-  "High",
-  "Low",
-  "NA"
-};
+static const char *const ScoreSchedSmpEdfReqSetAffinity_PreDesc_Priority[] =
+  { "High", "Low", "NA" };
 
-static const char * const ScoreSchedSmpEdfReqSetAffinity_PreDesc_State[] = {
-  "Ready",
-  "Blocked",
-  "NA"
-};
+static const char *const ScoreSchedSmpEdfReqSetAffinity_PreDesc_State[] =
+  { "Ready", "Blocked", "NA" };
 
-static const char * const ScoreSchedSmpEdfReqSetAffinity_PreDesc_Sticky[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const ScoreSchedSmpEdfReqSetAffinity_PreDesc_Sticky[] =
+  { "Yes", "No", "NA" };
 
-static const char * const ScoreSchedSmpEdfReqSetAffinity_PreDesc_Pinned[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const ScoreSchedSmpEdfReqSetAffinity_PreDesc_Pinned[] =
+  { "Yes", "No", "NA" };
 
-static const char * const ScoreSchedSmpEdfReqSetAffinity_PreDesc_AlphaPriority[] = {
-  "High",
-  "Low",
-  "NA"
-};
+static const char *const
+  ScoreSchedSmpEdfReqSetAffinity_PreDesc_AlphaPriority[] =
+    { "High", "Low", "NA" };
 
-static const char * const ScoreSchedSmpEdfReqSetAffinity_PreDesc_AlphaAffinity[] = {
-  "All",
-  "X",
-  "NA"
-};
+static const char *const
+  ScoreSchedSmpEdfReqSetAffinity_PreDesc_AlphaAffinity[] =
+    { "All", "X", "NA" };
 
-static const char * const ScoreSchedSmpEdfReqSetAffinity_PreDesc_AlphaIdle[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const ScoreSchedSmpEdfReqSetAffinity_PreDesc_AlphaIdle[] =
+  { "Yes", "No", "NA" };
 
-static const char * const ScoreSchedSmpEdfReqSetAffinity_PreDesc_BetaPriority[] = {
-  "High",
-  "Low",
-  "NA"
-};
+static const char *const
+  ScoreSchedSmpEdfReqSetAffinity_PreDesc_BetaPriority[] =
+    { "High", "Low", "NA" };
 
-static const char * const ScoreSchedSmpEdfReqSetAffinity_PreDesc_BetaAffinity[] = {
-  "All",
-  "Y",
-  "NA"
-};
+static const char *const
+  ScoreSchedSmpEdfReqSetAffinity_PreDesc_BetaAffinity[] = { "All", "Y", "NA" };
 
-static const char * const ScoreSchedSmpEdfReqSetAffinity_PreDesc_BetaIdle[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const ScoreSchedSmpEdfReqSetAffinity_PreDesc_BetaIdle[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const ScoreSchedSmpEdfReqSetAffinity_PreDesc[] = {
+static const char *const *const ScoreSchedSmpEdfReqSetAffinity_PreDesc[] = {
   ScoreSchedSmpEdfReqSetAffinity_PreDesc_Before,
   ScoreSchedSmpEdfReqSetAffinity_PreDesc_After,
   ScoreSchedSmpEdfReqSetAffinity_PreDesc_Priority,
@@ -1485,9 +1451,8 @@ ScoreSchedSmpEdfReqSetAffinity_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return ScoreSchedSmpEdfReqSetAffinity_Entries[
-    ScoreSchedSmpEdfReqSetAffinity_Map[ index ]
-  ];
+  return ScoreSchedSmpEdfReqSetAffinity_Entries
+    [ ScoreSchedSmpEdfReqSetAffinity_Map[ index ] ];
 }
 
 static void ScoreSchedSmpEdfReqSetAffinity_TestVariant(
@@ -1572,42 +1537,55 @@ T_TEST_CASE_FIXTURE(
             ++ctx->Map.pcs[ 4 ]
           ) {
             for (
-              ctx->Map.pcs[ 5 ] = ScoreSchedSmpEdfReqSetAffinity_Pre_Pinned_Yes;
+              ctx->Map.pcs[ 5 ] =
+                ScoreSchedSmpEdfReqSetAffinity_Pre_Pinned_Yes;
               ctx->Map.pcs[ 5 ] < ScoreSchedSmpEdfReqSetAffinity_Pre_Pinned_NA;
               ++ctx->Map.pcs[ 5 ]
             ) {
               for (
-                ctx->Map.pcs[ 6 ] = ScoreSchedSmpEdfReqSetAffinity_Pre_AlphaPriority_High;
-                ctx->Map.pcs[ 6 ] < ScoreSchedSmpEdfReqSetAffinity_Pre_AlphaPriority_NA;
+                ctx->Map.pcs[ 6 ] =
+                  ScoreSchedSmpEdfReqSetAffinity_Pre_AlphaPriority_High;
+                ctx->Map.pcs[ 6 ] <
+                ScoreSchedSmpEdfReqSetAffinity_Pre_AlphaPriority_NA;
                 ++ctx->Map.pcs[ 6 ]
               ) {
                 for (
-                  ctx->Map.pcs[ 7 ] = ScoreSchedSmpEdfReqSetAffinity_Pre_AlphaAffinity_All;
-                  ctx->Map.pcs[ 7 ] < ScoreSchedSmpEdfReqSetAffinity_Pre_AlphaAffinity_NA;
+                  ctx->Map.pcs[ 7 ] =
+                    ScoreSchedSmpEdfReqSetAffinity_Pre_AlphaAffinity_All;
+                  ctx->Map.pcs[ 7 ] <
+                  ScoreSchedSmpEdfReqSetAffinity_Pre_AlphaAffinity_NA;
                   ++ctx->Map.pcs[ 7 ]
                 ) {
                   for (
-                    ctx->Map.pcs[ 8 ] = ScoreSchedSmpEdfReqSetAffinity_Pre_AlphaIdle_Yes;
-                    ctx->Map.pcs[ 8 ] < ScoreSchedSmpEdfReqSetAffinity_Pre_AlphaIdle_NA;
+                    ctx->Map.pcs[ 8 ] =
+                      ScoreSchedSmpEdfReqSetAffinity_Pre_AlphaIdle_Yes;
+                    ctx->Map.pcs[ 8 ] <
+                    ScoreSchedSmpEdfReqSetAffinity_Pre_AlphaIdle_NA;
                     ++ctx->Map.pcs[ 8 ]
                   ) {
                     for (
-                      ctx->Map.pcs[ 9 ] = ScoreSchedSmpEdfReqSetAffinity_Pre_BetaPriority_High;
-                      ctx->Map.pcs[ 9 ] < ScoreSchedSmpEdfReqSetAffinity_Pre_BetaPriority_NA;
+                      ctx->Map.pcs[ 9 ] =
+                        ScoreSchedSmpEdfReqSetAffinity_Pre_BetaPriority_High;
+                      ctx->Map.pcs[ 9 ] <
+                      ScoreSchedSmpEdfReqSetAffinity_Pre_BetaPriority_NA;
                       ++ctx->Map.pcs[ 9 ]
                     ) {
                       for (
-                        ctx->Map.pcs[ 10 ] = ScoreSchedSmpEdfReqSetAffinity_Pre_BetaAffinity_All;
-                        ctx->Map.pcs[ 10 ] < ScoreSchedSmpEdfReqSetAffinity_Pre_BetaAffinity_NA;
+                        ctx->Map.pcs[ 10 ] =
+                          ScoreSchedSmpEdfReqSetAffinity_Pre_BetaAffinity_All;
+                        ctx->Map.pcs[ 10 ] <
+                        ScoreSchedSmpEdfReqSetAffinity_Pre_BetaAffinity_NA;
                         ++ctx->Map.pcs[ 10 ]
                       ) {
                         for (
-                          ctx->Map.pcs[ 11 ] = ScoreSchedSmpEdfReqSetAffinity_Pre_BetaIdle_Yes;
-                          ctx->Map.pcs[ 11 ] < ScoreSchedSmpEdfReqSetAffinity_Pre_BetaIdle_NA;
+                          ctx->Map.pcs[ 11 ] =
+                            ScoreSchedSmpEdfReqSetAffinity_Pre_BetaIdle_Yes;
+                          ctx->Map.pcs[ 11 ] <
+                          ScoreSchedSmpEdfReqSetAffinity_Pre_BetaIdle_NA;
                           ++ctx->Map.pcs[ 11 ]
                         ) {
                           ctx->Map.entry =
-                          ScoreSchedSmpEdfReqSetAffinity_PopEntry( ctx );
+                            ScoreSchedSmpEdfReqSetAffinity_PopEntry( ctx );
 
                           if ( ctx->Map.entry.Skip ) {
                             continue;

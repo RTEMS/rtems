@@ -97,8 +97,7 @@ typedef struct {
   Objects_Maximum objects_per_block_ori;
 } RtemsConfigUnitConfig_Context;
 
-static RtemsConfigUnitConfig_Context
-  RtemsConfigUnitConfig_Instance;
+static RtemsConfigUnitConfig_Context RtemsConfigUnitConfig_Instance;
 
 static void RtemsConfigUnitConfig_Setup( RtemsConfigUnitConfig_Context *ctx )
 {

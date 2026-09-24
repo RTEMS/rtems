@@ -160,31 +160,18 @@ typedef struct {
   } Map;
 } RtemsBarrierReqWait_Context;
 
-static RtemsBarrierReqWait_Context
-  RtemsBarrierReqWait_Instance;
+static RtemsBarrierReqWait_Context RtemsBarrierReqWait_Instance;
 
-static const char * const RtemsBarrierReqWait_PreDesc_Id[] = {
-  "NoObj",
-  "Manual",
-  "Auto",
-  "NA"
-};
+static const char *const RtemsBarrierReqWait_PreDesc_Id[] =
+  { "NoObj", "Manual", "Auto", "NA" };
 
-static const char * const RtemsBarrierReqWait_PreDesc_Timeout[] = {
-  "Ticks",
-  "Forever",
-  "NA"
-};
+static const char *const RtemsBarrierReqWait_PreDesc_Timeout[] =
+  { "Ticks", "Forever", "NA" };
 
-static const char * const RtemsBarrierReqWait_PreDesc_Satisfy[] = {
-  "Never",
-  "Wait",
-  "Release",
-  "Delete",
-  "NA"
-};
+static const char *const RtemsBarrierReqWait_PreDesc_Satisfy[] =
+  { "Never", "Wait", "Release", "Delete", "NA" };
 
-static const char * const * const RtemsBarrierReqWait_PreDesc[] = {
+static const char *const *const RtemsBarrierReqWait_PreDesc[] = {
   RtemsBarrierReqWait_PreDesc_Id,
   RtemsBarrierReqWait_PreDesc_Timeout,
   RtemsBarrierReqWait_PreDesc_Satisfy,
@@ -561,9 +548,7 @@ static inline RtemsBarrierReqWait_Entry RtemsBarrierReqWait_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsBarrierReqWait_Entries[
-    RtemsBarrierReqWait_Map[ index ]
-  ];
+  return RtemsBarrierReqWait_Entries[ RtemsBarrierReqWait_Map[ index ] ];
 }
 
 static void RtemsBarrierReqWait_SetPreConditionStates(

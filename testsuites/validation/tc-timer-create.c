@@ -175,28 +175,18 @@ typedef struct {
   } Map;
 } RtemsTimerReqCreate_Context;
 
-static RtemsTimerReqCreate_Context
-  RtemsTimerReqCreate_Instance;
+static RtemsTimerReqCreate_Context RtemsTimerReqCreate_Instance;
 
-static const char * const RtemsTimerReqCreate_PreDesc_Name[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsTimerReqCreate_PreDesc_Name[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsTimerReqCreate_PreDesc_Id[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsTimerReqCreate_PreDesc_Id[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsTimerReqCreate_PreDesc_Free[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTimerReqCreate_PreDesc_Free[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const RtemsTimerReqCreate_PreDesc[] = {
+static const char *const *const RtemsTimerReqCreate_PreDesc[] = {
   RtemsTimerReqCreate_PreDesc_Name,
   RtemsTimerReqCreate_PreDesc_Id,
   RtemsTimerReqCreate_PreDesc_Free,
@@ -488,9 +478,7 @@ static inline RtemsTimerReqCreate_Entry RtemsTimerReqCreate_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsTimerReqCreate_Entries[
-    RtemsTimerReqCreate_Map[ index ]
-  ];
+  return RtemsTimerReqCreate_Entries[ RtemsTimerReqCreate_Map[ index ] ];
 }
 
 static void RtemsTimerReqCreate_TestVariant( RtemsTimerReqCreate_Context *ctx )

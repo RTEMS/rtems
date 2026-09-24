@@ -193,8 +193,7 @@ typedef struct {
   SMP_barrier_State barrier_state;
 } ScoreTqValSmp_Context;
 
-static ScoreTqValSmp_Context
-  ScoreTqValSmp_Instance;
+static ScoreTqValSmp_Context ScoreTqValSmp_Instance;
 
 typedef ScoreTqValSmp_Context Context;
 

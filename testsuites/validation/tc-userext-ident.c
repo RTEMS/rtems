@@ -91,11 +91,7 @@ static void RtemsUserextValIdent_Action_0( void )
   rtems_status_code                   sc;
   rtems_id                            id_local_object;
 
-  sc = rtems_extension_create(
-    NAME_LOCAL_OBJECT,
-    &table,
-    &id_local_object
-  );
+  sc = rtems_extension_create( NAME_LOCAL_OBJECT, &table, &id_local_object );
   T_assert_rsc_success( sc );
 
   RtemsReqIdentLocal_Run(

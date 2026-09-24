@@ -135,10 +135,10 @@ typedef enum {
 } State;
 
 typedef struct {
-  struct timecounter  base;
-  State               state;
-  uint_fast32_t       busy;
-  struct bintime      tod;
+  struct timecounter base;
+  State              state;
+  uint_fast32_t      busy;
+  struct bintime     tod;
 } Timecounter;
 
 static Timecounter test_timecounter;

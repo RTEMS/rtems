@@ -179,26 +179,17 @@ typedef struct {
 static RtemsSchedulerReqGetProcessorSet_Context
   RtemsSchedulerReqGetProcessorSet_Instance;
 
-static const char * const RtemsSchedulerReqGetProcessorSet_PreDesc_Id[] = {
-  "Invalid",
-  "Scheduler",
-  "NA"
-};
+static const char *const RtemsSchedulerReqGetProcessorSet_PreDesc_Id[] =
+  { "Invalid", "Scheduler", "NA" };
 
-static const char * const RtemsSchedulerReqGetProcessorSet_PreDesc_CPUSetSize[] = {
-  "Valid",
-  "TooSmall",
-  "Askew",
-  "NA"
-};
+static const char *const
+  RtemsSchedulerReqGetProcessorSet_PreDesc_CPUSetSize[] =
+    { "Valid", "TooSmall", "Askew", "NA" };
 
-static const char * const RtemsSchedulerReqGetProcessorSet_PreDesc_CPUSet[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsSchedulerReqGetProcessorSet_PreDesc_CPUSet[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const * const RtemsSchedulerReqGetProcessorSet_PreDesc[] = {
+static const char *const *const RtemsSchedulerReqGetProcessorSet_PreDesc[] = {
   RtemsSchedulerReqGetProcessorSet_PreDesc_Id,
   RtemsSchedulerReqGetProcessorSet_PreDesc_CPUSetSize,
   RtemsSchedulerReqGetProcessorSet_PreDesc_CPUSet,
@@ -391,10 +382,7 @@ static void RtemsSchedulerReqGetProcessorSet_Setup(
 {
   rtems_status_code sc;
 
-  sc = rtems_scheduler_ident(
-    TEST_SCHEDULER_A_NAME,
-    &ctx->scheduler_id
-  );
+  sc = rtems_scheduler_ident( TEST_SCHEDULER_A_NAME, &ctx->scheduler_id );
   T_rsc_success( sc );
 }
 
@@ -485,9 +473,8 @@ RtemsSchedulerReqGetProcessorSet_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsSchedulerReqGetProcessorSet_Entries[
-    RtemsSchedulerReqGetProcessorSet_Map[ index ]
-  ];
+  return RtemsSchedulerReqGetProcessorSet_Entries
+    [ RtemsSchedulerReqGetProcessorSet_Map[ index ] ];
 }
 
 static void RtemsSchedulerReqGetProcessorSet_TestVariant(
@@ -534,7 +521,8 @@ T_TEST_CASE_FIXTURE(
     ++ctx->Map.pcs[ 0 ]
   ) {
     for (
-      ctx->Map.pcs[ 1 ] = RtemsSchedulerReqGetProcessorSet_Pre_CPUSetSize_Valid;
+      ctx->Map.pcs[ 1 ] =
+        RtemsSchedulerReqGetProcessorSet_Pre_CPUSetSize_Valid;
       ctx->Map.pcs[ 1 ] < RtemsSchedulerReqGetProcessorSet_Pre_CPUSetSize_NA;
       ++ctx->Map.pcs[ 1 ]
     ) {

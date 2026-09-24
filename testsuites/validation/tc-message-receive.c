@@ -180,7 +180,7 @@ typedef struct {
 } RtemsMessageReqReceive_Entry;
 
 #define MAXIMUM_PENDING_MESSAGES 3
-#define MAXIMUM_MESSAGE_SIZE 5
+#define MAXIMUM_MESSAGE_SIZE     5
 
 /**
  * @brief Test context for spec:/rtems/message/req/receive test case.
@@ -200,7 +200,7 @@ typedef struct {
    * @brief This member is used as storage area for the message queue.
    */
   RTEMS_MESSAGE_QUEUE_BUFFER( MAXIMUM_MESSAGE_SIZE )
-    storage_area[ MAXIMUM_PENDING_MESSAGES];
+  storage_area[ MAXIMUM_PENDING_MESSAGES ];
 
   /**
    * @brief This member contains always the same arbitrary number `magic`.
@@ -273,13 +273,13 @@ typedef struct {
    * @brief This member contains a pointer to a function which is executed
    *   while the worker is waiting to receive a message (`delete(), nop()`).
    */
-  void (*concurrent_activity)( void *ctx_in );
+  void ( *concurrent_activity )( void *ctx_in );
 
   /**
    * @brief This member contains a pointer to a function which is executed to
    *   check that the action has not changed the content of the message queue.
    */
-  void (*check_msgq_unchanged)( void *ctx_in );
+  void ( *check_msgq_unchanged )( void *ctx_in );
 
   struct {
     /**
@@ -310,59 +310,35 @@ typedef struct {
   } Map;
 } RtemsMessageReqReceive_Context;
 
-static RtemsMessageReqReceive_Context
-  RtemsMessageReqReceive_Instance;
+static RtemsMessageReqReceive_Context RtemsMessageReqReceive_Instance;
 
-static const char * const RtemsMessageReqReceive_PreDesc_Buffer[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsMessageReqReceive_PreDesc_Buffer[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsMessageReqReceive_PreDesc_Size[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsMessageReqReceive_PreDesc_Size[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsMessageReqReceive_PreDesc_Id[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsMessageReqReceive_PreDesc_Id[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsMessageReqReceive_PreDesc_DuringWait[] = {
-  "Nop",
-  "Deleted",
-  "NA"
-};
+static const char *const RtemsMessageReqReceive_PreDesc_DuringWait[] =
+  { "Nop", "Deleted", "NA" };
 
-static const char * const RtemsMessageReqReceive_PreDesc_TaskQueue[] = {
-  "Fifo",
-  "Priority",
-  "NA"
-};
+static const char *const RtemsMessageReqReceive_PreDesc_TaskQueue[] =
+  { "Fifo", "Priority", "NA" };
 
-static const char * const RtemsMessageReqReceive_PreDesc_Wait[] = {
-  "No",
-  "Timeout",
-  "Forever",
-  "NA"
-};
+static const char *const RtemsMessageReqReceive_PreDesc_Wait[] =
+  { "No", "Timeout", "Forever", "NA" };
 
-static const char * const RtemsMessageReqReceive_PreDesc_MsgQueue[] = {
-  "Empty",
-  "One",
-  "Several",
-  "NA"
-};
+static const char *const RtemsMessageReqReceive_PreDesc_MsgQueue[] =
+  { "Empty", "One", "Several", "NA" };
 
-static const char * const RtemsMessageReqReceive_PreDesc_Storage[] = {
+static const char *const RtemsMessageReqReceive_PreDesc_Storage[] = {
   "Nop",
   "NA"
 };
 
-static const char * const * const RtemsMessageReqReceive_PreDesc[] = {
+static const char *const *const RtemsMessageReqReceive_PreDesc[] = {
   RtemsMessageReqReceive_PreDesc_Buffer,
   RtemsMessageReqReceive_PreDesc_Size,
   RtemsMessageReqReceive_PreDesc_Id,
@@ -405,7 +381,7 @@ static void WorkerTask( rtems_task_argument argument )
 static void WorkerDoAction( void *ctx_in )
 {
   rtems_status_code status;
-  Context *ctx = ctx_in;
+  Context          *ctx = ctx_in;
   T_assert_eq_u32( ctx->magic, magic ); /* Run-time type check */
   status = rtems_task_restart( ctx->worker_id, (rtems_task_argument) ctx );
   T_rsc_success( status );
@@ -413,11 +389,11 @@ static void WorkerDoAction( void *ctx_in )
 
 static uint32_t WaitForWorker( Context *ctx )
 {
-  uint32_t ticks_to_wait = timeout_ticks + 1;
+  uint32_t          ticks_to_wait = timeout_ticks + 1;
   rtems_status_code status;
-  rtems_event_set event_set;
+  rtems_event_set   event_set;
 
-   for ( ; ticks_to_wait > 0; --ticks_to_wait ) {
+  for ( ; ticks_to_wait > 0; --ticks_to_wait ) {
     /* Check whether the worker finished executing the action */
     status = rtems_event_receive(
       RTEMS_PENDING_EVENTS,
@@ -441,7 +417,7 @@ static uint32_t WaitForWorker( Context *ctx )
       RTEMS_NO_TIMEOUT,
       &event_set
     );
-  T_rsc_success( status );
+    T_rsc_success( status );
   }
 
   return timeout_ticks + 1 - ticks_to_wait;
@@ -485,66 +461,66 @@ static void MessageQueueTeardown( Context *ctx )
 
 static void CheckForNoMessage(
   rtems_status_code status,
-  uint8_t *message_buffer,
-  size_t message_size
+  uint8_t          *message_buffer,
+  size_t            message_size
 )
 {
   (void) message_buffer;
   (void) message_size;
-  T_rsc( status, RTEMS_UNSATISFIED  );
+  T_rsc( status, RTEMS_UNSATISFIED );
 }
 
 static void CheckForFirstMessage(
   rtems_status_code status,
-  uint8_t *message_buffer,
-  size_t message_size
+  uint8_t          *message_buffer,
+  size_t            message_size
 )
 {
   T_rsc_success( status );
   T_eq_u32( message_size, 1 );
-  T_eq_u8( message_buffer[0], 0 );
+  T_eq_u8( message_buffer[ 0 ], 0 );
 }
 
 static void CheckForSecondMessage(
   rtems_status_code status,
-  uint8_t *message_buffer,
-  size_t message_size
+  uint8_t          *message_buffer,
+  size_t            message_size
 )
 {
   T_rsc_success( status );
   T_eq_u32( message_size, 3 );
-  T_eq_u8( message_buffer[0], 1 );
-  T_eq_u8( message_buffer[1], 1 );
-  T_eq_u8( message_buffer[2], 1 );
+  T_eq_u8( message_buffer[ 0 ], 1 );
+  T_eq_u8( message_buffer[ 1 ], 1 );
+  T_eq_u8( message_buffer[ 2 ], 1 );
 }
 
 static void CheckForThirdMessage(
   rtems_status_code status,
-  uint8_t *message_buffer,
-  size_t message_size
+  uint8_t          *message_buffer,
+  size_t            message_size
 )
 {
   T_rsc_success( status );
   T_eq_u32( message_size, 5 );
-  T_eq_u8( message_buffer[0], 2 );
-  T_eq_u8( message_buffer[1], 2 );
-  T_eq_u8( message_buffer[2], 2 );
-  T_eq_u8( message_buffer[3], 2 );
-  T_eq_u8( message_buffer[4], 2 );
+  T_eq_u8( message_buffer[ 0 ], 2 );
+  T_eq_u8( message_buffer[ 1 ], 2 );
+  T_eq_u8( message_buffer[ 2 ], 2 );
+  T_eq_u8( message_buffer[ 3 ], 2 );
+  T_eq_u8( message_buffer[ 4 ], 2 );
 }
 
 static void PopMessage(
   Context *ctx,
-  void (*check_fn)(
+  void ( *check_fn )(
     rtems_status_code status,
-    uint8_t *message_buffer,
-    size_t message_size
+    uint8_t          *message_buffer,
+    size_t            message_size
   )
 )
 {
   rtems_status_code status;
-  uint8_t message_buffer[ MAXIMUM_MESSAGE_SIZE ];
-  size_t message_size;
+  uint8_t           message_buffer[ MAXIMUM_MESSAGE_SIZE ];
+  size_t            message_size;
 
   status = rtems_message_queue_receive(
     ctx->tq_ctx.thread_queue_id,
@@ -554,7 +530,7 @@ static void PopMessage(
     RTEMS_NO_TIMEOUT
   );
 
- check_fn( status, message_buffer, message_size );
+  check_fn( status, message_buffer, message_size );
 }
 
 static void CheckForNoMessageInQueue( void *ctx_in )
@@ -603,10 +579,10 @@ static Context *ToContext( TQContext *tqctx )
 
 static Status_Control ReceiveMsg( TQContext *tqctx, TQWait wait )
 {
-  Context *ctx = ToContext( tqctx );
+  Context          *ctx = ToContext( tqctx );
   rtems_status_code status;
-  rtems_option option_set;
-  rtems_interval timeout;
+  rtems_option      option_set;
+  rtems_interval    timeout;
 
   switch ( wait ) {
     case TQ_WAIT_FOREVER:
@@ -636,9 +612,9 @@ static Status_Control ReceiveMsg( TQContext *tqctx, TQWait wait )
 
 static void SendMsg( TQContext *tqctx )
 {
-  Context *ctx = ToContext( tqctx );
+  Context          *ctx = ToContext( tqctx );
   rtems_status_code status;
-  uint8_t msg[ MAXIMUM_MESSAGE_SIZE ];
+  uint8_t           msg[ MAXIMUM_MESSAGE_SIZE ];
 
   memset( msg, ctx->send_msg_counter, MAXIMUM_MESSAGE_SIZE );
   status = rtems_message_queue_send(
@@ -827,9 +803,9 @@ static void RtemsMessageReqReceive_Pre_Wait_Prepare(
       /*
        * While the ``option_set`` parameter indicates the RTEMS_NO_WAIT option.
        */
-      ctx->tq_ctx.wait =      TQ_NO_WAIT;
+      ctx->tq_ctx.wait = TQ_NO_WAIT;
       ctx->option_set_param = RTEMS_NO_WAIT;
-      ctx->timeout_param =    1; /* 0 would be RTEMS_NO_TIMEOUT */
+      ctx->timeout_param = 1; /* 0 would be RTEMS_NO_TIMEOUT */
       break;
     }
 
@@ -838,9 +814,9 @@ static void RtemsMessageReqReceive_Pre_Wait_Prepare(
        * While the ``option_set`` parameter indicates the RTEMS_WAIT option,
        * while the ``timeout`` parameter is not equal to RTEMS_NO_TIMEOUT.
        */
-      ctx->tq_ctx.wait =      TQ_WAIT_TIMED;
+      ctx->tq_ctx.wait = TQ_WAIT_TIMED;
       ctx->option_set_param = RTEMS_WAIT;
-      ctx->timeout_param =    timeout_ticks;
+      ctx->timeout_param = timeout_ticks;
       break;
     }
 
@@ -849,9 +825,9 @@ static void RtemsMessageReqReceive_Pre_Wait_Prepare(
        * While the ``option_set`` parameter indicates the RTEMS_WAIT option,
        * while the ``timeout`` parameter is equal to RTEMS_NO_TIMEOUT.
        */
-      ctx->tq_ctx.wait =      TQ_WAIT_FOREVER;
+      ctx->tq_ctx.wait = TQ_WAIT_FOREVER;
       ctx->option_set_param = RTEMS_WAIT;
-      ctx->timeout_param =    RTEMS_NO_TIMEOUT;
+      ctx->timeout_param = RTEMS_NO_TIMEOUT;
       break;
     }
 
@@ -959,7 +935,7 @@ static void RtemsMessageReqReceive_Post_Status_Check(
        * The return status of rtems_message_queue_receive() shall be
        * RTEMS_UNSATISFIED.
        */
-      T_rsc( ctx->status, RTEMS_UNSATISFIED  );
+      T_rsc( ctx->status, RTEMS_UNSATISFIED );
       break;
     }
 
@@ -1090,7 +1066,7 @@ static void RtemsMessageReqReceive_Post_Msg_Check(
        */
       int i;
       for ( i = 0; i < MAXIMUM_MESSAGE_SIZE; ++i ) {
-        T_eq_u8( ctx->receive_buffer[i], UINT8_MAX );
+        T_eq_u8( ctx->receive_buffer[ i ], UINT8_MAX );
       }
       break;
     }
@@ -1179,12 +1155,12 @@ static void RtemsMessageReqReceive_Post_Tasks_Check(
 static void RtemsMessageReqReceive_Setup( RtemsMessageReqReceive_Context *ctx )
 {
   memset( ctx, 0, sizeof( *ctx ) );
-  ctx->magic                  = magic;
-  ctx->tq_ctx.enqueue         = ReceiveMsg;
-  ctx->tq_ctx.surrender       = TQDoNothingSuccessfully;
-  ctx->tq_ctx.convert_status  = TQConvertStatusClassic;
+  ctx->magic = magic;
+  ctx->tq_ctx.enqueue = ReceiveMsg;
+  ctx->tq_ctx.surrender = TQDoNothingSuccessfully;
+  ctx->tq_ctx.convert_status = TQConvertStatusClassic;
   ctx->tq_ctx.enqueue_prepare = EnqueuePrepare;
-  ctx->tq_ctx.enqueue_done    = EnqueueDone;
+  ctx->tq_ctx.enqueue_done = EnqueueDone;
   TQInitialize( &ctx->tq_ctx );
 
   /*
@@ -1200,7 +1176,7 @@ static void RtemsMessageReqReceive_Setup( RtemsMessageReqReceive_Context *ctx )
    * any message queue is created - a run-time sanity check.
    */
   ctx->tq_ctx.thread_queue_id = RTEMS_ID_NONE;
-  ctx->task_id                = rtems_task_self();
+  ctx->task_id = rtems_task_self();
 
   /* Note: TQInitialize() will assign the "main" task priority PRIO_NORMAL */
   ctx->worker_id = CreateTask( "WORK", PRIO_HIGH );
@@ -1242,7 +1218,7 @@ static void RtemsMessageReqReceive_Prepare(
   (void) PollAnyEvents();
 
   ctx->send_msg_counter = 0;
-  ctx->receive_size     = SIZE_MAX;
+  ctx->receive_size = SIZE_MAX;
   memset( ctx->receive_buffer, UINT8_MAX, MAXIMUM_MESSAGE_SIZE );
 }
 
@@ -1375,9 +1351,7 @@ static inline RtemsMessageReqReceive_Entry RtemsMessageReqReceive_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsMessageReqReceive_Entries[
-    RtemsMessageReqReceive_Map[ index ]
-  ];
+  return RtemsMessageReqReceive_Entries[ RtemsMessageReqReceive_Map[ index ] ];
 }
 
 static void RtemsMessageReqReceive_TestVariant(

@@ -197,35 +197,21 @@ typedef struct {
   } Map;
 } RtemsIntrReqGetAffinity_Context;
 
-static RtemsIntrReqGetAffinity_Context
-  RtemsIntrReqGetAffinity_Instance;
+static RtemsIntrReqGetAffinity_Context RtemsIntrReqGetAffinity_Instance;
 
-static const char * const RtemsIntrReqGetAffinity_PreDesc_Vector[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsIntrReqGetAffinity_PreDesc_Vector[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsIntrReqGetAffinity_PreDesc_CPUSetSize[] = {
-  "Valid",
-  "TooSmall",
-  "Askew",
-  "NA"
-};
+static const char *const RtemsIntrReqGetAffinity_PreDesc_CPUSetSize[] =
+  { "Valid", "TooSmall", "Askew", "NA" };
 
-static const char * const RtemsIntrReqGetAffinity_PreDesc_CPUSet[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsIntrReqGetAffinity_PreDesc_CPUSet[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsIntrReqGetAffinity_PreDesc_CanGetAffinity[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsIntrReqGetAffinity_PreDesc_CanGetAffinity[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const RtemsIntrReqGetAffinity_PreDesc[] = {
+static const char *const *const RtemsIntrReqGetAffinity_PreDesc[] = {
   RtemsIntrReqGetAffinity_PreDesc_Vector,
   RtemsIntrReqGetAffinity_PreDesc_CPUSetSize,
   RtemsIntrReqGetAffinity_PreDesc_CPUSet,
@@ -540,9 +526,7 @@ static void RtemsIntrReqGetAffinity_Action(
     ctx->cpuset == ctx->cpuset_obj
   ) {
     for (
-      ctx->vector = 0;
-      ctx->vector < BSP_INTERRUPT_VECTOR_COUNT;
-      ++ctx->vector
+      ctx->vector = 0; ctx->vector < BSP_INTERRUPT_VECTOR_COUNT; ++ctx->vector
     ) {
       rtems_status_code          sc;
       rtems_interrupt_attributes attr;
@@ -579,8 +563,7 @@ static void RtemsIntrReqGetAffinity_Action(
     );
 
     if (
-      ctx->cpuset == NULL ||
-      ctx->cpusetsize != sizeof( ctx->cpuset_obj )
+      ctx->cpuset == NULL || ctx->cpusetsize != sizeof( ctx->cpuset_obj )
     ) {
       CPU_FILL_S( sizeof( set ), set );
     } else {
@@ -654,9 +637,8 @@ static inline RtemsIntrReqGetAffinity_Entry RtemsIntrReqGetAffinity_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsIntrReqGetAffinity_Entries[
-    RtemsIntrReqGetAffinity_Map[ index ]
-  ];
+  return RtemsIntrReqGetAffinity_Entries
+    [ RtemsIntrReqGetAffinity_Map[ index ] ];
 }
 
 static void RtemsIntrReqGetAffinity_SetPreConditionStates(

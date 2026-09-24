@@ -148,35 +148,25 @@ typedef struct {
   } Map;
 } RtemsIntrReqGetPriority_Context;
 
-static RtemsIntrReqGetPriority_Context
-  RtemsIntrReqGetPriority_Instance;
+static RtemsIntrReqGetPriority_Context RtemsIntrReqGetPriority_Instance;
 
-static const char * const RtemsIntrReqGetPriority_PreDesc_Vector[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsIntrReqGetPriority_PreDesc_Vector[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsIntrReqGetPriority_PreDesc_Priority[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsIntrReqGetPriority_PreDesc_Priority[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsIntrReqGetPriority_PreDesc_CanGetPriority[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsIntrReqGetPriority_PreDesc_CanGetPriority[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const RtemsIntrReqGetPriority_PreDesc[] = {
+static const char *const *const RtemsIntrReqGetPriority_PreDesc[] = {
   RtemsIntrReqGetPriority_PreDesc_Vector,
   RtemsIntrReqGetPriority_PreDesc_Priority,
   RtemsIntrReqGetPriority_PreDesc_CanGetPriority,
   NULL
 };
 
-#define PRIORITY_UNSET (UINT32_MAX - 1234)
+#define PRIORITY_UNSET ( UINT32_MAX - 1234 )
 
 static void RtemsIntrReqGetPriority_Pre_Vector_Prepare(
   RtemsIntrReqGetPriority_Context   *ctx,
@@ -402,9 +392,7 @@ static T_fixture RtemsIntrReqGetPriority_Fixture = {
   .initial_context = &RtemsIntrReqGetPriority_Instance
 };
 
-static const uint8_t RtemsIntrReqGetPriority_Weights[] = {
-  4, 2, 1
-};
+static const uint8_t RtemsIntrReqGetPriority_Weights[] = { 4, 2, 1 };
 
 static void RtemsIntrReqGetPriority_Skip(
   RtemsIntrReqGetPriority_Context *ctx,
@@ -442,9 +430,8 @@ static inline RtemsIntrReqGetPriority_Entry RtemsIntrReqGetPriority_PopEntry(
 
   ctx->Map.index = index + 1;
 
-  return RtemsIntrReqGetPriority_Entries[
-    RtemsIntrReqGetPriority_Map[ index ]
-  ];
+  return RtemsIntrReqGetPriority_Entries
+    [ RtemsIntrReqGetPriority_Map[ index ] ];
 }
 
 static void RtemsIntrReqGetPriority_SetPreConditionStates(

@@ -126,16 +126,12 @@ typedef struct {
   } Map;
 } RtemsStatusReqIsSuccessful_Context;
 
-static RtemsStatusReqIsSuccessful_Context
-  RtemsStatusReqIsSuccessful_Instance;
+static RtemsStatusReqIsSuccessful_Context RtemsStatusReqIsSuccessful_Instance;
 
-static const char * const RtemsStatusReqIsSuccessful_PreDesc_Status[] = {
-  "Successful",
-  "Other",
-  "NA"
-};
+static const char *const RtemsStatusReqIsSuccessful_PreDesc_Status[] =
+  { "Successful", "Other", "NA" };
 
-static const char * const * const RtemsStatusReqIsSuccessful_PreDesc[] = {
+static const char *const *const RtemsStatusReqIsSuccessful_PreDesc[] = {
   RtemsStatusReqIsSuccessful_PreDesc_Status,
   NULL
 };
@@ -253,9 +249,8 @@ RtemsStatusReqIsSuccessful_PopEntry( RtemsStatusReqIsSuccessful_Context *ctx )
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsStatusReqIsSuccessful_Entries[
-    RtemsStatusReqIsSuccessful_Map[ index ]
-  ];
+  return RtemsStatusReqIsSuccessful_Entries
+    [ RtemsStatusReqIsSuccessful_Map[ index ] ];
 }
 
 static void RtemsStatusReqIsSuccessful_TestVariant(

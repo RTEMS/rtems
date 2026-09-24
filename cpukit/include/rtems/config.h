@@ -72,7 +72,7 @@
 #include <rtems/score/watchdogticks.h>
 #include <rtems/score/wkspacedata.h>
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   #include <rtems/rtems/types.h>
   #include <rtems/score/mpci.h>
 #endif
@@ -438,7 +438,7 @@ const char *rtems_get_version_string( void );
  * @endparblock
  */
 #define rtems_configuration_get_interrupt_stack_size() \
-  ((size_t) _ISR_Stack_size_object)
+  ( (size_t) _ISR_Stack_size_object )
 
 /* Generated from spec:/rtems/config/if/get-maximum-extensions */
 
@@ -607,7 +607,7 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @endparblock
  */
 #define rtems_configuration_get_number_of_initial_extensions() \
-  ((uint32_t) _User_extensions_Initial_count)
+  ( (uint32_t) _User_extensions_Initial_count )
 
 /* Generated from spec:/rtems/config/if/get-stack-allocate-for-idle-hook */
 
@@ -808,9 +808,9 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
-#if defined(RTEMS_MULTIPROCESSING)
+#if defined( RTEMS_MULTIPROCESSING )
   #define rtems_configuration_get_user_multiprocessing_table() \
-    ( &_MPCI_Configuration )
+  ( &_MPCI_Configuration )
 #else
   #define rtems_configuration_get_user_multiprocessing_table() NULL
 #endif
@@ -835,10 +835,11 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
-#define rtems_configuration_get_work_space_size() \
-  ( _Workspace_Size + \
-    ( rtems_configuration_get_stack_allocator_avoids_work_space() ? \
-      0 : rtems_configuration_get_stack_space_size() ) )
+#define rtems_configuration_get_work_space_size()                 \
+  ( _Workspace_Size +                                             \
+    ( rtems_configuration_get_stack_allocator_avoids_work_space() \
+        ? 0                                                       \
+        : rtems_configuration_get_stack_space_size() ) )
 
 /* Generated from spec:/rtems/config/if/resource-is-unlimited */
 

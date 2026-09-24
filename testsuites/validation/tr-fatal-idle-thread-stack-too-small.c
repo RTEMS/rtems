@@ -127,11 +127,7 @@ static void ScoreThreadValFatalIdleThreadStackTooSmall_Action_0(
   /*
    * Check that the expected fatal code is present.
    */
-  T_step_eq_ulong(
-    1,
-    ctx->code,
-    INTERNAL_ERROR_IDLE_THREAD_STACK_TOO_SMALL
-  );
+  T_step_eq_ulong( 1, ctx->code, INTERNAL_ERROR_IDLE_THREAD_STACK_TOO_SMALL );
 
   /*
    * Check the configured value of CONFIGURE_IDLE_TASK_STORAGE_SIZE.

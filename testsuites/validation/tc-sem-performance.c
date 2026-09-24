@@ -109,8 +109,7 @@ typedef struct {
   T_ticks end;
 } RtemsSemValPerf_Context;
 
-static RtemsSemValPerf_Context
-  RtemsSemValPerf_Instance;
+static RtemsSemValPerf_Context RtemsSemValPerf_Instance;
 
 #define EVENT_END RTEMS_EVENT_0
 
@@ -453,7 +452,7 @@ static bool RtemsSemReqPerfMtxPiReleaseOne_Teardown_Wrap(
 
 /** @} */
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 /**
  * @defgroup RtemsSemReqPerfMtxPiReleaseOtherCpu \
  *   spec:/rtems/sem/req/perf-mtx-pi-release-other-cpu
@@ -904,7 +903,7 @@ T_TEST_CASE_FIXTURE( RtemsSemValPerf, &RtemsSemValPerf_Fixture )
   ctx->request.teardown = RtemsSemReqPerfMtxPiReleaseOne_Teardown_Wrap;
   T_measure_runtime( ctx->context, &ctx->request );
 
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   RtemsSemReqPerfMtxPiReleaseOtherCpu_Prepare( ctx );
   ctx->request.name = "RtemsSemReqPerfMtxPiReleaseOtherCpu";
   ctx->request.setup = RtemsSemReqPerfMtxPiReleaseOtherCpu_Setup_Wrap;

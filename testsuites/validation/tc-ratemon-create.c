@@ -158,28 +158,18 @@ typedef struct {
   } Map;
 } RtemsRatemonReqCreate_Context;
 
-static RtemsRatemonReqCreate_Context
-  RtemsRatemonReqCreate_Instance;
+static RtemsRatemonReqCreate_Context RtemsRatemonReqCreate_Instance;
 
-static const char * const RtemsRatemonReqCreate_PreDesc_Name[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsRatemonReqCreate_PreDesc_Name[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsRatemonReqCreate_PreDesc_Id[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsRatemonReqCreate_PreDesc_Id[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsRatemonReqCreate_PreDesc_Free[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsRatemonReqCreate_PreDesc_Free[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const RtemsRatemonReqCreate_PreDesc[] = {
+static const char *const *const RtemsRatemonReqCreate_PreDesc[] = {
   RtemsRatemonReqCreate_PreDesc_Name,
   RtemsRatemonReqCreate_PreDesc_Id,
   RtemsRatemonReqCreate_PreDesc_Free,
@@ -480,9 +470,7 @@ static inline RtemsRatemonReqCreate_Entry RtemsRatemonReqCreate_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsRatemonReqCreate_Entries[
-    RtemsRatemonReqCreate_Map[ index ]
-  ];
+  return RtemsRatemonReqCreate_Entries[ RtemsRatemonReqCreate_Map[ index ] ];
 }
 
 static void RtemsRatemonReqCreate_TestVariant(

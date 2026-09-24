@@ -144,16 +144,12 @@ typedef struct {
   } Map;
 } RtemsMessageReqDelete_Context;
 
-static RtemsMessageReqDelete_Context
-  RtemsMessageReqDelete_Instance;
+static RtemsMessageReqDelete_Context RtemsMessageReqDelete_Instance;
 
-static const char * const RtemsMessageReqDelete_PreDesc_Id[] = {
-  "NoObj",
-  "MsgQueue",
-  "NA"
-};
+static const char *const RtemsMessageReqDelete_PreDesc_Id[] =
+  { "NoObj", "MsgQueue", "NA" };
 
-static const char * const * const RtemsMessageReqDelete_PreDesc[] = {
+static const char *const *const RtemsMessageReqDelete_PreDesc[] = {
   RtemsMessageReqDelete_PreDesc_Id,
   NULL
 };
@@ -166,8 +162,9 @@ static const char * const * const RtemsMessageReqDelete_PreDesc[] = {
 
 typedef RtemsMessageReqDelete_Context Context;
 
-static RTEMS_MESSAGE_QUEUE_BUFFER( MAX_MESSAGE_SIZE )
-  buffers[ MAX_PENDING_MESSAGES ];
+static RTEMS_MESSAGE_QUEUE_BUFFER(
+  MAX_MESSAGE_SIZE
+) buffers[ MAX_PENDING_MESSAGES ];
 
 static void Worker( rtems_task_argument arg )
 {
@@ -441,9 +438,7 @@ static inline RtemsMessageReqDelete_Entry RtemsMessageReqDelete_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsMessageReqDelete_Entries[
-    RtemsMessageReqDelete_Map[ index ]
-  ];
+  return RtemsMessageReqDelete_Entries[ RtemsMessageReqDelete_Map[ index ] ];
 }
 
 static void RtemsMessageReqDelete_TestVariant(

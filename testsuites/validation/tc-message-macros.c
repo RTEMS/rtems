@@ -82,13 +82,13 @@
  */
 static void RtemsMessageValMessageMacros_Action_0( void )
 {
-  rtems_status_code     status;
-  rtems_id              id;
+  rtems_status_code status;
+  rtems_id          id;
 
   static const uint32_t maximum_pending_messages_0 = 1;
   static const size_t   maximum_message_size_0 = 1;
   RTEMS_MESSAGE_QUEUE_BUFFER( maximum_message_size_0 )
-                        storage_area_0[ maximum_pending_messages_0 ];
+  storage_area_0[ maximum_pending_messages_0 ];
   rtems_message_queue_config config_0 = {
     .name = rtems_build_name( 'M', 'S', 'G', '0' ),
     .maximum_pending_messages = maximum_pending_messages_0,
@@ -102,7 +102,7 @@ static void RtemsMessageValMessageMacros_Action_0( void )
   static const uint32_t maximum_pending_messages_1 = 3;
   static const size_t   maximum_message_size_1 = 5;
   RTEMS_MESSAGE_QUEUE_BUFFER( maximum_message_size_1 )
-                        storage_area_1[ maximum_pending_messages_1 ];
+  storage_area_1[ maximum_pending_messages_1 ];
   rtems_message_queue_config config_1 = {
     .name = rtems_build_name( 'M', 'S', 'G', '1' ),
     .maximum_pending_messages = maximum_pending_messages_1,
@@ -119,17 +119,11 @@ static void RtemsMessageValMessageMacros_Action_0( void )
    * return RTEMS_UNSATISFIED instead of RTEMS_SUCCESSFUL if the object defined
    * by the RTEMS_MESSAGE_QUEUE_BUFFER() expression has incorrect size.
    */
-  status = rtems_message_queue_construct(
-    &config_0,
-    &id
-  );
+  status = rtems_message_queue_construct( &config_0, &id );
   T_step_rsc_success( 0, status );
   T_step_rsc_success( 1, rtems_message_queue_delete( id ) );
 
-  status = rtems_message_queue_construct(
-    &config_1,
-    &id
-  );
+  status = rtems_message_queue_construct( &config_1, &id );
   T_step_rsc_success( 2, status );
   T_step_rsc_success( 3, rtems_message_queue_delete( id ) );
 }

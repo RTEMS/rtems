@@ -109,8 +109,7 @@ typedef struct {
   T_ticks end;
 } RtemsBarrierValPerf_Context;
 
-static RtemsBarrierValPerf_Context
-  RtemsBarrierValPerf_Instance;
+static RtemsBarrierValPerf_Context RtemsBarrierValPerf_Instance;
 
 typedef RtemsBarrierValPerf_Context Context;
 
@@ -247,7 +246,7 @@ static void RtemsBarrierReqPerfReleaseAuto_Cleanup(
 
 /** @} */
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 /**
  * @defgroup RtemsBarrierReqPerfReleaseAutoOtherCpu \
  *   spec:/rtems/barrier/req/perf-release-auto-other-cpu
@@ -328,7 +327,12 @@ static bool RtemsBarrierReqPerfReleaseAutoOtherCpu_Teardown_Wrap(
 
   ctx = arg;
   (void) retry;
-  return RtemsBarrierReqPerfReleaseAutoOtherCpu_Teardown( ctx, delta, tic, toc );
+  return RtemsBarrierReqPerfReleaseAutoOtherCpu_Teardown(
+    ctx,
+    delta,
+    tic,
+    toc
+  );
 }
 
 /**
@@ -585,7 +589,7 @@ T_TEST_CASE_FIXTURE( RtemsBarrierValPerf, &RtemsBarrierValPerf_Fixture )
   T_measure_runtime( ctx->context, &ctx->request );
   RtemsBarrierReqPerfReleaseAuto_Cleanup( ctx );
 
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   RtemsBarrierReqPerfReleaseAutoOtherCpu_Prepare( ctx );
   ctx->request.name = "RtemsBarrierReqPerfReleaseAutoOtherCpu";
   ctx->request.setup = NULL;
@@ -607,7 +611,8 @@ T_TEST_CASE_FIXTURE( RtemsBarrierValPerf, &RtemsBarrierValPerf_Fixture )
   ctx->request.name = "RtemsBarrierReqPerfReleaseManualPreempt";
   ctx->request.setup = NULL;
   ctx->request.body = RtemsBarrierReqPerfReleaseManualPreempt_Body_Wrap;
-  ctx->request.teardown = RtemsBarrierReqPerfReleaseManualPreempt_Teardown_Wrap;
+  ctx->request.teardown =
+    RtemsBarrierReqPerfReleaseManualPreempt_Teardown_Wrap;
   T_measure_runtime( ctx->context, &ctx->request );
   RtemsBarrierReqPerfReleaseManualPreempt_Cleanup( ctx );
 }

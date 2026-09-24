@@ -195,10 +195,10 @@ typedef enum {
 static rtems_id extension_ids[ 7 ];
 
 static Atomic_Uint extension_counter[ RTEMS_ARRAY_SIZE( extension_ids ) ]
-  [ EXTENSION_KIND_COUNT ];
+                                    [ EXTENSION_KIND_COUNT ];
 
 static ExtensionEvent extension_events[ RTEMS_ARRAY_SIZE( extension_ids ) ]
-  [ EXTENSION_KIND_COUNT ][ 3 ];
+                                      [ EXTENSION_KIND_COUNT ][ 3 ];
 
 static Atomic_Uint global_counter;
 
@@ -319,69 +319,69 @@ static void Extension(
   }
 }
 
-#define DEFINE_EXTENSIONS( index, linkage ) \
-  linkage void ThreadBeginExtension##index( rtems_tcb *executing ) \
-  { \
-    Extension( index, THREAD_BEGIN, executing, NULL ); \
-  } \
-  linkage bool ThreadCreateExtension##index( \
-    rtems_tcb *executing, \
-    rtems_tcb *created \
-  ) \
-  { \
-    Extension( index, THREAD_CREATE, executing, created ); \
-    return true; \
-  } \
-  linkage void ThreadDeleteExtension##index( \
-    rtems_tcb *executing, \
-    rtems_tcb *deleted \
-  ) \
-  { \
-    Extension( index, THREAD_DELETE, executing, deleted ); \
-  } \
-  linkage void ThreadExittedExtension##index( rtems_tcb *executing ) \
-  { \
-    Extension( index, THREAD_EXITTED, executing, NULL ); \
-  } \
-  linkage void ThreadRestartExtension##index( \
-    rtems_tcb *executing, \
-    rtems_tcb *restarted \
-  ) \
-  { \
-    Extension( index, THREAD_RESTART, executing, restarted ); \
-  } \
-  linkage void ThreadStartExtension##index( \
-    rtems_tcb *executing, \
-    rtems_tcb *started \
-  ) \
-  { \
-    Extension( index, THREAD_START, executing, started ); \
-  } \
-  linkage void ThreadSwitchExtension##index( \
-    rtems_tcb *executing, \
-    rtems_tcb *heir \
-  ) \
-  { \
-    Extension( index, THREAD_SWITCH, executing, heir ); \
-  } \
+#define DEFINE_EXTENSIONS( index, linkage )                            \
+  linkage void ThreadBeginExtension##index( rtems_tcb *executing )     \
+  {                                                                    \
+    Extension( index, THREAD_BEGIN, executing, NULL );                 \
+  }                                                                    \
+  linkage bool ThreadCreateExtension##index(                           \
+    rtems_tcb *executing,                                              \
+    rtems_tcb *created                                                 \
+  )                                                                    \
+  {                                                                    \
+    Extension( index, THREAD_CREATE, executing, created );             \
+    return true;                                                       \
+  }                                                                    \
+  linkage void ThreadDeleteExtension##index(                           \
+    rtems_tcb *executing,                                              \
+    rtems_tcb *deleted                                                 \
+  )                                                                    \
+  {                                                                    \
+    Extension( index, THREAD_DELETE, executing, deleted );             \
+  }                                                                    \
+  linkage void ThreadExittedExtension##index( rtems_tcb *executing )   \
+  {                                                                    \
+    Extension( index, THREAD_EXITTED, executing, NULL );               \
+  }                                                                    \
+  linkage void ThreadRestartExtension##index(                          \
+    rtems_tcb *executing,                                              \
+    rtems_tcb *restarted                                               \
+  )                                                                    \
+  {                                                                    \
+    Extension( index, THREAD_RESTART, executing, restarted );          \
+  }                                                                    \
+  linkage void ThreadStartExtension##index(                            \
+    rtems_tcb *executing,                                              \
+    rtems_tcb *started                                                 \
+  )                                                                    \
+  {                                                                    \
+    Extension( index, THREAD_START, executing, started );              \
+  }                                                                    \
+  linkage void ThreadSwitchExtension##index(                           \
+    rtems_tcb *executing,                                              \
+    rtems_tcb *heir                                                    \
+  )                                                                    \
+  {                                                                    \
+    Extension( index, THREAD_SWITCH, executing, heir );                \
+  }                                                                    \
   linkage void ThreadTerminateExtension##index( rtems_tcb *executing ) \
-  { \
-    Extension( index, THREAD_TERMINATE, executing, NULL ); \
+  {                                                                    \
+    Extension( index, THREAD_TERMINATE, executing, NULL );             \
   }
 
 DEFINE_EXTENSIONS( 0, )
 DEFINE_EXTENSIONS( 1, )
 
-#define DEFINE_EXTENSIONS_AND_TABLE( index ) \
-  DEFINE_EXTENSIONS( index, static ) \
+#define DEFINE_EXTENSIONS_AND_TABLE( index )            \
+  DEFINE_EXTENSIONS( index, static )                    \
   static const rtems_extensions_table table_##index = { \
-    .thread_begin = ThreadBeginExtension##index, \
-    .thread_create = ThreadCreateExtension##index, \
-    .thread_delete = ThreadDeleteExtension##index, \
-    .thread_exitted = ThreadExittedExtension##index, \
-    .thread_restart = ThreadRestartExtension##index, \
-    .thread_start = ThreadStartExtension##index, \
-    .thread_switch = ThreadSwitchExtension##index, \
+    .thread_begin = ThreadBeginExtension##index,        \
+    .thread_create = ThreadCreateExtension##index,      \
+    .thread_delete = ThreadDeleteExtension##index,      \
+    .thread_exitted = ThreadExittedExtension##index,    \
+    .thread_restart = ThreadRestartExtension##index,    \
+    .thread_start = ThreadStartExtension##index,        \
+    .thread_switch = ThreadSwitchExtension##index,      \
     .thread_terminate = ThreadTerminateExtension##index \
   }
 
@@ -391,15 +391,8 @@ DEFINE_EXTENSIONS_AND_TABLE( 4 );
 DEFINE_EXTENSIONS_AND_TABLE( 5 );
 DEFINE_EXTENSIONS_AND_TABLE( 6 );
 
-static const rtems_extensions_table * const tables[] = {
-  NULL,
-  NULL,
-  &table_2,
-  &table_3,
-  &table_4,
-  &table_5,
-  &table_6
-};
+static const rtems_extensions_table *const tables[] =
+  { NULL, NULL, &table_2, &table_3, &table_4, &table_5, &table_6 };
 
 static rtems_tcb *StartTestCase( ExtensionKind kind )
 {
@@ -474,10 +467,7 @@ static void CheckReverse(
       T_eq_uint( extension_counter[ i ][ kind ], 0 );
     } else {
       T_eq_uint( extension_counter[ i ][ kind ], 1 );
-      T_eq_uint(
-        extension_events[ i ][ kind ][ 0 ].counter,
-        7 - counter
-      );
+      T_eq_uint( extension_events[ i ][ kind ][ 0 ].counter, 7 - counter );
       T_eq_ptr( extension_events[ i ][ kind ][ 0 ].executing, executing );
       T_eq_ptr( extension_events[ i ][ kind ][ 0 ].thread, thread );
 

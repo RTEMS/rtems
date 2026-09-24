@@ -109,16 +109,12 @@ typedef struct {
   } Map;
 } ScoreTqReqEnqueueFifo_Context;
 
-static ScoreTqReqEnqueueFifo_Context
-  ScoreTqReqEnqueueFifo_Instance;
+static ScoreTqReqEnqueueFifo_Context ScoreTqReqEnqueueFifo_Instance;
 
-static const char * const ScoreTqReqEnqueueFifo_PreDesc_Queue[] = {
-  "Empty",
-  "NonEmpty",
-  "NA"
-};
+static const char *const ScoreTqReqEnqueueFifo_PreDesc_Queue[] =
+  { "Empty", "NonEmpty", "NA" };
 
-static const char * const * const ScoreTqReqEnqueueFifo_PreDesc[] = {
+static const char *const *const ScoreTqReqEnqueueFifo_PreDesc[] = {
   ScoreTqReqEnqueueFifo_PreDesc_Queue,
   NULL
 };
@@ -290,9 +286,7 @@ static inline ScoreTqReqEnqueueFifo_Entry ScoreTqReqEnqueueFifo_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return ScoreTqReqEnqueueFifo_Entries[
-    ScoreTqReqEnqueueFifo_Map[ index ]
-  ];
+  return ScoreTqReqEnqueueFifo_Entries[ ScoreTqReqEnqueueFifo_Map[ index ] ];
 }
 
 static void ScoreTqReqEnqueueFifo_TestVariant(

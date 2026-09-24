@@ -237,46 +237,27 @@ typedef struct {
   } Map;
 } RtemsSignalReqCatch_Context;
 
-static RtemsSignalReqCatch_Context
-  RtemsSignalReqCatch_Instance;
+static RtemsSignalReqCatch_Context RtemsSignalReqCatch_Instance;
 
-static const char * const RtemsSignalReqCatch_PreDesc_Pending[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsSignalReqCatch_PreDesc_Pending[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsSignalReqCatch_PreDesc_Handler[] = {
-  "Invalid",
-  "Valid",
-  "NA"
-};
+static const char *const RtemsSignalReqCatch_PreDesc_Handler[] =
+  { "Invalid", "Valid", "NA" };
 
-static const char * const RtemsSignalReqCatch_PreDesc_Preempt[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsSignalReqCatch_PreDesc_Preempt[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsSignalReqCatch_PreDesc_Timeslice[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsSignalReqCatch_PreDesc_Timeslice[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsSignalReqCatch_PreDesc_ASR[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsSignalReqCatch_PreDesc_ASR[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsSignalReqCatch_PreDesc_IntLvl[] = {
-  "Zero",
-  "Positive",
-  "NA"
-};
+static const char *const RtemsSignalReqCatch_PreDesc_IntLvl[] =
+  { "Zero", "Positive", "NA" };
 
-static const char * const * const RtemsSignalReqCatch_PreDesc[] = {
+static const char *const *const RtemsSignalReqCatch_PreDesc[] = {
   RtemsSignalReqCatch_PreDesc_Pending,
   RtemsSignalReqCatch_PreDesc_Handler,
   RtemsSignalReqCatch_PreDesc_Preempt,
@@ -522,7 +503,7 @@ static void RtemsSignalReqCatch_Pre_IntLvl_Prepare(
       /*
        * While the ``mode_set`` parameter specifies an interrupt level of zero.
        */
-      #if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE && !defined(RTEMS_SMP)
+      #if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE && !defined( RTEMS_SMP )
       ctx->normal_mode |= RTEMS_INTERRUPT_LEVEL( 1 );
       #endif
       break;
@@ -756,11 +737,11 @@ static void RtemsSignalReqCatch_Action( RtemsSignalReqCatch_Context *ctx )
   if ( ctx->pending_signals != 0 ) {
     rtems_interrupt_level level;
 
-    rtems_interrupt_local_disable(level);
+    rtems_interrupt_local_disable( level );
     _SMP_barrier_Wait( &ctx->barrier, &ctx->runner_barrier_state, 2 );
     _SMP_barrier_Wait( &ctx->barrier, &ctx->runner_barrier_state, 2 );
     ctx->catch_status = rtems_signal_catch( ctx->handler, ctx->mode );
-    rtems_interrupt_local_enable(level);
+    rtems_interrupt_local_enable( level );
   } else {
     ctx->catch_status = rtems_signal_catch( ctx->handler, ctx->mode );
   }
@@ -839,9 +820,7 @@ static inline RtemsSignalReqCatch_Entry RtemsSignalReqCatch_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsSignalReqCatch_Entries[
-    RtemsSignalReqCatch_Map[ index ]
-  ];
+  return RtemsSignalReqCatch_Entries[ RtemsSignalReqCatch_Map[ index ] ];
 }
 
 static void RtemsSignalReqCatch_TestVariant( RtemsSignalReqCatch_Context *ctx )

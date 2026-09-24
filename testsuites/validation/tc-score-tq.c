@@ -91,8 +91,7 @@ typedef struct {
   TQContext tq_ctx;
 } ScoreTqValTq_Context;
 
-static ScoreTqValTq_Context
-  ScoreTqValTq_Instance;
+static ScoreTqValTq_Context ScoreTqValTq_Instance;
 
 static void ScoreTqValTq_Setup( ScoreTqValTq_Context *ctx )
 {

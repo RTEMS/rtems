@@ -129,16 +129,12 @@ typedef struct {
   } Map;
 } RtemsTimerReqDelete_Context;
 
-static RtemsTimerReqDelete_Context
-  RtemsTimerReqDelete_Instance;
+static RtemsTimerReqDelete_Context RtemsTimerReqDelete_Instance;
 
-static const char * const RtemsTimerReqDelete_PreDesc_Id[] = {
-  "NoObj",
-  "Timer",
-  "NA"
-};
+static const char *const RtemsTimerReqDelete_PreDesc_Id[] =
+  { "NoObj", "Timer", "NA" };
 
-static const char * const * const RtemsTimerReqDelete_PreDesc[] = {
+static const char *const *const RtemsTimerReqDelete_PreDesc[] = {
   RtemsTimerReqDelete_PreDesc_Id,
   NULL
 };
@@ -328,9 +324,7 @@ static inline RtemsTimerReqDelete_Entry RtemsTimerReqDelete_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsTimerReqDelete_Entries[
-    RtemsTimerReqDelete_Map[ index ]
-  ];
+  return RtemsTimerReqDelete_Entries[ RtemsTimerReqDelete_Map[ index ] ];
 }
 
 static void RtemsTimerReqDelete_TestVariant( RtemsTimerReqDelete_Context *ctx )

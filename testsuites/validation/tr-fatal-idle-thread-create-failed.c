@@ -125,11 +125,7 @@ static void ScoreThreadValFatalIdleThreadCreateFailed_Action_0(
   /*
    * Check that the expected fatal code is present.
    */
-  T_step_eq_ulong(
-    1,
-    ctx->code,
-    INTERNAL_ERROR_IDLE_THREAD_CREATE_FAILED
-  );
+  T_step_eq_ulong( 1, ctx->code, INTERNAL_ERROR_IDLE_THREAD_CREATE_FAILED );
 }
 
 void ScoreThreadValFatalIdleThreadCreateFailed_Run(

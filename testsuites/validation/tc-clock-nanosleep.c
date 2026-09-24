@@ -261,49 +261,27 @@ typedef struct {
   } Map;
 } CReqClockNanosleep_Context;
 
-static CReqClockNanosleep_Context
-  CReqClockNanosleep_Instance;
+static CReqClockNanosleep_Context CReqClockNanosleep_Instance;
 
-static const char * const CReqClockNanosleep_PreDesc_ClockId[] = {
-  "Monotonic",
-  "Realtime",
-  "Invalid",
-  "NA"
-};
+static const char *const CReqClockNanosleep_PreDesc_ClockId[] =
+  { "Monotonic", "Realtime", "Invalid", "NA" };
 
-static const char * const CReqClockNanosleep_PreDesc_Abstime[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const CReqClockNanosleep_PreDesc_Abstime[] =
+  { "Yes", "No", "NA" };
 
-static const char * const CReqClockNanosleep_PreDesc_RQTp[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const CReqClockNanosleep_PreDesc_RQTp[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const CReqClockNanosleep_PreDesc_RQTpNSec[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const CReqClockNanosleep_PreDesc_RQTpNSec[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const CReqClockNanosleep_PreDesc_RQTpSec[] = {
-  "Negative",
-  "FarFuture",
-  "Future",
-  "PastOrNow",
-  "NA"
-};
+static const char *const CReqClockNanosleep_PreDesc_RQTpSec[] =
+  { "Negative", "FarFuture", "Future", "PastOrNow", "NA" };
 
-static const char * const CReqClockNanosleep_PreDesc_RMTp[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const CReqClockNanosleep_PreDesc_RMTp[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const * const CReqClockNanosleep_PreDesc[] = {
+static const char *const *const CReqClockNanosleep_PreDesc[] = {
   CReqClockNanosleep_PreDesc_ClockId,
   CReqClockNanosleep_PreDesc_Abstime,
   CReqClockNanosleep_PreDesc_RQTp,
@@ -691,10 +669,7 @@ static void CReqClockNanosleep_Post_Scheduler_Check(
        * clock_nanosleep() call.
        */
       T_eq_sz( ctx->scheduler_log.header.recorded, 1 );
-      T_eq_int(
-        ctx->scheduler_log.events[ 0 ].operation,
-        T_SCHEDULER_BLOCK
-      );
+      T_eq_int( ctx->scheduler_log.events[ 0 ].operation, T_SCHEDULER_BLOCK );
       break;
     }
 
@@ -705,10 +680,7 @@ static void CReqClockNanosleep_Post_Scheduler_Check(
        * clock_nanosleep() call.
        */
       T_eq_sz( ctx->scheduler_log.header.recorded, 2 );
-      T_eq_int(
-        ctx->scheduler_log.events[ 0 ].operation,
-        T_SCHEDULER_BLOCK
-      );
+      T_eq_int( ctx->scheduler_log.events[ 0 ].operation, T_SCHEDULER_BLOCK );
       T_eq_int(
         ctx->scheduler_log.events[ 1 ].operation,
         T_SCHEDULER_UNBLOCK
@@ -921,9 +893,7 @@ static inline CReqClockNanosleep_Entry CReqClockNanosleep_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return CReqClockNanosleep_Entries[
-    CReqClockNanosleep_Map[ index ]
-  ];
+  return CReqClockNanosleep_Entries[ CReqClockNanosleep_Map[ index ] ];
 }
 
 static void CReqClockNanosleep_SetPreConditionStates(

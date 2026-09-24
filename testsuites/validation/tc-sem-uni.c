@@ -101,8 +101,7 @@ typedef struct {
   uint32_t counter;
 } RtemsSemValUni_Context;
 
-static RtemsSemValUni_Context
-  RtemsSemValUni_Instance;
+static RtemsSemValUni_Context RtemsSemValUni_Instance;
 
 typedef RtemsSemValUni_Context Context;
 
@@ -159,8 +158,8 @@ static T_fixture RtemsSemValUni_Fixture = {
  */
 static void RtemsSemValUni_Action_0( RtemsSemValUni_Context *ctx )
 {
-  rtems_status_code   sc;
-  rtems_id            worker_id;
+  rtems_status_code sc;
+  rtems_id          worker_id;
 
   sc = rtems_semaphore_create(
     rtems_build_name( 'M', 'T', 'X', '1' ),

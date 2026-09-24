@@ -246,62 +246,37 @@ typedef struct {
 static ScoreTqReqTimeoutPriorityInherit_Context
   ScoreTqReqTimeoutPriorityInherit_Instance;
 
-static const char * const ScoreTqReqTimeoutPriorityInherit_PreDesc_HomeScheduler[] = {
-  "Home",
-  "Helping",
-  "NA"
-};
+static const char *const
+  ScoreTqReqTimeoutPriorityInherit_PreDesc_HomeScheduler[] =
+    { "Home", "Helping", "NA" };
 
-static const char * const ScoreTqReqTimeoutPriorityInherit_PreDesc_EligibleScheduler[] = {
-  "One",
-  "More",
-  "NA"
-};
+static const char *const
+  ScoreTqReqTimeoutPriorityInherit_PreDesc_EligibleScheduler[] =
+    { "One", "More", "NA" };
 
-static const char * const ScoreTqReqTimeoutPriorityInherit_PreDesc_Queue[] = {
-  "Only",
-  "Vital",
-  "Dispensable",
-  "NA"
-};
+static const char *const ScoreTqReqTimeoutPriorityInherit_PreDesc_Queue[] =
+  { "Only", "Vital", "Dispensable", "NA" };
 
-static const char * const ScoreTqReqTimeoutPriorityInherit_PreDesc_OwnerPriority[] = {
-  "Only",
-  "Vital",
-  "Dispensable",
-  "NA"
-};
+static const char *const
+  ScoreTqReqTimeoutPriorityInherit_PreDesc_OwnerPriority[] =
+    { "Only", "Vital", "Dispensable", "NA" };
 
-static const char * const ScoreTqReqTimeoutPriorityInherit_PreDesc_OwnerState[] = {
-  "NotEnqueued",
-  "FIFO",
-  "Priority",
-  "PriorityInherit",
-  "NA"
-};
+static const char *const
+  ScoreTqReqTimeoutPriorityInherit_PreDesc_OwnerState[] =
+    { "NotEnqueued", "FIFO", "Priority", "PriorityInherit", "NA" };
 
-static const char * const ScoreTqReqTimeoutPriorityInherit_PreDesc_OwnerQueue[] = {
-  "Only",
-  "Vital",
-  "Dispensable",
-  "NA"
-};
+static const char *const
+  ScoreTqReqTimeoutPriorityInherit_PreDesc_OwnerQueue[] =
+    { "Only", "Vital", "Dispensable", "NA" };
 
-static const char * const ScoreTqReqTimeoutPriorityInherit_PreDesc_OwnerOwnerPriority[] = {
-  "Only",
-  "Vital",
-  "Dispensable",
-  "NA"
-};
+static const char *const
+  ScoreTqReqTimeoutPriorityInherit_PreDesc_OwnerOwnerPriority[] =
+    { "Only", "Vital", "Dispensable", "NA" };
 
-static const char * const ScoreTqReqTimeoutPriorityInherit_PreDesc_WaitState[] = {
-  "Blocked",
-  "IntendToBlock",
-  "ReadyAgain",
-  "NA"
-};
+static const char *const ScoreTqReqTimeoutPriorityInherit_PreDesc_WaitState[] =
+  { "Blocked", "IntendToBlock", "ReadyAgain", "NA" };
 
-static const char * const * const ScoreTqReqTimeoutPriorityInherit_PreDesc[] = {
+static const char *const *const ScoreTqReqTimeoutPriorityInherit_PreDesc[] = {
   ScoreTqReqTimeoutPriorityInherit_PreDesc_HomeScheduler,
   ScoreTqReqTimeoutPriorityInherit_PreDesc_EligibleScheduler,
   ScoreTqReqTimeoutPriorityInherit_PreDesc_Queue,
@@ -371,8 +346,7 @@ static void SchedulerBlock(
   ctx = arg;
 
   if (
-    when == T_SCHEDULER_BEFORE &&
-    event->operation == T_SCHEDULER_BLOCK &&
+    when == T_SCHEDULER_BEFORE && event->operation == T_SCHEDULER_BLOCK &&
     event->thread == ctx->tq_ctx->worker_tcb[ THREAD ]
   ) {
     T_scheduler_set_event_handler( NULL, NULL );
@@ -387,9 +361,7 @@ static void ThreadTimeout( void *arg )
 
   ctx = arg;
   TQSchedulerRecordStart( ctx->tq_ctx );
-  _Thread_Timeout(
-    &ctx->tq_ctx->worker_tcb[ THREAD ]->Timer.Watchdog
-  );
+  _Thread_Timeout( &ctx->tq_ctx->worker_tcb[ THREAD ]->Timer.Watchdog );
   TQSchedulerRecordStop( ctx->tq_ctx );
 }
 
@@ -404,14 +376,13 @@ static void SchedulerUnblock(
   ctx = arg;
 
   if (
-    when == T_SCHEDULER_BEFORE &&
-    event->operation == T_SCHEDULER_UNBLOCK &&
+    when == T_SCHEDULER_BEFORE && event->operation == T_SCHEDULER_UNBLOCK &&
     event->thread == ctx->tq_ctx->worker_tcb[ THREAD ]
   ) {
     T_scheduler_set_event_handler( NULL, NULL );
 
     if ( ctx->scheduler_id == SCHEDULER_B_ID ) {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
       _SMP_Unicast_action( 1, ThreadTimeout, ctx );
 #else
       T_unreachable();
@@ -506,12 +477,7 @@ static rtems_task_priority PrepareQueue(
     case TQ_NODE_DISPENSABLE:
       ctx->queue_helper_surrender = true;
       --priority;
-      TQSetScheduler(
-        ctx->tq_ctx,
-        QUEUE_HELPER,
-        ctx->scheduler_id,
-        priority
-      );
+      TQSetScheduler( ctx->tq_ctx, QUEUE_HELPER, ctx->scheduler_id, priority );
       TQSendAndWaitForExecutionStop(
         ctx->tq_ctx,
         QUEUE_HELPER,
@@ -1135,7 +1101,10 @@ static void ScoreTqReqTimeoutPriorityInherit_Post_OwnerOwnerPriority_Check(
        * enqueued with respect to the scheduler shall be lowered to the next
        * highest priority.
        */
-      T_eq_u32( ctx->owner_owner_priority_after, ctx->owner_owner_priority + 1 );
+      T_eq_u32(
+        ctx->owner_owner_priority_after,
+        ctx->owner_owner_priority + 1
+      );
       break;
     }
 
@@ -1206,11 +1175,7 @@ static void ScoreTqReqTimeoutPriorityInherit_Action(
   priority = PRIO_FLEXIBLE;
   TQSetScheduler( ctx->tq_ctx, THREAD, ctx->scheduler_id, priority );
 
-  TQSend(
-    ctx->tq_ctx,
-    OWNER,
-    TQ_EVENT_MUTEX_A_OBTAIN | TQ_EVENT_ENQUEUE
-  );
+  TQSend( ctx->tq_ctx, OWNER, TQ_EVENT_MUTEX_A_OBTAIN | TQ_EVENT_ENQUEUE );
 
   if ( ctx->owner_obtain != 0 ) {
     TQSend(
@@ -1991,9 +1956,8 @@ ScoreTqReqTimeoutPriorityInherit_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return ScoreTqReqTimeoutPriorityInherit_Entries[
-    ScoreTqReqTimeoutPriorityInherit_Map[ index ]
-  ];
+  return ScoreTqReqTimeoutPriorityInherit_Entries
+    [ ScoreTqReqTimeoutPriorityInherit_Map[ index ] ];
 }
 
 static void ScoreTqReqTimeoutPriorityInherit_SetPreConditionStates(
@@ -2013,7 +1977,8 @@ static void ScoreTqReqTimeoutPriorityInherit_SetPreConditionStates(
   }
 
   if ( ctx->Map.entry.Pre_OwnerOwnerPriority_NA ) {
-    ctx->Map.pcs[ 6 ] = ScoreTqReqTimeoutPriorityInherit_Pre_OwnerOwnerPriority_NA;
+    ctx->Map.pcs[ 6 ] =
+      ScoreTqReqTimeoutPriorityInherit_Pre_OwnerOwnerPriority_NA;
   } else {
     ctx->Map.pcs[ 6 ] = ctx->Map.pci[ 6 ];
   }
@@ -2095,13 +2060,16 @@ void ScoreTqReqTimeoutPriorityInherit_Run( TQContext *tq_ctx )
   ctx->Map.index = 0;
 
   for (
-    ctx->Map.pci[ 0 ] = ScoreTqReqTimeoutPriorityInherit_Pre_HomeScheduler_Home;
+    ctx->Map.pci[ 0 ] =
+      ScoreTqReqTimeoutPriorityInherit_Pre_HomeScheduler_Home;
     ctx->Map.pci[ 0 ] < ScoreTqReqTimeoutPriorityInherit_Pre_HomeScheduler_NA;
     ++ctx->Map.pci[ 0 ]
   ) {
     for (
-      ctx->Map.pci[ 1 ] = ScoreTqReqTimeoutPriorityInherit_Pre_EligibleScheduler_One;
-      ctx->Map.pci[ 1 ] < ScoreTqReqTimeoutPriorityInherit_Pre_EligibleScheduler_NA;
+      ctx->Map.pci[ 1 ] =
+        ScoreTqReqTimeoutPriorityInherit_Pre_EligibleScheduler_One;
+      ctx->Map.pci[ 1 ] <
+      ScoreTqReqTimeoutPriorityInherit_Pre_EligibleScheduler_NA;
       ++ctx->Map.pci[ 1 ]
     ) {
       for (
@@ -2110,28 +2078,38 @@ void ScoreTqReqTimeoutPriorityInherit_Run( TQContext *tq_ctx )
         ++ctx->Map.pci[ 2 ]
       ) {
         for (
-          ctx->Map.pci[ 3 ] = ScoreTqReqTimeoutPriorityInherit_Pre_OwnerPriority_Only;
-          ctx->Map.pci[ 3 ] < ScoreTqReqTimeoutPriorityInherit_Pre_OwnerPriority_NA;
+          ctx->Map.pci[ 3 ] =
+            ScoreTqReqTimeoutPriorityInherit_Pre_OwnerPriority_Only;
+          ctx->Map.pci[ 3 ] <
+          ScoreTqReqTimeoutPriorityInherit_Pre_OwnerPriority_NA;
           ++ctx->Map.pci[ 3 ]
         ) {
           for (
-            ctx->Map.pci[ 4 ] = ScoreTqReqTimeoutPriorityInherit_Pre_OwnerState_NotEnqueued;
-            ctx->Map.pci[ 4 ] < ScoreTqReqTimeoutPriorityInherit_Pre_OwnerState_NA;
+            ctx->Map.pci[ 4 ] =
+              ScoreTqReqTimeoutPriorityInherit_Pre_OwnerState_NotEnqueued;
+            ctx->Map.pci[ 4 ] <
+            ScoreTqReqTimeoutPriorityInherit_Pre_OwnerState_NA;
             ++ctx->Map.pci[ 4 ]
           ) {
             for (
-              ctx->Map.pci[ 5 ] = ScoreTqReqTimeoutPriorityInherit_Pre_OwnerQueue_Only;
-              ctx->Map.pci[ 5 ] < ScoreTqReqTimeoutPriorityInherit_Pre_OwnerQueue_NA;
+              ctx->Map.pci[ 5 ] =
+                ScoreTqReqTimeoutPriorityInherit_Pre_OwnerQueue_Only;
+              ctx->Map.pci[ 5 ] <
+              ScoreTqReqTimeoutPriorityInherit_Pre_OwnerQueue_NA;
               ++ctx->Map.pci[ 5 ]
             ) {
               for (
-                ctx->Map.pci[ 6 ] = ScoreTqReqTimeoutPriorityInherit_Pre_OwnerOwnerPriority_Only;
-                ctx->Map.pci[ 6 ] < ScoreTqReqTimeoutPriorityInherit_Pre_OwnerOwnerPriority_NA;
+                ctx->Map.pci[ 6 ] =
+                  ScoreTqReqTimeoutPriorityInherit_Pre_OwnerOwnerPriority_Only;
+                ctx->Map.pci[ 6 ] <
+                ScoreTqReqTimeoutPriorityInherit_Pre_OwnerOwnerPriority_NA;
                 ++ctx->Map.pci[ 6 ]
               ) {
                 for (
-                  ctx->Map.pci[ 7 ] = ScoreTqReqTimeoutPriorityInherit_Pre_WaitState_Blocked;
-                  ctx->Map.pci[ 7 ] < ScoreTqReqTimeoutPriorityInherit_Pre_WaitState_NA;
+                  ctx->Map.pci[ 7 ] =
+                    ScoreTqReqTimeoutPriorityInherit_Pre_WaitState_Blocked;
+                  ctx->Map.pci[ 7 ] <
+                  ScoreTqReqTimeoutPriorityInherit_Pre_WaitState_NA;
                   ++ctx->Map.pci[ 7 ]
                 ) {
                   ctx->Map.entry = ScoreTqReqTimeoutPriorityInherit_PopEntry(

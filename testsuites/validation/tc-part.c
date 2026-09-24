@@ -87,12 +87,12 @@
  */
 static void RtemsPartValPart_Action_0( void )
 {
-  RTEMS_ALIGNED( RTEMS_PARTITION_ALIGNMENT ) uint8_t
-    buffers[ 4 ][ 2 * sizeof( void * ) ];
-  void              *pointers[ RTEMS_ARRAY_SIZE( buffers ) ];
-  void              *pointer;
-  rtems_status_code  sc;
-  rtems_id           id;
+  RTEMS_ALIGNED( RTEMS_PARTITION_ALIGNMENT )
+  uint8_t           buffers[ 4 ][ 2 * sizeof( void * ) ];
+  void             *pointers[ RTEMS_ARRAY_SIZE( buffers ) ];
+  void             *pointer;
+  rtems_status_code sc;
+  rtems_id          id;
 
   id = 0xffffffff;
   sc = rtems_partition_create(

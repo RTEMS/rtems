@@ -187,29 +187,18 @@ typedef struct {
   } Map;
 } RtemsIntrReqRaiseOn_Context;
 
-static RtemsIntrReqRaiseOn_Context
-  RtemsIntrReqRaiseOn_Instance;
+static RtemsIntrReqRaiseOn_Context RtemsIntrReqRaiseOn_Instance;
 
-static const char * const RtemsIntrReqRaiseOn_PreDesc_Vector[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsIntrReqRaiseOn_PreDesc_Vector[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsIntrReqRaiseOn_PreDesc_CPU[] = {
-  "Online",
-  "NotOnline",
-  "NotConf",
-  "NA"
-};
+static const char *const RtemsIntrReqRaiseOn_PreDesc_CPU[] =
+  { "Online", "NotOnline", "NotConf", "NA" };
 
-static const char * const RtemsIntrReqRaiseOn_PreDesc_CanRaiseOn[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsIntrReqRaiseOn_PreDesc_CanRaiseOn[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const RtemsIntrReqRaiseOn_PreDesc[] = {
+static const char *const *const RtemsIntrReqRaiseOn_PreDesc[] = {
   RtemsIntrReqRaiseOn_PreDesc_Vector,
   RtemsIntrReqRaiseOn_PreDesc_CPU,
   RtemsIntrReqRaiseOn_PreDesc_CanRaiseOn,
@@ -337,7 +326,7 @@ static void CheckRaiseOn(
     );
     T_rsc_success( sc );
 
-    if ( !IsPending( ctx) && ( attr->can_enable || IsEnabled( ctx ) ) ) {
+    if ( !IsPending( ctx ) && ( attr->can_enable || IsEnabled( ctx ) ) ) {
       Disable( ctx );
       RaiseOn( ctx );
 
@@ -580,9 +569,7 @@ static void RtemsIntrReqRaiseOn_Action( RtemsIntrReqRaiseOn_Context *ctx )
 {
   if ( ctx->valid_vector && ctx->cpu_index == 0 ) {
     for (
-      ctx->vector = 0;
-      ctx->vector < BSP_INTERRUPT_VECTOR_COUNT;
-      ++ctx->vector
+      ctx->vector = 0; ctx->vector < BSP_INTERRUPT_VECTOR_COUNT; ++ctx->vector
     ) {
       rtems_status_code          sc;
       rtems_interrupt_attributes attr;
@@ -597,7 +584,9 @@ static void RtemsIntrReqRaiseOn_Action( RtemsIntrReqRaiseOn_Context *ctx )
 
       T_rsc_success( sc );
 
-      has_installed_entries = HasInterruptVectorEntriesInstalled( ctx->vector );
+      has_installed_entries = HasInterruptVectorEntriesInstalled(
+        ctx->vector
+      );
       CheckRaiseOn( ctx, &attr, has_installed_entries );
     }
   } else {
@@ -675,9 +664,7 @@ static inline RtemsIntrReqRaiseOn_Entry RtemsIntrReqRaiseOn_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsIntrReqRaiseOn_Entries[
-    RtemsIntrReqRaiseOn_Map[ index ]
-  ];
+  return RtemsIntrReqRaiseOn_Entries[ RtemsIntrReqRaiseOn_Map[ index ] ];
 }
 
 static void RtemsIntrReqRaiseOn_SetPreConditionStates(

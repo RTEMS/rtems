@@ -175,45 +175,29 @@ typedef struct {
   } Map;
 } ScoreTqReqSurrenderMrsp_Context;
 
-static ScoreTqReqSurrenderMrsp_Context
-  ScoreTqReqSurrenderMrsp_Instance;
+static ScoreTqReqSurrenderMrsp_Context ScoreTqReqSurrenderMrsp_Instance;
 
-static const char * const ScoreTqReqSurrenderMrsp_PreDesc_InheritedPriority[] = {
-  "Vital",
-  "Dispensable",
-  "NA"
-};
+static const char *const ScoreTqReqSurrenderMrsp_PreDesc_InheritedPriority[] =
+  { "Vital", "Dispensable", "NA" };
 
-static const char * const ScoreTqReqSurrenderMrsp_PreDesc_PreviousHelping[] = {
-  "Vital",
-  "Dispensable",
-  "NA"
-};
+static const char *const ScoreTqReqSurrenderMrsp_PreDesc_PreviousHelping[] =
+  { "Vital", "Dispensable", "NA" };
 
-static const char * const ScoreTqReqSurrenderMrsp_PreDesc_Scheduler[] = {
-  "Home",
-  "Helping",
-  "NA"
-};
+static const char *const ScoreTqReqSurrenderMrsp_PreDesc_Scheduler[] =
+  { "Home", "Helping", "NA" };
 
-static const char * const ScoreTqReqSurrenderMrsp_PreDesc_NewHelping[] = {
-  "Vital",
-  "Dispensable",
-  "NA"
-};
+static const char *const ScoreTqReqSurrenderMrsp_PreDesc_NewHelping[] =
+  { "Vital", "Dispensable", "NA" };
 
-static const char * const ScoreTqReqSurrenderMrsp_PreDesc_Suspended[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const ScoreTqReqSurrenderMrsp_PreDesc_Suspended[] =
+  { "Yes", "No", "NA" };
 
-static const char * const ScoreTqReqSurrenderMrsp_PreDesc_WaitState[] = {
+static const char *const ScoreTqReqSurrenderMrsp_PreDesc_WaitState[] = {
   "IntendToBlock",
   "NA"
 };
 
-static const char * const * const ScoreTqReqSurrenderMrsp_PreDesc[] = {
+static const char *const *const ScoreTqReqSurrenderMrsp_PreDesc[] = {
   ScoreTqReqSurrenderMrsp_PreDesc_InheritedPriority,
   ScoreTqReqSurrenderMrsp_PreDesc_PreviousHelping,
   ScoreTqReqSurrenderMrsp_PreDesc_Scheduler,
@@ -495,7 +479,7 @@ static void ScoreTqReqSurrenderMrsp_Post_RemoveHelper_Check(
         SCHEDULER_B_ID,
         &priority
       );
-      #if defined(RTEMS_SMP)
+      #if defined( RTEMS_SMP )
       T_rsc_success( sc );
 
       if ( ctx->tq_ctx->enqueue_variant == TQ_ENQUEUE_STICKY ) {
@@ -553,7 +537,7 @@ static void ScoreTqReqSurrenderMrsp_Post_AddHelper_Check(
         SCHEDULER_A_ID,
         &priority
       );
-      #if defined(RTEMS_SMP)
+      #if defined( RTEMS_SMP )
       T_rsc( sc, RTEMS_NOT_DEFINED );
       #else
       T_rsc_success( sc );
@@ -683,20 +667,12 @@ static void ScoreTqReqSurrenderMrsp_Action(
   );
   SetSelfScheduler( SCHEDULER_A_ID, PRIO_ULTRA_HIGH );
 
-  TQSendAndWaitForIntendToBlock(
-    ctx->tq_ctx,
-    TQ_BLOCKER_A,
-    TQ_EVENT_ENQUEUE
-  );
+  TQSendAndWaitForIntendToBlock( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
 
   SetSelfScheduler( SCHEDULER_B_ID, PRIO_ULTRA_HIGH );
 
   if ( ctx->gains_new_helping_scheduler ) {
-    TQSend(
-      ctx->tq_ctx,
-      TQ_BLOCKER_D,
-      TQ_EVENT_ENQUEUE
-    );
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_D, TQ_EVENT_ENQUEUE );
     YieldTask( ctx->tq_ctx->worker_id[ TQ_HELPER_A ] );
     TQWaitForEventsReceived( ctx->tq_ctx, TQ_BLOCKER_D );
     TQWaitForIntendToBlock( ctx->tq_ctx, TQ_BLOCKER_D );
@@ -716,8 +692,7 @@ static void ScoreTqReqSurrenderMrsp_Action(
   TQSendAndWaitForExecutionStop(
     ctx->tq_ctx,
     TQ_HELPER_A,
-    TQ_EVENT_SCHEDULER_RECORD_START |
-      TQ_EVENT_SURRENDER
+    TQ_EVENT_SCHEDULER_RECORD_START | TQ_EVENT_SURRENDER
   );
   TQSchedulerRecordStop( ctx->tq_ctx );
   T_eq_ptr(
@@ -737,11 +712,7 @@ static void ScoreTqReqSurrenderMrsp_Cleanup(
     ResumeTask( ctx->tq_ctx->worker_id[ TQ_BLOCKER_A ] );
   }
 
-  TQSendAndSynchronizeRunner(
-    ctx->tq_ctx,
-    TQ_BLOCKER_A,
-    TQ_EVENT_SURRENDER
-  );
+  TQSendAndSynchronizeRunner( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_SURRENDER );
 
   if ( ctx->gains_new_helping_scheduler ) {
     TQSendAndSynchronizeRunner(
@@ -925,9 +896,8 @@ static inline ScoreTqReqSurrenderMrsp_Entry ScoreTqReqSurrenderMrsp_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return ScoreTqReqSurrenderMrsp_Entries[
-    ScoreTqReqSurrenderMrsp_Map[ index ]
-  ];
+  return ScoreTqReqSurrenderMrsp_Entries
+    [ ScoreTqReqSurrenderMrsp_Map[ index ] ];
 }
 
 static void ScoreTqReqSurrenderMrsp_TestVariant(
@@ -1017,7 +987,8 @@ void ScoreTqReqSurrenderMrsp_Run( TQContext *tq_ctx )
             ++ctx->Map.pcs[ 4 ]
           ) {
             for (
-              ctx->Map.pcs[ 5 ] = ScoreTqReqSurrenderMrsp_Pre_WaitState_IntendToBlock;
+              ctx->Map.pcs[ 5 ] =
+                ScoreTqReqSurrenderMrsp_Pre_WaitState_IntendToBlock;
               ctx->Map.pcs[ 5 ] < ScoreTqReqSurrenderMrsp_Pre_WaitState_NA;
               ++ctx->Map.pcs[ 5 ]
             ) {

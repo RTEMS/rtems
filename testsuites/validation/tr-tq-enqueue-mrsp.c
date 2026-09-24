@@ -141,31 +141,18 @@ typedef struct {
   } Map;
 } ScoreTqReqEnqueueMrsp_Context;
 
-static ScoreTqReqEnqueueMrsp_Context
-  ScoreTqReqEnqueueMrsp_Instance;
+static ScoreTqReqEnqueueMrsp_Context ScoreTqReqEnqueueMrsp_Instance;
 
-static const char * const ScoreTqReqEnqueueMrsp_PreDesc_EligibleScheduler[] = {
-  "Home",
-  "Helping",
-  "NA"
-};
+static const char *const ScoreTqReqEnqueueMrsp_PreDesc_EligibleScheduler[] =
+  { "Home", "Helping", "NA" };
 
-static const char * const ScoreTqReqEnqueueMrsp_PreDesc_QueueEligible[] = {
-  "None",
-  "Equal",
-  "Low",
-  "NA"
-};
+static const char *const ScoreTqReqEnqueueMrsp_PreDesc_QueueEligible[] =
+  { "None", "Equal", "Low", "NA" };
 
-static const char * const ScoreTqReqEnqueueMrsp_PreDesc_QueueIneligible[] = {
-  "None",
-  "Only",
-  "Before",
-  "After",
-  "NA"
-};
+static const char *const ScoreTqReqEnqueueMrsp_PreDesc_QueueIneligible[] =
+  { "None", "Only", "Before", "After", "NA" };
 
-static const char * const * const ScoreTqReqEnqueueMrsp_PreDesc[] = {
+static const char *const *const ScoreTqReqEnqueueMrsp_PreDesc[] = {
   ScoreTqReqEnqueueMrsp_PreDesc_EligibleScheduler,
   ScoreTqReqEnqueueMrsp_PreDesc_QueueEligible,
   ScoreTqReqEnqueueMrsp_PreDesc_QueueIneligible,
@@ -419,12 +406,7 @@ static void ScoreTqReqEnqueueMrsp_Setup( ScoreTqReqEnqueueMrsp_Context *ctx )
 
   TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_A, SCHEDULER_B_ID, PRIO_LOW );
   TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_B, SCHEDULER_B_ID, PRIO_LOW );
-  TQSetScheduler(
-    ctx->tq_ctx,
-    TQ_BLOCKER_D,
-    SCHEDULER_A_ID,
-    PRIO_ULTRA_HIGH
-  );
+  TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_D, SCHEDULER_A_ID, PRIO_ULTRA_HIGH );
 }
 
 static void ScoreTqReqEnqueueMrsp_Setup_Wrap( void *arg )
@@ -591,9 +573,7 @@ static inline ScoreTqReqEnqueueMrsp_Entry ScoreTqReqEnqueueMrsp_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return ScoreTqReqEnqueueMrsp_Entries[
-    ScoreTqReqEnqueueMrsp_Map[ index ]
-  ];
+  return ScoreTqReqEnqueueMrsp_Entries[ ScoreTqReqEnqueueMrsp_Map[ index ] ];
 }
 
 static void ScoreTqReqEnqueueMrsp_TestVariant(

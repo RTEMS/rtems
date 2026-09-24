@@ -71,25 +71,24 @@ const char rtems_test_name[] = "TestsuitesUserext";
 
 #define CONFIGURE_MAXIMUM_PROCESSORS 2
 
-#define CONFIGURE_INITIAL_EXTENSIONS \
-  { \
-    .thread_begin = ThreadBeginExtension0, \
-    .thread_create = ThreadCreateExtension0, \
-    .thread_delete = ThreadDeleteExtension0, \
-    .thread_exitted = ThreadExittedExtension0, \
-    .thread_restart = ThreadRestartExtension0, \
-    .thread_start = ThreadStartExtension0, \
-    .thread_switch = ThreadSwitchExtension0, \
-    .thread_terminate = ThreadTerminateExtension0 \
-  }, { \
-    .thread_begin = ThreadBeginExtension1, \
-    .thread_create = ThreadCreateExtension1, \
-    .thread_delete = ThreadDeleteExtension1, \
-    .thread_exitted = ThreadExittedExtension1, \
-    .thread_restart = ThreadRestartExtension1, \
-    .thread_start = ThreadStartExtension1, \
-    .thread_switch = ThreadSwitchExtension1, \
-    .thread_terminate = ThreadTerminateExtension1 \
+#define CONFIGURE_INITIAL_EXTENSIONS                 \
+  { .thread_begin = ThreadBeginExtension0,           \
+    .thread_create = ThreadCreateExtension0,         \
+    .thread_delete = ThreadDeleteExtension0,         \
+    .thread_exitted = ThreadExittedExtension0,       \
+    .thread_restart = ThreadRestartExtension0,       \
+    .thread_start = ThreadStartExtension0,           \
+    .thread_switch = ThreadSwitchExtension0,         \
+    .thread_terminate = ThreadTerminateExtension0 }, \
+  {                                                  \
+    .thread_begin = ThreadBeginExtension1,           \
+    .thread_create = ThreadCreateExtension1,         \
+    .thread_delete = ThreadDeleteExtension1,         \
+    .thread_exitted = ThreadExittedExtension1,       \
+    .thread_restart = ThreadRestartExtension1,       \
+    .thread_start = ThreadStartExtension1,           \
+    .thread_switch = ThreadSwitchExtension1,         \
+    .thread_terminate = ThreadTerminateExtension1    \
   }
 
 #define CONFIGURE_IDLE_TASK_BODY IdleBody

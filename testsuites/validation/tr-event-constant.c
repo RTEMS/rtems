@@ -192,8 +192,7 @@ typedef struct {
   int number;
 } RtemsEventValEventConstant_Context;
 
-static RtemsEventValEventConstant_Context
-  RtemsEventValEventConstant_Instance;
+static RtemsEventValEventConstant_Context RtemsEventValEventConstant_Instance;
 
 static T_fixture RtemsEventValEventConstant_Fixture = {
   .setup = NULL,
@@ -216,11 +215,7 @@ static void RtemsEventValEventConstant_Action_0(
    * Check that the event constant is equal to the event number bit in the
    * event set.
    */
-  T_step_eq_u32(
-    0,
-    ctx->event,
-    ( (rtems_event_set) 1 ) << ctx->number
-  );
+  T_step_eq_u32( 0, ctx->event, ( (rtems_event_set) 1 ) << ctx->number );
 
   /*
    * Check that the event number bit of the event constant is not set in

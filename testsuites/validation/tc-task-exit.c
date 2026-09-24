@@ -261,34 +261,21 @@ typedef struct {
   } Map;
 } RtemsTaskReqExit_Context;
 
-static RtemsTaskReqExit_Context
-  RtemsTaskReqExit_Instance;
+static RtemsTaskReqExit_Context RtemsTaskReqExit_Instance;
 
-static const char * const RtemsTaskReqExit_PreDesc_Restarting[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqExit_PreDesc_Restarting[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqExit_PreDesc_Terminating[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqExit_PreDesc_Terminating[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqExit_PreDesc_Protected[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqExit_PreDesc_Protected[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqExit_PreDesc_ThreadDispatch[] = {
-  "Enabled",
-  "Disabled",
-  "NA"
-};
+static const char *const RtemsTaskReqExit_PreDesc_ThreadDispatch[] =
+  { "Enabled", "Disabled", "NA" };
 
-static const char * const * const RtemsTaskReqExit_PreDesc[] = {
+static const char *const *const RtemsTaskReqExit_PreDesc[] = {
   RtemsTaskReqExit_PreDesc_Restarting,
   RtemsTaskReqExit_PreDesc_Terminating,
   RtemsTaskReqExit_PreDesc_Protected,
@@ -921,9 +908,7 @@ static inline RtemsTaskReqExit_Entry RtemsTaskReqExit_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsTaskReqExit_Entries[
-    RtemsTaskReqExit_Map[ index ]
-  ];
+  return RtemsTaskReqExit_Entries[ RtemsTaskReqExit_Map[ index ] ];
 }
 
 static void RtemsTaskReqExit_TestVariant( RtemsTaskReqExit_Context *ctx )

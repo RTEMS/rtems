@@ -141,8 +141,7 @@ typedef struct {
   volatile bool done_2;
 } RtemsSemValSmp_Context;
 
-static RtemsSemValSmp_Context
-  RtemsSemValSmp_Instance;
+static RtemsSemValSmp_Context RtemsSemValSmp_Instance;
 
 typedef RtemsSemValSmp_Context Context;
 

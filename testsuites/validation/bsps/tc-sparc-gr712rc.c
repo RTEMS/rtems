@@ -92,14 +92,14 @@ static void BspSparcLeon3ValGr712rc_Action_0( void )
   /*
    * Check that the compiler built-in define `__FIX_LEON3FT_B2BST` is defined.
    */
-  #if !defined(__FIX_LEON3FT_B2BST)
+  #if !defined( __FIX_LEON3FT_B2BST )
   #error "__FIX_LEON3FT_B2BST is not defined"
   #endif
 
   /*
    * Check that the compiler built-in define `__FIX_LEON3FT_TN0018` is defined.
    */
-  #if !defined(__FIX_LEON3FT_TN0018)
+  #if !defined( __FIX_LEON3FT_TN0018 )
   #error "__FIX_LEON3FT_TN0018 is not defined"
   #endif
 

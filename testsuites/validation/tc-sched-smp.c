@@ -235,12 +235,7 @@
  * @{
  */
 
-typedef enum {
-  WORKER_A,
-  WORKER_B,
-  WORKER_C,
-  WORKER_COUNT
-} WorkerIndex;
+typedef enum { WORKER_A, WORKER_B, WORKER_C, WORKER_COUNT } WorkerIndex;
 
 /**
  * @brief Test context for spec:/score/sched/smp/val/smp test case.
@@ -302,8 +297,7 @@ typedef struct {
   CallWithinISRRequest request;
 } ScoreSchedSmpValSmp_Context;
 
-static ScoreSchedSmpValSmp_Context
-  ScoreSchedSmpValSmp_Instance;
+static ScoreSchedSmpValSmp_Context ScoreSchedSmpValSmp_Instance;
 
 #define EVENT_OBTAIN RTEMS_EVENT_0
 
@@ -559,8 +553,7 @@ static void UnblockAskForHelp(
   ctx = arg;
 
   if (
-    when == T_SCHEDULER_BEFORE &&
-    event->operation == T_SCHEDULER_UNBLOCK
+    when == T_SCHEDULER_BEFORE && event->operation == T_SCHEDULER_UNBLOCK
   ) {
     T_scheduler_set_event_handler( NULL, NULL );
     ctx->request.handler = InterceptAskForHelp;
@@ -603,7 +596,7 @@ static void UpdatePriorityMakeReady(
     when == T_SCHEDULER_BEFORE &&
     event->operation == T_SCHEDULER_UPDATE_PRIORITY
   ) {
-    Thread_Control  *thread;
+    Thread_Control *thread;
 
     T_scheduler_set_event_handler( NULL, NULL );
 
@@ -664,7 +657,7 @@ static void BlockAndPreempt(
   ctx = arg;
 
   if ( when == T_SCHEDULER_AFTER && event->operation == T_SCHEDULER_BLOCK ) {
-    Thread_Control  *thread;
+    Thread_Control *thread;
 
     T_scheduler_set_event_handler( NULL, NULL );
 

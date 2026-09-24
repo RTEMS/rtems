@@ -136,16 +136,12 @@ typedef struct {
   } Map;
 } RtemsIoReqGetchark_Context;
 
-static RtemsIoReqGetchark_Context
-  RtemsIoReqGetchark_Instance;
+static RtemsIoReqGetchark_Context RtemsIoReqGetchark_Instance;
 
-static const char * const RtemsIoReqGetchark_PreDesc_PollChar[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsIoReqGetchark_PreDesc_PollChar[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const * const RtemsIoReqGetchark_PreDesc[] = {
+static const char *const *const RtemsIoReqGetchark_PreDesc[] = {
   RtemsIoReqGetchark_PreDesc_PollChar,
   NULL
 };
@@ -295,9 +291,7 @@ static inline RtemsIoReqGetchark_Entry RtemsIoReqGetchark_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsIoReqGetchark_Entries[
-    RtemsIoReqGetchark_Map[ index ]
-  ];
+  return RtemsIoReqGetchark_Entries[ RtemsIoReqGetchark_Map[ index ] ];
 }
 
 static void RtemsIoReqGetchark_TestVariant( RtemsIoReqGetchark_Context *ctx )

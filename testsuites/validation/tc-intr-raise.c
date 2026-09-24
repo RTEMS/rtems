@@ -167,22 +167,15 @@ typedef struct {
   } Map;
 } RtemsIntrReqRaise_Context;
 
-static RtemsIntrReqRaise_Context
-  RtemsIntrReqRaise_Instance;
+static RtemsIntrReqRaise_Context RtemsIntrReqRaise_Instance;
 
-static const char * const RtemsIntrReqRaise_PreDesc_Vector[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsIntrReqRaise_PreDesc_Vector[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsIntrReqRaise_PreDesc_CanRaise[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsIntrReqRaise_PreDesc_CanRaise[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const RtemsIntrReqRaise_PreDesc[] = {
+static const char *const *const RtemsIntrReqRaise_PreDesc[] = {
   RtemsIntrReqRaise_PreDesc_Vector,
   RtemsIntrReqRaise_PreDesc_CanRaise,
   NULL
@@ -309,7 +302,7 @@ static void CheckRaise(
     );
     T_rsc_success( sc );
 
-    if ( !IsPending( ctx) && ( attr->can_enable || IsEnabled( ctx ) ) ) {
+    if ( !IsPending( ctx ) && ( attr->can_enable || IsEnabled( ctx ) ) ) {
       Disable( ctx );
       Raise( ctx );
 
@@ -479,9 +472,7 @@ static void RtemsIntrReqRaise_Action( RtemsIntrReqRaise_Context *ctx )
 {
   if ( ctx->valid_vector ) {
     for (
-      ctx->vector = 0;
-      ctx->vector < BSP_INTERRUPT_VECTOR_COUNT;
-      ++ctx->vector
+      ctx->vector = 0; ctx->vector < BSP_INTERRUPT_VECTOR_COUNT; ++ctx->vector
     ) {
       rtems_status_code          sc;
       rtems_interrupt_attributes attr;
@@ -496,7 +487,9 @@ static void RtemsIntrReqRaise_Action( RtemsIntrReqRaise_Context *ctx )
 
       T_rsc_success( sc );
 
-      has_installed_entries = HasInterruptVectorEntriesInstalled( ctx->vector );
+      has_installed_entries = HasInterruptVectorEntriesInstalled(
+        ctx->vector
+      );
       CheckRaise( ctx, &attr, has_installed_entries );
     }
   } else {
@@ -553,9 +546,7 @@ static inline RtemsIntrReqRaise_Entry RtemsIntrReqRaise_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsIntrReqRaise_Entries[
-    RtemsIntrReqRaise_Map[ index ]
-  ];
+  return RtemsIntrReqRaise_Entries[ RtemsIntrReqRaise_Map[ index ] ];
 }
 
 static void RtemsIntrReqRaise_SetPreConditionStates(

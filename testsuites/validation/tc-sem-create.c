@@ -275,78 +275,42 @@ typedef struct {
   } Map;
 } RtemsSemReqCreate_Context;
 
-static RtemsSemReqCreate_Context
-  RtemsSemReqCreate_Instance;
+static RtemsSemReqCreate_Context RtemsSemReqCreate_Instance;
 
-static const char * const RtemsSemReqCreate_PreDesc_Name[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsSemReqCreate_PreDesc_Name[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsSemReqCreate_PreDesc_Id[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsSemReqCreate_PreDesc_Id[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsSemReqCreate_PreDesc_Count[] = {
-  "Zero",
-  "One",
-  "GtOne",
-  "NA"
-};
+static const char *const RtemsSemReqCreate_PreDesc_Count[] =
+  { "Zero", "One", "GtOne", "NA" };
 
-static const char * const RtemsSemReqCreate_PreDesc_Binary[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsSemReqCreate_PreDesc_Binary[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsSemReqCreate_PreDesc_Simple[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsSemReqCreate_PreDesc_Simple[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsSemReqCreate_PreDesc_Inherit[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsSemReqCreate_PreDesc_Inherit[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsSemReqCreate_PreDesc_Ceiling[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsSemReqCreate_PreDesc_Ceiling[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsSemReqCreate_PreDesc_MrsP[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsSemReqCreate_PreDesc_MrsP[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsSemReqCreate_PreDesc_Disc[] = {
-  "FIFO",
-  "Prio",
-  "NA"
-};
+static const char *const RtemsSemReqCreate_PreDesc_Disc[] =
+  { "FIFO", "Prio", "NA" };
 
-static const char * const RtemsSemReqCreate_PreDesc_Prio[] = {
-  "LeCur",
-  "GtCur",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsSemReqCreate_PreDesc_Prio[] =
+  { "LeCur", "GtCur", "Invalid", "NA" };
 
-static const char * const RtemsSemReqCreate_PreDesc_Free[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsSemReqCreate_PreDesc_Free[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const RtemsSemReqCreate_PreDesc[] = {
+static const char *const *const RtemsSemReqCreate_PreDesc[] = {
   RtemsSemReqCreate_PreDesc_Name,
   RtemsSemReqCreate_PreDesc_Id,
   RtemsSemReqCreate_PreDesc_Count,
@@ -395,7 +359,7 @@ static void GetSemAttributes( Context *ctx )
     ctx->discipline = _Semaphore_Get_discipline( flags );
   } else {
     ctx->sem_count = 123;
-    ctx->owner = (void *)(uintptr_t) 1;
+    ctx->owner = (void *) (uintptr_t) 1;
     ctx->variant = INT_MAX;
     ctx->discipline = INT_MAX;
   }
@@ -646,7 +610,10 @@ static void RtemsSemReqCreate_Pre_Disc_Prepare(
        * While the ``attribute_set`` parameter specifies the FIFO task wait
        * queue discipline or the default task wait queue discipline.
        */
-      RTEMS_STATIC_ASSERT( RTEMS_DEFAULT_ATTRIBUTES == RTEMS_FIFO, RTEMS_FIFO );
+      RTEMS_STATIC_ASSERT(
+        RTEMS_DEFAULT_ATTRIBUTES == RTEMS_FIFO,
+        RTEMS_FIFO
+      );
       ctx->attribute_set |= RTEMS_FIFO;
       break;
     }
@@ -934,7 +901,7 @@ static void RtemsSemReqCreate_Post_Variant_Check(
        * The semaphore created by the rtems_semaphore_create() call shall be a
        * binary semaphore using the MrsP locking protocol.
        */
-      #if defined(RTEMS_SMP)
+      #if defined( RTEMS_SMP )
       T_eq_int( ctx->variant, SEMAPHORE_VARIANT_MRSP );
       #else
       T_true( false );
@@ -1448,9 +1415,7 @@ static inline RtemsSemReqCreate_Entry RtemsSemReqCreate_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsSemReqCreate_Entries[
-    RtemsSemReqCreate_Map[ index ]
-  ];
+  return RtemsSemReqCreate_Entries[ RtemsSemReqCreate_Map[ index ] ];
 }
 
 static void RtemsSemReqCreate_TestVariant( RtemsSemReqCreate_Context *ctx )

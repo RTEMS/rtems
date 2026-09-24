@@ -102,7 +102,10 @@ static void RtemsCpuuseValCpuuse_Action_0( void )
 
   idle_tasks = 0;
 
-  for ( cpu_index = 0; cpu_index < rtems_scheduler_get_processor_maximum(); ++cpu_index ) {
+  for (
+    cpu_index = 0; cpu_index < rtems_scheduler_get_processor_maximum();
+    ++cpu_index
+  ) {
     rtems_status_code sc;
     rtems_id          unused;
 
@@ -146,9 +149,8 @@ static void RtemsCpuuseValCpuuse_Action_0( void )
   );
   T_eq_i64(
     _Thread_Get_CPU_time_used( self ),
-    cpu_usage_self +
-    3 * SOFTWARE_TIMECOUNTER_INTERVAL +
-    idle_tasks * SOFTWARE_TIMECOUNTER_INTERVAL
+    cpu_usage_self + 3 * SOFTWARE_TIMECOUNTER_INTERVAL +
+      idle_tasks * SOFTWARE_TIMECOUNTER_INTERVAL
   );
 
   T_eq_i64( _Thread_Get_CPU_time_used_after_last_reset( other ), 0 );

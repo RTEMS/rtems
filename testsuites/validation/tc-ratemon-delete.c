@@ -129,16 +129,12 @@ typedef struct {
   } Map;
 } RtemsRatemonReqDelete_Context;
 
-static RtemsRatemonReqDelete_Context
-  RtemsRatemonReqDelete_Instance;
+static RtemsRatemonReqDelete_Context RtemsRatemonReqDelete_Instance;
 
-static const char * const RtemsRatemonReqDelete_PreDesc_Id[] = {
-  "NoObj",
-  "Period",
-  "NA"
-};
+static const char *const RtemsRatemonReqDelete_PreDesc_Id[] =
+  { "NoObj", "Period", "NA" };
 
-static const char * const * const RtemsRatemonReqDelete_PreDesc[] = {
+static const char *const *const RtemsRatemonReqDelete_PreDesc[] = {
   RtemsRatemonReqDelete_PreDesc_Id,
   NULL
 };
@@ -332,9 +328,7 @@ static inline RtemsRatemonReqDelete_Entry RtemsRatemonReqDelete_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsRatemonReqDelete_Entries[
-    RtemsRatemonReqDelete_Map[ index ]
-  ];
+  return RtemsRatemonReqDelete_Entries[ RtemsRatemonReqDelete_Map[ index ] ];
 }
 
 static void RtemsRatemonReqDelete_TestVariant(

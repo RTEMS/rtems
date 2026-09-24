@@ -153,22 +153,15 @@ typedef struct {
   } Map;
 } RtemsTaskReqResume_Context;
 
-static RtemsTaskReqResume_Context
-  RtemsTaskReqResume_Instance;
+static RtemsTaskReqResume_Context RtemsTaskReqResume_Instance;
 
-static const char * const RtemsTaskReqResume_PreDesc_Id[] = {
-  "Invalid",
-  "Task",
-  "NA"
-};
+static const char *const RtemsTaskReqResume_PreDesc_Id[] =
+  { "Invalid", "Task", "NA" };
 
-static const char * const RtemsTaskReqResume_PreDesc_Suspended[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqResume_PreDesc_Suspended[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const RtemsTaskReqResume_PreDesc[] = {
+static const char *const *const RtemsTaskReqResume_PreDesc[] = {
   RtemsTaskReqResume_PreDesc_Id,
   RtemsTaskReqResume_PreDesc_Suspended,
   NULL
@@ -360,9 +353,7 @@ static inline RtemsTaskReqResume_Entry RtemsTaskReqResume_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsTaskReqResume_Entries[
-    RtemsTaskReqResume_Map[ index ]
-  ];
+  return RtemsTaskReqResume_Entries[ RtemsTaskReqResume_Map[ index ] ];
 }
 
 static void RtemsTaskReqResume_SetPreConditionStates(

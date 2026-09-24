@@ -154,22 +154,15 @@ typedef struct {
   } Map;
 } RtemsSchedulerReqIdent_Context;
 
-static RtemsSchedulerReqIdent_Context
-  RtemsSchedulerReqIdent_Instance;
+static RtemsSchedulerReqIdent_Context RtemsSchedulerReqIdent_Instance;
 
-static const char * const RtemsSchedulerReqIdent_PreDesc_Name[] = {
-  "Invalid",
-  "Valid",
-  "NA"
-};
+static const char *const RtemsSchedulerReqIdent_PreDesc_Name[] =
+  { "Invalid", "Valid", "NA" };
 
-static const char * const RtemsSchedulerReqIdent_PreDesc_Id[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsSchedulerReqIdent_PreDesc_Id[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const * const RtemsSchedulerReqIdent_PreDesc[] = {
+static const char *const *const RtemsSchedulerReqIdent_PreDesc[] = {
   RtemsSchedulerReqIdent_PreDesc_Name,
   RtemsSchedulerReqIdent_PreDesc_Id,
   NULL
@@ -362,9 +355,7 @@ static inline RtemsSchedulerReqIdent_Entry RtemsSchedulerReqIdent_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsSchedulerReqIdent_Entries[
-    RtemsSchedulerReqIdent_Map[ index ]
-  ];
+  return RtemsSchedulerReqIdent_Entries[ RtemsSchedulerReqIdent_Map[ index ] ];
 }
 
 static void RtemsSchedulerReqIdent_TestVariant(

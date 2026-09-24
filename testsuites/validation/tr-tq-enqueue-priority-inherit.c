@@ -183,51 +183,30 @@ typedef struct {
 static ScoreTqReqEnqueuePriorityInherit_Context
   ScoreTqReqEnqueuePriorityInherit_Instance;
 
-static const char * const ScoreTqReqEnqueuePriorityInherit_PreDesc_Scheduler[] = {
-  "One",
-  "Two",
-  "Three",
-  "More",
-  "NA"
-};
+static const char *const ScoreTqReqEnqueuePriorityInherit_PreDesc_Scheduler[] =
+  { "One", "Two", "Three", "More", "NA" };
 
-static const char * const ScoreTqReqEnqueuePriorityInherit_PreDesc_QueueEligible[] = {
-  "None",
-  "High",
-  "Equal",
-  "Low",
-  "NA"
-};
+static const char *const
+  ScoreTqReqEnqueuePriorityInherit_PreDesc_QueueEligible[] =
+    { "None", "High", "Equal", "Low", "NA" };
 
-static const char * const ScoreTqReqEnqueuePriorityInherit_PreDesc_QueueIneligible[] = {
-  "None",
-  "Only",
-  "Before",
-  "After",
-  "NA"
-};
+static const char *const
+  ScoreTqReqEnqueuePriorityInherit_PreDesc_QueueIneligible[] =
+    { "None", "Only", "Before", "After", "NA" };
 
-static const char * const ScoreTqReqEnqueuePriorityInherit_PreDesc_PriorityForOwner[] = {
-  "Vital",
-  "Dispensable",
-  "NA"
-};
+static const char *const
+  ScoreTqReqEnqueuePriorityInherit_PreDesc_PriorityForOwner[] =
+    { "Vital", "Dispensable", "NA" };
 
-static const char * const ScoreTqReqEnqueuePriorityInherit_PreDesc_SchedulerForOwner[] = {
-  "Vital",
-  "Dispensable",
-  "NA"
-};
+static const char *const
+  ScoreTqReqEnqueuePriorityInherit_PreDesc_SchedulerForOwner[] =
+    { "Vital", "Dispensable", "NA" };
 
-static const char * const ScoreTqReqEnqueuePriorityInherit_PreDesc_OwnerState[] = {
-  "NotEnqueued",
-  "FIFO",
-  "Priority",
-  "PriorityInherit",
-  "NA"
-};
+static const char *const
+  ScoreTqReqEnqueuePriorityInherit_PreDesc_OwnerState[] =
+    { "NotEnqueued", "FIFO", "Priority", "PriorityInherit", "NA" };
 
-static const char * const * const ScoreTqReqEnqueuePriorityInherit_PreDesc[] = {
+static const char *const *const ScoreTqReqEnqueuePriorityInherit_PreDesc[] = {
   ScoreTqReqEnqueuePriorityInherit_PreDesc_Scheduler,
   ScoreTqReqEnqueuePriorityInherit_PreDesc_QueueEligible,
   ScoreTqReqEnqueuePriorityInherit_PreDesc_QueueIneligible,
@@ -297,9 +276,8 @@ static void CheckSchedulerNewHelper(
 )
 {
   if (
-    ctx->vital_priority &&
-    ( ctx->queue_priority == PRIO_VERY_HIGH ||
-      ctx->queue_priority == PRIO_ULTRA_HIGH )
+    ctx->vital_priority && ( ctx->queue_priority == PRIO_VERY_HIGH ||
+                             ctx->queue_priority == PRIO_ULTRA_HIGH )
   ) {
     if ( ctx->other_before || ctx->other_after ) {
       T_eq_u32( priority[ 3 ], PRIO_VERY_LOW );
@@ -316,7 +294,7 @@ static void CheckSchedulerNewHelper(
       T_eq_u32( priority[ 2 ], PRIO_INVALID );
     }
 
-     T_eq_u32( priority[ 3 ], PRIO_INVALID );
+    T_eq_u32( priority[ 3 ], PRIO_INVALID );
   }
 }
 
@@ -326,9 +304,8 @@ static void CheckSchedulerNop(
 )
 {
   if (
-    ctx->vital_priority &&
-    ( ctx->queue_priority == PRIO_VERY_HIGH ||
-      ctx->queue_priority == PRIO_ULTRA_HIGH )
+    ctx->vital_priority && ( ctx->queue_priority == PRIO_VERY_HIGH ||
+                             ctx->queue_priority == PRIO_ULTRA_HIGH )
   ) {
     if ( !ctx->other_before && !ctx->other_after ) {
       T_eq_u32( priority[ 2 ], PRIO_INVALID );
@@ -942,12 +919,7 @@ static void ScoreTqReqEnqueuePriorityInherit_Setup(
   TQSetPriority( ctx->tq_ctx, TQ_HELPER_C, PRIO_HIGH );
 
   #if defined( RTEMS_SMP )
-  TQSetScheduler(
-    ctx->tq_ctx,
-    TQ_BLOCKER_C,
-    SCHEDULER_B_ID,
-    PRIO_ULTRA_LOW
-  );
+  TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_C, SCHEDULER_B_ID, PRIO_ULTRA_LOW );
 
   if ( rtems_scheduler_get_processor_maximum() > 3 ) {
     RemoveProcessor( SCHEDULER_C_ID, 3 );
@@ -1019,12 +991,8 @@ static void ScoreTqReqEnqueuePriorityInherit_Action(
   }
 
   if ( ctx->queue_priority != PRIO_INVALID ) {
-    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_B , ctx->queue_priority );
-    TQSend(
-      ctx->tq_ctx,
-      TQ_BLOCKER_B,
-      TQ_EVENT_ENQUEUE | TQ_EVENT_SURRENDER
-    );
+    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_B, ctx->queue_priority );
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_ENQUEUE | TQ_EVENT_SURRENDER );
   }
 
   if ( ctx->other_after ) {
@@ -1558,9 +1526,8 @@ static T_fixture ScoreTqReqEnqueuePriorityInherit_Fixture = {
   .initial_context = &ScoreTqReqEnqueuePriorityInherit_Instance
 };
 
-static const uint16_t ScoreTqReqEnqueuePriorityInherit_Weights[] = {
-  256, 64, 16, 8, 4, 1
-};
+static const uint16_t ScoreTqReqEnqueuePriorityInherit_Weights[] =
+  { 256, 64, 16, 8, 4, 1 };
 
 static void ScoreTqReqEnqueuePriorityInherit_Skip(
   ScoreTqReqEnqueuePriorityInherit_Context *ctx,
@@ -1569,19 +1536,24 @@ static void ScoreTqReqEnqueuePriorityInherit_Skip(
 {
   switch ( index + 1 ) {
     case 1:
-      ctx->Map.pcs[ 1 ] = ScoreTqReqEnqueuePriorityInherit_Pre_QueueEligible_NA - 1;
+      ctx->Map.pcs[ 1 ] =
+        ScoreTqReqEnqueuePriorityInherit_Pre_QueueEligible_NA - 1;
       /* Fall through */
     case 2:
-      ctx->Map.pcs[ 2 ] = ScoreTqReqEnqueuePriorityInherit_Pre_QueueIneligible_NA - 1;
+      ctx->Map.pcs[ 2 ] =
+        ScoreTqReqEnqueuePriorityInherit_Pre_QueueIneligible_NA - 1;
       /* Fall through */
     case 3:
-      ctx->Map.pcs[ 3 ] = ScoreTqReqEnqueuePriorityInherit_Pre_PriorityForOwner_NA - 1;
+      ctx->Map.pcs[ 3 ] =
+        ScoreTqReqEnqueuePriorityInherit_Pre_PriorityForOwner_NA - 1;
       /* Fall through */
     case 4:
-      ctx->Map.pcs[ 4 ] = ScoreTqReqEnqueuePriorityInherit_Pre_SchedulerForOwner_NA - 1;
+      ctx->Map.pcs[ 4 ] =
+        ScoreTqReqEnqueuePriorityInherit_Pre_SchedulerForOwner_NA - 1;
       /* Fall through */
     case 5:
-      ctx->Map.pcs[ 5 ] = ScoreTqReqEnqueuePriorityInherit_Pre_OwnerState_NA - 1;
+      ctx->Map.pcs[ 5 ] = ScoreTqReqEnqueuePriorityInherit_Pre_OwnerState_NA -
+                          1;
       break;
   }
 }
@@ -1600,7 +1572,8 @@ ScoreTqReqEnqueuePriorityInherit_PopEntry(
     index = 0;
 
     for ( i = 0; i < 6; ++i ) {
-      index += ScoreTqReqEnqueuePriorityInherit_Weights[ i ] * ctx->Map.pcs[ i ];
+      index += ScoreTqReqEnqueuePriorityInherit_Weights[ i ] *
+               ctx->Map.pcs[ i ];
     }
   } else {
     index = ctx->Map.index;
@@ -1608,9 +1581,8 @@ ScoreTqReqEnqueuePriorityInherit_PopEntry(
 
   ctx->Map.index = index + 1;
 
-  return ScoreTqReqEnqueuePriorityInherit_Entries[
-    ScoreTqReqEnqueuePriorityInherit_Map[ index ]
-  ];
+  return ScoreTqReqEnqueuePriorityInherit_Entries
+    [ ScoreTqReqEnqueuePriorityInherit_Map[ index ] ];
 }
 
 static void ScoreTqReqEnqueuePriorityInherit_TestVariant(
@@ -1698,28 +1670,38 @@ void ScoreTqReqEnqueuePriorityInherit_Run( TQContext *tq_ctx )
     ++ctx->Map.pcs[ 0 ]
   ) {
     for (
-      ctx->Map.pcs[ 1 ] = ScoreTqReqEnqueuePriorityInherit_Pre_QueueEligible_None;
-      ctx->Map.pcs[ 1 ] < ScoreTqReqEnqueuePriorityInherit_Pre_QueueEligible_NA;
+      ctx->Map.pcs[ 1 ] =
+        ScoreTqReqEnqueuePriorityInherit_Pre_QueueEligible_None;
+      ctx->Map.pcs[ 1 ] <
+      ScoreTqReqEnqueuePriorityInherit_Pre_QueueEligible_NA;
       ++ctx->Map.pcs[ 1 ]
     ) {
       for (
-        ctx->Map.pcs[ 2 ] = ScoreTqReqEnqueuePriorityInherit_Pre_QueueIneligible_None;
-        ctx->Map.pcs[ 2 ] < ScoreTqReqEnqueuePriorityInherit_Pre_QueueIneligible_NA;
+        ctx->Map.pcs[ 2 ] =
+          ScoreTqReqEnqueuePriorityInherit_Pre_QueueIneligible_None;
+        ctx->Map.pcs[ 2 ] <
+        ScoreTqReqEnqueuePriorityInherit_Pre_QueueIneligible_NA;
         ++ctx->Map.pcs[ 2 ]
       ) {
         for (
-          ctx->Map.pcs[ 3 ] = ScoreTqReqEnqueuePriorityInherit_Pre_PriorityForOwner_Vital;
-          ctx->Map.pcs[ 3 ] < ScoreTqReqEnqueuePriorityInherit_Pre_PriorityForOwner_NA;
+          ctx->Map.pcs[ 3 ] =
+            ScoreTqReqEnqueuePriorityInherit_Pre_PriorityForOwner_Vital;
+          ctx->Map.pcs[ 3 ] <
+          ScoreTqReqEnqueuePriorityInherit_Pre_PriorityForOwner_NA;
           ++ctx->Map.pcs[ 3 ]
         ) {
           for (
-            ctx->Map.pcs[ 4 ] = ScoreTqReqEnqueuePriorityInherit_Pre_SchedulerForOwner_Vital;
-            ctx->Map.pcs[ 4 ] < ScoreTqReqEnqueuePriorityInherit_Pre_SchedulerForOwner_NA;
+            ctx->Map.pcs[ 4 ] =
+              ScoreTqReqEnqueuePriorityInherit_Pre_SchedulerForOwner_Vital;
+            ctx->Map.pcs[ 4 ] <
+            ScoreTqReqEnqueuePriorityInherit_Pre_SchedulerForOwner_NA;
             ++ctx->Map.pcs[ 4 ]
           ) {
             for (
-              ctx->Map.pcs[ 5 ] = ScoreTqReqEnqueuePriorityInherit_Pre_OwnerState_NotEnqueued;
-              ctx->Map.pcs[ 5 ] < ScoreTqReqEnqueuePriorityInherit_Pre_OwnerState_NA;
+              ctx->Map.pcs[ 5 ] =
+                ScoreTqReqEnqueuePriorityInherit_Pre_OwnerState_NotEnqueued;
+              ctx->Map.pcs[ 5 ] <
+              ScoreTqReqEnqueuePriorityInherit_Pre_OwnerState_NA;
               ++ctx->Map.pcs[ 5 ]
             ) {
               ctx->Map.entry = ScoreTqReqEnqueuePriorityInherit_PopEntry(

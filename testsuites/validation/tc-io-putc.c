@@ -130,16 +130,12 @@ typedef struct {
   } Map;
 } RtemsIoReqPutc_Context;
 
-static RtemsIoReqPutc_Context
-  RtemsIoReqPutc_Instance;
+static RtemsIoReqPutc_Context RtemsIoReqPutc_Instance;
 
-static const char * const RtemsIoReqPutc_PreDesc_Char[] = {
-  "Nl",
-  "Other",
-  "NA"
-};
+static const char *const RtemsIoReqPutc_PreDesc_Char[] =
+  { "Nl", "Other", "NA" };
 
-static const char * const * const RtemsIoReqPutc_PreDesc[] = {
+static const char *const *const RtemsIoReqPutc_PreDesc[] = {
   RtemsIoReqPutc_PreDesc_Char,
   NULL
 };
@@ -287,9 +283,7 @@ static inline RtemsIoReqPutc_Entry RtemsIoReqPutc_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsIoReqPutc_Entries[
-    RtemsIoReqPutc_Map[ index ]
-  ];
+  return RtemsIoReqPutc_Entries[ RtemsIoReqPutc_Map[ index ] ];
 }
 
 static void RtemsIoReqPutc_TestVariant( RtemsIoReqPutc_Context *ctx )

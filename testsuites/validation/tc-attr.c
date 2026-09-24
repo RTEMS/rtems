@@ -183,10 +183,7 @@ static void RtemsAttrValAttr_Action_0( void )
   /*
    * Check that RTEMS_MULTIPROCESSOR_RESOURCE_SHARING is a power of two.
    */
-  T_step_true(
-    5,
-    IsPowerOfTwo( RTEMS_MULTIPROCESSOR_RESOURCE_SHARING )
-  );
+  T_step_true( 5, IsPowerOfTwo( RTEMS_MULTIPROCESSOR_RESOURCE_SHARING ) );
 
   /*
    * Check that RTEMS_PRIORITY is a power of two.
@@ -326,11 +323,7 @@ static void RtemsAttrValAttr_Action_4( void )
   /*
    * Check RTEMS_DEFAULT_ATTRIBUTES equals RTEMS_FIFO | RTEMS_LOCAL.
    */
-  T_step_eq_int(
-    22,
-    RTEMS_DEFAULT_ATTRIBUTES,
-    RTEMS_FIFO | RTEMS_LOCAL
-  );
+  T_step_eq_int( 22, RTEMS_DEFAULT_ATTRIBUTES, RTEMS_FIFO | RTEMS_LOCAL );
 }
 
 /**

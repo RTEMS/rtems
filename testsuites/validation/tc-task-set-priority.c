@@ -214,44 +214,24 @@ typedef struct {
   } Map;
 } RtemsTaskReqSetPriority_Context;
 
-static RtemsTaskReqSetPriority_Context
-  RtemsTaskReqSetPriority_Instance;
+static RtemsTaskReqSetPriority_Context RtemsTaskReqSetPriority_Instance;
 
-static const char * const RtemsTaskReqSetPriority_PreDesc_Id[] = {
-  "Invalid",
-  "Task",
-  "NA"
-};
+static const char *const RtemsTaskReqSetPriority_PreDesc_Id[] =
+  { "Invalid", "Task", "NA" };
 
-static const char * const RtemsTaskReqSetPriority_PreDesc_State[] = {
-  "Dormant",
-  "Ready",
-  "Scheduled",
-  "Blocked",
-  "NA"
-};
+static const char *const RtemsTaskReqSetPriority_PreDesc_State[] =
+  { "Dormant", "Ready", "Scheduled", "Blocked", "NA" };
 
-static const char * const RtemsTaskReqSetPriority_PreDesc_NewPriority[] = {
-  "Current",
-  "Other",
-  "NA"
-};
+static const char *const RtemsTaskReqSetPriority_PreDesc_NewPriority[] =
+  { "Current", "Other", "NA" };
 
-static const char * const RtemsTaskReqSetPriority_PreDesc_TaskPriority[] = {
-  "High",
-  "Equal",
-  "Low",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsTaskReqSetPriority_PreDesc_TaskPriority[] =
+  { "High", "Equal", "Low", "Invalid", "NA" };
 
-static const char * const RtemsTaskReqSetPriority_PreDesc_OldPriority[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsTaskReqSetPriority_PreDesc_OldPriority[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const * const RtemsTaskReqSetPriority_PreDesc[] = {
+static const char *const *const RtemsTaskReqSetPriority_PreDesc[] = {
   RtemsTaskReqSetPriority_PreDesc_Id,
   RtemsTaskReqSetPriority_PreDesc_State,
   RtemsTaskReqSetPriority_PreDesc_NewPriority,
@@ -718,9 +698,8 @@ static inline RtemsTaskReqSetPriority_Entry RtemsTaskReqSetPriority_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsTaskReqSetPriority_Entries[
-    RtemsTaskReqSetPriority_Map[ index ]
-  ];
+  return RtemsTaskReqSetPriority_Entries
+    [ RtemsTaskReqSetPriority_Map[ index ] ];
 }
 
 static void RtemsTaskReqSetPriority_SetPreConditionStates(

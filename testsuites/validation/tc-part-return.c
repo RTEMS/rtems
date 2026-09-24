@@ -142,24 +142,15 @@ typedef struct {
   } Map;
 } RtemsPartReqReturnBuffer_Context;
 
-static RtemsPartReqReturnBuffer_Context
-  RtemsPartReqReturnBuffer_Instance;
+static RtemsPartReqReturnBuffer_Context RtemsPartReqReturnBuffer_Instance;
 
-static const char * const RtemsPartReqReturnBuffer_PreDesc_Id[] = {
-  "NoObj",
-  "Part",
-  "NA"
-};
+static const char *const RtemsPartReqReturnBuffer_PreDesc_Id[] =
+  { "NoObj", "Part", "NA" };
 
-static const char * const RtemsPartReqReturnBuffer_PreDesc_Buf[] = {
-  "Valid",
-  "BadAlign",
-  "BelowArea",
-  "AboveArea",
-  "NA"
-};
+static const char *const RtemsPartReqReturnBuffer_PreDesc_Buf[] =
+  { "Valid", "BadAlign", "BelowArea", "AboveArea", "NA" };
 
-static const char * const * const RtemsPartReqReturnBuffer_PreDesc[] = {
+static const char *const *const RtemsPartReqReturnBuffer_PreDesc[] = {
   RtemsPartReqReturnBuffer_PreDesc_Id,
   RtemsPartReqReturnBuffer_PreDesc_Buf,
   NULL
@@ -169,8 +160,9 @@ static const char * const * const RtemsPartReqReturnBuffer_PreDesc[] = {
 
 #define BUFFER_SIZE ( 2 * sizeof( void * ) )
 
-static RTEMS_ALIGNED( RTEMS_PARTITION_ALIGNMENT ) uint8_t
-  buffers[ BUFFER_COUNT ][ BUFFER_SIZE ];
+static RTEMS_ALIGNED(
+  RTEMS_PARTITION_ALIGNMENT
+) uint8_t buffers[ BUFFER_COUNT ][ BUFFER_SIZE ];
 
 static void RtemsPartReqReturnBuffer_Pre_Id_Prepare(
   RtemsPartReqReturnBuffer_Context *ctx,
@@ -438,9 +430,8 @@ static inline RtemsPartReqReturnBuffer_Entry RtemsPartReqReturnBuffer_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsPartReqReturnBuffer_Entries[
-    RtemsPartReqReturnBuffer_Map[ index ]
-  ];
+  return RtemsPartReqReturnBuffer_Entries
+    [ RtemsPartReqReturnBuffer_Map[ index ] ];
 }
 
 static void RtemsPartReqReturnBuffer_TestVariant(

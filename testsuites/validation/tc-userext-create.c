@@ -170,35 +170,21 @@ typedef struct {
   } Map;
 } RtemsUserextReqCreate_Context;
 
-static RtemsUserextReqCreate_Context
-  RtemsUserextReqCreate_Instance;
+static RtemsUserextReqCreate_Context RtemsUserextReqCreate_Instance;
 
-static const char * const RtemsUserextReqCreate_PreDesc_Name[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsUserextReqCreate_PreDesc_Name[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsUserextReqCreate_PreDesc_Id[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsUserextReqCreate_PreDesc_Id[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsUserextReqCreate_PreDesc_Table[] = {
-  "TdSw",
-  "NoTdSw",
-  "Null",
-  "NA"
-};
+static const char *const RtemsUserextReqCreate_PreDesc_Table[] =
+  { "TdSw", "NoTdSw", "Null", "NA" };
 
-static const char * const RtemsUserextReqCreate_PreDesc_Free[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsUserextReqCreate_PreDesc_Free[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const RtemsUserextReqCreate_PreDesc[] = {
+static const char *const *const RtemsUserextReqCreate_PreDesc[] = {
   RtemsUserextReqCreate_PreDesc_Name,
   RtemsUserextReqCreate_PreDesc_Id,
   RtemsUserextReqCreate_PreDesc_Table,
@@ -221,7 +207,7 @@ static rtems_status_code Create( void *arg, uint32_t *id )
   );
 }
 
-static void ThreadSwitch( rtems_tcb *executing,  rtems_tcb *heir)
+static void ThreadSwitch( rtems_tcb *executing, rtems_tcb *heir )
 {
   (void) executing;
   (void) heir;
@@ -554,9 +540,7 @@ static inline RtemsUserextReqCreate_Entry RtemsUserextReqCreate_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsUserextReqCreate_Entries[
-    RtemsUserextReqCreate_Map[ index ]
-  ];
+  return RtemsUserextReqCreate_Entries[ RtemsUserextReqCreate_Map[ index ] ];
 }
 
 static void RtemsUserextReqCreate_TestVariant(

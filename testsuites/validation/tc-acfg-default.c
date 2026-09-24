@@ -129,12 +129,11 @@
 
 #define NAME rtems_build_name( 'N', 'A', 'M', 'E' )
 
-RTEMS_ALIGNED(RTEMS_TASK_STORAGE_ALIGNMENT) static char task_storage[
-  RTEMS_TASK_STORAGE_SIZE(
-    RTEMS_MINIMUM_STACK_SIZE,
-    RTEMS_DEFAULT_ATTRIBUTES
-  )
-];
+RTEMS_ALIGNED( RTEMS_TASK_STORAGE_ALIGNMENT )
+static char task_storage[ RTEMS_TASK_STORAGE_SIZE(
+  RTEMS_MINIMUM_STACK_SIZE,
+  RTEMS_DEFAULT_ATTRIBUTES
+) ];
 
 static const rtems_task_config task_config = {
   .name = NAME,
@@ -166,7 +165,7 @@ static void AcfgValDefault_Action_0( void )
   T_step_eq_sz(
     1,
     rtems_configuration_get_idle_task_stack_size(),
-  #if defined(BSP_IDLE_TASK_STACK_SIZE)
+  #if defined( BSP_IDLE_TASK_STACK_SIZE )
     BSP_IDLE_TASK_STACK_SIZE
   #else
     CPU_STACK_MINIMUM_SIZE
@@ -180,7 +179,7 @@ static void AcfgValDefault_Action_0( void )
   T_step_eq_sz(
     2,
     rtems_configuration_get_interrupt_stack_size(),
-  #if defined(BSP_INTERRUPT_STACK_SIZE)
+  #if defined( BSP_INTERRUPT_STACK_SIZE )
     BSP_INTERRUPT_STACK_SIZE
   #else
     CPU_STACK_MINIMUM_SIZE
@@ -206,12 +205,7 @@ static void AcfgValDefault_Action_1( void )
   rtems_status_code sc;
   rtems_id          id;
 
-  sc = rtems_barrier_create(
-    NAME,
-    RTEMS_DEFAULT_ATTRIBUTES,
-    1,
-    &id
-  );
+  sc = rtems_barrier_create( NAME, RTEMS_DEFAULT_ATTRIBUTES, 1, &id );
 
   /*
    * Check that the returned status code is RTEMS_TOO_MANY.
@@ -224,10 +218,10 @@ static void AcfgValDefault_Action_1( void )
  */
 static void AcfgValDefault_Action_2( void )
 {
-  rtems_message_queue_config      config;
+  rtems_message_queue_config config;
   RTEMS_MESSAGE_QUEUE_BUFFER( 1 ) buffers[ 1 ];
-  rtems_status_code               sc;
-  rtems_id                        id;
+  rtems_status_code sc;
+  rtems_id          id;
 
   memset( &config, 0, sizeof( config ) );
   config.name = NAME;
@@ -301,13 +295,7 @@ static void AcfgValDefault_Action_6( void )
   rtems_status_code sc;
   rtems_id          id;
 
-  sc = rtems_semaphore_create(
-    NAME,
-    0,
-    RTEMS_DEFAULT_ATTRIBUTES,
-    0,
-    &id
-  );
+  sc = rtems_semaphore_create( NAME, 0, RTEMS_DEFAULT_ATTRIBUTES, 0, &id );
 
   /*
    * Check that the returned status code is RTEMS_TOO_MANY.

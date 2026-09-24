@@ -109,8 +109,9 @@ static void Constructor( void )
   constructor_id = rtems_task_self();
 }
 
-static RTEMS_USED RTEMS_SECTION( ".preinit_array" ) void
-  ( * const constructor_registration )( void ) = Constructor;
+static RTEMS_USED RTEMS_SECTION(
+  ".preinit_array"
+) void ( *const constructor_registration )( void ) = Constructor;
 
 /**
  * @brief Validate the `.preinit_array` constructor invocation.  Mark that the

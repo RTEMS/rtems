@@ -115,16 +115,12 @@ typedef struct {
   } Map;
 } ScoreSemReqSeizeWait_Context;
 
-static ScoreSemReqSeizeWait_Context
-  ScoreSemReqSeizeWait_Instance;
+static ScoreSemReqSeizeWait_Context ScoreSemReqSeizeWait_Instance;
 
-static const char * const ScoreSemReqSeizeWait_PreDesc_Count[] = {
-  "Zero",
-  "Positive",
-  "NA"
-};
+static const char *const ScoreSemReqSeizeWait_PreDesc_Count[] =
+  { "Zero", "Positive", "NA" };
 
-static const char * const * const ScoreSemReqSeizeWait_PreDesc[] = {
+static const char *const *const ScoreSemReqSeizeWait_PreDesc[] = {
   ScoreSemReqSeizeWait_PreDesc_Count,
   NULL
 };
@@ -353,9 +349,7 @@ static inline ScoreSemReqSeizeWait_Entry ScoreSemReqSeizeWait_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return ScoreSemReqSeizeWait_Entries[
-    ScoreSemReqSeizeWait_Map[ index ]
-  ];
+  return ScoreSemReqSeizeWait_Entries[ ScoreSemReqSeizeWait_Map[ index ] ];
 }
 
 static void ScoreSemReqSeizeWait_TestVariant(

@@ -214,41 +214,24 @@ typedef struct {
   } Map;
 } ScoreSchedReqYield_Context;
 
-static ScoreSchedReqYield_Context
-  ScoreSchedReqYield_Instance;
+static ScoreSchedReqYield_Context ScoreSchedReqYield_Instance;
 
-static const char * const ScoreSchedReqYield_PreDesc_EligibleScheduler[] = {
-  "Home",
-  "Helping",
-  "NA"
-};
+static const char *const ScoreSchedReqYield_PreDesc_EligibleScheduler[] =
+  { "Home", "Helping", "NA" };
 
-static const char * const ScoreSchedReqYield_PreDesc_UsedScheduler[] = {
-  "Home",
-  "Helping",
-  "NA"
-};
+static const char *const ScoreSchedReqYield_PreDesc_UsedScheduler[] =
+  { "Home", "Helping", "NA" };
 
-static const char * const ScoreSchedReqYield_PreDesc_HomeSchedulerState[] = {
-  "Blocked",
-  "Scheduled",
-  "Ready",
-  "NA"
-};
+static const char *const ScoreSchedReqYield_PreDesc_HomeSchedulerState[] =
+  { "Blocked", "Scheduled", "Ready", "NA" };
 
-static const char * const ScoreSchedReqYield_PreDesc_Sticky[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const ScoreSchedReqYield_PreDesc_Sticky[] =
+  { "Yes", "No", "NA" };
 
-static const char * const ScoreSchedReqYield_PreDesc_Other[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const ScoreSchedReqYield_PreDesc_Other[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const ScoreSchedReqYield_PreDesc[] = {
+static const char *const *const ScoreSchedReqYield_PreDesc[] = {
   ScoreSchedReqYield_PreDesc_EligibleScheduler,
   ScoreSchedReqYield_PreDesc_UsedScheduler,
   ScoreSchedReqYield_PreDesc_HomeSchedulerState,
@@ -540,7 +523,7 @@ static void ScoreSchedReqYield_Setup( ScoreSchedReqYield_Context *ctx )
 
   TQSetPriority( &ctx->tq_ctx, COUNTER, PRIO_NORMAL );
 
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   TQSetScheduler( &ctx->tq_ctx, HELPER, SCHEDULER_B_ID, PRIO_NORMAL );
   TQSetPriority( &ctx->tq_ctx, MOVER, PRIO_HIGH );
   #endif
@@ -613,7 +596,7 @@ static void ScoreSchedReqYield_Action( ScoreSchedReqYield_Context *ctx )
   Yield();
   TQSchedulerRecordStop( &ctx->tq_ctx );
 
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   ctx->tq_ctx.busy_wait[ COUNTER ] = false;
 
   while ( cpu->heir == ctx->tq_ctx.worker_tcb[ COUNTER ] ) {
@@ -773,9 +756,7 @@ static inline ScoreSchedReqYield_Entry ScoreSchedReqYield_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return ScoreSchedReqYield_Entries[
-    ScoreSchedReqYield_Map[ index ]
-  ];
+  return ScoreSchedReqYield_Entries[ ScoreSchedReqYield_Map[ index ] ];
 }
 
 static void ScoreSchedReqYield_TestVariant( ScoreSchedReqYield_Context *ctx )

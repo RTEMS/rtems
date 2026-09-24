@@ -148,30 +148,16 @@ typedef struct {
   } Map;
 } RtemsClockReqGetTod_Context;
 
-static RtemsClockReqGetTod_Context
-  RtemsClockReqGetTod_Instance;
+static RtemsClockReqGetTod_Context RtemsClockReqGetTod_Instance;
 
-static const char * const RtemsClockReqGetTod_PreDesc_ToD[] = {
-  "Arbitrary",
-  "Leap4",
-  "Leap400",
-  "Youngest",
-  "Oldest",
-  "NotSet",
-  "NA"
-};
+static const char *const RtemsClockReqGetTod_PreDesc_ToD[] =
+  { "Arbitrary", "Leap4", "Leap400", "Youngest", "Oldest", "NotSet", "NA" };
 
-static const char * const RtemsClockReqGetTod_PreDesc_Param[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsClockReqGetTod_PreDesc_Param[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const * const RtemsClockReqGetTod_PreDesc[] = {
-  RtemsClockReqGetTod_PreDesc_ToD,
-  RtemsClockReqGetTod_PreDesc_Param,
-  NULL
-};
+static const char *const *const RtemsClockReqGetTod_PreDesc[] =
+  { RtemsClockReqGetTod_PreDesc_ToD, RtemsClockReqGetTod_PreDesc_Param, NULL };
 
 static void RtemsClockReqGetTod_Pre_ToD_Prepare(
   RtemsClockReqGetTod_Context *ctx,
@@ -185,9 +171,15 @@ static void RtemsClockReqGetTod_Pre_ToD_Prepare(
        * between 1988-01-01T00:00:00.000000000Z and
        * 2514-05-30T01:53:03.999999999Z.
        */
-      ctx->set_tod_value =
-        (rtems_time_of_day) { 2023, 12, 27, 6, 7, 8,
-        rtems_clock_get_ticks_per_second() / 4 };
+      ctx->set_tod_value = (rtems_time_of_day) {
+        2023,
+        12,
+        27,
+        6,
+        7,
+        8,
+        rtems_clock_get_ticks_per_second() / 4
+      };
       break;
     }
 
@@ -196,8 +188,7 @@ static void RtemsClockReqGetTod_Pre_ToD_Prepare(
        * While the CLOCK_REALTIME indicates a date for a leap year with the
        * value of 29th of February.
        */
-      ctx->set_tod_value =
-        (rtems_time_of_day) { 2096, 2, 29, 0, 0, 0, 0 };
+      ctx->set_tod_value = (rtems_time_of_day) { 2096, 2, 29, 0, 0, 0, 0 };
       break;
     }
 
@@ -206,8 +197,7 @@ static void RtemsClockReqGetTod_Pre_ToD_Prepare(
        * While the CLOCK_REALTIME indicates a date for a leap year with the
        * value of 29th of February.
        */
-      ctx->set_tod_value =
-        (rtems_time_of_day) { 2000, 2, 29, 0, 0, 0, 0 };
+      ctx->set_tod_value = (rtems_time_of_day) { 2000, 2, 29, 0, 0, 0, 0 };
       break;
     }
 
@@ -216,8 +206,7 @@ static void RtemsClockReqGetTod_Pre_ToD_Prepare(
        * While the CLOCK_REALTIME indicates the youngest date and time accepted
        * (1988-01-01T00:00:00.000000000Z).
        */
-      ctx->set_tod_value =
-        (rtems_time_of_day) { 1988, 1, 1, 0, 0, 0, 0 };
+      ctx->set_tod_value = (rtems_time_of_day) { 1988, 1, 1, 0, 0, 0, 0 };
       break;
     }
 
@@ -226,9 +215,15 @@ static void RtemsClockReqGetTod_Pre_ToD_Prepare(
        * While the CLOCK_REALTIME indicates the oldest date and time accepted
        * (2099-12-31T23:59:59.999999999Z).
        */
-      ctx->set_tod_value =
-        (rtems_time_of_day) { 2099, 12, 31, 23, 59, 59,
-        rtems_clock_get_ticks_per_second() - 1 };
+      ctx->set_tod_value = (rtems_time_of_day) {
+        2099,
+        12,
+        31,
+        23,
+        59,
+        59,
+        rtems_clock_get_ticks_per_second() - 1
+      };
       break;
     }
 
@@ -323,14 +318,14 @@ static void RtemsClockReqGetTod_Post_Value_Check(
        * during the call to rtems_clock_get_tod().
        */
       T_eq_ptr( ctx->get_tod_ref, &ctx->get_tod_value );
-      T_eq_u32( ctx->get_tod_value.year,   ctx->set_tod_value.year );
-      T_eq_u32( ctx->get_tod_value.month,  ctx->set_tod_value.month );
-      T_eq_u32( ctx->get_tod_value.day,    ctx->set_tod_value.day );
-      T_eq_u32( ctx->get_tod_value.hour,   ctx->set_tod_value.hour );
+      T_eq_u32( ctx->get_tod_value.year, ctx->set_tod_value.year );
+      T_eq_u32( ctx->get_tod_value.month, ctx->set_tod_value.month );
+      T_eq_u32( ctx->get_tod_value.day, ctx->set_tod_value.day );
+      T_eq_u32( ctx->get_tod_value.hour, ctx->set_tod_value.hour );
       T_eq_u32( ctx->get_tod_value.minute, ctx->set_tod_value.minute );
       T_eq_u32( ctx->get_tod_value.second, ctx->set_tod_value.second );
       /* rtems_clock_set() or rtems_clock_get_tod() cause an error of 1 tick */
-      T_ge_u32( ctx->get_tod_value.ticks + 1,  ctx->set_tod_value.ticks );
+      T_ge_u32( ctx->get_tod_value.ticks + 1, ctx->set_tod_value.ticks );
       T_le_u32( ctx->get_tod_value.ticks, ctx->set_tod_value.ticks );
       break;
     }
@@ -341,13 +336,13 @@ static void RtemsClockReqGetTod_Post_Value_Check(
        * rtems_clock_get_tod() shall not be modified by the
        * rtems_clock_get_tod() call.
        */
-      T_eq_u32( ctx->get_tod_value.year,   1 );
-      T_eq_u32( ctx->get_tod_value.month,  1 );
-      T_eq_u32( ctx->get_tod_value.day,    1 );
-      T_eq_u32( ctx->get_tod_value.hour,   1 );
+      T_eq_u32( ctx->get_tod_value.year, 1 );
+      T_eq_u32( ctx->get_tod_value.month, 1 );
+      T_eq_u32( ctx->get_tod_value.day, 1 );
+      T_eq_u32( ctx->get_tod_value.hour, 1 );
       T_eq_u32( ctx->get_tod_value.minute, 1 );
       T_eq_u32( ctx->get_tod_value.second, 1 );
-      T_eq_u32( ctx->get_tod_value.ticks,  1 );
+      T_eq_u32( ctx->get_tod_value.ticks, 1 );
       break;
     }
 
@@ -428,9 +423,7 @@ static inline RtemsClockReqGetTod_Entry RtemsClockReqGetTod_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsClockReqGetTod_Entries[
-    RtemsClockReqGetTod_Map[ index ]
-  ];
+  return RtemsClockReqGetTod_Entries[ RtemsClockReqGetTod_Map[ index ] ];
 }
 
 static void RtemsClockReqGetTod_TestVariant( RtemsClockReqGetTod_Context *ctx )

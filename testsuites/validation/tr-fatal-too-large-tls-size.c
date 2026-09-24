@@ -103,7 +103,8 @@ typedef struct {
 static AcfgValFatalTooLargeTlsSize_Context
   AcfgValFatalTooLargeTlsSize_Instance;
 
-static _Thread_local volatile uint8_t large_tls_object[ RTEMS_TASK_STORAGE_ALIGNMENT + 1 ];
+static _Thread_local volatile uint8_t
+  large_tls_object[ RTEMS_TASK_STORAGE_ALIGNMENT + 1 ];
 
 static volatile bool shall_not_load_the_value;
 
@@ -139,21 +140,13 @@ static void AcfgValFatalTooLargeTlsSize_Action_0(
   /*
    * Check that the expected fatal code is present.
    */
-  T_step_eq_ulong(
-    1,
-    ctx->code,
-    INTERNAL_ERROR_TOO_LARGE_TLS_SIZE
-  );
+  T_step_eq_ulong( 1, ctx->code, INTERNAL_ERROR_TOO_LARGE_TLS_SIZE );
 
   /*
    * Check that the CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE application
    * configuration option resulted in the expected system setting.
    */
-  T_step_eq_sz(
-    2,
-    _Thread_Maximum_TLS_size,
-    RTEMS_TASK_STORAGE_ALIGNMENT
-  );
+  T_step_eq_sz( 2, _Thread_Maximum_TLS_size, RTEMS_TASK_STORAGE_ALIGNMENT );
 }
 
 void AcfgValFatalTooLargeTlsSize_Run(

@@ -166,23 +166,16 @@ typedef struct {
 static RtemsSchedulerReqGetMaximumPriority_Context
   RtemsSchedulerReqGetMaximumPriority_Instance;
 
-static const char * const RtemsSchedulerReqGetMaximumPriority_PreDesc_Id[] = {
-  "Invalid",
-  "Scheduler",
-  "NA"
-};
+static const char *const RtemsSchedulerReqGetMaximumPriority_PreDesc_Id[] =
+  { "Invalid", "Scheduler", "NA" };
 
-static const char * const RtemsSchedulerReqGetMaximumPriority_PreDesc_Prio[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsSchedulerReqGetMaximumPriority_PreDesc_Prio[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const * const RtemsSchedulerReqGetMaximumPriority_PreDesc[] = {
-  RtemsSchedulerReqGetMaximumPriority_PreDesc_Id,
-  RtemsSchedulerReqGetMaximumPriority_PreDesc_Prio,
-  NULL
-};
+static const char *const *const RtemsSchedulerReqGetMaximumPriority_PreDesc[] =
+  { RtemsSchedulerReqGetMaximumPriority_PreDesc_Id,
+    RtemsSchedulerReqGetMaximumPriority_PreDesc_Prio,
+    NULL };
 
 static void RtemsSchedulerReqGetMaximumPriority_Pre_Id_Prepare(
   RtemsSchedulerReqGetMaximumPriority_Context *ctx,
@@ -291,7 +284,7 @@ static void RtemsSchedulerReqGetMaximumPriority_Post_PrioObj_Check(
        * ``scheduler_id`` parameter after the return of the
        * rtems_scheduler_get_maximum_priority() call.
        */
-      #if defined(RTEMS_SMP)
+      #if defined( RTEMS_SMP )
       T_eq_u32( ctx->priority_obj, PRIORITY_DEFAULT_MAXIMUM );
       #else
       T_eq_u32( ctx->priority_obj, 127 );
@@ -320,10 +313,7 @@ static void RtemsSchedulerReqGetMaximumPriority_Setup(
 {
   rtems_status_code sc;
 
-  sc = rtems_scheduler_ident(
-    TEST_SCHEDULER_A_NAME,
-    &ctx->scheduler_id
-  );
+  sc = rtems_scheduler_ident( TEST_SCHEDULER_A_NAME, &ctx->scheduler_id );
   T_rsc_success( sc );
 }
 
@@ -408,9 +398,8 @@ RtemsSchedulerReqGetMaximumPriority_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsSchedulerReqGetMaximumPriority_Entries[
-    RtemsSchedulerReqGetMaximumPriority_Map[ index ]
-  ];
+  return RtemsSchedulerReqGetMaximumPriority_Entries
+    [ RtemsSchedulerReqGetMaximumPriority_Map[ index ] ];
 }
 
 static void RtemsSchedulerReqGetMaximumPriority_TestVariant(

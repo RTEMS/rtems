@@ -121,9 +121,7 @@ static void RtemsIntrValIntrSmpOnly_Action_0( void )
     int a;
     RTEMS_INTERRUPT_LOCK_MEMBER( member )
     int b;
-  } lock = {
-    .member = RTEMS_INTERRUPT_LOCK_INITIALIZER( "name" )
-  };
+  } lock = { .member = RTEMS_INTERRUPT_LOCK_INITIALIZER( "name" ) };
 
   RTEMS_INTERRUPT_LOCK_REFERENCE( ref, &the_lock )
   rtems_interrupt_lock_context lock_context;

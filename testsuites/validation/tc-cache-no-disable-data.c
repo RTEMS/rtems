@@ -120,15 +120,9 @@ static void RtemsCacheValCacheNoDisableData_Action_0( void )
   /*
    * Check that the right fatal error occurred.
    */
-  T_eq_uint(
-    _Atomic_Load_uint( &fatal_counter, ATOMIC_ORDER_RELAXED ),
-    1
-  );
+  T_eq_uint( _Atomic_Load_uint( &fatal_counter, ATOMIC_ORDER_RELAXED ), 1 );
   T_eq_int( fatal_source, INTERNAL_ERROR_CORE );
-  T_eq_ulong(
-    fatal_code,
-    INTERNAL_ERROR_CANNOT_DISABLE_DATA_CACHE
-  );
+  T_eq_ulong( fatal_code, INTERNAL_ERROR_CANNOT_DISABLE_DATA_CACHE );
 }
 
 /**
@@ -147,9 +141,9 @@ static void RtemsCacheValCacheNoDisableData_Action_2( void )
 {
   rtems_interrupt_level level;
 
-  rtems_interrupt_local_disable(level);
+  rtems_interrupt_local_disable( level );
   rtems_cache_invalidate_entire_data();
-  rtems_interrupt_local_enable(level);
+  rtems_interrupt_local_enable( level );
 }
 
 /**

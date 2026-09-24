@@ -100,8 +100,7 @@ typedef struct {
   unsigned int counter_snapshots[ TEST_MAXIMUM_TIMERS ];
 } RtemsTimerValTimer_Context;
 
-static RtemsTimerValTimer_Context
-  RtemsTimerValTimer_Instance;
+static RtemsTimerValTimer_Context RtemsTimerValTimer_Instance;
 
 typedef RtemsTimerValTimer_Context Context;
 
@@ -115,11 +114,8 @@ static void Timer( rtems_id timer, void *arg )
 
   ctx = T_fixture_context();
   counter = arg;
-  *counter = _Atomic_Fetch_add_uint(
-    &ctx->counter,
-    1,
-    ATOMIC_ORDER_RELAXED
-  ) + 1;
+  *counter = _Atomic_Fetch_add_uint( &ctx->counter, 1, ATOMIC_ORDER_RELAXED ) +
+             1;
 }
 
 static void Fire( Context *ctx, size_t i, rtems_interval ticks )
@@ -156,7 +152,7 @@ static void RtemsTimerValTimer_Action_0( RtemsTimerValTimer_Context *ctx )
 
   _Atomic_Init_uint( &ctx->counter, 0 );
 
-  for ( i = 0; i < TEST_MAXIMUM_TIMERS ; ++i ) {
+  for ( i = 0; i < TEST_MAXIMUM_TIMERS; ++i ) {
     sc = rtems_timer_create(
       rtems_build_name( 'T', 'E', 'S', 'T' ),
       &ctx->timer_ids[ i ]
@@ -183,14 +179,14 @@ static void RtemsTimerValTimer_Action_0( RtemsTimerValTimer_Context *ctx )
    */
   FinalClockTick();
 
-  for ( i = 0; i < TEST_MAXIMUM_TIMERS ; ++i ) {
+  for ( i = 0; i < TEST_MAXIMUM_TIMERS; ++i ) {
     T_eq_sz( ctx->counter_snapshots[ i ], i + 1 );
   }
 
   /*
    * Clean up all used resources.
    */
-  for ( i = 0; i < TEST_MAXIMUM_TIMERS ; ++i ) {
+  for ( i = 0; i < TEST_MAXIMUM_TIMERS; ++i ) {
     sc = rtems_timer_delete( ctx->timer_ids[ i ] );
     T_rsc_success( sc );
   }

@@ -139,11 +139,7 @@ static void AcfgValFatalInitTaskConstructFailed_Action_0(
    * Check that the CONFIGURE_INIT_TASK_PRIORITY application configuration
    * option resulted in the expected system setting.
    */
-  T_step_eq_u32(
-    2,
-    _RTEMS_tasks_User_task_config.config.initial_priority,
-    0
-  );
+  T_step_eq_u32( 2, _RTEMS_tasks_User_task_config.config.initial_priority, 0 );
 }
 
 void AcfgValFatalInitTaskConstructFailed_Run(

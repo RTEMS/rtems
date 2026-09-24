@@ -157,7 +157,7 @@ typedef struct {
    * @brief This member is used as storage area for the message queue.
    */
   RTEMS_MESSAGE_QUEUE_BUFFER( MAXIMUM_MESSAGE_SIZE )
-    storage_area[ MAXIMUM_PENDING_MESSAGES ];
+  storage_area[ MAXIMUM_PENDING_MESSAGES ];
 
   /**
    * @brief This member contains the returned status codes of the receivers.
@@ -170,7 +170,7 @@ typedef struct {
    * This is either rtems_message_queue_flush() or
    * rtems_message_queue_get_number_pending().
    */
-  rtems_status_code (*action)( rtems_id id, uint32_t *count );
+  rtems_status_code ( *action )( rtems_id id, uint32_t *count );
 
   /**
    * @brief This member specifies the ``id`` parameter of the action.
@@ -202,7 +202,7 @@ typedef struct {
    * @brief This member contains a pointer to a function which is executed to
    *   check that the action has not changed the content of the message queue.
    */
-  void (*check_msgq_unchanged)( void *ctx_in );
+  void ( *check_msgq_unchanged )( void *ctx_in );
 
   struct {
     /**
@@ -236,42 +236,27 @@ typedef struct {
 static RtemsMessageReqFlushPending_Context
   RtemsMessageReqFlushPending_Instance;
 
-static const char * const RtemsMessageReqFlushPending_PreDesc_Count[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsMessageReqFlushPending_PreDesc_Count[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsMessageReqFlushPending_PreDesc_Id[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsMessageReqFlushPending_PreDesc_Id[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsMessageReqFlushPending_PreDesc_MsgQueue[] = {
-  "Empty",
-  "Several",
-  "NA"
-};
+static const char *const RtemsMessageReqFlushPending_PreDesc_MsgQueue[] =
+  { "Empty", "Several", "NA" };
 
-static const char * const RtemsMessageReqFlushPending_PreDesc_Receivers[] = {
-  "Waiting",
-  "None",
-  "NA"
-};
+static const char *const RtemsMessageReqFlushPending_PreDesc_Receivers[] =
+  { "Waiting", "None", "NA" };
 
-static const char * const RtemsMessageReqFlushPending_PreDesc_Directive[] = {
-  "Flush",
-  "Pending",
-  "NA"
-};
+static const char *const RtemsMessageReqFlushPending_PreDesc_Directive[] =
+  { "Flush", "Pending", "NA" };
 
-static const char * const RtemsMessageReqFlushPending_PreDesc_Storage[] = {
+static const char *const RtemsMessageReqFlushPending_PreDesc_Storage[] = {
   "Nop",
   "NA"
 };
 
-static const char * const * const RtemsMessageReqFlushPending_PreDesc[] = {
+static const char *const *const RtemsMessageReqFlushPending_PreDesc[] = {
   RtemsMessageReqFlushPending_PreDesc_Count,
   RtemsMessageReqFlushPending_PreDesc_Id,
   RtemsMessageReqFlushPending_PreDesc_MsgQueue,
@@ -282,17 +267,17 @@ static const char * const * const RtemsMessageReqFlushPending_PreDesc[] = {
 };
 
 typedef RtemsMessageReqFlushPending_Context Context;
-static const uint32_t NUMBER_OF_PENDING_MESSAGES = 2;
-static const rtems_interval TIMEOUT_TICKS = 1;
-static const rtems_event_set EVENT_RECEIVE = RTEMS_EVENT_17;
+static const uint32_t                       NUMBER_OF_PENDING_MESSAGES = 2;
+static const rtems_interval                 TIMEOUT_TICKS = 1;
+static const rtems_event_set                EVENT_RECEIVE = RTEMS_EVENT_17;
 static const uint8_t queued_message[] = { 200, 201, 202 };
 
 static void Receive( Context *ctx, size_t worker_index )
 {
-  size_t size;
+  size_t  size;
   uint8_t buffer[ MAXIMUM_MESSAGE_SIZE ];
 
-  ctx->receive_status[worker_index] = rtems_message_queue_receive(
+  ctx->receive_status[ worker_index ] = rtems_message_queue_receive(
     ctx->message_queue_id,
     buffer,
     &size,
@@ -304,8 +289,8 @@ static void Receive( Context *ctx, size_t worker_index )
 static void WorkerTask( rtems_task_argument argument )
 {
   static size_t worker_number = 0;
-  size_t worker_index = worker_number++;
-  Context *ctx = (Context *) argument;
+  size_t        worker_index = worker_number++;
+  Context      *ctx = (Context *) argument;
 
   while ( true ) {
     ReceiveAnyEvents();
@@ -314,23 +299,23 @@ static void WorkerTask( rtems_task_argument argument )
 }
 
 static void CheckForNoMessage(
-  Context *ctx,
+  Context          *ctx,
   rtems_status_code status,
-  uint8_t *message_buffer,
-  size_t message_size
+  uint8_t          *message_buffer,
+  size_t            message_size
 )
 {
   (void) ctx;
   (void) message_buffer;
   (void) message_size;
-  T_rsc( status, RTEMS_UNSATISFIED  );
+  T_rsc( status, RTEMS_UNSATISFIED );
 }
 
 static void CheckForQueuedMessage(
-  Context *ctx,
+  Context          *ctx,
   rtems_status_code status,
-  uint8_t *message_buffer,
-  size_t message_size
+  uint8_t          *message_buffer,
+  size_t            message_size
 )
 {
   (void) ctx;
@@ -341,17 +326,17 @@ static void CheckForQueuedMessage(
 
 static void PopMessage(
   Context *ctx,
-  void (*check_fn)(
-    Context *ctx,
+  void ( *check_fn )(
+    Context          *ctx,
     rtems_status_code status,
-    uint8_t *message_buffer,
-    size_t message_size
+    uint8_t          *message_buffer,
+    size_t            message_size
   )
 )
 {
   rtems_status_code status;
-  uint8_t message_buffer[ MAXIMUM_MESSAGE_SIZE ];
-  size_t message_size;
+  uint8_t           message_buffer[ MAXIMUM_MESSAGE_SIZE ];
+  size_t            message_size;
 
   status = rtems_message_queue_receive(
     ctx->message_queue_id,
@@ -361,7 +346,7 @@ static void PopMessage(
     RTEMS_NO_TIMEOUT
   );
 
- check_fn( ctx, status, message_buffer, message_size );
+  check_fn( ctx, status, message_buffer, message_size );
 }
 
 static void CheckForNoMessageInQueue( void *ctx_in )
@@ -490,7 +475,7 @@ static void RtemsMessageReqFlushPending_Pre_Receivers_Prepare(
        */
       size_t i;
       for ( i = 0; i < NUMBER_OF_WORKERS; ++i ) {
-        SendEvents( ctx->worker_id[i], EVENT_RECEIVE );
+        SendEvents( ctx->worker_id[ i ], EVENT_RECEIVE );
       }
       break;
     }
@@ -692,7 +677,7 @@ static void RtemsMessageReqFlushPending_Post_Receivers_Check(
        */
       size_t i;
       for ( i = 0; i < NUMBER_OF_WORKERS; ++i ) {
-        T_rsc( ctx->receive_status[i], RTEMS_TIMEOUT );
+        T_rsc( ctx->receive_status[ i ], RTEMS_TIMEOUT );
       }
       break;
     }
@@ -710,8 +695,8 @@ static void RtemsMessageReqFlushPending_Setup(
   SetSelfPriority( PRIO_NORMAL );
 
   for ( i = 0; i < NUMBER_OF_WORKERS; ++i ) {
-    ctx->worker_id[i] = CreateTask( "WORK", PRIO_HIGH );
-    StartTask( ctx->worker_id[i], WorkerTask, ctx );
+    ctx->worker_id[ i ] = CreateTask( "WORK", PRIO_HIGH );
+    StartTask( ctx->worker_id[ i ], WorkerTask, ctx );
   }
 }
 
@@ -731,7 +716,7 @@ static void RtemsMessageReqFlushPending_Teardown(
   size_t i;
 
   for ( i = 0; i < NUMBER_OF_WORKERS; ++i ) {
-    DeleteTask( ctx->worker_id[i] );
+    DeleteTask( ctx->worker_id[ i ] );
   }
   RestoreRunnerPriority();
 }
@@ -752,19 +737,16 @@ static void RtemsMessageReqFlushPending_Prepare(
   rtems_status_code status;
 
   rtems_message_queue_config config = {
-    .name                     = rtems_build_name( 'M', 'S', 'G', 'Q' ),
+    .name = rtems_build_name( 'M', 'S', 'G', 'Q' ),
     .maximum_pending_messages = MAXIMUM_PENDING_MESSAGES,
-    .maximum_message_size     = MAXIMUM_MESSAGE_SIZE,
-    .storage_area             = ctx->storage_area,
-    .storage_size             = sizeof( ctx->storage_area ),
-    .storage_free             = NULL,
-    .attributes               = RTEMS_DEFAULT_ATTRIBUTES
+    .maximum_message_size = MAXIMUM_MESSAGE_SIZE,
+    .storage_area = ctx->storage_area,
+    .storage_size = sizeof( ctx->storage_area ),
+    .storage_free = NULL,
+    .attributes = RTEMS_DEFAULT_ATTRIBUTES
   };
 
-  status = rtems_message_queue_construct(
-    &config,
-    &ctx->message_queue_id
-  );
+  status = rtems_message_queue_construct( &config, &ctx->message_queue_id );
   T_rsc_success( status );
 
   ctx->count = UINT8_MAX;
@@ -774,10 +756,7 @@ static void RtemsMessageReqFlushPending_Action(
   RtemsMessageReqFlushPending_Context *ctx
 )
 {
-  ctx->status = (ctx->action)(
-    ctx->id_param,
-    ctx->count_param
-  );
+  ctx->status = ( ctx->action )( ctx->id_param, ctx->count_param );
 
   FinalClockTick();
 }
@@ -886,9 +865,8 @@ RtemsMessageReqFlushPending_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsMessageReqFlushPending_Entries[
-    RtemsMessageReqFlushPending_Map[ index ]
-  ];
+  return RtemsMessageReqFlushPending_Entries
+    [ RtemsMessageReqFlushPending_Map[ index ] ];
 }
 
 static void RtemsMessageReqFlushPending_TestVariant(
@@ -950,12 +928,14 @@ T_TEST_CASE_FIXTURE(
         ++ctx->Map.pcs[ 2 ]
       ) {
         for (
-          ctx->Map.pcs[ 3 ] = RtemsMessageReqFlushPending_Pre_Receivers_Waiting;
+          ctx->Map.pcs[ 3 ] =
+            RtemsMessageReqFlushPending_Pre_Receivers_Waiting;
           ctx->Map.pcs[ 3 ] < RtemsMessageReqFlushPending_Pre_Receivers_NA;
           ++ctx->Map.pcs[ 3 ]
         ) {
           for (
-            ctx->Map.pcs[ 4 ] = RtemsMessageReqFlushPending_Pre_Directive_Flush;
+            ctx->Map.pcs[ 4 ] =
+              RtemsMessageReqFlushPending_Pre_Directive_Flush;
             ctx->Map.pcs[ 4 ] < RtemsMessageReqFlushPending_Pre_Directive_NA;
             ++ctx->Map.pcs[ 4 ]
           ) {

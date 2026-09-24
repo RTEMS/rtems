@@ -138,16 +138,12 @@ typedef struct {
 static DevGrlibReqApbuartInbyteNonblocking_Context
   DevGrlibReqApbuartInbyteNonblocking_Instance;
 
-static const char * const DevGrlibReqApbuartInbyteNonblocking_PreDesc_DataReady[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const
+  DevGrlibReqApbuartInbyteNonblocking_PreDesc_DataReady[] =
+    { "Yes", "No", "NA" };
 
-static const char * const * const DevGrlibReqApbuartInbyteNonblocking_PreDesc[] = {
-  DevGrlibReqApbuartInbyteNonblocking_PreDesc_DataReady,
-  NULL
-};
+static const char *const *const DevGrlibReqApbuartInbyteNonblocking_PreDesc[] =
+  { DevGrlibReqApbuartInbyteNonblocking_PreDesc_DataReady, NULL };
 
 static void DevGrlibReqApbuartInbyteNonblocking_Pre_DataReady_Prepare(
   DevGrlibReqApbuartInbyteNonblocking_Context      *ctx,
@@ -300,9 +296,8 @@ DevGrlibReqApbuartInbyteNonblocking_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return DevGrlibReqApbuartInbyteNonblocking_Entries[
-    DevGrlibReqApbuartInbyteNonblocking_Map[ index ]
-  ];
+  return DevGrlibReqApbuartInbyteNonblocking_Entries
+    [ DevGrlibReqApbuartInbyteNonblocking_Map[ index ] ];
 }
 
 static void DevGrlibReqApbuartInbyteNonblocking_TestVariant(

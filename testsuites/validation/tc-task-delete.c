@@ -492,78 +492,42 @@ typedef struct {
   } Map;
 } RtemsTaskReqDelete_Context;
 
-static RtemsTaskReqDelete_Context
-  RtemsTaskReqDelete_Instance;
+static RtemsTaskReqDelete_Context RtemsTaskReqDelete_Instance;
 
-static const char * const RtemsTaskReqDelete_PreDesc_Id[] = {
-  "Executing",
-  "Other",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsTaskReqDelete_PreDesc_Id[] =
+  { "Executing", "Other", "Invalid", "NA" };
 
-static const char * const RtemsTaskReqDelete_PreDesc_Context[] = {
-  "Task",
-  "Interrupt",
-  "NA"
-};
+static const char *const RtemsTaskReqDelete_PreDesc_Context[] =
+  { "Task", "Interrupt", "NA" };
 
-static const char * const RtemsTaskReqDelete_PreDesc_ThreadDispatch[] = {
-  "Disabled",
-  "Enabled",
-  "NA"
-};
+static const char *const RtemsTaskReqDelete_PreDesc_ThreadDispatch[] =
+  { "Disabled", "Enabled", "NA" };
 
-static const char * const RtemsTaskReqDelete_PreDesc_CallerPriority[] = {
-  "Vital",
-  "Dispensable",
-  "NA"
-};
+static const char *const RtemsTaskReqDelete_PreDesc_CallerPriority[] =
+  { "Vital", "Dispensable", "NA" };
 
-static const char * const RtemsTaskReqDelete_PreDesc_Dormant[] = {
-  "No",
-  "Yes",
-  "NA"
-};
+static const char *const RtemsTaskReqDelete_PreDesc_Dormant[] =
+  { "No", "Yes", "NA" };
 
-static const char * const RtemsTaskReqDelete_PreDesc_Suspended[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqDelete_PreDesc_Suspended[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqDelete_PreDesc_Restarting[] = {
-  "No",
-  "Yes",
-  "NA"
-};
+static const char *const RtemsTaskReqDelete_PreDesc_Restarting[] =
+  { "No", "Yes", "NA" };
 
-static const char * const RtemsTaskReqDelete_PreDesc_Terminating[] = {
-  "No",
-  "Yes",
-  "NA"
-};
+static const char *const RtemsTaskReqDelete_PreDesc_Terminating[] =
+  { "No", "Yes", "NA" };
 
-static const char * const RtemsTaskReqDelete_PreDesc_Protected[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqDelete_PreDesc_Protected[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqDelete_PreDesc_State[] = {
-  "Enqueued",
-  "Ready",
-  "Blocked",
-  "NA"
-};
+static const char *const RtemsTaskReqDelete_PreDesc_State[] =
+  { "Enqueued", "Ready", "Blocked", "NA" };
 
-static const char * const RtemsTaskReqDelete_PreDesc_Timer[] = {
-  "Inactive",
-  "Active",
-  "NA"
-};
+static const char *const RtemsTaskReqDelete_PreDesc_Timer[] =
+  { "Inactive", "Active", "NA" };
 
-static const char * const * const RtemsTaskReqDelete_PreDesc[] = {
+static const char *const *const RtemsTaskReqDelete_PreDesc[] = {
   RtemsTaskReqDelete_PreDesc_Id,
   RtemsTaskReqDelete_PreDesc_Context,
   RtemsTaskReqDelete_PreDesc_ThreadDispatch,
@@ -592,8 +556,9 @@ static void CaptureWorkerState( Context *ctx )
     ctx->worker_wait_queue = ctx->worker_tcb->Wait.queue;
     ctx->worker_state = ctx->worker_tcb->current_state;
     ctx->worker_life_state = ctx->worker_tcb->Life.state;
-    ctx->worker_priority =
-      SCHEDULER_PRIORITY_UNMAP( _Thread_Get_priority( ctx->worker_tcb ) );
+    ctx->worker_priority = SCHEDULER_PRIORITY_UNMAP(
+      _Thread_Get_priority( ctx->worker_tcb )
+    );
     CopyExtensionCalls( &ctx->calls, &ctx->calls_after_restart );
     GetTaskTimerInfoByThread( ctx->worker_tcb, &ctx->worker_timer_info );
   }
@@ -609,7 +574,7 @@ static void TaskSwitch( rtems_tcb *executing, rtems_tcb *heir )
 static void VerifyTaskPreparation( const Context *ctx )
 {
   if ( ctx->id != INVALID_ID ) {
-    States_Control state;
+    States_Control    state;
     Thread_Life_state life_state;
 
     state = STATES_READY;
@@ -675,7 +640,7 @@ static void ResumeThreadDispatch(
   longjmp( ctx->thread_dispatch_context, 1 );
 }
 
-static void DeleteAndJumpBack( Context * const ctx )
+static void DeleteAndJumpBack( Context *const ctx )
 {
   if ( setjmp( ctx->thread_dispatch_context ) == 0 ) {
     ctx->status = rtems_task_delete( ctx->id );
@@ -768,8 +733,8 @@ static void BlockDone( Context *ctx )
 }
 
 static void BlockAndJumpBack(
-  Context         * const ctx,
-  Per_CPU_Control * const cpu_self
+  Context *const         ctx,
+  Per_CPU_Control *const cpu_self
 )
 {
   if ( setjmp( ctx->thread_dispatch_context ) == 0 ) {
@@ -940,8 +905,8 @@ static void Cleanup( Context *ctx )
 
   if (
     ctx->id == INVALID_ID ||
-    ( ctx->calls.thread_terminate == 0 && 
-    !( ctx->dormant && ctx->status != RTEMS_CALLED_FROM_ISR ) )
+    ( ctx->calls.thread_terminate == 0 &&
+      !( ctx->dormant && ctx->status != RTEMS_CALLED_FROM_ISR ) )
   ) {
     DeleteTask( ctx->worker_id );
   }
@@ -1364,8 +1329,7 @@ static void RtemsTaskReqDelete_Post_Zombie_Check(
        * The task specified by the ``id`` parameter shall be in the zombie
        * state after the rtems_task_delete() call.
        */
-      T_eq_u32( ctx->worker_state & STATES_ZOMBIE, STATES_ZOMBIE )
-      break;
+      T_eq_u32( ctx->worker_state & STATES_ZOMBIE, STATES_ZOMBIE ) break;
     }
 
     case RtemsTaskReqDelete_Post_Zombie_No: {
@@ -1373,8 +1337,7 @@ static void RtemsTaskReqDelete_Post_Zombie_Check(
        * The task specified by the ``id`` parameter shall not be in the zombie
        * state after the rtems_task_delete() call.
        */
-      T_eq_u32( ctx->worker_state & STATES_ZOMBIE, 0 )
-      break;
+      T_eq_u32( ctx->worker_state & STATES_ZOMBIE, 0 ) break;
     }
 
     case RtemsTaskReqDelete_Post_Zombie_NA:
@@ -1472,8 +1435,7 @@ static void RtemsTaskReqDelete_Post_Dormant_Check(
        * The task specified by the ``id`` parameter shall be dormant after the
        * rtems_task_delete() call.
        */
-      T_eq_u32( ctx->worker_state & STATES_DORMANT, STATES_DORMANT )
-      break;
+      T_eq_u32( ctx->worker_state & STATES_DORMANT, STATES_DORMANT ) break;
     }
 
     case RtemsTaskReqDelete_Post_Dormant_No: {
@@ -1481,8 +1443,7 @@ static void RtemsTaskReqDelete_Post_Dormant_Check(
        * The task specified by the ``id`` parameter shall not be dormant after
        * the rtems_task_delete() call.
        */
-      T_eq_u32( ctx->worker_state & STATES_DORMANT, 0 )
-      break;
+      T_eq_u32( ctx->worker_state & STATES_DORMANT, 0 ) break;
     }
 
     case RtemsTaskReqDelete_Post_Dormant_NA:
@@ -1501,8 +1462,7 @@ static void RtemsTaskReqDelete_Post_Suspended_Check(
        * The task specified by the ``id`` parameter shall be suspended after
        * the rtems_task_delete() call.
        */
-      T_eq_u32( ctx->worker_state & STATES_SUSPENDED, STATES_SUSPENDED )
-      break;
+      T_eq_u32( ctx->worker_state & STATES_SUSPENDED, STATES_SUSPENDED ) break;
     }
 
     case RtemsTaskReqDelete_Post_Suspended_No: {
@@ -1510,8 +1470,7 @@ static void RtemsTaskReqDelete_Post_Suspended_Check(
        * The task specified by the ``id`` parameter shall not be suspended
        * after the rtems_task_delete() call.
        */
-      T_eq_u32( ctx->worker_state & STATES_SUSPENDED, 0 )
-      break;
+      T_eq_u32( ctx->worker_state & STATES_SUSPENDED, 0 ) break;
     }
 
     case RtemsTaskReqDelete_Post_Suspended_NA:
@@ -1618,7 +1577,7 @@ static void RtemsTaskReqDelete_Post_State_Check(
        * queue and blocked.
        */
       T_ne_u32( ctx->worker_state & STATES_BLOCKED, 0 )
-      T_not_null( ctx->worker_wait_queue );
+        T_not_null( ctx->worker_wait_queue );
       break;
     }
 
@@ -1628,7 +1587,7 @@ static void RtemsTaskReqDelete_Post_State_Check(
        * wait queue and not blocked.
        */
       T_eq_u32( ctx->worker_state & STATES_BLOCKED, 0 )
-      T_null( ctx->worker_wait_queue );
+        T_null( ctx->worker_wait_queue );
       break;
     }
 
@@ -1638,7 +1597,7 @@ static void RtemsTaskReqDelete_Post_State_Check(
        * wait queue and blocked.
        */
       T_ne_u32( ctx->worker_state & STATES_BLOCKED, 0 )
-      T_null( ctx->worker_wait_queue );
+        T_null( ctx->worker_wait_queue );
       break;
     }
 
@@ -4658,9 +4617,7 @@ static inline RtemsTaskReqDelete_Entry RtemsTaskReqDelete_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsTaskReqDelete_Entries[
-    RtemsTaskReqDelete_Map[ index ]
-  ];
+  return RtemsTaskReqDelete_Entries[ RtemsTaskReqDelete_Map[ index ] ];
 }
 
 static void RtemsTaskReqDelete_SetPreConditionStates(
@@ -4830,12 +4787,14 @@ T_TEST_CASE_FIXTURE( RtemsTaskReqDelete, &RtemsTaskReqDelete_Fixture )
                     ++ctx->Map.pci[ 8 ]
                   ) {
                     for (
-                      ctx->Map.pci[ 9 ] = RtemsTaskReqDelete_Pre_State_Enqueued;
+                      ctx->Map.pci[ 9 ] =
+                        RtemsTaskReqDelete_Pre_State_Enqueued;
                       ctx->Map.pci[ 9 ] < RtemsTaskReqDelete_Pre_State_NA;
                       ++ctx->Map.pci[ 9 ]
                     ) {
                       for (
-                        ctx->Map.pci[ 10 ] = RtemsTaskReqDelete_Pre_Timer_Inactive;
+                        ctx->Map.pci[ 10 ] =
+                          RtemsTaskReqDelete_Pre_Timer_Inactive;
                         ctx->Map.pci[ 10 ] < RtemsTaskReqDelete_Pre_Timer_NA;
                         ++ctx->Map.pci[ 10 ]
                       ) {

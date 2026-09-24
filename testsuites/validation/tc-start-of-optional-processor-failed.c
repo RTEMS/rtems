@@ -89,10 +89,7 @@ static void ScoreSmpValStartOfOptionalProcessorFailed_Action_0( void )
   /*
    * Check that the boot processor is online.
    */
-  T_step_true(
-    0,
-    _Per_CPU_Is_processor_online( _Per_CPU_Get_by_index( 0 ) )
-  );
+  T_step_true( 0, _Per_CPU_Is_processor_online( _Per_CPU_Get_by_index( 0 ) ) );
 
   /*
    * Check that the optional processor which failed to start is not online.

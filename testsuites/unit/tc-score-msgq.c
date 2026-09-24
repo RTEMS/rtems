@@ -101,7 +101,7 @@
  */
 
 #define MAXIMUM_PENDING_MESSAGES 2
-#define MAXIMUM_MESSAGE_SIZE 3
+#define MAXIMUM_MESSAGE_SIZE     3
 
 static void WorkerTask( rtems_task_argument argument );
 
@@ -118,7 +118,7 @@ typedef struct {
    * @brief This member is used as storage area for the message queue.
    */
   RTEMS_MESSAGE_QUEUE_BUFFER( MAXIMUM_MESSAGE_SIZE )
-    storage_area[ MAXIMUM_PENDING_MESSAGES];
+  storage_area[ MAXIMUM_PENDING_MESSAGES ];
 
   /**
    * @brief This member contains the task identifier of the worker task.
@@ -139,15 +139,14 @@ typedef struct {
   rtems_status_code send_status;
 } ScoreMsgqUnitMsgq_Context;
 
-static ScoreMsgqUnitMsgq_Context
-  ScoreMsgqUnitMsgq_Instance;
+static ScoreMsgqUnitMsgq_Context ScoreMsgqUnitMsgq_Instance;
 
-#define EVENT_SEND RTEMS_EVENT_17
-#define MESSAGE_CONTENT_LOW { 1, 2, 3 }
-#define MESSAGE_CONTENT_HIGH { 4, 5 }
-#define MESSAGE_PRIORITY_LOW 5
+#define EVENT_SEND            RTEMS_EVENT_17
+#define MESSAGE_CONTENT_LOW   { 1, 2, 3 }
+#define MESSAGE_CONTENT_HIGH  { 4, 5 }
+#define MESSAGE_PRIORITY_LOW  5
 #define MESSAGE_PRIORITY_HIGH 7
-#define DO_WAIT true
+#define DO_WAIT               true
 
 typedef ScoreMsgqUnitMsgq_Context Context;
 
@@ -157,22 +156,19 @@ typedef ScoreMsgqUnitMsgq_Context Context;
  * task will wait in case the queue is full.
  */
 static rtems_status_code SubmitMessage(
-  rtems_id id,
-  uint8_t *message,
-  size_t message_size,
+  rtems_id     id,
+  uint8_t     *message,
+  size_t       message_size,
   unsigned int posix_piority
 )
 {
-  Status_Control status;
-  Thread_queue_Context queue_context;
+  Status_Control         status;
+  Thread_queue_Context   queue_context;
   Message_queue_Control *the_message_queue;
 
   T_assert_lt_uint( posix_piority, MQ_PRIO_MAX );
 
-  the_message_queue = _Message_queue_Get(
-    id,
-    &queue_context
-  );
+  the_message_queue = _Message_queue_Get( id, &queue_context );
   T_assert_not_null( the_message_queue );
 
   /* The next two calls are from _POSIX_Message_queue_Send_support() */
@@ -202,8 +198,8 @@ static rtems_status_code SubmitMessage(
 
 static rtems_status_code ReceiveMessage(
   rtems_id id,
-  void *buffer,
-  size_t *size
+  void    *buffer,
+  size_t  *size
 )
 {
   return rtems_message_queue_receive(
@@ -218,7 +214,7 @@ static rtems_status_code ReceiveMessage(
 static rtems_status_code ReceiveOneMessages( Context *ctx )
 {
   uint8_t message_buffer[ MAXIMUM_MESSAGE_SIZE ];
-  size_t message_size;
+  size_t  message_size;
 
   return ReceiveMessage(
     ctx->message_queue_id,
@@ -258,21 +254,18 @@ static void WorkerSendMessage( Context *ctx )
 
 static void ScoreMsgqUnitMsgq_Setup( ScoreMsgqUnitMsgq_Context *ctx )
 {
-  rtems_status_code status;
+  rtems_status_code          status;
   rtems_message_queue_config config = {
-    .name                     = rtems_build_name( 'M', 'S', 'G', 'Q' ),
+    .name = rtems_build_name( 'M', 'S', 'G', 'Q' ),
     .maximum_pending_messages = MAXIMUM_PENDING_MESSAGES,
-    .maximum_message_size     = MAXIMUM_MESSAGE_SIZE,
-    .storage_area             = ctx->storage_area,
-    .storage_size             = sizeof( ctx->storage_area ),
-    .storage_free             = NULL,
-    .attributes               = RTEMS_DEFAULT_ATTRIBUTES
+    .maximum_message_size = MAXIMUM_MESSAGE_SIZE,
+    .storage_area = ctx->storage_area,
+    .storage_size = sizeof( ctx->storage_area ),
+    .storage_free = NULL,
+    .attributes = RTEMS_DEFAULT_ATTRIBUTES
   };
 
-  status = rtems_message_queue_construct(
-    &config,
-    &ctx->message_queue_id
-  );
+  status = rtems_message_queue_construct( &config, &ctx->message_queue_id );
   T_rsc_success( status );
 
   SetSelfPriority( PRIO_NORMAL );
@@ -323,12 +316,12 @@ static void ScoreMsgqUnitMsgq_Action_0( ScoreMsgqUnitMsgq_Context *ctx )
   rtems_status_code status_submit_high;
   rtems_status_code status_receive_low;
   rtems_status_code status_receive_high;
-  uint8_t message_low[] = MESSAGE_CONTENT_LOW;
-  uint8_t message_high[] = MESSAGE_CONTENT_HIGH;
-  uint8_t message_buffer_low[ MAXIMUM_MESSAGE_SIZE ];
-  uint8_t message_buffer_high[ MAXIMUM_MESSAGE_SIZE ];
-  size_t message_size_low;
-  size_t message_size_high;
+  uint8_t           message_low[] = MESSAGE_CONTENT_LOW;
+  uint8_t           message_high[] = MESSAGE_CONTENT_HIGH;
+  uint8_t           message_buffer_low[ MAXIMUM_MESSAGE_SIZE ];
+  uint8_t           message_buffer_high[ MAXIMUM_MESSAGE_SIZE ];
+  size_t            message_size_low;
+  size_t            message_size_high;
 
   status_submit_low = SubmitMessage(
     ctx->message_queue_id,
@@ -411,11 +404,11 @@ static void ScoreMsgqUnitMsgq_Action_2( ScoreMsgqUnitMsgq_Context *ctx )
   rtems_status_code status_send_second_message;
   rtems_status_code status_send_third_message;
 
-  CallWithinISR( ( void (*)(void*) ) SendMessage, ctx );
+  CallWithinISR( (void ( * )( void * )) SendMessage, ctx );
   status_send_first_message = ctx->send_status;
-  CallWithinISR( ( void (*)(void*) ) SendMessage, ctx );
+  CallWithinISR( (void ( * )( void * )) SendMessage, ctx );
   status_send_second_message = ctx->send_status;
-  CallWithinISR( ( void (*)(void*) ) SendMessage, ctx );
+  CallWithinISR( (void ( * )( void * )) SendMessage, ctx );
   status_send_third_message = ctx->send_status;
 
   T_rsc_success( ReceiveOneMessages( ctx ) );

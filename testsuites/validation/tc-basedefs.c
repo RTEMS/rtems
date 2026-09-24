@@ -449,29 +449,28 @@
  */
 
 #define WHITE_SPACE_STRING_MAX_LENGTH 80
-#define abccat concat
-#define abc ABC
-#define CON con
-#define CAT cat
-#define defcat concat
-#define GLOBAL_SYMBOL_VALULE( _hex ) 0x ## _hex
-#define EXPAND expand
-#define PREDICT_FALSE 1 -
-#define SECTION_NAME ".rtemsroset.test"
-#define STATIC_ASSERT_COND 0 +
-#define STRING_PREFIX str
-#define SYMBOL_NAME global_object
-#define _TO_STR2( _text ) #_text
-#define _TO_STR( _text ) _TO_STR2( _text )
+#define abccat                        concat
+#define abc                           ABC
+#define CON                           con
+#define CAT                           cat
+#define defcat                        concat
+#define GLOBAL_SYMBOL_VALULE( _hex )  0x##_hex
+#define EXPAND                        expand
+#define PREDICT_FALSE                 1 -
+#define SECTION_NAME                  ".rtemsroset.test"
+#define STATIC_ASSERT_COND            0 +
+#define STRING_PREFIX                 str
+#define SYMBOL_NAME                   global_object
+#define _TO_STR2( _text )             #_text
+#define _TO_STR( _text )              _TO_STR2( _text )
 
 int global_object;
 
 extern int address_of_global_object;
 
-__asm__(
-  "\n\t.set " RTEMS_XSTRING( RTEMS_SYMBOL_NAME( address_of_global_object ) )
-  ", " RTEMS_XSTRING( RTEMS_SYMBOL_NAME( SYMBOL_NAME ) ) "\n"
-);
+__asm__( "\n\t.set " RTEMS_XSTRING(
+  RTEMS_SYMBOL_NAME( address_of_global_object )
+) ", " RTEMS_XSTRING( RTEMS_SYMBOL_NAME( SYMBOL_NAME ) ) "\n" );
 
 /*
  * For some reasons - which I fail to fully understand - _TO_STR()
@@ -488,21 +487,23 @@ __asm__(
  */
 static const char *remove_white_space( const char *str )
 {
-  char c;
-  int i = 0;
-  static char buffer[WHITE_SPACE_STRING_MAX_LENGTH] = {};
+  char        c;
+  int         i = 0;
+  static char buffer[ WHITE_SPACE_STRING_MAX_LENGTH ] = {};
 
   /* Sanity check */
-  if( strlen( str ) >= sizeof( buffer ) ) {
-    T_assert_true( false,
-      "Buffer too small; increase WHITE_SPACE_STRING_MAX_LENGTH" );
+  if ( strlen( str ) >= sizeof( buffer ) ) {
+    T_assert_true(
+      false,
+      "Buffer too small; increase WHITE_SPACE_STRING_MAX_LENGTH"
+    );
   }
 
   /* Copy string but skip white spaces */
   do {
     c = *( str++ );
-    if ( ' ' != c && '\t' !=c ) {
-      buffer[i++] = c;
+    if ( ' ' != c && '\t' != c ) {
+      buffer[ i++ ] = c;
     }
   } while ( '\0' != c );
 
@@ -512,7 +513,7 @@ static const char *remove_white_space( const char *str )
 static int alias_func( int i ) RTEMS_ALIAS( ori_func );
 
 typedef struct {
-  uint8_t c;
+  uint8_t                c;
   uint8_t aligned_member RTEMS_ALIGNED( 8 );
 } aligned_member_struct;
 
@@ -527,7 +528,7 @@ RTEMS_CONST static int const_func( int arg )
 }
 
 RTEMS_COMPILER_NO_RETURN_ATTRIBUTE
-  static void compiler_no_return_attribute_func( void );
+static void compiler_no_return_attribute_func( void );
 static void compiler_no_return_attribute_func( void )
 {
   while ( true ) {
@@ -551,7 +552,7 @@ RTEMS_DECLARE_GLOBAL_SYMBOL( global_symbol_2 );
 
 RTEMS_DEFINE_GLOBAL_SYMBOL( global_symbol_2, 0x123 );
 
-static const char * const volatile global_symbol_2_object = global_symbol_2;
+static const char *const volatile global_symbol_2_object = global_symbol_2;
 
 static int deprecated_func( int i ) RTEMS_DEPRECATED;
 static int deprecated_func( int i )
@@ -571,7 +572,7 @@ RTEMS_INLINE_ROUTINE int inline_routine_func( int arg )
 
 RTEMS_NO_INLINE static int no_inline_func( void )
 {
-  asm ("");
+  asm( "" );
   return 75;
 }
 
@@ -586,16 +587,13 @@ RTEMS_NOINIT static uint32_t noinit_variable;
 
 static int ori_func( int x )
 {
-   return 2 * x;
+  return 2 * x;
 }
 
-RTEMS_PRINTFLIKE(2, 3) static int printflike_func(
-  const char *prefix,
-  const char *fmt,
-  ...
-)
+RTEMS_PRINTFLIKE( 2, 3 )
+static int printflike_func( const char *prefix, const char *fmt, ... )
 {
-  int result;
+  int     result;
   va_list va_list;
 
   T_printf( "%s: ", prefix );
@@ -622,8 +620,7 @@ static int unreachable_func( int arg )
   if ( 1 == arg % 100 ) {
     return arg;
   } else {
-    T_assert_true( false,
-      "Oops! Function caled with bad argument." );
+    T_assert_true( false, "Oops! Function caled with bad argument." );
     RTEMS_UNREACHABLE();
   }
 }
@@ -645,7 +642,7 @@ int basedefs_weak_alias_1_func( int i ) RTEMS_WEAK_ALIAS( ori_func );
 
 RTEMS_WEAK const volatile int basedefs_weak_0_var = 60;
 RTEMS_WEAK const volatile int basedefs_weak_1_var = 61;
-RTEMS_WEAK int basedefs_weak_0_func( void )
+RTEMS_WEAK int                basedefs_weak_0_func( void )
 {
   return 63;
 }
@@ -761,7 +758,7 @@ static void RtemsBasedefsValBasedefs_Action_2( void )
  */
 static void RtemsBasedefsValBasedefs_Action_3( void )
 {
-  char unaligned_var = 'c';
+  char             unaligned_var = 'c';
   char aligned_var RTEMS_ALIGNED( 8 ) = 'd';
 
   (void) unaligned_var;
@@ -770,9 +767,12 @@ static void RtemsBasedefsValBasedefs_Action_3( void )
    * Check that RTEMS_ALIGNED() correctly aligns a variable on the stack and a
    * structure member.
    */
-  T_step_eq_int( 21, ( ( uintptr_t ) &aligned_var ) % 8, 0 );
-  T_step_eq_int( 22,
-    offsetof( aligned_member_struct, aligned_member ) % 8, 0 );
+  T_step_eq_int( 21, ( (uintptr_t) &aligned_var ) % 8, 0 );
+  T_step_eq_int(
+    22,
+    offsetof( aligned_member_struct, aligned_member ) % 8,
+    0
+  );
 }
 
 /**
@@ -782,8 +782,8 @@ static void RtemsBasedefsValBasedefs_Action_4( void )
 {
   size_t alignof_char = RTEMS_ALIGNOF( char );
   size_t alignof_long = RTEMS_ALIGNOF( long );
-  size_t alignof_long_array = RTEMS_ALIGNOF( long[3] );
-  size_t alignof_not_eval_array = RTEMS_ALIGNOF( long[7 / 0] );
+  size_t alignof_long_array = RTEMS_ALIGNOF( long[ 3 ] );
+  size_t alignof_not_eval_array = RTEMS_ALIGNOF( long[ 7 / 0 ] );
 
   /*
    * Check that the RTEMS_ALIGNOF() macro results in the alignment of the type.
@@ -806,9 +806,10 @@ static void RtemsBasedefsValBasedefs_Action_4( void )
   /*
    * Ensure the constant value of the RTEMS_ALIGNOF() macro is of type size_t.
    */
-  T_step_true( 27,
-    __builtin_types_compatible_p( __typeof__( RTEMS_ALIGNOF( char ) ),
-    size_t ) );
+  T_step_true(
+    27,
+    __builtin_types_compatible_p( __typeof__( RTEMS_ALIGNOF( char ) ), size_t )
+  );
 }
 
 /**
@@ -828,11 +829,17 @@ static void RtemsBasedefsValBasedefs_Action_5( void )
    * 1.
    */
   T_step_not_null( 28, alloc_align_ptr );
-  T_step_eq_int( 29, ( ( uintptr_t ) alloc_align_ptr ) % 64, 0 );
-  T_step_ge_uptr( 30, ( ( uintptr_t ) alloc_align_ptr ),
-    ( ( uintptr_t ) free_ptr ) );
-  T_step_lt_uptr( 31, ( ( uintptr_t ) alloc_align_ptr ),
-    ( ( uintptr_t ) free_ptr ) + 64 );
+  T_step_eq_int( 29, ( (uintptr_t) alloc_align_ptr ) % 64, 0 );
+  T_step_ge_uptr(
+    30,
+    ( (uintptr_t) alloc_align_ptr ),
+    ( (uintptr_t) free_ptr )
+  );
+  T_step_lt_uptr(
+    31,
+    ( (uintptr_t) alloc_align_ptr ),
+    ( (uintptr_t) free_ptr ) + 64
+  );
 }
 
 /**
@@ -876,10 +883,10 @@ static void RtemsBasedefsValBasedefs_Action_7( void )
  */
 static void RtemsBasedefsValBasedefs_Action_8( void )
 {
-  int array[] = { 10, 20, 30, 40, 50 };
-  unsigned char array2[12];
-  int array_size = RTEMS_ARRAY_SIZE(array);
-  int array2_size = RTEMS_ARRAY_SIZE(array2);
+  int           array[] = { 10, 20, 30, 40, 50 };
+  unsigned char array2[ 12 ];
+  int           array_size = RTEMS_ARRAY_SIZE( array );
+  int           array2_size = RTEMS_ARRAY_SIZE( array2 );
 
   /*
    * Check that the calculated size of the arrays fit their definition.
@@ -910,8 +917,8 @@ static void RtemsBasedefsValBasedefs_Action_9( void )
    * The RTEMS_DEPRECATED macro must result in a compiler warning here.
    */
   _Pragma( "GCC diagnostic push" )
-  _Pragma( "GCC diagnostic ignored \"-Wdeprecated-declarations\"" )
-  T_step_eq_int( 36, compiler_deprecated_attribute, 42 );
+    _Pragma( "GCC diagnostic ignored \"-Wdeprecated-declarations\"" )
+      T_step_eq_int( 36, compiler_deprecated_attribute, 42 );
   _Pragma( "GCC diagnostic pop" )
 }
 
@@ -921,7 +928,7 @@ static void RtemsBasedefsValBasedefs_Action_9( void )
 static void RtemsBasedefsValBasedefs_Action_10( void )
 {
   int x = 0;
-  switch (x) {
+  switch ( x ) {
     case 0:
       x = 1;
       RTEMS_FALL_THROUGH();
@@ -935,7 +942,6 @@ static void RtemsBasedefsValBasedefs_Action_10( void )
    * that no compiler warnings are produced for falling through to the default
    * case.
    */
-
 }
 
 /**
@@ -949,7 +955,6 @@ static void RtemsBasedefsValBasedefs_Action_11( void )
    * It cannot be checked that the RTEMS_COMPILER_MEMORY_BARRIER() macro has
    * the desired effect. It is only checked that such a macro exists.
    */
-
 }
 
 /**
@@ -964,7 +969,6 @@ static void RtemsBasedefsValBasedefs_Action_12( void )
    * It cannot be checked that the RTEMS_COMPILER_NO_RETURN_ATTRIBUTE macro has
    * the desired effect. It is only checked that such a macro exists.
    */
-
 }
 
 /**
@@ -973,11 +977,13 @@ static void RtemsBasedefsValBasedefs_Action_12( void )
 static void RtemsBasedefsValBasedefs_Action_13( void )
 {
   typedef struct {
-    uint8_t c;
+    uint8_t                                  c;
     RTEMS_COMPILER_PACKED_ATTRIBUTE uint32_t i;
   } compiler_packed_attribute_struct;
-  int compiler_packed_attribute_offset =
-    offsetof( compiler_packed_attribute_struct, i );
+  int compiler_packed_attribute_offset = offsetof(
+    compiler_packed_attribute_struct,
+    i
+  );
 
   /*
    * Check that RTEMS_COMPILER_PACKED_ATTRIBUTE correctly aligns a structure
@@ -995,8 +1001,7 @@ static void RtemsBasedefsValBasedefs_Action_14( void )
   int compiler_pure_attribute_result;
   int compiler_pure_attribute_result_2;
   compiler_pure_attribute_result = compiler_pure_attribute_func();
-  compiler_pure_attribute_result_2 =
-    compiler_pure_attribute_func();
+  compiler_pure_attribute_result_2 = compiler_pure_attribute_func();
 
   /*
    * It cannot be checked that the RTEMS_COMPILER_PURE_ATTRIBUTE macro has the
@@ -1019,7 +1024,6 @@ static void RtemsBasedefsValBasedefs_Action_15( void )
    * checked that such a macro exists and one can manually check that no
    * compiler warnings are produced for the compiler_unused_attribute_var.
    */
-
 }
 
 /**
@@ -1073,18 +1077,20 @@ static void RtemsBasedefsValBasedefs_Action_18( void )
     int b;
   } container_of_struct;
 
-  container_of_struct container_of_struct_var;
-  int *container_of_struct_b_adr = &container_of_struct_var.b;
+  container_of_struct  container_of_struct_var;
+  int                 *container_of_struct_b_adr = &container_of_struct_var.b;
   container_of_struct *container_of_struct_adr;
-  container_of_struct_adr =
-    RTEMS_CONTAINER_OF( container_of_struct_b_adr, container_of_struct, b );
+  container_of_struct_adr = RTEMS_CONTAINER_OF(
+    container_of_struct_b_adr,
+    container_of_struct,
+    b
+  );
 
   /*
    * Check that the RTEMS_CONTAINER_OF() macro evaluates to a pointer to
    * container_of_struct_var.
    */
-  T_step_eq_ptr( 44,
-    container_of_struct_adr, &container_of_struct_var );
+  T_step_eq_ptr( 44, container_of_struct_adr, &container_of_struct_var );
 }
 
 /**
@@ -1114,17 +1120,17 @@ static void RtemsBasedefsValBasedefs_Action_19( void )
 static void RtemsBasedefsValBasedefs_Action_20( void )
 {
   const int deconst_array[] = { 52, 55 };
-  int *deconst_pointer;
+  int      *deconst_pointer;
   deconst_pointer = RTEMS_DECONST( int *, deconst_array );
 
   /*
    * Check that the RTEMS_DECONST() macro returns a pointer which allows to
    * write into an otherwise const value.
    */
-  T_step_eq_int( 46, deconst_pointer[0], 52 );
-  T_step_eq_int( 47, deconst_pointer[1], 55 );
-  deconst_pointer[1] = 13;
-  T_step_eq_int( 48, deconst_pointer[1], 13 );
+  T_step_eq_int( 46, deconst_pointer[ 0 ], 52 );
+  T_step_eq_int( 47, deconst_pointer[ 1 ], 55 );
+  deconst_pointer[ 1 ] = 13;
+  T_step_eq_int( 48, deconst_pointer[ 1 ], 13 );
 }
 
 /**
@@ -1160,16 +1166,16 @@ static void RtemsBasedefsValBasedefs_Action_22( void )
    * The RTEMS_DEPRECATED macro must result in a compiler warning here.
    */
   _Pragma( "GCC diagnostic push" )
-  _Pragma( "GCC diagnostic ignored \"-Wdeprecated-declarations\"" )
-  deprecated_result = deprecated_func( 5 );
+    _Pragma( "GCC diagnostic ignored \"-Wdeprecated-declarations\"" )
+      deprecated_result = deprecated_func( 5 );
   _Pragma( "GCC diagnostic pop" )
 
-  /*
-   * It cannot automatically be checked that the RTEMS_DEPRECATED macro has the
-   * desired effect. The gcc compiler should issue a warning about the use of a
-   * deprecated function on the above line where the `deprecated_func` is used.
-   */
-  T_step_eq_int( 50, deprecated_result, 15 );
+    /*
+     * It cannot automatically be checked that the RTEMS_DEPRECATED macro has the
+     * desired effect. The gcc compiler should issue a warning about the use of a
+     * deprecated function on the above line where the `deprecated_func` is used.
+     */
+    T_step_eq_int( 50, deprecated_result, 15 );
 }
 
 /**
@@ -1178,25 +1184,27 @@ static void RtemsBasedefsValBasedefs_Action_22( void )
 static void RtemsBasedefsValBasedefs_Action_23( void )
 {
   const volatile int dequalify_depthx_array[] = { 52, 55 };
-  const char dequalify_depthx_var = 'a';
-  const char *dequalify_depthx_one_pointer = &dequalify_depthx_var;
-  const char **dequalify_depthx_two_pointer =
-    &dequalify_depthx_one_pointer;
-  int *dequalify_depthx_pointer;
+  const char         dequalify_depthx_var = 'a';
+  const char        *dequalify_depthx_one_pointer = &dequalify_depthx_var;
+  const char    **dequalify_depthx_two_pointer = &dequalify_depthx_one_pointer;
+  int            *dequalify_depthx_pointer;
   volatile char **dequalify_depthx_twice_pointer;
   dequalify_depthx_pointer =
     RTEMS_DEQUALIFY_DEPTHX( *, int *, dequalify_depthx_array );
   dequalify_depthx_twice_pointer = RTEMS_DEQUALIFY_DEPTHX(
-    **, volatile char **, dequalify_depthx_two_pointer );
+      **,
+      volatile char **,
+      dequalify_depthx_two_pointer
+  );
 
   /*
    * Check that the RTEMS_DEQUALIFY_DEPTHX() macro returns a pointer which
    * allows to write into an otherwise const (volatile) value.
    */
-  T_step_eq_int( 51, dequalify_depthx_pointer[0], 52 );
-  T_step_eq_int( 52, dequalify_depthx_pointer[1], 55 );
-  dequalify_depthx_pointer[0] = 13;
-  T_step_eq_int( 53, dequalify_depthx_pointer[0], 13 );
+  T_step_eq_int( 51, dequalify_depthx_pointer[ 0 ], 52 );
+  T_step_eq_int( 52, dequalify_depthx_pointer[ 1 ], 55 );
+  dequalify_depthx_pointer[ 0 ] = 13;
+  T_step_eq_int( 53, dequalify_depthx_pointer[ 0 ], 13 );
   T_step_eq_char( 54, **dequalify_depthx_twice_pointer, 'a' );
   **dequalify_depthx_twice_pointer = 'Z';
   T_step_eq_char( 55, **dequalify_depthx_twice_pointer, 'Z' );
@@ -1208,17 +1216,17 @@ static void RtemsBasedefsValBasedefs_Action_23( void )
 static void RtemsBasedefsValBasedefs_Action_24( void )
 {
   const volatile int dequalify_array[] = { 52, 55 };
-  int *dequalify_pointer;
+  int               *dequalify_pointer;
   dequalify_pointer = RTEMS_DECONST( int *, dequalify_array );
 
   /*
    * Check that the RTEMS_DEQUALIFY() macro returns a pointer which allows to
    * write into an otherwise const volatile value.
    */
-  T_step_eq_int( 56, dequalify_pointer[0], 52 );
-  T_step_eq_int( 57, dequalify_pointer[1], 55 );
-  dequalify_pointer[0] = 13;
-  T_step_eq_int( 58, dequalify_pointer[0], 13 );
+  T_step_eq_int( 56, dequalify_pointer[ 0 ], 52 );
+  T_step_eq_int( 57, dequalify_pointer[ 1 ], 55 );
+  dequalify_pointer[ 0 ] = 13;
+  T_step_eq_int( 58, dequalify_pointer[ 0 ], 13 );
 }
 
 /**
@@ -1227,17 +1235,17 @@ static void RtemsBasedefsValBasedefs_Action_24( void )
 static void RtemsBasedefsValBasedefs_Action_25( void )
 {
   volatile int devolatile_array[] = { 52, 55 };
-  int *devolatile_pointer;
+  int         *devolatile_pointer;
   devolatile_pointer = RTEMS_DEVOLATILE( int *, devolatile_array );
 
   /*
    * Check that the RTEMS_DEVOLATILE() macro returns a pointer which allows to
    * write into an otherwise volatile value.
    */
-  T_step_eq_int( 59, devolatile_pointer[0], 52 );
-  T_step_eq_int( 60, devolatile_pointer[1], 55 );
-  devolatile_pointer[1] = 13;
-  T_step_eq_int( 61, devolatile_pointer[1], 13 );
+  T_step_eq_int( 59, devolatile_pointer[ 0 ], 52 );
+  T_step_eq_int( 60, devolatile_pointer[ 1 ], 55 );
+  devolatile_pointer[ 1 ] = 13;
+  T_step_eq_int( 61, devolatile_pointer[ 1 ], 13 );
 }
 
 /**
@@ -1277,36 +1285,76 @@ static void RtemsBasedefsValBasedefs_Action_28( void )
     short s;
     int **i;
     char *c;
-    int a[5];
+    int   a[ 5 ];
   } same_type_union;
   typedef struct {
-    const short u;
-    short v;
-    int *w;
-    char *x;
-    volatile int y[5];
-    int z;
+    const short  u;
+    short        v;
+    int         *w;
+    char        *x;
+    volatile int y[ 5 ];
+    int          z;
   } same_type_struct;
   int same_type_result_0 = RTEMS_HAVE_MEMBER_SAME_TYPE(
-    same_type_union, s, same_type_struct, v );
+    same_type_union,
+    s,
+    same_type_struct,
+    v
+  );
   int same_type_result_1 = RTEMS_HAVE_MEMBER_SAME_TYPE(
-    same_type_union, s, same_type_struct, z );
+    same_type_union,
+    s,
+    same_type_struct,
+    z
+  );
   int same_type_result_2 = RTEMS_HAVE_MEMBER_SAME_TYPE(
-    same_type_union, i, same_type_struct, w );
+    same_type_union,
+    i,
+    same_type_struct,
+    w
+  );
   int same_type_result_3 = RTEMS_HAVE_MEMBER_SAME_TYPE(
-    same_type_union, c, same_type_struct, x );
+    same_type_union,
+    c,
+    same_type_struct,
+    x
+  );
   int same_type_result_4 = RTEMS_HAVE_MEMBER_SAME_TYPE(
-    same_type_union, a, same_type_struct, y );
+    same_type_union,
+    a,
+    same_type_struct,
+    y
+  );
   int same_type_result_5 = RTEMS_HAVE_MEMBER_SAME_TYPE(
-    same_type_union, s, same_type_union, s );
+    same_type_union,
+    s,
+    same_type_union,
+    s
+  );
   int same_type_result_6 = RTEMS_HAVE_MEMBER_SAME_TYPE(
-    same_type_union, i, same_type_union, i );
+    same_type_union,
+    i,
+    same_type_union,
+    i
+  );
   int same_type_result_7 = RTEMS_HAVE_MEMBER_SAME_TYPE(
-    same_type_union, s, same_type_struct, y );
+    same_type_union,
+    s,
+    same_type_struct,
+    y
+  );
   int same_type_result_8 = RTEMS_HAVE_MEMBER_SAME_TYPE(
-    same_type_union, a, same_type_struct, w );
+    same_type_union,
+    a,
+    same_type_struct,
+    w
+  );
   int same_type_result_9 = RTEMS_HAVE_MEMBER_SAME_TYPE(
-    same_type_union, s, same_type_struct, u );
+    same_type_union,
+    s,
+    same_type_struct,
+    u
+  );
 
   /*
    * Check that of RTEMS_HAVE_MEMBER_SAME_TYPE() returns 0 and 1 depending on
@@ -1332,8 +1380,8 @@ static void RtemsBasedefsValBasedefs_Action_28( void )
 static void RtemsBasedefsValBasedefs_Action_29( void )
 {
   const int inline_routine_step = 74;
-  int inline_routine_result;
-  char *inline_routine_text;
+  int       inline_routine_result;
+  char     *inline_routine_text;
   inline_routine_result = inline_routine_func( 3 );
   inline_routine_text = _TO_STR( RTEMS_INLINE_ROUTINE );
 
@@ -1341,12 +1389,14 @@ static void RtemsBasedefsValBasedefs_Action_29( void )
    * Check that the RTEMS_INLINE_ROUTINE exists and that it produces the
    * desired text.
    */
-  if( 0 == strcmp( "static inline", inline_routine_text ) ) {
-    T_step_eq_str( inline_routine_step,
-      inline_routine_text, "static inline" );
+  if ( 0 == strcmp( "static inline", inline_routine_text ) ) {
+    T_step_eq_str( inline_routine_step, inline_routine_text, "static inline" );
   } else {
-    T_step_eq_str( inline_routine_step,
-      inline_routine_text, "static __inline__" );
+    T_step_eq_str(
+      inline_routine_step,
+      inline_routine_text,
+      "static __inline__"
+    );
   }
   T_step_eq_int( 75, inline_routine_result, 8 );
 }
@@ -1356,7 +1406,7 @@ static void RtemsBasedefsValBasedefs_Action_29( void )
  */
 static void RtemsBasedefsValBasedefs_Action_30( void )
 {
-  void *malloclike_ptr;
+  void       *malloclike_ptr;
   /*
    * If this code is not compiled using GNU C, I still have to run a check
    * to avoid trouble with the {step} counter of the checks.
@@ -1382,7 +1432,7 @@ static void RtemsBasedefsValBasedefs_Action_30( void )
  */
 static void RtemsBasedefsValBasedefs_Action_31( void )
 {
-  int no_inline_result;
+  int         no_inline_result;
   /*
    * If this code is not compiled using GNU C, I still have to run a check
    * to avoid trouble with the {step} counter of the checks.
@@ -1413,7 +1463,6 @@ static void RtemsBasedefsValBasedefs_Action_32( void )
    * It cannot be checked that the RTEMS_NO_RETURN macro has the desired
    * effect. It is only checked that such a macro exists.
    */
-
 }
 
 /**
@@ -1457,20 +1506,15 @@ static void RtemsBasedefsValBasedefs_Action_35( void )
   int packed_full_j_offset;
   int packed_enum_size;
   typedef struct {
-    uint8_t c;
+    uint8_t               c;
     RTEMS_PACKED uint32_t i;
   } packed_struct;
   typedef struct RTEMS_PACKED {
-    uint8_t c;
+    uint8_t  c;
     uint32_t i;
     uint32_t j;
   } packed_full_struct;
-  typedef enum RTEMS_PACKED {
-    red = 1,
-    green,
-    yellow,
-    blue = 255
-  } packed_enum;
+  typedef enum RTEMS_PACKED { red = 1, green, yellow, blue = 255 } packed_enum;
   packed_offset = offsetof( packed_struct, i );
   packed_full_i_offset = offsetof( packed_full_struct, i );
   packed_full_j_offset = offsetof( packed_full_struct, j );
@@ -1573,16 +1617,16 @@ static void RtemsBasedefsValBasedefs_Action_40( void )
    */
   const char *return_address_text = "__builtin_return_address(0)";
   #if defined( __GNUC__ )
-  return_address_text =
-    remove_white_space( _TO_STR( RTEMS_RETURN_ADDRESS() ) );
+  return_address_text = remove_white_space(
+    _TO_STR( RTEMS_RETURN_ADDRESS() )
+  );
   #endif
 
   /*
    * The check confirms that a RTEMS_RETURN_ADDRESS() macro exists and that it
    * produces the correct code.
    */
-  T_step_eq_str( 91,
-    return_address_text, "__builtin_return_address(0)" );
+  T_step_eq_str( 91, return_address_text, "__builtin_return_address(0)" );
 }
 
 /**
@@ -1607,7 +1651,7 @@ static void RtemsBasedefsValBasedefs_Action_41( void )
  */
 static void RtemsBasedefsValBasedefs_Action_42( void )
 {
-  #if defined(RTEMS_STATIC_ANALYSIS)
+  #if defined( RTEMS_STATIC_ANALYSIS )
   bool defined = true;
   #else
   bool defined = false;
@@ -1631,7 +1675,6 @@ static void RtemsBasedefsValBasedefs_Action_43( void )
    * the desired effect. Yet, it can be checked that the macro exists and
    * accepts the specified arguments.
    */
-
 }
 
 /**
@@ -1655,8 +1698,7 @@ static void RtemsBasedefsValBasedefs_Action_44( void )
    */
   T_step_eq_str( 95, string_var, "\\ STRING_PREFIX cat\"\"\n" );
   T_step_eq_str( 96, string_empty_var, "" );
-  T_step_eq_str( 97, string_multi_args_var,
-    "STRING_PREFIX, \"abc\", DEF" );
+  T_step_eq_str( 97, string_multi_args_var, "STRING_PREFIX, \"abc\", DEF" );
 }
 
 /**
@@ -1694,21 +1736,21 @@ static void RtemsBasedefsValBasedefs_Action_46( void )
  */
 static void RtemsBasedefsValBasedefs_Action_47( void )
 {
-  int type_refx_val = 7;
-  char type_refx_chr = 'c';
-  char *type_refx_chr_p = &type_refx_chr;
-  char **type_refx_chr_pp = &type_refx_chr_p;
+  int         type_refx_val = 7;
+  char        type_refx_chr = 'c';
+  char       *type_refx_chr_p = &type_refx_chr;
+  char      **type_refx_chr_pp = &type_refx_chr_p;
   const short type_refx_const_val = 333;
-  RTEMS_TYPEOF_REFX( *, int *) type_refx_x_int = 8;
-  RTEMS_TYPEOF_REFX( **, int **) type_refx_xx_int = 9;
-  RTEMS_TYPEOF_REFX( ***, int ***) type_refx_xxx_int = 10;
-  RTEMS_TYPEOF_REFX( **, int ***) type_refx_xxx_int_p = &type_refx_val;
-  RTEMS_TYPEOF_REFX( **, &type_refx_chr_p) type_refx_ax_char = 'd';
-  RTEMS_TYPEOF_REFX( *, type_refx_chr_p) type_refx_x_char = 'e';
-  RTEMS_TYPEOF_REFX( , *type_refx_chr_p) type_refx_char = 'f';
-  RTEMS_TYPEOF_REFX( *, type_refx_chr_pp[0]) type_refx_xx_char = 'g';
-  RTEMS_TYPEOF_REFX( *, const short **)
-    type_refx_xx_const_short_p = &type_refx_const_val;
+  RTEMS_TYPEOF_REFX( *, int * ) type_refx_x_int = 8;
+  RTEMS_TYPEOF_REFX( **, int ** ) type_refx_xx_int = 9;
+  RTEMS_TYPEOF_REFX( ***, int *** ) type_refx_xxx_int = 10;
+  RTEMS_TYPEOF_REFX( **, int *** ) type_refx_xxx_int_p = &type_refx_val;
+  RTEMS_TYPEOF_REFX( **, &type_refx_chr_p ) type_refx_ax_char = 'd';
+  RTEMS_TYPEOF_REFX( *, type_refx_chr_p ) type_refx_x_char = 'e';
+  RTEMS_TYPEOF_REFX(, *type_refx_chr_p ) type_refx_char = 'f';
+  RTEMS_TYPEOF_REFX( *, type_refx_chr_pp[ 0 ] ) type_refx_xx_char = 'g';
+  RTEMS_TYPEOF_REFX( *, const short ** )
+  type_refx_xx_const_short_p = &type_refx_const_val;
 
   /*
    * The checks here are proforma. The macro is tested by the fact that the
@@ -1736,25 +1778,25 @@ static void RtemsBasedefsValBasedefs_Action_48( void )
   int unused_var RTEMS_UNUSED;
   typedef struct RTEMS_UNUSED {
     char c;
-    int i;
+    int  i;
   } unused_struct_t;
   unused_struct_t unused_struct = { '@', 13 };
 
-  /*
-   * It cannot automatically be checked that the RTEMS_UNUSED macro has the
-   * desired effect. It is checked that such a macro exists and one can
-   * manually check that no compiler warnings are produced for the
-   * unused_func().
-   */
+/*
+ * It cannot automatically be checked that the RTEMS_UNUSED macro has the
+ * desired effect. It is checked that such a macro exists and one can
+ * manually check that no compiler warnings are produced for the
+ * unused_func().
+ */
 
-  /*
-   * It cannot automatically be checked that the RTEMS_UNUSED macro has the
-   * desired effect. It is checked that such a macro exists and one can
-   * manually check that no compiler warnings are produced for the
-   * unused_lable.
-   */
-  unused_lable:
-    RTEMS_UNUSED;
+/*
+ * It cannot automatically be checked that the RTEMS_UNUSED macro has the
+ * desired effect. It is checked that such a macro exists and one can
+ * manually check that no compiler warnings are produced for the
+ * unused_lable.
+ */
+unused_lable:
+  RTEMS_UNUSED;
 
   /*
    * It cannot automatically be checked that the RTEMS_UNUSED macro has the
@@ -1769,7 +1811,6 @@ static void RtemsBasedefsValBasedefs_Action_48( void )
    * manually check that no compiler warnings are produced for the unused items
    * unused_var and the unused argument and variable in unused_func().
    */
-
 }
 
 /**
@@ -1779,7 +1820,7 @@ static void RtemsBasedefsValBasedefs_Action_48( void )
 static void RtemsBasedefsValBasedefs_Action_49( void )
 {
   int unreachable_result;
-  unreachable_result = unreachable_func(2101);
+  unreachable_result = unreachable_func( 2101 );
 
   /*
    * It cannot be checked that the RTEMS_UNREACHABLE() macro has the desired
@@ -1801,7 +1842,6 @@ static void RtemsBasedefsValBasedefs_Action_50( void )
    * It cannot be checked that the RTEMS_USED macro has the desired effect. It
    * is checked that such a macro exists.
    */
-
 }
 
 /**
@@ -1822,17 +1862,17 @@ static void RtemsBasedefsValBasedefs_Action_51( void )
    * here.
    */
   _Pragma( "GCC diagnostic push" )
-  _Pragma( "GCC diagnostic ignored \"-Wunused-result\"" )
-  warn_unused_func( 66 );
+    _Pragma( "GCC diagnostic ignored \"-Wunused-result\"" )
+      warn_unused_func( 66 );
   _Pragma( "GCC diagnostic pop" )
 
-  /*
-   * It cannot be checked that the RTEMS_WARN_UNUSED_RESULT macro has the
-   * desired effect. The GNU C compiler should issue a warning about the
-   * disregarded result returned by the call to the `warn_unused_func()`
-   * function.
-   */
-  T_step_eq_int( 112, warn_unused_result, 11 );
+    /*
+     * It cannot be checked that the RTEMS_WARN_UNUSED_RESULT macro has the
+     * desired effect. The GNU C compiler should issue a warning about the
+     * disregarded result returned by the call to the `warn_unused_func()`
+     * function.
+     */
+    T_step_eq_int( 112, warn_unused_result, 11 );
 }
 
 /**
@@ -1949,8 +1989,7 @@ static void RtemsBasedefsValBasedefs_Action_55( void )
    */
   T_step_eq_str( 123, xstring_var, "\\ str cat\"\"\n" );
   T_step_eq_str( 124, xstring_empty_var, "" );
-  T_step_eq_str( 125, string_multi_args_var,
-    "str, ABC, \"abc\", DEF" );
+  T_step_eq_str( 125, string_multi_args_var, "str, ABC, \"abc\", DEF" );
 }
 
 /**
@@ -1961,23 +2000,32 @@ static void RtemsBasedefsValBasedefs_Action_56( void )
 {
   typedef struct {
     char chr;
-    int array[RTEMS_ZERO_LENGTH_ARRAY];
+    int  array[ RTEMS_ZERO_LENGTH_ARRAY ];
   } zero_length_struct_0;
   typedef struct {
     char chr;
-    int array[1];
+    int  array[ 1 ];
   } zero_length_struct_1;
 
   /*
    * Checked that the RTEMS_ZERO_LENGTH_ARRAY macro produces a structure
    * similar to a structure with one element.
    */
-  T_step_eq_sz( 126, sizeof( zero_length_struct_0 ),
-    sizeof( zero_length_struct_1 ) - sizeof( int ) );
-  T_step_eq_sz( 127, offsetof( zero_length_struct_0, chr ),
-    offsetof( zero_length_struct_1, chr ) );
-  T_step_eq_sz( 128, offsetof( zero_length_struct_0, array ),
-    offsetof( zero_length_struct_1, array ) );
+  T_step_eq_sz(
+    126,
+    sizeof( zero_length_struct_0 ),
+    sizeof( zero_length_struct_1 ) - sizeof( int )
+  );
+  T_step_eq_sz(
+    127,
+    offsetof( zero_length_struct_0, chr ),
+    offsetof( zero_length_struct_1, chr )
+  );
+  T_step_eq_sz(
+    128,
+    offsetof( zero_length_struct_0, array ),
+    offsetof( zero_length_struct_1, array )
+  );
 }
 
 /**

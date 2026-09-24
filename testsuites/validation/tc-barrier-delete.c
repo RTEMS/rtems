@@ -144,16 +144,12 @@ typedef struct {
   } Map;
 } RtemsBarrierReqDelete_Context;
 
-static RtemsBarrierReqDelete_Context
-  RtemsBarrierReqDelete_Instance;
+static RtemsBarrierReqDelete_Context RtemsBarrierReqDelete_Instance;
 
-static const char * const RtemsBarrierReqDelete_PreDesc_Id[] = {
-  "NoObj",
-  "Barrier",
-  "NA"
-};
+static const char *const RtemsBarrierReqDelete_PreDesc_Id[] =
+  { "NoObj", "Barrier", "NA" };
 
-static const char * const * const RtemsBarrierReqDelete_PreDesc[] = {
+static const char *const *const RtemsBarrierReqDelete_PreDesc[] = {
   RtemsBarrierReqDelete_PreDesc_Id,
   NULL
 };
@@ -182,10 +178,7 @@ static void Worker( rtems_task_argument arg )
     );
     T_rsc_success( sc );
 
-    sc = rtems_barrier_wait(
-      ctx->barrier_id,
-      RTEMS_NO_TIMEOUT
-    );
+    sc = rtems_barrier_wait( ctx->barrier_id, RTEMS_NO_TIMEOUT );
     T_rsc( sc, RTEMS_OBJECT_WAS_DELETED );
 
     ++ctx->wait_done;
@@ -421,9 +414,7 @@ static inline RtemsBarrierReqDelete_Entry RtemsBarrierReqDelete_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsBarrierReqDelete_Entries[
-    RtemsBarrierReqDelete_Map[ index ]
-  ];
+  return RtemsBarrierReqDelete_Entries[ RtemsBarrierReqDelete_Map[ index ] ];
 }
 
 static void RtemsBarrierReqDelete_TestVariant(

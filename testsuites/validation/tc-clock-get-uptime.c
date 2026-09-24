@@ -128,16 +128,12 @@ typedef struct {
   } Map;
 } RtemsClockReqGetUptime_Context;
 
-static RtemsClockReqGetUptime_Context
-  RtemsClockReqGetUptime_Instance;
+static RtemsClockReqGetUptime_Context RtemsClockReqGetUptime_Instance;
 
-static const char * const RtemsClockReqGetUptime_PreDesc_Uptime[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsClockReqGetUptime_PreDesc_Uptime[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const * const RtemsClockReqGetUptime_PreDesc[] = {
+static const char *const *const RtemsClockReqGetUptime_PreDesc[] = {
   RtemsClockReqGetUptime_PreDesc_Uptime,
   NULL
 };
@@ -237,7 +233,7 @@ static void RtemsClockReqGetUptime_Post_Uptime_Check(
 
 static void RtemsClockReqGetUptime_Setup( RtemsClockReqGetUptime_Context *ctx )
 {
-  ctx->uptime_value.tv_sec  = -1;
+  ctx->uptime_value.tv_sec = -1;
   ctx->uptime_value.tv_nsec = -1;
 }
 
@@ -303,9 +299,7 @@ static inline RtemsClockReqGetUptime_Entry RtemsClockReqGetUptime_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsClockReqGetUptime_Entries[
-    RtemsClockReqGetUptime_Map[ index ]
-  ];
+  return RtemsClockReqGetUptime_Entries[ RtemsClockReqGetUptime_Map[ index ] ];
 }
 
 static void RtemsClockReqGetUptime_TestVariant(

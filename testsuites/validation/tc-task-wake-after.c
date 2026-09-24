@@ -186,22 +186,15 @@ typedef struct {
   } Map;
 } RtemsTaskReqWakeAfter_Context;
 
-static RtemsTaskReqWakeAfter_Context
-  RtemsTaskReqWakeAfter_Instance;
+static RtemsTaskReqWakeAfter_Context RtemsTaskReqWakeAfter_Instance;
 
-static const char * const RtemsTaskReqWakeAfter_PreDesc_Ticks[] = {
-  "Yield",
-  "Interval",
-  "NA"
-};
+static const char *const RtemsTaskReqWakeAfter_PreDesc_Ticks[] =
+  { "Yield", "Interval", "NA" };
 
-static const char * const RtemsTaskReqWakeAfter_PreDesc_Suspended[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqWakeAfter_PreDesc_Suspended[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const RtemsTaskReqWakeAfter_PreDesc[] = {
+static const char *const *const RtemsTaskReqWakeAfter_PreDesc[] = {
   RtemsTaskReqWakeAfter_PreDesc_Ticks,
   RtemsTaskReqWakeAfter_PreDesc_Suspended,
   NULL
@@ -383,10 +376,7 @@ static void RtemsTaskReqWakeAfter_Post_Scheduler_Check(
        * rtems_task_wake_after() call.
        */
       T_eq_sz( ctx->scheduler_log.header.recorded, 1 );
-      T_eq_int(
-        ctx->scheduler_log.events[ 0 ].operation,
-        T_SCHEDULER_BLOCK
-      );
+      T_eq_int( ctx->scheduler_log.events[ 0 ].operation, T_SCHEDULER_BLOCK );
       break;
     }
 
@@ -396,10 +386,7 @@ static void RtemsTaskReqWakeAfter_Post_Scheduler_Check(
        * rtems_task_wake_after() call.
        */
       T_eq_sz( ctx->scheduler_log.header.recorded, 1 );
-      T_eq_int(
-        ctx->scheduler_log.events[ 0 ].operation,
-        T_SCHEDULER_YIELD
-      );
+      T_eq_int( ctx->scheduler_log.events[ 0 ].operation, T_SCHEDULER_YIELD );
       break;
     }
 
@@ -526,9 +513,7 @@ static inline RtemsTaskReqWakeAfter_Entry RtemsTaskReqWakeAfter_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsTaskReqWakeAfter_Entries[
-    RtemsTaskReqWakeAfter_Map[ index ]
-  ];
+  return RtemsTaskReqWakeAfter_Entries[ RtemsTaskReqWakeAfter_Map[ index ] ];
 }
 
 static void RtemsTaskReqWakeAfter_TestVariant(

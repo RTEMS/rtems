@@ -134,19 +134,13 @@ typedef struct {
 static ScoreTqReqFlushPriorityInherit_Context
   ScoreTqReqFlushPriorityInherit_Instance;
 
-static const char * const ScoreTqReqFlushPriorityInherit_PreDesc_Priority[] = {
-  "Minimum",
-  "NotMinimum",
-  "NA"
-};
+static const char *const ScoreTqReqFlushPriorityInherit_PreDesc_Priority[] =
+  { "Minimum", "NotMinimum", "NA" };
 
-static const char * const ScoreTqReqFlushPriorityInherit_PreDesc_Queue[] = {
-  "Empty",
-  "NonEmpty",
-  "NA"
-};
+static const char *const ScoreTqReqFlushPriorityInherit_PreDesc_Queue[] =
+  { "Empty", "NonEmpty", "NA" };
 
-static const char * const * const ScoreTqReqFlushPriorityInherit_PreDesc[] = {
+static const char *const *const ScoreTqReqFlushPriorityInherit_PreDesc[] = {
   ScoreTqReqFlushPriorityInherit_PreDesc_Priority,
   ScoreTqReqFlushPriorityInherit_PreDesc_Queue,
   NULL
@@ -159,7 +153,10 @@ static const T_scheduler_event *GetUnblock( Context *ctx, size_t *index )
   return TQGetNextUnblock( ctx->tq_ctx, index );
 }
 
-static const T_scheduler_event *GetPriorityUpdate( Context *ctx, size_t *index )
+static const T_scheduler_event *GetPriorityUpdate(
+  Context *ctx,
+  size_t  *index
+)
 {
   return T_scheduler_next(
     &ctx->tq_ctx->scheduler_log.header,
@@ -192,10 +189,7 @@ static void SchedulerEvent(
 
   ctx = arg;
 
-  if (
-    when == T_SCHEDULER_BEFORE &&
-    event->operation == T_SCHEDULER_BLOCK
-  ) {
+  if ( when == T_SCHEDULER_BEFORE && event->operation == T_SCHEDULER_BLOCK ) {
     ctx->request.handler = Flush;
     ctx->request.arg = ctx;
     CallWithinISRSubmit( &ctx->request );
@@ -498,9 +492,8 @@ ScoreTqReqFlushPriorityInherit_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return ScoreTqReqFlushPriorityInherit_Entries[
-    ScoreTqReqFlushPriorityInherit_Map[ index ]
-  ];
+  return ScoreTqReqFlushPriorityInherit_Entries
+    [ ScoreTqReqFlushPriorityInherit_Map[ index ] ];
 }
 
 static void ScoreTqReqFlushPriorityInherit_SetPreConditionStates(

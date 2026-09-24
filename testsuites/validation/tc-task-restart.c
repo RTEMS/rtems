@@ -461,79 +461,42 @@ typedef struct {
   } Map;
 } RtemsTaskReqRestart_Context;
 
-static RtemsTaskReqRestart_Context
-  RtemsTaskReqRestart_Instance;
+static RtemsTaskReqRestart_Context RtemsTaskReqRestart_Instance;
 
-static const char * const RtemsTaskReqRestart_PreDesc_Id[] = {
-  "Invalid",
-  "Executing",
-  "Other",
-  "NA"
-};
+static const char *const RtemsTaskReqRestart_PreDesc_Id[] =
+  { "Invalid", "Executing", "Other", "NA" };
 
-static const char * const RtemsTaskReqRestart_PreDesc_Dormant[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqRestart_PreDesc_Dormant[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqRestart_PreDesc_Suspended[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqRestart_PreDesc_Suspended[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqRestart_PreDesc_Restarting[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqRestart_PreDesc_Restarting[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqRestart_PreDesc_Terminating[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqRestart_PreDesc_Terminating[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqRestart_PreDesc_Protected[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqRestart_PreDesc_Protected[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqRestart_PreDesc_Context[] = {
-  "Task",
-  "Interrupt",
-  "NestedRequest",
-  "NA"
-};
+static const char *const RtemsTaskReqRestart_PreDesc_Context[] =
+  { "Task", "Interrupt", "NestedRequest", "NA" };
 
-static const char * const RtemsTaskReqRestart_PreDesc_State[] = {
-  "Ready",
-  "Blocked",
-  "Enqueued",
-  "NA"
-};
+static const char *const RtemsTaskReqRestart_PreDesc_State[] =
+  { "Ready", "Blocked", "Enqueued", "NA" };
 
-static const char * const RtemsTaskReqRestart_PreDesc_Timer[] = {
-  "Inactive",
-  "Active",
-  "NA"
-};
+static const char *const RtemsTaskReqRestart_PreDesc_Timer[] =
+  { "Inactive", "Active", "NA" };
 
-static const char * const RtemsTaskReqRestart_PreDesc_RealPriority[] = {
-  "Initial",
-  "Changed",
-  "NA"
-};
+static const char *const RtemsTaskReqRestart_PreDesc_RealPriority[] =
+  { "Initial", "Changed", "NA" };
 
-static const char * const RtemsTaskReqRestart_PreDesc_ThreadDispatch[] = {
-  "Disabled",
-  "Enabled",
-  "NA"
-};
+static const char *const RtemsTaskReqRestart_PreDesc_ThreadDispatch[] =
+  { "Disabled", "Enabled", "NA" };
 
-static const char * const * const RtemsTaskReqRestart_PreDesc[] = {
+static const char *const *const RtemsTaskReqRestart_PreDesc[] = {
   RtemsTaskReqRestart_PreDesc_Id,
   RtemsTaskReqRestart_PreDesc_Dormant,
   RtemsTaskReqRestart_PreDesc_Suspended,
@@ -584,7 +547,7 @@ static void CaptureWorkerState( Context *ctx )
 static void VerifyTaskPreparation( const Context *ctx )
 {
   if ( ctx->id != INVALID_ID ) {
-    States_Control state;
+    States_Control    state;
     Thread_Life_state life_state;
 
     state = STATES_READY;
@@ -744,26 +707,23 @@ static void ResumeThreadDispatch(
 }
 
 static void TriggerNestedRequestViaSelfRestart(
-  Context         * const ctx,
-  Per_CPU_Control * const cpu_self
+  Context *const         ctx,
+  Per_CPU_Control *const cpu_self
 )
 {
   WrapThreadQueueExtract( &ctx->wrap_tq_ctx, ctx->worker_tcb );
   SetFatalHandler( ResumeThreadDispatch, ctx );
 
   if ( setjmp( ctx->thread_dispatch_context ) == 0 ) {
-    (void) rtems_task_restart(
-      RTEMS_SELF,
-      (rtems_task_argument) ctx
-    );
+    (void) rtems_task_restart( RTEMS_SELF, (rtems_task_argument) ctx );
   } else {
     _Thread_Dispatch_unnest( cpu_self );
   }
 }
 
 static void BlockAndJumpBack(
-  Context         * const ctx,
-  Per_CPU_Control * const cpu_self
+  Context *const         ctx,
+  Per_CPU_Control *const cpu_self
 )
 {
   if ( setjmp( ctx->thread_dispatch_context ) == 0 ) {
@@ -1405,7 +1365,7 @@ static void RtemsTaskReqRestart_Post_State_Check(
        */
       T_eq_u32( ctx->worker_state, STATES_DORMANT )
 
-      event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+        event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
       T_eq_int( event->operation, T_SCHEDULER_NOP );
       break;
     }
@@ -1417,7 +1377,7 @@ static void RtemsTaskReqRestart_Post_State_Check(
        */
       T_eq_u32( ctx->worker_state, STATES_DORMANT | STATES_SUSPENDED )
 
-      event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+        event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
       T_eq_int( event->operation, T_SCHEDULER_NOP );
       break;
     }
@@ -1428,9 +1388,10 @@ static void RtemsTaskReqRestart_Post_State_Check(
        * blocked after the rtems_task_restart() call.
        */
       T_ne_u32( ctx->worker_state & STATES_BLOCKED, 0 )
-      T_eq_u32( ctx->worker_state & STATES_BLOCKED, ctx->worker_state )
+        T_eq_u32( ctx->worker_state & STATES_BLOCKED, ctx->worker_state )
 
-      if ( ctx->suspended && !ctx->blocked ) {
+          if ( ctx->suspended && !ctx->blocked )
+      {
         event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
         T_eq_int( event->operation, T_SCHEDULER_UNBLOCK );
         T_eq_ptr( event->thread, ctx->worker_tcb );
@@ -1454,13 +1415,16 @@ static void RtemsTaskReqRestart_Post_State_Check(
        */
       T_eq_u32( ctx->worker_state, STATES_READY )
 
-      if ( ctx->protected ) {
+        if ( ctx->protected )
+      {
         if ( ctx->suspended ) {
           event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
           T_eq_int( event->operation, T_SCHEDULER_UNBLOCK );
           T_eq_ptr( event->thread, ctx->worker_tcb );
         }
-      } else {
+      }
+      else
+      {
         if ( ctx->suspended || ctx->blocked ) {
           event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
           T_eq_int( event->operation, T_SCHEDULER_UNBLOCK );
@@ -1494,13 +1458,16 @@ static void RtemsTaskReqRestart_Post_State_Check(
        */
       T_eq_u32( ctx->worker_state, STATES_ZOMBIE )
 
-      if ( ctx->protected ) {
+        if ( ctx->protected )
+      {
         if ( ctx->suspended ) {
           event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
           T_eq_int( event->operation, T_SCHEDULER_UNBLOCK );
           T_eq_ptr( event->thread, ctx->worker_tcb );
         }
-      } else {
+      }
+      else
+      {
         if ( ctx->suspended ) {
           event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
           T_eq_int( event->operation, T_SCHEDULER_UNBLOCK );
@@ -1544,7 +1511,8 @@ static void RtemsTaskReqRestart_Post_State_Check(
        */
       T_ne_u32( ctx->worker_state & STATES_LIFE_IS_CHANGING, 0 )
 
-      if ( !ctx->real_priority_is_initial ) {
+        if ( !ctx->real_priority_is_initial )
+      {
         event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
         T_eq_int( event->operation, T_SCHEDULER_UPDATE_PRIORITY );
         T_eq_ptr( event->thread, ctx->worker_tcb );
@@ -1602,7 +1570,7 @@ static void RtemsTaskReqRestart_Post_Timer_Check(
        * The timer of the task specified by the ``id`` parameter shall be
        * active after the rtems_task_restart() call.
        */
-      GetTaskTimerInfoByThread( ctx->worker_tcb, &info);
+      GetTaskTimerInfoByThread( ctx->worker_tcb, &info );
       T_eq_int( info.state, TASK_TIMER_TICKS );
       break;
     }
@@ -1612,7 +1580,7 @@ static void RtemsTaskReqRestart_Post_Timer_Check(
        * The timer of the task specified by the ``id`` parameter shall be
        * inactive after the rtems_task_restart() call.
        */
-      GetTaskTimerInfoByThread( ctx->worker_tcb, &info);
+      GetTaskTimerInfoByThread( ctx->worker_tcb, &info );
       T_eq_int( info.state, TASK_TIMER_INACTIVE );
       break;
     }
@@ -2575,9 +2543,7 @@ static inline RtemsTaskReqRestart_Entry RtemsTaskReqRestart_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsTaskReqRestart_Entries[
-    RtemsTaskReqRestart_Map[ index ]
-  ];
+  return RtemsTaskReqRestart_Entries[ RtemsTaskReqRestart_Map[ index ] ];
 }
 
 static void RtemsTaskReqRestart_SetPreConditionStates(
@@ -2741,13 +2707,17 @@ T_TEST_CASE_FIXTURE( RtemsTaskReqRestart, &RtemsTaskReqRestart_Fixture )
                     ++ctx->Map.pci[ 8 ]
                   ) {
                     for (
-                      ctx->Map.pci[ 9 ] = RtemsTaskReqRestart_Pre_RealPriority_Initial;
-                      ctx->Map.pci[ 9 ] < RtemsTaskReqRestart_Pre_RealPriority_NA;
+                      ctx->Map.pci[ 9 ] =
+                        RtemsTaskReqRestart_Pre_RealPriority_Initial;
+                      ctx->Map.pci[ 9 ] <
+                      RtemsTaskReqRestart_Pre_RealPriority_NA;
                       ++ctx->Map.pci[ 9 ]
                     ) {
                       for (
-                        ctx->Map.pci[ 10 ] = RtemsTaskReqRestart_Pre_ThreadDispatch_Disabled;
-                        ctx->Map.pci[ 10 ] < RtemsTaskReqRestart_Pre_ThreadDispatch_NA;
+                        ctx->Map.pci[ 10 ] =
+                          RtemsTaskReqRestart_Pre_ThreadDispatch_Disabled;
+                        ctx->Map.pci[ 10 ] <
+                        RtemsTaskReqRestart_Pre_ThreadDispatch_NA;
                         ++ctx->Map.pci[ 10 ]
                       ) {
                         ctx->Map.entry = RtemsTaskReqRestart_PopEntry( ctx );

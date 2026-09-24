@@ -102,11 +102,17 @@ typedef struct {
 static BspSparcLeon3ValFatalCacheSnoopingDisabledSecondary_Context
   BspSparcLeon3ValFatalCacheSnoopingDisabledSecondary_Instance;
 
-void __real_bsp_start_on_secondary_processor( struct Per_CPU_Control *cpu_self );
+void __real_bsp_start_on_secondary_processor(
+  struct Per_CPU_Control *cpu_self
+);
 
-void __wrap_bsp_start_on_secondary_processor( struct Per_CPU_Control *cpu_self );
+void __wrap_bsp_start_on_secondary_processor(
+  struct Per_CPU_Control *cpu_self
+);
 
-void __wrap_bsp_start_on_secondary_processor( struct Per_CPU_Control *cpu_self )
+void __wrap_bsp_start_on_secondary_processor(
+  struct Per_CPU_Control *cpu_self
+)
 {
   uint32_t control;
 
@@ -117,13 +123,13 @@ void __wrap_bsp_start_on_secondary_processor( struct Per_CPU_Control *cpu_self )
   __real_bsp_start_on_secondary_processor( cpu_self );
 }
 
-static T_fixture BspSparcLeon3ValFatalCacheSnoopingDisabledSecondary_Fixture = {
-  .setup = NULL,
-  .stop = NULL,
-  .teardown = NULL,
-  .scope = NULL,
-  .initial_context = &BspSparcLeon3ValFatalCacheSnoopingDisabledSecondary_Instance
-};
+static T_fixture BspSparcLeon3ValFatalCacheSnoopingDisabledSecondary_Fixture =
+  { .setup = NULL,
+    .stop = NULL,
+    .teardown = NULL,
+    .scope = NULL,
+    .initial_context =
+      &BspSparcLeon3ValFatalCacheSnoopingDisabledSecondary_Instance };
 
 /**
  * @brief The test action is carried out by the wrapped

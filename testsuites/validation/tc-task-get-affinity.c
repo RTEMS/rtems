@@ -168,29 +168,18 @@ typedef struct {
   } Map;
 } RtemsTaskReqGetAffinity_Context;
 
-static RtemsTaskReqGetAffinity_Context
-  RtemsTaskReqGetAffinity_Instance;
+static RtemsTaskReqGetAffinity_Context RtemsTaskReqGetAffinity_Instance;
 
-static const char * const RtemsTaskReqGetAffinity_PreDesc_Id[] = {
-  "Invalid",
-  "Task",
-  "NA"
-};
+static const char *const RtemsTaskReqGetAffinity_PreDesc_Id[] =
+  { "Invalid", "Task", "NA" };
 
-static const char * const RtemsTaskReqGetAffinity_PreDesc_CPUSetSize[] = {
-  "Valid",
-  "TooSmall",
-  "Askew",
-  "NA"
-};
+static const char *const RtemsTaskReqGetAffinity_PreDesc_CPUSetSize[] =
+  { "Valid", "TooSmall", "Askew", "NA" };
 
-static const char * const RtemsTaskReqGetAffinity_PreDesc_CPUSet[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsTaskReqGetAffinity_PreDesc_CPUSet[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const * const RtemsTaskReqGetAffinity_PreDesc[] = {
+static const char *const *const RtemsTaskReqGetAffinity_PreDesc[] = {
   RtemsTaskReqGetAffinity_PreDesc_Id,
   RtemsTaskReqGetAffinity_PreDesc_CPUSetSize,
   RtemsTaskReqGetAffinity_PreDesc_CPUSet,
@@ -463,9 +452,8 @@ static inline RtemsTaskReqGetAffinity_Entry RtemsTaskReqGetAffinity_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsTaskReqGetAffinity_Entries[
-    RtemsTaskReqGetAffinity_Map[ index ]
-  ];
+  return RtemsTaskReqGetAffinity_Entries
+    [ RtemsTaskReqGetAffinity_Map[ index ] ];
 }
 
 static void RtemsTaskReqGetAffinity_TestVariant(

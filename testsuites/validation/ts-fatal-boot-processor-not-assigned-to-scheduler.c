@@ -69,7 +69,8 @@
  * @{
  */
 
-const char rtems_test_name[] = "TestsuitesFatalBootProcessorNotAssignedToScheduler";
+const char
+  rtems_test_name[] = "TestsuitesFatalBootProcessorNotAssignedToScheduler";
 
 #define FATAL_SYSINIT_RUN \
   ScoreSmpValFatalBootProcessorNotAssignedToScheduler_Run
@@ -90,8 +91,8 @@ RTEMS_SCHEDULER_EDF_SMP( a );
   RTEMS_SCHEDULER_TABLE_EDF_SMP( a, TEST_SCHEDULER_A_NAME )
 
 #define CONFIGURE_SCHEDULER_ASSIGNMENTS \
-  RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER, \
-  RTEMS_SCHEDULER_ASSIGN( 0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL )
+  RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER,  \
+    RTEMS_SCHEDULER_ASSIGN( 0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL )
 
 #include "ts-fatal-sysinit.h"
 

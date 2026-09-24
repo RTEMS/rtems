@@ -125,11 +125,7 @@ static void ScoreSmpValFatalMandatoryProcessorNotPresent_Action_0(
   /*
    * Check that the expected fatal code is present.
    */
-  T_step_eq_ulong(
-    1,
-    ctx->code,
-    SMP_FATAL_MANDATORY_PROCESSOR_NOT_PRESENT
-  );
+  T_step_eq_ulong( 1, ctx->code, SMP_FATAL_MANDATORY_PROCESSOR_NOT_PRESENT );
 }
 
 void ScoreSmpValFatalMandatoryProcessorNotPresent_Run(

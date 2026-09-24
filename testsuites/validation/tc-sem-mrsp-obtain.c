@@ -240,29 +240,15 @@ typedef struct {
   } Map;
 } RtemsSemReqMrspObtain_Context;
 
-static RtemsSemReqMrspObtain_Context
-  RtemsSemReqMrspObtain_Instance;
+static RtemsSemReqMrspObtain_Context RtemsSemReqMrspObtain_Instance;
 
-static const char * const RtemsSemReqMrspObtain_PreDesc_Home[] = {
-  "Idle",
-  "Task",
-  "TaskIdle",
-  "Second",
-  "SecondIdle",
-  "NA"
-};
+static const char *const RtemsSemReqMrspObtain_PreDesc_Home[] =
+  { "Idle", "Task", "TaskIdle", "Second", "SecondIdle", "NA" };
 
-static const char * const RtemsSemReqMrspObtain_PreDesc_Helping[] = {
-  "Idle",
-  "Task",
-  "Helping",
-  "HelpingIdle",
-  "Third",
-  "ThirdIdle",
-  "NA"
-};
+static const char *const RtemsSemReqMrspObtain_PreDesc_Helping[] =
+  { "Idle", "Task", "Helping", "HelpingIdle", "Third", "ThirdIdle", "NA" };
 
-static const char * const RtemsSemReqMrspObtain_PreDesc_PriorityHome[] = {
+static const char *const RtemsSemReqMrspObtain_PreDesc_PriorityHome[] = {
   "None",
   "NewHigh",
   "NewEqual",
@@ -272,16 +258,10 @@ static const char * const RtemsSemReqMrspObtain_PreDesc_PriorityHome[] = {
   "NA"
 };
 
-static const char * const RtemsSemReqMrspObtain_PreDesc_PriorityHelping[] = {
-  "None",
-  "Helping",
-  "ThirdHigh",
-  "ThirdEqual",
-  "ThirdLow",
-  "NA"
-};
+static const char *const RtemsSemReqMrspObtain_PreDesc_PriorityHelping[] =
+  { "None", "Helping", "ThirdHigh", "ThirdEqual", "ThirdLow", "NA" };
 
-static const char * const * const RtemsSemReqMrspObtain_PreDesc[] = {
+static const char *const *const RtemsSemReqMrspObtain_PreDesc[] = {
   RtemsSemReqMrspObtain_PreDesc_Home,
   RtemsSemReqMrspObtain_PreDesc_Helping,
   RtemsSemReqMrspObtain_PreDesc_PriorityHome,
@@ -333,10 +313,10 @@ static void MoveToScheduler( Context *ctx, rtems_id scheduler_id )
   uint32_t cpu;
 
   if ( scheduler_id == SCHEDULER_A_ID ) {
-    other_scheduler_id =  SCHEDULER_B_ID;
+    other_scheduler_id = SCHEDULER_B_ID;
     cpu = 0;
   } else {
-    other_scheduler_id =  SCHEDULER_A_ID;
+    other_scheduler_id = SCHEDULER_A_ID;
     cpu = 1;
   }
 
@@ -628,7 +608,7 @@ static void RtemsSemReqMrspObtain_Post_Home_Check(
 
   cpu = _Per_CPU_Get_by_index( 0 );
   scheduled = cpu->heir;
-  task_cpu_index = rtems_scheduler_get_processor(); 
+  task_cpu_index = rtems_scheduler_get_processor();
 
   switch ( state ) {
     case RtemsSemReqMrspObtain_Post_Home_Task: {
@@ -698,7 +678,7 @@ static void RtemsSemReqMrspObtain_Post_Helping_Check(
 
   cpu = _Per_CPU_Get_by_index( 1 );
   scheduled = cpu->heir;
-  task_cpu_index = rtems_scheduler_get_processor(); 
+  task_cpu_index = rtems_scheduler_get_processor();
 
   switch ( state ) {
     case RtemsSemReqMrspObtain_Post_Helping_Idle: {
@@ -1139,9 +1119,7 @@ static inline RtemsSemReqMrspObtain_Entry RtemsSemReqMrspObtain_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsSemReqMrspObtain_Entries[
-    RtemsSemReqMrspObtain_Map[ index ]
-  ];
+  return RtemsSemReqMrspObtain_Entries[ RtemsSemReqMrspObtain_Map[ index ] ];
 }
 
 static void RtemsSemReqMrspObtain_TestVariant(

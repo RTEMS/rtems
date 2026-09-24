@@ -84,8 +84,7 @@ static void Increment( void *arg )
   unsigned int *value;
 
   value = (unsigned int *) arg;
-  *value =
-    _Atomic_Fetch_add_uint( &job_counter, 1, ATOMIC_ORDER_RELAXED ) + 1;
+  *value = _Atomic_Fetch_add_uint( &job_counter, 1, ATOMIC_ORDER_RELAXED ) + 1;
 }
 
 static unsigned int counter_0;
@@ -95,9 +94,7 @@ static const Per_CPU_Job_context job_context_0 = {
   .arg = &counter_0
 };
 
-Per_CPU_Job job_0 = {
-  .context = &job_context_0
-};
+Per_CPU_Job job_0 = { .context = &job_context_0 };
 
 static unsigned int counter_1;
 
@@ -119,11 +116,11 @@ static void ScoreSmpValPerCpuJobs_Action_0( void )
   rtems_interrupt_level level;
   Per_CPU_Control      *cpu;
 
-  rtems_interrupt_local_disable(level);
+  rtems_interrupt_local_disable( level );
   cpu = _Per_CPU_Get();
   _Per_CPU_Add_job( cpu, &job_0 );
   _Per_CPU_Submit_job( cpu, &job_1 );
-  rtems_interrupt_local_enable(level);
+  rtems_interrupt_local_enable( level );
 
   _Per_CPU_Wait_for_job( cpu, &job_1 );
 

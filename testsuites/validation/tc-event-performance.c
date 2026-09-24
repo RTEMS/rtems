@@ -104,8 +104,7 @@ typedef struct {
   T_ticks end;
 } RtemsEventValPerf_Context;
 
-static RtemsEventValPerf_Context
-  RtemsEventValPerf_Instance;
+static RtemsEventValPerf_Context RtemsEventValPerf_Instance;
 
 #define EVENT_END RTEMS_EVENT_0
 
@@ -340,7 +339,7 @@ static bool RtemsEventReqPerfOther_Teardown_Wrap(
 
 /** @} */
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 /**
  * @defgroup RtemsEventReqPerfOtherCpu spec:/rtems/event/req/perf-other-cpu
  *
@@ -559,7 +558,7 @@ T_TEST_CASE_FIXTURE( RtemsEventValPerf, &RtemsEventValPerf_Fixture )
   ctx->request.teardown = RtemsEventReqPerfOther_Teardown_Wrap;
   T_measure_runtime( ctx->context, &ctx->request );
 
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   RtemsEventReqPerfOtherCpu_Prepare( ctx );
   ctx->request.name = "RtemsEventReqPerfOtherCpu";
   ctx->request.setup = NULL;

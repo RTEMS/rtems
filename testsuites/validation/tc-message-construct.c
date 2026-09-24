@@ -218,66 +218,36 @@ typedef struct {
   } Map;
 } RtemsMessageReqConstruct_Context;
 
-static RtemsMessageReqConstruct_Context
-  RtemsMessageReqConstruct_Instance;
+static RtemsMessageReqConstruct_Context RtemsMessageReqConstruct_Instance;
 
-static const char * const RtemsMessageReqConstruct_PreDesc_Config[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsMessageReqConstruct_PreDesc_Config[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsMessageReqConstruct_PreDesc_Name[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsMessageReqConstruct_PreDesc_Name[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsMessageReqConstruct_PreDesc_Id[] = {
-  "Id",
-  "Null",
-  "NA"
-};
+static const char *const RtemsMessageReqConstruct_PreDesc_Id[] =
+  { "Id", "Null", "NA" };
 
-static const char * const RtemsMessageReqConstruct_PreDesc_MaxPending[] = {
-  "Valid",
-  "Zero",
-  "Big",
-  "NA"
-};
+static const char *const RtemsMessageReqConstruct_PreDesc_MaxPending[] =
+  { "Valid", "Zero", "Big", "NA" };
 
-static const char * const RtemsMessageReqConstruct_PreDesc_MaxSize[] = {
-  "Valid",
-  "Zero",
-  "Big",
-  "NA"
-};
+static const char *const RtemsMessageReqConstruct_PreDesc_MaxSize[] =
+  { "Valid", "Zero", "Big", "NA" };
 
-static const char * const RtemsMessageReqConstruct_PreDesc_Free[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsMessageReqConstruct_PreDesc_Free[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsMessageReqConstruct_PreDesc_Area[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsMessageReqConstruct_PreDesc_Area[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsMessageReqConstruct_PreDesc_AreaSize[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsMessageReqConstruct_PreDesc_AreaSize[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsMessageReqConstruct_PreDesc_StorageFree[] = {
-  "Null",
-  "Handler",
-  "NA"
-};
+static const char *const RtemsMessageReqConstruct_PreDesc_StorageFree[] =
+  { "Null", "Handler", "NA" };
 
-static const char * const * const RtemsMessageReqConstruct_PreDesc[] = {
+static const char *const *const RtemsMessageReqConstruct_PreDesc[] = {
   RtemsMessageReqConstruct_PreDesc_Config,
   RtemsMessageReqConstruct_PreDesc_Name,
   RtemsMessageReqConstruct_PreDesc_Id,
@@ -300,11 +270,13 @@ static const char * const * const RtemsMessageReqConstruct_PreDesc[] = {
 
 typedef RtemsMessageReqConstruct_Context Context;
 
-static RTEMS_MESSAGE_QUEUE_BUFFER( MAX_MESSAGE_SIZE )
-  buffers_to_seize[ MAX_MESSAGE_QUEUES ][ MAX_PENDING_MESSAGES ];
+static RTEMS_MESSAGE_QUEUE_BUFFER(
+  MAX_MESSAGE_SIZE
+) buffers_to_seize[ MAX_MESSAGE_QUEUES ][ MAX_PENDING_MESSAGES ];
 
-static RTEMS_MESSAGE_QUEUE_BUFFER( MAX_MESSAGE_SIZE )
-  buffers[ MAX_PENDING_MESSAGES ];
+static RTEMS_MESSAGE_QUEUE_BUFFER(
+  MAX_MESSAGE_SIZE
+) buffers[ MAX_PENDING_MESSAGES ];
 
 static rtems_status_code Create( void *arg, uint32_t *id )
 {
@@ -322,7 +294,7 @@ static rtems_status_code Create( void *arg, uint32_t *id )
   config.storage_area = buffers_to_seize[ *i ];
   config.attributes = RTEMS_DEFAULT_ATTRIBUTES;
 
-  ++(*i);
+  ++( *i );
 
   return rtems_message_queue_construct( &config, id );
 }
@@ -476,7 +448,10 @@ static void RtemsMessageReqConstruct_Pre_MaxSize_Prepare(
          * the message size.
          */
         ctx->config_obj.maximum_message_size = SIZE_MAX - sizeof( uintptr_t ) +
-          1 - sizeof( CORE_message_queue_Buffer );
+                                               1 -
+                                               sizeof(
+                                                 CORE_message_queue_Buffer
+                                               );
       } else {
         ctx->config_obj.maximum_message_size = MAX_MESSAGE_SIZE;
       }
@@ -690,7 +665,7 @@ static void RtemsMessageReqConstruct_Post_Status_Check(
        * The return status of rtems_message_queue_construct() shall be
        * RTEMS_UNSATISFIED.
        */
-      T_rsc( ctx->status, RTEMS_UNSATISFIED  );
+      T_rsc( ctx->status, RTEMS_UNSATISFIED );
       break;
     }
 
@@ -954,9 +929,8 @@ static inline RtemsMessageReqConstruct_Entry RtemsMessageReqConstruct_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsMessageReqConstruct_Entries[
-    RtemsMessageReqConstruct_Map[ index ]
-  ];
+  return RtemsMessageReqConstruct_Entries
+    [ RtemsMessageReqConstruct_Map[ index ] ];
 }
 
 static void RtemsMessageReqConstruct_TestVariant(
@@ -1035,13 +1009,16 @@ T_TEST_CASE_FIXTURE(
                 ++ctx->Map.pcs[ 6 ]
               ) {
                 for (
-                  ctx->Map.pcs[ 7 ] = RtemsMessageReqConstruct_Pre_AreaSize_Valid;
+                  ctx->Map.pcs[ 7 ] =
+                    RtemsMessageReqConstruct_Pre_AreaSize_Valid;
                   ctx->Map.pcs[ 7 ] < RtemsMessageReqConstruct_Pre_AreaSize_NA;
                   ++ctx->Map.pcs[ 7 ]
                 ) {
                   for (
-                    ctx->Map.pcs[ 8 ] = RtemsMessageReqConstruct_Pre_StorageFree_Null;
-                    ctx->Map.pcs[ 8 ] < RtemsMessageReqConstruct_Pre_StorageFree_NA;
+                    ctx->Map.pcs[ 8 ] =
+                      RtemsMessageReqConstruct_Pre_StorageFree_Null;
+                    ctx->Map.pcs[ 8 ] <
+                    RtemsMessageReqConstruct_Pre_StorageFree_NA;
                     ++ctx->Map.pcs[ 8 ]
                   ) {
                     ctx->Map.entry = RtemsMessageReqConstruct_PopEntry( ctx );

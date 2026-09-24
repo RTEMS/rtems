@@ -219,11 +219,7 @@ static void RtemsModeValModes_Action_2( void )
    * Check that the bitwise and of RTEMS_ASR_MASK and RTEMS_ALL_MODE_MASKS is
    * equal to RTEMS_ASR_MASK.
    */
-  T_step_eq_u32(
-    7,
-    RTEMS_ASR_MASK & RTEMS_ALL_MODE_MASKS,
-    RTEMS_ASR_MASK
-  );
+  T_step_eq_u32( 7, RTEMS_ASR_MASK & RTEMS_ALL_MODE_MASKS, RTEMS_ASR_MASK );
 
   /*
    * Check that the bitwise and of RTEMS_PREEMPT_MASK and RTEMS_ALL_MODE_MASKS

@@ -107,17 +107,16 @@ static void ClockInterrupt( void *arg )
   (void) arg;
 }
 
-static rtems_interrupt_entry interrupt_entry = RTEMS_INTERRUPT_ENTRY_INITIALIZER(
-  ClockInterrupt,
-  NULL,
-  "Clock"
-);
+static rtems_interrupt_entry interrupt_entry =
+  RTEMS_INTERRUPT_ENTRY_INITIALIZER( ClockInterrupt, NULL, "Clock" );
 
 static void OccupyClockInterrupt( void )
 {
   rtems_vector_number vector;
 
-  vector = GPTIMER_CONFIG_IRQ_GET( grlib_load_32( &LEON3_Timer_Regs->config ) );
+  vector = GPTIMER_CONFIG_IRQ_GET(
+    grlib_load_32( &LEON3_Timer_Regs->config )
+  );
   (void) rtems_interrupt_entry_install(
     vector,
     RTEMS_INTERRUPT_UNIQUE,
@@ -157,11 +156,7 @@ static void BspSparcLeon3ValFatalClockInitialization_Action_0(
   /*
    * Check that the expected fatal code is present.
    */
-  T_step_eq_ulong(
-    1,
-    ctx->code,
-    LEON3_FATAL_CLOCK_INITIALIZATION
-  );
+  T_step_eq_ulong( 1, ctx->code, LEON3_FATAL_CLOCK_INITIALIZATION );
 }
 
 void BspSparcLeon3ValFatalClockInitialization_Run(

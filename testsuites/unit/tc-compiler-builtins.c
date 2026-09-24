@@ -122,15 +122,15 @@
  * @{
  */
 
-#if __LONG_MAX__ == 0x7fffffffL && !defined(__aarch64__)
+#if __LONG_MAX__ == 0x7fffffffL && !defined( __aarch64__ )
 #define TEST_UDIVMODDI4
 #endif
 
-#if defined(TEST_UDIVMODDI4)
+#if defined( TEST_UDIVMODDI4 )
 uint64_t __udivmoddi4( uint64_t n, uint64_t d, uint64_t *r );
 #endif
 
-#if defined(TEST_UDIVMODDI4) && defined(__arm__)
+#if defined( TEST_UDIVMODDI4 ) && defined( __arm__ )
 /*
  * Here __aeabi_uldivmod() may be used to carry out integer division
  * operations even though the reminder is unused.  This function is
@@ -522,7 +522,7 @@ static void CompilerUnitBuiltins_Action_13( void )
 static void CompilerUnitBuiltins_Action_14( void )
 {
   volatile int64_t i;
-  volatile int s;
+  volatile int     s;
 
   i = 0;
   RTEMS_OBFUSCATE_VARIABLE( i );
@@ -553,7 +553,7 @@ static void CompilerUnitBuiltins_Action_14( void )
 static void CompilerUnitBuiltins_Action_15( void )
 {
   volatile int64_t i;
-  volatile int s;
+  volatile int     s;
 
   i = 0;
   RTEMS_OBFUSCATE_VARIABLE( i );
@@ -583,7 +583,7 @@ static void CompilerUnitBuiltins_Action_15( void )
 static void CompilerUnitBuiltins_Action_16( void )
 {
   volatile uint64_t i;
-  volatile int s;
+  volatile int      s;
 
   i = 0;
   RTEMS_OBFUSCATE_VARIABLE( i );
@@ -791,7 +791,7 @@ static void CompilerUnitBuiltins_Action_20( void )
     x = n / d;
   }
 
-  #if defined(TEST_UDIVMODDI4_WITHOUT_REMINDER)
+  #if defined( TEST_UDIVMODDI4_WITHOUT_REMINDER )
   do_longjmp = true;
 
   if ( setjmp( exception_return_context ) == 0 ) {
@@ -807,7 +807,7 @@ static void CompilerUnitBuiltins_Action_20( void )
     x = n / d;
   }
 
-  #if defined(TEST_UDIVMODDI4_WITHOUT_REMINDER)
+  #if defined( TEST_UDIVMODDI4_WITHOUT_REMINDER )
   do_longjmp = true;
 
   if ( setjmp( exception_return_context ) == 0 ) {
@@ -823,7 +823,7 @@ static void CompilerUnitBuiltins_Action_20( void )
     x = n / d;
   }
 
-  #if defined(TEST_UDIVMODDI4_WITHOUT_REMINDER)
+  #if defined( TEST_UDIVMODDI4_WITHOUT_REMINDER )
   do_longjmp = true;
 
   if ( setjmp( exception_return_context ) == 0 ) {
@@ -839,7 +839,7 @@ static void CompilerUnitBuiltins_Action_20( void )
     x = n / d;
   }
 
-  #if defined(TEST_UDIVMODDI4_WITHOUT_REMINDER)
+  #if defined( TEST_UDIVMODDI4_WITHOUT_REMINDER )
   do_longjmp = true;
 
   if ( setjmp( exception_return_context ) == 0 ) {
@@ -855,7 +855,7 @@ static void CompilerUnitBuiltins_Action_20( void )
     x = n / d;
   }
 
-  #if defined(TEST_UDIVMODDI4_WITHOUT_REMINDER)
+  #if defined( TEST_UDIVMODDI4_WITHOUT_REMINDER )
   do_longjmp = true;
 
   if ( setjmp( exception_return_context ) == 0 ) {
@@ -866,70 +866,70 @@ static void CompilerUnitBuiltins_Action_20( void )
   n = UINT64_C( 0 );
   d = UINT64_C( 1 );
   T_eq_u64( n / d, UINT64_C( 0 ) );
-  #if defined(TEST_UDIVMODDI4_WITHOUT_REMINDER)
+  #if defined( TEST_UDIVMODDI4_WITHOUT_REMINDER )
   T_eq_u64( __udivmoddi4( n, d, NULL ), UINT64_C( 0 ) );
   #endif
 
   n = UINT64_C( 1 );
   d = UINT64_C( 1 );
   T_eq_u64( n / d, UINT64_C( 1 ) );
-  #if defined(TEST_UDIVMODDI4_WITHOUT_REMINDER)
+  #if defined( TEST_UDIVMODDI4_WITHOUT_REMINDER )
   T_eq_u64( __udivmoddi4( n, d, NULL ), UINT64_C( 1 ) );
   #endif
 
   n = UINT64_C( 0xffffffffffffffff );
   d = UINT64_C( 1 );
   T_eq_u64( n / d, UINT64_C( 0xffffffffffffffff ) );
-  #if defined(TEST_UDIVMODDI4_WITHOUT_REMINDER)
+  #if defined( TEST_UDIVMODDI4_WITHOUT_REMINDER )
   T_eq_u64( __udivmoddi4( n, d, NULL ), UINT64_C( 0xffffffffffffffff ) );
   #endif
 
   n = UINT64_C( 2 );
   d = UINT64_C( 1 );
   T_eq_u64( n / d, UINT64_C( 2 ) );
-  #if defined(TEST_UDIVMODDI4_WITHOUT_REMINDER)
+  #if defined( TEST_UDIVMODDI4_WITHOUT_REMINDER )
   T_eq_u64( __udivmoddi4( n, d, NULL ), UINT64_C( 2 ) );
   #endif
 
   n = UINT64_C( 1 );
   d = UINT64_C( 0xffffffffffffffff );
   T_eq_u64( n / d, UINT64_C( 0 ) );
-  #if defined(TEST_UDIVMODDI4_WITHOUT_REMINDER)
+  #if defined( TEST_UDIVMODDI4_WITHOUT_REMINDER )
   T_eq_u64( __udivmoddi4( n, d, NULL ), UINT64_C( 0 ) );
   #endif
 
   n = UINT64_C( 0xffffffffffffffff );
   d = UINT64_C( 0xffffffffffffffff );
   T_eq_u64( n / d, UINT64_C( 1 ) );
-  #if defined(TEST_UDIVMODDI4_WITHOUT_REMINDER)
+  #if defined( TEST_UDIVMODDI4_WITHOUT_REMINDER )
   T_eq_u64( __udivmoddi4( n, d, NULL ), UINT64_C( 1 ) );
   #endif
 
   n = UINT64_C( 0xffffffffffffffff );
   d = UINT64_C( 0x8000000000000000 );
   T_eq_u64( n / d, UINT64_C( 1 ) );
-  #if defined(TEST_UDIVMODDI4_WITHOUT_REMINDER)
+  #if defined( TEST_UDIVMODDI4_WITHOUT_REMINDER )
   T_eq_u64( __udivmoddi4( n, d, NULL ), UINT64_C( 1 ) );
   #endif
 
   n = UINT64_C( 0x0000000100000001 );
   d = UINT64_C( 0x0000000f00000000 );
   T_eq_u64( n / d, UINT64_C( 0 ) );
-  #if defined(TEST_UDIVMODDI4_WITHOUT_REMINDER)
+  #if defined( TEST_UDIVMODDI4_WITHOUT_REMINDER )
   T_eq_u64( __udivmoddi4( n, d, NULL ), UINT64_C( 0 ) );
   #endif
 
   n = UINT64_C( 0x0000000100000000 );
   d = UINT64_C( 0x0000000f00000001 );
   T_eq_u64( n / d, UINT64_C( 0 ) );
-  #if defined(TEST_UDIVMODDI4_WITHOUT_REMINDER)
+  #if defined( TEST_UDIVMODDI4_WITHOUT_REMINDER )
   T_eq_u64( __udivmoddi4( n, d, NULL ), UINT64_C( 0 ) );
   #endif
 
   n = UINT64_C( 0xffffffff0000000f );
   d = UINT64_C( 0x000000010000000f );
   T_eq_u64( n / d, UINT64_C( 4294967280 ) );
-  #if defined(TEST_UDIVMODDI4_WITHOUT_REMINDER)
+  #if defined( TEST_UDIVMODDI4_WITHOUT_REMINDER )
   T_eq_u64( __udivmoddi4( n, d, NULL ), UINT64_C( 4294967280 ) );
   #endif
 }
@@ -1050,7 +1050,7 @@ static void CompilerUnitBuiltins_Action_21( void )
   d = INT64_C( 0x000000ff0000000f );
   T_eq_i64( n % d, INT64_C( 64424509455 ) );
 
-  #if defined(TEST_UDIVMODDI4)
+  #if defined( TEST_UDIVMODDI4 )
   /*
    * The above test cases may use __udivmoddi4().  However, the below
    * parameter values for __udivmoddi4() cannot be obtained through the

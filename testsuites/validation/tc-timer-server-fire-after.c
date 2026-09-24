@@ -180,17 +180,17 @@ typedef struct {
 } RtemsTimerReqServerFireAfter_Entry;
 
 typedef enum {
-  PRE_NONE      = 0,
+  PRE_NONE = 0,
   PRE_INTERRUPT = 1,
-  PRE_SERVER    = 2
+  PRE_SERVER = 2
 } PreConditionContext;
 
 typedef enum {
-  SCHEDULE_NONE       = 0,
-  SCHEDULE_VERY_SOON  = 1,
-  SCHEDULE_SOON       = 2,
-  SCHEDULE_LATER      = 3,
-  SCHEDULE_MAX        = 5
+  SCHEDULE_NONE = 0,
+  SCHEDULE_VERY_SOON = 1,
+  SCHEDULE_SOON = 2,
+  SCHEDULE_LATER = 3,
+  SCHEDULE_MAX = 5
 } Scheduling_Ticks;
 
 /**
@@ -319,52 +319,28 @@ typedef struct {
 static RtemsTimerReqServerFireAfter_Context
   RtemsTimerReqServerFireAfter_Instance;
 
-static const char * const RtemsTimerReqServerFireAfter_PreDesc_Server[] = {
-  "Init",
-  "NotInit",
-  "NA"
-};
+static const char *const RtemsTimerReqServerFireAfter_PreDesc_Server[] =
+  { "Init", "NotInit", "NA" };
 
-static const char * const RtemsTimerReqServerFireAfter_PreDesc_Ticks[] = {
-  "Valid",
-  "Is0",
-  "NA"
-};
+static const char *const RtemsTimerReqServerFireAfter_PreDesc_Ticks[] =
+  { "Valid", "Is0", "NA" };
 
-static const char * const RtemsTimerReqServerFireAfter_PreDesc_Routine[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsTimerReqServerFireAfter_PreDesc_Routine[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsTimerReqServerFireAfter_PreDesc_Id[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsTimerReqServerFireAfter_PreDesc_Id[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsTimerReqServerFireAfter_PreDesc_Context[] = {
-  "None",
-  "Interrupt",
-  "Server",
-  "NA"
-};
+static const char *const RtemsTimerReqServerFireAfter_PreDesc_Context[] =
+  { "None", "Interrupt", "Server", "NA" };
 
-static const char * const RtemsTimerReqServerFireAfter_PreDesc_Clock[] = {
-  "None",
-  "Ticks",
-  "Realtime",
-  "NA"
-};
+static const char *const RtemsTimerReqServerFireAfter_PreDesc_Clock[] =
+  { "None", "Ticks", "Realtime", "NA" };
 
-static const char * const RtemsTimerReqServerFireAfter_PreDesc_State[] = {
-  "Inactive",
-  "Scheduled",
-  "Pending",
-  "NA"
-};
+static const char *const RtemsTimerReqServerFireAfter_PreDesc_State[] =
+  { "Inactive", "Scheduled", "Pending", "NA" };
 
-static const char * const * const RtemsTimerReqServerFireAfter_PreDesc[] = {
+static const char *const *const RtemsTimerReqServerFireAfter_PreDesc[] = {
   RtemsTimerReqServerFireAfter_PreDesc_Server,
   RtemsTimerReqServerFireAfter_PreDesc_Ticks,
   RtemsTimerReqServerFireAfter_PreDesc_Routine,
@@ -375,11 +351,13 @@ static const char * const * const RtemsTimerReqServerFireAfter_PreDesc[] = {
   NULL
 };
 
-static const rtems_time_of_day tod_now      = { 2000, 1, 1, 0, 0, 0, 0 };
+static const rtems_time_of_day tod_now = { 2000, 1, 1, 0, 0, 0, 0 };
 static const rtems_time_of_day tod_schedule = { 2000, 1, 1, 1, 0, 0, 0 };
-static const rtems_time_of_day tod_fire     = { 2000, 1, 2, 0, 0, 0, 0 };
+static const rtems_time_of_day tod_fire = { 2000, 1, 2, 0, 0, 0, 0 };
 
-static Scheduling_Ticks TriggerTimer( const RtemsTimerReqServerFireAfter_Context *ctx )
+static Scheduling_Ticks TriggerTimer(
+  const RtemsTimerReqServerFireAfter_Context *ctx
+)
 {
   int ticks_fired = SCHEDULE_NONE;
   int invocations_old = ctx->invocations;
@@ -399,10 +377,7 @@ static Scheduling_Ticks TriggerTimer( const RtemsTimerReqServerFireAfter_Context
   return ticks_fired;
 }
 
-static void TimerServiceRoutine(
-  rtems_id timer_id,
-  void *user_data
-)
+static void TimerServiceRoutine( rtems_id timer_id, void *user_data )
 {
   (void) timer_id;
 
@@ -417,7 +392,7 @@ static void TimerServiceRoutine(
  */
 static void TimerServiceRoutineCover(
   rtems_id timer_cover_id,
-  void *user_data
+  void    *user_data
 )
 {
   (void) timer_cover_id;
@@ -1037,9 +1012,9 @@ static void RtemsTimerReqServerFireAfter_Prepare(
   );
   T_rsc_success( status );
 
-  ctx->invocations               = 0;
-  ctx->ticks_till_fire           = SCHEDULE_NONE;
-  ctx->routine_user_data         = NULL;
+  ctx->invocations = 0;
+  ctx->ticks_till_fire = SCHEDULE_NONE;
+  ctx->routine_user_data = NULL;
   T_rsc_success( rtems_clock_set( &tod_now ) );
 }
 
@@ -1187,9 +1162,8 @@ RtemsTimerReqServerFireAfter_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsTimerReqServerFireAfter_Entries[
-    RtemsTimerReqServerFireAfter_Map[ index ]
-  ];
+  return RtemsTimerReqServerFireAfter_Entries
+    [ RtemsTimerReqServerFireAfter_Map[ index ] ];
 }
 
 static void RtemsTimerReqServerFireAfter_TestVariant(
@@ -1279,7 +1253,8 @@ T_TEST_CASE_FIXTURE(
               ++ctx->Map.pcs[ 5 ]
             ) {
               for (
-                ctx->Map.pcs[ 6 ] = RtemsTimerReqServerFireAfter_Pre_State_Inactive;
+                ctx->Map.pcs[ 6 ] =
+                  RtemsTimerReqServerFireAfter_Pre_State_Inactive;
                 ctx->Map.pcs[ 6 ] < RtemsTimerReqServerFireAfter_Pre_State_NA;
                 ++ctx->Map.pcs[ 6 ]
               ) {

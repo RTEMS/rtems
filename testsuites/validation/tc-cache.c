@@ -164,7 +164,7 @@
 
 static void CallFlushMultipleDataLines( void )
 {
-  uint8_t buf[ 256 ];
+  uint8_t   buf[ 256 ];
   uintptr_t data;
   uintptr_t n;
   uintptr_t i;
@@ -172,7 +172,7 @@ static void CallFlushMultipleDataLines( void )
   rtems_cache_flush_multiple_data_lines( NULL, 0 );
   data = RTEMS_ALIGN_UP( (uintptr_t) &buf[ 1 ], 128 );
 
-  for ( n = 16; n <= 128 ; n *= 2 ) {
+  for ( n = 16; n <= 128; n *= 2 ) {
     for ( i = 0; i < 3; ++i ) {
       uintptr_t j;
 
@@ -188,7 +188,7 @@ static void CallFlushMultipleDataLines( void )
 
 static void CallInvalidateMultipleDataLines( void )
 {
-  uint8_t buf[ 384 ];
+  uint8_t   buf[ 384 ];
   uintptr_t data;
   uintptr_t n;
   uintptr_t i;
@@ -196,7 +196,7 @@ static void CallInvalidateMultipleDataLines( void )
   rtems_cache_invalidate_multiple_data_lines( NULL, 0 );
   data = RTEMS_ALIGN_UP( (uintptr_t) &buf[ 128 ], 128 );
 
-  for ( n = 16; n <= 128 ; n *= 2 ) {
+  for ( n = 16; n <= 128; n *= 2 ) {
     for ( i = 0; i < 3; ++i ) {
       uintptr_t j;
 
@@ -219,7 +219,7 @@ static void CallInvalidateMultipleInstructionLines( void )
   rtems_cache_invalidate_multiple_instruction_lines( NULL, 0 );
   data = (uintptr_t) rtems_cache_invalidate_multiple_instruction_lines;
 
-  for ( n = 16; n <= 128 ; n *= 2 ) {
+  for ( n = 16; n <= 128; n *= 2 ) {
     for ( i = 0; i < 3; ++i ) {
       uintptr_t j;
 
@@ -242,7 +242,7 @@ static void CallInstructionSyncAfterCodeChange( void )
   rtems_cache_instruction_sync_after_code_change( NULL, 0 );
   data = (uintptr_t) rtems_cache_instruction_sync_after_code_change;
 
-  for ( n = 16; n <= 128 ; n *= 2 ) {
+  for ( n = 16; n <= 128; n *= 2 ) {
     for ( i = 0; i < 3; ++i ) {
       uintptr_t j;
 
@@ -266,7 +266,7 @@ static void CallGetDataSize( void )
   do {
     n = rtems_cache_get_data_cache_size( level );
     ++level;
-  } while (n != 0 );
+  } while ( n != 0 );
 }
 
 static void CallGetInstructionSize( void )
@@ -279,7 +279,7 @@ static void CallGetInstructionSize( void )
   do {
     n = rtems_cache_get_instruction_cache_size( level );
     ++level;
-  } while (n != 0 );
+  } while ( n != 0 );
 }
 
 /**
@@ -298,9 +298,9 @@ static void RtemsCacheValCache_Action_1( void )
 {
   rtems_interrupt_level level;
 
-  rtems_interrupt_local_disable(level);
+  rtems_interrupt_local_disable( level );
   rtems_cache_enable_data();
-  rtems_interrupt_local_enable(level);
+  rtems_interrupt_local_enable( level );
 }
 
 /**
@@ -322,10 +322,10 @@ static void RtemsCacheValCache_Action_3( void )
 {
   rtems_interrupt_level level;
 
-  rtems_interrupt_local_disable(level);
+  rtems_interrupt_local_disable( level );
   rtems_cache_disable_instruction();
   rtems_cache_enable_instruction();
-  rtems_interrupt_local_enable(level);
+  rtems_interrupt_local_enable( level );
 }
 
 /**
@@ -346,10 +346,10 @@ static void RtemsCacheValCache_Action_5( void )
 {
   rtems_interrupt_level level;
 
-  rtems_interrupt_local_disable(level);
+  rtems_interrupt_local_disable( level );
   rtems_cache_freeze_data();
   rtems_cache_unfreeze_data();
-  rtems_interrupt_local_enable(level);
+  rtems_interrupt_local_enable( level );
 }
 
 /**
@@ -371,10 +371,10 @@ static void RtemsCacheValCache_Action_7( void )
 {
   rtems_interrupt_level level;
 
-  rtems_interrupt_local_disable(level);
+  rtems_interrupt_local_disable( level );
   rtems_cache_freeze_instruction();
   rtems_cache_unfreeze_instruction();
-  rtems_interrupt_local_enable(level);
+  rtems_interrupt_local_enable( level );
 }
 
 /**
@@ -393,9 +393,9 @@ static void RtemsCacheValCache_Action_9( void )
 {
   rtems_interrupt_level level;
 
-  rtems_interrupt_local_disable(level);
+  rtems_interrupt_local_disable( level );
   rtems_cache_invalidate_entire_instruction();
-  rtems_interrupt_local_enable(level);
+  rtems_interrupt_local_enable( level );
 }
 
 /**
@@ -414,9 +414,9 @@ static void RtemsCacheValCache_Action_11( void )
 {
   rtems_interrupt_level level;
 
-  rtems_interrupt_local_disable(level);
+  rtems_interrupt_local_disable( level );
   rtems_cache_flush_entire_data();
-  rtems_interrupt_local_enable(level);
+  rtems_interrupt_local_enable( level );
 }
 
 /**
@@ -436,9 +436,9 @@ static void RtemsCacheValCache_Action_13( void )
 {
   rtems_interrupt_level level;
 
-  rtems_interrupt_local_disable(level);
+  rtems_interrupt_local_disable( level );
   CallFlushMultipleDataLines();
-  rtems_interrupt_local_enable(level);
+  rtems_interrupt_local_enable( level );
 }
 
 /**
@@ -458,9 +458,9 @@ static void RtemsCacheValCache_Action_15( void )
 {
   rtems_interrupt_level level;
 
-  rtems_interrupt_local_disable(level);
+  rtems_interrupt_local_disable( level );
   CallInvalidateMultipleDataLines();
-  rtems_interrupt_local_enable(level);
+  rtems_interrupt_local_enable( level );
 }
 
 /**
@@ -481,9 +481,9 @@ static void RtemsCacheValCache_Action_17( void )
 {
   rtems_interrupt_level level;
 
-  rtems_interrupt_local_disable(level);
+  rtems_interrupt_local_disable( level );
   CallInvalidateMultipleInstructionLines();
-  rtems_interrupt_local_enable(level);
+  rtems_interrupt_local_enable( level );
 }
 
 /**
@@ -503,9 +503,9 @@ static void RtemsCacheValCache_Action_19( void )
 {
   rtems_interrupt_level level;
 
-  rtems_interrupt_local_disable(level);
+  rtems_interrupt_local_disable( level );
   CallInstructionSyncAfterCodeChange();
-  rtems_interrupt_local_enable(level);
+  rtems_interrupt_local_enable( level );
 }
 
 /**
@@ -544,16 +544,16 @@ static void RtemsCacheValCache_Action_20( void )
  */
 static void RtemsCacheValCache_Action_21( void )
 {
-  size_t data_line_size;
-  size_t instruction_line_size;
-  size_t maximal_line_size;
+  size_t                data_line_size;
+  size_t                instruction_line_size;
+  size_t                maximal_line_size;
   rtems_interrupt_level level;
 
-  rtems_interrupt_local_disable(level);
+  rtems_interrupt_local_disable( level );
   data_line_size = rtems_cache_get_data_line_size();
   instruction_line_size = rtems_cache_get_instruction_line_size();
   maximal_line_size = rtems_cache_get_maximal_line_size();
-  rtems_interrupt_local_enable(level);
+  rtems_interrupt_local_enable( level );
 
   /*
    * Check that the maximal cache line size is greater than or equal to the
@@ -586,9 +586,9 @@ static void RtemsCacheValCache_Action_23( void )
 {
   rtems_interrupt_level level;
 
-  rtems_interrupt_local_disable(level);
+  rtems_interrupt_local_disable( level );
   CallGetDataSize();
-  rtems_interrupt_local_enable(level);
+  rtems_interrupt_local_enable( level );
 }
 
 /**
@@ -609,9 +609,9 @@ static void RtemsCacheValCache_Action_25( void )
 {
   rtems_interrupt_level level;
 
-  rtems_interrupt_local_disable(level);
+  rtems_interrupt_local_disable( level );
   CallGetInstructionSize();
-  rtems_interrupt_local_enable(level);
+  rtems_interrupt_local_enable( level );
 }
 
 /**

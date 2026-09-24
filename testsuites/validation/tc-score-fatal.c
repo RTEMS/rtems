@@ -119,8 +119,7 @@ typedef struct {
   rtems_fatal_code code;
 } ScoreValFatal_Context;
 
-static ScoreValFatal_Context
-  ScoreValFatal_Instance;
+static ScoreValFatal_Context ScoreValFatal_Instance;
 
 typedef ScoreValFatal_Context Context;
 

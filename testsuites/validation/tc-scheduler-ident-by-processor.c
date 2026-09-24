@@ -184,25 +184,17 @@ typedef struct {
 static RtemsSchedulerReqIdentByProcessor_Context
   RtemsSchedulerReqIdentByProcessor_Instance;
 
-static const char * const RtemsSchedulerReqIdentByProcessor_PreDesc_CPUOwnedByScheduler[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const
+  RtemsSchedulerReqIdentByProcessor_PreDesc_CPUOwnedByScheduler[] =
+    { "Yes", "No", "NA" };
 
-static const char * const RtemsSchedulerReqIdentByProcessor_PreDesc_CPUIndex[] = {
-  "Invalid",
-  "Valid",
-  "NA"
-};
+static const char *const RtemsSchedulerReqIdentByProcessor_PreDesc_CPUIndex[] =
+  { "Invalid", "Valid", "NA" };
 
-static const char * const RtemsSchedulerReqIdentByProcessor_PreDesc_Id[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsSchedulerReqIdentByProcessor_PreDesc_Id[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const * const RtemsSchedulerReqIdentByProcessor_PreDesc[] = {
+static const char *const *const RtemsSchedulerReqIdentByProcessor_PreDesc[] = {
   RtemsSchedulerReqIdentByProcessor_PreDesc_CPUOwnedByScheduler,
   RtemsSchedulerReqIdentByProcessor_PreDesc_CPUIndex,
   RtemsSchedulerReqIdentByProcessor_PreDesc_Id,
@@ -382,7 +374,7 @@ static void RtemsSchedulerReqIdentByProcessor_Setup(
   RtemsSchedulerReqIdentByProcessor_Context *ctx
 )
 {
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   rtems_status_code sc;
 
   sc = rtems_scheduler_ident(
@@ -415,7 +407,7 @@ static void RtemsSchedulerReqIdentByProcessor_Action(
   RtemsSchedulerReqIdentByProcessor_Context *ctx
 )
 {
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   rtems_status_code sc;
 
   if ( !ctx->cpu_has_scheduler ) {
@@ -426,7 +418,7 @@ static void RtemsSchedulerReqIdentByProcessor_Action(
 
   ctx->status = rtems_scheduler_ident_by_processor( ctx->cpu_index, ctx->id );
 
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   if ( !ctx->cpu_has_scheduler ) {
     sc = rtems_scheduler_add_processor( ctx->second_scheduler_id, 1 );
     T_rsc_success( sc );
@@ -508,9 +500,8 @@ RtemsSchedulerReqIdentByProcessor_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsSchedulerReqIdentByProcessor_Entries[
-    RtemsSchedulerReqIdentByProcessor_Map[ index ]
-  ];
+  return RtemsSchedulerReqIdentByProcessor_Entries
+    [ RtemsSchedulerReqIdentByProcessor_Map[ index ] ];
 }
 
 static void RtemsSchedulerReqIdentByProcessor_SetPreConditionStates(
@@ -518,7 +509,8 @@ static void RtemsSchedulerReqIdentByProcessor_SetPreConditionStates(
 )
 {
   if ( ctx->Map.entry.Pre_CPUOwnedByScheduler_NA ) {
-    ctx->Map.pcs[ 0 ] = RtemsSchedulerReqIdentByProcessor_Pre_CPUOwnedByScheduler_NA;
+    ctx->Map.pcs[ 0 ] =
+      RtemsSchedulerReqIdentByProcessor_Pre_CPUOwnedByScheduler_NA;
   } else {
     ctx->Map.pcs[ 0 ] = ctx->Map.pci[ 0 ];
   }
@@ -566,12 +558,15 @@ T_TEST_CASE_FIXTURE(
   ctx->Map.index = 0;
 
   for (
-    ctx->Map.pci[ 0 ] = RtemsSchedulerReqIdentByProcessor_Pre_CPUOwnedByScheduler_Yes;
-    ctx->Map.pci[ 0 ] < RtemsSchedulerReqIdentByProcessor_Pre_CPUOwnedByScheduler_NA;
+    ctx->Map.pci[ 0 ] =
+      RtemsSchedulerReqIdentByProcessor_Pre_CPUOwnedByScheduler_Yes;
+    ctx->Map.pci[ 0 ] <
+    RtemsSchedulerReqIdentByProcessor_Pre_CPUOwnedByScheduler_NA;
     ++ctx->Map.pci[ 0 ]
   ) {
     for (
-      ctx->Map.pci[ 1 ] = RtemsSchedulerReqIdentByProcessor_Pre_CPUIndex_Invalid;
+      ctx->Map.pci[ 1 ] =
+        RtemsSchedulerReqIdentByProcessor_Pre_CPUIndex_Invalid;
       ctx->Map.pci[ 1 ] < RtemsSchedulerReqIdentByProcessor_Pre_CPUIndex_NA;
       ++ctx->Map.pci[ 1 ]
     ) {

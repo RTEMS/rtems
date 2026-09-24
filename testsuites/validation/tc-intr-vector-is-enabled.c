@@ -189,25 +189,16 @@ typedef struct {
 static RtemsIntrReqVectorIsEnabled_Context
   RtemsIntrReqVectorIsEnabled_Instance;
 
-static const char * const RtemsIntrReqVectorIsEnabled_PreDesc_Vector[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsIntrReqVectorIsEnabled_PreDesc_Vector[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsIntrReqVectorIsEnabled_PreDesc_Enabled[] = {
-  "Obj",
-  "Null",
-  "NA"
-};
+static const char *const RtemsIntrReqVectorIsEnabled_PreDesc_Enabled[] =
+  { "Obj", "Null", "NA" };
 
-static const char * const RtemsIntrReqVectorIsEnabled_PreDesc_IsEnabled[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsIntrReqVectorIsEnabled_PreDesc_IsEnabled[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const RtemsIntrReqVectorIsEnabled_PreDesc[] = {
+static const char *const *const RtemsIntrReqVectorIsEnabled_PreDesc[] = {
   RtemsIntrReqVectorIsEnabled_PreDesc_Vector,
   RtemsIntrReqVectorIsEnabled_PreDesc_Enabled,
   RtemsIntrReqVectorIsEnabled_PreDesc_IsEnabled,
@@ -219,10 +210,7 @@ typedef RtemsIntrReqVectorIsEnabled_Context Context;
 static void CheckIsEnabled( Context *ctx, bool expected )
 {
   ctx->enabled_obj = !expected;
-  ctx->status = rtems_interrupt_vector_is_enabled(
-    ctx->vector,
-    ctx->enabled
-  );
+  ctx->status = rtems_interrupt_vector_is_enabled( ctx->vector, ctx->enabled );
   T_rsc_success( ctx->status );
   T_eq( ctx->enabled_obj, expected );
 }
@@ -232,7 +220,7 @@ static void Enable( const Context *ctx )
   rtems_status_code sc;
 
   sc = rtems_interrupt_vector_enable( ctx->vector );
- T_rsc_success( sc );
+  T_rsc_success( sc );
 }
 
 static void Disable( const Context *ctx )
@@ -301,11 +289,11 @@ static void WhileIsDisabled(
   if ( has_installed_entries ) {
     if ( attr->can_enable && attr->can_disable ) {
       rtems_status_code sc;
-      cpu_set_t affinity_old;
-      cpu_set_t affinity_new;
+      cpu_set_t         affinity_old;
+      cpu_set_t         affinity_new;
 
-      CPU_ZERO(&affinity_old);
-      CPU_ZERO(&affinity_new);
+      CPU_ZERO( &affinity_old );
+      CPU_ZERO( &affinity_new );
 
       if ( attr->can_get_affinity ) {
         /*
@@ -539,9 +527,7 @@ static void RtemsIntrReqVectorIsEnabled_Action(
 {
   if ( ctx->valid_vector && ctx->enabled != NULL ) {
     for (
-      ctx->vector = 0;
-      ctx->vector < BSP_INTERRUPT_VECTOR_COUNT;
-      ++ctx->vector
+      ctx->vector = 0; ctx->vector < BSP_INTERRUPT_VECTOR_COUNT; ++ctx->vector
     ) {
       rtems_status_code          sc;
       rtems_interrupt_attributes attr;
@@ -556,7 +542,9 @@ static void RtemsIntrReqVectorIsEnabled_Action(
 
       T_rsc_success( sc );
 
-      has_installed_entries = HasInterruptVectorEntriesInstalled( ctx->vector );
+      has_installed_entries = HasInterruptVectorEntriesInstalled(
+        ctx->vector
+      );
 
       if ( ctx->is_enabled ) {
         WhileIsEnabled( ctx, &attr, has_installed_entries );
@@ -640,9 +628,8 @@ RtemsIntrReqVectorIsEnabled_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsIntrReqVectorIsEnabled_Entries[
-    RtemsIntrReqVectorIsEnabled_Map[ index ]
-  ];
+  return RtemsIntrReqVectorIsEnabled_Entries
+    [ RtemsIntrReqVectorIsEnabled_Map[ index ] ];
 }
 
 static void RtemsIntrReqVectorIsEnabled_SetPreConditionStates(

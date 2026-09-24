@@ -112,8 +112,7 @@ typedef struct {
   rtems_fatal_code code;
 } ScoreSmpValFatal_Context;
 
-static ScoreSmpValFatal_Context
-  ScoreSmpValFatal_Instance;
+static ScoreSmpValFatal_Context ScoreSmpValFatal_Instance;
 
 static void TriggerTestCase( void )
 {
@@ -155,13 +154,9 @@ static void DoNothing( void *arg )
   (void) arg;
 }
 
-static const Per_CPU_Job_context job_context = {
-  .handler = DoNothing
-};
+static const Per_CPU_Job_context job_context = { .handler = DoNothing };
 
-Per_CPU_Job job = {
-  .context = &job_context
-};
+Per_CPU_Job job = { .context = &job_context };
 
 static T_fixture ScoreSmpValFatal_Fixture = {
   .setup = NULL,
@@ -210,7 +205,7 @@ static void ScoreSmpValFatal_Action_0( ScoreSmpValFatal_Context *ctx )
  */
 static void ScoreSmpValFatal_Action_1( ScoreSmpValFatal_Context *ctx )
 {
-  Per_CPU_Control * const cpu = _Per_CPU_Get_by_index( 0 );
+  Per_CPU_Control *const cpu = _Per_CPU_Get_by_index( 0 );
 
   SetFatalHandler( FatalRecordAndJump, ctx );
   _Per_CPU_Submit_job( cpu, &job );
@@ -225,11 +220,7 @@ static void ScoreSmpValFatal_Action_1( ScoreSmpValFatal_Context *ctx )
     1
   );
   T_step_eq_int( 4, fatal_source, RTEMS_FATAL_SOURCE_SMP );
-  T_step_eq_ulong(
-    5,
-    fatal_code,
-    SMP_FATAL_WRONG_CPU_STATE_TO_PERFORM_JOBS
-  );
+  T_step_eq_ulong( 5, fatal_code, SMP_FATAL_WRONG_CPU_STATE_TO_PERFORM_JOBS );
   SetFatalHandler( NULL, NULL );
 }
 
@@ -244,7 +235,7 @@ static void ScoreSmpValFatal_Action_2( ScoreSmpValFatal_Context *ctx )
    * _SMP_Start_multitasking_on_secondary_processor() does not access the
    * structure.
    */
-  Per_CPU_Control * const cpu = _Per_CPU_Get_by_index( 3 );
+  Per_CPU_Control *const cpu = _Per_CPU_Get_by_index( 3 );
 
   SetFatalHandler( FatalRecordAndJump, ctx );
 
@@ -272,7 +263,7 @@ static void ScoreSmpValFatal_Action_2( ScoreSmpValFatal_Context *ctx )
  */
 static void ScoreSmpValFatal_Action_3( ScoreSmpValFatal_Context *ctx )
 {
-  Per_CPU_Control * const cpu = _Per_CPU_Get_by_index( 2 );
+  Per_CPU_Control *const cpu = _Per_CPU_Get_by_index( 2 );
 
   SetFatalHandler( FatalRecordAndJump, ctx );
 

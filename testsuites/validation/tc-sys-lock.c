@@ -122,15 +122,11 @@ typedef struct {
   TQMtxContext tq_mtx_ctx;
 } NewlibValSysLock_Context;
 
-static NewlibValSysLock_Context
-  NewlibValSysLock_Instance;
+static NewlibValSysLock_Context NewlibValSysLock_Instance;
 
 static Status_Control Enqueue( TQContext *ctx, TQWait wait )
 {
-  const struct timespec abstime = {
-    .tv_sec = INT64_MAX,
-    .tv_nsec = 0
-  };
+  const struct timespec abstime = { .tv_sec = INT64_MAX, .tv_nsec = 0 };
   int                   eno;
 
   switch ( wait ) {
@@ -170,10 +166,7 @@ static rtems_tcb *GetOwner( TQContext *ctx )
 
 static Status_Control RecursiveEnqueue( TQContext *ctx, TQWait wait )
 {
-  const struct timespec abstime = {
-    .tv_sec = INT64_MAX,
-    .tv_nsec = 0
-  };
+  const struct timespec abstime = { .tv_sec = INT64_MAX, .tv_nsec = 0 };
   int                   eno;
 
   switch ( wait ) {
@@ -262,10 +255,7 @@ static T_fixture NewlibValSysLock_Fixture = {
  */
 static void NewlibValSysLock_Action_0( NewlibValSysLock_Context *ctx )
 {
-  const struct timespec invalid_abstime = {
-    .tv_sec = -1,
-    .tv_nsec = -1
-  };
+  const struct timespec invalid_abstime = { .tv_sec = -1, .tv_nsec = -1 };
   int                   eno;
   struct _Mutex_Control mutex;
 
@@ -313,9 +303,7 @@ static void NewlibValSysLock_Action_0( NewlibValSysLock_Context *ctx )
    */
   ctx->tq_mtx_ctx.base.wait = TQ_WAIT_FOREVER;
   ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_DEADLOCK;
-  ScoreTqReqTimeoutPriorityInherit_Run(
-    &ctx->tq_mtx_ctx.base
-  );
+  ScoreTqReqTimeoutPriorityInherit_Run( &ctx->tq_mtx_ctx.base );
 
   /*
    * Validate the _Mutex_Acquire() directive.
@@ -342,11 +330,8 @@ static void NewlibValSysLock_Action_0( NewlibValSysLock_Context *ctx )
  */
 static void NewlibValSysLock_Action_1( NewlibValSysLock_Context *ctx )
 {
-  const struct timespec invalid_abstime = {
-    .tv_sec = -1,
-    .tv_nsec = -1
-  };
-  int                             eno;
+  const struct timespec invalid_abstime = { .tv_sec = -1, .tv_nsec = -1 };
+  int                   eno;
   struct _Mutex_recursive_Control mutex;
 
   _Mutex_recursive_Initialize( &mutex );
@@ -393,9 +378,7 @@ static void NewlibValSysLock_Action_1( NewlibValSysLock_Context *ctx )
    */
   ctx->tq_mtx_ctx.base.wait = TQ_WAIT_FOREVER;
   ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_ALLOWED;
-  ScoreTqReqTimeoutPriorityInherit_Run(
-    &ctx->tq_mtx_ctx.base
-  );
+  ScoreTqReqTimeoutPriorityInherit_Run( &ctx->tq_mtx_ctx.base );
 
   /*
    * Validate the _Mutex_recursive_Acquire() directive.

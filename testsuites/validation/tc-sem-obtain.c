@@ -133,7 +133,7 @@ typedef struct {
    * @brief This member contains the thread queue test context.
    */
   union {
-    TQContext tq_ctx;
+    TQContext    tq_ctx;
     TQMtxContext tq_mtx_ctx;
     TQSemContext tq_sem_ctx;
   };
@@ -172,10 +172,9 @@ typedef struct {
   } Map;
 } RtemsSemReqObtain_Context;
 
-static RtemsSemReqObtain_Context
-  RtemsSemReqObtain_Instance;
+static RtemsSemReqObtain_Context RtemsSemReqObtain_Instance;
 
-static const char * const RtemsSemReqObtain_PreDesc_Class[] = {
+static const char *const RtemsSemReqObtain_PreDesc_Class[] = {
   "Counting",
   "Simple",
   "Binary",
@@ -185,26 +184,16 @@ static const char * const RtemsSemReqObtain_PreDesc_Class[] = {
   "NA"
 };
 
-static const char * const RtemsSemReqObtain_PreDesc_Discipline[] = {
-  "FIFO",
-  "Priority",
-  "NA"
-};
+static const char *const RtemsSemReqObtain_PreDesc_Discipline[] =
+  { "FIFO", "Priority", "NA" };
 
-static const char * const RtemsSemReqObtain_PreDesc_Id[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsSemReqObtain_PreDesc_Id[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsSemReqObtain_PreDesc_Wait[] = {
-  "No",
-  "Timeout",
-  "Forever",
-  "NA"
-};
+static const char *const RtemsSemReqObtain_PreDesc_Wait[] =
+  { "No", "Timeout", "Forever", "NA" };
 
-static const char * const * const RtemsSemReqObtain_PreDesc[] = {
+static const char *const *const RtemsSemReqObtain_PreDesc[] = {
   RtemsSemReqObtain_PreDesc_Class,
   RtemsSemReqObtain_PreDesc_Discipline,
   RtemsSemReqObtain_PreDesc_Id,
@@ -267,7 +256,7 @@ static void RtemsSemReqObtain_Pre_Class_Prepare(
        * While the semaphore object is a MrsP semaphore.
        */
       ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE |
-        RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
+                            RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
       break;
     }
 
@@ -496,7 +485,7 @@ static void RtemsSemReqObtain_Post_Action_Check(
        * spec:/score/mtx/req/seize-try where an enqueue is sticky, a recursive
        * seize returns an error status, and a priority ceiling is used.
        */
-      #if defined(RTEMS_SMP)
+      #if defined( RTEMS_SMP )
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_STICKY;
       ctx->tq_mtx_ctx.protocol = TQ_MTX_MRSP;
       ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_DEADLOCK;
@@ -514,7 +503,7 @@ static void RtemsSemReqObtain_Post_Action_Check(
        * spec:/score/mtx/req/seize-wait where an enqueue is sticky, a recursive
        * seize returns an error status, and a priority ceiling is used.
        */
-      #if defined(RTEMS_SMP)
+      #if defined( RTEMS_SMP )
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_STICKY;
       ctx->tq_mtx_ctx.protocol = TQ_MTX_MRSP;
       ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_DEADLOCK;
@@ -585,7 +574,7 @@ static void RtemsSemReqObtain_Action( RtemsSemReqObtain_Context *ctx )
   );
   T_rsc_success( sc );
 
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   if ( ( ctx->attribute_set & RTEMS_MULTIPROCESSOR_RESOURCE_SHARING ) != 0 ) {
     rtems_task_priority prio;
 
@@ -603,7 +592,8 @@ static void RtemsSemReqObtain_Action( RtemsSemReqObtain_Context *ctx )
 static void RtemsSemReqObtain_Cleanup( RtemsSemReqObtain_Context *ctx )
 {
   rtems_status_code sc;
-  sc = rtems_semaphore_delete( ctx->tq_ctx.thread_queue_id ); T_rsc_success( sc );
+  sc = rtems_semaphore_delete( ctx->tq_ctx.thread_queue_id );
+  T_rsc_success( sc );
 }
 
 /* clang-format off */
@@ -670,9 +660,7 @@ static inline RtemsSemReqObtain_Entry RtemsSemReqObtain_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsSemReqObtain_Entries[
-    RtemsSemReqObtain_Map[ index ]
-  ];
+  return RtemsSemReqObtain_Entries[ RtemsSemReqObtain_Map[ index ] ];
 }
 
 static void RtemsSemReqObtain_TestVariant( RtemsSemReqObtain_Context *ctx )

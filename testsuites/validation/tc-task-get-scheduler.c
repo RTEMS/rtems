@@ -154,22 +154,15 @@ typedef struct {
   } Map;
 } RtemsTaskReqGetScheduler_Context;
 
-static RtemsTaskReqGetScheduler_Context
-  RtemsTaskReqGetScheduler_Instance;
+static RtemsTaskReqGetScheduler_Context RtemsTaskReqGetScheduler_Instance;
 
-static const char * const RtemsTaskReqGetScheduler_PreDesc_Id[] = {
-  "Invalid",
-  "Task",
-  "NA"
-};
+static const char *const RtemsTaskReqGetScheduler_PreDesc_Id[] =
+  { "Invalid", "Task", "NA" };
 
-static const char * const RtemsTaskReqGetScheduler_PreDesc_SchedulerID[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsTaskReqGetScheduler_PreDesc_SchedulerID[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const * const RtemsTaskReqGetScheduler_PreDesc[] = {
+static const char *const *const RtemsTaskReqGetScheduler_PreDesc[] = {
   RtemsTaskReqGetScheduler_PreDesc_Id,
   RtemsTaskReqGetScheduler_PreDesc_SchedulerID,
   NULL
@@ -367,9 +360,8 @@ static inline RtemsTaskReqGetScheduler_Entry RtemsTaskReqGetScheduler_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsTaskReqGetScheduler_Entries[
-    RtemsTaskReqGetScheduler_Map[ index ]
-  ];
+  return RtemsTaskReqGetScheduler_Entries
+    [ RtemsTaskReqGetScheduler_Map[ index ] ];
 }
 
 static void RtemsTaskReqGetScheduler_TestVariant(

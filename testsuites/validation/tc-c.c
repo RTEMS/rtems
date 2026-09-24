@@ -104,8 +104,8 @@ static bool Compare(
  */
 static void CValC_Action_0( void )
 {
-  uint8_t  src[sizeof( long ) * 10];
-  uint8_t  dst[sizeof( long ) * 10];
+  uint8_t  src[ sizeof( long ) * 10 ];
+  uint8_t  dst[ sizeof( long ) * 10 ];
   uint8_t *begin;
   uint8_t *end;
   uint8_t *aligned_src;
@@ -118,10 +118,10 @@ static void CValC_Action_0( void )
   aligned_src = (uint8_t *) RTEMS_ALIGN_UP( (uintptr_t) src, sizeof( long ) );
   aligned_dst = (uint8_t *) RTEMS_ALIGN_UP( (uintptr_t) dst, sizeof( long ) );
 
-  for ( offset_src = 0; offset_src < sizeof( long ); ++offset_src  ) {
+  for ( offset_src = 0; offset_src < sizeof( long ); ++offset_src ) {
     size_t offset_dst;
 
-    for ( offset_dst = 0; offset_dst < sizeof( long ); ++offset_dst  ) {
+    for ( offset_dst = 0; offset_dst < sizeof( long ); ++offset_dst ) {
       size_t size;
 
       for ( size = 0; size < sizeof( long ) * 8; ++size ) {
@@ -148,7 +148,7 @@ static void CValC_Action_0( void )
  */
 static void CValC_Action_1( void )
 {
-  uint8_t  dst[sizeof( long ) * 10];
+  uint8_t  dst[ sizeof( long ) * 10 ];
   uint8_t *begin;
   uint8_t *end;
   uint8_t *aligned;
@@ -158,7 +158,7 @@ static void CValC_Action_1( void )
   end = begin + sizeof( dst );
   aligned = (uint8_t *) RTEMS_ALIGN_UP( (uintptr_t) dst, sizeof( long ) );
 
-  for ( offset = 0; offset < sizeof( long ); ++offset  ) {
+  for ( offset = 0; offset < sizeof( long ); ++offset ) {
     size_t size;
 
     for ( size = 0; size < sizeof( long ) * 8; ++size ) {

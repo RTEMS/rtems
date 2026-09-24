@@ -142,7 +142,7 @@ void *__wrap__CPU_Thread_Idle_body( void *arg )
     _ISR_Set_level( 0 );
     longjmp( before_terminate, 1 );
   } else {
-#if defined(RTEMS_GCOV_COVERAGE)
+#if defined( RTEMS_GCOV_COVERAGE )
     rtems_test_gcov_dump_info();
 #endif
     return __real__CPU_Thread_Idle_body( arg );
@@ -331,36 +331,12 @@ static void ScoreInterrValTerminate_Action_0( void )
   /*
    * Check that the fatal extensions were invoked with the expected source.
    */
-  T_step_eq_int(
-    7,
-    info[ 0 ].source,
-    RTEMS_FATAL_SOURCE_APPLICATION
-  );
-  T_step_eq_int(
-    8,
-    info[ 1 ].source,
-    RTEMS_FATAL_SOURCE_APPLICATION
-  );
-  T_step_eq_int(
-    9,
-    info[ 2 ].source,
-    RTEMS_FATAL_SOURCE_APPLICATION
-  );
-  T_step_eq_int(
-    10,
-    info[ 4 ].source,
-    RTEMS_FATAL_SOURCE_APPLICATION
-  );
-  T_step_eq_int(
-    11,
-    info[ 5 ].source,
-    RTEMS_FATAL_SOURCE_APPLICATION
-  );
-  T_step_eq_int(
-    12,
-    info[ 6 ].source,
-    RTEMS_FATAL_SOURCE_APPLICATION
-  );
+  T_step_eq_int( 7, info[ 0 ].source, RTEMS_FATAL_SOURCE_APPLICATION );
+  T_step_eq_int( 8, info[ 1 ].source, RTEMS_FATAL_SOURCE_APPLICATION );
+  T_step_eq_int( 9, info[ 2 ].source, RTEMS_FATAL_SOURCE_APPLICATION );
+  T_step_eq_int( 10, info[ 4 ].source, RTEMS_FATAL_SOURCE_APPLICATION );
+  T_step_eq_int( 11, info[ 5 ].source, RTEMS_FATAL_SOURCE_APPLICATION );
+  T_step_eq_int( 12, info[ 6 ].source, RTEMS_FATAL_SOURCE_APPLICATION );
 
   /*
    * Check that the fatal extensions were invoked with the expected always set
@@ -414,11 +390,7 @@ static void ScoreInterrValTerminate_Action_0( void )
    * Check that an idle loop executed after invocation of the user extensions.
    */
   T_step_eq_uint( 38, idle_counter, 7 );
-  T_step_eq_uint(
-    39,
-    _Atomic_Load_uint( &counter, ATOMIC_ORDER_RELAXED ),
-    7
-  );
+  T_step_eq_uint( 39, _Atomic_Load_uint( &counter, ATOMIC_ORDER_RELAXED ), 7 );
 }
 
 /**

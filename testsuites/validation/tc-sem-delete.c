@@ -213,10 +213,9 @@ typedef struct {
   } Map;
 } RtemsSemReqDelete_Context;
 
-static RtemsSemReqDelete_Context
-  RtemsSemReqDelete_Instance;
+static RtemsSemReqDelete_Context RtemsSemReqDelete_Instance;
 
-static const char * const RtemsSemReqDelete_PreDesc_Id[] = {
+static const char *const RtemsSemReqDelete_PreDesc_Id[] = {
   "NoObj",
   "Counting",
   "Simple",
@@ -227,20 +226,13 @@ static const char * const RtemsSemReqDelete_PreDesc_Id[] = {
   "NA"
 };
 
-static const char * const RtemsSemReqDelete_PreDesc_Discipline[] = {
-  "FIFO",
-  "Priority",
-  "NA"
-};
+static const char *const RtemsSemReqDelete_PreDesc_Discipline[] =
+  { "FIFO", "Priority", "NA" };
 
-static const char * const RtemsSemReqDelete_PreDesc_State[] = {
-  "GtZeroOrNoOwner",
-  "Zero",
-  "Blocked",
-  "NA"
-};
+static const char *const RtemsSemReqDelete_PreDesc_State[] =
+  { "GtZeroOrNoOwner", "Zero", "Blocked", "NA" };
 
-static const char * const * const RtemsSemReqDelete_PreDesc[] = {
+static const char *const *const RtemsSemReqDelete_PreDesc[] = {
   RtemsSemReqDelete_PreDesc_Id,
   RtemsSemReqDelete_PreDesc_Discipline,
   RtemsSemReqDelete_PreDesc_State,
@@ -371,7 +363,7 @@ static void RtemsSemReqDelete_Pre_Id_Prepare(
        * While the ``id`` parameter is associated with a MrsP semaphore.
        */
       ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE |
-        RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
+                            RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
       break;
     }
 
@@ -704,9 +696,7 @@ static inline RtemsSemReqDelete_Entry RtemsSemReqDelete_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsSemReqDelete_Entries[
-    RtemsSemReqDelete_Map[ index ]
-  ];
+  return RtemsSemReqDelete_Entries[ RtemsSemReqDelete_Map[ index ] ];
 }
 
 static void RtemsSemReqDelete_TestVariant( RtemsSemReqDelete_Context *ctx )

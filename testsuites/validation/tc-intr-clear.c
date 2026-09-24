@@ -167,22 +167,15 @@ typedef struct {
   } Map;
 } RtemsIntrReqClear_Context;
 
-static RtemsIntrReqClear_Context
-  RtemsIntrReqClear_Instance;
+static RtemsIntrReqClear_Context RtemsIntrReqClear_Instance;
 
-static const char * const RtemsIntrReqClear_PreDesc_Vector[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsIntrReqClear_PreDesc_Vector[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsIntrReqClear_PreDesc_CanClear[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsIntrReqClear_PreDesc_CanClear[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const RtemsIntrReqClear_PreDesc[] = {
+static const char *const *const RtemsIntrReqClear_PreDesc[] = {
   RtemsIntrReqClear_PreDesc_Vector,
   RtemsIntrReqClear_PreDesc_CanClear,
   NULL
@@ -222,10 +215,7 @@ static void Disable( const Context *ctx )
   T_rsc_success( sc );
 }
 
-static void Raise(
-  const Context                    *ctx,
-  const rtems_interrupt_attributes *attr
-)
+static void Raise( const Context *ctx, const rtems_interrupt_attributes *attr )
 {
   rtems_status_code sc;
 
@@ -326,7 +316,7 @@ static void CheckClear(
 
     Clear( ctx );
 
-    if ( !IsPending( ctx) && ( attr->can_enable || IsEnabled( ctx ) ) ) {
+    if ( !IsPending( ctx ) && ( attr->can_enable || IsEnabled( ctx ) ) ) {
       T_false( IsPending( ctx ) );
       Clear( ctx );
       T_false( IsPending( ctx ) );
@@ -496,9 +486,7 @@ static void RtemsIntrReqClear_Action( RtemsIntrReqClear_Context *ctx )
 {
   if ( ctx->valid_vector ) {
     for (
-      ctx->vector = 0;
-      ctx->vector < BSP_INTERRUPT_VECTOR_COUNT;
-      ++ctx->vector
+      ctx->vector = 0; ctx->vector < BSP_INTERRUPT_VECTOR_COUNT; ++ctx->vector
     ) {
       rtems_status_code          sc;
       rtems_interrupt_attributes attr;
@@ -513,7 +501,9 @@ static void RtemsIntrReqClear_Action( RtemsIntrReqClear_Context *ctx )
 
       T_rsc_success( sc );
 
-      has_installed_entries = HasInterruptVectorEntriesInstalled( ctx->vector );
+      has_installed_entries = HasInterruptVectorEntriesInstalled(
+        ctx->vector
+      );
       CheckClear( ctx, &attr, has_installed_entries );
     }
   } else {
@@ -570,9 +560,7 @@ static inline RtemsIntrReqClear_Entry RtemsIntrReqClear_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsIntrReqClear_Entries[
-    RtemsIntrReqClear_Map[ index ]
-  ];
+  return RtemsIntrReqClear_Entries[ RtemsIntrReqClear_Map[ index ] ];
 }
 
 static void RtemsIntrReqClear_SetPreConditionStates(

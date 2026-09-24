@@ -308,71 +308,40 @@ typedef struct {
   } Map;
 } RtemsTaskReqSetScheduler_Context;
 
-static RtemsTaskReqSetScheduler_Context
-  RtemsTaskReqSetScheduler_Instance;
+static RtemsTaskReqSetScheduler_Context RtemsTaskReqSetScheduler_Instance;
 
-static const char * const RtemsTaskReqSetScheduler_PreDesc_TaskId[] = {
-  "Task",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsTaskReqSetScheduler_PreDesc_TaskId[] =
+  { "Task", "Invalid", "NA" };
 
-static const char * const RtemsTaskReqSetScheduler_PreDesc_Scheduler[] = {
-  "Home",
-  "Other",
-  "NA"
-};
+static const char *const RtemsTaskReqSetScheduler_PreDesc_Scheduler[] =
+  { "Home", "Other", "NA" };
 
-static const char * const RtemsTaskReqSetScheduler_PreDesc_SchedulerHasCPU[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqSetScheduler_PreDesc_SchedulerHasCPU[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqSetScheduler_PreDesc_SchedulerId[] = {
-  "Scheduler",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsTaskReqSetScheduler_PreDesc_SchedulerId[] =
+  { "Scheduler", "Invalid", "NA" };
 
-static const char * const RtemsTaskReqSetScheduler_PreDesc_Priority[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsTaskReqSetScheduler_PreDesc_Priority[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsTaskReqSetScheduler_PreDesc_HomePriority[] = {
-  "Real",
-  "More",
-  "NA"
-};
+static const char *const RtemsTaskReqSetScheduler_PreDesc_HomePriority[] =
+  { "Real", "More", "NA" };
 
-static const char * const RtemsTaskReqSetScheduler_PreDesc_EligiblePriorities[] = {
-  "OnlyOne",
-  "More",
-  "NA"
-};
+static const char *const
+  RtemsTaskReqSetScheduler_PreDesc_EligiblePriorities[] =
+    { "OnlyOne", "More", "NA" };
 
-static const char * const RtemsTaskReqSetScheduler_PreDesc_Pinned[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqSetScheduler_PreDesc_Pinned[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqSetScheduler_PreDesc_TaskState[] = {
-  "Ready",
-  "Blocked",
-  "Enqueued",
-  "NA"
-};
+static const char *const RtemsTaskReqSetScheduler_PreDesc_TaskState[] =
+  { "Ready", "Blocked", "Enqueued", "NA" };
 
-static const char * const RtemsTaskReqSetScheduler_PreDesc_AffinitySupported[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqSetScheduler_PreDesc_AffinitySupported[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const RtemsTaskReqSetScheduler_PreDesc[] = {
+static const char *const *const RtemsTaskReqSetScheduler_PreDesc[] = {
   RtemsTaskReqSetScheduler_PreDesc_TaskId,
   RtemsTaskReqSetScheduler_PreDesc_Scheduler,
   RtemsTaskReqSetScheduler_PreDesc_SchedulerHasCPU,
@@ -907,10 +876,7 @@ static void RtemsTaskReqSetScheduler_Setup(
   ctx->runner_id = rtems_task_self();
   SetSelfPriority( PRIO_NORMAL );
 
-  sc = rtems_scheduler_ident(
-    TEST_SCHEDULER_A_NAME,
-    &ctx->scheduler_a_id
-  );
+  sc = rtems_scheduler_ident( TEST_SCHEDULER_A_NAME, &ctx->scheduler_a_id );
   T_rsc_success( sc );
 
   for ( i = 0; i < RTEMS_ARRAY_SIZE( ctx->mutex_id ); ++i ) {
@@ -922,7 +888,7 @@ static void RtemsTaskReqSetScheduler_Setup(
     StartTask( ctx->worker_id[ i ], Worker, ctx );
   }
 
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   sc = rtems_scheduler_ident( TEST_SCHEDULER_B_NAME, &ctx->scheduler_b_id );
   T_rsc_success( sc );
 
@@ -1059,7 +1025,7 @@ static void RtemsTaskReqSetScheduler_Action(
     T_rsc_success( sc );
   }
 
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   sc = rtems_task_get_priority(
     ctx->worker_id[ 0 ],
     ctx->scheduler_b_id,
@@ -1306,9 +1272,8 @@ static inline RtemsTaskReqSetScheduler_Entry RtemsTaskReqSetScheduler_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsTaskReqSetScheduler_Entries[
-    RtemsTaskReqSetScheduler_Map[ index ]
-  ];
+  return RtemsTaskReqSetScheduler_Entries
+    [ RtemsTaskReqSetScheduler_Map[ index ] ];
 }
 
 static void RtemsTaskReqSetScheduler_SetPreConditionStates(
@@ -1436,7 +1401,8 @@ T_TEST_CASE_FIXTURE(
         ++ctx->Map.pci[ 2 ]
       ) {
         for (
-          ctx->Map.pci[ 3 ] = RtemsTaskReqSetScheduler_Pre_SchedulerId_Scheduler;
+          ctx->Map.pci[ 3 ] =
+            RtemsTaskReqSetScheduler_Pre_SchedulerId_Scheduler;
           ctx->Map.pci[ 3 ] < RtemsTaskReqSetScheduler_Pre_SchedulerId_NA;
           ++ctx->Map.pci[ 3 ]
         ) {
@@ -1446,13 +1412,16 @@ T_TEST_CASE_FIXTURE(
             ++ctx->Map.pci[ 4 ]
           ) {
             for (
-              ctx->Map.pci[ 5 ] = RtemsTaskReqSetScheduler_Pre_HomePriority_Real;
+              ctx->Map.pci[ 5 ] =
+                RtemsTaskReqSetScheduler_Pre_HomePriority_Real;
               ctx->Map.pci[ 5 ] < RtemsTaskReqSetScheduler_Pre_HomePriority_NA;
               ++ctx->Map.pci[ 5 ]
             ) {
               for (
-                ctx->Map.pci[ 6 ] = RtemsTaskReqSetScheduler_Pre_EligiblePriorities_OnlyOne;
-                ctx->Map.pci[ 6 ] < RtemsTaskReqSetScheduler_Pre_EligiblePriorities_NA;
+                ctx->Map.pci[ 6 ] =
+                  RtemsTaskReqSetScheduler_Pre_EligiblePriorities_OnlyOne;
+                ctx->Map.pci[ 6 ] <
+                RtemsTaskReqSetScheduler_Pre_EligiblePriorities_NA;
                 ++ctx->Map.pci[ 6 ]
               ) {
                 for (
@@ -1461,13 +1430,17 @@ T_TEST_CASE_FIXTURE(
                   ++ctx->Map.pci[ 7 ]
                 ) {
                   for (
-                    ctx->Map.pci[ 8 ] = RtemsTaskReqSetScheduler_Pre_TaskState_Ready;
-                    ctx->Map.pci[ 8 ] < RtemsTaskReqSetScheduler_Pre_TaskState_NA;
+                    ctx->Map.pci[ 8 ] =
+                      RtemsTaskReqSetScheduler_Pre_TaskState_Ready;
+                    ctx->Map.pci[ 8 ] <
+                    RtemsTaskReqSetScheduler_Pre_TaskState_NA;
                     ++ctx->Map.pci[ 8 ]
                   ) {
                     for (
-                      ctx->Map.pci[ 9 ] = RtemsTaskReqSetScheduler_Pre_AffinitySupported_Yes;
-                      ctx->Map.pci[ 9 ] < RtemsTaskReqSetScheduler_Pre_AffinitySupported_NA;
+                      ctx->Map.pci[ 9 ] =
+                        RtemsTaskReqSetScheduler_Pre_AffinitySupported_Yes;
+                      ctx->Map.pci[ 9 ] <
+                      RtemsTaskReqSetScheduler_Pre_AffinitySupported_NA;
                       ++ctx->Map.pci[ 9 ]
                     ) {
                       ctx->Map.entry = RtemsTaskReqSetScheduler_PopEntry(

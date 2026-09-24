@@ -143,10 +143,9 @@ typedef struct {
   } Map;
 } RtemsSemReqTimeout_Context;
 
-static RtemsSemReqTimeout_Context
-  RtemsSemReqTimeout_Instance;
+static RtemsSemReqTimeout_Context RtemsSemReqTimeout_Instance;
 
-static const char * const RtemsSemReqTimeout_PreDesc_Class[] = {
+static const char *const RtemsSemReqTimeout_PreDesc_Class[] = {
   "Counting",
   "Simple",
   "Binary",
@@ -156,19 +155,16 @@ static const char * const RtemsSemReqTimeout_PreDesc_Class[] = {
   "NA"
 };
 
-static const char * const RtemsSemReqTimeout_PreDesc_Discipline[] = {
-  "FIFO",
-  "Priority",
-  "NA"
-};
+static const char *const RtemsSemReqTimeout_PreDesc_Discipline[] =
+  { "FIFO", "Priority", "NA" };
 
-static const char * const * const RtemsSemReqTimeout_PreDesc[] = {
+static const char *const *const RtemsSemReqTimeout_PreDesc[] = {
   RtemsSemReqTimeout_PreDesc_Class,
   RtemsSemReqTimeout_PreDesc_Discipline,
   NULL
 };
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 #include "tr-tq-timeout-mrsp.h"
 #endif
 
@@ -228,8 +224,8 @@ static void RtemsSemReqTimeout_Pre_Class_Prepare(
        * While the semaphore object is a MrsP semaphore.
        */
       ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE |
-        RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
-      #if defined(RTEMS_SMP)
+                            RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
+      #if defined( RTEMS_SMP )
       ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_STICKY;
       #else
       ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_BLOCKS;
@@ -292,7 +288,7 @@ static void RtemsSemReqTimeout_Post_Action_Check(
        * The semaphore obtain timeout actions shall be done as specified by
        * spec:/score/tq/req/timeout-mrsp.
        */
-      #if defined(RTEMS_SMP)
+      #if defined( RTEMS_SMP )
       ctx->tq_ctx.wait = TQ_WAIT_TIMED;
       ScoreTqReqTimeoutMrsp_Run( &ctx->tq_ctx );
       #else
@@ -430,9 +426,7 @@ static inline RtemsSemReqTimeout_Entry RtemsSemReqTimeout_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsSemReqTimeout_Entries[
-    RtemsSemReqTimeout_Map[ index ]
-  ];
+  return RtemsSemReqTimeout_Entries[ RtemsSemReqTimeout_Map[ index ] ];
 }
 
 static void RtemsSemReqTimeout_TestVariant( RtemsSemReqTimeout_Context *ctx )

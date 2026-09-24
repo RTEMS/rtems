@@ -131,26 +131,16 @@ typedef struct {
   } Map;
 } RtemsPartReqDelete_Context;
 
-static RtemsPartReqDelete_Context
-  RtemsPartReqDelete_Instance;
+static RtemsPartReqDelete_Context RtemsPartReqDelete_Instance;
 
-static const char * const RtemsPartReqDelete_PreDesc_Id[] = {
-  "NoObj",
-  "Part",
-  "NA"
-};
+static const char *const RtemsPartReqDelete_PreDesc_Id[] =
+  { "NoObj", "Part", "NA" };
 
-static const char * const RtemsPartReqDelete_PreDesc_InUse[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsPartReqDelete_PreDesc_InUse[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const RtemsPartReqDelete_PreDesc[] = {
-  RtemsPartReqDelete_PreDesc_Id,
-  RtemsPartReqDelete_PreDesc_InUse,
-  NULL
-};
+static const char *const *const RtemsPartReqDelete_PreDesc[] =
+  { RtemsPartReqDelete_PreDesc_Id, RtemsPartReqDelete_PreDesc_InUse, NULL };
 
 #define PART_NAME rtems_build_name( 'N', 'A', 'M', 'E' )
 
@@ -158,8 +148,9 @@ static const char * const * const RtemsPartReqDelete_PreDesc[] = {
 
 #define BUFFER_SIZE ( 2 * sizeof( void * ) )
 
-static RTEMS_ALIGNED( RTEMS_PARTITION_ALIGNMENT ) uint8_t
-  buffers[ BUFFER_COUNT ][ BUFFER_SIZE ];
+static RTEMS_ALIGNED(
+  RTEMS_PARTITION_ALIGNMENT
+) uint8_t buffers[ BUFFER_COUNT ][ BUFFER_SIZE ];
 
 static void RtemsPartReqDelete_Pre_Id_Prepare(
   RtemsPartReqDelete_Context *ctx,
@@ -252,7 +243,7 @@ static void RtemsPartReqDelete_Post_Status_Check(
 
       id = 0xffffffff;
       sc = rtems_partition_ident( PART_NAME, RTEMS_SEARCH_LOCAL_NODE, &id );
-      T_rsc_success( sc);
+      T_rsc_success( sc );
       T_eq_u32( id, ctx->id_value );
       break;
     }
@@ -265,7 +256,7 @@ static void RtemsPartReqDelete_Post_Status_Check(
 
       id = 0xffffffff;
       sc = rtems_partition_ident( PART_NAME, RTEMS_SEARCH_LOCAL_NODE, &id );
-      T_rsc_success( sc);
+      T_rsc_success( sc );
       T_eq_u32( id, ctx->id_value );
       break;
     }
@@ -355,9 +346,7 @@ static inline RtemsPartReqDelete_Entry RtemsPartReqDelete_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsPartReqDelete_Entries[
-    RtemsPartReqDelete_Map[ index ]
-  ];
+  return RtemsPartReqDelete_Entries[ RtemsPartReqDelete_Map[ index ] ];
 }
 
 static void RtemsPartReqDelete_TestVariant( RtemsPartReqDelete_Context *ctx )

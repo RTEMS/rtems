@@ -110,8 +110,7 @@ typedef struct {
   T_ticks end;
 } RtemsTaskValPerf_Context;
 
-static RtemsTaskValPerf_Context
-  RtemsTaskValPerf_Instance;
+static RtemsTaskValPerf_Context RtemsTaskValPerf_Instance;
 
 #define EVENT_RESTART RTEMS_EVENT_0
 
@@ -121,12 +120,11 @@ static RtemsTaskValPerf_Context
 
 typedef RtemsTaskValPerf_Context Context;
 
-RTEMS_ALIGNED( RTEMS_TASK_STORAGE_ALIGNMENT ) static char task_storage[
-  RTEMS_TASK_STORAGE_SIZE(
-    TEST_MAXIMUM_TLS_SIZE + TEST_MINIMUM_STACK_SIZE,
-    RTEMS_DEFAULT_ATTRIBUTES
-  )
-];
+RTEMS_ALIGNED( RTEMS_TASK_STORAGE_ALIGNMENT )
+static char task_storage[ RTEMS_TASK_STORAGE_SIZE(
+  TEST_MAXIMUM_TLS_SIZE + TEST_MINIMUM_STACK_SIZE,
+  RTEMS_DEFAULT_ATTRIBUTES
+) ];
 
 static const rtems_task_config config = {
   .name = OBJECT_NAME,
@@ -517,7 +515,7 @@ static void RtemsTaskReqPerfRestartSelf_Cleanup(
 
 /** @} */
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 /**
  * @defgroup RtemsTaskReqPerfSetSchedulerMove \
  *   spec:/rtems/task/req/perf-set-scheduler-move
@@ -659,7 +657,7 @@ static bool RtemsTaskReqPerfSetSchedulerNop_Teardown_Wrap(
 
 /** @} */
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 /**
  * @defgroup RtemsTaskReqPerfSetSchedulerOther \
  *   spec:/rtems/task/req/perf-set-scheduler-other
@@ -747,7 +745,7 @@ static void RtemsTaskReqPerfSetSchedulerOther_Cleanup(
 /** @} */
 #endif
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 /**
  * @defgroup RtemsTaskReqPerfSetSchedulerPreempt \
  *   spec:/rtems/task/req/perf-set-scheduler-preempt
@@ -1064,7 +1062,7 @@ T_TEST_CASE_FIXTURE( RtemsTaskValPerf, &RtemsTaskValPerf_Fixture )
   T_measure_runtime( ctx->context, &ctx->request );
   RtemsTaskReqPerfRestartSelf_Cleanup( ctx );
 
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   RtemsTaskReqPerfSetSchedulerMove_Prepare();
   ctx->request.name = "RtemsTaskReqPerfSetSchedulerMove";
   ctx->request.setup = NULL;
@@ -1080,7 +1078,7 @@ T_TEST_CASE_FIXTURE( RtemsTaskValPerf, &RtemsTaskValPerf_Fixture )
   ctx->request.teardown = RtemsTaskReqPerfSetSchedulerNop_Teardown_Wrap;
   T_measure_runtime( ctx->context, &ctx->request );
 
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   RtemsTaskReqPerfSetSchedulerOther_Prepare( ctx );
   ctx->request.name = "RtemsTaskReqPerfSetSchedulerOther";
   ctx->request.setup = NULL;
@@ -1090,7 +1088,7 @@ T_TEST_CASE_FIXTURE( RtemsTaskValPerf, &RtemsTaskValPerf_Fixture )
   RtemsTaskReqPerfSetSchedulerOther_Cleanup( ctx );
   #endif
 
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   RtemsTaskReqPerfSetSchedulerPreempt_Prepare( ctx );
   ctx->request.name = "RtemsTaskReqPerfSetSchedulerPreempt";
   ctx->request.setup = RtemsTaskReqPerfSetSchedulerPreempt_Setup_Wrap;

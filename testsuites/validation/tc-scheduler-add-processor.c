@@ -222,33 +222,19 @@ typedef struct {
 static RtemsSchedulerReqAddProcessor_Context
   RtemsSchedulerReqAddProcessor_Instance;
 
-static const char * const RtemsSchedulerReqAddProcessor_PreDesc_HasReady[] = {
-  "Ready",
-  "Empty",
-  "NA"
-};
+static const char *const RtemsSchedulerReqAddProcessor_PreDesc_HasReady[] =
+  { "Ready", "Empty", "NA" };
 
-static const char * const RtemsSchedulerReqAddProcessor_PreDesc_Id[] = {
-  "Invalid",
-  "Scheduler",
-  "NA"
-};
+static const char *const RtemsSchedulerReqAddProcessor_PreDesc_Id[] =
+  { "Invalid", "Scheduler", "NA" };
 
-static const char * const RtemsSchedulerReqAddProcessor_PreDesc_CPUIndex[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsSchedulerReqAddProcessor_PreDesc_CPUIndex[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsSchedulerReqAddProcessor_PreDesc_CPUState[] = {
-  "Idle",
-  "InUse",
-  "NotOnline",
-  "NotUsable",
-  "NA"
-};
+static const char *const RtemsSchedulerReqAddProcessor_PreDesc_CPUState[] =
+  { "Idle", "InUse", "NotOnline", "NotUsable", "NA" };
 
-static const char * const * const RtemsSchedulerReqAddProcessor_PreDesc[] = {
+static const char *const *const RtemsSchedulerReqAddProcessor_PreDesc[] = {
   RtemsSchedulerReqAddProcessor_PreDesc_HasReady,
   RtemsSchedulerReqAddProcessor_PreDesc_Id,
   RtemsSchedulerReqAddProcessor_PreDesc_CPUIndex,
@@ -276,7 +262,7 @@ static void RtemsSchedulerReqAddProcessor_Pre_HasReady_Prepare(
       /*
        * While the scheduler has no ready threads.
        */
-      #if defined(RTEMS_SMP)
+      #if defined( RTEMS_SMP )
       ctx->scheduler_id = ctx->scheduler_c_id;
       #else
       ctx->scheduler_id = ctx->scheduler_a_id;
@@ -328,7 +314,7 @@ static void RtemsSchedulerReqAddProcessor_Pre_CPUIndex_Prepare(
        * While the ``cpu_index`` parameter is less than the configured
        * processor maximum.
        */
-      #if defined(RTEMS_SMP)
+      #if defined( RTEMS_SMP )
       ctx->cpu_index = CPU_TO_ADD;
       #else
       ctx->cpu_index = 0;
@@ -366,10 +352,7 @@ static void RtemsSchedulerReqAddProcessor_Pre_CPUState_Prepare(
        * associated with the ``cpu_index`` parameter is not owned by a
        * scheduler.
        */
-      sc = rtems_scheduler_remove_processor(
-        ctx->scheduler_b_id,
-        CPU_TO_ADD
-      );
+      sc = rtems_scheduler_remove_processor( ctx->scheduler_b_id, CPU_TO_ADD );
       T_rsc_success( sc );
       ctx->add_cpu_to_scheduler_b = true;
       break;
@@ -389,13 +372,10 @@ static void RtemsSchedulerReqAddProcessor_Pre_CPUState_Prepare(
        * While the processor associated with the ``cpu_index`` parameter is not
        * online.
        */
-      sc = rtems_scheduler_remove_processor(
-        ctx->scheduler_b_id,
-        CPU_TO_ADD
-      );
+      sc = rtems_scheduler_remove_processor( ctx->scheduler_b_id, CPU_TO_ADD );
       T_rsc_success( sc );
       ctx->add_cpu_to_scheduler_b = true;
-      #if defined(RTEMS_SMP)
+      #if defined( RTEMS_SMP )
       ctx->cpu->online = false;
       #endif
       break;
@@ -538,13 +518,10 @@ static void RtemsSchedulerReqAddProcessor_Setup(
 {
   rtems_status_code sc;
 
-  sc = rtems_scheduler_ident(
-    TEST_SCHEDULER_A_NAME,
-    &ctx->scheduler_a_id
-  );
+  sc = rtems_scheduler_ident( TEST_SCHEDULER_A_NAME, &ctx->scheduler_a_id );
   T_rsc_success( sc );
 
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   ctx->cpu = _Per_CPU_Get_by_index( CPU_TO_ADD );
 
   sc = rtems_scheduler_ident( TEST_SCHEDULER_B_NAME, &ctx->scheduler_b_id );
@@ -571,7 +548,7 @@ static void RtemsSchedulerReqAddProcessor_Prepare(
   RtemsSchedulerReqAddProcessor_Context *ctx
 )
 {
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   ctx->add_cpu_to_scheduler_b = false;
   ctx->online = _Per_CPU_Is_processor_online( ctx->cpu );
   #else
@@ -598,7 +575,7 @@ static void RtemsSchedulerReqAddProcessor_Cleanup(
   RtemsSchedulerReqAddProcessor_Context *ctx
 )
 {
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   rtems_status_code sc;
 
   ctx->cpu->online = ctx->online;
@@ -706,9 +683,8 @@ RtemsSchedulerReqAddProcessor_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsSchedulerReqAddProcessor_Entries[
-    RtemsSchedulerReqAddProcessor_Map[ index ]
-  ];
+  return RtemsSchedulerReqAddProcessor_Entries
+    [ RtemsSchedulerReqAddProcessor_Map[ index ] ];
 }
 
 static void RtemsSchedulerReqAddProcessor_SetPreConditionStates(

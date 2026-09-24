@@ -130,13 +130,11 @@ typedef struct {
 static DevGrlibReqIrqampGetTimestamp_Context
   DevGrlibReqIrqampGetTimestamp_Instance;
 
-static const char * const DevGrlibReqIrqampGetTimestamp_PreDesc_NumberOfTimestampRegisterSets[] = {
-  "Zero",
-  "Positive",
-  "NA"
-};
+static const char *const
+  DevGrlibReqIrqampGetTimestamp_PreDesc_NumberOfTimestampRegisterSets[] =
+    { "Zero", "Positive", "NA" };
 
-static const char * const * const DevGrlibReqIrqampGetTimestamp_PreDesc[] = {
+static const char *const *const DevGrlibReqIrqampGetTimestamp_PreDesc[] = {
   DevGrlibReqIrqampGetTimestamp_PreDesc_NumberOfTimestampRegisterSets,
   NULL
 };
@@ -261,9 +259,8 @@ DevGrlibReqIrqampGetTimestamp_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return DevGrlibReqIrqampGetTimestamp_Entries[
-    DevGrlibReqIrqampGetTimestamp_Map[ index ]
-  ];
+  return DevGrlibReqIrqampGetTimestamp_Entries
+    [ DevGrlibReqIrqampGetTimestamp_Map[ index ] ];
 }
 
 static void DevGrlibReqIrqampGetTimestamp_TestVariant(
@@ -296,8 +293,10 @@ T_TEST_CASE_FIXTURE(
   ctx->Map.index = 0;
 
   for (
-    ctx->Map.pcs[ 0 ] = DevGrlibReqIrqampGetTimestamp_Pre_NumberOfTimestampRegisterSets_Zero;
-    ctx->Map.pcs[ 0 ] < DevGrlibReqIrqampGetTimestamp_Pre_NumberOfTimestampRegisterSets_NA;
+    ctx->Map.pcs[ 0 ] =
+      DevGrlibReqIrqampGetTimestamp_Pre_NumberOfTimestampRegisterSets_Zero;
+    ctx->Map.pcs[ 0 ] <
+    DevGrlibReqIrqampGetTimestamp_Pre_NumberOfTimestampRegisterSets_NA;
     ++ctx->Map.pcs[ 0 ]
   ) {
     ctx->Map.entry = DevGrlibReqIrqampGetTimestamp_PopEntry( ctx );

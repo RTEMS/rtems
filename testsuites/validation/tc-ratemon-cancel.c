@@ -228,36 +228,21 @@ typedef struct {
   } Map;
 } RtemsRatemonReqCancel_Context;
 
-static RtemsRatemonReqCancel_Context
-  RtemsRatemonReqCancel_Instance;
+static RtemsRatemonReqCancel_Context RtemsRatemonReqCancel_Instance;
 
-static const char * const RtemsRatemonReqCancel_PreDesc_Id[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsRatemonReqCancel_PreDesc_Id[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsRatemonReqCancel_PreDesc_Caller[] = {
-  "OwnerTask",
-  "OtherTask",
-  "NA"
-};
+static const char *const RtemsRatemonReqCancel_PreDesc_Caller[] =
+  { "OwnerTask", "OtherTask", "NA" };
 
-static const char * const RtemsRatemonReqCancel_PreDesc_State[] = {
-  "Inactive",
-  "Active",
-  "Expired",
-  "NA"
-};
+static const char *const RtemsRatemonReqCancel_PreDesc_State[] =
+  { "Inactive", "Active", "Expired", "NA" };
 
-static const char * const RtemsRatemonReqCancel_PreDesc_Postponed[] = {
-  "Zero",
-  "One",
-  "Several",
-  "NA"
-};
+static const char *const RtemsRatemonReqCancel_PreDesc_Postponed[] =
+  { "Zero", "One", "Several", "NA" };
 
-static const char * const * const RtemsRatemonReqCancel_PreDesc[] = {
+static const char *const *const RtemsRatemonReqCancel_PreDesc[] = {
   RtemsRatemonReqCancel_PreDesc_Id,
   RtemsRatemonReqCancel_PreDesc_Caller,
   RtemsRatemonReqCancel_PreDesc_State,
@@ -265,10 +250,10 @@ static const char * const * const RtemsRatemonReqCancel_PreDesc[] = {
   NULL
 };
 
-static const rtems_interval period_length = 5;
+static const rtems_interval      period_length = 5;
 static const rtems_task_priority background_task_priority = 100;
 static const rtems_task_priority foreground_task_priority = 10;
-static const rtems_event_set wake_main_task_event = RTEMS_EVENT_17;
+static const rtems_event_set     wake_main_task_event = RTEMS_EVENT_17;
 
 static void TickTheClock( uint32_t ticks )
 {
@@ -287,8 +272,8 @@ static void Action( void *ctx_in )
 
 static void WorkerTask( rtems_task_argument argument )
 {
-  RtemsRatemonReqCancel_Context *ctx =
-    (RtemsRatemonReqCancel_Context *) argument;
+  RtemsRatemonReqCancel_Context *ctx = (RtemsRatemonReqCancel_Context *)
+    argument;
 
   if ( ctx != NULL ) {
     Action( ctx );
@@ -300,8 +285,8 @@ static void WorkerTask( rtems_task_argument argument )
 
 static void WorkerTaskAction( void *ctx_in )
 {
-  rtems_status_code status;
-  rtems_event_set event_set;
+  rtems_status_code              status;
+  rtems_event_set                event_set;
   RtemsRatemonReqCancel_Context *ctx = ctx_in;
 
   status = rtems_task_restart( ctx->worker_id, (rtems_task_argument) ctx );
@@ -319,7 +304,7 @@ static void WorkerTaskAction( void *ctx_in )
 
 static void CreatePostponedJobs(
   RtemsRatemonReqCancel_Context *ctx,
-  uint32_t jobs_count
+  uint32_t                       jobs_count
 )
 {
   rtems_status_code status;
@@ -561,8 +546,10 @@ static void RtemsRatemonReqCancel_Post_Postponed_Check(
        * rtems_rate_monotonic_cancel() shall not be accessed by the
        * rtems_rate_monotonic_cancel() call (see also Nop).
        */
-      T_eq_u32( ctx->period_status.postponed_jobs_count,
-        ctx->postponed_jobs_count );
+      T_eq_u32(
+        ctx->period_status.postponed_jobs_count,
+        ctx->postponed_jobs_count
+      );
       break;
     }
 
@@ -601,9 +588,9 @@ static void RtemsRatemonReqCancel_Post_Scheduler_Check(
 
 static void RtemsRatemonReqCancel_Setup( RtemsRatemonReqCancel_Context *ctx )
 {
-  rtems_status_code status;
+  rtems_status_code   status;
   rtems_task_priority priority;
-  rtems_event_set event_set;
+  rtems_event_set     event_set;
   ctx->worker_id = RTEMS_INVALID_ID;
 
   status = rtems_task_ident(
@@ -667,7 +654,7 @@ static void RtemsRatemonReqCancel_Teardown(
   RtemsRatemonReqCancel_Context *ctx
 )
 {
-  rtems_status_code status;
+  rtems_status_code   status;
   rtems_task_priority priority;
 
   T_rsc_success( rtems_task_delete( ctx->worker_id ) );
@@ -692,7 +679,7 @@ static void RtemsRatemonReqCancel_Teardown_Wrap( void *arg )
 static void RtemsRatemonReqCancel_Prepare( RtemsRatemonReqCancel_Context *ctx )
 {
   rtems_status_code status;
-  status =  rtems_rate_monotonic_create(
+  status = rtems_rate_monotonic_create(
     rtems_build_name( 'R', 'M', 'O', 'N' ),
     &ctx->period_id
   );
@@ -794,9 +781,7 @@ static inline RtemsRatemonReqCancel_Entry RtemsRatemonReqCancel_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsRatemonReqCancel_Entries[
-    RtemsRatemonReqCancel_Map[ index ]
-  ];
+  return RtemsRatemonReqCancel_Entries[ RtemsRatemonReqCancel_Map[ index ] ];
 }
 
 static void RtemsRatemonReqCancel_SetPreConditionStates(

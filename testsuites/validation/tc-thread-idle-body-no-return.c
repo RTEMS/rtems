@@ -114,7 +114,6 @@ static void CheckIdleBody( Context *ctx, rtems_task_entry entry )
    */
   interval = 1;
   while ( ctx->counter == 0 && interval <= 1024 ) {
-
     sc = rtems_task_wake_after( interval );
     T_rsc_success( sc );
 
@@ -138,7 +137,7 @@ static void CPUThreadIdleBody( rtems_task_argument arg )
   (void) _CPU_Thread_Idle_body( 0 );
 }
 
-#if defined(BSP_IDLE_TASK_BODY)
+#if defined( BSP_IDLE_TASK_BODY )
 static void BSPIdleTaskBody( rtems_task_argument arg )
 {
   Context *ctx;
@@ -177,7 +176,7 @@ static void ScoreThreadValIdleBodyNoReturn_Action_0(
   /*
    * Where the BSP provides an idle thread body, check that it does not return.
    */
-  #if defined(BSP_IDLE_TASK_BODY)
+  #if defined( BSP_IDLE_TASK_BODY )
   CheckIdleBody( ctx, BSPIdleTaskBody );
   #endif
 

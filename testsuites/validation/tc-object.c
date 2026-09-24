@@ -112,17 +112,17 @@ static void RtemsObjectValObject_Action_0( void )
           unsigned char u2;
           unsigned char u3;
           unsigned char u4;
-          signed char s1;
-          signed char s2;
-          signed char s3;
-          signed char s4;
-          rtems_name expected_name;
-          rtems_name actual_name;
+          signed char   s1;
+          signed char   s2;
+          signed char   s3;
+          signed char   s4;
+          rtems_name    expected_name;
+          rtems_name    actual_name;
 
           expected_name = ( chars[ i ] % 256 ) * UINT32_C( 16777216 ) +
-            ( chars[ j ] % 256 ) * UINT32_C( 65536 ) +
-            ( chars[ k ] % 256 ) * UINT32_C( 256 ) +
-            ( chars[ r ] % 256 );
+                          ( chars[ j ] % 256 ) * UINT32_C( 65536 ) +
+                          ( chars[ k ] % 256 ) * UINT32_C( 256 ) +
+                          ( chars[ r ] % 256 );
 
           u1 = (unsigned char) chars[ i ];
           u2 = (unsigned char) chars[ j ];
@@ -130,7 +130,7 @@ static void RtemsObjectValObject_Action_0( void )
           u4 = (unsigned char) chars[ r ];
           actual_name = rtems_build_name( u1, u2, u3, u4 );
           T_quiet_eq_u32( actual_name, expected_name )
-          accumulated_name += actual_name;
+            accumulated_name += actual_name;
 
           s1 = (signed char) u1;
           s2 = (signed char) u2;
@@ -138,7 +138,7 @@ static void RtemsObjectValObject_Action_0( void )
           s4 = (signed char) u4;
           actual_name = rtems_build_name( s1, s2, s3, s4 );
           T_quiet_eq_u32( actual_name, expected_name )
-          accumulated_name += actual_name;
+            accumulated_name += actual_name;
 
           actual_name = BuildName(
             chars[ i ],

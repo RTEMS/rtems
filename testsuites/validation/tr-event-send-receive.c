@@ -88,11 +88,7 @@ typedef enum {
   SENDER_INTERRUPT
 } SenderTypes;
 
-typedef enum {
-  RECEIVE_SKIP,
-  RECEIVE_NORMAL,
-  RECEIVE_INTERRUPT
-} ReceiveTypes;
+typedef enum { RECEIVE_SKIP, RECEIVE_NORMAL, RECEIVE_INTERRUPT } ReceiveTypes;
 
 typedef enum {
   RECEIVE_COND_UNKNOWN,
@@ -229,7 +225,12 @@ typedef struct {
    * @brief This member contains a copy of the corresponding
    *   RtemsEventReqSendReceive_Run() parameter.
    */
-  rtems_status_code ( *receive )( rtems_event_set, rtems_option, rtems_interval, rtems_event_set * );
+  rtems_status_code ( *receive )(
+    rtems_event_set,
+    rtems_option,
+    rtems_interval,
+    rtems_event_set *
+  );
 
   /**
    * @brief This member contains a copy of the corresponding
@@ -284,26 +285,15 @@ typedef struct {
   } Map;
 } RtemsEventReqSendReceive_Context;
 
-static RtemsEventReqSendReceive_Context
-  RtemsEventReqSendReceive_Instance;
+static RtemsEventReqSendReceive_Context RtemsEventReqSendReceive_Instance;
 
-static const char * const RtemsEventReqSendReceive_PreDesc_Id[] = {
-  "InvId",
-  "Task",
-  "NA"
-};
+static const char *const RtemsEventReqSendReceive_PreDesc_Id[] =
+  { "InvId", "Task", "NA" };
 
-static const char * const RtemsEventReqSendReceive_PreDesc_Send[] = {
-  "Zero",
-  "Unrelated",
-  "Any",
-  "All",
-  "MixedAny",
-  "MixedAll",
-  "NA"
-};
+static const char *const RtemsEventReqSendReceive_PreDesc_Send[] =
+  { "Zero", "Unrelated", "Any", "All", "MixedAny", "MixedAll", "NA" };
 
-static const char * const RtemsEventReqSendReceive_PreDesc_ReceiverState[] = {
+static const char *const RtemsEventReqSendReceive_PreDesc_ReceiverState[] = {
   "InvAddr",
   "NotWaiting",
   "Poll",
@@ -316,13 +306,10 @@ static const char * const RtemsEventReqSendReceive_PreDesc_ReceiverState[] = {
   "NA"
 };
 
-static const char * const RtemsEventReqSendReceive_PreDesc_Satisfy[] = {
-  "All",
-  "Any",
-  "NA"
-};
+static const char *const RtemsEventReqSendReceive_PreDesc_Satisfy[] =
+  { "All", "Any", "NA" };
 
-static const char * const * const RtemsEventReqSendReceive_PreDesc[] = {
+static const char *const *const RtemsEventReqSendReceive_PreDesc[] = {
   RtemsEventReqSendReceive_PreDesc_Id,
   RtemsEventReqSendReceive_PreDesc_Send,
   RtemsEventReqSendReceive_PreDesc_ReceiverState,
@@ -413,10 +400,7 @@ static void SendAction( Context *ctx )
   T_quiet_eq_ptr( &log->header, &ctx->thread_switch_log.header );
 }
 
-static void Send(
-  Context *ctx,
-  bool  ( *is_satsified )( Context * )
-)
+static void Send( Context *ctx, bool ( *is_satsified )( Context * ) )
 {
   SendAction( ctx );
 
@@ -424,8 +408,8 @@ static void Send(
     ctx->receive_condition_state = RECEIVE_COND_SATSIFIED;
   } else {
     rtems_status_code sc;
-    rtems_event_set pending;
-    rtems_event_set missing;
+    rtems_event_set   pending;
+    rtems_event_set   missing;
 
     ctx->receive_condition_state = RECEIVE_COND_UNSATISFIED;
     pending = ( *ctx->get_pending_events )( ctx->runner_thread );
@@ -475,7 +459,7 @@ static void Worker( rtems_task_argument arg )
          * CPU is recorded, otherwise the preemption check may sporadically
          * fail on some targets.
          */
-        while (ctx->thread_switch_log.header.recorded < 2) {
+        while ( ctx->thread_switch_log.header.recorded < 2 ) {
           RTEMS_COMPILER_MEMORY_BARRIER();
         }
 
@@ -488,11 +472,7 @@ static void Worker( rtems_task_argument arg )
 
     Send( ctx, IsSatisfiedState );
 
-    sc = rtems_task_set_scheduler(
-      RTEMS_SELF,
-      ctx->runner_sched,
-      PRIO_HIGH
-    );
+    sc = rtems_task_set_scheduler( RTEMS_SELF, ctx->runner_sched, PRIO_HIGH );
     T_rsc_success( sc );
 
     Wakeup( ctx->runner_wakeup );
@@ -501,7 +481,7 @@ static void Worker( rtems_task_argument arg )
 
 static rtems_event_set GetPendingEvents( Context *ctx )
 {
-  rtems_event_set pending;
+  rtems_event_set   pending;
   rtems_status_code sc;
 
   sc = ( *ctx->receive )(
@@ -546,10 +526,10 @@ static void InterruptContinue( Context *ctx )
 
 static T_interrupt_test_state Interrupt( void *arg )
 {
-  Context                *ctx;
-  Thread_Wait_flags       flags;
-  T_interrupt_test_state  next_state;
-  T_interrupt_test_state  previous_state;
+  Context               *ctx;
+  Thread_Wait_flags      flags;
+  T_interrupt_test_state next_state;
+  T_interrupt_test_state previous_state;
 
   ctx = arg;
   flags = _Thread_Wait_flags_get( ctx->runner_thread );
@@ -987,7 +967,7 @@ static void RtemsEventReqSendReceive_Setup(
   sc = rtems_task_get_scheduler( RTEMS_SELF, &ctx->runner_sched );
   T_rsc_success( sc );
 
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   sc = rtems_scheduler_ident_by_processor( 1, &ctx->other_sched );
   T_rsc_success( sc );
   T_ne_u32( ctx->runner_sched, ctx->other_sched );
@@ -1196,9 +1176,8 @@ static inline RtemsEventReqSendReceive_Entry RtemsEventReqSendReceive_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsEventReqSendReceive_Entries[
-    RtemsEventReqSendReceive_Map[ index ]
-  ];
+  return RtemsEventReqSendReceive_Entries
+    [ RtemsEventReqSendReceive_Map[ index ] ];
 }
 
 static void RtemsEventReqSendReceive_SetPreConditionStates(
@@ -1258,10 +1237,15 @@ static T_remark RtemsEventReqSendReceive_Remark = {
 
 void RtemsEventReqSendReceive_Run(
   rtems_status_code ( *send )( rtems_id, rtems_event_set ),
-  rtems_status_code ( *receive )( rtems_event_set, rtems_option, rtems_interval, rtems_event_set * ),
-  rtems_event_set (   *get_pending_events )( Thread_Control * ),
-  unsigned int         wait_class,
-  States_Control       waiting_for_event
+  rtems_status_code ( *receive )(
+    rtems_event_set,
+    rtems_option,
+    rtems_interval,
+    rtems_event_set *
+  ),
+  rtems_event_set ( *get_pending_events )( Thread_Control * ),
+  unsigned int   wait_class,
+  States_Control waiting_for_event
 )
 {
   RtemsEventReqSendReceive_Context *ctx;

@@ -136,29 +136,18 @@ typedef struct {
   } Map;
 } ScoreSemReqSurrender_Context;
 
-static ScoreSemReqSurrender_Context
-  ScoreSemReqSurrender_Instance;
+static ScoreSemReqSurrender_Context ScoreSemReqSurrender_Instance;
 
-static const char * const ScoreSemReqSurrender_PreDesc_Variant[] = {
-  "Binary",
-  "Counting",
-  "NA"
-};
+static const char *const ScoreSemReqSurrender_PreDesc_Variant[] =
+  { "Binary", "Counting", "NA" };
 
-static const char * const ScoreSemReqSurrender_PreDesc_Discipline[] = {
-  "FIFO",
-  "Priority",
-  "NA"
-};
+static const char *const ScoreSemReqSurrender_PreDesc_Discipline[] =
+  { "FIFO", "Priority", "NA" };
 
-static const char * const ScoreSemReqSurrender_PreDesc_Count[] = {
-  "LessMax",
-  "Max",
-  "Blocked",
-  "NA"
-};
+static const char *const ScoreSemReqSurrender_PreDesc_Count[] =
+  { "LessMax", "Max", "Blocked", "NA" };
 
-static const char * const * const ScoreSemReqSurrender_PreDesc[] = {
+static const char *const *const ScoreSemReqSurrender_PreDesc[] = {
   ScoreSemReqSurrender_PreDesc_Variant,
   ScoreSemReqSurrender_PreDesc_Discipline,
   ScoreSemReqSurrender_PreDesc_Count,
@@ -457,9 +446,7 @@ static T_fixture ScoreSemReqSurrender_Fixture = {
   .initial_context = &ScoreSemReqSurrender_Instance
 };
 
-static const uint8_t ScoreSemReqSurrender_Weights[] = {
-  6, 3, 1
-};
+static const uint8_t ScoreSemReqSurrender_Weights[] = { 6, 3, 1 };
 
 static void ScoreSemReqSurrender_Skip(
   ScoreSemReqSurrender_Context *ctx,
@@ -497,9 +484,7 @@ static inline ScoreSemReqSurrender_Entry ScoreSemReqSurrender_PopEntry(
 
   ctx->Map.index = index + 1;
 
-  return ScoreSemReqSurrender_Entries[
-    ScoreSemReqSurrender_Map[ index ]
-  ];
+  return ScoreSemReqSurrender_Entries[ ScoreSemReqSurrender_Map[ index ] ];
 }
 
 static void ScoreSemReqSurrender_TestVariant(

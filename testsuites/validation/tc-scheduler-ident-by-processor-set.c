@@ -210,43 +210,33 @@ typedef struct {
 static RtemsSchedulerReqIdentByProcessorSet_Context
   RtemsSchedulerReqIdentByProcessorSet_Instance;
 
-static const char * const RtemsSchedulerReqIdentByProcessorSet_PreDesc_CPUOwnedByScheduler[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const
+  RtemsSchedulerReqIdentByProcessorSet_PreDesc_CPUOwnedByScheduler[] =
+    { "Yes", "No", "NA" };
 
-static const char * const RtemsSchedulerReqIdentByProcessorSet_PreDesc_CPUSetObj[] = {
-  "Invalid",
-  "Valid",
-  "NA"
-};
+static const char *const
+  RtemsSchedulerReqIdentByProcessorSet_PreDesc_CPUSetObj[] =
+    { "Invalid", "Valid", "NA" };
 
-static const char * const RtemsSchedulerReqIdentByProcessorSet_PreDesc_CPUSetSize[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const
+  RtemsSchedulerReqIdentByProcessorSet_PreDesc_CPUSetSize[] =
+    { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsSchedulerReqIdentByProcessorSet_PreDesc_CPUSet[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const
+  RtemsSchedulerReqIdentByProcessorSet_PreDesc_CPUSet[] =
+    { "Valid", "Null", "NA" };
 
-static const char * const RtemsSchedulerReqIdentByProcessorSet_PreDesc_Id[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsSchedulerReqIdentByProcessorSet_PreDesc_Id[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const * const RtemsSchedulerReqIdentByProcessorSet_PreDesc[] = {
-  RtemsSchedulerReqIdentByProcessorSet_PreDesc_CPUOwnedByScheduler,
-  RtemsSchedulerReqIdentByProcessorSet_PreDesc_CPUSetObj,
-  RtemsSchedulerReqIdentByProcessorSet_PreDesc_CPUSetSize,
-  RtemsSchedulerReqIdentByProcessorSet_PreDesc_CPUSet,
-  RtemsSchedulerReqIdentByProcessorSet_PreDesc_Id,
-  NULL
+static const char *const *const
+  RtemsSchedulerReqIdentByProcessorSet_PreDesc[] = {
+    RtemsSchedulerReqIdentByProcessorSet_PreDesc_CPUOwnedByScheduler,
+    RtemsSchedulerReqIdentByProcessorSet_PreDesc_CPUSetObj,
+    RtemsSchedulerReqIdentByProcessorSet_PreDesc_CPUSetSize,
+    RtemsSchedulerReqIdentByProcessorSet_PreDesc_CPUSet,
+    RtemsSchedulerReqIdentByProcessorSet_PreDesc_Id,
+    NULL
 };
 
 static void
@@ -489,7 +479,7 @@ static void RtemsSchedulerReqIdentByProcessorSet_Setup(
   RtemsSchedulerReqIdentByProcessorSet_Context *ctx
 )
 {
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   rtems_status_code sc;
 
   sc = rtems_scheduler_ident(
@@ -522,7 +512,7 @@ static void RtemsSchedulerReqIdentByProcessorSet_Action(
   RtemsSchedulerReqIdentByProcessorSet_Context *ctx
 )
 {
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   rtems_status_code sc;
 
   if ( !ctx->cpu_has_scheduler ) {
@@ -537,7 +527,7 @@ static void RtemsSchedulerReqIdentByProcessorSet_Action(
     ctx->id
   );
 
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   if ( !ctx->cpu_has_scheduler ) {
     sc = rtems_scheduler_add_processor( ctx->second_scheduler_id, 1 );
     T_rsc_success( sc );
@@ -631,9 +621,8 @@ RtemsSchedulerReqIdentByProcessorSet_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsSchedulerReqIdentByProcessorSet_Entries[
-    RtemsSchedulerReqIdentByProcessorSet_Map[ index ]
-  ];
+  return RtemsSchedulerReqIdentByProcessorSet_Entries
+    [ RtemsSchedulerReqIdentByProcessorSet_Map[ index ] ];
 }
 
 static void RtemsSchedulerReqIdentByProcessorSet_SetPreConditionStates(
@@ -641,7 +630,8 @@ static void RtemsSchedulerReqIdentByProcessorSet_SetPreConditionStates(
 )
 {
   if ( ctx->Map.entry.Pre_CPUOwnedByScheduler_NA ) {
-    ctx->Map.pcs[ 0 ] = RtemsSchedulerReqIdentByProcessorSet_Pre_CPUOwnedByScheduler_NA;
+    ctx->Map.pcs[ 0 ] =
+      RtemsSchedulerReqIdentByProcessorSet_Pre_CPUOwnedByScheduler_NA;
   } else {
     ctx->Map.pcs[ 0 ] = ctx->Map.pci[ 0 ];
   }
@@ -702,27 +692,36 @@ T_TEST_CASE_FIXTURE(
   ctx->Map.index = 0;
 
   for (
-    ctx->Map.pci[ 0 ] = RtemsSchedulerReqIdentByProcessorSet_Pre_CPUOwnedByScheduler_Yes;
-    ctx->Map.pci[ 0 ] < RtemsSchedulerReqIdentByProcessorSet_Pre_CPUOwnedByScheduler_NA;
+    ctx->Map.pci[ 0 ] =
+      RtemsSchedulerReqIdentByProcessorSet_Pre_CPUOwnedByScheduler_Yes;
+    ctx->Map.pci[ 0 ] <
+    RtemsSchedulerReqIdentByProcessorSet_Pre_CPUOwnedByScheduler_NA;
     ++ctx->Map.pci[ 0 ]
   ) {
     for (
-      ctx->Map.pci[ 1 ] = RtemsSchedulerReqIdentByProcessorSet_Pre_CPUSetObj_Invalid;
-      ctx->Map.pci[ 1 ] < RtemsSchedulerReqIdentByProcessorSet_Pre_CPUSetObj_NA;
+      ctx->Map.pci[ 1 ] =
+        RtemsSchedulerReqIdentByProcessorSet_Pre_CPUSetObj_Invalid;
+      ctx->Map.pci[ 1 ] <
+      RtemsSchedulerReqIdentByProcessorSet_Pre_CPUSetObj_NA;
       ++ctx->Map.pci[ 1 ]
     ) {
       for (
-        ctx->Map.pci[ 2 ] = RtemsSchedulerReqIdentByProcessorSet_Pre_CPUSetSize_Valid;
-        ctx->Map.pci[ 2 ] < RtemsSchedulerReqIdentByProcessorSet_Pre_CPUSetSize_NA;
+        ctx->Map.pci[ 2 ] =
+          RtemsSchedulerReqIdentByProcessorSet_Pre_CPUSetSize_Valid;
+        ctx->Map.pci[ 2 ] <
+        RtemsSchedulerReqIdentByProcessorSet_Pre_CPUSetSize_NA;
         ++ctx->Map.pci[ 2 ]
       ) {
         for (
-          ctx->Map.pci[ 3 ] = RtemsSchedulerReqIdentByProcessorSet_Pre_CPUSet_Valid;
-          ctx->Map.pci[ 3 ] < RtemsSchedulerReqIdentByProcessorSet_Pre_CPUSet_NA;
+          ctx->Map.pci[ 3 ] =
+            RtemsSchedulerReqIdentByProcessorSet_Pre_CPUSet_Valid;
+          ctx->Map.pci[ 3 ] <
+          RtemsSchedulerReqIdentByProcessorSet_Pre_CPUSet_NA;
           ++ctx->Map.pci[ 3 ]
         ) {
           for (
-            ctx->Map.pci[ 4 ] = RtemsSchedulerReqIdentByProcessorSet_Pre_Id_Valid;
+            ctx->Map.pci[ 4 ] =
+              RtemsSchedulerReqIdentByProcessorSet_Pre_Id_Valid;
             ctx->Map.pci[ 4 ] < RtemsSchedulerReqIdentByProcessorSet_Pre_Id_NA;
             ++ctx->Map.pci[ 4 ]
           ) {

@@ -214,32 +214,19 @@ typedef struct {
 static RtemsTimerReqInitiateServer_Context
   RtemsTimerReqInitiateServer_Instance;
 
-static const char * const RtemsTimerReqInitiateServer_PreDesc_Priority[] = {
-  "Valid",
-  "Default",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsTimerReqInitiateServer_PreDesc_Priority[] =
+  { "Valid", "Default", "Invalid", "NA" };
 
-static const char * const RtemsTimerReqInitiateServer_PreDesc_Stack[] = {
-  "Allocatable",
-  "TooLarge",
-  "NA"
-};
+static const char *const RtemsTimerReqInitiateServer_PreDesc_Stack[] =
+  { "Allocatable", "TooLarge", "NA" };
 
-static const char * const RtemsTimerReqInitiateServer_PreDesc_Started[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTimerReqInitiateServer_PreDesc_Started[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTimerReqInitiateServer_PreDesc_TaskObj[] = {
-  "Available",
-  "Unavailable",
-  "NA"
-};
+static const char *const RtemsTimerReqInitiateServer_PreDesc_TaskObj[] =
+  { "Available", "Unavailable", "NA" };
 
-static const char * const * const RtemsTimerReqInitiateServer_PreDesc[] = {
+static const char *const *const RtemsTimerReqInitiateServer_PreDesc[] = {
   RtemsTimerReqInitiateServer_PreDesc_Priority,
   RtemsTimerReqInitiateServer_PreDesc_Stack,
   RtemsTimerReqInitiateServer_PreDesc_Started,
@@ -260,7 +247,7 @@ static rtems_task_priority GetTimerServerPriority( void )
 static size_t GetTimerServerStackSize( void )
 {
   rtems_tcb *tcb;
-  rtems_id server_task_id;
+  rtems_id   server_task_id;
   server_task_id = GetTimerServerTaskId();
   T_ne_u32( server_task_id, RTEMS_INVALID_ID );
   tcb = GetThread( server_task_id );
@@ -271,7 +258,7 @@ static size_t GetTimerServerStackSize( void )
 static bool HasTimerServerFloatingPoint( void )
 {
   rtems_tcb *tcb;
-  rtems_id server_task_id;
+  rtems_id   server_task_id;
   server_task_id = GetTimerServerTaskId();
   T_ne_u32( server_task_id, RTEMS_INVALID_ID );
   tcb = GetThread( server_task_id );
@@ -411,10 +398,7 @@ static void RtemsTimerReqInitiateServer_Pre_TaskObj_Prepare(
       /*
        * While the system has no inactive task object available.
        */
-      ctx->task_objects = T_seize_objects(
-        AllocateTaskObject,
-        NULL
-      );
+      ctx->task_objects = T_seize_objects( AllocateTaskObject, NULL );
       break;
     }
 
@@ -470,7 +454,7 @@ static void RtemsTimerReqInitiateServer_Post_Status_Check(
        * The return status of rtems_timer_initiate_server() shall be
        * RTEMS_UNSATISFIED.
        */
-      T_rsc( ctx->status, RTEMS_UNSATISFIED  );
+      T_rsc( ctx->status, RTEMS_UNSATISFIED );
       break;
     }
 
@@ -591,7 +575,9 @@ static void RtemsTimerReqInitiateServer_Post_TaskAttr_Check(
        * The task attributes of the Timer Server task shall not be modified by
        * the rtems_timer_initiate_server() call.
        */
-      T_true( HasTimerServerFloatingPoint() == ctx->before_has_floating_point );
+      T_true(
+        HasTimerServerFloatingPoint() == ctx->before_has_floating_point
+      );
       break;
     }
 
@@ -734,9 +720,8 @@ RtemsTimerReqInitiateServer_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsTimerReqInitiateServer_Entries[
-    RtemsTimerReqInitiateServer_Map[ index ]
-  ];
+  return RtemsTimerReqInitiateServer_Entries
+    [ RtemsTimerReqInitiateServer_Map[ index ] ];
 }
 
 static void RtemsTimerReqInitiateServer_TestVariant(
@@ -799,7 +784,8 @@ T_TEST_CASE_FIXTURE(
         ++ctx->Map.pcs[ 2 ]
       ) {
         for (
-          ctx->Map.pcs[ 3 ] = RtemsTimerReqInitiateServer_Pre_TaskObj_Available;
+          ctx->Map.pcs[ 3 ] =
+            RtemsTimerReqInitiateServer_Pre_TaskObj_Available;
           ctx->Map.pcs[ 3 ] < RtemsTimerReqInitiateServer_Pre_TaskObj_NA;
           ++ctx->Map.pcs[ 3 ]
         ) {

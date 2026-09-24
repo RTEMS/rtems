@@ -114,8 +114,7 @@ typedef struct {
   T_ticks end;
 } RtemsMessageValPerf_Context;
 
-static RtemsMessageValPerf_Context
-  RtemsMessageValPerf_Instance;
+static RtemsMessageValPerf_Context RtemsMessageValPerf_Instance;
 
 #define MAXIMUM_PENDING_MESSAGES 1
 
@@ -133,8 +132,9 @@ static RtemsMessageValPerf_Context
 
 typedef RtemsMessageValPerf_Context Context;
 
-static RTEMS_MESSAGE_QUEUE_BUFFER( MAXIMUM_MESSAGE_SIZE )
-  storage_area[ MAXIMUM_PENDING_MESSAGES ];
+static RTEMS_MESSAGE_QUEUE_BUFFER(
+  MAXIMUM_MESSAGE_SIZE
+) storage_area[ MAXIMUM_PENDING_MESSAGES ];
 
 rtems_message_queue_config config = {
   .name = OBJECT_NAME,
@@ -429,7 +429,12 @@ static bool RtemsMessageReqPerfReceiveWaitForever_Teardown_Wrap(
 
   ctx = arg;
   (void) retry;
-  return RtemsMessageReqPerfReceiveWaitForever_Teardown( ctx, delta, tic, toc );
+  return RtemsMessageReqPerfReceiveWaitForever_Teardown(
+    ctx,
+    delta,
+    tic,
+    toc
+  );
 }
 
 /** @} */
@@ -673,7 +678,7 @@ static bool RtemsMessageReqPerfSendOther_Teardown_Wrap(
 
 /** @} */
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 /**
  * @defgroup RtemsMessageReqPerfSendOtherCpu \
  *   spec:/rtems/message/req/perf-send-other-cpu
@@ -902,7 +907,7 @@ T_TEST_CASE_FIXTURE( RtemsMessageValPerf, &RtemsMessageValPerf_Fixture )
   ctx->request.teardown = RtemsMessageReqPerfSendOther_Teardown_Wrap;
   T_measure_runtime( ctx->context, &ctx->request );
 
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   RtemsMessageReqPerfSendOtherCpu_Prepare( ctx );
   ctx->request.name = "RtemsMessageReqPerfSendOtherCpu";
   ctx->request.setup = RtemsMessageReqPerfSendOtherCpu_Setup_Wrap;

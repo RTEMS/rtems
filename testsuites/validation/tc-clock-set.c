@@ -184,10 +184,9 @@ typedef struct {
   } Map;
 } RtemsClockReqSet_Context;
 
-static RtemsClockReqSet_Context
-  RtemsClockReqSet_Instance;
+static RtemsClockReqSet_Context RtemsClockReqSet_Instance;
 
-static const char * const RtemsClockReqSet_PreDesc_ToD[] = {
+static const char *const RtemsClockReqSet_PreDesc_ToD[] = {
   "Valid",
   "ValidLeap4",
   "ValidLeap400",
@@ -213,29 +212,22 @@ static const char * const RtemsClockReqSet_PreDesc_ToD[] = {
   "NA"
 };
 
-static const char * const RtemsClockReqSet_PreDesc_Hook[] = {
-  "None",
-  "Ok",
-  "NotOk",
-  "NA"
-};
+static const char *const RtemsClockReqSet_PreDesc_Hook[] =
+  { "None", "Ok", "NotOk", "NA" };
 
-static const char * const * const RtemsClockReqSet_PreDesc[] = {
-  RtemsClockReqSet_PreDesc_ToD,
-  RtemsClockReqSet_PreDesc_Hook,
-  NULL
-};
+static const char *const *const RtemsClockReqSet_PreDesc[] =
+  { RtemsClockReqSet_PreDesc_ToD, RtemsClockReqSet_PreDesc_Hook, NULL };
 
 typedef RtemsClockReqSet_Context Context;
 
 static rtems_timer_service_routine _TOD_timer_routine(
-  rtems_id   timer_id,
-  void      *user_data
+  rtems_id timer_id,
+  void    *user_data
 )
 {
   (void) timer_id;
 
-  Context *ctx = user_data;
+  Context          *ctx = user_data;
   rtems_status_code status;
   ++ctx->timer_routine_counter;
   status = rtems_clock_get_tod( &ctx->timer_routine_tod );
@@ -260,10 +252,7 @@ static void _TOD_prepare_timer( Context *ctx )
   T_rsc_success( status );
 }
 
-static Status_Control TODHook(
-  TOD_Action             action,
-  const struct timespec *tod
-)
+static Status_Control TODHook( TOD_Action action, const struct timespec *tod )
 {
   Context *ctx;
 
@@ -286,9 +275,15 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
        * and time between 1988-01-01T00:00:00.000000000Z and
        * 2105-12-31T23:59:59.999999999Z.
        */
-      ctx->target_tod_value =
-        (rtems_time_of_day) { 2021, 3, 11, 11, 10, 59,
-        rtems_clock_get_ticks_per_second() / 2 };
+      ctx->target_tod_value = (rtems_time_of_day) {
+        2021,
+        3,
+        11,
+        11,
+        10,
+        59,
+        rtems_clock_get_ticks_per_second() / 2
+      };
       break;
     }
 
@@ -297,8 +292,7 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
        * While the ``time_of_day`` parameter references a date for a leap year
        * with the value of 29th of February.
        */
-      ctx->target_tod_value =
-        (rtems_time_of_day) { 2096, 2, 29, 0, 0, 0, 0 };
+      ctx->target_tod_value = (rtems_time_of_day) { 2096, 2, 29, 0, 0, 0, 0 };
       break;
     }
 
@@ -307,8 +301,7 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
        * While the ``time_of_day`` parameter references a date for a leap year
        * with the value of 29th of February.
        */
-      ctx->target_tod_value =
-        (rtems_time_of_day) { 2000, 2, 29, 0, 0, 0, 0 };
+      ctx->target_tod_value = (rtems_time_of_day) { 2000, 2, 29, 0, 0, 0, 0 };
       break;
     }
 
@@ -317,8 +310,7 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
        * While the ``time_of_day`` parameter references the youngest date and
        * time accepted (1988-01-01T00:00:00.000000000Z).
        */
-      ctx->target_tod_value =
-        (rtems_time_of_day) { 1988, 1, 1, 0, 0, 0, 0 };
+      ctx->target_tod_value = (rtems_time_of_day) { 1988, 1, 1, 0, 0, 0, 0 };
       break;
     }
 
@@ -327,9 +319,15 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
        * While the ``time_of_day`` parameter references the oldest date and
        * time accepted (2400-12-31T23:59:59.999999999Z).
        */
-      ctx->target_tod_value =
-        (rtems_time_of_day) { 2400, 12, 31, 23, 59, 59,
-        rtems_clock_get_ticks_per_second() - 1 };
+      ctx->target_tod_value = (rtems_time_of_day) {
+        2400,
+        12,
+        31,
+        23,
+        59,
+        59,
+        rtems_clock_get_ticks_per_second() - 1
+      };
       break;
     }
 
@@ -338,9 +336,15 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
        * While the ``time_of_day`` parameter references a valid date and time
        * younger than 1988-01-01T00:00:00.000000000Z.
        */
-      ctx->target_tod_value =
-        (rtems_time_of_day) { 1987, 12, 31, 23, 59, 59,
-        rtems_clock_get_ticks_per_second() - 1 };
+      ctx->target_tod_value = (rtems_time_of_day) {
+        1987,
+        12,
+        31,
+        23,
+        59,
+        59,
+        rtems_clock_get_ticks_per_second() - 1
+      };
       break;
     }
 
@@ -349,8 +353,7 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
        * While the ``time_of_day`` parameter references a valid date and time
        * older than 2400-12-31T23:59:59.999999999Z.
        */
-      ctx->target_tod_value =
-        (rtems_time_of_day) { 2401, 1, 1, 0, 0, 0, 0 };
+      ctx->target_tod_value = (rtems_time_of_day) { 2401, 1, 1, 0, 0, 0, 0 };
       break;
     }
 
@@ -429,9 +432,15 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
        * While the ``time_of_day`` parameter is invalid because the value of
        * the ticks are larger or equal to the ticks per second.
        */
-      ctx->target_tod_value =
-        (rtems_time_of_day) { 2021, 3, 11, 11, 10, 60,
-        rtems_clock_get_ticks_per_second() };
+      ctx->target_tod_value = (rtems_time_of_day) {
+        2021,
+        3,
+        11,
+        11,
+        10,
+        60,
+        rtems_clock_get_ticks_per_second()
+      };
       break;
     }
 
@@ -440,8 +449,7 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
        * While the ``time_of_day`` parameter is invalid because the value 30th
        * of February does not exist in a leap year.
        */
-      ctx->target_tod_value =
-        (rtems_time_of_day) { 2104, 2, 30, 0, 0, 0, 0 };
+      ctx->target_tod_value = (rtems_time_of_day) { 2104, 2, 30, 0, 0, 0, 0 };
       break;
     }
 
@@ -450,8 +458,7 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
        * While the ``time_of_day`` parameter is invalid because the value 29th
        * of February does not exist in a non-leap year.
        */
-      ctx->target_tod_value =
-        (rtems_time_of_day) { 2100, 2, 29, 0, 0, 0, 0 };
+      ctx->target_tod_value = (rtems_time_of_day) { 2100, 2, 29, 0, 0, 0, 0 };
       break;
     }
 
@@ -460,8 +467,7 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
        * While the ``time_of_day`` parameter is invalid because the value 30th
        * of February does not exist in a leap year.
        */
-      ctx->target_tod_value =
-        (rtems_time_of_day) { 2000, 2, 30, 0, 0, 0, 0 };
+      ctx->target_tod_value = (rtems_time_of_day) { 2000, 2, 30, 0, 0, 0, 0 };
       break;
     }
 
@@ -470,8 +476,7 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
        * While the ``time_of_day`` parameter references the same point in time
        * when a timer should fire.
        */
-      ctx->target_tod_value =
-        (rtems_time_of_day) { 1989, 1, 1, 0, 0, 0, 0 };
+      ctx->target_tod_value = (rtems_time_of_day) { 1989, 1, 1, 0, 0, 0, 0 };
       _TOD_prepare_timer( ctx );
       break;
     }
@@ -492,8 +497,7 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
        * While the ``time_of_day`` parameter references a point in time after a
        * timer should fire.
        */
-      ctx->target_tod_value =
-        (rtems_time_of_day) { 1989, 1, 1, 1, 0, 0, 0 };
+      ctx->target_tod_value = (rtems_time_of_day) { 1989, 1, 1, 1, 0, 0, 0 };
       _TOD_prepare_timer( ctx );
       break;
     }
@@ -679,7 +683,7 @@ static void RtemsClockReqSet_Post_Timer_Check(
 static void RtemsClockReqSet_Setup( RtemsClockReqSet_Context *ctx )
 {
   rtems_status_code status;
-  rtems_name timer_name = rtems_build_name( 'T', 'M', 'R', '0' );
+  rtems_name        timer_name = rtems_build_name( 'T', 'M', 'R', '0' );
   ctx->timer_id = RTEMS_ID_NONE;
 
   ctx->target_tod = &ctx->target_tod_value;
@@ -728,9 +732,7 @@ static void RtemsClockReqSet_Prepare( RtemsClockReqSet_Context *ctx )
 
 static void RtemsClockReqSet_Action( RtemsClockReqSet_Context *ctx )
 {
-  TOD_Hook hook = {
-    .handler = TODHook
-  };
+  TOD_Hook hook = { .handler = TODHook };
 
   if ( ctx->register_hook ) {
     _TOD_Hook_Register( &hook );
@@ -799,9 +801,7 @@ static inline RtemsClockReqSet_Entry RtemsClockReqSet_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsClockReqSet_Entries[
-    RtemsClockReqSet_Map[ index ]
-  ];
+  return RtemsClockReqSet_Entries[ RtemsClockReqSet_Map[ index ] ];
 }
 
 static void RtemsClockReqSet_TestVariant( RtemsClockReqSet_Context *ctx )

@@ -68,7 +68,8 @@
  * @{
  */
 
-const char rtems_test_name[] = "TestsuitesBspsFatalSparcLeon3CacheSnoopingDisabledSecondary";
+const char rtems_test_name[] =
+  "TestsuitesBspsFatalSparcLeon3CacheSnoopingDisabledSecondary";
 
 #define FATAL_SYSINIT_RUN \
   BspSparcLeon3ValFatalCacheSnoopingDisabledSecondary_Run

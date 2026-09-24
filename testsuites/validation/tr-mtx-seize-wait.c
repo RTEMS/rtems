@@ -163,51 +163,27 @@ typedef struct {
   } Map;
 } ScoreMtxReqSeizeWait_Context;
 
-static ScoreMtxReqSeizeWait_Context
-  ScoreMtxReqSeizeWait_Instance;
+static ScoreMtxReqSeizeWait_Context ScoreMtxReqSeizeWait_Instance;
 
-static const char * const ScoreMtxReqSeizeWait_PreDesc_Protocol[] = {
-  "None",
-  "Inherit",
-  "Ceiling",
-  "MrsP",
-  "NA"
-};
+static const char *const ScoreMtxReqSeizeWait_PreDesc_Protocol[] =
+  { "None", "Inherit", "Ceiling", "MrsP", "NA" };
 
-static const char * const ScoreMtxReqSeizeWait_PreDesc_Discipline[] = {
-  "FIFO",
-  "Priority",
-  "NA"
-};
+static const char *const ScoreMtxReqSeizeWait_PreDesc_Discipline[] =
+  { "FIFO", "Priority", "NA" };
 
-static const char * const ScoreMtxReqSeizeWait_PreDesc_DeadlockResult[] = {
-  "Status",
-  "Fatal",
-  "NA"
-};
+static const char *const ScoreMtxReqSeizeWait_PreDesc_DeadlockResult[] =
+  { "Status", "Fatal", "NA" };
 
-static const char * const ScoreMtxReqSeizeWait_PreDesc_Recursive[] = {
-  "Allowed",
-  "Deadlock",
-  "NA"
-};
+static const char *const ScoreMtxReqSeizeWait_PreDesc_Recursive[] =
+  { "Allowed", "Deadlock", "NA" };
 
-static const char * const ScoreMtxReqSeizeWait_PreDesc_Owner[] = {
-  "None",
-  "Caller",
-  "Other",
-  "Deadlock",
-  "NA"
-};
+static const char *const ScoreMtxReqSeizeWait_PreDesc_Owner[] =
+  { "None", "Caller", "Other", "Deadlock", "NA" };
 
-static const char * const ScoreMtxReqSeizeWait_PreDesc_Priority[] = {
-  "High",
-  "Equal",
-  "Low",
-  "NA"
-};
+static const char *const ScoreMtxReqSeizeWait_PreDesc_Priority[] =
+  { "High", "Equal", "Low", "NA" };
 
-static const char * const * const ScoreMtxReqSeizeWait_PreDesc[] = {
+static const char *const *const ScoreMtxReqSeizeWait_PreDesc[] = {
   ScoreMtxReqSeizeWait_PreDesc_Protocol,
   ScoreMtxReqSeizeWait_PreDesc_Discipline,
   ScoreMtxReqSeizeWait_PreDesc_DeadlockResult,
@@ -217,7 +193,7 @@ static const char * const * const ScoreMtxReqSeizeWait_PreDesc[] = {
   NULL
 };
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 #include "tr-tq-enqueue-mrsp.h"
 #endif
 
@@ -731,7 +707,7 @@ static void ScoreMtxReqSeizeWait_Post_Enqueued_Check(
        * The calling thread shall be enqueued in priority order according to
        * the MrsP locking protocol.
        */
-      #if defined(RTEMS_SMP)
+      #if defined( RTEMS_SMP )
       ScoreTqReqEnqueueMrsp_Run( &ctx->tq_ctx->base );
       #else
       T_unreachable();
@@ -963,9 +939,7 @@ static T_fixture ScoreMtxReqSeizeWait_Fixture = {
   .initial_context = &ScoreMtxReqSeizeWait_Instance
 };
 
-static const uint8_t ScoreMtxReqSeizeWait_Weights[] = {
-  96, 48, 24, 12, 3, 1
-};
+static const uint8_t ScoreMtxReqSeizeWait_Weights[] = { 96, 48, 24, 12, 3, 1 };
 
 static void ScoreMtxReqSeizeWait_Skip(
   ScoreMtxReqSeizeWait_Context *ctx,
@@ -1012,9 +986,7 @@ static inline ScoreMtxReqSeizeWait_Entry ScoreMtxReqSeizeWait_PopEntry(
 
   ctx->Map.index = index + 1;
 
-  return ScoreMtxReqSeizeWait_Entries[
-    ScoreMtxReqSeizeWait_Map[ index ]
-  ];
+  return ScoreMtxReqSeizeWait_Entries[ ScoreMtxReqSeizeWait_Map[ index ] ];
 }
 
 static void ScoreMtxReqSeizeWait_SetPreConditionStates(

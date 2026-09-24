@@ -136,16 +136,12 @@ typedef struct {
   } Map;
 } RtemsReqIdent_Context;
 
-static RtemsReqIdent_Context
-  RtemsReqIdent_Instance;
+static RtemsReqIdent_Context RtemsReqIdent_Instance;
 
-static const char * const RtemsReqIdent_PreDesc_Name[] = {
-  "Invalid",
-  "Valid",
-  "NA"
-};
+static const char *const RtemsReqIdent_PreDesc_Name[] =
+  { "Invalid", "Valid", "NA" };
 
-static const char * const RtemsReqIdent_PreDesc_Node[] = {
+static const char *const RtemsReqIdent_PreDesc_Node[] = {
   "Local",
   "Remote",
   "Invalid",
@@ -155,13 +151,10 @@ static const char * const RtemsReqIdent_PreDesc_Node[] = {
   "NA"
 };
 
-static const char * const RtemsReqIdent_PreDesc_Id[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsReqIdent_PreDesc_Id[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const * const RtemsReqIdent_PreDesc[] = {
+static const char *const *const RtemsReqIdent_PreDesc[] = {
   RtemsReqIdent_PreDesc_Name,
   RtemsReqIdent_PreDesc_Node,
   RtemsReqIdent_PreDesc_Id,
@@ -294,7 +287,7 @@ static void RtemsReqIdent_Post_Status_Check(
       /*
        * The return status shall be RTEMS_SUCCESSFUL.
        */
-      T_rsc(ctx->status, RTEMS_SUCCESSFUL);
+      T_rsc( ctx->status, RTEMS_SUCCESSFUL );
       break;
     }
 
@@ -302,7 +295,7 @@ static void RtemsReqIdent_Post_Status_Check(
       /*
        * The return status shall be RTEMS_INVALID_ADDRESS.
        */
-      T_rsc(ctx->status, RTEMS_INVALID_ADDRESS);
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
       break;
     }
 
@@ -310,7 +303,7 @@ static void RtemsReqIdent_Post_Status_Check(
       /*
        * The return status shall be RTEMS_INVALID_NAME.
        */
-      T_rsc(ctx->status, RTEMS_INVALID_NAME);
+      T_rsc( ctx->status, RTEMS_INVALID_NAME );
       break;
     }
 
@@ -318,7 +311,7 @@ static void RtemsReqIdent_Post_Status_Check(
       /*
        * The return status shall be RTEMS_INVALID_NODE.
        */
-      T_rsc(ctx->status, RTEMS_INVALID_NODE);
+      T_rsc( ctx->status, RTEMS_INVALID_NODE );
       break;
     }
 
@@ -338,8 +331,8 @@ static void RtemsReqIdent_Post_Id_Check(
        * The value of the object identifier referenced by the id parameter
        * shall be the value before the action.
        */
-      T_eq_ptr(ctx->id, &ctx->id_value);
-      T_eq_u32(ctx->id_value, 0xffffffff);
+      T_eq_ptr( ctx->id, &ctx->id_value );
+      T_eq_u32( ctx->id_value, 0xffffffff );
       break;
     }
 
@@ -347,8 +340,7 @@ static void RtemsReqIdent_Post_Id_Check(
       /*
        * While the id is NULL.
        */
-      T_null(ctx->id)
-      break;
+      T_null( ctx->id ) break;
     }
 
     case RtemsReqIdent_Post_Id_LocalObj: {
@@ -359,8 +351,8 @@ static void RtemsReqIdent_Post_Id_Check(
        * the specified class with such a name exists, then it shall be the
        * identifier of the object with the lowest object index.
        */
-      T_eq_ptr(ctx->id, &ctx->id_value);
-      T_eq_u32(ctx->id_value, ctx->id_local_object);
+      T_eq_ptr( ctx->id, &ctx->id_value );
+      T_eq_u32( ctx->id_value, ctx->id_local_object );
       break;
     }
 
@@ -376,8 +368,8 @@ static void RtemsReqIdent_Post_Id_Check(
        * then it shall be the identifier of the object with the lowest node
        * index and the lowest object index on this node.
        */
-      T_eq_ptr(ctx->id, &ctx->id_value);
-      T_eq_u32(ctx->id_value, ctx->id_remote_object);
+      T_eq_ptr( ctx->id, &ctx->id_value );
+      T_eq_u32( ctx->id_value, ctx->id_remote_object );
       break;
     }
 
@@ -441,9 +433,7 @@ static inline RtemsReqIdent_Entry RtemsReqIdent_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsReqIdent_Entries[
-    RtemsReqIdent_Map[ index ]
-  ];
+  return RtemsReqIdent_Entries[ RtemsReqIdent_Map[ index ] ];
 }
 
 static void RtemsReqIdent_TestVariant( RtemsReqIdent_Context *ctx )
@@ -464,8 +454,8 @@ static T_remark RtemsReqIdent_Remark = {
 };
 
 void RtemsReqIdent_Run(
-  rtems_id             id_local_object,
-  rtems_name           name_local_object,
+  rtems_id   id_local_object,
+  rtems_name name_local_object,
   rtems_status_code ( *action )( rtems_name, uint32_t, rtems_id * )
 )
 {

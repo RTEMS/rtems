@@ -99,8 +99,7 @@ static void ShutdownFatalHandler(
   T_null( arg );
 
   if (
-    source == RTEMS_FATAL_SOURCE_SMP &&
-    code == SMP_FATAL_SHUTDOWN_RESPONSE
+    source == RTEMS_FATAL_SOURCE_SMP && code == SMP_FATAL_SHUTDOWN_RESPONSE
   ) {
     (void) Add( &shutdown_response_counter, 1 );
     shutdown_response_cpu_index = rtems_scheduler_get_processor();

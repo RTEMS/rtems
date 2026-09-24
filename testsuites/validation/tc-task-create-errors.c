@@ -221,54 +221,30 @@ typedef struct {
   } Map;
 } RtemsTaskReqCreateErrors_Context;
 
-static RtemsTaskReqCreateErrors_Context
-  RtemsTaskReqCreateErrors_Instance;
+static RtemsTaskReqCreateErrors_Context RtemsTaskReqCreateErrors_Instance;
 
-static const char * const RtemsTaskReqCreateErrors_PreDesc_Name[] = {
-  "Valid",
-  "Inv",
-  "NA"
-};
+static const char *const RtemsTaskReqCreateErrors_PreDesc_Name[] =
+  { "Valid", "Inv", "NA" };
 
-static const char * const RtemsTaskReqCreateErrors_PreDesc_Id[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsTaskReqCreateErrors_PreDesc_Id[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsTaskReqCreateErrors_PreDesc_SysTsk[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqCreateErrors_PreDesc_SysTsk[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqCreateErrors_PreDesc_Prio[] = {
-  "Valid",
-  "Zero",
-  "Inv",
-  "NA"
-};
+static const char *const RtemsTaskReqCreateErrors_PreDesc_Prio[] =
+  { "Valid", "Zero", "Inv", "NA" };
 
-static const char * const RtemsTaskReqCreateErrors_PreDesc_Free[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqCreateErrors_PreDesc_Free[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqCreateErrors_PreDesc_Stack[] = {
-  "Normal",
-  "Small",
-  "Huge",
-  "NA"
-};
+static const char *const RtemsTaskReqCreateErrors_PreDesc_Stack[] =
+  { "Normal", "Small", "Huge", "NA" };
 
-static const char * const RtemsTaskReqCreateErrors_PreDesc_Ext[] = {
-  "Ok",
-  "Err",
-  "NA"
-};
+static const char *const RtemsTaskReqCreateErrors_PreDesc_Ext[] =
+  { "Ok", "Err", "NA" };
 
-static const char * const * const RtemsTaskReqCreateErrors_PreDesc[] = {
+static const char *const *const RtemsTaskReqCreateErrors_PreDesc[] = {
   RtemsTaskReqCreateErrors_PreDesc_Name,
   RtemsTaskReqCreateErrors_PreDesc_Id,
   RtemsTaskReqCreateErrors_PreDesc_SysTsk,
@@ -588,7 +564,7 @@ static void RtemsTaskReqCreateErrors_Post_Status_Check(
       /*
        * The return status of rtems_task_create() shall be RTEMS_UNSATISFIED.
        */
-      T_rsc( ctx->status, RTEMS_UNSATISFIED  );
+      T_rsc( ctx->status, RTEMS_UNSATISFIED );
       break;
     }
 
@@ -900,9 +876,8 @@ static inline RtemsTaskReqCreateErrors_Entry RtemsTaskReqCreateErrors_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsTaskReqCreateErrors_Entries[
-    RtemsTaskReqCreateErrors_Map[ index ]
-  ];
+  return RtemsTaskReqCreateErrors_Entries
+    [ RtemsTaskReqCreateErrors_Map[ index ] ];
 }
 
 static void RtemsTaskReqCreateErrors_TestVariant(

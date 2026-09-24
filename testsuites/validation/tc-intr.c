@@ -184,7 +184,7 @@ static void RtemsIntrValIntr_Action_0( void )
  */
 static void RtemsIntrValIntr_Action_1( void )
 {
-  RTEMS_INTERRUPT_LOCK_DEFINE( , lock, "name" );
+  RTEMS_INTERRUPT_LOCK_DEFINE(, lock, "name" );
   rtems_interrupt_lock_context lock_context;
 
   /*
@@ -243,10 +243,10 @@ static void RtemsIntrValIntr_Action_1( void )
  */
 static void RtemsIntrValIntr_Action_2( void )
 {
-  int entry_arg;
-  int entry_arg_2;
-  const char entry_info[] = "1";
-  const char entry_info_2[] = "1";
+  int                   entry_arg;
+  int                   entry_arg_2;
+  const char            entry_info[] = "1";
+  const char            entry_info_2[] = "1";
   rtems_interrupt_entry entry = RTEMS_INTERRUPT_ENTRY_INITIALIZER(
     EntryRoutine,
     &entry_arg,
@@ -286,11 +286,7 @@ static void RtemsIntrValIntr_Action_3( void )
 {
   rtems_vector_number vector;
 
-  for (
-    vector = 0;
-    vector < BSP_INTERRUPT_VECTOR_COUNT;
-    ++vector
-  ) {
+  for ( vector = 0; vector < BSP_INTERRUPT_VECTOR_COUNT; ++vector ) {
     rtems_interrupt_attributes attr;
     rtems_status_code          sc;
 
@@ -313,11 +309,7 @@ static void RtemsIntrValIntr_Action_4( void )
 {
   rtems_vector_number vector;
 
-  for (
-    vector = 0;
-    vector < BSP_INTERRUPT_VECTOR_COUNT;
-    ++vector
-  ) {
+  for ( vector = 0; vector < BSP_INTERRUPT_VECTOR_COUNT; ++vector ) {
     rtems_interrupt_attributes attr;
     rtems_status_code          sc;
 

@@ -327,7 +327,7 @@ int rtems_printk_printer( void *unused, const char *fmt, va_list ap );
  *
  * @brief Polled character input functions shall have this type.
  */
-typedef int (* BSP_polling_getchar_function_type )( void );
+typedef int ( *BSP_polling_getchar_function_type )( void );
 
 /* Generated from spec:/rtems/io/if/bsp-poll-char */
 

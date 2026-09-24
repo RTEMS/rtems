@@ -355,101 +355,54 @@ typedef struct {
   } Map;
 } RtemsTaskReqConstruct_Context;
 
-static RtemsTaskReqConstruct_Context
-  RtemsTaskReqConstruct_Instance;
+static RtemsTaskReqConstruct_Context RtemsTaskReqConstruct_Instance;
 
-static const char * const RtemsTaskReqConstruct_PreDesc_CPUs[] = {
-  "One",
-  "More",
-  "NA"
-};
+static const char *const RtemsTaskReqConstruct_PreDesc_CPUs[] =
+  { "One", "More", "NA" };
 
-static const char * const RtemsTaskReqConstruct_PreDesc_Config[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsTaskReqConstruct_PreDesc_Config[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsTaskReqConstruct_PreDesc_Name[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsTaskReqConstruct_PreDesc_Name[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsTaskReqConstruct_PreDesc_Id[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsTaskReqConstruct_PreDesc_Id[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsTaskReqConstruct_PreDesc_SystemTask[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqConstruct_PreDesc_SystemTask[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqConstruct_PreDesc_Priority[] = {
-  "Valid",
-  "Zero",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsTaskReqConstruct_PreDesc_Priority[] =
+  { "Valid", "Zero", "Invalid", "NA" };
 
-static const char * const RtemsTaskReqConstruct_PreDesc_Free[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqConstruct_PreDesc_Free[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqConstruct_PreDesc_TLS[] = {
-  "Enough",
-  "TooSmall",
-  "NA"
-};
+static const char *const RtemsTaskReqConstruct_PreDesc_TLS[] =
+  { "Enough", "TooSmall", "NA" };
 
-static const char * const RtemsTaskReqConstruct_PreDesc_Stack[] = {
-  "Enough",
-  "TooSmall",
-  "NA"
-};
+static const char *const RtemsTaskReqConstruct_PreDesc_Stack[] =
+  { "Enough", "TooSmall", "NA" };
 
-static const char * const RtemsTaskReqConstruct_PreDesc_Create[] = {
-  "Ok",
-  "Error",
-  "NA"
-};
+static const char *const RtemsTaskReqConstruct_PreDesc_Create[] =
+  { "Ok", "Error", "NA" };
 
-static const char * const RtemsTaskReqConstruct_PreDesc_FloatingPoint[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqConstruct_PreDesc_FloatingPoint[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqConstruct_PreDesc_Preempt[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqConstruct_PreDesc_Preempt[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqConstruct_PreDesc_Timeslice[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqConstruct_PreDesc_Timeslice[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqConstruct_PreDesc_ASR[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqConstruct_PreDesc_ASR[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqConstruct_PreDesc_IntLvl[] = {
-  "Zero",
-  "Positive",
-  "NA"
-};
+static const char *const RtemsTaskReqConstruct_PreDesc_IntLvl[] =
+  { "Zero", "Positive", "NA" };
 
-static const char * const * const RtemsTaskReqConstruct_PreDesc[] = {
+static const char *const *const RtemsTaskReqConstruct_PreDesc[] = {
   RtemsTaskReqConstruct_PreDesc_CPUs,
   RtemsTaskReqConstruct_PreDesc_Config,
   RtemsTaskReqConstruct_PreDesc_Name,
@@ -476,12 +429,11 @@ static _Thread_local volatile int tls_object;
 
 #define MAX_TLS_SIZE RTEMS_ALIGN_UP( 128, RTEMS_TASK_STORAGE_ALIGNMENT )
 
-RTEMS_ALIGNED( RTEMS_TASK_STORAGE_ALIGNMENT ) static char task_storage[
-  RTEMS_TASK_STORAGE_SIZE(
-    MAX_TLS_SIZE + TEST_MINIMUM_STACK_SIZE,
-    RTEMS_FLOATING_POINT
-  )
-];
+RTEMS_ALIGNED( RTEMS_TASK_STORAGE_ALIGNMENT )
+static char task_storage[ RTEMS_TASK_STORAGE_SIZE(
+  MAX_TLS_SIZE + TEST_MINIMUM_STACK_SIZE,
+  RTEMS_FLOATING_POINT
+) ];
 
 static const rtems_task_config seize_task_config = {
   .name = rtems_build_name( 'S', 'I', 'Z', 'E' ),
@@ -547,7 +499,7 @@ static void ThreadDelete( rtems_tcb *executing, rtems_tcb *deleted )
   }
 }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 static void PreemptionIntervention( void *arg )
 {
   Context     *ctx;
@@ -574,8 +526,7 @@ static void ThreadTerminate( rtems_tcb *executing )
   ctx = &RtemsTaskReqConstruct_Instance;
 
   if (
-    ctx->scheduler_b_id != INVALID_ID &&
-    ctx->zombie_id == executing->Object.id
+    ctx->scheduler_b_id != INVALID_ID && ctx->zombie_id == executing->Object.id
   ) {
     /*
      * We use the ticket lock of the thread zombie registry to delay the thread
@@ -600,15 +551,13 @@ static void ThreadTerminate( rtems_tcb *executing )
 
 static const rtems_extensions_table extensions[] = {
   {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
     .thread_terminate = ThreadTerminate,
 #endif
     .thread_create = ThreadCreate,
     .thread_delete = ThreadDelete
-  }, {
-    .thread_create = SecondThreadCreate,
-    .thread_delete = ThreadDelete
-  }
+  },
+  { .thread_create = SecondThreadCreate, .thread_delete = ThreadDelete }
 };
 
 static void ZombieTask( rtems_task_argument arg )
@@ -625,14 +574,14 @@ static void PrepareZombie( Context *ctx )
   ctx->create_extension_status = true;
   ctx->zombie_id = CreateTask( "ZOMB", PRIO_HIGH );
   ctx->create_extension_status = create_extension_status;
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   if ( ctx->scheduler_b_id != INVALID_ID ) {
     ctx->zombie_ready = false;
     SetScheduler( ctx->zombie_id, ctx->scheduler_b_id, PRIO_NORMAL );
   }
 #endif
   StartTask( ctx->zombie_id, ZombieTask, ctx );
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   while ( !ctx->zombie_ready ) {
     /* Wait */
   }
@@ -1167,7 +1116,7 @@ static void RtemsTaskReqConstruct_Post_Status_Check(
        * The return status of rtems_task_construct() shall be
        * RTEMS_UNSATISFIED.
        */
-      T_rsc( ctx->status, RTEMS_UNSATISFIED  );
+      T_rsc( ctx->status, RTEMS_UNSATISFIED );
       break;
     }
 
@@ -1530,20 +1479,17 @@ static void RtemsTaskReqConstruct_Post_IntLvl_Check(
 static void RtemsTaskReqConstruct_Setup( RtemsTaskReqConstruct_Context *ctx )
 {
   rtems_status_code sc;
-  int var;
+  int               var;
 
   var = tls_object;
   RTEMS_OBFUSCATE_VARIABLE( var );
   tls_object = var;
 
   ctx->scheduler_b_id = INVALID_ID;
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   ctx->zombie_ready = true;
   if ( rtems_scheduler_get_processor_maximum() > 1 ) {
-    sc = rtems_scheduler_ident(
-      TEST_SCHEDULER_B_NAME,
-      &ctx->scheduler_b_id
-    );
+    sc = rtems_scheduler_ident( TEST_SCHEDULER_B_NAME, &ctx->scheduler_b_id );
     T_rsc_success( sc );
   }
   #endif
@@ -4697,9 +4643,8 @@ static T_fixture RtemsTaskReqConstruct_Fixture = {
   .initial_context = &RtemsTaskReqConstruct_Instance
 };
 
-static const uint16_t RtemsTaskReqConstruct_Weights[] = {
-  24576, 12288, 6144, 3072, 1536, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1
-};
+static const uint16_t RtemsTaskReqConstruct_Weights[] =
+  { 24576, 12288, 6144, 3072, 1536, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1 };
 
 static void RtemsTaskReqConstruct_Skip(
   RtemsTaskReqConstruct_Context *ctx,
@@ -4773,9 +4718,7 @@ static inline RtemsTaskReqConstruct_Entry RtemsTaskReqConstruct_PopEntry(
 
   ctx->Map.index = index + 1;
 
-  return RtemsTaskReqConstruct_Entries[
-    RtemsTaskReqConstruct_Map[ index ]
-  ];
+  return RtemsTaskReqConstruct_Entries[ RtemsTaskReqConstruct_Map[ index ] ];
 }
 
 static void RtemsTaskReqConstruct_TestVariant(
@@ -4898,32 +4841,42 @@ T_TEST_CASE_FIXTURE( RtemsTaskReqConstruct, &RtemsTaskReqConstruct_Fixture )
                       ++ctx->Map.pcs[ 9 ]
                     ) {
                       for (
-                        ctx->Map.pcs[ 10 ] = RtemsTaskReqConstruct_Pre_FloatingPoint_Yes;
-                        ctx->Map.pcs[ 10 ] < RtemsTaskReqConstruct_Pre_FloatingPoint_NA;
+                        ctx->Map.pcs[ 10 ] =
+                          RtemsTaskReqConstruct_Pre_FloatingPoint_Yes;
+                        ctx->Map.pcs[ 10 ] <
+                        RtemsTaskReqConstruct_Pre_FloatingPoint_NA;
                         ++ctx->Map.pcs[ 10 ]
                       ) {
                         for (
-                          ctx->Map.pcs[ 11 ] = RtemsTaskReqConstruct_Pre_Preempt_Yes;
-                          ctx->Map.pcs[ 11 ] < RtemsTaskReqConstruct_Pre_Preempt_NA;
+                          ctx->Map.pcs[ 11 ] =
+                            RtemsTaskReqConstruct_Pre_Preempt_Yes;
+                          ctx->Map.pcs[ 11 ] <
+                          RtemsTaskReqConstruct_Pre_Preempt_NA;
                           ++ctx->Map.pcs[ 11 ]
                         ) {
                           for (
-                            ctx->Map.pcs[ 12 ] = RtemsTaskReqConstruct_Pre_Timeslice_Yes;
-                            ctx->Map.pcs[ 12 ] < RtemsTaskReqConstruct_Pre_Timeslice_NA;
+                            ctx->Map.pcs[ 12 ] =
+                              RtemsTaskReqConstruct_Pre_Timeslice_Yes;
+                            ctx->Map.pcs[ 12 ] <
+                            RtemsTaskReqConstruct_Pre_Timeslice_NA;
                             ++ctx->Map.pcs[ 12 ]
                           ) {
                             for (
-                              ctx->Map.pcs[ 13 ] = RtemsTaskReqConstruct_Pre_ASR_Yes;
-                              ctx->Map.pcs[ 13 ] < RtemsTaskReqConstruct_Pre_ASR_NA;
+                              ctx->Map.pcs[ 13 ] =
+                                RtemsTaskReqConstruct_Pre_ASR_Yes;
+                              ctx->Map.pcs[ 13 ] <
+                              RtemsTaskReqConstruct_Pre_ASR_NA;
                               ++ctx->Map.pcs[ 13 ]
                             ) {
                               for (
-                                ctx->Map.pcs[ 14 ] = RtemsTaskReqConstruct_Pre_IntLvl_Zero;
-                                ctx->Map.pcs[ 14 ] < RtemsTaskReqConstruct_Pre_IntLvl_NA;
+                                ctx->Map.pcs[ 14 ] =
+                                  RtemsTaskReqConstruct_Pre_IntLvl_Zero;
+                                ctx->Map.pcs[ 14 ] <
+                                RtemsTaskReqConstruct_Pre_IntLvl_NA;
                                 ++ctx->Map.pcs[ 14 ]
                               ) {
                                 ctx->Map.entry =
-                                RtemsTaskReqConstruct_PopEntry( ctx );
+                                  RtemsTaskReqConstruct_PopEntry( ctx );
 
                                 if ( ctx->Map.entry.Skip ) {
                                   continue;

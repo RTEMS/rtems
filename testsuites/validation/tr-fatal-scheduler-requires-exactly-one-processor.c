@@ -100,13 +100,13 @@ typedef struct {
 static ScoreSmpValFatalSchedulerRequiresExactlyOneProcessor_Context
   ScoreSmpValFatalSchedulerRequiresExactlyOneProcessor_Instance;
 
-static T_fixture ScoreSmpValFatalSchedulerRequiresExactlyOneProcessor_Fixture = {
-  .setup = NULL,
-  .stop = NULL,
-  .teardown = NULL,
-  .scope = NULL,
-  .initial_context = &ScoreSmpValFatalSchedulerRequiresExactlyOneProcessor_Instance
-};
+static T_fixture ScoreSmpValFatalSchedulerRequiresExactlyOneProcessor_Fixture =
+  { .setup = NULL,
+    .stop = NULL,
+    .teardown = NULL,
+    .scope = NULL,
+    .initial_context =
+      &ScoreSmpValFatalSchedulerRequiresExactlyOneProcessor_Instance };
 
 /**
  * @brief The test action is carried out by the application configuration of

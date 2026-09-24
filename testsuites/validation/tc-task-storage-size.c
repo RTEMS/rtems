@@ -153,22 +153,15 @@ typedef struct {
   } Map;
 } RtemsTaskReqStorageSize_Context;
 
-static RtemsTaskReqStorageSize_Context
-  RtemsTaskReqStorageSize_Instance;
+static RtemsTaskReqStorageSize_Context RtemsTaskReqStorageSize_Instance;
 
-static const char * const RtemsTaskReqStorageSize_PreDesc_Id[] = {
-  "Invalid",
-  "Task",
-  "NA"
-};
+static const char *const RtemsTaskReqStorageSize_PreDesc_Id[] =
+  { "Invalid", "Task", "NA" };
 
-static const char * const RtemsTaskReqStorageSize_PreDesc_Suspended[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqStorageSize_PreDesc_Suspended[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const RtemsTaskReqStorageSize_PreDesc[] = {
+static const char *const *const RtemsTaskReqStorageSize_PreDesc[] = {
   RtemsTaskReqStorageSize_PreDesc_Id,
   RtemsTaskReqStorageSize_PreDesc_Suspended,
   NULL
@@ -371,9 +364,8 @@ static inline RtemsTaskReqStorageSize_Entry RtemsTaskReqStorageSize_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsTaskReqStorageSize_Entries[
-    RtemsTaskReqStorageSize_Map[ index ]
-  ];
+  return RtemsTaskReqStorageSize_Entries
+    [ RtemsTaskReqStorageSize_Map[ index ] ];
 }
 
 static void RtemsTaskReqStorageSize_SetPreConditionStates(

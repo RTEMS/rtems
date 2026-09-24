@@ -107,11 +107,8 @@ static void ClockInterrupt( void *arg )
   (void) arg;
 }
 
-static rtems_interrupt_entry interrupt_entry = RTEMS_INTERRUPT_ENTRY_INITIALIZER(
-  ClockInterrupt,
-  NULL,
-  "Clock"
-);
+static rtems_interrupt_entry interrupt_entry =
+  RTEMS_INTERRUPT_ENTRY_INITIALIZER( ClockInterrupt, NULL, "Clock" );
 
 static void OccupyClockInterrupt( void )
 {
@@ -154,11 +151,7 @@ static void DevClockXilTtcValFatalIrqInstall_Action_0(
   /*
    * Check that the expected fatal code is present.
    */
-  T_step_eq_ulong(
-    1,
-    ctx->code,
-    XIL_FATAL_TTC_IRQ_INSTALL
-  );
+  T_step_eq_ulong( 1, ctx->code, XIL_FATAL_TTC_IRQ_INSTALL );
 }
 
 void DevClockXilTtcValFatalIrqInstall_Run(

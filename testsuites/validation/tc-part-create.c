@@ -193,50 +193,27 @@ typedef struct {
   } Map;
 } RtemsPartReqCreate_Context;
 
-static RtemsPartReqCreate_Context
-  RtemsPartReqCreate_Instance;
+static RtemsPartReqCreate_Context RtemsPartReqCreate_Instance;
 
-static const char * const RtemsPartReqCreate_PreDesc_Name[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsPartReqCreate_PreDesc_Name[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsPartReqCreate_PreDesc_Id[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsPartReqCreate_PreDesc_Id[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsPartReqCreate_PreDesc_Start[] = {
-  "Valid",
-  "Null",
-  "BadAlign",
-  "NA"
-};
+static const char *const RtemsPartReqCreate_PreDesc_Start[] =
+  { "Valid", "Null", "BadAlign", "NA" };
 
-static const char * const RtemsPartReqCreate_PreDesc_Length[] = {
-  "Valid",
-  "Zero",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsPartReqCreate_PreDesc_Length[] =
+  { "Valid", "Zero", "Invalid", "NA" };
 
-static const char * const RtemsPartReqCreate_PreDesc_Size[] = {
-  "Valid",
-  "Zero",
-  "Skew",
-  "Small",
-  "NA"
-};
+static const char *const RtemsPartReqCreate_PreDesc_Size[] =
+  { "Valid", "Zero", "Skew", "Small", "NA" };
 
-static const char * const RtemsPartReqCreate_PreDesc_Free[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsPartReqCreate_PreDesc_Free[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const RtemsPartReqCreate_PreDesc[] = {
+static const char *const *const RtemsPartReqCreate_PreDesc[] = {
   RtemsPartReqCreate_PreDesc_Name,
   RtemsPartReqCreate_PreDesc_Id,
   RtemsPartReqCreate_PreDesc_Start,
@@ -254,11 +231,13 @@ static const char * const * const RtemsPartReqCreate_PreDesc[] = {
 
 #define BUFFER_SIZE ( 2 * sizeof( void * ) )
 
-static RTEMS_ALIGNED( RTEMS_PARTITION_ALIGNMENT ) uint8_t
-  buffers_to_seize[ MAX_PARTITIONS ][ BUFFER_COUNT ][ BUFFER_SIZE ];
+static RTEMS_ALIGNED(
+  RTEMS_PARTITION_ALIGNMENT
+) uint8_t buffers_to_seize[ MAX_PARTITIONS ][ BUFFER_COUNT ][ BUFFER_SIZE ];
 
-static RTEMS_ALIGNED( RTEMS_PARTITION_ALIGNMENT ) uint8_t
-  buffers[ BUFFER_COUNT ][ BUFFER_SIZE ];
+static RTEMS_ALIGNED(
+  RTEMS_PARTITION_ALIGNMENT
+) uint8_t buffers[ BUFFER_COUNT ][ BUFFER_SIZE ];
 
 static rtems_status_code Create( void *arg, uint32_t *id )
 {
@@ -590,7 +569,7 @@ static void RtemsPartReqCreate_Post_IdVar_Check(
       T_eq_ptr( ctx->id, &ctx->id_value );
       T_ne_u32( ctx->id_value, INVALID_ID );
 
-      for ( i = 0; i < BUFFER_COUNT; ++i) {
+      for ( i = 0; i < BUFFER_COUNT; ++i ) {
         sc = rtems_partition_get_buffer( ctx->id_value, &buffers[ i ] );
         T_rsc_success( sc );
         T_not_null( buffers[ i ] );
@@ -601,7 +580,7 @@ static void RtemsPartReqCreate_Post_IdVar_Check(
       T_rsc( sc, RTEMS_UNSATISFIED );
       T_eq_ptr( no_buffer, (void *) (uintptr_t) 1 );
 
-      for ( i = 0; i < BUFFER_COUNT; ++i) {
+      for ( i = 0; i < BUFFER_COUNT; ++i ) {
         sc = rtems_partition_return_buffer( ctx->id_value, buffers[ i ] );
         T_rsc_success( sc );
       }
@@ -720,9 +699,7 @@ static inline RtemsPartReqCreate_Entry RtemsPartReqCreate_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsPartReqCreate_Entries[
-    RtemsPartReqCreate_Map[ index ]
-  ];
+  return RtemsPartReqCreate_Entries[ RtemsPartReqCreate_Map[ index ] ];
 }
 
 static void RtemsPartReqCreate_TestVariant( RtemsPartReqCreate_Context *ctx )

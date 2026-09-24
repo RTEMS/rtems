@@ -121,16 +121,12 @@ typedef struct {
   } Map;
 } ScoreTqReqFlushPriority_Context;
 
-static ScoreTqReqFlushPriority_Context
-  ScoreTqReqFlushPriority_Instance;
+static ScoreTqReqFlushPriority_Context ScoreTqReqFlushPriority_Instance;
 
-static const char * const ScoreTqReqFlushPriority_PreDesc_Queue[] = {
-  "Empty",
-  "NonEmpty",
-  "NA"
-};
+static const char *const ScoreTqReqFlushPriority_PreDesc_Queue[] =
+  { "Empty", "NonEmpty", "NA" };
 
-static const char * const * const ScoreTqReqFlushPriority_PreDesc[] = {
+static const char *const *const ScoreTqReqFlushPriority_PreDesc[] = {
   ScoreTqReqFlushPriority_PreDesc_Queue,
   NULL
 };
@@ -166,10 +162,7 @@ static void SchedulerEvent(
 
   ctx = arg;
 
-  if (
-    when == T_SCHEDULER_BEFORE &&
-    event->operation == T_SCHEDULER_BLOCK
-  ) {
+  if ( when == T_SCHEDULER_BEFORE && event->operation == T_SCHEDULER_BLOCK ) {
     ctx->request.handler = Flush;
     ctx->request.arg = ctx;
     CallWithinISRSubmit( &ctx->request );
@@ -370,9 +363,8 @@ static inline ScoreTqReqFlushPriority_Entry ScoreTqReqFlushPriority_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return ScoreTqReqFlushPriority_Entries[
-    ScoreTqReqFlushPriority_Map[ index ]
-  ];
+  return ScoreTqReqFlushPriority_Entries
+    [ ScoreTqReqFlushPriority_Map[ index ] ];
 }
 
 static void ScoreTqReqFlushPriority_TestVariant(

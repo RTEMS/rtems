@@ -245,40 +245,24 @@ typedef struct {
   } Map;
 } RtemsTaskReqStart_Context;
 
-static RtemsTaskReqStart_Context
-  RtemsTaskReqStart_Instance;
+static RtemsTaskReqStart_Context RtemsTaskReqStart_Instance;
 
-static const char * const RtemsTaskReqStart_PreDesc_Id[] = {
-  "Invalid",
-  "Task",
-  "NA"
-};
+static const char *const RtemsTaskReqStart_PreDesc_Id[] =
+  { "Invalid", "Task", "NA" };
 
-static const char * const RtemsTaskReqStart_PreDesc_EntryPoint[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsTaskReqStart_PreDesc_EntryPoint[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsTaskReqStart_PreDesc_Argument[] = {
-  "Pointer",
-  "Number",
-  "NA"
-};
+static const char *const RtemsTaskReqStart_PreDesc_Argument[] =
+  { "Pointer", "Number", "NA" };
 
-static const char * const RtemsTaskReqStart_PreDesc_Dormant[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqStart_PreDesc_Dormant[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsTaskReqStart_PreDesc_Suspended[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqStart_PreDesc_Suspended[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const RtemsTaskReqStart_PreDesc[] = {
+static const char *const *const RtemsTaskReqStart_PreDesc[] = {
   RtemsTaskReqStart_PreDesc_Id,
   RtemsTaskReqStart_PreDesc_EntryPoint,
   RtemsTaskReqStart_PreDesc_Argument,
@@ -765,9 +749,7 @@ static inline RtemsTaskReqStart_Entry RtemsTaskReqStart_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsTaskReqStart_Entries[
-    RtemsTaskReqStart_Map[ index ]
-  ];
+  return RtemsTaskReqStart_Entries[ RtemsTaskReqStart_Map[ index ] ];
 }
 
 static void RtemsTaskReqStart_SetPreConditionStates(

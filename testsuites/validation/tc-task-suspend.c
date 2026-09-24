@@ -153,22 +153,15 @@ typedef struct {
   } Map;
 } RtemsTaskReqSuspend_Context;
 
-static RtemsTaskReqSuspend_Context
-  RtemsTaskReqSuspend_Instance;
+static RtemsTaskReqSuspend_Context RtemsTaskReqSuspend_Instance;
 
-static const char * const RtemsTaskReqSuspend_PreDesc_Id[] = {
-  "Invalid",
-  "Task",
-  "NA"
-};
+static const char *const RtemsTaskReqSuspend_PreDesc_Id[] =
+  { "Invalid", "Task", "NA" };
 
-static const char * const RtemsTaskReqSuspend_PreDesc_Suspended[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsTaskReqSuspend_PreDesc_Suspended[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const RtemsTaskReqSuspend_PreDesc[] = {
+static const char *const *const RtemsTaskReqSuspend_PreDesc[] = {
   RtemsTaskReqSuspend_PreDesc_Id,
   RtemsTaskReqSuspend_PreDesc_Suspended,
   NULL
@@ -360,9 +353,7 @@ static inline RtemsTaskReqSuspend_Entry RtemsTaskReqSuspend_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsTaskReqSuspend_Entries[
-    RtemsTaskReqSuspend_Map[ index ]
-  ];
+  return RtemsTaskReqSuspend_Entries[ RtemsTaskReqSuspend_Map[ index ] ];
 }
 
 static void RtemsTaskReqSuspend_SetPreConditionStates(

@@ -191,41 +191,24 @@ typedef struct {
   } Map;
 } RtemsBarrierReqCreate_Context;
 
-static RtemsBarrierReqCreate_Context
-  RtemsBarrierReqCreate_Instance;
+static RtemsBarrierReqCreate_Context RtemsBarrierReqCreate_Instance;
 
-static const char * const RtemsBarrierReqCreate_PreDesc_Name[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsBarrierReqCreate_PreDesc_Name[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsBarrierReqCreate_PreDesc_Id[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsBarrierReqCreate_PreDesc_Id[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsBarrierReqCreate_PreDesc_Class[] = {
-  "Default",
-  "Manual",
-  "Auto",
-  "NA"
-};
+static const char *const RtemsBarrierReqCreate_PreDesc_Class[] =
+  { "Default", "Manual", "Auto", "NA" };
 
-static const char * const RtemsBarrierReqCreate_PreDesc_MaxWait[] = {
-  "Zero",
-  "Positive",
-  "NA"
-};
+static const char *const RtemsBarrierReqCreate_PreDesc_MaxWait[] =
+  { "Zero", "Positive", "NA" };
 
-static const char * const RtemsBarrierReqCreate_PreDesc_Free[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsBarrierReqCreate_PreDesc_Free[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const RtemsBarrierReqCreate_PreDesc[] = {
+static const char *const *const RtemsBarrierReqCreate_PreDesc[] = {
   RtemsBarrierReqCreate_PreDesc_Name,
   RtemsBarrierReqCreate_PreDesc_Id,
   RtemsBarrierReqCreate_PreDesc_Class,
@@ -692,9 +675,7 @@ static inline RtemsBarrierReqCreate_Entry RtemsBarrierReqCreate_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsBarrierReqCreate_Entries[
-    RtemsBarrierReqCreate_Map[ index ]
-  ];
+  return RtemsBarrierReqCreate_Entries[ RtemsBarrierReqCreate_Map[ index ] ];
 }
 
 static void RtemsBarrierReqCreate_TestVariant(

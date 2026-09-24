@@ -206,66 +206,48 @@ typedef struct {
 static ScoreTqReqSurrenderPriorityInherit_Context
   ScoreTqReqSurrenderPriorityInherit_Instance;
 
-static const char * const ScoreTqReqSurrenderPriorityInherit_PreDesc_SchedulerCount[] = {
-  "One",
-  "Two",
-  "More",
-  "NA"
-};
+static const char *const
+  ScoreTqReqSurrenderPriorityInherit_PreDesc_SchedulerCount[] =
+    { "One", "Two", "More", "NA" };
 
-static const char * const ScoreTqReqSurrenderPriorityInherit_PreDesc_InheritedPriority[] = {
-  "Vital",
-  "Dispensable",
-  "NA"
-};
+static const char *const
+  ScoreTqReqSurrenderPriorityInherit_PreDesc_InheritedPriority[] =
+    { "Vital", "Dispensable", "NA" };
 
-static const char * const ScoreTqReqSurrenderPriorityInherit_PreDesc_PreviousHelping[] = {
-  "Vital",
-  "Dispensable",
-  "NA"
-};
+static const char *const
+  ScoreTqReqSurrenderPriorityInherit_PreDesc_PreviousHelping[] =
+    { "Vital", "Dispensable", "NA" };
 
-static const char * const ScoreTqReqSurrenderPriorityInherit_PreDesc_UsedScheduler[] = {
-  "Home",
-  "Helping",
-  "NA"
-};
+static const char *const
+  ScoreTqReqSurrenderPriorityInherit_PreDesc_UsedScheduler[] =
+    { "Home", "Helping", "NA" };
 
-static const char * const ScoreTqReqSurrenderPriorityInherit_PreDesc_NewPriority[] = {
-  "Vital",
-  "Dispensable",
-  "NA"
-};
+static const char *const
+  ScoreTqReqSurrenderPriorityInherit_PreDesc_NewPriority[] =
+    { "Vital", "Dispensable", "NA" };
 
-static const char * const ScoreTqReqSurrenderPriorityInherit_PreDesc_NewHelping[] = {
-  "Vital",
-  "Dispensable",
-  "NA"
-};
+static const char *const
+  ScoreTqReqSurrenderPriorityInherit_PreDesc_NewHelping[] =
+    { "Vital", "Dispensable", "NA" };
 
-static const char * const ScoreTqReqSurrenderPriorityInherit_PreDesc_Suspended[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const
+  ScoreTqReqSurrenderPriorityInherit_PreDesc_Suspended[] =
+    { "Yes", "No", "NA" };
 
-static const char * const ScoreTqReqSurrenderPriorityInherit_PreDesc_WaitState[] = {
-  "Blocked",
-  "IntendToBlock",
-  "NA"
-};
+static const char *const
+  ScoreTqReqSurrenderPriorityInherit_PreDesc_WaitState[] =
+    { "Blocked", "IntendToBlock", "NA" };
 
-static const char * const * const ScoreTqReqSurrenderPriorityInherit_PreDesc[] = {
-  ScoreTqReqSurrenderPriorityInherit_PreDesc_SchedulerCount,
-  ScoreTqReqSurrenderPriorityInherit_PreDesc_InheritedPriority,
-  ScoreTqReqSurrenderPriorityInherit_PreDesc_PreviousHelping,
-  ScoreTqReqSurrenderPriorityInherit_PreDesc_UsedScheduler,
-  ScoreTqReqSurrenderPriorityInherit_PreDesc_NewPriority,
-  ScoreTqReqSurrenderPriorityInherit_PreDesc_NewHelping,
-  ScoreTqReqSurrenderPriorityInherit_PreDesc_Suspended,
-  ScoreTqReqSurrenderPriorityInherit_PreDesc_WaitState,
-  NULL
-};
+static const char *const *const ScoreTqReqSurrenderPriorityInherit_PreDesc[] =
+  { ScoreTqReqSurrenderPriorityInherit_PreDesc_SchedulerCount,
+    ScoreTqReqSurrenderPriorityInherit_PreDesc_InheritedPriority,
+    ScoreTqReqSurrenderPriorityInherit_PreDesc_PreviousHelping,
+    ScoreTqReqSurrenderPriorityInherit_PreDesc_UsedScheduler,
+    ScoreTqReqSurrenderPriorityInherit_PreDesc_NewPriority,
+    ScoreTqReqSurrenderPriorityInherit_PreDesc_NewHelping,
+    ScoreTqReqSurrenderPriorityInherit_PreDesc_Suspended,
+    ScoreTqReqSurrenderPriorityInherit_PreDesc_WaitState,
+    NULL };
 
 typedef ScoreTqReqSurrenderPriorityInherit_Context Context;
 
@@ -314,7 +296,7 @@ static void Surrender( Context *ctx )
   ctx->priority_after = GetSelfPriority();
 }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 static void Delay( void *arg )
 {
   Context          *ctx;
@@ -340,10 +322,7 @@ static void SchedulerBlock(
 
   ctx = arg;
 
-  if (
-    when == T_SCHEDULER_BEFORE &&
-    event->operation == T_SCHEDULER_BLOCK
-  ) {
+  if ( when == T_SCHEDULER_BEFORE && event->operation == T_SCHEDULER_BLOCK ) {
     T_scheduler_set_event_handler( NULL, NULL );
     ctx->request.handler = Delay;
     CallWithinISRSubmit( &ctx->request );
@@ -353,7 +332,7 @@ static void SchedulerBlock(
 
 static void Setup( Context *ctx )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   TQSetScheduler( ctx->tq_ctx, NEW_OWNER, SCHEDULER_B_ID, PRIO_NORMAL );
   TQSetPriority( ctx->tq_ctx, PREV_OWNER_HELPER_A, PRIO_VERY_HIGH );
   TQSetScheduler(
@@ -385,15 +364,15 @@ static void Setup( Context *ctx )
 
 static void Action( Context *ctx )
 {
-  Status_Control    status;
-#if defined(RTEMS_SMP)
+  Status_Control status;
+#if defined( RTEMS_SMP )
   SMP_barrier_State state;
 #endif
 
   ctx->action_performed = true;
   ctx->previous_owner = ctx->tq_ctx->runner_id;
   TQMutexObtain( ctx->tq_ctx, TQ_MUTEX_A );
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   TQSendAndWaitForExecutionStop(
     ctx->tq_ctx,
     NEW_OWNER,
@@ -409,7 +388,7 @@ static void Action( Context *ctx )
     );
   }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   if ( ctx->helping_schedules_are_dispensible ) {
     TQSendAndWaitForExecutionStop(
       ctx->tq_ctx,
@@ -430,7 +409,7 @@ static void Action( Context *ctx )
   status = TQEnqueue( ctx->tq_ctx, TQ_NO_WAIT );
   T_eq_int( status, TQConvertStatus( ctx->tq_ctx, STATUS_SUCCESSFUL ) );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   if ( ctx->intend_to_block ) {
     _SMP_barrier_Control_initialize( &ctx->barrier );
     _SMP_barrier_State_initialize( &state );
@@ -441,11 +420,7 @@ static void Action( Context *ctx )
     /* B0 */
     _SMP_barrier_Wait( &ctx->barrier, &state, 2 );
   } else {
-    TQSendAndWaitForExecutionStop(
-      ctx->tq_ctx,
-      NEW_OWNER,
-      TQ_EVENT_ENQUEUE
-    );
+    TQSendAndWaitForExecutionStop( ctx->tq_ctx, NEW_OWNER, TQ_EVENT_ENQUEUE );
   }
 
   if ( ctx->gains_new_priority ) {
@@ -505,17 +480,13 @@ static void Action( Context *ctx )
     ctx->tq_ctx->busy_wait[ PREV_OWNER_MOVER ] = false;
   }
 #else
-  TQSend(
-    ctx->tq_ctx,
-    NEW_OWNER,
-    TQ_EVENT_HELPER_B_SYNC | TQ_EVENT_ENQUEUE
-  );
+  TQSend( ctx->tq_ctx, NEW_OWNER, TQ_EVENT_HELPER_B_SYNC | TQ_EVENT_ENQUEUE );
   TQSynchronizeRunner();
 #endif
 
   Surrender( ctx );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   if ( ctx->intend_to_block ) {
     /* B1 */
     _SMP_barrier_Wait( &ctx->barrier, &state, 2 );
@@ -529,23 +500,16 @@ static void Cleanup( Context *ctx )
     ResumeTask( ctx->tq_ctx->worker_id[ NEW_OWNER ] );
   }
 
-  TQSendAndSynchronizeRunner(
-    ctx->tq_ctx,
-    NEW_OWNER,
-    TQ_EVENT_SURRENDER
-  );
+  TQSendAndSynchronizeRunner( ctx->tq_ctx, NEW_OWNER, TQ_EVENT_SURRENDER );
   TQWaitForExecutionStop( ctx->tq_ctx, NEW_OWNER );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   TQSendAndSynchronizeRunner(
     ctx->tq_ctx,
     NEW_OWNER,
     TQ_EVENT_MUTEX_B_RELEASE
   );
-  TQWaitForExecutionStop(
-    ctx->tq_ctx,
-    NEW_OWNER
-  );
+  TQWaitForExecutionStop( ctx->tq_ctx, NEW_OWNER );
 
   if ( ctx->gains_new_priority ) {
     TQSendAndSynchronizeRunner(
@@ -578,14 +542,10 @@ static void Cleanup( Context *ctx )
 
 static void SetupSticky( Context *ctx )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   TQSetScheduler( ctx->tq_ctx, NEW_OWNER, SCHEDULER_B_ID, PRIO_NORMAL );
   TQSetPriority( ctx->tq_ctx, PREV_OWNER_HELPER_A, PRIO_VERY_HIGH );
-  TQSetScheduler( ctx->tq_ctx,
-    PREV_OWNER_HELPER_B,
-    SCHEDULER_B_ID,
-    PRIO_LOW
-  );
+  TQSetScheduler( ctx->tq_ctx, PREV_OWNER_HELPER_B, SCHEDULER_B_ID, PRIO_LOW );
   TQSetPriority( ctx->tq_ctx, NEW_OWNER_NEW_HELPER, PRIO_VERY_HIGH );
   TQSetPriority( ctx->tq_ctx, PREV_OWNER, PRIO_NORMAL );
 #else
@@ -595,7 +555,7 @@ static void SetupSticky( Context *ctx )
 
 static void ActionSticky( Context *ctx )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   ctx->action_performed = true;
   ctx->previous_owner = ctx->tq_ctx->worker_id[ PREV_OWNER ];
 
@@ -636,20 +596,12 @@ static void ActionSticky( Context *ctx )
   );
   SetSelfScheduler( SCHEDULER_A_ID, PRIO_ULTRA_HIGH );
 
-  TQSendAndWaitForIntendToBlock(
-    ctx->tq_ctx,
-    NEW_OWNER,
-    TQ_EVENT_ENQUEUE
-  );
+  TQSendAndWaitForIntendToBlock( ctx->tq_ctx, NEW_OWNER, TQ_EVENT_ENQUEUE );
 
   SetSelfScheduler( SCHEDULER_B_ID, PRIO_ULTRA_HIGH );
 
   if ( ctx->gains_new_helping_scheduler ) {
-    TQSend(
-      ctx->tq_ctx,
-      NEW_OWNER_NEW_HELPER,
-      TQ_EVENT_ENQUEUE
-    );
+    TQSend( ctx->tq_ctx, NEW_OWNER_NEW_HELPER, TQ_EVENT_ENQUEUE );
     YieldTask( ctx->tq_ctx->worker_id[ PREV_OWNER ] );
     TQWaitForEventsReceived( ctx->tq_ctx, NEW_OWNER_NEW_HELPER );
     TQWaitForIntendToBlock( ctx->tq_ctx, NEW_OWNER_NEW_HELPER );
@@ -668,14 +620,10 @@ static void ActionSticky( Context *ctx )
   TQSendAndWaitForExecutionStop(
     ctx->tq_ctx,
     PREV_OWNER,
-    TQ_EVENT_SCHEDULER_RECORD_START |
-      TQ_EVENT_SURRENDER
+    TQ_EVENT_SCHEDULER_RECORD_START | TQ_EVENT_SURRENDER
   );
   TQSchedulerRecordStop( ctx->tq_ctx );
-  T_eq_ptr(
-    TQGetOwner( ctx->tq_ctx ),
-    ctx->tq_ctx->worker_tcb[ NEW_OWNER ]
-  );
+  T_eq_ptr( TQGetOwner( ctx->tq_ctx ), ctx->tq_ctx->worker_tcb[ NEW_OWNER ] );
   ctx->priority_after = TQGetPriority( ctx->tq_ctx, PREV_OWNER );
 #else
   (void) ctx;
@@ -684,18 +632,14 @@ static void ActionSticky( Context *ctx )
 
 static void CleanupSticky( Context *ctx )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   SetSelfScheduler( SCHEDULER_A_ID, PRIO_ULTRA_HIGH );
 
   if ( ctx->suspended ) {
     ResumeTask( ctx->tq_ctx->worker_id[ NEW_OWNER ] );
   }
 
-  TQSendAndSynchronizeRunner(
-    ctx->tq_ctx,
-    NEW_OWNER,
-    TQ_EVENT_SURRENDER
-  );
+  TQSendAndSynchronizeRunner( ctx->tq_ctx, NEW_OWNER, TQ_EVENT_SURRENDER );
 
   if ( ctx->gains_new_helping_scheduler ) {
     TQSendAndSynchronizeRunner(
@@ -1099,7 +1043,7 @@ static void ScoreTqReqSurrenderPriorityInherit_Post_NewPriority_Check(
         scheduler_id,
         &priority
       );
-      #if defined(RTEMS_SMP)
+      #if defined( RTEMS_SMP )
       T_rsc( sc, RTEMS_NOT_DEFINED );
       #else
       T_rsc_success( sc );
@@ -1146,7 +1090,7 @@ static void ScoreTqReqSurrenderPriorityInherit_Post_RemoveHelper_Check(
         SCHEDULER_B_ID,
         &priority
       );
-      #if defined(RTEMS_SMP)
+      #if defined( RTEMS_SMP )
       T_rsc_success( sc );
 
       if ( ctx->tq_ctx->enqueue_variant == TQ_ENQUEUE_STICKY ) {
@@ -1217,7 +1161,7 @@ static void ScoreTqReqSurrenderPriorityInherit_Post_AddHelper_Check(
         scheduler_id,
         &priority
       );
-      #if defined(RTEMS_SMP)
+      #if defined( RTEMS_SMP )
       T_rsc( sc, RTEMS_NOT_DEFINED );
       #else
       T_rsc_success( sc );
@@ -2310,9 +2254,8 @@ static T_fixture ScoreTqReqSurrenderPriorityInherit_Fixture = {
   .initial_context = &ScoreTqReqSurrenderPriorityInherit_Instance
 };
 
-static const uint8_t ScoreTqReqSurrenderPriorityInherit_Weights[] = {
-  128, 64, 32, 16, 8, 4, 2, 1
-};
+static const uint8_t ScoreTqReqSurrenderPriorityInherit_Weights[] =
+  { 128, 64, 32, 16, 8, 4, 2, 1 };
 
 static void ScoreTqReqSurrenderPriorityInherit_Skip(
   ScoreTqReqSurrenderPriorityInherit_Context *ctx,
@@ -2321,25 +2264,32 @@ static void ScoreTqReqSurrenderPriorityInherit_Skip(
 {
   switch ( index + 1 ) {
     case 1:
-      ctx->Map.pcs[ 1 ] = ScoreTqReqSurrenderPriorityInherit_Pre_InheritedPriority_NA - 1;
+      ctx->Map.pcs[ 1 ] =
+        ScoreTqReqSurrenderPriorityInherit_Pre_InheritedPriority_NA - 1;
       /* Fall through */
     case 2:
-      ctx->Map.pcs[ 2 ] = ScoreTqReqSurrenderPriorityInherit_Pre_PreviousHelping_NA - 1;
+      ctx->Map.pcs[ 2 ] =
+        ScoreTqReqSurrenderPriorityInherit_Pre_PreviousHelping_NA - 1;
       /* Fall through */
     case 3:
-      ctx->Map.pcs[ 3 ] = ScoreTqReqSurrenderPriorityInherit_Pre_UsedScheduler_NA - 1;
+      ctx->Map.pcs[ 3 ] =
+        ScoreTqReqSurrenderPriorityInherit_Pre_UsedScheduler_NA - 1;
       /* Fall through */
     case 4:
-      ctx->Map.pcs[ 4 ] = ScoreTqReqSurrenderPriorityInherit_Pre_NewPriority_NA - 1;
+      ctx->Map.pcs[ 4 ] =
+        ScoreTqReqSurrenderPriorityInherit_Pre_NewPriority_NA - 1;
       /* Fall through */
     case 5:
-      ctx->Map.pcs[ 5 ] = ScoreTqReqSurrenderPriorityInherit_Pre_NewHelping_NA - 1;
+      ctx->Map.pcs[ 5 ] =
+        ScoreTqReqSurrenderPriorityInherit_Pre_NewHelping_NA - 1;
       /* Fall through */
     case 6:
-      ctx->Map.pcs[ 6 ] = ScoreTqReqSurrenderPriorityInherit_Pre_Suspended_NA - 1;
+      ctx->Map.pcs[ 6 ] = ScoreTqReqSurrenderPriorityInherit_Pre_Suspended_NA -
+                          1;
       /* Fall through */
     case 7:
-      ctx->Map.pcs[ 7 ] = ScoreTqReqSurrenderPriorityInherit_Pre_WaitState_NA - 1;
+      ctx->Map.pcs[ 7 ] = ScoreTqReqSurrenderPriorityInherit_Pre_WaitState_NA -
+                          1;
       break;
   }
 }
@@ -2358,7 +2308,8 @@ ScoreTqReqSurrenderPriorityInherit_PopEntry(
     index = 0;
 
     for ( i = 0; i < 8; ++i ) {
-      index += ScoreTqReqSurrenderPriorityInherit_Weights[ i ] * ctx->Map.pcs[ i ];
+      index += ScoreTqReqSurrenderPriorityInherit_Weights[ i ] *
+               ctx->Map.pcs[ i ];
     }
   } else {
     index = ctx->Map.index;
@@ -2366,9 +2317,8 @@ ScoreTqReqSurrenderPriorityInherit_PopEntry(
 
   ctx->Map.index = index + 1;
 
-  return ScoreTqReqSurrenderPriorityInherit_Entries[
-    ScoreTqReqSurrenderPriorityInherit_Map[ index ]
-  ];
+  return ScoreTqReqSurrenderPriorityInherit_Entries
+    [ ScoreTqReqSurrenderPriorityInherit_Map[ index ] ];
 }
 
 static void ScoreTqReqSurrenderPriorityInherit_TestVariant(
@@ -2466,43 +2416,59 @@ void ScoreTqReqSurrenderPriorityInherit_Run( TQContext *tq_ctx )
   ctx->Map.skip = false;
 
   for (
-    ctx->Map.pcs[ 0 ] = ScoreTqReqSurrenderPriorityInherit_Pre_SchedulerCount_One;
-    ctx->Map.pcs[ 0 ] < ScoreTqReqSurrenderPriorityInherit_Pre_SchedulerCount_NA;
+    ctx->Map.pcs[ 0 ] =
+      ScoreTqReqSurrenderPriorityInherit_Pre_SchedulerCount_One;
+    ctx->Map.pcs[ 0 ] <
+    ScoreTqReqSurrenderPriorityInherit_Pre_SchedulerCount_NA;
     ++ctx->Map.pcs[ 0 ]
   ) {
     for (
-      ctx->Map.pcs[ 1 ] = ScoreTqReqSurrenderPriorityInherit_Pre_InheritedPriority_Vital;
-      ctx->Map.pcs[ 1 ] < ScoreTqReqSurrenderPriorityInherit_Pre_InheritedPriority_NA;
+      ctx->Map.pcs[ 1 ] =
+        ScoreTqReqSurrenderPriorityInherit_Pre_InheritedPriority_Vital;
+      ctx->Map.pcs[ 1 ] <
+      ScoreTqReqSurrenderPriorityInherit_Pre_InheritedPriority_NA;
       ++ctx->Map.pcs[ 1 ]
     ) {
       for (
-        ctx->Map.pcs[ 2 ] = ScoreTqReqSurrenderPriorityInherit_Pre_PreviousHelping_Vital;
-        ctx->Map.pcs[ 2 ] < ScoreTqReqSurrenderPriorityInherit_Pre_PreviousHelping_NA;
+        ctx->Map.pcs[ 2 ] =
+          ScoreTqReqSurrenderPriorityInherit_Pre_PreviousHelping_Vital;
+        ctx->Map.pcs[ 2 ] <
+        ScoreTqReqSurrenderPriorityInherit_Pre_PreviousHelping_NA;
         ++ctx->Map.pcs[ 2 ]
       ) {
         for (
-          ctx->Map.pcs[ 3 ] = ScoreTqReqSurrenderPriorityInherit_Pre_UsedScheduler_Home;
-          ctx->Map.pcs[ 3 ] < ScoreTqReqSurrenderPriorityInherit_Pre_UsedScheduler_NA;
+          ctx->Map.pcs[ 3 ] =
+            ScoreTqReqSurrenderPriorityInherit_Pre_UsedScheduler_Home;
+          ctx->Map.pcs[ 3 ] <
+          ScoreTqReqSurrenderPriorityInherit_Pre_UsedScheduler_NA;
           ++ctx->Map.pcs[ 3 ]
         ) {
           for (
-            ctx->Map.pcs[ 4 ] = ScoreTqReqSurrenderPriorityInherit_Pre_NewPriority_Vital;
-            ctx->Map.pcs[ 4 ] < ScoreTqReqSurrenderPriorityInherit_Pre_NewPriority_NA;
+            ctx->Map.pcs[ 4 ] =
+              ScoreTqReqSurrenderPriorityInherit_Pre_NewPriority_Vital;
+            ctx->Map.pcs[ 4 ] <
+            ScoreTqReqSurrenderPriorityInherit_Pre_NewPriority_NA;
             ++ctx->Map.pcs[ 4 ]
           ) {
             for (
-              ctx->Map.pcs[ 5 ] = ScoreTqReqSurrenderPriorityInherit_Pre_NewHelping_Vital;
-              ctx->Map.pcs[ 5 ] < ScoreTqReqSurrenderPriorityInherit_Pre_NewHelping_NA;
+              ctx->Map.pcs[ 5 ] =
+                ScoreTqReqSurrenderPriorityInherit_Pre_NewHelping_Vital;
+              ctx->Map.pcs[ 5 ] <
+              ScoreTqReqSurrenderPriorityInherit_Pre_NewHelping_NA;
               ++ctx->Map.pcs[ 5 ]
             ) {
               for (
-                ctx->Map.pcs[ 6 ] = ScoreTqReqSurrenderPriorityInherit_Pre_Suspended_Yes;
-                ctx->Map.pcs[ 6 ] < ScoreTqReqSurrenderPriorityInherit_Pre_Suspended_NA;
+                ctx->Map.pcs[ 6 ] =
+                  ScoreTqReqSurrenderPriorityInherit_Pre_Suspended_Yes;
+                ctx->Map.pcs[ 6 ] <
+                ScoreTqReqSurrenderPriorityInherit_Pre_Suspended_NA;
                 ++ctx->Map.pcs[ 6 ]
               ) {
                 for (
-                  ctx->Map.pcs[ 7 ] = ScoreTqReqSurrenderPriorityInherit_Pre_WaitState_Blocked;
-                  ctx->Map.pcs[ 7 ] < ScoreTqReqSurrenderPriorityInherit_Pre_WaitState_NA;
+                  ctx->Map.pcs[ 7 ] =
+                    ScoreTqReqSurrenderPriorityInherit_Pre_WaitState_Blocked;
+                  ctx->Map.pcs[ 7 ] <
+                  ScoreTqReqSurrenderPriorityInherit_Pre_WaitState_NA;
                   ++ctx->Map.pcs[ 7 ]
                 ) {
                   ctx->Map.entry = ScoreTqReqSurrenderPriorityInherit_PopEntry(

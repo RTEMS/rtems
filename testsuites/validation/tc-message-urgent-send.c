@@ -150,7 +150,7 @@ typedef struct {
 } RtemsMessageReqUrgentSend_Entry;
 
 #define MAXIMUM_PENDING_MESSAGES 3
-#define MAXIMUM_MESSAGE_SIZE 5
+#define MAXIMUM_MESSAGE_SIZE     5
 
 /**
  * @brief Test context for spec:/rtems/message/req/urgent-send test case.
@@ -165,7 +165,7 @@ typedef struct {
    * @brief This member is used as storage area for the message queue.
    */
   RTEMS_MESSAGE_QUEUE_BUFFER( MAXIMUM_MESSAGE_SIZE )
-    storage_area[ MAXIMUM_PENDING_MESSAGES];
+  storage_area[ MAXIMUM_PENDING_MESSAGES ];
 
   /**
    * @brief This member contains always the same arbitrary number `magic`.
@@ -210,7 +210,11 @@ typedef struct {
    *
    * This is either rtems_message_queue_send() or rtems_message_queue_urgent().
    */
-  rtems_status_code (*action)( rtems_id id, const void *buffer, size_t size );
+  rtems_status_code ( *action )(
+    rtems_id    id,
+    const void *buffer,
+    size_t      size
+  );
 
   /**
    * @brief This member specifies the ``id`` parameter for the action.
@@ -241,7 +245,7 @@ typedef struct {
    * @brief This member contains a pointer to a function which is executed to
    *   check that the action has not changed the content of the message queue.
    */
-  void (*check_msgq_unchanged)( void *ctx_in );
+  void ( *check_msgq_unchanged )( void *ctx_in );
 
   struct {
     /**
@@ -272,55 +276,32 @@ typedef struct {
   } Map;
 } RtemsMessageReqUrgentSend_Context;
 
-static RtemsMessageReqUrgentSend_Context
-  RtemsMessageReqUrgentSend_Instance;
+static RtemsMessageReqUrgentSend_Context RtemsMessageReqUrgentSend_Instance;
 
-static const char * const RtemsMessageReqUrgentSend_PreDesc_Buffer[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsMessageReqUrgentSend_PreDesc_Buffer[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsMessageReqUrgentSend_PreDesc_Id[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsMessageReqUrgentSend_PreDesc_Id[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsMessageReqUrgentSend_PreDesc_Size[] = {
-  "Zero",
-  "SomeSize",
-  "MaxSize",
-  "TooLarge",
-  "NA"
-};
+static const char *const RtemsMessageReqUrgentSend_PreDesc_Size[] =
+  { "Zero", "SomeSize", "MaxSize", "TooLarge", "NA" };
 
-static const char * const RtemsMessageReqUrgentSend_PreDesc_MsgQueue[] = {
-  "Empty",
-  "One",
-  "Several",
-  "Full",
-  "NA"
-};
+static const char *const RtemsMessageReqUrgentSend_PreDesc_MsgQueue[] =
+  { "Empty", "One", "Several", "Full", "NA" };
 
-static const char * const RtemsMessageReqUrgentSend_PreDesc_Receiver[] = {
-  "Waiting",
-  "No",
-  "NA"
-};
+static const char *const RtemsMessageReqUrgentSend_PreDesc_Receiver[] =
+  { "Waiting", "No", "NA" };
 
-static const char * const RtemsMessageReqUrgentSend_PreDesc_Directive[] = {
-  "Send",
-  "Urgent",
-  "NA"
-};
+static const char *const RtemsMessageReqUrgentSend_PreDesc_Directive[] =
+  { "Send", "Urgent", "NA" };
 
-static const char * const RtemsMessageReqUrgentSend_PreDesc_Storage[] = {
+static const char *const RtemsMessageReqUrgentSend_PreDesc_Storage[] = {
   "Nop",
   "NA"
 };
 
-static const char * const * const RtemsMessageReqUrgentSend_PreDesc[] = {
+static const char *const *const RtemsMessageReqUrgentSend_PreDesc[] = {
   RtemsMessageReqUrgentSend_PreDesc_Buffer,
   RtemsMessageReqUrgentSend_PreDesc_Id,
   RtemsMessageReqUrgentSend_PreDesc_Size,
@@ -332,8 +313,8 @@ static const char * const * const RtemsMessageReqUrgentSend_PreDesc[] = {
 };
 
 typedef RtemsMessageReqUrgentSend_Context Context;
-static const uint32_t MAGIC = 0xA66FE31; /* an arbitrary number */
-static const rtems_interval TIMEOUT_TICKS = 1;
+static const uint32_t        MAGIC = 0xA66FE31; /* an arbitrary number */
+static const rtems_interval  TIMEOUT_TICKS = 1;
 static const rtems_event_set EVENT_RECEIVE = RTEMS_EVENT_17;
 
 static void Receive( Context *ctx )
@@ -363,92 +344,92 @@ static void WorkerTask( rtems_task_argument argument )
 }
 
 static void CheckForNoMessage(
-  Context *ctx,
+  Context          *ctx,
   rtems_status_code status,
-  uint8_t *message_buffer,
-  size_t message_size
+  uint8_t          *message_buffer,
+  size_t            message_size
 )
 {
   (void) ctx;
   (void) message_buffer;
   (void) message_size;
 
-  T_rsc( status, RTEMS_UNSATISFIED  );
+  T_rsc( status, RTEMS_UNSATISFIED );
 }
 
 static void CheckForFirstMessage(
-  Context *ctx,
+  Context          *ctx,
   rtems_status_code status,
-  uint8_t *message_buffer,
-  size_t message_size
+  uint8_t          *message_buffer,
+  size_t            message_size
 )
 {
   (void) ctx;
   T_rsc_success( status );
   T_eq_u32( message_size, 1 );
-  T_eq_u8( message_buffer[0], 0 );
+  T_eq_u8( message_buffer[ 0 ], 0 );
 }
 
 static void CheckForSecondMessage(
-  Context *ctx,
+  Context          *ctx,
   rtems_status_code status,
-  uint8_t *message_buffer,
-  size_t message_size
+  uint8_t          *message_buffer,
+  size_t            message_size
 )
 {
   (void) ctx;
   T_rsc_success( status );
   T_eq_u32( message_size, 3 );
-  T_eq_u8( message_buffer[0], 1 );
-  T_eq_u8( message_buffer[1], 1 );
-  T_eq_u8( message_buffer[2], 1 );
+  T_eq_u8( message_buffer[ 0 ], 1 );
+  T_eq_u8( message_buffer[ 1 ], 1 );
+  T_eq_u8( message_buffer[ 2 ], 1 );
 }
 
 static void CheckForThirdMessage(
-  Context *ctx,
+  Context          *ctx,
   rtems_status_code status,
-  uint8_t *message_buffer,
-  size_t message_size
+  uint8_t          *message_buffer,
+  size_t            message_size
 )
 {
   (void) ctx;
   T_rsc_success( status );
   T_eq_u32( message_size, 5 );
-  T_eq_u8( message_buffer[0], 2 );
-  T_eq_u8( message_buffer[1], 2 );
-  T_eq_u8( message_buffer[2], 2 );
-  T_eq_u8( message_buffer[3], 2 );
-  T_eq_u8( message_buffer[4], 2 );
+  T_eq_u8( message_buffer[ 0 ], 2 );
+  T_eq_u8( message_buffer[ 1 ], 2 );
+  T_eq_u8( message_buffer[ 2 ], 2 );
+  T_eq_u8( message_buffer[ 3 ], 2 );
+  T_eq_u8( message_buffer[ 4 ], 2 );
 }
 
 static void CheckForSendMessage(
-  Context *ctx,
+  Context          *ctx,
   rtems_status_code status,
-  uint8_t *message_buffer,
-  size_t message_size
+  uint8_t          *message_buffer,
+  size_t            message_size
 )
 {
   size_t i;
   T_rsc_success( status );
   T_eq_u32( message_size, ctx->size_param );
   for ( i = 0; i < ctx->size_param; ++i ) {
-    T_eq_u8( message_buffer[i], ctx->send_message[i] );
+    T_eq_u8( message_buffer[ i ], ctx->send_message[ i ] );
   }
 }
 
 static void PopMessage(
   Context *ctx,
-  void (*check_fn)(
-    Context *ctx,
+  void ( *check_fn )(
+    Context          *ctx,
     rtems_status_code status,
-    uint8_t *message_buffer,
-    size_t message_size
+    uint8_t          *message_buffer,
+    size_t            message_size
   )
 )
 {
   rtems_status_code status;
-  uint8_t message_buffer[ MAXIMUM_MESSAGE_SIZE ];
-  size_t message_size;
+  uint8_t           message_buffer[ MAXIMUM_MESSAGE_SIZE ];
+  size_t            message_size;
 
   status = rtems_message_queue_receive(
     ctx->message_queue_id,
@@ -458,7 +439,7 @@ static void PopMessage(
     RTEMS_NO_TIMEOUT
   );
 
- check_fn( ctx, status, message_buffer, message_size );
+  check_fn( ctx, status, message_buffer, message_size );
 }
 
 static void CheckForNoMessageInQueue( void *ctx_in )
@@ -493,7 +474,7 @@ static void CheckForAllMessagesInQueue( void *ctx_in )
 static void SendMsg( Context *ctx )
 {
   rtems_status_code status;
-  uint8_t msg[ MAXIMUM_MESSAGE_SIZE ];
+  uint8_t           msg[ MAXIMUM_MESSAGE_SIZE ];
 
   memset( msg, ctx->send_msg_counter, MAXIMUM_MESSAGE_SIZE );
   status = rtems_message_queue_send(
@@ -518,7 +499,7 @@ static void RtemsMessageReqUrgentSend_Pre_Buffer_Prepare(
        */
       uint8_t i;
       for ( i = 0; i < MAXIMUM_MESSAGE_SIZE; ++i ) {
-        ctx->send_message[i] = 42 + i;
+        ctx->send_message[ i ] = 42 + i;
       }
       ctx->buffer_param = &ctx->send_message;
       break;
@@ -898,7 +879,7 @@ static void RtemsMessageReqUrgentSend_Setup(
   RtemsMessageReqUrgentSend_Context *ctx
 )
 {
-  ctx->magic   = MAGIC;
+  ctx->magic = MAGIC;
 
   SetSelfPriority( PRIO_NORMAL );
   ctx->worker_id = CreateTask( "WORK", PRIO_HIGH );
@@ -940,19 +921,16 @@ static void RtemsMessageReqUrgentSend_Prepare(
   ctx->send_msg_counter = 0;
 
   rtems_message_queue_config config = {
-    .name                     = rtems_build_name( 'M', 'S', 'G', 'Q' ),
+    .name = rtems_build_name( 'M', 'S', 'G', 'Q' ),
     .maximum_pending_messages = MAXIMUM_PENDING_MESSAGES,
-    .maximum_message_size     = MAXIMUM_MESSAGE_SIZE,
-    .storage_area             = ctx->storage_area,
-    .storage_size             = sizeof( ctx->storage_area ),
-    .storage_free             = NULL,
-    .attributes               = RTEMS_DEFAULT_ATTRIBUTES
+    .maximum_message_size = MAXIMUM_MESSAGE_SIZE,
+    .storage_area = ctx->storage_area,
+    .storage_size = sizeof( ctx->storage_area ),
+    .storage_free = NULL,
+    .attributes = RTEMS_DEFAULT_ATTRIBUTES
   };
 
-  status = rtems_message_queue_construct(
-    &config,
-    &ctx->message_queue_id
-  );
+  status = rtems_message_queue_construct( &config, &ctx->message_queue_id );
   T_rsc_success( status );
 }
 
@@ -964,7 +942,7 @@ static void RtemsMessageReqUrgentSend_Action(
     SendEvents( ctx->worker_id, EVENT_RECEIVE );
   }
 
-  ctx->status = (ctx->action)(
+  ctx->status = ( ctx->action )(
     ctx->id_param,
     ctx->buffer_param,
     ctx->size_param
@@ -1073,9 +1051,8 @@ RtemsMessageReqUrgentSend_PopEntry( RtemsMessageReqUrgentSend_Context *ctx )
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsMessageReqUrgentSend_Entries[
-    RtemsMessageReqUrgentSend_Map[ index ]
-  ];
+  return RtemsMessageReqUrgentSend_Entries
+    [ RtemsMessageReqUrgentSend_Map[ index ] ];
 }
 
 static void RtemsMessageReqUrgentSend_TestVariant(

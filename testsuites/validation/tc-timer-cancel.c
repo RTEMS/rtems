@@ -218,37 +218,21 @@ typedef struct {
   } Map;
 } RtemsTimerReqCancel_Context;
 
-static RtemsTimerReqCancel_Context
-  RtemsTimerReqCancel_Instance;
+static RtemsTimerReqCancel_Context RtemsTimerReqCancel_Instance;
 
-static const char * const RtemsTimerReqCancel_PreDesc_Id[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsTimerReqCancel_PreDesc_Id[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsTimerReqCancel_PreDesc_Context[] = {
-  "None",
-  "Interrupt",
-  "Server",
-  "NA"
-};
+static const char *const RtemsTimerReqCancel_PreDesc_Context[] =
+  { "None", "Interrupt", "Server", "NA" };
 
-static const char * const RtemsTimerReqCancel_PreDesc_Clock[] = {
-  "None",
-  "Ticks",
-  "Realtime",
-  "NA"
-};
+static const char *const RtemsTimerReqCancel_PreDesc_Clock[] =
+  { "None", "Ticks", "Realtime", "NA" };
 
-static const char * const RtemsTimerReqCancel_PreDesc_State[] = {
-  "Inactive",
-  "Scheduled",
-  "Pending",
-  "NA"
-};
+static const char *const RtemsTimerReqCancel_PreDesc_State[] =
+  { "Inactive", "Scheduled", "Pending", "NA" };
 
-static const char * const * const RtemsTimerReqCancel_PreDesc[] = {
+static const char *const *const RtemsTimerReqCancel_PreDesc[] = {
   RtemsTimerReqCancel_PreDesc_Id,
   RtemsTimerReqCancel_PreDesc_Context,
   RtemsTimerReqCancel_PreDesc_Clock,
@@ -256,9 +240,9 @@ static const char * const * const RtemsTimerReqCancel_PreDesc[] = {
   NULL
 };
 
-static const rtems_time_of_day tod_now      = { 2000, 1, 1, 0, 0, 0, 0 };
+static const rtems_time_of_day tod_now = { 2000, 1, 1, 0, 0, 0, 0 };
 static const rtems_time_of_day tod_schedule = { 2000, 1, 1, 1, 0, 0, 0 };
-static const rtems_time_of_day tod_fire     = { 2000, 1, 2, 0, 0, 0, 0 };
+static const rtems_time_of_day tod_fire = { 2000, 1, 2, 0, 0, 0, 0 };
 
 static void TriggerTimer( void )
 {
@@ -270,10 +254,7 @@ static void TriggerTimer( void )
   T_rsc_success( rtems_clock_set( &tod_fire ) );
 }
 
-static void TimerServiceRoutine(
-  rtems_id timer_id,
-  void *user_data
-)
+static void TimerServiceRoutine( rtems_id timer_id, void *user_data )
 {
   (void) timer_id;
 
@@ -373,7 +354,7 @@ static void RtemsTimerReqCancel_Pre_Clock_Prepare(
           ctx
         );
       } else {
-         status = rtems_timer_server_fire_after(
+        status = rtems_timer_server_fire_after(
           ctx->timer_id,
           1,
           TimerServiceRoutine,
@@ -752,9 +733,7 @@ static inline RtemsTimerReqCancel_Entry RtemsTimerReqCancel_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsTimerReqCancel_Entries[
-    RtemsTimerReqCancel_Map[ index ]
-  ];
+  return RtemsTimerReqCancel_Entries[ RtemsTimerReqCancel_Map[ index ] ];
 }
 
 static void RtemsTimerReqCancel_TestVariant( RtemsTimerReqCancel_Context *ctx )

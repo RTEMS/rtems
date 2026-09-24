@@ -68,7 +68,8 @@
  * @{
  */
 
-const char rtems_test_name[] = "TestsuitesBspsFatalSparcLeon3ClockInitialization";
+const char
+  rtems_test_name[] = "TestsuitesBspsFatalSparcLeon3ClockInitialization";
 
 #define FATAL_SYSINIT_RUN BspSparcLeon3ValFatalClockInitialization_Run
 

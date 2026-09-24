@@ -124,16 +124,12 @@ typedef struct {
   } Map;
 } RtemsTaskReqIdent_Context;
 
-static RtemsTaskReqIdent_Context
-  RtemsTaskReqIdent_Instance;
+static RtemsTaskReqIdent_Context RtemsTaskReqIdent_Instance;
 
-static const char * const RtemsTaskReqIdent_PreDesc_Name[] = {
-  "WhoAmI",
-  "NotWhoAmI",
-  "NA"
-};
+static const char *const RtemsTaskReqIdent_PreDesc_Name[] =
+  { "WhoAmI", "NotWhoAmI", "NA" };
 
-static const char * const * const RtemsTaskReqIdent_PreDesc[] = {
+static const char *const *const RtemsTaskReqIdent_PreDesc[] = {
   RtemsTaskReqIdent_PreDesc_Name,
   NULL
 };
@@ -214,10 +210,7 @@ static void RtemsTaskReqIdent_Setup( RtemsTaskReqIdent_Context *ctx )
 {
   rtems_status_code sc;
 
-  sc = rtems_task_construct(
-    &DefaultTaskConfig,
-    &ctx->id_local_object
-  );
+  sc = rtems_task_construct( &DefaultTaskConfig, &ctx->id_local_object );
   T_assert_rsc_success( sc );
 }
 
@@ -306,9 +299,7 @@ static inline RtemsTaskReqIdent_Entry RtemsTaskReqIdent_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsTaskReqIdent_Entries[
-    RtemsTaskReqIdent_Map[ index ]
-  ];
+  return RtemsTaskReqIdent_Entries[ RtemsTaskReqIdent_Map[ index ] ];
 }
 
 static void RtemsTaskReqIdent_TestVariant( RtemsTaskReqIdent_Context *ctx )

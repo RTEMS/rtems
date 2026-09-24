@@ -96,10 +96,7 @@ static void AcfgValDisabledBspSettings_Action_0( void )
    * Check the default value CONFIGURE_IDLE_TASK_BODY where the optional
    * BSP-provided default value is disabled.
    */
-  T_eq_ptr(
-    rtems_configuration_get_idle_task(),
-    _CPU_Thread_Idle_body
-  );
+  T_eq_ptr( rtems_configuration_get_idle_task(), _CPU_Thread_Idle_body );
 
   /*
    * Check the default value CONFIGURE_IDLE_TASK_STACK_SIZE where the optional
@@ -123,10 +120,7 @@ static void AcfgValDisabledBspSettings_Action_0( void )
    * Check the BSP-provided initial extension is not registered.
    */
   T_eq_sz( _User_extensions_Initial_count, 1 );
-  T_ne_ptr(
-    _User_extensions_Initial_extensions[ 0 ].fatal,
-    bsp.fatal
-  );
+  T_ne_ptr( _User_extensions_Initial_extensions[ 0 ].fatal, bsp.fatal );
 }
 
 /**

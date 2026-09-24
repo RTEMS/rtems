@@ -119,7 +119,7 @@ typedef struct {
    * @brief This member contains the thread queue test context.
    */
   union {
-    TQContext tq_ctx;
+    TQContext    tq_ctx;
     TQMtxContext tq_mtx_ctx;
     TQSemContext tq_sem_ctx;
   };
@@ -158,10 +158,9 @@ typedef struct {
   } Map;
 } RtemsSemReqRelease_Context;
 
-static RtemsSemReqRelease_Context
-  RtemsSemReqRelease_Instance;
+static RtemsSemReqRelease_Context RtemsSemReqRelease_Instance;
 
-static const char * const RtemsSemReqRelease_PreDesc_Class[] = {
+static const char *const RtemsSemReqRelease_PreDesc_Class[] = {
   "Counting",
   "Simple",
   "Binary",
@@ -171,19 +170,13 @@ static const char * const RtemsSemReqRelease_PreDesc_Class[] = {
   "NA"
 };
 
-static const char * const RtemsSemReqRelease_PreDesc_Discipline[] = {
-  "FIFO",
-  "Priority",
-  "NA"
-};
+static const char *const RtemsSemReqRelease_PreDesc_Discipline[] =
+  { "FIFO", "Priority", "NA" };
 
-static const char * const RtemsSemReqRelease_PreDesc_Id[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsSemReqRelease_PreDesc_Id[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const * const RtemsSemReqRelease_PreDesc[] = {
+static const char *const *const RtemsSemReqRelease_PreDesc[] = {
   RtemsSemReqRelease_PreDesc_Class,
   RtemsSemReqRelease_PreDesc_Discipline,
   RtemsSemReqRelease_PreDesc_Id,
@@ -245,7 +238,7 @@ static void RtemsSemReqRelease_Pre_Class_Prepare(
        * While the semaphore object is a MrsP semaphore.
        */
       ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE |
-        RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
+                            RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
       break;
     }
 
@@ -499,7 +492,8 @@ static void RtemsSemReqRelease_Action( RtemsSemReqRelease_Context *ctx )
 static void RtemsSemReqRelease_Cleanup( RtemsSemReqRelease_Context *ctx )
 {
   rtems_status_code sc;
-  sc = rtems_semaphore_delete( ctx->tq_ctx.thread_queue_id ); T_rsc_success( sc );
+  sc = rtems_semaphore_delete( ctx->tq_ctx.thread_queue_id );
+  T_rsc_success( sc );
 }
 
 /* clang-format off */
@@ -561,9 +555,7 @@ static inline RtemsSemReqRelease_Entry RtemsSemReqRelease_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsSemReqRelease_Entries[
-    RtemsSemReqRelease_Map[ index ]
-  ];
+  return RtemsSemReqRelease_Entries[ RtemsSemReqRelease_Map[ index ] ];
 }
 
 static void RtemsSemReqRelease_TestVariant( RtemsSemReqRelease_Context *ctx )

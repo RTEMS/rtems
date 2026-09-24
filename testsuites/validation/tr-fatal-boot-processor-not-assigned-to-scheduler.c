@@ -100,13 +100,13 @@ typedef struct {
 static ScoreSmpValFatalBootProcessorNotAssignedToScheduler_Context
   ScoreSmpValFatalBootProcessorNotAssignedToScheduler_Instance;
 
-static T_fixture ScoreSmpValFatalBootProcessorNotAssignedToScheduler_Fixture = {
-  .setup = NULL,
-  .stop = NULL,
-  .teardown = NULL,
-  .scope = NULL,
-  .initial_context = &ScoreSmpValFatalBootProcessorNotAssignedToScheduler_Instance
-};
+static T_fixture ScoreSmpValFatalBootProcessorNotAssignedToScheduler_Fixture =
+  { .setup = NULL,
+    .stop = NULL,
+    .teardown = NULL,
+    .scope = NULL,
+    .initial_context =
+      &ScoreSmpValFatalBootProcessorNotAssignedToScheduler_Instance };
 
 /**
  * @brief The test action is carried out by the application configuration of

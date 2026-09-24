@@ -77,10 +77,7 @@
  * @{
  */
 
-static rtems_status_code EventSend(
-  rtems_id        id,
-  rtems_event_set event_in
-)
+static rtems_status_code EventSend( rtems_id id, rtems_event_set event_in )
 {
   return rtems_event_send( id, event_in );
 }
@@ -160,12 +157,7 @@ static rtems_status_code EventSystemReceive(
   rtems_event_set *event_out
 )
 {
-  return rtems_event_system_receive(
-    event_in,
-    option_set,
-    ticks,
-    event_out
-  );
+  return rtems_event_system_receive( event_in, option_set, ticks, event_out );
 }
 
 static rtems_event_set GetPendingSystemEvents( Thread_Control *thread )

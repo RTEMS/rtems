@@ -139,30 +139,18 @@ typedef struct {
   } Map;
 } ScoreTqReqEnqueueCeiling_Context;
 
-static ScoreTqReqEnqueueCeiling_Context
-  ScoreTqReqEnqueueCeiling_Instance;
+static ScoreTqReqEnqueueCeiling_Context ScoreTqReqEnqueueCeiling_Instance;
 
-static const char * const ScoreTqReqEnqueueCeiling_PreDesc_EligibleScheduler[] = {
-  "Home",
-  "Helping",
-  "NA"
-};
+static const char *const ScoreTqReqEnqueueCeiling_PreDesc_EligibleScheduler[] =
+  { "Home", "Helping", "NA" };
 
-static const char * const ScoreTqReqEnqueueCeiling_PreDesc_QueueEligible[] = {
-  "None",
-  "Equal",
-  "Low",
-  "NA"
-};
+static const char *const ScoreTqReqEnqueueCeiling_PreDesc_QueueEligible[] =
+  { "None", "Equal", "Low", "NA" };
 
-static const char * const ScoreTqReqEnqueueCeiling_PreDesc_QueueIneligible[] = {
-  "None",
-  "Before",
-  "After",
-  "NA"
-};
+static const char *const ScoreTqReqEnqueueCeiling_PreDesc_QueueIneligible[] =
+  { "None", "Before", "After", "NA" };
 
-static const char * const * const ScoreTqReqEnqueueCeiling_PreDesc[] = {
+static const char *const *const ScoreTqReqEnqueueCeiling_PreDesc[] = {
   ScoreTqReqEnqueueCeiling_PreDesc_EligibleScheduler,
   ScoreTqReqEnqueueCeiling_PreDesc_QueueEligible,
   ScoreTqReqEnqueueCeiling_PreDesc_QueueIneligible,
@@ -468,7 +456,7 @@ static void ScoreTqReqEnqueueCeiling_Action(
   if ( ctx->priority == PRIO_PSEUDO_ISR ) {
     TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
   } else {
-    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_B , ctx->priority );
+    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_B, ctx->priority );
 
     if ( ctx->other_before || ctx->other_after ) {
       TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_MUTEX_B_OBTAIN );
@@ -622,9 +610,8 @@ static inline ScoreTqReqEnqueueCeiling_Entry ScoreTqReqEnqueueCeiling_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return ScoreTqReqEnqueueCeiling_Entries[
-    ScoreTqReqEnqueueCeiling_Map[ index ]
-  ];
+  return ScoreTqReqEnqueueCeiling_Entries
+    [ ScoreTqReqEnqueueCeiling_Map[ index ] ];
 }
 
 static void ScoreTqReqEnqueueCeiling_TestVariant(

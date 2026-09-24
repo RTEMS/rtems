@@ -156,16 +156,16 @@ typedef struct {
 } RtemsTimerReqReset_Entry;
 
 typedef enum {
-  PRE_NONE      = 0,
+  PRE_NONE = 0,
   PRE_INTERRUPT = 1,
-  PRE_SERVER    = 2
+  PRE_SERVER = 2
 } PreConditionContext;
 
 typedef enum {
-  SCHEDULE_NONE  = 0,
-  SCHEDULE_SOON  = 1,
+  SCHEDULE_NONE = 0,
+  SCHEDULE_SOON = 1,
   SCHEDULE_LATER = 2,
-  SCHEDULE_MAX   = 5
+  SCHEDULE_MAX = 5
 } Scheduling_Ticks;
 
 /**
@@ -311,37 +311,21 @@ typedef struct {
   } Map;
 } RtemsTimerReqReset_Context;
 
-static RtemsTimerReqReset_Context
-  RtemsTimerReqReset_Instance;
+static RtemsTimerReqReset_Context RtemsTimerReqReset_Instance;
 
-static const char * const RtemsTimerReqReset_PreDesc_Id[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsTimerReqReset_PreDesc_Id[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsTimerReqReset_PreDesc_Context[] = {
-  "None",
-  "Interrupt",
-  "Server",
-  "NA"
-};
+static const char *const RtemsTimerReqReset_PreDesc_Context[] =
+  { "None", "Interrupt", "Server", "NA" };
 
-static const char * const RtemsTimerReqReset_PreDesc_Clock[] = {
-  "None",
-  "Ticks",
-  "Realtime",
-  "NA"
-};
+static const char *const RtemsTimerReqReset_PreDesc_Clock[] =
+  { "None", "Ticks", "Realtime", "NA" };
 
-static const char * const RtemsTimerReqReset_PreDesc_State[] = {
-  "Inactive",
-  "Scheduled",
-  "Pending",
-  "NA"
-};
+static const char *const RtemsTimerReqReset_PreDesc_State[] =
+  { "Inactive", "Scheduled", "Pending", "NA" };
 
-static const char * const * const RtemsTimerReqReset_PreDesc[] = {
+static const char *const *const RtemsTimerReqReset_PreDesc[] = {
   RtemsTimerReqReset_PreDesc_Id,
   RtemsTimerReqReset_PreDesc_Context,
   RtemsTimerReqReset_PreDesc_Clock,
@@ -349,9 +333,9 @@ static const char * const * const RtemsTimerReqReset_PreDesc[] = {
   NULL
 };
 
-static const rtems_time_of_day tod_now      = { 2000, 1, 1, 0, 0, 0, 0 };
+static const rtems_time_of_day tod_now = { 2000, 1, 1, 0, 0, 0, 0 };
 static const rtems_time_of_day tod_schedule = { 2000, 1, 1, 1, 0, 0, 0 };
-static const rtems_time_of_day tod_fire     = { 2000, 1, 2, 0, 0, 0, 0 };
+static const rtems_time_of_day tod_fire = { 2000, 1, 2, 0, 0, 0, 0 };
 
 static Scheduling_Ticks TriggerTimer( const RtemsTimerReqReset_Context *ctx )
 {
@@ -373,28 +357,20 @@ static Scheduling_Ticks TriggerTimer( const RtemsTimerReqReset_Context *ctx )
   return ticks_fired;
 }
 
-static void TimerServiceRoutineA(
-  rtems_id timer_id,
-  void *user_data
-)
+static void TimerServiceRoutineA( rtems_id timer_id, void *user_data )
 {
   (void) timer_id;
 
-  RtemsTimerReqReset_Context *ctx =
-    *(RtemsTimerReqReset_Context **) user_data;
+  RtemsTimerReqReset_Context *ctx = *(RtemsTimerReqReset_Context **) user_data;
   ++( ctx->invocations_a );
   ctx->routine_user_data = user_data;
 }
 
-static void TimerServiceRoutineB(
-  rtems_id timer_id,
-  void *user_data
-)
+static void TimerServiceRoutineB( rtems_id timer_id, void *user_data )
 {
   (void) timer_id;
 
-  RtemsTimerReqReset_Context *ctx =
-    *(RtemsTimerReqReset_Context **) user_data;
+  RtemsTimerReqReset_Context *ctx = *(RtemsTimerReqReset_Context **) user_data;
   ++( ctx->invocations_b );
   ctx->routine_user_data = user_data;
 }
@@ -497,7 +473,7 @@ static void RtemsTimerReqReset_Pre_Clock_Prepare(
         ctx->scheduled_ticks_till_fire = SCHEDULE_LATER;
         ctx->scheduled_invocations_b = 1;
         ctx->scheduled_user_data = &ctx->data_b;
-         status = rtems_timer_server_fire_after(
+        status = rtems_timer_server_fire_after(
           ctx->timer_id,
           ctx->scheduled_ticks_till_fire,
           TimerServiceRoutineB,
@@ -831,7 +807,7 @@ static void RtemsTimerReqReset_Post_UserData_Check(
        * timer will fire shall be the same as the last scheduled user data
        * argument.
        */
-      T_eq_ptr( ctx->routine_user_data, ctx->scheduled_user_data);
+      T_eq_ptr( ctx->routine_user_data, ctx->scheduled_user_data );
       break;
     }
 
@@ -900,14 +876,14 @@ static void RtemsTimerReqReset_Prepare( RtemsTimerReqReset_Context *ctx )
   );
   T_rsc_success( status );
 
-  ctx->data_a                    = ctx;
-  ctx->data_b                    = ctx;
-  ctx->invocations_a             = 0;
-  ctx->invocations_b             = 0;
-  ctx->ticks_till_fire           = SCHEDULE_NONE;
-  ctx->routine_user_data         = NULL;
-  ctx->scheduled_invocations_a   = 0;
-  ctx->scheduled_invocations_b   = 0;
+  ctx->data_a = ctx;
+  ctx->data_b = ctx;
+  ctx->invocations_a = 0;
+  ctx->invocations_b = 0;
+  ctx->ticks_till_fire = SCHEDULE_NONE;
+  ctx->routine_user_data = NULL;
+  ctx->scheduled_invocations_a = 0;
+  ctx->scheduled_invocations_b = 0;
   ctx->scheduled_ticks_till_fire = SCHEDULE_NONE;
   T_rsc_success( rtems_clock_set( &tod_now ) );
 }
@@ -996,9 +972,7 @@ static inline RtemsTimerReqReset_Entry RtemsTimerReqReset_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsTimerReqReset_Entries[
-    RtemsTimerReqReset_Map[ index ]
-  ];
+  return RtemsTimerReqReset_Entries[ RtemsTimerReqReset_Map[ index ] ];
 }
 
 static void RtemsTimerReqReset_TestVariant( RtemsTimerReqReset_Context *ctx )

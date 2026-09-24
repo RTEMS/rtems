@@ -93,8 +93,7 @@ typedef struct {
   T_ticks end;
 } ScoreCpuValPerf_Context;
 
-static ScoreCpuValPerf_Context
-  ScoreCpuValPerf_Instance;
+static ScoreCpuValPerf_Context ScoreCpuValPerf_Instance;
 
 static void ScoreCpuValPerf_Setup_Context( ScoreCpuValPerf_Context *ctx )
 {
@@ -179,14 +178,20 @@ static bool ScoreCpuReqPerfEmpty_Teardown_Wrap(
  */
 static void ScoreCpuReqPerfNops_Body( void )
 {
-  #define NOPS_10 \
-    _CPU_Instruction_no_operation(); _CPU_Instruction_no_operation(); \
-    _CPU_Instruction_no_operation(); _CPU_Instruction_no_operation(); \
-    _CPU_Instruction_no_operation(); _CPU_Instruction_no_operation(); \
-    _CPU_Instruction_no_operation(); _CPU_Instruction_no_operation(); \
-    _CPU_Instruction_no_operation(); _CPU_Instruction_no_operation();
-  #define NOPS_100 NOPS_10 NOPS_10 NOPS_10 NOPS_10 NOPS_10 NOPS_10 NOPS_10 \
-    NOPS_10 NOPS_10 NOPS_10
+  #define NOPS_10                  \
+  _CPU_Instruction_no_operation(); \
+  _CPU_Instruction_no_operation(); \
+  _CPU_Instruction_no_operation(); \
+  _CPU_Instruction_no_operation(); \
+  _CPU_Instruction_no_operation(); \
+  _CPU_Instruction_no_operation(); \
+  _CPU_Instruction_no_operation(); \
+  _CPU_Instruction_no_operation(); \
+  _CPU_Instruction_no_operation(); \
+  _CPU_Instruction_no_operation();
+  #define NOPS_100                                                        \
+  NOPS_10 NOPS_10 NOPS_10 NOPS_10 NOPS_10 NOPS_10 NOPS_10 NOPS_10 NOPS_10 \
+    NOPS_10
   NOPS_100
   NOPS_100
   NOPS_100

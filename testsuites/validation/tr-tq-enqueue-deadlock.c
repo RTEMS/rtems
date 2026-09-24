@@ -116,22 +116,15 @@ typedef struct {
   } Map;
 } ScoreTqReqEnqueueDeadlock_Context;
 
-static ScoreTqReqEnqueueDeadlock_Context
-  ScoreTqReqEnqueueDeadlock_Instance;
+static ScoreTqReqEnqueueDeadlock_Context ScoreTqReqEnqueueDeadlock_Instance;
 
-static const char * const ScoreTqReqEnqueueDeadlock_PreDesc_Notification[] = {
-  "Status",
-  "Fatal",
-  "NA"
-};
+static const char *const ScoreTqReqEnqueueDeadlock_PreDesc_Notification[] =
+  { "Status", "Fatal", "NA" };
 
-static const char * const ScoreTqReqEnqueueDeadlock_PreDesc_Deadlock[] = {
-  "One",
-  "More",
-  "NA"
-};
+static const char *const ScoreTqReqEnqueueDeadlock_PreDesc_Deadlock[] =
+  { "One", "More", "NA" };
 
-static const char * const * const ScoreTqReqEnqueueDeadlock_PreDesc[] = {
+static const char *const *const ScoreTqReqEnqueueDeadlock_PreDesc[] = {
   ScoreTqReqEnqueueDeadlock_PreDesc_Notification,
   ScoreTqReqEnqueueDeadlock_PreDesc_Deadlock,
   NULL
@@ -346,9 +339,7 @@ static T_fixture ScoreTqReqEnqueueDeadlock_Fixture = {
   .initial_context = &ScoreTqReqEnqueueDeadlock_Instance
 };
 
-static const uint8_t ScoreTqReqEnqueueDeadlock_Weights[] = {
-  2, 1
-};
+static const uint8_t ScoreTqReqEnqueueDeadlock_Weights[] = { 2, 1 };
 
 static void ScoreTqReqEnqueueDeadlock_Skip(
   ScoreTqReqEnqueueDeadlock_Context *ctx,
@@ -382,9 +373,8 @@ ScoreTqReqEnqueueDeadlock_PopEntry( ScoreTqReqEnqueueDeadlock_Context *ctx )
 
   ctx->Map.index = index + 1;
 
-  return ScoreTqReqEnqueueDeadlock_Entries[
-    ScoreTqReqEnqueueDeadlock_Map[ index ]
-  ];
+  return ScoreTqReqEnqueueDeadlock_Entries
+    [ ScoreTqReqEnqueueDeadlock_Map[ index ] ];
 }
 
 static void ScoreTqReqEnqueueDeadlock_TestVariant(

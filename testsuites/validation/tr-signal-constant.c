@@ -137,11 +137,7 @@ static void RtemsSignalValSignalConstant_Action_0(
    * Check that the signal constant is equal to the integer representation of
    * the signal in the signal set.
    */
-  T_step_eq_u32(
-    0,
-    ctx->signal,
-    ( (rtems_signal_set) 1 ) << ctx->number
-  );
+  T_step_eq_u32( 0, ctx->signal, ( (rtems_signal_set) 1 ) << ctx->number );
 }
 
 /**
@@ -167,11 +163,7 @@ static void RtemsSignalValSignalConstant_Action_1(
   /*
    * Check that the caught signal set represents exactly the sent signal.
    */
-  T_step_eq_u32(
-    4,
-    ctx->signal_set,
-    ctx->signal
-  );
+  T_step_eq_u32( 4, ctx->signal_set, ctx->signal );
 }
 
 static T_fixture_node RtemsSignalValSignalConstant_Node;

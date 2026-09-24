@@ -179,7 +179,7 @@ static void AcfgValAcfg_Action_0( void )
    */
   T_eq_ptr(
     rtems_configuration_get_idle_task(),
-  #if defined(BSP_IDLE_TASK_BODY)
+  #if defined( BSP_IDLE_TASK_BODY )
     BSP_IDLE_TASK_BODY
   #else
     _CPU_Thread_Idle_body
@@ -257,25 +257,19 @@ static void AcfgValAcfg_Action_0( void )
   /*
    * Check the configured CONFIGURE_MAXIMUM_PERIODS value.
    */
-  T_eq_u32(
-    rtems_configuration_get_maximum_periods(),
-    TEST_MAXIMUM_PERIODS
-  );
+  T_eq_u32( rtems_configuration_get_maximum_periods(), TEST_MAXIMUM_PERIODS );
 
   /*
    * Check the default CONFIGURE_MAXIMUM_PORTS value.
    */
-  T_eq_u32(
-    rtems_configuration_get_maximum_ports(),
-    0
-  );
+  T_eq_u32( rtems_configuration_get_maximum_ports(), 0 );
 
   /*
    * Check the configured CONFIGURE_MAXIMUM_PROCESSORS value.
    */
   T_eq_u32(
     rtems_configuration_get_maximum_processors(),
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
     5
   #else
     1
@@ -285,10 +279,7 @@ static void AcfgValAcfg_Action_0( void )
   /*
    * Check the default CONFIGURE_MAXIMUM_REGIONS value.
    */
-  T_eq_u32(
-    rtems_configuration_get_maximum_regions(),
-    0
-  );
+  T_eq_u32( rtems_configuration_get_maximum_regions(), 0 );
 
   /*
    * Check the configured CONFIGURE_MAXIMUM_SEMAPHORES value.
@@ -301,18 +292,12 @@ static void AcfgValAcfg_Action_0( void )
   /*
    * Check the configured CONFIGURE_MAXIMUM_TASKS value.
    */
-  T_eq_u32(
-    rtems_configuration_get_maximum_tasks(),
-    TEST_MAXIMUM_TASKS
-  );
+  T_eq_u32( rtems_configuration_get_maximum_tasks(), TEST_MAXIMUM_TASKS );
 
   /*
    * Check the configured CONFIGURE_MAXIMUM_TIMERS value.
    */
-  T_eq_u32(
-    rtems_configuration_get_maximum_timers(),
-    TEST_MAXIMUM_TIMERS
-  );
+  T_eq_u32( rtems_configuration_get_maximum_timers(), TEST_MAXIMUM_TIMERS );
 
   /*
    * Check the configured CONFIGURE_MICROSECONDS_PER_TICK value in

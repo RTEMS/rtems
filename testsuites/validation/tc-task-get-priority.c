@@ -191,34 +191,21 @@ typedef struct {
   } Map;
 } RtemsTaskReqGetPriority_Context;
 
-static RtemsTaskReqGetPriority_Context
-  RtemsTaskReqGetPriority_Instance;
+static RtemsTaskReqGetPriority_Context RtemsTaskReqGetPriority_Instance;
 
-static const char * const RtemsTaskReqGetPriority_PreDesc_TaskId[] = {
-  "Invalid",
-  "Task",
-  "NA"
-};
+static const char *const RtemsTaskReqGetPriority_PreDesc_TaskId[] =
+  { "Invalid", "Task", "NA" };
 
-static const char * const RtemsTaskReqGetPriority_PreDesc_SchedulerId[] = {
-  "Invalid",
-  "Scheduler",
-  "NA"
-};
+static const char *const RtemsTaskReqGetPriority_PreDesc_SchedulerId[] =
+  { "Invalid", "Scheduler", "NA" };
 
-static const char * const RtemsTaskReqGetPriority_PreDesc_Scheduler[] = {
-  "Eligible",
-  "Ineligible",
-  "NA"
-};
+static const char *const RtemsTaskReqGetPriority_PreDesc_Scheduler[] =
+  { "Eligible", "Ineligible", "NA" };
 
-static const char * const RtemsTaskReqGetPriority_PreDesc_Priority[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsTaskReqGetPriority_PreDesc_Priority[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const * const RtemsTaskReqGetPriority_PreDesc[] = {
+static const char *const *const RtemsTaskReqGetPriority_PreDesc[] = {
   RtemsTaskReqGetPriority_PreDesc_TaskId,
   RtemsTaskReqGetPriority_PreDesc_SchedulerId,
   RtemsTaskReqGetPriority_PreDesc_Scheduler,
@@ -423,17 +410,11 @@ static void RtemsTaskReqGetPriority_Setup(
 {
   rtems_status_code sc;
 
-  sc = rtems_scheduler_ident(
-    TEST_SCHEDULER_A_NAME,
-    &ctx->scheduler_a_id
-  );
+  sc = rtems_scheduler_ident( TEST_SCHEDULER_A_NAME, &ctx->scheduler_a_id );
   T_rsc_success( sc );
 
-  #if defined(RTEMS_SMP)
-  sc = rtems_scheduler_ident(
-    TEST_SCHEDULER_B_NAME,
-    &ctx->scheduler_b_id
-  );
+  #if defined( RTEMS_SMP )
+  sc = rtems_scheduler_ident( TEST_SCHEDULER_B_NAME, &ctx->scheduler_b_id );
   T_rsc_success( sc );
   #endif
 }
@@ -534,9 +515,8 @@ static inline RtemsTaskReqGetPriority_Entry RtemsTaskReqGetPriority_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsTaskReqGetPriority_Entries[
-    RtemsTaskReqGetPriority_Map[ index ]
-  ];
+  return RtemsTaskReqGetPriority_Entries
+    [ RtemsTaskReqGetPriority_Map[ index ] ];
 }
 
 static void RtemsTaskReqGetPriority_SetPreConditionStates(

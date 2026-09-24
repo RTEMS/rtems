@@ -77,9 +77,7 @@ const char rtems_test_name[] = "TestsuitesValidationIoKernel";
 
 static char buffer[ 512 ];
 
-static const T_action actions[] = {
-  T_report_hash_sha256
-};
+static const T_action actions[] = { T_report_hash_sha256 };
 
 static const T_config test_config = {
   .name = rtems_test_name,
@@ -135,7 +133,9 @@ static void *IdleBody( uintptr_t ignored )
 
 #define CONFIGURE_SCHEDULER
 
-#define CONFIGURE_SCHEDULER_TABLE_ENTRIES { }
+#define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
+  {                                       \
+  }
 
 #define CONFIGURE_IDLE_TASK_STORAGE_SIZE RTEMS_MINIMUM_STACK_SIZE
 

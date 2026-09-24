@@ -105,7 +105,7 @@ static void ScoreSchedSmpEdfValEdf_Action_0( void )
     _Processor_mask_Set( &_SMP_Online_processors, 2 );
   }
 
-  sc = rtems_task_set_affinity( RTEMS_SELF, sizeof( affinity), &affinity );
+  sc = rtems_task_set_affinity( RTEMS_SELF, sizeof( affinity ), &affinity );
   T_rsc( sc, RTEMS_INVALID_NUMBER );
 
   if ( rtems_scheduler_get_processor_maximum() < 3 ) {

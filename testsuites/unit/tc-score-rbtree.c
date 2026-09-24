@@ -124,7 +124,7 @@ static int Color( const RBTree_Node *n )
 
 static bool Less( const void *left, const RBTree_Node *right )
 {
-  const int       *the_left;
+  const int      *the_left;
   const TestNode *the_right;
 
   the_left = left;
@@ -166,8 +166,8 @@ static int VerifyTree( RBTree_Node *root )
     return -1;
   }
 
-  lh = VerifyTree ( ln );
-  rh = VerifyTree ( rn );
+  lh = VerifyTree( ln );
+  rh = VerifyTree( rn );
 
   if ( lh == -1 || rh == -1 ) {
     return -1;
@@ -206,10 +206,7 @@ typedef struct {
   const TestNodeDescription *tree;
 } VisitorContext;
 
-static bool VisitNodes(
-  const RBTree_Node *node,
-  void              *visitor_arg
-)
+static bool VisitNodes( const RBTree_Node *node, void *visitor_arg )
 {
   VisitorContext            *ctx;
   const TestNodeDescription *td;
@@ -246,11 +243,9 @@ static const TestNodeDescription random_ops_tree_multiple_1[] = {
   { 0, NULL, NULL, NULL, RTEMS_RB_BLACK }
 };
 
-static const TestNodeDescription random_ops_tree_unique_2[] = {
-};
+static const TestNodeDescription random_ops_tree_unique_2[] = {};
 
-static const TestNodeDescription random_ops_tree_multiple_2[] = {
-};
+static const TestNodeDescription random_ops_tree_multiple_2[] = {};
 
 static const TestNodeDescription random_ops_tree_unique_3[] = {
   { 2, NULL, NULL, NULL, RTEMS_RB_BLACK }
@@ -931,7 +926,7 @@ static const TestNodeDescription random_ops_tree_multiple_31[] = {
 #define RANDOM_OPS_TREE( i ) \
   { &random_ops_tree_multiple_##i[ 0 ], &random_ops_tree_unique_##i[ 0 ] }
 
-static const TestNodeDescription *const random_ops_trees[][2] = {
+static const TestNodeDescription *const random_ops_trees[][ 2 ] = {
   RANDOM_OPS_TREE( 1 ),
   RANDOM_OPS_TREE( 2 ),
   RANDOM_OPS_TREE( 3 ),
@@ -965,13 +960,11 @@ static const TestNodeDescription *const random_ops_trees[][2] = {
   RANDOM_OPS_TREE( 31 )
 };
 
-#define RANDOM_OPS_TREE_COUNT( i ) \
-  { \
-    RTEMS_ARRAY_SIZE( random_ops_tree_multiple_##i ), \
-    RTEMS_ARRAY_SIZE( random_ops_tree_unique_##i ) \
-  }
+#define RANDOM_OPS_TREE_COUNT( i )                    \
+  { RTEMS_ARRAY_SIZE( random_ops_tree_multiple_##i ), \
+    RTEMS_ARRAY_SIZE( random_ops_tree_unique_##i ) }
 
-static const size_t random_ops_tree_counts[][2] = {
+static const size_t random_ops_tree_counts[][ 2 ] = {
   RANDOM_OPS_TREE_COUNT( 1 ),
   RANDOM_OPS_TREE_COUNT( 2 ),
   RANDOM_OPS_TREE_COUNT( 3 ),
@@ -1040,7 +1033,7 @@ static void RandomOps( size_t n, bool unique )
   }
 
   for ( i = 0; i < m; ++i ) {
-    size_t j = ( v >> 13 ) % n;
+    size_t    j = ( v >> 13 ) % n;
     TestNode *tn = &nodes[ j ];
 
     if ( tn->id == 0 ) {

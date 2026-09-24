@@ -117,8 +117,7 @@ typedef struct {
   T_ticks end;
 } RtemsPartValPerf_Context;
 
-static RtemsPartValPerf_Context
-  RtemsPartValPerf_Instance;
+static RtemsPartValPerf_Context RtemsPartValPerf_Instance;
 
 static void RtemsPartValPerf_Setup_Context( RtemsPartValPerf_Context *ctx )
 {

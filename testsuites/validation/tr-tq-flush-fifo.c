@@ -141,34 +141,21 @@ typedef struct {
   } Map;
 } ScoreTqReqFlushFifo_Context;
 
-static ScoreTqReqFlushFifo_Context
-  ScoreTqReqFlushFifo_Instance;
+static ScoreTqReqFlushFifo_Context ScoreTqReqFlushFifo_Instance;
 
-static const char * const ScoreTqReqFlushFifo_PreDesc_MayStop[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const ScoreTqReqFlushFifo_PreDesc_MayStop[] =
+  { "Yes", "No", "NA" };
 
-static const char * const ScoreTqReqFlushFifo_PreDesc_QueueEmpty[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const ScoreTqReqFlushFifo_PreDesc_QueueEmpty[] =
+  { "Yes", "No", "NA" };
 
-static const char * const ScoreTqReqFlushFifo_PreDesc_Stop[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const ScoreTqReqFlushFifo_PreDesc_Stop[] =
+  { "Yes", "No", "NA" };
 
-static const char * const ScoreTqReqFlushFifo_PreDesc_WaitState[] = {
-  "Blocked",
-  "IntendToBlock",
-  "NA"
-};
+static const char *const ScoreTqReqFlushFifo_PreDesc_WaitState[] =
+  { "Blocked", "IntendToBlock", "NA" };
 
-static const char * const * const ScoreTqReqFlushFifo_PreDesc[] = {
+static const char *const *const ScoreTqReqFlushFifo_PreDesc[] = {
   ScoreTqReqFlushFifo_PreDesc_MayStop,
   ScoreTqReqFlushFifo_PreDesc_QueueEmpty,
   ScoreTqReqFlushFifo_PreDesc_Stop,
@@ -218,10 +205,7 @@ static void SchedulerEvent(
 
   ctx = arg;
 
-  if (
-    when == T_SCHEDULER_BEFORE &&
-    event->operation == T_SCHEDULER_BLOCK
-  ) {
+  if ( when == T_SCHEDULER_BEFORE && event->operation == T_SCHEDULER_BLOCK ) {
     T_scheduler_set_event_handler( NULL, NULL );
     ctx->request.handler = InterruptFlush;
     CallWithinISRSubmit( &ctx->request );
@@ -548,9 +532,7 @@ static T_fixture ScoreTqReqFlushFifo_Fixture = {
   .initial_context = &ScoreTqReqFlushFifo_Instance
 };
 
-static const uint8_t ScoreTqReqFlushFifo_Weights[] = {
-  8, 4, 2, 1
-};
+static const uint8_t ScoreTqReqFlushFifo_Weights[] = { 8, 4, 2, 1 };
 
 static void ScoreTqReqFlushFifo_Skip(
   ScoreTqReqFlushFifo_Context *ctx,
@@ -591,9 +573,7 @@ static inline ScoreTqReqFlushFifo_Entry ScoreTqReqFlushFifo_PopEntry(
 
   ctx->Map.index = index + 1;
 
-  return ScoreTqReqFlushFifo_Entries[
-    ScoreTqReqFlushFifo_Map[ index ]
-  ];
+  return ScoreTqReqFlushFifo_Entries[ ScoreTqReqFlushFifo_Map[ index ] ];
 }
 
 static void ScoreTqReqFlushFifo_SetPreConditionStates(

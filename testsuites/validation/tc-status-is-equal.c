@@ -131,16 +131,12 @@ typedef struct {
   } Map;
 } RtemsStatusReqIsEqual_Context;
 
-static RtemsStatusReqIsEqual_Context
-  RtemsStatusReqIsEqual_Instance;
+static RtemsStatusReqIsEqual_Context RtemsStatusReqIsEqual_Instance;
 
-static const char * const RtemsStatusReqIsEqual_PreDesc_Status[] = {
-  "Equal",
-  "NotEqual",
-  "NA"
-};
+static const char *const RtemsStatusReqIsEqual_PreDesc_Status[] =
+  { "Equal", "NotEqual", "NA" };
 
-static const char * const * const RtemsStatusReqIsEqual_PreDesc[] = {
+static const char *const *const RtemsStatusReqIsEqual_PreDesc[] = {
   RtemsStatusReqIsEqual_PreDesc_Status,
   NULL
 };
@@ -252,9 +248,7 @@ static inline RtemsStatusReqIsEqual_Entry RtemsStatusReqIsEqual_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsStatusReqIsEqual_Entries[
-    RtemsStatusReqIsEqual_Map[ index ]
-  ];
+  return RtemsStatusReqIsEqual_Entries[ RtemsStatusReqIsEqual_Map[ index ] ];
 }
 
 static void RtemsStatusReqIsEqual_TestVariant(

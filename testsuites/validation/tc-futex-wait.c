@@ -147,16 +147,12 @@ typedef struct {
   } Map;
 } NewlibReqFutexWait_Context;
 
-static NewlibReqFutexWait_Context
-  NewlibReqFutexWait_Instance;
+static NewlibReqFutexWait_Context NewlibReqFutexWait_Instance;
 
-static const char * const NewlibReqFutexWait_PreDesc_State[] = {
-  "Equal",
-  "NotEqual",
-  "NA"
-};
+static const char *const NewlibReqFutexWait_PreDesc_State[] =
+  { "Equal", "NotEqual", "NA" };
 
-static const char * const * const NewlibReqFutexWait_PreDesc[] = {
+static const char *const *const NewlibReqFutexWait_PreDesc[] = {
   NewlibReqFutexWait_PreDesc_State,
   NULL
 };
@@ -378,9 +374,7 @@ static inline NewlibReqFutexWait_Entry NewlibReqFutexWait_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return NewlibReqFutexWait_Entries[
-    NewlibReqFutexWait_Map[ index ]
-  ];
+  return NewlibReqFutexWait_Entries[ NewlibReqFutexWait_Map[ index ] ];
 }
 
 static void NewlibReqFutexWait_TestVariant( NewlibReqFutexWait_Context *ctx )

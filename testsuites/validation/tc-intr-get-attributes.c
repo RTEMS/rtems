@@ -155,22 +155,15 @@ typedef struct {
   } Map;
 } RtemsIntrReqGetAttributes_Context;
 
-static RtemsIntrReqGetAttributes_Context
-  RtemsIntrReqGetAttributes_Instance;
+static RtemsIntrReqGetAttributes_Context RtemsIntrReqGetAttributes_Instance;
 
-static const char * const RtemsIntrReqGetAttributes_PreDesc_Vector[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsIntrReqGetAttributes_PreDesc_Vector[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsIntrReqGetAttributes_PreDesc_Attributes[] = {
-  "Obj",
-  "Null",
-  "NA"
-};
+static const char *const RtemsIntrReqGetAttributes_PreDesc_Attributes[] =
+  { "Obj", "Null", "NA" };
 
-static const char * const * const RtemsIntrReqGetAttributes_PreDesc[] = {
+static const char *const *const RtemsIntrReqGetAttributes_PreDesc[] = {
   RtemsIntrReqGetAttributes_PreDesc_Vector,
   RtemsIntrReqGetAttributes_PreDesc_Attributes,
   NULL
@@ -418,9 +411,8 @@ RtemsIntrReqGetAttributes_PopEntry( RtemsIntrReqGetAttributes_Context *ctx )
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsIntrReqGetAttributes_Entries[
-    RtemsIntrReqGetAttributes_Map[ index ]
-  ];
+  return RtemsIntrReqGetAttributes_Entries
+    [ RtemsIntrReqGetAttributes_Map[ index ] ];
 }
 
 static void RtemsIntrReqGetAttributes_TestVariant(

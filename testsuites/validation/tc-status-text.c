@@ -184,10 +184,9 @@ typedef struct {
   } Map;
 } RtemsStatusReqText_Context;
 
-static RtemsStatusReqText_Context
-  RtemsStatusReqText_Instance;
+static RtemsStatusReqText_Context RtemsStatusReqText_Instance;
 
-static const char * const RtemsStatusReqText_PreDesc_Code[] = {
+static const char *const RtemsStatusReqText_PreDesc_Code[] = {
   "AlreadySuspended",
   "CalledFromIsr",
   "IllegalOnRemoteObject",
@@ -222,7 +221,7 @@ static const char * const RtemsStatusReqText_PreDesc_Code[] = {
   "NA"
 };
 
-static const char * const * const RtemsStatusReqText_PreDesc[] = {
+static const char *const *const RtemsStatusReqText_PreDesc[] = {
   RtemsStatusReqText_PreDesc_Code,
   NULL
 };
@@ -882,9 +881,7 @@ static inline RtemsStatusReqText_Entry RtemsStatusReqText_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsStatusReqText_Entries[
-    RtemsStatusReqText_Map[ index ]
-  ];
+  return RtemsStatusReqText_Entries[ RtemsStatusReqText_Map[ index ] ];
 }
 
 static void RtemsStatusReqText_TestVariant( RtemsStatusReqText_Context *ctx )

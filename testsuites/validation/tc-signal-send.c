@@ -193,41 +193,24 @@ typedef struct {
   } Map;
 } RtemsSignalReqSend_Context;
 
-static RtemsSignalReqSend_Context
-  RtemsSignalReqSend_Instance;
+static RtemsSignalReqSend_Context RtemsSignalReqSend_Instance;
 
-static const char * const RtemsSignalReqSend_PreDesc_Task[] = {
-  "NoObj",
-  "Self",
-  "Other",
-  "NA"
-};
+static const char *const RtemsSignalReqSend_PreDesc_Task[] =
+  { "NoObj", "Self", "Other", "NA" };
 
-static const char * const RtemsSignalReqSend_PreDesc_Set[] = {
-  "Zero",
-  "NonZero",
-  "NA"
-};
+static const char *const RtemsSignalReqSend_PreDesc_Set[] =
+  { "Zero", "NonZero", "NA" };
 
-static const char * const RtemsSignalReqSend_PreDesc_Handler[] = {
-  "Invalid",
-  "Valid",
-  "NA"
-};
+static const char *const RtemsSignalReqSend_PreDesc_Handler[] =
+  { "Invalid", "Valid", "NA" };
 
-static const char * const RtemsSignalReqSend_PreDesc_ASR[] = {
-  "Enabled",
-  "Disabled",
-  "NA"
-};
+static const char *const RtemsSignalReqSend_PreDesc_ASR[] =
+  { "Enabled", "Disabled", "NA" };
 
-static const char * const RtemsSignalReqSend_PreDesc_Nested[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsSignalReqSend_PreDesc_Nested[] =
+  { "Yes", "No", "NA" };
 
-static const char * const * const RtemsSignalReqSend_PreDesc[] = {
+static const char *const *const RtemsSignalReqSend_PreDesc[] = {
   RtemsSignalReqSend_PreDesc_Task,
   RtemsSignalReqSend_PreDesc_Set,
   RtemsSignalReqSend_PreDesc_Handler,
@@ -250,7 +233,7 @@ typedef RtemsSignalReqSend_Context Context;
 
 static void WorkerDone( const Context *ctx )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   if ( rtems_scheduler_get_processor_maximum() > 1 ) {
     SendEvents( ctx->runner_id, EVENT_WORKER_DONE );
   }
@@ -263,7 +246,7 @@ static void SendEventsToWorker( const Context *ctx, rtems_event_set events )
 {
   SendEvents( ctx->worker_id, events );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   if ( rtems_scheduler_get_processor_maximum() > 1 ) {
     events = ReceiveAnyEvents();
     T_eq_u32( events, EVENT_WORKER_DONE );
@@ -668,7 +651,7 @@ static void RtemsSignalReqSend_Setup( RtemsSignalReqSend_Context *ctx )
 
   ctx->worker_id = CreateTask( "WORK", PRIO_HIGH );
 
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   if ( rtems_scheduler_get_processor_maximum() > 1 ) {
     rtems_status_code sc;
     rtems_id          scheduler_id;
@@ -714,7 +697,11 @@ static void RtemsSignalReqSend_Prepare( RtemsSignalReqSend_Context *ctx )
   ctx->calls_after_send = 0;
   ctx->calls_after_dispatch = 0;
   ctx->calls_after_enable = 0;
-  memset( &ctx->processed_signal_sets, 0, sizeof( ctx->processed_signal_sets ) );
+  memset(
+    &ctx->processed_signal_sets,
+    0,
+    sizeof( ctx->processed_signal_sets )
+  );
   memset( &ctx->stack_pointers, 0, sizeof( ctx->stack_pointers ) );
 }
 
@@ -830,9 +817,7 @@ static inline RtemsSignalReqSend_Entry RtemsSignalReqSend_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsSignalReqSend_Entries[
-    RtemsSignalReqSend_Map[ index ]
-  ];
+  return RtemsSignalReqSend_Entries[ RtemsSignalReqSend_Map[ index ] ];
 }
 
 static void RtemsSignalReqSend_TestVariant( RtemsSignalReqSend_Context *ctx )

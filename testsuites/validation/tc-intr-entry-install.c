@@ -315,64 +315,33 @@ typedef struct {
   } Map;
 } RtemsIntrReqEntryInstall_Context;
 
-static RtemsIntrReqEntryInstall_Context
-  RtemsIntrReqEntryInstall_Instance;
+static RtemsIntrReqEntryInstall_Context RtemsIntrReqEntryInstall_Instance;
 
-static const char * const RtemsIntrReqEntryInstall_PreDesc_Vector[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsIntrReqEntryInstall_PreDesc_Vector[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsIntrReqEntryInstall_PreDesc_Options[] = {
-  "Unique",
-  "Shared",
-  "Replace",
-  "NA"
-};
+static const char *const RtemsIntrReqEntryInstall_PreDesc_Options[] =
+  { "Unique", "Shared", "Replace", "NA" };
 
-static const char * const RtemsIntrReqEntryInstall_PreDesc_Entry[] = {
-  "Obj",
-  "Null",
-  "NA"
-};
+static const char *const RtemsIntrReqEntryInstall_PreDesc_Entry[] =
+  { "Obj", "Null", "NA" };
 
-static const char * const RtemsIntrReqEntryInstall_PreDesc_Routine[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsIntrReqEntryInstall_PreDesc_Routine[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsIntrReqEntryInstall_PreDesc_Init[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsIntrReqEntryInstall_PreDesc_Init[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsIntrReqEntryInstall_PreDesc_ISR[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsIntrReqEntryInstall_PreDesc_ISR[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsIntrReqEntryInstall_PreDesc_CanEnable[] = {
-  "Yes",
-  "Maybe",
-  "No",
-  "NA"
-};
+static const char *const RtemsIntrReqEntryInstall_PreDesc_CanEnable[] =
+  { "Yes", "Maybe", "No", "NA" };
 
-static const char * const RtemsIntrReqEntryInstall_PreDesc_Installed[] = {
-  "None",
-  "Unique",
-  "Other",
-  "EqRoutine",
-  "EqArg",
-  "Match",
-  "NA"
-};
+static const char *const RtemsIntrReqEntryInstall_PreDesc_Installed[] =
+  { "None", "Unique", "Other", "EqRoutine", "EqArg", "Match", "NA" };
 
-static const char * const * const RtemsIntrReqEntryInstall_PreDesc[] = {
+static const char *const *const RtemsIntrReqEntryInstall_PreDesc[] = {
   RtemsIntrReqEntryInstall_PreDesc_Vector,
   RtemsIntrReqEntryInstall_PreDesc_Options,
   RtemsIntrReqEntryInstall_PreDesc_Entry,
@@ -965,7 +934,7 @@ static void RtemsIntrReqEntryInstall_Post_Status_Check(
        * The return status of rtems_interrupt_entry_install() shall be
        * RTEMS_RESOURCE_IN_USE.
        */
-      T_rsc( ctx->status, RTEMS_RESOURCE_IN_USE  );
+      T_rsc( ctx->status, RTEMS_RESOURCE_IN_USE );
       break;
     }
 
@@ -1114,10 +1083,8 @@ static void RtemsIntrReqEntryInstall_Setup(
   RtemsIntrReqEntryInstall_Context *ctx
 )
 {
-  rtems_interrupt_attributes required = {
-    .can_raise = true
-  };
-  rtems_status_code sc;
+  rtems_interrupt_attributes required = { .can_raise = true };
+  rtems_status_code          sc;
 
   ctx->initialized_during_setup = bsp_interrupt_is_initialized();
   ctx->test_vector = GetTestableInterruptVector( &required );
@@ -1361,9 +1328,8 @@ static inline RtemsIntrReqEntryInstall_Entry RtemsIntrReqEntryInstall_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsIntrReqEntryInstall_Entries[
-    RtemsIntrReqEntryInstall_Map[ index ]
-  ];
+  return RtemsIntrReqEntryInstall_Entries
+    [ RtemsIntrReqEntryInstall_Map[ index ] ];
 }
 
 static void RtemsIntrReqEntryInstall_SetPreConditionStates(
@@ -1473,8 +1439,10 @@ T_TEST_CASE_FIXTURE(
                 ++ctx->Map.pci[ 6 ]
               ) {
                 for (
-                  ctx->Map.pci[ 7 ] = RtemsIntrReqEntryInstall_Pre_Installed_None;
-                  ctx->Map.pci[ 7 ] < RtemsIntrReqEntryInstall_Pre_Installed_NA;
+                  ctx->Map.pci[ 7 ] =
+                    RtemsIntrReqEntryInstall_Pre_Installed_None;
+                  ctx->Map.pci[ 7 ] <
+                  RtemsIntrReqEntryInstall_Pre_Installed_NA;
                   ++ctx->Map.pci[ 7 ]
                 ) {
                   ctx->Map.entry = RtemsIntrReqEntryInstall_PopEntry( ctx );

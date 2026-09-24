@@ -194,14 +194,14 @@ typedef struct {
    * depending on the function pointer used here.  `ctx_arg` must be a pointer
    * to this context structure.
    */
-  uint32_t ( *do_action )( void *ctx, void (*todo)( void *ctx_arg ) );
+  uint32_t ( *do_action )( void *ctx, void ( *todo )( void *ctx_arg ) );
 
   /**
    * @brief This member serves to pass the pointer to the function which the
    *   work owner task shall execute from function `OwnerDoWork` to function
    *   `WorkerTask`.
    */
-  void (*worker_todo)( void *ctx );
+  void ( *worker_todo )( void *ctx );
 
   /**
    * @brief This member contains the owner task identifier of the owner task.
@@ -291,48 +291,27 @@ typedef struct {
   } Map;
 } RtemsRatemonReqPeriod_Context;
 
-static RtemsRatemonReqPeriod_Context
-  RtemsRatemonReqPeriod_Instance;
+static RtemsRatemonReqPeriod_Context RtemsRatemonReqPeriod_Instance;
 
-static const char * const RtemsRatemonReqPeriod_PreDesc_Id[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsRatemonReqPeriod_PreDesc_Id[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsRatemonReqPeriod_PreDesc_Caller[] = {
-  "OwnerTask",
-  "OtherTask",
-  "NA"
-};
+static const char *const RtemsRatemonReqPeriod_PreDesc_Caller[] =
+  { "OwnerTask", "OtherTask", "NA" };
 
-static const char * const RtemsRatemonReqPeriod_PreDesc_Length[] = {
-  "Ticks",
-  "Status",
-  "NA"
-};
+static const char *const RtemsRatemonReqPeriod_PreDesc_Length[] =
+  { "Ticks", "Status", "NA" };
 
-static const char * const RtemsRatemonReqPeriod_PreDesc_State[] = {
-  "Inactive",
-  "Active",
-  "Expired",
-  "NA"
-};
+static const char *const RtemsRatemonReqPeriod_PreDesc_State[] =
+  { "Inactive", "Active", "Expired", "NA" };
 
-static const char * const RtemsRatemonReqPeriod_PreDesc_Postponed[] = {
-  "Zero",
-  "One",
-  "Several",
-  "NA"
-};
+static const char *const RtemsRatemonReqPeriod_PreDesc_Postponed[] =
+  { "Zero", "One", "Several", "NA" };
 
-static const char * const RtemsRatemonReqPeriod_PreDesc_InactiveCause[] = {
-  "New",
-  "Canceled",
-  "NA"
-};
+static const char *const RtemsRatemonReqPeriod_PreDesc_InactiveCause[] =
+  { "New", "Canceled", "NA" };
 
-static const char * const * const RtemsRatemonReqPeriod_PreDesc[] = {
+static const char *const *const RtemsRatemonReqPeriod_PreDesc[] = {
   RtemsRatemonReqPeriod_PreDesc_Id,
   RtemsRatemonReqPeriod_PreDesc_Caller,
   RtemsRatemonReqPeriod_PreDesc_Length,
@@ -342,15 +321,12 @@ static const char * const * const RtemsRatemonReqPeriod_PreDesc[] = {
   NULL
 };
 
-static const rtems_interval period_length = 5;
+static const rtems_interval      period_length = 5;
 static const rtems_task_priority background_task_priority = 100;
 static const rtems_task_priority foreground_task_priority = 10;
-static const rtems_event_set wake_main_task_event = RTEMS_EVENT_17;
+static const rtems_event_set     wake_main_task_event = RTEMS_EVENT_17;
 
-static void TickTheClock(
-  RtemsRatemonReqPeriod_Context *ctx,
-  uint32_t ticks
-)
+static void TickTheClock( RtemsRatemonReqPeriod_Context *ctx, uint32_t ticks )
 {
   uint32_t i;
   for ( i = 0; i < ticks; ++i ) {
@@ -361,8 +337,8 @@ static void TickTheClock(
 
 static rtems_status_code CallPeriodFunction(
   RtemsRatemonReqPeriod_Context *ctx,
-  rtems_id id,
-  rtems_interval length
+  rtems_id                       id,
+  rtems_interval                 length
 )
 {
   rtems_status_code status;
@@ -374,8 +350,8 @@ static rtems_status_code CallPeriodFunction(
 static void CreatePeriod( void *ctx_in )
 {
   RtemsRatemonReqPeriod_Context *ctx = ctx_in;
-  rtems_status_code status;
-  status =  rtems_rate_monotonic_create(
+  rtems_status_code              status;
+  status = rtems_rate_monotonic_create(
     rtems_build_name( 'R', 'M', 'O', 'N' ),
     &ctx->period_id
   );
@@ -403,7 +379,7 @@ static void CallPeriod( void *ctx_in )
 static void CallPeriodTimeout( void *ctx_in )
 {
   RtemsRatemonReqPeriod_Context *ctx = ctx_in;
-  rtems_status_code status;
+  rtems_status_code              status;
   status = CallPeriodFunction( ctx, ctx->period_id, period_length );
   T_rsc( status, RTEMS_TIMEOUT );
 }
@@ -416,8 +392,8 @@ static void DoAction( void *ctx_in )
 
 static void WorkerTask( rtems_task_argument argument )
 {
-  RtemsRatemonReqPeriod_Context *ctx =
-    (RtemsRatemonReqPeriod_Context *) argument;
+  RtemsRatemonReqPeriod_Context *ctx = (RtemsRatemonReqPeriod_Context *)
+    argument;
   if ( ctx != NULL ) {
     ctx->worker_todo( ctx );
     T_rsc_success( rtems_event_send( ctx->task_id, wake_main_task_event ) );
@@ -425,12 +401,12 @@ static void WorkerTask( rtems_task_argument argument )
   T_rsc_success( rtems_task_suspend( RTEMS_SELF ) );
 }
 
-static uint32_t OwnerDoWork( void *ctx_in, void (*todo)( void *ctx_arg ) )
+static uint32_t OwnerDoWork( void *ctx_in, void ( *todo )( void *ctx_arg ) )
 {
   RtemsRatemonReqPeriod_Context *ctx = ctx_in;
-  uint32_t ticks_to_wait = period_length + 1;
-  rtems_status_code status;
-  rtems_event_set event_set;
+  uint32_t                       ticks_to_wait = period_length + 1;
+  rtems_status_code              status;
+  rtems_event_set                event_set;
 
   ctx->worker_todo = todo;
   status = rtems_task_restart( ctx->worker_id, (rtems_task_argument) ctx );
@@ -464,7 +440,7 @@ static uint32_t OwnerDoWork( void *ctx_in, void (*todo)( void *ctx_arg ) )
   return period_length + 1 - ticks_to_wait;
 }
 
-static uint32_t OtherDoWork( void *ctx_in, void (*todo)( void *ctx_arg ) )
+static uint32_t OtherDoWork( void *ctx_in, void ( *todo )( void *ctx_arg ) )
 {
   RtemsRatemonReqPeriod_Context *ctx = ctx_in;
   todo( ctx );
@@ -474,7 +450,7 @@ static uint32_t OtherDoWork( void *ctx_in, void (*todo)( void *ctx_arg ) )
 
 static void CreatePostponedJobs(
   RtemsRatemonReqPeriod_Context *ctx,
-  uint32_t jobs_count
+  uint32_t                       jobs_count
 )
 {
   ctx->postponed_jobs_count = jobs_count;
@@ -868,8 +844,9 @@ static void RtemsRatemonReqPeriod_Post_Delay_Check(
        */
       T_eq_u32(
         ctx->action_duration,
-        ( ctx->test_duration_till_action % period_length + 1 ) * period_length -
-        ctx->test_duration_till_action
+        ( ctx->test_duration_till_action % period_length + 1 ) *
+            period_length -
+          ctx->test_duration_till_action
       );
       break;
     }
@@ -909,9 +886,9 @@ static void RtemsRatemonReqPeriod_Post_Scheduler_Check(
 
 static void RtemsRatemonReqPeriod_Setup( RtemsRatemonReqPeriod_Context *ctx )
 {
-  rtems_status_code status;
+  rtems_status_code   status;
   rtems_task_priority priority;
-  rtems_event_set event_set;
+  rtems_event_set     event_set;
   ctx->worker_id = RTEMS_INVALID_ID;
 
   status = rtems_task_ident(
@@ -975,7 +952,7 @@ static void RtemsRatemonReqPeriod_Teardown(
   RtemsRatemonReqPeriod_Context *ctx
 )
 {
-  rtems_status_code status;
+  rtems_status_code   status;
   rtems_task_priority priority;
 
   T_rsc_success( rtems_task_delete( ctx->worker_id ) );
@@ -999,7 +976,7 @@ static void RtemsRatemonReqPeriod_Teardown_Wrap( void *arg )
 
 static void RtemsRatemonReqPeriod_Prepare( RtemsRatemonReqPeriod_Context *ctx )
 {
-  rtems_status_code status;
+  rtems_status_code                  status;
   rtems_rate_monotonic_period_status period_status;
   ctx->test_duration = 0;
   ctx->period_calls = 0;
@@ -1010,10 +987,7 @@ static void RtemsRatemonReqPeriod_Prepare( RtemsRatemonReqPeriod_Context *ctx )
    * (what ever value happens to be stored in that field of the internal data
    * structure) until period() is called.
    */
-  status = rtems_rate_monotonic_get_status(
-    ctx->period_id,
-    &period_status
-  );
+  status = rtems_rate_monotonic_get_status( ctx->period_id, &period_status );
   T_rsc_success( status );
 }
 
@@ -1163,9 +1137,7 @@ static inline RtemsRatemonReqPeriod_Entry RtemsRatemonReqPeriod_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsRatemonReqPeriod_Entries[
-    RtemsRatemonReqPeriod_Map[ index ]
-  ];
+  return RtemsRatemonReqPeriod_Entries[ RtemsRatemonReqPeriod_Map[ index ] ];
 }
 
 static void RtemsRatemonReqPeriod_SetPreConditionStates(

@@ -147,19 +147,13 @@ typedef struct {
 static RtemsBarrierReqGetNumberWaiting_Context
   RtemsBarrierReqGetNumberWaiting_Instance;
 
-static const char * const RtemsBarrierReqGetNumberWaiting_PreDesc_Id[] = {
-  "NoObj",
-  "Barrier",
-  "NA"
-};
+static const char *const RtemsBarrierReqGetNumberWaiting_PreDesc_Id[] =
+  { "NoObj", "Barrier", "NA" };
 
-static const char * const RtemsBarrierReqGetNumberWaiting_PreDesc_Waiting[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsBarrierReqGetNumberWaiting_PreDesc_Waiting[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const * const RtemsBarrierReqGetNumberWaiting_PreDesc[] = {
+static const char *const *const RtemsBarrierReqGetNumberWaiting_PreDesc[] = {
   RtemsBarrierReqGetNumberWaiting_PreDesc_Id,
   RtemsBarrierReqGetNumberWaiting_PreDesc_Waiting,
   NULL
@@ -398,9 +392,8 @@ RtemsBarrierReqGetNumberWaiting_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsBarrierReqGetNumberWaiting_Entries[
-    RtemsBarrierReqGetNumberWaiting_Map[ index ]
-  ];
+  return RtemsBarrierReqGetNumberWaiting_Entries
+    [ RtemsBarrierReqGetNumberWaiting_Map[ index ] ];
 }
 
 static void RtemsBarrierReqGetNumberWaiting_TestVariant(

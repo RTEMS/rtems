@@ -127,22 +127,15 @@ typedef struct {
   } Map;
 } ScoreTqReqTimeoutMrsp_Context;
 
-static ScoreTqReqTimeoutMrsp_Context
-  ScoreTqReqTimeoutMrsp_Instance;
+static ScoreTqReqTimeoutMrsp_Context ScoreTqReqTimeoutMrsp_Instance;
 
-static const char * const ScoreTqReqTimeoutMrsp_PreDesc_Scheduler[] = {
-  "Same",
-  "Other",
-  "NA"
-};
+static const char *const ScoreTqReqTimeoutMrsp_PreDesc_Scheduler[] =
+  { "Same", "Other", "NA" };
 
-static const char * const ScoreTqReqTimeoutMrsp_PreDesc_WaitState[] = {
-  "IntendToBlock",
-  "ReadyAgain",
-  "NA"
-};
+static const char *const ScoreTqReqTimeoutMrsp_PreDesc_WaitState[] =
+  { "IntendToBlock", "ReadyAgain", "NA" };
 
-static const char * const * const ScoreTqReqTimeoutMrsp_PreDesc[] = {
+static const char *const *const ScoreTqReqTimeoutMrsp_PreDesc[] = {
   ScoreTqReqTimeoutMrsp_PreDesc_Scheduler,
   ScoreTqReqTimeoutMrsp_PreDesc_WaitState,
   NULL
@@ -178,12 +171,7 @@ static void ScoreTqReqTimeoutMrsp_Pre_Scheduler_Prepare(
        */
       ctx->other_scheduler = false;
 
-      TQSetScheduler(
-        ctx->tq_ctx,
-        TQ_BLOCKER_A,
-        SCHEDULER_A_ID,
-        PRIO_LOW
-      );
+      TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_A, SCHEDULER_A_ID, PRIO_LOW );
       RemoveProcessor( SCHEDULER_B_ID, 1 );
       AddProcessor( SCHEDULER_A_ID, 1 );
       ctx->restore_scheduler = true;
@@ -197,12 +185,7 @@ static void ScoreTqReqTimeoutMrsp_Pre_Scheduler_Prepare(
        */
       ctx->other_scheduler = true;
 
-      TQSetScheduler(
-        ctx->tq_ctx,
-        TQ_BLOCKER_A,
-        SCHEDULER_B_ID,
-        PRIO_NORMAL
-      );
+      TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_A, SCHEDULER_B_ID, PRIO_NORMAL );
       break;
     }
 
@@ -425,9 +408,7 @@ static inline ScoreTqReqTimeoutMrsp_Entry ScoreTqReqTimeoutMrsp_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return ScoreTqReqTimeoutMrsp_Entries[
-    ScoreTqReqTimeoutMrsp_Map[ index ]
-  ];
+  return ScoreTqReqTimeoutMrsp_Entries[ ScoreTqReqTimeoutMrsp_Map[ index ] ];
 }
 
 static void ScoreTqReqTimeoutMrsp_TestVariant(

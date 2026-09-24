@@ -190,8 +190,7 @@ typedef struct {
   ISR_lock_Context worker_a_wait_default_lock_context;
 } ScoreThreadValSmp_Context;
 
-static ScoreThreadValSmp_Context
-  ScoreThreadValSmp_Instance;
+static ScoreThreadValSmp_Context ScoreThreadValSmp_Instance;
 
 #define EVENT_A_OBTAIN RTEMS_EVENT_0
 
@@ -307,10 +306,7 @@ static void SchedulerBlock(
 
   ctx = arg;
 
-  if (
-    when == T_SCHEDULER_BEFORE &&
-    event->operation == T_SCHEDULER_BLOCK
-  ) {
+  if ( when == T_SCHEDULER_BEFORE && event->operation == T_SCHEDULER_BLOCK ) {
     Thread_Control *thread;
 
     T_scheduler_set_event_handler( NULL, NULL );
@@ -383,10 +379,7 @@ Thread_queue_Deadlock_status __wrap__Thread_queue_Path_acquire(
 
   ctx = release_worker_a_wait_default;
 
-  if (
-    ctx != NULL &&
-    ctx->worker_a_wait_default_lock_cpu == _Per_CPU_Get()
-  ) {
+  if ( ctx != NULL && ctx->worker_a_wait_default_lock_cpu == _Per_CPU_Get() ) {
     Thread_Control *worker_a;
 
     release_worker_a_wait_default = NULL;
@@ -397,11 +390,7 @@ Thread_queue_Deadlock_status __wrap__Thread_queue_Path_acquire(
     );
   }
 
-  return __real__Thread_queue_Path_acquire(
-    queue,
-    the_thread,
-    queue_context
-  );
+  return __real__Thread_queue_Path_acquire( queue, the_thread, queue_context );
 }
 
 static void ScoreThreadValSmp_Setup( void )
@@ -440,8 +429,8 @@ static T_fixture ScoreThreadValSmp_Fixture = {
  */
 static void ScoreThreadValSmp_Action_0( ScoreThreadValSmp_Context *ctx )
 {
-  Per_CPU_Control*cpu_self;
-  Thread_Control *executing;
+  Per_CPU_Control *cpu_self;
+  Thread_Control  *executing;
 
   executing = _Thread_Get_executing();
   ctx->counter = 0;
@@ -502,7 +491,7 @@ static void ScoreThreadValSmp_Action_0( ScoreThreadValSmp_Context *ctx )
   /*
    * Release the mutex.
    */
-  ReleaseMutex( ctx->mutex_a_id);
+  ReleaseMutex( ctx->mutex_a_id );
   T_eq_u32( rtems_scheduler_get_processor(), 0 );
 
   /*

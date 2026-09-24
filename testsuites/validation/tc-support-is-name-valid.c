@@ -126,16 +126,12 @@ typedef struct {
   } Map;
 } RtemsSupportReqIsNameValid_Context;
 
-static RtemsSupportReqIsNameValid_Context
-  RtemsSupportReqIsNameValid_Instance;
+static RtemsSupportReqIsNameValid_Context RtemsSupportReqIsNameValid_Instance;
 
-static const char * const RtemsSupportReqIsNameValid_PreDesc_Name[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsSupportReqIsNameValid_PreDesc_Name[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const * const RtemsSupportReqIsNameValid_PreDesc[] = {
+static const char *const *const RtemsSupportReqIsNameValid_PreDesc[] = {
   RtemsSupportReqIsNameValid_PreDesc_Name,
   NULL
 };
@@ -253,9 +249,8 @@ RtemsSupportReqIsNameValid_PopEntry( RtemsSupportReqIsNameValid_Context *ctx )
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsSupportReqIsNameValid_Entries[
-    RtemsSupportReqIsNameValid_Map[ index ]
-  ];
+  return RtemsSupportReqIsNameValid_Entries
+    [ RtemsSupportReqIsNameValid_Map[ index ] ];
 }
 
 static void RtemsSupportReqIsNameValid_TestVariant(

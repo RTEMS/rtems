@@ -247,10 +247,9 @@ typedef struct {
   } Map;
 } RtemsSemReqSetPriority_Context;
 
-static RtemsSemReqSetPriority_Context
-  RtemsSemReqSetPriority_Instance;
+static RtemsSemReqSetPriority_Context RtemsSemReqSetPriority_Instance;
 
-static const char * const RtemsSemReqSetPriority_PreDesc_Class[] = {
+static const char *const RtemsSemReqSetPriority_PreDesc_Class[] = {
   "Counting",
   "Simple",
   "Binary",
@@ -261,33 +260,19 @@ static const char * const RtemsSemReqSetPriority_PreDesc_Class[] = {
   "NA"
 };
 
-static const char * const RtemsSemReqSetPriority_PreDesc_SemId[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsSemReqSetPriority_PreDesc_SemId[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsSemReqSetPriority_PreDesc_SchedId[] = {
-  "Invalid",
-  "Create",
-  "Other",
-  "NA"
-};
+static const char *const RtemsSemReqSetPriority_PreDesc_SchedId[] =
+  { "Invalid", "Create", "Other", "NA" };
 
-static const char * const RtemsSemReqSetPriority_PreDesc_NewPrio[] = {
-  "Current",
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsSemReqSetPriority_PreDesc_NewPrio[] =
+  { "Current", "Valid", "Invalid", "NA" };
 
-static const char * const RtemsSemReqSetPriority_PreDesc_OldPrio[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsSemReqSetPriority_PreDesc_OldPrio[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const * const RtemsSemReqSetPriority_PreDesc[] = {
+static const char *const *const RtemsSemReqSetPriority_PreDesc[] = {
   RtemsSemReqSetPriority_PreDesc_Class,
   RtemsSemReqSetPriority_PreDesc_SemId,
   RtemsSemReqSetPriority_PreDesc_SchedId,
@@ -310,7 +295,7 @@ static void ReleaseSemaphore( const Context *ctx )
 
 static void ChangeScheduler( rtems_id scheduler_id )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   rtems_status_code sc;
 
   sc = rtems_task_set_scheduler( RTEMS_SELF, scheduler_id, PRIO_NORMAL );
@@ -343,12 +328,9 @@ static void CheckPriority(
   ChangeScheduler( ctx->runner_scheduler_id );
 }
 
-static void CheckNotDefined(
-  const Context      *ctx,
-  rtems_id            scheduler_id
-)
+static void CheckNotDefined( const Context *ctx, rtems_id scheduler_id )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   rtems_status_code sc;
 
   ChangeScheduler( scheduler_id );
@@ -429,7 +411,7 @@ static void RtemsSemReqSetPriority_Pre_Class_Prepare(
        * While the semaphore object is a MrsP semaphore.
        */
       ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE |
-        RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
+                            RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
       break;
     }
 
@@ -674,13 +656,15 @@ static void RtemsSemReqSetPriority_Post_SemPrio_Check(
        * by the ``new_priority`` parameter during the
        * rtems_semaphore_set_priority() call.
        */
-      if ( ( ctx->attribute_set & RTEMS_MULTIPROCESSOR_RESOURCE_SHARING ) != 0 ) {
+      if (
+        ( ctx->attribute_set & RTEMS_MULTIPROCESSOR_RESOURCE_SHARING ) != 0
+      ) {
         if ( ctx->scheduler_id == ctx->other_scheduler_id ) {
           CheckPriority( ctx, ctx->runner_scheduler_id, PRIO_HIGH );
           CheckPriority( ctx, ctx->other_scheduler_id, PRIO_VERY_HIGH );
         } else {
           CheckPriority( ctx, ctx->runner_scheduler_id, PRIO_VERY_HIGH );
-      #if defined(RTEMS_SMP)
+      #if defined( RTEMS_SMP )
           CheckPriority( ctx, ctx->other_scheduler_id, 0 );
       #endif
         }
@@ -696,9 +680,11 @@ static void RtemsSemReqSetPriority_Post_SemPrio_Check(
        * Priorities used by semaphores shall not be modified by the
        * rtems_semaphore_set_priority() call.
        */
-      if ( ( ctx->attribute_set & RTEMS_MULTIPROCESSOR_RESOURCE_SHARING ) != 0 ) {
+      if (
+        ( ctx->attribute_set & RTEMS_MULTIPROCESSOR_RESOURCE_SHARING ) != 0
+      ) {
         CheckPriority( ctx, ctx->runner_scheduler_id, PRIO_HIGH );
-      #if defined(RTEMS_SMP)
+      #if defined( RTEMS_SMP )
         CheckPriority( ctx, ctx->other_scheduler_id, 0 );
       #endif
       } else if ( ( ctx->attribute_set & RTEMS_PRIORITY_CEILING ) != 0 ) {
@@ -762,7 +748,7 @@ static void RtemsSemReqSetPriority_Setup( RtemsSemReqSetPriority_Context *ctx )
   sc = rtems_task_get_scheduler( RTEMS_SELF, &ctx->runner_scheduler_id );
   T_rsc_success( sc );
 
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   sc = rtems_scheduler_ident(
     TEST_SCHEDULER_B_NAME,
     &ctx->other_scheduler_id
@@ -1053,9 +1039,7 @@ static inline RtemsSemReqSetPriority_Entry RtemsSemReqSetPriority_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsSemReqSetPriority_Entries[
-    RtemsSemReqSetPriority_Map[ index ]
-  ];
+  return RtemsSemReqSetPriority_Entries[ RtemsSemReqSetPriority_Map[ index ] ];
 }
 
 static void RtemsSemReqSetPriority_TestVariant(

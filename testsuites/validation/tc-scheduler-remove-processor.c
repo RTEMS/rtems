@@ -142,12 +142,7 @@ typedef struct {
   uint16_t Post_Removed : 2;
 } RtemsSchedulerReqRemoveProcessor_Entry;
 
-typedef enum {
-  WORKER_A,
-  WORKER_B,
-  WORKER_C,
-  WORKER_COUNT
-} WorkerIndex;
+typedef enum { WORKER_A, WORKER_B, WORKER_C, WORKER_COUNT } WorkerIndex;
 
 /**
  * @brief Test context for spec:/rtems/scheduler/req/remove-processor test
@@ -302,51 +297,29 @@ typedef struct {
 static RtemsSchedulerReqRemoveProcessor_Context
   RtemsSchedulerReqRemoveProcessor_Instance;
 
-static const char * const RtemsSchedulerReqRemoveProcessor_PreDesc_Id[] = {
-  "Invalid",
-  "Scheduler",
-  "NA"
-};
+static const char *const RtemsSchedulerReqRemoveProcessor_PreDesc_Id[] =
+  { "Invalid", "Scheduler", "NA" };
 
-static const char * const RtemsSchedulerReqRemoveProcessor_PreDesc_CPUIndex[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsSchedulerReqRemoveProcessor_PreDesc_CPUIndex[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsSchedulerReqRemoveProcessor_PreDesc_Owned[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsSchedulerReqRemoveProcessor_PreDesc_Owned[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsSchedulerReqRemoveProcessor_PreDesc_Last[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsSchedulerReqRemoveProcessor_PreDesc_Last[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsSchedulerReqRemoveProcessor_PreDesc_Home[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const RtemsSchedulerReqRemoveProcessor_PreDesc_Home[] =
+  { "Yes", "No", "NA" };
 
-static const char * const RtemsSchedulerReqRemoveProcessor_PreDesc_RequiredByAffinity[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const
+  RtemsSchedulerReqRemoveProcessor_PreDesc_RequiredByAffinity[] =
+    { "Yes", "No", "NA" };
 
-static const char * const RtemsSchedulerReqRemoveProcessor_PreDesc_UsedBy[] = {
-  "Idle",
-  "Task",
-  "TaskIdle",
-  "Helping",
-  "NA"
-};
+static const char *const RtemsSchedulerReqRemoveProcessor_PreDesc_UsedBy[] =
+  { "Idle", "Task", "TaskIdle", "Helping", "NA" };
 
-static const char * const * const RtemsSchedulerReqRemoveProcessor_PreDesc[] = {
+static const char *const *const RtemsSchedulerReqRemoveProcessor_PreDesc[] = {
   RtemsSchedulerReqRemoveProcessor_PreDesc_Id,
   RtemsSchedulerReqRemoveProcessor_PreDesc_CPUIndex,
   RtemsSchedulerReqRemoveProcessor_PreDesc_Owned,
@@ -376,7 +349,7 @@ static void DoRemoveProcessor( Context *ctx )
   }
 }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 
 #define EVENT_SYNC_RUNNER RTEMS_EVENT_0
 
@@ -504,7 +477,7 @@ static void RemoveWithHelpingOnly( Context *ctx )
   /* Clean up all used resources */
   SetSelfPriority( PRIO_NORMAL );
   SendEvents( ctx->worker_id[ WORKER_A ], EVENT_RELEASE );
-  T_busy(100000);
+  T_busy( 100000 );
 }
 
 static void Worker( rtems_task_argument arg, WorkerIndex worker )
@@ -559,7 +532,7 @@ static void Worker( rtems_task_argument arg, WorkerIndex worker )
       sc = rtems_task_restart(
         ctx->worker_id[ WORKER_B ],
         (rtems_task_argument) ctx
-        );
+      );
       T_rsc_success( sc );
 
       T_eq_u32( rtems_scheduler_get_processor(), 0 );
@@ -567,7 +540,11 @@ static void Worker( rtems_task_argument arg, WorkerIndex worker )
       if ( !ctx->last ) {
         RemoveProcessor( SCHEDULER_B_ID, 2 );
         AddProcessor( SCHEDULER_C_ID, 2 );
-        SetScheduler( ctx->worker_id[ WORKER_C ], SCHEDULER_C_ID, PRIO_NORMAL );
+        SetScheduler(
+          ctx->worker_id[ WORKER_C ],
+          SCHEDULER_C_ID,
+          PRIO_NORMAL
+        );
       }
     }
 
@@ -948,7 +925,7 @@ static void RtemsSchedulerReqRemoveProcessor_Setup(
   RtemsSchedulerReqRemoveProcessor_Context *ctx
 )
 {
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   rtems_status_code   sc;
   rtems_task_priority priority;
 
@@ -1019,7 +996,7 @@ static void RtemsSchedulerReqRemoveProcessor_Teardown(
   RtemsSchedulerReqRemoveProcessor_Context *ctx
 )
 {
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
   DeleteTask( ctx->worker_id[ WORKER_A ] );
   DeleteTask( ctx->worker_id[ WORKER_B ] );
   DeleteTask( ctx->worker_id[ WORKER_C ] );
@@ -1066,7 +1043,7 @@ static void RtemsSchedulerReqRemoveProcessor_Action(
   ) {
     DoRemoveProcessor( ctx );
   } else {
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
     if ( ctx->owned && !ctx->home && ctx->helping ) {
       RemoveWithHelpingOnly( ctx );
     } else {
@@ -1287,9 +1264,8 @@ static T_fixture RtemsSchedulerReqRemoveProcessor_Fixture = {
   .initial_context = &RtemsSchedulerReqRemoveProcessor_Instance
 };
 
-static const uint8_t RtemsSchedulerReqRemoveProcessor_Weights[] = {
-  128, 64, 32, 16, 8, 4, 1
-};
+static const uint8_t RtemsSchedulerReqRemoveProcessor_Weights[] =
+  { 128, 64, 32, 16, 8, 4, 1 };
 
 static void RtemsSchedulerReqRemoveProcessor_Skip(
   RtemsSchedulerReqRemoveProcessor_Context *ctx,
@@ -1310,7 +1286,8 @@ static void RtemsSchedulerReqRemoveProcessor_Skip(
       ctx->Map.pci[ 4 ] = RtemsSchedulerReqRemoveProcessor_Pre_Home_NA - 1;
       /* Fall through */
     case 5:
-      ctx->Map.pci[ 5 ] = RtemsSchedulerReqRemoveProcessor_Pre_RequiredByAffinity_NA - 1;
+      ctx->Map.pci[ 5 ] =
+        RtemsSchedulerReqRemoveProcessor_Pre_RequiredByAffinity_NA - 1;
       /* Fall through */
     case 6:
       ctx->Map.pci[ 6 ] = RtemsSchedulerReqRemoveProcessor_Pre_UsedBy_NA - 1;
@@ -1332,7 +1309,8 @@ RtemsSchedulerReqRemoveProcessor_PopEntry(
     index = 0;
 
     for ( i = 0; i < 7; ++i ) {
-      index += RtemsSchedulerReqRemoveProcessor_Weights[ i ] * ctx->Map.pci[ i ];
+      index += RtemsSchedulerReqRemoveProcessor_Weights[ i ] *
+               ctx->Map.pci[ i ];
     }
   } else {
     index = ctx->Map.index;
@@ -1340,9 +1318,8 @@ RtemsSchedulerReqRemoveProcessor_PopEntry(
 
   ctx->Map.index = index + 1;
 
-  return RtemsSchedulerReqRemoveProcessor_Entries[
-    RtemsSchedulerReqRemoveProcessor_Map[ index ]
-  ];
+  return RtemsSchedulerReqRemoveProcessor_Entries
+    [ RtemsSchedulerReqRemoveProcessor_Map[ index ] ];
 }
 
 static void RtemsSchedulerReqRemoveProcessor_SetPreConditionStates(
@@ -1371,7 +1348,8 @@ static void RtemsSchedulerReqRemoveProcessor_SetPreConditionStates(
   }
 
   if ( ctx->Map.entry.Pre_RequiredByAffinity_NA ) {
-    ctx->Map.pcs[ 5 ] = RtemsSchedulerReqRemoveProcessor_Pre_RequiredByAffinity_NA;
+    ctx->Map.pcs[ 5 ] =
+      RtemsSchedulerReqRemoveProcessor_Pre_RequiredByAffinity_NA;
   } else {
     ctx->Map.pcs[ 5 ] = ctx->Map.pci[ 5 ];
   }
@@ -1461,13 +1439,17 @@ T_TEST_CASE_FIXTURE(
             ++ctx->Map.pci[ 4 ]
           ) {
             for (
-              ctx->Map.pci[ 5 ] = RtemsSchedulerReqRemoveProcessor_Pre_RequiredByAffinity_Yes;
-              ctx->Map.pci[ 5 ] < RtemsSchedulerReqRemoveProcessor_Pre_RequiredByAffinity_NA;
+              ctx->Map.pci[ 5 ] =
+                RtemsSchedulerReqRemoveProcessor_Pre_RequiredByAffinity_Yes;
+              ctx->Map.pci[ 5 ] <
+              RtemsSchedulerReqRemoveProcessor_Pre_RequiredByAffinity_NA;
               ++ctx->Map.pci[ 5 ]
             ) {
               for (
-                ctx->Map.pci[ 6 ] = RtemsSchedulerReqRemoveProcessor_Pre_UsedBy_Idle;
-                ctx->Map.pci[ 6 ] < RtemsSchedulerReqRemoveProcessor_Pre_UsedBy_NA;
+                ctx->Map.pci[ 6 ] =
+                  RtemsSchedulerReqRemoveProcessor_Pre_UsedBy_Idle;
+                ctx->Map.pci[ 6 ] <
+                RtemsSchedulerReqRemoveProcessor_Pre_UsedBy_NA;
                 ++ctx->Map.pci[ 6 ]
               ) {
                 ctx->Map.entry = RtemsSchedulerReqRemoveProcessor_PopEntry(

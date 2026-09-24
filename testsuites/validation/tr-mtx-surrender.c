@@ -184,62 +184,33 @@ typedef struct {
   } Map;
 } ScoreMtxReqSurrender_Context;
 
-static ScoreMtxReqSurrender_Context
-  ScoreMtxReqSurrender_Instance;
+static ScoreMtxReqSurrender_Context ScoreMtxReqSurrender_Instance;
 
-static const char * const ScoreMtxReqSurrender_PreDesc_Protocol[] = {
-  "None",
-  "Inherit",
-  "Ceiling",
-  "MrsP",
-  "NA"
-};
+static const char *const ScoreMtxReqSurrender_PreDesc_Protocol[] =
+  { "None", "Inherit", "Ceiling", "MrsP", "NA" };
 
-static const char * const ScoreMtxReqSurrender_PreDesc_Discipline[] = {
-  "FIFO",
-  "Priority",
-  "NA"
-};
+static const char *const ScoreMtxReqSurrender_PreDesc_Discipline[] =
+  { "FIFO", "Priority", "NA" };
 
-static const char * const ScoreMtxReqSurrender_PreDesc_Recursive[] = {
-  "Allowed",
-  "NotAllowed",
-  "NA"
-};
+static const char *const ScoreMtxReqSurrender_PreDesc_Recursive[] =
+  { "Allowed", "NotAllowed", "NA" };
 
-static const char * const ScoreMtxReqSurrender_PreDesc_OwnerCheck[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const ScoreMtxReqSurrender_PreDesc_OwnerCheck[] =
+  { "Yes", "No", "NA" };
 
-static const char * const ScoreMtxReqSurrender_PreDesc_Owner[] = {
-  "None",
-  "Caller",
-  "Other",
-  "NA"
-};
+static const char *const ScoreMtxReqSurrender_PreDesc_Owner[] =
+  { "None", "Caller", "Other", "NA" };
 
-static const char * const ScoreMtxReqSurrender_PreDesc_Nested[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const ScoreMtxReqSurrender_PreDesc_Nested[] =
+  { "Yes", "No", "NA" };
 
-static const char * const ScoreMtxReqSurrender_PreDesc_Blocked[] = {
-  "Yes",
-  "No",
-  "NA"
-};
+static const char *const ScoreMtxReqSurrender_PreDesc_Blocked[] =
+  { "Yes", "No", "NA" };
 
-static const char * const ScoreMtxReqSurrender_PreDesc_Priority[] = {
-  "High",
-  "Equal",
-  "Low",
-  "NA"
-};
+static const char *const ScoreMtxReqSurrender_PreDesc_Priority[] =
+  { "High", "Equal", "Low", "NA" };
 
-static const char * const * const ScoreMtxReqSurrender_PreDesc[] = {
+static const char *const *const ScoreMtxReqSurrender_PreDesc[] = {
   ScoreMtxReqSurrender_PreDesc_Protocol,
   ScoreMtxReqSurrender_PreDesc_Discipline,
   ScoreMtxReqSurrender_PreDesc_Recursive,
@@ -251,7 +222,7 @@ static const char * const * const ScoreMtxReqSurrender_PreDesc[] = {
   NULL
 };
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 #include "tr-tq-surrender-mrsp.h"
 #endif
 
@@ -732,10 +703,7 @@ static void ScoreMtxReqSurrender_Post_Owner_Check(
       /*
        * The owner of the mutex shall be the calling thread.
        */
-      T_eq_ptr(
-        ctx->owner_after,
-        ctx->tq_ctx->base.runner_tcb
-      );
+      T_eq_ptr( ctx->owner_after, ctx->tq_ctx->base.runner_tcb );
       break;
     }
 
@@ -813,7 +781,7 @@ static void ScoreMtxReqSurrender_Post_Surrender_Check(
        * The thread queue of the mutex shall be surrendered in priority order
        * with MrsP.
        */
-      #if defined(RTEMS_SMP)
+      #if defined( RTEMS_SMP )
       T_eq_u32( ctx->counter, 1 );
       ScoreTqReqSurrenderMrsp_Run( &ctx->tq_ctx->base );
       #else
@@ -1029,9 +997,8 @@ static T_fixture ScoreMtxReqSurrender_Fixture = {
   .initial_context = &ScoreMtxReqSurrender_Instance
 };
 
-static const uint16_t ScoreMtxReqSurrender_Weights[] = {
-  288, 144, 72, 36, 12, 6, 3, 1
-};
+static const uint16_t ScoreMtxReqSurrender_Weights[] =
+  { 288, 144, 72, 36, 12, 6, 3, 1 };
 
 static void ScoreMtxReqSurrender_Skip(
   ScoreMtxReqSurrender_Context *ctx,
@@ -1084,9 +1051,7 @@ static inline ScoreMtxReqSurrender_Entry ScoreMtxReqSurrender_PopEntry(
 
   ctx->Map.index = index + 1;
 
-  return ScoreMtxReqSurrender_Entries[
-    ScoreMtxReqSurrender_Map[ index ]
-  ];
+  return ScoreMtxReqSurrender_Entries[ ScoreMtxReqSurrender_Map[ index ] ];
 }
 
 static void ScoreMtxReqSurrender_SetPreConditionStates(

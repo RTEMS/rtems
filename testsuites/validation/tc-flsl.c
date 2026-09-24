@@ -116,16 +116,12 @@ typedef struct {
   } Map;
 } CReqFlsl_Context;
 
-static CReqFlsl_Context
-  CReqFlsl_Instance;
+static CReqFlsl_Context CReqFlsl_Instance;
 
-static const char * const CReqFlsl_PreDesc_Value[] = {
-  "Zero",
-  "NonZero",
-  "NA"
-};
+static const char *const CReqFlsl_PreDesc_Value[] =
+  { "Zero", "NonZero", "NA" };
 
-static const char * const * const CReqFlsl_PreDesc[] = {
+static const char *const *const CReqFlsl_PreDesc[] = {
   CReqFlsl_PreDesc_Value,
   NULL
 };
@@ -237,9 +233,7 @@ static inline CReqFlsl_Entry CReqFlsl_PopEntry( CReqFlsl_Context *ctx )
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return CReqFlsl_Entries[
-    CReqFlsl_Map[ index ]
-  ];
+  return CReqFlsl_Entries[ CReqFlsl_Map[ index ] ];
 }
 
 static void CReqFlsl_TestVariant( CReqFlsl_Context *ctx )

@@ -157,11 +157,7 @@ static void RtemsSchedulerValSmpOnly_Action_1( void )
    * Check that the returned value is less than or equal to
    * rtems_configuration_get_maximum_processors().
    */
-  T_step_le_u32(
-    2,
-    cpu_max,
-    rtems_configuration_get_maximum_processors()
-  );
+  T_step_le_u32( 2, cpu_max, rtems_configuration_get_maximum_processors() );
 }
 
 /**
@@ -174,16 +170,16 @@ static void RtemsSchedulerValSmpOnly_Action_2( void )
   rtems_id            id_by_cpu;
   rtems_task_priority priority;
 
-  sc = rtems_scheduler_ident( TEST_SCHEDULER_A_NAME, &id[ 0 ]);
+  sc = rtems_scheduler_ident( TEST_SCHEDULER_A_NAME, &id[ 0 ] );
   T_step_rsc_success( 3, sc );
 
-  sc = rtems_scheduler_ident( TEST_SCHEDULER_B_NAME, &id[ 1 ]);
+  sc = rtems_scheduler_ident( TEST_SCHEDULER_B_NAME, &id[ 1 ] );
   T_step_rsc_success( 4, sc );
 
-  sc = rtems_scheduler_ident( TEST_SCHEDULER_C_NAME, &id[ 2 ]);
+  sc = rtems_scheduler_ident( TEST_SCHEDULER_C_NAME, &id[ 2 ] );
   T_step_rsc_success( 5, sc );
 
-  sc = rtems_scheduler_ident( TEST_SCHEDULER_D_NAME, &id[ 3 ]);
+  sc = rtems_scheduler_ident( TEST_SCHEDULER_D_NAME, &id[ 3 ] );
   T_step_rsc_success( 6, sc );
 
   /*

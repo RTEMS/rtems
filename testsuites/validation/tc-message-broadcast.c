@@ -181,7 +181,7 @@ typedef struct {
    * @brief This member is used as storage area for the message queue.
    */
   RTEMS_MESSAGE_QUEUE_BUFFER( MAXIMUM_MESSAGE_SIZE )
-    storage_area[ MAXIMUM_PENDING_MESSAGES ];
+  storage_area[ MAXIMUM_PENDING_MESSAGES ];
 
   /**
    * @brief This member contains a buffer to receive messages from the queue.
@@ -238,7 +238,7 @@ typedef struct {
    * @brief This member contains a pointer to a function which is executed to
    *   check that the action has not changed the content of the message queue.
    */
-  void (*check_msgq_unchanged)( void *ctx_in );
+  void ( *check_msgq_unchanged )( void *ctx_in );
 
   struct {
     /**
@@ -269,53 +269,32 @@ typedef struct {
   } Map;
 } RtemsMessageReqBroadcast_Context;
 
-static RtemsMessageReqBroadcast_Context
-  RtemsMessageReqBroadcast_Instance;
+static RtemsMessageReqBroadcast_Context RtemsMessageReqBroadcast_Instance;
 
-static const char * const RtemsMessageReqBroadcast_PreDesc_SendBuffer[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsMessageReqBroadcast_PreDesc_SendBuffer[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsMessageReqBroadcast_PreDesc_Count[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
+static const char *const RtemsMessageReqBroadcast_PreDesc_Count[] =
+  { "Valid", "Null", "NA" };
 
-static const char * const RtemsMessageReqBroadcast_PreDesc_Id[] = {
-  "Valid",
-  "Invalid",
-  "NA"
-};
+static const char *const RtemsMessageReqBroadcast_PreDesc_Id[] =
+  { "Valid", "Invalid", "NA" };
 
-static const char * const RtemsMessageReqBroadcast_PreDesc_MsgSize[] = {
-  "Zero",
-  "SomeSize",
-  "MaxSize",
-  "TooLarge",
-  "NA"
-};
+static const char *const RtemsMessageReqBroadcast_PreDesc_MsgSize[] =
+  { "Zero", "SomeSize", "MaxSize", "TooLarge", "NA" };
 
-static const char * const RtemsMessageReqBroadcast_PreDesc_MsgQueue[] = {
-  "Empty",
-  "Several",
-  "NA"
-};
+static const char *const RtemsMessageReqBroadcast_PreDesc_MsgQueue[] =
+  { "Empty", "Several", "NA" };
 
-static const char * const RtemsMessageReqBroadcast_PreDesc_Receivers[] = {
-  "Waiting",
-  "None",
-  "NA"
-};
+static const char *const RtemsMessageReqBroadcast_PreDesc_Receivers[] =
+  { "Waiting", "None", "NA" };
 
-static const char * const RtemsMessageReqBroadcast_PreDesc_Storage[] = {
+static const char *const RtemsMessageReqBroadcast_PreDesc_Storage[] = {
   "Nop",
   "NA"
 };
 
-static const char * const * const RtemsMessageReqBroadcast_PreDesc[] = {
+static const char *const *const RtemsMessageReqBroadcast_PreDesc[] = {
   RtemsMessageReqBroadcast_PreDesc_SendBuffer,
   RtemsMessageReqBroadcast_PreDesc_Count,
   RtemsMessageReqBroadcast_PreDesc_Id,
@@ -327,18 +306,18 @@ static const char * const * const RtemsMessageReqBroadcast_PreDesc[] = {
 };
 
 typedef RtemsMessageReqBroadcast_Context Context;
-static const rtems_interval TIMEOUT_TICKS = 1;
-static const rtems_event_set EVENT_RECEIVE = RTEMS_EVENT_17;
-static const uint8_t message[ MAXIMUM_MESSAGE_SIZE ] =
+static const rtems_interval              TIMEOUT_TICKS = 1;
+static const rtems_event_set             EVENT_RECEIVE = RTEMS_EVENT_17;
+static const uint8_t                     message[ MAXIMUM_MESSAGE_SIZE ] =
   { 13, 42, 99, 222, 101 };
 static const uint8_t queued_message[] = { 200, 201, 202 };
 
 static void Receive( Context *ctx, size_t worker_index )
 {
-  ctx->receive_status[worker_index] = rtems_message_queue_receive(
+  ctx->receive_status[ worker_index ] = rtems_message_queue_receive(
     ctx->message_queue_id,
-    ctx->receive_buffer[worker_index],
-    &ctx->receive_size[worker_index],
+    ctx->receive_buffer[ worker_index ],
+    &ctx->receive_size[ worker_index ],
     RTEMS_WAIT,
     TIMEOUT_TICKS
   );
@@ -347,8 +326,8 @@ static void Receive( Context *ctx, size_t worker_index )
 static void WorkerTask( rtems_task_argument argument )
 {
   static size_t worker_number = 0;
-  size_t worker_index = worker_number++;
-  Context *ctx = (Context *) argument;
+  size_t        worker_index = worker_number++;
+  Context      *ctx = (Context *) argument;
 
   while ( true ) {
     ReceiveAnyEvents();
@@ -357,23 +336,23 @@ static void WorkerTask( rtems_task_argument argument )
 }
 
 static void CheckForNoMessage(
-  Context *ctx,
+  Context          *ctx,
   rtems_status_code status,
-  uint8_t *message_buffer,
-  size_t message_size
+  uint8_t          *message_buffer,
+  size_t            message_size
 )
 {
   (void) ctx;
   (void) message_buffer;
   (void) message_size;
-  T_rsc( status, RTEMS_UNSATISFIED  );
+  T_rsc( status, RTEMS_UNSATISFIED );
 }
 
 static void CheckForMessage(
-  Context *ctx,
+  Context          *ctx,
   rtems_status_code status,
-  uint8_t *message_buffer,
-  size_t message_size
+  uint8_t          *message_buffer,
+  size_t            message_size
 )
 {
   T_rsc_success( status );
@@ -382,10 +361,10 @@ static void CheckForMessage(
 }
 
 static void CheckForQueuedMessage(
-  Context *ctx,
+  Context          *ctx,
   rtems_status_code status,
-  uint8_t *message_buffer,
-  size_t message_size
+  uint8_t          *message_buffer,
+  size_t            message_size
 )
 {
   (void) ctx;
@@ -396,17 +375,17 @@ static void CheckForQueuedMessage(
 
 static void PopMessage(
   Context *ctx,
-  void (*check_fn)(
-    Context *ctx,
+  void ( *check_fn )(
+    Context          *ctx,
     rtems_status_code status,
-    uint8_t *message_buffer,
-    size_t message_size
+    uint8_t          *message_buffer,
+    size_t            message_size
   )
 )
 {
   rtems_status_code status;
-  uint8_t message_buffer[ MAXIMUM_MESSAGE_SIZE ];
-  size_t message_size;
+  uint8_t           message_buffer[ MAXIMUM_MESSAGE_SIZE ];
+  size_t            message_size;
 
   status = rtems_message_queue_receive(
     ctx->message_queue_id,
@@ -416,7 +395,7 @@ static void PopMessage(
     RTEMS_NO_TIMEOUT
   );
 
- check_fn( ctx, status, message_buffer, message_size );
+  check_fn( ctx, status, message_buffer, message_size );
 }
 
 static void CheckForNoMessageInQueue( void *ctx_in )
@@ -614,7 +593,7 @@ static void RtemsMessageReqBroadcast_Pre_Receivers_Prepare(
        */
       size_t i;
       for ( i = 0; i < NUMBER_OF_WORKERS; ++i ) {
-        SendEvents( ctx->worker_id[i], EVENT_RECEIVE );
+        SendEvents( ctx->worker_id[ i ], EVENT_RECEIVE );
       }
       break;
     }
@@ -783,7 +762,7 @@ static void RtemsMessageReqBroadcast_Post_Receivers_Check(
        * returns. This may lead to infinite unblocking loops.
        */
       for ( i = 0; i < NUMBER_OF_WORKERS; ++i ) {
-        T_rsc_success( ctx->receive_status[i] );
+        T_rsc_success( ctx->receive_status[ i ] );
       }
       break;
     }
@@ -794,7 +773,7 @@ static void RtemsMessageReqBroadcast_Post_Receivers_Check(
        * affected by the call to the rtems_message_queue_broadcast() directive.
        */
       for ( i = 0; i < NUMBER_OF_WORKERS; ++i ) {
-        T_rsc( ctx->receive_status[i], RTEMS_TIMEOUT );
+        T_rsc( ctx->receive_status[ i ], RTEMS_TIMEOUT );
       }
       break;
     }
@@ -824,9 +803,9 @@ static void RtemsMessageReqBroadcast_Post_RecSize_Check(
       for ( i = 0; i < NUMBER_OF_WORKERS; ++i ) {
         CheckForMessage(
           ctx,
-          ctx->receive_status[i],
-          ctx->receive_buffer[i],
-          ctx->receive_size[i]
+          ctx->receive_status[ i ],
+          ctx->receive_buffer[ i ],
+          ctx->receive_size[ i ]
         );
       }
       break;
@@ -839,7 +818,7 @@ static void RtemsMessageReqBroadcast_Post_RecSize_Check(
        * rtems_message_queue_broadcast() call (see also Nop).
        */
       for ( i = 0; i < NUMBER_OF_WORKERS; ++i ) {
-        T_eq_sz( ctx->receive_size[i], SIZE_MAX );
+        T_eq_sz( ctx->receive_size[ i ], SIZE_MAX );
       }
       break;
     }
@@ -870,9 +849,9 @@ static void RtemsMessageReqBroadcast_Post_RecBuffer_Check(
       for ( i = 0; i < NUMBER_OF_WORKERS; ++i ) {
         CheckForMessage(
           ctx,
-          ctx->receive_status[i],
-          ctx->receive_buffer[i],
-          ctx->receive_size[i]
+          ctx->receive_status[ i ],
+          ctx->receive_buffer[ i ],
+          ctx->receive_size[ i ]
         );
       }
       break;
@@ -886,7 +865,7 @@ static void RtemsMessageReqBroadcast_Post_RecBuffer_Check(
        */
       for ( w = 0; w < NUMBER_OF_WORKERS; ++w ) {
         for ( i = 0; i < MAXIMUM_MESSAGE_SIZE; ++i ) {
-          T_eq_u8( ctx->receive_buffer[w][i], UINT8_MAX );
+          T_eq_u8( ctx->receive_buffer[ w ][ i ], UINT8_MAX );
         }
       }
       break;
@@ -905,8 +884,8 @@ static void RtemsMessageReqBroadcast_Setup(
   SetSelfPriority( PRIO_NORMAL );
 
   for ( i = 0; i < NUMBER_OF_WORKERS; ++i ) {
-    ctx->worker_id[i] = CreateTask( "WORK", PRIO_HIGH );
-    StartTask( ctx->worker_id[i], WorkerTask, ctx );
+    ctx->worker_id[ i ] = CreateTask( "WORK", PRIO_HIGH );
+    StartTask( ctx->worker_id[ i ], WorkerTask, ctx );
   }
 }
 
@@ -926,7 +905,7 @@ static void RtemsMessageReqBroadcast_Teardown(
   size_t i;
 
   for ( i = 0; i < NUMBER_OF_WORKERS; ++i ) {
-    DeleteTask( ctx->worker_id[i] );
+    DeleteTask( ctx->worker_id[ i ] );
   }
   RestoreRunnerPriority();
 }
@@ -945,28 +924,25 @@ static void RtemsMessageReqBroadcast_Prepare(
 )
 {
   rtems_status_code status;
-  size_t i;
+  size_t            i;
 
   rtems_message_queue_config config = {
-    .name                     = rtems_build_name( 'M', 'S', 'G', 'Q' ),
+    .name = rtems_build_name( 'M', 'S', 'G', 'Q' ),
     .maximum_pending_messages = MAXIMUM_PENDING_MESSAGES,
-    .maximum_message_size     = MAXIMUM_MESSAGE_SIZE,
-    .storage_area             = ctx->storage_area,
-    .storage_size             = sizeof( ctx->storage_area ),
-    .storage_free             = NULL,
-    .attributes               = RTEMS_DEFAULT_ATTRIBUTES
+    .maximum_message_size = MAXIMUM_MESSAGE_SIZE,
+    .storage_area = ctx->storage_area,
+    .storage_size = sizeof( ctx->storage_area ),
+    .storage_free = NULL,
+    .attributes = RTEMS_DEFAULT_ATTRIBUTES
   };
 
-  status = rtems_message_queue_construct(
-    &config,
-    &ctx->message_queue_id
-  );
+  status = rtems_message_queue_construct( &config, &ctx->message_queue_id );
   T_rsc_success( status );
 
   ctx->count = UINT8_MAX;
   for ( i = 0; i < NUMBER_OF_WORKERS; ++i ) {
-      ctx->receive_size[i] = SIZE_MAX;
-      memset( ctx->receive_buffer[i], UINT8_MAX, MAXIMUM_MESSAGE_SIZE );
+    ctx->receive_size[ i ] = SIZE_MAX;
+    memset( ctx->receive_buffer[ i ], UINT8_MAX, MAXIMUM_MESSAGE_SIZE );
   }
 }
 
@@ -1096,9 +1072,8 @@ static inline RtemsMessageReqBroadcast_Entry RtemsMessageReqBroadcast_PopEntry(
 
   index = ctx->Map.index;
   ctx->Map.index = index + 1;
-  return RtemsMessageReqBroadcast_Entries[
-    RtemsMessageReqBroadcast_Map[ index ]
-  ];
+  return RtemsMessageReqBroadcast_Entries
+    [ RtemsMessageReqBroadcast_Map[ index ] ];
 }
 
 static void RtemsMessageReqBroadcast_TestVariant(
@@ -1176,7 +1151,8 @@ T_TEST_CASE_FIXTURE(
             ++ctx->Map.pcs[ 4 ]
           ) {
             for (
-              ctx->Map.pcs[ 5 ] = RtemsMessageReqBroadcast_Pre_Receivers_Waiting;
+              ctx->Map.pcs[ 5 ] =
+                RtemsMessageReqBroadcast_Pre_Receivers_Waiting;
               ctx->Map.pcs[ 5 ] < RtemsMessageReqBroadcast_Pre_Receivers_NA;
               ++ctx->Map.pcs[ 5 ]
             ) {

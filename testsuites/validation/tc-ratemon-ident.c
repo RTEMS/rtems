@@ -90,10 +90,7 @@ static void RtemsRatemonValIdent_Action_0( void )
   rtems_status_code sc;
   rtems_id          id_local_object;
 
-  sc = rtems_rate_monotonic_create(
-    NAME_LOCAL_OBJECT,
-    &id_local_object
-  );
+  sc = rtems_rate_monotonic_create( NAME_LOCAL_OBJECT, &id_local_object );
   T_assert_rsc_success( sc );
 
   RtemsReqIdentLocal_Run(
