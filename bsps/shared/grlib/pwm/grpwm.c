@@ -271,9 +271,9 @@ int grpwm_init3( struct drvmgr_dev *dev )
     grpwm_driver_io_registered = 1;
   }
 
-  /* I/O system registered and initialized 
-	 * Now we take care of device initialization.
-	 */
+  /* I/O system registered and initialized
+   * Now we take care of device initialization.
+   */
   if ( grpwm_device_init( priv ) ) {
     free( dev->priv );
     dev->priv = NULL;
@@ -284,13 +284,13 @@ int grpwm_init3( struct drvmgr_dev *dev )
   prefix[ 0 ] = '\0';
   if ( drvmgr_get_dev_prefix( dev, prefix ) ) {
     /* Failed to get prefix, make sure of a unique FS name
-		 * by using the driver minor.
-		 */
+     * by using the driver minor.
+     */
     sprintf( priv->devName, "/dev/grpwm%d", dev->minor_drv );
   } else {
     /* Got special prefix, this means we have a bus prefix
-		 * And we should use our "bus minor"
-		 */
+     * And we should use our "bus minor"
+     */
     sprintf( priv->devName, "/dev/%sgrpwm%d", prefix, dev->minor_bus );
   }
 
@@ -452,7 +452,7 @@ static void grpwm_hw_reset( struct grpwm_priv *priv )
   }
 }
 
-/* Update one Channel but leaves the "Hold update" bit set 
+/* Update one Channel but leaves the "Hold update" bit set
  *
  * A bit mask of updated bits are returned.
  */
@@ -810,9 +810,9 @@ static rtems_device_driver grpwm_ioctl(
       }
 
       /* In order for the changes to take effect at the same time, the "Hold update"
-			 * bits is set for all PWM channels that will be updated. The hold update bits
-			 * will be cleared at the same time for all channels.
-			 */
+       * bits is set for all PWM channels that will be updated. The hold update bits
+       * will be cleared at the same time for all channels.
+       */
       priv->regs->ctrl = ( priv->regs->ctrl & ~GRPWM_CTRL_NOUP ) |
                          ( up->chanmask << GRPWM_CTRL_NOUP_BIT );
 
@@ -823,10 +823,10 @@ static rtems_device_driver grpwm_ioctl(
         }
       }
 
-      /* 1. Update all channels requested, 
-			 * 2. Enable the core if at least one channel is enabled
-			 * 3. Disable the core if all channels are disabled
-			 */
+      /* 1. Update all channels requested,
+       * 2. Enable the core if at least one channel is enabled
+       * 3. Disable the core if all channels are disabled
+       */
       grpwm_update_active( priv, ( pctrl & GRPWM_PCTRL_EN ) );
 
       break;
@@ -954,8 +954,8 @@ int grpwm_device_init( struct grpwm_priv *priv )
     pwm = priv->channels[ i ];
     if ( ( mask & ( 1 << pwm->irqindex ) ) == 0 ) {
       /* Not registered interrupt handler for this IRQ index before,
-			 * we do it now.
-			 */
+       * we do it now.
+       */
       mask |= ( 1 << pwm->irqindex );
       drvmgr_interrupt_register(
         priv->dev,

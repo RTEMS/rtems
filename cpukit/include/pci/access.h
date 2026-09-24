@@ -76,7 +76,7 @@ struct pci_cfg_ops {
   int ( *write32 )( pci_dev_t dev, int ofs, uint32_t data );
 };
 
-/* Read a register over PCI I/O Space, and swap it if necessary (due to 
+/* Read a register over PCI I/O Space, and swap it if necessary (due to
  * PCI endianness)
  */
 struct pci_io_ops {
@@ -88,7 +88,7 @@ struct pci_io_ops {
   void ( *write32 )( uint32_t *adr, uint32_t data );
 };
 
-/* Read a register over PCI Memory Space (non-prefetchable memory), and 
+/* Read a register over PCI Memory Space (non-prefetchable memory), and
  * swap it if necessary (due to PCI endianness)
  */
 struct pci_memreg_ops {
@@ -121,28 +121,28 @@ struct pci_access_drv {
   struct pci_io_ops io;
 
   /* Registers over Memory Access operations. Note that these funcs
-	 * are only for code that need to be compatible with both Big-Endian
-	 * and Little-Endian PCI bus or for some other reason need function
-	 * pointers to access functions. Normally drivers use the inline
-	 * functions for Registers-over-Memory access to avoid extra function
-	 * call.
-	 */
+   * are only for code that need to be compatible with both Big-Endian
+   * and Little-Endian PCI bus or for some other reason need function
+   * pointers to access functions. Normally drivers use the inline
+   * functions for Registers-over-Memory access to avoid extra function
+   * call.
+   */
   struct pci_memreg_ops *memreg;
 
   /* Translate from PCI address to CPU address (dir=0). Translate
-	 * CPU address to PCI address (dir!=0). The address will can be
-	 * used to perform I/O access or memory access by CPU or PCI DMA
-	 * peripheral.
-	 *
-	 * address    In/Out. CPU address or PCI address.
-	 * type       Access type. 1=I/O, 2=MEMIO, 3=MEM
-	 * dir        Translate direction. 0=PCI-to-CPU, 0!=CPU-to-PCI,
-	 *
-	 * Return Value
-	 *  0   = Success
-	 *  -1  = Requested Address not mapped into other address space
-	 *        i.e. not accessible
-	 */
+   * CPU address to PCI address (dir!=0). The address will can be
+   * used to perform I/O access or memory access by CPU or PCI DMA
+   * peripheral.
+   *
+   * address    In/Out. CPU address or PCI address.
+   * type       Access type. 1=I/O, 2=MEMIO, 3=MEM
+   * dir        Translate direction. 0=PCI-to-CPU, 0!=CPU-to-PCI,
+   *
+   * Return Value
+   *  0   = Success
+   *  -1  = Requested Address not mapped into other address space
+   *        i.e. not accessible
+   */
   int ( *translate )( uint32_t *address, int type, int dir );
 };
 
@@ -280,7 +280,7 @@ extern int pci_access_func(
   int    type
 );
 
-/* Predefined functions for Host drivers or BSPs that define the 
+/* Predefined functions for Host drivers or BSPs that define the
  * register-over-memory space functions operations.
  */
 extern struct pci_memreg_ops pci_mem_le_ops; /* For Little-Endian PCI bus */

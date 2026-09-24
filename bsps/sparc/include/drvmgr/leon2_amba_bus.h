@@ -14,11 +14,11 @@
  *  Cobham Gaisler AB.
  *
  *  Bus driver for a hardcoded setup. LEON2 systems have some
- *  cores always present, here called "Standard Cores". In 
+ *  cores always present, here called "Standard Cores". In
  *  addtion to the standard cores there are often extra cores
  *  that can be defined using the "Custom Cores" mechanism.
  *
- *  A Core is described by assigning a base register and 
+ *  A Core is described by assigning a base register and
  *  IRQ0..IRQ15 using the leon2_core structure.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -107,7 +107,7 @@ struct leon2_amba_drv_info {
   struct leon2_amba_dev_id *ids; /* Supported hardware */
 };
 
-/* Initialize LEON2 bus with a configuration 
+/* Initialize LEON2 bus with a configuration
  *  bus_config   -   What cores, their location and irqs
  *  resources    -   Driver configuration for the cores specified bus_config
  */

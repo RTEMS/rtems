@@ -162,7 +162,7 @@ static __inline__ int gradcdac_ADC_isOngoing( unsigned int status )
 #define GRADCDAC_ISR_ADC  1
 
 /* Install IRQ handler for ADC and/or DAC interrupt.
- * The installed IRQ handler(ISR) must read the status 
+ * The installed IRQ handler(ISR) must read the status
  * register to clear the pending interrupt avoiding multiple
  * entries to the ISR caused by the same IRQ.
  *
@@ -185,8 +185,8 @@ extern void gradcdac_uninstall_irq_handler( void *cookie, int adc );
  */
 extern void gradcdac_adc_convert_start( void *cookie );
 
-/* Tries to read the conversion result. If the circuitry is busy 
- * converting the function return a non-zero value, if the conversion 
+/* Tries to read the conversion result. If the circuitry is busy
+ * converting the function return a non-zero value, if the conversion
  * has successfully finished the function return zero.
  *
  * \param digital_value the resulting converted value is placed here
@@ -199,7 +199,7 @@ extern int gradcdac_adc_convert_try(
   unsigned short *digital_value
 );
 
-/* Waits until the ADC circuity has finished a digital to analogue 
+/* Waits until the ADC circuity has finished a digital to analogue
  * conversion. The Waiting is implemented as a busy loop utilizing
  * 100% CPU load.
  *
@@ -208,7 +208,7 @@ extern int gradcdac_adc_convert_try(
  */
 extern int gradcdac_adc_convert( void *cookie, unsigned short *digital_value );
 
-/* Try to make the DAC circuitry initialize a digital to analogue 
+/* Try to make the DAC circuitry initialize a digital to analogue
  * conversion. If the circuitry is busy by a previous conversion
  * the function return a non-zero value, if the conversion is
  * successfully initialized the function return zero.
@@ -218,7 +218,7 @@ extern int gradcdac_dac_convert_try(
   unsigned short digital_value
 );
 
-/* Initializes a digital to analogue conversion by waiting until 
+/* Initializes a digital to analogue conversion by waiting until
  * previous conversions is finished before procceding with the
  * conversion. The Waiting is implemented as a busy loop utilizing
  * 100% CPU load.

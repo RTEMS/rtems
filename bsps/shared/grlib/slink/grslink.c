@@ -29,11 +29,11 @@
  *
  * Comments concerning current driver implementation:
  *
- * The SLINK specification says that there are three IO cards that are capable 
- * of transmitting data. But these IO cards can have the address range 0 to 3, 
- * and an 'For information only' comment explains that the current 
+ * The SLINK specification says that there are three IO cards that are capable
+ * of transmitting data. But these IO cards can have the address range 0 to 3,
+ * and an 'For information only' comment explains that the current
  * implementation has receive buffers for ".. x 4 (IO cards)".
- * Because of this the driver has four queues, one for each IO card 0 - 3. 
+ * Because of this the driver has four queues, one for each IO card 0 - 3.
  * When the addressing convention used for the IO cards is known, the number of
  * queues may be lowered to three.
  *
@@ -113,8 +113,8 @@ static SLINK_cfg *cfg = NULL;
 /* Function: SLINK_createqueues
  * Arguments: size: Number of elements in each queue
  * Returns: 0 on success, -1 on failure
- * Description: Creates SLINK_NUMQUEUES queues, one for each IO card 
- * that can send data. The pointers to the queues is saved in the driver 
+ * Description: Creates SLINK_NUMQUEUES queues, one for each IO card
+ * that can send data. The pointers to the queues is saved in the driver
  * config structure.
  */
 static int SLINK_createqueues( int size )
@@ -159,11 +159,11 @@ slink_qiniterr1:
   static void SLINK_destroyqueues(void)
   {
         int i;
-	
-	for(i = 0; i < SLINK_NUMQUEUES; i++)
-		free(cfg->queues[i].buf);
 
-	free(cfg->queues);
+        for(i = 0; i < SLINK_NUMQUEUES; i++)
+                free(cfg->queues[i].buf);
+
+        free(cfg->queues);
 }
 */
 
@@ -171,7 +171,7 @@ slink_qiniterr1:
  * Function: SLINK_enqueue
  * Arguments: Received SLINK word
  * Returns: Nothing
- * Description: 
+ * Description:
  */
 static void SLINK_enqueue( unsigned int slink_wrd )
 {
@@ -192,7 +192,7 @@ static void SLINK_enqueue( unsigned int slink_wrd )
 
 /*
  * Function: SLINK_getaddr
- * Arguments: amba_conf 
+ * Arguments: amba_conf
  *            base: assigned to base of core registers
  *            irq: assigned to core irq lines
  * Returns: Base address and IRQ via arguments, 0 if core is found, else -1
@@ -216,8 +216,8 @@ static int SLINK_getaddr( int *base, int *irq )
  * Arguments: sysfreq: System frequency in Hz
  * Returns: Clock scaler register value
  * Description: Calculates value for SLINK clock scaler register to attain
- * a SLINK bus frequency as close to 6 MHz as possible. Please see the IP core 
- * documentation for a description of how clock scaling is implemented. 
+ * a SLINK bus frequency as close to 6 MHz as possible. Please see the IP core
+ * documentation for a description of how clock scaling is implemented.
  */
 static int SLINK_calcscaler( int sysfreq )
 {
@@ -230,7 +230,7 @@ static int SLINK_calcscaler( int sysfreq )
  * Arguments: None
  * Returns: System frequency in Hz, or 0 if system timer is not found.
  * Description: Looks at the timer to determine system frequency. Makes use
- * of AMBA Plug'n'Play. 
+ * of AMBA Plug'n'Play.
  */
 static int SLINK_getsysfreq( void )
 {
@@ -320,11 +320,11 @@ static rtems_isr SLINK_interrupt_handler( void *v )
 
   /* Check error conditions */
   if ( sts & SLINK_S_PERR ) {
-    /* 
-		   Parity error detected, set seqstat if there is an ongoing 
-		   sequence so that the calling application can decide if the
-		   sequence should be aborted 
-		*/
+    /*
+                   Parity error detected, set seqstat if there is an ongoing
+                   sequence so that the calling application can decide if the
+                   sequence should be aborted
+                */
     if ( cfg->status->seqstat == SLINK_ACTIVE ) {
       cfg->status->seqstat = SLINK_PARERR;
       if ( cfg->slink_seq_change ) {
@@ -531,7 +531,7 @@ int SLINK_read( int data, int channel, int *reply )
 /*
  * Function: SLINK_write
  * Arguments: data: Payload of SLINK data word
- *            channel: Channel value (bits 22 downto 16) of receive 
+ *            channel: Channel value (bits 22 downto 16) of receive
  *                     register word
  * Returns: 0 if command was placed in transmit queue
  *          -SLINK_QFULL if transmit queue was full (software should retry)
@@ -629,8 +629,8 @@ int SLINK_seqstatus( void )
  * Function: SLINK_seqwrds
  * Returns: -1 for ongoing sequence
  *          0 if all words were transferred in the last sequence
- *          number of words if the last SEQUENCE did not complete 
- *          (SLINK_AMBAERR or SLINK_ABORTED is reported ny SLINK_seqstatus()) 
+ *          number of words if the last SEQUENCE did not complete
+ *          (SLINK_AMBAERR or SLINK_ABORTED is reported ny SLINK_seqstatus())
  */
 int SLINK_seqwrds( void )
 {
@@ -644,9 +644,9 @@ int SLINK_seqwrds( void )
   }
 }
 
-/* 
+/*
  * Function: SLINK_hwstatus
- * Returns: The SLINK core's status register. The register values can be 
+ * Returns: The SLINK core's status register. The register values can be
  *          interpreted with the help of macros defined in bsp/grslink.h.
  */
 int SLINK_hwstatus( void )
@@ -690,7 +690,7 @@ int SLINK_queuestatus( int iocard )
  * Arguments: iocard: IO card number
  *            elem: First element in IO card queue
  * Returns: 0 on success or -1 on empty or non-existent queue
- * Description: 
+ * Description:
  */
 int SLINK_dequeue( int iocard, int *elem )
 {

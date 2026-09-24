@@ -318,11 +318,11 @@ STATIC int l4stat_init( struct l4stat_priv *priv )
   /* Find L4STAT capabilities */
   tmp = REG_READ( &priv->regs->cctrl[ 0 ] );
   /* The CPU field in the register is just information of the
-	 * cpus that are connected to the stat unit, but it is not
-	 * really used for anything else. I can still have more masters
-	 * on the bus (e.g. IOMMU) that I can collect stats from,
-	 * so it makes no sense to limit the cpus to the actual cpus.
-	 * Therefore, I will take the maximum number as 16. */
+   * cpus that are connected to the stat unit, but it is not
+   * really used for anything else. I can still have more masters
+   * on the bus (e.g. IOMMU) that I can collect stats from,
+   * so it makes no sense to limit the cpus to the actual cpus.
+   * Therefore, I will take the maximum number as 16. */
   /*priv->ncpu = ((tmp & CCTRL_NCPU) >> CCTRL_NCPU_BIT) + 1;*/
   priv->ncpu = 16;
   if ( dev_id == GAISLER_L3STAT ) {
@@ -378,8 +378,8 @@ int l4stat_init1( struct drvmgr_dev *dev )
   }
 
   /* Startup Action:
-	 *	- None
-	 */
+   *	- None
+   */
 
   /* Device name */
   sprintf( priv->devname, "l4stat0" );

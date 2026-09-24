@@ -50,9 +50,9 @@ struct drvmgr_drv *drvmgr_drv_by_name( const char *name )
   }
 
   /* NOTE: No locking is needed here since Driver list is supposed to be
-	 *       initialized once during startup, we treat it as a static
-	 *       read-only list
-	 */
+   *       initialized once during startup, we treat it as a static
+   *       read-only list
+   */
 
   drv = DRV_LIST_HEAD( &mgr->drivers );
   while ( drv ) {

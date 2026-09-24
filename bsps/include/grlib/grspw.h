@@ -120,9 +120,9 @@ typedef struct {
   unsigned int nodemask;
   unsigned int
     keep_source; /* copy source address to user-buffer in read() operations
-                              * Note that rm_prot_id has no effect when keep_source is
-                              * set.
-                              */
+                  * Note that rm_prot_id has no effect when keep_source is
+                  * set.
+                  */
   unsigned int rtimeout; /* Read timeout if != 0 */
 } spw_config;
 
@@ -162,7 +162,7 @@ typedef struct {
 #define SPACEWIRE_IOCTRL_START 64
 #define SPACEWIRE_IOCTRL_STOP  65
 
-/* Defines what register bits that will be touched 
+/* Defines what register bits that will be touched
  * for SPACEWIRE_IOCTRL_SET_TCODE_CTRL
  */
 #define SPACEWIRE_TCODE_CTRL_IE_MSK 0x001

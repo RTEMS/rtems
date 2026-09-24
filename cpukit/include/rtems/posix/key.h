@@ -119,8 +119,8 @@ typedef struct {
   void ( *destructor )( void * );
 
   /**
-    * @brief Key value pairs of this key.
-    */
+   * @brief Key value pairs of this key.
+   */
   Chain_Control Key_value_pairs;
 } POSIX_Keys_Control;
 

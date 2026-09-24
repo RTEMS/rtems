@@ -386,9 +386,9 @@ static void symlink_rename_self( void )
   rtems_test_assert( status == 0 );
 
   /*
-  * The new argument points to a file and
-  * the old argument points to the same file from another directory.
-  */
+   * The new argument points to a file and
+   * the old argument points to the same file from another directory.
+   */
 
   puts(
     "\nRename file with itself through a hard link in another directory\n"
@@ -410,8 +410,8 @@ static void symlink_rename_self( void )
   EXPECT_EQUAL( 0, rename, name01, path01 );
 
   /*
-  * Clear directory
-  */
+   * Clear directory
+   */
 
   EXPECT_EQUAL( 0, unlink, name01 );
   EXPECT_EQUAL( 0, unlink, path01 );

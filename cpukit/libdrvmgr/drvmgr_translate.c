@@ -81,8 +81,8 @@ unsigned int drvmgr_translate_bus(
   }
 
   /* Always find translation path from remote bus towards root bus. All
-	 * buses have root bus has parent at some level
-	 */
+   * buses have root bus has parent at some level
+   */
   if ( from->depth > to->depth ) {
     bus_bot = from;
     bus_top = to;

@@ -53,7 +53,7 @@ struct ahbstat_regs {
  * status             AHBSTAT status register at IRQ
  * failing_address    AHBSTAT Failing address register at IRQ
  *
- * * User return 
+ * * User return
  *  0: print error onto terminal with printk and reenable AHBSTAT
  *  1: just re-enable AHBSTAT
  *  2: just print error
@@ -86,7 +86,7 @@ extern int ahbstat_last_error(
 /* Get AHBSTAT registers address from minor. Can also be used to check if
  * AHBSTAT hardware is present.
  *
- * Return 
+ * Return
  *   NULL       returned if no such device
  *   non-zero   Address to AHBSTAT register
  */

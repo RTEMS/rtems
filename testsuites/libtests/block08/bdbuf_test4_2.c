@@ -63,50 +63,50 @@ void bdbuf_test4_2_main()
   START_THREAD( 2, bdbuf_test4_2_thread2 );
 
   /*
-     * Step 1:
-     * Call rtems_bdbuf_read(#N) in thread #1.
-     * Wait for read request in disk driver.
-     */
+   * Step 1:
+   * Call rtems_bdbuf_read(#N) in thread #1.
+   * Wait for read request in disk driver.
+   */
   WAIT_DRV_MSG( &msg );
   SEND_DRV_MSG( 0, 0, RTEMS_SUCCESSFUL, 0 );
 
   /*
-     * Step 2, 3:
-     * Call rtems_bdbuf_sync(#N) in thread #1.
-     * As the result buffer is asked to be flashed onto the disk.
-     */
+   * Step 2, 3:
+   * Call rtems_bdbuf_sync(#N) in thread #1.
+   * As the result buffer is asked to be flashed onto the disk.
+   */
   WAIT_DRV_MSG_WR( &msg );
   TEST_CHECK_RESULT( "3" );
 
   /*
-     * Step 4:
-     * Call rtems_bdbuf_read(#N) in thread #2
-     */
+   * Step 4:
+   * Call rtems_bdbuf_read(#N) in thread #2
+   */
   CONTINUE_THREAD( 2 );
 
   /* Make sure that thread #2 blocks */
   CHECK_THREAD_BLOCKED( 2 );
 
   /*
-     * Step 5:
-     * Notify bdbuf library about write complete event.
-     */
+   * Step 5:
+   * Notify bdbuf library about write complete event.
+   */
   SEND_DRV_MSG( 0, 0, RTEMS_SUCCESSFUL, 0 );
 
   /* Check that rtems_bdbuf_sync() is unlocked in thread #1 */
   WAIT_THREAD_SYNC( 1 );
 
   /*
-     * Step 7:
-     * Check that rtems_bdbuf_read(#N) call is unlocked in thread #2.
-     */
+   * Step 7:
+   * Check that rtems_bdbuf_read(#N) call is unlocked in thread #2.
+   */
   WAIT_THREAD_SYNC( 2 );
   TEST_CHECK_RESULT( "7" );
 
   /*
-     * Step 8:
-     * Release buffer in thread #2
-     */
+   * Step 8:
+   * Release buffer in thread #2
+   */
   CONTINUE_THREAD( 2 );
 
   /* Exit from thread #1 */
@@ -123,18 +123,18 @@ static rtems_task bdbuf_test4_2_thread1( rtems_task_argument arg )
   rtems_bdbuf_buffer *bd = NULL;
 
   /*
-     * Step 1:
-     * Call rtems_bdbuf_read(#N) in thread #1;
-     */
+   * Step 1:
+   * Call rtems_bdbuf_read(#N) in thread #1;
+   */
   rc = rtems_bdbuf_read( test_dd, TEST_BLK_NUM_N, &bd );
   if ( rc != RTEMS_SUCCESSFUL ) {
     TEST_FAILED();
   }
 
   /*
-     * Step 2:
-     * Call rtems_bdbuf_sync(#N)
-     */
+   * Step 2:
+   * Call rtems_bdbuf_sync(#N)
+   */
   rc = rtems_bdbuf_sync( bd );
   if ( rc != RTEMS_SUCCESSFUL ) {
     TEST_FAILED();
@@ -155,10 +155,10 @@ static rtems_task bdbuf_test4_2_thread2( rtems_task_argument arg )
   WAIT_MAIN_SYNC( 2 );
 
   /*
-     * Step 4:
-     * In thread #2 call read(#N).
-     * We will block on this call.
-     */
+   * Step 4:
+   * In thread #2 call read(#N).
+   * We will block on this call.
+   */
   rc = rtems_bdbuf_read( test_dd, TEST_BLK_NUM_N, &bd );
   if ( rc != RTEMS_SUCCESSFUL ) {
     TEST_FAILED();
@@ -167,8 +167,8 @@ static rtems_task bdbuf_test4_2_thread2( rtems_task_argument arg )
   CONTINUE_MAIN( 2 );
 
   /*
-     * Release buffer.
-     */
+   * Release buffer.
+   */
   rc = rtems_bdbuf_release( bd );
   if ( rc != RTEMS_SUCCESSFUL ) {
     TEST_FAILED();

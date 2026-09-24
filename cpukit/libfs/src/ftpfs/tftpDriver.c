@@ -149,16 +149,16 @@
  */
 union tftpPacket {
   /*
-     * RRQ/WRQ packet
-     */
+   * RRQ/WRQ packet
+   */
   struct tftpRWRQ {
     uint16_t opcode;
     char     filename_mode[];
   } tftpRWRQ;
 
   /*
-     * DATA packet
-     */
+   * DATA packet
+   */
   struct tftpDATA {
     uint16_t opcode;
     uint16_t blocknum;
@@ -166,24 +166,24 @@ union tftpPacket {
   } tftpDATA;
 
   /*
-     * ACK packet
-     */
+   * ACK packet
+   */
   struct tftpACK {
     uint16_t opcode;
     uint16_t blocknum;
   } tftpACK;
 
   /*
-     * OACK packet
-     */
+   * OACK packet
+   */
   struct tftpOACK {
     uint16_t opcode;
     char     options[];
   } tftpOACK;
 
   /*
-     * ERROR packet
-     */
+   * ERROR packet
+   */
   struct tftpERROR {
     uint16_t opcode;
     uint16_t errorCode;
@@ -196,82 +196,82 @@ union tftpPacket {
  */
 struct tftpStream {
   /*
-     * Buffer for storing packets for sending and receiving.  Can point
-     * to the same address when only one buffer is needed for reading.
-     */
+   * Buffer for storing packets for sending and receiving.  Can point
+   * to the same address when only one buffer is needed for reading.
+   */
   union tftpPacket *receive_buf;
   union tftpPacket *send_buf;
 
   /*
-     * Current block number - i.e. the block currently send or received
-     */
+   * Current block number - i.e. the block currently send or received
+   */
   uint16_t blocknum;
 
   /*
-     * Size of the data area in a DATA single packet.
-     */
+   * Size of the data area in a DATA single packet.
+   */
   size_t block_size;
 
   /*
-     * The maximum size of a packet.  It depends linearly on the block_size.
-     * The receive_buf and (the packets in) the send_buf are of this size.
-     */
+   * The maximum size of a packet.  It depends linearly on the block_size.
+   * The receive_buf and (the packets in) the send_buf are of this size.
+   */
   size_t packet_size;
 
   /*
-     * The number of packets which can be stored in the send buffer.
-     * During option negotiation and for reading a file from the server
-     * only a buffer for a single packet is needed.  In those cases, this
-     * value is always one.  When a file is written to the server,
-     * the value equals the window size:
-     *     send_buf_size_in_pkts == server_options.window_size
-     *
-     * Packet N is stored in
-     *     send_buf + packet_size * (N % send_buf_size_in_pkts)
-     */
+   * The number of packets which can be stored in the send buffer.
+   * During option negotiation and for reading a file from the server
+   * only a buffer for a single packet is needed.  In those cases, this
+   * value is always one.  When a file is written to the server,
+   * the value equals the window size:
+   *     send_buf_size_in_pkts == server_options.window_size
+   *
+   * Packet N is stored in
+   *     send_buf + packet_size * (N % send_buf_size_in_pkts)
+   */
   uint16_t send_buf_size_in_pkts;
 
   /*
-     * When writing files with windowsize > 1, the number of the completely
-     * filled packet with the highest block number in the send buffer.
-     * When the user calls write(), the data will be written into
-     * the block after this one.
-     */
+   * When writing files with windowsize > 1, the number of the completely
+   * filled packet with the highest block number in the send buffer.
+   * When the user calls write(), the data will be written into
+   * the block after this one.
+   */
   uint16_t blocknum_last_filled;
 
   /*
-     * When writing files with windowsize > 1, the number of the packet
-     * which is the last one in the whole file (i.e. the user
-     * called close()).  This block is never full (but maybe empty).
-     */
+   * When writing files with windowsize > 1, the number of the packet
+   * which is the last one in the whole file (i.e. the user
+   * called close()).  This block is never full (but maybe empty).
+   */
   uint16_t blocknum_eof_block;
 
   /*
-     * Data transfer socket
-     */
+   * Data transfer socket
+   */
   int                socket;
   struct sockaddr_in myAddress;
   struct sockaddr_in farAddress;
 
   /*
-     * Indices into buffer
-     * In case of sending a file with windowsize > 1, these values apply
-     * only to the packet with the highest number in the send buffer
-     * (blocknum_last_filled + 1).
-     */
+   * Indices into buffer
+   * In case of sending a file with windowsize > 1, these values apply
+   * only to the packet with the highest number in the send buffer
+   * (blocknum_last_filled + 1).
+   */
   int    nleft;
   size_t nused;
 
   /*
-     * Flags
-     */
+   * Flags
+   */
   int  firstReply;
   bool at_eof;
   bool is_for_reading;
 
   /*
-     * Function pointers and members for use by communicate_with_server().
-     */
+   * Function pointers and members for use by communicate_with_server().
+   */
   ssize_t ( *prepare_packet_for_sending )(
     struct tftpStream *tp,
     bool               force_retransmission,
@@ -289,13 +289,13 @@ struct tftpStream {
   int     error;
 
   /*
-     * Configuration and TFTP options
-     *
-     *     * config.options are options desired by the user (i.e. the values
-     *       send to the server).
-     *     * server_options are the options agreed by the server
-     *       (the option values actually used for the transfer of data).
-     */
+   * Configuration and TFTP options
+   *
+   *     * config.options are options desired by the user (i.e. the values
+   *       send to the server).
+   *     * server_options are the options agreed by the server
+   *       (the option values actually used for the transfer of data).
+   */
   tftp_net_config config;
   tftp_options    server_options;
 };
@@ -458,8 +458,8 @@ static bool parse_options(
   size_t remain = packet_size - sizeof( receive_buf->tftpOACK.opcode );
 
   /*
-     * Make sure there is a 0 byte in the end before comparing strings
-     */
+   * Make sure there is a 0 byte in the end before comparing strings
+   */
   if ( remain > 0 && pos[ remain - 1 ] != 0 ) {
     return false;
   }
@@ -523,8 +523,8 @@ static void send_error(
   } msg;
 
   /*
-     * Create the error packet (Unknown transfer ID).
-     */
+   * Create the error packet (Unknown transfer ID).
+   */
   msg.opcode = htons( TFTP_OPCODE_ERROR );
   msg.errorCode = htons( error_code );
   len = snprintf(
@@ -538,10 +538,10 @@ static void send_error(
   len += sizeof( msg.opcode ) + sizeof( msg.errorCode ) + 1;
 
   /*
-     * Send it
-     *
-     * Ignoring result because error packets are sent once and maybe lost.
-     */
+   * Send it
+   *
+   * Ignoring result because error packets are sent once and maybe lost.
+   */
   (void) sendto(
     tp->socket,
     (char *) &msg,
@@ -575,17 +575,17 @@ static ssize_t getPacket( struct tftpStream *tp, int retryCount )
     tv.tv_sec = tp->config.first_timeout / 1000L;
     tv.tv_usec = ( tp->config.first_timeout % 1000L ) * 1000L;
     /*
-         * Ignoring result because all possible errors indicate wrong
-         * arguments and these arguments are OK as tested by test suite.
-         */
+     * Ignoring result because all possible errors indicate wrong
+     * arguments and these arguments are OK as tested by test suite.
+     */
     (void) setsockopt( tp->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv );
   } else {
     tv.tv_sec = tp->config.timeout / 1000L;
     tv.tv_usec = ( tp->config.timeout % 1000L ) * 1000L;
     /*
-         * Ignoring result because all possible errors indicate wrong
-         * arguments and these arguments are OK as tested by test suite.
-         */
+     * Ignoring result because all possible errors indicate wrong
+     * arguments and these arguments are OK as tested by test suite.
+     */
     (void) setsockopt( tp->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv );
   }
   for ( ;; ) {
@@ -616,18 +616,18 @@ static ssize_t getPacket( struct tftpStream *tp, int retryCount )
     }
 
     /*
-         * Packet is from someone with whom we are
-         * not interested.  Tell them to go away.
-         */
+     * Packet is from someone with whom we are
+     * not interested.  Tell them to go away.
+     */
     sendStifle( tp, &from.i );
   }
   if ( retryCount != GET_PACKET_DONT_WAIT ) {
     tv.tv_sec = 0;
     tv.tv_usec = 0;
     /*
-         * Ignoring result because all possible errors indicate wrong
-         * arguments and these arguments are OK as tested by test suite.
-         */
+     * Ignoring result because all possible errors indicate wrong
+     * arguments and these arguments are OK as tested by test suite.
+     */
     (void) setsockopt( tp->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv );
   }
   return len;
@@ -686,11 +686,11 @@ static int process_error_packet_option_negotiation(
 {
   (void) len;
   /*
-     * Setting tp->config.options causes an RRQ or a WRQ to be created without
-     * options.
-     * Setting tp->server_option is defensive programming as these fields
-     * should already have these values.
-     */
+   * Setting tp->config.options causes an RRQ or a WRQ to be created without
+   * options.
+   * Setting tp->server_option is defensive programming as these fields
+   * should already have these values.
+   */
   tp->config.options.block_size = TFTP_RFC1350_BLOCK_SIZE;
   tp->config.options.window_size = TFTP_RFC1350_WINDOW_SIZE;
   tp->server_options.block_size = TFTP_RFC1350_BLOCK_SIZE;
@@ -698,8 +698,8 @@ static int process_error_packet_option_negotiation(
 
   tp->process_error_packet = process_error_packet;
   /*
-     * GOT_FIRST_OUT_OF_ORDER_PACKET will trigger a re-send of the RRQ or WRQ.
-     */
+   * GOT_FIRST_OUT_OF_ORDER_PACKET will trigger a re-send of the RRQ or WRQ.
+   */
   return GOT_FIRST_OUT_OF_ORDER_PACKET;
 }
 
@@ -718,12 +718,12 @@ static int process_data_packet( struct tftpStream *tp, ssize_t len )
   }
 
   /*
-     * In case of reading a file from the server:
-     * If the latest ACK packet(s) did not reach the server, the server
-     * starts the window from the last ACK it received.  This if-clause
-     * ensures, the client sends an ACK after having seen `windowsize`
-     * packets.
-     */
+   * In case of reading a file from the server:
+   * If the latest ACK packet(s) did not reach the server, the server
+   * starts the window from the last ACK it received.  This if-clause
+   * ensures, the client sends an ACK after having seen `windowsize`
+   * packets.
+   */
   if (
     pkt_blocknum < tp->blocknum_of_first_packet_of_window &&
     pkt_blocknum >=
@@ -739,14 +739,14 @@ static int process_data_packet( struct tftpStream *tp, ssize_t len )
     return GOT_FIRST_OUT_OF_ORDER_PACKET;
   } else if ( pkt_blocknum == (int32_t) tp->blocknum ) {
     /*
-       * In case of reading a file from the server:
-       * If the last ACK packet send by the client did not reach the
-       * server, the server re-sends all packets of the window.  In this
-       * case, the client must re-send the ACK packet after having
-       * received the last packet of the window (even through it has
-       * already received that packet before).
-       * GOT_OLD_PACKET would wrongly suppress this.
-       */
+     * In case of reading a file from the server:
+     * If the last ACK packet send by the client did not reach the
+     * server, the server re-sends all packets of the window.  In this
+     * case, the client must re-send the ACK packet after having
+     * received the last packet of the window (even through it has
+     * already received that packet before).
+     * GOT_OLD_PACKET would wrongly suppress this.
+     */
     return GOT_DUPLICATE_OF_CURRENT_PACKET;
   } else if ( pkt_blocknum != (int32_t) tp->blocknum + 1 ) {
     return GOT_OLD_PACKET;
@@ -758,14 +758,14 @@ static int process_data_packet( struct tftpStream *tp, ssize_t len )
   tp->nleft = BLK_SIZE_FROM_PKT_SIZE( len );
   tp->at_eof = ( tp->nleft < tp->server_options.block_size );
   /*
-     * After the last DATA packet, the client must send a final ACK
-     */
+   * After the last DATA packet, the client must send a final ACK
+   */
   if ( tp->at_eof ) {
     plen = prepare_ack_packet_for_sending( tp, true, &send_buf, NULL, NULL );
 
     /*
-         * Send it. Errors during send will not matter for this last ACK.
-         */
+     * Send it. Errors during send will not matter for this last ACK.
+     */
     (void) sendto(
       tp->socket,
       send_buf,
@@ -826,12 +826,12 @@ static ssize_t prepare_data_packet_for_sending(
   ( *send_buf )->tftpDATA.blocknum = htons( tp->blocknum );
 
   /*
-     * If the client sends the last packet of a window,
-     * it must wait for an ACK and - in case no ACK is received - begin
-     * a retransmission with the first packet of the window.
-     * Note that the last DATA block for the whole transfer is also
-     * a "last packet of a window".
-     */
+   * If the client sends the last packet of a window,
+   * it must wait for an ACK and - in case no ACK is received - begin
+   * a retransmission with the first packet of the window.
+   * Note that the last DATA block for the whole transfer is also
+   * a "last packet of a window".
+   */
   if (
     (int32_t) tp->blocknum + 1 >=
       tp->blocknum_of_first_packet_of_window + tp->send_buf_size_in_pkts ||
@@ -849,8 +849,8 @@ static ssize_t prepare_data_packet_for_sending(
   tp->process_error_packet = process_error_packet;
 
   /*
-     * Our last packet won't necessarily be acknowledged!
-     */
+   * Our last packet won't necessarily be acknowledged!
+   */
   if ( tp->blocknum == tp->blocknum_eof_block ) {
     tp->retransmission_error_code = 0;
   }
@@ -879,8 +879,8 @@ static ssize_t prepare_ack_packet_for_sending(
   tp->blocknum_of_first_packet_of_window = (int32_t) tp->blocknum + 1;
 
   /*
-     * Create the acknowledgement
-     */
+   * Create the acknowledgement
+   */
   *send_buf = tp->send_buf;
   ( *send_buf )->tftpACK.opcode = htons( TFTP_OPCODE_ACK );
   ( *send_buf )->tftpACK.blocknum = htons( tp->blocknum );
@@ -911,9 +911,9 @@ static int process_oack_packet( struct tftpStream *tp, ssize_t len )
   }
   if ( tp->is_for_reading ) {
     /*
-         * Since no DATA packet has been received yet, tell
-         * tftp_read() there is no data left.
-         */
+     * Since no DATA packet has been received yet, tell
+     * tftp_read() there is no data left.
+     */
     tp->nleft = 0;
     tp->prepare_packet_for_sending = prepare_ack_packet_for_sending;
   } else {
@@ -961,13 +961,13 @@ static ssize_t prepare_request_packet_for_sending(
   }
 
   /*
-     * getPacket() will change these values when the first packet is
-     * received.  Yet, this first packet may be an unexpected one
-     * (e.g. an ERROR or having a wrong block number).
-     * If a second, third, forth, ... RRQ/WRQ is to be sent, it should
-     * be directed to the server port again and not to the port the
-     * first unexpected packet came from.
-     */
+   * getPacket() will change these values when the first packet is
+   * received.  Yet, this first packet may be an unexpected one
+   * (e.g. an ERROR or having a wrong block number).
+   * If a second, third, forth, ... RRQ/WRQ is to be sent, it should
+   * be directed to the server port again and not to the port the
+   * first unexpected packet came from.
+   */
   tp->farAddress.sin_port = htons( tp->config.server_port );
   tp->firstReply = 1;
 
@@ -1062,8 +1062,8 @@ static int communicate_with_server(
 
       if ( len != DO_NOT_SEND_PACKET ) {
         /*
-                 * Send the packet
-                 */
+         * Send the packet
+         */
         if (
           sendto(
             tp->socket,
@@ -1083,8 +1083,8 @@ static int communicate_with_server(
     force_retransmission = false;
 
     /*
-         * Get reply
-         */
+     * Get reply
+     */
     len = getPacket(
       tp,
       wait_for_packet_reception ? retryCount : GET_PACKET_DONT_WAIT
@@ -1126,9 +1126,9 @@ static int communicate_with_server(
       break;
     } else {
       /*
-             * Timeout or other problems to receive packets
-             * Attempt a retransmission
-             */
+       * Timeout or other problems to receive packets
+       * Attempt a retransmission
+       */
       if ( ++retryCount >= (int) tp->config.retransmissions ) {
         tp->error = tp->retransmission_error_code;
         break;
@@ -1158,15 +1158,15 @@ static struct tftpStream *create_stream(
   }
 
   /*
-     * Initialize fields accessed by _Tftp_Destroy().
-     */
+   * Initialize fields accessed by _Tftp_Destroy().
+   */
   tp->receive_buf = NULL;
   tp->send_buf = NULL;
   tp->socket = 0;
 
   /*
-     * Allocate send and receive buffer for exchange of RRQ/WRQ and ACK/OACK.
-     */
+   * Allocate send and receive buffer for exchange of RRQ/WRQ and ACK/OACK.
+   */
   tp->block_size = TFTP_RFC1350_BLOCK_SIZE;
   tp->packet_size = PKT_SIZE_FROM_BLK_SIZE( tp->block_size );
   tp->receive_buf = malloc( tp->packet_size );
@@ -1178,16 +1178,16 @@ static struct tftpStream *create_stream(
   tp->send_buf_size_in_pkts = 1;
 
   /*
-     * Create the socket
-     */
+   * Create the socket
+   */
   if ( ( tp->socket = socket( AF_INET, SOCK_DGRAM, 0 ) ) < 0 ) {
     _Tftp_Destroy( tp );
     return NULL;
   }
 
   /*
-     * Setup configuration and options
-     */
+   * Setup configuration and options
+   */
   if ( config == NULL ) {
     tftp_initialize_net_config( &tp->config );
   } else {
@@ -1195,16 +1195,16 @@ static struct tftpStream *create_stream(
   }
 
   /*
-     * If the server does not confirm our option values later on,
-     * use numbers from the original RFC 1350 for the actual transfer.
-     */
+   * If the server does not confirm our option values later on,
+   * use numbers from the original RFC 1350 for the actual transfer.
+   */
   tp->server_options.block_size = TFTP_RFC1350_BLOCK_SIZE;
   tp->server_options.window_size = TFTP_RFC1350_WINDOW_SIZE;
 
   /*
-     * Set the UDP destination to the TFTP server
-     * port on the remote machine.
-     */
+   * Set the UDP destination to the TFTP server
+   * port on the remote machine.
+   */
   tp->farAddress.sin_family = AF_INET;
   tp->farAddress.sin_addr = *farAddress;
   tp->farAddress.sin_port = htons( tp->config.server_port );
@@ -1240,8 +1240,8 @@ static struct tftpStream *reallocate_stream_buffer( struct tftpStream *tp )
   tp->block_size = tp->server_options.block_size;
   tp->packet_size = PKT_SIZE_FROM_BLK_SIZE( tp->block_size );
   /*
-     * Defensive programming
-     */
+   * Defensive programming
+   */
   if ( tp->receive_buf == tp->send_buf ) {
     tp->send_buf = NULL;
   } else {
@@ -1311,8 +1311,8 @@ int tftp_open(
   int                err;
 
   /*
-     * Check parameters
-     */
+   * Check parameters
+   */
   if ( tftp_handle == NULL ) {
     return EINVAL;
   }
@@ -1329,8 +1329,8 @@ int tftp_open(
   }
 
   /*
-     * Create tftpStream structure
-     */
+   * Create tftpStream structure
+   */
   if ( get_ip_address( hostname, &farAddress ) == NULL ) {
     return ENOENT;
   }
@@ -1340,8 +1340,8 @@ int tftp_open(
   }
 
   /*
-     * Send RRQ or WRQ and wait for reply
-     */
+   * Send RRQ or WRQ and wait for reply
+   */
   tp->prepare_packet_for_sending = prepare_request_packet_for_sending;
   err = communicate_with_server( tp, path );
   if ( err != 0 ) {
@@ -1372,8 +1372,8 @@ ssize_t tftp_read( void *tftp_handle, void *buffer, size_t count )
   }
 
   /*
-     * Read till user request is satisfied or EOF is reached
-     */
+   * Read till user request is satisfied or EOF is reached
+   */
   bp = buffer;
   nwant = count;
   while ( nwant ) {
@@ -1398,21 +1398,21 @@ ssize_t tftp_read( void *tftp_handle, void *buffer, size_t count )
     }
 
     /*
-         * Wait for the next packet
-         */
+     * Wait for the next packet
+     */
     tp->retransmission_error_code = -EIO;
     err = communicate_with_server( tp, NULL );
     if ( err == tp->retransmission_error_code ) {
       return -EIO;
     }
     /*
-         * If communicate_with_server() returns an error, either
-         *    * an error message from the server was received or
-         *    * an error message was already sent to the server
-         * Setting tp->at_eof true, prevents all further calls to
-         * communicate_with_server() and suppresses the sending of
-         * an error message to the server by tftp_close().
-         */
+     * If communicate_with_server() returns an error, either
+     *    * an error message from the server was received or
+     *    * an error message was already sent to the server
+     * Setting tp->at_eof true, prevents all further calls to
+     * communicate_with_server() and suppresses the sending of
+     * an error message to the server by tftp_close().
+     */
     if ( err != 0 ) {
       tp->at_eof = true;
       return -err;
@@ -1444,13 +1444,13 @@ static int rtems_tftp_flush( struct tftpStream *tp )
   do {
     err = communicate_with_server( tp, NULL );
     /*
-         * If communicate_with_server() returns an error, either
-         *    * an error message from the server was received or
-         *    * an error message was already sent to the server
-         * Setting tp->at_eof true, prevents all further calls to
-         * communicate_with_server() and suppresses the sending of
-         * an error message to the server by tftp_close().
-         */
+     * If communicate_with_server() returns an error, either
+     *    * an error message from the server was received or
+     *    * an error message was already sent to the server
+     * Setting tp->at_eof true, prevents all further calls to
+     * communicate_with_server() and suppresses the sending of
+     * an error message to the server by tftp_close().
+     */
     if ( err != 0 ) {
       tp->at_eof = true;
       return err;
@@ -1459,9 +1459,9 @@ static int rtems_tftp_flush( struct tftpStream *tp )
     (int32_t) tp->blocknum_last_filled + 1 >=
       tp->blocknum_of_first_packet_of_window + tp->send_buf_size_in_pkts ||
     /*
-          * tp->blocknum_eof_block == tp->blocknum_last_filled
-          * holds only true when the user invoked tftp_close().
-          */
+     * tp->blocknum_eof_block == tp->blocknum_last_filled
+     * holds only true when the user invoked tftp_close().
+     */
     ( tp->blocknum_eof_block == tp->blocknum_last_filled &&
       tp->blocknum_of_first_packet_of_window <=
         (int32_t) tp->blocknum_eof_block )
@@ -1490,8 +1490,8 @@ int tftp_close( void *tftp_handle )
   }
   if ( !tp->at_eof && !tp->firstReply ) {
     /*
-         * Tell the other end to stop
-         */
+     * Tell the other end to stop
+     */
     rtems_interval ticksPerSecond;
     send_error(
       tp,
@@ -1516,19 +1516,19 @@ ssize_t tftp_write( void *tftp_handle, const void *buffer, size_t count )
   union tftpPacket  *send_buf;
 
   /*
-     * Bail out if an error has occurred
-     */
+   * Bail out if an error has occurred
+   */
   if ( tp == NULL || tp->is_for_reading || tp->at_eof || buffer == NULL ) {
     return -EIO;
   }
 
   /*
-     * Write till user request is satisfied
-     * Notice that the buffer is flushed as soon as it is filled rather
-     * than waiting for the next write or a close.  This ensures that
-     * the flush in close writes a less than full buffer so the far
-     * end can detect the end-of-file condition.
-     */
+   * Write till user request is satisfied
+   * Notice that the buffer is flushed as soon as it is filled rather
+   * than waiting for the next write or a close.  This ensures that
+   * the flush in close writes a less than full buffer so the far
+   * end can detect the end-of-file condition.
+   */
   bp = buffer;
   nleft = count;
   while ( nleft ) {

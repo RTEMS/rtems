@@ -476,9 +476,9 @@ static int pcibus_dev_register( struct pci_dev *dev, void *arg )
   pciinfo->pci_device = dev;
 
   /* Build resources so that PCI device drivers doesn't have to scan
-	 * configuration space themselves, also the address is translated
-	 * into CPU accessible addresses.
-	 */
+   * configuration space themselves, also the address is translated
+   * into CPU accessible addresses.
+   */
   for ( i = 0; i < PCIDEV_RES_CNT; i++ ) {
     pcibusres = &pciinfo->resources[ i ];
     pcires = &dev->resources[ i ];

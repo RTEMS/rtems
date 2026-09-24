@@ -66,7 +66,7 @@ static void test_delay( rtems_interval ticks )
 }
 
 /*
- * Task that continually sets the cpu and 
+ * Task that continually sets the cpu and
  * run indicators without blocking.
  */
 static void task( rtems_task_argument arg )
@@ -112,7 +112,7 @@ static void test( void )
 
   /*
    * Create and start TA1 at a higher priority
-   * than the init task. 
+   * than the init task.
    */
   sc = rtems_task_create(
     rtems_build_name( 'T', 'A', '0', '1' ),
@@ -128,7 +128,7 @@ static void test( void )
   sc = rtems_task_start( task_data.id, task, 0 );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  /* 
+  /*
    * Verify the Init task is running on the max core.
    */
   printf( "Verify Init task is on cpu %" PRIu32 "\n", cpu_count - 1 );

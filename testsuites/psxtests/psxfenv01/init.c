@@ -91,7 +91,7 @@ rtems_task Init( rtems_task_argument ignored )
   rtems_test_assert( r == 0 );
 
   /* Test 'FE_DIVBYZERO'
-     * Divide by zero and confirm fetestexcept() */
+   * Divide by zero and confirm fetestexcept() */
   a = 0.0;
   b = 1.0;
   c = b / a;
@@ -110,9 +110,9 @@ rtems_task Init( rtems_task_argument ignored )
   rtems_test_assert( r == 0 );
 
   /* Test for fegetround() and fesetround()
-     * They have four main macros to be tested separated by ifdef
-     * Since not all architectures support them
-     * The test case gets and sets the rounding directions */
+   * They have four main macros to be tested separated by ifdef
+   * Since not all architectures support them
+   * The test case gets and sets the rounding directions */
   #ifdef FE_TONEAREST /* Rounding direction TONEAREST */
   rtems_test_assert( fegetround() == FE_TONEAREST );
   #endif               /*rounding direction TONEAREST */

@@ -59,8 +59,8 @@ void Shm_Lock( Shm_Locked_queue_Control *lq_cb )
   while ( lock_value ) {
     lock_value = LEON3_Atomic_Swap( lock_value, lockptr );
     /*
-       *  If not available, then may want to delay to reduce load on lock.
-       */
+     *  If not available, then may want to delay to reduce load on lock.
+     */
   }
 }
 

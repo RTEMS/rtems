@@ -86,8 +86,8 @@ const void *rtems_monitor_init_task_next(
   itask = config->User_initialization_tasks_table + n;
 
   /*
-     * dummy up a fake id and name for this item
-     */
+   * dummy up a fake id and name for this item
+   */
 
   canonical_init_task->id = n;
   canonical_init_task->name = itask->name;

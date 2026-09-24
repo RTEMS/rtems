@@ -6,7 +6,7 @@
  * This test exercises the time of day services via the Classic
  * and POSIX APIs to make sure they are consistent. It additionally
  * exericses the adjtime() method.
- * 
+ *
  */
 
 /*

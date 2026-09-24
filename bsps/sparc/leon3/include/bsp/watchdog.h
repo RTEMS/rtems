@@ -50,7 +50,7 @@ int bsp_watchdog_init( void );
  *
  * Arguments
  *  watchdog       - Always 0 for now
- *  reload_value   - Number of timer clocks (after prescaler) to count before 
+ *  reload_value   - Number of timer clocks (after prescaler) to count before
  *                   watchdog is woken.
  */
 void bsp_watchdog_reload( int watchdog, unsigned int reload_value );

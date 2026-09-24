@@ -28,9 +28,9 @@ T_TEST_CASE( timer )
   T_step_assert_rsc_success( 1, sc );
 
   /*
-	 * Make sure that the next step is not immediately interrupted by the
-	 * clock interrupt.
-	 */
+   * Make sure that the next step is not immediately interrupted by the
+   * clock interrupt.
+   */
   (void) rtems_task_wake_after( 1 );
 
   task = rtems_task_self();

@@ -7,7 +7,7 @@
  *
  *  This is the general part of the different AMBA Plug & Play
  *  drivers. The drivers are wrappers around this driver, making
- *  the code size smaller for systems with multiple AMBA Plug & 
+ *  the code size smaller for systems with multiple AMBA Plug &
  *  Play buses.
  *
  * Redistribution and use in source and binary forms, with or without

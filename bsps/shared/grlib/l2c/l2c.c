@@ -871,7 +871,7 @@ STATIC void l2cache_flushwait( void )
   /* Read any L2cache register to wait until flush is done */
   /* The L2 will block any access until the flush is done */
   /* Force read operation */
-  //asm volatile ("" : : "r" (l2cache_reg_status()));
+  // asm volatile ("" : : "r" (l2cache_reg_status()));
   (void) l2cache_reg_status();
   return;
 }
@@ -973,7 +973,7 @@ int l2cache_lookup( uint32_t addr, int *way )
       return ret;
     }
     /*DBG("L2CACHE gottag: way=%d, valid=%d, tag=0x%08x.\n",
-		 *		i, gottag.valid, gottag.tag);*/
+     *		i, gottag.valid, gottag.tag);*/
     /* Check if valid */
     if ( gottag.valid ) {
       /* Check if they are the same */
@@ -1123,8 +1123,8 @@ void l2cache_isr( void *arg )
   unsigned int         addr = l2cache_reg_error_addr();
 
   /* Make sure that the interrupt is pending and unmasked,
-	 * otherwise it migth have been other core
-	 * sharing the same interrupt line */
+   * otherwise it migth have been other core
+   * sharing the same interrupt line */
   if (
     ( ( sts & L2C_ERROR_IRQP ) >> L2C_ERROR_IRQP_BIT ) &
     ( ( sts & L2C_ERROR_IRQM ) >> L2C_ERROR_IRQM_BIT )
@@ -1478,7 +1478,7 @@ int l2cache_fill_way( int way, uint32_t tag, int options, int flush )
           ( ( options & L2CACHE_OPTIONS_DIRTY ) ? L2C_FLUSHSI_DB : 0 );
 
   /*DBG("L2CACHE lock way: Locked=%d, way=%d, option=0x%04x\n",
-	 *		locked, way, flags);*/
+   *		locked, way, flags);*/
 
   switch ( flush & 0x3 ) {
     case L2CACHE_OPTIONS_FLUSH_NONE:
@@ -1556,7 +1556,7 @@ int l2cache_lock_way( uint32_t tag, int options, int flush, int enable )
           ( ( options & L2CACHE_OPTIONS_DIRTY ) ? L2C_FLUSHSI_DB : 0 );
 
   /*DBG("L2CACHE lock way: Locked=%d, way=%d, option=0x%04x\n",
-	 *		locked, way, flags);*/
+   *		locked, way, flags);*/
 
   switch ( flush & 0x3 ) {
     case L2CACHE_OPTIONS_FLUSH_NONE:

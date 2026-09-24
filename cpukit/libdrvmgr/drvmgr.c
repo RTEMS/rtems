@@ -142,8 +142,8 @@ void drvmgr_init_update( void )
   int                level;
 
   /* "Lock" to make sure we don't use up the stack and that the lists
-	 * remain consistent.
-	 */
+   * remain consistent.
+   */
   DRVMGR_LOCK_WRITE();
   if ( mgr->initializing_objs || ( mgr->level == 0 ) ) {
     goto out;
@@ -151,8 +151,8 @@ void drvmgr_init_update( void )
   mgr->initializing_objs = 1;
 
   /* Take all buses and devices ready into the same stage
-	 * as the driver manager global level.
-	 */
+   * as the driver manager global level.
+   */
   for ( level = 0; level < mgr->level; level++ ) {
     bus_might_been_registered = 0;
 
@@ -160,15 +160,15 @@ void drvmgr_init_update( void )
 
     while ( ( bus = BUS_LIST_HEAD( &mgr->buses[ level ] ) ) != NULL ) {
       /* Remove first in the list (will be inserted in
-			 * appropriate list by do_bus_init())
-			 */
+       * appropriate list by do_bus_init())
+       */
       drvmgr_list_remove_head( &mgr->buses[ level ] );
 
       DRVMGR_UNLOCK();
 
       /* Initialize Bus, this will register devices on
-			 * the bus. Take bus into next level.
-			 */
+       * the bus. Take bus into next level.
+       */
       do_bus_init( mgr, bus, level + 1 );
 
       DRVMGR_LOCK_WRITE();
@@ -180,8 +180,8 @@ void drvmgr_init_update( void )
       dev = DEV_LIST_HEAD( &mgr->devices[ level ] );
 
       /* Remove first in the list (will be inserted in
-			 * appropriate list by do_dev_init())
-			 */
+       * appropriate list by do_dev_init())
+       */
       drvmgr_list_remove_head( &mgr->devices[ level ] );
 
       DRVMGR_UNLOCK();
@@ -195,8 +195,8 @@ void drvmgr_init_update( void )
     }
 
     /* Make sure all buses registered and ready are taken at
-		 * the same time into init level N.
-		 */
+     * the same time into init level N.
+     */
     if ( bus_might_been_registered ) {
       level = -1; /* restart loop */
     }
@@ -215,8 +215,8 @@ static int do_bus_init( struct drvmgr *mgr, struct drvmgr_bus *bus, int level )
   int ( *init )( struct drvmgr_bus * );
 
   /* If bridge device has failed during initialization, the bus is not
-	 * initialized further.
-	 */
+   * initialized further.
+   */
   if ( bus->dev->state & DEV_STATE_INIT_FAILED ) {
     bus->state |= BUS_STATE_DEPEND_FAILED;
     goto inactivate_out;
@@ -227,13 +227,13 @@ static int do_bus_init( struct drvmgr *mgr, struct drvmgr_bus *bus, int level )
     bus->error = init( bus );
     if ( bus->error != DRVMGR_OK ) {
       /* An error of some kind during bus initialization.
-			 *
-			 * Child devices and their buses are not inactived
-			 * directly here, instead they will all be catched by
-			 * do_dev_init() and do_bus_init() by checking if
-			 * parent or bridge-device failed. We know that
-			 * initialization will happen later for those devices.
-			 */
+       *
+       * Child devices and their buses are not inactived
+       * directly here, instead they will all be catched by
+       * do_dev_init() and do_bus_init() by checking if
+       * parent or bridge-device failed. We know that
+       * initialization will happen later for those devices.
+       */
       goto inactivate_out;
     }
   }
@@ -244,9 +244,9 @@ static int do_bus_init( struct drvmgr *mgr, struct drvmgr_bus *bus, int level )
   bus->level = level;
 
   /* Put bus into list of buses reached level 'level'.
-	 * Put at end of bus list so that init[N+1]() calls comes
-	 * in the same order as init[N]()
-	 */
+   * Put at end of bus list so that init[N+1]() calls comes
+   * in the same order as init[N]()
+   */
   drvmgr_list_add_tail( &mgr->buses[ level ], bus );
 
   DRVMGR_UNLOCK();
@@ -271,16 +271,16 @@ static int do_dev_init( struct drvmgr *mgr, struct drvmgr_dev *dev, int level )
   int ( *init )( struct drvmgr_dev * );
 
   /* Try to allocate Private Device Structure for driver if driver
-	 * requests for this feature.
-	 */
+   * requests for this feature.
+   */
   if ( dev->drv && dev->drv->dev_priv_size && !dev->priv ) {
     dev->priv = malloc( dev->drv->dev_priv_size );
     memset( dev->priv, 0, dev->drv->dev_priv_size );
   }
 
   /* If parent bus has failed during initialization,
-	 * the device is not initialized further.
-	 */
+   * the device is not initialized further.
+   */
   if ( dev->parent && ( dev->parent->state & BUS_STATE_INIT_FAILED ) ) {
     dev->state |= DEV_STATE_DEPEND_FAILED;
     goto inactivate_out;
@@ -292,21 +292,21 @@ static int do_dev_init( struct drvmgr *mgr, struct drvmgr_dev *dev, int level )
     dev->error = init( dev );
     if ( dev->error != DRVMGR_OK ) {
       /* An error of some kind has occurred in the
-			 * driver/device, the failed device is put into the
-			 * inactive list, this way Init2,3 and/or 4 will not
-			 * be called for this device.
-			 *
-			 * The device is not removed from the bus (not
-			 * unregistered). The driver can be used to find
-			 * device information and debugging for example even
-			 * if device initialization failed.
-			 *
-			 * Child buses and their devices are not inactived
-			 * directly here, instead they will all be catched by
-			 * do_dev_init() and do_bus_init() by checking if
-			 * parent or bridge-device failed. We know that
-			 * initialization will happen later for those devices.
-			 */
+       * driver/device, the failed device is put into the
+       * inactive list, this way Init2,3 and/or 4 will not
+       * be called for this device.
+       *
+       * The device is not removed from the bus (not
+       * unregistered). The driver can be used to find
+       * device information and debugging for example even
+       * if device initialization failed.
+       *
+       * Child buses and their devices are not inactived
+       * directly here, instead they will all be catched by
+       * do_dev_init() and do_bus_init() by checking if
+       * parent or bridge-device failed. We know that
+       * initialization will happen later for those devices.
+       */
       goto inactivate_out;
     }
   }
@@ -316,8 +316,8 @@ static int do_dev_init( struct drvmgr *mgr, struct drvmgr_dev *dev, int level )
   dev->level = level;
 
   /* Put at end of device list so that init[N+1]() calls comes
-	 * in the same order as init[N]()
-	 */
+   * in the same order as init[N]()
+   */
   drvmgr_list_add_tail( &mgr->devices[ level ], dev );
   DRVMGR_UNLOCK();
 
@@ -375,10 +375,10 @@ int drvmgr_drv_register( struct drvmgr_drv *drv )
   struct drvmgr *mgr = &drvmgr;
 
   /* All drivers must have been registered before start of init,
-	 * because the manager does not scan all existing devices to find
-	 * suitable hardware for this driver, and it is not protected with
-	 * a lock therefore.
-	 */
+   * because the manager does not scan all existing devices to find
+   * suitable hardware for this driver, and it is not protected with
+   * a lock therefore.
+   */
   if ( mgr->level > 0 ) {
     return -1;
   }
@@ -389,12 +389,12 @@ int drvmgr_drv_register( struct drvmgr_drv *drv )
   drvmgr_list_add_head( &mgr->drivers, drv );
 
   /* TODO: we could scan for devices that this new driver has support
-	 *       for. However, at this stage we assume that all drivers are
-	 *       registered before devices are registered.
-	 *
-	 * LOCK: From the same assumsion locking the driver list is not needed
-	 *       either.
-	 */
+   *       for. However, at this stage we assume that all drivers are
+   *       registered before devices are registered.
+   *
+   * LOCK: From the same assumsion locking the driver list is not needed
+   *       either.
+   */
 
   return 0;
 }
@@ -420,7 +420,7 @@ static void drvmgr_insert_dev_into_drv(
   while ( curr ) {
     if ( minor < curr->minor_drv ) {
       /* Found a gap. Insert new device between prev
-			 * and curr. */
+       * and curr. */
       break;
     }
     minor++;
@@ -459,7 +459,7 @@ static void drvmgr_insert_dev_into_bus(
     if ( dev->drv && ( dev->drv == curr->drv ) ) {
       if ( minor < curr->minor_bus ) {
         /* Found a gap. Insert new device between prev
-				 * and curr. */
+         * and curr. */
         break;
       }
       minor++;
@@ -487,9 +487,9 @@ static struct drvmgr_drv *drvmgr_dev_find_drv( struct drvmgr_dev *dev )
   struct drvmgr_drv *drv;
 
   /* NOTE: No locking is needed here since Driver list is supposed to be
-	 *       initialized once during startup, we treat it as a static
-	 *       read-only list
-	 */
+   *       initialized once during startup, we treat it as a static
+   *       read-only list
+   */
 
   /* Try to find a driver that can handle this device */
   for ( drv = DRV_LIST_HEAD( &mgr->drivers ); drv; drv = drv->next ) {
@@ -528,57 +528,57 @@ int drvmgr_dev_register( struct drvmgr_dev *dev )
   DRVMGR_LOCK_WRITE();
 
   /* Assign Bus Minor number and put into bus device list
-	 * unless root device.
-	 */
+   * unless root device.
+   */
   if ( bus ) {
     drvmgr_insert_dev_into_bus( bus, dev );
   }
 
   if ( !drv ) {
     /* No driver found that can handle this device, put into
-		 * inactive list
-		 */
+     * inactive list
+     */
     dev->minor_drv = -1;
     dev->state |= DEV_STATE_LIST_INACTIVE;
   } else {
     /* United device with driver.
-		 * Put the device on the registered device list
-		 */
+     * Put the device on the registered device list
+     */
     dev->state |= DEV_STATE_UNITED;
 
     /* Check if user want to skip this core. This is not a
-		 * normal request, however in a multi-processor system
-		 * the two(or more) RTEMS instances must not use the same
-		 * devices in a system, not reporting a device to
-		 * it's driver will effectively accomplish this. In a
-		 * non Plug & Play system one can easily avoid this
-		 * problem by not report the core, but in a Plug & Play
-		 * system the bus driver will report all found cores.
-		 *
-		 * To stop the two RTEMS instances from using the same
-		 * device the user can simply define a resource entry
-		 * for a certain device but set the keys field to NULL.
-		 */
+     * normal request, however in a multi-processor system
+     * the two(or more) RTEMS instances must not use the same
+     * devices in a system, not reporting a device to
+     * it's driver will effectively accomplish this. In a
+     * non Plug & Play system one can easily avoid this
+     * problem by not report the core, but in a Plug & Play
+     * system the bus driver will report all found cores.
+     *
+     * To stop the two RTEMS instances from using the same
+     * device the user can simply define a resource entry
+     * for a certain device but set the keys field to NULL.
+     */
     if ( drvmgr_keys_get( dev, &keys ) == 0 && keys == NULL ) {
       /* Found Driver resource entry point
-			 * for this device, it was NULL, this
-			 * indicates to skip the core.
-			 *
-			 * We put it into the inactive list
-			 * marking it as ignored.
-			 */
+       * for this device, it was NULL, this
+       * indicates to skip the core.
+       *
+       * We put it into the inactive list
+       * marking it as ignored.
+       */
       dev->state |= DEV_STATE_IGNORED;
     } else {
       /* Assign Driver Minor number and put into driver's
-			 * device list
-			 */
+       * device list
+       */
       drvmgr_insert_dev_into_drv( drv, dev );
 
       /* Just register device, it will be initialized
-			 * later together with bus.
-			 *
-			 * At the end of the list (breadth first search)
-			 */
+       * later together with bus.
+       *
+       * At the end of the list (breadth first search)
+       */
       init_list = &mgr->devices[ 0 ];
 
       DBG(
@@ -595,8 +595,8 @@ int drvmgr_dev_register( struct drvmgr_dev *dev )
   DRVMGR_UNLOCK();
 
   /* Trigger Device initialization if not root device and
-	 * has a driver
-	 */
+   * has a driver
+   */
   if ( bus && dev->drv ) {
     drvmgr_init_update();
   }
@@ -673,10 +673,10 @@ int drvmgr_alloc_bus( struct drvmgr_bus **pbus, int extra )
 void drvmgr_bus_res_add( struct drvmgr_bus *bus, struct drvmgr_bus_res *bres )
 {
   /* insert first in bus resource list. Locking isn't needed since
-	 * resources can only be added before resource requests are made.
-	 * When bus has been registered resources are considered a read-only
-	 * tree.
-	 */
+   * resources can only be added before resource requests are made.
+   * When bus has been registered resources are considered a read-only
+   * tree.
+   */
   bres->next = bus->reslist;
   bus->reslist = bres;
 }

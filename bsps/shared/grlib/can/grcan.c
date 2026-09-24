@@ -224,8 +224,8 @@ int grcan_init3( struct drvmgr_dev *dev )
   priv = dev->priv;
 
   /*
-	 * Now we take care of device initialization.
-	 */
+   * Now we take care of device initialization.
+   */
 
   if ( grcan_device_init( priv ) ) {
     return DRVMGR_FAIL;
@@ -238,13 +238,13 @@ int grcan_init3( struct drvmgr_dev *dev )
   prefix[ 0 ] = '\0';
   if ( drvmgr_get_dev_prefix( dev, prefix ) ) {
     /* Failed to get prefix, make sure of a unique FS name
-		 * by using the driver minor.
-		 */
+     * by using the driver minor.
+     */
     sprintf( priv->devName, "grcan%d", dev->minor_drv );
   } else {
     /* Got special prefix, this means we have a bus prefix
-		 * And we should use our "bus minor"
-		 */
+     * And we should use our "bus minor"
+     */
     sprintf( priv->devName, "%sgrcan%d", prefix, dev->minor_bus );
   }
 
@@ -346,9 +346,9 @@ static __inline__ void grcan_hw_reset( struct grcan_regs *regs )
 static rtems_device_driver grcan_hw_start( struct grcan_priv *pDev )
 {
   /*
-	 * tmp is set but never used. GCC gives a warning for this
-	 * and we need to tell GCC not to complain.
-	 */
+   * tmp is set but never used. GCC gives a warning for this
+   * and we need to tell GCC not to complain.
+   */
   unsigned int tmp RTEMS_UNUSED;
 
   SPIN_IRQFLAGS( oldLevel );
@@ -361,8 +361,8 @@ static rtems_device_driver grcan_hw_start( struct grcan_priv *pDev )
   }
 
   /* Configure FIFO configuration register
-	 * and Setup timing
-	 */
+   * and Setup timing
+   */
   if ( pDev->config_changed ) {
     grcan_hw_config( pDev, &pDev->config );
     pDev->config_changed = 0;
@@ -410,8 +410,8 @@ static rtems_device_driver grcan_hw_start( struct grcan_priv *pDev )
   pDev->regs->ctrl = GRCAN_CTRL_ENABLE;
 
   /* Leave transmitter disabled, it is enabled when
-	 * trying to send something.
-	 */
+   * trying to send something.
+   */
   return RTEMS_SUCCESSFUL;
 }
 
@@ -433,15 +433,15 @@ static void grcan_hw_stop( struct grcan_priv *pDev )
 static void grcan_sw_stop( struct grcan_priv *pDev )
 {
   /*
-	 * Release semaphores to wake all threads waiting for an IRQ.
-	 * The threads that
-	 * get woken up must check started state in
-	 * order to determine that they should return to
-	 * user space with error status.
-	 *
-	 * Entering into started mode again will reset the
-	 * semaphore count.
-	 */
+   * Release semaphores to wake all threads waiting for an IRQ.
+   * The threads that
+   * get woken up must check started state in
+   * order to determine that they should return to
+   * user space with error status.
+   *
+   * Entering into started mode again will reset the
+   * semaphore count.
+   */
   rtems_semaphore_release( pDev->rx_sem );
   rtems_semaphore_release( pDev->tx_sem );
   rtems_semaphore_release( pDev->txempty_sem );
@@ -509,8 +509,8 @@ static void grcan_hw_accept(
 )
 {
   /* Disable Sync mask totaly (if we change scode or smask
-	 * in an unfortunate way we may trigger a sync match)
-	 */
+   * in an unfortunate way we may trigger a sync match)
+   */
   regs->rx0mask = 0xffffffff;
 
   /* Set Sync Filter in a controlled way */
@@ -524,8 +524,8 @@ static void grcan_hw_sync(
 )
 {
   /* Disable Sync mask totaly (if we change scode or smask
-	 * in an unfortunate way we may trigger a sync match)
-	 */
+   * in an unfortunate way we may trigger a sync match)
+   */
   regs->smask = 0xffffffff;
 
   /* Set Sync Filter in a controlled way */
@@ -544,9 +544,9 @@ int grcan_wait_rxdata( struct grcan_priv *pDev, int min )
   FUNCDBG();
 
   /*** block until receive IRQ received
-	 * Set up a valid IRQ point so that an IRQ is received
-	 * when one or more messages are received
-	 */
+   * Set up a valid IRQ point so that an IRQ is received
+   * when one or more messages are received
+   */
   SPIN_LOCK_IRQ( &pDev->devlock, oldLevel );
   state = pDev->started;
 
@@ -601,11 +601,11 @@ int grcan_wait_rxdata( struct grcan_priv *pDev, int min )
   if ( wait ) {
     rtems_semaphore_obtain( pDev->rx_sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
     /*
-		 * The semaphore is released either due to the expected IRQ
-		 * condition or by BUSOFF, AHBERROR or another thread calling
-		 * grcan_stop(). In either case, state2err[] has the correnct
-		 * return value.
-		 */
+     * The semaphore is released either due to the expected IRQ
+     * condition or by BUSOFF, AHBERROR or another thread calling
+     * grcan_stop(). In either case, state2err[] has the correnct
+     * return value.
+     */
     return state2err[ pDev->started ];
   }
 
@@ -667,12 +667,12 @@ int grcan_wait_txspace( struct grcan_priv *pDev, int min )
   pDev->regs->picr = GRCAN_TXIRQ_IRQ;
 
   /* One problem, if HW already gone past IRQ place the IRQ will
-	 * never be received resulting in a thread hang. We check if so
-	 * before proceeding.
-	 *
-	 * has the HW already gone past the IRQ generation place?
-	 *  == does min fit info tx buffer?
-	 */
+   * never be received resulting in a thread hang. We check if so
+   * before proceeding.
+   *
+   * has the HW already gone past the IRQ generation place?
+   *  == does min fit info tx buffer?
+   */
   rp = READ_REG( &pDev->regs->tx0rd );
 
   space_left = grcan_hw_txspace( rp, wp, size );
@@ -705,10 +705,10 @@ static int grcan_tx_flush( struct grcan_priv *pDev )
   FUNCDBG();
 
   /* loop until all data in circular buffer has been read by hw.
-	 * (write pointer != read pointer )
-	 *
-	 * Hardware doesn't update write pointer - we do
-	 */
+   * (write pointer != read pointer )
+   *
+   * Hardware doesn't update write pointer - we do
+   */
   while (
     ( wp = READ_REG( &pDev->regs->tx0wr ) ) !=
     ( rp = READ_REG( &pDev->regs->tx0rd ) )
@@ -765,8 +765,8 @@ static int grcan_alloc_buffers( struct grcan_priv *pDev, int rx, int tx )
     adr = (unsigned int) (uintptr_t) pDev->txbuf_adr;
     if ( adr & 0x1 ) {
       /* User defined "remote" address. Translate it into
-			 * a CPU accessible address
-			 */
+       * a CPU accessible address
+       */
       pDev->_tx_hw = (void *) (uintptr_t) ( adr & ~0x1 );
       drvmgr_translate_check(
         pDev->dev,
@@ -784,8 +784,8 @@ static int grcan_alloc_buffers( struct grcan_priv *pDev, int rx, int tx )
         }
       } else {
         /* User defined "cou-local" address. Translate
-				 * it into a CPU accessible address
-				 */
+         * it into a CPU accessible address
+         */
         pDev->_tx = (void *) (uintptr_t) adr;
       }
       /* Align TX buffer */
@@ -794,8 +794,8 @@ static int grcan_alloc_buffers( struct grcan_priv *pDev, int rx, int tx )
                                         ~( BUFFER_ALIGNMENT_NEEDS - 1 ) );
 
       /* Translate address into an hardware accessible
-			 * address
-			 */
+       * address
+       */
       drvmgr_translate_check(
         pDev->dev,
         CPUMEM_TO_DMA,
@@ -810,8 +810,8 @@ static int grcan_alloc_buffers( struct grcan_priv *pDev, int rx, int tx )
     adr = (unsigned int) (uintptr_t) pDev->rxbuf_adr;
     if ( adr & 0x1 ) {
       /* User defined "remote" address. Translate it into
-			 * a CPU accessible address
-			 */
+       * a CPU accessible address
+       */
       pDev->_rx_hw = (void *) (uintptr_t) ( adr & ~0x1 );
       drvmgr_translate_check(
         pDev->dev,
@@ -829,8 +829,8 @@ static int grcan_alloc_buffers( struct grcan_priv *pDev, int rx, int tx )
         }
       } else {
         /* User defined "cou-local" address. Translate
-				 * it into a CPU accessible address
-				 */
+         * it into a CPU accessible address
+         */
         pDev->_rx = (void *) (uintptr_t) adr;
       }
       /* Align RX buffer */
@@ -839,8 +839,8 @@ static int grcan_alloc_buffers( struct grcan_priv *pDev, int rx, int tx )
                                         ~( BUFFER_ALIGNMENT_NEEDS - 1 ) );
 
       /* Translate address into an hardware accessible
-			 * address
-			 */
+       * address
+       */
       drvmgr_translate_check(
         pDev->dev,
         CPUMEM_TO_DMA,
@@ -1049,8 +1049,8 @@ int grcan_start( void *d )
   }
 
   /* Clear semaphore state. This is to avoid effects from previous
-	 * bus-off/stop where semahpores where flushed() but the count remained.
-	 */
+   * bus-off/stop where semahpores where flushed() but the count remained.
+   */
   rtems_semaphore_obtain( pDev->rx_sem, RTEMS_NO_WAIT, 0 );
   rtems_semaphore_obtain( pDev->tx_sem, RTEMS_NO_WAIT, 0 );
   rtems_semaphore_obtain( pDev->txempty_sem, RTEMS_NO_WAIT, 0 );
@@ -1090,9 +1090,9 @@ int grcan_stop( void *d )
     DBGC( DBG_STATE, "STARTED->STOPPED\n" );
   } else {
     /*
-		 * started == STATE_[STOPPED|BUSOFF|AHBERR] so grcan_hw_stop()
-		 * might already been called from ISR.
-		 */
+     * started == STATE_[STOPPED|BUSOFF|AHBERR] so grcan_hw_stop()
+     * might already been called from ISR.
+     */
     DBGC( DBG_STATE, "[STOPPED|BUSOFF|AHBERR]->STOPPED\n" );
     do_sw_stop = 0;
   }
@@ -1136,9 +1136,9 @@ int grcan_flush( void *d )
   pDev->flushing = 0;
   if ( tmp ) {
     /* The wait has been aborted, probably due to
-		 * the device driver has been closed by another
-		 * thread.
-		 */
+     * the device driver has been closed by another
+     * thread.
+     */
     return -1;
   }
 
@@ -1173,8 +1173,8 @@ int grcan_set_abort( void *d, int abort )
 
   pDev->config.abort = abort;
   /* This Configuration parameter doesn't need HurriCANe reset
-	 * ==> no pDev->config_changed = 1;
-	 */
+   * ==> no pDev->config_changed = 1;
+   */
 
   return 0;
 }
@@ -1378,10 +1378,10 @@ static void grcan_interrupt( void *arg )
 
   if ( ( status & GRCAN_IRQ_ERRORS ) || ( canstat & GRCAN_STAT_ERRORS ) ) {
     /* Bus-off condition interrupt
-		 * The link is brought down by hardware, we wake all threads
-		 * that is blocked in read/write calls and stop futher calls
-		 * to read/write until user has called ioctl(fd,START,0).
-		 */
+     * The link is brought down by hardware, we wake all threads
+     * that is blocked in read/write calls and stop futher calls
+     * to read/write until user has called ioctl(fd,START,0).
+     */
     SPIN_LOCK( &pDev->devlock, irqflags );
     DBGC( DBG_STATE, "STARTED->BUSOFF|AHBERR\n" );
     pDev->stats.ints++;
@@ -1404,18 +1404,18 @@ static void grcan_interrupt( void *arg )
     grcan_hw_stop( pDev );      /* this mask all IRQ sources */
     pDev->regs->picr = 0x1ffff; /* clear all interrupts */
     /*
-		 * Prevent driver from affecting bus. Driver can be started
-		 * again with grcan_start().
-		 */
+     * Prevent driver from affecting bus. Driver can be started
+     * again with grcan_start().
+     */
     SPIN_UNLOCK( &pDev->devlock, irqflags );
 
     /* Release semaphores to wake blocked threads. */
     grcan_sw_stop( pDev );
 
     /*
-		 * NOTE: Another interrupt may be pending now so ISR could be
-		 * executed one more time aftert this (first) return.
-		 */
+     * NOTE: Another interrupt may be pending now so ISR could be
+     * executed one more time aftert this (first) return.
+     */
     return;
   }
 

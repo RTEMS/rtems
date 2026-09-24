@@ -579,16 +579,16 @@ _CORE_message_queue_Get_pending_message(
 
 #if defined( RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION )
 /**
-   * @brief Checks if notification is enabled.
-   *
-   * This function returns true if notification is enabled on this message
-   * queue and false otherwise.
-   *
-   * @param the_message_queue The message queue to check if the notification is enabled.
-   *
-   * @retval true Notification is enabled on this message queue.
-   * @retval false Notification is not enabled on this message queue.
-   */
+ * @brief Checks if notification is enabled.
+ *
+ * This function returns true if notification is enabled on this message
+ * queue and false otherwise.
+ *
+ * @param the_message_queue The message queue to check if the notification is enabled.
+ *
+ * @retval true Notification is enabled on this message queue.
+ * @retval false Notification is not enabled on this message queue.
+ */
 static inline bool _CORE_message_queue_Is_notify_enabled(
   CORE_message_queue_Control *the_message_queue
 )

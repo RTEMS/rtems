@@ -40,7 +40,7 @@
  *
  * @brief Regulator APIs
  *
- * The Regulator provides a set of APIs to manage input sources which 
+ * The Regulator provides a set of APIs to manage input sources which
  * produces bursts of message traffic.
  *
  * The regulator is designed to sit logically between two entities -- a
@@ -321,12 +321,12 @@ typedef struct _Regulator_Control *rtems_regulator_instance;
  * the Delivery thread dedicated to this regulator instance. It also
  * defines the period of the Delivery thread and the maximum number of
  * messages that may be delivered per period via invocation of the
- * delivery function. 
+ * delivery function.
  *
  * For each regulator instance, the following resources are allocated:
  *
  * - A memory area for the regulator control block using @a malloc().
- * - A RTEMS Classic API Message Queue is constructed with message 
+ * - A RTEMS Classic API Message Queue is constructed with message
  *   buffer memory allocated using @a malloc().  Each message consists
  *   of a pointer and a length.
  * - A RTEMS Classic API Partition.
@@ -355,7 +355,7 @@ rtems_status_code rtems_regulator_create(
  *
  * It is the responsibility of the user to ensure that any resources
  * such as sockets or open file descriptors used by the delivery
- * function are also deleted. It is likely safer to delete those 
+ * function are also deleted. It is likely safer to delete those
  * delivery resources after deleting the regulator instance rather than
  * before.
  *
@@ -483,9 +483,9 @@ rtems_status_code rtems_regulator_send(
  * @brief Obtain statistics for regulator instance
  *
  * This function is used by the application to obtain statistics
- * information about the regulator instance.  
+ * information about the regulator instance.
  *
- * If the @a obtained and @a released fields in the returned 
+ * If the @a obtained and @a released fields in the returned
  * @a statistics structure are equal, then there are no buffers
  * outstanding from this regulator instance.
  *

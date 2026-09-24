@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*  GR-RASTA-TMTC PCI Target driver.
- * 
+ *
  *  COPYRIGHT (c) 2008.
  *  Cobham Gaisler AB.
  *
@@ -66,7 +66,7 @@ extern "C" {
  * --12         TC Active High      (1=high,       0=low)
  * --11         Bit Lock Positive   (1=high,       0=low)
  * --10         RF Avail Positive   (1=high,       0=low)
- * -- 9 : 0     SpaceCraft ID 
+ * -- 9 : 0     SpaceCraft ID
  */
 
 #define GR_TMTC_GPIO_PWRX           ( 1 << 31 )

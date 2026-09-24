@@ -82,7 +82,7 @@ static inline int _POSIX_Priority_Get_maximum(
 /**
  * @brief Converts the POSIX API priority to the corresponding SuperCore
  * priority and validates it.
- * 
+ *
  * According to POSIX, numerically higher values represent higher priorities.
  * Thus, SuperCore has priorities run in the opposite sense of the POSIX API.
  *

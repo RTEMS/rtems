@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*  GR-RASTA-ADCDAC PCI Target driver.
- * 
+ *
  *  COPYRIGHT (c) 2008.
  *  Cobham Gaisler AB.
  *

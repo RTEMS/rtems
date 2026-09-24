@@ -1,16 +1,16 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*  GRLIB GRPCI PCI HOST driver.
- * 
+ *
  *  COPYRIGHT (c) 2008.
  *  Cobham Gaisler AB.
  *
  *  Configures the GRPCI core and initialize,
  *   - the PCI Library (pci.c)
  *   - the general part of the PCI Bus driver (pci_bus.c)
- *  
+ *
  *  System interrupt assigned to PCI interrupt (INTA#..INTD#) is by
- *  default taken from Plug and Play, but may be overridden by the 
+ *  default taken from Plug and Play, but may be overridden by the
  *  driver resources INTA#..INTD#.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -58,7 +58,7 @@
 /* If defined to 1 - byte twisting is enabled by default */
 #define DEFAULT_BT_ENABLED 0
 
-/* Interrupt assignment. Set to other value than 0xff in order to 
+/* Interrupt assignment. Set to other value than 0xff in order to
  * override defaults and plug&play information
  */
 #ifndef GRPCI_INTA_SYSIRQ
@@ -193,9 +193,9 @@ static int grpci_cfg_r32( pci_dev_t dev, int ofs, uint32_t *val )
     return PCISTS_OK;
   }
 
-  /* GRPCI can access "non-standard" devices on bus0 (on AD11.AD16), 
-	 * but we skip them.
-	 */
+  /* GRPCI can access "non-standard" devices on bus0 (on AD11.AD16),
+   * but we skip them.
+   */
   if ( dev == HOST_TGT ) {
     bus = devfn = 0;
   } else if ( bus == 0 ) {
@@ -277,9 +277,9 @@ static int grpci_cfg_w32( pci_dev_t dev, int ofs, uint32_t val )
     return PCISTS_MSTABRT;
   }
 
-  /* GRPCI can access "non-standard" devices on bus0 (on AD11.AD16), 
-	 * but we skip them.
-	 */
+  /* GRPCI can access "non-standard" devices on bus0 (on AD11.AD16),
+   * but we skip them.
+   */
   if ( dev == HOST_TGT ) {
     bus = devfn = 0;
   } else if ( bus == 0 ) {
@@ -383,41 +383,41 @@ static int grpci_translate( uint32_t *address, int type, int dir )
     /* I/O */
     if ( dir != 0 ) {
       /* The PCI bus can not access the CPU bus from I/O
-			 * because GRPCI core does not support I/O BARs
-			 */
+       * because GRPCI core does not support I/O BARs
+       */
       return -1;
     }
 
     /* We have got a PCI BAR address that the CPU want to access...
-		 * Check that it is within the PCI I/O window, I/O adresses
-		 * are mapped 1:1 with GRPCI driver... no translation needed.
-		 */
+     * Check that it is within the PCI I/O window, I/O adresses
+     * are mapped 1:1 with GRPCI driver... no translation needed.
+     */
     adr = *(uint32_t *) address;
     if ( adr < priv->pci_io || adr >= priv->pci_conf ) {
       return -1;
     }
   } else {
     /* MEMIO and MEM.
-		 * Memory space is mapped 1:1 so no translation is needed.
-		 * Check that address is within accessible windows.
-		 */
+     * Memory space is mapped 1:1 so no translation is needed.
+     * Check that address is within accessible windows.
+     */
     adr = *(uint32_t *) address;
     if ( dir == 0 ) {
       /* PCI BAR to AMBA-CPU address.. check that it is
-			 * located within GRPCI PCI Memory Window
-			 * adr = PCI address.
-			 */
+       * located within GRPCI PCI Memory Window
+       * adr = PCI address.
+       */
       if ( adr < priv->pci_area || adr >= priv->pci_area_end ) {
         return -1;
       }
     } else {
       /* We have a CPU address and want to get access to it
-			 * from PCI space, typically when doing DMA into CPU
-			 * RAM. The GRPCI core has two target BARs that PCI
-			 * masters can access, we check here that the address
-			 * is accessible from PCI.
-			 * adr = AMBA address.
-			 */
+       * from PCI space, typically when doing DMA into CPU
+       * RAM. The GRPCI core has two target BARs that PCI
+       * masters can access, we check here that the address
+       * is accessible from PCI.
+       * adr = AMBA address.
+       */
       if (
         adr < priv->bar1_pci_adr ||
         adr >= ( priv->bar1_pci_adr + priv->bar1_size )
@@ -524,9 +524,9 @@ static int grpci_hw_init( struct grpci_priv *priv )
   priv->regs->iomap = priv->pci_io & 0xffff0000;
 
   /* Setup Latency Timer and cache line size. Default cache line
-	 * size will result in poor performance (256 word fetches), 0xff
-	 * will set it according to the max size of the PCI FIFO.
-	 */
+   * size will result in poor performance (256 word fetches), 0xff
+   * will set it according to the max size of the PCI FIFO.
+   */
   grpci_cfg_w8( host, PCIR_CACHELNSZ, 0xff );
   grpci_cfg_w8( host, PCIR_LATTIMER, 0x40 );
 
@@ -536,15 +536,15 @@ static int grpci_hw_init( struct grpci_priv *priv )
   grpci_cfg_w32( host, PCIR_COMMAND, data );
 
   /* unmask all PCI interrupts at PCI Core, not all GRPCI cores support
-	 * this
-	 */
+   * this
+   */
   priv->regs->irq = 0xf0000;
 
   /* Successful */
   return 0;
 }
 
-/* Initializes the GRPCI core and driver, must be called before calling init_pci() 
+/* Initializes the GRPCI core and driver, must be called before calling init_pci()
  *
  * Return values
  *  0             Successful initalization
@@ -571,20 +571,20 @@ static int grpci_init( struct grpci_priv *priv )
   priv->regs = (struct grpci_regs *) (uintptr_t) apb->start;
   priv->bt_enabled = DEFAULT_BT_ENABLED;
 
-  /* Calculate the PCI windows 
-	 *  AMBA->PCI Window:                       AHB SLAVE AREA0
-	 *  AMBA->PCI I/O cycles Window:            AHB SLAVE AREA1 Lower half
-	 *  AMBA->PCI Configuration cycles Window:  AHB SLAVE AREA1 Upper half
-	 */
+  /* Calculate the PCI windows
+   *  AMBA->PCI Window:                       AHB SLAVE AREA0
+   *  AMBA->PCI I/O cycles Window:            AHB SLAVE AREA1 Lower half
+   *  AMBA->PCI Configuration cycles Window:  AHB SLAVE AREA1 Upper half
+   */
   priv->pci_area = ahb->start[ 0 ];
   priv->pci_area_end = ahb->start[ 0 ] + ahb->mask[ 0 ];
   priv->pci_io = ahb->start[ 1 ];
   priv->pci_conf = ahb->start[ 1 ] + ( ahb->mask[ 1 ] >> 1 );
   priv->pci_conf_end = ahb->start[ 1 ] + ahb->mask[ 1 ];
 
-  /* On systems where PCI I/O area and configuration area is apart of the "PCI Window" 
-	 * the PCI Window stops at the start of the PCI I/O area
-	 */
+  /* On systems where PCI I/O area and configuration area is apart of the "PCI Window"
+   * the PCI Window stops at the start of the PCI I/O area
+   */
   if (
     ( priv->pci_io > priv->pci_area ) &&
     ( priv->pci_io < ( priv->pci_area_end - 1 ) )
@@ -593,8 +593,8 @@ static int grpci_init( struct grpci_priv *priv )
   }
 
   /* Init PCI interrupt assignment table to all use the interrupt routed through
-	 * the GRPCI core.
-	 */
+   * the GRPCI core.
+   */
   strcpy( keyname, "INTX#" );
   for ( pin = 1; pin < 5; pin++ ) {
     if ( grpci_pci_irq_table[ pin - 1 ] == 0xff ) {
@@ -616,8 +616,8 @@ static int grpci_init( struct grpci_priv *priv )
   }
 
   /* Use GRPCI target BAR1 to map CPU RAM to PCI, this is to make it
-	 * possible for PCI peripherals to do DMA directly to CPU memory.
-	 */
+   * possible for PCI peripherals to do DMA directly to CPU memory.
+   */
   value = drvmgr_dev_key_get( priv->dev, "tgtbar1", DRVMGR_KT_INT );
   if ( value ) {
     priv->bar1_pci_adr = value->i;
@@ -655,7 +655,7 @@ static int grpci_init( struct grpci_priv *priv )
   return 0;
 }
 
-/* Called when a core is found with the AMBA device and vendor ID 
+/* Called when a core is found with the AMBA device and vendor ID
  * given in grpci_ids[]. IRQ, Console does not work here
  */
 int grpci_init1( struct drvmgr_dev *dev )

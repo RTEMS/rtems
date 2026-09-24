@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*  GR-RASTA-SPW-ROUTER PCI Target driver.
- * 
+ *
  *  COPYRIGHT (c) 2011.
  *  Cobham Gaisler AB.
  *
@@ -28,7 +28,7 @@
  *
  *  Configures the GR-RASTA-SPW-ROUTER interface PCI board.
  *  This driver provides a AMBA PnP bus by using the general part
- *  of the AMBA PnP bus driver (ambapp_bus.c). Based on the 
+ *  of the AMBA PnP bus driver (ambapp_bus.c). Based on the
  *  GR-RASTA-IO driver.
  */
 
@@ -246,8 +246,8 @@ void gr_rasta_spw_router_isr( void *arg )
   SPIN_UNLOCK( &priv->devlock, irqflags );
 
   /* ACK interrupt, this is because PCI is Level, so the IRQ Controller
-	 * still drives the IRQ
-	 */
+   * still drives the IRQ
+   */
   if ( tmp ) {
     drvmgr_interrupt_clear( priv->dev, 0 );
   }
@@ -268,8 +268,8 @@ static int gr_rasta_spw_router_hw_init( struct gr_rasta_spw_router_priv *priv )
   struct pci_dev_info    *devinfo = priv->devinfo;
 
   /* Select version of GR-RASTA-SPW-ROUTER board. Currently only one
-	 * version
-	 */
+   * version
+   */
   switch ( devinfo->rev ) {
     case 0:
       priv->version = &gr_rasta_spw_router_ver0;
@@ -422,7 +422,7 @@ static int gr_rasta_spw_router_hw_init2(
   return DRVMGR_OK;
 }
 
-/* Called when a PCI target is found with the PCI device and vendor ID 
+/* Called when a PCI target is found with the PCI device and vendor ID
  * given in gr_rasta_spw_router_ids[].
  */
 int gr_rasta_spw_router_init1( struct drvmgr_dev *dev )
@@ -483,18 +483,18 @@ int gr_rasta_spw_router_init1( struct drvmgr_dev *dev )
   }
 
   /* Initialize spin-lock for this PCI peripheral device. This is to
-	 * protect the Interrupt Controller Registers. The genirq layer is
-         * protecting its own internals and ISR dispatching.
-         */
+   * protect the Interrupt Controller Registers. The genirq layer is
+   * protecting its own internals and ISR dispatching.
+   */
   SPIN_INIT( &priv->devlock, priv->prefix );
 
   /* Let user override which PCI address the AHB masters of the
-	 * GR-RASTA-SPW board access when doing DMA to CPU RAM. The AHB masters
-	 * access the PCI Window of the AMBA bus, the MSB 4-bits of that address
-	 * is translated according this config option before the address
-	 * goes out on the PCI bus.
-	 * Only the 4 MSB bits have an effect;
-	 */
+   * GR-RASTA-SPW board access when doing DMA to CPU RAM. The AHB masters
+   * access the PCI Window of the AMBA bus, the MSB 4-bits of that address
+   * is translated according this config option before the address
+   * goes out on the PCI bus.
+   * Only the 4 MSB bits have an effect;
+   */
   value = drvmgr_dev_key_get( priv->dev, "ahbmst2pci", DRVMGR_KT_INT );
   if ( value ) {
     priv->ahbmst2pci_map = value->i;
@@ -537,14 +537,14 @@ int gr_rasta_spw_router_init2( struct drvmgr_dev *dev )
   drvmgr_interrupt_clear( dev, 0 );
 
   /* Enable System IRQ so that GR-RASTA-SPW-ROUTER PCI target interrupt
-	 * goes through.
-	 *
-	 * It is important to enable it in stage init2. If interrupts were
-	 * enabled in init1 this might hang the system when more than one
-	 * PCI board is connected, this is because PCI interrupts might
-	 * be shared and PCI board 2 have not initialized and
-	 * might therefore drive interrupt already when entering init1().
-	 */
+   * goes through.
+   *
+   * It is important to enable it in stage init2. If interrupts were
+   * enabled in init1 this might hang the system when more than one
+   * PCI board is connected, this is because PCI interrupts might
+   * be shared and PCI board 2 have not initialized and
+   * might therefore drive interrupt already when entering init1().
+   */
   drvmgr_interrupt_register(
     dev,
     0,

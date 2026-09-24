@@ -94,9 +94,9 @@ int timer_create(
   }
 
   /*
-  *  The data of the structure evp are checked in order to verify if they
-  *  are coherent.
-  */
+   *  The data of the structure evp are checked in order to verify if they
+   *  are coherent.
+   */
 
   if ( evp != NULL ) {
     /* The structure has data */

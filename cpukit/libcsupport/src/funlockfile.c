@@ -23,7 +23,7 @@
 #include <stdio.h>
 
 /**
- * This is a non-functional stub 
+ * This is a non-functional stub
  */
 void funlockfile( FILE *file )
 {

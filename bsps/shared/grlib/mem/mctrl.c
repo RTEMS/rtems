@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*  Memory Controller driver (FTMTRL, MCTRL)
- * 
+ *
  *  COPYRIGHT (c) 2008.
  *  Cobham Gaisler AB.
  *
@@ -186,8 +186,8 @@ static int mctrl_init1( struct drvmgr_dev *dev )
   }
 
   /* Init hardware registers right away, other devices may depend on it in init2(), also
-	 * the washing depend on it.
-	 */
+   * the washing depend on it.
+   */
   for ( i = 0; i < 8; i++ ) {
     if ( priv->configured & ( 1 << i ) ) {
       DBG( "Setting MCFG%d to 0x%08x\n", i + 1, priv->mcfg[ i ] );

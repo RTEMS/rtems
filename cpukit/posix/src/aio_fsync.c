@@ -11,10 +11,10 @@
 /*
  *  Copyright 2010, Alin Rus <alin.codejunkie@gmail.com>
  *  Copyright 2024, Alessandro Nardin <ale.daluch@gmail.com>
- * 
+ *
  *  COPYRIGHT (c) 1989-2011, 2024.
  *  On-Line Applications Research Corporation (OAR).
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:

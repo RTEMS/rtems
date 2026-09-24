@@ -53,10 +53,10 @@
 static T_time round_sbt( T_time time )
 {
   /*
-	 * One 1ns consists of 4.30 fractions of 1/2**32.  Round up close to
-	 * the middle.  This turns the conversion mapping of struct timespec to
-	 * sbintime_t and back into the identity function.
-	 */
+   * One 1ns consists of 4.30 fractions of 1/2**32.  Round up close to
+   * the middle.  This turns the conversion mapping of struct timespec to
+   * sbintime_t and back into the identity function.
+   */
   return time + 2;
 }
 #endif

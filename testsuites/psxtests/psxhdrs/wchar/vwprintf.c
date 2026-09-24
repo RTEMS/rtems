@@ -36,9 +36,9 @@
 
 #include <wchar.h>
 #include <stdarg.h>
-/* 
+/*
  Corresponds to ticket #3642, please remove the line
- above and this comment when fixed 
+ above and this comment when fixed
 */
 
 int test( char *fmt, ... );

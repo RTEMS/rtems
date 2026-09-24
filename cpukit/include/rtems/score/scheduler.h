@@ -412,35 +412,35 @@ extern const size_t _Scheduler_Count;
   #define SCHEDULER_ASSIGN_PROCESSOR_MANDATORY UINT32_C( 0x1 )
 
 /**
-   * @brief Scheduler assignment.
-   */
+ * @brief Scheduler assignment.
+ */
 typedef struct {
   /**
-     * @brief The scheduler for this processor.
-     */
+   * @brief The scheduler for this processor.
+   */
   const Scheduler_Control *scheduler;
 
   /**
-     * @brief The scheduler assignment attributes.
-     *
-     * Use @ref SCHEDULER_ASSIGN_DEFAULT to select default attributes.
-     *
-     * The presence of a processor can be
-     * - @ref SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL, or
-     * - @ref SCHEDULER_ASSIGN_PROCESSOR_MANDATORY.
-     */
+   * @brief The scheduler assignment attributes.
+   *
+   * Use @ref SCHEDULER_ASSIGN_DEFAULT to select default attributes.
+   *
+   * The presence of a processor can be
+   * - @ref SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL, or
+   * - @ref SCHEDULER_ASSIGN_PROCESSOR_MANDATORY.
+   */
   uint32_t attributes;
 } Scheduler_Assignment;
 
 /**
-   * @brief The scheduler assignments.
-   *
-   * The length of this array must be equal to the maximum processors.
-   *
-   * Application provided via <rtems/confdefs.h>.
-   *
-   * @see _Scheduler_Table and rtems_configuration_get_maximum_processors().
-   */
+ * @brief The scheduler assignments.
+ *
+ * The length of this array must be equal to the maximum processors.
+ *
+ * Application provided via <rtems/confdefs.h>.
+ *
+ * @see _Scheduler_Table and rtems_configuration_get_maximum_processors().
+ */
 extern const Scheduler_Assignment _Scheduler_Initial_assignments[];
 #endif
 
@@ -474,17 +474,17 @@ Priority_Control _Scheduler_default_Unmap_priority(
 
 #if defined( RTEMS_SMP )
 /**
-   * @brief Does nothing.
-   *
-   * This default implementation for the make and clean sticky operations
-   * should be used by uniprocessor schedulers if SMP support is enabled.
-   *
-   * @param scheduler is an unused parameter.
-   *
-   * @param the_thread is an unused parameter.
-   *
-   * @param node is an unused parameter.
-   */
+ * @brief Does nothing.
+ *
+ * This default implementation for the make and clean sticky operations
+ * should be used by uniprocessor schedulers if SMP support is enabled.
+ *
+ * @param scheduler is an unused parameter.
+ *
+ * @param the_thread is an unused parameter.
+ *
+ * @param node is an unused parameter.
+ */
 void _Scheduler_default_Sticky_do_nothing(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
@@ -492,16 +492,16 @@ void _Scheduler_default_Sticky_do_nothing(
 );
 
 /**
-   * @brief Does nothing.
-   *
-   * This default implementation for the thread pin or unpin operations should
-   * be used by uniprocessor schedulers if SMP support is enabled.
-   *
-   * @param scheduler This parameter is unused.
-   * @param the_thread This parameter is unused.
-   * @param node This parameter is unused.
-   * @param cpu This parameter is unused.
-   */
+ * @brief Does nothing.
+ *
+ * This default implementation for the thread pin or unpin operations should
+ * be used by uniprocessor schedulers if SMP support is enabled.
+ *
+ * @param scheduler This parameter is unused.
+ * @param the_thread This parameter is unused.
+ * @param node This parameter is unused.
+ * @param cpu This parameter is unused.
+ */
 void _Scheduler_default_Pin_or_unpin_do_nothing(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
@@ -510,17 +510,17 @@ void _Scheduler_default_Pin_or_unpin_do_nothing(
 );
 
 /**
-   * @brief Does nothing in a single processor system, otherwise a fatal error
-   * is issued.
-   *
-   * This default implementation for the thread pin or unpin operations should
-   * be used by SMP schedulers which do not support thread pinning.
-   *
-   * @param scheduler This parameter is unused.
-   * @param the_thread This parameter is unused.
-   * @param node This parameter is unused.
-   * @param cpu This parameter is unused.
-   */
+ * @brief Does nothing in a single processor system, otherwise a fatal error
+ * is issued.
+ *
+ * This default implementation for the thread pin or unpin operations should
+ * be used by SMP schedulers which do not support thread pinning.
+ *
+ * @param scheduler This parameter is unused.
+ * @param the_thread This parameter is unused.
+ * @param node This parameter is unused.
+ * @param cpu This parameter is unused.
+ */
 void _Scheduler_default_Pin_or_unpin_not_supported(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
@@ -645,22 +645,22 @@ void _Scheduler_default_Start_idle(
 );
 
 #if defined( RTEMS_SMP )
-/** 
-   * @brief Checks if the processor set of the scheduler is the subset of the affinity set.
-   *
-   * Default implementation of the set affinity scheduler operation.
-   *
-   * @param scheduler This parameter is unused.
-   * @param thread This parameter is unused.
-   * @param node This parameter is unused.
-   * @param affinity The new processor affinity set for the thread.
-   *
-    * @retval STATUS_SUCCESSFUL The affinity is a subset of the online
-    *   processors.
-    *
-    * @retval STATUS_INVALID_NUMBER The affinity is not a subset of the online
-    *   processors.
-   */
+/**
+ * @brief Checks if the processor set of the scheduler is the subset of the affinity set.
+ *
+ * Default implementation of the set affinity scheduler operation.
+ *
+ * @param scheduler This parameter is unused.
+ * @param thread This parameter is unused.
+ * @param node This parameter is unused.
+ * @param affinity The new processor affinity set for the thread.
+ *
+ * @retval STATUS_SUCCESSFUL The affinity is a subset of the online
+ *   processors.
+ *
+ * @retval STATUS_INVALID_NUMBER The affinity is not a subset of the online
+ *   processors.
+ */
 Status_Control _Scheduler_default_Set_affinity(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,

@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*  GR-701 PCI Target driver.
- * 
+ *
  *  COPYRIGHT (c) 2008.
  *  Cobham Gaisler AB.
  *
@@ -260,8 +260,8 @@ static int gr701_hw_init( struct gr701_priv *priv )
   }
 
   /* Setup Address translation for AMBA bus, assume that PCI BAR
-	 * are mapped 1:1 to CPU.
-	 */
+   * are mapped 1:1 to CPU.
+   */
 
   priv->amba_maps[ 0 ].size = 0x04000000;
   priv->amba_maps[ 0 ].local_adr = devinfo->resources[ 1 ].address;
@@ -325,7 +325,7 @@ static void gr701_hw_init2( struct gr701_priv *priv )
   pci_master_enable( priv->pcidev );
 }
 
-/* Called when a PCI target is found with the PCI device and vendor ID 
+/* Called when a PCI target is found with the PCI device and vendor ID
  * given in gr701_ids[].
  */
 int gr701_init1( struct drvmgr_dev *dev )
@@ -389,9 +389,9 @@ int gr701_init1( struct drvmgr_dev *dev )
   }
 
   /* Initialize spin-lock for this PCI perihperal device. This is to
-	 * protect the Interrupt Controller Registers. The genirq layer is
-         * protecting its own internals and ISR dispatching.
-         */
+   * protect the Interrupt Controller Registers. The genirq layer is
+   * protecting its own internals and ISR dispatching.
+   */
   SPIN_INIT( &priv->devlock, priv->prefix );
 
   priv->genirq = genirq_init( 16 );
@@ -424,7 +424,7 @@ int gr701_init1( struct drvmgr_dev *dev )
   return ambapp_bus_register( dev, &priv->config );
 }
 
-/* Called when a PCI target is found with the PCI device and vendor ID 
+/* Called when a PCI target is found with the PCI device and vendor ID
  * given in gr701_ids[].
  */
 int gr701_init2( struct drvmgr_dev *dev )
@@ -435,13 +435,13 @@ int gr701_init2( struct drvmgr_dev *dev )
   drvmgr_interrupt_clear( dev, 0 );
 
   /* Enable System IRQ so that GR-701 PCI target interrupt goes through.
-	 *
-	 * It is important to enable it in stage init2. If interrupts were
-	 * enabled in init1 this might hang the system when more than one PCI
-	 * board is connected, this is because PCI interrupts might be shared
-	 * and PCI target 2 have not initialized and might therefore drive
-	 * interrupt already when entering init1().
-	 */
+   *
+   * It is important to enable it in stage init2. If interrupts were
+   * enabled in init1 this might hang the system when more than one PCI
+   * board is connected, this is because PCI interrupts might be shared
+   * and PCI target 2 have not initialized and might therefore drive
+   * interrupt already when entering init1().
+   */
   drvmgr_interrupt_register( dev, 0, "gr701", gr701_interrupt, priv );
 
   gr701_hw_init2( priv );

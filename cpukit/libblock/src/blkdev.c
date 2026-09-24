@@ -191,9 +191,9 @@ rtems_device_driver rtems_blkdev_generic_ioctl(
     args->ioctl_return = dd->ioctl( dd, args->command, args->buffer );
   } else {
     /*
-         * It is not allowed to directly access the driver circumventing the
-         * cache.
-         */
+     * It is not allowed to directly access the driver circumventing the
+     * cache.
+     */
     args->ioctl_return = -1;
   }
 

@@ -68,7 +68,7 @@ extern int grspw_work_task_priority;
 /* 16-bit ISO-checksum (J.G. Fletcher, ISO 8473-1:1998). 2 byte */
 #define TXPKT_FLAG_DCRCT_ISO16 0x0800
 
-/* Control how many bytes the beginning of the Header 
+/* Control how many bytes the beginning of the Header
  * the CRC should not be calculated for */
 #define TXPKT_FLAG_NOCRC_MASK 0x0000000f
 #define TXPKT_FLAG_NOCRC_LEN0 0x00000000
@@ -177,8 +177,8 @@ typedef enum {
 /* Address Configuration */
 struct grspw_addr_config {
   /* Ignore address field and put all received packets to first
-	 * DMA channel.
-	 */
+   * DMA channel.
+   */
   int promiscuous;
 
   /* Default Node Address and Mask */
@@ -225,31 +225,31 @@ struct grspw_core_stats {
 #define LINKOPTS_DISABLE   0x0001
 #define LINKOPTS_START     0x0002
 #define LINKOPTS_AUTOSTART 0x0004
-#define LINKOPTS_DIS_ONERR \
-  0x0008                             /* Disable DMA transmitter on link error
-					 * Controls LE bit in DMACTRL register.
-					 */
+#define LINKOPTS_DIS_ONERR                                                    \
+  0x0008                             /* Disable DMA transmitter on link error \
+                                      * Controls LE bit in DMACTRL register.  \
+                                      */
 #define LINKOPTS_DIS_ON_CE 0x0020000 /* Disable Link on Credit error */
 #define LINKOPTS_DIS_ON_ER 0x0040000 /* Disable Link on Escape error */
 #define LINKOPTS_DIS_ON_DE 0x0080000 /* Disable Link on Disconnect error */
 #define LINKOPTS_DIS_ON_PE 0x0100000 /* Disable Link on Parity error */
-#define LINKOPTS_DIS_ON_WE \
-  0x0400000                          /* Disable Link on write synchonization
-					  * error (GRSPW1 only)
-					  */
+#define LINKOPTS_DIS_ON_WE                                                   \
+  0x0400000                          /* Disable Link on write synchonization \
+                                      * error (GRSPW1 only)                  \
+                                      */
 #define LINKOPTS_DIS_ON_EE 0x1000000 /* Disable Link on Early EOP/EEP error*/
 
 /*#define LINKOPTS_TICK_OUT_IRQ	0x0100*/ /* Enable Tick-out IRQ */
 #define LINKOPTS_EIRQ 0x0200             /* Enable Error Link IRQ */
 
 #define LINKOPTS_MASK 0x15e020f /* All above options */
-#define LINKOPTS_MASK_DIS_ON \
-  0x15e0000 /* All disable link on error options
-					  * On a certain error the link disable
-					  * bit will be written and the work
-					  * task will call dma_stop() for all
-					  * channels.
-					  */
+#define LINKOPTS_MASK_DIS_ON                       \
+  0x15e0000 /* All disable link on error options   \
+             * On a certain error the link disable \
+             * bit will be written and the work    \
+             * task will call dma_stop() for all   \
+             * channels.                           \
+             */
 
 #define LINKSTS_CE   0x002 /* Credit error */
 #define LINKSTS_ER   0x004 /* Escape error */
@@ -297,16 +297,16 @@ struct grspw_core_stats {
 #define DMAFLAG_MASK \
   ( DMAFLAG_NO_SPILL | DMAFLAG_STRIP_ADR | DMAFLAG_STRIP_PID )
 /* grspw_dma_config.flags misc options (not shifted internally) */
-#define DMAFLAG2_TXIE \
-  0x00100000 /* See HW doc DMA-CTRL TI bit. 
-					 * Used to enable TX DMA interrupt
-					 * when tx_irq_en_cnt=0.
-					 */
-#define DMAFLAG2_RXIE \
-  0x00200000 /* See HW doc DMA-CTRL RI bit.
-					 * Used to enable RX DMA interrupt
-					 * when rx_irq_en_cnt=0.
-					 */
+#define DMAFLAG2_TXIE                           \
+  0x00100000 /* See HW doc DMA-CTRL TI bit.     \
+              * Used to enable TX DMA interrupt \
+              * when tx_irq_en_cnt=0.           \
+              */
+#define DMAFLAG2_RXIE                           \
+  0x00200000 /* See HW doc DMA-CTRL RI bit.     \
+              * Used to enable RX DMA interrupt \
+              * when rx_irq_en_cnt=0.           \
+              */
 /* Defines how the ISR will disable RX/TX DMA interrupt source when a DMA RX/TX
  * interrupt has happended. DMA Error Interrupt always disables both RX/TX DMA
  * interrupt. By default both RX/TX IRQs are disabled when either a RX, TX or
@@ -342,8 +342,8 @@ struct grspw_dma_stats {
   int rx_err_endpkt; /* Number of Received packets with bad ending */
 
   /* Diagnostics to help developers sizing their number buffers to avoid
-	 * out-of-buffers or other phenomenons.
-	 */
+   * out-of-buffers or other phenomenons.
+   */
   int send_cnt_min;     /* Minimum number of packets in TX SEND Q */
   int send_cnt_max;     /* Maximum number of packets in TX SEND Q */
   int tx_sched_cnt_min; /* Minimum number of packets in TX SCHED Q */
@@ -414,9 +414,9 @@ extern void grspw_initialize_user(
   /* Callback every time a GRSPW device is found. Args: DeviceIndex */
   void *( *devfound )(int),
   /* Callback every time a GRSPW device is removed. Args:
-	 * int   = DeviceIndex
-	 * void* = Return Value from devfound()
-	 */
+   * int   = DeviceIndex
+   * void* = Return Value from devfound()
+   */
   void ( *devremove )( int, void * )
 );
 
@@ -449,7 +449,7 @@ extern rtems_status_code grspw_work_free( rtems_id msgQ, int freeMsgQ );
  * This affects messages to:
  *  - DMA AHB error interrupt handling (mandatory)
  *  - Link status interrupt handling (optional)
- *  - RX DMA, defaults to common msgQ (configured per DMA channel) 
+ *  - RX DMA, defaults to common msgQ (configured per DMA channel)
  */
 extern void grspw_work_cfg( void *d, struct grspw_work_config *wc );
 
@@ -551,7 +551,7 @@ struct spwpkt_ic_config {
  * rxack   - Interrupt-Ack-Code Recevie register of the GRSPW core read by ISR
  *           (only defined if AQ bit enabled through grspw_ic_ctrl())
  * intto   - Interrupt Tick-out Recevie register of the GRSPW core read by ISR
- *           (only defined if TQ bit enabled through grspw_ic_ctrl()) 
+ *           (only defined if TQ bit enabled through grspw_ic_ctrl())
  */
 typedef void ( *spwpkt_ic_isr_t )(
   void        *data,
@@ -721,7 +721,7 @@ extern int grspw_dma_tx_wait(
   int   timeout
 );
 
-/* Get received RX packet buffers that has previously been scheduled for 
+/* Get received RX packet buffers that has previously been scheduled for
  * reception with grspw_dma_rx_prepare().
  *
  * 1. Move Scheduled packets to RECV List (SCHED->RECV)
@@ -786,7 +786,7 @@ extern void grspw_dma_rx_count(
   int  *hw
 );
 
-/* Block until recv_cnt or more packets are Queued in RECV Q, op (AND or OR), 
+/* Block until recv_cnt or more packets are Queued in RECV Q, op (AND or OR),
  * ready_cnt or fewer packet buffers are available in the "READY and Scheduled" Q,
  * condition is met.
  * If a link error occurs and the Stop on Link error is defined, this function

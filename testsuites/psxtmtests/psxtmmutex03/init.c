@@ -97,10 +97,10 @@ void benchmark_mutex_trylock_not_available( void )
   benchmark_timer_initialize();
   status = pthread_mutex_trylock( &MutexId );
   /*
-     * it has to return a negative value
-     * because it try to lock a not available mutex
-     * so the assert call is make with status instead !status
-     */
+   * it has to return a negative value
+   * because it try to lock a not available mutex
+   * so the assert call is make with status instead !status
+   */
   end_time = benchmark_timer_read();
   rtems_test_assert( status );
 

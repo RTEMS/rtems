@@ -143,8 +143,8 @@ void rtems_monitor_task_canonical(
   canonical_task->priority = _Thread_Get_unmapped_priority( rtems_thread );
   canonical_task->events = api->Event.pending_events;
   /*
-     * FIXME: make this optionally cpu_time_executed
-     */
+   * FIXME: make this optionally cpu_time_executed
+   */
 #if 0
     canonical_task->ticks = rtems_thread->cpu_time_executed;
 #else

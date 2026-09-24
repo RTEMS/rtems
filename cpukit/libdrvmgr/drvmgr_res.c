@@ -61,8 +61,8 @@ int drvmgr_keys_get( struct drvmgr_dev *dev, struct drvmgr_key **keys )
     while ( res->drv_id ) {
       if ( res->drv_id == drv_id ) {
         /* Found resource matching driver, now check
-				 * that this resource is for this device.
-				 */
+         * that this resource is for this device.
+         */
         if ( dev->minor_bus == res->minor_bus ) {
           /* Matching driver and core number */
           if ( keys ) {

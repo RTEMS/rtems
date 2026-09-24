@@ -23,18 +23,18 @@
  *  Changed by:   Sergei Organov <osv@javad.ru> (OSV)
  *                Arnout Vandecappelle <arnout@mind.be> (AV)
  *                Sebastien Bourdeauducq <sebastien@milkymist.org> (MM)
- *                
+ *
  *
  *  Changes:
  *
  *    2010-12-02        Sebastien Bourdeauducq <sebastien@milkymist.org>
  *
  *      * Support spaces in filenames
- * 
+ *
  *    2010-04-29        Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- * 
+ *
  *      * Added USER/PASS authentication.
- * 
+ *
  *    2001-01-31        Sergei Organov <osv@javad.ru>
  *
  *      * Hacks with current dir and root dir removed in favor of new libio

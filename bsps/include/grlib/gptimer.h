@@ -35,7 +35,7 @@
 extern "C" {
 #endif
 
-/* The GPTIMER_INFO_AVAIL define set from the BSP bsp.h configures if the 
+/* The GPTIMER_INFO_AVAIL define set from the BSP bsp.h configures if the
  * Driver manager info interface is built.
  */
 

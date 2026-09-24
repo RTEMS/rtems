@@ -96,10 +96,10 @@ static bool _POSIX_signals_Clear_signals_helper(
         );
         _POSIX_signals_Clear_process_signals( signo );
         /*
-          *  It may be impossible to get here with an empty chain
-          *  BUT until that is proven we need to be defensive and
-          *  protect against it.
-          */
+         *  It may be impossible to get here with an empty chain
+         *  BUT until that is proven we need to be defensive and
+         *  protect against it.
+         */
         if ( psiginfo ) {
           *info = psiginfo->Info;
           _Chain_Append_unprotected(

@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*  GRLIB GRPCI2 PCI HOST driver.
- * 
+ *
  *  COPYRIGHT (c) 2011
  *  Cobham Gaisler AB.
  *
@@ -49,7 +49,7 @@ extern void grpci2_register_drv( void );
  * Name="INTC#", Type=INT, System Interrupt number that PCI INTC is connected to
  * Name="INTD#", Type=INT, System Interrupt number that PCI INTD is connected to
  *
- * Name="IRQmask", Type=INT, 
+ * Name="IRQmask", Type=INT,
  *
  * PCI Bytetwisting (endianess)
  * ============================

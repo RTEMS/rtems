@@ -1,16 +1,16 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*  GRLIB PCIF PCI HOST driver.
- * 
+ *
  *  COPYRIGHT (c) 2008.
  *  Cobham Gaisler AB.
  *
  *  Configures the PCIF core and initialize,
  *   - the PCI Library (pci.c)
  *   - the general part of the PCI Bus driver (pci_bus.c)
- *  
+ *
  *  System interrupt assigned to PCI interrupt (INTA#..INTD#) is by
- *  default taken from Plug and Play, but may be overridden by the 
+ *  default taken from Plug and Play, but may be overridden by the
  *  driver resources INTA#..INTD#.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,7 +53,7 @@
 /* Configuration options */
 #define SYSTEM_MAINMEM_START 0x40000000
 
-/* Interrupt assignment. Set to other value than 0xff in order to 
+/* Interrupt assignment. Set to other value than 0xff in order to
  * override defaults and plug&play information
  */
 #ifndef PCIF_INTA_SYSIRQ
@@ -183,9 +183,9 @@ static int pcif_cfg_r32( pci_dev_t dev, int ofs, uint32_t *val )
     return PCISTS_OK;
   }
 
-  /* PCIF can access "non-standard" devices on bus0 (on AD11.AD16), 
-	 * but we skip them.
-	 */
+  /* PCIF can access "non-standard" devices on bus0 (on AD11.AD16),
+   * but we skip them.
+   */
   if ( dev == HOST_TGT ) {
     bus = devfn = 0;
   } else if ( bus == 0 ) {
@@ -262,9 +262,9 @@ static int pcif_cfg_w32( pci_dev_t dev, int ofs, uint32_t val )
     return PCISTS_MSTABRT;
   }
 
-  /* PCIF can access "non-standard" devices on bus0 (on AD11.AD16), 
-	 * but we skip them.
-	 */
+  /* PCIF can access "non-standard" devices on bus0 (on AD11.AD16),
+   * but we skip them.
+   */
   if ( dev == HOST_TGT ) {
     bus = devfn = 0;
   } else if ( bus == 0 ) {
@@ -417,8 +417,8 @@ static int pcif_hw_init( struct pcif_priv *priv )
   }
 
   /* and map system RAM at pci address SYSTEM_MAINMEM_START. This way
-	 * PCI targets can do DMA directly into CPU main memory.
-	 */
+   * PCI targets can do DMA directly into CPU main memory.
+   */
   regs->bars[ 0 ] = SYSTEM_MAINMEM_START;
   regs->bars[ 1 ] = 0;
   regs->bars[ 2 ] = 0;
@@ -445,7 +445,7 @@ static int pcif_hw_init( struct pcif_priv *priv )
   return 0;
 }
 
-/* Initializes the PCIF core and driver, must be called before calling init_pci() 
+/* Initializes the PCIF core and driver, must be called before calling init_pci()
  *
  * Return values
  *  0             Successful initalization
@@ -471,20 +471,20 @@ static int pcif_init( struct pcif_priv *priv )
   priv->irq = apb->common.irq;
   priv->regs = (struct pcif_regs *) (uintptr_t) apb->start;
 
-  /* Calculate the PCI windows 
-	 *  AMBA->PCI Window:                       AHB SLAVE AREA0
-	 *  AMBA->PCI I/O cycles Window:            AHB SLAVE AREA1 Lower half
-	 *  AMBA->PCI Configuration cycles Window:  AHB SLAVE AREA1 Upper half
-	 */
+  /* Calculate the PCI windows
+   *  AMBA->PCI Window:                       AHB SLAVE AREA0
+   *  AMBA->PCI I/O cycles Window:            AHB SLAVE AREA1 Lower half
+   *  AMBA->PCI Configuration cycles Window:  AHB SLAVE AREA1 Upper half
+   */
   priv->pci_area = ahb->start[ 0 ];
   priv->pci_area_end = ahb->start[ 0 ] + ahb->mask[ 0 ];
   priv->pci_io = ahb->start[ 1 ];
   priv->pci_conf = ahb->start[ 1 ] + ( ahb->mask[ 1 ] >> 1 );
   priv->pci_conf_end = ahb->start[ 1 ] + ahb->mask[ 1 ];
 
-  /* On systems where PCI I/O area and configuration area is apart of the "PCI Window" 
-	 * the PCI Window stops at the start of the PCI I/O area
-	 */
+  /* On systems where PCI I/O area and configuration area is apart of the "PCI Window"
+   * the PCI Window stops at the start of the PCI I/O area
+   */
   if (
     ( priv->pci_io > priv->pci_area ) &&
     ( priv->pci_io < ( priv->pci_area_end - 1 ) )
@@ -493,8 +493,8 @@ static int pcif_init( struct pcif_priv *priv )
   }
 
   /* Init PCI interrupt assignment table to all use the interrupt routed through
-	 * the PCIF core.
-	 */
+   * the PCIF core.
+   */
   strcpy( keyname, "INTX#" );
   for ( pin = 1; pin < 5; pin++ ) {
     if ( pcif_pci_irq_table[ pin - 1 ] == 0xff ) {
@@ -545,7 +545,7 @@ static int pcif_init( struct pcif_priv *priv )
   return 0;
 }
 
-/* Called when a core is found with the AMBA device and vendor ID 
+/* Called when a core is found with the AMBA device and vendor ID
  * given in pcif_ids[].
  */
 int pcif_init1( struct drvmgr_dev *dev )
@@ -613,20 +613,20 @@ int pcif_init3( struct drvmgr_dev *dev )
 {
   struct pcif_priv *priv = dev->priv;
 
-  /* Unmask all interrupts, on some sytems this 
-	 * might be problematic because all PCI IRQs are
-	 * not connected on the PCB or used for something
-	 * else. The irqMask driver resource can be used to 
-	 * control which PCI IRQs are used to generate the
-	 * PCI system IRQ, example:
-	 *
-	 * 0xf - enable all  (DEFAULT)
-	 * 0x8 - enable one PCI irq
-	 *
-	 * Before unmasking PCI IRQ, all PCI boards must
-	 * have been initialized and IRQ turned off to avoid
-	 * system hang.
-	 */
+  /* Unmask all interrupts, on some sytems this
+   * might be problematic because all PCI IRQs are
+   * not connected on the PCB or used for something
+   * else. The irqMask driver resource can be used to
+   * control which PCI IRQs are used to generate the
+   * PCI system IRQ, example:
+   *
+   * 0xf - enable all  (DEFAULT)
+   * 0x8 - enable one PCI irq
+   *
+   * Before unmasking PCI IRQ, all PCI boards must
+   * have been initialized and IRQ turned off to avoid
+   * system hang.
+   */
 
   priv->regs->intr = priv->irq_mask;
 

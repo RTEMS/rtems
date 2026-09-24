@@ -53,7 +53,7 @@ void ahbstat_isr( void *arg );
  * status             AHBSTAT status register at IRQ
  * failing_address    AHBSTAT Failing address register at IRQ
  *
- * * User return 
+ * * User return
  *  0: print error onto terminal with printk and reenable AHBSTAT
  *  1: just re-enable AHBSTAT
  *  2: just print error
@@ -156,9 +156,9 @@ static int ahbstat_init2( struct drvmgr_dev *dev )
   strncpy( &priv->devname[ 0 ], "ahbstat0", DEVNAME_LEN );
   priv->devname[ 7 ] += priv->minor;
   /*
-	 * Initialize spinlock for AHBSTAT Device. It is used to protect user
-	 * API calls involivng priv structure from updates in ISR.
-	 */
+   * Initialize spinlock for AHBSTAT Device. It is used to protect user
+   * API calls involivng priv structure from updates in ISR.
+   */
   SPIN_INIT( &priv->devlock, priv->devname );
 
   /* Initialize hardware */
@@ -194,13 +194,13 @@ void ahbstat_isr( void *arg )
   SPIN_UNLOCK( &priv->devlock, lock_context );
 
   /* Let user handle error, default to print the error and reenable HW
-	 *
-	 * User return 
-	 *  0: print error and reenable AHBSTAT
-	 *  1: just reenable AHBSTAT
-	 *  2: just print error
-	 *  3: do nothing
-	 */
+   *
+   * User return
+   *  0: print error and reenable AHBSTAT
+   *  1: just reenable AHBSTAT
+   *  2: just print error
+   *  3: do nothing
+   */
   rc = 0;
   if ( ahbstat_error != NULL ) {
     rc = ahbstat_error( priv->minor, priv->regs, status, fadr );

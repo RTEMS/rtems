@@ -427,9 +427,9 @@ static void region_error_tests( void )
   puts( "TA1 - rtems_region_return_segment - RTEMS_INVALID_ADDRESS" );
 
   /*
- *  The following generate internal heap errors.  Thus this code
- *  is subject to change if the heap code changes.
- */
+   *  The following generate internal heap errors.  Thus this code
+   *  is subject to change if the heap code changes.
+   */
 
   status = rtems_region_extend( 100, Region_good_area, 128 );
   fatal_directive_status(

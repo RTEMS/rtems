@@ -1,8 +1,8 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-/* General Shared Interrupt handling function interface 
+/* General Shared Interrupt handling function interface
  *
- * The functions does not manipulate the IRQ controller or the 
+ * The functions does not manipulate the IRQ controller or the
  * interrupt level of the CPU. It simply helps the caller with
  * managing shared interrupts where multiple interrupt routines
  * share on interrupt vector/number.
@@ -53,15 +53,15 @@ struct genirq_stats {
  */
 extern genirq_t genirq_init( int number_of_irqs );
 
-/* Free the dynamically allocated memory that the genirq interface has 
+/* Free the dynamically allocated memory that the genirq interface has
  * allocated. Also the handlers will be freed.
  *
  * Returns zero on success, otherwise failure.
  */
 extern void genirq_destroy( genirq_t d );
 
-/* Check IRQ number validity 
- * 
+/* Check IRQ number validity
+ *
  * Returns zero for valid IRQ numbers, -1 of invalid IRQ numbers.
  */
 extern int genirq_check( genirq_t d, int irq );
@@ -112,7 +112,7 @@ extern void *genirq_unregister(
   void          *arg
 );
 
-/* Enables IRQ only for this isr[arg] combination. Records if this 
+/* Enables IRQ only for this isr[arg] combination. Records if this
  * is the first interrupt enable, only then must interrupts be enabled
  * on the interrupt controller.
  *
@@ -126,7 +126,7 @@ extern void *genirq_unregister(
  */
 extern int genirq_enable( genirq_t d, int irq, genirq_handler isr, void *arg );
 
-/* Disables IRQ only for this isr[arg] combination. Records if this 
+/* Disables IRQ only for this isr[arg] combination. Records if this
  * is the only interrupt handler that is enabled on this IRQ, only then
  * must interrupts be disabled on the interrupt controller.
  *
@@ -145,7 +145,7 @@ extern int genirq_disable(
   void          *arg
 );
 
-/* Must be called by user when an IRQ has fired, the argument 'irq' 
+/* Must be called by user when an IRQ has fired, the argument 'irq'
  * is the IRQ number of the IRQ which was fired.
  *
  * NOTE: internal list structures are accessed and needs to be protected by

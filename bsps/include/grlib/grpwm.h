@@ -131,8 +131,8 @@ struct grpwm_ioctl_update_chan {
   unsigned int  compare; /* Compare register content */
   unsigned int  dbcomp;  /* Dead band register content */
   unsigned char fix;     /* Bit-mask that select output on one or two PWM
-					 * output pins. Depends on PAIR config value.
-					 */
+                          * output pins. Depends on PAIR config value.
+                          */
 };
 struct grpwm_ioctl_update {
   unsigned char                  chanmask;      /* Bit Mask select channels */

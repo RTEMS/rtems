@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- *  Header file for RTEMS CAN_MUX driver 
+ *  Header file for RTEMS CAN_MUX driver
  *
  *  COPYRIGHT (c) 2008.
  *  Cobham Gaisler AB.

@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*  GR-TMTC-1553 PCI Target driver.
- * 
+ *
  *  COPYRIGHT (c) 2008.
  *  Cobham Gaisler AB.
  *
@@ -299,7 +299,7 @@ static int gr_tmtc_1553_hw_init( struct gr_tmtc_1553_priv *priv )
   return 0;
 }
 
-/* Called when a PCI target is found with the PCI device and vendor ID 
+/* Called when a PCI target is found with the PCI device and vendor ID
  * given in gr_tmtc_1553_ids[].
  */
 int gr_tmtc_1553_init1( struct drvmgr_dev *dev )
@@ -312,11 +312,11 @@ int gr_tmtc_1553_init1( struct drvmgr_dev *dev )
   int                       sc;
 
   /* PCI device does not have the IRQ line register, when PCI autoconf configures it the configuration
-	 * is forgotten. We take the IRQ number from the PCI Host device (AMBA device), this works as long
-	 * as PCI-IRQs are ored together on the bus.
-	 *
-	 * Note that this only works on LEON.
-	 */
+   * is forgotten. We take the IRQ number from the PCI Host device (AMBA device), this works as long
+   * as PCI-IRQs are ored together on the bus.
+   *
+   * Note that this only works on LEON.
+   */
   ( (struct pci_dev_info *) dev->businfo )->irq =
     ( (struct amba_dev_info *) dev->parent->dev->businfo )->info.irq;
 
@@ -367,9 +367,9 @@ int gr_tmtc_1553_init1( struct drvmgr_dev *dev )
   }
 
   /* Initialize spin-lock for this PCI peripheral device. This is to
-	 * protect the Interrupt Controller Registers. The genirq layer is
-         * protecting its own internals and ISR dispatching.
-         */
+   * protect the Interrupt Controller Registers. The genirq layer is
+   * protecting its own internals and ISR dispatching.
+   */
   SPIN_INIT( &priv->devlock, priv->prefix );
 
   priv->genirq = genirq_init( 16 );
@@ -393,8 +393,8 @@ int gr_tmtc_1553_init1( struct drvmgr_dev *dev )
   priv->config.ops = &ambapp_tmtc_1553_ops;
   priv->config.maps_down = &priv->bus_maps_down[ 0 ];
   /* This PCI device has only target interface so DMA is not supported,
-	 * which means that translation from AMBA->PCI should fail if attempted.
-	 */
+   * which means that translation from AMBA->PCI should fail if attempted.
+   */
   priv->config.maps_up = DRVMGR_TRANSLATE_NO_BRIDGE;
   if ( priv->dev->minor_drv < resources_cnt ) {
     priv->config.resources = gr_tmtc_1553_resources[ priv->dev->minor_drv ];
@@ -414,12 +414,12 @@ int gr_tmtc_1553_init2( struct drvmgr_dev *dev )
   drvmgr_interrupt_clear( dev, 0 );
 
   /* Enable System IRQ so that GR-TMTC-1553 PCI target interrupt goes through.
-	 *
-	 * It is important to enable it in stage init2. If interrupts were enabled in init1
-	 * this might hang the system when more than one PCI target is connected, this is
-	 * because PCI interrupts might be shared and PCI target 2 have not initialized and
-	 * might therefore drive interrupt already when entering init1().
-	 */
+   *
+   * It is important to enable it in stage init2. If interrupts were enabled in init1
+   * this might hang the system when more than one PCI target is connected, this is
+   * because PCI interrupts might be shared and PCI target 2 have not initialized and
+   * might therefore drive interrupt already when entering init1().
+   */
   drvmgr_interrupt_register(
     dev,
     0,

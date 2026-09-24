@@ -46,7 +46,7 @@
  * @ingroup RTEMSImplPOSIX
  *
  * @brief Internal Information about POSIX Signals
- * 
+ *
  */
 /**@{**/
 

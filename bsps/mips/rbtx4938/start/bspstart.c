@@ -2,7 +2,7 @@
 
 /**
  *  @file
- *  
+ *
  *  This routine starts the application.  It includes application,
  *  board, and monitor specific initialization and configuration.
  *  The generic CPU dependent initialization has been performed

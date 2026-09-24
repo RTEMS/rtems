@@ -178,13 +178,13 @@ int ambapp_leon2_init1( struct drvmgr_dev *dev )
   value = drvmgr_dev_key_get( dev, "busFreq", DRVMGR_KT_INT );
   if ( value ) {
     /* Set frequency of AMBA bus if specified by user. The frequency
-		 * must be for AHB bus which IOAREA matches (AHB bus 0).
-		 */
+     * must be for AHB bus which IOAREA matches (AHB bus 0).
+     */
     freq_hz = value->i;
   } else {
     /* Get Bus/LEON2 Frequency from timer prescaler,
-		 * the hardcoded address is used to get to timer
-		 */
+     * the hardcoded address is used to get to timer
+     */
     regs = (LEON_Register_Map *) 0x80000000;
     freq_hz = ( regs->Scaler_Reload + 1 ) * 1000 * 1000;
   }

@@ -1,8 +1,8 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Header file for RTEMS GRSLINK SLINK master driver 
- * 
+ * Header file for RTEMS GRSLINK SLINK master driver
+ *
  * COPYRIGHT (c) 2009.
  * Cobham Gaisler AB.
  *
@@ -50,7 +50,7 @@ extern "C" {
 #define IRQ_CNTRL_REG         0x80000200
 #define IRQ_CNTRL_MASK_OFFSET 0x40
 
-/* 
+/*
  * Structure returned by SLINK_statistics if SLINK_COLLECT_STATISTCS has
  * been defined
  */

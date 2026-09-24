@@ -53,9 +53,9 @@
 
 #if defined( RTEMS_NEWLIB ) && !defined( HAVE_GETTIMEOFDAY )
 
-/** 
+/**
  *  SVR4 and BSD4.3 extension required by Newlib
- * 
+ *
  *  @note The solaris gettimeofday does not have a second parameter.
  */
 int gettimeofday(

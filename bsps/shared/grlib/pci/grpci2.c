@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*  GRLIB GRPCI2 PCI HOST driver.
- * 
+ *
  *  COPYRIGHT (c) 2011
  *  Cobham Gaisler AB.
  *
@@ -30,9 +30,9 @@
 /* Configures the GRPCI2 core and initialize,
  *  - the PCI Library (pci.c)
  *  - the general part of the PCI Bus driver (pci_bus.c)
- *  
+ *
  * System interrupt assigned to PCI interrupt (INTA#..INTD#) is by
- * default taken from Plug and Play, but may be overridden by the 
+ * default taken from Plug and Play, but may be overridden by the
  * driver resources INTA#..INTD#. GRPCI2 handles differently depending
  * on the design (4 different ways).
  *
@@ -70,7 +70,7 @@
 /* If defined to 64 - Latency timer is 64 by default */
 #define DEFAULT_LATENCY_TIMER 64
 
-/* Interrupt assignment. Set to other value than 0xff in order to 
+/* Interrupt assignment. Set to other value than 0xff in order to
  * override defaults and plug&play information
  */
 #ifndef GRPCI2_INTA_SYSIRQ
@@ -315,9 +315,9 @@ static int grpci2_cfg_r32( pci_dev_t dev, int ofs, uint32_t *val )
     goto out;
   }
 
-  /* GRPCI2 can access "non-standard" devices on bus0 (on AD11.AD16), 
-	 * we skip them.
-	 */
+  /* GRPCI2 can access "non-standard" devices on bus0 (on AD11.AD16),
+   * we skip them.
+   */
   if ( dev == HOST_TGT ) {
     bus = devfn = 0;
   } else if ( bus == 0 ) {
@@ -339,8 +339,8 @@ static int grpci2_cfg_r32( pci_dev_t dev, int ofs, uint32_t *val )
   tmp = *pci_conf;
 
   /* Wait until GRPCI2 signals that CFG access is done, it should be
-	 * done instantaneously unless a DMA operation is ongoing...
-	 */
+   * done instantaneously unless a DMA operation is ongoing...
+   */
   while ( ( priv->regs->sts_cap & STS_CFGERRVALID ) == 0 );
 
   if ( priv->regs->sts_cap & STS_CFGERR ) {
@@ -416,9 +416,9 @@ static int grpci2_cfg_w32( pci_dev_t dev, int ofs, uint32_t val )
 
   value = CPU_swap_u32( val );
 
-  /* GRPCI2 can access "non-standard" devices on bus0 (on AD11.AD16), 
-	 * we skip them.
-	 */
+  /* GRPCI2 can access "non-standard" devices on bus0 (on AD11.AD16),
+   * we skip them.
+   */
   if ( dev == HOST_TGT ) {
     bus = devfn = 0;
   } else if ( bus == 0 ) {
@@ -440,8 +440,8 @@ static int grpci2_cfg_w32( pci_dev_t dev, int ofs, uint32_t val )
   *pci_conf = value;
 
   /* Wait until GRPCI2 signals that CFG access is done, it should be
-	 * done instantaneously unless a DMA operation is ongoing...
-	 */
+   * done instantaneously unless a DMA operation is ongoing...
+   */
   while ( ( priv->regs->sts_cap & STS_CFGERRVALID ) == 0 );
 
   if ( priv->regs->sts_cap & STS_CFGERR ) {
@@ -534,15 +534,15 @@ static int grpci2_translate( uint32_t *address, int type, int dir )
     /* I/O */
     if ( dir != 0 ) {
       /* The PCI bus can not access the CPU bus from I/O
-			 * because GRPCI2 core does not support I/O BARs
-			 */
+       * because GRPCI2 core does not support I/O BARs
+       */
       return -1;
     }
 
     /* We have got a PCI IO BAR address that the CPU want to access.
-		 * Check that it is within the PCI I/O window, I/O adresses
-		 * are NOT mapped 1:1 with GRPCI2 driver... translation needed.
-		 */
+     * Check that it is within the PCI I/O window, I/O adresses
+     * are NOT mapped 1:1 with GRPCI2 driver... translation needed.
+     */
     adr = *(uint32_t *) address;
     if ( adr < 0x100 || adr > 0x10000 ) {
       return -1;
@@ -550,33 +550,33 @@ static int grpci2_translate( uint32_t *address, int type, int dir )
     *address = adr + priv->pci_io;
   } else {
     /* MEMIO and MEM.
-		 * Memory space is mapped 1:1 so no translation is needed.
-		 * Check that address is within accessible windows.
-		 */
+     * Memory space is mapped 1:1 so no translation is needed.
+     * Check that address is within accessible windows.
+     */
     adr = *(uint32_t *) address;
     if ( dir == 0 ) {
       /* PCI BAR to AMBA-CPU address.. check that it is
-			 * located within GRPCI2 PCI Memory Window
-			 * adr = PCI address.
-			 */
+       * located within GRPCI2 PCI Memory Window
+       * adr = PCI address.
+       */
       if ( adr < priv->pci_area || adr >= priv->pci_area_end ) {
         return -1;
       }
     } else {
       /* We have a CPU address and want to get access to it
-			 * from PCI space, typically when doing DMA into CPU
-			 * RAM. The GRPCI2 core may have multiple target BARs
-			 * that PCI masters can access, the BARs are user
-			 * configurable in the following ways:
-			 *  BAR_SIZE, PCI_BAR Address and MAPPING (AMBA ADR)
-			 *
-			 * The below code tries to find a BAR for which the
-			 * AMBA bar may have been mapped onto, and translate
-			 * the AMBA-CPU address into a PCI address using the
-			 * given mapping.
-			 *
-			 * adr = AMBA address.
-			 */
+       * from PCI space, typically when doing DMA into CPU
+       * RAM. The GRPCI2 core may have multiple target BARs
+       * that PCI masters can access, the BARs are user
+       * configurable in the following ways:
+       *  BAR_SIZE, PCI_BAR Address and MAPPING (AMBA ADR)
+       *
+       * The below code tries to find a BAR for which the
+       * AMBA bar may have been mapped onto, and translate
+       * the AMBA-CPU address into a PCI address using the
+       * given mapping.
+       *
+       * adr = AMBA address.
+       */
       for ( i = 0; i < 6; i++ ) {
         start = priv->barcfg[ i ].ahbadr;
         end = priv->barcfg[ i ].ahbadr + priv->barcfg[ i ].barsize;
@@ -642,8 +642,8 @@ void grpci2_err_isr( void *arg )
     ( STS_IMSTABRT | STS_ITGTABRT | STS_IPARERR | STS_ISYSERR | STS_ITIMEOUT )
   ) {
     /* A PCI error IRQ ... Error handler unimplemented
-		 * add your code here...
-		 */
+     * add your code here...
+     */
     if ( sts & STS_IMSTABRT ) {
       printk( "GRPCI2: unhandled Master Abort IRQ\n" );
     }
@@ -699,8 +699,8 @@ static int grpci2_hw_init( struct grpci2_priv *priv )
   regs->io_map = priv->pci_io & 0xffff0000;
 
   /* set 1:1 mapping between AHB -> PCI memory space, for all Masters
-	 * Each AHB master has it's own mapping registers. Max 16 AHB masters.
-	 */
+   * Each AHB master has it's own mapping registers. Max 16 AHB masters.
+   */
   for ( i = 0; i < 16; i++ ) {
     regs->ahbmst_map[ i ] = priv->pci_area;
   }
@@ -793,11 +793,11 @@ static int grpci2_init( struct grpci2_priv *priv )
   /* Initialize Spin-lock for GRPCI2 Device. */
   SPIN_INIT( &priv->devlock, "grpci2" );
 
-  /* Calculate the PCI windows 
-	 *  AMBA->PCI Window:                       AHB SLAVE AREA0
-	 *  AMBA->PCI I/O cycles Window:            AHB SLAVE AREA1 Lower half
-	 *  AMBA->PCI Configuration cycles Window:  AHB SLAVE AREA1 Upper half
-	 */
+  /* Calculate the PCI windows
+   *  AMBA->PCI Window:                       AHB SLAVE AREA0
+   *  AMBA->PCI I/O cycles Window:            AHB SLAVE AREA1 Lower half
+   *  AMBA->PCI Configuration cycles Window:  AHB SLAVE AREA1 Upper half
+   */
   priv->pci_area = ahb->start[ 0 ];
   priv->pci_area_end = ahb->start[ 0 ] + ahb->mask[ 0 ];
   priv->pci_io = ahb->start[ 1 ];
@@ -805,8 +805,8 @@ static int grpci2_init( struct grpci2_priv *priv )
   priv->pci_conf_end = priv->pci_conf + 0x10000;
 
   /* On systems where PCI I/O area and configuration area is apart of the
-	 * "PCI Window" the PCI Window stops at the start of the PCI I/O area
-	 */
+   * "PCI Window" the PCI Window stops at the start of the PCI I/O area
+   */
   if (
     ( priv->pci_io > priv->pci_area ) &&
     ( priv->pci_io < ( priv->pci_area_end - 1 ) )
@@ -815,8 +815,8 @@ static int grpci2_init( struct grpci2_priv *priv )
   }
 
   /* Init PCI interrupt assignment table to all use the interrupt routed
-	 * through the GRPCI2 core.
-	 */
+   * through the GRPCI2 core.
+   */
   strcpy( keyname, "INTX#" );
   for ( pin = 1; pin < 5; pin++ ) {
     if ( grpci2_pci_irq_table[ pin - 1 ] == 0xff ) {
@@ -864,8 +864,8 @@ static int grpci2_init( struct grpci2_priv *priv )
     priv->latency_timer = value->i;
   }
 
-  /* This driver only support HOST systems, we check that it can act as a 
-	 * PCI Master and that it is in the Host slot. */
+  /* This driver only support HOST systems, we check that it can act as a
+   * PCI Master and that it is in the Host slot. */
   if (
     ( priv->regs->sts_cap & STS_HOST ) || !( priv->regs->sts_cap & STS_MST )
   ) {
@@ -910,7 +910,7 @@ static int grpci2_init( struct grpci2_priv *priv )
   return 0;
 }
 
-/* Called when a core is found with the AMBA device and vendor ID 
+/* Called when a core is found with the AMBA device and vendor ID
  * given in grpci2_ids[]. IRQ, Console does not work here
  */
 int grpci2_init1( struct drvmgr_dev *dev )
@@ -1007,9 +1007,9 @@ int grpci2_init3( struct drvmgr_dev *dev )
   }
 
   /* Unmask Error IRQ and all PCI interrupts at PCI Core. For this to be
-	 * safe every PCI board have to be resetted (no IRQ generation) before
-	 * Global IRQs are enabled (Init is reached or similar)
-	 */
+   * safe every PCI board have to be resetted (no IRQ generation) before
+   * Global IRQs are enabled (Init is reached or similar)
+   */
   priv->regs->ctrl |= ( CTRL_EI | priv->irq_mask );
 
   return DRVMGR_OK;

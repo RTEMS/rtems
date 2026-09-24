@@ -35,9 +35,9 @@
 #endif
 
 #include <wctype.h>
-/* 
+/*
  Corresponds to ticket #3642, please remove the line
- above and this comment when fixed 
+ above and this comment when fixed
 */
 #include <wchar.h>
 

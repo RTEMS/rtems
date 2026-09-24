@@ -130,16 +130,16 @@ static int grcan_hw_read_try_fd(
   rp = READ_REG( &regs->rx0rd );
 
   /*
-	 * Due to hardware wrap around simplification write pointer will
-	 * never reach the read pointer, at least a gap of 8 bytes.
-	 * The only time they are equal is when the read pointer has
-	 * reached the write pointer (empty buffer)
-	 *
-	 */
+   * Due to hardware wrap around simplification write pointer will
+   * never reach the read pointer, at least a gap of 8 bytes.
+   * The only time they are equal is when the read pointer has
+   * reached the write pointer (empty buffer)
+   *
+   */
   if ( wp != rp ) {
     /* Not empty, we have received chars...
-		 * Read as much as possible from DMA buffer
-		 */
+     * Read as much as possible from DMA buffer
+     */
     size = READ_REG( &regs->rx0size );
 
     /* Get number of bytes available in RX buffer */
@@ -271,11 +271,11 @@ int grcanfd_read( void *d, CANFDMsg *msg, size_t ucount )
     } else {
       left = req_cnt - count; /* return as soon as all data are available */
 
-      /* never wait for more than the half the maximum size of the receive buffer 
-			 * Why? We need some time to copy buffer before to catch up with hw,
-			 * otherwise we would have to copy everything when the data has been
-			 * received.
-			 */
+      /* never wait for more than the half the maximum size of the receive buffer
+       * Why? We need some time to copy buffer before to catch up with hw,
+       * otherwise we would have to copy everything when the data has been
+       * received.
+       */
       if ( left > ( ( pDev->rxbuf_size / GRCAN_MSG_SIZE ) / 2 ) ) {
         left = ( pDev->rxbuf_size / GRCAN_MSG_SIZE ) / 2;
       }
@@ -284,9 +284,9 @@ int grcanfd_read( void *d, CANFDMsg *msg, size_t ucount )
     nread = grcan_wait_rxdata( pDev, left );
     if ( nread ) {
       /* The wait has been aborted, probably due to
-			 * the device driver has been closed by another
-			 * thread or a bus-off. Return error code.
-			 */
+       * the device driver has been closed by another
+       * thread or a bus-off. Return error code.
+       */
       return nread;
     }
 
@@ -353,8 +353,8 @@ static int grcan_hw_write_try_fd(
     dlc = grcan_len2dlc( source->len );
     if ( dlc < 0 ) {
       /* Bad user input. Report the number of written messages
-			 * or an error when non sent.
-			 */
+       * or an error when non sent.
+       */
       if ( ret <= 0 ) {
         return GRCAN_RET_INVARG;
       }
@@ -446,10 +446,10 @@ int grcanfd_write( void *d, CANFDMsg *msg, size_t ucount )
   /* if in txcomplete mode we need to transmit all chars */
   while ( ( count == 0 ) || ( pDev->txcomplete && ( count != req_cnt ) ) ) {
     /*** block until room to fit all or as much of transmit buffer
-		 * as possible before IRQ comes. Set up a valid IRQ point so
-		 * that an IRQ is triggered when we can put a chunk of data
-		 * into transmit fifo.
-		 */
+     * as possible before IRQ comes. Set up a valid IRQ point so
+     * that an IRQ is triggered when we can put a chunk of data
+     * into transmit fifo.
+     */
 
     /* Get the number of descriptors to wait for */
     curr = &source[ count ];
@@ -461,8 +461,8 @@ int grcanfd_write( void *d, CANFDMsg *msg, size_t ucount )
 
     if ( pDev->txcomplete ) {
       /* Wait for all messages to fit into descriptor table.
-			 * Assume all following msgs are single descriptors.
-			 */
+       * Assume all following msgs are single descriptors.
+       */
       left += req_cnt - count - 1;
       if ( left > ( ( pDev->txbuf_size / GRCAN_MSG_SIZE ) / 2 ) ) {
         left = ( pDev->txbuf_size / GRCAN_MSG_SIZE ) / 2;
@@ -472,11 +472,11 @@ int grcanfd_write( void *d, CANFDMsg *msg, size_t ucount )
     nwritten = grcan_wait_txspace( pDev, left );
     /* Wait until more room in transmit buffer */
     if ( nwritten ) {
-      /* The wait has been aborted, probably due to 
-			 * the device driver has been closed by another
-			 * thread. To avoid deadlock we return directly
-			 * with error status.
-			 */
+      /* The wait has been aborted, probably due to
+       * the device driver has been closed by another
+       * thread. To avoid deadlock we return directly
+       * with error status.
+       */
       return nwritten;
     }
 
@@ -557,8 +557,8 @@ int grcanfd_set_btrs(
   FUNCDBG();
 
   /* Set BTR registers manually
-	 * Read GRCAN/HurriCANe Manual.
-	 */
+   * Read GRCAN/HurriCANe Manual.
+   */
   if ( ( pDev->started == STATE_STARTED ) || !pDev->fd_capable ) {
     return -1;
   }

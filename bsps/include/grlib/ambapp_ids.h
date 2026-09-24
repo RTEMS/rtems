@@ -10,7 +10,7 @@
  *  COPYRIGHT (c) 2008.
  *  Gaisler Research
  *
- *  This header file provide all known VENDOR and DEVICE IDs available 
+ *  This header file provide all known VENDOR and DEVICE IDs available
  *  in the AMBA Plug & Play information. Taken from GRLIB 3386.
  *
  * Redistribution and use in source and binary forms, with or without

@@ -2,7 +2,7 @@
 
 /*
  * GRSPW ROUTER APB-Register Driver.
- * 
+ *
  * COPYRIGHT (c) 2010-2017.
  * Cobham Gaisler AB.
  *

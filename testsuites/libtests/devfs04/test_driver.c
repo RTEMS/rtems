@@ -35,7 +35,7 @@
 #include "test_driver.h"
 #include <rtems/libio.h>
 #include <rtems/devnull.h>
-/* 
+/*
  * The test driver routines are mostly derived from the null driver routines.
  */
 uint32_t    TEST_major;

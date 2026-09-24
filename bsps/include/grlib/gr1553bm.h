@@ -48,7 +48,7 @@ struct gr1553bm_entry {
 #define GR1553BM_ERROPTS_ALL  0x0e
 
 /* Function used to implement a custom copy routine.
- * Returns number of bytes the desctionation address 
+ * Returns number of bytes the desctionation address
  * should be incremented with.
  *
  * \param dst        Optional Destination address
@@ -71,70 +71,70 @@ struct gr1553bm_config {
   /*** Time options ***/
 
   /* 8-bit time resolution, the BM will update the time according
-	 * to this setting. 0 will make the time tag be of highest
-	 * resolution (no division), 1 will make the BM increment the
-	 * time tag once for two time ticks (div with 2), etc.
-	 */
+   * to this setting. 0 will make the time tag be of highest
+   * resolution (no division), 1 will make the BM increment the
+   * time tag once for two time ticks (div with 2), etc.
+   */
   uint8_t time_resolution;
 
-  /* Enable Time Overflow IRQ handling. Setting this to 1 
-	 * makes the driver to update the 64-bit time by it self,
-	 * it will use time overflow IRQ to detect when the 64-bit
-	 * time counter must be incremented.
-	 *
-	 * If set to zero, the driver expect the user to call
-	 * gr1553bm_time() regularly, it must be called more often
-	 * than the time overflows to avoid an incorrect time.
-	 */
+  /* Enable Time Overflow IRQ handling. Setting this to 1
+   * makes the driver to update the 64-bit time by it self,
+   * it will use time overflow IRQ to detect when the 64-bit
+   * time counter must be incremented.
+   *
+   * If set to zero, the driver expect the user to call
+   * gr1553bm_time() regularly, it must be called more often
+   * than the time overflows to avoid an incorrect time.
+   */
   int time_ovf_irq;
 
   /*** Filtering options ***/
 
-  /* Bus error log options 
-	 *
-	 * bit0,4-31 = reserved, set to zero
-	 * Bit1 = Enables logging of Invalid mode code errors
-	 * Bit2 = Enables logging of Unexpected Data errors
-	 * Bit3 = Enables logging of Manchester/parity errors
-	 */
+  /* Bus error log options
+   *
+   * bit0,4-31 = reserved, set to zero
+   * Bit1 = Enables logging of Invalid mode code errors
+   * Bit2 = Enables logging of Unexpected Data errors
+   * Bit3 = Enables logging of Manchester/parity errors
+   */
   unsigned int filt_error_options;
 
   /* RT Address filtering bit mask. Each bit enables (if set)
-	 * logging of a certain RT sub address. Bit 31 enables logging
-	 * of broadcast messages.
-	 */
+   * logging of a certain RT sub address. Bit 31 enables logging
+   * of broadcast messages.
+   */
   unsigned int filt_rtadr;
 
   /* RT Subaddress filtering bit mask, bit definition:
-	 *  31:     Enables logging of mode commands on subadr 31
-	 *  1..30:  BitN enables/disables logging of RT subadr N
-	 *  0:      Enables logging of mode commands on subadr 0
-	 */
+   *  31:     Enables logging of mode commands on subadr 31
+   *  1..30:  BitN enables/disables logging of RT subadr N
+   *  0:      Enables logging of mode commands on subadr 0
+   */
   unsigned int filt_subadr;
 
   /* Mode code Filter, is written into "BM RT Mode code filter"
-	 * register, please see hardware manual for bit declarations.
-	 */
+   * register, please see hardware manual for bit declarations.
+   */
   unsigned int filt_mc;
 
   /*** Buffer options ***/
 
-  /* Size of buffer in bytes, must be aligned to 8-byte 
-	 * The size is limited to max 4Mb.
-	 */
+  /* Size of buffer in bytes, must be aligned to 8-byte
+   * The size is limited to max 4Mb.
+   */
   unsigned int buffer_size;
 
   /* Custom buffer, must be aligned to 8-byte and be of buffer_size
-	 * length. If NULL dynamic memory allocation is used.
-	 */
+   * length. If NULL dynamic memory allocation is used.
+   */
   void *buffer_custom;
 
-  /* Custom Copy function, may be used to implement a more 
-	 * effective way of copying the DMA buffer. For example
-	 * the DMA log may need to be compressed before copied
-	 * onto a storage, this function can be used to avoid an
-	 * extra copy.
-	 */
+  /* Custom Copy function, may be used to implement a more
+   * effective way of copying the DMA buffer. For example
+   * the DMA log may need to be compressed before copied
+   * onto a storage, this function can be used to avoid an
+   * extra copy.
+   */
   bmcopy_func_t copy_func;
 
   /* Optional Custom Data passed on to copy_func() */
@@ -143,8 +143,8 @@ struct gr1553bm_config {
   /*** Interrupt options ***/
 
   /* Custom DMA error function, note that this function is called
-	 * from Interrupt Context. Set to NULL to disable this callback.
-	 */
+   * from Interrupt Context. Set to NULL to disable this callback.
+   */
   bmisr_func_t dma_error_isr;
 
   /* Optional Custom Data passed on to dma_error_isr() */
@@ -194,7 +194,7 @@ extern int gr1553bm_available( void *bm, int *nentries );
 extern void gr1553bm_stop( void *bm );
 
 /* Read a maximum number of entries from LOG buffer. This function
- * must be 
+ * must be
  *
  * Arguments
  *  bm           - Private pointer returned by gr1553bm_open()

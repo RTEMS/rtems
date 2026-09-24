@@ -243,8 +243,8 @@ static rtems_id rtems_monitor_object_canonical_next_remote(
   rtems_monitor_server_response_t response;
 
   /*
-     * Send request
-     */
+   * Send request
+   */
 
   request.command = RTEMS_MONITOR_SERVER_CANONICAL;
   request.argument0 = (uint32_t) type;
@@ -260,8 +260,8 @@ static rtems_id rtems_monitor_object_canonical_next_remote(
   }
 
   /*
-     * process response
-     */
+   * process response
+   */
 
   next_id = (rtems_id) response.result0;
   if ( next_id != RTEMS_OBJECT_ID_FINAL ) {
@@ -349,17 +349,17 @@ static void rtems_monitor_object_dump_1(
     ) != RTEMS_OBJECT_ID_FINAL
   ) {
     /*
-         * If the one we actually got is the one we wanted, then
-         * print it out.
-         * For ones that have an id field, this works fine,
-         * for all others, always dump it out.
-         *
-         * HACK: the way we determine whether there is an id is a hack.
-         *
-         * by the way: the reason we try to not have an id, is that some
-         *   of the canonical structures are almost too big for shared
-         *   memory driver (eg: mpci)
-         */
+     * If the one we actually got is the one we wanted, then
+     * print it out.
+     * For ones that have an id field, this works fine,
+     * for all others, always dump it out.
+     *
+     * HACK: the way we determine whether there is an id is a hack.
+     *
+     * by the way: the reason we try to not have an id, is that some
+     *   of the canonical structures are almost too big for shared
+     *   memory driver (eg: mpci)
+     */
 
     if (
       ( info->next != rtems_monitor_manager_next ) ||
@@ -435,10 +435,10 @@ void rtems_monitor_object_cmd(
       type = (rtems_monitor_object_type_t) rtems_object_id_get_class( id );
 
       /*
-             * Allow the item type to change in the middle
-             * of the command.  If the type changes, then
-             * just dump out a new header and keep on going.
-             */
+       * Allow the item type to change in the middle
+       * of the command.  If the type changes, then
+       * just dump out a new header and keep on going.
+       */
       if ( type != last_type ) {
         info = rtems_monitor_object_lookup( type );
         if ( info == 0 ) {

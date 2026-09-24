@@ -384,8 +384,8 @@ typedef enum {
 typedef struct Per_CPU_Control {
   #if CPU_PER_CPU_CONTROL_SIZE > 0
   /**
-     * @brief CPU port specific control.
-     */
+   * @brief CPU port specific control.
+   */
   CPU_Per_CPU_control cpu_per_cpu;
   #endif
 
@@ -515,123 +515,123 @@ typedef struct Per_CPU_Control {
 
   #if defined( RTEMS_SMP )
   /**
-     * @brief This lock protects some members of this structure.
-     */
+   * @brief This lock protects some members of this structure.
+   */
   ISR_lock_Control Lock;
 
   /**
-     * @brief Lock context used to acquire all per-CPU locks.
-     *
-     * This member is protected by the Per_CPU_Control::Lock lock.
-     *
-     * @see _Per_CPU_Acquire_all().
-     */
+   * @brief Lock context used to acquire all per-CPU locks.
+   *
+   * This member is protected by the Per_CPU_Control::Lock lock.
+   *
+   * @see _Per_CPU_Acquire_all().
+   */
   ISR_lock_Context Lock_context;
 
   /**
-     * @brief Chain of threads in need for help.
-     *
-     * This member is protected by the Per_CPU_Control::Lock lock.
-     */
+   * @brief Chain of threads in need for help.
+   *
+   * This member is protected by the Per_CPU_Control::Lock lock.
+   */
   Chain_Control Threads_in_need_for_help;
 
   /**
-     * @brief Bit field for SMP messages.
-     *
-     * This member is not protected locks.  Atomic operations are used to set
-     * and get the message bits.
-     */
+   * @brief Bit field for SMP messages.
+   *
+   * This member is not protected locks.  Atomic operations are used to set
+   * and get the message bits.
+   */
   Atomic_Ulong message;
 
   struct {
     /**
-       * @brief The scheduler control of the scheduler owning this processor.
-       *
-       * This pointer is NULL in case this processor is currently not used by a
-       * scheduler instance.
-       */
+     * @brief The scheduler control of the scheduler owning this processor.
+     *
+     * This pointer is NULL in case this processor is currently not used by a
+     * scheduler instance.
+     */
     const struct _Scheduler_Control *control;
 
     /**
-       * @brief The scheduler context of the scheduler owning this processor.
-       *
-       * This pointer is NULL in case this processor is currently not used by a
-       * scheduler instance.
-       */
+     * @brief The scheduler context of the scheduler owning this processor.
+     *
+     * This pointer is NULL in case this processor is currently not used by a
+     * scheduler instance.
+     */
     const struct Scheduler_Context *context;
 
     /**
-       * @brief The idle thread for this processor in case it is online and
-       * currently not used by a scheduler instance.
-       */
+     * @brief The idle thread for this processor in case it is online and
+     * currently not used by a scheduler instance.
+     */
     struct _Thread_Control *idle_if_online_and_unused;
   } Scheduler;
 
   /**
-     * @brief The ancestor of the executing thread.
-     *
-     * This member is used by _User_extensions_Thread_switch().
-     */
+   * @brief The ancestor of the executing thread.
+   *
+   * This member is used by _User_extensions_Thread_switch().
+   */
   struct _Thread_Control *ancestor;
 
   /**
-     * @brief Begin of the per-CPU data area.
-     *
-     * Contains items defined via PER_CPU_DATA_ITEM().
-     */
+   * @brief Begin of the per-CPU data area.
+   *
+   * Contains items defined via PER_CPU_DATA_ITEM().
+   */
   char *data;
 
   /**
-     * @brief Indicates the current state of the processor.
-     *
-     * Only the processor associated with this control is allowed to change
-     * this member.
-     *
-     * @see _Per_CPU_Get_state() and _Per_CPU_Set_state().
-     */
+   * @brief Indicates the current state of the processor.
+   *
+   * Only the processor associated with this control is allowed to change
+   * this member.
+   *
+   * @see _Per_CPU_Get_state() and _Per_CPU_Set_state().
+   */
   Atomic_Uint state;
 
   /**
-     * @brief FIFO list of jobs to be performed by this processor.
-     *
-     * @see _SMP_Multicast_action().
-     */
+   * @brief FIFO list of jobs to be performed by this processor.
+   *
+   * @see _SMP_Multicast_action().
+   */
   struct {
     /**
-       * @brief Lock to protect the FIFO list of jobs to be performed by this
-       * processor.
-       */
+     * @brief Lock to protect the FIFO list of jobs to be performed by this
+     * processor.
+     */
     ISR_lock_Control Lock;
 
     /**
-       * @brief Head of the FIFO list of jobs to be performed by this
-       * processor.
-       *
-       * This member is protected by the Per_CPU_Control::Jobs::Lock lock.
-       */
+     * @brief Head of the FIFO list of jobs to be performed by this
+     * processor.
+     *
+     * This member is protected by the Per_CPU_Control::Jobs::Lock lock.
+     */
     struct Per_CPU_Job *head;
 
     /**
-       * @brief Tail of the FIFO list of jobs to be performed by this
-       * processor.
-       *
-       * This member is only valid if the head is not @c NULL.
-       *
-       * This member is protected by the Per_CPU_Control::Jobs::Lock lock.
-       */
+     * @brief Tail of the FIFO list of jobs to be performed by this
+     * processor.
+     *
+     * This member is only valid if the head is not @c NULL.
+     *
+     * This member is protected by the Per_CPU_Control::Jobs::Lock lock.
+     */
     struct Per_CPU_Job **tail;
   } Jobs;
 
   /**
-     * @brief Indicates if the processor has been successfully started via
-     * _CPU_SMP_Start_processor().
-     */
+   * @brief Indicates if the processor has been successfully started via
+   * _CPU_SMP_Start_processor().
+   */
   bool online;
 
   /**
-     * @brief Indicates if the processor is the one that performed the initial
-     * system initialization.
-     */
+   * @brief Indicates if the processor is the one that performed the initial
+   * system initialization.
+   */
   bool boot;
   #endif
 

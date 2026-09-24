@@ -91,11 +91,11 @@ typedef struct rtems_bdbuf_waiters {
 typedef struct rtems_bdbuf_cache {
   rtems_id swapout;         /**< Swapout task ID */
   bool     swapout_enabled; /**< Swapout is only running if
-                                          * enabled. Set to false to kill the
-                                          * swap out task. It deletes itself. */
+                             * enabled. Set to false to kill the
+                             * swap out task. It deletes itself. */
   rtems_chain_control
     swapout_free_workers; /**< The work threads for the swapout
-                                             * task. */
+                           * task. */
 
   rtems_bdbuf_buffer *bds;               /**< Pointer to table of buffer
                                           * descriptors. */
@@ -107,28 +107,28 @@ typedef struct rtems_bdbuf_cache {
   uint32_t            flags;             /**< Configuration flags. */
 
   rtems_mutex        lock;           /**< The cache lock. It locks all
-                                          * cache data, BD and lists. */
+                                      * cache data, BD and lists. */
   rtems_mutex        sync_lock;      /**< Sync calls block writes. */
   bool               sync_active;    /**< True if a sync is active. */
   rtems_id           sync_requester; /**< The sync requester. */
   rtems_disk_device *sync_device;    /**< The device to sync and
-                                          * BDBUF_INVALID_DEV not a device
-                                          * sync. */
+                                      * BDBUF_INVALID_DEV not a device
+                                      * sync. */
 
   rtems_bdbuf_buffer *tree;     /**< Buffer descriptor lookup AVL tree
-                                          * root. There is only one. */
+                                 * root. There is only one. */
   rtems_chain_control lru;      /**< Least recently used list */
   rtems_chain_control modified; /**< Modified buffers list */
   rtems_chain_control sync;     /**< Buffers to sync list */
 
   rtems_bdbuf_waiters access_waiters;   /**< Wait for a buffer in
-                                          * ACCESS_CACHED, ACCESS_MODIFIED or
-                                          * ACCESS_EMPTY
-                                          * state. */
+                                         * ACCESS_CACHED, ACCESS_MODIFIED or
+                                         * ACCESS_EMPTY
+                                         * state. */
   rtems_bdbuf_waiters transfer_waiters; /**< Wait for a buffer in TRANSFER
-                                          * state. */
+                                         * state. */
   rtems_bdbuf_waiters buffer_waiters;   /**< Wait for a buffer and no one is
-                                          * available. */
+                                         * available. */
 
   rtems_bdbuf_swapout_transfer *swapout_transfer;
   rtems_bdbuf_swapout_worker   *swapout_workers;

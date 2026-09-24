@@ -480,16 +480,16 @@ extern "C" {
 /* Generated from spec:/score/basedefs/if/debug-unreachable */
 
 /**
-   * @ingroup RTEMSScore
-   *
-   * @brief Terminates the program with a failed assertion.
-   *
-   * @param file is the file name.
-   *
-   * @param line is the line of the file.
-   *
-   * @param func is the function name.
-   */
+ * @ingroup RTEMSScore
+ *
+ * @brief Terminates the program with a failed assertion.
+ *
+ * @param file is the file name.
+ *
+ * @param line is the line of the file.
+ *
+ * @param func is the function name.
+ */
 RTEMS_NO_RETURN void _Debug_Unreachable(
   const char *file,
   int         line,

@@ -872,9 +872,9 @@ void T_measure_runtime(
 )
 {
   /*
-	 * Do FullCache variant before HotCache to get a good overall cache
-	 * state for the HotCache variant.
-	 */
+   * Do FullCache variant before HotCache to get a good overall cache
+   * state for the HotCache variant.
+   */
   if ( ( req->flags & T_MEASURE_RUNTIME_DISABLE_FULL_CACHE ) == 0 ) {
     measure_full_cache( ctx, req );
   }

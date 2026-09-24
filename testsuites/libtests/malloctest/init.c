@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-/* 
+/*
  *  COPYRIGHT (c) 1989-2011, 2014.
  *  On-Line Applications Research Corporation (OAR).
  *

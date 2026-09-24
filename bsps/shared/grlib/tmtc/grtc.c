@@ -411,9 +411,9 @@ static int grtc_init3( struct drvmgr_dev *dev )
     grtc_driver_io_registered = 1;
   }
 
-  /* I/O system registered and initialized 
-	 * Now we take care of device initialization.
-	 */
+  /* I/O system registered and initialized
+   * Now we take care of device initialization.
+   */
   if ( grtc_device_init( priv ) ) {
     return DRVMGR_FAIL;
   }
@@ -422,13 +422,13 @@ static int grtc_init3( struct drvmgr_dev *dev )
   prefix[ 0 ] = '\0';
   if ( drvmgr_get_dev_prefix( dev, prefix ) ) {
     /* Failed to get prefix, make sure of a unique FS name
-		 * by using the driver minor.
-		 */
+     * by using the driver minor.
+     */
     sprintf( priv->devName, "/dev/grtc%d", dev->minor_drv );
   } else {
     /* Got special prefix, this means we have a bus prefix
-		 * And we should use our "bus minor"
-		 */
+     * And we should use our "bus minor"
+     */
     sprintf( priv->devName, "/dev/%sgrtc%d", prefix, dev->minor_bus );
   }
 
@@ -770,9 +770,9 @@ static int grtc_start( struct grtc_priv *pDev )
   }
 
   /* make sure the RX semaphore is in the correct state when starting.
-	 * In case of a previous overrun condition it could be in incorrect
-	 * state (where rtems_semaphore_flush was used).
-	 */
+   * In case of a previous overrun condition it could be in incorrect
+   * state (where rtems_semaphore_flush was used).
+   */
   rtems_semaphore_obtain( pDev->sem_rx, RTEMS_NO_WAIT, 0 );
 
   /* Set operating modes */
@@ -796,17 +796,17 @@ static int grtc_start( struct grtc_priv *pDev )
   regs->imr = GRTC_INT_OV;
 
   /* Set up DMA registers
-	 * 1. Let hardware know about our DMA area (size and location)
-	 * 2. Set DMA read/write posistions to zero.
-	 */
+   * 1. Let hardware know about our DMA area (size and location)
+   * 2. Set DMA read/write posistions to zero.
+   */
   regs->asr = (unsigned int) (uintptr_t) pDev->buf_remote |
               ( ( pDev->len >> 10 ) - 1 );
   regs->rp = (unsigned int) (uintptr_t) pDev->buf_remote;
 
-  /* Mark running before enabling the receiver, we could receive 
-	 * an interrupt directly after enabling the receiver and it would 
-	 * then interpret the interrupt as spurious (see interrupt handler)
-	 */
+  /* Mark running before enabling the receiver, we could receive
+   * an interrupt directly after enabling the receiver and it would
+   * then interpret the interrupt as spurious (see interrupt handler)
+   */
   pDev->running = 1;
 
   /* Enable receiver */
@@ -846,8 +846,8 @@ static void grtc_stop( struct grtc_priv *pDev, int overrun )
   rtems_semaphore_flush( pDev->sem_rx );
 }
 
-/* Wait until 'count' bytes are available in receive buffer, or until 
- * the timeout expires. 
+/* Wait until 'count' bytes are available in receive buffer, or until
+ * the timeout expires.
  */
 static int grtc_wait_data(
   struct grtc_priv *pDev,
@@ -868,8 +868,8 @@ static int grtc_wait_data(
   SPIN_LOCK_IRQ( &pDev->devlock, irqflags );
 
   /* Enable interrupts when receiving CLTUs, Also clear old pending CLTUs store
-	 * interrupts.
-	 */
+   * interrupts.
+   */
   pDev->regs->picr = GRTC_INT_CS;
   pDev->regs->imr = READ_REG( &pDev->regs->imr ) | GRTC_INT_CS;
 
@@ -884,11 +884,11 @@ static int grtc_wait_data(
     }
     ret = rtems_semaphore_obtain( pDev->sem_rx, RTEMS_WAIT, timeout );
     /* RTEMS_SUCCESSFUL  = interrupt signaled data is available
-		 * RTEMS_TIMEOUT     = timeout expired, probably not enough data available
-		 * RTEMS_UNSATISFIED = driver has been closed or an error (overrun) occured
-		 *                     which should cancel this operation.
-		 * RTEMS_OBJECT_WAS_DELETED, RTEMS_INVALID_ID = driver error.
-		 */
+     * RTEMS_TIMEOUT     = timeout expired, probably not enough data available
+     * RTEMS_UNSATISFIED = driver has been closed or an error (overrun) occured
+     *                     which should cancel this operation.
+     * RTEMS_OBJECT_WAS_DELETED, RTEMS_INVALID_ID = driver error.
+     */
     SPIN_LOCK_IRQ( &pDev->devlock, irqflags );
   } else {
     ret = RTEMS_SUCCESSFUL;
@@ -966,8 +966,8 @@ static rtems_device_driver grtc_open(
   memset( &pDev->config, 0, sizeof( pDev->config ) );
 
   /* The core has been reset when we execute here, so it is possible
-	 * to read out defualts from core.
-	 */
+   * to read out defualts from core.
+   */
   grtc_hw_get_defaults( pDev, &pDev->config );
 
   return RTEMS_SUCCESSFUL;
@@ -1056,9 +1056,9 @@ read_from_buffer:
                          ( pDev->blocking == GRTC_BLKMODE_COMPLETE ) ) )
   ) {
     /* didn't read anything (no data available) or we want to wait for all bytes requested.
-		 * 
-		 * Wait for data to arrive only in blocking mode
-		 */
+     *
+     * Wait for data to arrive only in blocking mode
+     */
     if ( pDev->blocking ) {
       if (
         ( err = grtc_wait_data( pDev, left, timeout ) ) != RTEMS_SUCCESSFUL
@@ -1085,8 +1085,8 @@ read_from_buffer:
   if ( rw_args->bytes_moved == 0 ) {
     if ( pDev->overrun_condition ) {
       /* signal to the user that overrun has happend when
-			 * no more data can be read out.
-			 */
+       * no more data can be read out.
+       */
       return RTEMS_IO_ERROR;
     }
     return RTEMS_TIMEOUT;
@@ -1152,20 +1152,20 @@ static struct grtc_frame *grtc_pool_get_frm(
   unsigned int            i;
 
   /* Loop through all pools until a pool is found
-	 * with a matching (or larger) frame length
-	 */
+   * with a matching (or larger) frame length
+   */
   pool = pDev->pools;
   for ( i = 0; i < pDev->pool_cnt; i++, pool++ ) {
     if ( pool->frame_len >= frame_len ) {
       /* Found a good pool ==> get frame */
       frm = pool->frms;
       if ( !frm ) {
-        /* not enough frames available for this 
-				 * frame length, we try next
-				 *
-				 * If this is a severe error add your handling
-				 * code here.
-				 */
+        /* not enough frames available for this
+         * frame length, we try next
+         *
+         * If this is a severe error add your handling
+         * code here.
+         */
 #if 0
 				if ( error )
 					*error = 0;
@@ -1174,9 +1174,9 @@ static struct grtc_frame *grtc_pool_get_frm(
         continue;
       }
 
-      /* Got a frame, the frame is taken out of the 
-			 * pool for usage.
-			 */
+      /* Got a frame, the frame is taken out of the
+       * pool for usage.
+       */
       pool->frms = frm->next;
       pool->frame_cnt--;
       return frm;
@@ -1191,7 +1191,7 @@ static struct grtc_frame *grtc_pool_get_frm(
   return NULL;
 }
 
-/* Return number of bytes processed, Stops at the first occurance 
+/* Return number of bytes processed, Stops at the first occurance
  * of the pattern given in 'pattern'
  */
 static int grtc_scan(
@@ -1247,9 +1247,9 @@ static int grtc_hw_find_frm( struct grtc_priv *pDev )
   asr = READ_REG( &regs->asr );
   wp = READ_REG( &regs->wp );
 
-  /* Quick Check for most common case where Start of frame is at next 
-	 * data byte.
-	 */
+  /* Quick Check for most common case where Start of frame is at next
+   * data byte.
+   */
   if ( rp != wp ) {
     /* At least 1 byte in buffer */
     if (
@@ -1594,8 +1594,8 @@ void grtc_log_error( struct grtc_priv *pDev, int err )
 }
 #endif
 
-/* Read one frame from DMA buffer 
- * 
+/* Read one frame from DMA buffer
+ *
  * Return Values
  *  Zero - nothing more to process
  *  1 - more to process, no free frames
@@ -1671,19 +1671,19 @@ static int process_dma( struct grtc_priv *pDev )
         DBG2( "No free frames\n" );
         if ( err == 0 ) {
           /* Frame length exist in pool configuration, but no
-				 * frames are available for that frame length.
-				 */
+           * frames are available for that frame length.
+           */
           DEBUG_ERR_LOG( pDev, 3 );
           pDev->stats.dropped_no_buf++;
           return 1;
         } else {
           /* Frame length of incoming frame is larger than the
-				 * frame length in any of the configured frame pools.
-				 * 
-				 * This may be because of an corrupt header. We simply
-				 * scan for the end of frame marker in the DMA buffer
-				 * so we can drop the frame.
-				 */
+           * frame length in any of the configured frame pools.
+           *
+           * This may be because of an corrupt header. We simply
+           * scan for the end of frame marker in the DMA buffer
+           * so we can drop the frame.
+           */
           DEBUG_ERR_LOG( pDev, 4 );
           pDev->stats.dropped_too_long++;
           pDev->frame_state = FRM_STATE_NONE;
@@ -1923,9 +1923,9 @@ static rtems_device_driver grtc_ioctl(
 
       if ( mem & 1 ) {
         /* Remote address given, the address is as the GRTC
-			 * core looks at it. Translate the base address into
-			 * an address that the CPU can understand.
-			 */
+         * core looks at it. Translate the base address into
+         * an address that the CPU can understand.
+         */
         pDev->buf_remote = (void *) (uintptr_t) ( mem & ~0x1 );
         drvmgr_translate_check(
           pDev->dev,
@@ -1960,9 +1960,9 @@ static rtems_device_driver grtc_ioctl(
         }
 
         /* Translate into a remote address so that GRTC core
-			 * on a remote AMBA bus (for example over the PCI bus)
-			 * gets a valid address
-			 */
+         * on a remote AMBA bus (for example over the PCI bus)
+         * gets a valid address
+         */
         drvmgr_translate_check(
           pDev->dev,
           CPUMEM_TO_DMA,
@@ -2019,8 +2019,8 @@ static rtems_device_driver grtc_ioctl(
         return RTEMS_INVALID_NAME;
       }
       /* We disable interrupt on the local CPU in order to get a
-		 * snapshot of the registers.
-		 */
+       * snapshot of the registers.
+       */
       IRQ_LOCAL_DISABLE( oldLevel );
       hwregs->sir = READ_REG( &pDev->regs->sir );
       hwregs->far = READ_REG( &pDev->regs->far );
@@ -2075,8 +2075,8 @@ static rtems_device_driver grtc_ioctl(
       }
 
       /* Ok, we trust user. The pool descriptions are allocated
-		 * but not frames, that the user must do self.
-		 */
+       * but not frames, that the user must do self.
+       */
       if ( pDev->pools ) {
         free( pDev->pools );
       }
@@ -2145,11 +2145,11 @@ static rtems_device_driver grtc_ioctl(
       break;
 
     /* Try to read as much data as possible from DMA area and
-		 * put it into free frames.
-		 *
-		 * If receiver is in stopped mode, let user only read previously
-		 * received frames.
-		 */
+     * put it into free frames.
+     *
+     * If receiver is in stopped mode, let user only read previously
+     * received frames.
+     */
     case GRTC_IOC_RECV:
 
       if (( pDev->mode != GRTC_MODE_FRAME )) {
@@ -2180,8 +2180,8 @@ static rtems_device_driver grtc_ioctl(
 
       if ( ( frmlist->cnt == 0 ) && pDev->overrun_condition ) {
         /* signal to the user that overrun has happend when
-			 * no more data can be read out.
-			 */
+         * no more data can be read out.
+         */
         return RTEMS_IO_ERROR;
       }
       break;
@@ -2215,9 +2215,9 @@ static void grtc_interrupt( void *arg )
   }
 
   if ( status & GRTC_INT_OV ) {
-    /* Stop core (Disable receiver, interrupts), set overrun condition, 
-		 * Flush semaphore if thread waiting for data in grtc_wait_data(). 
-		 */
+    /* Stop core (Disable receiver, interrupts), set overrun condition,
+     * Flush semaphore if thread waiting for data in grtc_wait_data().
+     */
     grtc_stop( pDev, 1 );
 
     /* No need to handle the reset of interrupts, we are still */
@@ -2235,13 +2235,13 @@ static void grtc_interrupt( void *arg )
       }
 
       /* Enough data is available which means that we should
-			 * wake up the thread sleeping.
-			 */
+       * wake up the thread sleeping.
+       */
     }
 
     /* Disable further CLTUs Stored interrupts, no point until
-		 * thread waiting for them says it want to wait for more.
-		 */
+     * thread waiting for them says it want to wait for more.
+     */
     regs->imr = READ_REG( &regs->imr ) & ~GRTC_INT_CS;
     SPIN_UNLOCK( &pDev->devlock, irqflags );
 

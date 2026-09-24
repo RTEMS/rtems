@@ -33,7 +33,7 @@
  * AMBA-over-PCI bus. This driver provides an interface for the BC, RT and BM
  * drivers to use. Since the different interfaces are accessed over the same
  * register interface on the same core, the other drivers must share a GR1553B
- * device. Any combination of interface functionality is supported, but the RT 
+ * device. Any combination of interface functionality is supported, but the RT
  * and BC functionality can nnot be used simultaneously due to hardware
  * limitation.
  *

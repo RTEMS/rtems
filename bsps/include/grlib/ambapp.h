@@ -90,14 +90,14 @@ struct ambapp_ahb_info {
   unsigned int start[ 4 ];
   unsigned int mask[ 4 ];
   char         type[ 4 ]; /* type[N] Determine type of start[N]-mask[N],
-				 * 2=AHB Memory Space, 3=AHB I/O Space */
+                           * 2=AHB Memory Space, 3=AHB I/O Space */
   unsigned int custom[ 3 ];
 };
 
 struct ambapp_dev {
   struct ambapp_dev *next;     /* Next */
   struct ambapp_dev *prev;     /* Previous Device. If (this ==
-					 * rev->child) prev is bus bridge */
+                                * rev->child) prev is bus bridge */
   struct ambapp_dev *children; /* Points to first device on sub-bus */
   void              *owner;    /* Owner of this AMBA device */
   unsigned char      dev_type; /* AHB MST, AHB SLV or APB SLV*/
@@ -139,7 +139,7 @@ struct ambapp_bus {
   struct ambapp_ahb_bus ahbs[ AHB_BUS_MAX ]; /* AHB Buses */
 };
 
-/* 
+/*
  * Return values
  *  0 - continue
  *  1 - stop scanning
@@ -223,7 +223,7 @@ struct ambapp_context {
  */
 extern struct ambapp_bus *ambapp_plb( void );
 
-/* Scan a AMBA Plug & Play bus and create all device structures describing the 
+/* Scan a AMBA Plug & Play bus and create all device structures describing the
  * the devices. The devices will form a tree, where every node describes one
  * interface. The resulting tree is placed in the location pointed to by root.
  *
@@ -258,7 +258,7 @@ extern unsigned int ambapp_freq_get(
   struct ambapp_dev *dev
 );
 
-/* Iterates through all AMBA devices previously found, it calls func 
+/* Iterates through all AMBA devices previously found, it calls func
  * once for every device that match the search arguments.
  *
  * SEARCH OPTIONS

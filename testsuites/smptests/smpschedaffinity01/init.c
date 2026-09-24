@@ -35,7 +35,7 @@
  * with affinity are at priority 4, so the affinity task
  * on the core init is running on will preempt it.
  *
- * Test tasks run and delete themselves. 
+ * Test tasks run and delete themselves.
  * Init task never blocks.
  */
 

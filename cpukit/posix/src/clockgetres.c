@@ -57,8 +57,8 @@ int clock_getres( clockid_t clock_id, struct timespec *res )
 
   switch ( clock_id ) {
       /*
-     *  All time in rtems is based on the same clock tick.
-     */
+       *  All time in rtems is based on the same clock tick.
+       */
 
     case CLOCK_REALTIME:
     case CLOCK_PROCESS_CPUTIME_ID:

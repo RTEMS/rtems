@@ -62,7 +62,7 @@ int _STAT_NAME( const char *path, struct stat *buf );
 
 /**
  *  POSIX 1003.1b 5.6.2 - Get File Status
- * 
+ *
  *  Reused from lstat().
  */
 int _STAT_NAME( const char *path, struct stat *buf )

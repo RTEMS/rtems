@@ -391,8 +391,8 @@ void drvmgr_info_bus( struct drvmgr_bus *bus, unsigned int options )
   printf( "  ERROR:       %d\n", bus->error );
 
   /* Print address mappings up- (to parent) and down- (from parent to
-	 * this bus) stream the bridge of this bus
-	 */
+   * this bus) stream the bridge of this bus
+   */
   printf( "  DOWN STREAMS BRIDGE MAPPINGS  (from parent to this bus)\n" );
   drvmgr_info_bus_map( bus->maps_down );
   printf( "  UP STREAMS BRIDGE MAPPINGS    (from this bus to parent)\n" );

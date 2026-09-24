@@ -29,7 +29,7 @@
  *
  *  OVERVIEW
  *  ========
- *  This driver controls the L2CACHE device located 
+ *  This driver controls the L2CACHE device located
  *  at an on-chip AMBA.
  */
 

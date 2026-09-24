@@ -171,9 +171,9 @@ static void mmap_bad_arguments( void )
     "simple /dev/zero shared"
   );
   /*
-    * Repeat with no write protection. Will fail because of unimplemented
-    * mmap handler in /dev/zero.
-    */
+   * Repeat with no write protection. Will fail because of unimplemented
+   * mmap handler in /dev/zero.
+   */
   checked_mmap(
     PROT_READ | PROT_WRITE,
     MAP_SHARED,
@@ -198,9 +198,9 @@ static void mmap_bad_arguments( void )
     "simple test driver shared"
   );
   /*
-    * Repeat with no write protection. Should fail because of unimplemented
-    * mmap handler in /dev/null.
-    */
+   * Repeat with no write protection. Should fail because of unimplemented
+   * mmap handler in /dev/null.
+   */
   p = checked_mmap(
     PROT_READ | PROT_WRITE,
     MAP_SHARED,
@@ -313,8 +313,8 @@ static void mmap_bad_arguments( void )
   );
 
   /*
-    * Repeat with no write protection.
-    */
+   * Repeat with no write protection.
+   */
   checked_mmap(
     PROT_READ | PROT_WRITE,
     MAP_PRIVATE,

@@ -189,7 +189,7 @@ static void do_positive_case( int i )
   }
 
   /*
-   * Unregister the TOD hooks 
+   * Unregister the TOD hooks
    */
   if ( testcase->do_hook1 == true ) {
     _TOD_Hook_Unregister( &hook1 );
@@ -289,7 +289,7 @@ static void do_negative_case( bool use_posix )
   }
 
   /*
-   * Unregister the TOD hooks 
+   * Unregister the TOD hooks
    */
   _TOD_Hook_Unregister( &hook_error );
 

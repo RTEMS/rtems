@@ -39,12 +39,12 @@
 
 #include <grlib/grlib_impl.h>
 
-//#define STATIC
+// #define STATIC
 #define STATIC static
 
 #define UNUSED __attribute__(( unused ))
 
-//#define DEBUG 1
+// #define DEBUG 1
 
 #ifdef DEBUG
 #define DBG( x... ) printf( x )
@@ -679,9 +679,9 @@ int router_init2( struct drvmgr_dev *dev )
   }
 
   /* Startup Action:
-	 *  - Clear interrupts
-	 *  - Mask interrupts
-	 */
+   *  - Clear interrupts
+   *  - Mask interrupts
+   */
 
   /* Mask interrupts in ROTUER */
   REG_WRITE( &priv->regs->imask, 0 );
@@ -1194,8 +1194,8 @@ int router_route_get( void *d, struct router_route *route )
   }
 
   /*DBG("ROUTE from address 0x%02x read, PMAP: 0x%08x, CTRL: 0x%08x\n",
-	 *		(unsigned int) route->from_address, mask,
-	 *		(unsigned int) route->options);*/
+   *		(unsigned int) route->from_address, mask,
+   *		(unsigned int) route->options);*/
 
   i = 0;
   count = 0;

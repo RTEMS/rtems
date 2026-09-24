@@ -61,13 +61,13 @@ struct pci_auto_setup {
   uint32_t io_size; /* 0 = No I/O space */
 
   /* Get System IRQ connected to a PCI line of a PCI device on bus0.
-	 * The return IRQ value zero equals no IRQ (IRQ disabled).
-	 */
+   * The return IRQ value zero equals no IRQ (IRQ disabled).
+   */
   uint8_t ( *irq_map )( pci_dev_t dev, int irq_pin );
 
   /* IRQ Bridge routing. Returns the interrupt pin (0..3 = A..D) that
-	 * a device is connected to on parent bus.
-	 */
+   * a device is connected to on parent bus.
+   */
   int ( *irq_route )( pci_dev_t dev, int irq_pin );
 };
 

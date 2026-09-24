@@ -269,7 +269,7 @@ void stat_a_file_helper( const char *file, int follow_link )
 
 /*
  *  Do a stat on a single file and report the status.
-*/
+ */
 void stat_a_file( const char *file )
 {
   stat_a_file_helper( file, true );

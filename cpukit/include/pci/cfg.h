@@ -227,8 +227,8 @@ enum {
   DEV_RES_ROM = 6,
 
   /* Bridges have 2 BARs (BAR1 and BAR2) and 3 Windows to secondary bus
-	 * and an optional ROM BAR
-	 */
+   * and an optional ROM BAR
+   */
   BRIDGE_RES_BAR1 = 0,
   BRIDGE_RES_BAR2 = 1,
   BRIDGE_RES_IO = 2,
@@ -272,11 +272,11 @@ struct pci_bus {
 
 #if defined( PCI_CFG_AUTO_LIB )
   /* Resources of devices on bus. USED INTERNALLY IN AUTO-CFG LIBRARY.
-	 *
-	 * BUS_RES_IO    = 0:  I/O resources
-	 * BUS_RES_MEMIO = 1:  Prefetchable memory resources
-	 * BUS_RES_MEM   = 2:  Non-Prefetchable memory resources
-	 */
+   *
+   * BUS_RES_IO    = 0:  I/O resources
+   * BUS_RES_MEMIO = 1:  Prefetchable memory resources
+   * BUS_RES_MEM   = 2:  Non-Prefetchable memory resources
+   */
   struct pci_res *busres[ 3 ];
 #endif
 };

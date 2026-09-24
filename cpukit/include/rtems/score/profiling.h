@@ -46,7 +46,7 @@ extern "C" {
 
 /**
  * @defgroup RTEMSScoreProfiling Profiling Support
- * 
+ *
  * @ingroup RTEMSScore
  *
  * @brief This group contains the implementation to support profiling.

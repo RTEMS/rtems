@@ -54,9 +54,9 @@ static void action( void *arg )
   state = arg;
 
   /*
-	 * This code models a critical section in the operating system.  The
-	 * interrupt should happen between the two atomic operations.
-	 */
+   * This code models a critical section in the operating system.  The
+   * interrupt should happen between the two atomic operations.
+   */
   expected = 0;
   success_0 = _Atomic_Compare_exchange_uint(
     state,

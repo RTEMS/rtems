@@ -163,7 +163,7 @@ static inline void _POSIX_Condition_variables_Release(
 
 /**
  * @brief Implements wake up version of the "signal" operation.
- * 
+ *
  * A support routine which implements guts of the broadcast and single task
  * wake up version of the "signal" operation.
  */

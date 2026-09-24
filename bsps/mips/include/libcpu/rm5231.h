@@ -2,7 +2,7 @@
 
 /**
  *  @file
- *  
+ *
  *  MIPS RM5231 specific information
  */
 

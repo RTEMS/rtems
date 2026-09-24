@@ -393,9 +393,9 @@ int i2cmst_init3( struct drvmgr_dev *dev )
     return DRVMGR_FAIL;
   }
 
-  /* I/O system registered and initialized 
-	 * Now we take care of device initialization.
-	 */
+  /* I/O system registered and initialized
+   * Now we take care of device initialization.
+   */
 
   /* Get frequency */
   if ( drvmgr_freq_get( dev, DEV_APB_SLV, &priv->sysfreq ) ) {
@@ -413,13 +413,13 @@ int i2cmst_init3( struct drvmgr_dev *dev )
   prefix[ 0 ] = '\0';
   if ( drvmgr_get_dev_prefix( dev, prefix ) ) {
     /* Failed to get prefix, make sure of a unique FS name
-		 * by using the driver minor.
-		 */
+     * by using the driver minor.
+     */
     sprintf( devName, "/dev/i2c%d", dev->minor_drv + 1 );
   } else {
     /* Got special prefix, this means we have a bus prefix
-		 * And we should use our "bus minor"
-		 */
+     * And we should use our "bus minor"
+     */
     sprintf( devName, "/dev/%si2c%d", prefix, dev->minor_bus + 1 );
   }
 

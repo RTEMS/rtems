@@ -8,7 +8,7 @@
 
 /*
  * COPYRIGHT (c) 2000 Chris Johns <chrisj@rtems.org>
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -543,22 +543,22 @@ void rtems_monitor_task( rtems_task_argument monitor_flags )
   struct termios term;
 
   /*
-     * Make the stdin stream characte not line based.
-     */
+   * Make the stdin stream characte not line based.
+   */
 
   if ( tcgetattr( STDIN_FILENO, &term ) < 0 ) {
     fprintf( stdout, "rtems-monitor: cannot get terminal attributes.\n" );
   } else {
     /*
-       * No echo, no canonical processing.
-       */
+     * No echo, no canonical processing.
+     */
 
     term.c_lflag &= ~( ECHO | ICANON | IEXTEN );
 
     /*
-       * No sigint on BREAK, CR-to-NL off, input parity off,
-       * don't strip 8th bit on input, output flow control off
-       */
+     * No sigint on BREAK, CR-to-NL off, input parity off,
+     * don't strip 8th bit on input, output flow control off
+     */
 
     term.c_lflag &= ~( INPCK | ISTRIP | IXON );
     term.c_cc[ VMIN ] = 1;
@@ -633,8 +633,8 @@ void rtems_monitor_init( uint32_t monitor_flags )
 
   if ( !( monitor_flags & RTEMS_MONITOR_NOTASK ) ) {
     /*
-       * Start the monitor task itself
-       */
+     * Start the monitor task itself
+     */
     status = rtems_task_start(
       rtems_monitor_task_id,
       rtems_monitor_task,

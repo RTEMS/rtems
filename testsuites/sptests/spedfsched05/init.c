@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright (C) 2025 Gedare Bloom 
+ * Copyright (C) 2025 Gedare Bloom
  * Copyright (C) 2014, 2020 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without

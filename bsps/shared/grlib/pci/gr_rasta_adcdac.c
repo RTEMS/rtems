@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*  GR-RASTA-ADCDAC PCI Target driver.
- * 
+ *
  *  COPYRIGHT (c) 2008.
  *  Cobham Gaisler AB.
  *
@@ -268,9 +268,9 @@ static int gr_rasta_adcdac_hw_init1( struct gr_rasta_adcdac_priv *priv )
   pci_cfg_w32( priv->pcidev, PCIR_COMMAND, ( data | PCIM_CMD_PERRESPEN ) );
 
   /* Setup cache line size. Default cache line size will result in
-	 * poor performance (256 word fetches), 0xff will set it according
-	 * to the max size of the PCI FIFO.
-	 */
+   * poor performance (256 word fetches), 0xff will set it according
+   * to the max size of the PCI FIFO.
+   */
   pci_cfg_w8( priv->pcidev, PCIR_CACHELNSZ, 0xff );
 
   /* Scan AMBA Plug&Play */
@@ -297,7 +297,7 @@ static int gr_rasta_adcdac_hw_init1( struct gr_rasta_adcdac_priv *priv )
 
   /* Start AMBA PnP scan at first AHB bus */
   /*ambapp_scan(priv->bar0 + (priv->version->amba_ioarea & ~0xf0000000),
-		NULL, &priv->amba_maps[0], NULL, &priv->abus.root, NULL);*/
+                NULL, &priv->amba_maps[0], NULL, &priv->abus.root, NULL);*/
   ambapp_scan(
     &priv->abus,
     bar0 + ( priv->version->amba_ioarea & ~0xf0000000 ),
@@ -328,8 +328,8 @@ static int gr_rasta_adcdac_hw_init1( struct gr_rasta_adcdac_priv *priv )
                   ->start;
 
   /* Set GRPCI mmap so that AMBA masters can access CPU-RAM over
-	 * the PCI window.
-	 */
+   * the PCI window.
+   */
   priv->grpci->cfg_stat = ( priv->grpci->cfg_stat & 0x0fffffff ) |
                           ( priv->ahbmst2pci_map & 0xf0000000 );
   priv->grpci->page1 = 0x40000000;
@@ -407,7 +407,7 @@ static int gr_rasta_adcdac_hw_init2( struct gr_rasta_adcdac_priv *priv )
   return DRVMGR_OK;
 }
 
-/* Called when a PCI target is found with the PCI device and vendor ID 
+/* Called when a PCI target is found with the PCI device and vendor ID
  * given in gr_rasta_adcdac_ids[].
  */
 int gr_rasta_adcdac_init1( struct drvmgr_dev *dev )
@@ -474,18 +474,18 @@ int gr_rasta_adcdac_init1( struct drvmgr_dev *dev )
   }
 
   /* Initialize spin-lock for this PCI perihperal device. This is to
-	 * protect the Interrupt Controller Registers. The genirq layer is
-         * protecting its own internals and ISR dispatching.
-         */
+   * protect the Interrupt Controller Registers. The genirq layer is
+   * protecting its own internals and ISR dispatching.
+   */
   SPIN_INIT( &priv->devlock, priv->prefix );
 
   /* Let user override which PCI address the AHB masters of the
-	 * RASTA-ADCDAC board access when doing DMA to CPU RAM. The AHB masters
-	 * access the PCI Window of the AMBA bus, the MSB 4-bits of that address
-	 * is translated according this config option before the address
-	 * goes out on the PCI bus.
-	 * Only the 4 MSB bits have an effect;
-	 */
+   * RASTA-ADCDAC board access when doing DMA to CPU RAM. The AHB masters
+   * access the PCI Window of the AMBA bus, the MSB 4-bits of that address
+   * is translated according this config option before the address
+   * goes out on the PCI bus.
+   * Only the 4 MSB bits have an effect;
+   */
   value = drvmgr_dev_key_get( priv->dev, "ahbmst2pci", DRVMGR_KT_INT );
   if ( value ) {
     priv->ahbmst2pci_map = value->i;
@@ -530,15 +530,15 @@ int gr_rasta_adcdac_init2( struct drvmgr_dev *dev )
   /* Clear any old interrupt requests */
   drvmgr_interrupt_clear( dev, 0 );
 
-  /* Enable System IRQ so that GR-RASTA-ADCDAC PCI target interrupt 
-	 * goes through.
-	 *
-	 * It is important to enable it in stage init2. If interrupts were
-	 * enabled in init1 this might hang the system when more than one 
-	 * PCI board is connected, this is because PCI interrupts might 
-	 * be shared and PCI board 2 have not initialized and might
-	 * therefore drive interrupt already when entering init1().
-	 */
+  /* Enable System IRQ so that GR-RASTA-ADCDAC PCI target interrupt
+   * goes through.
+   *
+   * It is important to enable it in stage init2. If interrupts were
+   * enabled in init1 this might hang the system when more than one
+   * PCI board is connected, this is because PCI interrupts might
+   * be shared and PCI board 2 have not initialized and might
+   * therefore drive interrupt already when entering init1().
+   */
   drvmgr_interrupt_register(
     dev,
     0,

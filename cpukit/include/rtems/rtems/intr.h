@@ -2338,8 +2338,8 @@ rtems_status_code rtems_interrupt_handler_iterate(
 typedef struct rtems_interrupt_server_control {
   #if defined( RTEMS_SMP )
   /**
-     * @brief This member is the ISR lock protecting the server control state.
-     */
+   * @brief This member is the ISR lock protecting the server control state.
+   */
   rtems_interrupt_lock lock;
   #endif
 

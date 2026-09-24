@@ -126,8 +126,8 @@ static inline unsigned int grcan_hw_rxavail(
 {
   if ( rp == wp ) {
     /* read pointer and write pointer is equal only
-		 * when RX buffer is empty.
-		 */
+     * when RX buffer is empty.
+     */
     return 0;
   }
 
@@ -148,8 +148,8 @@ static inline unsigned int grcan_hw_txspace(
 
   if ( rp == wp ) {
     /* read pointer and write pointer is equal only
-		 * when TX buffer is empty.
-		 */
+     * when TX buffer is empty.
+     */
     return size / GRCAN_MSG_SIZE - WRAP_AROUND_TX_MSGS;
   }
 

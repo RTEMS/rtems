@@ -461,7 +461,7 @@ void *POSIX_Init( void *argument )
   rtems_test_assert( status == EINVAL );
   puts( "Init: pthread_cond_clockwait - EINVAL (abstime NULL)" );
 
-  clock_id = (clockid_t) 99; //invalid clock value
+  clock_id = (clockid_t) 99; // invalid clock value
   status = pthread_cond_clockwait( &Cond1_id, NULL, clock_id, &timeout );
   if ( status != EINVAL ) {
     printf( "status = %d\n", status );
@@ -540,24 +540,24 @@ void *POSIX_Init( void *argument )
   /* wait and timedwait without mutex */
 
   /* XXX - this case is commented out in the code pending review
- *
- *   status = pthread_cond_wait( &Cond1_id, &Mutex_id );
- *   if ( status != EINVAL )
- *     printf( "status = %d\n", status );
- *   rtems_test_assert( status == EINVAL );
- */
+   *
+   *   status = pthread_cond_wait( &Cond1_id, &Mutex_id );
+   *   if ( status != EINVAL )
+   *     printf( "status = %d\n", status );
+   *   rtems_test_assert( status == EINVAL );
+   */
   puts( "Init: pthread_cond_wait - EINVAL (mutex not locked before call)" );
 
   /* XXX - this case is commented out in the code pending review
- *
- *  status = clock_gettime( CLOCK_REALTIME, &timeout );
- *  rtems_test_assert( !status );
- *  timeout.tv_sec += 1;
- *  status = pthread_cond_timedwait( &Cond1_id, &Mutex_id, &timeout );
- *  if ( status != EINVAL )
- *    printf( "status = %d\n", status );
- *  rtems_test_assert( status == EINVAL );
- */
+   *
+   *  status = clock_gettime( CLOCK_REALTIME, &timeout );
+   *  rtems_test_assert( !status );
+   *  timeout.tv_sec += 1;
+   *  status = pthread_cond_timedwait( &Cond1_id, &Mutex_id, &timeout );
+   *  if ( status != EINVAL )
+   *    printf( "status = %d\n", status );
+   *  rtems_test_assert( status == EINVAL );
+   */
   puts(
     "Init: pthread_cond_timedwait - EINVAL (mutex not locked before call)"
   );

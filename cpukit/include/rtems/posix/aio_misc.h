@@ -13,7 +13,7 @@
 
 /*
  *  Copyright 2010, Alin Rus <alin.codejunkie@gmail.com>
- * 
+ *
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -100,8 +100,8 @@ extern "C" {
 #define AIO_SIGNALED 1
 
 /**
- * @brief holds a pointer to a sigevent struct or a thread id 
- *  
+ * @brief holds a pointer to a sigevent struct or a thread id
+ *
  */
 typedef union {
   /** @brief pointer to the sigevent for notification */
@@ -243,7 +243,7 @@ extern rtems_aio_queue aio_request_queue;
 
 /**
  * @brief Initialize the request queue for AIO Operations.
- * 
+ *
  * @retval 0 The queue has bees succesfully initialized.
  * @retval -1 An error occured while initializing the queue.
  */
@@ -251,21 +251,21 @@ int rtems_aio_init( void );
 
 /**
  * @brief Enqueue requests, and creates threads to process them.
- * 
+ *
  * @param[in,out] req A pointer to the request.
- * 
+ *
  * @retval 0 if the request was added to the queue, errno otherwise.
  */
 int rtems_aio_enqueue( rtems_aio_request *req );
 
 /**
  * @brief Search for and create a chain of requests for a given file descriptor.
- * 
+ *
  * @param[in,out] chain   A pointer to a chain of FD chains.
  * @param[in] fildes The file descriptor to search for.
  * @param[in] create  If create == 0, the function just searches for the given FD.
  *                    If create == 1, the function creates a new chain if none is found.
- * 
+ *
  * @retval NULL If create == 0 and no chain is found for the given FD.
  * @return A pointer to the chain if a chain for the given FD exists.
  * @return A pointer to a newly created chain if create == 1 and no chain
@@ -279,17 +279,17 @@ rtems_aio_request_chain *rtems_aio_search_fd(
 
 /**
  * @brief Removes all the requests in a FD chain.
- * 
+ *
  * @param[in,out] r_chain A pointer to a chain of requests for a given FD
  */
 void rtems_aio_remove_fd( rtems_aio_request_chain *r_chain );
 
 /**
  * @brief Remove request from given chain
- * 
+ *
  * @param[in,out] chain  A pointer to the FD chain that may contain the request
  * @param[in,out] aiocbp A pointer to the AIO control block of the request.
- * 
+ *
  * @retval AIO_CANCELED The request was canceled.
  * @retval AIO_NOTCANCELED The request was not canceled.
  */
@@ -299,7 +299,7 @@ int rtems_aio_remove_req( rtems_chain_control *chain, struct aiocb *aiocbp );
  * @brief Checks the validity of a sigevent struct
  *
  * Checks if the pointer passed as parameter points to a valid sigevent struct.
- * 
+ *
  * @param sigp Is a pointer to the sigevent struct to check.
  * @retval 0 The struct is not valid.
  * @retval 1 The struct is valid.
@@ -308,42 +308,42 @@ int rtems_aio_check_sigevent( struct sigevent *sigp );
 
 /**
  * @brief initializes a read rtems_aio_request
- * 
+ *
  * @param aiocb pointer to the aiocb describing the request
  * @retval NULL the aiocb passed was invalid, errno indicates the error:
- *          - 
+ *          -
  * @return rtems_aio_request* a pointer to the newly created request.
  */
 rtems_aio_request *init_write_req( struct aiocb *aiocbp );
 
 /**
  * @brief initializes a write rtems_aio_request
- * 
+ *
  * @param aiocb pointer to the aiocb describing the request
  * @retval NULL the aiocb passed was invalid, errno indicates the error:
- *          - 
+ *          -
  * @return rtems_aio_request* a pointer to the newly created request.
  */
 rtems_aio_request *init_read_req( struct aiocb *aiocbp );
 
 /**
  * @brief updates listcb after op completion
- * 
+ *
  * @param listcbp a pointer to the list control block.
  */
 void rtems_aio_completed_list_op( listcb *listcbp );
 
 /**
  * @brief updates suspendcb after related op completion
- * 
+ *
  * @param suspendcbp a pointer to the suspend control block.
  */
 void rtems_aio_update_suspendcbp( rtems_aio_suspendcb *suspendcbp );
 
 /**
  * @brief Search a request in an fd chain.
- * 
- * @param aiocbp 
+ *
+ * @param aiocbp
  * @retval NULL The request identified by aiocbp is not present in fd_chain.
  * @return A pointer to the rtems_aio_request referenced by aiocbp.
  */

@@ -28,7 +28,7 @@
 
 /*
  * Test designed for 2 cores: Init task and TA1 task.
- * of equal priorities.  
+ * of equal priorities.
  *
  *  - Set TA1 affinity to core 0 verify
  *  - Set TA1 affinity to core 1 verify it does not run because

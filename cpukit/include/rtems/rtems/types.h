@@ -117,10 +117,10 @@ typedef Watchdog_Interval rtems_interval;
 /* Generated from spec:/rtems/type/if/mp-packet-classes */
 
 /**
-   * @ingroup RTEMSAPIClassicTypes
-   *
-   * @brief This enumeration defines the MPCI packet classes.
-   */
+ * @ingroup RTEMSAPIClassicTypes
+ *
+ * @brief This enumeration defines the MPCI packet classes.
+ */
 typedef MP_packet_Classes rtems_mp_packet_classes;
 #endif
 
@@ -128,10 +128,10 @@ typedef MP_packet_Classes rtems_mp_packet_classes;
 /* Generated from spec:/rtems/type/if/mpci-entry */
 
 /**
-   * @ingroup RTEMSAPIClassicTypes
-   *
-   * @brief MPCI handler routines shall have this return type.
-   */
+ * @ingroup RTEMSAPIClassicTypes
+ *
+ * @brief MPCI handler routines shall have this return type.
+ */
 typedef MPCI_Entry rtems_mpci_entry;
 #endif
 
@@ -139,10 +139,10 @@ typedef MPCI_Entry rtems_mpci_entry;
 /* Generated from spec:/rtems/type/if/mpci-get-packet-entry */
 
 /**
-   * @ingroup RTEMSAPIClassicTypes
-   *
-   * @brief MPCI get packet routines shall have this type.
-   */
+ * @ingroup RTEMSAPIClassicTypes
+ *
+ * @brief MPCI get packet routines shall have this type.
+ */
 typedef MPCI_get_packet_entry rtems_mpci_get_packet_entry;
 #endif
 
@@ -150,10 +150,10 @@ typedef MPCI_get_packet_entry rtems_mpci_get_packet_entry;
 /* Generated from spec:/rtems/type/if/mpci-initialization-entry */
 
 /**
-   * @ingroup RTEMSAPIClassicTypes
-   *
-   * @brief MPCI initialization routines shall have this type.
-   */
+ * @ingroup RTEMSAPIClassicTypes
+ *
+ * @brief MPCI initialization routines shall have this type.
+ */
 typedef MPCI_initialization_entry rtems_mpci_initialization_entry;
 #endif
 
@@ -161,10 +161,10 @@ typedef MPCI_initialization_entry rtems_mpci_initialization_entry;
 /* Generated from spec:/rtems/type/if/mpci-receive-packet-entry */
 
 /**
-   * @ingroup RTEMSAPIClassicTypes
-   *
-   * @brief MPCI receive packet routines shall have this type.
-   */
+ * @ingroup RTEMSAPIClassicTypes
+ *
+ * @brief MPCI receive packet routines shall have this type.
+ */
 typedef MPCI_receive_entry rtems_mpci_receive_packet_entry;
 #endif
 
@@ -172,10 +172,10 @@ typedef MPCI_receive_entry rtems_mpci_receive_packet_entry;
 /* Generated from spec:/rtems/type/if/mpci-return-packet-entry */
 
 /**
-   * @ingroup RTEMSAPIClassicTypes
-   *
-   * @brief MPCI return packet routines shall have this type.
-   */
+ * @ingroup RTEMSAPIClassicTypes
+ *
+ * @brief MPCI return packet routines shall have this type.
+ */
 typedef MPCI_return_packet_entry rtems_mpci_return_packet_entry;
 #endif
 
@@ -183,10 +183,10 @@ typedef MPCI_return_packet_entry rtems_mpci_return_packet_entry;
 /* Generated from spec:/rtems/type/if/mpci-send-packet-entry */
 
 /**
-   * @ingroup RTEMSAPIClassicTypes
-   *
-   * @brief MPCI send packet routines shall have this type.
-   */
+ * @ingroup RTEMSAPIClassicTypes
+ *
+ * @brief MPCI send packet routines shall have this type.
+ */
 typedef MPCI_send_entry rtems_mpci_send_packet_entry;
 #endif
 
@@ -194,10 +194,10 @@ typedef MPCI_send_entry rtems_mpci_send_packet_entry;
 /* Generated from spec:/rtems/type/if/mpci-table */
 
 /**
-   * @ingroup RTEMSAPIClassicTypes
-   *
-   * @brief This type represents the user-provided MPCI control.
-   */
+ * @ingroup RTEMSAPIClassicTypes
+ *
+ * @brief This type represents the user-provided MPCI control.
+ */
 typedef MPCI_Control rtems_mpci_table;
 #endif
 
@@ -205,10 +205,10 @@ typedef MPCI_Control rtems_mpci_table;
 /* Generated from spec:/rtems/type/if/multiprocessing-table */
 
 /**
-   * @ingroup RTEMSAPIClassicTypes
-   *
-   * @brief This type represents the user-provided MPCI configuration.
-   */
+ * @ingroup RTEMSAPIClassicTypes
+ *
+ * @brief This type represents the user-provided MPCI configuration.
+ */
 typedef MPCI_Configuration rtems_multiprocessing_table;
 #endif
 
@@ -239,11 +239,11 @@ typedef uint32_t rtems_name;
 /* Generated from spec:/rtems/type/if/packet-prefix */
 
 /**
-   * @ingroup RTEMSAPIClassicTypes
-   *
-   * @brief This type represents the prefix found at the beginning of each MPCI
-   *   packet sent between nodes.
-   */
+ * @ingroup RTEMSAPIClassicTypes
+ *
+ * @brief This type represents the prefix found at the beginning of each MPCI
+ *   packet sent between nodes.
+ */
 typedef MP_packet_Prefix rtems_packet_prefix;
 #endif
 

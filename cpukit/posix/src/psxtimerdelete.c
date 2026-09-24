@@ -52,13 +52,13 @@
 int timer_delete( timer_t timerid )
 {
   /*
-  * IDEA: This function must probably stop the timer first and then delete it
-  *
-  *       It will have to do a call to rtems_timer_cancel and then another
-  *       call to rtems_timer_delete.
-  *       The call to rtems_timer_delete will be probably unnecessary,
-  *       because rtems_timer_delete stops the timer before deleting it.
-  */
+   * IDEA: This function must probably stop the timer first and then delete it
+   *
+   *       It will have to do a call to rtems_timer_cancel and then another
+   *       call to rtems_timer_delete.
+   *       The call to rtems_timer_delete will be probably unnecessary,
+   *       because rtems_timer_delete stops the timer before deleting it.
+   */
   POSIX_Timer_Control *ptimer;
   ISR_lock_Context     lock_context;
 

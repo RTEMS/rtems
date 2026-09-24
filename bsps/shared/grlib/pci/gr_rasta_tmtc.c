@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*  GR-RASTA-TMTC PCI Target driver.
- * 
+ *
  *  COPYRIGHT (c) 2008.
  *  Cobham Gaisler AB.
  *
@@ -276,8 +276,8 @@ static int gr_rasta_tmtc_hw_init_common( struct gr_rasta_tmtc_priv *priv )
   unsigned int       pci_freq_hz;
 
   /* Initialize Frequency of AMBA bus. The AMBA bus runs at same
-	 * frequency as PCI bus
-	 */
+   * frequency as PCI bus
+   */
   drvmgr_freq_get( priv->dev, 0, &pci_freq_hz );
   ambapp_freq_init( &priv->abus, NULL, pci_freq_hz );
 
@@ -385,9 +385,9 @@ static int gr_rasta_tmtc0_hw_init( struct gr_rasta_tmtc_priv *priv )
 #endif
 
   /* Setup cache line size. Default cache line size will result in
-	 * poor performance (256 word fetches), 0xff will set it according
-	 * to the max size of the PCI FIFO.
-	 */
+   * poor performance (256 word fetches), 0xff will set it according
+   * to the max size of the PCI FIFO.
+   */
   pci_cfg_w8( pcidev, PCIR_CACHELNSZ, 0xff );
 
   /* Scan AMBA Plug&Play */
@@ -440,8 +440,8 @@ static int gr_rasta_tmtc0_hw_init( struct gr_rasta_tmtc_priv *priv )
                   ->start;
 
   /* Set GRPCI mmap so that AMBA masters can access CPU-RAM over
-	 * the PCI window.
-	 */
+   * the PCI window.
+   */
   priv->grpci->cfg_stat = ( priv->grpci->cfg_stat & 0x0fffffff ) |
                           ( priv->ahbmst2pci_map & 0xf0000000 );
   priv->grpci->page1 = 0x40000000;
@@ -500,8 +500,8 @@ static int gr_rasta_tmtc1_hw_init( struct gr_rasta_tmtc_priv *priv )
 
   if ( !( ( tmp2 >> 4 ) & 1 ) ) {
     /* Capabilities list not available which it should be in the
-		 * GRPCI2
-		 */
+     * GRPCI2
+     */
     return -3;
   }
 
@@ -509,9 +509,9 @@ static int gr_rasta_tmtc1_hw_init( struct gr_rasta_tmtc_priv *priv )
   pci_cfg_r8( pcidev, PCIR_CAP_PTR, &cap_ptr );
 
   /* Set AHB address mappings for target PCI bars
-	 * BAR0: 16MB  : Mapped to I/O at 0x80000000
-	 * BAR1: 256MB : Mapped to MEM at 0x40000000
-	 */
+   * BAR0: 16MB  : Mapped to I/O at 0x80000000
+   * BAR1: 256MB : Mapped to MEM at 0x40000000
+   */
   pci_cfg_w32( pcidev, cap_ptr + GRPCI2_BAR0_TO_AHB_MAP, AHB1_BASE_ADDR );
   pci_cfg_w32( pcidev, cap_ptr + GRPCI2_BAR1_TO_AHB_MAP, 0x40000000 );
 
@@ -623,7 +623,7 @@ static void gr_rasta_tmtc_hw_init2( struct gr_rasta_tmtc_priv *priv )
   pci_master_enable( priv->pcidev );
 }
 
-/* Called when a PCI target is found with the PCI device and vendor ID 
+/* Called when a PCI target is found with the PCI device and vendor ID
  * given in gr_rasta_tmtc_ids[].
  */
 int gr_rasta_tmtc_init1( struct drvmgr_dev *dev )
@@ -688,18 +688,18 @@ int gr_rasta_tmtc_init1( struct drvmgr_dev *dev )
   }
 
   /* Initialize spin-lock for this PCI peripheral device. This is to
-	 * protect the Interrupt Controller Registers. The genirq layer is
-         * protecting its own internals and ISR dispatching.
-         */
+   * protect the Interrupt Controller Registers. The genirq layer is
+   * protecting its own internals and ISR dispatching.
+   */
   SPIN_INIT( &priv->devlock, priv->prefix );
 
   /* Let user override which PCI address the AHB masters of the
-	 * GR-RASTA-TMTC board access when doing DMA to CPU RAM. The AHB masters
-	 * access the PCI Window of the AMBA bus, the MSB 4-bits of that address
-	 * is translated according this config option before the address
-	 * goes out on the PCI bus.
-	 * Only the 4 MSB bits have an effect;
-	 */
+   * GR-RASTA-TMTC board access when doing DMA to CPU RAM. The AHB masters
+   * access the PCI Window of the AMBA bus, the MSB 4-bits of that address
+   * is translated according this config option before the address
+   * goes out on the PCI bus.
+   * Only the 4 MSB bits have an effect;
+   */
   value = drvmgr_dev_key_get( priv->dev, "ahbmst2pci", DRVMGR_KT_INT );
   if ( value ) {
     priv->ahbmst2pci_map = value->i;
@@ -754,14 +754,14 @@ int gr_rasta_tmtc_init2( struct drvmgr_dev *dev )
   drvmgr_interrupt_clear( priv->dev, 0 );
 
   /* Enable System IRQ so that GR-RASTA-TMTC PCI target interrupt goes
-	 * through.
-	 *
-	 * It is important to enable it in stage init2. If interrupts were
-	 * enabled in init1 this might hang the system when more than one
-	 * PCI target is connected, this is because PCI interrupts might 
-	 * be shared and PCI board 2 have not initialized and
-	 * might therefore drive interrupt already when entering init1().
-	 */
+   * through.
+   *
+   * It is important to enable it in stage init2. If interrupts were
+   * enabled in init1 this might hang the system when more than one
+   * PCI target is connected, this is because PCI interrupts might
+   * be shared and PCI board 2 have not initialized and
+   * might therefore drive interrupt already when entering init1().
+   */
   drvmgr_interrupt_register(
     priv->dev,
     0,

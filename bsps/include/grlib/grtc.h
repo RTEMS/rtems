@@ -80,7 +80,7 @@ enum {
   GRTC_BLKMODE_COMPLETE = 2 /* Block until all data requested has be read */
 };
 
-/* Argument of GRTC_IOC_SET_CONFIG and GRTC_IOC_GET_CONFIG 
+/* Argument of GRTC_IOC_SET_CONFIG and GRTC_IOC_GET_CONFIG
  * Pointer to:
  */
 struct grtc_ioc_config {
@@ -131,9 +131,9 @@ struct grtc_list {
 struct grtc_ioc_pools_setup {
   unsigned int pool_cnt; /* Number of pools */
   unsigned int pool_frame_len
-    [ 1 ]; /* Array of 'pool_cnt' length: Frame length of frames in a pool 
-						 * Lengths must be sorted, starting with the smallest frame pool.
-						 */
+    [ 1 ]; /* Array of 'pool_cnt' length: Frame length of frames in a pool
+            * Lengths must be sorted, starting with the smallest frame pool.
+            */
 };
 
 struct grtc_ioc_assign_frm_pool {
@@ -143,8 +143,8 @@ struct grtc_ioc_assign_frm_pool {
 
 enum { GRTC_MODE_RAW = 0, GRTC_MODE_FRAME = 1 };
 
-/* TC driver stats collected during receiving. The statistics is only available 
- * in FRAME mode. In RAW mode the user interprets the incoming frames and is 
+/* TC driver stats collected during receiving. The statistics is only available
+ * in FRAME mode. In RAW mode the user interprets the incoming frames and is
  * therefore responsible for generating the staticstics.
  */
 struct grtc_ioc_stats {

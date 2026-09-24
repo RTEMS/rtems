@@ -108,7 +108,7 @@ void *POSIX_Init( void *argument )
   rtems_test_assert( result != 0 );
   rtems_test_assert( errno == EINVAL );
 
-  //NO ERROR
+  // NO ERROR
   result = aio_read( aiocbp );
   rtems_test_assert( result == 0 );
 

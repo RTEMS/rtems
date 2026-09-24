@@ -209,7 +209,7 @@ typedef struct {
  * @retval ::RTEMS_INVALID_NUMBER The ``count`` parameter was invalid.
  *
  * @retval ::RTEMS_INVALID_SIZE The ``max_message_size`` parameter was zero.
- * 
+ *
  * @retval ::RTEMS_INVALID_SIZE In multiprocessing configurations, the
  *   ``max_message_size`` exceeded the maximum message size supported by the
  *   MPCI.

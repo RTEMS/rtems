@@ -164,21 +164,21 @@ struct grpci2dma_priv {
   /* Channel info */
   struct {
     /* Channel pointer. Indicates the assigned channel
-		 * for a given cid (used as index). NULL if not assigned.
-		 */
+     * for a given cid (used as index). NULL if not assigned.
+     */
     struct grpci2_bd_chan *ptr;
     /* Is this channel allocated by the driver */
     int                    allocated;
     /* Last added data descriptor for each channel.
-		 * This simplifies/speeds up adding data descriptors
-		 * to the channel*/
+     * This simplifies/speeds up adding data descriptors
+     * to the channel*/
     struct grpci2_bd_data *lastdata;
     /* Is this channel active */
     int                    active;
     /* Interrupt-code Handling
-		 * - isr: Holds the ISR for each channel
-		 * - isr_arg: Holds the ISR arg for each channel
-		 */
+     * - isr: Holds the ISR for each channel
+     * - isr_arg: Holds the ISR arg for each channel
+     */
     grpci2dma_isr_t        isr;
     void                  *isr_arg;
 
@@ -193,7 +193,7 @@ struct grpci2dma_priv {
   int nactive;
 
   /* Indicates if the number of DMA ISR that have been registered
-	 * into the GRPCI2 DRIVER */
+   * into the GRPCI2 DRIVER */
   int isr_registered;
 
   /* Callback to register the DMA ISR into the GRPCI2 DRIVER */
@@ -386,9 +386,9 @@ STATIC int grpci2dma_channel_list_remove( struct grpci2_bd_chan *chan )
   if ( nchan != chan ) {
     /* There are more channels */
     /* Since this is a circular linked list, we need to find last channel
-		 * and update the pointer to the next element */
+     * and update the pointer to the next element */
     /* Use index to avoid having an infinite loop in case of corrupted
-		 * channels */
+     * channels */
     struct grpci2_bd_chan *new_first_chan = nchan;
     struct grpci2_bd_chan *curr_chan = NULL;
     int                    i = 1;
@@ -449,7 +449,7 @@ STATIC int grpci2dma_data_list_add(
     /* Attach the new data */
     grpci2dma_data_bd_set_next( last_chan_data, data );
     /* 2nd- Let's check again to make sure that the DMA did not finished
-		 * while we were inserting the new data */
+     * while we were inserting the new data */
     first_data = grpci2dma_channel_bd_get_data( chan );
     if ( first_data == DISABLED_DESCRIPTOR ) {
       grpci2dma_channel_bd_set_data( chan, data );
@@ -558,7 +558,7 @@ UNUSED STATIC int grpci2dma_channel_list_foreach(
     /* Available channels */
     /* Iterate through next channels */
     /* Use index to avoid having an infinite loop in case of corrupted
-		 * channels */
+     * channels */
     int                    i = 0;
     int                    ret;
     struct grpci2_bd_chan *curr_chan = first_chan;
@@ -597,7 +597,7 @@ STATIC int grpci2dma_data_list_foreach(
   /* Available data */
   /* Iterate through next data */
   /* Use index to avoid having an infinite loop in case of corrupted
-	 * channels */
+   * channels */
   int                    i = 0;
   int                    ret;
   struct grpci2_bd_data *curr_data = first_data;
@@ -1066,9 +1066,9 @@ STATIC int grpci2dma_channel_start( int chan_no, int options )
   }
 
   /* Start the channel by enabling it.
-	 * HWNOTE: In GRPCI2 this bit does not work as it is supposed.
-	 * So we better add/remove the channel from the active linked
-	 * list. */
+   * HWNOTE: In GRPCI2 this bit does not work as it is supposed.
+   * So we better add/remove the channel from the active linked
+   * list. */
   grpci2dma_channel_bd_enable( chan, desccnt );
   priv->channel[ chan_no ].active = 1;
   priv->nactive++;
@@ -1126,7 +1126,7 @@ STATIC int grpci2dma_channel_stop( int chan_no )
   priv->nactive--;
 
   /* Check if DMA is active and it the removed
-	 * channel is the active */
+   * channel is the active */
   resume = 0;
   SPIN_LOCK_IRQ( &priv->devlock, irqflags );
   if (
@@ -1145,16 +1145,16 @@ STATIC int grpci2dma_channel_stop( int chan_no )
   }
 
   /* Now either the DMA is stopped, or it is processing
-	 * a different channel and the removed channel is no
-	 * longer in the linked list */
+   * a different channel and the removed channel is no
+   * longer in the linked list */
 
   /* Now is safe to update the removed channel */
   grpci2dma_channel_bd_set_next( chan, chan );
 
   /* Stop the channel by disabling it.
-	 * HWNOTE: In GRPCI2 this bit does not work as it is supposed.
-	 * So we better remove the channel from the active linked
-	 * list. */
+   * HWNOTE: In GRPCI2 this bit does not work as it is supposed.
+   * So we better remove the channel from the active linked
+   * list. */
   grpci2dma_channel_bd_disable( chan );
 
   /* Point channel to disabled descriptor */
@@ -1169,11 +1169,11 @@ STATIC int grpci2dma_channel_stop( int chan_no )
   /* Reactivate DMA only if we stopped */
   if ( resume ) {
     /* We have two options, either we stopped when the active
-		 * channel was still the active one, or we stopped when
-		 * the active channel was a different one */
+     * channel was still the active one, or we stopped when
+     * the active channel was a different one */
     if ( grpci2dma_ctrl_active() == (uintptr_t) chan ) {
       /* In this case, we need to start the DMA with
-			 * any active channel on the list */
+       * any active channel on the list */
       int i;
       for ( i = 0; i < MAX_DMA_CHANS; i++ ) {
         if ( priv->channel[ i ].active ) {
@@ -1184,10 +1184,10 @@ STATIC int grpci2dma_channel_stop( int chan_no )
     } else {
       /* In this case, we need to resume the DMA operation */
       /* HWNOTE: The GRPCI2 core does not update the channel next
-			 * data descriptor if we stopped a channel. This means that
-			 * we need to resume the DMA from the descriptor is was,
-			 * by only setting the enable bit, and not changing the
-			 * base register */
+       * data descriptor if we stopped a channel. This means that
+       * we need to resume the DMA from the descriptor is was,
+       * by only setting the enable bit, and not changing the
+       * base register */
       grpci2dma_ctrl_resume();
     }
   }
@@ -1314,17 +1314,17 @@ STATIC void grpci2dma_isr( void *arg )
   /* Error interrupt */
   if ( errsts ) {
     /* Find which channels had the error.
-		 * The GRPCI2DMA core does not indicate which channel
-		 * had the error, so we need to get 1st the base descriptor register
-		 * and see if it a channel. If is not a channel, then the active
-		 * channel register tells us which channel is.
-		 * After having the channel we need to find out which channel was. */
+     * The GRPCI2DMA core does not indicate which channel
+     * had the error, so we need to get 1st the base descriptor register
+     * and see if it a channel. If is not a channel, then the active
+     * channel register tells us which channel is.
+     * After having the channel we need to find out which channel was. */
     struct grpci2_bd_chan *chan = (struct grpci2_bd_chan *) (uintptr_t)
       grpci2dma_ctrl_base();
     /* Check if the base is a channel descriptor */
     if ( ( BD_READ( &chan->ctrl ) & BD_CHAN_TYPE ) != BD_CHAN_TYPE_DMA ) {
       /* Is not a channel, so the channel is in the channel active
-			 * register */
+       * register */
       chan = (struct grpci2_bd_chan *) (uintptr_t) grpci2dma_ctrl_active();
     }
     int i;
@@ -1637,8 +1637,8 @@ int grpci2dma_init(
   priv->isr_register = isr_register;
 
   /* Startup actions:
-	 * - stop DMA
-	 */
+   * - stop DMA
+   */
   grpci2dma_ctrl_stop();
 
   return DRVMGR_OK;

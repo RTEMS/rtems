@@ -244,8 +244,8 @@ static void pci_read_devs( struct pci_bus *bus )
       fail = PCI_CFG_R32( pcidev, PCIR_VENDOR, &id );
       if ( fail || id == 0xffffffff || id == 0 ) {
         /*
-				 * This slot is empty
-				 */
+         * This slot is empty
+         */
         if ( func == 0 ) {
           break;
         } else {
@@ -376,8 +376,8 @@ static void pci_read_devs( struct pci_bus *bus )
       pci_read_bar( dev, DEV_RES_ROM );
 
       /* Get System Interrupt/Vector for device.
-			 * 0 means no-IRQ
-			 */
+       * 0 means no-IRQ
+       */
       PCI_CFG_R8( pcidev, PCIR_INTLINE, &dev->sysirq );
 
       /* Stop if not a multi-function device */

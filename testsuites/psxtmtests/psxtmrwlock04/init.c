@@ -90,7 +90,7 @@ void *Middle( void *argument )
   sched_yield();
   /* let other threads run */
 
-  /* this write lock operation will be blocked 
+  /* this write lock operation will be blocked
    * cause another write operation has the lock */
   status = pthread_rwlock_wrlock( &rwlock );
   rtems_test_assert( status == 0 );

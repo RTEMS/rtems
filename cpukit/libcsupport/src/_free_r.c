@@ -8,7 +8,7 @@
  * @brief This source file contains the implementation of _free_r().
  */
 
-/* 
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

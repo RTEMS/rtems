@@ -62,17 +62,17 @@ void bdbuf_test1_1_main()
   TEST_START( "Test 1.1" );
 
   /*
-     * Create working thread that will call rtems_bdbuf_read() function.
-     */
+   * Create working thread that will call rtems_bdbuf_read() function.
+   */
   START_THREAD( 1, bdbuf_test1_1_thread1 );
 
   /*
-     * Step 1:
-     * Check that rtems_bdbuf_read() returns RTEMS_SUCCESSFUL
-     * when device driver returns 0 from ioctl() call and
-     * return RTEMS_SUCCESSFUL status in asynchronous
-     * callback notification.
-     */
+   * Step 1:
+   * Check that rtems_bdbuf_read() returns RTEMS_SUCCESSFUL
+   * when device driver returns 0 from ioctl() call and
+   * return RTEMS_SUCCESSFUL status in asynchronous
+   * callback notification.
+   */
   WAIT_DRV_MSG( &msg );
   SEND_DRV_MSG( 0, 0, RTEMS_SUCCESSFUL, 0 );
 
@@ -82,10 +82,10 @@ void bdbuf_test1_1_main()
   CONTINUE_THREAD( 1 );
 
   /*
-     * Step 3:
-     * Check that rtems_bdbuf_read() returns RTEMS_IO_ERROR
-     * return code, when device driver returns -1 from ioctl() call.
-     */
+   * Step 3:
+   * Check that rtems_bdbuf_read() returns RTEMS_IO_ERROR
+   * return code, when device driver returns -1 from ioctl() call.
+   */
   WAIT_DRV_MSG( &msg );
   SEND_DRV_MSG( -1, EFAULT, RTEMS_SUCCESSFUL, 0 );
 
@@ -95,12 +95,12 @@ void bdbuf_test1_1_main()
   CONTINUE_THREAD( 1 );
 
   /*
-     * Step 5:
-     * Check that rtems_bdbuf_read() returns status obtained
-     * from device driver via asynchonous notification.
-     * On this step device driver returns 0 from ioctl() call,
-     * but notification callback is called with RTEMS_IO_ERROR status.
-     */
+   * Step 5:
+   * Check that rtems_bdbuf_read() returns status obtained
+   * from device driver via asynchonous notification.
+   * On this step device driver returns 0 from ioctl() call,
+   * but notification callback is called with RTEMS_IO_ERROR status.
+   */
   WAIT_DRV_MSG( &msg );
   SEND_DRV_MSG( 0, 0, RTEMS_IO_ERROR, EFAULT );
 
@@ -121,9 +121,9 @@ static rtems_task bdbuf_test1_1_thread1( rtems_task_argument arg )
   rtems_bdbuf_buffer *bd2 = NULL;
 
   /*
-     * Step 1-2:
-     * Successful read operation.
-     */
+   * Step 1-2:
+   * Successful read operation.
+   */
   rc = rtems_bdbuf_read( test_dd, 0, &bd1 );
   if ( rc != RTEMS_SUCCESSFUL ) {
     TEST_FAILED();
@@ -136,10 +136,10 @@ static rtems_task bdbuf_test1_1_thread1( rtems_task_argument arg )
   CONTINUE_MAIN( 1 );
 
   /*
-     * Step 3-4:
-     * Read operation fails with RTEMS_IO_ERROR code.
-     * The function shall not update user pointer.
-     */
+   * Step 3-4:
+   * Read operation fails with RTEMS_IO_ERROR code.
+   * The function shall not update user pointer.
+   */
   rc = rtems_bdbuf_read( test_dd, TEST_BLK_NUM, &bd2 );
   if ( rc != RTEMS_IO_ERROR || bd2 != NULL ) {
     TEST_FAILED();
@@ -148,10 +148,10 @@ static rtems_task bdbuf_test1_1_thread1( rtems_task_argument arg )
   CONTINUE_MAIN( 1 );
 
   /*
-     * Step 5-6:
-     * Read operation fails with RTEMS_IO_ERROR code.
-     * The function shall not update user pointer.
-     */
+   * Step 5-6:
+   * Read operation fails with RTEMS_IO_ERROR code.
+   * The function shall not update user pointer.
+   */
   rc = rtems_bdbuf_read( test_dd, TEST_BLK_NUM, &bd2 );
   if ( rc != RTEMS_IO_ERROR || bd2 != NULL ) {
     TEST_FAILED();

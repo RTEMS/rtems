@@ -10,7 +10,7 @@
 
 /*
  *  Copyright 2024, Alessandro Nardin <ale.daluch@gmail.com>
- * 
+ *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

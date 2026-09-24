@@ -58,7 +58,7 @@ extern "C" {
  *   implementation.
  *
  * This is an extension of the Deterministic Priority SMP Scheduler. which
- * is an implementation of the global fixed priority scheduler (G-FP). 
+ * is an implementation of the global fixed priority scheduler (G-FP).
  * It adds thread to core affinity support.
  *
  * @note This is the first iteration of this scheduler. It currently tracks
@@ -259,7 +259,7 @@ Thread_Control *_Scheduler_priority_affinity_SMP_Remove_processor(
   struct Per_CPU_Control  *cpu
 );
 
-/** 
+/**
  * @brief Sets affinity for the priority affinity SMP scheduler.
  *
  * @param scheduler The scheduler of the thread.

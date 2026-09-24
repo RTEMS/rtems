@@ -371,15 +371,15 @@ typedef struct rtems_bdbuf_config {
   rtems_task_priority swapout_worker_priority; /**< Priority of the swap out
                                                 * task. */
   size_t              task_stack_size;     /**< Task stack size for swap-out
-                                                * task and worker threads. */
+                                            * task and worker threads. */
   size_t              size;                /**< Size of memory in the
-                                                * cache */
+                                            * cache */
   uint32_t            buffer_min;          /**< Minimum buffer size. */
   uint32_t            buffer_max;          /**< Maximum buffer size
-                                                * supported. It is also the
-                                                * allocation size. */
+                                            * supported. It is also the
+                                            * allocation size. */
   rtems_task_priority read_ahead_priority; /**< Priority of the read-ahead
-                                                * task. */
+                                            * task. */
 } rtems_bdbuf_config;
 
 /**
@@ -457,7 +457,7 @@ extern const rtems_bdbuf_config rtems_bdbuf_configuration;
  * neccessary) buffers. After initialization all blocks is placed into the
  * ready state.
  *
- * @retval RTEMS_SUCCESSFUL Successful operation. 
+ * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_CALLED_FROM_ISR Called from an interrupt context.
  * @retval RTEMS_INVALID_NUMBER The buffer maximum is not an integral multiple
  * of the buffer minimum.  The maximum read-ahead blocks count is too large.
@@ -491,7 +491,7 @@ rtems_status_code rtems_bdbuf_init( void );
  * @param block [in] Linear media block number.
  * @param bd [out] Reference to the buffer descriptor pointer.
  *
- * @retval RTEMS_SUCCESSFUL Successful operation. 
+ * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_INVALID_ID Invalid block number.
  */
 rtems_status_code rtems_bdbuf_get(
@@ -523,7 +523,7 @@ rtems_status_code rtems_bdbuf_get(
  * @param block [in] Linear media block number.
  * @param bd [out] Reference to the buffer descriptor pointer.
  *
- * @retval RTEMS_SUCCESSFUL Successful operation. 
+ * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_INVALID_ID Invalid block number.
  * @retval RTEMS_IO_ERROR IO error.
  */
@@ -571,7 +571,7 @@ void rtems_bdbuf_peek(
  * reference must not be @c NULL and must be obtained via rtems_bdbuf_get() or
  * rtems_bdbuf_read().
  *
- * @retval RTEMS_SUCCESSFUL Successful operation. 
+ * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_INVALID_ADDRESS The reference is NULL.
  */
 rtems_status_code rtems_bdbuf_release( rtems_bdbuf_buffer *bd );
@@ -594,7 +594,7 @@ rtems_status_code rtems_bdbuf_release( rtems_bdbuf_buffer *bd );
  * reference must not be @c NULL and must be obtained via rtems_bdbuf_get() or
  * rtems_bdbuf_read().
  *
- * @retval RTEMS_SUCCESSFUL Successful operation. 
+ * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_INVALID_ADDRESS The reference is NULL.
  */
 rtems_status_code rtems_bdbuf_release_modified( rtems_bdbuf_buffer *bd );
@@ -616,7 +616,7 @@ rtems_status_code rtems_bdbuf_release_modified( rtems_bdbuf_buffer *bd );
  * reference must not be @c NULL and must be obtained via rtems_bdbuf_get() or
  * rtems_bdbuf_read().
  *
- * @retval RTEMS_SUCCESSFUL Successful operation. 
+ * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_INVALID_ADDRESS The reference is NULL.
  */
 rtems_status_code rtems_bdbuf_sync( rtems_bdbuf_buffer *bd );
@@ -636,7 +636,7 @@ rtems_status_code rtems_bdbuf_sync( rtems_bdbuf_buffer *bd );
  *
  * @param dd [in] The disk device.
  *
- * @retval RTEMS_SUCCESSFUL Successful operation. 
+ * @retval RTEMS_SUCCESSFUL Successful operation.
  */
 rtems_status_code rtems_bdbuf_syncdev( rtems_disk_device *dd );
 
@@ -674,7 +674,7 @@ void rtems_bdbuf_purge_dev( rtems_disk_device *dd );
  * @param sync [in] If @c true, then synchronize the disk device before the
  * block size change.
  *
- * @retval RTEMS_SUCCESSFUL Successful operation. 
+ * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_INVALID_NUMBER Invalid block size.
  */
 rtems_status_code rtems_bdbuf_set_block_size(

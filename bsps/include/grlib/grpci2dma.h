@@ -29,7 +29,7 @@
  *
  *  OVERVIEW
  *  ========
- *  This driver controls the DMA on the GRPCI2 device, located 
+ *  This driver controls the DMA on the GRPCI2 device, located
  *  at an on-chip AMBA.
  */
 
@@ -82,13 +82,13 @@ extern void  grpci2dma_data_delete( void *databd );
  *  -databd: Pointer to the data descriptor buffer
  *  -bdindex: Where in the buffer to start the transfer
  *  -bdmax: Maximum index for the data descriptor buffer
- *  -block_size: Size in bytes for each PCI transaction (or block). Guaranteed 
+ *  -block_size: Size in bytes for each PCI transaction (or block). Guaranteed
  *  to be at least smaller that this value. Put 0 to use default.
  *  Default is maximum, which is 0x10000*4 bytes.
  * Returns:
  *  -WRONGPTR: Wrong input parameters
  *  -TOOMANY: Not enough data descriptors in the buffer
- *  -value > 0: A positive return value means the number of data descriptors 
+ *  -value > 0: A positive return value means the number of data descriptors
  *  prepared/used in the buffer, starting from index.
  */
 #define GRPCI2DMA_AHBTOPCI     1
@@ -270,8 +270,8 @@ extern int grpci2dma_active( void );
  * Parameters:
  *  -databd: Pointer to the data descriptor buffer
  *  -bdindex: Where in the buffer starts the transfer
- *  -bdmax: Upper limit for index. index < bdmax 
- *  -options: 
+ *  -bdmax: Upper limit for index. index < bdmax
+ *  -options:
  *      (=GRPCI2DMA_OPTIONS_ALL)=Enable interrupt on all transfer descriptors.
  *      (=GRPCI2DMA_OPTIONS_ONE)=Enable interrupt on transfer descriptor
  *              indicated by bdindex.

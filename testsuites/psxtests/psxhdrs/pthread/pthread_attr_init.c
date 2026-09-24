@@ -1,9 +1,9 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
-* @file
-* @brief pthread_attr_init() API Conformance Test
-*/
+ * @file
+ * @brief pthread_attr_init() API Conformance Test
+ */
 
 /*
  * Redistribution and use in source and binary forms, with or without

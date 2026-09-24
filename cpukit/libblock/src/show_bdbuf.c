@@ -244,8 +244,8 @@ rtems_status_code rtems_bdbuf_show_getargs(
        */
       switch ( tolower( argv[ i ][ 1 ] ) ) {
           /*
-	 * selection, which bdbufs to show
-	 */
+           * selection, which bdbufs to show
+           */
         case 'm': /* only show bdbufs modified */
           filter->bdbuf_modified = true;
           filter->bdbuf_all = false;
@@ -270,8 +270,8 @@ rtems_status_code rtems_bdbuf_show_getargs(
           filter->bdbuf_all = false;
           break;
           /*
-	 * selection, what fields to show
-	 */
+           * selection, what fields to show
+           */
         case 'n': /* show bdbuf node_chain */
           selector->show_node_chain = true;
           selector->show_all = false;
@@ -817,22 +817,22 @@ void rtems_bdbuf_show_fnc(
         matched_cnt = 0;
         un_matched_cnt = 0;
         /*
-	 * print header for bdbuf
-	 */
+         * print header for bdbuf
+         */
         if ( rc == RTEMS_SUCCESSFUL ) {
           rc = rtems_show_bdbuf_print( NULL, &selector, true );
         }
         /*
-	 * for all bdbufs in this pool
-	 */
+         * for all bdbufs in this pool
+         */
         for (
           bdbuf_idx = 0;
           ( ( rc == RTEMS_SUCCESSFUL ) && ( bdbuf_idx < curr_pool->nblks ) );
           bdbuf_idx++
         ) {
           /*
-	   * get infos about bdbuf
-	   */
+           * get infos about bdbuf
+           */
           if ( rc == RTEMS_SUCCESSFUL ) {
             rc = rtems_show_bdbuf_get_bdbuf_info(
               &( curr_pool->bdbufs[ bdbuf_idx ] ),
@@ -842,8 +842,8 @@ void rtems_bdbuf_show_fnc(
             );
           }
           /*
-	   * check, if bdbuf matches selection criteria
-	   */
+           * check, if bdbuf matches selection criteria
+           */
           if ( rc == RTEMS_SUCCESSFUL ) {
             rc = rtems_show_bdbuf_match_filter(
               &bdbuf_info,
@@ -852,8 +852,8 @@ void rtems_bdbuf_show_fnc(
             );
           }
           /*
-	   * print info about bdbuf
-	   */
+           * print info about bdbuf
+           */
           if ( rc == RTEMS_SUCCESSFUL ) {
             if ( bdbuf_matches ) {
               rc = rtems_show_bdbuf_print( &bdbuf_info, &selector, false );
@@ -869,8 +869,8 @@ void rtems_bdbuf_show_fnc(
           }
         }
         /*
-	 * print match statistics and footer
-	 */
+         * print match statistics and footer
+         */
         if ( rc == RTEMS_SUCCESSFUL ) {
           printf(
             "%d bdbufs printed, %d bdbufs suppressed\n",

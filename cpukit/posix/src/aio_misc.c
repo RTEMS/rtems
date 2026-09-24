@@ -14,7 +14,7 @@
 /*
  *  Copyright 2010-2011, Alin Rus <alin.codejunkie@gmail.com>
  *  Copyright 2024, Alessandro Nardin <ale.daluch@gmail.com>
- * 
+ *
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -52,16 +52,16 @@
 
 /**
  * @brief Thread processing AIO requests.
- * 
+ *
  * @param[in,out] arg A pointer to the chain for the FD to be worked on.
- * 
+ *
  * @retval NULL if an error occurs
  */
 static void *rtems_aio_handle( void *arg );
 
 /**
  * @brief Helper function por request processing
- * 
+ *
  * @param[in,out] req A pointer to a single request.
  *                    It will store the results of the request.
  */
@@ -69,7 +69,7 @@ static void rtems_aio_handle_helper( rtems_aio_request *req );
 
 /**
  * @brief Move chain of requests from IQ to WQ
- * 
+ *
  * @param[in,out] r_chain the chain of requests to move in WQ
  */
 static void rtems_aio_move_to_work( rtems_aio_request_chain *r_chain );
@@ -78,7 +78,7 @@ static void rtems_aio_move_to_work( rtems_aio_request_chain *r_chain );
  * @brief Add request to given FD chain.
  *
  * Inserts the request in a the fd chain, which is ordered by priority.
- * 
+ *
  * @param[in,out] chain A pointer to the chain of requests for a given FD.
  * @param[in,out] req   A pointer to a request (see aio_misc.h).
  */
@@ -90,12 +90,12 @@ static void rtems_aio_insert_prio(
 /**
  * @brief Wrapper for pthread_create() call.
  *
- * This function serves as a wrapper with the appropriate signature for a call 
- * to pthread_create(). It receives a pointer to a sigevent structure that 
- * contains a pointer to the function to be called and the parameters to be 
+ * This function serves as a wrapper with the appropriate signature for a call
+ * to pthread_create(). It receives a pointer to a sigevent structure that
+ * contains a pointer to the function to be called and the parameters to be
  * passed to it.
- * 
- * @param args Pointer to the sigevent struct containing a pointer to the 
+ *
+ * @param args Pointer to the sigevent struct containing a pointer to the
  *             function and its parameters.
  * @return void*
  */
@@ -104,10 +104,10 @@ static void *rtems_aio_notify_function_wrapper( void *args );
 /**
  * @brief Generates a notification.
  *
- * The signal is generated using a sigevent struct, as defined from the 
+ * The signal is generated using a sigevent struct, as defined from the
  * POSIX specifications.
- * 
- * @param sigp is a pointer to the sigevent struct that will be used 
+ *
+ * @param sigp is a pointer to the sigevent struct that will be used
  *             to generate the signal
  */
 static void rtems_aio_notify( struct sigevent *sigp );
@@ -706,7 +706,7 @@ static void *rtems_aio_handle( void *arg )
     } else {
       /* If the fd chain is empty we unlock the fd chain and we lock
          the queue chain, this will ensure that we have at most
-         one request coming to our fd chain when we check. 
+         one request coming to our fd chain when we check.
 
          If there was no request added sleep for 3 seconds and wait
          for a signal on chain, this will unlock the queue.
