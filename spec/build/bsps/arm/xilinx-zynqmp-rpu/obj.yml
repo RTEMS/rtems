@@ -31,8 +31,8 @@ source:
 - bsps/arm/xilinx-zynqmp-rpu/start/bspstart.c
 - bsps/arm/xilinx-zynqmp-rpu/start/bspstarthooks.c
 - bsps/arm/xilinx-zynqmp-rpu/start/mpu-config.c
-- bsps/shared/dev/clock/xil-ttc.c
 - bsps/shared/dev/btimer/btimer-cpucounter.c
+- bsps/shared/dev/clock/xil-ttc.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/irq/arm-gicv2-zynqmp.c
 - bsps/shared/dev/serial/console-termios.c

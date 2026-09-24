@@ -23,7 +23,6 @@ links:
 - role: build-dependency
   uid: ../../optconsolebaud
 source:
-- bsps/powerpc/shared/motppc/console/polled_io.c
 - bsps/powerpc/motorola_powerpc/start/bspreset.c
 - bsps/powerpc/motorola_powerpc/start/bspstart.c
 - bsps/powerpc/motorola_powerpc/start/motorola.c
@@ -44,6 +43,7 @@ source:
 - bsps/powerpc/shared/mmu/bat.c
 - bsps/powerpc/shared/mmu/mmuAsm.S
 - bsps/powerpc/shared/mmu/pte121.c
+- bsps/powerpc/shared/motppc/console/polled_io.c
 - bsps/powerpc/shared/pci/detect_raven_bridge.c
 - bsps/powerpc/shared/pci/generic_clear_hberrs.c
 - bsps/powerpc/shared/pci/pci.c

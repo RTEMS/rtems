@@ -37,11 +37,11 @@ links:
   uid: optldpagesize
 source:
 - bsps/x86_64/amd64/clock/eficlock.c
-- bsps/x86_64/amd64/console/eficonsole.c
-- bsps/x86_64/amd64/console/efistop.c
-- bsps/x86_64/amd64/console/efigop.c
-- bsps/x86_64/amd64/console/outch.c
 - bsps/x86_64/amd64/console/console.c
-- bsps/x86_64/amd64/start/multiboot2.c
+- bsps/x86_64/amd64/console/eficonsole.c
+- bsps/x86_64/amd64/console/efigop.c
+- bsps/x86_64/amd64/console/efistop.c
+- bsps/x86_64/amd64/console/outch.c
 - bsps/x86_64/amd64/start/efimem.c
+- bsps/x86_64/amd64/start/multiboot2.c
 type: build

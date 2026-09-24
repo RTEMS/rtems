@@ -39,11 +39,11 @@ source:
 - bsps/nios2/nios2_iss/clock/clock.c
 - bsps/nios2/nios2_iss/console/console.c
 - bsps/nios2/nios2_iss/start/bspstart.c
+- bsps/shared/atomics/__atomic_test_and_set.c
 - bsps/shared/cache/nocache.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/serial/console-polled.c
 - bsps/shared/start/bspreset-loop.c
 - bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/sbrk.c
-- bsps/shared/atomics/__atomic_test_and_set.c
 type: build

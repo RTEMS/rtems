@@ -88,13 +88,13 @@ source:
 - bsps/aarch64/shared/mmu/mmu-setup.c
 - bsps/aarch64/shared/mmu/vmsav8-64.c
 - bsps/aarch64/shared/start/start-cpu-mpidr.S
-- bsps/shared/dev/irq/arm-gicv2-get-attributes.c
-- bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/btimer/btimer-cpucounter.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/irq/arm-gicv2-get-attributes.c
 - bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspgetworkarea-default.c
 - bsps/shared/start/gettargethash-default.c
+- bsps/shared/start/mallocinitmulti.c
 - bsps/shared/start/sbrk.c
 - bsps/shared/start/wkspaceinitone.c
-- bsps/shared/start/mallocinitmulti.c
-- bsps/shared/start/bspgetworkarea-default.c
 type: build

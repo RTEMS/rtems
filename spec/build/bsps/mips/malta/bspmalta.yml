@@ -46,8 +46,8 @@ source:
 - bsps/mips/malta/irq/vectorisrs.c
 - bsps/mips/malta/pci/pci.c
 - bsps/mips/malta/start/bspreset.c
-- bsps/mips/malta/start/cpucounter.c
 - bsps/mips/malta/start/bspstart.c
+- bsps/mips/malta/start/cpucounter.c
 - bsps/mips/malta/start/inittlb.c
 - bsps/mips/malta/start/simple_access.c
 - bsps/mips/shared/clock/clockdrv.c

@@ -51,10 +51,10 @@ links:
   - role: build-dependency
     uid: linkercmds
 source:
+  - bsps/aarch64/frdm-imx93/console/console.c
   - bsps/aarch64/frdm-imx93/start/bspstart.c
   - bsps/aarch64/frdm-imx93/start/bspstarthooks.c
   - bsps/aarch64/frdm-imx93/start/bspstartmmu.c
-  - bsps/aarch64/frdm-imx93/console/console.c
   - bsps/aarch64/shared/cache/cache.c
   - bsps/aarch64/shared/mmu/mmu-setup.c
   - bsps/aarch64/shared/mmu/vmsav8-64.c

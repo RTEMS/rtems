@@ -50,6 +50,7 @@ source:
 - bsps/arm/csb336/start/bspstart.c
 - bsps/arm/csb336/start/memmap.c
 - bsps/arm/shared/cache/cache-cp15.c
+- bsps/shared/atomics/__atomic_test_and_set.c
 - bsps/shared/dev/cpucounter/cpucounterfrequency.c
 - bsps/shared/dev/cpucounter/cpucounterread.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
@@ -57,5 +58,4 @@ source:
 - bsps/shared/start/bspreset-loop.c
 - bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/sbrk.c
-- bsps/shared/atomics/__atomic_test_and_set.c
 type: build

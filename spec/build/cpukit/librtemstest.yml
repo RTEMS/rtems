@@ -18,8 +18,8 @@ install:
 install-path: ${BSP_LIBDIR}
 links: []
 source:
-- cpukit/libtest/gcovdumpinfobase64.c
 - cpukit/libtest/gcovdumpinfo.c
+- cpukit/libtest/gcovdumpinfobase64.c
 - cpukit/libtest/gcovinfoset.c
 - cpukit/libtest/t-test-busy-tick.c
 - cpukit/libtest/t-test-busy.c

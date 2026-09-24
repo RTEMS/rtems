@@ -75,6 +75,7 @@ source:
 - bsps/arm/shared/irq/irq-dispatch-armv7m.c
 - bsps/arm/shared/start/bsp-start-memcpy.S
 - bsps/arm/shared/start/bspreset-armv7m.c
+- bsps/shared/atomics/__atomic_test_and_set.c
 - bsps/shared/cache/nocache.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/rtc/rtc-support.c
@@ -85,5 +86,4 @@ source:
 - bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/sbrk.c
 - bsps/shared/start/stackalloc.c
-- bsps/shared/atomics/__atomic_test_and_set.c
 type: build

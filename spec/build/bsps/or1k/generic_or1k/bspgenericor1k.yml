@@ -50,14 +50,14 @@ source:
 - bsps/or1k/generic_or1k/console/uart.c
 - bsps/or1k/generic_or1k/irq/irq-dispatch.c
 - bsps/or1k/generic_or1k/irq/irq.c
+- bsps/or1k/generic_or1k/start/bspreset.c
 - bsps/or1k/generic_or1k/start/bspstart.c
 - bsps/or1k/shared/cache/cache.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
-- bsps/shared/irq/irq-default-handler.c
 - bsps/shared/dev/serial/legacy-console-control.c
 - bsps/shared/dev/serial/legacy-console-select.c
 - bsps/shared/dev/serial/legacy-console.c
-- bsps/or1k/generic_or1k/start/bspreset.c
+- bsps/shared/irq/irq-default-handler.c
 - bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/sbrk.c
 - bsps/shared/start/stackalloc.c

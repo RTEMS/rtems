@@ -15,6 +15,6 @@ install:
 links: []
 source:
 - bsps/aarch64/shared/start/aarch64-smp.c
-- bsps/shared/start/bspsmp-arm-psci.c
 - bsps/shared/start/bspsmp-arm-psci-targetcpu.c
+- bsps/shared/start/bspsmp-arm-psci.c
 type: build

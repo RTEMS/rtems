@@ -14,7 +14,7 @@ install:
   - bsps/include/bsp/bspsmp-arm-psci.h
 links: []
 source:
+- bsps/aarch64/raspberrypi5/start/bspsmp-arm-psci-targetcpu.c
 - bsps/aarch64/shared/start/aarch64-smp.c
 - bsps/shared/start/bspsmp-arm-psci.c
-- bsps/aarch64/raspberrypi5/start/bspsmp-arm-psci-targetcpu.c
 type: build

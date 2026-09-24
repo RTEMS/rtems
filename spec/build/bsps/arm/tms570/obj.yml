@@ -73,6 +73,8 @@ install:
   - bsps/arm/tms570/start/linkcmds.tms570ls3137_hdk_sdram
 links: []
 source:
+- bsps/arm/shared/cache/cache-cp15.c
+- bsps/arm/shared/cache/cache-v7ar-disable-data.S
 - bsps/arm/shared/cp15/arm-cp15-set-exception-handler.c
 - bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
 - bsps/arm/shared/start/bsp-start-memcpy.S
@@ -85,8 +87,6 @@ source:
 - bsps/arm/tms570/start/bspstart.c
 - bsps/arm/tms570/start/pinmux.c
 - bsps/arm/tms570/start/tms570-pom.c
-- bsps/arm/shared/cache/cache-cp15.c
-- bsps/arm/shared/cache/cache-v7ar-disable-data.S
 - bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/serial/console-termios.c

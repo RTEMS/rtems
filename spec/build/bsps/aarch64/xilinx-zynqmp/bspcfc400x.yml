@@ -19,6 +19,6 @@ links:
   uid: objfdtcfc400x
 source:
 - bsps/aarch64/xilinx-zynqmp/console/management_cfc400x.c
-- bsps/aarch64/xilinx-zynqmp/start/bspstartecc_hw.c
 - bsps/aarch64/xilinx-zynqmp/start/bspstartecc_cfc400x.c
+- bsps/aarch64/xilinx-zynqmp/start/bspstartecc_hw.c
 type: build

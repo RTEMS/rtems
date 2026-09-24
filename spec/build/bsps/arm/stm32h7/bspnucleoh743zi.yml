@@ -16,10 +16,10 @@ links:
 - role: build-dependency
   uid: tststm32h757i-eval
 source:
+- bsps/arm/shared/cache/cache-v7m.c
 - bsps/arm/stm32h7/boards/stm/nucleo-h743zi/stm32h7-bspstarthooks.c
 - bsps/arm/stm32h7/boards/stm/nucleo-h743zi/stm32h7-config-clk.c
 - bsps/arm/stm32h7/boards/stm/nucleo-h743zi/stm32h7-config-osc.c
 - bsps/arm/stm32h7/boards/stm/nucleo-h743zi/stm32h7-config-per.c
 - bsps/arm/stm32h7/boards/stm/nucleo-h743zi/system_stm32h7xx.c
-- bsps/arm/shared/cache/cache-v7m.c
 type: build

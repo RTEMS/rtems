@@ -18,11 +18,11 @@ links:
   uid: tststm32h757i-eval
 source:
 - bsps/arm/stm32h7/boards/stm/Components/mt25tl01g/mt25tl01g.c
-- bsps/arm/stm32h7/boards/stm/stm32h757i-eval/stm32h747i_eval_qspi.c
 - bsps/arm/stm32h7/boards/stm/stm32h757i-eval/stm32h7-bspstarthooks.c
 - bsps/arm/stm32h7/boards/stm/stm32h757i-eval/stm32h7-config-clk.c
 - bsps/arm/stm32h7/boards/stm/stm32h757i-eval/stm32h7-config-osc.c
 - bsps/arm/stm32h7/boards/stm/stm32h757i-eval/stm32h7-config-per.c
+- bsps/arm/stm32h7/boards/stm/stm32h757i-eval/stm32h747i_eval_qspi.c
 - bsps/arm/stm32h7/boards/stm/stm32h757i-eval/system_stm32h7xx.c
 - bsps/shared/cache/nocache.c
 type: build

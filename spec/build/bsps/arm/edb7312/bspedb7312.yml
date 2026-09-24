@@ -50,6 +50,7 @@ source:
 - bsps/arm/edb7312/irq/irq.c
 - bsps/arm/edb7312/start/bspreset.c
 - bsps/arm/edb7312/start/bspstart.c
+- bsps/shared/atomics/__atomic_test_and_set.c
 - bsps/shared/cache/nocache.c
 - bsps/shared/dev/cpucounter/cpucounterfrequency.c
 - bsps/shared/dev/cpucounter/cpucounterread.c
@@ -60,5 +61,4 @@ source:
 - bsps/shared/irq/irq-default-handler.c
 - bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/sbrk.c
-- bsps/shared/atomics/__atomic_test_and_set.c
 type: build

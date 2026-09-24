@@ -11,8 +11,8 @@ includes: []
 ldflags: []
 links: []
 source:
-- testsuites/psxtests/psximfs01/init.c
 - testsuites/psxtests/psximfs/init.c
+- testsuites/psxtests/psximfs01/init.c
 stlib: []
 target: testsuites/psxtests/psximfs01.exe
 type: build

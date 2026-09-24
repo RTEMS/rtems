@@ -14,11 +14,11 @@ links:
 - role: build-dependency
   uid: grp
 source:
+- bsps/arm/shared/cache/cache-v7m.c
+- bsps/arm/stm32h7/boards/stm/stm32h743i-eval/ext-mem-ctl.c
 - bsps/arm/stm32h7/boards/stm/stm32h743i-eval/stm32h7-bspstarthooks.c
 - bsps/arm/stm32h7/boards/stm/stm32h743i-eval/stm32h7-config-clk.c
 - bsps/arm/stm32h7/boards/stm/stm32h743i-eval/stm32h7-config-osc.c
 - bsps/arm/stm32h7/boards/stm/stm32h743i-eval/stm32h7-config-per.c
 - bsps/arm/stm32h7/boards/stm/stm32h743i-eval/system_stm32h7xx.c
-- bsps/arm/stm32h7/boards/stm/stm32h743i-eval/ext-mem-ctl.c
-- bsps/arm/shared/cache/cache-v7m.c
 type: build

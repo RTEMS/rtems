@@ -51,11 +51,11 @@ source:
 - bsps/mips/shared/irq/irq.c
 - bsps/mips/shared/irq/isr_entries.S
 - bsps/mips/shared/irq/vectorexceptions.c
+- bsps/shared/atomics/__atomic_test_and_set.c
 - bsps/shared/cache/nocache.c
 - bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/serial/console-polled.c
 - bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/sbrk.c
-- bsps/shared/atomics/__atomic_test_and_set.c
 type: build

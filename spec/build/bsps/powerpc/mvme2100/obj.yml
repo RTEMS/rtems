@@ -24,7 +24,6 @@ links:
 - role: build-dependency
   uid: ../../optconsolebaud
 source:
-- bsps/powerpc/shared/motppc/console/polled_io.c
 - bsps/powerpc/mvme2100/i2c/i2c_init.c
 - bsps/powerpc/mvme2100/i2c/mpc8240_i2c.c
 - bsps/powerpc/mvme2100/start/bspreset.c
@@ -45,6 +44,7 @@ source:
 - bsps/powerpc/shared/irq/ppc-irq-generic.c
 - bsps/powerpc/shared/mmu/bat.c
 - bsps/powerpc/shared/mmu/mmuAsm.S
+- bsps/powerpc/shared/motppc/console/polled_io.c
 - bsps/powerpc/shared/pci/detect_raven_bridge.c
 - bsps/powerpc/shared/pci/generic_clear_hberrs.c
 - bsps/powerpc/shared/pci/pci.c

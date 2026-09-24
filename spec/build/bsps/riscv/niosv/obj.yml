@@ -21,14 +21,14 @@ install:
   - bsps/riscv/niosv/include/bsp/niosv.h
 links: []
 source:
+- bsps/riscv/niosv/cache/alt_cache.c
 - bsps/riscv/niosv/clock/clockdrv.c
 - bsps/riscv/niosv/irq/irq.c
-- bsps/riscv/niosv/cache/alt_cache.c
 - bsps/riscv/niosv/start/bsp_fatal_halt.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/serial/console-termios.c
 - bsps/shared/irq/irq-default-handler.c
-- bsps/shared/start/bspgetworkarea-default.c
 - bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
 - bsps/shared/start/gettargethash-default.c
 type: build

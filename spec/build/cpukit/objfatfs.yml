@@ -45,10 +45,10 @@ install:
 links: []
 source:
 - contrib/cpukit/fatfs/ff.c
-- contrib/cpukit/fatfs/ffunicode.c
 - contrib/cpukit/fatfs/ffsystem.c
+- contrib/cpukit/fatfs/ffunicode.c
 - cpukit/libfs/src/fatfs/rtems-diskio.c
-- cpukit/libfs/src/fatfs/rtems-fatfs-init.c
-- cpukit/libfs/src/fatfs/rtems-fatfs-file.c
 - cpukit/libfs/src/fatfs/rtems-fatfs-dir.c
+- cpukit/libfs/src/fatfs/rtems-fatfs-file.c
+- cpukit/libfs/src/fatfs/rtems-fatfs-init.c
 type: build

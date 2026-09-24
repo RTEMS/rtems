@@ -11,7 +11,6 @@ install: []
 links: []
 source:
 - bsps/shared/irq/irq-affinity.c
-- bsps/shared/irq/irq-raise-clear.c
 - bsps/shared/irq/irq-enable-disable.c
 - bsps/shared/irq/irq-entry-remove.c
 - bsps/shared/irq/irq-generic.c
@@ -22,6 +21,7 @@ source:
 - bsps/shared/irq/irq-legacy.c
 - bsps/shared/irq/irq-lock.c
 - bsps/shared/irq/irq-priority.c
+- bsps/shared/irq/irq-raise-clear.c
 - bsps/shared/irq/irq-record.c
 - bsps/shared/irq/irq-server.c
 - bsps/shared/irq/irq-shell.c

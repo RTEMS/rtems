@@ -16,8 +16,8 @@ install:
   - bsps/riscv/esp32/include/bsp/irq.h
 links: []
 source:
-- bsps/riscv/esp32/console/console-config.c
 - bsps/riscv/esp32/clock/clockdrv_systimer.c
+- bsps/riscv/esp32/console/console-config.c
 - bsps/riscv/esp32/irq/irq_c3.c
 - bsps/riscv/esp32/start/bspstart.c
 - bsps/shared/atomics/__atomic_test_and_set.c

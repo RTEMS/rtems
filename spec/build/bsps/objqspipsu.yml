@@ -21,9 +21,9 @@ links:
 - role: build-dependency
   uid: optxpssysctrlbaseaddress
 source:
+- bsps/shared/dev/spi/xqspipsu-flash-helper.c
+- bsps/shared/dev/spi/xqspipsu.c
 - bsps/shared/dev/spi/xqspipsu_control.c
 - bsps/shared/dev/spi/xqspipsu_hw.c
 - bsps/shared/dev/spi/xqspipsu_options.c
-- bsps/shared/dev/spi/xqspipsu-flash-helper.c
-- bsps/shared/dev/spi/xqspipsu.c
 type: build

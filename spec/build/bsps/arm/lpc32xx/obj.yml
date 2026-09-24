@@ -56,6 +56,7 @@ source:
 - bsps/arm/shared/clock/clock-nxp-lpc.c
 - bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
 - bsps/arm/shared/start/bsp-start-memcpy.S
+- bsps/shared/atomics/__atomic_test_and_set.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/rtc/rtc-support.c
 - bsps/shared/dev/serial/console-termios-init.c
@@ -65,5 +66,4 @@ source:
 - bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/sbrk.c
 - bsps/shared/start/stackalloc.c
-- bsps/shared/atomics/__atomic_test_and_set.c
 type: build

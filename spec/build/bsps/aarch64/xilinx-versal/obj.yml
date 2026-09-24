@@ -27,7 +27,6 @@ source:
 - bsps/aarch64/shared/mmu/vmsav8-64.c
 - bsps/aarch64/shared/start/start-cpu-mpidr.S
 - bsps/aarch64/xilinx-versal/console/console.c
-- bsps/shared/dev/serial/versal-uart.c
 - bsps/aarch64/xilinx-versal/start/bspstart.c
 - bsps/aarch64/xilinx-versal/start/bspstarthooks.c
 - bsps/aarch64/xilinx-versal/start/bspstartmmu.c
@@ -35,6 +34,7 @@ source:
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/serial/console-termios-init.c
 - bsps/shared/dev/serial/console-termios.c
+- bsps/shared/dev/serial/versal-uart.c
 - bsps/shared/irq/irq-default-handler.c
 - bsps/shared/start/bspreset-arm-psci.S
 - bsps/shared/start/gettargethash-default.c

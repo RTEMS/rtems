@@ -524,6 +524,8 @@ links:
 - role: build-dependency
   uid: vckey
 source:
+- contrib/cpukit/posix-newlib/gmtime_r.c
+- contrib/cpukit/posix-newlib/mktime.c
 - contrib/cpukit/uuid/clear.c
 - contrib/cpukit/uuid/compare.c
 - contrib/cpukit/uuid/copy.c
@@ -537,9 +539,9 @@ source:
 - contrib/cpukit/xz-embedded/linux/lib/xz/xz_crc32.c
 - contrib/cpukit/xz-embedded/linux/lib/xz/xz_dec_lzma2.c
 - contrib/cpukit/xz-embedded/linux/lib/xz/xz_dec_stream.c
-- cpukit/crc/crc24q.c
-- cpukit/base64/base64-encode.c
 - cpukit/base64/base64-decode.c
+- cpukit/base64/base64-encode.c
+- cpukit/crc/crc24q.c
 - cpukit/dev/can/can-bittiming.c
 - cpukit/dev/can/can-bus.c
 - cpukit/dev/can/can-devcommon.c
@@ -549,9 +551,9 @@ source:
 - cpukit/dev/flash/flashdev.c
 - cpukit/dev/i2c/i2c-bus.c
 - cpukit/dev/i2c/i2c-dev.c
+- cpukit/dev/io/iodev.c
 - cpukit/dev/ioprintf.c
 - cpukit/dev/iorelax.c
-- cpukit/dev/io/iodev.c
 - cpukit/dev/serial/sc16is752-spi.c
 - cpukit/dev/serial/sc16is752.c
 - cpukit/dev/spi/spi-bus.c
@@ -666,6 +668,7 @@ source:
 - cpukit/libcsupport/src/ftruncate.c
 - cpukit/libcsupport/src/ftrylockfile.c
 - cpukit/libcsupport/src/funlockfile.c
+- cpukit/libcsupport/src/futimens.c
 - cpukit/libcsupport/src/gcovfork.c
 - cpukit/libcsupport/src/getchark.c
 - cpukit/libcsupport/src/getdents.c
@@ -736,7 +739,6 @@ source:
 - cpukit/libcsupport/src/realloc.c
 - cpukit/libcsupport/src/resource_snapshot.c
 - cpukit/libcsupport/src/rmdir.c
-- cpukit/libcsupport/src/rtemscalloc.c
 - cpukit/libcsupport/src/rtems_heap_extend.c
 - cpukit/libcsupport/src/rtems_heap_extend_via_sbrk.c
 - cpukit/libcsupport/src/rtems_heap_greedy.c
@@ -746,6 +748,7 @@ source:
 - cpukit/libcsupport/src/rtems_mkdir.c
 - cpukit/libcsupport/src/rtems_put_char.c
 - cpukit/libcsupport/src/rtems_putc.c
+- cpukit/libcsupport/src/rtemscalloc.c
 - cpukit/libcsupport/src/setegid.c
 - cpukit/libcsupport/src/seteuid.c
 - cpukit/libcsupport/src/setgid.c
@@ -788,9 +791,8 @@ source:
 - cpukit/libcsupport/src/unlink.c
 - cpukit/libcsupport/src/unmount.c
 - cpukit/libcsupport/src/utime.c
-- cpukit/libcsupport/src/utimes.c
-- cpukit/libcsupport/src/futimens.c
 - cpukit/libcsupport/src/utimensat.c
+- cpukit/libcsupport/src/utimes.c
 - cpukit/libcsupport/src/utsname.c
 - cpukit/libcsupport/src/vprintk.c
 - cpukit/libcsupport/src/write.c
@@ -886,8 +888,8 @@ source:
 - cpukit/libfs/src/imfs/imfs_rename.c
 - cpukit/libfs/src/imfs/imfs_rmnod.c
 - cpukit/libfs/src/imfs/imfs_stat.c
-- cpukit/libfs/src/imfs/imfs_statvfs.c
 - cpukit/libfs/src/imfs/imfs_stat_file.c
+- cpukit/libfs/src/imfs/imfs_statvfs.c
 - cpukit/libfs/src/imfs/imfs_symlink.c
 - cpukit/libfs/src/imfs/imfs_unmount.c
 - cpukit/libfs/src/imfs/imfs_utimens.c
@@ -960,8 +962,6 @@ source:
 - cpukit/libmisc/monitor/mon-task.c
 - cpukit/libmisc/mouse/contrib/mouse_parser.c
 - cpukit/libmisc/mouse/serial_mouse.c
-- contrib/cpukit/posix-newlib/gmtime_r.c
-- contrib/cpukit/posix-newlib/mktime.c
 - cpukit/libmisc/redirector/stdio-redirect.c
 - cpukit/libmisc/regulator/regulator.c
 - cpukit/libmisc/rtems-fdt/rtems-fdt-shell.c
@@ -1190,19 +1190,20 @@ source:
 - cpukit/posix/src/sigprocmask.c
 - cpukit/posix/src/sysconf.c
 - cpukit/posix/src/testcancel.c
+- cpukit/posix/src/timespecget.c
 - cpukit/posix/src/vfork.c
 - cpukit/posix/src/wait.c
 - cpukit/posix/src/waitpid.c
 - cpukit/rtems/src/barrier.c
 - cpukit/rtems/src/barriercreate.c
 - cpukit/rtems/src/barrierdelete.c
+- cpukit/rtems/src/barriergetnumwaiting.c
 - cpukit/rtems/src/barrierident.c
 - cpukit/rtems/src/barrierrelease.c
-- cpukit/rtems/src/barriergetnumwaiting.c
 - cpukit/rtems/src/barrierwait.c
 - cpukit/rtems/src/clockgetsecondssinceepoch.c
-- cpukit/rtems/src/clockgettickssinceboot.c
 - cpukit/rtems/src/clockgettickspersecond.c
+- cpukit/rtems/src/clockgettickssinceboot.c
 - cpukit/rtems/src/clockgettod.c
 - cpukit/rtems/src/clockgettodtimeval.c
 - cpukit/rtems/src/clockgetuptime.c
@@ -1318,6 +1319,7 @@ source:
 - cpukit/rtems/src/taskdelete.c
 - cpukit/rtems/src/taskexit.c
 - cpukit/rtems/src/taskgetaffinity.c
+- cpukit/rtems/src/taskgetcpuusage.c
 - cpukit/rtems/src/taskgetpriority.c
 - cpukit/rtems/src/taskgetscheduler.c
 - cpukit/rtems/src/taskident.c
@@ -1330,7 +1332,6 @@ source:
 - cpukit/rtems/src/taskresume.c
 - cpukit/rtems/src/tasks.c
 - cpukit/rtems/src/tasksetaffinity.c
-- cpukit/rtems/src/taskgetcpuusage.c
 - cpukit/rtems/src/tasksetpriority.c
 - cpukit/rtems/src/tasksetscheduler.c
 - cpukit/rtems/src/taskstart.c
@@ -1399,6 +1400,8 @@ source:
 - cpukit/score/src/chainnodecount.c
 - cpukit/score/src/condition.c
 - cpukit/score/src/configstackspacesize.c
+- cpukit/score/src/contrib/kern_ntptime.c
+- cpukit/score/src/contrib/kern_tc.c
 - cpukit/score/src/corebarrier.c
 - cpukit/score/src/corebarrierwait.c
 - cpukit/score/src/coremsg.c
@@ -1445,8 +1448,6 @@ source:
 - cpukit/score/src/isrisinprogress.c
 - cpukit/score/src/isrvectortable.c
 - cpukit/score/src/iterateoverthreads.c
-- cpukit/score/src/contrib/kern_ntptime.c
-- cpukit/score/src/contrib/kern_tc.c
 - cpukit/score/src/libatomic.c
 - cpukit/score/src/log2table.c
 - cpukit/score/src/memoryallocate.c
@@ -1598,11 +1599,10 @@ source:
 - cpukit/score/src/threadyield.c
 - cpukit/score/src/timespecaddto.c
 - cpukit/score/src/timespecdivide.c
-- cpukit/score/src/timespecisnonnegative.c
 - cpukit/score/src/timespecdividebyinteger.c
 - cpukit/score/src/timespecfromticks.c
 - cpukit/score/src/timespecgetasnanoseconds.c
-- cpukit/posix/src/timespecget.c
+- cpukit/score/src/timespecisnonnegative.c
 - cpukit/score/src/timespecisvalid.c
 - cpukit/score/src/timespeclessthan.c
 - cpukit/score/src/timespecsubtract.c
@@ -1617,8 +1617,8 @@ source:
 - cpukit/score/src/watchdogtick.c
 - cpukit/score/src/watchdogtickssinceboot.c
 - cpukit/score/src/watchdogtimeslicedefault.c
-- cpukit/score/src/wkspaceallocate.c
 - cpukit/score/src/wkspace.c
+- cpukit/score/src/wkspaceallocate.c
 - cpukit/score/src/wkspacefree.c
 - cpukit/score/src/wkspaceisunifieddefault.c
 - cpukit/score/src/wkspacemallocinitdefault.c

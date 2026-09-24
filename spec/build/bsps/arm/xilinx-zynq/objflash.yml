@@ -16,7 +16,7 @@ install:
   - bsps/arm/xilinx-zynq/include/dev/spi/zynq-qspi-flash-defs.h
 links: []
 source:
-- bsps/arm/xilinx-zynq/dev/spi/zynq-qspi-flashdev.c
-- bsps/arm/xilinx-zynq/dev/spi/zynq-qspi-flash.c
 - bsps/arm/xilinx-zynq/dev/spi/zynq-qspi-flash-transfer.c
+- bsps/arm/xilinx-zynq/dev/spi/zynq-qspi-flash.c
+- bsps/arm/xilinx-zynq/dev/spi/zynq-qspi-flashdev.c
 type: build
