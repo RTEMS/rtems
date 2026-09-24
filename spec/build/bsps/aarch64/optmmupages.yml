@@ -10,11 +10,11 @@ copyrights:
 - Copyright (C) 2021 On-Line Applications Research (OAR)
 default:
 - enabled-by: true
-  value: 0x00000040
+  value: 64
 description: |
   Defines the number of MMU translation table pages to provide.
 enabled-by: true
-format: '{:#010x}'
+format: '{}'
 links: []
 name: AARCH64_MMU_TRANSLATION_TABLE_PAGES
 type: build
