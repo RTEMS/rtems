@@ -20,7 +20,7 @@ default:
 description: |
   Set the size of UART FIFO
 enabled-by: true
-format: '{:#010x}'
+format: '{}'
 links: []
 name: ARM_PL011_FIFO_DEPTH
 type: build
