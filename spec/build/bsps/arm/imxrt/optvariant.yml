@@ -89,18 +89,18 @@ actions:
     conf.define("IMXRT_SPEEDGRADE", speedgrade, quote=False)
     conf.define("IMXRT_IS_{}xx".format(value[:8]), True)
 build-type: option
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 default:
 - enabled-by: arm/imxrt1166-cm7-saltshaker
   value: MIMXRT1166DVM6A_cm7
 - enabled-by: true
   value: MIMXRT1052DVL6B
+description: |
+  Select the i.MXRT series chip variant. Can be (for example) MIMXRT1052CVJ5B or
+  MIMXRT1166DVM6A_cm7.
 enabled-by: true
 format: '{}'
 links: []
 name: IMXRT_VARIANT
-description: |
-  Select the i.MXRT series chip variant. Can be (for example) MIMXRT1052CVJ5B or
-  MIMXRT1166DVM6A_cm7.
 type: build
-copyrights:
-- Copyright (C) 2021 embedded brains GmbH & Co. KG

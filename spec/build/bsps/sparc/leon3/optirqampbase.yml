@@ -1,10 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2021 embedded brains GmbH & Co. KG
 actions:
 - get-integer: null
 - format-and-define: null
 build-type: option
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 default:
 - enabled-by: sparc/gr712rc
   value: 0x80000200
@@ -12,10 +12,10 @@ default:
   - sparc/gr740
   - sparc/gr765
   value: 0xff904000
+description: |
+  This option defines the base address of the IRQ(A)MP register block.
 enabled-by: true
 format: '{:#010x}'
 links: []
 name: LEON3_IRQAMP_BASE
-description: |
-  This option defines the base address of the IRQ(A)MP register block.
 type: build

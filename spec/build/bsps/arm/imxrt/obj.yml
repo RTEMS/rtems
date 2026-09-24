@@ -3,9 +3,9 @@ build-type: objects
 cflags: []
 copyrights:
 - Copyright (C) 2020, 2023 embedded brains GmbH & Co. KG
-enabled-by: true
 cppflags: []
 cxxflags: []
+enabled-by: true
 includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}

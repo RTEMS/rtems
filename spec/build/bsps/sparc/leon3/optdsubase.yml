@@ -1,17 +1,13 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2023 embedded brains GmbH & Co. KG
 actions:
 - get-integer: null
 - format-and-define: null
 build-type: option
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
 default:
 - enabled-by: sparc/gr712rc
   value: 0x90000000
-enabled-by: true
-format: '{:#010x}'
-links: []
-name: LEON3_DSU_BASE
 description: |
   This option defines the base address of the DSU register block used by
   the clock driver and CPU counter implementation.
@@ -21,4 +17,8 @@ description: |
   it is available in flight models and that the time tag register is
   implemented in radiation hardened flip-flops.  For the GR712RC, this is the
   case.
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: LEON3_DSU_BASE
 type: build

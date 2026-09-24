@@ -1,10 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2021 embedded brains GmbH & Co. KG
 actions:
 - get-boolean: null
 - define-condition: null
 build-type: option
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 default:
 - enabled-by:
   - sparc/gr740
@@ -12,10 +12,10 @@ default:
   value: true
 - enabled-by: true
   value: false
-enabled-by: true
-links: []
-name: LEON3_HAS_ASR_22_23_UP_COUNTER
 description: |
   If this option is set to true, then the processor has the %asr22 and %asr23
   up-counter.
+enabled-by: true
+links: []
+name: LEON3_HAS_ASR_22_23_UP_COUNTER
 type: build

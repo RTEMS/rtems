@@ -1,10 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2021 embedded brains GmbH & Co. KG
 actions:
 - get-integer: null
 - format-and-define: null
 build-type: option
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 default:
 - enabled-by:
   - sparc/gr712rc
@@ -12,11 +12,11 @@ default:
   value: 12
 - enabled-by: sparc/gr740
   value: 10
+description: |
+  This option specifies the controller line of the IRQ(A)MP extended
+  interrupt.
 enabled-by: true
 format: '{}'
 links: []
 name: LEON3_IRQAMP_EXTENDED_INTERRUPT
-description: |
-  This option specifies the controller line of the IRQ(A)MP extended
-  interrupt.
 type: build

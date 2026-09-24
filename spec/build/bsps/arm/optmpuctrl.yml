@@ -5,11 +5,11 @@ actions:
 build-type: option
 copyrights:
 - Copyright (C) 2023 Karel Gardas
-description: |
-  Default value of the ARM MPU CTRL register
 default:
 - enabled-by: true
   value: (ARMV7M_MPU_CTRL_ENABLE | ARMV7M_MPU_CTRL_PRIVDEFENA)
+description: |
+  Default value of the ARM MPU CTRL register
 enabled-by: true
 format: '{}'
 links: []
