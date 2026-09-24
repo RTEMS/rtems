@@ -1468,8 +1468,31 @@ s32 XNandPsu_Write(XNandPsu *InstancePtr, u64 Offset, u64 Length, u8 *SrcBuf)
 
 #ifdef __rtems__
 	if (InstancePtr->PartialDataPageIndex != XNANDPSU_PAGE_CACHE_UNAVAILABLE) {
-		/* All writes invalidate the page cache */
-		InstancePtr->PartialDataPageIndex = XNANDPSU_PAGE_CACHE_NONE;
+		if (InstancePtr->PartialDataPageIndex != XNANDPSU_PAGE_CACHE_NONE) {
+			u64 CacheOffset = InstancePtr->PartialDataPageIndex * InstancePtr->Geometry.BytesPerPage;
+			u64 CacheEnd = CacheOffset + InstancePtr->Geometry.BytesPerPage - 1;
+			u64 WriteEnd = Offset + Length - 1;
+			/* Cached page start inside write? */
+			if (CacheOffset >= Offset && CacheOffset <= WriteEnd) {
+				/* Invalidate the page cache if the page overlaps the write */
+				InstancePtr->PartialDataPageIndex = XNANDPSU_PAGE_CACHE_NONE;
+			}
+			/* Cached page end inside write? */
+			if (CacheEnd >= Offset && CacheEnd <= WriteEnd) {
+				/* Invalidate the page cache if the page overlaps the write */
+				InstancePtr->PartialDataPageIndex = XNANDPSU_PAGE_CACHE_NONE;
+			}
+			/* Write start inside cached page? */
+			if (Offset >= CacheOffset && Offset <= CacheEnd) {
+				/* Invalidate the page cache if the page overlaps the write */
+				InstancePtr->PartialDataPageIndex = XNANDPSU_PAGE_CACHE_NONE;
+			}
+			/* Write end inside cached page? */
+			if (WriteEnd >= CacheOffset && WriteEnd <= CacheEnd) {
+				/* Invalidate the page cache if the page overlaps the write */
+				InstancePtr->PartialDataPageIndex = XNANDPSU_PAGE_CACHE_NONE;
+			}
+		}
 	}
 #endif
 	while (LengthVar > 0U) {
@@ -1737,8 +1760,22 @@ s32 XNandPsu_Erase(XNandPsu *InstancePtr, u64 Offset, u64 Length)
 	StartBlock = (u32) (OffsetVar/InstancePtr->Geometry.BlockSize);
 #ifdef __rtems__
 	if (InstancePtr->PartialDataPageIndex != XNANDPSU_PAGE_CACHE_UNAVAILABLE) {
-		/* All erases invalidate the page cache */
-		InstancePtr->PartialDataPageIndex = XNANDPSU_PAGE_CACHE_NONE;
+		if (InstancePtr->PartialDataPageIndex != XNANDPSU_PAGE_CACHE_NONE) {
+			u64 CacheOffset = InstancePtr->PartialDataPageIndex * InstancePtr->Geometry.BytesPerPage;
+			u64 EraseStart = StartBlock * InstancePtr->Geometry.BlockSize;
+			u64 EraseEndIndex = (Offset + Length + InstancePtr->Geometry.BlockSize - 1);
+			EraseEndIndex /= InstancePtr->Geometry.BlockSize;
+			u64 EraseEnd = EraseEndIndex * InstancePtr->Geometry.BlockSize - 1;
+			/*
+			 * Only a single check is necessary as partial overlaps are not possible and
+			 * the page cache size is strictly smaller than block size
+			 */
+			if (CacheOffset >= EraseStart && CacheOffset <= EraseEnd) {
+				/* Invalidate the page cache if the page is within the erase area */
+				InstancePtr->PartialDataPageIndex = XNANDPSU_PAGE_CACHE_NONE;
+			}
+
+		}
 	}
 #endif
 
