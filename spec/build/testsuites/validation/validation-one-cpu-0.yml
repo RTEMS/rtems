@@ -17,11 +17,11 @@ source:
 - testsuites/validation/tc-ratemon-get-status.c
 - testsuites/validation/tc-ratemon-period.c
 - testsuites/validation/tc-ratemon-timeout.c
+- testsuites/validation/tc-score-fatal.c
 - testsuites/validation/tc-sem-delete.c
 - testsuites/validation/tc-sem-uni.c
 - testsuites/validation/tc-signal-catch.c
 - testsuites/validation/tc-signal-send.c
-- testsuites/validation/tc-score-fatal.c
 - testsuites/validation/tc-task-create-errors.c
 - testsuites/validation/tc-task-mode.c
 - testsuites/validation/tc-task-set-affinity.c

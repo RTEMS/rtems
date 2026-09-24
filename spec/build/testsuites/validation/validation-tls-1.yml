@@ -11,8 +11,8 @@ includes: []
 ldflags: []
 links: []
 source:
-- testsuites/validation/tc-score-thread-tls.c
 - testsuites/validation/tc-score-thread-tls-max-zero.c
+- testsuites/validation/tc-score-thread-tls.c
 - testsuites/validation/ts-validation-tls-1.c
 stlib: []
 target: testsuites/validation/ts-validation-tls-1.exe
