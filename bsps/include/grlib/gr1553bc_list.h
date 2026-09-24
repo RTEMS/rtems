@@ -96,7 +96,7 @@
  *
  *  One can use the INDICATION service to avoid modifying
  *  a descriptor currently in use by the BC core. One can also in most cases
- *  do descriptor initialization in three steps: Init Descriptor as Dummy 
+ *  do descriptor initialization in three steps: Init Descriptor as Dummy
  *  with and allocated time (often done before starting/scheduling list),
  *  then modify transfer options and data-pointers, then clear the Dummy
  *  bit in one atomic data store. This approach will avoid potential races
@@ -113,7 +113,7 @@
  *  is setup with gr1553bc_list_table_alloc(list, CUSTOM_ADDRESS).
  *
  *  Object descriptions are normally allocated during initialization
- *  procedure by providing the API with a object configuration, for 
+ *  procedure by providing the API with a object configuration, for
  *  example a Major Frame configuration enables the API to allocate
  *  the software description of a Major Frame with all it's Minor frames.
  *
@@ -156,7 +156,7 @@
  *
  *  See the hardware manual for a detail description of a descriptor (Slot).
  *
- *  The BC Core is unaware of lists, it steps through executing each 
+ *  The BC Core is unaware of lists, it steps through executing each
  *  descriptor as the encountered, Conditionals resulting in jumps may
  *  let us to create more complex arrangements of buffer descriptos (BDs)
  *  which we call list.
@@ -181,12 +181,12 @@
  * \section bc_IRQ Interrupt Handling
  *
  * There are different types of interrupts, Error IRQs or transfer IRQs. The
- * Error IRQs are handled by the driver can a callback function is called. 
+ * Error IRQs are handled by the driver can a callback function is called.
  *
  * Transfer Descriptors can be programmed to generate interrupt, and
  * condition descriptors can be programmed to generate interrupt
  * unconditionaly (there exists more conditional types). When a Transfer
- * descriptor causes IRQ the general ISR callback of the BC driver is 
+ * descriptor causes IRQ the general ISR callback of the BC driver is
  * called to let the user handle the interrupt. When a condition descriptor
  * causes an IRQ a custom IRQ handler is called (if assigned).
  *
@@ -197,7 +197,7 @@
  *   -# gr1553bc_slot_alloc(&MID, TIME=0, ..)
  *   -# gr1553bc_slot_irq_prepare(MID, funcISR, data)
  *   -# gr1553bc_slot_irq_enable(MID)
- * 
+ *
  * \verbatim
  *  void funcISR(*bd, *data)
  *  {
@@ -246,8 +246,8 @@ struct gr1553bc_major_cfg {
 
 struct gr1553bc_list_cfg {
   unsigned char rt_timeout[ 31 ];   /* Number of us timeout tolerance per RT */
-  unsigned char bc_timeout;         /* Number of us timeout tolerance of 
-					 * broadcast transfers */
+  unsigned char bc_timeout;         /* Number of us timeout tolerance of
+                                     * broadcast transfers */
   int           tropt_irq_on_err;   /* Generate IRQ on transfer error */
   int           tropt_pause_on_err; /* Pause list on transfer error */
   int           async_list;         /* Set to non-zero if asyncronous list*/
@@ -265,14 +265,14 @@ struct gr1553bc_list {
   int                    table_size;    /* Descriptor Table Size */
   void                  *bc;            /* BC HW, needed for adr translation */
   unsigned char          rt_timeout[ 32 ]; /* Tolerance per RT, default 20us
-					 * Note: 31 is for Broadcast */
+                                            * Note: 31 is for Broadcast */
   uint32_t               tropts;           /* Transfer descriptor options:
-					 *  On transfer error the following bits
-					 *  do affect:
-					 *  - bit28 1=Generate IRQ
-					 *  - bit26 1=Pause transfer list
-					 *  
-					 */
+                                            *  On transfer error the following bits
+                                            *  do affect:
+                                            *  - bit28 1=Generate IRQ
+                                            *  - bit26 1=Pause transfer list
+                                            *
+                                            */
   int                    async_list;       /* async list or not */
   int                    major_cnt;        /* Number of Major frames */
   struct gr1553bc_major *majors[ 1 ];      /* Var-Array of Major Pointers*/
@@ -284,7 +284,7 @@ extern int gr1553bc_list_alloc( struct gr1553bc_list **list, int max_major );
 /* Free List if allocated with gr1553bc_list_alloc() */
 extern void gr1553bc_list_free( struct gr1553bc_list *list );
 
-/* Configure Global List parameters 
+/* Configure Global List parameters
  *
  * \param list    List to be configured and initialized.
  * \param cfg     List Configuration
@@ -297,7 +297,7 @@ extern int gr1553bc_list_config(
   void                     *bc
 );
 
-/* Link a 'major' Major frame with next major frame 
+/* Link a 'major' Major frame with next major frame
  * The links affected:
  *   - major->next
  *   - major->minor[LAST]->next
@@ -342,7 +342,7 @@ extern int gr1553bc_list_table_alloc(
 /* Free descriptor table allocated with gr1553bc_list_table_alloc() */
 extern void gr1553bc_list_table_free( struct gr1553bc_list *list );
 
-/* Build an empty descriptor table from list description, 
+/* Build an empty descriptor table from list description,
  * the minor frames will be linked together.
  */
 extern int gr1553bc_list_table_build( struct gr1553bc_list *list );
@@ -364,7 +364,7 @@ struct gr1553bc_minor {
   union gr1553bc_bd *bds; /* Descriptors for this minor frame (CPU ADRS)*/
 };
 
-/* Alloc a Major/Minor frame skeleton according to the configuration structure. 
+/* Alloc a Major/Minor frame skeleton according to the configuration structure.
  * The descriptor table is not allocated.
  */
 extern int gr1553bc_major_alloc_skel(
@@ -372,7 +372,7 @@ extern int gr1553bc_major_alloc_skel(
   struct gr1553bc_major_cfg *cfg
 );
 
-/* Unique Message/Descriptor ID. Can be used to identify a Major or Minor 
+/* Unique Message/Descriptor ID. Can be used to identify a Major or Minor
  * Frame, or a Slot.
  *
  * - If minor_num is 0xff, the ID identifies a Major Frame
@@ -408,7 +408,7 @@ extern int gr1553bc_list_freetime( struct gr1553bc_list *list, int mid );
 /* Get free time left of minor frame */
 extern int gr1553bc_minor_freetime( struct gr1553bc_minor *minor );
 
-/* Allocate a time slot on a minor frame, major/minor frame is identified 
+/* Allocate a time slot on a minor frame, major/minor frame is identified
  * by MID. The 'mid' is a input/ouput parameter, the resulting slot taken
  * will be placed in 'mid', a pointer to the allocated descriptor is stored
  * into bd.
@@ -417,7 +417,7 @@ extern int gr1553bc_minor_freetime( struct gr1553bc_minor *minor );
  * be allocated, if slot is 0xff, then the first free slot is allocated.
  *
  * The function fails (return negative) if timeslot is longer than remaining
- * time in minor frame, if no more slots are available in minor frame, if 
+ * time in minor frame, if no more slots are available in minor frame, if
  * MID points to a bad major/minor or major/minor/slot.
  */
 extern int gr1553bc_slot_alloc(
@@ -438,14 +438,14 @@ extern int gr1553bc_slot_alloc2(
 
 /* Free message slot and the time associated with it. The time taken by the
  * message slot is added to the END TIME descriptor, if managed by the driver
- * for this minor frame. The descriptor will be 
+ * for this minor frame. The descriptor will be
  */
 extern int gr1553bc_slot_free( struct gr1553bc_list *list, int mid );
 extern int gr1553bc_slot_free2( struct gr1553bc_minor *minor, int mid );
 
 /* Find MID from Descriptor pointer
  *
- * In the end of each minor frame is a unconditional jump 
+ * In the end of each minor frame is a unconditional jump
  * to next minor frame descriptor. The hardware does not
  * use the last 8 bytes of conditional descriptors, in the
  * padding area a MID is stored so that we can lookup the
@@ -459,7 +459,7 @@ extern int gr1553bc_slot_free2( struct gr1553bc_minor *minor, int mid );
  *
  * \param bd     IN: Descriptor to lookup MID of (CPU address of BD)
  * \param mid    OUT: Pointer to where Message-ID (Slot-ID) will be stored
- * \param async  OUT: Function will store non-zero value if BD belogs to 
+ * \param async  OUT: Function will store non-zero value if BD belogs to
  *                    async list.
  */
 extern int gr1553bc_mid_from_bd( union gr1553bc_bd *bd, int *mid, int *async );
@@ -494,7 +494,7 @@ extern int gr1553bc_slot_irq_enable( struct gr1553bc_list *list, int mid );
  */
 extern int gr1553bc_slot_irq_disable( struct gr1553bc_list *list, int mid );
 
-/* Create custom jump to descriptor, conditional or unconditional, see 
+/* Create custom jump to descriptor, conditional or unconditional, see
  * hardware manual for conditions.
  *
  * set conditional to GR1553BC_UNCOND_JMP for unconditional jump.
@@ -556,7 +556,7 @@ extern int gr1553bc_slot_transfer(
 );
 
 /* Remove or set dummy bit of a transfer descriptor
- * Bit31 of *dummy is written to the dummy bit, the 
+ * Bit31 of *dummy is written to the dummy bit, the
  * old descriptor value is stored into *dummy.
  */
 extern int gr1553bc_slot_dummy(
@@ -565,7 +565,7 @@ extern int gr1553bc_slot_dummy(
   unsigned int         *dummy
 );
 
-/* Make a slot empty (BC will not generate bus transfers), time slot 
+/* Make a slot empty (BC will not generate bus transfers), time slot
  * allocated is untouched (if assigned).
  */
 extern int gr1553bc_slot_empty( struct gr1553bc_list *list, int mid );
@@ -595,7 +595,7 @@ extern int gr1553bc_slot_update(
 );
 
 /* Modify a transfer descriptor in any way,
- * 
+ *
  * flags:
  *  bit[N=0..3]: 1 = set BD wordN according to argument wordN,
  *               0 = do not modify BD wordN
@@ -666,7 +666,7 @@ extern int gr1553bc_slot_raw(
     ( tx_subadr << 16 ) | ( 0 << 10 ) |                                 \
     ( ( word_count >= 32 ) ? 0 : word_count ) )
 
-/* Broadcast mode command without data (BC-to-RTs) 
+/* Broadcast mode command without data (BC-to-RTs)
  * Mode code: 1,3,4,5,6,7 or 8
  */
 #define GR1553BC_BC_MC_NODATA( modecode )                                     \
@@ -688,9 +688,9 @@ extern int gr1553bc_slot_raw(
 /* Retry modes */
 #define GR1553BC_RETRY_SAME  0x0 /* Retry on the same bus only */
 #define GR1553BC_RETRY_ALTER 0x1 /* Retry alternating on both busses */
-#define GR1553BC_RETRY_ATTEMPT \
-  0x2 /* Many attepts first on original 
-					 * bus then on other bus */
+#define GR1553BC_RETRY_ATTEMPT          \
+  0x2 /* Many attepts first on original \
+       * bus then on other bus */
 /* Number of retires supported */
 #define GR1553BC_RETRY_CNT_MAX 6
 

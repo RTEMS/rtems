@@ -232,9 +232,9 @@ int b1553rt_init3( struct drvmgr_dev *dev )
     b1553rt_driver_io_registered = 1;
   }
 
-  /* I/O system registered and initialized 
-     * Now we take care of device initialization.
-     */
+  /* I/O system registered and initialized
+   * Now we take care of device initialization.
+   */
 
   if ( b1553rt_device_init( priv ) ) {
     return DRVMGR_FAIL;
@@ -244,13 +244,13 @@ int b1553rt_init3( struct drvmgr_dev *dev )
   prefix[ 0 ] = '\0';
   if ( drvmgr_get_dev_prefix( dev, prefix ) ) {
     /* Failed to get prefix, make sure of a unique FS name
-         * by using the driver minor.
-         */
+     * by using the driver minor.
+     */
     sprintf( priv->devName, "/dev/b1553rt%d", dev->minor_drv );
   } else {
     /* Got special prefix, this means we have a bus prefix
-         * And we should use our "bus minor"
-         */
+     * And we should use our "bus minor"
+     */
     sprintf( priv->devName, "/dev/%sb1553rt%d", prefix, dev->minor_bus );
   }
 
@@ -366,8 +366,8 @@ int b1553rt_device_init( rt_priv *pDev )
   } else {
     if ( !value ) {
       /* Use dynamically allocated memory,
-             * 4k DMA memory + 4k for alignment 
-             */
+       * 4k DMA memory + 4k for alignment
+       */
       mem = (uintptr_t) grlib_malloc( 4 * 1024 * 2 );
       if ( !mem ) {
         printk( "RT: Failed to allocate HW memory\n\r" );
@@ -398,10 +398,10 @@ int b1553rt_device_init( rt_priv *pDev )
 
   pDev->rt_event = NULL;
 
-  /* The RT is always clocked at the same frequency as the bus 
-     * If the frequency doesnt match it is defaulted to 24MHz, 
-     * user can always override it.
-     */
+  /* The RT is always clocked at the same frequency as the bus
+   * If the frequency doesnt match it is defaulted to 24MHz,
+   * user can always override it.
+   */
   pDev->cfg_freq = RT_FREQ_24MHZ;
 
   /* Get frequency in Hz */

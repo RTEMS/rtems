@@ -86,7 +86,7 @@ typedef struct {
 
   /**
    * @brief This member contains the size of each buffer in bytes.
-  */
+   */
   size_t buffer_size;
 
   /**

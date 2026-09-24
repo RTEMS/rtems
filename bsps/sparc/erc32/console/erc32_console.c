@@ -339,15 +339,15 @@ static void erc32_console_initialize( int minor )
   cd->pDeviceContext = 0;
 
   /*
-  * Initialize the Termios infrastructure.  If Termios has already
-  * been initialized by another device driver, then this call will
-  * have no effect.
-  */
+   * Initialize the Termios infrastructure.  If Termios has already
+   * been initialized by another device driver, then this call will
+   * have no effect.
+   */
   rtems_termios_initialize();
 
   /*
-  *  Initialize Hardware
-  */
+   *  Initialize Hardware
+   */
   #if ( CONSOLE_USE_INTERRUPTS )
   if ( !interrupts_installed ) {
     rtems_interrupt_entry_initialize(

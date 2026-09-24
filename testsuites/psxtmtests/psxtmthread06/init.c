@@ -88,7 +88,7 @@ void *test_thread( void *argument )
 
   TEST_END();
   rtems_test_exit( 0 );
-  //Empty thread used in pthread_create().
+  // Empty thread used in pthread_create().
   return NULL;
 }
 

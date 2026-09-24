@@ -447,9 +447,9 @@ int grspw_init3( struct drvmgr_dev *dev )
     grspw_driver_io_registered = 1;
   }
 
-  /* I/O system registered and initialized 
-	 * Now we take care of device initialization.
-	 */
+  /* I/O system registered and initialized
+   * Now we take care of device initialization.
+   */
 
   /* Get frequency in Hz */
   if ( drvmgr_freq_get( dev, DEV_APB_SLV, &priv->core_freq_khz ) ) {
@@ -466,13 +466,13 @@ int grspw_init3( struct drvmgr_dev *dev )
   prefix[ 0 ] = '\0';
   if ( drvmgr_get_dev_prefix( dev, prefix ) ) {
     /* Failed to get prefix, make sure of a unique FS name
-		 * by using the driver minor.
-		 */
+     * by using the driver minor.
+     */
     sprintf( priv->devName, "/dev/grspw%d", dev->minor_drv );
   } else {
     /* Got special prefix, this means we have a bus prefix
-		 * And we should use our "bus minor"
-		 */
+     * And we should use our "bus minor"
+     */
     sprintf( priv->devName, "/dev/%sgrspw%d", prefix, dev->minor_bus );
   }
 
@@ -556,8 +556,8 @@ int grspw_device_init( GRSPW_DEV *pDev )
   }
 
   /* initialize the code with some resonable values,
-	 * actual initialization is done later using ioctl(fd)
-	 * on the opened device */
+   * actual initialization is done later using ioctl(fd)
+   * on the opened device */
   pDev->config.rxmaxlen = SPACEWIRE_RXPCK_SIZE;
   pDev->txdbufsize = SPACEWIRE_TXD_SIZE;
   pDev->txhbufsize = SPACEWIRE_TXH_SIZE;
@@ -840,8 +840,8 @@ static void grspw_interrupt( void *arg )
   );
 
   /* Make sure to put the timecode handling first in order to get the smallest
-	 * possible interrupt latency
-	 */
+   * possible interrupt latency
+   */
   if ( ( status & SPW_STATUS_TO ) && ( grspw_timecode_callback != NULL ) ) {
     /* Timecode received. Let custom function handle this */
     SPW_STATUS_WRITE( pDev, SPW_STATUS_TO );
@@ -854,8 +854,8 @@ static void grspw_interrupt( void *arg )
   /*SPW_WRITE(&pDev->regs->dma0ctrl, dmactrl | SPW_DMACTRL_PR);*/
   SPW_WRITE( &pDev->regs->dma0ctrl, dmactrl );
 
-  /* If linkinterrupts are enabled check if it was a linkerror irq and then send an event to the 
-	   process set in the config */
+  /* If linkinterrupts are enabled check if it was a linkerror irq and then send an event to the
+           process set in the config */
   if ( pDev->config.link_err_irq ) {
     if (
       status & ( SPW_STATUS_CE | SPW_STATUS_ER | SPW_STATUS_DE |
@@ -1075,10 +1075,10 @@ static rtems_device_driver grspw_read(
   while (
     ( count = grspw_hw_receive( pDev, rw_args->buffer, rw_args->count ) ) == 0
   ) {
-    /* wait a moment for any descriptors to get available 
-		 * 
-		 * Semaphore is signaled by interrupt handler
-		 */
+    /* wait a moment for any descriptors to get available
+     *
+     * Semaphore is signaled by interrupt handler
+     */
     if ( pDev->config.rx_blocking ) {
       SPACEWIRE_DBG2( "Rx blocking\n" );
       if ( pDev->config.rtimeout ) {
@@ -1545,11 +1545,11 @@ static rtems_device_driver grspw_control(
       break;
 
     /* Change MAX Packet size by:
-		 *  - stop RX/TX (if on)
-		 *  - wait for hw to complete RX DMA (if on)
-		 *  - reallocate buffers with new size
-		 *  - tell hw about new size & start RX/TX again (if previously on)
-		 */
+     *  - stop RX/TX (if on)
+     *  - wait for hw to complete RX DMA (if on)
+     *  - reallocate buffers with new size
+     *  - tell hw about new size & start RX/TX again (if previously on)
+     */
     case SPACEWIRE_IOCTRL_SET_PACKETSIZE:
       if ( ioarg->buffer == NULL ) {
         return RTEMS_INVALID_NAME;
@@ -1768,26 +1768,26 @@ static rtems_device_driver grspw_control(
       }
       break;
 
-    /* Calculate timer register from GRSPW Core frequency 
-		 * Also possible to set disconnect and timer64 from
-		 *  - SPACEWIRE_IOCTRL_SET_DISCONNECT
-		 *  - SPACEWIRE_IOCTRL_SET_TIMER
-		 */
+    /* Calculate timer register from GRSPW Core frequency
+     * Also possible to set disconnect and timer64 from
+     *  - SPACEWIRE_IOCTRL_SET_DISCONNECT
+     *  - SPACEWIRE_IOCTRL_SET_TIMER
+     */
     case SPACEWIRE_IOCTRL_SET_COREFREQ:
       pDev->core_freq_khz = (uintptr_t) ioarg->buffer;
       if ( pDev->core_freq_khz == 0 ) {
         /* Get GRSPW clock frequency from system clock.
-				 * System clock has been read from timer inited
-				 * by RTEMS loader (mkprom)
-				 */
+         * System clock has been read from timer inited
+         * by RTEMS loader (mkprom)
+         */
         drvmgr_freq_get( pDev->dev, DEV_APB_SLV, &pDev->core_freq_khz );
         /* Convert from Hz -> kHz */
         pDev->core_freq_khz = pDev->core_freq_khz / 1000;
       }
 
-      /* Only GRSPW1 needs the Timer64 and Disconnect values 
-			 * GRSPW2 and onwards doesn't have this register.
-			 */
+      /* Only GRSPW1 needs the Timer64 and Disconnect values
+       * GRSPW2 and onwards doesn't have this register.
+       */
       if ( pDev->core_ver <= 1 ) {
         /* Calculate Timer64 & Disconnect */
         pDev->config.timer = grspw_calc_timer64( pDev->core_freq_khz );
@@ -1818,13 +1818,13 @@ static rtems_device_driver grspw_control(
       }
 
       /* Get timeout from userspace
-			 *  timeout:
-			 *   *  -1	   = Default timeout
-			 *   *  less than -1 = forever
-			 *   *  0	    = no wait, proceed if link is up
-			 *   *  positive     = specifies number of system clock ticks that
-			 *		     startup will wait for link to enter ready mode.
-			 */
+       *  timeout:
+       *   *  -1	   = Default timeout
+       *   *  less than -1 = forever
+       *   *  0	    = no wait, proceed if link is up
+       *   *  positive     = specifies number of system clock ticks that
+       *		     startup will wait for link to enter ready mode.
+       */
       timeout = (int) (uintptr_t) ioarg->buffer;
 
       if ( ( ret = grspw_hw_startup( pDev, timeout ) ) != RTEMS_SUCCESSFUL ) {
@@ -1855,10 +1855,10 @@ static rtems_device_driver grspw_control(
       grspw_hw_stop( pDev, 1, 1 );
       break;
 
-    /* Set time-code control register bits, and Enables/Disables 
-		 * Time code interrupt, make sure to connect the callback 
-		 * grspw_timecode_callback if using interrupts.
-		 */
+    /* Set time-code control register bits, and Enables/Disables
+     * Time code interrupt, make sure to connect the callback
+     * grspw_timecode_callback if using interrupts.
+     */
     case SPACEWIRE_IOCTRL_SET_TCODE_CTRL:
       tmp = (uintptr_t) ioarg->buffer;
       mask = tmp &
@@ -1963,8 +1963,8 @@ static int grspw_hw_waitlink( GRSPW_DEV *pDev, int timeout )
   int j;
 
   /* No actual link interface on a DMA-only GRSPW2 connected to the
-	 * SPW router
-	 */
+   * SPW router
+   */
   if ( pDev->core_ver == 3 ) {
     return 0;
   }
@@ -2000,8 +2000,8 @@ static void grspw_hw_reset( GRSPW_DEV *pDev )
   ); /*clear status*/
 
   /* Add extra writes to make sure we wait the number of clocks required
-	 * after reset
-	 */
+   * after reset
+   */
   SPW_STATUS_WRITE(
     pDev,
     SPW_STATUS_TO | SPW_STATUS_CE | SPW_STATUS_ER | SPW_STATUS_DE |
@@ -2137,10 +2137,10 @@ static int grspw_hw_startup( GRSPW_DEV *pDev, int timeout )
 static void grspw_hw_wait_rx_inactive( GRSPW_DEV *pDev )
 {
   while ( SPW_READ( &pDev->regs->dma0ctrl ) & SPW_DMACTRL_RX ) {
-    /* switching may be needed: 
-		 *  - low frequency GRSPW 
-		 *  - mega packet incoming
-		 */
+    /* switching may be needed:
+     *  - low frequency GRSPW
+     *  - mega packet incoming
+     */
     rtems_task_wake_after( 1 );
   }
 }

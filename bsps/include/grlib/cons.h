@@ -5,7 +5,7 @@
  *  - First console device that has System Console flag set will be
  *    system console.
  *  - If none of the registered console devices has system console set,
- *    the first is registered device is used, unless it has 
+ *    the first is registered device is used, unless it has
  *
  *  COPYRIGHT (c) 2010.
  *  Cobham Gaisler AB.
@@ -45,9 +45,9 @@ struct console_dev;
 struct console_dev {
   rtems_termios_device_context        base;
   /* Set CONSOLE_FLAG_SYSCON to request this device to be system console
-	 * and/or debug console. CONSOLE_FLAG_SYSCON_GRANT will be set on the
-	 * device which was selected as system console.
-	 */
+   * and/or debug console. CONSOLE_FLAG_SYSCON_GRANT will be set on the
+   * device which was selected as system console.
+   */
   int                                 flags;
   char                               *fsname; /* File system prefix */
   const rtems_termios_device_handler *handler;

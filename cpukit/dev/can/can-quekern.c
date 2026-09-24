@@ -104,8 +104,8 @@ static rtems_task can_queue_dead_func( rtems_task_argument arg )
     entry = TAILQ_FIRST( &can_queue_dead_ends );
 
     /* Lock can be released there, because only one instance of can_queue_dead_tl
-    * can run at once and all other functions add ends only to head.
-    */
+     * can run at once and all other functions add ends only to head.
+     */
     rtems_mutex_unlock( &can_queue_dead_func_lock );
 
     while ( entry != NULL ) {

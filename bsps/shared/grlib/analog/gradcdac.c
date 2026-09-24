@@ -147,13 +147,13 @@ int gradcdac_init3( struct drvmgr_dev *dev )
   prefix[ 0 ] = '\0';
   if ( drvmgr_get_dev_prefix( dev, prefix ) ) {
     /* Failed to get prefix, make sure of a unique FS name
-		 * by using the driver minor.
-		 */
+     * by using the driver minor.
+     */
     sprintf( priv->devName, "/dev/gradcdac%d", dev->minor_drv );
   } else {
     /* Got special prefix, this means we have a bus prefix
-		 * And we should use our "bus minor"
-		 */
+     * And we should use our "bus minor"
+     */
     sprintf( priv->devName, "/dev/%sgradcdac%d", prefix, dev->minor_bus );
   }
 
@@ -388,7 +388,7 @@ unsigned int gradcdac_get_status( void *cookie )
 }
 
 /* Install IRQ handler for ADC and/or DAC interrupt.
- * The installed IRQ handler(ISR) must read the status 
+ * The installed IRQ handler(ISR) must read the status
  * register to clear the pending interrupt avoiding multiple
  * entries to the ISR caused by the same IRQ.
  *
@@ -479,8 +479,8 @@ void gradcdac_adc_convert_start( void *cookie )
   pDev->regs->adc_din = 0;
 }
 
-/* Tries to read the conversion result. If the circuitry is busy 
- * converting the function return a non-zero value, if the conversion 
+/* Tries to read the conversion result. If the circuitry is busy
+ * converting the function return a non-zero value, if the conversion
  * has successfully finished the function return zero.
  *
  * \param digital_value the resulting converted value is placed here
@@ -511,7 +511,7 @@ int gradcdac_adc_convert_try( void *cookie, unsigned short *digital_value )
   return -1;
 }
 
-/* Waits until the ADC circuity has finished a digital to analogue 
+/* Waits until the ADC circuity has finished a digital to analogue
  * conversion. The Waiting is implemented as a busy loop utilizing
  * 100% CPU load.
  */
@@ -535,7 +535,7 @@ int gradcdac_adc_convert( void *cookie, unsigned short *digital_value )
   return -1;
 }
 
-/* Try to make the DAC circuitry initialize a digital to analogue 
+/* Try to make the DAC circuitry initialize a digital to analogue
  * conversion. If the circuitry is busy by a previous conversion
  * the function return a non-zero value, if the conversion is
  * successfully initialized the function return zero.
@@ -556,7 +556,7 @@ int gradcdac_dac_convert_try( void *cookie, unsigned short digital_value )
   return 0;
 }
 
-/* Initializes a digital to analogue conversion by waiting until 
+/* Initializes a digital to analogue conversion by waiting until
  * previous conversions is finished before proceeding with the
  * conversion. The Waiting is implemented as a busy loop utilizing
  * 100% CPU load.

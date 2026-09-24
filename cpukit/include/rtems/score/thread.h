@@ -233,8 +233,8 @@ typedef struct {
   Thread_Entry_information Entry;
   /*-------------- initial execution modes ----------------- */
   /** This field indicates whether the thread was preemptible when
-    * it started.
-    */
+   * it started.
+   */
   bool                     is_preemptible;
 
   /**

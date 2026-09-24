@@ -61,7 +61,7 @@ static void rmdir_error( void )
 
   /*
    * Try to remove the relative parent directory
-  */
+   */
   EXPECT_EQUAL( -1, rmdir, ".." );
   puts( "Testing errno for ENOTEMPTY or EBUSY" );
   if ( errno == ENOTEMPTY || errno == EBUSY ) {

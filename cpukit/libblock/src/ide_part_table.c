@@ -211,11 +211,11 @@ static rtems_status_code data_to_part_desc(
   part_desc->size = LE_TO_CPU_U32( temp );
 
   /*
-     * use partitions that are
-     * - extended
-     * or
-     * - FAT type and non-zero
-     */
+   * use partitions that are
+   * - extended
+   * or
+   * - FAT type and non-zero
+   */
   if (
     is_extended( part_desc->sys_type ) ||
     ( ( is_fat_partition( part_desc->sys_type ) ) && ( part_desc->size != 0 ) )
@@ -285,8 +285,8 @@ static rtems_status_code read_extended_partition(
 
   for ( i = 0; i < RTEMS_IDE_PARTITION_MAX_SUB_PARTITION_NUMBER; i++ ) {
     /* if data_to_part_desc fails skip this partition
-         * and parse the next one
-         */
+     * and parse the next one
+     */
     rc = data_to_part_desc( data, &new_part_desc );
     if ( rc != RTEMS_SUCCESSFUL ) {
       free( sector );

@@ -155,7 +155,7 @@
  * 4090-4110   PrintIfNPositive
  * 4640-4850   TestPartialUnderflow
  *
-*/
+ */
 
 #include <stdio.h>
 #include <string.h>
@@ -2142,7 +2142,7 @@ void BadCond( int K, char *T )
  *     X = (Random1 + Random9)^5
  *     Random1 = X - FLOOR(X) + 0.000005 * X;
  *   and returns the new value of Random1
-*/
+ */
 FLOAT
 Random()
 {

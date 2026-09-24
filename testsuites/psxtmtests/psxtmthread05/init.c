@@ -64,7 +64,7 @@ void benchmark_pthread_setschedparam( void )
   param.sched_priority = sched_get_priority_min( policy );
 
   benchmark_timer_initialize();
-  //lower own priority to minimun, scheduler forces an involuntary context switch
+  // lower own priority to minimun, scheduler forces an involuntary context switch
   pthread_setschedparam( pthread_self(), policy, &param );
 }
 
@@ -87,7 +87,7 @@ void *test_thread( void *argument )
 
   TEST_END();
   rtems_test_exit( 0 );
-  //Empty thread used in pthread_create().
+  // Empty thread used in pthread_create().
   return NULL;
 }
 

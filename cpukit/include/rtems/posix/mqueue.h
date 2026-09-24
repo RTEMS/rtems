@@ -68,7 +68,7 @@ extern "C" {
  *  @defgroup RTEMSImplPOSIXMessageQueuePrivate Message Queues Private Support
  *
  *  @ingroup RTEMSImplPOSIX
- * 
+ *
  */
 /**@{**/
 

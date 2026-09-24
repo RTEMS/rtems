@@ -49,7 +49,7 @@ extern "C" {
 
 /**
  * @defgroup RTEMSImplPOSIXAio POSIX Asynchronous I/O Support
- * 
+ *
  * @ingroup RTEMSImplPOSIX
  * @{
  */
@@ -101,7 +101,7 @@ extern "C" {
 
 /**
  * @brief Asynchronous I/O Control Block
- * 
+ *
  * 6.7.1.1 Asynchronous I/O Control Block, P1003.1b-1993, p. 151
  */
 struct aiocb {
@@ -134,11 +134,11 @@ struct aiocb {
 
 /**
  * @brief Asynchronous Read
- * 
+ *
  * 6.7.2 Asynchronous Read, P1003.1b-1993, p. 154
- * 
+ *
  * @param[in,out] aiocbp is a pointer to the asynchronous I/O control block
- * 
+ *
  * @retval 0 The request has been successfuly enqueued.
  * @retval -1 The request has not been enqueued due to an error.
  *         The error is indicated in errno:
@@ -158,9 +158,9 @@ int aio_read( struct aiocb *aiocbp );
  * @brief Asynchronous Write
  *
  * 6.7.3 Asynchronous Write, P1003.1b-1993, p. 155
- * 
+ *
  * @param[in,out] aiocbp is a pointer to the asynchronous I/O control block
- * 
+ *
  * @retval 0 The request has been successfuly enqueued.
  * @retval -1 The request has not been enqueued due to an error.
  *         The error is indicated in errno:
@@ -178,7 +178,7 @@ int aio_write( struct aiocb *aiocbp );
  * @brief List Directed I/O
  *
  * 6.7.4 List Directed I/O, P1003.1b-1993, p. 158
- * 
+ *
  * @param[in] mode can be LIO_WAIT or LIO_NOWAIT
  * @param[in,out] list is a pointer to the array of aiocb
  * @param[in] nent is the number of element in list
@@ -209,11 +209,11 @@ int lio_listio(
 
 /**
  * @brief Retrieve Error of Asynchronous I/O Operation
- * 
+ *
  * 6.7.5 Retrieve Error of Asynchronous I/O Operation, P1003.1b-1993, p. 161
- * 
+ *
  * @param[in,out] aiocbp is a pointer to the asynchronous I/O control block
- * 
+ *
  * @retval 0 The operation has completed succesfully.
  * @retval EINPROGRESS The operation has not yet completed.
  * @retval EINVAL The return status for the request associated with aiocbp
@@ -225,12 +225,12 @@ int aio_error( const struct aiocb *aiocbp );
 
 /**
  * @brief Retrieve Return Status of Asynchronous I/O Operation
- * 
+ *
  * 6.7.6 Retrieve Return Status of Asynchronous I/O Operation,
  *       P1003.1b-1993, p. 162
- * 
+ *
  * @param[in,out] aiocbp is a pointer to the asynchronous I/O control block
- * 
+ *
  * @retval -1 The operation returned with an error. errno is set to indicate
  *            the error,as described for the various operations.
  * @retval EINVAL The return status for the request associated with aiocbp
@@ -242,13 +242,13 @@ ssize_t aio_return( struct aiocb *aiocbp );
 
 /**
  * @brief Cancel asynchronous I/O operation.
- * 
+ *
  * 6.7.7 Cancel Asynchronous I/O Operation, P1003.1b-1993, p. 163
- * 
+ *
  * @param[in] filedes Is the file descriptor
  * @param[in,out] aiocbp  Is a pointer to the asynchronous I/O control block
- * 
- * @retval AIO_CANCELED     The requested operation(s) were canceled. 
+ *
+ * @retval AIO_CANCELED     The requested operation(s) were canceled.
  * @retval AIO_NOTCANCELED  Some of the requested operation(s) cannot be
  *                          canceled since they are in progress.
  * @retval AIO_ALLDONE      None of the requested operation(s) could be
@@ -262,7 +262,7 @@ int aio_cancel( int filedes, struct aiocb *aiocbp );
  * @brief Wait for Asynchronous I/O Request
  *
  * 6.7.7 Wait for Asynchronous I/O Request, P1003.1b-1993, p. 164
- * 
+ *
  * @param list Is a pointer to the array of aiocbs.
  * @param nent Is the number of aiocbs in the array.
  * @param timeout Specifies the timeout time.
@@ -285,13 +285,13 @@ int aio_suspend(
 
 /**
  * @brief Asynchronous File Synchronization
- * 
+ *
  * 6.7.9 Asynchronous File Synchronization, P1003.1b-1993, p. 166
- * 
+ *
  * @param[in] op     O_SYNC or O_DSYNC
  * @param[in,out] aiocbp is a pointer to the asynchronous I/O control block
- * 
- * @retval  0 The request was correctly enqueued. 
+ *
+ * @retval  0 The request was correctly enqueued.
  * @retval -1 An error occured. errno indicated the error:
  *            - EAGAIN The requested asynchronous operation was not queued
  *              due to temporary resource limitations.

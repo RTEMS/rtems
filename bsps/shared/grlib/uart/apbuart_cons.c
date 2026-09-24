@@ -249,12 +249,12 @@ int apbuart_init1( struct drvmgr_dev *dev )
   uint32_t                ctrl;
 
   /* The default operation in AMP is to use APBUART[0] for CPU[0],
-	 * APBUART[1] for CPU[1] and so on. The remaining UARTs is not used
-	 * since we don't know how many CPU-cores there are. Note this only
-	 * affects the on-chip amba bus (the root bus). The user can override
-	 * the default resource sharing by defining driver resources for the
-	 * APBUART devices on each AMP OS instance.
-	 */
+   * APBUART[1] for CPU[1] and so on. The remaining UARTs is not used
+   * since we don't know how many CPU-cores there are. Note this only
+   * affects the on-chip amba bus (the root bus). The user can override
+   * the default resource sharing by defining driver resources for the
+   * APBUART devices on each AMP OS instance.
+   */
 #if defined( RTEMS_MULTIPROCESSING ) && defined( LEON3 )
   if (
     drvmgr_on_rootbus( dev ) && dev->minor_drv != LEON3_Cpu_Index &&
@@ -287,8 +287,8 @@ int apbuart_init1( struct drvmgr_dev *dev )
   ctrl = grlib_load_32( &priv->regs->ctrl );
 
   /* leave Transmitter/receiver if this is the RTEMS debug UART (assume
-	 * it has been setup by boot loader).
-	 */
+   * it has been setup by boot loader).
+   */
   db = 0;
 #ifdef LEON3
   if ( priv->regs == leon3_debug_uart ) {
@@ -297,12 +297,12 @@ int apbuart_init1( struct drvmgr_dev *dev )
   }
 #endif
   /* Let UART debug tunnelling be untouched if Flow-control is set.
-	 *
-	 * With old APBUARTs debug is enabled by setting LB and FL, since LB or
-	 * DB are not reset we can not trust them. However since FL is reset we
-	 * guess that we are debugging if FL is already set, the debugger set
-	 * either LB or DB depending on UART capabilities.
-	 */
+   *
+   * With old APBUARTs debug is enabled by setting LB and FL, since LB or
+   * DB are not reset we can not trust them. However since FL is reset we
+   * guess that we are debugging if FL is already set, the debugger set
+   * either LB or DB depending on UART capabilities.
+   */
   if ( ctrl & APBUART_CTRL_FL ) {
     db |= ctrl & ( APBUART_CTRL_DB | APBUART_CTRL_LB | APBUART_CTRL_FL );
   }
@@ -312,11 +312,11 @@ int apbuart_init1( struct drvmgr_dev *dev )
   priv->cap = probecap( priv->regs );
 
   /* The system console and Debug console may depend on this device, so
-	 * initialize it straight away.
-	 *
-	 * We default to have System Console on first APBUART, user may override
-	 * this behaviour by setting the syscon option to 0.
-	 */
+   * initialize it straight away.
+   *
+   * We default to have System Console on first APBUART, user may override
+   * this behaviour by setting the syscon option to 0.
+   */
   if ( drvmgr_on_rootbus( dev ) && first_uart ) {
     priv->condev.flags = CONSOLE_FLAG_SYSCON;
     first_uart = 0;
@@ -354,8 +354,8 @@ int apbuart_init1( struct drvmgr_dev *dev )
   prefix[ 0 ] = '\0';
   if ( drvmgr_get_dev_prefix( dev, prefix ) == DRVMGR_OK ) {
     /* Got special prefix, this means we have a bus prefix
-		 * And we should use our "bus minor"
-		 */
+     * And we should use our "bus minor"
+     */
     sprintf( priv->devName, "/dev/%sapbuart%d", prefix, dev->minor_bus );
     priv->condev.fsname = priv->devName;
   } else {
@@ -363,8 +363,8 @@ int apbuart_init1( struct drvmgr_dev *dev )
   }
 
   /* Register it as a console device, the console driver will register
-	 * a termios device as well
-	 */
+   * a termios device as well
+   */
   console_dev_register( &priv->condev );
 
   return DRVMGR_OK;
@@ -563,10 +563,10 @@ static int read_task( rtems_termios_device_context *base )
     }
 
     /*
-		 * Turn on RX interrupts. A new character in FIFO now may not
-		 * cause interrupt so we must check data ready again
-		 * afterwards.
-		 */
+     * Turn on RX interrupts. A new character in FIFO now may not
+     * cause interrupt so we must check data ready again
+     * afterwards.
+     */
     rtems_termios_device_lock_acquire( base, &lock_context );
     ctrl = grlib_load_32( &regs->ctrl );
     ctrl |= ctrl_add;
@@ -726,9 +726,9 @@ static void write_interrupt(
 
   if ( len > 0 ) {
     /*
-		 * sending is used to remember how much we have outstanding so
-		 * we can tell termios later.
-		 */
+     * sending is used to remember how much we have outstanding so
+     * we can tell termios later.
+     */
     /* Enable TX interrupt (interrupt is edge-triggered) */
     ctrl |= APBUART_CTRL_TI;
     grlib_store_32( &regs->ctrl, ctrl );
@@ -791,10 +791,10 @@ static void apbuart_cons_isr( void *arg )
     }
   } else {
     /*
-		 * Get all new characters from APBUART RX (FIFO) and store them
-		 * on the stack. Then tell termios about the new characters.
-		 * Maximum APBUART RX FIFO size is 32 characters.
-		 */
+     * Get all new characters from APBUART RX (FIFO) and store them
+     * on the stack. Then tell termios about the new characters.
+     * Maximum APBUART RX FIFO size is 32 characters.
+     */
     cnt = 0;
     while (
       ( ( status = grlib_load_32( &regs->status ) ) & APBUART_STATUS_DR ) &&
@@ -814,11 +814,11 @@ static void apbuart_cons_isr( void *arg )
     cnt = uart->sending;
 
     /*
-		 * Tell termios how much we have sent. dequeue() may call
-		 * write_interrupt() to refill the transmitter.
-		 * write_interrupt() will eventually be called with 0 len to
-		 * disable TX interrupts.
-		 */
+     * Tell termios how much we have sent. dequeue() may call
+     * write_interrupt() to refill the transmitter.
+     * write_interrupt() will eventually be called with 0 len to
+     * disable TX interrupts.
+     */
     rtems_termios_dequeue_characters( tty, cnt );
   }
 }

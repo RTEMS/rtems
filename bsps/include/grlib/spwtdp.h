@@ -82,7 +82,7 @@ struct spwtdp_regs {
 };
 
 /*
- * Configuration register definitions 
+ * Configuration register definitions
  */
 #define CONF0_JE  ( 0x1 << CONF0_JE_BIT )
 #define CONF0_ST  ( 0x1 << CONF0_ST_BIT )
@@ -149,7 +149,7 @@ struct spwtdp_regs {
 #define CONF3_INTX_BIT    0
 
 /*
- * Control register definitions 
+ * Control register definitions
  */
 #define CTRL_NC    ( 0x1 << CTRL_NC_BIT )
 #define CTRL_IS    ( 0x1 << CTRL_IS_BIT )
@@ -161,7 +161,7 @@ struct spwtdp_regs {
 #define CTRL_SPWTC_BIT 16
 #define CTRL_CPF_BIT   0
 
-/* 
+/*
  * Interrupt register definition
  */
 #define SPWTDP_IRQ_S    ( 0x1 << SPWTDP_IRQ_S_BIT )

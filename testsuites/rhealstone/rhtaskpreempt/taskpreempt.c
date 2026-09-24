@@ -21,9 +21,9 @@ rtems_name Task_name[ 2 ];
 uint32_t          telapsed;         /* total time elapsed during benchmark */
 uint32_t          tloop_overhead;   /* overhead of loops */
 uint32_t          tswitch_overhead; /* overhead of time it takes to switch
-                                       * from TA02 to TA01, includes rtems_suspend
-                                       * overhead
-                                       */
+                                     * from TA02 to TA01, includes rtems_suspend
+                                     * overhead
+                                     */
 unsigned long     count1;
 rtems_status_code status;
 

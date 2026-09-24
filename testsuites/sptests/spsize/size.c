@@ -101,12 +101,12 @@ void print_formula( void );
 #include <rtems/score/prioritybitmapimpl.h>
 #include <rtems/score/schedulerpriority.h>
 
-/* Priority scheduling per-thread consumption. Gets 
+/* Priority scheduling per-thread consumption. Gets
  * included in the PER_TASK consumption.
  */
 #define SCHEDULER_TASK_WKSP ( sizeof( Scheduler_priority_Node ) )
 
-/* Priority scheduling workspace consumption 
+/* Priority scheduling workspace consumption
  *
  * Include allocation of ready queue.
  */
@@ -184,55 +184,55 @@ void size_rtems( int mode )
   int initialized = 0;
 
   /*
- *  The following data is allocated for each Manager:
- *
- *    + Per Manager Object Information
- *      - local pointer table
- *      - local name table
- *      - the object's control blocks
- *      - global name chains
- *
- *  The following is the data allocate from the RTEMS Workspace Area.
- *  The order indicates the order in which RTEMS allocates it.
- *
- *    + Object MP
- *      - Global Object CB's
- *    + Thread MP
- *      - Proxies Chain
- *    + Scheduler
- *      - Ready queue
- *    + Interrupt Manager
- *      - Interrupt Stack
- *    + Timer Manager
- *      - per Manager Object Data
- *    + Extension Manager
- *      - per Manager Object Data
- *    + Message Queue Manager
- *      - per Manager Object Data
- *      - Message Buffers
- *    + Semaphore Manager
- *      - per Manager Object Data
- *    + Partition Manager
- *      - per Manager Object Data
- *    + Region Manager
- *      - per Manager Object Data
- *    + Dual Ported Memory Manager
- *      - per Manager Object Data
- *    + Rate Monotonic Manager
- *      - per Manager Object Data
- *    + Internal Threads Handler
- *      - MPCI Receive Server Thread TCB
- *      - IDLE Thread TCB
- *      - MPCI Receive Server Thread stack
- *      - MPCI Receive Server Thread FP area (if CPU requires this)
- *      - IDLE Thread stack
- *      - IDLE Thread FP area (if CPU requires this)
- *
- *  This does not take into account any CPU dependent alignment requirements.
- *
- *  The following calculates the overhead needed by RTEMS from the
- *  Workspace Area.
- */
+   *  The following data is allocated for each Manager:
+   *
+   *    + Per Manager Object Information
+   *      - local pointer table
+   *      - local name table
+   *      - the object's control blocks
+   *      - global name chains
+   *
+   *  The following is the data allocate from the RTEMS Workspace Area.
+   *  The order indicates the order in which RTEMS allocates it.
+   *
+   *    + Object MP
+   *      - Global Object CB's
+   *    + Thread MP
+   *      - Proxies Chain
+   *    + Scheduler
+   *      - Ready queue
+   *    + Interrupt Manager
+   *      - Interrupt Stack
+   *    + Timer Manager
+   *      - per Manager Object Data
+   *    + Extension Manager
+   *      - per Manager Object Data
+   *    + Message Queue Manager
+   *      - per Manager Object Data
+   *      - Message Buffers
+   *    + Semaphore Manager
+   *      - per Manager Object Data
+   *    + Partition Manager
+   *      - per Manager Object Data
+   *    + Region Manager
+   *      - per Manager Object Data
+   *    + Dual Ported Memory Manager
+   *      - per Manager Object Data
+   *    + Rate Monotonic Manager
+   *      - per Manager Object Data
+   *    + Internal Threads Handler
+   *      - MPCI Receive Server Thread TCB
+   *      - IDLE Thread TCB
+   *      - MPCI Receive Server Thread stack
+   *      - MPCI Receive Server Thread FP area (if CPU requires this)
+   *      - IDLE Thread stack
+   *      - IDLE Thread FP area (if CPU requires this)
+   *
+   *  This does not take into account any CPU dependent alignment requirements.
+   *
+   *  The following calculates the overhead needed by RTEMS from the
+   *  Workspace Area.
+   */
   sys_req = SYSTEM_TASKS +        /* MPCI Receive Server and IDLE */
             NAME_PTR_SIZE +       /* Task Overhead */
             SCHEDULER_WKSP_SIZE + /* Scheduler Overhead */

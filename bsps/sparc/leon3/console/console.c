@@ -39,7 +39,7 @@
  *
  * Note that it is not possible to use the interrupt mode of the driver
  * together with the "old" APBUART and -u to GRMON. However the new
- * APBUART core (from GRLIB 1.0.17-b2710) has the GRMON debug bit and can 
+ * APBUART core (from GRLIB 1.0.17-b2710) has the GRMON debug bit and can
  * handle interrupts.
  *
  * NOTE: This can be defined in the make/custom/leon3.cfg file.

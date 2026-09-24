@@ -42,7 +42,7 @@ extern "C" {
 
 extern void memscrub_register_drv( void );
 
-/* 
+/*
  * MEMORYSCRUBBER CONFIG register fields
  */
 #define CONFIG_DELAY_BIT 8
@@ -111,7 +111,7 @@ extern int memscrub_error_status(
 
 /* Set the different error thresholds. */
 
-/* 
+/*
  * MEMORYSCRUBBER AHBS register fields
  */
 #define AHBS_CECNT_BIT 22
@@ -136,7 +136,7 @@ extern int memscrub_error_status(
 #define AHBS_HM    ( 0xf << AHBS_HM_BIT )
 #define AHBS_HS    ( 0x7 << AHBS_HS_BIT )
 
-/* 
+/*
  * MEMORYSCRUBBER STAT register fields
  */
 #define STAT_RUNCOUNT_BIT 22
@@ -151,7 +151,7 @@ extern int memscrub_error_status(
 #define STAT_BURSTLEN ( 0xf << STAT_BURSTLEN_BIT )
 #define STAT_ACTIVE   ( 0x1 << STAT_ACTIVE_BIT )
 
-/* 
+/*
  * MEMORYSCRUBBER AHBERC register fields
  */
 #define AHBERC_CECNTT_BIT 22
@@ -164,7 +164,7 @@ extern int memscrub_error_status(
 #define AHBERC_CECTE  ( 0x1 << AHBERC_CECTE_BIT )
 #define AHBERC_UECTE  ( 0x1 << AHBERC_UECTE_BIT )
 
-/* 
+/*
  * MEMORYSCRUBBER ETHRES register fields
  */
 #define ETHRES_RECT_BIT  22

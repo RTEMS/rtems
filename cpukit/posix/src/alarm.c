@@ -63,9 +63,9 @@ static void _POSIX_signals_Alarm_TSR( Watchdog_Control *the_watchdog )
 
   #if defined( RTEMS_DEBUG )
   /*
-     *  There is no reason to think this might fail but we should be
-     *  cautious.
-     */
+   *  There is no reason to think this might fail but we should be
+   *  cautious.
+   */
   _Assert( status == 0 );
   #else
   (void) status;

@@ -53,16 +53,16 @@ void _CORE_message_queue_Flush_waiting_threads(
   /* XXX this is not supported for global message queues */
 
   /*
-     *  IF there are no pending messages,
-     *  THEN threads may be blocked waiting to RECEIVE a message,
-     *
-     *  IF the pending message queue is full
-     *  THEN threads may be blocked waiting to SEND a message
-     *
-     *  But in either case, we will return "unsatisfied nowait"
-     *  to indicate that the blocking condition was not satisfied
-     *  and that the blocking state was canceled.
-     */
+   *  IF there are no pending messages,
+   *  THEN threads may be blocked waiting to RECEIVE a message,
+   *
+   *  IF the pending message queue is full
+   *  THEN threads may be blocked waiting to SEND a message
+   *
+   *  But in either case, we will return "unsatisfied nowait"
+   *  to indicate that the blocking condition was not satisfied
+   *  and that the blocking state was canceled.
+   */
 
   _Thread_queue_Flush(
     &the_message_queue->Wait_queue,

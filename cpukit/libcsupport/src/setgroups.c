@@ -38,7 +38,7 @@
 int setgroups( int size, const gid_t *list )
 {
   /* FIXME: Implement this function properly. Currently it only returns a
-	 * success. */
+   * success. */
 
   (void) size;
   (void) list;

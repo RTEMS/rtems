@@ -41,8 +41,8 @@
 #include <unistd.h>
 
 /* Many programming environment flags have same values
-* this block is added to raise error if the flags value change
-*/
+ * this block is added to raise error if the flags value change
+ */
 
 #if ( _CS_POSIX_V6_ILP32_OFF32_CFLAGS != _CS_POSIX_V7_ILP32_OFF32_CFLAGS )
 #error \

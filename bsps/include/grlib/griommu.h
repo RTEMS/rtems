@@ -29,7 +29,7 @@
  *
  *  OVERVIEW
  *  ========
- *  This driver controls the GRIOMMU device located 
+ *  This driver controls the GRIOMMU device located
  *  at an on-chip AMBA.
  */
 
@@ -65,7 +65,7 @@ extern void  griommu_apv_delete( void *apv );
 
 /* IOMMU Master find */
 /*
- * GRIOMMU MASTER register fields 
+ * GRIOMMU MASTER register fields
  */
 #define MASTER_VENDOR ( 0xff << MASTER_VENDOR_BIT )
 #define MASTER_DEVICE ( 0xfff << MASTER_DEVICE_BIT )
@@ -116,7 +116,7 @@ extern int griommu_group_apv_flush( int group );
 
 /* IOMMU Setup */
 /*
- * GRIOMMU CTRL register fields 
+ * GRIOMMU CTRL register fields
  */
 #define CTRL_PGSZ     ( 0x7 << CTRL_PGSZ_BIT )
 #define CTRL_LB       ( 0x1 << CTRL_LB_BIT )

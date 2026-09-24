@@ -66,7 +66,7 @@ static void test( void )
 
   id = rtems_task_self();
 
-  /* 
+  /*
    * The Init task comes up on the maximum core so start at
    * that core and walk the affinity down to core 0.
    */

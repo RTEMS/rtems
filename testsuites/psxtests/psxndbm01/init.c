@@ -60,9 +60,9 @@ const char rtems_test_name[] = "PSXNDBM 01";
 rtems_task Init( rtems_task_argument ignored );
 
 /*
-* This Function takes DBM* as a argument and count the number of records in the
-* database pointed by it.
-*/
+ * This Function takes DBM* as a argument and count the number of records in the
+ * database pointed by it.
+ */
 static int count_no_of_records( DBM *db_local )
 {
   int   count = 0;
@@ -99,16 +99,16 @@ rtems_task Init( rtems_task_argument ignored )
   /* A Simple test to check if ndbm methods are call-able */
 
   /*
- * A Simple test to check if NDBM methods are call-able
- *
- * We will try to open a database and then close it.
- * If it successful, hence we can have further tests.
- * Also, while opening it for first time, will create that database,
- * hence we will be able to test for 'O_RDWR | O_EXCL' case later.
- * Meanwhile we will also store one record, this record will be helpful in
- * further tests.
- * And fetch it, to make sure if basic NDBM methods are working correctly.
- */
+   * A Simple test to check if NDBM methods are call-able
+   *
+   * We will try to open a database and then close it.
+   * If it successful, hence we can have further tests.
+   * Also, while opening it for first time, will create that database,
+   * hence we will be able to test for 'O_RDWR | O_EXCL' case later.
+   * Meanwhile we will also store one record, this record will be helpful in
+   * further tests.
+   * And fetch it, to make sure if basic NDBM methods are working correctly.
+   */
 
   puts( "\nOpen Database." );
   db = dbm_open( DB_NAME, O_RDWR | O_CREAT | O_TRUNC, S_IRWXU );
@@ -138,16 +138,16 @@ rtems_task Init( rtems_task_argument ignored )
   rtems_test_assert( errno == EEXIST );
 
   /* Some implementations use 3 characters for the suffix and others use
- * 4 characters for the suffix, applications should ensure that the maximum
- * portable pathname length passed to dbm_open() is no greater than
- * {PATH_MAX}-4 bytes, with the last component of the pathname no greater
- * than {NAME_MAX}-4 bytes.
- */
+   * 4 characters for the suffix, applications should ensure that the maximum
+   * portable pathname length passed to dbm_open() is no greater than
+   * {PATH_MAX}-4 bytes, with the last component of the pathname no greater
+   * than {NAME_MAX}-4 bytes.
+   */
 
   /* inside 'ndbm.h' ; '#define	DBM_SUFFIX	".db"' ;
- * 2 alphabets and 1 period, hence 3 characters are used for suffix
- * in this implementation.
- */
+   * 2 alphabets and 1 period, hence 3 characters are used for suffix
+   * in this implementation.
+   */
 
   puts( "Use path name larger than '{PATH_MAX}-3 bytes.' and confirm error." );
   test_strings = (char *) malloc( PATH_MAX - 2 );
@@ -165,8 +165,8 @@ rtems_task Init( rtems_task_argument ignored )
   free( test_strings );
 
   /* database opened for write-only access opens the files for read and
- * write access or it will fail.
- */
+   * write access or it will fail.
+   */
 
   /* Implementation of __hash_open in newlib does not support `O_WRONLY` */
 
@@ -266,10 +266,10 @@ rtems_task Init( rtems_task_argument ignored )
   rtems_test_assert( get_phone_no.dptr == NULL );
 
   /* record returned by 'dbm_firstkey()' should be the only record
- * left, this should be checked to confirm correct working of
- * 'dbm_firstkey()'.
- * Check if the data is not corrupted after usage of 'dbm_delete()'
- */
+   * left, this should be checked to confirm correct working of
+   * 'dbm_firstkey()'.
+   * Check if the data is not corrupted after usage of 'dbm_delete()'
+   */
 
   puts( "Check if the data is not corrupted after usage of 'dbm_delete()'." );
   get_phone_no = dbm_fetch( db, dbm_firstkey( db ) );
@@ -278,8 +278,8 @@ rtems_task Init( rtems_task_argument ignored )
   );
 
   /* Empty the database and then try to use 'dbm_firstkey()', the
- * dptr pointer should point to NULL.
- */
+   * dptr pointer should point to NULL.
+   */
 
   puts( "Empty records in database and check results of 'dbm_firstkey()'." );
   rtems_test_assert( dbm_delete( db, dbm_firstkey( db ) ) == 0 );
@@ -288,10 +288,10 @@ rtems_task Init( rtems_task_argument ignored )
   dbm_close( db );
 
   /*
-* All cases for 'dbm_firstkey()' and 'dbm_nextkey()' were tested while
-* performing other tests.
-* One such case be found in count_number_of_records() function.
-*/
+   * All cases for 'dbm_firstkey()' and 'dbm_nextkey()' were tested while
+   * performing other tests.
+   * One such case be found in count_number_of_records() function.
+   */
 
   TEST_END();
   rtems_test_exit( 0 );

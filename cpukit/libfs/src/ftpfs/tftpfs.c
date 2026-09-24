@@ -366,13 +366,13 @@ static int rtems_tftp_open_worker(
   int            err;
 
   /*
-     * Get the file system info.
-     */
+   * Get the file system info.
+   */
   fs = tftpfs_info_iop( iop );
 
   /*
-     * Extract the host name component
-     */
+   * Extract the host name component
+   */
   if ( *full_path_name == '/' ) {
     full_path_name++;
   }
@@ -387,16 +387,16 @@ static int rtems_tftp_open_worker(
   }
 
   /*
-     * Extract file pathname component
-     */
+   * Extract file pathname component
+   */
   if ( *cp1 == '\0' ) {
     return ENOENT;
   }
   remoteFilename = cp1;
 
   /*
-     * Establish the connection
-     */
+   * Establish the connection
+   */
   err = tftp_open(
     hostname,
     remoteFilename,
@@ -409,8 +409,8 @@ static int rtems_tftp_open_worker(
   }
 
   /*
-     * Find a free stream
-     */
+   * Find a free stream
+   */
   rtems_mutex_lock( &fs->tftp_mutex );
   for ( s = 0; s < fs->nStreams; s++ ) {
     if ( fs->tftpStreams[ s ] == NULL ) {
@@ -419,9 +419,9 @@ static int rtems_tftp_open_worker(
   }
   if ( s == fs->nStreams ) {
     /*
-         * Reallocate stream pointers
-         * Guard against the case where realloc() returns NULL.
-         */
+     * Reallocate stream pointers
+     * Guard against the case where realloc() returns NULL.
+     */
     void **np;
 
     np = realloc( fs->tftpStreams, ++fs->nStreams * sizeof *fs->tftpStreams );
@@ -461,8 +461,8 @@ static int rtems_tftp_open(
   }
 
   /*
-     * Get the file system info.
-     */
+   * Get the file system info.
+   */
   fs = tftpfs_info_iop( iop );
 
   if ( fs->flags & TFTPFS_VERBOSE ) {
@@ -505,8 +505,8 @@ static int rtems_tftp_close( rtems_libio_t *iop )
   int            e = 0;
 
   /*
-     * Get the file system info.
-     */
+   * Get the file system info.
+   */
   fs = tftpfs_info_iop( iop );
 
   if ( !tp ) {

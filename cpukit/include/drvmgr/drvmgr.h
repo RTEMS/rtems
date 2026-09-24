@@ -207,8 +207,8 @@ struct drvmgr_bus_ops {
   /* Get Frequency of Bus */
   int ( *get_freq )( struct drvmgr_dev *, int, unsigned int * );
   /*! Function called to request information about a device. The bus
-	 *  driver interpret the bus-specific information about the device.
-	 */
+   *  driver interpret the bus-specific information about the device.
+   */
   void ( *get_info_dev )(
     struct drvmgr_dev *,
     void ( *print )( void *p, char *str ),
@@ -290,9 +290,9 @@ struct drvmgr_map_entry {
   char        *name;     /*!< Map Name */
   unsigned int size;     /*!< Size of map window */
   char        *from_adr; /*!< Start address of access window used
-					 *   to reach into remote bus */
+                          *   to reach into remote bus */
   char        *to_adr;   /*!< Start address of remote system
-					 *   address range */
+                          *   address range */
 };
 #define DRVMGR_TRANSLATE_ONE2ONE   NULL
 #define DRVMGR_TRANSLATE_NO_BRIDGE ( (void *) 1 ) /* No bridge, error */
@@ -335,10 +335,10 @@ struct drvmgr_bus {
 #define DEV_STATE_UNITED 0x00000100 /* Device United with Device Driver */
 #define DEV_STATE_REMOVED \
   0x00000200 /* Device has been removed (unregistered) */
-#define DEV_STATE_IGNORED \
-  0x00000400 /* Device was ignored according to user's request, the device
-						 * was never reported to it's driver (as expected).
-						 */
+#define DEV_STATE_IGNORED                                                  \
+  0x00000400 /* Device was ignored according to user's request, the device \
+              * was never reported to it's driver (as expected).           \
+              */
 #define DEV_STATE_LIST_INACTIVE 0x00001000 /* In inactive device list */
 
 /*! Device information */
@@ -734,39 +734,39 @@ extern int drvmgr_interrupt_set_affinity(
 /*! drvmgr_translate() translation options */
 enum drvmgr_tr_opts {
   /* Translate CPU RAM Address (input) to DMA unit accessible address
-	 * (output), this is an upstreams translation in reverse order.
-	 *
-	 * Typical Usage:
-	 * It is common to translate a CPU accessible RAM address to an
-	 * address that DMA units can access over bridges.
-	 */
+   * (output), this is an upstreams translation in reverse order.
+   *
+   * Typical Usage:
+   * It is common to translate a CPU accessible RAM address to an
+   * address that DMA units can access over bridges.
+   */
   CPUMEM_TO_DMA = 0x0,
 
   /* Translate DMA Unit Accessible address mapped to CPU RAM (input) to
-	 * CPU accessible address (output). This is an upstreams translation.
-	 *
-	 * Typical Usage (not often used):
-	 * The DMA unit descriptors contain pointers to DMA buffers located at
-	 * CPU RAM addresses that the DMA unit can access, the CPU processes
-	 * the descriptors and want to access the data but a translation back
-	 * to CPU address is required.
-	 */
+   * CPU accessible address (output). This is an upstreams translation.
+   *
+   * Typical Usage (not often used):
+   * The DMA unit descriptors contain pointers to DMA buffers located at
+   * CPU RAM addresses that the DMA unit can access, the CPU processes
+   * the descriptors and want to access the data but a translation back
+   * to CPU address is required.
+   */
   CPUMEM_FROM_DMA = 0x1,
 
   /* Translate DMA Memory Address (input) to CPU accessible address
-	 * (output), this is a downstreams translation in reverse order.
-	 *
-	 * Typical Usage:
-	 * A PCI network card puts packets into its memory not doing DMA over
-	 * PCI, in order for the CPU to access them the PCI address must be
-	 * translated.
-	 */
+   * (output), this is a downstreams translation in reverse order.
+   *
+   * Typical Usage:
+   * A PCI network card puts packets into its memory not doing DMA over
+   * PCI, in order for the CPU to access them the PCI address must be
+   * translated.
+   */
   DMAMEM_TO_CPU = 0x2,
 
   /* Translate CPU accessible address (input) mapped to DMA Memory Address
-	 * to DMA Unit accessible address (output). This is a downstreams
-	 * translation.
-	 */
+   * to DMA Unit accessible address (output). This is a downstreams
+   * translation.
+   */
   DMAMEM_FROM_CPU = 0x3,
 };
 #define DRVMGR_TR_REVERSE 0x1 /* do reverse translation direction order */

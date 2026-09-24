@@ -88,8 +88,8 @@ int grlib_canbtrs_calc_timing(
     }
 
     /* tseg is increasing, so we accept higher tseg with the same
-		 * baudrate to get better sampling point.
-		 */
+     * baudrate to get better sampling point.
+     */
     if ( error <= best_error ) {
       best_error = error;
       best_tseg = tseg;

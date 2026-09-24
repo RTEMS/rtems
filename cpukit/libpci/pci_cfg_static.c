@@ -72,8 +72,8 @@ static int pci_init_dev( struct pci_dev *dev, void *unused )
   /* Init Device */
 
   /* Set command to reset values, it disables bus
-	 * mastering and address responses.
-	 */
+   * mastering and address responses.
+   */
   PCI_CFG_W16( pcidev, PCIR_COMMAND, 0 );
 
   /* Clear any already set status bits */

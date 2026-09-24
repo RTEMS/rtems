@@ -52,7 +52,7 @@
  * This macro validates that the given value is not NULL. If the value is
  * non-NULL, it is returned unchanged. Otherwise, a compile-time error is
  * triggered by using an invalid array bound.
- * 
+ *
  * When _value is a function symbol, the compiler may prove that its address
  * is never NULL and reports the comparison as tautological. This assertion may
  * trigger warnings (for example, -Waddress and -Wtautological-pointer-compare).

@@ -316,11 +316,11 @@ int pthread_create(
 
   #if defined( RTEMS_DEBUG )
   /*
-     *  _Thread_Start only fails if the thread was in the incorrect state
-     *
-     *  NOTE: This can only happen if someone slips in and touches the
-     *        thread while we are creating it.
-     */
+   *  _Thread_Start only fails if the thread was in the incorrect state
+   *
+   *  NOTE: This can only happen if someone slips in and touches the
+   *        thread while we are creating it.
+   */
   if ( status != STATUS_SUCCESSFUL ) {
     _Thread_Free( &_POSIX_Threads_Information, the_thread );
     _Objects_Allocator_unlock();
@@ -475,22 +475,22 @@ static bool _POSIX_Threads_Create_extension(
    */
   if ( _Objects_Get_API( created->Object.id ) == OBJECTS_INTERNAL_API ) {
     /*
-       * Ensure internal (especially IDLE) is handled first.
-       *
-       * Block signals for all internal threads -- especially IDLE.
-       */
+     * Ensure internal (especially IDLE) is handled first.
+     *
+     * Block signals for all internal threads -- especially IDLE.
+     */
     api->signals_unblocked = 0;
   } else if (
     _Objects_Get_API( executing->Object.id ) == OBJECTS_INTERNAL_API
   ) {
     /*
-       * Threads being created while an internal thread is executing
-       * should only happen for the initialization threads/tasks.
-       *
-       * Default state (signals unblocked) for all Initialization tasks
-       * and POSIX threads. We should not inherit from IDLE which is
-       * what appears to be executing during initialization.
-       */
+     * Threads being created while an internal thread is executing
+     * should only happen for the initialization threads/tasks.
+     *
+     * Default state (signals unblocked) for all Initialization tasks
+     * and POSIX threads. We should not inherit from IDLE which is
+     * what appears to be executing during initialization.
+     */
     api->signals_unblocked = SIGNAL_ALL_MASK;
   } else {
     const POSIX_API_Control *executing_api;

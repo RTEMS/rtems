@@ -91,7 +91,7 @@ void *Middle( void *argument )
   sched_yield();
   /* let other threads run */
 
-  /* This timed write lock operation will be blocked 
+  /* This timed write lock operation will be blocked
    * because the other write operation has the lock
    */
   status = pthread_rwlock_timedwrlock( &rwlock, &abstime );

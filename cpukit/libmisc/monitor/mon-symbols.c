@@ -420,9 +420,9 @@ uint32_t rtems_monitor_symbol_dump(
   uint32_t length = 0;
 
   /*
-     * print the name if it exists AND if value is non-zero
-     * Ie: don't print some garbage symbol for address 0
-     */
+   * print the name if it exists AND if value is non-zero
+   * Ie: don't print some garbage symbol for address 0
+   */
 
   if ( canonical_symbol->name[ 0 ] && ( canonical_symbol->value != 0 ) ) {
     if ( canonical_symbol->offset == 0 ) {
@@ -502,8 +502,8 @@ void rtems_monitor_symbol_cmd(
   }
 
   /*
-     * Use object command to dump out whole symbol table
-     */
+   * Use object command to dump out whole symbol table
+   */
   if ( argc == 1 ) {
     rtems_monitor_symbol_dump_all( table, verbose );
   } else {

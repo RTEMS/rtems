@@ -3,7 +3,7 @@
 /**
  * @file
  * @ingroup RTEMSBSPsSPARCLEON2
- * @brief LEON2 Idle Thread 
+ * @brief LEON2 Idle Thread
  */
 
 /*

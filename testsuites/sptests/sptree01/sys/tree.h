@@ -259,9 +259,9 @@
     SPLAY_ASSEMBLE( head, &__node, __left, __right, field );                  \
   }                                                                           \
                                                                               \
-  /* Splay with either the minimum or the maximum element			\
- * Used to find minimum or maximum element in tree.			\
- */                 \
+  /* Splay with either the minimum or the maximum element                     \
+   * Used to find minimum or maximum element in tree.                         \
+   */                                                                         \
   void name##_SPLAY_MINMAX( struct name *head, int __comp )                   \
   {                                                                           \
     struct type __node, *__left, *__right, *__tmp;                            \
@@ -524,140 +524,140 @@
 #else
 #define _RB_AUGMENT_VERIFY( x ) 0
 #endif
-#define RB_GENERATE_RANK( name, type, field, attr )          \
-  /*									\
- * Return the rank of the subtree rooted at elm, or -1 if the subtree	\
- * is not rank-balanced, or has inconsistent augmentation data.
- */                                               \
-  attr int name##_RB_RANK( struct type *elm )                \
-  {                                                          \
-    struct type *left, *right, *up;                          \
-    int          left_rank, right_rank;                      \
-                                                             \
-    if ( elm == NULL )                                       \
-      return ( 0 );                                          \
-    up = _RB_UP( elm, field );                               \
-    left = RB_LEFT( elm, field );                            \
-    left_rank = ( ( _RB_BITS( up ) & _RB_L ) ? 2 : 1 ) +     \
-                name##_RB_RANK( left );                      \
-    right = RB_RIGHT( elm, field );                          \
-    right_rank = ( ( _RB_BITS( up ) & _RB_R ) ? 2 : 1 ) +    \
-                 name##_RB_RANK( right );                    \
-    if (                                                     \
-      left_rank != right_rank ||                             \
-      ( left_rank == 2 && left == NULL && right == NULL ) || \
-      _RB_AUGMENT_VERIFY( elm )                              \
-    )                                                        \
-      return ( -1 );                                         \
-    return ( left_rank );                                    \
+#define RB_GENERATE_RANK( name, type, field, attr )                     \
+  /*                                                                    \
+   * Return the rank of the subtree rooted at elm, or -1 if the subtree \
+   * is not rank-balanced, or has inconsistent augmentation data.       \
+   */                                                                   \
+  attr int name##_RB_RANK( struct type *elm )                           \
+  {                                                                     \
+    struct type *left, *right, *up;                                     \
+    int          left_rank, right_rank;                                 \
+                                                                        \
+    if ( elm == NULL )                                                  \
+      return ( 0 );                                                     \
+    up = _RB_UP( elm, field );                                          \
+    left = RB_LEFT( elm, field );                                       \
+    left_rank = ( ( _RB_BITS( up ) & _RB_L ) ? 2 : 1 ) +                \
+                name##_RB_RANK( left );                                 \
+    right = RB_RIGHT( elm, field );                                     \
+    right_rank = ( ( _RB_BITS( up ) & _RB_R ) ? 2 : 1 ) +               \
+                 name##_RB_RANK( right );                               \
+    if (                                                                \
+      left_rank != right_rank ||                                        \
+      ( left_rank == 2 && left == NULL && right == NULL ) ||            \
+      _RB_AUGMENT_VERIFY( elm )                                         \
+    )                                                                   \
+      return ( -1 );                                                    \
+    return ( left_rank );                                               \
   }
 #else
 #define RB_GENERATE_RANK( name, type, field, attr )
 #endif
 
-#define RB_GENERATE_INSERT_COLOR( name, type, field, attr )      \
-  attr struct type *name##_RB_INSERT_COLOR(                      \
-    struct name *head,                                           \
-    struct type *parent,                                         \
-    struct type *elm                                             \
-  )                                                              \
-  {                                                              \
-    /*								\
-	 * Initially, elm is a leaf.  Either its parent was previously	\
-	 * a leaf, with two black null children, or an interior node	\
-	 * with a black non-null child and a red null child. The        \
-	 * balance criterion "the rank of any leaf is 1" precludes the  \
-	 * possibility of two red null children for the initial parent. \
-	 * So the first loop iteration cannot lead to accessing an      \
-	 * uninitialized 'child', and a later iteration can only happen \
-	 * when a value has been assigned to 'child' in the previous    \
-	 * one.								\
-	 */                                                  \
-    struct type *child, *child_up, *gpar;                        \
-    __uintptr_t  elmdir, sibdir;                                 \
-                                                                 \
-    do {                                                         \
-      /* the rank of the tree rooted at elm grew */              \
-      gpar = _RB_UP( parent, field );                            \
-      elmdir = RB_RIGHT( parent, field ) == elm ? _RB_R : _RB_L; \
-      if ( _RB_BITS( gpar ) & elmdir ) {                         \
-        /* shorten the parent-elm edge to rebalance */           \
-        _RB_BITSUP( parent, field ) ^= elmdir;                   \
-        return ( NULL );                                         \
-      }                                                          \
-      sibdir = elmdir ^ _RB_LR;                                  \
-      /* the other edge must change length */                    \
-      _RB_BITSUP( parent, field ) ^= sibdir;                     \
-      if ( ( _RB_BITS( gpar ) & _RB_LR ) == 0 ) {                \
-        /* both edges now short, retry from parent */            \
-        child = elm;                                             \
-        elm = parent;                                            \
-        continue;                                                \
-      }                                                          \
-      _RB_UP( parent, field ) = gpar = _RB_PTR( gpar );          \
-      if ( _RB_BITSUP( elm, field ) & elmdir ) {                 \
-        /*						\
-			 * Exactly one of the edges descending from elm \
-			 * is long. The long one is in the same		\
-			 * direction as the edge from parent to elm,	\
-			 * so change that by rotation.  The edge from	\
-			 * parent to z was shortened above.  Shorten	\
-			 * the long edge down from elm, and adjust	\
-			 * other edge lengths based on the downward	\
-			 * edges from 'child'.				\
-			 *						\
-			 *	     par		 par		\
-			 *	    /	\		/   \		\
-			 *	  elm	 z	       /     z		\
-			 *	 /  \		     child		\
-			 *	/  child	     /	 \		\
-			 *     /   /  \		   elm	  \		\
-			 *    w	  /    \	  /   \    y		\
-			 *	 x      y	 w     \		\
-			 *				x		\
-			 */                                                \
-        RB_ROTATE( elm, child, elmdir, field );                  \
-        child_up = _RB_UP( child, field );                       \
-        if ( _RB_BITS( child_up ) & sibdir )                     \
-          _RB_BITSUP( parent, field ) ^= elmdir;                 \
-        if ( _RB_BITS( child_up ) & elmdir )                     \
-          _RB_BITSUP( elm, field ) ^= _RB_LR;                    \
-        else                                                     \
-          _RB_BITSUP( elm, field ) ^= elmdir;                    \
-        /* if child is a leaf, don't augment elm,	\
-			 * since it is restored to be a leaf again. */              \
-        if ( ( _RB_BITS( child_up ) & _RB_LR ) == 0 )            \
-          elm = child;                                           \
-      } else                                                     \
-        child = elm;                                             \
-                                                                 \
-      /*							\
-		 * The long edge descending from 'child' points back	\
-		 * in the direction of 'parent'. Rotate to make		\
-		 * 'parent' a child of 'child', then make both edges	\
-		 * of 'child' short to rebalance.			\
-		 *							\
-		 *	     par		 child			\
-		 *	    /	\		/     \			\
-		 *	   /	 z	       x       par		\
-		 *	child			      /	  \		\
-		 *	 /  \			     /	   z		\
-		 *	x    \			    y			\
-		 *	      y						\
-		 */                                                 \
-      RB_ROTATE( parent, child, sibdir, field );                 \
-      _RB_UP( child, field ) = gpar;                             \
-      RB_SWAP_CHILD( head, gpar, parent, child, field );         \
-      /*							\
-		 * Elements rotated down have new, smaller subtrees,	\
-		 * so update augmentation for them.			\
-		 */                                                 \
-      if ( elm != child )                                        \
-        (void) RB_AUGMENT_CHECK( elm );                          \
-      (void) RB_AUGMENT_CHECK( parent );                         \
-      return ( child );                                          \
-    } while ( ( parent = gpar ) != NULL );                       \
-    return ( NULL );                                             \
+#define RB_GENERATE_INSERT_COLOR( name, type, field, attr )         \
+  attr struct type *name##_RB_INSERT_COLOR(                         \
+    struct name *head,                                              \
+    struct type *parent,                                            \
+    struct type *elm                                                \
+  )                                                                 \
+  {                                                                 \
+    /*                                                              \
+     * Initially, elm is a leaf.  Either its parent was previously  \
+     * a leaf, with two black null children, or an interior node    \
+     * with a black non-null child and a red null child. The        \
+     * balance criterion "the rank of any leaf is 1" precludes the  \
+     * possibility of two red null children for the initial parent. \
+     * So the first loop iteration cannot lead to accessing an      \
+     * uninitialized 'child', and a later iteration can only happen \
+     * when a value has been assigned to 'child' in the previous    \
+     * one.                                                         \
+     */                                                             \
+    struct type *child, *child_up, *gpar;                           \
+    __uintptr_t  elmdir, sibdir;                                    \
+                                                                    \
+    do {                                                            \
+      /* the rank of the tree rooted at elm grew */                 \
+      gpar = _RB_UP( parent, field );                               \
+      elmdir = RB_RIGHT( parent, field ) == elm ? _RB_R : _RB_L;    \
+      if ( _RB_BITS( gpar ) & elmdir ) {                            \
+        /* shorten the parent-elm edge to rebalance */              \
+        _RB_BITSUP( parent, field ) ^= elmdir;                      \
+        return ( NULL );                                            \
+      }                                                             \
+      sibdir = elmdir ^ _RB_LR;                                     \
+      /* the other edge must change length */                       \
+      _RB_BITSUP( parent, field ) ^= sibdir;                        \
+      if ( ( _RB_BITS( gpar ) & _RB_LR ) == 0 ) {                   \
+        /* both edges now short, retry from parent */               \
+        child = elm;                                                \
+        elm = parent;                                               \
+        continue;                                                   \
+      }                                                             \
+      _RB_UP( parent, field ) = gpar = _RB_PTR( gpar );             \
+      if ( _RB_BITSUP( elm, field ) & elmdir ) {                    \
+        /*                                                          \
+         * Exactly one of the edges descending from elm             \
+         * is long. The long one is in the same                     \
+         * direction as the edge from parent to elm,                \
+         * so change that by rotation.  The edge from               \
+         * parent to z was shortened above.  Shorten                \
+         * the long edge down from elm, and adjust                  \
+         * other edge lengths based on the downward                 \
+         * edges from 'child'.                                      \
+         *                                                          \
+         *	     par		 par                                           \
+         *	    /	\		/   \                                           \
+         *	  elm	 z	       /     z                                  \
+         *	 /  \		     child                                        \
+         *	/  child	     /	 \                                       \
+         *     /   /  \		   elm	  \                                 \
+         *    w	  /    \	  /   \    y                               \
+         *	 x      y	 w     \                                       \
+         *				x                                                     \
+         */                                                         \
+        RB_ROTATE( elm, child, elmdir, field );                     \
+        child_up = _RB_UP( child, field );                          \
+        if ( _RB_BITS( child_up ) & sibdir )                        \
+          _RB_BITSUP( parent, field ) ^= elmdir;                    \
+        if ( _RB_BITS( child_up ) & elmdir )                        \
+          _RB_BITSUP( elm, field ) ^= _RB_LR;                       \
+        else                                                        \
+          _RB_BITSUP( elm, field ) ^= elmdir;                       \
+        /* if child is a leaf, don't augment elm,                   \
+         * since it is restored to be a leaf again. */              \
+        if ( ( _RB_BITS( child_up ) & _RB_LR ) == 0 )               \
+          elm = child;                                              \
+      } else                                                        \
+        child = elm;                                                \
+                                                                    \
+      /*                                                            \
+       * The long edge descending from 'child' points back          \
+       * in the direction of 'parent'. Rotate to make               \
+       * 'parent' a child of 'child', then make both edges          \
+       * of 'child' short to rebalance.                             \
+       *                                                            \
+       *	     par		 child                                           \
+       *	    /	\		/     \                                           \
+       *	   /	 z	       x       par                                 \
+       *	child			      /	  \                                        \
+       *	 /  \			     /	   z                                        \
+       *	x    \			    y                                             \
+       *	      y                                                    \
+       */                                                           \
+      RB_ROTATE( parent, child, sibdir, field );                    \
+      _RB_UP( child, field ) = gpar;                                \
+      RB_SWAP_CHILD( head, gpar, parent, child, field );            \
+      /*                                                            \
+       * Elements rotated down have new, smaller subtrees,          \
+       * so update augmentation for them.                           \
+       */                                                           \
+      if ( elm != child )                                           \
+        (void) RB_AUGMENT_CHECK( elm );                             \
+      (void) RB_AUGMENT_CHECK( parent );                            \
+      return ( child );                                             \
+    } while ( ( parent = gpar ) != NULL );                          \
+    return ( NULL );                                                \
   }
 
 #ifndef RB_STRICT_HST
@@ -684,8 +684,8 @@
     if (                                                                     \
       RB_RIGHT( parent, field ) == elm && RB_LEFT( parent, field ) == elm    \
     ) {                                                                      \
-      /* Deleting a leaf that is an only-child creates a	\
-		 * rank-2 leaf. Demote that leaf. */                   \
+      /* Deleting a leaf that is an only-child creates a                     \
+       * rank-2 leaf. Demote that leaf. */                                   \
       _RB_UP( parent, field ) = _RB_PTR( _RB_UP( parent, field ) );          \
       elm = parent;                                                          \
       if ( ( parent = _RB_UP( elm, field ) ) == NULL )                       \
@@ -718,26 +718,26 @@
         continue;                                                            \
       }                                                                      \
       if ( ( _RB_BITS( up ) & sibdir ) == 0 ) {                              \
-        /*						\
-			 * The edge descending from 'sib' away from	\
-			 * 'parent' is long.  The short edge descending	\
-			 * from 'sib' toward 'parent' points to 'elm*'	\
-			 * Rotate to make 'sib' a child of 'elm*'	\
-			 * then adjust the lengths of the edges		\
-			 * descending from 'sib' and 'elm*'.		\
-			 *						\
-			 *	     par		 par		\
-			 *	    /	\		/   \		\
-			 *	   /	sib	      elm    \		\
-			 *	  /	/ \	            elm*	\
-			 *	elm   elm* \	            /  \	\
-			 *	      /	\   \		   /    \	\
-			 *	     /   \   z		  /      \	\
-			 *	    x	  y		 x      sib	\
-			 *				        /  \	\
-			 *				       /    z	\
-			 *				      y		\
-			 */                                                            \
+        /*                                                                   \
+         * The edge descending from 'sib' away from                          \
+         * 'parent' is long.  The short edge descending                      \
+         * from 'sib' toward 'parent' points to 'elm*'                       \
+         * Rotate to make 'sib' a child of 'elm*'                            \
+         * then adjust the lengths of the edges                              \
+         * descending from 'sib' and 'elm*'.                                 \
+         *                                                                   \
+         *	     par		 par                                                    \
+         *	    /	\		/   \                                                    \
+         *	   /	sib	      elm    \                                           \
+         *	  /	/ \	            elm*                                          \
+         *	elm   elm* \	            /  \                                     \
+         *	      /	\   \		   /    \                                          \
+         *	     /   \   z		  /      \                                        \
+         *	    x	  y		 x      sib                                            \
+         *				        /  \                                                   \
+         *				       /    z                                                  \
+         *				      y                                                        \
+         */                                                                  \
         elm = _RB_LINK( sib, elmdir, field );                                \
         /* elm is a 1-child.  First rotate at elm. */                        \
         RB_ROTATE( sib, elm, sibdir, field );                                \
@@ -751,8 +751,8 @@
         if (                                                                 \
           ( _RB_BITS( up ) & elmdir ) == 0 && RB_STRICT_HST && elm != NULL   \
         ) {                                                                  \
-          /* if parent does not become a leaf,	\
-				   do not demote parent yet. */                             \
+          /* if parent does not become a leaf,                               \
+                                   do not demote parent yet. */              \
           _RB_BITSUP( parent, field ) ^= sibdir;                             \
           _RB_BITSUP( sib, field ) ^= _RB_LR;                                \
         } else if ( ( _RB_BITS( up ) & elmdir ) == 0 ) {                     \
@@ -764,29 +764,29 @@
         elm = sib;                                                           \
       }                                                                      \
                                                                              \
-      /*							\
-		 * The edge descending from 'elm' away from 'parent'	\
-		 * is short.  Rotate to make 'parent' a child of 'elm', \
-		 * then lengthen the short edges descending from	\
-		 * 'parent' and 'elm' to rebalance.			\
-		 *							\
-		 *	     par		 elm			\
-		 *	    /	\		/   \			\
-		 *	   e	 \	       /     \			\
-		 *		 elm	      /	      \			\
-		 *		/  \	    par	       s		\
-		 *	       /    \	   /   \			\
-		 *	      /	     \	  e	\			\
-		 *	     x	      s		 x			\
-		 */                                                             \
+      /*                                                                     \
+       * The edge descending from 'elm' away from 'parent'                   \
+       * is short.  Rotate to make 'parent' a child of 'elm',                \
+       * then lengthen the short edges descending from                       \
+       * 'parent' and 'elm' to rebalance.                                    \
+       *                                                                     \
+       *	     par		 elm                                                      \
+       *	    /	\		/   \                                                      \
+       *	   e	 \	       /     \                                              \
+       *		 elm	      /	      \                                               \
+       *		/  \	    par	       s                                              \
+       *	       /    \	   /   \                                              \
+       *	      /	     \	  e	\                                                \
+       *	     x	      s		 x                                                  \
+       */                                                                    \
       RB_ROTATE( parent, elm, elmdir, field );                               \
       RB_SET_PARENT( elm, gpar, field );                                     \
       RB_SWAP_CHILD( head, gpar, parent, elm, field );                       \
-      /*							\
-		 * An element rotated down, but not into the search	\
-		 * path has a new, smaller subtree, so update		\
-		 * augmentation for it.					\
-		 */                                                             \
+      /*                                                                     \
+       * An element rotated down, but not into the search                    \
+       * path has a new, smaller subtree, so update                          \
+       * augmentation for it.                                                \
+       */                                                                    \
       if ( sib != elm )                                                      \
         (void) RB_AUGMENT_CHECK( sib );                                      \
       return ( parent );                                                     \
@@ -833,19 +833,19 @@
       _RB_UP( child, field ) = parent;                                      \
     if ( parent != NULL ) {                                                 \
       opar = name##_RB_REMOVE_COLOR( head, parent, child );                 \
-      /* if rotation has made 'parent' the root of the same	\
-		 * subtree as before, don't re-augment it. */               \
+      /* if rotation has made 'parent' the root of the same                 \
+       * subtree as before, don't re-augment it. */                         \
       if ( parent == in && RB_LEFT( parent, field ) == NULL ) {             \
         opar = NULL;                                                        \
         parent = RB_PARENT( parent, field );                                \
       }                                                                     \
       _RB_AUGMENT_WALK( parent, opar, field );                              \
       if ( opar != NULL ) {                                                 \
-        /*						\
-			 * Elements rotated into the search path have	\
-			 * changed subtrees, so update augmentation for	\
-			 * them if AUGMENT_WALK didn't.			\
-			 */                                                           \
+        /*                                                                  \
+         * Elements rotated into the search path have                       \
+         * changed subtrees, so update augmentation for                     \
+         * them if AUGMENT_WALK didn't.                                     \
+         */                                                                 \
         (void) RB_AUGMENT_CHECK( opar );                                    \
         (void) RB_AUGMENT_CHECK( RB_PARENT( opar, field ) );                \
       }                                                                     \
@@ -870,11 +870,11 @@
       tmp = name##_RB_INSERT_COLOR( head, parent, elm );     \
     _RB_AUGMENT_WALK( elm, tmp, field );                     \
     if ( tmp != NULL )                                       \
-      /*							\
-		 * An element rotated into the search path has a	\
-		 * changed subtree, so update augmentation for it if	\
-		 * AUGMENT_WALK didn't.					\
-		 */                                             \
+      /*                                                     \
+       * An element rotated into the search path has a       \
+       * changed subtree, so update augmentation for it if   \
+       * AUGMENT_WALK didn't.                                \
+       */                                                    \
       (void) RB_AUGMENT_CHECK( tmp );                        \
     return ( NULL );                                         \
   }

@@ -57,7 +57,7 @@
 #endif
 
 /*
- * GRIOMMU CAP0 register fields 
+ * GRIOMMU CAP0 register fields
  */
 #define CAP0_A    ( 0x1 << CAP0_A_BIT )
 #define CAP0_AC   ( 0x1 << CAP0_AC_BIT )
@@ -92,7 +92,7 @@
 #define CAP0_MSTS_BIT 0
 
 /*
- * GRIOMMU CAP1 register fields 
+ * GRIOMMU CAP1 register fields
  */
 #define CAP1_CADDR    ( 0xfff << CAP1_CADDR_BIT )
 #define CAP1_CMASK    ( 0xf << CAP1_CMASK_BIT )
@@ -107,12 +107,12 @@
 #define CAP1_CLINES_BIT   0
 
 /*
- * GRIOMMU CTRL register fields 
+ * GRIOMMU CTRL register fields
  * DEFINED IN HEADER FILE
  */
 
 /*
- * GRIOMMU FLUSH register fields 
+ * GRIOMMU FLUSH register fields
  */
 #define FLUSH_FGRP ( 0xf << FLUSH_FGRP_BIT )
 #define FLUSH_GF   ( 0x1 << FLUSH_GF_BIT )
@@ -123,7 +123,7 @@
 #define FLUSH_F_BIT    0
 
 /*
- * GRIOMMU STATUS register fields 
+ * GRIOMMU STATUS register fields
  */
 #define STS_PE  ( 0x1 << STS_PE_BIT )
 #define STS_DE  ( 0x1 << STS_DE_BIT )
@@ -141,7 +141,7 @@
 #define STS_TE_BIT 0
 
 /*
- * GRIOMMU IMASK register fields 
+ * GRIOMMU IMASK register fields
  */
 #define IMASK_PEI ( 0x1 << IMASK_PEI_BIT )
 #define IMASK_FCI ( 0x1 << IMASK_FCI_BIT )
@@ -157,9 +157,9 @@
 #define IMASK_TEI_BIT 0
 
 /*
- * GRIOMMU MASTER register fields 
+ * GRIOMMU MASTER register fields
  */
-/* DEFINED IN HEADER FILE 
+/* DEFINED IN HEADER FILE
 #define MASTER_VENDOR (0xff << MASTER_VENDOR_BIT)
 #define MASTER_DEVICE (0xfff << MASTER_DEVICE_BIT)
 #define MASTER_BS (0x1 << MASTER_BS_BIT)
@@ -175,7 +175,7 @@
 #define MASTER_BS_BUS1 MASTER_BS
 
 /*
- * GRIOMMU GROUP register fields 
+ * GRIOMMU GROUP register fields
  */
 #define GRP_BASE ( 0xfffffff << GRP_BASE_BIT )
 #define GRP_P    ( 0x1 << GRP_P_BIT )
@@ -246,7 +246,7 @@ struct griommu_priv {
 };
 
 /*
- * GRIOMMU internal prototypes 
+ * GRIOMMU internal prototypes
  */
 /* -Register access functions */
 STATIC INLINE unsigned int griommu_reg_cap0( void );
@@ -281,7 +281,7 @@ STATIC int griommu_init( struct griommu_priv *priv );
 void griommu_isr( void *arg );
 
 /*
- * GRIOMMU static members 
+ * GRIOMMU static members
  */
 static struct griommu_priv *griommupriv = NULL;
 
@@ -373,7 +373,7 @@ STATIC int griommu_init( struct griommu_priv *priv )
   return 0;
 }
 
-/* Called when a core is found with the AMBA device and vendor ID 
+/* Called when a core is found with the AMBA device and vendor ID
  * given in griommu_ids[]. IRQ, Console does not work here
  */
 int griommu_init1( struct drvmgr_dev *dev )
@@ -625,8 +625,8 @@ void griommu_isr( void *arg )
   unsigned int         access = griommu_reg_ahbfas();
 
   /* Make sure that the interrupt is pending and unmasked,
-	 * otherwise it migth have been other core
-	 * sharing the same interrupt line */
+   * otherwise it migth have been other core
+   * sharing the same interrupt line */
   if ( ( sts & STS_ALL ) & ( mask & IMASK_ALL ) ) {
     /* Reset error status */
     griommu_reg_status_clear( sts );
@@ -1255,7 +1255,7 @@ int griommu_group_apv_init( int group, int options )
   size_t               len;
 
   /* Flush APV cache if needed.
-	 * This function checks for priv and group being valid.*/
+   * This function checks for priv and group being valid.*/
   ret = griommu_group_apv_flush( group );
   if ( ret < 0 ) {
     return ret;
@@ -1292,7 +1292,7 @@ int griommu_group_apv_page_set( int group, int index, int size, int options )
   int          ret;
 
   /* Flush APV cache if needed.
-	 * This function checks for priv and group being valid.*/
+   * This function checks for priv and group being valid.*/
   ret = griommu_group_apv_flush( group );
   if ( ret < 0 ) {
     return ret;
@@ -1332,7 +1332,7 @@ int griommu_group_apv_address_set(
   int                  npages;
 
   /* Flush APV cache if needed.
-	 * This function checks for priv and group being valid.*/
+   * This function checks for priv and group being valid.*/
   ret = griommu_group_apv_flush( group );
   if ( ret < 0 ) {
     return ret;

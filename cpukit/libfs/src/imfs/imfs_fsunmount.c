@@ -58,9 +58,9 @@ void IMFS_fsunmount( rtems_filesystem_mount_table_entry_t *temp_mt_entry )
   int                              result = 0;
 
   /*
-    * Traverse tree that starts at the mt_fs_root and deallocate memory
-    * associated memory space
-    */
+   * Traverse tree that starts at the mt_fs_root and deallocate memory
+   * associated memory space
+   */
 
   loc = temp_mt_entry->mt_fs_root->location;
   jnode = (IMFS_jnode_t *) loc.node_access;

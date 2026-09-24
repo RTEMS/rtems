@@ -407,9 +407,9 @@ static inline void *Stack_check_Find_high_water_mark( const void *s, size_t n )
 
   #if ( CPU_STACK_GROWS_UP == TRUE )
   /*
-     * start at higher memory and find first word that does not
-     * match pattern
-     */
+   * start at higher memory and find first word that does not
+   * match pattern
+   */
 
   base += length - 1;
   for ( ebase = s; base > ebase; base-- ) {
@@ -419,9 +419,9 @@ static inline void *Stack_check_Find_high_water_mark( const void *s, size_t n )
   }
   #else
   /*
-     * start at lower memory and find first word that does not
-     * match pattern
-     */
+   * start at lower memory and find first word that does not
+   * match pattern
+   */
 
   for ( ebase = base + length; base < ebase; base++ ) {
     if ( *base != U32_PATTERN ) {

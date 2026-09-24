@@ -14,7 +14,7 @@
  * and portability. As a general rules, the profiles place a minimum
  * on the services which an operating system must provide. Those
  * same profile definitions represent the maximum services which
- * an application may use. 
+ * an application may use.
  */
 
 /*
@@ -58,10 +58,10 @@
 int _POSIX_Timer_Is_allowed( clockid_t clock_id )
 {
   /*
-     * Per the FACE Technical Standard, POSIX timers should not be
-     * allowed on CLOCK_REALTIME for safety reasons. If the application
-     * wants the FACE behavior, then this method is instantiated.
-     */
+   * Per the FACE Technical Standard, POSIX timers should not be
+   * allowed on CLOCK_REALTIME for safety reasons. If the application
+   * wants the FACE behavior, then this method is instantiated.
+   */
   if ( clock_id == CLOCK_REALTIME ) {
     return EPERM;
   }

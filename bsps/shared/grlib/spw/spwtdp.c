@@ -1100,9 +1100,9 @@ int spwtdp_precision_get( void *spwtdp, uint8_t *fine, uint8_t *coarse )
     return SPWTDP_ERR_ERROR;
   }
   /*
-	 * coarse_precision = 32;
-	 * fine_precision = 24;
-	 */
+   * coarse_precision = 32;
+   * fine_precision = 24;
+   */
   coarse_precision = ( ( preamble >> 10 ) & 0x3 ) + 1;
   if ( preamble & 0x80 ) {
     coarse_precision += ( preamble >> 5 ) & 0x3;

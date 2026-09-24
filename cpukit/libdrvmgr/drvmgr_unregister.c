@@ -115,9 +115,9 @@ int drvmgr_dev_drv_separate( struct drvmgr_dev *dev )
   int                rc;
 
   /* Remove children if this device exports a bus of devices. All
-	 * children must be removed first as they depend upon the bus
-	 * services this bridge provide.
-	 */
+   * children must be removed first as they depend upon the bus
+   * services this bridge provide.
+   */
   if ( dev->bus ) {
     rc = drvmgr_bus_unregister( dev->bus );
     if ( rc != DRVMGR_OK ) {
@@ -130,12 +130,12 @@ int drvmgr_dev_drv_separate( struct drvmgr_dev *dev )
   }
 
   /* Remove device by letting assigned driver take care of hardware
-	 * issues
-	 */
+   * issues
+   */
   if ( !dev->drv->ops->remove ) {
     /* No remove function is considered severe when someone
-		 * is trying to remove the device
-		 */
+     * is trying to remove the device
+     */
     return DRVMGR_ENOSYS;
   }
   dev->error = dev->drv->ops->remove( dev );
@@ -165,8 +165,8 @@ int drvmgr_dev_drv_separate( struct drvmgr_dev *dev )
   DRVMGR_UNLOCK();
 
   /* Free Device Driver Private memory if allocated previously by
-	 * Driver manager.
-	 */
+   * Driver manager.
+   */
   if ( dev->drv->dev_priv_size && dev->priv ) {
     free( dev->priv );
     dev->priv = NULL;
@@ -189,9 +189,9 @@ int drvmgr_dev_unregister( struct drvmgr_dev *dev )
   int                err;
 
   /* Separate device from driver, if the device is united with a driver.
-	 *
-	 * If this device is a bridge all child buses/devices are also removed.
-	 */
+   *
+   * If this device is a bridge all child buses/devices are also removed.
+   */
   err = drvmgr_dev_drv_separate( dev );
   if ( err != DRVMGR_OK ) {
     return err;

@@ -160,9 +160,9 @@ void run_bdbuf_tests()
   rtems_test_assert( rv == 0 );
 
   /*
-     * On initialization test disk device driver registers
-     * its RX message queue, so we just need to locate it.
-     */
+   * On initialization test disk device driver registers
+   * its RX message queue, so we just need to locate it.
+   */
   sc = rtems_message_queue_ident(
     TEST_DRV_RX_MQUEUE_NAME,
     RTEMS_SEARCH_ALL_NODES,

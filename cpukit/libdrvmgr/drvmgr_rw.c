@@ -50,7 +50,7 @@ void drvmgr_rw_memset(
 )
 {
   unsigned long long buf[ 16 + 1 ]; /* Extra bytes after data are reserved
-				       * for optimizations by write_mem */
+                                     * for optimizations by write_mem */
   int                txlen;
   char              *adr;
 

@@ -1,16 +1,16 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*  LEON2 AT697 PCI Host Driver.
- * 
+ *
  *  COPYRIGHT (c) 2008.
  *  Cobham Gaisler AB.
  *
  *  Configures the AT697 PCI core and initialize,
  *   - the PCI Library (pci.c)
  *   - the general part of the PCI Bus driver (pci_bus.c)
- *  
+ *
  *  System interrupt assigned to PCI interrupt (INTA#..INTD#) is by
- *  default taken from Plug and Play, but may be overridden by the 
+ *  default taken from Plug and Play, but may be overridden by the
  *  driver resources INTA#..INTD#.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -70,7 +70,7 @@
 #define SYSTEM_MAINMEM_START  0x40000000
 #define SYSTEM_MAINMEM_START2 0x60000000
 
-/* Interrupt assignment. Set to other value than 0xff in order to 
+/* Interrupt assignment. Set to other value than 0xff in order to
  * override defaults and plug&play information
  */
 #ifndef AT697_INTA_SYSIRQ
@@ -503,8 +503,8 @@ static int at697pci_hw_init( struct at697pci_priv *priv )
   }
 
   /* If not in system slot we are not host and we must abort.
-	 * This is a host only driver.
-	 */
+   * This is a host only driver.
+   */
   if ( ( regs->pciis & 0x1000 ) != 0 ) {
     return -1;
   }
@@ -533,7 +533,7 @@ static int at697pci_hw_init( struct at697pci_priv *priv )
   return 0;
 }
 
-/* Initializes the AT697PCI core and driver, must be called before calling init_pci() 
+/* Initializes the AT697PCI core and driver, must be called before calling init_pci()
  *
  * Return values
  *  0             Successful initalization
@@ -550,11 +550,11 @@ static int at697pci_init( struct at697pci_priv *priv )
   priv->regs = (struct at697pci_regs *) AT697_PCI_REG_ADR;
 
   /* Init PCI interrupt assignment table to all use the interrupt routed
-	 * through the GPIO core.
-	 *
-	 * INT[A..D]# selects system IRQ (and I/O interrupt)
-	 * INT[A..D]#_PIO selects PIO used to generate I/O interrupt
-	 */
+   * through the GPIO core.
+   *
+   * INT[A..D]# selects system IRQ (and I/O interrupt)
+   * INT[A..D]#_PIO selects PIO used to generate I/O interrupt
+   */
   strcpy( keyname_sysirq, "INTX#" );
   strcpy( keyname_pio, "INTX#_PIO" );
   for ( pin = 1; pin < 5; pin++ ) {
@@ -577,11 +577,11 @@ static int at697pci_init( struct at697pci_priv *priv )
   }
 
   /* Use GRPCI target BAR1 and BAR2 to map CPU RAM to PCI, this is to
-	 * make it possible for PCI peripherals to do DMA directly to CPU memory
-	 *
-	 * Defualt is to map system RAM at pci address 0x40000000 and system
-	 * SDRAM to pci address 0x60000000
-	 */
+   * make it possible for PCI peripherals to do DMA directly to CPU memory
+   *
+   * Defualt is to map system RAM at pci address 0x40000000 and system
+   * SDRAM to pci address 0x60000000
+   */
   value = drvmgr_dev_key_get( priv->dev, "tgtbar1", DRVMGR_KT_INT );
   if ( value ) {
     priv->bar1_pci_adr = value->i;
@@ -624,7 +624,7 @@ static int at697pci_init( struct at697pci_priv *priv )
   return 0;
 }
 
-/* Called when a core is found with the AMBA device and vendor ID 
+/* Called when a core is found with the AMBA device and vendor ID
  * given in at697pci_ids[].
  */
 int at697pci_init1( struct drvmgr_dev *dev )
@@ -693,20 +693,20 @@ int at697pci_init2( struct drvmgr_dev *dev )
   LEON_Register_Map *regs = (LEON_Register_Map *) 0x80000000;
 
   /* Enable interrupts now that init1 has been reached for all devices
-	 * on the bus.
-	 */
+   * on the bus.
+   */
 
   for ( pin = 1; pin < 5; pin++ ) {
     irq = at697_pci_irq_table[ pin - 1 ];
     pio = at697_pci_irq_pio_table[ pin - 1 ];
     if ( ( pio < 16 ) && ( irq >= 4 ) && ( irq <= 7 ) ) {
-      /* AT697 I/O IRQ, we know how to set up this 
-			 *
-			 * IRQ 4 -> I/O 0
-			 * IRQ 5 -> I/O 1
-			 * IRQ 6 -> I/O 2
-			 * IRQ 7 -> I/O 3
-			 */
+      /* AT697 I/O IRQ, we know how to set up this
+       *
+       * IRQ 4 -> I/O 0
+       * IRQ 5 -> I/O 1
+       * IRQ 6 -> I/O 2
+       * IRQ 7 -> I/O 3
+       */
       ioport = irq - 4;
 
       /* First disable interrupts */

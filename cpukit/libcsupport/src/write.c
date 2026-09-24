@@ -43,7 +43,7 @@
 
 /**
  *  POSIX 1003.1b 6.4.2 - Write to a File
- * 
+ *
  *  This routine writes count bytes from from buffer pointed to by buffer
  *  to the file associated with the open file descriptor, fildes.
  */

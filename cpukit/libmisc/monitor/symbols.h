@@ -63,14 +63,14 @@ struct _rtems_symbol_table_t {
   uint32_t size;          /* max # of symbols */
 
   /*
-     * Symbol list -- sorted by address (when we do a lookup)
-     */
+   * Symbol list -- sorted by address (when we do a lookup)
+   */
 
   rtems_symbol_t *addresses; /* symbol array by address */
 
   /*
-     * String pool, unsorted, a list of blocks of string data
-     */
+   * String pool, unsorted, a list of blocks of string data
+   */
 
   rtems_symbol_string_block_t *string_buffer_head;
   rtems_symbol_string_block_t *string_buffer_current;

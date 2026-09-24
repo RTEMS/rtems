@@ -5,8 +5,8 @@
  *
  * @brief CPU_Spin_wait() Test 1
  *
- * @note This test verifies the basic functionality of CPU_Spin_wait() by performing 
- * a number of spin waits across multiple CPU cores, ensuring that the 
+ * @note This test verifies the basic functionality of CPU_Spin_wait() by performing
+ * a number of spin waits across multiple CPU cores, ensuring that the
  * spin wait functionality works correctly under SMP conditions.
  *
  * @ingroup SMP
@@ -54,8 +54,8 @@ typedef struct {
   volatile uint32_t broadcast_flag;
   volatile uint32_t phase1_acks;
 
-  /* 
-   * Phase 2: Intentionally non-volatile. Proves _CPU_Spin_wait() 
+  /*
+   * Phase 2: Intentionally non-volatile. Proves _CPU_Spin_wait()
    * enforces a compiler memory barrier across SMP core boundaries.
    */
   uint32_t          non_volatile_flag;

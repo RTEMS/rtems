@@ -74,9 +74,9 @@ rtems_status_code rtems_monitor_server_request(
   size_t            size;
 
   /*
-     * What is id of monitor on target node?
-     * Look it up if we don't know it yet.
-     */
+   * What is id of monitor on target node?
+   * Look it up if we don't know it yet.
+   */
 
   server_id = rtems_monitor_server_request_queue_ids[ server_node ];
   if ( server_id == 0 ) {
@@ -102,8 +102,8 @@ rtems_status_code rtems_monitor_server_request(
   }
 
   /*
-     * Await response, if requested
-     */
+   * Await response, if requested
+   */
 
   if ( response ) {
     status = rtems_message_queue_receive(
@@ -253,10 +253,10 @@ void rtems_monitor_server_init( uint32_t monitor_flags RTEMS_UNUSED )
     uint32_t maximum_nodes = _MPCI_Configuration.maximum_nodes;
 
     /*
-         * create the msg que our server will listen
-         * Since we only get msgs from other RTEMS monitors, we just
-         * need reserve space for 1 msg from each node.
-         */
+     * create the msg que our server will listen
+     * Since we only get msgs from other RTEMS monitors, we just
+     * need reserve space for 1 msg from each node.
+     */
 
     status = rtems_message_queue_create(
       RTEMS_MONITOR_QUEUE_NAME,
@@ -272,10 +272,10 @@ void rtems_monitor_server_init( uint32_t monitor_flags RTEMS_UNUSED )
     }
 
     /*
-         * create the msg que our responses will come on
-         * Since monitor just does one thing at a time, we only need 1 item
-         * message queue.
-         */
+     * create the msg que our responses will come on
+     * Since monitor just does one thing at a time, we only need 1 item
+     * message queue.
+     */
 
     status = rtems_message_queue_create(
       RTEMS_MONITOR_RESPONSE_QUEUE_NAME,
@@ -305,8 +305,8 @@ void rtems_monitor_server_init( uint32_t monitor_flags RTEMS_UNUSED )
       rtems_monitor_server_request_queue_id;
 
     /*
-         * create the server task
-         */
+     * create the server task
+     */
     status = rtems_task_create(
       RTEMS_MONITOR_SERVER_NAME,
       1,
@@ -321,8 +321,8 @@ void rtems_monitor_server_init( uint32_t monitor_flags RTEMS_UNUSED )
     }
 
     /*
-         * Start the server task
-         */
+     * Start the server task
+     */
     status = rtems_task_start(
       rtems_monitor_server_task_id,
       rtems_monitor_server_task,

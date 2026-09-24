@@ -142,7 +142,7 @@ int mq_send(
 
 /**
  * @brief Send a message to a message queue.
- * 
+ *
  * @see mq_send()
  */
 int mq_timedsend(
@@ -156,8 +156,8 @@ int mq_timedsend(
 #endif /* _POSIX_TIMEOUTS */
 
 /**
- * @brief Receive a message from a message queue. 
- * 
+ * @brief Receive a message from a message queue.
+ *
  * 15.2.5 Receive a Message From a Message Queue, P1003.1b-1993, p. 279
  *
  * NOTE: P1003.4b/D8, p. 45 adds mq_timedreceive().

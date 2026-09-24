@@ -217,7 +217,7 @@ unsigned long long spwcuc_get_next_et( void *spwcuc )
 }
 
 /* Force/Set the elapsed time (coarse 32-bit and fine 24-bit) by writing the
- * T-Field Time Packet Registers then the FORCE, NEW and INIT bits. 
+ * T-Field Time Packet Registers then the FORCE, NEW and INIT bits.
  * The latter three are needed for the ET to be set with the new value.
  */
 void spwcuc_force_et( void *spwcuc, unsigned long long time )

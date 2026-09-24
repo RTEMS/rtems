@@ -2,7 +2,7 @@
 
 /*
  *  SatCAN FPGA driver
- * 
+ *
  *  COPYRIGHT (c) 2008.
  *  Cobham Gaisler AB.
  *
@@ -179,7 +179,7 @@ static rtems_device_driver satcan_initialize(
 );
 
 /*
- * almalloc: allocate memory area of size sz aligned on sz boundary 
+ * almalloc: allocate memory area of size sz aligned on sz boundary
  * alptr: Utilized to return aligned pointer
  * ptr:   Unaligned pointer
  * sz:    Size of memory area

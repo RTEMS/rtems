@@ -125,7 +125,7 @@ static int ASCS_calc_clkreg( int sysfreq, int etrfreq )
 }
 
 /* Function: ASCS_get_sysfreq
-   Arguments: - 
+   Arguments: -
    Return values: System clock frequency in kHz, -1 if failed
    Description: Uses AMBA plug and play to lookup system frequency
 */
@@ -162,7 +162,7 @@ static int ASCS_get_sysfreq( void )
    Return values: -
    Description: Determines the source of the interrupt, clears the
                 appropriate bits in the core's STS register and releases
-		the associated semaphore
+                the associated semaphore
 */
 static rtems_isr ASCS_irqhandler( void *v )
 {
@@ -351,11 +351,11 @@ init_error1:
               numbered from 0-15
    Return values: 0 if successful, -GRASCS_ERROR_CAPFAULT if slave value
                   is negative or too big, -GRASCS_ERROR_TRANSACTIVE if
-		  a TM is active.
+                  a TM is active.
    Description: Sets the slave_sel bits in the core's CMD register.
                 they are used to choose which slave the core listens
-		to when performing a TM. The bits can't be set
-		during a TM, and the function will in such a case fail.
+                to when performing a TM. The bits can't be set
+                during a TM, and the function will in such a case fail.
 */
 int ASCS_input_select( int slave )
 {
@@ -385,12 +385,12 @@ int ASCS_input_select( int slave )
 /* Function: ASCS_etr_select
    Arguments: src: The source of the ETR signal, valid values are
                    0-GRASCS_MAX_TMS (0 = internal source, 1-GRASCS_MAX_TMS =
-		   external time markers 1-GRASCS_MAX_TMS).
-	      freq: ETR frequency in Hz. Valid values are
-	            GRASCS_MIN_ETRFREQ-GRASCS_MAX_ETRFREQ
+                   external time markers 1-GRASCS_MAX_TMS).
+              freq: ETR frequency in Hz. Valid values are
+                    GRASCS_MIN_ETRFREQ-GRASCS_MAX_ETRFREQ
    Return values: 0 if successful, -GRASCS_ERROR_CAPFAULT if src or freq values
                   are invalid, -GRASCS_ERROR_STARTSTOP if synchronization interface
-		  isn't stopped.
+                  isn't stopped.
    Description: Changes the source for the ETR signal. The frequency of source signal
                 is assumed to be the same as the frequency of the freq input
 */
@@ -423,7 +423,7 @@ int ASCS_etr_select( int etr, int freq )
 /* Function: ASCS_start
    Arguments: -
    Return values: -
-   Description: Enables the serial interface. 
+   Description: Enables the serial interface.
 */
 void ASCS_start( void )
 {
@@ -437,8 +437,8 @@ void ASCS_start( void )
    Return values: -
    Description: Disables the serial interface. This function will
                 block until possible calls to TC_send(_block) and
-		TM_recv(_block) has returned in order to be sure
-		that started transactions will be performed.
+                TM_recv(_block) has returned in order to be sure
+                that started transactions will be performed.
 */
 void ASCS_stop( void )
 {
@@ -460,11 +460,11 @@ void ASCS_stop( void )
 }
 
 /* Function: ASCS_iface_status
-   Arguments: - 
+   Arguments: -
    Return values: 0 if both serial interface and synch interface is stopped,
                   1 if serial interface is running buth synch interface is
-		  stopped, 2 if serial interface is stopped but synch interface
-		  is running, 3 if both serial and synch interface is running
+                  stopped, 2 if serial interface is stopped but synch interface
+                  is running, 3 if both serial and synch interface is running
    Description: Reads the core's STS register and reports the status of the
                 serial and synch interfaces
 */
@@ -477,7 +477,7 @@ int ASCS_iface_status( void )
    Arguments: word: Pointer to a word that should be sent
    Return values: 0 on success
                   -GRASCS_ERROR_STARTSTOP if serial interface is stopped,
-		  -GRASCS_ERROR_TRANSACTIVE if another TC is in progress.
+                  -GRASCS_ERROR_TRANSACTIVE if another TC is in progress.
    Description: Start a TC and sends the data that word points to.
 */
 int ASCS_TC_send( int *word )
@@ -524,16 +524,16 @@ int ASCS_TC_send( int *word )
 /* Function: ASCS_TC_send_block
    Arguments: block: Pointer to the start of a datablock that
                      should be sent.
-	      ntrans: Number of transfers needed to transfer
-	              the block.
+              ntrans: Number of transfers needed to transfer
+                      the block.
    Return values: 0 if successfull, -GRASCS_ERROR_STARTSTOP if TC
                   couldn't be started because serial interface is
                   stopped, -GRASCS_ERROR_TRANSACTIVE if TC couldn't
-		  be started because another TC isn't done yet.
+                  be started because another TC isn't done yet.
    Description: Starts ntrans TCs and sends the data that starts at the
                 address that block points to. The size of each
-		transaction will vary depending on whether the core is
-		configured for 8, 16, or 32 bits data transfers.
+                transaction will vary depending on whether the core is
+                configured for 8, 16, or 32 bits data transfers.
 */
 int ASCS_TC_send_block( int *block, int ntrans )
 {
@@ -612,7 +612,7 @@ void ASCS_TC_sync_stop( void )
                     placed
    Return values: 0 if successful, -GRASCS_ERROR_STARTSTOP if serial
                   interface isn't started, -GRASCS_ERROR_TRANSACTIVE
-		  if another TM is in progress
+                  if another TM is in progress
    Description: Starts a TM and stores the incoming data in word.
 */
 int ASCS_TM_recv( int *word )
@@ -654,15 +654,15 @@ int ASCS_TM_recv( int *word )
 /* Function: ASCS_TM_recv_block
    Arguments: block: Pointer to where the received datablock
                      should be stored.
-	      ntrans: Number of transfers needed to transfer
-	              the block.
+              ntrans: Number of transfers needed to transfer
+                      the block.
    Return values: 0 if successful, -GRASCS_ERROR_STARTSTOP if serial
                   interface isn't started, -GRASCS_ERROR_TRANSACTIVE if
-		  a performed TM hasn't been processed yet
+                  a performed TM hasn't been processed yet
    Description: Starts ntrans TMs and stores the data at the address
                 that block points to. The size of each transaction
-		will vary depending on whether the core is
-		configured for 8, 16, or 32 bits data transfers.
+                will vary depending on whether the core is
+                configured for 8, 16, or 32 bits data transfers.
 */
 int ASCS_TM_recv_block( int *block, int ntrans )
 {

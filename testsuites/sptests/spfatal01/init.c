@@ -66,11 +66,11 @@ static void stack_deallocator( void *unused )
 static void force_error( void )
 {
   /*
- *  Case 2: Null entry
- *  Case 3: semaphore_create
- *          _Thread_Dispatch_disable
- *          semaphore_obtain
- */
+   *  Case 2: Null entry
+   *  Case 3: semaphore_create
+   *          _Thread_Dispatch_disable
+   *          semaphore_obtain
+   */
 
   /* we will not run this far */
 }

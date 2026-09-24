@@ -54,27 +54,27 @@
   ( *(volatile uint32_t *) ( addr ) = (uint32_t) ( val ) )
 #define REG_READ( addr ) ( *(volatile uint32_t *) ( addr ) )
 
-/* 
+/*
  * MEMORYSCRUBBER AHBS register fields
  * DEFINED IN HEADER FILE
  */
 
-/* 
+/*
  * MEMORYSCRUBBER AHBERC register fields
  * DEFINED IN HEADER FILE
  */
 
-/* 
+/*
  * MEMORYSCRUBBER STAT register fields
  * DEFINED IN HEADER FILE
  */
 
-/* 
+/*
  * MEMORYSCRUBBER CONFIG register fields
  * DEFINED IN HEADER FILE
  */
 
-/* 
+/*
  * MEMORYSCRUBBER ETHRES register fields
  * DEFINED IN HEADER FILE
  */
@@ -220,9 +220,9 @@ STATIC int memscrub_init2( struct drvmgr_dev *dev )
   }
 
   /* Startup Action:
-	 *	- Clear status
-	 *	- Register ISR
-	 */
+   *	- Clear status
+   *	- Register ISR
+   */
 
   /* Initialize hardware by clearing its status */
   REG_WRITE( &priv->regs->ahbstatus, 0 );

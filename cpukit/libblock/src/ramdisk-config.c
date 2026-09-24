@@ -34,13 +34,13 @@ rtems_device_driver ramdisk_initialize(
   rtems_status_code         rc;
 
   /*
-     * Coverity Id 27 notes that this calloc() is a resource leak.
-     *
-     * This is allocating memory for a RAM disk which will persist for
-     * the life of the system. RTEMS has no "de-initialize" driver call
-     * so there is no corresponding free(r).  Coverity is correct that
-     * it is never freed but this is not a problem.
-     */
+   * Coverity Id 27 notes that this calloc() is a resource leak.
+   *
+   * This is allocating memory for a RAM disk which will persist for
+   * the life of the system. RTEMS has no "de-initialize" driver call
+   * so there is no corresponding free(r).  Coverity is correct that
+   * it is never freed but this is not a problem.
+   */
   r = calloc( rtems_ramdisk_configuration_size, sizeof( struct ramdisk ) );
   r->trace = false;
   for ( i = 0; i < rtems_ramdisk_configuration_size; i++, c++, r++ ) {

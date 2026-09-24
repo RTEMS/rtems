@@ -399,7 +399,7 @@ static inline int rtems_can_queue_fifo_free_outslot(
  * rtems_can_queue_fifo_test_outslot().
  *
  * @return  This function returns %RTEMS_CAN_FIFOF_INACTIV if there
-  *         has not been ready slot before the call.
+ *         has not been ready slot before the call.
  *
  */
 static inline int rtems_can_queue_fifo_again_outslot(

@@ -114,8 +114,8 @@ const void *rtems_monitor_driver_next(
   _Objects_Allocator_lock();
 
   /*
-     * dummy up a fake id and name for this item
-     */
+   * dummy up a fake id and name for this item
+   */
 
   canonical_driver->id = n;
   canonical_driver->name = rtems_build_name( '-', '-', '-', '-' );

@@ -56,9 +56,9 @@ extern void *gpiolib_open( int port );
 extern void *gpiolib_open_by_name( char *devName );
 extern void  gpiolib_close( void *handle );
 
-/* Show the current status one or all GPIO ports in the system. 
+/* Show the current status one or all GPIO ports in the system.
  * Int port is port nunber, if port = -1 selects all ports.
- * 
+ *
  * If port != -1, handle is used to get port.
  * If port != -1, handle == NULL, then port is used as port number
  */

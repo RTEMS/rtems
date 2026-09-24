@@ -73,9 +73,9 @@ struct grspw_regs {
   volatile uint32_t timer; /* Used only in GRSPW1 */
   volatile uint32_t resv1;
 
-  /* DMA Registers, ctrl.NCH determines number of ports, 
-	 * up to 4 channels are supported
-	 */
+  /* DMA Registers, ctrl.NCH determines number of ports,
+   * up to 4 channels are supported
+   */
   struct grspw_dma_regs dma[ 4 ];
 
   volatile uint32_t icctrl;
@@ -540,8 +540,8 @@ void *grspw_open( int dev_no )
   }
 
   /* Initialize Spin-lock for GRSPW Device. This is to protect
-	 * CTRL and DMACTRL registers from ISR.
-	 */
+   * CTRL and DMACTRL registers from ISR.
+   */
   SPIN_INIT( &priv->devlock, priv->devname );
 
   priv->tcisr = NULL;
@@ -551,18 +551,18 @@ void *grspw_open( int dev_no )
   priv->stscfg = LINKSTS_MASK;
 
   /* Default to common work queue and message queue, if not created
-	 * during initialization then its disabled.
-	 */
+   * during initialization then its disabled.
+   */
   grspw_work_cfg( priv, &grspw_wc_def );
 
   grspw_stats_clr( priv );
 
   /* Allocate TX & RX Descriptor memory area for all DMA
-	 * channels. Max-size descriptor area is allocated (or user assigned):
-	 *  - 128 RX descriptors per DMA Channel
-	 *  - 64 TX descriptors per DMA Channel
-	 * Specified address must be in CPU RAM.
- 	 */
+   * channels. Max-size descriptor area is allocated (or user assigned):
+   *  - 128 RX descriptors per DMA Channel
+   *  - 64 TX descriptors per DMA Channel
+   * Specified address must be in CPU RAM.
+   */
   bdtabsize = 2 * BDTAB_SIZE * priv->hwsup.ndma_chans;
   value = drvmgr_dev_key_get( priv->dev, "bdDmaArea", DRVMGR_KT_INT );
   if ( value ) {
@@ -587,8 +587,8 @@ void *grspw_open( int dev_no )
   }
 
   /* Translate into DMA address that HW can use to access DMA
-	 * descriptors
-	 */
+   * descriptors
+   */
   drvmgr_translate_check(
     priv->dev,
     CPUMEM_TO_DMA,
@@ -606,10 +606,10 @@ void *grspw_open( int dev_no )
   );
   for ( i = 0; i < priv->hwsup.ndma_chans; i++ ) {
     /* Do DMA Channel Init, other variables etc. are inited
-		 * when respective DMA channel is opened.
-		 *
-		 * index & core are initialized by probe function.
-		 */
+     * when respective DMA channel is opened.
+     *
+     * index & core are initialized by probe function.
+     */
     priv->dma[ i ].open = 0;
     priv->dma[ i ].rx_bds = (struct grspw_rxbd *) (uintptr_t) ( priv->bd_mem +
                                                                 i *
@@ -640,8 +640,8 @@ void *grspw_open( int dev_no )
   }
 
   /* Basic initialization of hardware, clear some registers but
-	 * keep Link/RMAP/Node-Address registers intact.
-	 */
+   * keep Link/RMAP/Node-Address registers intact.
+   */
   grspw_hw_stop( priv );
 
   /* Register Interrupt handler and enable IRQ at IRQ ctrl */
@@ -668,9 +668,9 @@ int grspw_close( void *d )
   }
 
   /* Check that user has stopped and closed all DMA channels
-	 * appropriately. At this point the Hardware shall not be doing DMA
-	 * or generating Interrupts. We want HW in a "startup-state".
-	 */
+   * appropriately. At this point the Hardware shall not be doing DMA
+   * or generating Interrupts. We want HW in a "startup-state".
+   */
   for ( i = 0; i < priv->hwsup.ndma_chans; i++ ) {
     if ( priv->dma[ i ].open ) {
       rtems_semaphore_release( grspw_sem );
@@ -842,9 +842,9 @@ void grspw_link_ctrl( void *d, int *options, int *stscfg, int *clkdiv )
 
       REG_WRITE( &regs->ctrl, ctrl );
       /* Store the link disable events for use in
-			ISR. The LINKOPTS_DIS_ON_* options are actually the
-			corresponding bits in the status register, shifted
-			by 16. */
+                        ISR. The LINKOPTS_DIS_ON_* options are actually the
+                        corresponding bits in the status register, shifted
+                        by 16. */
       priv->dis_link_on_err = *options &
                               ( LINKOPTS_MASK_DIS_ON | LINKOPTS_DIS_ONERR );
     }
@@ -988,12 +988,12 @@ void grspw_ic_ctrl( void *d, unsigned int *options )
 
     ctrl = REG_READ( &regs->ctrl );
     ctrl &= ~GRSPW_CTRL_TF; /* Depends on one to one relation between
-					 * irqopts bits and ctrl bits */
+                             * irqopts bits and ctrl bits */
     ctrl |= ( *options & ICOPTS_CTRL_MASK ) << ( GRSPW_CTRL_TF_BIT - 0 );
 
     icctrl = REG_READ( &regs->icctrl );
     icctrl &= ~ICOPTS_ICCTRL_MASK; /* Depends on one to one relation between
-						* irqopts bits and icctrl bits */
+                                    * irqopts bits and icctrl bits */
     icctrl |= *options & ICOPTS_ICCTRL_MASK;
 
     /* Enable Global IRQ only if some irq source is set */
@@ -1129,7 +1129,7 @@ void grspw_rmap_support( void *d, char *rmap, char *rmap_crc )
   }
 }
 
-/* Select port, if 
+/* Select port, if
  * -1=The current selected port is returned
  * 0=Port 0
  * 1=Port 1
@@ -1263,7 +1263,7 @@ STATIC void grspw_bdrings_init( struct grspw_dma_priv *dma )
 }
 
 /* Try to populate descriptor ring with as many as possible READY unused packet
- * buffers. The packets assigned with to a descriptor are put in the end of 
+ * buffers. The packets assigned with to a descriptor are put in the end of
  * the scheduled list.
  *
  * The number of Packets scheduled is returned.
@@ -1306,8 +1306,8 @@ STATIC int grspw_rx_schedule_ready( struct grspw_dma_priv *dma )
     ctrl = GRSPW_RXBD_EN;
     if ( curr_bd->next == dma->rx_ring_base ) {
       /* Wrap around (only needed when smaller descriptor
-			 * table)
-			 */
+       * table)
+       */
       ctrl |= GRSPW_RXBD_WR;
     }
 
@@ -1315,8 +1315,8 @@ STATIC int grspw_rx_schedule_ready( struct grspw_dma_priv *dma )
     if ( ( --dma->rx_irq_en_cnt_curr ) <= 0 ) {
       if ( dma->cfg.rx_irq_en_cnt == 0 ) {
         /* IRQ is disabled. A big number to avoid
-				 * equal to zero too often
-				 */
+         * equal to zero too often
+         */
         dma->rx_irq_en_cnt_curr = 0x3fffffff;
       } else {
         dma->rx_irq_en_cnt_curr = dma->cfg.rx_irq_en_cnt;
@@ -1366,9 +1366,9 @@ STATIC int grspw_rx_schedule_ready( struct grspw_dma_priv *dma )
     /* Update TX ring posistion */
     dma->rx_ring_head = curr_bd;
 
-    /* Make hardware aware of the newly enabled descriptors 
-		 * We must protect from ISR which writes RI|TI
-		 */
+    /* Make hardware aware of the newly enabled descriptors
+     * We must protect from ISR which writes RI|TI
+     */
     SPIN_LOCK_IRQ( &dma->core->devlock, irqflags );
     dmactrl = REG_READ( &dma->regs->ctrl );
     dmactrl &= ~(
@@ -1403,39 +1403,39 @@ STATIC int grspw_rx_process_scheduled( struct grspw_dma_priv *dma )
 
   curr = dma->rx_ring_tail;
 
-  /* Step into RX ring to find if packets have been scheduled for 
-	 * reception.
-	 */
+  /* Step into RX ring to find if packets have been scheduled for
+   * reception.
+   */
   if ( !curr->pkt ) {
     return 0; /* No scheduled packets, thus no received, abort */
   }
 
   /* There has been Packets scheduled ==> scheduled Packets may have been
-	 * received and needs to be collected into RECV List.
-	 *
-	 * A temporary list "lst" with all received packets is created.
-	 */
+   * received and needs to be collected into RECV List.
+   *
+   * A temporary list "lst" with all received packets is created.
+   */
   lst.head = curr->pkt;
 
   /* Loop until first enabled "unrecveived" SpW Packet is found.
-	 * An unused descriptor is indicated by an unassigned pkt field.
-	 */
+   * An unused descriptor is indicated by an unassigned pkt field.
+   */
   while (
     curr->pkt && !( ( ctrl = BD_READ( &curr->bd->ctrl ) ) & GRSPW_RXBD_EN )
   ) {
     /* Handle one received Packet */
 
     /* Remember last handled Packet so that insertion/removal from
-		 * Packet lists go fast.
-		 */
+     * Packet lists go fast.
+     */
     last_pkt = curr->pkt;
 
     /* Get Length of Packet in bytes, and reception options */
     last_pkt->dlen = ( ctrl & GRSPW_RXBD_LEN ) >> GRSPW_RXBD_LEN_BIT;
 
     /* Set flags to indicate error(s) and CRC information,
-		 * and Mark Received.
-		 */
+     * and Mark Received.
+     */
     last_pkt->flags = ( last_pkt->flags & ~RXPKT_FLAG_OUTPUT_MASK ) |
                       ( ( ctrl >> 20 ) & RXPKT_FLAG_OUTPUT_MASK ) |
                       RXPKT_FLAG_RX;
@@ -1457,8 +1457,8 @@ STATIC int grspw_rx_process_scheduled( struct grspw_dma_priv *dma )
   }
 
   /* 1. Remove all handled packets from scheduled queue
-	 * 2. Put all handled packets into recv queue
-	 */
+   * 2. Put all handled packets into recv queue
+   */
   if ( recv_pkt_cnt > 0 ) {
     /* Update Stats, Number of Received Packets */
     dma->stats.rx_pkts += recv_pkt_cnt;
@@ -1488,7 +1488,7 @@ STATIC int grspw_rx_process_scheduled( struct grspw_dma_priv *dma )
 }
 
 /* Try to populate descriptor ring with as many SEND packets as possible. The
- * packets assigned with to a descriptor are put in the end of 
+ * packets assigned with to a descriptor are put in the end of
  * the scheduled list.
  *
  * The number of Packets scheduled is returned.
@@ -1534,8 +1534,8 @@ STATIC int grspw_tx_schedule_send( struct grspw_dma_priv *dma )
       ctrl = GRSPW_TXBD_EN;
     }
     /* Enable IRQ generation and CRC options as specified
-		 * by user.
-		 */
+     * by user.
+     */
     ctrl |= ( curr_pkt->flags & TXPKT_FLAG_INPUT_MASK ) << 8;
 
     if ( curr_bd->next == dma->tx_ring_base ) {
@@ -1547,8 +1547,8 @@ STATIC int grspw_tx_schedule_send( struct grspw_dma_priv *dma )
     if ( ( --dma->tx_irq_en_cnt_curr ) <= 0 ) {
       if ( dma->cfg.tx_irq_en_cnt == 0 ) {
         /* IRQ is disabled.
-				 * A big number to avoid equal to zero too often 
-				 */
+         * A big number to avoid equal to zero too often
+         */
         dma->tx_irq_en_cnt_curr = 0x3fffffff;
       } else {
         dma->tx_irq_en_cnt_curr = dma->cfg.tx_irq_en_cnt;
@@ -1557,8 +1557,8 @@ STATIC int grspw_tx_schedule_send( struct grspw_dma_priv *dma )
     }
 
     /* Prepare descriptor address. Parts of CTRL is written to
-		 * DLEN for debug-only (CTRL is cleared by HW).
-		 */
+     * DLEN for debug-only (CTRL is cleared by HW).
+     */
     if ( curr_pkt->data && curr_pkt->dlen ) {
       hwaddr = curr_pkt->data;
       if ( curr_pkt->flags & PKT_FLAG_TR_DATA ) {
@@ -1629,7 +1629,7 @@ STATIC int grspw_tx_schedule_send( struct grspw_dma_priv *dma )
   return cnt;
 }
 
-/* Scans the TX desciptor table for transmitted packets, and moves these 
+/* Scans the TX desciptor table for transmitted packets, and moves these
  * packets from the head of the scheduled queue to the tail of the sent queue.
  *
  * Also, for all packets the status is updated.
@@ -1649,35 +1649,35 @@ STATIC int grspw_tx_process_scheduled( struct grspw_dma_priv *dma )
 
   curr = dma->tx_ring_tail;
 
-  /* Step into TX ring to find if packets have been scheduled for 
-	 * transmission.
-	 */
+  /* Step into TX ring to find if packets have been scheduled for
+   * transmission.
+   */
   if ( !curr->pkt ) {
     return 0; /* No scheduled packets, thus no sent, abort */
   }
 
   /* There has been Packets scheduled ==> scheduled Packets may have been
-	 * transmitted and needs to be collected into SENT List.
-	 *
-	 * A temporary list "lst" with all sent packets is created.
-	 */
+   * transmitted and needs to be collected into SENT List.
+   *
+   * A temporary list "lst" with all sent packets is created.
+   */
   lst.head = curr->pkt;
 
   /* Loop until first enabled "un-transmitted" SpW Packet is found.
-	 * An unused descriptor is indicated by an unassigned pkt field.
-	 */
+   * An unused descriptor is indicated by an unassigned pkt field.
+   */
   while (
     curr->pkt && !( ( ctrl = BD_READ( &curr->bd->ctrl ) ) & GRSPW_TXBD_EN )
   ) {
     /* Handle one sent Packet */
 
     /* Remember last handled Packet so that insertion/removal from
-		 * packet lists go fast.
-		 */
+     * packet lists go fast.
+     */
     last_pkt = curr->pkt;
 
     /* Set flags to indicate error(s) and Mark Sent.
-		 */
+     */
     last_pkt->flags = ( last_pkt->flags & ~TXPKT_FLAG_OUTPUT_MASK ) |
                       ( ctrl & TXPKT_FLAG_LINKERR ) | TXPKT_FLAG_TX;
 
@@ -1694,8 +1694,8 @@ STATIC int grspw_tx_process_scheduled( struct grspw_dma_priv *dma )
   }
 
   /* 1. Remove all handled packets from TX-SCHED queue
-	 * 2. Put all handled packets into SENT queue
-	 */
+   * 2. Put all handled packets into SENT queue
+   */
   if ( sent_pkt_cnt > 0 ) {
     /* Update Stats, Number of Transmitted Packets */
     dma->stats.tx_pkts += sent_pkt_cnt;
@@ -1752,11 +1752,11 @@ void *grspw_dma_open( void *d, int chan_no )
   dma->started = 0;
 
   /* Set Default Configuration:
-	 *
-	 *  - MAX RX Packet Length = 
-	 *  - Disable IRQ generation
-	 *  -
-	 */
+   *
+   *  - MAX RX Packet Length =
+   *  - Disable IRQ generation
+   *  -
+   */
   dma->cfg.rxmaxlen = DEFAULT_RXMAX;
   dma->cfg.rx_irq_en_cnt = 0;
   dma->cfg.tx_irq_en_cnt = 0;
@@ -1867,8 +1867,8 @@ err:
 }
 
 /* Initialize Software Structures:
- *  - Clear all Queues 
- *  - init BD ring 
+ *  - Clear all Queues
+ *  - init BD ring
  *  - init IRQ counter
  *  - clear statistics counters
  *  - init wait structures and semaphores
@@ -1924,8 +1924,8 @@ int grspw_dma_close( void *c )
   }
 
   /* Can not close active DMA channel. User must stop DMA and make sure
-	 * no threads are active/blocked within driver.
-	 */
+   * no threads are active/blocked within driver.
+   */
   if ( dma->started || dma->rx_wait.waiting || dma->tx_wait.waiting ) {
     rtems_semaphore_release( dma->sem_txdma );
     rtems_semaphore_release( dma->sem_rxdma );
@@ -1974,8 +1974,8 @@ unsigned int grspw_dma_enable_int( void *c, int rxtx, int force )
   }
 
   /* DMA has finished a TX/RX packet and user wants work-task to
-	 * take care of DMA table processing.
-	 */
+   * take care of DMA table processing.
+   */
   ctrl &= ~GRSPW_DMACTRL_AT;
 
   if ( ( rxtx & 1 ) == 0 ) {
@@ -2133,10 +2133,10 @@ void grspw_dma_tx_count( void *c, int *send, int *sched, int *sent, int *hw )
   struct grspw_txbd     *tailbd;
 
   /* Take device lock - Wait until we get semaphore.
-	 * The lock is taken so that the counters are in sync with each other
-	 * and that DMA descriptor table and tx_ring_tail is not being updated
-	 * during HW counter processing in this function.
-	 */
+   * The lock is taken so that the counters are in sync with each other
+   * and that DMA descriptor table and tx_ring_tail is not being updated
+   * during HW counter processing in this function.
+   */
   if (
     rtems_semaphore_obtain( dma->sem_txdma, RTEMS_WAIT, RTEMS_NO_TIMEOUT ) !=
     RTEMS_SUCCESSFUL
@@ -2156,15 +2156,15 @@ void grspw_dma_tx_count( void *c, int *send, int *sched, int *sent, int *hw )
   }
   if ( hw ) {
     /* Calculate number of descriptors (processed by HW) between
-		 * HW pointer and oldest SW pointer.
-		 */
+     * HW pointer and oldest SW pointer.
+     */
     hwbd = REG_READ( &dma->regs->txdesc );
     tailbd = dma->tx_ring_tail->bd;
     diff = ( ( hwbd - (unsigned int) (uintptr_t) tailbd ) / GRSPW_TXBD_SIZE ) &
            ( GRSPW_TXBD_NR - 1 );
     /* Handle special case when HW and SW pointers are equal
-		 * because all TX descriptors have been processed by HW.
-		 */
+     * because all TX descriptors have been processed by HW.
+     */
     if (
       ( diff == 0 ) && ( sched_cnt == GRSPW_TXBD_NR ) &&
       ( ( BD_READ( &tailbd->ctrl ) & GRSPW_TXBD_EN ) == 0 )
@@ -2234,8 +2234,8 @@ check_condition:
   }
 
   /* Check so that no other thread is waiting, this driver only supports
-	 * one waiter at a time.
-	 */
+   * one waiter at a time.
+   */
   if ( initialized == 0 && dma->tx_wait.waiting ) {
     ret = 3;
     goto out_release;
@@ -2261,8 +2261,8 @@ check_condition:
     rtems_semaphore_release( dma->sem_txdma );
 
     /* Try to take Wait lock, if this fail link may have gone down
-		 * or user stopped this DMA channel
-		 */
+     * or user stopped this DMA channel
+     */
     rc = rtems_semaphore_obtain( dma->tx_wait.sem_wait, RTEMS_WAIT, timeout );
     if ( rc == RTEMS_TIMEOUT ) {
       ret = 2;
@@ -2418,10 +2418,10 @@ void grspw_dma_rx_count( void *c, int *ready, int *sched, int *recv, int *hw )
   struct grspw_rxbd     *tailbd;
 
   /* Take device lock - Wait until we get semaphore.
-	 * The lock is taken so that the counters are in sync with each other
-	 * and that DMA descriptor table and rx_ring_tail is not being updated
-	 * during HW counter processing in this function.
-	 */
+   * The lock is taken so that the counters are in sync with each other
+   * and that DMA descriptor table and rx_ring_tail is not being updated
+   * during HW counter processing in this function.
+   */
   if (
     rtems_semaphore_obtain( dma->sem_rxdma, RTEMS_WAIT, RTEMS_NO_TIMEOUT ) !=
     RTEMS_SUCCESSFUL
@@ -2441,15 +2441,15 @@ void grspw_dma_rx_count( void *c, int *ready, int *sched, int *recv, int *hw )
   }
   if ( hw ) {
     /* Calculate number of descriptors (processed by HW) between
-		 * HW pointer and oldest SW pointer.
-		 */
+     * HW pointer and oldest SW pointer.
+     */
     hwbd = REG_READ( &dma->regs->rxdesc );
     tailbd = dma->rx_ring_tail->bd;
     diff = ( ( hwbd - (unsigned int) (uintptr_t) tailbd ) / GRSPW_RXBD_SIZE ) &
            ( GRSPW_RXBD_NR - 1 );
     /* Handle special case when HW and SW pointers are equal
-		 * because all RX descriptors have been processed by HW.
-		 */
+     * because all RX descriptors have been processed by HW.
+     */
     if (
       ( diff == 0 ) && ( sched_cnt == GRSPW_RXBD_NR ) &&
       ( ( BD_READ( &tailbd->ctrl ) & GRSPW_RXBD_EN ) == 0 )
@@ -2487,7 +2487,7 @@ static inline int grspw_rx_wait_eval( struct grspw_dma_priv *dma )
   }
 }
 
-/* Block until recv_cnt or more packets are Queued in RECV Q, op (AND or OR), 
+/* Block until recv_cnt or more packets are Queued in RECV Q, op (AND or OR),
  * ready_cnt or fewer packet buffers are available in the "READY and Scheduled" Q,
  * condition is met.
  * If a link error occurs and the Stop on Link error is defined, this function
@@ -2519,8 +2519,8 @@ check_condition:
   }
 
   /* Check so that no other thread is waiting, this driver only supports
-	 * one waiter at a time.
-	 */
+   * one waiter at a time.
+   */
   if ( initialized == 0 && dma->rx_wait.waiting ) {
     ret = 3;
     goto out_release;
@@ -2546,8 +2546,8 @@ check_condition:
     rtems_semaphore_release( dma->sem_rxdma );
 
     /* Try to take Wait lock, if this fail link may have gone down
-		 * or user stopped this DMA channel
-		 */
+     * or user stopped this DMA channel
+     */
     rc = rtems_semaphore_obtain( dma->rx_wait.sem_wait, RTEMS_WAIT, timeout );
     if ( rc == RTEMS_TIMEOUT ) {
       ret = 2;
@@ -2622,8 +2622,8 @@ void grspw_dma_stats_clr( void *c )
   memset( &dma->stats, 0, sizeof( dma->stats ) );
 
   /* Init proper default values so that comparisons will work the
-	 * first time.
-	 */
+   * first time.
+   */
   dma->stats.send_cnt_min = 0x3fffffff;
   dma->stats.tx_sched_cnt_min = 0x3fffffff;
   dma->stats.ready_cnt_min = 0x3fffffff;
@@ -2642,41 +2642,41 @@ int grspw_dma_start( void *c )
   }
 
   /* Initialize Software Structures:
-	 *  - Clear all Queues
-	 *  - init BD ring 
-	 *  - init IRQ counter
-	 *  - clear statistics counters
-	 *  - init wait structures and semaphores
-	 */
+   *  - Clear all Queues
+   *  - init BD ring
+   *  - init IRQ counter
+   *  - clear statistics counters
+   *  - init wait structures and semaphores
+   */
   grspw_dma_reset( dma );
 
   /* RX&RD and TX is not enabled until user fills SEND and READY Queue
-	 * with SpaceWire Packet buffers. So we do not have to worry about
-	 * IRQs for this channel just yet. However other DMA channels
-	 * may be active.
-	 *
-	 * Some functionality that is not changed during started mode is set up
-	 * once and for all here:
-	 *
-	 *   - RX MAX Packet length
-	 *   - TX Descriptor base address to first BD in TX ring (not enabled)
-	 *   - RX Descriptor base address to first BD in RX ring (not enabled)
-	 *   - IRQs (TX DMA, RX DMA, DMA ERROR)
-	 *   - Strip PID
-	 *   - Strip Address
-	 *   - No Spill
-	 *   - Receiver Enable
-	 *   - disable on link error (LE)
-	 *
-	 * Note that the address register and the address enable bit in DMACTRL
-	 * register must be left untouched, they are configured on a GRSPW
-	 * core level.
-	 *
-	 * Note that the receiver is enabled here, but since descriptors are
-	 * not enabled the GRSPW core may stop/pause RX (if NS bit set) until
-	 * descriptors are enabled or it may ignore RX packets (NS=0) until
-	 * descriptors are enabled (writing RD bit).
-	 */
+   * with SpaceWire Packet buffers. So we do not have to worry about
+   * IRQs for this channel just yet. However other DMA channels
+   * may be active.
+   *
+   * Some functionality that is not changed during started mode is set up
+   * once and for all here:
+   *
+   *   - RX MAX Packet length
+   *   - TX Descriptor base address to first BD in TX ring (not enabled)
+   *   - RX Descriptor base address to first BD in RX ring (not enabled)
+   *   - IRQs (TX DMA, RX DMA, DMA ERROR)
+   *   - Strip PID
+   *   - Strip Address
+   *   - No Spill
+   *   - Receiver Enable
+   *   - disable on link error (LE)
+   *
+   * Note that the address register and the address enable bit in DMACTRL
+   * register must be left untouched, they are configured on a GRSPW
+   * core level.
+   *
+   * Note that the receiver is enabled here, but since descriptors are
+   * not enabled the GRSPW core may stop/pause RX (if NS bit set) until
+   * descriptors are enabled or it may ignore RX packets (NS=0) until
+   * descriptors are enabled (writing RD bit).
+   */
   REG_WRITE( &dregs->txdesc, (uintptr_t) dma->tx_bds_hwa );
   REG_WRITE( &dregs->rxdesc, (uintptr_t) dma->rx_bds_hwa );
 
@@ -2719,20 +2719,20 @@ STATIC void grspw_dma_stop_locked( struct grspw_dma_priv *dma )
   SPIN_UNLOCK_IRQ( &dma->core->devlock, irqflags );
 
   /* From here no more packets will be sent, however
-	 * there may still exist scheduled packets that has been
-	 * sent, and packets in the SEND Queue waiting for free
-	 * descriptors. All packets are moved to the SENT Queue
-	 * so that the user may get its buffers back, the user
-	 * must look at the TXPKT_FLAG_TX in order to determine
-	 * if the packet was sent or not.
-	 */
+   * there may still exist scheduled packets that has been
+   * sent, and packets in the SEND Queue waiting for free
+   * descriptors. All packets are moved to the SENT Queue
+   * so that the user may get its buffers back, the user
+   * must look at the TXPKT_FLAG_TX in order to determine
+   * if the packet was sent or not.
+   */
 
   /* Retreive scheduled all sent packets */
   grspw_tx_process_scheduled( dma );
 
   /* Move un-sent packets in SEND and SCHED queue to the
-	 * SENT Queue. (never marked sent)
-	 */
+   * SENT Queue. (never marked sent)
+   */
   if ( !grspw_list_is_empty( &dma->tx_sched ) ) {
     grspw_list_append_list( &dma->sent, &dma->tx_sched );
     grspw_list_clr( &dma->tx_sched );
@@ -2802,9 +2802,9 @@ static void grspw_work_shutdown_func( struct grspw_priv *priv )
   int i;
 
   /* Link is down for some reason, and the user has configured
-	 * that we stop all (open) DMA channels and throw out all their
-	 * blocked threads.
-	 */
+   * that we stop all (open) DMA channels and throw out all their
+   * blocked threads.
+   */
   for ( i = 0; i < priv->hwsup.ndma_chans; i++ ) {
     grspw_dma_stop( &priv->dma[ i ] );
   }
@@ -2855,10 +2855,10 @@ static void grspw_work_dma_func( struct grspw_dma_priv *dma, unsigned int msg )
 
   if ( ( dma->cfg.flags & DMAFLAG2_IRQD_MASK ) == DMAFLAG2_IRQD_BOTH ) {
     /* In case both interrupt sources are disabled simultaneously
-		 * by the ISR the re-enabling of the interrupt source must also
-		 * do so to avoid missing interrupts. Both RX and TX process
-		 * will be forced.
-		 */
+     * by the ISR the re-enabling of the interrupt source must also
+     * do so to avoid missing interrupts. Both RX and TX process
+     * will be forced.
+     */
     msg |= WORK_DMA_RX_MASK | WORK_DMA_TX_MASK;
   }
 
@@ -2878,8 +2878,8 @@ static void grspw_work_dma_func( struct grspw_dma_priv *dma, unsigned int msg )
     if ( dma->started ) {
       dma->stats.rx_work_enabled += grspw_rx_schedule_ready( dma );
       /* Check to see if condition for waking blocked
-		 	 * USER task is fullfilled.
-			 */
+       * USER task is fullfilled.
+       */
       if ( dma->rx_wait.waiting ) {
         rx_cond_true = grspw_rx_wait_eval( dma );
       }
@@ -2903,8 +2903,8 @@ static void grspw_work_dma_func( struct grspw_dma_priv *dma, unsigned int msg )
     if ( dma->started ) {
       dma->stats.tx_work_enabled += grspw_tx_schedule_send( dma );
       /* Check to see if condition for waking blocked
-		 	 * USER task is fullfilled.
-			 */
+       * USER task is fullfilled.
+       */
       if ( dma->tx_wait.waiting ) {
         tx_cond_true = grspw_tx_wait_eval( dma );
       }
@@ -2986,8 +2986,8 @@ STATIC void grspw_isr( void *data )
                 ( GRSPW_STS_TO | priv->stscfg );
 
   /* Make sure to put the timecode handling first in order to get the
-	 * smallest possible interrupt latency
-	 */
+   * smallest possible interrupt latency
+   */
   if ( ( stat & GRSPW_STS_TO ) && ( priv->tcisr != NULL ) ) {
     ctrl = REG_READ( &priv->regs->ctrl );
     if ( ctrl & GRSPW_CTRL_TQ ) {
@@ -3026,10 +3026,10 @@ STATIC void grspw_isr( void *data )
     }
 
     /* Let custom functions handle this POTENTIAL SPW interrupt. The
-		 * user function is called even if no such IRQ has happened!
-		 * User must make sure to clear all interrupts that have been
-		 * handled from the three registers by writing a one.
-		 */
+     * user function is called even if no such IRQ has happened!
+     * User must make sure to clear all interrupts that have been
+     * handled from the three registers by writing a one.
+     */
     if ( call_user_int_isr ) {
       priv->icisr( priv->icisr_arg, rxirq, rxack, intto );
     }
@@ -3073,8 +3073,8 @@ STATIC void grspw_isr( void *data )
       ( REG_READ( &priv->regs->ctrl ) & GRSPW_CTRL_IE )
     ) {
       /* Disable the link, no more transfers are expected
-			 * on any DMA channel.
-			 */
+       * on any DMA channel.
+       */
       SPIN_LOCK( &priv->devlock, irqflags );
       ctrl = REG_READ( &priv->regs->ctrl );
       REG_WRITE(
@@ -3094,17 +3094,17 @@ STATIC void grspw_isr( void *data )
   }
 
   /* A DMA transfer or Error occured? In that case disable more IRQs
-	 * from the DMA channel, then invoke the workQ.
-	 *
-	 * Also the GI interrupt flag may not be available for older
-	 * designs where (was added together with mutiple DMA channels).
-	 */
+   * from the DMA channel, then invoke the workQ.
+   *
+   * Also the GI interrupt flag may not be available for older
+   * designs where (was added together with mutiple DMA channels).
+   */
   SPIN_LOCK( &priv->devlock, irqflags );
   for ( i = 0; i < priv->hwsup.ndma_chans; i++ ) {
     dma_stat = REG_READ( &priv->regs->dma[ i ].ctrl );
     /* Check for Errors and if Packets been sent or received if
-		 * respective IRQ are enabled
-		 */
+     * respective IRQ are enabled
+     */
     irqs = ( ( ( dma_stat << 3 ) & ( GRSPW_DMACTRL_PR | GRSPW_DMACTRL_PS ) ) |
              GRSPW_DMA_STATUS_ERROR ) &
            dma_stat;
@@ -3115,15 +3115,15 @@ STATIC void grspw_isr( void *data )
     handled = 1;
 
     /* DMA error has priority, if error happens it is assumed that
-		 * the common work-queue stops the DMA operation for that
-		 * channel and makes the DMA tasks exit from their waiting
-		 * functions (both RX and TX tasks).
-		 * 
-		 * Disable Further IRQs (until enabled again)
-		 * from this DMA channel. Let the status
-		 * bit remain so that they can be handled by
-		 * work function.
-		 */
+     * the common work-queue stops the DMA operation for that
+     * channel and makes the DMA tasks exit from their waiting
+     * functions (both RX and TX tasks).
+     *
+     * Disable Further IRQs (until enabled again)
+     * from this DMA channel. Let the status
+     * bit remain so that they can be handled by
+     * work function.
+     */
     if ( irqs & GRSPW_DMA_STATUS_ERROR ) {
       REG_WRITE(
         &priv->regs->dma[ i ].ctrl,
@@ -3134,8 +3134,8 @@ STATIC void grspw_isr( void *data )
       message |= WORK_DMA_ER( i );
     } else {
       /* determine if RX/TX interrupt source(s) shall remain
-			 * enabled.
-			 */
+       * enabled.
+       */
       if ( priv->dma[ i ].cfg.flags & DMAFLAG2_IRQD_SRC ) {
         dma_en = ~irqs >> 3;
       } else {
@@ -3165,10 +3165,10 @@ STATIC void grspw_isr( void *data )
     int status;
     message |= WORK_CORE( priv->index );
     /* func interface compatible with msgQSend() on purpose, but
-		 * at the same time the user can assign a custom function to
-		 * handle DMA RX/TX operations as indicated by the "message"
-		 * and clear the handled bits before given to msgQSend().
-		 */
+     * at the same time the user can assign a custom function to
+     * handle DMA RX/TX operations as indicated by the "message"
+     * and clear the handled bits before given to msgQSend().
+     */
     status = priv->wc.msgisr( priv->wc.msgisr_arg, &message, 4 );
     if ( status != RTEMS_SUCCESSFUL ) {
       printk(
@@ -3424,9 +3424,9 @@ static int grspw2_init3( struct drvmgr_dev *dev )
   }
 
   /* Probe width of SpaceWire Interrupt ISR timers. All have the same
-	 * width... so only the first is probed, if no timer result will be
-	 * zero.
-	 */
+   * width... so only the first is probed, if no timer result will be
+   * zero.
+   */
   REG_WRITE( &priv->regs->icrlpresc, 0x7fffffff );
   ctrl = REG_READ( &priv->regs->icrlpresc );
   REG_WRITE( &priv->regs->icrlpresc, 0 );
@@ -3437,8 +3437,8 @@ static int grspw2_init3( struct drvmgr_dev *dev )
   }
 
   /* Let user limit the number of DMA channels on this core to save
-	 * space. Only the first nDMA channels will be available.
-	 */
+   * space. Only the first nDMA channels will be available.
+   */
   value = drvmgr_dev_key_get( priv->dev, "nDMA", DRVMGR_KT_INT );
   if ( value && ( value->i < (unsigned int) priv->hwsup.ndma_chans ) ) {
     priv->hwsup.ndma_chans = value->i;
@@ -3456,16 +3456,16 @@ static int grspw2_init3( struct drvmgr_dev *dev )
   }
 
   /* Startup Action:
-	 *  - stop DMA
-	 *  - do not bring down the link (RMAP may be active)
-	 *  - RMAP settings untouched (RMAP may be active)
-	 *  - port select untouched (RMAP may be active)
-	 *  - timecodes are diabled
-	 *  - IRQ generation disabled
-	 *  - status cleared
-	 *  - Node address / First DMA channels Node address
-	 *    is untouched (RMAP may be active)
-	 */
+   *  - stop DMA
+   *  - do not bring down the link (RMAP may be active)
+   *  - RMAP settings untouched (RMAP may be active)
+   *  - port select untouched (RMAP may be active)
+   *  - timecodes are diabled
+   *  - IRQ generation disabled
+   *  - status cleared
+   *  - Node address / First DMA channels Node address
+   *    is untouched (RMAP may be active)
+   */
   grspw_hw_stop( priv );
   grspw_hw_softreset( priv );
 
@@ -3622,8 +3622,8 @@ static int grspw_common_init( void )
   }
 
   /* Work queue, Work thread. Not created if user disables it.
-	 * user can disable it when interrupt is not used to save resources
-	 */
+   * user can disable it when interrupt is not used to save resources
+   */
   if ( grspw_work_task_priority != -1 ) {
     grspw_work_task = grspw_work_spawn(
       -1,

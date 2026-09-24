@@ -73,7 +73,7 @@ typedef enum {
   RTEMS_MONITOR_OBJECT_PORT = OBJECTS_RTEMS_PORTS,
 
   /* following monitor objects are not known to RTEMS, but
-     * we like to have "types" for them anyway */
+   * we like to have "types" for them anyway */
 
   RTEMS_MONITOR_OBJECT_DRIVER = OBJECTS_RTEMS_CLASSES_LAST + 1,
   RTEMS_MONITOR_OBJECT_DNAME,

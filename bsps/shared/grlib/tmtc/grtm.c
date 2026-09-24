@@ -415,9 +415,9 @@ struct grtm_priv {
     *ring; /* Next ring to use for new frames to be transmitted */
   struct grtm_ring *ring_end; /* Oldest activated ring used */
 
-  /* Collections of frames Ready to sent/ Scheduled for transmission/Sent 
-	 * frames waiting for the user to reclaim 
-	 */
+  /* Collections of frames Ready to sent/ Scheduled for transmission/Sent
+   * frames waiting for the user to reclaim
+   */
   struct grtm_list ready;     /* Frames Waiting for free BDs */
   struct grtm_list scheduled; /* Frames in BDs beeing transmitted */
   struct grtm_list
@@ -525,9 +525,9 @@ static int grtm_init3( struct drvmgr_dev *dev )
     grtm_driver_io_registered = 1;
   }
 
-  /* I/O system registered and initialized 
-	 * Now we take care of device initialization.
-	 */
+  /* I/O system registered and initialized
+   * Now we take care of device initialization.
+   */
   if ( grtm_device_init( priv ) ) {
     return DRVMGR_FAIL;
   }
@@ -536,13 +536,13 @@ static int grtm_init3( struct drvmgr_dev *dev )
   prefix[ 0 ] = '\0';
   if ( drvmgr_get_dev_prefix( dev, prefix ) ) {
     /* Failed to get prefix, make sure of a unique FS name
-		 * by using the driver minor.
-		 */
+     * by using the driver minor.
+     */
     sprintf( priv->devName, "/dev/grtm%d", dev->minor_drv );
   } else {
     /* Got special prefix, this means we have a bus prefix
-		 * And we should use our "bus minor"
-		 */
+     * And we should use our "bus minor"
+     */
     sprintf( priv->devName, "/dev/%sgrtm%d", prefix, dev->minor_bus );
   }
 
@@ -627,8 +627,8 @@ static int grtm_device_init( struct grtm_priv *pDev )
   }
 
   /* Allocate Memory for Buffer Descriptor Table, or let user provide a custom
-	 * address.
-	 */
+   * address.
+   */
   value = drvmgr_dev_key_get( pDev->dev, "bdTabAdr", DRVMGR_KT_POINTER );
   if ( value ) {
     pDev->bds = (struct grtm_bd *) value->ptr;
@@ -922,8 +922,8 @@ static int grtm_start( struct grtm_priv *pDev )
   DBG( "GRTM: reset time %d\n", i );
 
   /* Everything is configured, the TM transmitter is started
-	 * and idle frames has been sent.
-	 */
+   * and idle frames has been sent.
+   */
 
   /* Mark running before enabling the DMA transmitter */
   pDev->running = 1;
@@ -1006,8 +1006,8 @@ static rtems_device_driver grtm_open(
   memset( &pDev->config, 0, sizeof( pDev->config ) );
 
   /* The core has been reset when we execute here, so it is possible
-	 * to read out what HW is implemented from core.
-	 */
+   * to read out what HW is implemented from core.
+   */
   grtm_hw_get_implementation( pDev, &pDev->hw_avail );
 
   /* Get default modes */
@@ -1081,7 +1081,7 @@ static rtems_device_driver grtm_write(
   return RTEMS_NOT_IMPLEMENTED;
 }
 
-/* Scans the desciptor table for scheduled frames that has been sent, 
+/* Scans the desciptor table for scheduled frames that has been sent,
  * and moves these frames from the head of the scheduled queue to the
  * tail of the sent queue.
  *
@@ -1106,22 +1106,22 @@ static int grtm_free_sent( struct grtm_priv *pDev )
   }
 
   /* There has been messages scheduled ==> scheduled messages may have been
-	 * transmitted and needs to be collected.
-	 */
+   * transmitted and needs to be collected.
+   */
 
   first_frm = curr->frm;
 
-  /* Loop until first enabled unsent frame is found. 
-	 * A unused descriptor is indicated by an unassigned frm field
-	 */
+  /* Loop until first enabled unsent frame is found.
+   * A unused descriptor is indicated by an unassigned frm field
+   */
   while (
     curr->frm && !( ( ctrl = READ_REG( &curr->bd->ctrl ) ) & GRTM_BD_EN )
   ) {
     /* Handle one sent Frame */
 
     /* Remember last handled frame so that insertion/removal from
-		 * frames lists go fast.
-		 */
+     * frames lists go fast.
+     */
     last_frm = curr->frm;
 
     /* 1. Set flags to indicate error(s) and other information */
@@ -1144,8 +1144,8 @@ static int grtm_free_sent( struct grtm_priv *pDev )
   }
 
   /* 1. Remove all handled frames from scheduled queue
-	 * 2. Put all handled frames into sent queue
-	 */
+   * 2. Put all handled frames into sent queue
+   */
   if ( freed_frame_cnt > 0 ) {
     /* Save TX ring posistion */
     pDev->ring_end = curr;
@@ -1161,8 +1161,8 @@ static int grtm_free_sent( struct grtm_priv *pDev )
     last_frm->next = NULL;
 
     /* Put all sent frames into "Sent queue" for user to
-		 * collect, later on.
-		 */
+     * collect, later on.
+     */
     if ( !pDev->sent.head ) {
       /* Sent queue empty */
       pDev->sent.head = first_frm;
@@ -1178,9 +1178,9 @@ static int grtm_free_sent( struct grtm_priv *pDev )
 /* Moves as many frames in the ready queue (as there are free descriptors for)
  * to the scheduled queue. The free descriptors are then assigned one frame
  * each and enabled for transmission.
- * 
+ *
  * Return Value
- * Returns number of frames moved from ready to scheduled queue 
+ * Returns number of frames moved from ready to scheduled queue
  */
 static int grtm_schedule_ready( struct grtm_priv *pDev )
 {
@@ -1201,10 +1201,10 @@ static int grtm_schedule_ready( struct grtm_priv *pDev )
     curr_bd->frm = curr_frm;
 
     /* Prepare descriptor address. Three cases:
-		 *  - GRTM core on same bus as CPU ==> no translation (Address used by CPU = address used by GRTM)
-		 *  - GRTM core on remote bus, and payload address given as used by CPU ==> Translation needed
-		 *  - GRTM core on remote bus, and payload address given as used by GRTM ==> no translation  [ USER does custom translation]
-		 */
+     *  - GRTM core on same bus as CPU ==> no translation (Address used by CPU = address used by GRTM)
+     *  - GRTM core on remote bus, and payload address given as used by CPU ==> Translation needed
+     *  - GRTM core on remote bus, and payload address given as used by GRTM ==> no translation  [ USER does custom translation]
+     */
     if (
       curr_frm->flags &
       ( GRTM_FLAGS_TRANSLATE | GRTM_FLAGS_TRANSLATE_AND_REMEMBER )
@@ -1307,17 +1307,17 @@ static void grtm_tx_process( struct grtm_priv *pDev )
 {
   int num;
 
-  /* Free used descriptors and put the sent frame into the "Sent queue"  
-	 *   (SCHEDULED->SENT)
-	 */
+  /* Free used descriptors and put the sent frame into the "Sent queue"
+   *   (SCHEDULED->SENT)
+   */
   num = grtm_free_sent( pDev );
   pDev->scheduled_cnt -= num;
   pDev->sent_cnt += num;
 
   /* Use all available free descriptors there are frames for
-	 * in the ready queue.
-	 *   (READY->SCHEDULED)
-	 */
+   * in the ready queue.
+   *   (READY->SCHEDULED)
+   */
   if ( pDev->running ) {
     num = grtm_schedule_ready( pDev );
     pDev->ready_cnt -= num;
@@ -1510,10 +1510,10 @@ static rtems_device_driver grtm_ioctl(
       /* TODO: implement hwregs */
       break;
 
-      /* Put a chain of frames at the back of the "Ready frames" queue. This 
-		 * triggers the driver to put frames from the Ready queue into unused 
-		 * available descriptors. (Ready -> Scheduled)
-		 */
+      /* Put a chain of frames at the back of the "Ready frames" queue. This
+       * triggers the driver to put frames from the Ready queue into unused
+       * available descriptors. (Ready -> Scheduled)
+       */
 
     case GRTM_IOC_SEND:
       if ( !pDev->running ) {
@@ -1524,10 +1524,10 @@ static rtems_device_driver grtm_ioctl(
       chain = (struct grtm_list *) ioarg->buffer;
       if ( !chain ) {
         /* No new frames to send ==> just trigger hardware
-			 * to send previously made ready frames to be sent.
-			 * If someone else is processing the DMA we igore the
-			 * request.
-			 */
+         * to send previously made ready frames to be sent.
+         * If someone else is processing the DMA we igore the
+         * request.
+         */
         if ( grtm_request_txlock( pDev, 0 ) ) {
           grtm_tx_process( pDev );
           grtm_release_txlock( pDev );
@@ -1555,13 +1555,13 @@ static rtems_device_driver grtm_ioctl(
       /* wait until we get the device lock */
       grtm_request_txlock( pDev, 1 );
 
-      /* 1. Put frames into ready queue 
-		 *    (New Frames->READY)
-		 */
+      /* 1. Put frames into ready queue
+       *    (New Frames->READY)
+       */
       if ( pDev->ready.head ) {
         /* Frames already on ready queue (no free descriptors previously) ==>
-			 * Put frames at end of ready queue
-			 */
+         * Put frames at end of ready queue
+         */
         pDev->ready.tail->next = chain->head;
         pDev->ready.tail = chain->tail;
         chain->tail->next = NULL;
@@ -1574,24 +1574,24 @@ static rtems_device_driver grtm_ioctl(
       pDev->ready_cnt += num; /* Added 'num' frames to ready queue */
 
       /* 2. SCHEDULED->SENT
-		 * 3. READY->SCHEDULED
-		 */
+       * 3. READY->SCHEDULED
+       */
       grtm_tx_process( pDev );
       grtm_release_txlock( pDev );
       break;
 
     /* Take all available sent frames from the "Sent frames" queue.
-		 * If no frames has been sent, the thread may get blocked if in blocking
-		 * mode. The blocking mode is not available if driver is not in running mode.
-		 *
-		 * Note this ioctl may return success even if the driver is not in STARTED mode.
-		 * This is because in case of a error (link error of similar) and the driver switch
-		 * from START to STOP mode we must still be able to get our frames back.
-		 * 
-		 * Note in case the driver fails to send a frame for some reason (link error),
-		 * the sent flag is set to 0 indicating a failure.
-		 *
-		 */
+     * If no frames has been sent, the thread may get blocked if in blocking
+     * mode. The blocking mode is not available if driver is not in running mode.
+     *
+     * Note this ioctl may return success even if the driver is not in STARTED mode.
+     * This is because in case of a error (link error of similar) and the driver switch
+     * from START to STOP mode we must still be able to get our frames back.
+     *
+     * Note in case the driver fails to send a frame for some reason (link error),
+     * the sent flag is set to 0 indicating a failure.
+     *
+     */
     case GRTM_IOC_RECLAIM:
       /* Get pointer to were to place reaped chain */
       chain = (struct grtm_list *) ioarg->buffer;
@@ -1604,21 +1604,21 @@ static rtems_device_driver grtm_ioctl(
 
       do {
         /* Process descriptor table and populate with new
-			 * buffers:
-			 *    * SCHEDULED->SENT
-			 *    * READY->SCHEDULED
-			 */
+         * buffers:
+         *    * SCHEDULED->SENT
+         *    * READY->SCHEDULED
+         */
         grtm_tx_process( pDev );
 
-        /* Are there any frames on the sent queue waiting to be 
-			 * reclaimed?
-			 */
+        /* Are there any frames on the sent queue waiting to be
+         * reclaimed?
+         */
 
         if ( !pDev->sent.head ) {
           /* No frames to reclaim - no frame in sent queue.
-				 * Instead we block thread until frames have been sent 
-				 * if in blocking mode.
-				 */
+           * Instead we block thread until frames have been sent
+           * if in blocking mode.
+           */
           if ( pDev->running && pDev->config.blocking ) {
             ret = rtems_semaphore_obtain(
               pDev->sem_tx,

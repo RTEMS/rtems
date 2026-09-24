@@ -143,11 +143,11 @@ int gr1553bc_list_alloc( struct gr1553bc_list **list, int max_major )
   *list = l;
 
   /* Set default options:
-	 *  - RT timeout tolerance 20us
-	 *  - Global transfer options used when generating transfer descriptors
-	 *  - No BC device, note that this only works when no translation is
-	 *    required
-	 */
+   *  - RT timeout tolerance 20us
+   *  - Global transfer options used when generating transfer descriptors
+   *  - No BC device, note that this only works when no translation is
+   *    required
+   */
   if ( gr1553bc_list_config( l, &gr1553bc_def_cfg, NULL ) ) {
     free( l );
     return -1;
@@ -173,8 +173,8 @@ int gr1553bc_list_config(
   /* RT Time Tolerances */
   for ( i = 0; i < 31; i++ ) {
     /* 0=14us, 1=18us ... 0xf=74us
-		 * round upwards: 15us will be 18us
-		 */
+     * round upwards: 15us will be 18us
+     */
     timeout = ( ( cfg->rt_timeout[ i ] + 1 ) - 14 ) / 4;
     if ( ( timeout > 0xf ) || ( timeout < 0 ) ) {
       return -1;
@@ -241,8 +241,8 @@ int gr1553bc_list_set_major(
   }
 
   /* Link to next Major if not the last one and if there is
-	 * a next major
-	 */
+   * a next major
+   */
   if ( no == list->major_cnt - 1 ) {
     /* The last major, assume that it is connected with the first */
     next = list->majors[ 0 ];
@@ -337,8 +337,8 @@ int gr1553bc_list_table_alloc( struct gr1553bc_list *list, void *bdtab_custom )
 
   if ( (uintptr_t) bdtab_custom & 0x1 ) {
     /* Address given in Hardware accessible address, we
-		 * convert it into CPU-accessible address.
-		 */
+     * convert it into CPU-accessible address.
+     */
     list->_table = (void *) ( (uintptr_t) bdtab_custom & ~0x1 );
     list->table_hw = (uint32_t) (uintptr_t) list->_table;
     drvmgr_translate_check(
@@ -367,9 +367,9 @@ int gr1553bc_list_table_alloc( struct gr1553bc_list *list, void *bdtab_custom )
     }
 
     /* We got CPU accessible descriptor table address, now we
-		 * translate that into an address that the Hardware can
-		 * understand
-		 */
+     * translate that into an address that the Hardware can
+     * understand
+     */
     if ( bcpriv ) {
       drvmgr_translate_check(
         *bcpriv->pdev,
@@ -390,12 +390,12 @@ int gr1553bc_list_table_alloc( struct gr1553bc_list *list, void *bdtab_custom )
   }
 
   /* Write End-Of-List all over the descriptor table here,
-	 * For debugging/safety?
-	 */
+   * For debugging/safety?
+   */
 
   /* Assign descriptors to all minor frames. The addresses is
-	 * CPU-accessible addresses.
-	 */
+   * CPU-accessible addresses.
+   */
   table = list->table_cpu;
   for ( i = 0; i < list->major_cnt; i++ ) {
     major = list->majors[ i ];
@@ -459,14 +459,14 @@ int gr1553bc_list_table_build( struct gr1553bc_list *list )
       bds = minor->bds;
 
       /* BD[0..SLOTCNT-1] = message slots
-			 * BD[SLOTCNT+0] = END
-			 * BD[SLOTCNT+1] = JUMP
-			 *
-			 * or if no optional time slot handling:
-			 *
-			 * BD[0..SLOTCNT-1] = message slots
-			 * BD[SLOTCNT] = JUMP
-			 */
+       * BD[SLOTCNT+0] = END
+       * BD[SLOTCNT+1] = JUMP
+       *
+       * or if no optional time slot handling:
+       *
+       * BD[0..SLOTCNT-1] = message slots
+       * BD[SLOTCNT] = JUMP
+       */
 
       /* BD[0..SLOTCNT-1] */
       for ( k = 0; k < mincfg->slot_cnt; k++ ) {
@@ -480,12 +480,12 @@ int gr1553bc_list_table_build( struct gr1553bc_list *list )
       }
 
       /* BD[SLOTCNT] (OPTIONAL)
-			 * If a minor frame is configured to be executed in
-			 * certain time (given a time slot), this descriptor
-			 * sums up all unused time. The time slot is
-			 * decremented when messages are inserted into the
-			 * minor frame and increased when messages are removed.
-			 */
+       * If a minor frame is configured to be executed in
+       * certain time (given a time slot), this descriptor
+       * sums up all unused time. The time slot is
+       * decremented when messages are inserted into the
+       * minor frame and increased when messages are removed.
+       */
       if ( mincfg->timeslot > 0 ) {
         gr1553bc_bd_tr_init(
           &bds[ k ].tr,
@@ -498,10 +498,10 @@ int gr1553bc_list_table_build( struct gr1553bc_list *list )
       }
 
       /* Last descriptor is a jump to next minor frame, to a
-			 * synchronization point. If chain ends here, the list
-			 * is marked with a "end-of-list" marker.
-			 *
-			 */
+       * synchronization point. If chain ends here, the list
+       * is marked with a "end-of-list" marker.
+       *
+       */
       if ( minor->next ) {
         /* Translate CPU address of BD into HW address */
         hwbd = gr1553bc_bd_cpu2hw( list, &minor->next->bds[ 0 ] );
@@ -586,8 +586,8 @@ int gr1553bc_major_alloc_skel(
   maj->next = NULL;
 
   /* Create links between minor frames, and from minor frames
-	 * to configuration structure.
-	 */
+   * to configuration structure.
+   */
   minor = (struct gr1553bc_minor *) &maj->minors[ cfg->minor_cnt ];
   for ( i = 0; i < cfg->minor_cnt; i++, minor++ ) {
     maj->minors[ i ] = minor;
@@ -597,8 +597,8 @@ int gr1553bc_major_alloc_skel(
     minor->bds = NULL;
   }
   /* last Minor should point to next Major frame's first minor,
-	 * we do that somewhere else.
-	 */
+   * we do that somewhere else.
+   */
   ( minor - 1 )->next = NULL;
 
   *major = maj;
@@ -742,8 +742,8 @@ int gr1553bc_slot_alloc2(
   }
 
   /* Ok, we got our slot. Lets allocate time for slot if requested by user
-	 * and time management is enabled for this Minor Frame.
-	 */
+   * and time management is enabled for this Minor Frame.
+   */
   if ( timeslot > 0 ) {
     /* Make timeslot on a 4us boundary (time resolution of core) */
     timeslot = ( timeslot + 0x3 ) >> 2;
@@ -762,15 +762,15 @@ int gr1553bc_slot_alloc2(
       set0 = ( set0 & ~GR1553BC_TR_TIME ) | timefree;
       GR1553BC_WRITE_MEM( &trbd->settings[ 0 ], set0 );
       /* Note: at the moment the minor frame can be executed faster
-			 *       than expected, we hurry up writing requested
-			 *       descriptor.
-			 */
+       *       than expected, we hurry up writing requested
+       *       descriptor.
+       */
     }
   }
 
   /* Make the allocated descriptor be an empty slot with the
-	 * timeslot requested.
-	 */
+   * timeslot requested.
+   */
   trbd = &minor->bds[ slot_no ].tr;
   gr1553bc_bd_tr_init(
     trbd,
@@ -821,8 +821,8 @@ int gr1553bc_slot_free2( struct gr1553bc_minor *minor, int mid )
   bd = &minor->bds[ slot_no ];
 
   /* If the driver handles time for this minor frame, return
-	 * time if previuosly requested.
-	 */
+   * time if previuosly requested.
+   */
   timeslot = 0;
   mincfg = minor->cfg;
   if ( mincfg->timeslot > 0 ) {
@@ -835,8 +835,8 @@ int gr1553bc_slot_free2( struct gr1553bc_minor *minor, int mid )
       timeslot = word0 & GR1553BC_TR_TIME;
       if ( timeslot > 0 ) {
         /* Return previously allocated time to END
-				 * TIME descriptor.
-				 */
+         * TIME descriptor.
+         */
         endbd = &minor->bds[ mincfg->slot_cnt ].tr;
         set0 = GR1553BC_READ_MEM( &endbd->settings[ 0 ] );
         timefree = set0 & GR1553BC_TR_TIME;
@@ -844,9 +844,9 @@ int gr1553bc_slot_free2( struct gr1553bc_minor *minor, int mid )
         set0 = ( set0 & ~GR1553BC_TR_TIME ) | timefree;
         GR1553BC_WRITE_MEM( &endbd->settings[ 0 ], set0 );
         /* Note: at the moment the minor frame can be
-				 *       executed slower than expected, the
-				 *       timeslot is at two locations.
-				 */
+         *       executed slower than expected, the
+         *       timeslot is at two locations.
+         */
       }
     }
   }
@@ -886,14 +886,14 @@ int gr1553bc_minor_freetime( struct gr1553bc_minor *minor )
   }
 
   /* If the driver handles time for this minor frame, return
-	 * time if previuosly requested.
-	 */
+   * time if previuosly requested.
+   */
   timefree = 0;
   mincfg = minor->cfg;
   if ( mincfg->timeslot > 0 ) {
     /* Return previously allocated time to END
-		 * TIME descriptor.
-		 */
+     * TIME descriptor.
+     */
     endbd = &minor->bds[ mincfg->slot_cnt ].tr;
     set0 = GR1553BC_READ_MEM( &endbd->settings[ 0 ] );
     timefree = ( set0 & GR1553BC_TR_TIME ) << 2;
@@ -951,11 +951,11 @@ int gr1553bc_slot_irq_prepare(
   int                slot_no, to_mid;
 
   /* Build unconditional IRQ descriptor. The padding is used
-	 * for identifying the MINOR frame and function and custom data.
-	 *
-	 * The IRQ is disabled at first, a unconditional jump to next
-	 * descriptor in table.
-	 */
+   * for identifying the MINOR frame and function and custom data.
+   *
+   * The IRQ is disabled at first, a unconditional jump to next
+   * descriptor in table.
+   */
 
   /* Get BD address of jump destination */
   slot_no = GR1553BC_SLOTID_FROM_ID( mid );
@@ -981,15 +981,15 @@ int gr1553bc_slot_irq_prepare(
 int gr1553bc_slot_irq_enable( struct gr1553bc_list *list, int mid )
 {
   /* Leave word1..3 untouched:
-	 *  1. Unconditional Jump address
-	 *  2. Function
-	 *  3. Custom Data
-	 *
-	 * Since only one bit is changed in word0 (Condition word),
-	 * no hardware/software races will exist ==> it is safe
-	 * to enable/disable IRQ at any time independent of where
-	 * hardware is in table.
-	 */
+   *  1. Unconditional Jump address
+   *  2. Function
+   *  3. Custom Data
+   *
+   * Since only one bit is changed in word0 (Condition word),
+   * no hardware/software races will exist ==> it is safe
+   * to enable/disable IRQ at any time independent of where
+   * hardware is in table.
+   */
   return gr1553bc_slot_raw(
     list,
     mid,
@@ -1091,9 +1091,9 @@ int gr1553bc_slot_transfer(
   }
 
   /* Translate Data pointer from CPU-local to 1553-core accessible
-	 * address if user wants that. This may be useful for AMBA-over-PCI
-	 * cores.
-	 */
+   * address if user wants that. This may be useful for AMBA-over-PCI
+   * cores.
+   */
   if ( (uintptr_t) dptr & 0x1 ) {
     struct gr1553bc_priv *bcpriv = list->bc;
 
@@ -1106,12 +1106,12 @@ int gr1553bc_slot_transfer(
   }
 
   /* It is assumed that the descriptor has already been initialized
-	 * as a empty slot (Dummy bit set), so to avoid races the dummy
-	 * bit is cleared last.
-	 *
-	 * If we knew that the write would do a burst (for example over SpW)
-	 * it would be safe to write in order.
-	 */
+   * as a empty slot (Dummy bit set), so to avoid races the dummy
+   * bit is cleared last.
+   *
+   * If we knew that the write would do a burst (for example over SpW)
+   * it would be safe to write in order.
+   */
 
   /* Preserve timeslot */
   set0 = GR1553BC_READ_MEM( &bd->tr.settings[ 0 ] );
@@ -1120,11 +1120,11 @@ int gr1553bc_slot_transfer(
   set0 |= list->tropts; /* Global options */
 
   /* Set transfer type, bus and let RT tolerance table descide
-	 * responce tolerance.
-	 *
-	 * If a destination address is specified the longest timeout
-	 * tolerance is taken.
-	 */
+   * responce tolerance.
+   *
+   * If a destination address is specified the longest timeout
+   * tolerance is taken.
+   */
   rx_rtadr = ( tt >> 22 ) & 0x1f;
   tx_rtadr = ( tt >> 12 ) & 0x1f;
   if (
@@ -1169,9 +1169,9 @@ int gr1553bc_slot_update(
     struct gr1553bc_priv *bcpriv = list->bc;
 
     /* Translate Data pointer from CPU-local to 1553-core accessible
-		 * address if user wants that. This may be useful for AMBA-over-PCI
-		 * cores.
-		 */
+     * address if user wants that. This may be useful for AMBA-over-PCI
+     * cores.
+     */
     if ( dataptr & 0x1 ) {
       drvmgr_translate(
         *bcpriv->pdev,
@@ -1191,10 +1191,10 @@ int gr1553bc_slot_update(
     *stat = GR1553BC_READ_MEM( &bd->tr.status );
     if ( status ) {
       /* Clear status fields user selects, then
-			 * or bit31 if user wants that. The bit31
-			 * may be used to indicate if the BC has
-			 * performed the access.
-			 */
+       * or bit31 if user wants that. The bit31
+       * may be used to indicate if the BC has
+       * performed the access.
+       */
       status = ( *stat & ( status & 0xffffff ) ) | ( status & ( 1 << 31 ) );
       GR1553BC_WRITE_MEM( &bd->tr.status, status );
     }
@@ -1231,19 +1231,19 @@ int gr1553bc_mid_from_bd( union gr1553bc_bd *bd, int *mid, int *async )
   uint32_t word0, word2;
 
   /* Find Jump to next Minor Frame or End-Of-List,
-	 * at those locations we have stored a MID
-	 *
-	 * GR1553BC_SLOT_MAX+2 = Worst case, BD is max distance from jump
-	 *                       descriptor. 2=END and Jump descriptors.
-	 */
+   * at those locations we have stored a MID
+   *
+   * GR1553BC_SLOT_MAX+2 = Worst case, BD is max distance from jump
+   *                       descriptor. 2=END and Jump descriptors.
+   */
   for ( i = 0; i < GR1553BC_SLOT_MAX + 2; i++ ) {
     word0 = GR1553BC_READ_MEM( &bd->raw.words[ 0 ] );
     if ( word0 & GR1553BC_BD_TYPE ) {
       if ( word0 == GR1553BC_UNCOND_JMP ) {
         /* May be a unconditional IRQ set by user. In
-				 * that case the function is stored in WORD3,
-				 * functions must be aligned to 4 byte boudary.
-				 */
+         * that case the function is stored in WORD3,
+         * functions must be aligned to 4 byte boudary.
+         */
         word2 = GR1553BC_READ_MEM( &bd->raw.words[ 2 ] );
         if ( word2 & NEXT_MINOR_MARKER ) {
           goto found_mid;
@@ -1263,8 +1263,8 @@ found_mid:
   /* Get MID of JUMP descriptor */
   bdmid = word2 >> 8;
   /* Subtract distance from JUMP descriptor to find MID
-	 * of requested BD.
-	 */
+   * of requested BD.
+   */
   slot_no = GR1553BC_SLOTID_FROM_ID( bdmid );
   slot_no -= i;
   bdmid = GR1553BC_ID_SET_SLOT( bdmid, slot_no );
@@ -1429,8 +1429,8 @@ int gr1553bc_start(
   }
 
   /* Find first descriptor in list, the descriptor
-	 * first to be executed.
-	 */
+   * first to be executed.
+   */
   ctrl = GR1553BC_KEY;
   if ( list ) {
     bd = gr1553bc_slot_bd( list, GR1553BC_ID( 0, 0, 0 ) );
@@ -1539,8 +1539,8 @@ void gr1553bc_device_init( struct gr1553bc_priv *priv )
   GR1553BC_WRITE_REG( &priv->regs->bc_ctrl, GR1553BC_KEY | 0x0204 );
 
   /* Since RT can not be used at the same time as BC, we stop
-	 * RT rx, it should already be stopped...
-	 */
+   * RT rx, it should already be stopped...
+   */
   GR1553BC_WRITE_REG( &priv->regs->rt_cfg, GR1553RT_KEY );
 
   /* Clear some registers */
@@ -1586,8 +1586,8 @@ void gr1553bc_device_uninit( struct gr1553bc_priv *priv )
   GR1553BC_WRITE_REG( &priv->regs->bc_ctrl, GR1553BC_KEY | 0x0204 );
 
   /* Since RT can not be used at the same time as BC, we stop
-	 * RT rx, it should already be stopped...
-	 */
+   * RT rx, it should already be stopped...
+   */
   GR1553BC_WRITE_REG( &priv->regs->rt_cfg, GR1553RT_KEY );
 
   /* Turn off IRQ generation */
@@ -1620,8 +1620,8 @@ void gr1553bc_isr( void *arg )
   GR1553BC_WRITE_REG( &priv->regs->irq, irq );
 
   /* DMA error. This IRQ does not affect the IRQ log.
-	 * We let standard IRQ handle handle it.
-	 */
+   * We let standard IRQ handle handle it.
+   */
   if ( irq & GR1553B_IRQEN_BCDE ) {
     priv->irq_func( NULL, priv->irq_data );
   }
@@ -1640,10 +1640,10 @@ void gr1553bc_isr( void *arg )
     GR1553BC_WRITE_MEM( curr, 0x2 ); /* Mark Handled */
 
     /* Convert Descriptor in IRQ log into CPU address. In order
-		 * to convert we must know which list the descriptor belongs
-		 * to, we compare the address of the bd to the ASYNC list
-		 * descriptor table area.
-		 */
+     * to convert we must know which list the descriptor belongs
+     * to, we compare the address of the bd to the ASYNC list
+     * descriptor table area.
+     */
     SPIN_LOCK( &priv->devlock, irqflags );
     if (
       priv->alist && ( (uint32_t) (uintptr_t) bd >= priv->alist->table_hw ) &&
@@ -1661,18 +1661,18 @@ void gr1553bc_isr( void *arg )
       bd = gr1553bc_bd_hw2cpu( priv->list, bd );
     } else {
       /* error - unknown BD. Should not happen but could
-			 * if user has switched list. Ignore IRQ entry and
-			 * continue to next entry.
-			 */
+       * if user has switched list. Ignore IRQ entry and
+       * continue to next entry.
+       */
       bd = NULL;
     }
 
     /* Handle Descriptor that cased IRQ
-		 *
-		 * If someone have inserted an IRQ descriptor and tied
-		 * that to a custom function we call that function, otherwise
-		 * we let the standard IRQ handle handle it.
-		 */
+     *
+     * If someone have inserted an IRQ descriptor and tied
+     * that to a custom function we call that function, otherwise
+     * we let the standard IRQ handle handle it.
+     */
     if ( bd ) {
       word0 = GR1553BC_READ_MEM( &bd->raw.words[ 0 ] );
       word2 = GR1553BC_READ_MEM( &bd->raw.words[ 2 ] );

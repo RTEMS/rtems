@@ -88,22 +88,22 @@ static void pci_res_insert( struct pci_res **root, struct pci_res *res )
   size = res->size;
 
   /* Insert the resources depending on the boundary needs
-	 * Normally the boundary=size of the BAR, however when
-	 * PCI bridges are involved the bridge's boundary may be
-	 * smaller than the size due to the fact that a bridge
-	 * may have different-sized BARs behind, the largest BAR
-	 * (also the BAR with the largest boundary) will decide
-	 * the alignment need.
-	 */
+   * Normally the boundary=size of the BAR, however when
+   * PCI bridges are involved the bridge's boundary may be
+   * smaller than the size due to the fact that a bridge
+   * may have different-sized BARs behind, the largest BAR
+   * (also the BAR with the largest boundary) will decide
+   * the alignment need.
+   */
   last = NULL;
   curr = *root;
 
   /* Order List after boundary, the boundary is maintained
-	 * when the size is on an equal boundary, normally it is
-	 * but may not be with bridges. So in second hand it is
-	 * sorted after resulting boundary - the boundary after
-	 * the resource.
-	 */
+   * when the size is on an equal boundary, normally it is
+   * but may not be with bridges. So in second hand it is
+   * sorted after resulting boundary - the boundary after
+   * the resource.
+   */
   while ( curr && ( curr->boundary >= boundary ) ) {
     if ( curr->boundary == boundary ) {
       /* Find Resulting boundary of size */
@@ -196,8 +196,8 @@ static void pci_res_reorder( struct pci_res *root )
   }
 
   /* Make up a start address with the boundary of the
-	 * First element.
-	 */
+   * First element.
+   */
   start = root->boundary + root->size;
   last = root;
   curr = root->next;
@@ -206,7 +206,7 @@ static void pci_res_reorder( struct pci_res *root )
     start_next = ( start + ( curr->boundary - 1 ) ) & ~( curr->boundary - 1 );
 
     /* Find hole size, the unsed space in between last resource
-		 * and next */
+     * and next */
     hole_size = start_next - start;
 
     /* Find Boundary of START */
@@ -218,9 +218,9 @@ static void pci_res_reorder( struct pci_res *root )
     /* Detect dead hole */
     if ( hole_size > 0 ) {
       /* Step through list and try to find a resource that
-			 * can fit into hole. Take into account hole start
-			 * boundary and hole size.
-			 */
+       * can fit into hole. Take into account hole start
+       * boundary and hole size.
+       */
       last2 = curr;
       curr2 = curr->next;
       while ( curr2 ) {
@@ -228,10 +228,10 @@ static void pci_res_reorder( struct pci_res *root )
           ( curr2->boundary <= hole_boundary ) && ( curr2->size <= hole_size )
         ) {
           /* Found matching resource. Move it
-					 * first in the hole. Then rescan, now
-					 * that the hole has changed in
-					 * size/boundary.
-					 */
+           * first in the hole. Then rescan, now
+           * that the hole has changed in
+           * size/boundary.
+           */
           last2->next = curr2->next;
           curr2->next = curr;
           last->next = curr2;
@@ -240,10 +240,10 @@ static void pci_res_reorder( struct pci_res *root )
           start_next = ( start + ( curr2->boundary - 1 ) ) &
                        ~( curr2->boundary - 1 );
           /* Since we inserted the resource before
-					 * curr we need to re-evaluate curr one
-					 * more, more resources may fit into the
-					 * shrunken hole.
-					 */
+           * curr we need to re-evaluate curr one
+           * more, more resources may fit into the
+           * shrunken hole.
+           */
           curr = curr2;
           break;
         }
@@ -333,8 +333,8 @@ static void pci_find_devs( struct pci_bus *bus )
       fail = PCI_CFG_R32( pcidev, PCIR_VENDOR, &id );
       if ( fail || id == 0xffffffff || id == 0 ) {
         /*
-				 * This slot is empty
-				 */
+         * This slot is empty
+         */
         if ( func == 0 ) {
           break;
         } else {
@@ -351,8 +351,8 @@ static void pci_find_devs( struct pci_bus *bus )
       );
 
       /* Set command to reset values, it disables bus
-			 * mastering and address responses.
-			 */
+       * mastering and address responses.
+       */
       PCI_CFG_W16( pcidev, PCIR_COMMAND, 0 );
 
       /* Clear any already set status bits */
@@ -500,9 +500,9 @@ static void pci_find_bar( struct pci_dev *dev, int bar )
       }
     } else {
       /* Memory. We convert Prefetchable Memory BARs to Memory
-			 * BARs in case the Bridge does not support prefetchable
-			 * memory.
-			 */
+       * BARs in case the Bridge does not support prefetchable
+       * memory.
+       */
       if ( ( size & 0x8 ) && ( dev->bus->flags & PCI_BUS_MEM ) ) {
         /* Prefetchable and Bus supports it */
         res->flags = PCI_RES_MEM;
@@ -544,8 +544,8 @@ static int pci_find_res_dev( struct pci_dev *dev, void *unused )
     maxbars = 2;
 
     /* Probe Bridge Spaces (MEMIO space always implemented), the
-		 * probe disables all space-decoding at the same time
-		 */
+     * probe disables all space-decoding at the same time
+     */
     PCI_CFG_W32( pcidev, 0x30, 0 );
     PCI_CFG_W16( pcidev, 0x1c, 0x00f0 );
     PCI_CFG_R16( pcidev, 0x1c, &tmp16 );
@@ -588,18 +588,18 @@ static void pci_add_res_bus( struct pci_bus *bus, int type )
   bus->busres[ tindex ] = NULL;
 
   /* Add resources of devices behind bridge if bridge supports
-	 * resource type. If MEM space not supported by bridge, they are
-	 * converted to MEMIO in the process.
-	 */
+   * resource type. If MEM space not supported by bridge, they are
+   * converted to MEMIO in the process.
+   */
   if ( !( ( type == PCI_BUS_IO ) && ( ( bus->flags & PCI_BUS_IO ) == 0 ) ) ) {
     pci_for_each_child( bus, pci_add_res_dev, (void *) type, 0 );
 
     /* Reorder Bus resources to fit more optimally (avoid dead
-		 * PCI space). Currently they are sorted by boundary and size.
-		 *
-		 * This is especially important when multiple buses (bridges)
-		 * are present.
-		 */
+     * PCI space). Currently they are sorted by boundary and size.
+     *
+     * This is especially important when multiple buses (bridges)
+     * are present.
+     */
     pci_res_reorder( bus->busres[ tindex ] );
   }
 }
@@ -623,8 +623,8 @@ static int pci_add_res_dev( struct pci_dev *dev, void *arg )
     pci_add_res_bus( bridge, type );
 
     /* Propagate the resources from child bus to BAR on
-		 * this bus, by adding a "fake" BAR per type.
-		 */
+     * this bus, by adding a "fake" BAR per type.
+     */
     res = &bridge->dev.resources[ BUS_RES_START + tindex ];
     res->bar = BUS_RES_START + tindex;
     res->start = 0;
@@ -641,8 +641,8 @@ static int pci_add_res_dev( struct pci_dev *dev, void *arg )
         bbound = 0x100000; /* Bridge MEM min 1MB */
 
         /* Convert MEM to MEMIO if not supported by
-				 * this bridge
-				 */
+         * this bridge
+         */
         if ( ( bridge->flags & PCI_BUS_MEM ) == 0 ) {
           res->flags = PCI_RES_MEMIO;
         }
@@ -659,8 +659,8 @@ static int pci_add_res_dev( struct pci_dev *dev, void *arg )
   }
 
   /* Normal PCI Device as max 6 BARs and a ROM Bar.
-	 * Insert BARs into the sorted resource list.
-	 */
+   * Insert BARs into the sorted resource list.
+   */
   for ( i = 0; i < DEV_RES_CNT; i++ ) {
     res = &dev->resources[ i ];
     if ( ( res->flags & PCI_RES_TYPE_MASK ) != type ) {
@@ -689,16 +689,16 @@ static uint32_t pci_alloc_res(
   int             removed, sec_type;
 
   /* The resources are sorted on their size (size and alignment is the
-	 * same)
-	 */
+   * same)
+   */
   prev_next = &bus->busres[ type - 1 ];
   while ( ( res = *prev_next ) != NULL ) {
     dev = RES2DEV( res );
     removed = 0;
 
     /* Align start to this reource's need, only needed after
-		 * a bridge resource has been allocated.
-		 */
+     * a bridge resource has been allocated.
+     */
     starttmp = ( start + ( res->boundary - 1 ) ) & ~( res->boundary - 1 );
 
     if ( ( starttmp + res->size - 1 ) > end ) {
@@ -713,27 +713,27 @@ static uint32_t pci_alloc_res(
       res->start = res->end = 0;
 
       /* If this resources is a bridge window to the
-			 * secondary bus, the secondary resources are not
-			 * changed which has the following effect:
-			 *  I/O    :  Will never be assigned
-			 *  MEMIO  :  Will never be assigned
-			 *  MEM    :  Will stay marked as MEM, but bridge window
-			 *            is changed into MEMIO, when the window is
-			 *            assigned a MEMIO address the secondary
-			 *            resources will also be assigned.
-			 */
+       * secondary bus, the secondary resources are not
+       * changed which has the following effect:
+       *  I/O    :  Will never be assigned
+       *  MEMIO  :  Will never be assigned
+       *  MEM    :  Will stay marked as MEM, but bridge window
+       *            is changed into MEMIO, when the window is
+       *            assigned a MEMIO address the secondary
+       *            resources will also be assigned.
+       */
 
       if ( type == PCI_RES_MEM ) {
         /* Try prefetchable as non-prefetchable mem */
         res->flags &= ~PCI_RES_MEM_PREFETCH;
         /* Remove resource from MEM list, ideally we
-				 * should regenerate this list in order to fit
-				 * the comming BARs more optimially...
-				 */
+         * should regenerate this list in order to fit
+         * the comming BARs more optimially...
+         */
         *prev_next = res->next;
         /* We should not update prev_next here since
-				 * we just removed the resource from the list
-				 */
+         * we just removed the resource from the list
+         */
         removed = 1;
       } else {
         res->flags |= PCI_RES_FAIL;
@@ -746,16 +746,16 @@ static uint32_t pci_alloc_res(
       res->end = start + res->size;
 
       /* "Virtual BAR" on a bridge? A bridge resource need all
-			 * its child devices resources allocated
-			 */
+       * its child devices resources allocated
+       */
       if (
         ( res->bar != DEV_RES_ROM ) && ( dev->flags & PCI_DEV_BRIDGE ) &&
         ( res->bar >= BUS_RES_START )
       ) {
         bridge = (struct pci_bus *) dev;
         /* If MEM bar was changed into a MEMIO the
-				 * secondary MEM resources are still set to MEM,
-				 */
+         * secondary MEM resources are still set to MEM,
+         */
         if ( type == PCI_BUS_MEMIO && res->bar == BRIDGE_RES_MEM ) {
           sec_type = PCI_RES_MEM;
         } else {
@@ -974,8 +974,8 @@ int pci_config_auto( void )
     DBG( " MEM share the space with MEMIO\n" );
   }
   /* no-prefetchable memory space need separate memory space.
-	 * For example PCI controller maps this region non-cachable.
-	 */
+   * For example PCI controller maps this region non-cachable.
+   */
   start = autocfg->memio_start;
   end = autocfg->memio_start + autocfg->memio_size - 1;
   DBG( " MEMIO AVAIL [0x%08x-0x%08x]\n", start, end );
@@ -1003,8 +1003,8 @@ int pci_config_auto( void )
   }
 
   /* Find all PCI devices/functions on all buses. The buses will be
-	 * enumrated (assigned a unique PCI Bus ID 0..255).
-	 */
+   * enumrated (assigned a unique PCI Bus ID 0..255).
+   */
   DBG( "\n--- PCI SCANNING ---\n" );
   pci_find_devs( &pci_hb );
   pci_bus_cnt = pci_hb.sord + 1;
@@ -1015,27 +1015,27 @@ int pci_config_auto( void )
   pci_system_type = PCI_SYSTEM_HOST;
 
   /* Find all resources (MEM/MEMIO/IO BARs) of all devices/functions
-	 * on all buses.
-	 *
-	 * Device resources behind bridges which does not support prefetchable
-	 * memory are already marked as non-prefetchable memory.
-	 * Devices which as I/O resources behind a bridge that do not support
-	 * I/O space are marked DISABLED.
-	 *
-	 * All BARs and Bridge Spaces are disabled after this. Only the ones
-	 * that are allocated an address are initilized later on.
-	 */
+   * on all buses.
+   *
+   * Device resources behind bridges which does not support prefetchable
+   * memory are already marked as non-prefetchable memory.
+   * Devices which as I/O resources behind a bridge that do not support
+   * I/O space are marked DISABLED.
+   *
+   * All BARs and Bridge Spaces are disabled after this. Only the ones
+   * that are allocated an address are initilized later on.
+   */
   DBG( "\n\n--- PCI RESOURCES ---\n" );
   pci_for_each_dev( pci_find_res_dev, 0 );
 
   /* Add all device's resources to bus and sort them to fit in the PCI
-	 * Window. The device resources are propagated upwards through bridges
-	 * by adding a "virtual" BAR (boundary != BAR size).
-	 *
-	 * We wait with MEMIO (non-prefetchable memory) resources to after MEM
-	 * resources have been allocated, so that MEM resources can be changed
-	 * into MEMIO resources if not enough space.
-	 */
+   * Window. The device resources are propagated upwards through bridges
+   * by adding a "virtual" BAR (boundary != BAR size).
+   *
+   * We wait with MEMIO (non-prefetchable memory) resources to after MEM
+   * resources have been allocated, so that MEM resources can be changed
+   * into MEMIO resources if not enough space.
+   */
   pci_add_res_bus( &pci_hb, PCI_RES_IO );
   pci_add_res_bus( &pci_hb, PCI_RES_MEM );
 
@@ -1062,12 +1062,12 @@ int pci_config_auto( void )
   }
 
   /* Add non-prefetchable memory resources and not fitting prefetchable
-	 * memory resources.
-	 *
-	 * Some prefetchable memory resources may not have fitted into PCI
-	 * window. Prefetchable memory can be mapped into non-prefetchable
-	 * memory window. The failing BARs have been marked as MEMIO instead.
-	 */
+   * memory resources.
+   *
+   * Some prefetchable memory resources may not have fitted into PCI
+   * window. Prefetchable memory can be mapped into non-prefetchable
+   * memory window. The failing BARs have been marked as MEMIO instead.
+   */
   pci_add_res_bus( &pci_hb, PCI_RES_MEMIO );
 
   /* Allocate resources to non-prefetchable memory */
@@ -1089,10 +1089,10 @@ int pci_config_auto( void )
   pci_for_each_dev( pci_set_res_dev, NULL );
 
   /* Initialize IRQs of all devices. According to the PCI-PCI bridge
-	 * specification the IRQs are routed differently depending on slot
-	 * number. Drivers can override the default routing if a motherboard
-	 * requires it.
-	 */
+   * specification the IRQs are routed differently depending on slot
+   * number. Drivers can override the default routing if a motherboard
+   * requires it.
+   */
   if ( ( autocfg->options & CFGOPT_NOSETUP_IRQ ) == 0 ) {
     if ( autocfg->irq_route == NULL ) { /* use standard irq routing */
       autocfg->irq_route = pci_route_irq;

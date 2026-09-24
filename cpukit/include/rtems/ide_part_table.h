@@ -130,13 +130,13 @@ typedef struct rtems_part_desc_s {
   uint8_t  sys_type; /* type of partition */
   uint8_t  log_id;   /* logical number of partition */
   uint32_t start;    /* first partition sector, in absolute
-                                * numeration */
+                      * numeration */
   uint32_t size;     /* size in sectors */
   uint32_t end;      /* last partition sector, end = start + size - 1 */
   struct rtems_disk_desc_s *disk_desc; /* descriptor of disk, partition
-                                          * contains in */
+                                        * contains in */
   struct rtems_part_desc_s *ext_part;  /* extended partition containing this
-                                         * one */
+                                        * one */
 
   /* partitions, containing in this one */
   struct rtems_part_desc_s

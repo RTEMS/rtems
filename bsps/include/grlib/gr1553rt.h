@@ -36,7 +36,7 @@
  */
 #define RTLISTID_MAX 64
 
-/* CONFIG OPTION: Maximum number of Interrupt handlers per device supported 
+/* CONFIG OPTION: Maximum number of Interrupt handlers per device supported
  * max is 256 supported, and minimum is 1.
  */
 #define RTISR_MAX 64
@@ -60,7 +60,7 @@ struct gr1553rt_list;
 
 /* Descriptor read/written by hardware.
  *
- * Must be aligned to 16 byte boundary 
+ * Must be aligned to 16 byte boundary
  */
 struct gr1553rt_bd {
   volatile uint32_t ctrl;   /* 0x00 Control/Status word */
@@ -90,9 +90,9 @@ struct gr1553rt_list {
   struct gr1553rt_list_cfg *cfg;    /* List configuration */
   int                       bd_cnt; /* Number of Descriptors */
 
-  /* !!Must be last in data structure!! 
-	 * !!Array must at least be of length bd_cnt!!
-	 */
+  /* !!Must be last in data structure!!
+   * !!Array must at least be of length bd_cnt!!
+   */
   unsigned short bds[ 0 ]; /* Array of BDIDs */
 };
 
@@ -109,34 +109,34 @@ struct gr1553rt_cfg {
 
   /*** MODE CODE CONFIG ***/
   unsigned int modecode; /* Mode codes enable/disable/IRQ/EV-Log.
-					 * Each modecode has a 2-bit cfg field.
-					 * See Mode Code Control Register in
-					 * hardware manual.
-					 */
+                          * Each modecode has a 2-bit cfg field.
+                          * See Mode Code Control Register in
+                          * hardware manual.
+                          */
 
   /*** TIME CONFIG ***/
   unsigned short time_res; /* Time tag resolution in us */
 
   /*** SUBADDRESS TABLE CONFIG ***/
-  void *satab_buffer; /* Optional Custom buffer. Must be 
-					 * At least 16*32 bytes, and be aligned
-					 * to 10-bit (1KB) boundary. Set to NULL
-					 * to make driver allocate buffer.
-					 */
+  void *satab_buffer; /* Optional Custom buffer. Must be
+                       * At least 16*32 bytes, and be aligned
+                       * to 10-bit (1KB) boundary. Set to NULL
+                       * to make driver allocate buffer.
+                       */
 
   /*** EVENT LOG CONFIG ***/
   void *evlog_buffer; /* Optional Custom buffer */
   int   evlog_size;   /* Length, must be a multiple of 2.
-					 * If set to ZERO event log is disabled
-					 */
+                       * If set to ZERO event log is disabled
+                       */
 
   /*** TRANSFER DESCRIPTOR CONFIG ***/
   int   bd_count;  /* Number of transfer descriptors shared
-					 * by all RX/TX sub-addresses */
+                    * by all RX/TX sub-addresses */
   void *bd_buffer; /* Optional Custom descriptor area.
-					 * Must hold bd_count*32 bytes.
-					 * If NULL, descriptors will be 	
-					 * allocated dynamically. */
+                    * Must hold bd_count*32 bytes.
+                    * If NULL, descriptors will be
+                    * allocated dynamically. */
 };
 
 /* GR1553B-RT status indication, copied from the RT registers and stored
@@ -147,7 +147,7 @@ struct gr1553rt_status {
   unsigned int   bus_status; /* BUS Status */
   unsigned short synctime;   /* Time Tag of last sync with data */
   unsigned short syncword;   /* Data of last mode code synchronize
-					 * with data. */
+                              * with data. */
   unsigned short time_res;   /* Time resolution (set by config) */
   unsigned short time;       /* Current Time Tag */
 };
@@ -208,7 +208,7 @@ extern int gr1553rt_list_init(
   struct gr1553rt_list_cfg *cfg
 );
 
-/* Assign an Error Interrupt handler. Before the handler is called the 
+/* Assign an Error Interrupt handler. Before the handler is called the
  * RT hardware is stopped/disabled. The handler is optional, if not assigned
  * the ISR will still stop the RT upon error.
  *
@@ -256,7 +256,7 @@ extern int gr1553rt_irq_sa(
  * prior to scheduling the list.
  *
  * \param entry_no  Entry number in list (descriptor index in list)
- * \param flags     Enable IRQ when descriptor is accessed by setting 
+ * \param flags     Enable IRQ when descriptor is accessed by setting
  *                  argument GR1553RT_BD_FLAGS_IRQEN. Enabling IRQ on a
  *                  descriptor basis will override SA-table IRQ config.
  * \param dptr      Data Pointer to RX or TX operation. The LSB indicate
@@ -331,7 +331,7 @@ extern void gr1553rt_close( void *rt );
 extern int gr1553rt_config( void *rt, struct gr1553rt_cfg *cfg );
 
 /* Schedule a RX or TX list on a sub address. If a list has already been
- * schduled on the subaddress and on the same transfer type (RX/TX), the 
+ * schduled on the subaddress and on the same transfer type (RX/TX), the
  * old list is replaced with the list given here.
  *
  * \param subadr   Subaddress to schedule list on
@@ -345,7 +345,7 @@ extern void gr1553rt_sa_schedule(
   struct gr1553rt_list *list
 );
 
-/* Set SubAdress options. One may for example Enable or Disable a sub 
+/* Set SubAdress options. One may for example Enable or Disable a sub
  * address RX and/or TX. See hardware manual for SA-Table configuration
  * options.
  *
@@ -376,7 +376,7 @@ extern void gr1553rt_list_sa(
 
 /* Start RT Communication
  *
- * Interrupts will be enabled. The RT enabled and the "RT-run-time" 
+ * Interrupts will be enabled. The RT enabled and the "RT-run-time"
  * part of the API will be opened for the user and parts that need the
  * RT to be stopped are no longer available. After the RT has been
  * started the configuration function can not be called.
@@ -422,7 +422,7 @@ extern void gr1553rt_set_vecword(
  * is determined by the "mask" bit-mask. Operation:
  *
  * bus_status = (bus_status & ~mask) | (sts & mask)
- * 
+ *
  */
 extern void gr1553rt_set_bussts(
   void        *rt,
@@ -430,7 +430,7 @@ extern void gr1553rt_set_bussts(
   unsigned int sts
 );
 
-/* Read up to MAX number of entries in eventlog log. 
+/* Read up to MAX number of entries in eventlog log.
  *
  * \param dst   Destination address for event log entries
  * \param max   Maximal number of event log entries that an be stored into dst

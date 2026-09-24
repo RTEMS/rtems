@@ -54,9 +54,9 @@ void *POSIX_Init( void *argument )
 
 #if UNUSED
   /* FIXME: This test doesn't make sense.
- * On targets with sizeof(int) < sizeof(long), compilation will fail,
- * On targets with sizeof(int) == sizeof(long) the call is valid.
- */
+   * On targets with sizeof(int) < sizeof(long), compilation will fail,
+   * On targets with sizeof(int) == sizeof(long) the call is valid.
+   */
   puts( "sysconf -- bad configuration parameter - too large" );
   sc = sysconf( LONG_MAX );
   fatal_posix_service_status_errno( sc, EINVAL, "bad conf name" );

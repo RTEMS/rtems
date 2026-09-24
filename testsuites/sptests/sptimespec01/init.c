@@ -3,7 +3,7 @@
 /*
  *  Copyright (c) 2012.
  *  Krzysztof Miesowicz <krzysztof.miesowicz@gmail.com>
- *  
+ *
  *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -94,8 +94,8 @@ void test_greaterthan32bits()
 
 void test_add()
 {
-  /* Basic add_to test. tv_nsec in result is in range 
- * (less than TOD_NANOSECONDS_PER_SECOND) */
+  /* Basic add_to test. tv_nsec in result is in range
+   * (less than TOD_NANOSECONDS_PER_SECOND) */
   rtems_timespec_set( timespec1, 13, 300 );
   rtems_timespec_set( timespec2, 26, 5000 );
   rtems_timespec_add_to( timespec1, timespec2 );
@@ -154,33 +154,33 @@ void test_divide_by_integer()
 void test_compare()
 {
   /* Each case hit another single branch in timespeclessthan.c file */
-  /* 
- * Basic check if timespec1 is less than timespec2. Timespec1 has lower number
- * of either seconds and nanoseconds.
- */
+  /*
+   * Basic check if timespec1 is less than timespec2. Timespec1 has lower number
+   * of either seconds and nanoseconds.
+   */
   rtems_timespec_set( timespec1, 2, 300 );
   rtems_timespec_set( timespec2, 3, 400 );
   result = rtems_timespec_less_than( timespec1, timespec2 );
   rtems_test_assert( result );
   /*
- * Another check if timespec1 is less. Now number of seconds are equal in both
- * timespec1 and timespec2. It hits another branch in rtems_timespec_less_than
- * method.
- */
+   * Another check if timespec1 is less. Now number of seconds are equal in both
+   * timespec1 and timespec2. It hits another branch in rtems_timespec_less_than
+   * method.
+   */
   rtems_timespec_set( timespec2, 2, 400 );
   result = rtems_timespec_less_than( timespec1, timespec2 );
   rtems_test_assert( result );
   /*
- * Another check if timespec1 is less. In this case timespecs are equal so it
- * should return false.
- */
+   * Another check if timespec1 is less. In this case timespecs are equal so it
+   * should return false.
+   */
   rtems_timespec_set( timespec2, 2, 300 );
   result = rtems_timespec_less_than( timespec1, timespec2 );
   rtems_test_assert( !result );
   /*
- * Check if timespec1 is less. Both timespecs are equal on seconds, but 
- * timespec2 has smaller number of nanoseconds.
- */
+   * Check if timespec1 is less. Both timespecs are equal on seconds, but
+   * timespec2 has smaller number of nanoseconds.
+   */
   rtems_timespec_set( timespec2, 2, 0 );
   result = rtems_timespec_less_than( timespec1, timespec2 );
   rtems_test_assert( !result );
@@ -222,10 +222,10 @@ void test_validity()
 
 void test_subtract()
 {
-  /* 
- * Simple subtraction, number of nanoseconds in timespec2 is less than in 
- * timespec1.
- */
+  /*
+   * Simple subtraction, number of nanoseconds in timespec2 is less than in
+   * timespec1.
+   */
   rtems_timespec_set( timespec1, 10, 800 );
   rtems_timespec_set( timespec2, 13, 500 );
   rtems_timespec_subtract( timespec1, timespec2, tpointer );
@@ -233,19 +233,19 @@ void test_subtract()
     ( tpointer->tv_sec == 2 ) &&
     ( tpointer->tv_nsec == ( TOD_NANOSECONDS_PER_SECOND - 300 ) )
   );
-  /* 
- * Simple subtraction, number of nanoseconds in timespec2 is greater than in 
- * timespec1. It hits another branch.
- */
+  /*
+   * Simple subtraction, number of nanoseconds in timespec2 is greater than in
+   * timespec1. It hits another branch.
+   */
   rtems_timespec_set( timespec1, 10, 200 );
   rtems_timespec_subtract( timespec1, timespec2, tpointer );
   rtems_test_assert(
     ( tpointer->tv_sec == 3 ) && ( tpointer->tv_nsec == 300 )
   );
-  /* 
- * Case when timespec2 (end) is less than timespec1 (start). It produce
- * negative result.
- */
+  /*
+   * Case when timespec2 (end) is less than timespec1 (start). It produce
+   * negative result.
+   */
   rtems_timespec_set( timespec1, 13, 600 );
   rtems_timespec_subtract( timespec1, timespec2, tpointer );
   rtems_test_assert(
@@ -271,11 +271,11 @@ void test_convert()
   rtems_test_assert( ticks == 0 );
   ticks = rtems_timespec_to_ticks( timespec2 );
   rtems_test_assert( ticks == 1008 );
-  /* 
- * RTEMS_TIMESPEC_TO_TICKS TEST - test case when tv_nsec of timespec isn't 
- * multiplicity of nanoseconds_per_tick. Due to that, calculated number of ticks
- * should be increased by one.
- */
+  /*
+   * RTEMS_TIMESPEC_TO_TICKS TEST - test case when tv_nsec of timespec isn't
+   * multiplicity of nanoseconds_per_tick. Due to that, calculated number of ticks
+   * should be increased by one.
+   */
   uint32_t nanoseconds_per_tick;
   uint32_t nanoseconds;
   nanoseconds_per_tick = rtems_configuration_get_nanoseconds_per_tick();

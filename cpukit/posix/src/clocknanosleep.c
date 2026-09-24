@@ -11,7 +11,7 @@
 /*
  *  COPYRIGHT (c) 1989-2015.
  *  On-Line Applications Research Corporation (OAR).
- * 
+ *
  *  Copyright (c) 2016. Gedare Bloom.
  *
  * Redistribution and use in source and binary forms, with or without

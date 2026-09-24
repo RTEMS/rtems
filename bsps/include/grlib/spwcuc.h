@@ -125,7 +125,7 @@ struct spwcuc_stats {
 typedef void ( *spwcuc_isr_t )( unsigned int pimr, void *data );
 
 /* Open a SPWCUC device by minor number. A SPWCUC device can only by opened
- * once. The handle returned must be used as the input parameter 'spwcuc' in 
+ * once. The handle returned must be used as the input parameter 'spwcuc' in
  * the rest of the calls in the function interface.
  */
 extern void *spwcuc_open( int minor );

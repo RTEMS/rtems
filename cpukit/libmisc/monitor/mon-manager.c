@@ -60,8 +60,8 @@ const void *rtems_monitor_manager_next(
   Objects_Control         *object = 0;
 
   /*
-     * When we are called, it must be local
-     */
+   * When we are called, it must be local
+   */
 
 #if defined( RTEMS_MULTIPROCESSING )
   if ( !_Objects_Is_local_id( *next_id ) ) {

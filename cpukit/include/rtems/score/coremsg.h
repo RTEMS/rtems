@@ -92,12 +92,12 @@ typedef enum {
 
 #if defined( RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION )
 /**
-   *  @brief Type for a notification handler.
-   *
-   *  The following defines the type for a Notification handler.  A
-   *  notification handler is invoked when the message queue makes a
-   *  0->1 transition on pending messages.
-   */
+ *  @brief Type for a notification handler.
+ *
+ *  The following defines the type for a Notification handler.  A
+ *  notification handler is invoked when the message queue makes a
+ *  0->1 transition on pending messages.
+ */
 typedef void ( *CORE_message_queue_Notify_Handler )(
   CORE_message_queue_Control *,
   Thread_queue_Context *
@@ -153,8 +153,8 @@ struct CORE_message_queue_Control {
 
   #if defined( RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION )
   /** This is the routine invoked when the message queue transitions
-     *  from zero (0) messages pending to one (1) message pending.
-     */
+   *  from zero (0) messages pending to one (1) message pending.
+   */
   CORE_message_queue_Notify_Handler notify_handler;
   #endif
   /** This chain is the set of inactive messages.  A message is inactive

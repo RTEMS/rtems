@@ -88,9 +88,9 @@ rtems_task test_init( rtems_task_argument argument )
   rtems_task_entry    task_entry;
 
   /*  As each task is started, it preempts this task and
- *  performs a blocking rtems_event_receive.  Upon completion of
- *  this loop all created tasks are blocked.
- */
+   *  performs a blocking rtems_event_receive.  Upon completion of
+   *  this loop all created tasks are blocked.
+   */
 
   priority = RTEMS_MAXIMUM_PRIORITY - 2u;
   if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2u ) {

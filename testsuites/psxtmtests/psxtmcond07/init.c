@@ -98,8 +98,8 @@ void *POSIX_Init( void *argument )
   rtems_test_assert( status == 0 );
 
   /* Setup so threads are created with a high enough priority to preempt
-  * as they get created.
-  */
+   * as they get created.
+   */
   status = pthread_attr_init( &attr );
   rtems_test_assert( status == 0 );
 

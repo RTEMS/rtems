@@ -122,9 +122,9 @@ int grgpio_init1( struct drvmgr_dev *dev )
 
   DBG( "GRGPIO[%d] on bus %s\n", dev->minor_drv, dev->parent->dev->name );
 
-  /* This core will not find other cores, but other driver may depend upon 
-	 * the GPIO library to function. So, we set up GPIO right away.
-	 */
+  /* This core will not find other cores, but other driver may depend upon
+   * the GPIO library to function. So, we set up GPIO right away.
+   */
 
   /* Initialize library if not already done */
   status = gpiolib_initialize();
@@ -144,9 +144,9 @@ int grgpio_init1( struct drvmgr_dev *dev )
     return DRVMGR_FAIL;
   }
 
-  /* Register all ports available on this core as GPIO port to 
-	 * upper layer
-	 */
+  /* Register all ports available on this core as GPIO port to
+   * upper layer
+   */
   for ( port = 0; port < priv->port_cnt; port++ ) {
     priv->port_handles[ port ] = port;
     gpiolib_drv_register( &priv->gpiolib_desc, &priv->port_handles[ port ] );
@@ -202,13 +202,13 @@ static int grgpio_grpiolib_config( void *handle, struct gpiolib_config *cfg )
   DBG( "GRGPIO[0x%08x][%d]: CONFIG\n", priv->regs, portnr );
 
   /* Configure the device. And check that operation is supported,
-	 * not all I/O Pins have IRQ support.
-	 */
+   * not all I/O Pins have IRQ support.
+   */
   mask = ( 1 << portnr );
 
   /* Return error when IRQ not supported by this I/O Line and it
-	 * is beeing enabled by user.
-	 */
+   * is beeing enabled by user.
+   */
   if ( ( ( mask & priv->imask ) == 0 ) && cfg->mask ) {
     return -1;
   }
@@ -389,13 +389,13 @@ static int grgpio_gpiolib_get_info( void *handle, struct gpiolib_info *pinfo )
   prefix[ 0 ] = '\0';
   if ( drvmgr_get_dev_prefix( dev, prefix ) ) {
     /* Failed to get prefix, make sure of a unique FS name
-		 * by using the driver minor.
-		 */
+     * by using the driver minor.
+     */
     snprintf( pinfo->devName, 80, "/dev/grgpio%d/%d", dev->minor_drv, portnr );
   } else {
     /* Got special prefix, this means we have a bus prefix
-		 * And we should use our "bus minor"
-		 */
+     * And we should use our "bus minor"
+     */
     snprintf(
       pinfo->devName,
       80,
@@ -450,8 +450,8 @@ int grgpio_device_init( struct grgpio_priv *priv )
   priv->imask = priv->regs->ipol;
 
   /* Let the user configure the port count, this might be needed
-	 * when the GPIO lines must not be changed (assigned during bootup)
-	 */
+   * when the GPIO lines must not be changed (assigned during bootup)
+   */
   value = drvmgr_dev_key_get( priv->dev, "nBits", DRVMGR_KT_INT );
   if ( value ) {
     priv->port_cnt = value->i;
@@ -471,8 +471,8 @@ int grgpio_device_init( struct grgpio_priv *priv )
   }
 
   /* Let the user configure the BYPASS register, this might be needed
-	 * to select which cores can do I/O on a pin.
-	 */
+   * to select which cores can do I/O on a pin.
+   */
   value = drvmgr_dev_key_get( priv->dev, "bypass", DRVMGR_KT_INT );
   if ( value ) {
     priv->bypass = value->i;

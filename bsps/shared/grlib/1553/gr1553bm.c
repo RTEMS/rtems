@@ -218,8 +218,8 @@ int gr1553bm_config( void *bm, struct gr1553bm_config *cfg )
   priv->buffer_size = cfg->buffer_size & ~0x7; /* on 8 byte bounadry */
   if ( (uintptr_t) cfg->buffer_custom & 1 ) {
     /* Custom address given in remote address. We need
-		 * to convert it into a hardware accessible address
-		 */
+     * to convert it into a hardware accessible address
+     */
     priv->buffer = (void *) ( (uintptr_t) cfg->buffer_custom & ~1 );
     priv->buffer_base_hw = (uint32_t) (uintptr_t) priv->buffer;
     drvmgr_translate_check(
@@ -242,14 +242,14 @@ int gr1553bm_config( void *bm, struct gr1553bm_config *cfg )
                           ~( 8 - 1 );
     } else {
       /* Address given in CPU accessible address, no
-			 * translation required.
-			 */
+       * translation required.
+       */
       priv->buffer = cfg->buffer_custom;
       priv->buffer_base = (uint32_t) (uintptr_t) priv->buffer;
     }
     /* Translate address of buffer base into address that Hardware must
-		 * use to access the buffer.
-		 */
+     * use to access the buffer.
+     */
     drvmgr_translate_check(
       *priv->pdev,
       CPUMEM_TO_DMA,
@@ -329,8 +329,8 @@ void gr1553bm_stop( void *bm )
   gr1553bm_hw_stop( priv );
 
   /* At this point the hardware must be stopped and IRQ
-	 * sources unmasked.
-	 */
+   * sources unmasked.
+   */
 
   /* Unregister ISR handler and unmask 1553 IRQ source at IRQ ctrl */
   drvmgr_interrupt_unregister( *priv->pdev, 0, gr1553bm_isr, priv );
@@ -353,13 +353,13 @@ void gr1553bm_time( void *bm, uint64_t *time )
 resample:
   if ( priv->started && ( priv->cfg.time_ovf_irq == 0 ) ) {
     /* Update Time overflow counter. The carry bit from Time counter
-		 * is located in IRQ Flag.
-		 *
-		 * When IRQ is not used this function must be called often
-		 * enough to avoid that the Time overflows and the carry
-		 * bit is already set. The frequency depends on the Time
-		 * resolution.
-		 */
+     * is located in IRQ Flag.
+     *
+     * When IRQ is not used this function must be called often
+     * enough to avoid that the Time overflows and the carry
+     * bit is already set. The frequency depends on the Time
+     * resolution.
+     */
     if ( priv->regs->irq & GR1553B_IRQ_BMTOF ) {
       /* Clear carry bit */
       priv->regs->irq = GR1553B_IRQ_BMTOF;
@@ -378,9 +378,9 @@ resample:
     hwtime2 = priv->regs->bm_ttag & GR1553B_BM_TTAG_VAL;
     if ( hwtime > hwtime2 ) {
       /* priv->time and hwtime may be out of sync if
-			 * IRQ updated priv->time just after bm_ttag was read
-			 * here, we resample if we detect inconsistancy.
-			 */
+       * IRQ updated priv->time just after bm_ttag was read
+       * here, we resample if we detect inconsistancy.
+       */
       goto resample;
     }
   }
@@ -552,9 +552,9 @@ void gr1553bm_isr( void *data )
 
   if ( irqflag & GR1553B_IRQ_BMD ) {
     /* BM DMA ERROR. Fatal error, we stop BM hardware and let
-		 * user take care of it. From now on all calls will result
-		 * in an error because the BM is stopped (priv->started=0).
-		 */
+     * user take care of it. From now on all calls will result
+     * in an error because the BM is stopped (priv->started=0).
+     */
 
     /* Clear cause handled */
     priv->regs->irq = GR1553B_IRQ_BMD;

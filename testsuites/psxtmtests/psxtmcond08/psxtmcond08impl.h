@@ -148,11 +148,11 @@ void *Middle( void *argument )
   pthread_mutex_unlock( &MutexID );
   #if defined( USE_TIMEDWAIT_WAIT_VALUE_IN_PAST )
   /*
-     * In this case, unlock does not switch to another thread. so we need
-     * to explicitly yield. If we do not yield, then we will measure the
-     * time required to do an implicit pthread_exit() which is undesirable
-     * from a measurement viewpoint.
-     */
+   * In this case, unlock does not switch to another thread. so we need
+   * to explicitly yield. If we do not yield, then we will measure the
+   * time required to do an implicit pthread_exit() which is undesirable
+   * from a measurement viewpoint.
+   */
   sched_yield();
   #endif
   return NULL;

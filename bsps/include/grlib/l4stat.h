@@ -2,7 +2,7 @@
 
 /*
  * L4STAT APB-Register Driver.
- * 
+ *
  * COPYRIGHT (c) 2017.
  * Cobham Gaisler AB.
  *

@@ -148,7 +148,7 @@ typedef struct {
   /**
    *  This field contains the tick of the latest deadline decided by the period
    *  watchdog.
-  */
+   */
   uint64_t latest_deadline;
 } Rate_monotonic_Control;
 

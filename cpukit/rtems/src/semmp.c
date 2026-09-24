@@ -187,9 +187,9 @@ static void _Semaphore_MP_Send_response_packet(
       the_packet = (Semaphore_MP_Packet *) the_thread->receive_packet;
 
       /*
- *  The packet being returned already contains the class, length, and
- *  to_convert fields, therefore they are not set in this routine.
- */
+       *  The packet being returned already contains the class, length, and
+       *  to_convert fields, therefore they are not set in this routine.
+       */
       the_packet->operation = operation;
       the_packet->Prefix.id = the_packet->Prefix.source_tid;
 

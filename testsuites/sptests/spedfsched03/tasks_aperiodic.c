@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @brief Aperiodic test task for EDF Scheduler 
+ * @brief Aperiodic test task for EDF Scheduler
  */
 
 /*

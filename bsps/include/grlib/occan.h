@@ -82,8 +82,8 @@ typedef struct {
 
   /* ECC 4:0 */
   unsigned int err_bus_segs[ 32 ]; /* Segment (Where in frame error occured)
-	                                * See OCCAN_SEG_* defines for indexes
-	                                */
+                                    * See OCCAN_SEG_* defines for indexes
+                                    */
 
   /******************************/
 

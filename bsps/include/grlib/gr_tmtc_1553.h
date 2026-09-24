@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*  GR-TMTC-1553 PCI Target driver.
- * 
+ *
  *  COPYRIGHT (c) 2010.
  *  Cobham Gaisler AB.
  *

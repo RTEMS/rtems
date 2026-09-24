@@ -300,9 +300,9 @@
     RTEMS_SPLAY_ASSEMBLE( head, &__node, __left, __right, field );           \
   }                                                                          \
                                                                              \
-  /* Splay with either the minimum or the maximum element			\
- * Used to find minimum or maximum element in tree.			\
- */                \
+  /* Splay with either the minimum or the maximum element                    \
+   * Used to find minimum or maximum element in tree.                        \
+   */                                                                        \
   void name##_RTEMS_SPLAY_MINMAX( struct name *head, int __comp )            \
   {                                                                          \
     struct type __node, *__left, *__right, *__tmp;                           \

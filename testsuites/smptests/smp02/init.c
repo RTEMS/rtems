@@ -102,7 +102,7 @@ rtems_task Init( rtems_task_argument argument )
   status = rtems_semaphore_release( Semaphore );
   directive_failed( status, "rtems_semaphore_release of SEM1\n" );
 
-  /* 
+  /*
    * Wait for log full. print the log and end the program.
    */
   while ( Log_index < LOG_SIZE );

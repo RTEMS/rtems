@@ -52,14 +52,14 @@ extern "C" {
  */
 
 /**
-  * @brief The priority group order determines if a priority node is inserted
-  *   as the first or last node into its priority group.
-  *
-  * The values of the enumerators matter.  The least significant bit of a
-  * ::Priority_Control value is not used for the actual priority of a node.
-  * During insertion the least significant bit is used to determine the
-  * ordering within a priority group based on the enumerator values.
-  */
+ * @brief The priority group order determines if a priority node is inserted
+ *   as the first or last node into its priority group.
+ *
+ * The values of the enumerators matter.  The least significant bit of a
+ * ::Priority_Control value is not used for the actual priority of a node.
+ * During insertion the least significant bit is used to determine the
+ * ordering within a priority group based on the enumerator values.
+ */
 typedef enum {
   /**
    * @brief Priority group first option requests that the priority node is

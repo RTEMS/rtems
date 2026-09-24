@@ -124,9 +124,9 @@ struct drvmgr_dev **gr1553_bc_open( int minor )
   }
 
   /* Only possible to allocate is RT and BC is free,
-	 * this is beacuse it is not possible to use the
-	 * RT and the BC at the same time.
-	 */
+   * this is beacuse it is not possible to use the
+   * RT and the BC at the same time.
+   */
   if ( feat->dev->alloc & ( ALLOC_BC | ALLOC_RT ) ) {
     return NULL;
   }
@@ -154,9 +154,9 @@ struct drvmgr_dev **gr1553_rt_open( int minor )
   }
 
   /* Only possible to allocate is RT and BC is free,
-	 * this is beacuse it is not possible to use the
-	 * RT and the BC at the same time.
-	 */
+   * this is beacuse it is not possible to use the
+   * RT and the BC at the same time.
+   */
   if ( feat->dev->alloc & ( ALLOC_BC | ALLOC_RT ) ) {
     return NULL;
   }
@@ -184,9 +184,9 @@ struct drvmgr_dev **gr1553_bm_open( int minor )
   }
 
   /* Only possible to allocate is RT and BC is free,
-	 * this is beacuse it is not possible to use the
-	 * RT and the BC at the same time.
-	 */
+   * this is beacuse it is not possible to use the
+   * RT and the BC at the same time.
+   */
   if ( feat->dev->alloc & ALLOC_BM ) {
     return NULL;
   }
@@ -231,8 +231,8 @@ static int gr1553_init2( struct drvmgr_dev *dev )
   /* Stop BM logging (just in case) */
   GR1553B_WRITE_REG( &regs->bm_ctrl, 0 );
   /* Set codec version. This is only supported by some devices, i.e. GR740.
-	 * It will not have any effect on devices that does not support this bit. 
-	 */
+   * It will not have any effect on devices that does not support this bit.
+   */
   GR1553B_WRITE_REG( &regs->hwcfg, 1 << 12 );
 
   return DRVMGR_OK;

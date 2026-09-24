@@ -205,11 +205,11 @@ static int genirq_set_active(
     if ( ( isrentry->arg == arg ) && ( isrentry->isr == isr ) ) {
       /* Found ISR */
       if ( isrentry->enabled == action ) {
-        /* The ISR is already enabled or disabled 
-				 * depending on request, neccessary actions
-				 * were taken last time the same action was
-				 * requested.
-				 */
+        /* The ISR is already enabled or disabled
+         * depending on request, neccessary actions
+         * were taken last time the same action was
+         * requested.
+         */
         return 1;
       }
       e = isrentry;

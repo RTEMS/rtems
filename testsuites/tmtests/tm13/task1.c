@@ -93,9 +93,9 @@ rtems_task test_init( rtems_task_argument argument )
   rtems_status_code   status;
 
   /*  As each task is started, it preempts this task and
- *  performs a blocking rtems_message_queue_receive.  Upon completion of
- *  this loop all created tasks are blocked.
- */
+   *  performs a blocking rtems_message_queue_receive.  Upon completion of
+   *  this loop all created tasks are blocked.
+   */
 
   status = rtems_message_queue_create(
     rtems_build_name( 'M', 'Q', '1', ' ' ),

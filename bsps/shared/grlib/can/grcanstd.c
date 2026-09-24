@@ -77,24 +77,24 @@ static int grcan_hw_read_try(
   rp = READ_REG( &regs->rx0rd );
 
   /*
-	 * Due to hardware wrap around simplification write pointer will
-	 * never reach the read pointer, at least a gap of 8 bytes.
-	 * The only time they are equal is when the read pointer has
-	 * reached the write pointer (empty buffer)
-	 *
-	 */
+   * Due to hardware wrap around simplification write pointer will
+   * never reach the read pointer, at least a gap of 8 bytes.
+   * The only time they are equal is when the read pointer has
+   * reached the write pointer (empty buffer)
+   *
+   */
   if ( wp != rp ) {
     /* Not empty, we have received chars...
-		 * Read as much as possible from DMA buffer
-		 */
+     * Read as much as possible from DMA buffer
+     */
     size = READ_REG( &regs->rx0size );
 
     /* Get number of bytes available in RX buffer */
     trunk_msg_cnt = grcan_hw_rxavail( rp, wp, size );
 
     /* truncate size if user space buffer hasn't room for
-		 * all received chars.
-		 */
+     * all received chars.
+     */
     if ( trunk_msg_cnt > max ) {
       trunk_msg_cnt = max;
     }
@@ -294,10 +294,10 @@ int grcan_read( void *d, CANMsg *msg, size_t ucount )
       left = req_cnt - count; /* return as soon as all data are available */
 
       /* never wait for more than the half the maximum size of the receive buffer
-			 * Why? We need some time to copy buffer before to catch up with hw,
-			 * otherwise we would have to copy everything when the data has been
-			 * received.
-			 */
+       * Why? We need some time to copy buffer before to catch up with hw,
+       * otherwise we would have to copy everything when the data has been
+       * received.
+       */
       if ( left > ( ( pDev->rxbuf_size / GRCAN_MSG_SIZE ) / 2 ) ) {
         left = ( pDev->rxbuf_size / GRCAN_MSG_SIZE ) / 2;
       }
@@ -306,9 +306,9 @@ int grcan_read( void *d, CANMsg *msg, size_t ucount )
     nread = grcan_wait_rxdata( pDev, left );
     if ( nread ) {
       /* The wait has been aborted, probably due to
-			 * the device driver has been closed by another
-			 * thread or a bus-off. Return error code.
-			 */
+       * the device driver has been closed by another
+       * thread or a bus-off. Return error code.
+       */
       return nread;
     }
 
@@ -375,18 +375,18 @@ int grcan_write( void *d, CANMsg *msg, size_t ucount )
   /* if in txcomplete mode we need to transmit all chars */
   while ( ( count == 0 ) || ( pDev->txcomplete && ( count != req_cnt ) ) ) {
     /*** block until room to fit all or as much of transmit buffer as possible
-		 * IRQ comes. Set up a valid IRQ point so that an IRQ is received 
-		 * when we can put a chunk of data into transmit fifo
-		 */
+     * IRQ comes. Set up a valid IRQ point so that an IRQ is received
+     * when we can put a chunk of data into transmit fifo
+     */
     if ( !pDev->txcomplete ) {
       left = 1; /* wait for anything to fit buffer */
     } else {
       left = req_cnt - count; /* wait for all data to fit in buffer */
 
       /* never wait for more than the half the maximum size of the transmit
-			 * buffer 
-			 * Why? We need some time to fill buffer before hw catches up.
-			 */
+       * buffer
+       * Why? We need some time to fill buffer before hw catches up.
+       */
       if ( left > ( ( pDev->txbuf_size / GRCAN_MSG_SIZE ) / 2 ) ) {
         left = ( pDev->txbuf_size / GRCAN_MSG_SIZE ) / 2;
       }
@@ -395,11 +395,11 @@ int grcan_write( void *d, CANMsg *msg, size_t ucount )
     nwritten = grcan_wait_txspace( pDev, left );
     /* Wait until more room in transmit buffer */
     if ( nwritten ) {
-      /* The wait has been aborted, probably due to 
-			 * the device driver has been closed by another
-			 * thread. To avoid deadlock we return directly
-			 * with error status.
-			 */
+      /* The wait has been aborted, probably due to
+       * the device driver has been closed by another
+       * thread. To avoid deadlock we return directly
+       * with error status.
+       */
       return nwritten;
     }
 
@@ -461,8 +461,8 @@ int grcan_set_btrs( void *d, const struct grcan_timing *timing )
   FUNCDBG();
 
   /* Set BTR registers manually
-	 * Read GRCAN/HurriCANe Manual.
-	 */
+   * Read GRCAN/HurriCANe Manual.
+   */
   if ( ( pDev->started == STATE_STARTED ) || pDev->fd_capable ) {
     return -1;
   }

@@ -76,9 +76,9 @@ static void umask_test01( void )
   rtems_test_assert( status == 0 );
 
   /*
- *
- *  Call open creat and mkdir to create new files and directory
- */
+   *
+   *  Call open creat and mkdir to create new files and directory
+   */
   fd = open( file01, O_CREAT | O_RDWR, mode );
   status = close( fd );
   rtems_test_assert( status == 0 );

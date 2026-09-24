@@ -73,7 +73,7 @@ struct spictrl_regs {
  *   3. set_address()
  *   4. write()                   - Fills TX FIFO, this has some constraints
  *   5. ioctl(START)              - Starts the periodic transmission of the TX FIFO
- *   6. read()                    - Read one response of the tranistted data. It will 
+ *   6. read()                    - Read one response of the tranistted data. It will
  *                                  hang until data is available. If hanging is not an
  *                                  options use ioctl(STATUS)
  *   7. go back to 6.
@@ -93,16 +93,16 @@ struct spictrl_regs {
   5002 /* Configure Periodic transfer mode (before calling write() and START) */
 #define SPICTRL_IOCTL_STATUS 5003 /* Get status */
 
-#define SPICTRL_IOCTL_PERIOD_READ \
-  5005 /* Write transmit registers and mask register 
-						 * (only in automatic periodic mode) 
-						 * Note that it is probably prefferred to read
-						 * the received words using the read() using
-						 * operations instead.
-						 */
-#define SPICTRL_IOCTL_PERIOD_WRITE \
-  5006                          /* Read receive registers and mask register 
-						 * (only in automatic periodic mode) */
+#define SPICTRL_IOCTL_PERIOD_READ                     \
+  5005 /* Write transmit registers and mask register  \
+        * (only in automatic periodic mode)           \
+        * Note that it is probably prefferred to read \
+        * the received words using the read() using   \
+        * operations instead.                         \
+        */
+#define SPICTRL_IOCTL_PERIOD_WRITE                                          \
+  5006                          /* Read receive registers and mask register \
+                                 * (only in automatic periodic mode) */
 #define SPICTRL_IOCTL_REGS 5007 /* Get SPICTRL Register */
 
 /* SPICTRL_IOCTL_CONFIG argument */
@@ -128,20 +128,20 @@ struct spictrl_ioctl_config {
 #define SPICTRL_PERIOD_FLAGS_ASEL   0x04
 #define SPICTRL_PERIOD_FLAGS_EACT   0x01
 
-/* SPICTRL_IOCTL_PERIOD_READ and SPICTRL_IOCTL_PERIOD_WRITE Argument data structure 
+/* SPICTRL_IOCTL_PERIOD_READ and SPICTRL_IOCTL_PERIOD_WRITE Argument data structure
  *
  * Note that the order of reading the mask registers are different for read/write
  *      operation. See options notes.
  */
 struct spictrl_period_io {
   int          options; /* READ: bit0=Read Mask Registers into masks[].
-			 *       bit1=Read Receive registers according to masks[]
-			 *            (after reading masks).
-			 *
-			 * WRITE: bit0=Update Mask accoring to masks[].
-			 *        bit1=Update Transmit registers according to masks[].
-			 *             (before reading masks)
-			 */
+                         *       bit1=Read Receive registers according to masks[]
+                         *            (after reading masks).
+                         *
+                         * WRITE: bit0=Update Mask accoring to masks[].
+                         *        bit1=Update Transmit registers according to masks[].
+                         *             (before reading masks)
+                         */
   unsigned int masks[ 4 ];
 
   void *data; /* Data read sequentially according to masks[] bit. */

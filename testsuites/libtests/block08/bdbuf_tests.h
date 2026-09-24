@@ -80,9 +80,9 @@ enum bdbuf_test_msg_type {
   /** Message sent by disk driver to main test task */
   BDBUF_TEST_MSG_TYPE_DRIVER_REQ,
   /**
-     * Message sent main test task to disk driver
-     * in reply to request.
-     */
+   * Message sent main test task to disk driver
+   * in reply to request.
+   */
   BDBUF_TEST_MSG_TYPE_DRIVER_REPLY,
 };
 
@@ -121,41 +121,41 @@ typedef enum bdbuf_rest_thread_prio {
 
 typedef struct test_ctx {
   /**
-     * Message queue used by main task to get messages from
-     * disk device driver.
-     */
+   * Message queue used by main task to get messages from
+   * disk device driver.
+   */
   Objects_Id test_qid;
 
   /**
-     * Object ID for disk driver queue.
-     * Test task will send messages to this queue in reply
-     * to messages received on @a test_qid.
-     */
+   * Object ID for disk driver queue.
+   * Test task will send messages to this queue in reply
+   * to messages received on @a test_qid.
+   */
   Objects_Id test_drv_qid;
 
   /** Test name */
   const char *test_name;
 
   /**
-     * Semaphore used for synchronization between test thread
-     * and main test task.
-     * Main test task blocks on one of these semaphores and an auxiliary thread
-     * releases it in order to pass control to main task again.
-     */
+   * Semaphore used for synchronization between test thread
+   * and main test task.
+   * Main test task blocks on one of these semaphores and an auxiliary thread
+   * releases it in order to pass control to main task again.
+   */
   rtems_id test_sync_main[ 3 ];
 
   /**
-     * This semaphore is used for synchornization between main test task
-     * and the END of auxiliary threads.
-     */
+   * This semaphore is used for synchornization between main test task
+   * and the END of auxiliary threads.
+   */
   rtems_id test_end_main;
 
   /**
-     * Semaphore used for synchronization between test thread
-     * and main test task.
-     * Thread #N blocks on this semaphore and the main task releases it
-     * when it wants to pass control to the auxiliary thread #N.
-     */
+   * Semaphore used for synchronization between test thread
+   * and main test task.
+   * Thread #N blocks on this semaphore and the main task releases it
+   * when it wants to pass control to the auxiliary thread #N.
+   */
   rtems_id test_sync[ 3 ];
 
   /** Task Id values of auxiliary threads */

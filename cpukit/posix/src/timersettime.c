@@ -135,8 +135,8 @@ int timer_settime(
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
-  /* 
-   * First, it verifies if the structure "value" is correct   
+  /*
+   * First, it verifies if the structure "value" is correct
    * if the number of nanoseconds is not correct return EINVAL
    */
   if ( !_Timespec_Is_valid( &( value->it_value ) ) ) {

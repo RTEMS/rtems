@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*  GR-CPCI-GR740 PCI Target driver.
- * 
+ *
  *  COPYRIGHT (c) 2017.
  *  Cobham Gaisler AB.
  *
@@ -258,8 +258,8 @@ void gr_cpci_gr740_isr( void *arg )
   SPIN_UNLOCK( &priv->devlock, irqflags );
 
   /* ACK interrupt, this is because PCI is Level, so the IRQ Controller
-	 * still drives the IRQ
-	 */
+   * still drives the IRQ
+   */
   if ( tmp ) {
     drvmgr_interrupt_clear( priv->dev, 0 );
   }
@@ -289,10 +289,10 @@ static int gr_cpci_gr740_hw_init1( struct gr_cpci_gr740_priv *priv )
   pci_cfg_r8( pcidev, PCIR_CAP_PTR, &cap_ptr );
 
   /* Set AHB address mappings for target PCI bars
-	 *  BAR0 maps to 0x00000000-0x07ffffff 128MB (SDRAM/DDR2 memory)
-	 *  BAR1 maps to 0xf0000000-0xf7ffffff 128MB (L2-Cache regs/diagnostics)
-	 *  BAR2 maps to 0xff800000-0xffffffff   8MB (PnP, I/O regs)
-	 */
+   *  BAR0 maps to 0x00000000-0x07ffffff 128MB (SDRAM/DDR2 memory)
+   *  BAR1 maps to 0xf0000000-0xf7ffffff 128MB (L2-Cache regs/diagnostics)
+   *  BAR2 maps to 0xff800000-0xffffffff   8MB (PnP, I/O regs)
+   */
   pci_cfg_w32( pcidev, cap_ptr + GRPCI2_BAR0_TO_AHB_MAP, 0x00000000 );
   pci_cfg_w32( pcidev, cap_ptr + GRPCI2_BAR1_TO_AHB_MAP, 0xf0000000 );
   pci_cfg_w32( pcidev, cap_ptr + GRPCI2_BAR2_TO_AHB_MAP, 0xff800000 );
@@ -356,11 +356,11 @@ static int gr_cpci_gr740_hw_init1( struct gr_cpci_gr740_priv *priv )
   }
   priv->irq = (struct irqmp_regs *) DEV_TO_APB( tmp )->start;
   /* Set up GR-CPCI-GR740 irq controller
-	 * Interrupts are routed from IRQCtrl0, we leave the configuration
-	 * for the other CPUs, as the board's CPUs may be running something.
-	 * We assume IRQCtrl has been set up properly, or at least the reset
-	 * values shuold work with this code..
-	 */
+   * Interrupts are routed from IRQCtrl0, we leave the configuration
+   * for the other CPUs, as the board's CPUs may be running something.
+   * We assume IRQCtrl has been set up properly, or at least the reset
+   * values shuold work with this code..
+   */
   priv->irq->mask[ 0 ] = 0;
   priv->irq->iforce = 0;
   priv->irq->force[ 0 ] = 0;
@@ -477,7 +477,7 @@ static int gr_cpci_gr740_hw_init2( struct gr_cpci_gr740_priv *priv )
   return DRVMGR_OK;
 }
 
-/* Called when a PCI target is found with the PCI device and vendor ID 
+/* Called when a PCI target is found with the PCI device and vendor ID
  * given in gr_cpci_gr740_ids[].
  */
 int gr_cpci_gr740_init1( struct drvmgr_dev *dev )
@@ -537,19 +537,19 @@ int gr_cpci_gr740_init1( struct drvmgr_dev *dev )
   printk( " IRQ: %d\n\n\n", devinfo->irq );
 
   /* Initialize spin-lock for this PCI perihperal device. This is to
-	 * protect the Interrupt Controller Registers. The genirq layer is
-         * protecting its own internals and ISR dispatching.
-         */
+   * protect the Interrupt Controller Registers. The genirq layer is
+   * protecting its own internals and ISR dispatching.
+   */
   SPIN_INIT( &priv->devlock, priv->prefix );
 
   /* Let user override which PCI address the AHB masters of the
-	 * GR740 board access when doing DMA to HOST RAM. The AHB masters
-	 * access the PCI Window of the AMBA bus, the MSB 2-bits of that address
-	 * is translated according this config option before the address goes
-	 * out on the PCI bus.
-	 *
-	 * Only the 2 MSB bits have an effect.
-	 */
+   * GR740 board access when doing DMA to HOST RAM. The AHB masters
+   * access the PCI Window of the AMBA bus, the MSB 2-bits of that address
+   * is translated according this config option before the address goes
+   * out on the PCI bus.
+   *
+   * Only the 2 MSB bits have an effect.
+   */
   value = drvmgr_dev_key_get( priv->dev, "ahbmst2pci", DRVMGR_KT_INT );
   if ( value ) {
     priv->ahbmst2pci_map = value->i;
@@ -557,9 +557,9 @@ int gr_cpci_gr740_init1( struct drvmgr_dev *dev )
     priv->ahbmst2pci_map = AHBMST2PCIADR; /* default */
   }
 
-  /* Let user override the default AMBA system frequency of the 
-	 * CPU-bus of the remote GR-CPCI-GR740. Default is 250MHz.
-	 */
+  /* Let user override the default AMBA system frequency of the
+   * CPU-bus of the remote GR-CPCI-GR740. Default is 250MHz.
+   */
   value = drvmgr_dev_key_get( priv->dev, "ambaFreq", DRVMGR_KT_INT );
   if ( value ) {
     priv->amba_freq_hz = value->i;
@@ -568,8 +568,8 @@ int gr_cpci_gr740_init1( struct drvmgr_dev *dev )
   }
 
   /* Let user determine clock-gating unit configuration. The default
-	 * is to turn all cores on (disable gating). PCI is always turned ON.
-	 */
+   * is to turn all cores on (disable gating). PCI is always turned ON.
+   */
   value = drvmgr_dev_key_get( priv->dev, "cgEnMask", DRVMGR_KT_INT );
   if ( value ) {
     priv->cg_en_mask = ( value->i & CG_MASK ) | 0x08;
@@ -611,14 +611,14 @@ int gr_cpci_gr740_init2( struct drvmgr_dev *dev )
   drvmgr_interrupt_clear( dev, 0 );
 
   /* Enable System IRQ so that GR-CPCI-GR740 PCI target interrupt
-	 * goes through.
-	 *
-	 * It is important to enable it in stage init2. If interrupts were
-	 * enabled in init1 this might hang the system when more than one
-	 * PCI board is connected, this is because PCI interrupts might
-	 * be shared and PCI board 2 have not initialized and
-	 * might therefore drive interrupt already when entering init1().
-	 */
+   * goes through.
+   *
+   * It is important to enable it in stage init2. If interrupts were
+   * enabled in init1 this might hang the system when more than one
+   * PCI board is connected, this is because PCI interrupts might
+   * be shared and PCI board 2 have not initialized and
+   * might therefore drive interrupt already when entering init1().
+   */
   drvmgr_interrupt_register(
     dev,
     0,

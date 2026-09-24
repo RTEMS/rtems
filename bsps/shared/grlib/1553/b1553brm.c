@@ -190,10 +190,10 @@ typedef struct {
 
 #if defined( DMA_MEM_128K )
   /* Memory structure of a RT being inited, just used
-	 * for RT initialization.
-	 *
-	 * *mesgs[32] fit each minimally 8 messages per sub address.
-	 */
+   * for RT initialization.
+   *
+   * *mesgs[32] fit each minimally 8 messages per sub address.
+   */
   struct {
     /* RX Sub Address descriptors */
     struct desc_table rxsubs[ 32 ];
@@ -222,11 +222,11 @@ typedef struct {
   } *rtmem;
 #elif defined( DMA_MEM_16K )
   /* Memory structure of a RT being inited, just used
-	 * for RT initialization.
-	 *
-	 * circ_buf_2 *mesgs[32] fit each minimally 2 messages per queue.
-	 * circ_buf_1 *mesgs[32] fit each minimally 1 messages per queue.
-	 */
+   * for RT initialization.
+   *
+   * circ_buf_2 *mesgs[32] fit each minimally 2 messages per queue.
+   * circ_buf_1 *mesgs[32] fit each minimally 1 messages per queue.
+   */
   struct {
     /* RX Sub Address descriptors */
     struct desc_table rxsubs[ 32 ];
@@ -378,9 +378,9 @@ int b1553brm_init3( struct drvmgr_dev *dev )
     b1553brm_driver_io_registered = 1;
   }
 
-  /* I/O system registered and initialized 
-	 * Now we take care of device initialization.
-	 */
+  /* I/O system registered and initialized
+   * Now we take care of device initialization.
+   */
 
   if ( b1553brm_device_init( priv ) ) {
     return DRVMGR_FAIL;
@@ -390,13 +390,13 @@ int b1553brm_init3( struct drvmgr_dev *dev )
   prefix[ 0 ] = '\0';
   if ( drvmgr_get_dev_prefix( dev, prefix ) ) {
     /* Failed to get prefix, make sure of a unique FS name
-		 * by using the driver minor.
-		 */
+     * by using the driver minor.
+     */
     sprintf( priv->devName, "/dev/b1553brm%d", dev->minor_drv );
   } else {
     /* Got special prefix, this means we have a bus prefix
-		 * And we should use our "bus minor"
-		 */
+     * And we should use our "bus minor"
+     */
     sprintf( priv->devName, "/dev/%sb1553brm%d", prefix, dev->minor_bus );
   }
 
@@ -481,9 +481,9 @@ int b1553brm_device_init( brm_priv *pDev )
   }
   pnpinfo = &ambadev->info;
   pDev->irqno = pnpinfo->irq;
-  /* Two versions of the BRM core. One where the registers are accessed using the AHB bus 
-	 * and one where the APB bus is used
-	 */
+  /* Two versions of the BRM core. One where the registers are accessed using the AHB bus
+   * and one where the APB bus is used
+   */
   if ( pnpinfo->ahb_slv ) {
     /* Registers accessed over AHB */
     pDev->regs = (struct brm_reg *) (uintptr_t) pnpinfo->ahb_slv->start[ 0 ];
@@ -524,8 +524,8 @@ int b1553brm_device_init( brm_priv *pDev )
   } else {
     if ( !value ) {
       /* Use dynamically allocated memory + 128k for
-			 * alignment
-			 */
+       * alignment
+       */
       mem = (uintptr_t) grlib_malloc( size + 128 * 1024 );
       if ( !mem ) {
         printk( "BRM: Failed to allocate HW memory\n\r" );
@@ -741,11 +741,11 @@ static rtems_device_driver rt_init( brm_priv *brm )
     brm->regs->rt_cmd_leg[ i ] = b1553brm_rt_cmd_legalize[ i ];
   }
 
-  /* Init descriptor table 
-	 * 
-	 * Each circular buffer has room for 8 messages with up to 34 (32 data + miw + time) words (16b) in each.
-	 * The buffers must separated by 34 words.
-	 */
+  /* Init descriptor table
+   *
+   * Each circular buffer has room for 8 messages with up to 34 (32 data + miw + time) words (16b) in each.
+   * The buffers must separated by 34 words.
+   */
 
   /* RX Sub-address 0 - 31 */
   for ( i = 0; i < 32; i++ ) {
@@ -1326,8 +1326,8 @@ static rtems_device_driver brm_control(
         brm->bcmem->descs[ i ].cw1 = cw1;
         brm->bcmem->descs[ i ].cw2 = cw2;
         /* data pointer:
-			 * (&brm->bcmem->msg_data[i].data[0] & 0x1ffff) / 2 
-			 */
+         * (&brm->bcmem->msg_data[i].data[0] & 0x1ffff) / 2
+         */
         brm->bcmem->descs[ i ].dptr = 1024 + i * 32; /* data pointer */
         brm->bcmem->descs[ i ].tsw[ 0 ] = 0;
         brm->bcmem->descs[ i ].tsw[ 1 ] = 0;
@@ -1454,11 +1454,11 @@ static void b1553brm_interrupt( void *arg )
 
     /* Clear the log so that we */
 
-    /* Subaddress accessed irq (RT only) 
-		 *
-		 * Can be either a receive or transmit command
-		 * as well as a mode code.
-		*/
+    /* Subaddress accessed irq (RT only)
+     *
+     * Can be either a receive or transmit command
+     * as well as a mode code.
+     */
     if ( pending & BRM_SUBAD_IRQ ) {
       /* Pointer to next free message in circular buffer */
       current = READ_DMA( &brm->desc[ descriptor ].cur );
@@ -1470,9 +1470,9 @@ static void b1553brm_interrupt( void *arg )
       brm->log[ brm->log_i++ % EVENT_QUEUE_SIZE ] = 0;
 #endif
       accessed = ctrl & 0x10;
-      /* Note that current may be equal to bot and top when 
-			 * circular buffer one can handle one message.
-			 */
+      /* Note that current may be equal to bot and top when
+       * circular buffer one can handle one message.
+       */
       if ( accessed ) {
         do {
           msgadr = brm->last_read[ descriptor ];
@@ -1618,10 +1618,10 @@ static void b1553brm_interrupt( void *arg )
       wake_rx_task = 1;
     }
 
-    /* The reset of the interrupts 
-		 * cause a event to be signalled
-		 * so that user can handle error.
-		 */
+    /* The reset of the interrupts
+     * cause a event to be signalled
+     * so that user can handle error.
+     */
     if ( pending & BRM_RT_ILLCMD_IRQ ) {
       FUNCDBG( "BRM: BRM_RT_ILLCMD_IRQ\n\r" );
       brm->status |= BRM_RT_ILLCMD_IRQ;

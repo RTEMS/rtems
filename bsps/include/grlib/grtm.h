@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /* GRTM Telemetry (TM) driver interface
- * 
+ *
  * COPYRIGHT (c) 2007.
  * Cobham Gaisler AB.
  *
@@ -231,15 +231,15 @@ struct grtm_list {
 #define GRTM_FLAGS_TRANSLATE \
   ( 1                        \
     << 31 ) /* Translate frame payload address from CPU address to remote bus (the bus GRTM is resident on) */
-#define GRTM_FLAGS_TRANSLATE_AND_REMEMBER \
-  ( 1                                     \
-    << 30 ) /* As GRTM_FLAGS_TRANSLATE, however if the translated payload address equals the payload address
-							 * the GRTM_FLAGS_TRANSLATE_AND_REMEMBER bit is cleared and the GRTM_FLAGS_TRANSLATE bit is set */
-#define GRTM_FLAGS_COPY_DATA \
-  ( 1                        \
-    << 29 ) /* Where available: Transfer Frame payload to target, may be used for SpaceWire, where the GRTM driver transfer 
-					 * the payload to a buffer on the SpaceWire target. 
-					 */
+#define GRTM_FLAGS_TRANSLATE_AND_REMEMBER                                                                    \
+  ( 1                                                                                                        \
+    << 30 ) /* As GRTM_FLAGS_TRANSLATE, however if the translated payload address equals the payload address \
+             * the GRTM_FLAGS_TRANSLATE_AND_REMEMBER bit is cleared and the GRTM_FLAGS_TRANSLATE bit is set */
+#define GRTM_FLAGS_COPY_DATA                                                                                                \
+  ( 1                                                                                                                       \
+    << 29 ) /* Where available: Transfer Frame payload to target, may be used for SpaceWire, where the GRTM driver transfer \
+             * the payload to a buffer on the SpaceWire target.                                                             \
+             */
 
 #define GRTM_FLAGS_TS    ( 1 << 14 )
 #define GRTM_FLAGS_VCE   ( 1 << 9 )

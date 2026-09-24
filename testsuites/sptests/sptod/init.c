@@ -4,7 +4,7 @@
  * @file
  *
  * This test exercises the get time of day and set time of day
- * 
+ *
  */
 
 /*

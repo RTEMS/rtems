@@ -265,9 +265,9 @@ int spictrl_init3( struct drvmgr_dev *dev )
     return DRVMGR_FAIL;
   }
 
-  /* I/O system registered and initialized 
-	 * Now we take care of device initialization.
-	 */
+  /* I/O system registered and initialized
+   * Now we take care of device initialization.
+   */
 
   /* Get frequency */
   if ( drvmgr_freq_get( dev, DEV_APB_SLV, &priv->core_freq_hz ) ) {
@@ -284,13 +284,13 @@ int spictrl_init3( struct drvmgr_dev *dev )
   prefix[ 0 ] = '\0';
   if ( drvmgr_get_dev_prefix( dev, prefix ) ) {
     /* Failed to get prefix, make sure of a unique FS name
-		 * by using the driver minor.
-		 */
+     * by using the driver minor.
+     */
     sprintf( devName, "/dev/spi%d", dev->minor_drv + 1 );
   } else {
     /* Got special prefix, this means we have a bus prefix
-		 * And we should use our "bus minor"
-		 */
+     * And we should use our "bus minor"
+     */
     sprintf( devName, "/dev/%sspi%d", prefix, dev->minor_bus + 1 );
   }
 
@@ -312,7 +312,7 @@ int spictrl_init3( struct drvmgr_dev *dev )
 STATIC rtems_status_code
 spictrl_libi2c_send_addr( rtems_libi2c_bus_t *bushdl, uint32_t addr, int rw );
 
-/* Set as high frequency of SCK as possible but not higher than 
+/* Set as high frequency of SCK as possible but not higher than
  * requested frequency (freq).
  */
 static int spictrl_set_freq( struct spictrl_priv *priv, unsigned int freq )
@@ -412,7 +412,7 @@ static void spictrl_stop_periodic( struct spictrl_priv *priv )
   priv->regs->am_cfg = 0;
 }
 
-/* Return the status of the SPI controller (the event register), 
+/* Return the status of the SPI controller (the event register),
  * it may be needed in periodic mode to look at the Not Full bit (NF)
  * in order not to hang in an infinte loop when read is called.
  */
@@ -439,8 +439,8 @@ static int spictrl_read_periodic(
 
   if ( rarg->options & 0x2 ) {
     /* Read receive registers (after updating masks so that the caller can
-		 * read current buffer without knowning of actual register mask).
-		 */
+     * read current buffer without knowning of actual register mask).
+     */
 
     /* If not started we could be hanging here forever. */
     if ( !priv->periodic_started ) {
@@ -504,8 +504,8 @@ static int spictrl_write_periodic(
     priv->regs->mode |= SPICTRL_MODE_EN;
 
     /* Update Transmit registers (before updating masks so that we do not
-		 * transmit invalid data)
-		 */
+     * transmit invalid data)
+     */
 
     txshift = priv->txshift;
     bits_per_char = priv->bits_per_char;
@@ -514,8 +514,8 @@ static int spictrl_write_periodic(
     txbuf = warg->data;
     if ( !txbuf ) {
       /* If no data pointer specified we fill up with
-			 * idle chars.
-			 */
+       * idle chars.
+       */
       tx_word = priv->idle_char << txshift;
     }
 
@@ -581,9 +581,9 @@ static int spictrl_read_write(
   int          txi, rxi, bits_per_char;
   int          length;
 
-  /* Use IOCTL for periodic reads. The FIFO is not supported in automated 
-	 * periodic mode 
-	 */
+  /* Use IOCTL for periodic reads. The FIFO is not supported in automated
+   * periodic mode
+   */
   if ( priv->periodic_cfg.periodic_mode ) {
     return -1;
   }
@@ -748,10 +748,10 @@ spictrl_libi2c_send_addr( rtems_libi2c_bus_t *bushdl, uint32_t addr, int rw )
       ( priv->periodic_cfg.period_flags & SPICTRL_PERIOD_FLAGS_ASEL )
     ) {
       /* When automatic slave select is supported by hardware and
-			 * enabled by configuration the SPI address is determined by 
-			 * the automatic slave select register and the "idle" slave
-			 * select register is set by configuration.
-			 */
+       * enabled by configuration the SPI address is determined by
+       * the automatic slave select register and the "idle" slave
+       * select register is set by configuration.
+       */
       priv->regs->am_slvsel = ~( 1 << ( addr - 1 ) );
       priv->regs->slvsel = priv->periodic_cfg.period_slvsel;
       /* Enable automatic slave select */

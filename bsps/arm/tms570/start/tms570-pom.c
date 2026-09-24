@@ -122,7 +122,7 @@ void tms570_pom_remap( void )
   /*
    * Copy the RTEMS first level exception processing code
    * to RAM area which can be used for later as POM overlay
-   * of Flash vectors. The code is expected to consist of 
+   * of Flash vectors. The code is expected to consist of
    * eight instructions in the form:
    *   ldr pc, [pc,#0x18]
    * followed by eight words with actual exception service

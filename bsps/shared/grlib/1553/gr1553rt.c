@@ -94,8 +94,8 @@ struct gr1553rt_priv {
   struct gr1553rt_subadr subadrs[ 32 ];
 
   /* Pointer to array of Software's description of a hardware
-	 * descriptor.
-	 */
+   * descriptor.
+   */
 #if ( RTBD_MAX == 0 )
   struct gr1553rt_sw_bd *swbds;
 #else
@@ -262,11 +262,11 @@ int gr1553rt_list_init(
   struct gr1553rt_list  *list;
 
   /* The user may provide a pre allocated LIST, or
-	 * let the driver handle allocation by using malloc()
-	 *
-	 * If the IN/OUT plist argument points to NULL a list
-	 * dynamically allocated here.
-	 */
+   * let the driver handle allocation by using malloc()
+   *
+   * If the IN/OUT plist argument points to NULL a list
+   * dynamically allocated here.
+   */
   malloc_used = 0;
   list = *plist;
   if ( list == NULL ) {
@@ -309,9 +309,9 @@ int gr1553rt_list_init(
   }
 
   /* Now that the next pointer has fullfilled it's job and not
-	 * needed anymore, we use it as list entry pointer instead.
-	 * The this_next pointer is a list entry number.
-	 */
+   * needed anymore, we use it as list entry pointer instead.
+   * The this_next pointer is a list entry number.
+   */
   for ( i = 0; i < list->bd_cnt; i++ ) {
     priv->swbds[ list->bds[ i ] ].this_next = i;
   }
@@ -350,8 +350,8 @@ int gr1553rt_bd_init(
   }
 
   /* Find next descriptor in address space that the
-	 * Hardware understand.
-	 */
+   * Hardware understand.
+   */
   if ( next >= 0xffff ) {
     nextbd = 0x3; /* End of list */
   } else if ( next >= list->bd_cnt ) {
@@ -409,8 +409,8 @@ int gr1553rt_bd_update(
   if ( dptr && ( dataptr = (unsigned int) (uintptr_t) *dptr ) ) {
     if ( dataptr & 1 ) {
       /* Translate address from CPU-local into remote. May
-			 * be used when RT core is accessed over the PCI bus.
-			 */
+       * be used when RT core is accessed over the PCI bus.
+       */
       dataptr &= ~1;
       drvmgr_translate(
         *priv->pdev,
@@ -510,9 +510,9 @@ void gr1553rt_isr( void *data )
   SPIN_ISR_IRQFLAGS( irqflags );
 
   /* Ack IRQ before reading current write pointer, but after
-	 * reading current IRQ pointer. This is because RT_EVIRQ
-	 * may be updated after we ACK the IRQ source.
-	 */
+   * reading current IRQ pointer. This is because RT_EVIRQ
+   * may be updated after we ACK the IRQ source.
+   */
   irq = priv->regs->irq &
         ( GR1553B_IRQ_RTTE | GR1553B_IRQ_RTD | GR1553B_IRQ_RTEV );
   if ( irq == 0 ) {
@@ -538,18 +538,18 @@ void gr1553rt_isr( void *data )
     }
 
     /* Stop Hardware and enter non-started mode. This will
-		 * make all future calls to driver result in an error.
-		 */
+     * make all future calls to driver result in an error.
+     */
     gr1553rt_stop( priv );
   }
 
   /* Step between first log entry causing an IRQ to last
-	 * entry. Each entry that has caused an IRQ will be handled
-	 * by calling user-defined function.
-	 *
-	 * We convert hardware addresses into CPU accessable addresses
-	 * first.
-	 */
+   * entry. Each entry that has caused an IRQ will be handled
+   * by calling user-defined function.
+   *
+   * We convert hardware addresses into CPU accessable addresses
+   * first.
+   */
   index = ( firstirq - (uintptr_t) priv->evlog_hw_base ) /
           sizeof( unsigned int );
   curr = priv->evlog_cpu_base + index;
@@ -704,8 +704,8 @@ void *gr1553rt_open( int minor )
   gr1553rt_hw_stop( priv );
 
   /* Register ISR handler. hardware mask IRQ, so it is safe to unmask
-	 * at IRQ controller.
-	 */
+   * at IRQ controller.
+   */
   if (
     drvmgr_interrupt_register( *priv->pdev, 0, "gr1553rt", gr1553rt_isr, priv )
   ) {
@@ -752,8 +752,8 @@ void gr1553rt_hw_stop( struct gr1553rt_priv *priv )
   GR1553RT_WRITE_REG( &priv->regs->rt_cfg, GR1553RT_KEY );
 
   /* Stop BC if not already stopped: BC can not be used simultaneously
-	 * as the RT anyway
-	 */
+   * as the RT anyway
+   */
   GR1553RT_WRITE_REG( &priv->regs->bc_ctrl, GR1553BC_KEY | 0x0204 );
 
   /* Turn off RT IRQ generation */
@@ -968,8 +968,8 @@ void gr1553rt_sw_init( struct gr1553rt_priv *priv )
   gr1553rt_bd_alloc_init( priv, priv->bds_cnt );
 
   /* Init table used to convert from sub address to list.
-	 * Currently non assigned.
-	 */
+   * Currently non assigned.
+   */
   for ( i = 0; i < 32; i++ ) {
     priv->subadrs[ i ].rxlistid = 0xff;
     priv->subadrs[ i ].txlistid = 0xff;

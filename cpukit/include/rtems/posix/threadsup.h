@@ -50,7 +50,7 @@
  *  @defgroup RTEMSImplPOSIXThreadExtension POSIX Thread API Extension
  *
  *  @ingroup RTEMSImplPOSIX
- * 
+ *
  */
 /**@{**/
 #ifdef __cplusplus
@@ -96,7 +96,7 @@ typedef struct {
      * @brief Maximum pending replenishments.
      *
      * Only used by pthread_getschedparam() and pthread_getattr_np().
-    */
+     */
     int sched_ss_max_repl;
   } Sporadic;
 

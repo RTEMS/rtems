@@ -41,7 +41,7 @@
 
 /* Note that it is not possible to use the interrupt mode of the driver
  * together with the "old" APBUART and -u to GRMON. However the new
- * APBUART core (from 1.0.17-b2710) has the GRMON debug bit and can 
+ * APBUART core (from 1.0.17-b2710) has the GRMON debug bit and can
  * handle interrupts.
  */
 
@@ -127,8 +127,8 @@ void console_dev_register( struct console_dev *dev )
 
   if ( console_initialized ) {
     /* Console layer is already initialized, that means that we can
-		 * register termios interface directly.
-		 */
+     * register termios interface directly.
+     */
     console_dev_init( con );
   }
 }

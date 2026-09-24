@@ -61,9 +61,9 @@
 RTEMS_SECTION(".rtemsroset.copyright") const char _Copyright_Notice[] =
   "Copyright (C) 1989, 2021 RTEMS Project and contributors";
 
-/* 
+/*
  * Add a custom section (.debug_gdb_scripts) to every
- * ELF being built on RTEMS, in order to add auto-loading 
+ * ELF being built on RTEMS, in order to add auto-loading
  * support for Python scripts (specifically, GCC's pretty-printing
  * scripts), by in-lining the Python script in the section.
  */
