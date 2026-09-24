@@ -39,7 +39,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/io/if/header */
+/* Find related documentation with spec:/rtems/io/if/header */
 
 #ifndef _RTEMS_IO_H
 #define _RTEMS_IO_H
@@ -51,7 +51,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/io/if/group */
+/* Find related documentation with spec:/rtems/io/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicIO I/O Manager
@@ -63,7 +63,7 @@ extern "C" {
  *   device drivers.
  */
 
-/* Generated from spec:/rtems/io/if/device-driver */
+/* Find related documentation with spec:/rtems/io/if/device-driver */
 
 /**
  * @ingroup RTEMSAPIClassicIO
@@ -77,7 +77,7 @@ extern "C" {
  */
 typedef rtems_status_code rtems_device_driver;
 
-/* Generated from spec:/rtems/io/if/device-major-number */
+/* Find related documentation with spec:/rtems/io/if/device-major-number */
 
 /**
  * @ingroup RTEMSAPIClassicIO
@@ -90,7 +90,7 @@ typedef rtems_status_code rtems_device_driver;
  */
 typedef uint32_t rtems_device_major_number;
 
-/* Generated from spec:/rtems/io/if/device-minor-number */
+/* Find related documentation with spec:/rtems/io/if/device-minor-number */
 
 /**
  * @ingroup RTEMSAPIClassicIO
@@ -102,7 +102,7 @@ typedef uint32_t rtems_device_major_number;
  */
 typedef uint32_t rtems_device_minor_number;
 
-/* Generated from spec:/rtems/io/if/device-driver-entry */
+/* Find related documentation with spec:/rtems/io/if/device-driver-entry */
 
 /**
  * @ingroup RTEMSAPIClassicIO
@@ -115,7 +115,7 @@ typedef rtems_device_driver ( *rtems_device_driver_entry )(
   void *
 );
 
-/* Generated from spec:/rtems/io/if/driver-address-table */
+/* Find related documentation with spec:/rtems/io/if/driver-address-table */
 
 /**
  * @ingroup RTEMSAPIClassicIO
@@ -169,7 +169,7 @@ typedef struct {
   rtems_device_driver_entry control_entry;
 } rtems_driver_address_table;
 
-/* Generated from spec:/rtems/io/if/register-driver */
+/* Find related documentation with spec:/rtems/io/if/register-driver */
 
 /**
  * @ingroup RTEMSAPIClassicIO
@@ -223,7 +223,7 @@ rtems_status_code rtems_io_register_driver(
   rtems_device_major_number        *registered_major
 );
 
-/* Generated from spec:/rtems/io/if/unregister-driver */
+/* Find related documentation with spec:/rtems/io/if/unregister-driver */
 
 /**
  * @ingroup RTEMSAPIClassicIO
@@ -247,7 +247,7 @@ rtems_status_code rtems_io_unregister_driver(
   rtems_device_major_number major
 );
 
-/* Generated from spec:/rtems/io/if/initialize */
+/* Find related documentation with spec:/rtems/io/if/initialize */
 
 /**
  * @ingroup RTEMSAPIClassicIO
@@ -289,7 +289,7 @@ rtems_status_code rtems_io_initialize(
   void                     *argument
 );
 
-/* Generated from spec:/rtems/io/if/register-name */
+/* Find related documentation with spec:/rtems/io/if/register-name */
 
 /**
  * @ingroup RTEMSAPIClassicIO
@@ -317,7 +317,7 @@ rtems_status_code rtems_io_register_name(
   rtems_device_minor_number minor
 );
 
-/* Generated from spec:/rtems/io/if/open */
+/* Find related documentation with spec:/rtems/io/if/open */
 
 /**
  * @ingroup RTEMSAPIClassicIO
@@ -349,7 +349,7 @@ rtems_status_code rtems_io_open(
   void                     *argument
 );
 
-/* Generated from spec:/rtems/io/if/close */
+/* Find related documentation with spec:/rtems/io/if/close */
 
 /**
  * @ingroup RTEMSAPIClassicIO
@@ -381,7 +381,7 @@ rtems_status_code rtems_io_close(
   void                     *argument
 );
 
-/* Generated from spec:/rtems/io/if/read */
+/* Find related documentation with spec:/rtems/io/if/read */
 
 /**
  * @ingroup RTEMSAPIClassicIO
@@ -415,7 +415,7 @@ rtems_status_code rtems_io_read(
   void                     *argument
 );
 
-/* Generated from spec:/rtems/io/if/write */
+/* Find related documentation with spec:/rtems/io/if/write */
 
 /**
  * @ingroup RTEMSAPIClassicIO
@@ -447,7 +447,7 @@ rtems_status_code rtems_io_write(
   void                     *argument
 );
 
-/* Generated from spec:/rtems/io/if/control */
+/* Find related documentation with spec:/rtems/io/if/control */
 
 /**
  * @ingroup RTEMSAPIClassicIO

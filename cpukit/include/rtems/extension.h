@@ -39,7 +39,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/userext/if/header */
+/* Find related documentation with spec:/rtems/userext/if/header */
 
 #ifndef _RTEMS_EXTENSION_H
 #define _RTEMS_EXTENSION_H
@@ -53,7 +53,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/userext/if/group */
+/* Find related documentation with spec:/rtems/userext/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicUserExt User Extensions Manager
@@ -65,7 +65,7 @@ extern "C" {
  *   are invoked at critical system events.
  */
 
-/* Generated from spec:/rtems/userext/if/delete */
+/* Find related documentation with spec:/rtems/userext/if/delete */
 
 /**
  * @ingroup RTEMSAPIClassicUserExt
@@ -102,7 +102,7 @@ extern "C" {
  */
 rtems_status_code rtems_extension_delete( rtems_id id );
 
-/* Generated from spec:/rtems/userext/if/fatal */
+/* Find related documentation with spec:/rtems/userext/if/fatal */
 
 /**
  * @ingroup RTEMSAPIClassicUserExt
@@ -134,7 +134,7 @@ rtems_status_code rtems_extension_delete( rtems_id id );
  */
 typedef User_extensions_fatal_extension rtems_fatal_extension;
 
-/* Generated from spec:/rtems/userext/if/fatal-code */
+/* Find related documentation with spec:/rtems/userext/if/fatal-code */
 
 /**
  * @ingroup RTEMSAPIClassicUserExt
@@ -149,7 +149,7 @@ typedef User_extensions_fatal_extension rtems_fatal_extension;
  */
 typedef Internal_errors_t rtems_fatal_code;
 
-/* Generated from spec:/rtems/userext/if/fatal-source */
+/* Find related documentation with spec:/rtems/userext/if/fatal-source */
 
 /**
  * @ingroup RTEMSAPIClassicUserExt
@@ -162,7 +162,7 @@ typedef Internal_errors_t rtems_fatal_code;
  */
 typedef Internal_errors_Source rtems_fatal_source;
 
-/* Generated from spec:/rtems/userext/if/ident */
+/* Find related documentation with spec:/rtems/userext/if/ident */
 
 /**
  * @ingroup RTEMSAPIClassicUserExt
@@ -213,7 +213,7 @@ typedef Internal_errors_Source rtems_fatal_source;
  */
 rtems_status_code rtems_extension_ident( rtems_name name, rtems_id *id );
 
-/* Generated from spec:/rtems/userext/if/table */
+/* Find related documentation with spec:/rtems/userext/if/table */
 
 /**
  * @ingroup RTEMSAPIClassicUserExt
@@ -225,7 +225,7 @@ rtems_status_code rtems_extension_ident( rtems_name name, rtems_id *id );
  */
 typedef User_extensions_Table rtems_extensions_table;
 
-/* Generated from spec:/rtems/userext/if/create */
+/* Find related documentation with spec:/rtems/userext/if/create */
 
 /**
  * @ingroup RTEMSAPIClassicUserExt
@@ -305,7 +305,7 @@ rtems_status_code rtems_extension_create(
   rtems_id                     *id
 );
 
-/* Generated from spec:/rtems/userext/if/task-begin */
+/* Find related documentation with spec:/rtems/userext/if/task-begin */
 
 /**
  * @ingroup RTEMSAPIClassicUserExt
@@ -340,7 +340,7 @@ rtems_status_code rtems_extension_create(
  */
 typedef User_extensions_thread_begin_extension rtems_task_begin_extension;
 
-/* Generated from spec:/rtems/userext/if/task-create */
+/* Find related documentation with spec:/rtems/userext/if/task-create */
 
 /**
  * @ingroup RTEMSAPIClassicUserExt
@@ -397,7 +397,7 @@ typedef User_extensions_thread_begin_extension rtems_task_begin_extension;
  */
 typedef User_extensions_thread_create_extension rtems_task_create_extension;
 
-/* Generated from spec:/rtems/userext/if/task-delete */
+/* Find related documentation with spec:/rtems/userext/if/task-delete */
 
 /**
  * @ingroup RTEMSAPIClassicUserExt
@@ -447,7 +447,7 @@ typedef User_extensions_thread_create_extension rtems_task_create_extension;
  */
 typedef User_extensions_thread_delete_extension rtems_task_delete_extension;
 
-/* Generated from spec:/rtems/userext/if/task-exitted */
+/* Find related documentation with spec:/rtems/userext/if/task-exitted */
 
 /**
  * @ingroup RTEMSAPIClassicUserExt
@@ -468,7 +468,7 @@ typedef User_extensions_thread_delete_extension rtems_task_delete_extension;
  */
 typedef User_extensions_thread_exitted_extension rtems_task_exitted_extension;
 
-/* Generated from spec:/rtems/userext/if/task-restart */
+/* Find related documentation with spec:/rtems/userext/if/task-restart */
 
 /**
  * @ingroup RTEMSAPIClassicUserExt
@@ -505,7 +505,7 @@ typedef User_extensions_thread_exitted_extension rtems_task_exitted_extension;
  */
 typedef User_extensions_thread_restart_extension rtems_task_restart_extension;
 
-/* Generated from spec:/rtems/userext/if/task-start */
+/* Find related documentation with spec:/rtems/userext/if/task-start */
 
 /**
  * @ingroup RTEMSAPIClassicUserExt
@@ -537,7 +537,7 @@ typedef User_extensions_thread_restart_extension rtems_task_restart_extension;
  */
 typedef User_extensions_thread_start_extension rtems_task_start_extension;
 
-/* Generated from spec:/rtems/userext/if/task-switch */
+/* Find related documentation with spec:/rtems/userext/if/task-switch */
 
 /**
  * @ingroup RTEMSAPIClassicUserExt
@@ -595,7 +595,7 @@ typedef User_extensions_thread_start_extension rtems_task_start_extension;
  */
 typedef User_extensions_thread_switch_extension rtems_task_switch_extension;
 
-/* Generated from spec:/rtems/userext/if/task-terminate */
+/* Find related documentation with spec:/rtems/userext/if/task-terminate */
 
 /**
  * @ingroup RTEMSAPIClassicUserExt

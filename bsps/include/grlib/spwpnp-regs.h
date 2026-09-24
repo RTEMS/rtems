@@ -38,7 +38,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/dev/grlib/if/spwpnp-header */
+/* Find related documentation with spec:/dev/grlib/if/spwpnp-header */
 
 #ifndef _GRLIB_SPWPNP_REGS_H
 #define _GRLIB_SPWPNP_REGS_H
@@ -49,7 +49,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/dev/grlib/if/spwpnp */
+/* Find related documentation with spec:/dev/grlib/if/spwpnp */
 
 /**
  * @defgroup RTEMSDeviceGRLIBSPWPNP SpaceWire Plug-and-Play

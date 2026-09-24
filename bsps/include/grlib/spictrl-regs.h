@@ -38,7 +38,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/dev/grlib/if/spictrl-header */
+/* Find related documentation with spec:/dev/grlib/if/spictrl-header */
 
 #ifndef _GRLIB_SPICTRL_REGS_H
 #define _GRLIB_SPICTRL_REGS_H
@@ -49,7 +49,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/dev/grlib/if/spictrl */
+/* Find related documentation with spec:/dev/grlib/if/spictrl */
 
 /**
  * @defgroup RTEMSDeviceGRLIBSPICTRL SPICTRL

@@ -40,7 +40,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/task/if/header */
+/* Find related documentation with spec:/rtems/task/if/header */
 
 #ifndef _RTEMS_RTEMS_TASKS_H
 #define _RTEMS_RTEMS_TASKS_H
@@ -65,7 +65,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/task/if/group */
+/* Find related documentation with spec:/rtems/task/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicTasks Task Manager
@@ -76,7 +76,7 @@ extern "C" {
  *   create, delete, and administer tasks.
  */
 
-/* Generated from spec:/rtems/task/if/argument */
+/* Find related documentation with spec:/rtems/task/if/argument */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -89,7 +89,7 @@ extern "C" {
  */
 typedef CPU_Uint32ptr rtems_task_argument;
 
-/* Generated from spec:/rtems/task/if/config */
+/* Find related documentation with spec:/rtems/task/if/config */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -178,7 +178,7 @@ typedef struct {
   rtems_attribute attributes;
 } rtems_task_config;
 
-/* Generated from spec:/rtems/task/if/configured-minimum-stack-size */
+/* Find related documentation with spec:/rtems/task/if/configured-minimum-stack-size */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -198,7 +198,7 @@ typedef struct {
  */
 #define RTEMS_CONFIGURED_MINIMUM_STACK_SIZE 0
 
-/* Generated from spec:/rtems/task/if/current-priority */
+/* Find related documentation with spec:/rtems/task/if/current-priority */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -208,7 +208,7 @@ typedef struct {
  */
 #define RTEMS_CURRENT_PRIORITY 0
 
-/* Generated from spec:/rtems/task/if/task */
+/* Find related documentation with spec:/rtems/task/if/task */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -219,7 +219,7 @@ typedef struct {
  */
 typedef void rtems_task;
 
-/* Generated from spec:/rtems/task/if/entry */
+/* Find related documentation with spec:/rtems/task/if/entry */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -228,7 +228,7 @@ typedef void rtems_task;
  */
 typedef rtems_task ( *rtems_task_entry )( rtems_task_argument );
 
-/* Generated from spec:/rtems/task/if/initialization-table */
+/* Find related documentation with spec:/rtems/task/if/initialization-table */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -273,7 +273,7 @@ typedef struct {
   rtems_task_argument argument;
 } rtems_initialization_tasks_table;
 
-/* Generated from spec:/rtems/task/if/maximum-priority-impl */
+/* Find related documentation with spec:/rtems/task/if/maximum-priority-impl */
 
 /**
  * @ingroup RTEMSImplClassicTask
@@ -282,7 +282,7 @@ typedef struct {
  */
 rtems_task_priority _RTEMS_Maximum_priority( void );
 
-/* Generated from spec:/rtems/task/if/maximum-priority */
+/* Find related documentation with spec:/rtems/task/if/maximum-priority */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -292,7 +292,7 @@ rtems_task_priority _RTEMS_Maximum_priority( void );
  */
 #define RTEMS_MAXIMUM_PRIORITY _RTEMS_Maximum_priority()
 
-/* Generated from spec:/rtems/task/if/minimum-priority */
+/* Find related documentation with spec:/rtems/task/if/minimum-priority */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -302,7 +302,7 @@ rtems_task_priority _RTEMS_Maximum_priority( void );
  */
 #define RTEMS_MINIMUM_PRIORITY 1
 
-/* Generated from spec:/rtems/task/if/minimum-stack-size */
+/* Find related documentation with spec:/rtems/task/if/minimum-stack-size */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -320,7 +320,7 @@ rtems_task_priority _RTEMS_Maximum_priority( void );
  */
 #define RTEMS_MINIMUM_STACK_SIZE STACK_MINIMUM_SIZE
 
-/* Generated from spec:/rtems/task/if/no-priority */
+/* Find related documentation with spec:/rtems/task/if/no-priority */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -330,7 +330,7 @@ rtems_task_priority _RTEMS_Maximum_priority( void );
  */
 #define RTEMS_NO_PRIORITY RTEMS_CURRENT_PRIORITY
 
-/* Generated from spec:/rtems/task/if/self-define */
+/* Find related documentation with spec:/rtems/task/if/self-define */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -340,7 +340,7 @@ rtems_task_priority _RTEMS_Maximum_priority( void );
  */
 #define RTEMS_SELF OBJECTS_ID_OF_SELF
 
-/* Generated from spec:/rtems/task/if/storage-alignment */
+/* Find related documentation with spec:/rtems/task/if/storage-alignment */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -354,7 +354,7 @@ rtems_task_priority _RTEMS_Maximum_priority( void );
  */
 #define RTEMS_TASK_STORAGE_ALIGNMENT CPU_STACK_ALIGNMENT
 
-/* Generated from spec:/rtems/task/if/storage-size */
+/* Find related documentation with spec:/rtems/task/if/storage-size */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -380,7 +380,7 @@ rtems_task_priority _RTEMS_Maximum_priority( void );
                     : 0 ) )
 #endif
 
-/* Generated from spec:/rtems/task/if/tcb */
+/* Find related documentation with spec:/rtems/task/if/tcb */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -389,7 +389,7 @@ rtems_task_priority _RTEMS_Maximum_priority( void );
  */
 typedef struct _Thread_Control rtems_tcb;
 
-/* Generated from spec:/rtems/task/if/visitor */
+/* Find related documentation with spec:/rtems/task/if/visitor */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -399,7 +399,7 @@ typedef struct _Thread_Control rtems_tcb;
  */
 typedef bool ( *rtems_task_visitor )( rtems_tcb *, void * );
 
-/* Generated from spec:/rtems/task/if/yield-processor */
+/* Find related documentation with spec:/rtems/task/if/yield-processor */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -410,7 +410,7 @@ typedef bool ( *rtems_task_visitor )( rtems_tcb *, void * );
  */
 #define RTEMS_YIELD_PROCESSOR WATCHDOG_NO_TIMEOUT
 
-/* Generated from spec:/rtems/task/if/create */
+/* Find related documentation with spec:/rtems/task/if/create */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -653,7 +653,7 @@ rtems_status_code rtems_task_create(
   rtems_id           *id
 );
 
-/* Generated from spec:/rtems/task/if/construct */
+/* Find related documentation with spec:/rtems/task/if/construct */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -767,7 +767,7 @@ rtems_status_code rtems_task_construct(
   rtems_id                *id
 );
 
-/* Generated from spec:/rtems/task/if/ident */
+/* Find related documentation with spec:/rtems/task/if/ident */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -845,7 +845,7 @@ rtems_status_code rtems_task_ident(
   rtems_id  *id
 );
 
-/* Generated from spec:/rtems/task/if/self */
+/* Find related documentation with spec:/rtems/task/if/self */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -870,7 +870,7 @@ rtems_status_code rtems_task_ident(
  */
 rtems_id rtems_task_self( void );
 
-/* Generated from spec:/rtems/task/if/start */
+/* Find related documentation with spec:/rtems/task/if/start */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -935,7 +935,7 @@ rtems_status_code rtems_task_start(
   rtems_task_argument argument
 );
 
-/* Generated from spec:/rtems/task/if/restart */
+/* Find related documentation with spec:/rtems/task/if/restart */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -1003,7 +1003,7 @@ rtems_status_code rtems_task_restart(
   rtems_task_argument argument
 );
 
-/* Generated from spec:/rtems/task/if/delete */
+/* Find related documentation with spec:/rtems/task/if/delete */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -1093,7 +1093,7 @@ rtems_status_code rtems_task_restart(
  */
 rtems_status_code rtems_task_delete( rtems_id id );
 
-/* Generated from spec:/rtems/task/if/exit */
+/* Find related documentation with spec:/rtems/task/if/exit */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -1140,7 +1140,7 @@ rtems_status_code rtems_task_delete( rtems_id id );
  */
 RTEMS_NO_RETURN void rtems_task_exit( void );
 
-/* Generated from spec:/rtems/task/if/suspend */
+/* Find related documentation with spec:/rtems/task/if/suspend */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -1189,7 +1189,7 @@ RTEMS_NO_RETURN void rtems_task_exit( void );
  */
 rtems_status_code rtems_task_suspend( rtems_id id );
 
-/* Generated from spec:/rtems/task/if/resume */
+/* Find related documentation with spec:/rtems/task/if/resume */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -1231,7 +1231,7 @@ rtems_status_code rtems_task_suspend( rtems_id id );
  */
 rtems_status_code rtems_task_resume( rtems_id id );
 
-/* Generated from spec:/rtems/task/if/is-suspended */
+/* Find related documentation with spec:/rtems/task/if/is-suspended */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -1269,7 +1269,7 @@ rtems_status_code rtems_task_resume( rtems_id id );
  */
 rtems_status_code rtems_task_is_suspended( rtems_id id );
 
-/* Generated from spec:/rtems/task/if/set-priority */
+/* Find related documentation with spec:/rtems/task/if/set-priority */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -1344,7 +1344,7 @@ rtems_status_code rtems_task_set_priority(
   rtems_task_priority *old_priority
 );
 
-/* Generated from spec:/rtems/task/if/get-priority */
+/* Find related documentation with spec:/rtems/task/if/get-priority */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -1404,7 +1404,7 @@ rtems_status_code rtems_task_get_priority(
   rtems_task_priority *priority
 );
 
-/* Generated from spec:/rtems/task/if/mode */
+/* Find related documentation with spec:/rtems/task/if/mode */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -1527,7 +1527,7 @@ rtems_status_code rtems_task_mode(
   rtems_mode *previous_mode_set
 );
 
-/* Generated from spec:/rtems/task/if/wake-after */
+/* Find related documentation with spec:/rtems/task/if/wake-after */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -1572,7 +1572,7 @@ rtems_status_code rtems_task_mode(
  */
 rtems_status_code rtems_task_wake_after( rtems_interval ticks );
 
-/* Generated from spec:/rtems/task/if/wake-when */
+/* Find related documentation with spec:/rtems/task/if/wake-when */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -1613,7 +1613,7 @@ rtems_status_code rtems_task_wake_after( rtems_interval ticks );
  */
 rtems_status_code rtems_task_wake_when( const rtems_time_of_day *time_buffer );
 
-/* Generated from spec:/rtems/task/if/get-scheduler */
+/* Find related documentation with spec:/rtems/task/if/get-scheduler */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -1658,7 +1658,7 @@ rtems_status_code rtems_task_get_scheduler(
   rtems_id *scheduler_id
 );
 
-/* Generated from spec:/rtems/task/if/set-scheduler */
+/* Find related documentation with spec:/rtems/task/if/set-scheduler */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -1729,7 +1729,7 @@ rtems_status_code rtems_task_set_scheduler(
   rtems_task_priority priority
 );
 
-/* Generated from spec:/rtems/task/if/get-affinity */
+/* Find related documentation with spec:/rtems/task/if/get-affinity */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -1783,7 +1783,7 @@ rtems_status_code rtems_task_get_affinity(
   cpu_set_t *cpuset
 );
 
-/* Generated from spec:/rtems/task/if/set-affinity */
+/* Find related documentation with spec:/rtems/task/if/set-affinity */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -1836,7 +1836,7 @@ rtems_status_code rtems_task_set_affinity(
   const cpu_set_t *cpuset
 );
 
-/* Generated from spec:/rtems/task/if/get-cpu-usage */
+/* Find related documentation with spec:/rtems/task/if/get-cpu-usage */
 
 /**
  * @ingroup RTEMSAPIClassicTasks
@@ -1880,7 +1880,7 @@ rtems_status_code rtems_task_set_affinity(
  */
 rtems_status_code rtems_task_get_cpu_usage( rtems_id id, struct timespec *ts );
 
-/* Generated from spec:/rtems/task/if/iterate */
+/* Find related documentation with spec:/rtems/task/if/iterate */
 
 /**
  * @ingroup RTEMSAPIClassicTasks

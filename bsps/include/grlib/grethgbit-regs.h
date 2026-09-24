@@ -38,7 +38,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/dev/grlib/if/grethgbit-header */
+/* Find related documentation with spec:/dev/grlib/if/grethgbit-header */
 
 #ifndef _GRLIB_GRETHGBIT_REGS_H
 #define _GRLIB_GRETHGBIT_REGS_H
@@ -49,7 +49,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/dev/grlib/if/grethgbit */
+/* Find related documentation with spec:/dev/grlib/if/grethgbit */
 
 /**
  * @defgroup RTEMSDeviceGRETHGBIT GRETH_GBIT

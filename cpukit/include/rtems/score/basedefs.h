@@ -41,7 +41,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/basedefs/if/header */
+/* Find related documentation with spec:/rtems/basedefs/if/header */
 
 #ifndef _RTEMS_SCORE_BASEDEFS_H
 #define _RTEMS_SCORE_BASEDEFS_H
@@ -58,7 +58,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/if/group */
+/* Find related documentation with spec:/if/group */
 
 /**
  * @defgroup RTEMSAPI API
@@ -67,7 +67,7 @@ extern "C" {
  *   (API).
  */
 
-/* Generated from spec:/rtems/basedefs/if/group */
+/* Find related documentation with spec:/rtems/basedefs/if/group */
 
 /**
  * @defgroup RTEMSAPIBaseDefs Base Definitions
@@ -78,7 +78,7 @@ extern "C" {
  *   compiler-specific features.
  */
 
-/* Generated from spec:/rtems/basedefs/if/alias */
+/* Find related documentation with spec:/rtems/basedefs/if/alias */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -93,7 +93,7 @@ extern "C" {
   #define RTEMS_ALIAS( _target )
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/align-down */
+/* Find related documentation with spec:/rtems/basedefs/if/align-down */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -111,7 +111,7 @@ extern "C" {
 #define RTEMS_ALIGN_DOWN( _value, _alignment ) \
   ( ( _value ) & ~( ( _alignment ) - 1 ) )
 
-/* Generated from spec:/rtems/basedefs/if/align-up */
+/* Find related documentation with spec:/rtems/basedefs/if/align-up */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -129,7 +129,7 @@ extern "C" {
 #define RTEMS_ALIGN_UP( _value, _alignment ) \
   ( ( ( _value ) + ( _alignment ) - 1 ) & ~( ( _alignment ) - 1 ) )
 
-/* Generated from spec:/rtems/basedefs/if/aligned */
+/* Find related documentation with spec:/rtems/basedefs/if/aligned */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -146,7 +146,7 @@ extern "C" {
   #define RTEMS_ALIGNED( _alignment )
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/alignof */
+/* Find related documentation with spec:/rtems/basedefs/if/alignof */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -165,7 +165,7 @@ extern "C" {
   #define RTEMS_ALIGNOF( _type_name ) sizeof( _type_name )
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/alloc-align */
+/* Find related documentation with spec:/rtems/basedefs/if/alloc-align */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -183,7 +183,7 @@ extern "C" {
   #define RTEMS_ALLOC_ALIGN( _index )
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/alloc-size */
+/* Find related documentation with spec:/rtems/basedefs/if/alloc-size */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -200,7 +200,7 @@ extern "C" {
   #define RTEMS_ALLOC_SIZE( _index )
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/alloc-size-2 */
+/* Find related documentation with spec:/rtems/basedefs/if/alloc-size-2 */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -221,7 +221,7 @@ extern "C" {
   #define RTEMS_ALLOC_SIZE_2( _count_index, _size_index )
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/array-size */
+/* Find related documentation with spec:/rtems/basedefs/if/array-size */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -235,7 +235,7 @@ extern "C" {
 #define RTEMS_ARRAY_SIZE( _array ) \
   ( sizeof( _array ) / sizeof( ( _array )[ 0 ] ) )
 
-/* Generated from spec:/rtems/basedefs/if/compiler-memory-barrier */
+/* Find related documentation with spec:/rtems/basedefs/if/compiler-memory-barrier */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -253,7 +253,7 @@ extern "C" {
   } while ( 0 )
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/concat */
+/* Find related documentation with spec:/rtems/basedefs/if/concat */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -268,7 +268,7 @@ extern "C" {
  */
 #define RTEMS_CONCAT( _x, _y ) _x##_y
 
-/* Generated from spec:/rtems/basedefs/if/const */
+/* Find related documentation with spec:/rtems/basedefs/if/const */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -283,7 +283,7 @@ extern "C" {
   #define RTEMS_CONST
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/container-of */
+/* Find related documentation with spec:/rtems/basedefs/if/container-of */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -301,7 +301,7 @@ extern "C" {
 #define RTEMS_CONTAINER_OF( _m, _type, _member_name ) \
   ( (_type *) ( (uintptr_t) ( _m ) - offsetof( _type, _member_name ) ) )
 
-/* Generated from spec:/rtems/basedefs/if/declare-global-symbol */
+/* Find related documentation with spec:/rtems/basedefs/if/declare-global-symbol */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -315,7 +315,7 @@ extern "C" {
  */
 #define RTEMS_DECLARE_GLOBAL_SYMBOL( _name ) extern char _name[]
 
-/* Generated from spec:/rtems/basedefs/if/deprecated */
+/* Find related documentation with spec:/rtems/basedefs/if/deprecated */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -329,7 +329,7 @@ extern "C" {
   #define RTEMS_DEPRECATED
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/compiler-deprecated-attribute */
+/* Find related documentation with spec:/rtems/basedefs/if/compiler-deprecated-attribute */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -338,7 +338,7 @@ extern "C" {
  */
 #define RTEMS_COMPILER_DEPRECATED_ATTRIBUTE RTEMS_DEPRECATED
 
-/* Generated from spec:/rtems/basedefs/if/expand */
+/* Find related documentation with spec:/rtems/basedefs/if/expand */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -349,7 +349,7 @@ extern "C" {
  */
 #define RTEMS_EXPAND( _token ) _token
 
-/* Generated from spec:/rtems/basedefs/if/function-name */
+/* Find related documentation with spec:/rtems/basedefs/if/function-name */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -363,7 +363,7 @@ extern "C" {
   #define RTEMS_FUNCTION_NAME __func__
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/no-return */
+/* Find related documentation with spec:/rtems/basedefs/if/no-return */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -381,7 +381,7 @@ extern "C" {
   #define RTEMS_NO_RETURN
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/compiler-no-return-attribute */
+/* Find related documentation with spec:/rtems/basedefs/if/compiler-no-return-attribute */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -390,7 +390,7 @@ extern "C" {
  */
 #define RTEMS_COMPILER_NO_RETURN_ATTRIBUTE RTEMS_NO_RETURN
 
-/* Generated from spec:/rtems/basedefs/if/section */
+/* Find related documentation with spec:/rtems/basedefs/if/section */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -406,7 +406,7 @@ extern "C" {
   #define RTEMS_SECTION( _section )
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/string */
+/* Find related documentation with spec:/rtems/basedefs/if/string */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -420,7 +420,7 @@ extern "C" {
  */
 #define RTEMS_STRING( ... ) #__VA_ARGS__
 
-/* Generated from spec:/rtems/basedefs/if/typeof-refx */
+/* Find related documentation with spec:/rtems/basedefs/if/typeof-refx */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -447,7 +447,7 @@ extern "C" {
   #define RTEMS_TYPEOF_REFX( _level, _target )
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/xconcat */
+/* Find related documentation with spec:/rtems/basedefs/if/xconcat */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -465,7 +465,7 @@ extern "C" {
 #define RTEMS_XCONCAT( _x, _y ) RTEMS_CONCAT( _x, _y )
 
 #if !defined( ASM ) && defined( RTEMS_DEBUG )
-/* Generated from spec:/score/basedefs/if/debug-unreachable */
+/* Find related documentation with spec:/score/basedefs/if/debug-unreachable */
 
 /**
  * @ingroup RTEMSScore
@@ -486,7 +486,7 @@ RTEMS_NO_RETURN void _Debug_Unreachable(
 #endif
 
 #if !defined( ASM )
-  /* Generated from spec:/score/basedefs/if/dequalify-types-not-compatible */
+  /* Find related documentation with spec:/score/basedefs/if/dequalify-types-not-compatible */
 
   /**
    * @ingroup RTEMSScore
@@ -503,7 +503,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
   #endif
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/dequalify-depthx */
+/* Find related documentation with spec:/rtems/basedefs/if/dequalify-depthx */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -536,7 +536,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
   ( (_type) (uintptr_t) (const volatile void *) ( _var ) )
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/deconst */
+/* Find related documentation with spec:/rtems/basedefs/if/deconst */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -550,7 +550,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
  */
 #define RTEMS_DECONST( _type, _var ) RTEMS_DEQUALIFY_DEPTHX( *, _type, _var )
 
-/* Generated from spec:/rtems/basedefs/if/dequalify */
+/* Find related documentation with spec:/rtems/basedefs/if/dequalify */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -564,7 +564,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
  */
 #define RTEMS_DEQUALIFY( _type, _var ) RTEMS_DEQUALIFY_DEPTHX( *, _type, _var )
 
-/* Generated from spec:/rtems/basedefs/if/devolatile */
+/* Find related documentation with spec:/rtems/basedefs/if/devolatile */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -579,7 +579,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
 #define RTEMS_DEVOLATILE( _type, _var ) \
   RTEMS_DEQUALIFY_DEPTHX( *, _type, _var )
 
-/* Generated from spec:/rtems/basedefs/if/fallthrough */
+/* Find related documentation with spec:/rtems/basedefs/if/fallthrough */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -607,7 +607,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
 #endif
 
 #if !defined( FALSE )
-  /* Generated from spec:/rtems/basedefs/if/false */
+  /* Find related documentation with spec:/rtems/basedefs/if/false */
 
   /**
    * @ingroup RTEMSAPIBaseDefs
@@ -617,7 +617,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
   #define FALSE 0
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/have-member-same-type */
+/* Find related documentation with spec:/rtems/basedefs/if/have-member-same-type */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -645,7 +645,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
   #define RTEMS_HAVE_MEMBER_SAME_TYPE( _t_lhs, _m_lhs, _t_rhs, _m_rhs ) true
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/inline-routine */
+/* Find related documentation with spec:/rtems/basedefs/if/inline-routine */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -659,7 +659,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
   #define RTEMS_INLINE_ROUTINE static inline
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/malloclike */
+/* Find related documentation with spec:/rtems/basedefs/if/malloclike */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -673,7 +673,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
   #define RTEMS_MALLOCLIKE
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/no-inline */
+/* Find related documentation with spec:/rtems/basedefs/if/no-inline */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -687,7 +687,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
   #define RTEMS_NO_INLINE
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/noinit */
+/* Find related documentation with spec:/rtems/basedefs/if/noinit */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -697,7 +697,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
  */
 #define RTEMS_NOINIT RTEMS_SECTION( ".noinit" )
 
-/* Generated from spec:/rtems/basedefs/if/obfuscate-variable */
+/* Find related documentation with spec:/rtems/basedefs/if/obfuscate-variable */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -717,7 +717,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
   #define RTEMS_OBFUSCATE_VARIABLE( _var ) (void) ( _var )
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/packed */
+/* Find related documentation with spec:/rtems/basedefs/if/packed */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -731,7 +731,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
   #define RTEMS_PACKED
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/compiler-packed-attribute */
+/* Find related documentation with spec:/rtems/basedefs/if/compiler-packed-attribute */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -740,7 +740,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
  */
 #define RTEMS_COMPILER_PACKED_ATTRIBUTE RTEMS_PACKED
 
-/* Generated from spec:/rtems/basedefs/if/predict-false */
+/* Find related documentation with spec:/rtems/basedefs/if/predict-false */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -759,7 +759,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
   #define RTEMS_PREDICT_FALSE( _exp ) ( _exp )
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/predict-true */
+/* Find related documentation with spec:/rtems/basedefs/if/predict-true */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -778,7 +778,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
   #define RTEMS_PREDICT_TRUE( _exp ) ( _exp )
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/printflike */
+/* Find related documentation with spec:/rtems/basedefs/if/printflike */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -799,7 +799,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
   #define RTEMS_PRINTFLIKE( _format_pos, _ap_pos )
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/pure */
+/* Find related documentation with spec:/rtems/basedefs/if/pure */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -814,7 +814,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
   #define RTEMS_PURE
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/compiler-pure-attribute */
+/* Find related documentation with spec:/rtems/basedefs/if/compiler-pure-attribute */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -823,7 +823,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
  */
 #define RTEMS_COMPILER_PURE_ATTRIBUTE RTEMS_PURE
 
-/* Generated from spec:/rtems/basedefs/if/return-address */
+/* Find related documentation with spec:/rtems/basedefs/if/return-address */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -838,7 +838,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
   #define RTEMS_RETURN_ADDRESS() NULL
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/static-analysis */
+/* Find related documentation with spec:/rtems/basedefs/if/static-analysis */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -849,7 +849,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
   #define RTEMS_STATIC_ANALYSIS
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/static-assert */
+/* Find related documentation with spec:/rtems/basedefs/if/static-assert */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -871,7 +871,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
   }
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/symbol-name */
+/* Find related documentation with spec:/rtems/basedefs/if/symbol-name */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -891,7 +891,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
 #endif
 
 #if !defined( TRUE )
-  /* Generated from spec:/rtems/basedefs/if/true */
+  /* Find related documentation with spec:/rtems/basedefs/if/true */
 
   /**
    * @ingroup RTEMSAPIBaseDefs
@@ -901,7 +901,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
   #define TRUE 1
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/unreachable */
+/* Find related documentation with spec:/rtems/basedefs/if/unreachable */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -919,7 +919,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
   } while ( 0 )
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/unused */
+/* Find related documentation with spec:/rtems/basedefs/if/unused */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -933,7 +933,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
   #define RTEMS_UNUSED
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/compiler-unused-attribute */
+/* Find related documentation with spec:/rtems/basedefs/if/compiler-unused-attribute */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -942,7 +942,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
  */
 #define RTEMS_COMPILER_UNUSED_ATTRIBUTE RTEMS_UNUSED
 
-/* Generated from spec:/rtems/basedefs/if/used */
+/* Find related documentation with spec:/rtems/basedefs/if/used */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -955,7 +955,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
   #define RTEMS_USED
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/warn-unused-result */
+/* Find related documentation with spec:/rtems/basedefs/if/warn-unused-result */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -969,7 +969,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
   #define RTEMS_WARN_UNUSED_RESULT
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/weak */
+/* Find related documentation with spec:/rtems/basedefs/if/weak */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -986,7 +986,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
   #define RTEMS_WEAK
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/weak-alias */
+/* Find related documentation with spec:/rtems/basedefs/if/weak-alias */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -1003,7 +1003,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
   #define RTEMS_WEAK_ALIAS( _target )
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/xstring */
+/* Find related documentation with spec:/rtems/basedefs/if/xstring */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -1017,7 +1017,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
  */
 #define RTEMS_XSTRING( ... ) RTEMS_STRING( __VA_ARGS__ )
 
-/* Generated from spec:/rtems/basedefs/if/define-global-symbol */
+/* Find related documentation with spec:/rtems/basedefs/if/define-global-symbol */
 
 /**
  * @ingroup RTEMSAPIBaseDefs
@@ -1046,7 +1046,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
   #define RTEMS_DEFINE_GLOBAL_SYMBOL( _name, _value )
 #endif
 
-/* Generated from spec:/rtems/basedefs/if/zero-length-array */
+/* Find related documentation with spec:/rtems/basedefs/if/zero-length-array */
 
 /**
  * @ingroup RTEMSAPIBaseDefs

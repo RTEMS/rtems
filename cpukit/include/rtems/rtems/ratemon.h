@@ -40,7 +40,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/ratemon/if/header */
+/* Find related documentation with spec:/rtems/ratemon/if/header */
 
 #ifndef _RTEMS_RTEMS_RATEMON_H
 #define _RTEMS_RTEMS_RATEMON_H
@@ -55,7 +55,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/ratemon/if/group */
+/* Find related documentation with spec:/rtems/ratemon/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicRatemon Rate-Monotonic Manager
@@ -69,7 +69,7 @@ extern "C" {
  *   application.
  */
 
-/* Generated from spec:/rtems/ratemon/if/period-states */
+/* Find related documentation with spec:/rtems/ratemon/if/period-states */
 
 /**
  * @ingroup RTEMSAPIClassicRatemon
@@ -97,7 +97,7 @@ typedef enum {
   RATE_MONOTONIC_EXPIRED
 } rtems_rate_monotonic_period_states;
 
-/* Generated from spec:/rtems/ratemon/if/period-statistics */
+/* Find related documentation with spec:/rtems/ratemon/if/period-statistics */
 
 /**
  * @ingroup RTEMSAPIClassicRatemon
@@ -152,7 +152,7 @@ typedef struct {
   struct timespec total_wall_time;
 } rtems_rate_monotonic_period_statistics;
 
-/* Generated from spec:/rtems/ratemon/if/period-status */
+/* Find related documentation with spec:/rtems/ratemon/if/period-status */
 
 /**
  * @ingroup RTEMSAPIClassicRatemon
@@ -194,7 +194,7 @@ typedef struct {
   uint32_t postponed_jobs_count;
 } rtems_rate_monotonic_period_status;
 
-/* Generated from spec:/rtems/ratemon/if/period-status-define */
+/* Find related documentation with spec:/rtems/ratemon/if/period-status-define */
 
 /**
  * @ingroup RTEMSAPIClassicRatemon
@@ -204,12 +204,12 @@ typedef struct {
  */
 #define RTEMS_PERIOD_STATUS WATCHDOG_NO_TIMEOUT
 
-/* Generated from spec:/rtems/ratemon/if/printer */
+/* Find related documentation with spec:/rtems/ratemon/if/printer */
 
 /* Forward declaration */
 struct rtems_printer;
 
-/* Generated from spec:/rtems/ratemon/if/create */
+/* Find related documentation with spec:/rtems/ratemon/if/create */
 
 /**
  * @ingroup RTEMSAPIClassicRatemon
@@ -267,7 +267,7 @@ struct rtems_printer;
  */
 rtems_status_code rtems_rate_monotonic_create( rtems_name name, rtems_id *id );
 
-/* Generated from spec:/rtems/ratemon/if/ident */
+/* Find related documentation with spec:/rtems/ratemon/if/ident */
 
 /**
  * @ingroup RTEMSAPIClassicRatemon
@@ -316,7 +316,7 @@ rtems_status_code rtems_rate_monotonic_create( rtems_name name, rtems_id *id );
  */
 rtems_status_code rtems_rate_monotonic_ident( rtems_name name, rtems_id *id );
 
-/* Generated from spec:/rtems/ratemon/if/cancel */
+/* Find related documentation with spec:/rtems/ratemon/if/cancel */
 
 /**
  * @ingroup RTEMSAPIClassicRatemon
@@ -351,7 +351,7 @@ rtems_status_code rtems_rate_monotonic_ident( rtems_name name, rtems_id *id );
  */
 rtems_status_code rtems_rate_monotonic_cancel( rtems_id id );
 
-/* Generated from spec:/rtems/ratemon/if/delete */
+/* Find related documentation with spec:/rtems/ratemon/if/delete */
 
 /**
  * @ingroup RTEMSAPIClassicRatemon
@@ -392,7 +392,7 @@ rtems_status_code rtems_rate_monotonic_cancel( rtems_id id );
  */
 rtems_status_code rtems_rate_monotonic_delete( rtems_id id );
 
-/* Generated from spec:/rtems/ratemon/if/period */
+/* Find related documentation with spec:/rtems/ratemon/if/period */
 
 /**
  * @ingroup RTEMSAPIClassicRatemon
@@ -453,7 +453,7 @@ rtems_status_code rtems_rate_monotonic_period(
   rtems_interval length
 );
 
-/* Generated from spec:/rtems/ratemon/if/get-status */
+/* Find related documentation with spec:/rtems/ratemon/if/get-status */
 
 /**
  * @ingroup RTEMSAPIClassicRatemon
@@ -510,7 +510,7 @@ rtems_status_code rtems_rate_monotonic_get_status(
   rtems_rate_monotonic_period_status *status
 );
 
-/* Generated from spec:/rtems/ratemon/if/get-statistics */
+/* Find related documentation with spec:/rtems/ratemon/if/get-statistics */
 
 /**
  * @ingroup RTEMSAPIClassicRatemon
@@ -572,7 +572,7 @@ rtems_status_code rtems_rate_monotonic_get_statistics(
   rtems_rate_monotonic_period_statistics *status
 );
 
-/* Generated from spec:/rtems/ratemon/if/reset-statistics */
+/* Find related documentation with spec:/rtems/ratemon/if/reset-statistics */
 
 /**
  * @ingroup RTEMSAPIClassicRatemon
@@ -602,7 +602,7 @@ rtems_status_code rtems_rate_monotonic_get_statistics(
  */
 rtems_status_code rtems_rate_monotonic_reset_statistics( rtems_id id );
 
-/* Generated from spec:/rtems/ratemon/if/reset-all-statistics */
+/* Find related documentation with spec:/rtems/ratemon/if/reset-all-statistics */
 
 /**
  * @ingroup RTEMSAPIClassicRatemon
@@ -624,7 +624,7 @@ rtems_status_code rtems_rate_monotonic_reset_statistics( rtems_id id );
  */
 void rtems_rate_monotonic_reset_all_statistics( void );
 
-/* Generated from spec:/rtems/ratemon/if/report-statistics */
+/* Find related documentation with spec:/rtems/ratemon/if/report-statistics */
 
 /**
  * @ingroup RTEMSAPIClassicRatemon
@@ -646,7 +646,7 @@ void rtems_rate_monotonic_reset_all_statistics( void );
  */
 void rtems_rate_monotonic_report_statistics( void );
 
-/* Generated from spec:/rtems/ratemon/if/report-statistics-with-plugin */
+/* Find related documentation with spec:/rtems/ratemon/if/report-statistics-with-plugin */
 
 /**
  * @ingroup RTEMSAPIClassicRatemon

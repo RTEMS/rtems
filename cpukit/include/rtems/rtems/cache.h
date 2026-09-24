@@ -40,7 +40,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/cache/if/header */
+/* Find related documentation with spec:/rtems/cache/if/header */
 
 #ifndef _RTEMS_RTEMS_CACHE_H
 #define _RTEMS_RTEMS_CACHE_H
@@ -53,7 +53,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/cache/if/group */
+/* Find related documentation with spec:/rtems/cache/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicCache Cache Manager
@@ -69,7 +69,7 @@ extern "C" {
  * dependent.
  */
 
-/* Generated from spec:/rtems/cache/if/coherent-add-area */
+/* Find related documentation with spec:/rtems/cache/if/coherent-add-area */
 
 /**
  * @brief Adds a cache coherent memory area to the cache coherent allocator.
@@ -97,7 +97,7 @@ extern "C" {
  */
 rtems_status_code rtems_cache_coherent_add_area( void *begin, uintptr_t size );
 
-/* Generated from spec:/rtems/cache/if/coherent-allocate */
+/* Find related documentation with spec:/rtems/cache/if/coherent-allocate */
 
 /**
  * @brief Allocates a memory area from cache coherent memory.
@@ -153,7 +153,7 @@ void *rtems_cache_coherent_allocate(
   uintptr_t boundary
 );
 
-/* Generated from spec:/rtems/cache/if/coherent-free */
+/* Find related documentation with spec:/rtems/cache/if/coherent-free */
 
 /**
  * @brief Frees memory allocated by rtems_cache_coherent_allocate().
@@ -175,7 +175,7 @@ void *rtems_cache_coherent_allocate(
  */
 void rtems_cache_coherent_free( void *ptr );
 
-/* Generated from spec:/rtems/cache/if/freeze-data */
+/* Find related documentation with spec:/rtems/cache/if/freeze-data */
 
 /**
  * @brief Freezes the data caches.
@@ -191,7 +191,7 @@ void rtems_cache_coherent_free( void *ptr );
  */
 void rtems_cache_freeze_data( void );
 
-/* Generated from spec:/rtems/cache/if/freeze-instruction */
+/* Find related documentation with spec:/rtems/cache/if/freeze-instruction */
 
 /**
  * @brief Freezes the instruction caches.
@@ -207,7 +207,7 @@ void rtems_cache_freeze_data( void );
  */
 void rtems_cache_freeze_instruction( void );
 
-/* Generated from spec:/rtems/cache/if/unfreeze-data */
+/* Find related documentation with spec:/rtems/cache/if/unfreeze-data */
 
 /**
  * @brief Unfreezes the data cache.
@@ -223,7 +223,7 @@ void rtems_cache_freeze_instruction( void );
  */
 void rtems_cache_unfreeze_data( void );
 
-/* Generated from spec:/rtems/cache/if/unfreeze-instruction */
+/* Find related documentation with spec:/rtems/cache/if/unfreeze-instruction */
 
 /**
  * @brief Unfreezes the instruction cache.
@@ -239,7 +239,7 @@ void rtems_cache_unfreeze_data( void );
  */
 void rtems_cache_unfreeze_instruction( void );
 
-/* Generated from spec:/rtems/cache/if/flush-multiple-data-lines */
+/* Find related documentation with spec:/rtems/cache/if/flush-multiple-data-lines */
 
 /**
  * @ingroup RTEMSAPIClassicCache
@@ -264,7 +264,7 @@ void rtems_cache_unfreeze_instruction( void );
  */
 void rtems_cache_flush_multiple_data_lines( const void *begin, size_t size );
 
-/* Generated from spec:/rtems/cache/if/invalidate-multiple-data-lines */
+/* Find related documentation with spec:/rtems/cache/if/invalidate-multiple-data-lines */
 
 /**
  * @ingroup RTEMSAPIClassicCache
@@ -300,7 +300,7 @@ void rtems_cache_invalidate_multiple_data_lines(
   size_t      size
 );
 
-/* Generated from spec:/rtems/cache/if/invalidate-multiple-instruction-lines */
+/* Find related documentation with spec:/rtems/cache/if/invalidate-multiple-instruction-lines */
 
 /**
  * @ingroup RTEMSAPIClassicCache
@@ -333,7 +333,7 @@ void rtems_cache_invalidate_multiple_instruction_lines(
   size_t      size
 );
 
-/* Generated from spec:/rtems/cache/if/instruction-sync-after-code-change */
+/* Find related documentation with spec:/rtems/cache/if/instruction-sync-after-code-change */
 
 /**
  * @ingroup RTEMSAPIClassicCache
@@ -365,7 +365,7 @@ void rtems_cache_instruction_sync_after_code_change(
   size_t      size
 );
 
-/* Generated from spec:/rtems/cache/if/get-maximal-line-size */
+/* Find related documentation with spec:/rtems/cache/if/get-maximal-line-size */
 
 /**
  * @ingroup RTEMSAPIClassicCache
@@ -389,7 +389,7 @@ void rtems_cache_instruction_sync_after_code_change(
  */
 size_t rtems_cache_get_maximal_line_size( void );
 
-/* Generated from spec:/rtems/cache/if/get-data-line-size */
+/* Find related documentation with spec:/rtems/cache/if/get-data-line-size */
 
 /**
  * @ingroup RTEMSAPIClassicCache
@@ -412,7 +412,7 @@ size_t rtems_cache_get_maximal_line_size( void );
  */
 size_t rtems_cache_get_data_line_size( void );
 
-/* Generated from spec:/rtems/cache/if/get-instruction-line-size */
+/* Find related documentation with spec:/rtems/cache/if/get-instruction-line-size */
 
 /**
  * @ingroup RTEMSAPIClassicCache
@@ -435,7 +435,7 @@ size_t rtems_cache_get_data_line_size( void );
  */
 size_t rtems_cache_get_instruction_line_size( void );
 
-/* Generated from spec:/rtems/cache/if/get-data-size */
+/* Find related documentation with spec:/rtems/cache/if/get-data-size */
 
 /**
  * @ingroup RTEMSAPIClassicCache
@@ -460,7 +460,7 @@ size_t rtems_cache_get_instruction_line_size( void );
  */
 size_t rtems_cache_get_data_cache_size( uint32_t level );
 
-/* Generated from spec:/rtems/cache/if/get-instruction-size */
+/* Find related documentation with spec:/rtems/cache/if/get-instruction-size */
 
 /**
  * @ingroup RTEMSAPIClassicCache
@@ -487,7 +487,7 @@ size_t rtems_cache_get_data_cache_size( uint32_t level );
  */
 size_t rtems_cache_get_instruction_cache_size( uint32_t level );
 
-/* Generated from spec:/rtems/cache/if/flush-entire-data */
+/* Find related documentation with spec:/rtems/cache/if/flush-entire-data */
 
 /**
  * @ingroup RTEMSAPIClassicCache
@@ -505,7 +505,7 @@ size_t rtems_cache_get_instruction_cache_size( uint32_t level );
  */
 void rtems_cache_flush_entire_data( void );
 
-/* Generated from spec:/rtems/cache/if/invalidate-entire-data */
+/* Find related documentation with spec:/rtems/cache/if/invalidate-entire-data */
 
 /**
  * @ingroup RTEMSAPIClassicCache
@@ -523,7 +523,7 @@ void rtems_cache_flush_entire_data( void );
  */
 void rtems_cache_invalidate_entire_data( void );
 
-/* Generated from spec:/rtems/cache/if/invalidate-entire-instruction */
+/* Find related documentation with spec:/rtems/cache/if/invalidate-entire-instruction */
 
 /**
  * @ingroup RTEMSAPIClassicCache
@@ -541,7 +541,7 @@ void rtems_cache_invalidate_entire_data( void );
  */
 void rtems_cache_invalidate_entire_instruction( void );
 
-/* Generated from spec:/rtems/cache/if/enable-data */
+/* Find related documentation with spec:/rtems/cache/if/enable-data */
 
 /**
  * @ingroup RTEMSAPIClassicCache
@@ -559,7 +559,7 @@ void rtems_cache_invalidate_entire_instruction( void );
  */
 void rtems_cache_enable_data( void );
 
-/* Generated from spec:/rtems/cache/if/disable-data */
+/* Find related documentation with spec:/rtems/cache/if/disable-data */
 
 /**
  * @ingroup RTEMSAPIClassicCache
@@ -585,7 +585,7 @@ void rtems_cache_enable_data( void );
  */
 void rtems_cache_disable_data( void );
 
-/* Generated from spec:/rtems/cache/if/enable-instruction */
+/* Find related documentation with spec:/rtems/cache/if/enable-instruction */
 
 /**
  * @ingroup RTEMSAPIClassicCache
@@ -603,7 +603,7 @@ void rtems_cache_disable_data( void );
  */
 void rtems_cache_enable_instruction( void );
 
-/* Generated from spec:/rtems/cache/if/disable-instruction */
+/* Find related documentation with spec:/rtems/cache/if/disable-instruction */
 
 /**
  * @ingroup RTEMSAPIClassicCache
@@ -621,7 +621,7 @@ void rtems_cache_enable_instruction( void );
  */
 void rtems_cache_disable_instruction( void );
 
-/* Generated from spec:/rtems/cache/if/aligned-malloc */
+/* Find related documentation with spec:/rtems/cache/if/aligned-malloc */
 
 /**
  * @ingroup RTEMSAPIClassicCache

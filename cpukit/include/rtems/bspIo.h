@@ -10,7 +10,7 @@
  */
 
 /*
- * Copyright (C) 2020, 2021 embedded brains GmbH & Co. KG
+ * Copyright (C) 2020, 2026 embedded brains GmbH & Co. KG
  * Copyright (C) 2015 On-Line Applications Research Corporation (OAR)
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/io/if/header-3 */
+/* Find related documentation with spec:/rtems/io/if/header-3 */
 
 #ifndef _RTEMS_BSPIO_H
 #define _RTEMS_BSPIO_H
@@ -52,6 +52,8 @@
 extern "C" {
 #endif
 
+/* Find related documentation with spec:/rtems/io/req/group-kernel-char-io */
+
 /**
  * @defgroup RTEMSImplKernelCharIO Kernel Character Input and Output
  *
@@ -61,7 +63,7 @@ extern "C" {
  *   implementation.
  */
 
-/* Generated from spec:/rtems/io/if/group-3 */
+/* Find related documentation with spec:/rtems/io/if/group-3 */
 
 /**
  * @defgroup RTEMSAPIKernelCharIO Kernel Character I/O Support
@@ -80,7 +82,7 @@ extern "C" {
  * change the device.
  */
 
-/* Generated from spec:/rtems/io/if/bsp-output-char-function-type */
+/* Find related documentation with spec:/rtems/io/if/bsp-output-char-function-type */
 
 /**
  * @ingroup RTEMSAPIKernelCharIO
@@ -89,7 +91,7 @@ extern "C" {
  */
 typedef void ( *BSP_output_char_function_type )( char );
 
-/* Generated from spec:/rtems/io/if/bsp-output-char */
+/* Find related documentation with spec:/rtems/io/if/bsp-output-char */
 
 /**
  * @ingroup RTEMSAPIKernelCharIO
@@ -105,7 +107,7 @@ typedef void ( *BSP_output_char_function_type )( char );
  */
 extern BSP_output_char_function_type BSP_output_char;
 
-/* Generated from spec:/rtems/io/if/putc */
+/* Find related documentation with spec:/rtems/io/if/putc */
 
 /**
  * @ingroup RTEMSAPIKernelCharIO
@@ -133,7 +135,7 @@ extern BSP_output_char_function_type BSP_output_char;
  */
 void rtems_putc( char c );
 
-/* Generated from spec:/rtems/io/if/put-char */
+/* Find related documentation with spec:/rtems/io/if/put-char */
 
 /**
  * @ingroup RTEMSAPIKernelCharIO
@@ -158,7 +160,7 @@ void rtems_putc( char c );
  */
 void rtems_put_char( int c, void *unused );
 
-/* Generated from spec:/rtems/io/if/putk */
+/* Find related documentation with spec:/rtems/io/if/putk */
 
 /**
  * @ingroup RTEMSAPIKernelCharIO
@@ -192,7 +194,7 @@ void rtems_put_char( int c, void *unused );
  */
 int putk( const char *s );
 
-/* Generated from spec:/rtems/io/if/printk */
+/* Find related documentation with spec:/rtems/io/if/printk */
 
 /**
  * @ingroup RTEMSAPIKernelCharIO
@@ -230,7 +232,7 @@ int putk( const char *s );
  */
 RTEMS_PRINTFLIKE( 1, 2 ) int printk( const char *fmt, ... );
 
-/* Generated from spec:/rtems/io/if/vprintk */
+/* Find related documentation with spec:/rtems/io/if/vprintk */
 
 /**
  * @ingroup RTEMSAPIKernelCharIO
@@ -268,7 +270,7 @@ RTEMS_PRINTFLIKE( 1, 2 ) int printk( const char *fmt, ... );
  */
 int vprintk( const char *fmt, va_list ap );
 
-/* Generated from spec:/rtems/io/if/printk-printer */
+/* Find related documentation with spec:/rtems/io/if/printk-printer */
 
 /**
  * @ingroup RTEMSAPIKernelCharIO
@@ -308,7 +310,7 @@ int vprintk( const char *fmt, va_list ap );
  */
 int rtems_printk_printer( void *unused, const char *fmt, va_list ap );
 
-/* Generated from spec:/rtems/io/if/bsp-polling-getchar-function-type */
+/* Find related documentation with spec:/rtems/io/if/bsp-polling-getchar-function-type */
 
 /**
  * @ingroup RTEMSAPIKernelCharIO
@@ -317,7 +319,7 @@ int rtems_printk_printer( void *unused, const char *fmt, va_list ap );
  */
 typedef int ( *BSP_polling_getchar_function_type )( void );
 
-/* Generated from spec:/rtems/io/if/bsp-poll-char */
+/* Find related documentation with spec:/rtems/io/if/bsp-poll-char */
 
 /**
  * @ingroup RTEMSAPIKernelCharIO
@@ -333,7 +335,7 @@ typedef int ( *BSP_polling_getchar_function_type )( void );
  */
 extern BSP_polling_getchar_function_type BSP_poll_char;
 
-/* Generated from spec:/rtems/io/if/getchark */
+/* Find related documentation with spec:/rtems/io/if/getchark */
 
 /**
  * @ingroup RTEMSAPIKernelCharIO

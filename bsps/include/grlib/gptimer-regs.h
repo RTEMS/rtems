@@ -38,7 +38,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/dev/grlib/if/gptimer-header */
+/* Find related documentation with spec:/dev/grlib/if/gptimer-header */
 
 #ifndef _GRLIB_GPTIMER_REGS_H
 #define _GRLIB_GPTIMER_REGS_H
@@ -49,7 +49,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/dev/grlib/if/group */
+/* Find related documentation with spec:/dev/grlib/if/group */
 
 /**
  * @defgroup RTEMSDeviceGRLIB GRLIB
@@ -59,7 +59,7 @@ extern "C" {
  * @brief This group contains the GRLIB interfaces.
  */
 
-/* Generated from spec:/dev/grlib/if/gptimer-timer */
+/* Find related documentation with spec:/dev/grlib/if/gptimer-timer */
 
 /**
  * @defgroup RTEMSDeviceGRLIBGPTIMERTimer GPTIMER TIMER
@@ -193,7 +193,7 @@ typedef struct gptimer_timer {
 
 /** @} */
 
-/* Generated from spec:/dev/grlib/if/gptimer */
+/* Find related documentation with spec:/dev/grlib/if/gptimer */
 
 /**
  * @defgroup RTEMSDeviceGRLIBGPTIMER GPTIMER

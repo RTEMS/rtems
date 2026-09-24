@@ -39,7 +39,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/object/if/header */
+/* Find related documentation with spec:/rtems/object/if/header */
 
 #ifndef _RTEMS_RTEMS_OBJECT_H
 #define _RTEMS_RTEMS_OBJECT_H
@@ -55,7 +55,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/object/if/group */
+/* Find related documentation with spec:/rtems/object/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicObject Object Services
@@ -68,7 +68,7 @@ extern "C" {
  *   API used to create them.
  */
 
-/* Generated from spec:/rtems/object/if/api-class-information */
+/* Find related documentation with spec:/rtems/object/if/api-class-information */
 
 /**
  * @ingroup RTEMSAPIClassicObject
@@ -108,7 +108,7 @@ typedef struct {
   uint32_t unallocated;
 } rtems_object_api_class_information;
 
-/* Generated from spec:/rtems/object/if/id-final */
+/* Find related documentation with spec:/rtems/object/if/id-final */
 
 /**
  * @ingroup RTEMSAPIClassicObject
@@ -117,7 +117,7 @@ typedef struct {
  */
 #define RTEMS_OBJECT_ID_FINAL OBJECTS_ID_FINAL
 
-/* Generated from spec:/rtems/object/if/id-final-index */
+/* Find related documentation with spec:/rtems/object/if/id-final-index */
 
 /**
  * @ingroup RTEMSAPIClassicObject
@@ -127,7 +127,7 @@ typedef struct {
  */
 #define RTEMS_OBJECT_ID_FINAL_INDEX OBJECTS_ID_FINAL_INDEX
 
-/* Generated from spec:/rtems/object/if/id-initial */
+/* Find related documentation with spec:/rtems/object/if/id-initial */
 
 /**
  * @ingroup RTEMSAPIClassicObject
@@ -156,7 +156,7 @@ typedef struct {
 #define RTEMS_OBJECT_ID_INITIAL( _api, _class, _node ) \
   OBJECTS_ID_INITIAL( _api, _class, _node )
 
-/* Generated from spec:/rtems/object/if/id-initial-index */
+/* Find related documentation with spec:/rtems/object/if/id-initial-index */
 
 /**
  * @ingroup RTEMSAPIClassicObject
@@ -166,7 +166,7 @@ typedef struct {
  */
 #define RTEMS_OBJECT_ID_INITIAL_INDEX OBJECTS_ID_INITIAL_INDEX
 
-/* Generated from spec:/rtems/object/if/search-all-nodes */
+/* Find related documentation with spec:/rtems/object/if/search-all-nodes */
 
 /**
  * @ingroup RTEMSAPIClassicObject
@@ -176,7 +176,7 @@ typedef struct {
  */
 #define RTEMS_SEARCH_ALL_NODES OBJECTS_SEARCH_ALL_NODES
 
-/* Generated from spec:/rtems/object/if/search-local-node */
+/* Find related documentation with spec:/rtems/object/if/search-local-node */
 
 /**
  * @ingroup RTEMSAPIClassicObject
@@ -186,7 +186,7 @@ typedef struct {
  */
 #define RTEMS_SEARCH_LOCAL_NODE OBJECTS_SEARCH_LOCAL_NODE
 
-/* Generated from spec:/rtems/object/if/search-other-nodes */
+/* Find related documentation with spec:/rtems/object/if/search-other-nodes */
 
 /**
  * @ingroup RTEMSAPIClassicObject
@@ -196,7 +196,7 @@ typedef struct {
  */
 #define RTEMS_SEARCH_OTHER_NODES OBJECTS_SEARCH_OTHER_NODES
 
-/* Generated from spec:/rtems/object/if/who-am-i */
+/* Find related documentation with spec:/rtems/object/if/who-am-i */
 
 /**
  * @ingroup RTEMSAPIClassicObject
@@ -206,7 +206,7 @@ typedef struct {
  */
 #define RTEMS_WHO_AM_I OBJECTS_WHO_AM_I
 
-/* Generated from spec:/rtems/object/if/build-id */
+/* Find related documentation with spec:/rtems/object/if/build-id */
 
 /**
  * @ingroup RTEMSAPIClassicObject
@@ -243,11 +243,11 @@ rtems_id rtems_build_id(
   uint32_t index
 );
 
-/* Generated from spec:/rtems/object/if/build-id-macro */
+/* Find related documentation with spec:/rtems/object/if/build-id-macro */
 #define rtems_build_id( _api, _class, _node, _index ) \
   _Objects_Build_id( _api, _class, _node, _index )
 
-/* Generated from spec:/rtems/object/if/build-name */
+/* Find related documentation with spec:/rtems/object/if/build-name */
 
 /**
  * @ingroup RTEMSAPIClassicObject
@@ -281,11 +281,11 @@ rtems_id rtems_build_id(
  */
 rtems_name rtems_build_name( char c1, char c2, char c3, char c4 );
 
-/* Generated from spec:/rtems/object/if/build-name-macro */
+/* Find related documentation with spec:/rtems/object/if/build-name-macro */
 #define rtems_build_name( _c1, _c2, _c3, _c4 ) \
   _Objects_Build_name( _c1, _c2, _c3, _c4 )
 
-/* Generated from spec:/rtems/object/if/get-classic-name */
+/* Find related documentation with spec:/rtems/object/if/get-classic-name */
 
 /**
  * @ingroup RTEMSAPIClassicObject
@@ -325,7 +325,7 @@ rtems_status_code rtems_object_get_classic_name(
   rtems_name *name
 );
 
-/* Generated from spec:/rtems/object/if/get-name */
+/* Find related documentation with spec:/rtems/object/if/get-name */
 
 /**
  * @ingroup RTEMSAPIClassicObject
@@ -369,7 +369,7 @@ rtems_status_code rtems_object_get_classic_name(
  */
 char *rtems_object_get_name( rtems_id id, size_t length, char *name );
 
-/* Generated from spec:/rtems/object/if/set-name */
+/* Find related documentation with spec:/rtems/object/if/set-name */
 
 /**
  * @ingroup RTEMSAPIClassicObject
@@ -426,7 +426,7 @@ char *rtems_object_get_name( rtems_id id, size_t length, char *name );
  */
 rtems_status_code rtems_object_set_name( rtems_id id, const char *name );
 
-/* Generated from spec:/rtems/object/if/id-get-api */
+/* Find related documentation with spec:/rtems/object/if/id-get-api */
 
 /**
  * @ingroup RTEMSAPIClassicObject
@@ -453,10 +453,10 @@ rtems_status_code rtems_object_set_name( rtems_id id, const char *name );
  */
 int rtems_object_id_get_api( rtems_id id );
 
-/* Generated from spec:/rtems/object/if/id-get-api-macro */
+/* Find related documentation with spec:/rtems/object/if/id-get-api-macro */
 #define rtems_object_id_get_api( _id ) _Objects_Get_API( _id )
 
-/* Generated from spec:/rtems/object/if/id-get-class */
+/* Find related documentation with spec:/rtems/object/if/id-get-class */
 
 /**
  * @ingroup RTEMSAPIClassicObject
@@ -483,10 +483,10 @@ int rtems_object_id_get_api( rtems_id id );
  */
 int rtems_object_id_get_class( rtems_id id );
 
-/* Generated from spec:/rtems/object/if/id-get-class-macro */
+/* Find related documentation with spec:/rtems/object/if/id-get-class-macro */
 #define rtems_object_id_get_class( _id ) _Objects_Get_class( _id )
 
-/* Generated from spec:/rtems/object/if/id-get-node */
+/* Find related documentation with spec:/rtems/object/if/id-get-node */
 
 /**
  * @ingroup RTEMSAPIClassicObject
@@ -513,10 +513,10 @@ int rtems_object_id_get_class( rtems_id id );
  */
 int rtems_object_id_get_node( rtems_id id );
 
-/* Generated from spec:/rtems/object/if/id-get-node-macro */
+/* Find related documentation with spec:/rtems/object/if/id-get-node-macro */
 #define rtems_object_id_get_node( _id ) _Objects_Get_node( _id )
 
-/* Generated from spec:/rtems/object/if/id-get-index */
+/* Find related documentation with spec:/rtems/object/if/id-get-index */
 
 /**
  * @ingroup RTEMSAPIClassicObject
@@ -543,10 +543,10 @@ int rtems_object_id_get_node( rtems_id id );
  */
 int rtems_object_id_get_index( rtems_id id );
 
-/* Generated from spec:/rtems/object/if/id-get-index-macro */
+/* Find related documentation with spec:/rtems/object/if/id-get-index-macro */
 #define rtems_object_id_get_index( _id ) _Objects_Get_index( _id )
 
-/* Generated from spec:/rtems/object/if/id-api-minimum */
+/* Find related documentation with spec:/rtems/object/if/id-api-minimum */
 
 /**
  * @ingroup RTEMSAPIClassicObject
@@ -570,10 +570,10 @@ int rtems_object_id_get_index( rtems_id id );
  */
 int rtems_object_id_api_minimum( void );
 
-/* Generated from spec:/rtems/object/if/id-api-minimum-macro */
+/* Find related documentation with spec:/rtems/object/if/id-api-minimum-macro */
 #define rtems_object_id_api_minimum() OBJECTS_INTERNAL_API
 
-/* Generated from spec:/rtems/object/if/id-api-maximum */
+/* Find related documentation with spec:/rtems/object/if/id-api-maximum */
 
 /**
  * @ingroup RTEMSAPIClassicObject
@@ -597,10 +597,10 @@ int rtems_object_id_api_minimum( void );
  */
 int rtems_object_id_api_maximum( void );
 
-/* Generated from spec:/rtems/object/if/id-api-maximum-macro */
+/* Find related documentation with spec:/rtems/object/if/id-api-maximum-macro */
 #define rtems_object_id_api_maximum() OBJECTS_APIS_LAST
 
-/* Generated from spec:/rtems/object/if/api-minimum-class */
+/* Find related documentation with spec:/rtems/object/if/api-minimum-class */
 
 /**
  * @ingroup RTEMSAPIClassicObject
@@ -624,7 +624,7 @@ int rtems_object_id_api_maximum( void );
  */
 int rtems_object_api_minimum_class( int api );
 
-/* Generated from spec:/rtems/object/if/api-maximum-class */
+/* Find related documentation with spec:/rtems/object/if/api-maximum-class */
 
 /**
  * @ingroup RTEMSAPIClassicObject
@@ -648,7 +648,7 @@ int rtems_object_api_minimum_class( int api );
  */
 int rtems_object_api_maximum_class( int api );
 
-/* Generated from spec:/rtems/object/if/get-api-name */
+/* Find related documentation with spec:/rtems/object/if/get-api-name */
 
 /**
  * @ingroup RTEMSAPIClassicObject
@@ -675,7 +675,7 @@ int rtems_object_api_maximum_class( int api );
  */
 const char *rtems_object_get_api_name( int api );
 
-/* Generated from spec:/rtems/object/if/get-api-class-name */
+/* Find related documentation with spec:/rtems/object/if/get-api-class-name */
 
 /**
  * @ingroup RTEMSAPIClassicObject
@@ -707,7 +707,7 @@ const char *rtems_object_get_api_name( int api );
  */
 const char *rtems_object_get_api_class_name( int the_api, int the_class );
 
-/* Generated from spec:/rtems/object/if/get-class-information */
+/* Find related documentation with spec:/rtems/object/if/get-class-information */
 
 /**
  * @ingroup RTEMSAPIClassicObject
@@ -745,7 +745,7 @@ rtems_status_code rtems_object_get_class_information(
   rtems_object_api_class_information *info
 );
 
-/* Generated from spec:/rtems/object/if/get-local-node */
+/* Find related documentation with spec:/rtems/object/if/get-local-node */
 
 /**
  * @ingroup RTEMSAPIClassicObject

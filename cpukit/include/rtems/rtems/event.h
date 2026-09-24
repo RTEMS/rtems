@@ -39,7 +39,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/event/if/header */
+/* Find related documentation with spec:/rtems/event/if/header */
 
 #ifndef _RTEMS_RTEMS_EVENT_H
 #define _RTEMS_RTEMS_EVENT_H
@@ -53,7 +53,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/event/if/group */
+/* Find related documentation with spec:/rtems/event/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicEvent Event Manager
@@ -64,7 +64,7 @@ extern "C" {
  *   communication and synchronization.
  */
 
-/* Generated from spec:/rtems/event/if/all-events */
+/* Find related documentation with spec:/rtems/event/if/all-events */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -83,7 +83,7 @@ extern "C" {
  */
 #define RTEMS_ALL_EVENTS 0xffffffff
 
-/* Generated from spec:/rtems/event/if/event-00 */
+/* Find related documentation with spec:/rtems/event/if/event-00 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -93,7 +93,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_0 0x00000001
 
-/* Generated from spec:/rtems/event/if/event-01 */
+/* Find related documentation with spec:/rtems/event/if/event-01 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -103,7 +103,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_1 0x00000002
 
-/* Generated from spec:/rtems/event/if/event-02 */
+/* Find related documentation with spec:/rtems/event/if/event-02 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -113,7 +113,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_2 0x00000004
 
-/* Generated from spec:/rtems/event/if/event-03 */
+/* Find related documentation with spec:/rtems/event/if/event-03 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -123,7 +123,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_3 0x00000008
 
-/* Generated from spec:/rtems/event/if/event-04 */
+/* Find related documentation with spec:/rtems/event/if/event-04 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -133,7 +133,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_4 0x00000010
 
-/* Generated from spec:/rtems/event/if/event-05 */
+/* Find related documentation with spec:/rtems/event/if/event-05 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -143,7 +143,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_5 0x00000020
 
-/* Generated from spec:/rtems/event/if/event-06 */
+/* Find related documentation with spec:/rtems/event/if/event-06 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -153,7 +153,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_6 0x00000040
 
-/* Generated from spec:/rtems/event/if/event-07 */
+/* Find related documentation with spec:/rtems/event/if/event-07 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -163,7 +163,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_7 0x00000080
 
-/* Generated from spec:/rtems/event/if/event-08 */
+/* Find related documentation with spec:/rtems/event/if/event-08 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -173,7 +173,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_8 0x00000100
 
-/* Generated from spec:/rtems/event/if/event-09 */
+/* Find related documentation with spec:/rtems/event/if/event-09 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -183,7 +183,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_9 0x00000200
 
-/* Generated from spec:/rtems/event/if/event-10 */
+/* Find related documentation with spec:/rtems/event/if/event-10 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -193,7 +193,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_10 0x00000400
 
-/* Generated from spec:/rtems/event/if/event-11 */
+/* Find related documentation with spec:/rtems/event/if/event-11 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -203,7 +203,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_11 0x00000800
 
-/* Generated from spec:/rtems/event/if/event-12 */
+/* Find related documentation with spec:/rtems/event/if/event-12 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -213,7 +213,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_12 0x00001000
 
-/* Generated from spec:/rtems/event/if/event-13 */
+/* Find related documentation with spec:/rtems/event/if/event-13 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -223,7 +223,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_13 0x00002000
 
-/* Generated from spec:/rtems/event/if/event-14 */
+/* Find related documentation with spec:/rtems/event/if/event-14 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -233,7 +233,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_14 0x00004000
 
-/* Generated from spec:/rtems/event/if/event-15 */
+/* Find related documentation with spec:/rtems/event/if/event-15 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -243,7 +243,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_15 0x00008000
 
-/* Generated from spec:/rtems/event/if/event-16 */
+/* Find related documentation with spec:/rtems/event/if/event-16 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -253,7 +253,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_16 0x00010000
 
-/* Generated from spec:/rtems/event/if/event-17 */
+/* Find related documentation with spec:/rtems/event/if/event-17 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -263,7 +263,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_17 0x00020000
 
-/* Generated from spec:/rtems/event/if/event-18 */
+/* Find related documentation with spec:/rtems/event/if/event-18 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -273,7 +273,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_18 0x00040000
 
-/* Generated from spec:/rtems/event/if/event-19 */
+/* Find related documentation with spec:/rtems/event/if/event-19 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -283,7 +283,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_19 0x00080000
 
-/* Generated from spec:/rtems/event/if/event-20 */
+/* Find related documentation with spec:/rtems/event/if/event-20 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -293,7 +293,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_20 0x00100000
 
-/* Generated from spec:/rtems/event/if/event-21 */
+/* Find related documentation with spec:/rtems/event/if/event-21 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -303,7 +303,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_21 0x00200000
 
-/* Generated from spec:/rtems/event/if/event-22 */
+/* Find related documentation with spec:/rtems/event/if/event-22 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -313,7 +313,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_22 0x00400000
 
-/* Generated from spec:/rtems/event/if/event-23 */
+/* Find related documentation with spec:/rtems/event/if/event-23 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -323,7 +323,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_23 0x00800000
 
-/* Generated from spec:/rtems/event/if/event-24 */
+/* Find related documentation with spec:/rtems/event/if/event-24 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -333,7 +333,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_24 0x01000000
 
-/* Generated from spec:/rtems/event/if/event-25 */
+/* Find related documentation with spec:/rtems/event/if/event-25 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -343,7 +343,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_25 0x02000000
 
-/* Generated from spec:/rtems/event/if/event-26 */
+/* Find related documentation with spec:/rtems/event/if/event-26 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -353,7 +353,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_26 0x04000000
 
-/* Generated from spec:/rtems/event/if/event-27 */
+/* Find related documentation with spec:/rtems/event/if/event-27 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -363,7 +363,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_27 0x08000000
 
-/* Generated from spec:/rtems/event/if/event-28 */
+/* Find related documentation with spec:/rtems/event/if/event-28 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -373,7 +373,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_28 0x10000000
 
-/* Generated from spec:/rtems/event/if/event-29 */
+/* Find related documentation with spec:/rtems/event/if/event-29 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -383,7 +383,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_29 0x20000000
 
-/* Generated from spec:/rtems/event/if/event-30 */
+/* Find related documentation with spec:/rtems/event/if/event-30 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -393,7 +393,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_30 0x40000000
 
-/* Generated from spec:/rtems/event/if/event-31 */
+/* Find related documentation with spec:/rtems/event/if/event-31 */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -403,7 +403,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_31 0x80000000
 
-/* Generated from spec:/rtems/event/if/pending-events */
+/* Find related documentation with spec:/rtems/event/if/pending-events */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -413,7 +413,7 @@ extern "C" {
  */
 #define RTEMS_PENDING_EVENTS 0
 
-/* Generated from spec:/rtems/event/if/set */
+/* Find related documentation with spec:/rtems/event/if/set */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -423,7 +423,7 @@ extern "C" {
  */
 typedef uint32_t rtems_event_set;
 
-/* Generated from spec:/rtems/event/if/system-aio-suspension-terminated */
+/* Find related documentation with spec:/rtems/event/if/system-aio-suspension-terminated */
 
 /**
  * @brief This event set constant represents the reserved system event that is
@@ -431,7 +431,7 @@ typedef uint32_t rtems_event_set;
  */
 #define RTEMS_EVENT_SYSTEM_AIO_SUSPENSION_TERMINATED RTEMS_EVENT_27
 
-/* Generated from spec:/rtems/event/if/system-lio-list-completed */
+/* Find related documentation with spec:/rtems/event/if/system-lio-list-completed */
 
 /**
  * @brief This event set constant represents the reserved system event
@@ -440,7 +440,7 @@ typedef uint32_t rtems_event_set;
  */
 #define RTEMS_EVENT_SYSTEM_LIO_LIST_COMPLETED RTEMS_EVENT_28
 
-/* Generated from spec:/rtems/event/if/system-network-close */
+/* Find related documentation with spec:/rtems/event/if/system-network-close */
 
 /**
  * @brief This event set constant represents the reserved system event for a
@@ -448,7 +448,7 @@ typedef uint32_t rtems_event_set;
  */
 #define RTEMS_EVENT_SYSTEM_NETWORK_CLOSE RTEMS_EVENT_26
 
-/* Generated from spec:/rtems/event/if/system-network-sbwait */
+/* Find related documentation with spec:/rtems/event/if/system-network-sbwait */
 
 /**
  * @brief This event set constant represents the reserved system event for a
@@ -456,7 +456,7 @@ typedef uint32_t rtems_event_set;
  */
 #define RTEMS_EVENT_SYSTEM_NETWORK_SBWAIT RTEMS_EVENT_24
 
-/* Generated from spec:/rtems/event/if/system-network-sosleep */
+/* Find related documentation with spec:/rtems/event/if/system-network-sosleep */
 
 /**
  * @brief This event set constant represents the reserved system event for a
@@ -464,7 +464,7 @@ typedef uint32_t rtems_event_set;
  */
 #define RTEMS_EVENT_SYSTEM_NETWORK_SOSLEEP RTEMS_EVENT_25
 
-/* Generated from spec:/rtems/event/if/system-receive */
+/* Find related documentation with spec:/rtems/event/if/system-receive */
 
 /**
  * @brief Receives or gets a system event set from the executing task.
@@ -504,7 +504,7 @@ rtems_status_code rtems_event_system_receive(
   rtems_event_set *event_out
 );
 
-/* Generated from spec:/rtems/event/if/system-send */
+/* Find related documentation with spec:/rtems/event/if/system-send */
 
 /**
  * @brief Sends the system event set to the task.
@@ -533,7 +533,7 @@ rtems_status_code rtems_event_system_send(
   rtems_event_set event_in
 );
 
-/* Generated from spec:/rtems/event/if/system-server */
+/* Find related documentation with spec:/rtems/event/if/system-server */
 
 /**
  * @brief This event set constant represents the reserved system event for
@@ -541,7 +541,7 @@ rtems_status_code rtems_event_system_send(
  */
 #define RTEMS_EVENT_SYSTEM_SERVER RTEMS_EVENT_30
 
-/* Generated from spec:/rtems/event/if/system-server-resume */
+/* Find related documentation with spec:/rtems/event/if/system-server-resume */
 
 /**
  * @brief This event set constant represents the reserved system event to
@@ -549,7 +549,7 @@ rtems_status_code rtems_event_system_send(
  */
 #define RTEMS_EVENT_SYSTEM_SERVER_RESUME RTEMS_EVENT_29
 
-/* Generated from spec:/rtems/event/if/system-transient */
+/* Find related documentation with spec:/rtems/event/if/system-transient */
 
 /**
  * @brief This event set constant represents the reserved system event for
@@ -557,7 +557,7 @@ rtems_status_code rtems_event_system_send(
  */
 #define RTEMS_EVENT_SYSTEM_TRANSIENT RTEMS_EVENT_31
 
-/* Generated from spec:/rtems/event/if/transient-clear */
+/* Find related documentation with spec:/rtems/event/if/transient-clear */
 
 /**
  * @brief Clears the transient event.
@@ -586,7 +586,7 @@ static inline void rtems_event_transient_clear( void )
   );
 }
 
-/* Generated from spec:/rtems/event/if/transient-receive */
+/* Find related documentation with spec:/rtems/event/if/transient-receive */
 
 /**
  * @brief Receives the transient event.
@@ -622,7 +622,7 @@ static inline rtems_status_code rtems_event_transient_receive(
   );
 }
 
-/* Generated from spec:/rtems/event/if/transient-send */
+/* Find related documentation with spec:/rtems/event/if/transient-send */
 
 /**
  * @brief Sends the transient event to the task.
@@ -649,7 +649,7 @@ static inline rtems_status_code rtems_event_transient_send( rtems_id id )
   return rtems_event_system_send( id, RTEMS_EVENT_SYSTEM_TRANSIENT );
 }
 
-/* Generated from spec:/rtems/event/if/send */
+/* Find related documentation with spec:/rtems/event/if/send */
 
 /**
  * @ingroup RTEMSAPIClassicEvent
@@ -720,7 +720,7 @@ static inline rtems_status_code rtems_event_transient_send( rtems_id id )
  */
 rtems_status_code rtems_event_send( rtems_id id, rtems_event_set event_in );
 
-/* Generated from spec:/rtems/event/if/receive */
+/* Find related documentation with spec:/rtems/event/if/receive */
 
 /**
  * @ingroup RTEMSAPIClassicEvent

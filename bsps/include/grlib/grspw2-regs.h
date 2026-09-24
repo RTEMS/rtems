@@ -38,7 +38,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/dev/grlib/if/grspw2-header */
+/* Find related documentation with spec:/dev/grlib/if/grspw2-header */
 
 #ifndef _GRLIB_GRSPW2_REGS_H
 #define _GRLIB_GRSPW2_REGS_H
@@ -49,7 +49,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/dev/grlib/if/grspw2-dma */
+/* Find related documentation with spec:/dev/grlib/if/grspw2-dma */
 
 /**
  * @defgroup RTEMSDeviceGRSPW2DMA GRSPW2 DMA
@@ -314,7 +314,7 @@ typedef struct grspw2_dma {
 
 /** @} */
 
-/* Generated from spec:/dev/grlib/if/grspw2 */
+/* Find related documentation with spec:/dev/grlib/if/grspw2 */
 
 /**
  * @defgroup RTEMSDeviceGRSPW2 GRSPW2

@@ -39,7 +39,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/attr/if/header */
+/* Find related documentation with spec:/rtems/attr/if/header */
 
 #ifndef _RTEMS_RTEMS_ATTR_H
 #define _RTEMS_RTEMS_ATTR_H
@@ -50,7 +50,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/attr/if/group */
+/* Find related documentation with spec:/rtems/attr/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicAttr Directive Attributes
@@ -60,7 +60,7 @@ extern "C" {
  * @brief This group contains the Classic API directive attributes.
  */
 
-/* Generated from spec:/rtems/attr/if/application-task */
+/* Find related documentation with spec:/rtems/attr/if/application-task */
 
 /**
  * @ingroup RTEMSAPIClassicAttr
@@ -71,7 +71,7 @@ extern "C" {
  */
 #define RTEMS_APPLICATION_TASK 0x00000000
 
-/* Generated from spec:/rtems/attr/if/attribute */
+/* Find related documentation with spec:/rtems/attr/if/attribute */
 
 /**
  * @ingroup RTEMSAPIClassicAttr
@@ -83,7 +83,7 @@ extern "C" {
  */
 typedef uint32_t rtems_attribute;
 
-/* Generated from spec:/rtems/attr/if/barrier-automatic-release */
+/* Find related documentation with spec:/rtems/attr/if/barrier-automatic-release */
 
 /**
  * @ingroup RTEMSAPIClassicAttr
@@ -94,7 +94,7 @@ typedef uint32_t rtems_attribute;
  */
 #define RTEMS_BARRIER_AUTOMATIC_RELEASE 0x00000200
 
-/* Generated from spec:/rtems/attr/if/barrier-manual-release */
+/* Find related documentation with spec:/rtems/attr/if/barrier-manual-release */
 
 /**
  * @ingroup RTEMSAPIClassicAttr
@@ -104,7 +104,7 @@ typedef uint32_t rtems_attribute;
  */
 #define RTEMS_BARRIER_MANUAL_RELEASE 0x00000000
 
-/* Generated from spec:/rtems/attr/if/binary-semaphore */
+/* Find related documentation with spec:/rtems/attr/if/binary-semaphore */
 
 /**
  * @ingroup RTEMSAPIClassicAttr
@@ -115,7 +115,7 @@ typedef uint32_t rtems_attribute;
  */
 #define RTEMS_BINARY_SEMAPHORE 0x00000010
 
-/* Generated from spec:/rtems/attr/if/counting-semaphore */
+/* Find related documentation with spec:/rtems/attr/if/counting-semaphore */
 
 /**
  * @ingroup RTEMSAPIClassicAttr
@@ -125,7 +125,7 @@ typedef uint32_t rtems_attribute;
  */
 #define RTEMS_COUNTING_SEMAPHORE 0x00000000
 
-/* Generated from spec:/rtems/attr/if/default */
+/* Find related documentation with spec:/rtems/attr/if/default */
 
 /**
  * @ingroup RTEMSAPIClassicAttr
@@ -134,7 +134,7 @@ typedef uint32_t rtems_attribute;
  */
 #define RTEMS_DEFAULT_ATTRIBUTES 0x00000000
 
-/* Generated from spec:/rtems/attr/if/fifo */
+/* Find related documentation with spec:/rtems/attr/if/fifo */
 
 /**
  * @ingroup RTEMSAPIClassicAttr
@@ -144,7 +144,7 @@ typedef uint32_t rtems_attribute;
  */
 #define RTEMS_FIFO 0x00000000
 
-/* Generated from spec:/rtems/attr/if/floating-point */
+/* Find related documentation with spec:/rtems/attr/if/floating-point */
 
 /**
  * @ingroup RTEMSAPIClassicAttr
@@ -159,7 +159,7 @@ typedef uint32_t rtems_attribute;
  */
 #define RTEMS_FLOATING_POINT 0x00000001
 
-/* Generated from spec:/rtems/attr/if/global */
+/* Find related documentation with spec:/rtems/attr/if/global */
 
 /**
  * @ingroup RTEMSAPIClassicAttr
@@ -172,7 +172,7 @@ typedef uint32_t rtems_attribute;
  */
 #define RTEMS_GLOBAL 0x00000002
 
-/* Generated from spec:/rtems/attr/if/inherit-priority */
+/* Find related documentation with spec:/rtems/attr/if/inherit-priority */
 
 /**
  * @ingroup RTEMSAPIClassicAttr
@@ -186,7 +186,7 @@ typedef uint32_t rtems_attribute;
  */
 #define RTEMS_INHERIT_PRIORITY 0x00000040
 
-/* Generated from spec:/rtems/attr/if/local */
+/* Find related documentation with spec:/rtems/attr/if/local */
 
 /**
  * @ingroup RTEMSAPIClassicAttr
@@ -199,7 +199,7 @@ typedef uint32_t rtems_attribute;
  */
 #define RTEMS_LOCAL 0x00000000
 
-/* Generated from spec:/rtems/attr/if/multiprocessor-resource-sharing */
+/* Find related documentation with spec:/rtems/attr/if/multiprocessor-resource-sharing */
 
 /**
  * @ingroup RTEMSAPIClassicAttr
@@ -213,7 +213,7 @@ typedef uint32_t rtems_attribute;
  */
 #define RTEMS_MULTIPROCESSOR_RESOURCE_SHARING 0x00000100
 
-/* Generated from spec:/rtems/attr/if/no-floating-point */
+/* Find related documentation with spec:/rtems/attr/if/no-floating-point */
 
 /**
  * @ingroup RTEMSAPIClassicAttr
@@ -228,7 +228,7 @@ typedef uint32_t rtems_attribute;
  */
 #define RTEMS_NO_FLOATING_POINT 0x00000000
 
-/* Generated from spec:/rtems/attr/if/no-inherit-priority */
+/* Find related documentation with spec:/rtems/attr/if/no-inherit-priority */
 
 /**
  * @ingroup RTEMSAPIClassicAttr
@@ -239,7 +239,7 @@ typedef uint32_t rtems_attribute;
  */
 #define RTEMS_NO_INHERIT_PRIORITY 0x00000000
 
-/* Generated from spec:/rtems/attr/if/no-multiprocessor-resource-sharing */
+/* Find related documentation with spec:/rtems/attr/if/no-multiprocessor-resource-sharing */
 
 /**
  * @ingroup RTEMSAPIClassicAttr
@@ -250,7 +250,7 @@ typedef uint32_t rtems_attribute;
  */
 #define RTEMS_NO_MULTIPROCESSOR_RESOURCE_SHARING 0x00000000
 
-/* Generated from spec:/rtems/attr/if/no-priority-ceiling */
+/* Find related documentation with spec:/rtems/attr/if/no-priority-ceiling */
 
 /**
  * @ingroup RTEMSAPIClassicAttr
@@ -261,7 +261,7 @@ typedef uint32_t rtems_attribute;
  */
 #define RTEMS_NO_PRIORITY_CEILING 0x00000000
 
-/* Generated from spec:/rtems/attr/if/priority */
+/* Find related documentation with spec:/rtems/attr/if/priority */
 
 /**
  * @ingroup RTEMSAPIClassicAttr
@@ -271,7 +271,7 @@ typedef uint32_t rtems_attribute;
  */
 #define RTEMS_PRIORITY 0x00000004
 
-/* Generated from spec:/rtems/attr/if/priority-ceiling */
+/* Find related documentation with spec:/rtems/attr/if/priority-ceiling */
 
 /**
  * @ingroup RTEMSAPIClassicAttr
@@ -285,7 +285,7 @@ typedef uint32_t rtems_attribute;
  */
 #define RTEMS_PRIORITY_CEILING 0x00000080
 
-/* Generated from spec:/rtems/attr/if/semaphore-class */
+/* Find related documentation with spec:/rtems/attr/if/semaphore-class */
 
 /**
  * @ingroup RTEMSAPIClassicAttr
@@ -296,7 +296,7 @@ typedef uint32_t rtems_attribute;
  */
 #define RTEMS_SEMAPHORE_CLASS 0x00000030
 
-/* Generated from spec:/rtems/attr/if/simple-binary-semaphore */
+/* Find related documentation with spec:/rtems/attr/if/simple-binary-semaphore */
 
 /**
  * @ingroup RTEMSAPIClassicAttr
@@ -306,7 +306,7 @@ typedef uint32_t rtems_attribute;
  */
 #define RTEMS_SIMPLE_BINARY_SEMAPHORE 0x00000020
 
-/* Generated from spec:/rtems/attr/if/system-task */
+/* Find related documentation with spec:/rtems/attr/if/system-task */
 
 /**
  * @ingroup RTEMSAPIClassicAttr

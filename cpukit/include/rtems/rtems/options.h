@@ -39,7 +39,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/option/if/header */
+/* Find related documentation with spec:/rtems/option/if/header */
 
 #ifndef _RTEMS_RTEMS_OPTIONS_H
 #define _RTEMS_RTEMS_OPTIONS_H
@@ -50,7 +50,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/option/if/group */
+/* Find related documentation with spec:/rtems/option/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicOptions Directive Options
@@ -60,7 +60,7 @@ extern "C" {
  * @brief This group contains the Classic API directive options.
  */
 
-/* Generated from spec:/rtems/option/if/default */
+/* Find related documentation with spec:/rtems/option/if/default */
 
 /**
  * @ingroup RTEMSAPIClassicOptions
@@ -69,7 +69,7 @@ extern "C" {
  */
 #define RTEMS_DEFAULT_OPTIONS 0x00000000
 
-/* Generated from spec:/rtems/option/if/event-all */
+/* Find related documentation with spec:/rtems/option/if/event-all */
 
 /**
  * @ingroup RTEMSAPIClassicOptions
@@ -80,7 +80,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_ALL 0x00000000
 
-/* Generated from spec:/rtems/option/if/event-any */
+/* Find related documentation with spec:/rtems/option/if/event-any */
 
 /**
  * @ingroup RTEMSAPIClassicOptions
@@ -91,7 +91,7 @@ extern "C" {
  */
 #define RTEMS_EVENT_ANY 0x00000002
 
-/* Generated from spec:/rtems/option/if/no-wait */
+/* Find related documentation with spec:/rtems/option/if/no-wait */
 
 /**
  * @ingroup RTEMSAPIClassicOptions
@@ -104,7 +104,7 @@ extern "C" {
  */
 #define RTEMS_NO_WAIT 0x00000001
 
-/* Generated from spec:/rtems/option/if/option */
+/* Find related documentation with spec:/rtems/option/if/option */
 
 /**
  * @ingroup RTEMSAPIClassicOptions
@@ -113,7 +113,7 @@ extern "C" {
  */
 typedef uint32_t rtems_option;
 
-/* Generated from spec:/rtems/option/if/wait */
+/* Find related documentation with spec:/rtems/option/if/wait */
 
 /**
  * @ingroup RTEMSAPIClassicOptions

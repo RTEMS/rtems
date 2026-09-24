@@ -40,7 +40,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/barrier/if/header */
+/* Find related documentation with spec:/rtems/barrier/if/header */
 
 #ifndef _RTEMS_RTEMS_BARRIER_H
 #define _RTEMS_RTEMS_BARRIER_H
@@ -54,7 +54,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/barrier/if/group */
+/* Find related documentation with spec:/rtems/barrier/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicBarrier Barrier Manager
@@ -65,7 +65,7 @@ extern "C" {
  *   which can be used to have a set of tasks block and be unblocked as a set.
  */
 
-/* Generated from spec:/rtems/barrier/if/create */
+/* Find related documentation with spec:/rtems/barrier/if/create */
 
 /**
  * @ingroup RTEMSAPIClassicBarrier
@@ -160,7 +160,7 @@ rtems_status_code rtems_barrier_create(
   rtems_id       *id
 );
 
-/* Generated from spec:/rtems/barrier/if/ident */
+/* Find related documentation with spec:/rtems/barrier/if/ident */
 
 /**
  * @ingroup RTEMSAPIClassicBarrier
@@ -209,7 +209,7 @@ rtems_status_code rtems_barrier_create(
  */
 rtems_status_code rtems_barrier_ident( rtems_name name, rtems_id *id );
 
-/* Generated from spec:/rtems/barrier/if/delete */
+/* Find related documentation with spec:/rtems/barrier/if/delete */
 
 /**
  * @ingroup RTEMSAPIClassicBarrier
@@ -251,7 +251,7 @@ rtems_status_code rtems_barrier_ident( rtems_name name, rtems_id *id );
  */
 rtems_status_code rtems_barrier_delete( rtems_id id );
 
-/* Generated from spec:/rtems/barrier/if/wait */
+/* Find related documentation with spec:/rtems/barrier/if/wait */
 
 /**
  * @ingroup RTEMSAPIClassicBarrier
@@ -300,7 +300,7 @@ rtems_status_code rtems_barrier_delete( rtems_id id );
  */
 rtems_status_code rtems_barrier_wait( rtems_id id, rtems_interval timeout );
 
-/* Generated from spec:/rtems/barrier/if/release */
+/* Find related documentation with spec:/rtems/barrier/if/release */
 
 /**
  * @ingroup RTEMSAPIClassicBarrier
@@ -338,7 +338,7 @@ rtems_status_code rtems_barrier_wait( rtems_id id, rtems_interval timeout );
  */
 rtems_status_code rtems_barrier_release( rtems_id id, uint32_t *released );
 
-/* Generated from spec:/rtems/barrier/if/get-number-waiting */
+/* Find related documentation with spec:/rtems/barrier/if/get-number-waiting */
 
 /**
  * @ingroup RTEMSAPIClassicBarrier

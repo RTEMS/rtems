@@ -39,7 +39,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/dpmem/if/header */
+/* Find related documentation with spec:/rtems/dpmem/if/header */
 
 #ifndef _RTEMS_RTEMS_DPMEM_H
 #define _RTEMS_RTEMS_DPMEM_H
@@ -52,7 +52,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/dpmem/if/group */
+/* Find related documentation with spec:/rtems/dpmem/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicDPMem Dual-Ported Memory Manager
@@ -64,7 +64,7 @@ extern "C" {
  *   dual-ported memory areas (DPMA).
  */
 
-/* Generated from spec:/rtems/dpmem/if/create */
+/* Find related documentation with spec:/rtems/dpmem/if/create */
 
 /**
  * @ingroup RTEMSAPIClassicDPMem
@@ -141,7 +141,7 @@ rtems_status_code rtems_port_create(
   rtems_id  *id
 );
 
-/* Generated from spec:/rtems/dpmem/if/ident */
+/* Find related documentation with spec:/rtems/dpmem/if/ident */
 
 /**
  * @ingroup RTEMSAPIClassicDPMem
@@ -190,7 +190,7 @@ rtems_status_code rtems_port_create(
  */
 rtems_status_code rtems_port_ident( rtems_name name, rtems_id *id );
 
-/* Generated from spec:/rtems/dpmem/if/delete */
+/* Find related documentation with spec:/rtems/dpmem/if/delete */
 
 /**
  * @ingroup RTEMSAPIClassicDPMem
@@ -230,7 +230,7 @@ rtems_status_code rtems_port_ident( rtems_name name, rtems_id *id );
  */
 rtems_status_code rtems_port_delete( rtems_id id );
 
-/* Generated from spec:/rtems/dpmem/if/external-to-internal */
+/* Find related documentation with spec:/rtems/dpmem/if/external-to-internal */
 
 /**
  * @ingroup RTEMSAPIClassicDPMem
@@ -276,7 +276,7 @@ rtems_status_code rtems_port_external_to_internal(
   void   **internal
 );
 
-/* Generated from spec:/rtems/dpmem/if/internal-to-external */
+/* Find related documentation with spec:/rtems/dpmem/if/internal-to-external */
 
 /**
  * @ingroup RTEMSAPIClassicDPMem

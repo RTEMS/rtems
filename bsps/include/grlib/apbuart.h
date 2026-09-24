@@ -38,7 +38,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/dev/grlib/if/apbuart-header-2 */
+/* Find related documentation with spec:/dev/grlib/if/apbuart-header-2 */
 
 #ifndef _GRLIB_APBUART_H
 #define _GRLIB_APBUART_H
@@ -49,7 +49,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/dev/grlib/if/apbuart-inbyte-nonblocking */
+/* Find related documentation with spec:/dev/grlib/if/apbuart-inbyte-nonblocking */
 
 /**
  * @ingroup RTEMSDeviceGRLIBAPBUART
@@ -66,7 +66,7 @@ extern "C" {
  */
 int apbuart_inbyte_nonblocking( apbuart *regs );
 
-/* Generated from spec:/dev/grlib/if/apbuart-outbyte-polled */
+/* Find related documentation with spec:/dev/grlib/if/apbuart-outbyte-polled */
 
 /**
  * @ingroup RTEMSDeviceGRLIBAPBUART
@@ -80,7 +80,7 @@ int apbuart_inbyte_nonblocking( apbuart *regs );
  */
 void apbuart_outbyte_polled( apbuart *regs, char ch );
 
-/* Generated from spec:/dev/grlib/if/apbuart-outbyte-wait */
+/* Find related documentation with spec:/dev/grlib/if/apbuart-outbyte-wait */
 
 /**
  * @ingroup RTEMSDeviceGRLIBAPBUART

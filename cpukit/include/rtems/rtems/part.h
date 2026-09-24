@@ -39,7 +39,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/part/if/header */
+/* Find related documentation with spec:/rtems/part/if/header */
 
 #ifndef _RTEMS_RTEMS_PART_H
 #define _RTEMS_RTEMS_PART_H
@@ -55,7 +55,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/part/if/group */
+/* Find related documentation with spec:/rtems/part/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicPart Partition Manager
@@ -66,7 +66,7 @@ extern "C" {
  *   memory in fixed-size units.
  */
 
-/* Generated from spec:/rtems/part/if/alignment */
+/* Find related documentation with spec:/rtems/part/if/alignment */
 
 /**
  * @ingroup RTEMSAPIClassicPart
@@ -80,7 +80,7 @@ extern "C" {
  */
 #define RTEMS_PARTITION_ALIGNMENT CPU_SIZEOF_POINTER
 
-/* Generated from spec:/rtems/part/if/create */
+/* Find related documentation with spec:/rtems/part/if/create */
 
 /**
  * @ingroup RTEMSAPIClassicPart
@@ -229,7 +229,7 @@ rtems_status_code rtems_partition_create(
   rtems_id       *id
 );
 
-/* Generated from spec:/rtems/part/if/ident */
+/* Find related documentation with spec:/rtems/part/if/ident */
 
 /**
  * @ingroup RTEMSAPIClassicPart
@@ -307,7 +307,7 @@ rtems_status_code rtems_partition_ident(
   rtems_id  *id
 );
 
-/* Generated from spec:/rtems/part/if/delete */
+/* Find related documentation with spec:/rtems/part/if/delete */
 
 /**
  * @ingroup RTEMSAPIClassicPart
@@ -367,7 +367,7 @@ rtems_status_code rtems_partition_ident(
  */
 rtems_status_code rtems_partition_delete( rtems_id id );
 
-/* Generated from spec:/rtems/part/if/get-buffer */
+/* Find related documentation with spec:/rtems/part/if/get-buffer */
 
 /**
  * @ingroup RTEMSAPIClassicPart
@@ -425,7 +425,7 @@ rtems_status_code rtems_partition_delete( rtems_id id );
  */
 rtems_status_code rtems_partition_get_buffer( rtems_id id, void **buffer );
 
-/* Generated from spec:/rtems/part/if/return-buffer */
+/* Find related documentation with spec:/rtems/part/if/return-buffer */
 
 /**
  * @ingroup RTEMSAPIClassicPart

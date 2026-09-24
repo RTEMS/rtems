@@ -38,7 +38,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/dev/grlib/if/irqamp-header-2 */
+/* Find related documentation with spec:/dev/grlib/if/irqamp-header-2 */
 
 #ifndef _GRLIB_IRQAMP_H
 #define _GRLIB_IRQAMP_H
@@ -51,7 +51,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/dev/grlib/if/irqamp-get-timestamp */
+/* Find related documentation with spec:/dev/grlib/if/irqamp-get-timestamp */
 
 /**
  * @ingroup RTEMSDeviceGRLIBIRQAMP

@@ -38,7 +38,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/cpuuse/if/header */
+/* Find related documentation with spec:/rtems/cpuuse/if/header */
 
 #ifndef _RTEMS_CPUUSE_H
 #define _RTEMS_CPUUSE_H
@@ -47,7 +47,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/cpuuse/if/group */
+/* Find related documentation with spec:/rtems/cpuuse/if/group */
 
 /**
  * @defgroup RTEMSAPICPUUsageReporting CPU Usage Reporting
@@ -58,12 +58,12 @@ extern "C" {
  *   the CPU usage of threads.
  */
 
-/* Generated from spec:/rtems/cpuuse/if/printer */
+/* Find related documentation with spec:/rtems/cpuuse/if/printer */
 
 /* Forward declaration */
 struct rtems_printer;
 
-/* Generated from spec:/rtems/cpuuse/if/cpu-info-report */
+/* Find related documentation with spec:/rtems/cpuuse/if/cpu-info-report */
 
 /**
  * @ingroup RTEMSAPICPUUsageReporting
@@ -85,7 +85,7 @@ struct rtems_printer;
  */
 int rtems_cpu_info_report( const struct rtems_printer *printer );
 
-/* Generated from spec:/rtems/cpuuse/if/report */
+/* Find related documentation with spec:/rtems/cpuuse/if/report */
 
 /**
  * @ingroup RTEMSAPICPUUsageReporting
@@ -110,7 +110,7 @@ int rtems_cpu_info_report( const struct rtems_printer *printer );
  */
 void rtems_cpu_usage_report( void );
 
-/* Generated from spec:/rtems/cpuuse/if/report-with-plugin */
+/* Find related documentation with spec:/rtems/cpuuse/if/report-with-plugin */
 
 /**
  * @ingroup RTEMSAPICPUUsageReporting
@@ -134,7 +134,7 @@ void rtems_cpu_usage_report( void );
  */
 void rtems_cpu_usage_report_with_plugin( const struct rtems_printer *printer );
 
-/* Generated from spec:/rtems/cpuuse/if/reset */
+/* Find related documentation with spec:/rtems/cpuuse/if/reset */
 
 /**
  * @ingroup RTEMSAPICPUUsageReporting
@@ -156,7 +156,7 @@ void rtems_cpu_usage_report_with_plugin( const struct rtems_printer *printer );
  */
 void rtems_cpu_usage_reset( void );
 
-/* Generated from spec:/rtems/cpuuse/if/top */
+/* Find related documentation with spec:/rtems/cpuuse/if/top */
 
 /**
  * @ingroup RTEMSAPICPUUsageReporting
@@ -181,7 +181,7 @@ void rtems_cpu_usage_reset( void );
  */
 void rtems_cpu_usage_top( void );
 
-/* Generated from spec:/rtems/cpuuse/if/top-with-plugin */
+/* Find related documentation with spec:/rtems/cpuuse/if/top-with-plugin */
 
 /**
  * @ingroup RTEMSAPICPUUsageReporting

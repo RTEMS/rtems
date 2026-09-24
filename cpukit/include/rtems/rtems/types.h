@@ -39,7 +39,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/type/if/header */
+/* Find related documentation with spec:/rtems/type/if/header */
 
 #ifndef _RTEMS_RTEMS_TYPES_H
 #define _RTEMS_RTEMS_TYPES_H
@@ -62,7 +62,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/type/if/group */
+/* Find related documentation with spec:/rtems/type/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicTypes Basic Types
@@ -72,7 +72,7 @@ extern "C" {
  * @brief This group contains basic Classic API types.
  */
 
-/* Generated from spec:/rtems/type/if/id */
+/* Find related documentation with spec:/rtems/type/if/id */
 
 /**
  * @ingroup RTEMSAPIClassicTypes
@@ -81,7 +81,7 @@ extern "C" {
  */
 typedef Objects_Id rtems_id;
 
-/* Generated from spec:/rtems/type/if/id-none */
+/* Find related documentation with spec:/rtems/type/if/id-none */
 
 /**
  * @ingroup RTEMSAPIClassicTypes
@@ -92,7 +92,7 @@ typedef Objects_Id rtems_id;
  */
 #define RTEMS_ID_NONE OBJECTS_ID_NONE
 
-/* Generated from spec:/rtems/type/if/interval */
+/* Find related documentation with spec:/rtems/type/if/interval */
 
 /**
  * @ingroup RTEMSAPIClassicTypes
@@ -102,7 +102,7 @@ typedef Objects_Id rtems_id;
 typedef Watchdog_Interval rtems_interval;
 
 #if defined( RTEMS_MULTIPROCESSING )
-/* Generated from spec:/rtems/type/if/mp-packet-classes */
+/* Find related documentation with spec:/rtems/type/if/mp-packet-classes */
 
 /**
  * @ingroup RTEMSAPIClassicTypes
@@ -113,7 +113,7 @@ typedef MP_packet_Classes rtems_mp_packet_classes;
 #endif
 
 #if defined( RTEMS_MULTIPROCESSING )
-/* Generated from spec:/rtems/type/if/mpci-entry */
+/* Find related documentation with spec:/rtems/type/if/mpci-entry */
 
 /**
  * @ingroup RTEMSAPIClassicTypes
@@ -124,7 +124,7 @@ typedef MPCI_Entry rtems_mpci_entry;
 #endif
 
 #if defined( RTEMS_MULTIPROCESSING )
-/* Generated from spec:/rtems/type/if/mpci-get-packet-entry */
+/* Find related documentation with spec:/rtems/type/if/mpci-get-packet-entry */
 
 /**
  * @ingroup RTEMSAPIClassicTypes
@@ -135,7 +135,7 @@ typedef MPCI_get_packet_entry rtems_mpci_get_packet_entry;
 #endif
 
 #if defined( RTEMS_MULTIPROCESSING )
-/* Generated from spec:/rtems/type/if/mpci-initialization-entry */
+/* Find related documentation with spec:/rtems/type/if/mpci-initialization-entry */
 
 /**
  * @ingroup RTEMSAPIClassicTypes
@@ -146,7 +146,7 @@ typedef MPCI_initialization_entry rtems_mpci_initialization_entry;
 #endif
 
 #if defined( RTEMS_MULTIPROCESSING )
-/* Generated from spec:/rtems/type/if/mpci-receive-packet-entry */
+/* Find related documentation with spec:/rtems/type/if/mpci-receive-packet-entry */
 
 /**
  * @ingroup RTEMSAPIClassicTypes
@@ -157,7 +157,7 @@ typedef MPCI_receive_entry rtems_mpci_receive_packet_entry;
 #endif
 
 #if defined( RTEMS_MULTIPROCESSING )
-/* Generated from spec:/rtems/type/if/mpci-return-packet-entry */
+/* Find related documentation with spec:/rtems/type/if/mpci-return-packet-entry */
 
 /**
  * @ingroup RTEMSAPIClassicTypes
@@ -168,7 +168,7 @@ typedef MPCI_return_packet_entry rtems_mpci_return_packet_entry;
 #endif
 
 #if defined( RTEMS_MULTIPROCESSING )
-/* Generated from spec:/rtems/type/if/mpci-send-packet-entry */
+/* Find related documentation with spec:/rtems/type/if/mpci-send-packet-entry */
 
 /**
  * @ingroup RTEMSAPIClassicTypes
@@ -179,7 +179,7 @@ typedef MPCI_send_entry rtems_mpci_send_packet_entry;
 #endif
 
 #if defined( RTEMS_MULTIPROCESSING )
-/* Generated from spec:/rtems/type/if/mpci-table */
+/* Find related documentation with spec:/rtems/type/if/mpci-table */
 
 /**
  * @ingroup RTEMSAPIClassicTypes
@@ -190,7 +190,7 @@ typedef MPCI_Control rtems_mpci_table;
 #endif
 
 #if defined( RTEMS_MULTIPROCESSING )
-/* Generated from spec:/rtems/type/if/multiprocessing-table */
+/* Find related documentation with spec:/rtems/type/if/multiprocessing-table */
 
 /**
  * @ingroup RTEMSAPIClassicTypes
@@ -200,7 +200,7 @@ typedef MPCI_Control rtems_mpci_table;
 typedef MPCI_Configuration rtems_multiprocessing_table;
 #endif
 
-/* Generated from spec:/rtems/type/if/name */
+/* Find related documentation with spec:/rtems/type/if/name */
 
 /**
  * @ingroup RTEMSAPIClassicTypes
@@ -213,7 +213,7 @@ typedef MPCI_Configuration rtems_multiprocessing_table;
  */
 typedef uint32_t rtems_name;
 
-/* Generated from spec:/rtems/type/if/no-timeout */
+/* Find related documentation with spec:/rtems/type/if/no-timeout */
 
 /**
  * @ingroup RTEMSAPIClassicTypes
@@ -224,7 +224,7 @@ typedef uint32_t rtems_name;
 #define RTEMS_NO_TIMEOUT ( (rtems_interval) WATCHDOG_NO_TIMEOUT )
 
 #if defined( RTEMS_MULTIPROCESSING )
-/* Generated from spec:/rtems/type/if/packet-prefix */
+/* Find related documentation with spec:/rtems/type/if/packet-prefix */
 
 /**
  * @ingroup RTEMSAPIClassicTypes
@@ -235,7 +235,7 @@ typedef uint32_t rtems_name;
 typedef MP_packet_Prefix rtems_packet_prefix;
 #endif
 
-/* Generated from spec:/rtems/type/if/priority */
+/* Find related documentation with spec:/rtems/type/if/priority */
 
 /**
  * @ingroup RTEMSAPIClassicTypes
@@ -244,7 +244,7 @@ typedef MP_packet_Prefix rtems_packet_prefix;
  */
 typedef uint32_t rtems_task_priority;
 
-/* Generated from spec:/rtems/type/if/time-of-day */
+/* Find related documentation with spec:/rtems/type/if/time-of-day */
 
 /**
  * @ingroup RTEMSAPIClassicTypes

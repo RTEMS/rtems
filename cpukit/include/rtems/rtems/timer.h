@@ -39,7 +39,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/timer/if/header */
+/* Find related documentation with spec:/rtems/timer/if/header */
 
 #ifndef _RTEMS_RTEMS_TIMER_H
 #define _RTEMS_RTEMS_TIMER_H
@@ -54,7 +54,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/timer/if/group */
+/* Find related documentation with spec:/rtems/timer/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicTimer Timer Manager
@@ -64,7 +64,7 @@ extern "C" {
  * @brief The Timer Manager provides support for timer facilities.
  */
 
-/* Generated from spec:/rtems/timer/if/class-bit-not-dormant */
+/* Find related documentation with spec:/rtems/timer/if/class-bit-not-dormant */
 
 /**
  * @ingroup RTEMSAPIClassicTimer
@@ -73,7 +73,7 @@ extern "C" {
  */
 #define TIMER_CLASS_BIT_NOT_DORMANT 0x4
 
-/* Generated from spec:/rtems/timer/if/class-bit-on-task */
+/* Find related documentation with spec:/rtems/timer/if/class-bit-on-task */
 
 /**
  * @ingroup RTEMSAPIClassicTimer
@@ -83,7 +83,7 @@ extern "C" {
  */
 #define TIMER_CLASS_BIT_ON_TASK 0x2
 
-/* Generated from spec:/rtems/timer/if/class-bit-time-of-day */
+/* Find related documentation with spec:/rtems/timer/if/class-bit-time-of-day */
 
 /**
  * @ingroup RTEMSAPIClassicTimer
@@ -92,7 +92,7 @@ extern "C" {
  */
 #define TIMER_CLASS_BIT_TIME_OF_DAY 0x1
 
-/* Generated from spec:/rtems/timer/if/classes */
+/* Find related documentation with spec:/rtems/timer/if/classes */
 
 /**
  * @ingroup RTEMSAPIClassicTimer
@@ -134,7 +134,7 @@ typedef enum {
                               TIMER_CLASS_BIT_ON_TASK
 } Timer_Classes;
 
-/* Generated from spec:/rtems/timer/if/information */
+/* Find related documentation with spec:/rtems/timer/if/information */
 
 /**
  * @ingroup RTEMSAPIClassicTimer
@@ -170,7 +170,7 @@ typedef struct {
   Watchdog_Interval stop_time;
 } rtems_timer_information;
 
-/* Generated from spec:/rtems/timer/if/get-information */
+/* Find related documentation with spec:/rtems/timer/if/get-information */
 
 /**
  * @ingroup RTEMSAPIClassicTimer
@@ -211,7 +211,7 @@ rtems_status_code rtems_timer_get_information(
   rtems_timer_information *the_info
 );
 
-/* Generated from spec:/rtems/timer/if/server-default-priority */
+/* Find related documentation with spec:/rtems/timer/if/server-default-priority */
 
 /**
  * @ingroup RTEMSAPIClassicTimer
@@ -224,7 +224,7 @@ rtems_status_code rtems_timer_get_information(
  */
 #define RTEMS_TIMER_SERVER_DEFAULT_PRIORITY ( ( rtems_task_priority ) - 1 )
 
-/* Generated from spec:/rtems/timer/if/service-routine */
+/* Find related documentation with spec:/rtems/timer/if/service-routine */
 
 /**
  * @ingroup RTEMSAPIClassicTimer
@@ -236,7 +236,7 @@ rtems_status_code rtems_timer_get_information(
  */
 typedef void rtems_timer_service_routine;
 
-/* Generated from spec:/rtems/timer/if/service-routine-entry */
+/* Find related documentation with spec:/rtems/timer/if/service-routine-entry */
 
 /**
  * @ingroup RTEMSAPIClassicTimer
@@ -249,7 +249,7 @@ typedef rtems_timer_service_routine ( *rtems_timer_service_routine_entry )(
   void *
 );
 
-/* Generated from spec:/rtems/timer/if/create */
+/* Find related documentation with spec:/rtems/timer/if/create */
 
 /**
  * @ingroup RTEMSAPIClassicTimer
@@ -309,7 +309,7 @@ typedef rtems_timer_service_routine ( *rtems_timer_service_routine_entry )(
  */
 rtems_status_code rtems_timer_create( rtems_name name, rtems_id *id );
 
-/* Generated from spec:/rtems/timer/if/ident */
+/* Find related documentation with spec:/rtems/timer/if/ident */
 
 /**
  * @ingroup RTEMSAPIClassicTimer
@@ -358,7 +358,7 @@ rtems_status_code rtems_timer_create( rtems_name name, rtems_id *id );
  */
 rtems_status_code rtems_timer_ident( rtems_name name, rtems_id *id );
 
-/* Generated from spec:/rtems/timer/if/cancel */
+/* Find related documentation with spec:/rtems/timer/if/cancel */
 
 /**
  * @ingroup RTEMSAPIClassicTimer
@@ -394,7 +394,7 @@ rtems_status_code rtems_timer_ident( rtems_name name, rtems_id *id );
  */
 rtems_status_code rtems_timer_cancel( rtems_id id );
 
-/* Generated from spec:/rtems/timer/if/delete */
+/* Find related documentation with spec:/rtems/timer/if/delete */
 
 /**
  * @ingroup RTEMSAPIClassicTimer
@@ -435,7 +435,7 @@ rtems_status_code rtems_timer_cancel( rtems_id id );
  */
 rtems_status_code rtems_timer_delete( rtems_id id );
 
-/* Generated from spec:/rtems/timer/if/fire-after */
+/* Find related documentation with spec:/rtems/timer/if/fire-after */
 
 /**
  * @ingroup RTEMSAPIClassicTimer
@@ -487,7 +487,7 @@ rtems_status_code rtems_timer_fire_after(
   void                             *user_data
 );
 
-/* Generated from spec:/rtems/timer/if/fire-when */
+/* Find related documentation with spec:/rtems/timer/if/fire-when */
 
 /**
  * @ingroup RTEMSAPIClassicTimer
@@ -542,7 +542,7 @@ rtems_status_code rtems_timer_fire_when(
   void                             *user_data
 );
 
-/* Generated from spec:/rtems/timer/if/initiate-server */
+/* Find related documentation with spec:/rtems/timer/if/initiate-server */
 
 /**
  * @ingroup RTEMSAPIClassicTimer
@@ -605,7 +605,7 @@ rtems_status_code rtems_timer_initiate_server(
   rtems_attribute     attribute_set
 );
 
-/* Generated from spec:/rtems/timer/if/server-fire-after */
+/* Find related documentation with spec:/rtems/timer/if/server-fire-after */
 
 /**
  * @ingroup RTEMSAPIClassicTimer
@@ -659,7 +659,7 @@ rtems_status_code rtems_timer_server_fire_after(
   void                             *user_data
 );
 
-/* Generated from spec:/rtems/timer/if/server-fire-when */
+/* Find related documentation with spec:/rtems/timer/if/server-fire-when */
 
 /**
  * @ingroup RTEMSAPIClassicTimer
@@ -716,7 +716,7 @@ rtems_status_code rtems_timer_server_fire_when(
   void                             *user_data
 );
 
-/* Generated from spec:/rtems/timer/if/reset */
+/* Find related documentation with spec:/rtems/timer/if/reset */
 
 /**
  * @ingroup RTEMSAPIClassicTimer

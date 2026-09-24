@@ -38,7 +38,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/dev/grlib/if/gr1553b-header */
+/* Find related documentation with spec:/dev/grlib/if/gr1553b-header */
 
 #ifndef _GRLIB_GR1553B_REGS_H
 #define _GRLIB_GR1553B_REGS_H
@@ -49,7 +49,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/dev/grlib/if/gr1553b */
+/* Find related documentation with spec:/dev/grlib/if/gr1553b */
 
 /**
  * @defgroup RTEMSDeviceGR1553B GR1553B

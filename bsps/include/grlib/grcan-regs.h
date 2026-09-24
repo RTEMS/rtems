@@ -38,7 +38,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/dev/grlib/if/grcan-header */
+/* Find related documentation with spec:/dev/grlib/if/grcan-header */
 
 #ifndef _GRLIB_GRCAN_REGS_H
 #define _GRLIB_GRCAN_REGS_H
@@ -49,7 +49,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/dev/grlib/if/grcan */
+/* Find related documentation with spec:/dev/grlib/if/grcan */
 
 /**
  * @defgroup RTEMSDeviceGRCAN GRCAN

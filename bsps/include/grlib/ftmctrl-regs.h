@@ -38,7 +38,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/dev/grlib/if/ftmctrl-header */
+/* Find related documentation with spec:/dev/grlib/if/ftmctrl-header */
 
 #ifndef _GRLIB_FTMCTRL_REGS_H
 #define _GRLIB_FTMCTRL_REGS_H
@@ -49,7 +49,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/dev/grlib/if/ftmctrl */
+/* Find related documentation with spec:/dev/grlib/if/ftmctrl */
 
 /**
  * @defgroup RTEMSDeviceGRLIBFTMCTRL FTMCTRL

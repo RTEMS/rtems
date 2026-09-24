@@ -39,7 +39,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/bsp/sparc/leon3/if/gr740-iopll-header */
+/* Find related documentation with spec:/bsp/sparc/leon3/if/gr740-iopll-header */
 
 #ifndef _BSP_GR740_IOPLL_REGS_H
 #define _BSP_GR740_IOPLL_REGS_H
@@ -50,7 +50,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/bsp/sparc/leon3/if/gr740-iopll */
+/* Find related documentation with spec:/bsp/sparc/leon3/if/gr740-iopll */
 
 /**
  * @defgroup RTEMSBSPsGR740IOPLL GR740 I/0 and PLL Configuration

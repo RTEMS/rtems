@@ -38,7 +38,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/dev/grlib/if/ahbtrace-header */
+/* Find related documentation with spec:/dev/grlib/if/ahbtrace-header */
 
 #ifndef _GRLIB_AHBTRACE_REGS_H
 #define _GRLIB_AHBTRACE_REGS_H
@@ -49,7 +49,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/dev/grlib/if/ahbtrace */
+/* Find related documentation with spec:/dev/grlib/if/ahbtrace */
 
 /**
  * @defgroup RTEMSDeviceGRLIBAHBTRACE AHBTRACE

@@ -39,7 +39,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/intr/if/header */
+/* Find related documentation with spec:/rtems/intr/if/header */
 
 #ifndef _RTEMS_RTEMS_INTR_H
 #define _RTEMS_RTEMS_INTR_H
@@ -65,7 +65,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/intr/if/group */
+/* Find related documentation with spec:/rtems/intr/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicIntr Interrupt Manager
@@ -80,7 +80,7 @@ extern "C" {
  *   task to be preempted upon exit from an ISR.
  */
 
-/* Generated from spec:/rtems/intr/if/vector-number */
+/* Find related documentation with spec:/rtems/intr/if/vector-number */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -89,7 +89,7 @@ extern "C" {
  */
 typedef ISR_Vector_number rtems_vector_number;
 
-/* Generated from spec:/rtems/intr/if/level */
+/* Find related documentation with spec:/rtems/intr/if/level */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -98,7 +98,7 @@ typedef ISR_Vector_number rtems_vector_number;
  */
 typedef ISR_Level rtems_interrupt_level;
 
-/* Generated from spec:/rtems/intr/if/isr */
+/* Find related documentation with spec:/rtems/intr/if/isr */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -110,7 +110,7 @@ typedef ISR_Level rtems_interrupt_level;
  */
 typedef ISR_Handler rtems_isr;
 
-/* Generated from spec:/rtems/intr/if/isr-entry */
+/* Find related documentation with spec:/rtems/intr/if/isr-entry */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -124,7 +124,7 @@ typedef ISR_Handler_entry rtems_isr_entry;
 typedef void ( *rtems_isr_entry )( void * );
 #endif
 
-/* Generated from spec:/rtems/intr/if/catch */
+/* Find related documentation with spec:/rtems/intr/if/catch */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -180,7 +180,7 @@ rtems_status_code rtems_interrupt_catch(
 );
 
 #if !defined( RTEMS_SMP )
-  /* Generated from spec:/rtems/intr/if/disable */
+  /* Find related documentation with spec:/rtems/intr/if/disable */
 
   /**
    * @ingroup RTEMSAPIClassicIntr
@@ -254,7 +254,7 @@ rtems_status_code rtems_interrupt_catch(
 #endif
 
 #if !defined( RTEMS_SMP )
-  /* Generated from spec:/rtems/intr/if/enable */
+  /* Find related documentation with spec:/rtems/intr/if/enable */
 
   /**
    * @ingroup RTEMSAPIClassicIntr
@@ -302,7 +302,7 @@ rtems_status_code rtems_interrupt_catch(
 #endif
 
 #if !defined( RTEMS_SMP )
-  /* Generated from spec:/rtems/intr/if/flash */
+  /* Find related documentation with spec:/rtems/intr/if/flash */
 
   /**
    * @ingroup RTEMSAPIClassicIntr
@@ -344,7 +344,7 @@ rtems_status_code rtems_interrupt_catch(
   #define rtems_interrupt_flash( _isr_cookie ) _ISR_Local_flash( _isr_cookie )
 #endif
 
-/* Generated from spec:/rtems/intr/if/local-disable */
+/* Find related documentation with spec:/rtems/intr/if/local-disable */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -417,7 +417,7 @@ rtems_status_code rtems_interrupt_catch(
 #define rtems_interrupt_local_disable( _isr_cookie ) \
   _ISR_Local_disable( _isr_cookie )
 
-/* Generated from spec:/rtems/intr/if/local-enable */
+/* Find related documentation with spec:/rtems/intr/if/local-enable */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -458,7 +458,7 @@ rtems_status_code rtems_interrupt_catch(
 #define rtems_interrupt_local_enable( _isr_cookie ) \
   _ISR_Local_enable( _isr_cookie )
 
-/* Generated from spec:/rtems/intr/if/is-in-progress */
+/* Find related documentation with spec:/rtems/intr/if/is-in-progress */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -484,7 +484,7 @@ rtems_status_code rtems_interrupt_catch(
  */
 #define rtems_interrupt_is_in_progress() _ISR_Is_in_progress()
 
-/* Generated from spec:/rtems/intr/if/lock */
+/* Find related documentation with spec:/rtems/intr/if/lock */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -522,7 +522,7 @@ typedef ISR_lock_Control rtems_interrupt_lock;
 typedef char rtems_interrupt_lock;
 #endif
 
-/* Generated from spec:/rtems/intr/if/lock-needs-object */
+/* Find related documentation with spec:/rtems/intr/if/lock-needs-object */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -538,7 +538,7 @@ typedef char rtems_interrupt_lock;
  */
 #define RTEMS_INTERRUPT_LOCK_NEEDS_OBJECT ISR_LOCK_NEEDS_OBJECT
 
-/* Generated from spec:/rtems/intr/if/lock-context */
+/* Find related documentation with spec:/rtems/intr/if/lock-context */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -548,7 +548,7 @@ typedef char rtems_interrupt_lock;
  */
 typedef ISR_lock_Context rtems_interrupt_lock_context;
 
-/* Generated from spec:/rtems/intr/if/lock-initialize */
+/* Find related documentation with spec:/rtems/intr/if/lock-initialize */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -567,7 +567,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
 #define rtems_interrupt_lock_initialize( _lock, _name ) \
   _ISR_lock_Initialize( _lock, _name )
 
-/* Generated from spec:/rtems/intr/if/lock-destroy */
+/* Find related documentation with spec:/rtems/intr/if/lock-destroy */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -598,7 +598,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  */
 #define rtems_interrupt_lock_destroy( _lock ) _ISR_lock_Destroy( _lock )
 
-/* Generated from spec:/rtems/intr/if/lock-acquire */
+/* Find related documentation with spec:/rtems/intr/if/lock-acquire */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -656,7 +656,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
 #define rtems_interrupt_lock_acquire( _lock, _lock_context ) \
   _ISR_lock_ISR_disable_and_acquire( _lock, _lock_context )
 
-/* Generated from spec:/rtems/intr/if/lock-release */
+/* Find related documentation with spec:/rtems/intr/if/lock-release */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -699,7 +699,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
 #define rtems_interrupt_lock_release( _lock, _lock_context ) \
   _ISR_lock_Release_and_ISR_enable( _lock, _lock_context )
 
-/* Generated from spec:/rtems/intr/if/lock-acquire-isr */
+/* Find related documentation with spec:/rtems/intr/if/lock-acquire-isr */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -753,7 +753,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
   } while ( 0 )
 #endif
 
-/* Generated from spec:/rtems/intr/if/lock-release-isr */
+/* Find related documentation with spec:/rtems/intr/if/lock-release-isr */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -798,7 +798,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
   } while ( 0 )
 #endif
 
-/* Generated from spec:/rtems/intr/if/lock-isr-disable */
+/* Find related documentation with spec:/rtems/intr/if/lock-isr-disable */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -823,7 +823,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
 #define rtems_interrupt_lock_interrupt_disable( _lock_context ) \
   _ISR_lock_ISR_disable( _lock_context )
 
-/* Generated from spec:/rtems/intr/if/lock-declare */
+/* Find related documentation with spec:/rtems/intr/if/lock-declare */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -845,7 +845,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
   #define RTEMS_INTERRUPT_LOCK_DECLARE( _specifier, _designator )
 #endif
 
-/* Generated from spec:/rtems/intr/if/lock-define */
+/* Find related documentation with spec:/rtems/intr/if/lock-define */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -876,7 +876,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
   #define RTEMS_INTERRUPT_LOCK_DEFINE( _specifier, _designator, _name )
 #endif
 
-/* Generated from spec:/rtems/intr/if/lock-initializer */
+/* Find related documentation with spec:/rtems/intr/if/lock-initializer */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -898,7 +898,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
   #define RTEMS_INTERRUPT_LOCK_INITIALIZER( _name ) 0
 #endif
 
-/* Generated from spec:/rtems/intr/if/lock-member */
+/* Find related documentation with spec:/rtems/intr/if/lock-member */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -917,7 +917,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
   #define RTEMS_INTERRUPT_LOCK_MEMBER( _designator )
 #endif
 
-/* Generated from spec:/rtems/intr/if/lock-reference */
+/* Find related documentation with spec:/rtems/intr/if/lock-reference */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -938,7 +938,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
   #define RTEMS_INTERRUPT_LOCK_REFERENCE( _designator, _target )
 #endif
 
-/* Generated from spec:/rtems/intr/if/shared */
+/* Find related documentation with spec:/rtems/intr/if/shared */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -948,7 +948,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  */
 #define RTEMS_INTERRUPT_SHARED ( (rtems_option) 0x00000000 )
 
-/* Generated from spec:/rtems/intr/if/unique */
+/* Find related documentation with spec:/rtems/intr/if/unique */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -960,7 +960,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  */
 #define RTEMS_INTERRUPT_UNIQUE ( (rtems_option) 0x00000001 )
 
-/* Generated from spec:/rtems/intr/if/replace */
+/* Find related documentation with spec:/rtems/intr/if/replace */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -970,7 +970,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  */
 #define RTEMS_INTERRUPT_REPLACE ( (rtems_option) 0x00000002 )
 
-/* Generated from spec:/rtems/intr/if/is-shared */
+/* Find related documentation with spec:/rtems/intr/if/is-shared */
 
 /**
  * @brief Checks if the interrupt handler shared option is set.
@@ -983,7 +983,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
 #define RTEMS_INTERRUPT_IS_SHARED( _options ) \
   ( ( _options ) & RTEMS_INTERRUPT_SHARED )
 
-/* Generated from spec:/rtems/intr/if/is-unique */
+/* Find related documentation with spec:/rtems/intr/if/is-unique */
 
 /**
  * @brief Checks if the interrupt handler unique option is set.
@@ -996,7 +996,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
 #define RTEMS_INTERRUPT_IS_UNIQUE( _options ) \
   ( ( _options ) & RTEMS_INTERRUPT_UNIQUE )
 
-/* Generated from spec:/rtems/intr/if/is-replace */
+/* Find related documentation with spec:/rtems/intr/if/is-replace */
 
 /**
  * @brief Checks if the interrupt handler replace option is set.
@@ -1009,7 +1009,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
 #define RTEMS_INTERRUPT_IS_REPLACE( _options ) \
   ( ( _options ) & RTEMS_INTERRUPT_REPLACE )
 
-/* Generated from spec:/rtems/intr/if/handler */
+/* Find related documentation with spec:/rtems/intr/if/handler */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -1018,7 +1018,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  */
 typedef void ( *rtems_interrupt_handler )( void * );
 
-/* Generated from spec:/rtems/intr/if/per-handler-routine */
+/* Find related documentation with spec:/rtems/intr/if/per-handler-routine */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -1034,7 +1034,7 @@ typedef void ( *rtems_interrupt_per_handler_routine )(
   void *
 );
 
-/* Generated from spec:/rtems/intr/if/entry */
+/* Find related documentation with spec:/rtems/intr/if/entry */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -1078,7 +1078,7 @@ typedef struct rtems_interrupt_entry {
   const char *info;
 } rtems_interrupt_entry;
 
-/* Generated from spec:/rtems/intr/if/entry-initializer */
+/* Find related documentation with spec:/rtems/intr/if/entry-initializer */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -1098,7 +1098,7 @@ typedef struct rtems_interrupt_entry {
 #define RTEMS_INTERRUPT_ENTRY_INITIALIZER( _routine, _arg, _info ) \
   { _routine, _arg, NULL, _info }
 
-/* Generated from spec:/rtems/intr/if/entry-initialize */
+/* Find related documentation with spec:/rtems/intr/if/entry-initialize */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -1139,7 +1139,7 @@ static inline void rtems_interrupt_entry_initialize(
   entry->info = info;
 }
 
-/* Generated from spec:/rtems/intr/if/entry-install */
+/* Find related documentation with spec:/rtems/intr/if/entry-install */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -1227,7 +1227,7 @@ rtems_status_code rtems_interrupt_entry_install(
   rtems_interrupt_entry *entry
 );
 
-/* Generated from spec:/rtems/intr/if/entry-remove */
+/* Find related documentation with spec:/rtems/intr/if/entry-remove */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -1278,7 +1278,7 @@ rtems_status_code rtems_interrupt_entry_remove(
   rtems_interrupt_entry *entry
 );
 
-/* Generated from spec:/rtems/intr/if/handler-install */
+/* Find related documentation with spec:/rtems/intr/if/handler-install */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -1379,7 +1379,7 @@ rtems_status_code rtems_interrupt_handler_install(
   void                   *arg
 );
 
-/* Generated from spec:/rtems/intr/if/handler-remove */
+/* Find related documentation with spec:/rtems/intr/if/handler-remove */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -1427,7 +1427,7 @@ rtems_status_code rtems_interrupt_handler_remove(
   void                   *arg
 );
 
-/* Generated from spec:/rtems/intr/if/vector-is-enabled */
+/* Find related documentation with spec:/rtems/intr/if/vector-is-enabled */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -1477,7 +1477,7 @@ rtems_status_code rtems_interrupt_vector_is_enabled(
   bool               *enabled
 );
 
-/* Generated from spec:/rtems/intr/if/vector-enable */
+/* Find related documentation with spec:/rtems/intr/if/vector-enable */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -1521,7 +1521,7 @@ rtems_status_code rtems_interrupt_vector_is_enabled(
  */
 rtems_status_code rtems_interrupt_vector_enable( rtems_vector_number vector );
 
-/* Generated from spec:/rtems/intr/if/vector-disable */
+/* Find related documentation with spec:/rtems/intr/if/vector-disable */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -1565,7 +1565,7 @@ rtems_status_code rtems_interrupt_vector_enable( rtems_vector_number vector );
  */
 rtems_status_code rtems_interrupt_vector_disable( rtems_vector_number vector );
 
-/* Generated from spec:/rtems/intr/if/is-pending */
+/* Find related documentation with spec:/rtems/intr/if/is-pending */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -1619,7 +1619,7 @@ rtems_status_code rtems_interrupt_is_pending(
   bool               *pending
 );
 
-/* Generated from spec:/rtems/intr/if/raise */
+/* Find related documentation with spec:/rtems/intr/if/raise */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -1656,7 +1656,7 @@ rtems_status_code rtems_interrupt_is_pending(
  */
 rtems_status_code rtems_interrupt_raise( rtems_vector_number vector );
 
-/* Generated from spec:/rtems/intr/if/raise-on */
+/* Find related documentation with spec:/rtems/intr/if/raise-on */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -1705,7 +1705,7 @@ rtems_status_code rtems_interrupt_raise_on(
   uint32_t            cpu_index
 );
 
-/* Generated from spec:/rtems/intr/if/clear */
+/* Find related documentation with spec:/rtems/intr/if/clear */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -1742,7 +1742,7 @@ rtems_status_code rtems_interrupt_raise_on(
  */
 rtems_status_code rtems_interrupt_clear( rtems_vector_number vector );
 
-/* Generated from spec:/rtems/intr/if/get-priority */
+/* Find related documentation with spec:/rtems/intr/if/get-priority */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -1788,7 +1788,7 @@ rtems_status_code rtems_interrupt_get_priority(
   uint32_t           *priority
 );
 
-/* Generated from spec:/rtems/intr/if/set-priority */
+/* Find related documentation with spec:/rtems/intr/if/set-priority */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -1896,7 +1896,7 @@ rtems_status_code rtems_interrupt_set_priority(
   uint32_t            priority
 );
 
-/* Generated from spec:/rtems/intr/if/get-affinity */
+/* Find related documentation with spec:/rtems/intr/if/get-affinity */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -1945,7 +1945,7 @@ rtems_status_code rtems_interrupt_get_affinity(
   cpu_set_t          *affinity
 );
 
-/* Generated from spec:/rtems/intr/if/set-affinity */
+/* Find related documentation with spec:/rtems/intr/if/set-affinity */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -2007,7 +2007,7 @@ rtems_status_code rtems_interrupt_set_affinity(
   const cpu_set_t    *affinity
 );
 
-/* Generated from spec:/rtems/intr/if/signal-variant */
+/* Find related documentation with spec:/rtems/intr/if/signal-variant */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -2052,7 +2052,7 @@ typedef enum {
   RTEMS_INTERRUPT_SIGNAL_EDGE_RAISING
 } rtems_interrupt_signal_variant;
 
-/* Generated from spec:/rtems/intr/if/attributes */
+/* Find related documentation with spec:/rtems/intr/if/attributes */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -2198,7 +2198,7 @@ typedef struct {
   uint32_t maximum_priority;
 } rtems_interrupt_attributes;
 
-/* Generated from spec:/rtems/intr/if/get-attributes */
+/* Find related documentation with spec:/rtems/intr/if/get-attributes */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -2237,7 +2237,7 @@ rtems_status_code rtems_interrupt_get_attributes(
   rtems_interrupt_attributes *attributes
 );
 
-/* Generated from spec:/rtems/intr/if/handler-iterate */
+/* Find related documentation with spec:/rtems/intr/if/handler-iterate */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -2294,7 +2294,7 @@ rtems_status_code rtems_interrupt_handler_iterate(
   void                               *arg
 );
 
-/* Generated from spec:/rtems/intr/if/server-default */
+/* Find related documentation with spec:/rtems/intr/if/server-default */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -2303,7 +2303,7 @@ rtems_status_code rtems_interrupt_handler_iterate(
  */
 #define RTEMS_INTERRUPT_SERVER_DEFAULT 0
 
-/* Generated from spec:/rtems/intr/if/server-control */
+/* Find related documentation with spec:/rtems/intr/if/server-control */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -2363,7 +2363,7 @@ typedef struct rtems_interrupt_server_control {
   void ( *destroy )( struct rtems_interrupt_server_control * );
 } rtems_interrupt_server_control;
 
-/* Generated from spec:/rtems/intr/if/server-config */
+/* Find related documentation with spec:/rtems/intr/if/server-config */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -2428,7 +2428,7 @@ typedef struct {
   void ( *destroy )( rtems_interrupt_server_control * );
 } rtems_interrupt_server_config;
 
-/* Generated from spec:/rtems/intr/if/server-initialize */
+/* Find related documentation with spec:/rtems/intr/if/server-initialize */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -2497,7 +2497,7 @@ rtems_status_code rtems_interrupt_server_initialize(
   uint32_t           *server_count
 );
 
-/* Generated from spec:/rtems/intr/if/server-create */
+/* Find related documentation with spec:/rtems/intr/if/server-create */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -2543,7 +2543,7 @@ rtems_status_code rtems_interrupt_server_create(
   uint32_t                            *server_index
 );
 
-/* Generated from spec:/rtems/intr/if/server-handler-install */
+/* Find related documentation with spec:/rtems/intr/if/server-handler-install */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -2624,7 +2624,7 @@ rtems_status_code rtems_interrupt_server_handler_install(
   void                   *arg
 );
 
-/* Generated from spec:/rtems/intr/if/server-handler-remove */
+/* Find related documentation with spec:/rtems/intr/if/server-handler-remove */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -2677,7 +2677,7 @@ rtems_status_code rtems_interrupt_server_handler_remove(
   void                   *arg
 );
 
-/* Generated from spec:/rtems/intr/if/server-set-affinity */
+/* Find related documentation with spec:/rtems/intr/if/server-set-affinity */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -2742,7 +2742,7 @@ rtems_status_code rtems_interrupt_server_set_affinity(
   rtems_task_priority priority
 );
 
-/* Generated from spec:/rtems/intr/if/server-delete */
+/* Find related documentation with spec:/rtems/intr/if/server-delete */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -2781,7 +2781,7 @@ rtems_status_code rtems_interrupt_server_set_affinity(
  */
 rtems_status_code rtems_interrupt_server_delete( uint32_t server_index );
 
-/* Generated from spec:/rtems/intr/if/server-suspend */
+/* Find related documentation with spec:/rtems/intr/if/server-suspend */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -2816,7 +2816,7 @@ rtems_status_code rtems_interrupt_server_delete( uint32_t server_index );
  */
 rtems_status_code rtems_interrupt_server_suspend( uint32_t server_index );
 
-/* Generated from spec:/rtems/intr/if/server-resume */
+/* Find related documentation with spec:/rtems/intr/if/server-resume */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -2851,7 +2851,7 @@ rtems_status_code rtems_interrupt_server_suspend( uint32_t server_index );
  */
 rtems_status_code rtems_interrupt_server_resume( uint32_t server_index );
 
-/* Generated from spec:/rtems/intr/if/server-move */
+/* Find related documentation with spec:/rtems/intr/if/server-move */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -2900,7 +2900,7 @@ rtems_status_code rtems_interrupt_server_move(
   uint32_t            destination_server_index
 );
 
-/* Generated from spec:/rtems/intr/if/server-handler-iterate */
+/* Find related documentation with spec:/rtems/intr/if/server-handler-iterate */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -2957,7 +2957,7 @@ rtems_status_code rtems_interrupt_server_handler_iterate(
   void                               *arg
 );
 
-/* Generated from spec:/rtems/intr/if/server-action */
+/* Find related documentation with spec:/rtems/intr/if/server-action */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -2992,7 +2992,7 @@ typedef struct rtems_interrupt_server_action {
   void *arg;
 } rtems_interrupt_server_action;
 
-/* Generated from spec:/rtems/intr/if/server-entry */
+/* Find related documentation with spec:/rtems/intr/if/server-entry */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -3037,7 +3037,7 @@ typedef struct {
   rtems_interrupt_server_action *actions;
 } rtems_interrupt_server_entry;
 
-/* Generated from spec:/rtems/intr/if/server-entry-initialize */
+/* Find related documentation with spec:/rtems/intr/if/server-entry-initialize */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -3081,7 +3081,7 @@ rtems_status_code rtems_interrupt_server_entry_initialize(
   rtems_interrupt_server_entry *entry
 );
 
-/* Generated from spec:/rtems/intr/if/server-action-prepend */
+/* Find related documentation with spec:/rtems/intr/if/server-action-prepend */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -3144,7 +3144,7 @@ void rtems_interrupt_server_action_prepend(
   void                          *arg
 );
 
-/* Generated from spec:/rtems/intr/if/server-entry-destroy */
+/* Find related documentation with spec:/rtems/intr/if/server-entry-destroy */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -3178,7 +3178,7 @@ void rtems_interrupt_server_entry_destroy(
   rtems_interrupt_server_entry *entry
 );
 
-/* Generated from spec:/rtems/intr/if/server-entry-submit */
+/* Find related documentation with spec:/rtems/intr/if/server-entry-submit */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -3236,7 +3236,7 @@ void rtems_interrupt_server_entry_submit(
   rtems_interrupt_server_entry *entry
 );
 
-/* Generated from spec:/rtems/intr/if/server-entry-move */
+/* Find related documentation with spec:/rtems/intr/if/server-entry-move */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -3292,7 +3292,7 @@ rtems_status_code rtems_interrupt_server_entry_move(
   uint32_t                      server_index
 );
 
-/* Generated from spec:/rtems/intr/if/server-request */
+/* Find related documentation with spec:/rtems/intr/if/server-request */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -3327,7 +3327,7 @@ typedef struct {
   rtems_interrupt_server_action action;
 } rtems_interrupt_server_request;
 
-/* Generated from spec:/rtems/intr/if/server-request-initialize */
+/* Find related documentation with spec:/rtems/intr/if/server-request-initialize */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -3377,7 +3377,7 @@ rtems_status_code rtems_interrupt_server_request_initialize(
   void                           *arg
 );
 
-/* Generated from spec:/rtems/intr/if/server-request-set-vector */
+/* Find related documentation with spec:/rtems/intr/if/server-request-set-vector */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -3438,7 +3438,7 @@ static inline void rtems_interrupt_server_request_set_vector(
   request->entry.vector = vector;
 }
 
-/* Generated from spec:/rtems/intr/if/server-request-destroy */
+/* Find related documentation with spec:/rtems/intr/if/server-request-destroy */
 
 /**
  * @ingroup RTEMSAPIClassicIntr
@@ -3474,7 +3474,7 @@ static inline void rtems_interrupt_server_request_destroy(
   rtems_interrupt_server_entry_destroy( &request->entry );
 }
 
-/* Generated from spec:/rtems/intr/if/server-request-submit */
+/* Find related documentation with spec:/rtems/intr/if/server-request-submit */
 
 /**
  * @ingroup RTEMSAPIClassicIntr

@@ -38,7 +38,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/bsp/sparc/if/grlib-io-header */
+/* Find related documentation with spec:/bsp/sparc/if/grlib-io-header */
 
 #ifndef _GRLIB_IO_H
 #define _GRLIB_IO_H
@@ -49,7 +49,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/bsp/sparc/if/grlib-io-group */
+/* Find related documentation with spec:/bsp/sparc/if/grlib-io-group */
 
 /**
  * @defgroup RTEMSDeviceGRLIBIO Register Load/Store
@@ -59,7 +59,7 @@ extern "C" {
  * @brief This group contains the GRLIB register load/store API.
  */
 
-/* Generated from spec:/bsp/sparc/if/grlib-load-08 */
+/* Find related documentation with spec:/bsp/sparc/if/grlib-load-08 */
 
 /**
  * @ingroup RTEMSDeviceGRLIBIO
@@ -76,7 +76,7 @@ static inline uint8_t grlib_load_8( const volatile uint8_t *address )
   return *address;
 }
 
-/* Generated from spec:/bsp/sparc/if/grlib-load-16 */
+/* Find related documentation with spec:/bsp/sparc/if/grlib-load-16 */
 
 /**
  * @ingroup RTEMSDeviceGRLIBIO
@@ -93,7 +93,7 @@ static inline uint16_t grlib_load_16( const volatile uint16_t *address )
   return *address;
 }
 
-/* Generated from spec:/bsp/sparc/if/grlib-load-32 */
+/* Find related documentation with spec:/bsp/sparc/if/grlib-load-32 */
 
 /**
  * @ingroup RTEMSDeviceGRLIBIO
@@ -110,7 +110,7 @@ static inline uint32_t grlib_load_32( const volatile uint32_t *address )
   return *address;
 }
 
-/* Generated from spec:/bsp/sparc/if/grlib-load-64 */
+/* Find related documentation with spec:/bsp/sparc/if/grlib-load-64 */
 
 /**
  * @ingroup RTEMSDeviceGRLIBIO
@@ -127,7 +127,7 @@ static inline uint64_t grlib_load_64( const volatile uint64_t *address )
   return *address;
 }
 
-/* Generated from spec:/bsp/sparc/if/grlib-store-08 */
+/* Find related documentation with spec:/bsp/sparc/if/grlib-store-08 */
 
 /**
  * @ingroup RTEMSDeviceGRLIBIO
@@ -143,7 +143,7 @@ static inline void grlib_store_8( volatile uint8_t *address, uint8_t value )
   *address = value;
 }
 
-/* Generated from spec:/bsp/sparc/if/grlib-store-16 */
+/* Find related documentation with spec:/bsp/sparc/if/grlib-store-16 */
 
 /**
  * @ingroup RTEMSDeviceGRLIBIO
@@ -159,7 +159,7 @@ static inline void grlib_store_16( volatile uint16_t *address, uint16_t value )
   *address = value;
 }
 
-/* Generated from spec:/bsp/sparc/if/grlib-store-32 */
+/* Find related documentation with spec:/bsp/sparc/if/grlib-store-32 */
 
 /**
  * @ingroup RTEMSDeviceGRLIBIO
@@ -175,7 +175,7 @@ static inline void grlib_store_32( volatile uint32_t *address, uint32_t value )
   *address = value;
 }
 
-/* Generated from spec:/bsp/sparc/if/grlib-store-64 */
+/* Find related documentation with spec:/bsp/sparc/if/grlib-store-64 */
 
 /**
  * @ingroup RTEMSDeviceGRLIBIO

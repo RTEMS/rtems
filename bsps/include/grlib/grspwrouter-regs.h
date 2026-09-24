@@ -38,7 +38,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/dev/grlib/if/grspwrouter-header */
+/* Find related documentation with spec:/dev/grlib/if/grspwrouter-header */
 
 #ifndef _GRLIB_GRSPWROUTER_REGS_H
 #define _GRLIB_GRSPWROUTER_REGS_H
@@ -49,7 +49,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/dev/grlib/if/grspwrouter-portstats */
+/* Find related documentation with spec:/dev/grlib/if/grspwrouter-portstats */
 
 /**
  * @defgroup RTEMSDeviceGRSPWRouterPortStats SpaceWire Router Port Statistics
@@ -193,7 +193,7 @@ typedef struct grspwrouter_portstats {
 
 /** @} */
 
-/* Generated from spec:/dev/grlib/if/grspwrouter */
+/* Find related documentation with spec:/dev/grlib/if/grspwrouter */
 
 /**
  * @defgroup RTEMSDeviceGRSPWROUTER SpaceWire Router

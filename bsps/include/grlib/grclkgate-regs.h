@@ -38,7 +38,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/dev/grlib/if/grclkgate-header */
+/* Find related documentation with spec:/dev/grlib/if/grclkgate-header */
 
 #ifndef _GRLIB_GRCLKGATE_REGS_H
 #define _GRLIB_GRCLKGATE_REGS_H
@@ -49,7 +49,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/dev/grlib/if/grclkgate */
+/* Find related documentation with spec:/dev/grlib/if/grclkgate */
 
 /**
  * @defgroup RTEMSDeviceGRCLKGATE GRCLKGATE

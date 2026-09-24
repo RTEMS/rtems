@@ -40,7 +40,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/config/if/header-2 */
+/* Find related documentation with spec:/rtems/config/if/header-2 */
 
 #ifndef _RTEMS_RTEMS_CONFIG_H
 #define _RTEMS_RTEMS_CONFIG_H
@@ -53,7 +53,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/config/if/api-table */
+/* Find related documentation with spec:/rtems/config/if/api-table */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -159,7 +159,7 @@ typedef struct {
   const rtems_initialization_tasks_table *User_initialization_tasks_table;
 } rtems_api_configuration_table;
 
-/* Generated from spec:/rtems/config/if/get-maximum-barriers */
+/* Find related documentation with spec:/rtems/config/if/get-maximum-barriers */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -186,7 +186,7 @@ typedef struct {
  */
 uint32_t rtems_configuration_get_maximum_barriers( void );
 
-/* Generated from spec:/rtems/config/if/get-maximum-message-queues */
+/* Find related documentation with spec:/rtems/config/if/get-maximum-message-queues */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -213,7 +213,7 @@ uint32_t rtems_configuration_get_maximum_barriers( void );
  */
 uint32_t rtems_configuration_get_maximum_message_queues( void );
 
-/* Generated from spec:/rtems/config/if/get-maximum-partitions */
+/* Find related documentation with spec:/rtems/config/if/get-maximum-partitions */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -240,7 +240,7 @@ uint32_t rtems_configuration_get_maximum_message_queues( void );
  */
 uint32_t rtems_configuration_get_maximum_partitions( void );
 
-/* Generated from spec:/rtems/config/if/get-maximum-periods */
+/* Find related documentation with spec:/rtems/config/if/get-maximum-periods */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -267,7 +267,7 @@ uint32_t rtems_configuration_get_maximum_partitions( void );
  */
 uint32_t rtems_configuration_get_maximum_periods( void );
 
-/* Generated from spec:/rtems/config/if/get-maximum-ports */
+/* Find related documentation with spec:/rtems/config/if/get-maximum-ports */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -294,7 +294,7 @@ uint32_t rtems_configuration_get_maximum_periods( void );
  */
 uint32_t rtems_configuration_get_maximum_ports( void );
 
-/* Generated from spec:/rtems/config/if/get-maximum-regions */
+/* Find related documentation with spec:/rtems/config/if/get-maximum-regions */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -321,7 +321,7 @@ uint32_t rtems_configuration_get_maximum_ports( void );
  */
 uint32_t rtems_configuration_get_maximum_regions( void );
 
-/* Generated from spec:/rtems/config/if/get-maximum-semaphores */
+/* Find related documentation with spec:/rtems/config/if/get-maximum-semaphores */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -348,7 +348,7 @@ uint32_t rtems_configuration_get_maximum_regions( void );
  */
 uint32_t rtems_configuration_get_maximum_semaphores( void );
 
-/* Generated from spec:/rtems/config/if/get-maximum-tasks */
+/* Find related documentation with spec:/rtems/config/if/get-maximum-tasks */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -375,7 +375,7 @@ uint32_t rtems_configuration_get_maximum_semaphores( void );
  */
 uint32_t rtems_configuration_get_maximum_tasks( void );
 
-/* Generated from spec:/rtems/config/if/get-maximum-timers */
+/* Find related documentation with spec:/rtems/config/if/get-maximum-timers */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -402,7 +402,7 @@ uint32_t rtems_configuration_get_maximum_tasks( void );
  */
 uint32_t rtems_configuration_get_maximum_timers( void );
 
-/* Generated from spec:/rtems/config/if/get-api-configuration */
+/* Find related documentation with spec:/rtems/config/if/get-api-configuration */
 
 /**
  * @ingroup RTEMSAPIConfig

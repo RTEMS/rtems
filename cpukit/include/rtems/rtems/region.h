@@ -39,7 +39,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/region/if/header */
+/* Find related documentation with spec:/rtems/region/if/header */
 
 #ifndef _RTEMS_RTEMS_REGION_H
 #define _RTEMS_RTEMS_REGION_H
@@ -55,7 +55,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/region/if/group */
+/* Find related documentation with spec:/rtems/region/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicRegion Region Manager
@@ -66,7 +66,7 @@ extern "C" {
  *   in variable sized units.
  */
 
-/* Generated from spec:/rtems/region/if/get-segment-size */
+/* Find related documentation with spec:/rtems/region/if/get-segment-size */
 
 /**
  * @ingroup RTEMSAPIClassicRegion
@@ -118,7 +118,7 @@ rtems_status_code rtems_region_get_segment_size(
   uintptr_t *size
 );
 
-/* Generated from spec:/rtems/region/if/create */
+/* Find related documentation with spec:/rtems/region/if/create */
 
 /**
  * @ingroup RTEMSAPIClassicRegion
@@ -224,7 +224,7 @@ rtems_status_code rtems_region_create(
   rtems_id       *id
 );
 
-/* Generated from spec:/rtems/region/if/ident */
+/* Find related documentation with spec:/rtems/region/if/ident */
 
 /**
  * @ingroup RTEMSAPIClassicRegion
@@ -273,7 +273,7 @@ rtems_status_code rtems_region_create(
  */
 rtems_status_code rtems_region_ident( rtems_name name, rtems_id *id );
 
-/* Generated from spec:/rtems/region/if/delete */
+/* Find related documentation with spec:/rtems/region/if/delete */
 
 /**
  * @ingroup RTEMSAPIClassicRegion
@@ -320,7 +320,7 @@ rtems_status_code rtems_region_ident( rtems_name name, rtems_id *id );
  */
 rtems_status_code rtems_region_delete( rtems_id id );
 
-/* Generated from spec:/rtems/region/if/extend */
+/* Find related documentation with spec:/rtems/region/if/extend */
 
 /**
  * @ingroup RTEMSAPIClassicRegion
@@ -375,7 +375,7 @@ rtems_status_code rtems_region_extend(
   uintptr_t length
 );
 
-/* Generated from spec:/rtems/region/if/get-segment */
+/* Find related documentation with spec:/rtems/region/if/get-segment */
 
 /**
  * @ingroup RTEMSAPIClassicRegion
@@ -482,7 +482,7 @@ rtems_status_code rtems_region_get_segment(
   void         **segment
 );
 
-/* Generated from spec:/rtems/region/if/return-segment */
+/* Find related documentation with spec:/rtems/region/if/return-segment */
 
 /**
  * @ingroup RTEMSAPIClassicRegion
@@ -536,7 +536,7 @@ rtems_status_code rtems_region_get_segment(
  */
 rtems_status_code rtems_region_return_segment( rtems_id id, void *segment );
 
-/* Generated from spec:/rtems/region/if/resize-segment */
+/* Find related documentation with spec:/rtems/region/if/resize-segment */
 
 /**
  * @ingroup RTEMSAPIClassicRegion
@@ -595,7 +595,7 @@ rtems_status_code rtems_region_resize_segment(
   uintptr_t *old_size
 );
 
-/* Generated from spec:/rtems/region/if/get-information */
+/* Find related documentation with spec:/rtems/region/if/get-information */
 
 /**
  * @ingroup RTEMSAPIClassicRegion
@@ -650,7 +650,7 @@ rtems_status_code rtems_region_get_information(
   Heap_Information_block *the_info
 );
 
-/* Generated from spec:/rtems/region/if/get-free-information */
+/* Find related documentation with spec:/rtems/region/if/get-free-information */
 
 /**
  * @ingroup RTEMSAPIClassicRegion

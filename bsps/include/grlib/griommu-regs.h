@@ -38,7 +38,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/dev/grlib/if/griommu-header */
+/* Find related documentation with spec:/dev/grlib/if/griommu-header */
 
 #ifndef _GRLIB_GRIOMMU_REGS_H
 #define _GRLIB_GRIOMMU_REGS_H
@@ -49,7 +49,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/dev/grlib/if/griommu */
+/* Find related documentation with spec:/dev/grlib/if/griommu */
 
 /**
  * @defgroup RTEMSDeviceGRIOMMU GRIOMMU

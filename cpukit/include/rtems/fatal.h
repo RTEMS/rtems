@@ -39,7 +39,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/fatal/if/header */
+/* Find related documentation with spec:/rtems/fatal/if/header */
 
 #ifndef _RTEMS_FATAL_H
 #define _RTEMS_FATAL_H
@@ -54,7 +54,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/fatal/if/group */
+/* Find related documentation with spec:/rtems/fatal/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicFatal Fatal Error Manager
@@ -66,7 +66,7 @@ extern "C" {
  *   errors are identified by the fatal source and code pair.
  */
 
-/* Generated from spec:/rtems/fatal/if/assert-context */
+/* Find related documentation with spec:/rtems/fatal/if/assert-context */
 
 /**
  * @ingroup RTEMSAPIClassicFatal
@@ -99,7 +99,7 @@ typedef struct {
   const char *failed_expression;
 } rtems_assert_context;
 
-/* Generated from spec:/rtems/fatal/if/exception-frame */
+/* Find related documentation with spec:/rtems/fatal/if/exception-frame */
 
 /**
  * @ingroup RTEMSAPIClassicFatal
@@ -108,7 +108,7 @@ typedef struct {
  */
 typedef CPU_Exception_frame rtems_exception_frame;
 
-/* Generated from spec:/rtems/fatal/if/fatal */
+/* Find related documentation with spec:/rtems/fatal/if/fatal */
 
 /**
  * @ingroup RTEMSAPIClassicFatal
@@ -148,7 +148,7 @@ RTEMS_NO_RETURN static inline void rtems_fatal(
   _Terminate( fatal_source, fatal_code );
 }
 
-/* Generated from spec:/rtems/fatal/if/panic */
+/* Find related documentation with spec:/rtems/fatal/if/panic */
 
 /**
  * @ingroup RTEMSAPIClassicFatal
@@ -186,7 +186,7 @@ RTEMS_NO_RETURN RTEMS_PRINTFLIKE( 1, 2 ) void rtems_panic(
   ...
 );
 
-/* Generated from spec:/rtems/fatal/if/exception-frame-print */
+/* Find related documentation with spec:/rtems/fatal/if/exception-frame-print */
 
 /**
  * @ingroup RTEMSAPIClassicFatal
@@ -205,7 +205,7 @@ static inline void rtems_exception_frame_print(
   _CPU_Exception_frame_print( frame );
 }
 
-/* Generated from spec:/rtems/fatal/if/source-text */
+/* Find related documentation with spec:/rtems/fatal/if/source-text */
 
 /**
  * @ingroup RTEMSAPIClassicFatal
@@ -228,7 +228,7 @@ static inline void rtems_exception_frame_print(
  */
 const char *rtems_fatal_source_text( rtems_fatal_source fatal_source );
 
-/* Generated from spec:/rtems/fatal/if/internal-error-text */
+/* Find related documentation with spec:/rtems/fatal/if/internal-error-text */
 
 /**
  * @ingroup RTEMSAPIClassicFatal
@@ -252,7 +252,7 @@ const char *rtems_fatal_source_text( rtems_fatal_source fatal_source );
  */
 const char *rtems_internal_error_text( rtems_fatal_code internal_error_code );
 
-/* Generated from spec:/rtems/fatal/if/error-occurred */
+/* Find related documentation with spec:/rtems/fatal/if/error-occurred */
 
 /**
  * @ingroup RTEMSAPIClassicFatal

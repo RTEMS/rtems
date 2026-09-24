@@ -38,7 +38,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/dev/grlib/if/grgpio-header */
+/* Find related documentation with spec:/dev/grlib/if/grgpio-header */
 
 #ifndef _GRLIB_GRGPIO_REGS_H
 #define _GRLIB_GRGPIO_REGS_H
@@ -49,7 +49,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/dev/grlib/if/grgpio */
+/* Find related documentation with spec:/dev/grlib/if/grgpio */
 
 /**
  * @defgroup RTEMSDeviceGRGPIO GRGPIO

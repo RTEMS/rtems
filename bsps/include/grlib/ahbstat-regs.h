@@ -38,7 +38,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/dev/grlib/if/ahbstat-header */
+/* Find related documentation with spec:/dev/grlib/if/ahbstat-header */
 
 #ifndef _GRLIB_AHBSTAT_REGS_H
 #define _GRLIB_AHBSTAT_REGS_H
@@ -49,7 +49,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/dev/grlib/if/ahbstat */
+/* Find related documentation with spec:/dev/grlib/if/ahbstat */
 
 /**
  * @defgroup RTEMSDeviceGRLIBAHBSTAT AHBSTAT

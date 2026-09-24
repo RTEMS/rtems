@@ -39,7 +39,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/bsp/sparc/leon3/if/gr740-thsens-header */
+/* Find related documentation with spec:/bsp/sparc/leon3/if/gr740-thsens-header */
 
 #ifndef _BSP_GR740_THSENS_REGS_H
 #define _BSP_GR740_THSENS_REGS_H
@@ -50,7 +50,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/bsp/sparc/leon3/if/gr740-thsens */
+/* Find related documentation with spec:/bsp/sparc/leon3/if/gr740-thsens */
 
 /**
  * @defgroup RTEMSBSPsGR740ThSens GR740 Temperatur Sensor Controller

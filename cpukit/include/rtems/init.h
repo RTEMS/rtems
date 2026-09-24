@@ -39,7 +39,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/init/if/header */
+/* Find related documentation with spec:/rtems/init/if/header */
 
 #ifndef _RTEMS_INIT_H
 #define _RTEMS_INIT_H
@@ -51,7 +51,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/init/if/group */
+/* Find related documentation with spec:/rtems/init/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicInit Initialization Manager
@@ -66,7 +66,7 @@ extern "C" {
  * The @ref RTEMSAPIClassicFatal is responsible for the system shutdown.
  */
 
-/* Generated from spec:/rtems/init/if/initialize-executive */
+/* Find related documentation with spec:/rtems/init/if/initialize-executive */
 
 /**
  * @ingroup RTEMSAPIClassicInit
@@ -91,7 +91,7 @@ extern "C" {
  */
 RTEMS_NO_RETURN void rtems_initialize_executive( void );
 
-/* Generated from spec:/rtems/fatal/if/shutdown-executive */
+/* Find related documentation with spec:/rtems/fatal/if/shutdown-executive */
 
 /**
  * @ingroup RTEMSAPIClassicFatal

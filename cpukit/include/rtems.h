@@ -39,7 +39,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/if/header */
+/* Find related documentation with spec:/rtems/if/header */
 
 #ifndef _RTEMS_H
 #define _RTEMS_H
@@ -78,7 +78,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/if/group */
+/* Find related documentation with spec:/rtems/if/group */
 
 /**
  * @defgroup RTEMSAPIClassic Classic

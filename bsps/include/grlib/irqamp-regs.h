@@ -38,7 +38,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/dev/grlib/if/irqamp-header */
+/* Find related documentation with spec:/dev/grlib/if/irqamp-header */
 
 #ifndef _GRLIB_IRQAMP_REGS_H
 #define _GRLIB_IRQAMP_REGS_H
@@ -49,7 +49,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/dev/grlib/if/irqamp-timestamp */
+/* Find related documentation with spec:/dev/grlib/if/irqamp-timestamp */
 
 /**
  * @defgroup RTEMSDeviceGRLIBIRQAMPTimestamp IRQ(A)MP Timestamp
@@ -197,7 +197,7 @@ typedef struct irqamp_timestamp {
 
 /** @} */
 
-/* Generated from spec:/dev/grlib/if/irqamp */
+/* Find related documentation with spec:/dev/grlib/if/irqamp */
 
 /**
  * @defgroup RTEMSDeviceGRLIBIRQAMP IRQ(A)MP

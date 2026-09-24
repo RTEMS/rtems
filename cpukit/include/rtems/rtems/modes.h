@@ -39,7 +39,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/mode/if/header */
+/* Find related documentation with spec:/rtems/mode/if/header */
 
 #ifndef _RTEMS_RTEMS_MODES_H
 #define _RTEMS_RTEMS_MODES_H
@@ -51,7 +51,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/mode/if/group */
+/* Find related documentation with spec:/rtems/mode/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicModes Task Modes
@@ -61,7 +61,7 @@ extern "C" {
  * @brief This group contains the Classic API task modes.
  */
 
-/* Generated from spec:/rtems/mode/if/all-mode-masks */
+/* Find related documentation with spec:/rtems/mode/if/all-mode-masks */
 
 /**
  * @ingroup RTEMSAPIClassicModes
@@ -70,7 +70,7 @@ extern "C" {
  */
 #define RTEMS_ALL_MODE_MASKS 0x0000ffff
 
-/* Generated from spec:/rtems/mode/if/asr */
+/* Find related documentation with spec:/rtems/mode/if/asr */
 
 /**
  * @ingroup RTEMSAPIClassicModes
@@ -79,7 +79,7 @@ extern "C" {
  */
 #define RTEMS_ASR 0x00000000
 
-/* Generated from spec:/rtems/mode/if/asr-mask */
+/* Find related documentation with spec:/rtems/mode/if/asr-mask */
 
 /**
  * @ingroup RTEMSAPIClassicModes
@@ -88,7 +88,7 @@ extern "C" {
  */
 #define RTEMS_ASR_MASK 0x00000400
 
-/* Generated from spec:/rtems/mode/if/current-mode */
+/* Find related documentation with spec:/rtems/mode/if/current-mode */
 
 /**
  * @ingroup RTEMSAPIClassicModes
@@ -98,7 +98,7 @@ extern "C" {
  */
 #define RTEMS_CURRENT_MODE 0
 
-/* Generated from spec:/rtems/mode/if/default */
+/* Find related documentation with spec:/rtems/mode/if/default */
 
 /**
  * @ingroup RTEMSAPIClassicModes
@@ -107,7 +107,7 @@ extern "C" {
  */
 #define RTEMS_DEFAULT_MODES 0x00000000
 
-/* Generated from spec:/rtems/mode/if/interrupt-mask */
+/* Find related documentation with spec:/rtems/mode/if/interrupt-mask */
 
 /**
  * @ingroup RTEMSAPIClassicModes
@@ -117,7 +117,7 @@ extern "C" {
  */
 #define RTEMS_INTERRUPT_MASK CPU_MODES_INTERRUPT_MASK
 
-/* Generated from spec:/rtems/mode/if/interrupt-level */
+/* Find related documentation with spec:/rtems/mode/if/interrupt-level */
 
 /**
  * @ingroup RTEMSAPIClassicModes
@@ -139,7 +139,7 @@ extern "C" {
 #define RTEMS_INTERRUPT_LEVEL( _interrupt_level ) \
   ( ( _interrupt_level ) & RTEMS_INTERRUPT_MASK )
 
-/* Generated from spec:/rtems/mode/if/interrupt-mask-constant */
+/* Find related documentation with spec:/rtems/mode/if/interrupt-mask-constant */
 
 /**
  * @ingroup RTEMSAPIClassicModes
@@ -152,7 +152,7 @@ extern "C" {
  */
 extern const uint32_t rtems_interrupt_mask;
 
-/* Generated from spec:/rtems/mode/if/mode */
+/* Find related documentation with spec:/rtems/mode/if/mode */
 
 /**
  * @ingroup RTEMSAPIClassicModes
@@ -161,7 +161,7 @@ extern const uint32_t rtems_interrupt_mask;
  */
 typedef uint32_t rtems_mode;
 
-/* Generated from spec:/rtems/mode/if/interrupt-level-body */
+/* Find related documentation with spec:/rtems/mode/if/interrupt-level-body */
 
 /**
  * @ingroup RTEMSAPIClassicModes
@@ -178,7 +178,7 @@ typedef uint32_t rtems_mode;
  */
 rtems_mode rtems_interrupt_level_body( uint32_t level );
 
-/* Generated from spec:/rtems/mode/if/no-asr */
+/* Find related documentation with spec:/rtems/mode/if/no-asr */
 
 /**
  * @ingroup RTEMSAPIClassicModes
@@ -187,7 +187,7 @@ rtems_mode rtems_interrupt_level_body( uint32_t level );
  */
 #define RTEMS_NO_ASR 0x00000400
 
-/* Generated from spec:/rtems/mode/if/no-preempt */
+/* Find related documentation with spec:/rtems/mode/if/no-preempt */
 
 /**
  * @ingroup RTEMSAPIClassicModes
@@ -196,7 +196,7 @@ rtems_mode rtems_interrupt_level_body( uint32_t level );
  */
 #define RTEMS_NO_PREEMPT 0x00000100
 
-/* Generated from spec:/rtems/mode/if/no-timeslice */
+/* Find related documentation with spec:/rtems/mode/if/no-timeslice */
 
 /**
  * @ingroup RTEMSAPIClassicModes
@@ -205,7 +205,7 @@ rtems_mode rtems_interrupt_level_body( uint32_t level );
  */
 #define RTEMS_NO_TIMESLICE 0x00000000
 
-/* Generated from spec:/rtems/mode/if/preempt */
+/* Find related documentation with spec:/rtems/mode/if/preempt */
 
 /**
  * @ingroup RTEMSAPIClassicModes
@@ -214,7 +214,7 @@ rtems_mode rtems_interrupt_level_body( uint32_t level );
  */
 #define RTEMS_PREEMPT 0x00000000
 
-/* Generated from spec:/rtems/mode/if/preempt-mask */
+/* Find related documentation with spec:/rtems/mode/if/preempt-mask */
 
 /**
  * @ingroup RTEMSAPIClassicModes
@@ -224,7 +224,7 @@ rtems_mode rtems_interrupt_level_body( uint32_t level );
  */
 #define RTEMS_PREEMPT_MASK 0x00000100
 
-/* Generated from spec:/rtems/mode/if/timeslice */
+/* Find related documentation with spec:/rtems/mode/if/timeslice */
 
 /**
  * @ingroup RTEMSAPIClassicModes
@@ -233,7 +233,7 @@ rtems_mode rtems_interrupt_level_body( uint32_t level );
  */
 #define RTEMS_TIMESLICE 0x00000200
 
-/* Generated from spec:/rtems/mode/if/timeslice-mask */
+/* Find related documentation with spec:/rtems/mode/if/timeslice-mask */
 
 /**
  * @ingroup RTEMSAPIClassicModes

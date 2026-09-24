@@ -39,7 +39,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/support/if/header */
+/* Find related documentation with spec:/rtems/support/if/header */
 
 #ifndef _RTEMS_RTEMS_SUPPORT_H
 #define _RTEMS_RTEMS_SUPPORT_H
@@ -55,7 +55,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/support/if/group */
+/* Find related documentation with spec:/rtems/support/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicSupport Support Services
@@ -65,7 +65,7 @@ extern "C" {
  * @brief Items of this group should move to other groups.
  */
 
-/* Generated from spec:/rtems/support/if/is-name-valid */
+/* Find related documentation with spec:/rtems/support/if/is-name-valid */
 
 /**
  * @ingroup RTEMSAPIClassicSupport
@@ -90,7 +90,7 @@ static inline bool rtems_is_name_valid( rtems_name name )
   return name != 0;
 }
 
-/* Generated from spec:/rtems/support/if/microseconds-to-ticks */
+/* Find related documentation with spec:/rtems/support/if/microseconds-to-ticks */
 
 /**
  * @ingroup RTEMSAPIClassicSupport
@@ -118,7 +118,7 @@ static inline bool rtems_is_name_valid( rtems_name name )
 #define RTEMS_MICROSECONDS_TO_TICKS( _us ) \
   ( ( _us ) / rtems_configuration_get_microseconds_per_tick() )
 
-/* Generated from spec:/rtems/support/if/milliseconds-to-microseconds */
+/* Find related documentation with spec:/rtems/support/if/milliseconds-to-microseconds */
 
 /**
  * @ingroup RTEMSAPIClassicSupport
@@ -142,7 +142,7 @@ static inline bool rtems_is_name_valid( rtems_name name )
  */
 #define RTEMS_MILLISECONDS_TO_MICROSECONDS( _ms ) ( ( _ms ) * 1000UL )
 
-/* Generated from spec:/rtems/support/if/milliseconds-to-ticks */
+/* Find related documentation with spec:/rtems/support/if/milliseconds-to-ticks */
 
 /**
  * @ingroup RTEMSAPIClassicSupport
@@ -169,7 +169,7 @@ static inline bool rtems_is_name_valid( rtems_name name )
 #define RTEMS_MILLISECONDS_TO_TICKS( _ms ) \
   RTEMS_MICROSECONDS_TO_TICKS( RTEMS_MILLISECONDS_TO_MICROSECONDS( _ms ) )
 
-/* Generated from spec:/rtems/support/if/name-to-characters */
+/* Find related documentation with spec:/rtems/support/if/name-to-characters */
 
 /**
  * @ingroup RTEMSAPIClassicSupport
@@ -209,7 +209,7 @@ static inline void rtems_name_to_characters(
   *c4 = (char) ( ( name ) & 0xff );
 }
 
-/* Generated from spec:/rtems/support/if/workspace-allocate */
+/* Find related documentation with spec:/rtems/support/if/workspace-allocate */
 
 /**
  * @ingroup RTEMSAPIClassicSupport
@@ -242,7 +242,7 @@ static inline void rtems_name_to_characters(
  */
 bool rtems_workspace_allocate( size_t bytes, void **pointer );
 
-/* Generated from spec:/rtems/support/if/workspace-free */
+/* Find related documentation with spec:/rtems/support/if/workspace-free */
 
 /**
  * @ingroup RTEMSAPIClassicSupport
@@ -269,7 +269,7 @@ bool rtems_workspace_allocate( size_t bytes, void **pointer );
  */
 bool rtems_workspace_free( void *pointer );
 
-/* Generated from spec:/rtems/support/if/workspace-get-information */
+/* Find related documentation with spec:/rtems/support/if/workspace-get-information */
 
 /**
  * @ingroup RTEMSAPIClassicSupport
@@ -298,7 +298,7 @@ bool rtems_workspace_free( void *pointer );
  */
 bool rtems_workspace_get_information( Heap_Information_block *the_info );
 
-/* Generated from spec:/rtems/support/if/workspace-greedy-allocate */
+/* Find related documentation with spec:/rtems/support/if/workspace-greedy-allocate */
 
 /**
  * @ingroup RTEMSAPIClassicSupport
@@ -321,7 +321,7 @@ void *rtems_workspace_greedy_allocate(
   size_t           block_count
 );
 
-/* Generated from spec:/rtems/support/if/workspace-greedy-allocate-all-except-largest */
+/* Find related documentation with spec:/rtems/support/if/workspace-greedy-allocate-all-except-largest */
 
 /**
  * @ingroup RTEMSAPIClassicSupport
@@ -358,7 +358,7 @@ void *rtems_workspace_greedy_allocate_all_except_largest(
   uintptr_t *allocatable_size
 );
 
-/* Generated from spec:/rtems/support/if/workspace-greedy-free */
+/* Find related documentation with spec:/rtems/support/if/workspace-greedy-free */
 
 /**
  * @ingroup RTEMSAPIClassicSupport

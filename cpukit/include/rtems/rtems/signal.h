@@ -39,7 +39,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/signal/if/header */
+/* Find related documentation with spec:/rtems/signal/if/header */
 
 #ifndef _RTEMS_RTEMS_SIGNAL_H
 #define _RTEMS_RTEMS_SIGNAL_H
@@ -53,7 +53,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/signal/if/group */
+/* Find related documentation with spec:/rtems/signal/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicSignal Signal Manager
@@ -64,7 +64,7 @@ extern "C" {
  *   asynchronous communication.
  */
 
-/* Generated from spec:/rtems/signal/if/catch */
+/* Find related documentation with spec:/rtems/signal/if/catch */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -125,7 +125,7 @@ rtems_status_code rtems_signal_catch(
   rtems_mode      mode_set
 );
 
-/* Generated from spec:/rtems/signal/if/send */
+/* Find related documentation with spec:/rtems/signal/if/send */
 
 /**
  * @ingroup RTEMSAPIClassicSignal

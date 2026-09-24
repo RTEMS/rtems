@@ -40,7 +40,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/config/if/header */
+/* Find related documentation with spec:/rtems/config/if/header */
 
 #ifndef _RTEMS_CONFIG_H
 #define _RTEMS_CONFIG_H
@@ -69,7 +69,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/config/if/group */
+/* Find related documentation with spec:/rtems/config/if/group */
 
 /**
  * @defgroup RTEMSAPIConfig Application Configuration Information
@@ -118,7 +118,7 @@ extern "C" {
  * queried by the application.
  */
 
-/* Generated from spec:/rtems/config/if/unlimited-objects */
+/* Find related documentation with spec:/rtems/config/if/unlimited-objects */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -128,7 +128,7 @@ extern "C" {
  */
 #define RTEMS_UNLIMITED_OBJECTS OBJECTS_UNLIMITED_OBJECTS
 
-/* Generated from spec:/rtems/config/if/get-stack-allocator-avoids-work-space */
+/* Find related documentation with spec:/rtems/config/if/get-stack-allocator-avoids-work-space */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -156,7 +156,7 @@ extern "C" {
 #define rtems_configuration_get_stack_allocator_avoids_work_space() \
   _Stack_Allocator_avoids_workspace
 
-/* Generated from spec:/rtems/config/if/get-stack-space-size */
+/* Find related documentation with spec:/rtems/config/if/get-stack-space-size */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -182,7 +182,7 @@ extern "C" {
  */
 uintptr_t rtems_configuration_get_stack_space_size( void );
 
-/* Generated from spec:/rtems/config/if/has-hardware-fp */
+/* Find related documentation with spec:/rtems/config/if/has-hardware-fp */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -192,7 +192,7 @@ uintptr_t rtems_configuration_get_stack_space_size( void );
  */
 #define RTEMS_HAS_HARDWARE_FP CPU_HARDWARE_FP
 
-/* Generated from spec:/rtems/config/if/stack-allocate-hook */
+/* Find related documentation with spec:/rtems/config/if/stack-allocate-hook */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -201,7 +201,7 @@ uintptr_t rtems_configuration_get_stack_space_size( void );
  */
 typedef Stack_Allocator_allocate rtems_stack_allocate_hook;
 
-/* Generated from spec:/rtems/config/if/stack-allocate-init-hook */
+/* Find related documentation with spec:/rtems/config/if/stack-allocate-init-hook */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -210,7 +210,7 @@ typedef Stack_Allocator_allocate rtems_stack_allocate_hook;
  */
 typedef Stack_Allocator_initialize rtems_stack_allocate_init_hook;
 
-/* Generated from spec:/rtems/config/if/stack-free-hook */
+/* Find related documentation with spec:/rtems/config/if/stack-free-hook */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -219,7 +219,7 @@ typedef Stack_Allocator_initialize rtems_stack_allocate_init_hook;
  */
 typedef Stack_Allocator_free rtems_stack_free_hook;
 
-/* Generated from spec:/rtems/config/if/get-build-label */
+/* Find related documentation with spec:/rtems/config/if/get-build-label */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -251,7 +251,7 @@ typedef Stack_Allocator_free rtems_stack_free_hook;
  */
 const char *rtems_get_build_label( void );
 
-/* Generated from spec:/rtems/config/if/get-copyright-notice */
+/* Find related documentation with spec:/rtems/config/if/get-copyright-notice */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -271,7 +271,7 @@ const char *rtems_get_build_label( void );
  */
 const char *rtems_get_copyright_notice( void );
 
-/* Generated from spec:/rtems/config/if/get-target-hash */
+/* Find related documentation with spec:/rtems/config/if/get-target-hash */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -305,7 +305,7 @@ const char *rtems_get_copyright_notice( void );
  */
 const char *rtems_get_target_hash( void );
 
-/* Generated from spec:/rtems/config/if/get-version-string */
+/* Find related documentation with spec:/rtems/config/if/get-version-string */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -329,7 +329,7 @@ const char *rtems_get_target_hash( void );
  */
 const char *rtems_get_version_string( void );
 
-/* Generated from spec:/rtems/config/if/get-do-zero-of-workspace */
+/* Find related documentation with spec:/rtems/config/if/get-do-zero-of-workspace */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -355,7 +355,7 @@ const char *rtems_get_version_string( void );
  */
 #define rtems_configuration_get_do_zero_of_workspace() _Memory_Zero_before_use
 
-/* Generated from spec:/rtems/config/if/get-idle-task-stack-size */
+/* Find related documentation with spec:/rtems/config/if/get-idle-task-stack-size */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -379,7 +379,7 @@ const char *rtems_get_version_string( void );
  */
 #define rtems_configuration_get_idle_task_stack_size() _Thread_Idle_stack_size
 
-/* Generated from spec:/rtems/config/if/get-idle-task */
+/* Find related documentation with spec:/rtems/config/if/get-idle-task */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -403,7 +403,7 @@ const char *rtems_get_version_string( void );
  */
 #define rtems_configuration_get_idle_task() _Thread_Idle_body
 
-/* Generated from spec:/rtems/config/if/get-interrupt-stack-size */
+/* Find related documentation with spec:/rtems/config/if/get-interrupt-stack-size */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -428,7 +428,7 @@ const char *rtems_get_version_string( void );
 #define rtems_configuration_get_interrupt_stack_size() \
   ( (size_t) _ISR_Stack_size_object )
 
-/* Generated from spec:/rtems/config/if/get-maximum-extensions */
+/* Find related documentation with spec:/rtems/config/if/get-maximum-extensions */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -455,7 +455,7 @@ const char *rtems_get_version_string( void );
  */
 uint32_t rtems_configuration_get_maximum_extensions( void );
 
-/* Generated from spec:/rtems/config/if/get-maximum-processors */
+/* Find related documentation with spec:/rtems/config/if/get-maximum-processors */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -488,7 +488,7 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
 #define rtems_configuration_get_maximum_processors() \
   _SMP_Processor_configured_maximum
 
-/* Generated from spec:/rtems/config/if/get-microseconds-per-tick */
+/* Find related documentation with spec:/rtems/config/if/get-microseconds-per-tick */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -515,7 +515,7 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
 #define rtems_configuration_get_microseconds_per_tick() \
   _Watchdog_Microseconds_per_tick
 
-/* Generated from spec:/rtems/config/if/get-milliseconds-per-tick */
+/* Find related documentation with spec:/rtems/config/if/get-milliseconds-per-tick */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -542,7 +542,7 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
 #define rtems_configuration_get_milliseconds_per_tick() \
   ( _Watchdog_Microseconds_per_tick / 1000 )
 
-/* Generated from spec:/rtems/config/if/get-nanoseconds-per-tick */
+/* Find related documentation with spec:/rtems/config/if/get-nanoseconds-per-tick */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -569,7 +569,7 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
 #define rtems_configuration_get_nanoseconds_per_tick() \
   _Watchdog_Nanoseconds_per_tick
 
-/* Generated from spec:/rtems/config/if/get-number-of-initial-extensions */
+/* Find related documentation with spec:/rtems/config/if/get-number-of-initial-extensions */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -597,7 +597,7 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
 #define rtems_configuration_get_number_of_initial_extensions() \
   ( (uint32_t) _User_extensions_Initial_count )
 
-/* Generated from spec:/rtems/config/if/get-stack-allocate-for-idle-hook */
+/* Find related documentation with spec:/rtems/config/if/get-stack-allocate-for-idle-hook */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -624,7 +624,7 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
 #define rtems_configuration_get_stack_allocate_for_idle_hook() \
   _Stack_Allocator_allocate_for_idle
 
-/* Generated from spec:/rtems/config/if/get-stack-allocate-hook */
+/* Find related documentation with spec:/rtems/config/if/get-stack-allocate-hook */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -650,7 +650,7 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  */
 #define rtems_configuration_get_stack_allocate_hook() _Stack_Allocator_allocate
 
-/* Generated from spec:/rtems/config/if/get-stack-allocate-init-hook */
+/* Find related documentation with spec:/rtems/config/if/get-stack-allocate-init-hook */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -677,7 +677,7 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
 #define rtems_configuration_get_stack_allocate_init_hook() \
   _Stack_Allocator_initialize
 
-/* Generated from spec:/rtems/config/if/get-stack-free-hook */
+/* Find related documentation with spec:/rtems/config/if/get-stack-free-hook */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -703,7 +703,7 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  */
 #define rtems_configuration_get_stack_free_hook() _Stack_Allocator_free
 
-/* Generated from spec:/rtems/config/if/get-ticks-per-timeslice */
+/* Find related documentation with spec:/rtems/config/if/get-ticks-per-timeslice */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -729,7 +729,7 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
 #define rtems_configuration_get_ticks_per_timeslice() \
   _Watchdog_Ticks_per_timeslice
 
-/* Generated from spec:/rtems/config/if/get-unified-work-area */
+/* Find related documentation with spec:/rtems/config/if/get-unified-work-area */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -755,7 +755,7 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  */
 #define rtems_configuration_get_unified_work_area() _Workspace_Is_unified
 
-/* Generated from spec:/rtems/config/if/get-user-extension-table */
+/* Find related documentation with spec:/rtems/config/if/get-user-extension-table */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -777,7 +777,7 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
 #define rtems_configuration_get_user_extension_table() \
   _User_extensions_Initial_extensions
 
-/* Generated from spec:/rtems/config/if/get-user-multiprocessing-table */
+/* Find related documentation with spec:/rtems/config/if/get-user-multiprocessing-table */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -803,7 +803,7 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
   #define rtems_configuration_get_user_multiprocessing_table() NULL
 #endif
 
-/* Generated from spec:/rtems/config/if/get-work-space-size */
+/* Find related documentation with spec:/rtems/config/if/get-work-space-size */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -829,7 +829,7 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
         ? 0                                                       \
         : rtems_configuration_get_stack_space_size() ) )
 
-/* Generated from spec:/rtems/config/if/resource-is-unlimited */
+/* Find related documentation with spec:/rtems/config/if/resource-is-unlimited */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -854,7 +854,7 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
 #define rtems_resource_is_unlimited( _resource ) \
   _Objects_Is_unlimited( _resource )
 
-/* Generated from spec:/rtems/config/if/resource-maximum-per-allocation */
+/* Find related documentation with spec:/rtems/config/if/resource-maximum-per-allocation */
 
 /**
  * @ingroup RTEMSAPIConfig
@@ -879,7 +879,7 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
 #define rtems_resource_maximum_per_allocation( _resource ) \
   _Objects_Maximum_per_allocation( _resource )
 
-/* Generated from spec:/rtems/config/if/resource-unlimited */
+/* Find related documentation with spec:/rtems/config/if/resource-unlimited */
 
 /**
  * @ingroup RTEMSAPIConfig

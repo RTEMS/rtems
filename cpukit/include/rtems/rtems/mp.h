@@ -39,7 +39,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/mp/if/header */
+/* Find related documentation with spec:/rtems/mp/if/header */
 
 #ifndef _RTEMS_RTEMS_MP_H
 #define _RTEMS_RTEMS_MP_H
@@ -50,7 +50,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/mp/if/group */
+/* Find related documentation with spec:/rtems/mp/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicMP Multiprocessing Manager
@@ -88,7 +88,7 @@ extern "C" {
  * logically as a single system.
  */
 
-/* Generated from spec:/rtems/mp/if/announce */
+/* Find related documentation with spec:/rtems/mp/if/announce */
 
 /**
  * @ingroup RTEMSAPIClassicMP
@@ -123,7 +123,7 @@ extern "C" {
  */
 void rtems_multiprocessing_announce( void );
 
-/* Generated from spec:/rtems/mp/if/minimum-hetero-conversion */
+/* Find related documentation with spec:/rtems/mp/if/minimum-hetero-conversion */
 
 /**
  * @ingroup RTEMSAPIClassicMP
@@ -136,7 +136,7 @@ void rtems_multiprocessing_announce( void );
  */
 #define RTEMS_MINIMUN_HETERO_CONVERSION MP_PACKET_MINIMUN_HETERO_CONVERSION
 
-/* Generated from spec:/rtems/mp/if/minimum-packet-size */
+/* Find related documentation with spec:/rtems/mp/if/minimum-packet-size */
 
 /**
  * @ingroup RTEMSAPIClassicMP

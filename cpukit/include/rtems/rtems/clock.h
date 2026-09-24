@@ -39,7 +39,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/clock/if/header */
+/* Find related documentation with spec:/rtems/clock/if/header */
 
 #ifndef _RTEMS_RTEMS_CLOCK_H
 #define _RTEMS_RTEMS_CLOCK_H
@@ -58,7 +58,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/clock/if/group */
+/* Find related documentation with spec:/rtems/clock/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicClock Clock Manager
@@ -69,12 +69,12 @@ extern "C" {
  *   related capabilities.
  */
 
-/* Generated from spec:/rtems/clock/if/bintime */
+/* Find related documentation with spec:/rtems/clock/if/bintime */
 
 /* Forward declaration */
 struct bintime;
 
-/* Generated from spec:/rtems/clock/if/set */
+/* Find related documentation with spec:/rtems/clock/if/set */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -140,7 +140,7 @@ struct bintime;
  */
 rtems_status_code rtems_clock_set( const rtems_time_of_day *time_of_day );
 
-/* Generated from spec:/rtems/clock/if/get-tod */
+/* Find related documentation with spec:/rtems/clock/if/get-tod */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -172,7 +172,7 @@ rtems_status_code rtems_clock_set( const rtems_time_of_day *time_of_day );
  */
 rtems_status_code rtems_clock_get_tod( rtems_time_of_day *time_of_day );
 
-/* Generated from spec:/rtems/clock/if/get-tod-timeval */
+/* Find related documentation with spec:/rtems/clock/if/get-tod-timeval */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -205,7 +205,7 @@ rtems_status_code rtems_clock_get_tod( rtems_time_of_day *time_of_day );
  */
 rtems_status_code rtems_clock_get_tod_timeval( struct timeval *time_of_day );
 
-/* Generated from spec:/rtems/clock/if/get-realtime */
+/* Find related documentation with spec:/rtems/clock/if/get-realtime */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -242,7 +242,7 @@ rtems_status_code rtems_clock_get_tod_timeval( struct timeval *time_of_day );
  */
 void rtems_clock_get_realtime( struct timespec *time_snapshot );
 
-/* Generated from spec:/rtems/clock/if/get-realtime-bintime */
+/* Find related documentation with spec:/rtems/clock/if/get-realtime-bintime */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -279,7 +279,7 @@ void rtems_clock_get_realtime( struct timespec *time_snapshot );
  */
 void rtems_clock_get_realtime_bintime( struct bintime *time_snapshot );
 
-/* Generated from spec:/rtems/clock/if/get-realtime-timeval */
+/* Find related documentation with spec:/rtems/clock/if/get-realtime-timeval */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -316,7 +316,7 @@ void rtems_clock_get_realtime_bintime( struct bintime *time_snapshot );
  */
 void rtems_clock_get_realtime_timeval( struct timeval *time_snapshot );
 
-/* Generated from spec:/rtems/clock/if/get-realtime-coarse */
+/* Find related documentation with spec:/rtems/clock/if/get-realtime-coarse */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -354,7 +354,7 @@ void rtems_clock_get_realtime_timeval( struct timeval *time_snapshot );
  */
 void rtems_clock_get_realtime_coarse( struct timespec *time_snapshot );
 
-/* Generated from spec:/rtems/clock/if/get-realtime-coarse-bintime */
+/* Find related documentation with spec:/rtems/clock/if/get-realtime-coarse-bintime */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -392,7 +392,7 @@ void rtems_clock_get_realtime_coarse( struct timespec *time_snapshot );
  */
 void rtems_clock_get_realtime_coarse_bintime( struct bintime *time_snapshot );
 
-/* Generated from spec:/rtems/clock/if/get-realtime-coarse-timeval */
+/* Find related documentation with spec:/rtems/clock/if/get-realtime-coarse-timeval */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -430,7 +430,7 @@ void rtems_clock_get_realtime_coarse_bintime( struct bintime *time_snapshot );
  */
 void rtems_clock_get_realtime_coarse_timeval( struct timeval *time_snapshot );
 
-/* Generated from spec:/rtems/clock/if/get-monotonic */
+/* Find related documentation with spec:/rtems/clock/if/get-monotonic */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -469,7 +469,7 @@ void rtems_clock_get_realtime_coarse_timeval( struct timeval *time_snapshot );
  */
 void rtems_clock_get_monotonic( struct timespec *time_snapshot );
 
-/* Generated from spec:/rtems/clock/if/get-monotonic-bintime */
+/* Find related documentation with spec:/rtems/clock/if/get-monotonic-bintime */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -507,7 +507,7 @@ void rtems_clock_get_monotonic( struct timespec *time_snapshot );
  */
 void rtems_clock_get_monotonic_bintime( struct bintime *time_snapshot );
 
-/* Generated from spec:/rtems/clock/if/get-monotonic-sbintime */
+/* Find related documentation with spec:/rtems/clock/if/get-monotonic-sbintime */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -541,7 +541,7 @@ void rtems_clock_get_monotonic_bintime( struct bintime *time_snapshot );
  */
 int64_t rtems_clock_get_monotonic_sbintime( void );
 
-/* Generated from spec:/rtems/clock/if/get-monotonic-timeval */
+/* Find related documentation with spec:/rtems/clock/if/get-monotonic-timeval */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -579,7 +579,7 @@ int64_t rtems_clock_get_monotonic_sbintime( void );
  */
 void rtems_clock_get_monotonic_timeval( struct timeval *time_snapshot );
 
-/* Generated from spec:/rtems/clock/if/get-monotonic-coarse */
+/* Find related documentation with spec:/rtems/clock/if/get-monotonic-coarse */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -619,7 +619,7 @@ void rtems_clock_get_monotonic_timeval( struct timeval *time_snapshot );
  */
 void rtems_clock_get_monotonic_coarse( struct timespec *time_snapshot );
 
-/* Generated from spec:/rtems/clock/if/get-monotonic-coarse-bintime */
+/* Find related documentation with spec:/rtems/clock/if/get-monotonic-coarse-bintime */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -659,7 +659,7 @@ void rtems_clock_get_monotonic_coarse( struct timespec *time_snapshot );
  */
 void rtems_clock_get_monotonic_coarse_bintime( struct bintime *time_snapshot );
 
-/* Generated from spec:/rtems/clock/if/get-monotonic-coarse-timeval */
+/* Find related documentation with spec:/rtems/clock/if/get-monotonic-coarse-timeval */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -699,7 +699,7 @@ void rtems_clock_get_monotonic_coarse_bintime( struct bintime *time_snapshot );
  */
 void rtems_clock_get_monotonic_coarse_timeval( struct timeval *time_snapshot );
 
-/* Generated from spec:/rtems/clock/if/get-boot-time */
+/* Find related documentation with spec:/rtems/clock/if/get-boot-time */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -730,7 +730,7 @@ void rtems_clock_get_monotonic_coarse_timeval( struct timeval *time_snapshot );
  */
 void rtems_clock_get_boot_time( struct timespec *boot_time );
 
-/* Generated from spec:/rtems/clock/if/get-boot-time-bintime */
+/* Find related documentation with spec:/rtems/clock/if/get-boot-time-bintime */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -761,7 +761,7 @@ void rtems_clock_get_boot_time( struct timespec *boot_time );
  */
 void rtems_clock_get_boot_time_bintime( struct bintime *boot_time );
 
-/* Generated from spec:/rtems/clock/if/get-boot-time-timeval */
+/* Find related documentation with spec:/rtems/clock/if/get-boot-time-timeval */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -792,7 +792,7 @@ void rtems_clock_get_boot_time_bintime( struct bintime *boot_time );
  */
 void rtems_clock_get_boot_time_timeval( struct timeval *boot_time );
 
-/* Generated from spec:/rtems/clock/if/get-seconds-since-epoch */
+/* Find related documentation with spec:/rtems/clock/if/get-seconds-since-epoch */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -828,7 +828,7 @@ rtems_status_code rtems_clock_get_seconds_since_epoch(
   rtems_interval *seconds_since_rtems_epoch
 );
 
-/* Generated from spec:/rtems/clock/if/get-ticks-per-second */
+/* Find related documentation with spec:/rtems/clock/if/get-ticks-per-second */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -854,10 +854,10 @@ rtems_status_code rtems_clock_get_seconds_since_epoch(
  */
 rtems_interval rtems_clock_get_ticks_per_second( void );
 
-/* Generated from spec:/rtems/clock/if/get-ticks-per-second-macro */
+/* Find related documentation with spec:/rtems/clock/if/get-ticks-per-second-macro */
 #define rtems_clock_get_ticks_per_second() _Watchdog_Ticks_per_second
 
-/* Generated from spec:/rtems/clock/if/get-ticks-since-boot */
+/* Find related documentation with spec:/rtems/clock/if/get-ticks-since-boot */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -885,10 +885,10 @@ rtems_interval rtems_clock_get_ticks_per_second( void );
  */
 rtems_interval rtems_clock_get_ticks_since_boot( void );
 
-/* Generated from spec:/rtems/clock/if/get-ticks-since-boot-macro */
+/* Find related documentation with spec:/rtems/clock/if/get-ticks-since-boot-macro */
 #define rtems_clock_get_ticks_since_boot() _Watchdog_Ticks_since_boot
 
-/* Generated from spec:/rtems/clock/if/get-uptime */
+/* Find related documentation with spec:/rtems/clock/if/get-uptime */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -918,7 +918,7 @@ rtems_interval rtems_clock_get_ticks_since_boot( void );
  */
 rtems_status_code rtems_clock_get_uptime( struct timespec *uptime );
 
-/* Generated from spec:/rtems/clock/if/get-uptime-timeval */
+/* Find related documentation with spec:/rtems/clock/if/get-uptime-timeval */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -945,7 +945,7 @@ rtems_status_code rtems_clock_get_uptime( struct timespec *uptime );
  */
 void rtems_clock_get_uptime_timeval( struct timeval *uptime );
 
-/* Generated from spec:/rtems/clock/if/get-uptime-seconds */
+/* Find related documentation with spec:/rtems/clock/if/get-uptime-seconds */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -970,7 +970,7 @@ void rtems_clock_get_uptime_timeval( struct timeval *uptime );
  */
 time_t rtems_clock_get_uptime_seconds( void );
 
-/* Generated from spec:/rtems/clock/if/get-uptime-nanoseconds */
+/* Find related documentation with spec:/rtems/clock/if/get-uptime-nanoseconds */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -995,7 +995,7 @@ time_t rtems_clock_get_uptime_seconds( void );
  */
 uint64_t rtems_clock_get_uptime_nanoseconds( void );
 
-/* Generated from spec:/rtems/clock/if/tick-later */
+/* Find related documentation with spec:/rtems/clock/if/tick-later */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -1024,7 +1024,7 @@ static inline rtems_interval rtems_clock_tick_later( rtems_interval delta )
   return _Watchdog_Ticks_since_boot + delta;
 }
 
-/* Generated from spec:/rtems/clock/if/tick-later-usec */
+/* Find related documentation with spec:/rtems/clock/if/tick-later-usec */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -1064,7 +1064,7 @@ static inline rtems_interval rtems_clock_tick_later_usec(
          ( delta_in_usec + us_per_tick - 1 ) / us_per_tick;
 }
 
-/* Generated from spec:/rtems/clock/if/tick-before */
+/* Find related documentation with spec:/rtems/clock/if/tick-before */
 
 /**
  * @ingroup RTEMSAPIClassicClock
@@ -1114,7 +1114,7 @@ static inline bool rtems_clock_tick_before( rtems_interval ticks )
   return (int32_t) ( ticks - _Watchdog_Ticks_since_boot ) > 0;
 }
 
-/* Generated from spec:/rtems/clock/if/tick */
+/* Find related documentation with spec:/rtems/clock/if/tick */
 
 /**
  * @brief Announces a clock tick.

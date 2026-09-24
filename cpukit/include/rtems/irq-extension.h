@@ -38,7 +38,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/intr/if/header-2 */
+/* Find related documentation with spec:/rtems/intr/if/header-2 */
 
 #ifndef _RTEMS_IRQ_EXTENSION_H
 #define _RTEMS_IRQ_EXTENSION_H

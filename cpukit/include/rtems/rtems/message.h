@@ -39,7 +39,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/message/if/header */
+/* Find related documentation with spec:/rtems/message/if/header */
 
 #ifndef _RTEMS_RTEMS_MESSAGE_H
 #define _RTEMS_RTEMS_MESSAGE_H
@@ -56,7 +56,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/message/if/group */
+/* Find related documentation with spec:/rtems/message/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicMessage Message Manager
@@ -67,7 +67,7 @@ extern "C" {
  *   capabilities using RTEMS message queues.
  */
 
-/* Generated from spec:/rtems/message/if/config */
+/* Find related documentation with spec:/rtems/message/if/config */
 
 /**
  * @ingroup RTEMSAPIClassicMessage
@@ -124,7 +124,7 @@ typedef struct {
   rtems_attribute attributes;
 } rtems_message_queue_config;
 
-/* Generated from spec:/rtems/message/if/create */
+/* Find related documentation with spec:/rtems/message/if/create */
 
 /**
  * @ingroup RTEMSAPIClassicMessage
@@ -276,7 +276,7 @@ rtems_status_code rtems_message_queue_create(
   rtems_id       *id
 );
 
-/* Generated from spec:/rtems/message/if/construct */
+/* Find related documentation with spec:/rtems/message/if/construct */
 
 /**
  * @ingroup RTEMSAPIClassicMessage
@@ -380,7 +380,7 @@ rtems_status_code rtems_message_queue_construct(
   rtems_id                         *id
 );
 
-/* Generated from spec:/rtems/message/if/ident */
+/* Find related documentation with spec:/rtems/message/if/ident */
 
 /**
  * @ingroup RTEMSAPIClassicMessage
@@ -458,7 +458,7 @@ rtems_status_code rtems_message_queue_ident(
   rtems_id  *id
 );
 
-/* Generated from spec:/rtems/message/if/delete */
+/* Find related documentation with spec:/rtems/message/if/delete */
 
 /**
  * @ingroup RTEMSAPIClassicMessage
@@ -523,7 +523,7 @@ rtems_status_code rtems_message_queue_ident(
  */
 rtems_status_code rtems_message_queue_delete( rtems_id id );
 
-/* Generated from spec:/rtems/message/if/send */
+/* Find related documentation with spec:/rtems/message/if/send */
 
 /**
  * @ingroup RTEMSAPIClassicMessage
@@ -580,7 +580,7 @@ rtems_status_code rtems_message_queue_send(
   size_t      size
 );
 
-/* Generated from spec:/rtems/message/if/urgent */
+/* Find related documentation with spec:/rtems/message/if/urgent */
 
 /**
  * @ingroup RTEMSAPIClassicMessage
@@ -637,7 +637,7 @@ rtems_status_code rtems_message_queue_urgent(
   size_t      size
 );
 
-/* Generated from spec:/rtems/message/if/broadcast */
+/* Find related documentation with spec:/rtems/message/if/broadcast */
 
 /**
  * @ingroup RTEMSAPIClassicMessage
@@ -709,7 +709,7 @@ rtems_status_code rtems_message_queue_broadcast(
   uint32_t   *count
 );
 
-/* Generated from spec:/rtems/message/if/receive */
+/* Find related documentation with spec:/rtems/message/if/receive */
 
 /**
  * @ingroup RTEMSAPIClassicMessage
@@ -818,7 +818,7 @@ rtems_status_code rtems_message_queue_receive(
   rtems_interval timeout
 );
 
-/* Generated from spec:/rtems/message/if/get-number-pending */
+/* Find related documentation with spec:/rtems/message/if/get-number-pending */
 
 /**
  * @ingroup RTEMSAPIClassicMessage
@@ -860,7 +860,7 @@ rtems_status_code rtems_message_queue_get_number_pending(
   uint32_t *count
 );
 
-/* Generated from spec:/rtems/message/if/flush */
+/* Find related documentation with spec:/rtems/message/if/flush */
 
 /**
  * @ingroup RTEMSAPIClassicMessage
@@ -904,7 +904,7 @@ rtems_status_code rtems_message_queue_get_number_pending(
  */
 rtems_status_code rtems_message_queue_flush( rtems_id id, uint32_t *count );
 
-/* Generated from spec:/rtems/message/if/buffer */
+/* Find related documentation with spec:/rtems/message/if/buffer */
 
 /**
  * @ingroup RTEMSAPIClassicMessage

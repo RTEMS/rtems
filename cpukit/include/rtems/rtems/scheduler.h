@@ -39,7 +39,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/scheduler/if/header */
+/* Find related documentation with spec:/rtems/scheduler/if/header */
 
 #ifndef _RTEMS_RTEMS_SCHEDULER_H
 #define _RTEMS_RTEMS_SCHEDULER_H
@@ -55,7 +55,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/scheduler/if/group */
+/* Find related documentation with spec:/rtems/scheduler/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicScheduler Scheduler Manager
@@ -78,7 +78,7 @@ extern "C" {
  * competing for attention.
  */
 
-/* Generated from spec:/rtems/scheduler/if/ident */
+/* Find related documentation with spec:/rtems/scheduler/if/ident */
 
 /**
  * @ingroup RTEMSAPIClassicScheduler
@@ -120,7 +120,7 @@ extern "C" {
  */
 rtems_status_code rtems_scheduler_ident( rtems_name name, rtems_id *id );
 
-/* Generated from spec:/rtems/scheduler/if/ident-by-processor */
+/* Find related documentation with spec:/rtems/scheduler/if/ident-by-processor */
 
 /**
  * @ingroup RTEMSAPIClassicScheduler
@@ -156,7 +156,7 @@ rtems_status_code rtems_scheduler_ident_by_processor(
   rtems_id *id
 );
 
-/* Generated from spec:/rtems/scheduler/if/ident-by-processor-set */
+/* Find related documentation with spec:/rtems/scheduler/if/ident-by-processor-set */
 
 /**
  * @ingroup RTEMSAPIClassicScheduler
@@ -206,7 +206,7 @@ rtems_status_code rtems_scheduler_ident_by_processor_set(
   rtems_id        *id
 );
 
-/* Generated from spec:/rtems/scheduler/if/get-maximum-priority */
+/* Find related documentation with spec:/rtems/scheduler/if/get-maximum-priority */
 
 /**
  * @ingroup RTEMSAPIClassicScheduler
@@ -240,7 +240,7 @@ rtems_status_code rtems_scheduler_get_maximum_priority(
   rtems_task_priority *priority
 );
 
-/* Generated from spec:/rtems/scheduler/if/map-priority-to-posix */
+/* Find related documentation with spec:/rtems/scheduler/if/map-priority-to-posix */
 
 /**
  * @ingroup RTEMSAPIClassicScheduler
@@ -281,7 +281,7 @@ rtems_status_code rtems_scheduler_map_priority_to_posix(
   int                *posix_priority
 );
 
-/* Generated from spec:/rtems/scheduler/if/map-priority-from-posix */
+/* Find related documentation with spec:/rtems/scheduler/if/map-priority-from-posix */
 
 /**
  * @ingroup RTEMSAPIClassicScheduler
@@ -322,7 +322,7 @@ rtems_status_code rtems_scheduler_map_priority_from_posix(
   rtems_task_priority *priority
 );
 
-/* Generated from spec:/rtems/scheduler/if/get-processor */
+/* Find related documentation with spec:/rtems/scheduler/if/get-processor */
 
 /**
  * @ingroup RTEMSAPIClassicScheduler
@@ -356,10 +356,10 @@ rtems_status_code rtems_scheduler_map_priority_from_posix(
  */
 uint32_t rtems_scheduler_get_processor( void );
 
-/* Generated from spec:/rtems/scheduler/if/get-processor-macro */
+/* Find related documentation with spec:/rtems/scheduler/if/get-processor-macro */
 #define rtems_scheduler_get_processor() _SMP_Get_current_processor()
 
-/* Generated from spec:/rtems/scheduler/if/get-processor-maximum */
+/* Find related documentation with spec:/rtems/scheduler/if/get-processor-maximum */
 
 /**
  * @ingroup RTEMSAPIClassicScheduler
@@ -390,10 +390,10 @@ uint32_t rtems_scheduler_get_processor( void );
  */
 uint32_t rtems_scheduler_get_processor_maximum( void );
 
-/* Generated from spec:/rtems/scheduler/if/get-processor-maximum-macro */
+/* Find related documentation with spec:/rtems/scheduler/if/get-processor-maximum-macro */
 #define rtems_scheduler_get_processor_maximum() _SMP_Get_processor_maximum()
 
-/* Generated from spec:/rtems/scheduler/if/get-processor-set */
+/* Find related documentation with spec:/rtems/scheduler/if/get-processor-set */
 
 /**
  * @ingroup RTEMSAPIClassicScheduler
@@ -435,7 +435,7 @@ rtems_status_code rtems_scheduler_get_processor_set(
   cpu_set_t *cpuset
 );
 
-/* Generated from spec:/rtems/scheduler/if/add-processor */
+/* Find related documentation with spec:/rtems/scheduler/if/add-processor */
 
 /**
  * @ingroup RTEMSAPIClassicScheduler
@@ -481,7 +481,7 @@ rtems_status_code rtems_scheduler_add_processor(
   uint32_t cpu_index
 );
 
-/* Generated from spec:/rtems/scheduler/if/remove-processor */
+/* Find related documentation with spec:/rtems/scheduler/if/remove-processor */
 
 /**
  * @ingroup RTEMSAPIClassicScheduler

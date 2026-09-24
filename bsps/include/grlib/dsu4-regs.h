@@ -38,7 +38,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/dev/grlib/if/dsu4-header */
+/* Find related documentation with spec:/dev/grlib/if/dsu4-header */
 
 #ifndef _GRLIB_DSU4_REGS_H
 #define _GRLIB_DSU4_REGS_H
@@ -49,7 +49,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/dev/grlib/if/dsu4 */
+/* Find related documentation with spec:/dev/grlib/if/dsu4 */
 
 /**
  * @defgroup RTEMSDeviceGRLIBDSU4 DSU4

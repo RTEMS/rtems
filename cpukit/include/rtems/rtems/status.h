@@ -40,7 +40,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/status/if/header */
+/* Find related documentation with spec:/rtems/status/if/header */
 
 #ifndef _RTEMS_RTEMS_STATUS_H
 #define _RTEMS_RTEMS_STATUS_H
@@ -51,7 +51,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/status/if/group */
+/* Find related documentation with spec:/rtems/status/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicStatus Directive Status Codes
@@ -62,7 +62,7 @@ extern "C" {
  *   support functions.
  */
 
-/* Generated from spec:/rtems/status/if/code */
+/* Find related documentation with spec:/rtems/status/if/code */
 
 /**
  * @ingroup RTEMSAPIClassicStatus
@@ -248,7 +248,7 @@ typedef enum {
   RTEMS_PROXY_BLOCKING = 29
 } rtems_status_code;
 
-/* Generated from spec:/rtems/status/if/code-to-errno */
+/* Find related documentation with spec:/rtems/status/if/code-to-errno */
 
 /**
  * @ingroup RTEMSAPIClassicStatus
@@ -289,7 +289,7 @@ typedef enum {
  */
 int rtems_status_code_to_errno( rtems_status_code status_code );
 
-/* Generated from spec:/rtems/status/if/first */
+/* Find related documentation with spec:/rtems/status/if/first */
 
 /**
  * @ingroup RTEMSAPIClassicStatus
@@ -299,7 +299,7 @@ int rtems_status_code_to_errno( rtems_status_code status_code );
  */
 #define RTEMS_STATUS_CODES_FIRST RTEMS_SUCCESSFUL
 
-/* Generated from spec:/rtems/status/if/is-equal */
+/* Find related documentation with spec:/rtems/status/if/is-equal */
 
 /**
  * @ingroup RTEMSAPIClassicStatus
@@ -321,7 +321,7 @@ static inline bool rtems_are_statuses_equal(
   return left_status_code == right_status_code;
 }
 
-/* Generated from spec:/rtems/status/if/is-successful */
+/* Find related documentation with spec:/rtems/status/if/is-successful */
 
 /**
  * @ingroup RTEMSAPIClassicStatus
@@ -338,7 +338,7 @@ static inline bool rtems_is_status_successful( rtems_status_code status_code )
   return status_code == RTEMS_SUCCESSFUL;
 }
 
-/* Generated from spec:/rtems/status/if/last */
+/* Find related documentation with spec:/rtems/status/if/last */
 
 /**
  * @ingroup RTEMSAPIClassicStatus
@@ -348,7 +348,7 @@ static inline bool rtems_is_status_successful( rtems_status_code status_code )
  */
 #define RTEMS_STATUS_CODES_LAST RTEMS_PROXY_BLOCKING
 
-/* Generated from spec:/rtems/status/if/text */
+/* Find related documentation with spec:/rtems/status/if/text */
 
 /**
  * @ingroup RTEMSAPIClassicStatus

@@ -38,7 +38,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/dev/grlib/if/l4stat-header */
+/* Find related documentation with spec:/dev/grlib/if/l4stat-header */
 
 #ifndef _GRLIB_L4STAT_REGS_H
 #define _GRLIB_L4STAT_REGS_H
@@ -49,7 +49,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/dev/grlib/if/l4stat */
+/* Find related documentation with spec:/dev/grlib/if/l4stat */
 
 /**
  * @defgroup RTEMSDeviceGRLIBL4STAT L4STAT

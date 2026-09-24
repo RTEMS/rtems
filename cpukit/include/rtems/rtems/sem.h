@@ -39,7 +39,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/sem/if/header */
+/* Find related documentation with spec:/rtems/sem/if/header */
 
 #ifndef _RTEMS_RTEMS_SEM_H
 #define _RTEMS_RTEMS_SEM_H
@@ -54,7 +54,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/sem/if/group */
+/* Find related documentation with spec:/rtems/sem/if/group */
 
 /**
  * @defgroup RTEMSAPIClassicSem Semaphore Manager
@@ -65,7 +65,7 @@ extern "C" {
  *   to provide synchronization and mutual exclusion capabilities.
  */
 
-/* Generated from spec:/rtems/sem/if/create */
+/* Find related documentation with spec:/rtems/sem/if/create */
 
 /**
  * @ingroup RTEMSAPIClassicSem
@@ -251,7 +251,7 @@ rtems_status_code rtems_semaphore_create(
   rtems_id           *id
 );
 
-/* Generated from spec:/rtems/sem/if/ident */
+/* Find related documentation with spec:/rtems/sem/if/ident */
 
 /**
  * @ingroup RTEMSAPIClassicSem
@@ -329,7 +329,7 @@ rtems_status_code rtems_semaphore_ident(
   rtems_id  *id
 );
 
-/* Generated from spec:/rtems/sem/if/delete */
+/* Find related documentation with spec:/rtems/sem/if/delete */
 
 /**
  * @ingroup RTEMSAPIClassicSem
@@ -395,7 +395,7 @@ rtems_status_code rtems_semaphore_ident(
  */
 rtems_status_code rtems_semaphore_delete( rtems_id id );
 
-/* Generated from spec:/rtems/sem/if/obtain */
+/* Find related documentation with spec:/rtems/sem/if/obtain */
 
 /**
  * @ingroup RTEMSAPIClassicSem
@@ -543,7 +543,7 @@ rtems_status_code rtems_semaphore_obtain(
   rtems_interval timeout
 );
 
-/* Generated from spec:/rtems/sem/if/release */
+/* Find related documentation with spec:/rtems/sem/if/release */
 
 /**
  * @ingroup RTEMSAPIClassicSem
@@ -615,7 +615,7 @@ rtems_status_code rtems_semaphore_obtain(
  */
 rtems_status_code rtems_semaphore_release( rtems_id id );
 
-/* Generated from spec:/rtems/sem/if/flush */
+/* Find related documentation with spec:/rtems/sem/if/flush */
 
 /**
  * @ingroup RTEMSAPIClassicSem
@@ -712,7 +712,7 @@ rtems_status_code rtems_semaphore_release( rtems_id id );
  */
 rtems_status_code rtems_semaphore_flush( rtems_id id );
 
-/* Generated from spec:/rtems/sem/if/set-priority */
+/* Find related documentation with spec:/rtems/sem/if/set-priority */
 
 /**
  * @ingroup RTEMSAPIClassicSem

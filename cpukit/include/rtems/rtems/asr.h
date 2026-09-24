@@ -39,7 +39,7 @@
  * duplicated in the rtems and rtems-docs repositories.
  */
 
-/* Generated from spec:/rtems/signal/if/header-2 */
+/* Find related documentation with spec:/rtems/signal/if/header-2 */
 
 #ifndef _RTEMS_RTEMS_ASR_H
 #define _RTEMS_RTEMS_ASR_H
@@ -50,7 +50,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/signal/if/asr */
+/* Find related documentation with spec:/rtems/signal/if/asr */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -64,7 +64,7 @@ extern "C" {
  */
 typedef void rtems_asr;
 
-/* Generated from spec:/rtems/signal/if/set */
+/* Find related documentation with spec:/rtems/signal/if/set */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -74,7 +74,7 @@ typedef void rtems_asr;
  */
 typedef uint32_t rtems_signal_set;
 
-/* Generated from spec:/rtems/signal/if/asr-entry */
+/* Find related documentation with spec:/rtems/signal/if/asr-entry */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -84,7 +84,7 @@ typedef uint32_t rtems_signal_set;
  */
 typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
 
-/* Generated from spec:/rtems/signal/if/signal-00 */
+/* Find related documentation with spec:/rtems/signal/if/signal-00 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -94,7 +94,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_0 0x00000001
 
-/* Generated from spec:/rtems/signal/if/signal-01 */
+/* Find related documentation with spec:/rtems/signal/if/signal-01 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -104,7 +104,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_1 0x00000002
 
-/* Generated from spec:/rtems/signal/if/signal-02 */
+/* Find related documentation with spec:/rtems/signal/if/signal-02 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -114,7 +114,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_2 0x00000004
 
-/* Generated from spec:/rtems/signal/if/signal-03 */
+/* Find related documentation with spec:/rtems/signal/if/signal-03 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -124,7 +124,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_3 0x00000008
 
-/* Generated from spec:/rtems/signal/if/signal-04 */
+/* Find related documentation with spec:/rtems/signal/if/signal-04 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -134,7 +134,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_4 0x00000010
 
-/* Generated from spec:/rtems/signal/if/signal-05 */
+/* Find related documentation with spec:/rtems/signal/if/signal-05 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -144,7 +144,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_5 0x00000020
 
-/* Generated from spec:/rtems/signal/if/signal-06 */
+/* Find related documentation with spec:/rtems/signal/if/signal-06 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -154,7 +154,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_6 0x00000040
 
-/* Generated from spec:/rtems/signal/if/signal-07 */
+/* Find related documentation with spec:/rtems/signal/if/signal-07 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -164,7 +164,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_7 0x00000080
 
-/* Generated from spec:/rtems/signal/if/signal-08 */
+/* Find related documentation with spec:/rtems/signal/if/signal-08 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -174,7 +174,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_8 0x00000100
 
-/* Generated from spec:/rtems/signal/if/signal-09 */
+/* Find related documentation with spec:/rtems/signal/if/signal-09 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -184,7 +184,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_9 0x00000200
 
-/* Generated from spec:/rtems/signal/if/signal-10 */
+/* Find related documentation with spec:/rtems/signal/if/signal-10 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -194,7 +194,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_10 0x00000400
 
-/* Generated from spec:/rtems/signal/if/signal-11 */
+/* Find related documentation with spec:/rtems/signal/if/signal-11 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -204,7 +204,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_11 0x00000800
 
-/* Generated from spec:/rtems/signal/if/signal-12 */
+/* Find related documentation with spec:/rtems/signal/if/signal-12 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -214,7 +214,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_12 0x00001000
 
-/* Generated from spec:/rtems/signal/if/signal-13 */
+/* Find related documentation with spec:/rtems/signal/if/signal-13 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -224,7 +224,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_13 0x00002000
 
-/* Generated from spec:/rtems/signal/if/signal-14 */
+/* Find related documentation with spec:/rtems/signal/if/signal-14 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -234,7 +234,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_14 0x00004000
 
-/* Generated from spec:/rtems/signal/if/signal-15 */
+/* Find related documentation with spec:/rtems/signal/if/signal-15 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -244,7 +244,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_15 0x00008000
 
-/* Generated from spec:/rtems/signal/if/signal-16 */
+/* Find related documentation with spec:/rtems/signal/if/signal-16 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -254,7 +254,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_16 0x00010000
 
-/* Generated from spec:/rtems/signal/if/signal-17 */
+/* Find related documentation with spec:/rtems/signal/if/signal-17 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -264,7 +264,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_17 0x00020000
 
-/* Generated from spec:/rtems/signal/if/signal-18 */
+/* Find related documentation with spec:/rtems/signal/if/signal-18 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -274,7 +274,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_18 0x00040000
 
-/* Generated from spec:/rtems/signal/if/signal-19 */
+/* Find related documentation with spec:/rtems/signal/if/signal-19 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -284,7 +284,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_19 0x00080000
 
-/* Generated from spec:/rtems/signal/if/signal-20 */
+/* Find related documentation with spec:/rtems/signal/if/signal-20 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -294,7 +294,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_20 0x00100000
 
-/* Generated from spec:/rtems/signal/if/signal-21 */
+/* Find related documentation with spec:/rtems/signal/if/signal-21 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -304,7 +304,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_21 0x00200000
 
-/* Generated from spec:/rtems/signal/if/signal-22 */
+/* Find related documentation with spec:/rtems/signal/if/signal-22 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -314,7 +314,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_22 0x00400000
 
-/* Generated from spec:/rtems/signal/if/signal-23 */
+/* Find related documentation with spec:/rtems/signal/if/signal-23 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -324,7 +324,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_23 0x00800000
 
-/* Generated from spec:/rtems/signal/if/signal-24 */
+/* Find related documentation with spec:/rtems/signal/if/signal-24 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -334,7 +334,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_24 0x01000000
 
-/* Generated from spec:/rtems/signal/if/signal-25 */
+/* Find related documentation with spec:/rtems/signal/if/signal-25 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -344,7 +344,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_25 0x02000000
 
-/* Generated from spec:/rtems/signal/if/signal-26 */
+/* Find related documentation with spec:/rtems/signal/if/signal-26 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -354,7 +354,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_26 0x04000000
 
-/* Generated from spec:/rtems/signal/if/signal-27 */
+/* Find related documentation with spec:/rtems/signal/if/signal-27 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -364,7 +364,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_27 0x08000000
 
-/* Generated from spec:/rtems/signal/if/signal-28 */
+/* Find related documentation with spec:/rtems/signal/if/signal-28 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -374,7 +374,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_28 0x10000000
 
-/* Generated from spec:/rtems/signal/if/signal-29 */
+/* Find related documentation with spec:/rtems/signal/if/signal-29 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -384,7 +384,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_29 0x20000000
 
-/* Generated from spec:/rtems/signal/if/signal-30 */
+/* Find related documentation with spec:/rtems/signal/if/signal-30 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
@@ -394,7 +394,7 @@ typedef rtems_asr ( *rtems_asr_entry )( rtems_signal_set );
  */
 #define RTEMS_SIGNAL_30 0x40000000
 
-/* Generated from spec:/rtems/signal/if/signal-31 */
+/* Find related documentation with spec:/rtems/signal/if/signal-31 */
 
 /**
  * @ingroup RTEMSAPIClassicSignal
