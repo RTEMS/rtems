@@ -1,0 +1,29 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+accepted-licenses:
+- BSD-2-Clause
+build-directory: ${.:/deployment-directory}/build
+component-type: generic
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+deployment-directory: ${.:/prefix-directory}/${.:/package-directory}
+documentation-directory: ${.:/deployment-directory}/doc
+enabled-by: true
+enabled-set: []
+enabled-set-actions: []
+enabled-set-feedback-mapping: {}
+gcc-reported-version: 16.1.1 20260619
+ident: ${.:/name}
+license: CC-BY-SA-4.0
+links:
+- role: use-package-component-template
+  uid: /pkg/template/component
+- role: glossary
+  uid: /glossary/group
+name: eb-rtems-gr712rc
+package-directory: workspace
+package-version: '42'
+pkg-type: workspace
+prefix-directory: ${.:/repository-directory}
+rtems-version: '7'
+type: pkg
+workspace-type: component

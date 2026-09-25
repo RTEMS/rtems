@@ -1,0 +1,32 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+attribute-actions: []
+attributes:
+  build-label: $${.:/component/ident}/qual-only/coverage
+  config-key: qual-only-coverage
+  description: |
+    This build configuration has only the pre-qualified features enabled with
+    code and branch coverage instrumentation.  This build configuration is not
+    deployed and should not be used by applications.
+  enabled-by: true
+  links:
+  - hash: null
+    name: component
+    role: input
+    uid: component
+  name: Pre-Qualified Features Only with Coverage Instrumentation
+  pkg-type: build-configuration
+  test-timeout-key:
+  - enabled-by: RTEMS_SMP
+    key: coverage-smp
+  - enabled-by: true
+    key: coverage
+  type: pkg
+copyrights:
+- Copyright (C) 2024 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: add-package-template
+  uid: component
+pkg-type: template
+template-type: inline-item
+type: pkg

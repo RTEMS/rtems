@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+attribute-actions: []
+copyrights:
+- Copyright (C) 2024, 2026 embedded brains GmbH & Co. KG
+enabled-by: true
+enabled-set-actions:
+- action: add
+  enabled-by: true
+  value: ${.:/arch}
+enabled-set-feedback-mapping:
+  ${.:/arch}: pkg.arch.${.:/arch}
+  pkg.feature.ada: pkg.feature.ada
+  x86_64-w64: pkg.feature.x86_64-w64
+links: []
+pkg-type: template
+template-type: component
+type: pkg

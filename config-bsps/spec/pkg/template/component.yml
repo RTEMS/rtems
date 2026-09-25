@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+attribute-actions:
+- action: set
+  enabled-by: true
+  path: /repository-directory
+  value: ${.:/workspace-directory}
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+enabled-by: true
+enabled-set-actions: []
+enabled-set-feedback-mapping: {}
+links: []
+pkg-type: template
+template-type: component
+type: pkg

@@ -1,0 +1,27 @@
+#
+#  Device Tree for PSIM
+#
+/#address-cells 1
+/openprom/init/register/pvr 0xfffe0000
+/openprom/options/oea-memory-size 0x10000000
+##### EEPROM @ 0xfc000000 for 512K
+/eeprom@0xfc000000/reg 0xfc000000 0x80000
+/eeprom@0xfc000000/nr-sectors 8
+/eeprom@0xfc000000/sector-size 0x10000
+/eeprom@0xfc000000/byte-write-delay 1000
+/eeprom@0xfc000000/sector-start-delay 100
+/eeprom@0xfc000000/erase-delay 1000
+/eeprom@0xfc000000/manufacture-code 0x01
+/eeprom@0xfc000000/device-code 0xa4
+
+##### NVRAM/RTC NVRAM Portion is 0xfc080000 for 512K
+##### NVRAM/RTC RTC   Portion is 0xfc100000 for 12
+/nvram@0xfc080000/reg 0xfc080000 524300
+/nvram@0xfc080000/timezone -3600
+
+##### OPENPIC @ 0xfc130000 - 0xfc170000 (512K)
+/opic@0xfc130000/reg              0xfc130000 0 0xfc130000 0x40000
+/opic@0xfc130000/interrupt-ranges 0 0 0 16
+/opic@0xfc130000/device_type      open-pic
+## interupt out -> CPU's interrupt pin
+/opic@0xfc130000 > intr0 int /cpus/cpu@0

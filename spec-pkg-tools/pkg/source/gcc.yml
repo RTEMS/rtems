@@ -1,0 +1,63 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+branch: ${.:/component/ident}
+clone-depth: 20
+commit: e8179f71437bc5687b2696bbaba78bd727b9d15b
+copyrights:
+- Copyright (C) 2020, 2026 embedded brains GmbH & Co. KG
+description: |
+  This repository contains the GCC sources.  It is used to build host tools.
+destination-directory: ${.:/component/deployment-directory}/src/gcc
+directory: https://github.com/embedded-brains/gcc.git
+enabled-by:
+- pkg.arch.aarch64
+- pkg.arch.arm
+- pkg.arch.i386
+- pkg.arch.m68k
+- pkg.arch.microblaze
+- pkg.arch.mips
+- pkg.arch.moxie
+- pkg.arch.or1k
+- pkg.arch.powerpc
+- pkg.arch.riscv
+- pkg.arch.sparc
+- pkg.arch.x86_64
+license-files:
+  description: |
+    The GCC sources are used to provide host tools such as the
+    ${/glossary/target-arch:/term} compiler.
+  files:
+  - COPYING
+  - COPYING.LIB
+  - COPYING.RUNTIME
+  - COPYING3
+  - COPYING3.LIB
+license-info: []
+links:
+- role: repository
+  uid: ../component
+- hash: null
+  name: component
+  role: input
+  uid: ../component
+- hash: null
+  name: source
+  role: input
+  uid: newlib
+- hash: null
+  name: member
+  role: input-to
+  uid: ../deployment/archive
+origin-branch: releases/gcc-16
+origin-commit: 97a97ee00a96ace7ea7f9571df5fab584fc664a3
+origin-commit-url: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=${.:/origin-commit}
+origin-fetch: []
+origin-url: https://gcc.gnu.org/git/gcc.git
+pkg-type: workspace
+post-clone-commands:
+- - contrib/gcc_update
+  - --touch
+symbolic-links:
+- link-name: newlib
+  target: ${newlib:/directory}/newlib
+type: pkg
+workspace-type: repository

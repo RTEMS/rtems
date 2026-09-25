@@ -1,0 +1,299 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+archive-file: ${.:/component/workspace-directory}/src/qemu-11.1.1.tar.xz
+archive-hash: 8ws2gAtErANw5jNBqMVZEBlkinjVkp4YsBd4c8C25KDLvdwGkzfLBqO10g0Vd5ybl4bQqSBzxCH7B64Upn1GRg==
+archive-patches:
+- enabled-by: true
+  patch: "From 75c9bbebc02583c7bde0a4fe39e4088d1e568d83 Mon Sep 17 00:00:00 2001\n\
+    From: Sebastian Huber <sebastian.huber@embedded-brains.de>\nDate: Fri, 21 Aug\
+    \ 2026 14:54:40 +0200\nSubject: [PATCH 1/2] hw/timer/xilinx_timer: Start on the\
+    \ enable edge\n\nEvery write to a control register which has the enable bit set\n\
+    restarted the count from the load value.  A guest which clears the\ninterrupt\
+    \ of a periodic timer writes that register with the enable bit\nstill set, so\
+    \ every period gained the latency of the interrupt.  The\nRTEMS clock tick of\
+    \ the petalogix-s3adsp1800 machine ran 0.5 percent\nlong with -icount and 2.5\
+    \ to 3.4 percent long in host time.\n\nStart the count only where the enable bit\
+    \ goes from zero to one.  The\ndata sheet of the AXI Timer gives the reload of\
+    \ the counter to the load\nbit.\n\nAssisted-by: Claude:claude-opus-5 claude-code\n\
+    Signed-off-by: Sebastian Huber <sebastian.huber@embedded-brains.de>\n---\n hw/timer/xilinx_timer.c\
+    \ | 12 ++++++++++--\n 1 file changed, 10 insertions(+), 2 deletions(-)\n\ndiff\
+    \ --git a/hw/timer/xilinx_timer.c b/hw/timer/xilinx_timer.c\nindex 8a502dae0e..dff439c623\
+    \ 100644\n--- a/hw/timer/xilinx_timer.c\n+++ b/hw/timer/xilinx_timer.c\n@@ -175,17\
+    \ +175,25 @@ timer_write(void *opaque, hwaddr addr,\n     addr &= 3;\n     switch\
+    \ (addr) \n     {\n-        case R_TCSR:\n+        case R_TCSR: {\n+         \
+    \   uint32_t old = xt->regs[R_TCSR];\n+\n             if (value & TCSR_TINT)\n\
+    \                 value &= ~TCSR_TINT;\n \n             xt->regs[addr] = value\
+    \ & 0x7ff;\n-            if (value & TCSR_ENT) {\n+            /*\n+         \
+    \    * Only a transition of the enable bit to one starts the count.\n+       \
+    \      * A write which leaves the bit set, such as the acknowledge of\n+     \
+    \        * an interrupt, does not restart it.\n+             */\n+           \
+    \ if ((value & TCSR_ENT) && !(old & TCSR_ENT)) {\n                 ptimer_transaction_begin(xt->ptimer);\n\
+    \                 timer_enable(xt);\n                 ptimer_transaction_commit(xt->ptimer);\n\
+    \             }\n             break;\n+        }\n  \n         default:\n    \
+    \         if (addr < ARRAY_SIZE(xt->regs))\n-- \n2.53.0\n\n"
+  type: inline
+- enabled-by: true
+  patch: "From 932c652973b53a5c67eb64dc8f60e0491fe649a6 Mon Sep 17 00:00:00 2001\n\
+    From: Sebastian Huber <sebastian.huber@embedded-brains.de>\nDate: Fri, 21 Aug\
+    \ 2026 14:54:40 +0200\nSubject: [PATCH 2/2] hw/timer/xilinx_timer: Reload at the\
+    \ expiry\n\nThe callback of a timer with the auto reload and hold bit set restarted\n\
+    the count.  It restarted it at the moment the callback ran, so every\nperiod gained\
+    \ the latency of the callback and the period moved with the\nload of the host.\n\
+    \nRun the ptimer in the periodic mode, so that it reloads at the expiry.\nA write\
+    \ of the load register while the count runs sets the limit for\nthe next reload,\
+    \ which keeps the load value live.\n\nThe clock tick of the petalogix-s3adsp1800\
+    \ machine measures 62000.01\ncounts of a second timer against a programmed 62000\
+    \ with -icount, and\n61929 to 62036 counts in host time.  The values before this\
+    \ series are\n62327 and 63535 to 64083.\n\nAssisted-by: Claude:claude-opus-5 claude-code\n\
+    Signed-off-by: Sebastian Huber <sebastian.huber@embedded-brains.de>\n---\n hw/timer/xilinx_timer.c\
+    \ | 36 ++++++++++++++++++++++++++++--------\n 1 file changed, 28 insertions(+),\
+    \ 8 deletions(-)\n\ndiff --git a/hw/timer/xilinx_timer.c b/hw/timer/xilinx_timer.c\n\
+    index dff439c623..7120c339ec 100644\n--- a/hw/timer/xilinx_timer.c\n+++ b/hw/timer/xilinx_timer.c\n\
+    @@ -139,6 +139,14 @@ timer_read(void *opaque, hwaddr addr, unsigned int size)\n\
+    \     return r;\n }\n \n+static uint64_t timer_limit(struct xlx_timer *xt)\n+{\n\
+    +    if (xt->regs[R_TCSR] & TCSR_UDT)\n+        return xt->regs[R_TLR];\n+   \
+    \ else\n+        return ~0 - xt->regs[R_TLR];\n+}\n+\n /* Must be called inside\
+    \ ptimer transaction block */\n static void timer_enable(struct xlx_timer *xt)\n\
+    \ {\n@@ -149,12 +157,14 @@ static void timer_enable(struct xlx_timer *xt)\n \n\
+    \     ptimer_stop(xt->ptimer);\n \n-    if (xt->regs[R_TCSR] & TCSR_UDT)\n-  \
+    \      count = xt->regs[R_TLR];\n-    else\n-        count = ~0 - xt->regs[R_TLR];\n\
+    +    count = timer_limit(xt);\n     ptimer_set_limit(xt->ptimer, count, 1);\n\
+    -    ptimer_run(xt->ptimer, 1);\n+    /*\n+     * The auto reload and hold bit\
+    \ makes the count periodic.  Let the ptimer\n+     * carry the period, so that\
+    \ it reloads at the expiry rather than when the\n+     * callback runs.\n+   \
+    \  */\n+    ptimer_run(xt->ptimer, !(xt->regs[R_TCSR] & TCSR_ARHT));\n }\n \n\
+    \ static void\n@@ -195,6 +205,19 @@ timer_write(void *opaque, hwaddr addr,\n \
+    \            break;\n         }\n  \n+        case R_TLR:\n+            xt->regs[addr]\
+    \ = value;\n+            /*\n+             * A running periodic count takes the\
+    \ new load value at its next\n+             * reload.\n+             */\n+   \
+    \         if (xt->regs[R_TCSR] & TCSR_ENT) {\n+                ptimer_transaction_begin(xt->ptimer);\n\
+    +                ptimer_set_limit(xt->ptimer, timer_limit(xt), 0);\n+        \
+    \        ptimer_transaction_commit(xt->ptimer);\n+            }\n+           \
+    \ break;\n+\n         default:\n             if (addr < ARRAY_SIZE(xt->regs))\n\
+    \                 xt->regs[addr] = value;\n@@ -226,9 +249,6 @@ static void timer_hit(void\
+    \ *opaque)\n     XpsTimerState *t = xt->parent;\n     D(fprintf(stderr, \"%s %d\\\
+    n\", __func__, xt->nr));\n     xt->regs[R_TCSR] |= TCSR_TINT;\n-\n-    if (xt->regs[R_TCSR]\
+    \ & TCSR_ARHT)\n-        timer_enable(xt);\n     timer_update_irq(t);\n }\n \n\
+    -- \n2.53.0\n\n"
+  type: inline
+- enabled-by: true
+  patch: "From ee58daa8fc7c52baa578fc54a1aa6b4dbfd6b8ad Mon Sep 17 00:00:00 2001\n\
+    From: Sebastian Huber <sebastian.huber@embedded-brains.de>\nDate: Fri, 11 Sep\
+    \ 2026 03:28:13 +0200\nSubject: [PATCH] target/mips/tcg: Gate rdhwr on Config3.ULRI\n\
+    \nThe user local register of a MIPS processor exists where Config3.ULRI\nis set.\
+    \  gen_rdhwr() read CP0_UserLocal for hardware register 29\nwhatever that bit\
+    \ held.  A processor which implements no such register\nreturned a value nobody\
+    \ wrote.  A 24Kf leaves ULRI clear, so an\noperating system which supplies the\
+    \ thread pointer through the\nreserved instruction exception never saw that exception.\n\
+    \nGate the read on the bit.  A processor without the register then takes\nthe\
+    \ reserved instruction exception.  The operating system emulates the\ninstruction\
+    \ and supplies the value.\n\nRTEMS on the malta machine reads the thread pointer\
+    \ this way.\n\nAssisted-by: Claude:claude-opus-5 claude-code\nSigned-off-by: Sebastian\
+    \ Huber <sebastian.huber@embedded-brains.de>\n---\n target/mips/tcg/translate.c\
+    \ | 9 +++++++--\n 1 file changed, 7 insertions(+), 2 deletions(-)\n\ndiff --git\
+    \ a/target/mips/tcg/translate.c b/target/mips/tcg/translate.c\nindex e3467d1525..37f562df0d\
+    \ 100644\n--- a/target/mips/tcg/translate.c\n+++ b/target/mips/tcg/translate.c\n\
+    @@ -10915,8 +10915,13 @@ void gen_rdhwr(DisasContext *ctx, int rt, int rd, int\
+    \ sel)\n         gen_store_gpr(t0, rt);\n         break;\n #else\n-        if\
+    \ ((ctx->hflags & MIPS_HFLAG_CP0) ||\n-            (ctx->hflags & MIPS_HFLAG_HWRENA_ULR))\
+    \ {\n+        /*\n+         * The user local register exists where Config3.ULRI\
+    \ says so.  A\n+         * processor without it takes a reserved instruction exception,\
+    \ which\n+         * lets an operating system supply the value.\n+         */\n\
+    +        if (ctx->ulri && ((ctx->hflags & MIPS_HFLAG_CP0) ||\n+              \
+    \            (ctx->hflags & MIPS_HFLAG_HWRENA_ULR))) {\n             tcg_gen_ld_tl(t0,\
+    \ tcg_env,\n                           offsetof(CPUMIPSState, active_tc.CP0_UserLocal));\n\
+    \             gen_store_gpr(t0, rt);\n-- \n2.53.0\n\n"
+  type: inline
+- enabled-by: true
+  patch: "From 01ffafcb9158b8b45bf798959f900816b16483d7 Mon Sep 17 00:00:00 2001\n\
+    From: Sebastian Huber <sebastian.huber@embedded-brains.de>\nDate: Sun, 4 Oct 2026\
+    \ 13:51:16 +0200\nSubject: [PATCH 1/2] hw/watchdog: Add the Xilinx Timebase Watchdog\n\
+    \nQEMU has no model of the Xilinx XPS and AXI Timebase Watchdog Timer.  A\nMicroBlaze\
+    \ system resets itself through this watchdog.\n\nAdd a model.  The first expiry\
+    \ of the timer sets the watchdog state and\nraises the interrupt.  The second\
+    \ expiry performs the watchdog action\nand sets the reset status, which survives\
+    \ the reset.\n\nAssisted-by: Claude:claude-opus-5-5 claude-code\nSigned-off-by:\
+    \ Sebastian Huber <sebastian.huber@embedded-brains.de>\n---\n hw/watchdog/Kconfig\
+    \               |   4 +\n hw/watchdog/meson.build           |   1 +\n hw/watchdog/xilinx_timebase_wdt.c\
+    \ | 266 ++++++++++++++++++++++++++++++\n 3 files changed, 271 insertions(+)\n\
+    \ create mode 100644 hw/watchdog/xilinx_timebase_wdt.c\n\ndiff --git a/hw/watchdog/Kconfig\
+    \ b/hw/watchdog/Kconfig\nindex 55f77c5c8..ac7b2d323 100644\n--- a/hw/watchdog/Kconfig\n\
+    +++ b/hw/watchdog/Kconfig\n@@ -28,3 +28,7 @@ config WDT_SBSA\n config ALLWINNER_WDT\n\
+    \     bool\n     select PTIMER\n+\n+config XILINX_TIMEBASE_WDT\n+    bool\n+ \
+    \   select PTIMER\ndiff --git a/hw/watchdog/meson.build b/hw/watchdog/meson.build\n\
+    index 5edae65a3..e70e5311d 100644\n--- a/hw/watchdog/meson.build\n+++ b/hw/watchdog/meson.build\n\
+    @@ -8,4 +8,5 @@ system_ss.add(when: 'CONFIG_ASPEED_SOC', if_true: files('wdt_aspeed.c'))\n\
+    \ system_ss.add(when: 'CONFIG_WDT_IMX2', if_true: files('wdt_imx2.c'))\n system_ss.add(when:\
+    \ 'CONFIG_K230_WDT', if_true: files('k230_wdt.c'))\n system_ss.add(when: 'CONFIG_WDT_SBSA',\
+    \ if_true: files('sbsa_gwdt.c'))\n+system_ss.add(when: 'CONFIG_XILINX_TIMEBASE_WDT',\
+    \ if_true: files('xilinx_timebase_wdt.c'))\n specific_ss.add(when: 'CONFIG_PSERIES',\
+    \ if_true: files('spapr_watchdog.c'))\ndiff --git a/hw/watchdog/xilinx_timebase_wdt.c\
+    \ b/hw/watchdog/xilinx_timebase_wdt.c\nnew file mode 100644\nindex 000000000..002a6bace\n\
+    --- /dev/null\n+++ b/hw/watchdog/xilinx_timebase_wdt.c\n@@ -0,0 +1,266 @@\n+/*\n\
+    + * Xilinx XPS and AXI Timebase Watchdog Timer\n+ *\n+ * Copyright (C) 2026 embedded\
+    \ brains GmbH & Co. KG\n+ *\n+ * SPDX-License-Identifier: GPL-2.0-or-later\n+\
+    \ *\n+ * The timer expires after 2^wdt-interval clock cycles.  The first expiry\n\
+    + * sets the watchdog state and raises the interrupt.  An expiry with the\n+ *\
+    \ watchdog state set asserts the reset and sets the reset status.  Writing a\n\
+    + * one to the watchdog state clears it and restarts the interval.  The timer\n\
+    + * runs while one of the two enable bits is set.\n+ */\n+\n+#include \"qemu/osdep.h\"\
+    \n+#include \"qapi/error.h\"\n+#include \"hw/core/sysbus.h\"\n+#include \"hw/core/irq.h\"\
+    \n+#include \"hw/core/ptimer.h\"\n+#include \"hw/core/qdev-properties.h\"\n+#include\
+    \ \"hw/core/qdev-properties-system.h\"\n+#include \"migration/vmstate.h\"\n+#include\
+    \ \"qemu/timer.h\"\n+#include \"qemu/module.h\"\n+#include \"qom/object.h\"\n\
+    +#include \"system/watchdog.h\"\n+\n+#define R_TWCSR0 0\n+#define R_TWCSR1 1\n\
+    +#define R_TBR    2\n+#define R_MAX    4\n+\n+#define TWCSR_EWDT2 (1U << 0)\n\
+    +#define TWCSR0_EWDT1 (1U << 1)\n+#define TWCSR0_WDS (1U << 2)\n+#define TWCSR0_WRS\
+    \ (1U << 3)\n+\n+#define TYPE_XILINX_TIMEBASE_WDT \"xlnx.xps-timebase-wdt\"\n\
+    +OBJECT_DECLARE_SIMPLE_TYPE(XilinxTimebaseWdtState, XILINX_TIMEBASE_WDT)\n+\n\
+    +struct XilinxTimebaseWdtState {\n+    SysBusDevice parent_obj;\n+\n+    EndianMode\
+    \ model_endianness;\n+    MemoryRegion mmio;\n+    qemu_irq irq;\n+    ptimer_state\
+    \ *ptimer;\n+    uint32_t freq_hz;\n+    uint8_t interval;\n+\n+    bool ewdt1;\n\
+    +    bool ewdt2;\n+    bool wds;\n+    /* The reset status survives the reset\
+    \ which it reports. */\n+    bool wrs;\n+    int64_t timebase_start_ns;\n+};\n\
+    +\n+static bool wdt_enabled(XilinxTimebaseWdtState *s)\n+{\n+    return s->ewdt1\
+    \ || s->ewdt2;\n+}\n+\n+static void wdt_update_irq(XilinxTimebaseWdtState *s)\n\
+    +{\n+    qemu_set_irq(s->irq, s->wds);\n+}\n+\n+/* Must be called inside ptimer\
+    \ transaction block */\n+static void wdt_restart(XilinxTimebaseWdtState *s)\n\
+    +{\n+    ptimer_stop(s->ptimer);\n+    s->timebase_start_ns = qemu_clock_get_ns(QEMU_CLOCK_VIRTUAL);\n\
+    +\n+    if (wdt_enabled(s)) {\n+        ptimer_set_limit(s->ptimer, 1ULL << s->interval,\
+    \ 1);\n+        ptimer_run(s->ptimer, 0);\n+    }\n+}\n+\n+static uint32_t wdt_twcsr0(XilinxTimebaseWdtState\
+    \ *s)\n+{\n+    return (s->wrs ? TWCSR0_WRS : 0) | (s->wds ? TWCSR0_WDS : 0) |\n\
+    +           (s->ewdt1 ? TWCSR0_EWDT1 : 0) | (s->ewdt2 ? TWCSR_EWDT2 : 0);\n+}\n\
+    +\n+static uint64_t wdt_read(void *opaque, hwaddr addr, unsigned int size)\n+{\n\
+    +    XilinxTimebaseWdtState *s = opaque;\n+    int64_t ns;\n+\n+    switch (addr\
+    \ >> 2) {\n+    case R_TWCSR0:\n+        return wdt_twcsr0(s);\n+    case R_TWCSR1:\n\
+    +        return s->ewdt2 ? TWCSR_EWDT2 : 0;\n+    case R_TBR:\n+        ns = qemu_clock_get_ns(QEMU_CLOCK_VIRTUAL)\
+    \ - s->timebase_start_ns;\n+        return (uint32_t)muldiv64(ns, s->freq_hz,\
+    \ NANOSECONDS_PER_SECOND);\n+    default:\n+        return 0;\n+    }\n+}\n+\n\
+    +static void wdt_write(void *opaque, hwaddr addr, uint64_t val64,\n+         \
+    \             unsigned int size)\n+{\n+    XilinxTimebaseWdtState *s = opaque;\n\
+    +    uint32_t value = val64;\n+    bool was_enabled = wdt_enabled(s);\n+    bool\
+    \ restart = false;\n+\n+    switch (addr >> 2) {\n+    case R_TWCSR0:\n+     \
+    \   if (value & TWCSR0_WRS) {\n+            s->wrs = false;\n+        }\n+   \
+    \     if (value & TWCSR0_WDS) {\n+            s->wds = false;\n+            restart\
+    \ = true;\n+        }\n+        s->ewdt1 = value & TWCSR0_EWDT1;\n+        s->ewdt2\
+    \ = value & TWCSR_EWDT2;\n+        break;\n+    case R_TWCSR1:\n+        s->ewdt2\
+    \ = value & TWCSR_EWDT2;\n+        break;\n+    default:\n+        return;\n+\
+    \    }\n+\n+    if (restart || was_enabled != wdt_enabled(s)) {\n+        ptimer_transaction_begin(s->ptimer);\n\
+    +        wdt_restart(s);\n+        ptimer_transaction_commit(s->ptimer);\n+  \
+    \  }\n+\n+    wdt_update_irq(s);\n+}\n+\n+static const MemoryRegionOps wdt_ops[2]\
+    \ = {\n+    [0 ... 1] = {\n+        .read = wdt_read,\n+        .write = wdt_write,\n\
+    +        .impl = {\n+            .min_access_size = 4,\n+            .max_access_size\
+    \ = 4,\n+        },\n+        .valid = {\n+            .min_access_size = 4,\n\
+    +            .max_access_size = 4,\n+        },\n+    },\n+    [0].endianness\
+    \ = DEVICE_LITTLE_ENDIAN,\n+    [1].endianness = DEVICE_BIG_ENDIAN,\n+};\n+\n\
+    +static void wdt_expired(void *opaque)\n+{\n+    XilinxTimebaseWdtState *s = opaque;\n\
+    +\n+    if (s->wds) {\n+        s->wrs = true;\n+        watchdog_perform_action();\n\
+    +    } else {\n+        s->wds = true;\n+        wdt_update_irq(s);\n+    }\n\
+    +}\n+\n+static void xilinx_timebase_wdt_reset(DeviceState *dev)\n+{\n+    XilinxTimebaseWdtState\
+    \ *s = XILINX_TIMEBASE_WDT(dev);\n+\n+    s->ewdt1 = false;\n+    s->ewdt2 = false;\n\
+    +    s->wds = false;\n+    ptimer_transaction_begin(s->ptimer);\n+    wdt_restart(s);\n\
+    +    ptimer_transaction_commit(s->ptimer);\n+    wdt_update_irq(s);\n+}\n+\n+static\
+    \ void xilinx_timebase_wdt_realize(DeviceState *dev, Error **errp)\n+{\n+    XilinxTimebaseWdtState\
+    \ *s = XILINX_TIMEBASE_WDT(dev);\n+\n+    if (s->model_endianness == ENDIAN_MODE_UNSPECIFIED)\
+    \ {\n+        error_setg(errp, TYPE_XILINX_TIMEBASE_WDT \" property 'endianness'\"\
+    \n+                         \" must be set to 'big' or 'little'\");\n+       \
+    \ return;\n+    }\n+\n+    if (s->interval < 8 || s->interval > 31) {\n+     \
+    \   error_setg(errp, TYPE_XILINX_TIMEBASE_WDT \" property 'wdt-interval'\"\n+\
+    \                         \" must be in the range from 8 to 31\");\n+        return;\n\
+    +    }\n+\n+    s->ptimer = ptimer_init(wdt_expired, s, PTIMER_POLICY_LEGACY);\n\
+    +    ptimer_transaction_begin(s->ptimer);\n+    ptimer_set_freq(s->ptimer, s->freq_hz);\n\
+    +    ptimer_transaction_commit(s->ptimer);\n+\n+    memory_region_init_io(&s->mmio,\
+    \ OBJECT(s),\n+                          &wdt_ops[s->model_endianness == ENDIAN_MODE_BIG],\n\
+    +                          s, TYPE_XILINX_TIMEBASE_WDT, R_MAX * 4);\n+    sysbus_init_mmio(SYS_BUS_DEVICE(dev),\
+    \ &s->mmio);\n+}\n+\n+static void xilinx_timebase_wdt_init(Object *obj)\n+{\n\
+    +    XilinxTimebaseWdtState *s = XILINX_TIMEBASE_WDT(obj);\n+\n+    sysbus_init_irq(SYS_BUS_DEVICE(obj),\
+    \ &s->irq);\n+}\n+\n+static const VMStateDescription vmstate_xilinx_timebase_wdt\
+    \ = {\n+    .name = TYPE_XILINX_TIMEBASE_WDT,\n+    .version_id = 1,\n+    .minimum_version_id\
+    \ = 1,\n+    .fields = (const VMStateField[]) {\n+        VMSTATE_PTIMER(ptimer,\
+    \ XilinxTimebaseWdtState),\n+        VMSTATE_BOOL(ewdt1, XilinxTimebaseWdtState),\n\
+    +        VMSTATE_BOOL(ewdt2, XilinxTimebaseWdtState),\n+        VMSTATE_BOOL(wds,\
+    \ XilinxTimebaseWdtState),\n+        VMSTATE_BOOL(wrs, XilinxTimebaseWdtState),\n\
+    +        VMSTATE_INT64(timebase_start_ns, XilinxTimebaseWdtState),\n+        VMSTATE_END_OF_LIST()\n\
+    +    }\n+};\n+\n+static const Property xilinx_timebase_wdt_properties[] = {\n\
+    +    DEFINE_PROP_ENDIAN_NODEFAULT(\"endianness\", XilinxTimebaseWdtState,\n+ \
+    \                                model_endianness),\n+    DEFINE_PROP_UINT32(\"\
+    clock-frequency\", XilinxTimebaseWdtState, freq_hz,\n+                       62\
+    \ * 1000000),\n+    DEFINE_PROP_UINT8(\"wdt-interval\", XilinxTimebaseWdtState,\
+    \ interval, 30),\n+};\n+\n+static void xilinx_timebase_wdt_class_init(ObjectClass\
+    \ *klass,\n+                                           const void *data)\n+{\n\
+    +    DeviceClass *dc = DEVICE_CLASS(klass);\n+\n+    dc->realize = xilinx_timebase_wdt_realize;\n\
+    +    device_class_set_legacy_reset(dc, xilinx_timebase_wdt_reset);\n+    dc->vmsd\
+    \ = &vmstate_xilinx_timebase_wdt;\n+    device_class_set_props(dc, xilinx_timebase_wdt_properties);\n\
+    +    set_bit(DEVICE_CATEGORY_WATCHDOG, dc->categories);\n+}\n+\n+static const\
+    \ TypeInfo xilinx_timebase_wdt_info = {\n+    .name          = TYPE_XILINX_TIMEBASE_WDT,\n\
+    +    .parent        = TYPE_SYS_BUS_DEVICE,\n+    .instance_size = sizeof(XilinxTimebaseWdtState),\n\
+    +    .instance_init = xilinx_timebase_wdt_init,\n+    .class_init    = xilinx_timebase_wdt_class_init,\n\
+    +};\n+\n+static void xilinx_timebase_wdt_register_types(void)\n+{\n+    type_register_static(&xilinx_timebase_wdt_info);\n\
+    +}\n+\n+type_init(xilinx_timebase_wdt_register_types)\n-- \n2.53.0\n\n"
+  type: inline
+- enabled-by: true
+  patch: "From 085d0873d8983ffb85dd56e46c809bdf31edb327 Mon Sep 17 00:00:00 2001\n\
+    From: Sebastian Huber <sebastian.huber@embedded-brains.de>\nDate: Sun, 4 Oct 2026\
+    \ 13:51:16 +0200\nSubject: [PATCH 2/2] hw/microblaze: Add the S3ADSP1800 watchdog\n\
+    \nThe petalogix-s3adsp1800 machine offered its guest no way to reset the\nsystem.\
+    \  An RTEMS application ended through a branch to an unaligned\naddress, so QEMU\
+    \ aborted with a core dump.\n\nMap a timebase watchdog at 0x83a00000.  Use an\
+    \ interval of 2^20 cycles,\nso that a reset completes within about 35ms at 62MHz.\n\
+    \nAssisted-by: Claude:claude-opus-5-5 claude-code\nSigned-off-by: Sebastian Huber\
+    \ <sebastian.huber@embedded-brains.de>\n---\n hw/microblaze/Kconfig          \
+    \          |  1 +\n hw/microblaze/petalogix_s3adsp1800_mmu.c | 12 ++++++++++++\n\
+    \ 2 files changed, 13 insertions(+)\n\ndiff --git a/hw/microblaze/Kconfig b/hw/microblaze/Kconfig\n\
+    index 72d8072f7..5f27b4c21 100644\n--- a/hw/microblaze/Kconfig\n+++ b/hw/microblaze/Kconfig\n\
+    @@ -6,6 +6,7 @@ config PETALOGIX_S3ADSP1800\n     select XILINX\n     select XILINX_AXI\n\
+    \     select XILINX_ETHLITE\n+    select XILINX_TIMEBASE_WDT\n     select UNIMP\n\
+    \ \n config PETALOGIX_ML605\ndiff --git a/hw/microblaze/petalogix_s3adsp1800_mmu.c\
+    \ b/hw/microblaze/petalogix_s3adsp1800_mmu.c\nindex c5f643190..b079b2590 100644\n\
+    --- a/hw/microblaze/petalogix_s3adsp1800_mmu.c\n+++ b/hw/microblaze/petalogix_s3adsp1800_mmu.c\n\
+    @@ -49,6 +49,7 @@\n #define GPIO_BASEADDR 0x81400000\n #define INTC_BASEADDR 0x81800000\n\
+    \ #define TIMER_BASEADDR 0x83c00000\n+#define WDT_BASEADDR 0x83a00000\n #define\
+    \ UARTLITE_BASEADDR 0x84000000\n #define ETHLITE_BASEADDR 0x81000000\n \n@@ -144,6\
+    \ +145,17 @@ petalogix_s3adsp1800_init(MachineState *machine)\n     sysbus_mmio_map(SYS_BUS_DEVICE(dev),\
+    \ 0, ETHLITE_BASEADDR);\n     sysbus_connect_irq(SYS_BUS_DEVICE(dev), 0, irq[ETHLITE_IRQ]);\n\
+    \ \n+    /*\n+     * The second expiry of the watchdog resets the system.  The\
+    \ interval of\n+     * 2^20 cycles is about 17ms at 62MHz.\n+     */\n+    dev\
+    \ = qdev_new(\"xlnx.xps-timebase-wdt\");\n+    qdev_prop_set_enum(dev, \"endianness\"\
+    , endianness);\n+    qdev_prop_set_uint32(dev, \"clock-frequency\", 62 * 1000000);\n\
+    +    qdev_prop_set_uint8(dev, \"wdt-interval\", 20);\n+    sysbus_realize_and_unref(SYS_BUS_DEVICE(dev),\
+    \ &error_fatal);\n+    sysbus_mmio_map(SYS_BUS_DEVICE(dev), 0, WDT_BASEADDR);\n\
+    +\n     create_unimplemented_device(\"xps_gpio\", GPIO_BASEADDR, 0x10000);\n \n\
+    \     microblaze_load_kernel(cpu, endianness == ENDIAN_MODE_LITTLE, ddr_base,\n\
+    -- \n2.53.0\n\n"
+  type: inline
+archive-url: https://download.qemu.org/qemu-11.1.1.tar.xz
+copyrights:
+- Copyright (C) 2020, 2026 embedded brains GmbH & Co. KG
+description: |
+  Qemu sources.
+destination-directory: ${.:/component/deployment-directory}/src
+enabled-by:
+- pkg.arch.aarch64
+- pkg.arch.arm
+- pkg.arch.i386
+- pkg.arch.microblaze
+- pkg.arch.mips
+- pkg.arch.or1k
+- pkg.arch.riscv
+- pkg.arch.x86_64
+license-files:
+  description: |
+    The Qemu sources are used to provide host tools to simulate
+    ${/glossary/target:/plural}.
+  files:
+  - COPYING
+  - COPYING.LIB
+  - LICENSE
+license-info: []
+links:
+- hash: null
+  name: component
+  role: input
+  uid: ../component
+- hash: null
+  name: member
+  role: input-to
+  uid: ../deployment/archive
+pkg-type: workspace
+symbolic-links: []
+type: pkg
+workspace-type: archive

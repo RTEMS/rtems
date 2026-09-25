@@ -1,0 +1,143 @@
+# SPDX-License-Identifier: BSD-2-Clause
+
+# Copyright (C) 2026 embedded brains GmbH & Co. KG
+
+#
+# This Makefile is intended to provide a workspace application supporting the
+# pre-qualification of a single function.
+#
+# Normally, this should be done through an action requirement defined by the
+# $(TEST_UID) variable below. When the item changes, the Makefile regenerates
+# the validation code and rebuilds the executable. When you add new items with
+# a `test-target` attribute, make sure to register the specified source file in
+# the RTEMS build system, otherwise it is not possible to generate the source
+# file.
+#
+# To get the code coverage for the implementation of the specified function,
+# set the $(IMPL_C_FILE) variable to the path to the associated implemenation
+# source file.
+#
+# The $(BUILDDIR) with its subdirectories is only created once.
+# If you get "No such file or directory" errors, run `make clean all`.
+#
+# The `work/ts-work.c` file contains the test suite code. When your test case
+# needs specific resources, you may have to adjust the test suite application
+# configuration.
+#
+# Under specific circumstances, it may be necessary to specify and validate a
+# function through individual requirements and test cases. In this case, set
+# $(TEST_UID) to the test case item.
+#
+
+TEST_UID := /c/strings/req/flsl
+
+TEST_TARGET := $(shell uv run specyamlquery /test-target spec$(TEST_UID).yml)
+
+IMPL_C_FILE := cpukit/libc/string/flsl.c
+
+APP_C_FILES :=
+APP_C_FILES += $(TEST_TARGET)
+APP_C_FILES += $(IMPL_C_FILE)
+APP_C_FILES += work/ts-work.c
+APP_C_FILES += testsuites/validation/tx-support.c
+APP_C_FILES += testsuites/validation/tx-timecounter.c
+
+CPPFLAGS :=
+CPPFLAGS += -Itestsuites/validation
+
+# Below are implementation details, there should be no need to change them.
+
+RTEMS_API ?= 7
+RTEMS_CPU ?= aarch64
+RTEMS_BSP ?= zynqmp_apu
+RTEMS_TOOLS ?= $(CURDIR)/work-tools/$(RTEMS_API)
+RTEMS_ROOT ?= $(CURDIR)/work-rtems
+
+QEMU := $(RTEMS_TOOLS)/bin/qemu-system-aarch64 -nographic -serial mon:stdio -machine xlnx-zcu102 -m 4096 -kernel
+
+PKG_CONFIG := $(RTEMS_ROOT)/lib/pkgconfig/$(RTEMS_CPU)-rtems$(RTEMS_API)-$(RTEMS_BSP).pc
+BUILDDIR := b-$(RTEMS_CPU)-$(RTEMS_BSP)
+
+DEPFLAGS = -MT $@ -MD -MP -MF $(basename $@).d
+WARNFLAGS := -Wall -Wextra
+OPTFLAGS := -O0 -g -ffunction-sections -fdata-sections
+EXEEXT := .exe
+
+ABI_FLAGS := $(shell pkg-config --define-variable=prefix=$(RTEMS_ROOT) --cflags $(PKG_CONFIG))
+ABI_FLAGS += --coverage -fprofile-info-section=.rtemsroset.gcov_info.content -fprofile-update=atomic
+
+CFLAGS = $(DEPFLAGS) $(WARNFLAGS) $(ABI_FLAGS) $(OPTFLAGS)
+
+CXXFLAGS = $(DEPFLAGS) $(WARNFLAGS) $(ABI_FLAGS) $(OPTFLAGS)
+
+ASFLAGS := $(ABI_FLAGS)
+
+LDFLAGS := $(shell pkg-config --define-variable=prefix=$(RTEMS_ROOT) --variable=LDFLAGS $(PKG_CONFIG))
+LDFLAGS += -Wl,--wrap=_CPU_Fatal_halt -Wl,--wrap=bsp_reset -Wl,--start-group -lrtemsbsp -lrtemscpu -lrtemstest -lgcov -Wl,--end-group
+
+CCLINK = $(CC) $(CFLAGS) -Wl,-Map,$(basename $@).map
+CXXLINK = $(CXX) $(CXXFLAGS) -Wl,-Map,$(basename $@).map
+
+$(BUILDDIR)/%.o: %.c | $(BUILDDIR)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+$(BUILDDIR)/%.o: %.S | $(BUILDDIR)
+	$(CC) $(CPPFLAGS) -DASM $(CFLAGS) -c $< -o $@
+
+$(BUILDDIR)/%.o: %.cc | $(BUILDDIR)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+
+$(BUILDDIR)/%.o: %.cpp | $(BUILDDIR)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+
+$(BUILDDIR)/%.o: %.s | $(BUILDDIR)
+	$(AS) $(ASFLAGS) $< -o $@
+
+export PATH := $(RTEMS_TOOLS)/bin:$(PATH)
+
+export AR := $(RTEMS_CPU)-rtems$(RTEMS_API)-ar
+export AS := $(RTEMS_CPU)-rtems$(RTEMS_API)-as
+export CC := $(RTEMS_CPU)-rtems$(RTEMS_API)-gcc
+export CXX := $(RTEMS_CPU)-rtems$(RTEMS_API)-g++
+export LD := $(RTEMS_CPU)-rtems$(RTEMS_API)-ld
+export NM := $(RTEMS_CPU)-rtems$(RTEMS_API)-nm
+export OBJCOPY := $(RTEMS_CPU)-rtems$(RTEMS_API)-objcopy
+export RANLIB := $(RTEMS_CPU)-rtems$(RTEMS_API)-ranlib
+export SIZE := $(RTEMS_CPU)-rtems$(RTEMS_API)-size
+export STRIP := $(RTEMS_CPU)-rtems$(RTEMS_API)-strip
+
+APP := $(BUILDDIR)/work$(EXEEXT)
+
+all: $(APP)
+
+$(TEST_TARGET): spec$(TEST_UID).yml
+	uv run specwareexport $@
+
+APP_OBJS := $(patsubst %.c,$(BUILDDIR)/%.o,$(APP_C_FILES))
+
+$(APP): $(APP_OBJS)
+	$(CCLINK) $^ $(LDFLAGS) -o $@
+
+$(BUILDDIR):
+	mkdir -p $(sort $(dir $(APP_OBJS)))
+
+view:
+	uv run specwareview --filter=action-compact-table $(TEST_UID)
+
+run: $(APP)
+	$(QEMU) $< -no-reboot
+
+coverage: $(APP)
+	$(QEMU) $< -no-reboot | tee work-log.txt
+	uv run specgcovr -o $(BUILDDIR) -d work-coverage -g $(RTEMS_TOOLS)/bin/$(RTEMS_CPU)-rtems$(RTEMS_API)-gcov -t $(RTEMS_TOOLS)/bin/$(RTEMS_CPU)-rtems$(RTEMS_API)-gcov-tool work-log.txt
+
+debug: $(APP)
+	$(QEMU) $< -s -S
+
+gdb: $(APP)
+	$(RTEMS_TOOLS)/bin/gdb --command=work/$(RTEMS_CPU).gdb $<
+
+clean:
+	rm -rf $(BUILDDIR) work-log.txt work-coverage
+
+-include $(APP_OBJS:%.o=%.d)

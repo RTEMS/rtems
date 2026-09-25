@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+attribute-actions: []
+attributes:
+  enabled-by: true
+  links:
+  - hash: null
+    name: component
+    role: input
+    uid: component
+  pkg-type: rtems-item-cache
+  spec-root-uid: /req/root
+  type: pkg
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: add-package-template
+  uid: component
+pkg-type: template
+template-type: inline-item
+type: pkg

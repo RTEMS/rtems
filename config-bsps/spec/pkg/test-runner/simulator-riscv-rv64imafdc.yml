@@ -1,0 +1,46 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+command:
+- ${../deployment/qemu:/directory}/bin/qemu-system-riscv64
+- -no-reboot
+- -nographic
+- -net
+- none
+- -serial
+- mon:stdio
+- -machine
+- virt
+- -icount
+- shift=4
+- enabled-by: RTEMS_SMP
+  value:
+  - -smp
+  - '4'
+- -cpu
+- rv64
+- -m
+- 128M
+- -bios
+- ${.:/test-executable}
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+default-timeout-in-seconds: 180.0
+description: |
+  Run the tests of the rv64imafdc BSP on Qemu.  The executable is the
+  firmware of the machine.  The console is the first serial device.
+discard-patterns: []
+do-not-run: []
+enabled-by: riscv/rv64imafdc
+links:
+- role: proxy-member
+  uid: simulator
+- role: weak-package-build-dependency
+  uid: ../deployment/qemu
+max-process-count: 1
+max-retry-count-per-executable: 1
+min-timeout-in-seconds: 20.0
+name: Qemu [virt]
+params: {}
+pkg-type: test-runner
+test-runner-type: subprocess
+timeout-scaler: 2.0
+type: pkg

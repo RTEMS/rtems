@@ -1,0 +1,56 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+command:
+- ${../deployment/qemu:/directory}/bin/qemu-system-i386
+- -no-reboot
+- -nographic
+- -net
+- none
+- -monitor
+- none
+- -serial
+- stdio
+- -machine
+- pc
+- -icount
+- shift=4
+- enabled-by: RTEMS_SMP
+  value:
+  - -smp
+  - '4'
+- -cpu
+- coreduo
+- -m
+- 128M
+- -L
+- share/qemu
+- -append
+- --console=/dev/com1
+- -kernel
+- ${.:/test-executable}
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+default-timeout-in-seconds: 180.0
+description: |
+  Run the tests of the pc586-sse BSP on Qemu.  The firmware loads a
+  multiboot image.  The console of the board is a serial device selected
+  by a boot argument, so the monitor must not occupy the standard
+  streams.  The BSP checks the SSE2 bit of CPUID and panics without it.
+  The newest pentium model of Qemu has SSE but not SSE2, so the machine
+  runs a Core Duo.
+discard-patterns: []
+do-not-run: []
+enabled-by: i386/pc586-sse
+links:
+- role: proxy-member
+  uid: simulator
+- role: weak-package-build-dependency
+  uid: ../deployment/qemu
+max-process-count: 1
+max-retry-count-per-executable: 1
+min-timeout-in-seconds: 20.0
+name: Qemu [pc]
+params: {}
+pkg-type: test-runner
+test-runner-type: subprocess
+timeout-scaler: 2.0
+type: pkg

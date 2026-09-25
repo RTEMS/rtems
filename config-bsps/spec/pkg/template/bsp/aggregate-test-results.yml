@@ -1,0 +1,29 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+attribute-actions: []
+attributes:
+  enabled-by: true
+  links:
+  - hash: null
+    name: component
+    role: input
+    uid: component
+  - hash: null
+    name: spec
+    role: input
+    uid: rtems-item-cache
+  - hash: null
+    name: test-aggregation
+    role: input-to
+    uid: /pkg/deployment/doc-package-summary
+  pkg-type: test-aggregator
+  report-file: $${.:/component/documentation-directory}/reports.html
+  type: pkg
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: add-package-template
+  uid: component
+pkg-type: template
+template-type: inline-item
+type: pkg

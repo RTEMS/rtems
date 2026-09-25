@@ -1,0 +1,46 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+command:
+- ${../deployment/qemu:/directory}/bin/qemu-system-arm
+- -no-reboot
+- -nographic
+- -net
+- none
+- -serial
+- 'null'
+- -serial
+- mon:stdio
+- -machine
+- xilinx-zynq-a9
+- -icount
+- shift=4
+- enabled-by: RTEMS_SMP
+  value:
+  - -smp
+  - '2'
+- -m
+- 256M
+- -kernel
+- ${.:/test-executable}
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+default-timeout-in-seconds: 180.0
+description: |
+  Run the tests of the xilinx_zynq_a9_qemu BSP on Qemu.  The console of
+  the board is the second serial device.
+discard-patterns: []
+do-not-run: []
+enabled-by: arm/xilinx_zynq_a9_qemu
+links:
+- role: proxy-member
+  uid: simulator
+- role: weak-package-build-dependency
+  uid: ../deployment/qemu
+max-process-count: 1
+max-retry-count-per-executable: 1
+min-timeout-in-seconds: 20.0
+name: Qemu [xilinx-zynq-a9]
+params: {}
+pkg-type: test-runner
+test-runner-type: subprocess
+timeout-scaler: 2.0
+type: pkg

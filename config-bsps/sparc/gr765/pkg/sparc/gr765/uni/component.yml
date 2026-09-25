@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+bsp: gr765
+bsp-family: leon3
+component-type: rtems
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+enabled-by: true
+enabled-set:
+- target/simulator
+enabled-set-actions: []
+enabled-set-feedback-mapping: {}
+links:
+- role: use-package-component-template
+  uid: /pkg/template/bsp/component
+- role: glossary
+  uid: /req/glossary
+- hash: null
+  name: component
+  role: input
+  uid: ../../component
+pkg-type: workspace
+sis-cpus: '4'
+sis-extirq: '12'
+sis-target: gr765
+type: pkg
+workspace-type: component

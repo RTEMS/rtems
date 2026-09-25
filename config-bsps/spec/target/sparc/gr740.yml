@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: sparc/gr740
+links:
+- role: requirement-refinement
+  uid: /req/target
+non-functional-type: quality
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  The ${/glossary/gr740:/term} shall be a ${/glossary/target:/term}
+  ${/glossary/system-on-chip:/term}.
+type: requirement

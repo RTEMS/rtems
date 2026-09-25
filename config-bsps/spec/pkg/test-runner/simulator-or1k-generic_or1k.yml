@@ -1,0 +1,48 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+command:
+- ${../deployment/qemu:/directory}/bin/qemu-system-or1k
+- -no-reboot
+- -nographic
+- -net
+- none
+- -serial
+- mon:stdio
+- -machine
+- virt
+- -icount
+- shift=4
+- -cpu
+- or1200
+- -m
+- 32M
+- -kernel
+- ${.:/test-executable}
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+default-timeout-in-seconds: 180.0
+description: |
+  Run the tests of the generic_or1k BSP on Qemu.  Qemu advances the tick
+  timer in host time, so the emulated system cannot keep up with a tick
+  below a few milliseconds and a test which configures one overruns.  The
+  virtual clock comes from the instruction count, which removes the
+  dependency on the speed of the host.  The virt machine has a SiFive
+  test finisher, which lets the BSP power Qemu off.  The or1k-sim machine
+  has no such device, so Qemu keeps running after the system terminated
+  and every test hits its timeout.
+discard-patterns: []
+do-not-run: []
+enabled-by: or1k/generic_or1k
+links:
+- role: proxy-member
+  uid: simulator
+- role: weak-package-build-dependency
+  uid: ../deployment/qemu
+max-process-count: 1
+max-retry-count-per-executable: 1
+min-timeout-in-seconds: 20.0
+name: Qemu [virt]
+params: {}
+pkg-type: test-runner
+test-runner-type: subprocess
+timeout-scaler: 2.0
+type: pkg

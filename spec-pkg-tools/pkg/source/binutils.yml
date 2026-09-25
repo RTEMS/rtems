@@ -1,0 +1,94 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+archive-file: ${.:/component/workspace-directory}/src/binutils-2.46.1.tar.xz
+archive-hash: pcZeVuQA7T-4kGqZXbuT61vqVLFjRCRGU9f0TvKc62AnDaJjsZ0lMCw3dZeE4U_LS5Qhsp4OLH9FC9mfa7RZXA==
+archive-patches:
+- enabled-by: true
+  patch: |
+    From: Sebastian Huber <sebastian.huber@embedded-brains.de>
+    Date: Mon, 1 Sep 2026 09:00:00 +0200
+    Subject: bfd/microblaze: Relax a section once
+
+    The relaxation pass of the MicroBlaze linker deletes the imm word of a
+    branch pair where the distance fits in 16 bits.  The MicroBlaze
+    compiler passes -relax on every link.  The pass runs again after each
+    placement of the sections.  A placement moves the two ends apart again
+    where the alignment of a section between them takes more bytes.  The
+    pass cannot restore the word.  The RTEMS test ts-validation-acfg-0 got
+    a branch 205 bytes out of range.
+
+    Take the decisions of a section on the first placement alone.
+
+    Assisted-by: Claude:claude-opus-5 claude-code
+    Signed-off-by: Sebastian Huber <sebastian.huber@embedded-brains.de>
+    ---
+    --- a/bfd/elf32-microblaze.c
+    +++ b/bfd/elf32-microblaze.c
+    @@ -734,6 +734,8 @@
+       size_t relax_count;
+       /* Relaxation table.  */
+       struct relax_table *relax;
+    +  /* True after the first relaxation of this section.  */
+    +  bool relax_done;
+     };
+
+     #define microblaze_elf_section_data(sec) \
+    @@ -1788,6 +1790,16 @@
+           || (sdata = microblaze_elf_section_data (sec)) == NULL)
+         return true;
+
+    +  /* The pass cannot restore an instruction which an earlier call deleted.
+    +     The link places the sections again after each call, so a later call
+    +     sees other distances.  A distance grows again where the alignment of
+    +     a section between the two ends takes more bytes.  Take the decisions
+    +     of a section once, on the placement which the link makes before the
+    +     first call.  */
+    +  if (sdata->relax_done)
+    +    return true;
+    +  sdata->relax_done = true;
+    +
+       BFD_ASSERT ((sec->size > 0) || (sec->rawsize > 0));
+
+       /* If this is the first time we have been called for this section,
+  type: inline
+archive-url:
+- https://ftp.gwdg.de/pub/gnu/ftp/gnu/binutils/binutils-2.46.1.tar.xz
+- https://ftp.gnu.org/gnu/binutils/binutils-2.46.1.tar.xz
+copyrights:
+- Copyright (C) 2020, 2026 embedded brains GmbH & Co. KG
+description: |
+  This directory contains the Binutils sources.  It is used to build host tools.
+destination-directory: ${.:/component/deployment-directory}/src
+enabled-by:
+- pkg.arch.aarch64
+- pkg.arch.arm
+- pkg.arch.i386
+- pkg.arch.m68k
+- pkg.arch.microblaze
+- pkg.arch.mips
+- pkg.arch.moxie
+- pkg.arch.or1k
+- pkg.arch.powerpc
+- pkg.arch.riscv
+- pkg.arch.sparc
+- pkg.arch.x86_64
+license-files:
+  description: |
+    The Binutils sources are used to provide host tools such as the
+    ${/glossary/target-arch:/term} assembler and linker.
+  files:
+  - COPYING
+  - COPYING3
+license-info: []
+links:
+- hash: null
+  name: component
+  role: input
+  uid: ../component
+- hash: null
+  name: member
+  role: input-to
+  uid: ../deployment/archive
+pkg-type: workspace
+symbolic-links: []
+type: pkg
+workspace-type: archive

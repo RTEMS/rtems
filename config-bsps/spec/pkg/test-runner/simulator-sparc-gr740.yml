@@ -1,0 +1,38 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+command:
+- ${../deployment/sis:/directory}/bin/sis
+- -gr740
+- -extirq
+- '10'
+- -dumbio
+- -r
+- enabled-by: RTEMS_SMP
+  value:
+  - -m
+  - '4'
+- ${.:/test-executable}
+copyrights:
+- Copyright (C) 2022, 2026 embedded brains GmbH & Co. KG
+default-timeout-in-seconds: 180.0
+description: |
+  Run the tests of the gr740 BSP on the ${/glossary/sis:/term}.  The
+  extended interrupt line of the IRQ(A)MP is line 10.  Zero leaves the
+  controller without extended interrupts, which fails the interrupt
+  validation tests.
+discard-patterns: []
+do-not-run: []
+enabled-by: sparc/gr740
+links:
+- role: proxy-member
+  uid: simulator
+- role: weak-package-build-dependency
+  uid: ../deployment/sis
+max-process-count: 1
+max-retry-count-per-executable: 1
+min-timeout-in-seconds: 20.0
+name: SPARC/RISCV Instruction Simulator [-gr740 -extirq 10]
+params: {}
+pkg-type: test-runner
+test-runner-type: subprocess
+timeout-scaler: 2.0
+type: pkg

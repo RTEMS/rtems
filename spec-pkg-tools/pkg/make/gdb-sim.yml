@@ -1,0 +1,205 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- action: remove-tree
+  enabled-by: true
+  missing-ok: true
+  path: ${.:/params/build-directory}
+- action: mkdir
+  enabled-by: pkg.arch.mips
+  exist-ok: false
+  parents: true
+  path: ${.:/params/build-directory}/mipstx39-rtems7
+- action: subprocess
+  command:
+  - ${../source/gdb:/directory}/configure
+  - --prefix=${.:/component/deployment-directory}
+  - --libdir=${.:/component/deployment-directory}/lib
+  - --libexecdir=${.:/component/deployment-directory}/lib
+  - --target=mipstx39-rtems7
+  - --enable-sim
+  - --disable-binutils
+  - --disable-gas
+  - --disable-gold
+  - --disable-gprof
+  - --disable-ld
+  - --disable-nls
+  - --disable-werror
+  - --verbose
+  - --with-expat=${.:/component/deployment-directory}
+  - --with-gmp=${.:/component/deployment-directory}
+  - --with-guile=no
+  - --with-mpfr=${.:/component/deployment-directory}
+  - --with-pkgversion=${.:/component/pkgversion}
+  - --with-system-zlib=no
+  enabled-by: pkg.arch.mips
+  env:
+  - action: set
+    name: CPPFLAGS
+    value: ${.:/params/cppflags}
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}/mipstx39-rtems7
+- action: subprocess
+  command:
+  - make
+  - -j
+  - ${.:/host-processor-count}
+  - all-sim
+  enabled-by: pkg.arch.mips
+  env:
+  - action: set
+    name: CPPFLAGS
+    value: ${.:/params/cppflags}
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}/mipstx39-rtems7
+- action: subprocess
+  command:
+  - make
+  - install-sim
+  - DESTDIR=${.:/params/build-directory}/destdir
+  enabled-by: pkg.arch.mips
+  env:
+  - action: set
+    name: CPPFLAGS
+    value: ${.:/params/cppflags}
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}/mipstx39-rtems7
+- action: mkdir
+  enabled-by: pkg.arch.moxie
+  exist-ok: false
+  parents: true
+  path: ${.:/params/build-directory}/moxie-rtems7
+- action: subprocess
+  command:
+  - ${../source/gdb:/directory}/configure
+  - --prefix=${.:/component/deployment-directory}
+  - --libdir=${.:/component/deployment-directory}/lib
+  - --libexecdir=${.:/component/deployment-directory}/lib
+  - --target=moxie-rtems7
+  - --enable-sim
+  - --disable-binutils
+  - --disable-gas
+  - --disable-gold
+  - --disable-gprof
+  - --disable-ld
+  - --disable-nls
+  - --disable-werror
+  - --verbose
+  - --with-expat=${.:/component/deployment-directory}
+  - --with-gmp=${.:/component/deployment-directory}
+  - --with-guile=no
+  - --with-mpfr=${.:/component/deployment-directory}
+  - --with-pkgversion=${.:/component/pkgversion}
+  - --with-system-zlib=no
+  enabled-by: pkg.arch.moxie
+  env:
+  - action: set
+    name: CPPFLAGS
+    value: ${.:/params/cppflags}
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}/moxie-rtems7
+- action: subprocess
+  command:
+  - make
+  - -j
+  - ${.:/host-processor-count}
+  - all-sim
+  enabled-by: pkg.arch.moxie
+  env:
+  - action: set
+    name: CPPFLAGS
+    value: ${.:/params/cppflags}
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}/moxie-rtems7
+- action: subprocess
+  command:
+  - make
+  - install-sim
+  - DESTDIR=${.:/params/build-directory}/destdir
+  enabled-by: pkg.arch.moxie
+  env:
+  - action: set
+    name: CPPFLAGS
+    value: ${.:/params/cppflags}
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}/moxie-rtems7
+- action: mkdir
+  enabled-by: pkg.arch.powerpc
+  exist-ok: false
+  parents: true
+  path: ${.:/params/build-directory}/powerpc-rtems7
+- action: subprocess
+  command:
+  - ${../source/gdb:/directory}/configure
+  - --prefix=${.:/component/deployment-directory}
+  - --libdir=${.:/component/deployment-directory}/lib
+  - --libexecdir=${.:/component/deployment-directory}/lib
+  - --target=powerpc-rtems7
+  - --enable-sim
+  - --disable-binutils
+  - --disable-gas
+  - --disable-gold
+  - --disable-gprof
+  - --disable-ld
+  - --disable-nls
+  - --disable-werror
+  - --verbose
+  - --with-expat=${.:/component/deployment-directory}
+  - --with-gmp=${.:/component/deployment-directory}
+  - --with-guile=no
+  - --with-mpfr=${.:/component/deployment-directory}
+  - --with-pkgversion=${.:/component/pkgversion}
+  - --with-system-zlib=no
+  enabled-by: pkg.arch.powerpc
+  env:
+  - action: set
+    name: CPPFLAGS
+    value: ${.:/params/cppflags}
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}/powerpc-rtems7
+- action: subprocess
+  command:
+  - make
+  - -j
+  - ${.:/host-processor-count}
+  - all-sim
+  enabled-by: pkg.arch.powerpc
+  env:
+  - action: set
+    name: CPPFLAGS
+    value: ${.:/params/cppflags}
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}/powerpc-rtems7
+- action: subprocess
+  command:
+  - make
+  - install-sim
+  - DESTDIR=${.:/params/build-directory}/destdir
+  enabled-by: pkg.arch.powerpc
+  env:
+  - action: set
+    name: CPPFLAGS
+    value: ${.:/params/cppflags}
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}/powerpc-rtems7
+- action: directory-state-discard-and-clear
+  enabled-by: true
+  output-name: deployment
+- action: directory-state-move-tree
+  enabled-by: true
+  excludes: []
+  output-name: deployment
+  prefix: null
+  root: ${.:/params/build-directory}/destdir/${.:/component/deployment-directory}
+- action: remove-tree
+  enabled-by: true
+  missing-ok: true
+  path: ${.:/params/build-directory}
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+enabled-by: true
+links: []
+params:
+  build-directory: ${.:/component/build-directory}/build-gdb-sim
+  cppflags: -I${.:/component/deployment-directory}/include
+pkg-type: run-actions
+type: pkg

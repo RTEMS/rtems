@@ -1,0 +1,82 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- action: remove-tree
+  enabled-by: true
+  missing-ok: true
+  path: ${.:/params/build-directory}
+- action: mkdir
+  enabled-by: true
+  exist-ok: false
+  parents: true
+  path: ${.:/params/build-directory}
+- action: subprocess
+  command:
+  - meson
+  - setup
+  - ${.:/params/build-directory}
+  - --prefix=${.:/directory}
+  - -Dstrip=true
+  enabled-by: true
+  env: []
+  expected-return-code: 0
+  working-directory: ${../source/dtc/:/directory}
+- action: subprocess
+  command:
+  - meson
+  - compile
+  - -C
+  - ${.:/params/build-directory}
+  - -j0
+  enabled-by: true
+  env: []
+  expected-return-code: 0
+  working-directory: ${../source/dtc/:/directory}
+- action: subprocess
+  command:
+  - meson
+  - install
+  - -C
+  - ${.:/params/build-directory}
+  - --destdir=${.:/params/build-directory}/destdir
+  enabled-by: true
+  env: []
+  expected-return-code: 0
+  working-directory: ${../source/dtc/:/directory}
+- action: directory-state-discard-and-clear
+  enabled-by: true
+  output-name: .
+- action: directory-state-move-tree
+  enabled-by: true
+  excludes: []
+  output-name: .
+  prefix: null
+  root: ${.:/params/build-directory}/destdir/${.:/directory}
+- action: remove-tree
+  enabled-by: true
+  missing-ok: true
+  path: ${.:/params/build-directory}
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+directory: ${.:/component/deployment-directory}
+directory-state-type: explicit
+enabled-by: true
+files: []
+hash: null
+license-info: []
+links:
+- hash: null
+  name: component
+  role: input
+  uid: ../component
+- hash: null
+  name: source
+  role: input
+  uid: ../source/dtc
+- hash: null
+  name: member
+  role: input-to
+  uid: archive
+params:
+  build-directory: ${.:/component/build-directory}/build-dtc
+pkg-type: directory-state
+type: pkg

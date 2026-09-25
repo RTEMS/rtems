@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- action: directory-state-discard-and-clear
+  enabled-by: true
+  output-name: .
+- action: directory-state-copy-file
+  enabled-by: true
+  input-name: source
+  output-name: .
+  source: config-bsps/spec/pkg/test-runner/psim-device-tree
+  target: psim-device-tree
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+directory: ${.:/component/deployment-directory}/share/rtems-test-runner
+directory-state-type: explicit
+enabled-by: powerpc
+files: []
+hash: null
+license-info: []
+links:
+- hash: null
+  name: component
+  role: input
+  uid: ../component
+- hash: null
+  name: source
+  role: input
+  uid: ../source/rtems
+pkg-type: directory-state
+type: pkg

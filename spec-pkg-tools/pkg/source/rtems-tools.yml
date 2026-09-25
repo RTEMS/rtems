@@ -1,0 +1,253 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+archive-file: ${.:/component/workspace-directory}/src/rtems-tools-69ad12c299b0fa57d8fc5744faff3d681ef0e4d3.tar.bz2
+archive-hash: t95G250f0c3uC1IGMh55ICXPfzPSaXZklMaf-Bh1X-iiA7oiBJVPvwWr9EnToOu1JB8X3l7BnRUy-Iowk8Z7HQ==
+archive-patches:
+- enabled-by: true
+  patch: "From 83f3d8b66813c6ad6ddefd17197875c61fab0c6e Mon Sep 17 00:00:00 2001\n\
+    From: Sebastian Huber <sebastian.huber@embedded-brains.de>\nDate: Sat, 3 Oct 2026\
+    \ 06:07:47 +0200\nSubject: [PATCH] rtemstoolkit/elf: Ignore unused undefined symbols\n\
+    \nThe assembler of i386 and microblaze adds _GLOBAL_OFFSET_TABLE_ as an\nundefined\
+    \ symbol to an object which uses a thread-local storage\noperator.  No relocation\
+    \ record references the symbol.  rtems-ld\ntreated it as unresolved and stopped\
+    \ with \"symbol not found:\n_GLOBAL_OFFSET_TABLE_\".  A Newlib built with\n--enable-newlib-reent-thread-local\
+    \ carries such objects, so no\napplication which links them could become a RAP\
+    \ file.\n\nReport an undefined symbol as unresolved only if a relocation record\n\
+    references it.\n\nAssisted-by: Claude:claude-opus-5-5 claude-code\nSigned-off-by:\
+    \ Sebastian Huber <sebastian.huber@embedded-brains.de>\n---\n rtemstoolkit/rld-elf.cpp\
+    \ | 51 +++++++++++++++++++++++++++++++++++++++-\n rtemstoolkit/rld-elf.h   | \
+    \ 9 +++++++\n 2 files changed, 59 insertions(+), 1 deletion(-)\n\ndiff --git a/rtemstoolkit/rld-elf.cpp\
+    \ b/rtemstoolkit/rld-elf.cpp\nindex b8b5688..7635697 100644\n--- a/rtemstoolkit/rld-elf.cpp\n\
+    +++ b/rtemstoolkit/rld-elf.cpp\n@@ -848,6 +848,11 @@ namespace rld\n \n      \
+    \ load_symbols ();\n \n+      std::set<int> relocation_syms;\n+\n+      if (unresolved)\n\
+    +        get_relocation_symbols (relocation_syms);\n+\n       filtered_syms.clear\
+    \ ();\n \n       for (symbols::bucket::iterator si = symbols.begin ();\n@@ -872,7\
+    \ +877,12 @@ namespace rld\n             (sbind == STB_GLOBAL) &&\n          \
+    \   (sym.section_index () == SHN_UNDEF))\n         {\n-          if (unresolved)\n\
+    +          /*\n+           * An undefined symbol which no relocation record references\
+    \ needs\n+           * no definition. The assembler adds _GLOBAL_OFFSET_TABLE_\
+    \ to an\n+           * object which uses a thread-local storage operator, for\
+    \ example.\n+           */\n+          if (unresolved && relocation_syms.count\
+    \ (sym.index ()) != 0)\n             add = true;\n         }\n         else\n\
+    @@ -908,6 +918,45 @@ namespace rld\n                         \"elf:file:get_symbol:\
+    \ \" + name_);\n     }\n \n+    void\n+    file::get_relocation_symbols (std::set<int>&\
+    \ indices)\n+    {\n+      sections rel_secs;\n+\n+      get_sections (rel_secs,\
+    \ SHT_REL);\n+      get_sections (rel_secs, SHT_RELA);\n+\n+      for (sections::iterator\
+    \ si = rel_secs.begin ();\n+           si != rel_secs.end ();\n+           ++si)\n\
+    +      {\n+        section& sec = *(*si);\n+        int      rels = sec.entries\
+    \ ();\n+\n+        for (int r = 0; r < rels; ++r)\n+        {\n+          if (sec.type\
+    \ () == SHT_RELA)\n+          {\n+            elf_rela erela;\n+\n+          \
+    \  if (!::gelf_getrela (sec.data (), r, &erela))\n+              error (\"gelf_getrela\"\
+    );\n+\n+            indices.insert (GELF_R_SYM (erela.r_info));\n+          }\n\
+    +          else\n+          {\n+            elf_rel erel;\n+\n+            if\
+    \ (!::gelf_getrel (sec.data (), r, &erel))\n+              error (\"gelf_getrel\"\
+    );\n+\n+            indices.insert (GELF_R_SYM (erel.r_info));\n+          }\n\
+    +        }\n+      }\n+    }\n+\n     void\n     file::load_relocations ()\n \
+    \    {\ndiff --git a/rtemstoolkit/rld-elf.h b/rtemstoolkit/rld-elf.h\nindex d66eee5..fae5707\
+    \ 100644\n--- a/rtemstoolkit/rld-elf.h\n+++ b/rtemstoolkit/rld-elf.h\n@@ -27,6\
+    \ +27,7 @@\n \n #include <list>\n #include <map>\n+#include <set>\n #include <vector>\n\
+    \ \n #include <rld.h>\n@@ -705,6 +706,14 @@ namespace rld\n        */\n      \
+    \ void check_phdr (const char* where) const;\n \n+      /**\n+       * Get the\
+    \ indices of the symbols which the relocation records\n+       * reference.\n\
+    +       *\n+       * @param indices The symbol indices found in the file.\n+ \
+    \      */\n+      void get_relocation_symbols (std::set<int>& indices);\n+\n \
+    \      /**\n        * Generate libelf error.\n        *\n-- \n2.53.0\n\n"
+  type: inline
+- enabled-by: true
+  patch: "From 30e75ea748245871ff20902ea7dbf9ce62b79828 Mon Sep 17 00:00:00 2001\n\
+    From: Sebastian Huber <sebastian.huber@embedded-brains.de>\nDate: Sat, 3 Oct 2026\
+    \ 09:39:38 +0200\nSubject: [PATCH 1/3] rtemstoolkit/rap: Relocate undefined symbols\n\
+    \nThe RAP writer skipped every relocation record whose symbol has the\nsection\
+    \ index 0.  This index marks the null symbol, and also every\nundefined symbol.\
+    \  The loader resolves an undefined symbol by its name,\nso a call from the RAP\
+    \ file into the base image stayed unrelocated.\nThe header of each section still\
+    \ counted the skipped records.  The\nloader thus read past the last record and\
+    \ reported \"offset past end of\nfile\" or a symbol with a garbage name.\n\nDrop\
+    \ a relocation of the null symbol when the layout collects the\nrecords, so that\
+    \ the count in the header matches the records written.\nA relocation against an\
+    \ undefined symbol has a name and stays.\n\nAssisted-by: Claude:claude-opus-5-5\
+    \ claude-code\nSigned-off-by: Sebastian Huber <sebastian.huber@embedded-brains.de>\n\
+    ---\n rtemstoolkit/rld-rap.cpp | 11 +++++++----\n 1 file changed, 7 insertions(+),\
+    \ 4 deletions(-)\n\ndiff --git a/rtemstoolkit/rld-rap.cpp b/rtemstoolkit/rld-rap.cpp\n\
+    index 045536a..82bef94 100644\n--- a/rtemstoolkit/rld-rap.cpp\n+++ b/rtemstoolkit/rld-rap.cpp\n\
+    @@ -777,7 +777,13 @@ namespace rld\n            ++fri, ++rc)\n       {\n     \
+    \    const files::relocation& freloc = *fri;\n-        bool                  \
+    \   merge_reloc = machine_relocation_check (freloc);\n+\n+        /*\n+      \
+    \   * A relocation without a symbol references the null symbol.  The\n+      \
+    \   * null symbol has no section and no name.\n+         */\n+        bool merge_reloc\
+    \ = (freloc.symsect != 0 || !freloc.symname.empty ()) &&\n+          machine_relocation_check\
+    \ (freloc);\n \n         if (rld::verbose () >= RLD_VERBOSE_FULL_DEBUG)\n    \
+    \       std::cout << \" \" << std::setw (2) << sec.relocs.size ()\n@@ -1406,9\
+    \ +1412,6 @@ namespace rld\n             bool              write_addend = sec.rela;\n\
+    \             bool              write_symname = false;\n \n-            if (reloc.symsect\
+    \ == 0)\n-              continue;\n-\n             offset = sec.offset + reloc.offset;\n\
+    \ \n             if (rld::verbose () >= RLD_VERBOSE_TRACE)\n-- \n2.53.0\n\n"
+  type: inline
+- enabled-by: true
+  patch: "From 5e37a378e2391fa4254ba45b23dfb1baef32ad7f Mon Sep 17 00:00:00 2001\n\
+    From: Sebastian Huber <sebastian.huber@embedded-brains.de>\nDate: Sat, 3 Oct 2026\
+    \ 09:39:55 +0200\nSubject: [PATCH 2/3] rtemstoolkit/rap: Align objects to all\
+    \ sections\n\nThe layout aligned the start of an object in a RAP section to the\n\
+    alignment of its first input section.  This is often an empty .text\nsection with\
+    \ an alignment of one.  The offsets of the other input\nsections were aligned\
+    \ relative to the object start.  The writer padded\neach input section to its\
+    \ alignment relative to the RAP section start.\nOn i386 the code of a function\
+    \ thus lay two bytes after the address of\nits symbol and the targets of its relocations.\
+    \  The alignment of a RAP\nsection was the one of the last object.\n\nAlign an\
+    \ object to the largest alignment of its input sections, in the\nlayout and in\
+    \ the writer.  Its relative and its absolute offsets then\nagree.  Give a RAP\
+    \ section the largest alignment of all objects.\n\nAssisted-by: Claude:claude-opus-5-5\
+    \ claude-code\nSigned-off-by: Sebastian Huber <sebastian.huber@embedded-brains.de>\n\
+    ---\n rtemstoolkit/rld-rap.cpp | 48 +++++++++++++++++++++++++++++-----------\n\
+    \ 1 file changed, 35 insertions(+), 13 deletions(-)\n\ndiff --git a/rtemstoolkit/rld-rap.cpp\
+    \ b/rtemstoolkit/rld-rap.cpp\nindex 82bef94..4537d27 100644\n--- a/rtemstoolkit/rld-rap.cpp\n\
+    +++ b/rtemstoolkit/rld-rap.cpp\n@@ -205,7 +205,7 @@ namespace rld\n       uint32_t\
+    \ size (uint32_t offset = 0) const;\n \n       /**\n-       * The alignment of\
+    \ the first section.\n+       * The largest alignment of the sections.\n     \
+    \   */\n       uint32_t alignment () const;\n \n@@ -594,12 +594,14 @@ namespace\
+    \ rld\n     uint32_t\n     section::alignment () const\n     {\n-      if (!osindexes.empty\
+    \ ())\n+      uint32_t align = 0;\n+      for (size_t si = 0; si < osindexes.size\
+    \ (); ++si)\n       {\n-        const osection& osec = get_osection (osindexes[0]);\n\
+    -        return osec.align;\n+        const osection& osec = get_osection (osindexes[si]);\n\
+    +        if (osec.align > align)\n+          align = osec.align;\n       }\n-\
+    \      return 0;\n+      return align;\n     }\n \n     uint32_t\n@@ -1010,7 +1012,8\
+    \ @@ namespace rld\n           {\n             obj.secs[s].set_offset (pobj.secs[s]);\n\
+    \             sec_size[s] = obj.secs[s].offset + obj.secs[s].size ();\n-     \
+    \       sec_align[s] = obj.secs[s].alignment ();\n+            if (obj.secs[s].alignment\
+    \ () > sec_align[s])\n+              sec_align[s] = obj.secs[s].alignment ();\n\
+    \             if (obj.secs[s].rela == true)\n               sec_rela[s] = obj.secs[s].rela;\n\
+    \           }\n@@ -1276,6 +1279,14 @@ namespace rld\n       }\n     }\n \n+  \
+    \  static void\n+    write_padding (compress::compressor& comp, uint32_t size)\n\
+    +    {\n+      char ee = '\\xee';\n+      for (uint32_t p = 0; p < size; ++p)\n\
+    +        comp.write (&ee, 1);\n+    }\n+\n     void\n     image::write (compress::compressor&\
+    \  comp,\n                   files::object&         obj,\n@@ -1283,6 +1294,7 @@\
+    \ namespace rld\n                   uint32_t&              offset)\n     {\n \
+    \      uint32_t size = 0;\n+      uint32_t align = 0;\n \n       obj.open ();\n\
+    \ \n@@ -1293,6 +1305,22 @@ namespace rld\n         if (rld::verbose () >= RLD_VERBOSE_FULL_DEBUG)\n\
+    \           std::cout << \"rap:write sections: \" << obj.name ().full () << std::endl;\n\
+    \ \n+        /*\n+         * The layout aligns the object to the largest alignment\
+    \ of its\n+         * sections.\n+         */\n+        for (files::sections::const_iterator\
+    \ si = secs.begin ();\n+             si != secs.end ();\n+             ++si)\n\
+    +        {\n+          if (si->alignment > align)\n+            align = si->alignment;\n\
+    +        }\n+\n+        uint32_t unaligned_start = offset;\n+        offset =\
+    \ align_offset (offset, 0, align);\n+        write_padding (comp, offset - unaligned_start);\n\
+    +\n         for (files::sections::const_iterator si = secs.begin ();\n       \
+    \       si != secs.end ();\n              ++si)\n@@ -1301,13 +1329,7 @@ namespace\
+    \ rld\n           uint32_t              unaligned_offset = offset + size;\n \n\
+    \           offset = align_offset (offset, size, sec.alignment);\n-\n-       \
+    \   if (offset != unaligned_offset)\n-          {\n-            char ee = '\\\
+    xee';\n-            for (uint32_t p = 0; p < (offset - unaligned_offset); ++p)\n\
+    -              comp.write (&ee, 1);\n-          }\n+          write_padding (comp,\
+    \ offset - unaligned_offset);\n \n           comp.write (obj, sec.offset, sec.size);\n\
+    \ \n-- \n2.53.0\n\n"
+  type: inline
+- enabled-by: true
+  patch: "From 98cd8d4b743aa74a395d2b289650824c4f1e7621 Mon Sep 17 00:00:00 2001\n\
+    From: Sebastian Huber <sebastian.huber@embedded-brains.de>\nDate: Sat, 3 Oct 2026\
+    \ 09:40:06 +0200\nSubject: [PATCH 3/3] rap: Write the relocation type as a word\n\
+    \nA relocation record of a RAP file held the ELF relocation type in bits\n7:0\
+    \ of its info word.  The AArch64 types start at 257, so an AArch64\nRAP file carried\
+    \ wrong types and wrong symbol names.\n\nIntroduce version 3 of the format.  It\
+    \ writes the type as a word after\nthe info word and leaves bits 7:0 of the info\
+    \ word clear.  rtems-rap\nreads both versions.\n\nAssisted-by: Claude:claude-opus-5-5\
+    \ claude-code\nSigned-off-by: Sebastian Huber <sebastian.huber@embedded-brains.de>\n\
+    ---\n linkers/rtems-rapper.cpp | 25 ++++++++++++++++++-------\n rtemstoolkit/rld-rap.cpp\
+    \ | 10 +++++++---\n rtemstoolkit/rld-rap.h   |  7 +++++++\n 3 files changed, 32\
+    \ insertions(+), 10 deletions(-)\n\ndiff --git a/linkers/rtems-rapper.cpp b/linkers/rtems-rapper.cpp\n\
+    index ca239b4..0d3b49d 100644\n--- a/linkers/rtems-rapper.cpp\n+++ b/linkers/rtems-rapper.cpp\n\
+    @@ -76,6 +76,7 @@ namespace rap\n   struct relocation\n   {\n     uint32_t   \
+    \ info;\n+    uint32_t    type;\n     uint32_t    offset;\n     uint32_t    addend;\n\
+    \     std::string symname;\n@@ -118,7 +119,7 @@ namespace rap\n     ~section ();\n\
+    \ \n     void load_data (rld::compress::compressor& comp);\n-    void load_relocs\
+    \ (rld::compress::compressor& comp);\n+    void load_relocs (rld::compress::compressor&\
+    \ comp, uint32_t version);\n   };\n \n   /**\n@@ -282,6 +283,7 @@ namespace rap\n\
+    \ \n   relocation::relocation ()\n     : info (0),\n+      type (0),\n       offset\
+    \ (0),\n       addend (0),\n       rap_off (0)\n@@ -293,6 +295,9 @@ namespace\
+    \ rap\n   {\n     std::cout << std::hex << std::setfill ('0')\n              \
+    \ << \"0x\" << std::setw (8) << info\n+              << std::dec << std::setfill\
+    \ (' ')\n+              << \" \" << std::setw (4) << type\n+              << std::hex\
+    \ << std::setfill ('0')\n               << \" 0x\" << std::setw (8) << offset\n\
+    \               << \" 0x\" << std::setw(8) << addend\n               << std::dec\
+    \ << std::setfill (' ')\n@@ -329,7 +334,7 @@ namespace rap\n   }\n \n   void\n\
+    -  section::load_relocs (rld::compress::compressor& comp)\n+  section::load_relocs\
+    \ (rld::compress::compressor& comp, uint32_t version)\n   {\n     uint32_t header;\n\
+    \     comp >> header;\n@@ -345,8 +350,14 @@ namespace rap\n \n         reloc.rap_off\
+    \ = comp.offset ();\n \n-        comp >> reloc.info\n-             >> reloc.offset;\n\
+    +        comp >> reloc.info;\n+\n+        if (version >= 3)\n+          comp >>\
+    \ reloc.type;\n+        else\n+          reloc.type = reloc.info & 0xff;\n+\n\
+    +        comp >> reloc.offset;\n \n         if (((reloc.info & RAP_RELOC_STRING)\
+    \ == 0) || rela)\n           comp >> reloc.addend;\n@@ -632,7 +643,7 @@ namespace\
+    \ rap\n      */\n     relocs_rap_off = comp.offset ();\n     for (int s = 0; s\
+    \ < rld::rap::rap_secs; ++s)\n-      secs[s].load_relocs (comp);\n+      secs[s].load_relocs\
+    \ (comp, rhdr_version);\n   }\n \n   void\n@@ -944,7 +955,7 @@ rap_show (rld::path::paths&\
+    \ raps,\n         {\n           const char* rela = r.secs[s].rela ? \"(A)\" :\
+    \ \"   \";\n           std::cout << std::setw (16) << r.secs[s].name\n-      \
+    \              << \": info       offset     addend \"\n+                    <<\
+    \ \": info       type offset     addend \"\n                     << rela\n   \
+    \                  << \" symbol name\" << std::endl;\n           for (size_t f\
+    \ = 0; f < r.secs[s].relocs.size (); ++f)\n@@ -1035,7 +1046,7 @@ rap_overlay (rld::path::paths&\
+    \ raps, bool warnings)\n         if (sec.relocs.size ())\n         {\n       \
+    \    int count = 0;\n-          std::cout << \"     info       offset     addend\
+    \     symbol name\" << std::endl;\n+          std::cout << \"     info       type\
+    \ offset     addend     symbol name\" << std::endl;\n           for (size_t f\
+    \ = 0; f < r.secs[s].relocs.size (); ++f)\n           {\n             rap::relocation&\
+    \ reloc = r.secs[s].relocs[f];\ndiff --git a/rtemstoolkit/rld-rap.cpp b/rtemstoolkit/rld-rap.cpp\n\
+    index 4537d27..b613392 100644\n--- a/rtemstoolkit/rld-rap.cpp\n+++ b/rtemstoolkit/rld-rap.cpp\n\
+    @@ -1428,7 +1428,8 @@ namespace rld\n                ++ri)\n           {\n   \
+    \          const relocation& reloc = *ri;\n-            uint32_t          info\
+    \ = GELF_R_TYPE (reloc.info);\n+            uint32_t          type = GELF_R_TYPE\
+    \ (reloc.info);\n+            uint32_t          info = 0;\n             uint32_t\
+    \          offset;\n             uint32_t          addend = reloc.addend;\n  \
+    \           bool              write_addend = sec.rela;\n@@ -1510,6 +1511,7 @@\
+    \ namespace rld\n               std::cout << \"  \" << std::setw (2) << sr <<\
+    \ '/'\n                         << std::setw (2) << rc\n                     \
+    \    << std::hex << \": reloc: info=0x\" << info << std::dec\n+              \
+    \          << \" type=\" << type\n                         << \" offset=\" <<\
+    \ offset;\n               if (write_addend)\n                 std::cout << \"\
+    \ addend=\" << addend;\n@@ -1526,7 +1528,7 @@ namespace rld\n                \
+    \         << std::endl;\n             }\n \n-            comp << info << offset;\n\
+    +            comp << info << type << offset;\n \n             if (write_addend)\n\
+    \               comp << addend;\n@@ -1727,7 +1729,9 @@ namespace rld\n     {\n\
+    \       std::string header;\n \n-      header = \"RAP,00000000,0002,LZ77,00000000\\\
+    n\";\n+      std::ostringstream version;\n+      version << std::setfill ('0')\
+    \ << std::setw (4) << RAP_VERSION;\n+      header = \"RAP,00000000,\" + version.str\
+    \ () + \",LZ77,00000000\\n\";\n       app.write (header.c_str (), header.size\
+    \ ());\n \n       compress::compressor compressor (app, 2 * 1024);\ndiff --git\
+    \ a/rtemstoolkit/rld-rap.h b/rtemstoolkit/rld-rap.h\nindex 19969e3..7209232 100644\n\
+    --- a/rtemstoolkit/rld-rap.h\n+++ b/rtemstoolkit/rld-rap.h\n@@ -41,6 +41,13 @@\
+    \ namespace rld\n       */\n      extern std::string rpath;\n \n+    /**\n+  \
+    \   * The RAP file format version.  Version 3 adds the ELF relocation type as\n\
+    +     * a word of its own after the info word of a relocation record.  Version\
+    \ 2\n+     * holds the type in bits 7:0 of the info word.\n+     */\n+    #define\
+    \ RAP_VERSION 3\n+\n     /**\n      * The RAP relocation bit masks.\n      */\n\
+    -- \n2.53.0\n\n"
+  type: inline
+archive-url: https://gitlab.rtems.org/rtems/tools/rtems-tools/-/archive/69ad12c299b0fa57d8fc5744faff3d681ef0e4d3/rtems-tools-69ad12c299b0fa57d8fc5744faff3d681ef0e4d3.tar.bz2
+copyrights:
+- Copyright (C) 2020, 2026 embedded brains GmbH & Co. KG
+description: |
+  RTEMS Tools sources.
+destination-directory: ${.:/component/deployment-directory}/src
+enabled-by: true
+license-files:
+  description: |
+    The RTEMS tools sources are used to provide host tools such as the RTEMS
+    Tester and tracing tools.  The header of a source file states its
+    license.  The license files belong to the bundled getmac and inih
+    sources.
+  files:
+  - misc/tools/getmac/LICENSE
+  - trace/record/inih/LICENSE.txt
+license-info: []
+links:
+- hash: null
+  name: component
+  role: input
+  uid: ../component
+- hash: null
+  name: member
+  role: input-to
+  uid: ../deployment/archive
+pkg-type: workspace
+symbolic-links: []
+type: pkg
+workspace-type: archive

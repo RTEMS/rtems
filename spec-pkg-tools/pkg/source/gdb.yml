@@ -1,0 +1,464 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+archive-file: ${.:/component/workspace-directory}/src/gdb-17.1.tar.xz
+archive-hash: 8aZ1HkOaISj-zz6ui1fBYIoNx8_nm0NWqTeHTlpCuy3wq6NutqlFLEGWaQi5pZB2x8rZcg9oRoirlWtlCA8dfA==
+archive-patches:
+- enabled-by: true
+  patch: |
+    From: Sebastian Huber <sebastian.huber@embedded-brains.de>
+    Date: Sun, 16 Aug 2026 03:10:36 +0200
+    Subject: sim: Allow an overdue event to be descheduled
+
+    sim_events_deschedule() asserted that a non-empty event queue implies a
+    non-negative time from event.  That is not an invariant.
+    sim_events_slip() decrements the time from event unconditionally, so the
+    time can pass an event which is still queued.  update_time_from_event()
+    then computes a negative time from event for the head of the queue,
+    which is overdue rather than pending.  The next tick raises the pending
+    work flag and sim_events_process() consumes it, so nothing is lost.
+
+    An event handler which deschedules another overdue event triggers the
+    assertion.  The MIPS jmr3904 board reaches this with two timers running:
+    they queue events for the same time, a branch delay slot slips the time
+    past both, and the handler of the first deschedules the second.
+
+    Assert only the direction which holds: an empty queue gives a negative
+    time from event.
+
+    Approved-By: Andrew Burgess <aburgess@redhat.com>
+    ---
+     sim/common/sim-events.c | 6 +++++-
+     1 file changed, 5 insertions(+), 1 deletion(-)
+
+    diff --git a/sim/common/sim-events.c b/sim/common/sim-events.c
+    index f87f133efc3..e832992c266 100644
+    --- a/sim/common/sim-events.c
+    +++ b/sim/common/sim-events.c
+    @@ -852,7 +852,11 @@ sim_events_deschedule (SIM_DESC sd,
+     		       (dead->trace != NULL) ? dead->trace : ""));
+     	      sim_events_free (sd, dead);
+     	      update_time_from_event (sd);
+    -	      SIM_ASSERT ((events->time_from_event >= 0) == (events->queue != NULL));
+    +	      /* sim_events_slip() advances the time past an event
+    +		 which is still queued.  The head of the queue is then
+    +		 overdue rather than pending.  */
+    +	      SIM_ASSERT (events->queue != NULL
+    +			  || events->time_from_event < 0);
+     	      return;
+     	    }
+     	}
+  type: inline
+- enabled-by: true
+  patch: |
+    From: Sebastian Huber <sebastian.huber@embedded-brains.de>
+    Date: Sat, 15 Aug 2026 11:18:29 +0200
+    Subject: sim/mips: Do not abort on a HI/LO hazard
+
+    check_mf_hilo() calls sim_engine_abort() when a mfhi or mflo reads a
+    value which the ISA leaves UNPREDICTABLE.  The comment above the helper
+    states the rule correctly: the result is UNPREDICTABLE, not an error.
+    Reading an undefined value is not a fault, and the return value of the
+    helper is discarded at both call sites, so the abort is its only effect.
+
+    The abort halts the client and the run loop resumes it on the faulting
+    instruction, which reads the same register again and aborts again.  An
+    operating system may save HI and LO on interrupt entry and restore them
+    unchanged, so it reads them at an arbitrary instruction boundary where
+    the last writer is whatever the interrupted program did.  Every clock
+    tick landing in multiply or divide heavy code then deadlocks it.
+
+    Warn instead.
+
+    The warning repeats for every hazard.  Print it at most ten times.
+
+    Approved-By: Andrew Burgess <aburgess@redhat.com>
+    ---
+     sim/mips/mips.igen | 25 +++++++++++++++++++------
+     1 file changed, 19 insertions(+), 6 deletions(-)
+
+    diff --git a/sim/mips/mips.igen b/sim/mips/mips.igen
+    index 8203d19f8c4..3b52f2df43f 100644
+    --- a/sim/mips/mips.igen
+    +++ b/sim/mips/mips.igen
+    @@ -410,13 +410,26 @@
+           && ! (peer->mf.timestamp > history->op.timestamp
+     	    && peer->mf.timestamp < peer->mt.timestamp))
+         {
+    +      static int warning_count = 0;
+    +
+           /* The peer has been written to since the last OP yet we have
+    -         not */
+    -      sim_engine_abort (SD, CPU, CIA, "HILO: %s: MF at 0x%08lx following OP at 0x%08lx corrupted by MT at 0x%08lx\n",
+    -			itable[MY_INDEX].name,
+    -			(long) CIA,
+    -			(long) history->op.cia,
+    -			(long) peer->mt.cia);
+    +	 not.  The ISA makes the result of this MF UNPREDICTABLE, it does not
+    +	 make it an error.  An operating system may save HI and LO
+    +	 unconditionally on interrupt entry and restore them unchanged, so it
+    +	 reads whatever the interrupted program left behind.  Aborting the
+    +	 simulation here deadlocks such a system, since the run loop resumes at
+    +	 the faulting instruction and the MF is executed again.  */
+    +      if (warning_count < 10)
+    +	{
+    +	  ++warning_count;
+    +	  sim_io_eprintf (SD, "HILO: %s: MF at 0x%08lx following OP at 0x%08lx corrupted by MT at 0x%08lx\n",
+    +			  itable[MY_INDEX].name,
+    +			  (long) CIA,
+    +			  (long) history->op.cia,
+    +			  (long) peer->mt.cia);
+    +	  if (warning_count == 10)
+    +	    sim_io_eprintf (SD, "HILO: further warnings are silenced\n");
+    +	}
+           ok = 0;
+         }
+       history->mf.timestamp = time;
+  type: inline
+- enabled-by: true
+  patch: |+
+    From: Sebastian Huber <sebastian.huber@embedded-brains.de>
+    Date: Sat, 15 Aug 2026 11:18:29 +0200
+    Subject: sim/mips: Deliver the reserved instruction exception
+
+    The ReservedInstruction and CoProcessorUnusable cases of
+    signal_exception() compute CAUSE, SR and EPC and set PC to the exception
+    handler address, and then assign PC = EPC, which discards all of it.
+    The client resumes on the faulting instruction rather than in its
+    handler, so it raises the same exception again and never advances.  The
+    address error cases immediately above deliberately do not do this and
+    say so in a comment.
+
+    The consequence is that a target which handles the exception never runs.
+    A compiler emits rdhwr to read the thread pointer for every access to a
+    thread-local object on every MIPS target, because the instruction exists
+    since MIPS32r2 and the operating system is expected to emulate it where
+    the processor lacks it.  The R3900 lacks it.
+
+    Approved-By: Andrew Burgess <aburgess@redhat.com>
+    ---
+     sim/mips/interp.c | 3 ++-
+     1 file changed, 2 insertions(+), 1 deletion(-)
+
+    diff --git a/sim/mips/interp.c b/sim/mips/interp.c
+    index a2757ec5ef7..5dbd1482b99 100644
+    --- a/sim/mips/interp.c
+    +++ b/sim/mips/interp.c
+    @@ -1992,7 +1992,8 @@ signal_exception (SIM_DESC sd,
+
+            case ReservedInstruction:
+            case CoProcessorUnusable:
+    -	 PC = EPC;
+    +	 /* Leave PC at the exception handler address.  This allows emulating
+    +	    an instruction the CPU lacks.  */
+     	 sim_engine_halt (SD, CPU, NULL, PC,
+     			  sim_stopped, SIM_SIGILL);
+
+  type: inline
+- enabled-by: true
+  patch: |
+    From: Sebastian Huber <sebastian.huber@embedded-brains.de>
+    Date: Thu, 20 Aug 2026 13:59:03 +0200
+    Subject: sim/mips: Check all interrupt enable conditions
+
+    interrupt_event() tested Status.IE alone.  On a target with an
+    exception level it delivered an interrupt while Status.EXL was set.
+    The simulator entered the exception handler again through the vector
+    and left EPC at the address of the older exception.  The handler lost
+    its resume point.  The test also let an interrupt through in debug
+    mode.
+
+    Collect the conditions which enable an interrupt in
+    interrupts_enabled().  Use this function for the delivery.
+    ---
+     sim/mips/interp.c | 28 +++++++++++++++++++++++++++-
+     1 file changed, 27 insertions(+), 1 deletion(-)
+
+    diff --git a/sim/mips/interp.c b/sim/mips/interp.c
+    index 5dbd1482b99..dc918bb9281 100644
+    --- a/sim/mips/interp.c
+    +++ b/sim/mips/interp.c
+    @@ -295,12 +295,38 @@ static const OPTION mips_options[] =
+
+     int interrupt_pending;
+
+    +/* The interrupts are enabled while the Status register enables them and the
+    +   processor is at no exception level, at no error level and not in debug
+    +   mode:
+    +
+    +     Status.IE = 1, Status.EXL = 0, Status.ERL = 0, Debug.DM = 0
+    +
+    +   MIPS Architecture For Programmers Volume III: The MIPS Privileged Resource
+    +   Architecture, the Interrupts chapter.  The R3000 generation, which the
+    +   R3900 belongs to, has no exception level and no error level.  It disables
+    +   the interrupts through the interrupt enable stack of its Status register,
+    +   so only the current enable takes part.  See the IDT R30xx Family Software
+    +   Reference Manual, the Status register of the CPU control chapter.  */
+    +static int
+    +interrupts_enabled (sim_cpu *cpu)
+    +{
+    +  if ((SR & status_IE) == 0)
+    +    return 0;
+    +
+    +#ifndef SUBTARGET_R3900
+    +  if ((SR & (status_EXL | status_ERL)) != 0)
+    +    return 0;
+    +#endif
+    +
+    +  return (Debug & Debug_DM) == 0;
+    +}
+    +
+     void
+     interrupt_event (SIM_DESC sd, void *data)
+     {
+       sim_cpu *cpu = STATE_CPU (sd, 0); /* FIXME */
+       address_word cia = CPU_PC_GET (cpu);
+    -  if (SR & status_IE)
+    +  if (interrupts_enabled (cpu))
+         {
+           interrupt_pending = 0;
+           SignalExceptionInterrupt (1); /* interrupt "1" */
+  type: inline
+- enabled-by: true
+  patch: |
+    From: Sebastian Huber <sebastian.huber@embedded-brains.de>
+    Date: Thu, 20 Aug 2026 13:59:22 +0200
+    Subject: sim/mips: Keep the pending interrupts in Cause
+
+    signal_exception() assigned the whole Cause register.  It discarded
+    the interrupt pending field, so the handler of an interrupt read
+    Cause.IP as zero.  The handler could not tell which interrupt the
+    processor delivered.  The R3900 path keeps the field already.
+
+    Keep the interrupt pending field on the other targets as well.  Add
+    cause_IPALL_mask for the complete field, because cause_IP_mask covers
+    only the six hardware interrupts.
+    ---
+     sim/mips/interp.c   | 4 ++--
+     sim/mips/sim-main.h | 4 ++++
+     2 files changed, 6 insertions(+), 2 deletions(-)
+
+    diff --git a/sim/mips/interp.c b/sim/mips/interp.c
+    index dc918bb9281..8118b290a17 100644
+    --- a/sim/mips/interp.c
+    +++ b/sim/mips/interp.c
+    @@ -1962,7 +1962,7 @@ signal_exception (SIM_DESC sd,
+          /* See figure 5-17 for an outline of the code below */
+          if (! (SR & status_EXL))
+            {
+    -	 CAUSE = (exception << 2);
+    +	 CAUSE = (CAUSE & cause_IPALL_mask) | (exception << 2);
+     	 if (STATE & simDELAYSLOT)
+     	   {
+     	     STATE &= ~simDELAYSLOT;
+    @@ -1976,7 +1976,7 @@ signal_exception (SIM_DESC sd,
+            }
+          else
+            {
+    -	 CAUSE = (exception << 2);
+    +	 CAUSE = (CAUSE & cause_IPALL_mask) | (exception << 2);
+     	 /* vector = 0x180; */
+            }
+          SR |= status_EXL;
+    diff --git a/sim/mips/sim-main.h b/sim/mips/sim-main.h
+    index b6cb4e12258..28a4221dfd5 100644
+    --- a/sim/mips/sim-main.h
+    +++ b/sim/mips/sim-main.h
+    @@ -557,6 +557,10 @@ struct mips_sim_state {
+     #define cause_SW1       (1 << 9)        /* Software interrupt 1 */
+     #define cause_IP_mask   (0x3f)          /* Interrupt pending field */
+     #define cause_IP_shift  (10)
+    +/* The complete interrupt pending field, IP7:IP0.  Its bits meet the
+    +   Status.IM bits.  */
+    +#define cause_IPALL_mask ((cause_IP_mask << cause_IP_shift) \
+    +			  | cause_SW1 | cause_SW0)
+
+     #define cause_set_EXC(x)  CAUSE = (CAUSE & ~cause_EXC_mask)  | ((x << cause_EXC_shift)  & cause_EXC_mask)
+     #define cause_set_EXC2(x) CAUSE = (CAUSE & ~cause_EXC2_mask) | ((x << cause_EXC2_shift) & cause_EXC2_mask)
+  type: inline
+- enabled-by: true
+  patch: |
+    From: Sebastian Huber <sebastian.huber@embedded-brains.de>
+    Date: Thu, 20 Aug 2026 14:01:57 +0200
+    Subject: sim/mips: Recognise a software interrupt request
+
+    The simulator ignored the Cause.IP0 and Cause.IP1 software generated
+    interrupts of the MIPS Architecture For Programmers Volume III: The
+    MIPS Privileged Resource Architecture.  A client which requested one
+    got no exception.
+
+    Check the request wherever an instruction enables the interrupts or
+    writes a pending bit.  These places are the writes to the Status and
+    Cause registers, ERET, RFE and EI.  Deliver the interrupt through the
+    event queue and not in place, because signal_exception() leaves the
+    handler address in the program counter for an interrupt.  The
+    simulator would overwrite it with the result of the current
+    instruction.
+    ---
+     sim/mips/interp.c        | 51 ++++++++++++++++++++++++++++++++++++++--
+     sim/mips/micromips.igen  |  1 +
+     sim/mips/mips.igen       |  1 +
+     sim/mips/mips3264r2.igen |  1 +
+     sim/mips/sim-main.h      |  2 ++
+     5 files changed, 54 insertions(+), 2 deletions(-)
+
+    diff --git a/sim/mips/interp.c b/sim/mips/interp.c
+    index 8118b290a17..4a461879804 100644
+    --- a/sim/mips/interp.c
+    +++ b/sim/mips/interp.c
+    @@ -321,6 +321,46 @@ interrupts_enabled (sim_cpu *cpu)
+       return (Debug & Debug_DM) == 0;
+     }
+
+    +/* A software interrupt is requested while the interrupts are enabled and a
+    +   software interrupt pending bit of the Cause register meets its mask bit in
+    +   the Status register.  The Cause.IP bits meet the Status.IM bits.  See the
+    +   MIPS Architecture For Programmers Volume III: The MIPS Privileged Resource
+    +   Architecture, the Interrupts chapter.  */
+    +static int
+    +software_interrupt_requested (sim_cpu *cpu)
+    +{
+    +  if (!interrupts_enabled (cpu))
+    +    return 0;
+    +
+    +  /* Only the software interrupts.  A hardware interrupt keeps its pending bit
+    +     set until its device is served.  The device model delivers it.  */
+    +  return (CAUSE & SR & (cause_SW1 | cause_SW0)) != 0;
+    +}
+    +
+    +static void
+    +software_interrupt_event (SIM_DESC sd, void *data)
+    +{
+    +  sim_cpu *cpu = STATE_CPU (sd, 0);
+    +  address_word cia = CPU_PC_GET (cpu);
+    +
+    +  /* Check again, because the write which scheduled this event may have been
+    +     undone in the meantime.  */
+    +  if (software_interrupt_requested (cpu))
+    +    SignalExceptionInterrupt (0);
+    +}
+    +
+    +/* Deliver a requested software interrupt at the next instruction boundary.
+    +   The delivery cannot happen here: signal_exception() leaves the handler
+    +   address in the program counter for an interrupt and the instruction which
+    +   the simulator executes would overwrite it.  This is why the hardware
+    +   interrupts arrive through the event queue as well.  */
+    +void
+    +check_software_interrupts (SIM_DESC sd, sim_cpu *cpu)
+    +{
+    +  if (software_interrupt_requested (cpu))
+    +    sim_events_schedule (sd, 1, software_interrupt_event, NULL);
+    +}
+    +
+     void
+     interrupt_event (SIM_DESC sd, void *data)
+     {
+    @@ -2295,14 +2335,20 @@ decode_coproc (SIM_DESC sd,
+     		if (op == cp0_mfc0 || op == cp0_dmfc0)
+     		  GPR[rt] = SR;
+     		else
+    -		  SR = GPR[rt];
+    +		  {
+    +		    SR = GPR[rt];
+    +		    check_software_interrupts (sd, cpu);
+    +		  }
+     		break;
+     		/* 13 = Cause              R4000   VR4100  VR4300 */
+     	      case 13:
+     		if (op == cp0_mfc0 || op == cp0_dmfc0)
+     		  GPR[rt] = CAUSE;
+     		else
+    -		  CAUSE = GPR[rt];
+    +		  {
+    +		    CAUSE = GPR[rt];
+    +		    check_software_interrupts (sd, cpu);
+    +		  }
+     		break;
+     		/* 14 = EPC                R4000   VR4100  VR4300 */
+     	      case 14:
+    @@ -2427,6 +2473,7 @@ decode_coproc (SIM_DESC sd,
+
+     	    /* shift IE/KU history bits right */
+     	    SR = LSMASKED32(SR, 31, 4) | LSINSERTED32(LSEXTRACTED32(SR, 5, 2), 3, 0);
+    +	    check_software_interrupts (sd, cpu);
+
+     	    /* TODO: CACHE register */
+     #endif /* SUBTARGET_R3900 */
+    diff --git a/sim/mips/micromips.igen b/sim/mips/micromips.igen
+    index 8bb48cac1e4..2149aee352f 100644
+    --- a/sim/mips/micromips.igen
+    +++ b/sim/mips/micromips.igen
+    @@ -995,6 +995,7 @@
+           NIA = EPC;
+           SR &= ~status_EXL;
+         }
+    +  check_software_interrupts (SD, CPU);
+     }
+
+
+    diff --git a/sim/mips/mips.igen b/sim/mips/mips.igen
+    index 3b52f2df43f..4becc3da31e 100644
+    --- a/sim/mips/mips.igen
+    +++ b/sim/mips/mips.igen
+    @@ -6715,6 +6715,7 @@
+           NIA = EPC;
+           SR &= ~status_EXL;
+         }
+    +  check_software_interrupts (SD, CPU);
+     }
+
+
+    diff --git a/sim/mips/mips3264r2.igen b/sim/mips/mips3264r2.igen
+    index 67598e84433..2864d9b77de 100644
+    --- a/sim/mips/mips3264r2.igen
+    +++ b/sim/mips/mips3264r2.igen
+    @@ -94,6 +94,7 @@
+       TRACE_ALU_INPUT0 ();
+       GPR[rt] = EXTEND32 (SR);
+       SR |= status_IE;
+    +  check_software_interrupts (SD, CPU);
+       TRACE_ALU_RESULT1 (GPR[rt]);
+     }
+
+    diff --git a/sim/mips/sim-main.h b/sim/mips/sim-main.h
+    index 28a4221dfd5..73a3f9c992b 100644
+    --- a/sim/mips/sim-main.h
+    +++ b/sim/mips/sim-main.h
+    @@ -655,6 +655,8 @@ enum ExceptionCause {
+
+     void interrupt_event (SIM_DESC sd, void *data);
+
+    +void check_software_interrupts (SIM_DESC sd, sim_cpu *cpu);
+    +
+     void signal_exception (SIM_DESC sd, sim_cpu *cpu, address_word cia, int exception, ...);
+     #define SignalException(exc,instruction)     signal_exception (SD, CPU, cia, (exc), (instruction))
+     #define SignalExceptionInterrupt(level)      signal_exception (SD, CPU, cia, Interrupt, level)
+  type: inline
+archive-url:
+- https://ftp.gwdg.de/pub/gnu/ftp/gnu/gdb/gdb-17.1.tar.xz
+- https://ftp.gnu.org/gnu/gdb/gdb-17.1.tar.xz
+copyrights:
+- Copyright (C) 2020, 2025 embedded brains GmbH & Co. KG
+description: |
+  GDB sources.
+destination-directory: ${.:/component/deployment-directory}/src
+enabled-by: true
+license-files:
+  description: |
+    The GDB sources are used to provide a host tool to debug applications of
+    the ${/glossary/target-arch:/term}.
+  files:
+  - COPYING
+  - COPYING3
+license-info: []
+links:
+- hash: null
+  name: component
+  role: input
+  uid: ../component
+- hash: null
+  name: member
+  role: input-to
+  uid: ../deployment/archive
+pkg-type: workspace
+symbolic-links: []
+type: pkg
+workspace-type: archive

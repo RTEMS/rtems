@@ -1,0 +1,109 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+attribute-actions:
+- action: extend
+  enabled-by: RTEMS_SMP
+  path: /extra-files
+  value:
+  - testsuites/validation/tr-chains-api-model.h
+  - testsuites/validation/tr-event-mgr-model.h
+attributes:
+  arch: ${.:/component/arch}
+  base-directory-map:
+  - source: ${.:/component/build-directory}/spec
+    target: $${.:/component/deployment-directory}/src
+  bsp: ${.:/bsp}
+  build-spec-directories: []
+  build-uids:
+  - /build/cpukit/librtemscpu
+  - /build/testsuites/support/librtemstest
+  - /build/testsuites/isvv/grp
+  - /build/testsuites/membench/grp
+  - /build/testsuites/validation/grp
+  - /build/testsuites/unit/grp
+  directory: $${.:/component/deployment-directory}/src/rtems-${.:/component/arch}-${.:/bsp}${.:/config:dash}-qual-only
+  directory-state-type: repository-subset
+  enabled-by: RTEMS_QUAL
+  enabled-set-extension:
+  - enable: INSTALL_LEGACY_MAKEFILES
+    enabled-by: true
+  extra-files: []
+  files: []
+  hash: null
+  include-test-header: true
+  license-info: []
+  links:
+  - hash: null
+    name: component
+    role: input
+    uid: component
+  - hash: null
+    name: source
+    role: input
+    uid: /pkg/source/rtems
+  - exclude-patterns: []
+    hash: null
+    include-path:
+    - enabled-by: true
+      path:
+      - cpukit/include
+      - cpukit/score/cpu/${.:/component/arch}/include
+      - bsps/include
+      - bsps/${.:/component/arch}/include
+      - bsps/${.:/component/arch}/${.:/bsp-family}/include
+    input:
+    - enabled-by: true
+      path:
+      - bsps
+      - cpukit
+      - testsuites
+    name: doxygen
+    role: input-to
+    strip-from-path:
+    - enabled-by: true
+      path: .
+    uid: build-ddf-sdd-doxyfile
+  - exclude-patterns: []
+    hash: null
+    include-path:
+    - enabled-by: true
+      path:
+      - cpukit/include
+      - cpukit/score/cpu/${.:/component/arch}/include
+      - bsps/include
+      - bsps/${.:/component/arch}/include
+      - bsps/${.:/component/arch}/${.:/bsp-family}/include
+    input:
+    - enabled-by: true
+      path:
+      - bsps
+      - cpukit
+      - testsuites
+    name: doxygen
+    role: input-to
+    strip-from-path:
+    - enabled-by: true
+      path: .
+    uid: doc-ddf-sdd-doxyfile
+  - hash: null
+    name: source
+    role: input-to
+    uid: doc-ddf-sdd-tagfile-early
+  - hash: null
+    name: source
+    role: input-to
+    uid: doc-ddf-sdd
+  - hash: null
+    name: member
+    role: input-to
+    uid: /pkg/deployment/archive
+  pkg-type: directory-state
+  type: pkg
+copyrights:
+- Copyright (C) 2020, 2026 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: add-package-template
+  uid: component
+pkg-type: template
+template-type: inline-item
+type: pkg

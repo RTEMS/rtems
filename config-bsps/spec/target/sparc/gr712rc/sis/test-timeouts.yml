@@ -1,0 +1,1514 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+enabled-by: true
+links: []
+time-of-last-update: '2026-09-29T08:55:07.199994+00:00'
+timeouts:
+  coverage:
+    ts-fatal-extension.exe:
+    - 2.6556966960197315
+    - 2.1349996510034543
+    ts-fatal-idle-thread-create-failed.exe:
+    - 2.9468692430000374
+    - 2.185403169998608
+    ts-fatal-idle-thread-stack-too-small.exe:
+    - 2.527782288962044
+    - 2.1355286729958607
+    ts-fatal-init-task-construct-failed.exe:
+    - 2.6134046079823747
+    - 2.134815598001296
+    ts-fatal-sparc-leon3-clock-initialization.exe:
+    - 2.6357731600292027
+    - 2.235985856001207
+    ts-fatal-too-large-tls-size.exe:
+    - 2.5438426750479266
+    - 2.1847011760037276
+    ts-terminate.exe:
+    - 2.8271078979596496
+    - 2.1345865039984346
+    ts-unit-no-clock-0.exe:
+    - 13.661385654006153
+    - 8.099994750002224
+    ts-userext.exe:
+    - 3.7638630089350045
+    - 2.834775322000496
+    ts-validation-0.exe:
+    - 4.203459878102876
+    - 3.934248354002193
+    ts-validation-1.exe:
+    - 218.01752520899754
+    - 160.26144620500418
+    ts-validation-acfg-0.exe:
+    - 2.475106253987178
+    - 1.9660327050005435
+    ts-validation-acfg-1.exe:
+    - 1.9950468889437616
+    - 1.6810510569994221
+    ts-validation-bsp-0.exe:
+    - 3.495843165088445
+    - 2.7209534619978513
+    ts-validation-cache.exe:
+    - 3.87597046000883
+    - 2.7161653739967733
+    ts-validation-intr.exe:
+    - 5.321735727018677
+    - 3.0304239050019532
+    ts-validation-io-kernel.exe:
+    - 1.363736518076621
+    - 1.1371959500029334
+    ts-validation-no-clock-0.exe:
+    - 54.43233205599972
+    ts-validation-no-clock-1.exe:
+    - 54.43233205599972
+    ts-validation-non-smp.exe:
+    - 3.790184719953686
+    - 2.4619999219939928
+    ts-validation-one-cpu-0.exe:
+    - 20.851249348954298
+    - 15.442784835999191
+    ts-validation-one-cpu-1.exe:
+    - 190.00312977307476
+    - 157.1254195950023
+    ts-validation-timecounter-0.exe:
+    - 3.6856264480156824
+    - 1.5402440420002677
+    ts-validation-timecounter-1.exe:
+    - 9.729685578997305
+    ts-validation-tls-0.exe:
+    - 3.389910521917045
+    - 1.5720156440002029
+    ts-validation-tls-1.exe:
+    - 3.538999501033686
+    - 1.4196568729967112
+  coverage-smp:
+    ts-fatal-boot-processor-not-assigned-to-scheduler.exe:
+    - 4.118829921004362
+    - 2.8815212279951083
+    ts-fatal-extension.exe:
+    - 10.427393086021766
+    - 7.069547008999507
+    ts-fatal-idle-thread-create-failed.exe:
+    - 4.344122911978047
+    - 3.097656049001671
+    ts-fatal-idle-thread-stack-too-small.exe:
+    - 4.237152387038805
+    - 3.045490292002796
+    ts-fatal-init-task-construct-failed.exe:
+    - 4.331360587966628
+    - 3.1410938639965025
+    ts-fatal-mandatory-processor-not-present.exe:
+    - 4.030827548005618
+    - 2.944868429003691
+    ts-fatal-scheduler-requires-exactly-one-processor.exe:
+    - 10.22176332399249
+    - 6.981532516001607
+    ts-fatal-smp.exe:
+    - 11.34032731805928
+    - 6.855586149998999
+    ts-fatal-sparc-leon3-cache-snooping-disabled-boot.exe:
+    - 4.1587383459554985
+    - 2.942229899002996
+    ts-fatal-sparc-leon3-cache-snooping-disabled-secondary.exe:
+    - 9.740170116070658
+    - 6.855951464996906
+    ts-fatal-sparc-leon3-cannot-raise-ipi.exe:
+    - 2.992329708999023
+    ts-fatal-sparc-leon3-clock-initialization.exe:
+    - 4.515023451996967
+    - 3.225650273998326
+    ts-fatal-sparc-leon3-ipi-invalid-vector.exe:
+    - 2.8947516170010203
+    ts-fatal-start-of-mandatory-processor-failed.exe:
+    - 5.292855081963353
+    - 2.9635883270020713
+    ts-fatal-start-on-not-online-processor.exe:
+    - 11.237452717032284
+    - 7.175264401004824
+    ts-fatal-too-large-tls-size.exe:
+    - 5.292088694986887
+    - 2.95927441999811
+    ts-model-0.exe:
+    - 34.334586994023994
+    - 11.28074195299996
+    ts-terminate.exe:
+    - 5.795772742945701
+    - 3.4478827939965413
+    ts-unit-no-clock-0.exe:
+    - 45.21964309399482
+    - 15.026985857999534
+    ts-userext.exe:
+    - 7.627087687957101
+    - 4.903171092999401
+    ts-validation-0.exe:
+    - 34.23420775204431
+    - 12.16234497899859
+    ts-validation-1.exe:
+    - 650.174712439999
+    - 288.28978550600004
+    ts-validation-acfg-0.exe:
+    - 4.660341053036973
+    - 2.9844844070030376
+    ts-validation-acfg-1.exe:
+    - 3.9360491229454055
+    - 2.702619773001061
+    ts-validation-bsp-0.exe:
+    - 5.576411718968302
+    - 4.614407823995862
+    ts-validation-cache.exe:
+    - 28.664162585977465
+    - 9.320344912004657
+    ts-validation-intr.exe:
+    - 28.59832785697654
+    - 8.294804078002926
+    ts-validation-io-kernel.exe:
+    - 2.955625622998923
+    - 1.800141341998824
+    ts-validation-no-clock-0.exe:
+    - 250.5658246949315
+    - 145.65906224099308
+    ts-validation-no-clock-1.exe:
+    - 250.5658246949315
+    - 145.65906224099308
+    ts-validation-one-cpu-0.exe:
+    - 48.30898221896496
+    - 24.913214899002924
+    ts-validation-one-cpu-1.exe:
+    - 361.5883595220512
+    - 242.96926196900313
+    ts-validation-smp-one-cpu-0.exe:
+    - 6.860804211930372
+    - 5.025008584998432
+    ts-validation-smp-only-0.exe:
+    - 133.6521901229862
+    - 62.30202741899848
+    ts-validation-smp-only-1.exe:
+    - 6.3085090689128265
+    - 4.618539453993435
+    ts-validation-smp-only-2.exe:
+    - 6.335619685938582
+    - 4.537268585001584
+    ts-validation-timecounter-0.exe:
+    - 5.892804065020755
+    - 3.7042667490022723
+    ts-validation-timecounter-1.exe:
+    - 23.89700730703771
+    - 13.37276342700352
+    ts-validation-timecounter-smp-0.exe:
+    - 19.70479664299637
+    - 6.14440021700284
+    ts-validation-tls-0.exe:
+    - 6.166818200959824
+    - 3.0219367280005827
+    ts-validation-tls-1.exe:
+    - 5.026572171016596
+    - 3.291398934001336
+  default:
+    base_sp.exe:
+    - 0.00431550699431682
+    block01.exe:
+    - 0.01204605599923525
+    block02.exe:
+    - 0.009775592996447813
+    block03.exe:
+    - 0.01662532899354119
+    block04.exe:
+    - 0.013008854999497999
+    block05.exe:
+    - 4.333850828930736
+    block06.exe:
+    - 0.06521808612160385
+    block07.exe:
+    - 0.012423685999237932
+    block08.exe:
+    - 0.08187888300017221
+    block09.exe:
+    - 0.010458548000315204
+    block10.exe:
+    - 0.020730316995468456
+    block11.exe:
+    - 0.020617838003090583
+    block12.exe:
+    - 0.018806862004566938
+    block13.exe:
+    - 0.01479202300106408
+    block14.exe:
+    - 0.014677011997264344
+    block15.exe:
+    - 0.018606068995723035
+    block16.exe:
+    - 0.01410921200294979
+    block17.exe:
+    - 0.010654890000296291
+    bspcmdline01.exe:
+    - 0.010153867995541077
+    capture.exe:
+    - 0.06587152602151036
+    capture01.exe:
+    - 0.985812844002794
+    cdtest.exe:
+    - 0.03614569595083594
+    complex.exe:
+    - 0.0162580589967547
+    cpuuse.exe:
+    - 9.540131361995009
+    crypt01.exe:
+    - 91.54589259182103
+    defaultconfig01.exe:
+    - 0.010697318000893574
+    devfs01.exe:
+    - 0.012633960002858657
+    devfs04.exe:
+    - 0.024076938003418036
+    deviceio01.exe:
+    - 0.019986783001513686
+    devnullfatal01.exe:
+    - 0.013405696998233907
+    dhrystone.exe:
+    - 8.404898214852437
+    dl01.exe:
+    - 0.017219920875504613
+    dl02.exe:
+    - 0.03330506198108196
+    dl03.exe:
+    - 0.03163942019455135
+    dl04.exe:
+    - 0.03162973001599312
+    dl05.exe:
+    - 0.03636120609007776
+    dl07.exe:
+    - 0.07670680899173021
+    dl08.exe:
+    - 0.22557957703247666
+    dl09.exe:
+    - 0.1858090099412948
+    dl10.exe:
+    - 0.10627143597230315
+    dl11.exe:
+    - 0.025148844113573432
+    dl12.exe:
+    - 0.02657138812355697
+    dl14.exe:
+    - 0.019053338997764513
+    dumpbuf01.exe:
+    - 0.023270789999514818
+    exit01.exe:
+    - 0.009772245000931434
+    exit02.exe:
+    - 0.017226394003955647
+    exit03.exe:
+    - 0.06527596386149526
+    exit04.exe:
+    - 0.011053068003093358
+    fatfs_fserror.exe:
+    - 0.04680411700246623
+    fatfs_fspatheval.exe:
+    - 0.07962104399484815
+    fatfs_fsrdwr.exe:
+    - 0.12696141299966257
+    fatfs_fsrename.exe:
+    - 0.07239590700191911
+    fatfs_fsrenamelongname.exe:
+    - 0.03875110391527414
+    fatfs_fsrmdirparent.exe:
+    - 0.03867778088897467
+    fatfs_fsscandir01.exe:
+    - 0.040671321003173944
+    fatfs_fsstatvfs.exe:
+    - 0.04034395000053337
+    fatfs_fstime.exe:
+    - 0.11826235381886363
+    fdt01.exe:
+    - 0.11858238093554974
+    fdt02.exe:
+    - 0.0047737848944962025
+    fileio.exe:
+    - 0.11901977704837918
+    flashdev01.exe:
+    - 0.01737250600126572
+    flashdisk01.exe:
+    - 0.266964680980891
+    fsbdpart01.exe:
+    - 0.018889557002694346
+    fsclose01.exe:
+    - 0.013455619002343155
+    fsdosfsformat01.exe:
+    - 16.316863635998743
+    fsdosfsname01.exe:
+    - 6.664717804000247
+    fsdosfsname02.exe:
+    - 0.06491006600117544
+    fsdosfssync01.exe:
+    - 0.012025736039504409
+    fsdosfswrite01.exe:
+    - 0.014888821002386976
+    fsfatfsformat01.exe:
+    - 10.924966966034845
+    fsfatfssync01.exe:
+    - 0.0700647090561688
+    fsfseeko01.exe:
+    - 0.00784995100548258
+    fsimfsconfig01.exe:
+    - 0.007557639000879135
+    fsimfsconfig02.exe:
+    - 0.008210827996663284
+    fsimfsconfig03.exe:
+    - 0.007400192000204697
+    fsimfsgeneric01.exe:
+    - 0.006480588002887089
+    fsjffs2empty01.exe:
+    - 0.13567516399780288
+    fsjffs2gc01.exe:
+    - 0.13548409299983177
+    fsnofs01.exe:
+    - 0.005159249005373567
+    fsrfsbitmap01.exe:
+    - 0.037504040003113914
+    fsrofs01.exe:
+    - 0.012571471997944172
+    getentropy01.exe:
+    - 0.0038118349984870292
+    heapwalk.exe:
+    - 0.013504626927897334
+    hello.exe:
+    - 0.008062674998654984
+    i2c01.exe:
+    - 0.12903260299935937
+    imfs_fserror.exe:
+    - 0.013715555003727786
+    imfs_fslink.exe:
+    - 0.00461133800126845
+    imfs_fspatheval.exe:
+    - 0.013183400995330885
+    imfs_fspermission.exe:
+    - 0.01555525022558868
+    imfs_fsrdwr.exe:
+    - 1.0809300649998477
+    imfs_fsrmdirparent.exe:
+    - 0.004236146000039298
+    imfs_fsscandir01.exe:
+    - 0.004143785001360811
+    imfs_fstime.exe:
+    - 0.031731342896819115
+    iodev01.exe:
+    - 0.11944001889787614
+    iostream.exe:
+    - 0.004907249000098091
+    irqs01.exe:
+    - 0.008801334006420802
+    jffs2_fserror.exe:
+    - 0.04543593400012469
+    jffs2_fslink.exe:
+    - 0.042211465995933395
+    jffs2_fspatheval.exe:
+    - 0.06373871909454465
+    jffs2_fspermission.exe:
+    - 0.040769408995402046
+    jffs2_fsrdwr.exe:
+    - 0.4670090889558196
+    jffs2_fsrename.exe:
+    - 0.03269360199919902
+    jffs2_fsrenamelongname.exe:
+    - 0.01754834199527977
+    jffs2_fsrmdirparent.exe:
+    - 0.021304294998117257
+    jffs2_fsscandir01.exe:
+    - 0.02239498600101797
+    jffs2_fstime.exe:
+    - 0.14051620299869683
+    jffs2nand_fserror.exe:
+    - 0.031627393094822764
+    jffs2nand_fslink.exe:
+    - 0.017646505999437068
+    jffs2nand_fspatheval.exe:
+    - 0.03161733504384756
+    jffs2nand_fspermission.exe:
+    - 0.03444558400224196
+    jffs2nand_fsrdwr.exe:
+    - 0.5699082750361413
+    jffs2nand_fsrename.exe:
+    - 0.03816584195010364
+    jffs2nand_fsrenamelongname.exe:
+    - 0.018649597885087132
+    jffs2nand_fsrmdirparent.exe:
+    - 0.018495869997423142
+    jffs2nand_fsscandir01.exe:
+    - 0.01870277599664405
+    jffs2nand_fstime.exe:
+    - 0.13981630800117273
+    libfdt01.exe:
+    - 0.008230047002143692
+    libiofdopen.exe:
+    - 0.005340652998711448
+    linpack.exe:
+    - 87.90101894596592
+    malloc02.exe:
+    - 0.005428165000921581
+    malloc03.exe:
+    - 0.006039623003744055
+    malloc04.exe:
+    - 0.0038407719985116273
+    malloctest.exe:
+    - 0.1674101420212537
+    math.exe:
+    - 0.0174545890185982
+    mathf.exe:
+    - 0.010084549998282455
+    mathl.exe:
+    - 0.0035584401339292526
+    md501.exe:
+    - 0.011680281953886151
+    mdosfs_fserror.exe:
+    - 0.045812821001163684
+    mdosfs_fspatheval.exe:
+    - 0.06713586603291333
+    mdosfs_fsrdwr.exe:
+    - 0.1281925558578223
+    mdosfs_fsrename.exe:
+    - 0.04338639599882299
+    mdosfs_fsrenamelongname.exe:
+    - 0.037950895028188825
+    mdosfs_fsrmdirparent.exe:
+    - 0.024955750996014103
+    mdosfs_fsscandir01.exe:
+    - 0.015891334041953087
+    mdosfs_fsstatvfs.exe:
+    - 0.015645042061805725
+    mdosfs_fstime.exe:
+    - 0.06674703606404364
+    mimfs_fserror.exe:
+    - 0.009270229005778674
+    mimfs_fslink.exe:
+    - 0.005051933003414888
+    mimfs_fspatheval.exe:
+    - 0.015027605004434008
+    mimfs_fspermission.exe:
+    - 0.011837440004455857
+    mimfs_fsrdwr.exe:
+    - 1.2779557350004325
+    mimfs_fsrename.exe:
+    - 0.00913802799914265
+    mimfs_fsrenamelongname.exe:
+    - 0.005669951999152545
+    mimfs_fsrmdirparent.exe:
+    - 0.004985104998922907
+    mimfs_fsscandir01.exe:
+    - 0.004856977000599727
+    mimfs_fstime.exe:
+    - 0.03183549293316901
+    monitor.exe:
+    - 0.08577474699995946
+    monitor02.exe:
+    - 0.005879957927390933
+    mouse01.exe:
+    - 0.011146666947752237
+    mrfs_fserror.exe:
+    - 0.04740209299779963
+    mrfs_fsfpathconf.exe:
+    - 0.018812212998454925
+    mrfs_fslink.exe:
+    - 0.03964297600032296
+    mrfs_fspatheval.exe:
+    - 0.03736501200182829
+    mrfs_fspermission.exe:
+    - 0.03655266400164692
+    mrfs_fsrdwr.exe:
+    - 0.1648842040449381
+    mrfs_fsrename.exe:
+    - 0.033400622894987464
+    mrfs_fsrmdirparent.exe:
+    - 0.024105960997985676
+    mrfs_fsscandir01.exe:
+    - 0.01705439994111657
+    mrfs_fstime.exe:
+    - 0.044325517999823205
+    newlib01.exe:
+    - 0.00541002400132129
+    nsecs.exe:
+    - 0.07217223699990427
+    ofw01.exe:
+    - 0.010154895018786192
+    paranoia.exe:
+    - 0.03780317399650812
+    psx01.exe:
+    - 0.006138624004961457
+    psx05.exe:
+    - 0.0158694158308208
+    psx06.exe:
+    - 0.012593835999723524
+    psx07.exe:
+    - 0.01652086900139693
+    psx08.exe:
+    - 0.01562767800351139
+    psx10.exe:
+    - 0.0175792898517102
+    psx11.exe:
+    - 1.6889180389989633
+    psx13.exe:
+    - 0.010568983998382464
+    psx14.exe:
+    - 0.0066379240015521646
+    psx15.exe:
+    - 0.00846282300335588
+    psx16.exe:
+    - 0.007009269000263885
+    psxautoinit01.exe:
+    - 0.006046641996363178
+    psxautoinit02.exe:
+    - 0.005050579995440785
+    psxbarrier01.exe:
+    - 0.009099321905523539
+    psxcancel.exe:
+    - 0.015539268963038921
+    psxcancel01.exe:
+    - 0.22052060114219785
+    psxchroot01.exe:
+    - 0.007375987945124507
+    psxcleanup.exe:
+    - 0.007834339048713446
+    psxcleanup01.exe:
+    - 0.004338713995821308
+    psxcleanup02.exe:
+    - 0.007009456865489483
+    psxclock.exe:
+    - 0.043183359084650874
+    psxclock01.exe:
+    - 0.4721467469353229
+    psxclockrealtime01.exe:
+    - 0.07009991211816669
+    psxconcurrency01.exe:
+    - 0.005551720969378948
+    psxcond01.exe:
+    - 0.008110204013064504
+    psxcond02.exe:
+    - 0.006559594003192615
+    psxconfig01.exe:
+    - 0.04183225200540619
+    psxconfstr.exe:
+    - 0.008274876003270037
+    psxdevctl01.exe:
+    - 0.005602501994872
+    psxenosys.exe:
+    - 0.0047090520019992255
+    psxfatal01.exe:
+    - 0.006684562002192251
+    psxfatal02.exe:
+    - 0.0045272440038388595
+    psxfchx01.exe:
+    - 0.025783525001315866
+    psxfenv01.exe:
+    - 0.028124738004407845
+    psxfile01.exe:
+    - 0.03477602987550199
+    psxfile02.exe:
+    - 0.026424799994856585
+    psxfilelock01.exe:
+    - 0.0075378670007921755
+    psxftw01.exe:
+    - 0.008058032020926476
+    psxgetattrnp01.exe:
+    - 0.007473634002963081
+    psxgetrusage01.exe:
+    - 0.045787852999637835
+    psxglobalcon01.exe:
+    - 0.009020167002745438
+    psxglobalcon02.exe:
+    - 0.0085447449964704
+    psxid01.exe:
+    - 0.00999594500171952
+    psximfs01.exe:
+    - 0.04643097500229487
+    psximfs02.exe:
+    - 0.008059289000811987
+    psximfs03.exe:
+    - 0.045905684994068
+    psximfs04.exe:
+    - 0.004482377000385895
+    psxinttypes01.exe:
+    - 0.006989134009927511
+    psxkey01.exe:
+    - 0.00303993999841623
+    psxkey02.exe:
+    - 0.007139092005672865
+    psxkey03.exe:
+    - 0.00643339499947615
+    psxkey04.exe:
+    - 0.007159374996263068
+    psxkey05.exe:
+    - 0.005493233002198394
+    psxkey06.exe:
+    - 0.008991505994345061
+    psxkey07.exe:
+    - 0.008046912029385567
+    psxkey08.exe:
+    - 0.00887983400025405
+    psxkey09.exe:
+    - 0.00881663800100796
+    psxkey10.exe:
+    - 0.008254484004282858
+    psxmmap01.exe:
+    - 0.007229003997053951
+    psxmount.exe:
+    - 0.01708548003807664
+    psxmsgq01.exe:
+    - 0.019945016829296947
+    psxmsgq02.exe:
+    - 0.004211565996229183
+    psxmsgq03.exe:
+    - 0.006940694998775143
+    psxmsgq04.exe:
+    - 0.00843470892868936
+    psxmutexattr01.exe:
+    - 0.006904542999109253
+    psxndbm01.exe:
+    - 0.012442909996025264
+    psxobj01.exe:
+    - 0.010795005997351836
+    psxonce01.exe:
+    - 0.007647457001439761
+    psxpasswd01.exe:
+    - 0.007949335966259241
+    psxpasswd02.exe:
+    - 0.011574397998629138
+    psxpipe01.exe:
+    - 0.009605949999240693
+    psxrdwrv.exe:
+    - 0.008182530000340194
+    psxreaddir.exe:
+    - 0.035932601895183325
+    psxrwlock01.exe:
+    - 0.06680404487997293
+    psxsem01.exe:
+    - 0.007878617150709033
+    psxshm01.exe:
+    - 0.007308567997824866
+    psxshm02.exe:
+    - 0.007208670998807065
+    psxspin01.exe:
+    - 0.009739508001075592
+    psxstack01.exe:
+    - 0.008790054998826236
+    psxstack02.exe:
+    - 0.007025391998467967
+    psxstat.exe:
+    - 0.17158966581337154
+    psxstrsignal01.exe:
+    - 0.009966689001885243
+    psxsysconf.exe:
+    - 0.0058271839952794835
+    psxthreadname01.exe:
+    - 0.00653495699953055
+    psxtime.exe:
+    - 0.31794281397014856
+    psxtimes01.exe:
+    - 0.12117095899884589
+    psxtmbarrier01.exe:
+    - 0.004037769045680761
+    psxtmbarrier02.exe:
+    - 0.00930076800432289
+    psxtmbarrier03.exe:
+    - 0.006267064003623091
+    psxtmbarrier04.exe:
+    - 0.0052204840030753985
+    psxtmbarrierattr01.exe:
+    - 0.00536343199928524
+    psxtmcleanup01.exe:
+    - 0.008745938001084141
+    psxtmclocknanosleep01.exe:
+    - 0.008620025000709575
+    psxtmclocknanosleep02.exe:
+    - 0.017572333999851253
+    psxtmclocknanosleep03.exe:
+    - 0.01560525599779794
+    psxtmcond01.exe:
+    - 0.012938508996739984
+    psxtmcond02.exe:
+    - 0.013807540002744645
+    psxtmcond03.exe:
+    - 0.006595630002266262
+    psxtmcond04.exe:
+    - 0.008045881004363764
+    psxtmcond05.exe:
+    - 0.006236226996406913
+    psxtmcond06.exe:
+    - 0.007974451000336558
+    psxtmcond07.exe:
+    - 0.014275439003540669
+    psxtmcond08.exe:
+    - 0.009166037998511456
+    psxtmcond09.exe:
+    - 0.012386006004817318
+    psxtmcond10.exe:
+    - 0.013374923000810668
+    psxtmcond11.exe:
+    - 0.01671136999357259
+    psxtmcond12.exe:
+    - 0.013074757996946573
+    psxtmkey01.exe:
+    - 0.004055784003867302
+    psxtmkey02.exe:
+    - 0.010454980001668446
+    psxtmmq01.exe:
+    - 0.006340489999274723
+    psxtmmqrcvblock01.exe:
+    - 0.01697395881637931
+    psxtmmqrcvblock02.exe:
+    - 0.017779525835067034
+    psxtmmutex01.exe:
+    - 0.01559581900073681
+    psxtmmutex02.exe:
+    - 0.015313345000322443
+    psxtmmutex03.exe:
+    - 0.01317865199962398
+    psxtmmutex04.exe:
+    - 0.0109051580002415
+    psxtmmutex05.exe:
+    - 0.010911794001003727
+    psxtmmutex06.exe:
+    - 0.016823146026581526
+    psxtmmutex07.exe:
+    - 0.0037927619996480644
+    psxtmmutex08.exe:
+    - 0.010887244017794728
+    psxtmmutexattr01.exe:
+    - 0.0037009040024713613
+    psxtmnanosleep01.exe:
+    - 0.005205638000916224
+    psxtmnanosleep02.exe:
+    - 0.010234399000182748
+    psxtmonce01.exe:
+    - 0.00615646399819525
+    psxtmrwlock01.exe:
+    - 0.005259789002593607
+    psxtmrwlock02.exe:
+    - 0.01461103800102137
+    psxtmrwlock03.exe:
+    - 0.014716516998305451
+    psxtmrwlock04.exe:
+    - 0.014690408002934419
+    psxtmrwlock05.exe:
+    - 0.012123651998990681
+    psxtmrwlock06.exe:
+    - 0.0036469120022957213
+    psxtmrwlock07.exe:
+    - 0.01676463196054101
+    psxtmrwlock08.exe:
+    - 0.013970282998343464
+    psxtmrwlock09.exe:
+    - 0.015550198964774609
+    psxtmsem01.exe:
+    - 0.013431247003609315
+    psxtmsem02.exe:
+    - 0.0051629139998112805
+    psxtmsem03.exe:
+    - 0.015532272169366479
+    psxtmsem04.exe:
+    - 0.005992414000502322
+    psxtmsem05.exe:
+    - 0.015986419981345534
+    psxtmsleep01.exe:
+    - 0.013170735001040157
+    psxtmsleep02.exe:
+    - 0.013045011000940576
+    psxtmthread01.exe:
+    - 0.013233917998149991
+    psxtmthread02.exe:
+    - 0.012879882997367531
+    psxtmthread03.exe:
+    - 0.013025086998823099
+    psxtmthread04.exe:
+    - 0.017548554002132732
+    psxtmthread05.exe:
+    - 0.01110671700007515
+    psxtmthread06.exe:
+    - 0.008154658993589692
+    psxtmthreadattr01.exe:
+    - 0.01186907000374049
+    psxusleep.exe:
+    - 0.012347957999736536
+    putenvtest.exe:
+    - 0.010035651997895911
+    pwdgrp01.exe:
+    - 0.027790198000730015
+    pwdgrp02.exe:
+    - 0.0282478339941008
+    rbheap01.exe:
+    - 0.026096903005964123
+    rcxx01.exe:
+    - 0.06537222885526717
+    record01.exe:
+    - 0.02382434199535055
+    record02.exe:
+    - 0.11655587097629905
+    record03.exe:
+    - 0.022831150999991223
+    record04.exe:
+    - 0.4436594389990205
+    regulator01.exe:
+    - 0.3045251730000018
+    rhdeadlockbrk.exe:
+    - 2.5847168571781367
+    rhilatency.exe:
+    - 0.00857742899825098
+    rhmlatency.exe:
+    - 0.6228670079726726
+    rhsemshuffle.exe:
+    - 6.493480653967708
+    rhtaskpreempt.exe:
+    - 1.026570317997539
+    rhtaskswitch.exe:
+    - 0.952641602998483
+    rtmonuse.exe:
+    - 0.11598481703549623
+    sha.exe:
+    - 0.04235643799620448
+    shell01.exe:
+    - 0.021199565002461895
+    sp01.exe:
+    - 0.06996939610689878
+    sp02.exe:
+    - 0.04304057199624367
+    sp03.exe:
+    - 0.08407462499599205
+    sp04.exe:
+    - 9.922433077001187
+    sp05.exe:
+    - 0.06550002912990749
+    sp06.exe:
+    - 0.03702797300502425
+    sp07.exe:
+    - 0.008781088050454855
+    sp08.exe:
+    - 0.008874601917341352
+    sp11.exe:
+    - 0.03828118811361492
+    sp12.exe:
+    - 0.10428335500182584
+    sp13.exe:
+    - 0.779825351004547
+    sp14.exe:
+    - 0.37097577517852187
+    sp15.exe:
+    - 0.11354045200278051
+    sp16.exe:
+    - 0.013563936001446564
+    sp17.exe:
+    - 0.1047457359964028
+    sp18.exe:
+    - 0.009774984995601699
+    sp19.exe:
+    - 5.390904600964859
+    sp20.exe:
+    - 0.16921570408158004
+    sp2038.exe:
+    - 1.2270833980001044
+    sp21.exe:
+    - 0.005641049996484071
+    sp22.exe:
+    - 0.02296129520982504
+    sp23.exe:
+    - 0.047957055998267606
+    sp24.exe:
+    - 0.0653204198461026
+    sp25.exe:
+    - 0.010131543000170495
+    sp26.exe:
+    - 0.025684539003123064
+    sp27.exe:
+    - 0.009647598024457693
+    sp27a.exe:
+    - 0.017116877999796998
+    sp29.exe:
+    - 0.01556808299937984
+    sp30.exe:
+    - 0.06582000899652485
+    sp31.exe:
+    - 0.024618643001304008
+    sp32.exe:
+    - 0.019850435899570584
+    sp33.exe:
+    - 0.02158862119540572
+    sp34.exe:
+    - 0.11836450299597345
+    sp35.exe:
+    - 0.27682540100067854
+    sp37.exe:
+    - 0.07595908700022846
+    sp38.exe:
+    - 0.09420861199760111
+    sp40.exe:
+    - 0.006928314003744163
+    sp41.exe:
+    - 0.008876018924638629
+    sp42.exe:
+    - 0.03826219495385885
+    sp43.exe:
+    - 0.009835442004259676
+    sp44.exe:
+    - 0.15645392700389493
+    sp45.exe:
+    - 0.008818776004773099
+    sp46.exe:
+    - 0.009263282998290379
+    sp47.exe:
+    - 0.009244433997082524
+    sp48.exe:
+    - 0.5249281179931131
+    sp49.exe:
+    - 0.04467800100246677
+    sp50.exe:
+    - 0.024988082004711032
+    sp51.exe:
+    - 0.022196072997758165
+    sp52.exe:
+    - 0.019887770002242178
+    sp53.exe:
+    - 0.010647237999364734
+    sp54.exe:
+    - 1.9021991589979734
+    sp55.exe:
+    - 0.00827044899779139
+    sp56.exe:
+    - 0.009474662998400163
+    sp57.exe:
+    - 0.009405083001183812
+    sp58.exe:
+    - 0.0038400420016841963
+    sp59.exe:
+    - 0.08529251499567181
+    sp60.exe:
+    - 0.08246886500273831
+    sp62.exe:
+    - 0.07954671799961943
+    sp63.exe:
+    - 1.3197673419999774
+    sp64.exe:
+    - 0.009567512999637984
+    sp65.exe:
+    - 0.00937621999764815
+    sp66.exe:
+    - 0.009256324003217742
+    sp67.exe:
+    - 0.00856146000296576
+    sp68.exe:
+    - 0.008690225004102103
+    sp69.exe:
+    - 0.1203466090009897
+    sp70.exe:
+    - 0.04490410199650796
+    sp71.exe:
+    - 0.5300547200022265
+    sp72.exe:
+    - 0.008067169925197959
+    sp73.exe:
+    - 0.03179683000053046
+    sp74.exe:
+    - 0.007749431999400258
+    sp75.exe:
+    - 0.0038212119980016723
+    sp76.exe:
+    - 0.0070220249981503
+    sp77.exe:
+    - 0.0036061040009371936
+    sparsedisk01.exe:
+    - 0.015361937999841757
+    spassoc01.exe:
+    - 0.01544942100008484
+    spatomic01.exe:
+    - 0.008497293005348183
+    spcache01.exe:
+    - 0.008763521000219043
+    spcan01.exe:
+    - 0.006273082006373443
+    spcbssched01.exe:
+    - 0.07239035191014409
+    spcbssched02.exe:
+    - 1.3190951140131801
+    spcbssched03.exe:
+    - 10.644058499950916
+    spchain.exe:
+    - 0.005709445998945739
+    spclock_err01.exe:
+    - 0.009087658952921629
+    spclock_err02.exe:
+    - 0.02209533005952835
+    spclock_todhook01.exe:
+    - 0.0048629070006427355
+    spconfig01.exe:
+    - 0.004282344001694582
+    spconfig02.exe:
+    - 0.005940050999925006
+    spconsole01.exe:
+    - 0.03735501994378865
+    spcontext01.exe:
+    - 22.61355443089269
+    spcpucounter01.exe:
+    - 0.06695681298151612
+    spcpuset01.exe:
+    - 0.03399009900022065
+    spcxx01.exe:
+    - 0.0065585600677877665
+    spedfsched01.exe:
+    - 0.11386846494860947
+    spedfsched02.exe:
+    - 0.11518347100354731
+    spedfsched03.exe:
+    - 9.079019760945812
+    spedfsched04.exe:
+    - 4.005413932994998
+    spedfsched05.exe:
+    - 0.01899151600082405
+    sperror01.exe:
+    - 0.007969844853505492
+    sperror02.exe:
+    - 0.007923220982775092
+    sperror03.exe:
+    - 0.006866864860057831
+    spevent_err03.exe:
+    - 0.022217914927750826
+    speventsystem01.exe:
+    - 0.006872344994917512
+    speventtransient01.exe:
+    - 0.007865054067224264
+    spextensions01.exe:
+    - 0.008108992828056216
+    spfatal01.exe:
+    - 0.008230437058955431
+    spfatal03.exe:
+    - 0.006621226901188493
+    spfatal04.exe:
+    - 0.004987975116819143
+    spfatal05.exe:
+    - 0.006984409876167774
+    spfatal09.exe:
+    - 0.007165377959609032
+    spfatal10.exe:
+    - 0.00457310499768937
+    spfatal11.exe:
+    - 0.004563930997392163
+    spfatal12.exe:
+    - 0.00470505600242177
+    spfatal14.exe:
+    - 0.00436273000377696
+    spfatal15.exe:
+    - 0.005265738996968139
+    spfatal26.exe:
+    - 0.03635674389079213
+    spfatal28.exe:
+    - 0.005558784119784832
+    spfatal29.exe:
+    - 0.005982391070574522
+    spfatal30.exe:
+    - 0.004201519004709553
+    spfatal31.exe:
+    - 0.004279464999854099
+    spfatal32.exe:
+    - 0.00445518199558137
+    spfatal33.exe:
+    - 0.003932794999855105
+    spfatal34.exe:
+    - 0.004257682005118113
+    spfatal36.exe:
+    - 0.004012088000308722
+    spfifo01.exe:
+    - 0.0045330940047279
+    spfifo02.exe:
+    - 0.017423964105546474
+    spfifo03.exe:
+    - 0.008284300995001104
+    spfifo04.exe:
+    - 0.004976441996404901
+    spfifo05.exe:
+    - 0.006413539995264728
+    spfreechain01.exe:
+    - 0.0045007579974480905
+    spglobalcon01.exe:
+    - 0.0051480981055647135
+    spglobalcon02.exe:
+    - 0.004416210998897441
+    spheapprot.exe:
+    - 0.004699836019426584
+    spi01.exe:
+    - 0.004823700997803826
+    spinternalerror01.exe:
+    - 0.003712657002324704
+    spinternalerror02.exe:
+    - 0.00811004894785583
+    spintr_err01.exe:
+    - 0.008875775849446654
+    spintrcritical01.exe:
+    - 0.0688691008836031
+    spintrcritical02.exe:
+    - 0.12002397399919573
+    spintrcritical03.exe:
+    - 0.0682633682154119
+    spintrcritical04.exe:
+    - 0.07612556195817888
+    spintrcritical05.exe:
+    - 0.11432975088246167
+    spintrcritical08.exe:
+    - 0.5667973530944437
+    spintrcritical09.exe:
+    - 0.06878025294281542
+    spintrcritical10.exe:
+    - 0.11748188198544085
+    spintrcritical11.exe:
+    - 0.9200695361942053
+    spintrcritical12.exe:
+    - 0.8723212890326977
+    spintrcritical13.exe:
+    - 0.11790943797677755
+    spintrcritical14.exe:
+    - 0.06733261211775243
+    spintrcritical15.exe:
+    - 0.11610733484849334
+    spintrcritical16.exe:
+    - 0.0699551769066602
+    spintrcritical18.exe:
+    - 0.06675337883643806
+    spintrcritical20.exe:
+    - 0.18695537094026804
+    spintrcritical21.exe:
+    - 0.11825799383223057
+    spintrcritical22.exe:
+    - 0.06819950486533344
+    spintrcritical23.exe:
+    - 0.11550266202539206
+    spintrcritical24.exe:
+    - 0.17094219010323286
+    splinkersets01.exe:
+    - 0.007942967116832733
+    spmisc01.exe:
+    - 0.0068295481614768505
+    spmkdir.exe:
+    - 0.020050531020388007
+    spmountmgr01.exe:
+    - 0.006899750005686656
+    spmrsp01.exe:
+    - 0.006902346998685971
+    spmsgq_err01.exe:
+    - 0.01107801800390007
+    spmsgq_err02.exe:
+    - 0.012149330927059054
+    spmutex01.exe:
+    - 0.05292559800000163
+    spnsext01.exe:
+    - 0.2672759210690856
+    spntp01.exe:
+    - 0.009859584039077163
+    spobjgetnext.exe:
+    - 0.008029044001887087
+    sppagesize.exe:
+    - 0.005979269975796342
+    sppartition_err01.exe:
+    - 0.010594161998596974
+    sppercpudata01.exe:
+    - 0.006861377973109484
+    spport_err01.exe:
+    - 0.014826681996055413
+    sppps01.exe:
+    - 0.008117059012874961
+    spprintk.exe:
+    - 0.009345211998152081
+    spprivenv01.exe:
+    - 0.011497013038024306
+    spprofiling01.exe:
+    - 0.08847257900197292
+    spqreslib.exe:
+    - 2.9365779110230505
+    spratemon_err01.exe:
+    - 0.02121311891824007
+    sprbtree01.exe:
+    - 6.393354200059548
+    spregion_err01.exe:
+    - 0.0736315959948115
+    sprmsched01.exe:
+    - 2.0213323880452663
+    sprmsched02.exe:
+    - 0.0771272189958836
+    spscheduler01.exe:
+    - 0.007188080002379138
+    spsem01.exe:
+    - 0.00815279800008284
+    spsem02.exe:
+    - 0.007209941002656706
+    spsem03.exe:
+    - 0.005055777000961825
+    spsem_err01.exe:
+    - 0.014072837002458982
+    spsem_err02.exe:
+    - 0.01275665499997558
+    spsignal_err01.exe:
+    - 0.04698713000107091
+    spsimplesched01.exe:
+    - 0.06655886583030224
+    spsimplesched02.exe:
+    - 0.006858449996798299
+    spsimplesched03.exe:
+    - 0.010629704993334599
+    spsize.exe:
+    - 0.010603322996757925
+    spstdc17.exe:
+    - 0.006290008997893892
+    spstdthreads01.exe:
+    - 0.010766177998448256
+    spstkalloc.exe:
+    - 0.010948638002446387
+    spstkalloc02.exe:
+    - 0.009482131004915573
+    spstkalloc03.exe:
+    - 0.00973945399891818
+    spstkalloc04.exe:
+    - 0.008022501002415083
+    spsysinit01.exe:
+    - 0.00798379500338342
+    spsyslock01.exe:
+    - 0.00850757800071733
+    sptask_err01.exe:
+    - 0.007229857998027001
+    sptask_err02.exe:
+    - 0.015484796138480306
+    sptask_err03.exe:
+    - 0.010816366993822157
+    sptask_err04.exe:
+    - 0.01048168700071983
+    sptasknopreempt01.exe:
+    - 0.013279392005642876
+    spthread01.exe:
+    - 0.010299739995389245
+    spthreadlife01.exe:
+    - 0.00782475800224347
+    spthreadq01.exe:
+    - 0.00733961199875921
+    sptimecounter01.exe:
+    - 0.004845226001634728
+    sptimecounter02.exe:
+    - 1.3177296698559076
+    sptimecounter03.exe:
+    - 6.4375655530020595
+    sptimecounter04.exe:
+    - 0.05202927400387125
+    sptimer_err01.exe:
+    - 0.009963545016944408
+    sptimer_err02.exe:
+    - 0.009854261064901948
+    sptimerserver01.exe:
+    - 0.009102667216211557
+    sptimespec01.exe:
+    - 0.006877235835418105
+    sptls01.exe:
+    - 0.005977120948955417
+    sptls02.exe:
+    - 0.007030469001620077
+    sptls03.exe:
+    - 0.005811373004689813
+    sptls04.exe:
+    - 0.00697722309269011
+    sptod.exe:
+    - 0.005982907954603434
+    sptree01.exe:
+    - 0.007280200021341443
+    spunlimited01.exe:
+    - 0.00880614505149424
+    spversion01.exe:
+    - 0.006869050906971097
+    spwatchdog.exe:
+    - 0.02226838585920632
+    spwkspace.exe:
+    - 0.008477404015138745
+    stackchk.exe:
+    - 0.02884000500489492
+    stackchk01.exe:
+    - 0.005192267999518663
+    stackchk02.exe:
+    - 0.004873873003816698
+    stackchk03.exe:
+    - 0.03161684889346361
+    stackchk04.exe:
+    - 0.03210244420915842
+    stringto01.exe:
+    - 0.01073335299588507
+    tar01.exe:
+    - 0.11543498793616891
+    tar02.exe:
+    - 0.0049185550305992365
+    tar03.exe:
+    - 0.004471409003599547
+    termios.exe:
+    - 0.7411821380010224
+    termios01.exe:
+    - 0.06468008295632899
+    termios02.exe:
+    - 0.006375985001795925
+    termios03.exe:
+    - 0.01734957890585065
+    termios04.exe:
+    - 0.013892953997128643
+    termios05.exe:
+    - 0.036317582009360194
+    termios06.exe:
+    - 0.00906517612747848
+    termios07.exe:
+    - 0.011590745998546481
+    termios08.exe:
+    - 0.008895992999896407
+    termios09.exe:
+    - 0.009155605002888478
+    tftpfs.exe:
+    - 2.284956976000103
+    ticker.exe:
+    - 0.07007475406862795
+    tm01.exe:
+    - 0.16867244197055697
+    tm02.exe:
+    - 0.021723757963627577
+    tm03.exe:
+    - 0.037041072035208344
+    tm04.exe:
+    - 0.17019048309884965
+    tm05.exe:
+    - 0.03678240696899593
+    tm06.exe:
+    - 0.04064675490371883
+    tm07.exe:
+    - 0.03546536504290998
+    tm08.exe:
+    - 0.02163587906397879
+    tm09.exe:
+    - 0.26939679007045925
+    tm10.exe:
+    - 0.03604487096890807
+    tm11.exe:
+    - 0.0341630601324141
+    tm12.exe:
+    - 0.035409677075222135
+    tm13.exe:
+    - 0.01649901387281716
+    tm14.exe:
+    - 0.013058935997833032
+    tm15.exe:
+    - 0.017928054090589285
+    tm16.exe:
+    - 0.0171543899923563
+    tm17.exe:
+    - 0.011658777002594434
+    tm18.exe:
+    - 0.01786032784730196
+    tm19.exe:
+    - 0.006151162087917328
+    tm20.exe:
+    - 0.0076638460013782606
+    tm21.exe:
+    - 0.06717513804323971
+    tm22.exe:
+    - 0.005239550955593586
+    tm23.exe:
+    - 0.06800444680266082
+    tm24.exe:
+    - 0.01741538200440118
+    tm25.exe:
+    - 0.020908504957333207
+    tm26.exe:
+    - 0.023792129941284657
+    tm27.exe:
+    - 0.006909308955073357
+    tm28.exe:
+    - 0.004854356993746478
+    tm29.exe:
+    - 0.029192725894972682
+    tm30.exe:
+    - 0.007093898006132804
+    tm31.exe:
+    - 0.016951583791524172
+    tm32.exe:
+    - 0.019888302078470588
+    tm33.exe:
+    - 0.0200000808108598
+    tm34.exe:
+    - 0.01722081797197461
+    tm35.exe:
+    - 0.020960529800504446
+    tm36.exe:
+    - 0.016976626124233007
+    tmck.exe:
+    - 0.05338414600555552
+    tmcontext01.exe:
+    - 0.11599282221868634
+    tmfine01.exe:
+    - 7.5812791811767966
+    tmonetoone.exe:
+    - 3.3868970309995348
+    tmtimer01.exe:
+    - 5.98515651607886
+    top.exe:
+    - 0.12201283196918666
+    ts-fatal-extension.exe:
+    - 0.020381285998155363
+    ts-fatal-idle-thread-create-failed.exe:
+    - 0.01890234899474308
+    ts-fatal-idle-thread-stack-too-small.exe:
+    - 0.012360595865175128
+    ts-fatal-init-task-construct-failed.exe:
+    - 0.011433127001510002
+    ts-fatal-sparc-leon3-clock-initialization.exe:
+    - 0.026018358003057074
+    ts-fatal-too-large-tls-size.exe:
+    - 0.0281207209918648
+    ts-performance-no-clock-0.exe:
+    - 1.422044850885868
+    ts-terminate.exe:
+    - 0.057388087996514514
+    ts-unit-no-clock-0.exe:
+    - 6.595478158997139
+    ts-userext.exe:
+    - 0.017709264997392893
+    ts-validation-0.exe:
+    - 0.36901274300180376
+    ts-validation-1.exe:
+    - 14.444356265012175
+    ts-validation-acfg-0.exe:
+    - 0.04008320999855641
+    ts-validation-acfg-1.exe:
+    - 0.023682397993979976
+    ts-validation-bsp-0.exe:
+    - 0.04457066099712392
+    ts-validation-cache.exe:
+    - 0.023054171004332602
+    ts-validation-intr.exe:
+    - 0.16548679117113352
+    ts-validation-io-kernel.exe:
+    - 0.03932806599914329
+    ts-validation-no-clock-0.exe:
+    - 7.267476182001701
+    ts-validation-no-clock-1.exe:
+    - 7.267476182001701
+    ts-validation-non-smp.exe:
+    - 0.06528158800210804
+    ts-validation-one-cpu-0.exe:
+    - 2.073336032917723
+    ts-validation-one-cpu-1.exe:
+    - 14.597744780126959
+    ts-validation-timecounter-0.exe:
+    - 0.05797836599958828
+    ts-validation-timecounter-1.exe:
+    - 3.5234974958002567
+    ts-validation-tls-0.exe:
+    - 0.026298444005078636
+    ts-validation-tls-1.exe:
+    - 0.019027572001505177
+    ttest01.exe:
+    - 0.5539414130034856
+    ttest02.exe:
+    - 0.4171563349664211
+    tztest.exe:
+    - 0.023940416002005804
+    uid01.exe:
+    - 0.010325023999030236
+    unlimited.exe:
+    - 0.5413448179970146
+    utf8proc01.exe:
+    - 1.9633889659962733
+    whetstone.exe:
+    - 17.115935823181644
+  smp: {}
+type: test-timeouts
