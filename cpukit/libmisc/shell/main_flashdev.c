@@ -312,7 +312,12 @@ int flashdev_shell_write(
 
   /* Create buffer */
   buffer = calloc(1, 0x1000);
-
+  if (buffer == NULL) {
+    close(flash);
+    close(file);
+    printf("Failed to allocate write buffer\n");
+    return -1;
+  }
   /* Write file to flash device in 0x1000 byte chunks */
   offset = 0;
   while (offset != length) {
