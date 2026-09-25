@@ -42,7 +42,7 @@ void bsp_start_on_secondary_processor(Per_CPU_Control *cpu_self)
   uint32_t cpu_index_self;
 
   cpu_index_self = _Per_CPU_Get_index(cpu_self);
-  GRLIB_IrqCtrl_Regs->mask[cpu_index_self] |= 1U << GRLIB_mp_irq;
+  GRLIB_IrqCtrl_Regs->pimask[cpu_index_self] |= 1U << GRLIB_mp_irq;
 
   if (
     cpu_index_self < rtems_configuration_get_maximum_processors()
@@ -91,6 +91,6 @@ void _CPU_SMP_Prepare_start_multitasking(void)
 void _CPU_SMP_Send_interrupt(uint32_t target_processor_index)
 {
  
-  GRLIB_IrqCtrl_Regs->force[target_processor_index] = 1 << GRLIB_mp_irq;
+  GRLIB_IrqCtrl_Regs->piforce[target_processor_index] = 1 << GRLIB_mp_irq;
 
 }
