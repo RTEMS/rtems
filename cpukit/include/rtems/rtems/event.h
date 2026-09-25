@@ -435,7 +435,7 @@ typedef uint32_t rtems_event_set;
 
 /**
  * @brief This event set constant represents the reserved system event
- *   internally used to  notify list completion when lio_listio is called using
+ *   internally used to notify list completion when lio_listio is called using
  *   LIO_WAIT.
  */
 #define RTEMS_EVENT_SYSTEM_LIO_LIST_COMPLETED RTEMS_EVENT_28
@@ -469,15 +469,15 @@ typedef uint32_t rtems_event_set;
 /**
  * @brief Receives or gets a system event set from the executing task.
  *
- * @param event_in is the event set of interest.  Use #RTEMS_PENDING_EVENTS to
+ * @param event_in is the event set of interest. Use #RTEMS_PENDING_EVENTS to
  *   get the pending events.
  *
  * @param option_set is the option set.
  *
  * @param ticks is the timeout in clock ticks if the #RTEMS_WAIT option was
- *   set.  Use #RTEMS_NO_TIMEOUT to wait potentially forever.
+ *   set. Use #RTEMS_NO_TIMEOUT to wait potentially forever.
  *
- * @param event_out is the pointer to an event set.  The received or pending
+ * @param event_out is the pointer to an event set. The received or pending
  *   events are stored in the referenced event set if the operation was
  *   successful.
  *
@@ -660,16 +660,16 @@ static inline rtems_status_code rtems_event_transient_send( rtems_id id )
  *
  * @param event_in is the event set to send.
  *
- * This directive sends the event set, ``event_in``, to the target task
- * identified by ``id``.  Based upon the state of the target task, one of the
+ * This directive sends the event set, `event_in`, to the target task
+ * identified by `id`. Based upon the state of the target task, one of the
  * following situations applies:
  *
  * - The target task is blocked waiting for events, then
  *
- *   * if the waiting task's input event condition is satisfied, then the task
+ *   - if the waiting task's input event condition is satisfied, then the task
  *     is made ready for execution, or
  *
- *   * otherwise, the event set is posted but left pending and the task remains
+ *   - otherwise, the event set is posted but left pending and the task remains
  *     blocked.
  *
  * - The target task is not waiting for events, then the event set is posted
@@ -678,13 +678,13 @@ static inline rtems_status_code rtems_event_transient_send( rtems_id id )
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no task associated with the identifier
- *   specified by ``id``.
+ *   specified by `id`.
  *
  * @par Notes
  * @parblock
  * Events can be sent by tasks or an ISR.
  *
- * Specifying #RTEMS_SELF for ``id`` results in the event set being sent to the
+ * Specifying #RTEMS_SELF for `id` results in the event set being sent to the
  * calling task.
  *
  * The event set to send shall be built by a *bitwise or* of the desired
@@ -727,7 +727,7 @@ rtems_status_code rtems_event_send( rtems_id id, rtems_event_set event_in );
  *
  * @brief Receives or gets an event set from the calling task.
  *
- * @param event_in is the event set of interest.  Use #RTEMS_PENDING_EVENTS to
+ * @param event_in is the event set of interest. Use #RTEMS_PENDING_EVENTS to
  *   get the pending events.
  *
  * @param option_set is the option set.
@@ -735,7 +735,7 @@ rtems_status_code rtems_event_send( rtems_id id, rtems_event_set event_in );
  * @param ticks is the timeout in clock ticks if the #RTEMS_WAIT option is set.
  *   Use #RTEMS_NO_TIMEOUT to wait potentially forever.
  *
- * @param event_out is the pointer to an event set.  The received or pending
+ * @param event_out is the pointer to an event set. The received or pending
  *   events are stored in the referenced event set if the operation was
  *   successful.
  *
@@ -746,9 +746,9 @@ rtems_status_code rtems_event_send( rtems_id id, rtems_event_set event_in );
  * - receive events.
  *
  * To **get the pending events** use the constant #RTEMS_PENDING_EVENTS for the
- * ``event_in`` parameter.  The pending events are returned to the calling task
- * but the event set of the calling task is left unaltered.  The ``option_set``
- * and ``ticks`` parameters are ignored in this case.  The directive returns
+ * `event_in` parameter. The pending events are returned to the calling task
+ * but the event set of the calling task is left unaltered. The `option_set`
+ * and `ticks` parameters are ignored in this case. The directive returns
  * immediately and does not block.
  *
  * To **receive events** you have to define an input event condition and some
@@ -769,16 +769,15 @@ rtems_status_code rtems_event_send( rtems_id id, rtems_event_set event_in );
  * The calling task can **wait** or **poll** for the events.
  *
  * - **Waiting** for events is the default and can be emphasized through the
- *   use of the #RTEMS_WAIT option.  The ``ticks`` parameter defines how long
- *   the calling task is willing to wait.  Use #RTEMS_NO_TIMEOUT to wait
- *   potentially forever, otherwise set a timeout interval in clock ticks.
+ *   use of the #RTEMS_WAIT option. The `ticks` parameter defines how long the
+ *   calling task is willing to wait. Use #RTEMS_NO_TIMEOUT to wait potentially
+ *   forever, otherwise set a timeout interval in clock ticks.
  *
  * - Not waiting for events (**polling**) is selected by the #RTEMS_NO_WAIT
- *   option.  If this option is defined, then the ``ticks`` parameter is
- *   ignored.
+ *   option. If this option is defined, then the `ticks` parameter is ignored.
  *
  * The calling task can receive **all** or **any** of the input events
- * specified in ``event_in``.
+ * specified in `event_in`.
  *
  * - Receiving **all** input events is the default and can be emphasized
  *   through the use of the #RTEMS_EVENT_ALL option.
@@ -788,7 +787,7 @@ rtems_status_code rtems_event_send( rtems_id id, rtems_event_set event_in );
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``event_out`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `event_out` parameter was NULL.
  *
  * @retval ::RTEMS_UNSATISFIED The events of interest were not immediately
  *   available.
@@ -798,18 +797,18 @@ rtems_status_code rtems_event_send( rtems_id id, rtems_event_set event_in );
  *
  * @par Notes
  * @parblock
- * This directive only affects the events specified in ``event_in``. Any
- * pending events that do not correspond to any of the events specified in
- * ``event_in`` will be left pending.
+ * This directive only affects the events specified in `event_in`. Any pending
+ * events that do not correspond to any of the events specified in `event_in`
+ * will be left pending.
  *
  * To receive all events use the event set constant #RTEMS_ALL_EVENTS for the
- * ``event_in`` parameter.  Do not confuse this event set constant with the
+ * `event_in` parameter.  Do not confuse this event set constant with the
  * directive option #RTEMS_EVENT_ALL.
  *
  * A task can **receive all of the pending events** by calling the directive
- * with a value of #RTEMS_ALL_EVENTS for the ``event_in`` parameter and the
+ * with a value of #RTEMS_ALL_EVENTS for the `event_in` parameter and the
  * bitwise or of the #RTEMS_NO_WAIT and #RTEMS_EVENT_ANY options for the
- * ``option_set`` parameter.  The pending events are returned and the event set
+ * `option_set` parameter.  The pending events are returned and the event set
  * of the task is cleared.  If no events are pending then the
  * ::RTEMS_UNSATISFIED status code will be returned.
  * @endparblock

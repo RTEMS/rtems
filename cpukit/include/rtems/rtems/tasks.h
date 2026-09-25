@@ -116,7 +116,7 @@ typedef struct {
    * floating-point context.
    *
    * The task storage area begin address and size should be aligned by
-   * #RTEMS_TASK_STORAGE_ALIGNMENT.  To avoid memory waste, use RTEMS_ALIGNED()
+   * #RTEMS_TASK_STORAGE_ALIGNMENT. To avoid memory waste, use RTEMS_ALIGNED()
    * and #RTEMS_TASK_STORAGE_ALIGNMENT to enforce the recommended alignment of a
    * statically allocated task storage area.
    */
@@ -145,7 +145,7 @@ typedef struct {
    * by rtems_task_construct() fails.
    *
    * The actual thread-local storage size is determined when the application
-   * executable is linked.  The `rtems-exeinfo` command line tool included in the
+   * executable is linked. The `rtems-exeinfo` command line tool included in the
    * RTEMS Tools can be used to obtain the thread-local storage size and
    * alignment of an application executable.
    *
@@ -159,11 +159,11 @@ typedef struct {
    * @brief This member defines the optional handler to free the task storage
    *   area.
    *
-   * It is called on exactly two mutually exclusive occasions.  Firstly, when the
+   * It is called on exactly two mutually exclusive occasions. Firstly, when the
    * task construction aborts due to a failed task create extension, or secondly,
-   * when the task is deleted.  It is called from task context under protection
-   * of the object allocator lock.  It is allowed to call free() in this handler.
-   * If handler is NULL, then no action will be performed.
+   * when the task is deleted. It is called from task context under protection of
+   * the object allocator lock. It is allowed to call free() in this handler. If
+   * handler is NULL, then no action will be performed.
    */
   void ( *storage_free )( void * );
 
@@ -310,13 +310,13 @@ rtems_task_priority _RTEMS_Maximum_priority( void );
  * @brief This compile time constant provides the minimum task stack size
  *   recommended for the target architecture.
  *
- * It is the minimum stack size recommended for use on this processor.  This
+ * It is the minimum stack size recommended for use on this processor. This
  * value is selected by the RTEMS maintainers conservatively to minimize the
- * risk of blown stacks for most user applications.  Using this constant when
+ * risk of blown stacks for most user applications. Using this constant when
  * specifying the task stack size, indicates that the stack size will be at
- * least RTEMS_MINIMUM_STACK_SIZE bytes in size.  If the user configured
- * minimum stack size (see @ref CONFIGURE_MINIMUM_TASK_STACK_SIZE) is larger
- * than the recommended minimum, then it will be used.
+ * least RTEMS_MINIMUM_STACK_SIZE bytes in size. If the user configured minimum
+ * stack size (see @ref CONFIGURE_MINIMUM_TASK_STACK_SIZE) is larger than the
+ * recommended minimum, then it will be used.
  */
 #define RTEMS_MINIMUM_STACK_SIZE STACK_MINIMUM_SIZE
 
@@ -427,53 +427,53 @@ typedef bool ( *rtems_task_visitor )( rtems_tcb *, void * );
  *
  * @param attribute_set is the attribute set of the task.
  *
- * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ * @param[out] id is the pointer to an ::rtems_id object. When the directive
  *   call is successful, the identifier of the created task will be stored in
  *   this object.
  *
- * This directive creates a task which resides on the local node.  The task has
- * the user-defined object name specified in ``name``.  The assigned object
- * identifier is returned in ``id``.  This identifier is used to access the
- * task with other task related directives.
+ * This directive creates a task which resides on the local node. The task has
+ * the user-defined object name specified in `name`. The assigned object
+ * identifier is returned in `id`. This identifier is used to access the task
+ * with other task related directives.
  *
- * The **initial priority** of the task is specified in ``initial_priority``.
- * The home scheduler of the created task is the home scheduler of the calling
- * task at some time point during the task creation. The initial task priority
- * specified in ``initial_priority`` shall be valid for this scheduler.
+ * The **initial priority** of the task is specified in `initial_priority`. The
+ * home scheduler of the created task is the home scheduler of the calling task
+ * at some time point during the task creation. The initial task priority
+ * specified in `initial_priority` shall be valid for this scheduler.
  *
- * The **stack size** of the task is specified in ``stack_size``.  If the
+ * The **stack size** of the task is specified in `stack_size`. If the
  * requested stack size is less than the configured minimum stack size, then
- * RTEMS will use the configured minimum as the stack size for this task.  The
+ * RTEMS will use the configured minimum as the stack size for this task. The
  * configured minimum stack size is defined by the @ref
- * CONFIGURE_MINIMUM_TASK_STACK_SIZE application configuration option.  In
+ * CONFIGURE_MINIMUM_TASK_STACK_SIZE application configuration option. In
  * addition to being able to specify the task stack size as a integer, there
  * are two constants which may be specified:
  *
  * - The #RTEMS_MINIMUM_STACK_SIZE constant can be specified to use the
- *   **recommended minimum stack size** for the target processor.  This value
- *   is selected by the RTEMS maintainers conservatively to minimize the risk
- *   of blown stacks for most user applications.  Using this constant when
+ *   **recommended minimum stack size** for the target processor. This value is
+ *   selected by the RTEMS maintainers conservatively to minimize the risk of
+ *   blown stacks for most user applications. Using this constant when
  *   specifying the task stack size, indicates that the stack size will be at
- *   least #RTEMS_MINIMUM_STACK_SIZE bytes in size.  If the user configured
+ *   least #RTEMS_MINIMUM_STACK_SIZE bytes in size. If the user configured
  *   minimum stack size is larger than the recommended minimum, then it will be
  *   used.
  *
  * - The #RTEMS_CONFIGURED_MINIMUM_STACK_SIZE constant can be specified to use
- *   the minimum stack size that was configured by the application.  If not
+ *   the minimum stack size that was configured by the application. If not
  *   explicitly configured by the application, the default configured minimum
  *   stack size is the target processor dependent value
- *   #RTEMS_MINIMUM_STACK_SIZE.  Since this uses the configured minimum stack
+ *   #RTEMS_MINIMUM_STACK_SIZE. Since this uses the configured minimum stack
  *   size value, you may get a stack size that is smaller or larger than the
- *   recommended minimum.  This can be used to provide large stacks for all
+ *   recommended minimum. This can be used to provide large stacks for all
  *   tasks on complex applications or small stacks on applications that are
  *   trying to conserve memory.
  *
- * The **initial mode set** specified in ``initial_modes`` is built through a
- * *bitwise or* of the mode constants described below.  Not all combinations of
- * modes are allowed.  Some modes are mutually exclusive.  If mutually
- * exclusive modes are combined, the behaviour is undefined.  Default task
- * modes can be selected by using the #RTEMS_DEFAULT_MODES constant.  The task
- * mode set defines
+ * The **initial mode set** specified in `initial_modes` is built through a
+ * *bitwise or* of the mode constants described below. Not all combinations of
+ * modes are allowed. Some modes are mutually exclusive. If mutually exclusive
+ * modes are combined, the behaviour is undefined. Default task modes can be
+ * selected by using the #RTEMS_DEFAULT_MODES constant. The task mode set
+ * defines
  *
  * - the preemption mode of the task: #RTEMS_PREEMPT (default) or
  *   #RTEMS_NO_PREEMPT,
@@ -513,23 +513,23 @@ typedef bool ( *rtems_task_visitor )( rtems_tcb *, void * );
  *
  * - Task execution with **interrupts enabled** the default and can be
  *   emphasized through the use of the RTEMS_INTERRUPT_LEVEL() mode macro with
- *   a value of zero (0) for the parameter.  An interrupt level of zero is
+ *   a value of zero (0) for the parameter. An interrupt level of zero is
  *   associated with enabled interrupts on all target processors.
  *
  * - Task execution at a **non-zero interrupt level** can be specified by the
  *   RTEMS_INTERRUPT_LEVEL() mode macro with a non-zero value for the
- *   parameter.  The interrupt level portion of the task mode supports a
- *   maximum of 256 interrupt levels.  These levels are mapped onto the
- *   interrupt levels actually supported by the target processor in a processor
- *   dependent fashion.
+ *   parameter. The interrupt level portion of the task mode supports a maximum
+ *   of 256 interrupt levels. These levels are mapped onto the interrupt levels
+ *   actually supported by the target processor in a processor dependent
+ *   fashion.
  *
- * The **attribute set** specified in ``attribute_set`` is built through a
- * *bitwise or* of the attribute constants described below.  Not all
- * combinations of attributes are allowed.  Some attributes are mutually
- * exclusive.  If mutually exclusive attributes are combined, the behaviour is
- * undefined.  Attributes not mentioned below are not evaluated by this
- * directive and have no effect.  Default attributes can be selected by using
- * the #RTEMS_DEFAULT_ATTRIBUTES constant.  The attribute set defines
+ * The **attribute set** specified in `attribute_set` is built through a
+ * *bitwise or* of the attribute constants described below. Not all
+ * combinations of attributes are allowed. Some attributes are mutually
+ * exclusive. If mutually exclusive attributes are combined, the behaviour is
+ * undefined. Attributes not mentioned below are not evaluated by this
+ * directive and have no effect. Default attributes can be selected by using
+ * the #RTEMS_DEFAULT_ATTRIBUTES constant. The attribute set defines
  *
  * - the scope of the task: #RTEMS_LOCAL (default) or #RTEMS_GLOBAL and
  *
@@ -537,25 +537,25 @@ typedef bool ( *rtems_task_visitor )( rtems_tcb *, void * );
  *   #RTEMS_NO_FLOATING_POINT (default).
  *
  * The task has a local or global **scope** in a multiprocessing network (this
- * attribute does not refer to SMP systems).  The scope is selected by the
+ * attribute does not refer to SMP systems). The scope is selected by the
  * mutually exclusive #RTEMS_LOCAL and #RTEMS_GLOBAL attributes.
  *
  * - A **local scope** is the default and can be emphasized through the use of
- *   the #RTEMS_LOCAL attribute.  A local task can be only used by the node
+ *   the #RTEMS_LOCAL attribute. A local task can be only used by the node
  *   which created it.
  *
  * - A **global scope** is established if the #RTEMS_GLOBAL attribute is set.
  *   Setting the global attribute in a single node system has no effect.the
  *
  * The **use of the floating-point unit** is selected by the mutually exclusive
- * #RTEMS_FLOATING_POINT and #RTEMS_NO_FLOATING_POINT attributes.  On some
+ * #RTEMS_FLOATING_POINT and #RTEMS_NO_FLOATING_POINT attributes. On some
  * target processors, the use of the floating-point unit can be enabled or
- * disabled for each task.  Other target processors may have no hardware
+ * disabled for each task. Other target processors may have no hardware
  * floating-point unit or enable the use of the floating-point unit for all
- * tasks.  Consult the *RTEMS CPU Architecture Supplement* for the details.
+ * tasks. Consult the *RTEMS CPU Architecture Supplement* for the details.
  *
  * - A **disabled floating-point unit** is the default and can be emphasized
- *   through use of the #RTEMS_NO_FLOATING_POINT attribute.  For performance
+ *   through use of the #RTEMS_NO_FLOATING_POINT attribute. For performance
  *   reasons, it is recommended that tasks not using the floating-point unit
  *   should specify this attribute.
  *
@@ -564,23 +564,23 @@ typedef bool ( *rtems_task_visitor )( rtems_tcb *, void * );
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_NAME The ``name`` parameter was invalid.
+ * @retval ::RTEMS_INVALID_NAME The `name` parameter was invalid.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``id`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `id` parameter was NULL.
  *
- * @retval ::RTEMS_INVALID_PRIORITY The ``initial_priority`` was invalid.
+ * @retval ::RTEMS_INVALID_PRIORITY The `initial_priority` was invalid.
  *
  * @retval ::RTEMS_TOO_MANY There was no inactive object available to create a
- *   task.  The number of tasks available to the application is configured
+ *   task. The number of tasks available to the application is configured
  *   through the @ref CONFIGURE_MAXIMUM_TASKS application configuration option.
  *
  * @retval ::RTEMS_TOO_MANY In multiprocessing configurations, there was no
- *   inactive global object available to create a global task.  The number of
+ *   inactive global object available to create a global task. The number of
  *   global objects available to the application is configured through the @ref
  *   CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS application configuration option.
  *
  * @retval ::RTEMS_UNSATISFIED There was not enough memory to allocate the task
- *   storage area.  The task storage area contains the task stack, the
+ *   storage area. The task storage area contains the task stack, the
  *   thread-local storage, and the floating point context.
  *
  * @retval ::RTEMS_UNSATISFIED One of the task create extensions failed to
@@ -660,20 +660,20 @@ rtems_status_code rtems_task_create(
  *
  * @brief Constructs a task from the specified task configuration.
  *
- * @param config is the pointer to an rtems_task_config object.  It configures
+ * @param config is the pointer to an rtems_task_config object. It configures
  *   the task.
  *
- * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ * @param[out] id is the pointer to an ::rtems_id object. When the directive
  *   call is successful, the identifier of the constructed task will be stored
  *   in this object.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``config`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `config` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_NAME The task name was invalid.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``id`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `id` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_PRIORITY The initial task priority was invalid.
  *
@@ -725,9 +725,9 @@ rtems_status_code rtems_task_create(
  * memory allocators.  This can simplify the application architecture as well
  * as any analysis that may be required.
  *
- * The stack space estimate done by ``<rtems/confdefs.h>`` assumes that all
- * tasks are created by rtems_task_create().  The estimate can be adjusted to
- * take user-provided task storage areas into account through the @ref
+ * The stack space estimate done by `<rtems/confdefs.h>` assumes that all tasks
+ * are created by rtems_task_create().  The estimate can be adjusted to take
+ * user-provided task storage areas into account through the @ref
  * CONFIGURE_MINIMUM_TASKS_WITH_USER_PROVIDED_STORAGE application configuration
  * option.
  *
@@ -778,17 +778,17 @@ rtems_status_code rtems_task_construct(
  *
  * @param node is the node or node set to search for a matching object.
  *
- * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ * @param[out] id is the pointer to an ::rtems_id object. When the directive
  *   call is successful, the object identifier of an object with the specified
  *   name will be stored in this object.
  *
  * This directive obtains a task identifier associated with the task name
- * specified in ``name``.
+ * specified in `name`.
  *
  * A task may obtain its own identifier by specifying #RTEMS_WHO_AM_I for the
  * name.
  *
- * The node to search is specified in ``node``.  It shall be
+ * The node to search is specified in `node`. It shall be
  *
  * - a valid node number,
  *
@@ -801,7 +801,7 @@ rtems_status_code rtems_task_construct(
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``id`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `id` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_NAME There was no object with the specified name on
  *   the specified nodes.
@@ -815,7 +815,7 @@ rtems_status_code rtems_task_construct(
  * first task with that name in the search order.  However, this task
  * identifier is not guaranteed to correspond to the desired task.
  *
- * The objects are searched from lowest to the highest index.  If ``node`` is
+ * The objects are searched from lowest to the highest index.  If `node` is
  * #RTEMS_SEARCH_ALL_NODES, all nodes are searched with the local node being
  * searched first.  All other nodes are searched from lowest to the highest
  * node number.
@@ -877,24 +877,24 @@ rtems_id rtems_task_self( void );
  *
  * @brief Starts the task.
  *
- * @param id is the task identifier.  The constant #RTEMS_SELF may be used to
+ * @param id is the task identifier. The constant #RTEMS_SELF may be used to
  *   specify the calling task.
  *
  * @param entry_point is the task entry point.
  *
  * @param argument is the task entry point argument.
  *
- * This directive readies the task, specified by ``id``, for execution based on
- * the priority and execution mode specified when the task was created.  The
- * task entry point of the task is given in ``entry_point``.  The task's entry
- * point argument is contained in ``argument``.
+ * This directive readies the task, specified by `id`, for execution based on
+ * the priority and execution mode specified when the task was created. The
+ * task entry point of the task is given in `entry_point`. The task's entry
+ * point argument is contained in `argument`.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``entry_point`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `entry_point` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no task associated with the identifier
- *   specified by ``id``.
+ *   specified by `id`.
  *
  * @retval ::RTEMS_INCORRECT_STATE The task was not in the dormant state.
  *
@@ -942,22 +942,22 @@ rtems_status_code rtems_task_start(
  *
  * @brief Restarts the task.
  *
- * @param id is the task identifier.  The constant #RTEMS_SELF may be used to
+ * @param id is the task identifier. The constant #RTEMS_SELF may be used to
  *   specify the calling task.
  *
  * @param argument is the task entry point argument.
  *
- * This directive resets the task specified by ``id`` to begin execution at its
- * original entry point.  The task's priority and execution mode are set to the
- * original creation values.  If the task is currently blocked, RTEMS
- * automatically makes the task ready.  A task can be restarted from any state,
- * except the dormant state.  The task's entry point argument is contained in
- * ``argument``.
+ * This directive resets the task specified by `id` to begin execution at its
+ * original entry point. The task's priority and execution mode are set to the
+ * original creation values. If the task is currently blocked, RTEMS
+ * automatically makes the task ready. A task can be restarted from any state,
+ * except the dormant state. The task's entry point argument is contained in
+ * `argument`.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no task associated with the identifier
- *   specified by ``id``.
+ *   specified by `id`.
  *
  * @retval ::RTEMS_INCORRECT_STATE The task never started.
  *
@@ -1010,16 +1010,16 @@ rtems_status_code rtems_task_restart(
  *
  * @brief Deletes the task.
  *
- * @param id is the task identifier.  The constant #RTEMS_SELF may be used to
+ * @param id is the task identifier. The constant #RTEMS_SELF may be used to
  *   specify the calling task.
  *
  * This directive deletes the task, either the calling task or another task, as
- * specified by ``id``.
+ * specified by `id`.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no task associated with the identifier
- *   specified by ``id``.
+ *   specified by `id`.
  *
  * @retval ::RTEMS_CALLED_FROM_ISR The directive was called from within
  *   interrupt context.
@@ -1147,20 +1147,20 @@ RTEMS_NO_RETURN void rtems_task_exit( void );
  *
  * @brief Suspends the task.
  *
- * @param id is the task identifier.  The constant #RTEMS_SELF may be used to
+ * @param id is the task identifier. The constant #RTEMS_SELF may be used to
  *   specify the calling task.
  *
- * This directive suspends the task specified by ``id`` from further execution
- * by placing it in the suspended state.  This state is additive to any other
- * blocked state that the task may already be in.  The task will not execute
+ * This directive suspends the task specified by `id` from further execution by
+ * placing it in the suspended state. This state is additive to any other
+ * blocked state that the task may already be in. The task will not execute
  * again until another task issues the rtems_task_resume() directive for this
- * task and any blocked state has been removed.  The rtems_task_restart()
+ * task and any blocked state has been removed. The rtems_task_restart()
  * directive will also remove the suspended state.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no task associated with the identifier
- *   specified by ``id``.
+ *   specified by `id`.
  *
  * @retval ::RTEMS_ALREADY_SUSPENDED The task was already suspended.
  *
@@ -1168,7 +1168,7 @@ RTEMS_NO_RETURN void rtems_task_exit( void );
  *
  * @par Notes
  * The requesting task can suspend itself for example by specifying #RTEMS_SELF
- * as ``id``.  In this case, the task will be suspended and a successful return
+ * as `id`.  In this case, the task will be suspended and a successful return
  * code will be returned when the task is resumed.
  *
  * @par Constraints
@@ -1198,15 +1198,15 @@ rtems_status_code rtems_task_suspend( rtems_id id );
  *
  * @param id is the task identifier.
  *
- * This directive removes the task specified by ``id`` from the suspended
- * state.  If the task is in the ready state after the suspension is removed,
- * then it will be scheduled to run.  If the task is still in a blocked state
- * after the suspension is removed, then it will remain in that blocked state.
+ * This directive removes the task specified by `id` from the suspended state.
+ * If the task is in the ready state after the suspension is removed, then it
+ * will be scheduled to run. If the task is still in a blocked state after the
+ * suspension is removed, then it will remain in that blocked state.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no task associated with the identifier
- *   specified by ``id``.
+ *   specified by `id`.
  *
  * @retval ::RTEMS_INCORRECT_STATE The task was not suspended.
  *
@@ -1238,16 +1238,16 @@ rtems_status_code rtems_task_resume( rtems_id id );
  *
  * @brief Checks if the task is suspended.
  *
- * @param id is the task identifier.  The constant #RTEMS_SELF may be used to
+ * @param id is the task identifier. The constant #RTEMS_SELF may be used to
  *   specify the calling task.
  *
  * This directive returns a status code indicating whether or not the task
- * specified by ``id`` is currently suspended.
+ * specified by `id` is currently suspended.
  *
  * @retval ::RTEMS_SUCCESSFUL The task was **not** suspended.
  *
  * @retval ::RTEMS_INVALID_ID There was no task associated with the identifier
- *   specified by ``id``.
+ *   specified by `id`.
  *
  * @retval ::RTEMS_ALREADY_SUSPENDED The task was suspended.
  *
@@ -1276,7 +1276,7 @@ rtems_status_code rtems_task_is_suspended( rtems_id id );
  *
  * @brief Sets the real priority or gets the current priority of the task.
  *
- * @param id is the task identifier.  The constant #RTEMS_SELF may be used to
+ * @param id is the task identifier. The constant #RTEMS_SELF may be used to
  *   specify the calling task.
  *
  * @param new_priority is the new real priority or #RTEMS_CURRENT_PRIORITY to
@@ -1286,22 +1286,21 @@ rtems_status_code rtems_task_is_suspended( rtems_id id );
  *   When the directive call is successful, the current or previous priority of
  *   the task with respect to its home scheduler will be stored in this object.
  *
- * This directive manipulates the priority of the task specified by ``id``.
- * When ``new_priority`` is not equal to #RTEMS_CURRENT_PRIORITY, the specified
- * task's previous priority is returned in ``old_priority``.  When
- * ``new_priority`` is #RTEMS_CURRENT_PRIORITY, the specified task's current
- * priority is returned in ``old_priority``.
+ * This directive manipulates the priority of the task specified by `id`. When
+ * `new_priority` is not equal to #RTEMS_CURRENT_PRIORITY, the specified task's
+ * previous priority is returned in `old_priority`. When `new_priority` is
+ * #RTEMS_CURRENT_PRIORITY, the specified task's current priority is returned
+ * in `old_priority`.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``old_priority`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `old_priority` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no task associated with the identifier
- *   specified by ``id``.
+ *   specified by `id`.
  *
  * @retval ::RTEMS_INVALID_PRIORITY The task priority specified in
- *   ``new_priority`` was invalid with respect to the home scheduler of the
- *   task.
+ *   `new_priority` was invalid with respect to the home scheduler of the task.
  *
  * @par Notes
  * @parblock
@@ -1351,28 +1350,28 @@ rtems_status_code rtems_task_set_priority(
  *
  * @brief Gets the current priority of the task with respect to the scheduler.
  *
- * @param task_id is the task identifier.  The constant #RTEMS_SELF may be used
+ * @param task_id is the task identifier. The constant #RTEMS_SELF may be used
  *   to specify the calling task.
  *
  * @param scheduler_id is the scheduler identifier.
  *
- * @param[out] priority is the pointer to an ::rtems_task_priority object.
- *   When the directive call is successful, the current priority of the task
- *   with respect to the specified scheduler will be stored in this object.
+ * @param[out] priority is the pointer to an ::rtems_task_priority object. When
+ *   the directive call is successful, the current priority of the task with
+ *   respect to the specified scheduler will be stored in this object.
  *
- * This directive returns the current priority in ``priority`` of the task
- * specified by ``task_id`` with respect to the scheduler specified by
- * ``scheduler_id``.
+ * This directive returns the current priority in `priority` of the task
+ * specified by `task_id` with respect to the scheduler specified by
+ * `scheduler_id`.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``priority`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `priority` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no task associated with the identifier
- *   specified by ``task_id``.
+ *   specified by `task_id`.
  *
  * @retval ::RTEMS_INVALID_ID There was no scheduler associated with the
- *   identifier specified by ``scheduler_id``.
+ *   identifier specified by `scheduler_id`.
  *
  * @retval ::RTEMS_NOT_DEFINED The task had no priority with respect to the
  *   scheduler.
@@ -1411,27 +1410,27 @@ rtems_status_code rtems_task_get_priority(
  *
  * @brief Gets and optionally sets the mode of the calling task.
  *
- * @param mode_set is the mode set to apply to the calling task.  When ``mask``
- *   is set to #RTEMS_CURRENT_MODE, the value of this parameter is ignored.
- *   Only modes requested by ``mask`` are applied to the calling task.
+ * @param mode_set is the mode set to apply to the calling task. When `mask` is
+ *   set to #RTEMS_CURRENT_MODE, the value of this parameter is ignored. Only
+ *   modes requested by `mask` are applied to the calling task.
  *
- * @param mask is the mode mask which specifies which modes in ``mode_set`` are
- *   applied to the calling task.  When the value is #RTEMS_CURRENT_MODE, the
+ * @param mask is the mode mask which specifies which modes in `mode_set` are
+ *   applied to the calling task. When the value is #RTEMS_CURRENT_MODE, the
  *   mode of the calling task is not changed.
  *
- * @param previous_mode_set is the pointer to an ::rtems_mode object.  When the
+ * @param previous_mode_set is the pointer to an ::rtems_mode object. When the
  *   directive call is successful, the mode of the task before any mode changes
  *   done by the directive call will be stored in this object.
  *
  * This directive queries and optionally manipulates the execution mode of the
- * calling task.  A task's execution mode enables and disables preemption,
+ * calling task. A task's execution mode enables and disables preemption,
  * timeslicing, asynchronous signal processing, as well as specifying the
- * interrupt level.  To modify an execution mode, the mode class(es) to be
- * changed must be specified in the ``mask`` parameter and the desired mode(s)
- * must be specified in the ``mode_set`` parameter.
+ * interrupt level. To modify an execution mode, the mode class(es) to be
+ * changed must be specified in the `mask` parameter and the desired mode(s)
+ * must be specified in the `mode_set` parameter.
  *
  * A task can obtain its current execution mode, without modifying it, by
- * calling this directive with a ``mask`` value of #RTEMS_CURRENT_MODE.
+ * calling this directive with a `mask` value of #RTEMS_CURRENT_MODE.
  *
  * The **mode set** specified in ``mode_set`` is built through a *bitwise or*
  * of the mode constants described below.  Not all combinations of modes are
@@ -1452,59 +1451,58 @@ rtems_status_code rtems_task_get_priority(
  * - the interrupt level of the task: RTEMS_INTERRUPT_LEVEL() with a default of
  *   `RTEMS_INTERRUPT_LEVEL( 0 )` which is associated with enabled interrupts.
  *
- * The **mode mask** specified in ``mask`` is built through a *bitwise or* of
- * the mode mask constants described below.
+ * The **mode mask** specified in `mask` is built through a *bitwise or* of the
+ * mode mask constants described below.
  *
- * When the #RTEMS_PREEMPT_MASK is set in ``mask``, the **preemption mode** of
+ * When the #RTEMS_PREEMPT_MASK is set in `mask`, the **preemption mode** of
  * the calling task is
  *
- * - enabled by using the #RTEMS_PREEMPT mode constant in ``mode_set`` and
+ * - enabled by using the #RTEMS_PREEMPT mode constant in `mode_set` and
  *
- * - disabled by using the #RTEMS_NO_PREEMPT mode constant in ``mode_set``.
+ * - disabled by using the #RTEMS_NO_PREEMPT mode constant in `mode_set`.
  *
- * When the #RTEMS_TIMESLICE_MASK is set in ``mask``, the **timeslicing mode**
- * of the calling task is
+ * When the #RTEMS_TIMESLICE_MASK is set in `mask`, the **timeslicing mode** of
+ * the calling task is
  *
- * - enabled by using the #RTEMS_TIMESLICE mode constant in ``mode_set`` and
+ * - enabled by using the #RTEMS_TIMESLICE mode constant in `mode_set` and
  *
- * - disabled by using the #RTEMS_NO_TIMESLICE mode constant in ``mode_set``.
+ * - disabled by using the #RTEMS_NO_TIMESLICE mode constant in `mode_set`.
  *
- * Enabling timeslicing has no effect if preemption is disabled.  For a task to
+ * Enabling timeslicing has no effect if preemption is disabled. For a task to
  * be timesliced, that task must have both preemption and timeslicing enabled.
  *
- * When the #RTEMS_ASR_MASK is set in ``mask``, the **ASR processing mode** of
+ * When the #RTEMS_ASR_MASK is set in `mask`, the **ASR processing mode** of
  * the calling task is
  *
- * - enabled by using the #RTEMS_ASR mode constant in ``mode_set`` and
+ * - enabled by using the #RTEMS_ASR mode constant in `mode_set` and
  *
- * - disabled by using the #RTEMS_NO_ASR mode constant in ``mode_set``.
+ * - disabled by using the #RTEMS_NO_ASR mode constant in `mode_set`.
  *
- * When the #RTEMS_INTERRUPT_MASK is set in ``mask``, **interrupts** of the
+ * When the #RTEMS_INTERRUPT_MASK is set in `mask`, **interrupts** of the
  * calling task are
  *
  * - enabled by using the RTEMS_INTERRUPT_LEVEL() mode macro with a value of
- *   zero (0) in ``mode_set`` and
+ *   zero (0) in `mode_set` and
  *
  * - disabled up to the specified level by using the RTEMS_INTERRUPT_LEVEL()
- *   mode macro with a positive value in ``mode_set``.
+ *   mode macro with a positive value in `mode_set`.
  *
  * An interrupt level of zero is associated with enabled interrupts on all
- * target processors.  The interrupt level portion of the task mode supports a
- * maximum of 256 interrupt levels.  These levels are mapped onto the interrupt
+ * target processors. The interrupt level portion of the task mode supports a
+ * maximum of 256 interrupt levels. These levels are mapped onto the interrupt
  * levels actually supported by the target processor in a processor dependent
  * fashion.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_NOT_IMPLEMENTED The #RTEMS_NO_PREEMPT was set in
- *   ``mode_set`` and setting the preemption mode was requested by
- *   #RTEMS_PREEMPT_MASK in ``mask`` and the system configuration had no
- *   implementation for this mode.
+ * @retval ::RTEMS_NOT_IMPLEMENTED The #RTEMS_NO_PREEMPT was set in `mode_set`
+ *   and setting the preemption mode was requested by #RTEMS_PREEMPT_MASK in
+ *   `mask` and the system configuration had no implementation for this mode.
  *
  * @retval ::RTEMS_NOT_IMPLEMENTED The RTEMS_INTERRUPT_LEVEL() was set to a
- *   positive level in ``mode_set`` and setting the interrupt level was
- *   requested by #RTEMS_INTERRUPT_MASK in ``mask`` and the system
- *   configuration had no implementation for this mode.
+ *   positive level in `mode_set` and setting the interrupt level was requested
+ *   by #RTEMS_INTERRUPT_MASK in `mask` and the system configuration had no
+ *   implementation for this mode.
  *
  * @par Constraints
  * @parblock
@@ -1538,12 +1536,12 @@ rtems_status_code rtems_task_mode(
  * @param ticks is the count of clock ticks to delay the task or
  *   #RTEMS_YIELD_PROCESSOR to yield the processor.
  *
- * This directive blocks the calling task for the specified ``ticks`` count of
+ * This directive blocks the calling task for the specified `ticks` count of
  * clock ticks if the value is not equal to #RTEMS_YIELD_PROCESSOR. When the
- * requested count of ticks have occurred, the task is made ready.  The clock
- * tick directives automatically update the delay period.  The calling task may
+ * requested count of ticks have occurred, the task is made ready. The clock
+ * tick directives automatically update the delay period. The calling task may
  * give up the processor and remain in the ready state by specifying a value of
- * #RTEMS_YIELD_PROCESSOR in ``ticks``.
+ * #RTEMS_YIELD_PROCESSOR in `ticks`.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
@@ -1582,19 +1580,19 @@ rtems_status_code rtems_task_wake_after( rtems_interval ticks );
  * @param time_buffer is the date and time to wake up.
  *
  * This directive blocks a task until the date and time specified in
- * ``time_buffer``.  At the requested date and time, the calling task will be
+ * `time_buffer`. At the requested date and time, the calling task will be
  * unblocked and made ready to execute.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_NOT_DEFINED The system date and time was not set.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``time_buffer`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `time_buffer` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_CLOCK The time of day was invalid.
  *
  * @par Notes
- * The ticks portion of ``time_buffer`` structure is ignored.  The timing
+ * The ticks portion of `time_buffer` structure is ignored.  The timing
  * granularity of this directive is a second.
  *
  * @par Constraints
@@ -1620,22 +1618,22 @@ rtems_status_code rtems_task_wake_when( const rtems_time_of_day *time_buffer );
  *
  * @brief Gets the home scheduler of the task.
  *
- * @param task_id is the task identifier.  The constant #RTEMS_SELF may be used
+ * @param task_id is the task identifier. The constant #RTEMS_SELF may be used
  *   to specify the calling task.
  *
- * @param[out] scheduler_id is the pointer to an ::rtems_id object.  When the
+ * @param[out] scheduler_id is the pointer to an ::rtems_id object. When the
  *   directive call is successful, the identifier of the home scheduler of the
  *   task will be stored in this object.
  *
  * This directive returns the identifier of the home scheduler of the task
- * specified by ``task_id`` in ``scheduler_id``.
+ * specified by `task_id` in `scheduler_id`.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``scheduler_id`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `scheduler_id` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no task associated with the identifier
- *   specified by ``task_id``.
+ *   specified by `task_id`.
  *
  * @retval ::RTEMS_ILLEGAL_ON_REMOTE_OBJECT The task resided on a remote node.
  *
@@ -1665,46 +1663,45 @@ rtems_status_code rtems_task_get_scheduler(
  *
  * @brief Sets the home scheduler for the task.
  *
- * @param task_id is the task identifier.  The constant #RTEMS_SELF may be used
+ * @param task_id is the task identifier. The constant #RTEMS_SELF may be used
  *   to specify the calling task.
  *
  * @param scheduler_id is the scheduler identifier of the new home scheduler
- *   for the task specified by ``task_id``.
+ *   for the task specified by `task_id`.
  *
  * @param priority is the new real priority for the task with respect to the
- *   scheduler specified by ``scheduler_id``.
+ *   scheduler specified by `scheduler_id`.
  *
  * This directive sets the home scheduler to the scheduler specified by
- * ``scheduler_id`` for the task specified by ``task_id``.
+ * `scheduler_id` for the task specified by `task_id`.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no scheduler associated with the
- *   identifier specified by ``scheduler_id``.
+ *   identifier specified by `scheduler_id`.
  *
- * @retval ::RTEMS_INVALID_PRIORITY The task priority specified by ``priority``
- *   was invalid with respect to the scheduler specified by ``scheduler_id``.
+ * @retval ::RTEMS_INVALID_PRIORITY The task priority specified by `priority`
+ *   was invalid with respect to the scheduler specified by `scheduler_id`.
  *
  * @retval ::RTEMS_INVALID_ID There was no task associated with the identifier
- *   specified by ``task_id``.
+ *   specified by `task_id`.
  *
- * @retval ::RTEMS_RESOURCE_IN_USE The task specified by ``task_id`` was
- *   enqueued on a wait queue.
+ * @retval ::RTEMS_RESOURCE_IN_USE The task specified by `task_id` was enqueued
+ *   on a wait queue.
  *
- * @retval ::RTEMS_RESOURCE_IN_USE The task specified by ``task_id`` had a
+ * @retval ::RTEMS_RESOURCE_IN_USE The task specified by `task_id` had a
  *   current priority which consisted of more than the real priority.
  *
- * @retval ::RTEMS_RESOURCE_IN_USE The task specified by ``task_id`` had a
+ * @retval ::RTEMS_RESOURCE_IN_USE The task specified by `task_id` had a
  *   helping scheduler.
  *
- * @retval ::RTEMS_RESOURCE_IN_USE The task specified by ``task_id`` was
- *   pinned.
+ * @retval ::RTEMS_RESOURCE_IN_USE The task specified by `task_id` was pinned.
  *
- * @retval ::RTEMS_UNSATISFIED The scheduler specified by ``scheduler_id``
- *   owned no processor.
+ * @retval ::RTEMS_UNSATISFIED The scheduler specified by `scheduler_id` owned
+ *   no processor.
  *
- * @retval ::RTEMS_UNSATISFIED The scheduler specified by ``scheduler_id`` did
- *   not support the affinity set of the task specified by ``task_id``.
+ * @retval ::RTEMS_UNSATISFIED The scheduler specified by `scheduler_id` did
+ *   not support the affinity set of the task specified by `task_id`.
  *
  * @retval ::RTEMS_ILLEGAL_ON_REMOTE_OBJECT The task resided on a remote node.
  *
@@ -1736,29 +1733,29 @@ rtems_status_code rtems_task_set_scheduler(
  *
  * @brief Gets the processor affinity of the task.
  *
- * @param id is the task identifier.  The constant #RTEMS_SELF may be used to
+ * @param id is the task identifier. The constant #RTEMS_SELF may be used to
  *   specify the calling task.
  *
- * @param cpusetsize is the size of the processor set referenced by ``cpuset``
- *   in bytes.
+ * @param cpusetsize is the size of the processor set referenced by `cpuset` in
+ *   bytes.
  *
- * @param[out] cpuset is the pointer to a cpu_set_t object.  When the directive
+ * @param[out] cpuset is the pointer to a cpu_set_t object. When the directive
  *   call is successful, the processor affinity set of the task will be stored
- *   in this object.  A set bit in the processor set means that the
+ *   in this object. A set bit in the processor set means that the
  *   corresponding processor is in the processor affinity set of the task,
  *   otherwise the bit is cleared.
  *
- * This directive returns the processor affinity of the task in ``cpuset`` of
- * the task specified by ``id``.
+ * This directive returns the processor affinity of the task in `cpuset` of the
+ * task specified by `id`.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``cpuset`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `cpuset` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no task associated with the identifier
- *   specified by ``id``.
+ *   specified by `id`.
  *
- * @retval ::RTEMS_INVALID_SIZE The size specified by ``cpusetsize`` of the
+ * @retval ::RTEMS_INVALID_SIZE The size specified by `cpusetsize` of the
  *   processor set was too small for the processor affinity set of the task.
  *
  * @retval ::RTEMS_ILLEGAL_ON_REMOTE_OBJECT The task resided on a remote node.
@@ -1790,25 +1787,25 @@ rtems_status_code rtems_task_get_affinity(
  *
  * @brief Sets the processor affinity of the task.
  *
- * @param id is the task identifier.  The constant #RTEMS_SELF may be used to
+ * @param id is the task identifier. The constant #RTEMS_SELF may be used to
  *   specify the calling task.
  *
- * @param cpusetsize is the size of the processor set referenced by ``cpuset``
- *   in bytes.
+ * @param cpusetsize is the size of the processor set referenced by `cpuset` in
+ *   bytes.
  *
- * @param cpuset is the pointer to a cpu_set_t object.  The processor set
- *   defines the new processor affinity set of the task.  A set bit in the
+ * @param cpuset is the pointer to a cpu_set_t object. The processor set
+ *   defines the new processor affinity set of the task. A set bit in the
  *   processor set means that the corresponding processor shall be in the
  *   processor affinity set of the task, otherwise the bit shall be cleared.
  *
- * This directive sets the processor affinity of the task specified by ``id``.
+ * This directive sets the processor affinity of the task specified by `id`.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``cpuset`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `cpuset` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no task associated with the identifier
- *   specified by ``id``.
+ *   specified by `id`.
  *
  * @retval ::RTEMS_INVALID_NUMBER The referenced processor set was not a valid
  *   new processor affinity set for the task.
@@ -1843,22 +1840,22 @@ rtems_status_code rtems_task_set_affinity(
  *
  * @brief Gets the processor time used by the task.
  *
- * @param id is the task identifier.  The constant #RTEMS_SELF may be used to
+ * @param id is the task identifier. The constant #RTEMS_SELF may be used to
  *   specify the calling task.
  *
- * @param[out] ts is the pointer to a struct timespec object.  When the
+ * @param[out] ts is the pointer to a struct timespec object. When the
  *   directive call is successful, the processor time used by the task will be
  *   stored in this object.
  *
- * This directive returns the processor time which the task specified by
- * ``id`` used throughout its lifetime.
+ * This directive returns the processor time which the task specified by `id`
+ * used throughout its lifetime.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``ts`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `ts` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no task associated with the identifier
- *   specified by ``id``.
+ *   specified by `id`.
  *
  * @par Notes
  * The rtems_cpu_usage_reset() directive does not change the processor time
@@ -1893,10 +1890,10 @@ rtems_status_code rtems_task_get_cpu_usage( rtems_id id, struct timespec *ts );
  * @param arg is the argument passed to each visitor routine invocation during
  *   the iteration.
  *
- * This directive iterates over all tasks in the system.  This operation covers
- * all tasks of all APIs.  The user should be careful in accessing the contents
- * of the TCB.  The visitor argument ``arg`` is passed to all invocations of
- * ``visitor`` in addition to the TCB. The iteration stops immediately in case
+ * This directive iterates over all tasks in the system. This operation covers
+ * all tasks of all APIs. The user should be careful in accessing the contents
+ * of the TCB. The visitor argument `arg` is passed to all invocations of
+ * `visitor` in addition to the TCB. The iteration stops immediately in case
  * the visitor routine returns true.
  *
  * @par Notes

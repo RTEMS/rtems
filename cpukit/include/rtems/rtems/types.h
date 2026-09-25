@@ -208,7 +208,7 @@ typedef MPCI_Configuration rtems_multiprocessing_table;
  * @brief This type represents Classic API object names.
  *
  * It is an unsigned 32-bit integer which can be treated as a numeric value or
- * initialized using rtems_build_name() to encode four ASCII characters.  A
+ * initialized using rtems_build_name() to encode four ASCII characters. A
  * value of zero may have a special meaning in some directives.
  */
 typedef uint32_t rtems_name;

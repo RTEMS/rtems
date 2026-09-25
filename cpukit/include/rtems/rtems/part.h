@@ -100,7 +100,7 @@ extern "C" {
  *
  * @param attribute_set is the attribute set of the partition.
  *
- * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ * @param[out] id is the pointer to an ::rtems_id object. When the directive
  *   call is successful, the identifier of the created partition will be stored
  *   in this object.
  *
@@ -121,12 +121,12 @@ extern "C" {
  * the #RTEMS_DEFAULT_ATTRIBUTES constant.
  *
  * The partition has a local or global **scope** in a multiprocessing network
- * (this attribute does not refer to SMP systems).  The scope is selected by
- * the mutually exclusive #RTEMS_LOCAL and #RTEMS_GLOBAL attributes.
+ * (this attribute does not refer to SMP systems). The scope is selected by the
+ * mutually exclusive #RTEMS_LOCAL and #RTEMS_GLOBAL attributes.
  *
  * - A **local scope** is the default and can be emphasized through the use of
- *   the #RTEMS_LOCAL attribute.  A local partition can be only used by the
- *   node which created it.
+ *   the #RTEMS_LOCAL attribute. A local partition can be only used by the node
+ *   which created it.
  *
  * - A **global scope** is established if the #RTEMS_GLOBAL attribute is set.
  *   The memory space used for the partition must reside in shared memory.
@@ -134,39 +134,39 @@ extern "C" {
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_NAME The ``name`` parameter was invalid.
+ * @retval ::RTEMS_INVALID_NAME The `name` parameter was invalid.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``id`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `id` parameter was NULL.
  *
- * @retval ::RTEMS_INVALID_SIZE The ``length`` parameter was 0.
+ * @retval ::RTEMS_INVALID_SIZE The `length` parameter was 0.
  *
- * @retval ::RTEMS_INVALID_SIZE The ``buffer_size`` parameter was 0.
+ * @retval ::RTEMS_INVALID_SIZE The `buffer_size` parameter was 0.
  *
- * @retval ::RTEMS_INVALID_SIZE The ``length`` parameter was less than the
- *   ``buffer_size`` parameter.
+ * @retval ::RTEMS_INVALID_SIZE The `length` parameter was less than the
+ *   `buffer_size` parameter.
  *
- * @retval ::RTEMS_INVALID_SIZE The ``buffer_size`` parameter was not an
- *   integral multiple of the pointer size.
+ * @retval ::RTEMS_INVALID_SIZE The `buffer_size` parameter was not an integral
+ *   multiple of the pointer size.
  *
- * @retval ::RTEMS_INVALID_SIZE The ``buffer_size`` parameter was less than two
+ * @retval ::RTEMS_INVALID_SIZE The `buffer_size` parameter was less than two
  *   times the pointer size.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``starting_address`` parameter was not
- *   on a pointer size boundary.
+ * @retval ::RTEMS_INVALID_ADDRESS The `starting_address` parameter was not on
+ *   a pointer size boundary.
  *
  * @retval ::RTEMS_TOO_MANY There was no inactive object available to create a
- *   partition.  The number of partitions available to the application is
+ *   partition. The number of partitions available to the application is
  *   configured through the @ref CONFIGURE_MAXIMUM_PARTITIONS application
  *   configuration option.
  *
  * @retval ::RTEMS_TOO_MANY In multiprocessing configurations, there was no
- *   inactive global object available to create a global semaphore.  The number
+ *   inactive global object available to create a global semaphore. The number
  *   of global objects available to the application is configured through the
  *   @ref CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS application configuration option.
  *
  * @par Notes
  * @parblock
- * The partition buffer area specified by the ``starting_address`` must be
+ * The partition buffer area specified by the `starting_address` must be
  * properly aligned.  It must be possible to directly store target architecture
  * pointers and also the user data.  For example, if the user data contains
  * some long double or vector data types, the partition buffer area and the
@@ -175,10 +175,10 @@ extern "C" {
  * also a factor.  Use #RTEMS_PARTITION_ALIGNMENT to specify the minimum
  * alignment of a partition buffer type.
  *
- * The ``buffer_size`` parameter must be an integral multiple of the pointer
- * size on the target architecture.  Additionally, ``buffer_size`` must be
- * large enough to hold two pointers on the target architecture.  This is
- * required for RTEMS to manage the buffers when they are free.
+ * The `buffer_size` parameter must be an integral multiple of the pointer size
+ * on the target architecture.  Additionally, `buffer_size` must be large
+ * enough to hold two pointers on the target architecture.  This is required
+ * for RTEMS to manage the buffers when they are free.
  *
  * For control and maintenance of the partition, RTEMS allocates a PTCB from
  * the local PTCB free pool and initializes it. Memory from the partition
@@ -240,14 +240,14 @@ rtems_status_code rtems_partition_create(
  *
  * @param node is the node or node set to search for a matching object.
  *
- * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ * @param[out] id is the pointer to an ::rtems_id object. When the directive
  *   call is successful, the object identifier of an object with the specified
  *   name will be stored in this object.
  *
  * This directive obtains a partition identifier associated with the partition
- * name specified in ``name``.
+ * name specified in `name`.
  *
- * The node to search is specified in ``node``.  It shall be
+ * The node to search is specified in `node`. It shall be
  *
  * - a valid node number,
  *
@@ -260,9 +260,9 @@ rtems_status_code rtems_partition_create(
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``id`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `id` parameter was NULL.
  *
- * @retval ::RTEMS_INVALID_NAME The ``name`` parameter was 0.
+ * @retval ::RTEMS_INVALID_NAME The `name` parameter was 0.
  *
  * @retval ::RTEMS_INVALID_NAME There was no object with the specified name on
  *   the specified nodes.
@@ -277,7 +277,7 @@ rtems_status_code rtems_partition_create(
  * partition identifier is not guaranteed to correspond to the desired
  * partition.
  *
- * The objects are searched from lowest to the highest index.  If ``node`` is
+ * The objects are searched from lowest to the highest index.  If `node` is
  * #RTEMS_SEARCH_ALL_NODES, all nodes are searched with the local node being
  * searched first.  All other nodes are searched from lowest to the highest
  * node number.
@@ -316,12 +316,12 @@ rtems_status_code rtems_partition_ident(
  *
  * @param id is the partition identifier.
  *
- * This directive deletes the partition specified by ``id``.
+ * This directive deletes the partition specified by `id`.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no partition associated with the
- *   identifier specified by ``id``.
+ *   identifier specified by `id`.
  *
  * @retval ::RTEMS_ILLEGAL_ON_REMOTE_OBJECT The partition resided on a remote
  *   node.
@@ -376,20 +376,20 @@ rtems_status_code rtems_partition_delete( rtems_id id );
  *
  * @param id is the partition identifier.
  *
- * @param[out] buffer is the pointer to a `void` pointer object.  When the
+ * @param[out] buffer is the pointer to a `void` pointer object. When the
  *   directive call is successful, the pointer to the allocated buffer will be
  *   stored in this object.
  *
  * This directive allows a buffer to be obtained from the partition specified
- * by ``id``.  The address of the allocated buffer is returned through the
- * ``buffer`` parameter.
+ * by `id`. The address of the allocated buffer is returned through the
+ * `buffer` parameter.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no partition associated with the
- *   identifier specified by ``id``.
+ *   identifier specified by `id`.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``buffer`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `buffer` parameter was NULL.
  *
  * @retval ::RTEMS_UNSATISFIED There was no free buffer available to allocate
  *   and return.
@@ -436,16 +436,16 @@ rtems_status_code rtems_partition_get_buffer( rtems_id id, void **buffer );
  *
  * @param buffer is the pointer to the buffer to return.
  *
- * This directive returns the buffer specified by ``buffer`` to the partition
- * specified by ``id``.
+ * This directive returns the buffer specified by `buffer` to the partition
+ * specified by `id`.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no partition associated with the
- *   identifier specified by ``id``.
+ *   identifier specified by `id`.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The buffer referenced by ``buffer`` was not
- *   in the partition.
+ * @retval ::RTEMS_INVALID_ADDRESS The buffer referenced by `buffer` was not in
+ *   the partition.
  *
  * @par Notes
  * Returning a buffer multiple times is an error.  It will corrupt the internal

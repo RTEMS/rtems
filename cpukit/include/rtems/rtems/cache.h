@@ -65,8 +65,7 @@ extern "C" {
  *
  * The actual actions of the Cache Manager operations depend on the hardware
  * and the implementation provided by the CPU architecture port or a board
- * support package.  Cache implementations tend to be highly hardware
- * dependent.
+ * support package. Cache implementations tend to be highly hardware dependent.
  */
 
 /* Find related documentation with spec:/rtems/cache/if/coherent-add-area */
@@ -105,16 +104,15 @@ rtems_status_code rtems_cache_coherent_add_area( void *begin, uintptr_t size );
  * @param size is the requested size in bytes of the memory area to allocate.
  *
  * @param alignment is the requested alignment in bytes of the memory area to
- *   allocate.  If the alignment parameter is not equal to zero, the allocated
+ *   allocate. If the alignment parameter is not equal to zero, the allocated
  *   memory area will begin at an address aligned by this value.
  *
  * @param boundary is the requested boundary in bytes of the memory area to
- *   allocate.  If the boundary parameter is not equal to zero, the allocated
- *   memory area will comply with a boundary constraint.  The boundary value
+ *   allocate. If the boundary parameter is not equal to zero, the allocated
+ *   memory area will comply with a boundary constraint. The boundary value
  *   specifies the set of addresses which are aligned by the boundary value.
  *   The interior of the allocated memory area will not contain an element of
- *   this set.  The begin or end address of the area may be a member of the
- *   set.
+ *   this set. The begin or end address of the area may be a member of the set.
  *
  * @retval NULL There is not enough memory available to satisfy the allocation
  *   request.
@@ -250,8 +248,8 @@ void rtems_cache_unfreeze_instruction( void );
  *
  * @param size is the size in bytes of the memory area to flush.
  *
- * Dirty data cache lines covering the area are transfered to memory.
- * Depending on the cache implementation this may mark the lines as invalid.
+ * Dirty data cache lines covering the area are transfered to memory. Depending
+ * on the cache implementation this may mark the lines as invalid.
  *
  * @par Constraints
  * @parblock
@@ -275,8 +273,8 @@ void rtems_cache_flush_multiple_data_lines( const void *begin, size_t size );
  *
  * @param size is the size in bytes of the memory area to invalidate.
  *
- * The cache lines covering the area are marked as invalid.  A later read
- * access in the area will load the data from memory.
+ * The cache lines covering the area are marked as invalid. A later read access
+ * in the area will load the data from memory.
  *
  * @par Notes
  * @parblock
@@ -311,8 +309,8 @@ void rtems_cache_invalidate_multiple_data_lines(
  *
  * @param size is the size in bytes of the memory area to invalidate.
  *
- * The cache lines covering the area are marked as invalid.  A later
- * instruction fetch from the area will result in a load from memory.
+ * The cache lines covering the area are marked as invalid. A later instruction
+ * fetch from the area will result in a load from memory.
  *
  * @par Notes
  * In SMP configurations, on processors without instruction cache snooping,
@@ -398,7 +396,7 @@ size_t rtems_cache_get_maximal_line_size( void );
  *
  * @retval 0 There is no data cache present.
  *
- * @return Returns the data cache line size in bytes.  For multi-level caches
+ * @return Returns the data cache line size in bytes. For multi-level caches
  *   this is the maximum of the cache line sizes of all levels.
  *
  * @par Constraints
@@ -421,7 +419,7 @@ size_t rtems_cache_get_data_line_size( void );
  *
  * @retval 0 There is no instruction cache present.
  *
- * @return Returns the instruction cache line size in bytes.  For multi-level
+ * @return Returns the instruction cache line size in bytes. For multi-level
  *   caches this is the maximum of the cache line sizes of all levels.
  *
  * @par Constraints
@@ -442,7 +440,7 @@ size_t rtems_cache_get_instruction_line_size( void );
  *
  * @brief Gets the data cache size in bytes for the cache level.
  *
- * @param level is the requested data cache level.  The cache level zero
+ * @param level is the requested data cache level. The cache level zero
  *   specifies the entire data cache.
  *
  * @retval 0 There is no data cache present at the requested cache level.
@@ -467,7 +465,7 @@ size_t rtems_cache_get_data_cache_size( uint32_t level );
  *
  * @brief Gets the instruction cache size in bytes for the cache level.
  *
- * @param level is the requested instruction cache level.  The cache level zero
+ * @param level is the requested instruction cache level. The cache level zero
  *   specifies the entire instruction cache.
  *
  * @retval 0 There is no instruction cache present at the requested cache
@@ -634,8 +632,8 @@ void rtems_cache_disable_instruction( void );
  * @retval NULL There is not enough memory available to satisfy the allocation
  *   request.
  *
- * @return Returns the begin address of the allocated memory.  The begin
- *   address is on a cache line boundary.
+ * @return Returns the begin address of the allocated memory. The begin address
+ *   is on a cache line boundary.
  *
  * @par Constraints
  * @parblock

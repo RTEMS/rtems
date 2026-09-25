@@ -74,7 +74,7 @@ extern "C" {
  *
  * @brief Any real-time executive must provide a mechanism for quick response
  *   to externally generated interrupts to satisfy the critical time
- *   constraints of the application.  The Interrupt Manager provides this
+ *   constraints of the application. The Interrupt Manager provides this
  *   mechanism for RTEMS. This manager permits quick interrupt response times
  *   by providing the critical ability to alter task execution which allows a
  *   task to be preempted upon exit from an ISR.
@@ -141,9 +141,9 @@ typedef void ( *rtems_isr_entry )( void * );
  *   object.
  *
  * This directive establishes an interrupt service routine (ISR) for the
- * interrupt specified by the ``vector`` number.  The ``new_isr_handler``
- * parameter specifies the entry point of the ISR.  The entry point of the
- * previous ISR for the specified vector is returned in ``old_isr_handler``.
+ * interrupt specified by the `vector` number. The `new_isr_handler` parameter
+ * specifies the entry point of the ISR. The entry point of the previous ISR
+ * for the specified vector is returned in `old_isr_handler`.
  *
  * To release an interrupt vector, pass the old handler's address obtained when
  * the vector was first capture.
@@ -152,9 +152,9 @@ typedef void ( *rtems_isr_entry )( void * );
  *
  * @retval ::RTEMS_INVALID_NUMBER The interrupt vector number was illegal.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``new_isr_handler`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `new_isr_handler` parameter was NULL.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``old_isr_handler`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `old_isr_handler` parameter was NULL.
  *
  * @par Constraints
  * @parblock
@@ -191,14 +191,14 @@ rtems_status_code rtems_interrupt_catch(
    *   will be used to save the previous interrupt level.
    *
    * This directive disables all maskable interrupts on the current processor and
-   * returns the previous interrupt level in ``_isr_cookie``.
+   * returns the previous interrupt level in `_isr_cookie`.
    *
    * @par Notes
    * @parblock
    * A later invocation of the rtems_interrupt_enable() directive should be used
    * to restore the previous interrupt level.
    *
-   * This directive is implemented as a macro which sets the ``_isr_cookie``
+   * This directive is implemented as a macro which sets the `_isr_cookie`
    * parameter.
    *
    * @code
@@ -261,16 +261,16 @@ rtems_status_code rtems_interrupt_catch(
    *
    * @brief Restores the previous interrupt level on the current processor.
    *
-   * @param[in] _isr_cookie is the previous interrupt level to restore.  The
-   *   value must be obtained by a previous call to rtems_interrupt_disable() or
+   * @param[in] _isr_cookie is the previous interrupt level to restore. The value
+   *   must be obtained by a previous call to rtems_interrupt_disable() or
    *   rtems_interrupt_flash().
    *
-   * This directive restores the interrupt level specified by ``_isr_cookie`` on
+   * This directive restores the interrupt level specified by `_isr_cookie` on
    * the current processor.
    *
    * @par Notes
    * @parblock
-   * The ``_isr_cookie`` parameter value must be obtained by a previous call to
+   * The `_isr_cookie` parameter value must be obtained by a previous call to
    * rtems_interrupt_disable() or rtems_interrupt_flash().  Using an otherwise
    * obtained value is undefined behaviour.
    *
@@ -313,12 +313,12 @@ rtems_status_code rtems_interrupt_catch(
    *
    * This directive is functionally equivalent to a calling
    * rtems_interrupt_enable() immediately followed by a
-   * rtems_interrupt_disable().  On some architectures it is possible to provide
+   * rtems_interrupt_disable(). On some architectures it is possible to provide
    * an optimized implementation for this sequence.
    *
    * @par Notes
    * @parblock
-   * The ``_isr_cookie`` parameter value must be obtained by a previous call to
+   * The `_isr_cookie` parameter value must be obtained by a previous call to
    * rtems_interrupt_disable() or rtems_interrupt_flash().  Using an otherwise
    * obtained value is undefined behaviour.
    *
@@ -355,14 +355,14 @@ rtems_status_code rtems_interrupt_catch(
  *   will be used to save the previous interrupt level.
  *
  * This directive disables all maskable interrupts on the current processor and
- * returns the previous interrupt level in ``_isr_cookie``.
+ * returns the previous interrupt level in `_isr_cookie`.
  *
  * @par Notes
  * @parblock
  * A later invocation of the rtems_interrupt_local_enable() directive should be
  * used to restore the previous interrupt level.
  *
- * This directive is implemented as a macro which sets the ``_isr_cookie``
+ * This directive is implemented as a macro which sets the `_isr_cookie`
  * parameter.
  *
  * Where the system was built with SMP support enabled, this will not ensure
@@ -424,16 +424,15 @@ rtems_status_code rtems_interrupt_catch(
  *
  * @brief Restores the previous interrupt level on the current processor.
  *
- * @param[in] _isr_cookie is the previous interrupt level to restore.  The
- *   value must be obtained by a previous call to
- *   rtems_interrupt_local_disable().
+ * @param[in] _isr_cookie is the previous interrupt level to restore. The value
+ *   must be obtained by a previous call to rtems_interrupt_local_disable().
  *
- * This directive restores the interrupt level specified by ``_isr_cookie`` on
+ * This directive restores the interrupt level specified by `_isr_cookie` on
  * the current processor.
  *
  * @par Notes
  * @parblock
- * The ``_isr_cookie`` parameter value must be obtained by a previous call to
+ * The `_isr_cookie` parameter value must be obtained by a previous call to
  * rtems_interrupt_local_disable().  Using an otherwise obtained value is
  * undefined behaviour.
  *
@@ -466,7 +465,7 @@ rtems_status_code rtems_interrupt_catch(
  * @brief Checks if an ISR is in progress on the current processor.
  *
  * This directive returns `true`, if the current processor is currently
- * servicing an interrupt, and `false` otherwise.  A return value of `true`
+ * servicing an interrupt, and `false` otherwise. A return value of `true`
  * indicates that the caller is an interrupt service routine, **not** a task.
  * The directives available to an interrupt service routine are restricted.
  *
@@ -557,7 +556,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  *
  * @param[out] _lock is the ISR lock to initialize.
  *
- * @param _name is the ISR lock name.  It shall be a string.  The name is only
+ * @param _name is the ISR lock name. It shall be a string. The name is only
  *   used where the system was built with profiling support enabled.
  *
  * @par Notes
@@ -607,12 +606,12 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  *
  * @param[in,out] _lock is the ISR lock to acquire.
  *
- * @param[out] _lock_context is the ISR lock context.  This lock context shall
+ * @param[out] _lock_context is the ISR lock context. This lock context shall
  *   be used to release the lock by calling rtems_interrupt_lock_release().
  *
- * This directive acquires the ISR lock specified by ``_lock`` using the lock
- * context provided by ``_lock_context``.  Maskable interrupts will be disabled
- * on the current processor.
+ * This directive acquires the ISR lock specified by `_lock` using the lock
+ * context provided by `_lock_context`. Maskable interrupts will be disabled on
+ * the current processor.
  *
  * @par Notes
  * @parblock
@@ -665,12 +664,12 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  *
  * @param[in,out] _lock is the ISR lock to release.
  *
- * @param[in,out] _lock_context is the ISR lock context.  This lock context
+ * @param[in,out] _lock_context is the ISR lock context. This lock context
  *   shall have been used to acquire the lock by calling
  *   rtems_interrupt_lock_acquire().
  *
- * This directive releases the ISR lock specified by ``_lock`` using the lock
- * context provided by ``_lock_context``.  The previous interrupt level will be
+ * This directive releases the ISR lock specified by `_lock` using the lock
+ * context provided by `_lock_context`. The previous interrupt level will be
  * restored on the current processor.
  *
  * @par Notes
@@ -708,11 +707,11 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  *
  * @param[in,out] _lock is the ISR lock to acquire within an ISR.
  *
- * @param[out] _lock_context is the ISR lock context.  This lock context shall
+ * @param[out] _lock_context is the ISR lock context. This lock context shall
  *   be used to release the lock by calling rtems_interrupt_lock_release_isr().
  *
- * This directive acquires the ISR lock specified by ``_lock`` using the lock
- * context provided by ``_lock_context``.  The interrupt level will remain
+ * This directive acquires the ISR lock specified by `_lock` using the lock
+ * context provided by `_lock_context`. The interrupt level will remain
  * unchanged.
  *
  * @par Notes
@@ -762,12 +761,12 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  *
  * @param[in,out] _lock is the ISR lock to release within an ISR.
  *
- * @param[in,out] _lock_context is the ISR lock context.  This lock context
+ * @param[in,out] _lock_context is the ISR lock context. This lock context
  *   shall have been used to acquire the lock by calling
  *   rtems_interrupt_lock_acquire_isr().
  *
- * This directive releases the ISR lock specified by ``_lock`` using the lock
- * context provided by ``_lock_context``.  The interrupt level will remain
+ * This directive releases the ISR lock specified by `_lock` using the lock
+ * context provided by `_lock_context`. The interrupt level will remain
  * unchanged.
  *
  * @par Notes
@@ -809,7 +808,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  *   pair.
  *
  * This directive disables maskable interrupts on the current processor and
- * stores the previous interrupt level in ``_lock_context``.
+ * stores the previous interrupt level in `_lock_context`.
  *
  * @par Constraints
  * @parblock
@@ -857,7 +856,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  *
  * @param _designator is the ISR lock object designator.
  *
- * @param _name is the ISR lock name.  It shall be a string.  The name is only
+ * @param _name is the ISR lock name. It shall be a string. The name is only
  *   used where the system was built with profiling support enabled.
  *
  * @par Notes
@@ -883,7 +882,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  *
  * @brief Statically initializes an ISR lock object.
  *
- * @param _name is the ISR lock name.  It shall be a string.  The name is only
+ * @param _name is the ISR lock name. It shall be a string. The name is only
  *   used where the system was built with profiling support enabled.
  *
  * @par Notes
@@ -1158,12 +1157,12 @@ static inline void rtems_interrupt_entry_initialize(
  *
  * - #RTEMS_INTERRUPT_SHARED
  *
- * shall be set in the ``options`` parameter.
+ * shall be set in the `options` parameter.
  *
- * The handler routine of the entry specified by ``entry`` will be called with
- * the handler argument of the entry when dispatched.  The order in which
- * shared interrupt handlers are dispatched for one vector is defined by the
- * installation order.  The first installed handler is dispatched first.
+ * The handler routine of the entry specified by `entry` will be called with
+ * the handler argument of the entry when dispatched. The order in which shared
+ * interrupt handlers are dispatched for one vector is defined by the
+ * installation order. The first installed handler is dispatched first.
  *
  * If the option #RTEMS_INTERRUPT_UNIQUE is set, then it will be ensured that
  * the handler will be the only one for the interrupt vector.
@@ -1173,31 +1172,31 @@ static inline void rtems_interrupt_entry_initialize(
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``entry`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `entry` parameter was NULL.
  *
  * @retval ::RTEMS_INCORRECT_STATE The service was not initialized.
  *
  * @retval ::RTEMS_INVALID_ADDRESS The handler routine of the entry was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
- *   number specified by ``vector``.
+ *   number specified by `vector`.
  *
  * @retval ::RTEMS_CALLED_FROM_ISR The directive was called from within
  *   interrupt context.
  *
- * @retval ::RTEMS_INVALID_NUMBER An option specified by ``options`` was not
+ * @retval ::RTEMS_INVALID_NUMBER An option specified by `options` was not
  *   applicable.
  *
  * @retval ::RTEMS_RESOURCE_IN_USE The #RTEMS_INTERRUPT_UNIQUE option was set
- *   in ``entry`` and the interrupt vector was already occupied by a handler.
+ *   in `entry` and the interrupt vector was already occupied by a handler.
  *
  * @retval ::RTEMS_RESOURCE_IN_USE The #RTEMS_INTERRUPT_SHARED option was set
- *   in ``entry`` and the interrupt vector was already occupied by a unique
+ *   in `entry` and the interrupt vector was already occupied by a unique
  *   handler.
  *
  * @retval ::RTEMS_TOO_MANY The handler routine of the entry specified by
- *   ``entry`` was already installed for the interrupt vector specified by
- *   ``vector`` with an argument equal to the handler argument of the entry.
+ *   `entry` was already installed for the interrupt vector specified by
+ *   `vector` with an argument equal to the handler argument of the entry.
  *
  * @par Notes
  * When the directive call was successful, the ownership of the interrupt entry
@@ -1242,16 +1241,16 @@ rtems_status_code rtems_interrupt_entry_install(
  *
  * @retval ::RTEMS_INCORRECT_STATE The service was not initialized.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``entry`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `entry` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
- *   number specified by ``vector``.
+ *   number specified by `vector`.
  *
  * @retval ::RTEMS_CALLED_FROM_ISR The directive was called from within
  *   interrupt context.
  *
- * @retval ::RTEMS_UNSATISFIED The entry specified by ``entry`` was not
- *   installed at the interrupt vector specified by ``vector``.
+ * @retval ::RTEMS_UNSATISFIED The entry specified by `entry` was not installed
+ *   at the interrupt vector specified by `vector`.
  *
  * @par Notes
  * When the directive call was successful, the ownership of the interrupt entry
@@ -1305,12 +1304,12 @@ rtems_status_code rtems_interrupt_entry_remove(
  *
  * - #RTEMS_INTERRUPT_REPLACE
  *
- * shall be set in the ``options`` parameter.
+ * shall be set in the `options` parameter.
  *
- * The handler routine will be called with the argument specified by ``arg``
- * when dispatched.  The order in which shared interrupt handlers are
- * dispatched for one vector is defined by the installation order.  The first
- * installed handler is dispatched first.
+ * The handler routine will be called with the argument specified by `arg` when
+ * dispatched. The order in which shared interrupt handlers are dispatched for
+ * one vector is defined by the installation order. The first installed handler
+ * is dispatched first.
  *
  * If the option #RTEMS_INTERRUPT_UNIQUE is set, then it will be ensured that
  * the handler will be the only one for the interrupt vector.
@@ -1319,24 +1318,24 @@ rtems_status_code rtems_interrupt_entry_remove(
  * installed for the interrupt vector.
  *
  * If the option #RTEMS_INTERRUPT_REPLACE is set, then the handler specified by
- * ``routine`` will replace the first handler with the same argument for the
- * interrupt vector if it exists, otherwise an error status will be returned.
- * A second handler with the same argument for the interrupt vector will remain
- * unchanged.  The new handler will inherit the unique or shared options from
+ * `routine` will replace the first handler with the same argument for the
+ * interrupt vector if it exists, otherwise an error status will be returned. A
+ * second handler with the same argument for the interrupt vector will remain
+ * unchanged. The new handler will inherit the unique or shared options from
  * the replaced handler.
  *
- * An informative description may be provided in ``info``.  It may be used for
- * system debugging and diagnostic tools.  The referenced string has to be
+ * An informative description may be provided in `info`. It may be used for
+ * system debugging and diagnostic tools. The referenced string has to be
  * persistent as long as the handler is installed.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INCORRECT_STATE The service was not initialized.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``routine`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `routine` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
- *   number specified by ``vector``.
+ *   number specified by `vector`.
  *
  * @retval ::RTEMS_CALLED_FROM_ISR The directive was called from within
  *   interrupt context.
@@ -1345,18 +1344,18 @@ rtems_status_code rtems_interrupt_entry_remove(
  *   data structures to install the handler.
  *
  * @retval ::RTEMS_RESOURCE_IN_USE The #RTEMS_INTERRUPT_UNIQUE option was set
- *   in ``options`` and the interrupt vector was already occupied by a handler.
+ *   in `options` and the interrupt vector was already occupied by a handler.
  *
  * @retval ::RTEMS_RESOURCE_IN_USE The #RTEMS_INTERRUPT_SHARED option was set
- *   in ``options`` and the interrupt vector was already occupied by a unique
+ *   in `options` and the interrupt vector was already occupied by a unique
  *   handler.
  *
- * @retval ::RTEMS_TOO_MANY The handler specified by ``routine`` was already
- *   installed for the interrupt vector specified by ``vector`` with an
- *   argument equal to the argument specified by ``arg``.
+ * @retval ::RTEMS_TOO_MANY The handler specified by `routine` was already
+ *   installed for the interrupt vector specified by `vector` with an argument
+ *   equal to the argument specified by `arg`.
  *
  * @retval ::RTEMS_UNSATISFIED The #RTEMS_INTERRUPT_REPLACE option was set in
- *   ``options`` and no handler to replace was installed.
+ *   `options` and no handler to replace was installed.
  *
  * @par Constraints
  * @parblock
@@ -1397,16 +1396,16 @@ rtems_status_code rtems_interrupt_handler_install(
  *
  * @retval ::RTEMS_INCORRECT_STATE The service was not initialized.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``routine`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `routine` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
- *   number specified by ``vector``.
+ *   number specified by `vector`.
  *
  * @retval ::RTEMS_CALLED_FROM_ISR The directive was called from within
  *   interrupt context.
  *
  * @retval ::RTEMS_UNSATISFIED There was no handler routine and argument pair
- *   installed specified by ``routine`` and ``arg``.
+ *   installed specified by `routine` and `arg`.
  *
  * @par Constraints
  * @parblock
@@ -1436,23 +1435,23 @@ rtems_status_code rtems_interrupt_handler_remove(
  *
  * @param vector is the interrupt vector number.
  *
- * @param[out] enabled is the pointer to a `bool` object.  When the directive
+ * @param[out] enabled is the pointer to a `bool` object. When the directive
  *   call is successful, the enabled status of the interrupt associated with
- *   the interrupt vector specified by ``vector`` will be stored in this
- *   object.  When the interrupt was enabled for the processor executing the
- *   directive call at some time point during the call, the object value will
- *   be set to true, otherwise to false.
+ *   the interrupt vector specified by `vector` will be stored in this object.
+ *   When the interrupt was enabled for the processor executing the directive
+ *   call at some time point during the call, the object value will be set to
+ *   true, otherwise to false.
  *
  * The directive checks if the interrupt associated with the interrupt vector
- * specified by ``vector`` was enabled for the processor executing the
- * directive call at some time point during the call.
+ * specified by `vector` was enabled for the processor executing the directive
+ * call at some time point during the call.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``enabled`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `enabled` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
- *   number specified by ``vector``.
+ *   number specified by `vector`.
  *
  * @par Notes
  * Interrupt vectors may be enabled by rtems_interrupt_vector_enable() and
@@ -1486,16 +1485,16 @@ rtems_status_code rtems_interrupt_vector_is_enabled(
  *
  * @param vector is the number of the interrupt vector to enable.
  *
- * The directive enables the interrupt vector specified by ``vector``. This
+ * The directive enables the interrupt vector specified by `vector`. This
  * allows that interrupt service requests are issued to the target processors
- * of the interrupt vector.  Interrupt service requests for an interrupt vector
+ * of the interrupt vector. Interrupt service requests for an interrupt vector
  * may be raised by rtems_interrupt_raise(), rtems_interrupt_raise_on(),
  * external signals, or messages.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
- *   number specified by ``vector``.
+ *   number specified by `vector`.
  *
  * @retval ::RTEMS_UNSATISFIED The request to enable the interrupt vector has
  *   not been satisfied.
@@ -1530,14 +1529,14 @@ rtems_status_code rtems_interrupt_vector_enable( rtems_vector_number vector );
  *
  * @param vector is the number of the interrupt vector to disable.
  *
- * The directive disables the interrupt vector specified by ``vector``.  This
+ * The directive disables the interrupt vector specified by `vector`. This
  * prevents that an interrupt service request is issued to the target
  * processors of the interrupt vector.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
- *   number specified by ``vector``.
+ *   number specified by `vector`.
  *
  * @retval ::RTEMS_UNSATISFIED The request to disable the interrupt vector has
  *   not been satisfied.
@@ -1574,23 +1573,23 @@ rtems_status_code rtems_interrupt_vector_disable( rtems_vector_number vector );
  *
  * @param vector is the interrupt vector number.
  *
- * @param[out] pending is the pointer to a `bool` object.  When the directive
+ * @param[out] pending is the pointer to a `bool` object. When the directive
  *   call is successful, the pending status of the interrupt associated with
- *   the interrupt vector specified by ``vector`` will be stored in this
- *   object.  When the interrupt was pending for the processor executing the
- *   directive call at some time point during the call, the object value will
- *   be set to true, otherwise to false.
+ *   the interrupt vector specified by `vector` will be stored in this object.
+ *   When the interrupt was pending for the processor executing the directive
+ *   call at some time point during the call, the object value will be set to
+ *   true, otherwise to false.
  *
  * The directive checks if the interrupt associated with the interrupt vector
- * specified by ``vector`` was pending for the processor executing the
- * directive call at some time point during the call.
+ * specified by `vector` was pending for the processor executing the directive
+ * call at some time point during the call.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``pending`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `pending` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
- *   number specified by ``vector``.
+ *   number specified by `vector`.
  *
  * @retval ::RTEMS_UNSATISFIED The request to get the pending status has not
  *   been satisfied.
@@ -1631,7 +1630,7 @@ rtems_status_code rtems_interrupt_is_pending(
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
- *   number specified by ``vector``.
+ *   number specified by `vector`.
  *
  * @retval ::RTEMS_UNSATISFIED The request to raise the interrupt vector has
  *   not been satisfied.
@@ -1671,12 +1670,12 @@ rtems_status_code rtems_interrupt_raise( rtems_vector_number vector );
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
- *   number specified by ``vector``.
+ *   number specified by `vector`.
  *
- * @retval ::RTEMS_NOT_CONFIGURED The processor specified by ``cpu_index`` was
+ * @retval ::RTEMS_NOT_CONFIGURED The processor specified by `cpu_index` was
  *   not configured to be used by the application.
  *
- * @retval ::RTEMS_INCORRECT_STATE The processor specified by ``cpu_index`` was
+ * @retval ::RTEMS_INCORRECT_STATE The processor specified by `cpu_index` was
  *   configured to be used by the application, however, it was not online.
  *
  * @retval ::RTEMS_UNSATISFIED The request to raise the interrupt vector has
@@ -1717,7 +1716,7 @@ rtems_status_code rtems_interrupt_raise_on(
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
- *   number specified by ``vector``.
+ *   number specified by `vector`.
  *
  * @retval ::RTEMS_UNSATISFIED The request to raise the interrupt vector has
  *   not been satisfied.
@@ -1751,16 +1750,16 @@ rtems_status_code rtems_interrupt_clear( rtems_vector_number vector );
  *
  * @param vector is the interrupt vector number.
  *
- * @param[out] priority is the pointer to an uint32_t object.  When the
+ * @param[out] priority is the pointer to an uint32_t object. When the
  *   directive call is successful, the priority of the interrupt vector will be
  *   stored in this object.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``priority`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `priority` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
- *   number specified by ``vector``.
+ *   number specified by `vector`.
  *
  * @retval ::RTEMS_UNSATISFIED There is no priority associated with the
  *   interrupt vector.
@@ -1799,8 +1798,8 @@ rtems_status_code rtems_interrupt_get_priority(
  *
  * @param priority is the new priority for the interrupt vector.
  *
- * This directive sets the priority of the interrupt specified by ``vector`` to
- * the priority specified by ``priority``.
+ * This directive sets the priority of the interrupt specified by `vector` to
+ * the priority specified by `priority`.
  *
  * For processor-specific interrupts, the priority of the interrupt specific to
  * a processor executing the directive call will be set.
@@ -1808,9 +1807,9 @@ rtems_status_code rtems_interrupt_get_priority(
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
- *   number specified by ``vector``.
+ *   number specified by `vector`.
  *
- * @retval ::RTEMS_INVALID_PRIORITY The priority specified by ``priority`` was
+ * @retval ::RTEMS_INVALID_PRIORITY The priority specified by `priority` was
  *   not a valid new priority for the interrupt vector.
  *
  * @retval ::RTEMS_UNSATISFIED The request to set the priority of the interrupt
@@ -1906,22 +1905,22 @@ rtems_status_code rtems_interrupt_set_priority(
  * @param vector is the interrupt vector number.
  *
  * @param affinity_size is the size of the processor set referenced by
- *   ``affinity`` in bytes.
+ *   `affinity` in bytes.
  *
- * @param[out] affinity is the pointer to a cpu_set_t object.  When the
+ * @param[out] affinity is the pointer to a cpu_set_t object. When the
  *   directive call is successful, the processor affinity set of the interrupt
- *   vector will be stored in this object.  A set bit in the processor set
- *   means that the corresponding processor is in the processor affinity set of
- *   the interrupt vector, otherwise the bit is cleared.
+ *   vector will be stored in this object. A set bit in the processor set means
+ *   that the corresponding processor is in the processor affinity set of the
+ *   interrupt vector, otherwise the bit is cleared.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``affinity`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `affinity` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
- *   number specified by ``vector``.
+ *   number specified by `vector`.
  *
- * @retval ::RTEMS_INVALID_SIZE The size specified by ``affinity_size`` of the
+ * @retval ::RTEMS_INVALID_SIZE The size specified by `affinity_size` of the
  *   processor set was too small for the processor affinity set of the
  *   interrupt vector.
  *
@@ -1955,20 +1954,20 @@ rtems_status_code rtems_interrupt_get_affinity(
  * @param vector is the interrupt vector number.
  *
  * @param affinity_size is the size of the processor set referenced by
- *   ``affinity`` in bytes.
+ *   `affinity` in bytes.
  *
- * @param affinity is the pointer to a cpu_set_t object.  The processor set
- *   defines the new processor affinity set of the interrupt vector.  A set bit
+ * @param affinity is the pointer to a cpu_set_t object. The processor set
+ *   defines the new processor affinity set of the interrupt vector. A set bit
  *   in the processor set means that the corresponding processor shall be in
  *   the processor affinity set of the interrupt vector, otherwise the bit
  *   shall be cleared.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``affinity`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `affinity` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
- *   number specified by ``vector``.
+ *   number specified by `vector`.
  *
  * @retval ::RTEMS_INVALID_NUMBER The referenced processor set was not a valid
  *   new processor affinity set for the interrupt vector.
@@ -1981,10 +1980,10 @@ rtems_status_code rtems_interrupt_get_affinity(
  * The rtems_interrupt_get_attributes() directive may be used to check if the
  * processor affinity of an interrupt vector can be set.
  *
- * Only online processors of the affinity set specified by ``affinity_size``
- * and ``affinity`` are considered by the directive.  Other processors of the
- * set are ignored.  If the set contains no online processor, then the set is
- * invalid and an error status is returned.
+ * Only online processors of the affinity set specified by `affinity_size` and
+ * `affinity` are considered by the directive.  Other processors of the set are
+ * ignored.  If the set contains no online processor, then the set is invalid
+ * and an error status is returned.
  * @endparblock
  *
  * @par Constraints
@@ -2078,7 +2077,7 @@ typedef struct {
    *   rtems_interrupt_vector_enable(), otherwise it is false.
    *
    * When an interrupt vector can be enabled, this means that the enabled state
-   * can always be changed from disabled to enabled.  For an interrupt vector
+   * can always be changed from disabled to enabled. For an interrupt vector
    * which can be enabled it follows that it may be enabled.
    */
   bool can_enable;
@@ -2088,8 +2087,8 @@ typedef struct {
    *   rtems_interrupt_vector_enable(), otherwise it is false.
    *
    * When an interrupt vector may be enabled, this means that the enabled state
-   * may be changed from disabled to enabled.  The requested enabled state change
-   * should be checked by rtems_interrupt_vector_is_enabled().  Some interrupt
+   * may be changed from disabled to enabled. The requested enabled state change
+   * should be checked by rtems_interrupt_vector_is_enabled(). Some interrupt
    * vectors may be optionally available and cannot be enabled on a particular
    * target.
    */
@@ -2100,7 +2099,7 @@ typedef struct {
    *   rtems_interrupt_vector_disable(), otherwise it is false.
    *
    * When an interrupt vector can be disabled, this means that the enabled state
-   * can be changed from enabled to disabled.  For an interrupt vector which can
+   * can be changed from enabled to disabled. For an interrupt vector which can
    * be disabled it follows that it may be disabled.
    */
   bool can_disable;
@@ -2110,8 +2109,8 @@ typedef struct {
    *   rtems_interrupt_vector_disable(), otherwise it is false.
    *
    * When an interrupt vector may be disabled, this means that the enabled state
-   * may be changed from enabled to disabled.  The requested enabled state change
-   * should be checked by rtems_interrupt_vector_is_enabled().  Some interrupt
+   * may be changed from enabled to disabled. The requested enabled state change
+   * should be checked by rtems_interrupt_vector_is_enabled(). Some interrupt
    * vectors may be always enabled and cannot be disabled on a particular target.
    */
   bool maybe_disable;
@@ -2158,7 +2157,7 @@ typedef struct {
    *   vector can be triggered by a message.
    *
    * Interrupts may be also triggered by signals, rtems_interrupt_raise(), or
-   * rtems_interrupt_raise_on().  Examples for message triggered interrupts are
+   * rtems_interrupt_raise_on(). Examples for message triggered interrupts are
    * the PCIe MSI/MSI-X and the ARM GICv3 Locality-specific Peripheral Interrupts
    * (LPI).
    */
@@ -2169,7 +2168,7 @@ typedef struct {
    *   with the interrupt vector.
    *
    * Interrupts are normally triggered by signals which indicate an interrupt
-   * request from a peripheral.  Interrupts may be also triggered by messages,
+   * request from a peripheral. Interrupts may be also triggered by messages,
    * rtems_interrupt_raise(), or rtems_interrupt_raise_on().
    */
   rtems_interrupt_signal_variant trigger_signal;
@@ -2188,12 +2187,12 @@ typedef struct {
 
   /**
    * @brief This member represents the maximum priority value of the interrupt
-   *   vector.  By convention, the minimum priority value is zero.  Lower
-   *   priority values shall be associated with a higher importance.  The higher
-   *   the priority value, the less important is the service of the associated
-   *   interrupt vector.  Where nested interrupts are supported, interrupts with
-   *   a lower priority value may preempt other interrupts having a higher
-   *   priority value.
+   *   vector. By convention, the minimum priority value is zero. Lower priority
+   *   values shall be associated with a higher importance. The higher the
+   *   priority value, the less important is the service of the associated
+   *   interrupt vector. Where nested interrupts are supported, interrupts with a
+   *   lower priority value may preempt other interrupts having a higher priority
+   *   value.
    */
   uint32_t maximum_priority;
 } rtems_interrupt_attributes;
@@ -2208,15 +2207,15 @@ typedef struct {
  * @param vector is the interrupt vector number.
  *
  * @param[out] attributes is the pointer to an rtems_interrupt_attributes
- *   object.  When the directive call is successful, the attributes of the
+ *   object. When the directive call is successful, the attributes of the
  *   interrupt vector will be stored in this object.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``attributes`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `attributes` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
- *   number specified by ``vector``.
+ *   number specified by `vector`.
  *
  * @par Constraints
  * @parblock
@@ -2252,17 +2251,17 @@ rtems_status_code rtems_interrupt_get_attributes(
  * @param arg is the visitor argument.
  *
  * For each installed handler at the interrupt vector the visitor function
- * specified by ``routine`` will be called with the argument specified by
- * ``arg`` and the handler information, options, routine and argument.
+ * specified by `routine` will be called with the argument specified by `arg`
+ * and the handler information, options, routine and argument.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INCORRECT_STATE The service was not initialized.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``routine`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `routine` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
- *   number specified by ``vector``.
+ *   number specified by `vector`.
  *
  * @retval ::RTEMS_CALLED_FROM_ISR The directive was called from within
  *   interrupt context.
@@ -2421,7 +2420,7 @@ typedef struct {
    * @brief This member is an optional handler to destroy the interrupt server
    *   control handed over to rtems_interrupt_server_create().
    *
-   * The destroy handler is optional and may be NULL.  If the destroy handler is
+   * The destroy handler is optional and may be NULL. If the destroy handler is
    * present, it is called from within the context of the interrupt server to be
    * deleted, see also rtems_interrupt_server_delete().
    */
@@ -2450,18 +2449,18 @@ typedef struct {
  *   status.
  *
  * The directive tries to create an interrupt server task for each online
- * processor in the system.  The tasks will have the initial priority specified
- * by ``priority``, the stack size specified by ``stack_size``, the initial
- * mode set specified by ``modes``, and the attribute set specified by
- * ``attributes``.  The count of successfully created server tasks will be
- * returned in ``server_count`` if the pointer is not equal to NULL.
+ * processor in the system. The tasks will have the initial priority specified
+ * by `priority`, the stack size specified by `stack_size`, the initial mode
+ * set specified by `modes`, and the attribute set specified by `attributes`.
+ * The count of successfully created server tasks will be returned in
+ * `server_count` if the pointer is not equal to NULL.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INCORRECT_STATE The interrupt servers were already
  *   initialized.
  *
- * @return The directive uses rtems_task_create().  If this directive fails,
+ * @return The directive uses rtems_task_create(). If this directive fails,
  *   then its error status will be returned.
  *
  * @par Notes
@@ -2505,19 +2504,19 @@ rtems_status_code rtems_interrupt_server_initialize(
  * @brief Creates an interrupt server.
  *
  * @param[out] control is the pointer to an rtems_interrupt_server_control
- *   object.  When the directive call was successful, the ownership of the
+ *   object. When the directive call was successful, the ownership of the
  *   object was transferred from the caller of the directive to the interrupt
  *   server management.
  *
  * @param config is the interrupt server configuration.
  *
- * @param[out] server_index is the pointer to an uint32_t object.  When the
+ * @param[out] server_index is the pointer to an uint32_t object. When the
  *   directive call was successful, the index of the created interrupt server
  *   will be stored in this object.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @return The directive uses rtems_task_create().  If this directive fails,
+ * @return The directive uses rtems_task_create(). If this directive fails,
  *   then its error status will be returned.
  *
  * @par Notes
@@ -2551,7 +2550,7 @@ rtems_status_code rtems_interrupt_server_create(
  * @brief Installs the interrupt handler routine and argument at the interrupt
  *   vector on the interrupt server.
  *
- * @param server_index is the interrupt server index.  The constant
+ * @param server_index is the interrupt server index. The constant
  *   #RTEMS_INTERRUPT_SERVER_DEFAULT may be used to specify the default
  *   interrupt server.
  *
@@ -2566,38 +2565,38 @@ rtems_status_code rtems_interrupt_server_create(
  *
  * @param arg is the interrupt handler argument to install.
  *
- * The handler routine specified by ``routine`` will be executed within the
- * context of the interrupt server task specified by ``server_index``.
+ * The handler routine specified by `routine` will be executed within the
+ * context of the interrupt server task specified by `server_index`.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt server associated with the
- *   index specified by ``server_index``.
+ *   index specified by `server_index`.
  *
  * @retval ::RTEMS_CALLED_FROM_ISR The directive was called from within
  *   interrupt context.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``routine`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `routine` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
- *   number specified by ``vector``.
+ *   number specified by `vector`.
  *
- * @retval ::RTEMS_INVALID_NUMBER An option specified by ``info`` was not
+ * @retval ::RTEMS_INVALID_NUMBER An option specified by `info` was not
  *   applicable.
  *
  * @retval ::RTEMS_RESOURCE_IN_USE The #RTEMS_INTERRUPT_UNIQUE option was set
- *   in ``info`` and the interrupt vector was already occupied by a handler.
+ *   in `info` and the interrupt vector was already occupied by a handler.
  *
  * @retval ::RTEMS_RESOURCE_IN_USE The #RTEMS_INTERRUPT_SHARED option was set
- *   in ``info`` and the interrupt vector was already occupied by a unique
+ *   in `info` and the interrupt vector was already occupied by a unique
  *   handler.
  *
- * @retval ::RTEMS_TOO_MANY The handler specified by ``routine`` was already
- *   installed for the interrupt vector specified by ``vector`` with an
- *   argument equal to the argument specified by ``arg``.
+ * @retval ::RTEMS_TOO_MANY The handler specified by `routine` was already
+ *   installed for the interrupt vector specified by `vector` with an argument
+ *   equal to the argument specified by `arg`.
  *
  * @retval ::RTEMS_UNSATISFIED The #RTEMS_INTERRUPT_REPLACE option was set in
- *   ``info`` and no handler to replace was installed.
+ *   `info` and no handler to replace was installed.
  *
  * @par Notes
  * See also rtems_interrupt_handler_install().
@@ -2632,7 +2631,7 @@ rtems_status_code rtems_interrupt_server_handler_install(
  * @brief Removes the interrupt handler routine and argument from the interrupt
  *   vector and the interrupt server.
  *
- * @param server_index is the interrupt server index.  The constant
+ * @param server_index is the interrupt server index. The constant
  *   #RTEMS_INTERRUPT_SERVER_DEFAULT may be used to specify the default
  *   interrupt server.
  *
@@ -2645,13 +2644,13 @@ rtems_status_code rtems_interrupt_server_handler_install(
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt server associated with the
- *   index specified by ``server_index``.
+ *   index specified by `server_index`.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
- *   number specified by ``vector``.
+ *   number specified by `vector`.
  *
  * @retval ::RTEMS_UNSATISFIED There was no handler routine and argument pair
- *   installed specified by ``routine`` and ``arg``.
+ *   installed specified by `routine` and `arg`.
  *
  * @par Constraints
  * @parblock
@@ -2684,15 +2683,15 @@ rtems_status_code rtems_interrupt_server_handler_remove(
  *
  * @brief Sets the processor affinity of the interrupt server.
  *
- * @param server_index is the interrupt server index.  The constant
+ * @param server_index is the interrupt server index. The constant
  *   #RTEMS_INTERRUPT_SERVER_DEFAULT may be used to specify the default
  *   interrupt server.
  *
  * @param affinity_size is the size of the processor set referenced by
- *   ``affinity`` in bytes.
+ *   `affinity` in bytes.
  *
- * @param affinity is the pointer to a cpu_set_t object.  The processor set
- *   defines the new processor affinity set of the interrupt server.  A set bit
+ * @param affinity is the pointer to a cpu_set_t object. The processor set
+ *   defines the new processor affinity set of the interrupt server. A set bit
  *   in the processor set means that the corresponding processor shall be in
  *   the processor affinity set of the task, otherwise the bit shall be
  *   cleared.
@@ -2702,16 +2701,16 @@ rtems_status_code rtems_interrupt_server_handler_remove(
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt server associated with the
- *   index specified by ``server_index``.
+ *   index specified by `server_index`.
  *
  * @return The directive uses rtems_scheduler_ident_by_processor_set(),
- *   rtems_task_set_scheduler(), and rtems_task_set_affinity().  If one of
- *   these directive fails, then its error status will be returned.
+ *   rtems_task_set_scheduler(), and rtems_task_set_affinity(). If one of these
+ *   directive fails, then its error status will be returned.
  *
  * @par Notes
  * @parblock
  * The scheduler is set determined by the highest numbered processor in the
- * affinity set specified by ``affinity``.
+ * affinity set specified by `affinity`.
  *
  * This operation is only reliable in case the interrupt server was suspended
  * via rtems_interrupt_server_suspend().
@@ -2754,7 +2753,7 @@ rtems_status_code rtems_interrupt_server_set_affinity(
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt server associated with the
- *   server index specified by ``server_index``.
+ *   server index specified by `server_index`.
  *
  * @par Notes
  * @parblock
@@ -2788,14 +2787,14 @@ rtems_status_code rtems_interrupt_server_delete( uint32_t server_index );
  *
  * @brief Suspends the interrupt server.
  *
- * @param server_index is the index of the interrupt server to suspend.  The
+ * @param server_index is the index of the interrupt server to suspend. The
  *   constant #RTEMS_INTERRUPT_SERVER_DEFAULT may be used to specify the
  *   default interrupt server.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt server associated with the
- *   index specified by ``server_index``.
+ *   index specified by `server_index`.
  *
  * @par Notes
  * Interrupt server may be resumed by rtems_interrupt_server_resume().
@@ -2823,14 +2822,14 @@ rtems_status_code rtems_interrupt_server_suspend( uint32_t server_index );
  *
  * @brief Resumes the interrupt server.
  *
- * @param server_index is the index of the interrupt server to resume.  The
+ * @param server_index is the index of the interrupt server to resume. The
  *   constant #RTEMS_INTERRUPT_SERVER_DEFAULT may be used to specify the
  *   default interrupt server.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt server associated with the
- *   index specified by ``server_index``.
+ *   index specified by `server_index`.
  *
  * @par Notes
  * Interrupt server may be suspended by rtems_interrupt_server_suspend().
@@ -2859,26 +2858,26 @@ rtems_status_code rtems_interrupt_server_resume( uint32_t server_index );
  * @brief Moves the interrupt handlers installed at the interrupt vector and
  *   the source interrupt server to the destination interrupt server.
  *
- * @param source_server_index is the index of the source interrupt server.  The
+ * @param source_server_index is the index of the source interrupt server. The
  *   constant #RTEMS_INTERRUPT_SERVER_DEFAULT may be used to specify the
  *   default interrupt server.
  *
  * @param vector is the interrupt vector number.
  *
  * @param destination_server_index is the index of the destination interrupt
- *   server.  The constant #RTEMS_INTERRUPT_SERVER_DEFAULT may be used to
+ *   server. The constant #RTEMS_INTERRUPT_SERVER_DEFAULT may be used to
  *   specify the default interrupt server.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt server associated with the
- *   index specified by ``source_server_index``.
+ *   index specified by `source_server_index`.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt server associated with the
- *   index specified by ``destination_server_index``.
+ *   index specified by `destination_server_index`.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
- *   number specified by ``vector``.
+ *   number specified by `vector`.
  *
  * @par Constraints
  * @parblock
@@ -2917,17 +2916,17 @@ rtems_status_code rtems_interrupt_server_move(
  * @param arg is the visitor argument.
  *
  * For each installed handler at the interrupt vector and interrupt server the
- * visitor function specified by ``vector`` will be called with the argument
- * specified by ``routine`` and the handler information, options, routine and
+ * visitor function specified by `vector` will be called with the argument
+ * specified by `routine` and the handler information, options, routine and
  * argument.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt server associated with the
- *   index specified by ``server_index``.
+ *   index specified by `server_index`.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
- *   number specified by ``vector``.
+ *   number specified by `vector`.
  *
  * @par Notes
  * @parblock
@@ -3044,7 +3043,7 @@ typedef struct {
  *
  * @brief Initializes the interrupt server entry.
  *
- * @param server_index is the interrupt server index.  The constant
+ * @param server_index is the interrupt server index. The constant
  *   #RTEMS_INTERRUPT_SERVER_DEFAULT may be used to specify the default
  *   interrupt server.
  *
@@ -3053,7 +3052,7 @@ typedef struct {
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt server associated with the
- *   index specified by ``server_index``.
+ *   index specified by `server_index`.
  *
  * @par Notes
  * After initialization, the list of actions of the interrupt server entry is
@@ -3090,7 +3089,7 @@ rtems_status_code rtems_interrupt_server_entry_initialize(
  *   interrupt server entry.
  *
  * @param[in,out] entry is the interrupt server entry to prepend the interrupt
- *   server action.  It shall have been initialized via
+ *   server action. It shall have been initialized via
  *   rtems_interrupt_server_entry_initialize().
  *
  * @param[out] action is the interrupt server action to initialize and prepend
@@ -3189,7 +3188,7 @@ void rtems_interrupt_server_entry_destroy(
  * @param entry is the interrupt server entry to submit.
  *
  * The directive appends the entry to the pending entries of the interrupt
- * server.  The interrupt server is notified that a new entry is pending.  Once
+ * server. The interrupt server is notified that a new entry is pending. Once
  * the interrupt server is scheduled it services the actions of all pending
  * entries.
  *
@@ -3245,14 +3244,14 @@ void rtems_interrupt_server_entry_submit(
  *
  * @param entry is the interrupt server entry to move.
  *
- * @param server_index is the index of the destination interrupt server.  The
+ * @param server_index is the index of the destination interrupt server. The
  *   constant #RTEMS_INTERRUPT_SERVER_DEFAULT may be used to specify the
  *   default interrupt server.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt server associated with the
- *   index specified by ``server_index``.
+ *   index specified by `server_index`.
  *
  * @par Constraints
  * @parblock
@@ -3334,7 +3333,7 @@ typedef struct {
  *
  * @brief Initializes the interrupt server request.
  *
- * @param server_index is the interrupt server index.  The constant
+ * @param server_index is the interrupt server index. The constant
  *   #RTEMS_INTERRUPT_SERVER_DEFAULT may be used to specify the default
  *   interrupt server.
  *
@@ -3347,7 +3346,7 @@ typedef struct {
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no interrupt server associated with the
- *   index specified by ``server_index``.
+ *   index specified by `server_index`.
  *
  * @par Notes
  * An interrupt server requests consists of an interrupt server entry and
@@ -3485,8 +3484,8 @@ static inline void rtems_interrupt_server_request_destroy(
  * @param[in,out] request is the interrupt server request to submit.
  *
  * The directive appends the interrupt server entry of the request to the
- * pending entries of the interrupt server.  The interrupt server is notified
- * that a new entry is pending.  Once the interrupt server is scheduled it
+ * pending entries of the interrupt server. The interrupt server is notified
+ * that a new entry is pending. Once the interrupt server is scheduled it
  * services the actions of all pending entries.
  *
  * @par Notes

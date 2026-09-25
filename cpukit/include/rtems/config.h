@@ -79,7 +79,7 @@ extern "C" {
  * @brief The application configuration information group provides an API to
  *   get the configuration of an application.
  *
- * RTEMS must be configured for an application.  This configuration encompasses
+ * RTEMS must be configured for an application. This configuration encompasses
  * a variety of information including the length of each clock tick, the
  * maximum number of each information RTEMS object that can be created, the
  * application initialization tasks, the task scheduling algorithm to be used,
@@ -95,7 +95,7 @@ extern "C" {
  * macros which define configuration parameters of interest to the application
  * and defaulting or calculating all others. This variety of macros can
  * automatically produce all of the configuration data required for an RTEMS
- * application.  The term `confdefs` is shorthand for a *Configuration
+ * application. The term `confdefs` is shorthand for a *Configuration
  * Defaults*.
  *
  * As a general rule, application developers only specify values for the
@@ -227,7 +227,7 @@ typedef Stack_Allocator_free rtems_stack_free_hook;
  * @brief Gets the RTEMS build label.
  *
  * The build label is a user-provided string defined by the build configuration
- * through the `RTEMS_BUILD_LABEL` build option.  The format of the string is
+ * through the `RTEMS_BUILD_LABEL` build option. The format of the string is
  * completely user-defined.
  *
  * @return Returns a pointer to the RTEMS build label.
@@ -279,8 +279,8 @@ const char *rtems_get_copyright_notice( void );
  * @brief Gets the RTEMS target hash.
  *
  * The target hash is calculated from BSP-specific values which characterize a
- * target system.  The target hash is encoded as a base64url string.  The
- * target hash algorithm is unspecified.
+ * target system. The target hash is encoded as a base64url string. The target
+ * hash algorithm is unspecified.
  *
  * @return Returns a pointer to the RTEMS target hash.
  *

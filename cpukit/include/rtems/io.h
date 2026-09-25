@@ -177,15 +177,15 @@ typedef struct {
  * @brief Registers and initializes the device with the specified device driver
  *   address table and device major number in the Device Driver Table.
  *
- * @param major is the device major number.  Use a value of zero to let the
+ * @param major is the device major number. Use a value of zero to let the
  *   system obtain a device major number automatically.
  *
  * @param driver_table is the device driver address table.
  *
  * @param[out] registered_major is the pointer to an
- *   ::rtems_device_major_number object.  When the directive call is
- *   successful, the device major number of the registered device will be
- *   stored in this object.
+ *   ::rtems_device_major_number object. When the directive call is successful,
+ *   the device major number of the registered device will be stored in this
+ *   object.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *

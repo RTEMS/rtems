@@ -87,19 +87,19 @@ extern "C" {
  *
  * @param name is the scheduler name to look up.
  *
- * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ * @param[out] id is the pointer to an ::rtems_id object. When the directive
  *   call is successful, the identifier of the scheduler will be stored in this
  *   object.
  *
  * This directive obtains a scheduler identifier associated with the scheduler
- * name specified in ``name``.
+ * name specified in `name`.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_NAME There was no scheduler associated with the
  *   name.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``id`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `id` parameter was NULL.
  *
  * @par Notes
  * @parblock
@@ -129,13 +129,13 @@ rtems_status_code rtems_scheduler_ident( rtems_name name, rtems_id *id );
  *
  * @param cpu_index is the processor index to identify the scheduler.
  *
- * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ * @param[out] id is the pointer to an ::rtems_id object. When the directive
  *   call is successful, the identifier of the scheduler will be stored in this
  *   object.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``id`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `id` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_NAME The processor index was invalid.
  *
@@ -163,13 +163,13 @@ rtems_status_code rtems_scheduler_ident_by_processor(
  *
  * @brief Identifies a scheduler by the processor set.
  *
- * @param cpusetsize is the size of the processor set referenced by ``cpuset``
- *   in bytes.  The size shall be positive.
+ * @param cpusetsize is the size of the processor set referenced by `cpuset` in
+ *   bytes. The size shall be positive.
  *
- * @param cpuset is the pointer to a cpu_set_t.  The referenced processor set
+ * @param cpuset is the pointer to a cpu_set_t. The referenced processor set
  *   will be used to identify the scheduler.
  *
- * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ * @param[out] id is the pointer to an ::rtems_id object. When the directive
  *   call is successful, the identifier of the scheduler will be stored in this
  *   object.
  *
@@ -178,9 +178,9 @@ rtems_status_code rtems_scheduler_ident_by_processor(
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``id`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `id` parameter was NULL.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``cpuset`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `cpuset` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_SIZE The processor set size was invalid.
  *
@@ -215,16 +215,16 @@ rtems_status_code rtems_scheduler_ident_by_processor_set(
  *
  * @param scheduler_id is the scheduler identifier.
  *
- * @param[out] priority is the pointer to an ::rtems_task_priority object.
- *   When the directive the maximum priority of the scheduler will be stored in
- *   this object.
+ * @param[out] priority is the pointer to an ::rtems_task_priority object. When
+ *   the directive the maximum priority of the scheduler will be stored in this
+ *   object.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no scheduler associated with the
- *   identifier specified by ``scheduler_id``.
+ *   identifier specified by `scheduler_id`.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``priority`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `priority` parameter was NULL.
  *
  * @par Constraints
  * @parblock
@@ -252,17 +252,17 @@ rtems_status_code rtems_scheduler_get_maximum_priority(
  *
  * @param priority is the Classic API task priority to map.
  *
- * @param[out] posix_priority is the pointer to an `int` object.  When the
+ * @param[out] posix_priority is the pointer to an `int` object. When the
  *   directive call is successful, the POSIX thread priority value
  *   corresponding to the specified Classic API task priority value will be
  *   stored in this object.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``posix_priority`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `posix_priority` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no scheduler associated with the
- *   identifier specified by ``scheduler_id``.
+ *   identifier specified by `scheduler_id`.
  *
  * @retval ::RTEMS_INVALID_PRIORITY The Classic API task priority was invalid.
  *
@@ -293,17 +293,17 @@ rtems_status_code rtems_scheduler_map_priority_to_posix(
  *
  * @param posix_priority is the POSIX thread priority to map.
  *
- * @param[out] priority is the pointer to an ::rtems_task_priority object.
- *   When the directive call is successful, the Classic API task priority value
+ * @param[out] priority is the pointer to an ::rtems_task_priority object. When
+ *   the directive call is successful, the Classic API task priority value
  *   corresponding to the specified POSIX thread priority value will be stored
  *   in this object.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``priority`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `priority` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no scheduler associated with the
- *   identifier specified by ``scheduler_id``.
+ *   identifier specified by `scheduler_id`.
  *
  * @retval ::RTEMS_INVALID_PRIORITY The POSIX thread priority was invalid.
  *
@@ -333,7 +333,7 @@ rtems_status_code rtems_scheduler_map_priority_from_posix(
  * evaluates to a compile time constant of zero.
  *
  * Where the system was built with SMP support enabled, this directive returns
- * the index of the current processor.  The set of processor indices is the
+ * the index of the current processor. The set of processor indices is the
  * range of integers starting with zero up to
  * rtems_scheduler_get_processor_maximum() minus one.
  *
@@ -372,7 +372,7 @@ uint32_t rtems_scheduler_get_processor( void );
  * Where the system was built with SMP support enabled, this directive returns
  * the minimum of the processors (physically or virtually) available at the
  * target and the configured processor maximum (see @ref
- * CONFIGURE_MAXIMUM_PROCESSORS).  Not all processors in the range from
+ * CONFIGURE_MAXIMUM_PROCESSORS). Not all processors in the range from
  * processor index zero to the last processor index (which is the processor
  * maximum minus one) may be configured to be used by a scheduler or may be
  * online (online processors have a scheduler assigned).
@@ -402,20 +402,20 @@ uint32_t rtems_scheduler_get_processor_maximum( void );
  *
  * @param scheduler_id is the scheduler identifier.
  *
- * @param cpusetsize is the size of the processor set referenced by ``cpuset``
- *   in bytes.
+ * @param cpusetsize is the size of the processor set referenced by `cpuset` in
+ *   bytes.
  *
- * @param[out] cpuset is the pointer to a cpu_set_t object.  When the directive
+ * @param[out] cpuset is the pointer to a cpu_set_t object. When the directive
  *   call is successful, the processor set of the scheduler will be stored in
- *   this object.  A set bit in the processor set means that the corresponding
+ *   this object. A set bit in the processor set means that the corresponding
  *   processor is owned by the scheduler, otherwise the bit is cleared.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``cpuset`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `cpuset` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no scheduler associated with the
- *   identifier specified by ``scheduler_id``.
+ *   identifier specified by `scheduler_id`.
  *
  * @retval ::RTEMS_INVALID_SIZE The provided processor set was too small for
  *   the set of processors owned by the scheduler.
@@ -446,13 +446,13 @@ rtems_status_code rtems_scheduler_get_processor_set(
  *
  * @param cpu_index is the index of the processor to add.
  *
- * This directive adds the processor specified by the ``cpu_index`` to the
- * scheduler specified by ``scheduler_id``.
+ * This directive adds the processor specified by the `cpu_index` to the
+ * scheduler specified by `scheduler_id`.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no scheduler associated with the
- *   identifier specified by ``scheduler_id``.
+ *   identifier specified by `scheduler_id`.
  *
  * @retval ::RTEMS_NOT_CONFIGURED The processor was not configured to be used
  *   by the application.
@@ -493,13 +493,13 @@ rtems_status_code rtems_scheduler_add_processor(
  *
  * @param cpu_index is the index of the processor to remove.
  *
- * This directive removes the processor specified by the ``cpu_index`` from the
- * scheduler specified by ``scheduler_id``.
+ * This directive removes the processor specified by the `cpu_index` from the
+ * scheduler specified by `scheduler_id`.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no scheduler associated with the
- *   identifier specified by ``scheduler_id``.
+ *   identifier specified by `scheduler_id`.
  *
  * @retval ::RTEMS_INVALID_NUMBER The processor was not owned by the scheduler.
  *

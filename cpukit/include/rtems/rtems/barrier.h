@@ -102,32 +102,32 @@ extern "C" {
  * attributes.
  *
  * - The **manual release class** is the default and can be emphasized through
- *   use of the #RTEMS_BARRIER_MANUAL_RELEASE attribute.  For this class, there
+ *   use of the #RTEMS_BARRIER_MANUAL_RELEASE attribute. For this class, there
  *   is no limit on the number of tasks that will block at the barrier. Only
  *   when the rtems_barrier_release() directive is invoked, are the tasks
  *   waiting at the barrier unblocked.
  *
  * - The **automatic release class** is selected by the
- *   #RTEMS_BARRIER_AUTOMATIC_RELEASE attribute.  For this class, tasks calling
+ *   #RTEMS_BARRIER_AUTOMATIC_RELEASE attribute. For this class, tasks calling
  *   the rtems_barrier_wait() directive will block until there are
- *   ``maximum_waiters`` minus one tasks waiting at the barrier.  When the
- *   ``maximum_waiters`` task invokes the rtems_barrier_wait() directive, the
- *   previous ``maximum_waiters`` - 1 tasks are automatically released and the
+ *   `maximum_waiters` minus one tasks waiting at the barrier. When the
+ *   `maximum_waiters` task invokes the rtems_barrier_wait() directive, the
+ *   previous `maximum_waiters` - 1 tasks are automatically released and the
  *   caller returns.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_NAME The ``name`` parameter was invalid.
+ * @retval ::RTEMS_INVALID_NAME The `name` parameter was invalid.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``id`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `id` parameter was NULL.
  *
- * @retval ::RTEMS_INVALID_NUMBER The ``maximum_waiters`` parameter was 0 for
- *   an automatic release barrier.
+ * @retval ::RTEMS_INVALID_NUMBER The `maximum_waiters` parameter was 0 for an
+ *   automatic release barrier.
  *
  * @retval ::RTEMS_TOO_MANY There was no inactive object available to create a
- *   barrier.  The number of barriers available to the application is
- *   configured through the @ref CONFIGURE_MAXIMUM_BARRIERS application
- *   configuration option.
+ *   barrier. The number of barriers available to the application is configured
+ *   through the @ref CONFIGURE_MAXIMUM_BARRIERS application configuration
+ *   option.
  *
  * @par Notes
  * For control and maintenance of the barrier, RTEMS allocates a BCB from the
@@ -169,18 +169,18 @@ rtems_status_code rtems_barrier_create(
  *
  * @param name is the object name to look up.
  *
- * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ * @param[out] id is the pointer to an ::rtems_id object. When the directive
  *   call is successful, the object identifier of an object with the specified
  *   name will be stored in this object.
  *
  * This directive obtains a barrier identifier associated with the barrier name
- * specified in ``name``.
+ * specified in `name`.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``id`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `id` parameter was NULL.
  *
- * @retval ::RTEMS_INVALID_NAME The ``name`` parameter was 0.
+ * @retval ::RTEMS_INVALID_NAME The `name` parameter was 0.
  *
  * @retval ::RTEMS_INVALID_NAME There was no object with the specified name on
  *   the local node.
@@ -218,14 +218,14 @@ rtems_status_code rtems_barrier_ident( rtems_name name, rtems_id *id );
  *
  * @param id is the barrier identifier.
  *
- * This directive deletes the barrier specified by ``id``.  All tasks blocked
+ * This directive deletes the barrier specified by `id`. All tasks blocked
  * waiting for the barrier to be released will be readied and returned a status
  * code which indicates that the barrier was deleted.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no barrier associated with the
- *   identifier specified by ``id``.
+ *   identifier specified by `id`.
  *
  * @par Notes
  * The BCB for the deleted barrier is reclaimed by RTEMS.
@@ -260,24 +260,24 @@ rtems_status_code rtems_barrier_delete( rtems_id id );
  *
  * @param id is the barrier identifier.
  *
- * @param timeout is the timeout in clock ticks.  Use #RTEMS_NO_TIMEOUT to wait
+ * @param timeout is the timeout in clock ticks. Use #RTEMS_NO_TIMEOUT to wait
  *   potentially forever.
  *
- * This directive waits at the barrier specified by ``id``.  The ``timeout``
- * parameter defines how long the calling task is willing to wait.  Use
+ * This directive waits at the barrier specified by `id`. The `timeout`
+ * parameter defines how long the calling task is willing to wait. Use
  * #RTEMS_NO_TIMEOUT to wait potentially forever, otherwise set a timeout
  * interval in clock ticks.
  *
  * Conceptually, the calling task should always be thought of as blocking when
- * it makes this call and being unblocked when the barrier is released.  If the
+ * it makes this call and being unblocked when the barrier is released. If the
  * barrier is configured for manual release, this rule of thumb will always be
- * valid.  If the barrier is configured for automatic release, all callers will
+ * valid. If the barrier is configured for automatic release, all callers will
  * block except for the one which trips the automatic release condition.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no barrier associated with the
- *   identifier specified by ``id``.
+ *   identifier specified by `id`.
  *
  * @retval ::RTEMS_TIMEOUT The timeout happened while the calling task was
  *   waiting at the barrier.
@@ -309,20 +309,20 @@ rtems_status_code rtems_barrier_wait( rtems_id id, rtems_interval timeout );
  *
  * @param id is the barrier identifier.
  *
- * @param[out] released is the pointer to an uint32_t object.  When the
+ * @param[out] released is the pointer to an uint32_t object. When the
  *   directive call is successful, the number of released tasks will be stored
  *   in this object.
  *
- * This directive releases the barrier specified by ``id``.  All tasks waiting
- * at the barrier will be unblocked.  The number of released tasks will be
- * returned in ``released``.
+ * This directive releases the barrier specified by `id`. All tasks waiting at
+ * the barrier will be unblocked. The number of released tasks will be returned
+ * in `released`.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``released`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `released` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no barrier associated with the
- *   identifier specified by ``id``.
+ *   identifier specified by `id`.
  *
  * @par Constraints
  * @parblock
@@ -352,14 +352,14 @@ rtems_status_code rtems_barrier_release( rtems_id id, uint32_t *released );
  *   object.
  *
  * This directive gets the number of tasks waiting at the barrier specified by
- * ``id``. The number of waiting tasks will be returned in ``waiting``.
+ * `id`. The number of waiting tasks will be returned in `waiting`.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``waiting`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `waiting` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no barrier associated with the
- *   identifier specified by ``id``.
+ *   identifier specified by `id`.
  *
  * @par Constraints
  * @parblock

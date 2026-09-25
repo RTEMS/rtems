@@ -102,8 +102,8 @@ extern "C" {
  *
  * @param _value is the value to align down.
  *
- * @param _alignment is the desired alignment in bytes.  The alignment shall be
- *   a power of two, otherwise the returned value is undefined.  The alignment
+ * @param _alignment is the desired alignment in bytes. The alignment shall be
+ *   a power of two, otherwise the returned value is undefined. The alignment
  *   parameter is evaluated twice.
  *
  * @return Returns the value aligned down to the alignment.
@@ -120,8 +120,8 @@ extern "C" {
  *
  * @param _value is the value to align up.
  *
- * @param _alignment is the desired alignment in bytes.  The alignment shall be
- *   a power of two, otherwise the returned value is undefined.  The alignment
+ * @param _alignment is the desired alignment in bytes. The alignment shall be
+ *   a power of two, otherwise the returned value is undefined. The alignment
  *   parameter is evaluated twice.
  *
  * @return Returns the value aligned up to the alignment.
@@ -228,7 +228,7 @@ extern "C" {
  *
  * @brief Gets the element count of the array.
  *
- * @param _array is the name of the array.  This parameter is evaluated twice.
+ * @param _array is the name of the array. This parameter is evaluated twice.
  *
  * @return Returns the element count of the array.
  */
@@ -258,13 +258,13 @@ extern "C" {
 /**
  * @ingroup RTEMSAPIBaseDefs
  *
- * @brief Concatenates _x and _y without expanding.
+ * @brief Concatenates \_x and \_y without expanding.
  *
  * @param _x is the left hand side token of the concatenation.
  *
  * @param _y is the right hand side token of the concatenation.
  *
- * @return Returns the concatenation of the tokens _x and _y.
+ * @return Returns the concatenation of the tokens \_x and \_y.
  */
 #define RTEMS_CONCAT( _x, _y ) _x##_y
 
@@ -308,7 +308,7 @@ extern "C" {
  *
  * @brief Declares a global symbol with the name.
  *
- * @param _name is the name of the global symbol.  It shall be a valid
+ * @param _name is the name of the global symbol. It shall be a valid
  *   designator.
  *
  * This macro must be placed at file scope.
@@ -415,7 +415,7 @@ extern "C" {
  *
  * @param ... are the arguments to stringify.
  *
- * @return Returns the stringification of the arguments.  In case of several
+ * @return Returns the stringification of the arguments. In case of several
  *   arguments a single string is returned not several.
  */
 #define RTEMS_STRING( ... ) #__VA_ARGS__
@@ -452,7 +452,7 @@ extern "C" {
 /**
  * @ingroup RTEMSAPIBaseDefs
  *
- * @brief Concatenates expansion of _x and expansion of _y.
+ * @brief Concatenates expansion of \_x and expansion of \_y.
  *
  * @param _x is expanded first and then used as the left hand side token of the
  *   concatenation.
@@ -460,7 +460,7 @@ extern "C" {
  * @param _y is expanded first and then used as the right hand side token of
  *   the concatenation.
  *
- * @return Returns the concatenation of the expansions of tokens _x and _y.
+ * @return Returns the concatenation of the expansions of tokens \_x and \_y.
  */
 #define RTEMS_XCONCAT( _x, _y ) RTEMS_CONCAT( _x, _y )
 
@@ -878,8 +878,8 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
  *
  * @brief Maps the name to the associated symbol name.
  *
- * @param _name is the user defined name of the symbol.  The name shall be a
- *   valid designator.  On the name a macro expansion is performed.
+ * @param _name is the user defined name of the symbol. The name shall be a
+ *   valid designator. On the name a macro expansion is performed.
  *
  * @return Returns the symbol name associated with the name.
  */
@@ -977,7 +977,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
  * @brief Tells the compiler in a function definition that this function should
  *   be weak.
  *
- * Use this attribute for function definitions.  Do not use it for function
+ * Use this attribute for function definitions. Do not use it for function
  * declarations.
  */
 #if defined( __GNUC__ )
@@ -1012,7 +1012,7 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
  *
  * @param ... are the arguments to expand and stringify.
  *
- * @return Returns the stringification of the expansion of the arguments.  In
+ * @return Returns the stringification of the expansion of the arguments. In
  *   case of several arguments a single string is returned not several.
  */
 #define RTEMS_XSTRING( ... ) RTEMS_STRING( __VA_ARGS__ )
@@ -1024,13 +1024,13 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
  *
  * @brief Defines a global symbol with the name and value.
  *
- * @param _name is the user defined name of the symbol.  The name shall be a
- *   valid designator.  On the name a macro expansion is performed and
+ * @param _name is the user defined name of the symbol. The name shall be a
+ *   valid designator. On the name a macro expansion is performed and
  *   afterwards it is stringified.
  *
- * @param _value is the value of the symbol.  On the value a macro expansion is
- *   performed and afterwards it is stringified.  It shall expand to an integer
- *   expression understood by the assembler.  The value shall be representable
+ * @param _value is the value of the symbol. On the value a macro expansion is
+ *   performed and afterwards it is stringified. It shall expand to an integer
+ *   expression understood by the assembler. The value shall be representable
  *   in the code model of the target architecture.
  *
  * This macro shall be placed at file scope.
@@ -1053,8 +1053,8 @@ void *RTEMS_DEQUALIFY_types_not_compatible( void );
  *
  * @brief This constant represents the element count of a zero-length array.
  *
- * Zero-length arrays are valid in C99 as flexible array members.  C++11 does
- * not allow flexible array members.  Use the GNU extension which is also
+ * Zero-length arrays are valid in C99 as flexible array members. C++11 does
+ * not allow flexible array members. Use the GNU extension which is also
  * supported by other compilers.
  */
 #if __STDC_VERSION__ >= 199409L

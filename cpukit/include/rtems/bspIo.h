@@ -75,9 +75,9 @@ extern "C" {
  *   device and receive characters from the kernel character input device using
  *   a polled and non-blocking implementation.
  *
- * The directives may be used to print debug and test information.  The kernel
+ * The directives may be used to print debug and test information. The kernel
  * character input/output support should work even if no Console Driver is
- * configured, see @ref CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER.  The kernel
+ * configured, see @ref CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER. The kernel
  * character input and output device is provided by the BSP. Applications may
  * change the device.
  */
@@ -99,11 +99,11 @@ typedef void ( *BSP_output_char_function_type )( char );
  * @brief This function pointer references the kernel character output
  *   implementation.
  *
- * This function pointer shall never be NULL.  It shall be provided by the BSP
- * and statically initialized.  The referenced function shall output exactly
- * the character specified by the parameter.  In particular, it shall not
- * perform character translations, for example `NL` to `CR` followed by `NR`.
- * The function shall not block.
+ * This function pointer shall never be NULL. It shall be provided by the BSP
+ * and statically initialized. The referenced function shall output exactly the
+ * character specified by the parameter. In particular, it shall not perform
+ * character translations, for example `NL` to `CR` followed by `NR`. The
+ * function shall not block.
  */
 extern BSP_output_char_function_type BSP_output_char;
 
@@ -116,10 +116,10 @@ extern BSP_output_char_function_type BSP_output_char;
  *
  * @param c is the character to output.
  *
- * The directive outputs the character specified by ``c`` to the kernel
- * character output device using the polled character output implementation
- * provided by #BSP_output_char.  The directive performs a character
- * translation from `NL` to `CR` followed by `NR`.
+ * The directive outputs the character specified by `c` to the kernel character
+ * output device using the polled character output implementation provided by
+ * #BSP_output_char. The directive performs a character translation from `NL`
+ * to `CR` followed by `NR`.
  *
  * If the kernel character output device is concurrently accessed, then
  * interleaved output may occur.
@@ -327,9 +327,9 @@ typedef int ( *BSP_polling_getchar_function_type )( void );
  * @brief This function pointer may reference the kernel character input
  *   implementation.
  *
- * This function pointer may be NULL.  It may reference a function provided by
- * the BSP.  Referenced functions shall dequeue the least recently received
- * character from the device and return it as an unsigned character.  If no
+ * This function pointer may be NULL. It may reference a function provided by
+ * the BSP. Referenced functions shall dequeue the least recently received
+ * character from the device and return it as an unsigned character. If no
  * character is enqueued on the device, then the function shall immediately
  * return the value minus one.
  */

@@ -74,7 +74,7 @@ extern "C" {
  * @brief Initializes the system and starts multitasking.
  *
  * Iterates through the system initialization linker set and invokes the
- * registered handlers.  The final step is to start multitasking.
+ * registered handlers. The final step is to start multitasking.
  *
  * @par Notes
  * Errors in the initialization sequence are usually fatal and lead to a system
@@ -100,9 +100,9 @@ RTEMS_NO_RETURN void rtems_initialize_executive( void );
  *
  * @param fatal_code is the fatal code.
  *
- * This directive processes fatal errors.  The fatal source is set to
- * RTEMS_FATAL_SOURCE_EXIT.  The fatal code is set to the value of the
- * ``fatal_code`` parameter.
+ * This directive processes fatal errors. The fatal source is set to
+ * RTEMS_FATAL_SOURCE_EXIT. The fatal code is set to the value of the
+ * `fatal_code` parameter.
  *
  * @par Constraints
  * @parblock

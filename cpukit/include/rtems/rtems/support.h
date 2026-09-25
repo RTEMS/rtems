@@ -218,7 +218,7 @@ static inline void rtems_name_to_characters(
  *
  * @param bytes is the number of bytes to allocated.
  *
- * @param[out] pointer is the pointer to a `void` pointer object.  When the
+ * @param[out] pointer is the pointer to a `void` pointer object. When the
  *   directive call is successful, the begin address of the allocated memory
  *   area will be stored in this object.
  *
@@ -276,9 +276,9 @@ bool rtems_workspace_free( void *pointer );
  *
  * @brief Gets information about the RTEMS Workspace.
  *
- * @param[out] the_info is the pointer to a Heap_Information_block object.
- *   When the directive call is successful, the heap information will be stored
- *   in this object.
+ * @param[out] the_info is the pointer to a Heap_Information_block object. When
+ *   the directive call is successful, the heap information will be stored in
+ *   this object.
  *
  * @return Returns true, if getting the information was successful, otherwise
  *   false.
@@ -309,9 +309,9 @@ bool rtems_workspace_get_information( Heap_Information_block *the_info );
  *
  * @param block_count is the block count.
  *
- * Afterwards the heap has at most ``block_count`` allocatable blocks of sizes
- * specified by ``block_sizes``.  The ``block_sizes`` must point to an array
- * with ``block_count`` members.  All other blocks are used.
+ * Afterwards the heap has at most `block_count` allocatable blocks of sizes
+ * specified by `block_sizes`. The `block_sizes` must point to an array with
+ * `block_count` members. All other blocks are used.
  *
  * @return The returned pointer value may be used to free the greedy allocation
  *   by calling rtems_workspace_greedy_free().
@@ -331,9 +331,9 @@ void *rtems_workspace_greedy_allocate(
  *
  * @param allocatable_size is the remaining allocatable size.
  *
- * Afterwards the heap has at most one allocatable block.  This block is the
- * largest free block if it exists.  The allocatable size of this block is
- * stored in ``allocatable_size``.  All other blocks are used.
+ * Afterwards the heap has at most one allocatable block. This block is the
+ * largest free block if it exists. The allocatable size of this block is
+ * stored in `allocatable_size`. All other blocks are used.
  *
  * @return The returned pointer value may be used to free the greedy allocation
  *   by calling rtems_workspace_greedy_free().

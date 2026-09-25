@@ -63,7 +63,7 @@ extern "C" {
  * @ingroup RTEMSAPIClassic
  *
  * @brief RTEMS provides a collection of services to assist in the management
- *   and usage of the objects created and utilized via other managers.  These
+ *   and usage of the objects created and utilized via other managers. These
  *   services assist in the manipulation of RTEMS objects independent of the
  *   API used to create them.
  */
@@ -263,8 +263,8 @@ rtems_id rtems_build_id(
  * @param c4 is the fourth character of the name.
  *
  * This directive takes the four characters provided as arguments and composes
- * a 32-bit object name with ``c1`` in the most significant 8-bits and ``c4``
- * in the least significant 8-bits.
+ * a 32-bit object name with `c1` in the most significant 8-bits and `c4` in
+ * the least significant 8-bits.
  *
  * @return Returns the object name composed of the four characters.
  *
@@ -294,13 +294,13 @@ rtems_name rtems_build_name( char c1, char c2, char c3, char c4 );
  *
  * @param id is the object identifier to get the name.
  *
- * @param[out] name is the pointer to an ::rtems_name object.  When the
+ * @param[out] name is the pointer to an ::rtems_name object. When the
  *   directive call is successful, the object name associated with the object
  *   identifier will be stored in this object.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``name`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `name` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no object information available for the
  *   object identifier.
@@ -339,23 +339,23 @@ rtems_status_code rtems_object_get_classic_name(
  *
  * @param[out] name is the pointer to a buffer of the specified length.
  *
- * The object name is stored in the name buffer.  If the name buffer length is
+ * The object name is stored in the name buffer. If the name buffer length is
  * greater than zero, then the stored object name will be `NUL` terminated. The
- * stored object name may be truncated to fit the length.  There is no
- * indication if a truncation occurred.  Every attempt is made to return name
- * as a printable string even if the object has the Classic API 32-bit integer
+ * stored object name may be truncated to fit the length. There is no
+ * indication if a truncation occurred. Every attempt is made to return name as
+ * a printable string even if the object has the Classic API 32-bit integer
  * style name.
  *
- * @retval NULL The ``length`` parameter was 0.
+ * @retval NULL The `length` parameter was 0.
  *
- * @retval NULL The ``name`` parameter was NULL.
+ * @retval NULL The `name` parameter was NULL.
  *
  * @retval NULL There was no object information available for the object
  *   identifier.
  *
  * @retval NULL There was no object associated with the object identifier.
  *
- * @return Returns the ``name`` parameter value, if there is an object name
+ * @return Returns the `name` parameter value, if there is an object name
  *   associated with the object identifier.
  *
  * @par Constraints
@@ -385,7 +385,7 @@ char *rtems_object_get_name( rtems_id id, size_t length, char *name );
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``name`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `name` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no object information available for the
  *   object identifier.
@@ -401,13 +401,13 @@ char *rtems_object_get_name( rtems_id id, size_t length, char *name );
  * This directive can be used to set the name of objects which do not have a
  * naming scheme per their API.
  *
- * If the object specified by ``id`` is of a class that has a string name, this
+ * If the object specified by `id` is of a class that has a string name, this
  * directive will free the existing name to the RTEMS Workspace and allocate
  * enough memory from the RTEMS Workspace to make a copy of the string located
- * at ``name``.
+ * at `name`.
  *
- * If the object specified by ``id`` is of a class that has a 32-bit integer
- * style name, then the first four characters in ``name`` will be used to
+ * If the object specified by `id` is of a class that has a 32-bit integer
+ * style name, then the first four characters in `name` will be used to
  * construct the name.
  * @endparblock
  *
@@ -438,7 +438,7 @@ rtems_status_code rtems_object_set_name( rtems_id id, const char *name );
  * @return Returns the API component of the object identifier.
  *
  * @par Notes
- * This directive does not validate the object identifier provided in ``id``.
+ * This directive does not validate the object identifier provided in `id`.
  *
  * @par Constraints
  * @parblock
@@ -468,7 +468,7 @@ int rtems_object_id_get_api( rtems_id id );
  * @return Returns the class component of the object identifier.
  *
  * @par Notes
- * This directive does not validate the object identifier provided in ``id``.
+ * This directive does not validate the object identifier provided in `id`.
  *
  * @par Constraints
  * @parblock
@@ -498,7 +498,7 @@ int rtems_object_id_get_class( rtems_id id );
  * @return Returns the MPCI node component of the object identifier.
  *
  * @par Notes
- * This directive does not validate the object identifier provided in ``id``.
+ * This directive does not validate the object identifier provided in `id`.
  *
  * @par Constraints
  * @parblock
@@ -528,7 +528,7 @@ int rtems_object_id_get_node( rtems_id id );
  * @return Returns the index component of the object identifier.
  *
  * @par Notes
- * This directive does not validate the object identifier provided in ``id``.
+ * This directive does not validate the object identifier provided in `id`.
  *
  * @par Constraints
  * @parblock
@@ -721,12 +721,12 @@ const char *rtems_object_get_api_class_name( int the_api, int the_class );
  *   information.
  *
  * @param[out] info is the pointer to an rtems_object_api_class_information
- *   object.  When the directive call is successful, the object class
+ *   object. When the directive call is successful, the object class
  *   information of the class of the API will be stored in this object.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``info`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `info` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_NUMBER The class of the API or the API was invalid.
  *

@@ -187,10 +187,10 @@ typedef struct {
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``the_info`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `the_info` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no timer associated with the identifier
- *   specified by ``id``.
+ *   specified by `id`.
  *
  * @par Constraints
  * @parblock
@@ -258,23 +258,23 @@ typedef rtems_timer_service_routine ( *rtems_timer_service_routine_entry )(
  *
  * @param name is the object name of the timer.
  *
- * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ * @param[out] id is the pointer to an ::rtems_id object. When the directive
  *   call is successful, the identifier of the created timer will be stored in
  *   this object.
  *
- * This directive creates a timer which resides on the local node.  The timer
- * has the user-defined object name specified in ``name``.  The assigned object
- * identifier is returned in ``id``.  This identifier is used to access the
- * timer with other timer related directives.
+ * This directive creates a timer which resides on the local node. The timer
+ * has the user-defined object name specified in `name`. The assigned object
+ * identifier is returned in `id`. This identifier is used to access the timer
+ * with other timer related directives.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_NAME The ``name`` parameter was invalid.
+ * @retval ::RTEMS_INVALID_NAME The `name` parameter was invalid.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``id`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `id` parameter was NULL.
  *
  * @retval ::RTEMS_TOO_MANY There was no inactive object available to create a
- *   timer.  The number of timers available to the application is configured
+ *   timer. The number of timers available to the application is configured
  *   through the @ref CONFIGURE_MAXIMUM_TIMERS application configuration
  *   option.
  *
@@ -318,18 +318,18 @@ rtems_status_code rtems_timer_create( rtems_name name, rtems_id *id );
  *
  * @param name is the object name to look up.
  *
- * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ * @param[out] id is the pointer to an ::rtems_id object. When the directive
  *   call is successful, the object identifier of an object with the specified
  *   name will be stored in this object.
  *
  * This directive obtains a timer identifier associated with the timer name
- * specified in ``name``.
+ * specified in `name`.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``id`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `id` parameter was NULL.
  *
- * @retval ::RTEMS_INVALID_NAME The ``name`` parameter was 0.
+ * @retval ::RTEMS_INVALID_NAME The `name` parameter was 0.
  *
  * @retval ::RTEMS_INVALID_NAME There was no object with the specified name on
  *   the local node.
@@ -367,7 +367,7 @@ rtems_status_code rtems_timer_ident( rtems_name name, rtems_id *id );
  *
  * @param id is the timer identifier.
  *
- * This directive cancels the timer specified by ``id``.  This timer will be
+ * This directive cancels the timer specified by `id`. This timer will be
  * reinitiated by the next invocation of rtems_timer_reset(),
  * rtems_timer_fire_after(), rtems_timer_fire_when(),
  * rtems_timer_server_fire_after(), or rtems_timer_server_fire_when() with the
@@ -376,7 +376,7 @@ rtems_status_code rtems_timer_ident( rtems_name name, rtems_id *id );
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no timer associated with the identifier
- *   specified by ``id``.
+ *   specified by `id`.
  *
  * @par Constraints
  * @parblock
@@ -403,13 +403,13 @@ rtems_status_code rtems_timer_cancel( rtems_id id );
  *
  * @param id is the timer identifier.
  *
- * This directive deletes the timer specified by ``id``.  If the timer is
- * running, it is automatically canceled.
+ * This directive deletes the timer specified by `id`. If the timer is running,
+ * it is automatically canceled.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no timer associated with the identifier
- *   specified by ``id``.
+ *   specified by `id`.
  *
  * @par Notes
  * @parblock
@@ -460,21 +460,20 @@ rtems_status_code rtems_timer_delete( rtems_id id );
  *
  * @param user_data is the argument passed to the routine when it is fired.
  *
- * This directive initiates the timer specified by ``id``.  If the timer is
- * running, it is automatically canceled before being initiated.  The timer is
+ * This directive initiates the timer specified by `id`. If the timer is
+ * running, it is automatically canceled before being initiated. The timer is
  * scheduled to fire after an interval of clock ticks has passed specified by
- * ``ticks``.  When the timer fires, the timer service routine ``routine`` will
- * be invoked with the argument ``user_data`` in the context of the clock tick
- * ISR.
+ * `ticks`. When the timer fires, the timer service routine `routine` will be
+ * invoked with the argument `user_data` in the context of the clock tick ISR.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_NUMBER The ``ticks`` parameter was 0.
+ * @retval ::RTEMS_INVALID_NUMBER The `ticks` parameter was 0.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``routine`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `routine` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no timer associated with the identifier
- *   specified by ``id``.
+ *   specified by `id`.
  *
  * @par Constraints
  * @parblock
@@ -512,24 +511,24 @@ rtems_status_code rtems_timer_fire_after(
  *
  * @param user_data is the argument passed to the routine when it is fired.
  *
- * This directive initiates the timer specified by ``id``.  If the timer is
- * running, it is automatically canceled before being initiated.  The timer is
- * scheduled to fire at the time of day specified by ``wall_time``.  When the
- * timer fires, the timer service routine ``routine`` will be invoked with the
- * argument ``user_data`` in the context of the clock tick ISR.
+ * This directive initiates the timer specified by `id`. If the timer is
+ * running, it is automatically canceled before being initiated. The timer is
+ * scheduled to fire at the time of day specified by `wall_time`. When the
+ * timer fires, the timer service routine `routine` will be invoked with the
+ * argument `user_data` in the context of the clock tick ISR.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_NOT_DEFINED The system date and time was not set.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``routine`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `routine` parameter was NULL.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``wall_time`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `wall_time` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_CLOCK The time of day was invalid.
  *
  * @retval ::RTEMS_INVALID_ID There was no timer associated with the identifier
- *   specified by ``id``.
+ *   specified by `id`.
  *
  * @par Constraints
  * @parblock
@@ -565,9 +564,9 @@ rtems_status_code rtems_timer_fire_when(
  *
  * @param attribute_set is the task attribute set.
  *
- * This directive initiates the Timer Server task.  This task is responsible
- * for executing all timers initiated via the rtems_timer_server_fire_after()
- * or rtems_timer_server_fire_when() directives.
+ * This directive initiates the Timer Server task. This task is responsible for
+ * executing all timers initiated via the rtems_timer_server_fire_after() or
+ * rtems_timer_server_fire_when() directives.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
@@ -579,7 +578,7 @@ rtems_status_code rtems_timer_fire_when(
  *   create the Timer Server task.
  *
  * @retval ::RTEMS_UNSATISFIED There was not enough memory to allocate the task
- *   storage area.  The task storage area contains the task stack, the
+ *   storage area. The task storage area contains the task stack, the
  *   thread-local storage, and the floating point context.
  *
  * @retval ::RTEMS_UNSATISFIED One of the task create extensions failed to
@@ -630,23 +629,23 @@ rtems_status_code rtems_timer_initiate_server(
  *
  * @param user_data is the argument passed to the routine when it is fired.
  *
- * This directive initiates the timer specified by ``id``.  If the timer is
- * running, it is automatically canceled before being initiated.  The timer is
+ * This directive initiates the timer specified by `id`. If the timer is
+ * running, it is automatically canceled before being initiated. The timer is
  * scheduled to fire after an interval of clock ticks has passed specified by
- * ``ticks``.  When the timer fires, the timer service routine ``routine`` will
- * be invoked with the argument ``user_data`` in the context of the Timer
- * Server task.
+ * `ticks`. When the timer fires, the timer service routine `routine` will be
+ * invoked with the argument `user_data` in the context of the Timer Server
+ * task.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INCORRECT_STATE The Timer Server was not initiated.
  *
- * @retval ::RTEMS_INVALID_NUMBER The ``ticks`` parameter was 0.
+ * @retval ::RTEMS_INVALID_NUMBER The `ticks` parameter was 0.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``routine`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `routine` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no timer associated with the identifier
- *   specified by ``id``.
+ *   specified by `id`.
  *
  * @par Constraints
  * @parblock
@@ -684,11 +683,11 @@ rtems_status_code rtems_timer_server_fire_after(
  *
  * @param user_data is the argument passed to the routine when it is fired.
  *
- * This directive initiates the timer specified by ``id``.  If the timer is
- * running, it is automatically canceled before being initiated.  The timer is
- * scheduled to fire at the time of day specified by ``wall_time``.  When the
- * timer fires, the timer service routine ``routine`` will be invoked with the
- * argument ``user_data`` in the context of the Timer Server task.
+ * This directive initiates the timer specified by `id`. If the timer is
+ * running, it is automatically canceled before being initiated. The timer is
+ * scheduled to fire at the time of day specified by `wall_time`. When the
+ * timer fires, the timer service routine `routine` will be invoked with the
+ * argument `user_data` in the context of the Timer Server task.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
@@ -696,14 +695,14 @@ rtems_status_code rtems_timer_server_fire_after(
  *
  * @retval ::RTEMS_NOT_DEFINED The system date and time was not set.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``routine`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `routine` parameter was NULL.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``wall_time`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `wall_time` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_CLOCK The time of day was invalid.
  *
  * @retval ::RTEMS_INVALID_ID There was no timer associated with the identifier
- *   specified by ``id``.
+ *   specified by `id`.
  *
  * @par Constraints
  * @parblock
@@ -735,9 +734,9 @@ rtems_status_code rtems_timer_server_fire_when(
  *
  * @param id is the timer identifier.
  *
- * This directive resets the timer specified by ``id``.  This timer must have
- * been previously initiated with either the rtems_timer_fire_after() or
- * rtems_timer_server_fire_after() directive.  If active the timer is canceled,
+ * This directive resets the timer specified by `id`. This timer must have been
+ * previously initiated with either the rtems_timer_fire_after() or
+ * rtems_timer_server_fire_after() directive. If active the timer is canceled,
  * after which the timer is reinitiated using the same interval and timer
  * service routine which the original rtems_timer_fire_after() or
  * rtems_timer_server_fire_after() directive used.
@@ -745,7 +744,7 @@ rtems_status_code rtems_timer_server_fire_when(
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no timer associated with the identifier
- *   specified by ``id``.
+ *   specified by `id`.
  *
  * @retval ::RTEMS_NOT_DEFINED The timer was not of the interval class.
  *

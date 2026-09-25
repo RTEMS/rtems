@@ -111,9 +111,9 @@ typedef struct {
    * @brief This member defines the optional handler to free the message buffer
    *   storage area.
    *
-   * It is called when the message queue is deleted.  It is called from task
-   * context under protection of the object allocator lock.  It is allowed to
-   * call free() in this handler.  If handler is NULL, then no action will be
+   * It is called when the message queue is deleted. It is called from task
+   * context under protection of the object allocator lock. It is allowed to call
+   * free() in this handler. If handler is NULL, then no action will be
    * performed.
    */
   void ( *storage_free )( void * );
@@ -141,16 +141,16 @@ typedef struct {
  *
  * @param attribute_set is the attribute set of the message queue.
  *
- * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ * @param[out] id is the pointer to an ::rtems_id object. When the directive
  *   call is successful, the identifier of the created message queue will be
  *   stored in this object.
  *
- * This directive creates a message queue which resides on the local node.  The
- * message queue has the user-defined object name specified in ``name``.
- * Memory is allocated from the RTEMS Workspace for the count of messages
- * specified in ``count``, each of ``max_message_size`` bytes in length.  The
- * assigned object identifier is returned in ``id``.  This identifier is used
- * to access the message queue with other message queue related directives.
+ * This directive creates a message queue which resides on the local node. The
+ * message queue has the user-defined object name specified in `name`. Memory
+ * is allocated from the RTEMS Workspace for the count of messages specified in
+ * `count`, each of `max_message_size` bytes in length. The assigned object
+ * identifier is returned in `id`. This identifier is used to access the
+ * message queue with other message queue related directives.
  *
  * The **attribute set** specified in ``attribute_set`` is built through a
  * *bitwise or* of the attribute constants described below.  Not all
@@ -167,12 +167,12 @@ typedef struct {
  *   (default) or #RTEMS_PRIORITY.
  *
  * The message queue has a local or global **scope** in a multiprocessing
- * network (this attribute does not refer to SMP systems).  The scope is
+ * network (this attribute does not refer to SMP systems). The scope is
  * selected by the mutually exclusive #RTEMS_LOCAL and #RTEMS_GLOBAL
  * attributes.
  *
  * - A **local scope** is the default and can be emphasized through the use of
- *   the #RTEMS_LOCAL attribute.  A local message queue can be only used by the
+ *   the #RTEMS_LOCAL attribute. A local message queue can be only used by the
  *   node which created it.
  *
  * - A **global scope** is established if the #RTEMS_GLOBAL attribute is set.
@@ -190,35 +190,35 @@ typedef struct {
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_NAME The ``name`` parameter was invalid.
+ * @retval ::RTEMS_INVALID_NAME The `name` parameter was invalid.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``id`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `id` parameter was NULL.
  *
- * @retval ::RTEMS_INVALID_NUMBER The ``count`` parameter was invalid.
+ * @retval ::RTEMS_INVALID_NUMBER The `count` parameter was invalid.
  *
- * @retval ::RTEMS_INVALID_SIZE The ``max_message_size`` parameter was zero.
+ * @retval ::RTEMS_INVALID_SIZE The `max_message_size` parameter was zero.
  *
  * @retval ::RTEMS_INVALID_SIZE In multiprocessing configurations, the
- *   ``max_message_size`` exceeded the maximum message size supported by the
+ *   `max_message_size` exceeded the maximum message size supported by the
  *   MPCI.
  *
  * @retval ::RTEMS_TOO_MANY There was no inactive object available to create a
- *   message queue.  The number of message queue available to the application
- *   is configured through the @ref CONFIGURE_MAXIMUM_MESSAGE_QUEUES
- *   application configuration option.
+ *   message queue. The number of message queue available to the application is
+ *   configured through the @ref CONFIGURE_MAXIMUM_MESSAGE_QUEUES application
+ *   configuration option.
  *
  * @retval ::RTEMS_TOO_MANY In multiprocessing configurations, there was no
- *   inactive global object available to create a global message queue.  The
+ *   inactive global object available to create a global message queue. The
  *   number of global objects available to the application is configured
  *   through the @ref CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS application
  *   configuration option.
  *
- * @retval ::RTEMS_INVALID_SIZE The ``max_message_size`` parameter was too
- *   big and resulted in integer overflows in calculations carried out to
- *   determine the size of the message buffer area.
+ * @retval ::RTEMS_INVALID_SIZE The `max_message_size` parameter was too big
+ *   and resulted in integer overflows in calculations carried out to determine
+ *   the size of the message buffer area.
  *
- * @retval ::RTEMS_INVALID_NUMBER The product of ``count`` and
- *   ``max_message_size`` is greater than the maximum storage size.
+ * @retval ::RTEMS_INVALID_NUMBER The product of `count` and `max_message_size`
+ *   is greater than the maximum storage size.
  *
  * @retval ::RTEMS_UNSATISFIED There was not enough memory available in the
  *   RTEMS Workspace to allocate the message buffers for the message queue.
@@ -284,21 +284,21 @@ rtems_status_code rtems_message_queue_create(
  * @brief Constructs a message queue from the specified the message queue
  *   configuration.
  *
- * @param config is the pointer to an rtems_message_queue_config object.  It
+ * @param config is the pointer to an rtems_message_queue_config object. It
  *   configures the message queue.
  *
- * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ * @param[out] id is the pointer to an ::rtems_id object. When the directive
  *   call is successful, the identifier of the constructed message queue will
  *   be stored in this object.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``config`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `config` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_NAME The message queue name in the configuration was
  *   invalid.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``id`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `id` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_NUMBER The maximum number of pending messages in the
  *   configuration was zero.
@@ -307,8 +307,8 @@ rtems_status_code rtems_message_queue_create(
  *   was zero.
  *
  * @retval ::RTEMS_INVALID_SIZE In multiprocessing configurations, the maximum
- *   message size in the configuration exceeded the maximum message size supported
- *   by the MPCI.
+ *   message size in the configuration exceeded the maximum message size
+ *   supported by the MPCI.
  *
  * @retval ::RTEMS_TOO_MANY There was no inactive message queue object
  *   available to construct a message queue.
@@ -391,14 +391,14 @@ rtems_status_code rtems_message_queue_construct(
  *
  * @param node is the node or node set to search for a matching object.
  *
- * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ * @param[out] id is the pointer to an ::rtems_id object. When the directive
  *   call is successful, the object identifier of an object with the specified
  *   name will be stored in this object.
  *
  * This directive obtains a message queue identifier associated with the
- * message queue name specified in ``name``.
+ * message queue name specified in `name`.
  *
- * The node to search is specified in ``node``.  It shall be
+ * The node to search is specified in `node`. It shall be
  *
  * - a valid node number,
  *
@@ -411,9 +411,9 @@ rtems_status_code rtems_message_queue_construct(
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``id`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `id` parameter was NULL.
  *
- * @retval ::RTEMS_INVALID_NAME The ``name`` parameter was 0.
+ * @retval ::RTEMS_INVALID_NAME The `name` parameter was 0.
  *
  * @retval ::RTEMS_INVALID_NAME There was no object with the specified name on
  *   the specified nodes.
@@ -428,7 +428,7 @@ rtems_status_code rtems_message_queue_construct(
  * However, this message queue identifier is not guaranteed to correspond to
  * the desired message queue.
  *
- * The objects are searched from lowest to the highest index.  If ``node`` is
+ * The objects are searched from lowest to the highest index.  If `node` is
  * #RTEMS_SEARCH_ALL_NODES, all nodes are searched with the local node being
  * searched first.  All other nodes are searched from lowest to the highest
  * node number.
@@ -467,7 +467,7 @@ rtems_status_code rtems_message_queue_ident(
  *
  * @param id is the message queue identifier.
  *
- * This directive deletes the message queue specified by ``id``. As a result of
+ * This directive deletes the message queue specified by `id`. As a result of
  * this directive, all tasks blocked waiting to receive a message from this
  * queue will be readied and returned a status code which indicates that the
  * message queue was deleted.
@@ -475,7 +475,7 @@ rtems_status_code rtems_message_queue_ident(
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no message queue associated with the
- *   identifier specified by ``id``.
+ *   identifier specified by `id`.
  *
  * @retval ::RTEMS_ILLEGAL_ON_REMOTE_OBJECT The message queue resided on a
  *   remote node.
@@ -536,19 +536,19 @@ rtems_status_code rtems_message_queue_delete( rtems_id id );
  *
  * @param size is the size in bytes of the message buffer to send.
  *
- * This directive sends the message ``buffer`` of ``size`` bytes in length to
- * the queue specified by ``id``.  If a task is waiting at the queue, then the
- * message is copied to the waiting task's buffer and the task is unblocked. If
- * no tasks are waiting at the queue, then the message is copied to a message
- * buffer which is obtained from this message queue's message buffer pool.  The
+ * This directive sends the message `buffer` of `size` bytes in length to the
+ * queue specified by `id`. If a task is waiting at the queue, then the message
+ * is copied to the waiting task's buffer and the task is unblocked. If no
+ * tasks are waiting at the queue, then the message is copied to a message
+ * buffer which is obtained from this message queue's message buffer pool. The
  * message buffer is then placed at the rear of the queue.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no queue associated with the identifier
- *   specified by ``id``.
+ *   specified by `id`.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``buffer`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `buffer` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_SIZE The size of the message exceeded the maximum
  *   message size of the queue as defined by rtems_message_queue_create() or
@@ -593,19 +593,19 @@ rtems_status_code rtems_message_queue_send(
  *
  * @param size is the size in bytes of the message buffer to send urgently.
  *
- * This directive sends the message ``buffer`` of ``size`` bytes in length to
- * the queue specified by ``id``.  If a task is waiting at the queue, then the
- * message is copied to the waiting task's buffer and the task is unblocked. If
- * no tasks are waiting at the queue, then the message is copied to a message
- * buffer which is obtained from this message queue's message buffer pool.  The
+ * This directive sends the message `buffer` of `size` bytes in length to the
+ * queue specified by `id`. If a task is waiting at the queue, then the message
+ * is copied to the waiting task's buffer and the task is unblocked. If no
+ * tasks are waiting at the queue, then the message is copied to a message
+ * buffer which is obtained from this message queue's message buffer pool. The
  * message buffer is then placed at the front of the queue.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no queue associated with the identifier
- *   specified by ``id``.
+ *   specified by `id`.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``buffer`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `buffer` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_SIZE The size of the message exceeded the maximum
  *   message size of the queue as defined by rtems_message_queue_create() or
@@ -650,24 +650,24 @@ rtems_status_code rtems_message_queue_urgent(
  *
  * @param size is the size in bytes of the message buffer to broadcast.
  *
- * @param[out] count is the pointer to an uint32_t object.  When the directive
+ * @param[out] count is the pointer to an uint32_t object. When the directive
  *   call is successful, the number of unblocked tasks will be stored in this
  *   object.
  *
  * This directive causes all tasks that are waiting at the queue specified by
- * ``id`` to be unblocked and sent the message contained in ``buffer``.  Before
- * a task is unblocked, the message ``buffer`` of ``size`` bytes in length is
- * copied to that task's message buffer.  The number of tasks that were
- * unblocked is returned in ``count``.
+ * `id` to be unblocked and sent the message contained in `buffer`. Before a
+ * task is unblocked, the message `buffer` of `size` bytes in length is copied
+ * to that task's message buffer. The number of tasks that were unblocked is
+ * returned in `count`.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no queue associated with the identifier
- *   specified by ``id``.
+ *   specified by `id`.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``buffer`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `buffer` parameter was NULL.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``count`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `count` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_SIZE The size of the message exceeded the maximum
  *   message size of the queue as defined by rtems_message_queue_create() or
@@ -718,23 +718,23 @@ rtems_status_code rtems_message_queue_broadcast(
  *
  * @param id is the queue identifier.
  *
- * @param buffer is the begin address of the buffer to receive the message.
- *   The buffer shall be large enough to receive a message of the maximum
- *   length of the queue as defined by rtems_message_queue_create() or
- *   rtems_message_queue_construct().  The ``size`` parameter cannot be used to
+ * @param buffer is the begin address of the buffer to receive the message. The
+ *   buffer shall be large enough to receive a message of the maximum length of
+ *   the queue as defined by rtems_message_queue_create() or
+ *   rtems_message_queue_construct(). The `size` parameter cannot be used to
  *   specify the size of the buffer.
  *
- * @param[out] size is the pointer to a size_t object.  When the directive call
+ * @param[out] size is the pointer to a size_t object. When the directive call
  *   is successful, the size in bytes of the received messages will be stored
- *   in this object.  This parameter cannot be used to specify the size of the
+ *   in this object. This parameter cannot be used to specify the size of the
  *   buffer.
  *
  * @param option_set is the option set.
  *
  * @param timeout is the timeout in clock ticks if the #RTEMS_WAIT option is
- *   set.  Use #RTEMS_NO_TIMEOUT to wait potentially forever.
+ *   set. Use #RTEMS_NO_TIMEOUT to wait potentially forever.
  *
- * This directive receives a message from the queue specified by ``id``.
+ * This directive receives a message from the queue specified by `id`.
  *
  * The **option set** specified in ``option_set`` is built through a *bitwise
  * or* of the option constants described below.  Not all combinations of
@@ -748,39 +748,39 @@ rtems_status_code rtems_message_queue_broadcast(
  * according to the mutually exclusive #RTEMS_WAIT and #RTEMS_NO_WAIT options.
  *
  * - **Waiting to receive** a message from the queue is the default and can be
- *   emphasized through the use of the #RTEMS_WAIT option. The ``timeout``
- *   parameter defines how long the calling task is willing to wait.  Use
+ *   emphasized through the use of the #RTEMS_WAIT option. The `timeout`
+ *   parameter defines how long the calling task is willing to wait. Use
  *   #RTEMS_NO_TIMEOUT to wait potentially forever, otherwise set a timeout
  *   interval in clock ticks.
  *
  * - **Trying to receive** a message from the queue is selected by the
- *   #RTEMS_NO_WAIT option.  If this option is defined, then the ``timeout``
- *   parameter is ignored.  When a message from the queue cannot be immediately
+ *   #RTEMS_NO_WAIT option. If this option is defined, then the `timeout`
+ *   parameter is ignored. When a message from the queue cannot be immediately
  *   received, then the ::RTEMS_UNSATISFIED status is returned.
  *
  * With either #RTEMS_WAIT or #RTEMS_NO_WAIT if there is at least one message
  * in the queue, then it is copied to the buffer, the size is set to return the
  * length of the message in bytes, and this directive returns immediately with
- * the ::RTEMS_SUCCESSFUL status code.  The buffer has to be big enough to
+ * the ::RTEMS_SUCCESSFUL status code. The buffer has to be big enough to
  * receive a message of the maximum length with respect to this message queue.
  *
  * If the calling task chooses to return immediately and the queue is empty,
  * then the directive returns immediately with the ::RTEMS_UNSATISFIED status
- * code.  If the calling task chooses to wait at the message queue and the
- * queue is empty, then the calling task is placed on the message wait queue
- * and blocked.  If the queue was created with the #RTEMS_PRIORITY option
- * specified, then the calling task is inserted into the wait queue according
- * to its priority.  But, if the queue was created with the #RTEMS_FIFO option
+ * code. If the calling task chooses to wait at the message queue and the queue
+ * is empty, then the calling task is placed on the message wait queue and
+ * blocked. If the queue was created with the #RTEMS_PRIORITY option specified,
+ * then the calling task is inserted into the wait queue according to its
+ * priority. But, if the queue was created with the #RTEMS_FIFO option
  * specified, then the calling task is placed at the rear of the wait queue.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no queue associated with the identifier
- *   specified by ``id``.
+ *   specified by `id`.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``buffer`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `buffer` parameter was NULL.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``size`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `size` parameter was NULL.
  *
  * @retval ::RTEMS_UNSATISFIED The queue was empty.
  *
@@ -827,20 +827,20 @@ rtems_status_code rtems_message_queue_receive(
  *
  * @param id is the queue identifier.
  *
- * @param[out] count is the pointer to an uint32_t object.  When the directive
+ * @param[out] count is the pointer to an uint32_t object. When the directive
  *   call is successful, the number of pending messages will be stored in this
  *   object.
  *
  * This directive returns the number of messages pending on the queue specified
- * by ``id`` in ``count``.  If no messages are present on the queue, count is
- * set to zero.
+ * by `id` in `count`. If no messages are present on the queue, count is set to
+ * zero.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no queue associated with the identifier
- *   specified by ``id``.
+ *   specified by `id`.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``count`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `count` parameter was NULL.
  *
  * @par Constraints
  * @parblock
@@ -869,20 +869,20 @@ rtems_status_code rtems_message_queue_get_number_pending(
  *
  * @param id is the queue identifier.
  *
- * @param[out] count is the pointer to an uint32_t object.  When the directive
+ * @param[out] count is the pointer to an uint32_t object. When the directive
  *   call is successful, the number of pending messages removed from the queue
  *   will be stored in this object.
  *
  * This directive removes all pending messages from the queue specified by
- * ``id``.  The number of messages removed is returned in ``count``.  If no
- * messages are present on the queue, count is set to zero.
+ * `id`. The number of messages removed is returned in `count`. If no messages
+ * are present on the queue, count is set to zero.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
  * @retval ::RTEMS_INVALID_ID There was no queue associated with the identifier
- *   specified by ``id``.
+ *   specified by `id`.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``count`` parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The `count` parameter was NULL.
  *
  * @par Notes
  * The directive does not flush tasks waiting to receive a message from the
