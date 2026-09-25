@@ -1,0 +1,99 @@
+# SPDX-License-Identifier: BSD-2-Clause
+
+# Copyright (C) 2026 embedded brains GmbH & Co. KG
+
+name: Hermes
+on:
+  workflow_run:
+    workflows:
+    - Olympos
+    types:
+    - completed
+concurrency:
+  # Serialise the sticky comment updates per pull request head.
+  group: ${{ github.workflow }}-${{ github.event.workflow_run.head_sha }}
+  cancel-in-progress: false
+jobs:
+  comment:
+    if: ${{ github.event.workflow_run.event == 'pull_request' && (github.event.workflow_run.conclusion == 'success' || github.event.workflow_run.conclusion == 'failure') }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      actions: read
+      contents: read
+      pull-requests: write
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      with:
+        # Nothing in this job pushes, and it handles the content of
+        # a pull request.  Do not leave the token in .git/config.
+        persist-credentials: false
+    - name: Find PR by commit
+      id: pr
+      uses: ./.github/actions/find-pr-by-commit
+    - name: Download the Argos report
+      # The GitHub Actions token here is scoped to 'actions: read',
+      # 'contents: read' and 'pull-requests: write' in the eb repository.
+      if: ${{ steps.pr.outputs.pr != '0' }}
+      continue-on-error: true
+      uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+      with:
+        name: inspect-changes
+        run-id: ${{ github.event.workflow_run.id }}
+        github-token: ${{ github.token }}
+        path: argos
+    - name: Download the package summaries
+      if: ${{ steps.pr.outputs.pr != '0' }}
+      continue-on-error: true
+      uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+      with:
+        pattern: summary-*
+        run-id: ${{ github.event.workflow_run.id }}
+        github-token: ${{ github.token }}
+        # Never the workspace root.  Both artifacts are built from the pull
+        # request and choose their own paths inside the destination, so
+        # unpacking them over the checkout would let a pull request replace a
+        # file of this repository in a job which may write pull requests.
+        path: zerberus
+    - name: Assemble the comment
+      if: ${{ steps.pr.outputs.pr != '0' }}
+      # Both reports are produced by the workflow run of the pull request,
+      # from the tree of the pull request.  They are shown, not believed, and
+      # the comment says so: this job cannot tell a report from a forgery.
+      run: |
+        {
+          if test -f argos/inspect-changes.md; then
+            echo '## Argos'
+            cat argos/inspect-changes.md
+            echo
+          fi
+          for summary in zerberus/summary-*/package-summary.md; do
+            if test -f "${summary}"; then
+              # The artifact is summary-<arch>-<bsp>.
+              name="$(basename "$(dirname "${summary}")")"
+              name="${name#summary-}"
+              echo "## Zerberus (${name/-//})"
+              cat "${summary}"
+              echo
+            fi
+          done
+        } >comment.md
+        if ! test -s comment.md; then
+          {
+            echo 'No report was produced by this run.'
+            echo
+          } >>comment.md
+        fi
+        {
+          echo '---'
+          echo
+          echo '*Reported by the workflow run of this pull request, which' \
+            'builds the tree of this pull request.  Read the run itself before' \
+            'relying on a verdict here.*'
+        } >>comment.md
+    - name: Post comment
+      if: ${{ steps.pr.outputs.pr != '0' }}
+      uses: marocchino/sticky-pull-request-comment@5770ad5eb8f42dd2c4f34da00c94c5381e49af88 # v3.0.5
+      with:
+        number: ${{ steps.pr.outputs.pr }}
+        path: comment.md

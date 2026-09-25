@@ -1,0 +1,244 @@
+# SPDX-License-Identifier: BSD-2-Clause
+
+# Copyright (C) 2026 embedded brains GmbH & Co. KG
+
+# Iris carries the upstreaming branch to the GitLab fork of the eb repository
+# maintainer who set the label, using that maintainer's own GitLab personal
+# access token.
+#
+# Every maintainer has an environment named gitlab-<login> holding their own
+# credential: the secret GITLAB_TOKEN and the variable GITLAB_FORK.  A job sees
+# the secrets of the environment it names and of no other, and the environment
+# requires its owner to approve the deployment, so a workflow cannot use a
+# token without the consent of the maintainer it belongs to.
+#
+# Two different credentials are in play here.  The GitHub Actions token is
+# scoped to 'contents: read' in the eb repository and is used for the
+# permission check.  The jobs which comment on the pull request add
+# 'pull-requests: write'.  The GitLab personal access token is scoped to
+# 'write_repository' in the maintainer's own fork and is used for the push,
+# and for nothing else.
+#
+# It deliberately does NOT create the merge request.  The GitLab personal
+# access token has the 'write_repository' scope only, without 'api', so
+# creating one is not merely unimplemented, it is impossible.  Opening the
+# merge request stays a deliberate act of the maintainer, who is its author on
+# gitlab.rtems.org.
+name: Iris
+on:
+  # The rtems.org integration is stopped.  The workflow keeps no trigger
+  # of a pull request, so it runs only on purpose, and its jobs require the
+  # label event of a pull request.
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+permissions:
+  contents: read
+env:
+  LABEL: rtems.org push
+jobs:
+  check:
+    name: Iris check
+    # Only the review-only pull requests created by Charon, which are the ones
+    # based on the rtems.org mirror.
+    if: ${{ github.event.label.name == 'rtems.org push' && github.event.pull_request.base.ref == 'rtems.org/main' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    # Naming an environment which does not exist creates it, and the name of
+    # the environment is the name of the sender.  The permission check
+    # therefore runs in a job which names no environment, before the sender can
+    # reach one.  A job cannot pick its environment from one of its own steps
+    # either: that key reads the 'needs' context, not the 'steps' one.
+    outputs:
+      environment: ${{ steps.environment.outputs.environment }}
+    env:
+      ACTOR: ${{ github.event.sender.login }}
+    steps:
+    - name: Check the permission of the label sender
+      env:
+        GH_TOKEN: ${{ github.token }}
+      # A label proves nothing on its own.  Anyone with triage access can set
+      # one, and pull_request_target hands out the GitHub Actions token
+      # regardless of who triggered it.
+      run: |
+        permission="$(gh api \
+          "repos/${GITHUB_REPOSITORY}/collaborators/${ACTOR}/permission" \
+          --jq '.permission')"
+        echo "${ACTOR} has ${permission} permission"
+        case "${permission}" in
+        admin|maintain|write) ;;
+        *)
+          echo "::error::${ACTOR} is not an eb repository maintainer"
+          exit 1
+          ;;
+        esac
+    - name: Name the environment of the maintainer
+      id: environment
+      # GitHub reports a login in the case its owner registered, and the
+      # expression language cannot change case, so the name is built here.  It
+      # becomes a line of the GITHUB_OUTPUT file, where anything which is not a
+      # login could start a key of its own.
+      run: |
+        login="$(printf '%s' "${ACTOR}" | tr 'A-Z' 'a-z')"
+        case "${login}" in
+        ""|*[!a-z0-9-]*)
+          echo "::error::'${ACTOR}' is not a GitHub login"
+          exit 1
+          ;;
+        esac
+        echo "environment=gitlab-${login}" >>"${GITHUB_OUTPUT}"
+        echo "the credential of ${ACTOR} is in the environment gitlab-${login}"
+  push:
+    name: Iris
+    permissions:
+      contents: read
+      pull-requests: write
+    needs: check
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    # The owner of the environment approves the deployment before this job
+    # runs, and the deployment record links to the merge request it produced.
+    environment:
+      name: ${{ needs.check.outputs.environment }}
+      url: ${{ steps.push.outputs.url }}
+    env:
+      PR: ${{ github.event.pull_request.number }}
+      BRANCH: ${{ github.event.pull_request.head.ref }}
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+      ACTOR: ${{ github.event.sender.login }}
+    steps:
+    - name: Check out the eb branch
+      # Not the base of this pull request: its base is the rtems.org mirror,
+      # which carries no scripts of this repository.  eb/main is the default
+      # branch, so it is where this workflow file itself came from.
+      uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      with:
+        ref: eb/main
+    - name: Check the environment of the maintainer
+      env:
+        ENVIRONMENT: ${{ needs.check.outputs.environment }}
+        FORK: ${{ vars.GITLAB_FORK }}
+        GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+      # An environment which does not exist was created empty by naming it, so
+      # a maintainer who is not set up arrives here with nothing at all.
+      run: |
+        if test -z "${GITLAB_TOKEN}" || test -z "${FORK}"; then
+          echo "::error::The environment ${ENVIRONMENT} needs the secret GITLAB_TOKEN and the variable GITLAB_FORK.  A repository administrator has to configure it."
+          exit 1
+        fi
+        # The GitLab personal access token must never be able to reach any
+        # other host.  This value comes from the repository settings, which no
+        # pull request reviews.
+        ok=
+        case "${FORK}" in
+        https://gitlab.rtems.org/?*) ok=yes ;;
+        esac
+        case "${FORK}" in
+        *[[:space:]]*) ok= ;;
+        esac
+        if test -z "${ok}"; then
+          echo "::error::GITLAB_FORK of ${ENVIRONMENT} is not a repository on https://gitlab.rtems.org/"
+          exit 1
+        fi
+    - name: Push to the GitLab fork
+      id: push
+      env:
+        FORK: ${{ vars.GITLAB_FORK }}
+        GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+      # The credential store keeps the GitLab personal access token off the
+      # command line.  GitLab answers a push of a new branch with a URL which
+      # pre-fills the merge request form; that URL is the hand-over to the
+      # maintainer.
+      run: |
+        git fetch --no-tags origin \
+          "refs/heads/${BRANCH}:refs/heads/${BRANCH}"
+        # The label approves the commits which the maintainer saw.  The branch
+        # may have moved since.
+        head="$(git rev-parse "${BRANCH}")"
+        if test "${head}" != "${HEAD_SHA}"; then
+          echo "::error::${BRANCH} moved from ${HEAD_SHA} to ${head} after the label was set.  Review the new commits and set the label again."
+          exit 1
+        fi
+        credentials="${RUNNER_TEMP}/git-credentials"
+        trap 'rm -f "${credentials}"' EXIT
+        printf 'https://oauth2:%s@gitlab.rtems.org\n' "${GITLAB_TOKEN}" \
+          >"${credentials}"
+        chmod 600 "${credentials}"
+        target="eb-pr-${PR}"
+        set +e
+        git -c "credential.helper=store --file=${credentials}" \
+          push --force "${FORK}" \
+          "refs/heads/${BRANCH}:refs/heads/${target}" \
+          >"${RUNNER_TEMP}/push.log" 2>&1
+        status=$?
+        set -e
+        sed 's/^/  /' "${RUNNER_TEMP}/push.log"
+        if test "${status}" -ne 0; then
+          echo '::error::The push to the GitLab fork failed'
+          exit "${status}"
+        fi
+        url="$(grep -o 'https://gitlab.rtems.org/[^[:space:]]*merge_requests/new[^[:space:]]*' \
+          "${RUNNER_TEMP}/push.log" | head -1 || true)"
+        echo "target=${target}" >>"${GITHUB_OUTPUT}"
+        echo "url=${url}" >>"${GITHUB_OUTPUT}"
+    - name: Report
+      env:
+        GH_TOKEN: ${{ github.token }}
+        URL: ${{ steps.push.outputs.url }}
+        TARGET: ${{ steps.push.outputs.target }}
+        FORK: ${{ vars.GITLAB_FORK }}
+      run: |
+        body="${RUNNER_TEMP}/comment.md"
+        {
+          echo '## Iris'
+          echo
+          echo "Pushed \`${BRANCH}\` to \`${TARGET}\` in the GitLab fork of"
+          echo "@${ACTOR} (${FORK})."
+          echo
+          if test -n "${URL}"; then
+            echo "Open the merge request: ${URL}"
+          else
+            echo 'GitLab did not return a merge request URL; create the merge'
+            echo 'request from the branch in the fork.'
+          fi
+          echo
+          echo 'No merge request was created automatically: the GitLab'
+          echo 'personal access token used for the push has the'
+          echo '`write_repository` scope only, without `api`.'
+        } >"${body}"
+        cat "${body}" >>"${GITHUB_STEP_SUMMARY}"
+        gh pr comment "${PR}" --body-file "${body}"
+  report:
+    name: Iris report
+    permissions:
+      contents: read
+      pull-requests: write
+    needs:
+    - check
+    - push
+    # Anything but a push which happened: either job may have failed, and
+    # declining the deployment cancels the push rather than failing it.  The
+    # label has to go in every one of those cases, since setting a label which
+    # is already set triggers nothing.
+    if: ${{ always() && needs.check.result != 'skipped' && (needs.check.result != 'success' || needs.push.result != 'success') }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      PR: ${{ github.event.pull_request.number }}
+      ACTOR: ${{ github.event.sender.login }}
+    steps:
+    - name: Report the failure
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        body="${RUNNER_TEMP}/failure.md"
+        {
+          echo '## Iris'
+          echo
+          echo "The upstreaming requested by @${ACTOR} did not complete."
+          echo 'See the workflow log for what happened.  The label was'
+          echo 'removed; set it again to try once more.'
+        } >"${body}"
+        gh pr comment "${PR}" --body-file "${body}"
+        gh pr edit "${PR}" --remove-label "${LABEL}" || true

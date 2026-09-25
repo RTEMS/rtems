@@ -1,0 +1,108 @@
+# SPDX-License-Identifier: BSD-2-Clause
+
+# Copyright (C) 2026 embedded brains GmbH & Co. KG
+
+name: Echo
+on:
+  # The rtems.org baseline is frozen.  A maintainer runs Echo by hand to move
+  # the baseline on purpose.
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+permissions:
+  contents: write
+jobs:
+  mirror:
+    name: Echo
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      with:
+        fetch-depth: 0
+    - name: Mirror the rtems.org repository
+      id: mirror
+      # Pushes with the GitHub Actions token scoped to 'contents: write' in the
+      # eb repository.  The rtems.org repository itself is fetched
+      # anonymously and never needs a credential.
+      #
+      # The push is deliberately not forced.  The rtems.org/main branch is a
+      # fast-forward mirror; a rejected push means the branch was written by
+      # something other than this workflow and must be investigated, not
+      # overwritten.
+      run: |
+        git fetch --no-tags https://gitlab.rtems.org/rtems/rtos/rtems.git main
+        before="$(git rev-parse --verify --quiet refs/remotes/origin/rtems.org/main || true)"
+        after="$(git rev-parse FETCH_HEAD)"
+        echo "head=${after}" >>"${GITHUB_OUTPUT}"
+        if test "${before}" = "${after}"; then
+          echo "rtems.org/main is up to date at ${after}"
+          exit 0
+        fi
+        git push origin "FETCH_HEAD:refs/heads/rtems.org/main"
+        {
+          echo "## Echo"
+          echo
+          echo "Mirrored \`rtems.org/main\` to \`${after}\`."
+          if test -n "${before}"; then
+            echo
+            echo "New commits:"
+            echo
+            git log --oneline "${before}..${after}" | sed 's/^/- /'
+          fi
+        } >>"${GITHUB_STEP_SUMMARY}"
+    - name: Advance eb/main to the mirror
+      env:
+        MIRROR_HEAD: ${{ steps.mirror.outputs.head }}
+      # No pull request is opened for this merge.  The incoming commits are the
+      # ones the rtems.org repository published and were reviewed there, and
+      # the overlay of eb/main adds files which that repository does not have,
+      # so the merge has nothing to decide.  The one file both sides own is
+      # .gitignore.
+      #
+      # eb/main requires a pull request, so the ruleset of the branch names
+      # GitHub Actions as the one actor which may bypass that rule.  Without
+      # the exception this push is rejected and the import stops.
+      run: |
+        count="$(git rev-list --count "${MIRROR_HEAD}" "^origin/eb/main")"
+        if test "${count}" -eq 0; then
+          echo 'eb/main already contains the mirror'
+          exit 0
+        fi
+        commits="${count} commits"
+        if test "${count}" -eq 1; then
+          commits='1 commit'
+        fi
+        git config user.name 'github-actions[bot]'
+        git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+        git checkout -B eb/main origin/eb/main
+        message="${RUNNER_TEMP}/echo-message.txt"
+        {
+          echo 'Merge rtems.org/main into eb/main'
+          echo
+          echo "Merge ${commits} of the rtems.org repository.  Echo mirrors"
+          echo 'main of the rtems.org repository into rtems.org/main once a'
+          echo 'day and merges that mirror into eb/main.'
+        } >"${message}"
+        if ! git merge --no-commit --no-ff "${MIRROR_HEAD}"; then
+          {
+            echo '## Echo'
+            echo
+            echo 'The merge of `rtems.org/main` into `eb/main` conflicts.'
+            echo 'Resolve it locally; `eb/main` was not advanced.'
+            echo
+            echo '```'
+            git diff --name-only --diff-filter=U
+            echo '```'
+          } >>"${GITHUB_STEP_SUMMARY}"
+          git merge --abort
+          exit 1
+        fi
+        git commit -F "${message}"
+        git push origin eb/main
+        {
+          echo '## Echo'
+          echo
+          echo "Merged ${commits} of \`rtems.org/main\` into \`eb/main\`."
+        } >>"${GITHUB_STEP_SUMMARY}"

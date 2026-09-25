@@ -1,0 +1,53 @@
+# SPDX-License-Identifier: BSD-2-Clause
+
+# Copyright (C) 2026 embedded brains GmbH & Co. KG
+
+name: Save latest cache
+description: |
+  Saves a cache entry and deletes the other entries of the ref whose key
+  starts with the prefix.  The job requires the `actions: write` permission.
+inputs:
+  path:
+    description: |
+      Defines the path to save.
+    required: true
+  key:
+    description: |
+      Defines the key of the entry to save.
+    required: true
+  prefix:
+    description: |
+      Defines the key prefix of the entries which the saved entry replaces.
+      The key shall start with it.
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Save the entry
+      uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+      with:
+        path: ${{ inputs.path }}
+        key: ${{ inputs.key }}
+    - name: Delete the replaced entries
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        KEY: ${{ inputs.key }}
+        PREFIX: ${{ inputs.prefix }}
+        REF: ${{ github.ref }}
+      run: |
+        set -euo pipefail
+        keys="$(gh cache list --repo "${GITHUB_REPOSITORY}" --ref "${REF}" \
+          --key "${PREFIX}" --limit 100 --json key --jq '.[].key')"
+        # Without the saved entry, a deletion would leave nothing to restore.
+        if ! grep -qxF -- "${KEY}" <<<"${keys}"; then
+          echo "::warning::There is no entry ${KEY}, so no entry is deleted."
+          exit 0
+        fi
+        while read -r key; do
+          if test "${key}" != "${KEY}"; then
+            echo "delete ${key}"
+            gh cache delete --repo "${GITHUB_REPOSITORY}" --ref "${REF}" \
+              -- "${key}"
+          fi
+        done <<<"${keys}"

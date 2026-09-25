@@ -1,0 +1,673 @@
+# SPDX-License-Identifier: BSD-2-Clause
+
+# Copyright (C) 2026 embedded brains GmbH & Co. KG
+
+name: Olympos
+on:
+  push:
+    branches:
+    - eb/main
+    - eb/qual
+    - eb/staging
+  pull_request:
+    branches:
+    - eb/main
+    - eb/qual
+    - eb/staging
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+env:
+  # The branch of the version label.  For a pull request that is the branch
+  # it targets.
+  BRANCH: ${{ github.event.pull_request.base.ref || github.ref_name }}
+  # Only a push to eb/main writes cache entries and tools packages.
+  SAVE_CACHE: ${{ github.event_name == 'push' && github.ref == 'refs/heads/eb/main' }}
+  TOOLS_PACKAGE: ghcr.io/${{ github.repository_owner }}/rtems-tools
+  # Each architecture keeps this number of tools package versions.
+  TOOLS_PACKAGE_VERSIONS: 2
+jobs:
+  argos:
+    name: Argos
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      with:
+        # Inspect the commits of the pull request, not the merge commit.  The
+        # full history is required to determine the merge base.
+        ref: ${{ github.event.pull_request.head.sha }}
+        fetch-depth: 0
+        # This job installs the packages a pull request asks for and runs
+        # tools over its tree.  Do not leave the token in .git/config.
+        persist-credentials: false
+    - name: Fetch the rtems.org mirror
+      # The category invariant and the extractability check compare against
+      # the frozen baseline, which the rtems.org/main branch of this
+      # repository holds.
+      run: |
+        git fetch --no-tags --depth=1 origin \
+          rtems.org/main:refs/heads/rtems.org/main
+    - name: Set up Python
+      uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+      with:
+        python-version: "3.12"
+    - name: Set up uv
+      uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7.6.0
+      with:
+        enable-cache: true
+        save-cache: false
+        version: 0.11.9
+    - name: Install the tools
+      run: uv sync --frozen
+    - name: Inspect the changes
+      # A value of the event is bound to the environment and never expanded
+      # into the script.  A branch name may hold a backtick or a dollar sign,
+      # which the shell would act on where the template put it.
+      env:
+        BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        REPOSITORY_URL: ${{ github.event.repository.html_url }}
+      run: |
+        base="$(git merge-base "${BASE_SHA}" HEAD)"
+        echo "base commit: ${base}"
+        make check-commits \
+          BASE="${base}" \
+          REPOSITORY_URL="${REPOSITORY_URL}" \
+          INSPECT_OPTIONS=--output=inspect-changes.md
+    - name: Report
+      if: ${{ !cancelled() && hashFiles('inspect-changes.md') != '' }}
+      run: |
+        cat inspect-changes.md >>"${GITHUB_STEP_SUMMARY}"
+    - name: Report artifact
+      if: ${{ !cancelled() && hashFiles('inspect-changes.md') != '' }}
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: inspect-changes
+        path: inspect-changes.md
+        overwrite: true
+
+  hephaistos:
+    name: Hephaistos
+    needs: argos
+    # Argos is skipped for pushes.  Only an Argos failure stops the forge.
+    if: ${{ !cancelled() && (needs.argos.result == 'success' || needs.argos.result == 'skipped') }}
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      matrix:
+        arch:
+        - aarch64
+        - arm
+        - i386
+        - m68k
+        - microblaze
+        - mips
+        - moxie
+        - nios2
+        - or1k
+        - powerpc
+        - riscv
+        - sparc
+        - x86_64
+    env:
+      TOOLS_ARCH: ${{ matrix.arch }}
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      with:
+        # Nothing in this job pushes, and it handles the content of
+        # a pull request.  Do not leave the token in .git/config.
+        persist-credentials: false
+    - name: Set up Python
+      uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+      with:
+        python-version: "3.12"
+    - name: Set up uv
+      # All jobs share one uv cache key.  One job saves the cache, so the
+      # parallel jobs do not compete for the key.
+      uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7.6.0
+      with:
+        enable-cache: true
+        save-cache: ${{ matrix.arch == 'sparc' && env.SAVE_CACHE == 'true' }}
+        version: 0.11.9
+    - name: Identify the tools
+      id: tools
+      # The tag names the operating system of the runner image, the
+      # architecture and the toolchain recipe and nothing else.  The
+      # toolchains link against the libraries of that operating system.  All
+      # branches use the recipe of eb/main, so they share one set of
+      # toolchains.  The image variables exist in the process environment
+      # only, not in the env context of an expression.
+      env:
+        RECIPE: ${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}
+      run: |
+        echo "tag=${ImageOS}-${TOOLS_ARCH}-${RECIPE}" >>"${GITHUB_OUTPUT}"
+    - name: Set up ORAS
+      uses: oras-project/setup-oras@005458ad77f1c8facd38a094e4af2e69e5607ff4 # v2.0.2
+      with:
+        version: 1.3.4
+    - name: Look up the tools package
+      id: lookup
+      env:
+        REFERENCE: ${{ env.TOOLS_PACKAGE }}:${{ steps.tools.outputs.tag }}
+        TOKEN: ${{ github.token }}
+      run: |
+        oras login ghcr.io --username "${GITHUB_ACTOR}" --password-stdin \
+          <<<"${TOKEN}"
+        if oras manifest fetch "${REFERENCE}" >/dev/null; then
+          echo "found=true" >>"${GITHUB_OUTPUT}"
+        else
+          echo "found=false" >>"${GITHUB_OUTPUT}"
+        fi
+    - name: Build tools
+      # A step which exceeds its timeout fails, while a job which exceeds its
+      # timeout is cancelled.  The step timeouts of all jobs stay below the
+      # job timeout, so the log steps and the cache saves still run.
+      if: ${{ steps.lookup.outputs.found != 'true' }}
+      timeout-minutes: 270
+      run: |
+        sudo apt-get update
+        sudo apt-get -y install binutils-multiarch build-essential git gnutls-dev meson libglib2.0-dev libpixman-1-dev libssl-dev ninja-build
+        make tools TOOLS_OPTIONS=--distribution-directory=tools-dist >log-tools.txt 2>&1
+    - name: Tools log tail
+      if: ${{ always() && hashFiles('log-tools.txt') != '' }}
+      run: |
+        tail -n 1000 log-tools.txt
+    - name: Tools log artifact
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      if: ${{ always() && hashFiles('log-tools.txt') != '' }}
+      with:
+        name: log-tools-${{ matrix.arch }}
+        path: log-tools.txt
+        overwrite: true
+    - name: Pack the tools
+      if: ${{ steps.lookup.outputs.found != 'true' }}
+      run: |
+        tar -cf - tools | zstd -T0 --quiet >tools-dist/tools.tar.zst
+    # The tools contain GPL code.  Each place which offers the tools offers
+    # the license summary and the corresponding source as well.
+    - name: Tools artifact
+      # The later jobs of the run take the tools from here if there is no
+      # package, for example in a pull request which changes the recipe.
+      if: ${{ steps.lookup.outputs.found != 'true' }}
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: tools-${{ matrix.arch }}
+        path: |
+          tools-dist/LICENSES.txt
+          tools-dist/README.txt
+          tools-dist/tools.tar.zst
+        compression-level: 0
+        retention-days: 1
+        overwrite: true
+    - name: Tools source artifact
+      if: ${{ steps.lookup.outputs.found != 'true' }}
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: tools-source-${{ matrix.arch }}
+        path: |
+          tools-dist/LICENSES.txt
+          tools-dist/README.txt
+          tools-dist/source
+        compression-level: 0
+        retention-days: 1
+        overwrite: true
+    - name: Publish the tools package
+      # The source annotation links the package to the repository.  The
+      # registry stores a source file which several versions share once.
+      if: ${{ steps.lookup.outputs.found != 'true' && env.SAVE_CACHE == 'true' }}
+      working-directory: tools-dist
+      env:
+        REFERENCE: ${{ env.TOOLS_PACKAGE }}:${{ steps.tools.outputs.tag }}
+        SOURCE: ${{ github.server_url }}/${{ github.repository }}
+      run: |
+        oras push "${REFERENCE}" \
+          --annotation "org.opencontainers.image.source=${SOURCE}" \
+          tools.tar.zst:application/zstd \
+          LICENSES.txt:text/plain \
+          README.txt:text/plain \
+          source/*
+    - name: Delete the older tools packages
+      # A version holds the tools together with their source, so a deletion
+      # removes both.
+      if: ${{ steps.lookup.outputs.found != 'true' && env.SAVE_CACHE == 'true' }}
+      env:
+        GH_TOKEN: ${{ github.token }}
+        OWNER: ${{ github.repository_owner }}
+      run: |
+        versions="/orgs/${OWNER}/packages/container/${TOOLS_PACKAGE##*/}/versions"
+        gh api --paginate "${versions}" --jq \
+          ".[] | select(any(.metadata.container.tags[]; test(\"-${TOOLS_ARCH}-[0-9a-f]{64}\$\"))) | [.created_at, .id] | @tsv" |
+          sort -r | tail -n "+$((TOOLS_PACKAGE_VERSIONS + 1))" |
+          while read -r created id; do
+            echo "delete version ${id} of ${created}"
+            gh api --method DELETE "${versions}/${id}"
+          done
+
+  zerberus:
+    name: Zerberus (${{ matrix.arch }}/${{ matrix.bsp }})
+    needs: [argos, hephaistos]
+    # Run whenever the sparc toolchain exists.  A toolchain failure for an
+    # unrelated architecture must not hide a package test regression.
+    if: ${{ !cancelled() && (needs.argos.result == 'success' || needs.argos.result == 'skipped') && needs.hephaistos.result != 'cancelled' }}
+    runs-on: ubuntu-24.04
+    permissions:
+      # The save of a cache entry deletes the entry which it replaces.
+      actions: write
+      contents: read
+      packages: read
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - arch: sparc
+          bsp: gr712rc
+        - arch: sparc
+          bsp: gr740
+        - arch: sparc
+          bsp: gr765
+    env:
+      PKG_BSP: ${{ matrix.bsp }}
+      TOOLS_ARCH: ${{ matrix.arch }}
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      with:
+        # Nothing in this job pushes, and it handles the content of
+        # a pull request.  Do not leave the token in .git/config.
+        persist-credentials: false
+    - name: Set up Python
+      uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+      with:
+        python-version: "3.12"
+    - name: Set up uv
+      uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7.6.0
+      with:
+        enable-cache: true
+        save-cache: false
+        version: 0.11.9
+    - name: Identify the tools
+      id: tools
+      # As in Hephaistos.
+      env:
+        RECIPE: ${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}
+      run: |
+        echo "tag=${ImageOS}-${TOOLS_ARCH}-${RECIPE}" >>"${GITHUB_OUTPUT}"
+    - name: Fetch the tools
+      uses: ./.github/actions/fetch-tools
+      with:
+        package: ${{ env.TOOLS_PACKAGE }}
+        tag: ${{ steps.tools.outputs.tag }}
+        arch: ${{ env.TOOLS_ARCH }}
+    - name: Restore the workspace
+      # The test reports of a workspace are worth nothing after a change of
+      # the tools, so the tools key is part of the key.
+      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+      with:
+        path: workspace
+        key: workspace-eb/main-zerberus-${{ matrix.bsp }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-${{ github.sha }}
+        restore-keys: |
+          workspace-eb/main-zerberus-${{ matrix.bsp }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-
+    - name: View the specification
+      # A branch which holds no specitems.yml has no specification to
+      # view.  A substitution which names no item fails the view.  The
+      # package summary reports the requirements which are not validated.
+      if: ${{ hashFiles('specitems.yml') != '' }}
+      run: |
+        if ! make specview >log-specview.txt 2>&1; then
+          tail -n 50 log-specview.txt
+          echo "::error::specwareview failed for ${PKG_BSP}."
+          exit 1
+        fi
+    - name: Make
+      timeout-minutes: 270
+      run: |
+        make pkg >log-pkg.txt 2>&1
+    - name: Check the package summary
+      # The summary fails on an unexpected test failure, an unjustified
+      # coverage gap, a stale gap item and a pre-qualified functional
+      # requirement which is not validated.  A missing summary fails as well.
+      if: ${{ !cancelled() }}
+      run: |
+        summary=workspace/package-summary.md
+        if ! test -f "${summary}"; then
+          echo "::error::The package build wrote no ${summary}."
+          exit 1
+        fi
+        # The package names itself after its component.  The run names it
+        # after the branch, the architecture and the BSP.
+        sed -i -E "s|^(#+ Package summary - ).*\$|\\1${BRANCH}/${TOOLS_ARCH}/${PKG_BSP}|" \
+          "${summary}"
+        cat "${summary}" >>"${GITHUB_STEP_SUMMARY}"
+        if grep -q '^## ❌ Failed' "${summary}"; then
+          echo "::error::The package of ${PKG_BSP} failed.  See the package summary."
+          exit 1
+        fi
+    - name: Package log tail
+      if: ${{ always() && hashFiles('log-pkg.txt') != '' }}
+      run: |
+        tail -n 1000 log-pkg.txt
+    - name: Package log artifact
+      if: ${{ always() }}
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: log-pkg-${{ matrix.bsp }}
+        path: |
+          log-pkg.txt
+          workspace/package-summary.md
+        overwrite: true
+    - name: Package summary artifact
+      # Hermes collects the summaries of all packages by this name prefix.
+      if: ${{ !cancelled() && hashFiles('workspace/package-summary.md') != '' }}
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: summary-${{ matrix.arch }}-${{ matrix.bsp }}
+        path: workspace/package-summary.md
+        overwrite: true
+    - name: Save the workspace
+      if: ${{ !cancelled() && env.SAVE_CACHE == 'true' }}
+      uses: ./.github/actions/save-latest-cache
+      with:
+        path: workspace
+        key: workspace-eb/main-zerberus-${{ matrix.bsp }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-${{ github.sha }}
+        prefix: workspace-eb/main-zerberus-${{ matrix.bsp }}-
+
+  sisyphos:
+    name: Sisyphos
+    needs: [argos, hephaistos]
+    if: ${{ !cancelled() && (needs.argos.result == 'success' || needs.argos.result == 'skipped') && needs.hephaistos.result != 'cancelled' }}
+    runs-on: ubuntu-24.04
+    permissions:
+      # The save of a cache entry deletes the entry which it replaces.
+      actions: write
+      contents: read
+      packages: read
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      matrix:
+        arch:
+        - aarch64
+        - arm
+        - i386
+        - m68k
+        - microblaze
+        - mips
+        - moxie
+        - nios2
+        - or1k
+        - powerpc
+        - riscv
+        - sparc
+        - x86_64
+    env:
+      TOOLS_ARCH: ${{ matrix.arch }}
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      with:
+        # Nothing in this job pushes, and it handles the content of
+        # a pull request.  Do not leave the token in .git/config.
+        persist-credentials: false
+    - name: Set up Python
+      uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+      with:
+        python-version: "3.12"
+    - name: Set up uv
+      uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7.6.0
+      with:
+        enable-cache: true
+        save-cache: false
+        version: 0.11.9
+    - name: Identify the tools
+      id: tools
+      # As in Hephaistos.
+      env:
+        RECIPE: ${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}
+      run: |
+        echo "tag=${ImageOS}-${TOOLS_ARCH}-${RECIPE}" >>"${GITHUB_OUTPUT}"
+    - name: Fetch the tools
+      uses: ./.github/actions/fetch-tools
+      with:
+        package: ${{ env.TOOLS_PACKAGE }}
+        tag: ${{ steps.tools.outputs.tag }}
+        arch: ${{ env.TOOLS_ARCH }}
+    - name: Restore the build directory
+      # The build directory of eb/main serves every branch.  It still
+      # rebuilds less than an empty directory.  Waf rebuilds no object after
+      # a change of the tools behind the same path, so the tools tag is part
+      # of the key.
+      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+      with:
+        path: build
+        key: build-eb/main-sisyphos-${{ matrix.arch }}-${{ steps.tools.outputs.tag }}-${{ github.sha }}
+        restore-keys: |
+          build-eb/main-sisyphos-${{ matrix.arch }}-${{ steps.tools.outputs.tag }}-
+    - name: Restore the test logs
+      # A report of the previous run is reused for an executable whose hash
+      # did not change, so a run tests what the commits since the entry
+      # touched.  The entry is worth nothing without the version pin below,
+      # and nothing after a change of the tools, so the tools key is part of
+      # the key.
+      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+      with:
+        path: test-logs
+        key: test-logs-eb/main-sisyphos-${{ matrix.arch }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-${{ github.sha }}
+        restore-keys: |
+          test-logs-eb/main-sisyphos-${{ matrix.arch }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-
+    - name: Pin the version label
+      # Without the file the release label is the output of git rev-parse
+      # HEAD.  Every test executable carries it through the version control
+      # key, so every one of them changes with every commit and no report of
+      # an earlier run is reusable.  The branch name is constant and still
+      # separates an eb/main binary from an eb/qual one.
+      env:
+        REVISION: ${{ env.BRANCH }}
+      run: |
+        printf '[version]\nrevision = 7.0.0-%s\n' "${REVISION}" >VERSION
+    - name: Phase 1, build the BSPs
+      # All BSPs of the architecture in their default configuration.  The two
+      # phases share the step time of the other jobs.
+      timeout-minutes: 90
+      run: |
+        make bsps >log-bsps.txt 2>&1
+    - name: BSPs log tail
+      if: ${{ always() && hashFiles('log-bsps.txt') != '' }}
+      run: |
+        tail -n 1000 log-bsps.txt
+    - name: BSPs log artifact
+      if: ${{ always() }}
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: log-bsps-${{ matrix.arch }}
+        path: log-bsps.txt
+        overwrite: true
+    - name: Phase 2, run the simulator tests
+      # An architecture without a simulator BSP runs nothing and passes.
+      # The runner is slower than the host which measured the test
+      # durations, so the timeouts get twice the margin of the items.
+      timeout-minutes: 180
+      run: |
+        make tests TIMEOUT_SCALER=4.0 >log-tests.txt 2>&1
+    - name: Test report
+      if: ${{ always() && hashFiles('test-report.md') != '' }}
+      run: |
+        cat test-report.md >>"${GITHUB_STEP_SUMMARY}"
+    - name: Tests log tail
+      if: ${{ always() && hashFiles('log-tests.txt') != '' }}
+      run: |
+        tail -n 1000 log-tests.txt
+    - name: Tests log artifact
+      if: ${{ always() }}
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: log-tests-${{ matrix.arch }}
+        path: |
+          log-tests.txt
+          test-report.md
+        overwrite: true
+    - name: Test report artifact
+      # The Common Test Report Format file of each BSP.  A reader outside the
+      # forge takes the result of one test from it.
+      if: ${{ !cancelled() && hashFiles('test-logs/**/report.ctrf.json') != '' }}
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: ctrf-${{ matrix.arch }}
+        path: test-logs/**/report.ctrf.json
+        overwrite: true
+    - name: Save the test logs
+      # The latest entry replaces the older ones.  The toolchains must never
+      # be the entry which eviction picks.
+      if: ${{ !cancelled() && env.SAVE_CACHE == 'true' }}
+      uses: ./.github/actions/save-latest-cache
+      with:
+        path: test-logs
+        key: test-logs-eb/main-sisyphos-${{ matrix.arch }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-${{ github.sha }}
+        prefix: test-logs-eb/main-sisyphos-${{ matrix.arch }}-
+    - name: Save the build directory
+      # As the test logs.
+      if: ${{ !cancelled() && env.SAVE_CACHE == 'true' }}
+      uses: ./.github/actions/save-latest-cache
+      with:
+        path: build
+        key: build-eb/main-sisyphos-${{ matrix.arch }}-${{ steps.tools.outputs.tag }}-${{ github.sha }}
+        prefix: build-eb/main-sisyphos-${{ matrix.arch }}-
+
+  daidalos:
+    name: Daidalos (${{ matrix.arch }}/${{ matrix.bsp }}/${{ matrix.config }})
+    needs: [argos, hephaistos]
+    # Phase 2 of the special configurations.  Each configuration builds one
+    # BSP with its options and runs its tests.
+    if: ${{ !cancelled() && (needs.argos.result == 'success' || needs.argos.result == 'skipped') && needs.hephaistos.result != 'cancelled' }}
+    runs-on: ubuntu-24.04
+    permissions:
+      # The save of a cache entry deletes the entry which it replaces.
+      actions: write
+      contents: read
+      packages: read
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - arch: sparc
+          bsp: gr712rc
+          config: smp-posix
+        - arch: sparc
+          bsp: gr740
+          config: smp-debug
+        - arch: sparc
+          bsp: gr740
+          config: smp-posix
+        - arch: sparc
+          bsp: gr765
+          config: smp-posix
+        - arch: powerpc
+          bsp: psim
+          config: mp
+    env:
+      # The name of the special configuration of run_tests.py.
+      CONFIG: ${{ matrix.bsp }}-${{ matrix.config }}
+      TOOLS_ARCH: ${{ matrix.arch }}
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      with:
+        # Nothing in this job pushes, and it handles the content of
+        # a pull request.  Do not leave the token in .git/config.
+        persist-credentials: false
+    - name: Set up Python
+      uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+      with:
+        python-version: "3.12"
+    - name: Set up uv
+      uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7.6.0
+      with:
+        enable-cache: true
+        save-cache: false
+        version: 0.11.9
+    - name: Identify the tools
+      id: tools
+      # As in Hephaistos.
+      env:
+        RECIPE: ${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}
+      run: |
+        echo "tag=${ImageOS}-${TOOLS_ARCH}-${RECIPE}" >>"${GITHUB_OUTPUT}"
+    - name: Fetch the tools
+      uses: ./.github/actions/fetch-tools
+      with:
+        package: ${{ env.TOOLS_PACKAGE }}
+        tag: ${{ steps.tools.outputs.tag }}
+        arch: ${{ env.TOOLS_ARCH }}
+    - name: Restore the build directory
+      # As in Sisyphos.
+      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+      with:
+        path: build-${{ env.CONFIG }}
+        key: build-eb/main-daidalos-${{ env.CONFIG }}-${{ steps.tools.outputs.tag }}-${{ github.sha }}
+        restore-keys: |
+          build-eb/main-daidalos-${{ env.CONFIG }}-${{ steps.tools.outputs.tag }}-
+    - name: Restore the test logs
+      # As in Sisyphos.
+      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+      with:
+        path: test-logs-${{ env.CONFIG }}
+        key: test-logs-eb/main-daidalos-${{ env.CONFIG }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-${{ github.sha }}
+        restore-keys: |
+          test-logs-eb/main-daidalos-${{ env.CONFIG }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-
+    - name: Pin the version label
+      # As in Sisyphos.
+      env:
+        REVISION: ${{ env.BRANCH }}
+      run: |
+        printf '[version]\nrevision = 7.0.0-%s\n' "${REVISION}" >VERSION
+    - name: Phase 2, build and run the special configuration
+      # The timeouts get twice the margin of the items, see Sisyphos.
+      timeout-minutes: 270
+      run: |
+        make config-tests TIMEOUT_SCALER=4.0 >log-config.txt 2>&1
+    - name: Test report
+      if: ${{ always() && hashFiles('test-report.md') != '' }}
+      run: |
+        cat test-report.md >>"${GITHUB_STEP_SUMMARY}"
+    - name: Log tail
+      if: ${{ always() && hashFiles('log-config.txt') != '' }}
+      run: |
+        tail -n 1000 log-config.txt
+    - name: Log artifact
+      if: ${{ always() }}
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: log-config-${{ env.CONFIG }}
+        path: |
+          log-config.txt
+          test-report.md
+        overwrite: true
+    - name: Test report artifact
+      if: ${{ !cancelled() && hashFiles(format('test-logs-{0}/**/report.ctrf.json', env.CONFIG)) != '' }}
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: ctrf-${{ env.CONFIG }}
+        path: test-logs-${{ env.CONFIG }}/**/report.ctrf.json
+        overwrite: true
+    - name: Save the test logs
+      # As in Sisyphos.
+      if: ${{ !cancelled() && env.SAVE_CACHE == 'true' }}
+      uses: ./.github/actions/save-latest-cache
+      with:
+        path: test-logs-${{ env.CONFIG }}
+        key: test-logs-eb/main-daidalos-${{ env.CONFIG }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-${{ github.sha }}
+        prefix: test-logs-eb/main-daidalos-${{ env.CONFIG }}-
+    - name: Save the build directory
+      # As in Sisyphos.
+      if: ${{ !cancelled() && env.SAVE_CACHE == 'true' }}
+      uses: ./.github/actions/save-latest-cache
+      with:
+        path: build-${{ env.CONFIG }}
+        key: build-eb/main-daidalos-${{ env.CONFIG }}-${{ steps.tools.outputs.tag }}-${{ github.sha }}
+        prefix: build-eb/main-daidalos-${{ env.CONFIG }}-

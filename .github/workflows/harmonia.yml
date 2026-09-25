@@ -1,0 +1,199 @@
+# SPDX-License-Identifier: BSD-2-Clause
+
+# Copyright (C) 2026 embedded brains GmbH & Co. KG
+
+name: Harmonia
+on:
+  # A push to a branch merges it into the next branch of the chain
+  # eb/main, eb/qual and eb/staging.  A manual run does both merges.
+  push:
+    branches:
+    - eb/main
+    - eb/qual
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+permissions:
+  contents: write
+  pull-requests: write
+env:
+  REPORT_NAME: harmonia-report.txt
+  MESSAGE_NAME: harmonia-message.txt
+jobs:
+  merge:
+    name: Harmonia ${{ matrix.source }}
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        include:
+        - source: eb/main
+          target: eb/qual
+          branch: harmonia/eb-main
+        - source: eb/qual
+          target: eb/staging
+          branch: harmonia/eb-qual
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      BRANCH: ${{ matrix.branch }}
+      SOURCE_NAME: ${{ matrix.source }}
+      SOURCE: origin/${{ matrix.source }}
+      TARGET: ${{ matrix.target }}
+    steps:
+    - name: Select the merge
+      id: select
+      # The condition of a job cannot read the matrix.  A push runs only the
+      # merge whose source it updated.
+      env:
+        EVENT: ${{ github.event_name }}
+        REF: ${{ github.ref_name }}
+      run: |
+        if test "${EVENT}" = push && test "${REF}" != "${SOURCE_NAME}"; then
+          echo 'run=no' >>"${GITHUB_OUTPUT}"
+        else
+          echo 'run=yes' >>"${GITHUB_OUTPUT}"
+        fi
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      if: ${{ steps.select.outputs.run == 'yes' }}
+      with:
+        ref: ${{ matrix.target }}
+        fetch-depth: 0
+    - name: Check for an open merge pull request
+      id: open
+      if: ${{ steps.select.outputs.run == 'yes' }}
+      env:
+        # The GitHub Actions token, scoped to 'contents: write' and
+        # 'pull-requests: write' in the eb repository.
+        GH_TOKEN: ${{ github.token }}
+      # An open pull request may carry conflict resolutions pushed by a
+      # maintainer.  Never touch its branch.
+      run: |
+        number="$(gh pr list --head "${BRANCH}" --base "${TARGET}" --state open \
+          --json number --jq '.[0].number // empty')"
+        echo "number=${number}" >>"${GITHUB_OUTPUT}"
+        if test -n "${number}"; then
+          echo "Pull request #${number} is still open; nothing to do."
+        fi
+    - name: Check for pending commits
+      id: pending
+      if: ${{ steps.select.outputs.run == 'yes' && steps.open.outputs.number == '' }}
+      run: |
+        if ! git rev-parse --verify --quiet "${SOURCE}" >/dev/null; then
+          echo "The ${SOURCE} branch does not exist."
+          exit 1
+        fi
+        count="$(git rev-list --count "${SOURCE}" "^${TARGET}")"
+        echo "count=${count}" >>"${GITHUB_OUTPUT}"
+        echo "${count} commits to merge"
+    - name: Merge
+      if: ${{ steps.select.outputs.run == 'yes' && steps.open.outputs.number == '' && steps.pending.outputs.count != '0' }}
+      env:
+        COUNT: ${{ steps.pending.outputs.count }}
+      # GitHub builds the message of the merge commit from the title and the
+      # body of the pull request, so both are written as a commit message:
+      # plain text wrapped at 72 columns, no markup.  The same text is the
+      # message of the merge commit of this branch.
+      #
+      # The merge is left uncommitted until the checks have run, so their
+      # report goes into that message.
+      run: |
+        git config user.name 'github-actions[bot]'
+        git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+        # Copy the scripts out of the tree before the merge brings the commits
+        # of another branch into it.  What runs after a merge must not be
+        # something the merge could have written.
+        tools="${RUNNER_TEMP}/tools"
+        mkdir -p "${tools}"
+        cp ./.github/resolve_merge.py ./.github/check_sources.py "${tools}/"
+        git checkout -B "${BRANCH}" "${TARGET}"
+        report="${RUNNER_TEMP}/${REPORT_NAME}"
+        # Only the report may reach the message, so the scripts write anything
+        # else to the standard error stream, which is kept for the summary.
+        errors="${RUNNER_TEMP}/harmonia-errors.txt"
+        : >"${errors}"
+        failed=
+        # A conflict whose 'ours' side is empty is mechanical: the eb
+        # repository deleted that region and an upstream build change must not
+        # enter the pre-qualified set by itself.  Anything else is a
+        # qualification scope decision for a human.
+        if git merge --no-commit --no-ff "${SOURCE}"; then
+          echo 'The merge was clean.' >"${report}"
+        else
+          python3 "${tools}/resolve_merge.py" >"${report}" 2>"${errors}" \
+            || failed=yes
+        fi
+        # The rtems.org repository relocates sources.  A build item of this
+        # repository which still lists the old path merges without a conflict
+        # and leaves the build specification pointing at a file which is gone.
+        if test -z "${failed}"; then
+          echo >>"${report}"
+          python3 "${tools}/check_sources.py" "${TARGET}" >>"${report}" \
+            2>>"${errors}" || failed=yes
+        fi
+        cat "${errors}"
+        if test -n "${failed}"; then
+          cat "${report}"
+          {
+            echo '## Harmonia'
+            echo
+            echo "Harmonia could not finish the merge of \`${SOURCE_NAME}\` into"
+            echo "\`${TARGET}\`.  Resolve it locally; no pull request was"
+            echo 'created.'
+            echo
+            echo '```'
+            cat "${errors}" "${report}"
+            echo '```'
+          } >>"${GITHUB_STEP_SUMMARY}"
+          git merge --abort
+          exit 1
+        fi
+        commits="${COUNT} commits"
+        if test "${COUNT}" -eq 1; then
+          commits='1 commit'
+        fi
+        message="${RUNNER_TEMP}/${MESSAGE_NAME}"
+        {
+          echo "Merge ${SOURCE_NAME} into ${TARGET}"
+          echo
+          echo "Merge ${commits} of ${SOURCE_NAME}.  Harmonia merges every"
+          echo "change of ${SOURCE_NAME} into ${TARGET}, so the two branches do"
+          echo 'not drift apart.'
+          echo
+          cat "${report}"
+          if test "${TARGET}" = eb/qual; then
+            echo
+            echo 'A source which eb/main added is built outside the qualified'
+            echo 'subset until a maintainer decides otherwise, which is a'
+            echo 'change of its own.  This merge moves nothing into or out of'
+            echo 'that subset.'
+          fi
+        } >"${message}"
+        git commit -F "${message}"
+        cat "${message}"
+        {
+          echo '## Harmonia'
+          echo
+          echo 'The message of the merge commit:'
+          echo
+          echo '```'
+          cat "${message}"
+          echo '```'
+        } >>"${GITHUB_STEP_SUMMARY}"
+    - name: Open the pull request
+      if: ${{ steps.select.outputs.run == 'yes' && steps.open.outputs.number == '' && steps.pending.outputs.count != '0' }}
+      env:
+        GH_TOKEN: ${{ github.token }}
+      # The branch has no open pull request, so it carries no work of anyone
+      # else and may be replaced.
+      run: |
+        git push --force origin "${BRANCH}"
+        message="${RUNNER_TEMP}/${MESSAGE_NAME}"
+        body="${RUNNER_TEMP}/harmonia-body.txt"
+        tail -n +3 "${message}" >"${body}"
+        gh pr create \
+          --base "${TARGET}" \
+          --head "${BRANCH}" \
+          --title "$(head -n 1 "${message}")" \
+          --body-file "${body}"
