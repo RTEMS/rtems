@@ -31,6 +31,7 @@
 
 #include "tmacros.h"
 
+#include <stdatomic.h>
 #include <stdio.h>
 #include <math.h>
 #include <inttypes.h>
@@ -62,6 +63,7 @@ typedef struct {
 typedef struct {
   test_counters                counters[ RUNNER_COUNT ];
   volatile rtems_task_argument token;
+  atomic_int                   stop;
   rtems_id                     runner_ids[ RUNNER_COUNT ];
 } test_context;
 
@@ -89,7 +91,10 @@ static void runner( rtems_task_argument self )
 
     ++counters->cycles_per_cpu[ current_cpu ].counter;
 
-    if ( ctx->token == self ) {
+    if (
+      ctx->token == self &&
+      !atomic_load_explicit( &ctx->stop, memory_order_relaxed )
+    ) {
       uint32_t other_cpu = ( current_cpu + 1 ) % CPU_COUNT;
       uint32_t snapshot;
 
@@ -120,6 +125,18 @@ static void stopper( rtems_task_argument arg )
   }
 }
 
+/*
+ * The timer routine runs in interrupt context and takes no processor away from
+ * the runners.
+ */
+static rtems_timer_service_routine stop_runners( rtems_id timer_id, void *arg )
+{
+  test_context *ctx = arg;
+
+  (void) timer_id;
+  atomic_store_explicit( &ctx->stop, 1, memory_order_relaxed );
+}
+
 static uint32_t abs_delta( uint32_t a, uint32_t b )
 {
   return a > b ? a - b : b - a;
@@ -131,6 +148,7 @@ static void test( void )
   rtems_status_code   sc;
   rtems_task_argument runner_index;
   rtems_id            stopper_id;
+  rtems_id            timer_id;
   uint32_t            expected_tokens;
   uint32_t            total_delta;
   uint64_t            total_cycles;
@@ -167,7 +185,18 @@ static void test( void )
     rtems_test_assert( sc == RTEMS_SUCCESSFUL );
   }
 
-  sc = rtems_task_wake_after( 10 * rtems_clock_get_ticks_per_second() );
+  sc = rtems_timer_create( rtems_build_name( 'S', 'T', 'O', 'P' ), &timer_id );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  sc = rtems_timer_fire_after(
+    timer_id,
+    10 * rtems_clock_get_ticks_per_second(),
+    stop_runners,
+    ctx
+  );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  sc = rtems_task_wake_after( 11 * rtems_clock_get_ticks_per_second() );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   sc = rtems_task_start( stopper_id, stopper, 0 );
@@ -262,6 +291,8 @@ static void Init( rtems_task_argument arg )
 #define CONFIGURE_MAXIMUM_PROCESSORS CPU_COUNT
 
 #define CONFIGURE_MAXIMUM_TASKS ( 2 + RUNNER_COUNT )
+
+#define CONFIGURE_MAXIMUM_TIMERS 1
 
 #define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
 
