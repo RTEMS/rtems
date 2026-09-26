@@ -444,13 +444,9 @@ typedef struct TQSemContext {
   void ( *set_count )( struct TQSemContext *, uint32_t );
 } TQSemContext;
 
-Status_Control TQSemSurrender( TQSemContext *ctx );
-
 uint32_t TQSemGetCount( TQSemContext *ctx );
 
 void TQSemSetCount( TQSemContext *ctx, uint32_t count );
-
-Status_Control TQSemSurrenderClassic( TQSemContext *ctx );
 
 uint32_t TQSemGetCountClassic( TQSemContext *ctx );
 
