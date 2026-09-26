@@ -72,7 +72,7 @@ void StartTask( rtems_id id, rtems_task_entry entry, void *arg )
 {
   rtems_status_code sc;
 
-  sc = rtems_task_start( id, entry, (rtems_task_argument) arg);
+  sc = rtems_task_start( id, entry, (rtems_task_argument) arg );
   T_assert_rsc_success( sc );
 }
 
@@ -389,7 +389,7 @@ void YieldTask( rtems_id id )
   }
 
   cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
-  _ISR_lock_ISR_enable( &lock_context);
+  _ISR_lock_ISR_enable( &lock_context );
   _Thread_Yield( the_thread );
   _Thread_Dispatch_direct( cpu_self );
 }
@@ -486,7 +486,7 @@ bool IsMutexOwner( rtems_id id )
 
   _ISR_lock_ISR_enable( &queue_context.Lock_context.Lock_context );
   return the_semaphore->Core_control.Wait_queue.Queue.owner ==
-    _Thread_Get_executing();
+         _Thread_Get_executing();
 }
 
 void ObtainMutex( rtems_id id )
@@ -573,7 +573,7 @@ Thread_Control *GetThread( rtems_id id )
     return NULL;
   }
 
-  _ISR_lock_ISR_enable( &lock_context);
+  _ISR_lock_ISR_enable( &lock_context );
   return the_thread;
 }
 
@@ -615,7 +615,7 @@ void WaitForIntendToBlock( rtems_id task_id )
   T_assert_not_null( the_thread );
 
   intend_to_block = THREAD_WAIT_CLASS_OBJECT |
-    THREAD_WAIT_STATE_INTEND_TO_BLOCK;
+                    THREAD_WAIT_STATE_INTEND_TO_BLOCK;
 
   while ( _Thread_Wait_flags_get_acquire( the_thread ) != intend_to_block ) {
     /* Wait */
@@ -860,9 +860,7 @@ void SetTaskSwitchExtension( rtems_task_switch_extension task_switch )
     task_switch_extension = task_switch;
 
     if ( last == NULL ) {
-      rtems_extensions_table table = {
-        .thread_switch = TaskSwitchExtension
-      };
+      rtems_extensions_table table = { .thread_switch = TaskSwitchExtension };
 
       sc = rtems_extension_create(
         rtems_build_name( 'T', 'S', 'W', 'I' ),
@@ -884,7 +882,7 @@ void CopyExtensionCalls( const ExtensionCalls *from, ExtensionCalls *to )
   memcpy( to, from, sizeof( *to ) );
 }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 static volatile bool delay_thread_dispatch;
 
 static void DelayThreadDispatchHandler( void *arg )
@@ -907,7 +905,7 @@ static Per_CPU_Job delay_thread_dispatch_job = {
 
 void StartDelayThreadDispatch( uint32_t cpu_index )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   if ( rtems_configuration_get_maximum_processors() > cpu_index ) {
     delay_thread_dispatch = true;
     _Per_CPU_Submit_job(
@@ -922,7 +920,7 @@ void StartDelayThreadDispatch( uint32_t cpu_index )
 
 void StopDelayThreadDispatch( uint32_t cpu_index )
 {
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
   if ( rtems_configuration_get_maximum_processors() > cpu_index ) {
     Per_CPU_Control *cpu_self;
 
@@ -1000,7 +998,7 @@ bool IsEqualIgnoreWhiteSpace( const char *a, const char *b )
   return true;
 }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 bool TicketLockIsAvailable( const SMP_ticket_lock_Control *lock )
 {
   unsigned int now_serving;
@@ -1041,8 +1039,10 @@ void TicketLockGetState(
 )
 {
   state->lock = lock;
-  state->next_ticket =
-    _Atomic_Load_uint( &lock->next_ticket, ATOMIC_ORDER_RELAXED );
+  state->next_ticket = _Atomic_Load_uint(
+    &lock->next_ticket,
+    ATOMIC_ORDER_RELAXED
+  );
 }
 
 void TicketLockWaitForAcquires(

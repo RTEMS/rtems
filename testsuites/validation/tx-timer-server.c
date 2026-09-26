@@ -72,8 +72,8 @@ bool DeleteTimerServer( void )
 Timer_Classes GetTimerClass( rtems_id id )
 {
   /* This code is derived from rtems_timer_get_information() */
-  Timer_Classes result = TIMER_DORMANT;
-  Timer_Control *the_timer;
+  Timer_Classes    result = TIMER_DORMANT;
+  Timer_Control   *the_timer;
   ISR_lock_Context lock_context;
   Per_CPU_Control *cpu;
 
@@ -87,13 +87,10 @@ Timer_Classes GetTimerClass( rtems_id id )
   return result;
 }
 
-void GetTimerSchedulingData(
-  rtems_id id,
-  Timer_Scheduling_Data *data
-)
+void GetTimerSchedulingData( rtems_id id, Timer_Scheduling_Data *data )
 {
   /* This code is derived from rtems_timer_get_information() */
-  Timer_Control *the_timer;
+  Timer_Control   *the_timer;
   ISR_lock_Context lock_context;
   Per_CPU_Control *cpu;
 
@@ -104,9 +101,9 @@ void GetTimerSchedulingData(
   the_timer = _Timer_Get( id, &lock_context );
   if ( the_timer != NULL ) {
     cpu = _Timer_Acquire_critical( the_timer, &lock_context );
-    data->routine   = the_timer->routine;
+    data->routine = the_timer->routine;
     data->user_data = the_timer->user_data;
-    data->interval  = the_timer->initial;
+    data->interval = the_timer->initial;
     _Timer_Release( cpu, &lock_context );
   }
 }
@@ -136,7 +133,7 @@ Timer_States GetTimerState( rtems_id id )
       if ( _Watchdog_Get_state( &the_timer->Ticker ) == WATCHDOG_PENDING ) {
         result = TIMER_PENDING;
       }
-    _Timer_server_Release_critical( timer_server, &lock_context_server );
+      _Timer_server_Release_critical( timer_server, &lock_context_server );
     }
     _Timer_Release( cpu, &lock_context );
   }

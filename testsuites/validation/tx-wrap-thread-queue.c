@@ -47,8 +47,8 @@
 
 void WrapThreadQueueInitialize(
   WrapThreadQueueContext *ctx,
-  void                 ( *handler )( void * ),
-  void                   *arg
+  void ( *handler )( void * ),
+  void *arg
 )
 {
   memset( ctx, 0, sizeof( *ctx ) );
@@ -57,10 +57,7 @@ void WrapThreadQueueInitialize(
   _Thread_queue_Initialize( &ctx->thread_queue, "Wrap" );
 }
 
-static void Prepare(
-  WrapThreadQueueContext *ctx,
-  Thread_Control         *thread
-)
+static void Prepare( WrapThreadQueueContext *ctx, Thread_Control *thread )
 {
   if ( thread->Wait.queue != NULL ) {
     ctx->wrapped_ops = thread->Wait.operations;

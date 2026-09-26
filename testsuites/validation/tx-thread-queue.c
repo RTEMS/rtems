@@ -45,11 +45,7 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/rtems/semimpl.h>
 
-void TQSend(
-  TQContext      *ctx,
-  TQWorkerKind    worker,
-  rtems_event_set events
-)
+void TQSend( TQContext *ctx, TQWorkerKind worker, rtems_event_set events )
 {
 #if defined( RTEMS_SMP )
   ctx->event_received[ worker ] = false;
@@ -101,7 +97,7 @@ void TQWaitForIntendToBlock( const TQContext *ctx, TQWorkerKind worker )
 
   thread = ctx->worker_tcb[ worker ];
   intend_to_block = THREAD_WAIT_CLASS_OBJECT |
-    THREAD_WAIT_STATE_INTEND_TO_BLOCK;
+                    THREAD_WAIT_STATE_INTEND_TO_BLOCK;
 
   while ( _Thread_Wait_flags_get_acquire( thread ) != intend_to_block ) {
     /* Wait */
@@ -139,7 +135,7 @@ void TQSendAndWaitForExecutionStopOrIntendToBlock(
   TQWaitForEventsReceived( ctx, worker );
   thread = ctx->worker_tcb[ worker ];
   intend_to_block = THREAD_WAIT_CLASS_OBJECT |
-    THREAD_WAIT_STATE_INTEND_TO_BLOCK;
+                    THREAD_WAIT_STATE_INTEND_TO_BLOCK;
 
   while (
     _Thread_Is_executing_on_a_processor( thread ) &&
@@ -285,16 +281,16 @@ static void ThreadQueueDeadlock(
   longjmp( ctx->before_enqueue, 1 );
 }
 
-static void EnqueueFatal( TQContext * const ctx, TQWorkerKind const worker )
+static void EnqueueFatal( TQContext *const ctx, TQWorkerKind const worker )
 {
-   SetFatalHandler( ThreadQueueDeadlock, ctx );
+  SetFatalHandler( ThreadQueueDeadlock, ctx );
 
-   if ( setjmp( ctx->before_enqueue ) == 0 ) {
-     ctx->status[ worker ] = STATUS_MINUS_ONE;
-     Enqueue( ctx, worker, ctx->wait );
-   } else {
-     ctx->status[ worker ] = STATUS_DEADLOCK;
-   }
+  if ( setjmp( ctx->before_enqueue ) == 0 ) {
+    ctx->status[ worker ] = STATUS_MINUS_ONE;
+    Enqueue( ctx, worker, ctx->wait );
+  } else {
+    ctx->status[ worker ] = STATUS_DEADLOCK;
+  }
 }
 
 static void Worker( rtems_task_argument arg, TQWorkerKind worker )
@@ -419,7 +415,7 @@ static void Worker( rtems_task_argument arg, TQWorkerKind worker )
     if ( ( events & TQ_EVENT_UNPIN ) != 0 ) {
       Per_CPU_Control *cpu_self;
 
-       cpu_self = _Thread_Dispatch_disable();
+      cpu_self = _Thread_Dispatch_disable();
       _Thread_Unpin( _Thread_Get_executing(), cpu_self );
       _Thread_Dispatch_direct( cpu_self );
     }
@@ -551,7 +547,7 @@ void TQInitialize( TQContext *ctx )
   ctx->worker_id[ TQ_HELPER_C ] = CreateTask( "HLPC", PRIO_LOW );
   StartTask( ctx->worker_id[ TQ_HELPER_C ], HelperC, ctx );
 
-  for (i = 0; i < RTEMS_ARRAY_SIZE( ctx->worker_tcb ); ++i) {
+  for ( i = 0; i < RTEMS_ARRAY_SIZE( ctx->worker_tcb ); ++i ) {
     ctx->worker_tcb[ i ] = GetThread( ctx->worker_id[ i ] );
   }
 
@@ -602,16 +598,16 @@ void TQSortMutexesByID( TQContext *ctx )
   n = 3;
 
   /* Bubble sort */
-  for ( i = 1; i < n ; ++i ) {
+  for ( i = 1; i < n; ++i ) {
     size_t j;
 
     for ( j = 0; j < n - i; ++j ) {
       if ( ctx->mutex_id[ j ] > ctx->mutex_id[ j + 1 ] ) {
-       rtems_id tmp;
+        rtems_id tmp;
 
-       tmp = ctx->mutex_id[ j ];
-       ctx->mutex_id[ j ] = ctx->mutex_id[ j + 1 ];
-       ctx->mutex_id[ j + 1 ] = tmp;
+        tmp = ctx->mutex_id[ j ];
+        ctx->mutex_id[ j ] = ctx->mutex_id[ j + 1 ];
+        ctx->mutex_id[ j + 1 ] = tmp;
       }
     }
   }
@@ -637,7 +633,7 @@ Status_Control TQEnqueue( TQContext *ctx, TQWait wait )
   return ( *ctx->enqueue )( ctx, wait );
 }
 
-Status_Control TQEnqueueFatal( TQContext * const ctx )
+Status_Control TQEnqueueFatal( TQContext *const ctx )
 {
   SetFatalHandler( ThreadQueueDeadlock, ctx );
 
@@ -694,10 +690,7 @@ void TQSchedulerRecordStop( TQContext *ctx )
 
 const T_scheduler_event *TQGetNextAny( TQContext *ctx, size_t *index )
 {
-  return T_scheduler_next_any(
-    &ctx->scheduler_log.header,
-    index
-  );
+  return T_scheduler_next_any( &ctx->scheduler_log.header, index );
 }
 
 const T_scheduler_event *TQGetNextBlock( TQContext *ctx, size_t *index )
@@ -730,10 +723,7 @@ const T_scheduler_event *TQGetNextUpdatePriority(
   );
 }
 
-const T_scheduler_event *TQGetNextAskForHelp(
-  TQContext *ctx,
-  size_t    *index
-)
+const T_scheduler_event *TQGetNextAskForHelp( TQContext *ctx, size_t *index )
 {
   return T_scheduler_next(
     &ctx->scheduler_log.header,

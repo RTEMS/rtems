@@ -55,11 +55,7 @@ extern "C" {
  * @{
  */
 
-typedef enum {
-  TQ_NODE_ONLY,
-  TQ_NODE_VITAL,
-  TQ_NODE_DISPENSABLE
-} TQNodeKind;
+typedef enum { TQ_NODE_ONLY, TQ_NODE_VITAL, TQ_NODE_DISPENSABLE } TQNodeKind;
 
 typedef enum {
   TQ_WAIT_STATE_BLOCKED,
@@ -90,21 +86,11 @@ typedef enum {
   TQ_MUTEX_COUNT
 } TQMutex;
 
-typedef enum {
-  TQ_FIFO,
-  TQ_PRIORITY
-} TQDiscipline;
+typedef enum { TQ_FIFO, TQ_PRIORITY } TQDiscipline;
 
-typedef enum {
-  TQ_NO_WAIT,
-  TQ_WAIT_FOREVER,
-  TQ_WAIT_TIMED
-} TQWait;
+typedef enum { TQ_NO_WAIT, TQ_WAIT_FOREVER, TQ_WAIT_TIMED } TQWait;
 
-typedef enum {
-  TQ_DEADLOCK_STATUS,
-  TQ_DEADLOCK_FATAL
-} TQDeadlock;
+typedef enum { TQ_DEADLOCK_STATUS, TQ_DEADLOCK_FATAL } TQDeadlock;
 
 typedef enum {
   TQ_EVENT_ENQUEUE_PREPARE = RTEMS_EVENT_0,
@@ -140,10 +126,7 @@ typedef enum {
   TQ_EVENT_COUNT = RTEMS_EVENT_30
 } TQEvent;
 
-typedef enum {
-  TQ_ENQUEUE_BLOCKS,
-  TQ_ENQUEUE_STICKY
-} TQEnqueueVariant;
+typedef enum { TQ_ENQUEUE_BLOCKS, TQ_ENQUEUE_STICKY } TQEnqueueVariant;
 
 typedef struct TQContext {
   /**
@@ -311,11 +294,7 @@ typedef struct TQContext {
   rtems_tcb *( *get_owner )( struct TQContext * );
 } TQContext;
 
-void TQSend(
-  TQContext      *ctx,
-  TQWorkerKind    worker,
-  rtems_event_set events
-);
+void TQSend( TQContext *ctx, TQWorkerKind worker, rtems_event_set events );
 
 void TQSendAndWaitForExecutionStop(
   TQContext      *ctx,
@@ -441,10 +420,7 @@ Status_Control TQSurrenderClassicSem( TQContext *ctx );
 
 rtems_tcb *TQGetOwnerClassicSem( TQContext *ctx );
 
-typedef enum {
-  TQ_SEM_BINARY,
-  TQ_SEM_COUNTING
-} TQSemVariant;
+typedef enum { TQ_SEM_BINARY, TQ_SEM_COUNTING } TQSemVariant;
 
 typedef struct TQSemContext {
   /**
@@ -493,10 +469,7 @@ typedef enum {
   TQ_MTX_RECURSIVE_UNAVAILABLE
 } TQMtxRecursive;
 
-typedef enum {
-  TQ_MTX_NO_OWNER_CHECK,
-  TQ_MTX_CHECKS_OWNER
-} TQMtxOwnerCheck;
+typedef enum { TQ_MTX_NO_OWNER_CHECK, TQ_MTX_CHECKS_OWNER } TQMtxOwnerCheck;
 
 typedef struct TQMtxContext {
   /**

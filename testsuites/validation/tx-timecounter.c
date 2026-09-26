@@ -48,9 +48,9 @@
 #include <rtems/score/threaddispatch.h>
 
 typedef struct {
-  struct timecounter base;
+  struct timecounter  base;
   GetTimecountHandler handler;
-  Atomic_Ulong counter;
+  Atomic_Ulong        counter;
 } TimecounterControl;
 
 static TimecounterControl TimecounterInstance;
@@ -66,10 +66,9 @@ GetTimecountHandler SetGetTimecountHandler( GetTimecountHandler handler )
 
 uint32_t GetTimecountCounter( void )
 {
-  return (uint32_t) _Atomic_Load_ulong(
-    &TimecounterInstance.counter,
-    ATOMIC_ORDER_RELAXED
-  );
+  return (
+    uint32_t
+  ) _Atomic_Load_ulong( &TimecounterInstance.counter, ATOMIC_ORDER_RELAXED );
 }
 
 uint32_t SetTimecountCounter( uint32_t counter )
@@ -129,8 +128,8 @@ void TimecounterTick( void )
   Per_CPU_Control *cpu_self;
   bool             success;
 
-  counter_ticks_per_clock_tick =
-    SOFTWARE_TIMECOUNTER_FREQUENCY / rtems_clock_get_ticks_per_second();
+  counter_ticks_per_clock_tick = SOFTWARE_TIMECOUNTER_FREQUENCY /
+                                 rtems_clock_get_ticks_per_second();
   cpu_self = _Thread_Dispatch_disable();
 
   do {
@@ -142,7 +141,7 @@ void TimecounterTick( void )
       ATOMIC_ORDER_RELAXED
     );
     new_counter = old_counter + counter_ticks_per_clock_tick -
-      ( old_counter % counter_ticks_per_clock_tick );
+                  ( old_counter % counter_ticks_per_clock_tick );
     success = _Atomic_Compare_exchange_ulong(
       &TimecounterInstance.counter,
       &old_counter,

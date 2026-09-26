@@ -105,10 +105,10 @@ typedef enum {
  */
 #define OBJECT_NAME rtems_build_name( 'T', 'E', 'S', 'T' )
 
-#define CreateTask( name, priority ) \
-  DoCreateTask( \
+#define CreateTask( name, priority )                                \
+  DoCreateTask(                                                     \
     rtems_build_name( name[ 0 ], name[ 1 ], name[ 2 ], name[ 3 ] ), \
-    priority \
+    priority                                                        \
   )
 
 #define SCHEDULER_A_ID 0xf010001
@@ -255,8 +255,8 @@ typedef enum {
 } TaskTimerState;
 
 typedef struct {
-  TaskTimerState state;
-  uint64_t expire_ticks;
+  TaskTimerState  state;
+  uint64_t        expire_ticks;
   struct timespec expire_timespec;
 } TaskTimerInfo;
 
@@ -361,7 +361,7 @@ bool DeleteTimerServer( void );
 typedef struct {
   struct {
     const void *begin;
-    void *free_begin;
+    void       *free_begin;
     const void *end;
   } areas[ 2 ];
   size_t count;
@@ -386,7 +386,7 @@ void MemoryAllocationFailWhen( uint32_t counter );
 typedef struct {
   Chain_Node node;
   void ( *handler )( void * );
-  void *arg;
+  void       *arg;
   Atomic_Uint done;
 } CallWithinISRRequest;
 
@@ -413,8 +413,8 @@ typedef struct {
 
 void WrapThreadQueueInitialize(
   WrapThreadQueueContext *ctx,
-  void                 ( *handler )( void * ),
-  void                   *arg
+  void ( *handler )( void * ),
+  void *arg
 );
 
 void WrapThreadQueueExtract(
@@ -433,8 +433,8 @@ struct Per_CPU_Control;
 
 void SetPreemptionIntervention(
   struct Per_CPU_Control *cpu,
-  void                 ( *handler )( void * ),
-  void                   *arg
+  void ( *handler )( void * ),
+  void *arg
 );
 
 rtems_vector_number GetValidInterruptVectorNumber(
@@ -476,18 +476,18 @@ Timer_Classes GetTimerClass( rtems_id id );
  */
 typedef struct {
   /**
-    * @brief This member contains a reference to the timer service routine.
-    */
+   * @brief This member contains a reference to the timer service routine.
+   */
   rtems_timer_service_routine_entry routine;
   /**
    * @brief This member contains a reference to the user data to be provided
    * to the timer service routine.
    */
-  void *user_data;
+  void                             *user_data;
   /**
    * @brief This member contains the timer interval in ticks or seconds.
    */
-  Watchdog_Interval interval;
+  Watchdog_Interval                 interval;
 } Timer_Scheduling_Data;
 
 /**
@@ -498,10 +498,7 @@ typedef struct {
  * @param[out] data If the reference is not NULL, the data retrieved from
  *   internal RTEMS structures is stored here.
  */
-void GetTimerSchedulingData(
-  rtems_id id,
-  Timer_Scheduling_Data *data
-);
+void GetTimerSchedulingData( rtems_id id, Timer_Scheduling_Data *data );
 
 /**
  * @brief The various states of a timer.
@@ -579,7 +576,7 @@ bool IsWhiteSpaceOnly( const char *s );
 
 bool IsEqualIgnoreWhiteSpace( const char *a, const char *b );
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
 bool TicketLockIsAvailable( const SMP_ticket_lock_Control *lock );
 
 void TicketLockWaitForOwned( const SMP_ticket_lock_Control *lock );
