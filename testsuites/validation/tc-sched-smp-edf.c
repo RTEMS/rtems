@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (C) 2021, 2024 embedded brains GmbH & Co. KG
+ * Copyright (C) 2021, 2026 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -60,6 +60,14 @@
  *   processors. On systems with three or more processors, unsupported subsets
  *   are possible to construct.
  *
+ * - Start a rate monotonic period for the executing task. The period releases
+ *   a job with a deadline. Get the current priority of the task with respect
+ *   to the EDF SMP scheduler.
+ *
+ *   - Check that the current priority of the task is zero.
+ *
+ *   - Delete the period.
+ *
  * @{
  */
 
@@ -100,11 +108,45 @@ static void ScoreSchedSmpEdfValEdf_Action_0( void )
 }
 
 /**
+ * @brief Start a rate monotonic period for the executing task. The period
+ *   releases a job with a deadline. Get the current priority of the task with
+ *   respect to the EDF SMP scheduler.
+ */
+static void ScoreSchedSmpEdfValEdf_Action_1( void )
+{
+  rtems_status_code   sc;
+  rtems_id            period_id;
+  rtems_task_priority priority;
+
+  sc = rtems_rate_monotonic_create( OBJECT_NAME, &period_id );
+  T_rsc_success( sc );
+
+  sc = rtems_rate_monotonic_period( period_id, 2 );
+  T_rsc_success( sc );
+
+  priority = PRIO_INVALID;
+  sc = rtems_task_get_priority( RTEMS_SELF, SCHEDULER_A_ID, &priority );
+
+  /*
+   * Check that the current priority of the task is zero.
+   */
+  T_rsc_success( sc );
+  T_eq_u32( priority, 0 );
+
+  /*
+   * Delete the period.
+   */
+  sc = rtems_rate_monotonic_delete( period_id );
+  T_rsc_success( sc );
+}
+
+/**
  * @fn void T_case_body_ScoreSchedSmpEdfValEdf( void )
  */
 T_TEST_CASE( ScoreSchedSmpEdfValEdf )
 {
   ScoreSchedSmpEdfValEdf_Action_0();
+  ScoreSchedSmpEdfValEdf_Action_1();
 }
 
 /** @} */
