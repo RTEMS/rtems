@@ -126,6 +126,7 @@ source:
 - testsuites/validation/tc-task-storage-size.c
 - testsuites/validation/tc-task-suspend.c
 - testsuites/validation/tc-task-wake-after.c
+- testsuites/validation/tc-task-wake-when-tod.c
 - testsuites/validation/tc-task-wake-when.c
 - testsuites/validation/tc-task.c
 - testsuites/validation/tc-timegm-year.c

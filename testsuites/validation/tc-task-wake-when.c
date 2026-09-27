@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (C) 2021 embedded brains GmbH & Co. KG
+ * Copyright (C) 2021, 2026 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -59,17 +59,13 @@ typedef enum {
 } RtemsTaskReqWakeWhen_Pre_TODSet;
 
 typedef enum {
-  RtemsTaskReqWakeWhen_Pre_TOD_Valid,
-  RtemsTaskReqWakeWhen_Pre_TOD_Null,
-  RtemsTaskReqWakeWhen_Pre_TOD_NA
-} RtemsTaskReqWakeWhen_Pre_TOD;
-
-typedef enum {
-  RtemsTaskReqWakeWhen_Pre_TODObj_Future,
-  RtemsTaskReqWakeWhen_Pre_TODObj_PastOrNow,
-  RtemsTaskReqWakeWhen_Pre_TODObj_Invalid,
-  RtemsTaskReqWakeWhen_Pre_TODObj_NA
-} RtemsTaskReqWakeWhen_Pre_TODObj;
+  RtemsTaskReqWakeWhen_Pre_ToD_Null,
+  RtemsTaskReqWakeWhen_Pre_ToD_Invalid,
+  RtemsTaskReqWakeWhen_Pre_ToD_Past,
+  RtemsTaskReqWakeWhen_Pre_ToD_Now,
+  RtemsTaskReqWakeWhen_Pre_ToD_Future,
+  RtemsTaskReqWakeWhen_Pre_ToD_NA
+} RtemsTaskReqWakeWhen_Pre_ToD;
 
 typedef enum {
   RtemsTaskReqWakeWhen_Post_Status_Ok,
@@ -99,8 +95,7 @@ typedef enum {
 typedef struct {
   uint16_t Skip : 1;
   uint16_t Pre_TODSet_NA : 1;
-  uint16_t Pre_TOD_NA : 1;
-  uint16_t Pre_TODObj_NA : 1;
+  uint16_t Pre_ToD_NA : 1;
   uint16_t Post_Status : 3;
   uint16_t Post_Timer : 2;
   uint16_t Post_Expire : 1;
@@ -151,15 +146,9 @@ typedef struct {
 
   struct {
     /**
-     * @brief This member defines the pre-condition indices for the next
-     *   action.
-     */
-    size_t pci[ 3 ];
-
-    /**
      * @brief This member defines the pre-condition states for the next action.
      */
-    size_t pcs[ 3 ];
+    size_t pcs[ 2 ];
 
     /**
      * @brief If this member is true, then the test action loop is executed.
@@ -189,16 +178,12 @@ static RtemsTaskReqWakeWhen_Context RtemsTaskReqWakeWhen_Instance;
 static const char *const RtemsTaskReqWakeWhen_PreDesc_TODSet[] =
   { "Yes", "No", "NA" };
 
-static const char *const RtemsTaskReqWakeWhen_PreDesc_TOD[] =
-  { "Valid", "Null", "NA" };
-
-static const char *const RtemsTaskReqWakeWhen_PreDesc_TODObj[] =
-  { "Future", "PastOrNow", "Invalid", "NA" };
+static const char *const RtemsTaskReqWakeWhen_PreDesc_ToD[] =
+  { "Null", "Invalid", "Past", "Now", "Future", "NA" };
 
 static const char *const *const RtemsTaskReqWakeWhen_PreDesc[] = {
   RtemsTaskReqWakeWhen_PreDesc_TODSet,
-  RtemsTaskReqWakeWhen_PreDesc_TOD,
-  RtemsTaskReqWakeWhen_PreDesc_TODObj,
+  RtemsTaskReqWakeWhen_PreDesc_ToD,
   NULL
 };
 
@@ -210,6 +195,12 @@ static void SetTOD( rtems_time_of_day *tod, uint32_t year )
   tod->year = year;
   tod->month = 1;
   tod->day = 1;
+}
+
+static int64_t GetSeconds( const rtems_time_of_day *tod )
+{
+  return DaysFromCivil( tod->year, tod->month, tod->day ) * 86400 +
+         tod->hour * 3600 + tod->minute * 60 + tod->second;
 }
 
 static void Worker( rtems_task_argument arg )
@@ -265,22 +256,13 @@ static void RtemsTaskReqWakeWhen_Pre_TODSet_Prepare(
   }
 }
 
-static void RtemsTaskReqWakeWhen_Pre_TOD_Prepare(
+static void RtemsTaskReqWakeWhen_Pre_ToD_Prepare(
   RtemsTaskReqWakeWhen_Context *ctx,
-  RtemsTaskReqWakeWhen_Pre_TOD  state
+  RtemsTaskReqWakeWhen_Pre_ToD  state
 )
 {
   switch ( state ) {
-    case RtemsTaskReqWakeWhen_Pre_TOD_Valid: {
-      /*
-       * While the `time_buffer` parameter references an object of type
-       * rtems_time_of_day.
-       */
-      ctx->tod = &ctx->tod_obj;
-      break;
-    }
-
-    case RtemsTaskReqWakeWhen_Pre_TOD_Null: {
+    case RtemsTaskReqWakeWhen_Pre_ToD_Null: {
       /*
        * While the `time_buffer` parameter is equal to NULL.
        */
@@ -288,46 +270,51 @@ static void RtemsTaskReqWakeWhen_Pre_TOD_Prepare(
       break;
     }
 
-    case RtemsTaskReqWakeWhen_Pre_TOD_NA:
-      break;
-  }
-}
-
-static void RtemsTaskReqWakeWhen_Pre_TODObj_Prepare(
-  RtemsTaskReqWakeWhen_Context   *ctx,
-  RtemsTaskReqWakeWhen_Pre_TODObj state
-)
-{
-  switch ( state ) {
-    case RtemsTaskReqWakeWhen_Pre_TODObj_Future: {
+    case RtemsTaskReqWakeWhen_Pre_ToD_Invalid: {
       /*
-       * While the object referenced by the `time_buffer` parameter specifies a
-       * valid time of day in the future.
+       * While the `time_buffer` parameter references an object of type
+       * rtems_time_of_day, while the object holds an invalid time of day.
        */
+      ctx->tod = &ctx->tod_obj;
       SetTOD( &ctx->tod_obj, 2010 );
+      ctx->tod_obj.month = 13;
       break;
     }
 
-    case RtemsTaskReqWakeWhen_Pre_TODObj_PastOrNow: {
+    case RtemsTaskReqWakeWhen_Pre_ToD_Past: {
       /*
-       * While the object referenced by the `time_buffer` parameter specifies a
-       * valid time of day in the past or at the time of the
-       * rtems_task_wake_when() call.
+       * While the `time_buffer` parameter references an object of type
+       * rtems_time_of_day, while the object holds a valid time of day before
+       * the current second of the CLOCK_REALTIME.
        */
+      ctx->tod = &ctx->tod_obj;
       SetTOD( &ctx->tod_obj, 1990 );
       break;
     }
 
-    case RtemsTaskReqWakeWhen_Pre_TODObj_Invalid: {
+    case RtemsTaskReqWakeWhen_Pre_ToD_Now: {
       /*
-       * While the object referenced by the `time_buffer` parameter specifies
-       * an invalid time of day.
+       * While the `time_buffer` parameter references an object of type
+       * rtems_time_of_day, while the object holds a valid time of day in the
+       * current second of the CLOCK_REALTIME.
        */
-      memset( &ctx->tod_obj, 0xff, sizeof( ctx->tod_obj ) );
+      ctx->tod = &ctx->tod_obj;
+      SetTOD( &ctx->tod_obj, 2000 );
       break;
     }
 
-    case RtemsTaskReqWakeWhen_Pre_TODObj_NA:
+    case RtemsTaskReqWakeWhen_Pre_ToD_Future: {
+      /*
+       * While the `time_buffer` parameter references an object of type
+       * rtems_time_of_day, while the object holds a valid time of day after
+       * the current second of the CLOCK_REALTIME.
+       */
+      ctx->tod = &ctx->tod_obj;
+      SetTOD( &ctx->tod_obj, 2010 );
+      break;
+    }
+
+    case RtemsTaskReqWakeWhen_Pre_ToD_NA:
       break;
   }
 }
@@ -417,7 +404,10 @@ static void RtemsTaskReqWakeWhen_Post_Expire_Check(
        * The timer of the calling task shall expire at the time point specified
        * by the `time_buffer` parameter.
        */
-      T_eq_i64( ctx->timer_info.expire_timespec.tv_sec, 1262304000 );
+      T_eq_i64(
+        ctx->timer_info.expire_timespec.tv_sec,
+        GetSeconds( &ctx->tod_obj )
+      );
       T_eq_long( ctx->timer_info.expire_timespec.tv_nsec, 0 );
       break;
     }
@@ -505,23 +495,19 @@ static void RtemsTaskReqWakeWhen_Action( RtemsTaskReqWakeWhen_Context *ctx )
 
 static const RtemsTaskReqWakeWhen_Entry
 RtemsTaskReqWakeWhen_Entries[] = {
-  { 0, 0, 0, 1, RtemsTaskReqWakeWhen_Post_Status_InvAddr,
+  { 0, 0, 0, RtemsTaskReqWakeWhen_Post_Status_NotDef,
     RtemsTaskReqWakeWhen_Post_Timer_Inactive,
     RtemsTaskReqWakeWhen_Post_Expire_NA,
     RtemsTaskReqWakeWhen_Post_Scheduler_Nop },
-  { 0, 0, 0, 0, RtemsTaskReqWakeWhen_Post_Status_NotDef,
+  { 0, 0, 0, RtemsTaskReqWakeWhen_Post_Status_InvClock,
     RtemsTaskReqWakeWhen_Post_Timer_Inactive,
     RtemsTaskReqWakeWhen_Post_Expire_NA,
     RtemsTaskReqWakeWhen_Post_Scheduler_Nop },
-  { 0, 0, 0, 1, RtemsTaskReqWakeWhen_Post_Status_NotDef,
+  { 0, 0, 0, RtemsTaskReqWakeWhen_Post_Status_InvAddr,
     RtemsTaskReqWakeWhen_Post_Timer_Inactive,
     RtemsTaskReqWakeWhen_Post_Expire_NA,
     RtemsTaskReqWakeWhen_Post_Scheduler_Nop },
-  { 0, 0, 0, 0, RtemsTaskReqWakeWhen_Post_Status_InvClock,
-    RtemsTaskReqWakeWhen_Post_Timer_Inactive,
-    RtemsTaskReqWakeWhen_Post_Expire_NA,
-    RtemsTaskReqWakeWhen_Post_Scheduler_Nop },
-  { 0, 0, 0, 0, RtemsTaskReqWakeWhen_Post_Status_Ok,
+  { 0, 0, 0, RtemsTaskReqWakeWhen_Post_Status_Ok,
     RtemsTaskReqWakeWhen_Post_Timer_Realtime,
     RtemsTaskReqWakeWhen_Post_Expire_Absolute,
     RtemsTaskReqWakeWhen_Post_Scheduler_Block }
@@ -529,7 +515,7 @@ RtemsTaskReqWakeWhen_Entries[] = {
 
 static const uint8_t
 RtemsTaskReqWakeWhen_Map[] = {
-  4, 3, 3, 0, 0, 0, 1, 1, 1, 2, 2, 2
+  2, 1, 1, 1, 3, 0, 0, 0, 0, 0
 };
 
 /* clang-format on */
@@ -566,27 +552,12 @@ static inline RtemsTaskReqWakeWhen_Entry RtemsTaskReqWakeWhen_PopEntry(
   return RtemsTaskReqWakeWhen_Entries[ RtemsTaskReqWakeWhen_Map[ index ] ];
 }
 
-static void RtemsTaskReqWakeWhen_SetPreConditionStates(
-  RtemsTaskReqWakeWhen_Context *ctx
-)
-{
-  ctx->Map.pcs[ 0 ] = ctx->Map.pci[ 0 ];
-  ctx->Map.pcs[ 1 ] = ctx->Map.pci[ 1 ];
-
-  if ( ctx->Map.entry.Pre_TODObj_NA ) {
-    ctx->Map.pcs[ 2 ] = RtemsTaskReqWakeWhen_Pre_TODObj_NA;
-  } else {
-    ctx->Map.pcs[ 2 ] = ctx->Map.pci[ 2 ];
-  }
-}
-
 static void RtemsTaskReqWakeWhen_TestVariant(
   RtemsTaskReqWakeWhen_Context *ctx
 )
 {
   RtemsTaskReqWakeWhen_Pre_TODSet_Prepare( ctx->Map.pcs[ 0 ] );
-  RtemsTaskReqWakeWhen_Pre_TOD_Prepare( ctx, ctx->Map.pcs[ 1 ] );
-  RtemsTaskReqWakeWhen_Pre_TODObj_Prepare( ctx, ctx->Map.pcs[ 2 ] );
+  RtemsTaskReqWakeWhen_Pre_ToD_Prepare( ctx, ctx->Map.pcs[ 1 ] );
   RtemsTaskReqWakeWhen_Action( ctx );
   RtemsTaskReqWakeWhen_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
   RtemsTaskReqWakeWhen_Post_Timer_Check( ctx, ctx->Map.entry.Post_Timer );
@@ -609,25 +580,18 @@ T_TEST_CASE_FIXTURE( RtemsTaskReqWakeWhen, &RtemsTaskReqWakeWhen_Fixture )
   ctx->Map.index = 0;
 
   for (
-    ctx->Map.pci[ 0 ] = RtemsTaskReqWakeWhen_Pre_TODSet_Yes;
-    ctx->Map.pci[ 0 ] < RtemsTaskReqWakeWhen_Pre_TODSet_NA;
-    ++ctx->Map.pci[ 0 ]
+    ctx->Map.pcs[ 0 ] = RtemsTaskReqWakeWhen_Pre_TODSet_Yes;
+    ctx->Map.pcs[ 0 ] < RtemsTaskReqWakeWhen_Pre_TODSet_NA;
+    ++ctx->Map.pcs[ 0 ]
   ) {
     for (
-      ctx->Map.pci[ 1 ] = RtemsTaskReqWakeWhen_Pre_TOD_Valid;
-      ctx->Map.pci[ 1 ] < RtemsTaskReqWakeWhen_Pre_TOD_NA;
-      ++ctx->Map.pci[ 1 ]
+      ctx->Map.pcs[ 1 ] = RtemsTaskReqWakeWhen_Pre_ToD_Null;
+      ctx->Map.pcs[ 1 ] < RtemsTaskReqWakeWhen_Pre_ToD_NA;
+      ++ctx->Map.pcs[ 1 ]
     ) {
-      for (
-        ctx->Map.pci[ 2 ] = RtemsTaskReqWakeWhen_Pre_TODObj_Future;
-        ctx->Map.pci[ 2 ] < RtemsTaskReqWakeWhen_Pre_TODObj_NA;
-        ++ctx->Map.pci[ 2 ]
-      ) {
-        ctx->Map.entry = RtemsTaskReqWakeWhen_PopEntry( ctx );
-        RtemsTaskReqWakeWhen_SetPreConditionStates( ctx );
-        RtemsTaskReqWakeWhen_Prepare( ctx );
-        RtemsTaskReqWakeWhen_TestVariant( ctx );
-      }
+      ctx->Map.entry = RtemsTaskReqWakeWhen_PopEntry( ctx );
+      RtemsTaskReqWakeWhen_Prepare( ctx );
+      RtemsTaskReqWakeWhen_TestVariant( ctx );
     }
   }
 }
