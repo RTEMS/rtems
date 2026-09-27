@@ -178,7 +178,7 @@ static inline Watchdog_Interval _Timer_Get_CPU_ticks(
 
 rtems_status_code _Timer_Fire(
   rtems_id                          id,
-  rtems_interval                    interval,
+  uint64_t                          interval,
   rtems_timer_service_routine_entry routine,
   void                             *user_data,
   Timer_Classes                     the_class,

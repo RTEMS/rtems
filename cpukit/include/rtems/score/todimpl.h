@@ -308,9 +308,9 @@ static inline void _TOD_Get_zero_based_uptime_as_timespec(
  *
  * @return The number of seconds since RTEMS epoch.
  */
-static inline uint32_t _TOD_Seconds_since_epoch( void )
+static inline time_t _TOD_Seconds_since_epoch( void )
 {
-  return (uint32_t) _Timecounter_Time_second;
+  return _Timecounter_Time_second;
 }
 
 /**

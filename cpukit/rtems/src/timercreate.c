@@ -78,7 +78,7 @@ void _Timer_Routine_adaptor(
 
 rtems_status_code _Timer_Fire(
   rtems_id                          id,
-  rtems_interval                    interval,
+  uint64_t                          interval,
   rtems_timer_service_routine_entry routine,
   void                             *user_data,
   Timer_Classes                     the_class,
@@ -98,7 +98,7 @@ rtems_status_code _Timer_Fire(
     the_timer->the_class = the_class;
     the_timer->routine = routine;
     the_timer->user_data = user_data;
-    the_timer->initial = interval;
+    the_timer->initial = (Watchdog_Interval) interval;
     the_timer->start_time = _Timer_Get_CPU_ticks( cpu );
 
     if ( _Timer_Is_interval_class( the_class ) ) {
@@ -152,8 +152,7 @@ rtems_status_code _Timer_Fire_when(
 )
 {
   rtems_status_code status;
-  time_t            seconds_time_t;
-  rtems_interval    seconds;
+  time_t            seconds;
 
   if ( !_TOD_Is_set() ) {
     return RTEMS_NOT_DEFINED;
@@ -169,12 +168,7 @@ rtems_status_code _Timer_Fire_when(
     return status;
   }
 
-  seconds_time_t = _TOD_To_seconds( wall_time );
-  if ( seconds_time_t > UINT32_MAX ) {
-    return RTEMS_INVALID_CLOCK;
-  }
-
-  seconds = seconds_time_t;
+  seconds = _TOD_To_seconds( wall_time );
   if ( seconds <= _TOD_Seconds_since_epoch() ) {
     return RTEMS_INVALID_CLOCK;
   }

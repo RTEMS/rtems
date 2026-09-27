@@ -557,7 +557,7 @@ static inline bool _Watchdog_Is_far_future_timespec(
  *
  * @return @a seconds converted to ticks.
  */
-static inline uint64_t _Watchdog_Ticks_from_seconds( uint32_t seconds )
+static inline uint64_t _Watchdog_Ticks_from_seconds( uint64_t seconds )
 {
   uint64_t ticks = seconds;
 
