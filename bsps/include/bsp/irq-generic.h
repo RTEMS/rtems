@@ -435,7 +435,7 @@ rtems_status_code bsp_interrupt_set_priority(
  *
  * The function may have no implementation in uniprocessor configurations.
  *
- * @param vector is the interrupt vector number.
+ * @param vector is the interrupt vector number.  It shall be valid.
  *
  * @param[out] affinity is the pointer to a Processor_mask object.  When the
  *   directive call is successful, the processor affinity set of the interrupt

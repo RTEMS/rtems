@@ -516,14 +516,11 @@ rtems_status_code bsp_interrupt_set_affinity(
   uint32_t                     bit;
   irqamp                      *regs;
 
+  bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
+  bsp_interrupt_assert( affinity != NULL );
+
 #if LEON3_IRQMAP_BUS_LINE_COUNT != 0
-  rtems_vector_number irq_vector;
-
-  if ( leon3_irqmap_get( vector, &irq_vector ) != RTEMS_SUCCESSFUL ) {
-    return RTEMS_UNSATISFIED;
-  }
-
-  vector = irq_vector;
+  vector = leon3_irqmap_get_unchecked( vector );
 #endif
 
   if ( vector >= RTEMS_ARRAY_SIZE( leon3_interrupt_affinities ) ) {
@@ -557,14 +554,11 @@ rtems_status_code bsp_interrupt_get_affinity(
   Processor_mask     *affinity
 )
 {
+  bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
+  bsp_interrupt_assert( affinity != NULL );
+
 #if LEON3_IRQMAP_BUS_LINE_COUNT != 0
-  rtems_vector_number irq_vector;
-
-  if ( leon3_irqmap_get( vector, &irq_vector ) != RTEMS_SUCCESSFUL ) {
-    return RTEMS_UNSATISFIED;
-  }
-
-  vector = irq_vector;
+  vector = leon3_irqmap_get_unchecked( vector );
 #endif
 
   if ( vector >= RTEMS_ARRAY_SIZE( leon3_interrupt_affinities ) ) {
