@@ -525,8 +525,13 @@ links:
 - role: build-dependency
   uid: vckey
 source:
-- contrib/cpukit/posix-newlib/gmtime_r.c
-- contrib/cpukit/posix-newlib/mktime.c
+- contrib/cpukit/musl/src/time/__month_to_secs.c
+- contrib/cpukit/musl/src/time/__secs_to_tm.c
+- contrib/cpukit/musl/src/time/__tm_to_secs.c
+- contrib/cpukit/musl/src/time/__utc.c
+- contrib/cpukit/musl/src/time/__year_to_secs.c
+- contrib/cpukit/musl/src/time/gmtime_r.c
+- contrib/cpukit/musl/src/time/timegm.c
 - contrib/cpukit/uuid/clear.c
 - contrib/cpukit/uuid/compare.c
 - contrib/cpukit/uuid/copy.c

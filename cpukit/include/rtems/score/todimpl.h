@@ -417,20 +417,67 @@ void _TOD_Hook_Unregister( TOD_Hook *hook );
 Status_Control _TOD_Hook_Run( TOD_Action action, const struct timespec *tod );
 
 /**
- * @brief mktime() without timezone
+ * @brief Converts the broken-down time in UTC to the seconds since the Epoch.
  *
- * This method converts the broken down time of day pointed to by @a tim_p
- * to the number of seconds since the POSIX epoch.
+ * The musl import in contrib/cpukit/musl provides this function.  The
+ * function uses no time zone and sets no errno.
  *
- * This method is the POSIX mktime() function with the timezone functionality
- * disabled. Timezone support is in the C Library. RTEMS manages time at UTC.
- * This avoids pulling in TLS variables.
+ * @param tm is the broken-down time.  The function reads the members tm_sec,
+ *   tm_min, tm_hour, tm_mday, tm_mon, and tm_year.
  *
- * @param[in] tim_p points to the struct tm instance
- *
- * @retval seconds since the POSIX epoch.
+ * @return Returns the seconds since the Epoch.
  */
-time_t _TOD_mktime( struct tm *tim_p );
+long long __tm_to_secs( const struct tm *tm );
+
+/**
+ * @brief Converts the seconds since the Epoch to the broken-down time in UTC.
+ *
+ * The musl import in contrib/cpukit/musl provides this function.  The
+ * function uses no time zone and sets no errno.  It sets no member of the
+ * broken-down time other than tm_sec, tm_min, tm_hour, tm_mday, tm_mon,
+ * tm_year, tm_wday, and tm_yday.
+ *
+ * @param t is the seconds since the Epoch.
+ *
+ * @param[out] tm is the broken-down time.
+ *
+ * @retval 0 The function converted the seconds.
+ *
+ * @retval -1 The year of the result is not in the range of int.
+ */
+int __secs_to_tm( long long t, struct tm *tm );
+
+/**
+ * @brief Converts the broken-down time in UTC to the seconds since the Epoch.
+ *
+ * @param tm is the broken-down time.  The function reads the members tm_sec,
+ *   tm_min, tm_hour, tm_mday, tm_mon, and tm_year.
+ *
+ * @return Returns the seconds since the Epoch.
+ */
+static inline time_t _TOD_Tm_to_seconds( const struct tm *tm )
+{
+  return (time_t) __tm_to_secs( tm );
+}
+
+/**
+ * @brief Converts the seconds since the Epoch to the broken-down time in UTC.
+ *
+ * The function sets no member of the broken-down time other than tm_sec,
+ * tm_min, tm_hour, tm_mday, tm_mon, tm_year, tm_wday, and tm_yday.
+ *
+ * @param seconds is the seconds since the Epoch.
+ *
+ * @param[out] tm is the broken-down time.
+ *
+ * @retval true The function converted the seconds.
+ *
+ * @retval false The year of the result is not in the range of int.
+ */
+static inline bool _TOD_Seconds_to_tm( time_t seconds, struct tm *tm )
+{
+  return __secs_to_tm( seconds, tm ) == 0;
+}
 
 /** @} */
 

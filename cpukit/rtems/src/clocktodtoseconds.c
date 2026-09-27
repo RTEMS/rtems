@@ -53,11 +53,8 @@ time_t _TOD_To_seconds( const rtems_time_of_day *the_tod )
   tm.tm_mday = the_tod->day;
   tm.tm_mon = the_tod->month - 1;
   tm.tm_year = the_tod->year - 1900;
-  tm.tm_wday = 0;
-  tm.tm_yday = 0;
-  tm.tm_isdst = 0;
 
-  time = _TOD_mktime( &tm );
+  time = _TOD_Tm_to_seconds( &tm );
 
   return time;
 }
