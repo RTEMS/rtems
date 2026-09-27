@@ -1594,7 +1594,8 @@ rtems_status_code rtems_task_wake_after( rtems_interval ticks );
  *
  * @retval ::RTEMS_INVALID_ADDRESS The `time_buffer` parameter was NULL.
  *
- * @retval ::RTEMS_INVALID_CLOCK The time of day was invalid.
+ * @retval ::RTEMS_INVALID_CLOCK The time of day referenced by `time_buffer`
+ *   was invalid, or it was not after the current second of the CLOCK_REALTIME.
  *
  * @par Notes
  * The ticks portion of `time_buffer` structure is ignored.  The timing
