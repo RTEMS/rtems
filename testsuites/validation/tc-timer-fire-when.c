@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (C) 2021 embedded brains GmbH & Co. KG
+ * Copyright (C) 2021, 2026 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -36,6 +36,7 @@
 #endif
 
 #include <rtems.h>
+#include <rtems/score/watchdogimpl.h>
 
 #include "tx-support.h"
 
@@ -50,10 +51,10 @@
  */
 
 typedef enum {
-  RtemsTimerReqFireWhen_Pre_RtClock_Set,
-  RtemsTimerReqFireWhen_Pre_RtClock_Unset,
-  RtemsTimerReqFireWhen_Pre_RtClock_NA
-} RtemsTimerReqFireWhen_Pre_RtClock;
+  RtemsTimerReqFireWhen_Pre_TODSet_Yes,
+  RtemsTimerReqFireWhen_Pre_TODSet_No,
+  RtemsTimerReqFireWhen_Pre_TODSet_NA
+} RtemsTimerReqFireWhen_Pre_TODSet;
 
 typedef enum {
   RtemsTimerReqFireWhen_Pre_Routine_Valid,
@@ -62,16 +63,18 @@ typedef enum {
 } RtemsTimerReqFireWhen_Pre_Routine;
 
 typedef enum {
-  RtemsTimerReqFireWhen_Pre_WallTime_Valid,
-  RtemsTimerReqFireWhen_Pre_WallTime_Invalid,
-  RtemsTimerReqFireWhen_Pre_WallTime_Past,
-  RtemsTimerReqFireWhen_Pre_WallTime_Null,
-  RtemsTimerReqFireWhen_Pre_WallTime_NA
-} RtemsTimerReqFireWhen_Pre_WallTime;
+  RtemsTimerReqFireWhen_Pre_ToD_Null,
+  RtemsTimerReqFireWhen_Pre_ToD_Invalid,
+  RtemsTimerReqFireWhen_Pre_ToD_Past,
+  RtemsTimerReqFireWhen_Pre_ToD_Now,
+  RtemsTimerReqFireWhen_Pre_ToD_Future,
+  RtemsTimerReqFireWhen_Pre_ToD_NA
+} RtemsTimerReqFireWhen_Pre_ToD;
 
 typedef enum {
-  RtemsTimerReqFireWhen_Pre_Id_Valid,
-  RtemsTimerReqFireWhen_Pre_Id_Invalid,
+  RtemsTimerReqFireWhen_Pre_Id_Timer,
+  RtemsTimerReqFireWhen_Pre_Id_NoObj,
+  RtemsTimerReqFireWhen_Pre_Id_OtherClass,
   RtemsTimerReqFireWhen_Pre_Id_NA
 } RtemsTimerReqFireWhen_Pre_Id;
 
@@ -128,10 +131,10 @@ typedef enum {
 } RtemsTimerReqFireWhen_Post_State;
 
 typedef enum {
-  RtemsTimerReqFireWhen_Post_WallTime_Param,
-  RtemsTimerReqFireWhen_Post_WallTime_Nop,
-  RtemsTimerReqFireWhen_Post_WallTime_NA
-} RtemsTimerReqFireWhen_Post_WallTime;
+  RtemsTimerReqFireWhen_Post_Expire_Param,
+  RtemsTimerReqFireWhen_Post_Expire_Nop,
+  RtemsTimerReqFireWhen_Post_Expire_NA
+} RtemsTimerReqFireWhen_Post_Expire;
 
 typedef enum {
   RtemsTimerReqFireWhen_Post_Routine_Param,
@@ -147,9 +150,9 @@ typedef enum {
 
 typedef struct {
   uint32_t Skip : 1;
-  uint32_t Pre_RtClock_NA : 1;
+  uint32_t Pre_TODSet_NA : 1;
   uint32_t Pre_Routine_NA : 1;
-  uint32_t Pre_WallTime_NA : 1;
+  uint32_t Pre_ToD_NA : 1;
   uint32_t Pre_Id_NA : 1;
   uint32_t Pre_Context_NA : 1;
   uint32_t Pre_Clock_NA : 1;
@@ -158,7 +161,7 @@ typedef struct {
   uint32_t Post_Context : 3;
   uint32_t Post_Clock : 3;
   uint32_t Post_State : 2;
-  uint32_t Post_WallTime : 2;
+  uint32_t Post_Expire : 2;
   uint32_t Post_Routine : 2;
   uint32_t Post_UserData : 2;
 } RtemsTimerReqFireWhen_Entry;
@@ -298,17 +301,17 @@ typedef struct {
 
 static RtemsTimerReqFireWhen_Context RtemsTimerReqFireWhen_Instance;
 
-static const char *const RtemsTimerReqFireWhen_PreDesc_RtClock[] =
-  { "Set", "Unset", "NA" };
+static const char *const RtemsTimerReqFireWhen_PreDesc_TODSet[] =
+  { "Yes", "No", "NA" };
 
 static const char *const RtemsTimerReqFireWhen_PreDesc_Routine[] =
   { "Valid", "Null", "NA" };
 
-static const char *const RtemsTimerReqFireWhen_PreDesc_WallTime[] =
-  { "Valid", "Invalid", "Past", "Null", "NA" };
+static const char *const RtemsTimerReqFireWhen_PreDesc_ToD[] =
+  { "Null", "Invalid", "Past", "Now", "Future", "NA" };
 
 static const char *const RtemsTimerReqFireWhen_PreDesc_Id[] =
-  { "Valid", "Invalid", "NA" };
+  { "Timer", "NoObj", "OtherClass", "NA" };
 
 static const char *const RtemsTimerReqFireWhen_PreDesc_Context[] =
   { "None", "Interrupt", "Server", "NA" };
@@ -320,9 +323,9 @@ static const char *const RtemsTimerReqFireWhen_PreDesc_State[] =
   { "Inactive", "Scheduled", "Pending", "NA" };
 
 static const char *const *const RtemsTimerReqFireWhen_PreDesc[] = {
-  RtemsTimerReqFireWhen_PreDesc_RtClock,
+  RtemsTimerReqFireWhen_PreDesc_TODSet,
   RtemsTimerReqFireWhen_PreDesc_Routine,
-  RtemsTimerReqFireWhen_PreDesc_WallTime,
+  RtemsTimerReqFireWhen_PreDesc_ToD,
   RtemsTimerReqFireWhen_PreDesc_Id,
   RtemsTimerReqFireWhen_PreDesc_Context,
   RtemsTimerReqFireWhen_PreDesc_Clock,
@@ -332,12 +335,15 @@ static const char *const *const RtemsTimerReqFireWhen_PreDesc[] = {
 
 static const rtems_time_of_day tod_now = { 2000, 1, 1, 0, 0, 0, 0 };
 static const rtems_time_of_day tod_schedule = { 2000, 1, 1, 5, 0, 0, 0 };
-static const rtems_time_of_day tod_invalid = { 1985, 1, 1, 0, 0, 0, 0 };
 /*
  * rtems_fire_when() ignores ticks and treads all wall times in the
  * current second like being in the "past". This border case is tested.
  */
-static const rtems_time_of_day tod_past = { 2000, 1, 1, 0, 0, 0, 50 };
+static const rtems_time_of_day tod_past = { 1999, 12, 31, 23, 59, 59, 0 };
+
+static const rtems_time_of_day tod_now_ticks = { 2000, 1, 1, 0, 0, 0, 50 };
+
+static const rtems_time_of_day tod_invalid = { 2000, 13, 1, 0, 0, 0, 0 };
 
 static void TriggerTimer(
   const RtemsTimerReqFireWhen_Context *ctx,
@@ -372,29 +378,29 @@ static void TimerServiceRoutine( rtems_id timer_id, void *user_data )
   ctx->routine_user_data = user_data;
 }
 
-static void RtemsTimerReqFireWhen_Pre_RtClock_Prepare(
-  RtemsTimerReqFireWhen_Context    *ctx,
-  RtemsTimerReqFireWhen_Pre_RtClock state
+static void RtemsTimerReqFireWhen_Pre_TODSet_Prepare(
+  RtemsTimerReqFireWhen_Context   *ctx,
+  RtemsTimerReqFireWhen_Pre_TODSet state
 )
 {
   switch ( state ) {
-    case RtemsTimerReqFireWhen_Pre_RtClock_Set: {
+    case RtemsTimerReqFireWhen_Pre_TODSet_Yes: {
       /*
-       * While the realtime clock is set to a valid time-of-day.
+       * While the CLOCK_REALTIME was set at least once.
        */
       ctx->pre_cond_tod = &tod_now;
       break;
     }
 
-    case RtemsTimerReqFireWhen_Pre_RtClock_Unset: {
+    case RtemsTimerReqFireWhen_Pre_TODSet_No: {
       /*
-       * While the realtime clock has never been set.
+       * While the CLOCK_REALTIME was never set.
        */
       ctx->pre_cond_tod = NULL;
       break;
     }
 
-    case RtemsTimerReqFireWhen_Pre_RtClock_NA:
+    case RtemsTimerReqFireWhen_Pre_TODSet_NA:
       break;
   }
 }
@@ -416,7 +422,7 @@ static void RtemsTimerReqFireWhen_Pre_Routine_Prepare(
 
     case RtemsTimerReqFireWhen_Pre_Routine_Null: {
       /*
-       * While the `routine` parameter is NULL..
+       * While the `routine` parameter is NULL.
        */
       ctx->routine_param = NULL;
       break;
@@ -427,49 +433,60 @@ static void RtemsTimerReqFireWhen_Pre_Routine_Prepare(
   }
 }
 
-static void RtemsTimerReqFireWhen_Pre_WallTime_Prepare(
-  RtemsTimerReqFireWhen_Context     *ctx,
-  RtemsTimerReqFireWhen_Pre_WallTime state
+static void RtemsTimerReqFireWhen_Pre_ToD_Prepare(
+  RtemsTimerReqFireWhen_Context *ctx,
+  RtemsTimerReqFireWhen_Pre_ToD  state
 )
 {
   switch ( state ) {
-    case RtemsTimerReqFireWhen_Pre_WallTime_Valid: {
+    case RtemsTimerReqFireWhen_Pre_ToD_Null: {
       /*
-       * While the `wall_time` parameter references a time at least one second
-       * in the future but not later than the last second of the year 2105\.
-       * (Times after 2105 are invalid.)
-       */
-      ctx->wall_time_param = &tod_schedule;
-      break;
-    }
-
-    case RtemsTimerReqFireWhen_Pre_WallTime_Invalid: {
-      /*
-       * While the `wall_time` parameter is invalid.
-       */
-      ctx->wall_time_param = &tod_invalid;
-      break;
-    }
-
-    case RtemsTimerReqFireWhen_Pre_WallTime_Past: {
-      /*
-       * While the `wall_time` parameter references a time in the current
-       * second or in the past but not earlier than 1988. (Times before 1988
-       * are invalid.)
-       */
-      ctx->wall_time_param = &tod_past;
-      break;
-    }
-
-    case RtemsTimerReqFireWhen_Pre_WallTime_Null: {
-      /*
-       * While the `wall_time` parameter is 0.
+       * While the `wall_time` parameter is equal to NULL.
        */
       ctx->wall_time_param = NULL;
       break;
     }
 
-    case RtemsTimerReqFireWhen_Pre_WallTime_NA:
+    case RtemsTimerReqFireWhen_Pre_ToD_Invalid: {
+      /*
+       * While the `wall_time` parameter references an object of type
+       * rtems_time_of_day, while the object holds an invalid time of day.
+       */
+      ctx->wall_time_param = &tod_invalid;
+      break;
+    }
+
+    case RtemsTimerReqFireWhen_Pre_ToD_Past: {
+      /*
+       * While the `wall_time` parameter references an object of type
+       * rtems_time_of_day, while the object holds a valid time of day before
+       * the current second of the CLOCK_REALTIME.
+       */
+      ctx->wall_time_param = &tod_past;
+      break;
+    }
+
+    case RtemsTimerReqFireWhen_Pre_ToD_Now: {
+      /*
+       * While the `wall_time` parameter references an object of type
+       * rtems_time_of_day, while the object holds a valid time of day in the
+       * current second of the CLOCK_REALTIME.
+       */
+      ctx->wall_time_param = &tod_now_ticks;
+      break;
+    }
+
+    case RtemsTimerReqFireWhen_Pre_ToD_Future: {
+      /*
+       * While the `wall_time` parameter references an object of type
+       * rtems_time_of_day, while the object holds a valid time of day after
+       * the current second of the CLOCK_REALTIME.
+       */
+      ctx->wall_time_param = &tod_schedule;
+      break;
+    }
+
+    case RtemsTimerReqFireWhen_Pre_ToD_NA:
       break;
   }
 }
@@ -480,19 +497,28 @@ static void RtemsTimerReqFireWhen_Pre_Id_Prepare(
 )
 {
   switch ( state ) {
-    case RtemsTimerReqFireWhen_Pre_Id_Valid: {
+    case RtemsTimerReqFireWhen_Pre_Id_Timer: {
       /*
-       * While the `id` parameter is valid.
+       * While the `id` parameter is associated with the timer.
        */
       ctx->id_param = ctx->timer_id;
       break;
     }
 
-    case RtemsTimerReqFireWhen_Pre_Id_Invalid: {
+    case RtemsTimerReqFireWhen_Pre_Id_NoObj: {
       /*
-       * While the `id` parameter is invalid.
+       * While the `id` parameter is not associated with an object.
        */
       ctx->id_param = RTEMS_ID_NONE;
+      break;
+    }
+
+    case RtemsTimerReqFireWhen_Pre_Id_OtherClass: {
+      /*
+       * While the `id` parameter is associated with an object of a class other
+       * than the timer class.
+       */
+      ctx->id_param = rtems_task_self();
       break;
     }
 
@@ -553,8 +579,7 @@ static void RtemsTimerReqFireWhen_Pre_Clock_Prepare(
 
     case RtemsTimerReqFireWhen_Pre_Clock_Ticks: {
       /*
-       * While the clock used to determine when the timer will fire is the
-       * ticks based clock.
+       * While the clock of the timer is the ticks based clock.
        */
       rtems_status_code status;
 
@@ -579,8 +604,7 @@ static void RtemsTimerReqFireWhen_Pre_Clock_Prepare(
 
     case RtemsTimerReqFireWhen_Pre_Clock_Realtime: {
       /*
-       * While the clock used to determine when the timer will fire is the
-       * realtime clock.
+       * While the clock of the timer is the realtime clock.
        */
       rtems_status_code status;
       T_rsc_success( rtems_clock_set( &tod_now ) );
@@ -721,7 +745,7 @@ static void RtemsTimerReqFireWhen_Post_Context_Check(
   switch ( state ) {
     case RtemsTimerReqFireWhen_Post_Context_None: {
       /*
-       * The timer shall have never been scheduled. See also none.
+       * The timer shall be in no context.
        */
       T_eq_int( class, TIMER_DORMANT );
       break;
@@ -745,9 +769,8 @@ static void RtemsTimerReqFireWhen_Post_Context_Check(
 
     case RtemsTimerReqFireWhen_Post_Context_Nop: {
       /*
-       * Objects referenced by parameters in the past call to
-       * rtems_timer_fire_when() shall not be accessed by the
-       * rtems_timer_fire_when() call. See also Nop.
+       * The context of the timer shall not be modified by the
+       * rtems_timer_fire_when() call.
        */
       T_eq_int( class, ctx->pre_class );
       break;
@@ -769,7 +792,7 @@ static void RtemsTimerReqFireWhen_Post_Clock_Check(
   switch ( state ) {
     case RtemsTimerReqFireWhen_Post_Clock_None: {
       /*
-       * The timer shall have never been scheduled.
+       * The timer shall use no clock.
        */
       T_eq_int( class, TIMER_DORMANT );
       break;
@@ -796,8 +819,7 @@ static void RtemsTimerReqFireWhen_Post_Clock_Check(
 
     case RtemsTimerReqFireWhen_Post_Clock_Nop: {
       /*
-       * Objects referenced by parameters in the past call to
-       * rtems_timer_fire_when() shall not be accessed by the
+       * The clock of the timer shall not be modified by the
        * rtems_timer_fire_when() call.
        */
       T_eq_int( class, ctx->pre_class );
@@ -826,8 +848,7 @@ static void RtemsTimerReqFireWhen_Post_State_Check(
 
     case RtemsTimerReqFireWhen_Post_State_Nop: {
       /*
-       * Objects referenced by parameters in the past call to
-       * rtems_timer_fire_when() shall not be accessed by the
+       * The state of the timer shall not be modified by the
        * rtems_timer_fire_when() call.
        */
       T_eq_int( ctx->post_state, ctx->pre_state );
@@ -839,17 +860,16 @@ static void RtemsTimerReqFireWhen_Post_State_Check(
   }
 }
 
-static void RtemsTimerReqFireWhen_Post_WallTime_Check(
-  RtemsTimerReqFireWhen_Context      *ctx,
-  RtemsTimerReqFireWhen_Post_WallTime state
+static void RtemsTimerReqFireWhen_Post_Expire_Check(
+  RtemsTimerReqFireWhen_Context    *ctx,
+  RtemsTimerReqFireWhen_Post_Expire state
 )
 {
   switch ( state ) {
-    case RtemsTimerReqFireWhen_Post_WallTime_Param: {
+    case RtemsTimerReqFireWhen_Post_Expire_Param: {
       /*
-       * The Timer Service Routine shall be invoked at the wall time (see
-       * realtime clock) (ignoring ticks), which was provided by the
-       * `wall_time` parameter in the past call to rtems_timer_fire_when().
+       * The timer shall fire at the second of the time of day referenced by
+       * the `wall_time` parameter.
        */
       T_eq_mem(
         &ctx->tod_till_fire,
@@ -859,10 +879,10 @@ static void RtemsTimerReqFireWhen_Post_WallTime_Check(
       break;
     }
 
-    case RtemsTimerReqFireWhen_Post_WallTime_Nop: {
+    case RtemsTimerReqFireWhen_Post_Expire_Nop: {
       /*
-       * If and when the Timer Service Routine will be invoked shall not be
-       * changed by the past call to rtems_timer_fire_when().
+       * The time point at which the timer fires shall not be modified by the
+       * rtems_timer_fire_when() call.
        */
       /*
        * Whether the timer is scheduled has already been tested by the
@@ -875,7 +895,7 @@ static void RtemsTimerReqFireWhen_Post_WallTime_Check(
       break;
     }
 
-    case RtemsTimerReqFireWhen_Post_WallTime_NA:
+    case RtemsTimerReqFireWhen_Post_Expire_NA:
       break;
   }
 }
@@ -888,9 +908,8 @@ static void RtemsTimerReqFireWhen_Post_Routine_Check(
   switch ( state ) {
     case RtemsTimerReqFireWhen_Post_Routine_Param: {
       /*
-       * The function reference used to invoke the Timer Service Routine when
-       * the timer will fire shall be the one provided by the `routine`
-       * parameter in the past call to rtems_timer_fire_when().
+       * The timer shall invoke the function referenced by the `routine`
+       * parameter as its Timer Service Routine.
        */
       T_eq_int( ctx->invocations, 1 );
       break;
@@ -898,9 +917,8 @@ static void RtemsTimerReqFireWhen_Post_Routine_Check(
 
     case RtemsTimerReqFireWhen_Post_Routine_Nop: {
       /*
-       * The function reference used for any invocation of the Timer Service
-       * Routine shall not be changed by the past call to
-       * rtems_timer_fire_when().
+       * The Timer Service Routine of the timer shall not be modified by the
+       * rtems_timer_fire_when() call.
        */
       T_eq_ptr(
         ctx->post_scheduling_data.routine,
@@ -922,9 +940,8 @@ static void RtemsTimerReqFireWhen_Post_UserData_Check(
   switch ( state ) {
     case RtemsTimerReqFireWhen_Post_UserData_Param: {
       /*
-       * The user data argument for invoking the Timer Service Routine when the
-       * timer will fire shall be the one provided by the `user_data` parameter
-       * in the past call to rtems_timer_fire_when().
+       * The timer shall pass the value of the `user_data` parameter to its
+       * Timer Service Routine.
        */
       T_eq_ptr( ctx->routine_user_data, ctx );
       break;
@@ -932,9 +949,8 @@ static void RtemsTimerReqFireWhen_Post_UserData_Check(
 
     case RtemsTimerReqFireWhen_Post_UserData_Nop: {
       /*
-       * The user data argument used for any invocation of the Timer Service
-       * Routine shall not be changed by the past call to
-       * rtems_timer_fire_when().
+       * The user data of the Timer Service Routine of the timer shall not be
+       * modified by the rtems_timer_fire_when() call.
        */
       T_eq_ptr(
         ctx->post_scheduling_data.user_data,
@@ -1032,68 +1048,93 @@ static const RtemsTimerReqFireWhen_Entry
 RtemsTimerReqFireWhen_Entries[] = {
   { 1, 0, 0, 0, 0, 0, 0, 0, RtemsTimerReqFireWhen_Post_Status_NA,
     RtemsTimerReqFireWhen_Post_Context_NA, RtemsTimerReqFireWhen_Post_Clock_NA,
-    RtemsTimerReqFireWhen_Post_State_NA,
-    RtemsTimerReqFireWhen_Post_WallTime_NA,
+    RtemsTimerReqFireWhen_Post_State_NA, RtemsTimerReqFireWhen_Post_Expire_NA,
     RtemsTimerReqFireWhen_Post_Routine_NA,
     RtemsTimerReqFireWhen_Post_UserData_NA },
   { 0, 0, 0, 0, 0, 0, 0, 0, RtemsTimerReqFireWhen_Post_Status_InvAddr,
     RtemsTimerReqFireWhen_Post_Context_Nop,
     RtemsTimerReqFireWhen_Post_Clock_Nop, RtemsTimerReqFireWhen_Post_State_Nop,
-    RtemsTimerReqFireWhen_Post_WallTime_Nop,
+    RtemsTimerReqFireWhen_Post_Expire_Nop,
     RtemsTimerReqFireWhen_Post_Routine_Nop,
     RtemsTimerReqFireWhen_Post_UserData_Nop },
   { 0, 0, 0, 0, 0, 0, 0, 0, RtemsTimerReqFireWhen_Post_Status_NotDef,
     RtemsTimerReqFireWhen_Post_Context_Nop,
     RtemsTimerReqFireWhen_Post_Clock_Nop, RtemsTimerReqFireWhen_Post_State_Nop,
-    RtemsTimerReqFireWhen_Post_WallTime_Nop,
+    RtemsTimerReqFireWhen_Post_Expire_Nop,
     RtemsTimerReqFireWhen_Post_Routine_Nop,
     RtemsTimerReqFireWhen_Post_UserData_Nop },
   { 1, 0, 0, 0, 0, 0, 0, 0, RtemsTimerReqFireWhen_Post_Status_NA,
     RtemsTimerReqFireWhen_Post_Context_NA, RtemsTimerReqFireWhen_Post_Clock_NA,
-    RtemsTimerReqFireWhen_Post_State_NA,
-    RtemsTimerReqFireWhen_Post_WallTime_NA,
+    RtemsTimerReqFireWhen_Post_State_NA, RtemsTimerReqFireWhen_Post_Expire_NA,
     RtemsTimerReqFireWhen_Post_Routine_NA,
     RtemsTimerReqFireWhen_Post_UserData_NA },
   { 0, 0, 0, 0, 0, 0, 0, 0, RtemsTimerReqFireWhen_Post_Status_InvClock,
     RtemsTimerReqFireWhen_Post_Context_Nop,
     RtemsTimerReqFireWhen_Post_Clock_Nop, RtemsTimerReqFireWhen_Post_State_Nop,
-    RtemsTimerReqFireWhen_Post_WallTime_Nop,
+    RtemsTimerReqFireWhen_Post_Expire_Nop,
+    RtemsTimerReqFireWhen_Post_Routine_Nop,
+    RtemsTimerReqFireWhen_Post_UserData_Nop },
+  { 0, 0, 0, 0, 0, 0, 0, 0, RtemsTimerReqFireWhen_Post_Status_InvId,
+    RtemsTimerReqFireWhen_Post_Context_Nop,
+    RtemsTimerReqFireWhen_Post_Clock_Nop, RtemsTimerReqFireWhen_Post_State_Nop,
+    RtemsTimerReqFireWhen_Post_Expire_Nop,
     RtemsTimerReqFireWhen_Post_Routine_Nop,
     RtemsTimerReqFireWhen_Post_UserData_Nop },
   { 0, 0, 0, 0, 0, 0, 0, 0, RtemsTimerReqFireWhen_Post_Status_Ok,
     RtemsTimerReqFireWhen_Post_Context_Interrupt,
     RtemsTimerReqFireWhen_Post_Clock_Realtime,
     RtemsTimerReqFireWhen_Post_State_Scheduled,
-    RtemsTimerReqFireWhen_Post_WallTime_Param,
+    RtemsTimerReqFireWhen_Post_Expire_Param,
     RtemsTimerReqFireWhen_Post_Routine_Param,
-    RtemsTimerReqFireWhen_Post_UserData_Param },
-  { 0, 0, 0, 0, 0, 0, 0, 0, RtemsTimerReqFireWhen_Post_Status_InvId,
-    RtemsTimerReqFireWhen_Post_Context_Nop,
-    RtemsTimerReqFireWhen_Post_Clock_Nop, RtemsTimerReqFireWhen_Post_State_Nop,
-    RtemsTimerReqFireWhen_Post_WallTime_Nop,
-    RtemsTimerReqFireWhen_Post_Routine_Nop,
-    RtemsTimerReqFireWhen_Post_UserData_Nop }
+    RtemsTimerReqFireWhen_Post_UserData_Param }
 };
 
 static const uint8_t
 RtemsTimerReqFireWhen_Map[] = {
-  5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 0, 5, 5, 0, 0, 0, 0, 5, 5, 5, 5, 5,
-  5, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 6, 0, 6, 6, 0, 0, 0, 0, 6, 6, 6, 6,
-  6, 6, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 4, 4, 0, 0, 0, 0, 4, 4, 4,
-  4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 4, 4, 0, 0, 0, 0, 4, 4,
+  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1,
+  1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1,
+  1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1,
+  1, 1, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 4, 4, 0, 0, 0, 0, 4, 4,
   4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 4, 4, 0, 0, 0, 0, 4,
   4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 4, 4, 0, 0, 0, 0,
-  4, 4, 4, 4, 4, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0,
-  0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0,
-  0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0,
-  0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1,
-  0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1,
-  1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0,
-  1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
-  0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-  1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 4, 4, 0, 0, 0,
+  0, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 4, 4, 0, 0,
+  0, 0, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 4, 4, 0,
+  0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 4, 4,
+  0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 4,
+  4, 0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0,
+  4, 4, 0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 6,
+  0, 6, 6, 0, 0, 0, 0, 6, 6, 6, 6, 6, 6, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5,
+  5, 0, 5, 5, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  5, 5, 0, 5, 5, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1,
+  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1,
+  1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1,
+  1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1,
+  1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1,
+  1, 1, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 3, 3, 3, 0, 0, 0, 2,
+  2, 2, 3, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 3, 3, 3, 0, 0, 0,
+  2, 2, 2, 3, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 3, 3, 3, 0, 0,
+  0, 2, 2, 2, 3, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 3, 3, 3, 0,
+  0, 0, 2, 2, 2, 3, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 3, 3, 3,
+  0, 0, 0, 2, 2, 2, 3, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 3, 3,
+  3, 0, 0, 0, 2, 2, 2, 3, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 3,
+  3, 3, 0, 0, 0, 2, 2, 2, 3, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0,
+  3, 3, 3, 0, 0, 0, 2, 2, 2, 3, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2,
+  0, 3, 3, 3, 0, 0, 0, 2, 2, 2, 3, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+  2, 0, 3, 3, 3, 0, 0, 0, 2, 2, 2, 3, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  2, 2, 0, 3, 3, 3, 0, 0, 0, 2, 2, 2, 3, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 2, 2, 0, 3, 3, 3, 0, 0, 0, 2, 2, 2, 3, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 2, 2, 0, 3, 3, 3, 0, 0, 0, 2, 2, 2, 3, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 2, 2, 0, 3, 3, 3, 0, 0, 0, 2, 2, 2, 3, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 2, 2, 0, 3, 3, 3, 0, 0, 0, 2, 2, 2, 3, 3, 3, 2, 0, 0, 0, 0, 0, 0,
@@ -1110,7 +1151,9 @@ RtemsTimerReqFireWhen_Map[] = {
   3, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 3, 3, 3, 0, 0, 0, 2, 2,
   2, 3, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 3, 3, 3, 0, 0, 0, 2,
   2, 2, 3, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 3, 3, 3, 0, 0, 0,
-  2, 2, 2, 3, 3, 3
+  2, 2, 2, 3, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 3, 3, 3, 0, 0,
+  0, 2, 2, 2, 3, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 3, 3, 3, 0,
+  0, 0, 2, 2, 2, 3, 3, 3
 };
 
 /* clang-format on */
@@ -1151,9 +1194,9 @@ static void RtemsTimerReqFireWhen_TestVariant(
   RtemsTimerReqFireWhen_Context *ctx
 )
 {
-  RtemsTimerReqFireWhen_Pre_RtClock_Prepare( ctx, ctx->Map.pcs[ 0 ] );
+  RtemsTimerReqFireWhen_Pre_TODSet_Prepare( ctx, ctx->Map.pcs[ 0 ] );
   RtemsTimerReqFireWhen_Pre_Routine_Prepare( ctx, ctx->Map.pcs[ 1 ] );
-  RtemsTimerReqFireWhen_Pre_WallTime_Prepare( ctx, ctx->Map.pcs[ 2 ] );
+  RtemsTimerReqFireWhen_Pre_ToD_Prepare( ctx, ctx->Map.pcs[ 2 ] );
   RtemsTimerReqFireWhen_Pre_Id_Prepare( ctx, ctx->Map.pcs[ 3 ] );
   RtemsTimerReqFireWhen_Pre_Context_Prepare( ctx, ctx->Map.pcs[ 4 ] );
   RtemsTimerReqFireWhen_Pre_Clock_Prepare( ctx, ctx->Map.pcs[ 5 ] );
@@ -1163,10 +1206,7 @@ static void RtemsTimerReqFireWhen_TestVariant(
   RtemsTimerReqFireWhen_Post_Context_Check( ctx, ctx->Map.entry.Post_Context );
   RtemsTimerReqFireWhen_Post_Clock_Check( ctx, ctx->Map.entry.Post_Clock );
   RtemsTimerReqFireWhen_Post_State_Check( ctx, ctx->Map.entry.Post_State );
-  RtemsTimerReqFireWhen_Post_WallTime_Check(
-    ctx,
-    ctx->Map.entry.Post_WallTime
-  );
+  RtemsTimerReqFireWhen_Post_Expire_Check( ctx, ctx->Map.entry.Post_Expire );
   RtemsTimerReqFireWhen_Post_Routine_Check( ctx, ctx->Map.entry.Post_Routine );
   RtemsTimerReqFireWhen_Post_UserData_Check(
     ctx,
@@ -1186,8 +1226,8 @@ T_TEST_CASE_FIXTURE( RtemsTimerReqFireWhen, &RtemsTimerReqFireWhen_Fixture )
   ctx->Map.index = 0;
 
   for (
-    ctx->Map.pcs[ 0 ] = RtemsTimerReqFireWhen_Pre_RtClock_Set;
-    ctx->Map.pcs[ 0 ] < RtemsTimerReqFireWhen_Pre_RtClock_NA;
+    ctx->Map.pcs[ 0 ] = RtemsTimerReqFireWhen_Pre_TODSet_Yes;
+    ctx->Map.pcs[ 0 ] < RtemsTimerReqFireWhen_Pre_TODSet_NA;
     ++ctx->Map.pcs[ 0 ]
   ) {
     for (
@@ -1196,12 +1236,12 @@ T_TEST_CASE_FIXTURE( RtemsTimerReqFireWhen, &RtemsTimerReqFireWhen_Fixture )
       ++ctx->Map.pcs[ 1 ]
     ) {
       for (
-        ctx->Map.pcs[ 2 ] = RtemsTimerReqFireWhen_Pre_WallTime_Valid;
-        ctx->Map.pcs[ 2 ] < RtemsTimerReqFireWhen_Pre_WallTime_NA;
+        ctx->Map.pcs[ 2 ] = RtemsTimerReqFireWhen_Pre_ToD_Null;
+        ctx->Map.pcs[ 2 ] < RtemsTimerReqFireWhen_Pre_ToD_NA;
         ++ctx->Map.pcs[ 2 ]
       ) {
         for (
-          ctx->Map.pcs[ 3 ] = RtemsTimerReqFireWhen_Pre_Id_Valid;
+          ctx->Map.pcs[ 3 ] = RtemsTimerReqFireWhen_Pre_Id_Timer;
           ctx->Map.pcs[ 3 ] < RtemsTimerReqFireWhen_Pre_Id_NA;
           ++ctx->Map.pcs[ 3 ]
         ) {

@@ -104,6 +104,7 @@ void GetTimerSchedulingData( rtems_id id, Timer_Scheduling_Data *data )
     data->routine = the_timer->routine;
     data->user_data = the_timer->user_data;
     data->interval = the_timer->initial;
+    data->expire = the_timer->Ticker.expire;
     _Timer_Release( cpu, &lock_context );
   }
 }

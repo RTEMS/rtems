@@ -1644,6 +1644,14 @@ typedef struct {
    * @brief This member contains the timer interval in ticks or seconds.
    */
   Watchdog_Interval                 interval;
+  /**
+   * @brief This member contains the expiration time point of the watchdog of
+   *   the timer.
+   *
+   * For a timer of the CLOCK_REALTIME, the seconds since the Epoch are the
+   * value shifted to the right by WATCHDOG_BITS_FOR_1E9_NANOSECONDS.
+   */
+  uint64_t                          expire;
 } Timer_Scheduling_Data;
 
 /**

@@ -135,11 +135,13 @@ source:
 - testsuites/validation/tc-timer-create.c
 - testsuites/validation/tc-timer-delete.c
 - testsuites/validation/tc-timer-fire-after.c
+- testsuites/validation/tc-timer-fire-when-tod.c
 - testsuites/validation/tc-timer-fire-when.c
 - testsuites/validation/tc-timer-ident.c
 - testsuites/validation/tc-timer-initiate-server.c
 - testsuites/validation/tc-timer-reset.c
 - testsuites/validation/tc-timer-server-fire-after.c
+- testsuites/validation/tc-timer-server-fire-when-tod.c
 - testsuites/validation/tc-timer-server-fire-when.c
 - testsuites/validation/tc-timer.c
 - testsuites/validation/tc-type.c
