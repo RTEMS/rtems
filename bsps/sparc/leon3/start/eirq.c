@@ -104,7 +104,7 @@ void leon3_ext_irq_init( irqamp *regs )
     bus_line += 4
   ) {
     uint32_t n = bus_line / 4;
-    uint32_t irqmap_n = grlib_load_32( &LEON3_IrqCtrl_Regs->irqmap[ n ] );
+    uint32_t irqmap_n = grlib_load_32( &regs->irqmap[ n ] );
 
     LEON3_IrqCtrl_Mapping[ bus_line + 0 ] = leon3_irqmap_controller_line(
       IRQAMP_IRQMAP_IRQMAP_4_N_0_GET( irqmap_n )
