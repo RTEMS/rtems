@@ -10,7 +10,7 @@
 
 /*
  * Copyright (C) 2026 Abdullah Wasiq
- * Copyright (C) 2020, 2021 embedded brains GmbH & Co. KG
+ * Copyright (C) 2020, 2026 embedded brains GmbH & Co. KG
  * Copyright (C) 1988, 2023 On-Line Applications Research Corporation (OAR)
  *
  * Redistribution and use in source and binary forms, with or without
@@ -1379,9 +1379,14 @@ rtems_status_code rtems_task_set_priority(
  * @retval ::RTEMS_ILLEGAL_ON_REMOTE_OBJECT The task resided on a remote node.
  *
  * @par Notes
+ * @parblock
  * The current priority reflects temporary priority adjustments due to locking
  * protocols, the rate-monotonic period objects on some schedulers such as EDF,
  * and the POSIX sporadic server.
+ *
+ * While a task has a job deadline as its current priority with respect to an
+ * EDF scheduler, the directive returns zero for this scheduler.
+ * @endparblock
  *
  * @par Constraints
  * @parblock
