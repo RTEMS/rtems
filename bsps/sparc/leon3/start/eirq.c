@@ -150,11 +150,15 @@ Processor_mask leon3_interrupt_affinities[ BSP_INTERRUPT_VECTOR_MAX_STD + 1 ];
 static void leon3_check_ipi_vector( void )
 {
   rtems_interrupt_attributes ipi_attributes;
-  rtems_status_code          status;
 
-  status = bsp_interrupt_get_attributes( LEON3_mp_irq, &ipi_attributes );
-  if ( ( status != RTEMS_SUCCESSFUL ) || !ipi_attributes.can_raise_on ) {
-    bsp_fatal( LEON3_FATAL_IPI_INITIALIZATION );
+  if ( !bsp_interrupt_is_valid_vector( LEON3_mp_irq ) ) {
+    bsp_fatal( LEON3_FATAL_INVALID_IPI_VECTOR );
+  }
+
+  (void) bsp_interrupt_get_attributes( LEON3_mp_irq, &ipi_attributes );
+
+  if ( !ipi_attributes.can_raise_on ) {
+    bsp_fatal( LEON3_FATAL_CANNOT_RAISE_IPI );
   }
 }
 #endif
