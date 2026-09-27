@@ -44,7 +44,6 @@ int __secs_to_tm(long long t, struct tm *tm)
 	remdays -= c_cycles * DAYS_PER_100Y;
 
 	q_cycles = remdays / DAYS_PER_4Y;
-	if (q_cycles == 25) q_cycles--;
 	remdays -= q_cycles * DAYS_PER_4Y;
 
 	remyears = remdays / 365;
