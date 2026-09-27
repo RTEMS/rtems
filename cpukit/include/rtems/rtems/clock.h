@@ -90,6 +90,9 @@ struct bintime;
  * @retval ::RTEMS_INVALID_CLOCK The time of day specified by `time_of_day` was
  *   invalid.
  *
+ * @retval ::RTEMS_UNSATISFIED A time of day hook reported a failure. The
+ *   directive did not set the CLOCK_REALTIME.
+ *
  * @par Notes
  * @parblock
  * The date, time, and ticks specified by `time_of_day` are all range-checked,
