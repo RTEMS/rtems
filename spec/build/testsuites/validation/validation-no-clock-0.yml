@@ -127,6 +127,8 @@ source:
 - testsuites/validation/tc-task-wake-after.c
 - testsuites/validation/tc-task-wake-when.c
 - testsuites/validation/tc-task.c
+- testsuites/validation/tc-timegm-year.c
+- testsuites/validation/tc-timegm.c
 - testsuites/validation/tc-timer-cancel.c
 - testsuites/validation/tc-timer-create.c
 - testsuites/validation/tc-timer-delete.c
