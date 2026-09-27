@@ -1586,6 +1586,7 @@ source:
 - cpukit/score/src/threadqgetnameandid.c
 - cpukit/score/src/threadqops.c
 - cpukit/score/src/threadqtimeout.c
+- cpukit/score/src/threadqtimeoutbyclockid.c
 - cpukit/score/src/threadresettimeslice.c
 - cpukit/score/src/threadrestart.c
 - cpukit/score/src/threadscheduler.c
