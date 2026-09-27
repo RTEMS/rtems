@@ -525,7 +525,8 @@ rtems_status_code rtems_timer_fire_after(
  *
  * @retval ::RTEMS_INVALID_ADDRESS The `wall_time` parameter was NULL.
  *
- * @retval ::RTEMS_INVALID_CLOCK The time of day was invalid.
+ * @retval ::RTEMS_INVALID_CLOCK The time of day referenced by `wall_time` was
+ *   invalid, or it was not after the current second of the CLOCK_REALTIME.
  *
  * @retval ::RTEMS_INVALID_ID There was no timer associated with the identifier
  *   specified by `id`.
@@ -699,7 +700,8 @@ rtems_status_code rtems_timer_server_fire_after(
  *
  * @retval ::RTEMS_INVALID_ADDRESS The `wall_time` parameter was NULL.
  *
- * @retval ::RTEMS_INVALID_CLOCK The time of day was invalid.
+ * @retval ::RTEMS_INVALID_CLOCK The time of day referenced by `wall_time` was
+ *   invalid, or it was not after the current second of the CLOCK_REALTIME.
  *
  * @retval ::RTEMS_INVALID_ID There was no timer associated with the identifier
  *   specified by `id`.
