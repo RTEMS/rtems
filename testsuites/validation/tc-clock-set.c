@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (C) 2021 embedded brains GmbH & Co. KG
+ * Copyright (C) 2021, 2026 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -38,6 +38,8 @@
 #include <rtems.h>
 #include <rtems/score/todimpl.h>
 
+#include "tx-support.h"
+
 #include <rtems/test.h>
 
 /**
@@ -49,43 +51,32 @@
  */
 
 typedef enum {
+  RtemsClockReqSet_Pre_Timer_None,
+  RtemsClockReqSet_Pre_Timer_Future,
+  RtemsClockReqSet_Pre_Timer_Now,
+  RtemsClockReqSet_Pre_Timer_Past,
+  RtemsClockReqSet_Pre_Timer_NA
+} RtemsClockReqSet_Pre_Timer;
+
+typedef enum {
+  RtemsClockReqSet_Pre_Hook_None,
+  RtemsClockReqSet_Pre_Hook_Success,
+  RtemsClockReqSet_Pre_Hook_Failure,
+  RtemsClockReqSet_Pre_Hook_NA
+} RtemsClockReqSet_Pre_Hook;
+
+typedef enum {
   RtemsClockReqSet_Pre_ToD_Valid,
-  RtemsClockReqSet_Pre_ToD_ValidLeap4,
-  RtemsClockReqSet_Pre_ToD_ValidLeap400,
-  RtemsClockReqSet_Pre_ToD_Youngest,
-  RtemsClockReqSet_Pre_ToD_Oldest,
-  RtemsClockReqSet_Pre_ToD_TooJung,
-  RtemsClockReqSet_Pre_ToD_TooOld,
-  RtemsClockReqSet_Pre_ToD_InvMonth0,
-  RtemsClockReqSet_Pre_ToD_InvMonth,
-  RtemsClockReqSet_Pre_ToD_InvDay0,
-  RtemsClockReqSet_Pre_ToD_InvDay,
-  RtemsClockReqSet_Pre_ToD_InvHour,
-  RtemsClockReqSet_Pre_ToD_InvMinute,
-  RtemsClockReqSet_Pre_ToD_InvSecond,
-  RtemsClockReqSet_Pre_ToD_InvTicks,
-  RtemsClockReqSet_Pre_ToD_InvLeap4,
-  RtemsClockReqSet_Pre_ToD_InvLeap100,
-  RtemsClockReqSet_Pre_ToD_InvLeap400,
-  RtemsClockReqSet_Pre_ToD_AtTimer,
-  RtemsClockReqSet_Pre_ToD_BeforeTimer,
-  RtemsClockReqSet_Pre_ToD_AfterTimer,
+  RtemsClockReqSet_Pre_ToD_Invalid,
   RtemsClockReqSet_Pre_ToD_Null,
   RtemsClockReqSet_Pre_ToD_NA
 } RtemsClockReqSet_Pre_ToD;
 
 typedef enum {
-  RtemsClockReqSet_Pre_Hook_None,
-  RtemsClockReqSet_Pre_Hook_Ok,
-  RtemsClockReqSet_Pre_Hook_NotOk,
-  RtemsClockReqSet_Pre_Hook_NA
-} RtemsClockReqSet_Pre_Hook;
-
-typedef enum {
   RtemsClockReqSet_Post_Status_Ok,
   RtemsClockReqSet_Post_Status_InvAddr,
-  RtemsClockReqSet_Post_Status_InvClk,
-  RtemsClockReqSet_Post_Status_Hook,
+  RtemsClockReqSet_Post_Status_InvClock,
+  RtemsClockReqSet_Post_Status_Unsatisfied,
   RtemsClockReqSet_Post_Status_NA
 } RtemsClockReqSet_Post_Status;
 
@@ -101,48 +92,108 @@ typedef enum {
   RtemsClockReqSet_Post_Timer_NA
 } RtemsClockReqSet_Post_Timer;
 
+typedef enum {
+  RtemsClockReqSet_Post_HookCall_Once,
+  RtemsClockReqSet_Post_HookCall_Nop,
+  RtemsClockReqSet_Post_HookCall_NA
+} RtemsClockReqSet_Post_HookCall;
+
 typedef struct {
   uint16_t Skip : 1;
-  uint16_t Pre_ToD_NA : 1;
+  uint16_t Pre_Timer_NA : 1;
   uint16_t Pre_Hook_NA : 1;
+  uint16_t Pre_ToD_NA : 1;
   uint16_t Post_Status : 3;
   uint16_t Post_Clock : 2;
   uint16_t Post_Timer : 2;
+  uint16_t Post_HookCall : 2;
 } RtemsClockReqSet_Entry;
 
 /**
  * @brief Test context for spec:/rtems/clock/req/set test case.
  */
 typedef struct {
+  /**
+   * @brief This member contains the return status of the rtems_clock_set()
+   *   call.
+   */
   rtems_status_code status;
 
+  /**
+   * @brief This member is true, if a TOD hook shall be registered.
+   */
   bool register_hook;
 
+  /**
+   * @brief This member specifies the status which the TOD hook returns.
+   */
   Status_Control hook_status;
 
+  /**
+   * @brief This member specifies the `time_of_day` parameter value.
+   */
   rtems_time_of_day *target_tod;
 
+  /**
+   * @brief This member provides the object referenced by the `time_of_day`
+   *   parameter.
+   */
   rtems_time_of_day target_tod_value;
 
-  rtems_time_of_day tod_before;
+  /**
+   * @brief This member contains the expected seconds since the Epoch of the
+   *   time of day.
+   */
+  int64_t expected_seconds;
 
-  rtems_status_code get_tod_before_status;
+  /**
+   * @brief This member contains the CLOCK_REALTIME before the
+   *   rtems_clock_set() call.
+   */
+  struct timespec realtime_before;
 
-  rtems_time_of_day tod_after;
+  /**
+   * @brief This member contains the CLOCK_REALTIME after the rtems_clock_set()
+   *   call.
+   */
+  struct timespec realtime_after;
 
-  rtems_status_code get_tod_after_status;
-
+  /**
+   * @brief This member contains the identifier of the timer.
+   */
   rtems_id timer_id;
 
+  /**
+   * @brief This member counts the executions of the timer routine.
+   */
   int timer_routine_counter;
 
-  rtems_time_of_day timer_routine_tod;
+  /**
+   * @brief This member contains the seconds of the CLOCK_REALTIME which the
+   *   timer routine observed.
+   */
+  int64_t timer_routine_seconds;
+
+  /**
+   * @brief This member counts the calls of the TOD hook.
+   */
+  int hook_calls;
+
+  /**
+   * @brief This member contains the action of the last TOD hook call.
+   */
+  TOD_Action hook_action;
+
+  /**
+   * @brief This member contains the time of day of the last TOD hook call.
+   */
+  struct timespec hook_tod;
 
   struct {
     /**
      * @brief This member defines the pre-condition states for the next action.
      */
-    size_t pcs[ 2 ];
+    size_t pcs[ 3 ];
 
     /**
      * @brief If this member is true, then the test action loop is executed.
@@ -169,55 +220,71 @@ typedef struct {
 
 static RtemsClockReqSet_Context RtemsClockReqSet_Instance;
 
-static const char *const RtemsClockReqSet_PreDesc_ToD[] = {
-  "Valid",
-  "ValidLeap4",
-  "ValidLeap400",
-  "Youngest",
-  "Oldest",
-  "TooJung",
-  "TooOld",
-  "InvMonth0",
-  "InvMonth",
-  "InvDay0",
-  "InvDay",
-  "InvHour",
-  "InvMinute",
-  "InvSecond",
-  "InvTicks",
-  "InvLeap4",
-  "InvLeap100",
-  "InvLeap400",
-  "AtTimer",
-  "BeforeTimer",
-  "AfterTimer",
-  "Null",
-  "NA"
-};
+static const char *const RtemsClockReqSet_PreDesc_Timer[] =
+  { "None", "Future", "Now", "Past", "NA" };
 
 static const char *const RtemsClockReqSet_PreDesc_Hook[] =
-  { "None", "Ok", "NotOk", "NA" };
+  { "None", "Success", "Failure", "NA" };
 
-static const char *const *const RtemsClockReqSet_PreDesc[] =
-  { RtemsClockReqSet_PreDesc_ToD, RtemsClockReqSet_PreDesc_Hook, NULL };
+static const char *const RtemsClockReqSet_PreDesc_ToD[] =
+  { "Valid", "Invalid", "Null", "NA" };
+
+static const char *const *const RtemsClockReqSet_PreDesc[] = {
+  RtemsClockReqSet_PreDesc_Timer,
+  RtemsClockReqSet_PreDesc_Hook,
+  RtemsClockReqSet_PreDesc_ToD,
+  NULL
+};
 
 typedef RtemsClockReqSet_Context Context;
 
-static rtems_timer_service_routine _TOD_timer_routine(
-  rtems_id timer_id,
-  void    *user_data
-)
+static int64_t GetSeconds( const rtems_time_of_day *tod )
 {
-  (void) timer_id;
-
-  Context          *ctx = user_data;
-  rtems_status_code status;
-  ++ctx->timer_routine_counter;
-  status = rtems_clock_get_tod( &ctx->timer_routine_tod );
-  T_rsc_success( status );
+  return DaysFromCivil( tod->year, tod->month, tod->day ) * 86400 +
+         tod->hour * 3600 + tod->minute * 60 + tod->second;
 }
 
-static void _TOD_prepare_timer( Context *ctx )
+static int64_t GetNanoseconds( const struct timespec *ts )
+{
+  return (int64_t) ts->tv_sec * 1000000000 + ts->tv_nsec;
+}
+
+static void CheckClockSet( const Context *ctx )
+{
+  int64_t expected;
+  int64_t progress;
+
+  expected = ctx->expected_seconds * 1000000000 +
+             (int64_t) ctx->target_tod_value.ticks *
+               rtems_configuration_get_nanoseconds_per_tick();
+  progress = GetNanoseconds( &ctx->realtime_after ) - expected;
+  T_ge_i64( progress, 0 );
+  T_lt_i64( progress, rtems_configuration_get_nanoseconds_per_tick() );
+}
+
+static void CheckClockNop( const Context *ctx )
+{
+  int64_t progress;
+
+  progress = GetNanoseconds( &ctx->realtime_after ) -
+             GetNanoseconds( &ctx->realtime_before );
+  T_ge_i64( progress, 0 );
+  T_lt_i64( progress, rtems_configuration_get_nanoseconds_per_tick() );
+}
+
+static void TimerRoutine( rtems_id timer_id, void *user_data )
+{
+  Context        *ctx;
+  struct timespec now;
+
+  (void) timer_id;
+  ctx = user_data;
+  ++ctx->timer_routine_counter;
+  rtems_clock_get_realtime( &now );
+  ctx->timer_routine_seconds = now.tv_sec;
+}
+
+static void PrepareTimer( Context *ctx )
 {
   rtems_status_code status;
   rtems_time_of_day tod = { 1988, 1, 1, 0, 0, 0, 0 };
@@ -226,12 +293,7 @@ static void _TOD_prepare_timer( Context *ctx )
   T_rsc_success( status );
 
   tod.year = 1989;
-  status = rtems_timer_fire_when(
-    ctx->timer_id,
-    &tod,
-    _TOD_timer_routine,
-    ctx
-  );
+  status = rtems_timer_fire_when( ctx->timer_id, &tod, TimerRoutine, ctx );
   T_rsc_success( status );
 }
 
@@ -240,23 +302,22 @@ static Status_Control TODHook( TOD_Action action, const struct timespec *tod )
   Context *ctx;
 
   ctx = T_fixture_context();
-  T_eq_int( action, TOD_ACTION_SET_CLOCK );
-  T_not_null( tod );
+  ++ctx->hook_calls;
+  ctx->hook_action = action;
+  ctx->hook_tod = *tod;
 
   return ctx->hook_status;
 }
 
-static void RtemsClockReqSet_Pre_ToD_Prepare(
-  RtemsClockReqSet_Context *ctx,
-  RtemsClockReqSet_Pre_ToD  state
+static void RtemsClockReqSet_Pre_Timer_Prepare(
+  RtemsClockReqSet_Context  *ctx,
+  RtemsClockReqSet_Pre_Timer state
 )
 {
   switch ( state ) {
-    case RtemsClockReqSet_Pre_ToD_Valid: {
+    case RtemsClockReqSet_Pre_Timer_None: {
       /*
-       * While the `time_of_day` parameter references an arbitrary valid date
-       * and time between 1988-01-01T00:00:00.000000000Z and
-       * 2105-12-31T23:59:59.999999999Z.
+       * While no timer of the CLOCK_REALTIME is scheduled.
        */
       ctx->target_tod_value = (rtems_time_of_day) {
         2021,
@@ -270,230 +331,40 @@ static void RtemsClockReqSet_Pre_ToD_Prepare(
       break;
     }
 
-    case RtemsClockReqSet_Pre_ToD_ValidLeap4: {
+    case RtemsClockReqSet_Pre_Timer_Future: {
       /*
-       * While the `time_of_day` parameter references a date for a leap year
-       * with the value of 29th of February.
-       */
-      ctx->target_tod_value = (rtems_time_of_day) { 2096, 2, 29, 0, 0, 0, 0 };
-      break;
-    }
-
-    case RtemsClockReqSet_Pre_ToD_ValidLeap400: {
-      /*
-       * While the `time_of_day` parameter references a date for a leap year
-       * with the value of 29th of February.
-       */
-      ctx->target_tod_value = (rtems_time_of_day) { 2000, 2, 29, 0, 0, 0, 0 };
-      break;
-    }
-
-    case RtemsClockReqSet_Pre_ToD_Youngest: {
-      /*
-       * While the `time_of_day` parameter references the youngest date and
-       * time accepted (1988-01-01T00:00:00.000000000Z).
-       */
-      ctx->target_tod_value = (rtems_time_of_day) { 1988, 1, 1, 0, 0, 0, 0 };
-      break;
-    }
-
-    case RtemsClockReqSet_Pre_ToD_Oldest: {
-      /*
-       * While the `time_of_day` parameter references the oldest date and time
-       * accepted (2400-12-31T23:59:59.999999999Z).
-       */
-      ctx->target_tod_value = (rtems_time_of_day) {
-        2400,
-        12,
-        31,
-        23,
-        59,
-        59,
-        rtems_clock_get_ticks_per_second() - 1
-      };
-      break;
-    }
-
-    case RtemsClockReqSet_Pre_ToD_TooJung: {
-      /*
-       * While the `time_of_day` parameter references a valid date and time
-       * younger than 1988-01-01T00:00:00.000000000Z.
-       */
-      ctx->target_tod_value = (rtems_time_of_day) {
-        1987,
-        12,
-        31,
-        23,
-        59,
-        59,
-        rtems_clock_get_ticks_per_second() - 1
-      };
-      break;
-    }
-
-    case RtemsClockReqSet_Pre_ToD_TooOld: {
-      /*
-       * While the `time_of_day` parameter references a valid date and time
-       * older than 2400-12-31T23:59:59.999999999Z.
-       */
-      ctx->target_tod_value = (rtems_time_of_day) { 2401, 1, 1, 0, 0, 0, 0 };
-      break;
-    }
-
-    case RtemsClockReqSet_Pre_ToD_InvMonth0: {
-      /*
-       * While the `time_of_day` parameter is invalid because the value of the
-       * month is 0.
-       */
-      ctx->target_tod_value =
-        (rtems_time_of_day) { 2021, 0, 11, 11, 10, 59, 1 };
-      break;
-    }
-
-    case RtemsClockReqSet_Pre_ToD_InvMonth: {
-      /*
-       * While the `time_of_day` parameter is invalid because the value of the
-       * month is larger than 12.
-       */
-      ctx->target_tod_value =
-        (rtems_time_of_day) { 2021, 13, 11, 11, 10, 59, 1 };
-      break;
-    }
-
-    case RtemsClockReqSet_Pre_ToD_InvDay0: {
-      /*
-       * While the `time_of_day` parameter is invalid because the value of the
-       * day is 0.
-       */
-      ctx->target_tod_value =
-        (rtems_time_of_day) { 2021, 3, 0, 11, 10, 59, 1 };
-      break;
-    }
-
-    case RtemsClockReqSet_Pre_ToD_InvDay: {
-      /*
-       * While the `time_of_day` parameter is invalid because the value of the
-       * day is larger than the days of the month.
-       */
-      ctx->target_tod_value =
-        (rtems_time_of_day) { 2021, 2, 29, 11, 10, 59, 1 };
-      break;
-    }
-
-    case RtemsClockReqSet_Pre_ToD_InvHour: {
-      /*
-       * While the `time_of_day` parameter is invalid because the value of the
-       * hour is larger than 23.
-       */
-      ctx->target_tod_value =
-        (rtems_time_of_day) { 2021, 3, 11, 24, 10, 59, 1 };
-      break;
-    }
-
-    case RtemsClockReqSet_Pre_ToD_InvMinute: {
-      /*
-       * While the `time_of_day` parameter is invalid because the value of the
-       * minute is larger than 59.
-       */
-      ctx->target_tod_value =
-        (rtems_time_of_day) { 2021, 3, 11, 11, 60, 59, 1 };
-      break;
-    }
-
-    case RtemsClockReqSet_Pre_ToD_InvSecond: {
-      /*
-       * While the `time_of_day` parameter is invalid because the value of the
-       * second is larger than 59.
-       */
-      ctx->target_tod_value =
-        (rtems_time_of_day) { 2021, 3, 11, 11, 10, 60, 1 };
-      break;
-    }
-
-    case RtemsClockReqSet_Pre_ToD_InvTicks: {
-      /*
-       * While the `time_of_day` parameter is invalid because the value of the
-       * ticks are larger or equal to the ticks per second.
-       */
-      ctx->target_tod_value = (rtems_time_of_day) {
-        2021,
-        3,
-        11,
-        11,
-        10,
-        60,
-        rtems_clock_get_ticks_per_second()
-      };
-      break;
-    }
-
-    case RtemsClockReqSet_Pre_ToD_InvLeap4: {
-      /*
-       * While the `time_of_day` parameter is invalid because the value 30th of
-       * February does not exist in a leap year.
-       */
-      ctx->target_tod_value = (rtems_time_of_day) { 2104, 2, 30, 0, 0, 0, 0 };
-      break;
-    }
-
-    case RtemsClockReqSet_Pre_ToD_InvLeap100: {
-      /*
-       * While the `time_of_day` parameter is invalid because the value 29th of
-       * February does not exist in a non-leap year.
-       */
-      ctx->target_tod_value = (rtems_time_of_day) { 2100, 2, 29, 0, 0, 0, 0 };
-      break;
-    }
-
-    case RtemsClockReqSet_Pre_ToD_InvLeap400: {
-      /*
-       * While the `time_of_day` parameter is invalid because the value 30th of
-       * February does not exist in a leap year.
-       */
-      ctx->target_tod_value = (rtems_time_of_day) { 2000, 2, 30, 0, 0, 0, 0 };
-      break;
-    }
-
-    case RtemsClockReqSet_Pre_ToD_AtTimer: {
-      /*
-       * While the `time_of_day` parameter references the same point in time
-       * when a timer should fire.
-       */
-      ctx->target_tod_value = (rtems_time_of_day) { 1989, 1, 1, 0, 0, 0, 0 };
-      _TOD_prepare_timer( ctx );
-      break;
-    }
-
-    case RtemsClockReqSet_Pre_ToD_BeforeTimer: {
-      /*
-       * While the `time_of_day` parameter references a point in time before a
-       * timer should fire.
+       * While exactly one timer of the CLOCK_REALTIME is scheduled to fire at
+       * a time point after the time of day which the `time_of_day` parameter
+       * specifies.
        */
       ctx->target_tod_value =
         (rtems_time_of_day) { 1988, 12, 31, 23, 59, 59, 0 };
-      _TOD_prepare_timer( ctx );
+      PrepareTimer( ctx );
       break;
     }
 
-    case RtemsClockReqSet_Pre_ToD_AfterTimer: {
+    case RtemsClockReqSet_Pre_Timer_Now: {
       /*
-       * While the `time_of_day` parameter references a point in time after a
-       * timer should fire.
+       * While exactly one timer of the CLOCK_REALTIME is scheduled to fire at
+       * the time of day which the `time_of_day` parameter specifies.
+       */
+      ctx->target_tod_value = (rtems_time_of_day) { 1989, 1, 1, 0, 0, 0, 0 };
+      PrepareTimer( ctx );
+      break;
+    }
+
+    case RtemsClockReqSet_Pre_Timer_Past: {
+      /*
+       * While exactly one timer of the CLOCK_REALTIME is scheduled to fire at
+       * a time point before the time of day which the `time_of_day` parameter
+       * specifies.
        */
       ctx->target_tod_value = (rtems_time_of_day) { 1989, 1, 1, 1, 0, 0, 0 };
-      _TOD_prepare_timer( ctx );
+      PrepareTimer( ctx );
       break;
     }
 
-    case RtemsClockReqSet_Pre_ToD_Null: {
-      /*
-       * WHile the `time_of_day` parameter is NULL.
-       */
-      ctx->target_tod = NULL;
-      break;
-    }
-
-    case RtemsClockReqSet_Pre_ToD_NA:
+    case RtemsClockReqSet_Pre_Timer_NA:
       break;
   }
 }
@@ -512,9 +383,9 @@ static void RtemsClockReqSet_Pre_Hook_Prepare(
       break;
     }
 
-    case RtemsClockReqSet_Pre_Hook_Ok: {
+    case RtemsClockReqSet_Pre_Hook_Success: {
       /*
-       * While all TOD hooks invoked by the rtems_clock_set() call return a
+       * While exactly one TOD hook is registered, while the hook returns a
        * status code equal to STATUS_SUCCESSFUL.
        */
       ctx->register_hook = true;
@@ -522,10 +393,10 @@ static void RtemsClockReqSet_Pre_Hook_Prepare(
       break;
     }
 
-    case RtemsClockReqSet_Pre_Hook_NotOk: {
+    case RtemsClockReqSet_Pre_Hook_Failure: {
       /*
-       * While at least one TOD hook invoked by the rtems_clock_set() call
-       * returns a status code not equal to STATUS_SUCCESSFUL.
+       * While exactly one TOD hook is registered, while the hook returns a
+       * status code equal to STATUS_UNAVAILABLE.
        */
       ctx->register_hook = true;
       ctx->hook_status = STATUS_UNAVAILABLE;
@@ -533,6 +404,44 @@ static void RtemsClockReqSet_Pre_Hook_Prepare(
     }
 
     case RtemsClockReqSet_Pre_Hook_NA:
+      break;
+  }
+}
+
+static void RtemsClockReqSet_Pre_ToD_Prepare(
+  RtemsClockReqSet_Context *ctx,
+  RtemsClockReqSet_Pre_ToD  state
+)
+{
+  switch ( state ) {
+    case RtemsClockReqSet_Pre_ToD_Valid: {
+      /*
+       * While the `time_of_day` parameter references an object of type
+       * rtems_time_of_day, while the object holds a valid time of day.
+       */
+      ctx->target_tod = &ctx->target_tod_value;
+      break;
+    }
+
+    case RtemsClockReqSet_Pre_ToD_Invalid: {
+      /*
+       * While the `time_of_day` parameter references an object of type
+       * rtems_time_of_day, while the object holds an invalid time of day.
+       */
+      ctx->target_tod = &ctx->target_tod_value;
+      ctx->target_tod_value.month = 13;
+      break;
+    }
+
+    case RtemsClockReqSet_Pre_ToD_Null: {
+      /*
+       * While the `time_of_day` parameter is equal to NULL.
+       */
+      ctx->target_tod = NULL;
+      break;
+    }
+
+    case RtemsClockReqSet_Pre_ToD_NA:
       break;
   }
 }
@@ -545,7 +454,7 @@ static void RtemsClockReqSet_Post_Status_Check(
   switch ( state ) {
     case RtemsClockReqSet_Post_Status_Ok: {
       /*
-       * The return status of rtems_clock_set() shall be RTEMS_SUCCESSFUL
+       * The return status of rtems_clock_set() shall be RTEMS_SUCCESSFUL.
        */
       T_rsc_success( ctx->status );
       break;
@@ -559,7 +468,7 @@ static void RtemsClockReqSet_Post_Status_Check(
       break;
     }
 
-    case RtemsClockReqSet_Post_Status_InvClk: {
+    case RtemsClockReqSet_Post_Status_InvClock: {
       /*
        * The return status of rtems_clock_set() shall be RTEMS_INVALID_CLOCK.
        */
@@ -567,10 +476,9 @@ static void RtemsClockReqSet_Post_Status_Check(
       break;
     }
 
-    case RtemsClockReqSet_Post_Status_Hook: {
+    case RtemsClockReqSet_Post_Status_Unsatisfied: {
       /*
-       * The return status of rtems_clock_set() shall be derived from the
-       * status returned by the TOD hook.
+       * The return status of rtems_clock_set() shall be RTEMS_UNSATISFIED.
        */
       T_rsc( ctx->status, RTEMS_UNSATISFIED );
       break;
@@ -589,36 +497,18 @@ static void RtemsClockReqSet_Post_Clock_Check(
   switch ( state ) {
     case RtemsClockReqSet_Post_Clock_Set: {
       /*
-       * The CLOCK_REALTIME shall be set to the values of the object referenced
-       * by the `time_of_day` parameter during the rtems_clock_set() call.
+       * The CLOCK_REALTIME shall be set to the time of day referenced by the
+       * `time_of_day` parameter.
        */
-      T_eq_ptr( ctx->target_tod, &ctx->target_tod_value );
-      T_rsc_success( ctx->get_tod_after_status );
-      T_eq_u32( ctx->tod_after.year, ctx->target_tod_value.year );
-      T_eq_u32( ctx->tod_after.month, ctx->target_tod_value.month );
-      T_eq_u32( ctx->tod_after.day, ctx->target_tod_value.day );
-      T_eq_u32( ctx->tod_after.hour, ctx->target_tod_value.hour );
-      T_eq_u32( ctx->tod_after.minute, ctx->target_tod_value.minute );
-      T_eq_u32( ctx->tod_after.second, ctx->target_tod_value.second );
-      /* rtems_clock_set() or rtems_clock_get_tod() cause an error of 1 tick */
-      T_ge_u32( ctx->tod_after.ticks + 1, ctx->target_tod_value.ticks );
-      T_le_u32( ctx->tod_after.ticks, ctx->target_tod_value.ticks );
+      CheckClockSet( ctx );
       break;
     }
 
     case RtemsClockReqSet_Post_Clock_Nop: {
       /*
-       * The state of the CLOCK_REALTIME shall not be changed by the
-       * rtems_clock_set() call.
+       * The CLOCK_REALTIME shall not be changed by the rtems_clock_set() call.
        */
-      T_rsc_success( ctx->get_tod_before_status );
-      T_eq_u32( ctx->tod_after.year, ctx->tod_before.year );
-      T_eq_u32( ctx->tod_after.month, ctx->tod_before.month );
-      T_eq_u32( ctx->tod_after.day, ctx->tod_before.day );
-      T_eq_u32( ctx->tod_after.hour, ctx->tod_before.hour );
-      T_eq_u32( ctx->tod_after.minute, ctx->tod_before.minute );
-      T_eq_u32( ctx->tod_after.second, ctx->tod_before.second );
-      T_eq_u32( ctx->tod_after.ticks, ctx->tod_before.ticks );
+      CheckClockNop( ctx );
       break;
     }
 
@@ -635,24 +525,18 @@ static void RtemsClockReqSet_Post_Timer_Check(
   switch ( state ) {
     case RtemsClockReqSet_Post_Timer_Triggered: {
       /*
-       * The timer routine shall be executed once after the CLOCK_REALTIME has
-       * been set and before the execution of the rtems_clock_set() call
-       * terminates.
+       * The timer routine shall be executed once after the CLOCK_REALTIME is
+       * set and before the rtems_clock_set() call returns.
        */
       T_eq_int( ctx->timer_routine_counter, 1 );
-      T_eq_u32( ctx->timer_routine_tod.year, 1989 );
-      T_eq_u32( ctx->timer_routine_tod.month, 1 );
-      T_eq_u32( ctx->timer_routine_tod.day, 1 );
-      T_eq_u32( ctx->timer_routine_tod.minute, 0 );
-      T_eq_u32( ctx->timer_routine_tod.second, 0 );
-      T_eq_u32( ctx->timer_routine_tod.ticks, 0 );
+      T_eq_i64( ctx->timer_routine_seconds, ctx->expected_seconds );
       break;
     }
 
     case RtemsClockReqSet_Post_Timer_Nop: {
       /*
-       * The the timer routine shall not be invoked during the
-       * rtems_clock_set() call.
+       * The timer routine shall not be executed during the rtems_clock_set()
+       * call.
        */
       T_eq_int( ctx->timer_routine_counter, 0 );
       break;
@@ -663,15 +547,47 @@ static void RtemsClockReqSet_Post_Timer_Check(
   }
 }
 
+static void RtemsClockReqSet_Post_HookCall_Check(
+  RtemsClockReqSet_Context      *ctx,
+  RtemsClockReqSet_Post_HookCall state
+)
+{
+  switch ( state ) {
+    case RtemsClockReqSet_Post_HookCall_Once: {
+      /*
+       * The TOD hook shall be called once with the action to set the clock and
+       * the time of day referenced by the `time_of_day` parameter.
+       */
+      T_eq_int( ctx->hook_calls, 1 );
+      T_eq_int( ctx->hook_action, TOD_ACTION_SET_CLOCK );
+      T_eq_i64( ctx->hook_tod.tv_sec, ctx->expected_seconds );
+      T_eq_long(
+        ctx->hook_tod.tv_nsec,
+        (long) ( ctx->target_tod_value.ticks *
+                 rtems_configuration_get_nanoseconds_per_tick() )
+      );
+      break;
+    }
+
+    case RtemsClockReqSet_Post_HookCall_Nop: {
+      /*
+       * The TOD hook shall not be called by the rtems_clock_set() call.
+       */
+      T_eq_int( ctx->hook_calls, 0 );
+      break;
+    }
+
+    case RtemsClockReqSet_Post_HookCall_NA:
+      break;
+  }
+}
+
 static void RtemsClockReqSet_Setup( RtemsClockReqSet_Context *ctx )
 {
   rtems_status_code status;
-  rtems_name        timer_name = rtems_build_name( 'T', 'M', 'R', '0' );
+
   ctx->timer_id = RTEMS_ID_NONE;
-
-  ctx->target_tod = &ctx->target_tod_value;
-
-  status = rtems_timer_create( timer_name, &ctx->timer_id );
+  status = rtems_timer_create( OBJECT_NAME, &ctx->timer_id );
   T_rsc_success( status );
 }
 
@@ -688,7 +604,7 @@ static void RtemsClockReqSet_Teardown( RtemsClockReqSet_Context *ctx )
 {
   rtems_status_code status;
 
-  if ( RTEMS_ID_NONE != ctx->timer_id ) {
+  if ( ctx->timer_id != RTEMS_ID_NONE ) {
     status = rtems_timer_delete( ctx->timer_id );
     T_rsc_success( status );
   }
@@ -710,7 +626,8 @@ static void RtemsClockReqSet_Prepare( RtemsClockReqSet_Context *ctx )
   status = rtems_timer_cancel( ctx->timer_id );
   T_rsc_success( status );
   ctx->timer_routine_counter = 0;
-  ctx->timer_routine_tod = (rtems_time_of_day) { 0, 0, 0, 0, 0, 0, 0 };
+  ctx->timer_routine_seconds = 0;
+  ctx->hook_calls = 0;
 }
 
 static void RtemsClockReqSet_Action( RtemsClockReqSet_Context *ctx )
@@ -721,9 +638,10 @@ static void RtemsClockReqSet_Action( RtemsClockReqSet_Context *ctx )
     _TOD_Hook_Register( &hook );
   }
 
-  ctx->get_tod_before_status = rtems_clock_get_tod( &ctx->tod_before );
+  ctx->expected_seconds = GetSeconds( &ctx->target_tod_value );
+  rtems_clock_get_realtime( &ctx->realtime_before );
   ctx->status = rtems_clock_set( ctx->target_tod );
-  ctx->get_tod_after_status = rtems_clock_get_tod( &ctx->tod_after );
+  rtems_clock_get_realtime( &ctx->realtime_after );
 
   if ( ctx->register_hook ) {
     _TOD_Hook_Unregister( &hook );
@@ -734,23 +652,42 @@ static void RtemsClockReqSet_Action( RtemsClockReqSet_Context *ctx )
 
 static const RtemsClockReqSet_Entry
 RtemsClockReqSet_Entries[] = {
-  { 0, 0, 0, RtemsClockReqSet_Post_Status_InvClk,
-    RtemsClockReqSet_Post_Clock_Nop, RtemsClockReqSet_Post_Timer_Nop },
-  { 0, 0, 0, RtemsClockReqSet_Post_Status_Ok, RtemsClockReqSet_Post_Clock_Set,
-    RtemsClockReqSet_Post_Timer_Nop },
-  { 0, 0, 0, RtemsClockReqSet_Post_Status_Hook,
-    RtemsClockReqSet_Post_Clock_Nop, RtemsClockReqSet_Post_Timer_Nop },
-  { 0, 0, 0, RtemsClockReqSet_Post_Status_Ok, RtemsClockReqSet_Post_Clock_Set,
-    RtemsClockReqSet_Post_Timer_Triggered },
-  { 0, 0, 0, RtemsClockReqSet_Post_Status_InvAddr,
-    RtemsClockReqSet_Post_Clock_Nop, RtemsClockReqSet_Post_Timer_Nop }
+  { 1, 0, 0, 0, RtemsClockReqSet_Post_Status_NA,
+    RtemsClockReqSet_Post_Clock_NA, RtemsClockReqSet_Post_Timer_NA,
+    RtemsClockReqSet_Post_HookCall_NA },
+  { 0, 0, 0, 0, RtemsClockReqSet_Post_Status_Unsatisfied,
+    RtemsClockReqSet_Post_Clock_Nop, RtemsClockReqSet_Post_Timer_Nop,
+    RtemsClockReqSet_Post_HookCall_Once },
+  { 0, 0, 0, 0, RtemsClockReqSet_Post_Status_Ok,
+    RtemsClockReqSet_Post_Clock_Set, RtemsClockReqSet_Post_Timer_Nop,
+    RtemsClockReqSet_Post_HookCall_NA },
+  { 0, 0, 0, 0, RtemsClockReqSet_Post_Status_Ok,
+    RtemsClockReqSet_Post_Clock_Set, RtemsClockReqSet_Post_Timer_Nop,
+    RtemsClockReqSet_Post_HookCall_Once },
+  { 0, 0, 0, 0, RtemsClockReqSet_Post_Status_InvClock,
+    RtemsClockReqSet_Post_Clock_Nop, RtemsClockReqSet_Post_Timer_Nop,
+    RtemsClockReqSet_Post_HookCall_Nop },
+  { 0, 0, 0, 0, RtemsClockReqSet_Post_Status_InvAddr,
+    RtemsClockReqSet_Post_Clock_Nop, RtemsClockReqSet_Post_Timer_Nop,
+    RtemsClockReqSet_Post_HookCall_Nop },
+  { 0, 0, 0, 0, RtemsClockReqSet_Post_Status_Ok,
+    RtemsClockReqSet_Post_Clock_Set, RtemsClockReqSet_Post_Timer_Triggered,
+    RtemsClockReqSet_Post_HookCall_NA },
+  { 0, 0, 0, 0, RtemsClockReqSet_Post_Status_Ok,
+    RtemsClockReqSet_Post_Clock_Set, RtemsClockReqSet_Post_Timer_Triggered,
+    RtemsClockReqSet_Post_HookCall_Once },
+  { 0, 0, 0, 0, RtemsClockReqSet_Post_Status_InvClock,
+    RtemsClockReqSet_Post_Clock_Nop, RtemsClockReqSet_Post_Timer_Nop,
+    RtemsClockReqSet_Post_HookCall_NA },
+  { 0, 0, 0, 0, RtemsClockReqSet_Post_Status_InvAddr,
+    RtemsClockReqSet_Post_Clock_Nop, RtemsClockReqSet_Post_Timer_Nop,
+    RtemsClockReqSet_Post_HookCall_NA }
 };
 
 static const uint8_t
 RtemsClockReqSet_Map[] = {
-  1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 3, 3, 2, 1, 1, 2, 3, 3, 2, 4, 4, 4
+  2, 8, 9, 3, 4, 5, 1, 4, 5, 2, 0, 0, 3, 0, 0, 1, 0, 0, 6, 0, 0, 7, 0, 0, 1, 0,
+  0, 6, 0, 0, 7, 0, 0, 1, 0, 0
 };
 
 /* clang-format on */
@@ -789,12 +726,14 @@ static inline RtemsClockReqSet_Entry RtemsClockReqSet_PopEntry(
 
 static void RtemsClockReqSet_TestVariant( RtemsClockReqSet_Context *ctx )
 {
-  RtemsClockReqSet_Pre_ToD_Prepare( ctx, ctx->Map.pcs[ 0 ] );
+  RtemsClockReqSet_Pre_Timer_Prepare( ctx, ctx->Map.pcs[ 0 ] );
   RtemsClockReqSet_Pre_Hook_Prepare( ctx, ctx->Map.pcs[ 1 ] );
+  RtemsClockReqSet_Pre_ToD_Prepare( ctx, ctx->Map.pcs[ 2 ] );
   RtemsClockReqSet_Action( ctx );
   RtemsClockReqSet_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
   RtemsClockReqSet_Post_Clock_Check( ctx, ctx->Map.entry.Post_Clock );
   RtemsClockReqSet_Post_Timer_Check( ctx, ctx->Map.entry.Post_Timer );
+  RtemsClockReqSet_Post_HookCall_Check( ctx, ctx->Map.entry.Post_HookCall );
 }
 
 /**
@@ -809,8 +748,8 @@ T_TEST_CASE_FIXTURE( RtemsClockReqSet, &RtemsClockReqSet_Fixture )
   ctx->Map.index = 0;
 
   for (
-    ctx->Map.pcs[ 0 ] = RtemsClockReqSet_Pre_ToD_Valid;
-    ctx->Map.pcs[ 0 ] < RtemsClockReqSet_Pre_ToD_NA;
+    ctx->Map.pcs[ 0 ] = RtemsClockReqSet_Pre_Timer_None;
+    ctx->Map.pcs[ 0 ] < RtemsClockReqSet_Pre_Timer_NA;
     ++ctx->Map.pcs[ 0 ]
   ) {
     for (
@@ -818,9 +757,20 @@ T_TEST_CASE_FIXTURE( RtemsClockReqSet, &RtemsClockReqSet_Fixture )
       ctx->Map.pcs[ 1 ] < RtemsClockReqSet_Pre_Hook_NA;
       ++ctx->Map.pcs[ 1 ]
     ) {
-      ctx->Map.entry = RtemsClockReqSet_PopEntry( ctx );
-      RtemsClockReqSet_Prepare( ctx );
-      RtemsClockReqSet_TestVariant( ctx );
+      for (
+        ctx->Map.pcs[ 2 ] = RtemsClockReqSet_Pre_ToD_Valid;
+        ctx->Map.pcs[ 2 ] < RtemsClockReqSet_Pre_ToD_NA;
+        ++ctx->Map.pcs[ 2 ]
+      ) {
+        ctx->Map.entry = RtemsClockReqSet_PopEntry( ctx );
+
+        if ( ctx->Map.entry.Skip ) {
+          continue;
+        }
+
+        RtemsClockReqSet_Prepare( ctx );
+        RtemsClockReqSet_TestVariant( ctx );
+      }
     }
   }
 }

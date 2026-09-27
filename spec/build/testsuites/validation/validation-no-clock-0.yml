@@ -35,6 +35,7 @@ source:
 - testsuites/validation/tc-clock-get-uptime.c
 - testsuites/validation/tc-clock-nanosleep.c
 - testsuites/validation/tc-clock-set-no-dispatch.c
+- testsuites/validation/tc-clock-set-tod.c
 - testsuites/validation/tc-clock-set.c
 - testsuites/validation/tc-clock.c
 - testsuites/validation/tc-cpuuse.c
@@ -155,6 +156,8 @@ source:
 - testsuites/validation/tr-sem-seize-wait.c
 - testsuites/validation/tr-sem-surrender.c
 - testsuites/validation/tr-signal-constant.c
+- testsuites/validation/tr-tod-convert-date.c
+- testsuites/validation/tr-tod-convert-time.c
 - testsuites/validation/tr-tq-enqueue-ceiling.c
 - testsuites/validation/tr-tq-enqueue-deadlock.c
 - testsuites/validation/tr-tq-enqueue-fifo.c
