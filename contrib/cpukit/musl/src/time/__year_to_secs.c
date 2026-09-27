@@ -9,14 +9,13 @@ long long __year_to_secs(long long year, int *is_leap)
 		int leaps = (y-68)>>2;
 		if (!((y-68)&3)) {
 			leaps--;
-			if (is_leap) *is_leap = 1;
-		} else if (is_leap) *is_leap = 0;
+			*is_leap = 1;
+		} else *is_leap = 0;
 		return 31536000*(y-70) + 86400*leaps;
 	}
 
-	int cycles, centuries, leaps, rem, dummy;
+	int cycles, centuries, leaps, rem;
 
-	if (!is_leap) is_leap = &dummy;
 	cycles = (year-100) / 400;
 	rem = (year-100) % 400;
 	if (rem < 0) {
