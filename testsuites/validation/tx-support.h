@@ -28,7 +28,8 @@
  * - Mutexes: CreateMutex(), ObtainMutex(), ReleaseMutex(), and DeleteMutex().
  *
  * - Time: ClockTick(), TimecounterTick(), SetTimecountCounter(),
- *   SetGetTimecountHandler(), UnsetClock(), and GetTaskTimerInfo().
+ *   SetGetTimecountHandler(), UnsetClock(), GetTaskTimerInfo(), and
+ *   DaysFromCivil().
  *
  * - Memory: MemoryAllocationFailWhen(), MemorySave(), and MemoryRestore().
  *
@@ -1702,6 +1703,26 @@ Timer_States GetTimerState( rtems_id id );
  * effect.
  */
 void UnsetClock( void );
+
+/**
+ * @brief Gets the days of the date since the Epoch.
+ *
+ * The function uses the proleptic Gregorian calendar.  It implements
+ * days_from_civil() of Howard Hinnant, "chrono-Compatible Low-Level Date
+ * Algorithms".  The function does not use the date conversions of RTEMS or of
+ * the C library.  Use it to derive the expected values of a date conversion.
+ *
+ * @param year is the year.  The year 0 is the year 1 BC.
+ *
+ * @param month is the month of the year, from 1 for January to 12 for
+ *   December.
+ *
+ * @param day is the day of the month.  A value outside of the month counts
+ *   from the first day of the month.
+ *
+ * @return Returns the days of the date since 1970-01-01.
+ */
+int64_t DaysFromCivil( int64_t year, unsigned int month, int64_t day );
 
 /**
  * @brief Calls the fatal handler which SetFatalHandler() set.

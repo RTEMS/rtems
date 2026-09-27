@@ -1201,3 +1201,27 @@ void TicketLockWaitForReleases(
 }
 
 #endif
+
+int64_t DaysFromCivil( int64_t year, unsigned int month, int64_t day )
+{
+  int64_t era;
+  int64_t year_of_era;
+  int64_t day_of_year;
+  int64_t day_of_era;
+  int64_t shifted_month;
+
+  if ( month <= 2 ) {
+    --year;
+    shifted_month = (int64_t) month + 9;
+  } else {
+    shifted_month = (int64_t) month - 3;
+  }
+
+  era = ( year >= 0 ? year : year - 399 ) / 400;
+  year_of_era = year - era * 400;
+  day_of_year = ( 153 * shifted_month + 2 ) / 5 + day - 1;
+  day_of_era = year_of_era * 365 + year_of_era / 4 - year_of_era / 100 +
+               day_of_year;
+
+  return era * 146097 + day_of_era - 719468;
+}
