@@ -1,3 +1,7 @@
+#ifdef __rtems__
+#include "time_impl.h"
+#endif
+
 int __month_to_secs(int month, int is_leap)
 {
 	static const int secs_through_month[] = {

@@ -8,8 +8,12 @@ struct tm *__gmtime_r(const time_t *restrict t, struct tm *restrict tm)
 		return 0;
 	}
 	tm->tm_isdst = 0;
-	tm->__tm_gmtoff = 0;
-	tm->__tm_zone = __utc;
+#ifdef __TM_GMTOFF
+	tm->__TM_GMTOFF = 0;
+#endif
+#ifdef __TM_ZONE
+	tm->__TM_ZONE = __utc;
+#endif
 	return tm;
 }
 

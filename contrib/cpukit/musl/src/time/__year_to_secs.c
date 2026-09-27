@@ -1,3 +1,7 @@
+#ifdef __rtems__
+#include "time_impl.h"
+#endif
+
 long long __year_to_secs(long long year, int *is_leap)
 {
 	if (year-2ULL <= 136) {

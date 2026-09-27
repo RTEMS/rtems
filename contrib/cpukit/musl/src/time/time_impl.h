@@ -1,5 +1,13 @@
 #include <time.h>
 
+#ifdef __rtems__
+#define hidden __attribute__((__visibility__("hidden")))
+/* Newlib provides a gmtime_r() of its own, so the alias is strong. */
+#define weak_alias(old, new) \
+	extern __typeof(old) new __attribute__((__alias__(#old)))
+hidden struct tm *__gmtime_r(const time_t *restrict, struct tm *restrict);
+#endif
+
 hidden int __days_in_month(int, int);
 hidden int __month_to_secs(int, int);
 hidden long long __year_to_secs(long long, int *);
