@@ -113,7 +113,18 @@ extern uint32_t LEON3_IrqCtrl_EIrq;
 /**
  * @brief Initializes the interrupt controller for the boot processor.
  *
- * @param[in, out] regs is the IRQ(A)MP register block address.
+ * The function sets the processor interrupt mask and the processor interrupt
+ * force register of the boot processor to zero.  It writes all ones to the
+ * interrupt clear register, which clears every pending interrupt.  Where the
+ * BSP uses the interrupt map, the function copies the interrupt map entry of
+ * each bus line into the interrupt map copy of the BSP.  It masks each entry
+ * by the count of controller lines.  Where the BSP determines the extended
+ * controller line at run time, the function reads it from the interrupt
+ * controller.
+ *
+ * @param[in, out] regs is the register block address of the first IRQ(A)MP
+ *   interrupt controller.  Only the first controller provides the interrupt
+ *   map registers.
  */
 void leon3_ext_irq_init( irqamp *regs );
 
