@@ -36,12 +36,6 @@
 
 #include <bsp/irq-generic.h>
 
-static void dummy_handler( void *arg )
-{
-  (void) arg;
-  /* This handler does nothing and is never executed. */
-}
-
 rtems_status_code rtems_interrupt_handler_iterate(
   rtems_vector_number                 vector,
   rtems_interrupt_per_handler_routine routine,
@@ -52,21 +46,21 @@ rtems_status_code rtems_interrupt_handler_iterate(
   rtems_vector_number    index;
   rtems_option           options;
   rtems_interrupt_entry *entry;
-  rtems_interrupt_handler check_lock_handler = NULL;
-  rtems_vector_number     modified_vector;
-
-  if ( routine != NULL ) {
-    check_lock_handler = dummy_handler;
-  }
+  rtems_vector_number    modified_vector;
 
   /*
-   * bsp_interrupt_check_and_lock does not call the handler, it only checks it
-   * for NULL. Casting routine to rtems_interrupt_handler is not safe so this
-   * uses a dummy handler for the check.
+   * The bsp_interrupt_check_and_lock() function compares the routine with NULL
+   * and never calls it.  ISO/IEC 9899:2024, section 6.3.2.3, paragraph 8
+   * permits the conversion of a pointer to a function of one type into a
+   * pointer to a function of another type.  The behavior is undefined only if
+   * the converted pointer calls a function of an incompatible type.
+   * Paragraph 4 of the same section converts a null pointer into a null
+   * pointer of the other type.  GCC exempts the type void (*)( void ) from
+   * -Wcast-function-type.
    */
   sc = bsp_interrupt_check_and_lock(
     vector,
-    check_lock_handler
+    (rtems_interrupt_handler) (void ( * )( void )) routine
   );
 
   if ( sc != RTEMS_SUCCESSFUL ) {
@@ -81,8 +75,8 @@ rtems_status_code rtems_interrupt_handler_iterate(
 
   index = bsp_interrupt_dispatch_index( modified_vector );
   entry = *bsp_interrupt_get_dispatch_table_slot( index );
-  options = bsp_interrupt_is_handler_unique( index ) ?
-    RTEMS_INTERRUPT_UNIQUE : RTEMS_INTERRUPT_SHARED;
+  options = bsp_interrupt_is_handler_unique( index ) ? RTEMS_INTERRUPT_UNIQUE
+                                                     : RTEMS_INTERRUPT_SHARED;
 
   while ( entry != NULL ) {
     ( *routine )( arg, entry->info, options, entry->handler, entry->arg );
