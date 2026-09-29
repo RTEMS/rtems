@@ -83,6 +83,73 @@ rtems_status_code leon3_irqmap_get(
   return RTEMS_SUCCESSFUL;
 }
 
+rtems_status_code leon3_irqmap_set(
+  rtems_vector_number bus_line,
+  rtems_vector_number controller_line
+)
+{
+#if LEON3_IRQMAP_BUS_LINE_COUNT != 0
+  rtems_interrupt_lock_context lock_context;
+  rtems_vector_number          current_controller_line;
+  uint32_t                     shift;
+  uint32_t                     value;
+  uint32_t                    *reg;
+#endif
+
+  if ( bus_line == 0 || bus_line >= BSP_INTERRUPT_VECTOR_COUNT ) {
+    return RTEMS_INVALID_NUMBER;
+  }
+
+  if ( controller_line > BSP_INTERRUPT_VECTOR_MAX_EXT ) {
+    return RTEMS_INVALID_NUMBER;
+  }
+
+#if LEON3_IRQMAP_BUS_LINE_COUNT == 0
+  if ( controller_line != bus_line ) {
+    return RTEMS_UNSATISFIED;
+  }
+#endif
+
+  if ( !bsp_interrupt_is_initialized() ) {
+    return RTEMS_INCORRECT_STATE;
+  }
+
+  if ( rtems_interrupt_is_in_progress() ) {
+    return RTEMS_CALLED_FROM_ISR;
+  }
+
+#if LEON3_IRQMAP_BUS_LINE_COUNT != 0
+  bsp_interrupt_lock();
+
+  current_controller_line = leon3_irqmap_get_unchecked( bus_line );
+
+  if (
+    current_controller_line != controller_line &&
+    *bsp_interrupt_get_dispatch_table_slot(
+      bsp_interrupt_dispatch_index( current_controller_line )
+    ) != NULL
+  ) {
+    bsp_interrupt_unlock();
+    return RTEMS_RESOURCE_IN_USE;
+  }
+
+  shift = 24 - 8 * ( bus_line % 4 );
+  reg = &LEON3_IrqCtrl_Regs->irqmap[ bus_line / 4 ];
+
+  LEON3_IRQCTRL_ACQUIRE( &lock_context );
+  value = grlib_load_32( reg );
+  value &= ~( UINT32_C( 0xff ) << shift );
+  value |= (uint32_t) controller_line << shift;
+  grlib_store_32( reg, value );
+  LEON3_IrqCtrl_Mapping[ bus_line ] = (uint8_t) controller_line;
+  LEON3_IRQCTRL_RELEASE( &lock_context );
+
+  bsp_interrupt_unlock();
+#endif
+
+  return RTEMS_SUCCESSFUL;
+}
+
 rtems_interrupt_lock LEON3_IrqCtrl_Lock = RTEMS_INTERRUPT_LOCK_INITIALIZER(
   "LEON3 IrqCtrl"
 );
