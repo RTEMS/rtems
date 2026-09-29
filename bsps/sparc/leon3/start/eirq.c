@@ -347,6 +347,7 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
 }
 
 #if defined( RTEMS_SMP )
+/* The parameter is a controller line. */
 static void leon3_interrupt_vector_enable( rtems_vector_number vector )
 {
   uint32_t       cpu_index;
@@ -356,10 +357,6 @@ static void leon3_interrupt_vector_enable( rtems_vector_number vector )
   uint32_t       unmasked;
   uint32_t       brdcst;
   irqamp        *regs;
-
-#if LEON3_IRQMAP_BUS_LINE_COUNT != 0
-  vector = leon3_irqmap_get_unchecked( vector );
-#endif
 
   if ( vector <= BSP_INTERRUPT_VECTOR_MAX_STD ) {
     affinity = leon3_interrupt_affinities[ vector ];
