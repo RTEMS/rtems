@@ -81,8 +81,21 @@
  *   - Check that the pending extended controller line called the interrupt
  *     handler of each tested interrupt vector exactly once.
  *
+ * - Get the interrupt vector of a bus line which maps to the controller line
+ *   of the extended interrupt.  Where the BSP uses an interrupt map, map the
+ *   bus line `TM27_IRQMAP_BUS_LINE` to this controller line. Install an
+ *   interrupt handler, enable the vector, raise it and wait for the handler.
+ *   Clear and disable the vector, remove the handler and restore the interrupt
+ *   map.
+ *
+ *   - Check that the pending controller line of the extended interrupt called
+ *     the interrupt handler exactly once.
+ *
  * @{
  */
+
+#define _RTEMS_TMTEST27
+#include <tm27.h>
 
 /**
  * @brief Test context for spec:/bsp/sparc/leon3/val/ext-irq-raise test case.
@@ -130,6 +143,12 @@ typedef struct {
    * @brief This member contains the interrupt vector which the handler saw.
    */
   rtems_vector_number handled_vector;
+
+  /**
+   * @brief This member contains the controller line to which the interrupt map
+   *   maps the bus line `TM27_IRQMAP_BUS_LINE` before the test.
+   */
+  rtems_vector_number saved_controller_line;
 } BspSparcLeon3ValExtIrqRaise_Context;
 
 static BspSparcLeon3ValExtIrqRaise_Context
@@ -292,6 +311,75 @@ static void BspSparcLeon3ValExtIrqRaise_Action_0(
 }
 
 /**
+ * @brief Get the interrupt vector of a bus line which maps to the controller
+ *   line of the extended interrupt.  Where the BSP uses an interrupt map, map
+ *   the bus line `TM27_IRQMAP_BUS_LINE` to this controller line. Install an
+ *   interrupt handler, enable the vector, raise it and wait for the handler.
+ *   Clear and disable the vector, remove the handler and restore the interrupt
+ *   map.
+ */
+static void BspSparcLeon3ValExtIrqRaise_Action_1(
+  BspSparcLeon3ValExtIrqRaise_Context *ctx
+)
+{
+  rtems_vector_number   vector;
+  rtems_status_code     sc;
+  rtems_interrupt_entry entry;
+
+  #if defined( TM27_IRQMAP_BUS_LINE )
+  vector = TM27_IRQMAP_BUS_LINE;
+  sc = leon3_irqmap_get( vector, &ctx->saved_controller_line );
+  T_rsc_success( sc );
+  sc = leon3_irqmap_set( vector, LEON3_IrqCtrl_EIrq );
+  T_rsc_success( sc );
+  #else
+  vector = LEON3_IrqCtrl_EIrq;
+  #endif
+
+  ctx->call_count = 0;
+  ctx->expected_vector = vector;
+
+  rtems_interrupt_entry_initialize(
+    &entry,
+    Handler,
+    ctx,
+    "Extended Interrupt"
+  );
+  sc = rtems_interrupt_entry_install( vector, RTEMS_INTERRUPT_UNIQUE, &entry );
+  T_rsc_success( sc );
+
+  sc = rtems_interrupt_vector_enable( vector );
+  T_rsc_success( sc );
+
+  sc = rtems_interrupt_raise( vector );
+  T_rsc_success( sc );
+
+  while ( ctx->call_count == 0 ) {
+    /* Wait */
+  }
+
+  sc = rtems_interrupt_clear( vector );
+  T_rsc_success( sc );
+
+  sc = rtems_interrupt_vector_disable( vector );
+  T_rsc_success( sc );
+
+  sc = rtems_interrupt_entry_remove( vector, &entry );
+  T_rsc_success( sc );
+
+  #if defined( TM27_IRQMAP_BUS_LINE )
+  sc = leon3_irqmap_set( vector, ctx->saved_controller_line );
+  T_rsc_success( sc );
+  #endif
+
+  /*
+   * Check that the pending controller line of the extended interrupt called
+   * the interrupt handler exactly once.
+   */
+  T_eq_u32( ctx->call_count, 1 );
+}
+
+/**
  * @fn void T_case_body_BspSparcLeon3ValExtIrqRaise( void )
  */
 T_TEST_CASE_FIXTURE(
@@ -304,6 +392,7 @@ T_TEST_CASE_FIXTURE(
   ctx = T_fixture_context();
 
   BspSparcLeon3ValExtIrqRaise_Action_0( ctx );
+  BspSparcLeon3ValExtIrqRaise_Action_1( ctx );
 }
 
 /** @} */
