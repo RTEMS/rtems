@@ -89,7 +89,11 @@ links:
 - role: build-dependency
   uid: bsps/fatal-sparc-leon3-cache-snooping-disabled-secondary
 - role: build-dependency
+  uid: bsps/fatal-sparc-leon3-cannot-raise-ipi
+- role: build-dependency
   uid: bsps/fatal-sparc-leon3-clock-initialization
+- role: build-dependency
+  uid: bsps/fatal-sparc-leon3-ipi-invalid-vector
 - role: build-dependency
   uid: bsps/validation-bsp-0
 type: build
