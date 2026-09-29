@@ -42,26 +42,70 @@
 
 #define BSP_INTERRUPT_VECTOR_MAX_STD 15 /* Standard IRQ controller */
 #define BSP_INTERRUPT_VECTOR_MAX_EXT 31 /* Extended IRQ controller */
-#define BSP_INTERRUPT_VECTOR_MAX_MAP 63 /* Extended IRQ controller with mapping registers */
+#define BSP_INTERRUPT_VECTOR_MAX_MAP \
+  63 /* Extended IRQ controller with mapping registers */
 
 #define BSP_INTERRUPT_VECTOR_COUNT ( BSP_INTERRUPT_VECTOR_MAX_EXT + 1 )
 
 /* The check is different depending on IRQ controller, runtime detected */
 #define BSP_INTERRUPT_CUSTOM_VALID_VECTOR
 
-#ifdef LEON3_IRQAMP_IRQMAP
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+/**
+ * @brief Gets the controller line of the bus line.
+ *
+ * Where the BSP uses no interrupt map, a bus line maps to the controller line
+ * of the same number.  Where the BSP uses the interrupt map, the directive
+ * gets the controller line to which the interrupt map connects the bus line.
+ *
+ * Bus lines which map to the same controller line share its interrupt
+ * handlers.  They also share its enable, pending and affinity state.
+ *
+ * @param bus_line is the bus line number.
+ *
+ * @param[out] controller_line is the pointer to an rtems_vector_number object.
+ *   When the directive call is successful, the number of the controller line
+ *   of the bus line will be stored in this object.  When the number specified
+ *   by `bus_line` is invalid, UINT32_MAX will be stored in this object.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The `controller_line` parameter was NULL.
+ *
+ * @retval ::RTEMS_INVALID_NUMBER The number specified by `bus_line` was
+ *   greater than or equal to the count of bus lines.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * - The directive may be called from within interrupt context.
+ *
+ * - The directive may be called from within device driver initialization
+ *   context.
+ *
+ * - The directive may be called from within task context.
+ *
+ * - The directive will not cause the calling task to be preempted.
+ * @endparblock
+ */
+rtems_status_code leon3_irqmap_get(
+  rtems_vector_number  bus_line,
+  rtems_vector_number *controller_line
+);
+
+#ifdef LEON3_IRQAMP_IRQMAP
 extern rtems_vector_number
   LEON3_IrqCtrl_Mapping[ BSP_INTERRUPT_VECTOR_MAX_MAP + 1 ];
 
-#ifdef __cplusplus
-}
+#define bsp_interrupt_vector_modify( v ) LEON3_IrqCtrl_Mapping[ ( v ) ]
 #endif
 
-#define bsp_interrupt_vector_modify( v ) LEON3_IrqCtrl_Mapping[ ( v ) ]
+#ifdef __cplusplus
+}
 #endif
 
 #endif /* LIBBSP_LEON3_IRQ_CONFIG_H */

@@ -52,20 +52,29 @@ uint32_t LEON3_IrqCtrl_EIrq;
 #ifdef LEON3_IRQAMP_IRQMAP
 /* Mapping from bus interrupt lines to IRQ(A)MP interrupt lines */
 rtems_vector_number LEON3_IrqCtrl_Mapping[ BSP_INTERRUPT_VECTOR_MAX_MAP + 1 ];
+#endif
 
 rtems_status_code leon3_irqmap_get(
   rtems_vector_number  bus_line,
-  rtems_vector_number *irqmp_line
+  rtems_vector_number *controller_line
 )
 {
+  if ( controller_line == NULL ) {
+    return RTEMS_INVALID_ADDRESS;
+  }
+
+#ifdef LEON3_IRQAMP_IRQMAP
   if ( bus_line > BSP_INTERRUPT_VECTOR_MAX_MAP ) {
+#else
+  if ( bus_line >= BSP_INTERRUPT_VECTOR_COUNT ) {
+#endif
+    *controller_line = UINT32_MAX;
     return RTEMS_INVALID_NUMBER;
   }
 
-  *irqmp_line = leon3_irqmap_get_unchecked( bus_line );
+  *controller_line = leon3_irqmap_get_unchecked( bus_line );
   return RTEMS_SUCCESSFUL;
 }
-#endif
 
 rtems_interrupt_lock LEON3_IrqCtrl_Lock = RTEMS_INTERRUPT_LOCK_INITIALIZER(
   "LEON3 IrqCtrl"
