@@ -57,6 +57,23 @@
 #define SIS_USE_SYNCHRONOUS_TRAP 0
 
 /*
+ * The test may change the interrupt map entry of this bus line.  No driver
+ * uses the bus line.
+ */
+#if LEON3_IRQMAP_BUS_LINE_COUNT == 32
+/*
+ * The GR740 assigns no peripheral to the bus line, see GR740-UM-DS, Table 9.
+ */
+#define TM27_IRQMAP_BUS_LINE 13
+#elif LEON3_IRQMAP_BUS_LINE_COUNT == 64
+/*
+ * The bus line carries the eFPGA fabric interrupt, which the plug and play
+ * information does not report, see GR765-DSUM, Table 5.
+ */
+#define TM27_IRQMAP_BUS_LINE 19
+#endif
+
+/*
  *  The synchronous trap is an arbitrarily chosen software trap.
  */
 
