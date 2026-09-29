@@ -159,7 +159,7 @@ static inline rtems_vector_number leon3_irqmap_get_unchecked(
   rtems_vector_number bus_line
 )
 {
-#ifdef LEON3_IRQAMP_IRQMAP
+#if LEON3_IRQMAP_BUS_LINE_COUNT != 0
   return LEON3_IrqCtrl_Mapping[ bus_line ];
 #else
   return bus_line;

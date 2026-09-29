@@ -1,0 +1,28 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- assert-in-set:
+  - 0
+  - 32
+  - 64
+- format-and-define: null
+build-type: option
+copyrights:
+- Copyright (C) 2026 Frontgrade Gaisler
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+default:
+- enabled-by: sparc/gr740
+  value: 32
+- enabled-by: sparc/gr765
+  value: 64
+- enabled-by: true
+  value: 0
+description: |
+  This option defines the count of bus lines of the IRQ(A)MP interrupt map.
+  The GR740 has 32 bus lines, and the GR765 has 64.  A value of zero specifies
+  that the BSP uses no interrupt map.
+enabled-by: true
+format: '{}'
+links: []
+name: LEON3_IRQMAP_BUS_LINE_COUNT
+type: build

@@ -17,5 +17,6 @@ format: '{}'
 links: []
 name: LEON3_IRQAMP_EXTENDED_INTERRUPT
 description: |
-  This option specifies the interrupt line of the IRQ(A)MP extended interrupt.
+  This option specifies the controller line of the IRQ(A)MP extended
+  interrupt.
 type: build

@@ -42,10 +42,19 @@
 
 #define BSP_INTERRUPT_VECTOR_MAX_STD 15 /* Standard IRQ controller */
 #define BSP_INTERRUPT_VECTOR_MAX_EXT 31 /* Extended IRQ controller */
-#define BSP_INTERRUPT_VECTOR_MAX_MAP \
-  63 /* Extended IRQ controller with mapping registers */
 
+#if LEON3_IRQMAP_BUS_LINE_COUNT != 0
+/*
+ * A bus line is an interrupt line of the system interrupt bus.  A controller
+ * line is an interrupt line of the IRQ(A)MP.  With an interrupt map, an
+ * interrupt vector is a bus line.  The dispatch table has one entry for each
+ * controller line.
+ */
+#define BSP_INTERRUPT_VECTOR_COUNT        LEON3_IRQMAP_BUS_LINE_COUNT
+#define BSP_INTERRUPT_DISPATCH_TABLE_SIZE ( BSP_INTERRUPT_VECTOR_MAX_EXT + 1 )
+#else
 #define BSP_INTERRUPT_VECTOR_COUNT ( BSP_INTERRUPT_VECTOR_MAX_EXT + 1 )
+#endif
 
 /* The check is different depending on IRQ controller, runtime detected */
 #define BSP_INTERRUPT_CUSTOM_VALID_VECTOR
@@ -97,9 +106,8 @@ rtems_status_code leon3_irqmap_get(
   rtems_vector_number *controller_line
 );
 
-#ifdef LEON3_IRQAMP_IRQMAP
-extern rtems_vector_number
-  LEON3_IrqCtrl_Mapping[ BSP_INTERRUPT_VECTOR_MAX_MAP + 1 ];
+#if LEON3_IRQMAP_BUS_LINE_COUNT != 0
+extern uint8_t LEON3_IrqCtrl_Mapping[ BSP_INTERRUPT_VECTOR_COUNT ];
 
 #define bsp_interrupt_vector_modify( v ) LEON3_IrqCtrl_Mapping[ ( v ) ]
 #endif

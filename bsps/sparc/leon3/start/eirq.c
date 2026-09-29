@@ -49,9 +49,20 @@
 uint32_t LEON3_IrqCtrl_EIrq;
 #endif
 
-#ifdef LEON3_IRQAMP_IRQMAP
+#if LEON3_IRQMAP_BUS_LINE_COUNT != 0
 /* Mapping from bus interrupt lines to IRQ(A)MP interrupt lines */
-rtems_vector_number LEON3_IrqCtrl_Mapping[ BSP_INTERRUPT_VECTOR_MAX_MAP + 1 ];
+uint8_t LEON3_IrqCtrl_Mapping[ BSP_INTERRUPT_VECTOR_COUNT ];
+
+/*
+ * A map field is eight bits wide.  A field value outside the dispatch table is
+ * a hardware fault.  The mask keeps the controller line inside the dispatch
+ * table also in this case.
+ */
+static uint8_t leon3_irqmap_controller_line( uint32_t field )
+{
+  return (uint8_t) ( field & ( BSP_INTERRUPT_DISPATCH_TABLE_SIZE - 1 ) );
+}
+
 #endif
 
 rtems_status_code leon3_irqmap_get(
@@ -63,11 +74,7 @@ rtems_status_code leon3_irqmap_get(
     return RTEMS_INVALID_ADDRESS;
   }
 
-#ifdef LEON3_IRQAMP_IRQMAP
-  if ( bus_line > BSP_INTERRUPT_VECTOR_MAX_MAP ) {
-#else
   if ( bus_line >= BSP_INTERRUPT_VECTOR_COUNT ) {
-#endif
     *controller_line = UINT32_MAX;
     return RTEMS_INVALID_NUMBER;
   }
@@ -91,25 +98,25 @@ void leon3_ext_irq_init( irqamp *regs )
     grlib_load_32( &regs->mpstat )
   );
 #endif
-#ifdef LEON3_IRQAMP_IRQMAP
+#if LEON3_IRQMAP_BUS_LINE_COUNT != 0
   for (
-    rtems_vector_number bus_line = 0; bus_line <= BSP_INTERRUPT_VECTOR_MAX_MAP;
+    rtems_vector_number bus_line = 0; bus_line < BSP_INTERRUPT_VECTOR_COUNT;
     bus_line += 4
   ) {
     uint32_t n = bus_line / 4;
     uint32_t irqmap_n = grlib_load_32( &LEON3_IrqCtrl_Regs->irqmap[ n ] );
 
-    LEON3_IrqCtrl_Mapping[ bus_line + 0 ] = IRQAMP_IRQMAP_IRQMAP_4_N_0_GET(
-      irqmap_n
+    LEON3_IrqCtrl_Mapping[ bus_line + 0 ] = leon3_irqmap_controller_line(
+      IRQAMP_IRQMAP_IRQMAP_4_N_0_GET( irqmap_n )
     );
-    LEON3_IrqCtrl_Mapping[ bus_line + 1 ] = IRQAMP_IRQMAP_IRQMAP_4_N_1_GET(
-      irqmap_n
+    LEON3_IrqCtrl_Mapping[ bus_line + 1 ] = leon3_irqmap_controller_line(
+      IRQAMP_IRQMAP_IRQMAP_4_N_1_GET( irqmap_n )
     );
-    LEON3_IrqCtrl_Mapping[ bus_line + 2 ] = IRQAMP_IRQMAP_IRQMAP_4_N_2_GET(
-      irqmap_n
+    LEON3_IrqCtrl_Mapping[ bus_line + 2 ] = leon3_irqmap_controller_line(
+      IRQAMP_IRQMAP_IRQMAP_4_N_2_GET( irqmap_n )
     );
-    LEON3_IrqCtrl_Mapping[ bus_line + 3 ] = IRQAMP_IRQMAP_IRQMAP_4_N_3_GET(
-      irqmap_n
+    LEON3_IrqCtrl_Mapping[ bus_line + 3 ] = leon3_irqmap_controller_line(
+      IRQAMP_IRQMAP_IRQMAP_4_N_3_GET( irqmap_n )
     );
   }
 #endif
@@ -121,8 +128,9 @@ bool bsp_interrupt_is_valid_vector( rtems_vector_number vector )
     return false;
   }
 
-#if defined( LEON3_IRQAMP_IRQMAP )
-  return vector <= BSP_INTERRUPT_VECTOR_MAX_MAP;
+#if LEON3_IRQMAP_BUS_LINE_COUNT != 0
+  return vector < BSP_INTERRUPT_VECTOR_COUNT &&
+         leon3_irqmap_get_unchecked( vector ) != 0;
 #elif defined( LEON3_IRQAMP_EXTENDED_INTERRUPT )
   return vector <= BSP_INTERRUPT_VECTOR_MAX_EXT;
 #else
@@ -184,7 +192,7 @@ rtems_status_code bsp_interrupt_get_attributes(
   bool is_standard_interrupt;
   bool is_maskable;
 
-#ifdef LEON3_IRQAMP_IRQMAP
+#if LEON3_IRQMAP_BUS_LINE_COUNT != 0
   vector = leon3_irqmap_get_unchecked( vector );
 #endif
 
@@ -216,7 +224,7 @@ rtems_status_code bsp_interrupt_is_pending(
   bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
   bsp_interrupt_assert( pending != NULL );
 
-#ifdef LEON3_IRQAMP_IRQMAP
+#if LEON3_IRQMAP_BUS_LINE_COUNT != 0
   vector = leon3_irqmap_get_unchecked( vector );
 #endif
 
@@ -242,7 +250,7 @@ rtems_status_code bsp_interrupt_raise( rtems_vector_number vector )
 
   bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
 
-#ifdef LEON3_IRQAMP_IRQMAP
+#if LEON3_IRQMAP_BUS_LINE_COUNT != 0
   vector = leon3_irqmap_get_unchecked( vector );
 #endif
 
@@ -272,7 +280,7 @@ rtems_status_code bsp_interrupt_raise_on(
   bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
   bsp_interrupt_assert( cpu_index < rtems_scheduler_get_processor_maximum() );
 
-#ifdef LEON3_IRQAMP_IRQMAP
+#if LEON3_IRQMAP_BUS_LINE_COUNT != 0
   vector = leon3_irqmap_get_unchecked( vector );
 #endif
 
@@ -293,7 +301,7 @@ rtems_status_code bsp_interrupt_clear( rtems_vector_number vector )
 
   bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
 
-#ifdef LEON3_IRQAMP_IRQMAP
+#if LEON3_IRQMAP_BUS_LINE_COUNT != 0
   vector = leon3_irqmap_get_unchecked( vector );
 #endif
 
@@ -323,7 +331,7 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
 
   bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
 
-#ifdef LEON3_IRQAMP_IRQMAP
+#if LEON3_IRQMAP_BUS_LINE_COUNT != 0
   vector = leon3_irqmap_get_unchecked( vector );
 #endif
 
@@ -345,7 +353,7 @@ static void leon3_interrupt_vector_enable( rtems_vector_number vector )
   uint32_t       brdcst;
   irqamp        *regs;
 
-#ifdef LEON3_IRQAMP_IRQMAP
+#if LEON3_IRQMAP_BUS_LINE_COUNT != 0
   vector = leon3_irqmap_get_unchecked( vector );
 #endif
 
@@ -399,7 +407,7 @@ rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number vector )
 
   bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
 
-#ifdef LEON3_IRQAMP_IRQMAP
+#if LEON3_IRQMAP_BUS_LINE_COUNT != 0
   vector = leon3_irqmap_get_unchecked( vector );
 #endif
 
@@ -435,7 +443,7 @@ rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number vector )
 
   bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
 
-#ifdef LEON3_IRQAMP_IRQMAP
+#if LEON3_IRQMAP_BUS_LINE_COUNT != 0
   vector = leon3_irqmap_get_unchecked( vector );
 #endif
 
@@ -508,7 +516,7 @@ rtems_status_code bsp_interrupt_set_affinity(
   uint32_t                     bit;
   irqamp                      *regs;
 
-#ifdef LEON3_IRQAMP_IRQMAP
+#if LEON3_IRQMAP_BUS_LINE_COUNT != 0
   rtems_vector_number irq_vector;
 
   if ( leon3_irqmap_get( vector, &irq_vector ) != RTEMS_SUCCESSFUL ) {
@@ -549,7 +557,7 @@ rtems_status_code bsp_interrupt_get_affinity(
   Processor_mask     *affinity
 )
 {
-#ifdef LEON3_IRQAMP_IRQMAP
+#if LEON3_IRQMAP_BUS_LINE_COUNT != 0
   rtems_vector_number irq_vector;
 
   if ( leon3_irqmap_get( vector, &irq_vector ) != RTEMS_SUCCESSFUL ) {
