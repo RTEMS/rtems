@@ -13,5 +13,6 @@ includes: []
 install: []
 links: []
 source:
+- testsuites/validation/bsps/tc-sparc-leon3-ext-irq-init.c
 - testsuites/validation/bsps/tc-sparc-leon3-irqmap-get.c
 type: build
