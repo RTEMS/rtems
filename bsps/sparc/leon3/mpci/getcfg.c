@@ -17,6 +17,7 @@
 
 #include <rtems.h>
 #include <bsp.h>
+#include <bsp/irqimpl.h>
 #include <leon.h>
 #include <shm_driver.h>
 
@@ -63,7 +64,8 @@ void Shm_Get_configuration( uint32_t localnode, shm_config_table **shmcfg )
     LEON3_IrqCtrl_Regs->piforce[ LEON3_Cpu_Index ]
   );
   if ( BSP_shm_cfgtbl.Intr.value == 0 ) {
-    BSP_shm_cfgtbl.Intr.value = 1 << LEON3_mp_irq; /* Use default MP-IRQ */
+    BSP_shm_cfgtbl.Intr.value = 1U
+                                << leon3_irqmap_get_unchecked( LEON3_mp_irq );
   }
   BSP_shm_cfgtbl.Intr.length = 4;
 

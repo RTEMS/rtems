@@ -49,10 +49,11 @@
 #include <rtems/sysinit.h>
 
 #if defined( RTEMS_SMP ) || defined( RTEMS_MULTIPROCESSING )
-/* Irq used by shared memory driver and for inter-processor interrupts.
- * Can be overridden by being defined in the application.
+/*
+ * The bus line of the shared memory driver and of the inter-processor
+ * interrupts.  An application may define it.
  */
-const unsigned char LEON3_mp_irq __attribute__(( weak )) = 14;
+const unsigned char LEON3_mp_irq __attribute__(( weak )) = LEON3_IPI_BUS_LINE;
 #endif
 
 /*

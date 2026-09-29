@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- format-and-define: null
+build-type: option
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+default:
+- enabled-by:
+  - sparc/gr740
+  - sparc/gr765
+  value: 0
+- enabled-by: true
+  value: 14
+description: |
+  This option defines the initial value of LEON3_mp_irq, the bus line of the
+  inter-processor interrupt and of the shared memory driver.  Where the BSP
+  uses the interrupt map, the value zero selects bus line 0.  No peripheral
+  drives this bus line, and the BSP maps it to the controller line defined by
+  LEON3_IPI_CONTROLLER_LINE.
+enabled-by: true
+format: '{}'
+links: []
+name: LEON3_IPI_BUS_LINE
+type: build

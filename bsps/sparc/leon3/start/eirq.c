@@ -119,19 +119,28 @@ void leon3_ext_irq_init( irqamp *regs )
       IRQAMP_IRQMAP_IRQMAP_4_N_3_GET( irqmap_n )
     );
   }
+
+#if defined( RTEMS_SMP ) || defined( RTEMS_MULTIPROCESSING )
+  /*
+   * No peripheral drives bus line 0.  The copy maps it to the controller line
+   * of the inter-processor interrupt.
+   */
+  LEON3_IrqCtrl_Mapping[ 0 ] = LEON3_IPI_CONTROLLER_LINE;
+#endif
 #endif
 }
 
 bool bsp_interrupt_is_valid_vector( rtems_vector_number vector )
 {
+#if LEON3_IRQMAP_BUS_LINE_COUNT != 0
+  return vector < BSP_INTERRUPT_VECTOR_COUNT &&
+         leon3_irqmap_get_unchecked( vector ) != 0;
+#else
   if ( vector == 0 ) {
     return false;
   }
 
-#if LEON3_IRQMAP_BUS_LINE_COUNT != 0
-  return vector < BSP_INTERRUPT_VECTOR_COUNT &&
-         leon3_irqmap_get_unchecked( vector ) != 0;
-#elif defined( LEON3_IRQAMP_EXTENDED_INTERRUPT )
+#if defined( LEON3_IRQAMP_EXTENDED_INTERRUPT )
   return vector <= BSP_INTERRUPT_VECTOR_MAX_EXT;
 #else
   if ( LEON3_IrqCtrl_EIrq > 0 ) {
@@ -139,6 +148,7 @@ bool bsp_interrupt_is_valid_vector( rtems_vector_number vector )
   }
 
   return vector <= BSP_INTERRUPT_VECTOR_MAX_STD;
+#endif
 #endif
 }
 

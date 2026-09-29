@@ -69,6 +69,8 @@ extern "C" {
  * Where the BSP uses no interrupt map, a bus line maps to the controller line
  * of the same number.  Where the BSP uses the interrupt map, the directive
  * gets the controller line to which the interrupt map connects the bus line.
+ * In SMP and multiprocessing configurations, bus line 0 connects to the
+ * controller line defined by the BSP option LEON3_IPI_CONTROLLER_LINE.
  *
  * Bus lines which map to the same controller line share its interrupt
  * handlers.  They also share its enable, pending and affinity state.

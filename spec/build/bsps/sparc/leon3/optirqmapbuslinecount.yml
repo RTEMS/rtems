@@ -6,6 +6,7 @@ actions:
   - 32
   - 64
 - format-and-define: null
+- env-enable: null
 build-type: option
 copyrights:
 - Copyright (C) 2026 Frontgrade Gaisler

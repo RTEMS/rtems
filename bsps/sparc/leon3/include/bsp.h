@@ -213,9 +213,14 @@ RTEMS_DEPRECATED static inline void BSP_shared_interrupt_mask( int irq )
 }
 
 #if defined( RTEMS_SMP ) || defined( RTEMS_MULTIPROCESSING )
-/* Irq used by the shared memory driver and for inter-processor interrupts.
- * The variable is weakly linked. Redefine the variable in your application
- * to override the BSP default.
+/**
+ * @brief This constant is the bus line of the shared memory driver and of the
+ *   inter-processor interrupts.
+ *
+ * The BSP option LEON3_IPI_BUS_LINE defines the initial value.  The constant
+ * is weakly linked, so an application may define it.  Where the BSP uses the
+ * interrupt map, keep the value zero.  The BSP maps bus line 0 to the
+ * controller line defined by the BSP option LEON3_IPI_CONTROLLER_LINE.
  */
 extern const unsigned char LEON3_mp_irq;
 #endif

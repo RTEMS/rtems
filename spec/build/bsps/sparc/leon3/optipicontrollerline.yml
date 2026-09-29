@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- assert-in-set:
+  - 13
+  - 14
+- format-and-define: null
+build-type: option
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+default:
+- enabled-by: true
+  value: 14
+description: |
+  This option defines the controller line of the inter-processor interrupt.
+  Only a BSP which uses the interrupt map uses the option.  The BSP maps bus
+  line 0 to this controller line in the copy of the interrupt map and leaves
+  the interrupt map register unchanged.  The GR765 keeps the controller lines
+  13 and 14 free of peripherals after reset, see GR765-DSUM, section 14.2.3.
+  Controller line 15 is not maskable.
+enabled-by: LEON3_IRQMAP_BUS_LINE_COUNT
+format: '{}'
+links: []
+name: LEON3_IPI_CONTROLLER_LINE
+type: build

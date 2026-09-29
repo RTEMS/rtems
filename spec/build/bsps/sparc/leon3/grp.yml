@@ -47,7 +47,11 @@ links:
 - role: build-dependency
   uid: optirqampextirq
 - role: build-dependency
+  uid: optipibusline
+- role: build-dependency
   uid: optirqmapbuslinecount
+- role: build-dependency
+  uid: optipicontrollerline
 - role: build-dependency
   uid: optirqampts
 - role: build-dependency
