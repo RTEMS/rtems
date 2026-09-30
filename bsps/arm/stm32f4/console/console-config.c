@@ -26,6 +26,7 @@
  */
 
 #include <rtems/bspIo.h>
+#include <rtems/sysinit.h>
 
 #include <libchip/serial.h>
 
@@ -109,14 +110,34 @@ console_tbl Console_Configuration_Ports [] = {
 
 unsigned long Console_Configuration_Count = PORT_COUNT;
 
-static void output_char(char c)
+static void stm32f4_output_char(char c)
 {
-  const console_fns *con =
-    Console_Configuration_Ports [Console_Port_Minor].pDeviceFns;
-
-  con->deviceWritePolled((int) Console_Port_Minor, c);
+  stm32f4_usart_fns.deviceWritePolled((int) Console_Port_Minor, c);
 }
 
-BSP_output_char_function_type BSP_output_char = output_char;
+static void stm32f4_output_char_init()
+{
+  stm32f4_usart_fns.deviceInitialize((int) Console_Port_Minor);
 
-BSP_polling_getchar_function_type BSP_poll_char = NULL;
+  BSP_output_char = stm32f4_output_char;
+}
+
+static void stm32f4_output_char_init_early(char c)
+{
+  stm32f4_output_char_init();
+  stm32f4_output_char(c);
+}
+
+static int stm32f4_poll_char(void)
+{
+  return stm32f4_usart_read_polled((int) Console_Port_Minor);
+}
+BSP_output_char_function_type BSP_output_char = stm32f4_output_char_init_early;
+
+BSP_polling_getchar_function_type BSP_poll_char = stm32f4_poll_char;
+
+RTEMS_SYSINIT_ITEM(
+  stm32f4_output_char_init,
+  RTEMS_SYSINIT_BSP_START,
+  RTEMS_SYSINIT_ORDER_LAST_BUT_5
+);

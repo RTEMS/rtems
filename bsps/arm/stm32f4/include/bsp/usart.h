@@ -49,6 +49,7 @@ extern "C" {
 
 extern const console_fns stm32f4_usart_fns;
 
+int stm32f4_usart_read_polled(int minor);
 /** @} */
 
 #ifdef __cplusplus
