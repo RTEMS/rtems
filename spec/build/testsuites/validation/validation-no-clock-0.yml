@@ -67,6 +67,7 @@ source:
 - testsuites/validation/tc-pthread-join.c
 - testsuites/validation/tc-pthread-setcancelstate.c
 - testsuites/validation/tc-pthread-setcanceltype.c
+- testsuites/validation/tc-pthread-testcancel.c
 - testsuites/validation/tc-ratemon-cancel.c
 - testsuites/validation/tc-ratemon-create.c
 - testsuites/validation/tc-ratemon-delete.c
