@@ -22,6 +22,9 @@
  * - Control of workers: SendEvents(), ReceiveAnyEvents(), and
  *   ReceiveAllEvents().
  *
+ * - Task life: RestartTask(), RequestLifeChangesWithinISR(),
+ *   SetCancelability(), and DisableCancelability().
+ *
  * - Mutexes: CreateMutex(), ObtainMutex(), ReleaseMutex(), and DeleteMutex().
  *
  * - Time: ClockTick(), TimecounterTick(), SetTimecountCounter(),
@@ -299,6 +302,69 @@ void ResumeTask( rtems_id id );
  * @retval false The task is not suspended.
  */
 bool IsTaskSuspended( rtems_id id );
+
+/**
+ * @brief Restarts the task.
+ *
+ * The test records a failure, if rtems_task_restart() does not succeed.
+ *
+ * @param id is the identifier of the task.
+ * @param arg is the argument of the task entry.
+ */
+void RestartTask( rtems_id id, void *arg );
+
+/**
+ * @brief Requests life changes of the task within the interrupt service
+ *   routine of the call within ISR support.
+ *
+ * The function issues both requests in one interrupt service routine.  The
+ * restart request comes first.  The test records a failure, if
+ * rtems_task_restart() or pthread_cancel() does not succeed.
+ *
+ * @param id is the identifier of the task.  pthread_self() returns this
+ *   identifier in the task.
+ * @param arg is the argument of the task entry of the restarted task.
+ * @param restart is true, if the function shall request a restart of the
+ *   task.
+ * @param cancel is true, if the function shall request a cancellation of the
+ *   task.
+ */
+void RequestLifeChangesWithinISR(
+  rtems_id id,
+  void    *arg,
+  bool     restart,
+  bool     cancel
+);
+
+/**
+ * @brief Sets the cancel type and then the cancel state of the executing
+ *   thread.
+ *
+ * The thread acts upon a pending request in this call, if the state is
+ * PTHREAD_CANCEL_ENABLE and the type is PTHREAD_CANCEL_ASYNCHRONOUS.  The test
+ * records a failure, if pthread_setcanceltype() or pthread_setcancelstate()
+ * does not succeed.
+ *
+ * @param state is the cancel state to set.
+ * @param type is the cancel type to set.
+ */
+void SetCancelability( int state, int type );
+
+/**
+ * @brief Sets the cancel state of the executing thread to
+ *   PTHREAD_CANCEL_DISABLE and then its cancel type to
+ *   PTHREAD_CANCEL_DEFERRED.
+ *
+ * A request of a later cancellation or restart of the thread stays pending.
+ * The test records a failure, if pthread_setcancelstate() or
+ * pthread_setcanceltype() does not succeed.
+ *
+ * @param[out] old_state is the pointer to an int object.  When the pointer is
+ *   not NULL, the function stores the previous cancel state in the object.
+ * @param[out] old_type is the pointer to an int object.  When the pointer is
+ *   not NULL, the function stores the previous cancel type in the object.
+ */
+void DisableCancelability( int *old_state, int *old_type );
 
 /**
  * @brief Gets the pending events of the executing task.

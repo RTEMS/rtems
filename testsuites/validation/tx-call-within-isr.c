@@ -41,6 +41,8 @@
 
 #include "tx-support.h"
 
+#include <pthread.h>
+
 #include <rtems/sysinit.h>
 #include <rtems/test.h>
 #include <rtems/score/chainimpl.h>
@@ -95,8 +97,7 @@ static void CallWithinISRHandler( void *arg )
     CallWithinISRRequest        *request;
 
     rtems_interrupt_lock_acquire( &ctx->lock, &lock_context );
-    request = (CallWithinISRRequest *)
-      _Chain_Get_unprotected( &ctx->pending );
+    request = (CallWithinISRRequest *) _Chain_Get_unprotected( &ctx->pending );
     rtems_interrupt_lock_release( &ctx->lock, &lock_context );
 
     if ( request == NULL ) {
@@ -184,7 +185,7 @@ static void CallWithinISRIsHandlerInstalled(
   (void) option;
   (void) handler_arg;
 
-  if ( handler == (void *)CallWithinISRHandler && handler_arg == NULL ) {
+  if ( handler == (void *) CallWithinISRHandler && handler_arg == NULL ) {
     *(bool *) arg = true;
   }
 }
@@ -245,6 +246,47 @@ rtems_status_code ClearSoftwareInterrupt( rtems_vector_number vector )
 #endif
 
   return rtems_interrupt_clear( vector );
+}
+
+typedef struct {
+  rtems_id id;
+  void    *arg;
+  bool     restart;
+  bool     cancel;
+} LifeChanges;
+
+static void RequestLifeChanges( void *arg )
+{
+  const LifeChanges *changes;
+
+  changes = arg;
+
+  if ( changes->restart ) {
+    RestartTask( changes->id, changes->arg );
+  }
+
+  if ( changes->cancel ) {
+    int eno;
+
+    eno = pthread_cancel( changes->id );
+    T_quiet_eq_int( eno, 0 );
+  }
+}
+
+void RequestLifeChangesWithinISR(
+  rtems_id id,
+  void    *arg,
+  bool     restart,
+  bool     cancel
+)
+{
+  LifeChanges changes;
+
+  changes.id = id;
+  changes.arg = arg;
+  changes.restart = restart;
+  changes.cancel = cancel;
+  CallWithinISR( RequestLifeChanges, &changes );
 }
 
 static void CallWithinISRInitialize( void )

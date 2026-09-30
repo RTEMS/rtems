@@ -49,6 +49,7 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/rtems/semimpl.h>
 
+#include <pthread.h>
 #include <string.h>
 #include <sys/time.h>
 
@@ -117,6 +118,34 @@ bool IsTaskSuspended( rtems_id id )
   T_quiet_true( sc == RTEMS_SUCCESSFUL || sc == RTEMS_ALREADY_SUSPENDED );
 
   return sc == RTEMS_ALREADY_SUSPENDED;
+}
+
+void RestartTask( rtems_id id, void *arg )
+{
+  rtems_status_code sc;
+
+  sc = rtems_task_restart( id, (rtems_task_argument) arg );
+  T_quiet_rsc_success( sc );
+}
+
+void SetCancelability( int state, int type )
+{
+  int eno;
+
+  eno = pthread_setcanceltype( type, NULL );
+  T_quiet_eq_int( eno, 0 );
+  eno = pthread_setcancelstate( state, NULL );
+  T_quiet_eq_int( eno, 0 );
+}
+
+void DisableCancelability( int *old_state, int *old_type )
+{
+  int eno;
+
+  eno = pthread_setcancelstate( PTHREAD_CANCEL_DISABLE, old_state );
+  T_quiet_eq_int( eno, 0 );
+  eno = pthread_setcanceltype( PTHREAD_CANCEL_DEFERRED, old_type );
+  T_quiet_eq_int( eno, 0 );
 }
 
 rtems_event_set QueryPendingEvents( void )
