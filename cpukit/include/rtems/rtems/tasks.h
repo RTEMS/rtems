@@ -9,6 +9,7 @@
  */
 
 /*
+ * Copyright (C) 2026 Abdullah Wasiq
  * Copyright (C) 2020, 2021 embedded brains GmbH & Co. KG
  * Copyright (C) 1988, 2023 On-Line Applications Research Corporation (OAR)
  *
@@ -59,6 +60,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <sys/_timespec.h>
 #include <sys/cpuset.h>
 #include <rtems/rtems/attr.h>
 #include <rtems/rtems/modes.h>
@@ -1846,25 +1848,33 @@ rtems_status_code rtems_task_set_affinity(
   const cpu_set_t *cpuset
 );
 
+/* Generated from spec:/rtems/task/if/get-cpu-usage */
+
 /**
  * @ingroup RTEMSAPIClassicTasks
  *
- * @brief Returns CPU usage time for a specific task.
+ * @brief Gets the processor time used by the task.
  *
- * @param id is the task identifier.
+ * @param id is the task identifier.  The constant #RTEMS_SELF may be used to
+ *   specify the calling task.
  *
- * @param[out] ts is a pointer to a timestamp structure. When the directive
- *   call is successful, the CPU usage time used by the specified id will be
- *   stored here.
+ * @param[out] ts is the pointer to a struct timespec object.  When the
+ *   directive call is successful, the processor time used by the task will be
+ *   stored in this object.
  *
- * This directive retrieves the cpu usage time under the specified id.
+ * This directive returns the processor time which the task specified by
+ * ``id`` used throughout its lifetime.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``ts`` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_ID There was no task associated with the identifier
  *   specified by ``id``.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The ``ts`` parameter was NULL.
+ * @par Notes
+ * The rtems_cpu_usage_reset() directive does not change the processor time
+ * which this directive returns.
  *
  * @par Constraints
  * @parblock
@@ -1880,10 +1890,7 @@ rtems_status_code rtems_task_set_affinity(
  * - The directive will not cause the calling task to be preempted.
  * @endparblock
  */
-rtems_status_code rtems_task_get_cpu_usage(
-  rtems_id id,
-  struct timespec *ts
-);
+rtems_status_code rtems_task_get_cpu_usage( rtems_id id, struct timespec *ts );
 
 /* Generated from spec:/rtems/task/if/iterate */
 
