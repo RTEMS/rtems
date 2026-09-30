@@ -447,7 +447,11 @@ Thread_Cancel_state _Thread_Cancel(
 
   _Thread_State_acquire( the_thread, &lock_context );
 
-  _Thread_Set_exit_value( the_thread, PTHREAD_CANCELED );
+  /* A terminating thread keeps the exit value of its termination. */
+  if ( ( the_thread->Life.state & THREAD_LIFE_TERMINATING ) == 0 ) {
+    _Thread_Set_exit_value( the_thread, PTHREAD_CANCELED );
+  }
+
   previous = _Thread_Change_life_locked(
     the_thread,
     life_states_to_clear,
