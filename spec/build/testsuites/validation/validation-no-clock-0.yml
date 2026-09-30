@@ -62,6 +62,7 @@ source:
 - testsuites/validation/tc-part-ident.c
 - testsuites/validation/tc-part-return.c
 - testsuites/validation/tc-part.c
+- testsuites/validation/tc-pthread-setcancelstate.c
 - testsuites/validation/tc-ratemon-cancel.c
 - testsuites/validation/tc-ratemon-create.c
 - testsuites/validation/tc-ratemon-delete.c
