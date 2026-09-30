@@ -103,6 +103,7 @@ source:
 - testsuites/validation/tc-task-delete.c
 - testsuites/validation/tc-task-exit.c
 - testsuites/validation/tc-task-get-affinity.c
+- testsuites/validation/tc-task-get-cpu-usage.c
 - testsuites/validation/tc-task-get-priority.c
 - testsuites/validation/tc-task-get-scheduler.c
 - testsuites/validation/tc-task-ident.c
