@@ -98,6 +98,7 @@ static int _POSIX_Threads_Join( pthread_t thread, void **value_ptr )
 
 int pthread_join( pthread_t thread, void **value_ptr )
 {
+#if defined( RTEMS_POSIX_API )
   int error;
 
   do {
@@ -105,4 +106,7 @@ int pthread_join( pthread_t thread, void **value_ptr )
   } while ( error == EINTR );
 
   return error;
+#else
+  return _POSIX_Threads_Join( thread, value_ptr );
+#endif
 }
