@@ -438,12 +438,8 @@ Thread_Cancel_state _Thread_Cancel(
   Thread_Life_state life_states_to_clear
 )
 {
-  (void) executing;
-
   ISR_lock_Context  lock_context;
   Thread_Life_state previous;
-
-  _Assert( the_thread != executing );
 
   _Thread_State_acquire( the_thread, &lock_context );
 
@@ -463,6 +459,16 @@ Thread_Cancel_state _Thread_Cancel(
     _Thread_State_release( the_thread, &lock_context );
     _Thread_Make_zombie( the_thread );
     return THREAD_CANCEL_DONE;
+  }
+
+  /*
+   * The executing thread acts upon the request in its life action handler.
+   * The thread dispatch runs the handler unless the thread life protection or
+   * the deferred life changes block the request.
+   */
+  if ( the_thread == executing ) {
+    _Thread_State_release( the_thread, &lock_context );
+    return THREAD_CANCEL_IN_PROGRESS;
   }
 
   _Thread_Try_life_change_request( the_thread, previous, &lock_context );

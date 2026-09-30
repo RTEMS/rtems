@@ -420,6 +420,10 @@ typedef enum {
 /**
  * @brief Cancels the thread.
  *
+ * The thread may be the executing thread.  It then acts upon the request at
+ * the next thread dispatch, unless the thread life protection or the deferred
+ * life changes block the request.
+ *
  * @param[in, out] the_thread is the thread to cancel.
 
  * @param[in, out] executing is the currently executing thread.
