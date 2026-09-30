@@ -261,7 +261,11 @@ static void test_getprop_address_map(
   rc = rtems_fdt_getprop_address_map( handle, buffer, name, &addr_map );
   rtems_test_assert( rc == 0 );
 
-  rtems_test_assert( memcmp( &addr_map, exp_map, sizeof( addr_map ) ) == 0 );
+  rtems_test_assert( addr_map.node == exp_map->node );
+  rtems_test_assert( addr_map.address == exp_map->address );
+  rtems_test_assert( addr_map.size == exp_map->size );
+  rtems_test_assert( addr_map.address_cells == exp_map->address_cells );
+  rtems_test_assert( addr_map.size_cells == exp_map->size_cells );
 
   rc = rtems_fdt_getprop_address_cells( handle, addr_map.node );
   rtems_test_assert( rc == addr_map.address_cells );
