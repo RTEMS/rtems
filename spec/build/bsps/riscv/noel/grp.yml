@@ -37,6 +37,8 @@ links:
 - role: build-dependency
   uid: ../optextirqmax
 - role: build-dependency
+  uid: ../optplicprobeprio
+- role: build-dependency
   uid: ../../optfdtcpyro
 - role: build-dependency
   uid: ../../optfdtmxsz

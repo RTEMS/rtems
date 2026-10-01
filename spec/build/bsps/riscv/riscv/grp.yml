@@ -23,6 +23,8 @@ links:
 - role: build-dependency
   uid: ../optextirqmax
 - role: build-dependency
+  uid: ../optplicprobeprio
+- role: build-dependency
   uid: ../grp
 - role: build-dependency
   uid: ../optrambegin

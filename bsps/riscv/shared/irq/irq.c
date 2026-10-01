@@ -70,6 +70,16 @@ riscv_plic_irq_to_cpu[RISCV_MAXIMUM_EXTERNAL_INTERRUPTS];
 
 RTEMS_INTERRUPT_LOCK_DEFINE(static, riscv_plic_lock, "PLIC")
 
+/*
+ * The PLIC priority of an interrupt source is a WARL register.  A PLIC may
+ * implement fewer than 32 bits of it.
+ */
+#ifdef RISCV_PLIC_PROBE_PRIORITY_BITS
+static uint32_t riscv_plic_maximum_priority;
+#else
+#define riscv_plic_maximum_priority UINT32_MAX
+#endif
+
 void _RISCV_Interrupt_dispatch(uintptr_t cause, Per_CPU_Control *cpu_self)
 {
 #if defined(RISCV_USE_S_MODE) && !defined(RTEMS_SMP)
@@ -276,6 +286,16 @@ static void riscv_plic_init(void)
 
   interrupt_count = riscv_plic_get_interrupt_count();
 
+#ifdef RISCV_PLIC_PROBE_PRIORITY_BITS
+  /*
+   * A PLIC has at least one interrupt source.  The register keeps only the
+   * implemented bits.  The priority of the source is set by
+   * riscv_plic_cpu_0_init() below.
+   */
+  plic->priority[1] = UINT32_MAX;
+  riscv_plic_maximum_priority = plic->priority[1];
+#endif
+
   /*
    * Each interrupt enable register contains exactly 32 enable bits.
    * Calculate the enable register count based on the number of interrupts
@@ -367,8 +387,7 @@ rtems_status_code bsp_interrupt_get_attributes(
   attributes->can_get_affinity = is_external;
   attributes->can_set_affinity = is_external;
 
-  /* The PLIC priority is defined by a 32-bit WARL register */
-  attributes->maximum_priority = UINT32_MAX;
+  attributes->maximum_priority = riscv_plic_maximum_priority;
   attributes->can_get_priority = is_external;
   attributes->can_set_priority = is_external;
 
@@ -681,8 +700,15 @@ rtems_status_code bsp_interrupt_set_priority(
   if (!RISCV_INTERRUPT_VECTOR_IS_EXTERNAL(vector)) {
     return RTEMS_UNSATISFIED;
   }
+
+#ifdef RISCV_PLIC_PROBE_PRIORITY_BITS
+  if (priority > riscv_plic_maximum_priority) {
+    return RTEMS_INVALID_PRIORITY;
+  }
+#endif
+
   riscv_plic_get()->priority[RISCV_INTERRUPT_VECTOR_EXTERNAL_TO_INDEX(vector)] =
-    UINT32_MAX - priority;
+    riscv_plic_maximum_priority - priority;
   return RTEMS_SUCCESSFUL;
 }
 
@@ -698,7 +724,7 @@ rtems_status_code bsp_interrupt_get_priority(
     return RTEMS_UNSATISFIED;
   }
 
-  *priority = UINT32_MAX -
+  *priority = riscv_plic_maximum_priority -
     riscv_plic_get()->priority[RISCV_INTERRUPT_VECTOR_EXTERNAL_TO_INDEX(vector)];
   return RTEMS_SUCCESSFUL;
 }

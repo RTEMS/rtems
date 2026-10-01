@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+default:
+- enabled-by: bsps/riscv/noel
+  value: true
+- enabled-by: true
+  value: false
+description: |
+  If this option is enabled, then the PLIC driver probes the implemented bits
+  of the interrupt source priority registers at start.  The probed value is
+  the maximum interrupt priority.  Otherwise, the maximum interrupt priority is
+  UINT32_MAX.
+enabled-by: true
+links: []
+name: RISCV_PLIC_PROBE_PRIORITY_BITS
+type: build
