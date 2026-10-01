@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- format-and-define: null
+build-type: option
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+default:
+- enabled-by: riscv/gr765
+  value: 0xff908000
+description: |
+  This option defines the base address of the GPTIMER 0 register block.
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: GRLIB_GPTIMER_BASE
+type: build

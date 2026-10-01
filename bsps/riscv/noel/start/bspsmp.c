@@ -78,6 +78,9 @@ void bsp_start_on_secondary_processor( Per_CPU_Control *cpu_self )
   }
 }
 
+#if !defined( GRLIB_HART_COUNT )
+#include <grlib/ambapp.h>
+
 static int for_each_hart( struct ambapp_dev *dev, int index, void *arg )
 {
   uint32_t *count = (uint32_t *) arg;
@@ -105,9 +108,15 @@ static uint32_t grlib_get_cpu_count( void )
   return cpu_count;
 }
 
+#endif
+
 uint32_t _CPU_SMP_Initialize( void )
 {
+#if defined( GRLIB_HART_COUNT )
+  return GRLIB_HART_COUNT;
+#else
   return grlib_get_cpu_count();
+#endif
 }
 
 bool _CPU_SMP_Start_processor( uint32_t cpu_index )

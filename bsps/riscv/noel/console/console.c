@@ -76,6 +76,15 @@ static rtems_termios_device_context *grlib_console_get_context( int index )
   return &uart->base;
 }
 
+#if defined( GRLIB_APBUART_BASE ) && defined( GRLIB_APBUART_IRQ )
+static void grlib_console_scan_uarts( void )
+{
+  apbuarts[ 0 ].regs = (apbuart *) GRLIB_APBUART_BASE;
+  apbuarts[ 0 ].irq = RISCV_INTERRUPT_VECTOR_EXTERNAL( GRLIB_APBUART_IRQ );
+  apbuarts[ 0 ].freq_hz = grlib_processor_local_bus_frequency();
+  uarts = 1;
+}
+#else
 /* AMBA PP find routine. Extract AMBA PnP information into data structure. */
 static int find_matching_apbuart(
   struct ambapp_dev *dev,
@@ -119,6 +128,7 @@ static void grlib_console_scan_uarts( void )
     NULL
   );
 }
+#endif
 
 rtems_device_driver console_initialize(
   rtems_device_major_number major,

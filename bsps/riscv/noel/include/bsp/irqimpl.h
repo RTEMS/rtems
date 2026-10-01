@@ -52,6 +52,16 @@ extern "C" {
  * @{
  */
 
+#if defined( GRLIB_CLINT_BASE ) != defined( GRLIB_PLIC_BASE )
+#error "define both GRLIB_CLINT_BASE and GRLIB_PLIC_BASE or none of them"
+#endif
+
+#if defined( GRLIB_PLIC_BASE )
+static inline void noel_irq_initialize( void )
+{
+  /* The CLINT and the PLIC are at fixed addresses */
+}
+#else
 /**
  * @brief This pointer provides the PLIC register block found through AMBA
  *   Plug & Play.
@@ -64,6 +74,7 @@ extern volatile RISCV_PLIC_regs *noel_plic;
  * @brief Finds the CLINT and the PLIC through AMBA Plug & Play.
  */
 void noel_irq_initialize( void );
+#endif
 
 #ifndef RISCV_USE_S_MODE
 /**
@@ -73,7 +84,11 @@ void noel_irq_initialize( void );
  */
 static inline volatile RISCV_CLINT_regs *riscv_clint_get( void )
 {
+#if defined( GRLIB_CLINT_BASE )
+  return (volatile RISCV_CLINT_regs *) GRLIB_CLINT_BASE;
+#else
   return noel_clint;
+#endif
 }
 
 /**
@@ -89,10 +104,12 @@ static inline uint32_t riscv_clint_get_index( uint32_t cpu_index )
 }
 #endif
 
+#if !defined( GRLIB_PLIC_BASE ) || defined( RISCV_USE_S_MODE )
 /**
  * @brief This define indicates that the system may have no PLIC.
  */
 #define RISCV_PLIC_MAY_BE_ABSENT
+#endif
 
 /**
  * @brief Gets the PLIC register block.
@@ -101,7 +118,13 @@ static inline uint32_t riscv_clint_get_index( uint32_t cpu_index )
  */
 static inline volatile RISCV_PLIC_regs *riscv_plic_get( void )
 {
+#if defined( RISCV_USE_S_MODE )
+  return NULL;
+#elif defined( GRLIB_PLIC_BASE )
+  return (volatile RISCV_PLIC_regs *) GRLIB_PLIC_BASE;
+#else
   return noel_plic;
+#endif
 }
 
 /**

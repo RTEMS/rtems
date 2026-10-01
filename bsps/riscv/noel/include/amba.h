@@ -66,9 +66,19 @@
 
 #define GRLIB_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER 1000000
 
-#include <grlib/ambapp.h>
-#include <grlib/grlib.h>
+#include <bspopts.h>
+#include <grlib/gptimer-regs.h>
+#include <grlib/io.h>
 #include <rtems/rtems/intr.h>
+
+#if !defined( GRLIB_PLB_FREQUENCY_DEFINED_BY_GPTIMER )
+#include <grlib/ambapp.h>
+#endif
+
+#if defined( GRLIB_PLB_FREQUENCY_DEFINED_BY_GPTIMER ) && \
+  !defined( GRLIB_GPTIMER_BASE )
+#error "GRLIB_PLB_FREQUENCY_DEFINED_BY_GPTIMER requires GRLIB_GPTIMER_BASE"
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -81,13 +91,33 @@ extern volatile struct gptimer_regs *GRLIB_Timer_Regs;
 extern struct ambapp_dev            *GRLIB_Timer_Adev;
 void                                 gptimer_initialize( void );
 
-static inline uint32_t grlib_up_counter_frequency( void )
+/**
+ * @brief Gets the processor local bus frequency in Hz.
+ *
+ * @return Returns the frequency.
+ */
+static inline uint32_t grlib_processor_local_bus_frequency( void )
 {
+#if defined( GRLIB_PLB_FREQUENCY_DEFINED_BY_GPTIMER )
+  gptimer *regs;
+  uint32_t scaler_reload;
+
+  regs = (gptimer *) GRLIB_GPTIMER_BASE;
+  scaler_reload = grlib_load_32( &regs->sreload );
+
+  return ( scaler_reload + 1 ) * GRLIB_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER;
+#else
   /*
    * For simplicity, assume that the interrupt controller uses the processor
    * clock.
    */
   return ambapp_freq_get( ambapp_plb(), GRLIB_IrqCtrl_Adev );
+#endif
+}
+
+static inline uint32_t grlib_up_counter_frequency( void )
+{
+  return grlib_processor_local_bus_frequency();
 }
 
 #ifdef __cplusplus

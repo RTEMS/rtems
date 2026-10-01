@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+default:
+- enabled-by: riscv/gr765
+  value: true
+- enabled-by: true
+  value: false
+description: |
+  If this option is enabled, then the frequency of the processor local bus is
+  defined by the GPTIMER at GRLIB_GPTIMER_BASE.  The boot loader shall
+  configure this GPTIMER to tick with a frequency of
+  GRLIB_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER.  Otherwise, the BSP gets the
+  frequency through AMBA Plug & Play.
+enabled-by: true
+links: []
+name: GRLIB_PLB_FREQUENCY_DEFINED_BY_GPTIMER
+type: build

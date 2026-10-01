@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- format-and-define: null
+build-type: option
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+default:
+- enabled-by: riscv/gr765
+  value: 2
+description: |
+  This option defines the interrupt number of the APBUART at
+  GRLIB_APBUART_BASE.  If both options are defined, then the console driver
+  uses this APBUART and finds no other APBUART.
+enabled-by: true
+format: '{}'
+links: []
+name: GRLIB_APBUART_IRQ
+type: build

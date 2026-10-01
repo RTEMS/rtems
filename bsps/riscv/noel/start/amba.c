@@ -34,11 +34,14 @@
 #include <bsp/irqimpl.h>
 #include <bsp/rvintctrl.h>
 #include <amba.h>
+#include <grlib/ambapp.h>
+#include <grlib/grlib.h>
 
 #include <rtems/sysinit.h>
 
 struct ambapp_dev *GRLIB_IrqCtrl_Adev;
 
+#if !defined( GRLIB_PLIC_BASE )
 volatile RISCV_CLINT_regs *noel_clint;
 
 volatile RISCV_PLIC_regs *noel_plic;
@@ -126,11 +129,15 @@ void noel_irq_initialize( void )
   }
 #endif /* !RISCV_USE_S_MODE */
 }
+#endif /* !GRLIB_PLIC_BASE */
 
 /* GPTIMER */
 
+#if !defined( GRLIB_GPTIMER_BASE )
 unsigned int grlib_timer_prescaler __attribute__(( weak )) = 0;
-int          grlib_timer_core_index __attribute__(( weak )) = 0;
+#endif
+
+int grlib_timer_core_index __attribute__(( weak )) = 0;
 
 volatile struct gptimer_regs *GRLIB_Timer_Regs;
 struct ambapp_dev            *GRLIB_Timer_Adev;
@@ -165,6 +172,7 @@ void gptimer_initialize( void )
       ( GRLIB_Timer_Regs->scaler_reload + 1 ) *
         GRLIB_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER
     );
+#if !defined( GRLIB_GPTIMER_BASE )
     /* Set user prescaler configuration. Use this to increase accuracy of timer
      * and associated services like cpucounter.
      * Note that minimum value is the number of timer instances present in
@@ -173,6 +181,7 @@ void gptimer_initialize( void )
     if ( grlib_timer_prescaler ) {
       GRLIB_Timer_Regs->scaler_reload = grlib_timer_prescaler;
     }
+#endif
   }
 }
 

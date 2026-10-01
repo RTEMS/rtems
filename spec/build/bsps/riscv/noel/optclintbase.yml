@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- format-and-define: null
+build-type: option
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+default:
+- enabled-by: riscv/gr765
+  value: 0xb0000000
+description: |
+  This option defines the base address of the CLINT register block.  If the
+  option is undefined, then the BSP finds the CLINT through AMBA Plug & Play.
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: GRLIB_CLINT_BASE
+type: build
