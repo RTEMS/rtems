@@ -33,7 +33,7 @@ links:
 - role: build-dependency
   uid: optgpioval
 - role: build-dependency
-  uid: opticecub
+  uid: opticecube
 - role: build-dependency
   uid: optpm520cr825
 - role: build-dependency
