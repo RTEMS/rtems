@@ -33,8 +33,12 @@ directives:
 
   rtems_event_receive
   rtems_event_send
+  rtems_message_queue_receive
 
 concepts:
 
 + Ensure that timing out while while the task is in the process
   of blocking on a thread queue works as expected.
+
++ Ensure that a message receive in an interrupt leaves the event wait
+  of the interrupted task intact.

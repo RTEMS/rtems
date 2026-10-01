@@ -66,11 +66,12 @@ ssize_t _POSIX_Message_queue_Receive_support(
   Thread_queue_Enqueue_callout enqueue_callout
 )
 {
-  POSIX_Message_queue_Control *the_mq;
-  Thread_queue_Context         queue_context;
-  size_t                       length_out;
-  Thread_Control              *executing;
-  Status_Control               status;
+  POSIX_Message_queue_Control    *the_mq;
+  Thread_queue_Context            queue_context;
+  size_t                          length_out;
+  CORE_message_queue_Submit_types priority;
+  Thread_Control                 *executing;
+  Status_Control                  status;
 
   the_mq = _POSIX_Message_queue_Get( mqdes, &queue_context );
 
@@ -116,6 +117,7 @@ ssize_t _POSIX_Message_queue_Receive_support(
     executing,
     msg_ptr,
     &length_out,
+    &priority,
     ( the_mq->oflag & O_NONBLOCK ) == 0,
     &queue_context
   );
@@ -125,9 +127,7 @@ ssize_t _POSIX_Message_queue_Receive_support(
   }
 
   if ( msg_prio != NULL ) {
-    *msg_prio = _POSIX_Message_queue_Priority_from_core(
-      executing->Wait.count
-    );
+    *msg_prio = _POSIX_Message_queue_Priority_from_core( priority );
   }
 
   return length_out;

@@ -46,12 +46,13 @@
 #include <rtems/score/statesimpl.h>
 
 Status_Control _CORE_message_queue_Seize(
-  CORE_message_queue_Control *the_message_queue,
-  Thread_Control             *executing,
-  void                       *buffer,
-  size_t                     *size_p,
-  bool                        wait,
-  Thread_queue_Context       *queue_context
+  CORE_message_queue_Control      *the_message_queue,
+  Thread_Control                  *executing,
+  void                            *buffer,
+  size_t                          *size_p,
+  CORE_message_queue_Submit_types *priority,
+  bool                             wait,
+  Thread_queue_Context            *queue_context
 )
 {
   CORE_message_queue_Buffer *the_message;
@@ -61,9 +62,7 @@ Status_Control _CORE_message_queue_Seize(
     the_message_queue->number_of_pending_messages -= 1;
 
     *size_p = the_message->size;
-    executing->Wait.count = _CORE_message_queue_Get_message_priority(
-      the_message
-    );
+    *priority = _CORE_message_queue_Get_message_priority( the_message );
     _CORE_message_queue_Copy_buffer( the_message->buffer, buffer, *size_p );
 
     #if !defined( RTEMS_SCORE_COREMSG_ENABLE_BLOCKING_SEND )
@@ -144,5 +143,6 @@ Status_Control _CORE_message_queue_Seize(
     executing,
     queue_context
   );
+  *priority = (CORE_message_queue_Submit_types) executing->Wait.count;
   return _Thread_Wait_get_status( executing );
 }

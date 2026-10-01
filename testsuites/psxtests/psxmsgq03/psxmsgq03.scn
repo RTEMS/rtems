@@ -4,4 +4,8 @@ Init - send to message queue
 Init - Create Classic API Timer
 Init - Fire After Classic API Timer
 Init - mq_send from ISR returned correct status
+Init - mq_receive from a full queue returns the priority
+Init - Fire After Classic API Timer to send with priority 7
+Init - mq_receive blocks on the empty queue
+Init - mq_receive after the wait returned the priority
 *** END OF POSIX MESSAGE QUEUE TEST 3 ***

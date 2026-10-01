@@ -32,6 +32,7 @@ test set name:  psxmsgq03
 directives:
 
   mq_open
+  mq_receive
   mq_send
 
 concepts:
@@ -40,3 +41,7 @@ concepts:
   from an Interrupt Service Routine.  This condition is beyond the
   POSIX Standard because they do not discuss interrupt processing and
   what operations are allowed.
+
++ Ensure that mq_receive returns the priority of the message.  The
+  message is either pending, or a sender hands it over to the blocked
+  receiver.

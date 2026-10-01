@@ -310,6 +310,8 @@ Status_Control _CORE_message_queue_Submit(
  *        to be filled in with a message.
  * @param[out] size_p The size of the @a buffer,
  *        indicates the maximum size message that the caller can receive.
+ * @param[out] priority The priority of the received message is stored in
+ *   the referenced object.
  * @param wait Indicates whether the calling thread is willing to block
  *        if the message queue is empty.
  * @param queue_context The thread queue context used for
@@ -319,19 +321,18 @@ Status_Control _CORE_message_queue_Submit(
  * @retval STATUS_UNSATISFIED Wait was set to false and there is currently no pending message.
  * @retval STATUS_TIMEOUT A timeout occurred.
  *
- * @note Returns message priority via return area in TCB.
- *
  * - INTERRUPT LATENCY:
  *   + available
  *   + wait
  */
 Status_Control _CORE_message_queue_Seize(
-  CORE_message_queue_Control *the_message_queue,
-  Thread_Control             *executing,
-  void                       *buffer,
-  size_t                     *size_p,
-  bool                        wait,
-  Thread_queue_Context       *queue_context
+  CORE_message_queue_Control      *the_message_queue,
+  Thread_Control                  *executing,
+  void                            *buffer,
+  size_t                          *size_p,
+  CORE_message_queue_Submit_types *priority,
+  bool                             wait,
+  Thread_queue_Context            *queue_context
 );
 
 /**

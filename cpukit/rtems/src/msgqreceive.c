@@ -57,10 +57,11 @@ rtems_status_code rtems_message_queue_receive(
   rtems_interval timeout
 )
 {
-  Message_queue_Control *the_message_queue;
-  Thread_queue_Context   queue_context;
-  Thread_Control        *executing;
-  Status_Control         status;
+  Message_queue_Control          *the_message_queue;
+  Thread_queue_Context            queue_context;
+  Thread_Control                 *executing;
+  CORE_message_queue_Submit_types priority;
+  Status_Control                  status;
 
   if ( buffer == NULL ) {
     return RTEMS_INVALID_ADDRESS;
@@ -92,6 +93,7 @@ rtems_status_code rtems_message_queue_receive(
     executing,
     buffer,
     size,
+    &priority,
     !_Options_Is_no_wait( option_set ),
     &queue_context
   );
