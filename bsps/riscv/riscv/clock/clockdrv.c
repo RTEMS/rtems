@@ -9,7 +9,7 @@
 
 /*
  * Copyright (C) 2026 Gedare Bloom
- * Copyright (C) 2018, 2023 embedded brains GmbH & Co. KG
+ * Copyright (C) 2018, 2026 embedded brains GmbH & Co. KG
  * Copyright (C) 2015 Hesham Alatary <hesham@alumni.york.ac.uk>
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,10 +35,9 @@
  */
 
 #include <bsp/fatal.h>
-#include <bsp/fdt.h>
 #include <bsp/irq.h>
+#include <bsp/irqimpl.h>
 #include <bsp/riscv.h>
-#include <bsp/riscv-fdt.h>
 
 #include <rtems/sysinit.h>
 #include <rtems/timecounter.h>
@@ -47,12 +46,8 @@
 #include <rtems/score/riscv-utility.h>
 #include <rtems/score/smpimpl.h>
 
-#include <libfdt.h>
-
 #ifdef RISCV_USE_S_MODE
 #include <machine/sbi.h>
-
-static bool riscv_has_sstc;
 #endif
 
 typedef struct {
@@ -136,7 +131,7 @@ static uint32_t riscv_clock_get_timecount(struct timecounter *base)
 #ifdef RISCV_USE_S_MODE
   timecount = (uint32_t) rdtime();
 #else
-  timecount = riscv_clint->mtime.val_32[0];
+  timecount = riscv_clint_get()->mtime.val_32[0];
 #endif
 
   return timecount;
@@ -151,7 +146,7 @@ static uint64_t riscv_clock_read_timer(riscv_timecounter *tc)
 #ifdef RISCV_USE_S_MODE
   now = rdtime();
 #else
-  now = riscv_clock_read_mtime(&riscv_clint->mtime);
+  now = riscv_clock_read_mtime(&riscv_clint_get()->mtime);
 #endif
 
   return now;
@@ -161,7 +156,7 @@ static void riscv_clock_local_set_timer(uint64_t cmpval)
 {
 #ifdef RISCV_USE_S_MODE
   Per_CPU_Control *cpu_self = _Per_CPU_Get();
-  if (riscv_has_sstc) {
+  if (riscv_has_sstc_extension()) {
 #if __riscv_xlen == 32
     write_csr(stimecmp, (uint32_t) cmpval);
     write_csr(stimecmph, (uint32_t) (cmpval >> 32));
@@ -228,23 +223,17 @@ static void riscv_clock_secondary_init(
 
 static void riscv_clock_initialize(void)
 {
-  const char *fdt;
   riscv_timecounter *tc;
   uint64_t cmpval;
   uint32_t tb_freq;
   uint64_t us_per_tick;
   uint32_t interval;
 
-  fdt = bsp_fdt_get();
-  tb_freq = riscv_clock_get_timebase_frequency(fdt);
+  tb_freq = riscv_get_timebase_frequency();
   us_per_tick = rtems_configuration_get_microseconds_per_tick();
   interval = (uint32_t) ((tb_freq * us_per_tick) / 1000000);
   tc = &riscv_clock_tc;
   tc->interval = interval;
-
-#ifdef RISCV_USE_S_MODE
-  riscv_has_sstc = riscv_has_isa_extension(fdt, "sstc");
-#endif
 
   cmpval = riscv_clock_read_timer(tc);
   cmpval += interval;
@@ -267,13 +256,13 @@ volatile uint32_t _RISCV_Counter_register;
 static void riscv_counter_initialize(void)
 {
 #ifndef RISCV_USE_S_MODE
-  _RISCV_Counter_mutable = &riscv_clint->mtime.val_32[0];
+  _RISCV_Counter_mutable = &riscv_clint_get()->mtime.val_32[0];
 #endif
 }
 
 uint32_t _CPU_Counter_frequency( void )
 {
-  return riscv_clock_get_timebase_frequency(bsp_fdt_get());
+  return riscv_get_timebase_frequency();
 }
 
 CPU_Counter_ticks _CPU_Counter_read( void )

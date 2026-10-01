@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 embedded brains GmbH & Co. KG
+ * Copyright (c) 2018, 2026 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,6 +27,7 @@
 #include <bsp/fatal.h>
 #include <bsp/fdt.h>
 #include <bsp/irq-generic.h>
+#include <bsp/riscv-fdt-irq.h>
 #include <bsp/riscv.h>
 
 #include <libfdt.h>
@@ -275,6 +276,7 @@ uint32_t k210_get_frequency(void)
 void bsp_start(void)
 {
   riscv_find_harts();
+  riscv_fdt_irq_initialize();
   bsp_interrupt_initialize();
   riscv_core_freq = get_core_frequency();
 }

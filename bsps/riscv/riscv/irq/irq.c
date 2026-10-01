@@ -10,7 +10,7 @@
 
 /*
  * Copyright (C) 2026 Gedare Bloom
- * Copyright (C) 2018, 2022 embedded brains GmbH & Co. KG
+ * Copyright (C) 2018, 2026 embedded brains GmbH & Co. KG
  *
  * Copyright (c) 2015 University of York.
  * Hesham Almatary <hesham@alumni.york.ac.uk>
@@ -38,24 +38,14 @@
  */
 
 #include <bsp/fatal.h>
-#include <bsp/fdt.h>
 #include <bsp/irq-generic.h>
+#include <bsp/irqimpl.h>
 #include <bsp/riscv.h>
 
 #include <rtems/score/percpu.h>
 #include <rtems/score/riscv-utility.h>
 #include <rtems/score/scheduler.h>
 #include <rtems/score/smpimpl.h>
-
-#include <libfdt.h>
-
-static volatile RISCV_PLIC_regs *riscv_plic;
-
-static uint32_t riscv_maximum_external_interrupts = 0;
-
-#ifndef RISCV_USE_S_MODE
-volatile RISCV_CLINT_regs *riscv_clint;
-#endif
 
 #ifdef RTEMS_SMP
 /*
@@ -211,103 +201,56 @@ static void riscv_plic_cpu_0_init(
 
 #ifndef RISCV_USE_S_MODE
 
-static void riscv_clint_init(const void *fdt)
+static void riscv_clint_init(void)
 {
   volatile RISCV_CLINT_regs *clint;
-  int node;
-  const uint32_t *val;
-  int len;
-  int i;
+  uint32_t cpu_max;
+  uint32_t cpu_index;
 
-  node = fdt_node_offset_by_compatible(fdt, -1, "riscv,clint0");
+  clint = riscv_clint_get();
+  cpu_max = rtems_configuration_get_maximum_processors();
 
-  clint = riscv_fdt_get_address(fdt, node);
-  if (clint == NULL) {
-    bsp_fatal(RISCV_FATAL_NO_CLINT_REG_IN_DEVICE_TREE);
-  }
-
-  riscv_clint = clint;
-
-  val = fdt_getprop(fdt, node, "interrupts-extended", &len);
-
-  for (i = 0; i < len; i += 16) {
-    uint32_t hart_index;
-    uint32_t cpu_index;
-
-    hart_index = riscv_get_hart_index_by_phandle(fdt32_to_cpu(val[i / 4]));
+  for (cpu_index = 0; cpu_index < cpu_max; ++cpu_index) {
+    uint32_t index;
 
 #ifdef RTEMS_SMP
-    cpu_index = _RISCV_Map_hartid_to_cpu_index(hart_index);
-    if (cpu_index >= rtems_configuration_get_maximum_processors()) {
-      continue;
-    }
-
     if ( _Scheduler_Initial_assignments[ cpu_index ].scheduler == NULL ) {
       /* Skip not configured processor */
       continue;
     }
-#else
-    if (hart_index != RISCV_BOOT_HARTID) {
+#endif
+
+    index = riscv_clint_get_index(cpu_index);
+
+#ifdef RISCV_CLINT_INDEX_MAY_BE_ABSENT
+    if (index == UINT32_MAX) {
       continue;
     }
-
-    cpu_index = 0;
 #endif
 
-    riscv_clint_per_cpu_init(
-      clint,
-      _Per_CPU_Get_by_index(cpu_index),
-      (uint32_t) (i / 16)
-    );
-
-#ifndef RTEMS_SMP
-    break;
-#endif
+    riscv_clint_per_cpu_init(clint, _Per_CPU_Get_by_index(cpu_index), index);
   }
 }
 
 #endif
 
-static void riscv_plic_init(const void *fdt)
+static void riscv_plic_init(void)
 {
   volatile RISCV_PLIC_regs *plic;
-  int node;
-  int i;
-  const uint32_t *val;
-  int len;
-  uint32_t interrupt_index;
+  uint32_t interrupt_count;
   uint32_t enable_register_count;
+  uint32_t cpu_max;
+  uint32_t cpu_index;
 
-  node = fdt_node_offset_by_compatible(fdt, -1, "riscv,plic0");
+  plic = riscv_plic_get();
 
-  plic = riscv_fdt_get_address(fdt, node);
-
+#ifdef RISCV_PLIC_MAY_BE_ABSENT
   if (plic == NULL) {
-#ifdef RISCV_ENABLE_HTIF_SUPPORT
-    node = fdt_node_offset_by_compatible(fdt, -1, "ucb,htif0");
-
-    /* Spike platform has HTIF and does not have a PLIC */
-    if (node >= 0) {
-      return;
-    } else {
-      bsp_fatal(RISCV_FATAL_NO_PLIC_REG_IN_DEVICE_TREE);
-    }
-#else
-    bsp_fatal(RISCV_FATAL_NO_PLIC_REG_IN_DEVICE_TREE);
+    return;
+  }
 #endif
-  }
 
-  riscv_plic = plic;
-
-  val = fdt_getprop(fdt, node, "riscv,ndev", &len);
-  if (val == NULL || len != 4) {
-    bsp_fatal(RISCV_FATAL_INVALID_PLIC_NDEV_IN_DEVICE_TREE);
-  }
-
-  riscv_maximum_external_interrupts = fdt32_to_cpu(val[0]);
-  if (riscv_maximum_external_interrupts > RISCV_MAXIMUM_EXTERNAL_INTERRUPTS) {
-    bsp_fatal(RISCV_FATAL_TOO_LARGE_PLIC_NDEV_IN_DEVICE_TREE);
-  }
+  interrupt_count = riscv_plic_get_interrupt_count();
 
   /*
    * Each interrupt enable register contains exactly 32 enable bits.
@@ -315,44 +258,24 @@ static void riscv_plic_init(const void *fdt)
    * supported by the PLIC.  Take the reserved interrupt ID zero into
    * account.
    */
-  enable_register_count = RTEMS_ALIGN_UP(
-    riscv_maximum_external_interrupts + 1,
-    32
-  ) / 32;
+  enable_register_count = RTEMS_ALIGN_UP(interrupt_count + 1, 32) / 32;
 
-  val = fdt_getprop(fdt, node, "interrupts-extended", &len);
+  cpu_max = rtems_configuration_get_maximum_processors();
 
-  for (i = 0; i < len; i += 8) {
-    uint32_t hart_index;
-    uint32_t cpu_index;
-
-    hart_index = riscv_get_hart_index_by_phandle(fdt32_to_cpu(val[i / 4]));
+  for (cpu_index = 0; cpu_index < cpu_max; ++cpu_index) {
+    uint32_t context;
 
 #ifdef RTEMS_SMP
-    cpu_index = _RISCV_Map_hartid_to_cpu_index(hart_index);
-    if (cpu_index >= rtems_configuration_get_maximum_processors()) {
-      continue;
-    }
-
     if ( _Scheduler_Initial_assignments[ cpu_index ].scheduler == NULL ) {
       /* Skip not configured processor */
       continue;
     }
-#else
-    if (hart_index != RISCV_BOOT_HARTID) {
-      continue;
-    }
-
-    cpu_index = 0;
 #endif
 
-    interrupt_index = fdt32_to_cpu(val[i / 4 + 1]);
-#ifdef RISCV_USE_S_MODE
-    if (interrupt_index != RISCV_INTERRUPT_EXTERNAL_SUPERVISOR) {
-      continue;
-    }
-#else
-    if (interrupt_index != RISCV_INTERRUPT_EXTERNAL_MACHINE) {
+    context = riscv_plic_get_context(cpu_index);
+
+#ifdef RISCV_PLIC_CONTEXT_MAY_BE_ABSENT
+    if (context == UINT32_MAX) {
       continue;
     }
 #endif
@@ -361,29 +284,22 @@ static void riscv_plic_init(const void *fdt)
       plic,
       enable_register_count,
       _Per_CPU_Get_by_index(cpu_index),
-      (uint32_t) (i / 8)
+      context
     );
-
-#ifndef RTEMS_SMP
-    break;
-#endif
   }
 
-  riscv_plic_cpu_0_init(plic, riscv_maximum_external_interrupts);
+  riscv_plic_cpu_0_init(plic, interrupt_count);
 }
 
 void bsp_interrupt_facility_initialize(void)
 {
-  const void *fdt;
-
-  fdt = bsp_fdt_get();
-
 #ifndef RISCV_USE_S_MODE
-  riscv_clint_init(fdt);
+  riscv_clint_init();
 #endif
 
-  riscv_plic_init(fdt);
+  riscv_plic_init();
 }
+
 
 bool bsp_interrupt_is_valid_vector(rtems_vector_number vector)
 {
@@ -397,7 +313,7 @@ bool bsp_interrupt_is_valid_vector(rtems_vector_number vector)
     return false;
   }
 
-  max = RISCV_INTERRUPT_VECTOR_EXTERNAL(riscv_maximum_external_interrupts);
+  max = RISCV_INTERRUPT_VECTOR_EXTERNAL(riscv_plic_get_interrupt_count());
 
   return vector < max;
 }
@@ -448,7 +364,7 @@ rtems_status_code bsp_interrupt_is_pending(
     interrupt_index = RISCV_INTERRUPT_VECTOR_EXTERNAL_TO_INDEX(vector);
     group = interrupt_index / 32;
     bit = UINT32_C(1) << (interrupt_index % 32);
-    *pending = ((riscv_plic->pending[group] & bit) != 0);
+    *pending = ((riscv_plic_get()->pending[group] & bit) != 0);
     return RTEMS_SUCCESSFUL;
   }
 
@@ -717,7 +633,7 @@ rtems_status_code bsp_interrupt_set_priority(
   if (!RISCV_INTERRUPT_VECTOR_IS_EXTERNAL(vector)) {
     return RTEMS_UNSATISFIED;
   }
-  riscv_plic->priority[RISCV_INTERRUPT_VECTOR_EXTERNAL_TO_INDEX(vector)] =
+  riscv_plic_get()->priority[RISCV_INTERRUPT_VECTOR_EXTERNAL_TO_INDEX(vector)] =
     UINT32_MAX - priority;
   return RTEMS_SUCCESSFUL;
 }
@@ -735,7 +651,7 @@ rtems_status_code bsp_interrupt_get_priority(
   }
 
   *priority = UINT32_MAX -
-    riscv_plic->priority[RISCV_INTERRUPT_VECTOR_EXTERNAL_TO_INDEX(vector)];
+    riscv_plic_get()->priority[RISCV_INTERRUPT_VECTOR_EXTERNAL_TO_INDEX(vector)];
   return RTEMS_SUCCESSFUL;
 }
 
