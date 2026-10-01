@@ -21,11 +21,11 @@ links: []
 source:
 - bsps/riscv/noel/console/console-config.c
 - bsps/riscv/noel/start/bsp_fatal_halt.c
-- bsps/riscv/riscv/clock/clockdrv.c
-- bsps/riscv/riscv/irq/irq.c
 - bsps/riscv/riscv/start/bspstart.c
+- bsps/riscv/shared/clock/clockdrv.c
 - bsps/riscv/shared/fdt/riscv-fdt-irq.c
 - bsps/riscv/shared/fdt/riscv-fdt.c
+- bsps/riscv/shared/irq/irq.c
 - bsps/riscv/shared/start/bspgetworkarea.c
 - bsps/riscv/shared/start/sendipi.c
 - bsps/shared/cache/nocache.c
