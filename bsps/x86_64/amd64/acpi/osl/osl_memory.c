@@ -37,11 +37,13 @@
 
 #include <acpi/acpica/acpi.h>
 
+#include <rtems/malloc.h>
+
 #include <stdint.h>
 
 void* AcpiOsAllocate(ACPI_SIZE Size)
 {
-  return malloc(Size);
+  return rtems_malloc(Size);
 }
 
 void AcpiOsFree(void* Memory)

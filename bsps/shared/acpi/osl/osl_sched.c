@@ -27,9 +27,11 @@
 
 #include <acpi/acpica/acpi.h>
 
+#include <rtems.h>
+
 #include <pthread.h>
-#include <unistd.h>
 #include <sys/time.h>
+#include <time.h>
 
 /**
  * TODO: This routine will need to be implemented before using features such as:
@@ -51,7 +53,11 @@ ACPI_STATUS AcpiOsExecute(
 
 void AcpiOsSleep(UINT64 Milliseconds)
 {
-  usleep(Milliseconds * 1000);
+  struct timespec duration;
+
+  duration.tv_sec = (time_t) (Milliseconds / 1000);
+  duration.tv_nsec = (long) ((Milliseconds % 1000) * 1000000);
+  (void) clock_nanosleep(CLOCK_REALTIME, 0, &duration, NULL);
 }
 
 
@@ -60,12 +66,12 @@ void AcpiOsStall(UINT32 Microseconds)
   struct timeval tv;
   struct timeval stall_tv;
 
-  gettimeofday(&stall_tv, NULL);
+  rtems_clock_get_realtime_timeval(&stall_tv);
   stall_tv.tv_sec += Microseconds / 1000000;
   stall_tv.tv_usec += Microseconds % 1000000;
 
   do {
-    gettimeofday(&tv, NULL);
+    rtems_clock_get_realtime_timeval(&tv);
   } while (tv.tv_sec < stall_tv.tv_sec ||
           (tv.tv_sec == stall_tv.tv_sec && tv.tv_usec < stall_tv.tv_usec));
 }

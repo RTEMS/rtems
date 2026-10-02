@@ -27,13 +27,15 @@
 
 #include <acpi/acpica/acpi.h>
 
-#include <stdio.h>
+#include <rtems.h>
+#include <rtems/bspIo.h>
+
 #include <sys/time.h>
 
 UINT64 AcpiOsGetTimer(void)
 {
   struct timeval tv;
-  gettimeofday(&tv, NULL);
+  rtems_clock_get_realtime_timeval(&tv);
   return (tv.tv_sec * 10000000) + (tv.tv_usec * 10);
 }
 
@@ -42,7 +44,7 @@ ACPI_STATUS AcpiOsSignal(UINT32 Function, void* Info)
   switch (Function) {
   case ACPI_SIGNAL_FATAL:
     ACPI_SIGNAL_FATAL_INFO* fatal = (ACPI_SIGNAL_FATAL_INFO*) Info;
-    printf("ACPI: Fatal signal, type 0x%x code 0x%x argument 0x%x",
+    printk("ACPI: Fatal signal, type 0x%x code 0x%x argument 0x%x",
       fatal->Type, fatal->Code, fatal->Argument);
     break;
   case ACPI_SIGNAL_BREAKPOINT:

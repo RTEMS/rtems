@@ -27,13 +27,14 @@
 
 #include <acpi/acpica/acpi.h>
 #include <rtems.h>
+#include <rtems/malloc.h>
 
 #include <errno.h>
 #include <pthread.h>
 
 static void ms_timeout_to_abs_timespec(uint32_t timeout, struct timespec *abstime)
 {
-  clock_gettime(CLOCK_REALTIME, abstime);
+  rtems_clock_get_realtime(abstime);
   abstime->tv_sec += timeout / 1000;
   abstime->tv_nsec += (timeout % 1000) * 1000000;
 }
@@ -59,7 +60,7 @@ ACPI_STATUS AcpiOsCreateSemaphore(
   if (OutHandle == NULL || MaxUnits == 0 || InitialUnits > MaxUnits)
     return (AE_BAD_PARAMETER);
 
-  ac_sem = malloc(sizeof(acpi_semaphore));
+  ac_sem = rtems_malloc(sizeof(acpi_semaphore));
   if (ac_sem == NULL) {
     return (AE_NO_MEMORY);
   }
@@ -252,7 +253,7 @@ ACPI_STATUS AcpiOsCreateLock(ACPI_SPINLOCK* OutHandle)
   if (OutHandle == NULL)
     return (AE_BAD_PARAMETER);
 
-  lock = malloc(sizeof(acpi_spinlock));
+  lock = rtems_malloc(sizeof(acpi_spinlock));
   if (lock == NULL) {
     return (AE_NO_MEMORY);
   }
