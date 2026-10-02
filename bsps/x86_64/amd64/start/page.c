@@ -47,6 +47,7 @@
 #include <assert.h>
 #include <bsp.h>
 #include <rtems.h>
+#include <rtems/bspIo.h>
 #include <libcpu/page.h>
 #include <rtems/score/cpu.h>
 
@@ -148,7 +149,7 @@ uint64_t create_pdpt_entry(
 void paging_init(void)
 {
   if ( !paging_1gib_pages_supported() ) {
-    printf("warning: 1 GiB pages aren't supported - trying anyway.\n");
+    printk("warning: 1 GiB pages aren't supported - trying anyway.\n");
   }
   const uint8_t maxphysaddr = get_maxphysaddr();
   DBG_PRINTF("maxphysaddr = %d\n", maxphysaddr);
