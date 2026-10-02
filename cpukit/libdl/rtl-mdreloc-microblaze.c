@@ -234,6 +234,27 @@ rtems_rtl_elf_reloc_rela(rtems_rtl_obj* obj, const Elf_Rela* rela,
     break;
 
   /*
+   * __tls_get_addr() ignores its argument and returns the thread pointer of
+   * the executing thread, so the argument needs no value.
+   */
+  case R_TYPE(TLSLD):
+    break;
+
+  /*
+   * The value of a thread-local symbol is its offset from the thread pointer.
+   */
+  case R_TYPE(TLSDTPREL64):
+    write16le(where, (read16le(where) & 0xFFFF0000) | (target >> 16));
+    write16le(where + 1,
+              (read16le(where + 1) & 0xFFFF0000) | (target & 0xFFFF));
+
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
+      printf("rtl: R_MICROBLAZE_TLSDTPREL64 %p @ %p in %s\n", (void*)*(where),
+             where, rtems_rtl_obj_oname(obj));
+    }
+    break;
+
+  /*
    *  GNU binutils (include/elf/microblaze.h) defines:
    *    #define R_MICROBLAZE_32_NONE 33
    *

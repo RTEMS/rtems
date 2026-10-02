@@ -332,6 +332,30 @@ rtems_rtl_elf_relocate_rel(rtems_rtl_obj* obj, const Elf_Rel* rel,
 
     break;
 
+  /*
+   * The value of a thread-local symbol is its offset from the thread
+   * pointer.  The instruction holds the addend in its low 16 bits.
+   */
+  case R_TYPE(TLS_TPREL_HI16):
+    tmp = symvalue + (Elf_Word)(int16_t)addend;
+    *where = (addend & 0xffff0000) | (((tmp + 0x8000) >> 16) & 0xffff);
+
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
+      printf("rtl: R_MIPS_TLS_TPREL_HI16 %p @ %p in %s\n", (void*)*(where),
+             where, rtems_rtl_obj_oname(obj));
+    }
+    break;
+
+  case R_TYPE(TLS_TPREL_LO16):
+    tmp = symvalue + (Elf_Word)(int16_t)addend;
+    *where = (addend & 0xffff0000) | (tmp & 0xffff);
+
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
+      printf("rtl: R_MIPS_TLS_TPREL_LO16 %p @ %p in %s\n", (void*)*(where),
+             where, rtems_rtl_obj_oname(obj));
+    }
+    break;
+
   default:
     printf("rtl: reloc unknown: sym = %" PRIu32 ", type = %" PRIu32
            ", offset = %p, "

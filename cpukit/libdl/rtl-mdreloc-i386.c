@@ -172,6 +172,17 @@ rtems_rtl_elf_relocate_rel(rtems_rtl_obj* obj, const Elf_Rel* rel,
     printf("rtl: reloc COPY (please report)\n");
     break;
 
+  /*
+   * The value of a thread-local symbol is its offset from the thread pointer.
+   */
+  case R_TYPE(TLS_LE):
+    *where += (Elf_Addr)symvalue;
+    if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC)) {
+      printf("rtl: reloc TLS_LE in %s --> %p @ %p in %s\n", sect->name,
+             (void*)*where, where, rtems_rtl_obj_oname(obj));
+    }
+    break;
+
   default:
     printf("rtl: reloc unknown: sym = %i, type = %" PRIu32 ", offset = %p, "
            "contents = %p\n",
