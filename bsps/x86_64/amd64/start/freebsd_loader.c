@@ -36,7 +36,6 @@
 #include <acpi/acpi.h>
 #include <freebsd_loader.h>
 
-#include <stdlib.h>
 #include <string.h>
 #include <sys/param.h>
 
@@ -176,12 +175,43 @@ static const char* get_static_env(const char* envp, const char* name)
   return NULL;
 }
 
+/*
+ * The start code calls retrieve_info_from_freebsd_loader() before the
+ * thread-local storage exists.  A function such as strtol() which may set
+ * errno must not run there.
+ */
+static uint64_t parse_hex(const char* str)
+{
+  uint64_t value = 0;
+
+  if (str[0] == '0' && (str[1] == 'x' || str[1] == 'X')) {
+    str += 2;
+  }
+
+  while (true) {
+    char c = *str;
+    uint64_t digit;
+
+    if (c >= '0' && c <= '9') {
+      digit = (uint64_t) (c - '0');
+    } else if (c >= 'a' && c <= 'f') {
+      digit = (uint64_t) (c - 'a' + 10);
+    } else if (c >= 'A' && c <= 'F') {
+      digit = (uint64_t) (c - 'A' + 10);
+    } else {
+      return value;
+    }
+
+    value = (value << 4) | digit;
+    ++str;
+  }
+}
+
 void retrieve_info_from_freebsd_loader(uint32_t modules_metadata_addr)
 {
   const char* kernel_mod = NULL;
   const char* envp = NULL;
   const char* rsdp_str = NULL;
-  long rsdp_addr = 0;
 
   modules_metadata = (char*) ((uint64_t) modules_metadata_addr);
 
@@ -197,8 +227,6 @@ void retrieve_info_from_freebsd_loader(uint32_t modules_metadata_addr)
 
   rsdp_str = get_static_env(envp, "acpi.rsdp");
   if (rsdp_str != NULL) {
-    char* end_ptr;
-    rsdp_addr = strtol(rsdp_str, &end_ptr, 16);
-    acpi_rsdp_addr = rsdp_addr;
+    acpi_rsdp_addr = parse_hex(rsdp_str);
   }
 }
