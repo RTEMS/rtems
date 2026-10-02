@@ -66,6 +66,7 @@ source:
 - testsuites/validation/tc-part.c
 - testsuites/validation/tc-pthread-cancel.c
 - testsuites/validation/tc-pthread-detach.c
+- testsuites/validation/tc-pthread-exit.c
 - testsuites/validation/tc-pthread-join.c
 - testsuites/validation/tc-pthread-setcancelstate.c
 - testsuites/validation/tc-pthread-setcanceltype.c
