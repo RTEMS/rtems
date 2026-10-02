@@ -866,6 +866,22 @@ _ISR_Handler_1:
 	sw	t1, 0x8001e000
 #endif
 
+#if (__mips == 3) || (__mips == 32)
+	/*
+	** A handler may access a thread-local object.  The processor raises
+	** the reserved instruction exception for the rdhwr of the access.  It
+	** writes the exception program counter only for an exception taken
+	** with EXL cleared, and the emulation of rdhwr needs that counter.
+	** IE is cleared together with EXL, so the interrupts stay disabled.
+	** The exit restores the status register of the frame.
+	*/
+	mfc0	t0,C0_SR
+	li	t1,~(SR_EXL | SR_IE)
+	and	t0,t1
+	mtc0	t0,C0_SR
+	NOP
+#endif
+
 	move	 a0,sp
         jal      mips_vector_isr_handlers
         NOP
