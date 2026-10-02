@@ -38,6 +38,7 @@
 #include <bsp/fatal.h>
 #include <rtems/libio.h>
 #include <rtems/console.h>
+#include <rtems/malloc.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
@@ -109,14 +110,14 @@ void console_initialize_data(void)
    * Allocate memory for the table of device pointers.
    */
   Console_Port_Count = Console_Configuration_Count;
-  Console_Port_Tbl   = malloc( Console_Port_Count * sizeof( console_tbl * ) );
+  Console_Port_Tbl   = rtems_malloc( Console_Port_Count * sizeof( console_tbl * ) );
   if (Console_Port_Tbl == NULL)
     bsp_fatal( BSP_FATAL_CONSOLE_NO_MEMORY_0 );
 
   /*
    * Allocate memory for the table of device specific data pointers.
    */
-  Console_Port_Data  = calloc( Console_Port_Count, sizeof( console_data ) );
+  Console_Port_Data  = rtems_calloc( Console_Port_Count, sizeof( console_data ) );
   if ( Console_Port_Data == NULL ) {
     bsp_fatal( BSP_FATAL_CONSOLE_NO_MEMORY_3 );
   }
@@ -142,6 +143,7 @@ void console_register_devices(
 {
   int old_number_of_ports;
   size_t i;
+  console_tbl **port_tbl;
 
   /*
    * Initialize the console data elements
@@ -161,27 +163,28 @@ void console_register_devices(
    */
   old_number_of_ports = Console_Port_Count;
   Console_Port_Count += number_of_ports;
-  Console_Port_Tbl = realloc(
-    Console_Port_Tbl,
-    Console_Port_Count * sizeof(console_tbl *)
-  );
-  if ( Console_Port_Tbl == NULL ) {
+  port_tbl = rtems_malloc( Console_Port_Count * sizeof(console_tbl *) );
+  if ( port_tbl == NULL ) {
     bsp_fatal( BSP_FATAL_CONSOLE_NO_MEMORY_1 );
   }
+  memcpy(
+    port_tbl,
+    Console_Port_Tbl,
+    old_number_of_ports * sizeof(console_tbl *)
+  );
+  free( Console_Port_Tbl );
+  Console_Port_Tbl = port_tbl;
 
   /*
    * Since we can only add devices before console_initialize(),
    * the data area will contain no information and must be zero
-   * before it is used. So extend the area and zero it out.
+   * before it is used. So replace the area by a zeroed one.
    */
-  Console_Port_Data = realloc(
-    Console_Port_Data,
-    Console_Port_Count * sizeof(console_data)
-  );
+  free( Console_Port_Data );
+  Console_Port_Data = rtems_calloc( Console_Port_Count, sizeof(console_data) );
   if ( Console_Port_Data == NULL ) {
     bsp_fatal( BSP_FATAL_CONSOLE_NO_MEMORY_2 );
   }
-  memset(Console_Port_Data, '\0', Console_Port_Count * sizeof(console_data));
 
   /*
    *  Now add the new devices at the end.

@@ -54,6 +54,7 @@
 
 #include <rtems.h>
 #include <rtems/libio.h>
+#include <rtems/malloc.h>
 #include <rtems/ringbuf.h>
 #include <rtems/bspIo.h>
 #include <rtems/termiostypes.h>
@@ -244,7 +245,7 @@ void ns16550_init(int minor)
   getRegister_f           getReg;
   console_tbl             *c = Console_Port_Tbl [minor];
 
-  pns16550Context=(NS16550Context *)malloc(sizeof(NS16550Context));
+  pns16550Context=(NS16550Context *)rtems_malloc(sizeof(NS16550Context));
 
   if (pns16550Context == NULL) {
     printk( "%s: Error: Not enough memory\n", __func__);
