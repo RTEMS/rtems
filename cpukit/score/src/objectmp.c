@@ -305,6 +305,26 @@ void _Objects_MP_Close( Objects_Information *information, Objects_Id the_id )
   }
 }
 
+static Objects_MP_Control *_Objects_MP_Find_name_on_node(
+  const Objects_Information *information,
+  uint32_t                   name,
+  uint32_t                   node
+)
+{
+  Objects_MP_Name_and_node name_and_node;
+
+  name_and_node.name = name;
+  name_and_node.node = node;
+
+  return _RBTree_Find_inline(
+    &information->Global_by_name,
+    &name_and_node,
+    _Objects_MP_Name_and_node_equal,
+    _Objects_MP_Name_and_node_less,
+    _Objects_MP_Name_map
+  );
+}
+
 Status_Control _Objects_MP_Global_name_search(
   const Objects_Information *information,
   Objects_Name               the_name,
@@ -316,7 +336,10 @@ Status_Control _Objects_MP_Global_name_search(
   Objects_MP_Control *the_global_object;
   ISR_lock_Context    lock_context;
 
-  if ( nodes_to_search > _Objects_Maximum_nodes ) {
+  if (
+    nodes_to_search > _Objects_Maximum_nodes &&
+    nodes_to_search != OBJECTS_SEARCH_OTHER_NODES
+  ) {
     return STATUS_INVALID_NODE;
   }
 
@@ -330,18 +353,32 @@ Status_Control _Objects_MP_Global_name_search(
       _Objects_MP_Name_less,
       _Objects_MP_Name_map
     );
+  } else if ( nodes_to_search == OBJECTS_SEARCH_OTHER_NODES ) {
+    uint32_t node;
+
+    /*
+     * The global objects of the local node are in the tree as well.  Search
+     * the other nodes from the lowest to the highest node number.
+     */
+    the_global_object = NULL;
+
+    for (
+      node = 1; node <= _Objects_Maximum_nodes && the_global_object == NULL;
+      ++node
+    ) {
+      if ( node != _Objects_Local_node ) {
+        the_global_object = _Objects_MP_Find_name_on_node(
+          information,
+          the_name.name_u32,
+          node
+        );
+      }
+    }
   } else {
-    Objects_MP_Name_and_node name_and_node;
-
-    name_and_node.name = the_name.name_u32;
-    name_and_node.node = nodes_to_search;
-
-    the_global_object = _RBTree_Find_inline(
-      &information->Global_by_name,
-      &name_and_node,
-      _Objects_MP_Name_and_node_equal,
-      _Objects_MP_Name_and_node_less,
-      _Objects_MP_Name_map
+    the_global_object = _Objects_MP_Find_name_on_node(
+      information,
+      the_name.name_u32,
+      nodes_to_search
     );
   }
 
