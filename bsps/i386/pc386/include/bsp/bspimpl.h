@@ -58,6 +58,27 @@ console_tbl *pc386_console_port(rtems_device_minor_number minor);
 extern uint64_t pc386_tsc_frequency;
 
 /*
+ * Parse the decimal digits at the start of the string.  The end pointer
+ * references the first character which is no decimal digit.  The function
+ * sets no errno, so it adds no thread-local object to the application.
+ */
+static inline unsigned long pc386_parse_decimal(
+  const char  *str,
+  const char **end
+)
+{
+  unsigned long value = 0;
+
+  while (*str >= '0' && *str <= '9') {
+    value = value * 10 + (unsigned long) (*str - '0');
+    ++str;
+  }
+
+  *end = str;
+  return value;
+}
+
+/*
  * PCI Support Methods
  */
 const pci_config_access_functions *pci_bios_initialize(void);

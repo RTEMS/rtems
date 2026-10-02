@@ -38,7 +38,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stdlib.h>
 #include <limits.h>
 
 #include <bsp.h>
@@ -140,7 +139,7 @@ void pc386_parse_gdb_arguments(void)
 
     if (comma) {
       option = comma + 1;
-      baudrate = strtoul(option, 0, 10);
+      baudrate = pc386_parse_decimal(option, &option);
       switch (baudrate) {
         case 115200:
         case 57600:

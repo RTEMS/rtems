@@ -48,6 +48,7 @@
 
 #include <bsp.h>
 
+#include <bsp/bspimpl.h>
 #include <bsp/fb_default_mode.h>
 #include <bsp/fb_vesa.h>
 #include <bsp/realmode_int.h>
@@ -60,8 +61,6 @@
 #include <rtems/framebuffer.h>
 
 #include <rtems/score/atomic.h>
-
-#include <stdlib.h>
 
 #define FB_VESA_NAME    "FB_VESA_RM"
 
@@ -323,7 +322,7 @@ static int32_t find_mode_from_string(Mode_params *mode_list,
 {
     const char* opt;
     Mode_params cmdline_mode;
-    char* endptr;
+    const char* endptr;
     cmdline_mode.bpp = 16; /* default bpp */
     opt = video_string;
     if (opt)
@@ -335,22 +334,22 @@ static int32_t find_mode_from_string(Mode_params *mode_list,
         {
             return DONT_INIT;
         }
-        cmdline_mode.resX = strtol(opt, &endptr, 10);
+        cmdline_mode.resX = pc386_parse_decimal(opt, &endptr);
         if (*endptr != 'x')
         {
             return BAD_FORMAT;
         }
         opt = endptr+1;
-        cmdline_mode.resY = strtol(opt, &endptr, 10);
+        cmdline_mode.resY = pc386_parse_decimal(opt, &endptr);
         switch (*endptr)
         {
             case '-':
                 opt = endptr+1;
                 if (strlen(opt) <= 2)
-                    cmdline_mode.bpp = strtol(opt, &endptr, 10);
+                    cmdline_mode.bpp = pc386_parse_decimal(opt, &endptr);
                 else
                 {
-                    cmdline_mode.bpp = strtol(opt, &endptr, 10);
+                    cmdline_mode.bpp = pc386_parse_decimal(opt, &endptr);
                     if (*endptr != ' ')
                     {
                         return BAD_FORMAT;

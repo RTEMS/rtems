@@ -241,16 +241,26 @@ DRIVER_MODULE(uart, pci, uart_pci_driver, uart_devclass, NULL, NULL);
 #include <bsp.h>
 #include <bsp/bspimpl.h>
 
-#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <libchip/serial.h>
 #include <libchip/ns16550.h>
 #include <rtems/bspIo.h>
+#include <rtems/malloc.h>
 #include <rtems/pci.h>
 #include "../../shared/dev/serial/legacy-console.h"
 
 #define MAX_BOARDS 4
+
+#define PCI_UART_NAME_PREFIX "/dev/pcicom"
+
+/*
+ * The device instance is a single decimal digit.
+ */
+static char pci_uart_names[MAX_BOARDS][sizeof(PCI_UART_NAME_PREFIX) + 1];
+
+RTEMS_STATIC_ASSERT(MAX_BOARDS <= 9, pci_uart_max_boards);
 
 /*
  * Information saved from PCI scan
@@ -384,7 +394,7 @@ void pci_uart_probe(void)
   if (boards) {
     int device_instance;
 
-    ports = calloc( total_ports, sizeof( console_tbl ) );
+    ports = rtems_calloc( total_ports, sizeof( console_tbl ) );
     if (ports != NULL) {
       port_p = ports;
       device_instance = 1;
@@ -393,11 +403,15 @@ void pci_uart_probe(void)
 	bool io;
 	const char* locatable = "";
 	const char* prefectable = locatable;
-	char name[32];
+	char *name;
 	if ( conf[b].found == false )
 	  continue;
-	sprintf( name, "/dev/pcicom%d", device_instance++ );
-	port_p->sDeviceName   = strdup( name );
+	name = pci_uart_names[device_instance - 1];
+	memcpy( name, PCI_UART_NAME_PREFIX, sizeof( PCI_UART_NAME_PREFIX ) - 1 );
+	name[sizeof( PCI_UART_NAME_PREFIX ) - 1] = (char) ( '0' + device_instance );
+	name[sizeof( PCI_UART_NAME_PREFIX )] = '\0';
+	++device_instance;
+	port_p->sDeviceName   = name;
 	port_p->deviceType    = SERIAL_NS16550;
 	if ( conf[b].irq <= 15 ) {
 	  port_p->pDeviceFns    = &ns16550_fns;
