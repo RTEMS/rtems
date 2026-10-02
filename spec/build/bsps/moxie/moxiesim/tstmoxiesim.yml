@@ -34,6 +34,7 @@ actions:
     - sp37
     - spcan01
     - spconsole01
+    - spcpuusage01
     - spedfsched04
     - spfatal26
     - spfatal33
