@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (C) 2020 embedded brains GmbH & Co. KG
+ * Copyright (C) 2020, 2026 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -35,6 +35,8 @@
 #include "config.h"
 #endif
 
+#include <rtems/score/objectimpl.h>
+
 #include "tr-object-ident.h"
 
 #include <rtems/test.h>
@@ -51,9 +53,10 @@ typedef struct {
   uint16_t Skip : 1;
   uint16_t Pre_Name_NA : 1;
   uint16_t Pre_Node_NA : 1;
+  uint16_t Pre_RemoteObj_NA : 1;
   uint16_t Pre_Id_NA : 1;
   uint16_t Post_Status : 3;
-  uint16_t Post_Id : 3;
+  uint16_t Post_Id : 2;
 } RtemsReqIdent_Entry;
 
 /**
@@ -69,8 +72,6 @@ typedef struct {
   rtems_id *id;
 
   rtems_id id_value;
-
-  rtems_id id_remote_object;
 
   /**
    * @brief This member contains a copy of the corresponding
@@ -94,7 +95,7 @@ typedef struct {
     /**
      * @brief This member defines the pre-condition states for the next action.
      */
-    size_t pcs[ 3 ];
+    size_t pcs[ 4 ];
 
     /**
      * @brief If this member is true, then the test action loop is executed.
@@ -134,12 +135,16 @@ static const char *const RtemsReqIdent_PreDesc_Node[] = {
   "NA"
 };
 
+static const char *const RtemsReqIdent_PreDesc_RemoteObj[] =
+  { "Absent", "Exists", "NA" };
+
 static const char *const RtemsReqIdent_PreDesc_Id[] =
   { "Valid", "Null", "NA" };
 
 static const char *const *const RtemsReqIdent_PreDesc[] = {
   RtemsReqIdent_PreDesc_Name,
   RtemsReqIdent_PreDesc_Node,
+  RtemsReqIdent_PreDesc_RemoteObj,
   RtemsReqIdent_PreDesc_Id,
   NULL
 };
@@ -152,8 +157,8 @@ static void RtemsReqIdent_Pre_Name_Prepare(
   switch ( state ) {
     case RtemsReqIdent_Pre_Name_Invalid: {
       /*
-       * While the `name` parameter is not associated with an active object of
-       * the specified class .
+       * While the `name` parameter is not equal to the name of an active
+       * object of the specified class on the local node.
        */
       ctx->name = 1;
       break;
@@ -161,8 +166,8 @@ static void RtemsReqIdent_Pre_Name_Prepare(
 
     case RtemsReqIdent_Pre_Name_Valid: {
       /*
-       * While the `name` parameter is associated with an active object of the
-       * specified class .
+       * While the `name` parameter is equal to the name of an active object of
+       * the specified class on the local node.
        */
       ctx->name = ctx->name_local_object;
       break;
@@ -183,23 +188,25 @@ static void RtemsReqIdent_Pre_Node_Prepare(
       /*
        * While the `node` parameter is the local node number.
        */
-      ctx->node = 1;
+      ctx->node = rtems_object_get_local_node();
       break;
     }
 
     case RtemsReqIdent_Pre_Node_Remote: {
       /*
-       * While the `node` parameter is a remote node number.
+       * While the `node` parameter is a valid node number other than the local
+       * node number.
        */
-      ctx->node = 2;
+      /* Not constructible on one node */
       break;
     }
 
     case RtemsReqIdent_Pre_Node_Invalid: {
       /*
-       * While the `node` parameter is an invalid node number.
+       * While the `node` parameter is greater than the maximum node count of
+       * the system.
        */
-      ctx->node = 256;
+      ctx->node = (uint32_t) _Objects_Maximum_nodes + 1;
       break;
     }
 
@@ -228,6 +235,34 @@ static void RtemsReqIdent_Pre_Node_Prepare(
     }
 
     case RtemsReqIdent_Pre_Node_NA:
+      break;
+  }
+}
+
+static void RtemsReqIdent_Pre_RemoteObj_Prepare(
+  RtemsReqIdent_Pre_RemoteObj state
+)
+{
+  switch ( state ) {
+    case RtemsReqIdent_Pre_RemoteObj_Absent: {
+      /*
+       * While no object of the specified class with a name equal to the `name`
+       * parameter exists on a node other than the local node.
+       */
+      /* The system has one node */
+      break;
+    }
+
+    case RtemsReqIdent_Pre_RemoteObj_Exists: {
+      /*
+       * While an object of the specified class with a name equal to the `name`
+       * parameter exists on a node other than the local node.
+       */
+      /* Not constructible on one node */
+      break;
+    }
+
+    case RtemsReqIdent_Pre_RemoteObj_NA:
       break;
   }
 }
@@ -321,38 +356,20 @@ static void RtemsReqIdent_Post_Id_Check(
 
     case RtemsReqIdent_Post_Id_Null: {
       /*
-       * While the id is NULL.
+       * The `id` parameter shall be NULL.
        */
       T_null( ctx->id ) break;
     }
 
     case RtemsReqIdent_Post_Id_LocalObj: {
       /*
-       * The value of the object identifier referenced by the id parameter
-       * shall be the identifier of a local object of the specified class with
-       * a name equal to the name parameter. If more than one local object of
-       * the specified class with such a name exists, then it shall be the
-       * identifier of the object with the lowest object index.
+       * The value of the object identifier referenced by the `id` parameter
+       * shall be the identifier of the object with the lowest object index of
+       * the active objects of the specified class on the local node with a
+       * name equal to the `name` parameter.
        */
       T_eq_ptr( ctx->id, &ctx->id_value );
       T_eq_u32( ctx->id_value, ctx->id_local_object );
-      break;
-    }
-
-    case RtemsReqIdent_Post_Id_RemoteObj: {
-      /*
-       * The value of the object identifier referenced by the id parameter
-       * shall be the identifier of a remote object of the specified class on a
-       * eligible node defined by the node parameter with a name equal to the
-       * name parameter. If more than one local object of the specified class
-       * with such a name exists, then it shall be the identifier of the object
-       * with the lowest object index. Otherwise, if more than one object of
-       * the specified class with such a name exists on remote eligible nodes,
-       * then it shall be the identifier of the object with the lowest node
-       * index and the lowest object index on this node.
-       */
-      T_eq_ptr( ctx->id, &ctx->id_value );
-      T_eq_u32( ctx->id_value, ctx->id_remote_object );
       break;
     }
 
@@ -370,19 +387,26 @@ static void RtemsReqIdent_Action( RtemsReqIdent_Context *ctx )
 
 static const RtemsReqIdent_Entry
 RtemsReqIdent_Entries[] = {
-  { 0, 0, 0, 0, RtemsReqIdent_Post_Status_InvAddr, RtemsReqIdent_Post_Id_Null },
-  { 0, 0, 0, 0, RtemsReqIdent_Post_Status_InvName, RtemsReqIdent_Post_Id_Nop },
-  { 0, 0, 0, 0, RtemsReqIdent_Post_Status_Ok, RtemsReqIdent_Post_Id_LocalObj },
 #if defined(RTEMS_MULTIPROCESSING)
-  { 0, 0, 0, 0, RtemsReqIdent_Post_Status_Ok, RtemsReqIdent_Post_Id_RemoteObj }
+  { 1, 0, 0, 0, 0, RtemsReqIdent_Post_Status_NA, RtemsReqIdent_Post_Id_NA },
 #else
-  { 0, 0, 0, 0, RtemsReqIdent_Post_Status_InvName, RtemsReqIdent_Post_Id_Nop }
+  { 1, 0, 0, 0, 0, RtemsReqIdent_Post_Status_NA, RtemsReqIdent_Post_Id_NA },
+#endif
+  { 0, 0, 0, 0, 0, RtemsReqIdent_Post_Status_InvAddr,
+    RtemsReqIdent_Post_Id_Null },
+  { 0, 0, 0, 0, 0, RtemsReqIdent_Post_Status_InvName, RtemsReqIdent_Post_Id_Nop },
+  { 0, 0, 0, 0, 0, RtemsReqIdent_Post_Status_Ok, RtemsReqIdent_Post_Id_LocalObj },
+#if defined(RTEMS_MULTIPROCESSING)
+  { 0, 0, 0, 0, 0, RtemsReqIdent_Post_Status_InvNode, RtemsReqIdent_Post_Id_Nop }
+#else
+  { 0, 0, 0, 0, 0, RtemsReqIdent_Post_Status_InvName, RtemsReqIdent_Post_Id_Nop }
 #endif
 };
 
 static const uint8_t
 RtemsReqIdent_Map[] = {
-  1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 3, 0, 1, 0, 2, 0, 3, 0, 2, 0
+  2, 1, 0, 0, 0, 0, 0, 0, 4, 1, 0, 0, 2, 1, 0, 0, 2, 1, 0, 0, 2, 1, 0, 0, 3, 1,
+  0, 0, 0, 0, 0, 0, 4, 1, 0, 0, 3, 1, 0, 0, 2, 1, 0, 0, 3, 1, 0, 0
 };
 
 /* clang-format on */
@@ -423,7 +447,8 @@ static void RtemsReqIdent_TestVariant( RtemsReqIdent_Context *ctx )
 {
   RtemsReqIdent_Pre_Name_Prepare( ctx, ctx->Map.pcs[ 0 ] );
   RtemsReqIdent_Pre_Node_Prepare( ctx, ctx->Map.pcs[ 1 ] );
-  RtemsReqIdent_Pre_Id_Prepare( ctx, ctx->Map.pcs[ 2 ] );
+  RtemsReqIdent_Pre_RemoteObj_Prepare( ctx->Map.pcs[ 2 ] );
+  RtemsReqIdent_Pre_Id_Prepare( ctx, ctx->Map.pcs[ 3 ] );
   RtemsReqIdent_Action( ctx );
   RtemsReqIdent_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
   RtemsReqIdent_Post_Id_Check( ctx, ctx->Map.entry.Post_Id );
@@ -464,12 +489,23 @@ void RtemsReqIdent_Run(
       ++ctx->Map.pcs[ 1 ]
     ) {
       for (
-        ctx->Map.pcs[ 2 ] = RtemsReqIdent_Pre_Id_Valid;
-        ctx->Map.pcs[ 2 ] < RtemsReqIdent_Pre_Id_NA;
+        ctx->Map.pcs[ 2 ] = RtemsReqIdent_Pre_RemoteObj_Absent;
+        ctx->Map.pcs[ 2 ] < RtemsReqIdent_Pre_RemoteObj_NA;
         ++ctx->Map.pcs[ 2 ]
       ) {
-        ctx->Map.entry = RtemsReqIdent_PopEntry( ctx );
-        RtemsReqIdent_TestVariant( ctx );
+        for (
+          ctx->Map.pcs[ 3 ] = RtemsReqIdent_Pre_Id_Valid;
+          ctx->Map.pcs[ 3 ] < RtemsReqIdent_Pre_Id_NA;
+          ++ctx->Map.pcs[ 3 ]
+        ) {
+          ctx->Map.entry = RtemsReqIdent_PopEntry( ctx );
+
+          if ( ctx->Map.entry.Skip ) {
+            continue;
+          }
+
+          RtemsReqIdent_TestVariant( ctx );
+        }
       }
     }
   }

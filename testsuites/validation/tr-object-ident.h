@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (C) 2020 embedded brains GmbH & Co. KG
+ * Copyright (C) 2020, 2026 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -63,6 +63,12 @@ typedef enum {
 } RtemsReqIdent_Pre_Node;
 
 typedef enum {
+  RtemsReqIdent_Pre_RemoteObj_Absent,
+  RtemsReqIdent_Pre_RemoteObj_Exists,
+  RtemsReqIdent_Pre_RemoteObj_NA
+} RtemsReqIdent_Pre_RemoteObj;
+
+typedef enum {
   RtemsReqIdent_Pre_Id_Valid,
   RtemsReqIdent_Pre_Id_Null,
   RtemsReqIdent_Pre_Id_NA
@@ -80,7 +86,6 @@ typedef enum {
   RtemsReqIdent_Post_Id_Nop,
   RtemsReqIdent_Post_Id_Null,
   RtemsReqIdent_Post_Id_LocalObj,
-  RtemsReqIdent_Post_Id_RemoteObj,
   RtemsReqIdent_Post_Id_NA
 } RtemsReqIdent_Post_Id;
 
