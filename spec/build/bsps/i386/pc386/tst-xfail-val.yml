@@ -4,7 +4,6 @@ actions:
     reason: null
     state: expected-fail
     tests:
-    - validation-intr
     - validation-io-kernel
 build-type: option
 copyrights:

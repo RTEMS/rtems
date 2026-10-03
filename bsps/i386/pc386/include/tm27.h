@@ -32,6 +32,7 @@
 #define MUST_WAIT_FOR_INTERRUPT 0
 
 #define TM27_INTERRUPT_VECTOR_DEFAULT BSP_SOFTWARE_IRQ
+#define TM27_INTERRUPT_VECTOR_ALTERNATIVE BSP_SOFTWARE_IRQ_2
 
 static rtems_interrupt_entry pc386_tm27_interrupt_entry;
 
@@ -64,6 +65,16 @@ static inline void Clear_tm27_intr( void )
 
 static inline void Lower_tm27_intr( void )
 {
+}
+
+static inline rtems_status_code _TM27_Raise_alternative( void )
+{
+  return rtems_interrupt_raise( TM27_INTERRUPT_VECTOR_ALTERNATIVE );
+}
+
+static inline rtems_status_code _TM27_Clear_alternative( void )
+{
+  return rtems_interrupt_clear( TM27_INTERRUPT_VECTOR_ALTERNATIVE );
 }
 
 #endif

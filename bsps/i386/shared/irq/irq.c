@@ -350,6 +350,16 @@ RTEMS_STATIC_ASSERT(
   BSP_SOFTWARE_IRQ_IDT_INDEX
 );
 
+RTEMS_STATIC_ASSERT(
+  BSP_SOFTWARE_IRQ_2_IDT_INDEX == BSP_IRQ_VECTOR_BASE + BSP_SOFTWARE_IRQ_2,
+  BSP_SOFTWARE_IRQ_2_IDT_INDEX
+);
+
+static inline bool is_software_vector(rtems_vector_number vector)
+{
+  return vector == BSP_SOFTWARE_IRQ || vector == BSP_SOFTWARE_IRQ_2;
+}
+
 rtems_status_code bsp_interrupt_get_attributes(
   rtems_vector_number         vector,
   rtems_interrupt_attributes *attributes
@@ -361,7 +371,7 @@ rtems_status_code bsp_interrupt_get_attributes(
     attributes->maybe_enable = true;
     attributes->can_disable = true;
     attributes->maybe_disable = true;
-  } else if (vector == BSP_SOFTWARE_IRQ && lapic_is_available()) {
+  } else if (is_software_vector(vector) && lapic_is_available()) {
     attributes->is_maskable = true;
     attributes->can_raise = true;
     attributes->cleared_by_acknowledge = true;
@@ -409,13 +419,13 @@ rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
-  if (vector != BSP_SOFTWARE_IRQ || !lapic_is_available()) {
+  if (!is_software_vector(vector) || !lapic_is_available()) {
     return RTEMS_UNSATISFIED;
   }
 
   lapic_write(
     LAPIC_ICR_LOW,
-    LAPIC_ICR_DS_SELF | LAPIC_ICR_LEVELASSERT | BSP_SOFTWARE_IRQ_IDT_INDEX
+    LAPIC_ICR_DS_SELF | LAPIC_ICR_LEVELASSERT | (BSP_IRQ_VECTOR_BASE + vector)
   );
 
   while ((lapic_read(LAPIC_ICR_LOW) & LAPIC_ICR_STATUS_PEND) != 0) {
@@ -623,7 +633,7 @@ void BSP_dispatch_isr(int vector)
       rtems_interrupt_lock_release_isr(&rtems_i8259_access_lock, &lock_context);
     }
 
-    if (vector == BSP_SOFTWARE_IRQ) {
+    if (is_software_vector(vector)) {
       /*
        * Acknowledge before the handlers run, so that a handler which enables
        * the interrupts can take a nested interrupt of the same vector.

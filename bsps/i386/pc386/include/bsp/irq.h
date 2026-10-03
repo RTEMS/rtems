@@ -79,7 +79,7 @@ extern "C" {
  * Define the number of valid vectors. This is different to the number of IRQ
  * signals supported. Use this value to allocation vector data or range check.
  */
-#define BSP_IRQ_VECTOR_NUMBER        18
+#define BSP_IRQ_VECTOR_NUMBER        19
 #define BSP_IRQ_VECTOR_LOWEST_OFFSET 0
 #define BSP_IRQ_VECTOR_MAX_OFFSET    (BSP_IRQ_VECTOR_NUMBER - 1)
 
@@ -99,12 +99,18 @@ extern "C" {
 #define BSP_RT_TIMER3		10
 #define BSP_SMP_IPI   		16 /* not part of the ATPIC */
 #define BSP_SOFTWARE_IRQ	17 /* raised by the INT instruction */
+#define BSP_SOFTWARE_IRQ_2	18 /* raised by an IPI to self */
 
 /** @brief
  * The interrupt descriptor table index of BSP_SOFTWARE_IRQ.  It is needed as
  * a literal by the INT instruction which raises the interrupt.
  */
 #define BSP_SOFTWARE_IRQ_IDT_INDEX 0x31
+
+/** @brief
+ * The interrupt descriptor table index of BSP_SOFTWARE_IRQ_2.
+ */
+#define BSP_SOFTWARE_IRQ_2_IDT_INDEX 0x32
 
 #define BSP_INTERRUPT_VECTOR_COUNT BSP_IRQ_VECTOR_NUMBER
 
