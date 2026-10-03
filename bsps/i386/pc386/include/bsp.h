@@ -172,6 +172,7 @@ void          _IBMPC_outch    (char);    /* from 'outch.c'  */
 char          _IBMPC_inch     (void);    /* from 'inch.c'   */
 char          _IBMPC_inch_sleep (void);  /* from 'inch.c'   */
 int           BSP_wait_polled_input(void); /* from 'inch.c' */
+int           BSP_poll_polled_input(void); /* from 'inch.c' */
 int           rtems_kbpoll( void );      /* from 'inch.c' */
 int           getch( void );             /* from 'inch.c' */
 void           add_to_queue( unsigned short b ); /* from 'inch.c' */

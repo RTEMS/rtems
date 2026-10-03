@@ -5,7 +5,6 @@ actions:
     state: expected-fail
     tests:
     - validation-intr
-    - validation-io-kernel
 build-type: option
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH & Co. KG

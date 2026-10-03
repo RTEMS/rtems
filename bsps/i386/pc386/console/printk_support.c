@@ -139,25 +139,20 @@ int BSP_inch(void)
     bool isVga = false;
   #endif
 
-  int result = -1;
-
   if ( !isVga && Console_Port_Tbl != NULL ) {
     console_tbl *port = pc386_console_port(BSPPrintkPort);
     if (serialValid(port)) {
       if (port->pDeviceFns->deviceRead) {
-        do {
-          result = port->pDeviceFns->deviceRead( BSPPrintkPort );
-        } while (result == -1);
-        return result;
+        return port->pDeviceFns->deviceRead( BSPPrintkPort );
       }
     }
   }
 
   #if BSP_ENABLE_VGA
-    result = BSP_wait_polled_input();
+    return BSP_poll_polled_input();
+  #else
+    return -1;
   #endif
-
-  return result;
 }
 
 BSP_output_char_function_type     BSP_output_char = BSP_outch;
