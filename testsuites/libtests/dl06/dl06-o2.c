@@ -35,7 +35,10 @@
 #define printf( ... ) rtems_printf( &rtems_test_printer, __VA_ARGS__ );
 
 /*
- * Call function that are not part of the RTEMS kernel base image.
+ * Call functions of the C library and the mathematical library.  The
+ * functions atan2() and tan() are not part of the base image.  The object
+ * file of lcong48() defines thread-local objects, which a loaded module cannot
+ * provide, so the base image links lcong48().
  */
 
 void dl_o2_func1( unsigned short s[ 7 ] )

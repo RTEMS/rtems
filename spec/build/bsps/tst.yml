@@ -17,12 +17,6 @@ actions:
     - dhrystone
     - linpack
     - whetstone
-- set-test-state:
-    reason: |
-      Fails due to lack of TLS support in rtems-ld and RAP format
-    state: expected-fail
-    tests:
-    - dl06
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG

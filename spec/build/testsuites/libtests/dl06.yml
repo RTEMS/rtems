@@ -39,7 +39,8 @@ enabled-by:
   - BUILD_LIBDL
 includes:
 - testsuites/libtests/dl06
-ldflags: []
+ldflags:
+- -Wl,--undefined=lcong48
 links: []
 prepare-build: null
 prepare-configure: null
