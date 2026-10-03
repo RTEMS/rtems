@@ -13,7 +13,7 @@
  *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
  *
  *  Modifications to support reference counting in the file system are
- *  Copyright (c) 2012 embedded brains GmbH & Co. KG
+ *  Copyright (c) 2012, 2026 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -558,7 +558,9 @@ rtems_rfs_rtems_rename(const rtems_filesystem_location_info_t* old_parent_loc,
   rtems_rfs_ino old_parent;
   rtems_rfs_ino new_parent;
   rtems_rfs_ino ino;
+  rtems_rfs_inode_handle inode;
   uint32_t doff;
+  bool is_dir;
   int rc;
 
   old_parent = rtems_rfs_rtems_get_pathloc_ino(old_parent_loc);
@@ -571,6 +573,18 @@ rtems_rfs_rtems_rename(const rtems_filesystem_location_info_t* old_parent_loc,
     printf("rtems-rfs: rename: ino:%" PRId32 " doff:%" PRIu32
            ", new parent:%" PRId32 "\n",
            ino, doff, new_parent);
+  }
+
+  rc = rtems_rfs_inode_open(fs, ino, &inode, true);
+  if (rc) {
+    return rtems_rfs_rtems_error("rename: opening inode", rc);
+  }
+
+  is_dir = S_ISDIR(rtems_rfs_inode_get_mode(&inode));
+
+  rc = rtems_rfs_inode_close(fs, &inode);
+  if (rc) {
+    return rtems_rfs_rtems_error("rename: closing inode", rc);
   }
 
   /*
@@ -590,6 +604,57 @@ rtems_rfs_rtems_rename(const rtems_filesystem_location_info_t* old_parent_loc,
       rtems_rfs_unlink(fs, old_parent, ino, doff, rtems_rfs_unlink_dir_allowed);
   if (rc) {
     return rtems_rfs_rtems_error("rename: unlinking", rc);
+  }
+
+  /*
+   * The link to the new parent counted the '..' entry of a directory.  The
+   * unlink keeps the directory, so remove the count from the old parent.
+   */
+  if (is_dir) {
+    uint16_t links;
+
+    rc = rtems_rfs_inode_open(fs, old_parent, &inode, true);
+    if (rc) {
+      return rtems_rfs_rtems_error("rename: opening old parent", rc);
+    }
+
+    links = rtems_rfs_inode_get_links(&inode);
+    if (links > 1) {
+      rtems_rfs_inode_set_links(&inode, links - 1);
+    }
+
+    rc = rtems_rfs_inode_close(fs, &inode);
+    if (rc) {
+      return rtems_rfs_rtems_error("rename: closing old parent", rc);
+    }
+  }
+
+  if (is_dir && old_parent != new_parent) {
+    rtems_rfs_ino dotdot_ino;
+    uint32_t dotdot_doff;
+    int rc_close;
+
+    rc = rtems_rfs_inode_open(fs, ino, &inode, true);
+    if (rc) {
+      return rtems_rfs_rtems_error("rename: opening directory", rc);
+    }
+
+    rc = rtems_rfs_dir_lookup_ino(fs, &inode, "..", 2, &dotdot_ino,
+                                  &dotdot_doff);
+    if (rc == 0) {
+      rc = rtems_rfs_dir_del_entry(fs, &inode, dotdot_ino, dotdot_doff);
+    }
+    if (rc == 0) {
+      rc = rtems_rfs_dir_add_entry(fs, &inode, "..", 2, new_parent);
+    }
+
+    rc_close = rtems_rfs_inode_close(fs, &inode);
+    if (rc == 0) {
+      rc = rc_close;
+    }
+    if (rc) {
+      return rtems_rfs_rtems_error("rename: updating '..'", rc);
+    }
   }
 
   return 0;

@@ -56,6 +56,7 @@ int rtems_rfs_link(rtems_rfs_file_system* fs, const char* name, int length,
   rtems_rfs_inode_handle parent_inode;
   rtems_rfs_inode_handle target_inode;
   uint16_t links;
+  bool is_dir;
   int rc;
 
   if (rtems_rfs_trace(RTEMS_RFS_TRACE_LINK)) {
@@ -87,6 +88,11 @@ int rtems_rfs_link(rtems_rfs_file_system* fs, const char* name, int length,
     return rc;
   }
 
+  /*
+   * A directory adds the link of its '..' entry to its parent.
+   */
+  is_dir = S_ISDIR(rtems_rfs_inode_get_mode(&target_inode));
+
   rc = rtems_rfs_dir_add_entry(fs, &parent_inode, name, length, target);
   if (rc > 0) {
     rtems_rfs_inode_close(fs, &parent_inode);
@@ -96,6 +102,11 @@ int rtems_rfs_link(rtems_rfs_file_system* fs, const char* name, int length,
 
   links = rtems_rfs_inode_get_links(&target_inode) + 1;
   rtems_rfs_inode_set_links(&target_inode, links);
+
+  if (is_dir) {
+    links = rtems_rfs_inode_get_links(&parent_inode) + 1;
+    rtems_rfs_inode_set_links(&parent_inode, links);
+  }
 
   rc = rtems_rfs_inode_time_stamp_now(&parent_inode, true, true);
   if (rc > 0) {
