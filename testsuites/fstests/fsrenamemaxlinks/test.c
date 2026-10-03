@@ -45,11 +45,14 @@
 const char             rtems_test_name[] = "FSRENAMEMAXLINKS " FILESYSTEM;
 const RTEMS_TEST_STATE rtems_test_state = TEST_STATE;
 
+#define MAX_SUBDIRS 8
+
 void test( void )
 {
   int status;
   int rv;
   int i;
+  int subdirs;
 
   const char *dir01 = "dir01";
   const char *dir02 = "dir02";
@@ -75,8 +78,12 @@ void test( void )
   rtems_test_assert( status == 0 );
 
   /*
-   * The new argument points to a non existant directory and
-   * the old argument points to an existant directory at LINK_MAX.
+   * The old argument points to a directory.  A file system may count the
+   * '..' entry of a subdirectory as a link to its parent.  Fill a directory
+   * with subdirectories until its link count reaches LINK_MAX or the number of
+   * subdirectories reaches MAX_SUBDIRS.  A rename of the old directory into
+   * the filled directory shall fail with EMLINK if its link count reached
+   * LINK_MAX, otherwise the rename shall succeed.
    */
 
   status = mkdir( dir01, mode );
@@ -88,11 +95,20 @@ void test( void )
   status = stat( dir01, &statbuf );
   rtems_test_assert( status == 0 );
 
-  for ( i = statbuf.st_nlink; i < LINK_MAX_val; i++ ) {
-    rv = snprintf( link_name, sizeof( link_name ), "%s/%d", dir01, i );
+  subdirs = 0;
+
+  while (
+    (long) statbuf.st_nlink < LINK_MAX_val && subdirs < MAX_SUBDIRS
+  ) {
+    rv = snprintf( link_name, sizeof( link_name ), "%s/%d", dir01, subdirs );
     rtems_test_assert( rv < (int) sizeof( link_name ) );
 
     status = mkdir( link_name, mode );
+    rtems_test_assert( status == 0 );
+
+    ++subdirs;
+
+    status = stat( dir01, &statbuf );
     rtems_test_assert( status == 0 );
   }
 
@@ -101,13 +117,22 @@ void test( void )
 
   rv = snprintf( path01, sizeof( path01 ), "%s/%s", dir01, dir01 );
   rtems_test_assert( rv < (int) sizeof( path01 ) );
-  EXPECT_ERROR( EMLINK, rename, dir02, path01 );
+
+  if ( (long) statbuf.st_nlink >= LINK_MAX_val ) {
+    EXPECT_ERROR( EMLINK, rename, dir02, path01 );
+    EXPECT_EQUAL( -1, rmdir, path01 );
+    EXPECT_EQUAL( 0, rmdir, dir02 );
+  } else {
+    EXPECT_EQUAL( 0, rename, dir02, path01 );
+    EXPECT_EQUAL( -1, rmdir, dir02 );
+    EXPECT_EQUAL( 0, rmdir, path01 );
+  }
 
   /*
    * Clear directory
    */
 
-  for ( i = statbuf.st_nlink; i < LINK_MAX_val; i++ ) {
+  for ( i = 0; i < subdirs; i++ ) {
     rv = snprintf( link_name, sizeof( link_name ), "%s/%d", dir01, i );
     rtems_test_assert( rv < (int) sizeof( link_name ) );
 
@@ -115,8 +140,6 @@ void test( void )
     rtems_test_assert( status == 0 );
   }
 
-  EXPECT_EQUAL( -1, rmdir, path01 );
-  EXPECT_EQUAL( 0, rmdir, dir02 );
   EXPECT_EQUAL( 0, rmdir, dir01 );
 
   /*

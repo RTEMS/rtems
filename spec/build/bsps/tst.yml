@@ -23,16 +23,6 @@ actions:
     state: expected-fail
     tests:
     - dl06
-- set-test-state:
-    reason: |
-      Fails because of #5070, this test seems invalid
-    state: expected-fail
-    tests:
-    - jffs2fsrenamemaxlinks
-    - jffs2nandfsrenamemaxlinks
-    - mdosfsfsrenamemaxlinks
-    - mimfsfsrenamemaxlinks
-    - mrfsfsrenamemaxlinks
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH & Co. KG
