@@ -14,6 +14,16 @@
 
 #ifndef _RTEMS_TMTEST27
 #error "This is an RTEMS internal file you must not include directly."
+static inline rtems_status_code _TM27_Raise_alternative( void )
+{
+  return rtems_interrupt_raise( TM27_INTERRUPT_VECTOR_ALTERNATIVE );
+}
+
+static inline rtems_status_code _TM27_Clear_alternative( void )
+{
+  return rtems_interrupt_clear( TM27_INTERRUPT_VECTOR_ALTERNATIVE );
+}
+
 #endif
 
 #ifndef __tm27_h
@@ -27,58 +37,38 @@
 
 #define MUST_WAIT_FOR_INTERRUPT 1
 
-static void stub_rtems_irq_enable( const struct __rtems_irq_connect_data__ *i )
-{
-  (void) i;
-}
+#define TM27_INTERRUPT_VECTOR_DEFAULT BSP_OPENPIC_IPI_LOWEST_OFFSET
+#define TM27_INTERRUPT_VECTOR_ALTERNATIVE ( BSP_OPENPIC_IPI_LOWEST_OFFSET + 1 )
 
-static void stub_rtems_irq_disable( const struct __rtems_irq_connect_data__ *i )
-{
-  (void) i;
-}
-
-static int stub_rtems_irq_is_enabled(
-  const struct __rtems_irq_connect_data__ *i
-)
-{
-  (void) i;
-  return 0;
-}
-
-static rtems_irq_connect_data clockIrqData = {
-  .name = BSP_DECREMENTER,
-  .hdl = 0,
-  .handle = 0,
-  .on = stub_rtems_irq_enable,
-  .off = stub_rtems_irq_disable,
-  .isOn = stub_rtems_irq_is_enabled,
-  .next_handler = NULL
-};
+static rtems_interrupt_entry psim_tm27_interrupt_entry;
 
 static inline void Install_tm27_vector( rtems_interrupt_handler handler )
 {
-  clockIrqData.hdl = handler;
-  if ( !BSP_install_rtems_irq_handler( &clockIrqData ) ) {
-    printk( "Error installing clock interrupt handler!\n" );
-    rtems_fatal_error_occurred( 1 );
-  }
+  rtems_interrupt_entry_initialize(
+    &psim_tm27_interrupt_entry,
+    handler,
+    NULL,
+    "tm27"
+  );
+  (void) rtems_interrupt_entry_install(
+    TM27_INTERRUPT_VECTOR_DEFAULT,
+    RTEMS_INTERRUPT_SHARED,
+    &psim_tm27_interrupt_entry
+  );
 }
 
-#define Cause_tm27_intr()                   \
-  do {                                      \
-    uint32_t _clicks = 1;                   \
-    __asm__ volatile( "mtdec %0"            \
-                      : "=r"(( _clicks ))   \
-                      : "r"(( _clicks )) ); \
-  } while ( 0 )
+static inline void Cause_tm27_intr( void )
+{
+  (void) rtems_interrupt_raise( TM27_INTERRUPT_VECTOR_DEFAULT );
+}
 
-#define Clear_tm27_intr()                   \
-  do {                                      \
-    uint32_t _clicks = 0xffffffff;          \
-    __asm__ volatile( "mtdec %0"            \
-                      : "=r"(( _clicks ))   \
-                      : "r"(( _clicks )) ); \
-  } while ( 0 )
+/*
+ * The acknowledge of an interprocessor interrupt clears it, so there is
+ * nothing to clear.
+ */
+static inline void Clear_tm27_intr( void )
+{
+}
 
 #define Lower_tm27_intr()              \
   do {                                 \
@@ -92,5 +82,15 @@ static inline void Install_tm27_vector( rtems_interrupt_handler handler )
                       : "=r"( _msr )   \
                       : "r"( _msr ) ); \
   } while ( 0 )
+
+static inline rtems_status_code _TM27_Raise_alternative( void )
+{
+  return rtems_interrupt_raise( TM27_INTERRUPT_VECTOR_ALTERNATIVE );
+}
+
+static inline rtems_status_code _TM27_Clear_alternative( void )
+{
+  return rtems_interrupt_clear( TM27_INTERRUPT_VECTOR_ALTERNATIVE );
+}
 
 #endif

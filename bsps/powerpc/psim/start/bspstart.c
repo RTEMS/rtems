@@ -37,6 +37,7 @@
 #include <bsp/irq.h>
 #include <psim.h>
 #include <bsp/bootcard.h>
+#include <bsp/irq-generic.h>
 #include <bsp/linker-symbols.h>
 #include <rtems/bspIo.h>
 #include <rtems/counter.h>
@@ -45,6 +46,7 @@
 #include <libcpu/cpuIdent.h>
 #include <libcpu/bat.h>
 #include <libcpu/spr.h>
+#include <bsp/vectors.h>
 
 SPR_RW(SPRG1)
 
@@ -79,6 +81,21 @@ unsigned int BSP_time_base_divisor;
 
 extern unsigned long __rtems_end[];
 
+/*
+ * The handler and bsp_interrupt_dispatch() are in distinct object files, so
+ * that the linker can wrap bsp_interrupt_dispatch().
+ */
+static int psim_interrupt_handler(
+  BSP_Exception_frame *frame,
+  unsigned             exception_number
+)
+{
+  (void) frame;
+
+  bsp_interrupt_dispatch(exception_number);
+  return 0;
+}
+
 uint32_t _CPU_Counter_frequency(void)
 {
   return bsp_clicks_per_usec * 1000000;
@@ -112,10 +129,9 @@ void bsp_start( void )
     (void *) 0xfff00000
   );
 
-  /*
-   * Initalize RTEMS IRQ system
-   */
-  BSP_rtems_irq_mng_init(0);
+  ppc_exc_set_handler(ASM_EXT_VECTOR, psim_interrupt_handler);
+  ppc_exc_set_handler(ASM_DEC_VECTOR, psim_interrupt_handler);
+  bsp_interrupt_initialize();
 
   /*
    * Setup BATs and enable MMU

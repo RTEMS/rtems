@@ -42,53 +42,32 @@
 #ifndef LIBBSP_POWERPC_IRQ_H
 #define LIBBSP_POWERPC_IRQ_H
 
-#ifndef BSP_SHARED_HANDLER_SUPPORT
-#define BSP_SHARED_HANDLER_SUPPORT      1
-#endif
-
 #ifndef ASM
 
 #include <rtems/irq.h>
+#include <rtems/irq-extension.h>
 
+#define BSP_POWERPC_IRQ_GENERIC_SUPPORT 1
 
-/*
- * Symblolic IRQ names and related definitions.
- */
+/* The external interrupt sources of the OpenPIC */
+#define BSP_OPENPIC_SOURCE_NUMBER 16
+#define BSP_OPENPIC_SOURCE_LOWEST_OFFSET 0
 
-/*
- * PCI IRQ handlers related definitions
- * CAUTION : BSP_PCI_IRQ_LOWEST_OFFSET should be equal to OPENPIC_VEC_SOURCE
- */
-#define BSP_PCI_IRQ_NUMBER		(16)
-#define BSP_PCI_IRQ_LOWEST_OFFSET	(0)
-#define BSP_PCI_IRQ_MAX_OFFSET		(BSP_PCI_IRQ_LOWEST_OFFSET + BSP_PCI_IRQ_NUMBER - 1)
+/* The decrementer exception */
+#define BSP_DECREMENTER 16
 
-#define BSP_PROCESSOR_IRQ_NUMBER	    (1)
-#define BSP_PROCESSOR_IRQ_LOWEST_OFFSET	(BSP_PCI_IRQ_MAX_OFFSET)
-#define BSP_PROCESSOR_IRQ_MAX_OFFSET	(BSP_PROCESSOR_IRQ_LOWEST_OFFSET+BSP_PROCESSOR_IRQ_NUMBER-1)
+/* The interprocessor interrupts of the OpenPIC */
+#define BSP_OPENPIC_IPI_NUMBER 4
+#define BSP_OPENPIC_IPI_LOWEST_OFFSET 17
 
-
-  /*
-   * Summary
-   */
-#define BSP_IRQ_NUMBER		 	(BSP_PROCESSOR_IRQ_MAX_OFFSET + 1)
-#define BSP_LOWEST_OFFSET		(BSP_PCI_IRQ_LOWEST_OFFSET)
-#define BSP_MAX_OFFSET			(BSP_IRQ_NUMBER - 1)
-
-  /*
-   * Some Processor execption handled as rtems IRQ symbolic name definition
-   */
-#define BSP_DECREMENTER			(BSP_PROCESSOR_IRQ_LOWEST_OFFSET)
-
-#include <bsp/irq_supp.h>
-
-#define BSP_INTERRUPT_VECTOR_COUNT BSP_IRQ_NUMBER
+#define BSP_INTERRUPT_VECTOR_COUNT \
+  (BSP_OPENPIC_IPI_LOWEST_OFFSET + BSP_OPENPIC_IPI_NUMBER)
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void BSP_rtems_irq_mng_init(unsigned cpuId);
+void bsp_interrupt_dispatch(uintptr_t exception_number);
 
 #ifdef __cplusplus
 }
