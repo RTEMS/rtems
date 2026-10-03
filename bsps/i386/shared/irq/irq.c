@@ -377,14 +377,31 @@ rtems_status_code bsp_interrupt_is_pending(
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(pending != NULL);
-  *pending = false;
 
-  if (vector != BSP_SOFTWARE_IRQ || !lapic_is_available()) {
-    return RTEMS_UNSATISFIED;
+  if (is_i8259a_vector(vector)) {
+    rtems_interrupt_lock_context lock_context;
+    uint8_t                      irr;
+
+    rtems_interrupt_lock_acquire(&rtems_i8259_access_lock, &lock_context);
+
+    if (vector < 8) {
+      irr = BSP_i8259a_irq_int_request_reg(PIC_MASTER_COMMAND_IO_PORT);
+    } else {
+      irr = BSP_i8259a_irq_int_request_reg(PIC_SLAVE_COMMAND_IO_PORT);
+    }
+
+    rtems_interrupt_lock_release(&rtems_i8259_access_lock, &lock_context);
+    *pending = (irr & (1 << (vector % 8))) != 0;
+  } else if (lapic_is_available()) {
+    uint32_t idt_index;
+
+    idt_index = BSP_IRQ_VECTOR_BASE + vector;
+    *pending = (lapic_read(LAPIC_IRR + (idt_index / 32) * 16) &
+      (UINT32_C(1) << (idt_index % 32))) != 0;
+  } else {
+    *pending = false;
   }
 
-  *pending = (lapic_read(LAPIC_IRR + (BSP_SOFTWARE_IRQ_IDT_INDEX / 32) * 16) &
-    (UINT32_C(1) << (BSP_SOFTWARE_IRQ_IDT_INDEX % 32))) != 0;
   return RTEMS_SUCCESSFUL;
 }
 
@@ -435,12 +452,17 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
   bool               *enabled
 )
 {
-  (void) vector;
-
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(enabled != NULL);
-  *enabled = false;
-  return RTEMS_UNSATISFIED;
+
+  if (is_i8259a_vector(vector)) {
+    *enabled = (i8259a_imr_cache & (1 << vector)) == 0;
+  } else {
+    /* The Local APIC delivers these vectors without a mask */
+    *enabled = lapic_is_available();
+  }
+
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
