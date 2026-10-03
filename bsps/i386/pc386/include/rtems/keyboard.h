@@ -591,6 +591,7 @@ extern unsigned int keymap_count;
 void add_to_queue( unsigned short );
 int getch( void );
 int BSP_wait_polled_input(void);
+int BSP_poll_polled_input(void);
 int rtems_kbpoll( void );
 
 /* outch.c */

@@ -256,6 +256,21 @@ int BSP_wait_polled_input(void)
 }
 
 /*
+ * Routine that can be used before interrupt management is initialized.  It
+ * returns -1 if no key is available.
+ */
+int BSP_poll_polled_input(void)
+{
+  char c;
+
+  if (_IBMPC_scankey(&c)) {
+    return (unsigned char) c;
+  }
+
+  return -1;
+}
+
+/*
  * Check if a key has been pressed. This is a non-destructive
  * call, meaning, it keeps the key in the buffer.
  */
