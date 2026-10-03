@@ -634,6 +634,7 @@ int rtems_fatfs_rename(
   const rtems_filesystem_location_info_t *old_parent_loc,
   const rtems_filesystem_location_info_t *old_loc,
   const rtems_filesystem_location_info_t *new_parent_loc,
+  const rtems_filesystem_location_info_t *new_loc,
   const char                             *new_name,
   size_t                                  new_namelen
 )
@@ -677,6 +678,13 @@ int rtems_fatfs_rename(
   );
   if ( rc != 0 ) {
     return rc;
+  }
+
+  if ( new_loc != NULL ) {
+    rc = rtems_fatfs_rmnod( new_parent_loc, new_loc );
+    if ( rc != 0 ) {
+      return rc;
+    }
   }
 
   rtems_fatfs_lock( old_parent_loc->mt_entry );

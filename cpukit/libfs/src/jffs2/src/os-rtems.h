@@ -173,7 +173,7 @@ int jffs2_link (struct _inode *old_d_inode, struct _inode *dir_i, const unsigned
 int jffs2_unlink(struct _inode *dir_i, struct _inode *d_inode, const unsigned char *d_name, size_t d_namelen);
 int jffs2_rmdir (struct _inode *dir_i, struct _inode *d_inode, const unsigned char *d_name, size_t d_namelen);
 int jffs2_rename (struct _inode *old_dir_i, struct _inode *d_inode, const unsigned char *old_d_name, size_t old_d_namelen,
-		  struct _inode *new_dir_i, const unsigned char *new_d_name, size_t new_d_namelen);
+                  struct _inode *new_dir_i, struct _inode *victim_i, const unsigned char *new_d_name, size_t new_d_namelen);
 
 /* erase.c */
 static inline void jffs2_erase_pending_trigger(struct jffs2_sb_info *c)

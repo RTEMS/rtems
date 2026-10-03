@@ -6,7 +6,7 @@
  * Copyright © 2001-2003 Free Software Foundation, Inc.
  * Copyright © 2001-2007 Red Hat, Inc.
  * Copyright © 2004-2010 David Woodhouse <dwmw2@infradead.org>
- * Copyright © 2013 embedded brains GmbH & Co. KG
+ * Copyright © 2013, 2026 embedded brains GmbH & Co. KG
  *
  * Created by David Woodhouse <dwmw2@cambridge.redhat.com>
  *
@@ -344,7 +344,7 @@ int jffs2_rmdir (struct _inode *dir_i, struct _inode *d_inode, const unsigned ch
 }
 
 int jffs2_rename (struct _inode *old_dir_i, struct _inode *d_inode, const unsigned char *old_d_name, size_t old_d_namelen,
-		  struct _inode *new_dir_i, const unsigned char *new_d_name, size_t new_d_namelen)
+		  struct _inode *new_dir_i, struct _inode *victim_i, const unsigned char *new_d_name, size_t new_d_namelen)
 {
 	int ret;
 	struct jffs2_sb_info *c = JFFS2_SB_INFO(old_dir_i->i_sb);
@@ -352,24 +352,12 @@ int jffs2_rename (struct _inode *old_dir_i, struct _inode *d_inode, const unsign
 	uint8_t type;
 	uint32_t now;
 
-#if 0 /* FIXME -- this really doesn't belong in individual file systems.
-	 The fileio code ought to do this for us, or at least part of it */
-	if (new_dentry->d_inode) {
-		if (S_ISDIR(d_inode->i_mode) &&
-		    !S_ISDIR(new_dentry->d_inode->i_mode)) {
-			/* Cannot rename directory over non-directory */
-			return -EINVAL;
-		}
+	if (victim_i) {
+		victim_f = JFFS2_INODE_INFO(victim_i);
 
-		victim_f = JFFS2_INODE_INFO(new_dentry->d_inode);
-
-		if (S_ISDIR(new_dentry->d_inode->i_mode)) {
+		if (S_ISDIR(victim_i->i_mode)) {
 			struct jffs2_full_dirent *fd;
 
-			if (!S_ISDIR(d_inode->i_mode)) {
-				/* Cannot rename non-directory over directory */
-				return -EINVAL;
-			}
 			mutex_lock(&victim_f->sem);
 			for (fd = victim_f->dents; fd; fd = fd->next) {
 				if (fd->ino) {
@@ -380,7 +368,6 @@ int jffs2_rename (struct _inode *old_dir_i, struct _inode *d_inode, const unsign
 			mutex_unlock(&victim_f->sem);
 		}
 	}
-#endif
 
 	if (new_d_namelen > JFFS2_MAX_NAME_LEN) {
 		return -ENAMETOOLONG;
@@ -412,7 +399,11 @@ int jffs2_rename (struct _inode *old_dir_i, struct _inode *d_inode, const unsign
 		   inode which didn't exist. */
 		if (victim_f->inocache) {
 			mutex_lock(&victim_f->sem);
-			victim_f->inocache->pino_nlink--;
+			if (S_ISDIR(victim_i->i_mode))
+				victim_f->inocache->pino_nlink = 0;
+			else
+				victim_f->inocache->pino_nlink--;
+			victim_i->i_nlink = victim_f->inocache->pino_nlink;
 			mutex_unlock(&victim_f->sem);
 		}
 	}

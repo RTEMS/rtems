@@ -6,7 +6,7 @@
  * Copyright © 2001-2003 Free Software Foundation, Inc.
  * Copyright © 2001-2007 Red Hat, Inc.
  * Copyright © 2004-2010 David Woodhouse <dwmw2@infradead.org>
- * Copyright (C) 2013, 2016 embedded brains GmbH & Co. KG
+ * Copyright (C) 2013, 2026 embedded brains GmbH & Co. KG
  *
  * Created by Dominic Ostrowski <dominic.ostrowski@3glab.com>
  * Contributors: David Woodhouse, Nick Garnett, Richard Panton.
@@ -1110,6 +1110,7 @@ static int rtems_jffs2_rename(
 	const rtems_filesystem_location_info_t *oldparentloc,
 	const rtems_filesystem_location_info_t *oldloc,
 	const rtems_filesystem_location_info_t *newparentloc,
+	const rtems_filesystem_location_info_t *newloc,
 	const char *name,
 	size_t namelen
 )
@@ -1117,12 +1118,17 @@ static int rtems_jffs2_rename(
 	struct _inode *old_dir_i = rtems_jffs2_get_inode_by_location(oldparentloc);
 	struct _inode *new_dir_i = rtems_jffs2_get_inode_by_location(newparentloc);
 	struct _inode *d_inode = rtems_jffs2_get_inode_by_location(oldloc);
+	struct _inode *victim_i = NULL;
 	unsigned char *oldname;
 	size_t oldnamelen;
 	int eno = rtems_jffs2_cache_fd_name(d_inode, &oldname, &oldnamelen);
 
+	if (newloc != NULL) {
+		victim_i = rtems_jffs2_get_inode_by_location(newloc);
+	}
+
 	if (eno == 0) {
-		eno = -jffs2_rename(old_dir_i, d_inode, oldname, oldnamelen, new_dir_i, (const unsigned char *) name, namelen);
+		eno = -jffs2_rename(old_dir_i, d_inode, oldname, oldnamelen, new_dir_i, victim_i, (const unsigned char *) name, namelen);
 	}
 
 	return rtems_jffs2_eno_to_rv_and_errno(eno);

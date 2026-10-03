@@ -60,6 +60,7 @@ msdos_rename(
     const rtems_filesystem_location_info_t *old_parent_loc,
     const rtems_filesystem_location_info_t *old_loc,
     const rtems_filesystem_location_info_t *new_parent_loc,
+    const rtems_filesystem_location_info_t *new_loc,
     const char *new_name,
     size_t new_namelen
 )
@@ -69,6 +70,15 @@ msdos_rename(
     int                rc = RC_OK;
     fat_file_fd_t     *old_fat_fd  = old_loc->node_access;
     fat_dir_pos_t      old_pos = old_fat_fd->dir_pos;
+
+    if (new_loc != NULL)
+    {
+        rc = msdos_rmnod(new_parent_loc, new_loc);
+        if (rc != RC_OK)
+        {
+            return rc;
+        }
+    }
 
     /*
      * create new directory entry as "hard link", copying relevant info from

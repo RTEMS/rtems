@@ -70,6 +70,7 @@ int IMFS_rename(
   const rtems_filesystem_location_info_t *oldparentloc,
   const rtems_filesystem_location_info_t *oldloc,
   const rtems_filesystem_location_info_t *newparentloc,
+  const rtems_filesystem_location_info_t *newloc,
   const char                             *name,
   size_t                                  namelen
 )
@@ -79,11 +80,6 @@ int IMFS_rename(
   IMFS_jnode_t         *node;
   IMFS_jnode_t         *new_parent;
   IMFS_renamed_control *control;
-
-  /*
-   * FIXME: Due to insufficient checks we can create inaccessible nodes with
-   * this operation.
-   */
 
   node = oldloc->node_access;
   new_parent = newparentloc->node_access;
@@ -99,6 +95,11 @@ int IMFS_rename(
   control = malloc( sizeof( *control ) + namelen );
   if ( control == NULL ) {
     rtems_set_errno_and_return_minus_one( ENOMEM );
+  }
+
+  if ( newloc != NULL && IMFS_rmnod( newparentloc, newloc ) != 0 ) {
+    free( control );
+    return -1;
   }
 
   memcpy( control->name, name, namelen );

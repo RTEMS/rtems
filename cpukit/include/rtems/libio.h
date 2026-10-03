@@ -435,9 +435,25 @@ typedef ssize_t (*rtems_filesystem_readlink_t)(
 /**
  * @brief Renames a node.
  *
+ * If a node with the new name exists in the new parent, then the handler
+ * shall replace it.  The handler shall remove the entry of the existing node
+ * and give the old node the new name.  It shall fail with ENOTEMPTY or EEXIST
+ * if the existing node is a directory which is not empty.  A handler which
+ * cannot replace the entry in one step removes the existing node first.
+ *
+ * The caller checks that the old node and the new parent belong to the same
+ * file system instance.  It checks the write and search permission of both
+ * parents and the S_ISVTX flag of both parents.  The old node is not the
+ * root node of the file system instance, and it is neither the new parent nor
+ * one of its ancestors.  If the existing node is present, then it is not the
+ * old node or a link to it.  The existing node is a directory if and only if
+ * the old node is a directory.
+ *
  * @param[in] oldparentloc The location of the parent of the old node.
  * @param[in] oldloc The location of the old node.
  * @param[in] newparentloc The location of the parent of the new node.
+ * @param[in] newloc The location of the existing node with the new name, or
+ *   NULL if no such node exists.
  * @param[in] name Name for the new node.
  * @param[in] namelen Length of the name for the new node in characters.
  *
@@ -450,6 +466,7 @@ typedef int (*rtems_filesystem_rename_t)(
   const rtems_filesystem_location_info_t *oldparentloc,
   const rtems_filesystem_location_info_t *oldloc,
   const rtems_filesystem_location_info_t *newparentloc,
+  const rtems_filesystem_location_info_t *newloc,
   const char *name,
   size_t namelen
 );
@@ -688,6 +705,7 @@ int rtems_filesystem_default_rename(
   const rtems_filesystem_location_info_t *oldparentloc,
   const rtems_filesystem_location_info_t *oldloc,
   const rtems_filesystem_location_info_t *newparentloc,
+  const rtems_filesystem_location_info_t *newloc,
   const char *name,
   size_t namelen
 );

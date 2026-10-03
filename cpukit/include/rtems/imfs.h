@@ -1075,6 +1075,7 @@ extern int IMFS_rename(
   const rtems_filesystem_location_info_t *oldparentloc,
   const rtems_filesystem_location_info_t *oldloc,
   const rtems_filesystem_location_info_t *newparentloc,
+  const rtems_filesystem_location_info_t *newloc,
   const char *name,
   size_t namelen
 );

@@ -553,6 +553,7 @@ static int
 rtems_rfs_rtems_rename(const rtems_filesystem_location_info_t* old_parent_loc,
                        const rtems_filesystem_location_info_t* old_loc,
                        const rtems_filesystem_location_info_t* new_parent_loc,
+                       const rtems_filesystem_location_info_t* new_loc,
                        const char* new_name, size_t new_name_len) {
   rtems_rfs_file_system* fs = rtems_rfs_rtems_pathloc_dev(old_loc);
   rtems_rfs_ino old_parent;
@@ -585,6 +586,31 @@ rtems_rfs_rtems_rename(const rtems_filesystem_location_info_t* old_parent_loc,
   rc = rtems_rfs_inode_close(fs, &inode);
   if (rc) {
     return rtems_rfs_rtems_error("rename: closing inode", rc);
+  }
+
+  /*
+   * A directory holds at most one entry with a name, so remove the existing
+   * entry first.
+   */
+  if (new_loc != NULL) {
+    uint32_t new_doff = rtems_rfs_rtems_get_pathloc_doff(new_loc);
+    uint32_t block_size = rtems_rfs_fs_block_size(fs);
+
+    rc = rtems_rfs_unlink(fs, new_parent,
+                          rtems_rfs_rtems_get_pathloc_ino(new_loc), new_doff,
+                          rtems_rfs_unlink_dir_if_empty);
+    if (rc) {
+      return rtems_rfs_rtems_error("rename: unlinking existing", rc);
+    }
+
+    /*
+     * The removal moves the following entries of its block towards the start
+     * of the block.
+     */
+    if (old_parent == new_parent && doff > new_doff &&
+        doff / block_size == new_doff / block_size) {
+      doff -= RTEMS_RFS_DIR_ENTRY_SIZE + new_name_len;
+    }
   }
 
   /*

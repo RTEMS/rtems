@@ -245,6 +245,7 @@ static int null_op_rename(
   const rtems_filesystem_location_info_t *oldparentloc,
   const rtems_filesystem_location_info_t *oldloc,
   const rtems_filesystem_location_info_t *newparentloc,
+  const rtems_filesystem_location_info_t *newloc,
   const char                             *name,
   size_t                                  namelen
 )
@@ -252,6 +253,7 @@ static int null_op_rename(
   (void) oldparentloc;
   (void) oldloc;
   (void) newparentloc;
+  (void) newloc;
   (void) name;
   (void) namelen;
 

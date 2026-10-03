@@ -3,8 +3,7 @@ build-type: test-program
 cflags: []
 copyrights:
 - Copyright (C) 2025 Sepehr Ganji <sepehrganji79@gmail.com>
-cppflags:
-- -DTEST_STATE_EXPECTED_FAIL=1
+cppflags: []
 cxxflags: []
 enabled-by: true
 features: c cprogram

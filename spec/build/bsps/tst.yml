@@ -25,33 +25,6 @@ actions:
     - dl06
 - set-test-state:
     reason: |
-      Fails because of #2169, rename to existing entries is
-      not supported
-    state: expected-fail
-    tests:
-    - imfsfsrenameexisting
-    - imfsfsrenamepermexisting
-    - jffs2fsrenameexisting
-    - jffs2fsrenamepermexisting
-    - jffs2nandfsrenameexisting
-    - jffs2nandfsrenamepermexisting
-    - mdosfsfsrenameexisting
-    - mimfsfsrenameexisting
-    - mimfsfsrenamepermexisting
-    - mrfsfsrenameexisting
-    - mrfsfsrenamepermexisting
-- set-test-state:
-    reason: |
-      Fails because of #2169 and other rename issue
-    state: expected-fail
-    tests:
-    - imfsfssymlink
-    - jffs2fssymlink
-    - jffs2nandfssymlink
-    - mimfsfssymlink
-    - mrfsfssymlink
-- set-test-state:
-    reason: |
       Fails because of #5069, NAME_MAX is ignored by RFS
     state: expected-fail
     tests:

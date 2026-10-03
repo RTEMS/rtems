@@ -299,6 +299,7 @@ int msdos_rename(
   const rtems_filesystem_location_info_t *old_parent_loc,
   const rtems_filesystem_location_info_t *old_loc,
   const rtems_filesystem_location_info_t *new_parent_loc,
+  const rtems_filesystem_location_info_t *new_loc,
   const char *new_name,
   size_t new_namelen
 );
