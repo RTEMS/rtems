@@ -244,6 +244,12 @@ typedef struct _rtems_rfs_inode_handle {
 #define rtems_rfs_inode_ino(_h) ((_h)->ino)
 
 /**
+ * The maximum link count of an inode.  The link count field value 0xffff
+ * denotes zero links.
+ */
+#define RTEMS_RFS_LINK_MAX (0xfffe)
+
+/**
  * Get the link count.
  *
  * @param[in] handle is the inode handle.

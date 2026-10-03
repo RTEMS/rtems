@@ -93,6 +93,14 @@ int rtems_rfs_link(rtems_rfs_file_system* fs, const char* name, int length,
    */
   is_dir = S_ISDIR(rtems_rfs_inode_get_mode(&target_inode));
 
+  if (rtems_rfs_inode_get_links(&target_inode) >= RTEMS_RFS_LINK_MAX ||
+      (is_dir &&
+       rtems_rfs_inode_get_links(&parent_inode) >= RTEMS_RFS_LINK_MAX)) {
+    rtems_rfs_inode_close(fs, &parent_inode);
+    rtems_rfs_inode_close(fs, &target_inode);
+    return EMLINK;
+  }
+
   rc = rtems_rfs_dir_add_entry(fs, &parent_inode, name, length, target);
   if (rc > 0) {
     rtems_rfs_inode_close(fs, &parent_inode);

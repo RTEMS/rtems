@@ -269,6 +269,14 @@ int rtems_rfs_inode_create(rtems_rfs_file_system* fs, rtems_rfs_ino parent,
     return rc;
   }
 
+  if (RTEMS_RFS_S_ISDIR(mode) &&
+      rtems_rfs_inode_get_links(&parent_inode) >= RTEMS_RFS_LINK_MAX) {
+    rtems_rfs_inode_delete(fs, &inode);
+    rtems_rfs_inode_close(fs, &inode);
+    rtems_rfs_inode_close(fs, &parent_inode);
+    return EMLINK;
+  }
+
   rc = rtems_rfs_dir_add_entry(fs, &parent_inode, name, length, *ino);
   if (rc > 0) {
     rtems_rfs_inode_delete(fs, &inode);

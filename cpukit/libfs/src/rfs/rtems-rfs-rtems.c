@@ -593,6 +593,34 @@ rtems_rfs_rtems_rename(const rtems_filesystem_location_info_t* old_parent_loc,
   }
 
   /*
+   * Moving a directory adds the link of its '..' entry to the new parent.  An
+   * existing directory with the new name gives up its link.
+   */
+  if (is_dir && old_parent != new_parent) {
+    uint16_t links;
+
+    rc = rtems_rfs_inode_open(fs, new_parent, &inode, true);
+    if (rc) {
+      return rtems_rfs_rtems_error("rename: opening new parent", rc);
+    }
+
+    links = rtems_rfs_inode_get_links(&inode);
+
+    rc = rtems_rfs_inode_close(fs, &inode);
+    if (rc) {
+      return rtems_rfs_rtems_error("rename: closing new parent", rc);
+    }
+
+    if (new_loc != NULL) {
+      --links;
+    }
+
+    if (links >= RTEMS_RFS_LINK_MAX) {
+      return rtems_rfs_rtems_error("rename: new parent links", EMLINK);
+    }
+  }
+
+  /*
    * A directory holds at most one entry with a name, so remove the existing
    * entry first.
    */
@@ -752,6 +780,25 @@ int rtems_rfs_rtems_initialise(rtems_filesystem_mount_table_entry_t* mt_entry,
 void rtems_rfs_rtems_shutdown(rtems_filesystem_mount_table_entry_t* mt_entry);
 
 /**
+ * RFS file system limits and options.
+ */
+static const rtems_filesystem_limits_and_options_t
+    rtems_rfs_rtems_limits_and_options = {
+        RTEMS_RFS_LINK_MAX, /* link_max: count */
+        128,                /* max_canon: max formatted input line size */
+        7,                  /* max_input: max input line size */
+        NAME_MAX,           /* name_max: max name */
+        255,                /* path_max: max path */
+        1024,               /* pipe_buf: pipe buffer size */
+        0, /* posix_async_io: async IO supported on fs, 0=no, 1=yes */
+        0, /* posix_chown_restrictions: can chown: 0=no, 1=yes */
+        1, /* posix_no_trunc: error on filenames > max name, 0=no, 1=yes */
+        0, /* posix_prio_io: priority IO, 0=no, 1=yes */
+        0, /* posix_sync_io: file can be sync'ed, 0=no, 1=yes */
+        0  /* posix_vdisable: special char processing, 0=no, 1=yes */
+};
+
+/**
  * RFS file system operations table.
  */
 const rtems_filesystem_operations_table rtems_rfs_ops = {
@@ -844,6 +891,7 @@ int rtems_rfs_rtems_initialise(rtems_filesystem_mount_table_entry_t* mt_entry,
 
   mt_entry->fs_info = fs;
   mt_entry->ops = &rtems_rfs_ops;
+  mt_entry->pathconf_limits_and_options = &rtems_rfs_rtems_limits_and_options;
   mt_entry->mt_fs_root->location.node_access = (void*)RTEMS_RFS_ROOT_INO;
   mt_entry->mt_fs_root->location.handlers = &rtems_rfs_rtems_dir_handlers;
 
