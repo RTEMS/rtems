@@ -145,12 +145,12 @@ struct jffs2_inode_info *jffs2_gc_fetch_inode(struct jffs2_sb_info *c, int inum,
 #define os_to_jffs2_mode(x) jffs2_from_os_mode(x)
 static inline uint32_t jffs2_from_os_mode(uint32_t osmode)
 {
-  return osmode & (S_IFMT | S_IRWXU | S_IRWXG | S_IRWXO);
+  return osmode & (S_IFMT | S_ISUID | S_ISGID | S_ISVTX | S_IRWXU | S_IRWXG | S_IRWXO);
 }
 
 static inline uint32_t jffs2_to_os_mode (uint32_t jmode)
 {
-  return jmode & (S_IFMT | S_IRWXU | S_IRWXG | S_IRWXO);
+  return jmode & (S_IFMT | S_ISUID | S_ISGID | S_ISVTX | S_IRWXU | S_IRWXG | S_IRWXO);
 }
 
 
