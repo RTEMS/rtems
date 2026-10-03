@@ -287,6 +287,23 @@ static bool rtems_rtl_rap_relocate(rtems_rtl_rap* rap, rtems_rtl_obj* obj) {
         return false;
       }
 
+      /*
+       * Version 3 holds the ELF relocation type in a word after the info
+       * word.  Version 2 holds it in bits 7:0 of the info word.
+       */
+      if (rap->version >= 3) {
+        uint32_t rtype;
+
+        if (!rtems_rtl_rap_read_uint32(rap->decomp, &rtype)) {
+          free(symname_buffer);
+          return false;
+        }
+
+        type = rtype;
+      } else {
+        type = info & 0xff;
+      }
+
       if (!rtems_rtl_rap_read_uint32(rap->decomp, &offset)) {
         free(symname_buffer);
         return false;
@@ -300,8 +317,7 @@ static bool rtems_rtl_rap_relocate(rtems_rtl_rap* rap, rtems_rtl_obj* obj) {
        *  2  Symbol is in the strtabl.
        *
        * If type 2 bits 30:8 is the offset in the strtab. If type 1 the bits
-       * are the size of the string. The lower 8 bits of the info field if the
-       * ELF relocation type field.
+       * are the size of the string.
        */
 
       if (((info & (1 << 31)) == 0) || is_rela) {
@@ -316,8 +332,6 @@ static bool rtems_rtl_rap_relocate(rtems_rtl_rap* rap, rtems_rtl_obj* obj) {
                "\n",
                r, info, offset, addend);
       }
-
-      type = ELF_R_TYPE(info);
 
       if ((info & (1 << 31)) == 0) {
         rtems_rtl_obj_sect* symsect;
@@ -678,6 +692,10 @@ static bool rtems_rtl_rap_parse_header(uint8_t* rhdr, size_t* rhdr_len,
   *version = strtoul(sptr, &eptr, 10);
 
   if (*eptr != ',') {
+    return false;
+  }
+
+  if (*version != 2 && *version != 3) {
     return false;
   }
 
