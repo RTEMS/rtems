@@ -16,8 +16,6 @@ ldflags: []
 links:
 - role: build-dependency
   uid: optlinkflags
-- role: build-dependency
-  uid: ../tst-xfail-psxfenv01
 type: build
 use-after: []
 use-before: []
