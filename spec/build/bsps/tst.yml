@@ -25,12 +25,6 @@ actions:
     - dl06
 - set-test-state:
     reason: |
-      Fails because of #5069, NAME_MAX is ignored by RFS
-    state: expected-fail
-    tests:
-    - mrfsfsrenamelongname
-- set-test-state:
-    reason: |
       Fails because of #5070, this test seems invalid
     state: expected-fail
     tests:

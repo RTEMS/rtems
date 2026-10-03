@@ -576,6 +576,10 @@ rtems_rfs_rtems_rename(const rtems_filesystem_location_info_t* old_parent_loc,
            ino, doff, new_parent);
   }
 
+  if (new_name_len > NAME_MAX) {
+    return rtems_rfs_rtems_error("rename: name too long", ENAMETOOLONG);
+  }
+
   rc = rtems_rfs_inode_open(fs, ino, &inode, true);
   if (rc) {
     return rtems_rfs_rtems_error("rename: opening inode", rc);
