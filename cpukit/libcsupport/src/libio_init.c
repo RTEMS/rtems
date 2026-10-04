@@ -77,6 +77,7 @@ static void rtems_libio_init( void )
       rtems_libio_iop_flags_set( iop, LIBIO_FLAGS_FREE );
       iop->data1 = iop + 1;
     }
+    rtems_libio_iop_flags_set( iop, LIBIO_FLAGS_FREE );
     iop->data1 = NULL;
     rtems_libio_iop_free_tail = &iop->data1;
   }
