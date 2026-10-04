@@ -3,6 +3,7 @@ build-type: group
 cflags: []
 copyrights:
 - Copyright (C) 2021 On-Line Applications Research Corporation (OAR)
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
 cppflags: []
 cxxflags: []
 enabled-by: true
@@ -64,6 +65,8 @@ links:
   uid: optconsoleuart
 - role: build-dependency
   uid: optusefdt
+- role: build-dependency
+  uid: optwatchdogbaseaddress
 - role: build-dependency
   uid: ../../obj
 - role: build-dependency

@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- assert-uint32: null
+- env-assign: null
+- format-and-define: null
+build-type: option
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+default:
+- enabled-by: microblaze/petalogix_s3adsp1800
+  value: 0x83a00000
+- enabled-by: true
+  value: 0x00000000
+description: |
+  base address of the XPS or AXI Timebase Watchdog Timer which resets the
+  system; zero if there is no such watchdog
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: BSP_MICROBLAZE_FPGA_WATCHDOG_BASE
+type: build
