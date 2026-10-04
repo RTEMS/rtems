@@ -210,7 +210,7 @@ static void TaskSwitch( rtems_tcb *executing, rtems_tcb *heir )
   worker_id = ctx->worker_id;
   state = ctx->thread_switch_state;
   ctx->thread_switch_state = state + 1;
-  heir_stack = _CPU_Context_Get_SP( &heir->Registers );
+  heir_stack = (uintptr_t) _CPU_Context_Get_SP( &heir->Registers );
 
   switch ( state ) {
     case 0:
