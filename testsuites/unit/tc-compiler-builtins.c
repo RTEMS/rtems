@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (C) 2023 embedded brains GmbH & Co. KG
+ * Copyright (C) 2023, 2024 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -98,7 +98,11 @@
  *
  * - Check signed 64-bit negation for a sample set of values.
  *
+ * - Check signed 32-bit divisions for a sample set of values.
+ *
  * - Check signed 64-bit divisions for a sample set of values.
+ *
+ * - Check unsigned 32-bit divisions for a sample set of values.
  *
  * - Check unsigned 64-bit divisions for a sample set of values.
  *
@@ -641,9 +645,82 @@ static void CompilerUnitBuiltins_Action_18( void )
 }
 
 /**
- * @brief Check signed 64-bit divisions for a sample set of values.
+ * @brief Check signed 32-bit divisions for a sample set of values.
  */
 static void CompilerUnitBuiltins_Action_19( void )
+{
+  volatile int32_t n;
+  volatile int32_t d;
+  volatile int32_t x;
+
+  n = 0;
+  RTEMS_OBFUSCATE_VARIABLE( n );
+  d = 0;
+  RTEMS_OBFUSCATE_VARIABLE( d );
+  x = 0;
+  RTEMS_OBFUSCATE_VARIABLE( x );
+
+  n = INT32_C( 0 );
+  d = INT32_C( 0 );
+  do_longjmp = true;
+
+  if ( setjmp( exception_return_context ) == 0 ) {
+    x = n / d;
+  }
+
+  n = INT32_C( 1 );
+  d = INT32_C( 0 );
+  do_longjmp = true;
+
+  if ( setjmp( exception_return_context ) == 0 ) {
+    x = n / d;
+  }
+
+  n = INT32_C( 0x7fffffff );
+  d = INT32_C( 0 );
+  do_longjmp = true;
+
+  if ( setjmp( exception_return_context ) == 0 ) {
+    x = n / d;
+  }
+
+  n = INT32_C( 0 );
+  d = INT32_C( 1 );
+  T_eq_i32( n / d, INT32_C( 0 ) );
+
+  n = INT32_C( 1 );
+  d = INT32_C( 1 );
+  T_eq_i32( n / d, INT32_C( 1 ) );
+
+  n = INT32_C( 0x7fffffff );
+  d = INT32_C( 1 );
+  T_eq_i32( n / d, INT32_C( 2147483647 ) );
+
+  n = INT32_C( 2 );
+  d = INT32_C( 1 );
+  T_eq_i32( n / d, INT32_C( 2 ) );
+
+  n = INT32_C( 2 );
+  d = INT32_C( 1 );
+  T_eq_i32( n / d, INT32_C( 2 ) );
+
+  n = INT32_C( 1 );
+  d = INT32_C( 0x7fffffff );
+  T_eq_i32( n / d, INT32_C( 0 ) );
+
+  n = INT32_C( 0x7fffffff );
+  d = INT32_C( 0x7fffffff );
+  T_eq_i32( n / d, INT32_C( 1 ) );
+
+  n = INT32_C( 0x7fffffff );
+  d = INT32_C( 0x80000000 );
+  T_eq_i32( n / d, INT32_C( 0 ) );
+}
+
+/**
+ * @brief Check signed 64-bit divisions for a sample set of values.
+ */
+static void CompilerUnitBuiltins_Action_20( void )
 {
   volatile int64_t n;
   volatile int64_t d;
@@ -758,9 +835,74 @@ static void CompilerUnitBuiltins_Action_19( void )
 }
 
 /**
+ * @brief Check unsigned 32-bit divisions for a sample set of values.
+ */
+static void CompilerUnitBuiltins_Action_21( void )
+{
+  volatile uint32_t n;
+  volatile uint32_t d;
+  volatile uint32_t x;
+
+  n = 0;
+  RTEMS_OBFUSCATE_VARIABLE( n );
+  d = 0;
+  RTEMS_OBFUSCATE_VARIABLE( d );
+  x = 0;
+  RTEMS_OBFUSCATE_VARIABLE( x );
+
+  n = UINT32_C( 0 );
+  d = UINT32_C( 0 );
+  do_longjmp = true;
+
+  if ( setjmp( exception_return_context ) == 0 ) {
+    x = n / d;
+  }
+
+  n = UINT32_C( 1 );
+  d = UINT32_C( 0 );
+  do_longjmp = true;
+
+  if ( setjmp( exception_return_context ) == 0 ) {
+    x = n / d;
+  }
+
+  n = UINT32_C( 0x7fffffff );
+  d = UINT32_C( 0 );
+  do_longjmp = true;
+
+  if ( setjmp( exception_return_context ) == 0 ) {
+    x = n / d;
+  }
+
+  n = UINT32_C( 0 );
+  d = UINT32_C( 1 );
+  T_eq_u32( n / d, UINT32_C( 0 ) );
+
+  n = UINT32_C( 1 );
+  d = UINT32_C( 1 );
+  T_eq_u32( n / d, UINT32_C( 1 ) );
+
+  n = UINT32_C( 0xffffffff );
+  d = UINT32_C( 1 );
+  T_eq_u32( n / d, UINT32_C( 4294967295 ) );
+
+  n = UINT32_C( 2 );
+  d = UINT32_C( 1 );
+  T_eq_u32( n / d, UINT32_C( 2 ) );
+
+  n = UINT32_C( 1 );
+  d = UINT32_C( 0xffffffff );
+  T_eq_u32( n / d, UINT32_C( 0 ) );
+
+  n = UINT32_C( 0xffffffff );
+  d = UINT32_C( 0x80000000 );
+  T_eq_u32( n / d, UINT32_C( 1 ) );
+}
+
+/**
  * @brief Check unsigned 64-bit divisions for a sample set of values.
  */
-static void CompilerUnitBuiltins_Action_20( void )
+static void CompilerUnitBuiltins_Action_22( void )
 {
   volatile uint64_t n;
   volatile uint64_t d;
@@ -918,7 +1060,7 @@ static void CompilerUnitBuiltins_Action_20( void )
 /**
  * @brief Check signed 64-bit modulo operations for a sample set of values.
  */
-static void CompilerUnitBuiltins_Action_21( void )
+static void CompilerUnitBuiltins_Action_23( void )
 {
   volatile int64_t n;
   volatile int64_t d;
@@ -1047,7 +1189,7 @@ static void CompilerUnitBuiltins_Action_21( void )
 /**
  * @brief Check unsigned 64-bit modulo operations for a sample set of values.
  */
-static void CompilerUnitBuiltins_Action_22( void )
+static void CompilerUnitBuiltins_Action_24( void )
 {
   volatile uint64_t n;
   volatile uint64_t d;
@@ -1129,6 +1271,8 @@ T_TEST_CASE_FIXTURE( CompilerUnitBuiltins, &CompilerUnitBuiltins_Fixture )
   CompilerUnitBuiltins_Action_20();
   CompilerUnitBuiltins_Action_21();
   CompilerUnitBuiltins_Action_22();
+  CompilerUnitBuiltins_Action_23();
+  CompilerUnitBuiltins_Action_24();
 }
 
 /** @} */
