@@ -373,8 +373,7 @@ static void worker_task( rtems_task_argument arg )
       case ACTION_CLOSE_BUSY:
         ctx->wait_in_fstat = true;
         rv = fstat( ctx->fd, &st );
-        rtems_test_assert( rv == -1 );
-        rtems_test_assert( errno == EBADF );
+        rtems_test_assert( rv == 0 );
         break;
       case ACTION_FCNTL:
         rv = fcntl( ctx->fd, F_GETFD );

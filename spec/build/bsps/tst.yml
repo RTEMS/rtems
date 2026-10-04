@@ -19,8 +19,8 @@ actions:
     - whetstone
 - set-test-state:
     reason: |
-      Fails because of defects of the file descriptor support.  fstat() and
-      fcntl() report EBADF when the descriptor is closed during the call.
+      Fails because of defects of the file descriptor support.  fcntl() reports
+      EBADF when the descriptor is closed during the call.
       rtems_libio_check_is_open() rejects an open iop.  A close() returns EBUSY
       while a stale access holds the iop.
     state: expected-fail

@@ -72,10 +72,6 @@ int fstat( int fd, struct stat *sbuf )
   memset( sbuf, 0, sizeof( struct stat ) );
 
   rv = ( *iop->pathinfo.handlers->fstat_h )( &iop->pathinfo, sbuf );
-  if ( rv == 0 && !rtems_libio_iop_is_open( iop ) ) {
-    errno = EBADF;
-    rv = -1;
-  }
   rtems_libio_iop_drop( iop );
   return rv;
 }
