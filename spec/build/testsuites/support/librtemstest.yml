@@ -16,6 +16,7 @@ install:
   - testsuites/support/include/rtems/test-info.h
   - testsuites/support/include/rtems/test-gcov.h
   - testsuites/support/include/rtems/test-printer.h
+  - testsuites/support/include/rtems/test-register-check.h
   - testsuites/support/include/rtems/test-scheduler.h
   - testsuites/support/include/rtems/test-support.h
   - testsuites/support/include/rtems/test-thread-queue.h
@@ -60,6 +61,7 @@ source:
 - testsuites/support/src/tx-io-relax.c
 - testsuites/support/src/tx-memory-alloc.c
 - testsuites/support/src/tx-preemption-intervention.c
+- testsuites/support/src/tx-register-check.c
 - testsuites/support/src/tx-support.c
 - testsuites/support/src/tx-thread-queue.c
 - testsuites/support/src/tx-timecounter.c
