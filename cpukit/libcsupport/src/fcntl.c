@@ -107,14 +107,15 @@ static int duplicate2_iop( rtems_libio_t *iop, int fd2 )
   }
 
   if ( ( rtems_libio_iop_flags( iop2 ) & LIBIO_FLAGS_OPEN ) != 0 ) {
-    rv = ( *iop2->pathinfo.handlers->close_h )( iop2 );
+    rv = close( fd2 );
     if ( rv != 0 ) {
       return rv;
     }
+  }
 
-    rtems_filesystem_location_free( &iop2->pathinfo );
-  } else if ( rtems_libio_allocate_specific( fd2 ) == NULL ) {
-    rtems_set_errno_and_return_minus_one( EBADF );
+  /* The iop of a target which another task uses is not on the free list */
+  if ( rtems_libio_allocate_specific( fd2 ) == NULL ) {
+    rtems_set_errno_and_return_minus_one( EBUSY );
   }
 
   oflag = rtems_libio_to_fcntl_flags( rtems_libio_iop_flags( iop ) );
