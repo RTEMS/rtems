@@ -166,6 +166,9 @@ void rtems_libio_iop_release( rtems_libio_t *iop );
 /**
  * @brief Sets the specified flags in the iop.
  *
+ * The release order pairs with the acquire order of rtems_libio_iop_hold().  A
+ * holder which sees #LIBIO_FLAGS_OPEN sees the location of the file.
+ *
  * @param[in] iop The iop.
  * @param[in] set The flags to set.
  *
@@ -176,7 +179,7 @@ static inline unsigned int rtems_libio_iop_flags_set(
   unsigned int   set
 )
 {
-  return _Atomic_Fetch_or_uint( &iop->flags, set, ATOMIC_ORDER_RELAXED );
+  return _Atomic_Fetch_or_uint( &iop->flags, set, ATOMIC_ORDER_RELEASE );
 }
 
 /**
