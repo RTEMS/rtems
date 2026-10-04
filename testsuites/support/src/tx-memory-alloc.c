@@ -38,7 +38,7 @@
 #include "config.h"
 #endif
 
-#include "tx-support.h"
+#include <rtems/test-support.h>
 
 void *__real_rtems_malloc( size_t );
 

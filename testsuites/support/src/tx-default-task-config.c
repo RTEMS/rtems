@@ -5,12 +5,11 @@
  *
  * @ingroup RTEMSTestSuitesValidation
  *
- * @brief This source file contains the wrapper of the object allocator
- *   mutex obtain.
+ * @brief This source file contains the definition of ::DefaultTaskConfig.
  */
 
 /*
- * Copyright (C) 2026 embedded brains GmbH & Co. KG
+ * Copyright (C) 2022 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -38,18 +37,24 @@
 #include "config.h"
 #endif
 
-#include "tx-support.h"
+#include <rtems/test-support.h>
 
-CallCounter AllocatorLockCounter;
+#define TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
 
-void __real__RTEMS_Lock_allocator( void );
+RTEMS_ALIGNED( RTEMS_TASK_STORAGE_ALIGNMENT )
+static char DefaultTaskStorage[
+  RTEMS_TASK_STORAGE_SIZE(
+    TEST_MAXIMUM_TLS_SIZE + TEST_MINIMUM_STACK_SIZE,
+    TASK_ATTRIBUTES
+  )
+];
 
-void __wrap__RTEMS_Lock_allocator( void );
-
-void __wrap__RTEMS_Lock_allocator( void )
-{
-  __real__RTEMS_Lock_allocator();
-
-  /* The count states that the task holds the mutex and not that it asked. */
-  CallCounterAdd( &AllocatorLockCounter );
-}
+const rtems_task_config DefaultTaskConfig = {
+  .name = rtems_build_name( 'D', 'T', 'S', 'K' ),
+  .initial_priority = 1,
+  .storage_area = DefaultTaskStorage,
+  .storage_size = sizeof( DefaultTaskStorage ),
+  .maximum_thread_local_storage_size = TEST_MAXIMUM_TLS_SIZE,
+  .initial_modes = RTEMS_DEFAULT_MODES,
+  .attributes = TASK_ATTRIBUTES
+};

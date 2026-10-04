@@ -5,11 +5,11 @@
  *
  * @ingroup RTEMSTestSuitesValidation
  *
- * @brief This source file contains the definition of ::DefaultTaskConfig.
+ * @brief This source file contains the implementation of SetIORelaxHandler().
  */
 
 /*
- * Copyright (C) 2022 embedded brains GmbH & Co. KG
+ * Copyright (C) 2021 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -37,25 +37,31 @@
 #include "config.h"
 #endif
 
-#include "tx-support.h"
-#include "ts-config.h"
+#include <rtems/test-support.h>
 
-#define TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
+void __real__IO_Relax( void );
 
-RTEMS_ALIGNED( RTEMS_TASK_STORAGE_ALIGNMENT )
-static char DefaultTaskStorage[
-  RTEMS_TASK_STORAGE_SIZE(
-    TEST_MAXIMUM_TLS_SIZE + TEST_MINIMUM_STACK_SIZE,
-    TASK_ATTRIBUTES
-  )
-];
+void __wrap__IO_Relax( void );
 
-const rtems_task_config DefaultTaskConfig = {
-  .name = rtems_build_name( 'D', 'T', 'S', 'K' ),
-  .initial_priority = 1,
-  .storage_area = DefaultTaskStorage,
-  .storage_size = sizeof( DefaultTaskStorage ),
-  .maximum_thread_local_storage_size = TEST_MAXIMUM_TLS_SIZE,
-  .initial_modes = RTEMS_DEFAULT_MODES,
-  .attributes = TASK_ATTRIBUTES
-};
+static void ( *io_relax_handler )( void * );
+
+static void *io_relax_arg;
+
+void __wrap__IO_Relax( void )
+{
+  void ( *handler )( void * );
+
+  handler = io_relax_handler;
+
+  if ( handler != NULL ) {
+    ( *handler )( io_relax_arg );
+  }
+
+  __real__IO_Relax();
+}
+
+void SetIORelaxHandler( void ( *handler )( void * ), void *arg )
+{
+  io_relax_handler = handler;
+  io_relax_arg = arg;
+}

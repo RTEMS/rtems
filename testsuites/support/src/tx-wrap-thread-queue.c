@@ -38,7 +38,7 @@
 #include "config.h"
 #endif
 
-#include "tx-support.h"
+#include <rtems/test-support.h>
 
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>

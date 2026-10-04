@@ -38,9 +38,8 @@
 #include "config.h"
 #endif
 
-#include "tx-thread-queue.h"
-#include "tx-support.h"
-#include "ts-config.h"
+#include <rtems/test-thread-queue.h>
+#include <rtems/test-support.h>
 
 #include <rtems/score/threadimpl.h>
 #include <rtems/rtems/semimpl.h>

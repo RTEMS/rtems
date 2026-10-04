@@ -5,11 +5,12 @@
  *
  * @ingroup RTEMSTestSuitesValidation
  *
- * @brief This source file contains the implementation of SetIORelaxHandler().
+ * @brief This source file contains the wrapper of the object allocator
+ *   mutex obtain.
  */
 
 /*
- * Copyright (C) 2021 embedded brains GmbH & Co. KG
+ * Copyright (C) 2026 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -37,31 +38,18 @@
 #include "config.h"
 #endif
 
-#include "tx-support.h"
+#include <rtems/test-support.h>
 
-void __real__IO_Relax( void );
+CallCounter AllocatorLockCounter;
 
-void __wrap__IO_Relax( void );
+void __real__RTEMS_Lock_allocator( void );
 
-static void ( *io_relax_handler )( void * );
+void __wrap__RTEMS_Lock_allocator( void );
 
-static void *io_relax_arg;
-
-void __wrap__IO_Relax( void )
+void __wrap__RTEMS_Lock_allocator( void )
 {
-  void ( *handler )( void * );
+  __real__RTEMS_Lock_allocator();
 
-  handler = io_relax_handler;
-
-  if ( handler != NULL ) {
-    ( *handler )( io_relax_arg );
-  }
-
-  __real__IO_Relax();
-}
-
-void SetIORelaxHandler( void ( *handler )( void * ), void *arg )
-{
-  io_relax_handler = handler;
-  io_relax_arg = arg;
+  /* The count states that the task holds the mutex and not that it asked. */
+  CallCounterAdd( &AllocatorLockCounter );
 }

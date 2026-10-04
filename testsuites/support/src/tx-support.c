@@ -38,8 +38,7 @@
 #include "config.h"
 #endif
 
-#include "tx-support.h"
-#include "ts-config.h"
+#include <rtems/test-support.h>
 
 #include <rtems/test.h>
 #include <rtems/score/objectimpl.h>

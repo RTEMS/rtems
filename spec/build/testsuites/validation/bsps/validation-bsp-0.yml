@@ -32,6 +32,5 @@ source:
 stlib: []
 target: testsuites/validation/bsps/ts-validation-bsp-0.exe
 type: build
-use-after:
-- validation
+use-after: []
 use-before: []

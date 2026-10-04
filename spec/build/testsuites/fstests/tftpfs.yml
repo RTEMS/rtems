@@ -13,10 +13,10 @@ ldflags:
 - -Wl,--wrap=close
 links: []
 source:
-- cpukit/libtest/testwrappers.c
 - testsuites/fstests/tftpfs/init.c
 - testsuites/fstests/tftpfs/tftpfs_interactions.c
 - testsuites/fstests/tftpfs/tftpfs_udp_network_fake.c
+- testsuites/support/src/testwrappers.c
 stlib: []
 target: testsuites/fstests/tftpfs.exe
 type: build

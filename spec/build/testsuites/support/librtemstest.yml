@@ -1,0 +1,70 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: library
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes:
+- ${BSP_INCLUDES}
+- testsuites/support/include
+install:
+- destination: ${BSP_INCLUDEDIR}/rtems
+  source:
+  - testsuites/support/include/rtems/test.h
+  - testsuites/support/include/rtems/test-info.h
+  - testsuites/support/include/rtems/test-gcov.h
+  - testsuites/support/include/rtems/test-printer.h
+  - testsuites/support/include/rtems/test-scheduler.h
+  - testsuites/support/include/rtems/test-support.h
+  - testsuites/support/include/rtems/test-thread-queue.h
+install-path: ${BSP_LIBDIR}
+links: []
+source:
+- testsuites/support/src/gcovdumpinfo.c
+- testsuites/support/src/gcovdumpinfobase64.c
+- testsuites/support/src/gcovinfoset.c
+- testsuites/support/src/t-test-busy-tick.c
+- testsuites/support/src/t-test-busy.c
+- testsuites/support/src/t-test-checks-eno.c
+- testsuites/support/src/t-test-checks-psx.c
+- testsuites/support/src/t-test-checks.c
+- testsuites/support/src/t-test-hash-sha256.c
+- testsuites/support/src/t-test-interrupt.c
+- testsuites/support/src/t-test-rtems-context.c
+- testsuites/support/src/t-test-rtems-fds.c
+- testsuites/support/src/t-test-rtems-heap.c
+- testsuites/support/src/t-test-rtems-measure.c
+- testsuites/support/src/t-test-rtems-memory.c
+- testsuites/support/src/t-test-rtems-objs.c
+- testsuites/support/src/t-test-rtems-posix-keys.c
+- testsuites/support/src/t-test-rtems.c
+- testsuites/support/src/t-test-scheduler.c
+- testsuites/support/src/t-test-thread-switch.c
+- testsuites/support/src/t-test-time.c
+- testsuites/support/src/t-test.c
+- testsuites/support/src/testbeginend.c
+- testsuites/support/src/testbusy.c
+- testsuites/support/src/testexit.c
+- testsuites/support/src/testextension.c
+- testsuites/support/src/testgcovbspreset.c
+- testsuites/support/src/testgcovdumpinfo.c
+- testsuites/support/src/testparallel.c
+- testsuites/support/src/testprinter.c
+- testsuites/support/src/testrun.c
+- testsuites/support/src/testwrappers.c
+- testsuites/support/src/tx-call-within-isr.c
+- testsuites/support/src/tx-default-task-config.c
+- testsuites/support/src/tx-interrupt.c
+- testsuites/support/src/tx-io-relax.c
+- testsuites/support/src/tx-memory-alloc.c
+- testsuites/support/src/tx-preemption-intervention.c
+- testsuites/support/src/tx-support.c
+- testsuites/support/src/tx-thread-queue.c
+- testsuites/support/src/tx-timecounter.c
+- testsuites/support/src/tx-timer-server.c
+- testsuites/support/src/tx-wrap-allocator.c
+- testsuites/support/src/tx-wrap-thread-queue.c
+target: rtemstest
+type: build

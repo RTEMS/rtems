@@ -31,7 +31,7 @@ links:
 - role: build-dependency
   uid: librtemsdfltcfg
 - role: build-dependency
-  uid: librtemstest
+  uid: ../testsuites/support/librtemstest
 - role: build-dependency
   uid: libtftpfs
 - role: build-dependency

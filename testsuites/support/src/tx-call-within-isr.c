@@ -39,7 +39,7 @@
 #include "config.h"
 #endif
 
-#include "tx-support.h"
+#include <rtems/test-support.h>
 
 #include <pthread.h>
 

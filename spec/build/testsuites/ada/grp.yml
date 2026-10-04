@@ -9,7 +9,8 @@ enabled-by:
 - and:
   - __RTEMS_ADA__
   - BUILD_ADATESTS
-includes: []
+includes:
+- testsuites/support/include
 install: []
 ldflags:
 - -Wl,--wrap=printf

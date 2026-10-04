@@ -37,7 +37,7 @@
 #include "config.h"
 #endif
 
-#include "tx-support.h"
+#include <rtems/test-support.h>
 
 #include <rtems/test.h>
 #include <rtems/rtems/timerimpl.h>

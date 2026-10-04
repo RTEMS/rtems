@@ -16,6 +16,5 @@ source:
 stlib: []
 target: testsuites/validation/bsps/ts-fatal-clock-xil-ttc-irq-install.exe
 type: build
-use-after:
-- validation
+use-after: []
 use-before: []
