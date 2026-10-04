@@ -17,13 +17,6 @@ actions:
     - dhrystone
     - linpack
     - whetstone
-- set-test-state:
-    reason: |
-      Fails because of defects of the file descriptor support.  A close()
-      returns EBUSY while a stale access holds the iop.
-    state: expected-fail
-    tests:
-    - fsclose02
 build-type: option
 copyrights:
 - Copyright (C) 2020, 2026 embedded brains GmbH & Co. KG

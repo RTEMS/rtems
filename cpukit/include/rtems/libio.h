@@ -1401,10 +1401,10 @@ typedef struct {
  * | open     | #LIBIO_FLAGS_OPEN     | the open path                        |
  * | closing  | #LIBIO_FLAGS_CLOSING  | close(), rtems_libio_free()          |
  *
- * The reference count changes only through rtems_libio_iop_hold() and
- * rtems_libio_iop_drop().  The drop which releases the last reference of a
- * closing iop returns it to the free list.  A reserved iop returns to the free
- * list only through rtems_libio_free().
+ * The reference count changes only through rtems_libio_iop_hold(),
+ * rtems_libio_iop_hold_open() and rtems_libio_iop_drop().  The drop which
+ * releases the last reference of a closing iop returns it to the free list.
+ * A reserved iop returns to the free list only through rtems_libio_free().
  */
 /**@{**/
 

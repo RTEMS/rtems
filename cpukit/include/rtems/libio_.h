@@ -213,7 +213,11 @@ static inline rtems_libio_t *rtems_libio_iop( int fd )
 }
 
 /**
- * @brief Holds a refernece to the iop.
+ * @brief Holds a reference to the iop.
+ *
+ * The call holds a reference in every state of the iop.  Use it for an iop
+ * which the caller references already.  An access through a file descriptor
+ * uses rtems_libio_iop_hold_open().
  *
  * @param[in] iop The iop.
  *
@@ -226,6 +230,41 @@ static inline unsigned int rtems_libio_iop_hold( rtems_libio_t *iop )
     LIBIO_FLAGS_REFERENCE_INC,
     ATOMIC_ORDER_ACQUIRE
   );
+}
+
+/**
+ * @brief Holds a reference to the iop if it is open.
+ *
+ * The call takes no reference of an iop which is not open.  So an access
+ * through a stale file descriptor does not change the reference count.
+ *
+ * @param[in] iop The iop.
+ *
+ * @return Returns the flags of the iop before the call.  The call holds a
+ *   reference if and only if #LIBIO_FLAGS_OPEN is set in the returned flags.
+ */
+static inline unsigned int rtems_libio_iop_hold_open( rtems_libio_t *iop )
+{
+  unsigned int flags;
+  bool         success;
+
+  flags = _Atomic_Load_uint( &iop->flags, ATOMIC_ORDER_RELAXED );
+
+  do {
+    if ( ( flags & LIBIO_FLAGS_OPEN ) == 0 ) {
+      return flags;
+    }
+
+    success = _Atomic_Compare_exchange_uint(
+      &iop->flags,
+      &flags,
+      flags + LIBIO_FLAGS_REFERENCE_INC,
+      ATOMIC_ORDER_ACQUIRE,
+      ATOMIC_ORDER_RELAXED
+    );
+  } while ( !success );
+
+  return flags;
 }
 
 /**
@@ -311,10 +350,9 @@ static inline int rtems_libio_get_iop( int fd, rtems_libio_t **iop )
     return EBADF;
   }
   *iop = rtems_libio_iop( fd );
-  flags = rtems_libio_iop_hold( *iop );
-  if ( rtems_libio_iop_flags_bad_fd( flags ) ) {
-      rtems_libio_iop_drop( *iop );
-      return EBADF;
+  flags = rtems_libio_iop_hold_open( *iop );
+  if ( ( flags & LIBIO_FLAGS_OPEN ) == 0 ) {
+    return EBADF;
   }
   return 0;
 }
@@ -340,21 +378,20 @@ static inline int rtems_libio_get_iop_with_access(
   int fd, rtems_libio_t **iop, unsigned int access_flags, int access_error
 )
 {
-  const unsigned int mandatory = LIBIO_FLAGS_OPEN | access_flags ;
   unsigned int flags;
   if ( (uint32_t) ( fd ) >= rtems_libio_number_iops ) {
     return EBADF;
   }
   *iop = rtems_libio_iop( fd );
-  flags = rtems_libio_iop_hold( *iop );
-  if ( ( flags & mandatory ) != mandatory ) {
+  flags = rtems_libio_iop_hold_open( *iop );
+  if ( ( flags & LIBIO_FLAGS_OPEN ) == 0 ) {
+    *iop = NULL;
+    return EBADF;
+  }
+  if ( ( flags & access_flags ) != access_flags ) {
     rtems_libio_iop_drop( *iop );
     *iop = NULL;
-    if ( ( flags & LIBIO_FLAGS_OPEN ) == 0 ) {
-      return EBADF;
-    } else {
-      return access_error;
-    }
+    return access_error;
   }
   return 0;
 }
