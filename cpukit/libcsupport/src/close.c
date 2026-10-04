@@ -44,6 +44,8 @@
 int close( int fd )
 {
   rtems_libio_t *iop;
+  unsigned int   flags;
+  bool           success;
   int            rc;
 
   if ( (uint32_t) fd >= rtems_libio_number_iops ) {
@@ -51,51 +53,38 @@ int close( int fd )
   }
 
   LIBIO_GET_IOP( fd, iop );
+  flags = rtems_libio_iop_flags( iop );
 
-  while ( true ) {
-    unsigned int flags;
-    unsigned int desired;
-    bool         success;
-    flags = rtems_libio_iop_flags( iop );
-
+  do {
     if ( ( flags & LIBIO_FLAGS_OPEN ) == 0 ) {
       rtems_libio_iop_drop( iop );
       rtems_set_errno_and_return_minus_one( EBADF );
     }
 
-    /**
-     * When LIBIO_FLAGS_CLOSE_BUSY is not set check that only one reference
-     * is held to prevent closing while busy. Otherwise atomically check that
-     * the flags match to ensure the reference count is maintained.
+    /*
+     * Without LIBIO_FLAGS_CLOSE_BUSY, the reference of this call is the only
+     * one allowed.
      */
-    if ( ( flags & LIBIO_FLAGS_CLOSE_BUSY ) == 0 ) {
-      flags &= LIBIO_FLAGS_FLAGS_MASK;
-      flags |= LIBIO_FLAGS_REFERENCE_INC;
-    }
-
-    desired = flags & ~LIBIO_FLAGS_OPEN;
-    success = _Atomic_Compare_exchange_uint(
-      &iop->flags,
-      &flags,
-      desired,
-      ATOMIC_ORDER_ACQ_REL,
-      ATOMIC_ORDER_RELAXED
-    );
-
-    if ( success ) {
-      break;
-    }
-
     if (
+      ( flags & LIBIO_FLAGS_CLOSE_BUSY ) == 0 &&
       ( flags & LIBIO_FLAGS_REFERENCE_MASK ) != LIBIO_FLAGS_REFERENCE_INC
     ) {
       rtems_libio_iop_drop( iop );
       rtems_set_errno_and_return_minus_one( EBUSY );
     }
-  }
+
+    success = _Atomic_Compare_exchange_uint(
+      &iop->flags,
+      &flags,
+      ( flags & ~LIBIO_FLAGS_OPEN ) | LIBIO_FLAGS_CLOSING,
+      ATOMIC_ORDER_ACQ_REL,
+      ATOMIC_ORDER_RELAXED
+    );
+  } while ( !success );
 
   rc = ( *iop->pathinfo.handlers->close_h )( iop );
 
+  /* The drop of the last reference returns the iop to the free list */
   rtems_libio_iop_drop( iop );
 
   return rc;

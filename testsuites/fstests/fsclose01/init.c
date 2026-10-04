@@ -525,7 +525,8 @@ static void test_close( test_context *ctx )
         rtems_test_assert( rv == -1 );
         rtems_test_assert( errno == EBADF );
         flags = rtems_libio_iop_flags( iop );
-        expected_flags = LIBIO_FLAGS_REFERENCE_INC | LIBIO_FLAGS_READ_WRITE;
+        expected_flags = LIBIO_FLAGS_REFERENCE_INC | LIBIO_FLAGS_CLOSING |
+                         LIBIO_FLAGS_READ_WRITE;
         rtems_test_assert( flags == expected_flags );
         rtems_test_assert( ( iops_free - 1 ) == free_iops() );
         break;
@@ -630,18 +631,18 @@ static void test_iop( test_context *ctx )
   rtems_test_assert(
     ( flags & LIBIO_FLAGS_REFERENCE_MASK ) == LIBIO_FLAGS_REFERENCE_INC
   );
-  rtems_libio_free( iop );
-  flags = rtems_libio_iop_flags( iop );
-  rtems_test_assert( ( flags & LIBIO_FLAGS_FLAGS_MASK ) == expected );
-  rtems_test_assert(
-    ( flags & LIBIO_FLAGS_REFERENCE_MASK ) == LIBIO_FLAGS_REFERENCE_INC
-  );
   rtems_libio_iop_drop( iop );
   flags = rtems_libio_iop_flags( iop );
   rtems_test_assert( ( flags & LIBIO_FLAGS_FLAGS_MASK ) == expected );
   rtems_libio_iop_flags_clear( iop, LIBIO_FLAGS_OPEN );
+  expected &= ~LIBIO_FLAGS_OPEN;
+  /* The drop of a reference to a reserved iop does not free it */
   rtems_libio_iop_hold( iop );
   rtems_libio_iop_drop( iop );
+  flags = rtems_libio_iop_flags( iop );
+  rtems_test_assert( flags == expected );
+  rtems_test_assert( ( iops_free - 1 ) == free_iops() );
+  rtems_libio_free( iop );
   flags = rtems_libio_iop_flags( iop );
   rtems_test_assert( flags == LIBIO_FLAGS_FREE );
   rtems_test_assert( iops_free == free_iops() );

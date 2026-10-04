@@ -232,36 +232,77 @@ rtems_libio_t *rtems_libio_allocate_specific( int fd )
   return iop;
 }
 
-void rtems_libio_free_iop( rtems_libio_t *iop )
+static void rtems_libio_reclaim( rtems_libio_t *iop )
 {
   size_t zero;
-  unsigned int flags;
+
+  rtems_filesystem_location_free( &iop->pathinfo );
+
+  zero = offsetof( rtems_libio_t, offset );
+  memset( (char *) iop + zero, 0, sizeof( *iop ) - zero );
+
+  rtems_libio_lock();
 
   /*
-   * Use atomic test and set so the contents of the if statement
-   * can only be run once. Therefore only added to the free list once.
+   * Append it to the free list. This increases the likelihood that
+   * a use after close is detected.
    */
-  flags = rtems_libio_iop_flags_set( iop, LIBIO_FLAGS_FREE );
-  if ( ( flags & LIBIO_FLAGS_FREE ) == 0 ) {
-    rtems_libio_lock();
-    /*
-     * Clear the flags. All references should have been dropped.
-     */
-    _Atomic_Store_uint( &iop->flags, LIBIO_FLAGS_FREE, ATOMIC_ORDER_RELAXED );
+  *rtems_libio_iop_free_tail = iop;
+  rtems_libio_iop_free_tail = &iop->data1;
 
-    rtems_filesystem_location_free( &iop->pathinfo );
+  rtems_libio_unlock();
+}
 
-    zero = offsetof( rtems_libio_t, offset );
-    memset( (char *) iop + zero, 0, sizeof( *iop ) - zero );
+void rtems_libio_iop_release( rtems_libio_t *iop )
+{
+  unsigned int flags;
+  bool         success;
 
-    /*
-     * Append it to the free list. This increases the likelihood that
-     * a use after close is detected.
-     */
-    *rtems_libio_iop_free_tail = iop;
-    rtems_libio_iop_free_tail = &iop->data1;
-    rtems_libio_unlock();
-  }
+  flags = rtems_libio_iop_flags( iop );
+
+  do {
+    if (
+      ( flags & ( LIBIO_FLAGS_REFERENCE_MASK | LIBIO_FLAGS_CLOSING ) ) !=
+      LIBIO_FLAGS_CLOSING
+    ) {
+      return;
+    }
+
+    /* The reference count is zero, so the free state does not change it */
+    success = _Atomic_Compare_exchange_uint(
+      &iop->flags,
+      &flags,
+      LIBIO_FLAGS_FREE,
+      ATOMIC_ORDER_ACQ_REL,
+      ATOMIC_ORDER_RELAXED
+    );
+  } while ( !success );
+
+  rtems_libio_reclaim( iop );
+}
+
+void rtems_libio_free( rtems_libio_t *iop )
+{
+  unsigned int flags;
+  bool         success;
+
+  flags = rtems_libio_iop_flags( iop );
+
+  do {
+    if ( ( flags & ( LIBIO_FLAGS_FREE | LIBIO_FLAGS_CLOSING ) ) != 0 ) {
+      return;
+    }
+
+    success = _Atomic_Compare_exchange_uint(
+      &iop->flags,
+      &flags,
+      ( flags & ~LIBIO_FLAGS_OPEN ) | LIBIO_FLAGS_CLOSING,
+      ATOMIC_ORDER_ACQ_REL,
+      ATOMIC_ORDER_RELAXED
+    );
+  } while ( !success );
+
+  rtems_libio_iop_release( iop );
 }
 
 int rtems_libio_count_open_iops( void )

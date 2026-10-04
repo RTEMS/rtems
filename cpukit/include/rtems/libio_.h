@@ -141,41 +141,27 @@ unsigned int rtems_libio_from_fcntl_flags( int fcntl_flags );
 int rtems_libio_to_fcntl_flags( unsigned int flags );
 
 /**
- * This routine frees the resources associated with an IOP (file
- * descriptor) and clears the slot in the IOP Table. No checks are
- * made on the state of the IOP.
+ * @brief Returns an iop with a failed open to the free list.
+ *
+ * The iop is reserved, or it is open because its open handler set
+ * #LIBIO_FLAGS_OPEN.  The iop is closing afterwards.  It returns to the free
+ * list when its last reference is dropped.  The call has no effect on an iop
+ * which is free or closing.
+ *
+ * @param[in, out] iop The iop returned by rtems_libio_allocate(),
+ *   rtems_libio_allocate_minimum() or rtems_libio_allocate_specific().
  */
-void rtems_libio_free_iop(
-  rtems_libio_t *iop
-);
+void rtems_libio_free( rtems_libio_t *iop );
 
 /**
- * This routine frees the resources associated with an IOP (file
- * descriptor) and clears the slot in the IOP Table. The IOP has to
- * close (open flag not set) and no references held or the call will
- * ignore the request.
+ * @brief Returns a closing iop without references to the free list.
+ *
+ * The call has no effect on an iop which is not closing or which has a
+ * reference.  At most one of concurrent calls returns the iop.
+ *
+ * @param[in, out] iop The iop.
  */
-static inline void rtems_libio_free(
-  rtems_libio_t *iop
-)
-{
-  /*
-   * The IOP cannot be open and there can be no references held for it
-   * to be returned to the free list.
-   *
-   * Note, the open flag indicates the user owns the fd that indexes
-   * the iop so consider it an indirect reference. We cannot return
-   * the iop to the free list while the user owns the fd.
-   *
-   * Read the flags once as it is an atomic and we need to test 2
-   * flags. No convenience call as this is the only case we have.
-   */
-  const unsigned int flags = rtems_libio_iop_flags( iop );
-  if ( ( ( flags & LIBIO_FLAGS_OPEN ) == 0 )
-       && ( ( flags & LIBIO_FLAGS_REFERENCE_MASK ) == 0 ) ) {
-    rtems_libio_free_iop( iop );
-  }
-}
+void rtems_libio_iop_release( rtems_libio_t *iop );
 
 /**
  * @brief Sets the specified flags in the iop.
@@ -240,14 +226,17 @@ static inline unsigned int rtems_libio_iop_hold( rtems_libio_t *iop )
 }
 
 /**
- * @brief Drops a refernece to the iop.
+ * @brief Drops a reference to the iop.
+ *
+ * The drop of the last reference of a closing iop returns it to the free
+ * list.
  *
  * @param[in] iop The iop.
  */
 static inline void rtems_libio_iop_drop( rtems_libio_t *iop )
 {
-#if defined(RTEMS_DEBUG)
   unsigned int flags;
+#if defined(RTEMS_DEBUG)
   bool         success;
 
   flags = _Atomic_Load_uint( &iop->flags, ATOMIC_ORDER_RELAXED );
@@ -268,14 +257,19 @@ static inline void rtems_libio_iop_drop( rtems_libio_t *iop )
     );
   } while ( !success );
 #else
-  _Atomic_Fetch_sub_uint(
+  flags = _Atomic_Fetch_sub_uint(
     &iop->flags,
     LIBIO_FLAGS_REFERENCE_INC,
     ATOMIC_ORDER_RELEASE
   );
 #endif
-  /* free the IOP is not open or held */
-  rtems_libio_free( iop );
+
+  if (
+    ( flags & ( LIBIO_FLAGS_REFERENCE_MASK | LIBIO_FLAGS_CLOSING ) ) ==
+    ( LIBIO_FLAGS_REFERENCE_INC | LIBIO_FLAGS_CLOSING )
+  ) {
+    rtems_libio_iop_release( iop );
+  }
 }
 
 /*

@@ -734,6 +734,11 @@ int rtems_filesystem_default_statvfs(
 /**
  * @brief Opens a node.
  *
+ * The handler shall not set #LIBIO_FLAGS_OPEN.  The open path sets it after
+ * the handler and all other steps of the open succeeded.  Another task can
+ * close an open iop, so an earlier open flag lets it free the iop during the
+ * open.
+ *
  * @param[in, out] iop The IO pointer.
  * @param[in] path The path.
  * @param[in] oflag The open flags.
@@ -1385,6 +1390,21 @@ typedef struct {
 
 /**
  * @name Flag Values and Masks
+ *
+ * The flags of an iop contain its state and its reference count.  The state
+ * is one of the following.
+ *
+ * | State    | Flags                 | Entered by                           |
+ * | -------- | --------------------- | ------------------------------------ |
+ * | free     | #LIBIO_FLAGS_FREE     | system start, drop of last reference |
+ * | reserved | none of the three     | rtems_libio_allocate()               |
+ * | open     | #LIBIO_FLAGS_OPEN     | the open path                        |
+ * | closing  | #LIBIO_FLAGS_CLOSING  | close(), rtems_libio_free()          |
+ *
+ * The reference count changes only through rtems_libio_iop_hold() and
+ * rtems_libio_iop_drop().  The drop which releases the last reference of a
+ * closing iop returns it to the free list.  A reserved iop returns to the free
+ * list only through rtems_libio_free().
  */
 /**@{**/
 
@@ -1392,6 +1412,7 @@ typedef struct {
 #define LIBIO_FLAGS_NO_DELAY       0x0002U  /* return immediately if no data */
 #define LIBIO_FLAGS_READ           0x0004U  /* reading */
 #define LIBIO_FLAGS_WRITE          0x0008U  /* writing */
+#define LIBIO_FLAGS_CLOSING        0x0010U  /* closed, references remain */
 #define LIBIO_FLAGS_OPEN           0x0100U  /* device is open */
 #define LIBIO_FLAGS_APPEND         0x0200U  /* all writes append */
 #define LIBIO_FLAGS_CLOSE_BUSY     0x0400U  /* close with refs held */
