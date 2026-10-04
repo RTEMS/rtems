@@ -839,18 +839,9 @@ static void CompilerUnitBuiltins_Action_20( void )
 
   n = UINT64_C( 0x7fffffff00000000 );
   d = UINT64_C( 0x7fffffff00000000 );
-  do_longjmp = true;
-
-  if ( setjmp( exception_return_context ) == 0 ) {
-    x = n / d;
-  }
-
+  T_eq_u64( n / d, UINT64_C( 1 ) );
   #if defined( TEST_UDIVMODDI4_WITHOUT_REMINDER )
-  do_longjmp = true;
-
-  if ( setjmp( exception_return_context ) == 0 ) {
-    __udivmoddi4( n, d, NULL );
-  }
+  T_eq_u64( __udivmoddi4( n, d, NULL ), UINT64_C( 1 ) );
   #endif
 
   n = UINT64_C( 0 );
