@@ -292,11 +292,11 @@ static inline void rtems_libio_iop_drop( rtems_libio_t *iop )
  */
 
 #define rtems_libio_check_is_open(_iop) \
-  do {                                     \
-      if (rtems_libio_iop_is_open(_iop)) { \
-          errno = EBADF;                   \
-          return -1;                       \
-      }                                    \
+  do {                                      \
+      if (!rtems_libio_iop_is_open(_iop)) { \
+          errno = EBADF;                    \
+          return -1;                        \
+      }                                     \
   } while (0)
 
 /**
