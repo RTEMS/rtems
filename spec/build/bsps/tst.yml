@@ -17,9 +17,22 @@ actions:
     - dhrystone
     - linpack
     - whetstone
+- set-test-state:
+    reason: |
+      Fails because of defects of the file descriptor support.  A stale
+      descriptor frees an iop which open() constructs.  The free of an iop
+      overwrites its reference count.  It frees the location while it holds the
+      libio lock.  The last iop lacks LIBIO_FLAGS_FREE.  F_DUP2FD ignores the
+      references of its target.  fstat() and fcntl() report EBADF when the
+      descriptor is closed during the call.  rtems_libio_check_is_open()
+      rejects an open iop.  A failed open() leaks an iop which its open handler
+      set open.  A close() returns EBUSY while a stale access holds the iop.
+    state: expected-fail
+    tests:
+    - fsclose02
 build-type: option
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH & Co. KG
+- Copyright (C) 2020, 2026 embedded brains GmbH & Co. KG
 default: []
 description: |
   Provides general test states.

@@ -34,6 +34,8 @@ links:
 - role: build-dependency
   uid: fsclose01
 - role: build-dependency
+  uid: fsclose02
+- role: build-dependency
   uid: fsdosfsformat01
 - role: build-dependency
   uid: fsdosfsname01

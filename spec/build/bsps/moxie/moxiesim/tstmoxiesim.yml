@@ -20,6 +20,7 @@ actions:
     - fatal-idle-thread-stack-too-small
     - fatal-too-large-tls-size
     - flashdev01
+    - fsclose02
     - fsjffs2empty01
     - fsjffs2gc01
     - iostream
