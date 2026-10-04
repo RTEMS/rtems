@@ -47,7 +47,7 @@
 /**
  * @defgroup ScoreSchedReqYield spec:/score/sched/req/yield
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

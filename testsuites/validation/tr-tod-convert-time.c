@@ -46,6 +46,7 @@
  * @defgroup ScoreTodReqConvertTime spec:/score/tod/req/convert-time
  *
  * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

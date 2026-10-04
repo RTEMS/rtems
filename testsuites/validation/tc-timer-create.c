@@ -45,7 +45,7 @@
 /**
  * @defgroup RtemsTimerReqCreate spec:/rtems/timer/req/create
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

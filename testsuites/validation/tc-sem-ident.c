@@ -42,7 +42,7 @@
 /**
  * @defgroup RtemsSemValIdent spec:/rtems/sem/val/ident
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @brief Test the rtems_semaphore_ident() directive.
  *

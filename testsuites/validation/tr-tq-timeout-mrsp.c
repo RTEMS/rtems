@@ -46,7 +46,7 @@
 /**
  * @defgroup ScoreTqReqTimeoutMrsp spec:/score/tq/req/timeout-mrsp
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

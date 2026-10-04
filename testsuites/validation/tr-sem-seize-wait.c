@@ -46,7 +46,7 @@
 /**
  * @defgroup ScoreSemReqSeizeWait spec:/score/sem/req/seize-wait
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

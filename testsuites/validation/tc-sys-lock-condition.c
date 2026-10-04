@@ -50,7 +50,7 @@
 /**
  * @defgroup NewlibValSysLockCondition spec:/newlib/val/sys-lock-condition
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @brief Tests the `<sys/lock.h>` condition variable directives.
  *

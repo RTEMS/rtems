@@ -45,7 +45,7 @@
 /**
  * @defgroup RtemsTimerReqInitiateServer spec:/rtems/timer/req/initiate-server
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

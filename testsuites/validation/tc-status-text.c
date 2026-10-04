@@ -42,7 +42,7 @@
 /**
  * @defgroup RtemsStatusReqText spec:/rtems/status/req/text
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

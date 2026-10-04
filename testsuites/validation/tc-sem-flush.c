@@ -49,7 +49,7 @@
 /**
  * @defgroup RtemsSemReqFlush spec:/rtems/sem/req/flush
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

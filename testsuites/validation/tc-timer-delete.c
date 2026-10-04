@@ -47,7 +47,7 @@
 /**
  * @defgroup RtemsTimerReqDelete spec:/rtems/timer/req/delete
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

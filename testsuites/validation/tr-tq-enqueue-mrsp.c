@@ -42,7 +42,7 @@
 /**
  * @defgroup ScoreTqReqEnqueueMrsp spec:/score/tq/req/enqueue-mrsp
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

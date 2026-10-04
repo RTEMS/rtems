@@ -44,7 +44,7 @@
 /**
  * @defgroup ScoreMtxReqSurrender spec:/score/mtx/req/surrender
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

@@ -43,7 +43,7 @@
 /**
  * @defgroup ScoreTqReqFlushPriority spec:/score/tq/req/flush-priority
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

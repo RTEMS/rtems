@@ -46,7 +46,7 @@
 /**
  * @defgroup RtemsSemReqSetPriority spec:/rtems/sem/req/set-priority
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

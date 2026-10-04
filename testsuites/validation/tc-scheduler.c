@@ -44,7 +44,7 @@
 /**
  * @defgroup RtemsSchedulerValScheduler spec:/rtems/scheduler/val/scheduler
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @brief This test case collection provides validation test cases for general
  *   requirements of the @ref RTEMSAPIClassicScheduler.

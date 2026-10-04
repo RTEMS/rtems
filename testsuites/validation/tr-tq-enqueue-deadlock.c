@@ -42,7 +42,7 @@
 /**
  * @defgroup ScoreTqReqEnqueueDeadlock spec:/score/tq/req/enqueue-deadlock
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

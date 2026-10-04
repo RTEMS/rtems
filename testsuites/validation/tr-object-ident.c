@@ -45,6 +45,7 @@
  * @defgroup RtemsReqIdent spec:/rtems/req/ident
  *
  * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

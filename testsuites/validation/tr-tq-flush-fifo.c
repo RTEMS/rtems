@@ -43,7 +43,7 @@
 /**
  * @defgroup ScoreTqReqFlushFifo spec:/score/tq/req/flush-fifo
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

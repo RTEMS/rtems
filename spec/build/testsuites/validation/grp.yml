@@ -56,6 +56,8 @@ links:
 - role: build-dependency
   uid: validation-no-clock-0
 - role: build-dependency
+  uid: validation-no-clock-1
+- role: build-dependency
   uid: validation-non-smp
 - role: build-dependency
   uid: validation-one-cpu-0

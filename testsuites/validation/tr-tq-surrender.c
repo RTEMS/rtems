@@ -46,7 +46,7 @@
 /**
  * @defgroup ScoreTqReqSurrender spec:/score/tq/req/surrender
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

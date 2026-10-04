@@ -42,7 +42,7 @@
 /**
  * @defgroup RtemsStatusReqIsSuccessful spec:/rtems/status/req/is-successful
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

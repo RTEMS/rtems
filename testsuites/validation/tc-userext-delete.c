@@ -43,7 +43,7 @@
 /**
  * @defgroup RtemsUserextReqDelete spec:/rtems/userext/req/delete
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

@@ -47,7 +47,7 @@
 /**
  * @defgroup NewlibReqFutexWake spec:/newlib/req/futex-wake
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

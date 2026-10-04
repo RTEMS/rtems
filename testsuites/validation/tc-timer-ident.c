@@ -42,7 +42,7 @@
 /**
  * @defgroup RtemsTimerValIdent spec:/rtems/timer/val/ident
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @brief Test the rtems_timer_ident() directive.
  *

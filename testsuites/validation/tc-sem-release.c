@@ -48,7 +48,7 @@
 /**
  * @defgroup RtemsSemReqRelease spec:/rtems/sem/req/release
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

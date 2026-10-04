@@ -47,7 +47,7 @@
  * @defgroup ScoreTqReqSurrenderPriorityInherit \
  *   spec:/score/tq/req/surrender-priority-inherit
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

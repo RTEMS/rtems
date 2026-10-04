@@ -50,7 +50,7 @@
 /**
  * @defgroup NewlibValSysLock spec:/newlib/val/sys-lock
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @brief Tests the `<sys/lock.h>` mutex directives.
  *

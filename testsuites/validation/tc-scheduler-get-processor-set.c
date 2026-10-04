@@ -46,7 +46,7 @@
  * @defgroup RtemsSchedulerReqGetProcessorSet \
  *   spec:/rtems/scheduler/req/get-processor-set
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

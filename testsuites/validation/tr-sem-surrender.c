@@ -43,7 +43,7 @@
 /**
  * @defgroup ScoreSemReqSurrender spec:/score/sem/req/surrender
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

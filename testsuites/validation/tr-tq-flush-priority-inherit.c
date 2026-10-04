@@ -44,7 +44,7 @@
  * @defgroup ScoreTqReqFlushPriorityInherit \
  *   spec:/score/tq/req/flush-priority-inherit
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

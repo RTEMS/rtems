@@ -43,7 +43,7 @@
 /**
  * @defgroup RtemsTypeValType spec:/rtems/type/val/type
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @brief Tests some @ref RTEMSAPIClassicTypes interfaces.
  *

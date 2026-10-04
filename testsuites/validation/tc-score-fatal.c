@@ -49,7 +49,7 @@
 /**
  * @defgroup ScoreValFatal spec:/score/val/fatal
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  * @ingroup TestsuitesValidationOneCpu0
  *
  * @brief Tests some fatal errors.

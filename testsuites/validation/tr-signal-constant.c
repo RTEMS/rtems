@@ -45,7 +45,7 @@
  * @defgroup RtemsSignalValSignalConstant \
  *   spec:/rtems/signal/val/signal-constant
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @brief Tests a signal constant of the @ref RTEMSAPIClassicSignal using the
  *   signal set of the executing task.

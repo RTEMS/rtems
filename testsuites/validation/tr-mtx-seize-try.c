@@ -42,7 +42,7 @@
 /**
  * @defgroup ScoreMtxReqSeizeTry spec:/score/mtx/req/seize-try
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

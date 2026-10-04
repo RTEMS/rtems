@@ -47,7 +47,7 @@
  * @defgroup ScoreTqReqTimeoutPriorityInherit \
  *   spec:/score/tq/req/timeout-priority-inherit
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

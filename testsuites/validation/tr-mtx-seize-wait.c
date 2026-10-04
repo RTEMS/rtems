@@ -47,7 +47,7 @@
 /**
  * @defgroup ScoreMtxReqSeizeWait spec:/score/mtx/req/seize-wait
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

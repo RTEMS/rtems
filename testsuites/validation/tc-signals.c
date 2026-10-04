@@ -44,7 +44,7 @@
 /**
  * @defgroup RtemsSignalValSignals spec:/rtems/signal/val/signals
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @brief This test case collection provides validation test cases for the @ref
  *   RTEMSAPIClassicSignal.

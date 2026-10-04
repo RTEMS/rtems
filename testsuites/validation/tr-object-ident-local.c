@@ -43,6 +43,7 @@
  * @defgroup RtemsReqIdentLocal spec:/rtems/req/ident-local
  *
  * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

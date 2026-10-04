@@ -48,7 +48,7 @@
  * @defgroup RtemsTimerValServerFireWhenTod \
  *   spec:/rtems/timer/val/server-fire-when-tod
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @brief Tests the validation and the conversion of the time of day by
  *   rtems_timer_server_fire_when().

@@ -45,7 +45,7 @@
 /**
  * @defgroup RtemsTimerReqFireWhen spec:/rtems/timer/req/fire-when
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

@@ -45,7 +45,7 @@
 /**
  * @defgroup RtemsUserextReqCreate spec:/rtems/userext/req/create
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

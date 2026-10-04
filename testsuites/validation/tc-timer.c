@@ -46,7 +46,7 @@
 /**
  * @defgroup RtemsTimerValTimer spec:/rtems/timer/val/timer
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @brief Tests general timer behaviour.
  *

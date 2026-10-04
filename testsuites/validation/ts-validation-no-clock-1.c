@@ -3,11 +3,11 @@
 /**
  * @file
  *
- * @ingroup RtemsUserextValIdent
+ * @ingroup TestsuitesValidationNoClock1
  */
 
 /*
- * Copyright (C) 2020 embedded brains GmbH & Co. KG
+ * Copyright (C) 2026 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -35,64 +35,30 @@
 #include "config.h"
 #endif
 
-#include "tr-object-ident-local.h"
-
 #include <rtems/test.h>
 
 /**
- * @defgroup RtemsUserextValIdent spec:/rtems/userext/val/ident
+ * @defgroup TestsuitesValidationNoClock1 \
+ *   spec:/testsuites/validation-no-clock-1
  *
- * @ingroup TestsuitesValidationNoClock1
+ * @ingroup RTEMSTestSuitesValidation
  *
- * @brief Test the rtems_extension_ident() directive.
+ * @brief This general purpose validation test suite provides enough resources
+ *   to run basic tests without a Clock Driver for all specified managers and
+ *   functions.
  *
- * This test case performs the following actions:
- *
- * - Run the generic object identification tests for Classic API user extension
- *   class objects defined by spec:/rtems/req/ident-local.
+ * In SMP configurations, up to three scheduler instances using the SMP EDF
+ * scheduler are provided using up to four processors.
  *
  * @{
  */
 
-#define NAME_LOCAL_OBJECT rtems_build_name( 'U', 'E', 'X', 'T' )
+const char rtems_test_name[] = "TestsuitesValidationNoClock1";
 
-static rtems_status_code ClassicUserExtIdentAction(
-  rtems_name name,
-  rtems_id  *id
-)
-{
-  return rtems_extension_ident( name, id );
-}
+#define CONFIGURE_MAXIMUM_PROCESSORS 5
 
-/**
- * @brief Run the generic object identification tests for Classic API user
- *   extension class objects defined by spec:/rtems/req/ident-local.
- */
-static void RtemsUserextValIdent_Action_0( void )
-{
-  static const rtems_extensions_table table;
-  rtems_status_code                   sc;
-  rtems_id                            id_local_object;
+#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
-  sc = rtems_extension_create( NAME_LOCAL_OBJECT, &table, &id_local_object );
-  T_assert_rsc_success( sc );
-
-  RtemsReqIdentLocal_Run(
-    id_local_object,
-    NAME_LOCAL_OBJECT,
-    ClassicUserExtIdentAction
-  );
-
-  sc = rtems_extension_delete( id_local_object );
-  T_rsc_success( sc );
-}
-
-/**
- * @fn void T_case_body_RtemsUserextValIdent( void )
- */
-T_TEST_CASE( RtemsUserextValIdent )
-{
-  RtemsUserextValIdent_Action_0();
-}
+#include "ts-default.h"
 
 /** @} */

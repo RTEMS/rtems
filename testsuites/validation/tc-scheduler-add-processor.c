@@ -48,7 +48,7 @@
  * @defgroup RtemsSchedulerReqAddProcessor \
  *   spec:/rtems/scheduler/req/add-processor
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

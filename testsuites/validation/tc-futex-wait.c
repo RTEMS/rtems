@@ -47,7 +47,7 @@
 /**
  * @defgroup NewlibReqFutexWait spec:/newlib/req/futex-wait
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

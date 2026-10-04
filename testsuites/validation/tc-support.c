@@ -42,7 +42,7 @@
 /**
  * @defgroup RtemsSupportValSupport spec:/rtems/support/val/support
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @brief Tests some @ref RTEMSAPIClassicSupport directives.
  *

@@ -49,7 +49,7 @@
  * @defgroup RtemsSchedulerReqRemoveProcessor \
  *   spec:/rtems/scheduler/req/remove-processor
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

@@ -42,7 +42,7 @@
 /**
  * @defgroup RtemsStatusValStatus spec:/rtems/status/val/status
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @brief Tests some @ref RTEMSAPIClassicStatus interfaces.
  *

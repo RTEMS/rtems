@@ -47,7 +47,7 @@
 /**
  * @defgroup ScoreThreadValThread spec:/score/thread/val/thread
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @brief Tests general thread behaviour.
  *

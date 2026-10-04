@@ -42,7 +42,7 @@
 /**
  * @defgroup RtemsSupportReqIsNameValid spec:/rtems/support/req/is-name-valid
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

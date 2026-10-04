@@ -64,6 +64,7 @@ actions:
     - validation-1
     - validation-intr
     - validation-no-clock-0
+    - validation-no-clock-1
     - validation-one-cpu-0
     - validation-one-cpu-1
     - validation-timecounter-1

@@ -45,7 +45,7 @@
 /**
  * @defgroup ScoreCondReqWait spec:/score/cond/req/wait
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

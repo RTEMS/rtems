@@ -47,7 +47,7 @@
  * @defgroup RtemsSchedulerReqGetMaximumPriority \
  *   spec:/rtems/scheduler/req/get-maximum-priority
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

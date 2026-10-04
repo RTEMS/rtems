@@ -45,7 +45,7 @@
 /**
  * @defgroup RtemsSchedulerReqIdent spec:/rtems/scheduler/req/ident
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

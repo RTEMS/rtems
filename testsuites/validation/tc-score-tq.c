@@ -43,7 +43,7 @@
 /**
  * @defgroup ScoreTqValTq spec:/score/tq/val/tq
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @brief Tests special thread queue behaviour.
  *

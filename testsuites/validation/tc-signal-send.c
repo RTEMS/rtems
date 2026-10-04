@@ -44,7 +44,7 @@
 /**
  * @defgroup RtemsSignalReqSend spec:/rtems/signal/req/send
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  * @ingroup TestsuitesValidationOneCpu0
  *
  * @{

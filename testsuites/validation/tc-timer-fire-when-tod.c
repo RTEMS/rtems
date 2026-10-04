@@ -47,7 +47,7 @@
 /**
  * @defgroup RtemsTimerValFireWhenTod spec:/rtems/timer/val/fire-when-tod
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @brief Tests the validation and the conversion of the time of day by
  *   rtems_timer_fire_when().

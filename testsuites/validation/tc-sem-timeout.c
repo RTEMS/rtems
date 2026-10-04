@@ -48,7 +48,7 @@
 /**
  * @defgroup RtemsSemReqTimeout spec:/rtems/sem/req/timeout
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */

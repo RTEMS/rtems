@@ -46,7 +46,7 @@
  * @defgroup RtemsSchedulerReqIdentByProcessorSet \
  *   spec:/rtems/scheduler/req/ident-by-processor-set
  *
- * @ingroup TestsuitesValidationNoClock0
+ * @ingroup TestsuitesValidationNoClock1
  *
  * @{
  */
