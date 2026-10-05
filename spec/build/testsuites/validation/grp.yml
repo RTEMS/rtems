@@ -86,6 +86,8 @@ links:
 - role: build-dependency
   uid: bsps/fatal-extension
 - role: build-dependency
+  uid: bsps/fatal-sparc-floating-point-isr
+- role: build-dependency
   uid: bsps/fatal-sparc-leon3-cache-snooping-disabled-boot
 - role: build-dependency
   uid: bsps/fatal-sparc-leon3-cache-snooping-disabled-secondary

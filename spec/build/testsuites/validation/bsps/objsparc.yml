@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+cppflags: []
+cxxflags: []
+enabled-by: sparc
+includes: []
+install: []
+links: []
+source:
+- testsuites/validation/bsps/tc-sparc-context.c
+- testsuites/validation/bsps/tc-sparc-exception-frame.c
+- testsuites/validation/bsps/tc-sparc-exception.c
+- testsuites/validation/bsps/tc-sparc-interrupt-l7.c
+- testsuites/validation/bsps/tc-sparc-interrupt-traps.c
+- testsuites/validation/bsps/tc-sparc-interrupt.c
+- testsuites/validation/bsps/tc-sparc-resume.c
+- testsuites/validation/bsps/tc-sparc-windows.c
+type: build

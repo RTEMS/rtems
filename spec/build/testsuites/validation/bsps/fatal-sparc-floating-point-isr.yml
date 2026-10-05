@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2026 embedded brains GmbH & Co. KG
+cppflags: []
+cxxflags: []
+enabled-by:
+  and:
+  - sparc
+  - not: RTEMS_SMP
+features: c cprogram
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/validation/bsps/tr-fatal-sparc-floating-point-isr.c
+- testsuites/validation/bsps/ts-fatal-sparc-floating-point-isr.c
+stlib: []
+target: testsuites/validation/bsps/ts-fatal-sparc-floating-point-isr.exe
+type: build
+use-after: []
+use-before: []

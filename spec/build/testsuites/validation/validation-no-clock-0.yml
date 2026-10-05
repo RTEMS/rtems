@@ -16,6 +16,8 @@ links:
 - role: build-dependency
   uid: bsps/objmips
 - role: build-dependency
+  uid: bsps/objsparc
+- role: build-dependency
   uid: objpreinitarray
 source:
 - testsuites/validation/tc-acfg.c
