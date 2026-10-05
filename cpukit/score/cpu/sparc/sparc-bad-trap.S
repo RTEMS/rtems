@@ -58,7 +58,11 @@ SYM(_SPARC_Bad_trap):
         rd      %asr17, %l6
         srl     %l6, LEON3_ASR17_PROCESSOR_INDEX_SHIFT, %l6
         add     %l6, 1, %l4
+
+        /* The multiplication writes the Y register, so save it in %l7 */
+        rd      %y, %l7
         smul    %l4, %l5, %l5
+        wr      %l7, %y
 #endif
         set     SYM(_ISR_Stack_area_begin), %l7
         add     %l7, %l5, %l7
