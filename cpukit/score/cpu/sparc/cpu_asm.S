@@ -104,6 +104,15 @@ SYM(_CPU_Context_switch_no_return):
         ! Now actually save ISR stack nesting prevention flag
         st       %o4, [%o0 + ISR_DISPATCH_DISABLE_STACK_OFFSET]
 
+#if SPARC_HAS_FPU == 1
+        ! Save the FSR if the floating point unit is enabled (PSR[EF] == 1)
+        sethi   %hi(SPARC_PSR_EF_MASK), %o3
+        andcc   %o2, %o3, %g0
+        bne,a   .Lsave_fsr_done
+         st     %fsr, [%o0 + SPARC_CONTEXT_CONTROL_FSR_OFFSET]
+.Lsave_fsr_done:
+#endif
+
         /*
          *  This is entered from _CPU_Context_restore with:
          *    o1 = context to restore
@@ -252,8 +261,26 @@ done_flushing:
 #endif
         andn    %g1, SPARC_PSR_CWP_MASK, %g1  ! g1 = heir psr w/o cwp
         or      %g1, %g3, %g1                 ! g1 = heir psr with cwp
+#if SPARC_HAS_FPU == 1
+        /*
+         * Test PSR[EF] of the heir before the PSR write, since the write
+         * restores the condition codes of the heir.  Restore the FSR if the
+         * heir PSR enables the floating point unit (PSR[EF] == 1).
+         */
+        sethi   %hi(SPARC_PSR_EF_MASK), %g4
+        andcc   %g1, %g4, %g0
+        be      .Lrestore_fsr_done
+         mov    %g1, %psr                     ! restore status register and
+                                              ! **** ENABLE TRAPS ****
+        nop                                   ! PSR write delay
+        nop
+        nop
+        ld      [%o1 + SPARC_CONTEXT_CONTROL_FSR_OFFSET], %fsr
+.Lrestore_fsr_done:
+#else
         mov     %g1, %psr                     ! restore status register and
                                               ! **** ENABLE TRAPS ****
+#endif
 
         /*
          * WARNING: This code does not run with the restored stack pointer.  In

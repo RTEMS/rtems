@@ -100,6 +100,7 @@ SPARC_ASSERT_OFFSET(o6_sp, O6_SP);
 SPARC_ASSERT_OFFSET(o7, O7);
 SPARC_ASSERT_OFFSET(psr, PSR);
 SPARC_ASSERT_OFFSET(isr_dispatch_disable, ISR_DISPATCH_DISABLE_STACK);
+SPARC_ASSERT_OFFSET(fsr, SPARC_CONTEXT_CONTROL_FSR);
 
 #if defined(RTEMS_SMP)
 SPARC_ASSERT_OFFSET(is_executing, SPARC_CONTEXT_CONTROL_IS_EXECUTING);
@@ -238,9 +239,12 @@ void _CPU_Initialize(void)
     ".set SPARC_THREAD_CONTROL_REGISTERS_FP_CONTEXT_OFFSET, %0\n"
     ".global SPARC_THREAD_CONTROL_FP_CONTEXT_OFFSET\n"
     ".set SPARC_THREAD_CONTROL_FP_CONTEXT_OFFSET, %1\n"
+    ".global SPARC_THREAD_CONTROL_REGISTERS_FSR_OFFSET\n"
+    ".set SPARC_THREAD_CONTROL_REGISTERS_FSR_OFFSET, %2\n"
     :
     : "i" (offsetof(Thread_Control, Registers.fp_context)),
-      "i" (offsetof(Thread_Control, fp_context))
+      "i" (offsetof(Thread_Control, fp_context)),
+      "i" (offsetof(Thread_Control, Registers.fsr))
   );
 #endif
 }
@@ -311,6 +315,15 @@ void _CPU_Context_Initialize(
       tmp_psr |= SPARC_PSR_EF_MASK;
 #endif
     the_context->psr = tmp_psr;
+    the_context->fsr = SPARC_FSR_INITIAL;
+
+#if defined(SPARC_USE_LAZY_FP_SWITCH)
+    /*
+     * A restart reuses the context.  The lazy floating-point switch may hold
+     * a floating-point context which it saved before the restart.
+     */
+    the_context->fp_context = NULL;
+#endif
 
   /*
    *  Since THIS thread is being created, there is no way that THIS

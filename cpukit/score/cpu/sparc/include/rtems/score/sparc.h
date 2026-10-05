@@ -157,6 +157,17 @@ extern "C" {
 /** This constant is a mask for the IMPL bits in the PSR. */
 #define SPARC_PSR_IMPL_MASK 0xF0000000   /* bits 28 - 31 */
 
+/** @brief This constant defines the NS bit of the FSR. */
+#define SPARC_FSR_NS_MASK 0x00400000
+
+/**
+ * @brief This constant defines the initial FSR of a floating-point context.
+ *
+ * The floating-point unit rounds to nearest, raises no trap and treats a
+ * denormalized operand as zero.
+ */
+#define SPARC_FSR_INITIAL SPARC_FSR_NS_MASK
+
 /** This constant is the starting bit position of the CWP in the PSR. */
 #define SPARC_PSR_CWP_BIT_POSITION   0   /* bits  0 -  4 */
 /** This constant is the starting bit position of the ET in the PSR. */

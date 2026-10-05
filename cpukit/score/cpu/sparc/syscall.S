@@ -228,11 +228,14 @@ SYM(syscall_lazy_fp_switch):
 
 .Lfp_save_done:
 
-	/* Restore the floating point context if necessary */
+	/*
+	 * Restore the floating point context if necessary.  Without a saved
+	 * floating point context, restore the FSR of the thread context.
+	 */
 	st	%g0, [%l4 + %lo(SPARC_THREAD_CONTROL_REGISTERS_FP_CONTEXT_OFFSET)]
 	cmp	%l6, 0
-	be	.Lfp_restore_done
-	 nop
+	be,a	.Lfp_restore_done
+	 ld	[%l4 + %lo(SPARC_THREAD_CONTROL_REGISTERS_FSR_OFFSET)], %fsr
 	ldd	[%l6 + SPARC_FP_CONTEXT_OFFSET_F0_F1], %f0
 	ldd	[%l6 + SPARC_FP_CONTEXT_OFFSET_F2_F3], %f2
 	ldd	[%l6 + SPARC_FP_CONTEXT_OFFSET_F4_F5], %f4

@@ -394,6 +394,12 @@ typedef struct {
    */
   uint32_t   isr_dispatch_disable;
 
+  /**
+   * This will contain the contents of the floating point status register.
+   * The context switch saves and restores it if PSR[EF] is set.
+   */
+  uint32_t   fsr;
+
 #if defined(SPARC_USE_LAZY_FP_SWITCH)
   Context_Control_fp *fp_context;
 #endif
@@ -483,8 +489,11 @@ typedef struct {
 /** This macro defines an offset into the context for use in assembly. */
 #define ISR_DISPATCH_DISABLE_STACK_OFFSET 0x54
 
+/** This macro defines an offset into the context for use in assembly. */
+#define SPARC_CONTEXT_CONTROL_FSR_OFFSET 0x58
+
 #if defined(RTEMS_SMP)
-  #define SPARC_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 0x58
+  #define SPARC_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 0x5C
 #endif
 
 #ifndef ASM
