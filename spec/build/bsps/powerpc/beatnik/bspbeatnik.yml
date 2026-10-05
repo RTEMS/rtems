@@ -29,6 +29,7 @@ install:
   source:
   - bsps/powerpc/beatnik/start/linkcmds
   - bsps/powerpc/shared/start/linkcmds.share
+  - bsps/powerpc/shared/start/linkcmds.share_sections
 links:
 - role: build-dependency
   uid: ../../obj

@@ -19,6 +19,7 @@ install:
   source:
   - bsps/powerpc/mvme2700/start/linkcmds
   - bsps/powerpc/shared/start/linkcmds.share
+  - bsps/powerpc/shared/start/linkcmds.share_sections
 links:
 - role: build-dependency
   uid: ../../optconsolebaud
