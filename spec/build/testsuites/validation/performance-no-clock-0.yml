@@ -17,6 +17,7 @@ source:
 - testsuites/validation/tc-event-performance.c
 - testsuites/validation/tc-message-performance.c
 - testsuites/validation/tc-part-performance.c
+- testsuites/validation/tc-score-rbtree-performance.c
 - testsuites/validation/tc-sem-performance.c
 - testsuites/validation/tc-task-performance.c
 - testsuites/validation/ts-performance-no-clock-0.c
