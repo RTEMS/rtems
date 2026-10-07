@@ -33,13 +33,27 @@ A kernel fix enters before the validation test which checks it.
 
 ## Commit messages
 
-A commit holds the files of one category. The categories are `source`, `spec`,
-`pkg` and `ci`. The table `_CATEGORIES` in `.github/inspect_changes.py` assigns
-the category of a path. A `spec` commit may leave its generated files to the
-next commit, which must be a `source` commit.
+A commit holds the files of one category. The category gives the form of the
+subject:
 
-The subject is `<path prefix>: <Summary>`, for example
-`bsps/aarch64/raspberrypi: Add framebuffer driver`. It has at most 50
+| Category     | Paths                                                                     | Subject                 |
+| ------------ | ------------------------------------------------------------------------- | ----------------------- |
+| `source`     | the RTEMS source tree, which exists in the rtems.org repository           | `<scope>: <Summary>`    |
+| `spec`       | `spec/` outside `spec/build/`                                             | `spec: <Summary>`       |
+| `build-qual` | the items in `spec/build/` whose name ends in `extra.yml` or `qual.yml`   | `build-qual: <Summary>` |
+| `pkg`        | the package files, for example `Makefile`, `spec-pkg-bsps/` and this file | `pkg: <Summary>`        |
+| `ci`         | `.github/`                                                                | `ci: <Summary>`         |
+
+The table `_CATEGORIES` and the pattern `_BUILD_QUAL` in
+`.github/inspect_changes.py` assign the category of a path. A commit of another
+category does not use the prefix `spec:`, `build-qual:`, `pkg:` or `ci:`. A
+`spec` commit may leave its generated files to the next commit, which must be a
+`source` commit.
+
+The scope of a `source` subject names the area of the change, as the
+[commit header guidance](https://docs.rtems.org/docs/main/eng/vc-users.html#commit-header)
+of RTEMS describes. An example is
+`bsps/aarch64/raspberrypi: Add framebuffer driver`. The subject has at most 50
 characters. The second line is blank. The body wraps at 72 columns.
 
 The body states the problem, then the solution in the imperative. Reference an

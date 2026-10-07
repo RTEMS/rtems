@@ -80,8 +80,10 @@ gives each build directory its own lock file, so the two builds coexist.
 6. Split the commits. The item goes to a branch of `eb/qual`. The generated
    test and its line in the build item of the suite go to a branch of
    `eb/main`. A kernel fix which the test needs goes there first. A commit
-   holds one category: `source`, `spec`, `pkg` or `ci`. A `spec` commit may
-   leave its generated files to the next commit, a `source` commit.
+   holds one category: `source`, `spec`, `build-qual`, `pkg` or `ci`. The
+   category gives the subject prefix, see [CONTRIBUTING.md](CONTRIBUTING.md). A
+   `spec` commit may leave its generated files to the next commit, a `source`
+   commit.
 
 7. Inspect each branch:
 
