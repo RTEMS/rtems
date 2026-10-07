@@ -43,7 +43,7 @@
  */
 
 /**
- * @file cpukit/include/md4.h
+ * @file cpukit/contrib/include/md4.h
  *
  * @ingroup RTEMSAPIHashAlgorithms
  *
@@ -52,7 +52,7 @@
  */
 
 /**
- * @file cpukit/include/md5.h
+ * @file cpukit/contrib/include/md5.h
  *
  * @ingroup RTEMSAPIHashAlgorithms
  *
@@ -61,7 +61,7 @@
  */
 
 /**
- * @file cpukit/include/sha224.h
+ * @file cpukit/contrib/include/sha224.h
  *
  * @ingroup RTEMSAPIHashAlgorithms
  *
@@ -70,7 +70,7 @@
  */
 
 /**
- * @file cpukit/include/sha256.h
+ * @file cpukit/contrib/include/sha256.h
  *
  * @ingroup RTEMSAPIHashAlgorithms
  *
@@ -79,7 +79,7 @@
  */
 
 /**
- * @file cpukit/include/sha384.h
+ * @file cpukit/contrib/include/sha384.h
  *
  * @ingroup RTEMSAPIHashAlgorithms
  *
@@ -88,7 +88,7 @@
  */
 
 /**
- * @file cpukit/include/sha512.h
+ * @file cpukit/contrib/include/sha512.h
  *
  * @ingroup RTEMSAPIHashAlgorithms
  *
@@ -97,7 +97,7 @@
  */
 
 /**
- * @file cpukit/include/sha512t.h
+ * @file cpukit/contrib/include/sha512t.h
  *
  * @ingroup RTEMSAPIHashAlgorithms
  *
