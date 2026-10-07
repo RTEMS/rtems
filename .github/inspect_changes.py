@@ -27,6 +27,7 @@
 
 import logging
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import sys
@@ -56,6 +57,8 @@ CATEGORY_SPEC = "spec"
 CATEGORY_PKG = "pkg"
 
 CATEGORY_CI = "ci"
+
+CATEGORY_BUILD_QUAL = "build-qual"
 
 CATEGORY_UNKNOWN = "unknown"
 
@@ -123,6 +126,15 @@ _CATEGORIES: dict[str, str] = {
     ".github/": CATEGORY_CI,
 }
 
+# The build items of the pre-qualified build.  They do not exist in the
+# rtems.org repository, so the pattern takes precedence over 'spec/build/'.
+_BUILD_QUAL = re.compile(r"spec/build/.*(?:extra|qual)\.yml")
+
+# A commit of one of these categories has the subject '<category>: ...'.  No
+# commit of another category uses one of these subject prefixes.
+_SUBJECT_CATEGORIES = (CATEGORY_SPEC, CATEGORY_PKG, CATEGORY_CI,
+                       CATEGORY_BUILD_QUAL)
+
 # Checked from the longest prefix to the shortest one.
 _CATEGORY_PREFIXES: tuple[tuple[str, str], ...] = tuple(
     sorted(_CATEGORIES.items(), key=lambda item: len(item[0]), reverse=True))
@@ -136,6 +148,8 @@ _FORMATTER_INPUTS = ("_clang-format", "uv.lock")
 
 def get_category(path: str) -> str:
     """ Returns the category of the path. """
+    if _BUILD_QUAL.fullmatch(path):
+        return CATEGORY_BUILD_QUAL
     for prefix, category in _CATEGORY_PREFIXES:
         if prefix.endswith("/"):
             if path.startswith(prefix):
@@ -606,8 +620,21 @@ def _get_categories(commit: str) -> list[str]:
     return sorted({get_category(f) for f in _get_files(commit)})
 
 
+def _check_subject(subject: str, found: list[str], findings: _Findings,
+                   url: str) -> None:
+    for category in _SUBJECT_CATEGORIES:
+        prefix = f"{category}: "
+        if found == [category] and not subject.startswith(prefix):
+            findings.error(f"In {url}, the subject of a `{category}` commit "
+                           f"does not start with `{prefix}`.")
+        elif found != [category] and subject.startswith(prefix):
+            findings.error(
+                f"In {url}, the subject starts with `{prefix}`, but the "
+                f"change set belongs to: {', '.join(found)}.")
+
+
 def _check_commit(
-        worktree: Path, commit: str, found: list[str],
+        worktree: Path, commit: str, subject: str, found: list[str],
         pending: _PendingExport | None, findings: _Findings,
         url: str) -> tuple[str, str, str, _PendingExport | None]:
     """ Checks a commit which is no merge.  The commit is checked out. """
@@ -618,6 +645,7 @@ def _check_commit(
         findings.error(
             f"In {url}, the change set belongs to more than one category: "
             f"{', '.join(found)}.  Split it into one commit per category.")
+    _check_subject(subject, found, findings, url)
     existing = _get_existing_files(commit, files)
     items = [
         f for f in existing if f.startswith("spec/") and f.endswith(".yml")
@@ -716,7 +744,7 @@ def main(argv: list[str]) -> int:
                 else:
                     found = categories[commit]
                     fmt, export, deleted, pending = _check_commit(
-                        worktree, commit, found, pending, findings,
+                        worktree, commit, subject, found, pending, findings,
                         commit_url)
                 if dirty_base:
                     dirty_base = False
