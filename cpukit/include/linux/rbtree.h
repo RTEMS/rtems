@@ -57,14 +57,13 @@ extern "C" {
  * A common use of this API is a direct access of the rb_node member to get the
  * root node of the tree. So, this cannot be changed.
  *
- * The red-black tree implementation is provided by <sys/tree.h> and we have
+ * <rtems/score/rbtree.h> defines the tree control as
  *
  * struct RBTree_Control {
  *   struct RBTree_Node *rbh_root;
  * };
  *
- * The member name rbh_root is fixed by the <sys/tree.h> API.  To use
- * RBTree_Control directly we would need two defines:
+ * To use RBTree_Control directly we would need two defines:
  *
  * #define rb_root RBTree_Control
  * #define rb_node rbh_root

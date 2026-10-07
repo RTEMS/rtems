@@ -63,12 +63,12 @@ void _RBTree_Replace_node(
 
   child = _RBTree_Left( victim );
   if ( child != NULL ) {
-    RTEMS_RB_PARENT( child, Node ) = replacement;
+    _RBTree_Set_parent( child, replacement );
   }
 
   child = _RBTree_Right( victim );
   if ( child != NULL ) {
-    RTEMS_RB_PARENT( child, Node ) = replacement;
+    _RBTree_Set_parent( child, replacement );
   }
 
   *replacement = *victim;

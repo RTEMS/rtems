@@ -459,8 +459,6 @@ links:
   - role: build-dependency
     uid: sptod
   - role: build-dependency
-    uid: sptree01
-  - role: build-dependency
     uid: spunlimited01
   - role: build-dependency
     uid: spversion01

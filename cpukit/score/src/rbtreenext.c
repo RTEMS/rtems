@@ -11,6 +11,7 @@
 
 /*
  * Copyright (C) 2012 embedded brains GmbH & Co. KG
+ * Copyright (C) 2002 Niels Provos <provos@citi.umich.edu>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -34,6 +35,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+/*
+ * The red-black tree code of this file derives from the macros of the
+ * FreeBSD <sys/tree.h> file of 2020.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -41,13 +47,34 @@
 #include <rtems/score/rbtreeimpl.h>
 #include <rtems/score/basedefs.h>
 
-RTEMS_RB_GENERATE_NEXT( RBTree_Control, RBTree_Node, Node, static )
-
 RBTree_Node *_RBTree_Successor( const RBTree_Node *node )
 {
-  return RTEMS_RB_NEXT(
-    RBTree_Control,
-    NULL,
-    RTEMS_DECONST( RBTree_Node *, node )
-  );
+  RBTree_Node *elm;
+
+  elm = RTEMS_DECONST( RBTree_Node *, node );
+
+  if ( _RBTree_Right( elm ) ) {
+    elm = _RBTree_Right( elm );
+
+    while ( _RBTree_Left( elm ) ) {
+      elm = _RBTree_Left( elm );
+    }
+  } else {
+    if (
+      _RBTree_Parent( elm ) && ( elm == _RBTree_Left( _RBTree_Parent( elm ) ) )
+    ) {
+      elm = _RBTree_Parent( elm );
+    } else {
+      while (
+        _RBTree_Parent( elm ) &&
+        ( elm == _RBTree_Right( _RBTree_Parent( elm ) ) )
+      ) {
+        elm = _RBTree_Parent( elm );
+      }
+
+      elm = _RBTree_Parent( elm );
+    }
+  }
+
+  return elm;
 }

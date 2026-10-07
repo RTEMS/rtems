@@ -10,7 +10,8 @@
  */
 
 /*
- *  Copyright (c) 2010-2012 Gedare Bloom.
+ * Copyright (C) 2010-2012 Gedare Bloom.
+ * Copyright (C) 2002 Niels Provos <provos@citi.umich.edu>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -34,20 +35,66 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+/*
+ * The red-black tree code of this file derives from the macros of the
+ * FreeBSD <sys/tree.h> file of 2020.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <rtems/score/rbtreeimpl.h>
 
-RTEMS_RB_GENERATE_INSERT_COLOR(
-  RBTree_Control,
-  RBTree_Node,
-  Node,
-  static inline
-)
-
-void _RBTree_Insert_color( RBTree_Control *the_rbtree, RBTree_Node *the_node )
+void _RBTree_Insert_color( RBTree_Control *head, RBTree_Node *elm )
 {
-  RBTree_Control_RTEMS_RB_INSERT_COLOR( the_rbtree, the_node );
+  RBTree_Node *parent;
+  RBTree_Node *gparent;
+  RBTree_Node *tmp;
+
+  while ( _RBTree_Is_red( parent = _RBTree_Parent( elm ) ) ) {
+    gparent = _RBTree_Parent( parent );
+
+    if ( parent == _RBTree_Left( gparent ) ) {
+      tmp = _RBTree_Right( gparent );
+
+      if ( _RBTree_Is_red( tmp ) ) {
+        _RBTree_Set_color( tmp, RTEMS_RB_BLACK );
+        _RBTree_Set_black_red( parent, gparent );
+        elm = gparent;
+        continue;
+      }
+
+      if ( _RBTree_Right( parent ) == elm ) {
+        (void) _RBTree_Parent_rotate_left( gparent, parent );
+        tmp = parent;
+        parent = elm;
+        elm = tmp;
+      }
+
+      _RBTree_Set_black_red( parent, gparent );
+      (void) _RBTree_Rotate_right( head, gparent );
+    } else {
+      tmp = _RBTree_Left( gparent );
+
+      if ( _RBTree_Is_red( tmp ) ) {
+        _RBTree_Set_color( tmp, RTEMS_RB_BLACK );
+        _RBTree_Set_black_red( parent, gparent );
+        elm = gparent;
+        continue;
+      }
+
+      if ( _RBTree_Left( parent ) == elm ) {
+        (void) _RBTree_Parent_rotate_right( gparent, parent );
+        tmp = parent;
+        parent = elm;
+        elm = tmp;
+      }
+
+      _RBTree_Set_black_red( parent, gparent );
+      (void) _RBTree_Rotate_left( head, gparent );
+    }
+  }
+
+  _RBTree_Set_color( _RBTree_Root( head ), RTEMS_RB_BLACK );
 }

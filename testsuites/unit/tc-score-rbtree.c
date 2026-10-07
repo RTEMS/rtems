@@ -119,7 +119,7 @@ static TestNode node_array[ 100 ];
 
 static int Color( const RBTree_Node *n )
 {
-  return RTEMS_RB_COLOR( n, Node );
+  return _RBTree_Color( n );
 }
 
 static bool Less( const void *left, const RBTree_Node *right )

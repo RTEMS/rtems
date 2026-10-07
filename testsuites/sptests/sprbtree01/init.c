@@ -124,7 +124,7 @@ static test_node node_array[ 100 ];
 
 static int rb_color( const rtems_rbtree_node *n )
 {
-  return RTEMS_RB_COLOR( n, Node );
+  return _RBTree_Color( n );
 }
 
 static rtems_rbtree_compare_result test_compare_function(
@@ -1932,9 +1932,9 @@ static void postorder_tree_init(
     const postorder_node_description *pnd;
 
     pnd = &pt->tree[ i ];
-    RTEMS_RB_PARENT( TN( i ), Node ) = pnd->parent;
-    RTEMS_RB_LEFT( TN( i ), Node ) = pnd->left;
-    RTEMS_RB_RIGHT( TN( i ), Node ) = pnd->right;
+    _RBTree_Set_parent( TN( i ), pnd->parent );
+    _RBTree_Set_left( TN( i ), pnd->left );
+    _RBTree_Set_right( TN( i ), pnd->right );
   }
 }
 

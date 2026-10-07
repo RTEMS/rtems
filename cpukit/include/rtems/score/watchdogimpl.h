@@ -151,13 +151,13 @@ void _Watchdog_Tick( struct Per_CPU_Control *cpu );
  *
  * @param the_watchdog The watchdog to get the state of.
  *
- * @return The RTEMS_RB_COLOR of @a the_watchdog.
+ * @return The color of the red-black tree node of @a the_watchdog.
  */
 static inline Watchdog_State _Watchdog_Get_state(
   const Watchdog_Control *the_watchdog
 )
 {
-  return (Watchdog_State) RTEMS_RB_COLOR( &the_watchdog->Node.RBTree, Node );
+  return (Watchdog_State) _RBTree_Color( &the_watchdog->Node.RBTree );
 }
 
 /**
@@ -171,7 +171,7 @@ static inline void _Watchdog_Set_state(
   Watchdog_State    state
 )
 {
-  RTEMS_RB_COLOR( &the_watchdog->Node.RBTree, Node ) = state;
+  _RBTree_Set_color( &the_watchdog->Node.RBTree, (int) state );
 }
 
 /**
@@ -400,7 +400,7 @@ static inline void _Watchdog_Next_first(
   right = _RBTree_Right( &first->Node.RBTree );
 
   if ( right != NULL ) {
-    _Assert( RTEMS_RB_COLOR( right, Node ) == RTEMS_RB_RED );
+    _Assert( _RBTree_Color( right ) == RTEMS_RB_RED );
     _Assert( _RBTree_Left( right ) == NULL );
     _Assert( _RBTree_Right( right ) == NULL );
     header->first = right;
