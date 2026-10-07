@@ -10,6 +10,7 @@
  */
 
 /*
+ * Copyright (C) 2026 embedded brains GmbH & Co. KG
  * Copyright (C) 2010-2012 Gedare Bloom.
  * Copyright (C) 2002 Niels Provos <provos@citi.umich.edu>
  *
@@ -52,12 +53,29 @@ void _RBTree_Insert_color( RBTree_Control *head, RBTree_Node *elm )
   RBTree_Node *gparent;
   RBTree_Node *tmp;
 
-  while ( _RBTree_Is_red( parent = _RBTree_Parent( elm ) ) ) {
+  /* A black parent needs no rebalance. */
+  parent = _RBTree_Parent( elm );
+
+  if ( parent != NULL && _RBTree_Color( parent ) == RTEMS_RB_BLACK ) {
+    return;
+  }
+
+  while ( true ) {
+    parent = _RBTree_Parent( elm );
+
+    if ( parent == NULL ) {
+      _RBTree_Set_color( elm, RTEMS_RB_BLACK );
+      return;
+    }
+
+    if ( _RBTree_Color( parent ) == RTEMS_RB_BLACK ) {
+      return;
+    }
+
     gparent = _RBTree_Parent( parent );
+    tmp = _RBTree_Right( gparent );
 
-    if ( parent == _RBTree_Left( gparent ) ) {
-      tmp = _RBTree_Right( gparent );
-
+    if ( parent != tmp ) {
       if ( _RBTree_Is_red( tmp ) ) {
         _RBTree_Set_color( tmp, RTEMS_RB_BLACK );
         _RBTree_Set_black_red( parent, gparent );
@@ -94,7 +112,7 @@ void _RBTree_Insert_color( RBTree_Control *head, RBTree_Node *elm )
       _RBTree_Set_black_red( parent, gparent );
       (void) _RBTree_Rotate_left( head, gparent );
     }
-  }
 
-  _RBTree_Set_color( _RBTree_Root( head ), RTEMS_RB_BLACK );
+    return;
+  }
 }

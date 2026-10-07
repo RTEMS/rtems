@@ -285,62 +285,6 @@ static inline RBTree_Node *_RBTree_Parent_rotate_right(
   return tmp;
 }
 
-/**
- * @brief Rotates the red right child of the node to the left.
- *
- * The right child is red and has a left child.
- *
- * @param[in, out] head is the red-black tree control.
- *
- * @param[in, out] elm is the node.
- *
- * @return Returns the right child of the node before the rotation.
- */
-static inline RBTree_Node *_RBTree_Red_rotate_left(
-  RBTree_Control *head,
-  RBTree_Node    *elm
-)
-{
-  RBTree_Node *tmp;
-
-  tmp = _RBTree_Right( elm );
-  _RBTree_Set_right( elm, _RBTree_Left( tmp ) );
-  _RBTree_Set_parent( _RBTree_Right( elm ), elm );
-  _RBTree_Set_parent( tmp, _RBTree_Parent( elm ) );
-  _RBTree_Swap_child( head, elm, tmp );
-  _RBTree_Set_left( tmp, elm );
-  _RBTree_Set_parent( elm, tmp );
-  return tmp;
-}
-
-/**
- * @brief Rotates the red left child of the node to the right.
- *
- * The left child is red and has a right child.
- *
- * @param[in, out] head is the red-black tree control.
- *
- * @param[in, out] elm is the node.
- *
- * @return Returns the left child of the node before the rotation.
- */
-static inline RBTree_Node *_RBTree_Red_rotate_right(
-  RBTree_Control *head,
-  RBTree_Node    *elm
-)
-{
-  RBTree_Node *tmp;
-
-  tmp = _RBTree_Left( elm );
-  _RBTree_Set_left( elm, _RBTree_Right( tmp ) );
-  _RBTree_Set_parent( _RBTree_Left( elm ), elm );
-  _RBTree_Set_parent( tmp, _RBTree_Parent( elm ) );
-  _RBTree_Swap_child( head, elm, tmp );
-  _RBTree_Set_right( tmp, elm );
-  _RBTree_Set_parent( elm, tmp );
-  return tmp;
-}
-
 /** @} */
 
 #ifdef __cplusplus
