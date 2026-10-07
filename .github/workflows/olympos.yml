@@ -24,7 +24,9 @@ env:
   # The branch of the version label.  For a pull request that is the branch
   # it targets.
   BRANCH: ${{ github.event.pull_request.base.ref || github.ref_name }}
-  # Only a push to eb/main writes cache entries and tools packages.
+  # A push writes the build, test log and workspace entries of its branch.
+  SAVE_BRANCH_CACHE: ${{ github.event_name == 'push' }}
+  # Only a push to eb/main writes the uv cache entry and tools packages.
   SAVE_CACHE: ${{ github.event_name == 'push' && github.ref == 'refs/heads/eb/main' }}
   TOOLS_PACKAGE: ghcr.io/${{ github.repository_owner }}/rtems-tools
   # Each architecture keeps this number of tools package versions.
@@ -312,8 +314,9 @@ jobs:
       uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
       with:
         path: workspace
-        key: workspace-eb/main-zerberus-${{ matrix.bsp }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-${{ github.sha }}
+        key: workspace-${{ env.BRANCH }}-zerberus-${{ matrix.bsp }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-${{ github.sha }}
         restore-keys: |
+          workspace-${{ env.BRANCH }}-zerberus-${{ matrix.bsp }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-
           workspace-eb/main-zerberus-${{ matrix.bsp }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-
     - name: View the specification
       # A branch which holds no specitems.yml has no specification to
@@ -372,12 +375,12 @@ jobs:
         path: workspace/package-summary.md
         overwrite: true
     - name: Save the workspace
-      if: ${{ !cancelled() && env.SAVE_CACHE == 'true' }}
+      if: ${{ !cancelled() && env.SAVE_BRANCH_CACHE == 'true' }}
       uses: ./.github/actions/save-latest-cache
       with:
         path: workspace
-        key: workspace-eb/main-zerberus-${{ matrix.bsp }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-${{ github.sha }}
-        prefix: workspace-eb/main-zerberus-${{ matrix.bsp }}-
+        key: workspace-${{ env.BRANCH }}-zerberus-${{ matrix.bsp }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-${{ github.sha }}
+        prefix: workspace-${{ env.BRANCH }}-zerberus-${{ matrix.bsp }}-
 
   sisyphos:
     name: Sisyphos
@@ -439,15 +442,16 @@ jobs:
         tag: ${{ steps.tools.outputs.tag }}
         arch: ${{ env.TOOLS_ARCH }}
     - name: Restore the build directory
-      # The build directory of eb/main serves every branch.  It still
-      # rebuilds less than an empty directory.  Waf rebuilds no object after
-      # a change of the tools behind the same path, so the tools tag is part
-      # of the key.
+      # The build directory of the branch serves its pull requests.  The one
+      # of eb/main serves a branch without an entry.  It still rebuilds less
+      # than an empty directory.  Waf rebuilds no object after a change of
+      # the tools behind the same path, so the tools tag is part of the key.
       uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
       with:
         path: build
-        key: build-eb/main-sisyphos-${{ matrix.arch }}-${{ steps.tools.outputs.tag }}-${{ github.sha }}
+        key: build-${{ env.BRANCH }}-sisyphos-${{ matrix.arch }}-${{ steps.tools.outputs.tag }}-${{ github.sha }}
         restore-keys: |
+          build-${{ env.BRANCH }}-sisyphos-${{ matrix.arch }}-${{ steps.tools.outputs.tag }}-
           build-eb/main-sisyphos-${{ matrix.arch }}-${{ steps.tools.outputs.tag }}-
     - name: Restore the test logs
       # A report of the previous run is reused for an executable whose hash
@@ -458,9 +462,9 @@ jobs:
       uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
       with:
         path: test-logs
-        key: test-logs-eb/main-sisyphos-${{ matrix.arch }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-${{ github.sha }}
+        key: test-logs-${{ env.BRANCH }}-sisyphos-${{ matrix.arch }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-${{ github.sha }}
         restore-keys: |
-          test-logs-eb/main-sisyphos-${{ matrix.arch }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-
+          test-logs-${{ env.BRANCH }}-sisyphos-${{ matrix.arch }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-
     - name: Pin the version label
       # Without the file the release label is the output of git rev-parse
       # HEAD.  Every test executable carries it through the version control
@@ -524,20 +528,20 @@ jobs:
     - name: Save the test logs
       # The latest entry replaces the older ones.  The toolchains must never
       # be the entry which eviction picks.
-      if: ${{ !cancelled() && env.SAVE_CACHE == 'true' }}
+      if: ${{ !cancelled() && env.SAVE_BRANCH_CACHE == 'true' }}
       uses: ./.github/actions/save-latest-cache
       with:
         path: test-logs
-        key: test-logs-eb/main-sisyphos-${{ matrix.arch }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-${{ github.sha }}
-        prefix: test-logs-eb/main-sisyphos-${{ matrix.arch }}-
+        key: test-logs-${{ env.BRANCH }}-sisyphos-${{ matrix.arch }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-${{ github.sha }}
+        prefix: test-logs-${{ env.BRANCH }}-sisyphos-${{ matrix.arch }}-
     - name: Save the build directory
       # As the test logs.
-      if: ${{ !cancelled() && env.SAVE_CACHE == 'true' }}
+      if: ${{ !cancelled() && env.SAVE_BRANCH_CACHE == 'true' }}
       uses: ./.github/actions/save-latest-cache
       with:
         path: build
-        key: build-eb/main-sisyphos-${{ matrix.arch }}-${{ steps.tools.outputs.tag }}-${{ github.sha }}
-        prefix: build-eb/main-sisyphos-${{ matrix.arch }}-
+        key: build-${{ env.BRANCH }}-sisyphos-${{ matrix.arch }}-${{ steps.tools.outputs.tag }}-${{ github.sha }}
+        prefix: build-${{ env.BRANCH }}-sisyphos-${{ matrix.arch }}-
 
   daidalos:
     name: Daidalos (${{ matrix.arch }}/${{ matrix.bsp }}/${{ matrix.config }})
@@ -609,17 +613,18 @@ jobs:
       uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
       with:
         path: build-${{ env.CONFIG }}
-        key: build-eb/main-daidalos-${{ env.CONFIG }}-${{ steps.tools.outputs.tag }}-${{ github.sha }}
+        key: build-${{ env.BRANCH }}-daidalos-${{ env.CONFIG }}-${{ steps.tools.outputs.tag }}-${{ github.sha }}
         restore-keys: |
+          build-${{ env.BRANCH }}-daidalos-${{ env.CONFIG }}-${{ steps.tools.outputs.tag }}-
           build-eb/main-daidalos-${{ env.CONFIG }}-${{ steps.tools.outputs.tag }}-
     - name: Restore the test logs
       # As in Sisyphos.
       uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
       with:
         path: test-logs-${{ env.CONFIG }}
-        key: test-logs-eb/main-daidalos-${{ env.CONFIG }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-${{ github.sha }}
+        key: test-logs-${{ env.BRANCH }}-daidalos-${{ env.CONFIG }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-${{ github.sha }}
         restore-keys: |
-          test-logs-eb/main-daidalos-${{ env.CONFIG }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-
+          test-logs-${{ env.BRANCH }}-daidalos-${{ env.CONFIG }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-
     - name: Pin the version label
       # As in Sisyphos.
       env:
@@ -657,17 +662,17 @@ jobs:
         overwrite: true
     - name: Save the test logs
       # As in Sisyphos.
-      if: ${{ !cancelled() && env.SAVE_CACHE == 'true' }}
+      if: ${{ !cancelled() && env.SAVE_BRANCH_CACHE == 'true' }}
       uses: ./.github/actions/save-latest-cache
       with:
         path: test-logs-${{ env.CONFIG }}
-        key: test-logs-eb/main-daidalos-${{ env.CONFIG }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-${{ github.sha }}
-        prefix: test-logs-eb/main-daidalos-${{ env.CONFIG }}-
+        key: test-logs-${{ env.BRANCH }}-daidalos-${{ env.CONFIG }}-${{ hashFiles('build_tools.py', 'spec-pkg-tools/**/*.yml') }}-${{ github.sha }}
+        prefix: test-logs-${{ env.BRANCH }}-daidalos-${{ env.CONFIG }}-
     - name: Save the build directory
       # As in Sisyphos.
-      if: ${{ !cancelled() && env.SAVE_CACHE == 'true' }}
+      if: ${{ !cancelled() && env.SAVE_BRANCH_CACHE == 'true' }}
       uses: ./.github/actions/save-latest-cache
       with:
         path: build-${{ env.CONFIG }}
-        key: build-eb/main-daidalos-${{ env.CONFIG }}-${{ steps.tools.outputs.tag }}-${{ github.sha }}
-        prefix: build-eb/main-daidalos-${{ env.CONFIG }}-
+        key: build-${{ env.BRANCH }}-daidalos-${{ env.CONFIG }}-${{ steps.tools.outputs.tag }}-${{ github.sha }}
+        prefix: build-${{ env.BRANCH }}-daidalos-${{ env.CONFIG }}-
