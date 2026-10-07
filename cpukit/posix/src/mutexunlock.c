@@ -67,14 +67,10 @@ bool _POSIX_Mutex_Auto_initialization( POSIX_Mutex_Control *the_mutex )
   zero |= (unsigned long) the_mutex->Recursive.Mutex.Queue.Queue.owner;
   zero |= (unsigned long) the_mutex->Recursive.Mutex.Queue.Queue.name;
   zero |= the_mutex->Recursive.nest_level;
-  zero |= (unsigned long)
-            the_mutex->Priority_ceiling.Node.RBTree.Node.rbe_left;
-  zero |= (unsigned long)
-            the_mutex->Priority_ceiling.Node.RBTree.Node.rbe_right;
-  zero |= (unsigned long)
-            the_mutex->Priority_ceiling.Node.RBTree.Node.rbe_parent;
-  zero |= (unsigned long)
-            the_mutex->Priority_ceiling.Node.RBTree.Node.rbe_color;
+  zero |= (unsigned long) the_mutex->Priority_ceiling.Node.RBTree.rbn_left;
+  zero |= (unsigned long) the_mutex->Priority_ceiling.Node.RBTree.rbn_right;
+  zero |= (unsigned long) the_mutex->Priority_ceiling.Node.RBTree.rbn_parent;
+  zero |= (unsigned long) the_mutex->Priority_ceiling.Node.RBTree.rbn_color;
   zero |= (unsigned long) the_mutex->Priority_ceiling.priority;
   zero |= (unsigned long) ( the_mutex->Priority_ceiling.priority >> 32 );
   zero |= (unsigned long) the_mutex->scheduler;

@@ -153,7 +153,7 @@ static void _RBTree_Remove( RBTree_Control *head, RBTree_Node *elm )
 
     _RBTree_Set_parent( _RBTree_Left( old ), elm );
     color = _RBTree_Color( elm );
-    elm->Node = old->Node;
+    *elm = *old;
   }
 
   _RBTree_Swap_child( head, old, elm );

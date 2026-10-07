@@ -434,8 +434,8 @@ static void eat_last(struct rb_root *root, struct rb_node *node)
 		node->rb_left->__rb_parent_color = node->__rb_parent_color;
 #else /* __rtems__ */
 	{
-		node->rb_left->Node.rbe_parent = node->Node.rbe_parent;
-		node->rb_left->Node.rbe_color = node->Node.rbe_color;
+		node->rb_left->rbn_parent = node->rbn_parent;
+		node->rb_left->rbn_color = node->rbn_color;
 	}
 #endif /* __rtems__ */
 }

@@ -45,9 +45,9 @@ extern "C" {
 
 #define rb_node RBTree_Node
 
-#define rb_left Node.rbe_left
+#define rb_left rbn_left
 
-#define rb_right Node.rbe_right
+#define rb_right rbn_right
 
 /*
  * Getting rid of this placeholder structure is a bit difficult.  The use of

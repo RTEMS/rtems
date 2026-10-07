@@ -77,29 +77,24 @@ struct RBTree_Control;
  */
 typedef struct RBTree_Node {
   /**
-   * @brief This member contains the links and the color of the node.
+   * @brief This member references the left child of the node.
    */
-  struct {
-    /**
-     * @brief This member references the left child of the node.
-     */
-    struct RBTree_Node *rbe_left;
+  struct RBTree_Node *rbn_left;
 
-    /**
-     * @brief This member references the right child of the node.
-     */
-    struct RBTree_Node *rbe_right;
+  /**
+   * @brief This member references the right child of the node.
+   */
+  struct RBTree_Node *rbn_right;
 
-    /**
-     * @brief This member references the parent of the node.
-     */
-    struct RBTree_Node *rbe_parent;
+  /**
+   * @brief This member references the parent of the node.
+   */
+  struct RBTree_Node *rbn_parent;
 
-    /**
-     * @brief This member contains the color of the node.
-     */
-    int rbe_color;
-  } Node;
+  /**
+   * @brief This member contains the color of the node.
+   */
+  int rbn_color;
 } RBTree_Node;
 
 /**
@@ -145,7 +140,7 @@ typedef struct RBTree_Control {
  */
 static inline int _RBTree_Color( const RBTree_Node *the_node )
 {
-  return the_node->Node.rbe_color;
+  return the_node->rbn_color;
 }
 
 /**
@@ -157,7 +152,7 @@ static inline int _RBTree_Color( const RBTree_Node *the_node )
  */
 static inline void _RBTree_Set_color( RBTree_Node *the_node, int color )
 {
-  the_node->Node.rbe_color = color;
+  the_node->rbn_color = color;
 }
 
 /**
@@ -172,7 +167,7 @@ static inline void _RBTree_Set_parent(
   RBTree_Node *parent
 )
 {
-  the_node->Node.rbe_parent = parent;
+  the_node->rbn_parent = parent;
 }
 
 /**
@@ -184,7 +179,7 @@ static inline void _RBTree_Set_parent(
  */
 static inline void _RBTree_Set_left( RBTree_Node *the_node, RBTree_Node *left )
 {
-  the_node->Node.rbe_left = left;
+  the_node->rbn_left = left;
 }
 
 /**
@@ -199,7 +194,7 @@ static inline void _RBTree_Set_right(
   RBTree_Node *right
 )
 {
-  the_node->Node.rbe_right = right;
+  the_node->rbn_right = right;
 }
 
 /**
@@ -444,7 +439,7 @@ static inline RBTree_Node *const *_RBTree_Root_const_reference(
  */
 static inline RBTree_Node *_RBTree_Parent( const RBTree_Node *the_node )
 {
-  return the_node->Node.rbe_parent;
+  return the_node->rbn_parent;
 }
 
 /**
@@ -458,7 +453,7 @@ static inline RBTree_Node *_RBTree_Parent( const RBTree_Node *the_node )
  */
 static inline RBTree_Node *_RBTree_Left( const RBTree_Node *the_node )
 {
-  return the_node->Node.rbe_left;
+  return the_node->rbn_left;
 }
 
 /**
@@ -471,7 +466,7 @@ static inline RBTree_Node *_RBTree_Left( const RBTree_Node *the_node )
  */
 static inline RBTree_Node **_RBTree_Left_reference( RBTree_Node *the_node )
 {
-  return &the_node->Node.rbe_left;
+  return &the_node->rbn_left;
 }
 
 /**
@@ -485,7 +480,7 @@ static inline RBTree_Node **_RBTree_Left_reference( RBTree_Node *the_node )
  */
 static inline RBTree_Node *_RBTree_Right( const RBTree_Node *the_node )
 {
-  return the_node->Node.rbe_right;
+  return the_node->rbn_right;
 }
 
 /**
@@ -498,7 +493,7 @@ static inline RBTree_Node *_RBTree_Right( const RBTree_Node *the_node )
  */
 static inline RBTree_Node **_RBTree_Right_reference( RBTree_Node *the_node )
 {
-  return &the_node->Node.rbe_right;
+  return &the_node->rbn_right;
 }
 
 /**
