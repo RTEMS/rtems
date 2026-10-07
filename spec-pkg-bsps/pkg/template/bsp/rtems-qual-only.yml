@@ -50,6 +50,7 @@ attributes:
       - bsps/include
       - bsps/${.:/component/arch}/include
       - bsps/${.:/component/arch}/${.:/bsp-family}/include
+      - testsuites/support/include
     input:
     - enabled-by: true
       path:
@@ -72,6 +73,7 @@ attributes:
       - bsps/include
       - bsps/${.:/component/arch}/include
       - bsps/${.:/component/arch}/${.:/bsp-family}/include
+      - testsuites/support/include
     input:
     - enabled-by: true
       path:
