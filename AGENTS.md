@@ -91,9 +91,3 @@ gives each build directory its own lock file, so the two builds coexist.
    PATH=$PWD/.venv/bin:$PATH python .github/inspect_changes.py \
      https://github.com/embedded-brains/rtems <base> <head>
    ```
-
-## Item text
-
-An item text describes the directive or the device. Every observable result of
-a state is a post-condition. The test runner, the test suite and the simulator
-appear only in the test code.
