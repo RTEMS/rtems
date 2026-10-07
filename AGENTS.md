@@ -10,13 +10,13 @@ generates the validation test from it. The
 [Software Development Handbook](https://embedded-brains.github.io/rtems-docs-ecss/doc/technical-notes/sdh/index.html)
 states the rules for the items.
 
-Work in a worktree of `eb/staging`. It holds the items, the export
-configuration `specitems.yml` and all of `eb/main`.
+Work in a worktree of `eb/qual`. It holds the items, the export configuration
+`specitems.yml` and all of `eb/main`.
 
 ## Set up
 
 ```sh
-git worktree add -b <topic> ../rtems-<topic> eb/staging
+git worktree add -b <topic> ../rtems-<topic> eb/qual
 cd ../rtems-<topic>
 make prepare
 printf '[sparc/gr712rc]\nBUILD_VALIDATIONTESTS = True\n' > uni.ini
@@ -77,7 +77,7 @@ gives each build directory its own lock file, so the two builds coexist.
    `ts-validation-no-clock-0`. The step is done when the test case reports
    `F:0` in both runs and `git status` is clean after the export.
 
-6. Split the commits. The item goes to a branch of `eb/staging`. The generated
+6. Split the commits. The item goes to a branch of `eb/qual`. The generated
    test and its line in the build item of the suite go to a branch of
    `eb/main`. A kernel fix which the test needs goes there first. A commit
    holds one category: `source`, `spec`, `pkg` or `ci`. A `spec` commit may

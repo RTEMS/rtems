@@ -13,22 +13,21 @@ output where a test fails.
 
 ## Branches
 
-| Branch       | Content                                                                                          | Changes enter through                     |
-| ------------ | ------------------------------------------------------------------------------------------------ | ----------------------------------------- |
-| `eb/main`    | the baseline, the fixes of the regression test runs, and the build and CI infrastructure         | a pull request against `eb/main`          |
-| `eb/qual`    | `eb/main` plus the specification items in `spec/` and the pre-qualified RTEMS, ready for an ISVV | a piecewise integration from `eb/staging` |
-| `eb/staging` | `eb/qual` plus the work which waits for the integration into `eb/qual`                           | a pull request against `eb/staging`       |
+| Branch    | Content                                                                                          | Changes enter through            |
+| --------- | ------------------------------------------------------------------------------------------------ | -------------------------------- |
+| `eb/main` | the baseline, the fixes of the regression test runs, and the build and CI infrastructure         | a pull request against `eb/main` |
+| `eb/qual` | `eb/main` plus the specification items in `spec/` and the pre-qualified RTEMS, ready for an ISVV | a pull request against `eb/qual` |
 
-The workflow Harmonia merges every change of `eb/main` into `eb/qual`, and
-every change of `eb/qual` into `eb/staging`, through a pull request.
+The workflow Harmonia merges every change of `eb/main` into `eb/qual` through a
+pull request.
 
 A change takes the branch of its content:
 
-| Change                                                 | Branch       |
-| ------------------------------------------------------ | ------------ |
-| a kernel or BSP fix, a build item, the CI, the tooling | `eb/main`    |
-| a generated validation test and its build item         | `eb/main`    |
-| a specification item outside `spec/build/`             | `eb/staging` |
+| Change                                                 | Branch    |
+| ------------------------------------------------------ | --------- |
+| a kernel or BSP fix, a build item, the CI, the tooling | `eb/main` |
+| a generated validation test and its build item         | `eb/main` |
+| a specification item outside `spec/build/`             | `eb/qual` |
 
 A kernel fix enters before the validation test which checks it.
 
