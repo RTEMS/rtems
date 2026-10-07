@@ -4,12 +4,10 @@
 
 name: Harmonia
 on:
-  # A push to a branch merges it into the next branch of the chain
-  # eb/main, eb/qual and eb/staging.  A manual run does both merges.
+  # A push to eb/main merges it into eb/qual.
   push:
     branches:
     - eb/main
-    - eb/qual
   workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}
@@ -22,47 +20,21 @@ env:
   MESSAGE_NAME: harmonia-message.txt
 jobs:
   merge:
-    name: Harmonia ${{ matrix.source }}
-    strategy:
-      fail-fast: false
-      max-parallel: 1
-      matrix:
-        include:
-        - source: eb/main
-          target: eb/qual
-          branch: harmonia/eb-main
-        - source: eb/qual
-          target: eb/staging
-          branch: harmonia/eb-qual
+    name: Harmonia
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     env:
-      BRANCH: ${{ matrix.branch }}
-      SOURCE_NAME: ${{ matrix.source }}
-      SOURCE: origin/${{ matrix.source }}
-      TARGET: ${{ matrix.target }}
+      BRANCH: harmonia/eb-main
+      SOURCE_NAME: eb/main
+      SOURCE: origin/eb/main
+      TARGET: eb/qual
     steps:
-    - name: Select the merge
-      id: select
-      # The condition of a job cannot read the matrix.  A push runs only the
-      # merge whose source it updated.
-      env:
-        EVENT: ${{ github.event_name }}
-        REF: ${{ github.ref_name }}
-      run: |
-        if test "${EVENT}" = push && test "${REF}" != "${SOURCE_NAME}"; then
-          echo 'run=no' >>"${GITHUB_OUTPUT}"
-        else
-          echo 'run=yes' >>"${GITHUB_OUTPUT}"
-        fi
     - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
-      if: ${{ steps.select.outputs.run == 'yes' }}
       with:
-        ref: ${{ matrix.target }}
+        ref: eb/qual
         fetch-depth: 0
     - name: Check for an open merge pull request
       id: open
-      if: ${{ steps.select.outputs.run == 'yes' }}
       env:
         # The GitHub Actions token, scoped to 'contents: write' and
         # 'pull-requests: write' in the eb repository.
@@ -78,7 +50,7 @@ jobs:
         fi
     - name: Check for pending commits
       id: pending
-      if: ${{ steps.select.outputs.run == 'yes' && steps.open.outputs.number == '' }}
+      if: ${{ steps.open.outputs.number == '' }}
       run: |
         if ! git rev-parse --verify --quiet "${SOURCE}" >/dev/null; then
           echo "The ${SOURCE} branch does not exist."
@@ -88,7 +60,7 @@ jobs:
         echo "count=${count}" >>"${GITHUB_OUTPUT}"
         echo "${count} commits to merge"
     - name: Merge
-      if: ${{ steps.select.outputs.run == 'yes' && steps.open.outputs.number == '' && steps.pending.outputs.count != '0' }}
+      if: ${{ steps.open.outputs.number == '' && steps.pending.outputs.count != '0' }}
       env:
         COUNT: ${{ steps.pending.outputs.count }}
       # GitHub builds the message of the merge commit from the title and the
@@ -162,13 +134,11 @@ jobs:
           echo 'not drift apart.'
           echo
           cat "${report}"
-          if test "${TARGET}" = eb/qual; then
-            echo
-            echo 'A source which eb/main added is built outside the qualified'
-            echo 'subset until a maintainer decides otherwise, which is a'
-            echo 'change of its own.  This merge moves nothing into or out of'
-            echo 'that subset.'
-          fi
+          echo
+          echo 'A source which eb/main added is built outside the qualified'
+          echo 'subset until a maintainer decides otherwise, which is a'
+          echo 'change of its own.  This merge moves nothing into or out of'
+          echo 'that subset.'
         } >"${message}"
         git commit -F "${message}"
         cat "${message}"
@@ -182,7 +152,7 @@ jobs:
           echo '```'
         } >>"${GITHUB_STEP_SUMMARY}"
     - name: Open the pull request
-      if: ${{ steps.select.outputs.run == 'yes' && steps.open.outputs.number == '' && steps.pending.outputs.count != '0' }}
+      if: ${{ steps.open.outputs.number == '' && steps.pending.outputs.count != '0' }}
       env:
         GH_TOKEN: ${{ github.token }}
       # The branch has no open pull request, so it carries no work of anyone

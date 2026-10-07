@@ -8,12 +8,10 @@ on:
     branches:
     - eb/main
     - eb/qual
-    - eb/staging
   pull_request:
     branches:
     - eb/main
     - eb/qual
-    - eb/staging
   workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
