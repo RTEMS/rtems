@@ -19,7 +19,10 @@ output where a test fails.
 | `eb/qual` | `eb/main` plus the specification items in `spec/` and the pre-qualified RTEMS, ready for an ISVV | a pull request against `eb/qual` |
 
 The workflow Harmonia merges every change of `eb/main` into `eb/qual` through a
-pull request.
+pull request. The pull request merges by auto-merge with a merge commit. Never
+merge it with "Rebase and merge" or "Squash and merge". These copy the commits
+of `eb/main` into `eb/qual`, and the next Harmonia pull request offers the same
+changes again.
 
 A change takes the branch of its content:
 
@@ -30,6 +33,43 @@ A change takes the branch of its content:
 | a specification item outside `spec/build/`             | `eb/qual` |
 
 A kernel fix enters before the validation test which checks it.
+
+### Linearize eb/qual
+
+After the end of a project, a maintainer rebases `eb/qual` onto `eb/main`. The
+rebase drops the merge commits of Harmonia, so the history becomes linear.
+
+1. Make sure that no pull request against `eb/qual` is open.
+
+2. Merge all changes of `eb/main` into `eb/qual` through Harmonia.
+
+3. Update the local branches `eb/main` and `eb/qual`, then rebase:
+
+   ```sh
+   git switch -c linearize eb/qual
+   git rebase eb/main
+   ```
+
+4. Where the rebase stops on a copy of an `eb/main` commit, run
+   `git rebase --skip`. Resolve any other stop.
+
+5. Do the checks below.
+
+6. Push with a lease on the old tip:
+
+   ```sh
+   git push --force-with-lease=eb/qual:<old tip> <remote> linearize:eb/qual
+   ```
+
+7. Tell the owners of branches and worktrees on `eb/qual` to rebase them.
+
+| Check                      | Command                                                     | Expected result                                                       |
+| -------------------------- | ----------------------------------------------------------- | --------------------------------------------------------------------- |
+| no change of the tree      | `git diff eb/qual linearize`                                | no output                                                             |
+| no lost commit             | `git range-diff eb/main..eb/qual eb/main..linearize`        | each commit which only `eb/qual` has is a copy of an `eb/main` commit |
+| delivered commits are kept | `python3 .github/check_delivered_spec.py linearize eb/main` | exit status 0                                                         |
+
+A difference in the tree means a lost conflict resolution of a merge commit.
 
 ## Commit messages
 
