@@ -50,9 +50,30 @@ static uint64_t to_sbt_scaler;
 
 static uint64_t from_sbt_scaler;
 
+/*
+ * Returns the product of the value and the scaler shifted right by the shift
+ * value.  The product of the 32-bit value and the 64-bit scaler has 96 bits.
+ * The two partial products fit into 64 bits each.  The shift value is at
+ * most 32.
+ */
+static uint64_t rtems_counter_scale(
+  uint32_t     value,
+  uint64_t     scaler,
+  unsigned int shift
+)
+{
+  uint64_t high;
+  uint64_t low;
+
+  high = (uint64_t) value * (uint32_t) ( scaler >> 32 );
+  low = (uint64_t) value * (uint32_t) scaler;
+
+  return ( high << ( 32 - shift ) ) + ( low >> shift );
+}
+
 uint64_t rtems_counter_ticks_to_nanoseconds( rtems_counter_ticks ticks )
 {
-  return (uint32_t) ( ( ticks * to_ns_scaler ) >> 32 );
+  return rtems_counter_scale( ticks, to_ns_scaler, 32 );
 }
 
 rtems_counter_ticks rtems_counter_nanoseconds_to_ticks( uint32_t nanoseconds )
@@ -62,7 +83,7 @@ rtems_counter_ticks rtems_counter_nanoseconds_to_ticks( uint32_t nanoseconds )
 
 int64_t rtems_counter_ticks_to_sbintime( rtems_counter_ticks ticks )
 {
-  return (int64_t) ( ( ticks * to_sbt_scaler ) >> 31 );
+  return (int64_t) rtems_counter_scale( ticks, to_sbt_scaler, 31 );
 }
 
 rtems_counter_ticks rtems_counter_sbintime_to_ticks( int64_t sbt )

@@ -64,6 +64,52 @@ static rtems_interval sync_with_clock_tick( void )
   return current;
 }
 
+/*
+ * The conversion rounds up.  A result below the exact value yields a large
+ * error.
+ */
+static uint64_t nanoseconds_error(
+  rtems_counter_ticks ticks,
+  uint32_t            frequency
+)
+{
+  uint64_t expected;
+
+  expected = (uint64_t) ticks * UINT64_C( 1000000000 ) / frequency;
+
+  return rtems_counter_ticks_to_nanoseconds( ticks ) - expected;
+}
+
+static uint64_t sbintime_error( rtems_counter_ticks ticks, uint32_t frequency )
+{
+  uint64_t expected;
+
+  expected = ( (uint64_t) ticks << 32 ) / frequency;
+
+  return (uint64_t) rtems_counter_ticks_to_sbintime( ticks ) - expected;
+}
+
+static void test_converter_large_values( void )
+{
+  rtems_counter_ticks max;
+  rtems_counter_ticks three_seconds;
+  uint32_t            frequency;
+
+  max = (rtems_counter_ticks) -1;
+  frequency = rtems_counter_frequency();
+
+  if ( frequency <= max / 3 ) {
+    three_seconds = 3 * frequency;
+  } else {
+    three_seconds = max;
+  }
+
+  rtems_test_assert( nanoseconds_error( three_seconds, frequency ) <= 1 );
+  rtems_test_assert( nanoseconds_error( max, frequency ) <= 1 );
+  rtems_test_assert( sbintime_error( three_seconds, frequency ) <= 2 );
+  rtems_test_assert( sbintime_error( max, frequency ) <= 2 );
+}
+
 static void test_converter( void )
 {
   CPU_Counter_ticks frequency;
@@ -282,6 +328,7 @@ static void Init( rtems_task_argument arg )
   test_delay_ticks( ctx );
   test_overheads( ctx );
   test_converter();
+  test_converter_large_values();
   test_report( ctx );
 
   TEST_END();
