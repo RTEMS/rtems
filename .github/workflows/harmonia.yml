@@ -157,13 +157,26 @@ jobs:
         GH_TOKEN: ${{ github.token }}
       # The branch has no open pull request, so it carries no work of anyone
       # else and may be replaced.
+      #
+      # The pull request merges only through a merge commit, which keeps the
+      # commits of the source branch as ancestors of the target branch.
+      # Auto-merge merges once the required checks of the target branch pass.
+      # It needs the repository setting 'Allow auto-merge' and required status
+      # checks on the target branch.
       run: |
         git push --force origin "${BRANCH}"
         message="${RUNNER_TEMP}/${MESSAGE_NAME}"
         body="${RUNNER_TEMP}/harmonia-body.txt"
+        subject="$(head -n 1 "${message}")"
         tail -n +3 "${message}" >"${body}"
-        gh pr create \
+        url="$(gh pr create \
           --base "${TARGET}" \
           --head "${BRANCH}" \
-          --title "$(head -n 1 "${message}")" \
+          --title "${subject}" \
+          --body-file "${body}")"
+        echo "${url}"
+        gh pr merge "${url}" \
+          --auto \
+          --merge \
+          --subject "${subject}" \
           --body-file "${body}"
