@@ -52,6 +52,7 @@
 #include "config.h"
 #endif
 
+#include <inttypes.h>
 #include <rtems.h>
 
 #include <rtems/test.h>
@@ -148,12 +149,24 @@
  * - Call the rtems_cache_get_data_cache_size() directive with increasing level
  *   starting with zero until it returns zero.
  *
+ *   - Check that the size of level zero is greater than or equal to the size
+ *     of each level.
+ *
+ *   - Where the architecture provides cache geometry registers, check that the
+ *     size of each level is the size which the registers specify.
+ *
  * - Call the rtems_cache_get_data_cache_size() directive with increasing level
  *   starting with zero until it returns zero with maskable interrupts
  *   disabled.
  *
  * - Call the rtems_cache_get_instruction_cache_size() directive with
  *   increasing level starting with zero until it returns zero.
+ *
+ *   - Check that the size of level zero is greater than or equal to the size
+ *     of each level.
+ *
+ *   - Where the architecture provides cache geometry registers, check that the
+ *     size of each level is the size which the registers specify.
  *
  * - Call the rtems_cache_get_instruction_cache_size() directive with
  *   increasing level starting with zero until it returns zero with maskable
@@ -256,30 +269,148 @@ static void CallInstructionSyncAfterCodeChange( void )
   }
 }
 
+#define CACHE_LEVEL_COUNT 8
+
+static size_t data_sizes[ CACHE_LEVEL_COUNT ];
+
+static size_t instruction_sizes[ CACHE_LEVEL_COUNT ];
+
 static void CallGetDataSize( void )
 {
   uint32_t level;
-  size_t   n;
 
-  level = 0;
+  for ( level = 0; level < CACHE_LEVEL_COUNT; ++level ) {
+    data_sizes[ level ] = rtems_cache_get_data_cache_size( level );
 
-  do {
-    n = rtems_cache_get_data_cache_size( level );
-    ++level;
-  } while (n != 0 );
+    if ( data_sizes[ level ] == 0 ) {
+      break;
+    }
+  }
 }
 
 static void CallGetInstructionSize( void )
 {
   uint32_t level;
-  size_t   n;
 
-  level = 0;
+  for ( level = 0; level < CACHE_LEVEL_COUNT; ++level ) {
+    instruction_sizes[ level ] =
+      rtems_cache_get_instruction_cache_size( level );
 
-  do {
-    n = rtems_cache_get_instruction_cache_size( level );
-    ++level;
-  } while (n != 0 );
+    if ( instruction_sizes[ level ] == 0 ) {
+      break;
+    }
+  }
+}
+
+static bool CheckLevelZero( const size_t *sizes )
+{
+  uint32_t level;
+  bool     ok;
+
+  ok = true;
+
+  for ( level = 1; level < CACHE_LEVEL_COUNT; ++level ) {
+    if ( sizes[ level ] == 0 ) {
+      break;
+    }
+
+    if ( sizes[ 0 ] < sizes[ level ] ) {
+      T_log(
+        T_NORMAL,
+        "level 0 size %zu < level %" PRIu32 " size %zu",
+        sizes[ 0 ],
+        level,
+        sizes[ level ]
+      );
+      ok = false;
+    }
+  }
+
+  return ok;
+}
+
+#if defined( __aarch64__ )
+static size_t GetRegisterSize( uint32_t level, bool instruction )
+{
+  rtems_interrupt_level isr_level;
+  uint64_t              clidr;
+  uint64_t              loc;
+  uint64_t              ctype;
+  uint64_t              csselr;
+  uint64_t              ccsidr;
+
+  __asm__ volatile ( "mrs %0, CLIDR_EL1" : "=r" ( clidr ) );
+  loc = ( clidr >> 24 ) & 0x7;
+
+  if ( level == 0 ) {
+    level = (uint32_t) loc;
+  }
+
+  if ( level == 0 || level > loc ) {
+    return 0;
+  }
+
+  ctype = ( clidr >> ( 3 * ( level - 1 ) ) ) & 0x7;
+
+  if ( ctype == 4 ) {
+    instruction = false;
+  } else if ( ( ctype & ( instruction ? 1 : 2 ) ) == 0 ) {
+    return 0;
+  }
+
+  csselr = ( (uint64_t) ( level - 1 ) << 1 ) | ( instruction ? 1 : 0 );
+  rtems_interrupt_local_disable( isr_level );
+  __asm__ volatile (
+    "msr CSSELR_EL1, %1\n"
+    "isb\n"
+    "mrs %0, CCSIDR_EL1"
+    : "=r" ( ccsidr )
+    : "r" ( csselr )
+  );
+  rtems_interrupt_local_enable( isr_level );
+
+  return ( (size_t) 1 << ( ( ccsidr & 0x7 ) + 4 ) ) *
+    (size_t) ( ( ( ccsidr >> 3 ) & 0x3ff ) + 1 ) *
+    (size_t) ( ( ( ccsidr >> 13 ) & 0x7fff ) + 1 );
+}
+#endif
+
+static bool CheckRegisterSizes( const size_t *sizes, bool instruction )
+{
+#if defined( __aarch64__ )
+  uint32_t level;
+  bool     ok;
+
+  ok = true;
+
+  for ( level = 0; level < CACHE_LEVEL_COUNT; ++level ) {
+    size_t expected;
+
+    expected = GetRegisterSize( level, instruction );
+
+    if ( sizes[ level ] != expected ) {
+      T_log(
+        T_NORMAL,
+        "level %" PRIu32 " size %zu != register size %zu",
+        level,
+        sizes[ level ],
+        expected
+      );
+      ok = false;
+    }
+
+    if ( sizes[ level ] == 0 ) {
+      break;
+    }
+  }
+
+  return ok;
+#else
+  (void) sizes;
+  (void) instruction;
+
+  return true;
+#endif
 }
 
 /**
@@ -575,6 +706,18 @@ static void RtemsCacheValCache_Action_21( void )
 static void RtemsCacheValCache_Action_22( void )
 {
   CallGetDataSize();
+
+  /*
+   * Check that the size of level zero is greater than or equal to the size of
+   * each level.
+   */
+  T_step_true( 4, CheckLevelZero( data_sizes ) );
+
+  /*
+   * Where the architecture provides cache geometry registers, check that the
+   * size of each level is the size which the registers specify.
+   */
+  T_step_true( 5, CheckRegisterSizes( data_sizes, false ) );
 }
 
 /**
@@ -598,6 +741,21 @@ static void RtemsCacheValCache_Action_23( void )
 static void RtemsCacheValCache_Action_24( void )
 {
   CallGetInstructionSize();
+
+  /*
+   * Check that the size of level zero is greater than or equal to the size of
+   * each level.
+   */
+  T_step_true( 6, CheckLevelZero( instruction_sizes ) );
+
+  /*
+   * Where the architecture provides cache geometry registers, check that the
+   * size of each level is the size which the registers specify.
+   */
+  T_step_true(
+    7,
+    CheckRegisterSizes( instruction_sizes, true )
+  );
 }
 
 /**
@@ -619,7 +777,7 @@ static void RtemsCacheValCache_Action_25( void )
  */
 T_TEST_CASE( RtemsCacheValCache )
 {
-  T_plan( 4 );
+  T_plan( 8 );
 
   RtemsCacheValCache_Action_0();
   RtemsCacheValCache_Action_1();

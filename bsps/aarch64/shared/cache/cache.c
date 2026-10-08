@@ -384,12 +384,29 @@ static inline size_t AArch64_get_cache_size(
   rtems_interrupt_level isr_level;
   uint64_t clidr;
   uint64_t loc;
+  uint64_t ctype;
   uint64_t ccsidr;
 
   clidr = _AArch64_Read_clidr_el1();
   loc = AArch64_clidr_get_level_of_coherency(clidr);
 
-  if (level > loc) {
+  if (level == 0) {
+    level = loc;
+  }
+
+  if (level == 0 || level > loc) {
+    return 0;
+  }
+
+  /*
+   * The cache type is 1 for an instruction cache, 2 for a data cache, 3 for
+   * separate instruction and data caches, and 4 for a unified cache.
+   */
+  ctype = AArch64_clidr_get_cache_type(clidr, level - 1);
+
+  if (ctype == 4) {
+    instruction = false;
+  } else if ((ctype & (instruction ? 1 : 2)) == 0) {
     return 0;
   }
 
@@ -397,7 +414,7 @@ static inline size_t AArch64_get_cache_size(
   ccsidr = AArch64_get_ccsidr_for_level(level, instruction);
   rtems_interrupt_local_enable(isr_level);
 
-  return (1U << (AArch64_ccsidr_get_line_power(ccsidr)+4))
+  return (1U << AArch64_ccsidr_get_line_power(ccsidr))
     * AArch64_ccsidr_get_associativity(ccsidr)
     * AArch64_ccsidr_get_num_sets(ccsidr);
 }
