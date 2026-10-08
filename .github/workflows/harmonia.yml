@@ -125,6 +125,10 @@ jobs:
         if test "${COUNT}" -eq 1; then
           commits='1 commit'
         fi
+        # A pending commit with the patch of a commit of the target branch is a
+        # copy, which a rebase merge of a pull request created.
+        copies="$(git log --cherry-mark --right-only --no-merges \
+          --format='%m %h %s' "${TARGET}...${SOURCE}" | sed -n 's/^= //p')"
         message="${RUNNER_TEMP}/${MESSAGE_NAME}"
         {
           echo "Merge ${SOURCE_NAME} into ${TARGET}"
@@ -134,6 +138,13 @@ jobs:
           echo 'not drift apart.'
           echo
           cat "${report}"
+          if test -n "${copies}"; then
+            echo
+            echo "${TARGET} holds copies of these commits with other object"
+            echo 'names.  A pull request was merged without a merge commit:'
+            echo
+            echo "${copies}"
+          fi
           echo
           echo 'A source which eb/main added is built outside the qualified'
           echo 'subset until a maintainer decides otherwise, which is a'
