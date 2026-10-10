@@ -240,7 +240,7 @@ static inline void _Watchdog_Preinitialize(
  * The watchdog must be inactive.
  *
  * @param[out] the_watchdog The watchdog to initialize.
- * @param routing The service routine for @a the_watchdog.
+ * @param routine The service routine for @a the_watchdog.
  */
 static inline void _Watchdog_Initialize(
   Watchdog_Control              *the_watchdog,
@@ -252,7 +252,7 @@ static inline void _Watchdog_Initialize(
 }
 
 /**
- * @brief Calls the routine of each not expired watchdog control node.
+ * @brief Calls the routine of each expired watchdog control node.
  *
  * @param header The watchdog header.
  * @param first The first watchdog control node.
@@ -352,7 +352,7 @@ static inline uint64_t _Watchdog_Cancel(
  * @param the_watchdog The watchdog for the verification.
  *
  * @retval true The watchdog is scheduled.
- * @retval false The watchdog is inactive.
+ * @retval false The watchdog is not scheduled.
  */
 static inline bool _Watchdog_Is_scheduled(
   const Watchdog_Control *the_watchdog
@@ -430,7 +430,7 @@ static inline void _Watchdog_Next_first(
  * @brief The maximum number of seconds representable in the nanoseconds
  * watchdog format.
  *
- * We have 2**34 bits for the seconds part.
+ * We have 34 bits for the seconds part.
  */
 #define WATCHDOG_MAX_SECONDS 0x3ffffffff
 
@@ -688,7 +688,7 @@ static inline uint64_t _Watchdog_Per_CPU_insert(
  *
  * @param[in, out] the_watchdog The watchdog to remove.
  * @param cpu The cpu to remove the watchdog from.
- * @param[in, out] The scheduled watchdogs.
+ * @param[in, out] header The scheduled watchdogs.
  */
 static inline void _Watchdog_Per_CPU_remove(
   Watchdog_Control *the_watchdog,
