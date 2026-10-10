@@ -393,12 +393,12 @@ bool rtems_rtl_path_prepend(const char* path);
  * table.
  *
  * @param esyms The exported symbol table.
- * @param count The size of the exported symbol table.
+ * @param size The size of the exported symbol table in bytes.
  * @param tls_offsets The TLS offsets table. If NULL none provided.
  * @param tls_size The number TLS offset entries in the table.
  */
 void rtems_rtl_base_sym_global_add(const unsigned char* esyms,
-                                   unsigned int count,
+                                   unsigned int size,
                                    const rtems_rtl_tls_offset* tls_offsets,
                                    unsigned int tls_size);
 
