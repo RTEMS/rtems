@@ -585,7 +585,7 @@ static inline uint64_t _Watchdog_Ticks_from_sbintime( int64_t sbt )
 {
   uint64_t ticks = ( sbt >> 32 ) << WATCHDOG_BITS_FOR_1E9_NANOSECONDS;
 
-  ticks |= ( (uint64_t) 1000000000 * (uint32_t) sbt ) >> 32;
+  ticks |= ( (uint64_t) WATCHDOG_NANOSECONDS_PER_SECOND * (uint32_t) sbt ) >> 32;
 
   return ticks;
 }
