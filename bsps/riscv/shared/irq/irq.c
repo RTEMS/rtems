@@ -54,12 +54,12 @@
  * to store the interrupt distribution in software.  To keep it simple, we
  * support only a one-to-one and one-to-all interrupt to processor
  * distribution.  For a one-to-one distribution, the array member must point to
- * the enable register block of the corresponding.  For a one-to-all
+ * the per-CPU control of the corresponding processor.  For a one-to-all
  * distribution, the array member must be NULL.  The array index is the
  * external interrupt index minus one (external interrupt index zero is a
  * special value, see PLIC documentation).
  */
-static volatile uint32_t *
+static Per_CPU_Control *
 riscv_plic_irq_to_cpu[RISCV_MAXIMUM_EXTERNAL_INTERRUPTS];
 #endif
 
@@ -196,7 +196,7 @@ static void riscv_plic_cpu_0_init(
   for (i = 1; i <= interrupt_last; ++i) {
     plic->priority[i] = 1;
 #ifdef RTEMS_SMP
-    riscv_plic_irq_to_cpu[i - 1] = cpu->cpu_per_cpu.plic_m_ie;
+    riscv_plic_irq_to_cpu[i - 1] = cpu;
 #endif
   }
 
@@ -509,23 +509,21 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
     uint32_t bit;
     rtems_interrupt_lock_context lock_context;
     Per_CPU_Control *cpu;
-#ifdef RTEMS_SMP
-    volatile uint32_t *enable;
-#endif
 
     interrupt_index = RISCV_INTERRUPT_VECTOR_EXTERNAL_TO_INDEX(vector);
     group = interrupt_index / 32;
     bit = UINT32_C(1) << (interrupt_index % 32);
 #ifdef RTEMS_SMP
-    enable = riscv_plic_irq_to_cpu[interrupt_index - 1];
+    cpu = riscv_plic_irq_to_cpu[interrupt_index - 1];
 #endif
 
     rtems_interrupt_lock_acquire(&riscv_plic_lock, &lock_context);
 
 #ifdef RTEMS_SMP
-    if (enable != NULL) {
-      enable[group] |= bit;
+    if (cpu != NULL) {
+      cpu->cpu_per_cpu.plic_m_ie[group] |= bit;
     } else {
+      volatile uint32_t *enable;
       uint32_t cpu_max;
       uint32_t cpu_index;
 
@@ -577,23 +575,21 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
     uint32_t bit;
     rtems_interrupt_lock_context lock_context;
     Per_CPU_Control *cpu;
-#ifdef RTEMS_SMP
-    volatile uint32_t *enable;
-#endif
 
     interrupt_index = RISCV_INTERRUPT_VECTOR_EXTERNAL_TO_INDEX(vector);
     group = interrupt_index / 32;
     bit = UINT32_C(1) << (interrupt_index % 32);
 #ifdef RTEMS_SMP
-    enable = riscv_plic_irq_to_cpu[interrupt_index - 1];
+    cpu = riscv_plic_irq_to_cpu[interrupt_index - 1];
 #endif
 
     rtems_interrupt_lock_acquire(&riscv_plic_lock, &lock_context);
 
 #ifdef RTEMS_SMP
-    if (enable != NULL) {
-      enable[group] &= ~bit;
+    if (cpu != NULL) {
+      cpu->cpu_per_cpu.plic_m_ie[group] &= ~bit;
     } else {
+      volatile uint32_t *enable;
       uint32_t cpu_max;
       uint32_t cpu_index;
 
@@ -692,7 +688,7 @@ rtems_status_code bsp_interrupt_set_affinity(
 
       cpu_index = _Processor_mask_Find_last_set(&mask) - 1;
       cpu = _Per_CPU_Get_by_index(cpu_index);
-      riscv_plic_irq_to_cpu[interrupt_index - 1] = cpu->cpu_per_cpu.plic_m_ie;
+      riscv_plic_irq_to_cpu[interrupt_index - 1] = cpu;
       return RTEMS_SUCCESSFUL;
     }
 
@@ -709,27 +705,13 @@ rtems_status_code bsp_interrupt_get_affinity(
 {
   if (RISCV_INTERRUPT_VECTOR_IS_EXTERNAL(vector)) {
     uint32_t interrupt_index;
-    volatile uint32_t *enable;
+    Per_CPU_Control *cpu;
 
     interrupt_index = RISCV_INTERRUPT_VECTOR_EXTERNAL_TO_INDEX(vector);
-    enable = riscv_plic_irq_to_cpu[interrupt_index - 1];
+    cpu = riscv_plic_irq_to_cpu[interrupt_index - 1];
 
-    if (enable != NULL) {
-      uint32_t cpu_max;
-      uint32_t cpu_index;
-
-      cpu_max = _SMP_Get_processor_maximum();
-
-      for (cpu_index = 0; cpu_index < cpu_max; ++cpu_index) {
-        Per_CPU_Control *cpu;
-
-        cpu = _Per_CPU_Get_by_index(cpu_index);
-
-        if (enable == cpu->cpu_per_cpu.plic_m_ie) {
-          _Processor_mask_Set(affinity, cpu_index);
-          break;
-        }
-      }
+    if (cpu != NULL) {
+      _Processor_mask_Set(affinity, _Per_CPU_Get_index(cpu));
     } else {
       _Processor_mask_Assign(affinity, _SMP_Get_online_processors());
     }
