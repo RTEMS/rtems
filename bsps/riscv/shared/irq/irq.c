@@ -96,9 +96,21 @@ void _RISCV_Interrupt_dispatch(uintptr_t cause, Per_CPU_Control *cpu_self)
     plic_hart_regs = cpu_self->cpu_per_cpu.plic_hart_regs;
 
     while ((interrupt_index = plic_hart_regs->claim_complete) != 0) {
+#if (RISCV_MAXIMUM_EXTERNAL_INTERRUPTS & \
+  (RISCV_MAXIMUM_EXTERNAL_INTERRUPTS - 1)) == 0
+      /*
+       * The mask keeps the vector of a faulty claim within the dispatch table.
+       */
+      bsp_interrupt_handler_dispatch_unchecked(
+        RISCV_INTERRUPT_VECTOR_EXTERNAL(
+          interrupt_index & (RISCV_MAXIMUM_EXTERNAL_INTERRUPTS - 1)
+        )
+      );
+#else
       bsp_interrupt_handler_dispatch(
         RISCV_INTERRUPT_VECTOR_EXTERNAL(interrupt_index)
       );
+#endif
 
       plic_hart_regs->claim_complete = interrupt_index;
 
