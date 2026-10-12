@@ -8,9 +8,9 @@ cppflags: []
 do-build: |
   path = "testsuites/libtests/fdt01/"
   dts = []
-  dts.append("bsps/aarch64/xilinx-zynqmp/fdt/zynqmp.dts")
-  dts.append("bsps/riscv/riscv/dts/mpfs.dts")
-  dts.append("bsps/microblaze/microblaze_fpga/dts/system.dts")
+  dts.append(path + "zynqmp.dts")
+  dts.append(path + "mpfs.dts")
+  dts.append(path + "system.dts")
   objs = []
   for dts_file in dts:
     objs.append(self.dtc(bld, dts_file, path))

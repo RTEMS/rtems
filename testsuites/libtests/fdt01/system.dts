@@ -1,0 +1,452 @@
+/dts-v1/;
+
+/ {
+	#address-cells = <0x1>;
+	#size-cells = <0x1>;
+	compatible = "xlnx,microblaze";
+	model = "Xilinx MicroBlaze";
+
+	cpus {
+		#address-cells = <0x1>;
+		#cpus = <0x1>;
+		#size-cells = <0x0>;
+
+		cpu@0 {
+			bus-handle = <0x1>;
+			clock-frequency = <0x5f5e100>;
+			clocks = <0x2>;
+			compatible = "xlnx,microblaze-11.0";
+			d-cache-baseaddr = <0x80000000>;
+			d-cache-highaddr = <0xffffffff>;
+			d-cache-line-size = <0x10>;
+			d-cache-size = <0x8000>;
+			device_type = "cpu";
+			i-cache-baseaddr = <0x80000000>;
+			i-cache-highaddr = <0xffffffff>;
+			i-cache-line-size = <0x20>;
+			i-cache-size = <0x8000>;
+			interrupt-handle = <0x3>;
+			model = "microblaze,11.0";
+			reg = <0x0>;
+			timebase-frequency = <0x5f5e100>;
+			xlnx,addr-size = <0x20>;
+			xlnx,addr-tag-bits = <0x10>;
+			xlnx,allow-dcache-wr = <0x1>;
+			xlnx,allow-icache-wr = <0x1>;
+			xlnx,area-optimized = <0x0>;
+			xlnx,async-interrupt = <0x1>;
+			xlnx,async-wakeup = <0x3>;
+			xlnx,avoid-primitives = <0x0>;
+			xlnx,base-vectors = <0x0 0x0>;
+			xlnx,branch-target-cache-size = <0x0>;
+			xlnx,cache-byte-size = <0x8000>;
+			xlnx,d-axi = <0x1>;
+			xlnx,d-lmb = <0x1>;
+			xlnx,d-lmb-mon = <0x0>;
+			xlnx,d-lmb-protocol = <0x0>;
+			xlnx,daddr-size = <0x20>;
+			xlnx,data-size = <0x20>;
+			xlnx,dc-axi-mon = <0x0>;
+			xlnx,dcache-addr-tag = <0x10>;
+			xlnx,dcache-always-used = <0x1>;
+			xlnx,dcache-byte-size = <0x8000>;
+			xlnx,dcache-data-width = <0x0>;
+			xlnx,dcache-force-tag-lutram = <0x0>;
+			xlnx,dcache-line-len = <0x4>;
+			xlnx,dcache-use-writeback = <0x0>;
+			xlnx,dcache-victims = <0x0>;
+			xlnx,debug-counter-width = <0x20>;
+			xlnx,debug-enabled = <0x1>;
+			xlnx,debug-event-counters = <0x5>;
+			xlnx,debug-external-trace = <0x0>;
+			xlnx,debug-interface = <0x0>;
+			xlnx,debug-latency-counters = <0x1>;
+			xlnx,debug-profile-size = <0x0>;
+			xlnx,debug-trace-async-reset = <0x0>;
+			xlnx,debug-trace-size = <0x2000>;
+			xlnx,div-zero-exception = <0x1>;
+			xlnx,dp-axi-mon = <0x0>;
+			xlnx,dynamic-bus-sizing = <0x0>;
+			xlnx,ecc-use-ce-exception = <0x0>;
+			xlnx,edge-is-positive = <0x1>;
+			xlnx,enable-discrete-ports = <0x0>;
+			xlnx,endianness = <0x1>;
+			xlnx,fault-tolerant = <0x0>;
+			xlnx,fpu-exception = <0x1>;
+			xlnx,freq = <0x5f5e100>;
+			xlnx,fsl-exception = <0x0>;
+			xlnx,fsl-links = <0x0>;
+			xlnx,i-axi = <0x0>;
+			xlnx,i-lmb = <0x1>;
+			xlnx,i-lmb-mon = <0x0>;
+			xlnx,i-lmb-protocol = <0x0>;
+			xlnx,iaddr-size = <0x20>;
+			xlnx,ic-axi-mon = <0x0>;
+			xlnx,icache-always-used = <0x1>;
+			xlnx,icache-data-width = <0x0>;
+			xlnx,icache-force-tag-lutram = <0x0>;
+			xlnx,icache-line-len = <0x8>;
+			xlnx,icache-streams = <0x1>;
+			xlnx,icache-victims = <0x8>;
+			xlnx,ill-opcode-exception = <0x1>;
+			xlnx,imprecise-exceptions = <0x0>;
+			xlnx,instr-size = <0x20>;
+			xlnx,interconnect = <0x2>;
+			xlnx,interrupt-is-edge = <0x0>;
+			xlnx,interrupt-mon = <0x0>;
+			xlnx,ip-axi-mon = <0x0>;
+			xlnx,lmb-data-size = <0x20>;
+			xlnx,lockstep-master = <0x0>;
+			xlnx,lockstep-select = <0x0>;
+			xlnx,lockstep-slave = <0x0>;
+			xlnx,mmu-dtlb-size = <0x4>;
+			xlnx,mmu-itlb-size = <0x2>;
+			xlnx,mmu-privileged-instr = <0x0>;
+			xlnx,mmu-tlb-access = <0x3>;
+			xlnx,mmu-zones = <0x2>;
+			xlnx,num-sync-ff-clk = <0x2>;
+			xlnx,num-sync-ff-clk-debug = <0x2>;
+			xlnx,num-sync-ff-clk-irq = <0x1>;
+			xlnx,num-sync-ff-dbg-clk = <0x1>;
+			xlnx,num-sync-ff-dbg-trace-clk = <0x2>;
+			xlnx,number-of-pc-brk = <0x2>;
+			xlnx,number-of-rd-addr-brk = <0x1>;
+			xlnx,number-of-wr-addr-brk = <0x1>;
+			xlnx,opcode-0x0-illegal = <0x1>;
+			xlnx,optimization = <0x0>;
+			xlnx,pc-width = <0x20>;
+			xlnx,piaddr-size = <0x20>;
+			xlnx,pvr = <0x2>;
+			xlnx,pvr-user1 = <0x0>;
+			xlnx,pvr-user2 = <0x0>;
+			xlnx,reset-msr = <0x0>;
+			xlnx,reset-msr-bip = <0x0>;
+			xlnx,reset-msr-dce = <0x0>;
+			xlnx,reset-msr-ee = <0x0>;
+			xlnx,reset-msr-eip = <0x0>;
+			xlnx,reset-msr-ice = <0x0>;
+			xlnx,reset-msr-ie = <0x0>;
+			xlnx,sco = <0x0>;
+			xlnx,trace = <0x0>;
+			xlnx,unaligned-exceptions = <0x1>;
+			xlnx,use-barrel = <0x1>;
+			xlnx,use-branch-target-cache = <0x0>;
+			xlnx,use-config-reset = <0x0>;
+			xlnx,use-dcache = <0x1>;
+			xlnx,use-div = <0x1>;
+			xlnx,use-ext-brk = <0x0>;
+			xlnx,use-ext-nm-brk = <0x0>;
+			xlnx,use-extended-fsl-instr = <0x0>;
+			xlnx,use-fpu = <0x1>;
+			xlnx,use-hw-mul = <0x2>;
+			xlnx,use-icache = <0x1>;
+			xlnx,use-interrupt = <0x2>;
+			xlnx,use-mmu = <0x3>;
+			xlnx,use-msr-instr = <0x1>;
+			xlnx,use-non-secure = <0x0>;
+			xlnx,use-pcmp-instr = <0x1>;
+			xlnx,use-reorder-instr = <0x1>;
+			xlnx,use-stack-protection = <0x0>;
+		};
+	};
+
+	clocks {
+		#address-cells = <0x1>;
+		#size-cells = <0x0>;
+
+		clk_cpu@0 {
+			#clock-cells = <0x0>;
+			clock-frequency = <0x5f5e100>;
+			clock-output-names = "clk_cpu";
+			compatible = "fixed-clock";
+			reg = <0x0>;
+			phandle = <0x2>;
+		};
+
+		clk_bus_0@1 {
+			#clock-cells = <0x0>;
+			clock-frequency = <0x5f5e100>;
+			clock-output-names = "clk_bus_0";
+			compatible = "fixed-clock";
+			reg = <0x1>;
+			phandle = <0x7>;
+		};
+	};
+
+	amba_pl {
+		#address-cells = <0x1>;
+		#size-cells = <0x1>;
+		compatible = "simple-bus";
+		ranges;
+		phandle = <0x1>;
+
+		ethernet@40c00000 {
+			axistream-connected = <0x4>;
+			axistream-control-connected = <0x4>;
+			clock-frequency = <0x5f5e100>;
+			compatible = "xlnx,axi-ethernet-7.2", "xlnx,axi-ethernet-1.00.a";
+			device_type = "network";
+			interrupt-names = "mac_irq", "interrupt";
+			interrupt-parent = <0x3>;
+			interrupts = <0x4 0x0 0x5 0x2>;
+			local-mac-address = [00 0a 35 00 22 01];
+			phy-handle = <0x5>;
+			phy-mode = "sgmii";
+			reg = <0x40c00000 0x40000>;
+			xlnx = <0x0>;
+			xlnx,axiliteclkrate = <0x0>;
+			xlnx,axisclkrate = <0x0>;
+			xlnx,channel-ids = <0x1>;
+			xlnx,clockselection = <0x0>;
+			xlnx,enableasyncsgmii = <0x0>;
+			xlnx,gt-type = <0x0>;
+			xlnx,gtinex = <0x0>;
+			xlnx,gtlocation = <0x0>;
+			xlnx,gtrefclksrc = <0x0>;
+			xlnx,include-dre;
+			xlnx,instantiatebitslice0 = <0x0>;
+			xlnx,num-queues = [00 01];
+			xlnx,phy-type = <0x4>;
+			xlnx,phyaddr = <0x1>;
+			xlnx,phyrst-board-interface-dummy-port = <0x0>;
+			xlnx,rable = <0x0>;
+			xlnx,rxcsum = <0x0>;
+			xlnx,rxlane0-placement = <0x0>;
+			xlnx,rxlane1-placement = <0x0>;
+			xlnx,rxmem = <0x1000>;
+			xlnx,rxnibblebitslice0used = <0x0>;
+			xlnx,tx-in-upper-nibble = <0x1>;
+			xlnx,txcsum = <0x0>;
+			xlnx,txlane0-placement = <0x0>;
+			xlnx,txlane1-placement = <0x0>;
+			phandle = <0x6>;
+			dmas = <&dma 0
+				&dma 1>;
+			dma-names = "tx", "rx";
+			memory-region = <&dma_reserved>;
+			mdio {
+				#address-cells = <0x1>;
+				#size-cells = <0x0>;
+
+				phy@1 {
+					device_type = "ethernet-phy";
+					reg = <0x7>;
+					phandle = <0x5>;
+				};
+			};
+		};
+
+		dma: dma@41e00000 {
+			#dma-cells = <0x1>;
+			axistream-connected = <0x6>;
+			axistream-control-connected = <0x6>;
+			clock-frequency = <0x5f5e100>;
+			clock-names = "s_axi_lite_aclk";
+			clocks = <0x7>;
+			compatible = "xlnx,eth-dma";
+			interrupt-names = "mm2s_introut", "s2mm_introut";
+			interrupt-parent = <0x3>;
+			interrupts = <0x6 0x2 0x7 0x2>;
+			reg = <0x41e00000 0x10000>;
+			xlnx,addrwidth = [20];
+			xlnx,include-dre;
+			xlnx,num-queues = [00 01];
+			phandle = <0x4>;
+		};
+
+		gpio@40000000 {
+			#gpio-cells = <0x3>;
+			clock-frequency = <0x5f5e100>;
+			clock-names = "s_axi_aclk";
+			clocks = <0x7>;
+			compatible = "xlnx,axi-gpio-2.0", "xlnx,xps-gpio-1.00.a";
+			gpio-controller;
+			reg = <0x40000000 0x10000>;
+			xlnx,all-inputs = <0x1>;
+			xlnx,all-inputs-2 = <0x0>;
+			xlnx,all-outputs = <0x0>;
+			xlnx,all-outputs-2 = <0x1>;
+			xlnx,dout-default = <0x0>;
+			xlnx,dout-default-2 = <0x0>;
+			xlnx,gpio-width = <0x4>;
+			xlnx,gpio2-width = <0x8>;
+			xlnx,interrupt-present = <0x0>;
+			xlnx,is-dual = <0x1>;
+			xlnx,tri-default = <0xffffffff>;
+			xlnx,tri-default-2 = <0xffffffff>;
+		};
+
+		gpio@40010000 {
+			#gpio-cells = <0x3>;
+			clock-frequency = <0x5f5e100>;
+			clock-names = "s_axi_aclk";
+			clocks = <0x7>;
+			compatible = "xlnx,axi-gpio-2.0", "xlnx,xps-gpio-1.00.a";
+			gpio-controller;
+			reg = <0x40010000 0x10000>;
+			xlnx,all-inputs = <0x1>;
+			xlnx,all-inputs-2 = <0x1>;
+			xlnx,all-outputs = <0x0>;
+			xlnx,all-outputs-2 = <0x0>;
+			xlnx,dout-default = <0x0>;
+			xlnx,dout-default-2 = <0x0>;
+			xlnx,gpio-width = <0x5>;
+			xlnx,gpio2-width = <0x3>;
+			xlnx,interrupt-present = <0x0>;
+			xlnx,is-dual = <0x1>;
+			xlnx,tri-default = <0xffffffff>;
+			xlnx,tri-default-2 = <0xffffffff>;
+		};
+
+		i2c@40800000 {
+			#address-cells = <0x1>;
+			#size-cells = <0x0>;
+			clock-frequency = <0x5f5e100>;
+			clocks = <0x7>;
+			compatible = "xlnx,axi-iic-2.0", "xlnx,xps-iic-2.00.a";
+			interrupt-names = "iic2intc_irpt";
+			interrupt-parent = <0x3>;
+			interrupts = <0x2 0x2>;
+			reg = <0x40800000 0x10000>;
+
+			i2c-mux@75 {
+				compatible = "nxp,pca9544";
+				#address-cells = <0x1>;
+				#size-cells = <0x0>;
+				reg = <0x75>;
+
+				i2c@3 {
+					#address-cells = <0x1>;
+					#size-cells = <0x0>;
+					reg = <0x3>;
+
+					eeprom@54 {
+						compatible = "atmel,24c08";
+						reg = <0x54>;
+					};
+				};
+			};
+		};
+
+		axi_quad_spi@44a00000 {
+			bits-per-word = <0x8>;
+			compatible = "xlnx,axi-quad-spi-3.2", "xlnx,xps-spi-2.00.a";
+			fifo-size = <0x100>;
+			interrupt-names = "ip2intc_irpt";
+			interrupt-parent = <0x3>;
+			interrupts = <0x3 0x0>;
+			num-cs = <0x2>;
+			reg = <0x44a00000 0x10000>;
+			xlnx,num-ss-bits = <0x2>;
+			xlnx,spi-mode = <0x2>;
+			xlnx,startup-block;
+			#address-cells = <0x1>;
+			#size-cells = <0x0>;
+
+			flash@0 {
+				compatible = "n25q512a";
+				reg = <0x0>;
+				#address-cells = <0x1>;
+				#size-cells = <0x1>;
+				spi-tx-bus-width = <0x1>;
+				spi-rx-bus-width = <0x4>;
+				spi-max-frequency = <0x2faf080>;
+
+				partition@0 {
+					label = "fpga";
+					reg = <0x0 0x1000000>;
+				};
+
+				partition@1 {
+					label = "boot";
+					reg = <0x1000000 0x180000>;
+				};
+
+				partition@2 {
+					label = "bootenv";
+					reg = <0x1180000 0x40000>;
+				};
+
+				partition@3 {
+					label = "kernel";
+					reg = <0x11c0000 0xc00000>;
+				};
+			};
+		};
+
+		timer@41c00000 {
+			clock-frequency = <0x5f5e100>;
+			clocks = <0x7>;
+			compatible = "xlnx,axi-timer-2.0", "xlnx,xps-timer-1.00.a";
+			interrupt-names = "interrupt";
+			interrupt-parent = <0x3>;
+			interrupts = <0x0 0x2>;
+			reg = <0x41c00000 0x10000>;
+			xlnx,count-width = <0x20>;
+			xlnx,gen0-assert = <0x1>;
+			xlnx,gen1-assert = <0x1>;
+			xlnx,one-timer-only = <0x0>;
+			xlnx,trig0-assert = <0x1>;
+			xlnx,trig1-assert = <0x1>;
+		};
+
+		serial@40600000 {
+			clock-frequency = <0x5f5e100>;
+			clocks = <0x7>;
+			compatible = "xlnx,axi-uartlite-2.0", "xlnx,xps-uartlite-1.00.a";
+			current-speed = <0x1c200>;
+			device_type = "serial";
+			interrupt-names = "interrupt";
+			interrupt-parent = <0x3>;
+			interrupts = <0x1 0x0>;
+			port-number = <0x0>;
+			reg = <0x40600000 0x10000>;
+			xlnx,baudrate = <0x1c200>;
+			xlnx,data-bits = <0x8>;
+			xlnx,odd-parity = <0x0>;
+			xlnx,s-axi-aclk-freq-hz-d = "100.0";
+			xlnx,use-parity = <0x0>;
+		};
+
+		ddr4@80000000 {
+			compatible = "xlnx,ddr4-2.2";
+			reg = <0x80000000 0x80000000>;
+		};
+
+		interrupt-controller@41200000 {
+			#interrupt-cells = <0x2>;
+			compatible = "xlnx,axi-intc-4.1", "xlnx,xps-intc-1.00.a";
+			interrupt-controller;
+			reg = <0x41200000 0x10000>;
+			xlnx,kind-of-intr = <0x1a>;
+			xlnx,num-intr-inputs = <0x8>;
+			phandle = <0x3>;
+		};
+	};
+
+	chosen {
+		bootargs = "console=ttyUL0,115200 earlycon root=/dev/ram0 rw";
+		stdout-path = "serial0:115200n8";
+	};
+
+	aliases {
+		ethernet0 = "/amba_pl/ethernet@40c00000";
+		i2c0 = "/amba_pl/i2c@40800000";
+		serial0 = "/amba_pl/serial@40600000";
+		spi0 = "/amba_pl/axi_quad_spi@44a00000";
+	};
+
+	memory@80000000 {
+		device_type = "memory";
+		reg = <0x80000000 0x80000000>;
+		phandle = <0x8>;
+	};
+	reserved-memory {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		ranges;
+		dma_reserved: buffer@10000000 {
+			reg = <0x10000000 0x4000000>;
+		};
+	};
+};

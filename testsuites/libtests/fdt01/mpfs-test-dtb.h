@@ -1,8 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * This is a copy of the mpfs dtb for testing. It was copied from
- * bsps/riscv/riscv/include/bsp/mpfs-dtb.h.
+ * This is the blob of mpfs.dts in this directory.
  */
 
 /*

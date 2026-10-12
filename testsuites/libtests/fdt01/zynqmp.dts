@@ -1,0 +1,98 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsAArch64XilinxZynqMP
+ *
+ * @brief This file provides the base ZynqMP device tree
+ */
+
+/*
+ * Copyright (C) 2022 On-Line Applications Research Corporation (OAR)
+ * Written by Kinsey Moore <kinsey.moore@oarcorp.com>
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/dts-v1/;
+
+/ {
+	#address-cells = <0x02>;
+	#size-cells = <0x02>;
+
+	amba {
+		compatible = "simple-bus";
+		#address-cells = <0x02>;
+		#size-cells = <0x02>;
+		ranges;
+
+		interrupt-controller@f9010000 {
+			compatible = "arm,gic-400";
+			#address-cells = <0x02>;
+			#interrupt-cells = <0x03>;
+			reg = <0x00 0xf9010000 0x00 0x10000>;
+			interrupt-controller;
+			phandle = <0x01>;
+		};
+
+		ethernet@ff0b0000 {
+			compatible = "cdns,gem";
+			status = "okay";
+			interrupt-parent = <0x01>;
+			interrupts = <0x00 0x39 0x04>;
+			reg = <0x00 0xff0b0000 0x00 0x1000>;
+			phy-mode = "rgmii-id";
+			ref-clock-num = <0>;
+		};
+
+		ethernet@ff0c0000 {
+			compatible = "cdns,gem";
+			status = "okay";
+			interrupt-parent = <0x01>;
+			interrupts = <0x00 0x3b 0x04>;
+			reg = <0x00 0xff0c0000 0x00 0x1000>;
+			phy-mode = "rgmii-id";
+			ref-clock-num = <1>;
+		};
+
+		ethernet@ff0d0000 {
+			compatible = "cdns,gem";
+			status = "okay";
+			interrupt-parent = <0x01>;
+			interrupts = <0x00 0x3d 0x04>;
+			reg = <0x00 0xff0d0000 0x00 0x1000>;
+			phy-mode = "rgmii-id";
+			ref-clock-num = <2>;
+		};
+
+		ethernet@ff0e0000 {
+			compatible = "cdns,gem";
+			status = "okay";
+			interrupt-parent = <0x01>;
+			interrupts = <0x00 0x3f 0x04>;
+			reg = <0x00 0xff0e0000 0x00 0x1000>;
+			phy-mode = "rgmii-id";
+			ref-clock-num = <3>;
+		};
+	};
+};

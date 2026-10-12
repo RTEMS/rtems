@@ -1,6 +1,5 @@
 /*
- * This is a copy of the microblaze dtb for testing. It was copied from
- * bsps/microblaze/microblaze_fpga/include/bsp/microblaze-dtb.h.
+ * This is the blob of system.dts in this directory.
  */
 
 #ifndef __microblaze_test_dtb_h

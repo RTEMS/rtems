@@ -1,6 +1,5 @@
 /*
- * This is a copy of the zynqmp dtb for testing. It was copied from
- * bsps/aarch64/xilinx-zynqmp/fdt/zynqmp_dtb.c
+ * This is the blob of zynqmp.dts in this directory.
  */
 
 #ifndef __zynqmp_test_dtb_h
