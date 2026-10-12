@@ -3,8 +3,9 @@
 /**
  * @file
  *
- * @brief RISC-V BSP shared implementation for sending an IPI.
+ * @ingroup RTEMSBSPsRISCVShared
  *
+ * @brief RISC-V BSP shared implementation for sending an IPI.
  */
 
 /*

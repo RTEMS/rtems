@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup riscv_interrupt
+ * @ingroup RTEMSBSPsRISCVShared
  *
  * @brief Interrupt support.
  */
