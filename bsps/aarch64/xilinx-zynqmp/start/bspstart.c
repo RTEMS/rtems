@@ -44,6 +44,10 @@
 #include <libfdt.h>
 
 /*
+ * The PCIe addresses require 64-bit addresses. Disable for ILP32.
+ */
+#ifndef _ILP32
+/*
  * Initialize PCIe MMU mapping using the device tree.
  *
  * Example PCIe node from the upstream Linux device tree binding:
@@ -225,6 +229,7 @@ static void zynqmp_pcie_init(void)
     );
   }
 }
+#endif
 
 void bsp_start( void )
 {
@@ -234,5 +239,7 @@ void bsp_start( void )
     (uintptr_t) bsp_section_nocacheheap_size
   );
   zynqmp_ecc_init();
+#ifndef _ILP32
   zynqmp_pcie_init();
+#endif
 }
