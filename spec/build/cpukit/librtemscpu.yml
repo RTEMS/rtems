@@ -47,6 +47,9 @@ install:
   - cpukit/include/dev/can/can-queue.h
   - cpukit/include/dev/can/can-stats.h
   - cpukit/include/dev/can/can.h
+- destination: ${BSP_INCLUDEDIR}/dev/gpio
+  source:
+  - cpukit/include/dev/gpio/gpio.h
 - destination: ${BSP_INCLUDEDIR}/dev/i2c
   source:
   - cpukit/include/dev/i2c/i2c.h
@@ -546,6 +549,7 @@ source:
 - cpukit/dev/can/can-queue.c
 - cpukit/dev/contrib/iovprintf.c
 - cpukit/dev/flash/flashdev.c
+- cpukit/dev/gpio/gpio.c
 - cpukit/dev/i2c/i2c-bus.c
 - cpukit/dev/i2c/i2c-dev.c
 - cpukit/dev/ioprintf.c

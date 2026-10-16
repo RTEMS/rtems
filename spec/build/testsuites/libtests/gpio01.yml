@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2026 Samuel Price
+cppflags: []
+cxxflags: []
+enabled-by: true
+features: c cprogram
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/libtests/gpio01/init.c
+- testsuites/libtests/gpio01/test_gpio.c
+stlib: []
+target: testsuites/libtests/gpio01.exe
+type: build
+use-after: []
+use-before: []

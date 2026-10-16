@@ -1,0 +1,79 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: gpio01
+
+directives:
+
+  rtems_gpio_ctrl_init
+  rtems_gpio_ctrl_register
+  rtems_gpio_get_info
+  rtems_gpio_pin_get_info
+  rtems_gpio_pin_by_name
+  rtems_gpio_pin_configure
+  rtems_gpio_pin_get_configuration
+  rtems_gpio_pin_release
+  rtems_gpio_pin_get
+  rtems_gpio_pin_set
+  rtems_gpio_pin_toggle
+  rtems_gpio_pin_get_multiple
+  rtems_gpio_pin_set_multiple
+  rtems_gpio_pin_irq_enable
+  rtems_gpio_pin_irq_disable
+
+concepts:
+
+  - A controller registers as an IMFS node and every operation is an ioctl()
+    on it.
+
+  - A pin the board reserves is refused with EACCES before the driver is
+    called, and is left unconfigured by the refusal.
+
+  - A configuration asking for something the pin does not report in its
+    capabilities is refused with ENOTSUP, decided in the generic layer from
+    what pin_get_info() reported.
+
+  - A handler a driver did not implement answers ENOTSUP rather than calling
+    through a null pointer.
+
+  - A driver that rounds a value reports what it applied, both from
+    rtems_gpio_pin_configure() and from rtems_gpio_pin_get_configuration().
+
+  - An active-low pin speaks logical levels and the pad takes the opposite
+    one, asserted against the simulated pad rather than against a second API
+    call.
+
+  - A multiple-pin write containing one unusable pin changes none of them.
+
+  - Pins are logical and continuous; the controller decides what they are.
+    Physical and virtual pins are both pins and differ only in what
+    rtems_gpio_pin_get_info() reports.
+
+negative control:
+
+  Each check below was run with the code it tests removed, and the line the
+  test then stopped on is recorded.  A test that has never been seen to fail
+  is not evidence that the code it covers works.
+
+    1. cpukit/dev/gpio/gpio.c, rtems_gpio_do_configure(): remove the
+       RTEMS_GPIO_PIN_RESERVED check.
+       -> init.c:56 "rv == -1", reached from
+          test_reserved_pin_is_refused().  The pin configured.
+
+    2. cpukit/dev/gpio/gpio.c, rtems_gpio_do_configure(): remove the
+       "needed & ~info.capabilities" check.
+       -> init.c:56 "rv == -1", reached from
+          test_capabilities_are_enforced().  An open-drain output configured
+          on a pin that has no open drain.
+
+       1 and 2 stop on the same line because assert_fails() is shared; the
+       call stack is what tells them apart.
+
+    3. cpukit/dev/gpio/gpio.c, rtems_gpio_do_pin_set_multiple(): check the
+       pins after calling pin_set_multiple() rather than before.
+       -> init.c:384 "test_gpio_raw_level( TEST_GPIO_PIN_FULL ) == 1".  The
+          call still returned EBADF, and two of the three pins had already
+          been written.
+
+    4. testsuites/libtests/gpio01/test_gpio.c, test_gpio_pin_configure():
+       do not round drive_strength.
+       -> init.c:270 "config.drive_strength == TEST_GPIO_DRIVE_STRENGTH".

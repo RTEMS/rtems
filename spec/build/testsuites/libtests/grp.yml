@@ -165,6 +165,8 @@ links:
   - role: build-dependency
     uid: getuid
   - role: build-dependency
+    uid: gpio01
+  - role: build-dependency
     uid: heapwalk
   - role: build-dependency
     uid: htonl
