@@ -1,6 +1,7 @@
 /*-
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
  * Copyright (c) 2011 Ed Schouten <ed@FreeBSD.org>
- * Copyright (c) 2015 embedded brains GmbH & Co. KG
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,68 +24,103 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *
- * $FreeBSD r279326 2015-02-26T16:39:57Z$
  */
 
-#include <threads.h>
-#include <sys/lock.h>
-#include <errno.h>
+#include <sys/cdefs.h>
+#include <pthread.h>
+#include <stdint.h>
+#include <stdlib.h>
 
-void
-mtx_destroy(mtx_t *mtx)
+#include "threads.h"
+
+struct thrd_param {
+	thrd_start_t	 func;
+	void		*arg;
+};
+
+static void *
+thrd_entry(void *arg)
 {
+	struct thrd_param tp;
 
-	_Mutex_recursive_Destroy(mtx);
+	tp = *(struct thrd_param *)arg;
+	free(arg);
+	return ((void *)(intptr_t)tp.func(tp.arg));
 }
 
 int
-mtx_init(mtx_t *mtx, int type)
+thrd_create(thrd_t *thr, thrd_start_t func, void *arg)
 {
+	struct thrd_param *tp;
 
-	(void)type;
-	_Mutex_recursive_Initialize(mtx);
-	return (thrd_success);
-}
-
-int
-mtx_lock(mtx_t *mtx)
-{
-
-	_Mutex_recursive_Acquire(mtx);
-	return (thrd_success);
-}
-
-int
-mtx_timedlock(mtx_t *__restrict mtx, const struct timespec *__restrict ts)
-{
-
-	switch (_Mutex_recursive_Acquire_timed(mtx, ts)) {
-	case 0:
-		return (thrd_success);
-	case ETIMEDOUT:
-		return (thrd_timedout);
-	default:
+	/*
+	 * Work around return type inconsistency.  Wrap execution using
+	 * a function conforming to pthread_create()'s start_routine.
+	 */
+	tp = malloc(sizeof(*tp));
+	if (tp == NULL)
+		return (thrd_nomem);
+	tp->func = func;
+	tp->arg = arg;
+	if (pthread_create(thr, NULL, thrd_entry, tp) != 0) {
+		free(tp);
 		return (thrd_error);
 	}
-}
-
-int
-mtx_trylock(mtx_t *mtx)
-{
-
-	switch (_Mutex_recursive_Try_acquire(mtx)) {
-	case 0:
-		return (thrd_success);
-	default:
-		return (thrd_busy);
-	}
-}
-
-int
-mtx_unlock(mtx_t *mtx)
-{
-
-	_Mutex_recursive_Release(mtx);
 	return (thrd_success);
+}
+
+thrd_t
+thrd_current(void)
+{
+
+	return (pthread_self());
+}
+
+int
+thrd_detach(thrd_t thr)
+{
+
+	if (pthread_detach(thr) != 0)
+		return (thrd_error);
+	return (thrd_success);
+}
+
+int
+thrd_equal(thrd_t thr0, thrd_t thr1)
+{
+
+	return (pthread_equal(thr0, thr1));
+}
+
+_Noreturn void
+thrd_exit(int res)
+{
+
+	pthread_exit((void *)(intptr_t)res);
+}
+
+int
+thrd_join(thrd_t thr, int *res)
+{
+	void *value_ptr;
+
+	if (pthread_join(thr, &value_ptr) != 0)
+		return (thrd_error);
+	if (res != NULL)
+		*res = (intptr_t)value_ptr;
+	return (thrd_success);
+}
+
+int
+thrd_sleep(const struct timespec *duration, struct timespec *remaining)
+{
+
+	return (nanosleep(duration, remaining));
+}
+
+void
+thrd_yield(void)
+{
+
+	pthread_yield();
 }

@@ -1,4 +1,6 @@
 /*-
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
  * Copyright (c) 2011 Ed Schouten <ed@FreeBSD.org>
  * All rights reserved.
  *
@@ -22,19 +24,92 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *
- * $FreeBSD r228904 2011-12-26T21:51:53Z$
  */
 
-#include <threads.h>
+#include <sys/cdefs.h>
+#include <errno.h>
 #include <pthread.h>
 
+#include "threads.h"
+
 void
-call_once(once_flag *flag, void (*func)(void))
+mtx_destroy(mtx_t *mtx)
 {
 
-	(void)pthread_once((pthread_once_t *)flag, func);
+	(void)pthread_mutex_destroy(mtx);
 }
 
-_Static_assert(sizeof(once_flag) == sizeof(pthread_once_t),
-    "once_flag must be of the same size as pthread_once_t");
+int
+mtx_init(mtx_t *mtx, int type)
+{
+	pthread_mutexattr_t attr;
+	int mt, res;
+
+	switch (type) {
+	case mtx_plain:
+	case mtx_timed:
+		mt = PTHREAD_MUTEX_NORMAL;
+		break;
+	case mtx_plain | mtx_recursive:
+	case mtx_timed | mtx_recursive:
+		mt = PTHREAD_MUTEX_RECURSIVE;
+		break;
+	default:
+		return (thrd_error);
+	}
+
+	if (pthread_mutexattr_init(&attr) != 0)
+		return (thrd_error);
+	res = thrd_success;
+	if (pthread_mutexattr_settype(&attr, mt) != 0 ||
+	    pthread_mutex_init(mtx, &attr) != 0)
+		res = thrd_error;
+	pthread_mutexattr_destroy(&attr);
+	return (res);
+}
+
+int
+mtx_lock(mtx_t *mtx)
+{
+
+	if (pthread_mutex_lock(mtx) != 0)
+		return (thrd_error);
+	return (thrd_success);
+}
+
+int
+mtx_timedlock(mtx_t *restrict mtx, const struct timespec *restrict ts)
+{
+
+	switch (pthread_mutex_timedlock(mtx, ts)) {
+	case 0:
+		return (thrd_success);
+	case ETIMEDOUT:
+		return (thrd_timedout);
+	default:
+		return (thrd_error);
+	}
+}
+
+int
+mtx_trylock(mtx_t *mtx)
+{
+
+	switch (pthread_mutex_trylock(mtx)) {
+	case 0:
+		return (thrd_success);
+	case EBUSY:
+		return (thrd_busy);
+	default:
+		return (thrd_error);
+	}
+}
+
+int
+mtx_unlock(mtx_t *mtx)
+{
+
+	if (pthread_mutex_unlock(mtx) != 0)
+		return (thrd_error);
+	return (thrd_success);
+}

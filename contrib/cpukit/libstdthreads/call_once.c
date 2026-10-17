@@ -1,6 +1,7 @@
 /*-
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
  * Copyright (c) 2011 Ed Schouten <ed@FreeBSD.org>
- * Copyright (c) 2015 embedded brains GmbH & Co. KG
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,63 +24,19 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *
- * $FreeBSD r228904 2011-12-26T21:51:53Z$
  */
 
-#include <threads.h>
-#include <errno.h>
+#include <sys/cdefs.h>
+#include <pthread.h>
 
-int
-cnd_broadcast(cnd_t *cond)
-{
-
-	_Condition_Broadcast(cond);
-	return (thrd_success);
-}
+#include "threads.h"
 
 void
-cnd_destroy(cnd_t *cond)
+call_once(once_flag *flag, void (*func)(void))
 {
 
-	_Condition_Destroy(cond);
+	(void)pthread_once((pthread_once_t *)flag, func);
 }
 
-int
-cnd_init(cnd_t *cond)
-{
-
-	_Condition_Initialize(cond);
-	return (thrd_success);
-}
-
-int
-cnd_signal(cnd_t *cond)
-{
-
-	_Condition_Signal(cond);
-	return (thrd_success);
-}
-
-int
-cnd_timedwait(cnd_t *__restrict cond, mtx_t *__restrict mtx,
-    const struct timespec *__restrict ts)
-{
-
-	switch (_Condition_Wait_recursive_timed(cond, mtx, ts)) {
-	case 0:
-		return (thrd_success);
-	case ETIMEDOUT:
-		return (thrd_timedout);
-	default:
-		return (thrd_error);
-	}
-}
-
-int
-cnd_wait(cnd_t *cond, mtx_t *mtx)
-{
-
-	_Condition_Wait_recursive(cond, mtx);
-	return (thrd_success);
-}
+_Static_assert(sizeof(once_flag) == sizeof(pthread_once_t),
+    "once_flag must be of the same size as pthread_once_t");

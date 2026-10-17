@@ -56,6 +56,7 @@ Git log in order to find out version and update details
 | bsps/arm/stm32u5/stm32u5xx-hal-driver | https://github.com/STMicroelectronics/stm32h7xx_hal_driver.git |
 | bsps/riscv/sbi                        | https://cgit.freebsd.org/src/                                  |
 | cpukit/fastlz                         | https://github.com/ariya/FastLZ                                |
+| cpukit/libstdthreads                  | https://github.com/freebsd/freebsd-src/tree/main/lib/libstdthreads |
 | cpukit/utf8proc                       | https://juliastrings.github.io/utf8proc/releases/              |
 | cpukit/libz                           | https://github.com/madler/zlib                                 |
 | cpukit/uuid                           | https://github.com/tytso/e2fsprogs/tree/master/lib/uuid        |

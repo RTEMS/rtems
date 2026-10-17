@@ -1,4 +1,6 @@
 /*-
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
  * Copyright (c) 2011 Ed Schouten <ed@FreeBSD.org>
  * All rights reserved.
  *
@@ -22,104 +24,44 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *
- * $FreeBSD r279318 2015-02-26T09:42:03Z$
  */
 
-#include <threads.h>
+#include <sys/cdefs.h>
 #include <pthread.h>
-#include <sched.h>
-#include <stdint.h>
-#include <stdlib.h>
 
-struct thrd_param {
-	thrd_start_t	 func;
-	void		*arg;
-};
-
-static void *
-thrd_entry(void *arg)
-{
-	struct thrd_param tp;
-
-	tp = *(struct thrd_param *)arg;
-	free(arg);
-	return ((void *)(intptr_t)tp.func(tp.arg));
-}
+#include "threads.h"
 
 int
-thrd_create(thrd_t *thr, thrd_start_t func, void *arg)
-{
-	struct thrd_param *tp;
-
-	/*
-	 * Work around return type inconsistency.  Wrap execution using
-	 * a function conforming to pthread_create()'s start_routine.
-	 */
-	tp = malloc(sizeof(*tp));
-	if (tp == NULL)
-		return (thrd_nomem);
-	tp->func = func;
-	tp->arg = arg;
-	if (pthread_create(thr, NULL, thrd_entry, tp) != 0) {
-		free(tp);
-		return (thrd_error);
-	}
-	return (thrd_success);
-}
-
-thrd_t
-thrd_current(void)
+tss_create(tss_t *key, tss_dtor_t dtor)
 {
 
-	return (pthread_self());
-}
-
-int
-thrd_detach(thrd_t thr)
-{
-
-	if (pthread_detach(thr) != 0)
+	if (pthread_key_create(key, dtor) != 0)
 		return (thrd_error);
 	return (thrd_success);
-}
-
-int
-thrd_equal(thrd_t thr0, thrd_t thr1)
-{
-
-	return (pthread_equal(thr0, thr1));
-}
-
-_Noreturn void
-thrd_exit(int res)
-{
-
-	pthread_exit((void *)(intptr_t)res);
-}
-
-int
-thrd_join(thrd_t thr, int *res)
-{
-	void *value_ptr;
-
-	if (pthread_join(thr, &value_ptr) != 0)
-		return (thrd_error);
-	if (res != NULL)
-		*res = (intptr_t)value_ptr;
-	return (thrd_success);
-}
-
-int
-thrd_sleep(const struct timespec *duration, struct timespec *remaining)
-{
-
-	return (nanosleep(duration, remaining));
 }
 
 void
-thrd_yield(void)
+tss_delete(tss_t key)
 {
 
-	sched_yield();
+	(void)pthread_key_delete(key);
 }
+
+void *
+tss_get(tss_t key)
+{
+
+	return (pthread_getspecific(key));
+}
+
+int
+tss_set(tss_t key, void *val)
+{
+
+	if (pthread_setspecific(key, val) != 0)
+		return (thrd_error);
+	return (thrd_success);
+}
+
+_Static_assert(TSS_DTOR_ITERATIONS == PTHREAD_DESTRUCTOR_ITERATIONS,
+    "TSS_DTOR_ITERATIONS must be identical to PTHREAD_DESTRUCTOR_ITERATIONS");

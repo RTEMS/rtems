@@ -1,4 +1,6 @@
 /*-
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
  * Copyright (c) 2011 Ed Schouten <ed@FreeBSD.org>
  * All rights reserved.
  *
@@ -22,45 +24,73 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *
- * $FreeBSD r228904 2011-12-26T21:51:53Z$
  */
 
-#include <threads.h>
-#include <limits.h>
+#include <sys/cdefs.h>
+#include <errno.h>
 #include <pthread.h>
 
+#include "threads.h"
+
 int
-tss_create(tss_t *key, tss_dtor_t dtor)
+cnd_broadcast(cnd_t *cond)
 {
 
-	if (pthread_key_create(key, dtor) != 0)
+	if (pthread_cond_broadcast(cond) != 0)
 		return (thrd_error);
 	return (thrd_success);
 }
 
 void
-tss_delete(tss_t key)
+cnd_destroy(cnd_t *cond)
 {
 
-	(void)pthread_key_delete(key);
-}
-
-void *
-tss_get(tss_t key)
-{
-
-	return (pthread_getspecific(key));
+	(void)pthread_cond_destroy(cond);
 }
 
 int
-tss_set(tss_t key, void *val)
+cnd_init(cnd_t *cond)
 {
 
-	if (pthread_setspecific(key, val) != 0)
+	switch (pthread_cond_init(cond, NULL)) {
+	case 0:
+		return (thrd_success);
+	case ENOMEM:
+		return (thrd_nomem);
+	default:
+		return (thrd_error);
+	}
+}
+
+int
+cnd_signal(cnd_t *cond)
+{
+
+	if (pthread_cond_signal(cond) != 0)
 		return (thrd_error);
 	return (thrd_success);
 }
 
-_Static_assert(TSS_DTOR_ITERATIONS == PTHREAD_DESTRUCTOR_ITERATIONS,
-    "TSS_DTOR_ITERATIONS must be identical to PTHREAD_DESTRUCTOR_ITERATIONS");
+int
+cnd_timedwait(cnd_t *restrict cond, mtx_t *restrict mtx,
+    const struct timespec *restrict ts)
+{
+
+	switch (pthread_cond_timedwait(cond, mtx, ts)) {
+	case 0:
+		return (thrd_success);
+	case ETIMEDOUT:
+		return (thrd_timedout);
+	default:
+		return (thrd_error);
+	}
+}
+
+int
+cnd_wait(cnd_t *cond, mtx_t *mtx)
+{
+
+	if (pthread_cond_wait(cond, mtx) != 0)
+		return (thrd_error);
+	return (thrd_success);
+}

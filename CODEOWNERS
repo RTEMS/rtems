@@ -33,7 +33,7 @@
 /cpukit/librtemscxx
 
 [CPUKit libstdthreads] @approvers/cpukit/libstdthreads
-/cpukit/libstdthreads
+/contrib/cpukit/libstdthreads
 
 
 # Architectures
