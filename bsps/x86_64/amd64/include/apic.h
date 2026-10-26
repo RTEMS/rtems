@@ -245,7 +245,7 @@ void lapic_start_ap(uint32_t cpu_index, uint8_t page_vector);
  * @brief Retrieves the Local APIC ID
  * @return Local APIC ID
  */
-inline uint8_t lapic_get_id(void)
+static inline uint8_t lapic_get_id(void)
 {
   /* ID stored in highest 8 bits */
   return bsp_lapic_base[LAPIC_REGISTER_ID]>>24;
@@ -254,7 +254,7 @@ inline uint8_t lapic_get_id(void)
 /**
  * @brief Signals an end of interrupt to the Local APIC
  */
-inline void lapic_eoi(void)
+static inline void lapic_eoi(void)
 {
   bsp_lapic_base[LAPIC_REGISTER_EOI] = LAPIC_EOI_ACK;
 }
