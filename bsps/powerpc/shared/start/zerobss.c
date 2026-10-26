@@ -41,21 +41,10 @@ extern unsigned long __bss_start[], __SBSS_START__[], __SBSS_END__[];
 extern unsigned long __SBSS2_START__[], __SBSS2_END__[];
 extern unsigned long __bss_end[];
 
-void zero_bss(void)
-{
-  memset(
-    __SBSS_START__,
-    0,
-    ((unsigned) __SBSS_END__) - ((unsigned)__SBSS_START__)
-  );
-  memset(
-    __SBSS2_START__,
-    0,
-    ((unsigned) __SBSS2_END__) - ((unsigned)__SBSS2_START__)
-  );
-  memset(
-    __bss_start,
-    0,
-    ((unsigned) __bss_end) - ((unsigned)__bss_start)
-  );
+void zero_bss(void) {
+  memset(__SBSS_START__, 0,
+         ((unsigned)__SBSS_END__) - ((unsigned)__SBSS_START__));
+  memset(__SBSS2_START__, 0,
+         ((unsigned)__SBSS2_END__) - ((unsigned)__SBSS2_START__));
+  memset(__bss_start, 0, ((unsigned)__bss_end) - ((unsigned)__bss_start));
 }

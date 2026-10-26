@@ -40,29 +40,28 @@
  * Provide our own prototypes to avoid warnings and risk getting inlined
  * conflicts from the normal header files.
  */
-void* memset(void *p, int c, unsigned int n);
-void* memcpy(void *dst, const void * src, unsigned int n);
-char* strcat(char * dest, const char * src);
-int strlen(const char* string);
+void *memset(void *p, int c, unsigned int n);
+void *memcpy(void *dst, const void *src, unsigned int n);
+char *strcat(char *dest, const char *src);
+int strlen(const char *string);
 
-void* memset(void *p, int c, unsigned int n)
-{
-  char *q =p;
-  for(; n>0; --n) *q++=c;
+void *memset(void *p, int c, unsigned int n) {
+  char *q = p;
+  for (; n > 0; --n)
+    *q++ = c;
   return p;
 }
 
-void* memcpy(void *dst, const void * src, unsigned int n)
-{
-  unsigned char *d=dst;
-  const unsigned char *s=src;
+void *memcpy(void *dst, const void *src, unsigned int n) {
+  unsigned char *d = dst;
+  const unsigned char *s = src;
 
-  while(n-- > 0) *d++=*s++;
+  while (n-- > 0)
+    *d++ = *s++;
   return dst;
 }
 
-char* strcat(char * dest, const char * src)
-{
+char *strcat(char *dest, const char *src) {
   char *tmp = dest;
 
   while (*dest)
@@ -72,8 +71,7 @@ char* strcat(char * dest, const char * src)
   return tmp;
 }
 
-int strlen(const char* string)
-{
+int strlen(const char *string) {
   register int i = 0;
 
   while (string[i] != '\0')

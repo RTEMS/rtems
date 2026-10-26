@@ -72,10 +72,10 @@ void motload_gev_set_net_unit(const size_t unit) {
   }
 }
 
-void motload_gev_set_net_label(const size_t unit, const char* label) {
+void motload_gev_set_net_label(const size_t unit, const char *label) {
   if (unit - 1 < MAX_NET_UNITS) {
-    strlcpy(
-      &net_units[unit - 1].label[0], label, sizeof(net_units[unit - 1].label));
+    strlcpy(&net_units[unit - 1].label[0], label,
+            sizeof(net_units[unit - 1].label));
     if (init_run && nvram_base != 0 && net_units[unit - 1].valid) {
       motload_gev_set_net_envs(nvram_base, unit, net_units[unit - 1].label);
     }

@@ -44,8 +44,7 @@
  *
  *  This routine performs processor dependent initialization.
  */
-void _CPU_Initialize(void)
-{
+void _CPU_Initialize(void) {
 #if defined(__ALTIVEC__) && !defined(PPC_MULTILIB_ALTIVEC)
   _CPU_Initialize_altivec();
 #endif
@@ -54,34 +53,27 @@ void _CPU_Initialize(void)
 /*
  *  _CPU_Context_Initialize
  */
-void _CPU_Context_Initialize(
-  Context_Control  *the_context,
-  void             *stack_base,
-  size_t            size,
-  uint32_t          new_level,
-  void             *entry_point,
-  bool              is_fp,
-  void             *tls_area
-)
-{
-  (void) is_fp;
+void _CPU_Context_Initialize(Context_Control *the_context, void *stack_base,
+                             size_t size, uint32_t new_level, void *entry_point,
+                             bool is_fp, void *tls_area) {
+  (void)is_fp;
 
   ppc_context *the_ppc_context;
-  uint32_t   msr_value = 0;
-  uintptr_t  sp;
-  uintptr_t  stack_alignment;
+  uint32_t msr_value = 0;
+  uintptr_t sp;
+  uintptr_t stack_alignment;
 
-  sp = (uintptr_t) stack_base + size - PPC_MINIMUM_STACK_FRAME_SIZE;
+  sp = (uintptr_t)stack_base + size - PPC_MINIMUM_STACK_FRAME_SIZE;
 
   stack_alignment = CPU_STACK_ALIGNMENT;
   sp &= ~(stack_alignment - 1);
 
-  sp = (uintptr_t) memset((void *) sp, 0, PPC_MINIMUM_STACK_FRAME_SIZE);
+  sp = (uintptr_t)memset((void *)sp, 0, PPC_MINIMUM_STACK_FRAME_SIZE);
 
-  the_ppc_context = ppc_get_context( the_context );
+  the_ppc_context = ppc_get_context(the_context);
 
 #if !defined(PPC_DISABLE_MSR_ACCESS)
-  _CPU_MSR_GET( msr_value );
+  _CPU_MSR_GET(msr_value);
 
   /*
    * Setting the interrupt mask here is not strictly necessary
@@ -98,8 +90,7 @@ void _CPU_Context_Initialize(
 
   if (!(new_level & CPU_MODES_INTERRUPT_MASK)) {
     msr_value |= ppc_interrupt_get_disable_mask();
-  }
-  else {
+  } else {
     msr_value &= ~ppc_interrupt_get_disable_mask();
   }
 
@@ -118,7 +109,7 @@ void _CPU_Context_Initialize(
 #ifdef PPC_MULTILIB_ALTIVEC
   msr_value |= MSR_VE;
 #endif
-#endif  /* END PPC_DISABLE_MSR_ACCESS */
+#endif /* END PPC_DISABLE_MSR_ACCESS */
 
 #ifdef PPC_MULTILIB_ALTIVEC
   the_ppc_context->vrsave = 0;
@@ -126,16 +117,16 @@ void _CPU_Context_Initialize(
 
   the_ppc_context->gpr1 = sp;
   the_ppc_context->msr = msr_value;
-  the_ppc_context->lr = (uintptr_t) entry_point;
+  the_ppc_context->lr = (uintptr_t)entry_point;
   the_ppc_context->isr_dispatch_disable = 0;
 
 #if defined(__ALTIVEC__) && !defined(PPC_MULTILIB_ALTIVEC)
-  _CPU_Context_initialize_altivec( the_ppc_context );
+  _CPU_Context_initialize_altivec(the_ppc_context);
 #endif
 
-  if ( tls_area != NULL ) {
-    void *tls_block = _TLS_Initialize_area( tls_area );
+  if (tls_area != NULL) {
+    void *tls_block = _TLS_Initialize_area(tls_area);
 
-    the_ppc_context->tp = (uintptr_t) tls_block + 0x7000;
+    the_ppc_context->tp = (uintptr_t)tls_block + 0x7000;
   }
 }

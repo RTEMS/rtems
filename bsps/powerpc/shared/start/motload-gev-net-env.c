@@ -39,15 +39,15 @@ struct gev_net_var {
   char bootfile[64];
 };
 
-static void copy_opt(char* out, const size_t out_len, const char* in,
-                     const char* in_end, const char* opt,
+static void copy_opt(char *out, const size_t out_len, const char *in,
+                     const char *in_end, const char *opt,
                      const size_t opt_len) {
-  const char* out_end = out + out_len;
+  const char *out_end = out + out_len;
   const size_t in_len = in_end - in;
   memset(out, 0, out_len);
-  char* op = strnstr(in, opt, in_len);
+  char *op = strnstr(in, opt, in_len);
   if (op != NULL) {
-    char* i = op + opt_len;
+    char *i = op + opt_len;
     while (*i != ' ' && *i != '\0' && i < in_end && out < out_end) {
       *out++ = *i++;
     }
@@ -55,8 +55,8 @@ static void copy_opt(char* out, const size_t out_len, const char* in,
 }
 
 static void populate_env(uintptr_t nvram_base, const size_t unit,
-                         const char* env_name, const char* gev_name,
-                         const char* alt_var, char* var, const size_t var_len) {
+                         const char *env_name, const char *gev_name,
+                         const char *alt_var, char *var, const size_t var_len) {
   char name[32];
   int r;
   snprintf(name, sizeof(name), gev_name, unit);
@@ -69,7 +69,7 @@ static void populate_env(uintptr_t nvram_base, const size_t unit,
   }
 }
 
-static void process_epics_script(uintptr_t nvram_base, char* var,
+static void process_epics_script(uintptr_t nvram_base, char *var,
                                  const size_t var_len) {
   int r = motload_gev_get(nvram_base, "epics-script", var, var_len);
   if (r > 0) {
@@ -89,13 +89,13 @@ static void process_epics_script(uintptr_t nvram_base, char* var,
      *  - boot cmd line is mount point plus <path> so
      *    `/export/users/smith/ioc/iocexample/st.cmd`
      */
-    char* nfs_server = &var[0];
-    char* nfs_export = strchr(nfs_server, ':');
+    char *nfs_server = &var[0];
+    char *nfs_export = strchr(nfs_server, ':');
     if (nfs_export != NULL) {
       *nfs_export = '\0';
       ++nfs_export;
       /* Check for `romeo:/export/users` */
-      char* nfs_bootfile = strchr(nfs_export, ' ');
+      char *nfs_bootfile = strchr(nfs_export, ' ');
       if (nfs_bootfile == NULL) {
         /* Check for `/export/users:smith/ioc/....` */
         nfs_bootfile = strchr(nfs_export, ':');
@@ -116,7 +116,7 @@ static void process_epics_script(uintptr_t nvram_base, char* var,
 }
 
 void motload_gev_set_net_envs(uintptr_t nvram_base, const size_t unit,
-                              const char* label) {
+                              const char *label) {
   /*
    * The boot script is parsed for `tftpGet` settings -s -g and -m
    * and the values are used if there are no explictic names set.
@@ -132,9 +132,9 @@ void motload_gev_set_net_envs(uintptr_t nvram_base, const size_t unit,
   setenv(var, label, 1);
   r = motload_gev_get(nvram_base, "mot-script-boot", &var[0], sizeof(var));
   if (r > 0) {
-    const char* tftp_get = strnstr(var, "tftpGet", r);
+    const char *tftp_get = strnstr(var, "tftpGet", r);
     if (tftp_get != NULL) {
-      const char* tftp_get_end = strnstr(tftp_get, "\n", r);
+      const char *tftp_get_end = strnstr(tftp_get, "\n", r);
       char dev_name[32];
       char dev[32];
       if (tftp_get_end == NULL) {

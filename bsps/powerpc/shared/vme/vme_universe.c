@@ -4,7 +4,6 @@
  * This file is named vme_universe.c for historic reasons.
  */
 
-
 #include <rtems.h>
 #include <bsp.h>
 #include <bsp/VME.h>
@@ -29,7 +28,8 @@
 #define _VME_UNIVERSE_DECLARE_SHOW_ROUTINES
 #include <bsp/vmeUniverse.h>
 #include <bsp/vmeUniverseDMA.h>
-#if     !defined(BSP_VME_INSTALL_IRQ_MGR) && defined(BSP_VME_UNIVERSE_INSTALL_IRQ_MGR)
+#if !defined(BSP_VME_INSTALL_IRQ_MGR) &&                                       \
+    defined(BSP_VME_UNIVERSE_INSTALL_IRQ_MGR)
 #define BSP_VME_INSTALL_IRQ_MGR BSP_VME_UNIVERSE_INSTALL_IRQ_MGR
 #endif
 #endif
@@ -88,286 +88,235 @@
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
  */
 typedef struct {
-	int				(*xlate_adrs)(int, int, unsigned long, unsigned long, unsigned long *);
-	int				(*install_isr)(unsigned long, BSP_VME_ISR_t, void *);
-	int				(*remove_isr)(unsigned long, BSP_VME_ISR_t, void *);
-	BSP_VME_ISR_t	(*get_isr)(unsigned long vector, void **);
-	int				(*enable_int_lvl)(unsigned int);
-	int				(*disable_int_lvl)(unsigned int);
-	int				(*outbound_p_cfg)(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long);
-	int				(*inbound_p_cfg) (unsigned long, unsigned long, unsigned long, unsigned long, unsigned long);
-	void			(*outbound_p_show)(FILE*);
-	void			(*inbound_p_show) (FILE*);
-	void            (*reset_bus)(void);
-	int				(*install_irq_mgr)(int, int, int, ...);
-	int             irq_mgr_flags;
+  int (*xlate_adrs)(int, int, unsigned long, unsigned long, unsigned long *);
+  int (*install_isr)(unsigned long, BSP_VME_ISR_t, void *);
+  int (*remove_isr)(unsigned long, BSP_VME_ISR_t, void *);
+  BSP_VME_ISR_t (*get_isr)(unsigned long vector, void **);
+  int (*enable_int_lvl)(unsigned int);
+  int (*disable_int_lvl)(unsigned int);
+  int (*outbound_p_cfg)(unsigned long, unsigned long, unsigned long,
+                        unsigned long, unsigned long);
+  int (*inbound_p_cfg)(unsigned long, unsigned long, unsigned long,
+                       unsigned long, unsigned long);
+  void (*outbound_p_show)(FILE *);
+  void (*inbound_p_show)(FILE *);
+  void (*reset_bus)(void);
+  int (*install_irq_mgr)(int, int, int, ...);
+  int irq_mgr_flags;
 } VMEOpsRec, *VMEOps;
 
 /* two separate 'ops' structs for historic reasons */
 typedef struct DmaOpsRec_ {
-	int				(*setup)(int, uint32_t, uint32_t, void *);
-	int				(*start)(int, uint32_t, uint32_t, uint32_t);
-	uint32_t		(*status)(int);
-	VMEDmaListClass	listClass;
-	int				nChannels;
-	int				*vectors;
+  int (*setup)(int, uint32_t, uint32_t, void *);
+  int (*start)(int, uint32_t, uint32_t, uint32_t);
+  uint32_t (*status)(int);
+  VMEDmaListClass listClass;
+  int nChannels;
+  int *vectors;
 } DmaOpsRec, *DmaOps;
 
 #ifdef _VME_DRIVER_UNIVERSE
 static VMEOpsRec uniOpsRec = {
-	.xlate_adrs = vmeUniverseXlateAddr,
-	.install_isr = vmeUniverseInstallISR,
-	.remove_isr = vmeUniverseRemoveISR,
-	.get_isr = vmeUniverseISRGet,
-	.enable_int_lvl = vmeUniverseIntEnable,
-	.disable_int_lvl = vmeUniverseIntDisable,
-	.outbound_p_cfg = vmeUniverseMasterPortCfg,
-	.inbound_p_cfg = vmeUniverseSlavePortCfg,
-	.outbound_p_show = vmeUniverseMasterPortsShow,
-	.inbound_p_show = vmeUniverseSlavePortsShow,
-	.reset_bus = vmeUniverseResetBus,
-	.install_irq_mgr = vmeUniverseInstallIrqMgrAlt,
-	.irq_mgr_flags = VMEUNIVERSE_IRQ_MGR_FLAG_SHARED |
-	                    VMEUNIVERSE_IRQ_MGR_FLAG_PW_WORKAROUND,
+    .xlate_adrs = vmeUniverseXlateAddr,
+    .install_isr = vmeUniverseInstallISR,
+    .remove_isr = vmeUniverseRemoveISR,
+    .get_isr = vmeUniverseISRGet,
+    .enable_int_lvl = vmeUniverseIntEnable,
+    .disable_int_lvl = vmeUniverseIntDisable,
+    .outbound_p_cfg = vmeUniverseMasterPortCfg,
+    .inbound_p_cfg = vmeUniverseSlavePortCfg,
+    .outbound_p_show = vmeUniverseMasterPortsShow,
+    .inbound_p_show = vmeUniverseSlavePortsShow,
+    .reset_bus = vmeUniverseResetBus,
+    .install_irq_mgr = vmeUniverseInstallIrqMgrAlt,
+    .irq_mgr_flags = VMEUNIVERSE_IRQ_MGR_FLAG_SHARED |
+                     VMEUNIVERSE_IRQ_MGR_FLAG_PW_WORKAROUND,
 };
 
-static int uniVecs[] = { UNIV_DMA_INT_VEC };
+static int uniVecs[] = {UNIV_DMA_INT_VEC};
 
 static DmaOpsRec uniDmaOpsRec = {
-	.setup = vmeUniverseDmaSetup,
-	.start = vmeUniverseDmaStart,
-	.status = vmeUniverseDmaStatus,
-	.listClass = &vmeUniverseDmaListClass,
-	.nChannels = 1,
-	.vectors = uniVecs,
+    .setup = vmeUniverseDmaSetup,
+    .start = vmeUniverseDmaStart,
+    .status = vmeUniverseDmaStatus,
+    .listClass = &vmeUniverseDmaListClass,
+    .nChannels = 1,
+    .vectors = uniVecs,
 };
 #endif
 
 #ifdef _VME_DRIVER_TSI148
 static VMEOpsRec tsiOpsRec = {
-  .xlate_adrs = vmeTsi148XlateAddr,
-  .install_isr = vmeTsi148InstallISR,
-  .remove_isr = vmeTsi148RemoveISR,
-  .get_isr = vmeTsi148ISRGet,
-  .enable_int_lvl = vmeTsi148IntEnable,
-  .disable_int_lvl = vmeTsi148IntDisable,
-  .outbound_p_cfg = vmeTsi148OutboundPortCfg,
-  .inbound_p_cfg = vmeTsi148InboundPortCfg,
-  .outbound_p_show = vmeTsi148OutboundPortsShow,
-  .inbound_p_show = vmeTsi148InboundPortsShow,
-  .reset_bus = vmeTsi148ResetBus,
-  .install_irq_mgr = vmeTsi148InstallIrqMgrAlt,
-  .irq_mgr_flags = VMETSI148_IRQ_MGR_FLAG_SHARED,
+    .xlate_adrs = vmeTsi148XlateAddr,
+    .install_isr = vmeTsi148InstallISR,
+    .remove_isr = vmeTsi148RemoveISR,
+    .get_isr = vmeTsi148ISRGet,
+    .enable_int_lvl = vmeTsi148IntEnable,
+    .disable_int_lvl = vmeTsi148IntDisable,
+    .outbound_p_cfg = vmeTsi148OutboundPortCfg,
+    .inbound_p_cfg = vmeTsi148InboundPortCfg,
+    .outbound_p_show = vmeTsi148OutboundPortsShow,
+    .inbound_p_show = vmeTsi148InboundPortsShow,
+    .reset_bus = vmeTsi148ResetBus,
+    .install_irq_mgr = vmeTsi148InstallIrqMgrAlt,
+    .irq_mgr_flags = VMETSI148_IRQ_MGR_FLAG_SHARED,
 };
 
 static int tsiVecs[] = {
-	TSI_DMA_INT_VEC,
-	TSI_DMA1_INT_VEC,
+    TSI_DMA_INT_VEC,
+    TSI_DMA1_INT_VEC,
 };
 
 static DmaOpsRec tsiDmaOpsRec = {
-  .setup = vmeTsi148DmaSetup,
-  .start = vmeTsi148DmaStart,
-  .status = vmeTsi148DmaStatus,
-  .listClass = &vmeTsi148DmaListClass,
-  .nChannels = 2,
-  .vectors = tsiVecs,
+    .setup = vmeTsi148DmaSetup,
+    .start = vmeTsi148DmaStart,
+    .status = vmeTsi148DmaStatus,
+    .listClass = &vmeTsi148DmaListClass,
+    .nChannels = 2,
+    .vectors = tsiVecs,
 };
 #endif
 
-static VMEOps theOps    = 0;
+static VMEOps theOps = 0;
 static DmaOps theDmaOps = 0;
 
-int
-BSP_vme2local_adrs(unsigned long am, unsigned long vmeaddr, unsigned long *plocaladdr)
-{
-int rval=theOps->xlate_adrs(1,0,am,vmeaddr,plocaladdr);
-	*plocaladdr+=PCI_MEM_BASE;
-	return rval;
+int BSP_vme2local_adrs(unsigned long am, unsigned long vmeaddr,
+                       unsigned long *plocaladdr) {
+  int rval = theOps->xlate_adrs(1, 0, am, vmeaddr, plocaladdr);
+  *plocaladdr += PCI_MEM_BASE;
+  return rval;
 }
 
-int
-BSP_local2vme_adrs(unsigned long am, unsigned long localaddr, unsigned long *pvmeaddr)
-{
-	return theOps->xlate_adrs(0, 0, am,BSP_LOCAL2PCI_ADDR(localaddr),pvmeaddr);
+int BSP_local2vme_adrs(unsigned long am, unsigned long localaddr,
+                       unsigned long *pvmeaddr) {
+  return theOps->xlate_adrs(0, 0, am, BSP_LOCAL2PCI_ADDR(localaddr), pvmeaddr);
 }
 
-int
-BSP_installVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *arg)
-{
-	return theOps->install_isr(vector, handler, arg);
+int BSP_installVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *arg) {
+  return theOps->install_isr(vector, handler, arg);
 }
 
-int
-BSP_removeVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *arg)
-{
-	return theOps->remove_isr(vector, handler, arg);
+int BSP_removeVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *arg) {
+  return theOps->remove_isr(vector, handler, arg);
 }
 
 /* retrieve the currently installed ISR for a given vector */
-BSP_VME_ISR_t
-BSP_getVME_isr(unsigned long vector, void **parg)
-{
-	return theOps->get_isr(vector, parg);
+BSP_VME_ISR_t BSP_getVME_isr(unsigned long vector, void **parg) {
+  return theOps->get_isr(vector, parg);
 }
 
-int
-BSP_enableVME_int_lvl(unsigned int level)
-{
-	return theOps->enable_int_lvl(level);
+int BSP_enableVME_int_lvl(unsigned int level) {
+  return theOps->enable_int_lvl(level);
 }
 
-int
-BSP_disableVME_int_lvl(unsigned int level)
-{
-	return theOps->disable_int_lvl(level);
+int BSP_disableVME_int_lvl(unsigned int level) {
+  return theOps->disable_int_lvl(level);
 }
 
-int
-BSP_VMEOutboundPortCfg(
-	unsigned long port,
-	unsigned long address_space,
-	unsigned long vme_address,
-	unsigned long pci_address,
-	unsigned long size)
-{
-	return theOps->outbound_p_cfg(port, address_space, vme_address, pci_address, size);
+int BSP_VMEOutboundPortCfg(unsigned long port, unsigned long address_space,
+                           unsigned long vme_address, unsigned long pci_address,
+                           unsigned long size) {
+  return theOps->outbound_p_cfg(port, address_space, vme_address, pci_address,
+                                size);
 }
 
-int
-BSP_VMEInboundPortCfg(
-	unsigned long port,
-	unsigned long address_space,
-	unsigned long vme_address,
-	unsigned long pci_address,
-	unsigned long size)
-{
-	return theOps->inbound_p_cfg(port, address_space, vme_address, pci_address, size);
+int BSP_VMEInboundPortCfg(unsigned long port, unsigned long address_space,
+                          unsigned long vme_address, unsigned long pci_address,
+                          unsigned long size) {
+  return theOps->inbound_p_cfg(port, address_space, vme_address, pci_address,
+                               size);
 }
 
-void
-BSP_VMEOutboundPortsShow(FILE *f)
-{
-	theOps->outbound_p_show(f);
+void BSP_VMEOutboundPortsShow(FILE *f) { theOps->outbound_p_show(f); }
+
+void BSP_VMEInboundPortsShow(FILE *f) { theOps->inbound_p_show(f); }
+
+void BSP_VMEResetBus(void) { theOps->reset_bus(); }
+
+int BSP_VMEDmaSetup(int channel, uint32_t bus_mode, uint32_t xfer_mode,
+                    void *custom_setup) {
+  return theDmaOps->setup(channel, bus_mode, xfer_mode, custom_setup);
 }
 
-void
-BSP_VMEInboundPortsShow(FILE *f)
-{
-	theOps->inbound_p_show(f);
+int BSP_VMEDmaStart(int channel, uint32_t pci_addr, uint32_t vme_addr,
+                    uint32_t n_bytes) {
+  return theDmaOps->start(channel, pci_addr, vme_addr, n_bytes);
 }
 
-void
-BSP_VMEResetBus(void)
-{
-	theOps->reset_bus();
-}
-
-int
-BSP_VMEDmaSetup(int channel, uint32_t bus_mode, uint32_t xfer_mode, void *custom_setup)
-{
-	return theDmaOps->setup(channel, bus_mode, xfer_mode, custom_setup);
-}
-
-int
-BSP_VMEDmaStart(int channel, uint32_t pci_addr, uint32_t vme_addr, uint32_t n_bytes)
-{
-	return theDmaOps->start(channel, pci_addr, vme_addr, n_bytes);
-}
-
-uint32_t
-BSP_VMEDmaStatus(int channel)
-{
-	return theDmaOps->status(channel);
-}
+uint32_t BSP_VMEDmaStatus(int channel) { return theDmaOps->status(channel); }
 
 BSP_VMEDmaListDescriptor
-BSP_VMEDmaListDescriptorSetup(
-		BSP_VMEDmaListDescriptor d,
-		uint32_t                 attr_mask,
-		uint32_t				 xfer_mode,
-		uint32_t                 pci_addr,
-		uint32_t                 vme_addr,
-		uint32_t                 n_bytes)
-{
-VMEDmaListClass	pc;
+BSP_VMEDmaListDescriptorSetup(BSP_VMEDmaListDescriptor d, uint32_t attr_mask,
+                              uint32_t xfer_mode, uint32_t pci_addr,
+                              uint32_t vme_addr, uint32_t n_bytes) {
+  VMEDmaListClass pc;
 
-	if ( !d ) {
+  if (!d) {
 
-		pc = theDmaOps->listClass;
+    pc = theDmaOps->listClass;
 
-		return BSP_VMEDmaListDescriptorNewTool(
-					pc,
-					attr_mask,
-					xfer_mode,
-					pci_addr,
-					vme_addr,
-					n_bytes);
+    return BSP_VMEDmaListDescriptorNewTool(pc, attr_mask, xfer_mode, pci_addr,
+                                           vme_addr, n_bytes);
+  }
 
-	}
-
-	return BSP_VMEDmaListDescriptorSetupTool(d, attr_mask, xfer_mode, pci_addr, vme_addr, n_bytes);
+  return BSP_VMEDmaListDescriptorSetupTool(d, attr_mask, xfer_mode, pci_addr,
+                                           vme_addr, n_bytes);
 }
 
-int
-BSP_VMEDmaListStart(int channel, BSP_VMEDmaListDescriptor list)
-{
-	return BSP_VMEDmaListDescriptorStartTool(0, channel, list);
+int BSP_VMEDmaListStart(int channel, BSP_VMEDmaListDescriptor list) {
+  return BSP_VMEDmaListDescriptorStartTool(0, channel, list);
 }
 
 /* NOT thread safe! */
-int
-BSP_VMEDmaInstallISR(int channel, BSP_VMEDmaIRQCallback cb, void *usr_arg)
-{
-int vec;
-BSP_VME_ISR_t curr;
-void          *carg;
+int BSP_VMEDmaInstallISR(int channel, BSP_VMEDmaIRQCallback cb, void *usr_arg) {
+  int vec;
+  BSP_VME_ISR_t curr;
+  void *carg;
 
-	if ( channel < 0 || channel >= theDmaOps->nChannels )
-		return -1;
+  if (channel < 0 || channel >= theDmaOps->nChannels)
+    return -1;
 
-	vec = theDmaOps->vectors[channel];
+  vec = theDmaOps->vectors[channel];
 
-	curr = BSP_getVME_isr(vec, &carg);
+  curr = BSP_getVME_isr(vec, &carg);
 
-	if ( cb && curr ) {
-		/* IRQ currently in use */
-		return -1;
-	}
+  if (cb && curr) {
+    /* IRQ currently in use */
+    return -1;
+  }
 
-	if ( !cb && !curr ) {
-		/* Allow uninstall if no handler is currently installed;
-		 * just make sure IRQ is disabled
-		 */
-		BSP_disableVME_int_lvl(vec);
-		return 0;
-	}
+  if (!cb && !curr) {
+    /* Allow uninstall if no handler is currently installed;
+     * just make sure IRQ is disabled
+     */
+    BSP_disableVME_int_lvl(vec);
+    return 0;
+  }
 
-	if ( cb ) {
-		if ( BSP_installVME_isr(vec, (BSP_VME_ISR_t)cb, usr_arg) )
-			return -4;
-		BSP_enableVME_int_lvl(vec);
-	} else {
-		BSP_disableVME_int_lvl(vec);
-		if ( BSP_removeVME_isr(vec, curr, carg) )
-			return -4;
-	}
-	return 0;
+  if (cb) {
+    if (BSP_installVME_isr(vec, (BSP_VME_ISR_t)cb, usr_arg))
+      return -4;
+    BSP_enableVME_int_lvl(vec);
+  } else {
+    BSP_disableVME_int_lvl(vec);
+    if (BSP_removeVME_isr(vec, curr, carg))
+      return -4;
+  }
+  return 0;
 }
 
 #if defined(_VME_DRIVER_TSI148) && !defined(VME_CLEAR_BRIDGE_ERRORS)
-static unsigned short
-tsi_clear_errors(int quiet)
-{
-(void) quiet;
+static unsigned short tsi_clear_errors(int quiet) {
+  (void)quiet;
 
-unsigned long	v;
-unsigned short	rval;
-	v = vmeTsi148ClearVMEBusErrors(0);
+  unsigned long v;
+  unsigned short rval;
+  v = vmeTsi148ClearVMEBusErrors(0);
 
-	/* return bits 8..23 of VEAT; set bit 15 to make sure rval is nonzero on error */
-	rval =  v ? ((v>>8) & 0xffff) | (1<<15) : 0;
-	return rval;
+  /* return bits 8..23 of VEAT; set bit 15 to make sure rval is nonzero on error
+   */
+  rval = v ? ((v >> 8) & 0xffff) | (1 << 15) : 0;
+  return rval;
 }
 
 #define VME_CLEAR_BRIDGE_ERRORS tsi_clear_errors
@@ -375,63 +324,61 @@ unsigned short	rval;
 
 extern unsigned short (*_BSP_clear_vmebridge_errors)(int);
 
-int BSP_VMEInit(void)
-{
+int BSP_VMEInit(void) {
 #if defined(_VME_DRIVER_UNIVERSE)
-  if ( 0 == vmeUniverseInit() ) {
-  	theOps    = &uniOpsRec;
-	theDmaOps = &uniDmaOpsRec;
-	vmeUniverseReset();
+  if (0 == vmeUniverseInit()) {
+    theOps = &uniOpsRec;
+    theDmaOps = &uniDmaOpsRec;
+    vmeUniverseReset();
   }
 #endif
 #if defined(_VME_DRIVER_UNIVERSE) && defined(_VME_DRIVER_TSI148)
-	else
+  else
 #endif
 #if defined(_VME_DRIVER_TSI148)
-  if ( 0 == vmeTsi148Init() ) {
- 	theOps    = &tsiOpsRec;
-	theDmaOps = &tsiDmaOpsRec;
-	vmeTsi148Reset();
+      if (0 == vmeTsi148Init()) {
+    theOps = &tsiOpsRec;
+    theDmaOps = &tsiDmaOpsRec;
+    vmeTsi148Reset();
 #ifdef VME_CLEAR_BRIDGE_ERRORS
-	{
+    {
 
-	  _BSP_clear_vmebridge_errors = VME_CLEAR_BRIDGE_ERRORS;
-
-	}
+      _BSP_clear_vmebridge_errors = VME_CLEAR_BRIDGE_ERRORS;
+    }
 #endif
   }
 #endif
-    else
-	  /*  maybe no VME at all - or no universe/tsi148 ... */
-	  return -1;
+  else
+    /*  maybe no VME at all - or no universe/tsi148 ... */
+    return -1;
 
   return 0;
 }
 
-int BSP_VMEIrqMgrInstall(void)
-{
-int err;
+int BSP_VMEIrqMgrInstall(void) {
+  int err;
 #ifndef BSP_VME_INSTALL_IRQ_MGR
   /* No map; use first line only and obtain PIC wire from PCI config */
   err = theOps->install_irq_mgr(
-	theOps->irq_mgr_flags, /* use shared IRQs */
-	0, -1,	/* Universe/Tsi148 pin0 -> PIC line from config space */
-	-1      /* terminate list  */
+      theOps->irq_mgr_flags, /* use shared IRQs */
+      0, -1, /* Universe/Tsi148 pin0 -> PIC line from config space */
+      -1     /* terminate list  */
   );
 #else
   BSP_VME_INSTALL_IRQ_MGR(err);
 #endif
 
-  if ( err )
-  	return err;
+  if (err)
+    return err;
 
 /* This feature is only supported by the Universe driver (not Tsi148) */
 #if defined(BSP_PCI_VME_DRIVER_DOES_EOI) && defined(BSP_PIC_DO_EOI)
-#ifdef 	_VME_DRIVER_TSI148
-#error  "BSP_PCI_VME_DRIVER_DOES_EOI/BSP_PIC_DO_EOI feature can only be used with vmeUniverse"
+#ifdef _VME_DRIVER_TSI148
+#error                                                                         \
+    "BSP_PCI_VME_DRIVER_DOES_EOI/BSP_PIC_DO_EOI feature can only be used with vmeUniverse"
 #endif
-  if ( vmeUniverse0PciIrqLine < 0 )
-	rtems_panic("Unable to get universe interrupt line info from PCI config");
+  if (vmeUniverse0PciIrqLine < 0)
+    rtems_panic("Unable to get universe interrupt line info from PCI config");
   _BSP_vme_bridge_irq = vmeUniverse0PciIrqLine;
 #endif
   return 0;

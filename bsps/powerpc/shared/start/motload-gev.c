@@ -27,14 +27,14 @@
 
 #include <bsp/motload-gev.h>
 
-int motload_gev_get(uintptr_t nvram_base, const char* name, char* var,
+int motload_gev_get(uintptr_t nvram_base, const char *name, char *var,
                     const size_t var_len) {
   /*
    * The MOTLoad requires 8K bytes at the top end of NVRAM. The amount
    * of space set aside in the NVRAM for storage of GEVs is 3592
    * bytes. The offset into the NVRAM is 0x70f8.
    */
-  volatile char* gev = (volatile char*)nvram_base + 0x70f8;
+  volatile char *gev = (volatile char *)nvram_base + 0x70f8;
   const size_t gev_len = 3592;
   char state = 's';
   size_t g = 0;

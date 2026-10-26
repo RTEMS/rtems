@@ -62,27 +62,20 @@ static uint32_t ppc_clock_next_time_base;
 
 static struct timecounter ppc_tc;
 
-static uint32_t ppc_get_timecount(struct timecounter *tc)
-{
-  (void) tc;
+static uint32_t ppc_get_timecount(struct timecounter *tc) {
+  (void)tc;
 
   return ppc_time_base();
 }
 
-static void ppc_clock_no_tick(void)
-{
-  /* Do nothing */
-}
+static void ppc_clock_no_tick(void) { /* Do nothing */ }
 
 static void (*ppc_clock_tick)(void) = ppc_clock_no_tick;
 
-static int ppc_clock_exception_handler(
-  BSP_Exception_frame *frame,
-  unsigned number
-)
-{
-  (void) frame;
-  (void) number;
+static int ppc_clock_exception_handler(BSP_Exception_frame *frame,
+                                       unsigned number) {
+  (void)frame;
+  (void)number;
 
   uint32_t delta = ppc_clock_decrementer_value;
   uint32_t next = ppc_clock_next_time_base;
@@ -101,7 +94,7 @@ static int ppc_clock_exception_handler(
     ppc_clock_tick();
 
     /* Restore machine state */
-    ppc_external_exceptions_disable( msr);
+    ppc_external_exceptions_disable(msr);
 
     /* Next time base */
     next += delta;
@@ -114,7 +107,7 @@ static int ppc_clock_exception_handler(
   } while (dec > delta);
 
   /* Set decrementer */
-  ppc_set_decrementer_register( dec);
+  ppc_set_decrementer_register(dec);
 
   /* Expected next time base */
   ppc_clock_next_time_base = next;
@@ -122,34 +115,28 @@ static int ppc_clock_exception_handler(
   return 0;
 }
 
-static int ppc_clock_exception_handler_first(
-  BSP_Exception_frame *frame,
-  unsigned number
-)
-{
+static int ppc_clock_exception_handler_first(BSP_Exception_frame *frame,
+                                             unsigned number) {
   /* We have to clear the first pending decrementer exception this way */
 
   if (ppc_decrementer_register() >= 0x80000000) {
-    ppc_clock_exception_handler( frame, number);
+    ppc_clock_exception_handler(frame, number);
   }
 
-  ppc_exc_set_handler( ASM_DEC_VECTOR, ppc_clock_exception_handler);
+  ppc_exc_set_handler(ASM_DEC_VECTOR, ppc_clock_exception_handler);
 
   return 0;
 }
 
-static int ppc_clock_exception_handler_booke(
-  BSP_Exception_frame *frame,
-  unsigned number
-)
-{
-  (void) frame;
-  (void) number;
+static int ppc_clock_exception_handler_booke(BSP_Exception_frame *frame,
+                                             unsigned number) {
+  (void)frame;
+  (void)number;
 
   uint32_t msr;
 
   /* Acknowledge decrementer request */
-  PPC_SET_SPECIAL_PURPOSE_REGISTER( BOOKE_TSR, BOOKE_TSR_DIS);
+  PPC_SET_SPECIAL_PURPOSE_REGISTER(BOOKE_TSR, BOOKE_TSR_DIS);
 
   /* Increment clock ticks */
   Clock_driver_ticks += 1;
@@ -161,15 +148,15 @@ static int ppc_clock_exception_handler_booke(
   ppc_clock_tick();
 
   /* Restore machine state */
-  ppc_external_exceptions_disable( msr);
+  ppc_external_exceptions_disable(msr);
 
   return 0;
 }
 
-static int ppc_clock_exception_handler_ppc405(BSP_Exception_frame *frame, unsigned number)
-{
-  (void) frame;
-  (void) number;
+static int ppc_clock_exception_handler_ppc405(BSP_Exception_frame *frame,
+                                              unsigned number) {
+  (void)frame;
+  (void)number;
 
   uint32_t msr;
 
@@ -191,11 +178,10 @@ static int ppc_clock_exception_handler_ppc405(BSP_Exception_frame *frame, unsign
   return 0;
 }
 
-void _Clock_Initialize( void )
-{
+void _Clock_Initialize(void) {
   uint64_t frequency = bsp_time_base_frequency;
   uint64_t us_per_tick = rtems_configuration_get_microseconds_per_tick();
-  uint32_t interval = (uint32_t) ((frequency * us_per_tick) / 1000000);
+  uint32_t interval = (uint32_t)((frequency * us_per_tick) / 1000000);
 
   /*
    * Set default ticker.
@@ -209,17 +195,21 @@ void _Clock_Initialize( void )
     /* Check decrementer value */
     if (ppc_clock_decrementer_value == 0) {
       ppc_clock_decrementer_value = PPC_CLOCK_DECREMENTER_MAX;
-      RTEMS_SYSLOG_ERROR( "decrementer value would be zero, will be set to maximum value instead\n");
+      RTEMS_SYSLOG_ERROR("decrementer value would be zero, will be set to "
+                         "maximum value instead\n");
     }
     if (ppc_cpu_is_bookE()) {
       /* Set decrementer auto-reload value */
-      PPC_SET_SPECIAL_PURPOSE_REGISTER( BOOKE_DECAR, ppc_clock_decrementer_value);
+      PPC_SET_SPECIAL_PURPOSE_REGISTER(BOOKE_DECAR,
+                                       ppc_clock_decrementer_value);
 
       /* Install exception handler */
-      ppc_exc_set_handler( ASM_BOOKE_DEC_VECTOR, ppc_clock_exception_handler_booke);
+      ppc_exc_set_handler(ASM_BOOKE_DEC_VECTOR,
+                          ppc_clock_exception_handler_booke);
 
       /* Enable decrementer and auto-reload */
-      PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS( BOOKE_TCR, BOOKE_TCR_DIE | BOOKE_TCR_ARE);
+      PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS(BOOKE_TCR,
+                                            BOOKE_TCR_DIE | BOOKE_TCR_ARE);
     } else {
       /* Here the decrementer value is actually the interval */
       ++ppc_clock_decrementer_value;
@@ -228,20 +218,22 @@ void _Clock_Initialize( void )
       ppc_clock_next_time_base = ppc_time_base() + ppc_clock_decrementer_value;
 
       /* Install exception handler */
-      ppc_exc_set_handler( ASM_DEC_VECTOR, ppc_clock_exception_handler_first);
+      ppc_exc_set_handler(ASM_DEC_VECTOR, ppc_clock_exception_handler_first);
     }
 
     /* Set the decrementer value */
-    ppc_set_decrementer_register( ppc_clock_decrementer_value);
+    ppc_set_decrementer_register(ppc_clock_decrementer_value);
   } else {
     /* PIT interval value */
     ppc_clock_decrementer_value = interval;
 
     /* Install exception handler */
-    ppc_exc_set_handler(ASM_BOOKE_DEC_VECTOR, ppc_clock_exception_handler_ppc405);
+    ppc_exc_set_handler(ASM_BOOKE_DEC_VECTOR,
+                        ppc_clock_exception_handler_ppc405);
 
     /* Enable PIT and auto-reload */
-    PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS(PPC405_TCR, BOOKE_TCR_DIE | BOOKE_TCR_ARE);
+    PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS(PPC405_TCR,
+                                          BOOKE_TCR_DIE | BOOKE_TCR_ARE);
 
     /* Set PIT auto-reload and initial value */
     PPC_SET_SPECIAL_PURPOSE_REGISTER(PPC405_PIT, interval);

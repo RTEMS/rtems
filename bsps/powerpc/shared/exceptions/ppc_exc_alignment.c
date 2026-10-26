@@ -28,11 +28,10 @@
 #include <rtems.h>
 #include <bsp/vectors.h>
 
-int ppc_exc_alignment_handler(BSP_Exception_frame *frame, unsigned excNum)
-{
-  (void) excNum;
+int ppc_exc_alignment_handler(BSP_Exception_frame *frame, unsigned excNum) {
+  (void)excNum;
 
-  unsigned opcode = *(unsigned *) frame->EXC_SRR0;
+  unsigned opcode = *(unsigned *)frame->EXC_SRR0;
 
   /* Do we have a dcbz instruction? */
   if ((opcode & 0xffe007ff) == 0x7c0007ec) {
@@ -40,8 +39,9 @@ int ppc_exc_alignment_handler(BSP_Exception_frame *frame, unsigned excNum)
     unsigned a = (opcode >> 16) & 0x1f;
     unsigned b = (opcode >> 11) & 0x1f;
     PPC_GPR_TYPE *regs = &frame->GPR0;
-    unsigned *current = (unsigned *)
-      (((a == 0 ? 0 : (uintptr_t) regs[a]) + (uintptr_t) regs[b]) & (clsz - 1));
+    unsigned *current =
+        (unsigned *)(((a == 0 ? 0 : (uintptr_t)regs[a]) + (uintptr_t)regs[b]) &
+                     (clsz - 1));
     unsigned *end = current + clsz / sizeof(*current);
 
     while (current != end) {

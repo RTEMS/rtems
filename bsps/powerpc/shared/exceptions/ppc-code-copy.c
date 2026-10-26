@@ -39,8 +39,7 @@
 
 #include <libcpu/powerpc-utility.h>
 
-void ppc_code_copy(void *dest, const void *src, size_t n)
-{
+void ppc_code_copy(void *dest, const void *src, size_t n) {
   if (memcmp(dest, src, n) != 0) {
     memcpy(dest, src, n);
 

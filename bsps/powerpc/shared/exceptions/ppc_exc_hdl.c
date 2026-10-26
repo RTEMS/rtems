@@ -24,11 +24,11 @@
  *       be in the .sdata section and accesses them
  *       via R13.
  */
-uint32_t ppc_exc_lock_std  = 0;
+uint32_t ppc_exc_lock_std = 0;
 uint32_t ppc_exc_lock_crit = 0;
 uint32_t ppc_exc_lock_mchk = 0;
 
-uint32_t ppc_exc_vector_register_std  = 0;
+uint32_t ppc_exc_vector_register_std = 0;
 uint32_t ppc_exc_vector_register_crit = 0;
 uint32_t ppc_exc_vector_register_mchk = 0;
 
@@ -44,10 +44,9 @@ uint32_t ppc_exc_msr_bits = MSR_IR | MSR_DR | MSR_RI;
 
 #endif /* PPC_EXC_CONFIG_BOOKE_ONLY */
 
-int ppc_exc_handler_default(BSP_Exception_frame *f, unsigned int vector)
-{
-  (void) f;
-  (void) vector;
+int ppc_exc_handler_default(BSP_Exception_frame *f, unsigned int vector) {
+  (void)f;
+  (void)vector;
 
   return -1;
 }
@@ -57,35 +56,31 @@ int ppc_exc_handler_default(BSP_Exception_frame *f, unsigned int vector)
 exception_handler_t globalExceptHdl = C_exception_handler;
 
 /* Table of C-handlers */
-ppc_exc_handler_t ppc_exc_handler_table [LAST_VALID_EXC + 1] = {
-  [0 ... LAST_VALID_EXC] = ppc_exc_handler_default
-};
+ppc_exc_handler_t ppc_exc_handler_table[LAST_VALID_EXC + 1] = {
+    [0 ... LAST_VALID_EXC] = ppc_exc_handler_default};
 
 #endif /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
 
-ppc_exc_handler_t ppc_exc_get_handler(unsigned vector)
-{
-  if (
-    vector <= LAST_VALID_EXC
-      && ppc_exc_handler_table [vector] != ppc_exc_handler_default
-  ) {
-    return ppc_exc_handler_table [vector];
+ppc_exc_handler_t ppc_exc_get_handler(unsigned vector) {
+  if (vector <= LAST_VALID_EXC &&
+      ppc_exc_handler_table[vector] != ppc_exc_handler_default) {
+    return ppc_exc_handler_table[vector];
   } else {
     return NULL;
   }
 }
 
-rtems_status_code ppc_exc_set_handler(unsigned vector, ppc_exc_handler_t handler)
-{
+rtems_status_code ppc_exc_set_handler(unsigned vector,
+                                      ppc_exc_handler_t handler) {
   if (vector <= LAST_VALID_EXC) {
     if (handler == NULL) {
       handler = ppc_exc_handler_default;
     }
 
-    if (ppc_exc_handler_table [vector] != handler) {
+    if (ppc_exc_handler_table[vector] != handler) {
 #ifndef PPC_EXC_CONFIG_USE_FIXED_HANDLER
-      ppc_exc_handler_table [vector] = handler;
-#else /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
+      ppc_exc_handler_table[vector] = handler;
+#else  /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
       return RTEMS_RESOURCE_IN_USE;
 #endif /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
     }
@@ -96,8 +91,7 @@ rtems_status_code ppc_exc_set_handler(unsigned vector, ppc_exc_handler_t handler
   }
 }
 
-void ppc_exc_wrapup(BSP_Exception_frame *frame)
-{
+void ppc_exc_wrapup(BSP_Exception_frame *frame) {
   Per_CPU_Control *cpu_self;
 
   cpu_self = _Per_CPU_Get();
@@ -113,7 +107,7 @@ void ppc_exc_wrapup(BSP_Exception_frame *frame)
     cpu_self->thread_dispatch_disable_level = 1;
     _Thread_Do_dispatch(cpu_self, frame->EXC_SRR1);
     rtems_interrupt_local_disable(level);
-    (void) level;
+    (void)level;
     cpu_self = _Per_CPU_Get();
   }
 

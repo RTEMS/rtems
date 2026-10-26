@@ -42,12 +42,13 @@
 #include <bsp/vectors.h>
 #include <libcpu/powerpc-utility.h>
 
-#define LT(cr) ((cr)*4+0)
-#define GT(cr) ((cr)*4+1)
-#define EQ(cr) ((cr)*4+2)
+#define LT(cr) ((cr) * 4 + 0)
+#define GT(cr) ((cr) * 4 + 1)
+#define EQ(cr) ((cr) * 4 + 2)
 
 /* Opcode of 'stw r1, off(r13)' */
-#define STW_R1_R13(off) ((((36<<10)|(r1<<5)|(r13))<<16) | ((off)&0xffff))
+#define STW_R1_R13(off)                                                        \
+  ((((36 << 10) | (r1 << 5) | (r13)) << 16) | ((off) & 0xffff))
 
 #define FRAME_REGISTER r14
 #define VECTOR_REGISTER r4
@@ -55,39 +56,39 @@
 #define SCRATCH_REGISTER_1 r6
 #define SCRATCH_REGISTER_2 r7
 
-#define FRAME_OFFSET( r) GPR14_OFFSET( r)
-#define VECTOR_OFFSET( r) GPR4_OFFSET( r)
-#define SCRATCH_REGISTER_0_OFFSET( r) GPR5_OFFSET( r)
-#define SCRATCH_REGISTER_1_OFFSET( r) GPR6_OFFSET( r)
-#define SCRATCH_REGISTER_2_OFFSET( r) GPR7_OFFSET( r)
+#define FRAME_OFFSET(r) GPR14_OFFSET(r)
+#define VECTOR_OFFSET(r) GPR4_OFFSET(r)
+#define SCRATCH_REGISTER_0_OFFSET(r) GPR5_OFFSET(r)
+#define SCRATCH_REGISTER_1_OFFSET(r) GPR6_OFFSET(r)
+#define SCRATCH_REGISTER_2_OFFSET(r) GPR7_OFFSET(r)
 
 #define CR_TYPE 2
 #define CR_MSR 3
 #define CR_LOCK 4
 
-	/*
-	 * Minimal prologue snippets:
-	 *
-	 * Rationale: on some PPCs the vector offsets are spaced
-	 * as closely as 16 bytes.
-	 *
-	 * If we deal with asynchronous exceptions ('interrupts')
-	 * then we can use 4 instructions to
-	 *   1. atomically write lock to indicate ISR is in progress
-	 *      (we cannot atomically increase the Thread_Dispatch_disable_level,
-	 *      see README)
-	 *   2. save a register in special area
-	 *   3. load register with vector info
-	 *   4. branch
-	 *
-	 * If we deal with a synchronous exception (no stack switch
-	 * nor dispatch-disabling necessary) then it's easier:
-	 *   1. push stack frame
-	 *   2. save register on stack
-	 *   3. load register with vector info
-	 *   4. branch
-	 *
-	 */
+/*
+ * Minimal prologue snippets:
+ *
+ * Rationale: on some PPCs the vector offsets are spaced
+ * as closely as 16 bytes.
+ *
+ * If we deal with asynchronous exceptions ('interrupts')
+ * then we can use 4 instructions to
+ *   1. atomically write lock to indicate ISR is in progress
+ *      (we cannot atomically increase the Thread_Dispatch_disable_level,
+ *      see README)
+ *   2. save a register in special area
+ *   3. load register with vector info
+ *   4. branch
+ *
+ * If we deal with a synchronous exception (no stack switch
+ * nor dispatch-disabling necessary) then it's easier:
+ *   1. push stack frame
+ *   2. save register on stack
+ *   3. load register with vector info
+ *   4. branch
+ *
+ */
 
 /*
  *****************************************************************************
@@ -100,7 +101,7 @@
  *          'ppc_exc_vector_register_\_PRI'.
  *
  */
-	.macro	PPC_EXC_MIN_PROLOG_ASYNC _NAME _VEC _PRI _FLVR
+.macro	PPC_EXC_MIN_PROLOG_ASYNC _NAME _VEC _PRI _FLVR
 
 	.global	ppc_exc_min_prolog_async_\_NAME
 ppc_exc_min_prolog_async_\_NAME:
@@ -945,9 +946,9 @@ wrap_save_non_volatile_regs_\_FLVR:
 	/* Save pristine stack pointer */
 	stw	SCRATCH_REGISTER_1, GPR1_OFFSET(FRAME_REGISTER)
 
-	/* r14 is the FRAME_REGISTER and will be saved elsewhere */
+/* r14 is the FRAME_REGISTER and will be saved elsewhere */
 
-	/* Save non-volatile registers r15 .. r31 */
+/* Save non-volatile registers r15 .. r31 */
 #ifndef __SPE__
 	stmw	r15, GPR15_OFFSET(FRAME_REGISTER)
 #else
@@ -1030,9 +1031,9 @@ wrap_restore_non_volatile_regs_\_FLVR:
 	/* Restore small data area anchor (SYSV) */
 	lwz	r13, GPR13_OFFSET(r1)
 
-	/* r14 is the FRAME_REGISTER and will be restored elsewhere */
+/* r14 is the FRAME_REGISTER and will be restored elsewhere */
 
-	/* Restore non-volatile registers r15 .. r31 */
+/* Restore non-volatile registers r15 .. r31 */
 #ifndef __SPE__
 	lmw	r15, GPR15_OFFSET(r1)
 #else

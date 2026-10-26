@@ -21,8 +21,7 @@
  *       *pmemsize by the size of the page table.
  */
 /* to align the pointer to the (next) page boundary */
-#define PAGE_ALIGN(addr)	(((addr) + PAGE_MASK) & ~PAGE_MASK)
-
+#define PAGE_ALIGN(addr) (((addr) + PAGE_MASK) & ~PAGE_MASK)
 
 /*
  * Authorship
@@ -71,18 +70,16 @@
 
 Triv121PgTbl __BSP_default_pgtbl_setup(unsigned int *pmemsize);
 Triv121PgTbl BSP_pgtbl_setup(unsigned int *)
-  __attribute__ (( weak, alias("__BSP_default_pgtbl_setup") ));
+    __attribute__((weak, alias("__BSP_default_pgtbl_setup")));
 
 /* get those from the linker script.
  * NOTE THAT THE CORRECTNESS OF THE LINKER SCRIPT IS CRUCIAL
  */
 extern unsigned long __DATA_START__[], _etext[];
 
-Triv121PgTbl
-__BSP_default_pgtbl_setup(unsigned int *pmemsize)
-{
-Triv121PgTbl	pt;
-unsigned		ldPtSize,tmp;
+Triv121PgTbl __BSP_default_pgtbl_setup(unsigned int *pmemsize) {
+  Triv121PgTbl pt;
+  unsigned ldPtSize, tmp;
 
   /* Allocate a page table large enough to map
    * the entire physical memory. We put the page
@@ -99,43 +96,38 @@ unsigned		ldPtSize,tmp;
    * memory - THIS IS NOT AN OPTION - bspstart.c RELIES
    * ON THIS LAYOUT! (the size, however may be changed)
    */
-  if ( (pt = triv121PgTblInit(*pmemsize - (1<<ldPtSize), ldPtSize)) ) {
-	/* map text and RO data read-only */
-	tmp = triv121PgTblMap(
-						pt,
-						TRIV121_121_VSID,
-						0,
-						(PAGE_ALIGN((unsigned long)_etext) - 0) >> PG_SHIFT,
-						0, /* WIMG */
-						TRIV121_PP_RO_PAGE);
-	if ((unsigned int)TRIV121_MAP_SUCCESS != tmp) {
-		printk("Unable to map page index %i; reverting to BAT0\n",
-				tmp);
-		pt = 0;
-	} else {
-		/* map the rest (without the page table itself) RW */
-		tmp = triv121PgTblMap(
-						pt,
-						TRIV121_121_VSID,
-						(unsigned long)__DATA_START__,
-						(*pmemsize - (1<<ldPtSize) -  (unsigned long)__DATA_START__ )>> PG_SHIFT,
-						0, /* WIMG */
-						TRIV121_PP_RW_PAGE);
-		if ((unsigned int)TRIV121_MAP_SUCCESS != tmp) {
-			printk("Unable to map page index %i; reverting to BAT0\n",
-					tmp);
-			pt = 0;
-		}
-	}
+  if ((pt = triv121PgTblInit(*pmemsize - (1 << ldPtSize), ldPtSize))) {
+    /* map text and RO data read-only */
+    tmp = triv121PgTblMap(pt, TRIV121_121_VSID, 0,
+                          (PAGE_ALIGN((unsigned long)_etext) - 0) >> PG_SHIFT,
+                          0, /* WIMG */
+                          TRIV121_PP_RO_PAGE);
+    if ((unsigned int)TRIV121_MAP_SUCCESS != tmp) {
+      printk("Unable to map page index %i; reverting to BAT0\n", tmp);
+      pt = 0;
+    } else {
+      /* map the rest (without the page table itself) RW */
+      tmp = triv121PgTblMap(
+          pt, TRIV121_121_VSID, (unsigned long)__DATA_START__,
+          (*pmemsize - (1 << ldPtSize) - (unsigned long)__DATA_START__) >>
+              PG_SHIFT,
+          0, /* WIMG */
+          TRIV121_PP_RW_PAGE);
+      if ((unsigned int)TRIV121_MAP_SUCCESS != tmp) {
+        printk("Unable to map page index %i; reverting to BAT0\n", tmp);
+        pt = 0;
+      }
+    }
   } else {
-	printk("WARNING: unable to allocate page table, keeping DBAT0\n");
+    printk("WARNING: unable to allocate page table, keeping DBAT0\n");
   }
   if (pt) {
 #ifdef SHOW_MORE_INIT_SETTINGS
-	printk("Setting up page table mappings; protecting text/read-only data from write access\n");
+    printk("Setting up page table mappings; protecting text/read-only data "
+           "from write access\n");
 #endif
-	/* SUCCESS; reduce available memory by size of the page table */
-	*pmemsize -= (1<<ldPtSize);
+    /* SUCCESS; reduce available memory by size of the page table */
+    *pmemsize -= (1 << ldPtSize);
   }
   return pt;
 }

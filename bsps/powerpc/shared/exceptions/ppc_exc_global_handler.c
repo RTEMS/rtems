@@ -21,10 +21,6 @@
 
 #include <bsp/vectors.h>
 
-void C_exception_handler(BSP_Exception_frame *excPtr)
-{
-  rtems_fatal(
-    RTEMS_FATAL_SOURCE_EXCEPTION,
-    (rtems_fatal_code) excPtr
-  );
+void C_exception_handler(BSP_Exception_frame *excPtr) {
+  rtems_fatal(RTEMS_FATAL_SOURCE_EXCEPTION, (rtems_fatal_code)excPtr);
 }

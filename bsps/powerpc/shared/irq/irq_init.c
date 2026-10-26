@@ -36,12 +36,13 @@
 #include <rtems/bspIo.h>
 
 typedef struct {
-  unsigned char bus;	/* few chance the PCI/ISA bridge is not on first bus but ... */
+  unsigned char
+      bus; /* few chance the PCI/ISA bridge is not on first bus but ... */
   unsigned char device;
   unsigned char function;
 } pci_isa_bridge_device;
 
-pci_isa_bridge_device* via_82c586 = 0;
+pci_isa_bridge_device *via_82c586 = 0;
 #ifndef qemu
 static pci_isa_bridge_device bridge;
 #endif
@@ -49,173 +50,165 @@ static pci_isa_bridge_device bridge;
 /*
  * default methods
  */
-static void nop_hdl(rtems_irq_hdl_param ignored)
-{
-  (void) ignored;
+static void nop_hdl(rtems_irq_hdl_param ignored) { (void)ignored; }
+
+static void nop_irq_enable(const struct __rtems_irq_connect_data__ *ignored) {
+  (void)ignored;
 }
 
-static void nop_irq_enable(const struct __rtems_irq_connect_data__*ignored)
-{
-  (void) ignored;
-}
-
-static int irq_is_connected(const struct __rtems_irq_connect_data__*ignored)
-{
-  (void) ignored;
+static int irq_is_connected(const struct __rtems_irq_connect_data__ *ignored) {
+  (void)ignored;
 
   return 0;
 }
 
-
-static rtems_irq_connect_data     	rtemsIrq[BSP_IRQ_NUMBER];
-static rtems_irq_global_settings     	initial_config;
-static rtems_irq_connect_data     	defaultIrq = {
-  0,                /* vector */
-  nop_hdl,          /* hdl */
-  NULL,             /* handle */
-  nop_irq_enable,   /* on */
-  nop_irq_enable,   /* off */
-  irq_is_connected  /* isOn */
+static rtems_irq_connect_data rtemsIrq[BSP_IRQ_NUMBER];
+static rtems_irq_global_settings initial_config;
+static rtems_irq_connect_data defaultIrq = {
+    0,               /* vector */
+    nop_hdl,         /* hdl */
+    NULL,            /* handle */
+    nop_irq_enable,  /* on */
+    nop_irq_enable,  /* off */
+    irq_is_connected /* isOn */
 #ifdef BSP_SHARED_HANDLER_SUPPORT
-  , NULL /* next_handler */
+    ,
+    NULL /* next_handler */
 #endif
 };
-static rtems_irq_prio irqPrioTable[BSP_IRQ_NUMBER]={
-  /*
-   * actual priorities for interrupt :
-   *	0   means that only current interrupt is masked
-   *	255 means all other interrupts are masked
-   */
-  /*
-   * ISA interrupts.
-   * The second entry has a priority of 255 because
-   * it is the slave pic entry and should always remain
-   * unmasked.
-   */
-  0,0,
-  255,
-  0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+static rtems_irq_prio irqPrioTable[BSP_IRQ_NUMBER] = {
+    /*
+     * actual priorities for interrupt :
+     *	0   means that only current interrupt is masked
+     *	255 means all other interrupts are masked
+     */
+    /*
+     * ISA interrupts.
+     * The second entry has a priority of 255 because
+     * it is the slave pic entry and should always remain
+     * unmasked.
+     */
+    0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 #if BSP_PCI_IRQ_NUMBER > 0
-  /*
-   * PCI Interrupts
-   */
-  8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, /* for raven prio 0 means unactive... */
+    /*
+     * PCI Interrupts
+     */
+    8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+    8, /* for raven prio 0 means unactive... */
 #endif
-  /*
-   * Processor exceptions handled as interrupts
-   */
-  0
-};
+    /*
+     * Processor exceptions handled as interrupts
+     */
+    0};
 
 #if BSP_PCI_IRQ_NUMBER > 0
 #if defined(mot_ppc_mvme2100)
 static unsigned char mvme2100_openpic_initpolarities[16] = {
-    0,  /* Not used - should be disabled */
-    0,	/* DEC21143 Controller */
-    0,  /* PMC/PC-MIP Type I Slot 0 */
-    0,  /* PC-MIP Type I Slot 1 */
-    0,  /* PC-MIP Type II Slot 0 */
-    0,  /* PC-MIP Type II Slot 1 */
-    0,  /* Not used - should be disabled */
-    0,  /* PCI Expansion Interrupt A/Universe II (LINT0) */
-    0,  /* PCI Expansion Interrupt B/Universe II (LINT1) */
-    0,  /* PCI Expansion Interrupt C/Universe II (LINT2) */
-    0,  /* PCI Expansion Interrupt D/Universe II (LINT3) */
-    0,  /* Not used - should be disabled */
-    0,  /* Not used - should be disabled */
-    1,  /* 16550 UART */
-    0,  /* Front panel Abort Switch */
-    0,  /* RTC IRQ */
+    0, /* Not used - should be disabled */
+    0, /* DEC21143 Controller */
+    0, /* PMC/PC-MIP Type I Slot 0 */
+    0, /* PC-MIP Type I Slot 1 */
+    0, /* PC-MIP Type II Slot 0 */
+    0, /* PC-MIP Type II Slot 1 */
+    0, /* Not used - should be disabled */
+    0, /* PCI Expansion Interrupt A/Universe II (LINT0) */
+    0, /* PCI Expansion Interrupt B/Universe II (LINT1) */
+    0, /* PCI Expansion Interrupt C/Universe II (LINT2) */
+    0, /* PCI Expansion Interrupt D/Universe II (LINT3) */
+    0, /* Not used - should be disabled */
+    0, /* Not used - should be disabled */
+    1, /* 16550 UART */
+    0, /* Front panel Abort Switch */
+    0, /* RTC IRQ */
 };
 
 static unsigned char mvme2100_openpic_initsenses[] = {
-    0,  /* Not used - should be disabled */
-    1,	/* DEC21143 Controller */
-    1,  /* PMC/PC-MIP Type I Slot 0 */
-    1,  /* PC-MIP Type I Slot 1 */
-    1,  /* PC-MIP Type II Slot 0 */
-    1,  /* PC-MIP Type II Slot 1 */
-    0,  /* Not used - should be disabled */
-    1,  /* PCI Expansion Interrupt A/Universe II (LINT0) */
-    1,  /* PCI Expansion Interrupt B/Universe II (LINT1) */
-    1,  /* PCI Expansion Interrupt C/Universe II (LINT2) */
-    1,  /* PCI Expansion Interrupt D/Universe II (LINT3) */
-    0,  /* Not used - should be disabled */
-    0,  /* Not used - should be disabled */
-    1,  /* 16550 UART */
-    0,  /* Front panel Abort Switch */
-    1,  /* RTC IRQ */
+    0, /* Not used - should be disabled */
+    1, /* DEC21143 Controller */
+    1, /* PMC/PC-MIP Type I Slot 0 */
+    1, /* PC-MIP Type I Slot 1 */
+    1, /* PC-MIP Type II Slot 0 */
+    1, /* PC-MIP Type II Slot 1 */
+    0, /* Not used - should be disabled */
+    1, /* PCI Expansion Interrupt A/Universe II (LINT0) */
+    1, /* PCI Expansion Interrupt B/Universe II (LINT1) */
+    1, /* PCI Expansion Interrupt C/Universe II (LINT2) */
+    1, /* PCI Expansion Interrupt D/Universe II (LINT3) */
+    0, /* Not used - should be disabled */
+    0, /* Not used - should be disabled */
+    1, /* 16550 UART */
+    0, /* Front panel Abort Switch */
+    1, /* RTC IRQ */
 };
 #elif defined(mot_ppc_mvme5100)
 /* MVME5100 Hawk MPIC source wiring */
 static unsigned char mvme5100_openpic_initpolarities[16] = {
-    1,  /* IRQ0  PIB (8259) - active high */
-    0,  /* IRQ1  TL16C550 UART port 1 & 2 */
-    0,  /* IRQ2  PCI-Ethernet Port 1 (front panel) */
-    0,  /* IRQ3  Hawk WDT1/2 */
-    0,  /* IRQ4  Thermal alarm (DS1621) */
-    0,  /* IRQ5  Universe LINT0 */
-    0,  /* IRQ6  Universe LINT1 */
-    0,  /* IRQ7  Universe LINT2 */
-    0,  /* IRQ8  Universe LINT3 */
-    0,  /* IRQ9  PMC INTA */
-    0,  /* IRQ10 PMC INTB */
-    0,  /* IRQ11 PMC INTC */
-    0,  /* IRQ12 PMC INTD */
-    0,  /* IRQ13 PCI-Ethernet Port 2 */
-    0,  /* IRQ14 ABORT_L */
-    0,  /* IRQ15 RTC alarm */
+    1, /* IRQ0  PIB (8259) - active high */
+    0, /* IRQ1  TL16C550 UART port 1 & 2 */
+    0, /* IRQ2  PCI-Ethernet Port 1 (front panel) */
+    0, /* IRQ3  Hawk WDT1/2 */
+    0, /* IRQ4  Thermal alarm (DS1621) */
+    0, /* IRQ5  Universe LINT0 */
+    0, /* IRQ6  Universe LINT1 */
+    0, /* IRQ7  Universe LINT2 */
+    0, /* IRQ8  Universe LINT3 */
+    0, /* IRQ9  PMC INTA */
+    0, /* IRQ10 PMC INTB */
+    0, /* IRQ11 PMC INTC */
+    0, /* IRQ12 PMC INTD */
+    0, /* IRQ13 PCI-Ethernet Port 2 */
+    0, /* IRQ14 ABORT_L */
+    0, /* IRQ15 RTC alarm */
 };
 
 static unsigned char mvme5100_openpic_initsenses[16] = {
-    1,  /* IRQ0  PIB (8259)                        - level */
-    1,  /* IRQ1  TL16C550 UART port 1 & 2          - level */
-    1,  /* IRQ2  PCI-Ethernet Port 1 (front panel) - level */
-    1,  /* IRQ3  Hawk WDT1/2                        - level */
-    1,  /* IRQ4  Thermal alarm (DS1621)            - level */
-    1,  /* IRQ5  Universe LINT0                     - level */
-    1,  /* IRQ6  Universe LINT1                     - level */
-    1,  /* IRQ7  Universe LINT2                     - level */
-    1,  /* IRQ8  Universe LINT3                     - level */
-    1,  /* IRQ9  PMC INTA                           - level */
-    1,  /* IRQ10 PMC INTB                           - level */
-    1,  /* IRQ11 PMC INTC                           - level */
-    1,  /* IRQ12 PMC INTD                           - level */
-    1,  /* IRQ13 PCI-Ethernet Port 2                - level */
-    1,  /* IRQ14 ABORT_L                            - level */
-    1,  /* IRQ15 RTC alarm                          - level */
+    1, /* IRQ0  PIB (8259)                        - level */
+    1, /* IRQ1  TL16C550 UART port 1 & 2          - level */
+    1, /* IRQ2  PCI-Ethernet Port 1 (front panel) - level */
+    1, /* IRQ3  Hawk WDT1/2                        - level */
+    1, /* IRQ4  Thermal alarm (DS1621)            - level */
+    1, /* IRQ5  Universe LINT0                     - level */
+    1, /* IRQ6  Universe LINT1                     - level */
+    1, /* IRQ7  Universe LINT2                     - level */
+    1, /* IRQ8  Universe LINT3                     - level */
+    1, /* IRQ9  PMC INTA                           - level */
+    1, /* IRQ10 PMC INTB                           - level */
+    1, /* IRQ11 PMC INTC                           - level */
+    1, /* IRQ12 PMC INTD                           - level */
+    1, /* IRQ13 PCI-Ethernet Port 2                - level */
+    1, /* IRQ14 ABORT_L                            - level */
+    1, /* IRQ15 RTC alarm                          - level */
 };
 
 #else
 static unsigned char mcp750_openpic_initpolarities[16] = {
-    1,  /* 8259 cascade */
-    0,	/* all the rest of them */
+    1, /* 8259 cascade */
+    0, /* all the rest of them */
 };
 
 static unsigned char mcp750_openpic_initsenses[] = {
-    1,	/* MCP750_INT_PCB(8259) */
-    0,	/* MCP750_INT_FALCON_ECC_ERR */
-    1,	/* MCP750_INT_PCI_ETHERNET */
-    1,	/* MCP750_INT_PCI_PMC */
-    1,	/* MCP750_INT_PCI_WATCHDOG_TIMER1 */
-    1,	/* MCP750_INT_PCI_PRST_SIGNAL */
-    1,	/* MCP750_INT_PCI_FALL_SIGNAL */
-    1,	/* MCP750_INT_PCI_DEG_SIGNAL */
-    1,	/* MCP750_INT_PCI_BUS1_INTA */
-    1,	/* MCP750_INT_PCI_BUS1_INTB */
-    1,	/* MCP750_INT_PCI_BUS1_INTC */
-    1,	/* MCP750_INT_PCI_BUS1_INTD */
-    1,	/* MCP750_INT_PCI_BUS2_INTA */
-    1,	/* MCP750_INT_PCI_BUS2_INTB */
-    1,	/* MCP750_INT_PCI_BUS2_INTC */
-    1,	/* MCP750_INT_PCI_BUS2_INTD */
+    1, /* MCP750_INT_PCB(8259) */
+    0, /* MCP750_INT_FALCON_ECC_ERR */
+    1, /* MCP750_INT_PCI_ETHERNET */
+    1, /* MCP750_INT_PCI_PMC */
+    1, /* MCP750_INT_PCI_WATCHDOG_TIMER1 */
+    1, /* MCP750_INT_PCI_PRST_SIGNAL */
+    1, /* MCP750_INT_PCI_FALL_SIGNAL */
+    1, /* MCP750_INT_PCI_DEG_SIGNAL */
+    1, /* MCP750_INT_PCI_BUS1_INTA */
+    1, /* MCP750_INT_PCI_BUS1_INTB */
+    1, /* MCP750_INT_PCI_BUS1_INTC */
+    1, /* MCP750_INT_PCI_BUS1_INTD */
+    1, /* MCP750_INT_PCI_BUS2_INTA */
+    1, /* MCP750_INT_PCI_BUS2_INTB */
+    1, /* MCP750_INT_PCI_BUS2_INTC */
+    1, /* MCP750_INT_PCI_BUS2_INTD */
 };
 #endif
 #endif
 
 #if BSP_ISA_IRQ_NUMBER > 0 && !defined(qemu)
-void VIA_isa_bridge_interrupts_setup(void)
-{
+void VIA_isa_bridge_interrupts_setup(void) {
   pci_isa_bridge_device pci_dev;
   uint32_t temp;
   unsigned char tmp;
@@ -223,60 +216,61 @@ void VIA_isa_bridge_interrupts_setup(void)
   unsigned found = 0;
 
   maxBus = pci_bus_count();
-  pci_dev.function 	= 0; /* Assumes the bidge is the first function */
+  pci_dev.function = 0; /* Assumes the bidge is the first function */
 
   for (pci_dev.bus = 0; pci_dev.bus < maxBus; pci_dev.bus++) {
 #ifdef SCAN_PCI_PRINT
     printk("isa_bridge_interrupts_setup: Scanning bus %d\n", pci_dev.bus);
 #endif
-    for (pci_dev.device = 0; pci_dev.device < PCI_MAX_DEVICES; pci_dev.device++) {
+    for (pci_dev.device = 0; pci_dev.device < PCI_MAX_DEVICES;
+         pci_dev.device++) {
 #ifdef SCAN_PCI_PRINT
-      printk("isa_bridge_interrupts_setup: Scanning device %d\n", pci_dev.device);
+      printk("isa_bridge_interrupts_setup: Scanning device %d\n",
+             pci_dev.device);
 #endif
-      pci_read_config_dword(pci_dev.bus, pci_dev.device,  pci_dev.function,
-			       PCI_VENDOR_ID, &temp);
+      pci_read_config_dword(pci_dev.bus, pci_dev.device, pci_dev.function,
+                            PCI_VENDOR_ID, &temp);
 #ifdef SCAN_PCI_PRINT
       printk("Vendor/device = %x\n", temp);
 #endif
-      if ((temp == (((unsigned short) PCI_VENDOR_ID_VIA) | (PCI_DEVICE_ID_VIA_82C586_0 << 16)))
-	 ) {
-	bridge = pci_dev;
-	via_82c586 = &bridge;
+      if ((temp == (((unsigned short)PCI_VENDOR_ID_VIA) |
+                    (PCI_DEVICE_ID_VIA_82C586_0 << 16)))) {
+        bridge = pci_dev;
+        via_82c586 = &bridge;
 #ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS
-	/*
-	 * Should print : bus = 0, device = 11, function = 0 on a MCP750.
-	 */
-	printk("Via PCI/ISA bridge found at bus = %d, device = %d, function = %d\n",
-	       via_82c586->bus,
-	       via_82c586->device,
-	       via_82c586->function);
+        /*
+         * Should print : bus = 0, device = 11, function = 0 on a MCP750.
+         */
+        printk("Via PCI/ISA bridge found at bus = %d, device = %d, function = "
+               "%d\n",
+               via_82c586->bus, via_82c586->device, via_82c586->function);
 #endif
-	found = 1;
-	goto loop_exit;
-
+        found = 1;
+        goto loop_exit;
       }
     }
   }
 loop_exit:
-  if (!found) rtems_panic("VIA_82C586 PCI/ISA bridge not found!n");
+  if (!found)
+    rtems_panic("VIA_82C586 PCI/ISA bridge not found!n");
 
   tmp = inb(0x810);
-  if  ( !(tmp & 0x2)) {
+  if (!(tmp & 0x2)) {
 #ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS
     printk("This is a second generation MCP750 board\n");
     printk("We must reprogram the PCI/ISA bridge...\n");
 #endif
-    pci_read_config_byte(via_82c586->bus, via_82c586->device, via_82c586->function,
-			 0x47,  &tmp);
+    pci_read_config_byte(via_82c586->bus, via_82c586->device,
+                         via_82c586->function, 0x47, &tmp);
 #ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS
-    printk(" PCI ISA bridge control2 = %x\n", (unsigned) tmp);
+    printk(" PCI ISA bridge control2 = %x\n", (unsigned)tmp);
 #endif
     /*
      * Enable 4D0/4D1 ISA interrupt level/edge config registers
      */
     tmp |= 0x20;
-    pci_write_config_byte(via_82c586->bus, via_82c586->device, via_82c586->function,
-			  0x47, tmp);
+    pci_write_config_byte(via_82c586->bus, via_82c586->device,
+                          via_82c586->function, 0x47, tmp);
     /*
      * Now program the ISA interrupt edge/level
      */
@@ -287,46 +281,44 @@ loop_exit:
     /*
      * Set the Interrupt inputs to non-inverting level interrupt
      */
-    pci_read_config_byte(via_82c586->bus, via_82c586->device, via_82c586->function,
-			    0x54, &tmp);
+    pci_read_config_byte(via_82c586->bus, via_82c586->device,
+                         via_82c586->function, 0x54, &tmp);
 #ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS
-    printk(" PCI ISA bridge PCI/IRQ Edge/Level Select = %x\n", (unsigned) tmp);
+    printk(" PCI ISA bridge PCI/IRQ Edge/Level Select = %x\n", (unsigned)tmp);
 #endif
     tmp = 0;
-    pci_write_config_byte(via_82c586->bus, via_82c586->device, via_82c586->function,
-			  0x54, tmp);
-  }
-  else {
+    pci_write_config_byte(via_82c586->bus, via_82c586->device,
+                          via_82c586->function, 0x54, tmp);
+  } else {
 #ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS
     printk("This is a first generation MCP750 board\n");
     printk("We just show the actual value used by PCI/ISA bridge\n");
 #endif
-    pci_read_config_byte(via_82c586->bus, via_82c586->device, via_82c586->function,
-			 0x47,  &tmp);
+    pci_read_config_byte(via_82c586->bus, via_82c586->device,
+                         via_82c586->function, 0x47, &tmp);
 #ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS
-    printk(" PCI ISA bridge control2 = %x\n", (unsigned) tmp);
+    printk(" PCI ISA bridge control2 = %x\n", (unsigned)tmp);
 #endif
     /*
      * Show the Interrupt inputs inverting/non-inverting level status
      */
-    pci_read_config_byte(via_82c586->bus, via_82c586->device, via_82c586->function,
-			 0x54, &tmp);
+    pci_read_config_byte(via_82c586->bus, via_82c586->device,
+                         via_82c586->function, 0x54, &tmp);
 #ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS
-    printk(" PCI ISA bridge PCI/IRQ Edge/Level Select = %x\n", (unsigned) tmp);
+    printk(" PCI ISA bridge PCI/IRQ Edge/Level Select = %x\n", (unsigned)tmp);
 #endif
   }
 }
 #endif
 
-  /*
-   * This code assumes the exceptions management setup has already
-   * been done. We just need to replace the exceptions that will
-   * be handled like interrupt. On mcp750/mpc750 and many PPC processors
-   * this means the decrementer exception and the external exception.
-   */
-void BSP_rtems_irq_mng_init(unsigned cpuId)
-{
-  (void) cpuId;
+/*
+ * This code assumes the exceptions management setup has already
+ * been done. We just need to replace the exceptions that will
+ * be handled like interrupt. On mcp750/mpc750 and many PPC processors
+ * this means the decrementer exception and the external exception.
+ */
+void BSP_rtems_irq_mng_init(unsigned cpuId) {
+  (void)cpuId;
 
 #if BSP_ISA_IRQ_NUMBER > 0 && !defined(mot_ppc_mvme2100)
   int known_cpi_isa_bridge = 0;
@@ -344,45 +336,52 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   /* EPIC sources don't start at the regular place; define appropriate offset
    * prior to initializing the PIC.
    */
-  openpic_init(1, mvme2100_openpic_initpolarities, mvme2100_openpic_initsenses, 16, 16, BSP_bus_frequency);
+  openpic_init(1, mvme2100_openpic_initpolarities, mvme2100_openpic_initsenses,
+               16, 16, BSP_bus_frequency);
 #else
 #if BSP_PCI_IRQ_NUMBER > 0
 #ifdef TRACE_IRQ_INIT
-  printk("Going to initialize raven interrupt controller (openpic compliant)\n");
+  printk(
+      "Going to initialize raven interrupt controller (openpic compliant)\n");
 #endif
 #if defined(mot_ppc_mvme5100)
-  openpic_init(1, mvme5100_openpic_initpolarities, mvme5100_openpic_initsenses, 0, 0, 0);
+  openpic_init(1, mvme5100_openpic_initpolarities, mvme5100_openpic_initsenses,
+               0, 0, 0);
 #else
-  openpic_init(1, mcp750_openpic_initpolarities, mcp750_openpic_initsenses, 0, 0, 0);
+  openpic_init(1, mcp750_openpic_initpolarities, mcp750_openpic_initsenses, 0,
+               0, 0);
 #endif
 #ifdef TRACE_IRQ_INIT
-  printk("Going to initialize the PCI/ISA bridge IRQ related setting (VIA 82C586)\n");
+  printk("Going to initialize the PCI/ISA bridge IRQ related setting (VIA "
+         "82C586)\n");
 #endif
 #endif
 
 #if BSP_ISA_IRQ_NUMBER > 0
-  if ( currentBoard == MESQUITE ) {
+  if (currentBoard == MESQUITE) {
 #ifndef qemu
     VIA_isa_bridge_interrupts_setup();
 #endif
     known_cpi_isa_bridge = 1;
   }
-  if ( currentBoard == MVME_2300 || currentBoard == MVME_2600_2700_W_MVME761 ) {
+  if (currentBoard == MVME_2300 || currentBoard == MVME_2600_2700_W_MVME761) {
     /* nothing to do for W83C553 bridge */
     known_cpi_isa_bridge = 1;
   }
-  if ( currentBoard == MTX_WO_PP || currentBoard == MTX_W_PP ) {
-     /* W83C554, don't to anything at the moment.  gregm 11/6/2002 */
-     known_cpi_isa_bridge = 1;
+  if (currentBoard == MTX_WO_PP || currentBoard == MTX_W_PP) {
+    /* W83C554, don't to anything at the moment.  gregm 11/6/2002 */
+    known_cpi_isa_bridge = 1;
   }
-  if ( currentBoard == MVME_5100 ) {
-     /* Don't need to do anything for MVME5100 */
-     known_cpi_isa_bridge = 1;
+  if (currentBoard == MVME_5100) {
+    /* Don't need to do anything for MVME5100 */
+    known_cpi_isa_bridge = 1;
   }
 
   if (!known_cpi_isa_bridge) {
-    printk("Please add code for PCI/ISA bridge init to bsps/powerpc/shared/irq/irq_init.c\n");
-    printk("If your card works correctly please add a test and set known_cpi_isa_bridge to true\n");
+    printk("Please add code for PCI/ISA bridge init to "
+           "bsps/powerpc/shared/irq/irq_init.c\n");
+    printk("If your card works correctly please add a test and set "
+           "known_cpi_isa_bridge to true\n");
     printk("currentBoard = %i\n", currentBoard);
   }
 #ifdef TRACE_IRQ_INIT
@@ -396,42 +395,43 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   /*
    * Initialize RTEMS management interrupt table
    */
-    /*
-     * re-init the rtemsIrq table
-     */
-    for (i = 0; i < BSP_IRQ_NUMBER; i++) {
-      rtemsIrq[i]      = defaultIrq;
-      rtemsIrq[i].name = i;
-    }
-    /*
-     * Init initial Interrupt management config
-     */
-    initial_config.irqNb 	= BSP_IRQ_NUMBER;
-    initial_config.defaultEntry = defaultIrq;
-    initial_config.irqHdlTbl	= rtemsIrq;
-    initial_config.irqBase	= BSP_LOWEST_OFFSET;
-    initial_config.irqPrioTbl	= irqPrioTable;
+  /*
+   * re-init the rtemsIrq table
+   */
+  for (i = 0; i < BSP_IRQ_NUMBER; i++) {
+    rtemsIrq[i] = defaultIrq;
+    rtemsIrq[i].name = i;
+  }
+  /*
+   * Init initial Interrupt management config
+   */
+  initial_config.irqNb = BSP_IRQ_NUMBER;
+  initial_config.defaultEntry = defaultIrq;
+  initial_config.irqHdlTbl = rtemsIrq;
+  initial_config.irqBase = BSP_LOWEST_OFFSET;
+  initial_config.irqPrioTbl = irqPrioTable;
 
 #ifdef BSP_POWERPC_IRQ_GENERIC_SUPPORT
 #ifdef TRACE_IRQ_INIT
-    printk("RTEMS IRQ management: irq-generic\n");
+  printk("RTEMS IRQ management: irq-generic\n");
 #endif
-    r = BSP_rtems_irq_generic_set(&initial_config);
+  r = BSP_rtems_irq_generic_set(&initial_config);
 #else
 #ifdef TRACE_IRQ_INIT
-    printk("RTEMS IRQ management: legacy\n");
+  printk("RTEMS IRQ management: legacy\n");
 #endif
-    r = BSP_rtems_irq_mngt_set(&initial_config);
+  r = BSP_rtems_irq_mngt_set(&initial_config);
 #endif
 
-    if (!r) {
-      /*
-       * put something here that will show the failure...
-       */
-      rtems_panic("Unable to initialize RTEMS interrupt Management!!! System locked\n");
-    }
+  if (!r) {
+    /*
+     * put something here that will show the failure...
+     */
+    rtems_panic(
+        "Unable to initialize RTEMS interrupt Management!!! System locked\n");
+  }
 
 #ifdef TRACE_IRQ_INIT
-    printk("RTEMS IRQ management is now operational\n");
+  printk("RTEMS IRQ management is now operational\n");
 #endif
 }

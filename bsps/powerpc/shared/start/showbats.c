@@ -38,28 +38,22 @@
 #include <libcpu/spr.h>
 #include <libcpu/powerpc-utility.h>
 
-
-void printBAT( int bat, uint32_t upper, uint32_t lower )
-{
+void printBAT(int bat, uint32_t upper, uint32_t lower) {
   uint32_t lowest_addr;
   uint32_t size;
 
-  printk("BAT%d raw(upper=0x%08" PRIx32 ", lower=0x%08" PRIx32 ") ", bat, upper, lower );
+  printk("BAT%d raw(upper=0x%08" PRIx32 ", lower=0x%08" PRIx32 ") ", bat, upper,
+         lower);
 
   lowest_addr = (upper & 0xFFFE0000);
   size = (((upper & 0x00001FFC) >> 2) + 1) * (128 * 1024);
   printk(" range(0x%08" PRIx32 ", 0x%08" PRIx32 ") %s%s %s%s%s%s %s\n",
-    lowest_addr,
-    lowest_addr + (size - 1),
-    (upper & 0x01) ? "P" : "p",
-    (upper & 0x02) ? "S" : "s",
-    (lower & 0x08) ? "G" : "g",
-    (lower & 0x10) ? "M" : "m",
-    (lower & 0x20) ? "I" : "i",
-    (lower & 0x40) ? "W" : "w",
-    (lower & 0x01) ? "Read Only" :
-      ((lower & 0x02) ? "Read/Write" : "No Access")
-  );
+         lowest_addr, lowest_addr + (size - 1), (upper & 0x01) ? "P" : "p",
+         (upper & 0x02) ? "S" : "s", (lower & 0x08) ? "G" : "g",
+         (lower & 0x10) ? "M" : "m", (lower & 0x20) ? "I" : "i",
+         (lower & 0x40) ? "W" : "w",
+         (lower & 0x01) ? "Read Only"
+                        : ((lower & 0x02) ? "Read/Write" : "No Access"));
 }
 
 SPR_RO(DBAT0U);
@@ -79,15 +73,15 @@ SPR_RO(DBAT6L);
 SPR_RO(DBAT7U);
 SPR_RO(DBAT7L);
 
-void ShowBATS(void){
-  printBAT( 0, _read_DBAT0U(), _read_DBAT0L() );
-  printBAT( 1, _read_DBAT1U(), _read_DBAT1L() );
-  printBAT( 2, _read_DBAT2U(), _read_DBAT2L() );
-  printBAT( 3, _read_DBAT3U(), _read_DBAT3L() );
-  if ( ppc_cpu_has_8_bats() ) {
-    printBAT( 4, _read_DBAT4U(), _read_DBAT4L() );
-    printBAT( 5, _read_DBAT5U(), _read_DBAT5L() );
-    printBAT( 6, _read_DBAT6U(), _read_DBAT6L() );
-    printBAT( 7, _read_DBAT7U(), _read_DBAT6L() );
+void ShowBATS(void) {
+  printBAT(0, _read_DBAT0U(), _read_DBAT0L());
+  printBAT(1, _read_DBAT1U(), _read_DBAT1L());
+  printBAT(2, _read_DBAT2U(), _read_DBAT2L());
+  printBAT(3, _read_DBAT3U(), _read_DBAT3L());
+  if (ppc_cpu_has_8_bats()) {
+    printBAT(4, _read_DBAT4U(), _read_DBAT4L());
+    printBAT(5, _read_DBAT5U(), _read_DBAT5L());
+    printBAT(6, _read_DBAT6U(), _read_DBAT6L());
+    printBAT(7, _read_DBAT7U(), _read_DBAT6L());
   }
 }

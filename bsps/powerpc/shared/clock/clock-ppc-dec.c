@@ -40,52 +40,50 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <rtems/clockdrv.h>
-#include <stdlib.h>                     /* for atexit() */
+#include <stdlib.h> /* for atexit() */
 #include <assert.h>
 #include <libcpu/c_clock.h>
 #include <libcpu/cpuIdent.h>
 #include <libcpu/spr.h>
-#include <rtems/bspIo.h>                /* for printk() */
+#include <rtems/bspIo.h> /* for printk() */
 #include <libcpu/powerpc-utility.h>
 #include <rtems/timecounter.h>
 #include <rtems/score/percpu.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/watchdogimpl.h>
 
-#include <bspopts.h>   /* for CLOCK_DRIVER_USE_FAST_IDLE */
+#include <bspopts.h> /* for CLOCK_DRIVER_USE_FAST_IDLE */
 
 SPR_RW(BOOKE_TCR)
 SPR_RW(BOOKE_TSR)
 SPR_RW(BOOKE_DECAR)
 
-extern int BSP_connect_clock_handler (void);
+extern int BSP_connect_clock_handler(void);
 
 /*
  *  Clock ticks since initialization
  */
-volatile uint32_t   Clock_driver_ticks;
+volatile uint32_t Clock_driver_ticks;
 
 /*
  *  This is the value programmed into the count down timer.
  */
-static uint32_t   Clock_Decrementer_value;
+static uint32_t Clock_Decrementer_value;
 
 static struct timecounter Clock_TC;
 
-static uint32_t Clock_Get_timecount(struct timecounter *tc)
-{
-  (void) tc;
+static uint32_t Clock_Get_timecount(struct timecounter *tc) {
+  (void)tc;
 
   return ppc_time_base();
 }
 
-void clockOff(void* unused)
-{
-  (void) unused;
+void clockOff(void *unused) {
+  (void)unused;
 
   rtems_interrupt_level l;
 
-  if ( ppc_cpu_is_bookE() ) {
+  if (ppc_cpu_is_bookE()) {
     rtems_interrupt_disable(l);
     _write_BOOKE_TCR(_read_BOOKE_TCR() & ~BOOKE_TCR_DIE);
     rtems_interrupt_enable(l);
@@ -97,32 +95,29 @@ void clockOff(void* unused)
   }
 }
 
-void clockOn(void* unused)
-{
-  (void) unused;
+void clockOn(void *unused) {
+  (void)unused;
 
   rtems_interrupt_level l;
 
-  PPC_Set_decrementer( Clock_Decrementer_value );
+  PPC_Set_decrementer(Clock_Decrementer_value);
 
-  if ( ppc_cpu_is_bookE() ) {
-    _write_BOOKE_DECAR( Clock_Decrementer_value );
+  if (ppc_cpu_is_bookE()) {
+    _write_BOOKE_DECAR(Clock_Decrementer_value);
 
     rtems_interrupt_disable(l);
 
     /* clear pending/stale irq */
-    _write_BOOKE_TSR( BOOKE_TSR_DIS );
+    _write_BOOKE_TSR(BOOKE_TSR_DIS);
     /* enable */
-    _write_BOOKE_TCR( _read_BOOKE_TCR() | BOOKE_TCR_DIE );
+    _write_BOOKE_TCR(_read_BOOKE_TCR() | BOOKE_TCR_DIE);
 
     rtems_interrupt_enable(l);
-
   }
 }
 
 #if (CLOCK_DRIVER_USE_FAST_IDLE == 1)
-static bool clock_has_watchdogs(const Per_CPU_Control *cpu)
-{
+static bool clock_has_watchdogs(const Per_CPU_Control *cpu) {
   size_t i;
 
   for (i = 0; i < RTEMS_ARRAY_SIZE(cpu->Watchdog.Header); ++i) {
@@ -135,34 +130,30 @@ static bool clock_has_watchdogs(const Per_CPU_Control *cpu)
 }
 #endif
 
-static void clockHandler(void)
-{
-  #if (CLOCK_DRIVER_USE_FAST_IDLE == 1)
-    rtems_interrupt_level  level;
-    uint32_t               tb;
-    Per_CPU_Control       *cpu_self;
+static void clockHandler(void) {
+#if (CLOCK_DRIVER_USE_FAST_IDLE == 1)
+  rtems_interrupt_level level;
+  uint32_t tb;
+  Per_CPU_Control *cpu_self;
 
-    rtems_interrupt_disable(level);
+  rtems_interrupt_disable(level);
 
-    tb = ppc_time_base();
+  tb = ppc_time_base();
+  rtems_timecounter_tick();
+  cpu_self = _Per_CPU_Get();
+
+  while (cpu_self->thread_dispatch_disable_level == cpu_self->isr_nest_level &&
+         cpu_self->heir == cpu_self->executing &&
+         cpu_self->executing->is_idle && clock_has_watchdogs(cpu_self)) {
+    tb += Clock_Decrementer_value;
+    ppc_set_time_base(tb);
     rtems_timecounter_tick();
-    cpu_self = _Per_CPU_Get();
+  }
 
-    while (
-      cpu_self->thread_dispatch_disable_level == cpu_self->isr_nest_level
-        && cpu_self->heir == cpu_self->executing
-        && cpu_self->executing->is_idle
-        && clock_has_watchdogs(cpu_self)
-    ) {
-      tb += Clock_Decrementer_value;
-      ppc_set_time_base( tb );
-      rtems_timecounter_tick();
-    }
-
-    rtems_interrupt_enable(level);
-  #else
-    rtems_timecounter_tick();
-  #endif
+  rtems_interrupt_enable(level);
+#else
+  rtems_timecounter_tick();
+#endif
 }
 
 static void (*clock_handler)(void);
@@ -180,9 +171,8 @@ static void (*clock_handler)(void);
  *  Return values:      NONE
  *
  */
-void clockIsr(void *unused)
-{
-  (void) unused;
+void clockIsr(void *unused) {
+  (void)unused;
 
   int decr;
 
@@ -193,11 +183,9 @@ void clockIsr(void *unused)
     register uint32_t flags;
 
     rtems_interrupt_disable(flags);
-      __asm__ volatile (
-	"mfdec %0; add %0, %0, %1; mtdec %0"
-	: "=&r"(decr)
-	: "r"(Clock_Decrementer_value)
-      );
+    __asm__ volatile("mfdec %0; add %0, %0, %1; mtdec %0"
+                     : "=&r"(decr)
+                     : "r"(Clock_Decrementer_value));
     rtems_interrupt_enable(flags);
 
     Clock_driver_ticks += 1;
@@ -205,7 +193,7 @@ void clockIsr(void *unused)
      *  Real Time Clock counter/timer is set to automatically reload.
      */
     clock_handler();
-  } while ( decr < 0 );
+  } while (decr < 0);
 }
 
 /*
@@ -216,9 +204,8 @@ void clockIsr(void *unused)
  *  provide a separate handler rather than
  *  checking the CPU type each time.
  */
-void clockIsrBookE(void *unused)
-{
-  (void) unused;
+void clockIsrBookE(void *unused) {
+  (void)unused;
 
   /* Note: TSR bit has already been cleared in the exception handler */
 
@@ -234,52 +221,52 @@ void clockIsrBookE(void *unused)
   clock_handler();
 }
 
-int clockIsOn(void* unused)
-{
-  (void) unused;
+int clockIsOn(void *unused) {
+  (void)unused;
 
-  uint32_t   msr_value;
+  uint32_t msr_value;
 
-  _CPU_MSR_GET( msr_value );
+  _CPU_MSR_GET(msr_value);
 
-  if ( ppc_cpu_is_bookE() && ! (_read_BOOKE_TCR() & BOOKE_TCR_DIE) )
+  if (ppc_cpu_is_bookE() && !(_read_BOOKE_TCR() & BOOKE_TCR_DIE))
     msr_value = 0;
 
-  if (msr_value & MSR_EE) return 1;
+  if (msr_value & MSR_EE)
+    return 1;
 
   return 0;
 }
 
-void _Clock_Initialize( void )
-{
-  rtems_interrupt_level l,tcr;
+void _Clock_Initialize(void) {
+  rtems_interrupt_level l, tcr;
 
-  Clock_Decrementer_value = (BSP_bus_frequency/BSP_time_base_divisor)*
-            rtems_configuration_get_milliseconds_per_tick();
+  Clock_Decrementer_value = (BSP_bus_frequency / BSP_time_base_divisor) *
+                            rtems_configuration_get_milliseconds_per_tick();
 
   /* set the decrementer now, prior to installing the handler
    * so no interrupts will happen in a while.
    */
-  PPC_Set_decrementer( (unsigned)-1 );
+  PPC_Set_decrementer((unsigned)-1);
 
   /* On a bookE CPU the decrementer works differently. It doesn't
    * count past zero but we can enable auto-reload :-)
    */
-  if ( ppc_cpu_is_bookE() ) {
+  if (ppc_cpu_is_bookE()) {
 
     rtems_interrupt_disable(l);
 
-      tcr  = _read_BOOKE_TCR();
-      tcr |= BOOKE_TCR_ARE;
-      tcr &= ~BOOKE_TCR_DIE;
-      _write_BOOKE_TCR(tcr);
+    tcr = _read_BOOKE_TCR();
+    tcr |= BOOKE_TCR_ARE;
+    tcr &= ~BOOKE_TCR_DIE;
+    _write_BOOKE_TCR(tcr);
 
     rtems_interrupt_enable(l);
   }
 
   Clock_TC.tc_get_timecount = Clock_Get_timecount;
   Clock_TC.tc_counter_mask = 0xffffffff;
-  Clock_TC.tc_frequency = (UINT64_C(1000) * BSP_bus_frequency) / BSP_time_base_divisor;
+  Clock_TC.tc_frequency =
+      (UINT64_C(1000) * BSP_bus_frequency) / BSP_time_base_divisor;
   Clock_TC.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
   rtems_timecounter_install(&Clock_TC);
 
@@ -291,7 +278,7 @@ void _Clock_Initialize( void )
    * the correct value.
    */
   clock_handler = clockHandler;
-  if (!BSP_connect_clock_handler ()) {
+  if (!BSP_connect_clock_handler()) {
     printk("Unable to initialize system clock\n");
     rtems_fatal_error_occurred(1);
   }

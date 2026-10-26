@@ -57,13 +57,13 @@ struct ppcbug_nvram {
 
 typedef struct ppcbug_nvram ppcbug_nvram_data;
 
-static int indirect_get(uintptr_t nvram_base, ppcbug_nvram_data* data) {
-  volatile uint8_t* iaddr_l = (volatile uint8_t*)nvram_base;
-  volatile uint8_t* iaddr_h = (volatile uint8_t*)nvram_base + 1;
-  volatile uint8_t* idata = (volatile uint8_t*)nvram_base + 3;
+static int indirect_get(uintptr_t nvram_base, ppcbug_nvram_data *data) {
+  volatile uint8_t *iaddr_l = (volatile uint8_t *)nvram_base;
+  volatile uint8_t *iaddr_h = (volatile uint8_t *)nvram_base + 1;
+  volatile uint8_t *idata = (volatile uint8_t *)nvram_base + 3;
   int offset = 0x1000;
-  uint8_t* dst = (uint8_t*)data;
-  const uint8_t* end = dst + sizeof(ppcbug_nvram_data);
+  uint8_t *dst = (uint8_t *)data;
+  const uint8_t *end = dst + sizeof(ppcbug_nvram_data);
   while (dst < end) {
     *iaddr_l = offset & 0xff;
     *iaddr_h = (offset >> 8) & 0xff;
@@ -73,10 +73,10 @@ static int indirect_get(uintptr_t nvram_base, ppcbug_nvram_data* data) {
   return 0;
 }
 
-static int direct_get(uintptr_t nvram_base, ppcbug_nvram_data* data) {
-  volatile uint8_t* src = (volatile uint8_t*)nvram_base;
-  uint8_t* dst = (uint8_t*)data;
-  const uint8_t* end = dst + sizeof(ppcbug_nvram_data);
+static int direct_get(uintptr_t nvram_base, ppcbug_nvram_data *data) {
+  volatile uint8_t *src = (volatile uint8_t *)nvram_base;
+  uint8_t *dst = (uint8_t *)data;
+  const uint8_t *end = dst + sizeof(ppcbug_nvram_data);
   while (dst < end) {
     *dst++ = *src++;
   }
@@ -84,14 +84,14 @@ static int direct_get(uintptr_t nvram_base, ppcbug_nvram_data* data) {
 }
 
 static int nvram_get(uintptr_t nvram_base, bool indirect,
-                     ppcbug_nvram_data* data) {
+                     ppcbug_nvram_data *data) {
   if (indirect) {
     return indirect_get(nvram_base, data);
   }
   return direct_get(nvram_base, data);
 }
 
-static int ip_str(char* buf, const size_t buf_len, uint32_t addr) {
+static int ip_str(char *buf, const size_t buf_len, uint32_t addr) {
   if (addr == 0) {
     return -1;
   }
@@ -101,14 +101,14 @@ static int ip_str(char* buf, const size_t buf_len, uint32_t addr) {
   return 0;
 }
 
-static void populate_env(const size_t unit, const char* env_name,
-                         const char* var) {
+static void populate_env(const size_t unit, const char *env_name,
+                         const char *var) {
   char name[128];
   snprintf(name, sizeof(name), env_name, unit);
   setenv(name, &var[0], 1);
 }
 
-static void ip_env(const size_t unit, const char* env_name,
+static void ip_env(const size_t unit, const char *env_name,
                    const uint32_t addr) {
   char ip[16];
   int r = ip_str(ip, sizeof(ip), addr);
@@ -118,7 +118,7 @@ static void ip_env(const size_t unit, const char* env_name,
 }
 
 void ppcbug_nvram_set_net_envs(uintptr_t nvram_base, bool indirect,
-                               const size_t unit, const char* label) {
+                               const size_t unit, const char *label) {
   ppcbug_nvram_data nvram;
   int r;
   if (unit < 1) {

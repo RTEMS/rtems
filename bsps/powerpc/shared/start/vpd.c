@@ -65,183 +65,170 @@ field = type, length, { data }
  * VPD.
  */
 #include <rtems/libi2c.h>
-#define dev			BSP_I2C_BUS_DESCRIPTOR
+#define dev BSP_I2C_BUS_DESCRIPTOR
 extern rtems_libi2c_bus_t *dev;
 
-#define init		dev->ops->init
-#define start		dev->ops->send_start
-#define addr		dev->ops->send_addr
-#define write_bytes	dev->ops->write_bytes
+#define init dev->ops->init
+#define start dev->ops->send_start
+#define addr dev->ops->send_addr
+#define write_bytes dev->ops->write_bytes
 
-#define I2C_READ		1
-#define I2C_WRITE		0
+#define I2C_READ 1
+#define I2C_WRITE 0
 
 #ifndef BSP_VPD_I2C_ADDR_BYTES
-#define BSP_VPD_I2C_ADDR_BYTES	2
+#define BSP_VPD_I2C_ADDR_BYTES 2
 #endif
 
-static ssize_t	(*read_bytes)(int fd, void *buf, size_t len) = 0;
+static ssize_t (*read_bytes)(int fd, void *buf, size_t len) = 0;
 
 static ssize_t early_fp = 0;
 
-static ssize_t early_read(int fd, void *buf, size_t len)
-{
-ssize_t rval;
-rtems_libi2c_bus_t *d = (rtems_libi2c_bus_t*)fd;
-uint8_t            fp[2];
+static ssize_t early_read(int fd, void *buf, size_t len) {
+  ssize_t rval;
+  rtems_libi2c_bus_t *d = (rtems_libi2c_bus_t *)fd;
+  uint8_t fp[2];
 
-	/* Always send the file-pointer. Some i2c controllers
-	 * (mpc8540) have 'pipelined' operation and do extra
-	 * read cycles so that a sequence of
-	 * 'read_bytes', 'read_bytes' does NOT return the true
-	 * sequence of bytes :-(
-	 */
-	start(d);
-	addr(d, BSP_VPD_I2C_ADDR, I2C_WRITE);
+  /* Always send the file-pointer. Some i2c controllers
+   * (mpc8540) have 'pipelined' operation and do extra
+   * read cycles so that a sequence of
+   * 'read_bytes', 'read_bytes' does NOT return the true
+   * sequence of bytes :-(
+   */
+  start(d);
+  addr(d, BSP_VPD_I2C_ADDR, I2C_WRITE);
 #if BSP_VPD_I2C_ADDR_BYTES > 1
-	fp[0] = early_fp>>8;
-	fp[1] = early_fp;
+  fp[0] = early_fp >> 8;
+  fp[1] = early_fp;
 #else
-	fp[0] = early_fp;
+  fp[0] = early_fp;
 #endif
-	write_bytes(dev,fp,BSP_VPD_I2C_ADDR_BYTES);
+  write_bytes(dev, fp, BSP_VPD_I2C_ADDR_BYTES);
 
-	start(d);
-	addr(d, BSP_VPD_I2C_ADDR, I2C_READ);
-	rval = d->ops->read_bytes(d, buf, len);
-	if ( rval > 0 )
-		early_fp += rval;
-	return rval;
+  start(d);
+  addr(d, BSP_VPD_I2C_ADDR, I2C_READ);
+  rval = d->ops->read_bytes(d, buf, len);
+  if (rval > 0)
+    early_fp += rval;
+  return rval;
 }
 
-static int early_close(int fd)
-{
-rtems_libi2c_bus_t *d = (rtems_libi2c_bus_t*)fd;
-	return d->ops->send_stop(d);
+static int early_close(int fd) {
+  rtems_libi2c_bus_t *d = (rtems_libi2c_bus_t *)fd;
+  return d->ops->send_stop(d);
 }
 
-static int read_buf(int fd, void *buf, size_t len)
-{
-int got, rval = 0;
-	while ( len > 0 ) {
-		if ( (got = read_bytes(fd, buf+rval, len)) <= 0 )
-			return -1;
-		len -= got;
-		rval+= got;
-	}
-	return rval;
+static int read_buf(int fd, void *buf, size_t len) {
+  int got, rval = 0;
+  while (len > 0) {
+    if ((got = read_bytes(fd, buf + rval, len)) <= 0)
+      return -1;
+    len -= got;
+    rval += got;
+  }
+  return rval;
 }
 
 /* Not Efficient but simple */
-int
-BSP_vpdRetrieveFields(VpdBuf data)
-{
-VpdBuf	      b, b1;
-VpdKey	      k;
-size_t        l;
-int		        fd = -1, put, got;
-int           rval = -1;
-unsigned char mot[9];
-static int	  (*stop)(int fd);
+int BSP_vpdRetrieveFields(VpdBuf data) {
+  VpdBuf b, b1;
+  VpdKey k;
+  size_t l;
+  int fd = -1, put, got;
+  int rval = -1;
+  unsigned char mot[9];
+  static int (*stop)(int fd);
 
-	memset(mot,0,sizeof(mot));
+  memset(mot, 0, sizeof(mot));
 
-	if ( 0 && _System_state_Is_up(_System_state_Get()) ) {
-		read_bytes = read;
-		stop       = close;
-		fd         = open(BSP_I2C_VPD_EEPROM_DEV_NAME, 0);
-		if ( fd < 0 )
-			return -1;
-	} else {
-		fd = (int)dev;
-/*
-		init(dev);
- *
- *	 Hangs - probably would need a delay here - just leave motload settings
- */
+  if (0 && _System_state_Is_up(_System_state_Get())) {
+    read_bytes = read;
+    stop = close;
+    fd = open(BSP_I2C_VPD_EEPROM_DEV_NAME, 0);
+    if (fd < 0)
+      return -1;
+  } else {
+    fd = (int)dev;
+    /*
+                    init(dev);
+     *
+     *	 Hangs - probably would need a delay here - just leave motload settings
+     */
 
-		read_bytes = early_read;
-		stop       = early_close;
-	}
+    read_bytes = early_read;
+    stop = early_close;
+  }
 
-	if ( read_bytes(fd, mot, 8) < 8 ) {
-		goto bail;
-	}
+  if (read_bytes(fd, mot, 8) < 8) {
+    goto bail;
+  }
 
-	if ( strcmp((char*)mot,"MOTOROLA") )
-		goto bail;
+  if (strcmp((char *)mot, "MOTOROLA"))
+    goto bail;
 
-	l = 0;
-	do {
+  l = 0;
+  do {
 
-		/* skip field -- this is not done the first time since l=0 */
-		while ( l > sizeof(mot) ) {
-			got = read_buf(fd, mot, sizeof(mot));
-			if ( got < 1 )
-				goto bail;
-			l -= got;
-		}
-		if ( read_buf(fd, mot, l) < 0 )
-			goto bail;
+    /* skip field -- this is not done the first time since l=0 */
+    while (l > sizeof(mot)) {
+      got = read_buf(fd, mot, sizeof(mot));
+      if (got < 1)
+        goto bail;
+      l -= got;
+    }
+    if (read_buf(fd, mot, l) < 0)
+      goto bail;
 
-		/* now get a new header */
-		if ( read_buf(fd, mot, 2) < 2 )
-			goto bail;
+    /* now get a new header */
+    if (read_buf(fd, mot, 2) < 2)
+      goto bail;
 
-		k = mot[0];
-		l = mot[1];
+    k = mot[0];
+    l = mot[1];
 
-		for ( b = data; b->key != End; b++ ) {
-			if ( b->key == k && (signed char)b->instance >= 0 ) {
-				if ( 0 == b->instance--  ) {
-					/* found 'instance' of field 'type' */
+    for (b = data; b->key != End; b++) {
+      if (b->key == k && (signed char)b->instance >= 0) {
+        if (0 == b->instance--) {
+          /* found 'instance' of field 'type' */
 
-					/* limit to buffer size */
-					put = (size_t)b->buflen > l ? l : (size_t)b->buflen;
-					if ( read_buf(fd, b->buf, put) < put )
-						goto bail;
+          /* limit to buffer size */
+          put = (size_t)b->buflen > l ? l : (size_t)b->buflen;
+          if (read_buf(fd, b->buf, put) < put)
+            goto bail;
 
-					/* if this instance is multiply requested, copy the data */
-					for ( b1 = b + 1; b1->key != End; b1++ ) {
-						if ( b1->key == k && 0 == b1->instance ) {
-							b1->instance--;
-							/* we dont' handle the case where
-							 * the first buffer couldn't hold the entire
-							 * item but this one could...
-							 */
-							memcpy(b1->buf, b->buf, put);
-							b1->found = mot[1];
-						}
-					}
+          /* if this instance is multiply requested, copy the data */
+          for (b1 = b + 1; b1->key != End; b1++) {
+            if (b1->key == k && 0 == b1->instance) {
+              b1->instance--;
+              /* we dont' handle the case where
+               * the first buffer couldn't hold the entire
+               * item but this one could...
+               */
+              memcpy(b1->buf, b->buf, put);
+              b1->found = mot[1];
+            }
+          }
 
-					l -= put;
-					b->found = mot[1];
-				}
-			}
-		}
+          l -= put;
+          b->found = mot[1];
+        }
+      }
+    }
 
-	} while ( k != End );
+  } while (k != End);
 
-	rval = 0;
+  rval = 0;
 
 bail:
 
-	stop(fd);
-	return rval;
+  stop(fd);
+  return rval;
 }
 
-int
-BSP_vpdRetrieveKey(VpdKey k, void *buf, int len, int inst)
-{
-	VpdBufRec	d[] = {
-		{ .key = k,
-		  .buf = buf,
-		  .buflen = len,
-		  .instance = inst
-		},
-		VPD_END
-	};
-	return  BSP_vpdRetrieveFields(d) ? -1 : d[0].found;
+int BSP_vpdRetrieveKey(VpdKey k, void *buf, int len, int inst) {
+  VpdBufRec d[] = {{.key = k, .buf = buf, .buflen = len, .instance = inst},
+                   VPD_END};
+  return BSP_vpdRetrieveFields(d) ? -1 : d[0].found;
 }
 
 /*
@@ -330,6 +317,6 @@ Ethernet Address                   : 00 01 AF 16 E5 C5 00
 Ethernet Address                   : 00 01 AF 16 E5 C6 01
 Ethernet Address                   : 00 01 AF 16 E5 C7 02
 Flash Memory Configuration         : 00 01 7E 23 10 02 02 10
-								   : 10 00 64 09
+                                                                   : 10 00 64 09
 
 */

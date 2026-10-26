@@ -24,7 +24,7 @@
  *      software without specific, written prior permission.
  *      i-cubed limited makes no representations about the suitability
  *      of this software for any purpose.
-*/
+ */
 
 /*
  * Copyright (C) 1997 IMD Ingenieurbuero fuer Microcomputertechnik
@@ -55,7 +55,7 @@
 #include <rtems.h>
 #include <rtems/clockdrv.h>
 #include <rtems/libio.h>
-#include <stdlib.h>                     /* for atexit() */
+#include <stdlib.h> /* for atexit() */
 #include <rtems/bspIo.h>
 #include <rtems/powerpc/powerpc.h>
 
@@ -68,23 +68,22 @@
 #include <bsp/vectors.h>
 #include <bsp/irq.h>
 
-extern uint32_t   bsp_clicks_per_usec;
+extern uint32_t bsp_clicks_per_usec;
 
 volatile uint32_t Clock_driver_ticks;
-static uint32_t   pit_value, tick_time;
-static bool       auto_restart;
+static uint32_t pit_value, tick_time;
+static bool auto_restart;
 
-static void Clock_exit( void );
+static void Clock_exit(void);
 
-static inline uint32_t get_itimer(void)
-{
+static inline uint32_t get_itimer(void) {
   register uint32_t rc;
 
-#ifndef ppc405 /* this is a ppc403 */
-  __asm__ volatile ("mfspr %0, 0x3dd" : "=r" ((rc))); /* TBLO */
-#else /* ppc405 */
-  __asm__ volatile ("mfspr %0, 0x10c" : "=r" ((rc))); /* 405GP TBL */
-#endif /* ppc405 */
+#ifndef ppc405                                      /* this is a ppc403 */
+  __asm__ volatile("mfspr %0, 0x3dd" : "=r"((rc))); /* TBLO */
+#else                                               /* ppc405 */
+  __asm__ volatile("mfspr %0, 0x10c" : "=r"((rc))); /* 405GP TBL */
+#endif                                              /* ppc405 */
 
   return rc;
 }
@@ -92,9 +91,8 @@ static inline uint32_t get_itimer(void)
 /*
  *  ISR Handler
  */
-static void Clock_isr(void* handle)
-{
-  (void) handle;
+static void Clock_isr(void *handle) {
+  (void)handle;
 
   uint32_t clicks_til_next_interrupt;
 #if defined(BSP_PPC403_CLOCK_ISR_IRQ_LEVEL)
@@ -139,11 +137,11 @@ static void Clock_isr(void* handle)
       /* XXX: count these! this should never happen :-) */
     }
 
-    __asm__ volatile ("mtspr 0x3db, %0" :: "r"
-                      (clicks_til_next_interrupt));                  /* PIT */
+    __asm__ volatile(
+        "mtspr 0x3db, %0" ::"r"(clicks_til_next_interrupt)); /* PIT */
   }
 
-  __asm__ volatile ("mtspr 0x3d8, %0" :: "r" (0x08000000));          /* TSR */
+  __asm__ volatile("mtspr 0x3d8, %0" ::"r"(0x08000000)); /* TSR */
 
   Clock_driver_ticks++;
 
@@ -158,76 +156,69 @@ static void Clock_isr(void* handle)
 #endif
 }
 
-static int ClockIsOn(const rtems_irq_connect_data* unused)
-{
-  (void) unused;
+static int ClockIsOn(const rtems_irq_connect_data *unused) {
+  (void)unused;
 
   register uint32_t tcr;
 
-  __asm__ volatile ("mfspr %0, 0x3da" : "=r" ((tcr)));               /* TCR */
+  __asm__ volatile("mfspr %0, 0x3da" : "=r"((tcr))); /* TCR */
 
   return (tcr & 0x04000000) != 0;
 }
 
-static void ClockOff(const rtems_irq_connect_data* unused)
-{
-  (void) unused;
+static void ClockOff(const rtems_irq_connect_data *unused) {
+  (void)unused;
 
   register uint32_t tcr;
 
-  __asm__ volatile ("mfspr %0, 0x3da" : "=r" ((tcr)));               /* TCR */
-  tcr &= ~ 0x04400000;
-  __asm__ volatile ("mtspr 0x3da, %0" : "=r" ((tcr)) : "0" ((tcr))); /* TCR */
+  __asm__ volatile("mfspr %0, 0x3da" : "=r"((tcr))); /* TCR */
+  tcr &= ~0x04400000;
+  __asm__ volatile("mtspr 0x3da, %0" : "=r"((tcr)) : "0"((tcr))); /* TCR */
 }
 
-static void ClockOn(const rtems_irq_connect_data* unused)
-{
-  (void) unused;
+static void ClockOn(const rtems_irq_connect_data *unused) {
+  (void)unused;
 
-  uint32_t          iocr;
+  uint32_t iocr;
   register uint32_t tcr;
 #ifndef ppc405
-  uint32_t          pvr;
+  uint32_t pvr;
 #endif /* ppc403 */
 
   Clock_driver_ticks = 0;
 
-#ifndef ppc405 /* this is a ppc403 */
-  __asm__ volatile ("mfdcr %0, 0xa0" : "=r" (iocr));              /* IOCR */
-  iocr &= ~4;                         /* timer clocked from system clock */
-  __asm__ volatile ("mtdcr 0xa0, %0" : "=r" (iocr) : "0" (iocr)); /* IOCR */
+#ifndef ppc405                                     /* this is a ppc403 */
+  __asm__ volatile("mfdcr %0, 0xa0" : "=r"(iocr)); /* IOCR */
+  iocr &= ~4; /* timer clocked from system clock */
+  __asm__ volatile("mtdcr 0xa0, %0" : "=r"(iocr) : "0"(iocr)); /* IOCR */
 
-  __asm__ volatile ("mfspr %0, 0x11f" : "=r" ((pvr))); /* PVR */
+  __asm__ volatile("mfspr %0, 0x11f" : "=r"((pvr))); /* PVR */
   if (((pvr & 0xffff0000) >> 16) != 0x0020)
-    return;                             /* Not a ppc403 */
+    return; /* Not a ppc403 */
 
-  if ((pvr & 0xff00) == 0x0000)         /* 403GA */
+  if ((pvr & 0xff00) == 0x0000) /* 403GA */
 #if 0 /* FIXME: in which processor versions will "autoload" work properly? */
     auto_restart = (pvr & 0x00f0) > 0x0000 ? true : false;
 #else
     /* no known chip version supports auto restart of timer... */
     auto_restart = false;
 #endif
-  else if ((pvr & 0xff00) == 0x0100)    /* 403GB */
+  else if ((pvr & 0xff00) == 0x0100) /* 403GB */
     auto_restart = true;
 
-#else /* ppc405 */
-  __asm__ volatile (
-    ".machine \"push\"\n"
-    ".machine \"any\"\n"
-    "mfdcr %0, 0x0b2\n"
-    ".machine \"pop\"" :
-    "=r" (iocr)
-  ); /*405GP CPC0_CR1 */
-  iocr &=~0x800000;               /* timer clocked from system clock CETE*/
-  __asm__ volatile (
-    ".machine \"push\"\n"
-    ".machine \"any\"\n"
-    "mtdcr 0x0b2, %0\n"
-    ".machine \"pop\"" :
-    "=r" (iocr) :
-    "0" (iocr)
-  ); /* 405GP CPC0_CR1 */
+#else  /* ppc405 */
+  __asm__ volatile(".machine \"push\"\n"
+                   ".machine \"any\"\n"
+                   "mfdcr %0, 0x0b2\n"
+                   ".machine \"pop\""
+                   : "=r"(iocr)); /*405GP CPC0_CR1 */
+  iocr &= ~0x800000;              /* timer clocked from system clock CETE*/
+  __asm__ volatile(".machine \"push\"\n"
+                   ".machine \"any\"\n"
+                   "mtdcr 0x0b2, %0\n"
+                   ".machine \"pop\""
+                   : "=r"(iocr)
+                   : "0"(iocr)); /* 405GP CPC0_CR1 */
 
   /*
    * Enable auto restart
@@ -235,13 +226,13 @@ static void ClockOn(const rtems_irq_connect_data* unused)
   auto_restart = true;
 #endif /* ppc405 */
 
-  pit_value = rtems_configuration_get_microseconds_per_tick() *
-                bsp_clicks_per_usec;
+  pit_value =
+      rtems_configuration_get_microseconds_per_tick() * bsp_clicks_per_usec;
 
   /*
    * Set PIT value
    */
-  __asm__ volatile ("mtspr 0x3db, %0" : : "r" (pit_value)); /* PIT */
+  __asm__ volatile("mtspr 0x3db, %0" : : "r"(pit_value)); /* PIT */
 
   /*
    * Set timer to autoreload, bit TCR->ARE = 1  0x0400000
@@ -249,15 +240,14 @@ static void ClockOn(const rtems_irq_connect_data* unused)
    */
   tick_time = get_itimer() + pit_value;
 
-  __asm__ volatile ("mfspr %0, 0x3da" : "=r" ((tcr)));               /* TCR */
+  __asm__ volatile("mfspr %0, 0x3da" : "=r"((tcr))); /* TCR */
   tcr = (tcr & ~0x04400000) | (auto_restart ? 0x04400000 : 0x04000000);
 #if 1
-  __asm__ volatile ("mtspr 0x3da, %0" : "=r" ((tcr)) : "0" ((tcr))); /* TCR */
+  __asm__ volatile("mtspr 0x3da, %0" : "=r"((tcr)) : "0"((tcr))); /* TCR */
 #endif
 }
 
-static void Install_clock(void (*clock_isr)(void *))
-{
+static void Install_clock(void (*clock_isr)(void *)) {
   rtems_irq_connect_data clockIrqConnData;
 
   Clock_driver_ticks = 0;
@@ -269,12 +259,12 @@ static void Install_clock(void (*clock_isr)(void *))
    * in order to provide consistent clicks in the face of
    * interrupt overhead
    */
-  clockIrqConnData.on   = ClockOn;
-  clockIrqConnData.off  = ClockOff;
+  clockIrqConnData.on = ClockOn;
+  clockIrqConnData.off = ClockOff;
   clockIrqConnData.isOn = ClockIsOn;
   clockIrqConnData.name = BSP_PIT;
-  clockIrqConnData.hdl  = clock_isr;
-  if (!BSP_install_rtems_irq_handler (&clockIrqConnData)) {
+  clockIrqConnData.hdl = clock_isr;
+  if (!BSP_install_rtems_irq_handler(&clockIrqConnData)) {
     printk("Unable to connect Clock Irq handler\n");
     rtems_fatal_error_occurred(1);
   }
@@ -289,8 +279,7 @@ static void Install_clock(void (*clock_isr)(void *))
  * This will not work on the 405GP because
  * when bit's are set in TCR they can only be unset by a reset
  */
-void Clock_exit(void)
-{
+void Clock_exit(void) {
   rtems_irq_connect_data clockIrqConnData;
 
   clockIrqConnData.name = BSP_PIT;
@@ -299,10 +288,7 @@ void Clock_exit(void)
     rtems_fatal_error_occurred(1);
   }
 
-  BSP_remove_rtems_irq_handler (&clockIrqConnData);
+  BSP_remove_rtems_irq_handler(&clockIrqConnData);
 }
 
-void _Clock_Initialize( void )
-{
-  Install_clock( Clock_isr );
-}
+void _Clock_Initialize(void) { Install_clock(Clock_isr); }

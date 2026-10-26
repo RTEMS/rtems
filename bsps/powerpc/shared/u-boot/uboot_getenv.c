@@ -45,7 +45,7 @@
 #define UBOOT_ENV_SIZE 0
 #endif
 
-const uint8_t *uboot_environment = (const uint8_t *) UBOOT_ENV_BASE;
+const uint8_t *uboot_environment = (const uint8_t *)UBOOT_ENV_BASE;
 const size_t uboot_environment_size = UBOOT_ENV_SIZE;
 
 #if defined(HAS_UBOOT)
@@ -57,8 +57,7 @@ const size_t uboot_environment_size = UBOOT_ENV_SIZE;
  *
  * Making this method actually compute CRC32 is rtems#5660.
  */
-static int bsp_uboot_environ_check_crc(void)
-{
+static int bsp_uboot_environ_check_crc(void) {
 #if 0
   unsigned long crc;
   unsigned long max;
@@ -73,31 +72,27 @@ static int bsp_uboot_environ_check_crc(void)
   return 1;
 }
 
-const char *bsp_uboot_getenv(
-  const char *name
-)
-{
-  char   lhs[64];
+const char *bsp_uboot_getenv(const char *name) {
+  char lhs[64];
   size_t i, j;
 
-  if ( !bsp_uboot_environ_check_crc() )
+  if (!bsp_uboot_environ_check_crc())
     return NULL;
 
-  for ( i=4 ; i<uboot_environment_size ; i++ ) {
-    memset( lhs, '\0', sizeof(lhs) );
-    for( j=0 ; uboot_environment[i] != '=' && j<sizeof(lhs) ; i++, j++ ) {
+  for (i = 4; i < uboot_environment_size; i++) {
+    memset(lhs, '\0', sizeof(lhs));
+    for (j = 0; uboot_environment[i] != '=' && j < sizeof(lhs); i++, j++) {
       lhs[j] = uboot_environment[i];
     }
-    if ( !strncmp( name, lhs, sizeof(lhs) ) ) {
-      return (const char *)&uboot_environment[i+1];
+    if (!strncmp(name, lhs, sizeof(lhs))) {
+      return (const char *)&uboot_environment[i + 1];
     }
 
-    for ( i++ ; uboot_environment[i] && i<uboot_environment_size ; i++ )
+    for (i++; uboot_environment[i] && i < uboot_environment_size; i++)
       ;
-    if ( !uboot_environment[i+1] )
+    if (!uboot_environment[i + 1])
       return NULL;
   }
   return NULL;
 }
 #endif
-

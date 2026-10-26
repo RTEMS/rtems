@@ -26,32 +26,33 @@
 
 #include <libcpu/cpuIdent.h>
 
-#define TYP_I	1
-#define TYP_D	0
+#define TYP_I 1
+#define TYP_D 0
 
-typedef union
-{                               /* BAT register values to be loaded */
+typedef union { /* BAT register values to be loaded */
   BAT bat;
-  struct
-  {
+  struct {
     unsigned int u, l;
   } words;
 } ubat;
 
-typedef struct batrange
-{                               /* stores address ranges mapped by BATs */
+typedef struct batrange { /* stores address ranges mapped by BATs */
   unsigned long start;
   unsigned long limit;
   unsigned long phys;
 } batrange;
 
-batrange bat_addrs[2][8] = { { {0,} } };
+batrange bat_addrs[2][8] = {{{
+    0,
+}}};
 
-/* could encode this in bat_addrs but I don't touch that one for bwds compat. reasons */
+/* could encode this in bat_addrs but I don't touch that one for bwds compat.
+ * reasons */
 /* bitmask of used bats */
-static unsigned bat_in_use[2] = { 0, 0 };
+static unsigned bat_in_use[2] = {0, 0};
 
 /* define a few macros */
+/* clang-format off */
 
 #define CLRBAT_ASM(batu,r)			\
 	"	sync                   \n"	\
@@ -98,6 +99,8 @@ asm volatile(						\
 	:"0");							\
 }
 
+/* clang-formt on */
+
 /* export the 'asm' versions for historic reasons */
 DECL_SETBAT (dbat0, DBAT0)
 DECL_SETBAT (dbat1, DBAT1)
@@ -124,6 +127,7 @@ SPR_RO (HID0);
 static void
 set_hid0_sync (unsigned long val)
 {
+/* clang-format off */
   __asm__ volatile (
     "	sync			\n"
     "	isync			\n"
@@ -134,11 +138,10 @@ set_hid0_sync (unsigned long val)
     :"i" (HID0), "r" (val)
     :"memory" /* paranoia */
   );
+  /* clang-format on */
 }
 
-static void
-bat_addrs_put (ubat * bat, int typ, int idx)
-{
+static void bat_addrs_put(ubat *bat, int typ, int idx) {
   unsigned long bl;
   if (bat->bat.batu.vp || bat->bat.batu.vs) {
     bat_addrs[typ][idx].start = bat->bat.batu.bepi << 17;
@@ -159,53 +162,48 @@ bat_addrs_put (ubat * bat, int typ, int idx)
  * when 'setdbat' is first used we must initialize our
  * cache.
  */
-static void
-bat_addrs_init (void)
-{
+static void bat_addrs_init(void) {
   ubat bat;
 
-  GETBAT (DBAT0, bat.words.u, bat.words.l);
-  bat_addrs_put (&bat, TYP_D, 0);
-  GETBAT (DBAT1, bat.words.u, bat.words.l);
-  bat_addrs_put (&bat, TYP_D, 1);
-  GETBAT (DBAT2, bat.words.u, bat.words.l);
-  bat_addrs_put (&bat, TYP_D, 2);
-  GETBAT (DBAT3, bat.words.u, bat.words.l);
-  bat_addrs_put (&bat, TYP_D, 3);
+  GETBAT(DBAT0, bat.words.u, bat.words.l);
+  bat_addrs_put(&bat, TYP_D, 0);
+  GETBAT(DBAT1, bat.words.u, bat.words.l);
+  bat_addrs_put(&bat, TYP_D, 1);
+  GETBAT(DBAT2, bat.words.u, bat.words.l);
+  bat_addrs_put(&bat, TYP_D, 2);
+  GETBAT(DBAT3, bat.words.u, bat.words.l);
+  bat_addrs_put(&bat, TYP_D, 3);
 
-  GETBAT (IBAT0, bat.words.u, bat.words.l);
-  bat_addrs_put (&bat, TYP_I, 0);
-  GETBAT (IBAT1, bat.words.u, bat.words.l);
-  bat_addrs_put (&bat, TYP_I, 1);
-  GETBAT (IBAT2, bat.words.u, bat.words.l);
-  bat_addrs_put (&bat, TYP_I, 2);
-  GETBAT (IBAT3, bat.words.u, bat.words.l);
-  bat_addrs_put (&bat, TYP_I, 3);
+  GETBAT(IBAT0, bat.words.u, bat.words.l);
+  bat_addrs_put(&bat, TYP_I, 0);
+  GETBAT(IBAT1, bat.words.u, bat.words.l);
+  bat_addrs_put(&bat, TYP_I, 1);
+  GETBAT(IBAT2, bat.words.u, bat.words.l);
+  bat_addrs_put(&bat, TYP_I, 2);
+  GETBAT(IBAT3, bat.words.u, bat.words.l);
+  bat_addrs_put(&bat, TYP_I, 3);
 
-
-  if ( ppc_cpu_has_8_bats() && (HID0_7455_HIGH_BAT_EN & _read_HID0 ())) {
-    GETBAT (DBAT4, bat.words.u, bat.words.l);
-    bat_addrs_put (&bat, TYP_D, 4);
-    GETBAT (DBAT5, bat.words.u, bat.words.l);
-    bat_addrs_put (&bat, TYP_D, 5);
-    GETBAT (DBAT6, bat.words.u, bat.words.l);
-    bat_addrs_put (&bat, TYP_D, 6);
-    GETBAT (DBAT7, bat.words.u, bat.words.l);
-    bat_addrs_put (&bat, TYP_D, 7);
-    GETBAT (IBAT4, bat.words.u, bat.words.l);
-    bat_addrs_put (&bat, TYP_I, 4);
-    GETBAT (IBAT5, bat.words.u, bat.words.l);
-    bat_addrs_put (&bat, TYP_I, 5);
-    GETBAT (IBAT6, bat.words.u, bat.words.l);
-    bat_addrs_put (&bat, TYP_I, 6);
-    GETBAT (IBAT7, bat.words.u, bat.words.l);
-    bat_addrs_put (&bat, TYP_I, 7);
+  if (ppc_cpu_has_8_bats() && (HID0_7455_HIGH_BAT_EN & _read_HID0())) {
+    GETBAT(DBAT4, bat.words.u, bat.words.l);
+    bat_addrs_put(&bat, TYP_D, 4);
+    GETBAT(DBAT5, bat.words.u, bat.words.l);
+    bat_addrs_put(&bat, TYP_D, 5);
+    GETBAT(DBAT6, bat.words.u, bat.words.l);
+    bat_addrs_put(&bat, TYP_D, 6);
+    GETBAT(DBAT7, bat.words.u, bat.words.l);
+    bat_addrs_put(&bat, TYP_D, 7);
+    GETBAT(IBAT4, bat.words.u, bat.words.l);
+    bat_addrs_put(&bat, TYP_I, 4);
+    GETBAT(IBAT5, bat.words.u, bat.words.l);
+    bat_addrs_put(&bat, TYP_I, 5);
+    GETBAT(IBAT6, bat.words.u, bat.words.l);
+    bat_addrs_put(&bat, TYP_I, 6);
+    GETBAT(IBAT7, bat.words.u, bat.words.l);
+    bat_addrs_put(&bat, TYP_I, 7);
   }
 }
 
-static void
-do_dssall (void)
-{
+static void do_dssall(void) {
   /* Before changing BATs, 'dssall' must be issued.
    * We check MSR for MSR_VE and issue a 'dssall' if
    * MSR_VE is set hoping that
@@ -213,53 +211,51 @@ do_dssall (void)
    *  b) all altivec CPUs use the same bit
    * NOTE: psim doesn't implement dssall so we skip if we run on psim
    */
-  if ( (_read_MSR () & MSR_VE) && PPC_PSIM != get_ppc_cpu_type() ) {
+  if ((_read_MSR() & MSR_VE) && PPC_PSIM != get_ppc_cpu_type()) {
     /* this construct is needed because we don't know
      * if this file is compiled with -maltivec.
      * (I plan to add altivec support outside of
      * RTEMS core and hence I'd rather not
      * rely on consistent compiler flags).
      */
+    /* clang-format off */
 #define DSSALL	0x7e00066c      /* dssall opcode */
     __asm__ volatile ("	.long %0"::"i" (DSSALL));
 #undef  DSSALL
+    /* clang-format on */
   }
 }
 
 /* Clear I/D bats 4..7 ONLY ON 7455 etc.  */
-static void
-clear_hi_bats (void)
-{
-  do_dssall ();
-  CLRBAT (DBAT4);
-  CLRBAT (DBAT5);
-  CLRBAT (DBAT6);
-  CLRBAT (DBAT7);
-  CLRBAT (IBAT4);
-  CLRBAT (IBAT5);
-  CLRBAT (IBAT6);
-  CLRBAT (IBAT7);
+static void clear_hi_bats(void) {
+  do_dssall();
+  CLRBAT(DBAT4);
+  CLRBAT(DBAT5);
+  CLRBAT(DBAT6);
+  CLRBAT(DBAT7);
+  CLRBAT(IBAT4);
+  CLRBAT(IBAT5);
+  CLRBAT(IBAT6);
+  CLRBAT(IBAT7);
 }
 
-static int
-check_bat_index (int i)
-{
+static int check_bat_index(int i) {
   unsigned long hid0;
 
   if (i >= 0 && i < 4)
     return 0;
   if (i >= 4 && i < 8) {
-    if ( ! ppc_cpu_has_8_bats() )
+    if (!ppc_cpu_has_8_bats())
       return -1;
     /* OK, we're on the right hardware;
      * check if we are already enabled
      */
-    hid0 = _read_HID0 ();
+    hid0 = _read_HID0();
     if (HID0_7455_HIGH_BAT_EN & hid0)
       return 0;
     /* No; enable now */
-    clear_hi_bats ();
-    set_hid0_sync (hid0 | HID0_7455_HIGH_BAT_EN);
+    clear_hi_bats();
+    set_hid0_sync(hid0 | HID0_7455_HIGH_BAT_EN);
     return 0;
   }
   return -1;
@@ -274,9 +270,7 @@ check_bat_index (int i)
  * RETURNS:
  *  block mask on success or -1 on error
  */
-static int
-check_bat_size (unsigned long size)
-{
+static int check_bat_size(unsigned long size) {
   unsigned long bit;
   unsigned long hid0;
 
@@ -287,114 +281,111 @@ check_bat_size (unsigned long size)
   if (0xffffffff == size) {
     bit = 32;
   } else {
-    __asm__ volatile ("	cntlzw %0, %1":"=r" (bit):"r" (size));
+    __asm__ volatile("	cntlzw %0, %1" : "=r"(bit) : "r"(size));
     bit = 31 - bit;
     if (1u << bit != size)
       return -1;
   }
   /* bit < 17 is not really legal but we aliased it to 0 in the past */
   if (bit > (11 + 17)) {
-    if ( ! ppc_cpu_has_8_bats() )
+    if (!ppc_cpu_has_8_bats())
       return -1;
 
-    hid0 = _read_HID0 ();
+    hid0 = _read_HID0();
     /* Let's enable the larger block size if necessary */
     if (!(HID0_7455_XBSEN & hid0))
-      set_hid0_sync (hid0 | HID0_7455_XBSEN);
+      set_hid0_sync(hid0 | HID0_7455_XBSEN);
   }
 
   return (1 << (bit - 17)) - 1;
 }
 
-static int
-check_overlap (int typ, unsigned long start, unsigned long size)
-{
+static int check_overlap(int typ, unsigned long start, unsigned long size) {
   size_t i;
   unsigned long limit = start + size - 1;
-  for (i = 0; i < sizeof (bat_addrs[typ]) / sizeof (bat_addrs[typ][0]); i++) {
+  for (i = 0; i < sizeof(bat_addrs[typ]) / sizeof(bat_addrs[typ][0]); i++) {
     if (!((1 << i) & bat_in_use[typ]))
-      continue;                 /* unused bat */
-    /* safe is 'limit < bat_addrs[t][i].start || start > bat_addrs[t][i].limit */
+      continue; /* unused bat */
+    /* safe is 'limit < bat_addrs[t][i].start || start > bat_addrs[t][i].limit
+     */
     if (limit >= bat_addrs[typ][i].start && start <= bat_addrs[typ][i].limit)
       return i;
   }
   return -1;
 }
 
-
 /* Take no risks -- the essential parts of this routine run with
  * interrupts disabled!
  */
 
-static int
-setbat (int typ, int bat_index, unsigned long virt, unsigned long phys,
-         unsigned int size, int flags)
-{
+static int setbat(int typ, int bat_index, unsigned long virt,
+                  unsigned long phys, unsigned int size, int flags) {
   unsigned long level;
   unsigned int bl;
   int err;
   int wimgxpp;
   ubat bat;
 
-  if (check_bat_index (bat_index)) {
-    printk ("Invalid BAT index %d\n", bat_index);
+  if (check_bat_index(bat_index)) {
+    printk("Invalid BAT index %d\n", bat_index);
     return -1;
   }
 
-  if ((int) (bl = check_bat_size (size)) < 0) {
-    printk ("Invalid BAT size %u\n", size);
+  if ((int)(bl = check_bat_size(size)) < 0) {
+    printk("Invalid BAT size %u\n", size);
     return -1;
   }
 
   if (virt & (size - 1)) {
-    printk ("BAT effective address 0x%08lx misaligned (size is 0x%08x)\n",
-            virt, size);
+    printk("BAT effective address 0x%08lx misaligned (size is 0x%08x)\n", virt,
+           size);
     return -1;
   }
 
   if (phys & (size - 1)) {
-    printk ("BAT physical address 0x%08lx misaligned (size is 0x%08x)\n", phys,
-            size);
+    printk("BAT physical address 0x%08lx misaligned (size is 0x%08x)\n", phys,
+           size);
     return -1;
   }
 
   if (virt + size - 1 < virt) {
-    printk ("BAT range invalid: wraps around zero 0x%08lx..0x%08lx\n", virt,
-            virt + size - 1);
+    printk("BAT range invalid: wraps around zero 0x%08lx..0x%08lx\n", virt,
+           virt + size - 1);
     return -1;
   }
 
-  if ( TYP_I == typ && ( ( _PAGE_GUARDED | _PAGE_WRITETHRU ) & flags ) ) {
-  	printk("IBAT must not have 'guarded' or 'writethrough' attribute\n");
-	return -1;
+  if (TYP_I == typ && ((_PAGE_GUARDED | _PAGE_WRITETHRU) & flags)) {
+    printk("IBAT must not have 'guarded' or 'writethrough' attribute\n");
+    return -1;
   }
 
-/* must protect the bat_addrs table -- since this routine is only used for board setup
- * or similar special purposes we don't bother about interrupt latency too much.
- */
-  rtems_interrupt_disable (level);
+  /* must protect the bat_addrs table -- since this routine is only used for
+   * board setup or similar special purposes we don't bother about interrupt
+   * latency too much.
+   */
+  rtems_interrupt_disable(level);
 
-  {                             /* might have to initialize our cached data */
+  { /* might have to initialize our cached data */
     static char init_done = 0;
     if (!init_done) {
-      bat_addrs_init ();
+      bat_addrs_init();
       init_done = 1;
     }
   }
 
-  err = check_overlap (typ, virt, size);
+  err = check_overlap(typ, virt, size);
   if ((size >= (1 << 17)) && (err >= 0) && (err != bat_index)) {
-    rtems_interrupt_enable (level);
-    printk ("BATs must not overlap; area 0x%08lx..0x%08lx hits %cBAT %i\n",
-            virt, virt + size, (TYP_I == typ ? 'I' : 'D'), err);
+    rtems_interrupt_enable(level);
+    printk("BATs must not overlap; area 0x%08lx..0x%08lx hits %cBAT %i\n", virt,
+           virt + size, (TYP_I == typ ? 'I' : 'D'), err);
     return -1;
   }
 
   /* 603, 604, etc. */
-  wimgxpp = flags & (_PAGE_WRITETHRU | _PAGE_NO_CACHE
-                     | _PAGE_COHERENT | _PAGE_GUARDED);
+  wimgxpp = flags &
+            (_PAGE_WRITETHRU | _PAGE_NO_CACHE | _PAGE_COHERENT | _PAGE_GUARDED);
   wimgxpp |= (flags & _PAGE_RW) ? BPP_RW : BPP_RX;
-  bat.words.u = virt | (bl << 2) | 2;   /* Vs=1, Vp=0 */
+  bat.words.u = virt | (bl << 2) | 2; /* Vs=1, Vp=0 */
   bat.words.l = phys | wimgxpp;
   if (flags & _PAGE_USER)
     bat.bat.batu.vp = 1;
@@ -412,78 +403,140 @@ setbat (int typ, int bat_index, unsigned long virt, unsigned long phys,
      */
     bat_addrs[typ][bat_index].limit = virt;
   }
-  do_dssall ();
-  if ( TYP_I == typ ) {
-	  switch (bat_index) {
-		  case 0: asm_setibat0 (bat.words.u, bat.words.l); break;
-		  case 1: asm_setibat1 (bat.words.u, bat.words.l); break;
-		  case 2: asm_setibat2 (bat.words.u, bat.words.l); break;
-		  case 3: asm_setibat3 (bat.words.u, bat.words.l); break;
-			  /* cpu check already done in check_index */
-		  case 4: asm_setibat4 (bat.words.u, bat.words.l); break;
-		  case 5: asm_setibat5 (bat.words.u, bat.words.l); break;
-		  case 6: asm_setibat6 (bat.words.u, bat.words.l); break;
-		  case 7: asm_setibat7 (bat.words.u, bat.words.l); break;
-		  default:                     /* should never get here anyways */
-			  break;
-	  }
+  do_dssall();
+  if (TYP_I == typ) {
+    switch (bat_index) {
+    case 0:
+      asm_setibat0(bat.words.u, bat.words.l);
+      break;
+    case 1:
+      asm_setibat1(bat.words.u, bat.words.l);
+      break;
+    case 2:
+      asm_setibat2(bat.words.u, bat.words.l);
+      break;
+    case 3:
+      asm_setibat3(bat.words.u, bat.words.l);
+      break;
+      /* cpu check already done in check_index */
+    case 4:
+      asm_setibat4(bat.words.u, bat.words.l);
+      break;
+    case 5:
+      asm_setibat5(bat.words.u, bat.words.l);
+      break;
+    case 6:
+      asm_setibat6(bat.words.u, bat.words.l);
+      break;
+    case 7:
+      asm_setibat7(bat.words.u, bat.words.l);
+      break;
+    default: /* should never get here anyways */
+      break;
+    }
   } else {
-	  switch (bat_index) {
-		  case 0: asm_setdbat0 (bat.words.u, bat.words.l); break;
-		  case 1: asm_setdbat1 (bat.words.u, bat.words.l); break;
-		  case 2: asm_setdbat2 (bat.words.u, bat.words.l); break;
-		  case 3: asm_setdbat3 (bat.words.u, bat.words.l); break;
-			  /* cpu check already done in check_index */
-		  case 4: asm_setdbat4 (bat.words.u, bat.words.l); break;
-		  case 5: asm_setdbat5 (bat.words.u, bat.words.l); break;
-		  case 6: asm_setdbat6 (bat.words.u, bat.words.l); break;
-		  case 7: asm_setdbat7 (bat.words.u, bat.words.l); break;
-		  default:                     /* should never get here anyways */
-			  break;
-	  }
+    switch (bat_index) {
+    case 0:
+      asm_setdbat0(bat.words.u, bat.words.l);
+      break;
+    case 1:
+      asm_setdbat1(bat.words.u, bat.words.l);
+      break;
+    case 2:
+      asm_setdbat2(bat.words.u, bat.words.l);
+      break;
+    case 3:
+      asm_setdbat3(bat.words.u, bat.words.l);
+      break;
+      /* cpu check already done in check_index */
+    case 4:
+      asm_setdbat4(bat.words.u, bat.words.l);
+      break;
+    case 5:
+      asm_setdbat5(bat.words.u, bat.words.l);
+      break;
+    case 6:
+      asm_setdbat6(bat.words.u, bat.words.l);
+      break;
+    case 7:
+      asm_setdbat7(bat.words.u, bat.words.l);
+      break;
+    default: /* should never get here anyways */
+      break;
+    }
   }
-  rtems_interrupt_enable (level);
+  rtems_interrupt_enable(level);
 
   return 0;
 }
 
-static int
-getbat (int typ, int idx, unsigned long *pu, unsigned long *pl)
-{
+static int getbat(int typ, int idx, unsigned long *pu, unsigned long *pl) {
   unsigned long u, l;
 
-  if (check_bat_index (idx)) {
-    printk ("Invalid BAT #%i\n", idx);
+  if (check_bat_index(idx)) {
+    printk("Invalid BAT #%i\n", idx);
     return -1;
   }
-  if ( TYP_I == typ ) {
-	  switch (idx) {
-		  case 0: GETBAT (IBAT0, u, l); break;
-		  case 1: GETBAT (IBAT1, u, l); break;
-		  case 2: GETBAT (IBAT2, u, l); break;
-		  case 3: GETBAT (IBAT3, u, l); break;
-				  /* cpu check already done in check_index */
-		  case 4: GETBAT (IBAT4, u, l); break;
-		  case 5: GETBAT (IBAT5, u, l); break;
-		  case 6: GETBAT (IBAT6, u, l); break;
-		  case 7: GETBAT (IBAT7, u, l); break;
-		  default:                     /* should never get here anyways */
-				  return -1;
-	  }
+  if (TYP_I == typ) {
+    switch (idx) {
+    case 0:
+      GETBAT(IBAT0, u, l);
+      break;
+    case 1:
+      GETBAT(IBAT1, u, l);
+      break;
+    case 2:
+      GETBAT(IBAT2, u, l);
+      break;
+    case 3:
+      GETBAT(IBAT3, u, l);
+      break;
+      /* cpu check already done in check_index */
+    case 4:
+      GETBAT(IBAT4, u, l);
+      break;
+    case 5:
+      GETBAT(IBAT5, u, l);
+      break;
+    case 6:
+      GETBAT(IBAT6, u, l);
+      break;
+    case 7:
+      GETBAT(IBAT7, u, l);
+      break;
+    default: /* should never get here anyways */
+      return -1;
+    }
   } else {
-	  switch (idx) {
-		  case 0: GETBAT (DBAT0, u, l); break;
-		  case 1: GETBAT (DBAT1, u, l); break;
-		  case 2: GETBAT (DBAT2, u, l); break;
-		  case 3: GETBAT (DBAT3, u, l); break;
-				  /* cpu check already done in check_index */
-		  case 4: GETBAT (DBAT4, u, l); break;
-		  case 5: GETBAT (DBAT5, u, l); break;
-		  case 6: GETBAT (DBAT6, u, l); break;
-		  case 7: GETBAT (DBAT7, u, l); break;
-		  default:                     /* should never get here anyways */
-				  return -1;
-	  }
+    switch (idx) {
+    case 0:
+      GETBAT(DBAT0, u, l);
+      break;
+    case 1:
+      GETBAT(DBAT1, u, l);
+      break;
+    case 2:
+      GETBAT(DBAT2, u, l);
+      break;
+    case 3:
+      GETBAT(DBAT3, u, l);
+      break;
+      /* cpu check already done in check_index */
+    case 4:
+      GETBAT(DBAT4, u, l);
+      break;
+    case 5:
+      GETBAT(DBAT5, u, l);
+      break;
+    case 6:
+      GETBAT(DBAT6, u, l);
+      break;
+    case 7:
+      GETBAT(DBAT7, u, l);
+      break;
+    default: /* should never get here anyways */
+      return -1;
+    }
   }
   if (pu) {
     *pu = u;
@@ -497,51 +550,43 @@ getbat (int typ, int idx, unsigned long *pu, unsigned long *pl)
     ubat b;
     b.words.u = u;
     b.words.l = l;
-    printk ("Raw %cBAT %i contents; UPPER: (0x%08lx)", (TYP_I == typ ? 'I' : 'D'), idx, u);
-    printk (" BEPI: 0x%08x", b.bat.batu.bepi);
-    printk (" BL: 0x%08lx", (u >> 2) & ((1 << 15) - 1));
-    printk (" VS: 0b%i", b.bat.batu.vs);
-    printk (" VP: 0b%i", b.bat.batu.vp);
-    printk ("\n");
-    printk ("                     LOWER: (0x%08lx)", l);
-    printk ("  RPN: 0x%08x", b.bat.batl.brpn);
-    printk (" wimg:   0b%1i%1i%1i%1i", b.bat.batl.w, b.bat.batl.i,
-            b.bat.batl.m, b.bat.batl.g);
-    printk (" PP: 0x%1x", b.bat.batl.pp);
-    printk ("\n");
-    printk ("Covering EA Range: ");
+    printk("Raw %cBAT %i contents; UPPER: (0x%08lx)",
+           (TYP_I == typ ? 'I' : 'D'), idx, u);
+    printk(" BEPI: 0x%08x", b.bat.batu.bepi);
+    printk(" BL: 0x%08lx", (u >> 2) & ((1 << 15) - 1));
+    printk(" VS: 0b%i", b.bat.batu.vs);
+    printk(" VP: 0b%i", b.bat.batu.vp);
+    printk("\n");
+    printk("                     LOWER: (0x%08lx)", l);
+    printk("  RPN: 0x%08x", b.bat.batl.brpn);
+    printk(" wimg:   0b%1i%1i%1i%1i", b.bat.batl.w, b.bat.batl.i, b.bat.batl.m,
+           b.bat.batl.g);
+    printk(" PP: 0x%1x", b.bat.batl.pp);
+    printk("\n");
+    printk("Covering EA Range: ");
     if (bat_in_use[typ] & (1 << idx))
-      printk ("0x%08lx .. 0x%08lx\n", bat_addrs[typ][idx].start,
-              bat_addrs[typ][idx].limit);
+      printk("0x%08lx .. 0x%08lx\n", bat_addrs[typ][idx].start,
+             bat_addrs[typ][idx].limit);
     else
-      printk ("<none> (BAT off)\n");
-
+      printk("<none> (BAT off)\n");
   }
   return u;
 }
 
-int
-setdbat (int bat_index, unsigned long virt, unsigned long phys,
-         unsigned int size, int flags)
-{
-	return setbat(TYP_D, bat_index, virt, phys, size, flags);
+int setdbat(int bat_index, unsigned long virt, unsigned long phys,
+            unsigned int size, int flags) {
+  return setbat(TYP_D, bat_index, virt, phys, size, flags);
 }
 
-int
-setibat (int bat_index, unsigned long virt, unsigned long phys,
-         unsigned int size, int flags)
-{
-	return setbat(TYP_I, bat_index, virt, phys, size, flags);
+int setibat(int bat_index, unsigned long virt, unsigned long phys,
+            unsigned int size, int flags) {
+  return setbat(TYP_I, bat_index, virt, phys, size, flags);
 }
 
-int
-getdbat (int idx, unsigned long *pu, unsigned long *pl)
-{
-	return getbat (TYP_D, idx, pu, pl);
+int getdbat(int idx, unsigned long *pu, unsigned long *pl) {
+  return getbat(TYP_D, idx, pu, pl);
 }
 
-int
-getibat (int idx, unsigned long *pu, unsigned long *pl)
-{
-	return getbat (TYP_I, idx, pu, pl);
+int getibat(int idx, unsigned long *pu, unsigned long *pl) {
+  return getbat(TYP_I, idx, pu, pl);
 }

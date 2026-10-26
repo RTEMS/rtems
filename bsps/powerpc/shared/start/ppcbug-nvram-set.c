@@ -74,7 +74,7 @@ void ppcbug_nvram_set_net_unit(const size_t unit) {
   }
 }
 
-void ppcbug_nvram_set_net_label(const size_t unit, const char* label) {
+void ppcbug_nvram_set_net_label(const size_t unit, const char *label) {
   if (unit - 1 < MAX_NET_UNITS) {
     strlcpy(&net_units[unit - 1].label[0], label,
             sizeof(net_units[unit - 1].label));

@@ -36,31 +36,28 @@
  * XXX: These values are chosen to directly generate the vector offsets for an
  * e200z1 which has hard wired IVORs (IVOR0=0x00, IVOR1=0x10, IVOR2=0x20, ...).
  */
-static const uint8_t ivor_values [] = {
-  [ASM_BOOKE_CRIT_VECTOR] = 0,
-  [ASM_MACH_VECTOR] = 1,
-  [ASM_PROT_VECTOR] = 2,
-  [ASM_ISI_VECTOR] = 3,
-  [ASM_EXT_VECTOR] = 4,
-  [ASM_ALIGN_VECTOR] = 5,
-  [ASM_PROG_VECTOR] = 6,
-  [ASM_FLOAT_VECTOR] = 7,
-  [ASM_SYS_VECTOR] = 8,
-  [ASM_BOOKE_APU_VECTOR] = 9,
-  [ASM_BOOKE_DEC_VECTOR] = 10,
-  [ASM_BOOKE_FIT_VECTOR] = 11,
-  [ASM_BOOKE_WDOG_VECTOR] = 12,
-  [ASM_BOOKE_DTLBMISS_VECTOR] = 13,
-  [ASM_BOOKE_ITLBMISS_VECTOR] = 14,
-  [ASM_BOOKE_DEBUG_VECTOR] = 15,
-  [ASM_E500_SPE_UNAVAILABLE_VECTOR] = 16,
-  [ASM_E500_EMB_FP_DATA_VECTOR] = 17,
-  [ASM_E500_EMB_FP_ROUND_VECTOR] = 18,
-  [ASM_E500_PERFMON_VECTOR] = 19
-};
+static const uint8_t ivor_values[] = {[ASM_BOOKE_CRIT_VECTOR] = 0,
+                                      [ASM_MACH_VECTOR] = 1,
+                                      [ASM_PROT_VECTOR] = 2,
+                                      [ASM_ISI_VECTOR] = 3,
+                                      [ASM_EXT_VECTOR] = 4,
+                                      [ASM_ALIGN_VECTOR] = 5,
+                                      [ASM_PROG_VECTOR] = 6,
+                                      [ASM_FLOAT_VECTOR] = 7,
+                                      [ASM_SYS_VECTOR] = 8,
+                                      [ASM_BOOKE_APU_VECTOR] = 9,
+                                      [ASM_BOOKE_DEC_VECTOR] = 10,
+                                      [ASM_BOOKE_FIT_VECTOR] = 11,
+                                      [ASM_BOOKE_WDOG_VECTOR] = 12,
+                                      [ASM_BOOKE_DTLBMISS_VECTOR] = 13,
+                                      [ASM_BOOKE_ITLBMISS_VECTOR] = 14,
+                                      [ASM_BOOKE_DEBUG_VECTOR] = 15,
+                                      [ASM_E500_SPE_UNAVAILABLE_VECTOR] = 16,
+                                      [ASM_E500_EMB_FP_DATA_VECTOR] = 17,
+                                      [ASM_E500_EMB_FP_ROUND_VECTOR] = 18,
+                                      [ASM_E500_PERFMON_VECTOR] = 19};
 
-void *ppc_exc_vector_address(unsigned vector, void *vector_base)
-{
+void *ppc_exc_vector_address(unsigned vector, void *vector_base) {
   uintptr_t vector_offset = vector << 8;
 
   if (ppc_cpu_has_altivec()) {
@@ -71,32 +68,30 @@ void *ppc_exc_vector_address(unsigned vector, void *vector_base)
 
   if (ppc_cpu_is(PPC_405)) {
     switch (vector) {
-      case ASM_BOOKE_FIT_VECTOR:
-        vector_offset = ASM_PPC405_FIT_VECTOR_OFFSET;
-        break;
-      case ASM_BOOKE_WDOG_VECTOR:
-        vector_offset = ASM_PPC405_WDOG_VECTOR_OFFSET;
-        break;
-      case ASM_TRACE_VECTOR:
-        vector_offset = ASM_PPC405_TRACE_VECTOR_OFFSET;
-        break;
-      case ASM_PPC405_APU_UNAVAIL_VECTOR:
-        vector_offset = ASM_60X_VEC_VECTOR_OFFSET;
-      default:
-        break;
+    case ASM_BOOKE_FIT_VECTOR:
+      vector_offset = ASM_PPC405_FIT_VECTOR_OFFSET;
+      break;
+    case ASM_BOOKE_WDOG_VECTOR:
+      vector_offset = ASM_PPC405_WDOG_VECTOR_OFFSET;
+      break;
+    case ASM_TRACE_VECTOR:
+      vector_offset = ASM_PPC405_TRACE_VECTOR_OFFSET;
+      break;
+    case ASM_PPC405_APU_UNAVAIL_VECTOR:
+      vector_offset = ASM_60X_VEC_VECTOR_OFFSET;
+    default:
+      break;
     }
   }
 
-  if (
-    ppc_cpu_is_bookE() == PPC_BOOKE_STD
-      || ppc_cpu_is_bookE() == PPC_BOOKE_E500
-  ) {
-    if (vector < sizeof(ivor_values) / sizeof(ivor_values [0])) {
-      vector_offset = ((uintptr_t) ivor_values [vector]) << 4;
+  if (ppc_cpu_is_bookE() == PPC_BOOKE_STD ||
+      ppc_cpu_is_bookE() == PPC_BOOKE_E500) {
+    if (vector < sizeof(ivor_values) / sizeof(ivor_values[0])) {
+      vector_offset = ((uintptr_t)ivor_values[vector]) << 4;
     } else {
       vector_offset = 0;
     }
   }
 
-  return (void *) ((uintptr_t) vector_base + vector_offset);
+  return (void *)((uintptr_t)vector_base + vector_offset);
 }

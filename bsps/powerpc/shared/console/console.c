@@ -36,7 +36,7 @@
 #include <rtems/termiostypes.h>
 #include <termios.h>
 #include <bsp/uart.h>
-#include <rtems/bspIo.h>  /* printk */
+#include <rtems/bspIo.h> /* printk */
 
 /* Definitions for BSPConsolePort */
 /*
@@ -47,7 +47,7 @@
  */
 rtems_device_minor_number BSPConsolePort = BSP_CONSOLE_PORT;
 
-int BSPBaseBaud    = BSP_UART_BAUD_BASE;
+int BSPBaseBaud = BSP_UART_BAUD_BASE;
 
 /*
  * TERMIOS_OUTPUT_MODE should be a 'bspopts.h/configure'-able option;
@@ -55,37 +55,37 @@ int BSPBaseBaud    = BSP_UART_BAUD_BASE;
  * small changes)...
  */
 #if defined(USE_POLLED_IO)
-  #define TERMIOS_OUTPUT_MODE TERMIOS_POLLED
+#define TERMIOS_OUTPUT_MODE TERMIOS_POLLED
 #elif defined(USE_TASK_DRIVEN_IO)
-  #define TERMIOS_OUTPUT_MODE TERMIOS_TASK_DRIVEN
+#define TERMIOS_OUTPUT_MODE TERMIOS_TASK_DRIVEN
 #else
-  #define TERMIOS_OUTPUT_MODE TERMIOS_IRQ_DRIVEN
+#define TERMIOS_OUTPUT_MODE TERMIOS_IRQ_DRIVEN
 #endif
 
 /*-------------------------------------------------------------------------+
 | External Prototypes
 +--------------------------------------------------------------------------*/
 
-static int  conSetAttr(int minor, const struct termios *);
+static int conSetAttr(int minor, const struct termios *);
 
 typedef struct TtySTblRec_ {
-  char          *name;
-  rtems_irq_hdl  isr;
+  char *name;
+  rtems_irq_hdl isr;
 } TtySTblRec, *TtySTbl;
 
-static TtySTblRec ttyS[]={
-    { "/dev/ttyS0",
+static TtySTblRec ttyS[] = {
+    {"/dev/ttyS0",
 #ifdef BSP_UART_IOBASE_COM1
-      BSP_uart_termios_isr_com1
+     BSP_uart_termios_isr_com1
 #else
-      0
+     0
 #endif
     },
-    { "/dev/ttyS1",
+    {"/dev/ttyS1",
 #ifdef BSP_UART_IOBASE_COM2
-      BSP_uart_termios_isr_com2
+     BSP_uart_termios_isr_com2
 #else
-      0
+     0
 #endif
     },
 };
@@ -95,13 +95,10 @@ static TtySTblRec ttyS[]={
 +--------------------------------------------------------------------------+
 | Initilizes the I/O console (keyboard + VGA display) driver.
 +--------------------------------------------------------------------------*/
-rtems_device_driver console_initialize(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void                      *arg
-)
-{
-  (void) arg;
+rtems_device_driver console_initialize(rtems_device_major_number major,
+                                       rtems_device_minor_number minor,
+                                       void *arg) {
+  (void)arg;
 
   rtems_status_code status;
 
@@ -123,28 +120,27 @@ rtems_device_driver console_initialize(
    * all known instances...
    */
 
-  for (minor=0; minor < sizeof(ttyS)/sizeof(ttyS[0]); minor++) {
+  for (minor = 0; minor < sizeof(ttyS) / sizeof(ttyS[0]); minor++) {
     char *nm;
     /*
      * Skip ports (possibly not supported by BSP...) we have no ISR for
      */
-    if ( ! ttyS[minor].isr )
+    if (!ttyS[minor].isr)
       continue;
     /*
      * Register the device
      */
-    status = rtems_io_register_name ((nm=ttyS[minor].name), major, minor);
-    if ( RTEMS_SUCCESSFUL==status && BSPConsolePort == minor) {
-      printk("Registering /dev/console as minor %" PRIu32 " (==%s)\n",
-              minor,
-              ttyS[minor].name);
+    status = rtems_io_register_name((nm = ttyS[minor].name), major, minor);
+    if (RTEMS_SUCCESSFUL == status && BSPConsolePort == minor) {
+      printk("Registering /dev/console as minor %" PRIu32 " (==%s)\n", minor,
+             ttyS[minor].name);
       /* also register an alias */
-      status = rtems_io_register_name ( (nm="/dev/console"), major, minor);
+      status = rtems_io_register_name((nm = "/dev/console"), major, minor);
     }
 
     if (status != RTEMS_SUCCESSFUL) {
-      printk("Error registering %s!\n",nm);
-      rtems_fatal_error_occurred (status);
+      printk("Error registering %s!\n", nm);
+      rtems_fatal_error_occurred(status);
     }
   }
 
@@ -152,29 +148,29 @@ rtems_device_driver console_initialize(
 } /* console_initialize */
 
 #if !defined(USE_POLLED_IO)
-static int console_first_open(int major, int minor, void *arg)
-{
-  (void) major;
+static int console_first_open(int major, int minor, void *arg) {
+  (void)major;
 
   rtems_status_code status;
 
   /* must not open a minor device we have no ISR for */
-  assert( minor>=0 && (size_t) minor < sizeof(ttyS)/sizeof(ttyS[0]) &&
-          ttyS[minor].isr );
+  assert(minor >= 0 && (size_t)minor < sizeof(ttyS) / sizeof(ttyS[0]) &&
+         ttyS[minor].isr);
 
   /* BSP_CONSOLE_BAUD-8-N-1 */
   BSP_uart_init(minor, BSP_CONSOLE_BAUD, 0);
   status = BSP_uart_install_isr(minor, ttyS[minor].isr);
   if (!status) {
     printk("Error installing serial console interrupt handler for '%s'!\n",
-      ttyS[minor].name);
+           ttyS[minor].name);
     rtems_fatal_error_occurred(status);
   }
 
   /*
    * Pass data area info down to driver
    */
-  BSP_uart_termios_set(minor, ((rtems_libio_open_close_args_t *)arg)->iop->data1);
+  BSP_uart_termios_set(minor,
+                       ((rtems_libio_open_close_args_t *)arg)->iop->data1);
 
   /* Enable interrupts  on channel */
   BSP_uart_intr_ctrl(minor, BSP_UART_INTR_CTRL_TERMIOS);
@@ -184,11 +180,10 @@ static int console_first_open(int major, int minor, void *arg)
 #endif
 
 #if !defined(USE_POLLED_IO)
-static int console_last_close(int major, int minor, void *arg)
-{
-  (void) major;
-  (void) minor;
-  (void) arg;
+static int console_last_close(int major, int minor, void *arg) {
+  (void)major;
+  (void)minor;
+  (void)arg;
 
   BSP_uart_remove_isr(minor, ttyS[minor].isr);
   return 0;
@@ -198,43 +193,39 @@ static int console_last_close(int major, int minor, void *arg)
 /*-------------------------------------------------------------------------+
 | Console device driver OPEN entry point
 +--------------------------------------------------------------------------*/
-rtems_device_driver console_open(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void                      *arg
-)
-{
-  rtems_status_code              status;
+rtems_device_driver console_open(rtems_device_major_number major,
+                                 rtems_device_minor_number minor, void *arg) {
+  rtems_status_code status;
   static rtems_termios_callbacks cb =
 #if defined(USE_POLLED_IO)
-  {
-     NULL,                              /* firstOpen */
-     NULL,                              /* lastClose */
-     NULL,                              /* pollRead */
-     BSP_uart_termios_write_polled,     /* write */
-     conSetAttr,                        /* setAttributes */
-     NULL,                              /* stopRemoteTx */
-     NULL,                              /* startRemoteTx */
-     TERMIOS_POLLED                     /* outputUsesInterrupts */
+      {
+          NULL,                          /* firstOpen */
+          NULL,                          /* lastClose */
+          NULL,                          /* pollRead */
+          BSP_uart_termios_write_polled, /* write */
+          conSetAttr,                    /* setAttributes */
+          NULL,                          /* stopRemoteTx */
+          NULL,                          /* startRemoteTx */
+          TERMIOS_POLLED                 /* outputUsesInterrupts */
   };
 #else
-  {
-     console_first_open,                /* firstOpen */
-     console_last_close,                /* lastClose */
+      {
+          console_first_open, /* firstOpen */
+          console_last_close, /* lastClose */
 #ifdef USE_TASK_DRIVEN_IO
-     BSP_uart_termios_read_com,         /* pollRead */
+          BSP_uart_termios_read_com, /* pollRead */
 #else
-     NULL,                              /* pollRead */
+          NULL, /* pollRead */
 #endif
-     BSP_uart_termios_write_com,        /* write */
-     conSetAttr,                        /* setAttributes */
-     NULL,                              /* stopRemoteTx */
-     NULL,                              /* startRemoteTx */
-     TERMIOS_OUTPUT_MODE                /* outputUsesInterrupts */
+          BSP_uart_termios_write_com, /* write */
+          conSetAttr,                 /* setAttributes */
+          NULL,                       /* stopRemoteTx */
+          NULL,                       /* startRemoteTx */
+          TERMIOS_OUTPUT_MODE         /* outputUsesInterrupts */
   };
 #endif
 
-  status = rtems_termios_open (major, minor, arg, &cb);
+  status = rtems_termios_open(major, minor, arg, &cb);
 
   if (status != RTEMS_SUCCESSFUL) {
     printk("Error opening console device\n");
@@ -247,19 +238,14 @@ rtems_device_driver console_open(
 /*-------------------------------------------------------------------------+
 | Console device driver CLOSE entry point
 +--------------------------------------------------------------------------*/
-rtems_device_driver
-console_close(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void                      *arg
-)
-{
-  (void) major;
-  (void) minor;
+rtems_device_driver console_close(rtems_device_major_number major,
+                                  rtems_device_minor_number minor, void *arg) {
+  (void)major;
+  (void)minor;
 
   rtems_device_driver res = RTEMS_SUCCESSFUL;
 
-  res =  rtems_termios_close (arg);
+  res = rtems_termios_close(arg);
 
   return res;
 } /* console_close */
@@ -269,16 +255,12 @@ console_close(
 +--------------------------------------------------------------------------+
 | Read characters from the I/O console. We only have stdin.
 +--------------------------------------------------------------------------*/
-rtems_device_driver console_read(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void                      *arg
-)
-{
-  (void) major;
-  (void) minor;
+rtems_device_driver console_read(rtems_device_major_number major,
+                                 rtems_device_minor_number minor, void *arg) {
+  (void)major;
+  (void)minor;
 
-  return rtems_termios_read (arg);
+  return rtems_termios_read(arg);
 } /* console_read */
 
 /*-------------------------------------------------------------------------+
@@ -286,54 +268,46 @@ rtems_device_driver console_read(
 +--------------------------------------------------------------------------+
 | Write characters to the I/O console. Stderr and stdout are the same.
 +--------------------------------------------------------------------------*/
-rtems_device_driver console_write(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void                      *arg
-)
-{
-  (void) major;
-  (void) minor;
+rtems_device_driver console_write(rtems_device_major_number major,
+                                  rtems_device_minor_number minor, void *arg) {
+  (void)major;
+  (void)minor;
 
-  return rtems_termios_write (arg);
+  return rtems_termios_write(arg);
 } /* console_write */
 
 /*
  * Handle ioctl request.
  */
-rtems_device_driver console_control(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void                      *arg
-)
-{
-  (void) major;
+rtems_device_driver console_control(rtems_device_major_number major,
+                                    rtems_device_minor_number minor,
+                                    void *arg) {
+  (void)major;
 
 /* does the BSP support break callbacks ? */
 #if defined(BIOCSETBREAKCB) && defined(BIOCGETBREAKCB)
-  rtems_libio_ioctl_args_t  *ioa=arg;
+  rtems_libio_ioctl_args_t *ioa = arg;
   switch (ioa->command) {
-    case BIOCSETBREAKCB: return BSP_uart_set_break_cb(minor, ioa);
-    case BIOCGETBREAKCB: return BSP_uart_get_break_cb(minor, ioa);
-    default:             break;
+  case BIOCSETBREAKCB:
+    return BSP_uart_set_break_cb(minor, ioa);
+  case BIOCGETBREAKCB:
+    return BSP_uart_get_break_cb(minor, ioa);
+  default:
+    break;
   }
 #else
-  (void) minor;
-  (void) arg;
+  (void)minor;
+  (void)arg;
 #endif
-  return rtems_termios_ioctl (arg);
+  return rtems_termios_ioctl(arg);
 }
 
-static int conSetAttr(
-  int                   minor,
-  const struct termios *t
-)
-{
+static int conSetAttr(int minor, const struct termios *t) {
   rtems_termios_baud_t baud;
 
   baud = rtems_termios_baud_to_number(t->c_ospeed);
-  if ( baud > 115200 )
-    rtems_fatal_error_occurred (RTEMS_INTERNAL_ERROR);
+  if (baud > 115200)
+    rtems_fatal_error_occurred(RTEMS_INTERNAL_ERROR);
 
   BSP_uart_set_baud(minor, baud);
 

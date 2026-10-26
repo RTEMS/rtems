@@ -54,27 +54,26 @@ SPR_RW(PPC405_TSR)
  * However, the legacy mode works with less modifications
  * of user code.
  */
-static int C_dispatch_dec_handler_bookE (BSP_Exception_frame *frame, unsigned int excNum)
-{
-  (void) excNum;
+static int C_dispatch_dec_handler_bookE(BSP_Exception_frame *frame,
+                                        unsigned int excNum) {
+  (void)excNum;
 
   /* clear interrupt; we must do this
    * before C_dispatch_irq_handler()
    * re-enables MSR_EE.
    * Note that PPC405 uses a different SPR# for TSR
    */
-  if (ppc_cpu_is_bookE()==PPC_BOOKE_405)
-    _write_PPC405_TSR( BOOKE_TSR_DIS );
+  if (ppc_cpu_is_bookE() == PPC_BOOKE_405)
+    _write_PPC405_TSR(BOOKE_TSR_DIS);
   else
-    _write_BOOKE_TSR( BOOKE_TSR_DIS );
+    _write_BOOKE_TSR(BOOKE_TSR_DIS);
   return C_dispatch_irq_handler(frame, ASM_DEC_VECTOR);
 }
 
 /*
  * RTEMS Global Interrupt Handler Management Routines
  */
-int BSP_rtems_irq_generic_set(rtems_irq_global_settings* config)
-{
+int BSP_rtems_irq_generic_set(rtems_irq_global_settings *config) {
   int r;
 
   r = BSP_setup_the_pic(config);
@@ -82,7 +81,7 @@ int BSP_rtems_irq_generic_set(rtems_irq_global_settings* config)
     return r;
 
   ppc_exc_set_handler(ASM_EXT_VECTOR, C_dispatch_irq_handler);
-  if ( ppc_cpu_is_bookE() ) {
+  if (ppc_cpu_is_bookE()) {
     /* bookE decrementer interrupt needs to be cleared BEFORE
      * dispatching the user ISR (because the user ISR is called
      * with EE enabled)
@@ -97,23 +96,18 @@ int BSP_rtems_irq_generic_set(rtems_irq_global_settings* config)
   return 1;
 }
 
-rtems_status_code bsp_interrupt_get_attributes(
-  rtems_vector_number         vector,
-  rtems_interrupt_attributes *attributes
-)
-{
-  (void) vector;
-  (void) attributes;
+rtems_status_code
+bsp_interrupt_get_attributes(rtems_vector_number vector,
+                             rtems_interrupt_attributes *attributes) {
+  (void)vector;
+  (void)attributes;
 
   return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code bsp_interrupt_is_pending(
-  rtems_vector_number vector,
-  bool               *pending
-)
-{
-  (void) vector;
+rtems_status_code bsp_interrupt_is_pending(rtems_vector_number vector,
+                                           bool *pending) {
+  (void)vector;
 
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(pending != NULL);
@@ -121,28 +115,23 @@ rtems_status_code bsp_interrupt_is_pending(
   return RTEMS_UNSATISFIED;
 }
 
-rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
-{
-  (void) vector;
+rtems_status_code bsp_interrupt_raise(rtems_vector_number vector) {
+  (void)vector;
 
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   return RTEMS_UNSATISFIED;
 }
 
-rtems_status_code bsp_interrupt_clear(rtems_vector_number vector)
-{
-  (void) vector;
+rtems_status_code bsp_interrupt_clear(rtems_vector_number vector) {
+  (void)vector;
 
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   return RTEMS_UNSATISFIED;
 }
 
-rtems_status_code bsp_interrupt_vector_is_enabled(
-  rtems_vector_number vector,
-  bool               *enabled
-)
-{
-  (void) vector;
+rtems_status_code bsp_interrupt_vector_is_enabled(rtems_vector_number vector,
+                                                  bool *enabled) {
+  (void)vector;
 
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(enabled != NULL);
@@ -150,47 +139,38 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
   return RTEMS_UNSATISFIED;
 }
 
-rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
-{
+rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector) {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   BSP_enable_irq_at_pic(vector);
   return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
-{
+rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector) {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   BSP_disable_irq_at_pic(vector);
   return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code bsp_interrupt_set_priority(
-  rtems_vector_number vector,
-  uint32_t priority
-)
-{
-  (void) vector;
-  (void) priority;
+rtems_status_code bsp_interrupt_set_priority(rtems_vector_number vector,
+                                             uint32_t priority) {
+  (void)vector;
+  (void)priority;
 
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   return RTEMS_UNSATISFIED;
 }
 
-rtems_status_code bsp_interrupt_get_priority(
-  rtems_vector_number vector,
-  uint32_t *priority
-)
-{
-  (void) vector;
-  (void) priority;
+rtems_status_code bsp_interrupt_get_priority(rtems_vector_number vector,
+                                             uint32_t *priority) {
+  (void)vector;
+  (void)priority;
 
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(priority != NULL);
   return RTEMS_UNSATISFIED;
 }
 
-void bsp_interrupt_facility_initialize(void)
-{
+void bsp_interrupt_facility_initialize(void) {
   /*
    * Initialize RTEMS IRQ system
    */

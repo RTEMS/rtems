@@ -31,15 +31,12 @@
 
 uint32_t ppc_exc_cache_wb_check = 1;
 
-static void ppc_exc_initialize_booke(void *vector_base)
-{
+static void ppc_exc_initialize_booke(void *vector_base) {
   /* Interrupt vector prefix register */
   ppc_mtivpr(vector_base);
 
-  if (
-    ppc_cpu_is_specific_e200(PPC_e200z0)
-      || ppc_cpu_is_specific_e200(PPC_e200z1)
-  ) {
+  if (ppc_cpu_is_specific_e200(PPC_e200z0) ||
+      ppc_cpu_is_specific_e200(PPC_e200z1)) {
     /*
      * These cores have hard wired IVOR registers.  An access will case a
      * program exception.
@@ -48,42 +45,44 @@ static void ppc_exc_initialize_booke(void *vector_base)
   }
 
   /* Interupt vector offset registers */
-  ppc_mtivor(0,  ppc_exc_vector_address(ASM_BOOKE_CRIT_VECTOR, vector_base));
-  ppc_mtivor(1,  ppc_exc_vector_address(ASM_MACH_VECTOR, vector_base));
-  ppc_mtivor(2,  ppc_exc_vector_address(ASM_PROT_VECTOR, vector_base));
-  ppc_mtivor(3,  ppc_exc_vector_address(ASM_ISI_VECTOR, vector_base));
-  ppc_mtivor(4,  ppc_exc_vector_address(ASM_EXT_VECTOR, vector_base));
-  ppc_mtivor(5,  ppc_exc_vector_address(ASM_ALIGN_VECTOR, vector_base));
-  ppc_mtivor(6,  ppc_exc_vector_address(ASM_PROG_VECTOR, vector_base));
-  ppc_mtivor(7,  ppc_exc_vector_address(ASM_FLOAT_VECTOR, vector_base));
-  ppc_mtivor(8,  ppc_exc_vector_address(ASM_SYS_VECTOR, vector_base));
-  ppc_mtivor(9,  ppc_exc_vector_address(ASM_BOOKE_APU_VECTOR, vector_base));
+  ppc_mtivor(0, ppc_exc_vector_address(ASM_BOOKE_CRIT_VECTOR, vector_base));
+  ppc_mtivor(1, ppc_exc_vector_address(ASM_MACH_VECTOR, vector_base));
+  ppc_mtivor(2, ppc_exc_vector_address(ASM_PROT_VECTOR, vector_base));
+  ppc_mtivor(3, ppc_exc_vector_address(ASM_ISI_VECTOR, vector_base));
+  ppc_mtivor(4, ppc_exc_vector_address(ASM_EXT_VECTOR, vector_base));
+  ppc_mtivor(5, ppc_exc_vector_address(ASM_ALIGN_VECTOR, vector_base));
+  ppc_mtivor(6, ppc_exc_vector_address(ASM_PROG_VECTOR, vector_base));
+  ppc_mtivor(7, ppc_exc_vector_address(ASM_FLOAT_VECTOR, vector_base));
+  ppc_mtivor(8, ppc_exc_vector_address(ASM_SYS_VECTOR, vector_base));
+  ppc_mtivor(9, ppc_exc_vector_address(ASM_BOOKE_APU_VECTOR, vector_base));
   ppc_mtivor(10, ppc_exc_vector_address(ASM_BOOKE_DEC_VECTOR, vector_base));
   ppc_mtivor(11, ppc_exc_vector_address(ASM_BOOKE_FIT_VECTOR, vector_base));
   ppc_mtivor(12, ppc_exc_vector_address(ASM_BOOKE_WDOG_VECTOR, vector_base));
-  ppc_mtivor(13, ppc_exc_vector_address(ASM_BOOKE_DTLBMISS_VECTOR, vector_base));
-  ppc_mtivor(14, ppc_exc_vector_address(ASM_BOOKE_ITLBMISS_VECTOR, vector_base));
+  ppc_mtivor(13,
+             ppc_exc_vector_address(ASM_BOOKE_DTLBMISS_VECTOR, vector_base));
+  ppc_mtivor(14,
+             ppc_exc_vector_address(ASM_BOOKE_ITLBMISS_VECTOR, vector_base));
   ppc_mtivor(15, ppc_exc_vector_address(ASM_BOOKE_DEBUG_VECTOR, vector_base));
   if (ppc_cpu_is_e200() || ppc_cpu_is_e500()) {
-    ppc_mtivor(32, ppc_exc_vector_address(ASM_E500_SPE_UNAVAILABLE_VECTOR, vector_base));
-    ppc_mtivor(33, ppc_exc_vector_address(ASM_E500_EMB_FP_DATA_VECTOR, vector_base));
-    ppc_mtivor(34, ppc_exc_vector_address(ASM_E500_EMB_FP_ROUND_VECTOR, vector_base));
+    ppc_mtivor(32, ppc_exc_vector_address(ASM_E500_SPE_UNAVAILABLE_VECTOR,
+                                          vector_base));
+    ppc_mtivor(
+        33, ppc_exc_vector_address(ASM_E500_EMB_FP_DATA_VECTOR, vector_base));
+    ppc_mtivor(
+        34, ppc_exc_vector_address(ASM_E500_EMB_FP_ROUND_VECTOR, vector_base));
   }
   if (ppc_cpu_is_specific_e200(PPC_e200z7) || ppc_cpu_is_e500()) {
-    ppc_mtivor(35, ppc_exc_vector_address(ASM_E500_PERFMON_VECTOR, vector_base));
+    ppc_mtivor(35,
+               ppc_exc_vector_address(ASM_E500_PERFMON_VECTOR, vector_base));
   }
 }
 
-static void ppc_exc_fatal_error(void)
-{
+static void ppc_exc_fatal_error(void) {
   bsp_fatal(PPC_FATAL_EXCEPTION_INITIALIZATION);
 }
 
-void ppc_exc_initialize_with_vector_base(
-  uintptr_t interrupt_stack_begin,
-  void *vector_base
-)
-{
+void ppc_exc_initialize_with_vector_base(uintptr_t interrupt_stack_begin,
+                                         void *vector_base) {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   const ppc_exc_categories *const categories = ppc_exc_current_categories();
   unsigned vector = 0;
@@ -97,12 +96,10 @@ void ppc_exc_initialize_with_vector_base(
   /* Assembly code needs SDA_BASE in r13 (SVR4 or EABI). Make sure
    * early init code put it there.
    */
-  __asm__ volatile (
-    "lis %0, _SDA_BASE_@h\n"
-    "ori %0, %0, _SDA_BASE_@l\n"
-    "mr  %1, 13\n"
-    : "=r" (sda_base), "=r"(r13)
-  );
+  __asm__ volatile("lis %0, _SDA_BASE_@h\n"
+                   "ori %0, %0, _SDA_BASE_@l\n"
+                   "mr  %1, 13\n"
+                   : "=r"(sda_base), "=r"(r13));
 
   if (sda_base != r13) {
     ppc_exc_fatal_error();
@@ -122,7 +119,8 @@ void ppc_exc_initialize_with_vector_base(
 
 #endif /* PPC_EXC_CONFIG_BOOKE_ONLY */
 
-  if (ppc_cpu_is_bookE() == PPC_BOOKE_STD || ppc_cpu_is_bookE() == PPC_BOOKE_E500) {
+  if (ppc_cpu_is_bookE() == PPC_BOOKE_STD ||
+      ppc_cpu_is_bookE() == PPC_BOOKE_E500) {
     ppc_exc_initialize_booke(vector_base);
   }
 
@@ -131,16 +129,11 @@ void ppc_exc_initialize_with_vector_base(
 
     if (category != PPC_EXC_INVALID) {
       void *const vector_address = ppc_exc_vector_address(vector, vector_base);
-      uint32_t prologue [16];
+      uint32_t prologue[16];
       size_t prologue_size = sizeof(prologue);
 
-      sc = ppc_exc_make_prologue(
-        vector,
-        vector_base,
-        category,
-        prologue,
-        &prologue_size
-      );
+      sc = ppc_exc_make_prologue(vector, vector_base, category, prologue,
+                                 &prologue_size);
       if (sc != RTEMS_SUCCESSFUL) {
         ppc_exc_fatal_error();
       }
@@ -171,14 +164,14 @@ void ppc_exc_initialize_with_vector_base(
   if (ppc_exc_cache_wb_check && (MSR_DR & ppc_exc_msr_bits)) {
     /* The size of 63 assumes cache lines are at most 32 bytes */
     uint8_t dummy[63];
-    uintptr_t p = (uintptr_t) dummy;
+    uintptr_t p = (uintptr_t)dummy;
     /* If the dcbz instruction raises an alignment exception
      * then the stack is mapped as write-thru or caching-disabled.
      * The low-level code is not capable of dealing with this
      * ATM.
      */
     p = (p + 31U) & ~31U;
-    __asm__ volatile ("dcbz 0, %0"::"b" (p));
+    __asm__ volatile("dcbz 0, %0" ::"b"(p));
     /* If we make it thru here then things seem to be OK */
   }
 #endif /* PPC_EXC_CONFIG_BOOKE_ONLY */

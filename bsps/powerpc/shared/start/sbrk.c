@@ -71,7 +71,7 @@
 
 #ifdef CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
 
-#define INVALID_REMAINING_START ((uintptr_t) -1)
+#define INVALID_REMAINING_START ((uintptr_t)-1)
 
 static uintptr_t remaining_start = INVALID_REMAINING_START;
 static uintptr_t remaining_size = 0;
@@ -84,9 +84,9 @@ static uintptr_t remaining_size = 0;
  *    0  -> limit memory effectively to 32M.
  *
  */
-extern uintptr_t        BSP_sbrk_policy[] __attribute__((weak));
+extern uintptr_t BSP_sbrk_policy[] __attribute__((weak));
 
-#define LIMIT_32M  0x02000000
+#define LIMIT_32M 0x02000000
 
 /**
  * @brief Gives the BSP a chance to reduce the work area size with sbrk()
@@ -99,26 +99,25 @@ extern uintptr_t        BSP_sbrk_policy[] __attribute__((weak));
  * In case the @a mem area size is altered, then the remaining size of the
  * @a mem area must be greater than or equal to @a min_size.
  */
-static ptrdiff_t bsp_sbrk_init(const Memory_Information *mem, uintptr_t min_size)
-{
-  uintptr_t         rval = 0;
-  uintptr_t         policy;
-  uintptr_t         remaining_end;
-  Memory_Area      *area;
+static ptrdiff_t bsp_sbrk_init(const Memory_Information *mem,
+                               uintptr_t min_size) {
+  uintptr_t rval = 0;
+  uintptr_t policy;
+  uintptr_t remaining_end;
+  Memory_Area *area;
 
-  area = &mem->areas[ 0 ];
-  remaining_start = (uintptr_t) _Memory_Get_free_begin(area);
-  remaining_size  = _Memory_Get_free_size(area);
-  remaining_end   = (uintptr_t) _Memory_Get_end(area);
+  area = &mem->areas[0];
+  remaining_start = (uintptr_t)_Memory_Get_free_begin(area);
+  remaining_size = _Memory_Get_free_size(area);
+  remaining_end = (uintptr_t)_Memory_Get_end(area);
 
-  if (remaining_start < LIMIT_32M &&
-      remaining_end > LIMIT_32M &&
+  if (remaining_start < LIMIT_32M && remaining_end > LIMIT_32M &&
       min_size <= LIMIT_32M - remaining_start) {
     /* clip at LIMIT_32M */
     rval = remaining_end - LIMIT_32M;
-    _Memory_Set_end(area, (void *) (LIMIT_32M - remaining_start));
+    _Memory_Set_end(area, (void *)(LIMIT_32M - remaining_start));
     remaining_start = LIMIT_32M;
-    remaining_size  = rval;
+    remaining_size = rval;
   }
 
   /*
@@ -132,35 +131,34 @@ static ptrdiff_t bsp_sbrk_init(const Memory_Information *mem, uintptr_t min_size
     policy = BSP_sbrk_policy[0];
   }
 
-  switch ( policy ) {
-      case (uintptr_t)(-1):
-        _Memory_Set_end(area, (const char *) _Memory_Get_end(area) + rval);
-        remaining_start = (uintptr_t) _Memory_Get_end(area);
-        remaining_size  = 0;
-      break;
+  switch (policy) {
+  case (uintptr_t)(-1):
+    _Memory_Set_end(area, (const char *)_Memory_Get_end(area) + rval);
+    remaining_start = (uintptr_t)_Memory_Get_end(area);
+    remaining_size = 0;
+    break;
 
-      case 0:
-        remaining_size = 0;
-      break;
+  case 0:
+    remaining_size = 0;
+    break;
 
-      default:
-        if ( rval > policy )
-          rval = policy;
-      break;
+  default:
+    if (rval > policy)
+      rval = policy;
+    break;
   }
 
-  return (ptrdiff_t) (rval <= PTRDIFF_MAX ? rval : rval / 2);
+  return (ptrdiff_t)(rval <= PTRDIFF_MAX ? rval : rval / 2);
 }
 
-void *sbrk(ptrdiff_t incr)
-{
-  void *rval=(void*)-1;
+void *sbrk(ptrdiff_t incr) {
+  void *rval = (void *)-1;
 
-  if ( remaining_start != INVALID_REMAINING_START &&
-       (uintptr_t)incr <= remaining_size) {
+  if (remaining_start != INVALID_REMAINING_START &&
+      (uintptr_t)incr <= remaining_size) {
 
-    remaining_size-=incr;
-    rval = (void *) remaining_start;
+    remaining_size -= incr;
+    rval = (void *)remaining_start;
     remaining_start += incr;
   }
 
@@ -175,30 +173,24 @@ void *sbrk(ptrdiff_t incr)
    * into every application for every BSP that uses this method.
    */
 
-  #ifdef DEBUG
-    printk("************* SBRK 0x%08x (ret 0x%08x) **********\n", incr, rval);
-  #endif
+#ifdef DEBUG
+  printk("************* SBRK 0x%08x (ret 0x%08x) **********\n", incr, rval);
+#endif
   return rval;
 }
 
-static void bsp_sbrk_initialize(void)
-{
+static void bsp_sbrk_initialize(void) {
   uintptr_t overhead = _Heap_Area_overhead(CPU_HEAP_ALIGNMENT);
   uintptr_t work_space_size = rtems_configuration_get_work_space_size();
   ptrdiff_t sbrk_amount = bsp_sbrk_init(
-    _Memory_Get(),
-    work_space_size
-      + overhead
-      + (rtems_configuration_get_unified_work_area() ? 0 : overhead)
-  );
+      _Memory_Get(),
+      work_space_size + overhead +
+          (rtems_configuration_get_unified_work_area() ? 0 : overhead));
 
   rtems_heap_set_sbrk_amount(sbrk_amount);
 }
 
-RTEMS_SYSINIT_ITEM(
-  bsp_sbrk_initialize,
-  RTEMS_SYSINIT_SBRK,
-  RTEMS_SYSINIT_ORDER_MIDDLE
-);
+RTEMS_SYSINIT_ITEM(bsp_sbrk_initialize, RTEMS_SYSINIT_SBRK,
+                   RTEMS_SYSINIT_ORDER_MIDDLE);
 
 #endif /* CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK */

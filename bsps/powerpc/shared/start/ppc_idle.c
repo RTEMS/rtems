@@ -70,40 +70,35 @@
 
 SPR_RW(HID0)
 
-void *
-bsp_ppc_idle_task_body(uintptr_t ignored)
-{
-(void) ignored;
+void *bsp_ppc_idle_task_body(uintptr_t ignored) {
+  (void)ignored;
 
-uint32_t msr;
+  uint32_t msr;
 
-	switch ( current_ppc_cpu ) {
+  switch (current_ppc_cpu) {
 
-		case PPC_7400:
-		case PPC_7410:
-		case PPC_7455:
-		case PPC_7457:
-			/* Must enable NAP mode in HID0 for MSR_POW to work */
-			_write_HID0( _read_HID0() | HID0_NAP );
-		break;
+  case PPC_7400:
+  case PPC_7410:
+  case PPC_7455:
+  case PPC_7457:
+    /* Must enable NAP mode in HID0 for MSR_POW to work */
+    _write_HID0(_read_HID0() | HID0_NAP);
+    break;
 
-		default:
-		break;
-	}
+  default:
+    break;
+  }
 
-	for ( ;; ) {
-		_CPU_MSR_GET(msr);
-		msr |= MSR_POW;
-		asm volatile(
-				"1: sync       \n"
-				"	mtmsr %0   \n"
-				"   isync      \n"
-				"   b 1b       \n"
-				::"r"(msr)
-				);
-	}
+  for (;;) {
+    _CPU_MSR_GET(msr);
+    msr |= MSR_POW;
+    asm volatile("1: sync       \n"
+                 "	mtmsr %0   \n"
+                 "   isync      \n"
+                 "   b 1b       \n" ::"r"(msr));
+  }
 
-	return 0;
+  return 0;
 }
 
 #endif

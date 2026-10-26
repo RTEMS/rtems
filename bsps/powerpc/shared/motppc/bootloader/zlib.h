@@ -46,7 +46,7 @@
 #define fprintf printk
 #endif
 
-/* #include "zconf.h" */	/* included directly here */
+/* #include "zconf.h" */ /* included directly here */
 
 /* zconf.h -- configuration of the zlib compression library
  * Copyright (C) 1995 Jean-loup Gailly.
@@ -71,31 +71,31 @@
  */
 
 #ifndef STDC
-#  if defined(MSDOS) || defined(__STDC__) || defined(__cplusplus)
-#    define STDC
-#  endif
+#if defined(MSDOS) || defined(__STDC__) || defined(__cplusplus)
+#define STDC
+#endif
 #endif
 
-#ifdef	__MWERKS__ /* Metrowerks CodeWarrior declares fileno() in unix.h */
-#  include <unix.h>
+#ifdef __MWERKS__ /* Metrowerks CodeWarrior declares fileno() in unix.h */
+#include <unix.h>
 #endif
 
 /* Maximum value for memLevel in deflateInit2 */
 #ifndef MAX_MEM_LEVEL
-#  ifdef MAXSEG_64K
-#    define MAX_MEM_LEVEL 8
-#  else
-#    define MAX_MEM_LEVEL 9
-#  endif
+#ifdef MAXSEG_64K
+#define MAX_MEM_LEVEL 8
+#else
+#define MAX_MEM_LEVEL 9
+#endif
 #endif
 
 #ifndef FAR
-#  define FAR
+#define FAR
 #endif
 
 /* Maximum value for windowBits in deflateInit2 and inflateInit2 */
 #ifndef MAX_WBITS
-#  define MAX_WBITS   15 /* 32K LZ77 window */
+#define MAX_WBITS 15 /* 32K LZ77 window */
 #endif
 
 /* The memory requirements for deflate are (in bytes):
@@ -111,19 +111,19 @@
  for small objects.
 */
 
-                        /* Type declarations */
+/* Type declarations */
 
 #ifndef OF /* function prototypes */
-#  ifdef STDC
-#    define OF(args)  args
-#  else
-#    define OF(args)  ()
-#  endif
+#ifdef STDC
+#define OF(args) args
+#else
+#define OF(args) ()
+#endif
 #endif
 
-typedef unsigned char  Byte;  /* 8 bits */
-typedef unsigned int   uInt;  /* 16 bits or more */
-typedef unsigned long  uLong; /* 32 bits or more */
+typedef unsigned char Byte;  /* 8 bits */
+typedef unsigned int uInt;   /* 16 bits or more */
+typedef unsigned long uLong; /* 32 bits or more */
 
 typedef Byte FAR Bytef;
 typedef char FAR charf;
@@ -132,11 +132,11 @@ typedef uInt FAR uIntf;
 typedef uLong FAR uLongf;
 
 #ifdef STDC
-   typedef void FAR *voidpf;
-   typedef void     *voidp;
+typedef void FAR *voidpf;
+typedef void *voidp;
 #else
-   typedef Byte FAR *voidpf;
-   typedef Byte     *voidp;
+typedef Byte FAR *voidpf;
+typedef Byte *voidp;
 #endif
 
 /* end of original zconf.h */
@@ -162,28 +162,28 @@ typedef uLong FAR uLongf;
   (providing more output space) before each call.
 */
 
-typedef voidpf (*alloc_func) OF((voidpf opaque, uInt items, uInt size));
-typedef void   (*free_func)  OF((voidpf opaque, voidpf address, uInt nbytes));
+typedef voidpf(*alloc_func) OF((voidpf opaque, uInt items, uInt size));
+typedef void(*free_func) OF((voidpf opaque, voidpf address, uInt nbytes));
 
 struct internal_state;
 
 typedef struct z_stream_s {
-    Bytef    *next_in;  /* next input byte */
-    uInt     avail_in;  /* number of bytes available at next_in */
-    uLong    total_in;  /* total nb of input bytes read so far */
+  Bytef *next_in; /* next input byte */
+  uInt avail_in;  /* number of bytes available at next_in */
+  uLong total_in; /* total nb of input bytes read so far */
 
-    Bytef    *next_out; /* next output byte should be put there */
-    uInt     avail_out; /* remaining free space at next_out */
-    uLong    total_out; /* total nb of bytes output so far */
+  Bytef *next_out; /* next output byte should be put there */
+  uInt avail_out;  /* remaining free space at next_out */
+  uLong total_out; /* total nb of bytes output so far */
 
-    char     *msg;      /* last error message, NULL if no error */
-    struct internal_state FAR *state; /* not visible by applications */
+  char *msg;                        /* last error message, NULL if no error */
+  struct internal_state FAR *state; /* not visible by applications */
 
-    alloc_func zalloc;  /* used to allocate the internal state */
-    free_func  zfree;   /* used to free the internal state */
-    voidp      opaque;  /* private data object passed to zalloc and zfree */
+  alloc_func zalloc; /* used to allocate the internal state */
+  free_func zfree;   /* used to free the internal state */
+  voidp opaque;      /* private data object passed to zalloc and zfree */
 
-    Byte     data_type; /* best guess about the data type: ascii or binary */
+  Byte data_type; /* best guess about the data type: ascii or binary */
 
 } z_stream;
 
@@ -216,40 +216,40 @@ typedef struct z_stream_s {
    a single step).
 */
 
-                        /* constants */
+/* constants */
 
-#define Z_NO_FLUSH      0
+#define Z_NO_FLUSH 0
 #define Z_PARTIAL_FLUSH 1
-#define Z_FULL_FLUSH    2
-#define Z_SYNC_FLUSH    3 /* experimental: partial_flush + byte align */
-#define Z_FINISH        4
-#define Z_PACKET_FLUSH	5
+#define Z_FULL_FLUSH 2
+#define Z_SYNC_FLUSH 3 /* experimental: partial_flush + byte align */
+#define Z_FINISH 4
+#define Z_PACKET_FLUSH 5
 /* See deflate() below for the usage of these constants */
 
-#define Z_OK            0
-#define Z_STREAM_END    1
-#define Z_ERRNO        (-1)
+#define Z_OK 0
+#define Z_STREAM_END 1
+#define Z_ERRNO (-1)
 #define Z_STREAM_ERROR (-2)
-#define Z_DATA_ERROR   (-3)
-#define Z_MEM_ERROR    (-4)
-#define Z_BUF_ERROR    (-5)
+#define Z_DATA_ERROR (-3)
+#define Z_MEM_ERROR (-4)
+#define Z_BUF_ERROR (-5)
 /* error codes for the compression/decompression functions */
 
-#define Z_BEST_SPEED             1
-#define Z_BEST_COMPRESSION       9
-#define Z_DEFAULT_COMPRESSION  (-1)
+#define Z_BEST_SPEED 1
+#define Z_BEST_COMPRESSION 9
+#define Z_DEFAULT_COMPRESSION (-1)
 /* compression levels */
 
-#define Z_FILTERED            1
-#define Z_HUFFMAN_ONLY        2
-#define Z_DEFAULT_STRATEGY    0
+#define Z_FILTERED 1
+#define Z_HUFFMAN_ONLY 2
+#define Z_DEFAULT_STRATEGY 0
 
-#define Z_BINARY   0
-#define Z_ASCII    1
-#define Z_UNKNOWN  2
+#define Z_BINARY 0
+#define Z_ASCII 1
+#define Z_UNKNOWN 2
 /* Used to set the data_type field */
 
-#define Z_NULL  0  /* for initializing zalloc, zfree, opaque */
+#define Z_NULL 0 /* for initializing zalloc, zfree, opaque */
 
 extern char *zlib_version;
 /* The application can compare zlib_version and ZLIB_VERSION for consistency.
@@ -257,9 +257,9 @@ extern char *zlib_version;
    not compatible with the zlib.h header file used by the application.
  */
 
-                        /* basic functions */
+/* basic functions */
 
-extern int inflateInit OF((z_stream *strm));
+extern int inflateInit OF((z_stream * strm));
 /*
      Initializes the internal stream state for decompression. The fields
    zalloc and zfree must be initialized before by the caller.  If zalloc and
@@ -272,7 +272,7 @@ extern int inflateInit OF((z_stream *strm));
    inflate().
 */
 
-extern int inflate OF((z_stream *strm, int flush));
+extern int inflate OF((z_stream * strm, int flush));
 /*
   Performs one or both of the following actions:
 
@@ -322,7 +322,7 @@ extern int inflate OF((z_stream *strm, int flush));
   when Z_FINISH is used. In the Z_DATA_ERROR case, the application may then
   call inflateSync to look for a good compression block.  */
 
-extern int inflateEnd OF((z_stream *strm));
+extern int inflateEnd OF((z_stream * strm));
 /*
      All dynamically allocated data structures for this stream are freed.
    This function discards any unprocessed input and does not flush any
@@ -333,10 +333,9 @@ extern int inflateEnd OF((z_stream *strm));
    static string (which must not be deallocated).
 */
 
-                        /* advanced functions */
+/* advanced functions */
 
-extern int inflateInit2 OF((z_stream *strm,
-                            int  windowBits));
+extern int inflateInit2 OF((z_stream * strm, int windowBits));
 /*
      This is another version of inflateInit with more compression options. The
    fields next_out, zalloc and zfree must be initialized before by the caller.
@@ -368,7 +367,7 @@ extern int inflateInit2 OF((z_stream *strm,
    inflate().
 */
 
-extern int inflateSync OF((z_stream *strm));
+extern int inflateSync OF((z_stream * strm));
 /*
     Skips invalid compressed data until the special marker (see deflate()
   above) can be found, or until all available input is skipped. No output
@@ -383,7 +382,7 @@ extern int inflateSync OF((z_stream *strm));
   until success or end of the input data.
 */
 
-extern int inflateReset OF((z_stream *strm));
+extern int inflateReset OF((z_stream * strm));
 /*
      This function is equivalent to inflateEnd followed by inflateInit,
    but does not free and reallocate all the internal decompression state.
@@ -393,7 +392,7 @@ extern int inflateReset OF((z_stream *strm));
    stream state was inconsistent (such as zalloc or state being NULL).
 */
 
-extern int inflateIncomp OF((z_stream *strm));
+extern int inflateIncomp OF((z_stream * strm));
 /*
      This function adds the data at next_in (avail_in bytes) to the output
    history without performing any output.  There must be no pending output,
@@ -402,7 +401,7 @@ extern int inflateIncomp OF((z_stream *strm));
    containing the data at next_in (except that the data is not output).
 */
 
-                        /* checksum functions */
+/* checksum functions */
 
 /*
      This function is not related to compression but is exported
@@ -428,7 +427,9 @@ extern uLong adler32 OF((uLong adler, Bytef *buf, uInt len));
 */
 
 #ifndef _Z_UTIL_H
-    struct internal_state {int dummy;}; /* hack for buggy compilers */
+struct internal_state {
+  int dummy;
+}; /* hack for buggy compilers */
 #endif
 
 #endif /* _ZLIB_H */

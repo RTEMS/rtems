@@ -27,9 +27,9 @@
 #include <inttypes.h>
 
 #ifndef __SPE__
-  #define GET_GPR(gpr) (gpr)
+#define GET_GPR(gpr) (gpr)
 #else
-  #define GET_GPR(gpr) ((uintptr_t) ((gpr) >> 32))
+#define GET_GPR(gpr) ((uintptr_t)((gpr) >> 32))
 #endif
 
 /* T. Straumann: provide a stack trace
@@ -40,25 +40,24 @@ typedef struct LRFrameRec_ {
   unsigned long *lr;
 } LRFrameRec, *LRFrame;
 
-#define STACK_CLAMP 50          /* in case we have a corrupted bottom */
+#define STACK_CLAMP 50 /* in case we have a corrupted bottom */
 
-static uint32_t ppc_exc_get_DAR_dflt(void)
-{
+static uint32_t ppc_exc_get_DAR_dflt(void) {
   uint32_t val;
   if (ppc_cpu_is_60x()) {
     PPC_SPECIAL_PURPOSE_REGISTER(PPC_DAR, val);
     return val;
   } else {
     switch (ppc_cpu_is_bookE()) {
-      default:
-        break;
-      case PPC_BOOKE_STD:
-      case PPC_BOOKE_E500:
-        PPC_SPECIAL_PURPOSE_REGISTER(BOOKE_DEAR, val);
-        return val;
-      case PPC_BOOKE_405:
-        PPC_SPECIAL_PURPOSE_REGISTER(PPC405_DEAR, val);
-        return val;
+    default:
+      break;
+    case PPC_BOOKE_STD:
+    case PPC_BOOKE_E500:
+      PPC_SPECIAL_PURPOSE_REGISTER(BOOKE_DEAR, val);
+      return val;
+    case PPC_BOOKE_405:
+      PPC_SPECIAL_PURPOSE_REGISTER(PPC405_DEAR, val);
+      return val;
     }
   }
   return 0xdeadbeef;
@@ -66,8 +65,7 @@ static uint32_t ppc_exc_get_DAR_dflt(void)
 
 uint32_t (*ppc_exc_get_DAR)(void) = ppc_exc_get_DAR_dflt;
 
-void BSP_printStackTrace(const BSP_Exception_frame *excPtr)
-{
+void BSP_printStackTrace(const BSP_Exception_frame *excPtr) {
   LRFrame f;
   int i;
   LRFrame sp;
@@ -76,16 +74,17 @@ void BSP_printStackTrace(const BSP_Exception_frame *excPtr)
   printk("Stack Trace: \n  ");
   if (excPtr) {
     printk("IP: 0x%08" PRIxPTR ", ", excPtr->EXC_SRR0);
-    sp = (LRFrame) GET_GPR(excPtr->GPR1);
-    lr = (void *) excPtr->EXC_LR;
+    sp = (LRFrame)GET_GPR(excPtr->GPR1);
+    lr = (void *)excPtr->EXC_LR;
   } else {
     /* there's no macro for this */
-    __asm__ __volatile__("mr %0, 1":"=r"(sp));
-    lr = (LRFrame) ppc_link_register();
+    __asm__ __volatile__("mr %0, 1" : "=r"(sp));
+    lr = (LRFrame)ppc_link_register();
   }
-  printk("LR: 0x%08" PRIxPTR "\n", (uintptr_t) lr);
-  for (f = (LRFrame) sp, i = 0; f->frameLink && i < STACK_CLAMP; f = f->frameLink) {
-    printk("--^ 0x%08" PRIxPTR "", (uintptr_t) (f->frameLink->lr));
+  printk("LR: 0x%08" PRIxPTR "\n", (uintptr_t)lr);
+  for (f = (LRFrame)sp, i = 0; f->frameLink && i < STACK_CLAMP;
+       f = f->frameLink) {
+    printk("--^ 0x%08" PRIxPTR "", (uintptr_t)(f->frameLink->lr));
     if (!(++i % 5))
       printk("\n");
   }
@@ -97,26 +96,21 @@ void BSP_printStackTrace(const BSP_Exception_frame *excPtr)
   }
 }
 
-void _CPU_Exception_frame_print(const CPU_Exception_frame *excPtr)
-{
+void _CPU_Exception_frame_print(const CPU_Exception_frame *excPtr) {
   const Thread_Control *executing = _Thread_Executing;
-  bool synch = (int) excPtr->_EXC_number >= 0;
+  bool synch = (int)excPtr->_EXC_number >= 0;
   unsigned n = excPtr->_EXC_number & 0x7fff;
 
   printk("exception vector %d (0x%x)\n", n, n);
-  printk("  next PC or address of fault = 0x%08" PRIxPTR "\n", excPtr->EXC_SRR0);
+  printk("  next PC or address of fault = 0x%08" PRIxPTR "\n",
+         excPtr->EXC_SRR0);
   printk("  saved MSR = 0x%08" PRIxPTR "\n", excPtr->EXC_SRR1);
 
   /* Try to find out more about the context where this happened */
-  printk(
-    "  context = %s, ISR nest level = %" PRIu32 "\n",
-    _ISR_Nest_level == 0 ? "task" : "interrupt",
-    _ISR_Nest_level
-  );
-  printk(
-    "  thread dispatch disable level = %" PRIu32 "\n",
-    _Thread_Dispatch_disable_level
-  );
+  printk("  context = %s, ISR nest level = %" PRIu32 "\n",
+         _ISR_Nest_level == 0 ? "task" : "interrupt", _ISR_Nest_level);
+  printk("  thread dispatch disable level = %" PRIu32 "\n",
+         _Thread_Dispatch_disable_level);
 
   /* Dump registers */
 
@@ -173,7 +167,7 @@ void _CPU_Exception_frame_print(const CPU_Exception_frame *excPtr)
    * DEAR = SPR 61 :-(
    */
   if (ppc_exc_get_DAR != NULL) {
-    char* reg = ppc_cpu_is_60x() ? " DAR" : "DEAR";
+    char *reg = ppc_cpu_is_60x() ? " DAR" : "DEAR";
     printk(" %s = 0x%08" PRIx32 "\n", reg, ppc_exc_get_DAR());
   }
   if (ppc_cpu_is_bookE()) {
@@ -191,7 +185,7 @@ void _CPU_Exception_frame_print(const CPU_Exception_frame *excPtr)
 
 #ifdef PPC_MULTILIB_ALTIVEC
   {
-    unsigned char *v = (unsigned char *) &excPtr->V0;
+    unsigned char *v = (unsigned char *)&excPtr->V0;
     int i;
     int j;
 
@@ -214,7 +208,7 @@ void _CPU_Exception_frame_print(const CPU_Exception_frame *excPtr)
 
 #ifdef PPC_MULTILIB_FPU
   {
-    uint64_t *f = (uint64_t *) &excPtr->F0;
+    uint64_t *f = (uint64_t *)&excPtr->F0;
     int i;
 
     printk("FPSCR = 0x%08" PRIu64 "\n", excPtr->FPSCR);
@@ -226,16 +220,10 @@ void _CPU_Exception_frame_print(const CPU_Exception_frame *excPtr)
 #endif
 
   if (executing != NULL) {
-    const char *name = (const char *) &executing->Object.name;
+    const char *name = (const char *)&executing->Object.name;
 
-    printk(
-      "  executing thread ID = 0x%08" PRIx32 ", name = %c%c%c%c\n",
-      executing->Object.id,
-      name [0],
-      name [1],
-      name [2],
-      name [3]
-    );
+    printk("  executing thread ID = 0x%08" PRIx32 ", name = %c%c%c%c\n",
+           executing->Object.id, name[0], name[1], name[2], name[3]);
   } else {
     printk("  executing thread pointer is NULL");
   }

@@ -65,7 +65,7 @@
 extern "C" {
 #endif
 
-typedef void           *DmaDescriptor;
+typedef void *DmaDescriptor;
 
 /**
  *  @defgroup shared_bspvmedmalistp member functions
@@ -76,28 +76,34 @@ typedef void           *DmaDescriptor;
  */
 
 typedef DmaDescriptor (*DmaDescriptorAlloc)(void);
-typedef void          (*DmaDescriptorFree) (DmaDescriptor d);
-typedef void          (*DmaDescriptorInit) (DmaDescriptor d);
+typedef void (*DmaDescriptorFree)(DmaDescriptor d);
+typedef void (*DmaDescriptorInit)(DmaDescriptor d);
 /* Setup takes the parameters declared in VMEDMA.h */
-typedef int           (*DmaDescriptorSetup)(DmaDescriptor d, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t);
-typedef void          (*DmaDescriptorSetNxt)(DmaDescriptor d, DmaDescriptor next);
-typedef int           (*DmaDescriptorStart)(volatile void *controller_addr, int channel, DmaDescriptor);
-typedef int           (*DmaDescriptorRefr) (DmaDescriptor);
-typedef void          (*DmaDescriptorDump) (DmaDescriptor);
-
+typedef int (*DmaDescriptorSetup)(DmaDescriptor d, uint32_t, uint32_t, uint32_t,
+                                  uint32_t, uint32_t);
+typedef void (*DmaDescriptorSetNxt)(DmaDescriptor d, DmaDescriptor next);
+typedef int (*DmaDescriptorStart)(volatile void *controller_addr, int channel,
+                                  DmaDescriptor);
+typedef int (*DmaDescriptorRefr)(DmaDescriptor);
+typedef void (*DmaDescriptorDump)(DmaDescriptor);
 
 typedef struct VMEDmaListClassRec_ {
-	int					desc_size;	/* size of a descritor */
-	int					desc_align;	/* alignment of a descriptor */
-	VMEDmaListNode			freeList;	/* list of free descriptors of this class, MUST be initialized to NULL */
-	DmaDescriptorAlloc	desc_alloc;	/* [optional, may be NULL] allocator for one descriptor */
-	DmaDescriptorFree	desc_free;	/* [optional, may be NULL] destructor for one descriptor */
-	DmaDescriptorInit   desc_init;  /* [optional, may be NULL] set stuff that don't change during lifetime */
-	DmaDescriptorSetNxt	desc_setnxt;/* set 'NEXT' pointer in descriptor; mark as LAST if next == 0 */
-	DmaDescriptorSetup  desc_setup;	/* setup a descriptor   */
-	DmaDescriptorStart  desc_start;	/* start list at a descriptor   */
-	DmaDescriptorRefr	desc_refr;	/* refresh a descriptor */
-	DmaDescriptorDump	desc_dump;	/* dump a descriptor (for debugging) */
+  int desc_size;           /* size of a descritor */
+  int desc_align;          /* alignment of a descriptor */
+  VMEDmaListNode freeList; /* list of free descriptors of this class, MUST be
+                              initialized to NULL */
+  DmaDescriptorAlloc
+      desc_alloc; /* [optional, may be NULL] allocator for one descriptor */
+  DmaDescriptorFree
+      desc_free; /* [optional, may be NULL] destructor for one descriptor */
+  DmaDescriptorInit desc_init; /* [optional, may be NULL] set stuff that don't
+                                  change during lifetime */
+  DmaDescriptorSetNxt desc_setnxt; /* set 'NEXT' pointer in descriptor; mark as
+                                      LAST if next == 0 */
+  DmaDescriptorSetup desc_setup;   /* setup a descriptor   */
+  DmaDescriptorStart desc_start;   /* start list at a descriptor   */
+  DmaDescriptorRefr desc_refr;     /* refresh a descriptor */
+  DmaDescriptorDump desc_dump;     /* dump a descriptor (for debugging) */
 } VMEDmaListClassRec;
 
 #ifdef __cplusplus
