@@ -34,7 +34,7 @@
 extern "C" {
 #endif
 
-#define PM_GET_FPGA_STATUS_RESET   (1U << 6)
+#define PM_GET_FPGA_STATUS_RESET_N (1U << 6)
 #define PM_GET_FPGA_STATUS_EOS     (1U << 4)
 #define PM_GET_FPGA_STATUS_DONE    (1U << 3)
 #define PM_GET_FPGA_STATUS_INIT    (1U << 2)

@@ -409,7 +409,7 @@ static int pm_subcmd_fpga_status(int argc, char *argv[]) {
   printf("        EOS: %s\n",
       (status & PM_GET_FPGA_STATUS_EOS) ? "end of startup" : "startup");
   printf("      Reset: %s\n",
-      (status & PM_GET_FPGA_STATUS_RESET) ? "reset held" : "clear");
+      (status & PM_GET_FPGA_STATUS_RESET_N) ? "clear" : "reset held");
   return 0;
 }
 
