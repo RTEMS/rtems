@@ -89,9 +89,16 @@ Heap_Control *malloc_get_heap_pointer( void );
 extern size_t malloc_free_space(void);
 
 /**
- * @brief Get malloc status information.
- * 
- * Find amount of free heap remaining.
+ * @brief Returns information about the state of the C Program Heap.
+ *
+ * This function populates the provided Heap_Information_block with
+ * statistics regarding the C Program Heap. This function does not alter
+ * the physical state of the heap.
+ *
+ * @param[out] the_info Pointer to the Heap_Information_block to be filled.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 The @a the_info pointer is NULL.
  */
 extern int malloc_info(Heap_Information_block *the_info);
 

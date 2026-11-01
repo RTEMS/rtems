@@ -52,6 +52,10 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/posix/keyimpl.h>
 
+#ifdef HEAP_PROTECTION
+void _Heap_Protection_free_all_delayed_blocks( Heap_Control *heap );
+#endif
+
 static const struct {
   Objects_APIs api;
   uint16_t     cls;
@@ -167,6 +171,11 @@ void rtems_resource_snapshot_take( rtems_resource_snapshot *snapshot )
   _RTEMS_Lock_allocator();
 
   _Thread_Kill_zombies();
+
+  #ifdef HEAP_PROTECTION
+  _Heap_Protection_free_all_delayed_blocks( RTEMS_Malloc_Heap );
+  _Heap_Protection_free_all_delayed_blocks( &_Workspace_Area );
+  #endif /* ifdef HEAP HEAP_PROTECTION */
 
   get_heap_info( RTEMS_Malloc_Heap, &snapshot->heap_info );
   get_heap_info( &_Workspace_Area, &snapshot->workspace_info );
