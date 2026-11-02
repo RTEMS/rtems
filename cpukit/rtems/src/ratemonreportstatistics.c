@@ -41,7 +41,6 @@
 #endif
 
 #include <rtems/rtems/ratemonimpl.h>
-#include <rtems/rtems/object.h>
 #include <rtems/printer.h>
 
 #include <inttypes.h>
@@ -52,6 +51,28 @@
 #define PERCENT_FMT         "%04" PRId32
 #define NANOSECONDS_FMT     "%06ld"
 
+/* Width of the OWNER column, longer thread names are truncated */
+#define OWNER_NAME_WIDTH ( 2 * THREAD_DEFAULT_MAXIMUM_NAME_SIZE - 1 )
+
+static void get_owner_name( rtems_id owner, char *name, size_t size )
+{
+  Thread_Control  *the_thread;
+  ISR_lock_Context lock_context;
+
+  _Objects_Allocator_lock();
+
+  the_thread = _Thread_Get( owner, &lock_context );
+
+  if ( the_thread != NULL ) {
+    _ISR_lock_ISR_enable( &lock_context );
+    _Thread_Get_name( the_thread, name, size );
+  } else {
+    name[ 0 ] = '\0';
+  }
+
+  _Objects_Allocator_unlock();
+}
+
 void rtems_rate_monotonic_report_statistics_with_plugin(
   const rtems_printer *printer
 )
@@ -61,7 +82,7 @@ void rtems_rate_monotonic_report_statistics_with_plugin(
   rtems_id                               id;
   rtems_rate_monotonic_period_statistics the_stats;
   rtems_rate_monotonic_period_status     the_status;
-  char                                   name[ 5 ];
+  char                                   name[ OWNER_NAME_WIDTH + 1 ];
 
   rtems_printf( printer, "Period information by period\n" );
   rtems_printf( printer, "--- CPU times are in seconds ---\n" );
@@ -70,8 +91,8 @@ void rtems_rate_monotonic_report_statistics_with_plugin(
 Layout by columns -- in memory of Hollerith :)
 
 1234567890123456789012345678901234567890123456789012345678901234567890123456789\
-   ID     OWNER COUNT MISSED X
-ididididid NNNN ccccc mmmmmm X
+    ID     OWNER                           COUNT MISSED X
+ididididid NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN ccccc mmmmmm X
 
   Uncomment the following if you are tinkering with the formatting.
   Be sure to test the various cases.
@@ -81,10 +102,14 @@ ididididid NNNN ccccc mmmmmm X
 */
   rtems_printf(
     printer,
-    "   ID     OWNER COUNT MISSED     "
+    "    ID     %-*s COUNT MISSED     "
     "     CPU TIME                  WALL TIME\n"
-    "                               "
-    "     MIN/MAX/AVG                MIN/MAX/AVG\n"
+    "           %-*s                "
+    "     MIN/MAX/AVG                MIN/MAX/AVG\n",
+    OWNER_NAME_WIDTH,
+    "OWNER",
+    OWNER_NAME_WIDTH,
+    ""
   );
 
   /*
@@ -108,15 +133,16 @@ ididididid NNNN ccccc mmmmmm X
     (void) rtems_rate_monotonic_get_status( id, &the_status );
     #endif
 
-    rtems_object_get_name( the_status.owner, sizeof( name ), name );
+    get_owner_name( the_status.owner, name, sizeof( name ) );
 
     /*
      *  Print part of report line that is not dependent on granularity
      */
     rtems_printf(
       printer,
-      "0x%08" PRIx32 " %4s %5" PRId32 " %6" PRId32 " ",
+      "0x%08" PRIx32 " %-*s %5" PRId32 " %6" PRId32 " ",
       id,
+      OWNER_NAME_WIDTH,
       name,
       the_stats.count,
       the_stats.missed_count
