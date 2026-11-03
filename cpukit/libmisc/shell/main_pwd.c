@@ -51,8 +51,13 @@ static int rtems_shell_main_pwd(
 {
   char dir[1024];
 
-  getcwd(dir,1024);
-  puts(dir);
+  char *result = getcwd(dir, sizeof(dir));
+  if (result != NULL) {
+    puts(result);
+  } else {
+    printf("getcwd failed: errno=%d\n", errno);
+  }
+  
   return 0;
 }
 
