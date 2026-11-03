@@ -36,6 +36,9 @@
  * libdl, should not define this symbol.
  */
 
+bsp_section_work_bonus_begin = ORIGIN (VECTORS) + LENGTH (VECTORS);
+bsp_section_work_bonus_end = ORIGIN (CODE);
+
 SECTIONS
 {
   .entry_point_section :

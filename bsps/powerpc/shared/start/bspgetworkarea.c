@@ -14,8 +14,10 @@
 #include <rtems/sysinit.h>
 
 LINKER_SYMBOL(__rtems_end)
+LINKER_SYMBOL(bsp_section_work_bonus_begin)
+LINKER_SYMBOL(bsp_section_work_bonus_end)
 
-static Memory_Area _Memory_Areas[1];
+static Memory_Area _Memory_Areas[2];
 
 static const Memory_Information _Memory_Information =
     MEMORY_INFORMATION_INITIALIZER(_Memory_Areas);
@@ -28,6 +30,8 @@ static void bsp_memory_initialize(void) {
   size = (uintptr_t)BSP_mem_size - begin;
 
   _Memory_Initialize_by_size(&_Memory_Areas[0], (void *)begin, size);
+  _Memory_Initialize(&_Memory_Areas[1], bsp_section_work_bonus_begin,
+                     bsp_section_work_bonus_end);
 }
 
 RTEMS_SYSINIT_ITEM(bsp_memory_initialize, RTEMS_SYSINIT_MEMORY,

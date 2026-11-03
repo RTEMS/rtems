@@ -76,6 +76,8 @@ Triv121PgTbl BSP_pgtbl_setup(unsigned int *)
  * NOTE THAT THE CORRECTNESS OF THE LINKER SCRIPT IS CRUCIAL
  */
 extern unsigned long __DATA_START__[], _etext[];
+extern unsigned long bsp_section_work_bonus_begin[],
+    bsp_section_work_bonus_end[];
 
 Triv121PgTbl __BSP_default_pgtbl_setup(unsigned int *pmemsize) {
   Triv121PgTbl pt;
@@ -97,11 +99,19 @@ Triv121PgTbl __BSP_default_pgtbl_setup(unsigned int *pmemsize) {
    * ON THIS LAYOUT! (the size, however may be changed)
    */
   if ((pt = triv121PgTblInit(*pmemsize - (1 << ldPtSize), ldPtSize))) {
-    /* map text and RO data read-only */
-    tmp = triv121PgTblMap(pt, TRIV121_121_VSID, 0,
-                          (PAGE_ALIGN((unsigned long)_etext) - 0) >> PG_SHIFT,
+    tmp = triv121PgTblMap(pt, TRIV121_121_VSID,
+                          (unsigned long)bsp_section_work_bonus_begin,
+                          ((unsigned long)bsp_section_work_bonus_end -
+                           (unsigned long)bsp_section_work_bonus_begin) >>
+                              PG_SHIFT,
                           0, /* WIMG */
-                          TRIV121_PP_RO_PAGE);
+                          TRIV121_PP_RW_PAGE);
+    /* map text and RO data read-only */
+    if ((unsigned int)TRIV121_MAP_SUCCESS == tmp)
+      tmp = triv121PgTblMap(pt, TRIV121_121_VSID, 0,
+                            (PAGE_ALIGN((unsigned long)_etext) - 0) >> PG_SHIFT,
+                            0, /* WIMG */
+                            TRIV121_PP_RO_PAGE);
     if ((unsigned int)TRIV121_MAP_SUCCESS != tmp) {
       printk("Unable to map page index %i; reverting to BAT0\n", tmp);
       pt = 0;
