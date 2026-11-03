@@ -1,0 +1,27 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- format-and-define: null
+build-type: option
+copyrights:
+- Copyright (C) 2026 UChicago Argonne LLC, as operator of Argonne National Laboratory
+default:
+- enabled-by: powerpc/beatnik
+  value: 0x20000000
+- enabled-by: powerpc/mvme2100
+  value: 0x20000000
+- enabled-by: powerpc/mvme2600
+  value: 0x20000000
+- enabled-by: powerpc/mvme2700
+  value: 0x20000000
+- enabled-by: powerpc/mvme3100
+  value: 0xa0000000
+- enabled-by: powerpc/mvme5100
+  value: 0xa0000000
+description: |
+  VME address of the first VME A32 outbound window
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: VME_A32_WIN0_ON_VME
+type: build

@@ -60,6 +60,34 @@
 #define _VME_A32_WIN0_SIZE 0x0e000000
 #endif
 
+#ifndef _VME_CSR_SIZE
+#define _VME_CSR_SIZE 0x01000000
+#endif
+
+#ifndef _VME_A24_SIZE
+#define _VME_A24_SIZE 0x00ff0000
+#endif
+
+#ifndef _VME_A16_SIZE
+#define _VME_A16_SIZE 0x00010000
+#endif
+
+#ifndef BSP_VME_APERTURE_SIZE
+#define BSP_VME_APERTURE_SIZE 0x10000000
+#endif
+
+#ifndef _VME_CSR_ON_VME
+#define _VME_CSR_ON_VME 0x00000000
+#endif
+
+#ifndef _VME_A24_ON_VME
+#define _VME_A24_ON_VME 0x00000000
+#endif
+
+#ifndef _VME_A16_ON_VME
+#define _VME_A16_ON_VME 0x00000000
+#endif
+
 extern int BSP_VMEInit(void);
 extern int BSP_VMEIrqMgrInstall(void);
 
@@ -88,20 +116,21 @@ void __BSP_default_vme_config(void) {
 #ifdef BSP_VME_BAT_IDX
   /* setup a PCI area to map the VME bus */
   setdbat(BSP_VME_BAT_IDX, PCI_MEM_BASE + _VME_A32_WIN0_ON_PCI,
-          PCI_MEM_BASE + _VME_A32_WIN0_ON_PCI, 0x10000000, IO_PAGE);
+          PCI_MEM_BASE + _VME_A32_WIN0_ON_PCI, BSP_VME_APERTURE_SIZE, IO_PAGE);
 #endif
 
   /* map VME address ranges */
   BSP_VMEOutboundPortCfg(0, VME_AM_EXT_SUP_DATA, _VME_A32_WIN0_ON_VME,
                          _VME_A32_WIN0_ON_PCI, _VME_A32_WIN0_SIZE);
-  BSP_VMEOutboundPortCfg(1, VME_AM_STD_SUP_DATA, 0x00000000, _VME_A24_ON_PCI,
-                         0x00ff0000);
-  BSP_VMEOutboundPortCfg(2, VME_AM_SUP_SHORT_IO, 0x00000000, _VME_A16_ON_PCI,
-                         0x00010000);
+  BSP_VMEOutboundPortCfg(1, VME_AM_STD_SUP_DATA, _VME_A24_ON_VME,
+                         _VME_A24_ON_PCI, _VME_A24_SIZE);
+  BSP_VMEOutboundPortCfg(2, VME_AM_SUP_SHORT_IO, _VME_A16_ON_VME,
+                         _VME_A16_ON_PCI, _VME_A16_SIZE);
 
 #ifdef _VME_CSR_ON_PCI
   /* Map VME64 CSR */
-  BSP_VMEOutboundPortCfg(7, VME_AM_CSR, 0, _VME_CSR_ON_PCI, 0x01000000);
+  BSP_VMEOutboundPortCfg(7, VME_AM_CSR, _VME_CSR_ON_VME, _VME_CSR_ON_PCI,
+                         _VME_CSR_SIZE);
 #endif
 
 #ifdef _VME_DRAM_OFFSET

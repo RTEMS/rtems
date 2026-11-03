@@ -40,14 +40,37 @@
 #ifndef RTEMS_BSP_VME_CONFIG_H
 #define RTEMS_BSP_VME_CONFIG_H
 
+#include <bspopts.h>
+
 /* BSP specific address space configuration parameters */
 
 #define _VME_A32_WIN0_ON_PCI 0x90000000
+#define _VME_A32_WIN0_SIZE VME_A32_WIN0_SIZE
 #define _VME_A24_ON_PCI 0x9f000000
+#define _VME_A24_SIZE VME_A24_SIZE
 #define _VME_A16_ON_PCI 0x9fff0000
+#define _VME_A16_SIZE VME_A16_SIZE
 #define BSP_VME_BAT_IDX 1
 
-#define _VME_A32_WIN0_ON_VME 0x20000000
+#if _VME_A32_WIN0_ON_PCI + _VME_A32_WIN0_SIZE > _VME_A24_ON_PCI
+#error "VME A32 window overlaps the A24 window"
+#endif
+
+#if _VME_A24_ON_PCI + _VME_A24_SIZE > _VME_A16_ON_PCI
+#error "VME A24 window overlaps the A16 window"
+#endif
+
+#if _VME_A16_ON_PCI + _VME_A16_SIZE > _VME_A32_WIN0_ON_PCI + BSP_VME_APERTURE_SIZE
+#error "VME A16 window exceeds BSP_VME_APERTURE_SIZE"
+#endif
+
+#if (_VME_A32_WIN0_SIZE | _VME_A24_SIZE | _VME_A16_SIZE) & 0xffff
+#error "VME window sizes must be multiples of 64 KB"
+#endif
+
+#define _VME_A32_WIN0_ON_VME VME_A32_WIN0_ON_VME
+#define _VME_A24_ON_VME VME_A24_ON_VME
+#define _VME_A16_ON_VME VME_A16_ON_VME
 
 /* if _VME_DRAM_OFFSET is defined, the BSP
  * will map the board RAM onto the VME bus, starting

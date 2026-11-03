@@ -77,7 +77,6 @@ extern "C" {
 
 #define _REG_STRIDE 4
 #define PCI_MEM_WIN0 0x80000000
-#define BSP_VME_APERTURE_SIZE 0x20000000
 
 #if defined(_REG_STRIDE)
 #define BSP_REG_OFF(val) ((val) << _REG_STRIDE)
