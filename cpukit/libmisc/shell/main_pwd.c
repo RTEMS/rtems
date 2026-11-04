@@ -49,7 +49,7 @@ static int rtems_shell_main_pwd(
   char *argv[] RTEMS_UNUSED
 )
 {
-  char dir[1024];
+  char dir[PATH_MAX];
 
   char *result = getcwd(dir, sizeof(dir));
   if (result != NULL) {
