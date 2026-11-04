@@ -51,10 +51,7 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/posix/keyimpl.h>
-
-#ifdef HEAP_PROTECTION
-void _Heap_Protection_free_all_delayed_blocks( Heap_Control *heap );
-#endif
+#include <rtems/score/heapimpl.h>  
 
 static const struct {
   Objects_APIs api;

@@ -164,7 +164,12 @@ typedef struct {
 } rtems_resource_snapshot;
 
 /**
- * @brief Tasks a snapshot of the resource usage of the system.
+ * @brief Takes a snapshot of the resource usage of the system.
+ *
+ * @note When heap protection is enabled, drains all delayed free blocks
+ * from both heap and the workspace before capturing
+ * the snapshot. This ensures that the heap state reflects actual
+ * usage rather than pending frees from previous operations.
  *
  * @param[out] snapshot The snapshot of used resources.
  *
