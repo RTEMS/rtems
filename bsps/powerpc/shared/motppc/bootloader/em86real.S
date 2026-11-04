@@ -164,7 +164,7 @@
  * override, the value will be between 0 and 0x16ff. The reason for
  * this choice will be understood in the next part.
  *
- * C) addresing mode description tables.
+ * C) addressing mode description tables.
  *
  * the encoding of the modrm bytes (especially in 16 bit mode) is quite
  * complex. Hence a table, indexed by the five useful bits of the modrm
@@ -197,7 +197,7 @@
  * to ds. Combined with the value in opcode this gives the following table:
  * opcode	entry		entry>opcode ?	segment to use
  * positive	positive	yes		ds (default)
- * negative	positive	yes		overriden by prefix
+ * negative	positive	yes		overridden by prefix
  * positive	negative	no		ss
  * negative	negative	yes		overridden by prefix
  *
@@ -555,7 +555,7 @@ offset     name
  108       parm2     parameter for external emulator
  112       _opcode   current opcode register for external emulator
  116       _base     segment register base for external emulator
- 120       _offset   intruction operand offset
+ 120       _offset   instruction operand offset
  More internal state was dumped here for debugging in first versions
 
  128       vbase     where the 1Mb memory is mapped
@@ -1047,7 +1047,7 @@ _twobytes:	NEXTBYTE(r7); addi r3,r3,0x400
  *  Flag evaluation subroutines: they have not been written for performance
  * since they are not often used in practice. The rule of the game was to
  * write them with as few branches as possible.
- * The first routines eveluate either one or 2 (ZF and SF simultaneously)
+ * The first routines evaluate either one or 2 (ZF and SF simultaneously)
  * flags and do not use r0 and r7.
  * The more complex routines (_eval_above, _eval_signed and _eval_flags)
  * call the former ones, using r0 as a return address save register and
@@ -3895,7 +3895,7 @@ ldlptrw:	lhzux r7,MEM
 		lwz ssb,ssbase(state)
 		blr
 
-/* Intructions that may modify the current code segment: the next optimization
+/* Instructions that may modify the current code segment: the next optimization
  * might be to avoid calling C code when the code segment does not change. But
  * it's probably not worth the effort.
  */
@@ -4142,7 +4142,7 @@ daa:		lbz r0,AL(state)
 		rlwinm r4,r4,3,0x06		# 6 if AF or >9, 0 otherwise
 		srwi op1,r7,1			# 0..4, no AF, 5..f AF set
 		add r0,r0,r4			# conditional add
-		li op2,11			# sets AF depnding on op1
+		li op2,11			# sets AF depending on op1
 		or r0,r0,r3
 		subfic r3,r0,159
 		rlwinm r3,r3,7,0x60		# mask value to add

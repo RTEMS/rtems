@@ -659,7 +659,7 @@ static int am2omode(unsigned long address_space, unsigned long *pmode) {
     }
     break;
 
-  case 0: /* disable the port alltogether */
+  case 0: /* disable the port altogether */
     break;
 
   default:
@@ -743,7 +743,7 @@ static int am2imode(unsigned long address_space, unsigned long *pmode) {
     mode |= TSI_ITAT_ADMODE_A16;
     break;
 
-  case 0: /* disable the port alltogether */
+  case 0: /* disable the port altogether */
     *pmode = 0;
     return 0;
 
@@ -2018,7 +2018,7 @@ int vmeTsi148IntLoopbackTst(int level, unsigned vector) {
     sc = rtems_message_queue_receive(q, &msg, &size, RTEMS_WAIT, 20);
     if (sc) {
       if (RTEMS_TIMEOUT == sc && i > 1) {
-        /* OK; we dont' expect more to happen */
+        /* OK; we don't expect more to happen */
         sc = 0;
       } else {
         rtems_error(sc, "Error waiting for interrupts");

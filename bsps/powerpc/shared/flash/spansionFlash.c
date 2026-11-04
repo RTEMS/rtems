@@ -280,7 +280,7 @@ STATIC int flash_pend(struct bankdesc *b, uint32_t addr, uint32_t timeout_us,
   do {
     if (fl_dq7_poll(b, addr, d7_val)) {
 #if (DEBUG > 4)
-      printf("Write buffer succeded after %" PRIi32 "us\n",
+      printf("Write buffer succeeded after %" PRIi32 "us\n",
              (now - then) * 8 / 333);
 #endif
       return 0;

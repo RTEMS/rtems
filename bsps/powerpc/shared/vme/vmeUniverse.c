@@ -468,7 +468,7 @@ static int am2mode(int ismaster, unsigned long address_space,
     mode |= UNIV_MCTL_VASCSR;
     break;
 
-  case 0: /* disable the port alltogether */
+  case 0: /* disable the port altogether */
     break;
 
   default:
@@ -759,7 +759,7 @@ static int xlatePort(int ismaster, int port, volatile LERegister *preg,
 
   /* check for correct address space */
   if (am2mode(ismaster, l->aspace, &offst)) {
-    uprintf(stderr, "vmeUniverse WARNING: invalid adressing mode 0x%x\n",
+    uprintf(stderr, "vmeUniverse WARNING: invalid addressing mode 0x%x\n",
             l->aspace);
     return -1;
   }
@@ -1264,7 +1264,7 @@ static uint32_t xfer_mode2dctl(uint32_t xfer_mode) {
   case UNIV_DCTL_VAS_A32:
     /* fixup the data width; universe may always use MBLT
      * if data width is 64-bit so we go back to 32-bit
-     * if they didn't explicitely ask for MBLT cycles
+     * if they didn't explicitly ask for MBLT cycles
      */
     if ((xfer_mode & 0xb) != 8 /* MBLT */
         && (UNIV_DCTL_VDW_64 == (dctl & UNIV_DCTL_VDW_MSK))) {
@@ -1740,7 +1740,7 @@ static void universeSpecialISR(unsigned long status) {
 
   /*
    *	clear our line in the VINT_STAT register
-   *  seems to be not neccessary...
+   *  seems to be not necessary...
           vmeUniverseWriteReg(
                                           UNIV_VINT_STAT_LINT(specialIrqUnivOut),
                                           UNIV_REGOFF_VINT_STAT);
@@ -2351,7 +2351,7 @@ int vmeUniverseIntLoopbackTst(int level, unsigned vector) {
     sc = rtems_message_queue_receive(q, &msg, &size, RTEMS_WAIT, 20);
     if (sc) {
       if (RTEMS_TIMEOUT == sc && i > 1) {
-        /* OK; we dont' expect more to happen */
+        /* OK; we don't expect more to happen */
         sc = 0;
       } else {
         rtems_error(sc, "Error waiting for interrupts");

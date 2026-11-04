@@ -4,7 +4,7 @@ Motorola PowerPC
 The code in this directory has been taken WITH PERMISSION from 
 Gabriel Paubert, paubert@iram.es. The main reason for having
 a separate bootloader for PreP compliant firmware is that the 
-initial code is relocated by firmware at an unknow address 
+initial code is relocated by firmware at an unknown address
 (actually  0x5000 on motorola MCP750) and that as Gabriel I 
 think having a relocatable bootloder code is a must.
 
@@ -28,10 +28,10 @@ called prepboot.
 
 Note that the actual code differs a lot since Gabriel choose to use
 a CHRP compliant mapping instead of a Prep Mapping to save
-BATs. I had no time to upgrade the code to its new one allthough
+BATs. I had no time to upgrade the code to its new one although
 I agree it should be done...
 
-I have also splitted the original code to have a more modular
+I have also split the original code to have a more modular
 design enabling to reuse code between the loader and RTEMS
 initialization (e.g printk, ...).
 

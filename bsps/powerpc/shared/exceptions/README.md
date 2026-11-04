@@ -308,7 +308,7 @@ RACE CONDITION WHEN DEALING WITH CRITICAL INTERRUPTS
     1) low-priority interrupt (LPI) is taken
     2) before the LPI can increase the 
 	   thread-dispatch-disable level or disable
-	   high-priority interupts, a high-priority
+	   high-priority interrupts, a high-priority
 	   interrupt (HPI) happens
 	3) HPI increases dispatch-disable level
 	4) HPI executes high-priority ISR which e.g.,
@@ -321,7 +321,7 @@ RACE CONDITION WHEN DEALING WITH CRITICAL INTERRUPTS
    At this point, the LPI has been effectively
    suspended which means that the low-priority
    ISR will not be executed until the task 
-   interupted in 1) is scheduled again!
+   interrupted in 1) is scheduled again!
 
    The solution to this problem is letting the
    first machine instruction of the low-priority

@@ -93,7 +93,7 @@ static TtySTblRec ttyS[] = {
 /*-------------------------------------------------------------------------+
 | Console device driver INITIALIZE entry point.
 +--------------------------------------------------------------------------+
-| Initilizes the I/O console (keyboard + VGA display) driver.
+| Initializes the I/O console (keyboard + VGA display) driver.
 +--------------------------------------------------------------------------*/
 rtems_device_driver console_initialize(rtems_device_major_number major,
                                        rtems_device_minor_number minor,

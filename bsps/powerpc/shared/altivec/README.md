@@ -35,7 +35,7 @@ fast -- on my 1GHz 7457 saving or restoring 20 vector registers
 takes only about 1us or even less (if there are cache hits).
 
 The advantage is complete transparency to the user and full ABI
-compatibility (exept for ISRs and exception handlers), see below.
+compatibility (except for ISRs and exception handlers), see below.
 
 Mode 'b' (Only dedicated tasks are AltiVec-enabled)
 ---------------------------------------------------
@@ -131,7 +131,7 @@ for mode 'a':
    CPU_CFLAGS = ... -mcpu=7400
 ```
 
-Note that since -maltivec globally defines __ALTIVEC__ RTEMS automatially
+Note that since -maltivec globally defines __ALTIVEC__ RTEMS automatically
 enables code that takes care of switching the AltiVec context as necessary.
 This is transparent to application code.
 6. BSP support

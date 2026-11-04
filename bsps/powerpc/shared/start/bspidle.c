@@ -41,7 +41,7 @@
  * @brief BSP Idle thread body.
  *
  *  The MSR[POW] bit is set to put the CPU into the low power mode
- *  defined in HID0.  HID0 is set during starup in start.S.
+ *  defined in HID0.  HID0 is set during startup in start.S.
  */
 void *bsp_idle_thread(uintptr_t ignored) {
   (void)ignored;

@@ -44,7 +44,7 @@ static void ppc_exc_initialize_booke(void *vector_base) {
     return;
   }
 
-  /* Interupt vector offset registers */
+  /* Interrupt vector offset registers */
   ppc_mtivor(0, ppc_exc_vector_address(ASM_BOOKE_CRIT_VECTOR, vector_base));
   ppc_mtivor(1, ppc_exc_vector_address(ASM_MACH_VECTOR, vector_base));
   ppc_mtivor(2, ppc_exc_vector_address(ASM_PROT_VECTOR, vector_base));

@@ -75,7 +75,7 @@ to try to do the port (should be easy).
 For the sake of ease of maintenance, I just added a few hooks making it
 possible to override some things without having to modify the driver code.
 
- 1,2) PCI config space access macros may be overriden via CFLAGS
+ 1,2) PCI config space access macros may be overridden via CFLAGS
       when compiling vmeUniverse.c, hence:
       CFLAGS += -DBSP_PIC_DO_EOI=do{}while(0)
       CFLAGS += -DBSP_PCI_CONFIG_IN_LONG=PCIConfigRead32
@@ -173,7 +173,7 @@ NOTES: The universe may always issue MBLTs if a data width of 64-bit
 	   VME_AM_STD_xx_BLT / VME_AM_EXT_xx_BLT enforce 32-bit transfers).
 
 	   Therefore, if you want to setup a outbound window that always
-	   uses single cycles then you must explicitely request a data
+	   uses single cycles then you must explicitly request a data
 	   width < 64, e.g.,
 ```c
        vmeUniverseMasterPortCfg(port, VME_AM_EXT_SUP_DATA | VME_MODE_DBW32, vme_addr, pci_addr, size);

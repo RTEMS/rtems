@@ -200,7 +200,7 @@ int BSP_vpdRetrieveFields(VpdBuf data) {
           for (b1 = b + 1; b1->key != End; b1++) {
             if (b1->key == k && 0 == b1->instance) {
               b1->instance--;
-              /* we dont' handle the case where
+              /* we don't handle the case where
                * the first buffer couldn't hold the entire
                * item but this one could...
                */

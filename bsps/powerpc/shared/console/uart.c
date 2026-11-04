@@ -301,7 +301,7 @@ static void uartError(int uart, void *termiosPrivate) {
    * 1 if received char available, 2 if break
    * is detected, it will eat break and error
    * chars. It ignores overruns - we cannot do
-   * anything about - it execpt count statistics
+   * anything about - it except count statistics
    * and we are not counting it.
    */
   int BSP_uart_polled_status(int uart) {

@@ -56,7 +56,7 @@ SPR_RW(PPC405_TSR)
 /* legacy mode for bookE DEC exception;
  * to avoid the double layer of function calls
  * (dec_handler_bookE -> C_dispatch_irq_handler -> user handler)
- * it is preferrable for the user to hook the DEC
+ * it is preferable for the user to hook the DEC
  * exception directly.
  * However, the legacy mode works with less modifications
  * of user code.

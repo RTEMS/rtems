@@ -215,7 +215,7 @@ void BSP_i8259s_init(void) {
   outport_byte(PIC_MASTER_COMMAND_IO_PORT, 0x11); /* Start init sequence */
   outport_byte(PIC_MASTER_IMR_IO_PORT, 0x00);     /* Vector base  = 0 */
   outport_byte(PIC_MASTER_IMR_IO_PORT,
-               0x04); /* edge tiggered, Cascade (slave) on IRQ2 */
+               0x04); /* edge triggered, Cascade (slave) on IRQ2 */
   outport_byte(PIC_MASTER_IMR_IO_PORT, 0x01); /* Select 8086 mode */
   outport_byte(PIC_MASTER_IMR_IO_PORT, 0xFB); /* Mask all except cascade */
   /*

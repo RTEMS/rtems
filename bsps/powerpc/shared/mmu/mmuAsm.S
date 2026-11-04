@@ -167,7 +167,7 @@ set_L2CR:
 	 *				-	L2E set to turn on the cache
 	 *				-	L2SIZ set to 1MB
 	 *				-	L2CLK set to %2
-	 *				-	L2RAM set to pipelined syncronous late-write
+	 *				-	L2RAM set to pipelined synchronous late-write
 	 *				-	L2I set to perform a global invalidation
 	 *				-	L2OH set to 1 nS
 	 *

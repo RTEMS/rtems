@@ -494,7 +494,7 @@ _CPU_altivec_vscr_initval:
 	 *
 	 *  2) copy vrsave to _VRSAVE_REG
 	 *  3) preload/zero cache line where vrsave and vscr are stored.
-	 *  4) compute base adresses from _B0
+	 *  4) compute base addresses from _B0
 	 *  5) preload/zero first two cache lines (remember that the
 	 *     first S8VEC_P starts preloading/zeroing at offset 64).
 	 *

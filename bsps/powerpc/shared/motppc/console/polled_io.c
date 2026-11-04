@@ -915,7 +915,7 @@ int printk(const char *fmt, ...) {
 #define SIGN 1     /* unsigned/signed long */
 #define LARGE 2    /* use 'ABCDEF' instead of 'abcdef' */
 #define HEX 4      /* hexadecimal instead of decimal */
-#define ADDR 8     /* Value is an addres (p) */
+#define ADDR 8     /* Value is an address (p) */
 #define ZEROPAD 16 /* pad with zero */
 #define HALF 32
 #define LONG 64   /* long argument */

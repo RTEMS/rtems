@@ -91,7 +91,7 @@
 #define LD_PTE_SIZE 3     /* PTE size  */
 #define LD_SEG_SIZE 28    /* segment size */
 #define LD_MIN_PT_SIZE 16 /* minimal size of a page table */
-#define LD_HASH_SIZE 19   /* lengh of a hash */
+#define LD_HASH_SIZE 19   /* length of a hash */
 #define LD_VSID_SIZE 24   /* vsid bits in seg. register */
 
 #else                    /* DEBUG_MAIN */
@@ -103,7 +103,7 @@
 #define LD_PTE_SIZE 3    /* PTE size  */
 #define LD_SEG_SIZE 28   /* segment size */
 #define LD_MIN_PT_SIZE 7 /* minimal size of a page table */
-#define LD_HASH_SIZE 19  /* lengh of a hash */
+#define LD_HASH_SIZE 19  /* length of a hash */
 
 #endif /* DEBUG_MAIN */
 

@@ -88,7 +88,7 @@ typedef int (*DmaDescriptorRefr)(DmaDescriptor);
 typedef void (*DmaDescriptorDump)(DmaDescriptor);
 
 typedef struct VMEDmaListClassRec_ {
-  int desc_size;           /* size of a descritor */
+  int desc_size;           /* size of a descriptor */
   int desc_align;          /* alignment of a descriptor */
   VMEDmaListNode freeList; /* list of free descriptors of this class, MUST be
                               initialized to NULL */

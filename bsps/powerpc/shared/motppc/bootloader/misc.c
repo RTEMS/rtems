@@ -341,7 +341,7 @@ void setup_hw(void) {
 #define ENABLE_VGA_USAGE
 #undef ENABLE_VGA_USAGE
 #ifdef ENABLE_VGA_USAGE
-  /* Find the primary VGA device, chosing the first one found
+  /* Find the primary VGA device, choosing the first one found
    * if none is enabled. The basic loop structure has been copied
    * from linux/drivers/char/bttv.c by Alan Cox.
    */

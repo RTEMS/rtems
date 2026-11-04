@@ -59,7 +59,7 @@
 
 #if BSP_ISA_IRQ_NUMBER > 0
 /*
- * pointer to the mask representing the additionnal irq vectors
+ * pointer to the mask representing the additional irq vectors
  * that must be disabled when a particular entry is activated.
  * They will be dynamically computed from the priority table given
  * in BSP_rtems_irq_mngt_set();

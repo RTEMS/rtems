@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSBSPsPowerPCMotorola
  *
- * @brief Thi is a memory management for early boot.
+ * @brief This is a memory management for early boot.
  */
 
 /*
@@ -36,11 +36,11 @@
  */
 
 /* This code is a crude memory manager for early boot for LinuxPPC.
- * As such, it does not try to perform many optimiztions depending
+ * As such, it does not try to perform many optimizations depending
  * on the processor, it only uses features which are common to
  * all processors (no BATs...).
  *
- * On PreP platorms (the only ones on which it works for now),
+ * On PreP platforms (the only ones on which it works for now),
  * it maps 1:1 all RAM/ROM and I/O space as claimed by the
  * residual data. The holes between these areas can be virtually
  * remapped to any of these, since for some functions it is very handy
@@ -121,7 +121,7 @@ SPR_RO(DSISR);
 SPR_RO(PPC_DAR);
 
 /* We need a few statically allocated free maps to bootstrap the
- * memory managment */
+ * memory management */
 static map free_maps[4] = {{free_maps + 1, 0, 0, MAP_FREE},
                            {free_maps + 2, 0, 0, MAP_FREE},
                            {free_maps + 3, 0, 0, MAP_FREE},
@@ -244,7 +244,7 @@ void _handler(int vec, ctxt *p) {
     if (vec == 7) {
       unsigned int *ptr = ((unsigned int *)p->nip) - 4 * 10;
       for (; ptr <= (((unsigned int *)p->nip) + 4 * 10); ptr++)
-        printk("Hexdecimal code at address %p = %x\n", ptr, *ptr);
+        printk("Hexadecimal code at address %p = %x\n", ptr, *ptr);
     }
     hang("Program or alignment exception at ", vaddr, p);
   }
@@ -551,7 +551,7 @@ int early_setup(u_long image_size) {
      */
     bd->cache_lsize = 32;
   }
-  /* For now we always assume that it's succesful, we should
+  /* For now we always assume that it's successful, we should
    * handle better the case of insufficient memory.
    */
   return 0;

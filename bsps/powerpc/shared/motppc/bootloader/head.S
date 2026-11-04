@@ -132,7 +132,7 @@ start:
 
 2:	bl	reloc
 
-/* save all the parameters and the orginal msr/hid0/r31 */
+/* save all the parameters and the original msr/hid0/r31 */
 	lwz	bd,GOT(__bd)
 	stw	r3,0(bd)
 	stw	r4,4(bd)
@@ -408,7 +408,7 @@ flush_tlb:
 	tlbie	r11, 0
 	bnl	1b
 /* tlbsync is not implemented on 601, so use sync which seems to be a superset
- * of tlbsync in all cases and do not bother with CPU dependant code
+ * of tlbsync in all cases and do not bother with CPU dependent code
  */
 	sync
 	blr
@@ -473,7 +473,7 @@ _size_codemove=.-codemove
  * Must be 4-byte aligned...
  */
 nioc_reset_packet:
-	.byte	0	/* Contoller LUN                                   */
+	.byte	0	/* Controller LUN                                   */
 	.byte	0	/* Device LUN                                      */
 	.word   0   /* status return                                   */
 	.long	5	/* Command (5=RESET)                               */

@@ -128,7 +128,7 @@
 	PUBLIC_PROC (_CPU_Context_save_fp)
 PROC (_CPU_Context_save_fp):
 /* A FP context switch may occur in an ISR or exception handler when the FPU is not
- * available. Therefore, we must explicitely enable it here!
+ * available. Therefore, we must explicitly enable it here!
  */
 #if !defined(PPC_DISABLE_MSR_ACCESS)
 	mfmsr	r4
@@ -202,7 +202,7 @@ PROC (_CPU_Context_save_fp):
 PROC (_CPU_Context_restore_fp):
 	lwz	r3, 0(r3)
 /* A FP context switch may occur in an ISR or exception handler when the FPU is not
- * available. Therefore, we must explicitely enable it here!
+ * available. Therefore, we must explicitly enable it here!
  */
 #if !defined(PPC_DISABLE_MSR_ACCESS)
 	mfmsr	r4

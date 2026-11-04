@@ -398,7 +398,7 @@ static int setbat(int typ, int bat_index, unsigned long virt,
     bat.bat.batu.vp = 0;
     bat.bat.batu.vs = 0;
     bat_in_use[typ] &= ~(1 << bat_index);
-    /* mimic old behavior when bl was 0 (bs==0 is actually legal; it doesnt
+    /* mimic old behavior when bl was 0 (bs==0 is actually legal; it doesn't
      * indicate a size of zero. We now accept bl==0 and look at the size.
      */
     bat_addrs[typ][bat_index].limit = virt;

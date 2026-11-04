@@ -147,14 +147,14 @@ static unsigned probe_ppc_stack_alignment(void) {
 STATIC int check_stack_alignment(void) {
   int rval = 0;
   if (VEC_ALIGNMENT > PPC_STACK_ALIGNMENT) {
-    printk(NAM ": CPU support has unsufficient stack alignment;\n");
+    printk(NAM ": CPU support has insufficient stack alignment;\n");
     printk("modify 'cpukit/score/cpu/powerpc/rtems/score/powerpc.h'\n");
     printk("and choose PPC_ABI_SVR4. I'll enable a workaround for now.\n");
     rval |= 1;
   }
   /* Run-time check; should compile with -mabi=altivec */
   if (probe_ppc_stack_alignment() < VEC_ALIGNMENT) {
-    printk(NAM ": run-time stack alignment unsufficient; make sure you compile "
+    printk(NAM ": run-time stack alignment insufficient; make sure you compile "
                "with -mabi=altivec\n");
     rval |= 2;
   }

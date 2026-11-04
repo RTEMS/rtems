@@ -171,7 +171,7 @@ static inline int pci_bootloader_write_config_dword(struct pci_dev *dev,
  * zero, it performs more or less like memmove. No copy is performed if
  * source and destination addresses are equal. However the caches
  * are synchronized. Note that the size is always rounded up to the
- * next mutiple of 4.
+ * next multiple of 4.
  */
 extern void *codemove(void *, const void *, size_t, unsigned long);
 

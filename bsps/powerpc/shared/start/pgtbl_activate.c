@@ -60,7 +60,7 @@ void __BSP_default_pgtbl_activate(Triv121PgTbl pt) {
   if (!pt)
     return;
 
-  /* switch the text/ro sements to RO only after
+  /* switch the text/ro segments to RO only after
    * initializing the interrupts because the irq_mng
    * installs some code...
    *

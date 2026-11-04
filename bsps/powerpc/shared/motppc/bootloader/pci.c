@@ -224,10 +224,10 @@ static void insert_resource(pci_resource *r) {
   /*
   ** This is little ugly below.  It seems that at least on the MCP750,
   ** the PBC has some default IO space mappings that the bsp #defines
-  ** that read/write to PCI I/O space assume, particuarly the i8259
+  ** that read/write to PCI I/O space assume, particularly the i8259
   ** manipulation code.  So, if we allow the small IO spaces on PCI bus
   ** 0 and 1 to be remapped, the registers can shift out from under the
-  ** #defines.  This is particuarly awful, but short of redefining the
+  ** #defines.  This is particularly awful, but short of redefining the
   ** PCI I/O primitives to be functions with base addresses read from
   ** the hardware, we are stuck with the kludge below.  Note that
   ** everything is remapped on the CPCI backplane and any downstream
@@ -255,7 +255,7 @@ static void insert_resource(pci_resource *r) {
   }
 
   /* 2004/11/30, PR 729 fix is removing the r->size=0 and r->base=0
-   * assignement which makes too-large regions conflict with onboard
+   * assignment which makes too-large regions conflict with onboard
    * hardware, replacing it with sfree which deletes the memory region
    * from the setup code, leaving it disabled. */
   if ((r->type == PCI_BASE_ADDRESS_SPACE_IO) ? (r->size > 0x10000)

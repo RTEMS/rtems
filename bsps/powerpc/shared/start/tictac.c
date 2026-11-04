@@ -35,11 +35,11 @@
 #include <stdint.h>
 
 /**
- * @brief Referenc value for tac().
+ * @brief Reference value for tac().
  */
 uint32_t ppc_tic_tac = 0;
 
 /**
- * @brief Referenc value for bam().
+ * @brief Reference value for bam().
  */
 uint32_t ppc_boom_bam = 0;
