@@ -841,6 +841,15 @@ rtems_status_code rtems_termios_ioctl( void *arg )
     case TIOCSETA:
     case TIOCSETAW:
     case TIOCSETAF:
+      /*
+       * B0 requests a hangup, which is not supported by this
+       * termios device configuration interface.
+       */
+      if ( cfgetospeed( (struct termios *) args->buffer ) == B0 ) {
+        args->ioctl_return = -1;
+        errno = ENOTSUP;
+        break;
+      }
       tty->termios = *(struct termios *) args->buffer;
 
       if ( args->command == TIOCSETAW || args->command == TIOCSETAF ) {

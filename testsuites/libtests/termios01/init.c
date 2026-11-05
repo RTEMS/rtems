@@ -246,8 +246,36 @@ static void test_termios_set_baud( int test )
   int            i;
   struct termios attr;
 
+  sc = tcgetattr( test, &attr );
+  rtems_test_assert( sc == 0 );
+
+  sc = cfsetispeed( &attr, B0 );
+  rtems_test_assert( sc == 0 );
+  rtems_test_assert( cfgetispeed( &attr ) == B0 );
+
+  sc = cfsetospeed( &attr, B0 );
+  rtems_test_assert( sc == 0 );
+  rtems_test_assert( cfgetospeed( &attr ) == B0 );
+
+  errno = 0;
+  sc = tcsetattr( test, TCSANOW, &attr );
+  rtems_test_assert( sc == -1 );
+  rtems_test_assert( errno == ENOTSUP );
+
+  /* Test B0 input speed with a nonzero output speed. */
+  sc = tcgetattr( test, &attr );
+  rtems_test_assert( sc == 0 );
+
+  sc = cfsetispeed( &attr, B0 );
+  rtems_test_assert( sc == 0 );
+  rtems_test_assert( cfgetispeed( &attr ) == B0 );
+  rtems_test_assert( cfgetospeed( &attr ) != B0 );
+
+  sc = tcsetattr( test, TCSANOW, &attr );
+  rtems_test_assert( sc == 0 );
+
   puts( "Test termios setting device baud rate..." );
-  for ( i = 0; baud_table[ i ].constant != INVALID_CONSTANT; i++ ) {
+  for ( i = 1; baud_table[ i ].constant != INVALID_CONSTANT; i++ ) {
     sc = tcgetattr( test, &attr );
     if ( sc != 0 ) {
       printf( "ERROR - return %d\n", sc );
@@ -791,6 +819,10 @@ static void test_set_attributes_error( void )
   int fd;
   int rv;
 
+  memset( &term, 0, sizeof( term ) );
+  term.c_ispeed = B9600;
+  term.c_ospeed = B9600;
+
   rtems_resource_snapshot_take( &snapshot );
 
   sc = rtems_termios_device_install( &dev[ 0 ], &handler, NULL, &ctx.base );
@@ -909,6 +941,8 @@ static rtems_task Init( rtems_task_argument ignored )
     printf( "ERROR - baud opening test device (%d)\n", test );
     rtems_test_exit( 0 );
   }
+  rc = tcgetattr( test, &t );
+  rtems_test_assert( rc == 0 );
 
   /*
    * tcsetattr - ERROR invalid operation

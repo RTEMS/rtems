@@ -96,12 +96,6 @@ cfmakesane - OK
 tcsetattr - drain - OK
 set_attributes - B0 8-NONE-2
 Test termios setting device baud rate...
-tcsetattr(TCSANOW, B0) - OK
-set_attributes - B0 8-NONE-2
-tcsetattr(TCSADRAIN, B0) - OK
-set_attributes - B0 8-NONE-2
-tcsetattr(TCSAFLUSH, B0) - OK
-set_attributes - B0 8-NONE-2
 tcsetattr(TCSANOW, B50) - OK
 set_attributes - B50 8-NONE-2
 tcsetattr(TCSADRAIN, B50) - OK
