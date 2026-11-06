@@ -27,6 +27,9 @@
  */
 
 #include <sys/cdefs.h>
+#ifdef __rtems__
+#include <limits.h>
+#endif /* __rtems__ */
 #include <pthread.h>
 
 #include "threads.h"

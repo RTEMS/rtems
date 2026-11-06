@@ -122,5 +122,9 @@ void
 thrd_yield(void)
 {
 
+#ifndef __rtems__
 	pthread_yield();
+#else /* __rtems__ */
+	sched_yield();
+#endif /* __rtems__ */
 }

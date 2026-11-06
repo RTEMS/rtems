@@ -36,12 +36,17 @@ void
 mtx_destroy(mtx_t *mtx)
 {
 
+#ifndef __rtems__
 	(void)pthread_mutex_destroy(mtx);
+#else /* __rtems__ */
+	_Mutex_recursive_Destroy(mtx);
+#endif /* __rtems__ */
 }
 
 int
 mtx_init(mtx_t *mtx, int type)
 {
+#ifndef __rtems__
 	pthread_mutexattr_t attr;
 	int mt, res;
 
@@ -66,14 +71,23 @@ mtx_init(mtx_t *mtx, int type)
 		res = thrd_error;
 	pthread_mutexattr_destroy(&attr);
 	return (res);
+#else /* __rtems__ */
+	(void)type;
+	_Mutex_recursive_Initialize(mtx);
+	return (thrd_success);
+#endif /* __rtems__ */
 }
 
 int
 mtx_lock(mtx_t *mtx)
 {
 
+#ifndef __rtems__
 	if (pthread_mutex_lock(mtx) != 0)
 		return (thrd_error);
+#else /* __rtems__ */
+	_Mutex_recursive_Acquire(mtx);
+#endif /* __rtems__ */
 	return (thrd_success);
 }
 
@@ -81,7 +95,11 @@ int
 mtx_timedlock(mtx_t *restrict mtx, const struct timespec *restrict ts)
 {
 
+#ifndef __rtems__
 	switch (pthread_mutex_timedlock(mtx, ts)) {
+#else /* __rtems__ */
+	switch (_Mutex_recursive_Acquire_timed(mtx, ts)) {
+#endif /* __rtems__ */
 	case 0:
 		return (thrd_success);
 	case ETIMEDOUT:
@@ -95,7 +113,11 @@ int
 mtx_trylock(mtx_t *mtx)
 {
 
+#ifndef __rtems__
 	switch (pthread_mutex_trylock(mtx)) {
+#else /* __rtems__ */
+	switch (_Mutex_recursive_Try_acquire(mtx)) {
+#endif /* __rtems__ */
 	case 0:
 		return (thrd_success);
 	case EBUSY:
@@ -109,7 +131,11 @@ int
 mtx_unlock(mtx_t *mtx)
 {
 
+#ifndef __rtems__
 	if (pthread_mutex_unlock(mtx) != 0)
 		return (thrd_error);
+#else /* __rtems__ */
+	_Mutex_recursive_Release(mtx);
+#endif /* __rtems__ */
 	return (thrd_success);
 }

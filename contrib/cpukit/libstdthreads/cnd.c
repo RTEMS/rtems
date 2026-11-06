@@ -36,8 +36,12 @@ int
 cnd_broadcast(cnd_t *cond)
 {
 
+#ifndef __rtems__
 	if (pthread_cond_broadcast(cond) != 0)
 		return (thrd_error);
+#else /* __rtems__ */
+	_Condition_Broadcast(cond);
+#endif /* __rtems__ */
 	return (thrd_success);
 }
 
@@ -45,13 +49,18 @@ void
 cnd_destroy(cnd_t *cond)
 {
 
+#ifndef __rtems__
 	(void)pthread_cond_destroy(cond);
+#else /* __rtems__ */
+	_Condition_Destroy(cond);
+#endif /* __rtems__ */
 }
 
 int
 cnd_init(cnd_t *cond)
 {
 
+#ifndef __rtems__
 	switch (pthread_cond_init(cond, NULL)) {
 	case 0:
 		return (thrd_success);
@@ -60,14 +69,22 @@ cnd_init(cnd_t *cond)
 	default:
 		return (thrd_error);
 	}
+#else /* __rtems__ */
+	_Condition_Initialize(cond);
+	return (thrd_success);
+#endif /* __rtems__ */
 }
 
 int
 cnd_signal(cnd_t *cond)
 {
 
+#ifndef __rtems__
 	if (pthread_cond_signal(cond) != 0)
 		return (thrd_error);
+#else /* __rtems__ */
+	_Condition_Signal(cond);
+#endif /* __rtems__ */
 	return (thrd_success);
 }
 
@@ -76,7 +93,11 @@ cnd_timedwait(cnd_t *restrict cond, mtx_t *restrict mtx,
     const struct timespec *restrict ts)
 {
 
+#ifndef __rtems__
 	switch (pthread_cond_timedwait(cond, mtx, ts)) {
+#else /* __rtems__ */
+	switch (_Condition_Wait_recursive_timed(cond, mtx, ts)) {
+#endif /* __rtems__ */
 	case 0:
 		return (thrd_success);
 	case ETIMEDOUT:
@@ -90,7 +111,11 @@ int
 cnd_wait(cnd_t *cond, mtx_t *mtx)
 {
 
+#ifndef __rtems__
 	if (pthread_cond_wait(cond, mtx) != 0)
 		return (thrd_error);
+#else /* __rtems__ */
+	_Condition_Wait_recursive(cond, mtx);
+#endif /* __rtems__ */
 	return (thrd_success);
 }
