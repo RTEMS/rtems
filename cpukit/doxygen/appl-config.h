@@ -2677,10 +2677,19 @@
  * enabled.
  *
  * @par Notes
+ * @parblock
  * You can enable this option to reduce the size of the `TCB`.  Use this option
  * with care, since it can lead to race conditions and undefined system
  * behaviour.  For example, #errno is no longer a thread-local variable if this
  * option is enabled.
+ *
+ * When Newlib is built with thread-local storage reentrancy
+ * (`_REENT_THREAD_LOCAL`), per-thread reentrancy objects are stored in TLS
+ * rather than the `TCB`, and `__getreent()` is not used.  In this
+ * configuration, defining this option does not switch to a global reentrancy
+ * structure or reduce the `TCB` size; it only disables the thread termination
+ * extension that reclaims thread resources via `_reclaim_reent()`.
+ * @endparblock
  */
 #define CONFIGURE_DISABLE_NEWLIB_REENTRANCY
 
