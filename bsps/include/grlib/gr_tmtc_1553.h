@@ -55,9 +55,6 @@ extern struct drvmgr_bus_res *gr_tmtc_1553_resources[];
 #define TMTC_1553_OPTIONS_AMBA 0x01 /* Print AMBA bus devices */
 #define TMTC_1553_OPTIONS_IRQ  0x02 /* Print current IRQ setup */
 
-/* Print information about GR-RASTA-IO PCI board */
-void gr_tmtc_1553_print( int options );
-
 /* Register GR-RASTA-IO driver */
 void gr_tmtc_1553_register_drv( void );
 
