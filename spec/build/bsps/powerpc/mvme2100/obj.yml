@@ -21,6 +21,7 @@ install:
   - bsps/powerpc/mvme2100/start/linkcmds
   - bsps/powerpc/shared/start/linkcmds.share
   - bsps/powerpc/shared/start/linkcmds.share_sections
+  - bsps/powerpc/mvme2100/start/linkcmds.highmem
 links:
 - role: build-dependency
   uid: ../../optconsolebaud
