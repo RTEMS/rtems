@@ -289,7 +289,7 @@ const console_fns stm32f4_usart_fns = {
 #ifdef BSP_CONSOLE_USE_INTERRUPTS
   .deviceRead = NULL,
 #else
-  .deviceRead = usart_read_polled,
+  .deviceRead = stm32f4_usart_read_polled,
 #endif
   .deviceWrite = usart_write_support_polled,
   .deviceInitialize = usart_initialize,
