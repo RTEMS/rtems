@@ -91,7 +91,13 @@ void _CPU_Context_validate( uintptr_t pattern );
 
 static inline void _CPU_Instruction_illegal( void )
 {
-  __asm__ volatile ( ".word 0x0" );
+  /*
+   * A ".word 0x0" is an "add r0, r0, r0" on this architecture, which retires
+   * without an exception unless the core is synthesized with
+   * C_OPCODE_0x0_ILLEGAL.  The major opcode 0x3f is unallocated, so it raises
+   * the illegal opcode exception requiring only C_ILL_OPCODE_EXCEPTION.
+   */
+  __asm__ volatile ( ".word 0xfc000000" );
 }
 
 static inline void _CPU_Instruction_no_operation( void )
