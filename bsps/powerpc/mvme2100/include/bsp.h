@@ -91,6 +91,8 @@ extern "C" {
 #define MPC8240_MEEAR1 0x98 /* extended ending address, banks 0-3 */
 #define MPC8240_MEEAR2 0x9c /* extended ending address, banks 4-7 */
 #define MPC8240_MBEN 0xa0   /* memory bank enable, one bit per bank */
+#define MPC8240_PICR1 0xa8  /* processor interface configuration 1 */
+#define MPC8240_PICR1_MCP_EN (1 << 11) /* assert MCP on detected errors */
 
 extern unsigned int EUMBBAR;
 

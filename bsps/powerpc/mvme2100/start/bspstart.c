@@ -364,6 +364,13 @@ static void bsp_early(void) {
     }
   }
 
+  {
+    uint32_t picr1;
+
+    pci_read_config_dword(0, 0, 0, MPC8240_PICR1, &picr1);
+    pci_write_config_dword(0, 0, 0, MPC8240_PICR1,
+                           picr1 & ~MPC8240_PICR1_MCP_EN);
+  }
   /* clear hostbridge errors but leave MCP disabled -
    * PCI config space scanning code will trip otherwise :-(
    */
