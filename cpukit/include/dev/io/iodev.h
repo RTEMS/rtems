@@ -61,15 +61,18 @@ typedef struct rtems_iodev rtems_iodev;
 /* IOCTL Calls */
 
 /**
- * @brief Obtains the iodev device.
+ * @brief Obtains exclusive access to the iodev instance.
  *
- * This command has no argument.
+ * This command has no argument. The calling task obtains exclusive
+ * access to the iodev instance and retains it across subsequent IOCTL
+ * calls until RTEMS_IODEV_IOCTL_RELEASE is called.
  */
 #define RTEMS_IODEV_IOCTL_OBTAIN 0
 /**
- * @brief Releases the iodev device.
+ * @brief Releases exclusive access to the iodev instance.
  *
- * This command has no argument.
+ * This command has no argument. It releases the exclusive access
+ * obtained through RTEMS_IODEV_IOCTL_OBTAIN.
  */
 #define RTEMS_IODEV_IOCTL_RELEASE 1
 
@@ -226,9 +229,12 @@ struct rtems_iodev {
   );
 
   /**
-   * @brief Call to the device driver to wait on event. The iodev lock is not
-   * held when event_wait is called to allow other IOCTL calls while waiting
-   * on an event.
+   * @brief Call to the device driver to wait on event.
+   *
+   * The iodev lock is not held by iodev internals when wait_event is
+   * called so that other IOCTL calls can occur while waiting on an
+   * event. This does not affect exclusive access obtained through
+   * the use of RTEMS_IODEV_IOCTL_OBTAIN.
    *
    * @param[in] iodev Pointer to iodev device.
    * @param[in,out] event_args Arguments for wait operation.
