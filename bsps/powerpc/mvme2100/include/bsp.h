@@ -96,6 +96,8 @@ extern "C" {
 
 extern unsigned int EUMBBAR;
 
+#define VME_REG_BASE (EUMBBAR - 0x1000) /* Universe II registers, below EUMB */
+
 #define BSP_MPC8240_I2C_OFFSET 0x3000
 
 #define BSP_VPD_I2C_ADDR (0xA8 >> 1) /* system configuration EEPROM, ID 0b100  \

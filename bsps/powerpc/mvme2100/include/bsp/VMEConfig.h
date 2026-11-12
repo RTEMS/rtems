@@ -151,6 +151,9 @@ extern int _BSP_vme_bridge_irq;
 #include <bsp/motorola.h>
 #include <bsp/pci.h>
 
+#define VME_VENDOR_ID 0x10e3 /* Tundra vendor id */
+#define VME_DEVICE_ID 0x0000 /* Universe II device id */
+
 #define BSP_VME_UNIVERSE_INSTALL_IRQ_MGR(err)                                  \
   do {                                                                         \
     int bus, dev, i = 0, j;                                                    \
@@ -160,7 +163,8 @@ extern int _BSP_vme_bridge_irq;
      * configure additional lines...                                           \
      */                                                                        \
     err = -1;                                                                  \
-    if (0 == pci_find_device(0x10e3, 0x0000, 0, &bus, &dev, &i)) {             \
+    if (0 == pci_find_device(VME_VENDOR_ID, VME_DEVICE_ID, 0, &bus, &dev,      \
+                             &i)) {                                            \
       if ((bspmap = motorolaIntMap(currentBoard))) {                           \
         for (i = 0; bspmap[i].bus >= 0; i++) {                                 \
           if (bspmap[i].bus == bus && bspmap[i].slot == dev) {                 \

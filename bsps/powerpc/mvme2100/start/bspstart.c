@@ -371,6 +371,21 @@ static void bsp_early(void) {
     pci_write_config_dword(0, 0, 0, MPC8240_PICR1,
                            picr1 & ~MPC8240_PICR1_MCP_EN);
   }
+  {
+    int bus, dev, fun;
+    uint32_t bar;
+    unsigned char reg = PCI_BASE_ADDRESS_0;
+
+    if (pci_find_device(VME_VENDOR_ID, VME_DEVICE_ID, 0, &bus, &dev, &fun) ==
+        0) {
+      pci_read_config_dword(bus, dev, fun, PCI_BASE_ADDRESS_0, &bar);
+      if (bar & PCI_BASE_ADDRESS_SPACE_IO) {
+        reg = PCI_BASE_ADDRESS_1;
+      }
+      pci_write_config_dword(bus, dev, fun, reg, VME_REG_BASE);
+    }
+  }
+
   /* clear hostbridge errors but leave MCP disabled -
    * PCI config space scanning code will trip otherwise :-(
    */
