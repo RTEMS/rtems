@@ -71,9 +71,6 @@ extern "C" {
 /* offset of pci memory as seen from the CPU */
 #define PCI_MEM_BASE 0
 
-/* where (in CPU addr. space) does the PCI window start */
-#define PCI_MEM_WIN0 0x80000000
-
 #define BSP_REG_OFF(val) (val)
 
 #define BSP_MVME2100_MEM_SIZE 0x02000000 /* 32MB */

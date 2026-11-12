@@ -226,14 +226,12 @@ static void bsp_early(void) {
    */
   setdbat(3, 0xf0000000, 0xf0000000, 0x10000000, IO_PAGE);
 
-  /*
-   * PCI devices memory area. Needed to access OpenPIC features
-   * provided by the Raven
-   *
-   * T. Straumann: give more PCI address space
-   */
-  setdbat(2, PCI_MEM_BASE + PCI_MEM_WIN0, PCI_MEM_BASE + PCI_MEM_WIN0,
-          0x10000000, IO_PAGE);
+  /* VME windows */
+  setdbat(1, PCI_MEM_BASE + _VME_A32_WIN0_ON_PCI,
+          PCI_MEM_BASE + _VME_A32_WIN0_ON_PCI, 0x10000000, IO_PAGE);
+  setdbat(2, PCI_MEM_BASE + _VME_A32_WIN0_ON_PCI + 0x10000000,
+          PCI_MEM_BASE + _VME_A32_WIN0_ON_PCI + 0x10000000, 0x10000000,
+          IO_PAGE);
 
   /* Need 0xfec00000 mapped for this */
   EUMBBAR = get_eumbbar();
