@@ -34,6 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef TIMESYS_h
+#define TIMESYS_h
+
 #include <tmacros.h>
 #include <inttypes.h>
 
@@ -88,4 +91,5 @@
 TEST_EXTERN volatile uint32_t end_time; /* ending time variable */
 TEST_EXTERN volatile uint32_t overhead; /* loop overhead variable */
 
+#endif /* TIMESYS_h */
 /* end of include file */
