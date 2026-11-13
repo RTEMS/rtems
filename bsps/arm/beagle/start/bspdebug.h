@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsARMBeagle
+ *
+ * @brief This header file provides the hardware debug interfaces for the
+ *   Beagle BSP.
+ */
+
 /*
  * Copyright (C) 2019 Chris Johns <chrisj@rtems.org>.  All rights reserved.
  *

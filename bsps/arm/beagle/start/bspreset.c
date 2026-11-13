@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: GPL-2.0+-with-RTEMS-exception */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsARMBeagle
+ *
+ * @brief This source file contains the reset implementation for the Beagle
+ *   BSP.
+ */
+
 /*
  * Copyright (c) 2014 Ben Gras <beng@shrike-systems.com>. All rights reserved.
  *

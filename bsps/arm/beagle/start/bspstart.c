@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsARMBeagle
+ *
+ * @brief This source file contains the board initialization implementation
+ *   for the Beagle BSP.
+ */
+
 /*
  * Copyright (c) 2013 embedded brains GmbH & Co. KG
  *

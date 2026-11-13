@@ -1,3 +1,14 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsARMBeagle
+ *
+ * @brief This source file contains the MMU and cache configuration for the
+ *   Beagle BSP.
+ */
+
 /*
  * Copyright (C) 2013 embedded brains GmbH & Co. KG
  * Copyright (C) 2014 Chris Johns <chrisj@rtems.org>
