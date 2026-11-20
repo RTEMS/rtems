@@ -51,6 +51,7 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/posix/keyimpl.h>
+#include <rtems/score/heapfirstfitimpl.h>
 #include <rtems/score/heapimpl.h>  
 
 static const struct {
