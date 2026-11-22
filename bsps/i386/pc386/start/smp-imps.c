@@ -86,10 +86,6 @@
 
 extern uint8_t gdtdesc[GDT_SIZE];
 
-static int lapic_dummy = 0;
-unsigned imps_lapic_addr =
-  ((unsigned)(&lapic_dummy)) - (LAPIC_REGISTER_ID << 2);
-
 /* #define KERNEL_PRINT(_format)       printk(_format) */
 
 static void CMOS_WRITE_BYTE(
@@ -217,29 +213,6 @@ get_checksum(unsigned start, int length)
 }
 
 /*
- *  APIC ICR write and status check function.
- */
-int
-send_ipi(unsigned int dst, unsigned int v)
-{
-  int to, send_status, apicid;
-
-  apicid = imps_cpu_apic_map[dst];
-
-  bsp_lapic_base[LAPIC_REGISTER_ICR_HIGH] = (apicid << 24);
-  bsp_lapic_base[LAPIC_REGISTER_ICR_LOW] = v;
-
-  /* Wait for send to finish */
-  to = 0;
-  do {
-    UDELAY(100);
-    send_status = bsp_lapic_base[LAPIC_REGISTER_ICR_LOW] & LAPIC_ICR_DELIV_STAT_PEND;
-  } while (send_status && (to++ < 1000));
-
-  return (to < 1000);
-}
-
-/*
  *  Primary function for booting individual CPUs.
  *
  *  This must be modified to perform whatever OS-specific initialization
@@ -292,21 +265,7 @@ boot_cpu(imps_processor *proc)
   *((volatile unsigned *) bios_reset_vector) = ((bootaddr & 0xFF000) << 12);
 #pragma GCC diagnostic pop
 
-  /* clear the APIC error register */
-  bsp_lapic_base[LAPIC_REGISTER_ESR] = 0;
-  (void) bsp_lapic_base[LAPIC_REGISTER_ESR];
-
-  /* assert INIT IPI */
-  send_ipi(
-    cpuid,
-    LAPIC_ICR_TM_LEVEL | LAPIC_ICR_LEVELASSERT | LAPIC_ICR_DM_INIT
-  );
-  UDELAY(10000);
-
-  /* de-assert INIT IPI */
-  send_ipi(cpuid, LAPIC_ICR_TM_LEVEL | LAPIC_ICR_DM_INIT);
-
-  UDELAY(10000);
+  lapic_clear_errors();
 
   /*
    *  Send Startup IPIs if not an old pre-integrated APIC.
@@ -328,9 +287,7 @@ boot_cpu(imps_processor *proc)
    *  Generic CPU startup sequence ends here, the rest is cleanup.
    */
 
-  /* clear the APIC error register */
-  bsp_lapic_base[LAPIC_REGISTER_ESR] = 0;
-  (void) bsp_lapic_base[LAPIC_REGISTER_ESR];
+  lapic_clear_errors();
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Warray-bounds"
@@ -505,6 +462,7 @@ imps_read_bios(imps_fps *fps_ptr)
     = (imps_cth *)PHYS_TO_VIRTUAL(fps_ptr->cth_ptr);
   char *str_ptr;
   uint32_t lapic_paddr;
+  uint8_t apicid;
 
   printk("Intel MultiProcessor Spec 1.%d BIOS support detected\n",
           fps_ptr->spec_rev);
@@ -534,15 +492,16 @@ imps_read_bios(imps_fps *fps_ptr)
   if (lapic_paddr != (READ_MSR_LO(APIC_BASE_MSR) & 0xFFFFF000)) {
     return;
   }
-  imps_lapic_addr = PHYS_TO_VIRTUAL(imps_lapic_addr);
 
   /*
-   *  Setup primary CPU.
+   * Initialize the Local APIC and register the primary CPU.
    */
-  apicid = bsp_lapic_base[LAPIC_REGISTER_SPURIOUS];
-  bsp_lapic_base[LAPIC_REGISTER_SPURIOUS] = apicid | LAPIC_SPURIOUS_ENABLE;
+  if (!lapic_initialize(PHYS_TO_VIRTUAL(lapic_paddr))) {
+    printk("Failed to initialize Local APIC\n");
+    return;
+  }
 
-  apicid = bsp_lapic_base[LAPIC_REGISTER_ID] >> 24;
+  apicid = lapic_get_id();
   imps_cpu_apic_map[0] = apicid;
   imps_apic_cpu_map[apicid] = 0;
 
@@ -650,17 +609,17 @@ imps_force(int ncpus)
 
   printk("Intel MultiProcessor \"Force\" Support\n");
 
-  imps_lapic_addr = (READ_MSR_LO(0x1b) & 0xFFFFF000);
-  imps_lapic_addr = PHYS_TO_VIRTUAL(imps_lapic_addr);
+  lapic_paddr = READ_MSR_LO(APIC_BASE_MSR) & 0xFFFFF000;
 
   /*
-   *  Setup primary CPU.
+   * Initialize the Local APIC and register the primary CPU.
    */
-  apicid = bsp_lapic_base[LAPIC_REGISTER_SPURIOUS];
-  bsp_lapic_base[LAPIC_REGISTER_SPURIOUS] =
-    apicid | LAPIC_SPURIOUS_ENABLE;
+  if (!lapic_initialize(PHYS_TO_VIRTUAL(lapic_paddr))) {
+    printk("Failed to initialize Local APIC\n");
+    return 0;
+  }
 
-  apicid = bsp_lapic_base[LAPIC_REGISTER_ID] >> 24;
+  apicid = lapic_get_id();
   imps_cpu_apic_map[0] = apicid;
   imps_apic_cpu_map[apicid] = 0;
 
@@ -770,8 +729,7 @@ imps_probe(void)
  */
 static void smp_apic_ack(void)
 {
-  (void) bsp_lapic_base[LAPIC_REGISTER_SPURIOUS];
-  bsp_lapic_base[LAPIC_REGISTER_EOI] = LAPIC_EOI_ACK;
+  lapic_send_eoi();
 }
 
 static void bsp_inter_processor_interrupt(void *arg)
@@ -817,9 +775,7 @@ static void secondary_cpu_initialize(void)
 {
   asm volatile( "lidt IDT_Descriptor" );
 
-  apicid = bsp_lapic_base[LAPIC_REGISTER_SPURIOUS];
-  bsp_lapic_base[LAPIC_REGISTER_SPURIOUS] =
-    apicid | LAPIC_SPURIOUS_ENABLE;
+  lapic_enable();
 
 #ifdef __SSE__
   enable_sse();

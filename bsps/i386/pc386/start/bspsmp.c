@@ -47,9 +47,7 @@ bool _CPU_SMP_Start_processor( uint32_t cpu_index )
 
 uint32_t _CPU_SMP_Get_current_processor( void )
 {
-  return imps_apic_cpu_map[
-    bsp_lapic_base[LAPIC_REGISTER_ID] >> 24
-  ];
+  return lapic_get_cpu_index(lapic_get_id());
 }
 
 uint32_t _CPU_SMP_Initialize( void )

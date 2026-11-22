@@ -45,6 +45,11 @@ void lapic_enable(void)
   i386_lapic_base[LAPIC_REGISTER_SPURIOUS] = value;
 }
 
+uint8_t lapic_get_id(void)
+{
+  return i386_lapic_base[LAPIC_REGISTER_ID] >> 24;
+}
+
 void lapic_send_eoi(void)
 {
   i386_lapic_base[LAPIC_REGISTER_EOI] = LAPIC_EOI_ACK;
