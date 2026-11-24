@@ -6,6 +6,7 @@ actions:
     tests:
     - capture
     - cdtest
+    - fdt01
     - fileio
     - fsdosfsformat01
     - fsrfsbitmap01
