@@ -9,6 +9,8 @@ actions:
     - cdtest
     - complex
     - crypt01
+    - dl14
+    - fdt01
     - fileio
     - fsdosfsformat01
     - fsdosfsname02
